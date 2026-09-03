@@ -1,3 +1,4 @@
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23FF5145'/><stop offset='.38' stop-color='%23FFB60A'/><stop offset='.66' stop-color='%232BAE66'/><stop offset='1' stop-color='%233B82F6'/></linearGradient></defs><path fill='url(%23g)' d='M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z'/></svg>">
 <title>TETH</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..750&family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
@@ -1491,8 +1492,8 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       </div>
       <!-- 접힌 상태: 새 연구 연필 -->
       <div class="g-ico-row" id="g-new-row">
-        <button class="g-ico-btn" onclick="gHome()" aria-label="새 연구"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg></button>
-        <span class="g-ico-pill">새 연구</span>
+        <button class="g-ico-btn" onclick="gHome()" aria-label="새 전략"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg></button>
+        <span class="g-ico-pill">새 전략</span>
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
@@ -1504,14 +1505,14 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
           <span class="g-ico-pill">사이드바 닫기</span>
         </div>
       </div>
-      <button class="g-new" onclick="gHome()">＋ 새 연구</button>
+      <button class="g-new" onclick="gHome()">＋ 새 전략</button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
       <button class="g-util" onclick="toast('MOCK, 연구 기록')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>연구 기록</button>
       <button class="g-util" onclick="toast('MOCK, 예약된 검증')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8 3v4M16 3v4"/></svg>예약된 검증</button>
-      <div class="g-sec">Research<button onclick="gHome()" aria-label="새 연구">＋</button></div>
+      <div class="g-sec">Research<button onclick="gHome()" aria-label="새 전략">＋</button></div>
       <div id="g-sess-list"></div>
       <div class="g-sec" id="g-live-sec" hidden>Live</div>
       <div id="g-live-list"></div>
@@ -3347,9 +3348,9 @@ function gHome(){
   /* 등장 애니메이션이 끝나면 해제해 이후 칩 페이드가 트랜지션으로 부드럽게 이어지게 */
   var ch=document.querySelector('.g-home-chips');
   if(ch) ch.addEventListener('animationend',function(){ ch.style.animation='none'; });
-  /* 키보드가 열리거나(포커스) 텍스트가 있으면 칩, 약관 숨김 */
-  hi.addEventListener('focus',function(){ if(innerWidth<=860) document.body.classList.add('kb-open'); });
+  /* 칩→무료 배지 교대는 PC, 모바일 동일하게 "텍스트 입력" 기준 (포커스만으로는 유지) */
   hi.addEventListener('blur',function(){ if(!hi.value.trim()) document.body.classList.remove('kb-open'); });
+  hi.addEventListener('input',function(){ if(!this.value.trim()) document.body.classList.remove('kb-open'); });
   if(innerWidth>860) hi.focus(); /* 모바일에선 자동 포커스 금지 — 진입하자마자 키보드가 올라오지 않게 */
 }
 function gSelect(id){
@@ -3372,7 +3373,7 @@ function gNew(preset){
   /* 비로그인 상태에서 채팅 전송 시 로그인/회원가입 팝업, 로그인하면 이어서 시작 */
   if(!S.user){ G.pendingNew=text; authOpen('signup'); return; }
   S.strategy=newStrategy(); S.versions=[]; S.activeVer=0;
-  var sx={id:'s'+Date.now(), title:'새 연구', status:'draft', strategy:S.strategy, versions:S.versions,
+  var sx={id:'s'+Date.now(), title:'새 전략', status:'draft', strategy:S.strategy, versions:S.versions,
     artifacts:[], team:{}, actRows:[], convo:[], thread:[], tabs:[{id:'__act',title:'대화'}], live:false};
   G.sessions.unshift(sx); G.cur=sx;
   G.tabs=sx.tabs; G.activeTab='__act';
@@ -4102,7 +4103,7 @@ var I18N={
   'nav.signup':{ko:'무료로 시작',en:'Start free',ja:'無料で始める','zh-CN':'免费开始','zh-TW':'免費開始',es:'Empieza gratis',fr:'Commencer gratuitement'},
   'chip.free':{ko:'카드 등록 없이 무료',en:'Free, no card needed',ja:'カード登録なしで無料','zh-CN':'免费，无需绑卡','zh-TW':'免費，無需綁卡',es:'Gratis, sin tarjeta',fr:'Gratuit, sans carte'},
   'auth.free':{ko:'영원히 $0, 신용카드 필요 없음',en:'$0 forever, no credit card needed',ja:'ずっと$0、クレジットカード不要','zh-CN':'永久$0，无需信用卡','zh-TW':'永久$0，無需信用卡',es:'$0 para siempre, sin tarjeta de crédito',fr:'$0 pour toujours, sans carte bancaire'},
-  'side.new':{ko:'＋ 새 연구',en:'＋ New research',ja:'＋ 新しいリサーチ','zh-CN':'＋ 新研究','zh-TW':'＋ 新研究',es:'＋ Nueva investigación',fr:'＋ Nouvelle recherche'},
+  'side.new':{ko:'＋ 새 전략',en:'＋ New strategy',ja:'＋ 新しい戦略','zh-CN':'＋ 新策略','zh-TW':'＋ 新策略',es:'＋ Nueva estrategia',fr:'＋ Nouvelle stratégie'},
   'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.',ja:'市場に勝つ戦略、|ログイン|して今すぐ始めましょう。','zh-CN':'战胜市场的策略，|登录|即刻开始。','zh-TW':'戰勝市場的策略，|登入|即刻開始。',es:'Estrategias para ganar al mercado, |inicia sesión| y empieza ya.',fr:'Des stratégies pour battre le marché, |connectez-vous| et commencez.'},
   'side.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
   'menu.theme':{ko:'테마',en:'Theme',ja:'テーマ','zh-CN':'主题','zh-TW':'主題',es:'Tema',fr:'Thème'},
