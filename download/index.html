@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* Gemini App Download 실측 재현 — bg #0f0f0f · 원스크린 · 고정 하단바
-   좌 텍스트칼럼 375px(H1 60/60 w280 ls-1.2 · H2 24 · body 17/26.5 · QR 118) · 우 캐러셀 670×594 */
+/* Gemini App Download 실측 재현, bg #0f0f0f, 원스크린, 고정 하단바
+   좌 텍스트칼럼 375px(H1 60/60 w280 ls-1.2, H2 24, body 17/26.5, QR 118), 우 캐러셀 670×594 */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0f0f0f;--t:#e3e3e3;--t2:#c4c7c5;--navc:#a8c7fa;--pillbg:#0d3f6e;--pillt:#c2e7ff;--barbg:#202124}
 html,body{height:100%}
@@ -28,7 +28,7 @@ img,svg{display:block}
 .hd .login{height:40px;padding:0 16px;border-radius:9999px;background:var(--pillbg);color:var(--pillt);font-size:14px;font-weight:500;display:inline-flex;align-items:center;transition:filter .15s}
 .hd .login:hover{filter:brightness(1.15)}
 
-/* layout — 원스크린 */
+/* layout, 원스크린 */
 .wrap{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:88px 48px 96px}
 .cols{width:100%;max-width:1232px;display:grid;grid-template-columns:455px 1fr;gap:24px;align-items:center}
 .txt{padding-left:81px} /* 1440에서 x=179 재현: (1440-1232)/2=104 + 81 ≈ 179 안쪽에 위치하도록 wrap padding과 합산 */
@@ -46,7 +46,7 @@ img,svg{display:block}
 .store .link{display:inline-block;margin-top:8px;font-size:12px;color:var(--navc)}
 .store .link:hover{text-decoration:underline}
 
-/* carousel — 670×594 */
+/* carousel, 670×594 */
 .visual{position:relative;width:670px;max-width:100%;height:594px;margin-left:auto;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .stage{position:relative;width:100%;flex:1;display:flex;align-items:center;justify-content:center}
 .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .45s ease;pointer-events:none}
@@ -158,12 +158,12 @@ img,svg{display:block}
             <div class="comp"><span>무엇이든 물어보세요</span><i>↑</i></div>
           </div></div>
           <div class="fl tl"><span class="sp">✦</span>떨어졌을 때 사는 전략 어때?</div>
-          <div class="fl br"><span class="sp">✦</span>진입·손절 조건까지 정해진 전략이 완성됐어요</div>
+          <div class="fl br"><span class="sp">✦</span>진입, 손절 조건까지 정해진 전략이 완성됐어요</div>
         </div>
         <!-- slide 2: 백테스트 -->
         <div class="slide">
           <div class="dev"><div class="cam"></div><div class="scr">
-            <div class="top"><svg width="13" height="13" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>TETH · 백테스트</div>
+            <div class="top"><svg width="13" height="13" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>TETH, 백테스트</div>
             <div class="card">
               <svg class="mini" viewBox="0 0 220 84" fill="none"><path d="M0 70 L22 63 L40 67 L60 55 L80 58 L100 43 L120 49 L142 34 L162 39 L186 22 L204 27 L220 12" stroke="#5b8cff" stroke-width="2" stroke-linejoin="round"/></svg>
               <div class="r"><span>Research 수익</span><b class="up">+12.9%</b></div>
@@ -175,17 +175,17 @@ img,svg{display:block}
             <div class="comp"><span>무엇이든 물어보세요</span><i>↑</i></div>
           </div></div>
           <div class="fl tl"><span class="sp">✦</span>과거 3년 데이터로 검증했어요</div>
-          <div class="fl br"><span class="sp">✦</span>수익 +12.9% · 낙폭 −6.3%</div>
+          <div class="fl br"><span class="sp">✦</span>수익 +12.9%, 낙폭 −6.3%</div>
         </div>
         <!-- slide 3: 모니터링 -->
         <div class="slide">
           <div class="dev"><div class="cam"></div><div class="scr">
-            <div class="top"><svg width="13" height="13" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>TETH · 실행 중</div>
+            <div class="top"><svg width="13" height="13" viewBox="0 0 24 24"><path fill="url(#sg)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>TETH, 실행 중</div>
             <div class="card">
               <div class="r"><span>시작 후 수익</span><b class="up">+3.2% (+$161)</b></div>
               <div class="r"><span>오늘</span><b class="up">+0.4%</b></div>
-              <div class="r"><span>승률</span><b>66.7% · 9회</b></div>
-              <div class="r" style="padding-bottom:0"><span>다음 조건</span><b>RSI 30 이하 — 현재 41</b></div>
+              <div class="r"><span>승률</span><b>66.7%, 9회</b></div>
+              <div class="r" style="padding-bottom:0"><span>다음 조건</span><b>RSI 30 이하, 현재 41</b></div>
             </div>
             <div class="b u">어제 왜 손실이 났어?</div>
             <div class="b ai"><span class="who">TETH</span>새벽 변동성 급등으로 손절 라인에 닿았어요. 손실은 설정한 1% 한도 안에서 멈췄습니다.</div>
@@ -230,7 +230,7 @@ function show(i){
 function nextSlide(){show(cur+1);}
 setInterval(function(){show(cur+1);},6000);
 
-/* QR — site-config.js의 스토어 URL 기반 동적 생성. TODO: 출시 후 URL 입력 */
+/* QR, site-config.js의 스토어 URL 기반 동적 생성. TODO: 출시 후 URL 입력 */
 (function(){
   var cfg=window.TETH_CONFIG||{};
   var map={ios:cfg.iosStoreUrl,android:cfg.androidStoreUrl};
