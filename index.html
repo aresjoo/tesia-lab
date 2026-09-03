@@ -915,7 +915,13 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .au-field .au-input{border-radius:16px;background:#1b1c1f}
 .au-field .au-side{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ba0ff;background:none}
 .au-req{border:1px solid #3c3f45;border-radius:12px;padding:14px 16px;margin-top:16px;text-align:left;font-size:13px;color:#b7bac1;line-height:1.7}
-.au-req .ok{color:#4ade80}
+.au-req .rq{display:flex;align-items:center;gap:8px;transition:color .15s}
+.au-req .rq .m{width:14px;text-align:center;flex-shrink:0}
+.au-req .rq.ok{color:#4ade80}
+.au-btn.primary.dis{opacity:.45}
+.au-input.bad{border-color:#e5484d!important}
+@keyframes auShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.au-input.shake{animation:auShake .3s var(--ease)}
 .au-err{font-size:12.5px;color:#f87171;margin-top:10px;text-align:left;padding-left:18px;display:none}
 .au-err.on{display:block}
 .au-textbtn{display:block;margin:16px auto 0;font-size:14px;color:#ececf1;background:none}
@@ -1377,54 +1383,59 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 
     <!-- step 3: 코드 확인 -->
     <div class="au-step" id="au-code" hidden>
-      <div class="au-title">받은 편지함을 확인하세요</div>
+      <div class="au-title" id="au-code-title">받은 편지함을 확인하세요</div>
       <div class="au-sub" id="au-code-sub"></div>
       <div class="au-input-wrap">
         <input class="au-input" id="au-code-in" inputmode="numeric" maxlength="6" placeholder="코드" autocomplete="off" onkeydown="if(event.key==='Enter')authCodeNext()">
       </div>
       <div class="au-err" id="au-code-err">6자리 숫자 코드를 입력해 주세요.</div>
-      <button class="au-btn primary au-gap" onclick="authCodeNext()">계속</button>
-      <button class="au-textbtn" onclick="toast('MOCK, 인증 코드를 다시 보냈어요')">이메일 다시 보내기</button>
+      <button class="au-btn primary au-gap" id="au-code-go" onclick="authCodeNext()">계속</button>
+      <button class="au-textbtn" id="au-resend" onclick="authResend()">이메일 다시 보내기</button>
       <div class="au-div" id="au-code-div">또는</div>
       <button class="au-btn ghost au-gap" id="au-code-pwbtn" onclick="authShow('au-pw')">비밀번호로 계속하기</button>
-      <div class="au-foot"><a onclick="toast('MOCK, 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK, 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+      <div class="au-foot"><a id="au-foot-t1" href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a><span>|</span><a id="au-foot-p1" href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a></div>
     </div>
 
     <!-- step 4: 비밀번호 생성 (회원가입) -->
     <div class="au-step" id="au-pw-new" hidden>
-      <div class="au-title">비밀번호 생성하기</div>
-      <div class="au-sub">이 비밀번호를 사용해 TETH에<br>로그인하게 됩니다</div>
+      <div class="au-title" id="au-pwnew-title">비밀번호 생성하기</div>
+      <div class="au-sub" id="au-pwnew-sub">이 비밀번호를 사용해 TETH에<br>로그인하게 됩니다</div>
       <div class="au-field">
-        <span class="au-label">이메일 주소</span>
+        <span class="au-label" id="au-pwnew-lbl-email">이메일 주소</span>
         <input class="au-input" id="au-pwnew-email" type="email" disabled>
-        <button class="au-side" onclick="authShow('au-start')">편집</button>
+        <button class="au-side" id="au-edit" onclick="authShow('au-start')">편집</button>
       </div>
       <div class="au-field">
-        <span class="au-label">비밀번호</span>
+        <span class="au-label" id="au-pwnew-lbl-pw">비밀번호</span>
         <input class="au-input" id="au-pwnew-in" type="password" autocomplete="new-password" oninput="authPwReq()" onkeydown="if(event.key==='Enter')authPwNewNext()">
         <button class="au-side" onclick="authPwEye('au-pwnew-in',this)" aria-label="비밀번호 표시">👁</button>
       </div>
-      <div class="au-req">비밀번호에 포함되어야 하는 사항:<br><span id="au-req-len">&nbsp;, &nbsp; 12자 이상</span></div>
-      <button class="au-btn primary au-gap" onclick="authPwNewNext()">계속</button>
-      <div class="au-div">또는</div>
-      <button class="au-btn ghost au-gap" onclick="authSendCode()">일회용 코드로 회원 가입</button>
-      <div class="au-foot"><a onclick="toast('MOCK, 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK, 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+      <div class="au-req">
+        <div id="au-req-h">비밀번호에 포함되어야 하는 사항:</div>
+        <div class="rq" id="au-req-len"><span class="m">•</span><span class="t">12자 이상</span></div>
+        <div class="rq" id="au-req-num"><span class="m">•</span><span class="t">숫자 1개 이상</span></div>
+        <div class="rq" id="au-req-spec"><span class="m">•</span><span class="t">특수문자 1개 이상 (!@#$ 등)</span></div>
+      </div>
+      <button class="au-btn primary au-gap dis" id="au-pwnew-go" onclick="authPwNewNext()">계속</button>
+      <div class="au-div" id="au-pwnew-div">또는</div>
+      <button class="au-btn ghost au-gap" id="au-pwnew-codebtn" onclick="authSendCode()">일회용 코드로 회원 가입</button>
+      <div class="au-foot"><a id="au-foot-t2" href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a><span>|</span><a id="au-foot-p2" href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a></div>
     </div>
 
     <!-- step 5: 비밀번호 입력 (로그인) -->
     <div class="au-step" id="au-pw" hidden>
-      <div class="au-title">비밀번호를 입력하세요</div>
+      <div class="au-title" id="au-pw-title">비밀번호를 입력하세요</div>
       <div class="au-sub" id="au-pw-sub"></div>
       <div class="au-field">
-        <span class="au-label">비밀번호</span>
+        <span class="au-label" id="au-pw-lbl">비밀번호</span>
         <input class="au-input" id="au-pw-in" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')authPwNext()">
         <button class="au-side" onclick="authPwEye('au-pw-in',this)" aria-label="비밀번호 표시">👁</button>
       </div>
       <div class="au-err" id="au-pw-err">비밀번호를 입력해 주세요.</div>
-      <button class="au-btn primary au-gap" onclick="authPwNext()">계속</button>
-      <div class="au-div">또는</div>
-      <button class="au-btn ghost au-gap" onclick="authSendCode()">일회용 코드로 로그인</button>
-      <div class="au-foot"><a onclick="toast('MOCK, 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK, 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+      <button class="au-btn primary au-gap" id="au-pw-go" onclick="authPwNext()">계속</button>
+      <div class="au-div" id="au-pw-div">또는</div>
+      <button class="au-btn ghost au-gap" id="au-pw-codebtn" onclick="authSendCode()">일회용 코드로 로그인</button>
+      <div class="au-foot"><a id="au-foot-t3" href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a><span>|</span><a id="au-foot-p3" href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a></div>
     </div>
 
   </div>
@@ -1488,12 +1499,12 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
           <svg class="ico-spark" width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#sparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>
           <svg class="ico-panel" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg>
         </button>
-        <span class="g-ico-pill">사이드바 열기</span>
+        <span class="g-ico-pill" id="gp-open">사이드바 열기</span>
       </div>
       <!-- 접힌 상태: 새 연구 연필 -->
       <div class="g-ico-row" id="g-new-row">
         <button class="g-ico-btn" onclick="gHome()" aria-label="새 전략"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg></button>
-        <span class="g-ico-pill">새 전략</span>
+        <span class="g-ico-pill" id="gp-new">새 전략</span>
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
@@ -1502,7 +1513,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
         <span style="flex:1"></span>
         <div class="g-ico-row" style="height:40px">
           <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 닫기"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M16 9.5L13.5 12l2.5 2.5"/></svg></button>
-          <span class="g-ico-pill">사이드바 닫기</span>
+          <span class="g-ico-pill" id="gp-close">사이드바 닫기</span>
         </div>
       </div>
       <button class="g-new" onclick="gHome()">＋ 새 전략</button>
@@ -1523,7 +1534,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div class="g-side-bottom">
         <div class="g-ico-row" id="g-gear-row">
           <button class="g-ico-btn" id="g-gear-btn" onclick="gSetMenu(event)" aria-label="설정"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg></button>
-          <span class="g-ico-pill">설정</span>
+          <span class="g-ico-pill" id="gp-set">설정</span>
         </div>
         <div class="g-ico-row" id="g-person-row">
           <button class="g-ico-btn" onclick="gProfileClick()" aria-label="프로필"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="9.6" r="3"/><path d="M6.4 18.4c1.2-2.6 3.2-3.9 5.6-3.9s4.4 1.3 5.6 3.9"/></svg></button>
@@ -1599,19 +1610,19 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <!-- 의견 보내기 패널 -->
   <div id="fb-panel">
     <div id="fb-main" style="display:flex;flex-direction:column;flex:1;min-height:0">
-      <div class="fb-hd">TETH에 의견 보내기<button class="fb-x" onclick="fbClose()" aria-label="닫기">✕</button></div>
+      <div class="fb-hd"><span id="fb-title">TETH에 의견 보내기</span><button class="fb-x" onclick="fbClose()" aria-label="닫기">✕</button></div>
       <div class="fb-body">
-        <label>의견을 설명해 주세요. (필수)</label>
+        <label id="fb-lbl">의견을 설명해 주세요. (필수)</label>
         <textarea id="fb-text" placeholder="이 의견을 제시한 이유를 알려주세요."></textarea>
         <div class="fb-sens">
-          민감한 정보는 포함하지 마세요.
+          <span id="fb-sens-t">민감한 정보는 포함하지 마세요.</span>
           <span class="fb-q">?</span>
-          <div class="fb-tip">민감한 정보는 보호되어야 하는 모든 데이터를 의미합니다. 예를 들어 비밀번호, API 키, 세부적인 개인 정보를 포함하지 마세요.</div>
+          <div class="fb-tip" id="fb-tip">민감한 정보는 보호되어야 하는 모든 데이터를 의미합니다. 예를 들어 비밀번호, API 키, 세부적인 개인 정보를 포함하지 마세요.</div>
         </div>
-        <div class="fb-shot-desc">스크린샷을 주시면 TETH에서 의견을 더 잘 이해하는 데 도움이 됩니다.</div>
+        <div class="fb-shot-desc" id="fb-shot-desc">스크린샷을 주시면 TETH에서 의견을 더 잘 이해하는 데 도움이 됩니다.</div>
         <button class="fb-attach" onclick="document.getElementById('fb-file').click()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="9" cy="9" r="1.3"/></svg>
-          스크린샷 첨부
+          <span id="fb-attach-t">스크린샷 첨부</span>
         </button>
         <input type="file" id="fb-file" accept="image/*" hidden onchange="fbAttach(this)">
         <div class="fb-prev" id="fb-prev">
@@ -1619,9 +1630,9 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
           <button class="rm" onclick="fbRemove()" aria-label="첨부 제거">✕</button>
           <div class="nm" id="fb-prev-nm"></div>
         </div>
-        <div class="fb-fine">일부 계정 및 시스템 정보가 TETH에 전송될 수 있습니다. 이 정보는 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a> 및 <a href="policies/#terms" target="_blank" rel="noopener noreferrer">서비스 약관</a>에 따라 문제를 해결하고 서비스를 개선하는 데 사용됩니다. 이메일로 추가 정보와 소식을 전달해 드릴 수 있습니다.</div>
+        <div class="fb-fine" id="fb-fine">일부 계정 및 시스템 정보가 TETH에 전송될 수 있습니다. 이 정보는 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a> 및 <a href="policies/#terms" target="_blank" rel="noopener noreferrer">서비스 약관</a>에 따라 문제를 해결하고 서비스를 개선하는 데 사용됩니다. 이메일로 추가 정보와 소식을 전달해 드릴 수 있습니다.</div>
       </div>
-      <div class="fb-ft"><button class="fb-send" onclick="fbSubmit()">보내기</button></div>
+      <div class="fb-ft"><button class="fb-send" id="fb-send" onclick="fbSubmit()">보내기</button></div>
     </div>
     <div id="fb-done">
       <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1629,9 +1640,9 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
         <path d="M42 61l12 12 24-26" stroke="#3d6ef0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M95 25c1.2 5 3.8 7.6 8.8 8.8.6.14.6.9 0 1.04-5 1.2-7.6 3.8-8.8 8.8-.14.6-.9.6-1.04 0-1.2-5-3.8-7.6-8.8-8.8-.6-.14-.6-.9 0-1.04 5-1.2 7.6-3.8 8.8-8.8.14-.6.9-.6 1.04 0z" fill="#FFB60A"/>
       </svg>
-      <b>의견이 제출되었습니다. 감사합니다</b>
-      <p>여러분의 의견은 문제를 해결하고 TETH 서비스를 개선하는 데 활용됩니다.</p>
-      <button class="cls" onclick="fbClose()">닫기</button>
+      <b id="fb-done-t">의견이 제출되었습니다. 감사합니다</b>
+      <p id="fb-done-p">여러분의 의견은 문제를 해결하고 TETH 서비스를 개선하는 데 활용됩니다.</p>
+      <button class="cls" id="fb-done-x" onclick="fbClose()">닫기</button>
     </div>
   </div>
 </div>
@@ -3937,19 +3948,40 @@ openModal=function(id){ if(id==='modal-manage') renderManage(); _openModal(id); 
 var AUTH={mode:'signup',email:'',doneName:'',pwDone:false};
 function authOpen(mode){
   AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName=''; AUTH.pwDone=false;
-  ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el) el.value='';});
+  ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el){el.value=''; el.classList.remove('bad','shake');}});
   document.querySelectorAll('#modal-auth .au-err').forEach(function(x){x.classList.remove('on');});
+  if(AUTH.rt){ clearInterval(AUTH.rt); AUTH.rt=null; } AUTH.cool=0;
   authShow('au-start');
   openModal('modal-auth');
+}
+function authI18n(){ /* 딥 화면 정적 텍스트를 현재 언어로, 화면 표시 직전마다 호출 */
+  var T=function(id,k){var el=$(id); if(el) el.textContent=L(k);};
+  T('au-code-title','code.title'); T('au-code-go','auth.continue');
+  T('au-code-err','code.err'); T('au-code-div','auth.or'); T('au-code-pwbtn','code.pwbtn');
+  var ci=$('au-code-in'); if(ci) ci.placeholder=L('code.ph');
+  T('au-pwnew-title','pwnew.title'); var ps=$('au-pwnew-sub'); if(ps) ps.innerHTML=L('pwnew.sub');
+  T('au-pwnew-lbl-email','auth.email'); T('au-pwnew-lbl-pw','pw.label'); T('au-edit','pwnew.edit');
+  T('au-req-h','req.head');
+  var rq=[['au-req-len','req.len'],['au-req-num','req.num'],['au-req-spec','req.spec']];
+  rq.forEach(function(p){var el=$(p[0]); if(el) el.querySelector('.t').textContent=L(p[1]);});
+  T('au-pwnew-go','auth.continue'); T('au-pwnew-div','auth.or'); T('au-pwnew-codebtn','pwnew.codebtn');
+  T('au-pw-title','pw.title'); T('au-pw-lbl','pw.label'); T('au-pw-err','pw.err');
+  T('au-pw-go','auth.continue'); T('au-pw-div','auth.or'); T('au-pw-codebtn','pw.codebtn');
+  ['t1','t2','t3'].forEach(function(s){T('au-foot-'+s,'menu.terms');});
+  ['p1','p2','p3'].forEach(function(s){T('au-foot-'+s,'menu.privacy');});
+  var ee=$('au-email-err'); if(ee) ee.textContent=L('email.err');
+  authResendLabel();
 }
 function authShow(id){
   document.querySelectorAll('#modal-auth .au-step').forEach(function(s){s.hidden=true;});
   $(id).hidden=false;
+  authI18n();
+  if(id!=='au-code' && AUTH.rt){ clearInterval(AUTH.rt); AUTH.rt=null; }
   if(id==='au-code'){
-    $('au-code-sub').innerHTML=(AUTH.mode==='login'?'로그인하려면 방금 ':'계정을 만들려면 방금 ')+'<b>'+authEsc(AUTH.email)+'</b>(으)로<br>보낸 6자리 코드를 입력하세요';
+    $('au-code-sub').innerHTML=L(AUTH.mode==='login'?'code.sub.login':'code.sub.signup').replace('{e}','<b>'+authEsc(AUTH.email)+'</b>');
     $('au-code-div').hidden=$('au-code-pwbtn').hidden=!!AUTH.pwDone;
   }
-  if(id==='au-pw'){ $('au-pw-sub').innerHTML='<b>'+authEsc(AUTH.email)+'</b> 계정의<br>비밀번호를 입력하세요'; }
+  if(id==='au-pw'){ $('au-pw-sub').innerHTML=L('pw.sub').replace('{e}','<b>'+authEsc(AUTH.email)+'</b>'); }
   if(id==='au-pw-new'){ $('au-pwnew-email').value=AUTH.email; authPwReq(); }
   var f={'au-code':'au-code-in','au-pw-new':'au-pwnew-in','au-pw':'au-pw-in'}[id];
   if(f) setTimeout(function(){var el=$(f); if(el) el.focus();},80);
@@ -3958,36 +3990,79 @@ function authEsc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&'
 function authOauth(provider){ AUTH.doneName='김도현'; toast('MOCK, '+provider+' 인증 완료'); signupDone(); }
 function authEmailNext(){
   var v=($('au-email').value||'').trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ $('au-email-err').classList.add('on'); return; }
-  $('au-email-err').classList.remove('on');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ authBad('au-email','au-email-err'); return; }
+  authGood('au-email','au-email-err');
   AUTH.email=v;
   if(AUTH.mode==='signup') authShow('au-pw-new');
   else authSendCode();
+}
+function authBad(inputId,errId){ /* 오류 상태: 빨간 테두리 + 흔들림 + 메시지 */
+  var i=$(inputId), e=$(errId);
+  if(e) e.classList.add('on');
+  if(i){ i.classList.add('bad'); i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus(); }
+}
+function authGood(inputId,errId){ var i=$(inputId), e=$(errId); if(e) e.classList.remove('on'); if(i) i.classList.remove('bad'); }
+function authResendLabel(){
+  var b=$('au-resend'); if(!b) return;
+  if(AUTH.cool>0){ b.textContent=L('code.wait').replace('{s}',AUTH.cool); b.disabled=true; b.style.opacity=.5; }
+  else{ b.textContent=L('code.resend'); b.disabled=false; b.style.opacity=''; }
+}
+function authStartCool(){
+  AUTH.cool=30; authResendLabel();
+  if(AUTH.rt) clearInterval(AUTH.rt);
+  AUTH.rt=setInterval(function(){
+    AUTH.cool--; authResendLabel();
+    if(AUTH.cool<=0){ clearInterval(AUTH.rt); AUTH.rt=null; }
+  },1000);
+}
+function authResend(){
+  if(AUTH.cool>0) return;
+  var c=$('au-code-in'); if(c){ c.value=''; authGood('au-code-in','au-code-err'); }
+  toast(L('code.resent'));
+  authStartCool();
 }
 function authSendCode(){
   if(!AUTH.email){ authShow('au-start'); return; }
   var c=$('au-code-in'); if(c) c.value='';
   authShow('au-code');
-  toast('MOCK, 인증 코드를 보냈어요');
+  toast(L('code.sent'));
+  authStartCool();
 }
 function authCodeNext(){
   var v=($('au-code-in').value||'').trim();
-  if(!/^\d{6}$/.test(v)){ $('au-code-err').classList.add('on'); return; }
-  $('au-code-err').classList.remove('on');
+  if(!/^\d{6}$/.test(v)){ authBad('au-code-in','au-code-err'); return; }
+  authGood('au-code-in','au-code-err');
   authFinishEmail();
 }
-function authPwReq(){
-  var ok=($('au-pwnew-in').value||'').length>=12;
-  var el=$('au-req-len');
-  el.className=ok?'ok':'';
-  el.innerHTML=(ok?'&nbsp;✓&nbsp; ':'&nbsp;, &nbsp; ')+'12자 이상';
-  return ok;
+function authPwReq(){ /* 12자 이상 + 숫자 + 특수문자, 라이브 체크리스트 */
+  var v=$('au-pwnew-in').value||'';
+  var rules=[
+    ['au-req-len', v.length>=12],
+    ['au-req-num', /\d/.test(v)],
+    ['au-req-spec', /[^A-Za-z0-9\s]/.test(v)]
+  ];
+  var all=true;
+  rules.forEach(function(r){
+    var el=$(r[0]); if(!el) return;
+    el.classList.toggle('ok',r[1]);
+    el.querySelector('.m').textContent=r[1]?'✓':'•';
+    if(!r[1]) all=false;
+  });
+  var go=$('au-pwnew-go'); if(go) go.classList.toggle('dis',!all);
+  return all;
 }
-function authPwNewNext(){ if(!authPwReq()){ $('au-pwnew-in').focus(); return; } AUTH.pwDone=true; authSendCode(); }
+function authPwNewNext(){
+  if(!authPwReq()){
+    var i=$('au-pwnew-in');
+    i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus();
+    return;
+  }
+  AUTH.pwDone=true; authSendCode();
+}
 function authPwNext(){
   var v=$('au-pw-in').value||'';
-  if(v.length<1){ $('au-pw-err').classList.add('on'); return; }
-  $('au-pw-err').classList.remove('on');
+  if(v.length<1){ authBad('au-pw-in','au-pw-err'); return; }
+  authGood('au-pw-in','au-pw-err');
   AUTH.pwDone=true; authSendCode();
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
@@ -4116,6 +4191,23 @@ var I18N={
   'menu.terms':{ko:'약관',en:'Terms',ja:'利用規約','zh-CN':'条款','zh-TW':'條款',es:'Términos',fr:'Conditions'},
   'menu.privacy':{ko:'개인정보처리방침',en:'Privacy policy',ja:'プライバシーポリシー','zh-CN':'隐私政策','zh-TW':'隱私權政策',es:'Política de privacidad',fr:'Politique de confidentialité'},
   'menu.glc':{ko:'언어 및 통화',en:'Language & currency',ja:'言語と通貨','zh-CN':'语言与货币','zh-TW':'語言與貨幣',es:'Idioma y moneda',fr:'Langue et devise'},
+  'menu.settings':{ko:'설정',en:'Settings',ja:'設定','zh-CN':'设置','zh-TW':'設定',es:'Ajustes',fr:'Paramètres'},
+  'common.close':{ko:'닫기',en:'Close',ja:'閉じる','zh-CN':'关闭','zh-TW':'關閉',es:'Cerrar',fr:'Fermer'},
+  'common.menu':{ko:'메뉴',en:'Menu',ja:'メニュー','zh-CN':'菜单','zh-TW':'選單',es:'Menú',fr:'Menu'},
+  'fb.title':{ko:'TETH에 의견 보내기',en:'Send feedback to TETH',ja:'TETHにフィードバックを送信','zh-CN':'向TETH发送反馈','zh-TW':'向TETH傳送意見',es:'Enviar comentarios a TETH',fr:'Envoyer des commentaires à TETH'},
+  'fb.label':{ko:'의견을 설명해 주세요. (필수)',en:'Describe your feedback. (required)',ja:'フィードバックの内容をご記入ください。(必須)','zh-CN':'请描述您的反馈。(必填)','zh-TW':'請描述您的意見。(必填)',es:'Describe tus comentarios. (obligatorio)',fr:'Décrivez vos commentaires. (obligatoire)'},
+  'fb.ph':{ko:'이 의견을 제시한 이유를 알려주세요.',en:'Tell us why you are sharing this feedback.',ja:'このフィードバックを送る理由を教えてください。','zh-CN':'请告诉我们您提交此反馈的原因。','zh-TW':'請告訴我們您提交此意見的原因。',es:'Cuéntanos por qué envías estos comentarios.',fr:'Dites-nous pourquoi vous envoyez ces commentaires.'},
+  'fb.sens':{ko:'민감한 정보는 포함하지 마세요.',en:'Do not include sensitive information.',ja:'機密情報は含めないでください。','zh-CN':'请勿包含敏感信息。','zh-TW':'請勿包含敏感資訊。',es:'No incluyas información sensible.',fr:"N'incluez pas d'informations sensibles."},
+  'fb.tip':{ko:'민감한 정보는 보호되어야 하는 모든 데이터를 의미합니다. 예를 들어 비밀번호, API 키, 세부적인 개인 정보를 포함하지 마세요.',en:'Sensitive information means any data that must be protected. For example, do not include passwords, API keys, or detailed personal information.',ja:'機密情報とは、保護すべきあらゆるデータを指します。パスワード、APIキー、詳細な個人情報などは含めないでください。','zh-CN':'敏感信息指所有需要保护的数据。例如，请勿包含密码、API密钥或详细的个人信息。','zh-TW':'敏感資訊指所有需要保護的資料。例如，請勿包含密碼、API金鑰或詳細的個人資訊。',es:'La información sensible es cualquier dato que deba protegerse. Por ejemplo, no incluyas contraseñas, claves API ni datos personales detallados.',fr:"Les informations sensibles désignent toute donnée à protéger. Par exemple, n'incluez pas de mots de passe, de clés API ou de données personnelles détaillées."},
+  'fb.shot':{ko:'스크린샷을 주시면 TETH에서 의견을 더 잘 이해하는 데 도움이 됩니다.',en:'A screenshot helps TETH better understand your feedback.',ja:'スクリーンショットがあると、TETHがフィードバックをより理解しやすくなります。','zh-CN':'截图有助于TETH更好地理解您的反馈。','zh-TW':'截圖有助於TETH更好地理解您的意見。',es:'Una captura ayuda a TETH a entender mejor tus comentarios.',fr:"Une capture d'écran aide TETH à mieux comprendre vos commentaires."},
+  'fb.attach':{ko:'스크린샷 첨부',en:'Attach screenshot',ja:'スクリーンショットを添付','zh-CN':'附加截图','zh-TW':'附加截圖',es:'Adjuntar captura',fr:"Joindre une capture d'écran"},
+  'fb.fine':{ko:'일부 계정 및 시스템 정보가 TETH에 전송될 수 있습니다. 이 정보는 {P}개인정보처리방침{/} 및 {T}서비스 약관{/}에 따라 문제를 해결하고 서비스를 개선하는 데 사용됩니다. 이메일로 추가 정보와 소식을 전달해 드릴 수 있습니다.',en:'Some account and system information may be sent to TETH. This information is used to fix problems and improve the service under our {P}Privacy Policy{/} and {T}Terms of Service{/}. We may email you for more details and updates.',ja:'一部のアカウント情報とシステム情報がTETHに送信される場合があります。この情報は{P}プライバシーポリシー{/}と{T}利用規約{/}に基づき、問題の解決とサービスの改善に使用されます。追加情報やお知らせをメールでお送りすることがあります。','zh-CN':'部分账户和系统信息可能会发送给TETH。这些信息将根据{P}隐私政策{/}和{T}服务条款{/}用于解决问题和改进服务。我们可能会通过邮件向您发送更多信息和动态。','zh-TW':'部分帳戶和系統資訊可能會發送給TETH。這些資訊將根據{P}隱私權政策{/}和{T}服務條款{/}用於解決問題和改進服務。我們可能會透過郵件向您發送更多資訊和動態。',es:'Cierta información de cuenta y del sistema puede enviarse a TETH. Se usa para resolver problemas y mejorar el servicio según la {P}Política de privacidad{/} y los {T}Términos del servicio{/}. Podemos enviarte más información por correo.',fr:"Certaines informations de compte et système peuvent être envoyées à TETH. Elles servent à résoudre les problèmes et améliorer le service selon la {P}Politique de confidentialité{/} et les {T}Conditions de service{/}. Nous pouvons vous envoyer plus d'informations par e-mail."},
+  'fb.send':{ko:'보내기',en:'Send',ja:'送信','zh-CN':'发送','zh-TW':'傳送',es:'Enviar',fr:'Envoyer'},
+  'fb.doneT':{ko:'의견이 제출되었습니다. 감사합니다',en:'Feedback submitted. Thank you',ja:'フィードバックを送信しました。ありがとうございます','zh-CN':'反馈已提交，谢谢','zh-TW':'意見已提交，謝謝',es:'Comentarios enviados. Gracias',fr:'Commentaires envoyés. Merci'},
+  'fb.doneP':{ko:'여러분의 의견은 문제를 해결하고 TETH 서비스를 개선하는 데 활용됩니다.',en:'Your feedback helps us fix problems and improve TETH.',ja:'いただいたフィードバックは、問題の解決とTETHの改善に活用されます。','zh-CN':'您的反馈将用于解决问题并改进TETH服务。','zh-TW':'您的意見將用於解決問題並改進TETH服務。',es:'Tus comentarios nos ayudan a resolver problemas y mejorar TETH.',fr:'Vos commentaires nous aident à résoudre les problèmes et à améliorer TETH.'},
+  'side.open':{ko:'사이드바 열기',en:'Open sidebar',ja:'サイドバーを開く','zh-CN':'打开侧边栏','zh-TW':'打開側邊欄',es:'Abrir barra lateral',fr:'Ouvrir la barre latérale'},
+  'side.close':{ko:'사이드바 닫기',en:'Close sidebar',ja:'サイドバーを閉じる','zh-CN':'关闭侧边栏','zh-TW':'關閉側邊欄',es:'Cerrar barra lateral',fr:'Fermer la barre latérale'},
+  'side.newTip':{ko:'새 전략',en:'New strategy',ja:'新しい戦略','zh-CN':'新策略','zh-TW':'新策略',es:'Nueva estrategia',fr:'Nouvelle stratégie'},
   'banner.sub':{ko:'TETH에서 제공하는 AI 트레이딩 에이전트',en:'AI trading agent from TETH',ja:'TETHのAIトレーディングエージェント','zh-CN':'TETH推出的AI交易代理','zh-TW':'TETH推出的AI交易代理',es:'Agente de trading con IA de TETH',fr:'Agent de trading IA par TETH'},
   'banner.dl':{ko:'다운로드',en:'Download',ja:'ダウンロード','zh-CN':'下载','zh-TW':'下載',es:'Descargar',fr:'Télécharger'},
   'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips',ja:'例：ビットコイン下落時に買う戦略','zh-CN':'例如：比特币下跌时买入的策略','zh-TW':'例如：比特幣下跌時買入的策略',es:'p. ej. Una estrategia que compra caídas de Bitcoin',fr:'p. ex. Une stratégie qui achète les baisses du Bitcoin'},
@@ -4140,6 +4232,30 @@ var I18N={
   'auth.or':{ko:'또는',en:'or',ja:'または','zh-CN':'或','zh-TW':'或',es:'o',fr:'ou'},
   'auth.email':{ko:'이메일 주소',en:'Email address',ja:'メールアドレス','zh-CN':'电子邮件地址','zh-TW':'電子郵件地址',es:'Correo electrónico',fr:'Adresse e-mail'},
   'auth.continue':{ko:'계속',en:'Continue',ja:'続行','zh-CN':'继续','zh-TW':'繼續',es:'Continuar',fr:'Continuer'},
+  'email.err':{ko:'올바른 이메일 주소를 입력해 주세요.',en:'Enter a valid email address.',ja:'有効なメールアドレスを入力してください。','zh-CN':'请输入有效的电子邮件地址。','zh-TW':'請輸入有效的電子郵件地址。',es:'Introduce un correo electrónico válido.',fr:'Saisissez une adresse e-mail valide.'},
+  'code.title':{ko:'받은 편지함을 확인하세요',en:'Check your inbox',ja:'受信トレイを確認してください','zh-CN':'请查看您的收件箱','zh-TW':'請查看您的收件匣',es:'Revisa tu bandeja de entrada',fr:'Vérifiez votre boîte mail'},
+  'code.sub.login':{ko:'로그인하려면 방금 {e}(으)로<br>보낸 6자리 코드를 입력하세요',en:'Enter the 6-digit code we just sent to<br>{e} to log in',ja:'ログインするには、{e} に送信した<br>6桁のコードを入力してください','zh-CN':'请输入我们刚发送到<br>{e} 的6位验证码以登录','zh-TW':'請輸入我們剛發送到<br>{e} 的6位驗證碼以登入',es:'Introduce el código de 6 dígitos que enviamos a<br>{e} para iniciar sesión',fr:'Saisissez le code à 6 chiffres envoyé à<br>{e} pour vous connecter'},
+  'code.sub.signup':{ko:'계정을 만들려면 방금 {e}(으)로<br>보낸 6자리 코드를 입력하세요',en:'Enter the 6-digit code we just sent to<br>{e} to create your account',ja:'アカウントを作成するには、{e} に送信した<br>6桁のコードを入力してください','zh-CN':'请输入我们刚发送到<br>{e} 的6位验证码以创建账户','zh-TW':'請輸入我們剛發送到<br>{e} 的6位驗證碼以建立帳戶',es:'Introduce el código de 6 dígitos que enviamos a<br>{e} para crear tu cuenta',fr:'Saisissez le code à 6 chiffres envoyé à<br>{e} pour créer votre compte'},
+  'code.ph':{ko:'코드',en:'Code',ja:'コード','zh-CN':'验证码','zh-TW':'驗證碼',es:'Código',fr:'Code'},
+  'code.err':{ko:'6자리 숫자 코드를 입력해 주세요.',en:'Enter the 6-digit code.',ja:'6桁の数字コードを入力してください。','zh-CN':'请输入6位数字验证码。','zh-TW':'請輸入6位數字驗證碼。',es:'Introduce el código de 6 dígitos.',fr:'Saisissez le code à 6 chiffres.'},
+  'code.resend':{ko:'이메일 다시 보내기',en:'Resend email',ja:'メールを再送信','zh-CN':'重新发送邮件','zh-TW':'重新發送郵件',es:'Reenviar correo',fr:"Renvoyer l'e-mail"},
+  'code.wait':{ko:'다시 보내기 ({s}초)',en:'Resend ({s}s)',ja:'再送信 ({s}秒)','zh-CN':'重新发送 ({s}秒)','zh-TW':'重新發送 ({s}秒)',es:'Reenviar ({s}s)',fr:'Renvoyer ({s}s)'},
+  'code.sent':{ko:'인증 코드를 보냈어요',en:'Verification code sent',ja:'認証コードを送信しました','zh-CN':'验证码已发送','zh-TW':'驗證碼已發送',es:'Código enviado',fr:'Code envoyé'},
+  'code.resent':{ko:'인증 코드를 다시 보냈어요',en:'We sent a new code',ja:'認証コードを再送しました','zh-CN':'已重新发送验证码','zh-TW':'已重新發送驗證碼',es:'Hemos reenviado el código',fr:'Nouveau code envoyé'},
+  'code.pwbtn':{ko:'비밀번호로 계속하기',en:'Continue with password',ja:'パスワードで続行','zh-CN':'使用密码继续','zh-TW':'使用密碼繼續',es:'Continuar con contraseña',fr:'Continuer avec un mot de passe'},
+  'pwnew.title':{ko:'비밀번호 생성하기',en:'Create a password',ja:'パスワードを作成','zh-CN':'创建密码','zh-TW':'建立密碼',es:'Crea una contraseña',fr:'Créez un mot de passe'},
+  'pwnew.sub':{ko:'이 비밀번호를 사용해 TETH에<br>로그인하게 됩니다',en:"You'll use this password to<br>log in to TETH",ja:'このパスワードでTETHに<br>ログインします','zh-CN':'您将使用此密码<br>登录TETH','zh-TW':'您將使用此密碼<br>登入TETH',es:'Usarás esta contraseña para<br>iniciar sesión en TETH',fr:'Vous utiliserez ce mot de passe pour<br>vous connecter à TETH'},
+  'pwnew.edit':{ko:'편집',en:'Edit',ja:'編集','zh-CN':'编辑','zh-TW':'編輯',es:'Editar',fr:'Modifier'},
+  'pwnew.codebtn':{ko:'일회용 코드로 회원 가입',en:'Sign up with one-time code',ja:'ワンタイムコードで登録','zh-CN':'使用一次性验证码注册','zh-TW':'使用一次性驗證碼註冊',es:'Regístrate con código de un solo uso',fr:"S'inscrire avec un code à usage unique"},
+  'req.head':{ko:'비밀번호에 포함되어야 하는 사항:',en:'Your password must include:',ja:'パスワードに必要な条件:','zh-CN':'密码必须包含：','zh-TW':'密碼必須包含：',es:'Tu contraseña debe incluir:',fr:'Votre mot de passe doit contenir :'},
+  'req.len':{ko:'12자 이상',en:'At least 12 characters',ja:'12文字以上','zh-CN':'至少12个字符','zh-TW':'至少12個字元',es:'Mínimo 12 caracteres',fr:'Au moins 12 caractères'},
+  'req.num':{ko:'숫자 1개 이상',en:'At least 1 number',ja:'数字を1つ以上','zh-CN':'至少1个数字','zh-TW':'至少1個數字',es:'Al menos 1 número',fr:'Au moins 1 chiffre'},
+  'req.spec':{ko:'특수문자 1개 이상 (!@#$ 등)',en:'At least 1 special character (!@#$)',ja:'記号を1つ以上 (!@#$など)','zh-CN':'至少1个特殊字符 (!@#$等)','zh-TW':'至少1個特殊字元 (!@#$等)',es:'Al menos 1 carácter especial (!@#$)',fr:'Au moins 1 caractère spécial (!@#$)'},
+  'pw.label':{ko:'비밀번호',en:'Password',ja:'パスワード','zh-CN':'密码','zh-TW':'密碼',es:'Contraseña',fr:'Mot de passe'},
+  'pw.title':{ko:'비밀번호를 입력하세요',en:'Enter your password',ja:'パスワードを入力してください','zh-CN':'请输入密码','zh-TW':'請輸入密碼',es:'Introduce tu contraseña',fr:'Saisissez votre mot de passe'},
+  'pw.sub':{ko:'{e} 계정의<br>비밀번호를 입력하세요',en:'Enter the password for<br>{e}',ja:'{e} アカウントの<br>パスワードを入力してください','zh-CN':'请输入<br>{e} 的密码','zh-TW':'請輸入<br>{e} 的密碼',es:'Introduce la contraseña de<br>{e}',fr:'Saisissez le mot de passe de<br>{e}'},
+  'pw.err':{ko:'비밀번호를 입력해 주세요.',en:'Enter your password.',ja:'パスワードを入力してください。','zh-CN':'请输入密码。','zh-TW':'請輸入密碼。',es:'Introduce tu contraseña.',fr:'Saisissez votre mot de passe.'},
+  'pw.codebtn':{ko:'일회용 코드로 로그인',en:'Log in with one-time code',ja:'ワンタイムコードでログイン','zh-CN':'使用一次性验证码登录','zh-TW':'使用一次性驗證碼登入',es:'Inicia sesión con código de un solo uso',fr:'Se connecter avec un code à usage unique'},
   'help.title':{ko:'24/7 고객지원',en:'24/7 Support',ja:'24時間サポート','zh-CN':'24/7客服支持','zh-TW':'24/7客服支援',es:'Soporte 24/7',fr:'Assistance 24h/24'},
   'help.body':{ko:'무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.',en:'Ask us anything. Our agents are available around the clock.',ja:'何でもお尋ねください。担当者が24時間365日対応します。','zh-CN':'有任何问题都可以咨询，客服全年无休24小时在线。','zh-TW':'有任何問題都可以諮詢，客服全年無休24小時在線。',es:'Pregúntanos lo que sea. Nuestro equipo está disponible 24/7.',fr:'Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.'},
   'help.sub':{ko:'실시간 채팅은 곧 제공돼요. support@teth.ai',en:'Live chat coming soon. support@teth.ai',ja:'ライブチャットは近日提供予定です。support@teth.ai','zh-CN':'在线聊天即将上线。support@teth.ai','zh-TW':'線上聊天即將上線。support@teth.ai',es:'El chat en vivo llegará pronto. support@teth.ai',fr:'Le chat en direct arrive bientôt. support@teth.ai'}
@@ -4217,6 +4333,27 @@ function applyLang(){
   if(slinks[0]) slinks[0].lastChild.textContent=L('nav.about');
   if(slinks[1]) slinks[1].lastChild.textContent=L('nav.download');
   var lbtn=$('g-login-btn'); if(lbtn) lbtn.textContent=L('side.login');
+  /* 접힌 레일, 하단 아이콘의 호버 픽 */
+  var po=$('gp-open'); if(po) po.textContent=L('side.open');
+  var pc=$('gp-close'); if(pc) pc.textContent=L('side.close');
+  var pn=$('gp-new'); if(pn) pn.textContent=L('side.newTip');
+  var pst=$('gp-set'); if(pst) pst.textContent=L('menu.settings');
+  var pf=$('g-profile'); if(pf && !S.user) pf.textContent=L('nav.login');
+  /* 피드백 패널 */
+  var F=function(id,k){var el=$(id); if(el) el.textContent=L(k);};
+  F('fb-title','fb.title'); F('fb-lbl','fb.label'); F('fb-sens-t','fb.sens');
+  F('fb-tip','fb.tip'); F('fb-shot-desc','fb.shot'); F('fb-attach-t','fb.attach');
+  F('fb-send','fb.send'); F('fb-done-t','fb.doneT'); F('fb-done-p','fb.doneP'); F('fb-done-x','common.close');
+  var ft=$('fb-text'); if(ft) ft.placeholder=L('fb.ph');
+  var ff=$('fb-fine'); if(ff) ff.innerHTML=L('fb.fine')
+    .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
+    .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
+    .replace(/\{\/\}/g,'</a>');
+  /* 주요 aria-label */
+  var hb2=$('g-hamburger'); if(hb2) hb2.setAttribute('aria-label',L('common.menu'));
+  var gb2=$('g-globe'); if(gb2) gb2.setAttribute('aria-label',L('menu.glc'));
+  document.querySelectorAll('#glc-panel .x2,.fb-x,#fb-done .cls').forEach(function(el){el.setAttribute('aria-label',L('common.close'));});
+  var gr2=$('g-gear-btn'); if(gr2) gr2.setAttribute('aria-label',L('menu.settings'));
   /* 설정 메뉴 */
   var items=document.querySelectorAll('#g-setmenu>.gm-item, #g-setmenu>button.gm-item');
   document.querySelectorAll('#g-setmenu .gm-item').forEach(function(it){
