@@ -779,6 +779,14 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 /* 입력/키보드 시 칩만 부드럽게 페이드 (데스크톱, 모바일 공통) */
 body.kb-open .g-home-chips{opacity:0;transform:translateY(16px);pointer-events:none}
 .g-qchip{padding:7px 14px;border-radius:999px;border:1px solid var(--gl2);font-size:12.5px;color:var(--gt2);transition:background .12s}
+/* 무료 CTA 배지: 그라데이션 단일 배지, 클릭=회원가입 */
+.g-freecta{position:relative;display:inline-block;padding:11px 24px;font-size:14px;font-weight:700;letter-spacing:.01em;color:#fff;background:linear-gradient(93deg,#1f8bff 0%,#5f4bf4 52%,#b512d8 100%);border-radius:12px;transform:skewX(-4deg);box-shadow:0 6px 22px rgba(95,75,244,.35);transition:transform .15s,box-shadow .15s;cursor:pointer}
+.g-freecta>span{display:inline-block;transform:skewX(4deg)}
+.g-freecta:hover{transform:skewX(-4deg) translateY(-2px);box-shadow:0 10px 28px rgba(95,75,244,.5)}
+.g-freecta:active{transform:skewX(-4deg) translateY(0)}
+body.light .g-freecta{box-shadow:0 6px 20px rgba(95,75,244,.28)}
+.au-free{margin-top:14px;text-align:center;font-size:12.5px;font-weight:600;color:#62d69a}
+body.light .au-free{color:#1e8e3e}
 .g-qchip:hover{background:rgba(255,255,255,.05)}
 /* conversation */
 .g-thread{display:flex;flex-direction:column;gap:16px;padding-bottom:8px}
@@ -1357,6 +1365,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       </div>
       <div class="au-err" id="au-email-err">올바른 이메일 주소를 입력해 주세요.</div>
       <button class="au-btn primary au-gap" onclick="authEmailNext()">계속</button>
+      <div class="au-free" id="au-free">영원히 $0, 신용카드 필요 없음</div>
     </div>
 
     <!-- step 3: 코드 확인 -->
@@ -1444,7 +1453,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
     <button class="x" onclick="tethBannerClose()" aria-label="닫기">✕</button>
   </div>
   <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-  <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
+  <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 시작</button></span>
   <button id="g-globe" onclick="glcOpen(event)" aria-label="언어 및 통화"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span class="gtip" id="g-globe-tip">언어 및 통화</span></button>
   <div id="glc-panel">
     <button class="x2" onclick="glcClose()" aria-label="닫기">✕</button>
@@ -3277,9 +3286,7 @@ function gHome(){
     '<div class="g-plus-pop" id="g-plus-pop" onmouseenter="gPlusStay()" onmouseleave="gPlusLeave()"><b>'+TR('plus.t','더 많은 기능 사용하기')+'</b><p>'+TR('plus.b','로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.')+'</p><div class="row"><button class="go" onclick="authOpen(\'login\')">'+TR('nav.login','로그인')+'</button></div></div>'+
     '</div>'+
     '<div class="g-home-chips">'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.2','추세 추종 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
+    (S.user?'':'<button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','영원히 $0, 신용카드 필요 없음')+'</span></button>')+
     '</div>'+
     '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
@@ -4069,7 +4076,9 @@ var I18N={
   'nav.about':{ko:'TETH 정보',en:'About TETH',ja:'TETHについて','zh-CN':'关于TETH','zh-TW':'關於TETH',es:'Acerca de TETH',fr:'À propos de TETH'},
   'nav.download':{ko:'TETH 앱 다운로드',en:'Get TETH app',ja:'TETHアプリを入手','zh-CN':'下载TETH应用','zh-TW':'下載TETH應用',es:'Descargar la app TETH',fr:"Télécharger l'app TETH"},
   'nav.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
-  'nav.signup':{ko:'무료로 회원가입',en:'Sign up free',ja:'無料で登録','zh-CN':'免费注册','zh-TW':'免費註冊',es:'Regístrate gratis',fr:'Inscription gratuite'},
+  'nav.signup':{ko:'무료로 시작',en:'Start free',ja:'無料で始める','zh-CN':'免费开始','zh-TW':'免費開始',es:'Empieza gratis',fr:'Commencer gratuitement'},
+  'chip.free':{ko:'카드 등록 없이 무료',en:'Free, no card needed',ja:'カード登録なしで無料','zh-CN':'免费，无需绑卡','zh-TW':'免費，無需綁卡',es:'Gratis, sin tarjeta',fr:'Gratuit, sans carte'},
+  'auth.free':{ko:'영원히 $0, 신용카드 필요 없음',en:'$0 forever, no credit card needed',ja:'ずっと$0、クレジットカード不要','zh-CN':'永久$0，无需信用卡','zh-TW':'永久$0，無需信用卡',es:'$0 para siempre, sin tarjeta de crédito',fr:'$0 pour toujours, sans carte bancaire'},
   'side.new':{ko:'＋ 새 연구',en:'＋ New research',ja:'＋ 新しいリサーチ','zh-CN':'＋ 新研究','zh-TW':'＋ 新研究',es:'＋ Nueva investigación',fr:'＋ Nouvelle recherche'},
   'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.',ja:'市場に勝つ戦略、|ログイン|して今すぐ始めましょう。','zh-CN':'战胜市场的策略，|登录|即刻开始。','zh-TW':'戰勝市場的策略，|登入|即刻開始。',es:'Estrategias para ganar al mercado, |inicia sesión| y empieza ya.',fr:'Des stratégies pour battre le marché, |connectez-vous| et commencez.'},
   'side.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
@@ -4233,6 +4242,7 @@ function applyLang(){
   });
   var adiv=document.querySelector('#au-start .au-div'); if(adiv) adiv.textContent=L('auth.or');
   var aem=$('au-email'); if(aem) aem.placeholder=L('auth.email');
+  var af=$('au-free'); if(af) af.textContent=L('auth.free');
   /* 고객센터 팝오버 */
   var hp=document.getElementById('teth-help-pop');
   if(hp){
