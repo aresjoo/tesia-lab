@@ -521,8 +521,20 @@ body.g-dark{background:#0f1012}
 .g-doc{max-width:820px;margin:0 auto;padding:20px 28px 28px}
 /* home */
 .g-home{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 640px 420px at 50% 52%,rgba(24,42,94,.55),rgba(15,16,18,0) 70%)}
-.g-hello{font-size:clamp(24px,3vw,34px);font-weight:400;letter-spacing:-.01em;color:#eceef2;text-align:center;text-wrap:balance}
-.g-pill{width:min(640px,92%);margin-top:34px;height:58px;border-radius:999px;background:#1e2024;display:flex;align-items:center;gap:12px;padding:0 10px 0 20px}
+.g-hello{font-size:clamp(30px,3.8vw,44px);font-weight:500;letter-spacing:-.02em;color:#eceef2;text-align:center;text-wrap:balance;word-break:keep-all}
+.g-sub{font-size:clamp(14px,1.3vw,17px);color:var(--gt2);text-align:center;margin-top:14px;word-break:keep-all}
+.g-pill{position:relative;width:min(640px,92%);margin-top:34px;height:58px;border-radius:999px;background:#1e2024;display:flex;align-items:center;gap:12px;padding:0 10px 0 20px}
+.g-pill .plus{cursor:pointer;width:34px;height:34px;margin-left:-8px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:background .12s}
+.g-pill .plus:hover{background:rgba(255,255,255,.08)}
+.g-plus-pop{position:absolute;top:64px;left:4px;width:min(340px,86vw);background:#26282d;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;text-align:left;box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:30;display:none}
+.g-plus-pop.on{display:block}
+.g-plus-pop b{display:block;font-size:16px;font-weight:700;color:#eceef2;margin-bottom:8px}
+.g-plus-pop p{font-size:13.5px;color:var(--gt2);line-height:1.65}
+.g-plus-pop .row{display:flex;justify-content:flex-end;margin-top:14px}
+.g-plus-pop .go{height:36px;padding:0 20px;border-radius:999px;background:#eceef2;color:#17181b;font-size:13px;font-weight:600}
+.g-terms{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:var(--gt3)}
+.g-terms a{color:var(--gt3);text-decoration:underline;text-underline-offset:3px}
+.g-terms a:hover{color:var(--gt2)}
 .g-pill:focus-within{outline:1px solid rgba(255,255,255,.14)}
 .g-pill input{flex:1;background:none;border:none;outline:none;color:var(--gt);font-size:14.5px;font-family:inherit;min-width:0}
 .g-pill input::placeholder{color:var(--gt3)}
@@ -2882,16 +2894,30 @@ function gHome(){
   $('g-chead').hidden=true; gComposer(false);
   $('g-aux').style.display='none';
   gSideRender(); gTeamRender(); gArtRender();
+  var GREETS=[
+    {h:'TETH로 시장과 싸우세요',s:'AI와 대화하며 전략을 만들고, 과거 데이터로 검증하세요'},
+    {h:'주식이든 코인이든, 시장에 대해 물어보세요',s:'궁금한 것을 말하면 TETH가 검증 가능한 전략으로 바꿔드려요'},
+    {h:'TESLA 가격 전망이 궁금하지 않아요?',s:'AI와 대화하며 아이디어를 전략으로 만들어보세요'},
+    {h:'비트코인, 지금 사도 될까요?',s:'감이 아니라 데이터로 — TETH가 과거 시장에서 검증해드려요'},
+    {h:'오늘 시장, 왜 이런지 물어보세요',s:'AI와 대화하며 시장을 읽고, 전략까지 만들어보세요'},
+    {h:'무엇을 연구할까요?',s:'아이디어 한 줄이면 충분해요 — 검증은 TETH가 할게요'}
+  ];
+  var GR=GREETS[Math.floor(Math.random()*GREETS.length)];
   gContent(
-    '<div class="g-home" style="min-height:calc(100vh - 120px)">'+
-    '<div class="g-hello">무엇을 연구할까요?</div>'+
-    '<div class="g-pill"><span class="plus">＋</span><input id="g-home-in" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어">'+
-    '<button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button></div>'+
+    '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
+    '<div class="g-hello">'+GR.h+'</div>'+
+    '<div class="g-sub">'+GR.s+'</div>'+
+    '<div class="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><input id="g-home-in" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어">'+
+    '<button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button>'+
+    '<div class="g-plus-pop" id="g-plus-pop"><b>더 많은 기능 사용하기</b><p>로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.</p><div class="row"><button class="go" onclick="authOpen(\'login\')">로그인</button></div></div>'+
+    '</div>'+
     '<div class="g-home-chips">'+
     '<button class="g-qchip" onclick="gNew(\'비트코인이 떨어졌을 때 사는 전략\')">하락 후 반등 전략</button>'+
     '<button class="g-qchip" onclick="gNew(\'오르는 흐름에 올라타는 전략\')">추세 추종 전략</button>'+
     '<button class="g-qchip" onclick="gNew(\'뭐부터 검증해야 할지 모르겠어\')">막연한 아이디어부터</button>'+
-    '</div></div>');
+    '</div>'+
+    '<div class="g-terms"><a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH 약관</a>과 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.</div>'+
+    '</div>');
   var hi=$('g-home-in');
   hi.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); gNew(); } });
   hi.addEventListener('input',function(){ var b=$('g-home-send'); if(b) b.style.display=this.value.trim()?'inline-flex':'none'; });
@@ -3540,6 +3566,14 @@ function authSyncUI(){
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
 }
 function gProfileClick(){ if(!S.user){ authOpen('login'); return; } toast('MOCK — 프로필'); }
+function gPlusPop(e){
+  e.stopPropagation();
+  var p=$('g-plus-pop'); if(!p) return;
+  if(S.user){ toast('파일 첨부 준비 중이에요'); return; }
+  p.classList.toggle('on');
+  var close=function(ev){ if(!p.contains(ev.target)){ p.classList.remove('on'); document.removeEventListener('click',close); } };
+  if(p.classList.contains('on')) setTimeout(function(){ document.addEventListener('click',close); },0);
+}
 function gSideToggle(){
   var s=$('g-side'); if(!s) return;
   if(window.innerWidth<=860){

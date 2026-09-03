@@ -4,9 +4,9 @@ window.TETH_CONFIG = {
   /* 앱(워크스페이스) 진입 경로 */
   appUrl: "../",
 
-  /* 스토어 URL — TODO: 실제 출시 후 URL 입력. 입력하면 /download의 배지·QR이 자동 반영된다. */
-  iosStoreUrl: "",      /* 예: "https://apps.apple.com/app/id0000000000" */
-  androidStoreUrl: "",  /* 예: "https://play.google.com/store/apps/details?id=ai.teth.app" */
+  /* 스토어 URL — 출시 가정 임의 URL. 실제 출시 시 여기만 바꾸면 /download의 QR·링크가 자동 반영된다. */
+  iosStoreUrl: "https://apps.apple.com/kr/app/teth-ai/id6740000000",
+  androidStoreUrl: "https://play.google.com/store/apps/details?id=ai.teth.app",
 
   /* Zendesk Web Widget 키 — TODO: Zendesk 가입 후 키 입력. 입력하면 우측 하단 고객센터 버튼이 실제 Zendesk 채팅을 연다. */
   zendeskKey: "",
