@@ -1,5 +1,5 @@
 <title>TETH</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..750&family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
 /* ─────────────── Design tokens ─────────────── */
@@ -720,6 +720,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 /* ══ 모바일: 사이드바 = 오버레이 드로어 ══ */
 #g-hamburger{display:none}
 #g-side-links{display:none}
+#g-appbanner{display:none}
 #g-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:85;opacity:0;pointer-events:none;transition:opacity .22s var(--ease)}
 #g-scrim.on{opacity:1;pointer-events:auto}
 @media (max-width:860px){
@@ -731,6 +732,18 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-side #g-side-links{display:block;margin-top:auto;border-top:1px solid var(--gl);padding-top:8px}
   .g-side #g-side-links .g-util{display:flex;text-decoration:none}
   .g-side #g-side-links~.g-side-bottom{margin-top:0}
+  /* 모바일 앱 다운로드 배너 (Gemini 스마트배너 스타일) */
+  body.has-banner #g-appbanner{display:flex;position:fixed;top:0;left:0;right:0;z-index:75;height:64px;align-items:center;gap:11px;padding:0 12px;background:#0f1012;border-bottom:1px solid var(--gl)}
+  #g-appbanner .icon{width:40px;height:40px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  #g-appbanner .t{flex:1;min-width:0}
+  #g-appbanner .t b{display:block;font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+  #g-appbanner .t span{display:block;font-size:11px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #g-appbanner .dl{height:32px;padding:0 15px;border-radius:999px;background:#3d6ef0;color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;flex-shrink:0}
+  #g-appbanner .x{width:30px;height:30px;color:var(--gt3);font-size:14px;flex-shrink:0}
+  body.has-banner #g-hamburger{top:74px}
+  body.has-banner #g-auth-btns{top:76px}
+  /* 키보드 열림: 칩·약관·고객센터 숨김 (컴포저는 키보드 위로) */
+  body.kb-open .g-home-chips,body.kb-open .g-terms,body.kb-open #teth-help,body.kb-open #g-appbanner{display:none!important}
   /* 히어로: 로고+헤드라인 아래→위 등장, 채팅바 하단 도킹 */
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
@@ -1196,6 +1209,12 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 
 <!-- ══ V3 · Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
+  <div id="g-appbanner">
+    <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="bnGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#bnGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg></span>
+    <span class="t"><b>TETH AI</b><span>TETH에서 제공하는 AI 트레이딩 에이전트</span></span>
+    <a class="dl" href="download/" target="_blank" rel="noopener noreferrer">다운로드</a>
+    <button class="x" onclick="tethBannerClose()" aria-label="닫기">✕</button>
+  </div>
   <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
   <div class="g-body">
@@ -3576,6 +3595,34 @@ function authPwNext(){
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
 function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
+/* 모바일 앱 배너 */
+(function(){
+  var hide=false;
+  try{ hide=!!localStorage.getItem('tethBannerHide'); }catch(e){}
+  if(!hide) document.body.classList.add('has-banner');
+})();
+function tethBannerClose(){
+  document.body.classList.remove('has-banner');
+  try{ localStorage.setItem('tethBannerHide','1'); }catch(e){}
+}
+/* 키보드 대응: 키보드가 올라오면 컴포저를 키보드 위로 (iOS 폴백), 칩·약관 숨김 */
+(function(){
+  if(!window.visualViewport) return;
+  var vv=window.visualViewport;
+  function kb(){
+    if(innerWidth>860){ document.body.classList.remove('kb-open'); return; }
+    var kbH=Math.max(0, innerHeight - vv.height - vv.offsetTop);
+    var open=kbH>80;
+    document.body.classList.toggle('kb-open', open);
+    var pill=document.querySelector('.g-pill');
+    if(pill){
+      if(open){ pill.style.animation='none'; pill.style.transform='translateY(-'+Math.round(kbH-40)+'px)'; }
+      else { pill.style.transform=''; pill.style.animation=''; }
+    }
+  }
+  vv.addEventListener('resize',kb);
+  vv.addEventListener('scroll',kb);
+})();
 function authSyncUI(){
   var b=$('g-auth-btns'); if(b) b.hidden=!!S.user;
   var p=$('g-profile'); if(p) p.textContent=S.user?S.user.name:'로그인';
