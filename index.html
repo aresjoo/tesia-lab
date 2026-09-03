@@ -536,6 +536,8 @@ body.g-dark{background:#0f1012}
 .g-pill.multi .g-pill-sp{display:block;flex:1}
 @keyframes gSendPop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
 .g-send.pop{animation:gSendPop .25s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes gSendOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.3)}}
+.g-send.out{animation:gSendOut .18s var(--ease) both}
 .g-pill .plus{cursor:pointer;width:34px;height:34px;margin-left:-8px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:background .12s}
 .g-pill .plus:hover{background:rgba(255,255,255,.08)}
 .g-plus-pop{position:absolute;top:64px;left:4px;width:min(340px,86vw);background:#26282d;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;text-align:left;box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:30;display:none}
@@ -556,7 +558,9 @@ body.g-dark{background:#0f1012}
 .g-send{width:40px;height:40px;border-radius:50%;background:var(--gb);color:#fff;font-size:16px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .12s}
 .g-send:hover{background:var(--gb2)}
 .g-send:disabled{background:var(--g3);color:var(--gt3)}
-.g-home-chips{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.g-home-chips{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;justify-content:center;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+/* 입력/키보드 시 칩만 부드럽게 페이드 (데스크톱, 모바일 공통) */
+body.kb-open .g-home-chips{opacity:0;transform:translateY(16px);pointer-events:none}
 .g-qchip{padding:7px 14px;border-radius:999px;border:1px solid var(--gl2);font-size:12.5px;color:var(--gt2);transition:background .12s}
 .g-qchip:hover{background:rgba(255,255,255,.05)}
 /* conversation */
@@ -751,9 +755,6 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   #g-appbanner .x{width:30px;height:30px;color:var(--gt3);font-size:14px;flex-shrink:0}
   body.has-banner #g-hamburger{top:74px}
   body.has-banner #g-auth-btns{top:76px}
-  /* 키보드/입력 시: 칩만 부드럽게 사라짐 (약관, 배너, 고객센터는 유지) */
-  .g-home-chips{transition:opacity .28s var(--ease),transform .28s var(--ease)}
-  body.kb-open .g-home-chips{animation:none;opacity:0;transform:translateY(16px);pointer-events:none}
   /* 히어로: 로고+헤드라인 아래→위 등장, 채팅바 하단 도킹 */
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
@@ -2972,10 +2973,19 @@ function gHome(){
   hi.addEventListener('input',function(){
     var b=$('g-home-send');
     if(b){
-      var want=this.value.trim()?'inline-flex':'none';
-      if(b.style.display!==want){
-        b.style.display=want;
-        if(want!=='none'){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+      var has=!!this.value.trim();
+      if(has){
+        b.classList.remove('out');
+        if(b.style.display==='none'||b.dataset.hiding){
+          delete b.dataset.hiding;
+          b.style.display='inline-flex';
+          b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+        }
+      }else if(b.style.display!=='none'&&!b.dataset.hiding){
+        /* 스케일 다운 페이드 후 제거, 뚝 끊김 방지 */
+        b.dataset.hiding='1';
+        b.classList.remove('pop'); void b.offsetWidth; b.classList.add('out');
+        setTimeout(function(){ if(b.dataset.hiding){ delete b.dataset.hiding; b.style.display='none'; b.classList.remove('out'); } },200);
       }
     }
     /* 여러 줄이면 pill 확장 (Gemini 멀티라인 컴포저) */
@@ -2985,6 +2995,9 @@ function gHome(){
     var pill=$('g-pill'); if(pill) pill.classList.toggle('multi', h>30);
     if(this.value.trim()) document.body.classList.add('kb-open');
   });
+  /* 등장 애니메이션이 끝나면 해제해 이후 칩 페이드가 트랜지션으로 부드럽게 이어지게 */
+  var ch=document.querySelector('.g-home-chips');
+  if(ch) ch.addEventListener('animationend',function(){ ch.style.animation='none'; });
   /* 키보드가 열리거나(포커스) 텍스트가 있으면 칩, 약관 숨김 */
   hi.addEventListener('focus',function(){ if(innerWidth<=860) document.body.classList.add('kb-open'); });
   hi.addEventListener('blur',function(){ if(!hi.value.trim()) document.body.classList.remove('kb-open'); });
