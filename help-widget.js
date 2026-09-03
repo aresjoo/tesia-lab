@@ -37,15 +37,16 @@
   }catch(e){}
   var btn = document.createElement('button');
   btn.id = 'teth-help'; btn.setAttribute('aria-label',hwT('tip'));
-  /* C안: 브랜드 그라데이션 헤드셋 글리프 (로고 없이, 깔끔) */
+  /* 원조 아이콘 복원: TETH 스파크가 헤드셋을 쓴 상담원 마크 */
   btn.innerHTML =
-    '<svg width="32" height="32" viewBox="0 0 36 36" fill="none">'+
-      '<defs><linearGradient id="thg" gradientUnits="userSpaceOnUse" x1="4" y1="24" x2="32" y2="8"><stop offset="0" stop-color="#FFB60A"/><stop offset=".5" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>'+
-      '<path d="M7 20v-2a11 11 0 0 1 22 0v2" stroke="url(#thg)" stroke-width="2.6" stroke-linecap="round"/>'+
-      '<rect x="4.6" y="18.4" width="6" height="10" rx="3" fill="url(#thg)"/>'+
-      '<rect x="25.4" y="18.4" width="6" height="10" rx="3" fill="url(#thg)"/>'+
-      '<path d="M28.4 28.4v.4a4 4 0 0 1-4 4h-3.6" stroke="url(#thg)" stroke-width="2.4" stroke-linecap="round"/>'+
-      '<circle cx="19" cy="32.8" r="1.9" fill="url(#thg)"/>'+
+    '<svg width="30" height="30" viewBox="0 0 32 32" fill="none">'+
+      '<defs><linearGradient id="thg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>'+
+      '<path d="M6.2 15.5a9.8 9.8 0 0 1 19.6 0" stroke="#e6e7ea" stroke-width="2" stroke-linecap="round"/>'+
+      '<rect x="3.6" y="14.6" width="5" height="8.4" rx="2.5" fill="#e6e7ea"/>'+
+      '<rect x="23.4" y="14.6" width="5" height="8.4" rx="2.5" fill="#e6e7ea"/>'+
+      '<path d="M25.9 23v.9a3.6 3.6 0 0 1-3.6 3.6h-3.4" stroke="#e6e7ea" stroke-width="1.8" stroke-linecap="round"/>'+
+      '<circle cx="18" cy="27.5" r="1.6" fill="#e6e7ea"/>'+
+      '<path d="M15.63 11.6c.42 2.6 1.82 4 4.42 4.42.28.05.28.57 0 .62-2.6.42-4 1.82-4.42 4.42-.05.28-.57.28-.62 0-.42-2.6-1.82-4-4.42-4.42-.28-.05-.28-.57 0-.62 2.6-.42 4-1.82 4.42-4.42.05-.28.57-.28.62 0z" fill="url(#thg)"/>'+
     '</svg>'+
     '<span class="dot"></span>'+
     '<span class="tip">'+hwT('tip')+'</span>';
