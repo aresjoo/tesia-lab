@@ -1,0 +1,42 @@
+/* TETH.AI 사이트 공용 설정
+   가격·스토어 URL 등 자주 바뀌는 값은 전부 여기서만 수정한다. */
+window.TETH_CONFIG = {
+  /* 앱(워크스페이스) 진입 경로 */
+  appUrl: "../",
+
+  /* 스토어 URL — TODO: 실제 출시 후 URL 입력. 입력하면 /download의 배지·QR이 자동 반영된다. */
+  iosStoreUrl: "",      /* 예: "https://apps.apple.com/app/id0000000000" */
+  androidStoreUrl: "",  /* 예: "https://play.google.com/store/apps/details?id=ai.teth.app" */
+
+  /* 요금제 — /about Pricing 섹션이 이 데이터로 렌더링된다 */
+  pricing: [
+    {
+      id: "direct",
+      name: "TETH Direct",
+      price: "월 599,000원",
+      tagline: "쓰던 거래소 그대로, 바로 시작",
+      features: [
+        "무제한 전략 연구·백테스트",
+        "실전 실행·모니터링",
+        "모든 검증 엔진(리스크·비판·홀드아웃)",
+        "우선 지원"
+      ],
+      cta: "Direct로 시작하기",
+      highlight: false
+    },
+    {
+      id: "partner",
+      name: "TETH Partner",
+      price: "0원",
+      tagline: "파트너 거래소로 시작하면 이용료 무료",
+      features: [
+        "Direct의 모든 기능 동일",
+        "파트너 거래소 가입 즉시 자동 연결",
+        "이용료 파트너 혜택으로 전액 무료",
+        "언제든 Direct로 전환 가능"
+      ],
+      cta: "Partner로 무료 시작",
+      highlight: true
+    }
+  ]
+};
