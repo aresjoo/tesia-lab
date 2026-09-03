@@ -565,11 +565,15 @@ body.g-dark{background:#0f1012}
 #glc-panel li .soon{font-size:11px;color:var(--gt3);border:1px solid var(--gl2);border-radius:999px;padding:2px 8px}
 #glc-panel .tabs2{display:none}
 #glc-panel .x2{display:none}
-/* 드로어의 언어/통화 행 (모바일 진입점) */
-#g-side-glc{display:none}
+/* 설정 메뉴의 언어/통화 항목 — 모바일 전용 진입점 (데스크톱은 우측 상단 지구본) */
+.gm-item.glc-item{display:none}
+.gm-item .gm-val{font-size:12px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+#glc-panel .info{display:none}
 @media (max-width:860px){
-  #g-globe{display:none} /* 모바일 진입점은 드로어 */
-  .g-side #g-side-glc{display:flex}
+  #g-globe{display:none}
+  .gm-item.glc-item{display:flex}
+  #glc-panel .info{display:flex;gap:10px;align-items:flex-start;background:var(--g3);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:var(--gt2);margin-bottom:14px}
+  #glc-panel .info .ii{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--gt3);color:var(--g1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
   #glc-panel{top:0;right:0;left:0;bottom:0;width:auto;border-radius:0;border:0;grid-template-columns:1fr;gap:0;padding:16px;overflow-y:auto;z-index:98}
   #glc-panel.on{display:block}
   #glc-panel .tabs2{display:flex;gap:22px;margin:4px 0 16px;border-bottom:1px solid var(--gl)}
@@ -1414,6 +1418,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <button class="on" onclick="glcTab(0,this)">Language</button>
       <button onclick="glcTab(1,this)">Currency</button>
     </div>
+    <div class="info"><span class="ii">i</span><span id="glc-info-txt">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></div>
     <div class="col on" id="glc-lang">
       <h4>Language <span class="qi">i</span><span class="qtip" id="glc-lang-tip">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></h4>
       <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-lang')"></div>
@@ -1464,7 +1469,6 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div id="g-side-links">
         <a class="g-util" href="about/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>TETH 정보</a>
         <a class="g-util" href="download/" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>TETH 앱 다운로드</a>
-        <button class="g-util" id="g-side-glc" onclick="glcOpen(event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span id="g-side-glc-label">한국어, USD</span></button>
       </div>
       <div class="g-side-bottom">
         <div class="g-ico-row" id="g-gear-row">
@@ -1522,6 +1526,10 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
         <button data-theme="dark" onclick="applyTheme('dark');gSetMenuClose()">어둡게<span class="ck">✓</span></button>
       </div>
     </div>
+    <button class="gm-item glc-item" onclick="glcOpen(event)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg>
+      언어 및 통화<span class="sp"></span><span class="gm-val" id="g-side-glc-label">한국어, USD</span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
     <button class="gm-item" onclick="fbOpen()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H8l-4 4z"/><path d="M12 8.2v.4M12 11v3"/></svg>
       의견 보내기
@@ -4098,7 +4106,9 @@ function applyLang(){
   function setItemLabel(el,txt){ if(!el) return; for(var i=0;i<el.childNodes.length;i++){ var n=el.childNodes[i]; if(n.nodeType===3 && n.textContent.trim()){ n.textContent=txt; return; } } }
   setItemLabel(themeItem,L('menu.theme'));
   setItemLabel(helpItem,L('menu.help'));
-  var fbItem=document.querySelector('#g-setmenu button.gm-item'); setItemLabel(fbItem,L('menu.feedback'));
+  var fbItem=document.querySelector('#g-setmenu button.gm-item:not(.glc-item)'); setItemLabel(fbItem,L('menu.feedback'));
+  var glcItem=document.querySelector('#g-setmenu .glc-item'); setItemLabel(glcItem,GLC.lang==='en'?'Language & currency':'언어 및 통화');
+  var it=$('glc-info-txt'); if(it) it.textContent=GLC.lang==='en'?'Your language selection applies to TETH screens and notifications.':'선택한 언어는 TETH 화면과 알림에 적용됩니다.';
   var tsub=document.querySelectorAll('#gm-sub-theme [data-theme]');
   var tkeys=['menu.system','menu.light','menu.dark'];
   tsub.forEach(function(b,i){ for(var j=0;j<b.childNodes.length;j++){ var n=b.childNodes[j]; if(n.nodeType===3){ n.textContent=L(tkeys[i]); return; } } });
