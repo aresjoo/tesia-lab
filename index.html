@@ -545,7 +545,12 @@ body.g-dark{background:#0f1012}
 #glc-panel{position:fixed;top:56px;right:16px;z-index:95;width:560px;background:var(--g2);border:1px solid var(--gl);border-radius:18px;box-shadow:var(--shadow-pop);padding:22px;display:none;grid-template-columns:1fr 1fr;gap:0 26px}
 #glc-panel.on{display:grid}
 #glc-panel .col h4{font-size:15px;font-weight:700;color:var(--gt);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-#glc-panel .col h4 .qi{width:15px;height:15px;border-radius:50%;border:1.3px solid var(--gt3);color:var(--gt3);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:400}
+#glc-panel .col h4{position:relative}
+#glc-panel .col h4 .qi{width:15px;height:15px;border-radius:50%;border:1.3px solid var(--gt3);color:var(--gt3);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:400;cursor:default}
+#glc-panel .qtip{position:absolute;top:26px;left:0;background:var(--g3);color:var(--gt);font-size:12.5px;font-weight:400;line-height:1.6;padding:12px 14px;border-radius:10px;max-width:280px;box-shadow:var(--shadow-pop);opacity:0;pointer-events:none;transition:opacity .15s;z-index:5}
+#glc-panel .qi:hover~.qtip{opacity:1}
+#g-globe .gtip{position:absolute;top:40px;right:0;background:var(--tip-bg);color:var(--tip-fg);font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#g-globe:hover .gtip{opacity:1}
 #glc-panel .srch{display:flex;align-items:center;gap:8px;height:38px;border-radius:10px;background:var(--g3);padding:0 12px;margin-bottom:10px}
 #glc-panel .srch svg{flex-shrink:0;color:var(--gt3)}
 #glc-panel .srch input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:13px;font-family:inherit}
@@ -1402,7 +1407,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   </div>
   <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
-  <button id="g-globe" onclick="glcOpen(event)" aria-label="언어 및 통화"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg></button>
+  <button id="g-globe" onclick="glcOpen(event)" aria-label="언어 및 통화"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span class="gtip" id="g-globe-tip">언어 및 통화</span></button>
   <div id="glc-panel">
     <button class="x2" onclick="glcClose()" aria-label="닫기">✕</button>
     <div class="tabs2">
@@ -1410,7 +1415,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <button onclick="glcTab(1,this)">Currency</button>
     </div>
     <div class="col on" id="glc-lang">
-      <h4>Language <span class="qi">i</span></h4>
+      <h4>Language <span class="qi">i</span><span class="qtip" id="glc-lang-tip">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></h4>
       <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-lang')"></div>
       <ul id="glc-lang-list"></ul>
     </div>
@@ -4053,8 +4058,10 @@ function applyLang(){
   /* 배너 */
   var bsub=document.querySelector('#g-appbanner .t span'); if(bsub) bsub.textContent=L('banner.sub');
   var bdl=document.querySelector('#g-appbanner .dl'); if(bdl) bdl.textContent=L('banner.dl');
-  /* 고객센터 툴팁 */
+  /* 고객센터/지구본/언어 툴팁 */
   var tip=document.querySelector('#teth-help .tip'); if(tip) tip.textContent=L('help.tip');
+  var gt=$('g-globe-tip'); if(gt) gt.textContent=GLC.lang==='en'?'Language & currency':'언어 및 통화';
+  var lt=$('glc-lang-tip'); if(lt) lt.textContent=GLC.lang==='en'?'Your language selection applies to TETH screens and notifications.':'선택한 언어는 TETH 화면과 알림에 적용됩니다.';
   /* 홈 리렌더 (헤드라인/부제/칩/약관) — 홈 화면일 때만 */
   if(G && G.mode==='home' && typeof gHome==='function') gHome();
 }
