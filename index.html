@@ -663,6 +663,26 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .au-foot a{color:#a6aab2;text-decoration:underline;cursor:pointer}
 .au-gap{margin-top:14px}
 @media (max-width:520px){#modal-auth .modal{padding:36px 22px 28px}}
+
+/* ══ sidebar collapse + icon rows ══ */
+.g-side{transition:width .18s var(--ease)}
+.g-side.collapsed{width:64px}
+.g-side.collapsed .g-new,.g-side.collapsed .g-util,.g-side.collapsed .g-sec,.g-side.collapsed #g-sess-list,.g-side.collapsed #g-live-list{display:none}
+.g-ico-row{position:relative;display:flex;align-items:center;height:46px;flex-shrink:0}
+.g-ico-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#c3c6cd;transition:background .12s;flex-shrink:0}
+.g-ico-row:hover .g-ico-btn{background:rgba(255,255,255,.09);color:#e6e7ea}
+.g-ico-pill{position:absolute;left:48px;top:50%;transform:translateY(-50%);background:#e9e9e9;color:#17181b;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:40;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.g-ico-row:hover .g-ico-pill{opacity:1}
+#g-spark-row{margin-bottom:6px}
+#g-spark-row .ico-panel{display:none}
+#g-spark-row:hover .ico-spark{display:none}
+#g-spark-row:hover .ico-panel{display:block}
+.g-side-bottom{display:flex;flex-direction:column;gap:2px}
+#g-spark-row,#g-new-row{display:none}
+.g-side.collapsed #g-spark-row,.g-side.collapsed #g-new-row{display:flex}
+#g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 8px;margin-bottom:6px;flex-shrink:0}
+.g-side.collapsed #g-brand-row{display:none}
+#g-brand-row .g-word{font-size:16px;font-weight:600;color:#e6e7ea;letter-spacing:-.01em;white-space:nowrap}
 </style>
 
 <div id="shell">
@@ -1017,25 +1037,13 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <div class="modal" role="dialog" aria-modal="true" aria-label="로그인 또는 회원가입">
     <button class="au-x" onclick="closeModal('modal-auth')" aria-label="닫기">✕</button>
 
-    <!-- step 1: 시작 -->
+    <!-- step 1: 시작 (Google / Apple / 이메일) -->
     <div class="au-step" id="au-start">
       <div class="au-title">로그인 또는 회원가입</div>
       <div class="au-sub">teth ai를 잠금 해제하고 AI 투자 전략<br>연구·검증·실행을 시작하세요</div>
       <div class="au-btns">
         <button class="au-btn" onclick="authOauth('Google')"><span style="font-weight:700;background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853);-webkit-background-clip:text;background-clip:text;color:transparent">G</span>Google로 계속하기</button>
         <button class="au-btn" onclick="authOauth('Apple')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-top:-2px"><path d="M17.05 12.54c-.03-2.72 2.22-4.02 2.32-4.09-1.27-1.85-3.24-2.1-3.93-2.13-1.67-.17-3.26.98-4.1.98-.85 0-2.16-.96-3.55-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.16 1.36 10.83.9 1.3 1.98 2.77 3.39 2.72 1.36-.05 1.87-.88 3.52-.88 1.64 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.52 1.47-2.99 1.49-3.06-.03-.02-2.86-1.1-2.9-4.34zM14.34 4.56c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.15 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.43-.61 3.18-1.52z"/></svg>Apple로 계속하기</button>
-      </div>
-      <div class="au-div">또는</div>
-      <button class="au-btn ghost au-gap" onclick="authShow('au-more')">더 많은 옵션</button>
-    </div>
-
-    <!-- step 2: 더 많은 옵션 (이메일) -->
-    <div class="au-step" id="au-more" hidden>
-      <div class="au-title">로그인 또는 회원가입</div>
-      <div class="au-sub">전략 저장, 백테스트 기록 보관 등을<br>이용할 수 있습니다.</div>
-      <div class="au-btns">
-        <button class="au-btn" onclick="authOauth('Google')"><span style="font-weight:700;background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853);-webkit-background-clip:text;background-clip:text;color:transparent">G</span>Google 계정으로 계속하기</button>
-        <button class="au-btn" onclick="authOauth('Apple')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-top:-2px"><path d="M17.05 12.54c-.03-2.72 2.22-4.02 2.32-4.09-1.27-1.85-3.24-2.1-3.93-2.13-1.67-.17-3.26.98-4.1.98-.85 0-2.16-.96-3.55-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.16 1.36 10.83.9 1.3 1.98 2.77 3.39 2.72 1.36-.05 1.87-.88 3.52-.88 1.64 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.52 1.47-2.99 1.49-3.06-.03-.02-2.86-1.1-2.9-4.34zM14.34 4.56c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.15 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.43-.61 3.18-1.52z"/></svg>Apple 계정으로 계속하기</button>
       </div>
       <div class="au-div">또는</div>
       <div class="au-input-wrap">
@@ -1055,8 +1063,8 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div class="au-err" id="au-code-err">6자리 숫자 코드를 입력해 주세요.</div>
       <button class="au-btn primary au-gap" onclick="authCodeNext()">계속</button>
       <button class="au-textbtn" onclick="toast('MOCK — 인증 코드를 다시 보냈어요')">이메일 다시 보내기</button>
-      <div class="au-div">또는</div>
-      <button class="au-btn ghost au-gap" onclick="authShow('au-pw')">비밀번호로 계속하기</button>
+      <div class="au-div" id="au-code-div">또는</div>
+      <button class="au-btn ghost au-gap" id="au-code-pwbtn" onclick="authShow('au-pw')">비밀번호로 계속하기</button>
       <div class="au-foot"><a onclick="toast('MOCK — 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK — 개인정보 보호 정책')">개인정보 보호 정책</a></div>
     </div>
 
@@ -1067,7 +1075,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div class="au-field">
         <span class="au-label">이메일 주소</span>
         <input class="au-input" id="au-pwnew-email" type="email" disabled>
-        <button class="au-side" onclick="authShow('au-more')">편집</button>
+        <button class="au-side" onclick="authShow('au-start')">편집</button>
       </div>
       <div class="au-field">
         <span class="au-label">비밀번호</span>
@@ -1123,14 +1131,35 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 
 <!-- ══ V3 · Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
-  <div class="g-titlebar"><span class="g-brand">teth</span><span class="g-brand-sub">ai</span>
+  <div class="g-titlebar">
     <span style="flex:1"></span>
     <span id="g-auth-btns"><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
-    <button class="g-iconbtn" onclick="toast('MOCK — 알림')" aria-label="알림"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10a6 6 0 1 0-12 0c0 5-2 6-2 6h16s-2-1-2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
-    <button class="g-iconbtn" onclick="gToggleAux()" aria-label="패널 토글"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg></button>
   </div>
   <div class="g-body">
-    <aside class="g-side" id="g-side">
+    <aside class="g-side collapsed" id="g-side">
+      <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
+      <div class="g-ico-row" id="g-spark-row">
+        <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기">
+          <svg class="ico-spark" width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#sparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>
+          <svg class="ico-panel" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg>
+        </button>
+        <span class="g-ico-pill">사이드바 열기</span>
+      </div>
+      <!-- 접힌 상태: 새 연구 연필 -->
+      <div class="g-ico-row" id="g-new-row">
+        <button class="g-ico-btn" onclick="gHome()" aria-label="새 연구"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg></button>
+        <span class="g-ico-pill">새 연구</span>
+      </div>
+      <!-- 펼친 상태: 브랜드 + 닫기 -->
+      <div id="g-brand-row">
+        <svg width="22" height="22" viewBox="0 0 24 24"><defs><linearGradient id="sparkGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#sparkGrad2)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>
+        <span class="g-word">teth ai</span>
+        <span style="flex:1"></span>
+        <div class="g-ico-row" style="height:40px">
+          <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 닫기"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M16 9.5L13.5 12l2.5 2.5"/></svg></button>
+          <span class="g-ico-pill">사이드바 닫기</span>
+        </div>
+      </div>
       <button class="g-new" onclick="gHome()">＋ 새 연구</button>
       <button class="g-util" onclick="toast('MOCK — 연구 기록')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>연구 기록</button>
       <button class="g-util" onclick="toast('MOCK — 예약된 검증')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8 3v4M16 3v4"/></svg>예약된 검증</button>
@@ -1139,8 +1168,14 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div class="g-sec" id="g-live-sec" hidden>Live</div>
       <div id="g-live-list"></div>
       <div class="g-side-bottom">
-        <button class="g-util" onclick="toast('MOCK — 설정')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>설정</button>
-        <button class="g-util" onclick="toast('MOCK — 프로필')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.3-3 4-4.5 7-4.5s5.7 1.5 7 4.5"/></svg><span id="g-profile">게스트</span></button>
+        <div class="g-ico-row">
+          <button class="g-ico-btn" onclick="toast('MOCK — 설정')" aria-label="설정"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg></button>
+          <span class="g-ico-pill">설정</span>
+        </div>
+        <div class="g-ico-row">
+          <button class="g-ico-btn" onclick="gProfileClick()" aria-label="프로필"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="9.6" r="3"/><path d="M6.4 18.4c1.2-2.6 3.2-3.9 5.6-3.9s4.4 1.3 5.6 3.9"/></svg></button>
+          <span class="g-ico-pill" id="g-profile">로그인</span>
+        </div>
       </div>
     </aside>
     <main class="g-center">
@@ -3386,9 +3421,9 @@ openModal=function(id){ if(id==='modal-manage') renderManage(); _openModal(id); 
 <script>
 "use strict";
 /* ══ teth ai auth flow (MOCK) ══ */
-var AUTH={mode:'signup',email:'',doneName:''};
+var AUTH={mode:'signup',email:'',doneName:'',pwDone:false};
 function authOpen(mode){
-  AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName='';
+  AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName=''; AUTH.pwDone=false;
   ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el) el.value='';});
   document.querySelectorAll('#modal-auth .au-err').forEach(function(x){x.classList.remove('on');});
   authShow('au-start');
@@ -3397,10 +3432,13 @@ function authOpen(mode){
 function authShow(id){
   document.querySelectorAll('#modal-auth .au-step').forEach(function(s){s.hidden=true;});
   $(id).hidden=false;
-  if(id==='au-code'){ $('au-code-sub').innerHTML=(AUTH.mode==='login'?'로그인하려면 방금 ':'계정을 만들려면 방금 ')+'<b>'+authEsc(AUTH.email)+'</b>(으)로<br>보낸 6자리 코드를 입력하세요'; }
+  if(id==='au-code'){
+    $('au-code-sub').innerHTML=(AUTH.mode==='login'?'로그인하려면 방금 ':'계정을 만들려면 방금 ')+'<b>'+authEsc(AUTH.email)+'</b>(으)로<br>보낸 6자리 코드를 입력하세요';
+    $('au-code-div').hidden=$('au-code-pwbtn').hidden=!!AUTH.pwDone;
+  }
   if(id==='au-pw'){ $('au-pw-sub').innerHTML='<b>'+authEsc(AUTH.email)+'</b> 계정의<br>비밀번호를 입력하세요'; }
   if(id==='au-pw-new'){ $('au-pwnew-email').value=AUTH.email; authPwReq(); }
-  var f={'au-more':'au-email','au-code':'au-code-in','au-pw-new':'au-pwnew-in','au-pw':'au-pw-in'}[id];
+  var f={'au-code':'au-code-in','au-pw-new':'au-pwnew-in','au-pw':'au-pw-in'}[id];
   if(f) setTimeout(function(){var el=$(f); if(el) el.focus();},80);
 }
 function authEsc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -3414,7 +3452,7 @@ function authEmailNext(){
   else authSendCode();
 }
 function authSendCode(){
-  if(!AUTH.email){ authShow('au-more'); return; }
+  if(!AUTH.email){ authShow('au-start'); return; }
   var c=$('au-code-in'); if(c) c.value='';
   authShow('au-code');
   toast('MOCK — 인증 코드를 보냈어요');
@@ -3432,15 +3470,23 @@ function authPwReq(){
   el.innerHTML=(ok?'&nbsp;✓&nbsp; ':'&nbsp;·&nbsp; ')+'12자 이상';
   return ok;
 }
-function authPwNewNext(){ if(!authPwReq()){ $('au-pwnew-in').focus(); return; } authFinishEmail(); }
+function authPwNewNext(){ if(!authPwReq()){ $('au-pwnew-in').focus(); return; } AUTH.pwDone=true; authSendCode(); }
 function authPwNext(){
   var v=$('au-pw-in').value||'';
   if(v.length<1){ $('au-pw-err').classList.add('on'); return; }
   $('au-pw-err').classList.remove('on');
-  authFinishEmail();
+  AUTH.pwDone=true; authSendCode();
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
 function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
-function authSyncUI(){ var b=$('g-auth-btns'); if(b) b.hidden=!!S.user; }
+function authSyncUI(){
+  var b=$('g-auth-btns'); if(b) b.hidden=!!S.user;
+  var p=$('g-profile'); if(p) p.textContent=S.user?S.user.name:'로그인';
+}
+function gProfileClick(){ if(!S.user){ authOpen('login'); return; } toast('MOCK — 프로필'); }
+function gSideToggle(){
+  var s=$('g-side'); if(!s) return;
+  s.classList.toggle('collapsed');
+}
 authSyncUI();
 </script>
