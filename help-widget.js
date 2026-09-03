@@ -29,19 +29,16 @@
     '@media (max-width:640px){#teth-help{right:14px;bottom:14px;width:50px;height:50px}#teth-help-pop{right:14px;bottom:76px}#teth-help .tip{display:none}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
+  /* 로고 경로: 이 스크립트 src 기준으로 계산 → 어느 페이지에서 로드돼도 안전 */
+  var hwBase='';
+  try{
+    var hs=document.querySelector('script[src*="help-widget"]');
+    if(hs) hwBase=hs.getAttribute('src').replace(/help-widget[^/]*$/,'');
+  }catch(e){}
   var btn = document.createElement('button');
   btn.id = 'teth-help'; btn.setAttribute('aria-label',hwT('tip'));
   btn.innerHTML =
-    /* TETH 스파크 + 헤드셋 결합 아이콘 */
-    '<svg width="30" height="30" viewBox="0 0 32 32" fill="none">'+
-      '<defs><linearGradient id="thg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>'+
-      '<path d="M6.2 15.5a9.8 9.8 0 0 1 19.6 0" stroke="#e6e7ea" stroke-width="2" stroke-linecap="round"/>'+
-      '<rect x="3.6" y="14.6" width="5" height="8.4" rx="2.5" fill="#e6e7ea"/>'+
-      '<rect x="23.4" y="14.6" width="5" height="8.4" rx="2.5" fill="#e6e7ea"/>'+
-      '<path d="M25.9 23v.9a3.6 3.6 0 0 1-3.6 3.6h-3.4" stroke="#e6e7ea" stroke-width="1.8" stroke-linecap="round"/>'+
-      '<circle cx="18" cy="27.5" r="1.6" fill="#e6e7ea"/>'+
-      '<path d="M15.63 11.6c.42 2.6 1.82 4 4.42 4.42.28.05.28.57 0 .62-2.6.42-4 1.82-4.42 4.42-.05.28-.57.28-.62 0-.42-2.6-1.82-4-4.42-4.42-.28-.05-.28-.57 0-.62 2.6-.42 4-1.82 4.42-4.42.05-.28.57-.28.62 0z" fill="url(#thg)"/>'+
-    '</svg>'+
+    '<img src="'+hwBase+'assets/logo.png" alt="" style="width:30px;height:auto;display:block">'+
     '<span class="dot"></span>'+
     '<span class="tip">'+hwT('tip')+'</span>';
   var pop = document.createElement('div');

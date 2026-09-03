@@ -1,4 +1,4 @@
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23FF5145'/><stop offset='.38' stop-color='%23FFB60A'/><stop offset='.66' stop-color='%232BAE66'/><stop offset='1' stop-color='%233B82F6'/></linearGradient></defs><path fill='url(%23g)' d='M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z'/></svg>">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <title>TETH</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..750&family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
@@ -531,7 +531,7 @@ body.g-dark{background:#0f1012}
 .g-doc{max-width:820px;margin:0 auto;padding:20px 28px 28px}
 /* home */
 .g-home{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 640px 420px at 50% 52%,var(--glow),transparent 70%)}
-.g-hero-spark{display:none;width:46px;height:46px;margin:0 auto 12px}
+.g-hero-spark{display:none;width:76px;height:auto;margin:0 auto 12px}
 @keyframes gRiseIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
 @keyframes gSparkPulse{0%,100%{transform:translateY(0) scale(1);filter:brightness(1)}50%{transform:translateY(0) scale(1.06);filter:brightness(1.08)}}
 .g-hello{font-size:clamp(30px,3.8vw,44px);font-weight:500;letter-spacing:-.02em;line-height:1.28;color:var(--gt);text-align:center;word-break:keep-all} /* 1.6 상속 금지, Gemini 히어로 수준으로 타이트하게 */
@@ -589,6 +589,7 @@ body.g-dark{background:#0f1012}
 #glc-panel ul::-webkit-scrollbar-thumb{background:var(--gl2);border-radius:99px}
 #glc-panel ul::-webkit-scrollbar-thumb:hover{background:var(--gt3)}
 #glc-panel .tabs2{display:none}
+#glc-panel .grab2{display:none}
 #glc-panel .x2{display:none}
 /* 설정 메뉴의 언어/통화 항목 — 모바일 전용 진입점 (데스크톱은 우측 상단 지구본) */
 .gm-item.glc-item{display:none}
@@ -599,8 +600,9 @@ body.g-dark{background:#0f1012}
   .gm-item.glc-item{display:flex}
   #glc-panel .info{display:flex;gap:10px;align-items:flex-start;background:var(--g3);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:var(--gt2);margin-bottom:14px}
   #glc-panel .info .ii{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--gt3);color:var(--g1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
-  #glc-panel{top:0;right:0;left:0;bottom:0;width:auto;border-radius:0;border:0;grid-template-columns:1fr;gap:0;padding:16px;overflow-y:auto;z-index:98}
-  #glc-panel.on{display:block}
+  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;max-height:82vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+  #glc-panel.on{display:block;animation:gSheetUp .3s var(--ease)}
+  #glc-panel .grab2{display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 14px;cursor:pointer}
   #glc-panel .tabs2{display:flex;gap:22px;margin:4px 0 16px;border-bottom:1px solid var(--gl)}
   #glc-panel .tabs2 button{font-size:16px;font-weight:600;color:var(--gt3);padding:8px 2px 12px;border-bottom:2.5px solid transparent}
   #glc-panel .tabs2 button.on{color:var(--gt);border-bottom-color:var(--gt)}
@@ -655,6 +657,10 @@ body.g-dark{background:#0f1012}
   .gm-grab{display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 16px}
   .gm-item{height:58px;font-size:15.5px;background:rgba(128,128,128,.1);border-radius:16px;margin-bottom:9px}
   .gm-sub,#gm-sub-theme,#gm-sub-help{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:24px 24px 0 0;border:0;min-width:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -14px 50px rgba(0,0,0,.5);z-index:97;animation:gSheetUp .3s var(--ease)}
+  /* 서브시트가 열리면 부모 시트는 완전히 숨겨 중복 노출 방지 (Gemini 동일) */
+  #g-setmenu.subopen{background:transparent;box-shadow:none;border:0;padding:0}
+  #g-setmenu.subopen>*{visibility:hidden}
+  #g-setmenu.subopen .gm-sub.on{visibility:visible}
   .gm-sub.on::before{content:"";display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 16px}
   .gm-sub .st{display:block;font-size:15px;font-weight:600;color:var(--gt);padding:0 4px 14px}
   .gm-sub button,.gm-sub a{height:56px;font-size:15px;background:rgba(128,128,128,.1);border-radius:14px;margin-bottom:8px}
@@ -1465,7 +1471,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 <!-- ══ V3, Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
   <div id="g-appbanner">
-    <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="bnGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#bnGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg></span>
+    <span class="icon"><img src="assets/logo.png" alt="" style="width:26px;height:auto;display:block"></span>
     <span class="t"><b>TETH AI</b><span>TETH에서 제공하는 AI 트레이딩 에이전트</span></span>
     <a class="dl" href="download/" target="_blank" rel="noopener noreferrer">다운로드</a>
     <button class="x" onclick="tethBannerClose()" aria-label="닫기">✕</button>
@@ -1474,6 +1480,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 시작</button></span>
   <button id="g-globe" onclick="glcOpen(event)" aria-label="언어 및 통화"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span class="gtip" id="g-globe-tip">언어 및 통화</span></button>
   <div id="glc-panel">
+    <div class="grab2" onclick="glcClose()"></div>
     <button class="x2" onclick="glcClose()" aria-label="닫기">✕</button>
     <div class="tabs2">
       <button class="on" id="glc-tab-l" onclick="glcTab(0,this)">언어</button>
@@ -1496,7 +1503,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
       <div class="g-ico-row" id="g-spark-row">
         <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기">
-          <svg class="ico-spark" width="26" height="26" viewBox="0 0 24 24"><defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#sparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>
+          <img src="assets/logo.png" alt="" style="width:26px;height:auto;display:block">
           <svg class="ico-panel" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg>
         </button>
         <span class="g-ico-pill" id="gp-open">사이드바 열기</span>
@@ -1508,7 +1515,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
-        <svg width="22" height="22" viewBox="0 0 24 24"><defs><linearGradient id="sparkGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#sparkGrad2)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>
+        <img src="assets/logo.png" alt="" style="width:22px;height:auto;display:block">
         <span class="g-word">TETH</span>
         <span style="flex:1"></span>
         <div class="g-ico-row" style="height:40px">
@@ -1574,7 +1581,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <div id="g-scrim" onclick="gSideToggle()"></div>
 
   <!-- 설정 메뉴 -->
-  <div id="gm-scrim" onclick="gSetMenuClose()"></div>
+  <div id="gm-scrim" onclick="gSetMenuClose();glcClose()"></div>
   <div id="g-setmenu" hidden>
     <div class="gm-grab" onclick="gSetMenuClose()"></div>
     <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'theme')" onmouseenter="gmFlip(this)">
@@ -3292,7 +3299,7 @@ function gHome(){
   GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GR.s};
   gContent(
     '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
-    '<svg class="g-hero-spark" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="heroSparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#heroSparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>'+
+    '<img class="g-hero-spark" src="assets/logo.png" alt="">'+
     '<div class="g-hello">'+GR.h+'</div>'+
     '<div class="g-sub">'+GR.s+'</div>'+
     '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="연구 아이디어"></textarea>'+
@@ -3363,6 +3370,7 @@ function gHome(){
   hi.addEventListener('blur',function(){ if(!hi.value.trim()) document.body.classList.remove('kb-open'); });
   hi.addEventListener('input',function(){ if(!this.value.trim()) document.body.classList.remove('kb-open'); });
   if(innerWidth>860) hi.focus(); /* 모바일에선 자동 포커스 금지 — 진입하자마자 키보드가 올라오지 않게 */
+  if(typeof phRotStart==='function') phRotStart(); /* Lovable식 플레이스홀더 타자 로테이션 */
 }
 function gSelect(id){
   var sx=G.sessions.find(function(s){return s.id===id;});
@@ -4147,7 +4155,7 @@ function glcOpen(e){
   if($('g-side') && $('g-side').classList.contains('mobile-open')) gSideToggle();
   glcRender();
   $('glc-panel').classList.add('on');
-  var sc=$('gm-scrim'); if(sc && innerWidth>860) sc.classList.add('on');
+  var sc=$('gm-scrim'); if(sc) sc.classList.add('on'); /* 모바일도 스크림 표시, 탭하면 닫힘 */
   setTimeout(function(){ document.addEventListener('click',glcDoc); },0);
 }
 function glcDoc(ev){ var p=$('glc-panel'); if(p && !p.contains(ev.target)) glcClose(); }
@@ -4317,6 +4325,40 @@ fr:[
 ]
 };
 var GREETS_EN=GREETS_ALL.en; /* 하위 호환 */
+/* ── Lovable식 로테이팅 플레이스홀더 (프리픽스 고정 + 서픽스 타자 애니메이션) ── */
+var PH_ROT={
+prefix:{ko:'TETH에게 말해보세요: ',en:'Tell TETH: ',ja:'TETHに話しかけてみて: ','zh-CN':'对TETH说: ','zh-TW':'對TETH說: ',es:'Dile a TETH: ',fr:'Dites à TETH : '},
+list:{
+ko:['시장 상황 어때?','테슬라 조금씩 사줘','META 지금 사도 돼?','비트코인 알아서 거래해줘','엔비디아 떨어지면 사줘','요즘 뭐가 잘 올라?','수익 나면 알아서 팔아줘','지금 뭐 사는 게 좋아?','많이 떨어지면 알려줘','내가 잘 때도 거래해줘'],
+en:["How's the market?",'Buy Tesla bit by bit','Is META a buy right now?','Trade Bitcoin for me','Buy Nvidia when it dips',"What's been going up?",'Take profits for me','What should I buy now?','Alert me on big drops','Trade while I sleep'],
+ja:['相場どう？','テスラを少しずつ買って','METAは今買ってもいい？','ビットコインはお任せで取引して','エヌビディアが下がったら買って','最近何が上がってる？','利益が出たら売っておいて','今は何を買うのがいい？','大きく下がったら知らせて','寝ている間も取引して'],
+'zh-CN':['行情怎么样？','帮我分批买特斯拉','META现在能买吗？','比特币帮我自动交易','英伟达跌了就帮我买','最近什么涨得好？','有盈利就帮我卖掉','现在买什么好？','大跌时提醒我','我睡觉时也帮我交易'],
+'zh-TW':['行情怎麼樣？','幫我分批買特斯拉','META現在能買嗎？','比特幣幫我自動交易','輝達跌了就幫我買','最近什麼漲得好？','有盈利就幫我賣掉','現在買什麼好？','大跌時提醒我','我睡覺時也幫我交易'],
+es:['¿Cómo está el mercado?','Compra Tesla poco a poco','¿Compro META ahora?','Opera Bitcoin por mí','Compra Nvidia si cae','¿Qué está subiendo?','Vende cuando haya ganancia','¿Qué compro ahora?','Avísame si cae fuerte','Opera mientras duermo'],
+fr:['Le marché, ça donne quoi ?','Achète du Tesla petit à petit',"META, j'achète maintenant ?",'Trade le Bitcoin pour moi',"Achète Nvidia s'il baisse","Qu'est-ce qui monte en ce moment ?","Vends dès que c'est gagnant",'Quoi acheter maintenant ?','Préviens-moi si ça chute','Trade pendant que je dors']
+}};
+function phRotStart(){
+  if(G.phT){ clearInterval(G.phT); G.phT=null; }
+  var el=$('g-home-in'); if(!el) return;
+  var lang=(typeof GLC!=='undefined'&&PH_ROT.list[GLC.lang])?GLC.lang:'ko';
+  var pre=PH_ROT.prefix[lang], list=PH_ROT.list[lang];
+  var pi=Math.floor(Math.random()*list.length), ci=0, mode='type', hold=0;
+  el.placeholder=pre;
+  G.phT=setInterval(function(){
+    var hi=$('g-home-in');
+    if(!hi){ clearInterval(G.phT); G.phT=null; return; } /* 홈 이탈 시 자동 정리 */
+    var cur=list[pi];
+    if(mode==='type'){
+      ci++; hi.placeholder=pre+cur.slice(0,ci);
+      if(ci>=cur.length){ mode='hold'; hold=0; }
+    }else if(mode==='hold'){
+      if(++hold>=24) mode='del';
+    }else{
+      ci=Math.max(0,ci-2); hi.placeholder=pre+cur.slice(0,ci); /* 삭제는 두 배 속도 */
+      if(ci<=0){ pi=(pi+1)%list.length; mode='type'; }
+    }
+  },70);
+}
 function applyLang(){
   var en=GLC.lang==='en';
   /* 상단 내비 */
@@ -4446,7 +4488,7 @@ function gSetMenuDoc(ev){
   if(m && !m.contains(ev.target)) gSetMenuClose();
 }
 function gSetMenuClose(){
-  var m=$('g-setmenu'); if(m) m.hidden=true;
+  var m=$('g-setmenu'); if(m){ m.hidden=true; m.classList.remove('subopen'); }
   var sc=$('gm-scrim'); if(sc) sc.classList.remove('on');
   document.querySelectorAll('.gm-sub').forEach(function(s){ s.classList.remove('on'); });
   document.removeEventListener('click',gSetMenuDoc);
@@ -4457,6 +4499,7 @@ function gmSub(e,which){
   document.querySelectorAll('.gm-sub').forEach(function(s){ if(s!==target) s.classList.remove('on'); });
   var item=target.closest('.gm-item'); if(item) gmFlip(item);
   target.classList.toggle('on');
+  if(innerWidth<=640){ var m=$('g-setmenu'); if(m) m.classList.toggle('subopen', target.classList.contains('on')); }
 }
 function gmFlip(item){ /* 데스크톱: 항목 아래 공간이 서브메뉴 높이보다 좁으면 위로 열기 */
   if(innerWidth<=640) return;
@@ -4633,6 +4676,7 @@ authSyncUI();
 glcRender();
 if(GLC.lang!=='ko') applyLang();
 applyCurrency();
+if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="site-config.js?v=2"></script>
 <script src="help-widget.js?v=4"></script>
