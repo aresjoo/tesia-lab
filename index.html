@@ -1,4 +1,4 @@
-<title>TESIA Strategy Lab</title>
+<title>teth ai</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..750&family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
@@ -623,12 +623,52 @@ body.g-dark .modal .g-btn .g-mark{background:#fff;color:#1d1f23}
 body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);color:#a6aab2}
 @media (max-width:1100px){.g-aux{display:none}}
 @media (max-width:860px){.g-side{display:none}}
+
+/* ══ auth (teth ai 로그인/회원가입) ══ */
+#g-auth-btns{display:flex;align-items:center;gap:8px;-webkit-app-region:no-drag}
+.ga-login{height:30px;padding:0 16px;border-radius:999px;background:#fff;color:#111;font-size:12.5px;font-weight:600;transition:opacity .12s}
+.ga-login:hover{opacity:.88}
+.ga-signup{height:30px;padding:0 16px;border-radius:999px;background:#191a1d;color:#fff;border:1px solid rgba(255,255,255,.85);font-size:12.5px;font-weight:600;transition:background .12s}
+.ga-signup:hover{background:#26282c}
+#modal-auth .modal{width:min(480px,100%);background:#1b1c1f;color:#ececf1;border-radius:24px;padding:44px 40px 36px;position:relative;text-align:center}
+#modal-auth .au-x{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#a6aab2;font-size:18px;transition:background .12s}
+#modal-auth .au-x:hover{background:rgba(255,255,255,.07)}
+.au-title{font-size:24px;font-weight:700;letter-spacing:-.01em;color:#fff}
+.au-sub{font-size:14px;color:#b7bac1;line-height:1.65;margin-top:12px}
+.au-btns{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.au-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:999px;border:1px solid #3c3f45;background:#232529;color:#ececf1;font-size:15px;font-weight:500;transition:background .12s}
+.au-btn:hover{background:#2b2d32}
+.au-btn.ghost{background:transparent}
+.au-btn.ghost:hover{background:#232529}
+.au-btn.primary{background:#fff;border-color:#fff;color:#111;font-weight:600}
+.au-btn.primary:hover{background:#e8e8e8}
+.au-btn:disabled{opacity:.5;cursor:default}
+.au-div{display:flex;align-items:center;gap:12px;color:#8b8f98;font-size:12.5px;margin:18px 0 0}
+.au-div::before,.au-div::after{content:"";flex:1;border-top:1.5px dashed #3c3f45}
+.au-input-wrap{position:relative;margin-top:26px;text-align:left}
+.au-input{width:100%;height:52px;border-radius:999px;border:1px solid #3c3f45;background:#101114;color:#ececf1;padding:0 20px;font-size:15px;outline:none;transition:border-color .12s}
+.au-input:focus{border-color:#8a8fff}
+.au-input::placeholder{color:#6f747d}
+.au-field{position:relative;text-align:left;margin-top:16px}
+.au-field .au-label{position:absolute;top:-7px;left:18px;background:#1b1c1f;padding:0 6px;font-size:11.5px;color:#a6aab2;z-index:1}
+.au-field .au-input{border-radius:16px;background:#1b1c1f}
+.au-field .au-side{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ba0ff;background:none}
+.au-req{border:1px solid #3c3f45;border-radius:12px;padding:14px 16px;margin-top:16px;text-align:left;font-size:13px;color:#b7bac1;line-height:1.7}
+.au-req .ok{color:#4ade80}
+.au-err{font-size:12.5px;color:#f87171;margin-top:10px;text-align:left;padding-left:18px;display:none}
+.au-err.on{display:block}
+.au-textbtn{display:block;margin:16px auto 0;font-size:14px;color:#ececf1;background:none}
+.au-textbtn:hover{text-decoration:underline}
+.au-foot{margin-top:28px;font-size:12.5px;color:#a6aab2;display:flex;justify-content:center;gap:10px}
+.au-foot a{color:#a6aab2;text-decoration:underline;cursor:pointer}
+.au-gap{margin-top:14px}
+@media (max-width:520px){#modal-auth .modal{padding:36px 22px 28px}}
 </style>
 
 <div id="shell">
   <!-- ══ Sidebar ══ -->
   <nav id="sidebar" aria-label="주 메뉴">
-    <div class="logo"><b>TESIA</b><span>Strategy Lab</span></div>
+    <div class="logo"><b>teth</b><span>ai</span></div>
     <button class="nav-item on" data-nav="home" onclick="nav('home')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg>홈</button>
     <button class="nav-item" data-nav="strategies" onclick="nav('strategies')">
@@ -700,7 +740,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
             <div><div class="hh-n num">4</div><div class="hh-t">실행과 개선</div><div class="hh-d">AI가 지켜보고, 결과를 보며 함께 다듬어요</div></div>
           </div>
           <div class="home-foot">
-            <span>© 2026 TESIA · 본 데모의 모든 데이터는 mock이며 투자 조언이 아닙니다</span>
+            <span>© 2026 teth ai · 본 데모의 모든 데이터는 mock이며 투자 조언이 아닙니다</span>
             <span class="links"><a href="#" onclick="toast('MOCK — 위험 고지');return false">위험 고지</a><a href="#" onclick="toast('MOCK — 개인정보 처리방침');return false">개인정보</a><a href="#" onclick="toast('MOCK — FAQ');return false">FAQ</a></span>
           </div>
         </div>
@@ -763,7 +803,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
         <div class="bt-grid">
           <div class="bt-main" id="bt-main"></div>
           <aside class="ai-panel" aria-label="AI 해석과 개선">
-            <div class="ai-panel-head"><span class="ap-label">TESIA의 해석</span></div>
+            <div class="ai-panel-head"><span class="ap-label">teth ai의 해석</span></div>
             <div class="ai-panel-body" id="ai-body"></div>
             <div class="ai-panel-foot">
               <div class="chip-row" id="ai-quick"></div>
@@ -811,7 +851,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
               <div class="perm">
                 <div class="perm-row"><span><span class="p-what">잔고·시세 조회</span><br><span class="p-why">전략 계산과 리스크 확인에 필요해요</span></span><span class="perm-yes">요청함</span></div>
                 <div class="perm-row"><span><span class="p-what">주문 실행</span><br><span class="p-why">전략 조건이 맞을 때 매수·매도를 해요</span></span><span class="perm-yes">요청함</span></div>
-                <div class="perm-row"><span><span class="p-what">출금</span><br><span class="p-why">TESIA는 자산을 옮길 수 없어요</span></span><span class="perm-no">요청 안 함</span></div>
+                <div class="perm-row"><span><span class="p-what">출금</span><br><span class="p-why">teth ai는 자산을 옮길 수 없어요</span></span><span class="perm-no">요청 안 함</span></div>
               </div>
               <div id="cn-connect-zone" style="margin-top:18px">
                 <button class="btn btn-primary btn-lg" style="width:100%" id="cn-oauth-btn" onclick="oauthConnect()">
@@ -964,7 +1004,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 <!-- mobile nav -->
 <div id="mnav" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="mnav-panel">
-    <div class="logo"><b>TESIA</b><span>Strategy Lab</span></div>
+    <div class="logo"><b>teth</b><span>ai</span></div>
     <button class="nav-item" onclick="nav('home');closeMnav()">홈</button>
     <button class="nav-item" onclick="nav('strategies');closeMnav()">내 전략</button>
     <button class="nav-item" onclick="nav('live');closeMnav()">실행 중</button>
@@ -972,16 +1012,91 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   </div>
 </div>
 
-<!-- signup modal -->
-<div class="modal-bg" id="modal-signup" onclick="if(event.target===this)closeModal('modal-signup')">
-  <div class="modal" role="dialog" aria-modal="true" aria-label="계정 만들기">
-    <div style="font-size:18px;font-weight:700;letter-spacing:-.01em">전략을 저장하고 검증할게요</div>
-    <div style="font-size:13.5px;color:var(--text-2);margin-top:8px;line-height:1.65">백테스트 결과와 지금까지 만든 전략을 계정에 안전하게 보관해요. 결제 정보는 받지 않아요.</div>
-    <div style="margin-top:20px">
-      <button class="g-btn" onclick="signupDone()"><span class="g-mark">G</span>Google로 계속</button>
-      <button class="e-btn" onclick="signupDone()">이메일로 계속</button>
+<!-- auth modal (teth ai 로그인/회원가입) -->
+<div class="modal-bg" id="modal-auth" onclick="if(event.target===this)closeModal('modal-auth')">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="로그인 또는 회원가입">
+    <button class="au-x" onclick="closeModal('modal-auth')" aria-label="닫기">✕</button>
+
+    <!-- step 1: 시작 -->
+    <div class="au-step" id="au-start">
+      <div class="au-title">로그인 또는 회원가입</div>
+      <div class="au-sub">teth ai를 잠금 해제하고 AI 투자 전략<br>연구·검증·실행을 시작하세요</div>
+      <div class="au-btns">
+        <button class="au-btn" onclick="authOauth('Google')"><span style="font-weight:700;background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853);-webkit-background-clip:text;background-clip:text;color:transparent">G</span>Google로 계속하기</button>
+        <button class="au-btn" onclick="authOauth('Apple')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-top:-2px"><path d="M17.05 12.54c-.03-2.72 2.22-4.02 2.32-4.09-1.27-1.85-3.24-2.1-3.93-2.13-1.67-.17-3.26.98-4.1.98-.85 0-2.16-.96-3.55-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.16 1.36 10.83.9 1.3 1.98 2.77 3.39 2.72 1.36-.05 1.87-.88 3.52-.88 1.64 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.52 1.47-2.99 1.49-3.06-.03-.02-2.86-1.1-2.9-4.34zM14.34 4.56c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.15 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.43-.61 3.18-1.52z"/></svg>Apple로 계속하기</button>
+      </div>
+      <div class="au-div">또는</div>
+      <button class="au-btn ghost au-gap" onclick="authShow('au-more')">더 많은 옵션</button>
     </div>
-    <div style="font-size:11.5px;color:var(--text-3);margin-top:16px;line-height:1.6">계속하면 이용약관과 개인정보 처리방침에 동의하게 됩니다. 가입 후 만들던 전략으로 바로 돌아와요.</div>
+
+    <!-- step 2: 더 많은 옵션 (이메일) -->
+    <div class="au-step" id="au-more" hidden>
+      <div class="au-title">로그인 또는 회원가입</div>
+      <div class="au-sub">전략 저장, 백테스트 기록 보관 등을<br>이용할 수 있습니다.</div>
+      <div class="au-btns">
+        <button class="au-btn" onclick="authOauth('Google')"><span style="font-weight:700;background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853);-webkit-background-clip:text;background-clip:text;color:transparent">G</span>Google 계정으로 계속하기</button>
+        <button class="au-btn" onclick="authOauth('Apple')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-top:-2px"><path d="M17.05 12.54c-.03-2.72 2.22-4.02 2.32-4.09-1.27-1.85-3.24-2.1-3.93-2.13-1.67-.17-3.26.98-4.1.98-.85 0-2.16-.96-3.55-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.16 1.36 10.83.9 1.3 1.98 2.77 3.39 2.72 1.36-.05 1.87-.88 3.52-.88 1.64 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.52 1.47-2.99 1.49-3.06-.03-.02-2.86-1.1-2.9-4.34zM14.34 4.56c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.15 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.43-.61 3.18-1.52z"/></svg>Apple 계정으로 계속하기</button>
+      </div>
+      <div class="au-div">또는</div>
+      <div class="au-input-wrap">
+        <input class="au-input" id="au-email" type="email" placeholder="이메일 주소" autocomplete="off" onkeydown="if(event.key==='Enter')authEmailNext()">
+      </div>
+      <div class="au-err" id="au-email-err">올바른 이메일 주소를 입력해 주세요.</div>
+      <button class="au-btn primary au-gap" onclick="authEmailNext()">계속</button>
+    </div>
+
+    <!-- step 3: 코드 확인 -->
+    <div class="au-step" id="au-code" hidden>
+      <div class="au-title">받은 편지함을 확인하세요</div>
+      <div class="au-sub" id="au-code-sub"></div>
+      <div class="au-input-wrap">
+        <input class="au-input" id="au-code-in" inputmode="numeric" maxlength="6" placeholder="코드" autocomplete="off" onkeydown="if(event.key==='Enter')authCodeNext()">
+      </div>
+      <div class="au-err" id="au-code-err">6자리 숫자 코드를 입력해 주세요.</div>
+      <button class="au-btn primary au-gap" onclick="authCodeNext()">계속</button>
+      <button class="au-textbtn" onclick="toast('MOCK — 인증 코드를 다시 보냈어요')">이메일 다시 보내기</button>
+      <div class="au-div">또는</div>
+      <button class="au-btn ghost au-gap" onclick="authShow('au-pw')">비밀번호로 계속하기</button>
+      <div class="au-foot"><a onclick="toast('MOCK — 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK — 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+    </div>
+
+    <!-- step 4: 비밀번호 생성 (회원가입) -->
+    <div class="au-step" id="au-pw-new" hidden>
+      <div class="au-title">비밀번호 생성하기</div>
+      <div class="au-sub">이 비밀번호를 사용해 teth ai에<br>로그인하게 됩니다</div>
+      <div class="au-field">
+        <span class="au-label">이메일 주소</span>
+        <input class="au-input" id="au-pwnew-email" type="email" disabled>
+        <button class="au-side" onclick="authShow('au-more')">편집</button>
+      </div>
+      <div class="au-field">
+        <span class="au-label">비밀번호</span>
+        <input class="au-input" id="au-pwnew-in" type="password" autocomplete="new-password" oninput="authPwReq()" onkeydown="if(event.key==='Enter')authPwNewNext()">
+        <button class="au-side" onclick="authPwEye('au-pwnew-in',this)" aria-label="비밀번호 표시">👁</button>
+      </div>
+      <div class="au-req">비밀번호에 포함되어야 하는 사항:<br><span id="au-req-len">&nbsp;·&nbsp; 12자 이상</span></div>
+      <button class="au-btn primary au-gap" onclick="authPwNewNext()">계속</button>
+      <div class="au-div">또는</div>
+      <button class="au-btn ghost au-gap" onclick="authSendCode()">일회용 코드로 회원 가입</button>
+      <div class="au-foot"><a onclick="toast('MOCK — 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK — 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+    </div>
+
+    <!-- step 5: 비밀번호 입력 (로그인) -->
+    <div class="au-step" id="au-pw" hidden>
+      <div class="au-title">비밀번호를 입력하세요</div>
+      <div class="au-sub" id="au-pw-sub"></div>
+      <div class="au-field">
+        <span class="au-label">비밀번호</span>
+        <input class="au-input" id="au-pw-in" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')authPwNext()">
+        <button class="au-side" onclick="authPwEye('au-pw-in',this)" aria-label="비밀번호 표시">👁</button>
+      </div>
+      <div class="au-err" id="au-pw-err">비밀번호를 입력해 주세요.</div>
+      <button class="au-btn primary au-gap" onclick="authPwNext()">계속</button>
+      <div class="au-div">또는</div>
+      <button class="au-btn ghost au-gap" onclick="authSendCode()">일회용 코드로 로그인</button>
+      <div class="au-foot"><a onclick="toast('MOCK — 이용약관')">이용약관</a><span>|</span><a onclick="toast('MOCK — 개인정보 보호 정책')">개인정보 보호 정책</a></div>
+    </div>
+
   </div>
 </div>
 
@@ -1008,8 +1123,9 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 
 <!-- ══ V3 · Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
-  <div class="g-titlebar"><span class="g-brand">TESIA</span><span class="g-brand-sub">Research</span>
+  <div class="g-titlebar"><span class="g-brand">teth</span><span class="g-brand-sub">ai</span>
     <span style="flex:1"></span>
+    <span id="g-auth-btns"><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
     <button class="g-iconbtn" onclick="toast('MOCK — 알림')" aria-label="알림"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10a6 6 0 1 0-12 0c0 5-2 6-2 6h16s-2-1-2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
     <button class="g-iconbtn" onclick="gToggleAux()" aria-label="패널 토글"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg></button>
   </div>
@@ -1151,7 +1267,7 @@ function renderSheet(){
 
 /* ═══════════ conversation ═══════════ */
 function convScrollDown(){ var s=$('conv-scroll'); s.scrollTop=s.scrollHeight; }
-function say(html){ var d=document.createElement('div'); d.className='msg-a fade-up'; d.innerHTML='<span class="who">TESIA</span>'+html; $('conv').appendChild(d); convScrollDown(); return d; }
+function say(html){ var d=document.createElement('div'); d.className='msg-a fade-up'; d.innerHTML='<span class="who">teth ai</span>'+html; $('conv').appendChild(d); convScrollDown(); return d; }
 function note(html){ var d=document.createElement('div'); d.className='msg-note fade-up'; d.innerHTML=html; $('conv').appendChild(d); convScrollDown(); }
 function userSay(text){ var d=document.createElement('div'); d.className='msg-u fade-up'; d.textContent=text; $('conv').appendChild(d); convScrollDown(); }
 function chips(items){
@@ -1408,13 +1524,15 @@ function runBacktest(params){
 /* ═══════════ backtest flow ═══════════ */
 function requestBacktest(){
   if($('bt-run-btn').disabled) return;
-  if(!S.user){ S.pendingBacktest=true; openModal('modal-signup'); return; }
+  if(!S.user){ S.pendingBacktest=true; authOpen('signup'); return; }
   doBacktest();
 }
 function signupDone(){
-  S.user={name:'김도현'};
-  $('profile-name').textContent='김도현';
-  closeModal('modal-signup');
+  var nm=(window.AUTH&&AUTH.doneName)||'김도현';
+  S.user={name:nm};
+  $('profile-name').textContent=nm;
+  closeModal('modal-auth');
+  authSyncUI();
   toast('가입 완료 — 만들던 전략으로 돌아왔어요');
   if(S.pendingBacktest){ S.pendingBacktest=false; delay(400, doBacktest); }
 }
@@ -1601,7 +1719,7 @@ function chooseConnect(mode){
     $('cn-manual').style.display='';
   } else {
     $('cn-detail-title').textContent='파트너 거래소로 시작';
-    $('cn-detail-sub').textContent='가입과 동시에 자동으로 연결돼요. 파트너 혜택으로 TESIA 이용료는 무료예요.';
+    $('cn-detail-sub').textContent='가입과 동시에 자동으로 연결돼요. 파트너 혜택으로 teth ai 이용료는 무료예요.';
     $('cn-oauth-label').textContent='파트너 가입하고 자동 연결';
     $('cn-manual').style.display='none';
   }
@@ -2734,7 +2852,7 @@ function gThreadAdd(html){
   return th.lastElementChild;
 }
 function gConvUser(t){ gThreadAdd('<div class="g-umsg">'+gEsc(t)+'</div>'); }
-function gConvAI(html){ gThreadAdd('<div class="g-amsg"><span class="who">TESIA Research</span>'+html+'</div>'); }
+function gConvAI(html){ gThreadAdd('<div class="g-amsg"><span class="who">teth ai</span>'+html+'</div>'); }
 function gConvChips(items){
   var id='gc'+Date.now();
   var html='<div class="g-chiprow" id="'+id+'">'+items.map(function(it,i){ return '<button class="g-qchip" data-i="'+i+'">'+it.label+'</button>'; }).join('')+'</div>';
@@ -2856,16 +2974,18 @@ function gShowActivity(){
 
 /* ── research run ── */
 function gStartRun(){
-  if(!S.user){ G.pendingRun=true; openModal('modal-signup'); return; }
+  if(!S.user){ G.pendingRun=true; authOpen('signup'); return; }
   gStartRunGo();
 }
 var _signupDoneV2=signupDone;
 signupDone=function(){
   if(ANTIGRAVITY_RESEARCH_UI){
-    S.user={name:'김도현'};
-    var p=$('g-profile'); if(p) p.textContent='김도현';
-    closeModal('modal-signup');
-    toast('계정 생성 완료');
+    var nm=(window.AUTH&&AUTH.doneName)||'김도현';
+    S.user={name:nm};
+    var p=$('g-profile'); if(p) p.textContent=nm;
+    closeModal('modal-auth');
+    authSyncUI();
+    toast(AUTH&&AUTH.mode==='login'?'로그인 완료':'계정 생성 완료');
     if(G.pendingRun){ G.pendingRun=false; delay(300,gStartRunGo); }
     return;
   }
@@ -3231,7 +3351,7 @@ function gSend(){
     } else {
       a='현재 '+(G.openDoc||'문서')+' 기준 — 수익 '+pct(fin.ret)+', 낙폭 '+fin.mdd.toFixed(1)+'%, Holdout '+(holdoutOf(fin).ret>0?'통과':'경고')+'. 구체적으로 물어보면 근거와 함께 답합니다.';
     }
-    gDocThread('<div class="g-amsg"><span class="who">TESIA Research</span>'+a+'</div>');
+    gDocThread('<div class="g-amsg"><span class="who">teth ai</span>'+a+'</div>');
   });
 }
 
@@ -3262,4 +3382,65 @@ openModalManage();
 function openModalManage(){ renderManage(); }
 var _openModal=openModal;
 openModal=function(id){ if(id==='modal-manage') renderManage(); _openModal(id); };
+</script>
+<script>
+"use strict";
+/* ══ teth ai auth flow (MOCK) ══ */
+var AUTH={mode:'signup',email:'',doneName:''};
+function authOpen(mode){
+  AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName='';
+  ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el) el.value='';});
+  document.querySelectorAll('#modal-auth .au-err').forEach(function(x){x.classList.remove('on');});
+  authShow('au-start');
+  openModal('modal-auth');
+}
+function authShow(id){
+  document.querySelectorAll('#modal-auth .au-step').forEach(function(s){s.hidden=true;});
+  $(id).hidden=false;
+  if(id==='au-code'){ $('au-code-sub').innerHTML=(AUTH.mode==='login'?'로그인하려면 방금 ':'계정을 만들려면 방금 ')+'<b>'+authEsc(AUTH.email)+'</b>(으)로<br>보낸 6자리 코드를 입력하세요'; }
+  if(id==='au-pw'){ $('au-pw-sub').innerHTML='<b>'+authEsc(AUTH.email)+'</b> 계정의<br>비밀번호를 입력하세요'; }
+  if(id==='au-pw-new'){ $('au-pwnew-email').value=AUTH.email; authPwReq(); }
+  var f={'au-more':'au-email','au-code':'au-code-in','au-pw-new':'au-pwnew-in','au-pw':'au-pw-in'}[id];
+  if(f) setTimeout(function(){var el=$(f); if(el) el.focus();},80);
+}
+function authEsc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function authOauth(provider){ AUTH.doneName='김도현'; toast('MOCK — '+provider+' 인증 완료'); signupDone(); }
+function authEmailNext(){
+  var v=($('au-email').value||'').trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ $('au-email-err').classList.add('on'); return; }
+  $('au-email-err').classList.remove('on');
+  AUTH.email=v;
+  if(AUTH.mode==='signup') authShow('au-pw-new');
+  else authSendCode();
+}
+function authSendCode(){
+  if(!AUTH.email){ authShow('au-more'); return; }
+  var c=$('au-code-in'); if(c) c.value='';
+  authShow('au-code');
+  toast('MOCK — 인증 코드를 보냈어요');
+}
+function authCodeNext(){
+  var v=($('au-code-in').value||'').trim();
+  if(!/^\d{6}$/.test(v)){ $('au-code-err').classList.add('on'); return; }
+  $('au-code-err').classList.remove('on');
+  authFinishEmail();
+}
+function authPwReq(){
+  var ok=($('au-pwnew-in').value||'').length>=12;
+  var el=$('au-req-len');
+  el.className=ok?'ok':'';
+  el.innerHTML=(ok?'&nbsp;✓&nbsp; ':'&nbsp;·&nbsp; ')+'12자 이상';
+  return ok;
+}
+function authPwNewNext(){ if(!authPwReq()){ $('au-pwnew-in').focus(); return; } authFinishEmail(); }
+function authPwNext(){
+  var v=$('au-pw-in').value||'';
+  if(v.length<1){ $('au-pw-err').classList.add('on'); return; }
+  $('au-pw-err').classList.remove('on');
+  authFinishEmail();
+}
+function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
+function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
+function authSyncUI(){ var b=$('g-auth-btns'); if(b) b.hidden=!!S.user; }
+authSyncUI();
 </script>
