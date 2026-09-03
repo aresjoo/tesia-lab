@@ -600,7 +600,7 @@ body.g-dark{background:#0f1012}
   .gm-item.glc-item{display:flex}
   #glc-panel .info{display:flex;gap:10px;align-items:flex-start;background:var(--g3);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:var(--gt2);margin-bottom:14px}
   #glc-panel .info .ii{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--gt3);color:var(--g1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
-  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;max-height:82vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;max-height:55vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)} /* 다른 바텀시트와 같은 체급의 높이 */
   #glc-panel.on{display:block;animation:gSheetUp .3s var(--ease)}
   #glc-panel .grab2{display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 14px;cursor:pointer}
   #glc-panel .tabs2{display:flex;gap:22px;margin:4px 0 16px;border-bottom:1px solid var(--gl)}
@@ -1003,7 +1003,6 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
   .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
   .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:30;animation:gRiseIn .5s var(--ease) .1s both}
-  .g-pill textarea{height:42px} /* 기본 2줄, 로테이팅 플레이스홀더가 줄바꿈돼 온전히 보이게 */
   .g-plus-pop{top:auto;bottom:70px}
   .g-chipstack{position:fixed;left:16px;right:16px;bottom:136px;z-index:25}
   .g-home-chips{animation:gRiseIn .5s var(--ease) .18s both}
@@ -3360,8 +3359,7 @@ function gHome(){
       }
       this.style.height='auto';
     }
-    var minH=(innerWidth<=860)?42:21; /* 모바일 기본 2줄 — 플레이스홀더가 줄바꿈돼 보이게 (Lovable 동일) */
-    var h=Math.min(Math.max(this.scrollHeight,minH),147);
+    var h=Math.min(this.scrollHeight,147);
     this.style.height=h+'px';
     if(this.value.trim()) document.body.classList.add('kb-open');
   });
@@ -4328,22 +4326,23 @@ fr:[
 };
 var GREETS_EN=GREETS_ALL.en; /* 하위 호환 */
 /* ── Lovable식 로테이팅 플레이스홀더 (프리픽스 고정 + 서픽스 타자 애니메이션) ── */
-var PH_ROT={
-prefix:{ko:'TETH에게 말해보세요: ',en:'Tell TETH: ',ja:'TETHに話しかけてみて: ','zh-CN':'对TETH说: ','zh-TW':'對TETH說: ',es:'Dile a TETH: ',fr:'Dites à TETH : '},
+var PH_ROT={ /* 프리픽스+문구가 모바일에서도 한 줄에 들어가도록 짧게 유지 */
+prefix:{ko:'TETH에게 말해보세요: ',en:'Tell TETH: ',ja:'TETHに話して: ','zh-CN':'对TETH说: ','zh-TW':'對TETH說: ',es:'Dile a TETH: ',fr:'Dites à TETH : '},
+prefixM:{ko:'TETH에게: ',en:'TETH: ',ja:'TETHに: ','zh-CN':'对TETH说: ','zh-TW':'對TETH說: ',es:'TETH: ',fr:'TETH : '},
 list:{
-ko:['시장 상황 어때?','테슬라 조금씩 사줘','META 지금 사도 돼?','비트코인 알아서 거래해줘','엔비디아 떨어지면 사줘','요즘 뭐가 잘 올라?','수익 나면 알아서 팔아줘','지금 뭐 사는 게 좋아?','많이 떨어지면 알려줘','내가 잘 때도 거래해줘'],
-en:["How's the market?",'Buy Tesla bit by bit','Is META a buy right now?','Trade Bitcoin for me','Buy Nvidia when it dips',"What's been going up?",'Take profits for me','What should I buy now?','Alert me on big drops','Trade while I sleep'],
-ja:['相場どう？','テスラを少しずつ買って','METAは今買ってもいい？','ビットコインはお任せで取引して','エヌビディアが下がったら買って','最近何が上がってる？','利益が出たら売っておいて','今は何を買うのがいい？','大きく下がったら知らせて','寝ている間も取引して'],
-'zh-CN':['行情怎么样？','帮我分批买特斯拉','META现在能买吗？','比特币帮我自动交易','英伟达跌了就帮我买','最近什么涨得好？','有盈利就帮我卖掉','现在买什么好？','大跌时提醒我','我睡觉时也帮我交易'],
-'zh-TW':['行情怎麼樣？','幫我分批買特斯拉','META現在能買嗎？','比特幣幫我自動交易','輝達跌了就幫我買','最近什麼漲得好？','有盈利就幫我賣掉','現在買什麼好？','大跌時提醒我','我睡覺時也幫我交易'],
-es:['¿Cómo está el mercado?','Compra Tesla poco a poco','¿Compro META ahora?','Opera Bitcoin por mí','Compra Nvidia si cae','¿Qué está subiendo?','Vende cuando haya ganancia','¿Qué compro ahora?','Avísame si cae fuerte','Opera mientras duermo'],
-fr:['Le marché, ça donne quoi ?','Achète du Tesla petit à petit',"META, j'achète maintenant ?",'Trade le Bitcoin pour moi',"Achète Nvidia s'il baisse","Qu'est-ce qui monte en ce moment ?","Vends dès que c'est gagnant",'Quoi acheter maintenant ?','Préviens-moi si ça chute','Trade pendant que je dors']
+ko:['시장 상황 어때?','테슬라 조금씩 사줘','META 사도 돼?','비트코인 알아서 사줘','엔비디아 빠지면 사줘','요즘 뭐가 잘 올라?','수익 나면 팔아줘','지금 뭐 살까?','급락하면 알려줘','잘 때도 거래해줘'],
+en:["How's the market?",'Buy Tesla bit by bit','Is META a buy?','Trade BTC for me','Buy Nvidia dips',"What's going up?",'Take profits for me','What should I buy?','Alert me on drops','Trade while I sleep'],
+ja:['相場どう？','テスラ少しずつ買って','METAは買い？','BTCお任せで売買して','下がったらNVDA買って','最近何が上がってる？','利益出たら売って','今何を買うべき？','急落したら教えて','寝てる間も取引して'],
+'zh-CN':['行情怎么样？','帮我分批买特斯拉','META能买吗？','BTC帮我自动交易','英伟达跌了就买','最近什么在涨？','有盈利就卖掉','现在买什么好？','大跌时提醒我','睡觉时也帮我交易'],
+'zh-TW':['行情怎麼樣？','幫我分批買特斯拉','META能買嗎？','BTC幫我自動交易','輝達跌了就買','最近什麼在漲？','有盈利就賣掉','現在買什麼好？','大跌時提醒我','睡覺時也幫我交易'],
+es:['¿Cómo va el mercado?','Compra Tesla en partes','¿Compro META?','Opera BTC por mí','Compra Nvidia si cae','¿Qué está subiendo?','Vende con ganancia','¿Qué compro ahora?','Avísame si cae','Opera mientras duermo'],
+fr:['Le marché, ça va ?','Achète Tesla peu à peu',"META, j'achète ?",'Trade le BTC pour moi','Achète NVDA à la baisse','Qu\'est-ce qui monte ?','Vends si ça gagne','Quoi acheter là ?','Alerte si ça chute','Trade pendant mon sommeil']
 }};
 function phRotStart(){
   if(G.phT){ clearInterval(G.phT); G.phT=null; }
   var el=$('g-home-in'); if(!el) return;
   var lang=(typeof GLC!=='undefined'&&PH_ROT.list[GLC.lang])?GLC.lang:'ko';
-  var pre=PH_ROT.prefix[lang], list=PH_ROT.list[lang];
+  var pre=(innerWidth<=860?PH_ROT.prefixM:PH_ROT.prefix)[lang], list=PH_ROT.list[lang];
   var pi=Math.floor(Math.random()*list.length), ci=0, mode='type', hold=0;
   el.placeholder=pre;
   G.phT=setInterval(function(){
@@ -4681,4 +4680,4 @@ applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="site-config.js?v=2"></script>
-<script src="help-widget.js?v=4"></script>
+<script src="help-widget.js?v=5"></script>
