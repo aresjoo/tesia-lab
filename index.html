@@ -983,7 +983,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .g-side.collapsed #g-me-row{opacity:0;pointer-events:none;transition-delay:0s}
 .g-side:not(.authed) #g-me-row{display:none}
 /* 게스트: 새 연구 비활성 + 안내, 목록은 로그인 후에만 */
-.g-side:not(.authed) .g-new{opacity:.45;pointer-events:none}
+.g-side:not(.authed):not(.collapsed) .g-new{opacity:.45;pointer-events:none} /* 게스트 흐림은 펼침에서만 — 접힘의 opacity:0을 이기면 안 된다 */
 .g-side:not(.authed) #g-new-row{opacity:.45;pointer-events:none}
 .g-side:not(.authed) .g-util,.g-side:not(.authed) .g-sec,.g-side:not(.authed) #g-sess-list,.g-side:not(.authed) #g-live-list{display:none}
 #g-guest-note{display:none;align-items:flex-start;gap:9px;padding:12px 13px;font-size:13px;color:var(--gt2);line-height:1.5}
@@ -1505,7 +1505,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 <!-- ══ V3, Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
   <div id="g-appbanner">
-    <span class="icon"><img src="assets/logo.png" alt="" style="width:26px;height:auto;display:block" onerror="this.classList.add('imgfail')"></span>
+    <span class="icon"><img src="assets/logo.png" alt="" style="width:26px;height:auto;display:block" onerror="if(!this.dataset.r){this.dataset.r=1;this.src=this.src.split('?')[0]+'?r=1'}else this.classList.add('imgfail')"></span>
     <span class="t"><b>TETH AI</b><span>TETH에서 제공하는 AI 트레이딩 에이전트</span></span>
     <a class="dl" href="download/" target="_blank" rel="noopener noreferrer">다운로드</a>
     <button class="x" onclick="tethBannerClose()" aria-label="닫기">✕</button>
@@ -1536,7 +1536,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
     <aside class="g-side collapsed" id="g-side">
       <!-- 접힌 상태: 로고는 정적 브랜드(호버/클릭 없음), 토글은 별도 버튼 -->
       <div id="g-spark-row">
-        <img class="brand-mark" src="assets/logo.png" alt="" width="24" height="15" onerror="this.classList.add('imgfail')">
+        <img class="brand-mark" src="assets/logo.png" alt="" width="24" height="15" onerror="if(!this.dataset.r){this.dataset.r=1;this.src=this.src.split('?')[0]+'?r=1'}else this.classList.add('imgfail')">
       </div>
       <div class="g-ico-row" id="g-toggle-row">
         <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg></button>
@@ -1549,7 +1549,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
-        <span class="brand-slot"><img class="brand-mark" src="assets/logo.png" alt="" width="24" height="15" onerror="this.classList.add('imgfail')"></span>
+        <span class="brand-slot"><img class="brand-mark" src="assets/logo.png" alt="" width="24" height="15" onerror="if(!this.dataset.r){this.dataset.r=1;this.src=this.src.split('?')[0]+'?r=1'}else this.classList.add('imgfail')"></span>
         <span class="g-word">TETH</span>
         <span style="flex:1"></span>
         <div class="g-ico-row" style="height:40px">
@@ -3327,7 +3327,7 @@ function gHome(){
   GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GR.s};
   gContent(
     '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
-    '<img class="g-hero-spark" src="assets/logo.png" alt="" onerror="this.classList.add(\'imgfail\')">'+
+    '<img class="g-hero-spark" src="assets/logo.png" alt="" onerror="if(!this.dataset.r){this.dataset.r=1;this.src=\'assets/logo.png?r=1\'}else this.classList.add(\'imgfail\')">'+
     '<div class="g-hello">'+GR.h+'</div>'+
     '<div class="g-sub">'+GR.s+'</div>'+
     '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="연구 아이디어"></textarea>'+
