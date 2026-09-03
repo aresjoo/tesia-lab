@@ -36,7 +36,7 @@
     '<span class="tip">24/7 고객지원</span>';
   var pop = document.createElement('div');
   pop.id = 'teth-help-pop';
-  pop.innerHTML = '<b><i></i>24/7 고객지원</b>무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.<div class="sub">Zendesk 채팅 연결 준비 중입니다. support@teth.ai</div>';
+  pop.innerHTML = '<b><i></i>24/7 고객지원</b>무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.<div class="sub">실시간 채팅은 곧 제공돼요. support@teth.ai</div>';
   document.body.appendChild(btn); document.body.appendChild(pop);
 
   btn.addEventListener('click', function(e){

@@ -560,9 +560,11 @@ body.g-dark{background:#0f1012}
 #glc-panel li .ck{opacity:0;color:var(--gt)}
 #glc-panel li[data-on="1"]{font-weight:700}
 #glc-panel li[data-on="1"] .ck{opacity:1}
-#glc-panel li.dis{color:var(--gt3);cursor:default}
-#glc-panel li.dis:hover{background:none}
-#glc-panel li .soon{font-size:11px;color:var(--gt3);border:1px solid var(--gl2);border-radius:999px;padding:2px 8px}
+#glc-panel ul{scrollbar-width:thin;scrollbar-color:var(--gl2) transparent}
+#glc-panel ul::-webkit-scrollbar{width:5px}
+#glc-panel ul::-webkit-scrollbar-track{background:transparent}
+#glc-panel ul::-webkit-scrollbar-thumb{background:var(--gl2);border-radius:99px}
+#glc-panel ul::-webkit-scrollbar-thumb:hover{background:var(--gt3)}
 #glc-panel .tabs2{display:none}
 #glc-panel .x2{display:none}
 /* 설정 메뉴의 언어/통화 항목 — 모바일 전용 진입점 (데스크톱은 우측 상단 지구본) */
@@ -603,6 +605,13 @@ body.g-dark{background:#0f1012}
 .gm-sub [data-on="1"] .ck{opacity:1}
 #gm-sub-theme{top:0}
 #gm-sub-help{top:0} /* 자기 항목 top에서 시작해 아래로 열림 (Gemini 동일) */
+#gm-sub-theme.up,#gm-sub-help.up{top:auto;bottom:0} /* 아래 공간 부족 시 위로 열림, ID로 top:0을 이긴다 */
+/* 톤앤매너 스크롤바: 얇고 트랙 투명, 썸은 라인 토큰 */
+#g-root *{scrollbar-width:thin;scrollbar-color:var(--gl2) transparent}
+#g-root ::-webkit-scrollbar{width:5px;height:5px}
+#g-root ::-webkit-scrollbar-track{background:transparent}
+#g-root ::-webkit-scrollbar-thumb{background:var(--gl2);border-radius:99px}
+#g-root ::-webkit-scrollbar-thumb:hover{background:var(--gt3)}
 .gm-sub .st{display:none}
 .gm-grab{display:none}
 /* 팝오버 공통 등장 애니메이션 — display 전환에도 부드럽게 */
@@ -681,6 +690,9 @@ body.light #g-root{background:#fff;color:#1f1f1f;
   --shadow-pop:0 6px 26px rgba(60,64,67,.18);--shadow-pill:0 1px 3px rgba(60,64,67,.1);
   --glow:rgba(163,203,255,.55)}    /* Gemini 라이트의 맑은 스카이블루 글로우 (탁한 네이비 금지) */
 body.light .g-home{background:radial-gradient(ellipse 780px 540px at 50% 56%,var(--glow),rgba(255,255,255,0) 72%)}
+@media (max-width:860px){ /* 모바일: 화면 전체가 뿌옇지 않게 글로우를 중앙에만 작고 옅게 */
+  body.light .g-home{background:radial-gradient(ellipse 340px 300px at 50% 44%,rgba(163,203,255,.38),rgba(255,255,255,0) 68%)}
+}
 body.light .g-pill textarea{color:#1f1f1f}
 body.light .g-qchip{background:#fff;border-color:#dadce0;color:#3c4043}
 body.light .g-qchip:hover{background:#f8f9fa}
@@ -1415,18 +1427,18 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <div id="glc-panel">
     <button class="x2" onclick="glcClose()" aria-label="닫기">✕</button>
     <div class="tabs2">
-      <button class="on" onclick="glcTab(0,this)">Language</button>
-      <button onclick="glcTab(1,this)">Currency</button>
+      <button class="on" id="glc-tab-l" onclick="glcTab(0,this)">언어</button>
+      <button id="glc-tab-c" onclick="glcTab(1,this)">통화</button>
     </div>
     <div class="info"><span class="ii">i</span><span id="glc-info-txt">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></div>
     <div class="col on" id="glc-lang">
-      <h4>Language <span class="qi">i</span><span class="qtip" id="glc-lang-tip">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></h4>
-      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-lang')"></div>
+      <h4><span id="glc-h-lang">언어</span> <span class="qi">i</span><span class="qtip" id="glc-lang-tip">선택한 언어는 TETH 화면과 알림에 적용됩니다.</span></h4>
+      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="glc-srch-l" placeholder="검색" oninput="glcFilter(this,'glc-lang')"></div>
       <ul id="glc-lang-list"></ul>
     </div>
     <div class="col" id="glc-cur">
-      <h4>Local currency</h4>
-      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-cur')"></div>
+      <h4 id="glc-h-cur">현지 통화</h4>
+      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="glc-srch-c" placeholder="검색" oninput="glcFilter(this,'glc-cur')"></div>
       <ul id="glc-cur-list"></ul>
     </div>
   </div>
@@ -1516,7 +1528,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <div id="gm-scrim" onclick="gSetMenuClose()"></div>
   <div id="g-setmenu" hidden>
     <div class="gm-grab" onclick="gSetMenuClose()"></div>
-    <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'theme')">
+    <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'theme')" onmouseenter="gmFlip(this)">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/></svg>
       테마<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       <div class="gm-sub" id="gm-sub-theme" onclick="event.stopPropagation()">
@@ -1534,7 +1546,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H8l-4 4z"/><path d="M12 8.2v.4M12 11v3"/></svg>
       의견 보내기
     </button>
-    <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'help')">
+    <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'help')" onmouseenter="gmFlip(this)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="16" height="16" rx="3"/><path d="M5 7H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1" opacity=".6"/><path d="M10.5 8.6a2.6 2.6 0 1 1 3.6 2.4c-.8.35-1.1.8-1.1 1.6"/><path d="M13 15.4v.2"/></svg>
       도움말<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       <div class="gm-sub" id="gm-sub-help" onclick="event.stopPropagation()">
@@ -3224,9 +3236,9 @@ function gHome(){
     {h:'테슬라 왜 떨어졌어요?\n물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'},
     {h:'TETH와 함께\n시장을 정복하세요',s:'아이디어부터 검증, 실행까지 한 곳에서'}
   ];
-  var EN=(typeof GLC!=='undefined'&&GLC.lang==='en');
+  var LANG=(typeof GLC!=='undefined')?GLC.lang:'ko';
   var TR=function(k,d){ return (typeof L==='function')?L(k):d; }; /* i18n 정의 전 초기 부트 폴백 */
-  var GPOOL=(EN&&typeof GREETS_EN!=='undefined')?GREETS_EN:GREETS;
+  var GPOOL=(LANG!=='ko'&&typeof GREETS_ALL!=='undefined'&&GREETS_ALL[LANG])?GREETS_ALL[LANG]:GREETS;
   var GR=GPOOL[Math.floor(Math.random()*GPOOL.length)];
   GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GR.s};
   gContent(
@@ -3236,16 +3248,17 @@ function gHome(){
     '<div class="g-sub">'+GR.s+'</div>'+
     '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="연구 아이디어"></textarea>'+
     '<span class="g-pill-sp"></span><button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button>'+
-    '<div class="g-plus-pop" id="g-plus-pop"><b>더 많은 기능 사용하기</b><p>로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.</p><div class="row"><button class="go" onclick="authOpen(\'login\')">로그인</button></div></div>'+
+    '<div class="g-plus-pop" id="g-plus-pop"><b>'+TR('plus.t','더 많은 기능 사용하기')+'</b><p>'+TR('plus.b','로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.')+'</p><div class="row"><button class="go" onclick="authOpen(\'login\')">'+TR('nav.login','로그인')+'</button></div></div>'+
     '</div>'+
     '<div class="g-home-chips">'+
-    '<button class="g-qchip" onclick="gNew(\'비트코인이 떨어졌을 때 사는 전략\')">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(\'오르는 흐름에 올라타는 전략\')">'+TR('chip.2','추세 추종 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(\'뭐부터 검증해야 할지 모르겠어\')">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.2','추세 추종 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
     '</div>'+
-    '<div class="g-terms">'+(EN
-      ?'<a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH Terms</a> and the <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH Privacy Policy</a> apply. TETH is an AI and can make mistakes.'
-      :'<a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH 약관</a>과 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')+'</div>'+
+    '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')
+      .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
+      .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
+      .replace(/\{\/\}/g,'</a>')+'</div>'+
     '</div>');
   var hi=$('g-home-in');
   /* Enter=전송, Shift+Enter=줄바꿈 (Gemini와 동일) */
@@ -3923,22 +3936,14 @@ function authPwNext(){
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
 function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
 /* ══ 언어/통화 (지구본) ══ */
-var GLC_LANGS=[
-  {c:'ko',n:'한국어',ok:true},
-  {c:'en',n:'English',ok:true},
+var GLC_LANGS=[ /* 노출 = 실지원 원칙, 이 목록의 언어는 전부 I18N 사전과 GREETS_ALL이 커버한다 */
+  {c:'ko',n:'한국어'},
+  {c:'en',n:'English'},
   {c:'ja',n:'日本語'},
   {c:'zh-CN',n:'简体中文'},
   {c:'zh-TW',n:'繁體中文'},
   {c:'es',n:'Español'},
-  {c:'fr',n:'Français'},
-  {c:'pt',n:'Português'},
-  {c:'ru',n:'Русский'},
-  {c:'ar',n:'العربية'},
-  {c:'tr',n:'Türkçe'},
-  {c:'vi',n:'Tiếng Việt'},
-  {c:'mn',n:'Монгол'},
-  {c:'uz',n:'Oʻzbek'},
-  {c:'id',n:'Bahasa Indonesia'}
+  {c:'fr',n:'Français'}
 ];
 var GLC_CURS=[ /* 1 USD 기준 정적 환율, TODO: 실서비스에서 환율 API 연동 */
   {c:'USD',s:'$',r:1},
@@ -3981,6 +3986,9 @@ var GLC_CURS=[ /* 1 USD 기준 정적 환율, TODO: 실서비스에서 환율 AP
 ];
 var GLC={lang:'ko',cur:'USD'};
 try{ GLC.lang=localStorage.getItem('tethLang')||'ko'; GLC.cur=localStorage.getItem('tethCurrency')||'USD'; }catch(e){}
+if(!GLC_LANGS.some(function(l){return l.c===GLC.lang;})) GLC.lang='ko';
+if(!GLC_CURS.some(function(c){return c.c===GLC.cur;})) GLC.cur='USD';
+try{ document.documentElement.lang=GLC.lang; }catch(e){}
 function curInfo(){ return GLC_CURS.find(function(c){return c.c===GLC.cur;})||GLC_CURS[0]; }
 function fmtMoney(usd){ /* 데모 수치(USD 기준)를 표시 통화로 변환 */
   var ci=curInfo(); var v=usd*ci.r; var str;
@@ -3993,7 +4001,7 @@ function glcRender(){
   var ll=$('glc-lang-list'), cl=$('glc-cur-list');
   if(!ll) return;
   ll.innerHTML=GLC_LANGS.map(function(l){
-    return '<li data-v="'+l.c+'" data-on="'+(GLC.lang===l.c?1:0)+'" class="'+(l.ok?'':'dis')+'" onclick="'+(l.ok?'glcSetLang(\''+l.c+'\')':'')+'">'+l.n+(l.ok?'<span class="ck">✓</span>':'<span class="soon">'+(GLC.lang==='en'?'Soon':'준비 중')+'</span>')+'</li>';
+    return '<li data-v="'+l.c+'" data-on="'+(GLC.lang===l.c?1:0)+'" onclick="glcSetLang(\''+l.c+'\')">'+l.n+'<span class="ck">✓</span></li>';
   }).join('');
   cl.innerHTML=GLC_CURS.map(function(c){
     return '<li data-v="'+c.c+'" data-on="'+(GLC.cur===c.c?1:0)+'" onclick="glcSetCur(\''+c.c+'\')">'+c.c+'<span class="ck">✓</span></li>';
@@ -4030,44 +4038,55 @@ function glcFilter(inp,colId){
 function glcSetLang(c){ GLC.lang=c; try{localStorage.setItem('tethLang',c);}catch(e){} glcRender(); applyLang(); glcClose(); }
 function glcSetCur(c){ GLC.cur=c; try{localStorage.setItem('tethCurrency',c);}catch(e){} glcRender(); applyCurrency(); glcClose(); }
 
-/* ══ i18n — 1차 커버리지: 로그인 전 표면 (셸/홈/설정/배너/인증 핵심) ══ */
+/* ══ i18n — 로그인 전 표면 전체, 노출 언어 7종(ko/en/ja/zh-CN/zh-TW/es/fr) 전부 실지원 ══ */
 var I18N={
-  'nav.about':{ko:'TETH 정보',en:'About TETH'},
-  'nav.download':{ko:'TETH 앱 다운로드',en:'Get TETH app'},
-  'nav.login':{ko:'로그인',en:'Log in'},
-  'nav.signup':{ko:'무료로 회원가입',en:'Sign up free'},
-  'side.new':{ko:'＋ 새 연구',en:'＋ New research'},
-  'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.'},
-  'side.login':{ko:'로그인',en:'Log in'},
-  'menu.theme':{ko:'테마',en:'Theme'},
-  'menu.feedback':{ko:'의견 보내기',en:'Send feedback'},
-  'menu.help':{ko:'도움말',en:'Help'},
-  'menu.system':{ko:'시스템',en:'System'},
-  'menu.light':{ko:'밝게',en:'Light'},
-  'menu.dark':{ko:'어둡게',en:'Dark'},
-  'menu.themeTitle':{ko:'테마 선택',en:'Choose theme'},
-  'menu.terms':{ko:'약관',en:'Terms'},
-  'menu.privacy':{ko:'개인정보처리방침',en:'Privacy policy'},
-  'banner.sub':{ko:'TETH에서 제공하는 AI 트레이딩 에이전트',en:'AI trading agent from TETH'},
-  'banner.dl':{ko:'다운로드',en:'Download'},
-  'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips'},
-  'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy'},
-  'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy'},
-  'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea'},
-  'help.tip':{ko:'24/7 고객지원',en:'24/7 Support'},
-  'auth.title':{ko:'로그인 또는 회원가입',en:'Log in or sign up'},
-  'auth.sub':{ko:'TETH를 잠금 해제하고 AI 투자 전략<br>연구, 검증, 실행을 시작하세요',en:'Unlock TETH and start researching,<br>validating and executing AI strategies'},
-  'auth.google':{ko:'Google로 계속하기',en:'Continue with Google'},
-  'auth.apple':{ko:'Apple로 계속하기',en:'Continue with Apple'},
-  'auth.or':{ko:'또는',en:'or'},
-  'auth.email':{ko:'이메일 주소',en:'Email address'},
-  'auth.continue':{ko:'계속',en:'Continue'},
-  'help.title':{ko:'24/7 고객지원',en:'24/7 Support'},
-  'help.body':{ko:'무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.',en:'Ask us anything. Our agents are available around the clock.'},
-  'help.sub':{ko:'Zendesk 채팅 연결 준비 중입니다. support@teth.ai',en:'Zendesk chat coming soon. support@teth.ai'}
+  'nav.about':{ko:'TETH 정보',en:'About TETH',ja:'TETHについて','zh-CN':'关于TETH','zh-TW':'關於TETH',es:'Acerca de TETH',fr:'À propos de TETH'},
+  'nav.download':{ko:'TETH 앱 다운로드',en:'Get TETH app',ja:'TETHアプリを入手','zh-CN':'下载TETH应用','zh-TW':'下載TETH應用',es:'Descargar la app TETH',fr:"Télécharger l'app TETH"},
+  'nav.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
+  'nav.signup':{ko:'무료로 회원가입',en:'Sign up free',ja:'無料で登録','zh-CN':'免费注册','zh-TW':'免費註冊',es:'Regístrate gratis',fr:'Inscription gratuite'},
+  'side.new':{ko:'＋ 새 연구',en:'＋ New research',ja:'＋ 新しいリサーチ','zh-CN':'＋ 新研究','zh-TW':'＋ 新研究',es:'＋ Nueva investigación',fr:'＋ Nouvelle recherche'},
+  'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.',ja:'市場に勝つ戦略、|ログイン|して今すぐ始めましょう。','zh-CN':'战胜市场的策略，|登录|即刻开始。','zh-TW':'戰勝市場的策略，|登入|即刻開始。',es:'Estrategias para ganar al mercado, |inicia sesión| y empieza ya.',fr:'Des stratégies pour battre le marché, |connectez-vous| et commencez.'},
+  'side.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
+  'menu.theme':{ko:'테마',en:'Theme',ja:'テーマ','zh-CN':'主题','zh-TW':'主題',es:'Tema',fr:'Thème'},
+  'menu.feedback':{ko:'의견 보내기',en:'Send feedback',ja:'フィードバックを送信','zh-CN':'发送反馈','zh-TW':'傳送意見',es:'Enviar comentarios',fr:'Envoyer des commentaires'},
+  'menu.help':{ko:'도움말',en:'Help',ja:'ヘルプ','zh-CN':'帮助','zh-TW':'說明',es:'Ayuda',fr:'Aide'},
+  'menu.system':{ko:'시스템',en:'System',ja:'システム','zh-CN':'系统','zh-TW':'系統',es:'Sistema',fr:'Système'},
+  'menu.light':{ko:'밝게',en:'Light',ja:'ライト','zh-CN':'浅色','zh-TW':'淺色',es:'Claro',fr:'Clair'},
+  'menu.dark':{ko:'어둡게',en:'Dark',ja:'ダーク','zh-CN':'深色','zh-TW':'深色',es:'Oscuro',fr:'Sombre'},
+  'menu.themeTitle':{ko:'테마 선택',en:'Choose theme',ja:'テーマを選択','zh-CN':'选择主题','zh-TW':'選擇主題',es:'Elegir tema',fr:'Choisir le thème'},
+  'menu.terms':{ko:'약관',en:'Terms',ja:'利用規約','zh-CN':'条款','zh-TW':'條款',es:'Términos',fr:'Conditions'},
+  'menu.privacy':{ko:'개인정보처리방침',en:'Privacy policy',ja:'プライバシーポリシー','zh-CN':'隐私政策','zh-TW':'隱私權政策',es:'Política de privacidad',fr:'Politique de confidentialité'},
+  'menu.glc':{ko:'언어 및 통화',en:'Language & currency',ja:'言語と通貨','zh-CN':'语言与货币','zh-TW':'語言與貨幣',es:'Idioma y moneda',fr:'Langue et devise'},
+  'banner.sub':{ko:'TETH에서 제공하는 AI 트레이딩 에이전트',en:'AI trading agent from TETH',ja:'TETHのAIトレーディングエージェント','zh-CN':'TETH推出的AI交易代理','zh-TW':'TETH推出的AI交易代理',es:'Agente de trading con IA de TETH',fr:'Agent de trading IA par TETH'},
+  'banner.dl':{ko:'다운로드',en:'Download',ja:'ダウンロード','zh-CN':'下载','zh-TW':'下載',es:'Descargar',fr:'Télécharger'},
+  'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips',ja:'例：ビットコイン下落時に買う戦略','zh-CN':'例如：比特币下跌时买入的策略','zh-TW':'例如：比特幣下跌時買入的策略',es:'p. ej. Una estrategia que compra caídas de Bitcoin',fr:'p. ex. Une stratégie qui achète les baisses du Bitcoin'},
+  'home.terms':{ko:'{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.',en:'{T}TETH Terms{/} and the {P}TETH Privacy Policy{/} apply. TETH is an AI and can make mistakes.',ja:'{T}TETH利用規約{/}と{P}TETHプライバシーポリシー{/}が適用されます。TETHはAIであり、間違えることがあります。','zh-CN':'适用{T}TETH条款{/}和{P}TETH隐私政策{/}。TETH是AI，可能会出错。','zh-TW':'適用{T}TETH條款{/}和{P}TETH隱私權政策{/}。TETH是AI，可能會出錯。',es:'Se aplican los {T}Términos de TETH{/} y la {P}Política de privacidad de TETH{/}. TETH es una IA y puede cometer errores.',fr:"Les {T}Conditions TETH{/} et la {P}Politique de confidentialité TETH{/} s'appliquent. TETH est une IA et peut faire des erreurs."},
+  'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy',ja:'押し目買い戦略','zh-CN':'低吸反弹策略','zh-TW':'低接反彈策略',es:'Estrategia de comprar caídas',fr:"Stratégie d'achat sur repli"},
+  'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy',ja:'トレンドフォロー戦略','zh-CN':'趋势跟踪策略','zh-TW':'趨勢跟蹤策略',es:'Estrategia de seguir la tendencia',fr:'Stratégie de suivi de tendance'},
+  'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea',ja:'漠然としたアイデアから','zh-CN':'从模糊的想法开始','zh-TW':'從模糊的想法開始',es:'Empieza con una idea vaga',fr:"Partir d'une idée vague"},
+  'plus.t':{ko:'더 많은 기능 사용하기',en:'Do more with TETH',ja:'TETHをもっと活用','zh-CN':'使用更多功能','zh-TW':'使用更多功能',es:'Haz más con TETH',fr:'Faites plus avec TETH'},
+  'plus.b':{ko:'로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.',en:'Log in to attach charts and portfolio files, connect exchanges, save strategies and more.',ja:'ログインすると、チャートやポートフォリオのファイル添付、取引所の連携、戦略の保存など、より多くの機能が使えます。','zh-CN':'登录后可附加图表和投资组合文件、连接交易所、保存策略等，使用更多功能。','zh-TW':'登入後可附加圖表和投資組合檔案、連接交易所、儲存策略等，使用更多功能。',es:'Inicia sesión para adjuntar gráficos y archivos de cartera, conectar exchanges, guardar estrategias y más.',fr:'Connectez-vous pour joindre des graphiques et fichiers de portefeuille, connecter des plateformes, enregistrer des stratégies et plus.'},
+  'glc.lang':{ko:'언어',en:'Language',ja:'言語','zh-CN':'语言','zh-TW':'語言',es:'Idioma',fr:'Langue'},
+  'glc.curTab':{ko:'통화',en:'Currency',ja:'通貨','zh-CN':'货币','zh-TW':'貨幣',es:'Moneda',fr:'Devise'},
+  'glc.cur':{ko:'현지 통화',en:'Local currency',ja:'現地通貨','zh-CN':'当地货币','zh-TW':'當地貨幣',es:'Moneda local',fr:'Devise locale'},
+  'glc.search':{ko:'검색',en:'Search',ja:'検索','zh-CN':'搜索','zh-TW':'搜尋',es:'Buscar',fr:'Rechercher'},
+  'glc.info':{ko:'선택한 언어는 TETH 화면과 알림에 적용됩니다.',en:'Your language selection applies to TETH screens and notifications.',ja:'選択した言語はTETHの画面と通知に適用されます。','zh-CN':'所选语言将应用于TETH界面和通知。','zh-TW':'所選語言將應用於TETH介面和通知。',es:'El idioma seleccionado se aplica a las pantallas y notificaciones de TETH.',fr:"La langue choisie s'applique aux écrans et notifications de TETH."},
+  'help.tip':{ko:'24/7 고객지원',en:'24/7 Support',ja:'24時間サポート','zh-CN':'24/7客服支持','zh-TW':'24/7客服支援',es:'Soporte 24/7',fr:'Assistance 24h/24'},
+  'auth.title':{ko:'로그인 또는 회원가입',en:'Log in or sign up',ja:'ログインまたは登録','zh-CN':'登录或注册','zh-TW':'登入或註冊',es:'Inicia sesión o regístrate',fr:'Connexion ou inscription'},
+  'auth.sub':{ko:'TETH를 잠금 해제하고 AI 투자 전략<br>연구, 검증, 실행을 시작하세요',en:'Unlock TETH and start researching,<br>validating and executing AI strategies',ja:'TETHのロックを解除して、AI投資戦略の<br>研究、検証、実行を始めましょう','zh-CN':'解锁TETH，开始AI投资策略的<br>研究、验证与执行','zh-TW':'解鎖TETH，開始AI投資策略的<br>研究、驗證與執行',es:'Desbloquea TETH y empieza a investigar,<br>validar y ejecutar estrategias de IA',fr:'Déverrouillez TETH et commencez à rechercher,<br>valider et exécuter des stratégies IA'},
+  'auth.google':{ko:'Google로 계속하기',en:'Continue with Google',ja:'Googleで続行','zh-CN':'使用Google继续','zh-TW':'使用Google繼續',es:'Continuar con Google',fr:'Continuer avec Google'},
+  'auth.apple':{ko:'Apple로 계속하기',en:'Continue with Apple',ja:'Appleで続行','zh-CN':'使用Apple继续','zh-TW':'使用Apple繼續',es:'Continuar con Apple',fr:'Continuer avec Apple'},
+  'auth.or':{ko:'또는',en:'or',ja:'または','zh-CN':'或','zh-TW':'或',es:'o',fr:'ou'},
+  'auth.email':{ko:'이메일 주소',en:'Email address',ja:'メールアドレス','zh-CN':'电子邮件地址','zh-TW':'電子郵件地址',es:'Correo electrónico',fr:'Adresse e-mail'},
+  'auth.continue':{ko:'계속',en:'Continue',ja:'続行','zh-CN':'继续','zh-TW':'繼續',es:'Continuar',fr:'Continuer'},
+  'help.title':{ko:'24/7 고객지원',en:'24/7 Support',ja:'24時間サポート','zh-CN':'24/7客服支持','zh-TW':'24/7客服支援',es:'Soporte 24/7',fr:'Assistance 24h/24'},
+  'help.body':{ko:'무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.',en:'Ask us anything. Our agents are available around the clock.',ja:'何でもお尋ねください。担当者が24時間365日対応します。','zh-CN':'有任何问题都可以咨询，客服全年无休24小时在线。','zh-TW':'有任何問題都可以諮詢，客服全年無休24小時在線。',es:'Pregúntanos lo que sea. Nuestro equipo está disponible 24/7.',fr:'Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.'},
+  'help.sub':{ko:'실시간 채팅은 곧 제공돼요. support@teth.ai',en:'Live chat coming soon. support@teth.ai',ja:'ライブチャットは近日提供予定です。support@teth.ai','zh-CN':'在线聊天即将上线。support@teth.ai','zh-TW':'線上聊天即將上線。support@teth.ai',es:'El chat en vivo llegará pronto. support@teth.ai',fr:'Le chat en direct arrive bientôt. support@teth.ai'}
 };
-function L(k){ var e=I18N[k]; return e?(e[GLC.lang]||e.ko):k; }
-var GREETS_EN=[
+function L(k){ var e=I18N[k]; return e?(e[GLC.lang]||e.en||e.ko):k; }
+/* 언어별 인사말 풀 — ko는 gHome 내부 기본 배열, 나머지는 여기서 */
+var GREETS_ALL={
+en:[
   {h:'How should we read\ntonight\'s market?',s:'Chat with AI to read the market and build a strategy'},
   {h:'You don\'t need to\nread charts',s:'Say what you wonder and TETH turns it into a testable strategy'},
   {h:'The market is hard\nto beat alone',s:'TETH, the AI trading agent that fights on your side'},
@@ -4078,7 +4097,49 @@ var GREETS_EN=[
   {h:'Stocks, crypto, gold,\nask anything about markets',s:'Anything becomes a testable strategy'},
   {h:'Why did Tesla drop?\nJust ask',s:'Understand why, then build the next strategy'},
   {h:'Conquer the market\nwith TETH',s:'From idea to validation to execution in one place'}
-];
+],
+ja:[
+  {h:'今夜の相場、\nどう見ますか？',s:'AIと対話しながら相場を読み、戦略まで作りましょう'},
+  {h:'チャートが読めなくても\n大丈夫です',s:'気になることを話せば、TETHが検証できる戦略に変えます'},
+  {h:'相場はひとりで\n勝つのが難しい',s:'あなたの側で戦うAIトレーディングエージェント、TETH'},
+  {h:'今買ってもいい？\n聞いてみてください',s:'勘ではなくデータで、過去の相場で検証します'},
+  {h:'ニュースは遅く、\n相場は速い',s:'TETHが24時間相場を見守っています'},
+  {h:'TETHと一緒に\n相場を制覇しましょう',s:'アイデアから検証、実行までひとつの場所で'}
+],
+'zh-CN':[
+  {h:'今晚的行情，\n该怎么看？',s:'与AI对话解读行情，一直到生成策略'},
+  {h:'不会看K线\n也没关系',s:'说出你的想法，TETH把它变成可验证的策略'},
+  {h:'市场很难\n独自战胜',s:'站在你这边作战的AI交易代理，TETH'},
+  {h:'现在能买吗？\n问问就知道',s:'用数据而不是直觉，在历史行情中验证'},
+  {h:'新闻太慢，\n市场太快',s:'TETH全天候为你盯盘'},
+  {h:'与TETH一起\n征服市场',s:'从想法到验证再到执行，一站完成'}
+],
+'zh-TW':[
+  {h:'今晚的行情，\n該怎麼看？',s:'與AI對話解讀行情，一直到生成策略'},
+  {h:'不會看K線\n也沒關係',s:'說出你的想法，TETH把它變成可驗證的策略'},
+  {h:'市場很難\n獨自戰勝',s:'站在你這邊作戰的AI交易代理，TETH'},
+  {h:'現在能買嗎？\n問問就知道',s:'用數據而不是直覺，在歷史行情中驗證'},
+  {h:'新聞太慢，\n市場太快',s:'TETH全天候為你盯盤'},
+  {h:'與TETH一起\n征服市場',s:'從想法到驗證再到執行，一站完成'}
+],
+es:[
+  {h:'¿Cómo leemos el\nmercado esta noche?',s:'Habla con la IA para leer el mercado y crear estrategias'},
+  {h:'No necesitas saber\nleer gráficos',s:'Cuéntanos tu idea y TETH la convierte en una estrategia verificable'},
+  {h:'El mercado es difícil\nde vencer en solitario',s:'TETH, el agente de trading con IA que lucha de tu lado'},
+  {h:'¿Compro ahora?\nSolo pregunta',s:'Datos en vez de corazonadas, validado en mercados pasados'},
+  {h:'Las noticias llegan tarde,\nel mercado no espera',s:'TETH vigila el mercado las 24 horas'},
+  {h:'Conquista el mercado\ncon TETH',s:'De la idea a la validación y ejecución, todo en un lugar'}
+],
+fr:[
+  {h:"Comment lire le\nmarché ce soir ?",s:"Discutez avec l'IA pour lire le marché et créer des stratégies"},
+  {h:"Pas besoin de savoir\nlire les graphiques",s:"Dites votre idée, TETH en fait une stratégie vérifiable"},
+  {h:"Le marché est dur\nà battre seul",s:"TETH, l'agent de trading IA qui se bat à vos côtés"},
+  {h:"Acheter maintenant ?\nDemandez-nous",s:"Des données plutôt que l'instinct, validé sur les marchés passés"},
+  {h:"Les nouvelles sont lentes,\nle marché est rapide",s:"TETH surveille le marché 24h/24"},
+  {h:"Conquérez le marché\navec TETH",s:"De l'idée à la validation et l'exécution, au même endroit"}
+]
+};
+var GREETS_EN=GREETS_ALL.en; /* 하위 호환 */
 function applyLang(){
   var en=GLC.lang==='en';
   /* 상단 내비 */
@@ -4107,8 +4168,16 @@ function applyLang(){
   setItemLabel(themeItem,L('menu.theme'));
   setItemLabel(helpItem,L('menu.help'));
   var fbItem=document.querySelector('#g-setmenu button.gm-item:not(.glc-item)'); setItemLabel(fbItem,L('menu.feedback'));
-  var glcItem=document.querySelector('#g-setmenu .glc-item'); setItemLabel(glcItem,GLC.lang==='en'?'Language & currency':'언어 및 통화');
-  var it=$('glc-info-txt'); if(it) it.textContent=GLC.lang==='en'?'Your language selection applies to TETH screens and notifications.':'선택한 언어는 TETH 화면과 알림에 적용됩니다.';
+  var glcItem=document.querySelector('#g-setmenu .glc-item'); setItemLabel(glcItem,L('menu.glc'));
+  var it=$('glc-info-txt'); if(it) it.textContent=L('glc.info');
+  /* 언어/통화 패널 내부 정적 텍스트 */
+  var tl=$('glc-tab-l'); if(tl) tl.textContent=L('glc.lang');
+  var tc=$('glc-tab-c'); if(tc) tc.textContent=L('glc.curTab');
+  var hl=$('glc-h-lang'); if(hl) hl.textContent=L('glc.lang');
+  var hc=$('glc-h-cur'); if(hc) hc.textContent=L('glc.cur');
+  var sl=$('glc-srch-l'); if(sl) sl.placeholder=L('glc.search');
+  var sc2=$('glc-srch-c'); if(sc2) sc2.placeholder=L('glc.search');
+  try{ document.documentElement.lang=GLC.lang; }catch(e){}
   var tsub=document.querySelectorAll('#gm-sub-theme [data-theme]');
   var tkeys=['menu.system','menu.light','menu.dark'];
   tsub.forEach(function(b,i){ for(var j=0;j<b.childNodes.length;j++){ var n=b.childNodes[j]; if(n.nodeType===3){ n.textContent=L(tkeys[i]); return; } } });
@@ -4122,8 +4191,8 @@ function applyLang(){
   var bdl=document.querySelector('#g-appbanner .dl'); if(bdl) bdl.textContent=L('banner.dl');
   /* 고객센터/지구본/언어 툴팁 */
   var tip=document.querySelector('#teth-help .tip'); if(tip) tip.textContent=L('help.tip');
-  var gt=$('g-globe-tip'); if(gt) gt.textContent=GLC.lang==='en'?'Language & currency':'언어 및 통화';
-  var lt=$('glc-lang-tip'); if(lt) lt.textContent=GLC.lang==='en'?'Your language selection applies to TETH screens and notifications.':'선택한 언어는 TETH 화면과 알림에 적용됩니다.';
+  var gt=$('g-globe-tip'); if(gt) gt.textContent=L('menu.glc');
+  var lt=$('glc-lang-tip'); if(lt) lt.textContent=L('glc.info');
   /* 인증 모달 (시작 화면) */
   var at=document.querySelector('#au-start .au-title'); if(at) at.textContent=L('auth.title');
   var as=document.querySelector('#au-start .au-sub'); if(as) as.innerHTML=L('auth.sub');
@@ -4187,7 +4256,18 @@ function gmSub(e,which){
   e.stopPropagation();
   var target=$('gm-sub-'+which);
   document.querySelectorAll('.gm-sub').forEach(function(s){ if(s!==target) s.classList.remove('on'); });
+  var item=target.closest('.gm-item'); if(item) gmFlip(item);
   target.classList.toggle('on');
+}
+function gmFlip(item){ /* 데스크톱: 항목 아래 공간이 서브메뉴 높이보다 좁으면 위로 열기 */
+  if(innerWidth<=640) return;
+  var sub=item.querySelector('.gm-sub'); if(!sub) return;
+  var r=item.getBoundingClientRect();
+  var prevD=sub.style.display, prevV=sub.style.visibility;
+  sub.style.visibility='hidden'; sub.style.display='block';
+  var h=sub.offsetHeight;
+  sub.style.display=prevD; sub.style.visibility=prevV;
+  sub.classList.toggle('up', r.top+h > innerHeight-12);
 }
 /* 키보드 접근성: Enter/Space로 메뉴 항목 동작, ESC로 메뉴·시트·패널 닫기 */
 document.addEventListener('keydown',function(e){
@@ -4298,7 +4378,7 @@ function gProfileClick(){ if(!S.user){ authOpen('login'); return; } toast('MOCK,
 function gPlusPop(e){
   e.stopPropagation();
   var p=$('g-plus-pop'); if(!p) return;
-  if(S.user){ toast('파일 첨부 준비 중이에요'); return; }
+  if(S.user){ toast('파일 첨부는 곧 제공돼요'); return; }
   p.classList.toggle('on');
   var close=function(ev){ if(!p.contains(ev.target)){ p.classList.remove('on'); document.removeEventListener('click',close); } };
   if(p.classList.contains('on')) setTimeout(function(){ document.addEventListener('click',close); },0);
