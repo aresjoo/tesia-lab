@@ -775,16 +775,16 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 .g-send{width:40px;height:40px;border-radius:50%;background:var(--gb);color:#fff;font-size:16px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .12s}
 .g-send:hover{background:var(--gb2)}
 .g-send:disabled{background:var(--g3);color:var(--gt3)}
-.g-home-chips{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;justify-content:center;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.g-home-chips{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;justify-content:center;transition:opacity .3s var(--ease),transform .3s var(--ease)} /* 인풋과 하나의 컴포저 그룹으로 보이게 좁힌 간격 */
 /* 입력/키보드 시 칩만 부드럽게 페이드 (데스크톱, 모바일 공통) */
 body.kb-open .g-home-chips{opacity:0;transform:translateY(16px);pointer-events:none}
 .g-qchip{padding:7px 14px;border-radius:999px;border:1px solid var(--gl2);font-size:12.5px;color:var(--gt2);transition:background .12s}
 /* 무료 CTA 배지: 그라데이션 단일 배지, 클릭=회원가입 */
-.g-freecta{position:relative;display:inline-block;padding:11px 24px;font-size:14px;font-weight:700;letter-spacing:.01em;color:#fff;background:linear-gradient(93deg,#c9903f 0%,#8fa04d 48%,#3f9d6b 100%);border-radius:12px;transform:skewX(-4deg);box-shadow:0 6px 20px rgba(63,157,107,.3);transition:transform .15s,box-shadow .15s;cursor:pointer} /* 브랜드 스파크 그라데이션(앰버→그린)의 저채도 버전 */
+/* 무료 배지: CTA가 아니라 secondary benefit indicator — 브랜드 hue 유지, 저채도 저명도, 섀도 없음 */
+.g-freecta{position:relative;display:inline-block;padding:7px 19px;font-size:13.5px;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.85);background:linear-gradient(93deg,#8a6d3e 0%,#6c744e 48%,#406955 100%);border-radius:10px;transform:skewX(-4deg);transition:transform .15s,filter .15s;cursor:pointer}
 .g-freecta>span{display:inline-block;transform:skewX(4deg)}
-.g-freecta:hover{transform:skewX(-4deg) translateY(-2px);box-shadow:0 10px 26px rgba(63,157,107,.42)}
-.g-freecta:active{transform:skewX(-4deg) translateY(0)}
-body.light .g-freecta{box-shadow:0 6px 18px rgba(63,157,107,.25)}
+.g-freecta:hover{transform:skewX(-4deg) translateY(-1px);filter:brightness(1.08)}
+.g-freecta:active{transform:skewX(-4deg) translateY(0);filter:none}
 .au-free{margin-top:14px;text-align:center;font-size:12.5px;font-weight:600;color:#62d69a}
 body.light .au-free{color:#1e8e3e}
 .g-qchip:hover{background:rgba(255,255,255,.05)}
