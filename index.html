@@ -539,6 +539,45 @@ body.g-dark{background:#0f1012}
 .g-pill.multi{border-radius:26px}
 .g-pill.multi textarea{order:-1;flex:0 0 100%;margin:4px 4px 10px 0}
 .g-pill.multi .g-pill-sp{display:block;flex:1}
+/* ══ 언어/통화 선택기 (지구본) ══ */
+#g-globe{position:absolute;top:14px;right:20px;z-index:45;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt2);transition:background .12s}
+#g-globe:hover{background:var(--hoverline);color:var(--gt)}
+#glc-panel{position:fixed;top:56px;right:16px;z-index:95;width:560px;background:var(--g2);border:1px solid var(--gl);border-radius:18px;box-shadow:var(--shadow-pop);padding:22px;display:none;grid-template-columns:1fr 1fr;gap:0 26px}
+#glc-panel.on{display:grid}
+#glc-panel .col h4{font-size:15px;font-weight:700;color:var(--gt);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+#glc-panel .col h4 .qi{width:15px;height:15px;border-radius:50%;border:1.3px solid var(--gt3);color:var(--gt3);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:400}
+#glc-panel .srch{display:flex;align-items:center;gap:8px;height:38px;border-radius:10px;background:var(--g3);padding:0 12px;margin-bottom:10px}
+#glc-panel .srch svg{flex-shrink:0;color:var(--gt3)}
+#glc-panel .srch input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:13px;font-family:inherit}
+#glc-panel ul{list-style:none;max-height:300px;overflow-y:auto;margin:0;padding:0}
+#glc-panel li{display:flex;align-items:center;justify-content:space-between;padding:10px 10px;border-radius:9px;font-size:14px;color:var(--gt);cursor:pointer}
+#glc-panel li:hover{background:var(--hoverline)}
+#glc-panel li .ck{opacity:0;color:var(--gt)}
+#glc-panel li[data-on="1"]{font-weight:700}
+#glc-panel li[data-on="1"] .ck{opacity:1}
+#glc-panel li.dis{color:var(--gt3);cursor:default}
+#glc-panel li.dis:hover{background:none}
+#glc-panel li .soon{font-size:11px;color:var(--gt3);border:1px solid var(--gl2);border-radius:999px;padding:2px 8px}
+#glc-panel .tabs2{display:none}
+#glc-panel .x2{display:none}
+/* 드로어의 언어/통화 행 (모바일 진입점) */
+#g-side-glc{display:none}
+@media (max-width:860px){
+  #g-globe{display:none} /* 모바일 진입점은 드로어 */
+  .g-side #g-side-glc{display:flex}
+  #glc-panel{top:0;right:0;left:0;bottom:0;width:auto;border-radius:0;border:0;grid-template-columns:1fr;gap:0;padding:16px;overflow-y:auto;z-index:98}
+  #glc-panel.on{display:block}
+  #glc-panel .tabs2{display:flex;gap:22px;margin:4px 0 16px;border-bottom:1px solid var(--gl)}
+  #glc-panel .tabs2 button{font-size:16px;font-weight:600;color:var(--gt3);padding:8px 2px 12px;border-bottom:2.5px solid transparent}
+  #glc-panel .tabs2 button.on{color:var(--gt);border-bottom-color:var(--gt)}
+  #glc-panel .x2{display:flex;position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center;color:var(--gt2);font-size:17px}
+  #glc-panel .col{display:none}
+  #glc-panel .col.on{display:block}
+  #glc-panel .col h4{display:none}
+  #glc-panel ul{max-height:none}
+  #glc-panel li{padding:14px 8px;font-size:15px}
+}
+
 /* ══ 설정 메뉴 (Gemini 스타일) ══ */
 #g-setmenu{position:fixed;z-index:95;background:var(--g2);border:1px solid var(--gl);border-radius:18px;padding:8px;min-width:236px;box-shadow:var(--shadow-pop)}
 .gm-item{display:flex;align-items:center;gap:13px;width:100%;height:44px;padding:0 14px;border-radius:10px;font-size:14px;color:var(--gt);text-align:left;position:relative}
@@ -557,6 +596,11 @@ body.g-dark{background:#0f1012}
 #gm-sub-help{top:0} /* 자기 항목 top에서 시작해 아래로 열림 (Gemini 동일) */
 .gm-sub .st{display:none}
 .gm-grab{display:none}
+/* 팝오버 공통 등장 애니메이션 — display 전환에도 부드럽게 */
+@keyframes gmPopIn{from{opacity:0;transform:translateY(5px) scale(.985)}to{opacity:1;transform:none}}
+#g-setmenu:not([hidden]){animation:gmPopIn .18s var(--ease) both}
+.gm-item:hover>.gm-sub,.gm-sub.on{animation:gmPopIn .16s var(--ease) both}
+#glc-panel.on{animation:gmPopIn .18s var(--ease) both}
 #gm-scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:93;display:none}
 #gm-scrim.on{display:block}
 /* 데스크톱: 호버로 서브메뉴 표시 */
@@ -626,7 +670,8 @@ body.light #g-root{background:#fff;color:#1f1f1f;
   --pill:#f0f4f9;--pop:#fff;--hoverline:rgba(0,0,0,.05);
   --tip-bg:#1f1f1f;--tip-fg:#fff;--inv-bg:#1f1f1f;--inv-fg:#fff;
   --shadow-pop:0 6px 26px rgba(60,64,67,.18);--shadow-pill:0 1px 3px rgba(60,64,67,.1);
-  --glow:rgba(87,129,224,.09)}     /* blue haze는 흔적만 */
+  --glow:rgba(163,203,255,.55)}    /* Gemini 라이트의 맑은 스카이블루 글로우 (탁한 네이비 금지) */
+body.light .g-home{background:radial-gradient(ellipse 780px 540px at 50% 56%,var(--glow),rgba(255,255,255,0) 72%)}
 body.light .g-pill textarea{color:#1f1f1f}
 body.light .g-qchip{background:#fff;border-color:#dadce0;color:#3c4043}
 body.light .g-qchip:hover{background:#f8f9fa}
@@ -1148,8 +1193,8 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
             </div>
           </div>
           <div class="lv-stats">
-            <div class="metric"><div class="m-k">시작 후 수익</div><div class="m-v num gain" id="lv-pnl-total">+3.2%</div><div class="m-s num">+$161, 21일</div></div>
-            <div class="metric"><div class="m-k">오늘 수익</div><div class="m-v num gain">+0.4%</div><div class="m-s num">+$20</div></div>
+            <div class="metric"><div class="m-k">시작 후 수익</div><div class="m-v num gain" id="lv-pnl-total">+3.2%</div><div class="m-s num"><span data-usd="161" data-sign="+">+$161</span>, 21일</div></div>
+            <div class="metric"><div class="m-k">오늘 수익</div><div class="m-v num gain">+0.4%</div><div class="m-s num" data-usd="20" data-sign="+">+$20</div></div>
             <div class="metric"><div class="m-k">거래 횟수</div><div class="m-v num">9회</div><div class="m-s">승률 <span class="num">66.7%</span></div></div>
             <div class="metric"><div class="m-k">현재 리스크</div><div class="m-v num">$50</div><div class="m-s">1회 최대 손실 한도</div></div>
           </div>
@@ -1160,7 +1205,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
                 <div class="panel-body" id="lv-position">
                   <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
                     <div><b style="font-size:15px">BTC/USDT 매수 포지션</b><div style="font-size:12.5px;color:var(--text-3);margin-top:2px">진입가 <span class="num">$64,120</span>, 수량 <span class="num">0.078 BTC</span></div></div>
-                    <div style="text-align:right"><div class="num gain" style="font-size:20px;font-weight:650">+0.8%</div><div style="font-size:12px;color:var(--text-3)" class="num">+$40</div></div>
+                    <div style="text-align:right"><div class="num gain" style="font-size:20px;font-weight:650">+0.8%</div><div style="font-size:12px;color:var(--text-3)" class="num" data-usd="40" data-sign="+">+$40</div></div>
                   </div>
                   <div style="display:flex;gap:20px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text-2);flex-wrap:wrap">
                     <span>손절 <b class="num loss">$62,196 (−3%)</b></span>
@@ -1357,6 +1402,24 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   </div>
   <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
+  <button id="g-globe" onclick="glcOpen(event)" aria-label="언어 및 통화"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg></button>
+  <div id="glc-panel">
+    <button class="x2" onclick="glcClose()" aria-label="닫기">✕</button>
+    <div class="tabs2">
+      <button class="on" onclick="glcTab(0,this)">Language</button>
+      <button onclick="glcTab(1,this)">Currency</button>
+    </div>
+    <div class="col on" id="glc-lang">
+      <h4>Language <span class="qi">i</span></h4>
+      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-lang')"></div>
+      <ul id="glc-lang-list"></ul>
+    </div>
+    <div class="col" id="glc-cur">
+      <h4>Local currency</h4>
+      <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Search" oninput="glcFilter(this,'glc-cur')"></div>
+      <ul id="glc-cur-list"></ul>
+    </div>
+  </div>
   <div class="g-body">
     <aside class="g-side collapsed" id="g-side">
       <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
@@ -1385,7 +1448,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <button class="g-new" onclick="gHome()">＋ 새 연구</button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
-        <span>연구를 저장하려면 <a onclick="authOpen('login')">로그인</a>하세요.</span>
+        <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
       <button class="g-util" onclick="toast('MOCK, 연구 기록')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>연구 기록</button>
       <button class="g-util" onclick="toast('MOCK, 예약된 검증')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8 3v4M16 3v4"/></svg>예약된 검증</button>
@@ -1396,6 +1459,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div id="g-side-links">
         <a class="g-util" href="about/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>TETH 정보</a>
         <a class="g-util" href="download/" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>TETH 앱 다운로드</a>
+        <button class="g-util" id="g-side-glc" onclick="glcOpen(event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span id="g-side-glc-label">한국어, USD</span></button>
       </div>
       <div class="g-side-bottom">
         <div class="g-ico-row" id="g-gear-row">
@@ -3147,23 +3211,28 @@ function gHome(){
     {h:'테슬라 왜 떨어졌어요?\n물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'},
     {h:'TETH와 함께\n시장을 정복하세요',s:'아이디어부터 검증, 실행까지 한 곳에서'}
   ];
-  var GR=GREETS[Math.floor(Math.random()*GREETS.length)];
+  var EN=(typeof GLC!=='undefined'&&GLC.lang==='en');
+  var TR=function(k,d){ return (typeof L==='function')?L(k):d; }; /* i18n 정의 전 초기 부트 폴백 */
+  var GPOOL=(EN&&typeof GREETS_EN!=='undefined')?GREETS_EN:GREETS;
+  var GR=GPOOL[Math.floor(Math.random()*GPOOL.length)];
   GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GR.s};
   gContent(
     '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
     '<svg class="g-hero-spark" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="heroSparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#heroSparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>'+
     '<div class="g-hello">'+GR.h+'</div>'+
     '<div class="g-sub">'+GR.s+'</div>'+
-    '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어"></textarea>'+
+    '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="연구 아이디어"></textarea>'+
     '<span class="g-pill-sp"></span><button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button>'+
     '<div class="g-plus-pop" id="g-plus-pop"><b>더 많은 기능 사용하기</b><p>로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.</p><div class="row"><button class="go" onclick="authOpen(\'login\')">로그인</button></div></div>'+
     '</div>'+
     '<div class="g-home-chips">'+
-    '<button class="g-qchip" onclick="gNew(\'비트코인이 떨어졌을 때 사는 전략\')">하락 후 반등 전략</button>'+
-    '<button class="g-qchip" onclick="gNew(\'오르는 흐름에 올라타는 전략\')">추세 추종 전략</button>'+
-    '<button class="g-qchip" onclick="gNew(\'뭐부터 검증해야 할지 모르겠어\')">막연한 아이디어부터</button>'+
+    '<button class="g-qchip" onclick="gNew(\'비트코인이 떨어졌을 때 사는 전략\')">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(\'오르는 흐름에 올라타는 전략\')">'+TR('chip.2','추세 추종 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(\'뭐부터 검증해야 할지 모르겠어\')">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
     '</div>'+
-    '<div class="g-terms"><a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH 약관</a>과 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.</div>'+
+    '<div class="g-terms">'+(EN
+      ?'<a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH Terms</a> and the <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH Privacy Policy</a> apply. TETH is an AI and can make mistakes.'
+      :'<a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH 약관</a>과 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')+'</div>'+
     '</div>');
   var hi=$('g-home-in');
   /* Enter=전송, Shift+Enter=줄바꿈 (Gemini와 동일) */
@@ -3199,7 +3268,7 @@ function gHome(){
   /* 키보드가 열리거나(포커스) 텍스트가 있으면 칩, 약관 숨김 */
   hi.addEventListener('focus',function(){ if(innerWidth<=860) document.body.classList.add('kb-open'); });
   hi.addEventListener('blur',function(){ if(!hi.value.trim()) document.body.classList.remove('kb-open'); });
-  hi.focus();
+  if(innerWidth>860) hi.focus(); /* 모바일에선 자동 포커스 금지 — 진입하자마자 키보드가 올라오지 않게 */
 }
 function gSelect(id){
   var sx=G.sessions.find(function(s){return s.id===id;});
@@ -3840,6 +3909,164 @@ function authPwNext(){
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
 function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
+/* ══ 언어/통화 (지구본) ══ */
+var GLC_LANGS=[
+  {c:'ko',n:'한국어',ok:true},
+  {c:'en',n:'English',ok:true},
+  {c:'ja',n:'日本語'},
+  {c:'zh',n:'简体中文'},
+  {c:'es',n:'Español'},
+  {c:'fr',n:'Français'}
+];
+var GLC_CURS=[ /* 1 USD 기준 정적 환율 — TODO: 실서비스에서 환율 API 연동 */
+  {c:'USD',s:'$',r:1},
+  {c:'KRW',s:'₩',r:1390},
+  {c:'JPY',s:'¥',r:155},
+  {c:'EUR',s:'€',r:0.92},
+  {c:'CNY',s:'¥',r:7.2},
+  {c:'SGD',s:'S$',r:1.35}
+];
+var GLC={lang:'ko',cur:'USD'};
+try{ GLC.lang=localStorage.getItem('tethLang')||'ko'; GLC.cur=localStorage.getItem('tethCurrency')||'USD'; }catch(e){}
+function curInfo(){ return GLC_CURS.find(function(c){return c.c===GLC.cur;})||GLC_CURS[0]; }
+function fmtMoney(usd){ /* 데모 수치(USD 기준)를 표시 통화로 변환 */
+  var ci=curInfo(); var v=usd*ci.r;
+  var s=ci.r>=100?Math.round(v).toLocaleString():(Math.abs(v)>=100?Math.round(v).toLocaleString():v.toLocaleString(undefined,{maximumFractionDigits:2}));
+  return ci.s+s;
+}
+function glcRender(){
+  var ll=$('glc-lang-list'), cl=$('glc-cur-list');
+  if(!ll) return;
+  ll.innerHTML=GLC_LANGS.map(function(l){
+    return '<li data-v="'+l.c+'" data-on="'+(GLC.lang===l.c?1:0)+'" class="'+(l.ok?'':'dis')+'" onclick="'+(l.ok?'glcSetLang(\''+l.c+'\')':'')+'">'+l.n+(l.ok?'<span class="ck">✓</span>':'<span class="soon">'+(GLC.lang==='en'?'Soon':'준비 중')+'</span>')+'</li>';
+  }).join('');
+  cl.innerHTML=GLC_CURS.map(function(c){
+    return '<li data-v="'+c.c+'" data-on="'+(GLC.cur===c.c?1:0)+'" onclick="glcSetCur(\''+c.c+'\')">'+c.c+'<span class="ck">✓</span></li>';
+  }).join('');
+  var lb=$('g-side-glc-label');
+  if(lb){ var ln=(GLC_LANGS.find(function(l){return l.c===GLC.lang;})||{}).n||''; lb.textContent=ln+', '+GLC.cur; }
+}
+function glcOpen(e){
+  if(e) e.stopPropagation();
+  gSetMenuClose();
+  if($('g-side') && $('g-side').classList.contains('mobile-open')) gSideToggle();
+  glcRender();
+  $('glc-panel').classList.add('on');
+  var sc=$('gm-scrim'); if(sc && innerWidth>860) sc.classList.add('on');
+  setTimeout(function(){ document.addEventListener('click',glcDoc); },0);
+}
+function glcDoc(ev){ var p=$('glc-panel'); if(p && !p.contains(ev.target)) glcClose(); }
+function glcClose(){
+  $('glc-panel').classList.remove('on');
+  var sc=$('gm-scrim'); if(sc) sc.classList.remove('on');
+  document.removeEventListener('click',glcDoc);
+}
+function glcTab(i,btn){
+  document.querySelectorAll('#glc-panel .tabs2 button').forEach(function(b){b.classList.toggle('on',b===btn);});
+  $('glc-lang').classList.toggle('on',i===0);
+  $('glc-cur').classList.toggle('on',i===1);
+}
+function glcFilter(inp,colId){
+  var q=inp.value.trim().toLowerCase();
+  document.querySelectorAll('#'+colId+' li').forEach(function(li){
+    li.style.display = li.textContent.toLowerCase().indexOf(q)>=0 ? '' : 'none';
+  });
+}
+function glcSetLang(c){ GLC.lang=c; try{localStorage.setItem('tethLang',c);}catch(e){} glcRender(); applyLang(); glcClose(); }
+function glcSetCur(c){ GLC.cur=c; try{localStorage.setItem('tethCurrency',c);}catch(e){} glcRender(); applyCurrency(); glcClose(); }
+
+/* ══ i18n — 1차 커버리지: 로그인 전 표면 (셸/홈/설정/배너/인증 핵심) ══ */
+var I18N={
+  'nav.about':{ko:'TETH 정보',en:'About TETH'},
+  'nav.download':{ko:'TETH 앱 다운로드',en:'Get TETH app'},
+  'nav.login':{ko:'로그인',en:'Log in'},
+  'nav.signup':{ko:'무료로 회원가입',en:'Sign up free'},
+  'side.new':{ko:'＋ 새 연구',en:'＋ New research'},
+  'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.'},
+  'side.login':{ko:'로그인',en:'Log in'},
+  'menu.theme':{ko:'테마',en:'Theme'},
+  'menu.feedback':{ko:'의견 보내기',en:'Send feedback'},
+  'menu.help':{ko:'도움말',en:'Help'},
+  'menu.system':{ko:'시스템',en:'System'},
+  'menu.light':{ko:'밝게',en:'Light'},
+  'menu.dark':{ko:'어둡게',en:'Dark'},
+  'menu.themeTitle':{ko:'테마 선택',en:'Choose theme'},
+  'menu.terms':{ko:'약관',en:'Terms'},
+  'menu.privacy':{ko:'개인정보처리방침',en:'Privacy policy'},
+  'banner.sub':{ko:'TETH에서 제공하는 AI 트레이딩 에이전트',en:'AI trading agent from TETH'},
+  'banner.dl':{ko:'다운로드',en:'Download'},
+  'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips'},
+  'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy'},
+  'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy'},
+  'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea'},
+  'help.tip':{ko:'24/7 고객지원',en:'24/7 Support'}
+};
+function L(k){ var e=I18N[k]; return e?(e[GLC.lang]||e.ko):k; }
+var GREETS_EN=[
+  {h:'How should we read\ntonight\'s market?',s:'Chat with AI to read the market and build a strategy'},
+  {h:'You don\'t need to\nread charts',s:'Say what you wonder and TETH turns it into a testable strategy'},
+  {h:'The market is hard\nto beat alone',s:'TETH, the AI trading agent that fights on your side'},
+  {h:'The market\nwon\'t wait',s:'Ideas become strategies, TETH handles the validation'},
+  {h:'News is late,\nmarkets are fast',s:'TETH watches the market 24 hours a day'},
+  {h:'Should I buy now?\nJust ask',s:'Data over hunches, validated on past markets'},
+  {h:'Samsung vs SK hynix,\nwhich one?',s:'Compare with AI and turn it into a strategy'},
+  {h:'Stocks, crypto, gold,\nask anything about markets',s:'Anything becomes a testable strategy'},
+  {h:'Why did Tesla drop?\nJust ask',s:'Understand why, then build the next strategy'},
+  {h:'Conquer the market\nwith TETH',s:'From idea to validation to execution in one place'}
+];
+function applyLang(){
+  var en=GLC.lang==='en';
+  /* 상단 내비 */
+  var navs=document.querySelectorAll('#g-auth-btns .ga-nav');
+  if(navs[0]) navs[0].textContent=L('nav.about');
+  if(navs[1]) navs[1].textContent=L('nav.download');
+  var lg=document.querySelector('#g-auth-btns .ga-login'); if(lg) lg.textContent=L('nav.login');
+  var sg=document.querySelector('#g-auth-btns .ga-signup'); if(sg) sg.textContent=L('nav.signup');
+  /* 사이드바 */
+  var nw=document.querySelector('.g-new'); if(nw) nw.textContent=L('side.new');
+  var note=document.querySelector('#g-guest-note span');
+  if(note){ var parts=L('side.note').split('|'); note.innerHTML=parts[0]+'<a onclick="authOpen(\'login\')">'+parts[1]+'</a>'+(parts[2]||''); }
+  var slinks=document.querySelectorAll('#g-side-links a');
+  if(slinks[0]) slinks[0].lastChild.textContent=L('nav.about');
+  if(slinks[1]) slinks[1].lastChild.textContent=L('nav.download');
+  var lbtn=$('g-login-btn'); if(lbtn) lbtn.textContent=L('side.login');
+  /* 설정 메뉴 */
+  var items=document.querySelectorAll('#g-setmenu>.gm-item, #g-setmenu>button.gm-item');
+  document.querySelectorAll('#g-setmenu .gm-item').forEach(function(it){
+    var t=it.childNodes; /* 텍스트 노드 교체 */
+  });
+  var menuMap=[['theme','menu.theme'],['help','menu.help']];
+  var themeItem=document.querySelector('[onclick*="gmSub(event,\'theme\')"]');
+  var helpItem=document.querySelector('[onclick*="gmSub(event,\'help\')"]');
+  function setItemLabel(el,txt){ if(!el) return; for(var i=0;i<el.childNodes.length;i++){ var n=el.childNodes[i]; if(n.nodeType===3 && n.textContent.trim()){ n.textContent=txt; return; } } }
+  setItemLabel(themeItem,L('menu.theme'));
+  setItemLabel(helpItem,L('menu.help'));
+  var fbItem=document.querySelector('#g-setmenu button.gm-item'); setItemLabel(fbItem,L('menu.feedback'));
+  var tsub=document.querySelectorAll('#gm-sub-theme [data-theme]');
+  var tkeys=['menu.system','menu.light','menu.dark'];
+  tsub.forEach(function(b,i){ for(var j=0;j<b.childNodes.length;j++){ var n=b.childNodes[j]; if(n.nodeType===3){ n.textContent=L(tkeys[i]); return; } } });
+  var tst=document.querySelector('#gm-sub-theme .st'); if(tst) tst.textContent=L('menu.themeTitle');
+  var hsub=document.querySelectorAll('#gm-sub-help a');
+  var hkeys=['menu.terms','menu.privacy','nav.about'];
+  hsub.forEach(function(a,i){ a.textContent=L(hkeys[i]); });
+  var hst=document.querySelector('#gm-sub-help .st'); if(hst) hst.textContent=L('menu.help');
+  /* 배너 */
+  var bsub=document.querySelector('#g-appbanner .t span'); if(bsub) bsub.textContent=L('banner.sub');
+  var bdl=document.querySelector('#g-appbanner .dl'); if(bdl) bdl.textContent=L('banner.dl');
+  /* 고객센터 툴팁 */
+  var tip=document.querySelector('#teth-help .tip'); if(tip) tip.textContent=L('help.tip');
+  /* 홈 리렌더 (헤드라인/부제/칩/약관) — 홈 화면일 때만 */
+  if(G && G.mode==='home' && typeof gHome==='function') gHome();
+}
+function applyCurrency(){
+  /* 데모 수치 변환 — data-usd 속성이 있는 노드 */
+  document.querySelectorAll('[data-usd]').forEach(function(el){
+    var v=parseFloat(el.dataset.usd);
+    var sign=el.dataset.sign||'';
+    el.textContent=sign+fmtMoney(Math.abs(v));
+  });
+}
+
 /* ══ 설정 메뉴 ══ */
 function gSetMenu(e){
   e.stopPropagation();
@@ -4004,6 +4231,9 @@ function gSideToggle(){
   s.classList.toggle('collapsed');
 }
 authSyncUI();
+glcRender();
+if(GLC.lang!=='ko') applyLang();
+applyCurrency();
 </script>
 <script src="site-config.js?v=2"></script>
 <script src="help-widget.js?v=3"></script>
