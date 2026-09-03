@@ -32,6 +32,10 @@
 *{box-sizing:border-box;margin:0}
 html{height:100%}
 body{height:100%;font-family:var(--font);font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;word-break:keep-all}
+/* keep-all은 한국어 최적화 규칙 — 띄어쓰기 없는 일본어/중국어에선 줄바꿈을 전부 막아 넘침이 생기므로 해제 */
+html[lang="ja"] body,html[lang^="zh"] body,
+html[lang="ja"] .g-hello,html[lang^="zh"] .g-hello,
+html[lang="ja"] .g-sub,html[lang^="zh"] .g-sub{word-break:normal}
 button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
 input,textarea{font-family:inherit;font-size:inherit;color:inherit}
 a{color:var(--accent);text-decoration:none}
