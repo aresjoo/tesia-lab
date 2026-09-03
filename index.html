@@ -3007,6 +3007,8 @@ function gSelect(id){
 function gNew(preset){
   var inEl=$('g-home-in');
   var text=preset||(inEl?inEl.value.trim():'')||'비트코인이 떨어졌을 때 사는 전략';
+  /* 비로그인 상태에서 채팅 전송 시 로그인/회원가입 팝업, 로그인하면 이어서 시작 */
+  if(!S.user){ G.pendingNew=text; authOpen('signup'); return; }
   S.strategy=newStrategy(); S.versions=[]; S.activeVer=0;
   var sx={id:'s'+Date.now(), title:'새 연구', status:'draft', strategy:S.strategy, versions:S.versions,
     artifacts:[], team:{}, actRows:[], convo:[], thread:[], tabs:[{id:'__act',title:'대화'}], live:false};
@@ -3169,6 +3171,7 @@ signupDone=function(){
     authSyncUI();
     toast(AUTH&&AUTH.mode==='login'?'로그인 완료':'계정 생성 완료');
     if(G.pendingRun){ G.pendingRun=false; delay(300,gStartRunGo); }
+    if(G.pendingNew!=null){ var pn=G.pendingNew; G.pendingNew=null; delay(300,function(){ gNew(pn); }); }
     return;
   }
   _signupDoneV2();
