@@ -1003,6 +1003,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
   .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
   .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:30;animation:gRiseIn .5s var(--ease) .1s both}
+  .g-pill textarea{height:42px} /* 기본 2줄, 로테이팅 플레이스홀더가 줄바꿈돼 온전히 보이게 */
   .g-plus-pop{top:auto;bottom:70px}
   .g-chipstack{position:fixed;left:16px;right:16px;bottom:136px;z-index:25}
   .g-home-chips{animation:gRiseIn .5s var(--ease) .18s both}
@@ -3359,7 +3360,8 @@ function gHome(){
       }
       this.style.height='auto';
     }
-    var h=Math.min(this.scrollHeight,147);
+    var minH=(innerWidth<=860)?42:21; /* 모바일 기본 2줄 — 플레이스홀더가 줄바꿈돼 보이게 (Lovable 동일) */
+    var h=Math.min(Math.max(this.scrollHeight,minH),147);
     this.style.height=h+'px';
     if(this.value.trim()) document.body.classList.add('kb-open');
   });
