@@ -29,7 +29,15 @@
     '#teth-help-pop b{display:flex;align-items:center;gap:7px;font-size:14px;margin-bottom:6px;color:#fff}'+
     '#teth-help-pop b i{font-style:normal;width:8px;height:8px;border-radius:50%;background:#2bd97c}'+
     '#teth-help-pop .sub{color:#9aa0a6;font-size:12px;margin-top:8px}'+
-    '@media (max-width:640px){#teth-help{right:14px;bottom:14px;width:50px;height:50px}#teth-help-pop{right:14px;bottom:76px}#teth-help .tip{display:none}}';
+    '@media (max-width:640px){#teth-help{right:14px;bottom:14px;width:50px;height:50px}#teth-help-pop{right:14px;bottom:76px}#teth-help .tip{display:none}}'+
+    /* 오버레이(피드백/시트/메뉴/모달/전체화면 컴포저)가 떠 있는 동안 FAB는 자동 페이드아웃 — CTA 가림 방지 */
+    '#teth-help{transition:opacity .15s ease,transform .16s cubic-bezier(.2,0,0,1),box-shadow .16s,border-color .16s}'+
+    'body:has(#fb-panel.on) #teth-help,'+
+    'body:has(#glc-panel.on) #teth-help,'+
+    'body:has(#g-setmenu:not([hidden])) #teth-help,'+
+    'body:has(.gm-sub.on) #teth-help,'+
+    'body:has(.modal-bg.open) #teth-help,'+
+    'body:has(.g-pill.fullscr) #teth-help{opacity:0;pointer-events:none}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   /* 로고 경로: 이 스크립트 src 기준으로 계산 → 어느 페이지에서 로드돼도 안전 */
