@@ -9,18 +9,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* Gemini About 실측 재현, 다크 히어로(100vh, 스타필드, H1 71/71 w400 ls-2.88) + 화이트 본문
+/* Gemini About 실측 재현, 다크 단일 테마(앱과 동일 팔레트 #131314/#1e1f20/#e3e3e3)
    피처 섹션: 마진 60, 좌 텍스트 440(H2 48 w500, P 20/28, 링크 16 w500), 우 비주얼 622×622 r32 */
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--blue:#0b57d0;--link:#0b66da;--t2:#444746;--ease:cubic-bezier(.2,0,0,1)}
+:root{--blue:#0b57d0;--link:#a8c7fa;--t2:#c4c7c5;--ease:cubic-bezier(.2,0,0,1)}
 html{scroll-behavior:smooth}
-body{background:#fff;color:#000;font-family:'Noto Sans KR',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all}
+body{background:#131314;color:#e3e3e3;font-family:'Noto Sans KR',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all}
 a{color:inherit;text-decoration:none}
 img,svg{display:block}
 
-/* header, fixed 74px, 히어로 위 투명/흰 텍스트 → 스크롤 후 흰 배경/검정 텍스트 */
+/* header, fixed 74px, 히어로 위 투명 → 스크롤 후 다크 배경 */
 .hd{position:fixed;top:0;left:0;right:0;z-index:50;height:74px;display:flex;align-items:center;gap:34px;padding:0 28px;color:#fff;transition:background .25s,color .25s,box-shadow .25s}
-.hd.lite{background:#fff;color:#000;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.hd.lite{background:#131314;color:#e3e3e3;box-shadow:0 1px 0 rgba(255,255,255,.08)}
 .hd .brand{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:700}
 .hd nav{display:flex;gap:6px}
 .hd nav a{font-size:16px;font-weight:400;padding:10px 16px;border-radius:999px;transition:background .15s}
@@ -38,20 +38,20 @@ img,svg{display:block}
 .hero .cta{margin-top:58px}
 .hero .cap{position:absolute;bottom:24px;left:0;right:0;font-size:14px;color:#fff;opacity:.85}
 
-/* feature sections, 화이트 */
+/* feature sections, 다크 */
 .feats{padding:64px 0 6px}
 .feat{max-width:1425px;margin:0 auto 6px;padding:0 60px;display:grid;grid-template-columns:440px 1fr;gap:60px;align-items:center;min-height:622px}
-.feat .tx h2{font-size:48px;line-height:52.8px;font-weight:500;letter-spacing:-.04em;color:#000;word-break:keep-all}
-.feat .tx p{font-size:20px;line-height:28px;font-weight:400;color:#000;margin-top:20px;word-break:keep-all}
+.feat .tx h2{font-size:48px;line-height:52.8px;font-weight:500;letter-spacing:-.04em;color:#fff;word-break:keep-all}
+.feat .tx p{font-size:20px;line-height:28px;font-weight:400;color:#e3e3e3;margin-top:20px;word-break:keep-all}
 .feat .tx .lnk{display:inline-flex;align-items:center;gap:6px;margin-top:30px;font-size:16px;font-weight:500;color:var(--link)}
 .feat .tx .lnk:hover{text-decoration:underline}
 .vis{width:622px;height:622px;max-width:100%;border-radius:32px;margin-left:auto;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
-.vis.v1{background:linear-gradient(160deg,#e8f0fe,#f8fafd 70%)}
-.vis.v2{background:linear-gradient(160deg,#e6f4ea,#f8fafd 70%)}
-.vis.v3{background:linear-gradient(160deg,#fef7e0,#f8fafd 70%)}
-.vis.v4{background:linear-gradient(160deg,#fce8e6,#f8fafd 70%)}
+.vis.v1{background:linear-gradient(160deg,#1d2a47,#17181b 70%)}
+.vis.v2{background:linear-gradient(160deg,#16301f,#17181b 70%)}
+.vis.v3{background:linear-gradient(160deg,#332a12,#17181b 70%)}
+.vis.v4{background:linear-gradient(160deg,#331c16,#17181b 70%)}
 /* 비주얼 내부 제품 UI, 타일을 채우는 큰 스케일 */
-.ui{width:78%;background:#131417;border-radius:22px;padding:22px 20px;box-shadow:0 24px 70px rgba(32,33,36,.35);color:#e6e7ea;font-size:14px}
+.ui{width:78%;background:#1e1f24;border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:22px 20px;box-shadow:0 24px 70px rgba(0,0,0,.45);color:#e6e7ea;font-size:14px}
 .ui .top{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#fff;margin-bottom:14px}
 .ui .b{border-radius:14px;padding:13px 15px;line-height:1.6;max-width:92%;margin-top:10px}
 .ui .u{background:#2a2d35;margin-left:auto;border-bottom-right-radius:5px}
@@ -83,37 +83,36 @@ img,svg{display:block}
 .plan.hl .go{background:#a8c7fa;color:#062e6f}
 .pricing .note{margin-top:44px;font-size:13px;color:#9aa0a6;line-height:1.8;max-width:760px;margin-left:auto;margin-right:auto}
 
-/* centered white sections (신뢰, FAQ, 마지막 CTA) */
+/* centered sections (신뢰, FAQ, 마지막 CTA), 다크 */
 .csec{padding:120px 24px 0;text-align:center}
-.csec h2{font-size:56px;line-height:56px;font-weight:500;letter-spacing:-.04em;color:#000}
+.csec h2{font-size:56px;line-height:56px;font-weight:500;letter-spacing:-.04em;color:#fff}
 .csec .sub{font-size:18px;color:var(--t2);margin-top:20px}
 .trust{max-width:900px;margin:56px auto 0;text-align:left}
-.trust .row{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:26px 8px;border-top:1px solid #e3e3e3;font-size:16px;line-height:1.7}
-.trust .row:last-child{border-bottom:1px solid #e3e3e3}
-.trust b{font-weight:500}
+.trust .row{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:26px 8px;border-top:1px solid rgba(255,255,255,.12);font-size:16px;line-height:1.7}
+.trust .row:last-child{border-bottom:1px solid rgba(255,255,255,.12)}
+.trust b{font-weight:500;color:#fff}
 .trust span{color:var(--t2)}
 .faq{max-width:760px;margin:56px auto 0;text-align:left}
-.faq details{border-top:1px solid #e3e3e3}
-.faq details:last-child{border-bottom:1px solid #e3e3e3}
-.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 8px;font-size:18px;font-weight:500}
+.faq details{border-top:1px solid rgba(255,255,255,.12)}
+.faq details:last-child{border-bottom:1px solid rgba(255,255,255,.12)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 8px;font-size:18px;font-weight:500;color:#fff}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary .x{color:#5f6368;transition:transform .2s;font-size:22px;font-weight:300}
+.faq summary .x{color:#9aa0a6;transition:transform .2s;font-size:22px;font-weight:300}
 .faq details[open] summary .x{transform:rotate(45deg)}
 .faq .a{padding:0 8px 26px;font-size:16px;color:var(--t2);line-height:1.75}
 .faq .a a{color:var(--link);text-decoration:underline}
 .final{padding:130px 24px 140px;text-align:center}
-.final h2{font-size:56px;line-height:1.1;font-weight:500;letter-spacing:-.04em}
+.final h2{font-size:56px;line-height:1.1;font-weight:500;letter-spacing:-.04em;color:#fff}
 .final .sub{font-size:18px;color:var(--t2);margin-top:20px}
 .final .cta{margin-top:44px}
 
-/* footer, 화이트 */
-.ft{border-top:1px solid #e3e3e3;padding:52px 60px 64px;font-size:14px;color:var(--t2);line-height:1.8}
+/* footer, 다크. 하단 내비 링크는 밑줄 없음(사용자 지정) */
+.ft{border-top:1px solid rgba(255,255,255,.12);padding:52px 60px 64px;font-size:14px;color:var(--t2);line-height:1.8}
 .ft .top{display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-bottom:22px}
-.ft .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;color:#000}
-.ft a:hover{color:#000}
+.ft .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;color:#fff}
+.ft a:hover{color:#fff}
 /* inline-link 규칙: 문장 속 이동 링크는 이어지는 점선 밑줄 */
-.ft .top a:not(.brand){text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px}
-.faq .a a{text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px;color:var(--t)}
+.faq .a a{text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px;color:var(--link)}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
