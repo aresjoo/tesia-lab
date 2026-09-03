@@ -31,7 +31,7 @@
 }
 *{box-sizing:border-box;margin:0}
 html{height:100%}
-body{height:100%;font-family:var(--font);font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+body{height:100%;font-family:var(--font);font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;word-break:keep-all}
 button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
 input,textarea{font-family:inherit;font-size:inherit;color:inherit}
 a{color:var(--accent);text-decoration:none}
@@ -527,7 +527,15 @@ body.g-dark{background:#0f1012}
 .g-hello{font-size:clamp(30px,3.8vw,44px);font-weight:500;letter-spacing:-.02em;color:#eceef2;text-align:center;word-break:keep-all}
 @media (max-width:860px){.g-hello .hseg{display:block}} /* 모바일만 지정된 지점에서 개행, 데스크톱은 공백 포함 한 줄 */
 .g-sub{font-size:clamp(14px,1.3vw,17px);color:var(--gt2);text-align:center;margin-top:14px;word-break:keep-all}
-.g-pill{position:relative;width:min(640px,92%);margin-top:34px;height:58px;border-radius:999px;background:#1e2024;display:flex;align-items:center;gap:12px;padding:0 10px 0 20px}
+.g-pill{position:relative;width:min(640px,92%);margin-top:34px;min-height:58px;border-radius:999px;background:#1e2024;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;padding:8px 10px 8px 20px}
+.g-pill textarea{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:14.5px;font-family:inherit;resize:none;line-height:21px;height:21px;max-height:147px;padding:0;margin:6px 0;overflow-y:auto}
+.g-pill textarea::placeholder{color:var(--gt3)}
+.g-pill-sp{display:none}
+.g-pill.multi{border-radius:26px}
+.g-pill.multi textarea{order:-1;flex:0 0 100%;margin:4px 4px 10px 0}
+.g-pill.multi .g-pill-sp{display:block;flex:1}
+@keyframes gSendPop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+.g-send.pop{animation:gSendPop .25s cubic-bezier(.34,1.56,.64,1) both}
 .g-pill .plus{cursor:pointer;width:34px;height:34px;margin-left:-8px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:background .12s}
 .g-pill .plus:hover{background:rgba(255,255,255,.08)}
 .g-plus-pop{position:absolute;top:64px;left:4px;width:min(340px,86vw);background:#26282d;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;text-align:left;box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:30;display:none}
@@ -750,7 +758,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
   .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
-  .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:25;animation:gRiseIn .5s var(--ease) .1s both}
+  .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:30;animation:gRiseIn .5s var(--ease) .1s both}
   .g-plus-pop{top:auto;bottom:70px}
   .g-home-chips{position:fixed;left:16px;right:16px;bottom:136px;z-index:25;animation:gRiseIn .5s var(--ease) .18s both}
   .g-terms{bottom:12px;padding:0 64px 0 16px}
@@ -2947,8 +2955,8 @@ function gHome(){
     '<svg class="g-hero-spark" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="heroSparkGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5145"/><stop offset=".38" stop-color="#FFB60A"/><stop offset=".66" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path fill="url(#heroSparkGrad)" d="M12 1.7c.92 5.66 3.97 8.71 9.63 9.63.6.1.6 1.24 0 1.34-5.66.92-8.71 3.97-9.63 9.63-.1.6-1.24.6-1.34 0-.92-5.66-3.97-8.71-9.63-9.63-.6-.1-.6-1.24 0-1.34 5.66-.92 8.71-3.97 9.63-9.63.1-.6 1.24-.6 1.34 0z"/></svg>'+
     '<div class="g-hello">'+GR.h+'</div>'+
     '<div class="g-sub">'+GR.s+'</div>'+
-    '<div class="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><input id="g-home-in" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어">'+
-    '<button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button>'+
+    '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" role="button" aria-label="더 많은 기능">＋</span><textarea id="g-home-in" rows="1" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어"></textarea>'+
+    '<span class="g-pill-sp"></span><button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button>'+
     '<div class="g-plus-pop" id="g-plus-pop"><b>더 많은 기능 사용하기</b><p>로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.</p><div class="row"><button class="go" onclick="authOpen(\'login\')">로그인</button></div></div>'+
     '</div>'+
     '<div class="g-home-chips">'+
@@ -2959,9 +2967,22 @@ function gHome(){
     '<div class="g-terms"><a href="policies/#terms" target="_blank" rel="noopener noreferrer">TETH 약관</a>과 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.</div>'+
     '</div>');
   var hi=$('g-home-in');
-  hi.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); gNew(); } });
+  /* Enter=전송, Shift+Enter=줄바꿈 (Gemini와 동일) */
+  hi.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); gNew(); } });
   hi.addEventListener('input',function(){
-    var b=$('g-home-send'); if(b) b.style.display=this.value.trim()?'inline-flex':'none';
+    var b=$('g-home-send');
+    if(b){
+      var want=this.value.trim()?'inline-flex':'none';
+      if(b.style.display!==want){
+        b.style.display=want;
+        if(want!=='none'){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+      }
+    }
+    /* 여러 줄이면 pill 확장 (Gemini 멀티라인 컴포저) */
+    this.style.height='auto';
+    var h=Math.min(this.scrollHeight,147);
+    this.style.height=h+'px';
+    var pill=$('g-pill'); if(pill) pill.classList.toggle('multi', h>30);
     if(this.value.trim()) document.body.classList.add('kb-open');
   });
   /* 키보드가 열리거나(포커스) 텍스트가 있으면 칩, 약관 숨김 */
