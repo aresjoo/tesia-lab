@@ -37,18 +37,16 @@
   }catch(e){}
   var btn = document.createElement('button');
   btn.id = 'teth-help'; btn.setAttribute('aria-label',hwT('tip'));
-  /* 로고가 헤드셋을 쓴 상담원 마크: 밴드가 로고 위를 감싸고, 양쪽 이어패드 + 마이크 */
+  /* C안: 브랜드 그라데이션 헤드셋 글리프 (로고 없이, 깔끔) */
   btn.innerHTML =
-    '<span style="position:relative;width:36px;height:36px;display:flex;align-items:center;justify-content:center">'+
-      '<img src="'+hwBase+'assets/logo.png" alt="" style="width:22px;height:auto;display:block;margin-top:5px">'+
-      '<svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="position:absolute;inset:0">'+
-        '<path d="M7.2 17.5a10.8 10.8 0 0 1 21.6 0" stroke="#e6e7ea" stroke-width="2.2" stroke-linecap="round"/>'+
-        '<rect x="4.4" y="16.4" width="5.4" height="9.2" rx="2.7" fill="#e6e7ea"/>'+
-        '<rect x="26.2" y="16.4" width="5.4" height="9.2" rx="2.7" fill="#e6e7ea"/>'+
-        '<path d="M28.9 25.4v.8a3.8 3.8 0 0 1-3.8 3.8h-3.6" stroke="#e6e7ea" stroke-width="2" stroke-linecap="round"/>'+
-        '<circle cx="20.6" cy="30" r="1.7" fill="#e6e7ea"/>'+
-      '</svg>'+
-    '</span>'+
+    '<svg width="32" height="32" viewBox="0 0 36 36" fill="none">'+
+      '<defs><linearGradient id="thg" gradientUnits="userSpaceOnUse" x1="4" y1="24" x2="32" y2="8"><stop offset="0" stop-color="#FFB60A"/><stop offset=".5" stop-color="#2BAE66"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>'+
+      '<path d="M7 20v-2a11 11 0 0 1 22 0v2" stroke="url(#thg)" stroke-width="2.6" stroke-linecap="round"/>'+
+      '<rect x="4.6" y="18.4" width="6" height="10" rx="3" fill="url(#thg)"/>'+
+      '<rect x="25.4" y="18.4" width="6" height="10" rx="3" fill="url(#thg)"/>'+
+      '<path d="M28.4 28.4v.4a4 4 0 0 1-4 4h-3.6" stroke="url(#thg)" stroke-width="2.4" stroke-linecap="round"/>'+
+      '<circle cx="19" cy="32.8" r="1.9" fill="url(#thg)"/>'+
+    '</svg>'+
     '<span class="dot"></span>'+
     '<span class="tip">'+hwT('tip')+'</span>';
   var pop = document.createElement('div');
