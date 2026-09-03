@@ -707,7 +707,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .g-side:not(.authed) #g-me-row{display:none}
 /* 게스트: 새 연구 비활성 + 안내, 목록은 로그인 후에만 */
 .g-side:not(.authed) .g-new{opacity:.45;pointer-events:none}
-.g-side:not(.authed) #g-new-row .g-ico-btn{opacity:.45;pointer-events:none}
+.g-side:not(.authed) #g-new-row{opacity:.45;pointer-events:none}
 .g-side:not(.authed) .g-util,.g-side:not(.authed) .g-sec,.g-side:not(.authed) #g-sess-list,.g-side:not(.authed) #g-live-list{display:none}
 #g-guest-note{display:none;align-items:flex-start;gap:9px;padding:12px 13px;font-size:13px;color:var(--gt2);line-height:1.5}
 #g-guest-note svg{flex-shrink:0;margin-top:2px}
@@ -2899,12 +2899,13 @@ function gHome(){
     {h:'오늘 밤 시장, 어떻게 볼까요?',s:'AI와 대화하며 시장을 읽고, 전략까지 만들어보세요'},
     {h:'차트 볼 줄 몰라도 됩니다',s:'궁금한 걸 말하면 TETH가 검증 가능한 전략으로 바꿔드려요'},
     {h:'시장은 혼자 이기기 어렵습니다',s:'당신 편에서 싸우는 AI 트레이딩 에이전트, TETH'},
-    {h:'시장은 기다려주지 않아요',s:'아이디어를 바로 전략으로 — 검증은 TETH가 할게요'},
+    {h:'시장은 기다려주지 않아요',s:'아이디어를 바로 전략으로, 검증은 TETH가 할게요'},
     {h:'뉴스는 늦고, 시장은 빠릅니다',s:'TETH가 24시간 시장을 지켜보고 있어요'},
-    {h:'지금 사도 될까요? 물어보세요',s:'감이 아니라 데이터로 — 과거 시장에서 검증해드려요'},
+    {h:'지금 사도 될까요? 물어보세요',s:'감이 아니라 데이터로 과거 시장에서 검증해드려요'},
     {h:'삼성전자 vs SK하이닉스, 뭘 살까요?',s:'AI와 대화하며 비교하고, 전략으로 만들어보세요'},
     {h:'주식, 암호화폐, 금, 시장이면 다 물어보세요',s:'무엇이든 검증 가능한 전략이 됩니다'},
-    {h:'테슬라 왜 떨어졌어요? 물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'}
+    {h:'테슬라 왜 떨어졌어요? 물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'},
+    {h:'TETH와 함께 시장을 정복하세요',s:'아이디어부터 검증, 실행까지 한 곳에서'}
   ];
   var GR=GREETS[Math.floor(Math.random()*GREETS.length)];
   gContent(
@@ -3597,4 +3598,4 @@ function gSideToggle(){
 authSyncUI();
 </script>
 <script src="site-config.js?v=2"></script>
-<script src="help-widget.js?v=2"></script>
+<script src="help-widget.js?v=3"></script>

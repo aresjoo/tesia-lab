@@ -20,7 +20,7 @@
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   var btn = document.createElement('button');
-  btn.id = 'teth-help'; btn.setAttribute('aria-label','24시간 고객센터');
+  btn.id = 'teth-help'; btn.setAttribute('aria-label','24/7 고객지원');
   btn.innerHTML =
     /* TETH 스파크 + 헤드셋 결합 아이콘 */
     '<svg width="30" height="30" viewBox="0 0 32 32" fill="none">'+
@@ -33,10 +33,10 @@
       '<path d="M15.63 11.6c.42 2.6 1.82 4 4.42 4.42.28.05.28.57 0 .62-2.6.42-4 1.82-4.42 4.42-.05.28-.57.28-.62 0-.42-2.6-1.82-4-4.42-4.42-.28-.05-.28-.57 0-.62 2.6-.42 4-1.82 4.42-4.42.05-.28.57-.28.62 0z" fill="url(#thg)"/>'+
     '</svg>'+
     '<span class="dot"></span>'+
-    '<span class="tip">24시간 고객센터</span>';
+    '<span class="tip">24/7 고객지원</span>';
   var pop = document.createElement('div');
   pop.id = 'teth-help-pop';
-  pop.innerHTML = '<b><i></i>24시간 고객센터</b>무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.<div class="sub">Zendesk 채팅 연결 준비 중 · support@teth.ai</div>';
+  pop.innerHTML = '<b><i></i>24/7 고객지원</b>무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.<div class="sub">Zendesk 채팅 연결 준비 중입니다. support@teth.ai</div>';
   document.body.appendChild(btn); document.body.appendChild(pop);
 
   btn.addEventListener('click', function(e){
