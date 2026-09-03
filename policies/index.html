@@ -16,6 +16,14 @@ a{color:inherit;text-decoration:none}
 img,svg{display:block}
 h1,h2,h3{font-family:'Noto Sans KR',Roboto,sans-serif}
 
+/* 라이트 테마 — 앱에서 고른 tethTheme을 theme.js가 body.light로 반영 */
+body.light{--bg:#fff;--t:#1f1f1f;--t2:#5f6368;--th:#202124;--blue:#0b57d0;--line:#dadce0}
+body.light .hd .login{background:#d3e3fd;color:#041e49}
+body.light .toc a:hover{background:rgba(0,0,0,.05)}
+body.light .tabs a:hover{color:#0b57d0}
+body.light .ov .ico-row svg,body.light .callout>svg{stroke:#0b57d0}
+body.light .ft select{border-color:#dadce0;color:#1f1f1f}
+
 /* header */
 .hd{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--bg)}
 .hd .row1{height:64px;display:flex;align-items:center;gap:12px;padding:0 20px}
@@ -375,6 +383,7 @@ function route(){
 addEventListener('hashchange',route);
 route();
 </script>
+<script src="../theme.js"></script>
 <script src="../site-config.js?v=2"></script>
 <script src="../help-widget.js?v=3"></script>
 </body>
