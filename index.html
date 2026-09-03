@@ -2923,6 +2923,7 @@ function gScrollBottom(){ var s=$('g-scroll'); s.scrollTop=s.scrollHeight; }
 /* ── home ── */
 function gHome(){
   G.cur=null; G.mode='home'; G.tabs=[]; G.activeTab=null; /* 진행 중인 연구 타이머는 유지 — 내비게이션이 런을 중단하지 않는다 */
+  document.body.classList.remove('kb-open'); /* 키보드 상태 잔존으로 배너·칩이 숨은 채 남지 않게 */
   $('g-chead').hidden=true; gComposer(false);
   $('g-aux').style.display='none';
   gSideRender(); gTeamRender(); gArtRender();
@@ -3603,15 +3604,16 @@ function authPwNext(){
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
 function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
-/* 모바일 앱 배너 */
+/* 모바일 앱 배너 — 닫으면 이 탭 세션 동안만 숨김, 새 방문 시 다시 표시 */
 (function(){
   var hide=false;
-  try{ hide=!!localStorage.getItem('tethBannerHide'); }catch(e){}
+  try{ hide=!!sessionStorage.getItem('tethBannerHide'); }catch(e){}
+  try{ localStorage.removeItem('tethBannerHide'); }catch(e){} /* 과거 영구 숨김 저장분 정리 */
   if(!hide) document.body.classList.add('has-banner');
 })();
 function tethBannerClose(){
   document.body.classList.remove('has-banner');
-  try{ localStorage.setItem('tethBannerHide','1'); }catch(e){}
+  try{ sessionStorage.setItem('tethBannerHide','1'); }catch(e){}
 }
 /* 키보드 대응: 키보드가 올라오면 컴포저를 키보드 위로 (iOS 폴백), 칩·약관 숨김 */
 (function(){
