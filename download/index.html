@@ -85,7 +85,7 @@ img,svg{display:block}
 /* fixed bottom bar */
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--barbg);padding:24px 48px;display:flex;align-items:center;gap:28px;font-size:13px;color:var(--t2)}
 .bar .logo{font-weight:700;font-size:15px;color:#e3e3e3;display:flex;align-items:center;gap:7px}
-.bar a{text-decoration:underline;text-underline-offset:3px}
+.bar a{text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px}
 .bar .fine{margin-left:auto;font-size:12.5px;color:#9aa0a6}
 
 @media (max-width:1180px){
@@ -224,7 +224,7 @@ body.light .bar a,body.light .bar .logo{color:#1f1f1f}
 <footer class="bar">
   <span class="logo"><img src="../assets/logo.png" alt="" style="width:16px;height:auto;display:block">TETH</span>
   <a href="../policies/" target="_blank" rel="noopener noreferrer" data-i="pol">개인 정보 보호 및 약관</a>
-  <span class="fine" data-i="fine" data-ih><a href="../policies/#terms" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">TETH 약관</a>과 <a href="../policies/#privacy" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.</span>
+  <span class="fine" data-i="fine" data-ih><a href="../policies/#terms" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px">TETH 약관</a>과 <a href="../policies/#privacy" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px">TETH 개인정보처리방침</a>이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.</span>
 </footer>
 
 <script src="../theme.js"></script>
@@ -287,8 +287,8 @@ var PIDX=0;
       var s=v[PIDX]||v[1];
       if(el.hasAttribute('data-ih')){
         el.innerHTML=s
-          .replace('{T}','<a href="../policies/#terms" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">')
-          .replace('{P}','<a href="../policies/#privacy" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">')
+          .replace('{T}','<a href="../policies/#terms" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px">')
+          .replace('{P}','<a href="../policies/#privacy" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px">')
           .replace(/\{\/\}/g,'</a>');
       }else el.textContent=s;
     });
