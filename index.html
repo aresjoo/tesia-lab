@@ -624,7 +624,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 @media (max-width:1100px){.g-aux{display:none}}
 
 /* ══ auth (teth ai 로그인/회원가입) ══ */
-#g-auth-btns{display:flex;align-items:center;gap:8px;-webkit-app-region:no-drag}
+#g-auth-btns{position:absolute;top:14px;right:20px;z-index:45;display:flex;align-items:center;gap:8px}
 .ga-nav{height:30px;padding:0 12px;margin-right:2px;border-radius:999px;display:inline-flex;align-items:center;font-size:12.5px;font-weight:500;color:var(--gt2);text-decoration:none;transition:background .12s,color .12s}
 .ga-nav:hover{background:rgba(255,255,255,.07);color:var(--gt)}
 .ga-login{height:30px;padding:0 16px;border-radius:999px;background:#fff;color:#111;font-size:12.5px;font-weight:600;transition:opacity .12s}
@@ -703,14 +703,18 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 #g-spark-row,#g-new-row{display:none}
 /* ══ 모바일: 사이드바 = 오버레이 드로어 ══ */
 #g-hamburger{display:none}
+#g-side-links{display:none}
 #g-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:80;opacity:0;pointer-events:none;transition:opacity .22s var(--ease)}
 #g-scrim.on{opacity:1;pointer-events:auto}
 @media (max-width:860px){
-  #g-hamburger{display:inline-flex;width:38px;height:38px;border-radius:8px;align-items:center;justify-content:center;color:var(--gt2)}
+  #g-hamburger{display:inline-flex;position:fixed;top:10px;left:10px;z-index:70;width:40px;height:40px;border-radius:10px;align-items:center;justify-content:center;color:var(--gt2);background:rgba(15,16,18,.6)}
   #g-hamburger:active{background:rgba(255,255,255,.08)}
-  .g-titlebar{height:52px;padding:0 10px}
-  .ga-login,.ga-signup{height:34px}
+  #g-auth-btns{top:12px;right:14px}
+  .ga-login,.ga-signup{height:36px}
   .ga-signup,.ga-nav{display:none}
+  .g-side #g-side-links{display:block;margin-top:auto;border-top:1px solid var(--gl);padding-top:8px}
+  .g-side #g-side-links .g-util{display:flex;text-decoration:none}
+  .g-side #g-side-links~.g-side-bottom{margin-top:0}
   .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-right:1px solid var(--gl);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
   .g-side.collapsed{width:min(300px,85vw)}
   .g-side.mobile-open{transform:translateX(0)}
@@ -1168,11 +1172,8 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 
 <!-- ══ V3 · Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
-  <div class="g-titlebar">
-    <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-    <span style="flex:1"></span>
-    <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
-  </div>
+  <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <span id="g-auth-btns"><a class="ga-nav" href="about/">TETH 정보</a><a class="ga-nav" href="download/" target="_blank" rel="noopener noreferrer">TETH 앱 다운로드</a><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
   <div class="g-body">
     <aside class="g-side collapsed" id="g-side">
       <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
@@ -1209,6 +1210,10 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <div id="g-sess-list"></div>
       <div class="g-sec" id="g-live-sec" hidden>Live</div>
       <div id="g-live-list"></div>
+      <div id="g-side-links">
+        <a class="g-util" href="about/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>TETH 정보</a>
+        <a class="g-util" href="download/" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>TETH 앱 다운로드</a>
+      </div>
       <div class="g-side-bottom">
         <div class="g-ico-row" id="g-gear-row">
           <button class="g-ico-btn" onclick="toast('MOCK — 설정')" aria-label="설정"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg></button>
@@ -1238,7 +1243,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
         <div class="g-composer">
           <div id="g-ctx-chip"></div>
           <input id="g-in" placeholder="무엇이든 물어보세요 — 수정 요청은 즉시 재검증됩니다" aria-label="AI에게 입력">
-          <div class="g-composer-row"><span class="g-model">＋ &nbsp;Research Engine · Standard</span><button class="g-send" onclick="gSend()" aria-label="전송">↑</button></div>
+          <div class="g-composer-row"><span class="g-model">＋</span><button class="g-send" onclick="gSend()" aria-label="전송">↑</button></div>
         </div>
       </div>
     </main>
@@ -2881,7 +2886,7 @@ function gHome(){
     '<div class="g-home" style="min-height:calc(100vh - 120px)">'+
     '<div class="g-hello">무엇을 연구할까요?</div>'+
     '<div class="g-pill"><span class="plus">＋</span><input id="g-home-in" placeholder="예: 비트코인이 떨어졌을 때 사는 전략" aria-label="연구 아이디어">'+
-    '<span class="model">Standard ⌄</span><button class="g-send" onclick="gNew()" aria-label="연구 시작">↑</button></div>'+
+    '<button class="g-send" id="g-home-send" onclick="gNew()" aria-label="연구 시작" style="display:none">↑</button></div>'+
     '<div class="g-home-chips">'+
     '<button class="g-qchip" onclick="gNew(\'비트코인이 떨어졌을 때 사는 전략\')">하락 후 반등 전략</button>'+
     '<button class="g-qchip" onclick="gNew(\'오르는 흐름에 올라타는 전략\')">추세 추종 전략</button>'+
@@ -2889,6 +2894,7 @@ function gHome(){
     '</div></div>');
   var hi=$('g-home-in');
   hi.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); gNew(); } });
+  hi.addEventListener('input',function(){ var b=$('g-home-send'); if(b) b.style.display=this.value.trim()?'inline-flex':'none'; });
   hi.focus();
 }
 function gSelect(id){
@@ -3552,3 +3558,5 @@ function gSideToggle(){
 }
 authSyncUI();
 </script>
+<script src="site-config.js"></script>
+<script src="help-widget.js"></script>

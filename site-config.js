@@ -8,6 +8,9 @@ window.TETH_CONFIG = {
   iosStoreUrl: "",      /* 예: "https://apps.apple.com/app/id0000000000" */
   androidStoreUrl: "",  /* 예: "https://play.google.com/store/apps/details?id=ai.teth.app" */
 
+  /* Zendesk Web Widget 키 — TODO: Zendesk 가입 후 키 입력. 입력하면 우측 하단 고객센터 버튼이 실제 Zendesk 채팅을 연다. */
+  zendeskKey: "",
+
   /* 요금제 — /about Pricing 섹션이 이 데이터로 렌더링된다 */
   pricing: [
     {

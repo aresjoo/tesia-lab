@@ -31,7 +31,7 @@ img,svg{display:block}
 
 /* hero — 100vh 블랙 스타필드, 센터 정렬 */
 .hero{position:relative;height:100svh;min-height:640px;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden;padding:0 24px}
-#stars{position:absolute;inset:0}
+#stars{position:absolute;inset:0;width:100%;height:100%}
 .hero>*{position:relative}
 .hero h1{font-size:clamp(38px,4.95vw,71.25px);line-height:1;font-weight:400;letter-spacing:-.04em;max-width:1100px;word-break:keep-all}
 .hero .cta{margin-top:58px}
@@ -293,6 +293,7 @@ img,svg{display:block}
 </footer>
 
 <script src="../site-config.js"></script>
+<script src="../help-widget.js"></script>
 <script>
 "use strict";
 /* header: 히어로를 지나면 흰 배경으로 */
@@ -301,11 +302,17 @@ addEventListener('scroll',function(){ hd.classList.toggle('lite', scrollY > hero
 
 /* hero 스타필드 (Gemini about 히어로의 파티클 배경 재현) */
 (function(){
-  var cv=document.getElementById('stars'),cx=cv.getContext('2d'),W,H,pts=[];
-  function size(){ W=cv.width=cv.offsetWidth*devicePixelRatio; H=cv.height=cv.offsetHeight*devicePixelRatio; }
+  var cv=document.getElementById('stars'),cx=cv.getContext('2d'),W=0,H=0,pts=[];
+  function size(){
+    W=cv.width=Math.max(1,Math.round(cv.clientWidth*devicePixelRatio));
+    H=cv.height=Math.max(1,Math.round(cv.clientHeight*devicePixelRatio));
+  }
   size(); addEventListener('resize',size);
+  if(window.ResizeObserver) new ResizeObserver(size).observe(cv);
   for(var i=0;i<180;i++) pts.push({x:Math.random(),y:Math.random(),r:Math.random()*1.5+.3,s:Math.random()*.0003+.00008,o:Math.random()*.55+.12});
   (function draw(){
+    /* 레이아웃 늦게 잡히는 경우 자가 보정 — 별이 일부 영역에만 몰리는 버그 방지 */
+    if(Math.abs(cv.clientWidth*devicePixelRatio-W)>2 || Math.abs(cv.clientHeight*devicePixelRatio-H)>2) size();
     cx.clearRect(0,0,W,H);
     for(var i=0;i<pts.length;i++){
       var p=pts[i]; p.y-=p.s; if(p.y<0) p.y=1;
