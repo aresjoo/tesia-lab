@@ -111,6 +111,9 @@ img,svg{display:block}
 .ft .top{display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-bottom:22px}
 .ft .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;color:#000}
 .ft a:hover{color:#000}
+/* inline-link 규칙: 문장 속 이동 링크는 이어지는 점선 밑줄 */
+.ft .top a:not(.brand){text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px}
+.faq .a a{text-decoration:none;border-bottom:1.3px dotted currentColor;padding-bottom:1px;color:var(--t)}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -294,7 +297,7 @@ img,svg{display:block}
 </footer>
 
 <script src="../site-config.js?v=2"></script>
-<script src="../help-widget.js?v=7"></script>
+<script src="../help-widget.js?v=8"></script>
 <script>
 "use strict";
 /* ══ 페이지 i18n — 값 순서: [ko,en,ja,zh-CN,zh-TW,es,fr] ══ */

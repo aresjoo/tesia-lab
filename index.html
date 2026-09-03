@@ -29,6 +29,9 @@
   --shadow-1:0 1px 2px oklch(20% .01 262 / .05);
   --shadow-2:0 8px 28px oklch(20% .01 262 / .09);
   --ease:cubic-bezier(.16,1,.3,1);
+  --motion-fast:.15s;   /* 페이드, 호버류 */
+  --motion-normal:.28s; /* 패널 폭, 시트 이동류 */
+  --motion-out:.16s;    /* 팝오버 퇴장 */
 }
 *{box-sizing:border-box;margin:0}
 html{height:100%}
@@ -592,16 +595,16 @@ body.g-dark{background:#0f1012}
 #glc-panel .grab2{display:none}
 #glc-panel .x2{display:none}
 /* 설정 메뉴의 언어/통화 항목 — 모바일 전용 진입점 (데스크톱은 우측 상단 지구본) */
-.gm-item.glc-item{display:none}
+.gm-sub button .gm-val{margin-left:auto;font-size:12px;color:var(--gt3);white-space:nowrap}
 .gm-item .gm-val{font-size:12px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
 #glc-panel .info{display:none}
 @media (max-width:860px){
   #g-globe{display:none}
-  .gm-item.glc-item{display:flex}
+
   #glc-panel .info{display:flex;gap:10px;align-items:flex-start;background:var(--g3);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:var(--gt2);margin-bottom:14px}
   #glc-panel .info .ii{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--gt3);color:var(--g1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
   /* 헤더(그래버/탭/배너/검색)는 고정, 리스트만 내부 스크롤 */
-  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;height:78vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow:hidden;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;height:78vh;height:78dvh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow:hidden;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
   #glc-panel.on{display:flex;flex-direction:column;animation:gSheetUp .3s var(--ease)}
   #glc-panel .grab2,#glc-panel .tabs2,#glc-panel .info{flex-shrink:0}
   #glc-panel .grab2{display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 14px;cursor:pointer}
@@ -618,7 +621,7 @@ body.g-dark{background:#0f1012}
 }
 
 /* ══ 설정 메뉴 (Gemini 스타일) ══ */
-#g-setmenu{position:fixed;z-index:95;background:var(--g2);border:1px solid var(--gl);border-radius:18px;padding:8px;min-width:236px;box-shadow:var(--shadow-pop)}
+#g-setmenu{position:fixed;z-index:95;background:var(--g2);border:1px solid var(--gl);border-radius:18px;padding:8px;min-width:236px;box-shadow:var(--shadow-pop);animation:gmPopIn .18s var(--ease)}
 .gm-item{display:flex;align-items:center;gap:13px;width:100%;height:44px;padding:0 14px;border-radius:10px;font-size:14px;color:var(--gt);text-align:left;position:relative}
 .gm-item:hover,.gm-item:focus-visible{background:rgba(128,128,128,.15);outline:none}
 .gm-item svg{flex-shrink:0;color:var(--gt2)}
@@ -631,9 +634,9 @@ body.g-dark{background:#0f1012}
 .gm-sub button:hover,.gm-sub a:hover{background:rgba(128,128,128,.15)}
 .gm-sub .ck{margin-left:auto;opacity:0;color:var(--gt)}
 .gm-sub [data-on="1"] .ck{opacity:1}
-#gm-sub-theme{top:0}
+#gm-sub-set{top:0}
 #gm-sub-help{top:0} /* 자기 항목 top에서 시작해 아래로 열림 (Gemini 동일) */
-#gm-sub-theme.up,#gm-sub-help.up{top:auto;bottom:0} /* 아래 공간 부족 시 위로 열림, ID로 top:0을 이긴다 */
+#gm-sub-set.up,#gm-sub-help.up{top:auto;bottom:0} /* 아래 공간 부족 시 위로 열림, ID로 top:0을 이긴다 */
 /* 톤앤매너 스크롤바: 얇고 트랙 투명, 썸은 라인 토큰 */
 #g-root *{scrollbar-width:thin;scrollbar-color:var(--gl2) transparent}
 #g-root ::-webkit-scrollbar{width:5px;height:5px}
@@ -644,6 +647,16 @@ body.g-dark{background:#0f1012}
 .gm-grab{display:none}
 /* 팝오버 공통 등장 애니메이션 — display 전환에도 부드럽게 */
 @keyframes gmPopIn{from{opacity:0;transform:translateY(5px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes gmPopOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(4px) scale(.985)}}
+@keyframes gSheetDown{from{transform:none;opacity:1}to{transform:translateY(45%);opacity:0}}
+/* 퇴장 공통: 애니메이션 동안 인터랙션 차단, 끝난 뒤 JS가 hidden 처리 */
+.pop-closing{animation:gmPopOut var(--motion-out) var(--ease) both!important;pointer-events:none!important}
+@media (max-width:640px){
+  #g-setmenu.pop-closing,.gm-sub.pop-closing{animation:gSheetDown .2s var(--ease) both!important}
+}
+@media (max-width:860px){
+  #glc-panel.pop-closing{animation:gSheetDown .2s var(--ease) both!important}
+}
 #g-setmenu:not([hidden]){animation:gmPopIn .18s var(--ease) both}
 .gm-item:hover>.gm-sub,.gm-sub.on{animation:gmPopIn .16s var(--ease) both}
 #glc-panel.on{animation:gmPopIn .18s var(--ease) both}
@@ -941,9 +954,10 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 @media (max-width:520px){#modal-auth .modal{padding:36px 22px 28px}}
 
 /* ══ sidebar collapse + icon rows — Gemini식: 폭은 이징, 콘텐츠는 제자리 크로스페이드 ══ */
-.g-side{transition:width .28s var(--ease)}
+.g-side{transition:width var(--motion-normal) var(--ease)}
 .g-side.collapsed{width:64px}
-.g-new,#g-guest-note,#g-brand-row,.g-util,.g-sec,#g-sess-list,#g-live-list{transition:opacity .15s var(--ease)}
+.g-new,#g-guest-note,#g-brand-row,.g-util,.g-sec,#g-sess-list,#g-live-list,#g-side-links{transition:opacity var(--motion-fast) var(--ease)}
+.g-side.collapsed #g-side-links{opacity:0;pointer-events:none}
 .g-side.collapsed .g-new,.g-side.collapsed .g-util,.g-side.collapsed .g-sec,.g-side.collapsed #g-sess-list,.g-side.collapsed #g-live-list{opacity:0;pointer-events:none}
 .g-ico-row{position:relative;display:flex;align-items:center;height:46px;flex-shrink:0}
 .g-ico-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt2);transition:background .12s;flex-shrink:0}
@@ -951,8 +965,6 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .g-ico-pill{position:absolute;left:48px;top:50%;transform:translateY(-50%);background:var(--tip-bg);color:var(--tip-fg);font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:40;box-shadow:0 2px 10px rgba(0,0,0,.35)}
 .g-ico-row:hover .g-ico-pill{opacity:1}
 .g-ico-row.pill-off .g-ico-pill{opacity:0!important;transition:opacity .3s var(--ease)} /* 메뉴 열릴 때 부드럽게 페이드아웃 */
-#g-spark-row{margin-bottom:6px}
-#g-spark-row .ico-panel{display:none} /* 호버 시에도 로고 유지 + 툴팁만, 아이콘 스왑 없음 */
 /* 하단: 접힘=톱니/사람 세로 스택, 펼침=로그인 pill 좌측 + 톱니 우측 (애니메이션) */
 .g-side-bottom{position:relative;height:54px;transition:height .2s var(--ease)}
 .g-side.collapsed .g-side-bottom{height:100px}
@@ -975,11 +987,16 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 #g-guest-note svg{flex-shrink:0;margin-top:2px}
 #g-guest-note a{text-decoration:none;border-bottom:1.5px dotted var(--gt2);padding-bottom:1px;cursor:pointer;color:var(--gt)} /* border 방식이라 공백 포함 점선이 끊기지 않는다 */
 .g-side:not(.authed):not(.collapsed) #g-guest-note{display:flex}
-/* 레일 아이콘은 항상 같은 좌표에 떠 있고(absolute) 접힘/펼침에 따라 페이드만 */
-#g-spark-row,#g-new-row{display:flex;position:absolute;left:12px;width:40px;opacity:0;pointer-events:none;transition:opacity .15s var(--ease)}
-#g-spark-row{top:8px}
-#g-new-row{top:62px}
-.g-side.collapsed #g-spark-row,.g-side.collapsed #g-new-row{opacity:1;pointer-events:auto;transition-delay:.1s}
+/* 로고는 단일 요소가 항상 같은 좌표, 같은 크기로 고정 — 상태 전환에 절대 참여하지 않는다 */
+:root{--brand-mark:24px}
+.brand-mark{width:var(--brand-mark);height:auto;display:block}
+.brand-slot{width:var(--brand-mark);flex-shrink:0}
+#g-spark-row{position:absolute;left:20px;top:10px;height:46px;display:flex;align-items:center;pointer-events:none;z-index:2}
+/* 토글, 연필 레일 아이콘은 absolute 고정 좌표에서 페이드만 */
+#g-toggle-row,#g-new-row{display:flex;position:absolute;left:12px;width:40px;opacity:0;pointer-events:none;transition:opacity var(--motion-fast) var(--ease)}
+#g-toggle-row{top:60px}
+#g-new-row{top:108px}
+.g-side.collapsed #g-toggle-row,.g-side.collapsed #g-new-row{opacity:1;pointer-events:auto;transition-delay:.1s}
 .g-side:not(.authed).collapsed #g-new-row{opacity:.45;pointer-events:none}
 /* ══ 모바일: 사이드바 = 오버레이 드로어 ══ */
 #g-hamburger{display:none}
@@ -1020,7 +1037,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-side.mobile-open{transform:translateX(0)}
   .g-side .g-ico-pill{display:none}
 }
-#g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 8px;margin-bottom:6px;flex-shrink:0}
+#g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 10px;margin-bottom:6px;flex-shrink:0}
 .g-side.collapsed #g-brand-row{opacity:0;pointer-events:none}
 #g-brand-row .g-word{font-size:16px;font-weight:600;color:var(--gt);letter-spacing:-.01em;white-space:nowrap}
 </style>
@@ -1507,12 +1524,12 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   </div>
   <div class="g-body">
     <aside class="g-side collapsed" id="g-side">
-      <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
-      <div class="g-ico-row" id="g-spark-row">
-        <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기">
-          <img class="ico-spark" src="assets/logo.png" alt="" style="width:24px;height:auto;display:block">
-          <svg class="ico-panel" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg>
-        </button>
+      <!-- 접힌 상태: 로고는 정적 브랜드(호버/클릭 없음), 토글은 별도 버튼 -->
+      <div id="g-spark-row">
+        <img class="brand-mark" src="assets/logo.png" alt="TETH">
+      </div>
+      <div class="g-ico-row" id="g-toggle-row">
+        <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg></button>
         <span class="g-ico-pill" id="gp-open">사이드바 열기</span>
       </div>
       <!-- 접힌 상태: 새 연구 연필 -->
@@ -1522,7 +1539,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
-        <img src="assets/logo.png" alt="" style="width:24px;height:auto;display:block">
+        <span class="brand-slot"></span>
         <span class="g-word">TETH</span>
         <span style="flex:1"></span>
         <div class="g-ico-row" style="height:40px">
@@ -1591,10 +1608,14 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   <div id="gm-scrim" onclick="gSetMenuClose();glcClose()"></div>
   <div id="g-setmenu" hidden>
     <div class="gm-grab" onclick="gSetMenuClose()"></div>
-    <button class="gm-item glc-item" onclick="glcOpen(event)">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg>
-      언어 및 통화<span class="sp"></span><span class="gm-val" id="g-side-glc-label">한국어, USD</span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
+    <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'set')" onmouseenter="gmFlip(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>
+      설정<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <div class="gm-sub" id="gm-sub-set" onclick="event.stopPropagation()">
+        <div class="st" id="gm-set-st">설정</div>
+        <button onclick="glcOpen(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span id="gm-glc-lbl">언어 및 통화</span><span class="gm-val" id="g-side-glc-label">한국어, USD</span></button>
+      </div>
+    </div>
     <button class="gm-item" onclick="fbOpen()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H8l-4 4z"/><path d="M12 8.2v.4M12 11v3"/></svg>
       의견 보내기
@@ -4157,9 +4178,15 @@ function glcOpen(e){
 }
 function glcDoc(ev){ var p=$('glc-panel'); if(p && !p.contains(ev.target)) glcClose(); }
 function glcClose(){
-  $('glc-panel').classList.remove('on');
+  var p=$('glc-panel');
   var sc=$('gm-scrim'); if(sc) sc.classList.remove('on');
   document.removeEventListener('click',glcDoc);
+  if(!p||!p.classList.contains('on')||p.classList.contains('pop-closing')) return;
+  p.classList.add('pop-closing');
+  var done=false;
+  var fin=function(){ if(done) return; done=true; p.classList.remove('on','pop-closing'); };
+  p.addEventListener('animationend',fin,{once:true});
+  setTimeout(fin,260);
 }
 function glcTab(i,btn){
   document.querySelectorAll('#glc-panel .tabs2 button').forEach(function(b){b.classList.toggle('on',b===btn);});
@@ -4405,8 +4432,10 @@ function applyLang(){
   function setItemLabel(el,txt){ if(!el) return; for(var i=0;i<el.childNodes.length;i++){ var n=el.childNodes[i]; if(n.nodeType===3 && n.textContent.trim()){ n.textContent=txt; return; } } }
   setItemLabel(themeItem,L('menu.theme'));
   setItemLabel(helpItem,L('menu.help'));
-  var fbItem=document.querySelector('#g-setmenu button.gm-item:not(.glc-item)'); setItemLabel(fbItem,L('menu.feedback'));
-  var glcItem=document.querySelector('#g-setmenu .glc-item'); setItemLabel(glcItem,L('menu.glc'));
+  var fbItem=document.querySelector('#g-setmenu button.gm-item'); setItemLabel(fbItem,L('menu.feedback'));
+  var setItem=document.querySelector('[onclick*="gmSub(event,\'set\')"]'); setItemLabel(setItem,L('menu.settings'));
+  var setSt=$('gm-set-st'); if(setSt) setSt.textContent=L('menu.settings');
+  var glcLbl=$('gm-glc-lbl'); if(glcLbl) glcLbl.textContent=L('menu.glc');
   var it=$('glc-info-txt'); if(it) it.textContent=L('glc.info');
   /* 언어/통화 패널 내부 정적 텍스트 */
   var tl=$('glc-tab-l'); if(tl) tl.textContent=L('glc.lang');
@@ -4487,11 +4516,21 @@ function gSetMenuDoc(ev){
   if(m && !m.contains(ev.target)) gSetMenuClose();
 }
 function gSetMenuClose(){
-  var m=$('g-setmenu'); if(m){ m.hidden=true; m.classList.remove('subopen'); }
+  var m=$('g-setmenu');
   var gb=$('g-gear-btn'); if(gb&&gb.closest('.g-ico-row')) gb.closest('.g-ico-row').classList.remove('pill-off');
   var sc=$('gm-scrim'); if(sc) sc.classList.remove('on');
-  document.querySelectorAll('.gm-sub').forEach(function(s){ s.classList.remove('on'); });
   document.removeEventListener('click',gSetMenuDoc);
+  if(!m||m.hidden||m.classList.contains('pop-closing')) return;
+  /* 퇴장 애니메이션이 끝난 뒤에 DOM에서 제거 */
+  m.classList.add('pop-closing');
+  var done=false;
+  var fin=function(){
+    if(done) return; done=true;
+    m.hidden=true; m.classList.remove('pop-closing','subopen');
+    document.querySelectorAll('.gm-sub').forEach(function(s){ s.classList.remove('on','pop-closing'); });
+  };
+  m.addEventListener('animationend',fin,{once:true});
+  setTimeout(fin,260);
 }
 function gmSub(e,which){
   e.stopPropagation();
@@ -4609,25 +4648,36 @@ function authSyncUI(){
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
 }
 function gProfileClick(){ if(!S.user){ authOpen('login'); return; } toast('MOCK, 프로필'); }
+function gPlusClose(){
+  var p=$('g-plus-pop');
+  if(!p||!p.classList.contains('on')||p.classList.contains('pop-closing')) return;
+  p.classList.add('pop-closing');
+  var done=false;
+  var fin=function(){ if(done) return; done=true; p.classList.remove('on','pop-closing'); };
+  p.addEventListener('animationend',fin,{once:true});
+  setTimeout(fin,260);
+}
 function gPlusPop(e){
   e.stopPropagation();
   var p=$('g-plus-pop'); if(!p) return;
   if(S.user){ toast('파일 첨부는 곧 제공돼요'); return; }
-  p.classList.toggle('on');
-  var close=function(ev){ if(!p.contains(ev.target)){ p.classList.remove('on'); document.removeEventListener('click',close); } };
-  if(p.classList.contains('on')) setTimeout(function(){ document.addEventListener('click',close); },0);
+  if(p.classList.contains('on')){ gPlusClose(); return; }
+  p.classList.remove('pop-closing');
+  p.classList.add('on');
+  var close=function(ev){ if(!p.contains(ev.target)){ gPlusClose(); document.removeEventListener('click',close); } };
+  setTimeout(function(){ document.addEventListener('click',close); },0);
 }
 /* ＋ 팝오버 호버 오픈 (0.5초 지연), 팝오버로 마우스 이동 시 유지 */
 var GPLUS={t:null,c:null};
 function gPlusHover(){
   if(S.user) return;
   clearTimeout(GPLUS.c);
-  GPLUS.t=setTimeout(function(){ var p=$('g-plus-pop'); if(p) p.classList.add('on'); },500);
+  GPLUS.t=setTimeout(function(){ var p=$('g-plus-pop'); if(p){ p.classList.remove('pop-closing'); p.classList.add('on'); } },500);
 }
 function gPlusStay(){ clearTimeout(GPLUS.c); }
 function gPlusLeave(){
   clearTimeout(GPLUS.t);
-  GPLUS.c=setTimeout(function(){ var p=$('g-plus-pop'); if(p) p.classList.remove('on'); },250);
+  GPLUS.c=setTimeout(function(){ gPlusClose(); },250);
 }
 function gExpToggle(e){
   if(e) e.stopPropagation();
@@ -4667,4 +4717,4 @@ applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="site-config.js?v=2"></script>
-<script src="help-widget.js?v=7"></script>
+<script src="help-widget.js?v=8"></script>
