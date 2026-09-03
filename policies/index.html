@@ -22,7 +22,7 @@ h1,h2,h3{font-family:'Noto Sans KR',Roboto,sans-serif}
 .hd .brand{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:var(--th)}
 .hd .ptitle{font-size:22px;font-weight:400;color:var(--t)}
 .hd .sp{flex:1}
-.hd .login{height:40px;padding:0 20px;border-radius:100px;background:#c2e7ff;color:#001d35;font-size:14px;font-weight:500;display:inline-flex;align-items:center}
+.hd .login{height:40px;padding:0 20px;border-radius:100px;background:#c2e7ff;color:#001d35;font-size:14px;font-weight:500;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0}
 .tabs{display:flex;gap:42px;padding:0 20px;height:36px}
 .tabs a{font-size:16px;font-weight:500;color:var(--t);padding-bottom:6px;border-bottom:2.67px solid transparent;white-space:nowrap}
 .tabs a.on{color:var(--blue);border-bottom-color:var(--blue)}
@@ -85,7 +85,8 @@ main{padding-top:100px;min-height:70vh}
   .toc{display:none}
   .docmain{padding:0 24px 64px;max-width:none}
   .docmain .inner{margin-left:0}
-  .hd .ptitle{font-size:18px}
+  .hd .ptitle{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hd .brand{font-size:19px}
   .tabs{overflow-x:auto;gap:28px}
   .ft select{margin-left:0}
 }
