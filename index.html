@@ -832,7 +832,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 @media (max-width:1100px){.g-aux{display:none}}
 
 /* ══ auth (teth ai 로그인/회원가입) ══ */
-#g-auth-btns{position:absolute;top:14px;right:20px;z-index:45;display:flex;align-items:center;gap:8px}
+#g-auth-btns{position:absolute;top:14px;right:64px;z-index:45;display:flex;align-items:center;gap:8px} /* 지구본(우측 끝) 자리 확보 */
 .ga-nav{height:30px;padding:0 12px;margin-right:2px;border-radius:999px;display:inline-flex;align-items:center;font-size:12.5px;font-weight:500;color:var(--gt2);text-decoration:none;transition:background .12s,color .12s}
 .ga-nav:hover{background:rgba(255,255,255,.07);color:var(--gt)}
 .ga-login{height:30px;padding:0 16px;border-radius:999px;background:#fff;color:#111;font-size:12.5px;font-weight:600;transition:opacity .12s}
@@ -3919,25 +3919,67 @@ var GLC_LANGS=[
   {c:'ko',n:'한국어',ok:true},
   {c:'en',n:'English',ok:true},
   {c:'ja',n:'日本語'},
-  {c:'zh',n:'简体中文'},
+  {c:'zh-CN',n:'简体中文'},
+  {c:'zh-TW',n:'繁體中文'},
   {c:'es',n:'Español'},
-  {c:'fr',n:'Français'}
+  {c:'fr',n:'Français'},
+  {c:'pt',n:'Português'},
+  {c:'ru',n:'Русский'},
+  {c:'ar',n:'العربية'},
+  {c:'tr',n:'Türkçe'},
+  {c:'vi',n:'Tiếng Việt'},
+  {c:'mn',n:'Монгол'},
+  {c:'uz',n:'Oʻzbek'},
+  {c:'id',n:'Bahasa Indonesia'}
 ];
-var GLC_CURS=[ /* 1 USD 기준 정적 환율 — TODO: 실서비스에서 환율 API 연동 */
+var GLC_CURS=[ /* 1 USD 기준 정적 환율, TODO: 실서비스에서 환율 API 연동 */
   {c:'USD',s:'$',r:1},
+  {c:'USDT',s:'₮',r:1},
+  {c:'USDC',s:'',r:1},
+  {c:'BTC',s:'₿',r:0.0000155},
   {c:'KRW',s:'₩',r:1390},
-  {c:'JPY',s:'¥',r:155},
   {c:'EUR',s:'€',r:0.92},
+  {c:'JPY',s:'¥',r:155},
+  {c:'GBP',s:'£',r:0.79},
   {c:'CNY',s:'¥',r:7.2},
-  {c:'SGD',s:'S$',r:1.35}
+  {c:'AUD',s:'A$',r:1.52},
+  {c:'CAD',s:'C$',r:1.36},
+  {c:'CHF',s:'',r:0.88},
+  {c:'HKD',s:'HK$',r:7.8},
+  {c:'SGD',s:'S$',r:1.35},
+  {c:'TWD',s:'NT$',r:32.2},
+  {c:'INR',s:'₹',r:84},
+  {c:'SEK',s:'',r:10.5},
+  {c:'NOK',s:'',r:10.7},
+  {c:'DKK',s:'',r:6.9},
+  {c:'NZD',s:'NZ$',r:1.66},
+  {c:'MXN',s:'',r:18.3},
+  {c:'BRL',s:'R$',r:5.6},
+  {c:'ZAR',s:'',r:18},
+  {c:'PLN',s:'',r:3.95},
+  {c:'CZK',s:'',r:23.3},
+  {c:'HUF',s:'',r:360},
+  {c:'THB',s:'฿',r:34},
+  {c:'PHP',s:'₱',r:58},
+  {c:'MYR',s:'',r:4.4},
+  {c:'IDR',s:'Rp',r:15900},
+  {c:'VND',s:'₫',r:25400},
+  {c:'AED',s:'',r:3.67},
+  {c:'SAR',s:'',r:3.75},
+  {c:'TRY',s:'₺',r:34},
+  {c:'ILS',s:'₪',r:3.7},
+  {c:'CLP',s:'',r:950},
+  {c:'RUB',s:'₽',r:92}
 ];
 var GLC={lang:'ko',cur:'USD'};
 try{ GLC.lang=localStorage.getItem('tethLang')||'ko'; GLC.cur=localStorage.getItem('tethCurrency')||'USD'; }catch(e){}
 function curInfo(){ return GLC_CURS.find(function(c){return c.c===GLC.cur;})||GLC_CURS[0]; }
 function fmtMoney(usd){ /* 데모 수치(USD 기준)를 표시 통화로 변환 */
-  var ci=curInfo(); var v=usd*ci.r;
-  var s=ci.r>=100?Math.round(v).toLocaleString():(Math.abs(v)>=100?Math.round(v).toLocaleString():v.toLocaleString(undefined,{maximumFractionDigits:2}));
-  return ci.s+s;
+  var ci=curInfo(); var v=usd*ci.r; var str;
+  if(ci.c==='BTC') str=v.toFixed(6);
+  else if(ci.r>=100 || Math.abs(v)>=100) str=Math.round(v).toLocaleString();
+  else str=v.toLocaleString(undefined,{maximumFractionDigits:2});
+  return (ci.s||ci.c+' ')+str;
 }
 function glcRender(){
   var ll=$('glc-lang-list'), cl=$('glc-cur-list');
@@ -4004,7 +4046,17 @@ var I18N={
   'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy'},
   'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy'},
   'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea'},
-  'help.tip':{ko:'24/7 고객지원',en:'24/7 Support'}
+  'help.tip':{ko:'24/7 고객지원',en:'24/7 Support'},
+  'auth.title':{ko:'로그인 또는 회원가입',en:'Log in or sign up'},
+  'auth.sub':{ko:'TETH를 잠금 해제하고 AI 투자 전략<br>연구, 검증, 실행을 시작하세요',en:'Unlock TETH and start researching,<br>validating and executing AI strategies'},
+  'auth.google':{ko:'Google로 계속하기',en:'Continue with Google'},
+  'auth.apple':{ko:'Apple로 계속하기',en:'Continue with Apple'},
+  'auth.or':{ko:'또는',en:'or'},
+  'auth.email':{ko:'이메일 주소',en:'Email address'},
+  'auth.continue':{ko:'계속',en:'Continue'},
+  'help.title':{ko:'24/7 고객지원',en:'24/7 Support'},
+  'help.body':{ko:'무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.',en:'Ask us anything. Our agents are available around the clock.'},
+  'help.sub':{ko:'Zendesk 채팅 연결 준비 중입니다. support@teth.ai',en:'Zendesk chat coming soon. support@teth.ai'}
 };
 function L(k){ var e=I18N[k]; return e?(e[GLC.lang]||e.ko):k; }
 var GREETS_EN=[
@@ -4062,6 +4114,26 @@ function applyLang(){
   var tip=document.querySelector('#teth-help .tip'); if(tip) tip.textContent=L('help.tip');
   var gt=$('g-globe-tip'); if(gt) gt.textContent=GLC.lang==='en'?'Language & currency':'언어 및 통화';
   var lt=$('glc-lang-tip'); if(lt) lt.textContent=GLC.lang==='en'?'Your language selection applies to TETH screens and notifications.':'선택한 언어는 TETH 화면과 알림에 적용됩니다.';
+  /* 인증 모달 (시작 화면) */
+  var at=document.querySelector('#au-start .au-title'); if(at) at.textContent=L('auth.title');
+  var as=document.querySelector('#au-start .au-sub'); if(as) as.innerHTML=L('auth.sub');
+  document.querySelectorAll('#au-start .au-btn').forEach(function(b){
+    var t=b.textContent;
+    var last=b.childNodes[b.childNodes.length-1];
+    if(/Google/.test(t) && last.nodeType===3) last.textContent=L('auth.google');
+    else if(/Apple/.test(t) && last.nodeType===3) last.textContent=L('auth.apple');
+    else if(b.classList.contains('primary')) b.textContent=L('auth.continue');
+  });
+  var adiv=document.querySelector('#au-start .au-div'); if(adiv) adiv.textContent=L('auth.or');
+  var aem=$('au-email'); if(aem) aem.placeholder=L('auth.email');
+  /* 고객센터 팝오버 */
+  var hp=document.getElementById('teth-help-pop');
+  if(hp){
+    var hb=hp.querySelector('b'); if(hb) hb.innerHTML='<i></i>'+L('help.title');
+    var hs=hp.querySelector('.sub');
+    hp.childNodes.forEach(function(n){ if(n.nodeType===3 && n.textContent.trim()) n.textContent=L('help.body'); });
+    if(hs) hs.textContent=L('help.sub');
+  }
   /* 홈 리렌더 (헤드라인/부제/칩/약관) — 홈 화면일 때만 */
   if(G && G.mode==='home' && typeof gHome==='function') gHome();
 }
