@@ -3326,10 +3326,22 @@ function gHome(){
       }
     }
     /* 여러 줄이면 pill 확장 (Gemini 멀티라인 컴포저) */
+    /* multi 전환은 전환 결과 레이아웃 기준으로 판정 — 폭이 바뀌며 켜짐/꺼짐이 진동해
+       한 줄 경계에서 텍스트 첫 줄이 잘려 보이던 버그 방지 */
+    var pill=$('g-pill');
     this.style.height='auto';
+    if(pill && !pill.classList.contains('fullscr')){
+      if(!pill.classList.contains('multi')){
+        if(this.scrollHeight>30) pill.classList.add('multi');
+      }else{
+        pill.classList.remove('multi'); /* 좁은 폭 가정 측정 */
+        this.style.height='auto';
+        if(this.scrollHeight>30) pill.classList.add('multi');
+      }
+      this.style.height='auto';
+    }
     var h=Math.min(this.scrollHeight,147);
     this.style.height=h+'px';
-    var pill=$('g-pill'); if(pill) pill.classList.toggle('multi', h>30);
     if(this.value.trim()) document.body.classList.add('kb-open');
   });
   /* 등장 애니메이션이 끝나면 해제해 이후 칩 페이드가 트랜지션으로 부드럽게 이어지게 */
