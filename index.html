@@ -524,16 +524,6 @@ body.g-dark{background:#0f1012}
 .g-hero-spark{display:none;width:46px;height:46px;margin:0 auto 24px}
 @keyframes gRiseIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
 @keyframes gSparkPulse{0%,100%{transform:translateY(0) scale(1);filter:brightness(1)}50%{transform:translateY(0) scale(1.06);filter:brightness(1.08)}}
-@media (max-width:860px){
-  .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
-  .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
-  .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
-  /* 채팅바 하단 고정 + 아래→위 등장 */
-  .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:25;animation:gRiseIn .5s var(--ease) .1s both}
-  .g-plus-pop{top:auto;bottom:70px}
-  .g-home-chips{position:fixed;left:16px;right:16px;bottom:134px;z-index:25;animation:gRiseIn .5s var(--ease) .18s both}
-  .g-terms{bottom:12px;padding:0 64px 0 16px}
-}
 .g-hello{font-size:clamp(30px,3.8vw,44px);font-weight:500;letter-spacing:-.02em;color:#eceef2;text-align:center;text-wrap:balance;word-break:keep-all}
 .g-sub{font-size:clamp(14px,1.3vw,17px);color:var(--gt2);text-align:center;margin-top:14px;word-break:keep-all}
 .g-pill{position:relative;width:min(640px,92%);margin-top:34px;height:58px;border-radius:999px;background:#1e2024;display:flex;align-items:center;gap:12px;padding:0 10px 0 20px}
@@ -741,6 +731,14 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-side #g-side-links{display:block;margin-top:auto;border-top:1px solid var(--gl);padding-top:8px}
   .g-side #g-side-links .g-util{display:flex;text-decoration:none}
   .g-side #g-side-links~.g-side-bottom{margin-top:0}
+  /* 히어로: 로고+헤드라인 아래→위 등장, 채팅바 하단 도킹 */
+  .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
+  .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
+  .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
+  .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:25;animation:gRiseIn .5s var(--ease) .1s both}
+  .g-plus-pop{top:auto;bottom:70px}
+  .g-home-chips{position:fixed;left:16px;right:16px;bottom:136px;z-index:25;animation:gRiseIn .5s var(--ease) .18s both}
+  .g-terms{bottom:12px;padding:0 64px 0 16px}
   .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-right:1px solid var(--gl);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
   .g-side.collapsed{width:min(300px,85vw)}
   .g-side.mobile-open{transform:translateX(0)}
