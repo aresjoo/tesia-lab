@@ -622,7 +622,6 @@ body.g-dark .modal .g-btn{background:#3d6ef0;color:#fff;border-radius:8px}
 body.g-dark .modal .g-btn .g-mark{background:#fff;color:#1d1f23}
 body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);color:#a6aab2}
 @media (max-width:1100px){.g-aux{display:none}}
-@media (max-width:860px){.g-side{display:none}}
 
 /* ══ auth (teth ai 로그인/회원가입) ══ */
 #g-auth-btns{display:flex;align-items:center;gap:8px;-webkit-app-region:no-drag}
@@ -700,6 +699,21 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 #g-guest-note a{text-decoration:underline;text-underline-offset:3px;text-decoration-style:dotted;cursor:pointer;color:var(--gt)}
 .g-side:not(.authed):not(.collapsed) #g-guest-note{display:flex}
 #g-spark-row,#g-new-row{display:none}
+/* ══ 모바일: 사이드바 = 오버레이 드로어 ══ */
+#g-hamburger{display:none}
+#g-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:80;opacity:0;pointer-events:none;transition:opacity .22s var(--ease)}
+#g-scrim.on{opacity:1;pointer-events:auto}
+@media (max-width:860px){
+  #g-hamburger{display:inline-flex;width:38px;height:38px;border-radius:8px;align-items:center;justify-content:center;color:var(--gt2)}
+  #g-hamburger:active{background:rgba(255,255,255,.08)}
+  .g-titlebar{height:52px;padding:0 10px}
+  .ga-login,.ga-signup{height:34px}
+  .ga-signup{display:none}
+  .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-right:1px solid var(--gl);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
+  .g-side.collapsed{width:min(300px,85vw)}
+  .g-side.mobile-open{transform:translateX(0)}
+  .g-side .g-ico-pill{display:none}
+}
 .g-side.collapsed #g-spark-row,.g-side.collapsed #g-new-row{display:flex}
 #g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 8px;margin-bottom:6px;flex-shrink:0}
 .g-side.collapsed #g-brand-row{display:none}
@@ -1153,6 +1167,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 <!-- ══ V3 · Antigravity Research UI shell ══ -->
 <div id="g-root" hidden>
   <div class="g-titlebar">
+    <button id="g-hamburger" onclick="gSideToggle()" aria-label="메뉴"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <span style="flex:1"></span>
     <span id="g-auth-btns"><button class="ga-login" onclick="authOpen('login')">로그인</button><button class="ga-signup" onclick="authOpen('signup')">무료로 회원가입</button></span>
   </div>
@@ -1233,6 +1248,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
     </aside>
   </div>
 </div>
+<div id="g-scrim" onclick="gSideToggle()"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -3518,6 +3534,18 @@ function authSyncUI(){
 function gProfileClick(){ if(!S.user){ authOpen('login'); return; } toast('MOCK — 프로필'); }
 function gSideToggle(){
   var s=$('g-side'); if(!s) return;
+  if(window.innerWidth<=860){
+    if(s.classList.contains('mobile-open')){
+      s.classList.remove('mobile-open');
+      $('g-scrim').classList.remove('on');
+      setTimeout(function(){ s.classList.add('collapsed'); },260);
+    }else{
+      s.classList.remove('collapsed');
+      s.classList.add('mobile-open');
+      $('g-scrim').classList.add('on');
+    }
+    return;
+  }
   s.classList.toggle('collapsed');
 }
 authSyncUI();
