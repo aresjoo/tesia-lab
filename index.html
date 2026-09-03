@@ -743,8 +743,9 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   #g-appbanner .x{width:30px;height:30px;color:var(--gt3);font-size:14px;flex-shrink:0}
   body.has-banner #g-hamburger{top:74px}
   body.has-banner #g-auth-btns{top:76px}
-  /* 키보드 열림: 칩·약관·고객센터 숨김 (컴포저는 키보드 위로) */
-  body.kb-open .g-home-chips,body.kb-open .g-terms,body.kb-open #teth-help,body.kb-open #g-appbanner{display:none!important}
+  /* 키보드/입력 시: 칩만 부드럽게 사라짐 (약관·배너·고객센터는 유지) */
+  .g-home-chips{transition:opacity .28s var(--ease),transform .28s var(--ease)}
+  body.kb-open .g-home-chips{animation:none;opacity:0;transform:translateY(16px);pointer-events:none}
   /* 히어로: 로고+헤드라인 아래→위 등장, 채팅바 하단 도킹 */
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
