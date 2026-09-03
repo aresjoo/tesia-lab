@@ -500,7 +500,7 @@ body.g-dark{background:#0f1012}
 .g-iconbtn:hover{background:rgba(255,255,255,.06);color:var(--gt2)}
 .g-body{flex:1;display:flex;min-height:0}
 /* sidebar */
-.g-side{width:256px;flex-shrink:0;background:var(--g1);border-right:1px solid var(--gl);display:flex;flex-direction:column;padding:10px 10px 8px;gap:2px}
+.g-side{width:256px;flex-shrink:0;background:var(--g1);border-right:1px solid var(--gl);display:flex;flex-direction:column;padding:10px 10px 8px;gap:2px;position:relative}
 .g-new{display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border:1px solid var(--gl2);border-radius:8px;font-size:13.5px;font-weight:500;color:var(--gt);margin-bottom:8px;transition:background .12s}
 .g-new:hover{background:rgba(255,255,255,.05)}
 .g-util{display:flex;align-items:center;gap:9px;height:36px;padding:0 13px;border-radius:6px;font-size:13px;color:var(--gt2);transition:background .12s;text-align:left;width:100%}
@@ -601,7 +601,7 @@ body.g-dark{background:#0f1012}
   #glc-panel .info{display:flex;gap:10px;align-items:flex-start;background:var(--g3);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:var(--gt2);margin-bottom:14px}
   #glc-panel .info .ii{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--gt3);color:var(--g1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
   /* 헤더(그래버/탭/배너/검색)는 고정, 리스트만 내부 스크롤 */
-  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;max-height:78vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow:hidden;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+  #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;height:78vh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow:hidden;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
   #glc-panel.on{display:flex;flex-direction:column;animation:gSheetUp .3s var(--ease)}
   #glc-panel .grab2,#glc-panel .tabs2,#glc-panel .info{flex-shrink:0}
   #glc-panel .grab2{display:block;width:110px;height:5px;border-radius:3px;background:var(--gl2);margin:8px auto 14px;cursor:pointer}
@@ -940,10 +940,11 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .au-gap{margin-top:14px}
 @media (max-width:520px){#modal-auth .modal{padding:36px 22px 28px}}
 
-/* ══ sidebar collapse + icon rows ══ */
-.g-side{transition:width .18s var(--ease)}
+/* ══ sidebar collapse + icon rows — Gemini식: 폭은 이징, 콘텐츠는 제자리 크로스페이드 ══ */
+.g-side{transition:width .28s var(--ease)}
 .g-side.collapsed{width:64px}
-.g-side.collapsed .g-new,.g-side.collapsed .g-util,.g-side.collapsed .g-sec,.g-side.collapsed #g-sess-list,.g-side.collapsed #g-live-list{display:none}
+.g-new,#g-guest-note,#g-brand-row,.g-util,.g-sec,#g-sess-list,#g-live-list{transition:opacity .15s var(--ease)}
+.g-side.collapsed .g-new,.g-side.collapsed .g-util,.g-side.collapsed .g-sec,.g-side.collapsed #g-sess-list,.g-side.collapsed #g-live-list{opacity:0;pointer-events:none}
 .g-ico-row{position:relative;display:flex;align-items:center;height:46px;flex-shrink:0}
 .g-ico-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt2);transition:background .12s;flex-shrink:0}
 .g-ico-row:hover .g-ico-btn{background:var(--hoverline);color:var(--gt)}
@@ -974,7 +975,12 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 #g-guest-note svg{flex-shrink:0;margin-top:2px}
 #g-guest-note a{text-decoration:none;border-bottom:1.5px dotted var(--gt2);padding-bottom:1px;cursor:pointer;color:var(--gt)} /* border 방식이라 공백 포함 점선이 끊기지 않는다 */
 .g-side:not(.authed):not(.collapsed) #g-guest-note{display:flex}
-#g-spark-row,#g-new-row{display:none}
+/* 레일 아이콘은 항상 같은 좌표에 떠 있고(absolute) 접힘/펼침에 따라 페이드만 */
+#g-spark-row,#g-new-row{display:flex;position:absolute;left:12px;width:40px;opacity:0;pointer-events:none;transition:opacity .15s var(--ease)}
+#g-spark-row{top:8px}
+#g-new-row{top:62px}
+.g-side.collapsed #g-spark-row,.g-side.collapsed #g-new-row{opacity:1;pointer-events:auto;transition-delay:.1s}
+.g-side:not(.authed).collapsed #g-new-row{opacity:.45;pointer-events:none}
 /* ══ 모바일: 사이드바 = 오버레이 드로어 ══ */
 #g-hamburger{display:none}
 #g-side-links{display:none}
@@ -1014,9 +1020,8 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
   .g-side.mobile-open{transform:translateX(0)}
   .g-side .g-ico-pill{display:none}
 }
-.g-side.collapsed #g-spark-row,.g-side.collapsed #g-new-row{display:flex}
 #g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 8px;margin-bottom:6px;flex-shrink:0}
-.g-side.collapsed #g-brand-row{display:none}
+.g-side.collapsed #g-brand-row{opacity:0;pointer-events:none}
 #g-brand-row .g-word{font-size:16px;font-weight:600;color:var(--gt);letter-spacing:-.01em;white-space:nowrap}
 </style>
 
@@ -1505,7 +1510,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       <!-- 접힌 상태: 스파크 (호버 시 열기 아이콘) -->
       <div class="g-ico-row" id="g-spark-row">
         <button class="g-ico-btn" onclick="gSideToggle()" aria-label="사이드바 열기">
-          <img class="ico-spark" src="assets/logo.png" alt="" style="width:26px;height:auto;display:block">
+          <img class="ico-spark" src="assets/logo.png" alt="" style="width:24px;height:auto;display:block">
           <svg class="ico-panel" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9.5 4v16"/><path d="M13.5 9.5l2.5 2.5-2.5 2.5"/></svg>
         </button>
         <span class="g-ico-pill" id="gp-open">사이드바 열기</span>
@@ -1517,7 +1522,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
       </div>
       <!-- 펼친 상태: 브랜드 + 닫기 -->
       <div id="g-brand-row">
-        <img src="assets/logo.png" alt="" style="width:22px;height:auto;display:block">
+        <img src="assets/logo.png" alt="" style="width:24px;height:auto;display:block">
         <span class="g-word">TETH</span>
         <span style="flex:1"></span>
         <div class="g-ico-row" style="height:40px">
