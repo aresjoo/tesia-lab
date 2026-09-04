@@ -2050,8 +2050,9 @@ function signupDone(){
   toast('가입 완료, 만들던 전략으로 돌아왔어요');
   if(S.pendingBacktest){ S.pendingBacktest=false; delay(400, doBacktest); }
 }
-function baseParams(){
-  return {sl:S.strategy.slNum||-3, tp:S.strategy.tpNum!=null?S.strategy.tpNum:null, rsiTh:40, trendFilter:false, label:'처음 만든 조건'};
+function baseParams(st){
+  var s=st||S.strategy;
+  return {sl:s.slNum||-3, tp:s.tpNum!=null?s.tpNum:null, rsiTh:40, trendFilter:false, label:'처음 만든 조건'};
 }
 function doBacktest(){
   show('backtest');
@@ -2718,7 +2719,7 @@ function setResearchUx(v){ try{ localStorage.setItem('AI_RESEARCH_UX_V2', v==='v
 var DEV_END=909, HOLD_START=910, FULL_END=1334;
 if(RESEARCH_V2){ window.HOLD_SHADE=HOLD_START; }
 
-function baseParamsV2(){ var p=baseParams(); p.startI=61; p.endI=DEV_END; p.purpose='candidate'; return p; }
+function baseParamsV2(st){ var p=baseParams(st); p.startI=61; p.endI=DEV_END; p.purpose='candidate'; return p; }
 function cloneParams(p,extra){ var o={}; for(var k in p){ if(k!=='label'&&k!=='tech') o[k]=p[k]; } for(var k2 in extra){ o[k2]=extra[k2]; } return o; }
 
 /* ── real derived analyses (lazy, cached per version) ── */
@@ -3259,7 +3260,8 @@ function gTeamRender(){
     return '<div class="g-team-row"><span>'+n+'</span><span class="st">'+dot+st+'</span></div>';
   }).join('');
 }
-function gTeam(n,st){ if(G.cur){ G.cur.team[n]=st; gTeamRender(); } }
+function gTeamFor(sx,n,st){ if(!sx) return; sx.team[n]=st; if(sx===G.cur) gTeamRender(); }
+function gTeam(n,st){ gTeamFor(G.cur,n,st); }
 function gArtRender(){
   var arts=(G.cur&&G.cur.artifacts)||[];
   $('g-art-list').innerHTML=arts.length?arts.map(function(a){
@@ -3269,13 +3271,14 @@ function gArtRender(){
       '<span class="t">'+a.title+'</span><span class="st">'+st+'</span></div>';
   }).join(''):'<div class="g-note" style="padding:4px 11px">아직 없음</div>';
 }
-function gArtAdd(id,title,st){
-  if(!G.cur) return;
-  var ex=G.cur.artifacts.find(function(a){return a.id===id;});
+function gArtAddFor(sx,id,title,st){
+  if(!sx) return;
+  var ex=sx.artifacts.find(function(a){return a.id===id;});
   if(ex){ ex.st=st||'done'; ex.title=title||ex.title; }
-  else G.cur.artifacts.push({id:id,title:title,st:st||'done'});
-  gArtRender();
+  else sx.artifacts.push({id:id,title:title,st:st||'done'});
+  if(sx===G.cur) gArtRender();
 }
+function gArtAdd(id,title,st){ gArtAddFor(G.cur,id,title,st); }
 function gToggleAux(){ var a=$('g-aux'); a.style.display=(a.style.display==='none')?'':'none'; }
 
 /* ── chead / tabs / composer ── */
@@ -3540,14 +3543,16 @@ function gMakePlan(){
 }
 
 /* ── activity ── */
-function gAct(agent, text, cls, extraHTML){
+function gActFor(sx, agent, text, cls, extraHTML){
+  if(!sx) return null;
   var row={ts:gStamp(), agent:agent, text:text, cls:cls||'done', extra:extraHTML||''};
-  G.cur.actRows.push(row);
-  var prev=G.cur.actRows.slice(0,-1).reverse().find(function(r){return r.cls==='work';});
+  sx.actRows.push(row);
+  var prev=sx.actRows.slice(0,-1).reverse().find(function(r){return r.cls==='work';});
   if(prev) prev.cls='done';
-  if(G.mode==='activity') gRenderActivityRows();
+  if(sx===G.cur && G.mode==='activity') gRenderActivityRows();
   return row;
 }
+function gAct(agent, text, cls, extraHTML){ return gActFor(G.cur, agent, text, cls, extraHTML); }
 function gRenderActivityRows(){
   var el=$('g-act-list'); if(!el) return;
   el.innerHTML=G.cur.actRows.map(function(r){
@@ -3592,94 +3597,101 @@ function gStartRunGo(){
   if(G.sessions.some(function(x){return x!==sx && x.status==='run';})){ toast('다른 연구가 진행 중입니다, 완료 후 시작하세요'); return; }
   sx.status='run'; sx.actRows=[]; gSideRender();
   G.t0=Date.now(); gClearTimers();
-  G_TEAM.forEach(function(n){ gTeam(n,'대기'); });
+  /* 런은 시작한 세션(sx)에 바인딩 — 내비게이션으로 G.cur가 바뀌어도 상태는 sx에 기록된다 */
+  var T=function(n,s2){ gTeamFor(sx,n,s2); };
+  var A=function(a2,t2,c2,x2){ return gActFor(sx,a2,t2,c2,x2); };
+  var AR=function(i2,t2,s2){ gArtAddFor(sx,i2,t2,s2); };
+  G_TEAM.forEach(function(n){ T(n,'대기'); });
   gShowActivity();
-  var st=S.strategy, hy=hypothesisOf(st), v1=null, revised=false;
-  gAt(900,function(){ gTeam('Strategy Architect','작업 중');
-    gAct('Strategy Architect','가설 생성됨, '+hy.plain,'done'); gArtAdd('hypo','Hypothesis'); });
-  gAt(5500,function(){ gAct('Strategy Architect','조건 구조화 완료, 진입 1, 청산 2, 손실 한도 '+st.sl,'done'); gTeam('Strategy Architect','완료'); });
-  gAt(10500,function(){ gTeam('Market Context','작업 중'); gAct('Market Context','시장 데이터 준비 완료, Research 2023.01–2025.06, Holdout 봉인 유지','done'); gTeam('Market Context','완료'); });
-  gAt(15500,function(){ gTeam('Quant Validator','작업 중'); gAct('Quant Validator','백테스트 검증 중','work'); });
+  var st=sx.strategy, hy=hypothesisOf(st), v1=null, revised=false, fin=null;
+  gAt(900,function(){ T('Strategy Architect','작업 중');
+    A('Strategy Architect','가설 생성됨, '+hy.plain,'done'); AR('hypo','Hypothesis'); });
+  gAt(5500,function(){ A('Strategy Architect','조건 구조화 완료, 진입 1, 청산 2, 손실 한도 '+st.sl,'done'); T('Strategy Architect','완료'); });
+  gAt(10500,function(){ T('Market Context','작업 중'); A('Market Context','시장 데이터 준비 완료, Research 2023.01–2025.06, Holdout 봉인 유지','done'); T('Market Context','완료'); });
+  gAt(15500,function(){ T('Quant Validator','작업 중'); A('Quant Validator','백테스트 검증 중','work'); });
   gAt(21000,function(){
-    v1=runBacktest(baseParamsV2()); S.versions.length=0; S.versions.push(v1); S.activeVer=0;
-    gAct('Quant Validator','백테스트 완료, 수익 '+pct(v1.ret)+', 최대 낙폭 '+v1.mdd.toFixed(1)+'%, '+v1.n+'회','done');
-    gArtAdd('bt1','Backtest v1'); gArtAdd('strat1','Strategy v1');
+    v1=runBacktest(baseParamsV2(st)); sx.versions.length=0; sx.versions.push(v1);
+    if(G.cur===sx) S.activeVer=0;
+    A('Quant Validator','백테스트 완료, 수익 '+pct(v1.ret)+', 최대 낙폭 '+v1.mdd.toFixed(1)+'%, '+v1.n+'회','done');
+    AR('bt1','Backtest v1'); AR('strat1','Strategy v1');
   });
   gAt(26500,function(){
     var sc=sanityOf(v1), ok=sc.filter(function(c){return c.p;}).length;
-    gTeam('Sanity Check','작업 중');
-    gAct('Sanity Check','백테스트 무결성 검사, '+ok+'/'+sc.length+' 통과','done'); gTeam('Sanity Check','완료');
+    T('Sanity Check','작업 중');
+    A('Sanity Check','백테스트 무결성 검사, '+ok+'/'+sc.length+' 통과','done'); T('Sanity Check','완료');
   });
-  gAt(31500,function(){ gTeam('Strategy Critic','작업 중'); gAct('Strategy Critic','전략 검토 중, 과최적화, 기간 편중, 우연 가능성','work'); });
+  gAt(31500,function(){ T('Strategy Critic','작업 중'); A('Strategy Critic','전략 검토 중, 과최적화, 기간 편중, 우연 가능성','work'); });
   gAt(37500,function(){
     if(v1.lowVolLossShare>40 && v1.mdd<-9){
       revised=true;
-      gAct('Strategy Critic','개선점 1개 발견','warn',
+      A('Strategy Critic','개선점 1개 발견','warn',
         '<div class="g-finding"><div>저변동성 구간 과잉 거래</div>'+
         '<div><span class="k">Professional</span><span class="pro">Excessive trade frequency in low-volatility regimes, '+v1.lowVolLosses+'/'+v1.lossCount+' losing trades.</span></div>'+
         '<div><span class="k">쉽게 말하면</span>시장이 거의 움직이지 않을 때도 거래해 손실의 '+v1.lowVolLossShare.toFixed(0)+'%가 그 구간에서 발생했습니다.</div>'+
         '<div><span class="k">의미</span>횡보가 길어질수록 잔손실이 누적됩니다.</div>'+
         '<div><span class="k">다음 행동</span>저변동성 신규 진입을 제한하고 재검증합니다.</div></div>');
-      gArtAdd('critic','Critic Review');
+      AR('critic','Critic Review');
     } else {
-      gAct('Strategy Critic','중대한 결함 없음, 원안 유지 판단','done');
+      A('Strategy Critic','중대한 결함 없음, 원안 유지 판단','done');
     }
-    gTeam('Strategy Critic','완료');
+    T('Strategy Critic','완료');
   });
-  gAt(43500,function(){ if(revised){ gAct('Strategy Architect','저변동성 진입 필터 추가, Strategy v2 생성','done'); gArtAdd('strat2','Strategy v2'); } });
-  gAt(47500,function(){ if(revised){ gTeam('Quant Validator','작업 중'); gAct('Quant Validator','수정 전략 재검증 중','work'); } });
+  gAt(43500,function(){ if(revised){ A('Strategy Architect','저변동성 진입 필터 추가, Strategy v2 생성','done'); AR('strat2','Strategy v2'); } });
+  gAt(47500,function(){ if(revised){ T('Quant Validator','작업 중'); A('Quant Validator','수정 전략 재검증 중','work'); } });
   gAt(53000,function(){
     if(revised){
-      var p=baseParamsV2(); p.trendFilter=true; p.label='저변동성 진입 필터 추가'; p.tech='Low-volatility entry filter added';
-      var v2=runBacktest(p); S.versions.push(v2); S.activeVer=1;
+      var p=baseParamsV2(st); p.trendFilter=true; p.label='저변동성 진입 필터 추가'; p.tech='Low-volatility entry filter added';
+      var v2=runBacktest(p); sx.versions.push(v2);
+      if(G.cur===sx) S.activeVer=sx.versions.length-1;
       st.entry=st.entry.replace(' (저변동성 필터)','')+' (저변동성 필터)';
-      gAct('Quant Validator','재검증 완료, 최대 낙폭 '+v1.mdd.toFixed(1)+'% → '+v2.mdd.toFixed(1)+'%','done');
-      gArtAdd('bt2','Backtest v2');
+      A('Quant Validator','재검증 완료, 최대 낙폭 '+v1.mdd.toFixed(1)+'% → '+v2.mdd.toFixed(1)+'%','done');
+      AR('bt2','Backtest v2');
     }
-    G.fin=S.versions[S.versions.length-1];
+    fin=sx.versions[sx.versions.length-1];
   });
   gAt(59000,function(){
-    var sens=sensitivityOf(G.fin);
-    gAct('Quant Validator','파라미터 안정성 검사, '+sens.map(function(x){return pct(x.ret,0);}).join(', ')+' → '+(sensCliff(sens)?'불안정':'안정 구간'),'done');
-    gTeam('Quant Validator','완료');
+    var sens=sensitivityOf(fin);
+    A('Quant Validator','파라미터 안정성 검사, '+sens.map(function(x){return pct(x.ret,0);}).join(', ')+' → '+(sensCliff(sens)?'불안정':'안정 구간'),'done');
+    T('Quant Validator','완료');
   });
   gAt(65000,function(){
-    gTeam('Risk Reviewer','작업 중');
-    var strc=stressOf(G.fin), pass=strc.filter(function(x){return stressGrade(x)[0]==='Pass';}).length;
-    gAct('Risk Reviewer','스트레스 테스트 완료, '+strc.length+'개 시나리오 중 '+pass+' Pass','done');
-    gArtAdd('stress','Stress Test'); gTeam('Risk Reviewer','완료');
+    T('Risk Reviewer','작업 중');
+    var strc=stressOf(fin), pass=strc.filter(function(x){return stressGrade(x)[0]==='Pass';}).length;
+    A('Risk Reviewer','스트레스 테스트 완료, '+strc.length+'개 시나리오 중 '+pass+' Pass','done');
+    AR('stress','Stress Test'); T('Risk Reviewer','완료');
   });
   gAt(70500,function(){
-    var ts=topShare(G.fin);
-    gAct('Strategy Critic','수익 집중도, 상위 3개 거래 '+ts.toFixed(0)+'%'+(ts>50?', 소수 거래 의존':''), ts>50?'warn':'done');
+    var ts=topShare(fin);
+    A('Strategy Critic','수익 집중도, 상위 3개 거래 '+ts.toFixed(0)+'%'+(ts>50?', 소수 거래 의존':''), ts>50?'warn':'done');
   });
-  gAt(76000,function(){ gAct('Sealed Holdout','봉인 해제, 연구에 사용되지 않은 2025.07–2026.08 구간 검증 중','work'); });
+  gAt(76000,function(){ A('Sealed Holdout','봉인 해제, 연구에 사용되지 않은 2025.07–2026.08 구간 검증 중','work'); });
   gAt(82000,function(){
-    var hold=holdoutOf(G.fin), ok=hold.ret>0&&hold.mdd>-12;
-    gAct('Sealed Holdout','Holdout 결과, 수익 '+pct(hold.ret)+', 낙폭 '+hold.mdd.toFixed(1)+'% → '+(ok?'통과':'성과 저하'), ok?'done':'warn');
-    gArtAdd('holdout','Holdout Test');
+    var hold=holdoutOf(fin), ok=hold.ret>0&&hold.mdd>-12;
+    A('Sealed Holdout','Holdout 결과, 수익 '+pct(hold.ret)+', 낙폭 '+hold.mdd.toFixed(1)+'% → '+(ok?'통과':'성과 저하'), ok?'done':'warn');
+    AR('holdout','Holdout Test');
   });
   gAt(87000,function(){
-    var ops=teamOpinions(G.fin,holdoutOf(G.fin)), dis=ops.filter(function(o){return o.v!=='Pass';});
-    gAct('Research Verdict', dis.length?('의견 불일치 기록, '+dis.map(function(o){return o.who+' '+o.v;}).join(', ')):'4개 엔진 판단 일치','done');
+    var ops=teamOpinions(fin,holdoutOf(fin)), dis=ops.filter(function(o){return o.v!=='Pass';});
+    A('Research Verdict', dis.length?('의견 불일치 기록, '+dis.map(function(o){return o.who+' '+o.v;}).join(', ')):'4개 엔진 판단 일치','done');
   });
-  gAt(91000,function(){ gTeam('Explanation','작업 중'); gAct('Explanation','최종 보고서 작성 중','work'); });
-  gAt(95000,function(){ gFinishRun(revised); });
+  gAt(91000,function(){ T('Explanation','작업 중'); A('Explanation','최종 보고서 작성 중','work'); });
+  gAt(95000,function(){ gFinishRun(revised,sx); });
 }
-function gFinishRun(revised){
-  gTeam('Explanation','완료');
-  var last=G.cur.actRows[G.cur.actRows.length-1]; if(last&&last.cls==='work') last.cls='done';
-  var v1=S.versions[0], fin=S.versions[S.versions.length-1], hold=holdoutOf(fin);
-  G.cur.status='review'; gSideRender();
-  gArtAdd('report','Final Report','review');
-  G.cur.doneHTML=
+function gFinishRun(revised,sx){
+  sx=sx||G.cur; if(!sx) return;
+  gTeamFor(sx,'Explanation','완료');
+  var last=sx.actRows[sx.actRows.length-1]; if(last&&last.cls==='work') last.cls='done';
+  var fin=sx.versions[sx.versions.length-1], hold=holdoutOf(fin);
+  sx.status='review'; gSideRender();
+  gArtAddFor(sx,'report','Final Report','review');
+  sx.doneHTML=
     '<div style="max-width:760px;margin:14px auto 0;border-top:1px solid var(--gl);padding-top:14px">'+
     '<div style="font-size:14px;font-weight:600;color:var(--gt)">연구 완료</div>'+
     '<div class="g-note" style="margin-top:4px">검증 7단계 완료, 전략 수정 '+(revised?1:0)+'회, 백테스트 '+RUNSTATS.total+'회, Holdout '+(hold.ret>0?'통과':'경고')+'</div>'+
     '<div style="display:flex;gap:8px;margin-top:12px"><button class="g-btn g-btn-p" onclick="gOpen(\'report\')">최종 보고서 열기</button></div></div>';
-  if(G.mode==='activity'){ gRenderActivityRows(); $('g-act-done').innerHTML=G.cur.doneHTML; gComposer(true,null); gChead(G.cur.title,G.cur.sub,null); }
+  if(sx===G.cur && G.mode==='activity'){ gRenderActivityRows(); $('g-act-done').innerHTML=sx.doneHTML; gComposer(true,null); gChead(sx.title,sx.sub,null); }
   toast('연구 완료, 검토가 필요합니다');
-  delay(1200,function(){ gOpen('report'); });
+  delay(1200,function(){ if(G.cur===sx) gOpen('report'); });
 }
 
 /* ── artifact docs ── */
