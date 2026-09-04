@@ -1063,6 +1063,14 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-side.collapsed{width:min(300px,85vw)}
   .g-side.mobile-open{transform:translateX(0)}
   .g-side .g-ico-pill{display:none}
+  /* 모바일 세션 헤더: 한 줄 유지 — 타이틀 말줄임, 페어 숨김, 탭은 가로 스크롤 */
+  .g-chead{padding-left:58px;padding-right:12px}
+  #g-chead-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:36px}
+  .g-chead .sub{display:none}
+  .g-tabs{overflow-x:auto;scrollbar-width:none;flex-shrink:1;min-width:0}
+  .g-tabs::-webkit-scrollbar{display:none}
+  .g-tab{white-space:nowrap;flex-shrink:0}
+  #g-chead-status{white-space:nowrap;flex-shrink:0}
 }
 #g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 10px;margin-bottom:6px;flex-shrink:0}
 .g-side.collapsed #g-brand-row{opacity:0;pointer-events:none}

@@ -32,6 +32,7 @@
     '@media (max-width:640px){#teth-help{right:14px;bottom:14px;width:50px;height:50px}#teth-help-pop{right:14px;bottom:76px}#teth-help .tip{display:none}}'+
     /* 오버레이(피드백/시트/메뉴/모달/전체화면 컴포저)가 떠 있는 동안 FAB는 자동 페이드아웃 — CTA 가림 방지 */
     '#teth-help{transition:opacity .15s ease,transform .16s cubic-bezier(.2,0,0,1),box-shadow .16s,border-color .16s}'+
+    'body:has(.g-side.mobile-open) #teth-help,'+
     'body:has(#fb-panel.on) #teth-help,'+
     'body:has(#glc-panel.on) #teth-help,'+
     'body:has(#g-setmenu:not([hidden])) #teth-help,'+
