@@ -133,7 +133,7 @@ a{color:var(--accent);text-decoration:none}
 @keyframes skel{from{background-position:200% 0}to{background-position:-200% 0}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .fade-up{animation:fadeUp .4s var(--ease) both}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important;animation-iteration-count:1!important}}
 
 /* ─────────────── Home ─────────────── */
 #v-home .home-wrap{max-width:1080px;margin:0 auto;padding:64px 32px 60px}
@@ -933,7 +933,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .ga-login:hover{opacity:.88}
 .ga-signup{height:30px;padding:0 16px;border-radius:999px;background:#191a1d;color:#fff;border:1px solid rgba(255,255,255,.85);font-size:12.5px;font-weight:600;transition:background .12s}
 .ga-signup:hover{background:#26282c}
-#modal-auth .modal{width:min(480px,100%);background:#1b1c1f;color:#ececf1;border-radius:24px;padding:44px 40px 36px;position:relative;text-align:center}
+#modal-auth .modal{width:min(480px,100%);background:#1b1c1f;color:#ececf1;border-radius:24px;padding:44px 40px 36px;position:relative;text-align:center;max-height:calc(100vh - 20px);overflow-y:auto}
 #modal-auth .au-x{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#a6aab2;font-size:18px;transition:background .12s}
 #modal-auth .au-x:hover{background:rgba(255,255,255,.07)}
 .au-title{font-size:24px;font-weight:700;letter-spacing:-.01em;color:#fff}
@@ -4547,6 +4547,10 @@ function phRotStart(){
   if(G.phT){ clearInterval(G.phT); G.phT=null; }
   var el=$('g-home-in'); if(!el) return;
   var lang=(typeof GLC!=='undefined'&&PH_ROT.list[GLC.lang])?GLC.lang:'ko';
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ /* 모션 최소화: 타자 애니메이션 없이 고정 문구 */
+    el.placeholder=(innerWidth<=860?PH_ROT.prefixM:PH_ROT.prefix)[lang]+PH_ROT.list[lang][0];
+    return;
+  }
   var pre=(innerWidth<=860?PH_ROT.prefixM:PH_ROT.prefix)[lang], list=PH_ROT.list[lang];
   var pi=Math.floor(Math.random()*list.length), ci=0, mode='type', hold=0;
   el.placeholder=pre;

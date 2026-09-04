@@ -119,6 +119,7 @@ body.light .bar a,body.light .bar .logo{color:#1f1f1f}
   .bar .fine{margin-left:0}
   .nav-arrow{right:2px}
 }
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important;animation-iteration-count:1!important}}
 </style>
 </head>
 <body>
@@ -306,7 +307,8 @@ function show(i){
   document.getElementById('count').textContent=(cur+1)+' / '+slides.length;
 }
 function nextSlide(){show(cur+1);}
-setInterval(function(){show(cur+1);},6000);
+/* 모션 최소화 설정에서는 자동 넘김 없음 */
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function(){show(cur+1);},6000);
 
 /* QR, site-config.js의 스토어 URL 기반 동적 생성. TODO: 출시 후 URL 입력 */
 (function(){
