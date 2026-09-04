@@ -315,7 +315,7 @@ setInterval(function(){show(cur+1);},6000);
   document.querySelectorAll('.qr').forEach(function(q){
     var url=map[q.dataset.store];
     if(url){
-      var img=new Image(); img.alt='다운로드 QR';
+      var img=new Image(); img.alt='QR';
       img.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data='+encodeURIComponent(url);
       q.appendChild(img);
       var a=document.createElement('a'); a.className='link'; a.href=url; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=PI.linkOpen[PIDX];
