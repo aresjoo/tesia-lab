@@ -62,6 +62,12 @@ img,svg{display:block}
 .ui .r b{color:#e6e7ea;font-weight:600}
 .ui .up{color:#4ade80}.ui .dn{color:#f87171}
 .ui svg.chart{width:100%;height:auto;margin-bottom:6px}
+/* 실제 서비스 캡처 카드 — 제품 화면이 주인공, 프레임은 최소한으로 */
+.vis .shot{display:block;width:86%;height:auto;border-radius:18px;border:1px solid rgba(255,255,255,.1);box-shadow:0 24px 70px rgba(0,0,0,.5);background:#131417}
+.vis .shot.sm{width:76%}
+.vis .stack{width:88%;display:flex;flex-direction:column;align-items:stretch}
+.vis .stack .shot{width:100%}
+.vis .stack .shot+.shot{width:88%;align-self:flex-end;margin-top:-30px;box-shadow:0 28px 80px rgba(0,0,0,.62)}
 
 /* pricing, 다크 섹션 (Gemini 구독 블록) */
 .pricing{background:#131314;color:#e3e3e3;padding:110px 24px 120px;margin-top:70px}
@@ -133,6 +139,9 @@ img,svg{display:block}
   .feat .tx h2{font-size:34px;line-height:1.15}
   .feat .tx p{font-size:17px;line-height:1.65}
   .ui{width:92%;font-size:12.5px;padding:16px 14px}
+  .vis .shot{width:94%}
+  .vis .shot.sm{width:84%}
+  .vis .stack{width:96%}
   .pricing h2,.csec h2,.final h2{font-size:36px;line-height:1.15}
   .plans{grid-template-columns:1fr}
   .trust .row{grid-template-columns:1fr;gap:6px}
@@ -174,12 +183,9 @@ img,svg{display:block}
       <a class="lnk" href="../"><span data-i="f1l">전략 만들어보기</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="vis v1">
-      <div class="ui">
-        <div class="top"><img src="../assets/logo.png?v=2" alt="" style="width:15px;height:auto;display:block">TETH</div>
-        <div class="b u" data-i="f1u1">비트코인이 떨어졌을 때 사는 전략 어때?</div>
-        <div class="b ai"><span class="who">TETH</span><span data-i="f1a1">좋은 출발점이에요. “얼마나 떨어졌을 때, 무엇을 보고 다시 살지”만 정하면 검증할 수 있는 전략이 됩니다. 몇 가지만 물어볼게요.</span></div>
-        <div class="b u" data-i="f1u2">RSI가 과매도일 때 반등을 노리고 싶어</div>
-        <div class="b ai"><span class="who">TETH</span><span data-i="f1a2">정리했어요, 진입: RSI 30 이하 → 20일선 회복, 손절 −3%, 익절 +8%. 이대로 검증해볼까요?</span></div>
+      <div class="stack">
+        <img class="shot" src="../assets/shots/about-talk.webp" width="1200" height="382" alt="TETH 실제 대화 화면, 한 문장 요청에 필수 설정 확인으로 이어지는 전략 대화">
+        <img class="shot" src="../assets/shots/about-plan.webp" width="1200" height="728" alt="TETH Research Plan 실제 화면, 대상 BTC/USDT 1시간봉, 진입 RSI 30 이하 과매도 후 20일 이동평균 회복, 손절 -3%, 익절 +8%">
       </div>
     </div>
   </section>
@@ -191,18 +197,7 @@ img,svg{display:block}
       <a class="lnk" href="../"><span data-i="f2l">검증 과정 보기</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="vis v2">
-      <div class="ui">
-        <div class="top"><img src="../assets/logo.png?v=2" alt="" style="width:15px;height:auto;display:block"><span data-i="top2">TETH, 백테스트</span></div>
-        <svg class="chart" viewBox="0 0 300 110" fill="none">
-          <path d="M0 92 L26 84 L48 89 L74 73 L100 77 L124 58 L148 65 L174 46 L198 52 L226 30 L252 36 L280 18 L300 10" stroke="#5b8cff" stroke-width="2.4" stroke-linejoin="round"/>
-          <path d="M0 92 L26 84 L48 89 L74 73 L100 77 L124 58 L148 65 L174 46 L198 52 L226 30 L252 36 L280 18 L300 10 V110 H0Z" fill="rgba(91,140,255,.14)"/>
-        </svg>
-        <div class="r"><span data-i="rres">Research 수익</span><b class="up">+12.9%</b></div>
-        <div class="r"><span data-i="rhold">홀드아웃 수익</span><b class="up">+8.9%</b></div>
-        <div class="r"><span data-i="rmdd">최대 낙폭</span><b class="dn">−6.3%</b></div>
-        <div class="r"><span data-i="rint">무결성 검사</span><b data-i="vint">8/8 통과</b></div>
-      </div>
-    </div>
+      <img class="shot" src="../assets/shots/about-backtest.webp" width="1200" height="1160" loading="lazy" alt="TETH 백테스트 실제 화면, 수익률 +8.3%와 최대 낙폭 -12.4%, 거래 시점 마커와 Holdout 봉인 구간이 표시된 가격 차트">
   </section>
 
   <section class="feat rv">
@@ -212,15 +207,7 @@ img,svg{display:block}
       <a class="lnk" href="../"><span data-i="f3l">안전 장치 살펴보기</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="vis v3">
-      <div class="ui">
-        <div class="top"><img src="../assets/logo.png?v=2" alt="" style="width:15px;height:auto;display:block"><span data-i="top3c">TETH, 거래소 연결</span></div>
-        <div class="r"><span data-i="rbal">잔고, 시세 조회</span><b class="up" data-i="vyes">요청함</b></div>
-        <div class="r"><span data-i="rord">주문 실행</span><b class="up" data-i="vyes2">요청함</b></div>
-        <div class="r"><span data-i="rwd">출금</span><b class="dn" data-i="vno">요청 안 함</b></div>
-        <div class="b ai"><span class="who">TETH</span><span data-i="f3a1">실행 전 마지막 확인이에요. 조건이 충족되면 자동으로 매수, 매도가 실행되고, 1회 최대 손실은 투자금의 1%로 제한됩니다.</span></div>
-        <div class="b u" data-i="f3u1">Paper 검증으로 시작할게</div>
-      </div>
-    </div>
+      <img class="shot sm" src="../assets/shots/about-connect.webp" width="900" height="774" loading="lazy" alt="TETH 거래소 연결 실제 화면, 잔고와 시세 조회, 주문 실행은 요청하지만 출금 권한은 요청하지 않음">
   </section>
 
   <section class="feat rv">
@@ -230,15 +217,7 @@ img,svg{display:block}
       <a class="lnk" href="../"><span data-i="f4l">모니터링 보기</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="vis v4">
-      <div class="ui">
-        <div class="top"><img src="../assets/logo.png?v=2" alt="" style="width:15px;height:auto;display:block"><span data-i="top3">TETH, 실행 중</span></div>
-        <div class="r"><span data-i="rsince">시작 후 수익</span><b class="up">+3.2% (+$161)</b></div>
-        <div class="r"><span data-i="rwin">승률</span><b data-i="vwin">66.7%, 9회</b></div>
-        <div class="r"><span data-i="rnext">다음 조건</span><b data-i="vnext">RSI 30 이하, 현재 41</b></div>
-        <div class="b u" data-i="s3u1">어제 왜 손실이 났어?</div>
-        <div class="b ai"><span class="who">TETH</span><span data-i="f4a1">새벽 변동성 급등으로 손절 라인에 닿았어요. 손실은 설정한 1% 한도 안에서 멈췄고, 같은 상황을 피하는 조건을 제안드릴게요.</span></div>
-      </div>
-    </div>
+      <img class="shot" src="../assets/shots/about-live.webp" width="1200" height="820" loading="lazy" alt="TETH Paper 실행 모니터링 실제 화면, 시작 후 수익 +3.2%, 최근 매수와 익절 손절 활동 내역, 슬리피지와 신호 빈도 Reality Check">
   </section>
 
 </div>

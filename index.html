@@ -847,10 +847,11 @@ body.light .au-free{color:#1e8e3e}
 /* conversation */
 .g-thread{display:flex;flex-direction:column;gap:16px;padding-bottom:8px}
 .g-umsg{width:fit-content;max-width:78%;margin-left:auto;background:var(--g2);border-radius:18px;padding:10px 16px;font-size:14px;color:var(--gt)}
-.g-amsg{font-size:14.5px;line-height:1.7;color:var(--gt)}
+.g-amsg{font-size:15.5px;line-height:1.8;color:var(--gt);word-break:keep-all}
 /* 마크다운 답변 스타일 */
 .g-amsg{max-width:800px} /* Reading width 제한 */
-.g-amsg h4{font-size:15px;font-weight:700;margin:14px 0 6px;color:var(--gt)}
+.g-amsg h4{font-size:16.5px;font-weight:700;margin:22px 0 10px;color:var(--gt)}
+.g-amsg h4:first-child{margin-top:2px}
 /* 코드 블록 */
 .codeblk{margin:10px 0;border:1px solid var(--gl);border-radius:12px;overflow:hidden;background:rgba(0,0,0,.35)}
 .codeblk .ch{display:flex;align-items:center;justify-content:space-between;padding:7px 13px;border-bottom:1px solid var(--gl);font-size:11.5px;color:var(--gt3);letter-spacing:.03em}
@@ -885,17 +886,17 @@ body.light .au-free{color:#1e8e3e}
 .skipb:hover{color:var(--gt)}
 .fbt{background:rgba(128,128,128,.08);border:1px solid var(--gl);border-radius:10px;color:var(--gt);font-size:13px;font-family:inherit;padding:9px 12px;resize:vertical;outline:none;width:100%}
 .fbt:focus{border-color:var(--gb2,#8fb2ff)}
-.g-amsg p{margin:0 0 4px}
-.g-amsg ul{margin:2px 0 8px;padding-left:20px}
-.g-amsg li{margin:3px 0}
-.g-amsg blockquote{margin:8px 0;padding:8px 13px;border-left:3px solid var(--gb2,#8fb2ff);background:rgba(143,178,255,.07);border-radius:0 8px 8px 0;color:var(--gt2);font-size:13.5px}
-.g-amsg .tblwrap{overflow-x:auto;margin:8px 0}
-.g-amsg table{border-collapse:collapse;font-size:13px;color:var(--gt2)} /* 전역 --text(잉크) 상속 차단, 다크 가독성 보장 */
-.g-amsg th,.g-amsg td{border:1px solid var(--gl);padding:6px 11px;text-align:left;white-space:nowrap}
-.g-amsg th{background:rgba(255,255,255,.06);font-weight:600;color:var(--gt)}
+.g-amsg p{margin:0 0 10px}
+.g-amsg ul{margin:6px 0 14px;padding-left:22px}
+.g-amsg li{margin:6px 0}
+.g-amsg blockquote{margin:12px 0;padding:10px 15px;border-left:3px solid var(--gb2,#8fb2ff);background:rgba(143,178,255,.07);border-radius:0 8px 8px 0;color:var(--gt2);font-size:14.5px}
+.g-amsg .tblwrap{overflow-x:auto;margin:12px 0}
+.g-amsg table{border-collapse:collapse;font-size:14px;line-height:1.6;color:var(--gt2)} /* 전역 --text(잉크) 상속 차단, 다크 가독성 보장 */
+.g-amsg th,.g-amsg td{border:1px solid var(--gl);padding:9px 14px;text-align:left;vertical-align:top;word-break:keep-all}
+.g-amsg th{background:rgba(255,255,255,.06);font-weight:600;color:var(--gt);white-space:nowrap}
 .g-amsg td b{color:var(--gt)}
-.g-amsg code{background:rgba(128,128,128,.16);border-radius:4px;padding:1px 5px;font-size:12.5px}
-.g-amsg .sp8{height:6px}
+.g-amsg code{background:rgba(128,128,128,.16);border-radius:4px;padding:1px 5px;font-size:13.5px}
+.g-amsg .sp8{height:10px}
 /* 세션 제목 인라인 편집 */
 #g-chead-title{display:inline-flex;align-items:center;gap:6px}
 .g-title-edit{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;color:var(--gt3);cursor:pointer;opacity:0;transition:opacity .15s,background .12s}
@@ -967,6 +968,7 @@ body.light .au-free{color:#1e8e3e}
 .g-nextcol .g-nextq{animation:gFadeUp .3s var(--ease) both}
 .g-nextcol .g-nextq:nth-child(2){animation-delay:.07s}
 .g-nextcol .g-nextq:nth-child(3){animation-delay:.14s}
+.g-nextcol .g-nextq:nth-child(4){animation-delay:.21s}
 .g-srcs .g-src{animation:gFadeUp .3s var(--ease) both}
 .g-srcs .g-src:nth-child(2){animation-delay:.08s}
 /* 출처 카드 */
@@ -978,8 +980,8 @@ body.light .au-free{color:#1e8e3e}
 .g-src .s{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:12px;color:var(--gt3)}
 .g-src .s i{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 /* 후속 질문 */
-.g-nextcol{display:flex;flex-direction:column;gap:8px;max-width:640px}
-.g-nextq{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:12px 16px;border:1px solid var(--gl);border-radius:12px;background:rgba(255,255,255,.02);color:var(--gt2);font-size:13.5px;cursor:pointer;transition:background .12s,color .12s}
+.g-nextcol{display:flex;flex-direction:column;gap:10px;max-width:800px;margin-top:6px} /* 답변 컬럼(800px)과 폭 정렬 */
+.g-nextq{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:14px 18px;border:1px solid var(--gl);border-radius:12px;background:rgba(255,255,255,.02);color:var(--gt2);font-size:14.5px;word-break:keep-all;cursor:pointer;transition:background .12s,color .12s}
 .g-nextq:hover{background:rgba(255,255,255,.05);color:var(--gt)}
 .g-nextq .ar{color:var(--gt3);flex-shrink:0}
 /* 확인 질문 카드 (선택지) */
@@ -1000,9 +1002,8 @@ body.light .au-free{color:#1e8e3e}
 .g-askcard .pg .pn{width:22px;height:22px;border-radius:6px;color:var(--gt2);cursor:pointer;font-size:13px}
 .g-askcard .pg .pn:hover{background:rgba(128,128,128,.15)}
 .g-askcard .pg .pn:disabled{opacity:.3;cursor:default}
-.g-askcard .go{padding:0 14px;font-size:13px;white-space:nowrap;width:auto}
 .g-askcard .cnt{font-size:12.5px;color:var(--gt3)}
-.g-askcard .go{width:38px;height:34px;border-radius:10px;background:var(--g3);color:var(--gt);font-size:15px;cursor:pointer;transition:background .12s}
+.g-askcard .go{width:auto;min-width:38px;height:34px;padding:0 16px;border-radius:10px;background:var(--g3);color:var(--gt);font-size:13px;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:background .12s}
 .g-askcard .go:hover{background:rgba(143,178,255,.2)}
 /* 대화 속 트레이딩뷰 차트 카드 */
 .g-chartcard{margin:6px 0 4px;border:1px solid var(--gl);border-radius:12px;overflow:hidden;background:var(--g1,rgba(255,255,255,.02))}
@@ -1876,6 +1877,10 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 13a7.5 7.5 0 0 1 15 0"/><rect x="3" y="12.5" width="4" height="6.5" rx="2"/><rect x="17" y="12.5" width="4" height="6.5" rx="2"/><path d="M19 19v.4a3 3 0 0 1-3 3h-3"/></svg>
       고객센터
     </button>
+    <a class="gm-item" id="gm-dl" hidden href="download/" target="_blank" rel="noopener noreferrer" onclick="gSetMenuClose()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M12 6.2v6.6M9.4 10.4l2.6 2.4 2.6-2.4"/><path d="M10.4 18.6h3.2"/></svg>
+      앱 다운로드
+    </a>
     <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'help')" onmouseenter="gmFlip(this)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="16" height="16" rx="3"/><path d="M5 7H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1" opacity=".6"/><path d="M10.5 8.6a2.6 2.6 0 1 1 3.6 2.4c-.8.35-1.1.8-1.1 1.6"/><path d="M13 15.4v.2"/></svg>
       도움말<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
@@ -3817,8 +3822,13 @@ function gUserPin(){
 function taiSpacerTrim(){
   var s=$('g-scroll'),sp=$('g-spacer'); if(!s||!sp||!sp.parentNode) return;
   var cur=parseFloat(sp.style.height)||0; if(cur<=0) return;
-  var visBelow=s.scrollTop+s.clientHeight-sp.offsetTop;
-  sp.style.height=Math.max(0,Math.min(cur,visBelow+40))+'px';
+  /* 스크롤 위치와 무관하게: 마지막 질문을 뷰포트 상단에 붙일 수 있는 만큼만 남긴다.
+     답변이 화면보다 길면 스페이서는 0 — 짧은 답변에 긴 빈 스크롤이 남던 버그 수정 */
+  var th=sp.parentNode;
+  var rows=th.querySelectorAll('.g-urow,.g-usum'); var last=rows[rows.length-1];
+  var anchor=last?last.offsetTop:sp.offsetTop;
+  var need=s.clientHeight-(sp.offsetTop-anchor)-24;
+  sp.style.height=Math.max(0,Math.min(cur,need))+'px';
 }
 function gConvUser(t){
   gThreadAdd('<div class="g-urow"><span class="g-uacts">'
@@ -3971,6 +3981,7 @@ signupDone=function(){
     var p=$('g-profile'); if(p) p.textContent=nm;
     closeModal('modal-auth');
     authSyncUI();
+    STORE.flush(); /* 로그인 즉시 영속화 — 새로고침해도 로그아웃 전까지 로그인 유지 */
     toast(AUTH&&AUTH.mode==='login'?'다시 만나서 반가워요':'계정 준비 완료, 시장은 기다려주지 않아요');
     if(G.pendingRun){ G.pendingRun=false; delay(300,gStartRunGo); }
     if(G.pendingNew!=null){ var pn=G.pendingNew; G.pendingNew=null; delay(300,function(){ gNew(pn); }); }
@@ -4076,6 +4087,7 @@ function gFinishRun(revised,sx){
     '<div class="g-note" style="margin-top:4px">검증 7단계 완료, 전략 수정 '+(revised?1:0)+'회, 백테스트 '+RUNSTATS.total+'회, Holdout '+(hold.ret>0?'통과':'경고')+'</div>'+
     '<div style="display:flex;gap:8px;margin-top:12px"><button class="g-btn g-btn-p" onclick="gOpen(\'report\')">최종 보고서 열기</button></div></div>';
   if(sx===G.cur && G.mode==='activity'){ gRenderActivityRows(); $('g-act-done').innerHTML=sx.doneHTML; gComposer(true,null); gChead(sx.title,sx.sub,null); }
+  STORE.save(); /* 연구 결과(버전, 아티팩트) 영속화 — 새로고침 후에도 보고서 유지 */
   toast('연구 완료, 검토가 필요합니다');
   delay(1200,function(){ if(G.cur===sx) gOpen('report'); });
 }
@@ -4083,6 +4095,8 @@ function gFinishRun(revised,sx){
 /* ── artifact docs ── */
 function gOpen(id){
   if(!G.cur) return;
+  /* 연구 결과가 필요한 문서는 버전 없이는 열지 않는다 (복원 직후 크래시 방지) */
+  if(!S.versions.length && ['report','bt1','bt2','holdout','stress','critic','run'].indexOf(id)>=0){ toast('연구 결과가 없습니다, 연구를 먼저 실행해주세요'); return; }
   var fin=S.versions.length?S.versions[S.activeVer]:null;
   var html='', title='', ctx='';
   if(id==='plan'){ title='Research Plan'; ctx='Research Plan'; html=gDocPlan(); }
@@ -4278,7 +4292,7 @@ function gDocRunConfirm(){
 }
 function gGoLive(mode){
   G.cur.live=true; G.cur.liveMode=mode; G.cur.status='done';
-  gSideRender();
+  gSideRender(); STORE.save();
   toast(mode==='paper'?'Paper 시뮬레이션 시작':'전략 실행 시작');
   gOpen('live');
 }
@@ -4310,7 +4324,7 @@ function gLiveStop(btn){
   if(btn && !btn.dataset.arm){ btn.dataset.arm='1'; btn.textContent='정말 종료할까요?'; return; }
   var sx=G.cur;
   sx.live=false; sx.livePaused=false; sx.status='done';
-  gSideRender();
+  gSideRender(); STORE.save();
   toast('전략을 종료했어요, 보유 포지션은 규칙대로 정리됩니다');
   gOpen('report');
 }
@@ -4530,6 +4544,7 @@ function taiMarketRules(){
   var r='\n입력이 키워드 수준으로 짧거나 대상 자산·조건·타임프레임이 생략된 모호한 질문이면, 자의적으로 판단해 장황한 일반론 리포트를 쏟지 마라. 현재 상황을 한두 문장으로 가볍게 짚어준 뒤, 핵심 의도를 좁히는 명확한 되물음 1~2개로 대화를 이어가라. 선택지가 명확하면 [ASK] 카드를 써라.'
    +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
    +'\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
+   +'\n문장 부호 규칙: 답변 본문에 가운뎃점(·)과 대시(—, –)를 절대 쓰지 않는다. 나열은 쉼표나 불릿으로, 부연이나 이음은 쉼표로 풀어 쓴다. 예: "진입·손절" 대신 "진입과 손절", "돌파 — 목표" 대신 "돌파 후 목표".'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
    +'\n사용자가 특정 자산이나 시장(주식, 코인, 지수, 원자재, 부동산 등)을 언급하면 함께 차트를 보자고 자연스럽게 유도하고, 답변의 맨 마지막 줄에 정확히 다음 형식의 태그를 붙인다: [CHART {"tv":"트레이딩뷰심볼","data":"binance:심볼 또는 yahoo:티커 또는 none","label":"한글이름"}]'
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
@@ -5901,6 +5916,7 @@ function authSyncUI(){
   var b=$('g-auth-btns'); if(b) b.hidden=!!S.user;
   var gl=$('g-globe'); if(gl) gl.hidden=!!S.user; /* 로그인 상태에선 언어 선택도 숨김, 드로어의 언어 및 통화 행으로 접근 */
   var cs=$('gm-cs'); if(cs) cs.hidden=!S.user; /* 고객센터 메뉴는 로그인 후에만 */
+  var dl=$('gm-dl'); if(dl) dl.hidden=!S.user; /* 앱 다운로드도 로그인 후 사이드바 메뉴에 */
   var p=$('g-profile'); if(p) p.textContent=S.user?S.user.name:'로그인';
   var m=$('g-me-name'); if(m) m.textContent=S.user?S.user.name:'';
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
@@ -5924,6 +5940,9 @@ function gProfMenuClose(){ var m=$('g-prof-menu'); if(m) m.hidden=true; document
 function gLogout(){
   gProfMenuClose();
   S.user=null;
+  /* 명시적 로그아웃만 세션을 끊는다 — 저장된 로그인 상태 제거 */
+  try{ localStorage.removeItem('teth.state'); }catch(e){}
+  try{ fetch(TAI.url.replace('/api/chat','/api/state'),{method:'POST',headers:{'Content-Type':'application/json'},body:'{"v":0}'}).catch(function(){}); }catch(e){}
   authSyncUI();
   gHome();
   toast('로그아웃 완료, 다음에 또 만나요');
