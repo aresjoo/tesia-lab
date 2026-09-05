@@ -992,12 +992,17 @@ body.light .au-free{color:#1e8e3e}
 .g-gauge .lg .u{color:#4ade80;font-weight:700}
 .g-gauge .lg .d{color:#f87171;font-weight:700}
 .tai-txt+.g-gauge{margin-top:14px}
-/* 실행 액션 버튼 (알림/검증/위임/자동매매) */
-.g-acrow{display:flex;flex-wrap:wrap;gap:9px;max-width:800px;margin-top:4px;animation:gFadeUp .3s var(--ease) both}
-.g-acbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:999px;border:1px solid rgba(96,140,255,.45);background:rgba(61,110,240,.15);color:#ccd8ff;font-size:13.5px;font-weight:600;cursor:pointer;word-break:keep-all;transition:background .12s,border-color .12s}
-.g-acbtn svg{flex-shrink:0;opacity:.9}
-.g-acbtn:hover{background:rgba(61,110,240,.28);border-color:rgba(120,158,255,.6)}
-.g-acbtn:disabled{opacity:.7;cursor:default;background:rgba(61,110,240,.1)}
+/* 실행 액션 버튼 — 유도칩과 같은 풀폭 로우 포맷, TETH 로고 그라데이션 소프트 필 (시안 B) */
+.g-acrow{display:flex;flex-direction:column;gap:10px;max-width:800px;margin-top:4px;animation:gFadeUp .3s var(--ease) both}
+.g-acbtn{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(97deg,rgba(255,81,69,.16),rgba(255,182,10,.13) 34%,rgba(43,174,102,.13) 66%,rgba(59,130,246,.18));color:#fff;font-size:14.5px;font-weight:600;word-break:keep-all;cursor:pointer;transition:filter .12s,border-color .12s}
+.g-acbtn:hover{filter:brightness(1.18);border-color:rgba(255,255,255,.2)}
+.g-acbtn:disabled{opacity:.7;cursor:default;filter:none}
+.g-acbtn .lf{display:inline-flex;align-items:center;gap:9px}
+.g-acbtn .lf svg{flex-shrink:0;opacity:.95}
+.g-acbtn .rt{display:inline-flex;align-items:center;gap:10px;flex-shrink:0}
+.g-acbtn .ar{color:rgba(255,255,255,.75)}
+/* 무료 배지 — 비구독자에게만 노출 (화이트 글래스 필) */
+.g-acbtn .bdg{font-size:11px;font-weight:800;letter-spacing:.02em;color:#fff;padding:3.5px 9px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);white-space:nowrap}
 .g-nextq{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:14px 18px;border:1px solid var(--gl);border-radius:12px;background:rgba(255,255,255,.02);color:var(--gt2);font-size:14.5px;word-break:keep-all;cursor:pointer;transition:background .12s,color .12s}
 .g-nextq:hover{background:rgba(255,255,255,.05);color:var(--gt)}
 .g-nextq .ar{color:var(--gt3);flex-shrink:0}
@@ -4844,8 +4849,9 @@ function taiActChips(items){
   taiActClear();
   TAI.an=(TAI.an||0)+1; var id='gac'+TAI.an;
   TAI.acfg=TAI.acfg||{}; TAI.acfg[id]=items;
+  var badge=!(S.user&&S.user.plan); /* 구독자(plan 보유)에겐 무료 배지 미노출 */
   var el=taiThreadAdd('<div class="g-acrow" id="'+id+'">'+items.map(function(a,i){
-    return '<button class="g-acbtn" data-i="'+i+'">'+TAI_ACT_IC[a.type]+'<span>'+gEsc(a.label)+'</span></button>';
+    return '<button class="g-acbtn" data-i="'+i+'"><span class="lf">'+TAI_ACT_IC[a.type]+'<span class="tx">'+gEsc(a.label)+'</span></span><span class="rt">'+(badge?'<span class="bdg">무료, 즉시</span>':'')+'<span class="ar">→</span></span></button>';
   }).join('')+'</div>');
   if(el) el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){ taiActRun(id,i,b); }; });
 }
@@ -4855,7 +4861,7 @@ function taiActClear(){
 function taiActRun(id,i,btn){
   var a=((TAI.acfg||{})[id]||[])[i]; if(!a) return;
   if(a.type==='alert'){
-    if(btn){ btn.disabled=true; btn.querySelector('span').textContent='알림 등록됨 ✓'; }
+    if(btn){ btn.disabled=true; var tx=btn.querySelector('.tx'); if(tx) tx.textContent='알림 등록됨 ✓'; }
     toast('조건 알림을 등록했어요, 도달하면 바로 알려드릴게요');
     return;
   }
