@@ -4142,16 +4142,9 @@ function taiSystem(fin){
   }
   return s;
 }
-function taiAsk(t,fin,fallback){
-  S.aiChat=S.aiChat||[];
-  var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
-  var out=null,acc='',got=false;
-  function bubble(){
-    var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove();
-    gDocThread('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
-    var els=document.querySelectorAll('.tai-txt'); out=els[els.length-1];
-  }
-  fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:taiSystem(fin),messages:msgs})})
+function taiStream(system,msgs,onText,onDone,onFail){
+  var got=false;
+  fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:system,messages:msgs})})
     .then(function(r){
       if(!r.ok||!r.body) throw 0;
       var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
@@ -4163,20 +4156,56 @@ function taiAsk(t,fin,fallback){
           var L=lines[i]; if(L.indexOf('data: ')!==0) continue;
           var ev; try{ ev=JSON.parse(L.slice(6)); }catch(e){ continue; }
           if(ev.error&&!got) throw 0;
-          if(ev.text){ if(!got){ got=true; bubble(); } acc+=ev.text; if(out) out.textContent=acc; }
+          if(ev.text){ got=true; onText(ev.text); }
         }
         return pump(); });
       }
-      return pump().then(function(){
-        if(!got) throw 0;
-        TAI.ok=true;
-        S.aiChat.push({role:'user',content:t}); S.aiChat.push({role:'assistant',content:acc});
-        if(S.aiChat.length>24) S.aiChat=S.aiChat.slice(-24);
-        /* 스레드 기록도 최종 텍스트로 갱신 — 문서 재오픈 시 빈 말풍선 방지 */
-        if(G.cur&&G.cur.thread){ for(var k=G.cur.thread.length-1;k>=0;k--){ if(G.cur.thread[k].html.indexOf('tai-txt')>=0){ G.cur.thread[k].html='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
-      });
+      return pump().then(function(){ if(!got) throw 0; TAI.ok=true; onDone(); });
     })
-    .catch(function(){ if(!got){ TAI.ok=false; fallback(); } });
+    .catch(function(){ if(!got){ TAI.ok=false; onFail(); } });
+}
+function taiPushHist(t,acc){
+  S.aiChat=S.aiChat||[];
+  S.aiChat.push({role:'user',content:t}); S.aiChat.push({role:'assistant',content:acc});
+  if(S.aiChat.length>24) S.aiChat=S.aiChat.slice(-24);
+}
+function taiAsk(t,fin,fallback){
+  S.aiChat=S.aiChat||[];
+  var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
+  var out=null,acc='';
+  taiStream(taiSystem(fin),msgs,function(delta){
+    if(!out){
+      var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove();
+      gDocThread('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
+      var els=document.querySelectorAll('.tai-txt'); out=els[els.length-1]||{};
+    }
+    acc+=delta; if(out.textContent!==undefined) out.textContent=acc;
+  },function(){
+    taiPushHist(t,acc);
+    /* 스레드 기록도 최종 텍스트로 갱신 — 문서 재오픈 시 빈 말풍선 방지 */
+    if(G.cur&&G.cur.thread){ for(var k=G.cur.thread.length-1;k>=0;k--){ if(G.cur.thread[k].html.indexOf('tai-txt')>=0){ G.cur.thread[k].html='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
+  },fallback);
+}
+/* 가이드형 대화(conv) 단계에서 스크립트를 벗어난 발화 — AI가 응대하고 현재 선택 단계로 유도 */
+function taiConvSystem(){
+  var stepK={mode:'진입 방식 선택',pair:'대상 자산 선택',tf:'시간 프레임 선택',risk:'리스크(손절) 설정'}[gStep]||'전략 설정';
+  return '너는 TETH, AI 트레이딩 전략 리서치 어시스턴트다. 사용자는 지금 전략 만들기 대화의 "'+stepK+'" 단계에 있고, 화면에 선택지 버튼이 보인다. 사용자의 말에 한국어 1~2문장으로 자연스럽게 응대하되, 마지막엔 부드럽게 현재 단계의 선택을 이어가도록 유도하라. 마크다운 없이 평문으로.';
+}
+function taiAskConv(t,fallback){
+  S.aiChat=S.aiChat||[];
+  var msgs=S.aiChat.slice(-7).concat([{role:'user',content:t}]);
+  var out=null,acc='';
+  taiStream(taiConvSystem(),msgs,function(delta){
+    if(!out){
+      var el=gThreadAdd('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
+      out=el?el.querySelector('.tai-txt'):{};
+    }
+    acc+=delta; if(out.textContent!==undefined) out.textContent=acc;
+  },function(){
+    taiPushHist(t,acc);
+    /* convo 기록도 최종 텍스트로 갱신 — 재렌더 시 빈 말풍선 방지 */
+    if(G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
+  },fallback);
 }
 
 function gSend(){
@@ -4187,7 +4216,8 @@ function gSend(){
       if(gStep==='pair'&&/이더|eth/i.test(t)){ gPickPair('ETH/USDT',null); return; }
       if(gStep==='pair'&&/비트|btc/i.test(t)){ gPickPair('BTC/USDT',null); return; }
       if(gStep==='risk'){ var m=t.match(/(\d+)\s*%?/); if(m){ gPickRisk(-Math.abs(+m[1])); return; } }
-      gConvAI('선택지에서 고르면 가장 정확합니다. 이후 언제든 수정할 수 있습니다.');
+      var cannedC=function(){ gConvAI('선택지에서 고르면 가장 정확합니다. 이후 언제든 수정할 수 있습니다.'); };
+      if(S.user&&TAI.ok!==false) taiAskConv(t,cannedC); else cannedC();
     });
     return;
   }
