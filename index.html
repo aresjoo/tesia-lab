@@ -981,6 +981,23 @@ body.light .au-free{color:#1e8e3e}
 .g-src .s i{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 /* 후속 질문 */
 .g-nextcol{display:flex;flex-direction:column;gap:10px;max-width:800px;margin-top:6px} /* 답변 컬럼(800px)과 폭 정렬 */
+/* 방향성 확률 게이지 */
+.g-gauge{margin:4px 0 14px;padding:14px 16px;border:1px solid var(--gl);border-radius:14px;background:rgba(255,255,255,.03);max-width:520px}
+.g-gauge .t{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--gt3);margin-bottom:10px}
+.g-gauge .t b{font-size:14px;color:var(--gt);font-weight:600}
+.g-gauge .bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--g3)}
+.g-gauge .bar .u{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.g-gauge .bar .d{background:linear-gradient(90deg,#f87171,#ef4444)}
+.g-gauge .lg{display:flex;justify-content:space-between;margin-top:8px;font-size:13px}
+.g-gauge .lg .u{color:#4ade80;font-weight:700}
+.g-gauge .lg .d{color:#f87171;font-weight:700}
+.tai-txt+.g-gauge{margin-top:14px}
+/* 실행 액션 버튼 (알림/검증/위임/자동매매) */
+.g-acrow{display:flex;flex-wrap:wrap;gap:9px;max-width:800px;margin-top:4px;animation:gFadeUp .3s var(--ease) both}
+.g-acbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:999px;border:1px solid rgba(96,140,255,.45);background:rgba(61,110,240,.15);color:#ccd8ff;font-size:13.5px;font-weight:600;cursor:pointer;word-break:keep-all;transition:background .12s,border-color .12s}
+.g-acbtn svg{flex-shrink:0;opacity:.9}
+.g-acbtn:hover{background:rgba(61,110,240,.28);border-color:rgba(120,158,255,.6)}
+.g-acbtn:disabled{opacity:.7;cursor:default;background:rgba(61,110,240,.1)}
 .g-nextq{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:14px 18px;border:1px solid var(--gl);border-radius:12px;background:rgba(255,255,255,.02);color:var(--gt2);font-size:14.5px;word-break:keep-all;cursor:pointer;transition:background .12s,color .12s}
 .g-nextq:hover{background:rgba(255,255,255,.05);color:var(--gt)}
 .g-nextq .ar{color:var(--gt3);flex-shrink:0}
@@ -4541,7 +4558,8 @@ function taiConvSystem(){
 }
 /* 시장 Q&A 공통 규칙: 도메인 게이트 + 차트 태그 프로토콜 */
 function taiMarketRules(){
-  var r='\n입력이 키워드 수준으로 짧거나 대상 자산·조건·타임프레임이 생략된 모호한 질문이면, 자의적으로 판단해 장황한 일반론 리포트를 쏟지 마라. 현재 상황을 한두 문장으로 가볍게 짚어준 뒤, 핵심 의도를 좁히는 명확한 되물음 1~2개로 대화를 이어가라. 선택지가 명확하면 [ASK] 카드를 써라.'
+  var r='\n너는 사용자 편에서 시장과 싸우는 유능한 파트너다. 어려운 금융 용어를 쓰지 말고, 전문 용어가 꼭 필요하면 바로 옆에 쉬운 말로 풀어라. 예: "RSI(과열됐는지 보는 지표)". 훈계하거나 겁주지 말고, 확신 있게 분석하되 결과를 보장하는 표현("무조건 오릅니다")은 쓰지 않는다. 답변은 짧고 명확하게, 핵심 먼저, 그 다음 근거, 마지막에 다음 행동 순서로.'
+   +'\n입력이 키워드 수준으로 짧거나 대상 자산·조건·타임프레임이 생략된 모호한 질문이면, 자의적으로 판단해 장황한 일반론 리포트를 쏟지 마라. 현재 상황을 한두 문장으로 가볍게 짚어준 뒤, 핵심 의도를 좁히는 명확한 되물음 1~2개로 대화를 이어가라. 선택지가 명확하면 [ASK] 카드를 써라.'
    +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
    +'\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
    +'\n문장 부호 규칙: 답변 본문에 가운뎃점(·)과 대시(—, –)를 절대 쓰지 않는다. 나열은 쉼표나 불릿으로, 부연이나 이음은 쉼표로 풀어 쓴다. 예: "진입·손절" 대신 "진입과 손절", "돌파 — 목표" 대신 "돌파 후 목표".'
@@ -4550,10 +4568,12 @@ function taiMarketRules(){
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
    +'\n태그는 줄 하나에만, 자산이 특정될 때만 붙인다. 이미 같은 차트가 열려 있으면 붙이지 않는다.'
    +'\n핵심 비즈니스는 자동매매 전략 생성이다. 예측이나 시장 분석 답변의 끝에는 한 문장으로, 원하면 이 분석을 시장에서 싸우는 자동매매 전략으로 만들어줄 수 있고 자는 동안에도 자동으로 매매된다는 제안을 자연스럽게 덧붙여라. 사용자가 전혀 다른 주제를 물으면 먼저 그 질문에 응대한 뒤 가볍게 전략 제안으로 돌아오라. 단, 직전 답변에서 이미 제안했다면 똑같은 제안을 반복해 부담 주지 마라.'
-   +'\n사용자가 자동매매 전략 생성을 원하거나 제안에 동의하면, 답변 마지막 줄에 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라.'
+   +'\n사용자가 자동매매 전략 생성, 매매 위임, 조건부 실행을 원하거나 제안에 동의하면, 답변 마지막 줄에 반드시 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 자산이 BTC나 ETH가 아니면 pair는 null로 두고, 자동 실행은 코인 페어부터 지원되니 같은 구조를 BTC/ETH로 만들어 보자고 한 문장으로 안내하라. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라. 태그 없이 "아래에서 설정하세요" 같은 말은 절대 하지 마라, 태그가 있어야 화면에 설정이 뜬다.'
    +'\n요청이 광범위해서 분석 방향 확인이 필요하면(예: 막연한 "차트 분석해줘"), 한두 문장 안내 후 답변 마지막 줄에 [ASK {"steps":[{"title":"어떤 방식으로 분석해드릴까요?","multi":true,"options":[{"t":"항목","d":"짧은 부연"}]},{"title":"가격 표시 통화는?","multi":false,"options":[{"t":"USD (달러)","d":"글로벌 표준"},{"t":"KRW (원화)","d":"업비트 기준"}]}]}] 형식으로 선택지를 제시하라. 확인할 축이 하나면 steps에 1개만, 최대 2단계. 각 단계 선택지는 4~6개. 정말 필요할 때만, 연속 사용 금지.'
    +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 두 번째 답변부터는 절대 붙이지 않는다.'
-   +'\n그 외 일반 답변의 마지막 줄에는 사용자가 그대로 눌러 이어갈 후속 질문 3~4개를 [NEXT ["질문1","질문2"]] 태그로 붙여라. 각 질문은 20자 내외, 방금 대화의 자연스러운 다음 걸음(예: "이걸로 자동매매 전략 만들어줘", "하락 시나리오 자세히 보여줘")이어야 하며 시장 범위를 벗어나지 않는다. SETUP이나 ASK 태그를 붙일 때는 NEXT를 생략한다.';
+   +'\n방향성 확률: 사용자가 특정 자산의 방향(오를까, 내릴까, 사도 될까, 팔아야 할까)을 물으면 답변 마지막 줄에 정확히 이 형식의 태그를 하나만 붙여라: [GAUGE {"symbol":"TSLA","label":"테슬라","up":63,"down":37,"position":"top"}] — up과 down은 합이 100인 정수 확률로, 방금 분석한 지표와 구조에 근거해 정한다. position은 스스로 판단한다: 결론부터 궁금한 직접 질문("테슬라 오를까?")이면 "top"(확률을 먼저 보여주고 설명), 맥락 설명이 먼저 필요한 흐름이면 "bottom". 방향 질문이 아니면(가격 확인, 용어 질문, 일반 시장 잡담) 절대 붙이지 않는다.'
+   +'\n실행 버튼: 사용자가 실행으로 넘어갈 신호가 명확할 때만 답변 마지막 줄에 [ACT [{"type":"alert","label":"테슬라 300달러 오면 알려줘"}]] 형식의 태그를 붙여라. type은 4개뿐이다: alert(조건 알림 등록), backtest(전략 검증), delegate_trade(조건부 매매 위임, "direction":"buy" 또는 "sell" 필수), auto_trade(자동매매 전환). 기본값은 붙이지 않는 것이다. 붙일 때는 1개가 원칙이고, 매수와 매도로 방향이 갈리는 상황에서만 2개까지, 3개 이상은 절대 금지. label은 템플릿이 아니라 대화 속 종목명과 조건을 자연스럽게 녹여 직접 쓴다. 예: "테슬라 적정 가격 오면 나 대신 매수해줘". 붙여도 되는 신호: 특정 종목에 매매 의사를 밝힘("언제 사면 돼?", "팔아야 하나"), 사용자가 본인 전략이나 아이디어를 제시함, 감정 실린 확신("이거 지릴 것 같은데"), 같은 종목을 반복해서 물어봄. 붙이면 안 되는 신호(하나라도 해당하면 금지): 단순 정보 탐색(가격 얼마야, 용어 질문), 대화의 첫 질문(신뢰 형성 전), 불안이나 공포 맥락("떨어질 것 같아 무섭다") — 불안 맥락에선 위임을 권하지 말고 공감과 분석으로만 답한다.'
+   +'\n그 외 일반 답변의 마지막 줄에는 사용자가 그대로 눌러 이어갈 후속 질문 3~5개를 [NEXT ["질문1","질문2"]] 태그로 붙여라. 각 질문은 20자 내외, 사용자가 실제로 칠 법한 짧은 구어체로 쓰고, 탐색형("비트코인 가격 봐줘"), 판단형("테슬라 지금 사도 돼?"), 맥락형("요즘 시장 왜 이래?")을 섞어 같은 패턴만 나열하지 마라. 시장 범위를 벗어나지 않는다. SETUP이나 ASK 태그를 붙일 때는 NEXT를 생략한다.';
   if(TAI.chart) r+='\n현재 열린 차트: '+TAI.chart.label+' ('+TAI.chart.tv+').';
   return r;
 }
@@ -4801,6 +4821,48 @@ function taiNext(items){
 function taiNextClear(){
   document.querySelectorAll('.g-nextcol').forEach(function(el){ var id=el.id; el.remove(); taiRecFix(id,null); });
 }
+/* ── 방향성 확률 게이지: 방향 질문 답변에 1개, up+down=100 ── */
+function taiGauge(g){
+  if(!g||g.up==null||g.down==null) return '';
+  var up=Math.max(0,Math.min(100,Math.round(+g.up||0)));
+  var down=100-up; /* 합 100 강제 정규화 */
+  var lb=gEsc(g.label||g.symbol||'');
+  return '<div class="g-gauge"><div class="t"><b>'+lb+'</b><span>방향 확률'+(g.symbol?', '+gEsc(g.symbol):'')+'</span></div>'
+    +'<div class="bar"><span class="u" style="width:'+up+'%"></span><span class="d" style="width:'+down+'%"></span></div>'
+    +'<div class="lg"><span class="u">상승 '+up+'%</span><span class="d">하락 '+down+'%</span></div></div>';
+}
+/* ── 실행 액션 버튼: alert는 즉시 등록 연출, 나머지는 해당 요청을 대화로 실행(퍼널 진입) ── */
+var TAI_ACT_IC={
+  alert:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+  backtest:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 16l4-6 3 3 5-8"/></svg>',
+  delegate_trade:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h10M10 6l6 6-6 6"/><path d="M20 5v14"/></svg>',
+  auto_trade:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>'
+};
+function taiActChips(items){
+  items=(items||[]).filter(function(a){ return a&&a.label&&TAI_ACT_IC[a.type]; }).slice(0,2);
+  if(!items.length) return;
+  taiActClear();
+  TAI.an=(TAI.an||0)+1; var id='gac'+TAI.an;
+  TAI.acfg=TAI.acfg||{}; TAI.acfg[id]=items;
+  var el=taiThreadAdd('<div class="g-acrow" id="'+id+'">'+items.map(function(a,i){
+    return '<button class="g-acbtn" data-i="'+i+'">'+TAI_ACT_IC[a.type]+'<span>'+gEsc(a.label)+'</span></button>';
+  }).join('')+'</div>');
+  if(el) el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){ taiActRun(id,i,b); }; });
+}
+function taiActClear(){
+  document.querySelectorAll('.g-acrow').forEach(function(el){ var id=el.id; el.remove(); taiRecFix(id,null); });
+}
+function taiActRun(id,i,btn){
+  var a=((TAI.acfg||{})[id]||[])[i]; if(!a) return;
+  if(a.type==='alert'){
+    if(btn){ btn.disabled=true; btn.querySelector('span').textContent='알림 등록됨 ✓'; }
+    toast('조건 알림을 등록했어요, 도달하면 바로 알려드릴게요');
+    return;
+  }
+  /* backtest / delegate_trade / auto_trade → 요청 문장을 그대로 대화로 실행 (전략 퍼널로 이어짐) */
+  var col=btn&&btn.closest('.g-acrow'); if(col){ var cid=col.id; col.remove(); taiRecFix(cid,null); }
+  var f=$('g-in'); if(f){ f.value=a.label; gSend(); }
+}
 /* 확인 질문 카드: 다단계(steps) 지원, ‹ N개 중 M › 페이저, 선택 후 → 전송 */
 function taiAskCard(cfg){
   if(!cfg) return;
@@ -4852,7 +4914,7 @@ function taiAskGo(id){
   }
   taiAskClose(id);
   if(!parts.length) return;
-  taiNextClear();
+  taiNextClear(); taiActClear();
   taiThreadAdd('<div class="g-usum">'+rows+'</div>');
   gUserPin();
   var q=parts.join(' / ')+' 기준으로 진행해줘';
@@ -4978,7 +5040,7 @@ function taiMarket(t,fin,fallback){
   if(tfReq){ ai.tf=tfReq; if(ai.chart){ ai.chart.interval=TAI_TFTV[tfReq]||'D'; taiChartRender(); } } /* AI 컨텍스트 ↔ 차트 위젯 동기화 (차트 없어도 tf는 기억) */
   var isPred=!!(ai.chart&&taiPredictQ(t));
   var sys=taiBuildSystem(fin,conv);
-  taiNextClear();
+  taiNextClear(); taiActClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
   TAI.lastQ=t;
   /* 상태 라벨은 하드코딩 대신 사용자 발화를 반영해 생성 */
@@ -5018,7 +5080,7 @@ function taiMarket(t,fin,fallback){
         var nw=Date.now();
         if(nw-lastR>120||delta.indexOf('\n')>=0){
           lastR=nw;
-          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE)/)[0];
+          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0];
           var cut=vis.lastIndexOf('\n');
           var head=cut>=0?vis.slice(0,cut):'';
           var tail=cut>=0?vis.slice(cut+1):vis;
@@ -5030,16 +5092,23 @@ function taiMarket(t,fin,fallback){
       var mS=acc.match(/\[SETUP\s+(\{[\s\S]*?\})\s*\]/),setup=null; if(mS){ setup={}; try{ setup=JSON.parse(mS[1])||{}; }catch(e){} }
       var mA=acc.match(/\[ASK\s+(\{[\s\S]*\})\s*\]/),ask=null; if(mA){ try{ ask=JSON.parse(mA[1]); }catch(e){} } /* options 중첩 때문에 greedy */
       var mN=acc.match(/\[NEXT\s+(\[[\s\S]*?\])\s*\]/),nexts=null; if(mN){ try{ nexts=JSON.parse(mN[1]); }catch(e){} }
+      var mG=acc.match(/\[GAUGE\s+(\{[\s\S]*?\})\s*\]/),gauge=null; if(mG){ try{ gauge=JSON.parse(mG[1]); }catch(e){} }
+      var mAct=acc.match(/\[ACT\s+(\[[\s\S]*?\])\s*\]/),acts=null; if(mAct){ try{ acts=JSON.parse(mAct[1]); }catch(e){} }
       var mT=acc.match(/\[TITLE\s+"([^"\n]{1,40})"\s*\]/);
       var live=(G.cur===sess);
       if(mT&&sess.title==='새 전략'){ sess.title=mT[1]; gSideRender(); if(live&&!$('g-chead').hidden) gChead(sess.title,sess.sub||''); } /* AI 생성 세션 제목 */
-      var clean=acc.replace(/\[ASK\s+\{[\s\S]*\}\s*\]/g,'').replace(/\[(?:CHART|SETUP)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[NEXT\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim();
+      var clean=acc.replace(/\[ASK\s+\{[\s\S]*\}\s*\]/g,'').replace(/\[(?:CHART|SETUP|GAUGE)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[(?:NEXT|ACT)\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim();
       var mdHtml=taiMd(clean);
       if(out&&out.innerHTML!==undefined&&(!out.isConnected||live)) out.innerHTML=mdHtml;
       taiPushHist(sess,t,clean);
       var host=(out&&out.parentNode&&out.parentNode.classList&&out.parentNode.classList.contains('g-amsg'))?out.parentNode:null;
-      if(host&&live) host.insertAdjacentHTML('beforeend',taiActs());
-      var fixed='<div class="g-amsg"><span class="tai-txt">'+mdHtml+'</span>'+taiActs()+'</div>';
+      var gHtml=gauge?taiGauge(gauge):'';
+      var gTop=gHtml&&gauge.position!=='bottom';
+      if(host&&live){
+        if(gHtml) host.insertAdjacentHTML(gTop?'afterbegin':'beforeend',gHtml); /* 방향 확률 게이지: top=확률 먼저 */
+        host.insertAdjacentHTML('beforeend',taiActs());
+      }
+      var fixed='<div class="g-amsg">'+(gTop?gHtml:'')+'<span class="tai-txt">'+mdHtml+'</span>'+(gTop?'':gHtml)+taiActs()+'</div>';
       if(conv&&sess.convo){ for(var k=sess.convo.length-1;k>=0;k--){ if(sess.convo[k].indexOf('tai-txt')>=0){ sess.convo[k]=fixed; break; } } }
       if(!conv&&sess.thread){ for(var k2=sess.thread.length-1;k2>=0;k2--){ if(sess.thread[k2].html.indexOf('tai-txt')>=0){ sess.thread[k2].html=fixed; break; } } }
       if(live&&info&&info.tv&&(!ai.chart||ai.chart.tv!==info.tv)){
@@ -5053,7 +5122,11 @@ function taiMarket(t,fin,fallback){
         delay(info?1600:800,function(){ if(G.mode==='conv'&&G.cur===sess) S.strategy.entryMode?gNextAfterMode():gAskMode(); });
       }
       else if(ask&&live) delay(500,function(){ if(G.cur===sess) taiAskCard(ask); });
-      else if(nexts&&nexts.length&&live) delay(400,function(){ if(G.cur===sess) taiNext(nexts.slice(0,4)); });
+      else if(live){
+        /* 실행 액션 버튼(최대 2) + 후속 질문 칩(3~5)은 공존 가능, 퍼널(SETUP/ASK) 중엔 미노출 */
+        if(acts&&acts.length) delay(350,function(){ if(G.cur===sess) taiActChips(acts.slice(0,2)); });
+        if(nexts&&nexts.length) delay(acts&&acts.length?500:400,function(){ if(G.cur===sess) taiNext(nexts.slice(0,5)); });
+      }
       if(live) delay(1600,taiSpacerTrim); /* 차트/후속칩 렌더가 자리 잡은 뒤 과잉 여백 정리 */
       STORE.save();
     },function(kind){
@@ -5061,7 +5134,7 @@ function taiMarket(t,fin,fallback){
       /* 부분 생성물 보존: 중단/끊김 시점까지의 답변을 마무리하고 이어가기 제공 */
       endSt();
       var live=(G.cur===sess);
-      var clean=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE)/)[0].trim();
+      var clean=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0].trim();
       if(out.innerHTML!==undefined&&live) out.innerHTML=taiMd(clean);
       taiPushHist(sess,t,clean);
       var fixed='<div class="g-amsg"><span class="tai-txt">'+taiMd(clean)+'</span></div>';
