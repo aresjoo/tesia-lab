@@ -4,7 +4,7 @@
  * 키:    server/.env 의 ANTHROPIC_API_KEY (없으면 `ant auth login` 프로필로 폴백)
  */
 import { createServer } from "node:http";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import Anthropic from "@anthropic-ai/sdk";
 
 const env = {};
@@ -39,20 +39,40 @@ createServer(async (req, res) => {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: !!client, error: clientErr || undefined }));
   }
-  if (req.url.startsWith("/api/ohlc")) { /* 예측 근거용 실시세 (코인: Binance, 그 외: Yahoo) */
+  if (req.url === "/api/state" && req.method === "GET") { /* 대화 세션 영속 저장소 (파일) */
+    try {
+      const f = new URL("./state.json", import.meta.url);
+      if (!existsSync(f)) { res.writeHead(404, CORS); return res.end(); }
+      res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+      return res.end(readFileSync(f, "utf8"));
+    } catch { res.writeHead(500, CORS); return res.end(); }
+  }
+  if (req.url === "/api/state" && req.method === "POST") {
+    let sb = "";
+    for await (const c of req) { sb += c; if (sb.length > 4 * 1024 * 1024) { res.writeHead(413, CORS); return res.end(); } }
+    try { JSON.parse(sb); writeFileSync(new URL("./state.json", import.meta.url), sb); res.writeHead(200, CORS); return res.end('{"ok":true}'); }
+    catch { res.writeHead(400, CORS); return res.end(); }
+  }
+  if (req.url.startsWith("/api/ohlc")) { /* 예측 근거용 실시세 (코인: Binance, 그 외: Yahoo), 타임프레임 지원 */
     const q = new URL(req.url, "http://x").searchParams;
     const src = q.get("src"), sym = String(q.get("sym") || "").slice(0, 24);
+    const IV = { "1m": 1, "5m": 1, "15m": 1, "30m": 1, "1h": 1, "4h": 1, "1d": 1, "1w": 1 };
+    const iv = IV[q.get("iv")] ? q.get("iv") : "1d";
     try {
       let rows = [];
       if (src === "binance") {
-        const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=1d&limit=90`);
+        const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=${iv}&limit=90`);
         const j = await r.json();
         if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]);
       } else if (src === "yahoo") {
-        const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=3mo`, { headers: { "User-Agent": "Mozilla/5.0" } });
+        const YIV = { "1m": "5m", "5m": "5m", "15m": "15m", "30m": "30m", "1h": "60m", "4h": "60m", "1d": "1d", "1w": "1wk" };
+        const YRG = { "5m": "5d", "15m": "5d", "30m": "1mo", "60m": "1mo", "1d": "3mo", "1wk": "2y" };
+        const yiv = YIV[iv], yrg = YRG[yiv];
+        const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=${yiv}&range=${yrg}`, { headers: { "User-Agent": "Mozilla/5.0" } });
         const j = await r.json();
         const d = j?.chart?.result?.[0], ts = d?.timestamp || [], qd = d?.indicators?.quote?.[0];
         if (qd) rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i], qd.volume ? qd.volume[i] || 0 : 0]).filter((x) => x[4] != null);
+        rows = rows.slice(-90);
       }
       if (!rows.length) throw 0;
       const closes = rows.map((x) => x[4]), last = closes[closes.length - 1];
