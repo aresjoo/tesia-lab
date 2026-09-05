@@ -3359,7 +3359,7 @@ function gComposer(on,ctx){
 function gContent(html){ $('g-content').innerHTML=html; $('g-scroll').scrollTop=0; }
 function gScrollBottom(){ var s=$('g-scroll'); s.scrollTop=s.scrollHeight; }
 
-/* ── cosmic hero: 심연 상주 + 신호(혜성 차트 10종, 페이드아웃 종료) + 심볼 배지 32종 로테이션 ── */
+/* ── cosmic hero: 심연(별 필드) 상주 + 신호(이동하는 혜성 차트 10종) ── */
 var GCOS={raf:0,onr:null,jump:null};
 function gCosmosStart(){
   var cv=$('g-cosmos'); if(!cv) return;
@@ -3374,18 +3374,11 @@ function gCosmosStart(){
   function cl(v){ return v<0?0:v>1?1:v; }
   function sm(v){ v=cl(v); return v*v*(3-2*v); }
   function pal(){ return document.body.classList.contains('light')
-    ?{star:'140,168,224',acc:'52,98,214',ring:'rgba(0,0,0,.16)',k:.7}
-    :{star:'216,228,255',acc:'143,178,255',ring:'rgba(255,255,255,.3)',k:1}; }
+    ?{star:'140,168,224',acc:'52,98,214',k:.7}
+    :{star:'216,228,255',acc:'143,178,255',k:1}; }
   /* 별 필드 — 상주 */
   var stars=[],NS=mob?40:88,i;
   for(i=0;i<NS;i++) stars.push({x:Math.random(),y:Math.random(),r:rnd(.5,1.5),tw:rnd(0,6.28),ts:rnd(.5,1.3),vx:rnd(-.005,.005),vy:rnd(-.003,.003)});
-  /* 심볼 배지 풀 32종 (BTC, ETH + 글로벌 대형주 30) — 실제 로고(assets/logos/*.png), 미로드 시 모노그램 폴백 */
-  var POOL=[['BTC','₿','#f7931a'],['ETH','Ξ','#687de3'],['AAPL','AAPL','#8e9196'],['MSFT','MSFT','#00a4ef'],['NVDA','NVDA','#76b900'],['GOOG','GOOG','#4285f4'],['AMZN','AMZN','#ff9900'],['META','META','#0866ff'],['TSLA','TSLA','#cc2222'],['AVGO','AVGO','#cc092f'],['TSM','TSM','#c8102e'],['SSNLF','SS','#1428a0'],['LLY','LLY','#d52b1e'],['WMT','WMT','#0071ce'],['JPM','JPM','#7a8ca8'],['V','V','#3a5bd9'],['XOM','XOM','#ed1b2e'],['MA','MA','#eb5b1b'],['UNH','UNH','#2e6db4'],['ORCL','ORCL','#c74634'],['COST','COST','#3d6bb3'],['HD','HD','#f96302'],['PG','PG','#3f6ad8'],['NFLX','NFLX','#e50914'],['JNJ','JNJ','#d5342a'],['BAC','BAC','#3557a0'],['CRM','CRM','#00a1e0'],['ABBV','ABBV','#4a63b0'],['KO','KO','#f40009'],['ASML','ASML','#4356c9'],['TM','TM','#eb4a3e'],['SAP','SAP','#3aa0d8']];
-  if(!GCOS.imgs){ GCOS.imgs={}; for(i=0;i<POOL.length;i++){ var im0=new Image(); im0.src='assets/logos/'+POOL[i][0]+'.png'; GCOS.imgs[POOL[i][0]]=im0; } }
-  var NSl=mob?4:6,slots=[],used={};
-  function pick(){ var ix; do{ ix=Math.floor(Math.random()*POOL.length); }while(used[ix]); used[ix]=1; return ix; }
-  function spawn(sl,tt,mid){ if(sl.p!=null) delete used[sl.p]; sl.p=pick(); sl.x=rnd(.05,.95); sl.y=rnd(.1,.9); sl.dx=rnd(-.012,.012); sl.dy=rnd(-.008,.008); sl.life=rnd(9,15); sl.t0=mid?tt-sl.life*rnd(.15,.6):tt; }
-  for(i=0;i<NSl;i++){ var sl0={p:null}; spawn(sl0,0,true); slots.push(sl0); }
   /* 신호 — 차트 경로 10종 사전 생성(상승 7, 하락 3), 셔플 순회 */
   var NP=mob?30:44,PATHS=[],p;
   for(p=0;p<10;p++){ var down=p<3,arr=[],py=down?rnd(.22,.4):rnd(.5,.74),k;
@@ -3406,25 +3399,6 @@ function gCosmosStart(){
     for(j=0;j<NS;j++){ var s=stars[j],sx=(((s.x+s.vx*tt)%1)+1)%1*W,sy=(((s.y+s.vy*tt)%1)+1)%1*H;
       var sa=(.22+.55*Math.abs(Math.sin(s.tw+s.ts*tt)))*.62*P.k;
       cx.beginPath(); cx.arc(sx,sy,s.r,0,6.283); cx.fillStyle='rgba('+P.star+','+sa+')'; cx.fill(); }
-    /* 심볼 배지 — 페이드인, 표류, 페이드아웃 후 다른 종목으로 교대 */
-    var r0=mob?8:9.5;
-    cx.textAlign='center'; cx.textBaseline='middle';
-    for(j=0;j<NSl;j++){ var sl=slots[j],u=tt-sl.t0;
-      if(u>=sl.life||u<0){ spawn(sl,tt); u=0; }
-      var a=sm(u/1.2)*sm((sl.life-u)/1.2)*.92*P.k;
-      if(a<=.01) continue;
-      var x=(sl.x+sl.dx*u)*W,y=(sl.y+sl.dy*u)*H,pd=POOL[sl.p];
-      var im=GCOS.imgs[pd[0]],ok=im&&im.complete&&im.naturalWidth>0;
-      cx.globalAlpha=a;
-      cx.beginPath(); cx.arc(x,y,r0,0,6.283); cx.fillStyle=ok?'#fff':pd[2]; cx.fill();
-      cx.strokeStyle=P.ring; cx.lineWidth=1; cx.stroke();
-      if(ok){ cx.save(); cx.beginPath(); cx.arc(x,y,r0-1.2,0,6.283); cx.clip();
-        var s2=(r0-1.6)*2; cx.drawImage(im,x-s2/2,y-s2/2,s2,s2); cx.restore(); }
-      else{ var tx=pd[1];
-        cx.font='700 '+(tx.length<=1?10:tx.length===2?8.5:tx.length===3?6.5:5.5)+'px Geist,"Noto Sans KR",sans-serif';
-        cx.fillStyle='#fff'; cx.fillText(tx,x,y+.5); }
-      cx.globalAlpha=1; }
-    cx.textAlign='start';
     /* 신호 — 빛 구간이 차트 경로를 따라 이동: 꼬리(과거)는 지워지고, 끝점 도착 전에 머리도 소멸 */
     if(sgP<0&&tt>=sgT){ sgP=sgSeq[sgN%10]; sgN++; sg0=tt; }
     if(sgP>=0){ var u2=tt-sg0;
@@ -3445,8 +3419,8 @@ function gCosmosStart(){
     /* 진입 페이드 + 중앙 비네트(타이틀 가독성) + 상하 에지 페이드 */
     cx.globalCompositeOperation='destination-out';
     if(g<1){ cx.fillStyle='rgba(0,0,0,'+(1-g)+')'; cx.fillRect(0,0,W,H); }
-    var vg=cx.createRadialGradient(W/2,H*.5,0,W/2,H*.5,Math.min(W*.32,290));
-    vg.addColorStop(0,'rgba(0,0,0,.8)'); vg.addColorStop(1,'rgba(0,0,0,0)');
+    var vg=cx.createRadialGradient(W/2,H*.5,0,W/2,H*.5,Math.min(W*.26,240)); /* 신호가 중앙(타이틀·컴포저) 통과 시 완전히 가려지지 않게 약한 비네트 */
+    vg.addColorStop(0,'rgba(0,0,0,.5)'); vg.addColorStop(1,'rgba(0,0,0,0)');
     cx.fillStyle=vg; cx.fillRect(0,0,W,H);
     var eg=cx.createLinearGradient(0,0,0,H);
     eg.addColorStop(0,'rgba(0,0,0,.9)'); eg.addColorStop(Math.min(.2,40/H),'rgba(0,0,0,0)');
