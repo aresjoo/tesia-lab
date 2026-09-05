@@ -1682,8 +1682,8 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
         <input class="au-input" id="au-age-in" type="number" min="1" max="120" inputmode="numeric" onkeydown="if(event.key==='Enter')authAgeFinish()">
       </div>
       <div class="au-err" id="au-age-err">연령을 숫자로 입력해 주세요.</div>
-      <div class="au-agree">“계정 생성 끝내기”를 클릭하면 당사 <a href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a>에 동의하고<br><a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a>을 읽은 것으로 간주합니다.</div>
-      <button class="au-btn primary au-gap" id="au-age-go" onclick="authAgeFinish()">계정 생성 끝내기</button>
+      <div class="au-agree">“시장에 입장하기”를 클릭하면 당사 <a href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a>에 동의하고<br><a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a>을 읽은 것으로 간주합니다.</div>
+      <button class="au-btn primary au-gap" id="au-age-go" onclick="authAgeFinish()">시장에 입장하기</button>
     </div>
 
     <!-- step 5: 비밀번호 입력 (로그인) -->
@@ -2287,7 +2287,7 @@ function signupDone(){
   $('profile-name').textContent=nm;
   closeModal('modal-auth');
   authSyncUI();
-  toast('가입 완료, 만들던 전략으로 돌아왔어요');
+  toast('이어서 가볼게요');
   if(S.pendingBacktest){ S.pendingBacktest=false; delay(400, doBacktest); }
 }
 function baseParams(st){
@@ -3812,7 +3812,7 @@ function gConvUser(t){
    +'<button onclick="taiUCopy(this)" aria-label="복사"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>'
    +'</span><div class="g-umsg">'+gEsc(t)+'</div></div>');
 }
-function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx).catch(function(){}); }catch(e){} toast('클립보드에 복사됨'); }
+function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx).catch(function(){}); }catch(e){} toast('복사 완료'); }
 function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; } }
 function gConvAI(html){ gThreadAdd('<div class="g-amsg">'+html+'</div>'); }
 function gConvChips(items){
@@ -3957,7 +3957,7 @@ signupDone=function(){
     var p=$('g-profile'); if(p) p.textContent=nm;
     closeModal('modal-auth');
     authSyncUI();
-    toast(AUTH&&AUTH.mode==='login'?'로그인 완료':'계정 생성 완료');
+    toast(AUTH&&AUTH.mode==='login'?'다시 만나서 반가워요':'계정 준비 완료, 시장은 기다려주지 않아요');
     if(G.pendingRun){ G.pendingRun=false; delay(300,gStartRunGo); }
     if(G.pendingNew!=null){ var pn=G.pendingNew; G.pendingNew=null; delay(300,function(){ gNew(pn); }); }
     return;
@@ -4539,7 +4539,7 @@ function taiCodeCopy(b){
   try{ navigator.clipboard.writeText(blk.querySelector('code').textContent).catch(function(){}); }catch(e){}
   var old=b.textContent; b.textContent='✓ 복사됨';
   setTimeout(function(){ b.textContent=old; },1500);
-  toast('클립보드에 복사됨');
+  toast('복사 완료');
 }
 /* 실데이터 파생 지표 (딥 리서치 노트용) */
 function taiIndic(){
@@ -4658,11 +4658,11 @@ function taiCopy(b){
   b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
   b.classList.add('on');
   setTimeout(function(){ b.innerHTML=old; b.classList.remove('on'); },1500);
-  toast('답변이 복사되었습니다.');
+  toast('복사 완료');
 }
 function taiVote(b,v){
   var r=b.parentNode; r.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on');
-  if(v>0){ toast('피드백 감사합니다'); return; }
+  if(v>0){ toast('좋았다니 다행이에요, 더 날카로워질게요'); return; }
   taiFeedback();
 }
 /* 싫어요 → 사유 카드 (Gemini 패턴) */
@@ -4931,7 +4931,7 @@ function taiMarket(t,fin,fallback){
       var fixed='<div class="g-amsg"><span class="tai-txt">'+taiMd(clean)+'</span></div>';
       if(conv&&G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]=fixed; break; } } }
       if(!conv&&G.cur&&G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if(G.cur.thread[k2].html.indexOf('tai-txt')>=0){ G.cur.thread[k2].html=fixed; break; } } }
-      taiThreadAdd('<div class="g-status done"><span class="lb">'+(kind==='abort-partial'?'생성을 중단했습니다':'연결이 끊겨 답변이 중단되었습니다')+'</span></div>');
+      taiThreadAdd('<div class="g-status done"><span class="lb">'+(kind==='abort-partial'?'여기서 멈췄어요':'연결이 끊겨 답변이 중단되었습니다')+'</span></div>');
       taiCancelChips(true);
       delay(300,taiSpacerTrim);
     });
@@ -5195,7 +5195,7 @@ function authFinishEmail(){
 /* 연령 확인 스텝 (ChatGPT 패턴): 입력 → 버튼 스피너 약 1초 → 계정 생성 완료 */
 function authAgeShow(){
   var n=$('au-age-name'); if(n&&!n.value) n.value=AUTH.doneName||'';
-  var b=$('au-age-go'); if(b){ b.classList.remove('loading'); b.disabled=false; b.innerHTML='계정 생성 끝내기'; }
+  var b=$('au-age-go'); if(b){ b.classList.remove('loading'); b.disabled=false; b.innerHTML='시장에 입장하기'; }
   authShow('au-age');
   var a=$('au-age-in'); if(a){ a.value=''; setTimeout(function(){ a.focus(); },80); }
 }
@@ -5796,7 +5796,7 @@ function gLogout(){
   S.user=null;
   authSyncUI();
   gHome();
-  toast('로그아웃했어요');
+  toast('로그아웃 완료, 다음에 또 만나요');
 }
 function gPlusClose(){
   var p=$('g-plus-pop');
