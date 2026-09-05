@@ -3801,7 +3801,7 @@ function gConvUser(t){
    +'<button onclick="taiUCopy(this)" aria-label="복사"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>'
    +'</span><div class="g-umsg">'+gEsc(t)+'</div></div>');
 }
-function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx); }catch(e){} toast('클립보드에 복사됨'); }
+function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx).catch(function(){}); }catch(e){} toast('클립보드에 복사됨'); }
 function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; } }
 function gConvAI(html){ gThreadAdd('<div class="g-amsg">'+html+'</div>'); }
 function gConvChips(items){
@@ -4525,7 +4525,7 @@ function taiMd(src){
 }
 function taiCodeCopy(b){
   var blk=b.closest('.codeblk'); if(!blk) return;
-  try{ navigator.clipboard.writeText(blk.querySelector('code').textContent); }catch(e){}
+  try{ navigator.clipboard.writeText(blk.querySelector('code').textContent).catch(function(){}); }catch(e){}
   var old=b.textContent; b.textContent='✓ 복사됨';
   setTimeout(function(){ b.textContent=old; },1500);
   toast('클립보드에 복사됨');
@@ -4641,7 +4641,7 @@ function taiActs(){
 }
 function taiMsgText(b){ var m=b.closest('.g-amsg'); return m?((m.querySelector('.tai-txt')||m).textContent):''; }
 function taiCopy(b){
-  try{ navigator.clipboard.writeText(taiMsgText(b)); }catch(e){}
+  try{ navigator.clipboard.writeText(taiMsgText(b)).catch(function(){}); }catch(e){}
   /* 복사 → 체크 아이콘 마이크로 인터랙션 */
   var old=b.innerHTML;
   b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
@@ -5757,6 +5757,7 @@ function tethBannerClose(){
 })();
 function authSyncUI(){
   var b=$('g-auth-btns'); if(b) b.hidden=!!S.user;
+  var gl=$('g-globe'); if(gl) gl.hidden=!!S.user; /* 로그인 상태에선 언어 선택도 숨김, 드로어의 언어 및 통화 행으로 접근 */
   var p=$('g-profile'); if(p) p.textContent=S.user?S.user.name:'로그인';
   var m=$('g-me-name'); if(m) m.textContent=S.user?S.user.name:'';
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
