@@ -15,8 +15,9 @@ try {
   }
 } catch { /* .env 없으면 SDK 기본 자격 증명 해석에 맡긴다 */ }
 
-for (const k of ["ANTHROPIC_API_KEY", "TETH_AI_MODEL", "TETH_AI_PORT", "TETH_AI_MOCK"]) if (!env[k] && process.env[k]) env[k] = process.env[k];
+for (const k of ["ANTHROPIC_API_KEY", "TETH_AI_MODEL", "TETH_AI_EFFORT", "TETH_AI_PORT", "TETH_AI_MOCK"]) if (!env[k] && process.env[k]) env[k] = process.env[k];
 const MODEL = env.TETH_AI_MODEL || "claude-opus-5";
+const EFFORT = env.TETH_AI_EFFORT || "low";
 const PORT = Number(env.TETH_AI_PORT || 8799);
 let client = null, clientErr = "";
 try {
@@ -90,8 +91,8 @@ createServer(async (req, res) => {
   try {
     const stream = client.beta.messages.stream({
       model: MODEL,
-      max_tokens: 1024, // 채팅 말풍선용 짧은 답변 상한
-      output_config: { effort: "low" }, // 대화형이라 지연 최소화 우선
+      max_tokens: 16000, // 씽킹 토큰 포함 여유 상한, 답변 길이는 프롬프트로 제어
+      output_config: { effort: EFFORT },
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       system: String(payload.system || "").slice(0, 8000),
@@ -106,4 +107,4 @@ createServer(async (req, res) => {
     send({ error: true });
   }
   res.end();
-}).listen(PORT, () => console.log(`TETH AI proxy — http://localhost:${PORT} (model: ${MODEL})`));
+}).listen(PORT, () => console.log(`TETH AI proxy — http://localhost:${PORT} (model: ${MODEL}, effort: ${EFFORT})`));
