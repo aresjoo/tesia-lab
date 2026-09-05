@@ -853,7 +853,6 @@ body.light .au-free{color:#1e8e3e}
 .g-amsg h4{font-size:15px;font-weight:700;margin:14px 0 6px;color:var(--gt)}
 /* 코드 블록 */
 .codeblk{margin:10px 0;border:1px solid var(--gl);border-radius:12px;overflow:hidden;background:rgba(0,0,0,.35)}
-body.light .codeblk{background:rgba(15,25,50,.05)}
 .codeblk .ch{display:flex;align-items:center;justify-content:space-between;padding:7px 13px;border-bottom:1px solid var(--gl);font-size:11.5px;color:var(--gt3);letter-spacing:.03em}
 .codeblk .ch button{font-size:11.5px;color:var(--gt3);cursor:pointer;padding:3px 8px;border-radius:6px;transition:background .12s,color .12s}
 .codeblk .ch button:hover{background:rgba(128,128,128,.15);color:var(--gt)}
@@ -891,9 +890,10 @@ body.light .codeblk{background:rgba(15,25,50,.05)}
 .g-amsg li{margin:3px 0}
 .g-amsg blockquote{margin:8px 0;padding:8px 13px;border-left:3px solid var(--gb2,#8fb2ff);background:rgba(143,178,255,.07);border-radius:0 8px 8px 0;color:var(--gt2);font-size:13.5px}
 .g-amsg .tblwrap{overflow-x:auto;margin:8px 0}
-.g-amsg table{border-collapse:collapse;font-size:13px}
+.g-amsg table{border-collapse:collapse;font-size:13px;color:var(--gt2)} /* 전역 --text(잉크) 상속 차단, 다크 가독성 보장 */
 .g-amsg th,.g-amsg td{border:1px solid var(--gl);padding:6px 11px;text-align:left;white-space:nowrap}
-.g-amsg th{background:rgba(255,255,255,.05);font-weight:600}
+.g-amsg th{background:rgba(255,255,255,.06);font-weight:600;color:var(--gt)}
+.g-amsg td b{color:var(--gt)}
 .g-amsg code{background:rgba(128,128,128,.16);border-radius:4px;padding:1px 5px;font-size:12.5px}
 .g-amsg .sp8{height:6px}
 /* 세션 제목 인라인 편집 */
@@ -907,12 +907,8 @@ body.light .codeblk{background:rgba(15,25,50,.05)}
 .g-usum .rw{display:flex;flex-direction:column;gap:1px}
 .g-usum .rw b{font-size:12.5px;color:#1c2432}
 .g-usum .rw span{font-size:13px;color:#3d4a61}
-body.light .g-usum{background:#1f2430}
-body.light .g-usum .rw b{color:#e8ecf4}
-body.light .g-usum .rw span{color:#aeb9cc}
 /* 사고 과정 CoT 스트림 박스 */
 .det .cot{background:rgba(0,0,0,.35);border:1px solid var(--gl);border-radius:10px;padding:10px 13px;font-size:11.5px;line-height:1.75;color:#96a0b4;white-space:pre-wrap;word-break:break-word}
-body.light .det .cot{background:rgba(15,25,50,.05);color:#4a5570}
 .g-src .s .fv,.det .srow .fv{width:15px;height:15px;border-radius:4px}
 /* AI 응답 액션 아이콘 */
 .g-acts{display:flex;gap:2px;margin-top:8px}
@@ -924,21 +920,16 @@ body.light .det .cot{background:rgba(15,25,50,.05);color:#4a5570}
 @keyframes taiPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.28);opacity:1;filter:brightness(1.15)}}
 .g-amsg,.g-umsg,.g-status,.g-trail,.g-chartcard,.g-srcs,.g-askcard,.g-nextcol{animation:gFadeUp .3s var(--ease) both}
 .g-status{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2)}
-/* TETH 로고 스트로크 드로잉: 좌 루프 → 우 루프 순서로 그려지고, 잠시 완성 유지 후 리셋 */
-.spd{flex-shrink:0;animation:tethGlow 2.6s ease-in-out infinite} /* 완성 구간 글로우 펄스 */
-@keyframes tethGlow{0%,48%{filter:drop-shadow(0 0 0 rgba(59,168,240,0))}64%{filter:drop-shadow(0 0 4px rgba(59,168,240,.5))}82%{filter:drop-shadow(0 0 2px rgba(59,168,240,.2))}100%{filter:drop-shadow(0 0 0 rgba(59,168,240,0))}}
-.spd .p1{stroke-dasharray:40;stroke-dashoffset:40;animation:tethD1 2.6s cubic-bezier(.5,0,.3,1) infinite}
-.spd .p2{stroke-dasharray:40;stroke-dashoffset:40;animation:tethD2 2.6s cubic-bezier(.5,0,.3,1) infinite}
-@keyframes tethD1{0%{stroke-dashoffset:40;opacity:1}34%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:40;opacity:0}}
-@keyframes tethD2{0%,16%{stroke-dashoffset:40;opacity:1}50%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:40;opacity:0}}
+/* 로딩 아이콘 = 실제 TETH 로고 자산(--logo-uri), 은은한 펄스만 */
+.g-status .sp,.g-trail .sp{width:22px;height:13px;background-size:contain;background-position:center;background-repeat:no-repeat;animation:gSparkPulse 2s ease-in-out infinite;flex-shrink:0}
+.g-trail .sp.sm{width:17px;height:10px}
+.tcur{display:inline-block;width:7px;height:14px;vertical-align:-2px;background:var(--gt3);border-radius:2px;animation:tcurB 1s steps(2) infinite;margin-left:2px}
+@keyframes tcurB{50%{opacity:0}}
 /* 대기 라벨 shimmer: 하이라이트가 글자 위를 쓸고 지나감 */
 .g-status:not(.done) .lb,.g-trail .hd:not(.ok) .hlb,.g-trail .st.on .lb{
   background:linear-gradient(90deg,var(--gt3) 0%,var(--gt3) 42%,#fff 50%,var(--gt3) 58%,var(--gt3) 100%);
   background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
   animation:tethShimmer 2.2s linear infinite}
-body.light .g-status:not(.done) .lb,body.light .g-trail .hd:not(.ok) .hlb,body.light .g-trail .st.on .lb{
-  background:linear-gradient(90deg,var(--gt3) 0%,var(--gt3) 42%,#0f2a6b 50%,var(--gt3) 58%,var(--gt3) 100%);
-  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
 @keyframes tethShimmer{from{background-position:190% 0}to{background-position:-90% 0}}
 .g-status .sec{color:var(--gt3);font-size:12px}
 .g-status .chev,.g-trail .chev{color:var(--gt3);transition:transform .2s var(--ease)}
@@ -955,7 +946,6 @@ body.light .g-status:not(.done) .lb,body.light .g-trail .hd:not(.ok) .hlb,body.l
 .det .srow .fv{width:16px;height:16px;border-radius:4px;flex-shrink:0}
 .det .srow .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--gt2)}
 .det .srow .dm{font-size:11.5px;color:var(--gt3);flex-shrink:0}
-body.light .det .srow:hover{background:rgba(0,0,0,.05)}
 .open>.chev{transform:rotate(90deg)}
 .g-trail{display:flex;flex-direction:column;gap:7px}
 .g-trail .hd{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2);cursor:pointer;user-select:none}
@@ -1012,8 +1002,6 @@ body.light .det .srow:hover{background:rgba(0,0,0,.05)}
 .g-askcard .cnt{font-size:12.5px;color:var(--gt3)}
 .g-askcard .go{width:38px;height:34px;border-radius:10px;background:var(--g3);color:var(--gt);font-size:15px;cursor:pointer;transition:background .12s}
 .g-askcard .go:hover{background:rgba(143,178,255,.2)}
-body.light .g-src,body.light .g-nextq{background:rgba(0,0,0,.02)}
-body.light .g-src:hover,body.light .g-nextq:hover,body.light .g-askcard .op:hover{background:rgba(0,0,0,.05)}
 /* 대화 속 트레이딩뷰 차트 카드 */
 .g-chartcard{margin:6px 0 4px;border:1px solid var(--gl);border-radius:12px;overflow:hidden;background:var(--g1,rgba(255,255,255,.02))}
 .g-chartcard .hd{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;font-size:13px;font-weight:600;color:var(--gt);border-bottom:1px solid var(--gl)}
@@ -1023,7 +1011,6 @@ body.light .g-src:hover,body.light .g-nextq:hover,body.light .g-askcard .op:hove
 .g-chartcard .fc canvas{width:100%;height:172px;display:block}
 .g-chartcard .fc .lb{position:absolute;top:8px;left:12px;font-size:11px;color:var(--gt3);letter-spacing:.02em}
 @media (max-width:860px){.g-chartcard .bd{height:300px}.g-chartcard .fc canvas{height:140px}}
-.g-amsg .who{display:block;font-size:11px;color:var(--gt3);margin-bottom:5px}
 .g-amsg b{font-weight:600}
 .g-chiprow{display:flex;flex-wrap:wrap;gap:7px}
 .g-think{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gt3)}
@@ -1832,8 +1819,8 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       <div class="g-composer-wrap" id="g-composer-wrap" hidden>
         <div class="g-composer">
           <div id="g-ctx-chip"></div>
-          <textarea id="g-in" rows="1" placeholder="무엇이든 물어보세요, 수정 요청은 즉시 재검증됩니다" aria-label="AI에게 입력"></textarea>
-          <div class="g-composer-row"><span class="g-model">＋</span><button class="g-send" id="g-send-btn" onclick="gSend()" aria-label="전송">↑</button></div>
+          <textarea id="g-in" rows="1" placeholder="시장에 대해 무엇이든 물어보세요" aria-label="AI에게 입력"></textarea>
+          <div class="g-composer-row"><span class="g-model"></span><button class="g-send" id="g-send-btn" onclick="gSend()" aria-label="전송">↑</button></div>
         </div>
       </div>
     </main>
@@ -3778,7 +3765,7 @@ function gConvUser(t){
 }
 function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx); }catch(e){} toast('클립보드에 복사됨'); }
 function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; } }
-function gConvAI(html){ gThreadAdd('<div class="g-amsg"><span class="who">TETH</span>'+html+'</div>'); }
+function gConvAI(html){ gThreadAdd('<div class="g-amsg">'+html+'</div>'); }
 function gConvChips(items){
   var id='gc'+Date.now();
   var html='<div class="g-chiprow" id="'+id+'">'+items.map(function(it,i){ return '<button class="g-qchip" data-i="'+i+'">'+it.label+'</button>'; }).join('')+'</div>';
@@ -4402,7 +4389,7 @@ function taiBusySync(){
 /* 중단/실패 후 이어가기 액션 */
 function taiCancelChips(showContinue){
   var items=[]; if(showContinue) items.push(['이어서 계속','방금 끊긴 답변을 이어서 계속 작성해줘']);
-  items.push(['다시 생성',TAI.lastQ||'']);
+  if(!items.length) return;
   taiThreadAdd('<div class="g-nextcol">'+items.map(function(x){ return '<button class="g-nextq" data-q="'+gEsc(x[1]).replace(/"/g,'&quot;')+'" onclick="taiChipSend(this)"><span>'+gEsc(x[0])+'</span><span class="ar">→</span></button>'; }).join('')+'</div>');
 }
 function taiChipSend(b){ var q=b.getAttribute('data-q'); var col=b.closest('.g-nextcol'); if(col) col.remove(); if(q){ var f=$('g-in'); if(f){ f.value=q; gSend(); } } }
@@ -4505,17 +4492,6 @@ function taiCodeCopy(b){
   setTimeout(function(){ b.textContent=old; },1500);
   toast('클립보드에 복사됨');
 }
-/* 실제 TETH 로고(좌 웜 루프 + 우 쿨 루프)가 순서대로 그려지는 로딩 아이콘 */
-function taiDrawSvg(w){
-  return '<svg class="spd" viewBox="0 0 48 24" width="'+w+'" height="'+Math.round(w/2)+'" fill="none">'
-   +'<defs>'
-   +'<linearGradient id="tgl" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#f6903c"/><stop offset=".38" stop-color="#f2d13c"/><stop offset="1" stop-color="#2ecf7c"/></linearGradient>'
-   +'<linearGradient id="tgr" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#2fd0c8"/><stop offset=".5" stop-color="#38aef2"/><stop offset="1" stop-color="#2b6bf0"/></linearGradient>'
-   +'</defs>'
-   +'<path class="p1" d="M20.4 8.4 A7.3 7.3 0 1 0 20.4 15.6" stroke="url(#tgl)" stroke-width="4.6" stroke-linecap="round"/>'
-   +'<path class="p2" d="M27.6 15.6 A7.3 7.3 0 1 0 27.6 8.4" stroke="url(#tgr)" stroke-width="4.6" stroke-linecap="round"/>'
-   +'</svg>';
-}
 /* 실데이터 파생 지표 (딥 리서치 노트용) */
 function taiIndic(){
   var j=TAI.ohlc; if(!j||!j.rows||j.rows.length<30) return null;
@@ -4561,11 +4537,11 @@ function taiSrcRows(){
 function taiStatus(label,opts){
   opts=opts||{};
   TAI.sn=(TAI.sn||0)+1; var id='gst'+TAI.sn;
-  var html='<div class="g-status" id="'+id+'">'+taiDrawSvg(24)+'<span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
+  var html='<div class="g-status" id="'+id+'">'+'<span class="sp brand-bg" aria-hidden="true"></span>'+'<span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
   var el=taiThreadAdd(html),t0=Date.now(),iv=0;
   if(opts.sec&&el){ iv=setInterval(function(){ if(!el||!el.isConnected){ clearInterval(iv); return; } var s=el.querySelector('.sec'); var n=Math.round((Date.now()-t0)/1000); if(s&&n>=2) s.textContent=n+'초';
     var lb2=el.querySelector('.lb'); /* 오래 걸릴 때 멈춘 게 아님을 알리는 문구 전환 */
-    if(lb2){ if(n===12) lb2.textContent='조금 더 깊게 확인하고 있어요'; else if(n===30) lb2.textContent='여러 자료를 비교하고 있어요, 계속 기다리지 않아도 됩니다'; }
+    if(lb2){ if(n===12) lb2.textContent='시장 흐름을 더 깊게 확인하고 있어요'; else if(n===30) lb2.textContent='여러 데이터를 비교하고 있어요, 계속 기다리지 않아도 됩니다'; }
   },1000); }
   return {
     set:function(l){ if(el&&el.isConnected){ var e=el.querySelector('.lb'); if(e) e.textContent=l; } },
@@ -4583,12 +4559,12 @@ function taiThink(label){ var st=taiStatus(label); return function(){ st.done(nu
 /* 작업 타임라인: 진행 중 로고 펄스, 완료 스텝은 체크 스택, 클릭하면 상세 펼침, 헤더로 접기 */
 function taiTrail(){
   TAI.tn=(TAI.tn||0)+1; var id='gtr'+TAI.tn;
-  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)">'+taiDrawSvg(24)+'<span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
+  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)">'+'<span class="sp brand-bg" aria-hidden="true"></span>'+'<span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
   var cur=null,curT0=0;
   function sync(){ if(el&&el.isConnected) taiRecFix(id,el.outerHTML); }
   return {
     step:function(label){ if(!el) return; curT0=Date.now(); cur=document.createElement('div'); cur.className='st on';
-      cur.innerHTML=taiDrawSvg(18)+'<span class="lb">'+gEsc(label)+'</span>';
+      cur.innerHTML='<span class="sp sm brand-bg" aria-hidden="true"></span>'+'<span class="lb">'+gEsc(label)+'</span>';
       el.querySelector('.steps').appendChild(cur); gScrollBottom(); },
     endStep:function(label,det){ if(!cur) return;
       if(typeof det==='function') det=det();
@@ -4623,8 +4599,6 @@ function taiActs(){
    +'<button aria-label="좋아요" onclick="taiVote(this,1)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a2 2 0 0 0-2-2l-3 7v10h8.3a2 2 0 0 0 2-1.7l1-6A2 2 0 0 0 18.3 10H14z"/><path d="M9 20H6a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3"/></svg></button>'
    +'<button aria-label="별로예요" onclick="taiVote(this,-1)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg)"><path d="M14 9V5a2 2 0 0 0-2-2l-3 7v10h8.3a2 2 0 0 0 2-1.7l1-6A2 2 0 0 0 18.3 10H14z"/><path d="M9 20H6a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3"/></svg></button>'
    +'<button aria-label="복사" onclick="taiCopy(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>'
-   +'<button aria-label="공유" onclick="taiShare(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></button>'
-   +'<button aria-label="다시 생성" onclick="taiRetry()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>'
    +'</div>';
 }
 function taiMsgText(b){ var m=b.closest('.g-amsg'); return m?((m.querySelector('.tai-txt')||m).textContent):''; }
@@ -4635,20 +4609,13 @@ function taiCopy(b){
   b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
   b.classList.add('on');
   setTimeout(function(){ b.innerHTML=old; b.classList.remove('on'); },1500);
-  toast('클립보드에 복사됨');
-}
-function taiShare(b){
-  var tx=taiMsgText(b);
-  if(navigator.share){ navigator.share({title:'TETH 분석',text:tx}).catch(function(){}); return; }
-  try{ navigator.clipboard.writeText(tx); }catch(e){}
-  toast('답변이 복사되었습니다, 원하는 곳에 붙여넣어 공유하세요');
+  toast('답변이 복사되었습니다.');
 }
 function taiVote(b,v){
   var r=b.parentNode; r.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on');
   if(v>0){ toast('피드백 감사합니다'); return; }
   taiFeedback();
 }
-function taiRetry(){ var q=TAI.lastQ; if(!q) return; var f=$('g-in'); if(f){ f.value=q; gSend(); } }
 /* 싫어요 → 사유 카드 (Gemini 패턴) */
 function taiFeedback(){
   TAI.fn=(TAI.fn||0)+1; var id='gfb'+TAI.fn;
@@ -4765,7 +4732,7 @@ function taiOhlc(cb){
     .then(function(j){
       TAI.ohlc=j;
       taiChartPx(j);
-      cb('\n['+c.label+' 실시세 데이터] 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30일 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 마크다운으로 구조화된 깊이 있는 분석을 작성한다: "### 현재 위치" 섹션(핵심 수치 **볼드**), "### 상방 시나리오"와 "### 하방 시나리오"(트리거 가격과 목표 레벨, 불릿), 지표 요약은 | 표 |, "### 리스크와 대응"(현실적 제안), 마지막에 "> 투자 판단은 본인 몫" 콜아웃. 확정적 단정과 수익 보장은 피한다.');
+      cb('\n['+c.label+' 실시세 데이터] 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30일 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 마크다운으로 구조화된 깊이 있는 분석을 작성한다: "### 현재 위치" 섹션(핵심 수치 **볼드**), "### 상방 시나리오"와 "### 하방 시나리오"(트리거 가격과 목표 레벨, 불릿), 지표 요약은 | 표 |, "### 리스크와 대응"(현실적 제안). 확정적 단정과 수익 보장은 피한다.');
     })
     .catch(function(){
       /* 부분 실패: 전체 답변을 죽이지 않고 시세 없이 진행함을 알림 */
@@ -4845,8 +4812,7 @@ function taiMarket(t,fin,fallback){
   taiNextClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
   TAI.lastQ=t;
-  var TH=['질문을 이해하고 있어요','헤아리는 중','생각을 정리하는 중'];
-  var st=taiStatus(TH[Math.floor(Math.random()*TH.length)],{sec:true});
+  var st=taiStatus('요청을 확인하고 있어요',{sec:true});
   var endSt=function(){ if(st){ st.done(null); st=null; } };
   var fb=function(kind){
     endSt();
@@ -4856,15 +4822,26 @@ function taiMarket(t,fin,fallback){
   var proceed=function(ctx){
     S.aiChat=S.aiChat||[];
     var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
-    var out=null,acc='';
+    var out=null,acc='',lastR=0;
     taiStream(sys+ctx,msgs,function(delta){
       if(!out){
         endSt();
-        var el=taiThreadAdd('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
+        var el=taiThreadAdd('<div class="g-amsg"><span class="tai-txt"></span></div>');
         out=(el&&el.querySelector('.tai-txt'))||{};
       }
       acc+=delta;
-      if(out.textContent!==undefined) out.textContent=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE)/)[0]; /* 태그는 화면에 노출하지 않는다 */
+      /* 스트리밍 증분 마크다운: 완성된 줄은 즉시 리치 렌더, 작성 중인 마지막 줄만 raw 버퍼. 120ms 스로틀 */
+      if(out.innerHTML!==undefined){
+        var nw=Date.now();
+        if(nw-lastR>120||delta.indexOf('\n')>=0){
+          lastR=nw;
+          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE)/)[0];
+          var cut=vis.lastIndexOf('\n');
+          var head=cut>=0?vis.slice(0,cut):'';
+          var tail=cut>=0?vis.slice(cut+1):vis;
+          out.innerHTML=(head?taiMd(head):'')+'<p>'+gEsc(tail)+'<span class="tcur"></span></p>';
+        }
+      }
     },function(){
       var mC=acc.match(/\[CHART\s+(\{[\s\S]*?\})\s*\]/),info=null; if(mC){ try{ info=JSON.parse(mC[1]); }catch(e){} }
       var mS=acc.match(/\[SETUP\s+(\{[\s\S]*?\})\s*\]/),setup=null; if(mS){ setup={}; try{ setup=JSON.parse(mS[1])||{}; }catch(e){} }
@@ -4878,7 +4855,7 @@ function taiMarket(t,fin,fallback){
       taiPushHist(t,clean);
       var host=(out&&out.parentNode&&out.parentNode.classList&&out.parentNode.classList.contains('g-amsg'))?out.parentNode:null;
       if(host) host.insertAdjacentHTML('beforeend',taiActs());
-      var fixed='<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt">'+mdHtml+'</span>'+taiActs()+'</div>';
+      var fixed='<div class="g-amsg"><span class="tai-txt">'+mdHtml+'</span>'+taiActs()+'</div>';
       if(conv&&G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]=fixed; break; } } }
       if(!conv&&G.cur&&G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if(G.cur.thread[k2].html.indexOf('tai-txt')>=0){ G.cur.thread[k2].html=fixed; break; } } }
       if(info&&info.tv&&(!TAI.chart||TAI.chart.tv!==info.tv)){
@@ -4900,7 +4877,7 @@ function taiMarket(t,fin,fallback){
       var clean=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE)/)[0].trim();
       if(out.innerHTML!==undefined) out.innerHTML=taiMd(clean);
       taiPushHist(t,clean);
-      var fixed='<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt">'+taiMd(clean)+'</span></div>';
+      var fixed='<div class="g-amsg"><span class="tai-txt">'+taiMd(clean)+'</span></div>';
       if(conv&&G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]=fixed; break; } } }
       if(!conv&&G.cur&&G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if(G.cur.thread[k2].html.indexOf('tai-txt')>=0){ G.cur.thread[k2].html=fixed; break; } } }
       taiThreadAdd('<div class="g-status done"><span class="lb">'+(kind==='abort-partial'?'생성을 중단했습니다':'연결이 끊겨 답변이 중단되었습니다')+'</span></div>');
@@ -4930,14 +4907,14 @@ function taiMarket(t,fin,fallback){
     ];
     var i=0;
     (function next(){
-      if(i>=seq.length){ tr.finish(); taiSources(); st=taiStatus('곱씹는 중',{sec:true}); proceed(oh); return; }
+      if(i>=seq.length){ tr.finish(); taiSources(); st=taiStatus('분석을 정리하고 있어요',{sec:true}); proceed(oh); return; }
       var sq=seq[i++]; tr.step(sq.a);
       if(sq.tf&&TAI.chart){ TAI.chart.interval=sq.tf; taiChartRender(); }
       delay(sq.ms,function(){ tr.endStep(sq.d,sq.x); next(); });
     })();
   } else if(TAI.chart&&TAI.chart.data&&TAI.chart.data!=='none'){
-    if(st) st.set(TAI.chart.label+' 현재 가격과 시장 동향 정리 중');
-    taiOhlc(function(ctx){ if(st) st.set('곱씹는 중'); proceed(ctx); });
+    if(st) st.set('시장 데이터를 확인하고 있어요');
+    taiOhlc(function(ctx){ if(st) st.set('분석을 정리하고 있어요'); proceed(ctx); });
   } else proceed('');
 }
 /* 하위 호환 별칭 */
@@ -4993,7 +4970,7 @@ function gSend(){
     } else {
       a='현재 '+(G.openDoc||'문서')+' 기준, 수익 '+pct(fin.ret)+', 낙폭 '+fin.mdd.toFixed(1)+'%, Holdout '+(holdoutOf(fin).ret>0?'통과':'경고')+'. 구체적으로 물어보면 근거와 함께 답합니다.';
     }
-    gDocThread('<div class="g-amsg"><span class="who">TETH</span>'+a+'</div>');
+    gDocThread('<div class="g-amsg">'+a+'</div>');
   };
   /* 로그인 상태 + 프록시 살아있으면 실제 AI, 아니면 기존 mock 답변 */
   if(S.user&&TAI.ok!==false) taiAsk(t,fin,canned);
