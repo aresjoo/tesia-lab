@@ -920,10 +920,11 @@ body.light .au-free{color:#1e8e3e}
 @keyframes taiPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.28);opacity:1;filter:brightness(1.15)}}
 .g-amsg,.g-umsg,.g-status,.g-trail,.g-chartcard,.g-srcs,.g-askcard,.g-nextcol{animation:gFadeUp .3s var(--ease) both}
 .g-status{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2)}
-/* 로딩 아이콘 = 실제 TETH 로고 원본 자산(--logo-uri) 그대로, 좌→우로 그려지는 리빌 */
-.g-status .sp,.g-trail .sp{width:22px;height:13px;background-size:contain;background-position:center;background-repeat:no-repeat;animation:tethReveal 1.9s cubic-bezier(.45,0,.25,1) infinite;flex-shrink:0}
-.g-trail .sp.sm{width:17px;height:10px}
-@keyframes tethReveal{0%{clip-path:inset(0 100% 0 0);opacity:1}55%{clip-path:inset(0 0 0 0);opacity:1}82%{clip-path:inset(0 0 0 0);opacity:1}94%{clip-path:inset(0 0 0 0);opacity:0}100%{clip-path:inset(0 100% 0 0);opacity:0}}
+/* 로딩 아이콘 = 원본 로고 PNG를 마스크 스트로크 드로잉으로 궤적을 따라 그림 (에셋 무변형) */
+.spd2{flex-shrink:0;animation:tethFadeC 2.1s cubic-bezier(.45,0,.25,1) infinite}
+.spd2 .mp{stroke-dasharray:150;stroke-dashoffset:150;animation:tethDrawM 2.1s cubic-bezier(.45,0,.25,1) infinite}
+@keyframes tethDrawM{0%{stroke-dashoffset:150}58%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+@keyframes tethFadeC{0%,84%{opacity:1}96%,100%{opacity:0}}
 .tcur{display:inline-block;width:7px;height:14px;vertical-align:-2px;background:var(--gt3);border-radius:2px;animation:tcurB 1s steps(2) infinite;margin-left:2px}
 @keyframes tcurB{50%{opacity:0}}
 /* 대기 라벨 shimmer: 하이라이트가 글자 위를 쓸고 지나감 */
@@ -4496,6 +4497,14 @@ function taiRecFix(id,nh){
   if(G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if((G.cur.thread[k2].html||'').indexOf(id)>=0){ if(nh==null) G.cur.thread.splice(k2,1); else G.cur.thread[k2].html=nh; return; } } }
 }
 var TAI_CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg>';
+/* 원본 로고 PNG를 ∞ 궤적 마스크로 그려내는 드로잉 아이콘 (에셋 형태·색 100% 유지) */
+function taiLogoDraw(w){
+  TAI.mi=(TAI.mi||0)+1; var mid='tldm'+TAI.mi;
+  return '<svg class="spd2" viewBox="0 0 52 32" width="'+w+'" height="'+Math.round(w*32/52)+'" aria-hidden="true">'
+   +'<defs><mask id="'+mid+'"><path class="mp" d="M26 16 C26 4.5 3 4.5 3 16 C3 27.5 26 27.5 26 16 C26 4.5 49 4.5 49 16 C49 27.5 26 27.5 26 16" stroke="#fff" stroke-width="13" fill="none" stroke-linecap="round"/></mask></defs>'
+   +'<image href="assets/logo.png" x="0" y="0" width="52" height="32" preserveAspectRatio="xMidYMid meet" mask="url(#'+mid+')"/>'
+   +'</svg>';
+}
 /* 미니 마크다운 렌더러 (이스케이프 후 변환이라 XSS 안전): ### 헤더, **볼드**, `코드`, 불릿, | 표 |, > 콜아웃 */
 function taiMd(src){
   function inl(s){ return s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/`([^`]+)`/g,'<code>$1</code>'); }
@@ -4593,7 +4602,7 @@ function taiSrcRows(){
 function taiStatus(label,opts){
   opts=opts||{};
   TAI.sn=(TAI.sn||0)+1; var id='gst'+TAI.sn;
-  var html='<div class="g-status" id="'+id+'">'+'<span class="sp brand-bg" aria-hidden="true"></span>'+'<span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
+  var html='<div class="g-status" id="'+id+'">'+taiLogoDraw(24)+'<span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
   var el=taiThreadAdd(html),t0=Date.now(),iv=0;
   if(opts.sec&&el){ iv=setInterval(function(){ if(!el||!el.isConnected){ clearInterval(iv); return; } var s=el.querySelector('.sec'); var n=Math.round((Date.now()-t0)/1000); if(s&&n>=2) s.textContent=n+'초';
     var lb2=el.querySelector('.lb'); /* 오래 걸릴 때 멈춘 게 아님을 알리는 문구 전환 */
@@ -4615,12 +4624,12 @@ function taiThink(label){ var st=taiStatus(label); return function(){ st.done(nu
 /* 작업 타임라인: 진행 중 로고 펄스, 완료 스텝은 체크 스택, 클릭하면 상세 펼침, 헤더로 접기 */
 function taiTrail(){
   TAI.tn=(TAI.tn||0)+1; var id='gtr'+TAI.tn;
-  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)">'+'<span class="sp brand-bg" aria-hidden="true"></span>'+'<span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
+  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)">'+taiLogoDraw(24)+'<span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
   var cur=null,curT0=0;
   function sync(){ if(el&&el.isConnected) taiRecFix(id,el.outerHTML); }
   return {
     step:function(label){ if(!el) return; curT0=Date.now(); cur=document.createElement('div'); cur.className='st on';
-      cur.innerHTML='<span class="sp sm brand-bg" aria-hidden="true"></span>'+'<span class="lb">'+gEsc(label)+'</span>';
+      cur.innerHTML=taiLogoDraw(18)+'<span class="lb">'+gEsc(label)+'</span>';
       el.querySelector('.steps').appendChild(cur); gScrollBottom(); },
     endStep:function(label,det){ if(!cur) return;
       if(typeof det==='function') det=det();
