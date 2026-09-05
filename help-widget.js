@@ -38,7 +38,9 @@
     'body:has(#g-setmenu:not([hidden])) #teth-help,'+
     'body:has(.gm-sub.on) #teth-help,'+
     'body:has(.modal-bg.open) #teth-help,'+
-    'body:has(.g-pill.fullscr) #teth-help{opacity:0;pointer-events:none}';
+    'body:has(.g-pill.fullscr) #teth-help{opacity:0;pointer-events:none}'+
+    /* 채팅(세션) 화면에서는 FAB 숨김 — 고객센터는 설정 → 도움말에서 진입 */
+    'body:has(#g-chead:not([hidden])) #teth-help{opacity:0;pointer-events:none}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   /* 로고 경로: 이 스크립트 src 기준으로 계산 → 어느 페이지에서 로드돼도 안전 */
@@ -67,8 +69,7 @@
   pop.innerHTML = '<b><i></i>'+hwT('tip')+'</b>'+hwT('body')+'<div class="sub">'+hwT('sub')+'</div>';
   document.body.appendChild(btn); document.body.appendChild(pop);
 
-  btn.addEventListener('click', function(e){
-    e.stopPropagation();
+  function hwOpen(){
     var cfg = window.TETH_CONFIG || {};
     if (cfg.zendeskKey) {
       if (window.zE) { window.zE('webWidget','open'); return; }
@@ -80,7 +81,9 @@
       return;
     }
     if (pop.classList.contains('on')) hwClose(); else { pop.classList.remove('closing'); pop.classList.add('on'); }
-  });
+  }
+  window.tethHelpOpen = hwOpen; /* 설정 → 도움말 → 고객센터에서 호출 */
+  btn.addEventListener('click', function(e){ e.stopPropagation(); hwOpen(); });
   function hwClose(){
     if (!pop.classList.contains('on') || pop.classList.contains('closing')) return;
     pop.classList.add('closing');

@@ -1020,7 +1020,6 @@ body.light .au-free{color:#1e8e3e}
 .g-composer:focus-within{border-color:var(--gl2)}
 .g-composer textarea{width:100%;background:none;border:none;outline:none;color:var(--gt);font-size:14px;font-family:inherit;padding:2px 0 8px;resize:none;line-height:20px;height:30px;max-height:120px;overflow-y:auto}
 .g-composer textarea::placeholder{color:var(--gt3)}
-.g-composer:focus-within{border-color:var(--gb2,#8fb2ff)}
 .g-send .stopsq{display:block;width:10px;height:10px;border-radius:2.5px;background:currentColor}
 .g-composer-row{display:flex;align-items:center;gap:10px}
 .g-composer-row .g-model{font-size:12.5px;color:var(--gt3);flex:1}
@@ -1841,7 +1840,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       <div class="g-composer-wrap" id="g-composer-wrap" hidden>
         <div class="g-composer">
           <div id="g-ctx-chip"></div>
-          <textarea id="g-in" rows="1" placeholder="시장에 대해 무엇이든 물어보세요" aria-label="AI에게 입력"></textarea>
+          <textarea id="g-in" rows="1" placeholder="시장에 대해 무엇이든 물어보세요" aria-label="AI에게 입력" spellcheck="false" autocomplete="off"></textarea>
           <div class="g-composer-row"><span class="g-model"></span><button class="g-send" id="g-send-btn" onclick="gSend()" aria-label="전송">↑</button></div>
         </div>
       </div>
@@ -1876,6 +1875,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       도움말<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       <div class="gm-sub" id="gm-sub-help" onclick="event.stopPropagation()">
         <div class="st">도움말</div>
+        <a href="#" onclick="if(typeof gSetMenuClose==='function')gSetMenuClose(); if(window.tethHelpOpen)window.tethHelpOpen(); return false;">고객센터</a>
         <a href="policies/#terms" target="_blank" rel="noopener noreferrer">서비스 약관</a>
         <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>
         <a href="about/">TETH 정보</a>
@@ -3526,7 +3526,7 @@ function gArtAddFor(sx,id,title,st){
   var ex=sx.artifacts.find(function(a){return a.id===id;});
   if(ex){ ex.st=st||'done'; ex.title=title||ex.title; }
   else sx.artifacts.push({id:id,title:title,st:st||'done'});
-  if(sx===G.cur) gArtRender();
+  if(sx===G.cur){ var ax=$('g-aux'); if(ax&&ax.style.display==='none') ax.style.display=''; gArtRender(); }
 }
 function gArtAdd(id,title,st){ gArtAddFor(G.cur,id,title,st); }
 function gToggleAux(){ var a=$('g-aux'); a.style.display=(a.style.display==='none')?'':'none'; }
@@ -3740,7 +3740,7 @@ function gSelect(id){
   if(!sx) return;
   G.cur=sx; S.strategy=sx.strategy; S.versions=sx.versions; S.activeVer=Math.max(sx.versions.length-1,0);
   G.tabs=sx.tabs||[{id:'__act',title:'Activity'}]; sx.tabs=G.tabs;
-  $('g-aux').style.display='';
+  $('g-aux').style.display=((sx.artifacts&&sx.artifacts.length)||sx.live)?'':'none';
   gSideRender(); gTeamRender(); gArtRender();
   if(sx.live){ gOpen('live'); return; }
   if(sx.status==='draft'){ gShowConv(); }
@@ -3759,7 +3759,7 @@ function gNew(preset){
     artifacts:[], team:{}, actRows:[], convo:[], thread:[], tabs:[{id:'__act',title:'대화'}], live:false};
   G.sessions.unshift(sx); G.cur=sx;
   G.tabs=sx.tabs; G.activeTab='__act';
-  $('g-aux').style.display='';
+  $('g-aux').style.display='none'; /* 아티팩트가 생기면 그때 열림 */
   gSideRender(); gTeamRender(); gArtRender();
   gShowConv();
   gConvUser(text);
@@ -5867,4 +5867,4 @@ applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="site-config.js?v=2"></script>
-<script src="help-widget.js?v=9"></script>
+<script src="help-widget.js?v=10"></script>
