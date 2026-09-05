@@ -4127,6 +4127,58 @@ function gSessDelete(){
 }
 
 /* ── composer routing ── */
+/* ── TETH AI: 로컬 프록시(server/) 연동 — 로그인 후 세션 자유 질문에 실제 Claude 응답 ── */
+var TAI={url:'http://localhost:8799/api/chat',ok:null};
+function taiPing(){
+  try{
+    fetch(TAI.url.replace('/api/chat','/api/ping')).then(function(r){ return r.json(); })
+      .then(function(j){ TAI.ok=!!j.ok; }).catch(function(){ TAI.ok=false; });
+  }catch(e){ TAI.ok=false; }
+}
+function taiSystem(fin){
+  var s='너는 TETH, AI 트레이딩 전략 리서치 어시스턴트다. 한국어로, 핵심만 2~5문장, 마크다운 없이 평문으로 답한다. 확정 수익 약속이나 투자 권유는 하지 않고 데이터 근거 중심으로 말한다. 이 서비스는 2023-2026 일봉 시뮬레이션 데이터로 전략을 백테스트하는 리서치 도구다.';
+  if(fin){
+    s+='\n현재 전략 컨텍스트: 수익률 '+pct(fin.ret)+', 최대낙폭 '+fin.mdd.toFixed(1)+'%, 손절 '+fin.params.sl+'% / 익절 '+fin.params.tp+'%, 버전 '+S.versions.length+'개, 최악 연도 '+fin.worstYear+', Holdout '+(holdoutOf(fin).ret>0?'통과':'경고')+'.';
+  }
+  return s;
+}
+function taiAsk(t,fin,fallback){
+  S.aiChat=S.aiChat||[];
+  var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
+  var out=null,acc='',got=false;
+  function bubble(){
+    var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove();
+    gDocThread('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
+    var els=document.querySelectorAll('.tai-txt'); out=els[els.length-1];
+  }
+  fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:taiSystem(fin),messages:msgs})})
+    .then(function(r){
+      if(!r.ok||!r.body) throw 0;
+      var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
+      function pump(){ return rd.read().then(function(x){
+        if(x.done) return;
+        buf+=dec.decode(x.value,{stream:true});
+        var lines=buf.split('\n'); buf=lines.pop();
+        for(var i=0;i<lines.length;i++){
+          var L=lines[i]; if(L.indexOf('data: ')!==0) continue;
+          var ev; try{ ev=JSON.parse(L.slice(6)); }catch(e){ continue; }
+          if(ev.error&&!got) throw 0;
+          if(ev.text){ if(!got){ got=true; bubble(); } acc+=ev.text; if(out) out.textContent=acc; }
+        }
+        return pump(); });
+      }
+      return pump().then(function(){
+        if(!got) throw 0;
+        TAI.ok=true;
+        S.aiChat.push({role:'user',content:t}); S.aiChat.push({role:'assistant',content:acc});
+        if(S.aiChat.length>24) S.aiChat=S.aiChat.slice(-24);
+        /* 스레드 기록도 최종 텍스트로 갱신 — 문서 재오픈 시 빈 말풍선 방지 */
+        if(G.cur&&G.cur.thread){ for(var k=G.cur.thread.length-1;k>=0;k--){ if(G.cur.thread[k].html.indexOf('tai-txt')>=0){ G.cur.thread[k].html='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
+      });
+    })
+    .catch(function(){ if(!got){ TAI.ok=false; fallback(); } });
+}
+
 function gSend(){
   var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value='';
   if(G.mode==='conv'){
@@ -4164,7 +4216,7 @@ function gSend(){
     return;
   }
   gDocThread('<div class="g-think"><span class="tdots"><i></i><i></i><i></i></span></div>');
-  delay(900,function(){
+  var canned=function(){
     var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove();
     var a;
     if(!fin){ a='아직 검증 결과가 없습니다. 연구를 먼저 시작하세요.'; }
@@ -4177,12 +4229,16 @@ function gSend(){
       a='현재 '+(G.openDoc||'문서')+' 기준, 수익 '+pct(fin.ret)+', 낙폭 '+fin.mdd.toFixed(1)+'%, Holdout '+(holdoutOf(fin).ret>0?'통과':'경고')+'. 구체적으로 물어보면 근거와 함께 답합니다.';
     }
     gDocThread('<div class="g-amsg"><span class="who">TETH</span>'+a+'</div>');
-  });
+  };
+  /* 로그인 상태 + 프록시 살아있으면 실제 AI, 아니면 기존 mock 답변 */
+  if(S.user&&TAI.ok!==false) taiAsk(t,fin,canned);
+  else delay(900,canned);
 }
 
 /* ── boot ── */
 function gBoot(){
   if(!ANTIGRAVITY_RESEARCH_UI) return;
+  taiPing();
   document.body.classList.add('g-dark');
   var sh=$('shell'); if(sh) sh.style.display='none';
   ['sheet-toggle','ssheet','mnav'].forEach(function(id){ var e=$(id); if(e) e.style.display='none'; });
