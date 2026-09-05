@@ -47,12 +47,12 @@ createServer(async (req, res) => {
       if (src === "binance") {
         const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=1d&limit=90`);
         const j = await r.json();
-        if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4]]);
+        if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]);
       } else if (src === "yahoo") {
         const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=3mo`, { headers: { "User-Agent": "Mozilla/5.0" } });
         const j = await r.json();
         const d = j?.chart?.result?.[0], ts = d?.timestamp || [], qd = d?.indicators?.quote?.[0];
-        if (qd) rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i]]).filter((x) => x[4] != null);
+        if (qd) rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i], qd.volume ? qd.volume[i] || 0 : 0]).filter((x) => x[4] != null);
       }
       if (!rows.length) throw 0;
       const closes = rows.map((x) => x[4]), last = closes[closes.length - 1];
@@ -61,7 +61,7 @@ createServer(async (req, res) => {
         last: +last.toPrecision(6), chg1d: pctFrom(1), chg7d: pctFrom(7), chg30d: pctFrom(30),
         hi90: +Math.max(...rows.map((x) => x[2])).toPrecision(6), lo90: +Math.min(...rows.map((x) => x[3])).toPrecision(6),
         closes30: closes.slice(-30).map((v) => +v.toPrecision(5)),
-        rows: rows.slice(-60).map((x) => [x[0], +x[1].toPrecision(5), +x[2].toPrecision(5), +x[3].toPrecision(5), +x[4].toPrecision(5)]), /* 예측 시나리오 카드용 */
+        rows: rows.slice(-60).map((x) => [x[0], +x[1].toPrecision(5), +x[2].toPrecision(5), +x[3].toPrecision(5), +x[4].toPrecision(5), +(x[5] || 0).toPrecision(4)]), /* 예측 시나리오 카드 + 지표 계산용 */
       };
       res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
       return res.end(JSON.stringify(out));

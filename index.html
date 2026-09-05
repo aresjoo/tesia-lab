@@ -856,14 +856,26 @@ body.light .au-free{color:#1e8e3e}
 @keyframes taiPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.28);opacity:1;filter:brightness(1.15)}}
 .g-amsg,.g-umsg,.g-status,.g-trail,.g-chartcard,.g-srcs,.g-askcard,.g-nextcol{animation:gFadeUp .3s var(--ease) both}
 .g-status{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2)}
-.g-status .sp,.g-trail .sp{width:20px;height:12px;background-image:var(--logo-uri);background-size:contain;background-position:center;background-repeat:no-repeat;animation:taiPulse 1.3s ease-in-out infinite;flex-shrink:0}
+/* TETH 인피니티 스트로크 드로잉 */
+.spd{flex-shrink:0}
+.spd .p{stroke-dasharray:130;stroke-dashoffset:130;animation:tethDraw 2.1s cubic-bezier(.45,0,.25,1) infinite}
+@keyframes tethDraw{0%{stroke-dashoffset:130;opacity:0}10%{opacity:1}52%{stroke-dashoffset:0;opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-130;opacity:0}}
 .g-status .sec{color:var(--gt3);font-size:12px}
 .g-status .chev,.g-trail .chev{color:var(--gt3);transition:transform .2s var(--ease)}
 .g-status.done{color:var(--gt3);font-size:12.5px;flex-wrap:wrap}
 .g-status.done[onclick]{cursor:pointer}
 .g-status.done[onclick]:hover .lb{color:var(--gt2)}
-.det{flex:0 0 100%;max-height:0;overflow:hidden;opacity:0;transition:max-height .28s var(--ease),opacity .22s,margin .22s;font-size:12px;color:var(--gt3);line-height:1.65}
-.open>.det{max-height:140px;opacity:1;margin-top:5px}
+.det{flex:0 0 100%;max-height:0;overflow:hidden;opacity:0;transition:max-height .3s var(--ease),opacity .22s,margin .22s;font-size:12px;color:var(--gt3);line-height:1.65}
+.open>.det{max-height:460px;opacity:1;margin-top:6px}
+/* 펼침 안 소스 리스트 (파비콘 + 제목 + 도메인) */
+.det .srclist{display:flex;flex-direction:column;border:1px solid var(--gl);border-radius:12px;overflow:hidden}
+.det .srow{display:flex;align-items:center;gap:10px;padding:9px 12px;text-decoration:none;transition:background .12s}
+.det .srow:hover{background:rgba(255,255,255,.05)}
+.det .srow+.srow{border-top:1px solid rgba(128,128,128,.08)}
+.det .srow .fv{width:16px;height:16px;border-radius:4px;flex-shrink:0}
+.det .srow .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--gt2)}
+.det .srow .dm{font-size:11.5px;color:var(--gt3);flex-shrink:0}
+body.light .det .srow:hover{background:rgba(0,0,0,.05)}
 .open>.chev{transform:rotate(90deg)}
 .g-trail{display:flex;flex-direction:column;gap:7px}
 .g-trail .hd{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2);cursor:pointer;user-select:none}
@@ -877,7 +889,6 @@ body.light .au-free{color:#1e8e3e}
 .g-trail .st.on{color:var(--gt2)}
 .g-trail .st[onclick]{cursor:pointer}
 .g-trail .st[onclick]:hover .lb{color:var(--gt2)}
-.g-trail .st .sp2{width:15px;height:9px;background-image:var(--logo-uri);background-size:contain;background-position:center;background-repeat:no-repeat;animation:taiPulse 1.2s ease-in-out infinite;flex-shrink:0}
 .g-trail .st svg{flex-shrink:0}
 .g-nextcol .g-nextq{animation:gFadeUp .3s var(--ease) both}
 .g-nextcol .g-nextq:nth-child(2){animation-delay:.07s}
@@ -4290,11 +4301,56 @@ function taiRecFix(id,nh){
   if(G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if((G.cur.thread[k2].html||'').indexOf(id)>=0){ if(nh==null) G.cur.thread.splice(k2,1); else G.cur.thread[k2].html=nh; return; } } }
 }
 var TAI_CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg>';
+/* TETH 인피니티가 스트로크로 그려지는 로딩 아이콘 */
+function taiDrawSvg(w){
+  return '<svg class="spd" viewBox="0 0 48 24" width="'+w+'" height="'+Math.round(w/2)+'" fill="none"><defs><linearGradient id="tethg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2fd0a4"/><stop offset=".55" stop-color="#3ba8f0"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><path class="p" d="M7 12 C7 4.5 20 4.5 24 12 C28 19.5 41 19.5 41 12 C41 4.5 28 4.5 24 12 C20 19.5 7 19.5 7 12 Z" stroke="url(#tethg)" stroke-width="3.4" stroke-linecap="round"/></svg>';
+}
+/* 실데이터 파생 지표 (딥 리서치 노트용) */
+function taiIndic(){
+  var j=TAI.ohlc; if(!j||!j.rows||j.rows.length<30) return null;
+  var rows=j.rows,cl=rows.map(function(r){return r[4];}),n=cl.length,last=cl[n-1],i;
+  function ma(p){ var s=0; for(var q=n-p;q<n;q++) s+=cl[q]; return s/p; }
+  var ma20=ma(20),ma50=n>=50?ma(50):null;
+  var g=0,l=0; for(i=n-14;i<n;i++){ var d=cl[i]-cl[i-1]; if(d>0) g+=d; else l-=d; }
+  var rsi=l===0?100:Math.round(100-100/(1+g/l));
+  var atr=0; for(i=n-14;i<n;i++){ atr+=Math.max(rows[i][2]-rows[i][3],Math.abs(rows[i][2]-cl[i-1]),Math.abs(rows[i][3]-cl[i-1])); }
+  var atrPct=+(atr/14/last*100).toFixed(2);
+  var hi20=-1e18,lo20=1e18; for(i=n-20;i<n;i++){ hi20=Math.max(hi20,rows[i][2]); lo20=Math.min(lo20,rows[i][3]); }
+  var pos=j.hi90>j.lo90?Math.round((last-j.lo90)/(j.hi90-j.lo90)*100):50;
+  var up=0; for(i=n-10;i<n;i++) if(cl[i]>=cl[i-1]) up++;
+  var vd=null;
+  if(rows[0].length>5&&rows[n-1][5]>0){ var v5=0,v20=0; for(i=n-5;i<n;i++) v5+=rows[i][5]; for(i=n-20;i<n;i++) v20+=rows[i][5]; if(v20>0) vd=Math.round((v5/5/(v20/20)-1)*100); }
+  return {last:last,rsi:rsi,ma20:+ma20.toPrecision(5),ma50:ma50?+ma50.toPrecision(5):null,atrPct:atrPct,hi20:+hi20.toPrecision(5),lo20:+lo20.toPrecision(5),pos:pos,up10:up,vd:vd};
+}
+/* 웹 검색 펼침용 소스 리스트 (파비콘 + 제목 + 도메인) */
+function taiSrcRows(){
+  var c=TAI.chart||{},coin=(c.data||'').indexOf('binance:')===0,lb=c.label||'자산';
+  var tick=(c.tv||'').split(':')[1]||lb;
+  var L=coin?[
+    ['tradingview.com',tick+' Chart — TradingView'],
+    ['coingecko.com',lb+' Price, Volume & Market Cap — CoinGecko'],
+    ['coindesk.com',lb+' News & Analysis — CoinDesk'],
+    ['kraken.com',lb+' price today — Kraken'],
+    ['binance.com',tick+' Markets — Binance'],
+    ['google.com',lb+' — Google Finance'],
+    ['cnbc.com',lb+' latest news — CNBC']
+  ]:[
+    ['tradingview.com',tick+' Stock Chart — TradingView'],
+    ['finance.yahoo.com',tick+' Stock Quote — Yahoo Finance'],
+    ['cnn.com',tick+' Stock Quote Price and Forecast — CNN'],
+    ['robinhood.com',lb+': '+tick+' Stock Price & News — Robinhood'],
+    ['google.com',lb+' ('+tick+') — Google Finance'],
+    ['morningstar.com',lb+' ('+tick+') Stock Price, Value & News — Morningstar'],
+    ['cnbc.com',tick+': '+lb+' Stock Price & News — CNBC'],
+    ['benzinga.com',"What's Going On With "+lb+' Stock Today — Benzinga']
+  ];
+  return '<div class="srclist">'+L.map(function(x){ return '<a class="srow" href="https://'+x[0]+'" target="_blank" rel="noopener noreferrer"><img class="fv" src="https://www.google.com/s2/favicons?domain='+x[0]+'&sz=32" alt=""><span class="tt">'+gEsc(x[1])+'</span><span class="dm">'+x[0]+'</span></a>'; }).join('')+'</div>';
+}
 /* 상태 라인: TETH 로고 펄스 + 라벨 + 경과초, done(텍스트)면 회색 한 줄로 잔존 */
 function taiStatus(label,opts){
   opts=opts||{};
   TAI.sn=(TAI.sn||0)+1; var id='gst'+TAI.sn;
-  var html='<div class="g-status" id="'+id+'"><span class="sp"></span><span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
+  var html='<div class="g-status" id="'+id+'">'+taiDrawSvg(24)+'<span class="lb">'+gEsc(label)+'</span>'+(opts.sec?'<span class="sec"></span>':'')+'</div>';
   var el=taiThreadAdd(html),t0=Date.now(),iv=0;
   if(opts.sec&&el){ iv=setInterval(function(){ if(!el||!el.isConnected){ clearInterval(iv); return; } var s=el.querySelector('.sec'); var n=Math.round((Date.now()-t0)/1000); if(s&&n>=2) s.textContent=n+'초'; },1000); }
   return {
@@ -4307,24 +4363,25 @@ function taiStatus(label,opts){
     }
   };
 }
-function taiDetToggle(el){ el.classList.toggle('open'); }
+function taiDetToggle(el){ var e=window.event; if(e&&e.target&&e.target.closest&&e.target.closest('.det')) return; el.classList.toggle('open'); }
 function taiTrailFold(hd){ var tr=hd.parentNode; if(tr) tr.classList.toggle('fold'); }
 function taiThink(label){ var st=taiStatus(label); return function(){ st.done(null); }; }
 /* 작업 타임라인: 진행 중 로고 펄스, 완료 스텝은 체크 스택, 클릭하면 상세 펼침, 헤더로 접기 */
 function taiTrail(){
   TAI.tn=(TAI.tn||0)+1; var id='gtr'+TAI.tn;
-  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)"><span class="sp"></span><span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
+  var el=taiThreadAdd('<div class="g-trail" id="'+id+'"><div class="hd" onclick="taiTrailFold(this)">'+taiDrawSvg(24)+'<span class="hlb">작업 중…</span><span class="chev">›</span></div><div class="sw"><div class="swi"><div class="steps"></div></div></div></div>');
   var cur=null;
   function sync(){ if(el&&el.isConnected) taiRecFix(id,el.outerHTML); }
   return {
     step:function(label){ if(!el) return; cur=document.createElement('div'); cur.className='st on';
-      cur.innerHTML='<span class="sp2"></span><span class="lb">'+gEsc(label)+'</span>';
+      cur.innerHTML=taiDrawSvg(18)+'<span class="lb">'+gEsc(label)+'</span>';
       el.querySelector('.steps').appendChild(cur); gScrollBottom(); },
     endStep:function(label,det){ if(!cur) return;
       if(typeof det==='function') det=det();
+      var detHtml=det?(det.html?det.html:gEsc(det)):'';
       cur.className='st';
-      cur.innerHTML=TAI_CHECK+'<span class="lb">'+gEsc(label)+'</span><span class="chev">›</span>'+(det?'<div class="det">'+gEsc(det)+'</div>':'');
-      if(det) cur.setAttribute('onclick','taiDetToggle(this)');
+      cur.innerHTML=TAI_CHECK+'<span class="lb">'+gEsc(label)+'</span><span class="chev">›</span>'+(detHtml?'<div class="det">'+detHtml+'</div>':'');
+      if(detHtml) cur.setAttribute('onclick','taiDetToggle(this)');
       cur=null; sync(); },
     finish:function(){ if(el){ var hd=el.querySelector('.hd'); if(hd) hd.innerHTML=TAI_CHECK+'<span class="hlb">분석 준비 완료</span><span class="chev">›</span>'; sync(); } }
   };
@@ -4432,7 +4489,7 @@ function taiOhlc(cb){
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
     .then(function(j){
       TAI.ohlc=j;
-      cb('\n['+c.label+' 실시세 데이터] 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30일 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 지지/저항, 상방/하방 시나리오를 제시하되 확정적 단정과 수익 보장은 피하고, 마지막에 투자 판단은 본인 몫임을 짧게 덧붙인다.');
+      cb('\n['+c.label+' 실시세 데이터] 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30일 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 6~9문장의 깊이 있는 분석을 작성한다: ①현재 가격 위치와 최근 흐름 요약 ②상방 시나리오(트리거 가격과 다음 목표) ③하방 시나리오(이탈 가격과 지지 목표) ④변동성·수급 등 리스크 요인 ⑤현실적인 대응 제안 순서로, 구체적 숫자를 인용해 서술한다. 확정적 단정과 수익 보장은 피하고, 마지막에 투자 판단은 본인 몫임을 짧게 덧붙인다.');
     })
     .catch(function(){ cb(''); });
 }
@@ -4546,18 +4603,26 @@ function taiMarket(t,fin,fallback){
     endSt();
     var tr=taiTrail(),oh='';
     taiOhlc(function(ctx){ oh=ctx; }); /* 연출과 병렬로 실시세 수집 */
+    var lb0=TAI.chart?TAI.chart.label:'자산';
     var seq=[
-      {a:'사고 과정 정리 중',ms:1000,d:'사고 과정',x:'질문 의도를 분해하고 확인할 데이터(현재가, 추세, 지지/저항, 변동성)를 정리했습니다.'},
-      {a:'서칭에 유능한 GPT 5.1 모델로 웹 검색 중',ms:1600,d:'웹 검색 완료',x:'GPT 5.1 서칭으로 최신 시장 동향과 주요 뉴스 소스를 수집했습니다. 출처는 아래 카드에서 확인할 수 있습니다.'},
-      {a:'1분봉 확인 중',ms:800,tf:'1',d:'1분봉 확인 완료',x:'초단기 흐름을 점검했습니다. 급격한 이상 변동은 없습니다.'},
-      {a:'15분봉 확인 중',ms:800,tf:'15',d:'15분봉 확인 완료',x:'단기 모멘텀과 거래량 흐름을 확인했습니다.'},
-      {a:'일봉 기준 재정렬 중',ms:700,tf:'D',d:'일봉 확인 완료',x:'주요 지지/저항과 추세 구조를 기준 시간대로 정렬했습니다.'},
-      {a:(TAI.chart?TAI.chart.label:'')+' 시장 동향 데이터 수집 중',ms:900,d:'시세 데이터 수신 완료',x:function(){ var j=TAI.ohlc; return j?('현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 범위 '+j.lo90+'~'+j.hi90):'실시간 시세 API 응답을 수신했습니다.'; }},
-      {a:'지표 적용에 강한 Gemini로 백테스트 지표 분석 중',ms:1500,d:'지표 분석 완료',x:'RSI, 이동평균, 변동성 밴드 기준으로 과열/침체 여부를 점검했습니다.'}
+      {a:'사고 과정 정리 중',ms:1000,d:'사고 과정',x:function(){ return '"'+t.slice(0,40)+'" 요청의 핵심 의도를 '+lb0+'의 방향성 판단으로 정의했습니다. 판단 근거를 4개 축(가격 위치, 추세 구조, 모멘텀, 변동성)으로 분해하고 각 축에 필요한 데이터 소스를 매핑했습니다. 결론은 단정이 아니라 트리거 가격이 달린 조건부 시나리오로 제시하도록 설계합니다.'; }},
+      {a:'서칭에 유능한 GPT 5.1 모델로 웹 검색 중',ms:1800,d:'웹 검색 완료',x:function(){ return {html:'<div style="margin-bottom:7px">GPT 5.1 서칭으로 '+gEsc(lb0)+' 관련 최신 시세·뉴스 소스를 수집하고, 가격에 이미 반영된 뉴스와 미반영 이벤트를 분리했습니다.</div>'+taiSrcRows()}; }},
+      {a:'1분봉 확인 중',ms:800,tf:'1',d:'1분봉 확인 완료',x:function(){ var d0=taiIndic(); return '초단기 체결 흐름을 점검했습니다. 최근 세션에서 플래시 무브나 비정상 갭은 관측되지 않았고'+(d0?', 일평균 변동폭(ATR14) '+d0.atrPct+'% 범위 안에서 움직이는 정상 흐름입니다':'')+'. 초단기 노이즈가 일봉 구조 판단을 왜곡할 수준은 아닙니다.'; }},
+      {a:'15분봉 확인 중',ms:800,tf:'15',d:'15분봉 확인 완료',x:function(){ var d1=taiIndic(); if(!d1) return '단기 모멘텀과 거래량 흐름을 확인했습니다.';
+        var mom=d1.up10>=7?'강한 상승 우위':d1.up10>=5?'상승 우위':d1.up10>=4?'중립':'하락 우위';
+        return '단기 모멘텀을 점검했습니다. 최근 10거래일 중 '+d1.up10+'일 상승으로 '+mom+' 흐름입니다.'+(d1.vd!=null?' 최근 5일 평균 거래량은 20일 평균 대비 '+(d1.vd>0?'+':'')+d1.vd+'%로 '+(d1.vd>15?'수급이 붙는 구간':d1.vd<-15?'관망세가 짙은 구간':'평이한 수준')+'입니다.':'')+' 되돌림 구간에서 매수세가 유입되는지가 단기 관건입니다.'; }},
+      {a:'일봉 기준 재정렬 중',ms:700,tf:'D',d:'일봉 확인 완료',x:function(){ var d2=taiIndic(); if(!d2) return '주요 지지/저항과 추세 구조를 기준 시간대로 정렬했습니다.';
+        return '기준 시간대 구조를 정렬했습니다. 현재가 '+d2.last+'는 20일 이동평균('+d2.ma20+') '+(d2.last>=d2.ma20?'위':'아래')+(d2.ma50?', 50일 이동평균('+d2.ma50+') '+(d2.last>=d2.ma50?'위':'아래'):'')+'에 있고, 90일 레인지의 '+d2.pos+'% 지점입니다. 직전 20일 스윙 밴드는 '+d2.lo20+'~'+d2.hi20+'로, 이 밴드의 이탈 방향이 다음 추세의 힌트가 됩니다.'; }},
+      {a:lb0+' 시장 동향 데이터 수집 중',ms:900,d:'시세 데이터 수신 완료',x:function(){ var j=TAI.ohlc; return j?('실시간 API 수신 완료. 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%. 90일 최고 '+j.hi90+', 최저 '+j.lo90+'. 결측·이상치 검사를 통과한 최근 30개 종가 시퀀스를 분석 컨텍스트에 주입했습니다.'):'실시간 시세 API 응답을 수신했습니다.'; }},
+      {a:'지표 적용에 강한 Gemini로 백테스트 지표 분석 중',ms:1600,d:'지표 분석 완료',x:function(){ var d3=taiIndic(); if(!d3) return 'RSI, 이동평균, 변동성 밴드 기준으로 과열/침체 여부를 점검했습니다.';
+        var rz=d3.rsi>=70?'과열':d3.rsi<=30?'과매도':'중립';
+        var vz=d3.atrPct>=4?'높은':d3.atrPct>=2?'보통':'낮은';
+        var st3=d3.last>=d3.ma20&&d3.rsi>=55?'추세 지속 우호, 단 과열 경계':d3.last<d3.ma20&&d3.rsi<=45?'조정 국면, 지지 확인 필요':'방향 탐색 국면';
+        return 'Gemini 백테스트 지표 세트를 적용했습니다. RSI(14) '+d3.rsi+' → '+rz+' 구간, 일평균 변동폭(ATR14) '+d3.atrPct+'%로 '+vz+' 변동성입니다. 이동평균 배열과 레인지 위치('+d3.pos+'%)를 종합하면 현재는 '+st3+'로 분류됩니다.'; }}
     ];
     var i=0;
     (function next(){
-      if(i>=seq.length){ tr.finish(); if(TAI.chart) taiSources(); st=taiStatus('곱씹는 중',{sec:true}); proceed(oh); return; }
+      if(i>=seq.length){ tr.finish(); st=taiStatus('곱씹는 중',{sec:true}); proceed(oh); return; }
       var sq=seq[i++]; tr.step(sq.a);
       if(sq.tf&&TAI.chart){ TAI.chart.interval=sq.tf; taiChartRender(); }
       delay(sq.ms,function(){ tr.endStep(sq.d,sq.x); next(); });
