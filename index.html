@@ -920,9 +920,10 @@ body.light .au-free{color:#1e8e3e}
 @keyframes taiPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.28);opacity:1;filter:brightness(1.15)}}
 .g-amsg,.g-umsg,.g-status,.g-trail,.g-chartcard,.g-srcs,.g-askcard,.g-nextcol{animation:gFadeUp .3s var(--ease) both}
 .g-status{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2)}
-/* 로딩 아이콘 = 실제 TETH 로고 자산(--logo-uri), 은은한 펄스만 */
-.g-status .sp,.g-trail .sp{width:22px;height:13px;background-size:contain;background-position:center;background-repeat:no-repeat;animation:gSparkPulse 2s ease-in-out infinite;flex-shrink:0}
+/* 로딩 아이콘 = 실제 TETH 로고 원본 자산(--logo-uri) 그대로, 좌→우로 그려지는 리빌 */
+.g-status .sp,.g-trail .sp{width:22px;height:13px;background-size:contain;background-position:center;background-repeat:no-repeat;animation:tethReveal 1.9s cubic-bezier(.45,0,.25,1) infinite;flex-shrink:0}
 .g-trail .sp.sm{width:17px;height:10px}
+@keyframes tethReveal{0%{clip-path:inset(0 100% 0 0);opacity:1}55%{clip-path:inset(0 0 0 0);opacity:1}82%{clip-path:inset(0 0 0 0);opacity:1}94%{clip-path:inset(0 0 0 0);opacity:0}100%{clip-path:inset(0 100% 0 0);opacity:0}}
 .tcur{display:inline-block;width:7px;height:14px;vertical-align:-2px;background:var(--gt3);border-radius:2px;animation:tcurB 1s steps(2) infinite;margin-left:2px}
 @keyframes tcurB{50%{opacity:0}}
 /* 대기 라벨 shimmer: 하이라이트가 글자 위를 쓸고 지나감 */
@@ -1870,12 +1871,15 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H8l-4 4z"/><path d="M12 8.2v.4M12 11v3"/></svg>
       의견 보내기
     </button>
+    <button class="gm-item" id="gm-cs" hidden onclick="gSetMenuClose(); if(window.tethHelpOpen)window.tethHelpOpen();">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 13a7.5 7.5 0 0 1 15 0"/><rect x="3" y="12.5" width="4" height="6.5" rx="2"/><rect x="17" y="12.5" width="4" height="6.5" rx="2"/><path d="M19 19v.4a3 3 0 0 1-3 3h-3"/></svg>
+      고객센터
+    </button>
     <div class="gm-item" role="button" tabindex="0" onclick="gmSub(event,'help')" onmouseenter="gmFlip(this)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="16" height="16" rx="3"/><path d="M5 7H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1" opacity=".6"/><path d="M10.5 8.6a2.6 2.6 0 1 1 3.6 2.4c-.8.35-1.1.8-1.1 1.6"/><path d="M13 15.4v.2"/></svg>
       도움말<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       <div class="gm-sub" id="gm-sub-help" onclick="event.stopPropagation()">
         <div class="st">도움말</div>
-        <a href="#" onclick="if(typeof gSetMenuClose==='function')gSetMenuClose(); if(window.tethHelpOpen)window.tethHelpOpen(); return false;">고객센터</a>
         <a href="policies/#terms" target="_blank" rel="noopener noreferrer">서비스 약관</a>
         <a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>
         <a href="about/">TETH 정보</a>
@@ -3564,6 +3568,7 @@ function gTabAdd(id,title){
 }
 function gComposer(on,ctx){
   $('g-composer-wrap').hidden=!on;
+  document.body.classList.toggle('g-inchat',!!on); /* 채팅 도중에만 고객센터 FAB 숨김 */
   $('g-ctx-chip').innerHTML=ctx?'<span class="g-ctx">컨텍스트, '+ctx+'</span>':'';
 }
 function gContent(html){ $('g-content').innerHTML=html; $('g-scroll').scrollTop=0; }
@@ -4462,7 +4467,9 @@ function taiConvSystem(){
 }
 /* 시장 Q&A 공통 규칙: 도메인 게이트 + 차트 태그 프로토콜 */
 function taiMarketRules(){
-  var r='\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
+  var r='\n입력이 키워드 수준으로 짧거나 대상 자산·조건·타임프레임이 생략된 모호한 질문이면, 자의적으로 판단해 장황한 일반론 리포트를 쏟지 마라. 현재 상황을 한두 문장으로 가볍게 짚어준 뒤, 핵심 의도를 좁히는 명확한 되물음 1~2개로 대화를 이어가라. 선택지가 명확하면 [ASK] 카드를 써라.'
+   +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
+   +'\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
    +'\n사용자가 특정 자산이나 시장(주식, 코인, 지수, 원자재, 부동산 등)을 언급하면 함께 차트를 보자고 자연스럽게 유도하고, 답변의 맨 마지막 줄에 정확히 다음 형식의 태그를 붙인다: [CHART {"tv":"트레이딩뷰심볼","data":"binance:심볼 또는 yahoo:티커 또는 none","label":"한글이름"}]'
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
@@ -4862,7 +4869,15 @@ function taiMarket(t,fin,fallback){
   taiNextClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
   TAI.lastQ=t;
-  var st=taiStatus('요청을 확인하고 있어요',{sec:true});
+  /* 상태 라벨은 하드코딩 대신 사용자 발화를 반영해 생성 */
+  var stLb=(function(){
+    var short=t.replace(/\s+/g,' ').trim();
+    if(short.length>22) short=short.slice(0,22)+'…';
+    if(isPred) return '"'+short+'" 흐름부터 짚어보고 있어요';
+    if(/전략|만들|자동매매/.test(t)) return '"'+short+'" 조건을 정리하고 있어요';
+    return '"'+short+'" 요청을 살펴보고 있어요';
+  })();
+  var st=taiStatus(stLb,{sec:true});
   var endSt=function(){ if(st){ st.done(null); st=null; } };
   var fb=function(kind){
     endSt();
@@ -4959,14 +4974,14 @@ function taiMarket(t,fin,fallback){
     ];
     var i=0;
     (function next(){
-      if(i>=seq.length){ tr.finish(); taiSources(); st=taiStatus('분석을 정리하고 있어요',{sec:true}); proceed(oh); return; }
+      if(i>=seq.length){ tr.finish(); taiSources(); st=taiStatus((TAI.chart?TAI.chart.label+' ':'')+'분석을 정리하고 있어요',{sec:true}); proceed(oh); return; }
       var sq=seq[i++]; tr.step(sq.a);
       if(sq.tf&&TAI.chart){ TAI.chart.interval=sq.tf; taiChartRender(); }
       delay(sq.ms,function(){ tr.endStep(sq.d,sq.x); next(); });
     })();
   } else if(TAI.chart&&TAI.chart.data&&TAI.chart.data!=='none'){
     if(st) st.set('시장 데이터를 확인하고 있어요');
-    taiOhlc(function(ctx){ if(st) st.set('분석을 정리하고 있어요'); proceed(ctx); });
+    taiOhlc(function(ctx){ if(st) st.set((TAI.chart?TAI.chart.label+' ':'')+'분석을 정리하고 있어요'); proceed(ctx); });
   } else proceed('');
 }
 /* 하위 호환 별칭 */
@@ -5771,6 +5786,7 @@ function tethBannerClose(){
 function authSyncUI(){
   var b=$('g-auth-btns'); if(b) b.hidden=!!S.user;
   var gl=$('g-globe'); if(gl) gl.hidden=!!S.user; /* 로그인 상태에선 언어 선택도 숨김, 드로어의 언어 및 통화 행으로 접근 */
+  var cs=$('gm-cs'); if(cs) cs.hidden=!S.user; /* 고객센터 메뉴는 로그인 후에만 */
   var p=$('g-profile'); if(p) p.textContent=S.user?S.user.name:'로그인';
   var m=$('g-me-name'); if(m) m.textContent=S.user?S.user.name:'';
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
@@ -5867,4 +5883,4 @@ applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="site-config.js?v=2"></script>
-<script src="help-widget.js?v=10"></script>
+<script src="help-widget.js?v=11"></script>

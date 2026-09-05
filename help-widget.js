@@ -39,8 +39,8 @@
     'body:has(.gm-sub.on) #teth-help,'+
     'body:has(.modal-bg.open) #teth-help,'+
     'body:has(.g-pill.fullscr) #teth-help{opacity:0;pointer-events:none}'+
-    /* 채팅(세션) 화면에서는 FAB 숨김 — 고객센터는 설정 → 도움말에서 진입 */
-    'body:has(#g-chead:not([hidden])) #teth-help{opacity:0;pointer-events:none}';
+    /* 채팅 컴포저가 떠 있는 동안에만 FAB 숨김 — 그 외 모든 화면(홈, 서브페이지)에선 표시 */
+    'body.g-inchat #teth-help{opacity:0;pointer-events:none}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   /* 로고 경로: 이 스크립트 src 기준으로 계산 → 어느 페이지에서 로드돼도 안전 */
