@@ -3793,7 +3793,18 @@ function gUserPin(){
   th.appendChild(sp);
   sp.style.height=Math.max(0,s.clientHeight-170)+'px';
   var rows=th.querySelectorAll('.g-urow,.g-usum'); var last=rows[rows.length-1];
-  if(last) s.scrollTop=Math.max(0,last.offsetTop-10);
+  if(last){
+    var top=Math.max(0,last.offsetTop-10);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) s.scrollTop=top;
+    else s.scrollTo({top:top,behavior:'smooth'});
+  }
+}
+/* 답변 완료 후: 화면에 보이는 만큼 + 약간의 여유만 남기고 과잉 스페이서 제거 (스크롤 점프 없음) */
+function taiSpacerTrim(){
+  var s=$('g-scroll'),sp=$('g-spacer'); if(!s||!sp||!sp.parentNode) return;
+  var cur=parseFloat(sp.style.height)||0; if(cur<=0) return;
+  var visBelow=s.scrollTop+s.clientHeight-sp.offsetTop;
+  sp.style.height=Math.max(0,Math.min(cur,visBelow+40))+'px';
 }
 function gConvUser(t){
   gThreadAdd('<div class="g-urow"><span class="g-uacts">'
@@ -4855,8 +4866,8 @@ function taiMarket(t,fin,fallback){
   var endSt=function(){ if(st){ st.done(null); st=null; } };
   var fb=function(kind){
     endSt();
-    if(kind==='abort'){ taiThreadAdd('<div class="g-status done"><span class="lb">생성을 중단했습니다</span></div>'); taiCancelChips(false); return; }
-    taiErrCard(t);
+    if(kind==='abort'){ taiThreadAdd('<div class="g-status done"><span class="lb">생성을 중단했습니다</span></div>'); taiCancelChips(false); delay(300,taiSpacerTrim); return; }
+    taiErrCard(t); delay(300,taiSpacerTrim);
   };
   var proceed=function(ctx){
     S.aiChat=S.aiChat||[];
@@ -4909,6 +4920,7 @@ function taiMarket(t,fin,fallback){
       }
       else if(ask) delay(500,function(){ taiAskCard(ask); });
       else if(nexts&&nexts.length) delay(400,function(){ taiNext(nexts.slice(0,4)); });
+      delay(1600,taiSpacerTrim); /* 차트/후속칩 렌더가 자리 잡은 뒤 과잉 여백 정리 */
     },function(kind){
       if(!out||(kind!=='abort-partial'&&kind!=='error-partial')){ fb(kind); return; }
       /* 부분 생성물 보존: 중단/끊김 시점까지의 답변을 마무리하고 이어가기 제공 */
@@ -4921,6 +4933,7 @@ function taiMarket(t,fin,fallback){
       if(!conv&&G.cur&&G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if(G.cur.thread[k2].html.indexOf('tai-txt')>=0){ G.cur.thread[k2].html=fixed; break; } } }
       taiThreadAdd('<div class="g-status done"><span class="lb">'+(kind==='abort-partial'?'생성을 중단했습니다':'연결이 끊겨 답변이 중단되었습니다')+'</span></div>');
       taiCancelChips(true);
+      delay(300,taiSpacerTrim);
     });
   };
   if(isPred){
