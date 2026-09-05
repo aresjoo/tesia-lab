@@ -846,6 +846,12 @@ body.light .au-free{color:#1e8e3e}
 .g-thread{display:flex;flex-direction:column;gap:16px;padding-bottom:8px}
 .g-umsg{background:var(--g2);border-radius:10px;padding:11px 16px;font-size:14px;color:var(--gt)}
 .g-amsg{font-size:14.5px;line-height:1.7;color:var(--gt)}
+/* 대화 속 트레이딩뷰 차트 카드 */
+.g-chartcard{margin:6px 0 4px;border:1px solid var(--gl);border-radius:12px;overflow:hidden;background:var(--g1,rgba(255,255,255,.02))}
+.g-chartcard .hd{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;font-size:13px;font-weight:600;color:var(--gt);border-bottom:1px solid var(--gl)}
+.g-chartcard .hd .tvtag{font-size:10.5px;font-weight:500;color:var(--gt3);letter-spacing:.04em}
+.g-chartcard .bd{height:380px}
+@media (max-width:860px){.g-chartcard .bd{height:300px}}
 .g-amsg .who{display:block;font-size:11px;color:var(--gt3);margin-bottom:5px}
 .g-amsg b{font-weight:600}
 .g-chiprow{display:flex;flex-wrap:wrap;gap:7px}
@@ -4169,44 +4175,122 @@ function taiPushHist(t,acc){
   S.aiChat.push({role:'user',content:t}); S.aiChat.push({role:'assistant',content:acc});
   if(S.aiChat.length>24) S.aiChat=S.aiChat.slice(-24);
 }
-function taiAsk(t,fin,fallback){
-  S.aiChat=S.aiChat||[];
-  var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
-  var out=null,acc='';
-  taiStream(taiSystem(fin),msgs,function(delta){
-    if(!out){
-      var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove();
-      gDocThread('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
-      var els=document.querySelectorAll('.tai-txt'); out=els[els.length-1]||{};
-    }
-    acc+=delta; if(out.textContent!==undefined) out.textContent=acc;
-  },function(){
-    taiPushHist(t,acc);
-    /* 스레드 기록도 최종 텍스트로 갱신 — 문서 재오픈 시 빈 말풍선 방지 */
-    if(G.cur&&G.cur.thread){ for(var k=G.cur.thread.length-1;k>=0;k--){ if(G.cur.thread[k].html.indexOf('tai-txt')>=0){ G.cur.thread[k].html='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
-  },fallback);
-}
-/* 가이드형 대화(conv) 단계에서 스크립트를 벗어난 발화 — AI가 응대하고 현재 선택 단계로 유도 */
+/* 가이드형 대화(conv) 단계 페르소나 — 현재 선택 단계로 유도 */
 function taiConvSystem(){
   var stepK={mode:'진입 방식 선택',pair:'대상 자산 선택',tf:'시간 프레임 선택',risk:'리스크(손절) 설정'}[gStep]||'전략 설정';
-  return '너는 TETH, AI 트레이딩 전략 리서치 어시스턴트다. 사용자는 지금 전략 만들기 대화의 "'+stepK+'" 단계에 있고, 화면에 선택지 버튼이 보인다. 사용자의 말에 한국어 1~2문장으로 자연스럽게 응대하되, 마지막엔 부드럽게 현재 단계의 선택을 이어가도록 유도하라. 마크다운 없이 평문으로.';
+  return '너는 TETH, AI 트레이딩 전략 리서치 어시스턴트다. 사용자는 지금 전략 만들기 대화의 "'+stepK+'" 단계에 있고, 화면에 선택지 버튼이 보인다. 사용자의 말에 한국어 1~3문장으로 자연스럽게 응대하되, 마지막엔 부드럽게 현재 단계의 선택을 이어가도록 유도하라. 마크다운 없이 평문으로.';
 }
-function taiAskConv(t,fallback){
-  S.aiChat=S.aiChat||[];
-  var msgs=S.aiChat.slice(-7).concat([{role:'user',content:t}]);
-  var out=null,acc='';
-  taiStream(taiConvSystem(),msgs,function(delta){
-    if(!out){
-      var el=gThreadAdd('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
-      out=el?el.querySelector('.tai-txt'):{};
-    }
-    acc+=delta; if(out.textContent!==undefined) out.textContent=acc;
-  },function(){
-    taiPushHist(t,acc);
-    /* convo 기록도 최종 텍스트로 갱신 — 재렌더 시 빈 말풍선 방지 */
-    if(G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(acc)+'</div>'; break; } } }
-  },fallback);
+/* 시장 Q&A 공통 규칙: 도메인 게이트 + 차트 태그 프로토콜 */
+function taiMarketRules(){
+  var r='\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
+   +'\n사용자가 특정 자산이나 시장(주식, 코인, 지수, 원자재, 부동산 등)을 언급하면 함께 차트를 보자고 자연스럽게 유도하고, 답변의 맨 마지막 줄에 정확히 다음 형식의 태그를 붙인다: [CHART {"tv":"트레이딩뷰심볼","data":"binance:심볼 또는 yahoo:티커 또는 none","label":"한글이름"}]'
+   +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
+   +'\n태그는 줄 하나에만, 자산이 특정될 때만 붙인다. 이미 같은 차트가 열려 있으면 붙이지 않는다.';
+  if(TAI.chart) r+='\n현재 열린 차트: '+TAI.chart.label+' ('+TAI.chart.tv+').';
+  return r;
 }
+function taiPredictQ(t){ return /예측|전망|오를|내릴|떨어질|갈까|얼마까지|목표가|어떻게 될|살까|팔까/.test(t); }
+/* 스레드 공용 append — conv면 g-thread, 아니면 doc 스레드 */
+function taiThreadAdd(html){
+  if($('g-thread')&&G.mode==='conv') return gThreadAdd(html);
+  if(G.cur){ gDocThread(html); var th=$('g-doc-thread'); return th?th.lastElementChild:null; }
+  return null;
+}
+function taiThink(label){
+  var conv=!!($('g-thread')&&G.mode==='conv');
+  var html='<div class="g-think"><span class="tdots"><i></i><i></i><i></i></span><span>'+label+'</span></div>';
+  var el=taiThreadAdd(html);
+  return function(){ if(el&&el.parentNode){ el.remove(); if(conv){ if(G.cur) G.cur.convo.pop(); } else if(G.cur) G.cur.thread.pop(); } };
+}
+/* ── 트레이딩뷰 차트 카드 ── */
+function taiTv(cb){
+  if(window.TradingView) return cb();
+  if(TAI.tvq){ TAI.tvq.push(cb); return; }
+  TAI.tvq=[cb];
+  var s=document.createElement('script'); s.src='https://s3.tradingview.com/tv.js';
+  s.onload=function(){ var q=TAI.tvq; TAI.tvq=null; q.forEach(function(f){ f(); }); };
+  document.head.appendChild(s);
+}
+function taiChartOpen(info){
+  TAI.cn=(TAI.cn||0)+1; var id='tvc'+TAI.cn;
+  TAI.chart={tv:info.tv,data:info.data||'none',label:info.label||info.tv,interval:'D',cid:id};
+  taiThreadAdd('<div class="g-chartcard"><div class="hd"><span>'+gEsc(TAI.chart.label)+'</span><span class="tvtag">TradingView</span></div><div class="bd" id="'+id+'"></div></div>');
+  taiTv(taiChartRender);
+}
+function taiChartRender(){
+  var c=TAI.chart; if(!c) return; var host=$(c.cid); if(!host) return;
+  host.innerHTML='';
+  new TradingView.widget({container_id:c.cid,symbol:c.tv,interval:c.interval,autosize:true,theme:document.body.classList.contains('light')?'light':'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
+}
+/* 예측 연출: 멀티모델 카피 + 타임프레임 넘겨보기 (표시는 연출, 분석은 실데이터+Claude) */
+function taiTheater(steps,done){
+  var i=0;
+  (function next(){
+    if(i>=steps.length) return done();
+    var st=steps[i++],rm=taiThink(st.label);
+    if(st.tf&&TAI.chart){ TAI.chart.interval=st.tf; taiChartRender(); }
+    delay(st.ms,function(){ rm(); next(); });
+  })();
+}
+function taiOhlc(cb){
+  var c=TAI.chart;
+  if(!c||!c.data||c.data==='none') return cb('');
+  var p=c.data.split(':');
+  var ctrl=('AbortController' in window)?new AbortController():null;
+  if(ctrl) setTimeout(function(){ ctrl.abort(); },4000);
+  fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src='+encodeURIComponent(p[0])+'&sym='+encodeURIComponent(p.slice(1).join(':')),ctrl?{signal:ctrl.signal}:{})
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(j){
+      cb('\n['+c.label+' 실시세 데이터] 현재가 '+j.last+', 24시간 '+j.chg1d+'%, 7일 '+j.chg7d+'%, 30일 '+j.chg30d+'%, 90일 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30일 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 지지/저항, 상방/하방 시나리오를 제시하되 확정적 단정과 수익 보장은 피하고, 마지막에 투자 판단은 본인 몫임을 짧게 덧붙인다.');
+    })
+    .catch(function(){ cb(''); });
+}
+/* ── 시장 Q&A 본체: conv/doc 공용 ── */
+function taiMarket(t,fin,fallback){
+  var conv=!!($('g-thread')&&G.mode==='conv');
+  var sys=(conv?taiConvSystem():taiSystem(fin))+taiMarketRules();
+  var proceed=function(ctx){
+    S.aiChat=S.aiChat||[];
+    var msgs=S.aiChat.slice(-11).concat([{role:'user',content:t}]);
+    var out=null,acc='';
+    taiStream(sys+ctx,msgs,function(delta){
+      if(!out){
+        if(!conv){ var th=$('g-doc-thread'); if(th&&th.lastElementChild&&th.lastElementChild.querySelector('.tdots')) th.lastElementChild.remove(); }
+        var el=taiThreadAdd('<div class="g-amsg"><span class="who">TETH</span><span class="tai-txt"></span></div>');
+        out=(el&&el.querySelector('.tai-txt'))||{};
+      }
+      acc+=delta;
+      if(out.textContent!==undefined) out.textContent=acc.split('[CHART')[0]; /* 태그는 화면에 노출하지 않는다 */
+    },function(){
+      var m=acc.match(/\[CHART\s+(\{[\s\S]*?\})\s*\]/),info=null;
+      if(m){ try{ info=JSON.parse(m[1]); }catch(e){} }
+      var clean=m?acc.replace(m[0],'').trim():acc;
+      if(out&&out.textContent!==undefined) out.textContent=clean;
+      taiPushHist(t,clean);
+      var fixed='<div class="g-amsg"><span class="who">TETH</span>'+gEsc(clean)+'</div>';
+      if(conv&&G.cur&&G.cur.convo){ for(var k=G.cur.convo.length-1;k>=0;k--){ if(G.cur.convo[k].indexOf('tai-txt')>=0){ G.cur.convo[k]=fixed; break; } } }
+      if(!conv&&G.cur&&G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if(G.cur.thread[k2].html.indexOf('tai-txt')>=0){ G.cur.thread[k2].html=fixed; break; } } }
+      if(info&&info.tv&&(!TAI.chart||TAI.chart.tv!==info.tv)){
+        var rm=taiThink('관련 차트를 불러오는 중');
+        delay(900,function(){ rm(); taiChartOpen(info); });
+      }
+    },fallback);
+  };
+  if(TAI.chart&&taiPredictQ(t)){
+    taiTheater([
+      {label:'서칭에 유능한 GPT 5.1 모델로 시장 상황을 받아오는 중',ms:1500},
+      {label:'1분봉 확인 중',ms:900,tf:'1'},
+      {label:'15분봉 확인 중',ms:900,tf:'15'},
+      {label:'4시간봉 확인 중',ms:900,tf:'240'},
+      {label:'일봉 기준 재정렬 중',ms:800,tf:'D'},
+      {label:'지표 적용에 강한 Gemini로 백테스트 지표를 분석하는 중',ms:1500}
+    ],function(){ taiOhlc(proceed); });
+  } else if(TAI.chart){ taiOhlc(proceed); }
+  else proceed('');
+}
+/* 하위 호환 별칭 */
+function taiAsk(t,fin,fallback){ taiMarket(t,fin,fallback); }
+function taiAskConv(t,fallback){ taiMarket(t,null,fallback); }
 
 function gSend(){
   var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value='';

@@ -38,6 +38,33 @@ createServer(async (req, res) => {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: !!client, error: clientErr || undefined }));
   }
+  if (req.url.startsWith("/api/ohlc")) { /* 예측 근거용 실시세 (코인: Binance, 그 외: Yahoo) */
+    const q = new URL(req.url, "http://x").searchParams;
+    const src = q.get("src"), sym = String(q.get("sym") || "").slice(0, 24);
+    try {
+      let rows = [];
+      if (src === "binance") {
+        const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=1d&limit=90`);
+        const j = await r.json();
+        if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4]]);
+      } else if (src === "yahoo") {
+        const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=3mo`, { headers: { "User-Agent": "Mozilla/5.0" } });
+        const j = await r.json();
+        const d = j?.chart?.result?.[0], ts = d?.timestamp || [], qd = d?.indicators?.quote?.[0];
+        if (qd) rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i]]).filter((x) => x[4] != null);
+      }
+      if (!rows.length) throw 0;
+      const closes = rows.map((x) => x[4]), last = closes[closes.length - 1];
+      const pctFrom = (n) => { const p = closes[closes.length - 1 - n]; return p ? +((last / p - 1) * 100).toFixed(2) : null; };
+      const out = {
+        last: +last.toPrecision(6), chg1d: pctFrom(1), chg7d: pctFrom(7), chg30d: pctFrom(30),
+        hi90: +Math.max(...rows.map((x) => x[2])).toPrecision(6), lo90: +Math.min(...rows.map((x) => x[3])).toPrecision(6),
+        closes30: closes.slice(-30).map((v) => +v.toPrecision(5)),
+      };
+      res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+      return res.end(JSON.stringify(out));
+    } catch { res.writeHead(502, CORS); return res.end(); }
+  }
   if (req.method !== "POST" || req.url !== "/api/chat") { res.writeHead(404, CORS); return res.end(); }
 
   let body = "";
