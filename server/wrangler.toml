@@ -1,0 +1,16 @@
+# TETH AI 프록시 — Cloudflare Workers 배포 설정
+# 배포:  cd server && npx wrangler deploy
+# 키:    npx wrangler secret put ANTHROPIC_API_KEY
+name = "teth-ai-proxy"
+main = "worker.mjs"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+TETH_AI_MODEL = "claude-fable-5"
+TETH_AI_EFFORT = "high"
+
+# 일일 총량 상한용 KV (wrangler kv namespace create RL 후 id 기입)
+# [[kv_namespaces]]
+# binding = "RL"
+# id = ""

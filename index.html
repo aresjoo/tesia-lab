@@ -5249,12 +5249,26 @@ function gSend(){
 }
 
 /* ── boot ── */
+/* 배포 환경 AI 프록시 해석: ① site-config 고정값 ② 저장소 proxy-url 브랜치의 포인터 파일(터널 URL, 재시작마다 자동 갱신).
+   로컬(localhost)은 항상 localhost:8799. 해석 실패 시 스크립트 폴백으로 동작한다. */
+function taiResolveProxy(done){
+  if(location.hostname==='localhost'||location.hostname==='127.0.0.1'){ done(); return; }
+  if(window.TETH_CONFIG&&TETH_CONFIG.aiProxy){ TAI.url=TETH_CONFIG.aiProxy.replace(/\/$/,'')+'/api/chat'; done(); return; }
+  var fin=false; var go=function(){ if(!fin){ fin=true; done(); } };
+  setTimeout(go,4000); /* 포인터 조회가 늦어도 부팅은 막지 않는다 */
+  fetch('https://raw.githubusercontent.com/aresjoo/tesia-lab/proxy-url/PROXY_URL?t='+Math.floor(Date.now()/60000))
+    .then(function(r){ return r.ok?r.text():''; })
+    .then(function(u){ u=(u||'').trim(); if(/^https:\/\/[\w.-]+$/.test(u)) TAI.url=u+'/api/chat'; go(); })
+    .catch(go);
+}
 function gBoot(){
   if(!ANTIGRAVITY_RESEARCH_UI) return;
-  taiPing();
-  /* 저장된 세션 복원: 서버 파일스토어 우선, localStorage 폴백. 로그인·대화 목록·세션 메모리 복구 */
-  STORE.load(function(p){
-    if(!S.user&&STORE.restore(p)){ authSyncUI(); gSideRender(); }
+  taiResolveProxy(function(){
+    taiPing();
+    /* 저장된 세션 복원: 서버 파일스토어 우선, localStorage 폴백. 로그인·대화 목록·세션 메모리 복구 */
+    STORE.load(function(p){
+      if(!S.user&&STORE.restore(p)){ authSyncUI(); gSideRender(); }
+    });
   });
   document.body.classList.add('g-dark');
   var sh=$('shell'); if(sh) sh.style.display='none';

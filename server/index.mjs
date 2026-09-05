@@ -33,12 +33,35 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
+/* ── 공개 터널 노출 대비 크레딧 보호 ──
+ * 허용 오리진에서 온 /api/chat만 통과 + IP당 버스트 제한 + 일일 총량 상한.
+ * 저장소(/api/state)는 로컬 접속(Host=localhost)에서만 — 터널 경유 방문자에게 대화 파일을 열지 않는다. */
+const ORIGIN_OK = [/^https:\/\/aresjoo\.github\.io$/, /^https?:\/\/localhost(?::\d+)?$/, /^https?:\/\/127\.0\.0\.1(?::\d+)?$/];
+const DAILY_CAP = 400, BURST_MAX = 8;
+const rl = { day: "", n: 0, ip: new Map() };
+function chatAllowed(req) {
+  const origin = req.headers.origin || "";
+  if (!ORIGIN_OK.some((r) => r.test(origin))) return "forbidden";
+  const today = new Date().toISOString().slice(0, 10);
+  if (rl.day !== today) { rl.day = today; rl.n = 0; rl.ip.clear(); }
+  if (rl.n >= DAILY_CAP) return "daily-cap";
+  const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "?").split(",")[0].trim();
+  const now = Date.now();
+  const arr = (rl.ip.get(ip) || []).filter((t) => now - t < 60000);
+  if (arr.length >= BURST_MAX) { rl.ip.set(ip, arr); return "rate-limited"; }
+  arr.push(now); rl.ip.set(ip, arr); rl.n++;
+  if (rl.ip.size > 5000) rl.ip.clear();
+  return null;
+}
+const isLocalHost = (req) => /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(String(req.headers.host || ""));
+
 createServer(async (req, res) => {
   if (req.method === "OPTIONS") { res.writeHead(204, CORS); return res.end(); }
   if (req.url === "/api/ping") {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: !!client, error: clientErr || undefined }));
   }
+  if (req.url === "/api/state" && !isLocalHost(req)) { res.writeHead(404, CORS); return res.end(); } /* 저장소는 로컬 전용 */
   if (req.url === "/api/state" && req.method === "GET") { /* 대화 세션 영속 저장소 (파일) */
     try {
       const f = new URL("./state.json", import.meta.url);
@@ -88,6 +111,8 @@ createServer(async (req, res) => {
     } catch { res.writeHead(502, CORS); return res.end(); }
   }
   if (req.method !== "POST" || req.url !== "/api/chat") { res.writeHead(404, CORS); return res.end(); }
+  const deny = chatAllowed(req);
+  if (deny) { console.log("[teth-ai] blocked:", deny, req.headers.origin || "(no origin)"); res.writeHead(deny === "forbidden" ? 403 : 429, CORS); return res.end(); }
 
   let body = "";
   for await (const c of req) body += c;
