@@ -3359,7 +3359,7 @@ function gComposer(on,ctx){
 function gContent(html){ $('g-content').innerHTML=html; $('g-scroll').scrollTop=0; }
 function gScrollBottom(){ var s=$('g-scroll'); s.scrollTop=s.scrollHeight; }
 
-/* ── cosmic hero: 심연(별 필드) 상주 + 신호(이동하는 혜성 차트 10종) ── */
+/* ── cosmic hero: 심연(별 필드) 상주 ── */
 var GCOS={raf:0,onr:null,jump:null};
 function gCosmosStart(){
   var cv=$('g-cosmos'); if(!cv) return;
@@ -3374,22 +3374,11 @@ function gCosmosStart(){
   function cl(v){ return v<0?0:v>1?1:v; }
   function sm(v){ v=cl(v); return v*v*(3-2*v); }
   function pal(){ return document.body.classList.contains('light')
-    ?{star:'140,168,224',acc:'52,98,214',k:.7}
-    :{star:'216,228,255',acc:'143,178,255',k:1}; }
+    ?{star:'140,168,224',k:.7}
+    :{star:'216,228,255',k:1}; }
   /* 별 필드 — 상주 */
   var stars=[],NS=mob?40:88,i;
   for(i=0;i<NS;i++) stars.push({x:Math.random(),y:Math.random(),r:rnd(.5,1.5),tw:rnd(0,6.28),ts:rnd(.5,1.3),vx:rnd(-.005,.005),vy:rnd(-.003,.003)});
-  /* 신호 — 차트 경로 10종 사전 생성(상승 7, 하락 3), 셔플 순회 */
-  var NP=mob?30:44,PATHS=[],p;
-  for(p=0;p<10;p++){ var down=p<3,arr=[],py=down?rnd(.22,.4):rnd(.5,.74),k;
-    for(k=0;k<NP;k++){ py+=rnd(-.055,.05)+(down?.008:-.006); py=Math.max(.12,Math.min(.92,py)); arr.push(py); }
-    if(down){ arr[NP-2]=Math.max(arr[NP-2],.62); arr[NP-1]=Math.max(arr[NP-1],rnd(.68,.78)); }
-    else{ arr[NP-2]=Math.min(arr[NP-2],.4); arr[NP-1]=Math.min(arr[NP-1],rnd(.24,.34)); }
-    PATHS.push(arr); }
-  var SGD=7.5,TL=.34; /* 여정 7.5s, 꼬리 길이 = 경로의 34% */
-  var sgSeq=[],sgN=0,sgP=-1,sg0=0,sgT=2.2;
-  for(i=0;i<10;i++) sgSeq.push(i);
-  for(i=9;i>0;i--){ var jx=Math.floor(Math.random()*(i+1)),tp=sgSeq[i]; sgSeq[i]=sgSeq[jx]; sgSeq[jx]=tp; }
   var t=0,last=0;
   function render(tt){
     var P=pal();
@@ -3399,23 +3388,6 @@ function gCosmosStart(){
     for(j=0;j<NS;j++){ var s=stars[j],sx=(((s.x+s.vx*tt)%1)+1)%1*W,sy=(((s.y+s.vy*tt)%1)+1)%1*H;
       var sa=(.22+.55*Math.abs(Math.sin(s.tw+s.ts*tt)))*.62*P.k;
       cx.beginPath(); cx.arc(sx,sy,s.r,0,6.283); cx.fillStyle='rgba('+P.star+','+sa+')'; cx.fill(); }
-    /* 신호 — 빛 구간이 차트 경로를 따라 이동: 꼬리(과거)는 지워지고, 끝점 도착 전에 머리도 소멸 */
-    if(sgP<0&&tt>=sgT){ sgP=sgSeq[sgN%10]; sgN++; sg0=tt; }
-    if(sgP>=0){ var u2=tt-sg0;
-      if(u2<0||u2>=SGD){ sgP=-1; sgT=tt+rnd(2.6,4.6); }
-      else{ var path=PATHS[sgP],hp=u2/SGD; /* 머리 진행도 0→1 */
-        var env=sm(hp/.08)*(1-sm((hp-.78)/.2))*.92*P.k; /* 진입 페이드인, 도착 전 소멸 */
-        if(env>.005){
-          var tipI=hp*(NP-1),f3=Math.floor(tipI),j0=Math.max(1,Math.ceil((hp-TL)*(NP-1)));
-          for(j=j0;j<=f3+1&&j<NP;j++){
-            var x0=W*(.06+.88*(j-1)/(NP-1)),y0=H*path[j-1],x1=W*(.06+.88*j/(NP-1)),y1=H*path[j];
-            if(j>f3){ var fr=tipI-f3; if(fr<=0) break; x1=x0+(x1-x0)*fr; y1=y0+(y1-y0)*fr; }
-            var ta=(.06+.6*sm((j/(NP-1)-(hp-TL))/TL))*env; /* 꼬리 끝 0 → 머리 최대 */
-            cx.beginPath(); cx.moveTo(x0,y0); cx.lineTo(x1,y1); cx.strokeStyle='rgba('+P.acc+','+ta+')'; cx.lineWidth=1.6; cx.stroke(); }
-          var tf2=Math.min(f3,NP-2),tfr=cl(tipI-tf2);
-          var hx=W*(.06+.88*(tf2+tfr)/(NP-1)),hy=H*(path[tf2]+(path[tf2+1]-path[tf2])*tfr);
-          cx.save(); cx.shadowColor='rgba('+P.acc+','+env+')'; cx.shadowBlur=14;
-          cx.beginPath(); cx.arc(hx,hy,2.6,0,6.283); cx.fillStyle='rgba('+P.acc+','+env+')'; cx.fill(); cx.restore(); } } }
     /* 진입 페이드 + 중앙 비네트(타이틀 가독성) + 상하 에지 페이드 */
     cx.globalCompositeOperation='destination-out';
     if(g<1){ cx.fillStyle='rgba(0,0,0,'+(1-g)+')'; cx.fillRect(0,0,W,H); }
@@ -3428,8 +3400,7 @@ function gCosmosStart(){
     cx.fillStyle=eg; cx.fillRect(0,0,W,H);
     cx.globalCompositeOperation='source-over';
   }
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ /* 모션 최소화: 심연만 정적 한 프레임 */
-    sgT=1e9;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ /* 모션 최소화: 정적 한 프레임 */
     GCOS.onr=function(){ fit(); render(6); }; addEventListener('resize',GCOS.onr);
     render(6); return;
   }
@@ -3437,7 +3408,7 @@ function gCosmosStart(){
   function loop(now){
     if(!cv.isConnected){ GCOS.raf=0; if(GCOS.onr){ removeEventListener('resize',GCOS.onr); GCOS.onr=null; } return; }
     var dt=Math.min((now-last)/1000,.05); last=now; t+=dt;
-    if(GCOS.jump!=null){ t=GCOS.jump; GCOS.jump=null; sgP=-1; sgT=t+.6; } /* QA용 타임라인 점프 */
+    if(GCOS.jump!=null){ t=GCOS.jump; GCOS.jump=null; } /* QA용 타임라인 점프 */
     render(t);
     GCOS.raf=requestAnimationFrame(loop);
   }
