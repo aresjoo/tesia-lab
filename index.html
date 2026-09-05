@@ -856,10 +856,21 @@ body.light .au-free{color:#1e8e3e}
 @keyframes taiPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.28);opacity:1;filter:brightness(1.15)}}
 .g-amsg,.g-umsg,.g-status,.g-trail,.g-chartcard,.g-srcs,.g-askcard,.g-nextcol{animation:gFadeUp .3s var(--ease) both}
 .g-status{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--gt2)}
-/* TETH 인피니티 스트로크 드로잉 */
+/* TETH 로고 스트로크 드로잉: 좌 루프 → 우 루프 순서로 그려지고, 잠시 완성 유지 후 리셋 */
 .spd{flex-shrink:0}
-.spd .p{stroke-dasharray:130;stroke-dashoffset:130;animation:tethDraw 2.1s cubic-bezier(.45,0,.25,1) infinite}
-@keyframes tethDraw{0%{stroke-dashoffset:130;opacity:0}10%{opacity:1}52%{stroke-dashoffset:0;opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-130;opacity:0}}
+.spd .p1{stroke-dasharray:40;stroke-dashoffset:40;animation:tethD1 2.6s cubic-bezier(.5,0,.3,1) infinite}
+.spd .p2{stroke-dasharray:40;stroke-dashoffset:40;animation:tethD2 2.6s cubic-bezier(.5,0,.3,1) infinite}
+@keyframes tethD1{0%{stroke-dashoffset:40;opacity:1}34%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:40;opacity:0}}
+@keyframes tethD2{0%,16%{stroke-dashoffset:40;opacity:1}50%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:40;opacity:0}}
+/* 대기 라벨 shimmer: 하이라이트가 글자 위를 쓸고 지나감 */
+.g-status:not(.done) .lb,.g-trail .hd:not(.ok) .hlb,.g-trail .st.on .lb{
+  background:linear-gradient(90deg,var(--gt3) 0%,var(--gt3) 42%,#fff 50%,var(--gt3) 58%,var(--gt3) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:tethShimmer 2.2s linear infinite}
+body.light .g-status:not(.done) .lb,body.light .g-trail .hd:not(.ok) .hlb,body.light .g-trail .st.on .lb{
+  background:linear-gradient(90deg,var(--gt3) 0%,var(--gt3) 42%,#0f2a6b 50%,var(--gt3) 58%,var(--gt3) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes tethShimmer{from{background-position:190% 0}to{background-position:-90% 0}}
 .g-status .sec{color:var(--gt3);font-size:12px}
 .g-status .chev,.g-trail .chev{color:var(--gt3);transition:transform .2s var(--ease)}
 .g-status.done{color:var(--gt3);font-size:12.5px;flex-wrap:wrap}
@@ -4301,9 +4312,16 @@ function taiRecFix(id,nh){
   if(G.cur.thread){ for(var k2=G.cur.thread.length-1;k2>=0;k2--){ if((G.cur.thread[k2].html||'').indexOf(id)>=0){ if(nh==null) G.cur.thread.splice(k2,1); else G.cur.thread[k2].html=nh; return; } } }
 }
 var TAI_CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg>';
-/* TETH 인피니티가 스트로크로 그려지는 로딩 아이콘 */
+/* 실제 TETH 로고(좌 웜 루프 + 우 쿨 루프)가 순서대로 그려지는 로딩 아이콘 */
 function taiDrawSvg(w){
-  return '<svg class="spd" viewBox="0 0 48 24" width="'+w+'" height="'+Math.round(w/2)+'" fill="none"><defs><linearGradient id="tethg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2fd0a4"/><stop offset=".55" stop-color="#3ba8f0"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><path class="p" d="M7 12 C7 4.5 20 4.5 24 12 C28 19.5 41 19.5 41 12 C41 4.5 28 4.5 24 12 C20 19.5 7 19.5 7 12 Z" stroke="url(#tethg)" stroke-width="3.4" stroke-linecap="round"/></svg>';
+  return '<svg class="spd" viewBox="0 0 48 24" width="'+w+'" height="'+Math.round(w/2)+'" fill="none">'
+   +'<defs>'
+   +'<linearGradient id="tgl" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#f6903c"/><stop offset=".38" stop-color="#f2d13c"/><stop offset="1" stop-color="#2ecf7c"/></linearGradient>'
+   +'<linearGradient id="tgr" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#2fd0c8"/><stop offset=".5" stop-color="#38aef2"/><stop offset="1" stop-color="#2b6bf0"/></linearGradient>'
+   +'</defs>'
+   +'<path class="p1" d="M20.4 8.4 A7.3 7.3 0 1 0 20.4 15.6" stroke="url(#tgl)" stroke-width="4.6" stroke-linecap="round"/>'
+   +'<path class="p2" d="M27.6 15.6 A7.3 7.3 0 1 0 27.6 8.4" stroke="url(#tgr)" stroke-width="4.6" stroke-linecap="round"/>'
+   +'</svg>';
 }
 /* 실데이터 파생 지표 (딥 리서치 노트용) */
 function taiIndic(){
@@ -4383,7 +4401,7 @@ function taiTrail(){
       cur.innerHTML=TAI_CHECK+'<span class="lb">'+gEsc(label)+'</span><span class="chev">›</span>'+(detHtml?'<div class="det">'+detHtml+'</div>':'');
       if(detHtml) cur.setAttribute('onclick','taiDetToggle(this)');
       cur=null; sync(); },
-    finish:function(){ if(el){ var hd=el.querySelector('.hd'); if(hd) hd.innerHTML=TAI_CHECK+'<span class="hlb">분석 준비 완료</span><span class="chev">›</span>'; sync(); } }
+    finish:function(){ if(el){ var hd=el.querySelector('.hd'); if(hd){ hd.classList.add('ok'); hd.innerHTML=TAI_CHECK+'<span class="hlb">분석 준비 완료</span><span class="chev">›</span>'; } sync(); } }
   };
 }
 /* 출처 카드 (서칭 연출 결과) */
