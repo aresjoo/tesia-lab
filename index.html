@@ -1112,6 +1112,11 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .au-sub{font-size:14px;color:#b7bac1;line-height:1.65;margin-top:12px}
 .au-btns{display:flex;flex-direction:column;gap:12px;margin-top:26px}
 .au-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:999px;border:1px solid #3c3f45;background:#232529;color:#ececf1;font-size:15px;font-weight:500;transition:background .12s}
+.au-agree{font-size:12.5px;color:var(--gt3,#9aa0a6);text-align:center;line-height:1.7;margin-top:14px}
+.au-agree a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.au-btn.loading{background:#8f9299!important;border-color:#8f9299!important;cursor:default;pointer-events:none}
+.au-spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(20,22,26,.25);border-top-color:#17191d;animation:auSpin .8s linear infinite}
+@keyframes auSpin{to{transform:rotate(360deg)}}
 .au-btn:hover{background:#2b2d32}
 .au-btn.ghost{background:transparent}
 .au-btn.ghost:hover{background:#232529}
@@ -1662,6 +1667,23 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
       <div class="au-div" id="au-pwnew-div">또는</div>
       <button class="au-btn ghost au-gap" id="au-pwnew-codebtn" onclick="authSendCode()">일회용 코드로 회원 가입</button>
       <div class="au-foot"><a id="au-foot-t2" href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a><span>|</span><a id="au-foot-p2" href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a></div>
+    </div>
+
+    <!-- step 4.5: 연령 확인 (회원가입 마지막) -->
+    <div class="au-step" id="au-age" hidden>
+      <div class="au-title">연령을 알려주세요</div>
+      <div class="au-sub">연령을 제공하면 당사 <a href="policies/#privacy" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;text-underline-offset:3px;color:inherit">개인정보 보호 정책</a>을 준수하면서 사용자님의 경험을 개인 맞춤화하고 올바른 설정을 제공하는 데 도움이 됩니다</div>
+      <div class="au-field">
+        <span class="au-label">성명</span>
+        <input class="au-input" id="au-age-name" type="text" autocomplete="name">
+      </div>
+      <div class="au-field">
+        <span class="au-label">연령</span>
+        <input class="au-input" id="au-age-in" type="number" min="1" max="120" inputmode="numeric" onkeydown="if(event.key==='Enter')authAgeFinish()">
+      </div>
+      <div class="au-err" id="au-age-err">연령을 숫자로 입력해 주세요.</div>
+      <div class="au-agree">“계정 생성 끝내기”를 클릭하면 당사 <a href="policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</a>에 동의하고<br><a href="policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</a>을 읽은 것으로 간주합니다.</div>
+      <button class="au-btn primary au-gap" id="au-age-go" onclick="authAgeFinish()">계정 생성 끝내기</button>
     </div>
 
     <!-- step 5: 비밀번호 입력 (로그인) -->
@@ -3545,11 +3567,14 @@ function gComposer(on,ctx){
   $('g-ctx-chip').innerHTML=ctx?'<span class="g-ctx">컨텍스트, '+ctx+'</span>':'';
 }
 function gContent(html){ $('g-content').innerHTML=html; $('g-scroll').scrollTop=0; }
-/* 하단 근처일 때만 자동 스크롤, 위에서 읽는 중이면 '새 응답 보기' 칩만 */
+/* 하단 근처일 때만 자동 스크롤, 위에서 읽는 중이면 '새 응답 보기' 칩만. 스페이서는 실콘텐츠 하단 기준 */
 function gScrollBottom(force){
   var s=$('g-scroll'); if(!s) return;
-  var c=$('g-newmsg');
-  if(force||s.scrollHeight-s.scrollTop-s.clientHeight<140){ s.scrollTop=s.scrollHeight; if(c) c.hidden=true; }
+  var c=$('g-newmsg'),sp=$('g-spacer');
+  var ref=(sp&&sp.parentNode)?sp.offsetTop:s.scrollHeight;
+  var gap=ref-s.scrollTop-s.clientHeight;
+  if(force){ s.scrollTop=Math.max(0,ref-s.clientHeight+24); if(c) c.hidden=true; }
+  else if(gap<140){ if(gap>0) s.scrollTop=ref-s.clientHeight+24; if(c) c.hidden=true; }
   else if(c&&!$('g-composer-wrap').hidden) c.hidden=false;
 }
 
@@ -3739,7 +3764,7 @@ function gNew(preset){
   gShowConv();
   gConvUser(text);
   /* 첫 메시지부터 스크립트 없이 실제 AI 대화로 니즈 파악, 프록시가 없을 때만 기존 스크립트 */
-  if(TAI.ok!==false&&typeof taiMarket==='function'){ gStep=null; taiMarket(text,null,function(){ gConvInterpret(text); }); }
+  if(TAI.ok!==false&&typeof taiMarket==='function'){ gStep=null; gUserPin(); taiMarket(text,null,function(){ gConvInterpret(text); }); }
   else gConvInterpret(text);
 }
 function gShowConv(){
@@ -3754,8 +3779,21 @@ function gThreadAdd(html){
   if(!G.cur) return null;
   G.cur.convo.push(html);
   var th=$('g-thread'); if(!th) return null;
-  th.insertAdjacentHTML('beforeend',html); gScrollBottom();
-  return th.lastElementChild;
+  var sp=$('g-spacer'),el;
+  if(sp&&sp.parentNode===th){ var tmp=document.createElement('div'); tmp.innerHTML=html; el=tmp.firstElementChild; th.insertBefore(el,sp); }
+  else { th.insertAdjacentHTML('beforeend',html); el=th.lastElementChild; }
+  gScrollBottom();
+  return el;
+}
+/* ChatGPT식 리프트: 전송한 메시지를 뷰포트 상단으로 올리고 아래에 답변 공간 확보 */
+function gUserPin(){
+  var th=$('g-thread'),s=$('g-scroll'); if(!th||!s) return;
+  var sp=$('g-spacer');
+  if(!sp){ sp=document.createElement('div'); sp.id='g-spacer'; }
+  th.appendChild(sp);
+  sp.style.height=Math.max(0,s.clientHeight-170)+'px';
+  var rows=th.querySelectorAll('.g-urow,.g-usum'); var last=rows[rows.length-1];
+  if(last) s.scrollTop=Math.max(0,last.offsetTop-10);
 }
 function gConvUser(t){
   gThreadAdd('<div class="g-urow"><span class="g-uacts">'
@@ -4694,6 +4732,7 @@ function taiAskGo(id){
   if(!parts.length) return;
   taiNextClear();
   taiThreadAdd('<div class="g-usum">'+rows+'</div>');
+  gUserPin();
   var q=parts.join(' / ')+' 기준으로 진행해줘';
   var fin=S.versions.length?S.versions[S.versions.length-1]:null;
   taiMarket(q,fin,function(){ gConvAI('네트워크 연결을 확인한 뒤 다시 시도해주세요.'); });
@@ -4891,7 +4930,7 @@ function taiMarket(t,fin,fallback){
     var lb0=TAI.chart?TAI.chart.label:'자산';
     var seq=[
       {a:'사고 과정 정리 중',ms:1000,d:'사고 과정',x:function(){ return {html:'<div class="cot">Parsing intent → directional call on '+gEsc(lb0)+'. Request: "'+gEsc(t.slice(0,48))+'"\n판단 축 분해: ① 가격 위치(레인지/이평 대비) ② 추세 구조(스윙 밴드) ③ 모멘텀(RSI·상승일수) ④ 변동성(ATR14)\nData mapping: realtime OHLC 90d + derived indicators + volume 5/20 delta\nConstraint: no certainty claims → output = conditional scenarios with explicit trigger levels</div>'}; }},
-      {a:'서칭에 유능한 GPT 5.1 모델로 웹 검색 중',ms:1800,d:'웹 검색 완료',x:function(){ return {html:'<div style="margin-bottom:7px">GPT 5.1 서칭으로 '+gEsc(lb0)+' 관련 최신 시세·뉴스 소스를 수집하고, 가격에 이미 반영된 뉴스와 미반영 이벤트를 분리했습니다.</div>'+taiSrcRows()}; }},
+      {a:'웹 검색: '+lb0+' 시세 · 최근 실적 · 시장 동향 · 수급',ms:1800,d:'웹 검색 완료',x:function(){ return {html:'<div style="margin-bottom:7px">GPT 5.1 서칭으로 '+gEsc(lb0)+' 관련 최신 시세·뉴스 소스를 수집하고, 가격에 이미 반영된 뉴스와 미반영 이벤트를 분리했습니다.</div>'+taiSrcRows()}; }},
       {a:'1분봉 확인 중',ms:800,tf:'1',d:'1분봉 확인 완료',x:function(){ var d0=taiIndic(); return '초단기 체결 흐름을 점검했습니다. 최근 세션에서 플래시 무브나 비정상 갭은 관측되지 않았고'+(d0?', 일평균 변동폭(ATR14) '+d0.atrPct+'% 범위 안에서 움직이는 정상 흐름입니다':'')+'. 초단기 노이즈가 일봉 구조 판단을 왜곡할 수준은 아닙니다.'; }},
       {a:'15분봉 확인 중',ms:800,tf:'15',d:'15분봉 확인 완료',x:function(){ var d1=taiIndic(); if(!d1) return '단기 모멘텀과 거래량 흐름을 확인했습니다.';
         var mom=d1.up10>=7?'강한 상승 우위':d1.up10>=5?'상승 우위':d1.up10>=4?'중립':'하락 우위';
@@ -4930,7 +4969,7 @@ function gSend(){
     if(gStep==='pair'&&/비트|btc/i.test(t)){ gThink('확인 중',450,function(){ gPickPair('BTC/USDT',null); }); return; }
     if(gStep==='risk'){ var m=t.match(/(\d+)\s*%?/); if(m){ gThink('확인 중',450,function(){ gPickRisk(-Math.abs(+m[1])); }); return; } }
     var cannedC=function(){ gConvAI('선택지에서 고르면 가장 정확합니다. 이후 언제든 수정할 수 있습니다.'); };
-    if(S.user&&TAI.ok!==false) taiAskConv(t,cannedC); else gThink('확인 중',600,cannedC);
+    if(S.user&&TAI.ok!==false){ gUserPin(); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC);
     return;
   }
   /* artifact / activity context */
@@ -5056,7 +5095,7 @@ function authShow(id){
   if(f) setTimeout(function(){var el=$(f); if(el) el.focus();},80);
 }
 function authEsc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-function authOauth(provider){ AUTH.doneName='김도현'; toast(provider+' 인증 완료'); signupDone(); }
+function authOauth(provider){ AUTH.doneName='김도현'; toast(provider+' 인증 완료'); if(AUTH.mode==='signup'){ authAgeShow(); return; } signupDone(); }
 function authEmailNext(){
   var v=($('au-email').value||'').trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ authBad('au-email','au-email-err'); return; }
@@ -5135,7 +5174,27 @@ function authPwNext(){
   AUTH.pwDone=true; authFinishEmail(); /* 비밀번호 확인 = 로그인 완료, 코드 재요구 금지 */
 }
 function authPwEye(id,btn){ var i=$(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁':'🙈'; }
-function authFinishEmail(){ AUTH.doneName=AUTH.email.split('@')[0]; signupDone(); }
+function authFinishEmail(){
+  AUTH.doneName=AUTH.email.split('@')[0];
+  if(AUTH.mode==='signup'){ authAgeShow(); return; } /* 가입은 연령 확인 후 완료 */
+  signupDone();
+}
+/* 연령 확인 스텝 (ChatGPT 패턴): 입력 → 버튼 스피너 약 1초 → 계정 생성 완료 */
+function authAgeShow(){
+  var n=$('au-age-name'); if(n&&!n.value) n.value=AUTH.doneName||'';
+  var b=$('au-age-go'); if(b){ b.classList.remove('loading'); b.disabled=false; b.innerHTML='계정 생성 끝내기'; }
+  authShow('au-age');
+  var a=$('au-age-in'); if(a){ a.value=''; setTimeout(function(){ a.focus(); },80); }
+}
+function authAgeFinish(){
+  var a=$('au-age-in'), v=parseInt((a&&a.value||'').trim(),10);
+  if(!v||v<1||v>120){ authBad('au-age-in','au-age-err'); return; }
+  authGood('au-age-in','au-age-err');
+  var n=$('au-age-name'); if(n&&n.value.trim()) AUTH.doneName=n.value.trim();
+  var b=$('au-age-go');
+  if(b){ b.disabled=true; b.classList.add('loading'); b.innerHTML='<span class="au-spin"></span>'; }
+  delay(1000,signupDone);
+}
 /* ══ 언어/통화 (지구본) ══ */
 var GLC_LANGS=[ /* 노출 = 실지원 원칙, 이 목록의 언어는 전부 I18N 사전과 GREETS_ALL이 커버한다 */
   {c:'ko',n:'한국어'},
