@@ -36,7 +36,7 @@ function run() {
     "-o", "ServerAliveInterval=30",
     "-o", "ServerAliveCountMax=3",
     "-o", "ExitOnForwardFailure=yes",
-    "-R", "80:localhost:8799",
+    "-R", "80:127.0.0.1:8799",
     "nokey@localhost.run",
   ]);
   const onData = (d) => {

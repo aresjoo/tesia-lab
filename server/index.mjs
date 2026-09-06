@@ -49,7 +49,7 @@ function chatAllowed(req) {
   const now = Date.now();
   const arr = (rl.ip.get(ip) || []).filter((t) => now - t < 60000);
   if (arr.length >= BURST_MAX) { rl.ip.set(ip, arr); return "rate-limited"; }
-  arr.push(now); rl.ip.set(ip, arr); rl.n++;
+  arr.push(now); rl.ip.set(ip, arr); /* rl.n은 본문 검증 후 차감 (codex QA-12) */
   if (rl.ip.size > 5000) rl.ip.clear();
   return null;
 }
@@ -59,7 +59,7 @@ createServer(async (req, res) => {
   if (req.method === "OPTIONS") { res.writeHead(204, CORS); return res.end(); }
   if (req.url === "/api/ping") {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: !!client, error: clientErr || undefined }));
+    return res.end(JSON.stringify({ ok: !!(client && (env.ANTHROPIC_API_KEY || env.TETH_AI_MOCK)), error: clientErr || undefined }));
   }
   if (req.url === "/api/state" && !isLocalHost(req)) { res.writeHead(404, CORS); return res.end(); } /* ì €ìž¥ì†ŒëŠ” ë¡œì»¬ ì „ìš© */
   if (req.url === "/api/state" && req.method === "GET") { /* ëŒ€í™” ì„¸ì…˜ ì˜ì† ì €ìž¥ì†Œ (íŒŒì¼) */
@@ -115,7 +115,7 @@ createServer(async (req, res) => {
   if (deny) { console.log("[teth-ai] blocked:", deny, req.headers.origin || "(no origin)"); res.writeHead(deny === "forbidden" ? 403 : 429, CORS); return res.end(); }
 
   let body = "";
-  for await (const c of req) body += c;
+  for await (const c of req) { body += c; if (body.length > 262144) { res.writeHead(413, CORS); return res.end(); } } /* body 상한 (codex QA-13) */
   let payload;
   try { payload = JSON.parse(body); } catch { res.writeHead(400, CORS); return res.end(); }
 
@@ -123,6 +123,7 @@ createServer(async (req, res) => {
     .filter((m) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content)
     .slice(-16);
   if (!messages.length) { res.writeHead(400, CORS); return res.end(); }
+  rl.n++; /* 유효 요청만 일일 쿼터 차감 (codex QA-12) */
   if (!client) { res.writeHead(503, CORS); return res.end(); }
 
   res.writeHead(200, { ...CORS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" });
@@ -157,6 +158,7 @@ createServer(async (req, res) => {
       system: String(payload.system || "").slice(0, 8000),
       messages,
     });
+    res.on("close", () => { try { stream.abort(); } catch (e) {} }); /* 탭 닫힘/중지 시 모델 생성도 중단 (codex QA-13) */
     stream.on("text", (delta) => send({ text: delta }));
     /* ì‹¤ìž‘ì—… ì´ë²¤íŠ¸: ëª¨ë¸ì˜ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼(think) + ëˆ„ì  ì¶œë ¥ í† í°(tok)ì„ ê·¸ëŒ€ë¡œ ì „ë‹¬ â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì´ ì‹¤ë°ì´í„°ë¡œ êµ¬ë™ëœë‹¤ */
     const blocks = {}; /* indexë³„ server_tool_use ìž…ë ¥ JSON ëˆ„ì  */
@@ -196,7 +198,7 @@ createServer(async (req, res) => {
     send({ error: true });
   }
   res.end();
-}).listen(PORT, () => console.log(`TETH AI proxy â€” http://localhost:${PORT} (model: ${MODEL}, effort: ${EFFORT})`));
+}).listen(PORT, '127.0.0.1', () => console.log(`TETH AI proxy â€” http://localhost:${PORT} (model: ${MODEL}, effort: ${EFFORT})`));
 
 
 

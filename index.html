@@ -3914,7 +3914,8 @@ var G_TEAM=['Strategy Architect','Quant Validator','Sanity Check','Strategy Crit
 function gClearTimers(){ G.timeouts.forEach(clearTimeout); G.timeouts=[]; }
 function gAt(ms,fn){ G.timeouts.push(setTimeout(fn,ms)); }
 function gStamp(){ var s=Math.floor((Date.now()-G.t0)/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
-function gEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+/* attribute-safe escape: href/data-* 속성 주입까지 차단 (codex QA-10/11) */
+function gEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 /* ── sidebar / aux ── */
 function gSideRender(){
@@ -4811,11 +4812,13 @@ function gSessRename(){
 function gSessRenameGo(){
   if(!G.cur) return;
   var v=($('g-sess-ren-in').value||'').trim(); if(!v) return;
+  v=v.replace(/[<>]/g,''); /* 저장형 XSS 하드닝 (codex QA-10, 출력측 gEsc 확장과 이중 방어) */
   G.cur.title=v;
   if(G.cur.strategy) G.cur.strategy.name=v; /* 실행 확인/Live 화면의 전략명도 함께 */
   gSideRender();
   $('g-chead-title').textContent=v;
   gSessMenuClose();
+  STORE.save(); /* 이름 변경 영속화 (codex QA-16) */
   toast('이름을 바꿨어요');
 }
 function gSessDelete(){
@@ -4826,6 +4829,7 @@ function gSessDelete(){
   if(sx.status==='run') gClearTimers(); /* 진행 중 연구도 함께 중단 */
   G.sessions=G.sessions.filter(function(x){return x!==sx;});
   gSessMenuClose();
+  STORE.save(); /* 삭제 영속화 — 새로고침 부활 방지 (codex QA-16) */
   toast('전략을 삭제했어요');
   gHome();
 }
@@ -4851,7 +4855,12 @@ var STORE={t:0,
   snapshot:function(){
     return {v:1,savedAt:Date.now(),user:{name:S.user.name,email:S.user.email||''},
       lastSid:(G.cur&&G.cur.id)||null, /* 새로고침 복귀용 마지막 활성 세션 */
-      tf:S.tf||null, /* 전략 위임 플로우 상태 (API 키 원문은 애초에 저장 안 함, 마스킹만) */
+      tf:(function(){ /* 카드번호 등 결제 민감정보는 어떤 저장소에도 남기지 않는다 (codex QA-01) */
+        if(!S.tf) return null;
+        var c; try{ c=JSON.parse(JSON.stringify(S.tf)); }catch(e){ return null; }
+        if(c.pay){ delete c.pay.num; delete c.pay.exp; delete c.pay.nm; }
+        return c;
+      })(),
       sessions:G.sessions.slice(0,20).map(function(sx){
         return {id:sx.id,title:sx.title,status:sx.status,convo:sx.convo,thread:sx.thread,
           strategy:sx.strategy,versions:sx.versions,artifacts:sx.artifacts,ai:sx.ai||null,acts:sx.acts||{}};
@@ -4885,7 +4894,7 @@ var STORE={t:0,
   restore:function(p){
     if(!p||!p.v||!p.user) return false;
     S.user={name:p.user.name,email:p.user.email};
-    if(p.tf) S.tf=p.tf;
+    if(p.tf){ S.tf=p.tf; if(S.tf.pay){ delete S.tf.pay.num; delete S.tf.pay.exp; delete S.tf.pay.nm; } } /* 과거 스냅샷에 남은 결제정보도 로드 시 소거 */
     setTimeout(function(){ if(typeof tfSideSync==='function') tfSideSync(); },0);
     (p.sessions||[]).forEach(function(sx){
       sx.team=sx.team||{}; sx.actRows=sx.actRows||[]; sx.tabs=sx.tabs||[{id:'__act',title:'대화'}];
@@ -4933,7 +4942,7 @@ function taiStream(system,msgs,onText,onDone,onFail,onMeta){
         for(var i=0;i<lines.length;i++){
           var L=lines[i]; if(L.indexOf('data: ')!==0) continue;
           var ev; try{ ev=JSON.parse(L.slice(6)); }catch(e){ continue; }
-          if(ev.error&&!got) throw 0;
+          if(ev.error) throw 0; /* 부분 텍스트 뒤 오류도 실패로 — 잘린 답을 성공 확정하지 않는다 (codex QA-05) */
           if(alive()&&onMeta){ /* 실작업 메타: 서버 툴(검색/페이지/코드) / 사고 스트림 / 누적 토큰 / 최종 usage */
             if(ev.think) onMeta({think:ev.think});
             if(ev.tok) onMeta({tok:ev.tok});
@@ -4951,9 +4960,9 @@ function taiStream(system,msgs,onText,onDone,onFail,onMeta){
     })
     .catch(function(err){
       var aborted=err&&err.name==='AbortError';
-      if(!aborted&&!got&&retriesLeft>0&&alive()){
-        /* 터널 주소가 바뀌었을 수 있다: 포인터 재해석 후 같은 요청을 1회 재시도 */
-        taiResolveProxy(function(){ if(alive()) attempt(retriesLeft-1); else fin(); });
+      if(!aborted&&!got&&retriesLeft>0&&alive()&&!(TAI.req&&TAI.req.cancelled)){
+        /* 터널 주소가 바뀌었을 수 있다: 포인터 재해석 후 같은 요청을 1회 재시도 (Stop이 눌렸으면 재시도하지 않는다) */
+        taiResolveProxy(function(){ if(alive()&&!(TAI.req&&TAI.req.cancelled)) attempt(retriesLeft-1); else { fin(); onFail('abort'); } });
         return;
       }
       fin();
@@ -4962,7 +4971,7 @@ function taiStream(system,msgs,onText,onDone,onFail,onMeta){
     });
   })(1);
 }
-function taiStop(){ if(TAI.req&&TAI.req.ctrl) TAI.req.ctrl.abort(); }
+function taiStop(){ if(TAI.req){ TAI.req.cancelled=true; if(TAI.req.ctrl) TAI.req.ctrl.abort(); } } /* 재시도 예약까지 취소 (codex QA-04) */
 /* 컴포저 전송 버튼 ↔ 중지 버튼 동기화 */
 function taiBusySync(){
   var b=$('g-send-btn'); if(!b) return;
@@ -5720,6 +5729,7 @@ function tfHead(title,sub,badge){
     +'<span class="ti">'+title+'</span>'+(sub?'<span class="sb">'+sub+'</span>':'')+(badge||'')+'</div>';
 }
 function tfPageMode(mode,title){
+  tfDrawerClose(); /* 라우트 전환 시 떠 있는 가이드 드로어와 스크림 정리 (codex QA-14) */
   G.cur=null; G.mode=mode; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); document.body.classList.add('tf-route'); /* 헬프 FAB를 스티키 CTA 위로 */
   gComposer(false);
@@ -6076,7 +6086,7 @@ function tfPayConfirm(){
   if(go){ go.disabled=true; go.textContent='결제 확인 중...'; }
   TF_ADAPTER.pay({num:(t.pay.num||'').replace(/\s/g,''),cycle:t.pay.cycle},function(err){
     if(err){ t.pay.err='카드사 승인이 거절됐어요. 다른 카드로 시도해주세요.'; t.pay.step='card'; tfSave(); tfConnectView(); tfPayBind(); return; }
-    t.payDone=true; t.pay.step='done'; t.stage='connect'; tfSave();
+    t.payDone=true; t.pay={step:'done',cycle:t.pay.cycle}; t.stage='connect'; tfSave(); /* 승인 즉시 카드 정보 메모리에서 소거 */
     toast('결제가 완료됐어요');
     tfConnectView();
   });
@@ -6489,7 +6499,9 @@ function taiOhlc(cb,sess,run,ast){
   fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src='+encodeURIComponent(p[0])+'&sym='+encodeURIComponent(p.slice(1).join(':'))+'&iv='+encodeURIComponent(iv),ctrl?{signal:ctrl.signal}:{})
     .then(function(r){ if(!r.ok) throw r.status; return r.json(); })
     .then(function(j){
-      TAI.ohlc=j;
+      /* 늦게 도착한 응답이 다른 세션/차트의 전역 데이터를 오염시키지 않게 완료 시점에 소유권 재검사 (codex QA-07) */
+      var curNow=isCur&&(!sess||G.cur===sess)&&TAI.chart&&c&&TAI.chart.data===c.data;
+      if(curNow) TAI.ohlc=j;
       if(ai&&isCur){ ai.ohlc=j; ai.ohlcAt=Date.now(); }
       if(h){
         var ms=Date.now()-t0, kb=(JSON.stringify(j).length/1024).toFixed(1);
@@ -6497,7 +6509,7 @@ function taiOhlc(cb,sess,run,ast){
           '<b>'+gEsc(c.label||'')+'</b> '+gEsc(ivL)+' '+(j.rows?j.rows.length:0)+'봉 수신. 현재가 <b>'+gEsc(String(j.last))+'</b>, '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, 30'+(iv==='1d'?'일':'봉')+' '+j.chg30d+'%. 90'+(iv==='1d'?'일':'봉')+' 최고 '+gEsc(String(j.hi90))+' / 최저 '+gEsc(String(j.lo90))+'. 응답 '+ms+'ms, '+kb+'KB.',
           ms+'ms, '+(j.rows?j.rows.length:0)+'봉');
       }
-      if(isCur) taiChartPx(j); /* 다른 자산 스냅샷을 현재 차트 카드에 표시하지 않는다 */
+      if(curNow) taiChartPx(j); /* 다른 자산/세션 스냅샷을 현재 차트 카드에 표시하지 않는다 */
       cb('\n['+c.label+' 실시세 스냅샷, '+(TAI_TFL[iv]||'일봉')+' 기준, 방금 수신] 현재가 '+j.last+', '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, '+(iv==='1d'?'7일':'7봉')+' '+j.chg7d+'%, '+(iv==='1d'?'30일':'30봉')+' '+j.chg30d+'%, '+(iv==='1d'?'90일':'90봉')+' 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30개 봉 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 마크다운으로 구조화된 깊이 있는 분석을 작성한다: "### 현재 위치" 섹션(핵심 수치 **볼드**), "### 상방 시나리오"와 "### 하방 시나리오"(트리거 가격과 목표 레벨, 불릿), 지표 요약은 | 표 |, "### 리스크와 대응"(현실적 제안). 확정적 단정과 수익 보장은 피한다.');
     })
     .catch(function(err){
@@ -6679,6 +6691,8 @@ function taiForecast(){
 /* ── 시장 Q&A 본체: conv/doc 공용 ── */
 function taiMarket(t,fin,fallback){
   var sess=G.cur; if(!sess) return; /* 이 요청의 소유 세션에 바인딩 — 이후 세션 전환에도 기록은 이 세션으로만 */
+  /* 모든 진입 경로(ASK 카드 포함) 공통 동시 실행 가드 (codex QA-03) */
+  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중이에요, 끝나면 바로 보내주세요'); return; }
   TAI.busy=true; TAI.busyAt=Date.now(); taiBusySync(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
   var ai=taiAI(sess);
   var conv=!!($('g-thread')&&G.mode==='conv');
@@ -6762,6 +6776,7 @@ function taiMarket(t,fin,fallback){
     TAI.busy=false; taiBusySync();
     stopNarr();
     actFinish(run,kind==='abort'?'abort':'error');
+    if(G.cur!==sess) return; /* 실패/중단 카드가 다른 세션 화면과 기록에 붙지 않게 (codex QA-06) */
     if(kind==='abort'){
       taiThreadAdd('<div class="g-status done"><span class="lb">여기서 멈췄어요</span></div>');
       /* 세션 이동 등으로 끊긴 경우에도 죽은 끝이 아니게 재생성 경로 제공 (agy QA 6-2) */
