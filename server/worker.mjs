@@ -111,6 +111,7 @@ export default {
         const stream = client.beta.messages.stream({
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
           max_tokens: 16000,
+          thinking: { type: "adaptive" },
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
@@ -118,9 +119,16 @@ export default {
           messages,
         });
         stream.on("text", (delta) => send({ text: delta }));
+        /* 실작업 이벤트: 사고 스트림 + 누적 출력 토큰 전달 */
+        stream.on("streamEvent", (ev) => {
+          try {
+            if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
+            else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
+          } catch (e) {}
+        });
         const final = await stream.finalMessage();
         if (final.stop_reason === "refusal") await send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
-        await send({ done: true });
+        await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
       } catch (e) {
         await send({ error: true });
       } finally {

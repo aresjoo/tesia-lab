@@ -138,6 +138,7 @@ createServer(async (req, res) => {
     const stream = client.beta.messages.stream({
       model: MODEL,
       max_tokens: 16000, // 씽킹 토큰 포함 여유 상한, 답변 길이는 프롬프트로 제어
+      thinking: { type: "adaptive" }, // 사고 블록 활성화 — 프론트 작업 타임라인의 실제 사고 스트림 소스
       output_config: { effort: EFFORT },
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
@@ -145,9 +146,17 @@ createServer(async (req, res) => {
       messages,
     });
     stream.on("text", (delta) => send({ text: delta }));
+    /* 실작업 이벤트: 모델의 사고 스트림(think) + 누적 출력 토큰(tok)을 그대로 전달 — 프론트 작업 타임라인이 실데이터로 구동된다 */
+    stream.on("streamEvent", (ev) => {
+      try {
+        if (process.env.TETH_DEBUG_EV) console.log("[ev]", ev.type, ev.delta ? ev.delta.type : "", ev.content_block ? ev.content_block.type : "");
+        if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
+        else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
+      } catch (e) {}
+    });
     const final = await stream.finalMessage();
     if (final.stop_reason === "refusal") send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
-    send({ done: true });
+    send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
   } catch (e) {
     console.error("[teth-ai]", e?.status || "", e?.message || e);
     send({ error: true });
