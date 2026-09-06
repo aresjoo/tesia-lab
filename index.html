@@ -4981,6 +4981,7 @@ function taiMarketRules(){
    +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
    +'\n서술 형식: 답변은 도트 불릿을 나열하는 요약 리포트가 아니라 논리가 이어지는 서술형으로 쓴다. 정보량이 많으면 "### 섹션 헤더" 아래 번호 문단("1." "2." "3.")으로 구조화하되, 각 번호 항목은 짧은 명사 조각이 아니라 사실을 제시하고 해석하고 의미를 짚는 2~4문장짜리 완결된 문단이어야 한다. 핵심 수치와 결론 구절만 **볼드**로 강조한다. "- " 불릿 나열은 원칙적으로 금지한다, 짧은 사실을 정말 어쩔 수 없이 나열할 때만 예외로 3개 이내. 여러 지표를 여러 자산에 걸쳐 비교할 때만 | 마크다운 표 |를 쓰고, 주의사항 한 줄은 "> 콜아웃"으로. 가벼운 대화는 짧은 평문으로 답한다.'
    +'\n문장 부호 규칙: 답변 본문에 가운뎃점(·)과 대시(—, –)를 절대 쓰지 않는다. 나열은 쉼표나 불릿으로, 부연이나 이음은 쉼표로 풀어 쓴다. 예: "진입·손절" 대신 "진입과 손절", "돌파 — 목표" 대신 "돌파 후 목표".'
+   +'\n신뢰 규칙: 확인된 사실, 합리적 가정, 아직 검증하지 않은 것을 구분해서 말한다. 비교 실험이나 실측 없이 "영향 없다", "안전하다", "검증 완료" 같은 단정 표현을 쓰지 않는다, 대신 무엇을 확인해야 판단이 서는지 말한다. 사용자가 오류나 모순을 지적하면 방어하지 말고 틀렸거나 불확실한 부분부터 정정하고 그로 인해 결론이 어떻게 바뀌는지 밝힌다. 사용자가 쓰는 언어를 끝까지 유지한다, 코드와 표준 지표명만 예외다.'
    +'\n사고 규칙: 분석, 예측, 비교, 전략 판단처럼 여러 요인을 따져야 하는 요청에서는 반드시 답변과 도구 사용 전에 확장 사고(extended thinking)부터 시작하라. 사고에서 판단 축을 나누고, 무엇을 확인할지 계획하고, 데이터를 본 뒤에는 해석을 사고로 정리한 다음 답하라. 사고 과정은 사용자 화면에 실시간으로 표시되므로 읽기 좋은 자연스러운 한국어 문장으로 이어가라. 간단한 시세 확인이나 용어 질문만 사고 없이 바로 답한다.'
    +'\n실시간 정보 규칙: 최근 뉴스, 실적 발표, 규제 이슈, 오늘 급등락의 이유처럼 최신 정보가 판단에 필요하면 웹 검색 도구를 실제로 사용해 확인하고, 확인한 출처에 근거해 답하라. 검색 없이 최신 사건을 아는 척 만들어내지 마라. 필요하면 검색 결과 중 핵심 페이지를 web_fetch로 열어 수치를 확인하라. 단, 시세 수치는 여전히 제공된 실시세 스냅샷을 우선 근거로 쓴다.'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
@@ -5610,15 +5611,20 @@ function tfIntakeDone(){
   TAI.nn=(TAI.nn||0)+1; var id='tfsum'+Date.now().toString(36)+TAI.nn;
   var iv=t.intake;
   var budget=TF_BUDGET[(iv.budget||{}).i!=null?iv.budget.i:1];
+  var p0=tfParams();
+  var days=p0.endI-p0.startI;
+  function av(q){ var x=iv[q]; return gEsc((x||{}).label||'')+((x||{}).rec?' <span style="font-size:11px;color:var(--gt3)">(AI 추천)</span>':''); }
   var html='<div class="tf-sum" id="'+id+'">'
-    +'<div class="h">전략 조건 확인</div>'
+    +'<div class="h">전략 계약서</div>'
     +'<div class="rows">'
-    +'<div class="r"><span class="k">자산</span><span class="v">'+gEsc((iv.asset||{}).label||'')+'</span></div>'
-    +'<div class="r"><span class="k">투자금</span><span class="v">'+tfWon(budget)+'</span></div>'
-    +'<div class="r"><span class="k">성향</span><span class="v">'+gEsc((iv.style||{}).label||'')+'</span></div>'
-    +'<div class="r"><span class="k">검증 기간</span><span class="v">'+gEsc((iv.period||{}).label||'')+'</span></div>'
-    +'<div class="r"><span class="k">허용 하락</span><span class="v">'+gEsc((iv.stop||{}).label||'')+'</span><span class="re" onclick="tfIntakeRedo(\''+id+'\')">다시 답하기</span></div>'
+    +'<div class="r"><span class="k">자산</span><span class="v">'+av('asset')+'</span></div>'
+    +'<div class="r"><span class="k">투자금</span><span class="v">'+tfWon(budget)+((iv.budget||{}).rec?' <span style="font-size:11px;color:var(--gt3)">(AI 추천)</span>':'')+'</span></div>'
+    +'<div class="r"><span class="k">성향</span><span class="v">'+av('style')+'</span></div>'
+    +'<div class="r"><span class="k">검증 기간</span><span class="v">'+av('period')+'</span></div>'
+    +'<div class="r"><span class="k">허용 하락</span><span class="v">'+av('stop')+'</span><span class="re" onclick="tfIntakeRedo(\''+id+'\')">다시 답하기</span></div>'
     +'</div>'
+    /* 숨은 가정 선제 공개: 데이터, 체결, 비용 */
+    +'<div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:-4px 0 13px">데이터: 2023~2026 일봉 시뮬레이션, '+days+'일 구간. 체결: 신호 봉 종가 기준. 비용: 거래당 수수료 0.2% 반영.</div>'
     +'<button class="tf-btn p" onclick="tfVerifyGo(\''+id+'\')">전략 검증 시작</button>'
     +'</div>';
   taiThreadAdd(html); gScrollBottom(); tfSave();
@@ -5691,6 +5697,7 @@ function tfWorkView(){
     +'<div class="r"><span class="k">성향</span><span class="v">'+gEsc((iv.style||{}).label||'')+'</span></div>'
     +'<div class="r"><span class="k">기간</span><span class="v">'+gEsc((iv.period||{}).label||'')+'</span></div>'
     +'<div class="r"><span class="k">허용 하락</span><span class="v">'+gEsc((iv.stop||{}).label||'')+'</span></div>'
+    +'<div style="font-size:11px;color:var(--gt3);line-height:1.7;margin-top:9px;border-top:1px solid var(--gl);padding-top:9px">데이터: 일봉 시뮬레이션. 체결: 신호 봉 종가. 비용: 거래당 0.2% 반영.</div>'
     +'</div>'
     +'<div class="tfw-sec" id="tfw-panel"></div>'
     +'</div></div></div>');
@@ -5743,7 +5750,11 @@ function tfWorkResult(){
     +'<div class="tf-kpi"><div class="v d">'+c.mdd.toFixed(1)+'%</div><div class="k">최대 하락폭</div></div>'
     +'<div class="tf-kpi"><div class="v">'+c.winRate.toFixed(0)+'%</div><div class="k">승률</div></div>'
     +'<div class="tf-kpi"><div class="v">'+c.n+'회</div><div class="k">거래</div></div>'
-    +'</div>';
+    +'</div>'
+    /* 수치의 조건을 같은 카드에: 비용, 표본, 미검증 항목 (P0-04, P0-05) */
+    +'<div style="font-size:11px;color:var(--gt3);line-height:1.7;margin-top:9px">수수료 0.2% 포함, 거래 '+c.n+'회 표본 기준.'
+    +(c.n<6?' 표본이 적어 점수 상한을 적용했어요.':'')
+    +(pass?' 파라미터 민감도와 시장 국면별 검증은 아직 안 거친 조건부 통과예요.':'')+'</div>';
   if(pass){
     h+='<div class="tf-sticky"><button class="tf-btn p" onclick="tfNav(\'#/strategy/report\')">리포트 보기</button></div>';
   } else if(capped){
@@ -5800,6 +5811,7 @@ function tfScore(res){
        +nz(res.tradeVol,c.volLo,c.volHi)*c.wVol;
   sc*=100;
   if(res.n<4) sc*=0.65; /* 표본 부족 페널티 */
+  if(res.n<6) sc=Math.min(sc,79); /* 표본이 너무 적으면 실행 기준을 넘지 못하게 상한 (P0-05) */
   return Math.max(5,Math.min(99,Math.round(sc)));
 }
 function tfShield(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5v-6z"/></svg>'; }
@@ -5811,7 +5823,7 @@ function tfEasyText(c){
   return '100번 중 '+Math.round(c.winRate)+'번 꼴로 이기는 전략이었고, 가장 안 좋았던 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%까지 떨어졌어요. '+shp+'. 검증 구간 동안 총 '+c.n+'번 사고팔았어요.';
 }
 function tfRiskText(c){
-  return '하락 뒤 반등을 노리는 전략이라 큰 추세 하락장에서는 신호가 약해질 수 있어요. 최악 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%의 평가 손실을 견뎌야 했고, 시장 급변 시 검증 결과와 다르게 움직일 수 있습니다.';
+  return '하락 뒤 반등을 노리는 전략이라 큰 추세 하락장에서는 신호가 약해질 수 있어요. 최악 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%의 평가 손실을 견뎌야 했고, 시장 급변 시 검증 결과와 다르게 움직일 수 있습니다. 모든 수치는 거래당 수수료 0.2%를 반영한 값이며, 파라미터 민감도와 하락장 구간별 검증은 아직 수행하지 않았어요.';
 }
 /* ── §5 리포트 라우트: 분석이 아니라 의사결정 화면 ── */
 function tfReportView(){
