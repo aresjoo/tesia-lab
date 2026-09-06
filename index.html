@@ -997,7 +997,9 @@ body.light .au-free{color:#1e8e3e}
 .g-act2 .arh .am,.g-act2 .ft .ftx{font-family:var(--num);font-variant-numeric:tabular-nums}
 .g-act2 .hd .chev{flex-shrink:0;color:var(--gt3);transition:transform .2s var(--ease)}
 .g-act2.open .hd .chev{transform:rotate(180deg)}
-.g-act2 .tl{margin:2px 0 0 10px;position:relative}
+.g-act2 .tl{display:grid;grid-template-rows:1fr;transition:grid-template-rows .24s var(--ease);margin:2px 0 0 10px}
+.g-act2:not(.open) .tl{grid-template-rows:0fr}
+.g-act2 .tlin{overflow:hidden;min-height:0;position:relative}
 .g-act2 .ar{position:relative;display:flex;gap:11px;padding:7px 0 7px 2px}
 .g-act2 .ar::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:1px;background:var(--gl)}
 .g-act2 .ar:first-child::before{top:12px}
@@ -1020,11 +1022,14 @@ body.light .au-free{color:#1e8e3e}
 .g-act2 .arh .bdg+.am{margin-left:0}
 .g-act2 .arh .chev{flex-shrink:0;color:var(--gt3);transition:transform .2s var(--ease)}
 .g-act2 .ab.open .arh .chev{transform:rotate(90deg)}
-.g-act2 .ad{padding:6px 4px 4px 8px;font-size:12.5px;color:var(--gt3);line-height:1.65;animation:gFadeUp .18s var(--ease) both}
+.g-act2 .ad{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s var(--ease);font-size:12.5px;color:var(--gt3);line-height:1.65}
+.g-act2 .ab.open .ad{grid-template-rows:1fr}
+.g-act2 .adin{overflow:hidden;min-height:0;padding:0 4px 0 8px;transition:padding .22s var(--ease)}
+.g-act2 .ab.open .adin{padding:6px 4px 4px 8px}
 .g-act2 .ad b{color:var(--gt2);font-weight:600}
 .g-act2 .ar.note .an{padding:1px 4px;font-size:12.5px;color:var(--gt3);line-height:1.6;border-left:2px solid var(--gl);padding-left:10px;margin-left:2px}
-/* 사고 스트림: 클로드식 — 박스 없이 흐르는 무드 텍스트, 스트리밍 중 내부 스크롤 */
-.g-act2 .cot2{max-height:210px;overflow-y:auto;white-space:pre-wrap;padding:2px 4px 2px 12px;border-left:2px solid var(--gl);font-size:12.8px;color:var(--gt3);line-height:1.75}
+/* 사고 스트림: 클로드식 — 박스/스크롤 없이 자연스럽게 자라는 흐름 텍스트 */
+.g-act2 .cot2{white-space:pre-wrap;padding:2px 4px 2px 12px;border-left:2px solid var(--gl);font-size:12.8px;color:var(--gt3);line-height:1.75}
 .g-act2 .ft{display:flex;align-items:center;gap:8px;margin:4px 0 0 3px;font-size:12px;color:var(--gt3)}
 .g-act2 .ft .dot{width:7px;height:7px;border-radius:50%;background:#5b8def;animation:actPulse 1.4s ease-in-out infinite}
 @keyframes actPulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
@@ -4866,8 +4871,8 @@ function actStart(sess,label){
   var el=taiThreadAdd('<div class="g-act2 open" id="'+id+'" data-run="'+id+'"></div>');
   if(el){
     el.innerHTML='<button class="hd" aria-expanded="true" aria-controls="'+id+'-tl" onclick="actToggle(\''+id+'\')">'+taiLogoDraw(22)+'<span class="hlb">'+gEsc(label)+'</span><span class="els"></span><svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>'
-     +'<div class="tl" id="'+id+'-tl"></div>';
-    run.el=el; run.tl=el.querySelector('.tl');
+     +'<div class="tl" id="'+id+'-tl"><div class="tlin"></div></div>';
+    run.el=el; run.tl=el.querySelector('.tlin');
   }
   ACT.live[id]=run;
   run.timer=setInterval(function(){ actTick(run); },1000);
@@ -4902,7 +4907,7 @@ function actPaint(run,st){
   var open=st.open?' open':'';
   st.el.innerHTML=actTic(st)
    +'<div class="ab'+open+'"><button class="arh" '+(hasDet?'aria-expanded="'+(st.open?'true':'false')+'" onclick="actRowToggle(this)"':'disabled')+'><span class="at">'+gEsc(st.title)+'</span>'+right+(hasDet?'<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>':'')+'</button>'
-   +(hasDet?'<div class="ad"'+(st.open?'':' hidden')+'>'+st.detail+'</div>':'')+'</div>';
+   +(hasDet?'<div class="ad"><div class="adin">'+st.detail+'</div></div>':'')+'</div>';
 }
 function actStep(run,st){
   st.status=st.status||'running'; st.t0=Date.now();
@@ -4930,13 +4935,30 @@ function actThink(run){
   var buf='';
   return {
     push:function(d){
-      buf+=d; h.st.think=buf;
-      if(h.st.el&&h.st.el.isConnected){ var box=h.st.el.querySelector('.cot2'); if(box){ box.textContent=buf; box.scrollTop=box.scrollHeight; } }
+      if(!d) return;
+      if(!buf) d=String(d).replace(/^\s+/,''); /* 첫 청크 선행 개행 제거 */
+      buf=(buf+d).replace(/\n{3,}/g,'\n\n'); /* 연속 빈 줄 압축 — 줄바꿈 폭탄 방지 */
+      h.st.think=buf;
+      if(h.st.el&&h.st.el.isConnected){ var box=h.st.el.querySelector('.cot2'); if(box) box.textContent=buf; gScrollBottom(); }
     },
     done:function(){
       if(h.st.status!=='running') return;
-      h.st.open=false;
-      h.done('생각 완료',buf?'<div class="cot2">'+gEsc(buf)+'</div>':null,((Date.now()-h.st.t0)/1000).toFixed(1)+'초');
+      /* 부드러운 접힘: DOM 재생성 대신 상태만 전환해 그리드 트랜지션이 살아 있게 */
+      h.st.status='done'; h.st.open=false;
+      h.st.title='생각 완료'; h.st.mR=((Date.now()-h.st.t0)/1000).toFixed(1)+'초';
+      h.st.ms=Date.now()-h.st.t0;
+      h.st.detail=buf?'<div class="cot2">'+gEsc(buf)+'</div>':null;
+      var el=h.st.el;
+      if(el&&el.isConnected&&el.querySelector('.ab')){
+        el.className='ar done think';
+        var tic=el.querySelector('.tic'); if(tic) tic.outerHTML=actTic(h.st);
+        var at=el.querySelector('.at'); if(at) at.textContent=h.st.title;
+        var btn=el.querySelector('.arh');
+        if(btn&&h.st.mR&&!el.querySelector('.am')){ var am=document.createElement('span'); am.className='am'; am.textContent=h.st.mR; var cv=btn.querySelector('.chev'); btn.insertBefore(am,cv||null); }
+        el.querySelector('.ab').classList.remove('open');
+        if(btn) btn.setAttribute('aria-expanded','false');
+      } else actPaint(null,h.st);
+      STORE.save();
     },
     st:h.st
   };
@@ -4952,7 +4974,7 @@ function taiThinkSim(th,run){
     busy=true;
     var s=q[0], ch=s.slice(0,2); q[0]=s.slice(2);
     th.push(ch);
-    if(!q[0].length){ q.shift(); th.push('\n\n'); setTimeout(pump,460); }
+    if(!q[0].length){ q.shift(); th.push(' '); setTimeout(pump,460); } /* 연출 문장은 한 문단으로 흘림 */
     else setTimeout(pump,26+Math.random()*22);
   }
   return {
@@ -5016,22 +5038,20 @@ function actRenderFinal(el,d){
    +'<span class="tic '+(d.status==='done'?'ok':'fail')+'">'+(d.status==='done'?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':'!')+'</span>'
    +'<span class="hlb">'+gEsc(head)+'</span>'+(d.tok?'<span class="els">'+Number(d.tok).toLocaleString()+' 토큰</span>':'')
    +'<svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>'
-   +'<div class="tl" id="'+d.id+'-tl" hidden></div>';
-  var tl=el.querySelector('.tl');
+   +'<div class="tl" id="'+d.id+'-tl"><div class="tlin"></div></div>';
+  var tl=el.querySelector('.tlin');
   d.steps.forEach(function(s){ var r=document.createElement('div'); var tmp={el:r}; for(var k in s) tmp[k]=s[k]; tmp.el=r; tmp.open=false; actPaint(null,tmp); tl.appendChild(r); });
 }
 function actToggle(id){
   var el=$(id); if(!el) return;
   var show=!el.classList.contains('open');
   el.classList.toggle('open',show);
-  var tl=el.querySelector('.tl'); if(tl) tl.hidden=!show;
   var hd=el.querySelector('.hd'); if(hd) hd.setAttribute('aria-expanded',show?'true':'false');
 }
 function actRowToggle(btn){
-  var ab=btn.closest('.ab'); if(!ab) return;
-  var ad=ab.querySelector('.ad'); if(!ad) return;
-  var show=ad.hidden;
-  ad.hidden=!show; ab.classList.toggle('open',show);
+  var ab=btn.closest('.ab'); if(!ab||!ab.querySelector('.ad')) return;
+  var show=!ab.classList.contains('open');
+  ab.classList.toggle('open',show);
   btn.setAttribute('aria-expanded',show?'true':'false');
 }
 function actHydrate(sess,el){
@@ -5396,7 +5416,7 @@ function taiMarket(t,fin,fallback){
   /* 사고 내레이터: 실모델(하이쿠)이 길고 진지한 1인칭 사고를 병렬 생성 */
   var narr=null;
   if(TAI.ok!==false){
-    var np='너는 최고 수준의 시니어 트레이더다. 아래 요청을 받고 답을 준비하는 너의 사고 과정을 1인칭 현재형 한국어로 서술하라. 진지하고 밀도 있게 9~14문장, 문단 흐름으로(마크다운·목록·헤더 금지). 판단 축을 나누고, 무엇을 확인해야 하는지, 가설과 반박, 어떤 조건이면 생각이 바뀌는지를 오가라. 아직 결론은 내리지 마라. 확정 수익 표현 금지.'
+    var np='너는 최고 수준의 시니어 트레이더다. 아래 요청을 받고 답을 준비하는 너의 사고 과정을 1인칭 현재형 한국어로 서술하라. 진지하고 밀도 있게 9~14문장. 판단 축을 나누고, 무엇을 확인해야 하는지, 가설과 반박, 어떤 조건이면 생각이 바뀌는지를 오가라. 아직 결론은 내리지 마라. 확정 수익 표현 금지. 형식 규칙: 마크다운, 목록, 헤더 금지. 문단은 최대 2개, 문단 사이 줄바꿈 한 번만, 연속 빈 줄 금지. 가운뎃점(·)과 대시(—, –) 금지, 나열은 쉼표로 풀어 쓴다.'
       +'\n\n요청: "'+t+'"';
     var astN=ast||ai.chart;
     if(astN&&astN.label) np+='\n대상 자산: '+astN.label;
