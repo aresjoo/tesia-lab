@@ -4568,9 +4568,13 @@ function taiStream(system,msgs,onText,onDone,onFail,onMeta){
           var L=lines[i]; if(L.indexOf('data: ')!==0) continue;
           var ev; try{ ev=JSON.parse(L.slice(6)); }catch(e){ continue; }
           if(ev.error&&!got) throw 0;
-          if(alive()&&onMeta){ /* 실작업 메타: 사고 스트림 / 누적 토큰 / 최종 usage */
+          if(alive()&&onMeta){ /* 실작업 메타: 서버 툴(검색/페이지/코드) / 사고 스트림 / 누적 토큰 / 최종 usage */
             if(ev.think) onMeta({think:ev.think});
             if(ev.tok) onMeta({tok:ev.tok});
+            if(ev.tool) onMeta({tool:ev.tool});
+            if(ev.sres) onMeta({sres:ev.sres});
+            if(ev.fres) onMeta({fres:ev.fres});
+            if(ev.tres) onMeta({tres:ev.tres});
             if(ev.done&&ev.usage) onMeta({usage:ev.usage});
           }
           if(ev.text&&alive()){ got=true; onText(ev.text); }
@@ -4625,6 +4629,7 @@ function taiMarketRules(){
    +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
    +'\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
    +'\n문장 부호 규칙: 답변 본문에 가운뎃점(·)과 대시(—, –)를 절대 쓰지 않는다. 나열은 쉼표나 불릿으로, 부연이나 이음은 쉼표로 풀어 쓴다. 예: "진입·손절" 대신 "진입과 손절", "돌파 — 목표" 대신 "돌파 후 목표".'
+   +'\n실시간 정보 규칙: 최근 뉴스, 실적 발표, 규제 이슈, 오늘 급등락의 이유처럼 최신 정보가 판단에 필요하면 웹 검색 도구를 실제로 사용해 확인하고, 확인한 출처에 근거해 답하라. 검색 없이 최신 사건을 아는 척 만들어내지 마라. 필요하면 검색 결과 중 핵심 페이지를 web_fetch로 열어 수치를 확인하라. 단, 시세 수치는 여전히 제공된 실시세 스냅샷을 우선 근거로 쓴다.'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
    +'\n사용자가 특정 자산이나 시장(주식, 코인, 지수, 원자재, 부동산 등)을 언급하면 함께 차트를 보자고 자연스럽게 유도하고, 답변의 맨 마지막 줄에 정확히 다음 형식의 태그를 붙인다: [CHART {"tv":"트레이딩뷰심볼","data":"binance:심볼 또는 yahoo:티커 또는 none","label":"한글이름"}]'
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
@@ -4912,6 +4917,13 @@ function actThink(run){
     },
     st:h.st
   };
+}
+/* 실검색 결과 리스트 (모델이 실제 수행한 웹 검색의 실제 URL) */
+function actSrcList(rs){
+  return '<div class="srclist">'+rs.map(function(r){
+    var d=''; try{ d=new URL(r.u).hostname.replace(/^www\./,''); }catch(e){}
+    return '<a class="srow" href="'+gEsc(r.u)+'" target="_blank" rel="noopener noreferrer"><img class="fv" src="https://www.google.com/s2/favicons?domain='+gEsc(d)+'&sz=32" alt=""><span class="tt">'+gEsc(r.t)+'</span><span class="dm">'+gEsc(d)+'</span></a>';
+  }).join('')+'</div>';
 }
 function actFinish(run,mode,usage){
   var d=run.data; if(d.status!=='running') return;
@@ -5294,6 +5306,7 @@ function taiMarket(t,fin,fallback){
   /* 실시간 작업 타임라인: 실제 실행 이벤트(시세/지표/사고/답변)만 반영 */
   var run=actStart(sess,stLb);
   var thinkH=null,ansH=null,lastUsage=null;
+  var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
     actFinish(run,kind==='abort'?'abort':'error');
     if(kind==='abort'){ taiThreadAdd('<div class="g-status done"><span class="lb">여기서 멈췄어요</span></div>'); taiCancelChips(false); delay(300,taiSpacerTrim); return; }
@@ -5393,7 +5406,20 @@ function taiMarket(t,fin,fallback){
     },function(meta){ /* 실작업 메타 스트림 */
       if(meta.tok) run.data.tok=meta.tok;
       if(meta.usage) lastUsage=meta.usage;
-      if(meta.think&&run.data.status==='running'){ if(!thinkH) thinkH=actThink(run); thinkH.push(meta.think); }
+      if(run.data.status!=='running') return;
+      if(meta.think){ if(!thinkH) thinkH=actThink(run); thinkH.push(meta.think); }
+      if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
+        if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:'웹 검색 중'+(q?' · "'+q+'"':''),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
+        else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:'페이지 여는 중 · '+(dm||'출처'),h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
+        else pend.o.push(actStep(run,{kind:'cmd',title:'코드 실행 중'+(meta.tool.q?' · '+meta.tool.q.replace(/\s+/g,' ').slice(0,36):''),h:'계산을 실행하는 중',verb:'계산을 실행하는 중',detail:meta.tool.q?'<code>'+gEsc(meta.tool.q)+'</code>':null}));
+      }
+      if(meta.sres){ var hs=pend.s.shift(); if(hs){ var qq=hs.st.q?' · "'+hs.st.q+'"':'';
+        if(meta.sres.error) hs.fail('웹 검색 실패'+qq);
+        else hs.done('웹 검색 완료'+qq, meta.sres.results&&meta.sres.results.length?actSrcList(meta.sres.results):null, meta.sres.n+'개 결과'); } }
+      if(meta.fres){ var hf=pend.f.shift(); if(hf){
+        if(meta.fres.error) hf.fail('페이지 읽기 실패 · '+(hf.st.d||''),(hf.st.u?gEsc(hf.st.u)+'<br>':'')+'오류 코드: '+gEsc(String(meta.fres.error)));
+        else hf.done('페이지 읽기 완료 · '+(hf.st.d||''),hf.st.u?'<a href="'+gEsc(hf.st.u)+'" target="_blank" rel="noopener noreferrer">'+gEsc(hf.st.u)+'</a>':null); } }
+      if(meta.tres){ var ho=pend.o.shift(); if(ho){ if(meta.tres.error) ho.fail(ho.st.title.replace('실행 중','실행 실패')); else ho.done(ho.st.title.replace('실행 중','실행 완료')); } }
     });
   };
   if(isPred){

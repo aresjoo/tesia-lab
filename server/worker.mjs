@@ -113,17 +113,42 @@ export default {
           max_tokens: 16000,
           thinking: { type: "adaptive" },
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
+          tools: [
+            { type: "web_search_20260209", name: "web_search", max_uses: 4 },
+            { type: "web_fetch_20260209", name: "web_fetch", max_uses: 4 },
+          ],
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
           system: String(payload.system || "").slice(0, 8000),
           messages,
         });
         stream.on("text", (delta) => send({ text: delta }));
-        /* 실작업 이벤트: 사고 스트림 + 누적 출력 토큰 전달 */
+        /* 실작업 이벤트: 검색/페이지/코드 실행 툴 + 사고 스트림 + 누적 출력 토큰 전달 (index.mjs와 동일 프로토콜) */
+        const blocks = {};
         stream.on("streamEvent", (ev) => {
           try {
-            if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
-            else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
+            if (ev.type === "content_block_start") {
+              const cb = ev.content_block || {};
+              if (cb.type === "server_tool_use") blocks[ev.index] = { kind: cb.name, json: "", seed: cb.input && Object.keys(cb.input).length ? cb.input : null };
+              else if (cb.type === "web_search_tool_result") {
+                const ok = Array.isArray(cb.content);
+                const rs = ok ? cb.content.filter((r) => r && r.url).map((r) => ({ t: r.title || r.url, u: r.url })) : [];
+                send({ sres: { n: rs.length, results: rs.slice(0, 8), error: ok ? undefined : true } });
+              } else if (cb.type === "web_fetch_tool_result") {
+                const c = cb.content || {};
+                const err = c.type === "web_fetch_tool_error";
+                send({ fres: { u: (c.content && c.content.url) || c.url || "", error: err ? (c.error_code || true) : undefined } });
+              } else if (/_tool_result$/.test(cb.type || "")) {
+                send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
+              }
+            } else if (ev.type === "content_block_delta" && ev.delta) {
+              if (ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
+              else if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
+            } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
+              const b = blocks[ev.index]; delete blocks[ev.index];
+              let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
+              send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : "") } });
+            } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
           } catch (e) {}
         });
         const final = await stream.finalMessage();
