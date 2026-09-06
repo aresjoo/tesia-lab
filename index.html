@@ -1311,7 +1311,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   #g-hamburger:active{background:rgba(255,255,255,.08)}
   #g-auth-btns{top:12px;right:14px}
   .ga-login,.ga-signup{height:36px}
-  .ga-signup,.ga-nav{display:none}
+  .ga-nav{display:none}
   .g-side #g-side-links{display:block;margin-top:auto;border-top:1px solid var(--gl);padding-top:8px}
   .g-side #g-side-links .g-util{display:flex;text-decoration:none}
   .g-side #g-side-links~.g-side-bottom{margin-top:0}
@@ -1556,7 +1556,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 .tfw-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
 @media (max-width:900px){.tfw-grid{grid-template-columns:1fr}.tfw{padding:14px 14px 110px}}
 .tfw-chart{border:1px solid var(--gl);border-radius:14px;overflow:hidden;background:rgba(0,0,0,.25);height:460px}
-@media (max-width:900px){.tfw-chart{height:300px}}
+@media (max-width:900px){.tfw-chart{height:200px}}
 .tfw-rail{display:flex;flex-direction:column;gap:12px}
 .tfw-sec{border:1px solid var(--gl);border-radius:14px;padding:15px 17px;background:rgba(255,255,255,.02)}
 .tfw-sec .sh{font-size:12px;font-weight:600;color:var(--gt3);letter-spacing:.03em;margin-bottom:11px}
@@ -1667,7 +1667,10 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 .tf-cyc2 .d{font-size:11.5px;color:var(--gt3)}
 .tf-cyc2 .pr{margin-left:auto;text-align:right;font-size:14px;font-weight:700;color:var(--gt);font-variant-numeric:tabular-nums}
 .tf-cyc2 .pr small{display:block;font-size:11px;color:#56c486;font-weight:600}
-body.tf-route #teth-help{bottom:88px} /* 전략 라우트: 헬프 FAB가 스티키 CTA를 가리지 않게 */
+body.tf-route #teth-help{bottom:88px}
+@media (max-width:900px){ body.tf-route #teth-help{display:none} } /* 워크스페이스 모바일: FAB가 CTA를 간섭하지 않게 */
+.tfw-hd .bk{width:44px;height:44px} /* 터치 타깃 44px (agy QA 8-1) */
+.tf-drawer .dh .x,.tf-mbox .mh .x{width:40px;height:40px} /* 전략 라우트: 헬프 FAB가 스티키 CTA를 가리지 않게 */
 </style>
 
 <div id="shell">
@@ -4847,6 +4850,7 @@ var STORE={t:0,
   save:function(){ if(!S.user) return; clearTimeout(STORE.t); STORE.t=setTimeout(STORE.flush,700); },
   snapshot:function(){
     return {v:1,savedAt:Date.now(),user:{name:S.user.name,email:S.user.email||''},
+      lastSid:(G.cur&&G.cur.id)||null, /* 새로고침 복귀용 마지막 활성 세션 */
       tf:S.tf||null, /* 전략 위임 플로우 상태 (API 키 원문은 애초에 저장 안 함, 마스킹만) */
       sessions:G.sessions.slice(0,20).map(function(sx){
         return {id:sx.id,title:sx.title,status:sx.status,convo:sx.convo,thread:sx.thread,
@@ -4962,8 +4966,9 @@ function taiStop(){ if(TAI.req&&TAI.req.ctrl) TAI.req.ctrl.abort(); }
 /* 컴포저 전송 버튼 ↔ 중지 버튼 동기화 */
 function taiBusySync(){
   var b=$('g-send-btn'); if(!b) return;
-  if(TAI.req){ b.innerHTML='<span class="stopsq"></span>'; b.onclick=taiStop; b.setAttribute('aria-label','생성 중지'); }
-  else{ b.innerHTML='↑'; b.onclick=gSend; b.setAttribute('aria-label','전송'); }
+  if(TAI.req){ b.innerHTML='<span class="stopsq"></span>'; b.onclick=taiStop; b.setAttribute('aria-label','생성 중지'); b.style.opacity=''; }
+  else if(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000){ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity='.4'; b.setAttribute('aria-label','조사 진행 중'); } /* 프리스트림: 흐리게 — 클릭 시 안내 토스트 */
+  else{ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity=''; b.setAttribute('aria-label','전송'); }
 }
 /* 중단/실패 후 이어가기 액션 */
 function taiCancelChips(showContinue){
@@ -5585,7 +5590,16 @@ var TF_BUDGET=[1000000,5000000,10000000,30000000];
 var TF_STOP=[-3,-5,-8,-12];
 /* ── §1 인테이크: 채팅 안에서는 가볍게 — 짧은 질문 + 작은 칩, 끝에 요약 카드 하나 ── */
 function tfStart(act){
+  /* 대화 스레드 밖(홈 등)에서 호출되면 무음 실패하지 않게 세션부터 연다 (agy QA 4-1) */
+  if(!$('g-thread')||G.mode!=='conv'){
+    var sx=G.cur||G.sessions[0];
+    if(!sx){ toast('채팅을 먼저 시작해주세요'); gHome(); return; }
+    gSelect(sx.id);
+    delay(400,function(){ tfStart(act); });
+    return;
+  }
   var t=tfS();
+  t.cloneFrom=null;
   t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null;
   t.ob={st:'idle',ex:null,uid:'',err:null};
   var sell=/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
@@ -5720,7 +5734,7 @@ function tfWorkView(){
   var budget=TF_BUDGET[(iv.budget||{}).i!=null?iv.budget.i:1];
   TF_RENDERING=true;
   gContent('<div class="tfw">'
-    +tfHead(gEsc(asset)+' 전략 검증','과거 시장 기준')
+    +tfHead(gEsc(asset)+' 전략 검증',t.cloneFrom?gEsc(t.cloneFrom)+' 님의 전략 복제본, 과거 시장 기준':'과거 시장 기준')
     +'<div class="tfw-grid">'
     +'<div class="tfw-chart" id="tfw-chart"></div>'
     +'<div class="tfw-rail">'
@@ -5775,7 +5789,7 @@ function tfWorkResult(){
   var h='<div class="tf-scorebox">'
     +'<div class="lb">TETH SCORE</div>'
     +'<div class="n"><span id="tfw-num">0</span> <small>/ 100</small></div>'
-    +'<div class="vd '+(pass?'ok':'no')+'">'+(pass?'실행 가능':'기준 미달')+'</div>'
+    +'<div class="vd '+(pass?'ok':'no')+'" id="tfw-vd" style="opacity:0;transition:opacity .25s">'+(pass?'실행 가능':'기준 미달')+'</div>'
     +'<div class="cp">'+(pass?'과거 데이터 기준으로 TETH 실행 기준(80점)을 통과했어요.':capped?gEsc(TFCOPY.gateFailCap):'조금만 조정하면 실행 기준(80점)에 가까워질 수 있어요.')+'</div>'
     +'</div>'
     +'<div class="tf-kpis">'
@@ -5805,7 +5819,8 @@ function tfWorkResult(){
   }
   panel.innerHTML='<div class="sh">검증 결과</div>'+h;
   var num=$('tfw-num'),t0=performance.now(),target=t.score;
-  (function anim(now){ if(!num||!num.isConnected) return; var q=Math.min(1,(now-t0)/700); q=q*q*(3-2*q); num.textContent=Math.round(target*q); if(q<1) requestAnimationFrame(anim); })(t0);
+  /* 판정 배지는 카운팅이 목표 점수에 닿은 뒤에만 — 52점인데 "실행 가능"이 먼저 보이는 인지 부조화 방지 (agy QA 7-2) */
+  (function anim(now){ if(!num||!num.isConnected) return; var q=Math.min(1,(now-t0)/700); q=q*q*(3-2*q); num.textContent=Math.round(target*q); if(q<1) requestAnimationFrame(anim); else { var vd=$('tfw-vd'); if(vd) vd.style.opacity='1'; } })(t0);
   if(t.stage!=='report'&&t.stage!=='connect'&&t.stage!=='pay'&&t.stage!=='done'){ t.stage=pass?'verified':'improve'; tfSave(); }
 }
 /* 추천 diff: 현재 설정과 TETH 권장의 차이만 */
@@ -6297,6 +6312,7 @@ function tfFollow(i){
   var t=tfS();
   t.intake={asset:{i:0,label:r.asset},assetInfo:tfAssetLookup(r.asset),style:{i:1,label:'중립적으로'},budget:{i:1,label:'500만원'},period:{i:r.p.startI>61?1:2,label:r.p.startI>61?'최근 2년':'전체 기간'},stop:{i:TF_STOP.indexOf(r.p.sl),label:r.p.sl+'%까지'}};
   t.qi=TF_QS.length; t.tries=[]; t.stage='verify'; t.workDone=false; t.pendingP=tfParams(r.p);
+  t.cloneFrom=r.nick; /* 원작자 크레딧을 워크스페이스까지 유지 (agy QA 7-3) */
   tfSave();
   toast(r.nick+' 님의 전략으로 검증을 시작해요');
   tfNav('#/strategy/backtest');
@@ -6331,7 +6347,11 @@ function tfRoute(){
   var h=location.hash;
   if(h.indexOf('#/strategy/')!==0){ if(TF_ONSTRAT){ TF_ONSTRAT=false; tfBackToChat(); } return; }
   var t=tfS();
-  if(!S.user||!t.intake||!t.intake.asset){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} return; }
+  if(!S.user||!t.intake||!t.intake.asset){
+    /* 부팅 복원이 끝나기 전에는 해시를 지우지 않는다 — 새로고침 시 워크스페이스 복구 불가가 되던 레이스 (agy QA 5-2) */
+    if(window.TF_STATE_READY){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} }
+    return;
+  }
   TF_ONSTRAT=true;
   if(h==='#/strategy/report') tfReportView();
   else if(h==='#/strategy/connect') tfConnectView();
@@ -6659,7 +6679,7 @@ function taiForecast(){
 /* ── 시장 Q&A 본체: conv/doc 공용 ── */
 function taiMarket(t,fin,fallback){
   var sess=G.cur; if(!sess) return; /* 이 요청의 소유 세션에 바인딩 — 이후 세션 전환에도 기록은 이 세션으로만 */
-  TAI.busy=true; TAI.busyAt=Date.now(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
+  TAI.busy=true; TAI.busyAt=Date.now(); taiBusySync(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
   var ai=taiAI(sess);
   var conv=!!($('g-thread')&&G.mode==='conv');
   var tfReq=taiTfFrom(t);
@@ -6739,10 +6759,15 @@ function taiMarket(t,fin,fallback){
   },1500);
   var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
-    TAI.busy=false;
+    TAI.busy=false; taiBusySync();
     stopNarr();
     actFinish(run,kind==='abort'?'abort':'error');
-    if(kind==='abort'){ taiThreadAdd('<div class="g-status done"><span class="lb">여기서 멈췄어요</span></div>'); taiCancelChips(false); delay(300,taiSpacerTrim); return; }
+    if(kind==='abort'){
+      taiThreadAdd('<div class="g-status done"><span class="lb">여기서 멈췄어요</span></div>');
+      /* 세션 이동 등으로 끊긴 경우에도 죽은 끝이 아니게 재생성 경로 제공 (agy QA 6-2) */
+      if(TAI.lastQ) taiThreadAdd('<div class="g-nextcol"><button class="g-nextq" data-q="'+gEsc(TAI.lastQ).replace(/"/g,'&quot;')+'" onclick="taiChipSend(this)"><span>다시 생성</span><span class="ar">→</span></button></div>');
+      delay(300,taiSpacerTrim); return;
+    }
     taiErrCard(t); delay(300,taiSpacerTrim);
   };
   var proceed=function(ctx){
@@ -6783,6 +6808,7 @@ function taiMarket(t,fin,fallback){
         var nw=Date.now();
         if(nw-lastR>120||delta.indexOf('\n')>=0){
           lastR=nw;
+          gScrollBottom(); /* 하단 근처면 최신 토큰 추적, 위에서 읽는 중이면 새 응답 칩만 (agy QA 2-2) */
           var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0]
             .replace(/\[[A-Z]{0,6}$/,''); /* 청크 경계에서 잘린 태그 조각([CHA 등) 원문 노출 방지 */
           var cut=vis.lastIndexOf('\n');
@@ -6802,7 +6828,7 @@ function taiMarket(t,fin,fallback){
       var mAct=acc.match(/\[ACT\s+(\[[\s\S]*?\])\s*\]/),acts=null; if(mAct){ try{ acts=JSON.parse(mAct[1]); }catch(e){} }
       var mT=acc.match(/\[TITLE\s+"([^"\n]{1,40})"\s*\]/);
       TAI.lastRaw=acc; /* 디버그: 태그 포함 원문 */
-      TAI.busy=false;
+      TAI.busy=false; taiBusySync();
       stopNarr();
       if(sim) sim.flush();
       if(thinkH) thinkH.done();
@@ -6843,7 +6869,7 @@ function taiMarket(t,fin,fallback){
       if(live) delay(1600,taiSpacerTrim); /* 차트/후속칩 렌더가 자리 잡은 뒤 과잉 여백 정리 */
       STORE.save();
     },function(kind){
-      TAI.busy=false;
+      TAI.busy=false; taiBusySync();
       if(!out||(kind!=='abort-partial'&&kind!=='error-partial')){ fb(kind); return; }
       /* 부분 생성물 보존: 중단/끊김 시점까지의 답변을 마무리하고 이어가기 제공 */
       stopNarr();
@@ -6882,7 +6908,7 @@ function taiMarket(t,fin,fallback){
           var code=(meta.tool.q||'').replace(/\s+/g,' ');
           /* 검색/페이지 호출용 배관 코드는 숨김 — 알맹이는 웹 검색/페이지 행이 이미 보여준다. 결과 페어링용 자리만 유지 */
           if(/web_search\s*\(|web_fetch\s*\(/.test(code)) pend.o.push(null);
-          else pend.o.push(actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중',detail:code?'<code>'+gEsc(meta.tool.q)+'</code>':null}));
+          else pend.o.push(actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중'})); /* 내부 파이썬 스크립트는 사용자에게 노출하지 않는다 (agy QA 3-3) */
         }
       }
       if(meta.sres){
@@ -6953,7 +6979,8 @@ function taiAsk(t,fin,fallback){ taiMarket(t,fin,fallback); }
 function taiAskConv(t,fallback){ taiMarket(t,null,fallback); }
 
 function gSend(){
-  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)) return; /* 생성 중 + 프리스트림 조사 중 중복 전송 방지 (3분 고착 해제) */
+  /* 생성/조사 중 전송: 조용히 삼키지 않는다 — 입력을 보존하고 이유를 알린다 (agy QA 3-1) */
+  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중이에요, 끝나면 바로 보내주세요'); return; }
   var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value=''; f.style.height='auto';
   if(G.mode==='conv'){
     gConvUser(t);
@@ -7033,6 +7060,14 @@ function gBoot(){
     /* 저장된 세션 복원: 서버 파일스토어 우선, localStorage 폴백. 로그인·대화 목록·세션 메모리 복구 */
     STORE.load(function(p){
       if(!S.user&&STORE.restore(p)){ authSyncUI(); gSideRender(); }
+      window.TF_STATE_READY=true; /* 이제부터 라우트 가드가 해시를 정리해도 안전 (복원 레이스 방지) */
+      var onStrat=location.hash.indexOf('#/strategy/')===0;
+      if(onStrat){ TF_BOOTED=true; tfRoute(); }
+      else if(S.user&&p&&p.lastSid){
+        /* 새로고침 시 마지막 작업 세션으로 복귀 — 빈 홈으로 튕기지 않는다 */
+        var ex=G.sessions.some(function(x){ return x.id===p.lastSid; });
+        if(ex) gSelect(p.lastSid);
+      }
     });
   });
   document.body.classList.add('g-dark');
