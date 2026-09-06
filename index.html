@@ -889,7 +889,9 @@ body.light .au-free{color:#1e8e3e}
 .g-amsg p{margin:0 0 10px}
 .g-amsg ul{margin:6px 0 14px;padding-left:22px}
 .g-amsg li{margin:6px 0}
-.g-amsg blockquote{margin:12px 0;padding:10px 15px;border-left:3px solid var(--gb2,#8fb2ff);background:rgba(143,178,255,.07);border-radius:0 8px 8px 0;color:var(--gt2);font-size:14.5px}
+/* 콜아웃: 인포 카드 (헤어라인 보더 라운드 박스 + 인포 아이콘) */
+.g-amsg blockquote{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:12px 15px;border:1px solid var(--gl);background:rgba(255,255,255,.03);border-radius:12px;color:var(--gt2);font-size:14.5px}
+.g-amsg blockquote::before{content:'';flex-shrink:0;width:15px;height:15px;margin-top:4px;background:var(--gt3);-webkit-mask:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5v.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5v.5'/%3E%3C/svg%3E") center/contain no-repeat}
 .g-amsg .tblwrap{overflow-x:auto;margin:12px 0}
 .g-amsg table{border-collapse:collapse;font-size:14px;line-height:1.6;color:var(--gt2)} /* 전역 --text(잉크) 상속 차단, 다크 가독성 보장 */
 .g-amsg th,.g-amsg td{border:1px solid var(--gl);padding:9px 14px;text-align:left;vertical-align:top;word-break:keep-all}
