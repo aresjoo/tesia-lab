@@ -135,7 +135,14 @@ createServer(async (req, res) => {
     return res.end();
   }
   try {
-    const stream = client.beta.messages.stream({
+    /* think 모드: 경량 모델이 사고 내레이션만 스트리밍 (본답변과 병렬, 도구/사고 없음) */
+    const isThink = payload.think === true;
+    const stream = isThink ? client.beta.messages.stream({
+      model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
+      max_tokens: 1024,
+      system: String(payload.system || "").slice(0, 4000),
+      messages,
+    }) : client.beta.messages.stream({
       model: MODEL,
       max_tokens: 16000, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
       thinking: { type: "adaptive" }, // ì‚¬ê³  ë¸”ë¡ í™œì„±í™” â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì˜ ì‹¤ì œ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼ ì†ŒìŠ¤

@@ -108,7 +108,13 @@ export default {
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
     ctx.waitUntil((async () => {
       try {
-        const stream = client.beta.messages.stream({
+        const isThink = payload.think === true;
+        const stream = isThink ? client.beta.messages.stream({
+          model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
+          max_tokens: 1024,
+          system: String(payload.system || "").slice(0, 4000),
+          messages,
+        }) : client.beta.messages.stream({
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
           max_tokens: 16000,
           thinking: { type: "adaptive" },
