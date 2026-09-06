@@ -4924,6 +4924,7 @@ function actPaint(run,st){
 }
 function actStep(run,st){
   st.status=st.status||'running'; st.t0=Date.now();
+  run.lastEvt=Date.now(); /* 공백 브리지 타이머 리셋 */
   run.data.steps.push(st);
   if(run.tl&&run.tl.isConnected){ st.el=document.createElement('div'); actPaint(run,st); run.tl.appendChild(st.el); gScrollBottom(); }
   actHeadSync(run);
@@ -4995,7 +4996,8 @@ function taiThinkSim(th,run){
   return {
     feed:function(s,cb){
       if(dead()||!s||total>1600){ if(cb) cb(); return; }
-      total+=s.length; q.push({s:s,cb:cb||null}); if(!busy) pump();
+      /* 큐가 비어 있으면 직전 내용(내레이터 원문 등)과의 이음새에 공백 하나를 큐 순서대로 삽입 */
+      total+=s.length; q.push({s:((busy||q.length)?'':' ')+s,cb:cb||null}); if(!busy) pump();
     },
     real:function(){ real=true; flushCbs(); },
     resume:function(){ real=false; if(q.length&&!busy) pump(); },
@@ -5522,7 +5524,7 @@ function taiMarket(t,fin,fallback){
   var ansH=null,lastUsage=null,seg=false;
   /* 사고는 시세와 매크로를 받은 뒤 시작 — 내레이터가 방금 받은 실수치를 짚으며 생각한다 */
   var thinkH=null,sim=null,narr=null,narrOn=false,narrEnd=null;
-  function fireNarrEnd(){ if(narrEnd){ var f=narrEnd; narrEnd=null; f(); } }
+  function fireNarrEnd(){ narr=null; run.lastEvt=Date.now(); if(narrEnd){ var f=narrEnd; narrEnd=null; f(); } }
   function startThink(fx){
     if(thinkH||run.data.status!=='running') return;
     thinkH=actThink(run); sim=taiThinkSim(thinkH,run);
@@ -5547,6 +5549,20 @@ function taiMarket(t,fin,fallback){
     }
   }
   var stopNarr=function(){ if(narr){ narr.abort(); narr=null; } };
+  /* 무이벤트 공백 브리지: 조사가 끝나고 답변 첫 토큰까지의 긴 침묵 동안 사고가 계속 말한다.
+     이벤트(행 생성, 메타, 텍스트)가 7초 이상 끊기면 정리 문장을 하나씩 흘리고 헤더를 "결론을 정리하는 중"으로 전환 */
+  var BR=['모은 재료를 교차 검증하면서 결론의 뼈대를 세운다.','수치와 뉴스가 가리키는 방향이 일치하는지 대조한다.','트리거 레벨을 어디에 둘지 저울질한다.','반대 시나리오를 한 번 더 두드려 보고 답의 구조를 정한다.'];
+  var brI=0;
+  run.lastEvt=Date.now();
+  var brT=setInterval(function(){
+    if(run.data.status!=='running'){ clearInterval(brT); return; }
+    if(ansH||seg||narr||!sim||!thinkH||brI>=BR.length) return;
+    if(thinkH.st.status!=='running') return;
+    if(Date.now()-(run.lastEvt||0)<7000) return;
+    if(brI===0){ thinkH.st.h='결론을 정리하는 중'; actHeadSync(run); }
+    run.lastEvt=Date.now();
+    sim.resume(); sim.feed(BR[brI++]);
+  },1500);
   var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
     stopNarr();
@@ -5581,6 +5597,7 @@ function taiMarket(t,fin,fallback){
         if(thinkH) thinkH.done();
         if(run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
       }
+      run.lastEvt=Date.now();
       acc+=delta;
       /* 스트리밍 증분 마크다운: 완성된 줄은 즉시 리치 렌더, 작성 중인 마지막 줄만 raw 버퍼. 120ms 스로틀 */
       if(out.innerHTML!==undefined){
@@ -5660,12 +5677,13 @@ function taiMarket(t,fin,fallback){
       }
       STORE.save();
     },function(meta){ /* 실작업 메타 스트림 */
+      run.lastEvt=Date.now();
       if(meta.tok) run.data.tok=meta.tok;
       if(meta.usage) lastUsage=meta.usage;
       if(run.data.status!=='running') return;
       if(meta.think){ if(!thinkH) startThink(null); stopNarr(); sim.real(); thinkH.push(meta.think); } /* 본모델 실사고 도착 → 내레이터/연출 즉시 양보 */
       if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
-        if(!ansH&&!seg){ if(narr){ stopNarr(); if(thinkH) thinkH.push(' '); } if(sim) sim.resume(); } /* 사고 중 검색 시작 → 내레이터가 바톤을 넘기고 검색 내레이션이 사고 행을 잇는다 */
+        if(!ansH&&!seg){ stopNarr(); if(sim) sim.resume(); } /* 사고 중 검색 시작 → 내레이터가 바톤을 넘기고 검색 내레이션이 사고 행을 잇는다 */
         if(ansH){ /* 답변 작성 중 자료 보강 → 답변 행을 닫고 사고 세그먼트를 연다 */
           ansH.done('초안 작성, 자료 보강 필요',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초');
           ansH=null; seg=true;
