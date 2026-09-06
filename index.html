@@ -5025,7 +5025,7 @@ function actFinish(run,mode,usage){
   var d=run.data; if(d.status!=='running') return;
   d.status=mode; d.ms=Date.now()-d.t0;
   if(usage&&usage.out) d.tok=usage.out;
-  d.steps.forEach(function(s){ if(s.status==='running'){ s.status='failed'; s.title=s.title+(mode==='abort'?' · 중단됨':''); } });
+  d.steps.forEach(function(s){ if(s.status==='running'){ s.status='failed'; s.title=s.title+(mode==='abort'?', 중단됨':''); } });
   clearInterval(run.timer); delete ACT.live[run.id];
   if(run.el&&run.el.isConnected) actRenderFinal(run.el,d);
   STORE.save();
@@ -5034,7 +5034,7 @@ function actFinish(run,mode,usage){
 function actRenderFinal(el,d){
   var n=d.steps.filter(function(s){return s.kind!=='note';}).length;
   var secs=d.ms?Math.round(d.ms/1000)+'초':'';
-  var head=d.status==='done'?('작업 완료 · '+n+'단계'+(secs?' · '+secs:'')):d.status==='abort'?('작업 중단 · '+n+'단계'):('작업 오류 · '+n+'단계');
+  var head=d.status==='done'?('작업 완료, '+n+'단계'+(secs?', '+secs:'')):d.status==='abort'?('작업 중단, '+n+'단계'):('작업 오류, '+n+'단계');
   el.classList.add('fin'); el.classList.remove('open');
   el.innerHTML='<button class="hd" aria-expanded="false" aria-controls="'+d.id+'-tl" onclick="actToggle(\''+d.id+'\')">'
    +'<span class="tic '+(d.status==='done'?'ok':'fail')+'">'+(d.status==='done'?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':'!')+'</span>'
@@ -5251,7 +5251,7 @@ function taiChartOpen(info){
 function taiChartRender(){
   var c=TAI.chart; if(!c) return; var host=$(c.cid); if(!host) return;
   host.innerHTML='';
-  new TradingView.widget({container_id:c.cid,symbol:c.tv,interval:c.interval,autosize:true,theme:document.body.classList.contains('light')?'light':'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
+  new TradingView.widget({container_id:c.cid,symbol:c.tv,interval:c.interval,range:c.range||undefined,autosize:true,theme:document.body.classList.contains('light')?'light':'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
 }
 function taiOhlc(cb,sess,run,ast){
   var ai=taiAI(sess||G.cur);
@@ -5263,7 +5263,7 @@ function taiOhlc(cb,sess,run,ast){
   var p=c.data.split(':');
   var srcNm=p[0]==='binance'?'바이낸스':'야후 파이낸스';
   var ivL=TAI_TFL[iv]||'일봉';
-  var h=run?actStep(run,{kind:'fetch',title:srcNm+' 시세 수신 중 · '+(c.label||p.slice(1).join(':'))+' '+ivL,h:'실시세를 확인하는 중',verb:'실시세를 확인하는 중'}):null;
+  var h=run?actStep(run,{kind:'fetch',title:(c.label||p.slice(1).join(':'))+' '+ivL+' 시세 수신 중',h:'실시세를 확인하는 중',verb:'실시세를 확인하는 중'}):null;
   var t0=Date.now();
   var ctrl=('AbortController' in window)?new AbortController():null;
   if(ctrl) setTimeout(function(){ ctrl.abort(); },4000);
@@ -5274,16 +5274,16 @@ function taiOhlc(cb,sess,run,ast){
       if(ai&&isCur){ ai.ohlc=j; ai.ohlcAt=Date.now(); }
       if(h){
         var ms=Date.now()-t0, kb=(JSON.stringify(j).length/1024).toFixed(1);
-        h.done(srcNm+' 시세 수신 완료 · '+(c.label||'')+' '+ivL,
+        h.done((c.label||'')+' '+ivL+' 시세 수신 완료',
           '<b>'+gEsc(c.label||'')+'</b> '+gEsc(ivL)+' '+(j.rows?j.rows.length:0)+'봉 수신. 현재가 <b>'+gEsc(String(j.last))+'</b>, '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, 30'+(iv==='1d'?'일':'봉')+' '+j.chg30d+'%. 90'+(iv==='1d'?'일':'봉')+' 최고 '+gEsc(String(j.hi90))+' / 최저 '+gEsc(String(j.lo90))+'. 응답 '+ms+'ms, '+kb+'KB.',
-          ms+'ms · '+(j.rows?j.rows.length:0)+'봉');
+          ms+'ms, '+(j.rows?j.rows.length:0)+'봉');
       }
       if(isCur) taiChartPx(j); /* 다른 자산 스냅샷을 현재 차트 카드에 표시하지 않는다 */
       cb('\n['+c.label+' 실시세 스냅샷, '+(TAI_TFL[iv]||'일봉')+' 기준, 방금 수신] 현재가 '+j.last+', '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, '+(iv==='1d'?'7일':'7봉')+' '+j.chg7d+'%, '+(iv==='1d'?'30일':'30봉')+' '+j.chg30d+'%, '+(iv==='1d'?'90일':'90봉')+' 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30개 봉 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 마크다운으로 구조화된 깊이 있는 분석을 작성한다: "### 현재 위치" 섹션(핵심 수치 **볼드**), "### 상방 시나리오"와 "### 하방 시나리오"(트리거 가격과 목표 레벨, 불릿), 지표 요약은 | 표 |, "### 리스크와 대응"(현실적 제안). 확정적 단정과 수익 보장은 피한다.');
     })
     .catch(function(err){
       /* 부분 실패: 실패를 타임라인에 그대로 남기고 시세 없이 계속 진행 */
-      if(h) h.fail(srcNm+' 시세 수신 실패 · '+(c.label||''),'엔드포인트: /api/ohlc?src='+gEsc(p[0])+'&sym='+gEsc(p.slice(1).join(':'))+'&iv='+gEsc(iv)+'<br>'+(err&&err.name==='AbortError'?'4초 타임아웃 초과':'응답 오류 '+gEsc(String(err)))+'. 실시세 없이 분석을 계속합니다.');
+      if(h) h.fail((c.label||'')+' 시세 수신 실패','엔드포인트: /api/ohlc?src='+gEsc(p[0])+'&sym='+gEsc(p.slice(1).join(':'))+'&iv='+gEsc(iv)+'<br>'+(err&&err.name==='AbortError'?'4초 타임아웃 초과':'응답 오류 '+gEsc(String(err)))+'. 실시세 없이 분석을 계속합니다.');
       else if(c&&c.data&&c.data!=='none') taiThreadAdd('<div class="g-status done"><span class="lb">실시간 시세를 불러오지 못해 시세 없이 진행합니다</span></div>');
       cb('');
     });
@@ -5297,7 +5297,7 @@ function actProbeIv(run,ai,iv,cb,ast){
   var srcNm=p[0]==='binance'?'바이낸스':'야후 파이낸스';
   var ivL=TAI_TFL[iv]||iv;
   if(isCur&&G.cur===run.sess&&TAI_TFTV[iv]&&ai.chart){ ai.chart.interval=TAI_TFTV[iv]; taiChartRender(); } /* 실제 차트 전환 (현재 차트 자산일 때만) */
-  var h=actStep(run,{kind:'fetch',title:(c.label?c.label+' ':'')+ivL+' 흐름 확인 중 · '+srcNm,h:ivL+' 흐름을 확인하는 중',verb:ivL+' 흐름을 확인하는 중'});
+  var h=actStep(run,{kind:'fetch',title:(c.label?c.label+' ':'')+ivL+' 흐름 확인 중',h:ivL+' 흐름을 확인하는 중',verb:ivL+' 흐름을 확인하는 중'});
   var t0=Date.now();
   fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src='+encodeURIComponent(p[0])+'&sym='+encodeURIComponent(p.slice(1).join(':'))+'&iv='+encodeURIComponent(iv))
     .then(function(r){ if(!r.ok) throw r.status; return r.json(); })
@@ -5305,15 +5305,81 @@ function actProbeIv(run,ai,iv,cb,ast){
       var ms=Date.now()-t0;
       var up=0,rows=j.rows||[];
       for(var i=Math.max(1,rows.length-10);i<rows.length;i++) if(rows[i][4]>=rows[i][1]) up++;
-      h.done((c.label?c.label+' ':'')+ivL+' 흐름 확인 완료 · '+srcNm,
+      h.done((c.label?c.label+' ':'')+ivL+' 흐름 확인 완료',
         '<b>'+gEsc(ivL)+'</b> '+rows.length+'봉 실측. 최근 10봉 중 <b>'+up+'봉 상승</b>, 직전 1봉 '+j.chg1d+'%, 최근 7봉 '+j.chg7d+'%. 현재가 '+gEsc(String(j.last))+'.',
-        ms+'ms · '+rows.length+'봉');
+        ms+'ms, '+rows.length+'봉');
       cb&&cb(j);
     })
     .catch(function(err){
-      h.fail(ivL+' 흐름 확인 실패 · '+srcNm,'응답 오류 '+gEsc(String(err))+'. 기준 타임프레임 데이터로 계속합니다.');
+      h.fail(ivL+' 흐름 확인 실패','응답 오류 '+gEsc(String(err))+'. 기준 타임프레임 데이터로 계속합니다.');
       cb&&cb();
     });
+}
+/* 매크로 환경 실측: 나스닥, 달러인덱스, 미 10년물을 실제 조회해 한 행으로. 코인이면 비트코인 대비 상대강도까지 */
+function actMacro(run,sim,coin,assetChg7,cb){
+  var syms=[['^IXIC','나스닥'],['DX-Y.NYB','달러인덱스'],['^TNX','미 10년물']];
+  var h=actStep(run,{kind:'fetch',title:'매크로 환경 확인 중',h:'매크로 환경을 확인하는 중',verb:'매크로 환경을 확인하는 중'});
+  var t0=Date.now(),total=syms.length+(coin?1:0),done=0,res=[],fails=[],btc=null;
+  function fin(){
+    if(++done<total) return;
+    var ok=res.filter(Boolean),ms=Date.now()-t0;
+    var rel=(coin&&btc&&assetChg7!=null)?+(assetChg7-btc.chg7d).toFixed(2):null;
+    if(!ok.length&&rel==null){ h.fail('매크로 환경 확인 실패','나스닥, 달러인덱스, 미 10년물 조회가 모두 실패했습니다. 매크로 없이 계속합니다.'); cb(''); return; }
+    var line=ok.map(function(r){ return r.n+' '+(r.chg>=0?'+':'')+r.chg+'%'; }).join(', ');
+    var det='당일 실측: '+ok.map(function(r){ return '<b>'+r.n+'</b> '+r.last+' ('+(r.chg>=0?'+':'')+r.chg+'%)'; }).join(', ')+'.'
+      +(rel!=null?' 비트코인 대비 7봉 상대강도 <b>'+(rel>=0?'+':'')+rel+'%p</b>.':'')
+      +(fails.length?' 조회 실패: '+fails.join(', ')+'.':'');
+    h.done('매크로 환경 확인 완료',det,ms+'ms, '+(ok.length+(rel!=null?1:0))+'종');
+    var nas=ok.filter(function(r){return r.n==='나스닥';})[0];
+    sim.feed('매크로부터 본다. '+line+'. '
+      +(nas?(nas.chg>=0?'위험자산 분위기는 나쁘지 않다.':'위험자산 전반이 눌려 있어 보수적으로 봐야 한다.'):'')
+      +(rel!=null?(rel>=0?' 비트코인보다 강하게 움직이고 있다는 점은 플러스다.':' 비트코인보다 약한 흐름이라 알트 약세 구간일 수 있다.'):''));
+    cb('\n[매크로 실측, 방금 수신] '+line+'.'+(rel!=null?' 비트코인 대비 7봉 상대강도 '+(rel>=0?'+':'')+rel+'%p.':''));
+  }
+  syms.forEach(function(s,i){
+    fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src=yahoo&sym='+encodeURIComponent(s[0])+'&iv=1d')
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(j){ res[i]={n:s[1],last:j.last,chg:j.chg1d}; })
+      .catch(function(){ fails.push(s[1]); })
+      .then(fin,fin);
+  });
+  if(coin) fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src=binance&sym=BTCUSDT&iv=1d')
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(j){ btc=j; })
+    .catch(function(){})
+    .then(fin,fin);
+}
+/* 멀티 타임프레임 스윕: 사고-차트-행이 같은 박자로 1분/15분/1시간/4시간을 실측 투어, 마지막에 줌아웃 후 기준 복귀 */
+function actTfSweep(run,ai,ast,sim,cb){
+  var c=ast||(ai&&ai.chart);
+  if(!c||!c.data||c.data==='none'){ cb(); return; }
+  var isCur=!ast||(ai.chart&&ai.chart.data===c.data);
+  var SIMS={'1m':'1분봉부터 본다. 초단기 체결에 비정상 급변이 있는지만 빠르게 확인한다.',
+    '15m':'15분봉으로 올라간다. 최근 봉들의 방향으로 단기 매수세가 붙는지 센다.',
+    '1h':'1시간봉으로 구조를 본다. 눌림과 반등의 리듬이 살아 있는지 확인한다.',
+    '4h':'4시간봉으로 스윙 구간을 잡는다. 지지와 저항이 어디에 몰려 있는지 본다.'};
+  var seq=['1m','15m','1h','4h'].filter(function(v){ return v!==ai.tf; });
+  var i=0;
+  (function next(){
+    if(run.data.status!=='running'){ cb(); return; }
+    if(i>=seq.length){
+      if(isCur&&ai.chart&&G.cur===run.sess){
+        sim.feed('마지막으로 줌아웃해서 큰 그림을 본다. 지금 자리가 긴 사이클의 어디쯤인지 확인한다.');
+        ai.chart.interval=TAI_TFTV[ai.tf]||'D'; ai.chart.range='12M'; taiChartRender();
+        var zh=actStep(run,{kind:'chart',title:'차트 줌아웃, 12개월 구조 확인 중',h:'큰 그림을 확인하는 중',verb:'큰 그림을 확인하는 중'});
+        delay(1700,function(){
+          if(ai.chart){ ai.chart.range='3M'; if(G.cur===run.sess) taiChartRender(); }
+          zh.done('차트 줌아웃으로 12개월 구조 확인 완료','트레이딩뷰 위젯을 12개월 범위로 실제 전환해 장기 구조를 보고 3개월 범위로 복귀했습니다.');
+          cb();
+        });
+      } else cb();
+      return;
+    }
+    var iv=seq[i++];
+    sim.feed(SIMS[iv]||'');
+    var st=Date.now();
+    actProbeIv(run,ai,iv,function(){ delay(Math.max(0,1000-(Date.now()-st)),next); },ast);
+  })();
 }
 /* 차트 카드 헤더에 실시세 표시 */
 function taiChartPx(j){
@@ -5322,7 +5388,7 @@ function taiChartPx(j){
   var px=hd.querySelector('.px');
   if(!px){ px=document.createElement('span'); px.className='px'; var tag=hd.querySelector('.tvtag'); hd.insertBefore(px,tag); }
   var up=(j.chg1d||0)>=0;
-  px.innerHTML=gEsc(String(j.last))+'<em class="'+(up?'u':'d')+'">'+(up?'+':'')+j.chg1d+'% · 24H</em><i>'+new Date().toTimeString().slice(0,5)+' 업데이트</i>';
+  px.innerHTML=gEsc(String(j.last))+'<em class="'+(up?'u':'d')+'">'+(up?'+':'')+j.chg1d+'% 24H</em><i>'+new Date().toTimeString().slice(0,5)+' 업데이트</i>';
 }
 /* 예측 시나리오: 차트 카드 하단에 실캔들 + 미래 구간 상/하방 경로가 그려지는 애니메이션 */
 function taiForecast(){
@@ -5330,7 +5396,7 @@ function taiForecast(){
   var host=$(c.cid); if(!host) return; var card=host.closest('.g-chartcard'); if(!card) return;
   var old=card.querySelector('.fc'); if(old) old.remove();
   var fc=document.createElement('div'); fc.className='fc';
-  fc.innerHTML='<canvas></canvas><div class="lb">AI 예측 시나리오 · 참고용</div>';
+  fc.innerHTML='<canvas></canvas><div class="lb">AI 예측 시나리오, 참고용</div>';
   card.appendChild(fc);
   var cv=fc.querySelector('canvas'),cx=cv.getContext('2d');
   var rows=j.rows.slice(-40),last=j.rows[j.rows.length-1][4];
@@ -5533,8 +5599,8 @@ function taiMarket(t,fin,fallback){
       if(run.data.status!=='running') return;
       if(meta.think){ stopNarr(); sim.real(); thinkH.push(meta.think); } /* 본모델 실사고 도착 → 내레이터/연출 즉시 양보 */
       if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
-        if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:'웹 검색 중'+(q?' · "'+q+'"':''),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
-        else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:'페이지 여는 중 · '+(dm||'출처'),h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
+        if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:(q?'"'+q+'" 검색 중':'웹 검색 중'),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
+        else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:(dm||'출처')+' 페이지 여는 중',h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
         else{
           var code=(meta.tool.q||'').replace(/\s+/g,' ');
           /* 검색/페이지 호출용 배관 코드는 숨김 — 알맹이는 웹 검색/페이지 행이 이미 보여준다. 결과 페어링용 자리만 유지 */
@@ -5542,13 +5608,13 @@ function taiMarket(t,fin,fallback){
           else pend.o.push(actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중',detail:code?'<code>'+gEsc(meta.tool.q)+'</code>':null}));
         }
       }
-      if(meta.sres){ var hs=pend.s.shift(); if(hs){ var qq=hs.st.q?' · "'+hs.st.q+'"':'';
-        if(meta.sres.error) hs.fail('웹 검색 실패'+qq);
-        else{ hs.done('웹 검색 완료'+qq, meta.sres.results&&meta.sres.results.length?actSrcList(meta.sres.results):null, meta.sres.n+'개 결과');
+      if(meta.sres){ var hs=pend.s.shift(); if(hs){ var qq=hs.st.q?'"'+hs.st.q+'" ':'웹 ';
+        if(meta.sres.error) hs.fail(qq+'검색 실패');
+        else{ hs.done(qq+'검색 완료', meta.sres.results&&meta.sres.results.length?actSrcList(meta.sres.results):null, meta.sres.n+'개 결과');
           if(hs.st.q) sim.feed('"'+hs.st.q+'" 검색에서 '+meta.sres.n+'개 소스가 잡혔다. 가격에 이미 반영된 뉴스와 새 재료를 구분해서 본다.'); } } }
       if(meta.fres){ var hf=pend.f.shift(); if(hf){
-        if(meta.fres.error) hf.fail('페이지 읽기 실패 · '+(hf.st.d||''),(hf.st.u?gEsc(hf.st.u)+'<br>':'')+'오류 코드: '+gEsc(String(meta.fres.error)));
-        else{ hf.done('페이지 읽기 완료 · '+(hf.st.d||''),hf.st.u?'<a href="'+gEsc(hf.st.u)+'" target="_blank" rel="noopener noreferrer">'+gEsc(hf.st.u)+'</a>':null);
+        if(meta.fres.error) hf.fail((hf.st.d||'출처')+' 페이지 읽기 실패',(hf.st.u?gEsc(hf.st.u)+'<br>':'')+'오류 코드: '+gEsc(String(meta.fres.error)));
+        else{ hf.done((hf.st.d||'출처')+' 페이지 읽기 완료',hf.st.u?'<a href="'+gEsc(hf.st.u)+'" target="_blank" rel="noopener noreferrer">'+gEsc(hf.st.u)+'</a>':null);
           if(hf.st.d) sim.feed(hf.st.d+' 원문을 열어 세부 수치까지 확인했다.'); } } }
       if(meta.tres){ var ho=pend.o.shift(); if(ho){ if(meta.tres.error) ho.fail(ho.st.failT||ho.st.title); else ho.done(ho.st.doneT||ho.st.title); } }
     });
@@ -5558,23 +5624,25 @@ function taiMarket(t,fin,fallback){
     /* 실이벤트 시퀀스: 보조 타임프레임 실측 → 기준 타임프레임 실시세 → 실지표 계산 → 사고/답변 스트림.
        모든 행이 실제 fetch/계산의 시작·완료·실패로만 생성된다 (타이머 연출 없음) */
     var shortT=t.replace(/\s+/g,' ').slice(0,40)+(t.length>40?'…':'');
-    actNote(run,'"'+shortT+'" 판단에는 '+lb0+'의 현재가 위치, 단기 모멘텀, 변동성 확인이 필요합니다. 실시세부터 수신합니다.');
-    actProbeIv(run,ai,ai.tf==='15m'?'1h':'15m',function(){
-      if(G.cur!==sess){ taiOhlc(proceed,sess,run,ast); return; } /* 세션 전환 시에도 데이터 수집과 기록은 계속 */
-      taiOhlc(function(ctx){
-        if(!ast&&ai.chart&&G.cur===sess){ ai.chart.interval=TAI_TFTV[ai.tf]||'D'; taiChartRender(); }
-        var j0=TAI.ohlc;
-        if(j0) sim.feed('실시세가 들어왔다. 현재가 '+j0.last+', 30봉 기준 '+j0.chg30d+'%. '+(j0.chg30d>=10?'상승 흐름이 살아 있으니 과열 여부가 관건이다.':j0.chg30d<=-10?'조정 폭이 커서 지지선 방어부터 본다.':'방향 탐색 구간이라 트리거 레벨이 중요하다.'));
-        var d=taiIndic();
-        if(d){
-          actStep(run,{kind:'calc',status:'done',title:'지표 계산 완료 · RSI '+d.rsi+', 변동폭 '+d.atrPct+'%',mR:'실계산',
-            detail:'수신한 실데이터로 직접 계산했습니다. RSI(14) <b>'+d.rsi+'</b>'+(d.rsi>=70?' (과열권)':d.rsi<=30?' (과매도권)':' (중립)')+', 일평균 변동폭(ATR14) <b>'+d.atrPct+'%</b>, 20일 이동평균 '+d.ma20+(d.ma50?', 50일 이동평균 '+d.ma50:'')+', 90일 레인지 위치 <b>'+d.pos+'%</b>, 최근 10봉 중 '+d.up10+'봉 상승, 스윙 밴드 '+d.lo20+'~'+d.hi20+'.'});
-          actNote(run,(d.last>=d.ma20?'가격이 20일선 위에 있어 ':'가격이 20일선 아래라 ')+(d.rsi>=60?'과열 여부를 함께 따져야 해서 상하방 시나리오를 모두 계산합니다.':d.rsi<=40?'지지선이 버티는지가 관건이라 하방 트리거부터 점검합니다.':'추세와 모멘텀을 같이 놓고 시나리오를 계산합니다.'));
-          sim.feed('RSI '+d.rsi+'면 '+(d.rsi>=70?'과열권이다. 추격 진입보다 눌림 시나리오 쪽에 무게를 둔다.':d.rsi<=30?'과매도권이다. 반등 트리거가 어디서 잡히는지 본다.':'중립이다. 20일선 '+(d.last>=d.ma20?'위라 추세 지속':'아래라 회복 확인')+' 여부가 먼저다.')+' 레인지 위치는 '+d.pos+'%.');
-        }
-        proceed(ctx);
-      },sess,run,ast);
-    },ast);
+    actNote(run,'"'+shortT+'" 판단에는 '+lb0+'의 현재가 위치, 매크로 환경, 타임프레임별 추세 확인이 필요합니다. 실시세부터 수신합니다.');
+    /* 3단 시장 조사: ① 자산 실시세 → ② 매크로 실측 → ③ 멀티 타임프레임 실측 투어(차트 동기) → 지표 계산 → 답변 */
+    taiOhlc(function(ctxA){
+      var j0=TAI.ohlc;
+      if(j0) sim.feed('실시세가 들어왔다. 현재가 '+j0.last+', 30봉 기준 '+j0.chg30d+'%. '+(j0.chg30d>=10?'상승 흐름이 살아 있으니 과열 여부가 관건이다.':j0.chg30d<=-10?'조정 폭이 커서 지지선 방어부터 본다.':'방향 탐색 구간이라 트리거 레벨이 중요하다.'));
+      var coin=((ast||ai.chart)&&((ast||ai.chart).data||'').indexOf('binance:')===0)&&((ast||ai.chart).data||'')!=='binance:BTCUSDT';
+      actMacro(run,sim,coin,j0?j0.chg7d:null,function(ctxM){
+        actTfSweep(run,ai,ast,sim,function(){
+          var d=taiIndic();
+          if(d){
+            actStep(run,{kind:'calc',status:'done',title:'지표 계산 완료, RSI '+d.rsi+', 변동폭 '+d.atrPct+'%',mR:'실계산',
+              detail:'수신한 실데이터로 직접 계산했습니다. RSI(14) <b>'+d.rsi+'</b>'+(d.rsi>=70?' (과열권)':d.rsi<=30?' (과매도권)':' (중립)')+', 일평균 변동폭(ATR14) <b>'+d.atrPct+'%</b>, 20일 이동평균 '+d.ma20+(d.ma50?', 50일 이동평균 '+d.ma50:'')+', 90일 레인지 위치 <b>'+d.pos+'%</b>, 최근 10봉 중 '+d.up10+'봉 상승, 스윙 밴드 '+d.lo20+'~'+d.hi20+'.'});
+            actNote(run,(d.last>=d.ma20?'가격이 20일선 위에 있어 ':'가격이 20일선 아래라 ')+(d.rsi>=60?'과열 여부를 함께 따져야 해서 상하방 시나리오를 모두 계산합니다.':d.rsi<=40?'지지선이 버티는지가 관건이라 하방 트리거부터 점검합니다.':'추세와 모멘텀을 같이 놓고 시나리오를 계산합니다.'));
+            sim.feed('타임프레임을 합쳐 보면, RSI '+d.rsi+'에 '+(d.rsi>=70?'과열권이라 추격보다 눌림 시나리오에 무게를 둔다.':d.rsi<=30?'과매도권이라 반등 트리거가 어디서 잡히는지 본다.':'중립이라 20일선 '+(d.last>=d.ma20?'위 유지':'회복')+' 여부가 먼저다.')+' 레인지 위치는 '+d.pos+'%.');
+          }
+          proceed(ctxA+ctxM);
+        });
+      });
+    },sess,run,ast);
   } else if(ast||(ai.chart&&ai.chart.data&&ai.chart.data!=='none')){
     taiOhlc(function(ctx){
       var j1=TAI.ohlc;
