@@ -4854,6 +4854,13 @@ var STORE={t:0,
       })};
   },
   flush:function(){
+    /* 스텝마다 서버 POST가 연사되지 않게 800ms 트레일링 디바운스 (로컬 저장은 즉시) */
+    if(!S.user) return;
+    if(STORE._t) clearTimeout(STORE._t);
+    STORE._t=setTimeout(function(){ STORE._t=null; STORE.flushNow(); },800);
+    try{ localStorage.setItem('teth.state',JSON.stringify(STORE.snapshot())); }catch(e){}
+  },
+  flushNow:function(){
     if(!S.user) return;
     try{
       var j=JSON.stringify(STORE.snapshot());
@@ -6652,6 +6659,7 @@ function taiForecast(){
 /* ── 시장 Q&A 본체: conv/doc 공용 ── */
 function taiMarket(t,fin,fallback){
   var sess=G.cur; if(!sess) return; /* 이 요청의 소유 세션에 바인딩 — 이후 세션 전환에도 기록은 이 세션으로만 */
+  TAI.busy=true; TAI.busyAt=Date.now(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
   var ai=taiAI(sess);
   var conv=!!($('g-thread')&&G.mode==='conv');
   var tfReq=taiTfFrom(t);
@@ -6731,6 +6739,7 @@ function taiMarket(t,fin,fallback){
   },1500);
   var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
+    TAI.busy=false;
     stopNarr();
     actFinish(run,kind==='abort'?'abort':'error');
     if(kind==='abort'){ taiThreadAdd('<div class="g-status done"><span class="lb">여기서 멈췄어요</span></div>'); taiCancelChips(false); delay(300,taiSpacerTrim); return; }
@@ -6774,7 +6783,8 @@ function taiMarket(t,fin,fallback){
         var nw=Date.now();
         if(nw-lastR>120||delta.indexOf('\n')>=0){
           lastR=nw;
-          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0];
+          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0]
+            .replace(/\[[A-Z]{0,6}$/,''); /* 청크 경계에서 잘린 태그 조각([CHA 등) 원문 노출 방지 */
           var cut=vis.lastIndexOf('\n');
           var head=cut>=0?vis.slice(0,cut):'';
           var tail=cut>=0?vis.slice(cut+1):vis;
@@ -6792,6 +6802,7 @@ function taiMarket(t,fin,fallback){
       var mAct=acc.match(/\[ACT\s+(\[[\s\S]*?\])\s*\]/),acts=null; if(mAct){ try{ acts=JSON.parse(mAct[1]); }catch(e){} }
       var mT=acc.match(/\[TITLE\s+"([^"\n]{1,40})"\s*\]/);
       TAI.lastRaw=acc; /* 디버그: 태그 포함 원문 */
+      TAI.busy=false;
       stopNarr();
       if(sim) sim.flush();
       if(thinkH) thinkH.done();
@@ -6832,6 +6843,7 @@ function taiMarket(t,fin,fallback){
       if(live) delay(1600,taiSpacerTrim); /* 차트/후속칩 렌더가 자리 잡은 뒤 과잉 여백 정리 */
       STORE.save();
     },function(kind){
+      TAI.busy=false;
       if(!out||(kind!=='abort-partial'&&kind!=='error-partial')){ fb(kind); return; }
       /* 부분 생성물 보존: 중단/끊김 시점까지의 답변을 마무리하고 이어가기 제공 */
       stopNarr();
@@ -6941,7 +6953,7 @@ function taiAsk(t,fin,fallback){ taiMarket(t,fin,fallback); }
 function taiAskConv(t,fallback){ taiMarket(t,null,fallback); }
 
 function gSend(){
-  if(TAI.req) return; /* 생성 중 중복 전송 방지, 버튼은 Stop 상태 */
+  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)) return; /* 생성 중 + 프리스트림 조사 중 중복 전송 방지 (3분 고착 해제) */
   var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value=''; f.style.height='auto';
   if(G.mode==='conv'){
     gConvUser(t);
