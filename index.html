@@ -965,10 +965,13 @@ body.light .au-free{color:#1e8e3e}
 .g-trail .st svg{flex-shrink:0}
 .g-trail .st .els{margin-left:auto;font-size:11px;color:var(--gt3);flex-shrink:0}
 .g-trail .st .lb{min-width:0}
-.g-nextcol .g-nextq{animation:gFadeUp .3s var(--ease) both}
-.g-nextcol .g-nextq:nth-child(2){animation-delay:.07s}
-.g-nextcol .g-nextq:nth-child(3){animation-delay:.14s}
-.g-nextcol .g-nextq:nth-child(4){animation-delay:.21s}
+.g-nextcol>button{animation:gFadeUp .3s var(--ease) both}
+.g-nextcol>button:nth-child(2){animation-delay:.07s}
+.g-nextcol>button:nth-child(3){animation-delay:.14s}
+.g-nextcol>button:nth-child(4){animation-delay:.21s}
+.g-nextcol>button:nth-child(5){animation-delay:.28s}
+.g-nextcol>button:nth-child(6){animation-delay:.35s}
+.g-nextcol>button:nth-child(7){animation-delay:.42s}
 .g-srcs .g-src{animation:gFadeUp .3s var(--ease) both}
 .g-srcs .g-src:nth-child(2){animation-delay:.08s}
 /* 출처 카드 */
@@ -4816,12 +4819,27 @@ function taiFbEtc(id){
   var ta=el.querySelector('.fbt'); if(ta) ta.focus();
 }
 function taiFbPick(id){ taiAskClose(id); toast('감사합니다. 제공해 주신 의견은 TETH를 개선하는 데 도움이 됩니다.'); }
-/* 후속 질문 버튼 */
-function taiNext(items){
+/* 후속 질문 + 실행 액션 통합 칩 목록 — 액션칩은 유도칩과 같은 컨테이너, 같은 간격의 한 목록 안에 섞인다 */
+function taiNext(items,acts){
+  items=items||[];
+  acts=(acts||[]).filter(function(a){ return a&&a.label&&TAI_ACT_IC[a.type]; }).slice(0,2);
+  if(!items.length&&!acts.length) return;
   taiNextClear();
   TAI.nn=(TAI.nn||0)+1; var id='gnx'+TAI.nn;
-  var el=taiThreadAdd('<div class="g-nextcol" id="'+id+'">'+items.map(function(q,i){ return '<button class="g-nextq" data-i="'+i+'"><span>'+gEsc(q)+'</span><span class="ar">→</span></button>'; }).join('')+'</div>');
-  if(el) el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){ var f=$('g-in'); if(f){ f.value=items[i]; gSend(); } }; });
+  TAI.acfg=TAI.acfg||{}; TAI.acfg[id]=acts;
+  var badge=!(S.user&&S.user.plan); /* 구독자(plan 보유)에겐 무료 배지 미노출 */
+  var rows=items.map(function(q){ return {t:'n',q:q}; });
+  /* 자연스러운 위치: 유도칩이 있으면 두 번째 슬롯에, 없으면 맨 앞에 */
+  var at=Math.min(1,rows.length);
+  acts.forEach(function(a,i){ rows.splice(at+i,0,{t:'a',a:a,i:i}); });
+  var el=taiThreadAdd('<div class="g-nextcol" id="'+id+'">'+rows.map(function(r){
+    if(r.t==='a') return '<button class="g-acbtn" data-a="'+r.i+'"><span class="lf">'+TAI_ACT_IC[r.a.type]+'<span class="tx">'+gEsc(r.a.label)+'</span></span><span class="rt">'+(badge?'<span class="bdg">무료, 즉시</span>':'')+'<span class="ar">→</span></span></button>';
+    return '<button class="g-nextq" data-q="'+gEsc(r.q).replace(/"/g,'&quot;')+'"><span>'+gEsc(r.q)+'</span><span class="ar">→</span></button>';
+  }).join('')+'</div>');
+  if(el){
+    el.querySelectorAll('.g-nextq').forEach(function(b){ b.onclick=function(){ var f=$('g-in'); if(f){ f.value=b.getAttribute('data-q'); gSend(); } }; });
+    el.querySelectorAll('.g-acbtn').forEach(function(b){ b.onclick=function(){ taiActRun(id,+b.getAttribute('data-a'),b); }; });
+  }
 }
 function taiNextClear(){
   document.querySelectorAll('.g-nextcol').forEach(function(el){ var id=el.id; el.remove(); taiRecFix(id,null); });
@@ -4843,18 +4861,7 @@ var TAI_ACT_IC={
   delegate_trade:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h10M10 6l6 6-6 6"/><path d="M20 5v14"/></svg>',
   auto_trade:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>'
 };
-function taiActChips(items){
-  items=(items||[]).filter(function(a){ return a&&a.label&&TAI_ACT_IC[a.type]; }).slice(0,2);
-  if(!items.length) return;
-  taiActClear();
-  TAI.an=(TAI.an||0)+1; var id='gac'+TAI.an;
-  TAI.acfg=TAI.acfg||{}; TAI.acfg[id]=items;
-  var badge=!(S.user&&S.user.plan); /* 구독자(plan 보유)에겐 무료 배지 미노출 */
-  var el=taiThreadAdd('<div class="g-acrow" id="'+id+'">'+items.map(function(a,i){
-    return '<button class="g-acbtn" data-i="'+i+'"><span class="lf">'+TAI_ACT_IC[a.type]+'<span class="tx">'+gEsc(a.label)+'</span></span><span class="rt">'+(badge?'<span class="bdg">무료, 즉시</span>':'')+'<span class="ar">→</span></span></button>';
-  }).join('')+'</div>');
-  if(el) el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){ taiActRun(id,i,b); }; });
-}
+function taiActChips(items){ taiNext([],items); } /* 단독 호출도 통합 목록으로 */
 function taiActClear(){
   document.querySelectorAll('.g-acrow').forEach(function(el){ var id=el.id; el.remove(); taiRecFix(id,null); });
 }
@@ -4866,7 +4873,7 @@ function taiActRun(id,i,btn){
     return;
   }
   /* backtest / delegate_trade / auto_trade → 요청 문장을 그대로 대화로 실행 (전략 퍼널로 이어짐) */
-  var col=btn&&btn.closest('.g-acrow'); if(col){ var cid=col.id; col.remove(); taiRecFix(cid,null); }
+  var col=btn&&btn.closest('.g-nextcol,.g-acrow'); if(col){ var cid=col.id; col.remove(); taiRecFix(cid,null); }
   var f=$('g-in'); if(f){ f.value=a.label; gSend(); }
 }
 /* 확인 질문 카드: 다단계(steps) 지원, ‹ N개 중 M › 페이저, 선택 후 → 전송 */
@@ -5128,10 +5135,9 @@ function taiMarket(t,fin,fallback){
         delay(info?1600:800,function(){ if(G.mode==='conv'&&G.cur===sess) S.strategy.entryMode?gNextAfterMode():gAskMode(); });
       }
       else if(ask&&live) delay(500,function(){ if(G.cur===sess) taiAskCard(ask); });
-      else if(live){
-        /* 실행 액션 버튼(최대 2) + 후속 질문 칩(3~5)은 공존 가능, 퍼널(SETUP/ASK) 중엔 미노출 */
-        if(acts&&acts.length) delay(350,function(){ if(G.cur===sess) taiActChips(acts.slice(0,2)); });
-        if(nexts&&nexts.length) delay(acts&&acts.length?500:400,function(){ if(G.cur===sess) taiNext(nexts.slice(0,5)); });
+      else if(live&&((nexts&&nexts.length)||(acts&&acts.length))){
+        /* 후속 질문(3~5) + 실행 액션(최대 2)을 같은 영역의 한 목록으로 렌더, 퍼널(SETUP/ASK) 중엔 미노출 */
+        delay(400,function(){ if(G.cur===sess) taiNext((nexts||[]).slice(0,5),(acts||[]).slice(0,2)); });
       }
       if(live) delay(1600,taiSpacerTrim); /* 차트/후속칩 렌더가 자리 잡은 뒤 과잉 여백 정리 */
       STORE.save();
