@@ -508,6 +508,9 @@ body.g-dark{background:#0f1012}
 .g-new{display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border:1px solid var(--gl2);border-radius:8px;font-size:13.5px;font-weight:500;color:var(--gt);margin-bottom:8px;transition:background .12s}
 .g-new:hover{background:rgba(255,255,255,.05)}
 .g-util{display:flex;align-items:center;gap:9px;height:36px;padding:0 13px;border-radius:6px;font-size:13px;color:var(--gt2);transition:background .12s;text-align:left;width:100%}
+/* 세션이 많아도 상단 메뉴가 눌리지 않게: 고정 요소는 shrink 금지, 스크롤은 세션 목록만 */
+.g-new,.g-util,.g-sec,#g-side-links,#g-live-list{flex-shrink:0}
+#g-sess-list{flex:1 1 auto;overflow-y:auto;min-height:60px;scrollbar-width:thin}
 .g-util:hover{background:rgba(255,255,255,.05)}
 .g-util svg{flex-shrink:0;stroke:currentColor;opacity:.8}
 .g-sec{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--gt3);padding:14px 13px 5px}
