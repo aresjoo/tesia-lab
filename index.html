@@ -935,7 +935,7 @@ body.light .au-free{color:#1e8e3e}
 .spd2 .mp{stroke-dasharray:150;stroke-dashoffset:150;animation:tethDrawM 2.1s cubic-bezier(.45,0,.25,1) infinite}
 @keyframes tethDrawM{0%{stroke-dashoffset:150}58%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
 @keyframes tethFadeC{0%,84%{opacity:1}96%,100%{opacity:0}}
-.tcur{display:inline-block;width:7px;height:14px;vertical-align:-2px;background:var(--gt3);border-radius:2px;animation:tcurB 1s steps(2) infinite;margin-left:2px}
+.tcur{display:inline-block;width:7px;height:14px;vertical-align:-2px;background:var(--gt3);border-radius:2px;animation:tcurB .6s steps(2) infinite;margin-left:2px}
 @keyframes tcurB{50%{opacity:0}}
 /* 대기 라벨 shimmer: 하이라이트가 글자 위를 쓸고 지나감 */
 .g-status:not(.done) .lb,.g-trail .hd:not(.ok) .hlb,.g-trail .st.on .lb{
@@ -4899,16 +4899,19 @@ function taiSystem(fin){
   }
   return s;
 }
-/* 스트리밍: 실제 AbortController 중지 + 요청 ID로 늦게 도착한 stale 이벤트 차단 */
+/* 스트리밍: 실제 AbortController 중지 + 요청 ID로 늦게 도착한 stale 이벤트 차단.
+   연결 실패 시(터널 URL 갱신 등) 프록시 포인터를 재해석해 1회 조용히 재시도한다 (agy 감사 P0-1) */
 function taiStream(system,msgs,onText,onDone,onFail,onMeta){
   var got=false;
-  var ctrl=('AbortController' in window)?new AbortController():null;
   TAI.rq=(TAI.rq||0)+1; var myId=TAI.rq;
-  TAI.req={id:myId,ctrl:ctrl};
-  taiBusySync();
+  var lite=!!TAI.liteNext; TAI.liteNext=false; /* 시세 확인형: 서버 도구 비활성 즉답 */
   function alive(){ return TAI.req&&TAI.req.id===myId; }
   function fin(){ if(alive()){ TAI.req=null; taiBusySync(); } }
-  fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:system,messages:msgs}),signal:ctrl?ctrl.signal:undefined})
+  (function attempt(retriesLeft){
+  var ctrl=('AbortController' in window)?new AbortController():null;
+  TAI.req={id:myId,ctrl:ctrl};
+  taiBusySync();
+  fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:system,messages:msgs,lite:lite||undefined}),signal:ctrl?ctrl.signal:undefined})
     .then(function(r){
       if(!r.ok||!r.body) throw 0;
       var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
@@ -4937,10 +4940,16 @@ function taiStream(system,msgs,onText,onDone,onFail,onMeta){
     })
     .catch(function(err){
       var aborted=err&&err.name==='AbortError';
+      if(!aborted&&!got&&retriesLeft>0&&alive()){
+        /* 터널 주소가 바뀌었을 수 있다: 포인터 재해석 후 같은 요청을 1회 재시도 */
+        taiResolveProxy(function(){ if(alive()) attempt(retriesLeft-1); else fin(); });
+        return;
+      }
       fin();
       if(!aborted&&!got) TAI.ok=false;
       onFail(aborted?(got?'abort-partial':'abort'):(got?'error-partial':'error'));
     });
+  })(1);
 }
 function taiStop(){ if(TAI.req&&TAI.req.ctrl) TAI.req.ctrl.abort(); }
 /* 컴포저 전송 버튼 ↔ 중지 버튼 동기화 */
@@ -4986,7 +4995,8 @@ function taiMarketRules(){
    +'\n초보자 규칙: 사용자가 투자를 전혀 모른다고 밝히면 계좌 개설이나 매수 권유보다 먼저 비상자금, 고금리 부채, 투자 기간, 감내 가능한 손실을 확인한다. 모의 검증과 학습을 실매수보다 앞에 둔다.'
    +'\n말투 규칙: 한 응답 안에서 존댓말 수준을 바꾸지 않는다, 해요체로 일관한다. 수익 욕구가 모호하게 드러난 사용자에게 승부, 무기, 지르다 같은 도박성 은유를 쓰지 않는다.'
    +'\n시세 규칙: 단순 시세 확인 질문은 첫 문장에 현재가와 기준 시각부터 말하고 부가 해설은 그 뒤에 짧게 붙인다.'
-   +'\n교정 턴 규칙: 사용자의 오류 지적에 답하는 턴과 범위 밖 질문을 거절하는 턴에는 실행 액션 태그를 붙이지 않고 후속 질문도 2개 이하로 줄이거나 생략한다.'
+   +'\n교정 턴 규칙: 사용자의 오류 지적에 답하는 턴과 범위 밖 질문을 거절하는 턴에는 실행 액션 태그를 붙이지 않고 후속 질문도 2개 이하로 줄이거나 생략한다. 지적이 사용자의 착각으로 보여도 "그런 말을 한 적 없습니다", "잘못 기억하신 것 같습니다"처럼 고객을 탓하는 문장은 절대 쓰지 않는다. "제 설명에 혼선이 있었던 것 같습니다"로 시작해 실제 수치와 판단 기준을 담백하게 다시 대조하라.'
+   +'\n작업 예고 규칙: 검색이나 조회를 시작하기 전의 예고 발화("찾아보겠습니다", "확인해볼게요")는 생략하거나 한 문장 이내로 하고, 도구 사용 후 본답변은 반드시 새 문단에서 시작한다.'
    +'\n사고 규칙: 분석, 예측, 비교, 전략 판단처럼 여러 요인을 따져야 하는 요청에서는 반드시 답변과 도구 사용 전에 확장 사고(extended thinking)부터 시작하라. 사고에서 판단 축을 나누고, 무엇을 확인할지 계획하고, 데이터를 본 뒤에는 해석을 사고로 정리한 다음 답하라. 사고 과정은 사용자 화면에 실시간으로 표시되므로 읽기 좋은 자연스러운 한국어 문장으로 이어가라. 간단한 시세 확인이나 용어 질문만 사고 없이 바로 답한다.'
    +'\n실시간 정보 규칙: 최근 뉴스, 실적 발표, 규제 이슈, 오늘 급등락의 이유처럼 최신 정보가 판단에 필요하면 웹 검색 도구를 실제로 사용해 확인하고, 확인한 출처에 근거해 답하라. 검색 없이 최신 사건을 아는 척 만들어내지 마라. 필요하면 검색 결과 중 핵심 페이지를 web_fetch로 열어 수치를 확인하라. 단, 시세 수치는 여전히 제공된 실시세 스냅샷을 우선 근거로 쓴다.'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
@@ -5335,7 +5345,7 @@ function taiThinkSim(th,run){
   }
   return {
     feed:function(s,cb){
-      if(dead()||!s||total>1600){ if(cb) cb(); return; }
+      if(dead()||!s||total>4000){ if(cb) cb(); return; }
       /* 큐가 비어 있으면 직전 내용(내레이터 원문 등)과의 이음새에 공백 하나를 큐 순서대로 삽입 */
       total+=s.length; q.push({s:((busy||q.length)?'':' ')+s,cb:cb||null}); if(!busy) pump();
     },
@@ -6711,12 +6721,13 @@ function taiMarket(t,fin,fallback){
   run.lastEvt=Date.now();
   var brT=setInterval(function(){
     if(run.data.status!=='running'){ clearInterval(brT); return; }
-    if(ansH||seg||narr||!sim||!thinkH||brI>=BR.length) return;
+    if(ansH||seg||narr||!sim||!thinkH) return;
     if(thinkH.st.status!=='running') return;
-    if(Date.now()-(run.lastEvt||0)<7000) return;
+    /* 첫 4문장 이후에도 침묵이 이어지면 14초 간격으로 순환 — 168초짜리 죽은 시간 방지 (agy 감사 P0-2) */
+    if(Date.now()-(run.lastEvt||0)<(brI<BR.length?7000:14000)) return;
     if(brI===0){ thinkH.st.h='결론을 정리하는 중'; actHeadSync(run); }
     run.lastEvt=Date.now();
-    sim.resume(); sim.feed(BR[brI++]);
+    sim.resume(); sim.feed(BR[brI%BR.length]); brI++;
   },1500);
   var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
@@ -6730,6 +6741,7 @@ function taiMarket(t,fin,fallback){
     TAI.lastCtx={conversationId:sess.id,msgCount:msgs.length,summaryLen:sys.length,tf:ai.tf,chart:ai.chart?ai.chart.tv:null,ohlcFreshMs:ai.ohlcAt?Date.now()-ai.ohlcAt:null,system:sys,at:new Date().toISOString()}; /* 개발용 인스펙터 */
     var out=null,acc='',lastR=0;
     var srchN=0,srcDom=[],needBrk=false; /* 도구 사용 기록 보존 + 프리앰블-본문 문장 붙음 방지 */
+    TAI.liteNext=(qKind==='lite'); /* 시세 확인형은 서버 도구 없이 즉답 (agy 감사 P1-3) */
     taiStream(sys+ctx,msgs,function(delta){
       if(!out){
         stopNarr();
@@ -6766,7 +6778,9 @@ function taiMarket(t,fin,fallback){
           var cut=vis.lastIndexOf('\n');
           var head=cut>=0?vis.slice(0,cut):'';
           var tail=cut>=0?vis.slice(cut+1):vis;
-          out.innerHTML=(head?taiMd(head):'')+'<p>'+gEsc(tail)+'<span class="tcur"></span></p>';
+          /* 작성 중인 줄도 헤더 기호는 즉시 헤더로 렌더 — 개행 순간 글자가 커지며 화면이 덜컥이는 CLS 방지 (agy 감사 P1-2) */
+          var mH=tail.match(/^#{2,4}\s+(.*)$/);
+          out.innerHTML=(head?taiMd(head):'')+(mH?'<h4>'+gEsc(mH[1])+'<span class="tcur"></span></h4>':'<p>'+gEsc(tail)+'<span class="tcur"></span></p>');
         }
       }
     },function(){
@@ -6995,7 +7009,7 @@ function taiResolveProxy(done){
   if(window.TETH_CONFIG&&TETH_CONFIG.aiProxy){ TAI.url=TETH_CONFIG.aiProxy.replace(/\/$/,'')+'/api/chat'; done(); return; }
   var fin=false; var go=function(){ if(!fin){ fin=true; done(); } };
   setTimeout(go,4000); /* 포인터 조회가 늦어도 부팅은 막지 않는다 */
-  fetch('https://raw.githubusercontent.com/aresjoo/tesia-lab/proxy-url/PROXY_URL?t='+Math.floor(Date.now()/60000))
+  fetch('https://raw.githubusercontent.com/aresjoo/tesia-lab/proxy-url/PROXY_URL?t='+Date.now())
     .then(function(r){ return r.ok?r.text():''; })
     .then(function(u){ u=(u||'').trim(); if(/^https:\/\/[\w.-]+$/.test(u)) TAI.url=u+'/api/chat'; go(); })
     .catch(go);
