@@ -4999,6 +4999,10 @@ function taiThinkSim(th,run){
     },
     real:function(){ real=true; flushCbs(); },
     resume:function(){ real=false; if(q.length&&!busy) pump(); },
+    flush:function(){ /* 종료 직전: 타이핑 남은 문장을 즉시 덤프해 중간 절단을 막는다 */
+      closed=true;
+      q.forEach(function(it){ th.push(it.s+' '); if(it.cb) try{ it.cb(); }catch(e){} }); q=[];
+    },
     wrap:function(endS,cb){
       if(closed){ cb&&cb(); return; }
       if(endS&&!real&&run&&run.data.status==='running'){ total=0; this.feed(endS); }
@@ -5009,9 +5013,10 @@ function taiThinkSim(th,run){
 }
 /* 사고 내레이터: 경량 실모델(하이쿠)이 본답변과 병렬로 1인칭 사고를 실제 생성·스트리밍.
    첫 델타가 오면 템플릿 연출(sim)은 양보하고, 본답변 시작/실사고 도착/중단 시 abort */
-function taiNarrate(th,sim,prompt){
+function taiNarrate(th,sim,prompt,onEnd){
   var ctrl=('AbortController' in window)?new AbortController():null;
-  var first=true,dead=false;
+  var first=true,dead=false,ended=false;
+  function fin(){ if(ended||dead) return; ended=true; if(onEnd) try{ onEnd(); }catch(e){} }
   fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({think:true,messages:[{role:'user',content:prompt}]}),signal:ctrl?ctrl.signal:undefined})
     .then(function(r){
       if(!r.ok||!r.body) throw 0;
@@ -5028,7 +5033,7 @@ function taiNarrate(th,sim,prompt){
         return pump(); });
       }
       return pump();
-    }).catch(function(){});
+    }).then(fin).catch(function(){ fin(); });
   return { abort:function(){ dead=true; try{ if(ctrl) ctrl.abort(); }catch(e){} } };
 }
 /* 실검색 결과 리스트 (모델이 실제 수행한 웹 검색의 실제 URL) */
@@ -5050,7 +5055,9 @@ function actFinish(run,mode,usage){
 }
 /* 완료/복원 공용 정적 렌더 — 접힌 요약 헤더 + 클릭 시 전체 타임라인 */
 function actRenderFinal(el,d){
-  var n=d.steps.filter(function(s){return s.kind!=='note';}).length;
+  /* 단계 수: 세그먼트로 쪼개진 생각/답변 행은 종류당 1단계로만 센다 */
+  var seen={},n=0;
+  d.steps.forEach(function(s){ if(s.kind==='note') return; if(s.kind==='think'||s.kind==='ans'){ if(seen[s.kind]) return; seen[s.kind]=1; } n++; });
   var secs=d.ms?Math.round(d.ms/1000)+'초':'';
   var head=d.status==='done'?('작업 완료, '+n+'단계'+(secs?', '+secs:'')):d.status==='abort'?('작업 중단, '+n+'단계'):('작업 오류, '+n+'단계');
   el.classList.add('fin'); el.classList.remove('open');
@@ -5383,25 +5390,32 @@ function actTfSweep(run,ai,ast,sim,cb){
     '4h':'4시간봉으로 스윙 구간을 잡는다. 지지와 저항이 어디에 몰려 있는지 본다.'};
   var seq=['1m','15m','1h','4h'].filter(function(v){ return v!==ai.tf; });
   var i=0;
+  /* 완전 순차: 사고가 해당 문장을 다 말한 직후에만 행 생성, 실제 fetch, 차트 전환이 시작된다 */
   (function next(){
     if(run.data.status!=='running'){ fin(); return; }
     if(i>=seq.length){
       if(isCur&&ai.chart&&G.cur===run.sess){
-        sim.feed('마지막으로 줌아웃해서 큰 그림을 본다. 지금 자리가 긴 사이클의 어디쯤인지 확인한다.');
-        ai.chart.interval=TAI_TFTV[ai.tf]||'D'; ai.chart.range='12M'; taiChartRender();
-        var zh=actStep(run,{kind:'chart',title:'차트 줌아웃, 12개월 구조 확인 중',h:'큰 그림을 확인하는 중',verb:'큰 그림을 확인하는 중'});
-        delay(1700,function(){
-          if(ai.chart){ ai.chart.range='3M'; if(G.cur===run.sess) taiChartRender(); }
-          zh.done('차트 줌아웃으로 12개월 구조 확인 완료','트레이딩뷰 위젯을 12개월 범위로 실제 전환해 장기 구조를 보고 3개월 범위로 복귀했습니다.');
-          fin();
-        });
+        var zgo=function(){
+          if(run.data.status!=='running'){ fin(); return; }
+          ai.chart.interval=TAI_TFTV[ai.tf]||'D'; ai.chart.range='12M'; taiChartRender();
+          var zh=actStep(run,{kind:'chart',title:'차트 줌아웃, 12개월 구조 확인 중',h:'큰 그림을 확인하는 중',verb:'큰 그림을 확인하는 중'});
+          delay(1700,function(){
+            if(ai.chart){ ai.chart.range='3M'; if(G.cur===run.sess) taiChartRender(); }
+            zh.done('차트 줌아웃으로 12개월 구조 확인 완료','트레이딩뷰 위젯을 12개월 범위로 실제 전환해 장기 구조를 보고 3개월 범위로 복귀했습니다.');
+            fin();
+          });
+        };
+        if(sim) sim.feed('마지막으로 줌아웃해서 큰 그림을 본다. 지금 자리가 긴 사이클의 어디쯤인지 확인한다.',zgo); else zgo();
       } else fin();
       return;
     }
     var iv=seq[i++];
-    sim.feed(SIMS[iv]||'');
-    var st=Date.now();
-    actProbeIv(run,ai,iv,function(){ delay(Math.max(0,1000-(Date.now()-st)),next); },ast);
+    var go=function(){
+      if(run.data.status!=='running'){ fin(); return; }
+      var st=Date.now();
+      actProbeIv(run,ai,iv,function(){ delay(Math.max(0,700-(Date.now()-st)),next); },ast);
+    };
+    if(sim) sim.feed(SIMS[iv]||'',go); else go();
   })();
 }
 /* 차트 카드 헤더에 실시세 표시 */
@@ -5479,6 +5493,8 @@ function taiMarket(t,fin,fallback){
   var mention=taiAssetFrom(t);
   var ast=(mention&&(!ai.chart||ai.chart.data!==mention.data))?mention:null;
   var isPred=!!((ast||ai.chart)&&taiPredictQ(t));
+  /* 질문 무게: 시세 확인성은 lite(내레이터 없음), 판단성은 pred(투어+깊은 사고), 그 외 std */
+  var qKind=isPred?'pred':(taiPredictQ(t)?'pred':((ast||ai.chart)&&/가격|얼마|시세|현재가/.test(t)?'lite':'std'));
   var sys=taiBuildSystem(fin,conv);
   taiNextClear(); taiActClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
@@ -5503,23 +5519,31 @@ function taiMarket(t,fin,fallback){
     taiChartOpen(mention);
     ast=null; /* 이제 현재 차트 = 질문 자산 */
   }
-  var ansH=null,lastUsage=null;
+  var ansH=null,lastUsage=null,seg=false;
   /* 사고는 시세와 매크로를 받은 뒤 시작 — 내레이터가 방금 받은 실수치를 짚으며 생각한다 */
-  var thinkH=null,sim=null,narr=null;
+  var thinkH=null,sim=null,narr=null,narrOn=false,narrEnd=null;
+  function fireNarrEnd(){ if(narrEnd){ var f=narrEnd; narrEnd=null; f(); } }
   function startThink(fx){
     if(thinkH||run.data.status!=='running') return;
     thinkH=actThink(run); sim=taiThinkSim(thinkH,run);
     var s0=t.replace(/\s+/g,' ').slice(0,42)+(t.length>42?'…':'');
     var j=fx&&fx.j;
-    sim.feed('"'+s0+'". '+(j?'실시세가 손에 있다. 현재가 '+j.last+', 30봉 기준 '+j.chg30d+'%. ':'')+(fx&&fx.macro?'매크로는 '+fx.macro+'. ':'')+'이 수치들을 놓고 판단 축을 잡는다.');
+    if(qKind==='lite'){ /* 시세 확인성 질문: 내레이터 없이 한 문장 사고만 */
+      sim.feed(j?('현재가 '+j.last+', 직전 봉 '+j.chg1d+'% 확인했다. 따로 따질 축이 없는 질문이라 바로 답한다.'):'시세 응답이 늦다. 확인되는 범위에서 바로 답한다.');
+      return;
+    }
+    sim.feed('"'+s0+'". '+(fx&&fx.nosrc?'실시간 시세 소스가 없는 자산이다. 매크로 환경을 짚고 공개 정보로 확인한다. ':'')+(j?'실시세가 손에 있다. 현재가 '+j.last+', 30봉 기준 '+j.chg30d+'%. ':'')+(fx&&fx.macro?'매크로는 '+fx.macro+'. ':'')+'이 수치들을 놓고 판단 축을 잡는다.');
     if(TAI.ok!==false){
-      var np='너는 최고 수준의 시니어 트레이더다. 아래 요청을 받고 답을 준비하는 너의 사고 과정을 1인칭 현재형 한국어로 서술하라. 진지하고 밀도 있게 9~14문장. 아래 제공된 실측 수치가 있으면 그 숫자를 구체적으로 짚으며 생각하라. 판단 축을 나누고, 가설과 반박, 어떤 조건이면 생각이 바뀌는지를 오가라. 아직 결론은 내리지 마라. 확정 수익 표현 금지. 형식 규칙: 마크다운, 목록, 헤더 금지. 문단은 최대 2개, 문단 사이 줄바꿈 한 번만, 연속 빈 줄 금지. 가운뎃점(·)과 대시(—, –) 금지, 나열은 쉼표로 풀어 쓴다.'
+      var np='너는 최고 수준의 시니어 트레이더다. 아래 요청을 받고 답을 준비하는 너의 사고 과정을 1인칭 현재형 한국어로 서술하라. 진지하고 밀도 있게 6~9문장. 아래 제공된 실측 수치가 있으면 그 숫자를 구체적으로 짚으며 생각하라. 판단 축을 나누고, 가설과 반박, 어떤 조건이면 생각이 바뀌는지를 오가라. 아직 결론은 내리지 마라. 확정 수익 표현 금지. 형식 규칙: 마크다운, 목록, 헤더 금지. 문단은 최대 2개, 문단 사이 줄바꿈 한 번만, 연속 빈 줄 금지. 가운뎃점(·)과 대시(—, –) 금지, 나열은 쉼표로 풀어 쓴다.'
+        +(fx&&fx.tour?'\n마지막 문장은 반드시 정확히 "이제 타임프레임별로 차트를 직접 확인한다."로 끝내라.':'')
+        +(fx&&fx.nosrc?'\n주의: 이 자산은 등록된 실시간 시세 소스가 없다. 시세 수치를 지어내지 말고, 공개 정보에서 무엇을 확인해야 판단이 서는지를 생각하라.':'')
         +'\n\n요청: "'+t+'"';
       var astN=ast||ai.chart;
-      if(astN&&astN.label) np+='\n대상 자산: '+astN.label;
+      if(astN&&astN.label&&!(fx&&fx.nosrc)) np+='\n대상 자산: '+astN.label;
       if(j) np+='\n방금 수신한 실시세: 현재가 '+j.last+', 직전 봉 '+j.chg1d+'%, 7봉 '+j.chg7d+'%, 30봉 '+j.chg30d+'%, 90봉 최고 '+j.hi90+' 최저 '+j.lo90;
       if(fx&&fx.macro) np+='\n방금 수신한 매크로 실측: '+fx.macro;
-      narr=taiNarrate(thinkH,sim,np);
+      narrOn=true;
+      narr=taiNarrate(thinkH,sim,np,fireNarrEnd);
     }
   }
   var stopNarr=function(){ if(narr){ narr.abort(); narr=null; } };
@@ -5539,7 +5563,9 @@ function taiMarket(t,fin,fallback){
         stopNarr();
         if(!thinkH) startThink(null);
         stopNarr();
-        sim.wrap('재료가 모였다. 결론과 트리거 레벨을 정리해서 답을 쓴다.',function(){ thinkH.done(); });
+        /* 사고 마무리 문장: 질문 유형별 분기 */
+        var wrapS=qKind==='lite'?'수치 확인 끝. 바로 답한다.':qKind==='pred'?'재료가 모였다. 결론과 트리거 레벨을 정리해서 답을 쓴다.':'확인이 끝났다. 근거를 갖춰 정리해서 답한다.';
+        sim.wrap(wrapS,function(){ thinkH.done(); });
         if(!ansH&&run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
         if(G.cur===sess){
           var el=taiThreadAdd('<div class="g-amsg"><span class="tai-txt"></span></div>');
@@ -5549,6 +5575,11 @@ function taiMarket(t,fin,fallback){
           if(conv) sess.convo.push('<div class="g-amsg"><span class="tai-txt"></span></div>');
           else sess.thread.push({doc:null,html:'<div class="g-amsg"><span class="tai-txt"></span></div>'});
         }
+      } else if(seg){ /* 자료 보강 세그먼트에서 답변 텍스트 재개 → 세그먼트 접고 새 답변 행 */
+        seg=false;
+        if(sim) sim.real();
+        if(thinkH) thinkH.done();
+        if(run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
       }
       acc+=delta;
       /* 스트리밍 증분 마크다운: 완성된 줄은 즉시 리치 렌더, 작성 중인 마지막 줄만 raw 버퍼. 120ms 스로틀 */
@@ -5573,6 +5604,7 @@ function taiMarket(t,fin,fallback){
       var mT=acc.match(/\[TITLE\s+"([^"\n]{1,40})"\s*\]/);
       TAI.lastRaw=acc; /* 디버그: 태그 포함 원문 */
       stopNarr();
+      if(sim) sim.flush();
       if(thinkH) thinkH.done();
       if(ansH) ansH.done('답변 작성 완료',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초'); /* 토큰 총계는 헤더에만 (중복·오독 방지) */
       actFinish(run,'done',lastUsage);
@@ -5633,6 +5665,13 @@ function taiMarket(t,fin,fallback){
       if(run.data.status!=='running') return;
       if(meta.think){ if(!thinkH) startThink(null); stopNarr(); sim.real(); thinkH.push(meta.think); } /* 본모델 실사고 도착 → 내레이터/연출 즉시 양보 */
       if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
+        if(!ansH&&!seg){ if(narr){ stopNarr(); if(thinkH) thinkH.push(' '); } if(sim) sim.resume(); } /* 사고 중 검색 시작 → 내레이터가 바톤을 넘기고 검색 내레이션이 사고 행을 잇는다 */
+        if(ansH){ /* 답변 작성 중 자료 보강 → 답변 행을 닫고 사고 세그먼트를 연다 */
+          ansH.done('초안 작성, 자료 보강 필요',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초');
+          ansH=null; seg=true;
+          thinkH=actThink(run); sim=taiThinkSim(thinkH,run);
+          sim.feed('초안을 쓰다 보니 근거를 더 확인할 부분이 남았다. 자료를 보강한다.');
+        }
         if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:(q?'"'+q+'" 검색 중':'웹 검색 중'),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
         else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:(dm||'출처')+' 페이지 여는 중',h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
         else{
@@ -5664,17 +5703,29 @@ function taiMarket(t,fin,fallback){
       var j0=TAI.ohlc;
       var coin=((ast||ai.chart)&&((ast||ai.chart).data||'').indexOf('binance:')===0)&&((ast||ai.chart).data||'')!=='binance:BTCUSDT';
       actMacro(run,null,coin,j0?j0.chg7d:null,function(ctxM,mline){
-        startThink({j:j0,macro:mline||null}); /* 데이터가 손에 들어온 뒤 사고 시작 */
-        actTfSweep(run,ai,ast,sim,function(){
-          var d=taiIndic();
-          if(d){
-            actStep(run,{kind:'calc',status:'done',title:'지표 계산 완료, RSI '+d.rsi+', 변동폭 '+d.atrPct+'%',mR:'실계산',
-              detail:'수신한 실데이터로 직접 계산했습니다. RSI(14) <b>'+d.rsi+'</b>'+(d.rsi>=70?' (과열권)':d.rsi<=30?' (과매도권)':' (중립)')+', 일평균 변동폭(ATR14) <b>'+d.atrPct+'%</b>, 20일 이동평균 '+d.ma20+(d.ma50?', 50일 이동평균 '+d.ma50:'')+', 90일 레인지 위치 <b>'+d.pos+'%</b>, 최근 10봉 중 '+d.up10+'봉 상승, 스윙 밴드 '+d.lo20+'~'+d.hi20+'.'});
-            actNote(run,(d.last>=d.ma20?'가격이 20일선 위에 있어 ':'가격이 20일선 아래라 ')+(d.rsi>=60?'과열 여부를 함께 따져야 해서 상하방 시나리오를 모두 계산합니다.':d.rsi<=40?'지지선이 버티는지가 관건이라 하방 트리거부터 점검합니다.':'추세와 모멘텀을 같이 놓고 시나리오를 계산합니다.'));
-            if(sim) sim.feed('타임프레임을 합쳐 보면, RSI '+d.rsi+'에 '+(d.rsi>=70?'과열권이라 추격보다 눌림 시나리오에 무게를 둔다.':d.rsi<=30?'과매도권이라 반등 트리거가 어디서 잡히는지 본다.':'중립이라 20일선 '+(d.last>=d.ma20?'위 유지':'회복')+' 여부가 먼저다.')+' 레인지 위치는 '+d.pos+'%.');
-          }
-          proceed(ctxA+ctxM);
-        });
+        startThink({j:j0,macro:mline||null,tour:true}); /* 데이터가 손에 들어온 뒤 사고 시작 */
+        /* 투어는 내레이터가 말을 마친 뒤에만 시작 — 사고가 유일한 진행 드라이버. 25초 폴백 */
+        var tourOn=false;
+        var goTour=function(){
+          if(tourOn||run.data.status!=='running') return;
+          tourOn=true; stopNarr();
+          if(sim){ sim.resume(); sim.feed('\n'); }
+          actTfSweep(run,ai,ast,sim,function(){
+            var d=taiIndic();
+            var finishUp=function(){
+              if(d){
+                actStep(run,{kind:'calc',status:'done',title:'지표 계산 완료, RSI '+d.rsi+', 변동폭 '+d.atrPct+'%',mR:'실계산',
+                  detail:'수신한 실데이터로 직접 계산했습니다. RSI(14) <b>'+d.rsi+'</b>'+(d.rsi>=70?' (과열권)':d.rsi<=30?' (과매도권)':' (중립)')+', 일평균 변동폭(ATR14) <b>'+d.atrPct+'%</b>, 20일 이동평균 '+d.ma20+(d.ma50?', 50일 이동평균 '+d.ma50:'')+', 90일 레인지 위치 <b>'+d.pos+'%</b>, 최근 10봉 중 '+d.up10+'봉 상승, 스윙 밴드 '+d.lo20+'~'+d.hi20+'.'});
+                actNote(run,(d.last>=d.ma20?'가격이 20일선 위에 있어 ':'가격이 20일선 아래라 ')+(d.rsi>=60?'과열 여부를 함께 따져야 해서 상하방 시나리오를 모두 계산합니다.':d.rsi<=40?'지지선이 버티는지가 관건이라 하방 트리거부터 점검합니다.':'추세와 모멘텀을 같이 놓고 시나리오를 계산합니다.'));
+              }
+              proceed(ctxA+ctxM);
+            };
+            if(d&&sim) sim.feed('타임프레임을 합쳐 보면, RSI '+d.rsi+'에 '+(d.rsi>=70?'과열권이라 추격보다 눌림 시나리오에 무게를 둔다.':d.rsi<=30?'과매도권이라 반등 트리거가 어디서 잡히는지 본다.':'중립이라 20일선 '+(d.last>=d.ma20?'위 유지':'회복')+' 여부가 먼저다.')+' 레인지 위치는 '+d.pos+'%. 지표를 계산해 확정한다.',finishUp);
+            else finishUp();
+          });
+        };
+        if(narrOn){ narrEnd=goTour; setTimeout(goTour,25000); }
+        else goTour();
       });
     },sess,run,ast);
   } else if(ast||(ai.chart&&ai.chart.data&&ai.chart.data!=='none')){
@@ -5682,6 +5733,13 @@ function taiMarket(t,fin,fallback){
       startThink(TAI.ohlc?{j:TAI.ohlc}:null);
       proceed(ctx);
     },sess,run,ast);
+  } else if(taiPredictQ(t)||/어때|고민|분석|어떨|괜찮/.test(t)){
+    /* 미등록 자산의 판단성 질문: 매크로 1행 + 정직한 no-price 인트로 후 검색 국면으로 */
+    actNote(run,'등록된 실시세 소스가 없는 대상입니다. 매크로 환경을 확인하고 공개 정보로 조사합니다.');
+    actMacro(run,null,false,null,function(ctxM,mline){
+      startThink({macro:mline||null,nosrc:true});
+      proceed(ctxM||'');
+    });
   } else { startThink(null); proceed(''); }
 }
 /* 하위 호환 별칭 */
