@@ -1002,7 +1002,7 @@ body.light .au-free{color:#1e8e3e}
 .g-act2 .ar:first-child::before{top:12px}
 .g-act2 .ar:last-child::before{bottom:auto;height:12px}
 .g-act2 .tic{position:relative;z-index:1;flex-shrink:0;width:16px;height:16px;margin-top:2px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--g1);color:var(--gt3);border:1px solid var(--gl)}
-.g-act2 .tic.ok{color:#4ade80;border-color:rgba(74,222,128,.35)}
+.g-act2 .tic.ok{color:var(--gt3);border-color:var(--gl)}
 .g-act2 .tic.fail{color:#f87171;border-color:rgba(248,113,113,.4);font-size:10px;font-weight:800}
 .g-act2 .tic.nt{width:6px;height:6px;margin:7px 5px 0;background:var(--gt3);border:0}
 .g-act2 .tic.run i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--gt3);border-top-color:var(--gt);animation:actSpin .8s linear infinite}
@@ -4648,6 +4648,28 @@ function taiMarketRules(){
   return r;
 }
 function taiPredictQ(t){ return /예측|전망|오를|내릴|떨어질|갈까|얼마까지|목표가|어떻게 될|살까|팔까/.test(t); }
+/* 발화에서 자산 감지 — 현재 열린 차트와 다른 자산을 물으면 스냅샷 대상을 그 자산으로 교체한다 */
+var TAI_AST=[
+  [/비트코인|비트\b|\bbtc/i,{tv:'BINANCE:BTCUSDT',data:'binance:BTCUSDT',label:'비트코인'}],
+  [/이더리움|이더\b|\beth/i,{tv:'BINANCE:ETHUSDT',data:'binance:ETHUSDT',label:'이더리움'}],
+  [/솔라나|\bsol\b/i,{tv:'BINANCE:SOLUSDT',data:'binance:SOLUSDT',label:'솔라나'}],
+  [/리플|\bxrp/i,{tv:'BINANCE:XRPUSDT',data:'binance:XRPUSDT',label:'리플'}],
+  [/도지|\bdoge/i,{tv:'BINANCE:DOGEUSDT',data:'binance:DOGEUSDT',label:'도지코인'}],
+  [/테슬라|\btsla/i,{tv:'NASDAQ:TSLA',data:'yahoo:TSLA',label:'테슬라'}],
+  [/애플|\baapl/i,{tv:'NASDAQ:AAPL',data:'yahoo:AAPL',label:'애플'}],
+  [/엔비디아|\bnvda/i,{tv:'NASDAQ:NVDA',data:'yahoo:NVDA',label:'엔비디아'}],
+  [/마이크로소프트|\bmsft/i,{tv:'NASDAQ:MSFT',data:'yahoo:MSFT',label:'마이크로소프트'}],
+  [/아마존|\bamzn/i,{tv:'NASDAQ:AMZN',data:'yahoo:AMZN',label:'아마존'}],
+  [/구글|알파벳|\bgoogl?/i,{tv:'NASDAQ:GOOGL',data:'yahoo:GOOGL',label:'알파벳'}],
+  [/메타\b|\bmeta\b/i,{tv:'NASDAQ:META',data:'yahoo:META',label:'메타'}],
+  [/삼성전자/,{tv:'KRX:005930',data:'yahoo:005930.KS',label:'삼성전자'}],
+  [/나스닥/,{tv:'NASDAQ:IXIC',data:'yahoo:^IXIC',label:'나스닥 종합'}],
+  [/에스앤피|s ?& ?p ?500|스탠더드/i,{tv:'SP:SPX',data:'yahoo:^GSPC',label:'S&P 500'}]
+];
+function taiAssetFrom(t){
+  for(var i=0;i<TAI_AST.length;i++) if(TAI_AST[i][0].test(t)) return TAI_AST[i][1];
+  return null;
+}
 /* 사용자 발화에서 타임프레임 의도 감지 (툴 파라미터·차트 동기화용, 최종 해석은 AI) */
 function taiTfFrom(t){
   var m=[['1분','1m'],['5분','5m'],['15분','15m'],['30분','30m'],['1시간','1h'],['4시간','4h'],['일봉','1d'],['하루','1d'],['주봉','1w'],['주간','1w']];
@@ -5162,9 +5184,10 @@ function taiChartRender(){
   host.innerHTML='';
   new TradingView.widget({container_id:c.cid,symbol:c.tv,interval:c.interval,autosize:true,theme:document.body.classList.contains('light')?'light':'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
 }
-function taiOhlc(cb,sess,run){
+function taiOhlc(cb,sess,run,ast){
   var ai=taiAI(sess||G.cur);
-  var c=ai?ai.chart:TAI.chart;
+  var c=ast||(ai?ai.chart:TAI.chart);
+  var isCur=!ast||(ai&&ai.chart&&ai.chart.data===c.data); /* 질문 자산이 현재 차트와 같을 때만 차트/컨텍스트에 반영 */
   TAI.ohlc=null;
   if(!c||!c.data||c.data==='none') return cb('');
   var iv=(ai&&ai.tf)||'1d';
@@ -5179,14 +5202,14 @@ function taiOhlc(cb,sess,run){
     .then(function(r){ if(!r.ok) throw r.status; return r.json(); })
     .then(function(j){
       TAI.ohlc=j;
-      if(ai){ ai.ohlc=j; ai.ohlcAt=Date.now(); }
+      if(ai&&isCur){ ai.ohlc=j; ai.ohlcAt=Date.now(); }
       if(h){
         var ms=Date.now()-t0, kb=(JSON.stringify(j).length/1024).toFixed(1);
         h.done(srcNm+' 시세 수신 완료 · '+(c.label||'')+' '+ivL,
           '<b>'+gEsc(c.label||'')+'</b> '+gEsc(ivL)+' '+(j.rows?j.rows.length:0)+'봉 수신. 현재가 <b>'+gEsc(String(j.last))+'</b>, '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, 30'+(iv==='1d'?'일':'봉')+' '+j.chg30d+'%. 90'+(iv==='1d'?'일':'봉')+' 최고 '+gEsc(String(j.hi90))+' / 최저 '+gEsc(String(j.lo90))+'. 응답 '+ms+'ms, '+kb+'KB.',
           ms+'ms · '+(j.rows?j.rows.length:0)+'봉');
       }
-      taiChartPx(j);
+      if(isCur) taiChartPx(j); /* 다른 자산 스냅샷을 현재 차트 카드에 표시하지 않는다 */
       cb('\n['+c.label+' 실시세 스냅샷, '+(TAI_TFL[iv]||'일봉')+' 기준, 방금 수신] 현재가 '+j.last+', '+(iv==='1d'?'24시간':'직전 1봉')+' '+j.chg1d+'%, '+(iv==='1d'?'7일':'7봉')+' '+j.chg7d+'%, '+(iv==='1d'?'30일':'30봉')+' '+j.chg30d+'%, '+(iv==='1d'?'90일':'90봉')+' 최고 '+j.hi90+' 최저 '+j.lo90+', 최근 30개 봉 종가: '+j.closes30.join(', ')+'. 예측이나 전망 질문에는 이 데이터를 근거로 마크다운으로 구조화된 깊이 있는 분석을 작성한다: "### 현재 위치" 섹션(핵심 수치 **볼드**), "### 상방 시나리오"와 "### 하방 시나리오"(트리거 가격과 목표 레벨, 불릿), 지표 요약은 | 표 |, "### 리스크와 대응"(현실적 제안). 확정적 단정과 수익 보장은 피한다.');
     })
     .catch(function(err){
@@ -5197,14 +5220,15 @@ function taiOhlc(cb,sess,run){
     });
 }
 /* 보조 타임프레임 실측정: 표시용 실제 fetch(컨텍스트와 별개), 차트 인터벌도 실제로 전환 */
-function actProbeIv(run,ai,iv,cb){
-  var c=ai&&ai.chart;
+function actProbeIv(run,ai,iv,cb,ast){
+  var c=ast||(ai&&ai.chart);
   if(!c||!c.data||c.data==='none'){ cb&&cb(); return; }
+  var isCur=!ast||(ai&&ai.chart&&ai.chart.data===c.data);
   var p=c.data.split(':');
   var srcNm=p[0]==='binance'?'바이낸스':'야후 파이낸스';
   var ivL=TAI_TFL[iv]||iv;
-  if(G.cur===run.sess&&TAI_TFTV[iv]){ c.interval=TAI_TFTV[iv]; taiChartRender(); } /* 실제 차트 전환 */
-  var h=actStep(run,{kind:'fetch',title:ivL+' 흐름 확인 중 · '+srcNm,h:ivL+' 흐름을 확인하는 중',verb:ivL+' 흐름을 확인하는 중'});
+  if(isCur&&G.cur===run.sess&&TAI_TFTV[iv]&&ai.chart){ ai.chart.interval=TAI_TFTV[iv]; taiChartRender(); } /* 실제 차트 전환 (현재 차트 자산일 때만) */
+  var h=actStep(run,{kind:'fetch',title:(c.label?c.label+' ':'')+ivL+' 흐름 확인 중 · '+srcNm,h:ivL+' 흐름을 확인하는 중',verb:ivL+' 흐름을 확인하는 중'});
   var t0=Date.now();
   fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src='+encodeURIComponent(p[0])+'&sym='+encodeURIComponent(p.slice(1).join(':'))+'&iv='+encodeURIComponent(iv))
     .then(function(r){ if(!r.ok) throw r.status; return r.json(); })
@@ -5212,7 +5236,7 @@ function actProbeIv(run,ai,iv,cb){
       var ms=Date.now()-t0;
       var up=0,rows=j.rows||[];
       for(var i=Math.max(1,rows.length-10);i<rows.length;i++) if(rows[i][4]>=rows[i][1]) up++;
-      h.done(ivL+' 흐름 확인 완료 · '+srcNm,
+      h.done((c.label?c.label+' ':'')+ivL+' 흐름 확인 완료 · '+srcNm,
         '<b>'+gEsc(ivL)+'</b> '+rows.length+'봉 실측. 최근 10봉 중 <b>'+up+'봉 상승</b>, 직전 1봉 '+j.chg1d+'%, 최근 7봉 '+j.chg7d+'%. 현재가 '+gEsc(String(j.last))+'.',
         ms+'ms · '+rows.length+'봉');
       cb&&cb(j);
@@ -5293,7 +5317,10 @@ function taiMarket(t,fin,fallback){
   var conv=!!($('g-thread')&&G.mode==='conv');
   var tfReq=taiTfFrom(t);
   if(tfReq){ ai.tf=tfReq; if(ai.chart){ ai.chart.interval=TAI_TFTV[tfReq]||'D'; taiChartRender(); } } /* AI 컨텍스트 ↔ 차트 위젯 동기화 (차트 없어도 tf는 기억) */
-  var isPred=!!(ai.chart&&taiPredictQ(t));
+  /* 질문이 지목한 자산이 현재 차트와 다르면 스냅샷과 실측을 그 자산으로 수행한다 (차트 전환은 답변의 CHART 태그 몫) */
+  var mention=taiAssetFrom(t);
+  var ast=(mention&&(!ai.chart||ai.chart.data!==mention.data))?mention:null;
+  var isPred=!!((ast||ai.chart)&&taiPredictQ(t));
   var sys=taiBuildSystem(fin,conv);
   taiNextClear(); taiActClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
@@ -5426,15 +5453,15 @@ function taiMarket(t,fin,fallback){
     });
   };
   if(isPred){
-    var lb0=ai.chart?ai.chart.label:'자산';
+    var lb0=(ast||ai.chart)?(ast||ai.chart).label:'자산';
     /* 실이벤트 시퀀스: 보조 타임프레임 실측 → 기준 타임프레임 실시세 → 실지표 계산 → 사고/답변 스트림.
        모든 행이 실제 fetch/계산의 시작·완료·실패로만 생성된다 (타이머 연출 없음) */
     var shortT=t.replace(/\s+/g,' ').slice(0,40)+(t.length>40?'…':'');
     actNote(run,'"'+shortT+'" 판단에는 '+lb0+'의 현재가 위치, 단기 모멘텀, 변동성 확인이 필요합니다. 실시세부터 수신합니다.');
     actProbeIv(run,ai,ai.tf==='15m'?'1h':'15m',function(){
-      if(G.cur!==sess){ taiOhlc(proceed,sess,run); return; } /* 세션 전환 시에도 데이터 수집과 기록은 계속 */
+      if(G.cur!==sess){ taiOhlc(proceed,sess,run,ast); return; } /* 세션 전환 시에도 데이터 수집과 기록은 계속 */
       taiOhlc(function(ctx){
-        if(ai.chart&&G.cur===sess){ ai.chart.interval=TAI_TFTV[ai.tf]||'D'; taiChartRender(); }
+        if(!ast&&ai.chart&&G.cur===sess){ ai.chart.interval=TAI_TFTV[ai.tf]||'D'; taiChartRender(); }
         var d=taiIndic();
         if(d){
           actStep(run,{kind:'calc',status:'done',title:'지표 계산 완료 · RSI '+d.rsi+', 변동폭 '+d.atrPct+'%',mR:'실계산',
@@ -5442,10 +5469,10 @@ function taiMarket(t,fin,fallback){
           actNote(run,(d.last>=d.ma20?'가격이 20일선 위에 있어 ':'가격이 20일선 아래라 ')+(d.rsi>=60?'과열 여부를 함께 따져야 해서 상하방 시나리오를 모두 계산합니다.':d.rsi<=40?'지지선이 버티는지가 관건이라 하방 트리거부터 점검합니다.':'추세와 모멘텀을 같이 놓고 시나리오를 계산합니다.'));
         }
         proceed(ctx);
-      },sess,run);
-    });
-  } else if(ai.chart&&ai.chart.data&&ai.chart.data!=='none'){
-    taiOhlc(proceed,sess,run);
+      },sess,run,ast);
+    },ast);
+  } else if(ast||(ai.chart&&ai.chart.data&&ai.chart.data!=='none')){
+    taiOhlc(proceed,sess,run,ast);
   } else proceed('');
 }
 /* 하위 호환 별칭 */
