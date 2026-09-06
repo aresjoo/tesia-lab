@@ -889,6 +889,10 @@ body.light .au-free{color:#1e8e3e}
 .g-amsg p{margin:0 0 10px}
 .g-amsg ul{margin:6px 0 14px;padding-left:22px}
 .g-amsg li{margin:6px 0}
+/* 번호 서술 문단: 불릿 마커 없이 번호를 행잉 인덴트로, 항목 간 여유 */
+.g-amsg ul.nl{list-style:none;padding-left:0}
+.g-amsg ul.nl li{margin:12px 0;padding-left:26px;position:relative}
+.g-amsg ul.nl li .no{position:absolute;left:2px;top:0;font-style:normal;font-weight:600;color:var(--gt);font-variant-numeric:tabular-nums}
 /* 콜아웃: 인포 카드 (헤어라인 보더 라운드 박스 + 인포 아이콘) */
 .g-amsg blockquote{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:12px 15px;border:1px solid var(--gl);background:rgba(255,255,255,.03);border-radius:12px;color:var(--gt2);font-size:14.5px}
 .g-amsg blockquote::before{content:'';flex-shrink:0;width:15px;height:15px;margin-top:4px;background:var(--gt3);-webkit-mask:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5v.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5v.5'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -4559,7 +4563,7 @@ function taiPing(){
   }catch(e){ TAI.ok=false; }
 }
 function taiSystem(fin){
-  var s='너는 TETH, 최고 수준의 시니어 금융 리서치 AI다. 한국어로 답한다. "안녕하세요", "알려드리겠습니다" 같은 서론 미사여구를 완전히 배제하고 본론과 핵심 데이터부터 시작한다. 얕은 요약 대신 구체적 수치, 지표, 기준선을 근거로 대는 고밀도 답변을 쓴다. 가벼운 대화는 2~4문장 평문으로, 분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치 **볼드**, 나열은 "- 불릿", 지표 비교는 | 표 |, 주의사항은 "> 콜아웃". 통짜 문단 금지. 확정 수익 약속이나 투자 권유는 하지 않는다. 이 서비스는 2023-2026 일봉 시뮬레이션 데이터로 전략을 백테스트하는 리서치 도구다.';
+  var s='너는 TETH, 최고 수준의 시니어 금융 리서치 AI다. 한국어로 답한다. "안녕하세요", "알려드리겠습니다" 같은 서론 미사여구를 완전히 배제하고 본론과 핵심 데이터부터 시작한다. 얕은 요약 대신 구체적 수치, 지표, 기준선을 근거로 대는 고밀도 답변을 쓴다. 가벼운 대화는 2~4문장 평문으로, 정보량이 많은 답변은 "### 섹션 헤더"와 번호 문단("1." "2.")으로 구조화하되 각 항목은 사실과 해석이 이어지는 2~4문장 서술형 문단으로 쓴다. 핵심 수치는 **볼드**, 도트 불릿 나열은 금지, 지표 비교만 | 표 |, 주의사항은 "> 콜아웃". 확정 수익 약속이나 투자 권유는 하지 않는다. 이 서비스는 2023-2026 일봉 시뮬레이션 데이터로 전략을 백테스트하는 리서치 도구다.';
   if(fin){
     s+='\n현재 전략 컨텍스트: 수익률 '+pct(fin.ret)+', 최대낙폭 '+fin.mdd.toFixed(1)+'%, 손절 '+fin.params.sl+'% / 익절 '+fin.params.tp+'%, 버전 '+S.versions.length+'개, 최악 연도 '+fin.worstYear+', Holdout '+(holdoutOf(fin).ret>0?'통과':'경고')+'.';
   }
@@ -4645,7 +4649,7 @@ function taiMarketRules(){
   var r='\n너는 사용자 편에서 시장과 싸우는 유능한 파트너다. 어려운 금융 용어를 쓰지 말고, 전문 용어가 꼭 필요하면 바로 옆에 쉬운 말로 풀어라. 예: "RSI(과열됐는지 보는 지표)". 훈계하거나 겁주지 말고, 확신 있게 분석하되 결과를 보장하는 표현("무조건 오릅니다")은 쓰지 않는다. 답변은 짧고 명확하게, 핵심 먼저, 그 다음 근거, 마지막에 다음 행동 순서로.'
    +'\n입력이 키워드 수준으로 짧거나 대상 자산·조건·타임프레임이 생략된 모호한 질문이면, 자의적으로 판단해 장황한 일반론 리포트를 쏟지 마라. 현재 상황을 한두 문장으로 가볍게 짚어준 뒤, 핵심 의도를 좁히는 명확한 되물음 1~2개로 대화를 이어가라. 선택지가 명확하면 [ASK] 카드를 써라.'
    +'\n깊은 구조화 리포트는 사용자가 분석·리포트·전략서를 명시적으로 요청했거나 대상과 조건이 충분히 특정된 경우에만 작성한다.'
-   +'\n분석·예측·비교처럼 정보량이 많은 답변은 마크다운으로 구조화한다: "### 섹션 헤더", 핵심 수치는 **볼드**, 나열은 "- 불릿", 지표·자산 비교는 반드시 | 마크다운 표 |, 주의사항은 "> 콜아웃" 한 줄. 통짜 문단 금지. 가벼운 대화만 짧은 평문으로 답한다.'
+   +'\n서술 형식: 답변은 도트 불릿을 나열하는 요약 리포트가 아니라 논리가 이어지는 서술형으로 쓴다. 정보량이 많으면 "### 섹션 헤더" 아래 번호 문단("1." "2." "3.")으로 구조화하되, 각 번호 항목은 짧은 명사 조각이 아니라 사실을 제시하고 해석하고 의미를 짚는 2~4문장짜리 완결된 문단이어야 한다. 핵심 수치와 결론 구절만 **볼드**로 강조한다. "- " 불릿 나열은 원칙적으로 금지한다, 짧은 사실을 정말 어쩔 수 없이 나열할 때만 예외로 3개 이내. 여러 지표를 여러 자산에 걸쳐 비교할 때만 | 마크다운 표 |를 쓰고, 주의사항 한 줄은 "> 콜아웃"으로. 가벼운 대화는 짧은 평문으로 답한다.'
    +'\n문장 부호 규칙: 답변 본문에 가운뎃점(·)과 대시(—, –)를 절대 쓰지 않는다. 나열은 쉼표나 불릿으로, 부연이나 이음은 쉼표로 풀어 쓴다. 예: "진입·손절" 대신 "진입과 손절", "돌파 — 목표" 대신 "돌파 후 목표".'
    +'\n사고 규칙: 분석, 예측, 비교, 전략 판단처럼 여러 요인을 따져야 하는 요청에서는 반드시 답변과 도구 사용 전에 확장 사고(extended thinking)부터 시작하라. 사고에서 판단 축을 나누고, 무엇을 확인할지 계획하고, 데이터를 본 뒤에는 해석을 사고로 정리한 다음 답하라. 사고 과정은 사용자 화면에 실시간으로 표시되므로 읽기 좋은 자연스러운 한국어 문장으로 이어가라. 간단한 시세 확인이나 용어 질문만 사고 없이 바로 답한다.'
    +'\n실시간 정보 규칙: 최근 뉴스, 실적 발표, 규제 이슈, 오늘 급등락의 이유처럼 최신 정보가 판단에 필요하면 웹 검색 도구를 실제로 사용해 확인하고, 확인한 출처에 근거해 답하라. 검색 없이 최신 사건을 아는 척 만들어내지 마라. 필요하면 검색 결과 중 핵심 페이지를 web_fetch로 열어 수치를 확인하라. 단, 시세 수치는 여전히 제공된 실시세 스냅샷을 우선 근거로 쓴다.'
@@ -4756,6 +4760,7 @@ function taiMd(src){
   function taiMdCore(part){
   var lines=gEsc(part).split('\n'),out=[],ul=false,tbl=[];
   function endUl(){ if(ul){ out.push('</ul>'); ul=false; } }
+  function openUl(kind){ if(ul!==kind){ endUl(); out.push(kind==='n'?'<ul class="nl">':'<ul>'); ul=kind; } }
   function endTbl(){ if(tbl.length){ out.push(tblHtml(tbl)); tbl=[]; } }
   for(var i=0;i<lines.length;i++){
     var L=lines[i];
@@ -4763,8 +4768,8 @@ function taiMd(src){
     endTbl();
     if(/^#{2,4}\s+/.test(L)){ endUl(); out.push('<h4>'+inl(L.replace(/^#{2,4}\s+/,''))+'</h4>'); continue; }
     if(/^(?:&gt;|>)\s?/.test(L)){ endUl(); out.push('<blockquote>'+inl(L.replace(/^(?:&gt;|>)\s?/,''))+'</blockquote>'); continue; }
-    if(/^\s*[-*•]\s+/.test(L)){ if(!ul){ out.push('<ul>'); ul=true; } out.push('<li>'+inl(L.replace(/^\s*[-*•]\s+/,''))+'</li>'); continue; }
-    if(/^\s*\d+[.)]\s+/.test(L)){ if(!ul){ out.push('<ul>'); ul=true; } out.push('<li>'+inl(L.replace(/^\s*/,''))+'</li>'); continue; }
+    if(/^\s*[-*•]\s+/.test(L)){ openUl('u'); out.push('<li>'+inl(L.replace(/^\s*[-*•]\s+/,''))+'</li>'); continue; }
+    if(/^\s*\d+[.)]\s+/.test(L)){ var m=L.match(/^\s*(\d+)[.)]\s+(.*)$/); openUl('n'); out.push('<li><em class="no">'+m[1]+'.</em>'+inl(m[2])+'</li>'); continue; }
     endUl();
     if(!L.trim()){ out.push('<div class="sp8"></div>'); continue; }
     out.push('<p>'+inl(L)+'</p>');
@@ -4953,7 +4958,7 @@ function actThink(run){
       if(h.st.status!=='running') return;
       /* 부드러운 접힘: DOM 재생성 대신 상태만 전환해 그리드 트랜지션이 살아 있게 */
       h.st.status='done'; h.st.open=false;
-      h.st.title='생각 완료'; h.st.mR=((Date.now()-h.st.t0)/1000).toFixed(1)+'초';
+      h.st.title='생각 완료'; h.st.mR=Math.max(1,Math.round((Date.now()-h.st.t0)/1000))+'초';
       h.st.ms=Date.now()-h.st.t0;
       h.st.detail=buf?'<div class="cot2">'+gEsc(buf)+'</div>':null;
       var el=h.st.el;
@@ -4971,23 +4976,29 @@ function actThink(run){
     st:h.st
   };
 }
-/* 사고 연출 스트림: 실데이터 기반 문장을 타자 속도로 흘린다. 실제 thinking 델타가 도착하면 즉시 양보 */
+/* 사고 연출 스트림: 실데이터 기반 문장을 타자 속도로 흘린다. 문장 완료 콜백으로 행 생성과 순차 동기.
+   실제 thinking/내레이터가 흐르는 동안은 양보(real), 끝나면 resume으로 재개 */
 function taiThinkSim(th,run){
   var q=[],busy=false,real=false,closed=false,onEmpty=null,total=0;
   function dead(){ return closed||real||(run&&run.data.status!=='running'); }
   function drainDone(){ if(onEmpty){ var f=onEmpty; onEmpty=null; f(); } }
+  function flushCbs(){ q.forEach(function(it){ if(it.cb) try{ it.cb(); }catch(e){} }); q=[]; }
   function pump(){
-    if(dead()){ busy=false; q=[]; drainDone(); return; }
+    if(dead()){ busy=false; flushCbs(); drainDone(); return; }
     if(!q.length){ busy=false; drainDone(); return; }
     busy=true;
-    var s=q[0], ch=s.slice(0,2); q[0]=s.slice(2);
+    var it=q[0], ch=it.s.slice(0,2); it.s=it.s.slice(2);
     th.push(ch);
-    if(!q[0].length){ q.shift(); th.push(' '); setTimeout(pump,460); } /* 연출 문장은 한 문단으로 흘림 */
-    else setTimeout(pump,26+Math.random()*22);
+    if(!it.s.length){ q.shift(); th.push(' '); var c=it.cb; setTimeout(function(){ if(c) try{ c(); }catch(e){} pump(); },380); }
+    else setTimeout(pump,24+Math.random()*20);
   }
   return {
-    feed:function(s){ if(dead()||!s||total>900) return; total+=s.length; q.push(s); if(!busy) pump(); },
-    real:function(){ real=true; q=[]; },
+    feed:function(s,cb){
+      if(dead()||!s||total>1600){ if(cb) cb(); return; }
+      total+=s.length; q.push({s:s,cb:cb||null}); if(!busy) pump();
+    },
+    real:function(){ real=true; flushCbs(); },
+    resume:function(){ real=false; if(q.length&&!busy) pump(); },
     wrap:function(endS,cb){
       if(closed){ cb&&cb(); return; }
       if(endS&&!real&&run&&run.data.status==='running'){ total=0; this.feed(endS); }
@@ -5563,7 +5574,7 @@ function taiMarket(t,fin,fallback){
       TAI.lastRaw=acc; /* 디버그: 태그 포함 원문 */
       stopNarr();
       if(thinkH) thinkH.done();
-      if(ansH) ansH.done('답변 작성 완료',null,((Date.now()-ansH.st.t0)/1000).toFixed(1)+'초'); /* 토큰 총계는 헤더에만 (중복·오독 방지) */
+      if(ansH) ansH.done('답변 작성 완료',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초'); /* 토큰 총계는 헤더에만 (중복·오독 방지) */
       actFinish(run,'done',lastUsage);
       var live=(G.cur===sess);
       if(mT&&sess.title==='새 전략'){ sess.title=mT[1]; gSideRender(); if(live&&!$('g-chead').hidden) gChead(sess.title,sess.sub||''); } /* AI 생성 세션 제목 */
