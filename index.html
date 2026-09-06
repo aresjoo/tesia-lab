@@ -4533,12 +4533,15 @@ var STORE={t:0,
     try{
       var j=JSON.stringify(STORE.snapshot());
       try{ localStorage.setItem('teth.state',j); }catch(e){}
-      fetch(TAI.url.replace('/api/chat','/api/state'),{method:'POST',headers:{'Content-Type':'application/json'},body:j}).catch(function(){});
+      var su=taiStateUrl(); /* 서버 저장은 localhost 프록시 전용 — 원격(터널)은 404라 호출하지 않는다 */
+      if(su) fetch(su,{method:'POST',headers:{'Content-Type':'application/json'},body:j}).catch(function(){});
     }catch(e){}
   },
   load:function(cb){
     function local(){ try{ return JSON.parse(localStorage.getItem('teth.state')||'null'); }catch(e){ return null; } }
-    fetch(TAI.url.replace('/api/chat','/api/state'))
+    var su=taiStateUrl();
+    if(!su){ cb(local()); return; }
+    fetch(su)
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(p){ cb(p&&p.v?p:local()); })
       .catch(function(){ cb(local()); });
@@ -5823,6 +5826,11 @@ function gSend(){
 /* ── boot ── */
 /* 배포 환경 AI 프록시 해석: ① site-config 고정값 ② 저장소 proxy-url 브랜치의 포인터 파일(터널 URL, 재시작마다 자동 갱신).
    로컬(localhost)은 항상 localhost:8799. 해석 실패 시 스크립트 폴백으로 동작한다. */
+/* 서버 대화 저장(/api/state)은 localhost 프록시에만 존재 — 원격(터널) URL이면 null을 돌려 호출을 막는다 */
+function taiStateUrl(){
+  var u=TAI.url.replace('/api/chat','/api/state');
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(u)?u:null;
+}
 function taiResolveProxy(done){
   if(location.hostname==='localhost'||location.hostname==='127.0.0.1'){ done(); return; }
   if(window.TETH_CONFIG&&TETH_CONFIG.aiProxy){ TAI.url=TETH_CONFIG.aiProxy.replace(/\/$/,'')+'/api/chat'; done(); return; }
@@ -6607,7 +6615,7 @@ function gLogout(){
   S.user=null;
   /* 명시적 로그아웃만 세션을 끊는다 — 저장된 로그인 상태 제거 */
   try{ localStorage.removeItem('teth.state'); }catch(e){}
-  try{ fetch(TAI.url.replace('/api/chat','/api/state'),{method:'POST',headers:{'Content-Type':'application/json'},body:'{"v":0}'}).catch(function(){}); }catch(e){}
+  try{ var su=taiStateUrl(); if(su) fetch(su,{method:'POST',headers:{'Content-Type':'application/json'},body:'{"v":0}'}).catch(function(){}); }catch(e){}
   authSyncUI();
   gHome();
   toast('로그아웃 완료, 다음에 또 만나요');
