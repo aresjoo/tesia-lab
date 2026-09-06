@@ -114,8 +114,8 @@ export default {
           thinking: { type: "adaptive" },
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
           tools: [
-            { type: "web_search_20260209", name: "web_search", max_uses: 4 },
-            { type: "web_fetch_20260209", name: "web_fetch", max_uses: 4 },
+            { type: "web_search_20260209", name: "web_search" },
+            { type: "web_fetch_20260209", name: "web_fetch" },
           ],
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",

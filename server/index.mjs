@@ -142,9 +142,9 @@ createServer(async (req, res) => {
       output_config: { effort: EFFORT },
       /* 실제 웹 검색/페이지 열기 (Anthropic 서버사이드 툴) — 쿼리 선택부터 결과까지 전부 실동작, 타임라인에 이벤트로 전달 */
       tools: [
-        { type: "web_search_20260209", name: "web_search", max_uses: 4 },
-        { type: "web_fetch_20260209", name: "web_fetch", max_uses: 4 },
-      ],
+        { type: "web_search_20260209", name: "web_search" },
+        { type: "web_fetch_20260209", name: "web_fetch" },
+      ], /* 사용 횟수 상한 없음 — 필요한 만큼 모델이 판단 */
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       system: String(payload.system || "").slice(0, 8000),
