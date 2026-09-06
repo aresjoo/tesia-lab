@@ -1,7 +1,7 @@
-/* TETH 로컬 AI 프록시.
- * 세션 화면의 자유 질문에 실제 Claude 응답을 스트리밍한다.
- * 실행:  cd server && npm install && npm start
- * 키:    server/.env 의 ANTHROPIC_API_KEY (없으면 `ant auth login` 프로필로 폴백)
+﻿/* TETH ë¡œì»¬ AI í”„ë¡ì‹œ.
+ * ì„¸ì…˜ í™”ë©´ì˜ ìžìœ  ì§ˆë¬¸ì— ì‹¤ì œ Claude ì‘ë‹µì„ ìŠ¤íŠ¸ë¦¬ë°í•œë‹¤.
+ * ì‹¤í–‰:  cd server && npm install && npm start
+ * í‚¤:    server/.env ì˜ ANTHROPIC_API_KEY (ì—†ìœ¼ë©´ `ant auth login` í”„ë¡œí•„ë¡œ í´ë°±)
  */
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -13,7 +13,7 @@ try {
     const m = line.match(/^\s*([A-Z_]+)\s*=\s*(.+?)\s*$/);
     if (m && !m[1].startsWith("#")) env[m[1]] = m[2];
   }
-} catch { /* .env 없으면 SDK 기본 자격 증명 해석에 맡긴다 */ }
+} catch { /* .env ì—†ìœ¼ë©´ SDK ê¸°ë³¸ ìžê²© ì¦ëª… í•´ì„ì— ë§¡ê¸´ë‹¤ */ }
 
 for (const k of ["ANTHROPIC_API_KEY", "TETH_AI_MODEL", "TETH_AI_EFFORT", "TETH_AI_PORT", "TETH_AI_MOCK"]) if (!env[k] && process.env[k]) env[k] = process.env[k];
 const MODEL = env.TETH_AI_MODEL || "claude-opus-5";
@@ -23,7 +23,7 @@ let client = null, clientErr = "";
 try {
   client = env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }) : new Anthropic();
 } catch (e) {
-  clientErr = "API 키가 없습니다. server/.env.example을 server/.env로 복사해 ANTHROPIC_API_KEY를 채워주세요.";
+  clientErr = "API í‚¤ê°€ ì—†ìŠµë‹ˆë‹¤. server/.env.exampleì„ server/.envë¡œ ë³µì‚¬í•´ ANTHROPIC_API_KEYë¥¼ ì±„ì›Œì£¼ì„¸ìš”.";
   console.error(clientErr);
 }
 
@@ -33,9 +33,9 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
-/* ── 공개 터널 노출 대비 크레딧 보호 ──
- * 허용 오리진에서 온 /api/chat만 통과 + IP당 버스트 제한 + 일일 총량 상한.
- * 저장소(/api/state)는 로컬 접속(Host=localhost)에서만 — 터널 경유 방문자에게 대화 파일을 열지 않는다. */
+/* â”€â”€ ê³µê°œ í„°ë„ ë…¸ì¶œ ëŒ€ë¹„ í¬ë ˆë”§ ë³´í˜¸ â”€â”€
+ * í—ˆìš© ì˜¤ë¦¬ì§„ì—ì„œ ì˜¨ /api/chatë§Œ í†µê³¼ + IPë‹¹ ë²„ìŠ¤íŠ¸ ì œí•œ + ì¼ì¼ ì´ëŸ‰ ìƒí•œ.
+ * ì €ìž¥ì†Œ(/api/state)ëŠ” ë¡œì»¬ ì ‘ì†(Host=localhost)ì—ì„œë§Œ â€” í„°ë„ ê²½ìœ  ë°©ë¬¸ìžì—ê²Œ ëŒ€í™” íŒŒì¼ì„ ì—´ì§€ ì•ŠëŠ”ë‹¤. */
 const ORIGIN_OK = [/^https:\/\/aresjoo\.github\.io$/, /^https?:\/\/localhost(?::\d+)?$/, /^https?:\/\/127\.0\.0\.1(?::\d+)?$/];
 const DAILY_CAP = 400, BURST_MAX = 8;
 const rl = { day: "", n: 0, ip: new Map() };
@@ -61,8 +61,8 @@ createServer(async (req, res) => {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: !!client, error: clientErr || undefined }));
   }
-  if (req.url === "/api/state" && !isLocalHost(req)) { res.writeHead(404, CORS); return res.end(); } /* 저장소는 로컬 전용 */
-  if (req.url === "/api/state" && req.method === "GET") { /* 대화 세션 영속 저장소 (파일) */
+  if (req.url === "/api/state" && !isLocalHost(req)) { res.writeHead(404, CORS); return res.end(); } /* ì €ìž¥ì†ŒëŠ” ë¡œì»¬ ì „ìš© */
+  if (req.url === "/api/state" && req.method === "GET") { /* ëŒ€í™” ì„¸ì…˜ ì˜ì† ì €ìž¥ì†Œ (íŒŒì¼) */
     try {
       const f = new URL("./state.json", import.meta.url);
       if (!existsSync(f)) { res.writeHead(404, CORS); return res.end(); }
@@ -76,7 +76,7 @@ createServer(async (req, res) => {
     try { JSON.parse(sb); writeFileSync(new URL("./state.json", import.meta.url), sb); res.writeHead(200, CORS); return res.end('{"ok":true}'); }
     catch { res.writeHead(400, CORS); return res.end(); }
   }
-  if (req.url.startsWith("/api/ohlc")) { /* 예측 근거용 실시세 (코인: Binance, 그 외: Yahoo), 타임프레임 지원 */
+  if (req.url.startsWith("/api/ohlc")) { /* ì˜ˆì¸¡ ê·¼ê±°ìš© ì‹¤ì‹œì„¸ (ì½”ì¸: Binance, ê·¸ ì™¸: Yahoo), íƒ€ìž„í”„ë ˆìž„ ì§€ì› */
     const q = new URL(req.url, "http://x").searchParams;
     const src = q.get("src"), sym = String(q.get("sym") || "").slice(0, 24);
     const IV = { "1m": 1, "5m": 1, "15m": 1, "30m": 1, "1h": 1, "4h": 1, "1d": 1, "1w": 1 };
@@ -104,7 +104,7 @@ createServer(async (req, res) => {
         last: +last.toPrecision(6), chg1d: pctFrom(1), chg7d: pctFrom(7), chg30d: pctFrom(30),
         hi90: +Math.max(...rows.map((x) => x[2])).toPrecision(6), lo90: +Math.min(...rows.map((x) => x[3])).toPrecision(6),
         closes30: closes.slice(-30).map((v) => +v.toPrecision(5)),
-        rows: rows.slice(-60).map((x) => [x[0], +x[1].toPrecision(5), +x[2].toPrecision(5), +x[3].toPrecision(5), +x[4].toPrecision(5), +(x[5] || 0).toPrecision(4)]), /* 예측 시나리오 카드 + 지표 계산용 */
+        rows: rows.slice(-60).map((x) => [x[0], +x[1].toPrecision(5), +x[2].toPrecision(5), +x[3].toPrecision(5), +x[4].toPrecision(5), +(x[5] || 0).toPrecision(4)]), /* ì˜ˆì¸¡ ì‹œë‚˜ë¦¬ì˜¤ ì¹´ë“œ + ì§€í‘œ ê³„ì‚°ìš© */
       };
       res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
       return res.end(JSON.stringify(out));
@@ -128,8 +128,8 @@ createServer(async (req, res) => {
   res.writeHead(200, { ...CORS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" });
   const send = (obj) => res.write("data: " + JSON.stringify(obj) + "\n\n");
 
-  if (env.TETH_AI_MOCK) { /* 키 없이 UI 스트리밍 경로를 시험하는 목 모드 */
-    const demo = "목 모드 응답입니다. server/.env에 ANTHROPIC_API_KEY를 넣으면 실제 Claude가 답합니다.";
+  if (env.TETH_AI_MOCK) { /* í‚¤ ì—†ì´ UI ìŠ¤íŠ¸ë¦¬ë° ê²½ë¡œë¥¼ ì‹œí—˜í•˜ëŠ” ëª© ëª¨ë“œ */
+    const demo = "ëª© ëª¨ë“œ ì‘ë‹µìž…ë‹ˆë‹¤. server/.envì— ANTHROPIC_API_KEYë¥¼ ë„£ìœ¼ë©´ ì‹¤ì œ Claudeê°€ ë‹µí•©ë‹ˆë‹¤.";
     for (const ch of demo.match(/.{1,6}/g)) { send({ text: ch }); await new Promise((r) => setTimeout(r, 40)); }
     send({ done: true });
     return res.end();
@@ -137,22 +137,22 @@ createServer(async (req, res) => {
   try {
     const stream = client.beta.messages.stream({
       model: MODEL,
-      max_tokens: 16000, // 씽킹 토큰 포함 여유 상한, 답변 길이는 프롬프트로 제어
-      thinking: { type: "adaptive" }, // 사고 블록 활성화 — 프론트 작업 타임라인의 실제 사고 스트림 소스
+      max_tokens: 16000, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
+      thinking: { type: "adaptive" }, // ì‚¬ê³  ë¸”ë¡ í™œì„±í™” â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì˜ ì‹¤ì œ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼ ì†ŒìŠ¤
       output_config: { effort: EFFORT },
-      /* 실제 웹 검색/페이지 열기 (Anthropic 서버사이드 툴) — 쿼리 선택부터 결과까지 전부 실동작, 타임라인에 이벤트로 전달 */
+      /* ì‹¤ì œ ì›¹ ê²€ìƒ‰/íŽ˜ì´ì§€ ì—´ê¸° (Anthropic ì„œë²„ì‚¬ì´ë“œ íˆ´) â€” ì¿¼ë¦¬ ì„ íƒë¶€í„° ê²°ê³¼ê¹Œì§€ ì „ë¶€ ì‹¤ë™ìž‘, íƒ€ìž„ë¼ì¸ì— ì´ë²¤íŠ¸ë¡œ ì „ë‹¬ */
       tools: [
         { type: "web_search_20260209", name: "web_search" },
         { type: "web_fetch_20260209", name: "web_fetch" },
-      ], /* 사용 횟수 상한 없음 — 필요한 만큼 모델이 판단 */
+      ], /* ì‚¬ìš© íšŸìˆ˜ ìƒí•œ ì—†ìŒ â€” í•„ìš”í•œ ë§Œí¼ ëª¨ë¸ì´ íŒë‹¨ */
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       system: String(payload.system || "").slice(0, 8000),
       messages,
     });
     stream.on("text", (delta) => send({ text: delta }));
-    /* 실작업 이벤트: 모델의 사고 스트림(think) + 누적 출력 토큰(tok)을 그대로 전달 — 프론트 작업 타임라인이 실데이터로 구동된다 */
-    const blocks = {}; /* index별 server_tool_use 입력 JSON 누적 */
+    /* ì‹¤ìž‘ì—… ì´ë²¤íŠ¸: ëª¨ë¸ì˜ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼(think) + ëˆ„ì  ì¶œë ¥ í† í°(tok)ì„ ê·¸ëŒ€ë¡œ ì „ë‹¬ â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì´ ì‹¤ë°ì´í„°ë¡œ êµ¬ë™ëœë‹¤ */
+    const blocks = {}; /* indexë³„ server_tool_use ìž…ë ¥ JSON ëˆ„ì  */
     stream.on("streamEvent", (ev) => {
       try {
         if (process.env.TETH_DEBUG_EV) console.log("[ev]", ev.type, ev.delta ? ev.delta.type : "", ev.content_block ? ev.content_block.type : "");
@@ -168,7 +168,7 @@ createServer(async (req, res) => {
             const err = c.type === "web_fetch_tool_error";
             send({ fres: { u: (c.content && c.content.url) || c.url || "", error: err ? (c.error_code || true) : undefined } });
           } else if (/_tool_result$/.test(cb.type || "")) {
-            /* 그 외 서버 툴 결과 (예: code_execution) — 범용 완료 신호 */
+            /* ê·¸ ì™¸ ì„œë²„ íˆ´ ê²°ê³¼ (ì˜ˆ: code_execution) â€” ë²”ìš© ì™„ë£Œ ì‹ í˜¸ */
             send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
           }
         } else if (ev.type === "content_block_delta" && ev.delta) {
@@ -182,11 +182,16 @@ createServer(async (req, res) => {
       } catch (e) {}
     });
     const final = await stream.finalMessage();
-    if (final.stop_reason === "refusal") send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
+    if (final.stop_reason === "refusal") send({ text: "ì´ ì§ˆë¬¸ì—ëŠ” ë‹µë³€ë“œë¦¬ê¸° ì–´ë µìŠµë‹ˆë‹¤. ì „ëžµì´ë‚˜ ê²€ì¦ ê²°ê³¼ì— ëŒ€í•´ ë¬¼ì–´ë´ ì£¼ì„¸ìš”." });
     send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
   } catch (e) {
     console.error("[teth-ai]", e?.status || "", e?.message || e);
     send({ error: true });
   }
   res.end();
-}).listen(PORT, () => console.log(`TETH AI proxy — http://localhost:${PORT} (model: ${MODEL}, effort: ${EFFORT})`));
+}).listen(PORT, () => console.log(`TETH AI proxy â€” http://localhost:${PORT} (model: ${MODEL}, effort: ${EFFORT})`));
+
+
+
+
+
