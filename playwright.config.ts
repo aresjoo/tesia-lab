@@ -24,7 +24,9 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['iPhone 13'], browserName: 'chromium' } },
   ],
   webServer: {
-    command: `VITE_E2E_FAST=true npm run dev -- --host 127.0.0.1 --port ${port} --strictPort`,
+    // env 옵션은 Windows cmd 에도 통한다 — POSIX 한정 `VAR=x cmd` 접두 구문을 쓰지 않는다.
+    command: `npm run dev -- --host 127.0.0.1 --port ${port} --strictPort`,
+    env: { VITE_E2E_FAST: 'true' },
     url: baseURL,
     reuseExistingServer: false,
   },

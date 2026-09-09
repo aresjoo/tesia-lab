@@ -13,8 +13,12 @@ import { ClientResearchHub } from './ClientResearchHub'
 import { InternalLink } from './InternalLink'
 import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
 import { ConversationCosmos } from './ConversationCosmos'
+import { TethProbability } from './TethProbability'
 import { clientCopy, useClientPreferences } from '../client-preferences'
 import { createClientExperienceStore, type ClientTurn } from '../client-experience-store'
+import { resolveAiProxyOrigin } from '../teth-ai-client'
+import { abortAiTurns, startAiTurn } from '../teth-ai-controller'
+import { TETH_SYSTEM_PROMPT } from '../prompts/teth-system'
 import { getSitePage } from '../site-navigation'
 import type { ResearchPage, ResearchRecord } from '../research-library'
 import { CLIENT_RESEARCH_FIXTURE } from '../client-research-fixtures'
@@ -35,7 +39,42 @@ function AnswerActions({ text }: { text: string }) {
   </div>
 }
 
+function AiAnswerBody({ turn }: { turn: ClientTurn }) {
+  const caret = <span className={turn.status === 'running' ? 'client-stream-caret' : ''} aria-hidden="true" />
+  if (!turn.prob) return <div className="g-amsg"><p>{turn.answer}{caret}</p></div>
+  // 확률 게이지는 모델이 <prob/> 를 배치한 지점(offset)에 맞춰 본문을 가른다.
+  const before = turn.answer.slice(0, turn.prob.offset).trimEnd()
+  const after = turn.answer.slice(turn.prob.offset).replace(/^\n+/, '')
+  return <div className="g-amsg">
+    {before && <p>{before}</p>}
+    <TethProbability up={turn.prob.up} down={turn.prob.down} />
+    {(after || turn.status === 'running') && <p>{after}{caret}</p>}
+  </div>
+}
+
+function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
+  const running = turn.status === 'running'
+  const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
+  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(trace)는 뒤이은 스텝으로.
+  const thinkingStep = {
+    id: 'thinking',
+    title: running && !turn.answer && !turn.trace?.length ? '생각하는 중' : 'TETH의 생각',
+    status: running && !turn.answer && !turn.trace?.length ? 'running' as const : activityStatus === 'stopped' && !turn.answer ? 'stopped' as const : 'done' as const,
+    detail: turn.thinking || undefined,
+  }
+  return <Fragment>
+    <ClientUserMessage onEdit={onEdit}>{turn.question}</ClientUserMessage>
+    <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : '생각 완료'} status={activityStatus}
+      source="service" startedAt={turn.startedAt} finishedAt={turn.finishedAt}
+      steps={[thinkingStep, ...(turn.trace ?? [])]} />
+    {(turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
+    {turn.status === 'done' && <AnswerActions text={turn.answer} />}
+    {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
+  </Fragment>
+}
+
 function ConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
+  if (turn.source === 'ai') return <AiConversationTurn turn={turn} onEdit={onEdit} />
   const thinking = turn.status === 'running' && !turn.answer
   const status = thinking ? 'running' : turn.status === 'stopped' ? 'stopped' : 'done'
   return <Fragment>
@@ -166,7 +205,14 @@ export function ClientMainExperience() {
   }, [auth, surface])
   const home = () => { setPage(null); store.home(); setNotice('') }
   const openAuth = (mode: 'login' | 'signup', fromComposer = false) => { setAuthReturnToComposer(fromComposer); setAuth(mode) }
-  const send = (text = value) => { if (!text.trim()) return; setPage(null); store.send(text) }
+  const send = (text = value) => {
+    if (!text.trim()) return
+    setPage(null)
+    // 실 AI는 명시 설정이 있을 때만 켜진다. 미설정·요청 실패는 스크립트 응답으로 폴백.
+    const aiOrigin = resolveAiProxyOrigin()
+    const started = store.send(text, { ai: Boolean(aiOrigin) })
+    if (started && aiOrigin) startAiTurn({ origin: aiOrigin, system: TETH_SYSTEM_PROMPT, store, ...started })
+  }
   const workspace = (next: 'research' | 'delegation') => { if (session) store.workspace(session.id, next) }
   const backToChat = () => { if (session) store.workspace(session.id, 'conversation') }
   const changeProfile = (next: ClientProfile | null) => {
@@ -196,14 +242,17 @@ export function ClientMainExperience() {
         </div>
       </section></div> : session?.workspace === 'research' ? <ClientResearchWorkspace key={session.id} sessionId={session.id} idea={session.idea} planContext={session} onStatusChange={status => store.researchStatus(session.id, status)} onPaperChange={paper => store.paper(session.id, paper)} onBack={backToChat} onDelegate={() => workspace('delegation')} />
       : session?.workspace === 'delegation' ? <ClientDelegationWorkspace key={session.id} sessionId={session.id} idea={session.idea} onBack={backToChat} onTradingReady={() => store.tradingReady(session.id)} onShowRanking={() => setPage('ranking')} initialPage={session.tradingReady ? 'trading' : undefined} />
-      : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onStop={() => store.stop(session.id)} busy={busy}
+      : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onStop={() => { abortAiTurns(session.id); store.stop(session.id) }} busy={busy}
         initialViewport={store.conversationViewport(session.id)} onViewportChange={view => store.saveConversationViewport(session.id, view)}
         inputLabel="TETH에게 물어보세요" sendLabel="메시지 보내기" titleLabel="대화 제목" initialTitle={session.title} onTitleChange={title => store.rename(session.id, title)}
-        activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}`} previewTools={<></>}
-        headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => { const removed = store.remove(session.id); setNotice(removed ? '전략을 삭제했어요' : '목록에서 제거했지만 저장소의 일부 기록을 삭제하지 못했습니다.') }} />}>
+        activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}:${latest?.thinking?.length ?? 0}:${latest?.trace?.length ?? 0}`} previewTools={<></>}
+        headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => { abortAiTurns(session.id); const removed = store.remove(session.id); setNotice(removed ? '전략을 삭제했어요' : '목록에서 제거했지만 저장소의 일부 기록을 삭제하지 못했습니다.') }} />}>
         {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn} onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }} />)}
-        {latest?.status === 'done' && <><div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>
-          <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>
+        {latest?.status === 'done' && <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}
+          {latest.source === 'ai'
+            // 실 AI 턴의 액션 칩은 모델 판단(검증 통과분)만 노출한다 — 없으면 없다.
+            ? latest.actions && latest.actions.length > 0 && <div className="client-next-actions">{latest.actions.map(action => <button type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}>{action.label} <span>{{ backtest: '과거 데이터로 검증 →', alert: '알림 조건 설정 →', delegate: '전략 맡기기 →', auto: '자동 실행 검토 →' }[action.type]}</span></button>)}</div>
+            : <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>}
         </>}
       </ClientConversation> : null}
     </main>

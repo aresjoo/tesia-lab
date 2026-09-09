@@ -6,13 +6,23 @@ import { forgetMockResearchPreview, getMockResearchPreview } from './mock-resear
 import { parsePercentageEdit } from './client-percentage-input'
 import { forgetResearchDocumentMemory } from './client-research-cache'
 import { forgetDelegationUiMemory } from './client-delegation-fixtures'
+import { isTethActionChip, validateProb, type TethActionChip } from './teth-chips-schema'
+import type { TethAiMessage } from './teth-ai-client'
 
 export type ConversationPhase = 'mode' | 'pair' | 'timeframe' | 'risk' | 'take' | 'plan'
 export type ConversationViewport = { top: number; spacer: number; follow: boolean; questionKey: string }
+/** 실 AI 턴의 분석 스텝 표시 상태. 서버 권위 상태가 아니라 스트림 관찰의 투영이다. */
+export type AiTraceStep = { id: string; title: string; status: 'running' | 'done' | 'stopped' }
 export type ClientTurn = {
   id: string; question: string; answer: string; fullAnswer: string
   startedAt: number; finishedAt?: number; status: 'running' | 'done' | 'stopped'
   suggestions: string[]; phase: ConversationPhase
+  /** 'ai' = 실 스트리밍 턴. 없으면 기존 스크립트(mock) 턴 — tick 리빌 경로를 탄다. */
+  source?: 'ai'
+  thinking?: string
+  trace?: AiTraceStep[]
+  prob?: { up: number; down: number; offset: number }
+  actions?: TethActionChip[]
 }
 export type ClientSession = {
   id: string; title: string; renamed: boolean; idea: string; draft: string
@@ -35,6 +45,28 @@ const validSession = (x: unknown): x is ClientSession => {
   const s = x as ClientSession
   return ['id','title','idea','draft','pair','mode','phase','timeframe','risk'].every(k => typeof s[k as keyof ClientSession] === 'string') && Array.isArray(s.turns) && ['conversation','research','delegation'].includes(s.workspace) && Number.isFinite(s.updatedAt)
 }
+const stopTrace = (trace?: AiTraceStep[]) => trace?.map(step => step.status === 'running' ? { ...step, status: 'stopped' as const } : step)
+
+/** 복원 스냅샷의 AI 필드는 거부 대신 정화한다 — 변조·구버전 값이 렌더로 새지 않게. */
+function sanitizeAiFields(turn: ClientTurn): ClientTurn {
+  const clean = { ...turn }
+  if (clean.source !== 'ai') {
+    delete clean.source; delete clean.thinking; delete clean.trace; delete clean.prob; delete clean.actions
+    return clean
+  }
+  if (typeof clean.thinking !== 'string') delete clean.thinking
+  clean.trace = Array.isArray(clean.trace)
+    ? clean.trace.filter(step => step && typeof step === 'object' && typeof step.id === 'string' && typeof step.title === 'string' && ['running', 'done', 'stopped'].includes(step.status))
+    : []
+  const prob = clean.prob && typeof clean.prob === 'object' ? validateProb(clean.prob.up, clean.prob.down) : null
+  if (prob && Number.isFinite(clean.prob?.offset) && (clean.prob?.offset ?? -1) >= 0) clean.prob = { ...prob, offset: Math.min(Math.floor(clean.prob!.offset), clean.answer.length) }
+  else delete clean.prob
+  const actions = Array.isArray(clean.actions) ? clean.actions.filter(isTethActionChip).slice(0, 2) : []
+  if (actions.length) clean.actions = actions
+  else delete clean.actions
+  return clean
+}
+
 function read(): Snapshot {
   try {
     const x = JSON.parse(sessionStorage.getItem(KEY) || 'null')
@@ -44,12 +76,15 @@ function read(): Snapshot {
       const sessions: ClientSession[] = x.sessions.filter(validSession).map((s: ClientSession) => {
         const validTurns = s.turns.filter(validTurn)
         if (validTurns.length !== s.turns.length) recoveryWarning = true
-        const turns = validTurns.map((turn, index): ClientTurn => {
+        const turns = validTurns.map((rawTurn, index): ClientTurn => {
+          const turn = sanitizeAiFields(rawTurn)
           // Only the latest local fixture turn can stream. Preserve incomplete
           // text in inconsistent older records without inventing a completion.
-          if (turn.status === 'running' && (index !== validTurns.length - 1 || !turn.fullAnswer)) {
-            recoveryWarning = true
-            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt }
+          // A real AI stream can never resume after reload — demote it silently
+          // (expected teardown, not corruption), keeping partial answer/thinking.
+          if (turn.status === 'running' && (turn.source === 'ai' || index !== validTurns.length - 1 || !turn.fullAnswer)) {
+            if (turn.source !== 'ai') recoveryWarning = true
+            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt, trace: stopTrace(turn.trace) }
           }
           return turn
         })
@@ -82,6 +117,12 @@ function sourceReply(s: ClientSession, question: string): { answer: string; sugg
   if (!s.risk) return { answer: '1회 거래의 손실 한도를 선택하세요. 이 선에서 자동 손절합니다.', suggestions: ['−2%', '−3% (표준)', '−5%'], phase: 'risk' }
   if (!s.takeProfit) return { answer: '익절 기준이 없습니다. 수익 확정 지점이 없으면 낙폭이 커질 수 있습니다.', suggestions: ['익절 +8% 설정', '익절 없이 진행'], phase: 'take' }
   return { answer: '조건을 정리했습니다. 연구 계획을 생성했습니다, 검토 후 연구를 시작하세요.', suggestions: [], phase: 'plan' }
+}
+
+// Auto titles follow confirmed conditions; user-renamed titles stay untouched.
+function autoTitle(s: ClientSession): string {
+  if (s.renamed) return s.title
+  return s.pair && s.mode ? `${s.pair.startsWith('ETH') ? 'ETH' : 'BTC'} ${s.mode === 'trend' ? 'Trend' : 'Pullback'} Strategy` : (s.idea.slice(0, 40) || s.title)
 }
 
 export function createClientExperienceStore() {
@@ -146,21 +187,68 @@ export function createClientExperienceStore() {
     paper: (id: string, paper: boolean) => { if (Boolean(snapshot.sessions.find(s => s.id === id)?.paper) !== paper) update(id, s => ({ ...s, paper }), true) },
     workspace: (id: string, workspace: ClientSession['workspace']) => update(id, s => ({ ...s, workspace }), true),
     tradingReady: (id: string) => update(id, s => ({ ...s, tradingReady: true }), true),
-    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now() } : t) }), true),
-    send: (question: string) => {
+    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now(), trace: stopTrace(t.trace) } : t) }), true),
+    send: (question: string, options?: { ai?: boolean }): { sessionId: string; turnId: string; messages: TethAiMessage[] } | null => {
       const text = question.trim()
-      if (!text) return
+      if (!text) return null
       let session = snapshot.sessions.find(s => s.id === snapshot.currentId)
-      if (session?.turns.some(t => t.status === 'running')) return
+      if (session?.turns.some(t => t.status === 'running')) return null
       if (!session) {
         session = { id: crypto.randomUUID(), title: '새 전략', renamed: false, idea: text, draft: '', pair: '', mode: '', timeframe: '', risk: '', takeProfit: '', researchStatus: '초안', phase: 'mode', turns: [], updatedAt: Date.now(), workspace: 'conversation', tradingReady: false }
         snapshot = { ...snapshot, sessions: [session, ...snapshot.sessions], currentId: session.id, homeDraft: '' }
       }
       const next = { ...session, draft: '', updatedAt: Date.now() }
+      if (options?.ai) {
+        // 실 AI 턴: 스크립트 응답·퍼널 단계 진행 없이 빈 턴을 만들고, 요청 재료를 돌려준다.
+        const turnId = crypto.randomUUID()
+        next.turns = [...session.turns, { id: turnId, question: text, answer: '', fullAnswer: '', suggestions: [], phase: session.phase, status: 'running', startedAt: Date.now(), source: 'ai', thinking: '', trace: [] }]
+        update(next.id, () => next, true)
+        const messages: TethAiMessage[] = []
+        for (const turn of session.turns) {
+          messages.push({ role: 'user', content: turn.question })
+          // 저장된 answer 는 파서를 거친 태그 제거 본문뿐이라 재전송해도 안전하다.
+          if (turn.answer) messages.push({ role: 'assistant', content: turn.answer })
+        }
+        messages.push({ role: 'user', content: text })
+        return { sessionId: next.id, turnId, messages }
+      }
       const reply = sourceReply(next, text)
       next.phase = reply.phase
       next.turns = [...session.turns, { id: crypto.randomUUID(), question: text, answer: '', fullAnswer: reply.answer, suggestions: reply.suggestions, phase: reply.phase, status: 'running', startedAt: Date.now() }]
       update(next.id, () => next, true)
+      return null
+    },
+    // 아래 세 메서드는 실 AI 턴 전용이다. running 가드가 중지/삭제 뒤 늦게 도착한
+    // 스트림 이벤트를 무해화한다 — 이벤트 순서를 신뢰하지 않는다.
+    patchAiTurn: (sessionId: string, turnId: string, patch: Partial<Pick<ClientTurn, 'thinking' | 'answer' | 'trace' | 'prob' | 'actions' | 'suggestions'>>) => {
+      const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)
+      if (!turn || turn.source !== 'ai' || turn.status !== 'running') return
+      update(sessionId, s => ({ ...s, updatedAt: Date.now(), turns: s.turns.map(t => t.id === turnId ? { ...t, ...patch } : t) }))
+    },
+    finishAiTurn: (sessionId: string, turnId: string) => {
+      const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)
+      if (!turn || turn.source !== 'ai' || turn.status !== 'running') return
+      update(sessionId, s => ({
+        ...s, title: autoTitle(s), updatedAt: Date.now(),
+        turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'done' as const, finishedAt: Date.now(), fullAnswer: t.answer, trace: t.trace?.map(step => step.status === 'running' ? { ...step, status: 'done' as const } : step) } : t),
+      }), true)
+    },
+    failAiTurn: (sessionId: string, turnId: string, failMode: 'fallback' | 'stop') => {
+      const session = snapshot.sessions.find(s => s.id === sessionId)
+      const turn = session?.turns.find(t => t.id === turnId)
+      if (!session || !turn || turn.source !== 'ai' || turn.status !== 'running') return
+      if (failMode === 'stop') {
+        update(sessionId, s => ({ ...s, turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'stopped' as const, finishedAt: Date.now(), trace: stopTrace(t.trace) } : t) }), true)
+        return
+      }
+      // 프록시 미연결/실패: 같은 질문을 스크립트 응답으로 대체하고 tick 리빌에 넘긴다.
+      const next = { ...session, updatedAt: Date.now() }
+      const reply = sourceReply(next, turn.question)
+      next.phase = reply.phase
+      next.turns = session.turns.map(t => t.id === turnId
+        ? { id: t.id, question: t.question, answer: '', fullAnswer: reply.answer, suggestions: reply.suggestions, phase: reply.phase, status: 'running' as const, startedAt: Date.now() }
+        : t)
+      update(sessionId, () => next, true)
     },
     tick: (now: number) => {
       let changed = false
@@ -173,15 +261,15 @@ export function createClientExperienceStore() {
           if (research.getSnapshot().status === 'completed') { s = { ...s, researchStatus: '검토 필요' }; changed = true; settled = true }
         }
         const turn = s.turns.at(-1)
-        if (!turn || turn.status !== 'running') return s
+        // 실 AI 턴은 스트림이 답을 채운다 — 산술 리빌이 델타를 덮어쓰지 않게 건너뛴다.
+        if (!turn || turn.status !== 'running' || turn.source === 'ai') return s
         const length = Math.max(0, Math.floor((now - turn.startedAt - 1800) / 26))
         const answer = turn.fullAnswer.slice(0, length)
         const done = answer === turn.fullAnswer
         if (answer === turn.answer && !done) return s
         changed = true
         settled ||= done
-        // Auto titles follow confirmed conditions; user-renamed titles stay untouched.
-        const title = !s.renamed && done ? (s.pair && s.mode ? `${s.pair.startsWith('ETH') ? 'ETH' : 'BTC'} ${s.mode === 'trend' ? 'Trend' : 'Pullback'} Strategy` : s.idea.slice(0, 40)) : s.title
+        const title = done ? autoTitle(s) : s.title
         return { ...s, title, turns: s.turns.map(t => t.id === turn.id ? { ...t, answer, status: done ? 'done' as const : 'running' as const, finishedAt: done ? t.startedAt + 1800 + t.fullAnswer.length * 26 : undefined } : t) }
       })
       // Terminal transitions are durable immediately; only streaming is batched.
