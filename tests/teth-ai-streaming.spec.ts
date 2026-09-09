@@ -67,7 +67,7 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
   await expect(workCards).toHaveCount(2)
   await expect(workCards.first()).toHaveClass(/fin/)
   await expect(workCards.first().locator('.twk-sum')).toContainText('주봉 추세 구조 검토, 일봉 조정 구간 점검')
-  await expect(workCards.first().locator('.twk-model-tail')).toHaveText('— gemini-agy-flash')
+  await expect(workCards.first().locator('.twk-model-tail')).toHaveText('gemini-agy-flash')
   await workCards.first().locator('.twk-head').click()
   await expect(workCards.first().locator('.twk-items li', { hasText: '일봉 조정 구간 점검' })).toBeVisible()
   // 상단 활동 패널은 thinking 전용으로 축소
@@ -77,8 +77,9 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
   await page.locator('.g-act2 .arh', { hasText: 'TETH의 생각' }).click()
   await expect(page.locator('.g-act2 .ad')).toContainText('주봉과 일봉의 관계를 먼저 확인한다.')
   await expect(page.locator('.teth-prob')).toHaveAttribute('aria-label', '상승 확률 62%, 하락 확률 38%')
-  await expect(page.locator('.g-qchip', { hasText: '분할은 어떻게 나눠?' })).toBeVisible()
-  await expect(page.locator('.client-next-actions button', { hasText: '이 전략 검증하기' })).toBeVisible()
+  // 후속 질문·액션은 풀폭 로우 디자인
+  await expect(page.locator('.teth-followup', { hasText: '분할은 어떻게 나눠?' })).toBeVisible()
+  await expect(page.locator('.teth-followup.teth-action', { hasText: '이 전략 검증하기' })).toBeVisible()
   // 가로 오버플로 없음 (모바일 프로젝트 포함 양 프로젝트에서 확인)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
   const persisted = await page.evaluate(() => sessionStorage.getItem('teth-client-experience') ?? '')
@@ -159,8 +160,8 @@ test('무효 prob 과 깨진 chips 는 조용히 제외되고 렌더는 계속, 
   await expect(page.locator('.g-amsg')).toContainText('결론만 유효합니다.')
   await expect(page.locator('.client-answer-actions')).toBeVisible()
   await expect(page.locator('.teth-prob')).toHaveCount(0)
-  await expect(page.locator('.client-next-actions button')).toHaveCount(1)
-  await expect(page.locator('.client-next-actions button')).toContainText('전략 맡기기')
+  await expect(page.locator('.teth-followup.teth-action')).toHaveCount(1)
+  await expect(page.locator('.teth-followup.teth-action')).toContainText('전략 맡기기')
   expect(errors).toEqual([])
 })
 
@@ -190,6 +191,77 @@ test('사고 패널 tool 활동: 번역·집계되고 쿼리 원문·URL·내부
   expect(panelText).not.toContain('bitcoin price')
   expect(panelText).not.toContain('https://')
   expect(panelText).not.toContain('code_execution')
+  expect(errors).toEqual([])
+})
+
+test('<ask> 질문 폼: 선택→자동 이동→제출 시 답변이 다음 메시지로 전송된다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  const askBody = sse(
+    { text: '<say>맞춤 전략을 위해 몇 가지만 확인할게요.</say><ask>{"questions":[{"title":"투자 가능한 시드 규모는 어느 정도인가요?","hint":"분할 매수 단위가 달라집니다","options":[{"label":"500만원 이하","desc":"소액"},{"label":"500만~3천만원","desc":"중간 시드"}]},{"title":"투자 기간은 어느 정도로 보세요?","options":[{"label":"단기 스윙"},{"label":"장기 보유"}]}]}</ask>' },
+    { done: true },
+  )
+  const followupBody = sse({ text: '<say>답변 기준으로 정리했습니다.</say>' }, { done: true })
+  let mainCalls = 0
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    mainCalls++
+    await route.fulfill({ status: 200, headers: sseHeaders, body: mainCalls === 1 ? askBody : followupBody })
+  })
+  await ask(page, '반감기 사이클 내 시드에 맞춰서 알려줘')
+  await expect(page.locator('.tak-banner')).toContainText('질문 2개에 답변하세요')
+  await expect(page.locator('.tak-title')).toContainText('시드 규모')
+  await page.locator('.tak-options > button', { hasText: '500만원 이하' }).click()
+  await expect(page.locator('.tak-title')).toContainText('투자 기간')
+  await page.locator('.tak-options > button', { hasText: '단기 스윙' }).click()
+  await page.locator('.tak-submit').click()
+  await expect(page.locator('.g-umsg').last()).toContainText('500만원 이하')
+  await expect(page.locator('.g-amsg', { hasText: '답변 기준으로 정리했습니다' })).toBeVisible()
+  await expect(page.locator('.teth-ask.answered .tak-done')).toContainText('답변 완료')
+  expect(mainCalls).toBe(2)
+  expect(errors).toEqual([])
+})
+
+test('소스 읽기: 검색 결과·페이지 열기가 도메인 행으로 렌더되고 전체 URL 은 새지 않는다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  const body = sse(
+    { tool: { name: 'web_search', q: 'bitcoin support levels' } },
+    { sres: { n: 2, results: [{ t: 'Bitcoin Four Year Cycle', u: 'https://www.galaxy.com/insights/research/bitcoin-four-year' }, { t: '사이클 반복 차트', u: 'https://charts.bitbo.io/cycle-repeat/' }] } },
+    { tool: { name: 'web_fetch', q: 'https://www.galaxy.com/insights/research/bitcoin-four-year' } },
+    { fres: { u: 'https://www.galaxy.com/insights/research/bitcoin-four-year' } },
+    { text: '<say>확인 결과를 정리했습니다.</say>' },
+    { done: true },
+  )
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    await route.fulfill({ status: 200, headers: sseHeaders, body })
+  })
+  await ask(page, '비트코인 지지선 알려줘')
+  await expect(page.locator('.g-amsg', { hasText: '확인 결과를 정리했습니다' })).toBeVisible()
+  const card = page.locator('.teth-work').first()
+  await card.locator('.twk-head').click()
+  await expect(card.locator('.twk-sources li', { hasText: 'Bitcoin Four Year Cycle' })).toBeVisible()
+  await expect(card.locator('.twk-src-domain', { hasText: 'galaxy.com' }).first()).toBeVisible()
+  const cardText = await card.textContent() ?? ''
+  expect(cardText).not.toContain('https://')
+  expect(cardText).not.toContain('/insights/')
+  expect(errors).toEqual([])
+})
+
+test('say 본문 마크다운: 표·굵게·리스트·인용이 렌더된다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  const body = sse(
+    { text: '<say>정리해드릴게요.\n\n| 항목 | 값 |\n|---|---|\n| 지지선 | **$2,438** |\n| 저항선 | $2,546 |\n\n- 첫째 규칙\n- 둘째 규칙\n\n> 본 내용은 정보 제공 목적입니다.</say>' },
+    { done: true },
+  )
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    await route.fulfill({ status: 200, headers: sseHeaders, body })
+  })
+  await ask(page, '표로 정리해줘')
+  await expect(page.locator('.teth-rich th', { hasText: '항목' })).toBeVisible()
+  await expect(page.locator('.teth-rich td strong', { hasText: '$2,438' })).toBeVisible()
+  await expect(page.locator('.teth-rich li', { hasText: '첫째 규칙' })).toBeVisible()
+  await expect(page.locator('.teth-rich blockquote')).toContainText('정보 제공 목적')
   expect(errors).toEqual([])
 })
 

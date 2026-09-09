@@ -19,6 +19,7 @@ export type TethParseEvent =
   | { kind: 'work-close' }
   | { kind: 'prob-raw'; up: string; down: string }
   | { kind: 'chips-raw'; raw: string }
+  | { kind: 'ask-raw'; raw: string }
   | { kind: 'drop'; reason: string }
 
 export type TethStreamParser = {
@@ -26,14 +27,14 @@ export type TethStreamParser = {
   finish(): TethParseEvent[]
 }
 
-const FIXED_TAGS = ['<say>', '</say>', '</work>', '<item>', '</item>', '<chips>', '</chips>'] as const
+const FIXED_TAGS = ['<say>', '</say>', '</work>', '<item>', '</item>', '<chips>', '</chips>', '<ask>', '</ask>'] as const
 const ATTR_HEADS = ['<work', '<prob'] as const
-const CLOSE_CHIPS = '</chips>'
 const ATTR_MAX = 192   // 속성부 '>' 탐색 상한 (버그 클래스 ①)
 const ITEM_MAX = 200   // item 라벨 상한 (버그 클래스 ②)
-const CHIPS_MAX = 8192
+const RAW_MAX = 8192   // chips/ask JSON 본문 상한 (버그 클래스 ②)
 
-type Mode = 'idle' | 'say' | 'work' | 'item' | 'chips'
+type Mode = 'idle' | 'say' | 'work' | 'item' | 'chips' | 'ask'
+const RAW_MODES = { chips: { close: '</chips>', event: 'chips-raw', unterminated: 'unterminated-chips', overflow: 'chips-too-large' }, ask: { close: '</ask>', event: 'ask-raw', unterminated: 'unterminated-ask', overflow: 'ask-too-large' } } as const
 
 type TagMatch =
   | { kind: 'fixed'; tag: (typeof FIXED_TAGS)[number]; length: number }
@@ -75,8 +76,8 @@ export function createTethStreamParser(): TethStreamParser {
   let itemLabel = ''
   let itemOverflow = false
   let workStray = ''         // work 안·item 밖의 떠도는 텍스트 → 줄 단위로 item 승격
-  let chipsRaw = ''
-  let chipsOverflow = false
+  let rawBuffer = ''         // chips/ask JSON 본문 축적 (RAW_MAX 상한)
+  let rawOverflow = false
 
   function openSay(events: TethParseEvent[], implicit: boolean) {
     if (sayOpen) return
@@ -199,26 +200,28 @@ export function createTethStreamParser(): TethStreamParser {
         if (mode === 'work') closeWork(events)
         break
       case '<chips>':
+      case '<ask>':
         if (mode === 'item') { commitItem(events); closeWork(events) }
         else if (mode === 'work') closeWork(events)
         closeSay(events)
-        mode = 'chips'
-        chipsRaw = ''
-        chipsOverflow = false
+        mode = match.tag === '<chips>' ? 'chips' : 'ask'
+        rawBuffer = ''
+        rawOverflow = false
         break
       case '</chips>':
-        break // chips 모드 밖의 잔여 닫는 태그는 무시
+      case '</ask>':
+        break // raw 모드 밖의 잔여 닫는 태그는 무시
     }
   }
 
-  function appendChips(events: TethParseEvent[], text: string) {
-    if (chipsOverflow) return
-    if (chipsRaw.length + text.length > CHIPS_MAX) {
-      chipsOverflow = true
-      events.push({ kind: 'drop', reason: 'chips-too-large' })
+  function appendRaw(events: TethParseEvent[], text: string, overflowReason: string) {
+    if (rawOverflow) return
+    if (rawBuffer.length + text.length > RAW_MAX) {
+      rawOverflow = true
+      events.push({ kind: 'drop', reason: overflowReason })
       return
     }
-    chipsRaw += text
+    rawBuffer += text
   }
 
   function process(chunk: string): TethParseEvent[] {
@@ -227,22 +230,23 @@ export function createTethStreamParser(): TethStreamParser {
     carry = ''
     let i = 0
     while (i < work.length) {
-      if (mode === 'chips') {
-        // chips 본문에서는 닫는 태그만 찾는다 — JSON 내부 '<' 를 태그로 오인하지 않는다.
-        const close = work.indexOf(CLOSE_CHIPS, i)
+      if (mode === 'chips' || mode === 'ask') {
+        // raw(JSON) 본문에서는 닫는 태그만 찾는다 — 내부 '<' 를 태그로 오인하지 않는다.
+        const spec = RAW_MODES[mode]
+        const close = work.indexOf(spec.close, i)
         if (close !== -1) {
-          appendChips(events, work.slice(i, close))
-          if (!chipsOverflow) events.push({ kind: 'chips-raw', raw: chipsRaw })
-          chipsRaw = ''
+          appendRaw(events, work.slice(i, close), spec.overflow)
+          if (!rawOverflow) events.push({ kind: spec.event, raw: rawBuffer } as TethParseEvent)
+          rawBuffer = ''
           mode = 'idle'
-          i = close + CLOSE_CHIPS.length
+          i = close + spec.close.length
           continue
         }
         let keep = 0
-        for (let k = Math.min(CLOSE_CHIPS.length - 1, work.length - i); k > 0; k--) {
-          if (CLOSE_CHIPS.startsWith(work.slice(work.length - k))) { keep = k; break }
+        for (let k = Math.min(spec.close.length - 1, work.length - i); k > 0; k--) {
+          if (spec.close.startsWith(work.slice(work.length - k))) { keep = k; break }
         }
-        appendChips(events, work.slice(i, work.length - keep))
+        appendRaw(events, work.slice(i, work.length - keep), spec.overflow)
         carry = keep ? work.slice(work.length - keep) : ''
         return events
       }
@@ -265,9 +269,9 @@ export function createTethStreamParser(): TethStreamParser {
     push: (chunk: string) => process(chunk),
     finish: () => {
       const events: TethParseEvent[] = []
-      if (mode === 'chips') {
-        events.push({ kind: 'drop', reason: 'unterminated-chips' })
-        chipsRaw = ''
+      if (mode === 'chips' || mode === 'ask') {
+        events.push({ kind: 'drop', reason: RAW_MODES[mode].unterminated })
+        rawBuffer = ''
         mode = 'idle'
       } else if (carry) {
         const leftover = carry

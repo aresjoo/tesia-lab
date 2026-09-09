@@ -11,11 +11,13 @@ export type WorkBlock = {
   role: string
   items: { id: string; label: string; status: AiFlowStatus }[]
   status: AiFlowStatus
+  /** 조사한 소스 행 (제목+도메인만 — 전체 URL·쿼리 비노출 원칙). */
+  sources?: { id: string; title: string; domain: string; status: 'reading' | 'done' }[]
 }
 
 /** 어댑터 1: say/work 태그 스트림(flow 세그먼트) → WorkBlock. (로드맵 1·2단계) */
 export function workBlockFromFlowSegment(segment: Extract<TethFlowSegment, { kind: 'work' }>): WorkBlock {
-  return { id: segment.id, model: segment.model, role: segment.role, items: segment.items, status: segment.status }
+  return { id: segment.id, model: segment.model, role: segment.role, items: segment.items, status: segment.status, ...(segment.sources ? { sources: segment.sources } : {}) }
 }
 
 /** 어댑터 2 (자리만, 미구현): 실제 tool use 이벤트 → WorkBlock. (로드맵 3단계)

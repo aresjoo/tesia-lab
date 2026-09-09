@@ -7,7 +7,7 @@
  * 2단계=실 멀티모델 라우팅과 model 라벨 1:1 / 3단계=tool use 연동으로 tool 이벤트가
  * WorkBlock 어댑터를 통해 같은 flow 채널에 합류(수량·데이터 영수증 해금). */
 import { createTethStreamParser } from './teth-stream-parser'
-import { parseChipsJson, validateProb } from './teth-chips-schema'
+import { parseAskJson, parseChipsJson, validateProb } from './teth-chips-schema'
 import { validateWorkModel } from './teth-model-routing'
 import { aggregateToolActivity, describeToolEvent } from './teth-tool-display'
 import { TETH_ACK_PROMPT } from './prompts/teth-system'
@@ -69,6 +69,7 @@ export function startAiTurn(args: {
   let segSeq = 0
   let probSeen = false
   let chipsDone = false
+  let askSeen = false
   let sawError = false
   let finished = false
   let watchdogFired = false
@@ -87,8 +88,21 @@ export function startAiTurn(args: {
   const pushSeg = (segment: TethFlowSegment) => { flow = [...flow, segment] }
   const settleAll = (to: 'done') => {
     flow = flow.map(s => s.kind === 'work' && s.status === 'running'
-      ? { ...s, status: to, items: s.items.map(item => item.status === 'running' ? { ...item, status: to } : item) }
+      ? { ...s, status: to, items: s.items.map(item => item.status === 'running' ? { ...item, status: to } : item), ...(s.sources ? { sources: s.sources.map(source => source.status === 'reading' ? { ...source, status: 'done' as const } : source) } : {}) }
       : s)
+  }
+  /** 소스 행을 붙일 work 세그먼트 — 진행 중 work 가 없으면 '자료 조사' work 를 암시 생성. */
+  const ensureSourceWork = (): Extract<TethFlowSegment, { kind: 'work' }> => {
+    const work = currentWork()
+    if (work && work.status === 'running') return work
+    const created: Extract<TethFlowSegment, { kind: 'work' }> = { kind: 'work', id: nextId('work'), model: null, role: '자료 조사', items: [], status: 'running' }
+    pushSeg(created)
+    return created
+  }
+  const patchSources = (mutate: (sources: { id: string; title: string; domain: string; status: 'reading' | 'done' }[]) => { id: string; title: string; domain: string; status: 'reading' | 'done' }[]) => {
+    const work = ensureSourceWork()
+    replaceLast({ ...work, sources: mutate([...(work.sources ?? [])]) })
+    queueFlow()
   }
 
   // ── 스로틀 배치 패치 (버그 클래스 ③: 델타당 전체 커밋 금지) ──
@@ -176,6 +190,15 @@ export function startAiTurn(args: {
           queuePatch({ suggestions: result.chips.suggest, ...(result.chips.actions.length ? { actions: result.chips.actions } : {}) })
           break
         }
+        case 'ask-raw': {
+          if (askSeen) { console.warn('[teth-ai] 중복 <ask> 무시'); break }
+          const result = parseAskJson(event.raw)
+          if (result.kind === 'invalid') { console.warn('[teth-ai] 무효 <ask> 제외:', result.reason, event.raw.slice(0, 200)); break }
+          askSeen = true
+          pushSeg({ kind: 'ask', id: nextId('ask'), questions: result.questions })
+          queueFlow()
+          break
+        }
         case 'drop':
           console.warn('[teth-ai] 블록 제외:', event.reason)
           break
@@ -249,6 +272,24 @@ export function startAiTurn(args: {
             //  3단계에서 WorkBlock 어댑터로 승격 예정.)
             toolLabels = [...toolLabels, describeToolEvent(event)]
             queuePatch({ trace: aggregateToolActivity(toolLabels, true) })
+            if (event.name === 'web_fetch') {
+              const domain = (() => { try { return new URL(event.query).hostname.replace(/^www\./, '') } catch { return '' } })()
+              if (domain) patchSources(sources => [...sources, { id: nextId('src'), title: '페이지 확인', domain, status: 'reading' }])
+            }
+          }
+          else if (event.kind === 'sources') {
+            // 검색이 확보한 소스 목록 — work 카드에 행으로 표시 (제목+도메인만).
+            patchSources(sources => [...sources, ...event.results.slice(0, 6).map(result => ({ id: nextId('src'), title: result.title || result.domain, domain: result.domain, status: 'done' as const }))])
+          }
+          else if (event.kind === 'source-read') {
+            patchSources(sources => {
+              for (let index = sources.length - 1; index >= 0; index--) {
+                if (sources[index].domain === event.domain && sources[index].status === 'reading') {
+                  return sources.map((source, sourceIndex) => sourceIndex === index ? { ...source, status: 'done' as const } : source)
+                }
+              }
+              return sources
+            })
           }
           else if (event.kind === 'error') sawError = true
         },

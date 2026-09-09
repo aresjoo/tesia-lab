@@ -6,7 +6,7 @@ import { forgetMockResearchPreview, getMockResearchPreview } from './mock-resear
 import { parsePercentageEdit } from './client-percentage-input'
 import { forgetResearchDocumentMemory } from './client-research-cache'
 import { forgetDelegationUiMemory } from './client-delegation-fixtures'
-import { isTethActionChip, validateProb, type TethActionChip } from './teth-chips-schema'
+import { isTethActionChip, parseAskJson, validateProb, type TethActionChip, type TethAskQuestion } from './teth-chips-schema'
 import { validateWorkModel } from './teth-model-routing'
 import type { TethAiMessage } from './teth-ai-client'
 
@@ -19,8 +19,9 @@ export type AiFlowStatus = 'running' | 'done' | 'stopped'
  * 향후 실제 tool use 결과의 그릇이다(어댑터 교체 전제 — PR2 WorkBlock 참조). */
 export type TethFlowSegment =
   | { kind: 'say'; id: string; text: string; ack?: true }
-  | { kind: 'work'; id: string; model: string | null; role: string; items: { id: string; label: string; status: AiFlowStatus }[]; status: AiFlowStatus }
+  | { kind: 'work'; id: string; model: string | null; role: string; items: { id: string; label: string; status: AiFlowStatus }[]; status: AiFlowStatus; sources?: { id: string; title: string; domain: string; status: 'reading' | 'done' }[] }
   | { kind: 'prob'; id: string; up: number; down: number }
+  | { kind: 'ask'; id: string; questions: TethAskQuestion[]; answers?: string[] }
 export type ClientTurn = {
   id: string; question: string; answer: string; fullAnswer: string
   startedAt: number; finishedAt?: number; status: 'running' | 'done' | 'stopped'
@@ -60,7 +61,7 @@ const stopTrace = (trace?: AiTraceStep[]) => trace?.map(step => step.status === 
 /** flow 의 running 상태를 일괄 정착시킨다 (완료=done, 중지=stopped). */
 const settleFlow = (flow: TethFlowSegment[] | undefined, to: 'done' | 'stopped') => flow?.map(segment =>
   segment.kind === 'work'
-    ? { ...segment, status: segment.status === 'running' ? to : segment.status, items: segment.items.map(item => item.status === 'running' ? { ...item, status: to } : item) }
+    ? { ...segment, status: segment.status === 'running' ? to : segment.status, items: segment.items.map(item => item.status === 'running' ? { ...item, status: to } : item), ...(segment.sources ? { sources: segment.sources.map(source => source.status === 'reading' ? { ...source, status: 'done' as const } : source) } : {}) }
     : segment)
 
 function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
@@ -74,6 +75,10 @@ function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
     } else if (segment.kind === 'prob') {
       const prob = validateProb(segment.up, segment.down)
       if (prob) clean.push({ kind: 'prob', id: segment.id, ...prob })
+    } else if (segment.kind === 'ask') {
+      // 질문 폼은 스키마 재검증으로 복원한다 — 변조 스냅샷 방어.
+      const revalidated = parseAskJson(JSON.stringify({ questions: segment.questions }))
+      if (revalidated.kind === 'ok') clean.push({ kind: 'ask', id: segment.id, questions: revalidated.questions, ...(Array.isArray(segment.answers) && segment.answers.every((a: unknown) => typeof a === 'string') ? { answers: segment.answers.map((a: string) => a.slice(0, 200)) } : {}) })
     } else if (segment.kind === 'work' && typeof segment.role === 'string' && Array.isArray(segment.items) && statuses.includes(segment.status)) {
       clean.push({
         kind: 'work', id: segment.id, role: segment.role.slice(0, 40), status: segment.status,
@@ -82,6 +87,12 @@ function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
           const step = item as { id?: unknown; label?: unknown; status?: unknown }
           return Boolean(step) && typeof step.id === 'string' && typeof step.label === 'string' && statuses.includes(step.status as string)
         }),
+        ...(Array.isArray(segment.sources) ? {
+          sources: segment.sources.filter((entry: unknown): entry is { id: string; title: string; domain: string; status: 'reading' | 'done' } => {
+            const source = entry as { id?: unknown; title?: unknown; domain?: unknown; status?: unknown }
+            return Boolean(source) && typeof source.id === 'string' && typeof source.title === 'string' && typeof source.domain === 'string' && (source.status === 'reading' || source.status === 'done')
+          }),
+        } : {}),
       })
     }
   }
@@ -275,6 +286,15 @@ export function createClientExperienceStore() {
       const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)
       if (!turn || turn.source !== 'ai' || turn.status !== 'running') return
       update(sessionId, s => ({ ...s, updatedAt: Date.now(), turns: s.turns.map(t => t.id === turnId ? { ...t, ...patch } : t) }))
+    },
+    // 질문 폼 답변 기록 — 턴 완료 후의 상호작용이므로 running 가드를 쓰지 않는다.
+    answerAsk: (sessionId: string, turnId: string, segmentId: string, answers: string[]) => {
+      const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)
+      if (!turn?.flow?.some(segment => segment.kind === 'ask' && segment.id === segmentId && !segment.answers)) return
+      update(sessionId, s => ({
+        ...s,
+        turns: s.turns.map(t => t.id === turnId ? { ...t, flow: t.flow?.map(segment => segment.kind === 'ask' && segment.id === segmentId ? { ...segment, answers: answers.map(a => a.slice(0, 200)) } : segment) } : t),
+      }), true)
     },
     finishAiTurn: (sessionId: string, turnId: string) => {
       const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)

@@ -45,6 +45,43 @@ export function parseChipsJson(raw: string, context: { allowTwoActions: boolean 
   return { kind: 'ok', chips: { suggest, actions } }
 }
 
+// ── <ask> 질문 폼 검증 — 프롬프트를 신뢰하지 않는다 ──
+
+export type TethAskOption = { label: string; desc?: string }
+export type TethAskQuestion = { title: string; hint?: string; options: TethAskOption[]; allowCustom: boolean }
+
+/** ask JSON 검증: 질문 1~4개, 각 선택지 2~5개. 무효 질문은 건너뛰고 전부 무효면 invalid. */
+export function parseAskJson(raw: string): { kind: 'ok'; questions: TethAskQuestion[] } | { kind: 'invalid'; reason: string } {
+  let parsed: unknown
+  try { parsed = JSON.parse(raw) } catch { return { kind: 'invalid', reason: 'broken-json' } }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { kind: 'invalid', reason: 'not-an-object' }
+  const body = parsed as { questions?: unknown }
+  if (!Array.isArray(body.questions)) return { kind: 'invalid', reason: 'no-questions' }
+  const questions: TethAskQuestion[] = []
+  for (const item of body.questions) {
+    if (!item || typeof item !== 'object') continue
+    const question = item as { title?: unknown; hint?: unknown; options?: unknown; allowCustom?: unknown }
+    if (typeof question.title !== 'string' || !question.title.trim() || !Array.isArray(question.options)) continue
+    const options: TethAskOption[] = []
+    for (const opt of question.options) {
+      const option = opt as { label?: unknown; desc?: unknown }
+      if (!option || typeof option.label !== 'string' || !option.label.trim()) continue
+      options.push({ label: option.label.trim().slice(0, 60), ...(typeof option.desc === 'string' && option.desc.trim() ? { desc: option.desc.trim().slice(0, 90) } : {}) })
+      if (options.length >= 5) break
+    }
+    if (options.length < 2) continue
+    questions.push({
+      title: question.title.trim().slice(0, 120),
+      ...(typeof question.hint === 'string' && question.hint.trim() ? { hint: question.hint.trim().slice(0, 160) } : {}),
+      options,
+      allowCustom: question.allowCustom !== false,
+    })
+    if (questions.length >= 4) break
+  }
+  if (!questions.length) return { kind: 'invalid', reason: 'no-valid-questions' }
+  return { kind: 'ok', questions }
+}
+
 /** up+down=100, 각 0~100 의 유한수일 때만 확률로 인정한다. 아니면 null. */
 export function validateProb(up: unknown, down: unknown): { up: number; down: number } | null {
   const parse = (value: unknown): number | null => {

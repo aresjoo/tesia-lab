@@ -32,20 +32,30 @@ export function TethWorkBlock({ block, demoMode }: { block: WorkBlock; demoMode:
         </>
         : <>
           <span className="twk-sum">{summary}</span>
-          {model && <span className="twk-model-tail">— {model}</span>}
+          {model && <span className="twk-model-tail">{model}</span>}
         </>}
       <ChevronRight size={12} className="twk-chev" aria-hidden="true" />
     </button>
     {running && model && <p className="twk-route">이 작업에는 {model}를 사용합니다</p>}
     <div className="twk-body" aria-hidden={!expanded}>
-      <ol id={id} className="twk-items">
-        {block.items.map(item => <li key={item.id} className={item.status}>
-          <span className="twk-ic" aria-hidden="true">
-            {item.status === 'running' ? <span className="g-tdots"><i /><i /><i /></span> : item.status === 'stopped' ? <Square size={7} fill="currentColor" /> : <Check size={10} />}
-          </span>
-          <span className="twk-label">{item.label}</span>
-        </li>)}
-      </ol>
+      <div className="twk-inner">
+        <ol id={id} className="twk-items">
+          {block.items.map(item => <li key={item.id} className={item.status}>
+            <span className="twk-ic" aria-hidden="true">
+              {item.status === 'running' ? <span className="g-tdots"><i /><i /><i /></span> : item.status === 'stopped' ? <Square size={7} fill="currentColor" /> : <Check size={10} />}
+            </span>
+            <span className="twk-label">{item.label}</span>
+          </li>)}
+        </ol>
+        {block.sources && block.sources.length > 0 && <ul className="twk-sources" aria-label={`읽은 소스 ${block.sources.length}개`}>
+          {block.sources.map(source => <li key={source.id} className={source.status}>
+            <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(source.domain)}&sz=32`} alt="" width={14} height={14} loading="lazy" />
+            <span className="twk-src-title">{source.title}</span>
+            <span className="twk-src-domain">{source.domain}</span>
+            <span className="twk-src-state">{source.status === 'reading' ? '읽는 중…' : <Check size={10} aria-label="읽기 완료" />}</span>
+          </li>)}
+        </ul>}
+      </div>
     </div>
   </section>
 }

@@ -3,6 +3,8 @@ import { createTethStreamParser, type TethParseEvent } from '../src/teth-stream-
 import { parseChipsJson, validateProb } from '../src/teth-chips-schema'
 import { validateWorkModel } from '../src/teth-model-routing'
 import { aggregateToolActivity, describeToolEvent } from '../src/teth-tool-display'
+import { parseAskJson } from '../src/teth-chips-schema'
+import { parseRichText, parseSpans } from '../src/teth-rich-text'
 
 // Node-only unit spec: no page fixture, one project is enough.
 test.skip(({ isMobile }) => isMobile, '브라우저 무관 단위 검증은 desktop 프로젝트에서만 1회 실행')
@@ -171,6 +173,44 @@ test('태그 사이 공백·개행은 say 로 새지 않는다', () => {
     { kind: 'work-close' },
     { kind: 'say', text: 'c' },
   ])
+})
+
+// ── <ask> 질문 폼 (파서 + 스키마) ──
+
+test('ask 블록은 raw JSON 으로 커밋되고 청크 분할·미종결을 견딘다', () => {
+  const json = '{"questions":[{"title":"시드?","options":[{"label":"a"},{"label":"b"}]}]}'
+  expect(run([`<say>확인할게요.</say><ask>${json}</as`, 'k>'])).toEqual([
+    { kind: 'say', text: '확인할게요.' },
+    { kind: 'ask-raw', raw: json },
+  ])
+  expect(run(['<ask>{"questions": ['])).toEqual([{ kind: 'drop', reason: 'unterminated-ask' }])
+})
+
+test('parseAskJson: 검증 통과분만 남기고 상한을 강제한다', () => {
+  const ok = parseAskJson('{"questions":[{"title":"시드 규모는?","hint":"h","options":[{"label":"500만원 이하","desc":"소액"},{"label":"그 이상"}],"allowCustom":false},{"title":"옵션 부족","options":[{"label":"하나뿐"}]}]}')
+  expect(ok.kind === 'ok' && ok.questions).toHaveLength(1)
+  expect(ok.kind === 'ok' && ok.questions[0].allowCustom).toBe(false)
+  expect(ok.kind === 'ok' && ok.questions[0].options[0]).toEqual({ label: '500만원 이하', desc: '소액' })
+  expect(parseAskJson('{"questions": broken').kind).toBe('invalid')
+  expect(parseAskJson('{"questions":[]}').kind).toBe('invalid')
+})
+
+// ── say 본문 미니 마크다운 파서 ──
+
+test('parseRichText: 표는 구분선이 있을 때만 확정되고 굵게·리스트·인용을 파싱한다', () => {
+  const blocks = parseRichText('정리:\n\n| 항목 | 값 |\n|---|---|\n| 지지선 | **$2,438** |\n\n- 규칙 하나\n1. 순서 하나\n\n> 주의 문구\n\n---')
+  expect(blocks.map(block => block.kind)).toEqual(['p', 'table', 'ul', 'ol', 'quote', 'hr'])
+  const table = blocks[1]
+  expect(table.kind === 'table' && table.header[0][0].text).toBe('항목')
+  expect(table.kind === 'table' && table.rows[0][1]).toEqual([{ text: '$2,438', bold: true }])
+})
+
+test('parseRichText: 구분선 없는 | 줄과 홀수 ** 는 평문으로 남는다', () => {
+  const blocks = parseRichText('| 가격 | 조건\n그리고 **미완성 굵게')
+  expect(blocks).toHaveLength(1)
+  expect(blocks[0].kind).toBe('p')
+  expect(parseSpans('**미완성')).toEqual([{ text: '**미완성' }])
+  expect(parseSpans('a **b** c')).toEqual([{ text: 'a ' }, { text: 'b', bold: true }, { text: ' c' }])
 })
 
 // ── WorkBlock 어댑터 (렌더러는 정규화 타입만 받는다) ──

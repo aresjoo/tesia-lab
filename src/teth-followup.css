@@ -1,0 +1,11 @@
+/* AI 턴 후속 질문·액션 칩 — 풀폭 로우 디자인 (구 정적 사이트 확정안과 동일 계열).
+ * mock 턴의 기존 .g-qchip 알약은 건드리지 않는다. */
+.teth-followups { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 2px }
+.teth-followup { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 12px 16px; border: 1px solid rgba(255, 255, 255, .10); border-radius: 12px; background: rgba(255, 255, 255, .035); color: inherit; font: inherit; font-size: 13px; cursor: pointer; transition: background .15s, border-color .15s }
+.teth-followup:hover { background: rgba(255, 255, 255, .07); border-color: rgba(255, 255, 255, .18) }
+.teth-followup > span:first-child { flex: 1; min-width: 0 }
+.teth-followup .tfu-sub { flex: none; color: #9aa0a6; font-size: 12px }
+.teth-followup .tfu-arrow { flex: none; color: #9aa0a6; transition: transform .15s }
+.teth-followup:hover .tfu-arrow { transform: translateX(2px) }
+.teth-followup.teth-action { border-color: rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .05); font-weight: 600 }
+@media (prefers-reduced-motion: reduce) { .teth-followup, .teth-followup .tfu-arrow { transition: none } }

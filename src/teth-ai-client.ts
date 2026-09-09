@@ -8,8 +8,17 @@ export type TethAiEvent =
   | { kind: 'text'; delta: string }
   | { kind: 'think'; delta: string }
   | { kind: 'tool'; name: string; query: string; purpose?: string }
+  /** 웹 검색이 확보한 소스 목록 (제목+도메인만 — 전체 URL 비노출 원칙) */
+  | { kind: 'sources'; results: { title: string; domain: string }[] }
+  /** 페이지 열기 완료 신호 (도메인만) */
+  | { kind: 'source-read'; domain: string }
   | { kind: 'done' }
   | { kind: 'error' }
+
+const toDomain = (value: unknown): string => {
+  if (typeof value !== 'string') return ''
+  try { return new URL(value).hostname.replace(/^www\./, '') } catch { return '' }
+}
 
 export class TethAiHttpError extends Error {
   constructor(readonly status: number) { super(`teth-ai proxy HTTP ${status}`) }
@@ -79,9 +88,20 @@ export async function streamTethChat(options: {
         ...(typeof tool.p === 'string' ? { purpose: tool.p } : {}),
       })
     }
+    else if (event.sres && typeof event.sres === 'object') {
+      const sres = event.sres as { results?: unknown }
+      const results = (Array.isArray(sres.results) ? sres.results : [])
+        .map(entry => { const row = entry as { t?: unknown; u?: unknown }; return { title: typeof row.t === 'string' ? row.t.slice(0, 90) : '', domain: toDomain(row.u) } })
+        .filter(row => row.domain)
+      if (results.length) options.onEvent({ kind: 'sources', results })
+    }
+    else if (event.fres && typeof event.fres === 'object') {
+      const domain = toDomain((event.fres as { u?: unknown }).u)
+      if (domain) options.onEvent({ kind: 'source-read', domain })
+    }
     else if (event.done === true) options.onEvent({ kind: 'done' })
     else if (event.error === true) options.onEvent({ kind: 'error' })
-    // {sres}/{fres}/{tok} 등은 아직 미소비 — 향후 같은 스텝 채널의 입력 후보다.
+    // {tok} 등 나머지는 미소비.
   }
   for (;;) {
     const { value, done } = await reader.read()

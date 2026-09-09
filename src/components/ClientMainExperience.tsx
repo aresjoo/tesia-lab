@@ -1,6 +1,6 @@
 import { Fragment, lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
-import { Check, Copy, MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
+import { ArrowRight, Check, Copy, MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
 import { ClientChrome, ClientLogo } from './ClientChrome'
 import { ClientComposer } from './ClientComposer'
 import { ClientConversation, ClientUserMessage } from './ClientConversation'
@@ -13,12 +13,15 @@ import { ClientResearchHub } from './ClientResearchHub'
 import { InternalLink } from './InternalLink'
 import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
 import { ConversationCosmos } from './ConversationCosmos'
+import { TethAskForm } from './TethAskForm'
 import { TethProbability } from './TethProbability'
+import { TethRichText } from './TethRichText'
 import { TethWorkBlock } from './TethWorkBlock'
 import { workBlockFromFlowSegment } from '../teth-work-block'
 import { resolveDemoMode } from '../teth-model-routing'
 import { clientCopy, useClientPreferences } from '../client-preferences'
 import { createClientExperienceStore, type ClientTurn } from '../client-experience-store'
+import '../teth-followup.css'
 import { resolveAiProxyOrigin } from '../teth-ai-client'
 import { abortAiTurns, startAiTurn } from '../teth-ai-controller'
 import { TETH_SYSTEM_PROMPT } from '../prompts/teth-system'
@@ -61,7 +64,7 @@ function AiAnswerBody({ turn }: { turn: ClientTurn }) {
 
 /* say/prob 는 본문 순서대로, work 는 인라인 WorkBlock 카드(릴레이 핸드오프)로 렌더한다.
  * 진행 중 work 가 접히면서 다음 say 가 이어지는 리듬이 데이터(flow 순서)에서 나온다. */
-function AiFlowBody({ turn }: { turn: ClientTurn }) {
+function AiFlowBody({ turn, onAsk }: { turn: ClientTurn; onAsk: (segmentId: string, answers: string[]) => void }) {
   const [demoMode] = useState(resolveDemoMode)
   const running = turn.status === 'running'
   const flow = turn.flow ?? []
@@ -70,25 +73,27 @@ function AiFlowBody({ turn }: { turn: ClientTurn }) {
     {flow.map(segment => {
       if (segment.kind === 'prob') return <div className="g-amsg" key={segment.id}><TethProbability up={segment.up} down={segment.down} /></div>
       if (segment.kind === 'work') return <TethWorkBlock key={segment.id} block={workBlockFromFlowSegment(segment)} demoMode={demoMode} />
+      if (segment.kind === 'ask') return <TethAskForm key={segment.id} questions={segment.questions} answers={segment.answers} onSubmit={answers => onAsk(segment.id, answers)} />
       const isLast = segment.id === lastSay?.id
       if (!segment.text.trim() && !(running && isLast)) return null
-      return <div className="g-amsg" key={segment.id}><p>{segment.text}{running && isLast ? <span className="client-stream-caret" aria-hidden="true" /> : null}</p></div>
+      return <div className="g-amsg" key={segment.id}><TethRichText text={segment.text} caret={running && isLast} /></div>
     })}
   </Fragment>
 }
 
-function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
+function AiConversationTurn({ turn, onEdit, onAsk }: { turn: ClientTurn; onEdit: (text: string) => void; onAsk: (segmentId: string, answers: string[]) => void }) {
   const running = turn.status === 'running'
   const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
   // flow 턴의 work 는 본문 인라인 WorkBlock 이 렌더한다. 상단 패널 = thinking +
   // 번역·집계된 tool 활동(turn.trace — tool 이 켜진 경우에만 채워진다).
   const workSteps = turn.trace ?? []
   const started = Boolean(turn.answer || workSteps.length || turn.flow?.length)
-  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(work item)는 뒤이은 스텝으로.
+  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로 — 첫 say 가 와도 접지 않고
+  // 턴이 끝날 때까지 running/펼침을 유지해 사고 과정이 답변 내내 보이게 한다.
   const thinkingStep = {
     id: 'thinking',
     title: running && !started ? '생각하는 중' : 'TETH의 생각',
-    status: running && !started ? 'running' as const : activityStatus === 'stopped' && !turn.answer ? 'stopped' as const : 'done' as const,
+    status: running ? 'running' as const : activityStatus === 'stopped' && !turn.answer ? 'stopped' as const : 'done' as const,
     detail: turn.thinking || undefined,
   }
   return <Fragment>
@@ -96,14 +101,14 @@ function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text:
     <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : '생각 완료'} status={activityStatus}
       source="service" startedAt={turn.startedAt} finishedAt={turn.finishedAt}
       steps={[thinkingStep, ...workSteps]} />
-    {turn.flow ? <AiFlowBody turn={turn} /> : (turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
+    {turn.flow ? <AiFlowBody turn={turn} onAsk={onAsk} /> : (turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
     {turn.status === 'done' && <AnswerActions text={turn.answer} />}
     {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
   </Fragment>
 }
 
-function ConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
-  if (turn.source === 'ai') return <AiConversationTurn turn={turn} onEdit={onEdit} />
+function ConversationTurn({ turn, onEdit, onAsk }: { turn: ClientTurn; onEdit: (text: string) => void; onAsk: (segmentId: string, answers: string[]) => void }) {
+  if (turn.source === 'ai') return <AiConversationTurn turn={turn} onEdit={onEdit} onAsk={onAsk} />
   const thinking = turn.status === 'running' && !turn.answer
   const status = thinking ? 'running' : turn.status === 'stopped' ? 'stopped' : 'done'
   return <Fragment>
@@ -278,16 +283,25 @@ export function ClientMainExperience() {
         inputLabel="TETH에게 물어보세요" sendLabel="메시지 보내기" titleLabel="대화 제목" initialTitle={session.title} onTitleChange={title => store.rename(session.id, title)}
         activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}:${latest?.thinking?.length ?? 0}:${latest?.trace?.length ?? 0}:${latest?.flow?.length ?? 0}`} previewTools={<></>}
         headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => { abortAiTurns(session.id); const removed = store.remove(session.id); setNotice(removed ? '전략을 삭제했어요' : '목록에서 제거했지만 저장소의 일부 기록을 삭제하지 못했습니다.') }} />}>
-        {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn} onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }} />)}
-        {latest?.status === 'done' && <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}
-          {latest.source === 'ai'
-            // 실 AI 턴: 모델 액션 칩(검증 통과분)이 있으면 그것만, 없으면 제품 기본
-            // 진입점(전략 맡기기)을 유지한다 — 워크스페이스로 가는 길이 죽으면 안 된다.
-            ? <div className="client-next-actions">{latest.actions && latest.actions.length > 0
-              ? latest.actions.map(action => <button type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}>{action.label} <span>{{ backtest: '과거 데이터로 검증 →', alert: '알림 조건 설정 →', delegate: '전략 맡기기 →', auto: '자동 실행 검토 →' }[action.type]}</span></button>)
-              : <button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button>}</div>
-            : <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>}
-        </>}
+        {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn}
+          onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }}
+          onAsk={(segmentId, answers) => {
+            // 폼 답변 → 기록 → 요약을 다음 user 메시지로 전송해 본 분석 릴레이를 잇는다.
+            const askSegment = turn.flow?.find(segment => segment.kind === 'ask' && segment.id === segmentId)
+            store.answerAsk(session.id, turn.id, segmentId, answers)
+            if (askSegment?.kind === 'ask') send(askSegment.questions.map((question, questionIndex) => `${question.title} — ${answers[questionIndex]}`).join('\n'))
+          }} />)}
+        {latest?.status === 'done' && (latest.source === 'ai'
+          // 실 AI 턴: 후속 질문·액션 전부 풀폭 로우 디자인 (Genspark/구 사이트 확정안).
+          ? <div className="teth-followups">
+            {latest.suggestions.map(text => <button className="teth-followup" type="button" key={text} onClick={() => send(text)}><span>{text}</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>)}
+            {latest.actions && latest.actions.length > 0
+              ? latest.actions.map(action => <button className="teth-followup teth-action" type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}><span>{action.label}</span><span className="tfu-sub">{{ backtest: '과거 데이터로 검증', alert: '알림 조건 설정', delegate: '전략 맡기기', auto: '자동 실행 검토' }[action.type]}</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>)
+              : <button className="teth-followup teth-action" type="button" onClick={() => workspace('delegation')}><span>전략 맡기기</span><span className="tfu-sub">조건을 정하고 검증하기</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>}
+          </div>
+          : <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}
+            <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>
+          </>)}
       </ClientConversation> : null}
     </main>
     <aside className="client-development-boundary" aria-label="로컬 검수 환경"><details><summary>로컬 UI 검수 · 서비스 미연결</summary><p>클라이언트 원본 acccc7f 기반 React 화면입니다. 대화는 원본 스크립트, 연구·차트·랭킹·거래는 고정 시각 검수 데이터입니다. 인증·메일·피드백·결제·거래소 연결·주문은 실제 처리되지 않습니다. 실제 비밀번호·API 키·카드 정보를 입력하지 마세요. 원본 첫 전송 인증 시점은 PM 결정 대기이며 현재 비로그인 대화 정책을 유지합니다.</p></details></aside>

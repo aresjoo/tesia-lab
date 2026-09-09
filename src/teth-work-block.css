@@ -12,16 +12,27 @@
 .twk-route { margin: 0; padding: 0 12px 8px 35px; font-size: 12px; color: #9aa0a6 }
 .twk-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s cubic-bezier(.16, 1, .3, 1) }
 .teth-work.open .twk-body { grid-template-rows: 1fr }
-.twk-items { overflow: hidden; margin: 0; padding: 0 12px 2px 13px; list-style: none; min-height: 0 }
+.twk-inner { overflow: hidden; min-height: 0 }
+.twk-items { margin: 0; padding: 0 12px 2px 13px; list-style: none }
 .twk-items li { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; font-size: 12.5px }
 .twk-items .twk-ic { width: 15px; flex: none; display: flex; justify-content: center; padding-top: 3px; color: var(--positive, #2bb673) }
 .twk-items li.stopped .twk-ic { color: #9aa0a6 }
 .twk-items li.done { color: #9aa0a6 }
 .twk-items li:last-child { padding-bottom: 8px }
 .twk-label { min-width: 0; overflow-wrap: anywhere }
+.twk-sources { margin: 2px 12px 10px 32px; padding: 8px 10px; list-style: none; border: 1px solid rgba(255, 255, 255, .07); border-radius: 10px; background: rgba(0, 0, 0, .16) }
+.twk-sources li { display: flex; align-items: center; gap: 8px; padding: 4px 2px; font-size: 12px; animation: twk-in .25s cubic-bezier(.16, 1, .3, 1) }
+.twk-sources img { flex: none; border-radius: 4px }
+.twk-src-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.twk-src-domain { flex: none; color: #9aa0a6; font-size: 11.5px }
+.twk-src-state { flex: none; display: flex; align-items: center; color: #9aa0a6; font-size: 11.5px; min-width: 44px; justify-content: flex-end }
+.twk-sources li.reading .twk-src-state { color: #d5d8dd; animation: twk-pulse 1.2s ease-in-out infinite }
+.twk-sources li.done .twk-src-state { color: var(--positive, #2bb673) }
+@keyframes twk-pulse { 0%, 100% { opacity: .45 } 50% { opacity: 1 } }
 @keyframes twk-in { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
 @media (prefers-reduced-motion: reduce) {
-  .teth-work, .twk-badge { animation: none }
+  .teth-work, .twk-badge, .twk-sources li { animation: none }
+  .twk-sources li.reading .twk-src-state { animation: none }
   .twk-body, .twk-chev { transition: none }
 }
 @media (max-width: 420px) {
