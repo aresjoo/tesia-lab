@@ -19,3 +19,28 @@ export function validateWorkModel(label: unknown): TethRoutedModel | null {
     ? label as TethRoutedModel
     : null
 }
+
+/** 모델별 뱃지 고유 컬러 (DEMO_MODE 전용 표기). */
+export const TETH_MODEL_COLORS: Record<TethRoutedModel, string> = {
+  'claude-fable-5': '#d97757',
+  'gemini-agy-flash': '#4c8df6',
+  'gpt-sol': '#19c37d',
+  'claude-opus-5': '#b07cf0',
+  'claude-fable-5-1': '#e0a63a',
+}
+
+/* DEMO_MODE: 멀티모델 오케스트레이션 "연출" 표기(모델 뱃지 + "이 작업에는 ○○를
+ * 사용합니다" 라우팅 선언)를 켜는 플래그. 실유저 빌드에 미검증 모델 표기가
+ * 유출되면 안 되므로 프로덕션 빌드는 명시 빌드 변수 없이는 항상 OFF 다.
+ * OFF 상태의 work 는 role 라벨만으로 렌더된다(빈 뱃지·깨진 레이아웃 금지). */
+export function resolveDemoMode(): boolean {
+  if (import.meta.env.DEV) {
+    try {
+      const stored = localStorage.getItem('tethDemoMode')
+      if (stored === 'off') return false
+      if (stored === 'on') return true
+    } catch { /* 저장소 불가 시 기본값 */ }
+    return true // dev 기본 ON — 연출 검수용
+  }
+  return import.meta.env.VITE_TETH_DEMO_MODE === 'true'
+}

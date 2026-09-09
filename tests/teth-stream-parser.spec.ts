@@ -172,6 +172,14 @@ test('태그 사이 공백·개행은 say 로 새지 않는다', () => {
   ])
 })
 
+// ── WorkBlock 어댑터 (렌더러는 정규화 타입만 받는다) ──
+
+test('workBlockFromFlowSegment: flow work 세그먼트를 WorkBlock 으로 정규화한다', async () => {
+  const { workBlockFromFlowSegment } = await import('../src/teth-work-block')
+  const segment = { kind: 'work' as const, id: 'w1', model: 'gpt-sol', role: '뉴스 검토', status: 'done' as const, items: [{ id: 'i1', label: '시장 심리 점검', status: 'done' as const }] }
+  expect(workBlockFromFlowSegment(segment)).toEqual({ id: 'w1', model: 'gpt-sol', role: '뉴스 검토', status: 'done', items: segment.items })
+})
+
 // ── 라우팅 표 검증 ──
 
 test('validateWorkModel: 표 안 라벨만 통과, 밖은 null', () => {

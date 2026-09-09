@@ -62,19 +62,68 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
   await expect(page.locator('.g-amsg', { hasText: '진입 타이밍 질문이시군요' })).toBeVisible()
   await expect(page.locator('.g-amsg', { hasText: '두 신호가 어긋나 있어요' })).toBeVisible()
   await expect(page.locator('.g-amsg', { hasText: '결론: 분할 접근이 낫습니다' })).toBeVisible()
+  // work 는 인라인 카드로 릴레이 렌더 — 완료 후 한 줄 접힘 + (DEMO on) 모델 표기
+  const workCards = page.locator('.teth-work')
+  await expect(workCards).toHaveCount(2)
+  await expect(workCards.first()).toHaveClass(/fin/)
+  await expect(workCards.first().locator('.twk-sum')).toContainText('주봉 추세 구조 검토, 일봉 조정 구간 점검')
+  await expect(workCards.first().locator('.twk-model-tail')).toHaveText('— gemini-agy-flash')
+  await workCards.first().locator('.twk-head').click()
+  await expect(workCards.first().locator('.twk-items li', { hasText: '일봉 조정 구간 점검' })).toBeVisible()
+  // 상단 활동 패널은 thinking 전용으로 축소
   await expect(page.locator('.g-act2 .hlb')).toHaveText('생각 완료')
-  // 활동 패널: thinking 프로즈 + work item 스텝
   await page.locator('.g-act2 .hd').click()
-  await expect(page.locator('.g-act2 .at', { hasText: '주봉 추세 구조 검토' })).toBeVisible()
-  await expect(page.locator('.g-act2 .at', { hasText: '반대 시나리오 점검' })).toBeVisible()
+  await expect(page.locator('.g-act2 .at')).toHaveCount(1)
   await page.locator('.g-act2 .arh', { hasText: 'TETH의 생각' }).click()
   await expect(page.locator('.g-act2 .ad')).toContainText('주봉과 일봉의 관계를 먼저 확인한다.')
   await expect(page.locator('.teth-prob')).toHaveAttribute('aria-label', '상승 확률 62%, 하락 확률 38%')
   await expect(page.locator('.g-qchip', { hasText: '분할은 어떻게 나눠?' })).toBeVisible()
   await expect(page.locator('.client-next-actions button', { hasText: '이 전략 검증하기' })).toBeVisible()
+  // 가로 오버플로 없음 (모바일 프로젝트 포함 양 프로젝트에서 확인)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
   const persisted = await page.evaluate(() => sessionStorage.getItem('teth-client-experience') ?? '')
   expect(persisted).toContain('"source":"ai"')
   expect(persisted).toContain('"kind":"work"')
+  expect(errors).toEqual([])
+})
+
+test('DEMO_MODE off: 모델 뱃지·라우팅 선언 없이 role 라벨만으로 정상 렌더된다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  await page.addInitScript(() => localStorage.setItem('tethDemoMode', 'off'))
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    await route.fulfill({ status: 200, headers: sseHeaders, body: MAIN_BODY })
+  })
+  await ask(page, '비트코인 지금 사도 돼?')
+  await expect(page.locator('.g-amsg', { hasText: '결론: 분할 접근이 낫습니다' })).toBeVisible()
+  await expect(page.locator('.teth-work')).toHaveCount(2)
+  await expect(page.locator('.twk-badge')).toHaveCount(0)
+  await expect(page.locator('.twk-model-tail')).toHaveCount(0)
+  await expect(page.locator('.twk-route')).toHaveCount(0)
+  await expect(page.locator('.teth-work').first().locator('.twk-sum')).toContainText('주봉 추세 구조 검토')
+  const bodyText = await page.locator('.client-source-main').textContent() ?? ''
+  expect(bodyText).not.toContain('gemini-agy-flash')
+  expect(bodyText).not.toContain('claude-fable-5')
+  expect(errors).toEqual([])
+})
+
+test('라우팅 표 밖 모델명은 뱃지를 만들지 않고 role 만 렌더된다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  const body = sse(
+    { text: '<say>확인해볼게요.</say><work model="gpt-9000-ultra" role="차트 검토"><item>추세 확인</item></work><say>끝.</say>' },
+    { done: true },
+  )
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    await route.fulfill({ status: 200, headers: sseHeaders, body })
+  })
+  await ask(page, '비트코인 어때?')
+  await expect(page.locator('.g-amsg', { hasText: '끝.' })).toBeVisible()
+  await expect(page.locator('.teth-work')).toHaveCount(1)
+  await expect(page.locator('.twk-badge')).toHaveCount(0)
+  await expect(page.locator('.twk-model-tail')).toHaveCount(0)
+  const bodyText = await page.locator('.client-source-main').textContent() ?? ''
+  expect(bodyText).not.toContain('gpt-9000-ultra')
   expect(errors).toEqual([])
 })
 

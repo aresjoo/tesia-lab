@@ -14,6 +14,9 @@ import { InternalLink } from './InternalLink'
 import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
 import { ConversationCosmos } from './ConversationCosmos'
 import { TethProbability } from './TethProbability'
+import { TethWorkBlock } from './TethWorkBlock'
+import { workBlockFromFlowSegment } from '../teth-work-block'
+import { resolveDemoMode } from '../teth-model-routing'
 import { clientCopy, useClientPreferences } from '../client-preferences'
 import { createClientExperienceStore, type ClientTurn } from '../client-experience-store'
 import { resolveAiProxyOrigin } from '../teth-ai-client'
@@ -56,17 +59,17 @@ function AiAnswerBody({ turn }: { turn: ClientTurn }) {
   </div>
 }
 
-/* PR1 렌더 심: flow 세그먼트를 기존 컴포넌트에 매핑한다. say/prob 는 본문 순서대로,
- * work 아이템은 상단 활동 패널 스텝으로 집계(role 라벨만, 뱃지 없음).
- * PR2에서 인라인 WorkBlock 렌더러(뱃지·릴레이 핸드오프)로 교체된다. */
+/* say/prob 는 본문 순서대로, work 는 인라인 WorkBlock 카드(릴레이 핸드오프)로 렌더한다.
+ * 진행 중 work 가 접히면서 다음 say 가 이어지는 리듬이 데이터(flow 순서)에서 나온다. */
 function AiFlowBody({ turn }: { turn: ClientTurn }) {
+  const [demoMode] = useState(resolveDemoMode)
   const running = turn.status === 'running'
   const flow = turn.flow ?? []
   const lastSay = [...flow].reverse().find(segment => segment.kind === 'say')
   return <Fragment>
     {flow.map(segment => {
       if (segment.kind === 'prob') return <div className="g-amsg" key={segment.id}><TethProbability up={segment.up} down={segment.down} /></div>
-      if (segment.kind !== 'say') return null
+      if (segment.kind === 'work') return <TethWorkBlock key={segment.id} block={workBlockFromFlowSegment(segment)} demoMode={demoMode} />
       const isLast = segment.id === lastSay?.id
       if (!segment.text.trim() && !(running && isLast)) return null
       return <div className="g-amsg" key={segment.id}><p>{segment.text}{running && isLast ? <span className="client-stream-caret" aria-hidden="true" /> : null}</p></div>
@@ -77,11 +80,9 @@ function AiFlowBody({ turn }: { turn: ClientTurn }) {
 function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
   const running = turn.status === 'running'
   const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
-  const flowSteps = (turn.flow ?? []).flatMap(segment => segment.kind === 'work'
-    ? segment.items.map(item => ({ id: item.id, title: item.label, status: item.status }))
-    : [])
-  const workSteps = turn.flow ? flowSteps : (turn.trace ?? [])
-  const started = Boolean(turn.answer || workSteps.length)
+  // flow 턴의 work 는 본문 인라인 WorkBlock 이 렌더한다 — 상단 패널은 thinking 전용.
+  const workSteps = turn.flow ? [] : (turn.trace ?? [])
+  const started = Boolean(turn.answer || workSteps.length || turn.flow?.length)
   // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(work item)는 뒤이은 스텝으로.
   const thinkingStep = {
     id: 'thinking',
