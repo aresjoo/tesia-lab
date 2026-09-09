@@ -258,8 +258,10 @@ export function startAiTurn(args: {
       if (!answerText().trim()) { finalize('fallback'); return }
       settleAll('done')
       queueFlow()
-      // 프록시가 {error:true} 로 끝냈다면 잘린 답변 — '완료'가 아니라 '중지'로 정직하게.
-      finalize(sawError ? 'stop' : 'finish')
+      // 프록시가 {error:true} 로 끝냈어도 chips(종결 블록)까지 받았다면 내용은 완결이다.
+      // 그 외의 말미 오류는 잘린 답변 — '완료'가 아니라 '중지'로 정직하게 표시한다.
+      if (sawError && !chipsDone) console.warn('[teth-ai] 스트림 말미 오류 — 부분 응답으로 중지 처리')
+      finalize(sawError && !chipsDone ? 'stop' : 'finish')
     } catch (error) {
       if (finished) return
       if (controller.signal.aborted) {
