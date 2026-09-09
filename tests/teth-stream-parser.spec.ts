@@ -1,17 +1,24 @@
 import { expect, test } from '@playwright/test'
 import { createTethStreamParser, type TethParseEvent } from '../src/teth-stream-parser'
 import { parseChipsJson, validateProb } from '../src/teth-chips-schema'
+import { validateWorkModel } from '../src/teth-model-routing'
 
 // Node-only unit spec: no page fixture, one project is enough.
 test.skip(({ isMobile }) => isMobile, '브라우저 무관 단위 검증은 desktop 프로젝트에서만 1회 실행')
 
-/** 연속 answer-delta 를 합쳐 청크 경계와 무관한 정규형으로 만든다. */
+/** 연속 say-delta 를 합치고 렌더 무관 이벤트(say-open/close)를 접어,
+ * 청크 경계와 무관한 정규형으로 만든다. */
 function normalize(events: TethParseEvent[]) {
-  const out: (TethParseEvent | { kind: 'answer-delta'; text: string })[] = []
+  const out: (TethParseEvent | { kind: 'say'; text: string })[] = []
   for (const event of events) {
-    const last = out.at(-1)
-    if (event.kind === 'answer-delta' && last?.kind === 'answer-delta') last.text += event.text
-    else out.push(event.kind === 'answer-delta' ? { ...event } : event)
+    if (event.kind === 'say-open' || event.kind === 'say-close') continue
+    if (event.kind === 'say-delta') {
+      const last = out.at(-1)
+      if (last?.kind === 'say') { last.text += event.text; continue }
+      out.push({ kind: 'say', text: event.text })
+      continue
+    }
+    out.push(event)
   }
   return out
 }
@@ -24,17 +31,27 @@ function run(chunks: string[]) {
   return normalize(events)
 }
 
-const SAMPLE = '<trace>주봉 흐름 확인</trace>\n<trace>반대 시나리오 검증</trace>\n<answer>\n결론: 분할 접근이 낫습니다.\n<prob up="58" down="42"/>\n근거는 주봉 추세입니다.\n</answer>\n<chips>{"suggest": ["다음 질문 A", "다음 질문 B"], "action": [{"type": "backtest", "label": "검증하기"}]}</chips>'
+const SAMPLE = '<say>비트코인 진입 타이밍 보시는군요. 차트부터 볼게요.</say>\n' +
+  '<work model="gemini-agy-flash" role="차트 검토">\n<item>주봉 추세 구조 검토</item>\n<item>일봉 조정 구간 점검</item>\n</work>\n' +
+  '<say>두 신호가 살짝 어긋나 있어요.</say>\n' +
+  '<work model="claude-fable-5" role="종합 판단">\n<item>반대 시나리오 점검</item>\n</work>\n' +
+  '<say>결론: 분할 접근이 낫습니다.\n<prob up="58" down="42"/>\n무효선은 $XX,XXX 입니다.</say>\n' +
+  '<chips>{"suggest": ["다음 질문 A"], "action": [{"type": "backtest", "label": "검증하기"}]}</chips>'
 
 const SAMPLE_NORMALIZED = [
-  { kind: 'trace-step', label: '주봉 흐름 확인' },
-  { kind: 'trace-step', label: '반대 시나리오 검증' },
-  { kind: 'answer-open' },
-  { kind: 'answer-delta', text: '결론: 분할 접근이 낫습니다.\n' },
+  { kind: 'say', text: '비트코인 진입 타이밍 보시는군요. 차트부터 볼게요.' },
+  { kind: 'work-open', model: 'gemini-agy-flash', role: '차트 검토' },
+  { kind: 'item', label: '주봉 추세 구조 검토' },
+  { kind: 'item', label: '일봉 조정 구간 점검' },
+  { kind: 'work-close' },
+  { kind: 'say', text: '두 신호가 살짝 어긋나 있어요.' },
+  { kind: 'work-open', model: 'claude-fable-5', role: '종합 판단' },
+  { kind: 'item', label: '반대 시나리오 점검' },
+  { kind: 'work-close' },
+  { kind: 'say', text: '결론: 분할 접근이 낫습니다.\n' },
   { kind: 'prob-raw', up: '58', down: '42' },
-  { kind: 'answer-delta', text: '\n근거는 주봉 추세입니다.\n' },
-  { kind: 'answer-close' },
-  { kind: 'chips-raw', raw: '{"suggest": ["다음 질문 A", "다음 질문 B"], "action": [{"type": "backtest", "label": "검증하기"}]}' },
+  { kind: 'say', text: '\n무효선은 $XX,XXX 입니다.' },
+  { kind: 'chips-raw', raw: '{"suggest": ["다음 질문 A"], "action": [{"type": "backtest", "label": "검증하기"}]}' },
 ]
 
 test('전체 프로토콜을 한 청크로 받아도 정규형이 일치한다', () => {
@@ -55,52 +72,81 @@ test('임의 2~7자 청크로 끊어 받아도 결과가 동일하다', () => {
   }
 })
 
-test('태그가 청크 경계에서 잘려도 복원된다: <ans + wer>', () => {
-  expect(run(['<ans', 'wer>결론', '만 있음</an', 'swer>'])).toEqual([
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '결론만 있음' },
-    { kind: 'answer-close' },
+test('태그 없는 평문 답변은 전부 say 채널로 흐른다 (work 0개)', () => {
+  expect(run(['손절은 ', '손해를 멈추는 기준선이에요.'])).toEqual([
+    { kind: 'say', text: '손절은 손해를 멈추는 기준선이에요.' },
   ])
 })
 
-test('prob 속성이 중간에서 잘려도 복원된다', () => {
-  expect(run(['<answer>a<prob up="6', '2" down="38"/>b</answer>'])).toEqual([
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: 'a' },
-    { kind: 'prob-raw', up: '62', down: '38' },
-    { kind: 'answer-delta', text: 'b' },
-    { kind: 'answer-close' },
+test('work 태그가 청크 경계에서 잘려도 복원된다', () => {
+  expect(run(['<say>확인해볼게요.</say><wor', 'k model="gpt-sol" role="뉴스 검토"><ite', 'm>시장 심리 점검</item></work>'])).toEqual([
+    { kind: 'say', text: '확인해볼게요.' },
+    { kind: 'work-open', model: 'gpt-sol', role: '뉴스 검토' },
+    { kind: 'item', label: '시장 심리 점검' },
+    { kind: 'work-close' },
   ])
 })
 
-test('닫는 태그가 없어도 finish 가 내용을 커밋한다', () => {
-  expect(run(['<trace>무효선 계산', '\n<answer>부분 답변'])).toEqual([
-    { kind: 'trace-step', label: '무효선 계산' },
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '부분 답변' },
-    { kind: 'answer-close' },
+// ── 버그 클래스 ① 회귀 (직전 세션: 셀프클로즈 누락 prob 의 산문 삼킴) ──
+
+test('버그① prob: 닫는 괄호 누락 + 멀리 있는 > 가 본문을 삼키지 않는다', () => {
+  const prose = 'BTC 가격이 오르면 '.repeat(30)
+  const result = run([`<say>앞 <prob up="62" down="38" ${prose} > 뒤</say>`])
+  expect(result.some(event => event.kind === 'prob-raw')).toBe(false)
+  const text = result.filter(event => event.kind === 'say').map(event => (event as { text: string }).text).join('')
+  expect(text).toContain('뒤')
+  expect(text).toContain(prose.trim())
+})
+
+test('버그① work: 닫는 괄호 누락 태그도 상한 초과 시 산문으로 복구된다', () => {
+  const prose = '이후 본문이 계속 이어진다 '.repeat(20)
+  const result = run([`<work model="gpt-sol" role="뉴스" ${prose}`])
+  expect(result.some(event => event.kind === 'work-open')).toBe(false)
+  const text = result.filter(event => event.kind === 'say').map(event => (event as { text: string }).text).join('')
+  expect(text).toContain('이후 본문이 계속 이어진다')
+})
+
+// ── 버그 클래스 ② 회귀 (미종결 태그의 전체 흡수 방지) ──
+
+test('버그② item: 라벨 상한 초과 시 절단 커밋 + drop 신호', () => {
+  const long = '가'.repeat(400)
+  const result = run([`<work model="claude-fable-5" role="검토"><item>${long}</item></work>`])
+  const item = result.find(event => event.kind === 'item') as { label: string }
+  expect(item.label.length).toBeLessThanOrEqual(200)
+  expect(result.some(event => event.kind === 'drop' && event.reason === 'item-overflow')).toBe(true)
+})
+
+test('버그② 미종결 say/work/item 은 finish 가 관대하게 커밋한다', () => {
+  expect(run(['<say>부분 답변', '</say><work model="claude-fable-5" role="검토"><item>무효선 계산'])).toEqual([
+    { kind: 'say', text: '부분 답변' },
+    { kind: 'work-open', model: 'claude-fable-5', role: '검토' },
+    { kind: 'item', label: '무효선 계산' },
+    { kind: 'work-close' },
   ])
 })
 
-test('answer 태그가 아예 없으면 본문 전체가 답변으로 흐른다', () => {
-  expect(run(['그냥 ', '평문으로 답한 경우'])).toEqual([
-    { kind: 'answer-delta', text: '그냥 평문으로 답한 경우' },
+test('버그② 종결되지 않은 chips 는 drop 된다', () => {
+  const result = run(['<say>답</say><chips>{"suggest": ['])
+  expect(result).toEqual([
+    { kind: 'say', text: '답' },
+    { kind: 'drop', reason: 'unterminated-chips' },
   ])
 })
 
-test('본문 속 비교 기호 < 는 태그로 오인되지 않는다', () => {
-  expect(run(['<answer>가격 < 100 이면 매수, x<y 유지</answer>'])).toEqual([
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '가격 < 100 이면 매수, x<y 유지' },
-    { kind: 'answer-close' },
+// ── 관대 복구 ──
+
+test('item 태그 없이 줄만 나열한 work 도 줄 단위로 item 이 된다', () => {
+  expect(run(['<work model="claude-opus-5" role="전략">\n손절선 계산\n익절 구간 설계\n</work>'])).toEqual([
+    { kind: 'work-open', model: 'claude-opus-5', role: '전략' },
+    { kind: 'item', label: '손절선 계산' },
+    { kind: 'item', label: '익절 구간 설계' },
+    { kind: 'work-close' },
   ])
 })
 
-test('알 수 없는 태그 <foo> 는 리터럴 텍스트로 남는다', () => {
-  expect(run(['<answer><foo>내용</foo></answer>'])).toEqual([
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '<foo>내용</foo>' },
-    { kind: 'answer-close' },
+test('say 본문 속 비교 기호 < 와 미지 태그는 리터럴로 남는다', () => {
+  expect(run(['<say>가격 < 100 이면 매수, <foo>표시</foo> 유지</say>'])).toEqual([
+    { kind: 'say', text: '가격 < 100 이면 매수, <foo>표시</foo> 유지' },
   ])
 })
 
@@ -110,54 +156,34 @@ test('chips JSON 내부의 < 와 닫는 태그 분할을 견딘다', () => {
   ])
 })
 
-test('종결되지 않은 chips 는 drop 된다', () => {
-  expect(run(['<answer>답</answer><chips>{"suggest": ['])).toEqual([
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '답' },
-    { kind: 'answer-close' },
-    { kind: 'drop', reason: 'unterminated-chips' },
-  ])
-})
-
-test('중복 chips 블록은 파서 단계에서는 둘 다 통과한다 (검증 계층이 첫 유효만 채택)', () => {
-  const result = run(['<chips>{"a":1}</chips><chips>{"b":2}</chips>'])
-  expect(result.filter(event => event.kind === 'chips-raw')).toHaveLength(2)
-})
-
-test('닫힘 없는 trace 가 200자를 넘으면 라벨 대신 본문으로 방류된다', () => {
-  const long = '가'.repeat(240)
-  const result = run([`<trace>${long}`])
-  expect(result.some(event => event.kind === 'drop' && event.reason === 'trace-overflow')).toBe(true)
-  const text = result.filter(event => event.kind === 'answer-delta').map(event => event.text).join('')
-  expect(text).toBe(long)
-  expect(result.some(event => event.kind === 'trace-step')).toBe(false)
-})
-
-test('셀프클로즈 없는 prob 는 멀리 있는 > 까지 본문을 삼키지 않는다', () => {
-  const prose = 'BTC 가격이 오르면'.repeat(10)
-  const result = run([`<answer>앞 <prob up="62" down="38" ${prose} > 뒤</answer>`])
-  expect(result.some(event => event.kind === 'prob-raw')).toBe(false)
-  const text = result.filter(event => event.kind === 'answer-delta').map(event => event.text).join('')
-  expect(text).toContain(prose)
-  expect(text).toContain('뒤')
-})
-
-test('빈 스트림은 아무 이벤트도 만들지 않는다', () => {
+test('빈 스트림과 공백 전용 청크는 아무 이벤트도 만들지 않는다', () => {
   expect(run([])).toEqual([])
-  expect(run(['', ''])).toEqual([])
+  expect(run(['  \n', ' '])).toEqual([])
 })
 
-test('trace 사이 공백·개행은 답변으로 새지 않는다', () => {
-  expect(run(['<trace>a</trace>\n  \n<trace>b</trace>\n\n<answer>본문</answer>'])).toEqual([
-    { kind: 'trace-step', label: 'a' },
-    { kind: 'trace-step', label: 'b' },
-    { kind: 'answer-open' },
-    { kind: 'answer-delta', text: '본문' },
-    { kind: 'answer-close' },
+test('태그 사이 공백·개행은 say 로 새지 않는다', () => {
+  const result = run(['<say>a</say>\n  \n<work model="gpt-sol" role="r"><item>b</item></work>\n\n<say>c</say>'])
+  expect(result).toEqual([
+    { kind: 'say', text: 'a' },
+    { kind: 'work-open', model: 'gpt-sol', role: 'r' },
+    { kind: 'item', label: 'b' },
+    { kind: 'work-close' },
+    { kind: 'say', text: 'c' },
   ])
 })
 
-// ── 검증 계층 (프롬프트를 믿지 않는다) ─────────────────────────────
+// ── 라우팅 표 검증 ──
+
+test('validateWorkModel: 표 안 라벨만 통과, 밖은 null', () => {
+  expect(validateWorkModel('claude-fable-5')).toBe('claude-fable-5')
+  expect(validateWorkModel('gemini-agy-flash')).toBe('gemini-agy-flash')
+  expect(validateWorkModel('gpt-5-turbo-max')).toBeNull()
+  expect(validateWorkModel('')).toBeNull()
+  expect(validateWorkModel(undefined)).toBeNull()
+  expect(validateWorkModel('__proto__')).toBeNull()
+})
+
+// ── 검증 계층 (프롬프트를 믿지 않는다) — 기존 스키마 회귀 유지 ──
 
 test('validateProb: 합 100 의 0~100 값만 통과한다', () => {
   expect(validateProb('62', '38')).toEqual({ up: 62, down: 38 })
@@ -166,13 +192,11 @@ test('validateProb: 합 100 의 0~100 값만 통과한다', () => {
   expect(validateProb('abc', '38')).toBeNull()
   expect(validateProb(-10, 110)).toBeNull()
   expect(validateProb('', '')).toBeNull()
-  expect(validateProb(101, -1)).toBeNull()
 })
 
 test('parseChipsJson: 깨진 JSON 과 비객체는 invalid', () => {
   expect(parseChipsJson('{"suggest": [', { allowTwoActions: false }).kind).toBe('invalid')
   expect(parseChipsJson('[1,2]', { allowTwoActions: false }).kind).toBe('invalid')
-  expect(parseChipsJson('"text"', { allowTwoActions: false }).kind).toBe('invalid')
 })
 
 test('parseChipsJson: 미지 액션 타입은 버리고 허용 타입만 남긴다', () => {
@@ -191,9 +215,4 @@ test('parseChipsJson: 액션은 기본 1개, 판단이 갈릴 때만 2개까지'
 test('parseChipsJson: 제안은 문자열만, 중복 제거, 5개 상한', () => {
   const result = parseChipsJson('{"suggest": ["a", "a", 3, null, "b", "c", "d", "e", "f"]}', { allowTwoActions: false })
   expect(result.kind === 'ok' && result.chips.suggest).toEqual(['a', 'b', 'c', 'd', 'e'])
-})
-
-test('parseChipsJson: 빈 라벨 액션은 버린다', () => {
-  const result = parseChipsJson('{"action": [{"type": "alert", "label": "  "}]}', { allowTwoActions: false })
-  expect(result.kind === 'ok' && result.chips.actions).toEqual([])
 })

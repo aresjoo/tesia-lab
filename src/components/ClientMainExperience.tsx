@@ -56,22 +56,45 @@ function AiAnswerBody({ turn }: { turn: ClientTurn }) {
   </div>
 }
 
+/* PR1 렌더 심: flow 세그먼트를 기존 컴포넌트에 매핑한다. say/prob 는 본문 순서대로,
+ * work 아이템은 상단 활동 패널 스텝으로 집계(role 라벨만, 뱃지 없음).
+ * PR2에서 인라인 WorkBlock 렌더러(뱃지·릴레이 핸드오프)로 교체된다. */
+function AiFlowBody({ turn }: { turn: ClientTurn }) {
+  const running = turn.status === 'running'
+  const flow = turn.flow ?? []
+  const lastSay = [...flow].reverse().find(segment => segment.kind === 'say')
+  return <Fragment>
+    {flow.map(segment => {
+      if (segment.kind === 'prob') return <div className="g-amsg" key={segment.id}><TethProbability up={segment.up} down={segment.down} /></div>
+      if (segment.kind !== 'say') return null
+      const isLast = segment.id === lastSay?.id
+      if (!segment.text.trim() && !(running && isLast)) return null
+      return <div className="g-amsg" key={segment.id}><p>{segment.text}{running && isLast ? <span className="client-stream-caret" aria-hidden="true" /> : null}</p></div>
+    })}
+  </Fragment>
+}
+
 function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
   const running = turn.status === 'running'
   const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
-  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(trace)는 뒤이은 스텝으로.
+  const flowSteps = (turn.flow ?? []).flatMap(segment => segment.kind === 'work'
+    ? segment.items.map(item => ({ id: item.id, title: item.label, status: item.status }))
+    : [])
+  const workSteps = turn.flow ? flowSteps : (turn.trace ?? [])
+  const started = Boolean(turn.answer || workSteps.length)
+  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(work item)는 뒤이은 스텝으로.
   const thinkingStep = {
     id: 'thinking',
-    title: running && !turn.answer && !turn.trace?.length ? '생각하는 중' : 'TETH의 생각',
-    status: running && !turn.answer && !turn.trace?.length ? 'running' as const : activityStatus === 'stopped' && !turn.answer ? 'stopped' as const : 'done' as const,
+    title: running && !started ? '생각하는 중' : 'TETH의 생각',
+    status: running && !started ? 'running' as const : activityStatus === 'stopped' && !turn.answer ? 'stopped' as const : 'done' as const,
     detail: turn.thinking || undefined,
   }
   return <Fragment>
     <ClientUserMessage onEdit={onEdit}>{turn.question}</ClientUserMessage>
     <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : '생각 완료'} status={activityStatus}
       source="service" startedAt={turn.startedAt} finishedAt={turn.finishedAt}
-      steps={[thinkingStep, ...(turn.trace ?? [])]} />
-    {(turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
+      steps={[thinkingStep, ...workSteps]} />
+    {turn.flow ? <AiFlowBody turn={turn} /> : (turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
     {turn.status === 'done' && <AnswerActions text={turn.answer} />}
     {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
   </Fragment>
@@ -251,7 +274,7 @@ export function ClientMainExperience() {
       : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onStop={() => { abortAiTurns(session.id); store.stop(session.id) }} busy={busy}
         initialViewport={store.conversationViewport(session.id)} onViewportChange={view => store.saveConversationViewport(session.id, view)}
         inputLabel="TETH에게 물어보세요" sendLabel="메시지 보내기" titleLabel="대화 제목" initialTitle={session.title} onTitleChange={title => store.rename(session.id, title)}
-        activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}:${latest?.thinking?.length ?? 0}:${latest?.trace?.length ?? 0}`} previewTools={<></>}
+        activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}:${latest?.thinking?.length ?? 0}:${latest?.trace?.length ?? 0}:${latest?.flow?.length ?? 0}`} previewTools={<></>}
         headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => { abortAiTurns(session.id); const removed = store.remove(session.id); setNotice(removed ? '전략을 삭제했어요' : '목록에서 제거했지만 저장소의 일부 기록을 삭제하지 못했습니다.') }} />}>
         {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn} onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }} />)}
         {latest?.status === 'done' && <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}

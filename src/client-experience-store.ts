@@ -7,12 +7,20 @@ import { parsePercentageEdit } from './client-percentage-input'
 import { forgetResearchDocumentMemory } from './client-research-cache'
 import { forgetDelegationUiMemory } from './client-delegation-fixtures'
 import { isTethActionChip, validateProb, type TethActionChip } from './teth-chips-schema'
+import { validateWorkModel } from './teth-model-routing'
 import type { TethAiMessage } from './teth-ai-client'
 
 export type ConversationPhase = 'mode' | 'pair' | 'timeframe' | 'risk' | 'take' | 'plan'
 export type ConversationViewport = { top: number; spacer: number; follow: boolean; questionKey: string }
 /** 실 AI 턴의 분석 스텝 표시 상태. 서버 권위 상태가 아니라 스트림 관찰의 투영이다. */
 export type AiTraceStep = { id: string; title: string; status: 'running' | 'done' | 'stopped' }
+export type AiFlowStatus = 'running' | 'done' | 'stopped'
+/** say/work 인터리브 답변의 순서 있는 세그먼트. work 는 연출 전용이 아니라
+ * 향후 실제 tool use 결과의 그릇이다(어댑터 교체 전제 — PR2 WorkBlock 참조). */
+export type TethFlowSegment =
+  | { kind: 'say'; id: string; text: string; ack?: true }
+  | { kind: 'work'; id: string; model: string | null; role: string; items: { id: string; label: string; status: AiFlowStatus }[]; status: AiFlowStatus }
+  | { kind: 'prob'; id: string; up: number; down: number }
 export type ClientTurn = {
   id: string; question: string; answer: string; fullAnswer: string
   startedAt: number; finishedAt?: number; status: 'running' | 'done' | 'stopped'
@@ -20,6 +28,8 @@ export type ClientTurn = {
   /** 'ai' = 실 스트리밍 턴. 없으면 기존 스크립트(mock) 턴 — tick 리빌 경로를 탄다. */
   source?: 'ai'
   thinking?: string
+  /** say/work 인터리브 턴의 렌더 정본. 없으면 구( trace/answer/prob.offset ) 렌더 경로. */
+  flow?: TethFlowSegment[]
   trace?: AiTraceStep[]
   prob?: { up: number; down: number; offset: number }
   actions?: TethActionChip[]
@@ -47,6 +57,37 @@ const validSession = (x: unknown): x is ClientSession => {
 }
 const stopTrace = (trace?: AiTraceStep[]) => trace?.map(step => step.status === 'running' ? { ...step, status: 'stopped' as const } : step)
 
+/** flow 의 running 상태를 일괄 정착시킨다 (완료=done, 중지=stopped). */
+const settleFlow = (flow: TethFlowSegment[] | undefined, to: 'done' | 'stopped') => flow?.map(segment =>
+  segment.kind === 'work'
+    ? { ...segment, status: segment.status === 'running' ? to : segment.status, items: segment.items.map(item => item.status === 'running' ? { ...item, status: to } : item) }
+    : segment)
+
+function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
+  if (!Array.isArray(flow)) return undefined
+  const statuses = ['running', 'done', 'stopped']
+  const clean: TethFlowSegment[] = []
+  for (const segment of flow) {
+    if (!segment || typeof segment !== 'object' || typeof segment.id !== 'string') continue
+    if (segment.kind === 'say' && typeof segment.text === 'string') {
+      clean.push({ kind: 'say', id: segment.id, text: segment.text, ...(segment.ack === true ? { ack: true as const } : {}) })
+    } else if (segment.kind === 'prob') {
+      const prob = validateProb(segment.up, segment.down)
+      if (prob) clean.push({ kind: 'prob', id: segment.id, ...prob })
+    } else if (segment.kind === 'work' && typeof segment.role === 'string' && Array.isArray(segment.items) && statuses.includes(segment.status)) {
+      clean.push({
+        kind: 'work', id: segment.id, role: segment.role.slice(0, 40), status: segment.status,
+        model: validateWorkModel(segment.model),
+        items: segment.items.filter((item: unknown): item is { id: string; label: string; status: AiFlowStatus } => {
+          const step = item as { id?: unknown; label?: unknown; status?: unknown }
+          return Boolean(step) && typeof step.id === 'string' && typeof step.label === 'string' && statuses.includes(step.status as string)
+        }),
+      })
+    }
+  }
+  return clean.length ? clean : undefined
+}
+
 /** 복원 스냅샷의 AI 필드는 거부 대신 정화한다 — 변조·구버전 값이 렌더로 새지 않게. */
 function sanitizeAiFields(turn: ClientTurn): ClientTurn {
   const clean = { ...turn }
@@ -55,6 +96,9 @@ function sanitizeAiFields(turn: ClientTurn): ClientTurn {
     return clean
   }
   if (typeof clean.thinking !== 'string') delete clean.thinking
+  const flow = sanitizeFlow(clean.flow)
+  if (flow) clean.flow = flow
+  else delete clean.flow
   clean.trace = Array.isArray(clean.trace)
     ? clean.trace.filter(step => step && typeof step === 'object' && typeof step.id === 'string' && typeof step.title === 'string' && ['running', 'done', 'stopped'].includes(step.status))
     : []
@@ -84,7 +128,7 @@ function read(): Snapshot {
           // (expected teardown, not corruption), keeping partial answer/thinking.
           if (turn.status === 'running' && (turn.source === 'ai' || index !== validTurns.length - 1 || !turn.fullAnswer)) {
             if (turn.source !== 'ai') recoveryWarning = true
-            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt, trace: stopTrace(turn.trace), fullAnswer: turn.source === 'ai' ? turn.answer : turn.fullAnswer }
+            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt, trace: stopTrace(turn.trace), flow: settleFlow(turn.flow, 'stopped'), fullAnswer: turn.source === 'ai' ? turn.answer : turn.fullAnswer }
           }
           return turn
         })
@@ -191,7 +235,7 @@ export function createClientExperienceStore() {
     paper: (id: string, paper: boolean) => { if (Boolean(snapshot.sessions.find(s => s.id === id)?.paper) !== paper) update(id, s => ({ ...s, paper }), true) },
     workspace: (id: string, workspace: ClientSession['workspace']) => update(id, s => ({ ...s, workspace }), true),
     tradingReady: (id: string) => update(id, s => ({ ...s, tradingReady: true }), true),
-    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now(), trace: stopTrace(t.trace), fullAnswer: t.source === 'ai' ? t.answer : t.fullAnswer } : t) }), true),
+    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now(), trace: stopTrace(t.trace), flow: settleFlow(t.flow, 'stopped'), fullAnswer: t.source === 'ai' ? t.answer : t.fullAnswer } : t) }), true),
     send: (question: string, options?: { ai?: boolean }): { sessionId: string; turnId: string; messages: TethAiMessage[] } | null => {
       const text = question.trim()
       if (!text) return null
@@ -205,7 +249,7 @@ export function createClientExperienceStore() {
       if (options?.ai) {
         // 실 AI 턴: 스크립트 응답·퍼널 단계 진행 없이 빈 턴을 만들고, 요청 재료를 돌려준다.
         const turnId = crypto.randomUUID()
-        next.turns = [...session.turns, { id: turnId, question: text, answer: '', fullAnswer: '', suggestions: [], phase: session.phase, status: 'running', startedAt: Date.now(), source: 'ai', thinking: '', trace: [] }]
+        next.turns = [...session.turns, { id: turnId, question: text, answer: '', fullAnswer: '', suggestions: [], phase: session.phase, status: 'running', startedAt: Date.now(), source: 'ai', thinking: '', flow: [] }]
         update(next.id, () => next, true)
         const messages: TethAiMessage[] = []
         for (const turn of session.turns) {
@@ -227,7 +271,7 @@ export function createClientExperienceStore() {
     },
     // 아래 세 메서드는 실 AI 턴 전용이다. running 가드가 중지/삭제 뒤 늦게 도착한
     // 스트림 이벤트를 무해화한다 — 이벤트 순서를 신뢰하지 않는다.
-    patchAiTurn: (sessionId: string, turnId: string, patch: Partial<Pick<ClientTurn, 'thinking' | 'answer' | 'trace' | 'prob' | 'actions' | 'suggestions'>>) => {
+    patchAiTurn: (sessionId: string, turnId: string, patch: Partial<Pick<ClientTurn, 'thinking' | 'answer' | 'flow' | 'trace' | 'prob' | 'actions' | 'suggestions'>>) => {
       const turn = snapshot.sessions.find(s => s.id === sessionId)?.turns.find(t => t.id === turnId)
       if (!turn || turn.source !== 'ai' || turn.status !== 'running') return
       update(sessionId, s => ({ ...s, updatedAt: Date.now(), turns: s.turns.map(t => t.id === turnId ? { ...t, ...patch } : t) }))
@@ -237,7 +281,7 @@ export function createClientExperienceStore() {
       if (!turn || turn.source !== 'ai' || turn.status !== 'running') return
       update(sessionId, s => ({
         ...s, title: autoTitle(s), updatedAt: Date.now(),
-        turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'done' as const, finishedAt: Date.now(), fullAnswer: t.answer, trace: t.trace?.map(step => step.status === 'running' ? { ...step, status: 'done' as const } : step) } : t),
+        turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'done' as const, finishedAt: Date.now(), fullAnswer: t.answer, flow: settleFlow(t.flow, 'done'), trace: t.trace?.map(step => step.status === 'running' ? { ...step, status: 'done' as const } : step) } : t),
       }), true)
     },
     failAiTurn: (sessionId: string, turnId: string, failMode: 'fallback' | 'stop') => {
@@ -245,7 +289,7 @@ export function createClientExperienceStore() {
       const turn = session?.turns.find(t => t.id === turnId)
       if (!session || !turn || turn.source !== 'ai' || turn.status !== 'running') return
       if (failMode === 'stop') {
-        update(sessionId, s => ({ ...s, turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'stopped' as const, finishedAt: Date.now(), trace: stopTrace(t.trace), fullAnswer: t.answer } : t) }), true)
+        update(sessionId, s => ({ ...s, turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'stopped' as const, finishedAt: Date.now(), trace: stopTrace(t.trace), flow: settleFlow(t.flow, 'stopped'), fullAnswer: t.answer } : t) }), true)
         return
       }
       // 프록시 미연결/실패: 같은 질문을 스크립트 응답으로 대체하고 tick 리빌에 넘긴다.

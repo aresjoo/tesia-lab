@@ -40,12 +40,21 @@ export async function streamTethChat(options: {
   messages: TethAiMessage[]
   system: string
   signal: AbortSignal
+  /** true = 도구 없는 즉답 경로(로드맵 1단계 본 호출). */
+  lite?: boolean
+  /** true = 프록시의 초경량 모델 경로(thinking·도구 없음) — ack 병렬 호출용. */
+  think?: boolean
   onEvent: (event: TethAiEvent) => void
 }): Promise<void> {
   const response = await fetch(`${options.origin}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: options.messages, system: options.system }),
+    body: JSON.stringify({
+      messages: options.messages,
+      system: options.system,
+      ...(options.lite ? { lite: true } : {}),
+      ...(options.think ? { think: true } : {}),
+    }),
     signal: options.signal,
     cache: 'no-store',
   })
