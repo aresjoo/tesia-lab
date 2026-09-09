@@ -1,0 +1,243 @@
+import { expect, test, type Page } from '@playwright/test'
+import { researchVersion, researchPrices, RESEARCH_LAST_BAR, researchPriceAt } from '../src/client-research-analysis'
+import { CLIENT_RESEARCH_FIXTURE } from '../src/client-research-fixtures'
+
+async function research(page: Page, finish = true) {
+  await page.clock.install()
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  await page.locator('.client-home-content textarea').fill('비트코인 과매도 반등 전략을 검증하고 싶어요')
+  await page.locator('.client-home-content textarea').press('Enter')
+  await page.clock.fastForward(12_000)
+  for (const choice of ['1시간', '−3% (표준)', '익절 +8% 설정']) {
+    await page.getByRole('button', { name: choice, exact: true }).click()
+    await page.clock.fastForward(12_000)
+  }
+  await page.getByRole('button', { name: /Research Plan.*연구 계획 확인/ }).click()
+  await page.getByRole('button', { name: '연구 시작', exact: true }).click()
+  await page.clock.fastForward(finish ? 97_000 : 25_000)
+}
+async function artifact(page: Page, title: string) {
+  const toggle = page.getByRole('button', { name: 'Artifacts 열기', exact: true })
+  if (await toggle.isVisible()) await toggle.click()
+  await page.locator('.rw-artifact').filter({ hasText: title }).first().click()
+}
+async function openChart(page: Page) {
+  await page.getByRole('button', { name: '차트로 자세히 보기' }).click()
+  await expect(page.locator('.ra-analysis')).toBeVisible()
+  await expect(page.locator('.ra-chart canvas').first()).toBeVisible()
+}
+
+test('분석 데이터는 원본 버전의 거래·수치 그대로이며 가격과 Holdout을 혼합하지 않는다', () => {
+  expect(RESEARCH_LAST_BAR).toBe(909)
+  const holdout = CLIENT_RESEARCH_FIXTURE.prices.filter(([index]) => index >= 910)
+  expect(holdout.length).toBeGreaterThan(0)
+  expect(researchPrices.length).toBeLessThan(CLIENT_RESEARCH_FIXTURE.prices.length)
+  for (const [index] of holdout) expect(researchPriceAt.has(index)).toBe(false)
+  for (const version of [0, 1] as const) {
+    expect(researchVersion(version)).toBe(CLIENT_RESEARCH_FIXTURE.versions[version])
+    expect(researchVersion(version).trades).toHaveLength(researchVersion(version).n)
+    expect(new Set(researchVersion(version).trades.map(trade => trade.exit)).size).toBe(researchVersion(version).n)
+    for (const trade of researchVersion(version).trades) {
+      expect(researchPriceAt.has(trade.entry)).toBe(true)
+      expect(researchPriceAt.has(trade.exit)).toBe(true)
+    }
+  }
+  expect(researchPrices.every(([index]) => index <= RESEARCH_LAST_BAR)).toBe(true)
+})
+
+test('문서→차트→뒤로가기·앞으로가기는 초안·거래 선택·스크롤을 보존한다', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message))
+  await research(page)
+  await artifact(page, 'Backtest v2')
+  await page.getByLabel('Backtest v2에 질문').fill('작성하던 질문을 유지해주세요')
+  await page.getByRole('button', { name: '차트로 자세히 보기' }).scrollIntoViewIfNeeded()
+  const documentScroll = await page.locator('.rw-scroll').evaluate(el => el.scrollTop)
+  await openChart(page)
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(10)
+  await page.locator('.ra-ledger > button').nth(2).click()
+  await expect(page.locator('.ra-ledger > button').nth(2)).toHaveAttribute('aria-pressed', 'true')
+  if (info.project.name === 'mobile') await page.getByRole('button', { name: '대화 이어가기', exact: true }).click()
+  await expect(page.locator('#ra-question')).toHaveValue('작성하던 질문을 유지해주세요')
+  await expect(page.locator('.ra-reference')).toContainText('거래 3')
+  await page.goBack()
+  await expect(page.locator('.ra-analysis')).toHaveCount(0)
+  await expect(page.getByLabel('Backtest v2에 질문')).toHaveValue('작성하던 질문을 유지해주세요')
+  await expect(page.getByRole('button', { name: '차트로 자세히 보기' })).toBeFocused()
+  await expect.poll(() => page.locator('.rw-scroll').evaluate(el => el.scrollTop)).toBeCloseTo(documentScroll, 0)
+  await page.goForward()
+  await expect(page.locator('.ra-analysis')).toBeVisible()
+  await expect(page.locator('.ra-ledger > button').nth(2)).toHaveAttribute('aria-pressed', 'true')
+  await page.getByRole('button', { name: 'Backtest v2로 돌아가기' }).click()
+  await expect(page.locator('.ra-analysis')).toHaveCount(0)
+  expect(errors).toEqual([])
+})
+
+test('완료 보고서의 질문과 거래 참고대상은 원래 문서로 이어지고 버전은 분리된다', async ({ page }, info) => {
+  await research(page)
+  await openChart(page)
+  await expect(page.locator('.ra-analysis')).toHaveAttribute('data-version', '2')
+  await page.locator('.ra-ledger > button').first().click()
+  if (info.project.name === 'mobile') await page.getByRole('button', { name: '대화 이어가기', exact: true }).click()
+  await page.locator('#ra-question').fill('이 거래를 설명해주세요')
+  await page.getByRole('button', { name: '차트 질문 보내기' }).click()
+  await expect(page.locator('.ra-thread .rw-user-message')).toContainText('이 거래를 설명해주세요')
+  await expect(page.locator('.ra-thread .rw-user-message')).toContainText('참고: Backtest v2')
+  await page.getByRole('button', { name: 'Final Report로 돌아가기' }).click()
+  await expect(page.locator('.rw-thread .rw-user-message')).toContainText('이 거래를 설명해주세요')
+  await artifact(page, 'Backtest v1')
+  await openChart(page)
+  await expect(page.locator('.ra-analysis')).toHaveAttribute('data-version', '1')
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(27)
+  await expect(page.locator('.ra-reference')).toHaveCount(0)
+})
+
+test('거래 선택에서 바로 질문하며 보조기술에도 매수·매도 봉을 전달한다', async ({ page }) => {
+  await research(page)
+  await openChart(page)
+  await page.locator('.ra-ledger > button').nth(1).click()
+  await expect(page.locator('.ra-ledger > button').nth(1)).toHaveAccessibleName(/매수.*매도/)
+  await page.getByRole('button', { name: '거래 2에 질문하기', exact: true }).click()
+  await expect(page.locator('#ra-question')).toBeFocused()
+  await expect(page.getByRole('region', { name: 'Final Report 대화 기록' })).toHaveAttribute('tabindex', '0')
+  await expect(page.locator('.ra-reference')).toContainText('거래 2')
+})
+
+test('자산 곡선에서 재생해도 퍼센트를 가격으로 표시하지 않고 긴 초안 높이를 복원한다', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await research(page)
+  await page.getByLabel('Final Report에 질문').fill('첫 번째 질문\n두 번째 질문\n세 번째 질문\n네 번째 질문')
+  await openChart(page)
+  await page.getByRole('button', { name: '자산 곡선', exact: true }).click()
+  const bounds = await page.locator('.ra-chart').boundingBox()
+  await page.mouse.move(bounds!.x + bounds!.width / 2, bounds!.y + 80)
+  await expect(page.locator('.ra-quote b')).toContainText('%')
+  await page.getByRole('button', { name: '거래 재생', exact: true }).focus()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.ra-quote b')).toHaveCount(0)
+  await page.getByRole('button', { name: '결과 재생 건너뛰기' }).click()
+  await expect.poll(() => page.locator('#ra-question').evaluate(el => el.clientHeight)).toBeGreaterThan(70)
+  await expect(page.locator('#ra-question')).toHaveValue(/네 번째 질문/)
+})
+
+test('차트 생성 실패 뒤 재시도 성공 시 오류 층이 남지 않는다', async ({ page }) => {
+  await research(page)
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.evaluate(() => {
+    const original = document.createElement.bind(document)
+    Object.defineProperty(document, 'createElement', { configurable: true, value: (name: string, options?: ElementCreationOptions) => {
+      if (name === 'table' && document.querySelector('.ra-chart')) throw new Error('Injected chart initialization failure')
+      return original(name, options)
+    } })
+  })
+  await page.getByRole('button', { name: '차트로 자세히 보기' }).click()
+  await expect(page.locator('.ra-chart-failure')).toBeVisible()
+  await expect(page.locator('.ra-analysis')).not.toHaveClass(/is-replaying/)
+  await expect(page.getByRole('progressbar')).toHaveCount(0)
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(10)
+  await page.evaluate(() => { Reflect.deleteProperty(document, 'createElement') })
+  await page.getByRole('button', { name: '자산 곡선', exact: true }).click()
+  await expect(page.locator('.ra-chart-failure')).toHaveCount(0)
+  await expect(page.locator('.ra-chart canvas').first()).toBeVisible()
+  await expect(page.locator('.ra-chart')).not.toHaveAttribute('aria-hidden', 'true')
+})
+
+test('320~1440px 분석·대화가 넘치지 않고 색상과 단일 입력을 유지한다', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  await research(page)
+  await openChart(page)
+  for (const width of [320, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await expect(page.locator('.ra-analysis')).toHaveCSS('background-color', 'rgb(15, 16, 18)')
+    if (width <= 860) await page.getByRole('button', { name: '대화 이어가기', exact: true }).click()
+    const logo = await page.locator('.ra-conversation-heading img').boundingBox()
+    expect(logo?.width).toBeLessThanOrEqual(24)
+    if (width <= 860) {
+      const menu = await page.locator('.client-hamburger').boundingBox()
+      const back = await page.locator('.ra-return').boundingBox()
+      expect(back!.x).toBeGreaterThanOrEqual(menu!.x + menu!.width)
+    }
+    await expect(page.locator('textarea:visible')).toHaveCount(1)
+    await page.locator('#ra-question').fill('긴 질문입니다 '.repeat(20))
+    await expect(page.getByRole('button', { name: '차트 질문 보내기' })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    if (width <= 860) await page.getByRole('button', { name: '차트·거래', exact: true }).click()
+    if (process.env.TETH_ANALYSIS_SCREENSHOTS) await page.screenshot({ path: `/tmp/teth-analysis-${width}.png` })
+  }
+  expect(errors).toEqual([])
+})
+
+test('첫 결과 재생은 Skip으로만 접히고 재진입은 다시 재생하지 않는다', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message))
+  await research(page)
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await openChart(page)
+  await expect(page.getByRole('progressbar', { name: '결과 재생' })).toBeVisible()
+  await page.clock.runFor(3500)
+  await expect(page.locator('[data-component="executionToast"]')).toBeVisible()
+  if (process.env.TETH_ANALYSIS_SCREENSHOTS) await page.screenshot({ path: '/tmp/teth-analysis-replay.png' })
+  await page.getByRole('button', { name: '결과 재생 건너뛰기' }).click()
+  await expect(page.locator('.ra-analysis')).not.toHaveClass(/is-replaying/)
+  await page.getByRole('button', { name: 'Final Report로 돌아가기' }).click()
+  await openChart(page)
+  await expect(page.getByRole('progressbar')).toHaveCount(0)
+  expect(errors).toEqual([])
+})
+
+test('연구가 이어져도 열어 둔 v1 차트가 새 결과로 바뀌지 않는다', async ({ page }) => {
+  await research(page, false)
+  await artifact(page, 'Backtest v1')
+  await openChart(page)
+  await page.clock.fastForward(80_000)
+  await expect(page.locator('.ra-analysis')).toHaveAttribute('data-version', '1')
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(27)
+  await page.getByRole('button', { name: 'Backtest v1로 돌아가기' }).click()
+  await expect(page.getByRole('heading', { name: 'Backtest v1', exact: true })).toBeVisible()
+})
+
+test('차트 청크 실패에도 키보드로 문서에 복귀하고 질문을 잃지 않는다', async ({ page }) => {
+  await research(page)
+  await page.getByLabel('Final Report에 질문').fill('연결이 끊겨도 남겨둘 질문')
+  await page.route('**/src/components/ClientResearchAnalysis.tsx*', route => route.abort())
+  await page.getByRole('button', { name: '차트로 자세히 보기' }).click()
+  await expect(page.getByRole('alert')).toContainText('차트를 불러오지 못했습니다')
+  await expect(page.getByRole('button', { name: '문서로 돌아가기', exact: true })).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(page.getByLabel('Final Report에 질문')).toHaveValue('연결이 끊겨도 남겨둘 질문')
+  await expect(page.getByRole('button', { name: '차트로 자세히 보기' })).toBeFocused()
+})
+
+test('자동 재생 완료·재생 도중 복귀는 캔버스와 이벤트를 정리한다', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message))
+  await research(page)
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await openChart(page)
+  await page.clock.runFor(16_500)
+  await expect(page.getByRole('progressbar')).toHaveCount(0)
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(10)
+  await page.getByRole('button', { name: '거래 재생', exact: true }).click()
+  await page.clock.runFor(800)
+  await page.getByRole('button', { name: 'Final Report로 돌아가기' }).click()
+  await page.clock.runFor(18_000)
+  await expect(page.locator('.ra-chart canvas')).toHaveCount(0)
+  await expect(page.getByRole('article', { name: 'Final Report 문서', exact: true })).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('새로고침과 저장 실패에도 버전과 문서 질문을 혼합하지 않는다', async ({ page }, info) => {
+  await research(page)
+  await artifact(page, 'Backtest v1')
+  await page.getByLabel('Backtest v1에 질문').fill('v1에 남기는 질문')
+  await openChart(page)
+  await page.reload()
+  await expect(page.locator('.ra-analysis')).toHaveAttribute('data-version', '1')
+  await expect(page.locator('.ra-ledger > button')).toHaveCount(27)
+  if (info.project.name === 'mobile') await page.getByRole('button', { name: '대화 이어가기', exact: true }).click()
+  await expect(page.locator('#ra-question')).toHaveValue('v1에 남기는 질문')
+  await page.evaluate(() => { Storage.prototype.setItem = () => { throw new DOMException('Blocked', 'QuotaExceededError') } })
+  await page.locator('#ra-question').fill('저장이 차단되어도 같은 문서에 남겨둘 질문')
+  await page.getByRole('button', { name: 'Backtest v1로 돌아가기' }).click()
+  await expect(page.getByLabel('Backtest v1에 질문')).toHaveValue('저장이 차단되어도 같은 문서에 남겨둘 질문')
+})

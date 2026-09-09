@@ -1,0 +1,221 @@
+import { Fragment, lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
+import { Check, Copy, MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
+import { ClientChrome, ClientLogo } from './ClientChrome'
+import { ClientComposer } from './ClientComposer'
+import { ClientConversation, ClientUserMessage } from './ClientConversation'
+import { ClientResearchActivity } from './ClientResearchActivity'
+import { ClientLocalePanel } from './ClientLocalePanel'
+import { ClientAuthDialog, ClientFeedbackDialog, ClientProfileMenu, ClientSettingsMenu, type ClientProfile } from './ClientAccountUI'
+import { ClientResearchWorkspace } from './ClientResearchWorkspace'
+import { ClientDelegationWorkspace } from './ClientDelegationWorkspace'
+import { ClientResearchHub } from './ClientResearchHub'
+import { InternalLink } from './InternalLink'
+import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
+import { ConversationCosmos } from './ConversationCosmos'
+import { clientCopy, useClientPreferences } from '../client-preferences'
+import { createClientExperienceStore, type ClientTurn } from '../client-experience-store'
+import { getSitePage } from '../site-navigation'
+import type { ResearchPage, ResearchRecord } from '../research-library'
+import { CLIENT_RESEARCH_FIXTURE } from '../client-research-fixtures'
+import '../client-main-experience.css'
+
+const ClientHelp = lazy(() => import('./ClientPublicPages').then(module => ({ default: module.SiteHelp })))
+
+function AnswerActions({ text }: { text: string }) {
+  const [vote, setVote] = useState<'up' | 'down' | null>(null)
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState('')
+  const copyAttempt = useRef(0)
+  return <div className="client-answer-actions">
+    <button type="button" aria-label="좋은 답변" aria-pressed={vote === 'up'} onClick={() => setVote(vote === 'up' ? null : 'up')}><ThumbsUp size={15} /></button>
+    <button type="button" aria-label="아쉬운 답변" aria-pressed={vote === 'down'} onClick={() => setVote(vote === 'down' ? null : 'down')}><ThumbsDown size={15} /></button>
+    <button type="button" aria-label={copied ? '답변 복사 완료' : '답변 복사'} onClick={async () => { const attempt = ++copyAttempt.current; try { await navigator.clipboard.writeText(text); if (attempt !== copyAttempt.current) return; setCopied(true); setError('') } catch { if (attempt !== copyAttempt.current) return; setCopied(false); setError('복사 권한을 확인해주세요.') } }}>{copied ? <Check size={15} /> : <Copy size={15} />}</button>
+    {error && <span role="status">{error}</span>}
+  </div>
+}
+
+function ConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
+  const thinking = turn.status === 'running' && !turn.answer
+  const status = thinking ? 'running' : turn.status === 'stopped' ? 'stopped' : 'done'
+  return <Fragment>
+    <ClientUserMessage onEdit={onEdit}>{turn.question}</ClientUserMessage>
+    <ClientResearchActivity label={thinking ? '생각을 정리하는 중' : turn.status === 'stopped' ? '작업 중단, 1단계' : '작업 완료, 1단계'} status={status}
+      source="mock" startedAt={turn.startedAt} finishedAt={turn.finishedAt ?? (thinking ? undefined : turn.startedAt + 1800)}
+      steps={[{ id: 'thinking', title: thinking ? '생각하는 중' : '생각 완료', status, detail: '아이디어 확인 중\n검증 가능한 조건으로 만들기 위해 몇 가지를 확인합니다.' }]} />
+    {turn.answer && <div className="g-amsg"><p>{turn.answer}<span className={turn.status === 'running' ? 'client-stream-caret' : ''} aria-hidden="true" /></p></div>}
+    {turn.status === 'done' && <AnswerActions text={turn.answer} />}
+    {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
+  </Fragment>
+}
+
+function SessionMenu({ title, onRename, onDelete }: { title: string; onRename: (text: string) => void; onDelete: () => void }) {
+  const [open, setOpen] = useState(false)
+  const [renaming, setRenaming] = useState(false)
+  const [armed, setArmed] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const input = useRef<HTMLInputElement>(null)
+  const trigger = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const click = (e: PointerEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    const navigate = () => setOpen(false)
+    const key = (e: KeyboardEvent) => {
+      if (e.isComposing) return
+      if (!ref.current?.contains(e.target as Node)) return
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); trigger.current?.focus() }
+      if (!renaming && ['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
+        const items = Array.from(ref.current?.querySelectorAll<HTMLButtonElement>('.client-session-pop button') ?? [])
+        if (!items.length) return
+        e.preventDefault()
+        const index = items.indexOf(document.activeElement as HTMLButtonElement)
+        const next = e.key === 'Home' ? 0 : e.key === 'End' ? items.length - 1 : (index + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length
+        items[next]?.focus()
+      }
+    }
+    document.addEventListener('pointerdown', click); document.addEventListener('keydown', key)
+    window.addEventListener('popstate', navigate); window.addEventListener('teth:navigate', navigate); window.addEventListener('hashchange', navigate)
+    return () => { document.removeEventListener('pointerdown', click); document.removeEventListener('keydown', key); window.removeEventListener('popstate', navigate); window.removeEventListener('teth:navigate', navigate); window.removeEventListener('hashchange', navigate) }
+  }, [open, renaming])
+  useEffect(() => { if (open && !renaming) ref.current?.querySelector<HTMLButtonElement>('.client-session-pop button')?.focus() }, [open, renaming])
+  useEffect(() => { if (renaming) { input.current?.focus(); input.current?.select() } }, [renaming])
+  return <div className="client-session-options" ref={ref}>
+    <button ref={trigger} type="button" aria-label="대화 메뉴" aria-expanded={open} onClick={() => { setOpen(!open); setArmed(false); setRenaming(false) }}><MoreHorizontal size={18} /></button>
+    {open && <div className="client-session-pop" aria-label="대화 관리">{renaming ? <form onSubmit={e => { e.preventDefault(); const value = input.current?.value.trim(); if (value) { onRename(value); setOpen(false); trigger.current?.focus() } }}><input ref={input} defaultValue={title} maxLength={120} aria-label="전략 이름" /><button type="submit">저장</button></form> : <><button type="button" onClick={() => setRenaming(true)}>이름 변경</button><button className="danger" type="button" onClick={() => { if (armed) { onDelete(); setOpen(false) } else setArmed(true) }}>{armed ? '정말 삭제할까요? 되돌릴 수 없어요' : '삭제'}</button></>}</div>}
+  </div>
+}
+
+/** Source-first entry point. The older funnel is NOT rendered in this shell.
+ * UI preview adapters remain isolated from approved service/execution contracts.
+ */
+export function ClientMainExperience() {
+  const { language, t } = useClientPreferences()
+  const [store] = useState(createClientExperienceStore)
+  const state = useSyncExternalStore(store.subscribe, store.getSnapshot)
+  const session = state.sessions.find(s => s.id === state.currentId)
+  const [profile, setProfile] = useState<ClientProfile | null>(() => {
+    try { const saved = JSON.parse(sessionStorage.getItem('teth-client-profile-preview') || 'null'); return saved && typeof saved.name === 'string' && typeof saved.email === 'string' ? saved : null } catch { return null }
+  })
+  const [surface, setSurface] = useState<'settings' | 'locale' | 'feedback' | 'profile' | 'help' | null>(null)
+  const [auth, setAuth] = useState<'login' | 'signup' | null>(null)
+  const [authReturnToComposer, setAuthReturnToComposer] = useState(false)
+  const [page, setPage] = useState<ResearchPage | null>(null)
+  const [greetingSeed] = useState(() => Math.random())
+  const input = useRef<HTMLTextAreaElement>(null)
+  const [composerHeight, setComposerHeight] = useState(58)
+  const [compactHome, setCompactHome] = useState(false)
+  const [notice, setNotice] = useState('')
+  const [storageNoticeDismissed, setStorageNoticeDismissed] = useState(false)
+  // Dismissal belongs to the current failure, not every future storage outage.
+  if (!state.storageError && storageNoticeDismissed) setStorageNoticeDismissed(false)
+  const greetings = language === 'ko' ? clientCopy.GREETS : clientCopy.GREETS_ALL[language]
+  const greeting = greetings[Math.floor(greetingSeed * greetings.length)]
+  const isHome = !session && !page
+  const busy = Boolean(session?.turns.some(t => t.status === 'running'))
+  const hasTurns = state.sessions.some(s => s.turns.some(t => t.status === 'running'))
+  const hasJobs = hasTurns || state.sessions.some(s => s.researchStatus === '진행 중')
+  const value = session?.draft ?? state.homeDraft
+  const latest = session?.turns.at(-1)
+  const records: ResearchRecord[] = state.sessions.map(s => ({ id: s.id, title: s.title, market: s.pair, status: s.paper ? 'Paper 실행 중' : s.researchStatus, live: s.paper || s.tradingReady, updatedAt: s.updatedAt, snapshot: s }))
+  useEffect(() => {
+    if (!isHome) return
+    const content = document.querySelector<HTMLElement>('.client-source-app .client-home-content')
+    if (!content) return
+    const elements = ['.client-hero-logo', '.client-hero-title', '.client-hero-subtitle', '.client-home-pill', '.client-chip-stack', '.client-home-terms'].map(selector => content.querySelector<HTMLElement>(selector)).filter((element): element is HTMLElement => Boolean(element))
+    let frame = 0
+    const measure = () => {
+      const heights = elements.map(element => element.getBoundingClientRect().height)
+      const terms = elements.at(-1)
+      const style = terms ? getComputedStyle(terms) : null
+      const margins = style ? parseFloat(style.marginTop) + parseFloat(style.marginBottom) : 0
+      content.style.setProperty('--client-terms-height', `${(heights.at(-1) ?? 40) + margins + 28}px`)
+      setCompactHome(innerWidth <= 860 && heights.reduce((sum, height) => sum + height, 0) + margins + 248 > innerHeight)
+    }
+    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure) }
+    const observer = new ResizeObserver(schedule)
+    elements.forEach(element => observer.observe(element))
+    window.addEventListener('resize', schedule)
+    schedule()
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener('resize', schedule) }
+  }, [isHome])
+  useEffect(() => {
+    if (!hasJobs) return
+    let timer: number | undefined
+    const sync = () => { window.clearInterval(timer); if (!document.hidden) { store.tick(Date.now()); timer = window.setInterval(() => store.tick(Date.now()), hasTurns ? 65 : 1000) } }
+    sync(); document.addEventListener('visibilitychange', sync); window.addEventListener('pageshow', sync)
+    return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', sync); window.removeEventListener('pageshow', sync) }
+  }, [hasJobs, hasTurns, store])
+  useEffect(() => { const flush = () => store.flush(); window.addEventListener('pagehide', flush); return () => { window.removeEventListener('pagehide', flush); store.flush() } }, [store])
+  useEffect(() => {
+    // Keep the conversation mounted on public pages, but never its modal portals.
+    const closeOverlays = () => { if (getSitePage()) { setAuth(null); setSurface(null) } }
+    window.addEventListener('popstate', closeOverlays)
+    window.addEventListener('teth:navigate', closeOverlays)
+    return () => { window.removeEventListener('popstate', closeOverlays); window.removeEventListener('teth:navigate', closeOverlays) }
+  }, [])
+  useEffect(() => { if (isHome && matchMedia('(min-width: 861px)').matches) input.current?.focus({ preventScroll: true }) }, [isHome])
+  useEffect(() => { if (!isHome) document.querySelector<HTMLElement>('.client-source-main')?.focus({ preventScroll: true }) }, [isHome, page, session?.id, session?.workspace])
+  useEffect(() => {
+    if (!auth && (!surface || surface === 'locale')) return
+    const root = document.getElementById('root')
+    const wasInert = root?.inert ?? false
+    const overflow = document.body.style.overflow
+    if (root) root.inert = true
+    document.body.style.overflow = 'hidden'
+    return () => { if (root) root.inert = wasInert; document.body.style.overflow = overflow }
+  }, [auth, surface])
+  const home = () => { setPage(null); store.home(); setNotice('') }
+  const openAuth = (mode: 'login' | 'signup', fromComposer = false) => { setAuthReturnToComposer(fromComposer); setAuth(mode) }
+  const send = (text = value) => { if (!text.trim()) return; setPage(null); store.send(text) }
+  const workspace = (next: 'research' | 'delegation') => { if (session) store.workspace(session.id, next) }
+  const backToChat = () => { if (session) store.workspace(session.id, 'conversation') }
+  const changeProfile = (next: ClientProfile | null) => {
+    setProfile(next)
+    try { if (next) sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: next.name, email: next.email })); else sessionStorage.removeItem('teth-client-profile-preview') }
+    catch { setNotice('계정 미리보기 상태를 이 탭에 저장하지 못했습니다.') }
+  }
+  return <div className={`tesia-shell conversation-surface client-source-app ${isHome ? 'view-landing' : 'view-briefing'}`}>
+    <a className="skip-link" href="#tesia-main">본문으로 건너뛰기</a>
+    <ClientChrome signedIn={Boolean(profile)} profileName={profile?.name} onHome={home} onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')}
+      onSettings={() => setSurface('settings')} onLocale={() => setSurface('locale')} onDashboard={() => setPage('history')} onProfile={() => setSurface('profile')}
+      researchPage={page} records={records} activeResearchId={session?.id} onResearchPage={setPage} onSelectResearch={id => { setPage(null); store.select(id) }}
+      onTrading={state.sessions.some(s => s.tradingReady) ? () => { const live = session?.tradingReady ? session : state.sessions.find(s => s.tradingReady)!; store.select(live.id); store.workspace(live.id, 'delegation'); setPage(null) } : undefined} />
+    <main id="tesia-main" className="client-source-main" tabIndex={-1}>
+      {page ? <ClientResearchHub page={page} records={records} onSelect={id => { store.select(id); setPage(null) }} onNew={home} onReturn={() => setPage(null)}
+        onFollow={text => { home(); store.draft(text) }} shareable={state.sessions.some(s => s.researchStatus === '검토 필요') ? { id: state.sessions.find(s => s.researchStatus === '검토 필요')!.id, title: state.sessions.find(s => s.researchStatus === '검토 필요')!.title, returnRate: CLIENT_RESEARCH_FIXTURE.versions[1].ret } : undefined} externalBoundary /> : isHome ? <div className="landing-main"><section className="landing-hero" aria-labelledby="landing-title">
+        <ConversationCosmos />
+        <div className={`client-home-content ${value.trim() ? 'has-input' : ''} ${compactHome ? 'is-compact-home' : ''}`} style={{ '--client-composer-height': `${composerHeight}px` } as CSSProperties}>
+          <span className="client-hero-logo" aria-hidden="true"><ClientLogo /></span>
+          <h1 className="client-hero-title" id="landing-title">{greeting.h.split('\n').map((line, i) => <span key={i}>{line}</span>)}</h1>
+          <p className="client-hero-subtitle">{greeting.s}</p>
+          <ClientComposer value={value} inputRef={input} disabled={false} onChange={store.draft} onSend={() => send()} onLogin={() => openAuth('login', true)} onHeightChange={setComposerHeight} />
+          <div className="client-chip-stack"><div className="client-home-chips" aria-label="시작 아이디어" inert={Boolean(value.trim())}>{(['chip.1','chip.2','chip.3'] as const).map(key => <button key={key} type="button" onClick={() => send(t(key))}>{t(key)}</button>)}</div>
+            {!profile && <div className="client-free-row" inert={!value.trim()}><button type="button" onClick={() => openAuth('signup')}><span>{t('auth.free')}</span></button></div>}
+          </div>
+          <p className="client-home-terms">{t('home.terms').split(/(\{[TP]\}.*?\{\/\})/g).map((part, i) => { const link = part.match(/^\{([TP])\}(.*?)\{\/\}$/); return link ? <InternalLink key={i} href={`/policies/#${link[1] === 'T' ? 'terms' : 'privacy'}`}>{link[2]}</InternalLink> : <Fragment key={i}>{part}</Fragment> })}</p>
+        </div>
+      </section></div> : session?.workspace === 'research' ? <ClientResearchWorkspace key={session.id} sessionId={session.id} idea={session.idea} planContext={session} onStatusChange={status => store.researchStatus(session.id, status)} onPaperChange={paper => store.paper(session.id, paper)} onBack={backToChat} onDelegate={() => workspace('delegation')} />
+      : session?.workspace === 'delegation' ? <ClientDelegationWorkspace key={session.id} sessionId={session.id} idea={session.idea} onBack={backToChat} onTradingReady={() => store.tradingReady(session.id)} onShowRanking={() => setPage('ranking')} initialPage={session.tradingReady ? 'trading' : undefined} />
+      : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onStop={() => store.stop(session.id)} busy={busy}
+        initialViewport={store.conversationViewport(session.id)} onViewportChange={view => store.saveConversationViewport(session.id, view)}
+        inputLabel="TETH에게 물어보세요" sendLabel="메시지 보내기" titleLabel="대화 제목" initialTitle={session.title} onTitleChange={title => store.rename(session.id, title)}
+        activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}`} previewTools={<></>}
+        headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => { const removed = store.remove(session.id); setNotice(removed ? '전략을 삭제했어요' : '목록에서 제거했지만 저장소의 일부 기록을 삭제하지 못했습니다.') }} />}>
+        {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn} onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }} />)}
+        {latest?.status === 'done' && <><div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>
+          <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>
+        </>}
+      </ClientConversation> : null}
+    </main>
+    <aside className="client-development-boundary" aria-label="로컬 검수 환경"><details><summary>로컬 UI 검수 · 서비스 미연결</summary><p>클라이언트 원본 acccc7f 기반 React 화면입니다. 대화는 원본 스크립트, 연구·차트·랭킹·거래는 고정 시각 검수 데이터입니다. 인증·메일·피드백·결제·거래소 연결·주문은 실제 처리되지 않습니다. 실제 비밀번호·API 키·카드 정보를 입력하지 마세요. 원본 첫 전송 인증 시점은 PM 결정 대기이며 현재 비로그인 대화 정책을 유지합니다.</p></details></aside>
+    {((state.storageError && !storageNoticeDismissed) || state.recoveryWarning || notice) && <div className="client-global-notice" role="status">{state.storageError && !storageNoticeDismissed ? '이 탭에 변경 내용을 저장하지 못했습니다. 새로고침 전에 내용을 복사해주세요.' : state.recoveryWarning ? '일부 대화 기록을 복원하지 못했습니다. 나머지 대화와 초안은 유지했습니다.' : notice}<button type="button" aria-label="알림 닫기" onClick={() => { setNotice(''); setStorageNoticeDismissed(true); if (state.recoveryWarning) store.dismissRecovery() }}>×</button></div>}
+    {surface === 'locale' && <ClientLocalePanel onClose={() => setSurface(null)} />}
+    {surface && surface !== 'locale' && createPortal(<div className="client-source-overlays">
+      {surface === 'settings' && <ClientSettingsMenu signedIn={Boolean(profile)} onClose={() => setSurface(null)} onLocale={() => setSurface('locale')} onFeedback={() => setSurface('feedback')} onHelp={() => setSurface('help')} onDownload={() => { setSurface(null); history.pushState({}, '', '/download/'); window.dispatchEvent(new Event('teth:navigate')) }} />}
+      {surface === 'feedback' && <ClientFeedbackDialog onClose={() => setSurface(null)} />}
+      {surface === 'profile' && profile && <ClientProfileMenu profile={profile} onClose={() => setSurface(null)} onLogout={() => { changeProfile(null); setSurface(null); home() }} />}
+      {surface === 'help' && <ClientLoadBoundary fallback={<ClientLoadFallback onClose={() => setSurface(null)} />}><Suspense fallback={<ClientLoadFallback loading onClose={() => setSurface(null)} />}><ClientHelp initialOpen onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
+    </div>, document.body)}
+    {auth && createPortal(<div className="client-source-overlays"><ClientAuthDialog key={auth} mode={auth} returnFocus={authReturnToComposer ? input : undefined} onClose={() => setAuth(null)} onComplete={next => { changeProfile(next); setAuth(null) }} /></div>, document.body)}
+  </div>
+}

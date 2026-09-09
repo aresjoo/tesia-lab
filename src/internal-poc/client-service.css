@@ -1,0 +1,26 @@
+/* Internal-only: client tokens skin the existing, contract-owned decision UI. */
+body:has(.client-service-app) { background: var(--client-0, #0f1012); color: var(--client-text, #e6e7ea); }
+.client-service-app {
+  --poc-ink: var(--client-text); --poc-soft: var(--client-text-2); --poc-muted: var(--client-text-2);
+  --poc-paper: var(--client-1); --poc-ground: var(--client-0); --poc-cool: var(--client-2);
+  --poc-line: var(--client-line); --poc-line-strong: var(--client-line-2);
+}
+.client-service-app .client-service-document { margin-top: 24px; border-top: 1px solid var(--client-line-2); padding-top: 24px; }
+.client-service-app .strategy-summary .section-heading { flex-wrap: wrap; }
+.client-service-app .strategy-summary .section-heading > div { flex: 1 1 180px; min-width: 0; }
+.client-service-app .strategy-summary .status-pill { flex: none; white-space: nowrap; color: var(--client-text-2); background: var(--client-2); }
+.client-service-app .decision-rail { width: 100%; min-width: 0; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.client-service-app .decision-rail :is(h2,h3,p,code,label) { overflow-wrap: anywhere; word-break: keep-all; }
+.client-service-app .decision-rail .primary-button { background: var(--client-text); color: var(--client-0); border: 1px solid var(--client-text); min-height: 44px; }
+.client-service-app .decision-rail button:disabled { opacity: .45; cursor: not-allowed; }
+.client-service-app .approval-box { background: var(--client-1); border-color: var(--client-line-2); }
+.client-service-app .client-service-logout { padding: 8px 12px; margin-left: auto; font-size: 12px; white-space: nowrap; }
+.client-service-app .client-service-issue:empty, .client-service-app .client-service-outcome:empty { display: none; }
+.client-service-app .client-service-issue [role=alert] { padding: 16px; margin-top: 16px; border: 1px solid var(--client-line-2); border-radius: 10px; background: var(--client-1); color: var(--client-text); font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.client-service-app .client-service-issue button { min-height: 40px; padding: 8px 12px; }
+.client-service-app .g-composer textarea:disabled { opacity: .7; }
+.client-service-app .g-send:disabled { cursor: not-allowed; }
+.client-service-app .g-uacts button:disabled { opacity: .4; cursor: not-allowed; }
+.client-service-app .client-service-outcome { min-width: 0; }
+.client-service-app .client-service-delivery { margin: -8px 0 12px; text-align: right; color: var(--client-text-2); font-size: 12px; line-height: 1.7; }
+.client-service-app .client-service-outcome .table-wrap { max-width: 100%; overflow-x: auto; }

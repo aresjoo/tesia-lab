@@ -1,0 +1,35 @@
+/* tesia-lab acccc7f g-act2: same content hierarchy, scoped to the conversation.
+   Task state comes from props; styling cannot synthesize progress or success. */
+.client-lab-conversation .g-act2 { max-width: 800px; min-width: 0; font-size: 13.5px; color: var(--client-text-2); }
+.client-lab-conversation .g-act2 .hd { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 32px; text-align: left; padding: 4px 2px; color: var(--client-text-2); font-size: 13.5px; border-radius: 8px; }
+.client-lab-conversation .g-act2 .hd:hover { color: var(--client-text); }
+.client-lab-conversation .g-act2 .activity-logo { width: 22px; height: 14px; object-fit: contain; flex: none; }
+.client-lab-conversation .g-act2 .hlb { min-width: 0; font-weight: 500; word-break: keep-all; overflow-wrap: anywhere; }
+.client-lab-conversation .g-act2 .els { flex-shrink: 0; font-size: 12px; color: var(--client-text-2); font-family: var(--font-number); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.client-lab-conversation .g-act2 .hd > .tic { margin-top: 0; }
+.client-lab-conversation .g-act2 .chev { flex-shrink: 0; color: var(--client-text-3); }
+.client-lab-conversation .g-act2.open .hd > .chev { transform: rotate(180deg); }
+.client-lab-conversation .g-act2 .tl { margin: 2px 0 0 10px; }
+.client-lab-conversation .g-act2 .tlin { list-style: none; padding: 0; margin: 0; }
+.client-lab-conversation .g-act2 .ar { position: relative; display: flex; gap: 11px; padding: 7px 0 7px 2px; }
+.client-lab-conversation .g-act2 .ar::before { content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 1px; background: var(--client-line); }
+.client-lab-conversation .g-act2 .ar:first-child::before { top: 12px; }
+.client-lab-conversation .g-act2 .ar:last-child::before { bottom: auto; height: 12px; }
+.client-lab-conversation .g-act2 .tic { z-index: 1; flex: none; width: 16px; height: 16px; margin-top: 6px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--client-0); color: var(--client-text-2); border: 1px solid var(--client-line); }
+.client-lab-conversation .g-act2 .tic.running { border: 0; }
+.client-lab-conversation .g-act2 .g-tdots { gap: 2px; }
+.client-lab-conversation .g-act2 .g-tdots i { width: 3px; height: 3px; }
+.client-lab-conversation .g-act2 .ab { flex: 1; min-width: 0; }
+.client-lab-conversation .g-act2 .arh { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 28px; text-align: left; padding: 1px 4px; border-radius: 7px; color: var(--client-text-2); font-size: 13.5px; }
+.client-lab-conversation .g-act2 button.arh:hover { background: var(--client-2); color: var(--client-text); }
+.client-lab-conversation .g-act2 .at { min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
+.client-lab-conversation .g-act2 .running .at { color: var(--client-text); }
+.client-lab-conversation .g-act2 .am { margin-left: auto; flex: none; font-size: 11.5px; color: var(--client-text-2); }
+.client-lab-conversation .g-act2 :is(.tic.failed,.am.failed) { color: #f87171; }
+.client-lab-conversation .g-act2 .arh > svg { flex: none; }
+.client-lab-conversation .g-act2 .arh[aria-expanded='true'] > svg { transform: rotate(90deg); }
+.client-lab-conversation .g-act2 .ad { white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font-size: 12.8px; line-height: 1.75; color: var(--client-text-2); padding: 6px 4px 4px 8px; }
+.client-lab-conversation .activity-announcer { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 640px) {
+  .client-lab-conversation .g-act2 :is(.hd,button.arh) { min-height: 44px; }
+}

@@ -1,0 +1,856 @@
+/* Client-approved conversation shell. Imported after the legacy funnel styles. */
+
+.tesia-shell.conversation-surface {
+  --chat-canvas: #0f1012;
+  --chat-surface: #15171a;
+  --chat-surface-2: #1c1f24;
+  --chat-surface-3: #242830;
+  --chat-line: rgba(255, 255, 255, 0.1);
+  --chat-line-strong: rgba(255, 255, 255, 0.18);
+  --chat-text: #f2f4f7;
+  --chat-text-2: #a9aeb8;
+  --chat-text-3: #737985;
+  --chat-accent: #6f92f6;
+  min-height: 100svh;
+  padding-left: 64px;
+  overflow-x: clip;
+  color: var(--chat-text);
+  background: var(--chat-canvas);
+  font-family: "Noto Sans KR Variable", "Geist Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tesia-shell.conversation-surface .skip-link {
+  background: var(--chat-text);
+  color: var(--chat-canvas);
+}
+
+.conversation-rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 90;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 10px 14px;
+  border-right: 1px solid var(--chat-line);
+  background: color-mix(in srgb, var(--chat-canvas) 88%, transparent);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+.conversation-rail .tesia-brand {
+  width: 44px;
+  height: 44px;
+  justify-content: center;
+  padding: 0;
+  border-radius: 14px;
+}
+
+.conversation-rail .tesia-brand > span:not(.brand-mark),
+.conversation-rail .tesia-brand > sup {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.conversation-rail .brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  color: white;
+  background:
+    radial-gradient(circle at 28% 22%, rgba(255, 210, 77, .9), transparent 28%),
+    linear-gradient(135deg, #12d6b2 6%, #0eb7e9 48%, #5674f5 100%);
+  box-shadow: 0 0 26px rgba(30, 194, 215, .16);
+}
+
+.conversation-rail nav,
+.conversation-rail-bottom {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.conversation-rail nav {
+  margin-top: 24px;
+}
+
+.conversation-rail-bottom {
+  margin-top: auto;
+}
+
+.conversation-rail nav button,
+.conversation-rail-bottom button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 13px;
+  color: var(--chat-text-3);
+  background: transparent;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.conversation-rail nav button:hover,
+.conversation-rail-bottom button:hover {
+  color: var(--chat-text);
+  background: rgba(255, 255, 255, .06);
+}
+
+.conversation-rail nav button:active,
+.conversation-rail-bottom button:active {
+  transform: scale(.96);
+}
+
+.conversation-rail nav button > span:not(.rail-avatar),
+.conversation-rail-bottom button > span:not(.rail-avatar) {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  width: max-content;
+  padding: 7px 9px;
+  border: 1px solid var(--chat-line);
+  border-radius: 9px;
+  color: var(--chat-text-2);
+  background: #191b1f;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .32);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(4px, -50%);
+  transition: opacity 140ms ease, transform 140ms ease;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.conversation-rail nav button:hover > span,
+.conversation-rail-bottom button:hover > span:not(.rail-avatar) {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.conversation-rail .rail-new-chat {
+  color: #dce5ff;
+  background: rgba(111, 146, 246, .12);
+}
+
+.conversation-rail .rail-avatar {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--chat-line-strong);
+  border-radius: 50%;
+  color: var(--chat-text);
+  background: var(--chat-surface-2);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.tesia-shell.conversation-surface .agent-chat-stage {
+  min-height: 100svh;
+  padding: 0;
+  color: var(--chat-text);
+  background: var(--chat-canvas);
+}
+
+.tesia-shell.conversation-surface .agent-chat-stage > .landing-main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  transform: none;
+  animation: none;
+}
+
+/* Home */
+.tesia-shell.view-landing .landing-main {
+  min-height: 100svh;
+  color: var(--chat-text);
+  background: var(--chat-canvas);
+}
+
+.tesia-shell.view-landing .landing-hero {
+  position: relative;
+  min-height: min(820px, 100svh);
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 80px 32px 52px;
+  color: var(--chat-text);
+  background:
+    linear-gradient(180deg, rgba(15, 16, 18, .3), rgba(15, 16, 18, 0) 42%, rgba(15, 16, 18, .82)),
+    var(--chat-canvas);
+}
+
+.tesia-shell.view-landing .landing-hero::before,
+.tesia-shell.view-landing .landing-hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.tesia-shell.view-landing .landing-hero::before {
+  z-index: -1;
+  inset: 16% 16% 5%;
+  background: radial-gradient(circle at 50% 46%, rgba(77, 112, 205, .11), transparent 48%);
+  filter: blur(34px);
+}
+
+.tesia-shell.view-landing .landing-hero::after {
+  z-index: 1;
+  inset: auto 0 0;
+  height: 150px;
+  background: linear-gradient(180deg, transparent, var(--chat-canvas));
+}
+
+.tesia-shell.view-landing .landing-hero > .conversation-cosmos {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  display: block;
+}
+
+.landing-home-content {
+  position: relative;
+  z-index: 3;
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tesia-shell.view-landing .landing-symbol {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 28px;
+  border-radius: 19px;
+  background: rgba(255, 255, 255, .035);
+  box-shadow: 0 0 0 1px var(--chat-line), 0 20px 58px rgba(37, 93, 180, .18);
+}
+
+.tesia-shell.view-landing .landing-symbol .brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  color: white;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 210, 77, .95), transparent 26%),
+    linear-gradient(135deg, #15d7b2, #0cb6e8 49%, #5975f5);
+}
+
+.tesia-shell.view-landing .landing-hero .landing-home-content > h1 {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  color: var(--chat-text);
+  font-family: "Noto Sans KR Variable", "Geist Variable", sans-serif;
+  font-size: clamp(44px, 5.4vw, 72px);
+  font-weight: 560;
+  letter-spacing: -.055em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.tesia-shell.view-landing .landing-hero .landing-home-content > h1 span:last-child {
+  color: #c7d3f3;
+}
+
+.tesia-shell.view-landing .landing-hero .landing-home-content > p {
+  margin: 20px 0 0;
+  color: var(--chat-text-2);
+  font-size: 16px;
+  line-height: 1.68;
+  letter-spacing: -.018em;
+}
+
+.mobile-break {
+  display: none;
+}
+
+.tesia-shell.view-landing .landing-composer {
+  position: relative;
+  width: min(720px, 100%);
+  margin: 34px auto 0;
+  padding: 0;
+  border: 1px solid var(--chat-line);
+  border-radius: 25px;
+  color: var(--chat-text);
+  background: color-mix(in srgb, var(--chat-surface-2) 80%, transparent);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .36), inset 0 1px rgba(255, 255, 255, .04);
+  backdrop-filter: blur(24px) saturate(122%);
+  -webkit-backdrop-filter: blur(24px) saturate(122%);
+  opacity: 1;
+  transform: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+  min-height: 0;
+  overflow: visible;
+}
+
+.tesia-shell.view-landing .landing-composer::before,
+.tesia-shell.view-landing .landing-composer::after {
+  content: none;
+}
+
+.tesia-shell.view-landing .landing-composer:focus-within {
+  border-color: rgba(142, 170, 246, .56);
+  box-shadow: 0 24px 78px rgba(0, 0, 0, .42), 0 0 0 3px rgba(111, 146, 246, .08), inset 0 1px rgba(255, 255, 255, .06);
+}
+
+.tesia-shell.view-landing .composer-body {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 9px 8px 14px;
+}
+
+.composer-plus {
+  display: grid;
+  place-items: center;
+  color: var(--chat-text-3);
+  font-size: 23px;
+  font-weight: 300;
+}
+
+.tesia-shell.view-landing .composer-body textarea {
+  width: 100%;
+  min-height: 44px;
+  max-height: 152px;
+  padding: 9px 4px;
+  border: 0;
+  outline: 0;
+  resize: none;
+  color: var(--chat-text);
+  background: transparent;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.tesia-shell.view-landing .composer-body textarea::placeholder {
+  color: #777d87;
+}
+
+.tesia-shell.view-landing .composer-body button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #0e1220;
+  background: #d8e1fb;
+  cursor: pointer;
+  transition: transform 150ms ease, filter 150ms ease, opacity 150ms ease;
+}
+
+.tesia-shell.view-landing .composer-body button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.tesia-shell.view-landing .composer-body button:disabled {
+  color: var(--chat-text-3);
+  background: rgba(255, 255, 255, .055);
+  opacity: 1;
+}
+
+.tesia-shell.view-landing .composer-error {
+  margin: -1px 58px 12px;
+  color: #f59a92;
+  text-align: left;
+  font-size: 12px;
+}
+
+.tesia-shell.view-landing .composer-intents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 58px 12px;
+}
+
+.tesia-shell.view-landing .composer-intents em {
+  padding: 4px 8px;
+  border: 1px solid var(--chat-line);
+  border-radius: 999px;
+  color: var(--chat-text-2);
+  background: rgba(255, 255, 255, .035);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.tesia-shell.view-landing .starter-ideas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 0;
+  opacity: 1;
+  transform: none;
+}
+
+.tesia-shell.view-landing .starter-ideas button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--chat-line);
+  border-radius: 999px;
+  color: var(--chat-text-2);
+  background: rgba(18, 20, 24, .62);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 540;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.tesia-shell.view-landing .starter-ideas button:hover {
+  color: var(--chat-text);
+  border-color: var(--chat-line-strong);
+  background: rgba(255, 255, 255, .055);
+}
+
+.landing-trust-line,
+.tesia-shell.view-landing .live-activity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  color: var(--chat-text-3);
+  font-size: 11.5px;
+}
+
+.landing-trust-line {
+  margin-top: 22px;
+}
+
+.landing-trust-line > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.landing-trust-line i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #60c88c;
+  box-shadow: 0 0 10px rgba(96, 200, 140, .5);
+}
+
+.tesia-shell.view-landing .live-activity {
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+}
+
+.tesia-shell.view-landing .live-activity > span {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tesia-shell.view-landing .live-activity strong {
+  color: #cbd1da;
+  font-variant-numeric: tabular-nums;
+}
+
+.tesia-shell.view-landing .live-activity > i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #424751;
+}
+
+/* Compact social proof. It supports the home instead of becoming another page. */
+.tesia-shell.view-landing .trust-runway {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 42px clamp(24px, 5vw, 72px) 64px;
+  color: var(--chat-text);
+  background: #0b0c0e;
+}
+
+.tesia-shell.view-landing .landing-proof {
+  width: min(1120px, 100%);
+  min-height: 184px;
+  margin: 0 auto;
+  padding: 0;
+  border: 1px solid var(--chat-line);
+  border-radius: 20px;
+  background: #111317;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+}
+
+.tesia-shell.view-landing .proof-viewport {
+  min-height: 182px;
+}
+
+.tesia-shell.view-landing .proof-slide {
+  min-height: 182px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 210px;
+  align-items: end;
+  gap: 40px;
+  padding: 30px 34px 26px;
+}
+
+.tesia-shell.view-landing .proof-quote blockquote {
+  max-width: 760px;
+  margin: 0;
+  color: #e6e9ef;
+  font-size: clamp(18px, 1.8vw, 25px);
+  font-weight: 480;
+  letter-spacing: -.03em;
+  line-height: 1.55;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.tesia-shell.view-landing .proof-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+}
+
+.tesia-shell.view-landing .proof-count {
+  order: 2;
+  color: var(--chat-text-3);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tesia-shell.view-landing .proof-person {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.tesia-shell.view-landing .proof-person strong {
+  color: var(--chat-text);
+  font-size: 13px;
+}
+
+.tesia-shell.view-landing .proof-person small,
+.tesia-shell.view-landing .proof-person em {
+  color: var(--chat-text-3);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.tesia-shell.view-landing .how-flow {
+  width: min(1120px, 100%);
+  margin: 36px auto 0;
+  padding: 0 8px;
+  border: 0;
+  color: var(--chat-text-2);
+  background: transparent;
+}
+
+.tesia-shell.view-landing .how-flow > div p {
+  color: var(--chat-text-3);
+}
+
+.tesia-shell.view-landing + .tesia-footer,
+.tesia-shell.conversation-surface .tesia-footer {
+  display: none;
+}
+
+/* Conversation */
+.tesia-shell:is(.view-briefing, .view-build) .agent-chat-stage {
+  height: 100svh;
+  min-height: 0;
+  color: var(--chat-text);
+  background:
+    radial-gradient(circle at 52% 0%, rgba(50, 80, 145, .08), transparent 34%),
+    var(--chat-canvas);
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-row .message-avatar {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--chat-line);
+  border-radius: 10px;
+  color: #dfe6f7;
+  background: linear-gradient(145deg, #22262c, #17191d);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .24);
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-row .message-avatar .tesia-glyph {
+  width: 22px;
+  height: 22px;
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 13px;
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-bubble {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  color: var(--chat-text-3);
+  background: transparent;
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9ca5b5;
+  animation: chat-dot 1.15s ease-in-out infinite;
+}
+
+.tesia-shell:is(.view-briefing, .view-build) .thinking-dots i:nth-child(2) { animation-delay: 140ms; }
+.tesia-shell:is(.view-briefing, .view-build) .thinking-dots i:nth-child(3) { animation-delay: 280ms; }
+
+@keyframes chat-dot {
+  0%,
+70%,
+100% { opacity: .25; transform: translateY(0); }
+  35% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* The strategy summary behaves like an artifact panel on wide screens. */
+
+@media (max-width: 860px) {
+  .tesia-shell.conversation-surface {
+    padding: 56px 0 0;
+  }
+
+  .conversation-rail {
+    inset: 0 0 auto;
+    width: auto;
+    height: 56px;
+    flex-direction: row;
+    padding: 6px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--chat-line);
+  }
+
+  .conversation-rail .tesia-brand {
+    width: auto;
+    gap: 9px;
+    padding: 0 6px;
+  }
+
+  .conversation-rail .tesia-brand > span:not(.brand-mark) {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    color: var(--chat-text);
+    font-size: 15px;
+  }
+
+  .conversation-rail nav {
+    width: auto;
+    display: flex;
+    margin: 0 0 0 auto;
+  }
+
+  .conversation-rail nav button:not(.rail-new-chat),
+.conversation-rail-bottom button:first-child {
+    display: none;
+  }
+
+  .conversation-rail-bottom {
+    width: auto;
+    display: flex;
+    margin: 0 0 0 4px;
+  }
+
+  .conversation-rail nav button > span,
+.conversation-rail-bottom button > span:not(.rail-avatar) {
+    display: none;
+  }
+
+  .tesia-shell.conversation-surface .agent-chat-stage {
+    min-height: calc(100svh - 56px);
+  }
+
+  .tesia-shell:is(.view-briefing, .view-build) .agent-chat-stage {
+    height: calc(100svh - 56px);
+  }
+}
+
+@media (max-width: 640px) {
+  .tesia-shell.view-landing .landing-hero {
+    min-height: calc(100svh - 56px);
+    padding: 48px 16px 34px;
+  }
+
+  .tesia-shell.view-landing .landing-symbol {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+  }
+
+  .tesia-shell.view-landing .landing-hero .landing-home-content > h1 {
+    font-size: clamp(37px, 11.2vw, 46px);
+    line-height: 1.08;
+  }
+
+  .tesia-shell.view-landing .landing-hero .landing-home-content > p {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+
+  .mobile-break {
+    display: block;
+  }
+
+  .tesia-shell.view-landing .landing-composer {
+    margin-top: 28px;
+    border-radius: 22px;
+  }
+
+  .tesia-shell.view-landing .composer-body {
+    min-height: 60px;
+    grid-template-columns: 28px minmax(0, 1fr) 40px;
+    padding-left: 11px;
+  }
+
+  .tesia-shell.view-landing .composer-body button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tesia-shell.view-landing .starter-ideas {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tesia-shell.view-landing .starter-ideas button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 10px;
+  }
+
+  .tesia-shell.view-landing .starter-ideas button:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .landing-trust-line {
+    max-width: 320px;
+    margin-top: 18px;
+  }
+
+  .tesia-shell.view-landing .live-activity {
+    max-width: 330px;
+    gap: 6px 10px;
+    line-height: 1.55;
+  }
+
+  .tesia-shell.view-landing .live-activity > i {
+    display: none;
+  }
+
+  .tesia-shell.view-landing .live-activity > span {
+    width: 100%;
+  }
+
+  .tesia-shell.view-landing .trust-runway {
+    padding: 26px 12px 46px;
+  }
+
+  .tesia-shell.view-landing .landing-proof,
+.tesia-shell.view-landing .proof-viewport,
+.tesia-shell.view-landing .proof-slide {
+    min-height: 252px;
+  }
+
+  .tesia-shell.view-landing .proof-slide {
+    grid-template-columns: 1fr;
+    align-content: space-between;
+    gap: 24px;
+    padding: 24px 22px 20px;
+  }
+
+  .tesia-shell.view-landing .proof-quote blockquote {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .tesia-shell.view-landing .proof-meta,
+.tesia-shell.view-landing .proof-person {
+    align-items: flex-start;
+    justify-items: start;
+  }
+
+  .tesia-shell.view-landing .proof-meta {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+
+  .tesia-shell.view-landing .how-flow {
+    display: none;
+  }
+
+  .tesia-shell:is(.view-briefing, .view-build) .thinking-row {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .tesia-shell:is(.view-briefing, .view-build) .thinking-row .message-avatar {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tesia-shell.conversation-surface *,
+.tesia-shell.conversation-surface *::before,
+.tesia-shell.conversation-surface *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+@media (prefers-contrast: more), (prefers-reduced-transparency: reduce) {
+  .conversation-rail,
+.tesia-shell.view-landing .landing-composer {
+    background: var(--chat-surface-2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

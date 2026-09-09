@@ -1,0 +1,262 @@
+/* Client palette shared by the migrated shell and the existing Mock workflow. */
+:root {
+  --font-ui: "Noto Sans KR Variable", "Noto Sans SC Variable", "Geist Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-number: "Geist Variable", "Noto Sans KR Variable", sans-serif;
+  --ink: var(--client-text);
+  --ink-soft: var(--client-text-2);
+  --muted: #a6aab2;
+  --line: rgba(255, 255, 255, .1);
+  --line-strong: rgba(255, 255, 255, .2);
+  --paper: var(--client-2);
+  --ground: var(--client-0);
+  --positive: #60c88c;
+  --negative: #eb786e;
+  --blue: #5b8af7;
+  --v2-ink: var(--client-text);
+  --v2-soft: var(--client-text-2);
+  --v2-muted: var(--client-text-2);
+  --v2-line: var(--line);
+  --v2-line-strong: var(--line-strong);
+  --v2-ground: var(--client-0);
+  --v2-paper: var(--client-2);
+  --v2-blue: var(--client-blue);
+  --v2-green: var(--positive);
+  --v2-red: var(--negative);
+  color: var(--client-text);
+  background: var(--client-0);
+  font-family: var(--font-ui);
+}
+
+body, .tesia-shell, .app-shell {
+  color: var(--client-text);
+  background: var(--client-0);
+  font-family: var(--font-ui);
+}
+
+button, input, textarea, select { font-family: inherit; }
+button, a { touch-action: manipulation; }
+:is(button, a, input, textarea, select):focus-visible { outline-color: #88a8ff; }
+.skip-link { color: var(--client-0); background: var(--client-text); }
+:is(.tesia-shell, .app-shell) :is(h1, h2, h3, p, li, dt, dd, label, button) { word-break: keep-all; overflow-wrap: anywhere; }
+:is(.tesia-shell, .app-shell) :is(h1, h2, h3) { text-wrap: balance; }
+:is(.tesia-shell, .app-shell) :is(p, li) { text-wrap: pretty; }
+:is(.tesia-shell, .app-shell) :is(main, section, article, aside, header, nav) { min-width: 0; }
+
+/* The expanded rail keeps the same alignment on desktop and mobile. */
+.client-auth-link, .client-download { display: inline-flex; align-items: center; justify-content: center; }
+.client-drawer-links a { display: flex; align-items: center; min-height: 44px; padding: 0 13px; color: var(--client-text-2); font-size: 13px; border-radius: 8px; }
+.client-drawer-links a:hover { color: var(--client-text); background: var(--client-3); }
+.client-locale-panel button:disabled { opacity: .4; cursor: not-allowed; }
+.client-rail-logo-row:focus-within > span, .client-sidebar-bottom > button:focus-visible > span { opacity: 1; }
+@media (min-width: 861px) {
+  .client-sidebar.mobile-open { width: 256px; }
+  .client-sidebar.mobile-open :is(.client-rail-logo-row, .client-rail-new-row) { display: none; }
+  .client-sidebar.mobile-open .client-drawer-brand { display: flex; align-items: center; justify-content: space-between; height: 46px; margin-bottom: 12px; }
+  .client-drawer-brand button { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 0 10px; border: 0; background: transparent; color: var(--client-text); }
+  .client-drawer-brand .client-logo { width: 24px; height: 15px; }
+  .client-drawer-brand strong { font-size: 16px; }
+  .client-sidebar.mobile-open .client-new-strategy { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: transparent; font-size: 13px; }
+  .client-new-strategy:disabled { opacity: .4; }
+  .client-sidebar.mobile-open .client-guest-note { display: block; margin: 0; padding: 16px 12px; font-size: 13px; line-height: 1.65; color: var(--client-text-2); }
+  .client-sidebar.mobile-open .client-drawer-links { display: grid; margin-top: auto; }
+  .client-sidebar.mobile-open .client-sidebar-bottom { margin-top: 8px; }
+  .client-sidebar.mobile-open .client-sidebar-bottom > button { width: 100%; justify-content: flex-start; gap: 12px; padding: 0 12px; border-radius: 8px; }
+  .client-sidebar.mobile-open .client-sidebar-bottom > button > span { position: static; padding: 0; background: none; color: inherit; box-shadow: none; opacity: 1; transform: none; font-size: 13px; font-weight: 400; }
+  .tesia-shell.conversation-surface:has(.client-sidebar.mobile-open) { padding-left: 256px; }
+  .tesia-shell:has(.client-sidebar.mobile-open) .client-home-terms { left: 256px; }
+}
+
+/* Preserve the compact artwork while giving each icon a reliable hit area. */
+:is(.client-home-plus, .client-expand, .client-home-send, .client-globe, .client-banner-close, .client-hamburger),
+.client-sidebar button { min-width: 44px; min-height: 44px; }
+.client-rail-logo-row, .client-rail-new-row { width: 44px; margin-left: 0; }
+.client-home-pill { padding-top: 7px; padding-bottom: 7px; }
+.client-home-plus { margin-left: -12px; }
+.client-home-send { width: 44px; height: 44px; }
+.client-home-chips button, .client-free-row button { min-height: 44px; }
+.client-auth-nav { top: 7px; }
+.client-auth-nav :is(a, button) { min-height: 44px; }
+.client-auth-link { padding-inline: 10px; }
+.client-globe { top: 7px; right: 12px; }
+.client-home-chips, .client-free-row { visibility: visible; }
+.client-home-content.has-input .client-home-chips, .client-free-row[inert] { visibility: hidden; }
+.client-home-content.has-input .client-free-row { visibility: visible; }
+.client-home-terms { margin: 0; line-height: 1.7; }
+.client-home-pill.is-multiline .client-expand { top: 5px; right: 5px; }
+
+/* Conversation and artifacts use the same neutrals as the entry screen. */
+.tesia-shell.conversation-surface {
+  --chat-bg: var(--client-0);
+  --chat-surface: var(--client-1);
+  --chat-surface-2: var(--client-2);
+  --chat-surface-3: var(--client-3);
+  --chat-text: var(--client-text);
+  --chat-text-2: var(--client-text-2);
+  --chat-text-3: var(--client-text-2);
+  --chat-accent: #5b8af7;
+}
+
+/* Post-conversation screens retain their workflow but share the client surfaces. */
+.tesia-shell .tesia-header, .app-shell .topbar, .app-shell .ticker-strip, .app-shell .rail,
+.app-shell .mobile-nav { color: var(--client-text); background: var(--client-1); border-color: var(--line); box-shadow: none; backdrop-filter: none; }
+.tesia-shell :is(.gate-main, .testing-main, .result-main, .recommend-main, .match-main, .onboarding-main) { width: min(1160px, calc(100% - 64px)); margin-inline: auto; }
+.tesia-shell :is(.gate-context, .result-heading, .recommend-heading, .match-heading, .onboarding-summary) h1 { max-width: 26ch; font-size: 36px; line-height: 1.4; letter-spacing: -.03em; font-weight: 600; }
+.tesia-shell .gate-main { grid-template-columns: minmax(0, 1.3fr) minmax(320px, .8fr); gap: 48px; padding-block: 48px; }
+.tesia-shell .gate-context { padding: 16px 0; background: transparent; }
+.tesia-shell .signup-panel { padding: 32px; align-self: start; }
+.tesia-shell .signup-panel h2 { font-size: 26px; line-height: 1.45; font-weight: 600; }
+.tesia-shell .signup-panel > span, .tesia-shell .result-score > span { font-family: var(--font-ui); }
+.tesia-shell .matcher-intro { padding: 20px 24px; }
+.tesia-shell .matcher-cta { width: calc(100% - 48px); margin: 0 24px 16px; border-radius: 12px; }
+.tesia-shell .matcher-disclaimer { padding: 0 24px 16px; margin: 0; }
+.tesia-shell :is(.signup-panel, .signup-report-preview, .testing-console, .result-board, .broker-matcher, .onboarding-steps, .recommend-list) { color: var(--client-text); background: var(--client-1); border: 1px solid var(--line); box-shadow: none; border-radius: 16px; }
+.tesia-shell :is(.gate-strategy-line, .gate-spec-preview, .preview-head, .result-metrics, .result-chart, .matching-note, .onboarding-proof) { color: var(--client-text); background: transparent; border-color: var(--line); }
+.tesia-shell :is(.gate-kicker, .gate-context > p, .signup-panel > p, .signup-panel > span, .signup-panel li, .result-heading > div > span, .result-disclaimer, .recommend-note, .matcher-disclaimer, .testing-main > p, .testing-stages small, .broker-detail, .broker-price small, .onboarding-summary > p) { color: var(--client-text-2); }
+.tesia-shell :is(.gate-strategy-line strong, .gate-spec-preview dd, .gate-data-points strong, .signup-panel h2, .result-score strong, .testing-meta strong, .result-metrics strong:not(.positive):not(.negative), .recommend-copy strong, .broker-identity strong, .broker-price strong, .onboarding-steps strong) { color: var(--client-text); }
+.tesia-shell :is(.result-score, .testing-stages li, .broker-row, .recommend-list > button, .onboarding-paths button) { color: var(--client-text); border-color: var(--line); background: transparent; }
+.tesia-shell :is(.result-mode, .onboarding-paths) { background: var(--client-2); border-color: var(--line); }
+.tesia-shell :is(.result-mode button.active, .onboarding-paths button.active, .broker-row.selected) { color: var(--client-text); background: rgba(61, 110, 240, .12); border-color: #5b8af7; box-shadow: none; }
+.tesia-shell :is(.ai-verdict, .ai-verdict.base, .ai-verdict.stress) { color: var(--client-text); background: var(--client-1); border: 1px solid var(--line); border-radius: 16px; }
+.tesia-shell .ai-verdict :is(h2, p, strong) { color: var(--client-text); }
+.tesia-shell .ai-verdict p { color: var(--client-text-2); }
+.tesia-shell :is(.matcher-cta, .onboarding-steps > button, .ai-verdict > button, .repair-actions > button:first-of-type) { color: #f5f7fc; background: var(--client-blue); box-shadow: none; }
+.tesia-shell :is(.signup-lock, .verdict-icon) { color: #91adff; background: rgba(61, 110, 240, .12); box-shadow: none; }
+.tesia-shell .social-signup { min-height: 48px; }
+.tesia-shell .social-signup.email { color: var(--client-text); border: 1px solid var(--line-strong); background: var(--client-2); }
+.tesia-shell .preview-lock { color: var(--client-text); background: rgba(23, 24, 27, .9); }
+.tesia-shell .account-button { color: var(--client-text); background: var(--client-2); border-color: var(--line); box-shadow: none; }
+.tesia-shell :is(.funnel-progress .current .step-index, .funnel-progress .done .step-index) { color: #f5f7fc; background: var(--client-blue); }
+.tesia-shell :is(.back-link, .tesia-footer) { color: var(--client-text-2); }
+
+/* Dashboard: a solid reading surface, with a single shared composer treatment. */
+.app-shell {
+  --dash-ground: var(--client-0);
+  --dash-paper: var(--client-1);
+  --dash-paper-soft: var(--client-2);
+  --dash-ink: var(--client-text);
+  --dash-soft: var(--client-text-2);
+  --dash-muted: var(--client-text-2);
+  --dash-line: var(--line);
+  --dash-line-strong: var(--line-strong);
+  --dash-night: var(--client-0);
+  --dash-night-raised: var(--client-2);
+  --dash-night-text: var(--client-text);
+  --dash-night-muted: var(--client-text-2);
+  --dash-night-line: var(--line);
+  --dash-positive-light: var(--positive);
+  --dash-positive-dark: var(--positive);
+  --dash-negative-light: var(--negative);
+}
+.app-shell :is(.main-content, .dashboard-main, .hero) { background: transparent; }
+.app-shell .hero-copy h1 { font-size: clamp(28px, 3.2vw, 44px); line-height: 1.35; letter-spacing: -.035em; }
+.app-shell .hero-copy h1 span { color: var(--client-text-2); }
+.app-shell :is(.eyebrow, .kicker, .mock-badge, .ticker-strip) { font-family: var(--font-number); }
+.app-shell :is(.strategy-panel, .market-panel, .ai-result, .connection-drawer) { color: var(--client-text); background: var(--client-1); border: 1px solid var(--line); box-shadow: none; border-radius: 16px; }
+.app-shell :is(.ask-zone, .ask-glass, .dashboard-conversation, .dashboard-thread) { color: var(--client-text); background: var(--client-1); border-color: var(--line); box-shadow: none; }
+.app-shell .ask-zone { border-radius: 20px; }
+.app-shell .ask-zone::before, .app-shell .ask-zone::after { display: none; }
+.app-shell .ask-glass { background: var(--client-2); border-radius: 16px; backdrop-filter: none; }
+.app-shell :is(.ask-input-row textarea, .ask-header label) { color: var(--client-text); }
+.app-shell .ask-input-row textarea::placeholder { color: var(--client-text-2); }
+.app-shell :is(.send-button, .strategy-footer button, .drawer-submit) { color: #f5f7fc; background: var(--client-blue); box-shadow: none; }
+.app-shell .desktop-nav button { color: var(--client-text-2); }
+.app-shell .ask-zone:has(+ .dashboard-conversation) { border-radius: 20px 20px 0 0; box-shadow: none; }
+.app-shell .ask-zone + .dashboard-conversation { background: var(--client-1); border-color: var(--line); border-radius: 0 0 20px 20px; box-shadow: none; }
+.app-shell .question-list button { background: var(--client-1); border-color: var(--line); box-shadow: none; }
+.app-shell .period-tabs { background: var(--client-2); border-color: var(--line); backdrop-filter: none; }
+.app-shell .period-tabs button { color: var(--client-text-2); }
+.app-shell .period-tabs button.active { color: var(--client-text); background: var(--client-3); box-shadow: none; }
+.app-shell :is(.connect-button, .period-switch, .question-card, .suggestion-card) { color: var(--client-text); background: var(--client-2); border-color: var(--line); box-shadow: none; }
+.app-shell :is(.period-switch button.active, .rail-item.active) { color: var(--client-text); background: var(--client-3); box-shadow: none; }
+.app-shell :is(.metric-grid, .strategy-footer, .coin-row, .market-table-head, .workspace-stats) { border-color: var(--line); }
+.app-shell :is(.section-heading h2, .metric-grid strong, .coin-price strong, .regime-score, .strategy-card h2, .market-card h2) { color: var(--client-text); }
+.app-shell :is(.regime-label, .hero-meta, .eyebrow, .market-time, .section-label, .market-table-head, .strategy-card header p, .metric-grid small, .metric-grid span) { color: var(--client-text-2); }
+.app-shell :is(.coin-icon, .drawer-field input, .connection-status) { color: var(--client-text); background: var(--client-2); border-color: var(--line); }
+.app-shell .equity-chart { background: var(--client-0); border-color: var(--line); }
+.app-shell .regime-track span { background: #5b8af7; }
+
+/* A single undistorted mark for headers, agents and dialogs. */
+:is(.tesia-shell, .app-shell) :is(.brand-mark, .tesia-agent-avatar, .ask-icon, .message-avatar) { background: transparent; box-shadow: none; border-color: transparent; filter: none; }
+:is(.tesia-shell, .app-shell) :is(.brand-mark, .tesia-agent-avatar, .ask-icon, .message-avatar) img { object-fit: contain; aspect-ratio: 256 / 155; }
+.app-shell .dashboard-ai-message > .message-avatar,
+.app-shell .thinking-row > .message-avatar { background: transparent; border: 0; box-shadow: none; }
+.app-shell .tesia-glyph { filter: none; }
+.policy-dialog { color: var(--client-text); background: var(--client-2); border: 1px solid var(--line-strong); border-radius: 20px; box-shadow: 0 24px 80px #0006; font-family: var(--font-ui); }
+.policy-dialog { overflow-y: auto; overscroll-behavior: contain; word-break: keep-all; overflow-wrap: anywhere; }
+.policy-dialog h2 { line-height: 1.4; text-wrap: balance; }
+.policy-dialog :is(h2, p) { color: var(--client-text); }
+.policy-dialog p { color: var(--client-text-2); }
+.policy-dialog button { background: var(--client-blue); color: #f5f7fc; }
+.policy-dialog::backdrop { background: rgba(15, 16, 18, .75); }
+.client-settings { display: grid; margin: 24px 0; }
+.client-settings > :is(div, label) { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 56px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.client-settings strong { font-size: 13px; color: var(--client-text-2); font-weight: 400; }
+.client-settings input { width: 44px; height: 44px; accent-color: var(--client-blue); }
+.client-motion-paused *, .client-motion-paused *::before, .client-motion-paused *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+
+@media (max-width: 860px) {
+  .client-sidebar { z-index: 110; }
+  .client-drawer-scrim { z-index: 105; }
+  .client-auth-nav .client-auth-link { display: none; }
+  .client-download { min-height: 44px; padding-inline: 12px; }
+  .client-banner-close { margin-right: -6px; }
+  .client-app-banner { gap: 8px; }
+  .client-home-pill textarea { font-size: 16px; }
+  .client-home-chips button { min-height: 44px; }
+  .client-home-pill:not(.is-fullscreen) { bottom: calc(24px + var(--client-terms-height, 40px)); }
+  .client-chip-stack { bottom: calc(38px + var(--client-terms-height, 40px) + var(--client-composer-height, 58px)); }
+  .tesia-shell :is(.gate-main, .testing-main, .result-main, .recommend-main, .match-main, .onboarding-main) { width: calc(100% - 32px); }
+  .tesia-shell .gate-main, .tesia-shell .onboarding-main { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .tesia-shell .tesia-header { gap: 12px; }
+  .tesia-shell .result-heading { gap: 16px; align-items: flex-start; }
+  .tesia-shell .result-heading h1 { font-size: 25px; }
+  .tesia-shell .result-mode { flex-shrink: 0; }
+  .tesia-shell .ai-verdict { gap: 16px; }
+}
+
+@media(max-width:860px){
+ .client-home-content { padding-top:144px; min-height:calc(100svh - 120px); }
+ .client-home-content.is-compact-home { justify-content:flex-start; min-height:100svh; padding:144px 24px 24px; }
+ .client-home-content.is-compact-home .client-home-pill:not(.is-fullscreen) { position:relative;inset:auto;width:100%;margin-top:28px;animation:none; }
+ .client-home-content.is-compact-home .client-chip-stack { position:static;margin-top:16px; }
+ .client-home-content.is-compact-home .client-home-terms { position:static; margin-top:24px;padding:0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-composer-dialog *, .client-locale-panel { animation: none !important; transition: none !important; }
+}
+
+/* Content grows vertically instead of squeezing labels or splitting amounts. */
+.tesia-shell :is(.gate-context>p,.signup-panel>p,.recommend-heading>p,.match-heading>p,.onboarding-summary>p,.ai-verdict p){max-width:64ch;line-height:1.8}
+.tesia-shell :is(.gate-spec-preview>div,.testing-stages li>div,.recommend-copy,.onboarding-steps li>div){min-width:0}
+.tesia-shell :is(.testing-stages small,.onboarding-steps p,.legal-copy,.matcher-disclaimer,.result-disclaimer){line-height:1.75}
+.tesia-shell :is(.result-metrics strong,.gate-data-points strong,.broker-price strong,.onboarding-price>span){white-space:nowrap;font-variant-numeric:tabular-nums}
+.tesia-shell :is(.social-signup,.matcher-cta,.onboarding-steps>button,.ai-verdict>button,.repair-actions>button){height:auto;min-height:48px;line-height:1.6;padding-block:12px}
+.tesia-shell :is(.result-disclaimer,.recommend-note) { align-items:flex-start; }
+.tesia-shell :is(.result-disclaimer,.recommend-note,.matching-note,.onboarding-disclosure)>svg { flex-shrink:0; margin-top:3px; }
+.app-shell .hero-signal-line>span { column-gap:4px; flex-wrap:wrap; line-height:1.7; }
+.app-shell .ask-glass label { font-size:13px; line-height:1.6; }
+.app-shell .ask-mode { white-space:nowrap; line-height:1.6; }
+.app-shell :is(.dashboard-ai-message p,.drawer-lead,.security-note,.strategy-card header p){line-height:1.8}
+.app-shell :is(.metric-grid strong,.coin-price strong,.regime-score){white-space:nowrap;font-variant-numeric:tabular-nums}
+.app-shell :is(.drawer-header>div,.security-note>span,.strategy-footer>div){min-width:0}
+.app-shell .drawer-header button { flex-shrink:0; }
+.app-shell .ask-input-row textarea { word-break:keep-all; overflow-wrap:anywhere; }
+.client-settings strong { text-align:right; word-break:keep-all; }
+.client-settings input { flex-shrink:0; }
+@media(max-width:640px){
+ .app-shell .ask-header { grid-template-columns:28px minmax(0,1fr); gap:6px 9px; }
+ .app-shell .ask-header .ask-mode { grid-column:2; font-size:10px; }
+ .app-shell .ask-input-row { margin-top:12px; }
+ .tesia-shell .signup-panel { padding:24px; }
+ .tesia-shell :is(.gate-context,.recommend-heading,.match-heading,.onboarding-summary) h1 { font-size:28px; line-height:1.45; }
+ .tesia-shell .result-heading { flex-wrap:wrap; }
+ .tesia-shell .result-mode { max-width:100%; }
+ .tesia-shell .result-mode button { white-space:normal; line-height:1.6; }
+ .tesia-shell .ai-verdict { grid-template-columns:minmax(0,1fr); padding:24px; gap:14px; }
+ .tesia-shell .ai-verdict > :is(button,div) { grid-column:1; min-width:0; }
+ .tesia-shell .ai-verdict h2 { font-size:20px; line-height:1.5; margin-top:8px; }
+ .tesia-shell .ai-verdict p { font-size:14px; }
+ .tesia-shell .verdict-icon { width:36px; height:36px; }
+ .tesia-shell .signup-panel h2 { font-size:24px; line-height:1.5; }
+}

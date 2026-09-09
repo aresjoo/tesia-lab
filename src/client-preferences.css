@@ -1,0 +1,39 @@
+.client-preferences-layer { position: fixed; inset: 0; z-index: 120; }
+.client-preferences-layer .client-locale-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 26px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 72px); overflow-y: auto; font-family: "Noto Sans KR Variable", "Noto Sans SC Variable", sans-serif; }
+.client-locale-panel .locale-column { min-width: 0; }
+.client-locale-panel h4 { position: relative; display: flex; align-items: center; gap: 6px; margin: 0 0 12px; font-size: 15px; font-weight: 700; line-height: 1.8; }
+.client-locale-panel .locale-info-button { display: inline-flex; flex: none; align-items: center; justify-content: center; padding: 0; width: 15px; height: 15px; min-height: 0; border: 1.3px solid var(--client-text-3); border-radius: 50%; font-size: 10px; color: var(--client-text-3); }
+.locale-tooltip { position: absolute; top: 26px; left: 0; z-index: 5; background: var(--client-3); color: var(--client-text); font-size: 12.5px; font-weight: 400; line-height: 1.6; padding: 12px 14px; border-radius: 10px; width: 260px; max-width: calc(100vw - 64px); box-shadow: 0 16px 48px #0006; opacity: 0; pointer-events: none; }
+.locale-info-button:hover + .locale-tooltip, .locale-info-button:focus-visible + .locale-tooltip { opacity: 1; }
+.locale-search { display: flex; align-items: center; gap: 8px; height: 38px; border-radius: 10px; background: var(--client-3); padding: 0 12px; margin-bottom: 10px; }
+.locale-search svg { flex: none; color: var(--client-text-3); }
+.locale-search:focus-within { outline: 1px solid var(--client-line-2); }
+.locale-search input { width: 100%; min-width: 0; background: transparent; border: 0; outline: none; color: var(--client-text); font: inherit; font-size: 13px; }
+.client-locale-panel ul { list-style: none; max-height: 300px; overflow-y: auto; overscroll-behavior: contain; margin: 0; padding: 0; scrollbar-width: thin; scrollbar-color: var(--client-line-2) transparent; }
+.client-locale-panel li { margin: 0; }
+.client-locale-panel li button { align-items: center; font: inherit; font-size: 14px; line-height: 1.6; }
+.client-locale-panel li button[aria-pressed="true"] { font-weight: 700; }
+.client-locale-panel .locale-check { visibility: hidden; }
+.client-locale-panel [aria-pressed="true"] .locale-check { visibility: visible; }
+.client-locale-panel .locale-grab, .client-locale-panel .locale-close, .client-locale-panel .locale-tabs, .client-locale-panel .locale-info { display: none; }
+.locale-empty, .locale-storage-error { font-size: 12.5px; line-height: 1.6; color: var(--client-text-2); }
+.locale-storage-error { grid-column: 1 / -1; }
+@media (max-width: 860px) {
+  .client-preferences-layer { background: #0006; }
+  .client-preferences-layer .client-locale-panel { inset: auto 0 var(--locale-bottom, 0px); width: auto; max-width: none; height: min(78dvh, var(--locale-viewport, 100dvh)); max-height: 100dvh; display: flex; flex-direction: column; border: 0; border-radius: 24px 24px 0 0; gap: 0; padding: 8px 16px calc(20px + env(safe-area-inset-bottom)); overflow: hidden; }
+  .client-locale-panel .locale-grab { display: block; flex: none; width: 110px; height: 5px; border-radius: 3px; background: var(--client-line-2); margin: 8px auto 14px; }
+  .client-locale-panel .locale-close { display: flex; position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; align-items: center; justify-content: center; font-size: 17px; }
+  .client-locale-panel .locale-tabs { display: flex; flex: none; gap: 22px; margin: 4px 0 16px; border-bottom: 1px solid var(--client-line); }
+  .client-locale-panel .locale-tabs button { width: auto; border-radius: 0; font-size: 16px; font-weight: 600; color: var(--client-text-3); padding: 8px 2px 12px; border-bottom: 2.5px solid transparent; }
+  .client-locale-panel .locale-tabs [aria-selected="true"] { color: var(--client-text); border-bottom-color: var(--client-text); }
+  .client-locale-panel .locale-info { display: flex; flex: none; gap: 10px; align-items: flex-start; background: var(--client-3); border-radius: 12px; padding: 13px 14px; font-size: 12.5px; line-height: 1.6; color: var(--client-text-2); margin-bottom: 14px; }
+  .locale-info > span { display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; margin-top: 2px; border-radius: 50%; flex: none; font-weight: 700; font-size: 11px; background: var(--client-text-3); color: var(--client-1); }
+  .client-locale-panel .locale-column { display: none; }
+  .client-locale-panel .locale-column.is-active { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+  .client-locale-panel .locale-column h4 { display: none; }
+  .locale-search { flex: none; }
+  .locale-search input { font-size: 16px; }
+  .client-locale-panel ul { max-height: none; flex: 1; min-height: 0; }
+  .client-locale-panel li button { padding: 14px 8px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .client-preferences-layer .client-locale-panel { animation: none; } }

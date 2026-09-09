@@ -1,0 +1,53 @@
+import { expect, test } from '@playwright/test'
+
+test('1분이 넘어도 이벤트 없이 검증이나 완료를 만들어내지 않는다', async ({ page }) => {
+  await page.clock.install()
+  await page.goto('/tests/fixtures/research-activity.html')
+  await expect(page.getByRole('button', { name: '생각을 정리하는 중' })).toBeVisible()
+  await page.clock.fastForward(65_000)
+  await expect(page.locator('.g-act2 .els')).toHaveText('65초')
+  await expect(page.locator('.g-act2 .ar')).toHaveCount(1)
+  await expect(page.locator('.g-act2 .ar')).toHaveClass('ar running')
+  await expect(page.locator('.g-act2')).toHaveAttribute('data-source', 'mock')
+  await expect(page.getByLabel('테스트 데이터 안내')).toContainText('실제 리서치·검증이 아닙니다')
+  await expect(page.locator('.g-act2 .activity-source')).toHaveCount(0)
+  await page.getByRole('button', { name: '중지 이벤트 주입' }).click()
+  const elapsed = await page.locator('.g-act2 .els').textContent()
+  await page.clock.fastForward(60_000)
+  await expect(page.locator('.g-act2 .els')).toHaveText(elapsed!)
+  await expect(page.locator('.g-act2 .ar')).toHaveClass('ar stopped')
+})
+
+test('단계별 실패·재검증 기록과 상세를 완료 후에도 유지한다', async ({ page }) => {
+  await page.goto('/tests/fixtures/research-activity.html')
+  await page.getByRole('button', { name: '실패·재검증 이벤트 주입' }).click()
+  await expect(page.locator('.ar.failed')).toContainText('조건 검증')
+  await expect(page.locator('.ar.running')).toContainText('수정한 조건 재검증')
+  await expect(page.getByRole('button', { name: '수정한 조건 재검증 진행 중' })).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.locator('.ar.running .ad')).toContainText('<script>alert(1)</script>')
+  await page.getByRole('button', { name: '완료 이벤트 주입' }).click()
+  await expect(page.locator('.ar.failed')).toHaveCount(1)
+  await expect(page.locator('.ar.running')).toHaveCount(0)
+  const header = page.getByRole('button', { name: '작업 완료' })
+  await expect(header).toHaveAttribute('aria-expanded', 'false')
+  await header.focus()
+  await page.keyboard.press('Enter')
+  await expect(header).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.locator('.ar.failed')).toBeVisible()
+  await page.keyboard.press('Space')
+  await expect(page.locator('.tl')).toBeHidden()
+})
+
+test('320px부터 긴 작업 설명이 겹치거나 가로로 넘치지 않는다', async ({ page }) => {
+  await page.goto('/tests/fixtures/research-activity.html')
+  await page.getByRole('button', { name: '실패·재검증 이벤트 주입' }).click()
+  await expect(page.getByRole('button', { name: '수정한 조건 재검증 진행 중' })).toHaveAttribute('aria-expanded', 'true')
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 800 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    const header = await page.locator('.g-act2 .hd').boundingBox()
+    const detail = await page.locator('.ar.running .ad').boundingBox()
+    expect(detail!.y).toBeGreaterThan(header!.y + header!.height)
+    expect(detail!.x + detail!.width).toBeLessThanOrEqual(width)
+  }
+})

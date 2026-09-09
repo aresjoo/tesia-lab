@@ -1,0 +1,157 @@
+import { expect, test, type Page } from '@playwright/test'
+
+async function seededConversation(page: Page, route = '/') {
+  await page.addInitScript(() => {
+    const turn = { id: 'turn', question: '비트코인 반등 전략', answer: '조건을 검토해보세요.', fullAnswer: '조건을 검토해보세요.', status: 'done', startedAt: 1, suggestions: [], phase: 'plan' }
+    sessionStorage.setItem('teth-client-experience', JSON.stringify({ currentId: 'journey', homeDraft: '', sessions: [{ id: 'journey', title: '연속 사용 검수', idea: turn.question, draft: '보존할 초안', pair: 'BTC/USDT', mode: 'dip', phase: 'plan', timeframe: '일봉', risk: '−3%', takeProfit: '+8%', workspace: 'conversation', researchStatus: '초안', turns: [turn], updatedAt: 1 }] }))
+  })
+  await page.goto(route)
+}
+
+test('열린 대화 메뉴는 공개 페이지 왕복에서 키보드를 가로채지 않는다', async ({ page }) => {
+  await seededConversation(page, '/download/')
+  await page.locator('a.web-start').click()
+  await page.getByRole('button', { name: '대화 메뉴', exact: true }).click()
+  await page.goBack()
+  await expect(page.locator('.client-info-download')).toBeVisible()
+  await expect(page.locator('.client-session-pop')).toHaveCount(0)
+  await page.locator('#site-main').focus()
+  expect(await page.locator('#site-main').evaluate(el => el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true })))).toBe(true)
+  await page.goForward()
+  await expect(page.locator('.g-composer textarea')).toHaveValue('보존할 초안')
+  await page.getByRole('button', { name: '대화 메뉴', exact: true }).click()
+  await expect(page.getByRole('button', { name: '이름 변경', exact: true })).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: '대화 메뉴', exact: true })).toBeFocused()
+})
+
+test('대화 메뉴에서 Tab으로 나간 뒤 입력창 Home·End는 커서 이동으로 동작한다', async ({ page }) => {
+  await seededConversation(page)
+  await page.getByRole('button', { name: '대화 메뉴', exact: true }).click()
+  const input = page.locator('.g-composer textarea')
+  for (let i = 0; i < 15 && !await input.evaluate(el => el === document.activeElement); i++) await page.keyboard.press('Tab')
+  await expect(input).toBeFocused()
+  await page.keyboard.press('Home')
+  await expect(input).toBeFocused()
+  expect(await input.evaluate(el => el.selectionStart)).toBe(0)
+  await page.keyboard.press('End')
+  expect(await input.evaluate(el => el.selectionStart)).toBe('보존할 초안'.length)
+})
+
+for (const overlay of ['locale', 'help'] as const) {
+  test(`공개 페이지 ${overlay} 팝업은 뒤로가기 시 닫고 본문 조작을 복구한다`, async ({ page }) => {
+    await page.goto('/about/')
+    await page.locator('.ft').getByRole('link', { name: '앱 다운로드', exact: true }).click()
+    const trigger = page.locator(overlay === 'locale' ? '.public-language-trigger' : '.site-help-trigger')
+    const popup = page.locator(overlay === 'locale' ? '.client-locale-panel' : '.site-help-pop')
+    await trigger.click()
+    await expect(popup).toBeVisible()
+    await page.goBack()
+    await expect(page.locator('.client-info-about')).toBeVisible()
+    await expect(popup).toHaveCount(0)
+    await expect.poll(() => page.evaluate(() => document.body.style.overflow)).not.toBe('hidden')
+    await expect(page.locator('#site-main')).toBeFocused()
+    await expect.poll(() => page.evaluate(() => Boolean(document.activeElement?.closest('[hidden],[inert]')))).toBe(false)
+    await trigger.click()
+    await expect(popup).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(popup).toHaveCount(0)
+    await expect(trigger).toBeFocused()
+  })
+}
+
+for (const target of ['answer', 'question'] as const) {
+  test(`${target} 복사의 오래된 실패는 이후 요청의 성공을 덮지 않는다`, async ({ page }) => {
+    await seededConversation(page)
+    await page.evaluate(() => {
+      const pending: { resolve: () => void; reject: (reason: Error) => void }[] = []
+      Object.assign(window, { pendingCopies: pending })
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => new Promise<void>((resolve, reject) => pending.push({ resolve, reject })) } })
+    })
+    const area = page.locator(target === 'answer' ? '.client-answer-actions' : '.g-urow')
+    const copy = area.getByRole('button', { name: target === 'answer' ? '답변 복사' : '메시지 복사', exact: true })
+    await copy.click()
+    await copy.click()
+    await page.evaluate(() => Reflect.get(window, 'pendingCopies')[1].resolve())
+    const done = area.getByRole('button', { name: target === 'answer' ? '답변 복사 완료' : '메시지 복사 완료', exact: true })
+    await expect(done).toBeVisible()
+    await page.evaluate(() => Reflect.get(window, 'pendingCopies')[0].reject(new Error('Older failure')))
+    // Flush React's async update before asserting that an obsolete result was ignored.
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))
+    await expect(done).toBeVisible()
+    await expect(area.getByRole('status')).toHaveCount(0)
+  })
+}
+
+test('연결 입력은 검증 중 바뀌지 않고 실패 후 다시 수정하며 취소한 완료는 적용되지 않는다', async ({ page }) => {
+  await page.clock.install()
+  await seededConversation(page)
+  await page.evaluate(() => sessionStorage.setItem('teth:client-delegation:journey', JSON.stringify({ page: 'connect', answers: Object.fromEntries(['asset', 'style', 'budget', 'period', 'stop'].map(key => [key, { index: 1 }])), attempt: 1, workStep: 5, chartInterval: '1D' })))
+  await page.getByRole('button', { name: /^전략 맡기기/ }).click()
+  await page.getByRole('button', { name: '무료로 시작', exact: true }).click()
+  await page.getByRole('button', { name: '추천 Binance', exact: true }).click()
+  await page.getByRole('button', { name: '가입 완료했어요', exact: true }).click()
+  const uid = page.getByLabel('Binance UID', { exact: true })
+  await uid.fill('000000')
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
+  await page.getByRole('button', { name: '연동 확인하기', exact: true }).click()
+  await expect(uid).not.toBeEditable()
+  await page.clock.fastForward(2000)
+  await expect(page.getByRole('alert')).toContainText('가입 내역을 찾지 못했어요')
+  await expect(uid).toBeEditable()
+  await uid.fill('123456')
+  await page.getByRole('button', { name: '연동 확인하기', exact: true }).click()
+  await page.clock.fastForward(2000)
+  const api = page.getByLabel('API Key', { exact: true }), secret = page.getByLabel('Secret Key', { exact: true })
+  await api.fill('BAD_FAKE_TEST_KEY')
+  await secret.fill('SAFE_FAKE_TEST_SECRET')
+  await page.getByRole('button', { name: '권한 확인하고 연결하기', exact: true }).click()
+  await expect(api).not.toBeEditable()
+  await expect(secret).not.toBeEditable()
+  await page.clock.fastForward(2200)
+  await expect(api).toBeEditable()
+  await expect(secret).toBeEditable()
+  await expect(page.getByRole('alert')).toContainText('API Key 권한 확인에 실패')
+  await api.fill('SAFE_FAKE_TEST_KEY')
+  await page.getByRole('button', { name: '권한 확인하고 연결하기', exact: true }).click()
+  await page.getByRole('button', { name: '뒤로', exact: true }).click()
+  await page.clock.fastForward(2500)
+  await expect(page.getByRole('button', { name: '이 전략 실행하기', exact: true })).toBeVisible()
+  await expect(page.getByText('준비가 끝났어요', { exact: true })).toHaveCount(0)
+  expect(await page.evaluate(() => Object.values({ ...localStorage, ...sessionStorage }).some(value => /FAKE_TEST/.test(value)))).toBe(false)
+})
+
+async function researchEntry(page: Page) {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seededConversation(page, '/download/')
+  await page.locator('a.web-start').click()
+  await page.getByRole('button', { name: /Research Plan.*연구 계획/ }).click()
+}
+
+test('연구 Artifacts를 연 채 공개 페이지로 돌아가도 이전 패널·키보드 처리가 남지 않는다', async ({ page }) => {
+  await researchEntry(page)
+  await page.getByRole('button', { name: 'Artifacts 열기', exact: true }).click()
+  await expect(page.locator('.rw-aux')).toHaveClass(/is-open/)
+  await page.goBack()
+  await expect(page.locator('.client-info-download')).toBeVisible()
+  await expect(page.locator('.rw-aux')).not.toHaveClass(/is-open/)
+  expect(await page.locator('#site-main').evaluate(el => el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })))).toBe(true)
+  await page.goForward()
+  await expect(page.locator('.rw-aux')).toBeHidden()
+  await page.getByRole('button', { name: 'Artifacts 열기', exact: true }).click()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Artifacts 열기', exact: true })).toBeFocused()
+})
+
+test('Artifacts 패널의 모바일·데스크톱 전환은 숨겨진 버튼에 포커스를 남기지 않는다', async ({ page }) => {
+  await researchEntry(page)
+  await page.getByRole('button', { name: 'Artifacts 열기', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Artifacts 닫기', exact: true })).toBeFocused()
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await expect(page.locator('.rw-artifact').first()).toBeFocused()
+  await page.setViewportSize({ width: 390, height: 844 })
+  await expect(page.locator('.rw-aux')).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Artifacts 열기', exact: true })).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.rw-aux')).toBeVisible()
+})
