@@ -22,6 +22,7 @@ const CLOSE_CHIPS = '</chips>'
 const PROB_HEAD = '<prob'
 const PROB_HOLD_MAX = 96
 const CHIPS_MAX = 8192
+const TRACE_MAX = 200
 
 type Mode = 'pre' | 'trace' | 'answer' | 'post' | 'chips'
 
@@ -41,6 +42,8 @@ function matchTag(rest: string): TagMatch {
     if (after && /[A-Za-z0-9]/.test(after)) return { kind: 'none' }
     const gt = rest.indexOf('>')
     if (gt === -1) return rest.length > PROB_HOLD_MAX ? { kind: 'none' } : { kind: 'partial' }
+    // '/>' 누락 후 한참 뒤의 산문 속 '>' 까지 속성으로 삼켜 본문을 지우면 안 된다.
+    if (gt > PROB_HOLD_MAX) return { kind: 'none' }
     const attrs = rest.slice(PROB_HEAD.length, gt)
     const up = /\bup\s*=\s*"?([^"\s/>]+)"?/.exec(attrs)?.[1] ?? ''
     const down = /\bdown\s*=\s*"?([^"\s/>]+)"?/.exec(attrs)?.[1] ?? ''
@@ -65,7 +68,19 @@ export function createTethStreamParser(): TethStreamParser {
 
   function emitText(events: TethParseEvent[], text: string) {
     if (!text) return
-    if (mode === 'trace') { traceLabel += text; return }
+    if (mode === 'trace') {
+      traceLabel += text
+      // 라벨이 아니라 본문이 잘못 흘러든 경우(닫는 태그·<answer> 동시 누락):
+      // 통째로 스텝 제목이 되어 실제 답변이 폴백으로 대체되는 것을 막는다.
+      if (traceLabel.length > TRACE_MAX) {
+        const spill = traceLabel
+        traceLabel = ''
+        mode = traceReturn
+        events.push({ kind: 'drop', reason: 'trace-overflow' })
+        emitText(events, spill)
+      }
+      return
+    }
     if (mode === 'pre' || mode === 'answer' || mode === 'post') {
       if (!prose[mode]) {
         const trimmed = text.replace(/^\s+/, '')

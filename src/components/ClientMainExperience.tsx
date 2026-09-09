@@ -43,8 +43,12 @@ function AiAnswerBody({ turn }: { turn: ClientTurn }) {
   const caret = <span className={turn.status === 'running' ? 'client-stream-caret' : ''} aria-hidden="true" />
   if (!turn.prob) return <div className="g-amsg"><p>{turn.answer}{caret}</p></div>
   // 확률 게이지는 모델이 <prob/> 를 배치한 지점(offset)에 맞춰 본문을 가른다.
-  const before = turn.answer.slice(0, turn.prob.offset).trimEnd()
-  const after = turn.answer.slice(turn.prob.offset).replace(/^\n+/, '')
+  // 단 줄 경계가 아닌 문장 한가운데라면 문장을 찢지 않고 답변 끝에 붙인다.
+  const { offset } = turn.prob
+  const boundary = offset === 0 || offset >= turn.answer.length || turn.answer[offset - 1] === '\n' || turn.answer[offset] === '\n'
+  if (!boundary) return <div className="g-amsg"><p>{turn.answer}{caret}</p><TethProbability up={turn.prob.up} down={turn.prob.down} /></div>
+  const before = turn.answer.slice(0, offset).trimEnd()
+  const after = turn.answer.slice(offset).replace(/^\n+/, '')
   return <div className="g-amsg">
     {before && <p>{before}</p>}
     <TethProbability up={turn.prob.up} down={turn.prob.down} />
@@ -151,7 +155,9 @@ export function ClientMainExperience() {
   const greeting = greetings[Math.floor(greetingSeed * greetings.length)]
   const isHome = !session && !page
   const busy = Boolean(session?.turns.some(t => t.status === 'running'))
-  const hasTurns = state.sessions.some(s => s.turns.some(t => t.status === 'running'))
+  // AI 턴은 스트림이 직접 스토어를 갱신한다 — 65ms tick 은 mock 리빌 전용이므로
+  // AI 턴만 돌고 있을 때 무의미한 고빈도 인터벌을 만들지 않는다.
+  const hasTurns = state.sessions.some(s => s.turns.some(t => t.status === 'running' && t.source !== 'ai'))
   const hasJobs = hasTurns || state.sessions.some(s => s.researchStatus === '진행 중')
   const value = session?.draft ?? state.homeDraft
   const latest = session?.turns.at(-1)
@@ -250,8 +256,11 @@ export function ClientMainExperience() {
         {session.turns.map(turn => <ConversationTurn key={turn.id} turn={turn} onEdit={text => { store.draft(text); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.g-composer textarea')?.focus()) }} />)}
         {latest?.status === 'done' && <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}
           {latest.source === 'ai'
-            // 실 AI 턴의 액션 칩은 모델 판단(검증 통과분)만 노출한다 — 없으면 없다.
-            ? latest.actions && latest.actions.length > 0 && <div className="client-next-actions">{latest.actions.map(action => <button type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}>{action.label} <span>{{ backtest: '과거 데이터로 검증 →', alert: '알림 조건 설정 →', delegate: '전략 맡기기 →', auto: '자동 실행 검토 →' }[action.type]}</span></button>)}</div>
+            // 실 AI 턴: 모델 액션 칩(검증 통과분)이 있으면 그것만, 없으면 제품 기본
+            // 진입점(전략 맡기기)을 유지한다 — 워크스페이스로 가는 길이 죽으면 안 된다.
+            ? <div className="client-next-actions">{latest.actions && latest.actions.length > 0
+              ? latest.actions.map(action => <button type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}>{action.label} <span>{{ backtest: '과거 데이터로 검증 →', alert: '알림 조건 설정 →', delegate: '전략 맡기기 →', auto: '자동 실행 검토 →' }[action.type]}</span></button>)
+              : <button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button>}</div>
             : <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>}
         </>}
       </ClientConversation> : null}

@@ -17,13 +17,17 @@ export class TethAiHttpError extends Error {
 
 const isHttpOrigin = (value: unknown): value is string => typeof value === 'string' && /^https?:\/\/\S+$/.test(value)
 
-/** 명시 설정이 있을 때만 실 AI가 켜진다. 공개 빌드 기본값은 항상 null(Mock). */
+/** 명시 설정이 있을 때만 실 AI가 켜진다. 공개 빌드 기본값은 항상 null(Mock).
+ * localStorage 재정의는 DEV 전용 시험 심(seam)이다 — 프로덕션 빌드에서 저장소 키
+ * 하나로 Mock 게이트를 우회해 대화가 임의 origin 으로 나가는 일을 막는다. */
 export function resolveAiProxyOrigin(): string | null {
-  try {
-    const stored = localStorage.getItem('tethAiProxy')
-    if (stored === 'off') return null
-    if (isHttpOrigin(stored)) return stored.replace(/\/+$/, '')
-  } catch { /* 저장소 접근 불가 시 빌드 설정으로 폴백 */ }
+  if (import.meta.env.DEV) {
+    try {
+      const stored = localStorage.getItem('tethAiProxy')
+      if (stored === 'off') return null
+      if (isHttpOrigin(stored)) return stored.replace(/\/+$/, '')
+    } catch { /* 저장소 접근 불가 시 빌드 설정으로 폴백 */ }
+  }
   if (import.meta.env.VITE_E2E_FAST === 'true') return null
   const configured = import.meta.env.VITE_TETH_AI_PROXY
   return isHttpOrigin(configured) ? configured.replace(/\/+$/, '') : null

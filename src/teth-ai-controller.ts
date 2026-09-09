@@ -14,6 +14,9 @@ export type AiStorePort = {
   failAiTurn(sessionId: string, turnId: string, failMode: 'fallback' | 'stop'): void
 }
 
+const PATCH_FLUSH_MS = 80    // 토큰마다 스토어 전체 커밋을 만들지 않기 위한 표시 스로틀
+const IDLE_LIMIT_MS = 60_000 // 이벤트가 이만큼 끊기면 스트림이 죽은 것으로 본다
+
 const active = new Map<string, { controller: AbortController; sessionId: string }>()
 
 export function abortAiTurns(sessionId?: string) {
@@ -25,7 +28,7 @@ export function abortAiTurns(sessionId?: string) {
 }
 
 // 리로드/이탈로 죽는 fetch 를 "프록시 실패"로 오인해 mock 폴백을 저장하면 안 된다.
-// pagehide 에서 전부 abort 로 전환하면 복원 경로(read 의 stopped 강등)가 턴을 이어받는다.
+// pagehide 에서 abort 로 전환하면 abort 경로가 턴을 '중지'로 정리한다(아래 finalize).
 if (typeof window !== 'undefined') window.addEventListener('pagehide', () => abortAiTurns())
 
 export function startAiTurn(args: {
@@ -47,37 +50,53 @@ export function startAiTurn(args: {
   let stepSeq = 0
   let prob: ClientTurn['prob']
   let chipsDone = false
-  let suggestions: string[] = []
-  let actions: ClientTurn['actions']
-  let sawDone = false
   let sawError = false
   let finished = false
-  let thinkTimer: number | undefined
+  let watchdogFired = false
 
-  const patch = (fields: AiTurnPatch) => { if (!finished) store.patchAiTurn(sessionId, turnId, fields) }
-  const flushThinking = () => { window.clearTimeout(thinkTimer); thinkTimer = undefined; patch({ thinking }) }
-  const settleSteps = (status: 'done') => { steps = steps.map(step => step.status === 'running' ? { ...step, status } : step) }
+  // 모든 표시 패치는 하나의 트레일링 타이머로 합쳐진다 — SSE 이벤트당 스토어
+  // 커밋/리렌더/강제 레이아웃을 만들지 않는다.
+  let pending: AiTurnPatch | null = null
+  let flushTimer: number | undefined
+  const flushPatch = () => {
+    window.clearTimeout(flushTimer)
+    flushTimer = undefined
+    if (!pending || finished) { pending = null; return }
+    const patch = pending
+    pending = null
+    store.patchAiTurn(sessionId, turnId, patch)
+  }
+  const queuePatch = (fields: AiTurnPatch) => {
+    pending = { ...(pending ?? {}), ...fields }
+    if (flushTimer === undefined) flushTimer = window.setTimeout(flushPatch, PATCH_FLUSH_MS)
+  }
+
+  let watchdog: number | undefined
+  const armWatchdog = () => {
+    window.clearTimeout(watchdog)
+    watchdog = window.setTimeout(() => { watchdogFired = true; controller.abort() }, IDLE_LIMIT_MS)
+  }
+
+  const settleSteps = () => { steps = steps.map(step => step.status === 'running' ? { ...step, status: 'done' as const } : step) }
   const appendStep = (title: string) => {
-    settleSteps('done')
+    settleSteps()
     steps = [...steps, { id: `step-${++stepSeq}`, title, status: 'running' }]
   }
 
   const applyParseEvents = (events: ReturnType<typeof parser.push>) => {
-    let touched: AiTurnPatch | null = null
-    const touch = (fields: AiTurnPatch) => { touched = { ...(touched ?? {}), ...fields } }
     for (const event of events) {
       switch (event.kind) {
         case 'trace-step':
           appendStep(event.label)
-          touch({ trace: steps })
+          queuePatch({ trace: steps })
           break
         case 'answer-open':
-          settleSteps('done')
-          touch({ trace: steps })
+          settleSteps()
+          queuePatch({ trace: steps })
           break
         case 'answer-delta':
           answer += event.text
-          touch({ answer })
+          queuePatch({ answer })
           break
         case 'answer-close':
           break
@@ -86,7 +105,7 @@ export function startAiTurn(args: {
           const valid = validateProb(event.up, event.down)
           if (!valid) { console.warn('[teth-ai] 무효 <prob/> 제외:', event.up, event.down); break }
           prob = { ...valid, offset: answer.length }
-          touch({ prob })
+          queuePatch({ prob })
           break
         }
         case 'chips-raw': {
@@ -95,9 +114,7 @@ export function startAiTurn(args: {
           const result = parseChipsJson(event.raw, { allowTwoActions })
           if (result.kind === 'invalid') { console.warn('[teth-ai] 무효 <chips> 제외:', result.reason, event.raw.slice(0, 200)); break }
           chipsDone = true
-          suggestions = result.chips.suggest
-          actions = result.chips.actions.length ? result.chips.actions : undefined
-          touch({ suggestions, ...(actions ? { actions } : {}) })
+          queuePatch({ suggestions: result.chips.suggest, ...(result.chips.actions.length ? { actions: result.chips.actions } : {}) })
           break
         }
         case 'drop':
@@ -105,20 +122,22 @@ export function startAiTurn(args: {
           break
       }
     }
-    if (touched) patch(touched)
   }
 
-  const finalize = (outcome: 'finish' | 'fallback' | 'abort') => {
+  const finalize = (outcome: 'finish' | 'fallback' | 'stop') => {
     if (finished) return
+    flushPatch() // 마지막 상태를 running 가드가 살아있을 때 반영한다
     finished = true
-    window.clearTimeout(thinkTimer)
+    window.clearTimeout(flushTimer)
+    window.clearTimeout(watchdog)
     active.delete(turnId)
-    if (outcome === 'abort') return // store.stop() 이 이미 턴을 중지 상태로 만들었다
-    if (outcome === 'fallback') { store.failAiTurn(sessionId, turnId, 'fallback'); return }
-    store.finishAiTurn(sessionId, turnId)
+    if (outcome === 'fallback') store.failAiTurn(sessionId, turnId, 'fallback')
+    else if (outcome === 'stop') store.failAiTurn(sessionId, turnId, 'stop') // 이미 중지된 턴이면 no-op
+    else store.finishAiTurn(sessionId, turnId)
   }
 
   void (async () => {
+    armWatchdog()
     try {
       await streamTethChat({
         origin: args.origin,
@@ -127,38 +146,38 @@ export function startAiTurn(args: {
         signal: controller.signal,
         onEvent: event => {
           if (finished) return
+          armWatchdog()
           if (event.kind === 'text') applyParseEvents(parser.push(event.delta))
-          else if (event.kind === 'think') {
-            thinking += event.delta
-            // 토큰마다 스토어를 두드리지 않게 표시만 가볍게 스로틀한다.
-            if (thinkTimer === undefined) thinkTimer = window.setTimeout(flushThinking, 80)
-          }
+          else if (event.kind === 'think') { thinking += event.delta; queuePatch({ thinking }) }
           else if (event.kind === 'tool') {
             appendStep(event.name === 'web_search' ? `웹 검색: ${event.query}` : event.name === 'web_fetch' ? `페이지 확인: ${event.query}` : event.name === 'code_execution' ? '데이터 확인 중' : `${event.name || '도구'} 실행`)
-            patch({ trace: steps })
+            queuePatch({ trace: steps })
           }
-          else if (event.kind === 'done') sawDone = true
           else if (event.kind === 'error') sawError = true
+          // {done} 은 스트림 자연 종료와 구분할 필요가 없어 소비하지 않는다.
         },
       })
       if (finished) return
       applyParseEvents(parser.finish())
-      flushThinking()
-      // 답변 텍스트가 전혀 없으면(프록시 오류 포함) 스크립트 응답으로 폴백한다.
-      if (!answer.trim() && (sawError || !sawDone)) { finalize('fallback'); return }
       if (!answer.trim()) { finalize('fallback'); return }
-      settleSteps('done')
-      patch({ trace: steps })
-      finalize('finish')
+      settleSteps()
+      queuePatch({ trace: steps })
+      // 프록시가 {error:true} 로 끝냈다면 잘린 답변이다 — '완료'가 아니라 '중지'로
+      // 정직하게 표시하고 부분 텍스트를 보존한다.
+      finalize(sawError ? 'stop' : 'finish')
     } catch (error) {
       if (finished) return
-      if (controller.signal.aborted) { finalize('abort'); return }
+      if (controller.signal.aborted) {
+        // 사용자 중지(no-op) / pagehide·bfcache / 유휴 워치독 — 모두 '중지'로 정리.
+        // 단 워치독이 첫 토큰 전에 발화했다면 스크립트 폴백이 낫다.
+        finalize(watchdogFired && !answer.trim() ? 'fallback' : 'stop')
+        return
+      }
       // 중간 단절: 일부라도 답이 있으면 그대로 마무리, 아니면 폴백.
       if (answer.trim()) {
         applyParseEvents(parser.finish())
-        flushThinking()
-        settleSteps('done')
-        patch({ trace: steps })
+        settleSteps()
+        queuePatch({ trace: steps })
         finalize('finish')
       } else {
         console.warn('[teth-ai] 프록시 연결 실패, 스크립트 응답으로 폴백:', error instanceof Error ? error.message : error)

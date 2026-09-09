@@ -124,6 +124,24 @@ test('중복 chips 블록은 파서 단계에서는 둘 다 통과한다 (검증
   expect(result.filter(event => event.kind === 'chips-raw')).toHaveLength(2)
 })
 
+test('닫힘 없는 trace 가 200자를 넘으면 라벨 대신 본문으로 방류된다', () => {
+  const long = '가'.repeat(240)
+  const result = run([`<trace>${long}`])
+  expect(result.some(event => event.kind === 'drop' && event.reason === 'trace-overflow')).toBe(true)
+  const text = result.filter(event => event.kind === 'answer-delta').map(event => event.text).join('')
+  expect(text).toBe(long)
+  expect(result.some(event => event.kind === 'trace-step')).toBe(false)
+})
+
+test('셀프클로즈 없는 prob 는 멀리 있는 > 까지 본문을 삼키지 않는다', () => {
+  const prose = 'BTC 가격이 오르면'.repeat(10)
+  const result = run([`<answer>앞 <prob up="62" down="38" ${prose} > 뒤</answer>`])
+  expect(result.some(event => event.kind === 'prob-raw')).toBe(false)
+  const text = result.filter(event => event.kind === 'answer-delta').map(event => event.text).join('')
+  expect(text).toContain(prose)
+  expect(text).toContain('뒤')
+})
+
 test('빈 스트림은 아무 이벤트도 만들지 않는다', () => {
   expect(run([])).toEqual([])
   expect(run(['', ''])).toEqual([])

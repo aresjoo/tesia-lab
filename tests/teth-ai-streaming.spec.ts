@@ -75,7 +75,9 @@ test('무효 prob 과 깨진 chips 는 조용히 제외되고 답변 렌더는 �
   await expect(page.locator('.g-amsg')).toContainText('결론만 유효합니다.')
   await expect(page.locator('.client-answer-actions')).toBeVisible()
   await expect(page.locator('.teth-prob')).toHaveCount(0)
-  await expect(page.locator('.client-next-actions')).toHaveCount(0)
+  // 모델 칩이 무효여도 제품 기본 진입점(전략 맡기기)은 살아 있어야 한다.
+  await expect(page.locator('.client-next-actions button')).toHaveCount(1)
+  await expect(page.locator('.client-next-actions button')).toContainText('전략 맡기기')
   expect(errors).toEqual([])
 })
 

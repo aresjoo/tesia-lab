@@ -84,7 +84,7 @@ function read(): Snapshot {
           // (expected teardown, not corruption), keeping partial answer/thinking.
           if (turn.status === 'running' && (turn.source === 'ai' || index !== validTurns.length - 1 || !turn.fullAnswer)) {
             if (turn.source !== 'ai') recoveryWarning = true
-            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt, trace: stopTrace(turn.trace) }
+            return { ...turn, status: 'stopped', finishedAt: Number.isFinite(turn.finishedAt) ? turn.finishedAt : turn.startedAt, trace: stopTrace(turn.trace), fullAnswer: turn.source === 'ai' ? turn.answer : turn.fullAnswer }
           }
           return turn
         })
@@ -134,8 +134,10 @@ export function createClientExperienceStore() {
   }
   const listeners = new Set<() => void>()
   let saveTimer: number | undefined
+  let lastPersist = Date.now()
   function persist() {
     window.clearTimeout(saveTimer)
+    lastPersist = Date.now()
     try {
       sessionStorage.setItem(KEY, JSON.stringify({ ...snapshot, sessions: snapshot.sessions.map(s => ({ ...s, conversationViewport: viewports.get(s.id) })), storageError: false }))
       if (snapshot.storageError) { snapshot = { ...snapshot, storageError: false }; listeners.forEach(fn => fn()) }
@@ -146,7 +148,9 @@ export function createClientExperienceStore() {
     snapshot = next
     listeners.forEach(fn => fn())
     window.clearTimeout(saveTimer)
-    if (immediate) persist()
+    // 스트리밍처럼 250ms 안에 계속 갱신되는 구간에서도 디바운스가 영원히 굶지 않게
+    // 2초를 넘기면 강제로 한 번 내려쓴다 — 탭 크래시 시 유실 창을 상한한다.
+    if (immediate || Date.now() - lastPersist > 2000) persist()
     else saveTimer = window.setTimeout(persist, 250)
   }
   function update(id: string, fn: (s: ClientSession) => ClientSession, immediate = false) {
@@ -187,7 +191,7 @@ export function createClientExperienceStore() {
     paper: (id: string, paper: boolean) => { if (Boolean(snapshot.sessions.find(s => s.id === id)?.paper) !== paper) update(id, s => ({ ...s, paper }), true) },
     workspace: (id: string, workspace: ClientSession['workspace']) => update(id, s => ({ ...s, workspace }), true),
     tradingReady: (id: string) => update(id, s => ({ ...s, tradingReady: true }), true),
-    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now(), trace: stopTrace(t.trace) } : t) }), true),
+    stop: (id: string) => update(id, s => ({ ...s, turns: s.turns.map(t => t.status === 'running' ? { ...t, status: 'stopped', finishedAt: Date.now(), trace: stopTrace(t.trace), fullAnswer: t.source === 'ai' ? t.answer : t.fullAnswer } : t) }), true),
     send: (question: string, options?: { ai?: boolean }): { sessionId: string; turnId: string; messages: TethAiMessage[] } | null => {
       const text = question.trim()
       if (!text) return null
@@ -205,9 +209,12 @@ export function createClientExperienceStore() {
         update(next.id, () => next, true)
         const messages: TethAiMessage[] = []
         for (const turn of session.turns) {
-          messages.push({ role: 'user', content: turn.question })
+          // 답이 빈 턴(응답 전 중지·리로드 강등)은 질문째 제외한다 — user 역할이
+          // 연속되면 API가 400으로 거부해 세션 전체가 폴백으로 강등되기 때문이다.
+          if (!turn.answer) continue
           // 저장된 answer 는 파서를 거친 태그 제거 본문뿐이라 재전송해도 안전하다.
-          if (turn.answer) messages.push({ role: 'assistant', content: turn.answer })
+          messages.push({ role: 'user', content: turn.question })
+          messages.push({ role: 'assistant', content: turn.answer })
         }
         messages.push({ role: 'user', content: text })
         return { sessionId: next.id, turnId, messages }
@@ -238,16 +245,16 @@ export function createClientExperienceStore() {
       const turn = session?.turns.find(t => t.id === turnId)
       if (!session || !turn || turn.source !== 'ai' || turn.status !== 'running') return
       if (failMode === 'stop') {
-        update(sessionId, s => ({ ...s, turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'stopped' as const, finishedAt: Date.now(), trace: stopTrace(t.trace) } : t) }), true)
+        update(sessionId, s => ({ ...s, turns: s.turns.map(t => t.id === turnId ? { ...t, status: 'stopped' as const, finishedAt: Date.now(), trace: stopTrace(t.trace), fullAnswer: t.answer } : t) }), true)
         return
       }
       // 프록시 미연결/실패: 같은 질문을 스크립트 응답으로 대체하고 tick 리빌에 넘긴다.
-      const next = { ...session, updatedAt: Date.now() }
+      // 실패한 AI 턴을 제외한 뒤 sourceReply 를 불러야 mock send 시점과 turns.length 가
+      // 같아져 첫 턴의 인트로 리드 문장이 보존된다.
+      const next = { ...session, updatedAt: Date.now(), turns: session.turns.filter(t => t.id !== turnId) }
       const reply = sourceReply(next, turn.question)
       next.phase = reply.phase
-      next.turns = session.turns.map(t => t.id === turnId
-        ? { id: t.id, question: t.question, answer: '', fullAnswer: reply.answer, suggestions: reply.suggestions, phase: reply.phase, status: 'running' as const, startedAt: Date.now() }
-        : t)
+      next.turns = [...next.turns, { id: turn.id, question: turn.question, answer: '', fullAnswer: reply.answer, suggestions: reply.suggestions, phase: reply.phase, status: 'running' as const, startedAt: Date.now() }]
       update(sessionId, () => next, true)
     },
     tick: (now: number) => {

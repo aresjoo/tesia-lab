@@ -1,8 +1,9 @@
-/* 상승/하락 확률 게이지 — 손익 색만 green/red 원칙을 방향 확률에도 따른다. */
+/* 상승/하락 확률 게이지 — 손익 색만 green/red 원칙을 방향 확률에도 따른다.
+ * 앱 팔레트 토큰(--positive/--negative)을 우선 사용하고 없으면 폴백한다. */
 .teth-prob { margin: 12px 0 4px; max-width: 360px }
 .teth-prob-head { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; font-variant-numeric: tabular-nums }
-.teth-prob-up { color: #2bb673 }
-.teth-prob-down { color: #e5534b }
-.teth-prob-bar { height: 8px; border-radius: 999px; background: rgba(229, 83, 75, .34); overflow: hidden }
-.teth-prob-bar span { display: block; height: 100%; border-radius: 999px 0 0 999px; background: #2bb673; transition: width .12s linear }
+.teth-prob-up { color: var(--positive, #2bb673) }
+.teth-prob-down { color: var(--negative, #e5534b) }
+.teth-prob-bar { height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--negative, #e5534b) 36%, transparent); overflow: hidden }
+.teth-prob-bar span { display: block; height: 100%; border-radius: 999px 0 0 999px; background: var(--positive, #2bb673); transition: width .12s linear }
 @media (prefers-reduced-motion: reduce) { .teth-prob-bar span { transition: none } }
