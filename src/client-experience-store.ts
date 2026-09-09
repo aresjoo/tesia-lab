@@ -12,8 +12,8 @@ import type { TethAiMessage } from './teth-ai-client'
 
 export type ConversationPhase = 'mode' | 'pair' | 'timeframe' | 'risk' | 'take' | 'plan'
 export type ConversationViewport = { top: number; spacer: number; follow: boolean; questionKey: string }
-/** 실 AI 턴의 분석 스텝 표시 상태. 서버 권위 상태가 아니라 스트림 관찰의 투영이다. */
-export type AiTraceStep = { id: string; title: string; status: 'running' | 'done' | 'stopped' }
+/** 실 AI 턴의 사고 패널 스텝(번역된 tool 활동 포함). 서버 권위 상태가 아니라 스트림 관찰의 투영이다. */
+export type AiTraceStep = { id: string; title: string; status: 'running' | 'done' | 'stopped'; detail?: string }
 export type AiFlowStatus = 'running' | 'done' | 'stopped'
 /** say/work 인터리브 답변의 순서 있는 세그먼트. work 는 연출 전용이 아니라
  * 향후 실제 tool use 결과의 그릇이다(어댑터 교체 전제 — PR2 WorkBlock 참조). */

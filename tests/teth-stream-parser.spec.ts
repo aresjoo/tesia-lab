@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 import { createTethStreamParser, type TethParseEvent } from '../src/teth-stream-parser'
 import { parseChipsJson, validateProb } from '../src/teth-chips-schema'
 import { validateWorkModel } from '../src/teth-model-routing'
+import { aggregateToolActivity, describeToolEvent } from '../src/teth-tool-display'
 
 // Node-only unit spec: no page fixture, one project is enough.
 test.skip(({ isMobile }) => isMobile, '브라우저 무관 단위 검증은 desktop 프로젝트에서만 1회 실행')
@@ -189,6 +190,36 @@ test('validateWorkModel: 표 안 라벨만 통과, 밖은 null', () => {
   expect(validateWorkModel('')).toBeNull()
   expect(validateWorkModel(undefined)).toBeNull()
   expect(validateWorkModel('__proto__')).toBeNull()
+})
+
+// ── 사고 패널 tool 번역·집계 (내부 ID·쿼리 원문·전체 URL 노출 금지) ──
+
+test('describeToolEvent: 검색 쿼리 원문 대신 한국어 주제만 노출한다', () => {
+  expect(describeToolEvent({ name: 'web_search', query: 'bitcoin price weekly trend analysis' })).toBe('시장 뉴스 확인: 비트코인')
+  expect(describeToolEvent({ name: 'web_search', query: 'ethereum ETF inflow september' })).toBe('시장 뉴스 확인: 이더리움')
+  const generic = describeToolEvent({ name: 'web_search', query: 'obscure altcoin momentum' })
+  expect(generic).toBe('시장 뉴스 확인')
+  expect(generic).not.toContain('obscure')
+})
+
+test('describeToolEvent: URL 은 도메인만, 내부 tool ID 는 노출하지 않는다', () => {
+  expect(describeToolEvent({ name: 'web_fetch', query: 'https://www.cryptorank.io/news/feed/bf7c2-eth-outlook?ref=x' })).toBe('출처 확인: cryptorank.io')
+  expect(describeToolEvent({ name: 'web_fetch', query: 'not-a-url' })).toBe('출처 확인')
+  expect(describeToolEvent({ name: 'code_execution', query: 'import pandas' })).toBe('데이터 계산')
+  expect(describeToolEvent({ name: 'code_execution', query: '', purpose: '지지선 레벨 계산' })).toBe('지지선 레벨 계산')
+  expect(describeToolEvent({ name: 'mcp__internal_secret_tool', query: 'x' })).toBe('데이터 확인')
+})
+
+test('aggregateToolActivity: 연속 동일 작업은 N회로 접히고 상한을 넘으면 "외 N개 작업"이 된다', () => {
+  const six = aggregateToolActivity(Array(6).fill('데이터 계산'), false)
+  expect(six).toHaveLength(1)
+  expect(six[0].title).toBe('데이터 계산 6회')
+  const many = aggregateToolActivity(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], true)
+  expect(many).toHaveLength(6)
+  expect(many[0].title).toBe('외 3개 작업')
+  expect(many[0].detail).toContain('a')
+  expect(many.at(-1)?.status).toBe('running')
+  expect(aggregateToolActivity([], false)).toEqual([])
 })
 
 // ── 검증 계층 (프롬프트를 믿지 않는다) — 기존 스키마 회귀 유지 ──

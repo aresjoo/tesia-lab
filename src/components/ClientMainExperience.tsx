@@ -80,8 +80,9 @@ function AiFlowBody({ turn }: { turn: ClientTurn }) {
 function AiConversationTurn({ turn, onEdit }: { turn: ClientTurn; onEdit: (text: string) => void }) {
   const running = turn.status === 'running'
   const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
-  // flow 턴의 work 는 본문 인라인 WorkBlock 이 렌더한다 — 상단 패널은 thinking 전용.
-  const workSteps = turn.flow ? [] : (turn.trace ?? [])
+  // flow 턴의 work 는 본문 인라인 WorkBlock 이 렌더한다. 상단 패널 = thinking +
+  // 번역·집계된 tool 활동(turn.trace — tool 이 켜진 경우에만 채워진다).
+  const workSteps = turn.trace ?? []
   const started = Boolean(turn.answer || workSteps.length || turn.flow?.length)
   // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로, 채널 2(work item)는 뒤이은 스텝으로.
   const thinkingStep = {

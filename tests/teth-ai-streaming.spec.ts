@@ -164,6 +164,35 @@ test('무효 prob 과 깨진 chips 는 조용히 제외되고 렌더는 계속, 
   expect(errors).toEqual([])
 })
 
+test('사고 패널 tool 활동: 번역·집계되고 쿼리 원문·URL·내부 ID 가 새지 않는다', async ({ page }) => {
+  const errors = collectPageErrors(page)
+  const body = sse(
+    { tool: { name: 'web_search', q: 'bitcoin price today weekly trend' } },
+    { tool: { name: 'code_execution', q: 'import json' } },
+    { tool: { name: 'code_execution', q: 'run()' } },
+    { tool: { name: 'code_execution', q: 'calc()', p: '지지선 레벨 계산' } },
+    { tool: { name: 'web_fetch', q: 'https://www.cryptorank.io/news/feed/bf7c2-eth' } },
+    { text: '<say>확인을 끝냈어요. 결론은 관망입니다.</say>' },
+    { done: true },
+  )
+  await openWithProxy(page, async route => {
+    if (isAckRequest(route)) { await route.fulfill({ status: 200, headers: sseHeaders, body: sse({ done: true }) }); return }
+    await route.fulfill({ status: 200, headers: sseHeaders, body })
+  })
+  await ask(page, '비트코인 어때?')
+  await expect(page.locator('.g-amsg', { hasText: '결론은 관망입니다' })).toBeVisible()
+  await page.locator('.g-act2 .hd').click()
+  await expect(page.locator('.g-act2 .at', { hasText: '시장 뉴스 확인: 비트코인' })).toBeVisible()
+  await expect(page.locator('.g-act2 .at', { hasText: '데이터 계산 2회' })).toBeVisible()
+  await expect(page.locator('.g-act2 .at', { hasText: '지지선 레벨 계산' })).toBeVisible()
+  await expect(page.locator('.g-act2 .at', { hasText: '출처 확인: cryptorank.io' })).toBeVisible()
+  const panelText = await page.locator('.g-act2').textContent() ?? ''
+  expect(panelText).not.toContain('bitcoin price')
+  expect(panelText).not.toContain('https://')
+  expect(panelText).not.toContain('code_execution')
+  expect(errors).toEqual([])
+})
+
 test('프록시 429 는 스크립트 응답으로 폴백해 기존 리빌로 답한다', async ({ page }) => {
   const errors = collectPageErrors(page)
   await openWithProxy(page, route => route.fulfill({ status: 429, headers: CORS, body: 'rate limited' }))

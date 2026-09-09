@@ -7,7 +7,7 @@ export type TethAiMessage = { role: 'user' | 'assistant'; content: string }
 export type TethAiEvent =
   | { kind: 'text'; delta: string }
   | { kind: 'think'; delta: string }
-  | { kind: 'tool'; name: string; query: string }
+  | { kind: 'tool'; name: string; query: string; purpose?: string }
   | { kind: 'done' }
   | { kind: 'error' }
 
@@ -71,8 +71,13 @@ export async function streamTethChat(options: {
     if (typeof event.text === 'string') options.onEvent({ kind: 'text', delta: event.text })
     else if (typeof event.think === 'string') options.onEvent({ kind: 'think', delta: event.think })
     else if (event.tool && typeof event.tool === 'object') {
-      const tool = event.tool as { name?: unknown; q?: unknown }
-      options.onEvent({ kind: 'tool', name: typeof tool.name === 'string' ? tool.name : '', query: typeof tool.q === 'string' ? tool.q : '' })
+      const tool = event.tool as { name?: unknown; q?: unknown; p?: unknown }
+      options.onEvent({
+        kind: 'tool',
+        name: typeof tool.name === 'string' ? tool.name : '',
+        query: typeof tool.q === 'string' ? tool.q : '',
+        ...(typeof tool.p === 'string' ? { purpose: tool.p } : {}),
+      })
     }
     else if (event.done === true) options.onEvent({ kind: 'done' })
     else if (event.error === true) options.onEvent({ kind: 'error' })

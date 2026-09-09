@@ -9,6 +9,7 @@
 import { createTethStreamParser } from './teth-stream-parser'
 import { parseChipsJson, validateProb } from './teth-chips-schema'
 import { validateWorkModel } from './teth-model-routing'
+import { aggregateToolActivity, describeToolEvent } from './teth-tool-display'
 import { TETH_ACK_PROMPT } from './prompts/teth-system'
 import { streamTethChat, type TethAiMessage } from './teth-ai-client'
 import type { ClientTurn, TethFlowSegment } from './client-experience-store'
@@ -73,6 +74,7 @@ export function startAiTurn(args: {
   let watchdogFired = false
   let mainSayStarted = false
   let ackStarted = false
+  let toolLabels: string[] = []
   const startedAt = performance.now()
 
   const nextId = (prefix: string) => `${prefix}-${++segSeq}`
@@ -241,8 +243,14 @@ export function startAiTurn(args: {
           armWatchdog()
           if (event.kind === 'text') applyParseEvents(parser.push(event.delta))
           else if (event.kind === 'think') { thinking += event.delta; queuePatch({ thinking }) }
+          else if (event.kind === 'tool') {
+            // 사고 패널의 tool 활동: 번역·집계 레이어를 거쳐 스텝으로 표시.
+            // (1단계 lite 에선 발생하지 않지만, tool 이 켜지는 즉시 이 경로가 받는다.
+            //  3단계에서 WorkBlock 어댑터로 승격 예정.)
+            toolLabels = [...toolLabels, describeToolEvent(event)]
+            queuePatch({ trace: aggregateToolActivity(toolLabels, true) })
+          }
           else if (event.kind === 'error') sawError = true
-          // {tool} 은 1단계에서 발생하지 않는다(lite). 3단계에서 WorkBlock 어댑터로 합류 예정.
         },
       })
       if (finished) return
