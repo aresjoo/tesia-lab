@@ -1621,8 +1621,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 .tfq .q .pg{margin-left:auto;font-size:11.5px;color:var(--gt3);font-variant-numeric:tabular-nums}
 .tfq .d{font-size:12.5px;color:var(--gt3);margin-bottom:11px}
 .tfq .ops{display:flex;flex-wrap:wrap;gap:8px}
-.tfq .op{border:1px solid var(--gl2,rgba(255,255,255,.14));border-radius:14px;padding:9px 16px;font-size:13.5px;color:var(--gt);cursor:pointer;transition:background .12s,border-color .12s;min-height:40px;display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left}
-.tfq .op .opd{font-size:11px;color:var(--gt3);font-weight:400;line-height:1.35}
+.tfq .op{border:1px solid var(--gl2,rgba(255,255,255,.14));border-radius:999px;padding:9px 16px;font-size:13.5px;color:var(--gt);cursor:pointer;transition:background .12s,border-color .12s;min-height:40px}
 .tfq .op:hover{background:rgba(255,255,255,.05)}
 .tfq .op.rec{border-style:dashed;color:var(--gt3)}
 /* 인테이크 요약 카드 (채팅에 남는 유일한 카드) */
@@ -2347,7 +2346,7 @@ body.tf-route #teth-help{bottom:88px}
       <div class="g-composer-wrap" id="g-composer-wrap" hidden>
         <div class="g-composer">
           <div id="g-ctx-chip"></div>
-          <textarea id="g-in" rows="1" placeholder="아이디어를 적거나, 무엇이 가능한지 편하게 물어보세요" aria-label="AI에게 입력" spellcheck="false" autocomplete="off"></textarea>
+          <textarea id="g-in" rows="1" placeholder="시장에 대해 무엇이든 물어보세요" aria-label="AI에게 입력" spellcheck="false" autocomplete="off"></textarea>
           <div class="g-composer-row"><span class="g-model"></span><button class="g-send" id="g-send-btn" onclick="gSend()" aria-label="전송">↑</button></div>
         </div>
       </div>
@@ -2789,7 +2788,7 @@ function runBacktest(params){
   return {
     params:params, trades:trades, eq:eq,
     ret:(equity-1)*100, mdd:mdd*100,
-    winRate:n?wins.length/n*100:0, w:wins.length, l:losses.length, openPnl:openPnl*100,
+    winRate:n?wins.length/n*100:0,
     n:n, pf:gl>0?gw/gl:gw>0?9.9:0,
     byYear:byYear, worstYear:worstYear, bestYear:bestYear,
     worstYearPnl:worstYear?byYear[worstYear].pnl*100:0,
@@ -4206,7 +4205,7 @@ function gHome(){
     {h:'시장은 혼자\n이기기 어렵습니다',s:'당신 편에서 싸우는 AI 트레이딩 에이전트, TETH'},
     {h:'시장은\n기다려주지 않아요',s:'아이디어를 바로 전략으로, 검증은 TETH가 할게요'},
     {h:'뉴스는 늦고,\n시장은 빠릅니다',s:'TETH가 24시간 시장을 지켜보고 있어요'},
-    {h:'지금 사도 될까요?\n물어보세요',s:'감이 아니라 데이터로 검증해드려요'},
+    {h:'지금 사도 될까요?\n물어보세요',s:'감이 아니라 데이터로 과거 시장에서 검증해드려요'},
     {h:'삼성전자 vs SK하이닉스,\n뭘 살까요?',s:'AI와 대화하며 비교하고, 전략으로 만들어보세요'},
     {h:'주식, 암호화폐, 금,\n시장이면 다 물어보세요',s:'무엇이든 검증 가능한 전략이 됩니다'},
     {h:'테슬라 왜 떨어졌어요?\n물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'},
@@ -4233,9 +4232,9 @@ function gHome(){
     '</div>'+
     '<div class="g-chipstack">'+
     '<div class="g-home-chips">'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.1','떨어질 때 사는 규칙을 만들고, 어디서 깨지는지 확인해보기')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.2','추세를 따라가는 규칙을 만들고, 과거 구간에서 검증해보기')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.3','막연한 아이디어를 검증 가능한 조건으로 바꿔보기')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.2','추세 추종 전략')+'</button>'+
+    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
     '</div>'+
     (S.user?'':'<div class="g-free-row"><button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','영원히 $0, 신용카드 필요 없음')+'</span></button></div>')+
     '</div>'+
@@ -5106,12 +5105,9 @@ function taiStop(){ if(TAI.req){ TAI.req.cancelled=true; if(TAI.req.ctrl) TAI.re
 /* 컴포저 전송 버튼 ↔ 중지 버튼 동기화 */
 function taiBusySync(){
   var b=$('g-send-btn'); if(!b) return;
-  /* 상태를 입력 지점에서 상시 안내 — placeholder 를 상태별로 교체, 직접답변 안내(taiAskGo)가 걸려 있으면 덮지 않는다 (QuantPilot [0:18] 변형) */
-  var f=$('g-in');
-  var setPh=function(ph){ if(!f) return; if(f.placeholder&&f.placeholder.indexOf('직접')>=0) return; f.placeholder=ph||'아이디어를 적거나, 무엇이 가능한지 편하게 물어보세요'; };
-  if(TAI.req){ b.innerHTML='<span class="stopsq"></span>'; b.onclick=taiStop; b.setAttribute('aria-label','생성 중지'); b.style.opacity=''; setPh('답변 생성 중 — 중지(■)하면 새 질문을 보낼 수 있어요'); }
-  else if(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000){ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity='.4'; b.setAttribute('aria-label','조사 진행 중'); setPh('시세·자료 조사 중이에요 — 곧 답변이 시작돼요'); } /* 프리스트림: 흐리게 — 클릭 시 안내 토스트 */
-  else{ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity=''; b.setAttribute('aria-label','전송'); setPh(null); }
+  if(TAI.req){ b.innerHTML='<span class="stopsq"></span>'; b.onclick=taiStop; b.setAttribute('aria-label','생성 중지'); b.style.opacity=''; }
+  else if(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000){ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity='.4'; b.setAttribute('aria-label','조사 진행 중'); } /* 프리스트림: 흐리게 — 클릭 시 안내 토스트 */
+  else{ b.innerHTML='↑'; b.onclick=gSend; b.style.opacity=''; b.setAttribute('aria-label','전송'); }
 }
 /* 중단/실패 후 이어가기 액션 */
 function taiCancelChips(showContinue){
@@ -5164,8 +5160,7 @@ function taiMarketRules(){
    +'\n핵심 비즈니스는 자동매매 전략 생성이다. 예측이나 시장 분석 답변의 끝에는 한 문장으로, 원하면 이 분석을 시장에서 싸우는 자동매매 전략으로 만들어줄 수 있고 자는 동안에도 자동으로 매매된다는 제안을 자연스럽게 덧붙여라. 사용자가 전혀 다른 주제를 물으면 먼저 그 질문에 응대한 뒤 가볍게 전략 제안으로 돌아오라. 단, 직전 답변에서 이미 제안했다면 똑같은 제안을 반복해 부담 주지 마라.'
    +'\n사용자가 자동매매 전략 생성, 매매 위임, 조건부 실행을 원하거나 제안에 동의하면, 답변 마지막 줄에 반드시 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 자산이 BTC나 ETH가 아니면 pair는 null로 두고, 자동 실행은 코인 페어부터 지원되니 같은 구조를 BTC/ETH로 만들어 보자고 한 문장으로 안내하라. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라. 태그 없이 "아래에서 설정하세요" 같은 말은 절대 하지 마라, 태그가 있어야 화면에 설정이 뜬다.'
    +'\n요청이 광범위해서 분석 방향 확인이 필요하면(예: 막연한 "차트 분석해줘"), 한두 문장 안내 후 답변 마지막 줄에 [ASK {"steps":[{"title":"어떤 방식으로 분석해드릴까요?","multi":true,"options":[{"t":"항목","d":"짧은 부연"}]},{"title":"가격 표시 통화는?","multi":false,"options":[{"t":"USD (달러)","d":"글로벌 표준"},{"t":"KRW (원화)","d":"업비트 기준"}]}]}] 형식으로 선택지를 제시하라. 확인할 축이 하나면 steps에 1개만, 최대 2단계. 각 단계 선택지는 4~6개. 정말 필요할 때만, 연속 사용 금지.'
-   +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 예외 한 가지: 잡담으로 시작한 세션이 특정 전략 설계 요청으로 전환되는 턴(SETUP 태그를 붙이는 턴)에는 자산명+전략 목적으로 제목을 한 번 더 [TITLE]로 갱신할 수 있다. 그 외에는 절대 붙이지 않는다.'
-   +'\n시세 흐름 브리핑 골격: 시세·가격 흐름 질문에는 ① 관측 대상·기간 한 문장 ② 앵커 수치 불릿(관측 기간 / 시작→현재 등락 / 기간 내 최고·최저와 발생 시점 / 진폭) ③ 국면 진단 한두 문장 ④ 데이터 기준 고지(마지막 관측 봉 시각 명시) ⑤ 이 국면에 맞는 후속 제안 1개 순으로 답하라. 활동량(거래·변동 횟수)과 성과(수익·낙폭)는 별개로 서술하고, 빈도를 수익성의 근거로 쓰지 마라.'
+   +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 두 번째 답변부터는 절대 붙이지 않는다.'
    +'\n방향성 확률: 사용자가 특정 자산의 방향(오를까, 내릴까, 사도 될까, 팔아야 할까)을 물으면 답변 마지막 줄에 정확히 이 형식의 태그를 하나만 붙여라: [GAUGE {"symbol":"TSLA","label":"테슬라","up":63,"down":37,"position":"top"}] — up과 down은 합이 100인 정수 확률로, 방금 분석한 지표와 구조에 근거해 정한다. position은 스스로 판단한다: 결론부터 궁금한 직접 질문("테슬라 오를까?")이면 "top"(확률을 먼저 보여주고 설명), 맥락 설명이 먼저 필요한 흐름이면 "bottom". 방향 질문이 아니면(가격 확인, 용어 질문, 일반 시장 잡담) 절대 붙이지 않는다.'
    +'\n실행 버튼: 사용자가 실행으로 넘어갈 신호가 명확할 때만 답변 마지막 줄에 [ACT [{"type":"alert","label":"테슬라 300달러 오면 알려줘"}]] 형식의 태그를 붙여라. type은 4개뿐이다: alert(조건 알림 등록), backtest(전략 검증), delegate_trade(조건부 매매 위임, "direction":"buy" 또는 "sell" 필수), auto_trade(자동매매 전환). 기본값은 붙이지 않는 것이다. 붙일 때는 1개가 원칙이고, 매수와 매도로 방향이 갈리는 상황에서만 2개까지, 3개 이상은 절대 금지. label은 템플릿이 아니라 대화 속 종목명과 조건을 자연스럽게 녹여 직접 쓴다. 타입 선택 기준: 사용자가 매매 타이밍을 고민하면(언제 사야 할지, 언제 팔아야 할지, 지금 사도 되나, 탈출 언제, 포지션 정리 언제) alert가 아니라 반드시 delegate_trade를 쓰고, label은 나에게 맡기는 위임 화법으로 쓴다. 예: "언제 사야 할지 모르겠어" → "너가 대신 적정 가격에 사줘" / "롱 언제 정리해야 함?" → "너가 적절한 타이밍에 대신 정리해줘" / "평단 마이너스인데 언제 팔지?" → "너가 정한 손실 한도 안에서 대신 정리해줘". alert는 사용자가 알림만 원할 때(특정 가격 도달을 통지받고 싶다는 맥락)만 쓴다. 예: "테슬라 300달러 오면 알려줘". 붙여도 되는 신호(위에서부터 우선): ① 매매 타이밍 고민이 보이면 무조건 delegate_trade 1개를 붙인다, 절대 생략하지 마라 — "언제 사야 할지 모르겠어" → "너가 대신 적정 가격에 사줘", "롱 언제 정리해?" → "너가 적절한 타이밍에 대신 정리해줘", "평단 마이너스인데 언제 팔지?" → "너가 정한 손실 한도 안에서 대신 정리해줘", "지금 사도 되나?" → "너가 적절할 때 대신 사줘" ② 특정 종목에 매매 의사를 밝힘 ③ 사용자가 본인 전략이나 아이디어를 제시함 ④ 감정 실린 확신("이거 지릴 것 같은데") ⑤ 같은 종목을 반복해서 물어봄. 붙이면 안 되는 신호(신호 ①보다 약하다 — 매매 타이밍 고민이 보이면 첫 질문이어도 delegate_trade 를 붙인다): 단순 정보 탐색(가격 얼마야, 용어 질문), 불안이나 공포 맥락("떨어질 것 같아 무섭다") — 불안 맥락에선 위임을 권하지 말고 공감과 분석으로만 답한다 — 그리고 사용자가 초보자임을 밝힌 맥락, 실시간 시세 소스가 없는 비상장 자산, 사용자의 오류 지적을 정정하는 턴. 단 하나의 예외 없는 상위 규칙: 답변 본문에서 자동매매 전환, 매매 위임, 조건 알림, 전략 생성 같은 실행을 네가 먼저 제안하거나 언급했다면, 그 제안과 같은 내용의 [ACT] 태그를 반드시 붙인다 — 본문으로 제안만 하고 누를 버튼을 안 주는 것을 금지한다.'
    +'\n답변 길이 규칙: 질문 유형에 맞춘다 — 가벼운 질문·용어는 2~4문장, 보통 분석은 결론 1문단+핵심 근거 2개+한계 1문장, 여러 섹션의 상세 보고서는 명시적 요청이나 복잡한 비교·전망 질문에 한정한다. 같은 수치를 본문과 표에 중복 나열하지 마라.'
@@ -5748,7 +5743,7 @@ function taiActDo(a,btn,col){
     S.alerts.push({label:a.label,at:Date.now(),asset:(TAI.chart&&TAI.chart.label)||null});
     try{ STORE.save(); }catch(e){}
     if(btn){ btn.disabled=true; var tx=btn.querySelector('.tx'); if(tx) tx.textContent='조건 저장됨 ✓'; }
-    toast('알림 조건을 저장했어요. 지켜보다 알려만 드리고, 거래는 실행하지 않아요. 실시간 통지는 준비 중이라 다음 접속 때 이 조건 기준으로 바로 점검해드릴게요');
+    toast('알림 조건을 저장했어요. 실시간 통지는 준비 중이라, 다음 접속 때 이 조건 기준으로 바로 점검해드릴게요');
     return;
   }
   if(col){ var cid=col.id; col.remove(); if(cid) taiRecFix(cid,null); }
@@ -5890,7 +5885,6 @@ function tfStart(act){
   window.TF_STARTN=0;
   var t=tfS();
   t.cloneFrom=null;
-  t.srcQ=(TAI.lastQ||'').slice(0,140)||((act&&act.label)||''); /* 요청 원문 보존 — 계약서에서 사용자 발화와 시스템 값을 구분 (QuantPilot verbatim 허위 라벨 반면교사) */
   t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null;
   t.ob={st:'idle',ex:null,uid:'',err:null};
   var sell=/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
@@ -5905,9 +5899,8 @@ function tfStart(act){
 }
 function tfAssetOpts(){
   var t=tfS(),ops=[],seen={};
-  /* 데이터 성격을 선택 시점에 공개 — 차트는 실시세, 검증은 합성 데이터임을 섞지 않고 표기 (agy 수확6 + codex 정직성 조건) */
-  if(t.ctxAsset){ ops.push([t.ctxAsset.label,'지금 보던 자산 · 검증은 합성 일봉']); seen[t.ctxAsset.label]=1; }
-  [['비트코인','실시세 차트 · 검증은 합성 일봉'],['이더리움','실시세 차트 · 검증은 합성 일봉'],['테슬라','실시세 차트 · 검증은 합성 일봉'],['나스닥','실시세 차트 · 검증은 합성 일봉']].forEach(function(x){ if(!seen[x[0]]&&ops.length<4) ops.push(x); });
+  if(t.ctxAsset){ ops.push([t.ctxAsset.label,'지금 보던 자산']); seen[t.ctxAsset.label]=1; }
+  [['비트코인','대장 코인'],['이더리움','2위 코인'],['테슬라','미국 성장주'],['나스닥','미국 기술주 지수']].forEach(function(x){ if(!seen[x[0]]&&ops.length<4) ops.push(x); });
   return ops;
 }
 function tfIntakeNext(){
@@ -5920,9 +5913,8 @@ function tfIntakeNext(){
     +'<div class="q"><span class="t">'+gEsc(q.t)+'</span><span class="pg">'+(t.qi+1)+'/'+TF_QS.length+'</span></div>'
     +'<div class="d">'+gEsc(q.d)+'</div>'
     +'<div class="ops">'
-    /* 부연을 title(호버)에만 두면 터치 화면에선 못 읽는다 — 버튼 안 두 번째 줄로 (codex 수확1) */
-    +ops.map(function(o,i){ return '<button class="op" onclick="tfPick(\''+id+'\',\''+qk+'\','+i+')">'+gEsc(o[0])+(o[1]?'<span class="opd">'+gEsc(o[1])+'</span>':'')+'</button>'; }).join('')
-    +'<button class="op rec" onclick="tfPick(\''+id+'\',\''+qk+'\',-1)">'+gEsc(TFCOPY.intakeDunno)+'<span class="opd">AI 추천값으로 진행</span></button>'
+    +ops.map(function(o,i){ return '<button class="op" onclick="tfPick(\''+id+'\',\''+qk+'\','+i+')" title="'+gEsc(o[1]||'')+'">'+gEsc(o[0])+'</button>'; }).join('')
+    +'<button class="op rec" onclick="tfPick(\''+id+'\',\''+qk+'\',-1)">'+gEsc(TFCOPY.intakeDunno)+'</button>'
     +'</div></div>';
   taiThreadAdd(html); gScrollBottom();
 }
@@ -5957,12 +5949,8 @@ function tfIntakeDone(){
   var p0=tfParams();
   var days=p0.endI-p0.startI;
   function av(q){ var x=iv[q]; return gEsc((x||{}).label||'')+((x||{}).rec?' <span style="font-size:11px;color:var(--gt3)">(AI 추천)</span>':''); }
-  /* 반영하지 못한 조건 수집 — 침묵 폐기 금지 (QuantPilot [4:34] Requirements not met 패턴) */
-  t.unmet=[];
-  if(t.intake.assetInfo&&t.intake.assetInfo.data==='none') t.unmet.push('요청 자산 "'+((iv.asset||{}).label||'')+'"은 실시세 차트를 지원하지 않아 합성 데이터 검증만 제공돼요.');
   var html='<div class="tf-sum" id="'+id+'">'
     +'<div class="h">전략 계약서</div>'
-    +(t.srcQ?'<div style="font-size:11.5px;color:var(--gt3);line-height:1.6;margin:-2px 0 10px">요청 원문: “'+gEsc(t.srcQ)+'”</div>':'')
     +'<div class="rows">'
     +'<div class="r"><span class="k">자산</span><span class="v">'+av('asset')+'</span></div>'
     +'<div class="r"><span class="k">투자금</span><span class="v">'+tfWon(budget)+((iv.budget||{}).rec?' <span style="font-size:11px;color:var(--gt3)">(AI 추천)</span>':'')+'</span></div>'
@@ -5970,9 +5958,8 @@ function tfIntakeDone(){
     +'<div class="r"><span class="k">검증 기간</span><span class="v">'+av('period')+'</span></div>'
     +'<div class="r"><span class="k">허용 하락</span><span class="v">'+av('stop')+'</span><span class="re" onclick="tfIntakeRedo(\''+id+'\')">다시 답하기</span></div>'
     +'</div>'
-    /* 숨은 가정 선제 공개: 위 항목=사용자 선택, 아래=시스템 기본값 — 출처 구분 (codex VA 3순위) */
-    +'<div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:-4px 0 13px">시스템 기본값 — 데이터: 검증용 합성 일봉 '+days+'개 구간(데모) · 체결: 신호 봉 종가 기준 · 비용: 왕복 수수료 0.2% 청산 시 차감 · 슬리피지 미반영.</div>'
-    +(t.unmet.length?'<div style="font-size:11.5px;color:#d9a441;line-height:1.7;margin:-6px 0 13px">반영하지 못한 조건: '+t.unmet.map(gEsc).join(' / ')+'</div>':'')
+    /* 숨은 가정 선제 공개: 데이터, 체결, 비용 */
+    +'<div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:-4px 0 13px">데이터: 2023~2026 일봉 시뮬레이션, '+days+'일 구간. 체결: 신호 봉 종가 기준. 비용: 거래당 수수료 0.2% 반영.</div>'
     +'<button class="tf-btn p" onclick="tfVerifyGo(\''+id+'\')">전략 검증 시작</button>'
     +'</div>';
   taiThreadAdd(html); gScrollBottom(); tfSave();
@@ -6036,7 +6023,7 @@ function tfWorkView(){
   var budget=TF_BUDGET[(iv.budget||{}).i!=null?iv.budget.i:1];
   TF_RENDERING=true;
   gContent('<div class="tfw">'
-    +tfHead(gEsc(asset)+' 전략 검증',t.cloneFrom?gEsc(t.cloneFrom)+' 님의 전략 복제본, 모의 검증(합성 데이터)':'모의 검증(합성 데이터)')
+    +tfHead(gEsc(asset)+' 전략 검증',t.cloneFrom?gEsc(t.cloneFrom)+' 님의 전략 복제본, 과거 시장 기준':'과거 시장 기준')
     +'<div class="tfw-grid">'
     +'<div class="tfw-chart" id="tfw-chart"></div>'
     +'<div class="tfw-rail">'
@@ -6061,20 +6048,26 @@ function tfWorkView(){
 function tfWorkRun(p){
   var t=tfS(); t.pendingP=p;
   var panel=$('tfw-panel'); if(!panel) return;
-  /* 계산 전에 단계를 타이머로 완료 연출하던 것 제거 — 상태는 실제 계산 이벤트에만 묶는다 (codex VA 적발, 원칙② 가짜 연출 금지) */
-  panel.innerHTML='<div class="sh">검증 진행</div><div class="tfw-steps">'
-    +'<div class="tfw-st run" id="tfw-calcrow"><span class="ic"><i></i></span><span>백테스트 계산 중 · 조건 분석 → 시뮬레이션 → 위험도 → 점수</span></div>'
-    +'</div><div style="font-size:11px;color:var(--gt3);margin-top:8px">검증 데이터: 합성 일봉(데모) · 왕복 수수료 0.2% 청산 시 차감 · 슬리피지 미반영</div>';
-  var t0=Date.now();
-  TF_ADAPTER.backtest(p,function(err,res){
-    if(err||!res){ panel.innerHTML='<div class="sh">검증 진행</div><div class="tf-errb">검증 중 문제가 발생했어요.<button onclick="tfWorkRun(tfS().pendingP)">다시 시도</button></div>'; return; }
-    var row=$('tfw-calcrow'); if(row){ row.className='tfw-st ok'; row.querySelector('.ic').innerHTML=TAI_CHECK; row.lastElementChild.textContent='백테스트 계산 완료 · '+Math.max(1,Math.round((Date.now()-t0)/1000))+'초'; }
-    var score=tfScore(res);
-    t.cur={p:p,ret:res.ret,mdd:res.mdd,winRate:res.winRate,n:res.n,w:res.w,l:res.l,openPnl:res.openPnl,sharpe:res.sharpe,pf:res.pf,cagr:res.cagr,tradeVol:res.tradeVol,
-      trades:res.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl,kind:x.kind};}),startI:p.startI,endI:p.endI};
-    t.score=score; t.tries.push(score); t.workDone=true;
-    tfSave(); tfWorkResult();
-  });
+  var steps=['시장 데이터 불러오기','전략 조건 분석','과거 시장에서 시뮬레이션','위험도 계산','TETH Score 산출'];
+  panel.innerHTML='<div class="sh">검증 진행</div><div class="tfw-steps">'+steps.map(function(s){ return '<div class="tfw-st"><span class="ic"></span><span>'+gEsc(s)+'</span></div>'; }).join('')+'</div>';
+  var i=0;
+  (function step(){
+    var rows=panel.querySelectorAll('.tfw-st'); if(!rows.length) return;
+    if(i>0){ rows[i-1].className='tfw-st ok'; rows[i-1].querySelector('.ic').innerHTML=TAI_CHECK; }
+    if(i>=steps.length){
+      TF_ADAPTER.backtest(p,function(err,res){
+        if(err||!res){ panel.innerHTML='<div class="sh">검증 진행</div><div class="tf-errb">검증 중 문제가 발생했어요.<button onclick="tfWorkRun(tfS().pendingP)">다시 시도</button></div>'; return; }
+        var score=tfScore(res);
+        t.cur={p:p,ret:res.ret,mdd:res.mdd,winRate:res.winRate,n:res.n,sharpe:res.sharpe,pf:res.pf,cagr:res.cagr,tradeVol:res.tradeVol,
+          trades:res.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl};}),startI:p.startI,endI:p.endI};
+        t.score=score; t.tries.push(score); t.workDone=true;
+        tfSave(); tfWorkResult();
+      });
+      return;
+    }
+    rows[i].className='tfw-st run'; rows[i].querySelector('.ic').innerHTML='<i></i>';
+    i++; delay(i===3?900:480,step);
+  })();
 }
 /* 결과 패널: 점수 → 판정 → 핵심 지표 → 다음 행동 하나 */
 function tfWorkResult(){
@@ -6086,49 +6079,40 @@ function tfWorkResult(){
     +'<div class="lb">TETH SCORE</div>'
     +'<div class="n"><span id="tfw-num">0</span> <small>/ 100</small></div>'
     +'<div class="vd '+(pass?'ok':'no')+'" id="tfw-vd" style="opacity:0;transition:opacity .25s">'+(pass?'실행 가능':'기준 미달')+'</div>'
-    +'<div class="cp">'+(pass?'모의 검증(합성 데이터) 기준으로 TETH 실행 기준(80점)을 통과했어요.':capped?gEsc(TFCOPY.gateFailCap):'조금만 조정하면 실행 기준(80점)에 가까워질 수 있어요.')+'</div>'
+    +'<div class="cp">'+(pass?'과거 데이터 기준으로 TETH 실행 기준(80점)을 통과했어요.':capped?gEsc(TFCOPY.gateFailCap):'조금만 조정하면 실행 기준(80점)에 가까워질 수 있어요.')+'</div>'
     +'</div>'
     +'<div class="tf-kpis">'
-    +'<div class="tf-kpi"><div class="v '+(c.ret>=0?'u':'d')+'">'+(c.ret>=0?'+':'')+c.ret.toFixed(1)+'%</div><div class="k">모의 검증 수익률 · '+tfWon(TF_BUDGET[(t.intake.budget||{}).i!=null?t.intake.budget.i:1]*c.ret/100)+' 환산</div></div>'
+    +'<div class="tf-kpi"><div class="v '+(c.ret>=0?'u':'d')+'">'+(c.ret>=0?'+':'')+c.ret.toFixed(1)+'%</div><div class="k">과거 시뮬레이션 수익률</div></div>'
     +'<div class="tf-kpi"><div class="v d">'+c.mdd.toFixed(1)+'%</div><div class="k">최대 하락폭</div></div>'
-    +'<div class="tf-kpi"><div class="v">'+(c.n?c.winRate.toFixed(0)+'%':'—')+'</div><div class="k">'+(c.n?('승률 · '+(c.w!=null?c.w:Math.round(c.winRate*c.n/100))+'승 '+(c.l!=null?c.l:(c.n-Math.round(c.winRate*c.n/100)))+'패'):'종료 거래 없음')+'</div></div>'
+    +'<div class="tf-kpi"><div class="v">'+c.winRate.toFixed(0)+'%</div><div class="k">승률</div></div>'
     +'<div class="tf-kpi"><div class="v">'+c.n+'회</div><div class="k">거래</div></div>'
     +'</div>'
     /* 수치의 조건을 같은 카드에: 비용, 표본, 미검증 항목 (P0-04, P0-05) */
-    +'<div style="font-size:11px;color:var(--gt3);line-height:1.7;margin-top:9px">검증 데이터: 합성 일봉(데모) · 왕복 수수료 0.2% 청산 시 차감 · 슬리피지 미반영 · 거래 '+c.n+'회 표본.'
+    +'<div style="font-size:11px;color:var(--gt3);line-height:1.7;margin-top:9px">수수료 0.2% 포함, 거래 '+c.n+'회 표본 기준.'
     +(c.n<6?' 표본이 적어 점수 상한을 적용했어요.':'')
     +(pass?' 파라미터 민감도와 시장 국면별 검증은 아직 안 거친 조건부 통과예요.':'')+'</div>';
-  /* 결과 후 표준 분기 — 상태별로 흩어져 있던 다음 행동을 한 문법으로 (QuantPilot [3:57] 비판 수용: 점수 배지 없음, 직접 요청 탈출로 유지) */
-  var rx=tfPrescribe(c,pass);
-  if(rx) h+='<div style="font-size:12px;color:var(--gt2);line-height:1.7;margin-top:10px;padding:9px 11px;border:1px solid var(--gl);border-radius:9px">'+rx+'</div>';
-  h+='<div style="margin-top:14px">';
-  if(pass) h+='<button class="tf-btn p" onclick="tfNav(\'#/strategy/report\')">이 결과로 리포트 보기</button>';
-  if(!pass&&!capped){
+  if(pass){
+    h+='<div class="tf-sticky"><button class="tf-btn p" onclick="tfNav(\'#/strategy/report\')">리포트 보기</button></div>';
+  } else if(capped){
+    /* 막다른 골목 해소 — 점수 조작 없이, 추천 설정 1클릭 재검증 출구를 제공한다 */
+    h+='<div style="margin-top:14px"><button class="tf-btn p" onclick="tfRetryRec()">TETH 추천 설정으로 한 번 더 검증</button><button class="tf-btn s" onclick="tfRankGo()">다른 전략 보기</button><button class="tf-btn ghost" onclick="tfEditGo()">조건 다시 정하기</button></div>'
+      +'<div class="tf-prev" style="margin-top:8px">이 조합은 과거 데이터 기준으로 기준 점수를 넘지 못했어요. 점수를 보정하지 않고, 조건을 바꿔 다시 검증하는 것만 제공합니다.</div>';
+  } else {
     var rec=tfRecommend(c.p);
-    h+='<div class="sh" style="margin-bottom:8px">TETH 추천 조정</div><div class="tf-diff">'
-      +rec.rows.map(function(r){ return '<div class="dr"><span style="color:var(--gt3);width:70px;flex-shrink:0">'+gEsc(r.k)+'</span><span class="a">'+gEsc(r.a)+'</span><span aria-hidden="true" style="color:var(--gt3)">→</span><span class="b">'+gEsc(r.b)+'</span></div>'; }).join('')+'</div>';
+    h+='<div style="margin-top:15px"><div class="sh" style="margin-bottom:8px">TETH 추천</div><div class="tf-diff">'
+      +rec.rows.map(function(r){ return '<div class="dr"><span style="color:var(--gt3);width:70px;flex-shrink:0">'+gEsc(r.k)+'</span><span class="a">'+gEsc(r.a)+'</span><span aria-hidden="true" style="color:var(--gt3)">→</span><span class="b">'+gEsc(r.b)+'</span></div>'; }).join('')
+      +'</div>'
+      +'<button class="tf-btn p" onclick="tfRetryRec()">추천 설정으로 다시 검증</button>'
+      +'<button class="tf-btn ghost" onclick="tfEditGo()">직접 수정</button>'
+      +'<button class="tf-btn ghost" onclick="tfRankGo()">다른 전략 보기</button>'
+      +(t.tries.length>1?'<div class="tf-prev">이전 시도 '+t.tries.join(' → ')+'</div>':'')
+      +'</div>';
   }
-  h+='<button class="tf-btn '+(pass?'s':'p')+'" onclick="tfRetryRec()">추천 조정으로 다시 검증</button>'
-    +'<button class="tf-btn ghost" onclick="tfEditGo()">조건 직접 수정</button>'
-    +'<button class="tf-btn ghost" onclick="tfRankGo()">다른 접근 탐색</button>'
-    +'<button class="tf-btn ghost" onclick="tfBackToChat()">채팅으로 직접 요청</button>'
-    +(capped?'<div class="tf-prev" style="margin-top:8px">이 조합은 모의 검증 기준 점수를 넘지 못했어요. 점수를 보정하지 않고, 조건을 바꿔 다시 검증하는 것만 제공합니다.</div>':'')
-    +(t.tries.length>1?'<div class="tf-prev">이전 시도 '+t.tries.join(' → ')+'</div>':'')
-    +'</div>';
   panel.innerHTML='<div class="sh">검증 결과</div>'+h;
   var num=$('tfw-num'),t0=performance.now(),target=t.score;
   /* 판정 배지는 카운팅이 목표 점수에 닿은 뒤에만 — 52점인데 "실행 가능"이 먼저 보이는 인지 부조화 방지 (agy QA 7-2) */
   (function anim(now){ if(!num||!num.isConnected) return; var q=Math.min(1,(now-t0)/700); q=q*q*(3-2*q); num.textContent=Math.round(target*q); if(q<1) requestAnimationFrame(anim); else { var vd=$('tfw-vd'); if(vd) vd.style.opacity='1'; } })(t0);
   if(t.stage!=='report'&&t.stage!=='connect'&&t.stage!=='pay'&&t.stage!=='done'){ t.stage=pass?'verified':'improve'; tfSave(); }
-}
-/* 결과 기반 처방 카피 — 수치의 원인을 짚고 다음 손질을 제안 (QuantPilot [4:34] 'clear room to improve edge' 패턴의 룰 기반 변형) */
-function tfPrescribe(c,pass){
-  if(pass) return null;
-  if(c.n>=30&&c.pf<1.15) return '거래 빈도는 충분한데 엣지가 약해요. ① 진입 문턱을 더 엄격하게 좁히거나 ② 추세 필터를 결합해 노이즈 구간을 걸러내는 조정을 추천해요.';
-  if(c.mdd<=-15) return '낙폭이 커요. 손실 제한을 더 타이트하게 잡거나 진입 조건을 보수적으로 조정하는 것부터 추천해요.';
-  if(c.n<6) return '거래 표본이 너무 적어 우연에 좌우돼요. 기간을 전체 구간으로 넓히거나 진입 조건을 완화해 표본을 늘려보세요.';
-  if(c.pf<1) return '손실이 이익보다 커요. 익절·손절 비율을 재조정하거나 진입 조건 자체를 바꿔보는 편이 나아요.';
-  return null;
 }
 /* 추천 diff: 현재 설정과 TETH 권장의 차이만 */
 function tfRecommend(p){
@@ -6171,15 +6155,11 @@ function tfScore(res){
 }
 function tfShield(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5v-6z"/></svg>'; }
 function tfProText(c){
-  /* 0과 '계산 불가'를 구분 — 손실합 0이면 PF 는 미정의(9.9 대용값 노출 금지), 거래 0이면 승률 표시 안 함 (codex 수확7) */
-  var pfTxt=(c.l===0&&c.w>0)?'Profit Factor — (손실 거래 없음, 비율 미정의)':'Profit Factor '+c.pf.toFixed(2);
-  var wrTxt=c.n?('승률 '+c.winRate.toFixed(1)+'% ('+(c.w!=null?c.w:'?')+'W/'+(c.l!=null?c.l:'?')+'L)'):'종료 거래 없음';
-  return wrTxt+', 거래 '+c.n+'회, MDD '+c.mdd.toFixed(1)+'%, Sharpe '+c.sharpe.toFixed(2)+', '+pfTxt+', CAGR '+c.cagr.toFixed(1)+'%.';
+  return '승률 '+c.winRate.toFixed(1)+'%, 거래 '+c.n+'회, MDD '+c.mdd.toFixed(1)+'%, Sharpe '+c.sharpe.toFixed(2)+', Profit Factor '+c.pf.toFixed(2)+', CAGR '+c.cagr.toFixed(1)+'%.';
 }
 function tfEasyText(c){
   var shp=c.sharpe>=1.5?'위험 대비 수익이 좋은 편이에요':c.sharpe>=0.8?'위험 대비 수익이 무난한 편이에요':'수익 대비 흔들림이 좀 있는 편이에요';
-  var wl=(c.w!=null&&c.l!=null)?c.n+'번 사고판 중 '+c.w+'번 수익, '+c.l+'번 손실로 끝났어요':'검증 구간 동안 총 '+c.n+'번 사고팔았어요';
-  return wl+'. 가장 안 좋았던 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%까지 떨어졌어요. '+shp+'.';
+  return '100번 중 '+Math.round(c.winRate)+'번 꼴로 이기는 전략이었고, 가장 안 좋았던 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%까지 떨어졌어요. '+shp+'. 검증 구간 동안 총 '+c.n+'번 사고팔았어요.';
 }
 function tfRiskText(c){
   return '하락 뒤 반등을 노리는 전략이라 큰 추세 하락장에서는 신호가 약해질 수 있어요. 최악 구간에서는 약 '+Math.abs(c.mdd).toFixed(1)+'%의 평가 손실을 견뎌야 했고, 시장 급변 시 검증 결과와 다르게 움직일 수 있습니다. 모든 수치는 거래당 수수료 0.2%를 반영한 값이며, 파라미터 민감도와 하락장 구간별 검증은 아직 수행하지 않았어요.';
@@ -6199,13 +6179,11 @@ function tfReportView(){
     +tfHead(gEsc(asset)+', '+gEsc((t.intake.period||{}).label||'')+' 전략','','<span class="bdg">'+tfShield()+'TETH '+t.score+', 실행 가능</span>')
     +'<div class="tfw-sec" style="padding:12px 14px 4px;margin-bottom:14px"><canvas id="tfr-cv" style="width:100%;height:240px;display:block"></canvas><div style="font-size:11px;color:var(--gt3);text-align:right;padding:6px 2px">과거 검증 구간의 매수(▲)와 매도(▼) 지점</div></div>'
     +'<div class="tf-kpis" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0 0 14px">'
-    +'<div class="tf-kpi"><div class="v '+(profit>=0?'u':'d')+'">'+(profit>=0?'+':'')+tfWon(profit)+'</div><div class="k">'+tfWon(budget)+' 기준 '+months+'개월 모의 검증 손익 (합성 데이터)</div></div>'
+    +'<div class="tf-kpi"><div class="v '+(profit>=0?'u':'d')+'">'+(profit>=0?'+':'')+tfWon(profit)+'</div><div class="k">'+tfWon(budget)+' 기준 '+months+'개월 시뮬레이션 손익 (과거 시장)</div></div>'
     +'<div class="tf-kpi"><div class="v d">'+c.mdd.toFixed(1)+'%</div><div class="k">최대 손실</div></div>'
-    +'<div class="tf-kpi"><div class="v">'+(c.n?c.winRate.toFixed(0)+'%':'—')+'</div><div class="k">'+(c.n?('승률 · '+(c.w!=null?c.w:Math.round(c.winRate*c.n/100))+'승 '+(c.l!=null?c.l:(c.n-Math.round(c.winRate*c.n/100)))+'패'):'종료 거래 없음')+'</div></div>'
-    +'<div class="tf-kpi"><div class="v">'+c.n+'회</div><div class="k">거래 횟수'+(c.openPnl?' · 미청산 1건 평가 포함':'')+'</div></div>'
+    +'<div class="tf-kpi"><div class="v">'+c.winRate.toFixed(0)+'%</div><div class="k">승률</div></div>'
+    +'<div class="tf-kpi"><div class="v">'+c.n+'회</div><div class="k">거래 횟수</div></div>'
     +'</div>'
-    +'<div style="font-size:11px;color:var(--gt3);line-height:1.7;margin:-6px 0 14px">검증 가정 — 데이터: 검증용 합성 일봉(데모) · 왕복 수수료 0.2% 청산 시 차감 · 슬리피지 미반영 · 신호 봉 종가 기준 체결.</div>'
-    +((t.unmet&&t.unmet.length)?'<div style="font-size:11.5px;color:#d9a441;line-height:1.7;margin:-8px 0 14px">반영하지 못한 조건: '+t.unmet.map(gEsc).join(' / ')+'</div>':'')
     +'<div class="tfw-sec" style="margin-bottom:6px"><div class="sh" style="display:flex;align-items:center">전략 설명<button class="tf-tgl" id="tfr-tg" style="margin-left:auto" onclick="tfEzToggle()">전문가 보기</button></div>'
     +'<div class="tf-ez" id="tfr-ez" style="transition:opacity .18s">'+gEsc(tfEasyText(c))+'</div>'
     +'<div class="sh" style="margin-top:16px">위험 요소</div><div class="tf-ez">'+gEsc(tfRiskText(c))+'</div></div>'
@@ -6465,7 +6443,6 @@ function tfApiHtml(){
   return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:6px">'+gEsc(e.name)+' API 연결</div>'
     +'<div style="font-size:13px;color:var(--gt2);margin-bottom:4px">TETH는 출금 권한을 요구하지 않습니다.</div>'
     +'<div class="tf-perm"><span class="yes">✓ 조회</span><span class="yes">✓ 거래</span><span class="no">✕ 출금</span></div>'
-    +'<div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:6px 0 2px">팁: 전체 자산이 든 본 계정보다 전략 전용 서브계정의 API 키를 연결하면, 전략의 영향 범위를 그 계정 예치금으로 한정할 수 있어요.</div>'
     +(t.ob.err?'<div class="tf-errb">'+gEsc(t.ob.err)+'<button onclick="tfCnUidRetry()">다시 시도</button></div>':'')
     +'<div style="max-width:400px">'
     +'<div class="tf-fld"><label for="tfcn-k">API Key</label><input id="tfcn-k" autocomplete="off" placeholder="발급받은 API Key"><div class="err">API Key를 확인해주세요 (10자 이상)</div></div>'
@@ -6521,7 +6498,6 @@ function tfDoneView(){
     +'<div class="r"><span class="k">거래소</span><span class="v">'+gEsc(e.name)+' (API •••• '+gEsc(t.api.last4)+')</span></div>'
     +(t.plan==='partner'?'<div class="r"><span class="k">이용료</span><span class="v">₩0, 파트너 플랜</span></div>':'')
     +'</div>'
-    +'<div style="font-size:11.5px;color:var(--gt3);line-height:1.7;text-align:left;margin:2px 0 12px">실행 중에는 거래소 앱에서 이 자산을 수동으로 주문·청산하지 마세요. 필요하면 전략을 먼저 일시 정지해야 상태가 어긋나지 않아요.</div>'
     +'<button class="tf-btn p" style="height:50px" onclick="tfStartStrategy()">전략 시작</button>'
     +'<button class="tf-btn ghost" onclick="tfLater()">나중에 시작</button>'
     +'</div></div>');
@@ -6573,8 +6549,7 @@ function tfDashView(){
         +(today!=null?'<span class="m">오늘 <b style="color:#56c486">+'+today+'%</b></span>':'')
         +'<span class="m">검증 수익 <b>'+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%</b></span>'
         +'<button class="go" style="margin-left:auto;border:1px solid var(--gl2,rgba(255,255,255,.2));border-radius:10px;padding:7px 13px;font-size:12px;color:var(--gt);cursor:pointer" onclick="tfStratToggle('+i+')">'+(x.status==='live'?'중지':'재개')+'</button></div>';
-    }).join(''):'<div class="pd">아직 실행 중인 전략이 없어요. '+(t.workDone?'검증한 전략을 실행 상태로 전환하면 여기에서 관리할 수 있어요.':'전략 조건을 정하고 검증부터 시작해보세요.')+'</div>'
-      +'<button class="tf-btn s" style="margin-top:4px;max-width:240px" onclick="'+(t.workDone?'tfResume()':'tfBackToChat()')+'">'+(t.workDone?'검증 결과로 돌아가기':'대화로 이동')+'</button>')
+    }).join(''):'<div class="pd">아직 실행 중인 전략이 없어요. 채팅에서 전략을 맡겨보세요.</div>')
     +'<h2 style="font-size:16px;margin:26px 0 10px">현황</h2>'
     +'<div class="tf-grid">'
     +'<div class="tf-dcard"><div class="k">총 자산 (시뮬레이션)</div><div class="v">'+tfWon(budget+pnl)+'</div></div>'
@@ -6585,7 +6560,7 @@ function tfDashView(){
     +'<h2 style="font-size:16px;margin:26px 0 10px">최근 체결</h2>'
     +(t.fills.length?'<div class="tf-fills">'+t.fills.map(function(f){
       return '<div class="tf-fill"><span class="sd '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span><span>'+gEsc(f.label)+'</span><span style="color:'+(f.pnl>=0?'#56c486':'#ee766a')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span><span class="tm">'+new Date(f.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span></div>';
-    }).join('')+'</div>':'<div class="pd">아직 체결 내역이 없어요. 검증을 통과한 전략을 시작하면 진입·청산이 여기에 기록돼요.</div>')
+    }).join('')+'</div>':'<div class="pd">아직 체결 내역이 없어요.</div>')
     +'</div>');
 }
 function tfStratToggle(i){
@@ -6622,7 +6597,7 @@ function tfRankView(){
     +rows.map(function(r,i){
       return '<div class="tf-rank"><span class="no'+(i<3?' top':'')+'">'+(i+1)+'</span>'
         +'<span class="who"><span class="nm">'+gEsc(r.nick)+(r.me?' (나)':'')+'</span><span class="by" style="display:block">'+gEsc(r.asset)+' 전략</span></span>'
-        +'<span class="sc">TETH <b>'+r.score+'점</b></span><span class="sc">모의 검증 <b style="color:'+(r.ret>=0?'#56c486':'#ee766a')+'">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</b></span>'
+        +'<span class="sc">TETH <b>'+r.score+'점</b></span><span class="sc">실수익 <b style="color:'+(r.ret>=0?'#56c486':'#ee766a')+'">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</b></span>'
         +'<span class="fw">팔로워 '+Number(r.fw).toLocaleString()+'</span>'
         +(r.me?'':'<button class="go" onclick="tfFollow('+r.si+')">'+gEsc(TFCOPY.followBtn)+'</button>')
         +'</div>';
@@ -7865,9 +7840,9 @@ var I18N={
   'banner.dl':{ko:'다운로드',en:'Download',ja:'ダウンロード','zh-CN':'下载','zh-TW':'下載',es:'Descargar',fr:'Télécharger'},
   'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips',ja:'例：ビットコイン下落時に買う戦略','zh-CN':'例如：比特币下跌时买入的策略','zh-TW':'例如：比特幣下跌時買入的策略',es:'p. ej. Una estrategia que compra caídas de Bitcoin',fr:'p. ex. Une stratégie qui achète les baisses du Bitcoin'},
   'home.terms':{ko:'{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.',en:'{T}TETH Terms{/} and the {P}TETH Privacy Policy{/} apply. TETH is an AI and can make mistakes.',ja:'{T}TETH利用規約{/}と{P}TETHプライバシーポリシー{/}が適用されます。TETHはAIであり、間違えることがあります。','zh-CN':'适用{T}TETH条款{/}和{P}TETH隐私政策{/}。TETH是AI，可能会出错。','zh-TW':'適用{T}TETH條款{/}和{P}TETH隱私權政策{/}。TETH是AI，可能會出錯。',es:'Se aplican los {T}Términos de TETH{/} y la {P}Política de privacidad de TETH{/}. TETH es una IA y puede cometer errores.',fr:"Les {T}Conditions TETH{/} et la {P}Politique de confidentialité TETH{/} s'appliquent. TETH est une IA et peut faire des erreurs."},
-  'chip.1':{ko:'떨어질 때 사는 규칙을 만들고, 어디서 깨지는지 확인해보기',en:'Turn buying dips into rules, and see where the idea breaks',ja:'押し目買いをルール化して弱点を確認','zh-CN':'把低吸变成规则并找出失效点','zh-TW':'把低接變成規則並找出失效點',es:'Convierte comprar caídas en reglas y ve dónde falla',fr:"Transformer l'achat sur repli en règles et voir où ça casse"},
-  'chip.2':{ko:'추세를 따라가는 규칙을 만들고, 과거 구간에서 검증해보기',en:'Build trend-following rules and test them on the past',ja:'トレンド追随ルールを作って過去区間で検証','zh-CN':'制定趋势跟随规则并回测','zh-TW':'制定趨勢跟隨規則並回測',es:'Crea reglas de tendencia y pruébalas en el pasado',fr:'Créer des règles de tendance et les tester sur le passé'},
-  'chip.3':{ko:'막연한 아이디어를 검증 가능한 조건으로 바꿔보기',en:'Turn a vague idea into testable conditions',ja:'漠然としたアイデアを検証可能な条件に','zh-CN':'把模糊想法变成可验证条件','zh-TW':'把模糊想法變成可驗證條件',es:'Convierte una idea vaga en condiciones verificables',fr:"Transformer une idée vague en conditions testables"},
+  'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy',ja:'押し目買い戦略','zh-CN':'低吸反弹策略','zh-TW':'低接反彈策略',es:'Estrategia de comprar caídas',fr:"Stratégie d'achat sur repli"},
+  'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy',ja:'トレンドフォロー戦略','zh-CN':'趋势跟踪策略','zh-TW':'趨勢跟蹤策略',es:'Estrategia de seguir la tendencia',fr:'Stratégie de suivi de tendance'},
+  'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea',ja:'漠然としたアイデアから','zh-CN':'从模糊的想法开始','zh-TW':'從模糊的想法開始',es:'Empieza con una idea vaga',fr:"Partir d'une idée vague"},
   'plus.t':{ko:'더 많은 기능 사용하기',en:'Do more with TETH',ja:'TETHをもっと活用','zh-CN':'使用更多功能','zh-TW':'使用更多功能',es:'Haz más con TETH',fr:'Faites plus avec TETH'},
   'plus.b':{ko:'로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.',en:'Log in to attach charts and portfolio files, connect exchanges, save strategies and more.',ja:'ログインすると、チャートやポートフォリオのファイル添付、取引所の連携、戦略の保存など、より多くの機能が使えます。','zh-CN':'登录后可附加图表和投资组合文件、连接交易所、保存策略等，使用更多功能。','zh-TW':'登入後可附加圖表和投資組合檔案、連接交易所、儲存策略等，使用更多功能。',es:'Inicia sesión para adjuntar gráficos y archivos de cartera, conectar exchanges, guardar estrategias y más.',fr:'Connectez-vous pour joindre des graphiques et fichiers de portefeuille, connecter des plateformes, enregistrer des stratégies et plus.'},
   'comp.full':{ko:'전체 화면',en:'Full screen',ja:'全画面','zh-CN':'全屏','zh-TW':'全螢幕',es:'Pantalla completa',fr:'Plein écran'},
