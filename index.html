@@ -6941,7 +6941,10 @@ function taiMarket(t,fin,fallback){
           var code=(meta.tool.q||'').replace(/\s+/g,' ');
           /* 검색/페이지 호출용 배관 코드는 숨김 — 알맹이는 웹 검색/페이지 행이 이미 보여준다. 결과 페어링용 자리만 유지 */
           if(/web_search\s*\(|web_fetch\s*\(/.test(code)) pend.o.push(null);
-          else if(cmdH&&cmdH.st.status==='running'){ cmdN++; cmdH.set('검색 결과를 정리하는 중 ('+cmdN+')'); pend.o.push(cmdH); } /* 연속 정리 작업은 한 행에 접는다 — 동일 행 도배 방지 */
+          else if(cmdH&&run.data.steps.length&&run.data.steps[run.data.steps.length-1]===cmdH.st){
+            /* 직전 행이 같은 정리 행이면(사이에 다른 행 없음) 완료됐어도 그 행을 다시 살려 잇는다 — "정리 완료" 도배 방지, N회로 요약 */
+            cmdN++; cmdH.st.status='running'; cmdH.set('검색 결과를 정리하는 중 ('+cmdN+')'); pend.o.push(cmdH);
+          }
           else { cmdN=1; cmdH=actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중'}); pend.o.push(cmdH); } /* 내부 파이썬 스크립트는 사용자에게 노출하지 않는다 (agy QA 3-3) */
         }
       }
