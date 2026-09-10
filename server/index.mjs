@@ -1,4 +1,4 @@
-﻿/* TETH ë¡œì»¬ AI í”„ë¡ì‹œ.
+/* TETH ë¡œì»¬ AI í”„ë¡ì‹œ.
  * ì„¸ì…˜ í™”ë©´ì˜ ìžìœ  ì§ˆë¬¸ì— ì‹¤ì œ Claude ì‘ë‹µì„ ìŠ¤íŠ¸ë¦¬ë°í•œë‹¤.
  * ì‹¤í–‰:  cd server && npm install && npm start
  * í‚¤:    server/.env ì˜ ANTHROPIC_API_KEY (ì—†ìœ¼ë©´ `ant auth login` í”„ë¡œí•„ë¡œ í´ë°±)
@@ -146,7 +146,7 @@ createServer(async (req, res) => {
     }) : client.beta.messages.stream({
       model: MODEL,
       max_tokens: 16000, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
-      thinking: { type: "adaptive" }, // ì‚¬ê³  ë¸”ë¡ í™œì„±í™” â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì˜ ì‹¤ì œ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼ ì†ŒìŠ¤
+      thinking: { type: "adaptive", display: "summarized" }, // ì‚¬ê³  ë¸”ë¡ í™œì„±í™” â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì˜ ì‹¤ì œ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼ ì†ŒìŠ¤
       output_config: { effort: EFFORT },
       /* ì‹¤ì œ ì›¹ ê²€ìƒ‰/íŽ˜ì´ì§€ ì—´ê¸° (Anthropic ì„œë²„ì‚¬ì´ë“œ íˆ´) â€” ì¿¼ë¦¬ ì„ íƒë¶€í„° ê²°ê³¼ê¹Œì§€ ì „ë¶€ ì‹¤ë™ìž‘, íƒ€ìž„ë¼ì¸ì— ì´ë²¤íŠ¸ë¡œ ì „ë‹¬ */
       tools: payload.lite === true ? undefined : [ /* lite: 시세 확인형은 도구 없이 즉답 */
@@ -158,8 +158,42 @@ createServer(async (req, res) => {
       system: String(payload.system || "").slice(0, 8000),
       messages,
     });
-    res.on("close", () => { try { stream.abort(); } catch (e) {} }); /* 탭 닫힘/중지 시 모델 생성도 중단 (codex QA-13) */
-    stream.on("text", (delta) => send({ text: delta }));
+    let streamDone = false; res.on("close", () => { if (streamDone) return; try { stream.abort(); } catch (e) {} }); /* 탭 닫힘/중지 시 모델 생성도 중단 (codex QA-13) */
+    /* work model server scrub - keep in sync with src/teth-model-routing.ts */
+    const WORK_MODELS = ["claude-fable-5", "gemini-agy-flash", "gpt-sol", "claude-opus-5", "claude-fable-5-1"];
+    const WORK_HEAD = "<work";
+    const WORK_ATTR_MAX = 192;
+    let workTail = "";
+    const scrubWorkTag = (tag) => tag.replace(/\s*\bmodel\s*=\s*"([^"]*)"/, (m, v) => WORK_MODELS.includes(v) ? m : "");
+    const scrubWork = (delta) => {
+      let pending = workTail + delta;
+      workTail = "";
+      let out = "";
+      for (;;) {
+        const at = pending.indexOf(WORK_HEAD);
+        if (at === -1) {
+          let keep = 0;
+          for (let k = Math.min(WORK_HEAD.length - 1, pending.length); k > 0; k--) {
+            if (WORK_HEAD.startsWith(pending.slice(pending.length - k))) { keep = k; break; }
+          }
+          out += pending.slice(0, pending.length - keep);
+          workTail = keep ? pending.slice(pending.length - keep) : "";
+          return out;
+        }
+        out += pending.slice(0, at);
+        const rest = pending.slice(at);
+        const gt = rest.indexOf(">");
+        if (gt === -1) {
+          if (rest.length > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
+          workTail = rest;
+          return out;
+        }
+        if (gt > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
+        out += scrubWorkTag(rest.slice(0, gt + 1));
+        pending = rest.slice(gt + 1);
+      }
+    };
+    stream.on("text", (delta) => { const scrubbed = scrubWork(delta); if (scrubbed) send({ text: scrubbed }); });
     /* ì‹¤ìž‘ì—… ì´ë²¤íŠ¸: ëª¨ë¸ì˜ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼(think) + ëˆ„ì  ì¶œë ¥ í† í°(tok)ì„ ê·¸ëŒ€ë¡œ ì „ë‹¬ â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì´ ì‹¤ë°ì´í„°ë¡œ êµ¬ë™ëœë‹¤ */
     const blocks = {}; /* indexë³„ server_tool_use ìž…ë ¥ JSON ëˆ„ì  */
     stream.on("streamEvent", (ev) => {
@@ -186,13 +220,13 @@ createServer(async (req, res) => {
         } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
           const b = blocks[ev.index]; delete blocks[ev.index];
           let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
-          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : "") } });
+          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
         } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
       } catch (e) {}
     });
     const final = await stream.finalMessage();
-    if (final.stop_reason === "refusal") send({ text: "ì´ ì§ˆë¬¸ì—ëŠ” ë‹µë³€ë“œë¦¬ê¸° ì–´ë µìŠµë‹ˆë‹¤. ì „ëžµì´ë‚˜ ê²€ì¦ ê²°ê³¼ì— ëŒ€í•´ ë¬¼ì–´ë´ ì£¼ì„¸ìš”." });
-    send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+    if (workTail) { send({ text: workTail }); workTail = ""; }    if (final.stop_reason === "refusal") send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
+    streamDone = true; send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
   } catch (e) {
     console.error("[teth-ai]", e?.status || "", e?.message || e);
     send({ error: true });

@@ -1039,6 +1039,8 @@ body.light .au-free{color:#1e8e3e}
 .g-act2 .ar.note .an{padding:1px 4px;font-size:12.5px;color:var(--gt3);line-height:1.6;border-left:2px solid var(--gl);padding-left:10px;margin-left:2px}
 /* 사고 스트림: 클로드식 — 박스/스크롤 없이 자연스럽게 자라는 흐름 텍스트 */
 .g-act2 .cot2{white-space:pre-wrap;padding:2px 4px 2px 12px;border-left:2px solid var(--gl);font-size:12.8px;color:var(--gt3);line-height:1.75}
+/* 진행 중 사고 = 고정 높이 라이브 티커: 최근 줄만 보이고 위는 페이드 — 스트리밍 중 위쪽이 계속 자라며 화면을 밀어내는 문제 차단 */
+.g-act2 .ar.running.think .cot2{max-height:118px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 30px);mask-image:linear-gradient(to bottom,transparent 0,#000 30px)}
 .g-act2 .ft{display:flex;align-items:center;gap:8px;margin:4px 0 0 3px;font-size:12px;color:var(--gt3)}
 .g-act2 .ft .dot{width:7px;height:7px;border-radius:50%;background:#5b8def;animation:actPulse 1.4s ease-in-out infinite}
 @keyframes actPulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
@@ -5324,7 +5326,7 @@ function actThink(run){
       if(!buf) d=String(d).replace(/^\s+/,''); /* 첫 청크 선행 개행 제거 */
       buf=(buf+d).replace(/\n{3,}/g,'\n\n'); /* 연속 빈 줄 압축 — 줄바꿈 폭탄 방지 */
       h.st.think=buf;
-      if(h.st.el&&h.st.el.isConnected){ var box=h.st.el.querySelector('.cot2'); if(box) box.textContent=buf; gScrollBottom(); }
+      if(h.st.el&&h.st.el.isConnected){ var box=h.st.el.querySelector('.cot2'); if(box){ box.textContent=buf; box.scrollTop=box.scrollHeight; } gScrollBottom(); } /* 고정 창 하단 고정 — 최근 사고 줄만 보인다 */
     },
     done:function(){
       if(h.st.status!=='running') return;
@@ -5436,7 +5438,7 @@ function actRenderFinal(el,d){
   el.classList.add('fin'); el.classList.remove('open');
   el.innerHTML='<button class="hd" aria-expanded="false" aria-controls="'+d.id+'-tl" onclick="actToggle(\''+d.id+'\')">'
    +'<span class="tic '+(d.status==='done'?'ok':'fail')+'">'+(d.status==='done'?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':'!')+'</span>'
-   +'<span class="hlb">'+gEsc(head)+'</span>'+(d.tok?'<span class="els">'+Number(d.tok).toLocaleString()+' 토큰</span>':'')
+   +'<span class="hlb">'+gEsc(head)+'</span>'
    +'<svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>'
    +'<div class="tl" id="'+d.id+'-tl"><div class="tlin"></div></div>';
   var tl=el.querySelector('.tlin');
@@ -6514,7 +6516,8 @@ function taiOhlc(cb,sess,run,ast){
     })
     .catch(function(err){
       /* 부분 실패: 실패를 타임라인에 그대로 남기고 시세 없이 계속 진행 */
-      if(h) h.fail((c.label||'')+' 시세 수신 실패','엔드포인트: /api/ohlc?src='+gEsc(p[0])+'&sym='+gEsc(p.slice(1).join(':'))+'&iv='+gEsc(iv)+'<br>'+(err&&err.name==='AbortError'?'4초 타임아웃 초과':'응답 오류 '+gEsc(String(err)))+'. 실시세 없이 분석을 계속합니다.');
+      /* 시세 보강 실패는 조용히 강등 — 빨간 실패 뱃지·엔드포인트 내부 정보를 사용자에게 흘리지 않는다 */
+      if(h) h.done((c.label||'')+' 실시세 없이 진행합니다');
       else if(c&&c.data&&c.data!=='none') taiThreadAdd('<div class="g-status done"><span class="lb">실시간 시세를 불러오지 못해 시세 없이 진행합니다</span></div>');
       cb('');
     });
@@ -6703,7 +6706,9 @@ function taiMarket(t,fin,fallback){
   var ast=(mention&&(!ai.chart||ai.chart.data!==mention.data))?mention:null;
   var isPred=!!((ast||ai.chart)&&taiPredictQ(t));
   /* 질문 무게: 시세 확인성은 lite(내레이터 없음), 판단성은 pred(투어+깊은 사고), 그 외 std */
-  var qKind=isPred?'pred':(taiPredictQ(t)?'pred':((ast||ai.chart)&&/가격|얼마|시세|현재가/.test(t)?'lite':'std'));
+  /* 인사·스몰톡은 lite: 서버 도구 없이 즉답, 사고 연출 없음 */
+  var isSmallTalk=/^(안녕|하이|헬로|반가|고마워|고맙|감사|잘\s?부탁|테스트|ㅎ+|ㅋ+|hi|hello|hey|ㅎㅇ)[!~^.?요하세염\s]*$/i.test(t.trim());
+  var qKind=isPred?'pred':(taiPredictQ(t)?'pred':(isSmallTalk?'lite':((ast||ai.chart)&&/가격|얼마|시세|현재가/.test(t)?'lite':'std')));
   var sys=taiBuildSystem(fin,conv);
   taiNextClear(); taiActClear();
   if(!conv){ var th0=$('g-doc-thread'); if(th0&&th0.lastElementChild&&th0.lastElementChild.querySelector&&th0.lastElementChild.querySelector('.tdots')){ th0.lastElementChild.remove(); if(G.cur&&G.cur.thread) G.cur.thread.pop(); } }
@@ -6735,41 +6740,20 @@ function taiMarket(t,fin,fallback){
   function startThink(fx){
     if(thinkH||run.data.status!=='running') return;
     thinkH=actThink(run); sim=taiThinkSim(thinkH,run);
-    var s0=t.replace(/\s+/g,' ').slice(0,42)+(t.length>42?'…':'');
-    var j=fx&&fx.j;
-    if(qKind==='lite'){ /* 시세 확인성 질문: 내레이터 없이 한 문장 사고만 */
-      sim.feed(j?('현재가 '+j.last+', 직전 봉 '+j.chg1d+'% 확인했다. 따로 따질 축이 없는 질문이라 바로 답한다.'):'시세 응답이 늦다. 확인되는 범위에서 바로 답한다.');
-      return;
-    }
-    sim.feed('"'+s0+'". '+(fx&&fx.nosrc?'실시간 시세 소스가 없는 자산이다. 매크로 환경을 짚고 공개 정보로 확인한다. ':'')+(j?'실시세가 손에 있다. 현재가 '+j.last+', 30봉 기준 '+j.chg30d+'%. ':'')+(fx&&fx.macro?'매크로는 '+fx.macro+'. ':'')+'이 수치들을 놓고 판단 축을 잡는다.');
-    if(TAI.ok!==false){
-      var np='너는 최고 수준의 시니어 트레이더다. 아래 요청을 받고 답을 준비하는 너의 사고 과정을 1인칭 현재형 한국어로 서술하라. 진지하고 밀도 있게 6~9문장. 아래 제공된 실측 수치가 있으면 그 숫자를 구체적으로 짚으며 생각하라. 판단 축을 나누고, 가설과 반박, 어떤 조건이면 생각이 바뀌는지를 오가라. 아직 결론은 내리지 마라. 확정 수익 표현 금지. 형식 규칙: 마크다운, 목록, 헤더 금지. 문단은 최대 2개, 문단 사이 줄바꿈 한 번만, 연속 빈 줄 금지. 가운뎃점(·)과 대시(—, –) 금지, 나열은 쉼표로 풀어 쓴다.'
-        +(fx&&fx.tour?'\n마지막 문장은 반드시 정확히 "이제 타임프레임별로 차트를 직접 확인한다."로 끝내라.':'')
-        +(fx&&fx.nosrc?'\n주의: 이 자산은 등록된 실시간 시세 소스가 없다. 시세 수치를 지어내지 말고, 공개 정보에서 무엇을 확인해야 판단이 서는지를 생각하라.':'')
-        +'\n\n요청: "'+t+'"';
-      var astN=ast||ai.chart;
-      if(astN&&astN.label&&!(fx&&fx.nosrc)) np+='\n대상 자산: '+astN.label;
-      if(j) np+='\n방금 수신한 실시세: 현재가 '+j.last+', 직전 봉 '+j.chg1d+'%, 7봉 '+j.chg7d+'%, 30봉 '+j.chg30d+'%, 90봉 최고 '+j.hi90+' 최저 '+j.lo90;
-      if(fx&&fx.macro) np+='\n방금 수신한 매크로 실측: '+fx.macro;
-      narrOn=true;
-      narr=taiNarrate(thinkH,sim,np,fireNarrEnd);
-    }
+    /* 유사-사고 폐지: 이 행에는 서버가 스트리밍하는 실제 thinking 델타만 흐른다.
+       (캔드 오프너·1인칭 내레이터·수치 대본 제거 — 실사고가 없으면 행도 비지 않게
+       meta.think 도착 시에만 startThink 가 불린다) */
   }
   var stopNarr=function(){ if(narr){ narr.abort(); narr=null; } };
-  /* 무이벤트 공백 브리지: 조사가 끝나고 답변 첫 토큰까지의 긴 침묵 동안 사고가 계속 말한다.
-     이벤트(행 생성, 메타, 텍스트)가 7초 이상 끊기면 정리 문장을 하나씩 흘리고 헤더를 "결론을 정리하는 중"으로 전환 */
-  var BR=['모은 재료를 교차 검증하면서 결론의 뼈대를 세운다.','수치와 뉴스가 가리키는 방향이 일치하는지 대조한다.','트리거 레벨을 어디에 둘지 저울질한다.','반대 시나리오를 한 번 더 두드려 보고 답의 구조를 정한다.'];
-  var brI=0;
+  /* 무이벤트 공백: 문장을 지어내지 않는다 — 7초 이상 침묵이면 헤더만 "결론을 정리하는 중"으로 전환 */
+  var brDone=false;
   run.lastEvt=Date.now();
   var brT=setInterval(function(){
     if(run.data.status!=='running'){ clearInterval(brT); return; }
-    if(ansH||seg||narr||!sim||!thinkH) return;
+    if(brDone||ansH||seg||!thinkH) return;
     if(thinkH.st.status!=='running') return;
-    /* 첫 4문장 이후에도 침묵이 이어지면 14초 간격으로 순환 — 168초짜리 죽은 시간 방지 (agy 감사 P0-2) */
-    if(Date.now()-(run.lastEvt||0)<(brI<BR.length?7000:14000)) return;
-    if(brI===0){ thinkH.st.h='결론을 정리하는 중'; actHeadSync(run); }
-    run.lastEvt=Date.now();
-    sim.resume(); sim.feed(BR[brI%BR.length]); brI++;
+    if(Date.now()-(run.lastEvt||0)<7000) return;
+    brDone=true; thinkH.st.h='결론을 정리하는 중'; actHeadSync(run);
   },1500);
   var pend={s:[],f:[],o:[]}; /* 진행 중 서버 툴 행 큐: 검색/페이지/기타 */
   var fb=function(kind){
@@ -6790,15 +6774,14 @@ function taiMarket(t,fin,fallback){
     TAI.lastCtx={conversationId:sess.id,msgCount:msgs.length,summaryLen:sys.length,tf:ai.tf,chart:ai.chart?ai.chart.tv:null,ohlcFreshMs:ai.ohlcAt?Date.now()-ai.ohlcAt:null,system:sys,at:new Date().toISOString()}; /* 개발용 인스펙터 */
     var out=null,acc='',lastR=0;
     var srchN=0,srcDom=[],needBrk=false; /* 도구 사용 기록 보존 + 프리앰블-본문 문장 붙음 방지 */
+    var cmdH=null,cmdN=0; /* 연속 '검색 결과 정리' 행 접기용 공유 핸들 */
     TAI.liteNext=(qKind==='lite'); /* 시세 확인형은 서버 도구 없이 즉답 (agy 감사 P1-3) */
     taiStream(sys+ctx,msgs,function(delta){
       if(!out){
         stopNarr();
-        if(!thinkH) startThink(null);
-        stopNarr();
-        /* 사고 마무리 문장: 질문 유형별 분기 */
-        var wrapS=qKind==='lite'?'수치 확인 끝. 바로 답한다.':qKind==='pred'?'재료가 모였다. 결론과 트리거 레벨을 정리해서 답을 쓴다.':'확인이 끝났다. 근거를 갖춰 정리해서 답한다.';
-        sim.wrap(wrapS,function(){ thinkH.done(); });
+        /* 답변 시작 = 사고 burst 자동 접힘. 마무리 대본 없이 실사고 그대로 닫는다 */
+        if(sim) sim.flush();
+        if(thinkH){ thinkH.done(); thinkH=null; sim=null; }
         if(!ansH&&run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
         if(G.cur===sess){
           var el=taiThreadAdd('<div class="g-amsg"><span class="tai-txt"></span></div>');
@@ -6810,8 +6793,8 @@ function taiMarket(t,fin,fallback){
         }
       } else if(seg){ /* 자료 보강 세그먼트에서 답변 텍스트 재개 → 세그먼트 접고 새 답변 행 */
         seg=false;
-        if(sim) sim.real();
-        if(thinkH) thinkH.done();
+        if(sim) sim.flush();
+        if(thinkH){ thinkH.done(); thinkH=null; sim=null; }
         if(run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
       }
       run.lastEvt=Date.now();
@@ -6910,12 +6893,11 @@ function taiMarket(t,fin,fallback){
       if(meta.think){ if(!thinkH) startThink(null); stopNarr(); sim.real(); thinkH.push(meta.think); } /* 본모델 실사고 도착 → 내레이터/연출 즉시 양보 */
       if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
         needBrk=true; if(meta.tool.name==='web_search') srchN++;
-        if(!ansH&&!seg){ stopNarr(); if(sim) sim.resume(); } /* 사고 중 검색 시작 → 내레이터가 바톤을 넘기고 검색 내레이션이 사고 행을 잇는다 */
-        if(ansH){ /* 답변 작성 중 자료 보강 → 답변 행을 닫고 사고 세그먼트를 연다 */
+        /* 사고 중 툴 시작 = 그 사고 burst 의 끝: 행을 자동으로 접고, 다음 실사고는 툴 행 아래 새 행으로 이어진다 (단일 시간순 스트림) */
+        if(!ansH&&!seg&&thinkH){ stopNarr(); if(sim) sim.flush(); thinkH.done(); thinkH=null; sim=null; }
+        if(ansH){ /* 답변 작성 중 자료 보강 → 답변 행을 닫는다 (사고 행은 실사고 도착 시 생성) */
           ansH.done('초안 작성, 자료 보강 필요',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초');
           ansH=null; seg=true;
-          thinkH=actThink(run); sim=taiThinkSim(thinkH,run);
-          sim.feed('초안을 쓰다 보니 근거를 더 확인할 부분이 남았다. 자료를 보강한다.');
         }
         if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:(q?'"'+q+'" 검색 중':'웹 검색 중'),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
         else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:(dm||'출처')+' 페이지 여는 중',h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
@@ -6923,20 +6905,19 @@ function taiMarket(t,fin,fallback){
           var code=(meta.tool.q||'').replace(/\s+/g,' ');
           /* 검색/페이지 호출용 배관 코드는 숨김 — 알맹이는 웹 검색/페이지 행이 이미 보여준다. 결과 페어링용 자리만 유지 */
           if(/web_search\s*\(|web_fetch\s*\(/.test(code)) pend.o.push(null);
-          else pend.o.push(actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중'})); /* 내부 파이썬 스크립트는 사용자에게 노출하지 않는다 (agy QA 3-3) */
+          else if(cmdH&&cmdH.st.status==='running'){ cmdN++; cmdH.set('검색 결과를 정리하는 중 ('+cmdN+')'); pend.o.push(cmdH); } /* 연속 정리 작업은 한 행에 접는다 — 동일 행 도배 방지 */
+          else { cmdN=1; cmdH=actStep(run,{kind:'cmd',title:'검색 결과를 정리하는 중',doneT:'검색 결과 정리 완료',failT:'결과 정리 실패',h:'검색 결과를 정리하는 중',verb:'검색 결과를 정리하는 중'}); pend.o.push(cmdH); } /* 내부 파이썬 스크립트는 사용자에게 노출하지 않는다 (agy QA 3-3) */
         }
       }
       if(meta.sres){
         (meta.sres.results||[]).forEach(function(r){ try{ var d=new URL(r.u).hostname.replace(/^www\./,''); if(srcDom.indexOf(d)<0&&srcDom.length<6) srcDom.push(d); }catch(e){} });
         var hs=pend.s.shift(); if(hs){ var qq=hs.st.q?'"'+hs.st.q+'" ':'웹 ';
         if(meta.sres.error) hs.fail(qq+'검색 실패');
-        else{ hs.done(qq+'검색 완료', meta.sres.results&&meta.sres.results.length?actSrcList(meta.sres.results):null, meta.sres.n+'개 결과');
-          if(hs.st.q&&sim) sim.feed('"'+hs.st.q+'" 검색에서 '+meta.sres.n+'개 소스가 잡혔다. 가격에 이미 반영된 뉴스와 새 재료를 구분해서 본다.'); } } }
+        else hs.done(qq+'검색 완료', meta.sres.results&&meta.sres.results.length?actSrcList(meta.sres.results):null, meta.sres.n+'개 결과'); } }
       if(meta.fres){ var hf=pend.f.shift(); if(hf){
         if(meta.fres.error) hf.fail((hf.st.d||'출처')+' 페이지 읽기 실패',(hf.st.u?gEsc(hf.st.u)+'<br>':'')+'오류 코드: '+gEsc(String(meta.fres.error)));
-        else{ hf.done((hf.st.d||'출처')+' 페이지 읽기 완료',hf.st.u?'<a href="'+gEsc(hf.st.u)+'" target="_blank" rel="noopener noreferrer">'+gEsc(hf.st.u)+'</a>':null);
-          if(hf.st.d&&sim) sim.feed(hf.st.d+' 원문을 열어 세부 수치까지 확인했다.'); } } }
-      if(meta.tres){ var ho=pend.o.shift(); if(ho){ if(meta.tres.error) ho.fail(ho.st.failT||ho.st.title); else ho.done(ho.st.doneT||ho.st.title); } }
+        else hf.done((hf.st.d||'출처')+' 페이지 읽기 완료',hf.st.u?'<a href="'+gEsc(hf.st.u)+'" target="_blank" rel="noopener noreferrer">'+gEsc(hf.st.u)+'</a>':null); } }
+      if(meta.tres){ var ho=pend.o.shift(); if(ho){ if(meta.tres.error) ho.fail(ho.st.failT||ho.st.title); else ho.done((ho.st.doneT||ho.st.title)+(ho===cmdH&&cmdN>1?' · '+cmdN+'건':'')); } }
     });
   };
   if(isPred){
@@ -6950,8 +6931,7 @@ function taiMarket(t,fin,fallback){
       var j0=TAI.ohlc;
       var coin=((ast||ai.chart)&&((ast||ai.chart).data||'').indexOf('binance:')===0)&&((ast||ai.chart).data||'')!=='binance:BTCUSDT';
       actMacro(run,null,coin,j0?j0.chg7d:null,function(ctxM,mline){
-        startThink({j:j0,macro:mline||null,tour:true}); /* 데이터가 손에 들어온 뒤 사고 시작 */
-        /* 투어는 내레이터가 말을 마친 뒤에만 시작 — 사고가 유일한 진행 드라이버. 25초 폴백 */
+        /* 사고 행은 실제 thinking 델타가 도착할 때만 생성된다 (유사-사고 폐지) */
         var tourOn=false;
         var goTour=function(){
           if(tourOn||run.data.status!=='running') return;
@@ -6977,17 +6957,15 @@ function taiMarket(t,fin,fallback){
     },sess,run,ast);
   } else if(ast||(ai.chart&&ai.chart.data&&ai.chart.data!=='none')){
     taiOhlc(function(ctx){
-      startThink(TAI.ohlc?{j:TAI.ohlc}:null);
       proceed(ctx);
     },sess,run,ast);
   } else if(taiPredictQ(t)||/어때|고민|분석|어떨|괜찮/.test(t)){
     /* 미등록 자산의 판단성 질문: 매크로 1행 + 정직한 no-price 인트로 후 검색 국면으로 */
     actNote(run,'등록된 실시세 소스가 없는 대상입니다. 매크로 환경을 확인하고 공개 정보로 조사합니다.');
     actMacro(run,null,false,null,function(ctxM,mline){
-      startThink({macro:mline||null,nosrc:true});
       proceed(ctxM||'');
     });
-  } else { startThink(null); proceed(''); }
+  } else { proceed(''); }
 }
 /* 하위 호환 별칭 */
 function taiAsk(t,fin,fallback){ taiMarket(t,fin,fallback); }
