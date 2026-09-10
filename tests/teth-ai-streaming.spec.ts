@@ -72,12 +72,13 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
   await expect(workCards.first().locator('.twk-model-tail')).toHaveText('gemini-agy-flash')
   await workCards.first().locator('.twk-head').click()
   await expect(workCards.first().locator('.twk-items li', { hasText: '일봉 조정 구간 점검' })).toBeVisible()
-  // 상단 활동 패널은 thinking 전용으로 축소
-  await expect(page.locator('.g-act2 .hlb')).toHaveText('작업 완료 · 1단계')
-  await page.locator('.g-act2 .hd').click()
-  await expect(page.locator('.g-act2 .at')).toHaveCount(1)
-  await page.locator('.g-act2 .arh', { hasText: 'TETH의 생각' }).click()
-  await expect(page.locator('.g-act2 .ad')).toContainText('주봉과 일봉의 관계를 먼저 확인한다.')
+  // 사고는 상단 패널이 아니라 스트림 인라인 노드 — 완료 후 자동 접힘, 클릭 재열람
+  await expect(page.locator('.g-act2')).toHaveCount(0)
+  const think = page.locator('.teth-think')
+  await expect(think).toHaveCount(1)
+  await expect(think.locator('.tkn-head')).toContainText('사고 과정')
+  await think.locator('.tkn-head').click()
+  await expect(think.locator('.tkn-inner')).toContainText('주봉과 일봉의 관계를 먼저 확인한다.')
   await expect(page.locator('.teth-prob')).toHaveAttribute('aria-label', '상승 확률 62%, 하락 확률 38%')
   // 후속 질문 = Genspark 풀폭 로우, 액션 = 기존 next-actions 디자인
   await expect(page.locator('.teth-followup', { hasText: '분할은 어떻게 나눠?' })).toBeVisible()
@@ -167,7 +168,7 @@ test('무효 prob 과 깨진 chips 는 조용히 제외되고 렌더는 계속, 
   expect(errors).toEqual([])
 })
 
-test('사고 패널 tool 활동: 번역·집계되고 쿼리 원문·URL·내부 ID 가 새지 않는다', async ({ page }) => {
+test('tool 활동: 시간순 인라인 칩으로 번역·접힘 렌더되고 쿼리 원문·URL·내부 ID 가 새지 않는다', async ({ page }) => {
   const errors = collectPageErrors(page)
   const body = sse(
     { tool: { name: 'web_search', q: 'bitcoin price today weekly trend' } },
@@ -184,15 +185,23 @@ test('사고 패널 tool 활동: 번역·집계되고 쿼리 원문·URL·내부
   })
   await ask(page, '비트코인 어때?')
   await expect(page.locator('.g-amsg', { hasText: '결론은 관망입니다' })).toBeVisible()
-  await page.locator('.g-act2 .hd').click()
-  await expect(page.locator('.g-act2 .at', { hasText: '시장 뉴스 확인: 비트코인' })).toBeVisible()
-  await expect(page.locator('.g-act2 .at', { hasText: '데이터 계산 2회' })).toBeVisible()
-  await expect(page.locator('.g-act2 .at', { hasText: '지지선 레벨 계산' })).toBeVisible()
-  await expect(page.locator('.g-act2 .at', { hasText: '출처 확인: cryptorank.io' })).toBeVisible()
-  const panelText = await page.locator('.g-act2').textContent() ?? ''
-  expect(panelText).not.toContain('bitcoin price')
-  expect(panelText).not.toContain('https://')
-  expect(panelText).not.toContain('code_execution')
+  // 상단 패널 없음 — 툴 실행은 시간순 인라인 칩, 연속 동일 라벨은 N회로 접힌다
+  await expect(page.locator('.g-act2')).toHaveCount(0)
+  const chips = page.locator('.teth-toolchip')
+  await expect(chips).toHaveCount(3)
+  await expect(chips.nth(0)).toContainText('시장 뉴스 확인: 비트코인')
+  await expect(chips.nth(1)).toContainText('데이터 계산')
+  await expect(chips.nth(1).locator('.ttc-count')).toHaveText('2회')
+  await expect(chips.nth(2)).toContainText('지지선 레벨 계산')
+  // web_fetch 는 칩 대신 work 카드의 소스 행으로 시각화된다
+  const card = page.locator('.teth-work')
+  await expect(card).toHaveCount(1)
+  await card.locator('.twk-head').click()
+  await expect(card.locator('.twk-src-domain', { hasText: 'cryptorank.io' })).toBeVisible()
+  const bodyText = await page.locator('.client-source-main').textContent() ?? ''
+  expect(bodyText).not.toContain('bitcoin price')
+  expect(bodyText).not.toContain('https://')
+  expect(bodyText).not.toContain('code_execution')
   expect(errors).toEqual([])
 })
 
@@ -312,7 +321,7 @@ test('스트림 중 중지: 요청을 끊고 턴은 중지 상태로 남는다',
 test('스트림 중 리로드: 실행 중 AI 턴은 조용히 중지로 복원된다', async ({ page }) => {
   await openWithProxy(page, () => new Promise<never>(() => { /* hold */ }))
   await ask(page, '비트코인 지금 사도 돼?')
-  await expect(page.locator('.g-act2')).toBeVisible()
+  await expect(page.locator('.teth-tail-loader')).toBeVisible()
   await page.reload()
   await expect(page.locator('.client-stopped')).toHaveText('응답이 중지되었습니다.')
   // 복원 경고(recoveryWarning)는 AI 스트림 강등에는 뜨지 않아야 한다.

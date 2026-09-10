@@ -1,6 +1,6 @@
 import { Fragment, lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowRight, Check, Copy, MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
+import { ArrowRight, Check, Copy, MoreHorizontal, Terminal, ThumbsDown, ThumbsUp } from 'lucide-react'
 import { ClientChrome, ClientLogo } from './ClientChrome'
 import { ClientComposer } from './ClientComposer'
 import { ClientConversation, ClientUserMessage } from './ClientConversation'
@@ -14,6 +14,7 @@ import { InternalLink } from './InternalLink'
 import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
 import { ConversationCosmos } from './ConversationCosmos'
 import { TethAskForm } from './TethAskForm'
+import { TethThinkNode } from './TethThinkNode'
 import { TethProbability } from './TethProbability'
 import { TethRichText } from './TethRichText'
 import { TethWorkBlock } from './TethWorkBlock'
@@ -88,6 +89,8 @@ function AiFlowBody({ turn, onAsk }: { turn: ClientTurn; onAsk: (segmentId: stri
       if (segment.kind === 'prob') return <div className="g-amsg" key={segment.id}><TethProbability up={segment.up} down={segment.down} /></div>
       if (segment.kind === 'work') return <TethWorkBlock key={segment.id} block={workBlockFromFlowSegment(segment)} demoMode={demoMode} />
       if (segment.kind === 'ask') return <TethAskForm key={segment.id} questions={segment.questions} answers={segment.answers} onSubmit={answers => onAsk(segment.id, answers)} />
+      if (segment.kind === 'think') return <TethThinkNode key={segment.id} text={segment.text} status={segment.status} seconds={segment.seconds} />
+      if (segment.kind === 'tool') return <div className="teth-toolchip" key={segment.id}><Terminal size={13} aria-hidden="true" /><span className="ttc-label">{segment.label}</span>{typeof segment.count === 'number' && segment.count > 1 && <span className="ttc-count">{segment.count}회</span>}</div>
       const isLast = segment.id === lastSay?.id
       if (!segment.text.trim() && !(running && isLast)) return null
       return <div className="g-amsg" key={segment.id}><TethRichText text={segment.text} caret={running && isLast} /></div>
@@ -98,13 +101,20 @@ function AiFlowBody({ turn, onAsk }: { turn: ClientTurn; onAsk: (segmentId: stri
 
 function AiConversationTurn({ turn, onEdit, onAsk }: { turn: ClientTurn; onEdit: (text: string) => void; onAsk: (segmentId: string, answers: string[]) => void }) {
   const running = turn.status === 'running'
+  // flow 턴 = 단일 스트림: 사고(think 세그먼트)·툴 칩·work·say 전부 본문에 시간순
+  // 인라인 — 위쪽에서 자라는 패널이 없다. running 인데 flow 가 아직 없으면(첫 이벤트
+  // 대기) 꼬리 로더만 보인다. 상단 패널은 flow 없는 완결 구 스냅샷 폴백 전용.
+  if (turn.flow || running) {
+    return <Fragment>
+      <ClientUserMessage onEdit={onEdit}>{turn.question}</ClientUserMessage>
+      <AiFlowBody turn={turn} onAsk={onAsk} />
+      {turn.status === 'done' && <AnswerActions text={turn.answer} />}
+      {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
+    </Fragment>
+  }
   const activityStatus = running ? 'running' as const : turn.status === 'stopped' ? 'stopped' as const : 'done' as const
-  // flow 턴의 work 는 본문 인라인 WorkBlock 이 렌더한다. 상단 패널 = thinking +
-  // 번역·집계된 tool 활동(turn.trace — tool 이 켜진 경우에만 채워진다).
   const workSteps = turn.trace ?? []
-  const started = Boolean(turn.answer || workSteps.length || turn.flow?.length)
-  // 채널 1(진짜 thinking 프로즈)은 첫 스텝의 접이식 detail 로 — 첫 say 가 와도 접지 않고
-  // 턴이 끝날 때까지 running/펼침을 유지해 사고 과정이 답변 내내 보이게 한다.
+  const started = Boolean(turn.answer || workSteps.length)
   const thinkingStep = {
     id: 'thinking',
     title: running && !started ? '생각하는 중' : 'TETH의 생각',
@@ -116,7 +126,7 @@ function AiConversationTurn({ turn, onEdit, onAsk }: { turn: ClientTurn; onEdit:
     <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : `작업 완료 · ${1 + workSteps.length}단계`} status={activityStatus}
       source="service" startedAt={turn.startedAt} finishedAt={turn.finishedAt}
       steps={[thinkingStep, ...workSteps]} />
-    {turn.flow ? <AiFlowBody turn={turn} onAsk={onAsk} /> : (turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
+    {(turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
     {turn.status === 'done' && <AnswerActions text={turn.answer} />}
     {turn.status === 'stopped' && <p className="client-stopped" role="status">응답이 중지되었습니다.</p>}
   </Fragment>

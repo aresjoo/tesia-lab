@@ -22,6 +22,10 @@ export type TethFlowSegment =
   | { kind: 'work'; id: string; model: string | null; role: string; items: { id: string; label: string; status: AiFlowStatus }[]; status: AiFlowStatus; sources?: { id: string; title: string; domain: string; status: 'reading' | 'done' }[] }
   | { kind: 'prob'; id: string; up: number; down: number }
   | { kind: 'ask'; id: string; questions: TethAskQuestion[]; answers?: string[] }
+  /* 단계별 사고 burst — 진행 중엔 고정 높이 라이브 티커, 끝나면 자동 접힘 한 줄. */
+  | { kind: 'think'; id: string; text: string; status: 'running' | 'done'; seconds?: number }
+  /* 번역된 툴 실행 한 줄 칩 — 시간순 인라인 (스트림 단일 글쓰기 지점 원칙). */
+  | { kind: 'tool'; id: string; label: string; count?: number }
 export type ClientTurn = {
   id: string; question: string; answer: string; fullAnswer: string
   startedAt: number; finishedAt?: number; status: 'running' | 'done' | 'stopped'
@@ -62,6 +66,7 @@ const stopTrace = (trace?: AiTraceStep[]) => trace?.map(step => step.status === 
 const settleFlow = (flow: TethFlowSegment[] | undefined, to: 'done' | 'stopped') => flow?.map(segment =>
   segment.kind === 'work'
     ? { ...segment, status: segment.status === 'running' ? to : segment.status, items: segment.items.map(item => item.status === 'running' ? { ...item, status: to } : item), ...(segment.sources ? { sources: segment.sources.map(source => source.status === 'reading' ? { ...source, status: 'done' as const } : source) } : {}) }
+    : segment.kind === 'think' && segment.status === 'running' ? { ...segment, status: 'done' as const }
     : segment)
 
 function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
@@ -79,6 +84,17 @@ function sanitizeFlow(flow: unknown): TethFlowSegment[] | undefined {
       // 질문 폼은 스키마 재검증으로 복원한다 — 변조 스냅샷 방어.
       const revalidated = parseAskJson(JSON.stringify({ questions: segment.questions }))
       if (revalidated.kind === 'ok') clean.push({ kind: 'ask', id: segment.id, questions: revalidated.questions, ...(Array.isArray(segment.answers) && segment.answers.every((a: unknown) => typeof a === 'string') ? { answers: segment.answers.map((a: string) => a.slice(0, 200)) } : {}) })
+    } else if (segment.kind === 'think' && typeof segment.text === 'string') {
+      clean.push({
+        kind: 'think', id: segment.id, text: segment.text.slice(0, 20000),
+        status: segment.status === 'running' ? 'running' : 'done',
+        ...(Number.isFinite(segment.seconds) && segment.seconds >= 0 ? { seconds: Math.min(9999, Math.round(segment.seconds)) } : {}),
+      })
+    } else if (segment.kind === 'tool' && typeof segment.label === 'string' && segment.label) {
+      clean.push({
+        kind: 'tool', id: segment.id, label: segment.label.slice(0, 80),
+        ...(Number.isInteger(segment.count) && segment.count >= 2 ? { count: Math.min(99, segment.count) } : {}),
+      })
     } else if (segment.kind === 'work' && typeof segment.role === 'string' && Array.isArray(segment.items) && statuses.includes(segment.status)) {
       clean.push({
         kind: 'work', id: segment.id, role: segment.role.slice(0, 40), status: segment.status,

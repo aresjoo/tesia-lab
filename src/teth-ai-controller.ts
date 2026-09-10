@@ -9,12 +9,12 @@
 import { createTethStreamParser } from './teth-stream-parser'
 import { parseAskJson, parseChipsJson, validateProb } from './teth-chips-schema'
 import { validateWorkModel } from './teth-model-routing'
-import { aggregateToolActivity, describeToolEvent } from './teth-tool-display'
+import { describeToolEvent } from './teth-tool-display'
 import { TETH_ACK_PROMPT } from './prompts/teth-system'
 import { streamTethChat, type TethAiMessage } from './teth-ai-client'
 import type { ClientTurn, TethFlowSegment } from './client-experience-store'
 
-type AiTurnPatch = Partial<Pick<ClientTurn, 'thinking' | 'answer' | 'flow' | 'trace' | 'prob' | 'actions' | 'suggestions'>>
+type AiTurnPatch = Partial<Pick<ClientTurn, 'thinking' | 'answer' | 'flow' | 'prob' | 'actions' | 'suggestions'>>
 
 export type AiStorePort = {
   patchAiTurn(sessionId: string, turnId: string, patch: AiTurnPatch): void
@@ -75,7 +75,6 @@ export function startAiTurn(args: {
   let watchdogFired = false
   let mainSayStarted = false
   let ackStarted = false
-  let toolLabels: string[] = []
   const startedAt = performance.now()
 
   const nextId = (prefix: string) => `${prefix}-${++segSeq}`
@@ -102,6 +101,28 @@ export function startAiTurn(args: {
   const patchSources = (mutate: (sources: { id: string; title: string; domain: string; status: 'reading' | 'done' }[]) => { id: string; title: string; domain: string; status: 'reading' | 'done' }[]) => {
     const work = ensureSourceWork()
     replaceLast({ ...work, sources: mutate([...(work.sources ?? [])]) })
+    queueFlow()
+  }
+
+  // ── 단계별 사고 burst: 진행 중 티커 세그먼트 하나, 다음 이벤트가 오면 자동 접힘 ──
+  let thinkId: string | null = null
+  let thinkStartedAt = 0
+  const appendThink = (delta: string) => {
+    if (!thinkId) {
+      thinkId = nextId('think')
+      thinkStartedAt = performance.now()
+      pushSeg({ kind: 'think', id: thinkId, text: '', status: 'running' })
+    }
+    const id = thinkId
+    flow = flow.map(segment => segment.kind === 'think' && segment.id === id ? { ...segment, text: segment.text + delta } : segment)
+    queueFlow()
+  }
+  const closeThink = () => {
+    if (!thinkId) return
+    const id = thinkId
+    thinkId = null
+    const seconds = Math.max(1, Math.round((performance.now() - thinkStartedAt) / 1000))
+    flow = flow.map(segment => segment.kind === 'think' && segment.id === id ? { ...segment, status: 'done' as const, seconds } : segment)
     queueFlow()
   }
 
@@ -132,9 +153,11 @@ export function startAiTurn(args: {
     for (const event of events) {
       switch (event.kind) {
         case 'say-open':
+          closeThink()
           pushSeg({ kind: 'say', id: nextId('say'), text: '' })
           break
         case 'say-delta': {
+          closeThink()
           if (!mainSayStarted) {
             mainSayStarted = true
             ackController.abort()
@@ -151,6 +174,7 @@ export function startAiTurn(args: {
         case 'say-close':
           break
         case 'work-open': {
+          closeThink()
           const model = validateWorkModel(event.model)
           if (event.model && !model) console.warn('[teth-ai] 라우팅 표 밖 model 드랍:', event.model)
           pushSeg({ kind: 'work', id: nextId('work'), model, role: event.role.trim().slice(0, 40) || '검토 작업', items: [], status: 'running' })
@@ -267,19 +291,31 @@ export function startAiTurn(args: {
           if (finished) return
           armWatchdog()
           if (event.kind === 'text') applyParseEvents(parser.push(event.delta))
-          else if (event.kind === 'think') { thinking += event.delta; queuePatch({ thinking }) }
+          else if (event.kind === 'think') {
+            // 채널 1 사고: 스트림 내 시간순 think 세그먼트(티커) + 구 스냅샷 폴백용 문자열.
+            thinking += event.delta
+            appendThink(event.delta)
+            queuePatch({ thinking })
+          }
           else if (event.kind === 'tool') {
-            // 사고 패널의 tool 활동: 번역·집계 레이어를 거쳐 스텝으로 표시.
-            // (1단계 lite 에선 발생하지 않지만, tool 이 켜지는 즉시 이 경로가 받는다.
-            //  3단계에서 WorkBlock 어댑터로 승격 예정.)
-            toolLabels = [...toolLabels, describeToolEvent(event)]
-            queuePatch({ trace: aggregateToolActivity(toolLabels, true) })
+            // 툴 실행: 번역 레이어를 거쳐 그 시점의 인라인 한 줄 칩으로 표시.
+            // 같은 라벨 연속 실행은 한 칩에 N회로 접힌다. web_fetch 는 소스 행이
+            // 시각화를 대신하므로 칩을 만들지 않는다. (1단계 lite 에선 미발생,
+            // tool 재연동 즉시 이 경로가 받는다 — 3단계 WorkBlock 승격 예정.)
+            closeThink()
             if (event.name === 'web_fetch') {
               const domain = (() => { try { return new URL(event.query).hostname.replace(/^www\./, '') } catch { return '' } })()
               if (domain) patchSources(sources => [...sources, { id: nextId('src'), title: '페이지 확인', domain, status: 'reading' }])
+            } else {
+              const label = describeToolEvent(event)
+              const last = flow.at(-1)
+              if (last?.kind === 'tool' && last.label === label) replaceLast({ ...last, count: (last.count ?? 1) + 1 })
+              else pushSeg({ kind: 'tool', id: nextId('tool'), label })
+              queueFlow()
             }
           }
           else if (event.kind === 'sources') {
+            closeThink()
             // 검색이 확보한 소스 목록 — work 카드에 행으로 표시 (제목+도메인만).
             patchSources(sources => [...sources, ...event.results.slice(0, 6).map(result => ({ id: nextId('src'), title: result.title || result.domain, domain: result.domain, status: 'done' as const }))])
           }
@@ -299,6 +335,7 @@ export function startAiTurn(args: {
       if (finished) return
       applyParseEvents(parser.finish())
       if (!answerText().trim()) { finalize('fallback'); return }
+      closeThink()
       settleAll('done')
       queueFlow()
       // 프록시가 {error:true} 로 끝냈어도 chips(종결 블록)까지 받았다면 내용은 완결이다.
@@ -313,6 +350,7 @@ export function startAiTurn(args: {
       }
       if (answerText().trim()) {
         applyParseEvents(parser.finish())
+        closeThink()
         settleAll('done')
         queueFlow()
         finalize('finish')

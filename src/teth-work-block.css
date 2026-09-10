@@ -30,6 +30,11 @@
 .twk-sources li.done .twk-src-state { color: var(--positive, #2bb673) }
 @keyframes twk-pulse { 0%, 100% { opacity: .45 } 50% { opacity: 1 } }
 @keyframes twk-in { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+/* 인라인 툴 실행 칩 — 번역된 라벨 한 줄, 시간순 배치 (Genspark Bash Command 칩 계열). */
+.teth-toolchip { display: flex; align-items: center; gap: 9px; margin: 2px 0 10px; padding: 10px 14px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 10px; background: rgba(255, 255, 255, .04); font-size: 12.5px; color: #b7bcc4; animation: twk-in .3s cubic-bezier(.16, 1, .3, 1) }
+.teth-toolchip svg { flex: none; color: #9aa0a6 }
+.ttc-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.ttc-count { flex: none; color: #9aa0a6; font-size: 11.5px }
 /* 스트리밍 꼬리 로더 — "작업 중… · Ns" 셔머 텍스트 + 2점 바운스 (Genspark 실측). */
 .teth-tail-loader { margin: 4px 0 12px }
 .ttl-text { display: inline-block; font-size: 12.5px; color: #9aa0a6; background: linear-gradient(90deg, #9aa0a6 30%, #eceef1 50%, #9aa0a6 70%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: ttl-shimmer 1.6s linear infinite }
@@ -39,7 +44,7 @@
 @keyframes ttl-shimmer { to { background-position-x: -200% } }
 @keyframes ttl-bounce { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-3px) } }
 @media (prefers-reduced-motion: reduce) {
-  .teth-work, .twk-badge, .twk-sources li { animation: none }
+  .teth-work, .twk-badge, .twk-sources li, .teth-toolchip { animation: none }
   .twk-sources li.reading .twk-src-state { animation: none }
   .twk-body, .twk-chev { transition: none }
   .ttl-text { animation: none; -webkit-text-fill-color: currentColor; background: none }
