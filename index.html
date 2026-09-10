@@ -496,7 +496,7 @@ body.g-dark{background:#0f1012}
 #g-root{position:fixed;inset:0;background:#0f1012;color:#e6e7ea;display:flex;flex-direction:column;font-size:13.5px;z-index:40;
   --g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;
   --gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);
-  --gt:#e6e7ea;--gt2:#a6aab2;--gt3:#6f747d;
+  --gt:#e6e7ea;--gt2:#a6aab2;--gt3:#848a94; /* 6f747d→848a94: 12px 힌트 텍스트가 어두운 카드에서 WCAG AA(4.5:1) 미달이던 대비 상향 (agy QA2) */
   --gb:#3d6ef0;--gb2:#5b8af7;--gg:#4ec08d;--ga:#d9a84e;--gr:#e0604b;
   /* 확장 토큰: 표면/반전/툴팁/그림자/글로우, 라이트 테마가 이 값만 재정의한다 */
   --pill:#1e2024;--pop:#26282d;--hoverline:rgba(255,255,255,.05);
@@ -1757,6 +1757,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 body.tf-route #teth-help{bottom:88px}
 @media (max-width:900px){ body.tf-route #teth-help{display:none} } /* 워크스페이스 모바일: FAB가 CTA를 간섭하지 않게 */
 .tfw-hd .bk{width:44px;height:44px} /* 터치 타깃 44px (agy QA 8-1) */
+@media (max-width:860px){ .tfw-hd{padding-left:44px} } /* 좌상단 고정 햄버거(40px)와 뒤로 버튼 겹침 방지 — 모바일 tf 라우트 (라이브 QA2) */
 .tf-drawer .dh .x,.tf-mbox .mh .x{width:40px;height:40px} /* 전략 라우트: 헬프 FAB가 스티키 CTA를 가리지 않게 */
 </style>
 
@@ -2134,7 +2135,7 @@ body.tf-route #teth-help{bottom:88px}
       <div class="au-title" id="au-code-title">받은 편지함을 확인하세요</div>
       <div class="au-sub" id="au-code-sub"></div>
       <div class="au-input-wrap">
-        <input class="au-input" id="au-code-in" inputmode="numeric" maxlength="6" placeholder="코드" autocomplete="off" onkeydown="if(event.key==='Enter')authCodeNext()">
+        <input class="au-input" id="au-code-in" inputmode="numeric" maxlength="12" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)" placeholder="코드" autocomplete="one-time-code" onkeydown="if(event.key==='Enter')authCodeNext()"><!-- '123-456' 붙여넣기가 maxlength 선컷으로 5자리가 되던 유실 방지 (agy QA2) -->
       </div>
       <div class="au-err" id="au-code-err">6자리 숫자 코드를 입력해 주세요.</div>
       <button class="au-btn primary au-gap" id="au-code-go" onclick="authCodeNext()">계속</button>
@@ -4987,7 +4988,8 @@ var STORE={t:0,
       })(),
       sessions:G.sessions.slice(0,20).map(function(sx){
         return {id:sx.id,title:sx.title,status:sx.status,convo:sx.convo,thread:sx.thread,
-          strategy:sx.strategy,versions:sx.versions,artifacts:sx.artifacts,ai:sx.ai||null,acts:sx.acts||{}};
+          strategy:sx.strategy,versions:sx.versions,artifacts:sx.artifacts,ai:sx.ai||null,acts:sx.acts||{},
+          live:!!sx.live,liveMode:sx.liveMode||null,livePaused:!!sx.livePaused}; /* 실행 상태도 저장 — 리로드 후 실행 목록·Paper 구분 유실 방지 (codex QA2 P1) */
       })};
   },
   flush:function(){
@@ -5874,9 +5876,13 @@ function tfStart(act){
     var sx=G.cur||G.sessions[0];
     if(!sx){ toast('채팅을 먼저 시작해주세요'); gHome(); return; }
     gSelect(sx.id);
+    if(G.mode!=='conv') try{ gShowConv(); }catch(e){} /* 보고서 세션은 gSelect가 문서를 열어 재시도가 안 끝난다 — 대화 화면 강제 (codex QA2 P2) */
+    window.TF_STARTN=(window.TF_STARTN||0)+1;
+    if(window.TF_STARTN>4){ window.TF_STARTN=0; toast('대화 화면에서 다시 시도해주세요'); return; }
     delay(400,function(){ tfStart(act); });
     return;
   }
+  window.TF_STARTN=0;
   var t=tfS();
   t.cloneFrom=null;
   t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null;
@@ -6236,7 +6242,8 @@ var TF_ADAPTER={
   mode:'mock', /* 'mock' | 'production' — production 연동 시 아래 구현만 교체 */
   backtest:function(p,cb){ try{ cb(null,runBacktest(p)); }catch(e){ cb(e); } }, /* 백테스트는 실계산 */
   verifyUid:function(ex,uid,cb){ setTimeout(function(){ /^0+$/.test(uid)?cb({code:'not_found'}):cb(null,{ok:true}); },1800); },
-  verifyApi:function(ex,k,s,cb){ setTimeout(function(){ /^BAD/i.test(k)?cb({code:'invalid_key'}):cb(null,{perm:['read','trade']}); },1900); },
+  verifyApi:function(ex,k,s,cb,passphrase){ /* okx 등 passphrase 필요 거래소는 4번째 이후 인자로 수신 — 실어댑터 교체 시 서명 유지 */
+    setTimeout(function(){ /^BAD/i.test(k)?cb({code:'invalid_key'}):(ex==='okx'&&!passphrase)?cb({code:'missing_passphrase'}):cb(null,{perm:['read','trade']}); },1900); },
   pay:function(info,cb){ setTimeout(function(){ /^0000/.test(info.num)?cb({code:'declined'}):cb(null,{ok:true}); },1400); }
 };
 function tfExOf(exId){ for(var i=0;i<TFC.exchanges.length;i++) if(TFC.exchanges[i].id===exId) return TFC.exchanges[i]; return TFC.exchanges[0]; }
@@ -6460,14 +6467,16 @@ function tfCnApi(){
   var kv=k.value.trim();
   var msgs=['읽기 권한 확인 중...','거래 권한 확인 중...','출금 권한 없음 확인 중...'],mi=0;
   var tick=setInterval(function(){ if(go&&mi<msgs.length) go.textContent=msgs[mi++]; },650);
+  var ppv=pp?pp.value.trim():null; /* okx passphrase — 존재 검사만 하고 버리던 결함 수정, 원문은 저장하지 않는다 (codex QA2 P2) */
   TF_ADAPTER.verifyApi(t.ob.ex,kv,s.value.trim(),function(err){
     clearInterval(tick);
+    if(err&&err.code==='missing_passphrase'){ t.ob.err='Passphrase를 확인해주세요. OKX는 API 생성 시 설정한 Passphrase가 필요해요.'; tfSave(); tfConnectView(); return; }
     if(err){ t.ob.err='API Key 권한 확인에 실패했어요. 읽기와 거래 권한이 켜져 있는지 확인해주세요.'; tfSave(); tfConnectView(); return; }
     t.ob.st='api_verified'; t.ob.err=null;
     t.api={ex:t.ob.ex,last4:kv.slice(-4)}; /* 키 원문은 저장하지 않는다 */
     tfSave();
     tfNav('#/strategy/done');
-  });
+  },ppv);
 }
 /* ── §19 완료 화면 라우트 #/strategy/done ── */
 function tfDoneView(){
@@ -6756,6 +6765,7 @@ function taiTv(cb){
   TAI.tvq=[cb];
   var s=document.createElement('script'); s.src='https://s3.tradingview.com/tv.js';
   s.onload=function(){ var q=TAI.tvq; TAI.tvq=null; q.forEach(function(f){ f(); }); };
+  s.onerror=function(){ TAI.tvq=null; try{ s.remove(); }catch(e){} }; /* 로딩 실패 시 대기열 정리 — 다음 차트 요청이 재시도할 수 있게 (codex QA2 P2) */
   document.head.appendChild(s);
 }
 function taiChartOpen(info){
@@ -7141,6 +7151,8 @@ function taiMarket(t,fin,fallback){
     taiErrCard(t); delay(300,taiSpacerTrim);
   };
   var proceed=function(ctx){
+    /* 사전 조사(시세·매크로) 완료 후에도 로그아웃·세션 소멸이면 전송하지 않는다 (codex QA2 P1) */
+    if(!S.user||G.sessions.indexOf(sess)<0){ TAI.busy=false; taiBusySync(); actFinish(run,'abort'); return; }
     var msgs=ai.hist.slice(-11).concat([{role:'user',content:t}]);
     TAI.lastCtx={conversationId:sess.id,msgCount:msgs.length,summaryLen:sys.length,tf:ai.tf,chart:ai.chart?ai.chart.tv:null,ohlcFreshMs:ai.ohlcAt?Date.now()-ai.ohlcAt:null,system:sys,at:new Date().toISOString()}; /* 개발용 인스펙터 */
     var out=null,acc='',segAcc='',lastR=0;
@@ -7426,7 +7438,9 @@ function gSend(){
   if(fin && /줄여|늘려|바꿔|수정|해줘|재검증|다시/.test(t)){
     var kind=/낙폭|mdd|손절/i.test(t)?'mdd':/횟수|덜/.test(t)?'fewer':/늘/.test(t)?'more':'mdd';
     gDocThread('<div class="g-think"><span class="tdots"><i></i><i></i><i></i></span><span>수정 생성, 재검증 중</span></div>');
+    var reqSess=G.cur; /* 재검증 콜백을 요청 세션에 바인딩 — 1.7초 내 세션 전환 시 타 전략 오염 방지 (codex QA2 P1) */
     delay(1700,function(){
+      if(G.cur!==reqSess) return;
       var res=S.versions[S.versions.length-1];
       var p={sl:res.params.sl,tp:res.params.tp,rsiTh:res.params.rsiTh,trendFilter:res.params.trendFilter,startI:res.params.startI,endI:res.params.endI,purpose:'revision'};
       var lb;
@@ -8200,6 +8214,8 @@ function fbSubmit(){
   var t=$('fb-text').value.trim();
   if(!t){ toast(L('fb.req')); $('fb-text').focus(); return; }
   /* TODO: 백엔드 연동 시 여기서 전송 (텍스트 + 첨부 이미지 dataURL) */
+  /* 그때까지는 로컬에 실제로 남긴다 — 전송 없이 '제출 완료'만 띄우던 공허한 확인 제거 (codex QA2 P2) */
+  try{ var fl=JSON.parse(localStorage.getItem('teth.feedback')||'[]'); fl.push({t:t.slice(0,2000),at:new Date().toISOString()}); localStorage.setItem('teth.feedback',JSON.stringify(fl.slice(-50))); }catch(e){}
   $('fb-main').style.display='none';
   $('fb-done').classList.add('on');
 }
