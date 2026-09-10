@@ -81,49 +81,65 @@ createServer(async (req, res) => {
     const src = q.get("src"), sym = String(q.get("sym") || "").slice(0, 24);
     const IV = { "1m": 1, "5m": 1, "15m": 1, "30m": 1, "1h": 1, "4h": 1, "1d": 1, "1w": 1 };
     const iv = IV[q.get("iv")] ? q.get("iv") : "1d";
-    try {
-      let rows = [];
-      if (src === "binance") {
-        /* worker.mjs 와 동일한 폴백 체인: binance → kraken(USDT) → coinbase(USD) */
-        let j = null;
-        for (const host of ["https://data-api.binance.vision", "https://api.binance.com"]) {
-          try { const r = await fetch(`${host}/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=${iv}&limit=90`); if (r.ok) { j = await r.json(); break; } } catch (e) {}
-        }
-        if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]);
-        const base = sym.replace(/USDT$/, "");
-        if (!rows.length && base) {
-          const KIV = { "1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440, "1w": 10080 };
-          try {
-            const r = await fetch(`https://api.kraken.com/0/public/OHLC?pair=${encodeURIComponent((base === "BTC" ? "XBT" : base) + "USDT")}&interval=${KIV[iv] || 1440}`);
-            if (r.ok) { const kj = await r.json(); const key = kj && kj.result && Object.keys(kj.result).find((k) => k !== "last"); const arr = key ? kj.result[key] : null; if (Array.isArray(arr) && arr.length) rows = arr.slice(-90).map((k) => [k[0] * 1000, +k[1], +k[2], +k[3], +k[4], +k[6]]); }
-          } catch (e) {}
-        }
-        if (!rows.length && base) {
-          const CIV = { "1m": 60, "5m": 300, "15m": 900, "30m": 900, "1h": 3600, "4h": 21600, "1d": 86400, "1w": 86400 };
-          try {
-            const r = await fetch(`https://api.exchange.coinbase.com/products/${encodeURIComponent(base + "-USD")}/candles?granularity=${CIV[iv] || 86400}`, { headers: { "User-Agent": "teth-ai-proxy" } });
-            if (r.ok) { const cj = await r.json(); if (Array.isArray(cj) && cj.length) rows = cj.slice(0, 90).reverse().map((k) => [k[0] * 1000, +k[3], +k[2], +k[1], +k[4], +k[5]]); }
-          } catch (e) {}
-        }
-      } else if (src === "yahoo") {
-        const YIV = { "1m": "5m", "5m": "5m", "15m": "15m", "30m": "30m", "1h": "60m", "4h": "60m", "1d": "1d", "1w": "1wk" };
-        const YRG = { "5m": "5d", "15m": "5d", "30m": "1mo", "60m": "1mo", "1d": "3mo", "1wk": "2y" };
-        const yiv = YIV[iv], yrg = YRG[yiv];
-        const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=${yiv}&range=${yrg}`, { headers: { "User-Agent": "Mozilla/5.0" } });
-        const j = await r.json();
-        const d = j?.chart?.result?.[0], ts = d?.timestamp || [], qd = d?.indicators?.quote?.[0];
-        if (qd) rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i], qd.volume ? qd.volume[i] || 0 : 0]).filter((x) => x[4] != null);
-        rows = rows.slice(-90);
+    /* worker.mjs 와 동일 계약(0단): count 관통·meta·듀얼 스냅샷·정직한 폴백 재집계 */
+    const n = Math.max(10, Math.min(300, parseInt(q.get("n") || "90", 10) || 90));
+    const aggBars = (rows, m) => { const out = []; for (let i = rows.length % m; i + m <= rows.length; i += m) { const g = rows.slice(i, i + m); out.push([g[0][0], g[0][1], Math.max(...g.map((x) => x[2])), Math.min(...g.map((x) => x[3])), g[g.length - 1][4], g.reduce((s, x) => s + (x[5] || 0), 0)]); } return out; };
+    const coinRows = async (sym2, iv2, n2) => {
+      const path = `/api/v3/klines?symbol=${encodeURIComponent(sym2)}&interval=${iv2}&limit=${n2}`;
+      for (const host of ["https://data-api.binance.vision", "https://api.binance.com"]) {
+        try { const r = await fetch(host + path); if (r.ok) { const j = await r.json(); if (Array.isArray(j) && j.length) return { src: "binance", iv: iv2, rows: j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]) }; } } catch (e) {}
       }
-      if (!rows.length) throw 0;
+      const base = sym2.replace(/USDT$/, "");
+      if (!base) return null;
+      const KIV = { "1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440, "1w": 10080 };
+      try {
+        const r = await fetch(`https://api.kraken.com/0/public/OHLC?pair=${encodeURIComponent((base === "BTC" ? "XBT" : base) + "USDT")}&interval=${KIV[iv2] || 1440}`);
+        if (r.ok) { const kj = await r.json(); const key = kj && kj.result && Object.keys(kj.result).find((k) => k !== "last"); const arr = key ? kj.result[key] : null; if (Array.isArray(arr) && arr.length) return { src: "kraken", iv: iv2, rows: arr.slice(-n2).map((k) => [k[0] * 1000, +k[1], +k[2], +k[3], +k[4], +k[6]]) }; }
+      } catch (e) {}
+      const CB = { "1m": [60, 1], "5m": [300, 1], "15m": [900, 1], "30m": [900, 2], "1h": [3600, 1], "4h": [3600, 4], "1d": [86400, 1] };
+      const cb = CB[iv2];
+      if (!cb) return null;
+      try {
+        const r = await fetch(`https://api.exchange.coinbase.com/products/${encodeURIComponent(base + "-USD")}/candles?granularity=${cb[0]}`, { headers: { "User-Agent": "teth-ai-proxy" } });
+        if (r.ok) { const cj = await r.json(); if (Array.isArray(cj) && cj.length) { let rows = cj.slice(0, Math.min(300, n2 * cb[1])).reverse().map((k) => [k[0] * 1000, +k[3], +k[2], +k[1], +k[4], +k[5]]); if (cb[1] > 1) rows = aggBars(rows, cb[1]); return { src: "coinbase", iv: iv2, rows: rows.slice(-n2) }; } }
+      } catch (e) {}
+      return null;
+    };
+    const yahooRows = async (sym2, iv2, n2) => {
+      const YIV = { "1m": "5m", "5m": "5m", "15m": "15m", "30m": "30m", "1h": "60m", "4h": "60m", "1d": "1d", "1w": "1wk" };
+      const yiv = YIV[iv2] || "1d";
+      const YRG = { "5m": "5d", "15m": "5d", "30m": "1mo", "60m": "1mo", "1d": n2 > 120 ? "2y" : "6mo", "1wk": "5y" };
+      const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym2)}?interval=${yiv}&range=${YRG[yiv] || "6mo"}`, { headers: { "User-Agent": "Mozilla/5.0" } });
+      const j = await r.json();
+      const d = j?.chart?.result?.[0], ts = d?.timestamp || [], qd = d?.indicators?.quote?.[0];
+      if (!qd) return null;
+      const rows = ts.map((t, i) => [t * 1000, qd.open[i], qd.high[i], qd.low[i], qd.close[i], qd.volume ? qd.volume[i] || 0 : 0]).filter((x) => x[4] != null);
+      const actual = (iv2 === "4h" && yiv === "60m") ? "1h" : (iv2 === "1m" ? "5m" : iv2);
+      return { src: "yahoo", iv: actual, rows: rows.slice(-n2) };
+    };
+    try {
+      const got = src === "binance" ? await coinRows(sym, iv, n) : src === "yahoo" ? await yahooRows(sym, iv, n) : null;
+      if (!got || !got.rows.length) throw 0;
+      const rows = got.rows;
       const closes = rows.map((x) => x[4]), last = closes[closes.length - 1];
-      const pctFrom = (n) => { const p = closes[closes.length - 1 - n]; return p ? +((last / p - 1) * 100).toFixed(2) : null; };
+      const pctFrom = (k) => { const p = closes[closes.length - 1 - k]; return p ? +((last / p - 1) * 100).toFixed(2) : null; };
+      const sN = Math.min(30, rows.length), samp = [];
+      for (let i = 0; i < sN; i++) samp.push(rows[Math.min(rows.length - 1, Math.round(i * (rows.length - 1) / Math.max(1, sN - 1)))]);
       const out = {
-        last: +last.toPrecision(6), chg1d: pctFrom(1), chg7d: pctFrom(7), chg30d: pctFrom(30),
+        last: +last.toPrecision(6), chg1d: pctFrom(1), chg7d: pctFrom(7), chg30d: pctFrom(30), ivChg: pctFrom(1),
         hi90: +Math.max(...rows.map((x) => x[2])).toPrecision(6), lo90: +Math.min(...rows.map((x) => x[3])).toPrecision(6),
         closes30: closes.slice(-30).map((v) => +v.toPrecision(5)),
-        rows: rows.slice(-60).map((x) => [x[0], +x[1].toPrecision(5), +x[2].toPrecision(5), +x[3].toPrecision(5), +x[4].toPrecision(5), +(x[5] || 0).toPrecision(4)]), /* ì˜ˆì¸¡ ì‹œë‚˜ë¦¬ì˜¤ ì¹´ë“œ + ì§€í‘œ ê³„ì‚°ìš© */
+        closesS: samp.map((r) => [r[0], +r[4].toPrecision(6)]),
+        rows: rows.slice(-300).map((x) => [x[0], +x[1].toPrecision(6), +x[2].toPrecision(6), +x[3].toPrecision(6), +x[4].toPrecision(6), +(x[5] || 0).toPrecision(4)]),
+        meta: { src: got.src, iv: got.iv, n: rows.length, at: Date.now(), quality: got.iv === iv ? "complete" : "adjusted" },
       };
+      const attach = (dr) => {
+        const dc = dr.map((x) => x[4]); const dl = dc[dc.length - 1], dp = dc[dc.length - 2];
+        out.base = { chg: dp ? +((dl / dp - 1) * 100).toFixed(2) : null, label: src === "binance" ? "24H" : "전일比" };
+        out.daily = dr.slice(-30).map((x) => [new Date(x[0]).toISOString().slice(0, 10), +x[4].toPrecision(6)]);
+      };
+      if (iv !== "1d") { try { const dg = src === "binance" ? await coinRows(sym, "1d", 31) : await yahooRows(sym, "1d", 31); if (dg && dg.rows.length > 1) attach(dg.rows); } catch (e) {} }
+      else attach(rows);
       res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
       return res.end(JSON.stringify(out));
     } catch { res.writeHead(502, CORS); return res.end(); }
