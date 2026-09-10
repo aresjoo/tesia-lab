@@ -1,28 +1,49 @@
-/* <ask> 질문 폼 — Genspark 입력 카드 스타일. */
-.teth-ask { margin: 8px 0 12px }
-.tak-banner { display: inline-block; padding: 8px 14px; border-radius: 999px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .12); font-size: 12.5px; color: #d5d8dd; margin-bottom: 12px }
-.tak-banner strong { color: #fff; margin-right: 6px }
-.tak-card { border: 1px solid rgba(255, 255, 255, .12); border-radius: 14px; background: rgba(255, 255, 255, .035); padding: 14px 16px }
-.tak-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px }
-.tak-title { flex: 1; min-width: 0; font-size: 13.5px; font-weight: 700 }
-.tak-hint { display: block; margin-top: 3px; font-size: 12px; font-weight: 400; color: #9aa0a6 }
-.tak-nav { flex: none; display: flex; align-items: center; gap: 4px; color: #9aa0a6; font-size: 12px }
-.tak-nav button { display: flex; padding: 3px; background: none; border: 0; color: inherit; cursor: pointer; border-radius: 6px }
+/* <ask> 질문 폼 — Genspark 입력 카드 1:1. 등장/접힘 전환 포함, reduced-motion 대응. */
+.teth-ask { margin: 8px 0 12px; animation: tak-in .3s cubic-bezier(.16, 1, .3, 1) }
+.tak-banner { display: flex; align-items: baseline; gap: 8px; font-size: 13px; margin-bottom: 12px }
+.tak-banner strong { color: #fff; font-weight: 700 }
+.tak-banner-sub { color: #9aa0a6; font-weight: 400 }
+.tak-card { border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; background: rgba(255, 255, 255, .035); padding: 16px 18px; animation: tak-in .3s cubic-bezier(.16, 1, .3, 1) }
+.tak-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px }
+.tak-title { flex: 1; min-width: 0; font-size: 15px; font-weight: 700; line-height: 1.5 }
+.tak-hint { font-size: 13px; font-weight: 400; color: #9aa0a6; margin-left: 6px }
+.tak-nav { flex: none; display: flex; align-items: center; gap: 2px; color: #9aa0a6; font-size: 12.5px }
+.tak-nav > span { padding: 0 4px; white-space: nowrap }
+.tak-nav button { display: flex; padding: 4px; background: none; border: 0; color: inherit; cursor: pointer; border-radius: 6px }
 .tak-nav button:hover:not(:disabled) { background: rgba(255, 255, 255, .08); color: #fff }
 .tak-nav button:disabled { opacity: .35; cursor: default }
+.tak-nav .tak-close { margin-left: 4px }
 .tak-options { display: flex; flex-direction: column; gap: 8px }
-.tak-options > button { width: 100%; text-align: left; padding: 11px 14px; border: 1px solid rgba(255, 255, 255, .10); border-radius: 10px; background: rgba(255, 255, 255, .03); color: inherit; font: inherit; cursor: pointer; transition: background .15s, border-color .15s }
+.tak-options > button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px 14px; border: 1px solid rgba(255, 255, 255, .10); border-radius: 12px; background: rgba(255, 255, 255, .03); color: inherit; font: inherit; cursor: pointer; transition: background .15s, border-color .15s }
 .tak-options > button:hover { background: rgba(255, 255, 255, .07) }
-.tak-options > button.on { border-color: rgba(140, 165, 255, .55); background: rgba(140, 165, 255, .10) }
-.tak-label { display: block; font-size: 13px; font-weight: 600 }
-.tak-desc { display: block; margin-top: 2px; font-size: 12px; color: #9aa0a6 }
+.tak-options > button.on { border-color: rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .06) }
+.tak-option-text { flex: 1; min-width: 0 }
+.tak-label { display: block; font-size: 14px; font-weight: 600; color: #d5d8dd }
+.tak-desc { display: block; margin-top: 2px; font-size: 12.5px; color: #9aa0a6 }
+/* 선택=제출 어포던스: 호버한 행 우측에만 ↵ 글리프가 떠오른다. */
+.tak-enter-hint { flex: none; color: #9aa0a6; opacity: 0; transition: opacity .15s }
+.tak-options > button:hover .tak-enter-hint { opacity: 1 }
 .tak-custom { display: flex; gap: 8px; align-items: flex-end }
-.tak-custom textarea { flex: 1; resize: none; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 10px; background: rgba(255, 255, 255, .04); color: inherit; font: inherit; font-size: 13px }
-.tak-custom button { flex: none; display: flex; padding: 10px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 10px; background: rgba(255, 255, 255, .06); color: inherit; cursor: pointer }
-.tak-submit { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 10px 18px; border: 0; border-radius: 999px; background: #3f6cf0; color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer }
-.tak-submit:disabled { opacity: .5; cursor: default }
-.teth-ask.answered { border: 1px solid rgba(255, 255, 255, .10); border-radius: 12px; background: rgba(255, 255, 255, .03); padding: 12px 14px }
-.tak-done { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--positive, #2bb673); margin-bottom: 8px }
-.teth-ask.answered dl { margin: 0; display: flex; flex-direction: column; gap: 6px }
-.teth-ask.answered dt { font-size: 12px; color: #9aa0a6 }
-.teth-ask.answered dd { margin: 1px 0 0; font-size: 13px; font-weight: 600 }
+.tak-custom textarea { flex: 1; resize: none; padding: 11px 13px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 12px; background: rgba(255, 255, 255, .04); color: inherit; font: inherit; font-size: 14px; outline: none }
+.tak-custom textarea:focus { border-color: rgba(255, 255, 255, .26) }
+.tak-custom-send { flex: none; display: flex; padding: 11px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 12px; background: rgba(255, 255, 255, .06); color: #9aa0a6; cursor: pointer; transition: background .15s, color .15s, border-color .15s }
+.tak-custom-send:disabled { cursor: default }
+/* 직접 입력 CTA: 타이핑이 시작되면 점등 — Genspark 화이트 버튼. */
+.tak-custom-send.on { background: #fff; border-color: #fff; color: #17181b }
+/* 접힘 상태 — "질문 대기 중 · 이 질문에 답하기" 알약. */
+.tak-waiting { display: inline-flex; align-items: center; gap: 12px; padding: 9px 16px; border: 1px solid rgba(255, 255, 255, .12); border-radius: 999px; background: rgba(255, 255, 255, .05); font: inherit; font-size: 13px; cursor: pointer; transition: background .15s }
+.tak-waiting:hover { background: rgba(255, 255, 255, .09) }
+.tak-waiting-state { color: #9aa0a6 }
+.tak-waiting-cta { color: #fff; font-weight: 600 }
+/* 답변 완료 — 사용자 쪽(우측) 라이트 카드 요약. */
+.tak-answered-row { display: flex; justify-content: flex-end; margin: 8px 0 12px }
+.tak-answered-card { max-width: min(320px, 86%); padding: 14px 18px; border-radius: 16px; background: #f2f3f5; color: #1c1e21; animation: tak-in .3s cubic-bezier(.16, 1, .3, 1) }
+.tak-pair { margin: 0 0 10px }
+.tak-pair:last-child { margin-bottom: 0 }
+.tak-pair-label { display: block; font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.tak-pair-value { display: block; margin-top: 1px; font-size: 13.5px; color: #3c4043 }
+@keyframes tak-in { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) {
+  .teth-ask, .tak-card, .tak-answered-card { animation: none }
+  .tak-options > button, .tak-enter-hint, .tak-custom-send, .tak-waiting { transition: none }
+}

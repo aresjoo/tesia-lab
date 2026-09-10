@@ -62,6 +62,20 @@ function AiAnswerBody({ turn }: { turn: ClientTurn }) {
   </div>
 }
 
+/* 스트리밍 꼬리 로더 — "작업 중… · Ns" 셔머 + 2점 바운스 (Genspark 실측 연출). */
+function AiTailLoader({ startedAt }: { startedAt: number }) {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+  const seconds = Math.max(0, Math.floor((now - startedAt) / 1000))
+  return <div className="teth-tail-loader" role="status" aria-label="응답 생성 중">
+    <span className="ttl-text">작업 중…{seconds >= 3 && <span className="ttl-sec"> · {seconds}s</span>}</span>
+    <span className="ttl-dots" aria-hidden="true"><i /><i /></span>
+  </div>
+}
+
 /* say/prob 는 본문 순서대로, work 는 인라인 WorkBlock 카드(릴레이 핸드오프)로 렌더한다.
  * 진행 중 work 가 접히면서 다음 say 가 이어지는 리듬이 데이터(flow 순서)에서 나온다. */
 function AiFlowBody({ turn, onAsk }: { turn: ClientTurn; onAsk: (segmentId: string, answers: string[]) => void }) {
@@ -78,6 +92,7 @@ function AiFlowBody({ turn, onAsk }: { turn: ClientTurn; onAsk: (segmentId: stri
       if (!segment.text.trim() && !(running && isLast)) return null
       return <div className="g-amsg" key={segment.id}><TethRichText text={segment.text} caret={running && isLast} /></div>
     })}
+    {running && <AiTailLoader startedAt={turn.startedAt} />}
   </Fragment>
 }
 
@@ -98,7 +113,7 @@ function AiConversationTurn({ turn, onEdit, onAsk }: { turn: ClientTurn; onEdit:
   }
   return <Fragment>
     <ClientUserMessage onEdit={onEdit}>{turn.question}</ClientUserMessage>
-    <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : '생각 완료'} status={activityStatus}
+    <ClientResearchActivity label={running ? 'TETH의 생각 보기' : turn.status === 'stopped' ? '작업 중단' : `작업 완료 · ${1 + workSteps.length}단계`} status={activityStatus}
       source="service" startedAt={turn.startedAt} finishedAt={turn.finishedAt}
       steps={[thinkingStep, ...workSteps]} />
     {turn.flow ? <AiFlowBody turn={turn} onAsk={onAsk} /> : (turn.answer || turn.prob) && <AiAnswerBody turn={turn} />}
@@ -292,13 +307,15 @@ export function ClientMainExperience() {
             if (askSegment?.kind === 'ask') send(askSegment.questions.map((question, questionIndex) => `${question.title} — ${answers[questionIndex]}`).join('\n'))
           }} />)}
         {latest?.status === 'done' && (latest.source === 'ai'
-          // 실 AI 턴: 후속 질문·액션 전부 풀폭 로우 디자인 (Genspark/구 사이트 확정안).
-          ? <div className="teth-followups">
-            {latest.suggestions.map(text => <button className="teth-followup" type="button" key={text} onClick={() => send(text)}><span>{text}</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>)}
-            {latest.actions && latest.actions.length > 0
-              ? latest.actions.map(action => <button className="teth-followup teth-action" type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}><span>{action.label}</span><span className="tfu-sub">{{ backtest: '과거 데이터로 검증', alert: '알림 조건 설정', delegate: '전략 맡기기', auto: '자동 실행 검토' }[action.type]}</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>)
-              : <button className="teth-followup teth-action" type="button" onClick={() => workspace('delegation')}><span>전략 맡기기</span><span className="tfu-sub">조건을 정하고 검증하기</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>}
-          </div>
+          // 실 AI 턴: 후속 질문 = Genspark 풀폭 로우(스태거 등장), 액션 = 기존 next-actions 디자인.
+          ? <>
+            {latest.suggestions.length > 0 && <div className="teth-followups">
+              {latest.suggestions.map((text, chipIndex) => <button className="teth-followup" style={{ '--tfu-i': chipIndex } as CSSProperties} type="button" key={text} onClick={() => send(text)}><span>{text}</span><ArrowRight className="tfu-arrow" size={14} aria-hidden="true" /></button>)}
+            </div>}
+            <div className="client-next-actions">{latest.actions && latest.actions.length > 0
+              ? latest.actions.map(action => <button type="button" key={`${action.type}:${action.label}`} onClick={() => workspace(action.type === 'backtest' ? 'research' : 'delegation')}>{action.label} <span>{{ backtest: '과거 데이터로 검증 →', alert: '알림 조건 설정 →', delegate: '전략 맡기기 →', auto: '자동 실행 검토 →' }[action.type]}</span></button>)
+              : <button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button>}</div>
+          </>
           : <>{latest.suggestions.length > 0 && <div className="g-chiprow">{latest.suggestions.map(text => <button className="g-qchip" type="button" key={text} onClick={() => send(text)}>{text}</button>)}</div>}
             <div className="client-next-actions">{session.phase === 'plan' && <button type="button" onClick={() => workspace('research')}>Research Plan <span>연구 계획 확인 →</span></button>}<button type="button" onClick={() => workspace('delegation')}>전략 맡기기 <span>조건을 정하고 검증하기 →</span></button></div>
           </>)}

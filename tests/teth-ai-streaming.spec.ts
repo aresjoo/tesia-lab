@@ -56,10 +56,12 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
     await route.fulfill({ status: 200, headers: sseHeaders, body: MAIN_BODY })
   })
   await ask(page, '비트코인 지금 사도 돼?')
-  // ack 문장이 본 호출 도착 전에 먼저 보인다
+  // ack 문장 + 꼬리 로더가 본 호출 도착 전에 먼저 보인다
   await expect(page.locator('.g-amsg').first()).toContainText('비트코인 상황이군요, 바로 볼게요.')
-  // 본 호출 완료 후: say 세그먼트 교대 렌더
+  await expect(page.locator('.teth-tail-loader')).toBeVisible()
+  // 본 호출 완료 후: say 세그먼트 교대 렌더 — 첫 본 say 가 ack 를 대체해 도입부는 한 줄만 남는다
   await expect(page.locator('.g-amsg', { hasText: '진입 타이밍 질문이시군요' })).toBeVisible()
+  await expect(page.locator('.g-amsg', { hasText: '비트코인 상황이군요, 바로 볼게요.' })).toHaveCount(0)
   await expect(page.locator('.g-amsg', { hasText: '두 신호가 어긋나 있어요' })).toBeVisible()
   await expect(page.locator('.g-amsg', { hasText: '결론: 분할 접근이 낫습니다' })).toBeVisible()
   // work 는 인라인 카드로 릴레이 렌더 — 완료 후 한 줄 접힘 + (DEMO on) 모델 표기
@@ -71,15 +73,15 @@ test('해피패스: ack 가 먼저 흐르고 say/work 교대·확률·칩이 태
   await workCards.first().locator('.twk-head').click()
   await expect(workCards.first().locator('.twk-items li', { hasText: '일봉 조정 구간 점검' })).toBeVisible()
   // 상단 활동 패널은 thinking 전용으로 축소
-  await expect(page.locator('.g-act2 .hlb')).toHaveText('생각 완료')
+  await expect(page.locator('.g-act2 .hlb')).toHaveText('작업 완료 · 1단계')
   await page.locator('.g-act2 .hd').click()
   await expect(page.locator('.g-act2 .at')).toHaveCount(1)
   await page.locator('.g-act2 .arh', { hasText: 'TETH의 생각' }).click()
   await expect(page.locator('.g-act2 .ad')).toContainText('주봉과 일봉의 관계를 먼저 확인한다.')
   await expect(page.locator('.teth-prob')).toHaveAttribute('aria-label', '상승 확률 62%, 하락 확률 38%')
-  // 후속 질문·액션은 풀폭 로우 디자인
+  // 후속 질문 = Genspark 풀폭 로우, 액션 = 기존 next-actions 디자인
   await expect(page.locator('.teth-followup', { hasText: '분할은 어떻게 나눠?' })).toBeVisible()
-  await expect(page.locator('.teth-followup.teth-action', { hasText: '이 전략 검증하기' })).toBeVisible()
+  await expect(page.locator('.client-next-actions button', { hasText: '이 전략 검증하기' })).toBeVisible()
   // 가로 오버플로 없음 (모바일 프로젝트 포함 양 프로젝트에서 확인)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
   const persisted = await page.evaluate(() => sessionStorage.getItem('teth-client-experience') ?? '')
@@ -160,8 +162,8 @@ test('무효 prob 과 깨진 chips 는 조용히 제외되고 렌더는 계속, 
   await expect(page.locator('.g-amsg')).toContainText('결론만 유효합니다.')
   await expect(page.locator('.client-answer-actions')).toBeVisible()
   await expect(page.locator('.teth-prob')).toHaveCount(0)
-  await expect(page.locator('.teth-followup.teth-action')).toHaveCount(1)
-  await expect(page.locator('.teth-followup.teth-action')).toContainText('전략 맡기기')
+  await expect(page.locator('.client-next-actions button')).toHaveCount(1)
+  await expect(page.locator('.client-next-actions button')).toContainText('전략 맡기기')
   expect(errors).toEqual([])
 })
 
@@ -210,13 +212,22 @@ test('<ask> 질문 폼: 선택→자동 이동→제출 시 답변이 다음 메
   await ask(page, '반감기 사이클 내 시드에 맞춰서 알려줘')
   await expect(page.locator('.tak-banner')).toContainText('질문 2개에 답변하세요')
   await expect(page.locator('.tak-title')).toContainText('시드 규모')
+  // 직접 답변 CTA: 타이핑 전 회색·비활성, 타이핑하면 액센트 점등
+  await page.locator('.tak-custom-toggle').click()
+  await expect(page.locator('.tak-custom-send')).toBeDisabled()
+  await page.locator('.tak-custom textarea').fill('1천만원 정도')
+  await expect(page.locator('.tak-custom-send')).toHaveClass(/on/)
+  await expect(page.locator('.tak-custom-send')).toBeEnabled()
+  await page.locator('.tak-custom textarea').fill('')
   await page.locator('.tak-options > button', { hasText: '500만원 이하' }).click()
   await expect(page.locator('.tak-title')).toContainText('투자 기간')
+  // 마지막 선택지를 고르는 순간 제출 버튼 없이 즉시 전송된다
   await page.locator('.tak-options > button', { hasText: '단기 스윙' }).click()
-  await page.locator('.tak-submit').click()
   await expect(page.locator('.g-umsg').last()).toContainText('500만원 이하')
   await expect(page.locator('.g-amsg', { hasText: '답변 기준으로 정리했습니다' })).toBeVisible()
-  await expect(page.locator('.teth-ask.answered .tak-done')).toContainText('답변 완료')
+  // 답변 완료 요약 = 우측 라이트 카드 (라벨 굵게 + 값)
+  await expect(page.locator('.tak-answered-card .tak-pair-label').first()).toContainText('시드 규모')
+  await expect(page.locator('.tak-answered-card .tak-pair-value').first()).toHaveText('500만원 이하')
   expect(mainCalls).toBe(2)
   expect(errors).toEqual([])
 })

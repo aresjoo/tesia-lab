@@ -137,8 +137,10 @@ export function startAiTurn(args: {
         case 'say-delta': {
           if (!mainSayStarted) {
             mainSayStarted = true
-            // 본 호출의 첫 say 도착: ack 가 아직 한 글자도 못 냈다면 통째로 생략한다.
-            if (!ackStarted) ackController.abort()
+            ackController.abort()
+            // 본 호출의 첫 say 도착: ack 는 대기 시간을 가리는 자리표시자였으므로
+            // 본 say 가 그 자리를 대체한다 — 도입부가 두 줄로 겹치지 않는다.
+            flow = flow.filter(segment => !(segment.kind === 'say' && segment.ack))
           }
           const say = currentSay()
           if (say && !say.ack) replaceLast({ ...say, text: say.text + event.text })
