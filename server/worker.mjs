@@ -53,8 +53,8 @@ function aggBars(rows, m) {
   }
   return out;
 }
-async function coinRows(sym, iv, n) {
-  const path = `/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=${iv}&limit=${n}`;
+async function coinRows(sym, iv, n, endMs) {
+  const path = `/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=${iv}&limit=${n}${endMs ? `&endTime=${endMs}` : ""}`;
   for (const host of ["https://data-api.binance.vision", "https://api.binance.com"]) {
     try { const r = await fetch(host + path); if (r.ok) { const j = await r.json(); if (Array.isArray(j) && j.length) return { src: "binance", iv, rows: j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]) }; } } catch (e) {}
   }
@@ -118,6 +118,56 @@ function attachDaily(out, drows, isCoin) {
   out.base = { chg: prev ? +((last / prev - 1) * 100).toFixed(2) : null, label: isCoin ? "24H" : "전일比" };
   out.daily = drows.slice(-30).map((x) => [new Date(x[0]).toISOString().slice(0, 10), +x[4].toPrecision(6)]);
 }
+/* ── 2단: AI 청구형 시장 데이터 툴 (market_data) ──
+ * 모델이 스냅샷 밖 데이터(비교 자산·다른 인터벌·과거 구간)를 턴 중간에 스스로 청구한다.
+ * 가격 계산은 전부 이쪽(결정론) — 모델은 요청만. 요약 JSON(~1.2KB)만 tool_result 로 반환. */
+const MARKET_TOOL = {
+  name: "market_data",
+  description: "시장 OHLCV 캔들 데이터를 실시간 조회한다. 시스템 컨텍스트에 이미 제공된 스냅샷 범위를 벗어난 데이터가 판단에 필요할 때만 사용: 비교 자산(예: ETHUSDT, ^IXIC), 다른 타임프레임, end_time 으로 지정한 특정 과거 구간. 이미 제공된 범위의 재청구는 낭비다. 반환된 수치만 근거로 쓰고 직접 계산해 채우지 마라.",
+  input_schema: {
+    type: "object",
+    properties: {
+      symbol: { type: "string", description: "바이낸스 표기 코인 페어(BTCUSDT, ETHUSDT 등) 또는 야후 티커(TSLA, ^IXIC, DX-Y.NYB 등)" },
+      interval: { type: "string", enum: ["1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w"] },
+      count: { type: "integer", minimum: 10, maximum: 300, description: "봉 개수, 기본 90" },
+      end_time: { type: "string", description: "선택. ISO 날짜(YYYY-MM-DD) — 이 시점까지의 과거 구간을 조회 (코인만 지원)" },
+      purpose: { type: "string", description: "필수. 이 조회의 분석 목적 한 문장(한국어) — 사용자 화면의 작업 표시에 그대로 노출된다" },
+    },
+    required: ["symbol", "interval", "purpose"],
+  },
+};
+async function runMarketData(input, cache) {
+  const fail = (code, message) => ({ ok: false, code, message });
+  const sym = String(input.symbol || "").toUpperCase().replace(/[^A-Z0-9^.\-=]/g, "").slice(0, 20);
+  const iv = ["1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w"].includes(input.interval) ? input.interval : null;
+  const n = Math.max(10, Math.min(300, parseInt(input.count, 10) || 90));
+  if (!sym || !iv) return fail("UNKNOWN_SYMBOL", "symbol 또는 interval 이 유효하지 않습니다.");
+  let endMs = null;
+  if (input.end_time) {
+    const t = Date.parse(String(input.end_time));
+    if (!isFinite(t)) return fail("HISTORY_UNAVAILABLE", "end_time 형식이 유효하지 않습니다 (YYYY-MM-DD).");
+    endMs = t;
+  }
+  const isCoin = /USDT$/.test(sym);
+  if (endMs && !isCoin) return fail("HISTORY_UNAVAILABLE", "과거 구간(end_time) 조회는 현재 코인 페어만 지원합니다.");
+  const key = sym + "|" + iv + "|" + n + "|" + (endMs || "");
+  if (cache.has(key)) return { ...cache.get(key), cached: true };
+  const run = (async () => {
+    const got = isCoin ? await coinRows(sym, iv, n, endMs) : await yahooRows(sym, iv, n);
+    if (!got || !got.rows.length) return fail(endMs ? "HISTORY_UNAVAILABLE" : "UPSTREAM_TIMEOUT", "요청한 데이터를 현재 공급자에서 받지 못했습니다." + (endMs ? " 과거 구간은 바이낸스 직접 응답이 필요합니다." : ""));
+    const s = summarize(got.rows);
+    return {
+      ok: true,
+      meta: { src: got.src, iv: got.iv, n: got.rows.length, at: Date.now(), quality: got.iv === iv ? "complete" : "adjusted", ...(endMs ? { end: new Date(endMs).toISOString().slice(0, 10) } : {}) },
+      last: s.last, prevBarChg: s.ivChg, chg7: s.chg7d, chg30: s.chg30d, hi: s.hi90, lo: s.lo90,
+      closes: s.closesS.map((x) => [new Date(x[0]).toISOString().slice(0, 10), x[1]]),
+      note: "closes 는 관측 구간 전체의 균등 샘플(과거→현재). 등락(prevBarChg)은 직전 봉 종가 대비.",
+    };
+  })();
+  const out = await Promise.race([run, new Promise((res) => setTimeout(() => res(fail("UPSTREAM_TIMEOUT", "조회가 8초를 초과했습니다.")), 8000))]);
+  if (out.ok) cache.set(key, out);
+  return out;
+}
 async function ohlc(url, h) {
   const q = url.searchParams;
   const src = q.get("src"), sym = String(q.get("sym") || "").slice(0, 24);
@@ -172,24 +222,39 @@ export default {
     ctx.waitUntil((async () => {
       try {
         const isThink = payload.think === true;
-        const stream = isThink ? client.beta.messages.stream({
-          model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
-          max_tokens: 1024,
-          system: String(payload.system || "").slice(0, 4000),
-          messages,
-        }) : client.beta.messages.stream({
+        if (isThink) {
+          const stream = client.beta.messages.stream({
+            model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
+            max_tokens: 1024,
+            system: String(payload.system || "").slice(0, 4000),
+            messages,
+          });
+          stream.on("text", (delta) => send({ text: delta }));
+          const final = await stream.finalMessage();
+          await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+          return;
+        }
+        /* ── 본 경로: 커스텀 툴(market_data) 루프 — 모델 호출 ≤6(초회+pause_turn 포함), 툴 ≤3회/턴.
+         * assistant content 는 원본 그대로 보존(사고 서명 포함), tool_result 만 담은 user 턴으로 재개.
+         * 브라우저에는 라운드 경계 없이 연속 SSE 로 중계된다. */
+        const TOOLS = [
+          { type: "web_search_20260209", name: "web_search" },
+          { type: "web_fetch_20260209", name: "web_fetch" },
+          MARKET_TOOL,
+        ];
+        const convo = messages.map((m) => ({ role: m.role, content: m.content }));
+        const mdCache = new Map();
+        let modelCalls = 0, toolCalls = 0, totIn = 0, totOut = 0, tokBase = 0;
+        const mkStream = () => client.beta.messages.stream({
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
           max_tokens: 16000,
           thinking: { type: "adaptive", display: "summarized" }, // display 미지정 시 기본 omitted — thinking_delta 가 빈 값으로 온다
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
-          tools: [
-            { type: "web_search_20260209", name: "web_search" },
-            { type: "web_fetch_20260209", name: "web_fetch" },
-          ],
+          tools: TOOLS,
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
-          system: String(payload.system || "").slice(0, 8000),
-          messages,
+          system: String(payload.system || "").slice(0, 12000), /* 고정 지침(~7.6k)+실시세 ctx 가 8k 를 넘으며 꼬리(스냅샷)가 잘리던 문제 — 상향 */
+          messages: convo,
         });
         /* 서버사이드 chips 검증 — 프롬프트를 신뢰하지 않는다. <chips> 이후 텍스트를 보류했다가
          * 스트림 종료 시 스키마(허용 타입 4종, 액션 최대 2개)를 통과할 때만 원문 그대로 방류한다.
@@ -268,41 +333,75 @@ export default {
           } else { emitText(chipTail); }
           chipTail = "";
         };
-        stream.on("text", (delta) => { const scrubbed = scrubWork(delta); if (scrubbed) onDelta(scrubbed); });
-        /* 실작업 이벤트: 검색/페이지/코드 실행 툴 + 사고 스트림 + 누적 출력 토큰 전달 (index.mjs와 동일 프로토콜) */
-        const blocks = {};
-        stream.on("streamEvent", (ev) => {
-          try {
-            if (ev.type === "content_block_start") {
-              const cb = ev.content_block || {};
-              if (cb.type === "server_tool_use") blocks[ev.index] = { kind: cb.name, json: "", seed: cb.input && Object.keys(cb.input).length ? cb.input : null };
-              else if (cb.type === "web_search_tool_result") {
-                const ok = Array.isArray(cb.content);
-                const rs = ok ? cb.content.filter((r) => r && r.url).map((r) => ({ t: r.title || r.url, u: r.url })) : [];
-                send({ sres: { n: rs.length, results: rs.slice(0, 8), error: ok ? undefined : true } });
-              } else if (cb.type === "web_fetch_tool_result") {
-                const c = cb.content || {};
-                const err = c.type === "web_fetch_tool_error";
-                send({ fres: { u: (c.content && c.content.url) || c.url || "", error: err ? (c.error_code || true) : undefined } });
-              } else if (/_tool_result$/.test(cb.type || "")) {
-                send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
-              }
-            } else if (ev.type === "content_block_delta" && ev.delta) {
-              if (ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
-              else if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
-            } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
-              const b = blocks[ev.index]; delete blocks[ev.index];
-              let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
-              /* p = 생성 시점 purpose 메타 (있을 때만) — 클라이언트 사고 패널 번역 레이어가 소비 */
-              send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
-            } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
-          } catch (e) {}
-        });
-        const final = await stream.finalMessage();
+        /* 실작업 이벤트 중계 — 라운드마다 새 스트림에 부착. blocks 는 라운드 로컬 */
+        const attach = (stream, blocks) => {
+          stream.on("text", (delta) => { const scrubbed = scrubWork(delta); if (scrubbed) onDelta(scrubbed); });
+          stream.on("streamEvent", (ev) => {
+            try {
+              if (ev.type === "content_block_start") {
+                const cb = ev.content_block || {};
+                if (cb.type === "server_tool_use") blocks[ev.index] = { kind: cb.name, json: "", seed: cb.input && Object.keys(cb.input).length ? cb.input : null };
+                else if (cb.type === "tool_use") blocks[ev.index] = { kind: cb.name, id: cb.id, json: "", seed: cb.input && Object.keys(cb.input).length ? cb.input : null };
+                else if (cb.type === "web_search_tool_result") {
+                  const ok = Array.isArray(cb.content);
+                  const rs = ok ? cb.content.filter((r) => r && r.url).map((r) => ({ t: r.title || r.url, u: r.url })) : [];
+                  send({ sres: { n: rs.length, results: rs.slice(0, 8), error: ok ? undefined : true } });
+                } else if (cb.type === "web_fetch_tool_result") {
+                  const c2 = cb.content || {};
+                  const err = c2.type === "web_fetch_tool_error";
+                  send({ fres: { u: (c2.content && c2.content.url) || c2.url || "", error: err ? (c2.error_code || true) : undefined } });
+                } else if (/_tool_result$/.test(cb.type || "")) {
+                  send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
+                }
+              } else if (ev.type === "content_block_delta" && ev.delta) {
+                if (ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
+                else if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
+              } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
+                const b = blocks[ev.index]; delete blocks[ev.index];
+                let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
+                if (b.kind === "market_data") {
+                  /* purpose 를 화면 표시용 q 로 — 실행·결과는 finalMessage 후 검증된 입력으로 수행 */
+                  send({ tool: { id: b.id, name: "market_data", q: (typeof input.purpose === "string" && input.purpose.trim()) ? input.purpose.slice(0, 80) : ((input.symbol || "") + " " + (input.interval || "")).trim() } });
+                } else {
+                  /* p = 생성 시점 purpose 메타 (있을 때만) — 클라이언트 사고 패널 번역 레이어가 소비 */
+                  send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
+                }
+              } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: tokBase + ev.usage.output_tokens });
+            } catch (e) {}
+          });
+        };
+        let final = null;
+        for (;;) {
+          if (++modelCalls > 6) { console.error("model call budget exceeded"); await send({ error: true }); return; }
+          const blocks = {};
+          const stream = mkStream();
+          attach(stream, blocks);
+          final = await stream.finalMessage();
+          if (final.usage) { totIn += final.usage.input_tokens || 0; totOut += final.usage.output_tokens || 0; tokBase = totOut; }
+          /* 사고 서명·툴 상태 보존을 위해 assistant content 원본 그대로 이어붙인다 (재구성 금지) */
+          convo.push({ role: "assistant", content: final.content });
+          if (final.stop_reason === "pause_turn") continue;
+          if (final.stop_reason === "tool_use") {
+            const uses = final.content.filter((b) => b.type === "tool_use");
+            if (!uses.length) continue; /* 서버 툴만 보류된 케이스: 같은 구성으로 재개 */
+            const results = [];
+            for (const u of uses) {
+              let out;
+              if (u.name !== "market_data") out = { ok: false, code: "UNKNOWN_TOOL", message: "지원하지 않는 툴입니다." };
+              else if (toolCalls >= 3) out = { ok: false, code: "BUDGET_EXCEEDED", message: "이번 턴의 데이터 조회 한도(3회)를 초과했습니다. 확보한 데이터로 답하십시오." };
+              else { toolCalls++; out = await runMarketData(u.input || {}, mdCache); }
+              send({ mres: { id: u.id, ok: !!out.ok, ...(out.ok ? { meta: out.meta, cached: out.cached || undefined } : { code: out.code }) } });
+              results.push({ type: "tool_result", tool_use_id: u.id, ...(out.ok ? {} : { is_error: true }), content: JSON.stringify(out) });
+            }
+            convo.push({ role: "user", content: results });
+            continue;
+          }
+          break;
+        }
         { const rest = flushWork(); if (rest) onDelta(rest); }
         flushChips();
         if (final.stop_reason === "refusal") await send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
-        await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+        await send({ done: true, usage: { in: totIn, out: totOut } });
       } catch (e) {
         console.error("chat error:", e && e.status, e && e.name, e && e.message, e && e.error ? JSON.stringify(e.error) : "(no error body)", e && e.headers ? (e.headers.get ? e.headers.get("request-id") : e.headers["request-id"]) : "");
         await send({ error: true });

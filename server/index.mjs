@@ -189,7 +189,7 @@ createServer(async (req, res) => {
       ], /* ì‚¬ìš© íšŸìˆ˜ ìƒí•œ ì—†ìŒ â€” í•„ìš”í•œ ë§Œí¼ ëª¨ë¸ì´ íŒë‹¨ */
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
-      system: String(payload.system || "").slice(0, 8000),
+      system: String(payload.system || "").slice(0, 12000), /* 고정 지침+실시세 ctx 절단 방지 (worker 동기) */
       messages,
     });
     let streamDone = false; res.on("close", () => { if (streamDone) return; try { stream.abort(); } catch (e) {} }); /* 탭 닫힘/중지 시 모델 생성도 중단 (codex QA-13) */
