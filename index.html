@@ -5020,6 +5020,7 @@ function taiMarketRules(){
    +'\n시세 규칙: 단순 시세 확인 질문은 첫 문장에 현재가와 기준 시각부터 말하고 부가 해설은 그 뒤에 짧게 붙인다.'
    +'\n교정 턴 규칙: 사용자의 오류 지적에 답하는 턴과 범위 밖 질문을 거절하는 턴에는 실행 액션 태그를 붙이지 않고 후속 질문도 2개 이하로 줄이거나 생략한다. 지적이 사용자의 착각으로 보여도 "그런 말을 한 적 없습니다", "잘못 기억하신 것 같습니다"처럼 고객을 탓하는 문장은 절대 쓰지 않는다. "제 설명에 혼선이 있었던 것 같습니다"로 시작해 실제 수치와 판단 기준을 담백하게 다시 대조하라.'
    +'\n작업 예고 규칙: 검색이나 조회를 시작하기 전의 예고 발화("찾아보겠습니다", "확인해볼게요")는 생략하거나 한 문장 이내로 하고, 도구 사용 후 본답변은 반드시 새 문단에서 시작한다.'
+   +'\n진행 서술 규칙: 도구를 여러 번 쓰는 긴 조사에서는 도구 호출 묶음 사이사이에 지금까지 확인한 핵심과 다음에 확인할 것을 한두 문장의 본문으로 먼저 말한 뒤 다음 도구를 이어가라. 조사가 다 끝날 때까지 본문을 침묵시키지 말고, 일하고 말하고 다시 일하는 교대 리듬을 유지하라.'
    +'\n사고 규칙: 분석, 예측, 비교, 전략 판단처럼 여러 요인을 따져야 하는 요청에서는 반드시 답변과 도구 사용 전에 확장 사고(extended thinking)부터 시작하라. 사고에서 판단 축을 나누고, 무엇을 확인할지 계획하고, 데이터를 본 뒤에는 해석을 사고로 정리한 다음 답하라. 사고 과정은 사용자 화면에 실시간으로 표시되므로 읽기 좋은 자연스러운 한국어 문장으로 이어가라. 간단한 시세 확인이나 용어 질문만 사고 없이 바로 답한다.'
    +'\n실시간 정보 규칙: 최근 뉴스, 실적 발표, 규제 이슈, 오늘 급등락의 이유처럼 최신 정보가 판단에 필요하면 웹 검색 도구를 실제로 사용해 확인하고, 확인한 출처에 근거해 답하라. 검색 없이 최신 사건을 아는 척 만들어내지 마라. 필요하면 검색 결과 중 핵심 페이지를 web_fetch로 열어 수치를 확인하라. 단, 시세 수치는 여전히 제공된 실시세 스냅샷을 우선 근거로 쓴다.'
    +'\n답변 범위는 시장, 차트, 종목, 경제, 전망으로 한정한다. 그 외 주제(일상 잡담, 코딩, 개인사 등)가 오면 한 문장으로 양해를 구하고 시장이나 경제에 관해 질문해달라고 안내한다.'
@@ -6772,42 +6773,53 @@ function taiMarket(t,fin,fallback){
   var proceed=function(ctx){
     var msgs=ai.hist.slice(-11).concat([{role:'user',content:t}]);
     TAI.lastCtx={conversationId:sess.id,msgCount:msgs.length,summaryLen:sys.length,tf:ai.tf,chart:ai.chart?ai.chart.tv:null,ohlcFreshMs:ai.ohlcAt?Date.now()-ai.ohlcAt:null,system:sys,at:new Date().toISOString()}; /* 개발용 인스펙터 */
-    var out=null,acc='',lastR=0;
+    var out=null,acc='',segAcc='',lastR=0;
     var srchN=0,srcDom=[],needBrk=false; /* 도구 사용 기록 보존 + 프리앰블-본문 문장 붙음 방지 */
     var cmdH=null,cmdN=0; /* 연속 '검색 결과 정리' 행 접기용 공유 핸들 */
+    var stripTags=function(s){ return s.replace(/\[ASK\s+\{[\s\S]*\}\s*\]/g,'').replace(/\[(?:CHART|SETUP|GAUGE)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[(?:NEXT|ACT)\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim(); };
+    /* Genspark 리듬(작업↔말 교대)의 말풍선 단위: 텍스트 세그먼트마다 새 말풍선을 열고,
+       도구가 끼어드는 순간 직전 말풍선을 확정 렌더로 봉인한다 */
+    var openOut=function(){
+      segAcc='';
+      if(G.cur===sess){
+        var el=taiThreadAdd('<div class="g-amsg"><span class="tai-txt"></span></div>');
+        out=(el&&el.querySelector('.tai-txt'))||{};
+      } else { /* 스트리밍 중 세션 전환됨: DOM 없이 소유 세션 기록에만 적재 */
+        out={};
+        if(conv) sess.convo.push('<div class="g-amsg"><span class="tai-txt"></span></div>');
+        else sess.thread.push({doc:null,html:'<div class="g-amsg"><span class="tai-txt"></span></div>'});
+      }
+    };
+    var sealOut=function(){
+      if(!out) return;
+      var segClean=stripTags(segAcc);
+      if(out.innerHTML!==undefined) out.innerHTML=taiMd(segClean);
+      var html='<div class="g-amsg"><span class="tai-txt">'+taiMd(segClean)+'</span></div>';
+      if(conv&&sess.convo){ for(var k=sess.convo.length-1;k>=0;k--){ if(sess.convo[k].indexOf('tai-txt')>=0){ sess.convo[k]=html; break; } } }
+      if(!conv&&sess.thread){ for(var k2=sess.thread.length-1;k2>=0;k2--){ if(sess.thread[k2].html.indexOf('tai-txt')>=0){ sess.thread[k2].html=html; break; } } }
+      out=null;
+    };
     TAI.liteNext=(qKind==='lite'); /* 시세 확인형은 서버 도구 없이 즉답 (agy 감사 P1-3) */
     taiStream(sys+ctx,msgs,function(delta){
       if(!out){
-        stopNarr();
-        /* 답변 시작 = 사고 burst 자동 접힘. 마무리 대본 없이 실사고 그대로 닫는다 */
+        stopNarr(); seg=false;
+        /* 텍스트 세그먼트 시작 = 사고 burst 자동 접힘, 새 말풍선. 마무리 대본 없음 */
         if(sim) sim.flush();
         if(thinkH){ thinkH.done(); thinkH=null; sim=null; }
         if(!ansH&&run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
-        if(G.cur===sess){
-          var el=taiThreadAdd('<div class="g-amsg"><span class="tai-txt"></span></div>');
-          out=(el&&el.querySelector('.tai-txt'))||{};
-        } else { /* 스트리밍 중 세션 전환됨: DOM 없이 소유 세션 기록에만 적재 */
-          out={};
-          if(conv) sess.convo.push('<div class="g-amsg"><span class="tai-txt"></span></div>');
-          else sess.thread.push({doc:null,html:'<div class="g-amsg"><span class="tai-txt"></span></div>'});
-        }
-      } else if(seg){ /* 자료 보강 세그먼트에서 답변 텍스트 재개 → 세그먼트 접고 새 답변 행 */
-        seg=false;
-        if(sim) sim.flush();
-        if(thinkH){ thinkH.done(); thinkH=null; sim=null; }
-        if(run.data.status==='running') ansH=actStep(run,{kind:'ans',title:'답변 작성 중',h:'답변을 작성하는 중',verb:'답변을 작성하는 중'});
+        openOut();
       }
       run.lastEvt=Date.now();
       /* 도구 사용을 사이에 둔 두 텍스트 세그먼트가 "확인해볼게요.결론부터"처럼 붙지 않게 문단 경계 삽입 */
       if(needBrk){ needBrk=false; if(acc&&!/\s$/.test(acc)&&delta.charAt(0)!=='\n') acc+='\n\n'; }
-      acc+=delta;
+      acc+=delta; segAcc+=delta;
       /* 스트리밍 증분 마크다운: 완성된 줄은 즉시 리치 렌더, 작성 중인 마지막 줄만 raw 버퍼. 120ms 스로틀 */
       if(out.innerHTML!==undefined){
         var nw=Date.now();
         if(nw-lastR>120||delta.indexOf('\n')>=0){
           lastR=nw;
           gScrollBottom(); /* 하단 근처면 최신 토큰 추적, 위에서 읽는 중이면 새 응답 칩만 (agy QA 2-2) */
-          var vis=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0]
+          var vis=segAcc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0]
             .replace(/\[[A-Z]{0,6}$/,''); /* 청크 경계에서 잘린 태그 조각([CHA 등) 원문 노출 방지 */
           var cut=vis.lastIndexOf('\n');
           var head=cut>=0?vis.slice(0,cut):'';
@@ -6834,8 +6846,9 @@ function taiMarket(t,fin,fallback){
       actFinish(run,'done',lastUsage);
       var live=(G.cur===sess);
       if(mT&&sess.title==='새 전략'){ sess.title=mT[1]; gSideRender(); if(live&&!$('g-chead').hidden) gChead(sess.title,sess.sub||''); } /* AI 생성 세션 제목 */
-      var clean=acc.replace(/\[ASK\s+\{[\s\S]*\}\s*\]/g,'').replace(/\[(?:CHART|SETUP|GAUGE)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[(?:NEXT|ACT)\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim();
-      var mdHtml=taiMd(clean);
+      var clean=stripTags(acc);
+      /* 말풍선은 세그먼트 단위 — 마지막 말풍선에는 마지막 세그먼트만 확정 렌더한다 (전체 답변을 욱여넣으면 앞 세그먼트가 중복된다) */
+      var mdHtml=taiMd(stripTags(segAcc));
       if(out&&out.innerHTML!==undefined&&(!out.isConnected||live)) out.innerHTML=mdHtml;
       /* 다음 턴이 근거 사슬을 잃지 않게 도구 사용 기록을 히스토리에만 덧붙인다 (화면 미표시) */
       taiPushHist(sess,t,clean+(srchN?'\n\n[내부 도구 기록: 이 답변은 웹 검색 '+srchN+'회를 실제 수행했고 참조 도메인은 '+srcDom.join(', ')+'다. 사용자가 근거를 지적하면 검색 여부를 부정하지 말고 출처 연결 부족을 정정하라.]':''));
@@ -6874,9 +6887,10 @@ function taiMarket(t,fin,fallback){
       actFinish(run,kind==='abort-partial'?'abort':'error');
       var live=(G.cur===sess);
       var clean=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0].trim();
-      if(out.innerHTML!==undefined&&live) out.innerHTML=taiMd(clean);
+      var segCut=segAcc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT)/)[0].trim(); /* 마지막 말풍선 몫 */
+      if(out.innerHTML!==undefined&&live) out.innerHTML=taiMd(segCut);
       taiPushHist(sess,t,clean);
-      var fixed='<div class="g-amsg"><span class="tai-txt">'+taiMd(clean)+'</span></div>';
+      var fixed='<div class="g-amsg"><span class="tai-txt">'+taiMd(segCut)+'</span></div>';
       if(conv&&sess.convo){ for(var k=sess.convo.length-1;k>=0;k--){ if(sess.convo[k].indexOf('tai-txt')>=0){ sess.convo[k]=fixed; break; } } }
       if(!conv&&sess.thread){ for(var k2=sess.thread.length-1;k2>=0;k2--){ if(sess.thread[k2].html.indexOf('tai-txt')>=0){ sess.thread[k2].html=fixed; break; } } }
       if(live){
@@ -6894,10 +6908,14 @@ function taiMarket(t,fin,fallback){
       if(meta.tool){ /* 모델이 실제로 호출한 서버 툴 */
         needBrk=true; if(meta.tool.name==='web_search') srchN++;
         /* 사고 중 툴 시작 = 그 사고 burst 의 끝: 행을 자동으로 접고, 다음 실사고는 툴 행 아래 새 행으로 이어진다 (단일 시간순 스트림) */
-        if(!ansH&&!seg&&thinkH){ stopNarr(); if(sim) sim.flush(); thinkH.done(); thinkH=null; sim=null; }
-        if(ansH){ /* 답변 작성 중 자료 보강 → 답변 행을 닫는다 (사고 행은 실사고 도착 시 생성) */
-          ansH.done('초안 작성, 자료 보강 필요',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초');
+        if(!ansH&&thinkH){ stopNarr(); if(sim) sim.flush(); thinkH.done(); thinkH=null; sim=null; }
+        if(ansH){ /* 말하던 중 도구 시작 = Genspark 리듬의 교대점: 말풍선을 봉인하고,
+                     지금까지의 활동 블록을 접은 뒤 말풍선 아래 새 활동 블록에서 작업을 잇는다 */
+          ansH.done('작성 일시 중지, 자료 확인',null,Math.max(1,Math.round((Date.now()-ansH.st.t0)/1000))+'초');
           ansH=null; seg=true;
+          sealOut();
+          actFinish(run,'done',null);
+          run=actStart(sess,'자료를 더 확인하는 중');
         }
         if(meta.tool.name==='web_search'){ var q=meta.tool.q||''; pend.s.push(actStep(run,{kind:'search',q:q,title:(q?'"'+q+'" 검색 중':'웹 검색 중'),h:'웹에서 검색하는 중',verb:'웹에서 검색하는 중'})); }
         else if(meta.tool.name==='web_fetch'){ var u=meta.tool.q||'',dm=''; try{ dm=new URL(u).hostname.replace(/^www\./,''); }catch(e){} pend.f.push(actStep(run,{kind:'page',u:u,d:dm,title:(dm||'출처')+' 페이지 여는 중',h:'페이지를 읽는 중',verb:'페이지를 읽는 중'})); }
