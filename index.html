@@ -6498,7 +6498,7 @@ function taiOhlc(cb,sess,run,ast){
   var h=run?actStep(run,{kind:'fetch',title:(c.label||p.slice(1).join(':'))+' '+ivL+' 시세 수신 중',h:'실시세를 확인하는 중',verb:'실시세를 확인하는 중'}):null;
   var t0=Date.now();
   var ctrl=('AbortController' in window)?new AbortController():null;
-  if(ctrl) setTimeout(function(){ ctrl.abort(); },4000);
+  if(ctrl) setTimeout(function(){ ctrl.abort(); },8000); /* 워커가 Kraken/Coinbase 폴백 체인을 도는 시간 감안 */
   fetch(TAI.url.replace('/api/chat','/api/ohlc')+'?src='+encodeURIComponent(p[0])+'&sym='+encodeURIComponent(p.slice(1).join(':'))+'&iv='+encodeURIComponent(iv),ctrl?{signal:ctrl.signal}:{})
     .then(function(r){ if(!r.ok) throw r.status; return r.json(); })
     .then(function(j){

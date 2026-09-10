@@ -50,13 +50,40 @@ async function ohlc(url, h) {
   try {
     let rows = [];
     if (src === "binance") {
-      /* 데이터센터 IP 지역 차단 회피: 공개 시세 미러(binance.vision) 우선, 본 API 폴백 */
+      /* Binance 는 Cloudflare 등 데이터센터 IP 를 미러(binance.vision)까지 차단한다(451/차단 → 502).
+         클라우드 IP 를 허용하는 Kraken(USDT 페어 동일)과 Coinbase(USD) 를 폴백 체인에 둔다. */
       const path = `/api/v3/klines?symbol=${encodeURIComponent(sym)}&interval=${iv}&limit=90`;
       let j = null;
       for (const host of ["https://data-api.binance.vision", "https://api.binance.com"]) {
         try { const r = await fetch(host + path); if (r.ok) { j = await r.json(); break; } } catch (e) {}
       }
       if (Array.isArray(j)) rows = j.map((k) => [k[0], +k[1], +k[2], +k[3], +k[4], +k[5]]);
+      const base = sym.replace(/USDT$/, "");
+      if (!rows.length && base) {
+        /* Kraken: BTC→XBT 표기, interval 은 분 단위. USDT 페어라 바이낸스와 시세 정합. */
+        const KIV = { "1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440, "1w": 10080 };
+        const kbase = base === "BTC" ? "XBT" : base;
+        try {
+          const r = await fetch(`https://api.kraken.com/0/public/OHLC?pair=${encodeURIComponent(kbase + "USDT")}&interval=${KIV[iv] || 1440}`);
+          if (r.ok) {
+            const kj = await r.json();
+            const key = kj && kj.result && Object.keys(kj.result).find((k) => k !== "last");
+            const arr = key ? kj.result[key] : null;
+            if (Array.isArray(arr) && arr.length) rows = arr.slice(-90).map((k) => [k[0] * 1000, +k[1], +k[2], +k[3], +k[4], +k[6]]);
+          }
+        } catch (e) {}
+      }
+      if (!rows.length && base) {
+        /* Coinbase Exchange: USD 페어(≈USDT), 클라우드 IP 허용. candles 는 최신순 [t, low, high, open, close, vol]. */
+        const CIV = { "1m": 60, "5m": 300, "15m": 900, "30m": 900, "1h": 3600, "4h": 21600, "1d": 86400, "1w": 86400 };
+        try {
+          const r = await fetch(`https://api.exchange.coinbase.com/products/${encodeURIComponent(base + "-USD")}/candles?granularity=${CIV[iv] || 86400}`, { headers: { "User-Agent": "teth-ai-proxy" } });
+          if (r.ok) {
+            const cj = await r.json();
+            if (Array.isArray(cj) && cj.length) rows = cj.slice(0, 90).reverse().map((k) => [k[0] * 1000, +k[3], +k[2], +k[1], +k[4], +k[5]]);
+          }
+        } catch (e) {}
+      }
     } else if (src === "yahoo") {
       const YIV = { "1m": "5m", "5m": "5m", "15m": "15m", "30m": "30m", "1h": "60m", "4h": "60m", "1d": "1d", "1w": "1wk" };
       const YRG = { "5m": "5d", "15m": "5d", "30m": "1mo", "60m": "1mo", "1d": "3mo", "1wk": "2y" };
