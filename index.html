@@ -1392,6 +1392,9 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 #g-scrim.on{opacity:1;pointer-events:auto}
 @media (max-width:860px){
   #g-hamburger{display:inline-flex;position:fixed;top:10px;left:10px;z-index:70;width:40px;height:40px;border-radius:10px;align-items:center;justify-content:center;color:var(--gt2);background:rgba(15,16,18,.6)}
+  /* 모바일 스크롤 시 상단 크롬 뒤로 카드가 비쳐 보이던 문제 — 전폭 불투명 차폐 바 (AGY FINAL P1).
+     버튼 기준 absolute 라 배너 유무로 버튼이 내려가도 함께 따라간다 */
+  body:not(.g-inchat) #g-hamburger::before{content:'';position:absolute;top:-10px;left:-10px;width:100vw;height:60px;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;pointer-events:none}
   #g-hamburger:active{background:rgba(255,255,255,.08)}
   #g-auth-btns{top:12px;right:14px}
   body.g-inchat #g-auth-btns{display:none} /* 모바일 게스트 채팅: 인증 버튼이 헤더 제목·메뉴를 덮던 겹침 제거, 로그인은 드로어에서 (agy IA-10) */
@@ -1830,10 +1833,10 @@ body.tf-route #teth-help{bottom:88px}
 .tfbk-card .pr small{display:block;font-size:14px;line-height:18px;color:#dbdbdb;margin-top:6px}
 /* actions: 위 32, 버튼 h48 r8 pad 0 31 fs16/500, gap 12 */
 .tfbk-card .bt{display:flex;gap:12px;margin-top:32px}
-.tfbk .wbtn{height:48px;padding:0 31px;border-radius:8px;background:#fff;color:#0f0f0f;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
-.tfbk .wbtn:hover{background:#f2f2f2;border-color:#f2f2f2}
-.tfbk .obtn{height:48px;padding:0 31px;border-radius:8px;background:transparent;color:#fff;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
-.tfbk .obtn:hover{background:rgba(255,255,255,.08)}
+.tfbk .wbtn,.ss3-dlg .wbtn{height:48px;padding:0 31px;border-radius:8px;background:#fff;color:#0f0f0f;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
+.tfbk .wbtn:hover,.ss3-dlg .wbtn:hover{background:#f2f2f2;border-color:#f2f2f2}
+.tfbk .obtn,.ss3-dlg .obtn{height:48px;padding:0 31px;border-radius:8px;background:transparent;color:#fff;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
+.tfbk .obtn:hover,.ss3-dlg .obtn:hover{background:rgba(255,255,255,.08)}
 /* 로고: TV 카드 이미지 291x272 스케일. 스택 타일 + 마크 */
 .tfbk-logo{position:relative;flex-shrink:0;display:inline-block;filter:drop-shadow(0 14px 24px rgba(0,0,0,.5))}
 .tfbk-logo i,.tfbk-logo b{position:absolute;inset:0;border-radius:22%;border:1px solid rgba(255,255,255,.1)}
@@ -2004,187 +2007,157 @@ body.tf-route #teth-help{bottom:88px}
   .tfbk-faq .q{font-size:17px;padding:18px 4px}
   .tfbk-cats .cc{font-size:14px;height:32px;padding:0 13px}
 }
-/* ══ 전략 공유 허브 (tfss) — .reference-audit 실측: S1 Bitget 리스트 / S2 OKX 상세 다크매핑 / S4-6 Bybit 골격 ══ */
-.tf-page.tfss{max-width:1280px;padding:48px 40px 80px;
-  --ss-bg:#151517;--ss-bd:#38393d;--ss-cta:#252629;--ss-cta-h:#323438;--ss-up:#26c99b;--ss-dn:#f6465d;--ss-t:#f4f5f7;--ss-t2:#c8c9cc;--ss-t3:#8e8e92}
-.tfss .num{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.tfss h2.tfss-h1{font-size:48px;font-weight:700;line-height:68px;color:var(--ss-t);margin:0 0 8px}
-.tfss-sub{font-size:16px;line-height:24px;color:var(--ss-t2);margin:0 0 36px}
-/* 페이지 네비: Bitget 카테고리 탭 문법 (fs16 pad 8 12, 활성 언더라인 4px) */
-.tfss-nav{display:flex;gap:16px;margin:0 0 32px;border-bottom:1px solid rgba(255,255,255,.06)}
-.tfss-nav .nv{position:relative;font-size:16px;color:var(--ss-t3);background:none;border:0;padding:8px 12px 16px;cursor:pointer;transition:none;white-space:nowrap}
-.tfss-nav .nv:hover{color:var(--ss-t)}
-.tfss-nav .nv.on{color:var(--ss-t)}
-.tfss-nav .nv.on::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:4px;background:#fff;border-radius:2px}
-/* 섹션 행: 24/500 + 우측 검색 */
-.tfss-secrow{display:flex;align-items:center;gap:40px;margin:0 0 28px;flex-wrap:wrap}
-.tfss-sec{font-size:24px;font-weight:500;line-height:32px;color:var(--ss-t)}
-.tfss-search{margin-left:auto;display:flex;align-items:center;gap:8px;height:40px;border:1px solid var(--ss-bd);border-radius:8px;padding:0 12px;background:transparent}
-.tfss-search svg{width:14px;height:14px;stroke:var(--ss-t3);fill:none;stroke-width:2}
-.tfss-search input{background:none;border:0;outline:none;color:var(--ss-t);font-size:14px;width:260px}
-.tfss-search input::placeholder{color:var(--ss-t3)}
-/* 정렬 행: 12/400 텍스트 소터 */
-.tfss-sorts{display:flex;gap:32px;margin:0 0 36px;flex-wrap:wrap}
-.tfss-sorts .so{font-size:12px;color:var(--ss-t2);background:none;border:0;padding:4px 0;cursor:pointer;display:inline-flex;align-items:center;gap:3px;transition:none}
-.tfss-sorts .so.on{color:var(--ss-t);font-weight:600}
-.tfss-sorts .so .ar{font-size:9px;opacity:.75}
-/* 카드 그리드: 3열 gap 40 (실측) */
-.tfss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:40px}
-/* 카드: 373x335 스케일, r16 bd #38393d bg #151517, hover -12px all .15s cubic-bezier(.4,0,.2,1) */
-.tfss-card{position:relative;min-height:335px;border-radius:16px;border:1px solid var(--ss-bd);background:var(--ss-bg);padding:24px;display:flex;flex-direction:column;transition:all .15s cubic-bezier(.4,0,.2,1)}
-@media (hover:hover){ .tfss-card:hover{transform:translateY(-12px);box-shadow:0 12px 32px rgba(0,0,0,.45)} }
-.tfss-card .hd{display:flex;gap:10px;align-items:flex-start}
-.tfss-av{width:56px;height:56px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#0d0e10;flex-shrink:0}
-.tfss-card .id{min-width:0;flex:1}
-.tfss-card .id .nm{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px;font-weight:600;line-height:26px;color:var(--ss-t);background:none;border:0;padding:0;cursor:pointer;text-align:left}
-.tfss-card .id .nm:hover{text-decoration:underline;text-underline-offset:3px}
-.tfss-card .id .sb{font-size:12px;line-height:18px;color:var(--ss-t3);margin-top:2px}
-.tfss-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;margin-top:6px;font-size:12px;color:#c8c9cc;border:0;border-radius:4px;background:#252629}
-/* 지표: 라벨 14 dim @~122, 값 28/600 lh32, 보조 14, 스파크 우측 */
-.tfss-card .met{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px}
-.tfss-card .met .lb{font-size:14px;line-height:20px;color:var(--ss-t3)}
-.tfss-card .met .v{font-size:28px;font-weight:600;line-height:32px}
-.tfss-card .met .v.up{color:var(--ss-up)}
-.tfss-card .met .v.dn{color:var(--ss-dn)}
-.tfss-card .met .sc{font-size:14px;line-height:22px;color:var(--ss-t2);margin-top:2px}
-.tfss-spark{width:96px;height:40px;flex-shrink:0;margin-bottom:4px}
-.tfss-spark polyline{fill:none;stroke-width:1.6}
-/* 미니 3열: 라벨 12 dim + 값 14 */
-.tfss-mini{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:18px}
-.tfss-mini small{display:block;font-size:12px;line-height:16px;color:var(--ss-t3)}
-.tfss-mini b{display:block;font-size:14px;font-weight:500;color:var(--ss-t);margin-top:2px}
-/* CTA: 풀폭 40h r8 #252629 */
-.tfss-card .ctaw{margin-top:auto;padding-top:16px}
-.tfss-cta{display:inline-flex;align-items:center;justify-content:center;width:100%;height:40px;border-radius:8px;background:var(--ss-cta);border:1px solid transparent;color:var(--ss-t);font-size:14px;cursor:pointer;transition:none}
-.tfss-cta:hover{background:var(--ss-cta-h)}
-.tfss-cta.pri{background:#f2f2f2;color:#0f0f0f}
-.tfss-cta.pri:hover{background:#fff}
-.tfss-mebdg{display:inline-flex;align-items:center;justify-content:center;width:100%;height:40px;border-radius:8px;border:1px dashed var(--ss-bd);color:var(--ss-t3);font-size:13px}
-.tfss-empty{grid-column:1/-1;padding:64px 0;text-align:center;color:var(--ss-t3);font-size:14px}
-.tfss-empty button{margin-top:12px}
-/* ── S2 전략 상세 (OKX 상세 다크 매핑: 밴드 헤더/이름 32/500/필 CTA r60/메인탭 22/700/세그 서브 문법) ── */
-.tfss-bc{font-size:14px;line-height:34px;color:#8e8e92;margin:0 0 4px}
-.tfss-bc button{background:none;border:0;padding:0;color:#dbdbdb;font-size:14px;cursor:pointer}
-.tfss-bc button:hover{text-decoration:underline;text-underline-offset:3px}
-/* 콘텐츠 페인 풀블리드 밴드 (OKX 212h 스케일) */
-.tfss-dband{background:#0a0b0d;border-bottom:1px solid rgba(255,255,255,.05)}
-.tfss-dband .dbin{max-width:1280px;margin:0 auto;padding:16px 40px 36px;min-height:212px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center}
-.tfss-dhead{position:relative;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
-.tfss-dhead .hcol{display:flex;flex-direction:column;gap:10px;min-width:0}
-.tfss-dhead .hcol .frow{margin-top:0}
-.tfss-dhead .nm2{font-size:32px;font-weight:500;line-height:44px;color:#fff;margin:0;overflow-wrap:anywhere}
-.tfss-dhead .frow{display:flex;gap:20px;margin-top:8px;font-size:14px;color:var(--ss-t2);flex-wrap:wrap}
-.tfss-dhead .frow b{color:#fff;margin-right:4px}
-.tfss-dhead .ha2{margin-left:auto;display:flex;gap:12px;align-items:center}
-.tfss-pill{height:48px;padding:0 24px;border-radius:60px;background:#f2f2f2;color:#0f0f0f;font-size:16px;font-weight:500;border:0;cursor:pointer;transition:none}
-.tfss-pill:hover{background:#fff}
-.tfss-mtabs{display:flex;gap:28px;margin:20px 0 24px;border-bottom:1px solid rgba(255,255,255,.08)}
-.tfss-mtabs .mt{font-size:22px;font-weight:700;color:var(--ss-t3);background:none;border:0;padding:14px 2px 16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:none}
-.tfss-mtabs .mt.on{color:#fff;border-bottom-color:#fff}
-.tfss-mtabs .mt:hover{color:#fff}
-.tfss-dgrid{display:grid;grid-template-columns:392px minmax(0,1fr);gap:24px;align-items:start}
-.tfss-pcard,.tfss-ccard{border:1px solid var(--ss-bd);border-radius:16px;background:var(--ss-bg);padding:24px}
-.tfss-ccard{margin-bottom:24px}
-.tfss-pcard .ph,.tfss-ccard .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.tfss-pcard .ph b,.tfss-ccard .ch b{font-size:18px;font-weight:600;color:#fff}
-.tfss-kv{display:flex;justify-content:space-between;align-items:center;padding:13px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.05)}
-.tfss-kv:last-of-type{border-bottom:0}
-.tfss-kv small{color:var(--ss-t3);font-size:14px}
-.tfss-kv b{color:#fff;font-weight:500}
-.tfss-wlrow{display:flex;justify-content:space-between;font-size:13px;margin-top:12px}
-.tfss-wlrow .w{color:var(--ss-up)} .tfss-wlrow .l{color:var(--ss-dn)}
-.tfss-wlbar{height:10px;border-radius:12px;background:rgba(246,70,93,.5);overflow:hidden;margin:8px 0 2px}
-.tfss-wlbar i{display:block;height:100%;background:var(--ss-up)}
-.tfss-chart{width:100%;height:280px;display:block}
-.tfss-chart polyline{fill:none;stroke-width:2}
-.tfss-chart line{stroke:rgba(255,255,255,.08);stroke-width:1}
-.tfss-chart text{fill:var(--ss-t3);font-size:11px}
-.tfss-bars rect.up{fill:var(--ss-up)}
-.tfss-bars rect.dn{fill:var(--ss-dn)}
-.tfss-trades{width:100%;border-collapse:collapse;font-size:13px}
-.tfss-trades th{color:var(--ss-t3);font-weight:400;text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,.08)}
-.tfss-trades td{padding:9px 8px;color:var(--ss-t2);border-bottom:1px solid rgba(255,255,255,.05)}
-.tfss-trades .up{color:var(--ss-up)} .tfss-trades .dn{color:var(--ss-dn)}
-/* ── S3 카피 설정 — 중앙 모달 (OKX 필터 모달 계약: 중앙/딤/잠금/Esc/포커스 복귀) ── */
-.tfss-modalw{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
-.tfss-scrim{position:absolute;inset:0;background:rgba(0,0,0,.6)}
-.tfss-modal{position:relative;width:480px;max-width:100%;max-height:calc(100vh - 48px);overflow-y:auto;background:var(--ss-bg,#151517);border:1px solid #38393d;border-radius:16px;padding:20px 22px}
-.tfss-modal .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.tfss-modal .mh b{font-size:17px;font-weight:600;color:#f4f5f7}
-.tfss-modal .mx{background:none;border:0;color:#8e8e92;font-size:15px;cursor:pointer;padding:4px;transition:none}
-.tfss-modal .mx:hover{color:#fff}
-.tfss-cp .sum{display:flex;gap:12px;align-items:center;margin-bottom:14px}
-.tfss-cp .sum .nm{font-size:16px;font-weight:600;color:#fff}
-.tfss-cp .sum .sb{font-size:12.5px;color:var(--ss-t3,#8e8e92);margin-top:2px}
-.tfss-cp .exp{font-size:13px;line-height:1.65;color:#e2e3e6;background:rgba(255,255,255,.07);border-radius:10px;padding:12px 14px;margin-bottom:16px}
-.tfss-cp .fld{margin-bottom:14px}
-.tfss-cp .fld label{display:block;font-size:12.5px;color:var(--ss-t3,#8e8e92);margin-bottom:6px}
-.tfss-cp select{width:100%;height:40px;border-radius:8px;background:#1d1e21;border:1px solid #38393d;color:#fff;font-size:14px;padding:0 10px}
-.tfss-cp .warn{font-size:12.5px;line-height:1.6;color:#e8c15a;border:1px solid rgba(232,193,90,.35);border-radius:10px;padding:10px 12px;margin:4px 0 14px}
-.tfss-cp .acts{display:flex;gap:12px}
-.tfss-cp .cx{flex:0 0 auto;height:44px;padding:0 20px;border-radius:8px;background:transparent;border:1px solid #38393d;color:#c8c9cc;font-size:14px;cursor:pointer;transition:none}
-.tfss-cp .cx:hover{background:rgba(255,255,255,.05)}
-.tfss-cp .go2{flex:1;height:44px;border-radius:8px;background:#f2f2f2;color:#0f0f0f;font-size:14.5px;font-weight:600;border:0;cursor:pointer;transition:none}
-.tfss-cp .go2:hover{background:#fff}
-/* ── S4 따라가는 중 / S5 온보딩 / S6 크리에이터 (Bybit 골격) ── */
-.tfss-st{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:rgba(38,201,155,.12);color:var(--ss-up)}
-.tfss-st.idle{background:rgba(255,255,255,.06);color:var(--ss-t3)}
-.tfss-onb{border:1px solid var(--ss-bd);border-radius:16px;background:var(--ss-bg);padding:40px;max-width:720px}
-.tfss-onb h3{font-size:24px;font-weight:600;color:#fff;margin:0 0 8px}
-.tfss-onb .dsc{font-size:14px;line-height:1.7;color:var(--ss-t2);margin-bottom:20px}
-.tfss-onb .rw{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:14px;background:rgba(38,201,155,.12);color:var(--ss-up);font-size:13px;font-weight:600;margin-bottom:20px}
-.tfss-onb .steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
-.tfss-onb .steps .st1{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ss-t2)}
-.tfss-onb .steps .st1 i{font-style:normal;flex-shrink:0;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
-.tfss-onb .cta2{height:44px;padding:0 24px;border-radius:8px;background:#f2f2f2;color:#0f0f0f;font-size:14.5px;font-weight:600;border:0;cursor:pointer;transition:none}
-.tfss-onb .cta2:hover{background:#fff}
-.tfss-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.tfss-stats .stc{border:1px solid var(--ss-bd);border-radius:16px;background:var(--ss-bg);padding:20px}
-.tfss-stats .stc small{display:block;font-size:12.5px;color:var(--ss-t3)}
-.tfss-stats .stc b{display:block;font-size:24px;font-weight:600;color:#fff;margin-top:6px}
-.tfss-stats .stc b.up{color:var(--ss-up)}
-.tfss-shrow{display:flex;align-items:center;gap:14px;border:1px solid var(--ss-bd);border-radius:16px;background:var(--ss-bg);padding:18px 20px;margin-bottom:24px;flex-wrap:wrap}
-.tfss-shrow .si small{display:block;font-size:12px;color:var(--ss-t3)}
-.tfss-shrow .si b{font-size:15px;color:#fff}
-/* S6 대시보드: 좌 패널(통계+공개 제어) + 우 프리뷰 */
-.tfss-dash{display:grid;grid-template-columns:minmax(0,1fr) 373px;gap:24px;align-items:start}
-.tfss-dashp{border:1px solid var(--ss-bd);border-radius:16px;background:var(--ss-bg);padding:20px}
-.tfss-dashp .tfss-stats{grid-template-columns:repeat(2,1fr)} /* 3+1 비대칭 랩 방지 (AGY-REG-101) */
-.tfss-dashp .tfss-stats .stc{border:0;background:rgba(255,255,255,.03)}
-.tfss-spark-empty{width:96px;height:40px;border:1px dashed rgba(255,255,255,.14);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--ss-t3);flex-shrink:0}
-.tfss-dashr .tfss-dashl{font-size:13px;color:var(--ss-t3);margin-bottom:10px}
-@media (max-width:1024px){ .tfss-dash{grid-template-columns:1fr} }
-@media (max-width:1024px){ .tf-page.tfss{padding:40px 32px 64px} .tfss-grid{gap:24px} .tfss-dgrid{grid-template-columns:1fr} .tfss-dband .dbin{padding:14px 32px 28px} }
+/* ══ 전략 공유 v3 (ss3) — 캐논=지원 거래소(.tfbk) 클래스 직접 재사용. 근거: agy-visual-spec.md ══
+   히어로/필/드롭다운/풀폭 카드/버튼은 .tfbk 문법 그대로. 아래는 전략 전용 확장만. */
+.ss3-by{font-size:16px;font-weight:400;color:#848a94;margin-left:2px}
+.ss3-div{width:1px;height:26px;background:rgba(255,255,255,.14);flex-shrink:0}
+/* 검색 필: 캐논 드롭다운 필 문법 (h48 r24 bg#000 bd2 #4a4a4a) */
+.ss3-search{display:inline-flex;align-items:center;gap:10px;height:48px;border-radius:24px;padding:0 24px;background:#000;border:2px solid #4a4a4a;flex:1;max-width:320px;min-width:180px;box-sizing:border-box;transition:none}
+.ss3-search:hover,.ss3-search:focus-within{border-color:#787878}
+.ss3-search svg{width:14px;height:14px;stroke:#848a94;fill:none;stroke-width:2;flex-shrink:0}
+.ss3-search input{background:none;border:0;outline:none;color:#fff;font-size:14px;width:100%}
+.ss3-search input::placeholder{color:#848a94}
+/* 카드 우측 에쿼티 캔버스 (528x260 스케일) */
+.ss3-eq{display:block;width:100%;max-width:528px;height:260px}
+.ss3-eq .ln{fill:none;stroke-width:2.5}
+.ss3-eq .ln.up{stroke:#2fb98a;filter:drop-shadow(0 4px 12px rgba(47,185,138,.35))}
+.ss3-eq .ln.dn{stroke:#ee766a;filter:drop-shadow(0 4px 12px rgba(238,118,106,.3))}
+.ss3-eq .base{stroke:rgba(255,255,255,.1);stroke-dasharray:3 4;stroke-width:1}
+.ss3-eq text{fill:#848a94;font-size:11px}
+.ss3-eq .tag{fill:#2fb98a;font-size:12px;font-weight:600}
+.ss3-eq .tag.dn{fill:#ee766a}
+/* 요약 통계 타일 (S4/S6): h92 r16 값 28/700 */
+.ss3-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:34px}
+.ss3-tiles .tl{min-height:92px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:18px 24px;box-sizing:border-box}
+.ss3-tiles .tl small{display:block;font-size:14px;color:#848a94}
+.ss3-tiles .tl b{display:block;font-size:28px;font-weight:700;line-height:36px;color:#fff;margin-top:6px;font-variant-numeric:tabular-nums}
+.ss3-tiles .tl b.up{color:#56c486}
+/* 상태 배지 */
+.ss3-st{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:6px;font-size:13px;font-weight:600;background:rgba(47,185,138,.14);color:#2fb98a}
+.ss3-st.idle{background:rgba(255,255,255,.07);color:#848a94}
+/* 상세 히어로 (캐논 히어로 내부, 중앙 정렬) */
+.tfbk-hero h2.ss3-dtitle{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:48px;font-weight:600;line-height:56px;color:#fff;margin:0}
+.ss3-dsub{position:relative;font-size:15px;color:#dbdbdb;margin-top:12px}
+.ss3-dsub .dim{color:#848a94}
+.ss3-dbig{position:relative;font-size:56px;font-weight:700;line-height:64px;margin-top:34px;font-variant-numeric:tabular-nums}
+.ss3-dbig.up{color:#56c486} .ss3-dbig.dn{color:#ee766a}
+.ss3-dbigl{position:relative;font-size:15px;color:#dbdbdb;margin-top:6px}
+.ss3-dchips{position:relative;display:flex;justify-content:center;gap:16px;margin-top:28px;flex-wrap:wrap}
+.ss3-dchips .dc{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 24px;min-width:128px}
+.ss3-dchips .dc b{display:block;font-size:28px;font-weight:600;line-height:34px;color:#fff;font-variant-numeric:tabular-nums}
+.ss3-dchips .dc small{display:block;font-size:14px;color:#848a94;margin-top:4px}
+.ss3-dacts{position:relative;display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap}
+/* 콘텐츠 카드 (풀폭, 캐논 그라디언트 래퍼 재사용 + 블록 내부) */
+.ss3-blk{display:block!important}
+.ss3-ch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.ss3-ch b{font-size:24px;font-weight:600;color:#fff}
+.ss3-ch .mt2{font-size:13px;color:#848a94}
+/* 기간 필 (캐논 모바일 필 문법 h34 r17) */
+.ss3-pp{display:inline-flex;gap:8px}
+.ss3-pp .p{height:34px;border-radius:17px;padding:0 15px;font-size:14px;color:#dbdbdb;background:#2e2e2e;border:2px solid #2e2e2e;cursor:pointer;transition:none}
+.ss3-pp .p:hover{background:#3c3c3c;border-color:#3c3c3c}
+.ss3-pp .p.on{background:#f2f2f2;color:#0f0f0f;border-color:#f2f2f2}
+/* 대형 차트 */
+.ss3-chart{display:block;width:100%;height:360px}
+.ss3-chart line{stroke:rgba(255,255,255,.08);stroke-width:1}
+.ss3-chart text{fill:#848a94;font-size:12px}
+.ss3-chart .ln{fill:none;stroke-width:2.5}
+.ss3-chart .ln.up{stroke:#2fb98a;filter:drop-shadow(0 4px 12px rgba(47,185,138,.3))}
+.ss3-chart .ln.dn{stroke:#ee766a}
+.ss3-bars rect.up{fill:#2fb98a} .ss3-bars rect.dn{fill:#ee766a}
+.ss3-bars text{font-size:13px;font-weight:600}
+/* 성과 지표 매트릭스 3x2 */
+.ss3-matrix{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.ss3-matrix .mx{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px 22px;background:rgba(255,255,255,.02)}
+.ss3-matrix .mx small{display:block;font-size:14px;color:#848a94}
+.ss3-matrix .mx b{display:block;font-size:18px;font-weight:600;color:#fff;margin-top:6px;font-variant-numeric:tabular-nums}
+/* 체결 테이블 */
+.ss3-tbl{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.ss3-tbl th{color:#848a94;font-weight:400;text-align:left;padding:0 10px 12px;border-bottom:1px solid rgba(255,255,255,.08);white-space:nowrap}
+.ss3-tbl td{height:44px;padding:0 10px;color:#dbdbdb;border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap}
+.ss3-tbl .up{color:#56c486} .ss3-tbl .dn{color:#ee766a}
+/* 빈 상태 */
+.ss3-empty{padding:72px 0;text-align:center;color:#848a94;font-size:15px;line-height:1.8}
+/* 다이얼로그 (중앙, 캐논 그라디언트 래퍼) — 모션: 백드롭 .15s, 페이드 .12s만 */
+.ss3-dlgw{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);animation:ss3fade .15s linear}
+@keyframes ss3fade{from{opacity:0}to{opacity:1}}
+.ss3-dlg{position:relative;width:560px;max-width:100%;max-height:85vh;border-radius:24px;padding:1px;overflow:hidden;animation:ss3in .12s ease-out;
+  background:linear-gradient(308deg,rgba(255,255,255,.14),rgba(0,0,0,0) 13.16%),linear-gradient(139deg,rgba(255,255,255,.14) 1%,rgba(0,0,0,0) 19.85%),#000}
+.ss3-dlg.wide{width:620px}
+@keyframes ss3in{from{opacity:0}to{opacity:1}}
+.ss3-dlg .din{background:#000;border-radius:23px;padding:36px 40px;max-height:calc(85vh - 2px);overflow-y:auto;box-sizing:border-box}
+.ss3-dlg .dh2{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ss3-dlg .dh2 b{font-size:24px;font-weight:600;color:#fff}
+.ss3-dlg .dx{background:none;border:0;color:#848a94;font-size:18px;cursor:pointer;padding:4px;transition:none}
+.ss3-dlg .dx:hover{color:#fff}
+.ss3-dlg .sumb{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:14px 18px;margin-bottom:16px}
+.ss3-dlg .sumb .nm3{font-size:16px;font-weight:600;color:#fff}
+.ss3-dlg .sumb .sb3{font-size:13px;color:#848a94;margin-top:3px;font-variant-numeric:tabular-nums}
+.ss3-dlg .ntc{font-size:13px;line-height:20px;color:#848a94;margin-bottom:20px}
+.ss3-dlg .fld3{margin-bottom:16px}
+.ss3-dlg .fld3 label{display:block;font-size:13px;color:#848a94;margin-bottom:8px}
+.ss3-dlg select,.ss3-dlg input[type=text]{width:100%;height:48px;border-radius:12px;background:#000;border:2px solid #4a4a4a;color:#fff;font-size:14px;padding:0 16px;box-sizing:border-box;outline:none}
+.ss3-dlg select{appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg fill="%23dbdbdb" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 16px center;padding-right:44px;cursor:pointer} /* AGY 게이트 P1-6: 네이티브 화살표 제거, pillDrop 룩 */
+.ss3-dlg select:hover,.ss3-dlg input[type=text]:focus{border-color:#787878}
+.ss3-dlg .warn3{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:10px;padding:12px 16px;font-size:12.5px;line-height:1.6;color:#eab308;margin-bottom:16px}
+.ss3-dlg .acts3{display:flex;gap:12px;margin-top:28px}
+.ss3-dlg .acts3 .obtn{width:120px;padding:0}
+.ss3-dlg .acts3 .wbtn{flex:1;padding:0}
+/* 온보딩 스텝/라디오 */
+.ss3-steps{display:flex;align-items:center;gap:8px;font-size:13px;color:#848a94;margin-bottom:22px;flex-wrap:wrap}
+.ss3-steps .stp{display:inline-flex;align-items:center;gap:6px}
+.ss3-steps .stp i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);color:#dbdbdb;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
+.ss3-steps .stp.on{color:#fff}
+.ss3-steps .stp.on i{background:#f2f2f2;color:#0f0f0f}
+.ss3-steps .sep3{color:rgba(255,255,255,.2)}
+.ss3-radio{display:block;width:100%;text-align:left;border:2px solid #4a4a4a;border-radius:12px;padding:16px 18px;background:none;color:#fff;cursor:pointer;margin-bottom:12px;transition:none;box-sizing:border-box}
+.ss3-radio.on{border-color:#fff}
+.ss3-radio.off{opacity:.45;cursor:not-allowed}
+.ss3-radio .rn{font-size:16px;font-weight:600}
+.ss3-radio .rs{font-size:13px;color:#848a94;margin-top:4px;font-variant-numeric:tabular-nums}
+/* 파괴적 버튼 */
+.ss3-dbtn{height:48px;padding:0 24px;border-radius:8px;background:transparent;color:#ee766a;border:1px solid rgba(238,118,106,.4);font-size:16px;font-weight:500;cursor:pointer;transition:none}
+.ss3-dbtn:hover{background:rgba(238,118,106,.08)}
+/* 크리에이터 관리 카드 내부 2열 */
+.ss3-mgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:start}
+.ss3-mrow{display:flex;align-items:center;gap:12px;margin-top:16px;font-size:14px;color:#dbdbdb;flex-wrap:wrap}
+.ss3-mrow small{color:#848a94}
+.ss3-prevl{font-size:13px;color:#848a94;margin-bottom:12px}
+/* pressed (캐논 §19) */
+.tfbk .wbtn:active,.tfbk .obtn:active,.ss3-dlg .wbtn:active,.ss3-dlg .obtn:active,.tfbk .fp:active,.ss3-dbtn:active,.ss3-pp .p:active{transform:scale(.98);filter:brightness(.9)}
+button{-webkit-tap-highlight-color:transparent}
+/* 반응형 */
+@media (max-width:1024px){
+  .ss3-eq{max-width:204px;height:172px}
+  .ss3-matrix{grid-template-columns:repeat(2,1fr)}
+  .ss3-mgrid{grid-template-columns:1fr}
+  .ss3-dchips .dc{min-width:104px;padding:12px 16px}
+  .ss3-dchips .dc b{font-size:22px;line-height:28px}
+}
 @media (max-width:768px){
-  .tf-page.tfss{padding:32px 20px 56px}
-  .tfss h2.tfss-h1{font-size:32px;line-height:44px}
-  .tfss-sub{margin-bottom:24px}
-  .tfss-nav{gap:4px;overflow-x:auto;scrollbar-width:none}
-  .tfss-nav .nv{font-size:15px;padding:8px 10px 14px}
-  .tfss-secrow{gap:16px}
-  .tfss-sec{font-size:20px}
-  .tfss-search{width:100%;order:9}
-  .tfss-search input{width:100%;flex:1}
-  .tfss-sorts{gap:20px}
-  .tfss-sorts .so{padding:10px 0}
-  .tfss-grid{grid-template-columns:1fr;gap:20px}
-  .tfss-card{min-height:0}
-  .tfss-dband .dbin{padding:12px 20px 24px;min-height:0}
-  .tfss-dhead{gap:14px}
-  .tfss-dhead .nm2{font-size:24px;line-height:32px}
-  /* 390 실측(Bitget 모바일): 미니 지표 = 좌 라벨 / 우 수치 키-값 행 (AGY-POST P0-103) */
-  .tfss-mini{display:flex;flex-direction:column;gap:0;margin-top:14px}
-  .tfss-mini>div{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-  .tfss-mini>div:last-child{border-bottom:0}
-  .tfss-mini small{margin:0}
-  .tfss-mini b{margin:0}
-  .tfss-dhead .ha2{margin-left:0;width:100%}
-  .tfss-dhead .ha2 .tfss-pill{flex:1;height:44px}
-  .tfss-mtabs{gap:20px}
-  .tfss-mtabs .mt{font-size:18px;padding:10px 2px 12px}
-  .tfss-chart{height:200px}
-  .tfss-onb{padding:24px}
-  .tfss-trades{font-size:12px}
+  .ss3-search{height:34px;border-radius:17px;border-width:1px;padding:0 15px;min-width:0}
+  .ss3-div{display:none}
+  .tfbk-hero h2.ss3-dtitle{font-size:28px;line-height:40px}
+  .ss3-dbig{font-size:40px;line-height:48px;margin-top:22px}
+  .ss3-chart{height:200px}
+  .ss3-ch b{font-size:20px}
+  .ss3-matrix{grid-template-columns:1fr;gap:12px}
+  .ss3-tiles{gap:12px;margin-bottom:24px}
+  .ss3-tiles .tl b{font-size:22px;line-height:28px}
+  .ss3-tbl{font-size:12px}
+  .ss3-tbl td{height:40px;padding:0 6px}
+  .ss3-tbl th{padding:0 6px 10px}
+  .ss3-dlg .din{padding:24px 20px}
+  .ss3-dacts .wbtn,.ss3-dacts .obtn{flex:1}
+}
+@media (max-width:640px){
+  /* 모바일 바텀시트 (AGY §21: translateY .2s ease-out 허용) */
+  .ss3-dlgw{align-items:flex-end;padding:0}
+  .ss3-dlg,.ss3-dlg.wide{width:100%;max-height:92vh;border-radius:24px 24px 0 0;animation:ss3up .2s ease-out}
+  .ss3-dlg .din{border-radius:23px 23px 0 0;max-height:calc(92vh - 2px)}
+  @keyframes ss3up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  /* 모바일 카드: 캐논 640 그리드 재사용 — 에쿼티 미니 86x80 */
+  .tfbk-card .lgo .ss3-eq{width:86px;height:80px;max-width:none}
 }
 @media (max-width:640px){
   /* 390 실측: 페이지 패딩 20, 카드 grid [93.6|1fr] pad 24 16, 로고 86x80 좌상단 + 이름 옆, 카운터 박스 32h r4 */
@@ -4547,7 +4520,7 @@ function gComposer(on,ctx){
 function gContent(html){
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
-    if(window.TF_BOOTED&&location.hash.indexOf('#/strategy')===0){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; } }
+    if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0)){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; } }
   $('g-content').innerHTML=html; $('g-scroll').scrollTop=0;
   if(window.gSideMobClose) gSideMobClose(); /* 드로어에서 뷰를 골랐으면 드로어는 닫는다 */
 }
@@ -5444,13 +5417,15 @@ var STORE={t:0,
     try{ localStorage.setItem('teth.state',JSON.stringify(STORE.snapshot())); }catch(e){}
   },
   flushNow:function(){
-    if(!S.user) return;
+    if(!S.user) return null;
+    var ok=true; /* 로컬 쓰기 성공 여부를 호출자에게 알린다 — 확정 액션이 실패를 침묵하지 않게 (codex F11) */
     try{
       var j=JSON.stringify(STORE.snapshot());
-      try{ localStorage.setItem('teth.state',j); }catch(e){}
+      try{ localStorage.setItem('teth.state',j); }catch(e){ ok=false; }
       var su=taiStateUrl(); /* 서버 저장은 localhost 프록시 전용 — 원격(터널)은 404라 호출하지 않는다 */
       if(su) fetch(su,{method:'POST',headers:{'Content-Type':'application/json'},body:j}).catch(function(){});
-    }catch(e){}
+    }catch(e){ ok=false; }
+    return ok;
   },
   load:function(cb){
     function local(){ try{ return JSON.parse(localStorage.getItem('teth.state')||'null'); }catch(e){ return null; } }
@@ -5458,7 +5433,8 @@ var STORE={t:0,
     if(!su){ cb(local()); return; }
     fetch(su)
       .then(function(r){ return r.ok?r.json():null; })
-      .then(function(p){ cb(p&&p.v?p:local()); })
+      .then(function(p){ var l=local(); /* 로컬이 더 최신이면 로컬 우선 — 플러시 전 새로고침 유실 방지 (codex F11) */
+        cb(p&&p.v?(l&&l.v&&(l.savedAt||0)>(p.savedAt||0)?l:p):l); })
       .catch(function(){ cb(local()); });
   },
   restore:function(p){
@@ -6328,7 +6304,8 @@ function tfStart(act){
   }
   window.TF_STARTN=0;
   var t=tfS();
-  t.cloneFrom=null;
+  t.cloneFrom=null; t.followId=null; /* 새 독립 작업은 팔로우 기록에 귀속되지 않는다 (codex F07) */
+  if(typeof TF_SS_TOKEN!=='undefined') TF_SS_TOKEN++; /* 진행 중이던 이전 검증 콜백 무효화 (codex F06) */
   t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null;
   t.ob={st:'idle',ex:null,uid:'',err:null};
   var sell=/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
@@ -6508,6 +6485,11 @@ function tfWorkRun(p){
         t.cur={p:p,ret:res.ret,mdd:res.mdd,winRate:res.winRate,n:res.n,sharpe:res.sharpe,pf:res.pf,cagr:res.cagr,tradeVol:res.tradeVol,
           trades:res.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl};}),startI:p.startI,endI:p.endI};
         t.score=score; t.tries.push(score); t.workDone=true;
+        /* 팔로우 기록의 설정을 실제 검증에 쓴 파라미터로 동기화 — 기록과 결과의 불일치 방지 (codex F07).
+           followId 없는 구버전 활성 기록은 cloneFrom 최신 미보관 기록으로 폴백 */
+        var fw0=(t.follows||[]).find(function(x){ return x.id===t.followId; });
+        if(!fw0&&t.followId===undefined&&t.cloneFrom) fw0=(t.follows||[]).filter(function(x){ return !x.archived&&x.nick===t.cloneFrom; }).sort(function(a,b){ return b.id-a.id; })[0];
+        if(fw0) fw0.p={sl:p.sl,tp:p.tp,rsiTh:p.rsiTh,trendFilter:p.trendFilter,startI:p.startI,endI:p.endI};
         tfSave(); tfWorkResult();
       });
       return;
@@ -6964,10 +6946,12 @@ function tfStartStrategy(){
   if(!(t.cur&&t.score>=TFC.score.pass)){ toast('현재 설정의 검증을 먼저 통과해야 해요'); tfNav('#/strategy/backtest'); return; }
   t.conn=true; t.stage='live';
   var asset=(t.intake.asset||{}).label||'자산';
-  if(t.cur&&!t.strat.some(function(x){ return x.name.indexOf(asset)===0&&x.at>Date.now()-6e5; })){
-    t.strat.unshift({name:asset+' 위임 전략',score:t.score,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,status:'live',at:Date.now()});
+  /* 같은 자산이라도 원본(src)이 다르면 별도 엔트리 — 시작 안내와 실행 배지 불일치 방지 (codex N03) */
+  var srcNow=t.cloneFrom||null;
+  if(t.cur&&!t.strat.some(function(x){ return x.name.indexOf(asset)===0&&x.at>Date.now()-6e5&&(x.src===undefined||x.src===srcNow); })){
+    t.strat.unshift({name:asset+' 위임 전략',score:t.score,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p,src:srcNow,fid:t.followId!=null?t.followId:null,status:'live',at:Date.now()}); /* p 스냅샷+원본/기록 링크: 공유 카드 실곡선, 팔로우 배지 정밀 판정 (codex F07) */
     var tr=(t.cur.trades||[]).slice(-4);
-    t.fills=tr.map(function(x,i){ return {side:i%2===0?'b':'s',label:asset,pnl:x.pnl,at:Date.now()-(tr.length-i)*36e5}; });
+    t.fills=tr.map(function(x,i){ return {side:i%2===0?'b':'s',label:asset,pnl:x.pnl,sim:true,at:Date.now()-(tr.length-i)*36e5}; });
   }
   tfSideSync(); tfSave();
   var sx=G.cur||G.sessions[0];
@@ -6993,24 +6977,24 @@ function tfDashView(){
     +'<div class="pd">'+(e?gEsc(e.name)+' 연결됨 (API ••••'+gEsc((t.api||{}).last4||'')+'), 출금 권한 없음':'거래소 미연결')+(t.plan==='partner'?', 파트너 0원 플랜':t.plan==='paid'?', 구독 중':'')+'</div>'
     +'<h2 style="font-size:16px;margin:4px 0 10px">내 전략</h2>'
     +(t.strat.length?t.strat.map(function(x,i){
-      var today=x.status==='live'?(((x.score-78)*0.13+0.2)).toFixed(1):null;
+      /* '오늘 수익률'은 점수 공식으로 만든 합성 수치라 제거 — 실계산 값만 표시 (codex F12) */
       return '<div class="tf-strat" style="margin-bottom:10px"><span class="nm">'+gEsc(x.name)+'</span>'
         +'<span class="st '+(x.status==='live'?'live':'off')+'">'+(x.status==='live'?'Running':'중지됨')+'</span>'
         +'<span class="m">TETH <b>'+x.score+'</b></span>'
-        +(today!=null?'<span class="m">오늘 <b style="color:#56c486">+'+today+'%</b></span>':'')
         +'<span class="m">검증 수익 <b>'+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%</b></span>'
         +'<button class="go" style="margin-left:auto;border:1px solid var(--gl2,rgba(255,255,255,.2));border-radius:10px;padding:7px 13px;font-size:12px;color:var(--gt);cursor:pointer" onclick="tfStratToggle('+i+')">'+(x.status==='live'?'중지':'재개')+'</button></div>';
     }).join(''):'<div class="pd">아직 실행 중인 전략이 없어요. 채팅에서 전략을 맡겨보세요.</div>')
     +'<h2 style="font-size:16px;margin:26px 0 10px">현황</h2>'
     +'<div class="tf-grid">'
     +'<div class="tf-dcard"><div class="k">총 자산 (시뮬레이션)</div><div class="v">'+tfWon(budget+pnl)+'</div></div>'
-    +'<div class="tf-dcard"><div class="k">전략 누적 손익</div><div class="v"><small class="'+(pnl>=0?'u':'d')+'">'+(pnl>=0?'+':'')+tfWon(pnl)+'</small></div></div>'
+    +'<div class="tf-dcard"><div class="k">전략 누적 손익 (시뮬레이션)</div><div class="v"><small class="'+(pnl>=0?'u':'d')+'">'+(pnl>=0?'+':'')+tfWon(pnl)+'</small></div></div>'
     +'<div class="tf-dcard"><div class="k">실행 중인 전략</div><div class="v">'+t.strat.filter(function(x){return x.status==='live';}).length+'개</div></div>'
     +'<div class="tf-dcard"><div class="k">누적 공유 보상</div><div class="v">'+tfWon(t.reward||0)+'</div></div>'
     +'</div>'
-    +'<h2 style="font-size:16px;margin:26px 0 10px">최근 체결</h2>'
+    +'<h2 style="font-size:16px;margin:26px 0 10px">최근 체결 (검증 시뮬레이션 재현)</h2>'
     +(t.fills.length?'<div class="tf-fills">'+t.fills.map(function(f){
-      return '<div class="tf-fill"><span class="sd '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span><span>'+gEsc(f.label)+'</span><span style="color:'+(f.pnl>=0?'#56c486':'#ee766a')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span><span class="tm">'+new Date(f.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span></div>';
+      /* 백테스트 체결 재현 — 실제 주문 시각처럼 보이는 합성 타임스탬프는 표시하지 않는다 (codex F12) */
+      return '<div class="tf-fill"><span class="sd '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span><span>'+gEsc(f.label)+'</span><span style="color:'+(f.pnl>=0?'#56c486':'#ee766a')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span><span class="tm">시뮬레이션</span></div>';
     }).join('')+'</div>':'<div class="pd">아직 체결 내역이 없어요.</div>')
     +'</div>');
 }
@@ -7040,430 +7024,628 @@ function tfRankSeeds(){
   return TF_SEEDS;
 }
 var TF_SEEDS=null;
-/* ── §9.6 전략 공유 허브 (tfSS) — 증거 기반 재구축, .reference-audit 참조 ──
-   구 tfRankView/tfShareView/tfFollow 는 허브 리다이렉트로 보존 (진입점 회귀 방지, CODEX-P1-012) */
+/* ── §9.6 전략 공유 v3 (ss3) — 비주얼=캐논(.tfbk) 재사용, 스펙: .reference-audit/agy-visual-spec.md ──
+   구 진입점 보존: tfRankView/tfShareView/tfFollow. 데이터 계약: t.follows(+archived)/t.followId/t.sharedSnap(+desc,at) */
 function tfRankView(){ tfShareHub('find'); }
 function tfShareView(){ var t=tfSSState(); tfShareHub(t.ss.tab||'find'); }
-function tfFollow(i){ /* 구 인덱스 호출 호환 (CODEX-P1-011: 신규 경로는 아이덴티티 기반) */
-  var rows=tfRankSeeds(); var r=rows[Math.min(i,rows.length-1)]; if(!r) return;
-  tfSSCopy(tfSSNe(r.nick));
+function tfFollow(i){ var rows=tfRankSeeds(); var r=rows[Math.min(i,rows.length-1)]; if(!r) return; tfSS3Copy(tfSSNe(r.nick)); }
+var TF_SS_CACHE=null,TF_SS_Q='',TF_SS_PREV=null,TF_SS_TOKEN=0;
+var TF_SS3_CP_BUSY=false;
+/* 확정 액션(복제/공개/중지)은 디바운스 없이 즉시 저장 — 확정 직후 새로고침 유실 방지 (codex F11) */
+function tfSaveNow(){
+  tfSave();
+  try{ if(window.STORE&&STORE.flushNow&&STORE.flushNow()===false) toast('로컬 저장에 실패했어요. 브라우저 저장 공간을 확인해주세요'); }catch(e){}
 }
-var TF_SS_CACHE=null,TF_SS_Q='',TF_SS_PREV=null; /* 검색어는 세션 한정 — 영속 시 리로드 후 숨은 필터로 빈 목록이 되는 문제 */
-/* onclick 인라인 인자 안전 인코딩 — 작은따옴표 포함 닉 대응 (CODEX-POST P1-010) */
 function tfSSNe(n){ return encodeURIComponent(n).replace(/'/g,'%27').replace(/\\/g,'%5C'); }
 function tfSSState(){
-  var t=tfS(); t.ss=t.ss||{tab:'find',sort:'ret'}; t.follows=t.follows||[];
-  /* 구버전 공개 상태 마이그레이션 — sharedSnap 없이 shared=true 인 저장분 (CODEX-REG-002) */
-  if(t.shared&&!t.sharedSnap&&t.strat&&t.strat.length){
+  var t=tfS(); t.ss=t.ss||{tab:'find',sort:'ret',asset:'all'}; t.follows=t.follows||[];
+  if(t.shared&&!t.sharedSnap&&t.strat&&t.strat.length){ /* 구버전 마이그레이션 */
     var s0=t.strat.find(function(x){return x.name===t.sharedName;})||t.strat[0];
     t.sharedName=s0.name;
-    t.sharedSnap={name:s0.name,asset:s0.name.replace(' 위임 전략',''),score:s0.score,ret:s0.ret,mdd:s0.mdd,n:s0.n,winRate:0,p:null};
+    t.sharedSnap={name:s0.name,asset:s0.name.replace(' 위임 전략',''),score:s0.score,ret:s0.ret,mdd:s0.mdd,n:s0.n,winRate:0,p:null,at:new Date().toISOString().slice(0,10)};
+  }
+  /* srcAt 없는 구버전 스냅샷 백필 — 유일하게 특정되는 경우에만 (codex FINAL F02) */
+  if(t.sharedSnap&&t.sharedSnap.srcAt==null&&t.strat&&t.strat.length){
+    var cand=t.strat.filter(function(x){ return x.at!=null&&x.name===t.sharedSnap.name&&x.score===t.sharedSnap.score&&Math.abs((x.ret||0)-(t.sharedSnap.ret||0))<1e-9; });
+    if(cand.length===1) t.sharedSnap.srcAt=cand[0].at;
   }
   return t;
 }
-/* 시드 + full 백테스트 결과 (전부 실계산: eq 곡선/승률/거래 수 포함) */
 function tfSSRows(){
-  if(!TF_SS_CACHE){
-    TF_SS_CACHE=tfRankSeeds().map(function(s){ var r=runBacktest(s.p); return {nick:s.nick,asset:s.asset,p:s.p,fw:s.fw,score:s.score,r:r}; });
-  }
-  var t=tfSSState(); var rows=TF_SS_CACHE.slice();
-  /* 공개 카드는 공개 시점 스냅샷만 사용 — 전역 현재 작업(t.cur) 혼입 금지 (CODEX-POST P1-007/008/009) */
+  if(!TF_SS_CACHE) TF_SS_CACHE=tfRankSeeds().map(function(s){ var r=runBacktest(s.p); return {nick:s.nick,asset:s.asset,p:s.p,fw:s.fw,score:s.score,r:r}; });
+  var t=tfSSState(), rows=TF_SS_CACHE.slice();
   if(t.shared&&t.sharedSnap){
     var sn=t.sharedSnap;
-    rows.push({nick:(S.user&&S.user.name)||'나',asset:sn.asset,p:sn.p,fw:t.followers||0,score:sn.score,me:true,
+    rows.push({nick:(S.user&&S.user.name)||'나',title:sn.name,desc:sn.desc,asset:sn.asset,p:sn.p,fw:t.followers||0,score:sn.score,me:true,
       r:sn.p?runBacktest(sn.p):{ret:sn.ret,mdd:sn.mdd,n:sn.n,winRate:sn.winRate||0,eq:null,trades:[],byYear:{},pf:0,avgHold:0,lossCount:0}});
   }
   return rows;
 }
-function tfSSFind(nick){ var rows=tfSSRows(); for(var i=0;i<rows.length;i++) if(rows[i].nick===nick) return rows[i]; return null; }
-/* 닉 파생 결정적 아바타 (실사진 없음 — 가짜 프로필 이미지 금지) */
-function tfSSAv(nick,sz){
-  var h=0; for(var i=0;i<nick.length;i++) h=(h*31+nick.charCodeAt(i))>>>0;
-  return '<span class="tfss-av num" aria-hidden="true" style="width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*0.4)+'px;background:hsl('+(h%360)+',26%,36%);color:#f4f5f7">'+gEsc(nick.slice(0,1))+'</span>';
-}
-/* 실계산 에쿼티 스파크라인 */
-function tfSSSpark(eq,w,h){
-  if(!eq||eq.length<2) return '';
-  var min=1e18,max=-1e18,i0=eq[0].i,i1=eq[eq.length-1].i;
-  eq.forEach(function(e){ if(e.v<min)min=e.v; if(e.v>max)max=e.v; });
-  if(max-min<1e-9) max=min+1e-9;
-  var step=Math.max(1,Math.floor(eq.length/60)), pts=[];
-  for(var k=0;k<eq.length;k+=step){ var e=eq[k];
-    pts.push(((e.i-i0)/Math.max(1,i1-i0)*w).toFixed(1)+','+(h-2-(e.v-min)/(max-min)*(h-4)).toFixed(1)); }
-  var e2=eq[eq.length-1];
-  pts.push((w).toFixed(1)+','+(h-2-(e2.v-min)/(max-min)*(h-4)).toFixed(1));
-  var up=e2.v>=1, col=up?'var(--ss-up)':'var(--ss-dn)', gid='sg'+Math.floor(Math.random()*1e6);
-  /* 면적 그라디언트 채움 + 시작 기준선 (AGY-POST P1-104, Secondary Bybit 카드 패턴) */
-  var baseY=(h-2-(1-min)/(max-min)*(h-4));
-  return '<svg class="tfss-spark" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="검증 구간 수익 곡선">'
-    +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+(up?'#26c99b':'#f6465d')+'" stop-opacity=".28"/><stop offset="1" stop-color="'+(up?'#26c99b':'#f6465d')+'" stop-opacity="0"/></linearGradient></defs>'
-    +(baseY>0&&baseY<h?'<line x1="0" y1="'+baseY.toFixed(1)+'" x2="'+w+'" y2="'+baseY.toFixed(1)+'" stroke="rgba(255,255,255,.12)" stroke-dasharray="2 3"/>':'')
-    +'<path fill="url(#'+gid+')" stroke="none" d="M'+pts.join(' L')+' L'+w+','+h+' L0,'+h+' Z"/>'
-    +'<polyline points="'+pts.join(' ')+'" style="stroke:'+col+'"/></svg>';
-}
-/* S1 카드 — 리듬/타이포/CTA: bitget-list-deep.json */
-function tfSSCard(s){
-  var r=s.r, up=r.ret>=0, ne=tfSSNe(s.nick);
-  return '<div class="tfss-card">'
-    +'<div class="hd">'+tfSSAv(s.nick,56)
-    +'<div class="id"><button type="button" class="nm" onclick="tfSSDetail(\''+ne+'\')">'+gEsc(s.nick)+(s.me?' (나)':'')+'</button>'
-    +'<div class="sb num">팔로워 '+Number(s.fw||0).toLocaleString()+'</div>'
-    +'<span class="tfss-tag">'+gEsc(s.asset)+'</span></div></div>'
-    +'<div class="met"><div><div class="lb">검증 수익</div>'
-    +'<div class="v num '+(up?'up':'dn')+'">'+(up?'+':'')+r.ret.toFixed(1)+'%</div>'
-    +'<div class="sc num">TETH '+s.score+'점</div></div>'
-    +(r.eq?tfSSSpark(r.eq,96,40):(s.me?'<span class="tfss-spark-empty" aria-hidden="true">기록 없음</span>':''))+'</div>'
-    +'<div class="tfss-mini num">'
-    +'<div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div>'
-    +'<div><small>승률</small><b>'+(r.winRate||0).toFixed(0)+'%</b></div>'
-    +'<div><small>거래</small><b>'+r.n+'회</b></div></div>'
-    +'<div class="ctaw">'+(s.me
-      ?'<span class="tfss-mebdg">내가 공유한 전략</span>'
-      :'<button type="button" class="tfss-cta" onclick="tfSSCopy(\''+ne+'\')">따라하기</button>')+'</div>'
-    +'</div>';
-}
-function tfSSSort(rows,key,dir){
-  var f={ret:function(a,b){return b.r.ret-a.r.ret;},score:function(a,b){return b.score-a.score;},mdd:function(a,b){return b.r.mdd-a.r.mdd;},fw:function(a,b){return (b.fw||0)-(a.fw||0);}}[key]||null;
-  if(f){ rows.sort(f); if(dir==='asc') rows.reverse(); }
-  return rows;
-}
-function tfSSGridHtml(){
-  var t=tfSSState(), rows=tfSSRows();
-  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0; }); }
-  tfSSSort(rows,t.ss.sort,t.ss.dir);
-  if(!rows.length) return '<div class="tfss-empty">조건에 맞는 전략이 없어요<br><button type="button" class="tfss-cta" style="width:auto;padding:0 18px;margin-top:12px" onclick="tfSSSearchClear()">검색 초기화</button></div>';
-  return rows.map(tfSSCard).join('');
-}
-function tfSSGridApply(){ var g=$('tfss-grid'); if(g) g.innerHTML=tfSSGridHtml(); var so=$('tfss-sorts'); if(so) so.innerHTML=tfSSSortsHtml(); }
-function tfSSSortsHtml(){
-  var t=tfSSState();
-  return [['ret','검증 수익'],['score','TETH 점수'],['mdd','최대 낙폭'],['fw','팔로워']].map(function(o){
-    var on=t.ss.sort===o[0];
-    var ar=on?(t.ss.dir==='asc'?'▲':'▼'):'↕'; /* 방향 피드백 (AGY-POST P2-117) */
-    return '<button type="button" class="so num'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSSSetSort(\''+o[0]+'\')">'+o[1]+' <span class="ar" aria-hidden="true">'+ar+'</span></button>';
-  }).join('');
-}
-function tfSSSetSort(k){
-  var t=tfSSState();
-  if(t.ss.sort===k){ t.ss.dir=t.ss.dir==='asc'?'desc':'asc'; } /* 같은 키 재클릭 = 방향 전환 */
-  else { t.ss.sort=k; t.ss.dir='desc'; }
-  tfSave(); tfSSGridApply();
-}
-function tfSSSearch(v){ TF_SS_Q=v.trim(); tfSSGridApply(); }
-function tfSSSearchClear(){ TF_SS_Q=''; var i=$('tfss-q'); if(i) i.value=''; tfSSGridApply(); }
-function tfSSFindTab(){
-  return '<div class="tfss-secrow"><span class="tfss-sec">리더보드</span>'
-    +'<label class="tfss-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
-    +'<input id="tfss-q" type="search" placeholder="전략 검색" value="'+gEsc(TF_SS_Q||'')+'" aria-label="전략 검색" oninput="tfSSSearch(this.value)"></label></div>'
-    +'<div class="tfss-sorts" id="tfss-sorts">'+tfSSSortsHtml()+'</div>'
-    +'<div class="tfss-grid" id="tfss-grid">'+tfSSGridHtml()+'</div>';
-}
-function tfShareHub(tab){
-  var t=tfSSState(); tab=tab||t.ss.tab||'find'; t.ss.tab=tab; tfSave();
-  if(G.cur) TF_SS_PREV=G.cur.id; /* 진입 전 대화 보존 (CODEX-POST P1-014) */
-  G.cur=null; G.mode='tfss'; G.tabs=[]; G.activeTab=null;
-  document.body.classList.remove('kb-open'); gComposer(false);
-  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead('전략 공유','',null);
-  var nav=[['find','전략 찾기'],['follow','따라가는 중'],['mine','내 전략']];
-  var body= tab==='follow'?tfSSFollowTab(): tab==='mine'?tfSSMineTab(): tfSSFindTab();
-  gContent('<div class="tf-page tfss">'
-    +'<h2 class="tfss-h1">전략 공유</h2>'
-    +'<div class="tfss-sub">검증을 통과한 전략을 찾아 따라하고, 내 전략을 공유해 보상을 받아요</div>'
-    +'<div class="tfss-nav" role="tablist">'
-    +nav.map(function(n){ return '<button type="button" role="tab" aria-selected="'+(tab===n[0])+'" class="nv'+(tab===n[0]?' on':'')+'" onclick="tfShareHub(\''+n[0]+'\')">'+n[1]+'</button>'; }).join('')
-    +'</div>'+body+'</div>');
-  var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
-}
-/* ── S2 전략 상세 — OKX 상세 문법 다크 매핑 (okx-detail-deep.json). 메인탭 2개는 실데이터 있는 층만 채택(개요/체결 이력, 매핑 기록) ── */
-function tfSSChart(eq,w,h){
-  if(!eq||eq.length<2) return '<div class="tfss-empty">차트 데이터가 없어요</div>';
-  var min=1e18,max=-1e18,i0=eq[0].i,i1=eq[eq.length-1].i;
-  eq.forEach(function(e){ if(e.v<min)min=e.v; if(e.v>max)max=e.v; });
-  if(max-min<1e-9) max=min+1e-9;
-  var padL=56,padB=26,cw=w-padL-10,chh=h-30-padB; /* 좌 56, 상하 여백 확대 (AGY-POST P1-110) */
-  var X=function(i){ return padL+(i-i0)/Math.max(1,i1-i0)*cw; }, Y=function(v){ return 20+chh-(v-min)/(max-min)*chh; };
-  var step=Math.max(1,Math.floor(eq.length/160)),pts=[];
-  for(var k=0;k<eq.length;k+=step) pts.push(X(eq[k].i).toFixed(1)+','+Y(eq[k].v).toFixed(1));
-  pts.push(X(i1).toFixed(1)+','+Y(eq[eq.length-1].v).toFixed(1));
-  var gl='',ticks=4;
-  for(var g2=0;g2<=ticks;g2++){ var v=min+(max-min)*g2/ticks, y=Y(v).toFixed(1);
-    gl+='<line x1="'+padL+'" y1="'+y+'" x2="'+(w-6)+'" y2="'+y+'"/><text x="4" y="'+(+y+4)+'">'+((v-1)*100).toFixed(0)+'%</text>'; }
-  var d0=idxToDate(i0),d1=idxToDate(i1);
-  gl+='<text x="'+padL+'" y="'+(h-4)+'">'+(d0.getFullYear())+'.'+(d0.getMonth()+1)+'</text><text x="'+(w-52)+'" y="'+(h-4)+'">'+(d1.getFullYear())+'.'+(d1.getMonth()+1)+'</text>';
-  var up=eq[eq.length-1].v>=1;
-  return '<svg class="tfss-chart" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="검증 구간 누적 수익 곡선">'+gl+'<polyline points="'+pts.join(' ')+'" style="stroke:'+(up?'var(--ss-up)':'var(--ss-dn)')+'"/></svg>';
-}
-function tfSSYearBars(byYear,w,h){
-  var ys=Object.keys(byYear).sort(); if(!ys.length) return '';
-  var mx=0; ys.forEach(function(y){ mx=Math.max(mx,Math.abs(byYear[y].pnl)); }); if(mx<=0) mx=1;
-  var bw=Math.min(64,(w-20)/ys.length-18), mid=h/2-6, out='';
-  ys.forEach(function(y,i){
-    var v=byYear[y].pnl, bh=Math.max(2,Math.abs(v)/mx*(mid-30)), x=16+i*((w-32)/ys.length)+((w-32)/ys.length-bw)/2; /* 라벨 클리핑 방지 여백 (AGY-POST P2-118) */
-    out+='<rect class="'+(v>=0?'up':'dn')+'" x="'+x.toFixed(1)+'" y="'+(v>=0?mid-bh:mid).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="2"/>'
-      +'<text x="'+(x+bw/2).toFixed(1)+'" y="'+(h-6)+'" text-anchor="middle">'+y+'</text>'
-      +'<text x="'+(x+bw/2).toFixed(1)+'" y="'+(v>=0?mid-bh-5:mid+bh+13).toFixed(1)+'" text-anchor="middle">'+(v>=0?'+':'')+(v*100).toFixed(0)+'%</text>';
-  });
-  return '<svg class="tfss-chart tfss-bars" viewBox="0 0 '+w+' '+h+'" style="height:'+h+'px" role="img" aria-label="연도별 검증 손익"><line x1="10" y1="'+mid+'" x2="'+(w-10)+'" y2="'+mid+'"/>'+out+'</svg>';
+/* 라우트 식별자: 내 공개 전략은 예약어 'me' — 시드 닉과 충돌 불가 (codex F02) */
+function tfSS3Rid(s){ return s.me?'me':tfSSNe(s.nick); }
+function tfSSFind(nick){
+  var rows=tfSSRows();
+  if(nick==='me'){
+    for(var k=0;k<rows.length;k++) if(rows[k].me) return rows[k];
+    /* 비공개 상태에서도 소유자는 자기 스냅샷 상세를 볼 수 있다 (codex N01) */
+    var t0=tfS(), sn0=t0.sharedSnap;
+    if(sn0) return {nick:(S.user&&S.user.name)||'나',title:sn0.name,desc:sn0.desc,asset:sn0.asset,p:sn0.p,fw:t0.followers||0,score:sn0.score,me:true,
+      r:sn0.p?runBacktest(sn0.p):{ret:sn0.ret,mdd:sn0.mdd,n:sn0.n,winRate:sn0.winRate||0,eq:null,trades:[],byYear:{},pf:0,avgHold:0,lossCount:0}};
+    return null;
+  }
+  for(var i=0;i<rows.length;i++) if(rows[i].nick===nick&&!rows[i].me) return rows[i];
+  return null;
 }
 function tfSSPeriodLabel(p){
-  if(!p||p.endI==null||p.startI==null) return '검증 구간'; /* 공개 스냅샷에 p가 없을 때 (CODEX-POST P1-009) */
+  if(!p||p.endI==null||p.startI==null) return '검증 구간';
   var span=p.endI-p.startI;
   return span>=(PRICE.length-62)?'전체 기간':span>700?'최근 2년':'최근 1년';
 }
-function tfSSDetail(ne,tab){
-  var nick=decodeURIComponent(ne); var s=tfSSFind(nick);
-  if(!s){ toast('전략을 찾을 수 없어요'); return; }
-  tab=tab||'overview';
+/* 에쿼티 곡선 — 기준선/글로우/면적/날짜/최고치 태그 (agy-visual-spec §9A) */
+function tfSS3Eq(eq,w,h,o){
+  o=o||{};
+  if(!eq||eq.length<2) return '<div class="ss3-empty" style="padding:24px 0">검증 곡선이 없어요</div>';
+  var min=1e18,max=-1e18,i0=eq[0].i,i1=eq[eq.length-1].i;
+  eq.forEach(function(e){ if(e.v<min)min=e.v; if(e.v>max)max=e.v; });
+  if(max-min<1e-9) max=min+1e-9;
+  var padB=o.dates?18:4, chh=h-8-padB;
+  var X=function(i){ return (i-i0)/Math.max(1,i1-i0)*w; }, Y=function(v){ return 6+chh-(v-min)/(max-min)*chh; };
+  var step=Math.max(1,Math.floor(eq.length/120)), pts=[];
+  for(var k=0;k<eq.length;k+=step) pts.push(X(eq[k].i).toFixed(1)+','+Y(eq[k].v).toFixed(1));
+  pts.push(w.toFixed(1)+','+Y(eq[eq.length-1].v).toFixed(1));
+  var up=eq[eq.length-1].v>=1, gid='eg'+Math.floor(Math.random()*1e7);
+  var baseY=Y(Math.min(Math.max(1,min),max));
+  var d0=idxToDate(i0),d1=idxToDate(i1);
+  var fd=function(d){ return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0'); };
+  var maxPct=((max-1)*100);
+  return '<svg class="ss3-eq" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="검증 구간 누적 수익 곡선">'
+    +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+(up?'#2fb98a':'#ee766a')+'" stop-opacity=".15"/><stop offset="1" stop-color="'+(up?'#2fb98a':'#ee766a')+'" stop-opacity="0"/></linearGradient></defs>'
+    +'<line class="base" x1="0" y1="'+baseY.toFixed(1)+'" x2="'+w+'" y2="'+baseY.toFixed(1)+'"/>'
+    +'<path fill="url(#'+gid+')" stroke="none" d="M'+pts.join(' L')+' L'+w+','+(h-padB)+' L0,'+(h-padB)+' Z"/>'
+    +'<polyline class="ln '+(up?'up':'dn')+'" points="'+pts.join(' ')+'"/>'
+    +(o.tag?'<text class="tag'+(up?'':' dn')+'" x="'+(w-6)+'" y="14" text-anchor="end">'+(maxPct>=0?'+':'')+maxPct.toFixed(1)+'%</text>':'')
+    +(o.dates?'<text x="2" y="'+(h-4)+'">'+fd(d0)+'</text><text x="'+(w-2)+'" y="'+(h-4)+'" text-anchor="end">'+fd(d1)+'</text>':'')
+    +'</svg>';
+}
+/* 상세 대형 차트 (Y축 4단계 그리드) */
+function tfSS3Chart(eq,w,h){
+  if(!eq||eq.length<2) return '<div class="ss3-empty">차트 데이터가 없어요</div>';
+  var min=1e18,max=-1e18,i0=eq[0].i,i1=eq[eq.length-1].i;
+  eq.forEach(function(e){ if(e.v<min)min=e.v; if(e.v>max)max=e.v; });
+  if(max-min<1e-9) max=min+1e-9;
+  var padL=56,padB=26,cw=w-padL-10,chh=h-26-padB;
+  var X=function(i){ return padL+(i-i0)/Math.max(1,i1-i0)*cw; }, Y=function(v){ return 18+chh-(v-min)/(max-min)*chh; };
+  var step=Math.max(1,Math.floor(eq.length/180)), pts=[];
+  for(var k=0;k<eq.length;k+=step) pts.push(X(eq[k].i).toFixed(1)+','+Y(eq[k].v).toFixed(1));
+  pts.push(X(i1).toFixed(1)+','+Y(eq[eq.length-1].v).toFixed(1));
+  var gl='';
+  for(var g2=0;g2<=4;g2++){ var v=min+(max-min)*g2/4, y=Y(v).toFixed(1);
+    gl+='<line x1="'+padL+'" y1="'+y+'" x2="'+(w-10)+'" y2="'+y+'"/><text x="4" y="'+(+y+4)+'">'+((v-1)*100).toFixed(0)+'%</text>'; }
+  var d0=idxToDate(i0),d1=idxToDate(i1);
+  gl+='<text x="'+padL+'" y="'+(h-6)+'">'+d0.getFullYear()+'.'+(d0.getMonth()+1)+'</text><text x="'+(w-12)+'" y="'+(h-6)+'" text-anchor="end">'+d1.getFullYear()+'.'+(d1.getMonth()+1)+'</text>';
+  var up=eq[eq.length-1].v>=1;
+  return '<svg class="ss3-chart" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="누적 수익 곡선">'+gl+'<polyline class="ln '+(up?'up':'dn')+'" points="'+pts.join(' ')+'"/></svg>';
+}
+function tfSS3YearBars(byYear,w,h){
+  var ys=Object.keys(byYear).sort(); if(!ys.length) return '';
+  var mx=0; ys.forEach(function(y){ mx=Math.max(mx,Math.abs(byYear[y].pnl)); }); if(mx<=0) mx=1;
+  var bw=48, mid=h/2-6, out='';
+  ys.forEach(function(y,i){
+    var v=byYear[y].pnl, bh=Math.max(2,Math.abs(v)/mx*(mid-32)), x=24+i*((w-48)/ys.length)+((w-48)/ys.length-bw)/2;
+    out+='<rect class="'+(v>=0?'up':'dn')+'" x="'+x.toFixed(1)+'" y="'+(v>=0?mid-bh:mid).toFixed(1)+'" width="'+bw+'" height="'+bh.toFixed(1)+'" rx="4"/>'
+      +'<text x="'+(x+bw/2).toFixed(1)+'" y="'+(h-8)+'" text-anchor="middle" style="font-weight:400">'+y+'</text>'
+      +'<text class="'+(v>=0?'up':'dn')+'" fill="'+(v>=0?'#2fb98a':'#ee766a')+'" x="'+(x+bw/2).toFixed(1)+'" y="'+(v>=0?mid-bh-8:mid+bh+16).toFixed(1)+'" text-anchor="middle">'+(v>=0?'+':'')+(v*100).toFixed(0)+'%</text>';
+  });
+  return '<svg class="ss3-chart ss3-bars" viewBox="0 0 '+w+' 200" style="height:200px" role="img" aria-label="연도별 검증 손익"><line x1="12" y1="'+mid+'" x2="'+(w-12)+'" y2="'+mid+'"/>'+out+'</svg>';
+}
+/* 풀폭 전략 카드 — 캐논 .tfbk-card 문법 (agy-visual-spec §7) */
+function tfSS3Card(s){
+  var r=s.r, up=r.ret>=0, ne=tfSS3Rid(s);
+  var title=s.me?(s.title||'내 전략'):s.nick;
+  return '<div class="tfbk-card"><div class="cin">'
+    +'<div class="lft">'
+    +'<div class="nmrow"><button type="button" class="nm" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(title)+'</button>'
+    +'<span class="bdg">'+gEsc(s.asset)+'</span>'
+    +(s.me?'<span class="ss3-by">by '+gEsc(s.nick)+' (나)</span>':'')
+    +'</div>'
+    +'<div class="as">'+gEsc(s.desc||('검증 완료 전략, 거래 비용 0.2% 반영 백테스트'))+'</div>'
+    +'<div class="rtrow num">'
+    +'<span class="ctc"><b>'+s.score+'점</b><small>TETH 점수</small></span>'
+    +'<span class="ctc"><b>'+r.mdd.toFixed(1)+'%</b><small>최대 낙폭</small></span>'
+    +'<span class="ctc"><b>'+(r.winRate||0).toFixed(0)+'%</b><small>승률 ('+r.n+'회)</small></span>'
+    +'<span class="ctc"><b>'+Number(s.fw||0).toLocaleString()+'명</b><small>팔로워</small></span>'
+    +'</div>'
+    +'<div class="pr"><b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">검증 수익 '+(up?'+':'')+r.ret.toFixed(1)+'%</b><small>누적 백테스트 성과</small></div>'
+    +'<div class="bt">'+(s.me
+      ?'<button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>'
+      :'<button class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">따라하기</button><button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>')
+    +'</div></div>'
+    +'<div class="lgo">'+tfSS3Eq(r.eq,528,260,{dates:true,tag:true})+'</div>'
+    +'</div></div>';
+}
+/* 허브: 캐논 히어로 + 필 컨트롤 + 탭 바디 */
+function tfShareHub(tab){
+  tfSS3DlgClose(true); /* 화면 전환 시 떠 있는 다이얼로그 정리 (codex F09) */
+  var t=tfSSState(); tab=tab||t.ss.tab||'find'; t.ss.tab=tab; tfSave();
   if(G.cur) TF_SS_PREV=G.cur.id;
-  G.cur=null; G.mode='tfssd'; G.tabs=[]; G.activeTab=null;
+  /* 허브는 해시 주소가 없다 — 상세/퍼널 해시가 남아 새로고침·뒤로가기가 꼬이지 않게 정리 */
+  try{ if(location.hash) history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  TF_ONSHARE=false; TF_ONSTRAT=false;
+  G.cur=null; G.mode='tfss3'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead(nick,'',null);
-  var r=s.r, up=r.ret>=0;
-  /* 밴드는 콘텐츠 페인 풀블리드 (OKX 배너 212h — 앱 셸 §22 기준 적용) (AGY-POST P0-101) */
-  var band='<div class="tfss-dband"><div class="dbin">'
-    +'<div class="tfss-bc"><button type="button" onclick="tfShareHub(\'find\')">전략 공유</button> / <span>'+gEsc(nick)+'</span></div>'
-    +'<div class="tfss-dhead">'+tfSSAv(nick,112)
-    +'<div class="hcol"><h2 class="nm2">'+gEsc(nick)+(s.me?' (나)':'')+'</h2>'
-    +'<div class="frow num"><span><b>'+Number(s.fw||0).toLocaleString()+'</b>팔로워</span><span><b>'+r.n+'회</b>검증 거래</span></div>'
-    +'<div class="frow"><span class="tfss-tag" style="margin-top:0">'+gEsc(s.asset)+'</span><span class="tfss-tag" style="margin-top:0">'+tfSSPeriodLabel(s.p)+'</span></div></div>'
-    +'<div class="ha2">'+(s.me?'<span class="tfss-mebdg" style="width:auto;padding:0 18px">내가 공유한 전략</span>':'<button type="button" class="tfss-pill" onclick="tfSSCopy(\''+ne+'\')">따라하기</button>')+'</div>'
-    +'</div></div></div>';
-  var head='<div class="tfss-mtabs" role="tablist">'
-    +[['overview','개요'],['trades','체결 이력']].map(function(m){ return '<button type="button" role="tab" aria-selected="'+(tab===m[0])+'" class="mt'+(tab===m[0]?' on':'')+'" onclick="tfSSDetail(\''+ne+'\',\''+m[0]+'\')">'+m[1]+'</button>'; }).join('')
+  gChead('전략 공유','',null);
+  var fN=t.follows.filter(function(f){return !f.archived;}).length;
+  var nav=[['find','전략 찾기'],['follow','따라가는 중'+(fN?' '+fN:'')],['mine','내 전략']];
+  var controls='<div class="tfbk-filters">'
+    +nav.map(function(n){ return '<button type="button" class="fp'+(tab===n[0]?' on':'')+'" aria-pressed="'+(tab===n[0])+'" onclick="tfShareHub(\''+n[0]+'\')">'+n[1]+'</button>'; }).join('')
+    +(tab==='find'
+      ?'<span class="ss3-div"></span>'
+      +tfBkDrop('ss3-m-sort',[['ret','검증 수익순'],['score','TETH 점수순'],['mdd','최대 낙폭 낮은순'],['winrate','승률순'],['fw','팔로워순']].map(function(it){ return t.ss.dir==='asc'&&it[0]===t.ss.sort?[it[0],it[1]+' (역순)']:it; }),t.ss.sort,'tfSS3SortPick') /* 방향 표시 (codex N02) */
+      +tfBkDrop('ss3-m-asset',[['all','전체 자산군'],['비트코인','비트코인'],['이더리움','이더리움'],['나스닥','나스닥']],t.ss.asset,'tfSS3AssetPick')
+      +'<label class="ss3-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
+      +'<input id="ss3-q" type="search" placeholder="전략 또는 작성자 검색" value="'+gEsc(TF_SS_Q||'')+'" aria-label="전략 검색" oninput="tfSS3Search(this.value)"></label>'
+      :'')
     +'</div>';
-  var body='';
-  if(tab==='overview'){
-    var wl=r.n?Math.round(r.winRate):0;
-    body='<div class="tfss-dgrid">'
-      +'<div class="tfss-pcard num"><div class="ph"><b>검증 성과</b><span style="font-size:12.5px;color:var(--ss-t3)">'+tfSSPeriodLabel(s.p)+'</span></div>'
-      +'<div class="tfss-kv"><small>검증 수익</small><b style="color:var(--ss-'+(up?'up':'dn')+')">'+(up?'+':'')+r.ret.toFixed(1)+'%</b></div>'
-      +'<div class="tfss-kv"><small>TETH 점수</small><b>'+s.score+'점</b></div>'
-      +'<div class="tfss-kv"><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div>'
-      +'<div class="tfss-kv"><small>손익비</small><b>'+(r.pf||0).toFixed(2)+'</b></div>'
-      +'<div class="tfss-kv"><small>평균 보유</small><b>'+(r.avgHold||0).toFixed(1)+'일</b></div>'
-      +'<div class="tfss-kv"><small>거래 수</small><b>'+r.n+'회</b></div>'
-      +'<div class="tfss-wlrow"><span class="w">이익 '+Math.round(r.n*(r.winRate||0)/100)+'</span><span class="l">손실 '+(r.lossCount||0)+'</span></div>'
-      +'<div class="tfss-wlbar" role="img" aria-label="승률 '+wl+'%"><i style="width:'+wl+'%"></i></div>'
-      +'<div class="tfss-kv" style="padding-top:12px"><small>승률</small><b>'+wl+'%</b></div>'
-      +'</div>'
-      +'<div><div class="tfss-ccard"><div class="ch"><b>누적 수익 곡선</b><span style="font-size:12.5px;color:var(--ss-t3)">검증 구간 기준</span></div>'+tfSSChart(r.eq,780,300)+'</div>'
-      +'<div class="tfss-ccard"><div class="ch"><b>연도별 손익</b></div>'+tfSSYearBars(r.byYear||{},780,180)+'</div></div>'
-      +'</div>';
-  } else {
-    var tr=(r.trades||[]).slice(-30).reverse();
-    body='<div class="tfss-ccard"><div class="ch"><b>체결 이력</b><span style="font-size:12.5px;color:var(--ss-t3)">최근 '+tr.length+'건, 검증 시뮬레이션 체결</span></div>'
-      +'<div style="overflow-x:auto"><table class="tfss-trades num"><thead><tr><th>진입</th><th>청산</th><th>보유</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익</th></tr></thead><tbody>'
-      +(tr.length?tr.map(function(x){
-        var d1=idxToDate(x.entry),d2=idxToDate(x.exit);
-        var f=function(d){return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');};
-        var kind={sl:'손절',tp:'익절',time:'기간 청산'}[x.kind]||x.kind;
-        var p1=PRICE[x.entry],p2=PRICE[x.exit];
-        return '<tr><td>'+f(d1)+'</td><td>'+f(d2)+'</td><td>'+(x.exit-x.entry)+'일</td><td>'+kind+'</td>'
-          +'<td style="text-align:right">'+(p1!=null?Math.round(p1).toLocaleString():'-')+'</td>'
-          +'<td style="text-align:right">'+(p2!=null?Math.round(p2).toLocaleString():'-')+'</td>'
-          +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+(x.pnl>=0?'+':'')+(x.pnl*100).toFixed(2)+'%</td></tr>';
-      }).join(''):'<tr><td colspan="7" style="text-align:center;padding:32px">체결 내역이 없어요</td></tr>')
-      +'</tbody></table></div></div>';
-  }
-  gContent(band+'<div class="tf-page tfss" style="padding-top:0">'+head+body+'</div>');
+  var body= tab==='follow'?tfSS3FollowTab(): tab==='mine'?tfSS3MineTab(): '<div id="ss3-grid">'+tfSS3GridHtml()+'</div>';
+  gContent('<div class="tf-page tfbk ss3">'
+    +'<div class="tfbk-hero"><div class="planet" aria-hidden="true"></div>'
+    +'<h2>검증되면, 복제됩니다</h2>'
+    +'<div class="cnt" id="tfbk-cnt"></div>'
+    +'<div class="cs">모의 검증으로 계산된 거래</div>'
+    +'<div class="cs2">과거 검증 성과가 미래 수익을 보장하지 않으며, 모든 검증은 수수료와 슬리피지를 반영해요</div></div>'
+    +controls+body
+    +'</div>');
+  tfBkDropInit();
+  tfBkReel(1247306);
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
 }
-/* ── S3 따라하기 설정 — 게이트/모달 계약 실측 + TETH 실파라미터(예산/손절/익절)만 (CODEX-P0-003/004, P1-010/023) ── */
-var TF_SS_TOKEN=0;
-/* ready(계약서 작성 완료) 포함 — 작성 상태 무경고 파괴 방지 (CODEX-POST P1-003) */
-function tfSSBusy(){ var t=tfS(); return !!(t.cur||(t.stage&&['ready','verify','report','connect','pay'].indexOf(t.stage)>=0)); }
-/* 중앙 다이얼로그 — OKX 필터 모달 실측 계약(중앙, 스크롤 잠금, Esc, 포커스 복귀) (AGY-POST P0-102) */
-var TF_SS_MODAL_TRIG=null;
-function tfSSModalEsc(e){ if(e.key==='Escape') tfSSModalClose(); }
-function tfSSModal(title,html){
-  tfSSModalClose(true);
-  TF_SS_MODAL_TRIG=document.activeElement;
-  var w=document.createElement('div'); w.className='tfss-modalw'; w.id='tfss-modalw';
-  w.innerHTML='<div class="tfss-scrim"></div>'
-    +'<div class="tfss-modal" role="dialog" aria-modal="true" aria-labelledby="tfss-modal-t">'
-    +'<div class="mh"><b id="tfss-modal-t">'+gEsc(title)+'</b><button type="button" class="mx" aria-label="닫기" onclick="tfSSModalClose()">✕</button></div>'
-    +html+'</div>';
-  w.querySelector('.tfss-scrim').onclick=function(){ tfSSModalClose(); };
+function tfSS3GridHtml(){
+  var t=tfSSState(), rows=tfSSRows();
+  if(t.ss.asset&&t.ss.asset!=='all') rows=rows.filter(function(s){ return s.asset===t.ss.asset; });
+  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||(s.title||'').toLowerCase().indexOf(q)>=0; }); }
+  var f={ret:function(a,b){return b.r.ret-a.r.ret;},score:function(a,b){return b.score-a.score;},mdd:function(a,b){return b.r.mdd-a.r.mdd;},winrate:function(a,b){return (b.r.winRate||0)-(a.r.winRate||0);},fw:function(a,b){return (b.fw||0)-(a.fw||0);}}[t.ss.sort];
+  if(f) rows.sort(f);
+  if(t.ss.dir==='asc') rows.reverse(); /* 같은 정렬 키 재선택 = 방향 전환 (codex F17) */
+  if(!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없어요<br><button type="button" class="obtn" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
+  return rows.map(tfSS3Card).join('');
+}
+function tfSS3Apply(){ var g=$('ss3-grid'); if(g) g.innerHTML=tfSS3GridHtml(); }
+function tfSS3SortPick(v){
+  var t=tfSSState();
+  if(t.ss.sort===v){ t.ss.dir=t.ss.dir==='asc'?'desc':'asc'; } /* 재선택 = 방향 전환 (codex F17) */
+  else { t.ss.sort=v; t.ss.dir='desc'; }
+  tfSave(); tfShareHub('find');
+}
+function tfSS3AssetPick(v){ var t=tfSSState(); t.ss.asset=v; tfSave(); tfShareHub('find'); }
+function tfSS3Search(v){ TF_SS_Q=v.trim(); tfSS3Apply(); }
+function tfSS3Reset(){ TF_SS_Q=''; var t=tfSSState(); t.ss.asset='all'; tfSave(); tfShareHub('find'); }
+/* ── 상세: 딥링크 라우트 #/share/s/<ne>[/<pd>] ── */
+var TF_ONSHARE=false;
+function tfSS3Go(ne,pd){
+  var r='#/share/s/'+ne+(pd&&pd!=='all'?'/'+pd:'');
+  var h=location.hash;
+  /* 같은 상세 안 기간 전환은 히스토리를 쌓지 않는다 — 뒤로가기 한 번이면 허브 (참조: 기간 칩 in-place) */
+  if(TF_ONSHARE&&(h==='#/share/s/'+ne||h.indexOf('#/share/s/'+ne+'/')===0)){
+    try{ history.replaceState(null,'',location.pathname+location.search+r); }catch(e){}
+    tfSS3DetailRender._keep=true;
+    tfSS3Route(r);
+    return;
+  }
+  tfNav(r);
+}
+function tfSS3Route(h){
+  tfSS3DlgClose(true); /* 라우트 이동 시 떠 있는 다이얼로그 정리 (codex F09) */
+  var m=h.match(/^#\/share\/s\/([^/]+)(?:\/(1y|2y))?$/); /* 끝 경계 엄격 (codex F14) */
+  if(!m){
+    if(h.indexOf('#/share/s/')===0){ TF_ONSHARE=false; tfShareHub('find'); return; } /* 깨진 상세 URL은 허브로 */
+    if(TF_ONSHARE){ TF_ONSHARE=false; tfShareHub(tfSSState().ss.tab||'find'); }
+    return;
+  }
+  tfSS3DetailRender(m[1],m[2]||'all');
+}
+var TF_SS3_PDC={};
+function tfSS3PdCalc(s,pd){
+  if(pd==='all'||!s.p) return s.r;
+  /* 캐시 키에 파라미터 포함 — 재공개 후 이전 결과 재사용 방지 (codex F03) */
+  var key=tfSS3Rid(s)+'|'+pd+'|'+[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI].join(',');
+  if(!TF_SS3_PDC[key]){
+    var days=pd==='1y'?365:730;
+    var p2={sl:s.p.sl,tp:s.p.tp,rsiTh:s.p.rsiTh,trendFilter:s.p.trendFilter,startI:Math.max(61,s.p.endI-days),endI:s.p.endI};
+    TF_SS3_PDC[key]=runBacktest(p2);
+  }
+  return TF_SS3_PDC[key];
+}
+function tfSS3DetailRender(ne,pd){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ TF_ONSHARE=false; tfShareHub('find'); return; } /* 비정규 인코딩 (codex F14) */
+  ne=tfSSNe(nick); /* URL 원문을 그대로 onclick 에 넣지 않는다 — 항상 재정규화 (codex F13) */
+  var s=tfSSFind(nick);
+  if(!s){
+    if(!window.TF_STATE_READY){ return; } /* 저장 복원 전에는 부재 판정 금지 — 복원 후 tfRoute 재진입이 다시 그린다 (codex F01) */
+    toast('전략을 찾을 수 없어요'); tfShareHub('find'); return;
+  }
+  pd=pd||'all';
+  /* 기간 전환(_keep): 스크롤 위치와 기간 선택 포커스를 재렌더 후 복원 (codex F16) */
+  var keep=!!tfSS3DetailRender._keep, st0=keep&&$('g-scroll')?$('g-scroll').scrollTop:0;
+  TF_ONSHARE=true;
+  if(G.cur) TF_SS_PREV=G.cur.id;
+  G.cur=null; G.mode='tfss3d'; G.tabs=[]; G.activeTab=null;
+  document.body.classList.remove('kb-open'); gComposer(false);
+  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
+  var title=s.me?(s.title||'내 전략'):s.nick;
+  gChead(title,'',null);
+  var r=tfSS3PdCalc(s,pd), up=r.ret>=0;
+  var pdl={all:'전체 기간','2y':'최근 2년','1y':'최근 1년'}[pd];
+  var wl=r.n?Math.round(r.winRate):0, wins=Math.round(r.n*(r.winRate||0)/100);
+  var pps=[['all','전체'],['2y','최근 2년'],['1y','최근 1년']].map(function(o){
+    return '<button type="button" class="p'+(pd===o[0]?' on':'')+'" aria-pressed="'+(pd===o[0])+'" onclick="tfSS3Go(\''+ne+'\',\''+o[0]+'\')">'+o[1]+'</button>'; }).join('');
+  var tr=(r.trades||[]).slice(-12).reverse();
+  var fdt=function(i){ var d=idxToDate(i); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); };
+  TF_RENDERING=true; document.body.classList.remove('tf-route'); /* 해시 정리 가드가 상세 자신의 #/share 해시를 지우지 않게 */
+  gContent('<div class="tf-page tfbk ss3">'
+    +'<div class="tfbk-bc"><span class="lk" onclick="tfShareHub(\'find\')">전략 공유</span> / <span>'+gEsc(title)+'</span></div>'
+    +'<div class="tfbk-hero" style="padding-top:56px;padding-bottom:8px">'
+    +'<div class="planet" aria-hidden="true"></div>'
+    +'<h2 class="ss3-dtitle">'+gEsc(title)+'<span class="bdg">'+gEsc(s.asset)+'</span></h2>'
+    +'<div class="ss3-dsub num">작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'<span class="dim">, '+pdl+' 검증, 거래 '+r.n+'회</span></div>'
+    +'<div class="ss3-dbig num '+(up?'up':'dn')+'">'+(up?'+':'')+r.ret.toFixed(1)+'%</div>'
+    +'<div class="ss3-dbigl">검증 수익률 ('+pdl+')</div>'
+    +'<div class="ss3-dchips num">'
+    +'<div class="dc"><b>'+s.score+'점</b><small>TETH 점수 (공개 기준)</small></div>'
+    +'<div class="dc"><b>'+r.mdd.toFixed(1)+'%</b><small>최대 낙폭</small></div>'
+    +'<div class="dc"><b>'+wl+'%</b><small>승률 ('+r.n+'전 '+wins+'승 '+(r.lossCount||0)+'패)</small></div>'
+    +'</div>'
+    +'<div class="ss3-dacts">'
+    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">따라하기</button>')
+    +'<button class="obtn" onclick="tfSS3CopyLink(\''+ne+'\',\''+pd+'\')">전략 링크 복사</button>'
+    +'</div>'
+    +'</div>'
+    +'<div class="tfbk-card" style="margin-top:44px"><div class="cin ss3-blk">'
+    +'<div class="ss3-ch"><b>누적 수익 곡선</b><span style="display:inline-flex;gap:14px;align-items:center;flex-wrap:wrap"><span class="ss3-pp">'+pps+'</span><span class="mt2">수수료 0.2% 반영</span></span></div>'
+    +tfSS3Chart(r.eq,1216,360)
+    +'</div></div>'
+    +'<div class="tfbk-card"><div class="cin ss3-blk">'
+    +'<div class="ss3-ch"><b>검증 성과 지표</b><span class="mt2">'+pdl+'</span></div>'
+    +'<div class="ss3-matrix num">'
+    +'<div class="mx"><small>검증 수익</small><b style="color:'+(up?'#56c486':'#ee766a')+'">'+(up?'+':'')+r.ret.toFixed(1)+'%</b></div>'
+    +'<div class="mx"><small>TETH 점수 (공개 기준)</small><b>'+s.score+'점</b></div>'
+    +'<div class="mx"><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div>'
+    +'<div class="mx"><small>손익비</small><b>'+(r.pf||0).toFixed(2)+':1</b></div>'
+    +'<div class="mx"><small>평균 보유일</small><b>'+(r.avgHold||0).toFixed(1)+'일</b></div>'
+    +'<div class="mx"><small>거래 수</small><b>'+r.n+'회 (이익 '+wins+', 손실 '+(r.lossCount||0)+')</b></div>'
+    +'</div></div></div>'
+    +'<div class="tfbk-card"><div class="cin ss3-blk">'
+    +'<div class="ss3-ch"><b>연도별 손익, 체결 이력</b><span class="mt2">최근 '+tr.length+'건, 검증 시뮬레이션 체결</span></div>'
+    +tfSS3YearBars(r.byYear||{},1216,200)
+    +'<div style="overflow-x:auto;margin-top:24px"><table class="ss3-tbl"><thead><tr><th>진입일</th><th>청산일</th><th>자산</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익률</th></tr></thead><tbody>'
+    +(tr.length?tr.map(function(x){
+      var kind={sl:'손절',tp:'익절',time:'기간 청산'}[x.kind]||x.kind;
+      var p1=PRICE[x.entry],p2=PRICE[x.exit];
+      return '<tr><td>'+fdt(x.entry)+'</td><td>'+fdt(x.exit)+'</td><td>'+gEsc(s.asset)+'</td><td>'+kind+'</td>'
+        +'<td style="text-align:right">'+(p1!=null?Math.round(p1).toLocaleString():'-')+'</td>'
+        +'<td style="text-align:right">'+(p2!=null?Math.round(p2).toLocaleString():'-')+'</td>'
+        +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+(x.pnl>=0?'+':'')+(x.pnl*100).toFixed(2)+'%</td></tr>';
+    }).join(''):'<tr><td colspan="7" style="text-align:center;height:80px">이 기간에는 체결이 없어요</td></tr>')
+    +'</tbody></table></div>'
+    +'</div></div>'
+    +'<div class="tfbk-note">검증 수치는 과거 데이터 기반 백테스트 결과이며 미래 수익을 보장하지 않아요.</div>'
+    +'</div>');
+  TF_RENDERING=false;
+  var sc=$('g-scroll'); if(sc) sc.scrollTop=keep?st0:0;
+  if(keep){ var pf=document.querySelector('.ss3-pp .p[aria-pressed="true"]'); if(pf) try{ pf.focus(); }catch(e){} }
+  tfSS3DetailRender._keep=false;
+}
+function tfSS3CopyLink(ne,pd){
+  var url=location.origin+location.pathname+'#/share/s/'+ne+(pd&&pd!=='all'?'/'+pd:''); /* 보고 있는 기간 포함 (codex F14) */
+  try{ navigator.clipboard.writeText(url).then(function(){ toast('전략 링크를 복사했어요'); },function(){ toast(url); }); }
+  catch(e){ toast(url); }
+}
+/* ── 다이얼로그 공통 (Esc/스크림/포커스/잠금, 백드롭 .15s + 페이드 .12s만) ── */
+var TF_SS3_TRIG=null;
+function tfSS3DlgEsc(e){ if(e.key==='Escape') tfSS3DlgClose(); }
+function tfSS3Dlg(title,html,wide){
+  tfSS3DlgClose(true);
+  TF_SS3_TRIG=document.activeElement;
+  var w=document.createElement('div'); w.className='ss3-dlgw'; w.id='ss3-dlgw';
+  w.innerHTML='<div class="ss3-dlg'+(wide?' wide':'')+'" role="dialog" aria-modal="true" aria-labelledby="ss3-dlg-t"><div class="din">'
+    +'<div class="dh2"><b id="ss3-dlg-t">'+gEsc(title)+'</b><button type="button" class="dx" aria-label="닫기" onclick="tfSS3DlgClose()">✕</button></div>'
+    +html+'</div></div>';
+  w.addEventListener('click',function(e){ if(e.target===w) tfSS3DlgClose(); });
   document.body.appendChild(w);
   var gs=$('g-scroll'); if(gs) gs.style.overflow='hidden';
-  document.addEventListener('keydown',tfSSModalEsc);
-  var mx=w.querySelector('.mx'); if(mx) mx.focus(); /* 초기 포커스 모달 내부 (CODEX-POST P1-011) */
+  document.addEventListener('keydown',tfSS3DlgEsc);
+  var dx=w.querySelector('.dx'); if(dx) dx.focus();
 }
-function tfSSModalClose(silent){
-  var w=$('tfss-modalw');
-  if(w){ w.id=''; w.remove(); } /* ID 즉시 해제 — 빠른 재개방 중복 방지 (CODEX-POST P1-012) */
+function tfSS3DlgClose(silent){
+  var w=$('ss3-dlgw'); if(w){ w.id=''; w.remove(); }
   var gs=$('g-scroll'); if(gs) gs.style.overflow='';
-  document.removeEventListener('keydown',tfSSModalEsc);
-  if(!silent&&TF_SS_MODAL_TRIG&&TF_SS_MODAL_TRIG.focus){ try{ TF_SS_MODAL_TRIG.focus(); }catch(e){} }
-  TF_SS_MODAL_TRIG=null;
+  document.removeEventListener('keydown',tfSS3DlgEsc);
+  if(!silent&&TF_SS3_TRIG&&TF_SS3_TRIG.focus){ try{ TF_SS3_TRIG.focus(); }catch(e){} }
+  TF_SS3_TRIG=null;
 }
-function tfSSCopy(ne,fp){
-  var nick=decodeURIComponent(ne); var s=tfSSFind(nick);
+/* ── 카피 설정 (agy-visual-spec §12/S3) ── */
+function tfSSBusy(){
+  var t=tfS();
+  if(t.cur) return true;
+  if(!t.stage) return false;
+  if(t.stage==='intake') return t.qi>0||!!(t.intake&&t.intake.asset); /* 입력이 시작된 인테이크도 보호 (codex F04) */
+  return true;
+}
+/* 카피 원본 해석: 랭킹 조회 실패 시 보관된 팔로우 기록의 p 스냅샷으로 재검증 (codex F05) */
+function tfSS3CopySrc(ne,fid){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return null; }
+  var s=tfSSFind(nick);
+  if(!s&&fid!=null){
+    var f=(tfS().follows||[]).find(function(x){ return x.id===fid; });
+    if(f&&f.p) s={nick:f.nick,asset:f.asset,p:f.p,fw:0,score:null,ghost:true,r:runBacktest(f.p)};
+  }
+  return s;
+}
+function tfSS3Copy(ne,fp,fid){
+  var s=tfSS3CopySrc(ne,fid);
   if(!s){ toast('전략을 찾을 수 없어요'); return; }
   if(s.me){ toast('내가 공유한 전략이에요'); return; }
-  var t=tfS(); var busy=tfSSBusy();
-  var base=fp||s.p; /* S4 '다시 검증'은 저장된 내 설정으로 초기화 (CODEX-POST P1-006) */
+  var t0=tfS(), fx=fid!=null?(t0.follows||[]).find(function(f){ return f.id===fid; }):null;
+  var busy=tfSSBusy(), base=(fx&&fx.p)||fp||s.p;
+  TF_SS3_CP_BUSY=busy; /* 확정 시점 재검사용 — 열 때의 busy 상태 기록 (codex F04) */
   var budgets=TFCOPY.intakeOpt.budget, stops=TFCOPY.intakeOpt.stop;
-  tfSSModal('전략 따라하기','<div class="tfss-cp">'
-    +'<div class="sum">'+tfSSAv(nick,44)+'<div><div class="nm">'+gEsc(nick)+'</div><div class="sb num">'+gEsc(s.asset)+' 전략, 검증 수익 '+(s.r.ret>=0?'+':'')+s.r.ret.toFixed(1)+'%, TETH '+s.score+'점</div></div></div>'
-    +'<div class="exp">이 전략의 설정을 복제해 내 조건으로 다시 검증한 뒤 실행해요. 계좌를 실시간으로 미러링하는 방식이 아니라, 검증을 통과해야 실행됩니다.</div>'
-    +'<div class="fld"><label for="tfss-cp-bu">시작 예산</label><select id="tfss-cp-bu">'+budgets.map(function(b,i){ return '<option value="'+i+'"'+(i===1?' selected':'')+'>'+b[0]+' ('+b[1]+')</option>'; }).join('')+'</select></div>'
-    +'<div class="fld"><label for="tfss-cp-sl">손절선</label><select id="tfss-cp-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===base.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
-    +'<div class="fld"><label for="tfss-cp-tp">익절 목표</label><select id="tfss-cp-tp">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
-    +(busy?'<div class="warn">진행 중인 전략 작업이 있어요. 지금 시작하면 현재 작업이 이 전략의 검증으로 교체됩니다.</div>':'')
-    +'<div class="acts"><button type="button" class="cx" onclick="tfSSModalClose()">취소</button>'
-    +'<button type="button" class="go2" onclick="tfSSCopyGo(\''+ne+'\')">'+(busy?'교체하고 검증 시작':'검증 시작')+'</button></div>'
+  var bi0=1; if(fx&&fx.budget){ budgets.forEach(function(b,i){ if(b[0]===fx.budget) bi0=i; }); } /* 설정 변경: 저장된 예산 복원 (codex P0-8) */
+  tfSS3Dlg('전략 따라하기','<div class="ss3-cp">'
+    +'<div class="sumb">'+'<div><div class="nm3">'+gEsc(s.nick)+' ('+gEsc(s.asset)+' 전략)</div>'
+    +'<div class="sb3">검증 수익 '+(s.r.ret>=0?'+':'')+s.r.ret.toFixed(1)+'%'+(s.score!=null?', TETH '+s.score+'점':'')+', 최대 낙폭 '+s.r.mdd.toFixed(1)+'%'+(s.ghost?' (보관된 설정으로 재검증)':'')+'</div></div></div>'
+    +'<div class="ntc">이 전략의 설정을 복제해 내 조건으로 다시 검증한 뒤 실행해요. 계좌를 실시간으로 미러링하는 방식이 아니라, 검증을 통과해야 실행됩니다.</div>'
+    +'<div class="fld3"><label for="ss3-cp-bu">시작 예산</label><select id="ss3-cp-bu">'+budgets.map(function(b,i){ return '<option value="'+i+'"'+(i===bi0?' selected':'')+'>'+b[0]+' ('+b[1]+')</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="ss3-cp-sl">손절선</label><select id="ss3-cp-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===base.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="ss3-cp-tp">익절 목표</label><select id="ss3-cp-tp">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
+    +(busy?'<div class="warn3">진행 중인 전략 작업이 있어요. 지금 시작하면 현재 작업이 이 전략의 검증으로 교체됩니다.</div>':'')
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" onclick="tfSS3CopyGo(\''+ne+'\''+(fid!=null?','+fid:'')+')">'+(busy?'교체하고 검증 시작':'복제하고 검증 시작')+'</button></div>'
     +'</div>');
 }
-function tfSSCopyGo(ne){
-  var nick=decodeURIComponent(ne); var s=tfSSFind(nick); if(!s) return;
-  var bi=+($('tfss-cp-bu')||{value:1}).value, sl=+($('tfss-cp-sl')||{value:s.p.sl}).value, tp=+($('tfss-cp-tp')||{value:s.p.tp}).value;
+function tfSS3CopyGo(ne,fid){
+  var s=tfSS3CopySrc(ne,fid); if(!s||s.me) return;
+  /* 다이얼로그를 연 뒤 작업 상태가 바뀌었으면(백그라운드 검증 진행 등) 경고 없이 덮지 않는다 (codex F04) */
+  if(!TF_SS3_CP_BUSY&&tfSSBusy()){ toast('작업 상태가 바뀌었어요. 내용을 다시 확인해주세요'); tfSS3Copy(ne,null,fid); return; }
+  var bi=+($('ss3-cp-bu')||{value:1}).value, sl=+($('ss3-cp-sl')||{value:s.p.sl}).value, tp=+($('ss3-cp-tp')||{value:s.p.tp}).value;
   var budgets=TFCOPY.intakeOpt.budget;
   var t=tfS();
-  var p={sl:sl,tp:tp,rsiTh:s.p.rsiTh,trendFilter:s.p.trendFilter,startI:s.p.startI,endI:s.p.endI};
-  t.intake={asset:{i:0,label:s.asset},assetInfo:tfAssetLookup(s.asset),style:{i:1,label:'중립적으로'},budget:{i:bi,label:budgets[bi][0]},period:{i:s.p.startI>61?1:2,label:tfSSPeriodLabel(s.p)},stop:{i:TF_STOP.indexOf(sl),label:sl+'%까지'}};
+  /* 설정 변경/재검증(fid)은 저장된 기록의 rsiTh/trendFilter/기간을 보존한다 (codex F05) */
+  var fx2=fid!=null?(t.follows||[]).find(function(f){ return f.id===fid; }):null;
+  var bp=(fx2&&fx2.p)||s.p;
+  var p={sl:sl,tp:tp,rsiTh:bp.rsiTh,trendFilter:bp.trendFilter,startI:bp.startI,endI:bp.endI};
+  t.intake={asset:{i:0,label:s.asset},assetInfo:tfAssetLookup(s.asset),style:{i:1,label:'중립적으로'},budget:{i:bi,label:budgets[bi][0]},period:{i:bp.startI>61?1:2,label:tfSSPeriodLabel(bp)},stop:{i:TF_STOP.indexOf(sl),label:sl+'%까지'}};
   t.qi=TF_QS.length; t.tries=[]; t.stage='verify'; t.workDone=false; t.pendingP=tfParams(p);
   t.cloneFrom=s.nick;
-  t.score=0; t.cur=null; /* 이전 검증 결과로 게이트 통과 금지 (CODEX-P0-004) */
-  TF_SS_TOKEN++;          /* 이전 비동기 작업 무효화 토큰 (CODEX-P1-002/005) */
+  t.score=0; t.cur=null; /* 이전 검증으로 게이트 통과 금지 */
+  TF_SS_TOKEN++;          /* 이전 비동기 검증 무효화 */
   t.follows=t.follows||[];
-  /* 동일 설정은 갱신, 아니면 새 항목 — 현재 활성 복제는 followId로 식별 (CODEX-POST P1-005) */
-  var ex=t.follows.find(function(f){ return f.nick===s.nick&&f.p.sl===p.sl&&f.p.tp===p.tp; });
-  if(ex){ ex.at=new Date().toISOString().slice(0,10); ex.budget=budgets[bi][0]; t.followId=ex.id; }
-  else { var fid=Date.now(); t.follows.push({id:fid,nick:s.nick,asset:s.asset,p:p,budget:budgets[bi][0],at:new Date().toISOString().slice(0,10)}); t.followId=fid; }
-  tfSave(); tfSSModalClose();
+  /* 설정 변경(fid)은 같은 기록을 갱신 — 파라미터가 달라져도 새 항목을 만들지 않는다 (codex P0-8) */
+  /* 신규 중복 판정은 예산까지 포함한 전체 설정 (codex F05) */
+  var ex=fid!=null?t.follows.find(function(f){ return f.id===fid; }):t.follows.find(function(f){ return f.nick===s.nick&&f.p.sl===p.sl&&f.p.tp===p.tp&&f.p.rsiTh===p.rsiTh&&f.p.trendFilter===p.trendFilter&&f.p.startI===p.startI&&f.p.endI===p.endI&&f.budget===budgets[bi][0]; });
+  if(ex){ ex.p=p; ex.at=new Date().toISOString().slice(0,10); ex.budget=budgets[bi][0]; ex.archived=false; t.followId=ex.id; }
+  else { var nid=Date.now(); t.follows.push({id:nid,nick:s.nick,asset:s.asset,p:p,budget:budgets[bi][0],at:new Date().toISOString().slice(0,10)}); t.followId=nid; }
+  tfSaveNow(); tfSS3DlgClose();
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  TF_ONSHARE=false;
   toast(s.nick+' 님의 전략으로 검증을 시작해요');
   tfNav('#/strategy/backtest');
 }
-/* ── S4 따라가는 중 — BLOCKED 레퍼런스 대신 TETH 실데이터(복제 레지스트리+상태 파생) ── */
+/* ── 따라가는 중 (S4) ── */
 function tfSSFollowStatus(f){
   var t=tfS();
-  /* 활성 복제는 followId 로 식별 (같은 닉 다중 복제 대응), 레거시는 cloneFrom 폴백 — 전체 상태 머신 매핑 (CODEX-POST P1-004/005) */
+  if(f.archived) return {label:'보관됨',live:false,running:false};
   var active;
-  if(t.followId!=null) active=(t.followId===f.id);
-  else { /* 레거시 폴백: 같은 닉 다중 항목 중 최신 것만 활성 (codex-final P1-005 잔여) */
-    var latest=null; (t.follows||[]).forEach(function(x){ if(x.nick===f.nick&&(latest==null||x.id>latest)) latest=x.id; });
-    active=(t.cloneFrom===f.nick&&f.id===latest);
-  }
+  /* followId 가 정의돼 있으면(null 포함) 그것만이 소유권의 진실 — null 은 '활성 없음' (codex F07)
+     undefined 는 followId 도입 전 구버전 상태라서만 닉네임 폴백을 쓴다 */
+  if(t.followId!==undefined) active=(t.followId===f.id);
+  else { var latest=null; (t.follows||[]).forEach(function(x){ if(x.nick===f.nick&&!x.archived&&(latest==null||x.id>latest)) latest=x.id; }); active=(t.cloneFrom===f.nick&&f.id===latest); }
   if(active&&t.stage){
-    var m={ready:'조건 확인',verify:'검증 중',improve:'조정 중',verified:'검증 통과',report:'리포트 확인',connect:'연결 단계',pay:'결제 단계',done:'실행 준비',live:'실행 중'};
-    if(m[t.stage]) return {label:m[t.stage],live:true,running:t.stage==='live'};
+    var m={intake:'조건 입력 중',ready:'조건 확인',verify:'검증 중',improve:'조정 중',verified:'검증 통과',report:'리포트 확인',connect:'연결 단계',pay:'결제 단계',done:'실행 준비',live:'실행 중'};
+    /* 실행 여부는 stage 만이 아니라 대시보드 전략 스위치 상태까지 본다 (codex F07) */
+    var running=t.stage==='live'&&(t.strat||[]).some(function(x){
+      if(x.status!=='live'||x.name.indexOf(f.asset)!==0) return false;
+      if(x.fid!==undefined&&x.fid!==null) return x.fid===f.id; /* 기록 id 링크가 가장 정밀 (codex FINAL F07) */
+      return x.src!==undefined?x.src===f.nick:true; /* 구버전 엔트리 폴백: 원본 닉 → 자산 */
+    });
+    var lbl=m[t.stage]||'진행 중';
+    if(t.stage==='live'&&!running) lbl='실행 꺼짐';
+    return {label:lbl,live:true,running:running};
   }
   return {label:'보관됨',live:false,running:false};
 }
-function tfSSCopyF(fid){
-  var t=tfSSState(); var f=t.follows.find(function(x){ return x.id===fid; });
-  if(!f){ toast('항목을 찾을 수 없어요'); return; }
-  tfSSCopy(tfSSNe(f.nick),f.p);
-}
-function tfSSFollowTab(){
+function tfSS3FollowTab(){
   var t=tfSSState();
   if(!t.follows.length)
-    return '<div class="tfss-empty">아직 따라가는 전략이 없어요<br><button type="button" class="tfss-cta" style="width:auto;padding:0 18px;margin-top:12px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>';
-  var act=t.follows.filter(function(f){ return tfSSFollowStatus(f).live; }).length;
-  return '<div class="tfss-secrow"><span class="tfss-sec">따라가는 중</span></div>'
-    +'<div class="tfss-stats num" style="margin-bottom:24px">'
-    +'<div class="stc"><small>복제한 전략</small><b>'+t.follows.length+'개</b></div>'
-    +'<div class="stc"><small>진행 중</small><b>'+act+'개</b></div>'
-    +'<div class="stc"><small>보관됨</small><b>'+(t.follows.length-act)+'개</b></div></div>'
-    +'<div class="tfss-grid">'+t.follows.slice().reverse().map(function(f){
-      var st=tfSSFollowStatus(f); var s=tfSSFind(f.nick);
-      var r=s?s.r:null;
-      return '<div class="tfss-card">'
-        +'<div class="hd">'+tfSSAv(f.nick,56)
-        +'<div class="id"><button type="button" class="nm" onclick="tfSSDetail(\''+tfSSNe(f.nick)+'\')">'+gEsc(f.nick)+'</button>'
-        +'<div class="sb num">'+gEsc(f.at)+' 시작</div>'
-        +'<span class="tfss-tag">'+gEsc(f.asset)+'</span></div>'
-        +'<span class="tfss-st'+(st.live?'':' idle')+'" style="margin-left:auto">'+st.label+'</span></div>'
-        +'<div class="met"><div><div class="lb">시작 설정</div>'
-        +'<div class="sc num" style="margin-top:6px">손절 '+f.p.sl+'% / 익절 +'+f.p.tp+'%'+(f.budget?' / '+gEsc(f.budget):'')+'</div>'
-        +(r?'<div class="sc num">원 전략 검증 수익 '+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</div>':'')
-        +'</div>'+(r?tfSSSpark(r.eq,96,40):'')+'</div>'
-        +'<div class="ctaw">'+(st.running
-          ?'<button type="button" class="tfss-cta pri" onclick="try{history.replaceState(null,\'\',location.pathname);}catch(e){} tfDashView()">실행 현황 보기</button>'
+    return '<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 복제해보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>';
+  var act=0,arc=0;
+  t.follows.forEach(function(f){ var st=tfSSFollowStatus(f); if(st.live) act++; else arc++; });
+  var fills=(tfS().fills||[]);
+  var myPnl=fills.length?fills.reduce(function(a,x){return a+x.pnl;},0)*100:null;
+  return '<div class="ss3-tiles num">'
+    +'<div class="tl"><small>복제한 전략</small><b>'+t.follows.length+'개</b></div>'
+    +'<div class="tl"><small>진행 중</small><b>'+act+'개</b></div>'
+    +'<div class="tl"><small>보관됨</small><b>'+arc+'개</b></div></div>'
+    +t.follows.slice().reverse().map(function(f){
+      var st=tfSSFollowStatus(f); var s=tfSSFind(f.nick); var r=s?s.r:null; var ne=tfSSNe(f.nick);
+      return '<div class="tfbk-card"><div class="cin">'
+        +'<div class="lft">'
+        +'<div class="nmrow"><button type="button" class="nm" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(f.nick)+'</button>'
+        +'<span class="ss3-st'+(st.live?'':' idle')+'">'+st.label+'</span></div>'
+        +'<div class="as num">복제 설정: 손절 '+f.p.sl+'%, 익절 +'+f.p.tp+'%'+(f.budget?', 예산 '+gEsc(f.budget):'')+'<span style="color:#848a94"> (시작 '+gEsc(f.at)+')</span></div>'
+        +'<div class="rtrow num">'
+        +(r?'<span class="ctc"><b style="color:'+(r.ret>=0?'#56c486':'#ee766a')+'">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</b><small>원 전략 검증 수익</small></span>':'')
+        +(st.running&&myPnl!=null?'<span class="ctc"><b style="color:'+(myPnl>=0?'#56c486':'#ee766a')+'">'+(myPnl>=0?'+':'')+myPnl.toFixed(1)+'%</b><small>실행 시뮬레이션 손익</small></span>':'')
+        +(r?'<span class="ctc"><b>'+s.score+'점</b><small>TETH 점수</small></span>':'')
+        +'</div>'
+        +'<div class="bt">'+(st.running
+          ?'<button class="wbtn" onclick="try{history.replaceState(null,\'\',location.pathname);}catch(e){} TF_ONSHARE=false; tfDashView()">실행 현황 보기</button><button class="ss3-dbtn" onclick="tfSS3Stop('+f.id+')">따라가기 중지</button>'
           :st.live
-          ?'<button type="button" class="tfss-cta pri" onclick="tfResume()">이어서 진행</button>'
-          :'<button type="button" class="tfss-cta" onclick="tfSSCopyF('+f.id+')">다시 검증</button>')+'</div>'
-        +'</div>';
-    }).join('')+'</div>';
+          ?'<button class="wbtn" onclick="TF_ONSHARE=false; tfResume()">이어서 진행</button><button class="obtn" onclick="tfSS3Copy(\''+ne+'\',null,'+f.id+')">설정 변경</button><button class="ss3-dbtn" onclick="tfSS3Stop('+f.id+')">중지</button>'
+          :'<button class="obtn" onclick="tfSS3CopyF('+f.id+')">다시 검증</button><button class="ss3-dbtn" onclick="tfSS3Remove('+f.id+')">목록에서 삭제</button>')
+        +'</div></div>'
+        +'<div class="lgo">'+(r?tfSS3Eq(r.eq,528,260,{dates:true}):'')+'</div>'
+        +'</div></div>';
+    }).join('');
 }
-/* ── S5/S6 내 전략 — 공유 전 온보딩(Bybit 진입 카드 골격) / 공유 후 크리에이터 센터 ── */
-function tfSSMineTab(){
+function tfSS3CopyF(fid){
+  var t=tfSSState(); var f=t.follows.find(function(x){ return x.id===fid; });
+  if(!f){ toast('항목을 찾을 수 없어요'); return; }
+  tfSS3Copy(tfSSNe(f.nick),f.p,fid);
+}
+function tfSS3Stop(fid){
+  var t=tfSSState(); var f=t.follows.find(function(x){ return x.id===fid; }); if(!f) return;
+  tfSS3Dlg('따라가기 중지','<div class="ntc">'+gEsc(f.nick)+' 전략 따라가기를 중지할까요?<br>항목은 보관 처리되고, 이미 실행 중인 전략은 내 트레이딩에서 계속 관리할 수 있어요.</div>'
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="ss3-dbtn" style="flex:1" onclick="tfSS3StopGo('+fid+')">중지하고 보관</button></div>');
+}
+function tfSS3StopGo(fid){
+  var t=tfSSState(); var f=t.follows.find(function(x){ return x.id===fid; }); if(!f) return;
+  var wasActive=tfSSFollowStatus(f).live; /* 구버전 폴백(followId undefined)으로 활성이던 기록도 포함 (codex F06) */
+  f.archived=true;
+  if(wasActive){ t.followId=null; TF_SS_TOKEN++; } /* 소유권 해제 명시 + 진행 중 검증 콜백 무효화 */
+  tfSaveNow(); tfSS3DlgClose();
+  toast('보관했어요');
+  tfShareHub('follow');
+}
+function tfSS3Remove(fid){
+  var t=tfSSState(); t.follows=t.follows.filter(function(x){ return x.id!==fid; });
+  tfSave(); toast('목록에서 삭제했어요'); tfShareHub('follow');
+}
+/* ── 내 전략: 온보딩 3단계 + 크리에이터 센터 (S5/S6) ── */
+var TF_SS3_OB={step:1,sel:null,desc:''};
+function tfSS3MineTab(){
   var t=tfSSState();
   var rw=Math.round((TFC.community&&TFC.community.rewardRate||0.2)*100);
-  if(!t.strat.length){
-    return '<div class="tfss-onb"><h3>내 전략을 공유해보세요</h3>'
-      +'<div class="rw">팔로워 이용 요금의 '+rw+'% 보상</div>'
-      +'<div class="dsc">검증을 통과한 전략은 닉네임으로 공개할 수 있어요. 다른 사용자가 따라하면 보상이 쌓입니다.</div>'
-      +'<div class="steps">'
-      +'<div class="st1"><i>1</i>채팅에서 전략을 만들어요</div>'
-      +'<div class="st1"><i>2</i>TETH 점수 '+(TFC.score&&TFC.score.pass||80)+'점 이상으로 검증을 통과해요</div>'
-      +'<div class="st1"><i>3</i>여기서 공개하면 전략 찾기에 올라가요</div></div>'
-      +'<button type="button" class="cta2" onclick="tfBackToChat()">채팅에서 전략 만들기</button></div>';
+  var pass=(TFC.score&&TFC.score.pass)||80;
+  if(!t.sharedSnap){ /* 센터 존재 여부는 스냅샷 기준 — 비공개 전환해도 관리 화면 유지 (codex F10) */
+    var has=t.strat&&t.strat.length;
+    return '<div class="tfbk-card"><div class="cin ss3-blk" style="text-align:center;padding:64px 40px">'
+      +'<div style="font-size:32px;font-weight:700;color:#fff;line-height:44px">내 전략을 공유해보세요</div>'
+      +'<div style="font-size:16px;color:#dbdbdb;margin-top:12px;line-height:1.7">검증을 통과한 전략을 닉네임으로 공개하면,<br>다른 사용자가 따라할 때마다 이용 요금의 '+rw+'%가 보상으로 쌓여요.</div>'
+      +'<div class="ss3-steps" style="justify-content:center;margin:28px 0">'
+      +'<span class="stp on"><i>1</i>전략 만들기</span><span class="sep3">─</span>'
+      +'<span class="stp'+(has?' on':'')+'"><i>2</i>TETH '+pass+'점 검증 통과</span><span class="sep3">─</span>'
+      +'<span class="stp"><i>3</i>공개하고 보상 받기</span></div>'
+      +(has
+        ?'<button class="wbtn" style="min-width:220px" onclick="tfSS3ObOpen()">내 전략 공유하기</button>'
+        :'<button class="wbtn" style="min-width:220px" onclick="TF_ONSHARE=false; tfBackToChat()">채팅에서 전략 만들기</button>')
+      +'</div></div>';
   }
-  var s0=t.strat.find(function(x){return x.name===t.sharedName;})||t.strat[0];
-  if(!t.shared){
-    return '<div class="tfss-onb"><h3>공유 준비가 됐어요</h3>'
-      +'<div class="rw">팔로워 이용 요금의 '+rw+'% 보상</div>'
-      +'<div class="dsc">아래 전략을 닉네임으로 공개할 수 있어요. 공개 후에도 언제든 끌 수 있습니다.</div>'
-      +(t.strat.length>1?'<div class="fld" style="margin-bottom:16px"><label style="display:block;font-size:12.5px;color:var(--ss-t3);margin-bottom:6px">공유할 전략</label><select id="tfss-share-sel" style="width:100%;height:40px;border-radius:8px;background:#1d1e21;border:1px solid var(--ss-bd);color:#fff;font-size:14px;padding:0 10px">'
-        +t.strat.map(function(x){ return '<option value="'+gEsc(x.name)+'"'+(x.name===s0.name?' selected':'')+'>'+gEsc(x.name)+' (TETH '+x.score+'점)</option>'; }).join('')+'</select></div>':'')
-      +'<div class="tfss-shrow" style="margin-bottom:20px"><div class="si"><small>전략</small><b>'+gEsc(s0.name)+'</b></div>'
-      +'<div class="si num" style="margin-left:auto"><small>검증 성과</small><b>TETH '+s0.score+'점, '+(s0.ret>=0?'+':'')+s0.ret.toFixed(1)+'%</b></div></div>'
-      +'<button type="button" class="cta2" onclick="tfSSShareOn()">이 전략 공개하기</button></div>';
-  }
-  /* S6 크리에이터 센터 — 통계+공개 제어를 단일 대시보드 패널로, 프리뷰는 우측 열 (AGY-POST P1-114) */
-  var sn=t.sharedSnap||{name:s0.name,asset:s0.name.replace(' 위임 전략',''),score:s0.score,ret:s0.ret,mdd:s0.mdd,n:s0.n,p:null};
-  var meCard=tfSSRows().find(function(x){return x.me;})||{nick:(S.user&&S.user.name)||'나',asset:sn.asset,fw:t.followers||0,score:sn.score,me:true,r:{ret:sn.ret,mdd:sn.mdd,n:sn.n,winRate:0,eq:null}};
-  return '<div class="tfss-secrow"><span class="tfss-sec">크리에이터 센터</span></div>'
-    +'<div class="tfss-dash">'
-    +'<div class="tfss-dashp">'
-    +'<div class="tfss-stats num" style="margin-bottom:0">'
-    +'<div class="stc"><small>팔로워</small><b>'+Number(t.followers||0).toLocaleString()+'명</b></div>'
-    +'<div class="stc"><small>누적 보상</small><b>'+tfWon(t.reward||0)+'</b></div>'
-    +'<div class="stc"><small>검증 수익</small><b class="'+(sn.ret>=0?'up':'')+'">'+(sn.ret>=0?'+':'')+sn.ret.toFixed(1)+'%</b></div>'
-    +'<div class="stc"><small>TETH 점수</small><b>'+sn.score+'점</b></div></div>'
-    +'<div class="tfss-shrow" style="margin:16px 0 0;border:0;background:rgba(255,255,255,.03)">'
-    +'<span class="tf-swch'+(t.shared?' on':'')+'" role="switch" aria-checked="'+(!!t.shared)+'" tabindex="0" onclick="tfSSShareToggle(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tfSSShareToggle(this);}"><i></i></span>'
-    +'<div class="si"><small>공개 상태</small><b>'+gEsc(sn.name)+'</b></div>'
-    +'<div class="si" style="margin-left:auto"><small>보상 구조</small><b>팔로워 요금의 '+rw+'%</b></div></div>'
+  /* 크리에이터 센터 */
+  var sn=t.sharedSnap;
+  var me=tfSSRows().find(function(x){return x.me;})
+    ||{nick:(S.user&&S.user.name)||'나',title:sn.name,desc:sn.desc,asset:sn.asset,p:sn.p,fw:t.followers||0,score:sn.score,me:true,
+       r:sn.p?runBacktest(sn.p):{ret:sn.ret,mdd:sn.mdd,n:sn.n,winRate:sn.winRate||0,eq:null,trades:[],byYear:{},pf:0,avgHold:0,lossCount:0}};
+  return '<div class="ss3-tiles num">'
+    +'<div class="tl"><small>팔로워</small><b>'+Number(t.followers||0).toLocaleString()+'명</b></div>'
+    +'<div class="tl"><small>누적 정산 보상</small><b>'+tfWon(t.reward||0)+'</b></div>'
+    +'<div class="tl"><small>공개 전략 검증 수익</small><b class="'+(sn.ret>=0?'up':'')+'">'+(sn.ret>=0?'+':'')+sn.ret.toFixed(1)+'%</b></div>'
+    +'<div class="tl"><small>TETH 점수</small><b>'+sn.score+'점</b></div></div>'
+    +'<div class="tfbk-card"><div class="cin ss3-blk">'
+    +'<div class="ss3-mgrid">'
+    +'<div><div class="ss3-ch" style="margin-bottom:8px"><b>'+gEsc(sn.name)+'</b></div>'
+    +'<div class="ss3-mrow"><span class="tf-swch'+(t.shared?' on':'')+'" role="switch" aria-checked="'+(!!t.shared)+'" tabindex="0" onclick="tfSS3ShareToggle(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tfSS3ShareToggle(this);}"><i></i></span>'
+    +'<span>'+(t.shared?'랭킹에 공개 중':'비공개 상태')+'</span></div>'
+    +'<div class="ss3-mrow"><small>보상 요율</small><span>팔로워 요금의 '+rw+'%</span></div>'
+    +'<div class="ss3-mrow"><small>공개 등록일</small><span class="num">'+gEsc(sn.at||'')+'</span></div>'
+    +(sn.desc?'<div class="ss3-mrow"><small>소개</small><span>'+gEsc(sn.desc)+'</span></div>':'')
+    +'<div class="bt" style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">'
+    +'<button class="obtn" onclick="tfSS3ObOpen(3)">설정 수정</button>'
+    +(t.shared?'<button class="ss3-dbtn" onclick="tfSS3Unshare()">비공개로 전환</button>':'')+'</div>'
     +'</div>'
-    +'<div class="tfss-dashr"><div class="tfss-dashl">전략 찾기에 이렇게 보여요</div>'+tfSSCard(meCard)+'</div>'
-    +'</div>';
+    +'<div><div class="ss3-prevl">전략 찾기에 이렇게 노출돼요</div>'
+    +'<div class="ss3-prevscale-w"><div class="ss3-prevscale">'+(me?tfSS3Card(me):'')+'</div></div>'
+    +'</div></div>'
+    +'</div></div>';
 }
-function tfSSShareOn(){
+function tfSS3ObOpen(step){
   var t=tfSSState();
-  var sel=$('tfss-share-sel');
-  var name=sel?sel.value:(t.strat[0]&&t.strat[0].name);
-  var s0=t.strat.find(function(x){return x.name===name;})||t.strat[0];
-  if(!s0){ toast('공유할 전략이 없어요'); return; }
-  t.sharedName=s0.name;
-  /* 공개 시점 스냅샷 — 현재 작업(t.cur)이 선택 전략과 같은 작업일 때만 파라미터 결합 (codex-final P1-007 잔여) */
+  var pass=(TFC.score&&TFC.score.pass)||80;
+  /* 초기 선택은 자격(score>=pass)을 갖춘 전략만 — 미달 전략이 기본 선택되는 우회 차단 (codex F08).
+     선택자는 이름이 아니라 배열 인덱스 — 동명 전략 오연결 차단 (codex F02) */
+  var idx=-1;
+  if(t.sharedSnap&&t.sharedSnap.srcAt!=null) idx=t.strat.findIndex(function(x){ return x.at===t.sharedSnap.srcAt&&x.score>=pass; }); /* 원본 식별자 우선 (codex F02) */
+  if(idx<0&&t.sharedSnap) idx=t.strat.findIndex(function(x){ return x.name===t.sharedSnap.name&&x.score>=pass; });
+  if(idx<0) idx=t.strat.findIndex(function(x){ return x.score>=pass; });
+  TF_SS3_OB={step:step||1,sel:idx>=0?idx:null,desc:(t.sharedSnap&&t.sharedSnap.desc)||''};
+  tfSS3ObRender();
+}
+function tfSS3ObPick(i){ var t=tfSSState(); var pass=(TFC.score&&TFC.score.pass)||80; if(t.strat[i]&&t.strat[i].score>=pass){ TF_SS3_OB.sel=i; tfSS3ObRender(); } }
+function tfSS3ObNext(step){
+  var t=tfSSState(); var pass=(TFC.score&&TFC.score.pass)||80; var ob=TF_SS3_OB;
+  if(ob.sel==null||!t.strat[ob.sel]||t.strat[ob.sel].score<pass){ toast('검증을 통과한 전략을 선택해주세요'); return; } /* 단계 이동 자격 재검사 (codex F08) */
+  ob.step=step; tfSS3ObRender();
+}
+function tfSS3ObRender(){
+  var t=tfSSState(), ob=TF_SS3_OB;
+  var pass=(TFC.score&&TFC.score.pass)||80;
+  var rw=Math.round((TFC.community&&TFC.community.rewardRate||0.2)*100);
+  var steps='<div class="ss3-steps">'
+    +[[1,'전략 선택'],[2,'보상, 공개 범위'],[3,'검토, 공개']].map(function(sp,i){
+      return (i?'<span class="sep3">─</span>':'')+'<span class="stp'+(ob.step>=sp[0]?' on':'')+'"><i>'+sp[0]+'</i>'+sp[1]+'</span>'; }).join('')+'</div>';
+  var body='';
+  if(ob.step===1){
+    body='<div class="ntc">TETH 점수 '+pass+'점 이상을 획득한 전략만 공개 랭킹에 등록할 수 있어요.</div>'
+      +t.strat.map(function(x,i){
+        var ok=x.score>=pass, on=ob.sel===i;
+        return '<button type="button" class="ss3-radio'+(on?' on':'')+(ok?'':' off')+'" '+(ok?'onclick="tfSS3ObPick('+i+')"':'disabled')+'>'
+          +'<span class="rn">'+gEsc(x.name)+(on?' ✓':'')+'</span>'
+          +'<span class="rs num">TETH '+x.score+'점, 검증 수익 '+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%, 최대 낙폭 '+x.mdd.toFixed(1)+'%'+(ok?'':' (기준 미달로 공개 불가)')+'</span></button>';
+      }).join('')
+      +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+      +'<button type="button" class="wbtn" '+(ob.sel!=null?'onclick="tfSS3ObNext(2)"':'disabled style="opacity:.4"')+'>다음 단계</button></div>';
+  } else if(ob.step===2){
+    body='<div class="ntc"><b style="color:#fff">보상 구조</b><br>내 전략을 따라하는 사용자가 지불하는 TETH 이용료의 '+rw+'%가 크리에이터 보상으로 매월 정산돼요.</div>'
+      +'<div class="ntc"><b style="color:#fff">공개 범위</b><br>전략 파라미터 원본은 공개되지 않아요. 검증 성과 지표(수익률, 점수, 낙폭, 승률)와 에쿼티 곡선만 닉네임으로 공개됩니다.</div>'
+      +'<div class="fld3"><label for="ss3-ob-desc">전략 소개 (선택, 100자)</label><input type="text" id="ss3-ob-desc" maxlength="100" placeholder="예: 하락 후 반등 구간만 노리는 전략이에요" value="'+gEsc(ob.desc||'')+'"></div>'
+      +'<div class="acts3"><button type="button" class="obtn" onclick="TF_SS3_OB.step=1;tfSS3ObRender()">이전</button>'
+      +'<button type="button" class="wbtn" onclick="TF_SS3_OB.desc=($(\'ss3-ob-desc\')||{value:\'\'}).value.trim();tfSS3ObNext(3)">다음 단계</button></div>';
+  } else {
+    var s0=t.strat[ob.sel];
+    if(!s0){ tfSS3DlgClose(); return; }
+    var sp=tfSS3StratP(t,s0); /* 전략 엔트리의 p 스냅샷 우선, 구버전 엔트리는 현재 검증 일치 시에만 */
+    var prev={nick:(S.user&&S.user.name)||'나',title:s0.name,desc:ob.desc,asset:s0.name.replace(' 위임 전략',''),p:sp,fw:t.followers||0,score:s0.score,me:true,
+      r:sp?runBacktest(sp):{ret:s0.ret,mdd:s0.mdd,n:s0.n,winRate:s0.winRate||0,eq:null,trades:[],byYear:{},pf:0,avgHold:0,lossCount:0}};
+    body='<div class="ss3-prevl">공개되면 전략 찾기에 이렇게 노출돼요</div>'
+      +'<div class="ss3-prevscale-w"><div class="ss3-prevscale">'+tfSS3Card(prev)+'</div></div>'
+      +'<div class="acts3" style="margin-top:20px"><button type="button" class="obtn" onclick="TF_SS3_OB.step=2;tfSS3ObRender()">이전</button>'
+      +'<button type="button" class="wbtn" onclick="tfSS3Publish()">공개하고 랭킹 등록하기</button></div>';
+  }
+  var w=$('ss3-dlgw');
+  if(w){ var din=w.querySelector('.din'); din.innerHTML='<div class="dh2"><b id="ss3-dlg-t">내 전략 공유하기</b><button type="button" class="dx" aria-label="닫기" onclick="tfSS3DlgClose()">✕</button></div>'+steps+body; }
+  else tfSS3Dlg('내 전략 공유하기',steps+body,true);
+}
+function tfSS3StratP(t,s0){
+  if(!s0) return null;
+  if(s0.p) return s0.p;
   var curAsset=(t.intake&&t.intake.asset&&t.intake.asset.label)||'';
   var curMatches=!!(t.cur&&t.score===s0.score&&(curAsset+' 위임 전략')===s0.name);
+  return curMatches?t.cur.p:null;
+}
+function tfSS3Publish(){
+  var t=tfSSState(), ob=TF_SS3_OB;
+  var pass=(TFC.score&&TFC.score.pass)||80;
+  var s0=ob.sel!=null?t.strat[ob.sel]:null;
+  if(!s0){ toast('공개할 전략이 없어요'); return; }
+  if(s0.score<pass){ toast('TETH '+pass+'점 이상 전략만 공개할 수 있어요'); return; } /* 최종 공개 자격 재검사 (codex F08) */
+  var sp=tfSS3StratP(t,s0);
+  t.sharedName=s0.name;
   t.sharedSnap={name:s0.name,asset:s0.name.replace(' 위임 전략',''),score:s0.score,ret:s0.ret,mdd:s0.mdd,n:s0.n,
-    winRate:curMatches?(t.cur.winRate||0):0,p:curMatches&&t.cur.p?JSON.parse(JSON.stringify(t.cur.p)):null};
-  t.shared=true; tfSave();
+    winRate:s0.winRate||(sp&&t.cur&&t.cur.p===sp?t.cur.winRate:0)||0,p:sp?JSON.parse(JSON.stringify(sp)):null,
+    srcAt:s0.at||null, /* 원본 전략 엔트리 식별자 — 동명 전략 재진입 오연결 방지 (codex F02) */
+    desc:ob.desc||'',at:new Date().toISOString().slice(0,10)};
+  t.shared=true; tfSaveNow(); tfSS3DlgClose();
   toast('전략이 공개됐어요. 전략 찾기에서 확인할 수 있어요');
   tfShareHub('mine');
 }
-function tfSSShareToggle(el){
+function tfSS3ShareToggle(el){
   var t=tfSSState(); t.shared=!t.shared;
   el.classList.toggle('on',t.shared);
   el.setAttribute('aria-checked',String(t.shared));
   toast(t.shared?'전략이 공개됐어요':'전략 공개를 껐어요');
-  tfSave();
-  if(!t.shared) tfShareHub('mine');
+  tfSaveNow(); tfShareHub('mine');
 }
-function tfShareToggle(el){
-  var t=tfS(); t.shared=!t.shared;
-  el.classList.toggle('on',t.shared);
-  el.setAttribute('aria-checked',String(t.shared));
-  toast(t.shared?'전략이 공개됐어요. 랭킹에서 확인할 수 있어요':'전략 공개를 껐어요');
-  tfSave();
-}
+function tfSS3Unshare(){ var t=tfSSState(); t.shared=false; tfSaveNow(); toast('비공개로 전환했어요. 스냅샷은 보관돼요'); tfShareHub('mine'); }
 /* ── §9.5 지원 거래소: 목록 + 상세 (TradingView Brokers 구조의 TETH 변형, 수치는 데모) ── */
 var TF_BROKERS=[
   {id:'binance',name:'Binance',tag:'거래소',assets:'암호화폐',conn:true,rating:4.2,traders:'1.2천',fw0:830,lev:'현물 1:1',col:'#F3BA2F',fg:'#181818',
@@ -7772,6 +7954,11 @@ var TF_RENDERING=false,TF_ONSTRAT=false;
 function tfNav(r){ if(location.hash===r) tfRoute(); else location.hash=r; }
 function tfRoute(){
   var h=location.hash;
+  tfSS3DlgClose(true); /* 라우트 전환 시 공유 다이얼로그 잔존 방지 (codex F09) */
+  /* 전략 공유 상세 딥링크 (#/share/s/<닉>[/기간]) — 퍼널 라우트(#/strategy/*)와 네임스페이스 분리 */
+  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }
+  if(TF_ONSHARE&&h.indexOf('#/strategy/')!==0){ TF_ONSHARE=false; tfShareHub(tfSSState().ss.tab||'find'); return; } /* 상세에서 뒤로가기 → 허브 */
+  TF_ONSHARE=false;
   if(h.indexOf('#/strategy/')!==0){ if(TF_ONSTRAT){ TF_ONSTRAT=false; tfBackToChat(); } return; }
   var t=tfS();
   if(!S.user||!t.intake||!t.intake.asset){
@@ -7795,7 +7982,7 @@ function tfBackToChat(){
 }
 /* 새로고침 복구: 상태 복원 뒤 해시 라우트 재진입 (Scenario D) */
 var TF_BOOTED=false;
-setTimeout(function(){ TF_BOOTED=true; if(location.hash.indexOf('#/strategy/')===0) tfRoute(); },900);
+setTimeout(function(){ TF_BOOTED=true; if(location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0) tfRoute(); },900);
 /* 우측 drawer: 가이드 전용 — 닫아도 페이지 입력값 유지 */
 var TF_DRAWER_TRIG=null;
 function tfDrawerEsc(e){ if(e.key==='Escape') tfDrawerClose(); }
@@ -8646,7 +8833,7 @@ function gBoot(){
     STORE.load(function(p){
       if(!S.user&&STORE.restore(p)){ authSyncUI(); gSideRender(); }
       window.TF_STATE_READY=true; /* 이제부터 라우트 가드가 해시를 정리해도 안전 (복원 레이스 방지) */
-      var onStrat=location.hash.indexOf('#/strategy/')===0;
+      var onStrat=location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0;
       if(onStrat){ TF_BOOTED=true; tfRoute(); }
       else if(S.user&&p&&p.lastSid){
         /* 새로고침 시 마지막 작업 세션으로 복귀 — 빈 홈으로 튕기지 않는다 */
