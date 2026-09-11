@@ -496,7 +496,7 @@ body.g-dark{background:#0f1012}
 #g-root{position:fixed;inset:0;background:#0f1012;color:#e6e7ea;display:flex;flex-direction:column;font-size:13.5px;z-index:40;
   --g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;
   --gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);
-  --gt:#e6e7ea;--gt2:#a6aab2;--gt3:#848a94; /* 6f747d→848a94: 12px 힌트 텍스트가 어두운 카드에서 WCAG AA(4.5:1) 미달이던 대비 상향 (agy QA2) */
+  --gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6; /* Gemini 다크 실측 톤(#e3e3e3/#c4c7c5/#9aa0a6)으로 상향 — 가독성 (사용자 지시) */
   --gb:#3d6ef0;--gb2:#5b8af7;--gg:#4ec08d;--ga:#d9a84e;--gr:#e0604b;
   /* 확장 토큰: 표면/반전/툴팁/그림자/글로우, 라이트 테마가 이 값만 재정의한다 */
   --pill:#1e2024;--pop:#26282d;--hoverline:rgba(255,255,255,.05);
@@ -512,20 +512,22 @@ body.g-dark{background:#0f1012}
 .g-iconbtn:hover{background:rgba(255,255,255,.06);color:var(--gt2)}
 .g-body{flex:1;display:flex;min-height:0}
 /* sidebar */
-.g-side{width:256px;flex-shrink:0;background:var(--g1);border-right:1px solid var(--gl);display:flex;flex-direction:column;padding:10px 10px 8px;gap:2px;position:relative}
-.g-new{display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border:1px solid var(--gl2);border-radius:8px;font-size:13.5px;font-weight:500;color:var(--gt);margin-bottom:8px;transition:background .12s}
-.g-new:hover{background:rgba(255,255,255,.05)}
-.g-util{display:flex;align-items:center;gap:9px;height:36px;padding:0 13px;border-radius:6px;font-size:13px;color:var(--gt2);transition:background .12s;text-align:left;width:100%}
+/* Gemini식: 사이드바는 보더 없이 배경 색조 차이만 — 접힘 레일은 콘텐츠와 같은 색으로 녹아든다 */
+.g-side{width:256px;flex-shrink:0;background:var(--g1);display:flex;flex-direction:column;padding:10px 10px 8px;gap:2px;position:relative}
+.g-new{display:flex;align-items:center;gap:12px;height:40px;padding:0 13px;border:0;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--gt);margin-bottom:2px;transition:background .12s}
+.g-new svg{flex-shrink:0;stroke:currentColor;opacity:.9}
+.g-new:hover{background:rgba(255,255,255,.06)}
+.g-util{display:flex;align-items:center;gap:12px;height:40px;padding:0 13px;border-radius:999px;font-size:13.5px;color:var(--gt);transition:background .12s;text-align:left;width:100%}
 /* 세션이 많아도 상단 메뉴가 눌리지 않게: 고정 요소는 shrink 금지, 스크롤은 세션 목록만 */
 .g-new,.g-util,.g-sec,#g-side-links,#g-live-list{flex-shrink:0}
 #g-sess-list{flex:1 1 auto;overflow-y:auto;min-height:60px;scrollbar-width:thin}
-.g-util:hover{background:rgba(255,255,255,.05)}
-.g-util svg{flex-shrink:0;stroke:currentColor;opacity:.8}
+.g-util:hover{background:rgba(255,255,255,.06)}
+.g-util svg{flex-shrink:0;stroke:currentColor;opacity:.9}
 .g-sec{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--gt3);padding:14px 13px 5px}
 .g-sec button{color:var(--gt3);font-size:14px}
 .g-sec button:hover{color:var(--gt2)}
-.g-sess{display:flex;align-items:center;gap:8px;min-height:38px;padding:7px 13px;border-radius:6px;font-size:13.5px;color:var(--gt2);cursor:pointer;transition:background .12s}
-.g-sess:hover{background:rgba(255,255,255,.045)}
+.g-sess{display:flex;align-items:center;gap:8px;min-height:38px;padding:7px 13px;border-radius:999px;font-size:13.5px;color:var(--gt);cursor:pointer;transition:background .12s}
+.g-sess:hover{background:rgba(255,255,255,.06)}
 .g-sess.on{background:var(--g3);color:var(--gt)}
 .g-sess .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .g-sess .m{font-size:11px;color:var(--gt3);flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
@@ -533,7 +535,7 @@ body.g-dark{background:#0f1012}
 .g-dot.run{background:var(--gb2);animation:pulse 1.8s infinite}
 .g-dot.rev{background:var(--ga)}
 .g-dot.ok{background:var(--gg)}
-.g-side-bottom{margin-top:auto;border-top:1px solid var(--gl);padding-top:6px}
+.g-side-bottom{margin-top:auto;padding-top:6px} /* Gemini: 프로필 위 구분선 없음 */
 /* center */
 .g-center{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--g0);position:relative}
 /* 중앙정렬(translateX)과 등장 모션이 같은 transform 을 쓰면 fill-mode 가 정렬을 덮어쓴다 — 전용 키프레임으로 유지 */
@@ -1223,6 +1225,18 @@ body.light .au-free{color:#1e8e3e}
 .g-composer-row .g-model{font-size:12.5px;color:var(--gt3);flex:1}
 .g-composer-row .g-send{width:30px;height:30px;font-size:14px}
 .g-ctx{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--gt3);border:1px solid var(--gl);border-radius:999px;padding:2px 9px;margin-bottom:6px}
+/* 연구 기록 (Gemini 채팅 검색 실측 재현: 검색 필 + 최근 + 우측 일자) */
+.g-hist{max-width:880px;margin:0 auto;padding:34px 24px 60px}
+.g-hist-search{display:flex;align-items:center;gap:14px;height:56px;border-radius:999px;background:var(--g2);padding:0 22px;margin-bottom:28px;color:var(--gt2)}
+.g-hist-search:focus-within{outline:1px solid rgba(255,255,255,.12)}
+.g-hist-search input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:15px;font-family:inherit}
+.g-hist-search input::placeholder{color:var(--gt3)}
+.g-hist-sec{font-size:14px;color:var(--gt3);padding:2px 6px 8px}
+.g-hist-row{display:flex;align-items:center;gap:18px;min-height:58px;padding:0 14px;margin:0 -8px;cursor:pointer;border-radius:14px;transition:background .12s}
+.g-hist-row:hover{background:rgba(255,255,255,.05)}
+.g-hist-row .t{flex:1;min-width:0;font-size:16px;color:var(--gt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g-hist-row .d{font-size:13.5px;color:var(--gt2);flex-shrink:0}
+@media(max-width:860px){.g-hist{padding:18px 14px 40px}.g-hist-search{height:48px}.g-hist-row{min-height:52px}.g-hist-row .t{font-size:15px}}
 /* aux */
 .g-aux{width:300px;flex-shrink:0;background:var(--g1);border-left:1px solid var(--gl);overflow-y:auto;padding:6px 10px 14px}
 .g-art{display:flex;align-items:center;gap:9px;min-height:36px;padding:6px 11px;border-radius:6px;font-size:13px;color:var(--gt2);cursor:pointer;transition:background .12s}
@@ -1347,9 +1361,10 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 .au-gap{margin-top:14px}
 @media (max-width:520px){#modal-auth .modal{padding:36px 22px 28px}}
 
-/* ══ sidebar collapse + icon rows — Gemini식: 폭은 이징, 콘텐츠는 제자리 크로스페이드 ══ */
-.g-side{transition:width var(--motion-normal) var(--ease)}
-.g-side.collapsed{width:64px}
+/* ══ sidebar collapse + icon rows — Gemini식: 폭은 이징, 콘텐츠는 제자리 크로스페이드,
+   배경색도 함께 트랜지션 — 접힘 레일은 콘텐츠 배경과 동일해 경계가 완전히 사라진다 ══ */
+.g-side{transition:width var(--motion-normal) var(--ease),background-color var(--motion-normal) var(--ease)}
+.g-side.collapsed{width:64px;background:var(--g0)}
 .g-new,#g-guest-note,#g-brand-row,.g-util,.g-sec,#g-sess-list,#g-live-list,#g-side-links{transition:opacity var(--motion-fast) var(--ease)}
 .g-side.collapsed #g-side-links{opacity:0;pointer-events:none}
 .g-side.collapsed .g-new,.g-side.collapsed .g-util,.g-side.collapsed .g-sec,.g-side.collapsed #g-sess-list,.g-side.collapsed #g-live-list{opacity:0;pointer-events:none}
@@ -1440,7 +1455,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-home-chips{animation:gRiseIn .5s var(--ease) .18s both}
   .g-terms{bottom:12px;padding:0 64px 0 16px}
   .g-home{padding-bottom:224px} /* 하단 고정 독(칩+채팅바) 높이만큼 여백 — 짧은 창에서 칩이 히어로 문구를 덮는 겹침 방지 */
-  .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-right:1px solid var(--gl);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
+  .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
   .g-side.collapsed{width:min(300px,85vw)}
   .g-side.mobile-open{transform:translateX(0)}
   .g-side .g-ico-pill{display:none}
@@ -2717,17 +2732,16 @@ button{-webkit-tap-highlight-color:transparent}
           <span class="g-ico-pill" id="gp-close">사이드바 닫기</span>
         </div>
       </div>
-      <button class="g-new" onclick="gHome()">＋ 새 전략</button>
+      <button class="g-new" onclick="gHome()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg><span class="lb">새 전략</span></button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
-      <button class="g-util" onclick="gHistory()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>연구 기록</button>
-      <button class="g-util" onclick="gSchedule()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8 3v4M16 3v4"/></svg>예약된 검증</button>
-      <button class="g-util" id="g-tf-dash-btn" onclick="tfDashView()" hidden><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg>내 트레이딩</button>
-      <button class="g-util" onclick="tfShareView()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/></svg>전략 공유</button>
-      <button class="g-util" onclick="tfBrokersView()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg>지원 거래소</button>
-      <div class="g-sec">Research<button onclick="gHome()" aria-label="새 전략">＋</button></div>
+      <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>연구 기록</button>
+      <button class="g-util" id="g-tf-dash-btn" onclick="tfDashView()" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg>내 트레이딩</button>
+      <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/></svg>전략 공유</button>
+      <button class="g-util" onclick="tfBrokersView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg>지원 거래소</button>
+      <div class="g-sec">최근</div>
       <div id="g-sess-list"></div>
       <div class="g-sec" id="g-live-sec" hidden>Live</div>
       <div id="g-live-list"></div>
@@ -4455,9 +4469,10 @@ function gEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 
 /* ── sidebar / aux ── */
 function gSideRender(){
+  /* Gemini식 최근 목록: 제목만, 진행 중일 때만 점 표시 (초안 등 상태 배지 제거) */
   $('g-sess-list').innerHTML=G.sessions.filter(function(x){return !x.live;}).map(function(sx){
-    var st=sx.status==='run'?'<span class="g-dot run"></span>진행 중':sx.status==='review'?'<span class="g-dot rev"></span>검토 필요':sx.status==='done'?'완료':'초안';
-    return '<div class="g-sess'+(G.cur===sx?' on':'')+'" onclick="gSelect(\''+sx.id+'\')"><span class="t">'+gEsc(sx.title)+'</span><span class="m">'+st+'</span></div>';
+    var dot=sx.status==='run'?'<span class="g-dot run" style="margin-left:6px"></span>':'';
+    return '<div class="g-sess'+(G.cur===sx?' on':'')+'" onclick="gSelect(\''+sx.id+'\')"><span class="t">'+gEsc(sx.title)+'</span>'+dot+'</div>';
   }).join('') || '<div class="g-note" style="padding:4px 13px">아직 없음</div>';
   var lives=G.sessions.filter(function(x){return x.live;});
   $('g-live-sec').hidden=!lives.length;
@@ -5358,6 +5373,35 @@ function gStatusLabel(sx){
   if(sx.live) return sx.liveMode==='paper'?'Paper 실행 중':'실행 중';
   return sx.status==='run'?'진행 중':sx.status==='review'?'검토 필요':sx.status==='done'?'완료':'초안';
 }
+/* ── 연구 기록: Gemini 채팅 검색 화면 재현 — 검색 필 + 최근 + 일자, 20개씩 무한 스크롤 ── */
+var GH={q:'',limit:20};
+function gHistDate(ts){
+  if(!ts) return '';
+  var d=new Date(ts), now=new Date();
+  var d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var dd=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  var diff=Math.round((d0-dd)/864e5);
+  if(diff<=0) return '오늘';
+  if(diff===1) return '어제';
+  if(d.getFullYear()===now.getFullYear()) return (d.getMonth()+1)+'월 '+d.getDate()+'일';
+  return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.';
+}
+function gHistRows(){
+  var q=GH.q;
+  return G.sessions
+    .map(function(sx){ return {sx:sx, ts:+String(sx.id).replace(/^s/,'')||0}; })
+    .filter(function(r){ return !q||r.sx.title.toLowerCase().indexOf(q)>=0; })
+    .sort(function(a,b){ return b.ts-a.ts; });
+}
+function gHistList(append){
+  var box=$('g-hist-list'); if(!box) return;
+  var rows=gHistRows();
+  var slice=rows.slice(0,GH.limit);
+  box.innerHTML=slice.length?slice.map(function(r){
+    return '<div class="g-hist-row" onclick="gSelect(\''+r.sx.id+'\')"><span class="t">'+gEsc(r.sx.title)+'</span><span class="d num">'+gHistDate(r.ts)+'</span></div>';
+  }).join(''):'<div class="g-note" style="padding:26px 4px;text-align:center">'+(GH.q?'검색 결과가 없어요':'아직 연구 기록이 없어요. 새 전략으로 시작해보세요.')+'</div>';
+  var more=$('g-hist-more'); if(more) more.hidden=rows.length<=GH.limit;
+}
 function gHistory(){
   G.cur=null; G.mode='history'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open');
@@ -5365,12 +5409,29 @@ function gHistory(){
   $('g-aux').style.display='none';
   gSideRender(); gTabsRender();
   gChead('연구 기록','', null);
-  var rows=G.sessions;
-  gContent('<div class="g-doc">'+(rows.length
-    ? '<table class="g-table"><tbody>'+rows.map(function(sx){
-        return '<tr style="cursor:pointer" onclick="gSelect(\''+sx.id+'\')"><td>'+gEsc(sx.title)+'</td><td class="num">'+((sx.strategy&&sx.strategy.pair)||'')+'</td><td style="text-align:right;color:var(--gt3)">'+gStatusLabel(sx)+'</td></tr>';
-      }).join('')+'</tbody></table>'
-    : '<div class="g-note" style="padding:28px 4px;text-align:center">아직 연구 기록이 없어요. 새 전략으로 시작해보세요.</div>')+'</div>');
+  GH={q:'',limit:20};
+  gContent('<div class="g-hist">'
+    +'<div class="g-hist-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
+    +'<input id="g-hist-q" type="search" placeholder="연구 검색" aria-label="연구 검색" autocomplete="off"></div>'
+    +'<div class="g-hist-sec">최근</div>'
+    +'<div id="g-hist-list"></div>'
+    +'<div id="g-hist-more" class="g-note" style="text-align:center;padding:16px 0 6px" hidden>스크롤하면 더 불러와요</div>'
+    +'</div>');
+  gHistList();
+  var qi=$('g-hist-q');
+  qi.addEventListener('input',function(){ GH.q=this.value.trim().toLowerCase(); GH.limit=20; gHistList(); });
+  if(innerWidth>860) qi.focus();
+  /* 무한 스크롤: 목록 바닥 근처에서 20개씩 추가 (리스너는 1회만 장착, history 모드에서만 동작) */
+  var sc=$('g-scroll');
+  if(sc&&!sc._histScroll){
+    sc._histScroll=1;
+    sc.addEventListener('scroll',function(){
+      if(G.mode!=='history') return;
+      if(sc.scrollHeight-sc.scrollTop-sc.clientHeight<320&&gHistRows().length>GH.limit){
+        GH.limit+=20; gHistList(true);
+      }
+    });
+  }
 }
 function gSchedule(){
   G.cur=null; G.mode='schedule'; G.tabs=[]; G.activeTab=null;
@@ -9386,7 +9447,7 @@ function applyLang(){
   var lg=document.querySelector('#g-auth-btns .ga-login'); if(lg) lg.textContent=L('nav.login');
   var sg=document.querySelector('#g-auth-btns .ga-signup'); if(sg) sg.textContent=L('nav.signup');
   /* 사이드바 */
-  var nw=document.querySelector('.g-new'); if(nw) nw.textContent=L('side.new');
+  var nw=document.querySelector('.g-new .lb'); if(nw) nw.textContent=L('side.new'); /* .lb 로 한정 — 아이콘 svg 를 지우지 않게 */
   var note=document.querySelector('#g-guest-note span');
   if(note){ var parts=L('side.note').split('|'); note.innerHTML=parts[0]+'<a onclick="authOpen(\'login\')">'+parts[1]+'</a>'+(parts[2]||''); }
   var slinks=document.querySelectorAll('#g-side-links a');
