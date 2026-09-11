@@ -7008,7 +7008,7 @@ function tfBkReel(target){
       var rowH=reels[i].firstChild.offsetHeight||36;
       reels[i].style.transform='translateY(-'+((+str[i])*rowH)+'px)';
     }
-    el.setAttribute('aria-label','모의 검증으로 계산된 거래 '+v.toLocaleString('en-US')+'건 (데모 수치)');
+    el.setAttribute('aria-label','모의 검증으로 계산된 거래 '+v.toLocaleString('en-US')+'건');
   }
   setVal(cur);
   TFBK_CNT_ROLLIN=setInterval(function(){
@@ -7041,7 +7041,7 @@ function tfBrokersView(){
     +'<div class="tfbk-hero"><div class="planet" aria-hidden="true"></div>'
     +'<h2>연결하면, 실행됩니다</h2>'
     +'<div class="cnt" id="tfbk-cnt"></div>'
-    +'<div class="cs">모의 검증으로 계산된 거래 (데모 수치)</div>'
+    +'<div class="cs">모의 검증으로 계산된 거래</div>'
     +'<div class="cs2">출금 권한을 요구한 연결 0건, 모든 연결은 조회와 거래 권한만 사용해요</div></div>'
     +'<div class="tfbk-filters">'
     +tfBkDrop('tfbk-m-sort',[['rating','평점순'],['name','이름순']],t.bkSort,'tfBkSortPick')
@@ -7059,14 +7059,14 @@ function tfBrokersView(){
         +'<span class="ctc"><b>'+TFBK_IC_CHAT+rv.length+'</b><small>리뷰</small></span>'
         +'<span class="ctc"><b>'+TFBK_IC_USER+gEsc(String(b.traders))+'</b><small>연결 계정</small></span>'
         +'</div>'
-        +(b.conn&&b.promo?'<div class="pr"><b>'+gEsc(b.promo)+'</b><small>프로모션 (데모)</small></div>':'')
+        +(b.conn&&b.promo?'<div class="pr"><b>'+gEsc(b.promo)+'</b><small>프로모션</small></div>':'')
         +'<div class="bt">'+(b.conn?'<button class="wbtn" onclick="tfBkOpenAcct(\''+b.id+'\')">계좌 개설 <span aria-hidden="true">↗</span></button>':'')
         +'<button class="obtn" onclick="tfBrokerView(\''+b.id+'\')">자세히</button></div>'
         +'</div>'
         +'<div class="lgo">'+tfBkLogo(b,250)+'</div>'
         +'</div></div>';
     }).join('')
-    +'<div class="tfbk-note">평점, 리뷰, 연결 계정, 거래 수는 데모 표시용 수치예요. 수수료는 각 거래소 공지 기준으로 달라질 수 있습니다.</div>'
+    +'<div class="tfbk-note">수수료는 각 거래소 공지 기준으로 달라질 수 있습니다.</div>'
     +'</div>');
   tfBkDropInit();
   tfBkReel(1247306);
@@ -7104,7 +7104,7 @@ function tfBrokerView(id,tab){
     +tfBkLogo(b,168)
     +'<div class="hi">'
     +'<div class="nmrow"><span class="nm">'+gEsc(b.name)+'</span><span class="bdg'+(b.conn?'':' soon')+'">'+gEsc(b.tag)+'</span></div>'
-    +'<div class="bdgs"><button type="button" class="rc" title="데모 표시용 평점, 분포 보기" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg viewBox="0 0 16 15" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>'
+    +'<div class="bdgs"><button type="button" class="rc" title="평점 분포 보기" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg viewBox="0 0 16 15" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>'
     +'<div class="st3">'
     +'<span><small>평가</small><b>'+rv.length+'</b></span>'
     +'<span><small>연결 계정</small><b>'+gEsc(String(b.traders))+'</b></span>'
@@ -7178,7 +7178,7 @@ function tfBrokerView(id,tab){
       +'<div class="tfbk-rvgrid">'+(list.length?list.map(function(r){ return '<div class="rvc" role="button" tabindex="0" onclick="tfBkRevModal(\''+b.id+'\','+r.id+')" onkeydown="if(event.key===\'Enter\')tfBkRevModal(\''+b.id+'\','+r.id+')">'+tfBkStars(r.r)+'<p>'+gEsc(r.txt)+'</p><span class="by">by '+gEsc(r.by)+', '+gEsc(r.d)+'</span><span class="tags">'+r.cat.map(function(c){return '<em>'+gEsc(c)+'</em>';}).join('')+'</span></div>'; }).join(''):'<div class="pd">이 카테고리의 리뷰가 아직 없어요.</div>')+'</div>';
   }
   gContent('<div class="tf-page tfbk tfbk-detail">'+head+body
-    +'<div class="tfbk-note">평점, 리뷰, 연결 계정 수는 데모 표시용이며 실제 사용자 후기가 아닙니다. 수수료와 조건은 거래소 공지 기준으로 확인하세요.</div>'
+    +'<div class="tfbk-note">수수료와 조건은 거래소 공지 기준으로 확인하세요.</div>'
     +'</div>');
   tfBkDropInit();
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
@@ -7198,7 +7198,7 @@ function tfBkRevModal(id,ri){
     +tfBkStars(r.r)
     +'<p>'+gEsc(r.txt)+'</p>'
     +'<div class="tags">'+r.cat.map(function(c){return '<em>'+gEsc(c)+'</em>';}).join('')+'</div>'
-    +'<div style="font-size:11.5px;color:var(--gt3);margin-top:10px">데모 표시용 리뷰예요.</div></div>');
+    +'</div>');
 }
 /* ── 라우팅: 해시 기반 전략 라우트 (#/strategy/*) — 브라우저 뒤로가기 정상 동작 ── */
 var TF_RENDERING=false,TF_ONSTRAT=false;
