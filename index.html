@@ -1198,16 +1198,26 @@ body.light .au-free{color:#1e8e3e}
 .g-think{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gt3)}
 /* composer (workspace) */
 .g-composer-wrap{flex-shrink:0;padding:10px 18px 14px}
-/* 홈 필 낙하 연출과 크로스페이드 — 고스트가 도착하는 동안 실 컴포저가 살짝 위에서 내려앉는다 (PC 전용) */
-@media (min-width:861px) and (prefers-reduced-motion:no-preference){
-  .g-composer-wrap.drop-in .g-composer{animation:gCompDropIn .34s var(--ease) both}
-}
-@keyframes gCompDropIn{from{opacity:0;transform:translateY(-16px)}55%{opacity:1}to{opacity:1;transform:none}}
 .g-composer{max-width:820px;margin:0 auto;background:#1a1c1f;border:1px solid var(--gl);border-radius:10px;padding:10px 10px 8px 16px}
 .g-composer:focus-within{border-color:var(--gl2)}
 .g-composer textarea{width:100%;background:none;border:none;outline:none;color:var(--gt);font-size:16px;font-family:inherit;padding:2px 0 8px;resize:none;line-height:22px;height:32px;max-height:120px;overflow-y:auto} /* 16px 미만이면 iOS 포커스 시 강제 줌 */
-@media(min-width:861px){.g-composer textarea{font-size:14px;line-height:20px;height:30px}}
 .g-composer textarea::placeholder{color:var(--gt3)}
+/* PC: 채팅 컴포저 = 홈 필과 동일한 알약 (Gemini 패리티) — 전송 낙하 연출이 "같은 박스"로 이어진다 */
+@media(min-width:861px){
+  .g-composer{max-width:640px;min-height:58px;background:var(--pill);border:0;border-radius:999px;box-shadow:var(--shadow-pill);padding:8px 10px 8px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px}
+  .g-composer:focus-within{outline:1px solid rgba(255,255,255,.14)}
+  body.light .g-composer:focus-within{outline-color:rgba(60,64,67,.22)}
+  body.light .g-composer textarea{color:#1f1f1f}
+  .g-composer textarea{flex:1;min-width:0;width:auto;font-size:14.5px;line-height:21px;height:21px;max-height:147px;padding:0;margin:6px 0}
+  .g-composer #g-ctx-chip:not(:empty){flex:0 0 100%;order:-2}
+  .g-composer-row{flex:0 0 auto}
+  .g-composer-row .g-model{flex:0 0 auto}
+  .g-composer-row .g-send{width:40px;height:40px;font-size:16px}
+  .g-composer.multi{border-radius:26px}
+  .g-composer.multi textarea{order:-1;flex:0 0 100%;margin:4px 0 10px}
+  .g-composer.multi .g-composer-row{margin-left:auto}
+  .g-composer-wrap.drop-fly .g-composer{visibility:hidden} /* 고스트가 착지할 때까지 실 컴포저 숨김 — 착지=픽셀 동일 스왑 */
+}
 .g-send .stopsq{display:block;width:10px;height:10px;border-radius:2.5px;background:currentColor}
 .g-composer-row{display:flex;align-items:center;gap:10px}
 .g-composer-row .g-model{font-size:12.5px;color:var(--gt3);flex:1}
@@ -4741,27 +4751,36 @@ function gPillDropStart(){
   if(!r.height||r.top<0||r.top>innerHeight) return null;
   var g=pill.cloneNode(true);
   g.removeAttribute('id');
-  var gt=g.querySelector('textarea'); if(gt){ gt.value=''; gt.style.height='21px'; } /* 레퍼런스: 전송 즉시 비워진 필이 낙하 (Chrome cloneNode 는 입력값을 복사함) */
-  g.classList.remove('multi'); /* 멀티라인이었어도 낙하는 한 줄 필 형태로 */
-  g.querySelectorAll('.g-send,.g-exp,.g-plus-pop').forEach(function(n){ n.remove(); });
+  /* 낙하하는 박스 = 착지할 채팅 필과 완전히 같은 구성(텍스트영역+전송 버튼)으로 만든다 */
+  g.querySelectorAll('.plus,.g-exp,.g-plus-pop,.g-pill-sp').forEach(function(n){ n.remove(); });
+  var gt=g.querySelector('textarea');
+  if(gt){ gt.value=''; gt.style.height='21px'; var di=$('g-in'); if(di) gt.placeholder=di.placeholder; } /* 전송 즉시 비워진 필 (Chrome cloneNode 는 입력값을 복사함) */
+  g.classList.remove('multi');
+  var sb=g.querySelector('.g-send');
+  if(sb){ sb.style.display='inline-flex'; sb.classList.remove('pop','out'); delete sb.dataset.hiding; }
   g.querySelectorAll('[id]').forEach(function(n){ n.removeAttribute('id'); });
   g.setAttribute('aria-hidden','true');
-  g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0;z-index:55;pointer-events:none;will-change:transform;transition:transform .32s cubic-bezier(.3,0,.15,1),opacity .18s ease .17s';
+  g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0;z-index:55;pointer-events:none;will-change:transform;'
+    +'transition:transform .34s cubic-bezier(.3,0,.15,1),width .34s cubic-bezier(.3,0,.15,1),height .34s cubic-bezier(.3,0,.15,1),opacity .2s ease .14s';
   document.body.appendChild(g);
   return {g:g,r:r};
 }
 function gPillDropEnd(d){
   if(!d) return;
   var wrap=$('g-composer-wrap');
-  if(wrap&&!wrap.hidden){ wrap.classList.remove('drop-in'); void wrap.offsetWidth; wrap.classList.add('drop-in'); }
+  if(wrap&&!wrap.hidden) wrap.classList.add('drop-fly'); /* 착지 전까지 실 컴포저 숨김 */
   requestAnimationFrame(function(){ requestAnimationFrame(function(){
-    var ty=innerHeight-d.r.top-d.r.height-24; /* 타깃을 못 찾으면 화면 하단으로 폴백 */
     var tgt=wrap&&!wrap.hidden?wrap.querySelector('.g-composer'):null;
-    if(tgt){ var tr=tgt.getBoundingClientRect(); ty=(tr.top+tr.height/2)-(d.r.top+d.r.height/2); }
-    d.g.style.transform='translateY('+ty+'px)';
-    d.g.style.opacity='0';
+    if(tgt){
+      var tr=tgt.getBoundingClientRect();
+      d.g.style.width=tr.width+'px'; d.g.style.height=tr.height+'px';
+      d.g.style.transform='translate('+(tr.left-d.r.left)+'px,'+(tr.top-d.r.top)+'px)';
+    }else{
+      d.g.style.transform='translateY('+(innerHeight-d.r.top-d.r.height-24)+'px)';
+      d.g.style.opacity='0';
+    }
   }); });
-  setTimeout(function(){ if(d.g.parentNode) d.g.remove(); if(wrap) wrap.classList.remove('drop-in'); },460);
+  setTimeout(function(){ if(wrap) wrap.classList.remove('drop-fly'); if(d.g.parentNode) d.g.remove(); },400);
 }
 function gNew(preset){
   var inEl=$('g-home-in');
@@ -4842,7 +4861,7 @@ function gConvUser(t){
    +'</span><div class="g-umsg">'+gEsc(t)+'</div></div>');
 }
 function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx).catch(function(){}); }catch(e){} toast('복사 완료'); }
-function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; } }
+function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; var cp=f.closest('.g-composer'); if(cp&&innerWidth>860) cp.classList.toggle('multi',f.scrollHeight>30); } }
 function gConvAI(html){ gThreadAdd('<div class="g-amsg">'+html+'</div>'); }
 function gConvChips(items){
   var id='gc'+Date.now();
@@ -8792,6 +8811,7 @@ function gSend(){
   /* 생성/조사 중 전송: 조용히 삼키지 않는다 — 입력을 보존하고 이유를 알린다 (agy QA 3-1) */
   if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중이에요, 끝나면 바로 보내주세요'); return; }
   var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value=''; f.style.height='auto';
+  var cp0=f.closest('.g-composer'); if(cp0) cp0.classList.remove('multi');
   if(G.mode==='conv'){
     gConvUser(t);
     if(gStep==='pair'&&/이더|eth/i.test(t)){ gThink('확인 중',450,function(){ gPickPair('ETH/USDT',null); }); return; }
@@ -8893,7 +8913,8 @@ function gBoot(){
   var gi=$('g-in');
   /* IME 조합 중 Enter 오작동 방지, Shift+Enter 줄바꿈, 자동 높이 */
   gi.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229){ e.preventDefault(); gSend(); } });
-  gi.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+  gi.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px';
+    var cp=this.closest('.g-composer'); if(cp&&innerWidth>860) cp.classList.toggle('multi',this.scrollHeight>30); /* PC 알약: 여러 줄이면 radius 26 (홈 필과 동일) */ });
   $('g-scroll').addEventListener('scroll',function(){ if(this.scrollHeight-this.scrollTop-this.clientHeight<60){ var c=$('g-newmsg'); if(c) c.hidden=true; } });
   gHome();
 }
