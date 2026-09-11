@@ -5386,11 +5386,32 @@ function gHistDate(ts){
   if(d.getFullYear()===now.getFullYear()) return (d.getMonth()+1)+'월 '+d.getDate()+'일';
   return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.';
 }
+/* 세션의 검색용 본문: 대화 기록(convo HTML)에서 태그를 벗긴 평문 — Gemini 처럼 제목만이 아니라 내용도 검색.
+   convo 길이 기준 캐시 (STORE 스냅샷 필드가 아니라 저장에는 섞이지 않음) */
+function gHistText(sx){
+  var n=(sx.convo||[]).length;
+  if(sx._sTx!=null&&sx._sN===n) return sx._sTx;
+  var t=(sx.convo||[]).join(' ');
+  t=t.replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<script[\s\S]*?<\/script>/gi,' ')
+     .replace(/<[^>]+>/g,' ')
+     .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ')
+     .replace(/\s+/g,' ').toLowerCase();
+  sx._sTx=t; sx._sN=n;
+  return t;
+}
 function gHistRows(){
-  var q=GH.q;
+  var toks=GH.q.split(/\s+/).filter(Boolean); /* 다중 단어 = AND (Gemini 검색 동작) */
   return G.sessions
     .map(function(sx){ return {sx:sx, ts:+String(sx.id).replace(/^s/,'')||0}; })
-    .filter(function(r){ return !q||r.sx.title.toLowerCase().indexOf(q)>=0; })
+    .filter(function(r){
+      if(!toks.length) return true;
+      var title=r.sx.title.toLowerCase(), body=null;
+      return toks.every(function(tk){
+        if(title.indexOf(tk)>=0) return true;
+        if(body===null) body=gHistText(r.sx);
+        return body.indexOf(tk)>=0;
+      });
+    })
     .sort(function(a,b){ return b.ts-a.ts; });
 }
 function gHistList(append){
