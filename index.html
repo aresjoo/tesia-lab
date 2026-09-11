@@ -4718,17 +4718,24 @@ function gCosmosStart(){
   function pal(){ return document.body.classList.contains('light')
     ?{star:'140,168,224',k:.7}
     :{star:'216,228,255',k:1}; }
-  /* 별 필드 — 상주 */
+  /* 별 필드 — 상주. 위치는 절대시간 곱이 아니라 프레임별 증분 적분:
+     장시간 세션에서 큰 t 와 미세 속도의 곱이 만드는 수치 누적/자리 뭉침을 구조적으로 차단 */
   var stars=[],NS=mob?40:88,i;
   for(i=0;i<NS;i++) stars.push({x:Math.random(),y:Math.random(),r:rnd(.5,1.5),tw:rnd(0,6.28),ts:rnd(.5,1.3),vx:rnd(-.005,.005),vy:rnd(-.003,.003)});
   var t=0,last=0;
+  function advance(dt){
+    for(var j=0;j<NS;j++){ var s=stars[j];
+      s.x=(((s.x+s.vx*dt)%1)+1)%1; s.y=(((s.y+s.vy*dt)%1)+1)%1;
+      if(!isFinite(s.x)||!isFinite(s.y)){ s.x=Math.random(); s.y=Math.random(); } }
+  }
   function render(tt){
     var P=pal();
     cx.clearRect(0,0,W,H);
     var g=sm(tt/.8),j; /* 최초 진입 페이드인만, 심연은 이후 상주 */
-    /* 별 */
-    for(j=0;j<NS;j++){ var s=stars[j],sx=(((s.x+s.vx*tt)%1)+1)%1*W,sy=(((s.y+s.vy*tt)%1)+1)%1*H;
-      var sa=(.22+.55*Math.abs(Math.sin(s.tw+s.ts*tt)))*.62*P.k;
+    /* 별 — 좌우 에지 30px 페이드로 경계에서 뚝 나타나거나 줄지어 보이지 않게 */
+    for(j=0;j<NS;j++){ var s=stars[j],sx=s.x*W,sy=s.y*H;
+      var ef=Math.min(1,sx/30,(W-sx)/30); if(ef<=0) continue;
+      var sa=(.22+.55*Math.abs(Math.sin(s.tw+s.ts*tt)))*.62*P.k*ef;
       cx.beginPath(); cx.arc(sx,sy,s.r,0,6.283); cx.fillStyle='rgba('+P.star+','+sa+')'; cx.fill(); }
     /* 진입 페이드 + 중앙 비네트(타이틀 가독성) + 상하 에지 페이드 */
     cx.globalCompositeOperation='destination-out';
@@ -4750,7 +4757,8 @@ function gCosmosStart(){
   function loop(now){
     if(!cv.isConnected){ GCOS.raf=0; if(GCOS.onr){ removeEventListener('resize',GCOS.onr); GCOS.onr=null; } return; }
     var dt=Math.min((now-last)/1000,.05); last=now; t+=dt;
-    if(GCOS.jump!=null){ t=GCOS.jump; GCOS.jump=null; } /* QA용 타임라인 점프 */
+    if(GCOS.jump!=null){ if(GCOS.jump>t) advance(GCOS.jump-t); t=GCOS.jump; GCOS.jump=null; } /* QA용 타임라인 점프 — 드리프트도 동일 경과만큼 진행 */
+    advance(dt);
     render(t);
     GCOS.raf=requestAnimationFrame(loop);
   }
