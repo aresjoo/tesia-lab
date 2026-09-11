@@ -1760,32 +1760,53 @@ body.tf-route #teth-help{bottom:88px}
 @media (max-width:860px){ .tfw-hd{padding-left:44px} } /* 좌상단 고정 햄버거(40px)와 뒤로 버튼 겹침 방지 — 모바일 tf 라우트 (라이브 QA2) */
 .tf-drawer .dh .x,.tf-mbox .mh .x{width:40px;height:40px} /* 전략 라우트: 헬프 FAB가 스티키 CTA를 가리지 않게 */
 /* ══ 지원 거래소 (TradingView Brokers 구조 변형) ══ */
-.tfbk-hero{text-align:center;margin:6px 0 20px}
-.tfbk-hero h2{font-size:26px;margin:0 0 12px}
-.tfbk-hero .cnt b{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:56px;border:1px solid var(--gl);border-radius:10px;background:rgba(255,255,255,.04);font-size:30px;font-weight:800;color:var(--gt)}
-.tfbk-hero .cs{font-size:12.5px;color:var(--gt3);margin-top:9px}
-.tfbk-filters{display:flex;gap:10px;justify-content:center;margin:0 0 18px}
-.tfbk-sel{background:rgba(255,255,255,.05);border:1px solid var(--gl);border-radius:999px;color:var(--gt);font-size:13px;padding:8px 14px;cursor:pointer;appearance:auto}
-.tfbk-card{display:flex;align-items:center;gap:14px;border:1px solid var(--gl);border-radius:16px;padding:18px;margin-bottom:12px;cursor:pointer;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.008));transition:border-color .16s,transform .16s}
-.tfbk-card:hover{border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
-.tfbk-card .in{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.tfbk-card .nm,.tfbk-head .nm{font-size:16.5px;font-weight:700;color:var(--gt);display:flex;align-items:center;gap:8px}
+.tfbk{max-width:900px;margin:0 auto}
+.tfbk-hero{position:relative;text-align:center;padding:64px 0 34px;margin:-8px -8px 10px;overflow:hidden}
+.tfbk-hero .planet{position:absolute;left:50%;top:-560px;transform:translateX(-50%);width:1700px;height:820px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,#16407f 0%,#0d2a5c 42%,#081a3c 62%,rgba(8,20,44,0) 74%);
+  box-shadow:0 40px 140px -40px rgba(58,124,255,.35), inset 0 -50px 120px -40px rgba(120,180,255,.28);filter:saturate(1.1)}
+.tfbk-hero .planet::after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 -3px 18px rgba(160,205,255,.5)}
+.tfbk-hero h2{position:relative;font-size:clamp(34px,6.4vw,74px);line-height:1.06;letter-spacing:-.02em;font-weight:800;color:#fff;margin:0 0 30px;text-shadow:0 6px 40px rgba(0,0,0,.55)}
+.tfbk-hero .cnt{position:relative;display:flex;justify-content:center;align-items:center;gap:5px;min-height:56px;flex-wrap:wrap}
+.tfbk-hero .cnt b{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:54px;border-radius:9px;background:rgba(10,12,16,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(3px);font-size:28px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;box-shadow:0 6px 22px rgba(0,0,0,.45)}
+.tfbk-hero .cnt em{font-style:normal;font-size:26px;font-weight:800;color:#fff;margin:0 1px}
+.tfbk-hero .cs{position:relative;font-size:13.5px;color:#dfe6f2;margin-top:11px;font-weight:600}
+.tfbk-hero .cs2{position:relative;font-size:11.5px;color:var(--gt3);margin-top:5px}
+.tfbk-filters{display:flex;gap:9px;justify-content:center;align-items:center;margin:6px 0 26px;flex-wrap:wrap}
+.tfbk-filters .fdiv{width:1px;height:22px;background:var(--gl)}
+.tfbk-sel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;color:var(--gt);font-size:13.5px;font-weight:600;padding:10px 16px;cursor:pointer;appearance:auto}
+.tfbk-filters .fp{font-size:13.5px;font-weight:600;color:var(--gt2);background:rgba(255,255,255,.06);border:1px solid transparent;border-radius:999px;padding:10px 18px;cursor:pointer;transition:background .14s,color .14s}
+.tfbk-filters .fp:hover{background:rgba(255,255,255,.1)}
+.tfbk-filters .fp.on{background:#fff;color:#0d0e10}
+.tfbk-card{display:flex;align-items:center;gap:22px;border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:26px 28px;margin-bottom:16px;cursor:pointer;background:linear-gradient(120deg,#101114 0%,#0a0b0d 55%,#101114 100%);transition:border-color .16s,transform .16s,box-shadow .16s}
+.tfbk-card:hover{border-color:rgba(255,255,255,.18);transform:translateY(-2px);box-shadow:0 14px 40px -18px rgba(0,0,0,.7)}
+.tfbk-card .in{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.tfbk-card .nm,.tfbk-head .nm{font-size:21px;font-weight:800;color:#fff;display:flex;align-items:center;gap:9px}
 .tfbk .bdg{font-size:10px;font-weight:700;letter-spacing:.4px;color:#8fb2ff;border:1px solid rgba(143,178,255,.4);border-radius:5px;padding:2px 7px}
 .tfbk .bdg.soon{color:var(--gt3);border-color:var(--gl)}
-.tfbk-card .as{font-size:12.5px;color:var(--gt2)}
-.tfbk-card .rt{font-size:14px;color:var(--gt);display:flex;align-items:center;gap:7px}
+.tfbk-card .as{font-size:13px;color:var(--gt2)}
+.tfbk-card .rtrow{display:flex;align-items:flex-start;gap:26px;margin-top:5px;flex-wrap:wrap}
+.tfbk-card .rt{display:flex;flex-direction:column;gap:3px}
+.tfbk-card .rt>b{font-size:15px;color:#fff}
+.tfbk-card .rt .vf{font-style:normal;font-size:11px;color:#56c486}
 .tfbk-stars .st{color:rgba(255,255,255,.22);font-size:13px}
-.tfbk-stars .st.on{color:#e8c15a}
-.tfbk-card .ct{display:flex;gap:16px;font-size:12.5px;color:var(--gt2)}
-.tfbk-card .ct small{display:block;font-size:10.5px;color:var(--gt3)}
-.tfbk-card .pr b{display:block;font-size:13.5px;color:var(--gt)}
-.tfbk-card .pr small{font-size:10.5px;color:var(--gt3)}
-.tfbk-card .bt{display:flex;gap:8px;margin-top:4px}
-.tfbk-logo{position:relative;flex-shrink:0;display:inline-block}
-.tfbk-logo i,.tfbk-logo b{position:absolute;inset:0;border-radius:22%;border:1px solid rgba(255,255,255,.14);background:#1c1e23}
-.tfbk-logo i:nth-child(1){transform:translate(14%,6%) rotate(9deg);opacity:.45}
-.tfbk-logo i:nth-child(2){transform:translate(7%,3%) rotate(4deg);opacity:.7}
-.tfbk-logo b{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gt);background:linear-gradient(135deg,#23252b,#17181c)}
+.tfbk-stars .st.on{color:#fff}
+.tfbk-card .ctc{display:flex;flex-direction:column;gap:3px}
+.tfbk-card .ctc b{font-size:15px;color:#fff;font-weight:700}
+.tfbk-card .ctc small{font-size:11px;color:var(--gt3)}
+.tfbk-card .pr{margin-top:4px}
+.tfbk-card .pr b{display:block;font-size:16px;font-weight:800;color:#fff}
+.tfbk-card .pr small{font-size:11px;color:var(--gt3)}
+.tfbk-card .bt{display:flex;gap:10px;margin-top:10px}
+.tfbk .wbtn{height:44px;padding:0 22px;border-radius:12px;background:#fff;color:#0d0e10;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:transform .12s,opacity .12s}
+.tfbk .wbtn:hover{opacity:.92;transform:translateY(-1px)}
+.tfbk .obtn{height:44px;padding:0 20px;border-radius:12px;background:transparent;color:#fff;font-size:14px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.28)}
+.tfbk .obtn:hover{background:rgba(255,255,255,.07)}
+.tfbk-logo{position:relative;flex-shrink:0;display:inline-block;filter:drop-shadow(0 14px 24px rgba(0,0,0,.5))}
+.tfbk-logo i,.tfbk-logo b{position:absolute;inset:0;border-radius:24%;border:1px solid rgba(255,255,255,.12)}
+.tfbk-logo i:nth-child(1){transform:translate(16%,7%) rotate(10deg);opacity:.4}
+.tfbk-logo i:nth-child(2){transform:translate(8%,3.5%) rotate(5deg);opacity:.68}
+.tfbk-logo b{display:flex;align-items:center;justify-content:center;font-weight:800}
 .tfbk-note{font-size:11px;color:var(--gt3);line-height:1.7;margin-top:18px}
 .tfbk-bc{font-size:12px;color:var(--gt3);margin-bottom:14px}
 .tfbk-bc .lk{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
@@ -1858,11 +1879,16 @@ body.tf-route #teth-help{bottom:88px}
 .tfbk-rvmodal .u span{font-size:11.5px;color:var(--gt3)}
 .tfbk-rvmodal p{font-size:13.5px;color:var(--gt2);line-height:1.75;margin:10px 0}
 @media (max-width:860px){
-  .tfbk-card{flex-direction:row-reverse}
-  .tfbk-card .tfbk-logo{width:56px!important;height:56px!important;font-size:22px!important}
+  .tfbk-card{flex-direction:row-reverse;padding:20px;gap:14px;align-items:flex-start}
+  .tfbk-card .tfbk-logo{width:64px!important;height:64px!important;font-size:26px!important}
+  .tfbk-card .nm{font-size:17px}
+  .tfbk-card .rtrow{gap:16px}
+  .tfbk .wbtn,.tfbk .obtn{height:42px;padding:0 16px;font-size:13px}
   .tfbk-head .ha{margin-left:0;width:100%}
   .tfbk-faq{grid-template-columns:1fr}
-  .tfbk-hero h2{font-size:21px}
+  .tfbk-hero{padding:44px 0 26px}
+  .tfbk-hero .planet{top:-620px}
+  .tfbk-hero .cnt b{min-width:26px;height:40px;font-size:20px;border-radius:7px}
 }
 </style>
 
@@ -6747,23 +6773,23 @@ function tfShareToggle(el){
 }
 /* ── §9.5 지원 거래소: 목록 + 상세 (TradingView Brokers 구조의 TETH 변형, 수치는 데모) ── */
 var TF_BROKERS=[
-  {id:'binance',name:'Binance',tag:'거래소',assets:'암호화폐',conn:true,rating:4.2,traders:'1.2천',fw0:830,lev:'현물 1:1',
+  {id:'binance',name:'Binance',tag:'거래소',assets:'암호화폐',conn:true,rating:4.2,traders:'1.2천',fw0:830,lev:'현물 1:1',col:'#F3BA2F',fg:'#181818',
    promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료예요. 가입 즉시 자동 연결됩니다.',
    site:'binance.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.10%',tk:'0.10%'},
    about:'글로벌 최대 거래량의 암호화폐 거래소예요. 현물·선물과 폭넓은 알트코인을 지원하고, 유동성이 깊어 체결이 안정적입니다. TETH 연결은 조회·거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
-  {id:'okx',name:'OKX',tag:'거래소',assets:'암호화폐',conn:true,rating:4.1,traders:'640',fw0:410,lev:'현물 1:1',
+  {id:'okx',name:'OKX',tag:'거래소',assets:'암호화폐',conn:true,rating:4.1,traders:'640',fw0:410,lev:'현물 1:1',col:'#0a0a0c',fg:'#fff',
    promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 이용료가 무료예요. API 연결 시 Passphrase까지 함께 준비해주세요.',
    site:'okx.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.08%',tk:'0.10%'},
    about:'파생상품과 웹3 지갑까지 아우르는 종합 거래소예요. API 인증에 Passphrase가 필요한 점이 다른 거래소와 달라요. TETH 연결은 조회·거래 권한만 사용합니다.'},
-  {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',
+  {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',col:'#0fe7a2',fg:'#06251b',
    promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴 가입 시 이용료가 무료예요.',
    site:'woox.io',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.02%',tk:'0.05%'},
    about:'낮은 수수료와 깊은 유동성을 내세우는 거래소예요. TETH 연결은 조회·거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
-  {id:'upbit',name:'업비트',tag:'거래소',assets:'암호화폐 (KRW)',conn:false,rating:4.3,traders:'—',fw0:520,lev:'현물 1:1',site:'upbit.com',
+  {id:'upbit',name:'업비트',tag:'거래소',assets:'암호화폐 (KRW)',conn:false,rating:4.3,traders:'—',fw0:520,lev:'현물 1:1',col:'#093687',fg:'#fff',site:'upbit.com',
    about:'국내 최대 원화 마켓 거래소예요. TETH 연결은 준비 중입니다.'},
-  {id:'bybit',name:'Bybit',tag:'거래소',assets:'암호화폐',conn:false,rating:4.0,traders:'—',fw0:280,lev:'현물 1:1',site:'bybit.com',
+  {id:'bybit',name:'Bybit',tag:'거래소',assets:'암호화폐',conn:false,rating:4.0,traders:'—',fw0:280,lev:'현물 1:1',col:'#15192a',fg:'#f7a600',site:'bybit.com',
    about:'파생상품 중심의 글로벌 거래소예요. TETH 연결은 준비 중입니다.'},
-  {id:'kiwoom',name:'키움증권',tag:'증권사',assets:'국내·미국 주식',conn:false,rating:3.9,traders:'—',fw0:190,lev:'현금 1:1',site:'kiwoom.com',
+  {id:'kiwoom',name:'키움증권',tag:'증권사',assets:'국내·미국 주식',conn:false,rating:3.9,traders:'—',fw0:190,lev:'현금 1:1',col:'#5b2d86',fg:'#fff',site:'kiwoom.com',
    about:'국내 개인 투자자 점유율 1위 증권사예요. 주식 전략 연결은 준비 중입니다.'}
 ];
 function tfBkOf(id){ for(var i=0;i<TF_BROKERS.length;i++) if(TF_BROKERS[i].id===id) return TF_BROKERS[i]; return TF_BROKERS[0]; }
@@ -6784,7 +6810,19 @@ function tfBkRev(b){
   return base.map(function(r,i){ return {r:r[0],txt:r[1].replace('{N}',b.name),by:r[2],d:r[3],cat:r[4],id:i}; });
 }
 function tfBkStars(r){ var f=Math.round(r),s=''; for(var i=1;i<=5;i++) s+='<span class="st'+(i<=f?' on':'')+'">★</span>'; return '<span class="tfbk-stars" aria-label="별점 '+r+'">'+s+'</span>'; }
-function tfBkLogo(b,sz){ return '<span class="tfbk-logo" style="width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*0.4)+'px"><i></i><i></i><b>'+gEsc(b.name.slice(0,1))+'</b></span>'; }
+function tfBkLogo(b,sz){ return '<span class="tfbk-logo" style="width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*0.42)+'px"><i style="background:'+(b.col||'#1c1e23')+'"></i><i style="background:'+(b.col||'#1c1e23')+'"></i><b style="background:'+(b.col||'#1c1e23')+';color:'+(b.fg||'#fff')+'">'+gEsc(b.name.slice(0,1))+'</b></span>'; }
+/* 자릿박스 카운트업 — 콤마는 박스 밖 (TradingView 히어로 카운터 스타일) */
+function tfBkCount(target){
+  var el=$('tfbk-cnt'); if(!el) return;
+  var t0=performance.now(),D=1400;
+  (function tick(now){
+    if(!el.isConnected) return;
+    var q=Math.min(1,(now-t0)/D); q=1-Math.pow(1-q,3);
+    var v=Math.round(target*q).toLocaleString('en-US');
+    el.innerHTML=v.split('').map(function(ch){ return ch===','?'<em>,</em>':'<b>'+ch+'</b>'; }).join('');
+    if(q<1) requestAnimationFrame(tick);
+  })(t0);
+}
 function tfBrokersView(){
   var t=tfS();
   G.cur=null; G.mode='tfbrokers'; G.tabs=[]; G.activeTab=null;
@@ -6795,14 +6833,20 @@ function tfBrokersView(){
   var rows=TF_BROKERS.slice();
   if(t.bkFilter==='conn') rows=rows.filter(function(b){return b.conn;});
   if(t.bkFilter==='soon') rows=rows.filter(function(b){return !b.conn;});
+  if(t.bkFilter==='crypto') rows=rows.filter(function(b){return b.assets.indexOf('암호화폐')>=0;});
+  if(t.bkFilter==='stock') rows=rows.filter(function(b){return b.tag==='증권사';});
   rows.sort(t.bkSort==='name'?function(a,b){return a.name.localeCompare(b.name,'ko');}:function(a,b){return (b.conn-a.conn)||(b.rating-a.rating);}); /* 연결 지원 우선, 그 안에서 평점순 */
+  var pills=[['all','전체 거래소'],['crypto','암호화폐'],['stock','증권사'],['conn','연결 지원'],['soon','지원 예정']];
   gContent('<div class="tf-page tfbk">'
-    +'<div class="tfbk-hero"><h2>검증에서 실행까지</h2>'
-    +'<div class="cnt" aria-label="출금 권한을 요구한 연결 0건"><b>0</b></div>'
-    +'<div class="cs">출금 권한을 요구한 연결, 0건 — 모든 연결은 조회·거래 권한만 사용해요</div></div>'
+    +'<div class="tfbk-hero"><div class="planet" aria-hidden="true"></div>'
+    +'<h2>연결하는 순간,<br>전략은 실행이 됩니다</h2>'
+    +'<div class="cnt" id="tfbk-cnt" aria-label="모의 검증으로 계산된 거래"></div>'
+    +'<div class="cs">모의 검증으로 체결까지 계산된 거래 · 데모 수치</div>'
+    +'<div class="cs2">출금 권한을 요구한 연결 0건 — 모든 연결은 조회·거래 권한만 사용해요</div></div>'
     +'<div class="tfbk-filters">'
     +'<select class="tfbk-sel" aria-label="정렬" onchange="tfBkSet(\'bkSort\',this.value)"><option value="rating"'+(t.bkSort==='rating'?' selected':'')+'>평점순</option><option value="name"'+(t.bkSort==='name'?' selected':'')+'>이름순</option></select>'
-    +'<select class="tfbk-sel" aria-label="필터" onchange="tfBkSet(\'bkFilter\',this.value)"><option value="all"'+(t.bkFilter==='all'?' selected':'')+'>전체 거래소</option><option value="conn"'+(t.bkFilter==='conn'?' selected':'')+'>연결 지원</option><option value="soon"'+(t.bkFilter==='soon'?' selected':'')+'>지원 예정</option></select>'
+    +'<span class="fdiv"></span>'
+    +pills.map(function(p){ return '<button class="fp'+(t.bkFilter===p[0]?' on':'')+'" onclick="tfBkSet(\'bkFilter\',\''+p[0]+'\')">'+p[1]+'</button>'; }).join('')
     +'</div>'
     +rows.map(function(b){
       var rv=tfBkRev(b);
@@ -6810,15 +6854,19 @@ function tfBrokersView(){
         +'<div class="in">'
         +'<div class="nm">'+gEsc(b.name)+'<span class="bdg'+(b.conn?'':' soon')+'">'+(b.conn?'연결 지원':'지원 예정')+'</span></div>'
         +'<div class="as">거래 가능 자산: '+gEsc(b.assets)+'</div>'
-        +'<div class="rt"><b>'+b.rating.toFixed(1)+'</b> · '+(b.rating>=4.2?'좋음':b.rating>=4?'무난함':'보통')+' '+tfBkStars(b.rating)+'</div>'
-        +'<div class="ct"><span>💬 '+rv.length+'<small>리뷰</small></span><span>👤 '+gEsc(String(b.traders))+'<small>연결 계정</small></span></div>'
+        +'<div class="rtrow">'
+        +'<span class="rt"><b>'+b.rating.toFixed(1)+' · '+(b.rating>=4.2?'좋음':b.rating>=4?'무난함':'보통')+' <i class="vf">✔</i></b>'+tfBkStars(b.rating)+'</span>'
+        +'<span class="ctc"><b>💬 '+rv.length+'</b><small>리뷰</small></span>'
+        +'<span class="ctc"><b>👤 '+gEsc(String(b.traders))+'</b><small>연결 계정</small></span>'
+        +'</div>'
         +(b.conn&&b.promo?'<div class="pr"><b>'+gEsc(b.promo)+'</b><small>프로모션</small></div>':'')
-        +'<div class="bt">'+(b.conn?'<button class="tf-btn s" style="max-width:150px" onclick="event.stopPropagation();tfBkOpenAcct(\''+b.id+'\')">계좌 개설 ↗</button>':'')
-        +'<button class="tf-btn ghost" style="max-width:120px" onclick="event.stopPropagation();tfBrokerView(\''+b.id+'\')">자세히</button></div>'
-        +'</div>'+tfBkLogo(b,84)+'</div>';
+        +'<div class="bt">'+(b.conn?'<button class="wbtn" onclick="event.stopPropagation();tfBkOpenAcct(\''+b.id+'\')">계좌 개설 <span aria-hidden="true">↗</span></button>':'')
+        +'<button class="obtn" onclick="event.stopPropagation();tfBrokerView(\''+b.id+'\')">자세히</button></div>'
+        +'</div>'+tfBkLogo(b,128)+'</div>';
     }).join('')
-    +'<div class="tfbk-note">평점·리뷰·연결 계정 수는 데모 표시용 수치예요. 수수료는 각 거래소 공지 기준으로 달라질 수 있습니다.</div>'
+    +'<div class="tfbk-note">평점·리뷰·연결 계정·거래 수는 데모 표시용 수치예요. 수수료는 각 거래소 공지 기준으로 달라질 수 있습니다.</div>'
     +'</div>');
+  tfBkCount(1247306);
 }
 function tfBkSet(k,v){ var t=tfS(); t[k]=v; tfSave(); tfBrokersView(); }
 function tfBkOpenAcct(id){ var e=(TFC.exchanges||[]).find(function(x){return x.id===id;}); var b=tfBkOf(id); try{ window.open((e&&e.ref)||('https://'+b.site),'_blank','noopener'); }catch(er){} }
