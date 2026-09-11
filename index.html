@@ -6912,7 +6912,7 @@ var TF_BROKERS=[
    promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 이용료가 무료예요. API 연결 시 Passphrase까지 함께 준비해주세요.',
    site:'okx.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.08%',tk:'0.10%'},
    about:'파생상품과 웹3 지갑까지 아우르는 종합 거래소예요. API 인증에 Passphrase가 필요한 점이 다른 거래소와 달라요. TETH 연결은 조회와 거래 권한만 사용합니다.'},
-  {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',col:'#0fe7a2',fg:'#06251b',
+  {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',col:'#0a0a0a',fg:'#fff',
    promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴 가입 시 이용료가 무료예요.',
    site:'woox.io',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.02%',tk:'0.05%'},
    about:'낮은 수수료와 깊은 유동성을 내세우는 거래소예요. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
@@ -6950,9 +6950,14 @@ var TFBK_IC_USER='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy
 /* 브랜드 마크 — 플레이스홀더 이니셜 금지: 기하 마크(SVG) 또는 워드마크 타일 */
 function tfBkMark(b){
   var fg=b.fg||'#fff';
-  if(b.id==='binance') return '<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="'+fg+'" d="M16 1.5 21 6.5 16 11.5 11 6.5ZM6.5 11 11.5 16 6.5 21 1.5 16ZM16 11 21 16 16 21 11 16ZM25.5 11 30.5 16 25.5 21 20.5 16ZM16 20.5 21 25.5 16 30.5 11 25.5Z"/></svg>';
+  if(b.id==='binance') return '<svg viewBox="0 0 32 32" aria-hidden="true" fill-rule="evenodd"><path fill="'+fg+'" d="M16 .8 26 10.8 22.5 14.3 16 7.8 9.5 14.3 6 10.8Z'
+    +'M16 31.2 26 21.2 22.5 17.7 16 24.2 9.5 17.7 6 21.2Z'
+    +'M1.6 16 5.2 12.4 8.8 16 5.2 19.6Z'
+    +'M23.2 16 26.8 12.4 30.4 16 26.8 19.6Z'
+    +'M10.6 16 16 10.6 21.4 16 16 21.4Z M13.4 16 16 13.4 18.6 16 16 18.6Z"/></svg>';
   if(b.id==='okx') return '<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="'+fg+'" d="M1 1h10v10H1zM21 1h10v10H21zM11 11h10v10H11zM1 21h10v10H1zM21 21h10v10H21z"/></svg>';
-  var wm={woox:'WOO X',upbit:'UPbit',bybit:'BYBIT',kiwoom:'키움'}[b.id]||b.name;
+  if(b.id==='woox') return '<span class="wm" style="font-size:.3em;letter-spacing:.01em;display:inline-flex;align-items:baseline"><span style="color:#fff">WOO</span><span style="color:#24e07c">X</span><span style="font-size:.52em;color:#fff;margin-left:.22em;align-self:flex-start;margin-top:.34em">PRO</span></span>';
+  var wm={upbit:'UPbit',bybit:'BYBIT',kiwoom:'키움'}[b.id]||b.name;
   return '<span class="wm" style="font-size:'+Math.max(.34,Math.round(150/wm.length)/100)+'em">'+gEsc(wm)+'</span>';
 }
 function tfBkLogo(b,sz){ return '<span class="tfbk-logo" style="width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*0.42)+'px"><i style="background:'+(b.col||'#1c1e23')+'"></i><i style="background:'+(b.col||'#1c1e23')+'"></i><b style="background:'+(b.col||'#1c1e23')+';color:'+(b.fg||'#fff')+'">'+tfBkMark(b)+'</b></span>'; }
