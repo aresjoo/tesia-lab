@@ -1529,7 +1529,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
 .g-askcard .fbp .pill:hover{background:rgba(143,178,255,.18)}
 /* ══ §9.7 크레딧·알림·정산·트레이딩 확장 (nf) — 기존 tf/g 문법 재사용, 신규 클래스는 nf- 접두 ══ */
 /* 우상단 유틸 클러스터: 크레딧 필 + 알림 벨 (로그인 시에만, 셸 DOM 불변 — body 직속 fixed) */
-#nf-util{position:fixed;top:10px;right:14px;z-index:60;display:flex;align-items:center;gap:8px}
+#nf-util{position:fixed;top:10px;right:14px;z-index:74;display:flex;align-items:center;gap:8px} /* 모바일 햄버거 헤더 스크림(z70) 위, 앱 배너(z75)·스크림(z85) 아래 (AGY P0-4) */
 #nf-util[hidden],#nf-bell-bd[hidden],#nf-notif[hidden]{display:none!important} /* body 직속이라 #g-root [hidden] 규칙 밖 */
 body.g-inchat #nf-util{right:14px}
 .nf-credit{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:15px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:12.5px;color:var(--gt2);cursor:pointer;transition:background .12s}
@@ -1627,8 +1627,9 @@ body.g-inchat #nf-util{right:14px}
 .nf-cause b{color:var(--gt);font-weight:600;display:block;margin-bottom:3px}
 @media (max-width:640px){
   #nf-util{top:8px;right:10px}
-  body.has-banner #nf-util{top:58px} /* 앱 배너 ✕ 버튼과 히트박스 충돌 방지 (AGY P0) */
+  body.has-banner #nf-util{top:72px} /* 앱 배너(실높이 64px) 아래 햄버거 라인 우측 — ✕ 히트박스 충돌·가림 방지 (AGY P0-4) */
   .nf-credit .tx{display:none} /* 모바일은 아이콘/숫자만 */
+  .nf-credit,.nf-bell{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)} /* 모바일 헤더 순검정 밴드 위 가시성 (AGY P0-4) */
   .nf-page{padding:18px 14px 50px}
 }
 
