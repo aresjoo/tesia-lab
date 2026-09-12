@@ -8328,8 +8328,8 @@ function tfSS3Copy(ne,fp,fid){
   var s=tfSS3CopySrc(ne,fid);
   if(!s){ toast('전략을 찾을 수 없어요'); return; }
   if(s.me){ toast('내가 공유한 전략이에요'); return; }
-  /* 비연동 계정 유도 — 진입점 ①: 소프트 게이트(나중에 하기로 계속 가능), 복제 기록은 생성 안 함 (codex flow3 C) */
-  if(!tfS().conn&&!tfS().payDone&&!window.TF_UP_SKIP&&typeof tfUpSheet==='function'){ tfUpSheet('follow',{ne:ne,fp:fp,fid:fid,name:s.nick+' ('+s.asset+')'}); return; }
+  /* 비연동 계정 유도 — 진입점 ①: 소프트 게이트(나중에 하기로 계속), 세션당 1회만 노출, 복제 기록 생성 안 함 (codex flow3 C) */
+  if(!tfS().conn&&!tfS().payDone&&!window.TF_UP_SKIP&&!window.TF_UP_FOLLOW_SEEN&&typeof tfUpSheet==='function'){ tfUpSheet('follow',{ne:ne,fp:fp,fid:fid,name:s.nick+' ('+s.asset+')'}); return; }
   var t0=tfS(), fx=fid!=null?(t0.follows||[]).find(function(f){ return f.id===fid; }):null;
   var busy=tfSSBusy(), base=(fx&&fx.p)||fp||s.p;
   TF_SS3_CP_BUSY=busy; /* 확정 시점 재검사용 — 열 때의 busy 상태 기록 (codex F04) */
@@ -9021,8 +9021,8 @@ function tfUpSheet(ctx,opt){
 function tfUpClose(){ var a=$('tf-upscrim'),b=$('tf-upsheet'); if(a)a.remove(); if(b)b.remove(); }
 function tfUpLater(){
   var c=TF_UP_CTX; tfUpClose(); TF_UP_CTX=null;
-  /* 따라하기는 유도 없이도 계속 진행 가능 — 소진 게이트만 하드 (codex flow3 C) */
-  if(c&&c.ctx==='follow'&&c.opt){ window.TF_UP_SKIP=true; tfSS3Copy(c.opt.ne,c.opt.fp,c.opt.fid); window.TF_UP_SKIP=false; }
+  /* 따라하기는 유도 없이도 계속 진행 가능 — 소진 게이트만 하드. 재유도는 세션당 1회 (codex flow3 C) */
+  if(c&&c.ctx==='follow'&&c.opt){ window.TF_UP_FOLLOW_SEEN=true; window.TF_UP_SKIP=true; tfSS3Copy(c.opt.ne,c.opt.fp,c.opt.fid); window.TF_UP_SKIP=false; }
 }
 function tfUpDoUid(){
   var c=TF_UP_CTX;
