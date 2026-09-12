@@ -1775,6 +1775,49 @@ body.g-inchat #nf-util{right:14px}
   .nfx-tabs{align-self:stretch;display:flex}
   .nfx-tab{flex:1}
 }
+/* nfx — 내 트레이딩 터미널 (Hyperliquid 레이아웃: 좌 차트 / 우 실행 패널 / 하단 탭, 미연결=잠금) */
+.nfxh-page{max-width:none;padding:0 0 40px;gap:0}
+.nfxh-top{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--gl);flex-wrap:wrap}
+.nfxh-title{font-size:13px;font-weight:600;color:var(--gt3);letter-spacing:.01em}
+.nfxh-pair{display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:var(--gt)}
+.nfxh-pair .tag{font-size:10.5px;font-weight:600;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:6px;padding:2px 7px}
+.nfxh-sp{flex:1}
+.nfxh-conn{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--gt2)}
+.nfxh-main{display:grid;grid-template-columns:1fr 340px;gap:0;border-bottom:1px solid var(--gl)}
+.nfxh-chart{border-right:1px solid var(--gl);position:relative;min-height:440px}
+#nfxh-tv{position:absolute;inset:0}
+.nfxh-chart .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gt3);font-size:13px}
+.nfxh-side{display:flex;flex-direction:column;padding:16px;gap:12px;min-height:440px}
+.nfxh-shd{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--gt)}
+.nfxh-tabs{display:flex;align-items:center;gap:2px;padding:0 10px;border-bottom:1px solid var(--gl);overflow-x:auto;scrollbar-width:none}
+.nfxh-tab{display:inline-flex;align-items:center;gap:6px;padding:11px 13px;font-size:12.5px;font-weight:600;color:var(--gt3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s;background:transparent;font-family:inherit}
+.nfxh-tab:hover{color:var(--gt2)}
+.nfxh-tab.on{color:var(--gt);border-bottom-color:var(--gb)}
+.nfxh-pane{padding:16px 18px;display:none;animation:nfxIn .25s var(--ease)}
+.nfxh-pane.on{display:block}
+.nfxh-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:46px 20px}
+.nfxh-lock .ic{width:52px;height:52px;border-radius:50%;background:var(--pill);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;color:var(--gt3)}
+.nfxh-lock .t{font-size:15px;font-weight:600;color:var(--gt)}
+.nfxh-lock .d{font-size:12.5px;color:var(--gt3);max-width:320px;line-height:1.55}
+.nfxh-kv{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--gt3);padding:8px 0;border-bottom:1px solid var(--gl)}
+.nfxh-kv:last-child{border-bottom:0}
+.nfxh-kv b{color:var(--gt);font-weight:600;font-variant-numeric:tabular-nums}
+.nfxh-stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nfxh-tabs.m-only{display:none}
+@media (max-width:960px){
+  /* 모바일 = 단일 탭 스트립이 전 섹션(차트 포함)을 전환 — Hyperliquid 모바일 패턴 */
+  .nfxh-tabs.m-only{display:flex;position:sticky;top:0;background:var(--g0);z-index:5}
+  .nfxh-tabs.d-only{display:none}
+  .nfxh-main{grid-template-columns:1fr;border-bottom:0}
+  .nfxh-chart,.nfxh-side{display:none;border-right:0}
+  .nfxh-wrap.mt-chart .nfxh-chart{display:block;min-height:calc(100vh - 190px)}
+  .nfxh-wrap.mt-side .nfxh-side{display:flex}
+  .nfxh-pane.on{display:none}
+  .nfxh-wrap.mt-strat .nfxh-pane[data-p="strat"],.nfxh-wrap.mt-fills .nfxh-pane[data-p="fills"],.nfxh-wrap.mt-pos .nfxh-pane[data-p="pos"],.nfxh-wrap.mt-pnl .nfxh-pane[data-p="pnl"],.nfxh-wrap.mt-rebates .nfxh-pane[data-p="rebates"]{display:block}
+  .nfxh-stat3{grid-template-columns:1fr}
+  .nfxh-top{padding:10px 12px;gap:10px}
+  .nfxh-pair{font-size:15px}
+}
 /* nfx — 내 트레이딩 대시보드 (mock-trade 포팅) */
 .nfxt-banner{display:flex;align-items:center;gap:12px;border:1px solid rgba(217,168,78,.32);background:linear-gradient(90deg,rgba(217,168,78,.08),rgba(217,168,78,.03));border-radius:14px;padding:13px 16px;font-size:13px;color:var(--gt2);animation:nfxIn .3s var(--ease) both}
 .nfxt-banner b{color:var(--ga)}
@@ -7639,7 +7682,9 @@ function tfDashView(){
   var e=t.api?tfExOf(t.api.ex):(t.ex?tfExOf(t.ex):null);
   var tt=tfNFInit();
   var strat=t.strat||[]; var liveN=strat.filter(function(x){return x.status==='live';}).length;
+  var offN=strat.filter(function(x){return x.status==='off';}).length;
   var readyBot=strat.find(function(x){ return x.status==='ready'; });
+  var locked=!t.conn&&!strat.length; /* 미연결 신규 계정 = 잠금 (Hyperliquid connect-wallet 게이트 대응) */
   /* 상태 배지 2축 — status × env (codex NF 계약: paper 는 status 가 아니다) */
   function stB(x){
     if(x.status==='ready') return ['시작 대기','ready'];
@@ -7661,23 +7706,15 @@ function tfDashView(){
   else if(!tt.uidLinked&&!t.payDone) banner='<div class="nfxt-banner blue" id="nf-ready-banner"><span class="nfx-dot" style="color:var(--gb2);background:var(--gb2)"></span>'
     +'<span><b>UID 를 무료로 연동</b>하면 PRO 분석 크레딧을 받아요</span><span class="sp"></span>'
     +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFLinkUid()">Fast API 연동</button></div>';
-  gContent('<div class="nfx-page"><div class="nfx-glow"></div>'
-    +'<h2 class="nfx-title">'+gEsc(TFCOPY.dashTitle)+'</h2>'
-    +banner
-    +'<div class="nfxt-conn">'+(e?'<span class="nfx-dot"></span><b style="color:var(--gt)">'+gEsc(e.name)+' 연결됨</b><span class="tag">API ••••'+gEsc((t.api||{}).last4||'')+'</span><span class="ok">✓ 출금 권한 없음</span>':'<span style="color:var(--gt3)">거래소 미연결</span>')
-    +(t.plan==='partner'?'<span class="tag">파트너 0원 플랜</span>':t.plan==='paid'?'<span class="tag">구독 중</span>':'')+'</div>'
-    +'<div class="nfxt-hgrid">'
-    +'<section class="nfxt-asset"><div class="lbl"><span>총 자산 <span class="nfx-badge sim">시뮬레이션</span></span></div>'
-    +'<div class="big" id="nfxt-asset-num">'+tfWon(budget+pnl)+'</div>'
-    +'<span class="nfxt-pnl '+(pnl>=0?'up':'dn')+'">'+(pnl>=0?'+':'')+tfWon(pnl)+' ('+(pnl>=0?'+':'')+(t.cur?t.cur.ret.toFixed(1):'0.0')+'%)<span class="cap">전략 누적 손익</span></span>'
-    +'</section>'
-    +'<div class="nfxt-side">'
-    +'<div class="nfxt-mini"><span class="k">실행 중인 전략'+(liveN?'<span class="nfx-dot pulse" style="color:var(--gg);background:var(--gg)"></span>':'')+'</span><span class="v">'+liveN+'개</span><span class="s">전체 '+strat.length+'개 전략 중</span></div>'
-    +'<div class="nfxt-mini"><span class="k">누적 공유 보상</span><span class="v">'+tfWon(t.reward||0)+'</span><span class="s">전략 공유 프로그램</span></div>'
-    +'</div></div>'
-    +'<div class="nfxt-cols">'
-    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">내 전략 <span class="nfx-badge">'+strat.length+'</span></h2></div>'
-    +(strat.length?'<div class="nfx-rows">'+strat.map(function(x,i){
+  var pairL=(t.intake&&t.intake.asset&&t.intake.asset.label)||'비트코인';
+  var tvSym=(t.intake&&t.intake.assetInfo&&t.intake.assetInfo.tv)||'BINANCE:BTCUSDT';
+  function lockGate(what){
+    return '<div class="nfxh-lock"><div class="ic">'+NFX_IC.lock+'</div><div class="t">거래소를 연결하면 '+what+' 열려요</div>'
+      +'<div class="d">TETH 는 검증을 통과한 전략만 대신 실행해요. 연결과 실행 모두 체험 모드 시뮬레이션이에요.</div>'
+      +'<button class="nfx-btn pri" onclick="tfNFHUnlock()">'+NFX_IC.zap+'거래소 연결하기</button></div>';
+  }
+  var paneStrat=locked?lockGate('내 전략이')
+    :(strat.length?'<div class="nfx-rows">'+strat.map(function(x,i){
         var sb=stB(x); var id=String(x.at);
         return '<div class="nfx-row lk tf-strat nf-click nfx-stag s'+Math.min(i+1,8)+'" onclick="if(event.target.closest(\'button\'))return;tfNav(\'#/trade/bot/'+id+'\')">'
           +'<div class="nfx-rl"><div class="nfxt-coin">'+gEsc(x.name.charAt(0))+'</div>'
@@ -7687,22 +7724,89 @@ function tfDashView(){
       }).join('')+'</div>'
       :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 실행 중인 전략이 없어요</div>'
       +'<div class="nfx-edesc">채팅에서 전략을 맡기면 검증을 거쳐 여기에 등록돼요.</div>'
-      +'<button class="nfx-btn pri" style="margin-top:6px" onclick="tfBackToChat()">채팅에서 전략 맡기기</button></div>')
-    +'</section>'
-    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">최근 체결 <span class="nfx-badge sim">시뮬레이션</span></h2><span class="nfx-badge">검증 재현</span></div>'
-    +(t.fills.length?'<div class="nfx-rows">'+t.fills.map(function(f,i){
+      +'<button class="nfx-btn pri" style="margin-top:6px" onclick="tfBackToChat()">채팅에서 전략 맡기기</button></div>');
+  var paneFills=locked?lockGate('주문 내역이')
+    :(t.fills.length?'<div class="nfx-rows">'+t.fills.map(function(f,i){
         var rv=f.fid?tt.reviews.find(function(r){ return r.fid===f.fid; }):null;
         return '<div class="nfx-row tf-fill'+(rv?' lk nf-click':'')+' nfx-stag s'+Math.min(i+1,8)+'"'+(rv?' onclick="tfNav(\'#/review/'+rv.id+'\')"':'')+'>'
           +'<div class="nfx-rl"><span class="nfxt-side-tag '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span>'
-          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(f.label)+'</span>'+(rv?'<span class="nfx-rds">복기 리포트 보기</span>':'')+'</div></div>'
+          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(f.label)+' <span class="nfx-badge sim">시뮬레이션</span></span>'+(rv?'<span class="nfx-rds">복기 리포트 보기</span>':'')+'</div></div>'
           +'<div class="nfx-rr"><span class="nfx-rval '+(f.pnl>=0?'gain':'loss')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span>'+(rv?NFX_IC.chev:'')+'</div></div>';
       }).join('')+'</div>'
       :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 체결 내역이 없어요</div>'
-      +'<div class="nfx-edesc">전략이 실행되어 체결이 발생하면 여기에 표시돼요.</div></div>')
-    +'</section>'
-    +'</div></div>');
+      +'<div class="nfx-edesc">전략이 실행되어 체결이 발생하면 여기에 표시돼요.</div></div>');
+  var panePos=locked?lockGate('포지션이')
+    :'<div class="nfxb-posbox"><div><div class="nfxb-postit">현재 열린 포지션이 없어요</div>'
+    +'<div class="nfxb-posdesc">'+(liveN?'실행 중인 전략 '+liveN+'개가 신호를 탐색하고 있어요. 진입 신호가 발생하면 여기에 표시돼요. (시뮬레이션)':'전략을 시작하면 신호 탐색이 시작돼요. (시뮬레이션)')+'</div></div>'
+    +(liveN?'<div class="nfxb-check"><span class="d"></span><span>신호 탐색 중 — 실행 '+liveN+'개</span></div>':'')+'</div>';
+  var panePnl=locked?lockGate('손익 현황이')
+    :'<div class="nfxh-stat3">'
+    +'<div class="nfxt-mini"><span class="k">총 자산 <span class="nfx-badge sim">시뮬레이션</span></span><span class="v">'+tfWon(budget+pnl)+'</span><span class="s">위임 예산 + 전략 손익</span></div>'
+    +'<div class="nfxt-mini"><span class="k">전략 누적 손익</span><span class="v" style="color:var('+(pnl>=0?'--gg':'--gr')+')">'+(pnl>=0?'+':'')+tfWon(pnl)+'</span><span class="s">'+(t.cur?(t.cur.ret>=0?'+':'')+t.cur.ret.toFixed(1)+'% 검증 수익률':'검증 전')+'</span></div>'
+    +'<div class="nfxt-mini"><span class="k">누적 공유 보상</span><span class="v">'+tfWon(t.reward||0)+'</span><span class="s">전략 공유 프로그램</span></div></div>';
+  var rebT=tt.rebates.reduce(function(a,r){return a+r.amt;},0);
+  var paneReb=locked?lockGate('정산 내역이')
+    :'<div class="nfxh-stat3" style="grid-template-columns:repeat(2,1fr)">'
+    +'<div class="nfxt-mini"><span class="k">누적 적립 <span class="nfx-badge sim">시뮬레이션</span></span><span class="v" style="color:var(--gg)">'+tfWon(rebT)+'</span><span class="s">수수료(0.2%)의 10%</span></div>'
+    +'<div class="nfxt-mini"><span class="k">적립 건수</span><span class="v">'+tt.rebates.length+'건</span><span class="s">체결 건별 적립</span></div></div>'
+    +'<div class="nfx-cta" style="margin-top:12px"><button class="nfx-btn out" onclick="tfNav(&quot;#/plan/rebates&quot;)">전체 적립 내역 보기</button></div>';
+  var sideHtml=locked?lockGate('전략 실행 패널이')
+    :'<div class="nfxh-shd">전략 실행 <span class="nfx-badge sim">시뮬레이션</span></div>'
+    +'<div class="nfxh-kv"><span>실행 중</span><b style="color:var(--gg)">'+liveN+'개</b></div>'
+    +'<div class="nfxh-kv"><span>시작 대기</span><b'+(readyBot?' style="color:var(--ga)"':'')+'>'+strat.filter(function(x){return x.status==='ready';}).length+'개</b></div>'
+    +'<div class="nfxh-kv"><span>중지됨</span><b>'+offN+'개</b></div>'
+    +(e?'<div class="nfxh-kv"><span>연결</span><b>'+gEsc(e.name)+' · 출금 권한 없음</b></div>':'')
+    +'<div style="flex:1"></div>'
+    +(readyBot?'<button class="nfx-btn pri" onclick="tfBotCtl(\''+String(readyBot.at)+'\',\'start\')">'+NFX_IC.zap+gEsc(readyBot.name)+' 시작</button>':'')
+    +'<button class="nfx-btn '+(readyBot?'out':'pri')+'" onclick="tfBackToChat()">새 전략 맡기기</button>'
+    +'<div class="nfx-foot" style="border-top:0;padding-top:4px">'+NFX_IC.info+'<span>주문은 검증된 전략이 대신 실행해요. 직접 주문 입력은 제공하지 않아요.</span></div>';
+  var TABS=[['strat','내 전략'],['fills','주문 내역'],['pos','포지션'],['pnl','손익'],['rebates','정산']];
+  function strip(list,onKey){ return list.map(function(tb){ return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(\''+tb[0]+'\',this)">'+tb[1]+'</button>'; }).join(''); }
+  gContent('<div class="nfx-page nfxh-page nfxh-wrap mt-chart" id="nfxh-wrap">'
+    +'<div class="nfxh-top"><span class="nfxh-title">내 트레이딩</span>'
+    +'<span class="nfxh-pair">'+gEsc(pairL)+'<span class="tag">실시세 차트 · 실행은 시뮬레이션</span></span>'
+    +'<span class="nfxh-sp"></span>'
+    +'<span class="nfxh-conn">'+(e?'<span class="nfx-dot" style="background:var(--gg);color:var(--gg)"></span><b style="color:var(--gt)">'+gEsc(e.name)+' 연결됨</b><span class="tag" style="font-size:10.5px;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:6px;padding:2px 7px">API ••••'+gEsc((t.api||{}).last4||'')+'</span>'
+      :'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFHUnlock()">거래소 연결하기</button>')+'</span></div>'
+    +(banner?'<div style="padding:12px 18px 0">'+banner+'</div>':'')
+    +'<div class="nfxh-tabs m-only">'+strip([['chart','차트'],['side','실행']].concat(TABS),'chart')+'</div>'
+    +'<div class="nfxh-main">'
+    +'<div class="nfxh-chart"><div class="ph" id="nfxh-ph">차트 불러오는 중…</div><div id="nfxh-tv"></div></div>'
+    +'<div class="nfxh-side">'+sideHtml+'</div></div>'
+    +'<div class="nfxh-tabs d-only">'+strip(TABS,'strat')+'</div>'
+    +'<div class="nfxh-pane on" data-p="strat">'+paneStrat+'</div>'
+    +'<div class="nfxh-pane" data-p="fills">'+paneFills+'</div>'
+    +'<div class="nfxh-pane" data-p="pos">'+panePos+'</div>'
+    +'<div class="nfxh-pane" data-p="pnl">'+panePnl+'</div>'
+    +'<div class="nfxh-pane" data-p="rebates">'+paneReb+'</div>'
+    +'</div>');
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
   if(typeof tfDashEnhance==='function') tfDashEnhance(); /* nf: 주기 보고서 체크 + 유틸바 동기화 */
+  /* 트레이딩뷰 차트 마운트 (실시세, 실행과 무관 — 라벨로 명시) */
+  if(typeof taiTv==='function') taiTv(function(){
+    try{
+      var host=$('nfxh-tv'); if(!host||host.childNodes.length) return;
+      new TradingView.widget({container_id:'nfxh-tv',symbol:tvSym,interval:'60',autosize:true,theme:'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
+      var ph=$('nfxh-ph'); if(ph) ph.hidden=true;
+    }catch(err){}
+  });
+}
+/* 터미널 탭 전환 — 모바일은 차트/실행 포함 전 섹션, 데스크톱은 하단 컨텐츠 탭만 */
+function tfNFHTab(k,btn){
+  var w=$('nfxh-wrap'); if(!w) return;
+  w.className=w.className.replace(/\s*mt-[a-z]+/g,'')+' mt-'+k;
+  document.querySelectorAll('.nfxh-tabs.m-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
+  if(k!=='chart'&&k!=='side'){
+    document.querySelectorAll('.nfxh-pane').forEach(function(p){ p.classList.toggle('on',p.getAttribute('data-p')===k); });
+    document.querySelectorAll('.nfxh-tabs.d-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
+  }
+}
+/* 잠금 해제 CTA — 검증 통과면 connect, 아니면 채팅으로 (tfNFCanRun 과 동일 규약) */
+function tfNFHUnlock(){
+  var t=tfS();
+  if(t.cur&&t.score>=TFC.score.pass){ tfNav('#/strategy/connect'); return; }
+  toast('채팅에서 전략을 맡기면 검증 후 연결 단계로 이어져요');
+  tfBackToChat();
 }
 function tfStratToggle(i){
   var t=tfS(); if(!t.strat[i]) return;
@@ -8586,7 +8690,8 @@ var NFX_IC={
   info:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
   zap:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
   chev:'<svg class="nfx-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
-  empty:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>'
+  empty:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+  lock:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
 };
 function tfNFCount(id,end,pre,suf){
   var el=$(id); if(el==null) return;
