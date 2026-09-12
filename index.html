@@ -1775,6 +1775,39 @@ body.g-inchat #nf-util{right:14px}
   .nfx-tabs{align-self:stretch;display:flex}
   .nfx-tab{flex:1}
 }
+/* nfx — 공용 업그레이드 시트 (결제/UID 유도, 4 진입점: 따라하기/백테스트 직후/사용량 소진/설정) */
+#tf-upscrim{position:fixed;inset:0;background:rgba(8,9,11,.62);backdrop-filter:blur(3px);z-index:120;animation:nfxIn .18s var(--ease)}
+#tf-upsheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,94vw);max-height:90vh;overflow-y:auto;scrollbar-width:thin;background:var(--g1);border:1px solid var(--gl2);border-radius:22px;box-shadow:var(--shadow-pop);z-index:121;padding:26px 26px 22px;animation:nfxuIn .22s var(--ease)}
+@keyframes nfxuIn{from{opacity:0;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+#tf-upsheet .x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt3);background:transparent;transition:background .12s;cursor:pointer}
+#tf-upsheet .x:hover{background:var(--hoverline);color:var(--gt)}
+.nfxu-tags{display:flex;gap:6px;margin-bottom:10px}
+.nfxu-hd{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--gt);margin:0 0 6px}
+.nfxu-sub{font-size:13px;color:var(--gt3);line-height:1.55;margin-bottom:16px}
+.nfxu-quota{display:flex;flex-direction:column;gap:7px;background:var(--g2);border:1px solid rgba(224,96,75,.25);border-radius:12px;padding:12px 15px;margin-bottom:16px}
+.nfxu-quota .r{display:flex;justify-content:space-between;font-size:12.5px;color:var(--gt2)}
+.nfxu-quota .r b{color:var(--gr)}
+.nfxu-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nfxu-card{background:var(--g2);border:1px solid var(--gl);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:transform .15s var(--ease),border-color .15s,box-shadow .2s}
+.nfxu-card:hover{transform:translateY(-2px);border-color:var(--gl2)}
+.nfxu-card.hot{border-color:rgba(78,192,141,.45);box-shadow:0 0 0 1px rgba(78,192,141,.2),0 8px 30px rgba(0,0,0,.3)}
+.nfxu-card .bd1{display:flex;align-items:center;gap:6px}
+.nfxu-card .t{font-size:15px;font-weight:700;color:var(--gt)}
+.nfxu-card .big{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--gg);font-variant-numeric:tabular-nums}
+.nfxu-card .big.pro{color:var(--gt)}
+.nfxu-card .d{font-size:12px;color:var(--gt3);line-height:1.5}
+.nfxu-card ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.nfxu-card li{font-size:12px;color:var(--gt2);display:flex;gap:7px;line-height:1.45}
+.nfxu-card li::before{content:'✓';color:var(--gg);font-weight:700;flex-shrink:0}
+.nfxu-card .sp{flex:1}
+.nfxu-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--gl);font-size:11.5px;color:var(--gt3)}
+.nfxu-later{background:transparent;border:none;color:var(--gt3);font-size:12.5px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px}
+.nfxu-later:hover{color:var(--gt)}
+@media (max-width:640px){
+  #tf-upsheet{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;max-height:88vh;border-radius:24px 24px 0 0;animation:gSheetUp .22s var(--ease);padding:20px 16px 18px}
+  #tf-upsheet::before{content:'';display:block;width:44px;height:4px;border-radius:2px;background:var(--gl2);margin:0 auto 14px}
+  .nfxu-cards{grid-template-columns:1fr}
+}
 /* nfx — 내 트레이딩 터미널 (Hyperliquid 레이아웃: 좌 차트 / 우 실행 패널 / 하단 탭, 미연결=잠금) */
 .nfxh-page{max-width:none;padding:0 0 40px;gap:0}
 .nfxh-top{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--gl);flex-wrap:wrap}
@@ -5356,6 +5389,7 @@ function gNew(preset){
   var text=preset||(inEl?inEl.value.trim():'')||'비트코인이 떨어졌을 때 사는 전략';
   /* 비로그인 상태에서 채팅 전송 시 로그인/회원가입 팝업, 로그인하면 이어서 시작 */
   if(!S.user){ G.pendingNew=text; authOpen('signup'); return; }
+  if(TAI.ok!==false&&typeof tfAiGate==='function'&&!tfAiGate()) return; /* 무료 소진 — 세션 생성 전 차단, 입력 보존 (codex flow3) */
   var _drop=gPillDropStart(); /* 홈 뷰가 교체되기 전에 필 위치를 복제해 둔다 */
   S.strategy=newStrategy(); S.versions=[]; S.activeVer=0;
   var sx={id:'s'+Date.now(), title:'새 전략', status:'draft', strategy:S.strategy, versions:S.versions,
@@ -7180,7 +7214,7 @@ function tfWorkRun(p){
         if(err||!res){ panel.innerHTML='<div class="sh">검증 진행</div><div class="tf-errb">검증 중 문제가 발생했어요.<button onclick="tfWorkRun(tfS().pendingP)">다시 시도</button></div>'; return; }
         var score=tfScore(res);
         t.cur={p:p,ret:res.ret,mdd:res.mdd,winRate:res.winRate,n:res.n,sharpe:res.sharpe,pf:res.pf,cagr:res.cagr,tradeVol:res.tradeVol,
-          trades:res.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl};}),startI:p.startI,endI:p.endI};
+          trades:res.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl,kind:x.kind};}),startI:p.startI,endI:p.endI}; /* kind 보존 — 복기·행동 로그 청산 사유 실데이터 (codex flow3 P0) */
         t.score=score; t.tries.push(score); t.workDone=true;
         /* 팔로우 기록의 설정을 실제 검증에 쓴 파라미터로 동기화 — 기록과 결과의 불일치 방지 (codex F07).
            followId 없는 구버전 활성 기록은 cloneFrom 최신 미보관 기록으로 폴백 */
@@ -7295,6 +7329,13 @@ function tfReportView(){
   var t=tfS(),c=t.cur;
   if(!c||t.score<TFC.score.pass){ tfNav('#/strategy/backtest'); return; }
   t.stage='report'; tfSave();
+  /* 진입점 ②: 검증 통과 직후 1회만 업그레이드 시트 — 결과 지문으로 재렌더·새로고침 반복 금지 (codex flow3 C).
+     봇 수정 재검증(TF_EDIT_BOT)은 제외 */
+  var upTok=String(c.ret)+'|'+c.n+'|'+t.score;
+  if(!t.conn&&!t.payDone&&t.upFor!==upTok&&!window.TF_EDIT_BOT&&typeof tfUpSheet==='function'){
+    t.upFor=upTok; tfSave();
+    setTimeout(function(){ if(G.mode==='tfreport') tfUpSheet('backtest'); },700);
+  }
   var asset=(t.intake.asset||{}).label||'자산';
   tfPageMode('tfreport',asset+' 전략 리포트');
   var budget=TF_BUDGET[(t.intake.budget||{}).i!=null?t.intake.budget.i:1];
@@ -8196,6 +8237,8 @@ function tfSS3Copy(ne,fp,fid){
   var s=tfSS3CopySrc(ne,fid);
   if(!s){ toast('전략을 찾을 수 없어요'); return; }
   if(s.me){ toast('내가 공유한 전략이에요'); return; }
+  /* 비연동 계정 유도 — 진입점 ①: 소프트 게이트(나중에 하기로 계속 가능), 복제 기록은 생성 안 함 (codex flow3 C) */
+  if(!tfS().conn&&!tfS().payDone&&!window.TF_UP_SKIP&&typeof tfUpSheet==='function'){ tfUpSheet('follow',{ne:ne,fp:fp,fid:fid,name:s.nick+' ('+s.asset+')'}); return; }
   var t0=tfS(), fx=fid!=null?(t0.follows||[]).find(function(f){ return f.id===fid; }):null;
   var busy=tfSSBusy(), base=(fx&&fx.p)||fp||s.p;
   TF_SS3_CP_BUSY=busy; /* 확정 시점 재검사용 — 열 때의 busy 상태 기록 (codex F04) */
@@ -8471,6 +8514,7 @@ function tfNFInit(){
   t.periodics=t.periodics||[];
   t.notifPrefs=t.notifPrefs||{pos:true,loss:true,review:true,rebate:true,watch:true,chW:true,chK:false,chT:false,chM:false};
   t.uidLinked=t.uidLinked||false;
+  t.freeUsed=t.freeUsed||0; /* 로그인 무료 고급 분석 사용량 — 계정 단위, 초기화 없음 (codex flow3 B) */
   /* 처리 완료 키 원장 — 표시 목록(FIFO 캡)과 분리해 dedup 근거를 보존한다 (codex NF P0-01, P1) */
   t.creditSeen=t.creditSeen||{};
   t.notifKeys=t.notifKeys||{};
@@ -8478,17 +8522,38 @@ function tfNFInit(){
   t.fillLog=t.fillLog||[];
   return t;
 }
-/* 자격 판정 단일 지점 (codex 자격 우선순위: 결제 active > UID+거래 active > UID+거래 X > 무연동) */
+/* 자격 판정 단일 지점 — paid > trade > credit > free > free-out, 비로그인은 guest (codex flow3 B) */
 function tfEnt(){
   var t=tfNFInit(), C=TFC.credit;
+  if(!S.user) return {tier:'low', why:'guest', label:'기본 분석', bal:null}; /* 잔존 플래그로 고급 자격 금지 */
   if(t.payDone) return {tier:'high', why:'paid', label:'PRO, 구독', bal:null};
   var tradeActive=t.tradeActiveUntil&&Date.now()<t.tradeActiveUntil;
   if(t.uidLinked&&tradeActive) return {tier:'high', why:'trade', label:'PRO, 파트너 거래 활성', bal:null};
-  if(t.uidLinked){
-    if(t.creditBal>=C.costHigh) return {tier:'high', why:'credit', label:'PRO 크레딧', bal:t.creditBal};
-    return {tier:'low', why:'credit-out', label:'기본 분석', bal:t.creditBal};
-  }
-  return {tier:'low', why:'guest', label:'기본 분석', bal:null};
+  if(t.uidLinked&&t.creditBal>=C.costHigh) return {tier:'high', why:'credit', label:'PRO 크레딧', bal:t.creditBal};
+  /* 크레딧 부족은 조기 반환하지 않는다 — 무료 잔여량 검사 (codex flow3) */
+  var fq=C.freeQuota!=null?C.freeQuota:10;
+  if((t.freeUsed||0)<fq) return {tier:'high', why:'free', label:'무료 체험', bal:t.uidLinked?t.creditBal:null, freeLeft:fq-(t.freeUsed||0)};
+  return {tier:'low', why:'free-out', label:'업그레이드 필요', bal:t.uidLinked?t.creditBal:null};
+}
+/* 실AI 요청 1건 소비 — credit 우선, 아니면 free 카운트. creditSeen 원장 공용(재전달 이중 소비 금지) */
+function tfAiSpend(reqId){
+  var t=tfNFInit(), e=tfEnt();
+  if(e.why==='credit'){ tfCreditSpend(reqId); return; }
+  if(e.why!=='free') return;
+  if(t.creditSeen[reqId]) return;
+  t.creditSeen[reqId]=1;
+  t.freeUsed=(t.freeUsed||0)+1;
+  var fq=TFC.credit.freeQuota!=null?TFC.credit.freeQuota:10;
+  if(t.freeUsed>=fq) tfNotify('credit','freeout:'+Math.floor(Date.now()/864e5),'무료 분석 사용량을 모두 썼어요','UID 연동(무료) 또는 구독으로 계속 사용할 수 있어요.','#/plan');
+  else if(fq-t.freeUsed<=2) tfNotify('credit','freewarn:'+Math.floor(Date.now()/864e5),'무료 분석이 '+(fq-t.freeUsed)+'회 남았어요','UID 를 연동하면 PRO 크레딧 '+TFC.credit.uidGrant.toLocaleString()+'을 무료로 받아요.','#/plan');
+  tfSaveNow(); tfNFBar();
+}
+/* 실AI 발송 게이트 — free-out 이면 차단하고 업그레이드 시트 (하드 게이트, mock·로컬 경로 무관) */
+function tfAiGate(){
+  if(!S.user||(window.TAI&&TAI.ok===false)) return true;
+  if(tfEnt().why!=='free-out') return true;
+  tfUpSheet('quota');
+  return false;
 }
 function tfCreditGrant(key,amt,reason){
   var t=tfNFInit();
@@ -8551,11 +8616,12 @@ function tfNFBar(){
   var e=tfEnt(), t=tfNFInit();
   var tx=$('nf-credit-tx'), cp=$('nf-credit');
   if(tx){
-    if(e.tier==='high'&&e.bal==null) tx.innerHTML='<b>PRO</b> '+(e.why==='paid'?'구독':'무제한');
+    if(e.why==='free') tx.innerHTML='무료 <b>'+e.freeLeft+'회</b> 남음';
+    else if(e.why==='free-out') tx.innerHTML='<b>업그레이드 필요</b>';
+    else if(e.tier==='high'&&e.bal==null) tx.innerHTML='<b>PRO</b> '+(e.why==='paid'?'구독':'무제한');
     else if(e.why==='credit') tx.innerHTML='<b>'+e.bal.toLocaleString()+'C</b> 남음';
-    else if(e.why==='credit-out') tx.innerHTML='기본 분석, <b>충전 필요</b>';
     else tx.innerHTML='기본 분석';
-    cp.classList.toggle('warn',e.why==='credit'&&e.bal<=TFC.credit.uidGrant*(1-TFC.credit.warnRatio));
+    cp.classList.toggle('warn',(e.why==='credit'&&e.bal<=TFC.credit.uidGrant*(1-TFC.credit.warnRatio))||(e.why==='free'&&e.freeLeft<=2));
     cp.classList.toggle('low',e.tier==='low');
   }
   var un=t.notifs.filter(function(n){return !n.read;}).length;
@@ -8729,18 +8795,20 @@ function tfPlanView(tab){
     if(e.why==='paid') st={bt:'PRO 멤버십',bc:'blue',hv:'PRO',hu:'무제한',hc:'cb',g:'inf',gl:'멤버십: 구독 중',gr:'무제한 이용',pin:false,pri:null,sec:null,
       desc:'구독 중이라 PRO 분석이 무제한이에요.'};
     else if(e.why==='trade') st={bt:'PRO 활성 (무제한)',bc:'pro',hv:'무제한',hu:'',hc:'cg',g:'inf',gl:'이용 상태: 무제한 활성',gr:'만료일 '+new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR'),pin:false,
-      pri:!t.payDone?['구독으로 업그레이드','tfNFUpgrade()','sec']:null,sec:null,
+      pri:!t.payDone?['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','sec']:null,sec:null,
       desc:'파트너 거래소 거래가 활성 상태라 PRO 분석이 무제한이에요. (거래 인정 기간 '+C.activityDays+'일)'};
     else if(e.why==='credit') st={bt:bal<=warnAt?'PRO (소진 임박)':'PRO',bc:bal<=warnAt?'warn':'pro',hv:bal,hu:'C',hc:bal<=warnAt?'cw':'cg',g:bal<=warnAt?'warn':'',gl:'잔여 <b>'+bal.toLocaleString()+'C</b>',gr:'지급 <b>'+C.uidGrant.toLocaleString()+'C</b>',pin:true,
-      pri:['구독으로 업그레이드','tfNFUpgrade()','pri'],sec:null,
+      pri:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','pri'],sec:null,
       desc:'UID 연동 크레딧으로 PRO 분석을 사용 중이에요. 거래가 1회 체결되면 무제한으로 전환돼요.'};
-    else if(e.why==='credit-out') st={bt:'기본 (크레딧 소진)',bc:'danger',hv:0,hu:'C',hc:'cx',g:'empty',gl:'잔여 <b>0C</b>',gr:'지급 '+C.uidGrant.toLocaleString()+'C (소진)',pin:true,
-      pri:['구독으로 업그레이드','tfNFUpgrade()','pri'],sec:['거래 체결하고 무제한 받기','tfNav(&quot;#/trade&quot;)','out'],
-      desc:'크레딧이 소진되어 기본 분석으로 응답해요. 거래 1회 체결 또는 구독으로 PRO 를 복구할 수 있어요.'};
-    else st={bt:'기본',bc:'',hv:0,hu:'C',hc:'cx',g:'empty',gl:'잔여 0C',gr:'연동 시 지급 '+C.uidGrant.toLocaleString()+'C',pin:true,
-      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:!t.payDone?['구독으로 업그레이드','tfNFUpgrade()','out']:null,
-      desc:'파트너 거래소 UID 를 연동하면 무료로 PRO 크레딧 '+C.uidGrant.toLocaleString()+'을 받아요.'};
-    var pct=typeof st.hv==='number'?Math.max(st.hv>0?2:0,Math.round(bal/C.uidGrant*100)):100;
+    else if(e.why==='free'){ var fq2=C.freeQuota!=null?C.freeQuota:10;
+      st={bt:'무료 체험',bc:'blue',hv:e.freeLeft,hu:'회 남음',hc:e.freeLeft<=2?'cw':'cb',g:e.freeLeft<=2?'warn':'',gl:'무료 고급 분석 <b>'+e.freeLeft+'회</b>',gr:'제공 '+fq2+'회',pin:false,
+      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
+      desc:'로그인 무료 체험으로 고급 분석을 사용 중이에요. UID 를 연동하면 PRO 크레딧 '+C.uidGrant.toLocaleString()+'을 무료로 받아요.',fpct:Math.max(2,Math.round(e.freeLeft/fq2*100))};
+    }
+    else st={bt:'업그레이드 필요',bc:'danger',hv:0,hu:'회 남음',hc:'cx',g:'empty',gl:'무료 고급 분석 <b>0회</b>',gr:'소진됨',pin:false,
+      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
+      desc:'무료 분석 사용량을 모두 썼어요. UID 연동(무료) 또는 구독으로 계속 사용할 수 있어요.'};
+    var pct=st.fpct!=null?st.fpct:(typeof st.hv==='number'?Math.max(st.hv>0?2:0,Math.round(bal/C.uidGrant*100)):100);
     var uidBadge=t.uidLinked?(e.why==='credit-out'?['연동됨 (크레딧 소진)','warn']:['연동됨 (무료)','pro']):['미연동',''];
     var trBadge=(t.tradeActiveUntil&&Date.now()<t.tradeActiveUntil)?[new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR')+' 까지 활성','pro']:['없음',''];
     var subBadge=t.payDone?['구독 중','blue']:['없음',''];
@@ -8817,6 +8885,67 @@ function tfNFPref(k,el){
   el.classList.toggle('on',t.notifPrefs[k]); el.setAttribute('aria-checked',String(t.notifPrefs[k]));
   tfSave();
 }
+/* ── 공용 업그레이드 시트 — 4 진입점(따라하기/백테스트 직후/사용량 소진/설정) 단일 컴포넌트.
+   복귀 컨텍스트는 TF_UP_CTX 로 분리 — TF_NF_RESUME(봇 재개 전용)와 혼용 금지 (codex flow3 C P0) ── */
+var TF_UP_CTX=null;
+function tfUpSheet(ctx,opt){
+  tfUpClose();
+  TF_UP_CTX={ctx:ctx,sid:G.cur&&G.cur.id,opt:opt||null};
+  var t=tfNFInit(), fq=TFC.credit.freeQuota!=null?TFC.credit.freeQuota:10;
+  var HD={
+    follow:['이 전략을 따라하려면 연결이 필요해요','전략 설정을 복제해 내 조건으로 재검증한 뒤 실행해요. 계좌 미러링이 아니라 검증을 통과해야 실행됩니다.'],
+    backtest:['검증을 통과했어요 — 실행하려면 연결하세요','지금 연결하면 이 전략을 바로 실행 단계로 이어갈 수 있어요.'],
+    quota:['무료 분석 사용량을 모두 썼어요','UID 를 연동(무료)하거나 구독하면 바로 계속할 수 있어요. 입력한 내용은 그대로 남아 있어요.'],
+    plan:['PRO 로 업그레이드','UID 무료 연동 또는 구독으로 고급 분석을 계속 사용할 수 있어요.']
+  }[ctx]||['업그레이드',''];
+  var sc=document.createElement('div'); sc.id='tf-upscrim'; sc.onclick=tfUpClose;
+  var m=document.createElement('div'); m.id='tf-upsheet';
+  m.innerHTML='<button class="x" onclick="tfUpClose()" aria-label="닫기">✕</button>'
+    +'<div class="nfxu-tags"><span class="nfx-badge sim">시뮬레이션</span>'+(ctx==='follow'&&opt&&opt.name?'<span class="nfx-badge">'+gEsc(opt.name)+'</span>':'')+'</div>'
+    +'<h2 class="nfxu-hd">'+HD[0]+'</h2>'
+    +'<div class="nfxu-sub">'+HD[1]+'</div>'
+    +(ctx==='quota'?'<div class="nfxu-quota"><div class="r"><span>무료 고급 분석</span><b>'+Math.min(t.freeUsed||0,fq)+' / '+fq+'회 사용</b></div>'
+      +'<div class="nfx-gtrack" style="height:7px"><div class="nfx-gfill empty"></div></div></div>':'')
+    +'<div class="nfxu-cards">'
+    +'<div class="nfxu-card hot"><div class="bd1"><span class="nfx-badge pro">무료</span><span class="nfx-badge">소요 1분</span></div>'
+    +'<div class="t">UID 무료 연동 (Fast API)</div>'
+    +'<div class="big">1,000C <span style="font-size:13px;font-weight:600;color:var(--gt2)">지급</span></div>'
+    +'<div class="d">거래 1회 체결 시 무제한 전환</div>'
+    +'<ul><li>거래소 UID 입력만으로 1분 연동</li><li>출금 권한 없는 조회·거래 전용</li><li>PRO 심층 분석 '+Math.round(TFC.credit.uidGrant/TFC.credit.costHigh)+'회분 크레딧</li></ul>'
+    +'<span class="sp"></span><button class="nfx-btn pri" onclick="tfUpDoUid()">'+NFX_IC.zap+'무료로 연동하기</button></div>'
+    +'<div class="nfxu-card"><div class="bd1"><span class="nfx-badge blue">PRO 무제한</span></div>'
+    +'<div class="t">구독</div>'
+    +'<div class="big pro">무제한</div>'
+    +'<div class="d">모든 고급 분석, 차감 없음</div>'
+    +'<ul><li>AI 심층 분석 무제한</li><li>검증 통과 전략 실행</li><li>알림·복기·정산 전체 이용</li></ul>'
+    +'<span class="sp"></span><button class="nfx-btn sec" onclick="tfUpDoPay()">구독으로 업그레이드</button></div>'
+    +'</div>'
+    +'<div class="nfxu-foot"><span>체험 모드 — 결제·연동은 시뮬레이션이에요.</span>'
+    +(ctx!=='quota'?'<button class="nfxu-later" onclick="tfUpLater()">나중에 하기</button>':'')
+    +'</div>';
+  var host=$('g-root')||document.body;
+  host.appendChild(sc); host.appendChild(m);
+}
+function tfUpClose(){ var a=$('tf-upscrim'),b=$('tf-upsheet'); if(a)a.remove(); if(b)b.remove(); }
+function tfUpLater(){
+  var c=TF_UP_CTX; tfUpClose(); TF_UP_CTX=null;
+  /* 따라하기는 유도 없이도 계속 진행 가능 — 소진 게이트만 하드 (codex flow3 C) */
+  if(c&&c.ctx==='follow'&&c.opt){ window.TF_UP_SKIP=true; tfSS3Copy(c.opt.ne,c.opt.fp,c.opt.fid); window.TF_UP_SKIP=false; }
+}
+function tfUpDoUid(){
+  var c=TF_UP_CTX;
+  tfNFLinkUid(function(){
+    tfUpClose(); TF_UP_CTX=null;
+    if(!c) return;
+    if(c.ctx==='follow'&&c.opt){ window.TF_UP_SKIP=true; tfSS3Copy(c.opt.ne,c.opt.fp,c.opt.fid); window.TF_UP_SKIP=false; }
+    else if(c.ctx==='quota') toast('PRO 크레딧이 지급됐어요. 이어서 보내보세요');
+    else if(c.ctx==='plan'&&G.mode==='nfplan') tfPlanView('plan');
+  });
+}
+function tfUpDoPay(){
+  var c=TF_UP_CTX; tfUpClose(); TF_UP_CTX=null;
+  tfNFUpgrade(); /* 검증 통과면 connect, 아니면 채팅 안내 — 기존 규약 유지 */
+}
 /* 구독 CTA — 검증 통과 전 계정은 connect 가드에 막혀 dead-end 가 되므로 채팅으로 안내 (codex NF P1) */
 function tfNFUpgrade(){
   var t=tfNFInit();
@@ -8825,9 +8954,9 @@ function tfNFUpgrade(){
   tfBackToChat();
 }
 /* UID Fast API 원클릭 (체험 모드 시뮬 — 기존 connect 와 동일 정직성 수준) */
-function tfNFLinkUid(){
+function tfNFLinkUid(cb){
   var t=tfNFInit();
-  if(t.uidLinked){ toast('이미 연동되어 있어요'); return; }
+  if(t.uidLinked){ toast('이미 연동되어 있어요'); if(typeof cb==='function') cb(); return; }
   toast('Fast API 연동 확인 중');
   delay(900,function(){
     t.uidLinked=true;
@@ -8835,6 +8964,7 @@ function tfNFLinkUid(){
     toast('UID 연동 완료, PRO 크레딧이 지급됐어요');
     if(G.mode==='nfplan') tfPlanView('plan');
     else if(G.mode==='tfdash') tfDashView(); /* 배너 즉시 갱신 — 연동 CTA 잔존 방지 (codex NF P1) */
+    if(typeof cb==='function') cb(); /* 업그레이드 시트 등 호출부 복귀 (codex flow3 C) */
   });
 }
 /* ── 봇 상세 (#/trade/bot/<id>) ── */
@@ -9862,6 +9992,9 @@ function taiMarket(t,fin,fallback){
   var sess=G.cur; if(!sess) return; /* 이 요청의 소유 세션에 바인딩 — 이후 세션 전환에도 기록은 이 세션으로만 */
   /* 모든 진입 경로(ASK 카드 포함) 공통 동시 실행 가드 (codex QA-03) */
   if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중이에요, 끝나면 바로 보내주세요'); return; }
+  /* 실AI 단일 경계 — 자격 게이트 + 소비 확정 (gSend/gNew/문서 taiAsk 전 경로 공통, codex flow3 B) */
+  if(typeof tfAiGate==='function'&&!tfAiGate()){ if(fallback) fallback(); return; }
+  if(typeof tfAiSpend==='function') tfAiSpend('rq'+Date.now());
   TAI.busy=true; TAI.busyAt=Date.now(); taiBusySync(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
   var ai=taiAI(sess);
   var conv=!!($('g-thread')&&G.mode==='conv');
@@ -10210,7 +10343,10 @@ function taiAskConv(t,fallback){ taiMarket(t,null,fallback); }
 function gSend(){
   /* 생성/조사 중 전송: 조용히 삼키지 않는다 — 입력을 보존하고 이유를 알린다 (agy QA 3-1) */
   if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중이에요, 끝나면 바로 보내주세요'); return; }
-  var f=$('g-in'); var t=f.value.trim(); if(!t) return; f.value=''; f.style.height='auto';
+  var f=$('g-in'); var t=f.value.trim(); if(!t) return;
+  /* 무료 소진 하드 게이트 — 입력을 지우기 전에 차단해 보존 (pair/risk 로컬 스텝은 통과, codex flow3) */
+  if(G.mode==='conv'&&gStep!=='pair'&&gStep!=='risk'&&S.user&&(!window.TAI||TAI.ok!==false)&&typeof tfAiGate==='function'&&!tfAiGate()) return;
+  f.value=''; f.style.height='auto';
   var cp0=f.closest('.g-composer'); if(cp0) cp0.classList.remove('multi');
   if(G.mode==='conv'){
     gConvUser(t);
@@ -10218,7 +10354,7 @@ function gSend(){
     if(gStep==='pair'&&/비트|btc/i.test(t)){ gThink('확인 중',450,function(){ gPickPair('BTC/USDT',null); }); return; }
     if(gStep==='risk'){ var m=t.match(/(\d+)\s*%?/); if(m){ gThink('확인 중',450,function(){ gPickRisk(-Math.abs(+m[1])); }); return; } }
     var cannedC=function(){ gConvAI('선택지에서 고르면 가장 정확합니다. 이후 언제든 수정할 수 있습니다.'); };
-    if(S.user&&TAI.ok!==false){ gUserPin(); if(typeof tfCreditSpend==='function') tfCreditSpend('rq'+Date.now()); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC);
+    if(S.user&&TAI.ok!==false){ gUserPin(); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC); /* 차감·게이트는 taiMarket 단일 경계로 이동 (codex flow3) */
     return;
   }
   /* artifact / activity context */

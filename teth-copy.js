@@ -43,7 +43,7 @@ window.TFC = {
   /* 커뮤니티 보상: 내 전략을 누가 따라할 때 제작자가 받는 보상률(월 요금 대비) */
   community: { rewardRate: 0.10, currency: 'KRW' },
   /* nf: AI 티어링 크레딧 정책 (phase6 계약 — 버전 관리) */
-  credit: { version: 1, uidGrant: 1000, costHigh: 10, warnRatio: 0.8, activityDays: 30 },
+  credit: { version: 1, uidGrant: 1000, costHigh: 10, warnRatio: 0.8, activityDays: 30, freeQuota: 10 },
   rebate: { rate: 0.10 }
 };
 
