@@ -1984,6 +1984,33 @@ body.g-inchat #nf-util{right:14px}
 .nfxb-spec{background:var(--g2);border:1px solid var(--gl);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
 .nfxb-spec .k{font-size:11.5px;color:var(--gt3)}
 .nfxb-spec .v{font-size:12.5px;font-weight:600;color:var(--gt)}
+/* AI 행동 로그 — 엔진 신호 재생 타임라인 (mock-ailog 포팅, 실계산만) */
+.nfxl-sum{display:flex;gap:16px;flex-wrap:wrap;align-items:center;background:var(--g2);border:1px solid var(--gl);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:12.5px;color:var(--gt2)}
+.nfxl-sum b{color:var(--gt);font-variant-numeric:tabular-nums}
+.nfxl-rsi{display:flex;align-items:center;gap:8px;min-width:180px;flex:1}
+.nfxl-rsi .tr{flex:1;height:6px;border-radius:3px;background:var(--g3);position:relative;overflow:visible}
+.nfxl-rsi .fl{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--gb)}
+.nfxl-rsi .pin{position:absolute;top:-3px;width:2px;height:12px;background:var(--ga);transform:translateX(-50%)}
+.nfxl-tl{display:flex;flex-direction:column;gap:0;position:relative}
+.nfxl-ev{display:flex;gap:12px;padding:9px 0;position:relative}
+.nfxl-ev .tm2{width:76px;flex-shrink:0;font-size:11px;color:var(--gt3);text-align:right;padding-top:4px;font-variant-numeric:tabular-nums}
+.nfxl-ev .node{width:24px;flex-shrink:0;display:flex;flex-direction:column;align-items:center}
+.nfxl-ev .node .dt{width:9px;height:9px;border-radius:50%;background:var(--gt3);border:2px solid var(--g1);box-shadow:0 0 0 1px var(--gl2);margin-top:6px;flex-shrink:0}
+.nfxl-ev .node .ln{width:2px;flex:1;background:var(--gl);margin-top:3px}
+.nfxl-ev:last-child .node .ln{display:none}
+.nfxl-ev.entry .node .dt{background:var(--gb2)}
+.nfxl-ev.exit-tp .node .dt,.nfxl-ev.exit-time .node .dt{background:var(--gg)}
+.nfxl-ev.exit-sl .node .dt{background:var(--gr)}
+.nfxl-ev.risk .node .dt{background:var(--ga)}
+.nfxl-ev .card{flex:1;min-width:0;background:var(--g2);border:1px solid var(--gl);border-radius:11px;padding:9px 13px;font-size:12.5px;color:var(--gt2);line-height:1.5}
+.nfxl-ev.watch .card{background:transparent;border-style:dashed;color:var(--gt3)}
+.nfxl-ev .card .tp2{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:5px;padding:1px 7px;margin-right:7px;vertical-align:1px}
+.nfxl-ev.watch .card .tp2{background:var(--g3);color:var(--gt3)}
+.nfxl-ev.entry .card .tp2{background:rgba(61,110,240,.14);color:var(--gb2)}
+.nfxl-ev.exit-tp .card .tp2,.nfxl-ev.exit-time .card .tp2{background:rgba(78,192,141,.14);color:var(--gg)}
+.nfxl-ev.exit-sl .card .tp2{background:rgba(224,96,75,.14);color:var(--gr)}
+.nfxl-ev.risk .card .tp2{background:rgba(217,168,78,.14);color:var(--ga)}
+@media (max-width:640px){.nfxl-ev .tm2{display:none}}
 @media (max-width:900px){.nfxb-mgrid{grid-template-columns:1fr}.nfxb-grid2{grid-template-columns:1fr}}
 @media (max-width:640px){.nfxb-title{font-size:20px}.nfxb-bigval{font-size:30px}.nfxb-specs{grid-template-columns:1fr}.nfxb-actions{width:100%}.nfxb-actions .nfx-btn{flex:1}.nfxb-hero{padding:18px 16px}}
 @media (prefers-reduced-motion:reduce){
@@ -9068,6 +9095,7 @@ function tfBotView(id){
     +'<button class="nfx-btn sec" onclick="tfBotCtl(\''+botId+'\',\'env\')">'+(b.env==='paper'?'라이브(시뮬레이션)로 전환':'가상 시뮬레이션으로 전환')+'</button>';
   else if(b.status==='off') acts='<button class="nfx-btn pri" onclick="tfBotCtl(\''+botId+'\',\'resume\')">'+NFX_IC.zap+'재개</button>';
   else if(b.status==='ready') acts='<button class="nfx-btn pri" onclick="tfBotCtl(\''+botId+'\',\'start\')">'+NFX_IC.zap+'지금 시작하기</button>';
+  if(b.p) acts+='<button class="nfx-btn out" onclick="tfBotEdit(\''+botId+'\')">전략 수정</button>'; /* b.p 없으면 수정 차단 (codex flow3 D P1) */
   var ex=t.api?tfExOf(t.api.ex):(t.ex?tfExOf(t.ex):null);
   var posPill=b.status==='live'?(b.env==='paper'?'가상 신호 탐색 중':'신호 탐색 중'):'실행 대기';
   tfNFView('nfbot',b.name,
@@ -9135,7 +9163,10 @@ function tfBotView(id){
     +'<div class="nfxb-spec"><span class="k">등록일</span><span class="v">'+new Date(b.at).toLocaleDateString('ko-KR')+'</span></div>'
     +'</div></section>'
     +'</div></div>'
+    +(b.p?'<section class="nfxb-scard" style="margin-top:20px"><div class="nfx-sechead"><h2 class="nfx-sectit">AI 행동 로그</h2>'
+      +'<span class="nfx-badge">엔진 신호 기준 · 시뮬레이션</span></div><div id="nfxl-host"></div></section>':'')
     +'</div>');
+  if(b.p){ TF_LOG_MODE='all'; tfBotLogRender(botId); }
   setTimeout(function(){ var fg=$('nfxb-ringfg'); if(fg) fg.style.strokeDashoffset=String(251.3*(1-Math.min(100,b.score)/100)); },60);
 }
 /* 실행 자격 공통 가드 — 시작/재개/라이브 전환은 연결 완료 상태에서만 (codex NF P0-04) */
@@ -9163,6 +9194,103 @@ function tfBotCtl(botId,act){
     b.env=toLive?'live':'paper'; toast(b.env==='paper'?'가상 실행으로 전환했어요':'라이브(시뮬레이션)로 전환했어요');
   }
   tfSave(); tfBotView(botId);
+}
+/* ── AI 행동 로그 — 저장 없음, 렌더 시 엔진 규칙 재생(발명 금지·합성 최신성 금지, codex flow3 E) ── */
+function tfBotLogEvents(p){
+  var startI=p.startI!=null?p.startI:61, endI=p.endI!=null?p.endI:PRICE.length-1;
+  var sl=p.sl/100, tp=p.tp!=null?p.tp/100:null;
+  var evs=[], inPos=false, entryI=0, entryP=0, cnt={watch:0,entry:0,exit:0,risk:0};
+  for(var i=startI;i<=endI;i++){
+    var s20=sma(PRICE,20,i), s60=sma(PRICE,60,i), ev=null;
+    if(!inPos){
+      var rp=rsi(PRICE,i-1), wasLow=rp<p.rsiTh, bounce=PRICE[i]>PRICE[i-1]*1.005;
+      var trendOk=!p.trendFilter||Math.abs(s20-s60)/PRICE[i]>0.03;
+      if(wasLow&&bounce&&trendOk){
+        inPos=true; entryI=i; entryP=PRICE[i]; cnt.entry++;
+        ev={k:'entry',tag:'진입',i:i,txt:'진입 조건 충족 — 전봉 RSI '+rp.toFixed(1)+' < 임계 '+p.rsiTh+', 반등 +'+((PRICE[i]/PRICE[i-1]-1)*100).toFixed(2)+'%'+(p.trendFilter?', 추세 필터 통과':'')};
+      }else{
+        cnt.watch++;
+        var why=!wasLow?('전봉 RSI '+rp.toFixed(1)+' ≥ 임계 '+p.rsiTh)
+          :!bounce?('반등 미확인 ('+((PRICE[i]/PRICE[i-1]-1)*100).toFixed(2)+'% < +0.50%)')
+          :'추세 필터 미충족 (이평 괴리 부족)';
+        ev={k:'watch',tag:'관망',i:i,txt:'조건 미충족 — '+why};
+      }
+    } else if(i>entryI){
+      var chg=PRICE[i]/entryP-1;
+      if(chg<=sl){ inPos=false; cnt.exit++; ev={k:'exit-sl',tag:'손절',i:i,txt:'손절선 '+p.sl+'% 도달 — 규칙대로 청산'}; }
+      else if(tp!=null&&chg>=tp){ inPos=false; cnt.exit++; ev={k:'exit-tp',tag:'익절',i:i,txt:'익절 목표 +'+p.tp+'% 도달 — 규칙대로 청산'}; }
+      else if(i-entryI>=25){ inPos=false; cnt.exit++; ev={k:'exit-time',tag:'기간 청산',i:i,txt:'보유 25봉 경과 — 기간 청산 규칙 실행 ('+(chg>=0?'+':'')+(chg*100).toFixed(1)+'%)'}; }
+      else { cnt.risk++; ev={k:'risk',tag:'보유·리스크',i:i,txt:'보유 중 — 현재 '+(chg>=0?'+':'')+(chg*100).toFixed(1)+'%, 손절 규칙 '+p.sl+'%'+(tp!=null?' · 익절 +'+p.tp+'%':'')+' 대기'}; }
+    } else { cnt.risk++; ev={k:'risk',tag:'보유·리스크',i:i,txt:'진입 체결 확인 — 청산 규칙 감시 시작'}; }
+    evs.push(ev);
+  }
+  var li=endI, lr=rsi(PRICE,li), ls20=sma(PRICE,20,li), ls60=sma(PRICE,60,li);
+  return {evs:evs,cnt:cnt,bars:endI-startI+1,last:{rsi:lr,trendOk:!p.trendFilter||Math.abs(ls20-ls60)/PRICE[li]>0.03,inPos:inPos}};
+}
+var TF_LOG_MODE='all';
+function tfBotLogRender(botId){
+  var host=$('nfxl-host'); var b=tfBotFind(botId); if(!host||!b||!b.p) return;
+  var L=tfBotLogEvents(b.p);
+  var rows=TF_LOG_MODE==='fills'?L.evs.filter(function(e){return e.k==='entry'||e.k.indexOf('exit')===0;}):L.evs;
+  var show=rows.slice(-14);
+  host.innerHTML='<div class="nfxl-sum">'
+    +'<span>검증 구간 평가 <b>'+L.bars+'봉</b></span><span>관망 <b>'+L.cnt.watch+'</b></span><span>진입 <b>'+L.cnt.entry+'</b></span><span>청산 <b>'+L.cnt.exit+'</b></span>'
+    +'<span class="nfxl-rsi"><span>마지막 봉 RSI <b>'+L.last.rsi.toFixed(1)+'</b></span><span class="tr"><span class="fl" style="width:'+Math.min(100,L.last.rsi)+'%"></span><span class="pin" style="left:'+b.p.rsiTh+'%" title="임계 '+b.p.rsiTh+'"></span></span></span>'
+    +'</div>'
+    +'<div class="nfxh-fchips"><button class="nfxh-fchip'+(TF_LOG_MODE==='all'?' on':'')+'" onclick="TF_LOG_MODE=\'all\';tfBotLogRender(\''+botId+'\')">전체</button>'
+    +'<button class="nfxh-fchip'+(TF_LOG_MODE==='fills'?' on':'')+'" onclick="TF_LOG_MODE=\'fills\';tfBotLogRender(\''+botId+'\')">체결만<span class="c2">'+(L.cnt.entry+L.cnt.exit)+'</span></button>'
+    +'<span style="font-size:11.5px;color:var(--gt3);margin-left:auto">최근 '+show.length+'개 표시 · 이전 '+(rows.length-show.length)+'개</span></div>'
+    +'<div class="nfxl-tl">'+show.map(function(e){
+      return '<div class="nfxl-ev '+e.k+'"><span class="tm2">'+fmtDate(idxToDate(e.i))+'</span><span class="node"><span class="dt"></span><span class="ln"></span></span>'
+        +'<div class="card"><span class="tp2">'+e.tag+'</span>'+e.txt+'</div></div>';
+    }).join('')+'</div>';
+}
+/* ── 전략 수정 — 후보 분리·같은 봇(at)에만 커밋, 전역 t.cur/stage 불변 (codex flow3 D) ── */
+var TF_EDIT_CAND=null;
+function tfBotEdit(botId){
+  var b=tfBotFind(botId); if(!b||!b.p){ toast('이 전략은 저장된 검증 설정이 없어 수정할 수 없어요'); return; }
+  TF_EDIT_CAND=null;
+  var p=b.p;
+  var stops=TFCOPY.intakeOpt.stop;
+  tfSS3Dlg('전략 수정 — '+b.name,'<div class="ss3-cp">'
+    +'<div class="ntc">설정을 바꾸면 같은 검증 구간에서 다시 검증해요. 재검증을 통과해야 이 전략에 적용됩니다.'+(b.status==='live'?' 적용 시 실행이 일시정지돼요.':'')+'</div>'
+    +'<div class="fld3"><label for="tfbe-sl">손절선</label><select id="tfbe-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===p.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="tfbe-tp">익절 목표</label><select id="tfbe-tp">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===p.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="tfbe-rsi">진입 RSI 임계</label><select id="tfbe-rsi">'+[38,40,42,44,46].map(function(v){ return '<option value="'+v+'"'+(v===p.rsiTh?' selected':'')+'>RSI '+v+' 이하</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="tfbe-tf">추세 필터</label><select id="tfbe-tf"><option value="1"'+(p.trendFilter?' selected':'')+'>사용 (20/60일 이평)</option><option value="0"'+(!p.trendFilter?' selected':'')+'>사용 안 함</option></select></div>'
+    +'<div id="tfbe-res" class="ntc" style="display:none"></div>'
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" id="tfbe-run" onclick="tfBotEditRun(\''+botId+'\')">재검증</button>'
+    +'<button type="button" class="wbtn" id="tfbe-apply" style="display:none" onclick="tfBotEditApply(\''+botId+'\')">이 전략에 적용</button></div>'
+    +'</div>');
+}
+function tfBotEditRun(botId){
+  var b=tfBotFind(botId); if(!b||!b.p) return;
+  var p2={sl:+$('tfbe-sl').value, tp:+$('tfbe-tp').value, rsiTh:+$('tfbe-rsi').value, trendFilter:$('tfbe-tf').value==='1', startI:b.p.startI, endI:b.p.endI, purpose:'edit'};
+  var r=runBacktest(p2), sc=tfScore(r);
+  var pass=sc>=TFC.score.pass;
+  TF_EDIT_CAND=pass?{id:botId,p:p2,r:{ret:r.ret,mdd:r.mdd,n:r.n,winRate:r.winRate},score:sc}:null;
+  var res=$('tfbe-res');
+  if(res){ res.style.display='block';
+    res.innerHTML='재검증 결과 — TETH <b>'+sc+'점</b> ('+(pass?'통과':'기준 '+TFC.score.pass+'점 미달')+'), 검증 수익 <b style="color:var('+(r.ret>=0?'--gg':'--gr')+')">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</b>, 최대 낙폭 '+r.mdd.toFixed(1)+'%, 체결 '+r.n+'회 <span style="color:var(--gt3)">(시뮬레이션)</span>'
+      +(pass?'':'<br>설정을 조정해 다시 검증해보세요. 통과 전에는 적용되지 않아요.'); }
+  var ap=$('tfbe-apply'); if(ap) ap.style.display=pass?'':'none';
+}
+function tfBotEditApply(botId){
+  var c=TF_EDIT_CAND;
+  if(!c||c.id!==botId){ toast('먼저 재검증을 통과해야 해요'); return; }
+  var b=tfBotFind(botId); if(!b){ TF_EDIT_CAND=null; return; }
+  /* 같은 at 봇에만 커밋 — 지표는 후보 결과와 함께 갱신, 원장(fills/reviews/rebates) 불변 */
+  b.p={sl:c.p.sl,tp:c.p.tp,rsiTh:c.p.rsiTh,trendFilter:c.p.trendFilter,startI:c.p.startI,endI:c.p.endI};
+  b.score=c.score; b.ret=c.r.ret; b.mdd=c.r.mdd; b.n=c.r.n; b.winRate=c.r.winRate;
+  var paused=false;
+  if(b.status==='live'){ b.status='off'; paused=true; } /* 적용 시 일시정지 — 자동 재개 없음 (codex flow3 D) */
+  TF_EDIT_CAND=null;
+  tfNotify('bot','be:'+botId+':'+Date.now(),b.name+' 설정을 수정했어요 (재검증 통과)',paused?'적용을 위해 일시정지됐어요. 재개하면 새 설정으로 실행돼요.':'다음 실행부터 새 설정이 적용돼요.','#/trade/bot/'+botId);
+  tfSaveNow();
+  tfSS3DlgClose();
+  toast('전략 설정이 적용됐어요'+(paused?' — 일시정지됨':''));
+  tfBotView(botId);
 }
 /* ── 복기 상세 (#/review/<id>) / 주간·월간 (#/periodic/<id>) ── */
 function tfReviewView(id){
