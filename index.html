@@ -1826,6 +1826,15 @@ body.g-inchat #nf-util{right:14px}
 .nfxh-tab{display:inline-flex;align-items:center;gap:6px;padding:11px 13px;font-size:12.5px;font-weight:600;color:var(--gt3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s;background:transparent;font-family:inherit}
 .nfxh-tab:hover{color:var(--gt2)}
 .nfxh-tab.on{color:var(--gt);border-bottom-color:var(--gb)}
+.nfxh-tab .ct{font-size:10.5px;font-weight:700;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:999px;padding:1px 6px;font-variant-numeric:tabular-nums}
+.nfxh-tab.on .ct{color:var(--gb2);border-color:rgba(61,110,240,.3)}
+.nfxh-fchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.nfxh-fchip{border:1px solid var(--gl);background:var(--g2);color:var(--gt3);font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit;transition:color .12s,border-color .12s}
+.nfxh-fchip:hover{color:var(--gt2)}
+.nfxh-fchip.on{color:var(--gt);border-color:var(--gt3);background:var(--g3)}
+.nfxh-fchip .c2{color:var(--gt3);margin-left:4px;font-variant-numeric:tabular-nums}
+.nfxh-alerts-list .nf-item{border:1px solid var(--gl);border-radius:12px;background:var(--g2);margin-bottom:8px}
+.nfxh-alerts-list .nf-item:hover{background:var(--g3)}
 .nfxh-pane{padding:16px 18px;display:none;animation:nfxIn .25s var(--ease)}
 .nfxh-pane.on{display:block}
 .nfxh-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:46px 20px}
@@ -1846,7 +1855,7 @@ body.g-inchat #nf-util{right:14px}
   .nfxh-wrap.mt-chart .nfxh-chart{display:block;min-height:calc(100vh - 190px)}
   .nfxh-wrap.mt-side .nfxh-side{display:flex}
   .nfxh-pane.on{display:none}
-  .nfxh-wrap.mt-strat .nfxh-pane[data-p="strat"],.nfxh-wrap.mt-fills .nfxh-pane[data-p="fills"],.nfxh-wrap.mt-pos .nfxh-pane[data-p="pos"],.nfxh-wrap.mt-pnl .nfxh-pane[data-p="pnl"],.nfxh-wrap.mt-rebates .nfxh-pane[data-p="rebates"]{display:block}
+  .nfxh-wrap.mt-strat .nfxh-pane[data-p="strat"],.nfxh-wrap.mt-fills .nfxh-pane[data-p="fills"],.nfxh-wrap.mt-pos .nfxh-pane[data-p="pos"],.nfxh-wrap.mt-pnl .nfxh-pane[data-p="pnl"],.nfxh-wrap.mt-rebates .nfxh-pane[data-p="rebates"],.nfxh-wrap.mt-alerts .nfxh-pane[data-p="alerts"],.nfxh-wrap.mt-reports .nfxh-pane[data-p="reports"]{display:block}
   .nfxh-stat3{grid-template-columns:1fr}
   .nfxh-top{padding:10px 12px;gap:10px}
   .nfxh-pair{font-size:15px}
@@ -7801,8 +7810,12 @@ function tfDashView(){
     +(readyBot?'<button class="nfx-btn pri" onclick="tfBotCtl(\''+String(readyBot.at)+'\',\'start\')">'+NFX_IC.zap+gEsc(readyBot.name)+' 시작</button>':'')
     +'<button class="nfx-btn '+(readyBot?'out':'pri')+'" onclick="tfBackToChat()">새 전략 맡기기</button>'
     +'<div class="nfx-foot" style="border-top:0;padding-top:4px">'+NFX_IC.info+'<span>주문은 검증된 전략이 대신 실행해요. 직접 주문 입력은 제공하지 않아요.</span></div>';
-  var TABS=[['strat','내 전략'],['fills','주문 내역'],['pos','포지션'],['pnl','손익'],['rebates','정산']];
-  function strip(list,onKey){ return list.map(function(tb){ return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(\''+tb[0]+'\',this)">'+tb[1]+'</button>'; }).join(''); }
+  /* 알림·보고서 탭은 잠금 대상 제외 — 로그인만 해도 열람 (codex flow3 A). 렌더 전에 주기 보고서 생성 */
+  tfPeriodicCheck();
+  var unread=tt.notifs.filter(function(n){return !n.read;}).length;
+  var TABS=[['strat','내 전략'],['fills','주문 내역'],['pos','포지션'],['pnl','손익'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
+  var CNT={alerts:unread,reports:(tt.periodics||[]).length,strat:strat.length};
+  function strip(list,onKey){ return list.map(function(tb){ var c=CNT[tb[0]]; return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(\''+tb[0]+'\',this)">'+tb[1]+(c?'<span class="ct" id="nfxh-ct-'+tb[0]+'-'+(list.length>7?'m':'d')+'">'+c+'</span>':'')+'</button>'; }).join(''); }
   gContent('<div class="nfx-page nfxh-page nfxh-wrap mt-chart" id="nfxh-wrap">'
     +'<div class="nfxh-top"><span class="nfxh-title">내 트레이딩</span>'
     +'<span class="nfxh-pair">'+gEsc(pairL)+'<span class="tag">실시세 차트 · 실행은 시뮬레이션</span></span>'
@@ -7820,9 +7833,13 @@ function tfDashView(){
     +'<div class="nfxh-pane" data-p="pos">'+panePos+'</div>'
     +'<div class="nfxh-pane" data-p="pnl">'+panePnl+'</div>'
     +'<div class="nfxh-pane" data-p="rebates">'+paneReb+'</div>'
+    +'<div class="nfxh-pane" data-p="alerts"><div id="nfxh-alerts"></div></div>'
+    +'<div class="nfxh-pane" data-p="reports">'+tfNFReportsPane()+'</div>'
     +'</div>');
+  tfNFAlertsRender();
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
   if(typeof tfDashEnhance==='function') tfDashEnhance(); /* nf: 주기 보고서 체크 + 유틸바 동기화 */
+  if(window.TF_NFH_OPEN){ tfNFHTab(window.TF_NFH_OPEN); window.TF_NFH_OPEN=null; } /* 벨 등 외부 진입 탭 지정 */
   /* 트레이딩뷰 차트 마운트 (실시세, 실행과 무관 — 라벨로 명시) */
   if(typeof taiTv==='function') taiTv(function(){
     try{
@@ -7841,6 +7858,53 @@ function tfNFHTab(k,btn){
     document.querySelectorAll('.nfxh-pane').forEach(function(p){ p.classList.toggle('on',p.getAttribute('data-p')===k); });
     document.querySelectorAll('.nfxh-tabs.d-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
   }
+}
+/* ── 터미널 알림 탭 (드롭다운 대체 — n.link 딥링크·모두 읽음·수신 설정 계약 유지, codex flow3 A) ── */
+function tfNFAlertsRender(){
+  var host=$('nfxh-alerts'); if(!host) return;
+  var t=tfNFInit();
+  function inTab(n,k){ return k==='all'||n.type===k||(k==='pos'&&(n.type==='pos'||n.type==='bot')); }
+  var TB=[['all','전체'],['pos','포지션'],['review','거래복기'],['rebate','정산']];
+  var rows=t.notifs.filter(function(n){ return inTab(n,NF_TAB); });
+  var unread=t.notifs.filter(function(n){ return !n.read; }).length;
+  host.innerHTML='<div class="nfx-sechead"><h2 class="nfx-sectit">알림'+(unread?' <span class="nfx-badge blue">'+unread+'개 안읽음</span>':'')+'</h2>'
+    +'<div style="display:flex;gap:10px;align-items:center"><button class="nfxu-later" onclick="tfNotifReadAll()">모두 읽음</button>'
+    +'<button class="nfx-btn out" style="padding:6px 12px;font-size:12px" onclick="tfNav(&quot;#/plan/alerts&quot;)">수신 설정</button></div></div>'
+    +'<div class="nfxh-fchips">'+TB.map(function(tb){ var c=t.notifs.filter(function(n){return inTab(n,tb[0]);}).length;
+      return '<button class="nfxh-fchip'+(NF_TAB===tb[0]?' on':'')+'" onclick="NF_TAB=\''+tb[0]+'\';tfNFAlertsRender()">'+tb[1]+(c?'<span class="c2">'+c+'</span>':'')+'</button>'; }).join('')+'</div>'
+    +'<div class="nfxh-alerts-list">'+(rows.length?rows.map(function(n){
+      var tg={credit:'크레딧',pos:'포지션',bot:'전략',review:'거래복기',rebate:'정산',report:'보고서'}[n.type]||n.type;
+      var mv=''; var m1=n.title.match(/([+-]\d+(?:\.\d+)?)%/); var m2=n.title.match(/\+₩([\d,]+)/);
+      if(m1) mv='<span class="mv '+(m1[1].charAt(0)==='+'?'up':'dn')+'">'+m1[1]+'%</span>';
+      else if(m2) mv='<span class="mv up">+₩'+m2[1]+'</span>';
+      return '<div class="nf-item'+(n.read?' read':'')+'" onclick="tfNotifGo(\''+n.id+'\')"><span class="ic"></span><div class="bx">'
+        +'<div class="tt" style="display:flex;align-items:flex-start"><span style="flex:1;min-width:0"><span class="tg t-'+n.type+'">'+tg+'</span>'+gEsc(n.title)+'</span>'+mv+'</div>'
+        +(n.body?'<div class="bd2">'+gEsc(n.body)+'</div>':'')
+        +'<div class="tm num">'+tfNFTime(n.at)+'</div></div></div>';
+    }).join(''):(t.notifs.length
+      ?'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.bell+'</div><div class="nfx-etit">이 분류의 알림이 없어요</div><div class="nfx-edesc">다른 필터에서 '+t.notifs.length+'건을 확인할 수 있어요.</div></div>'
+      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.bell+'</div><div class="nfx-etit">아직 알림이 없어요</div><div class="nfx-edesc">전략이 실행되면 체결, 복기, 정산 소식이 여기로 와요.</div></div>'))+'</div>';
+  ['d','m'].forEach(function(sfx){ var el=$('nfxh-ct-alerts-'+sfx); if(el){ if(unread) el.textContent=unread; else el.remove(); } });
+}
+function tfNFReportsPane(){
+  var t=tfNFInit();
+  var ps=(t.periodics||[]).slice();
+  if(!ps.length) return '<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.doc+'</div><div class="nfx-etit">아직 보고서가 없어요</div>'
+    +'<div class="nfx-edesc">전략이 실행된 뒤 첫 주가 지나면 주간 성과 보고서가 도착해요. (시뮬레이션)</div></div>';
+  return '<div class="nfx-rows">'+ps.map(function(p,i){
+    var wr=p.n?Math.round(p.wins/p.n*100):0;
+    return tfNFRow({ic:'doc',icc:p.pnl>=0?'gg':'gr',lb:p.label+' 성과 보고서',
+      ds:new Date(p.from||p.until-1).toLocaleDateString('ko-KR')+' ~ '+new Date(p.until-1).toLocaleDateString('ko-KR')+' · 체결 '+p.n+'회 · 승률 '+wr+'%',
+      val:'<span class="nfx-rval '+(p.pnl>=0?'gain':'loss')+'">'+(p.pnl>=0?'+':'')+(p.pnl*100).toFixed(1)+'%</span>',
+      arrow:true,stag:Math.min(i+1,8),click:'tfNav(&quot;#/periodic/'+p.id+'&quot;)'});
+  }).join('')+'</div>';
+}
+/* 벨 = 배지 + 터미널 알림 탭으로 이동 (드롭다운 제거, codex flow3 A) */
+function tfNFGoAlerts(ev){
+  if(ev) ev.stopPropagation();
+  if(G.mode==='tfdash'&&$('nfxh-wrap')){ tfNFHTab('alerts'); return; }
+  window.TF_NFH_OPEN='alerts';
+  tfNav('#/trade');
 }
 /* 잠금 해제 CTA — 검증 통과면 connect, 아니면 채팅으로 (tfNFCanRun 과 동일 규약) */
 function tfNFHUnlock(){
@@ -8609,7 +8673,7 @@ function tfNFBar(){
   if(!el){
     el=document.createElement('div'); el.id='nf-util';
     el.innerHTML='<button class="nf-credit" id="nf-credit" onclick="tfPlanGo()"><span class="dot"></span><span class="tx" id="nf-credit-tx"></span></button>'
-      +'<button class="nf-bell" id="nf-bell" onclick="tfNotifToggle(event)" aria-label="알림"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="bd" id="nf-bell-bd" hidden></span></button>';
+      +'<button class="nf-bell" id="nf-bell" onclick="tfNFGoAlerts(event)" aria-label="알림"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="bd" id="nf-bell-bd" hidden></span></button>';
     ($('g-root')||document.body).appendChild(el); /* g-root 내부 — CSS 변수/[hidden] 스코프 (AGY P0) */
   }
   el.hidden=false;
@@ -8660,11 +8724,12 @@ function tfNotifRender(){
     }).join(''):(t.notifs.length?'<div class="empty">이 분류의 알림이 없어요.<br>다른 탭에서 '+t.notifs.length+'건을 확인할 수 있어요.</div>':'<div class="empty">아직 알림이 없어요.<br>전략이 실행되면 체결, 복기, 정산 소식이 여기로 와요.</div>'))+'</div>'
     +'<div class="ft"><button onclick="tfNotifClose();tfNav(\'#/plan/alerts\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>알림 수신 설정</button></div>';
 }
-function tfNotifReadAll(){ var t=tfNFInit(); t.notifs.forEach(function(n){ n.read=true; }); tfSave(); tfNFBar(); tfNotifRender(); }
+function tfNotifReadAll(){ var t=tfNFInit(); t.notifs.forEach(function(n){ n.read=true; }); tfSave(); tfNFBar(); tfNotifRender(); if(typeof tfNFAlertsRender==='function') tfNFAlertsRender(); }
 function tfNotifGo(id){
   var t=tfNFInit(); var n=t.notifs.find(function(x){return x.id===id;}); if(!n) return;
   n.read=true; tfSave(); tfNFBar();
-  if(n.link){ tfNotifClose(); tfNav(n.link); } else tfNotifRender();
+  if(n.link){ tfNotifClose(); tfNav(n.link); } /* 사건별 딥링크 유지 (codex flow3 A P0) */
+  else { tfNotifRender(); if(typeof tfNFAlertsRender==='function') tfNFAlertsRender(); }
 }
 /* ── 정산: 실행 체결에만 명목×수수료율×10%, fillId dedup (codex F: 재적립 금지) ── */
 function tfRebateCommit(botId,fills,budget){
