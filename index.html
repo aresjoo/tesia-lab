@@ -3198,7 +3198,7 @@ button{-webkit-tap-highlight-color:transparent}
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
       <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
-      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
+      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
       <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/></svg><span class="lb">전략 공유</span><span class="g-ico-pill lbp">전략 공유</span></button>
       <button class="g-util" onclick="tfBrokersView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg><span class="lb">지원 거래소</span><span class="g-ico-pill lbp">지원 거래소</span></button>
       <div class="g-sec">최근</div>
@@ -7669,7 +7669,7 @@ function tfStartStrategy(){
   tfDashView();
 }
 
-function tfSideSync(){ var b=$('g-tf-dash-btn'); if(b) b.hidden=!(S.tf&&(S.tf.conn||((S.tf.strat||[]).length))); }
+function tfSideSync(){ var b=$('g-tf-dash-btn'); if(b) b.hidden=false; } /* 항상 노출 — 게스트=로그인 유도, 미연결=잠금 터미널 (사용자 지시) */
 /* ── §8 대시보드 ── */
 function tfDashView(){
   var t=tfS();
