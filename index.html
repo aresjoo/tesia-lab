@@ -1775,6 +1775,51 @@ body.g-inchat #nf-util{right:14px}
   .nfx-tabs{align-self:stretch;display:flex}
   .nfx-tab{flex:1}
 }
+/* nfx — 인사이트 (뉴스레터 허브, TetherMax 구조 차용·TETH 다크 톤) */
+.nfxi-thumb{border-radius:14px;overflow:hidden;position:relative;background:var(--g2);border:1px solid var(--gl)}
+.nfxi-thumb::after{content:'';position:absolute;inset:0}
+.nfxi-thumb.c-market{background:linear-gradient(135deg,rgba(61,110,240,.35),rgba(23,24,27,.9) 70%)}
+.nfxi-thumb.c-guide{background:linear-gradient(135deg,rgba(78,192,141,.32),rgba(23,24,27,.9) 70%)}
+.nfxi-thumb.c-update{background:linear-gradient(135deg,rgba(217,168,78,.3),rgba(23,24,27,.9) 70%)}
+.nfxi-thumb .gl2x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85)}
+.nfxi-feat{display:grid;grid-template-columns:1.1fr 1fr;gap:0;background:var(--g1);border:1px solid var(--gl);border-radius:20px;overflow:hidden}
+.nfxi-feat .nfxi-thumb{border-radius:0;border:0;min-height:260px}
+.nfxi-feat .bd{padding:26px 28px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.nfxi-feat h3{font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--gt);margin:0;line-height:1.35}
+.nfxi-feat .sum{font-size:13.5px;color:var(--gt2);line-height:1.6}
+.nfxi-meta{font-size:12px;color:var(--gt3);display:flex;align-items:center;gap:8px}
+.nfxi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nfxi-card{background:var(--g1);border:1px solid var(--gl);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s var(--ease),border-color .15s;display:flex;flex-direction:column}
+.nfxi-card:hover{transform:translateY(-2px);border-color:var(--gl2)}
+.nfxi-card .nfxi-thumb{border-radius:0;border:0;height:130px}
+.nfxi-card .bd{padding:14px 16px;display:flex;flex-direction:column;gap:7px;flex:1}
+.nfxi-card h4{font-size:14.5px;font-weight:700;color:var(--gt);margin:0;line-height:1.4}
+.nfxi-card .sum{font-size:12.5px;color:var(--gt3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfxi-top{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.nfxi-top .nfxi-card{flex-direction:row}
+.nfxi-top .nfxi-card .nfxi-thumb{width:120px;height:auto;flex-shrink:0}
+.nfxi-sub{display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(61,110,240,.1),rgba(61,110,240,.03));border:1px solid rgba(61,110,240,.25);border-radius:16px;padding:18px 20px;flex-wrap:wrap}
+.nfxi-sub b{color:var(--gt)}
+.nfxi-sub input{flex:1;min-width:200px;height:40px;border-radius:10px;border:1px solid var(--gl2);background:var(--g2);color:var(--gt);padding:0 14px;font-size:13px;font-family:inherit}
+.nfxi-art{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start}
+.nfxi-body h3{font-size:17px;font-weight:700;color:var(--gt);margin:26px 0 10px;letter-spacing:-.01em}
+.nfxi-body p{font-size:13.5px;color:var(--gt2);line-height:1.75;margin:0 0 12px}
+.nfxi-toc{position:sticky;top:20px;display:flex;flex-direction:column;gap:14px}
+.nfxi-toc .box{background:var(--g1);border:1px solid var(--gl);border-radius:14px;padding:16px}
+.nfxi-toc .tt2{font-size:12px;font-weight:700;color:var(--gt3);letter-spacing:.04em;margin-bottom:10px}
+.nfxi-toc a{display:block;font-size:12.5px;color:var(--gt3);padding:5px 0 5px 12px;border-left:2px solid var(--gl);cursor:pointer;transition:color .12s,border-color .12s;text-decoration:none}
+.nfxi-toc a:hover{color:var(--gt);border-left-color:var(--gt3)}
+.nfxi-cmt{margin-top:30px}
+.nfxi-cmt textarea{width:100%;min-height:84px;border-radius:12px;border:1px solid var(--gl2);background:var(--g2);color:var(--gt);padding:12px 14px;font-size:13px;font-family:inherit;resize:vertical}
+.nfxi-cmt .cnt{font-size:11.5px;color:var(--gt3);text-align:right;margin-top:4px}
+.nfxi-c1{display:flex;gap:11px;padding:14px 0;border-bottom:1px solid var(--gl)}
+.nfxi-c1:last-child{border-bottom:0}
+.nfxi-av{width:32px;height:32px;border-radius:50%;background:var(--g3);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gt2);flex-shrink:0}
+.nfxi-c1 .nm{font-size:12.5px;font-weight:700;color:var(--gt)}
+.nfxi-c1 .tx2{font-size:13px;color:var(--gt2);line-height:1.6;margin-top:3px;word-break:break-word}
+.nfxi-c1 .tm3{font-size:11px;color:var(--gt3);margin-top:4px}
+.nfxi-c1.reply{margin-left:42px;background:var(--g2);border:1px solid var(--gl);border-radius:12px;padding:12px 14px;border-bottom:1px solid var(--gl)}
+@media (max-width:900px){.nfxi-feat{grid-template-columns:1fr}.nfxi-grid{grid-template-columns:1fr}.nfxi-top{grid-template-columns:1fr}.nfxi-art{grid-template-columns:1fr}.nfxi-toc{position:static}}
 /* nfx — 공용 업그레이드 시트 (결제/UID 유도, 4 진입점: 따라하기/백테스트 직후/사용량 소진/설정) */
 #tf-upscrim{position:fixed;inset:0;background:rgba(8,9,11,.62);backdrop-filter:blur(3px);z-index:120;animation:nfxIn .18s var(--ease)}
 #tf-upsheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,94vw);max-height:90vh;overflow-y:auto;scrollbar-width:thin;background:var(--g1);border:1px solid var(--gl2);border-radius:22px;box-shadow:var(--shadow-pop);z-index:121;padding:26px 26px 22px;animation:nfxuIn .22s var(--ease)}
@@ -3269,6 +3314,7 @@ button{-webkit-tap-highlight-color:transparent}
       <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
       <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
       <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/></svg><span class="lb">전략 공유</span><span class="g-ico-pill lbp">전략 공유</span></button>
+      <button class="g-util" onclick="tfNav('#/insight')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="lb">인사이트</span><span class="g-ico-pill lbp">인사이트</span></button>
       <button class="g-util" onclick="tfBrokersView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg><span class="lb">지원 거래소</span><span class="g-ico-pill lbp">지원 거래소</span></button>
       <div class="g-sec">최근</div>
       <div id="g-sess-list"></div>
@@ -5165,7 +5211,7 @@ function gComposer(on,ctx){
 function gContent(html){
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
-    if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
+    if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
   $('g-content').innerHTML=html; $('g-scroll').scrollTop=0;
   if(window.gSideMobClose) gSideMobClose(); /* 드로어에서 뷰를 골랐으면 드로어는 닫는다 */
 }
@@ -9412,6 +9458,127 @@ function tfNFOnLater(){
     tfSave();
   }
 }
+/* ── 인사이트 — 콘텐츠 허브 (#/insight[/:id]). 실존 개념 에디토리얼만, 댓글=별도 localStorage (codex flow3 F) ── */
+var TF_INS=[
+  {id:'read-backtest',cat:'guide',catL:'전략 가이드',date:'2026-03-11',read:6,feat:true,
+   title:'백테스트 리포트 제대로 읽는 법: MDD 와 승률의 상관관계',
+   sum:'수익률이 높다고 안전한 전략일까요? 최대 낙폭(MDD)과 승률 지표의 실제 구조를 파악하고, 검증 결과를 읽는 원칙을 다룹니다.',
+   body:[['수익률만 보면 안 되는 이유','백테스트의 최종 수익률은 구간 전체의 결과 하나만 말해줍니다. 같은 +20% 라도 중간에 -30% 를 견딘 전략과 -8% 만 겪은 전략은 전혀 다른 전략이에요. TETH 리포트가 수익률 옆에 항상 최대 낙폭(MDD)을 함께 보여주는 이유입니다.'],
+    ['MDD 는 견딜 수 있는 크기인가','MDD 는 검증 구간에서 자산이 고점 대비 가장 많이 빠졌던 폭이에요. 실행 중에 같은 폭의 하락이 오면 버틸 수 있는지가 기준이 됩니다. 손절 규칙이 있는 전략은 MDD 가 손절 폭 근처에서 관리되는지 확인해보세요.'],
+    ['승률과 손익비는 세트','승률 60% 여도 손실이 클 때 크게 잃으면 계좌는 줄어요. 반대로 승률 40% 여도 익절 폭이 손절 폭보다 충분히 크면 우상향할 수 있습니다. TETH 점수는 승률·수익·낙폭·거래량을 함께 반영해요.'],
+    ['거래 횟수가 너무 적다면','체결이 5회 미만이면 우연일 가능성이 커서 TETH 점수에 표본 부족 페널티가 붙어요. 기간을 늘리거나 조건을 완화해 표본을 확보한 뒤 판단하는 것이 안전합니다.'],
+    ['체크리스트','① 수익률과 MDD 를 항상 같이 본다 ② 손절 규칙이 실제로 작동했는지 복기에서 확인한다 ③ 표본(체결 수)이 충분한지 본다 ④ 검증 구간이 상승장에만 걸쳐 있지 않은지 본다.']]},
+  {id:'uid-rebate',cat:'guide',catL:'전략 가이드',date:'2026-03-08',read:5,top:true,
+   title:'거래소 UID 연동으로 수수료의 10%를 적립하는 구조',
+   sum:'파트너 거래소 UID 를 연동하면 체결 수수료의 10%가 적립되고, PRO 크레딧 1,000이 지급됩니다. 구조를 그대로 설명합니다.',
+   body:[['UID 연동이 하는 일','거래소 파트너 프로그램의 UID 를 TETH 에 연결하면 내 체결이 파트너 체결로 집계돼요. 연동은 Fast API 로 1분이면 끝나고, 출금 권한은 요구하지 않습니다.'],
+    ['적립 계산','체결 1건의 수수료(0.2%)의 10%가 적립돼요. 적립 내역은 PLAN 정산 탭과 내 트레이딩 정산 탭에서 체결 단위로 확인할 수 있고, 적립금은 이용료 차감에 사용될 예정입니다. 체험 모드에서는 시뮬레이션 체결 기준이에요.'],
+    ['PRO 크레딧','연동 즉시 PRO 심층 분석 크레딧 1,000(100회분)이 지급되고, 거래가 1회 체결되면 일정 기간 무제한으로 전환돼요.'],
+    ['주의','적립률과 정책은 파트너 조건에 따라 바뀔 수 있어요. 이 글은 수익 보장이 아니라 구조 설명입니다.']]},
+  {id:'funding-risk',cat:'market',catL:'시장 분석',date:'2026-03-10',read:4,top:true,
+   title:'변동성 구간에서 자동 위임 전략의 리스크 관리 원칙',
+   sum:'급변동 구간에서 규칙 기반 전략이 손실을 제한하는 방식 — 손절 규칙과 기간 청산이 작동하는 순서를 설명합니다.',
+   body:[['규칙이 감정을 대신한다','급락 구간에서 사람의 판단은 늦거나 과합니다. 위임 전략은 진입 전에 정한 손절선과 청산 규칙을 그대로 실행할 뿐이에요.'],
+    ['청산 규칙의 우선순위','TETH 엔진은 손절 → 익절 → 보유 기간 청산 순서로 평가해요. 봇 상세의 AI 행동 로그에서 각 봉마다 어떤 규칙이 평가됐는지 그대로 볼 수 있습니다.'],
+    ['리스크를 줄이는 설정','손절 폭을 넓히는 것보다 진입 조건(RSI 임계)을 엄격하게 하는 편이 검증상 유리한 경우가 많아요. 전략 수정에서 조건을 바꾸면 같은 구간으로 재검증됩니다.']]},
+  {id:'first-strategy',cat:'guide',catL:'전략 가이드',date:'2026-03-06',read:5,
+   title:'첫 전략 맡기기: 질문에서 실행까지 5단계',
+   sum:'채팅 질문 → 조건 확정 → 백테스트 검증 → 거래소 연결 → 실행. 각 단계에서 확인할 것을 정리했습니다.',
+   body:[['1. 질문으로 시작','종목이나 아이디어를 채팅에 말하면 TETH 가 조건을 좁혀가며 물어봐요.'],['2. 조건 확정','자산·스타일·예산·기간·손절선을 확정하면 요약 카드가 만들어져요.'],['3. 검증','과거 시장에서 백테스트로 검증하고 TETH 점수가 기준을 넘어야 실행 단계가 열려요.'],['4. 연결','파트너 거래소 API 를 연결해요. 출금 권한은 요구하지 않습니다.'],['5. 실행과 관찰','실행 후에는 내 트레이딩에서 체결·복기·정산·행동 로그를 확인하세요.']]},
+  {id:'review-loop',cat:'guide',catL:'전략 가이드',date:'2026-03-04',read:4,
+   title:'거래복기 리포트 활용법: 손실에서 배우는 구조',
+   sum:'체결마다 생성되는 복기 리포트를 다음 설정 조정으로 잇는 방법.',
+   body:[['복기는 왜 자동인가','체결이 확정되면 진입 근거와 청산 사유가 엔진 신호 기준으로 기록돼요. 기억이 아니라 기록으로 복기합니다.'],['손실 복기 읽기','손실 원인(손절선 도달)과 규칙 평가를 확인하고, 다음 제안에서 조정 방향을 봅니다. 조정은 전략 수정 → 재검증으로만 적용돼요.'],['주간 보고서와 함께','주간·월간 보고서에서 기간 승률과 합산 손익을 보고, 개별 복기로 내려가는 흐름을 추천해요.']]},
+  {id:'notif-setup',cat:'update',catL:'업데이트',date:'2026-03-02',read:3,
+   title:'알림 센터 개편: 내 트레이딩에서 한 번에',
+   sum:'알림과 주간·월간 보고서가 내 트레이딩 탭으로 이동했습니다. 수신 설정은 PLAN 에 그대로 있어요.',
+   body:[['무엇이 바뀌었나','우상단 벨을 누르면 내 트레이딩의 알림 탭으로 이동해요. 체결·복기·정산·크레딧 알림을 필터로 나눠 볼 수 있습니다.'],['보고서 탭','주간·월간 성과 보고서도 내 트레이딩 보고서 탭에서 모아 봅니다.'],['수신 설정','어떤 알림을 받을지는 PLAN → 알림 설정에서 그대로 관리해요.']]},
+  {id:'terminal-intro',cat:'update',catL:'업데이트',date:'2026-02-28',read:3,
+   title:'트레이딩 터미널: 차트와 실행을 한 화면에서',
+   sum:'내 트레이딩이 실시세 차트 + 전략 실행 패널 + 탭 구조의 터미널로 바뀌었습니다.',
+   body:[['구성','좌측 실시세 차트(트레이딩뷰), 우측 전략 실행 패널, 하단 내 전략·주문·포지션·손익·정산·알림·보고서 탭.'],['정직한 라벨','차트는 실시세, 실행과 체결은 시뮬레이션이에요. 화면의 라벨이 항상 그 구분을 표시합니다.'],['직접 주문은 없음','주문은 검증을 통과한 전략이 대신 실행해요. 직접 주문 입력은 제공하지 않습니다.']]},
+  {id:'score-anatomy',cat:'market',catL:'시장 분석',date:'2026-02-25',read:5,
+   title:'TETH 점수 해부: 왜 80점이 실행 기준인가',
+   sum:'승률·수익·낙폭·거래량 4개 축으로 계산되는 TETH 점수의 구조와 표본 페널티.',
+   body:[['4개 축','점수는 승률, 수익(CAGR), 최대 낙폭, 거래량 축을 가중 합산해 0~99 로 매겨요.'],['표본 페널티','체결이 4회 미만이면 점수가 크게 깎이고, 6회 미만이면 실행 기준(80)을 넘지 못하게 상한이 걸려요. 우연히 좋은 결과를 실행 자격으로 인정하지 않기 위해서입니다.'],['기준 미달이라면','조건을 조정해 재검증하거나, 전략 공유에서 검증된 전략을 따라해 시작할 수 있어요.']]},
+  {id:'share-follow',cat:'guide',catL:'전략 가이드',date:'2026-02-20',read:4,
+   title:'전략 공유 따라하기: 미러링이 아니라 재검증',
+   sum:'따라하기는 계좌 미러링이 아니라 설정 복제 후 내 조건으로 재검증하는 구조입니다.',
+   body:[['복제되는 것','원본 전략의 진입·청산 설정이에요. 예산과 손절선은 내 조건으로 바꿔 검증합니다.'],['왜 재검증인가','같은 설정도 예산·기간이 다르면 결과가 달라요. 검증을 통과해야 실행되는 원칙은 따라하기에도 동일하게 적용됩니다.'],['따라간 뒤','원본이 설정을 바꾸면 알림이 오고, 내 쪽 적용은 항상 재검증을 거쳐요.']]}
+];
+function tfInsOf(id){ for(var i=0;i<TF_INS.length;i++) if(TF_INS[i].id===id) return TF_INS[i]; return null; }
+var TF_INS_CAT='all';
+function tfInsThumb(cat,big){
+  var ic={market:NFX_IC.trend,guide:NFX_IC.doc,update:NFX_IC.zap}[cat]||NFX_IC.doc;
+  return '<div class="nfxi-thumb c-'+cat+'"><span class="gl2x" style="transform:scale('+(big?2.2:1.4)+')">'+ic+'</span></div>';
+}
+function tfInsightList(){
+  var feat=TF_INS.filter(function(p){return p.feat;})[0]||TF_INS[0];
+  var tops=TF_INS.filter(function(p){return p.top;}).slice(0,2);
+  var CATS=[['all','전체'],['market','시장 분석'],['guide','전략 가이드'],['update','업데이트']];
+  var rows=TF_INS.filter(function(p){ return TF_INS_CAT==='all'||p.cat===TF_INS_CAT; });
+  tfNFView('nfins','인사이트',
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-head"><h1 class="nfx-title">인사이트 <span class="nfx-badge">데모 콘텐츠</span></h1>'
+    +'<div class="nfx-sub">전략 검증, 복기, 수수료 적립 구조를 다루는 TETH 에디토리얼이에요.</div></div>'
+    +'<div class="nfx-sechead"><h2 class="nfx-sectit">FEATURED</h2></div>'
+    +'<div class="nfxi-feat" onclick="tfNav(\'#/insight/'+feat.id+'\')" style="cursor:pointer">'+tfInsThumb(feat.cat,true)
+    +'<div class="bd"><div class="nfxi-meta"><span class="nfx-badge blue">'+feat.catL+'</span><span class="nfx-badge">에디터 픽</span></div>'
+    +'<h3>'+gEsc(feat.title)+'</h3><div class="sum">'+gEsc(feat.sum)+'</div>'
+    +'<div class="nfxi-meta">'+feat.date+' · 읽는 시간 '+feat.read+'분 <span style="color:var(--gb2);font-weight:600;margin-left:auto">읽어보기 →</span></div></div></div>'
+    +(tops.length?'<div class="nfx-sechead" style="margin-top:6px"><h2 class="nfx-sectit">TOP POSTS</h2></div>'
+      +'<div class="nfxi-top">'+tops.map(function(p){ return '<div class="nfxi-card" onclick="tfNav(\'#/insight/'+p.id+'\')">'+tfInsThumb(p.cat)
+        +'<div class="bd"><div class="nfxi-meta"><span class="nfx-badge '+(p.cat==='market'?'blue':p.cat==='guide'?'pro':'warn')+'">'+p.catL+'</span></div><h4>'+gEsc(p.title)+'</h4><div class="nfxi-meta">'+p.date+' · '+p.read+'분 읽기</div></div></div>'; }).join('')+'</div>':'')
+    +'<div class="nfx-sechead" style="margin-top:6px"><h2 class="nfx-sectit">ALL POSTS ('+TF_INS.length+')</h2>'
+    +'<div class="nfxh-fchips" style="margin:0">'+CATS.map(function(cc){ var c=cc[0]==='all'?TF_INS.length:TF_INS.filter(function(p){return p.cat===cc[0];}).length;
+      return '<button class="nfxh-fchip'+(TF_INS_CAT===cc[0]?' on':'')+'" onclick="TF_INS_CAT=\''+cc[0]+'\';tfInsightList()">'+cc[1]+'<span class="c2">'+c+'</span></button>'; }).join('')+'</div></div>'
+    +'<div class="nfxi-grid">'+rows.map(function(p,i){
+      return '<div class="nfxi-card nfx-stag s'+Math.min(i+1,8)+'" onclick="tfNav(\'#/insight/'+p.id+'\')">'+tfInsThumb(p.cat)
+        +'<div class="bd"><div class="nfxi-meta"><span class="nfx-badge '+(p.cat==='market'?'blue':p.cat==='guide'?'pro':'warn')+'">'+p.catL+'</span></div>'
+        +'<h4>'+gEsc(p.title)+'</h4><div class="sum">'+gEsc(p.sum)+'</div>'
+        +'<div class="nfxi-meta" style="margin-top:auto">'+p.date+' · '+p.read+'분 읽기</div></div></div>'; }).join('')+'</div>'
+    +'<div class="nfxi-sub"><div style="flex:1;min-width:220px"><b>인사이트 구독</b><div style="font-size:12.5px;color:var(--gt3);margin-top:3px">새 글이 올라오면 알려드려요. 데모 — 발송은 일어나지 않아요.</div></div>'
+    +'<input type="email" placeholder="이메일 주소" id="nfxi-em"><button class="nfx-btn pri" onclick="toast(\'구독이 저장됐어요 (데모)\')">구독</button></div>'
+    +'</div>');
+}
+function tfInsCmts(id){ try{ return JSON.parse(localStorage.getItem('TETH_INS_C:'+id)||'[]'); }catch(e){ return []; } }
+function tfInsCmtAdd(id){
+  var ta=$('nfxi-ta'); var v=(ta&&ta.value||'').trim();
+  if(!v){ toast('내용을 입력해주세요'); return; }
+  if(v.length>300) v=v.slice(0,300);
+  var list=tfInsCmts(id);
+  list.push({nm:(S.user&&S.user.name)||'게스트',tx:v,at:Date.now()});
+  try{ localStorage.setItem('TETH_INS_C:'+id,JSON.stringify(list)); }catch(e){ toast('브라우저 저장에 실패했어요'); return; } /* 실패를 성공으로 표시하지 않음 (codex flow3 F) */
+  toast('댓글이 저장됐어요 (이 기기에만)');
+  tfInsightView(id);
+}
+function tfInsightView(id){
+  var p=tfInsOf(id);
+  if(!p){ if(!window.TF_STATE_READY) return; toast('글을 찾을 수 없어요'); tfNav('#/insight'); return; }
+  var cm=tfInsCmts(id);
+  tfNFView('nfins',p.title,
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/insight\')">인사이트</span><span>/</span><span style="color:var(--gt2)">'+gEsc(p.catL)+'</span></div>'
+    +'<div class="nfxi-art"><div>'
+    +'<div class="nfxi-meta"><span class="nfx-badge '+(p.cat==='market'?'blue':p.cat==='guide'?'pro':'warn')+'">'+p.catL+'</span><span class="nfx-badge">데모 콘텐츠</span></div>'
+    +'<h1 class="nfx-title" style="font-size:24px;margin:10px 0 6px">'+gEsc(p.title)+'</h1>'
+    +'<div class="nfxi-meta" style="margin-bottom:8px">'+p.date+' · 읽는 시간 '+p.read+'분</div>'
+    +'<div class="nfxi-body">'+p.body.map(function(s,i){ return '<h3 id="nfxi-s'+i+'">'+gEsc(s[0])+'</h3><p>'+gEsc(s[1])+'</p>'; }).join('')+'</div>'
+    +'<div class="nfxi-cmt"><div class="nfx-sechead"><h2 class="nfx-sectit">의견 ('+cm.length+')</h2><span class="nfx-badge">데모 — 이 기기에만 저장</span></div>'
+    +'<textarea id="nfxi-ta" maxlength="300" placeholder="이 글에 대한 생각을 남겨보세요" oninput="var c=$(\'nfxi-cnt\'); if(c) c.textContent=this.value.length+\' / 300\'"></textarea>'
+    +'<div class="cnt" id="nfxi-cnt">0 / 300</div>'
+    +'<div class="nfx-cta" style="margin-top:8px"><button class="nfx-btn pri" onclick="tfInsCmtAdd(\''+p.id+'\')">등록</button></div>'
+    +'<div style="margin-top:14px">'+(cm.length?cm.slice().reverse().map(function(x){
+        return '<div class="nfxi-c1"><span class="nfxi-av">'+gEsc(String(x.nm).charAt(0))+'</span><div style="min-width:0"><span class="nm">'+gEsc(x.nm)+'</span><div class="tx2">'+gEsc(x.tx)+'</div><div class="tm3">'+tfNFTime(x.at)+'</div></div></div>';
+      }).join(''):'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.chat+'</div><div class="nfx-etit">아직 의견이 없어요</div><div class="nfx-edesc">이 글에 대한 첫 생각을 남겨보세요.</div></div>')+'</div>'
+    +'</div></div>'
+    +'<div class="nfxi-toc"><div class="box"><div class="tt2">목차</div>'
+    +p.body.map(function(s,i){ return '<a onclick="var el=$(\'nfxi-s'+i+'\'); if(el) el.scrollIntoView({behavior:\'smooth\',block:\'start\'})">'+gEsc(s[0])+'</a>'; }).join('')+'</div>'
+    +'<div class="box"><div class="tt2">더 보기</div>'
+    +TF_INS.filter(function(x){return x.id!==p.id;}).slice(0,3).map(function(x){ return '<a onclick="tfNav(\'#/insight/'+x.id+'\')">'+gEsc(x.title)+'</a>'; }).join('')+'</div>'
+    +'</div></div>'
+    +'</div>');
+}
 /* ── 라우팅 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 ── */
 function tfNFRoute(h){
   var m;
@@ -9422,6 +9589,8 @@ function tfNFRoute(h){
   if((m=h.match(/^#\/plan(?:\/(rebates|alerts))?$/))){ tfPlanView(m[1]||'plan'); return true; }
   if((m=h.match(/^#\/review\/([A-Za-z0-9-]+)$/))){ tfReviewView(m[1]); return true; }
   if((m=h.match(/^#\/periodic\/([A-Za-z0-9:-]+)$/))){ tfPeriodicView(m[1]); return true; }
+  if(h==='#/insight'){ tfInsightList(); return true; }
+  if((m=h.match(/^#\/insight\/([A-Za-z0-9-]+)$/))){ tfInsightView(m[1]); return true; }
   return false;
 }
 /* ── §9.5 지원 거래소: 목록 + 상세 (TradingView Brokers 구조의 TETH 변형, 수치는 데모) ── */
@@ -9734,7 +9903,7 @@ function tfRoute(){
   var h=location.hash;
   tfSS3DlgClose(true); /* 라우트 전환 시 공유 다이얼로그 잔존 방지 (codex F09) */
   /* nf 라우트 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 */
-  if(/^#\/(trade|plan|review|periodic)(\/|$)/.test(h)){ TF_ONNF=true; if(tfNFRoute(h)) return; }
+  if(/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(h)){ TF_ONNF=true; if(tfNFRoute(h)) return; }
   if(TF_ONNF&&h.indexOf('#/strategy/')!==0&&h.indexOf('#/share/s/')!==0){ TF_ONNF=false; tfBackToChat(); return; } /* nf 화면에서 뒤로가기 */
   TF_ONNF=false; /* 여기부터는 share/strategy 계열 — nf 플래그가 남아 뒤로가기 폴백을 가로채지 않게 */
   /* 전략 공유 상세 딥링크 (#/share/s/<닉>[/기간]) — 퍼널 라우트(#/strategy/*)와 네임스페이스 분리 */
@@ -9764,7 +9933,7 @@ function tfBackToChat(){
 }
 /* 새로고침 복구: 상태 복원 뒤 해시 라우트 재진입 (Scenario D) */
 var TF_BOOTED=false;
-setTimeout(function(){ TF_BOOTED=true; if(location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0||/^#\/(trade|plan|review|periodic)(\/|$)/.test(location.hash)) tfRoute(); },900);
+setTimeout(function(){ TF_BOOTED=true; if(location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash)) tfRoute(); },900);
 /* 우측 drawer: 가이드 전용 — 닫아도 페이지 입력값 유지 */
 var TF_DRAWER_TRIG=null;
 function tfDrawerEsc(e){ if(e.key==='Escape') tfDrawerClose(); }
@@ -10622,7 +10791,7 @@ function gBoot(){
     STORE.load(function(p){
       if(!S.user&&STORE.restore(p)){ authSyncUI(); gSideRender(); }
       window.TF_STATE_READY=true; /* 이제부터 라우트 가드가 해시를 정리해도 안전 (복원 레이스 방지) */
-      var onStrat=location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0||/^#\/(trade|plan|review|periodic)(\/|$)/.test(location.hash);
+      var onStrat=location.hash.indexOf('#/strategy/')===0||location.hash.indexOf('#/share/s/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash);
       if(onStrat){ TF_BOOTED=true; tfRoute(); }
       else if(S.user&&p&&p.lastSid){
         /* 새로고침 시 마지막 작업 세션으로 복귀 — 빈 홈으로 튕기지 않는다 */
