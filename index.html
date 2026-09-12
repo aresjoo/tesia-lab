@@ -1565,8 +1565,27 @@ body.g-inchat #nf-util{right:14px}
 #nf-notif .ft button{font-size:12.5px;color:var(--gt2);display:flex;align-items:center;gap:8px}
 #nf-notif .ft button:hover{color:var(--gt)}
 #nf-notif .empty{padding:44px 20px;text-align:center;font-size:13px;color:var(--gt3);line-height:1.7}
+#nf-notif .tabs button .ct{font-size:10.5px;color:var(--gt3);margin-left:4px;font-variant-numeric:tabular-nums}
+#nf-notif .tabs button.on .ct{color:var(--inv-fg);opacity:.65}
+.nf-item{animation:nfxUp .3s var(--ease) both}
+.nf-item:nth-child(1){animation-delay:30ms}.nf-item:nth-child(2){animation-delay:60ms}.nf-item:nth-child(3){animation-delay:90ms}.nf-item:nth-child(4){animation-delay:120ms}.nf-item:nth-child(5){animation-delay:150ms}.nf-item:nth-child(6){animation-delay:180ms}
+.nf-item .tg{border:none;font-weight:600;padding:1px 8px}
+.nf-item .tg.t-credit{background:rgba(61,110,240,.13);color:var(--gb2)}
+.nf-item .tg.t-pos{background:rgba(78,192,141,.13);color:var(--gg)}
+.nf-item .tg.t-bot{background:rgba(78,192,141,.13);color:var(--gg)}
+.nf-item .tg.t-review{background:rgba(217,168,78,.13);color:var(--ga)}
+.nf-item .tg.t-rebate{background:rgba(78,192,141,.13);color:var(--gg)}
+.nf-item .tg.t-report{background:rgba(61,110,240,.13);color:var(--gb2)}
+.nf-item .mv{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;margin-left:8px}
+.nf-item .mv.up{color:var(--gg)}.nf-item .mv.dn{color:var(--gr)}
+#nf-grab{display:none}
+@keyframes nfBellShake{0%,100%{transform:rotate(0)}20%{transform:rotate(13deg)}40%{transform:rotate(-11deg)}60%{transform:rotate(7deg)}80%{transform:rotate(-4deg)}}
+.nf-bell.shake svg{animation:nfBellShake .55s var(--ease)}
+@keyframes nfBadgePop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+.nf-bell .bd.pop{animation:nfBadgePop .3s var(--ease)}
 @media (max-width:640px){
   #nf-notif{top:auto;bottom:0;left:0;right:0;width:auto;max-height:80vh;border-radius:24px 24px 0 0;animation:gSheetUp .2s var(--ease)}
+  #nf-grab{display:block;width:44px;height:4px;border-radius:2px;background:var(--gl2);margin:10px auto 0}
 }
 /* PLAN 뷰 (탭: 플랜/정산/알림) */
 .nf-page{max-width:880px;margin:0 auto;padding:30px 24px 70px}
@@ -1633,6 +1652,259 @@ body.g-inchat #nf-util{right:14px}
   .nf-credit .tx{display:none} /* 모바일은 아이콘/숫자만 */
   .nf-credit,.nf-bell{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)} /* 모바일 헤더 순검정 밴드 위 가시성 (AGY P0-4) */
   .nf-page{padding:18px 14px 50px}
+}
+/* ══ nfx — 신규 화면 디자인 시스템 (AGY 목업 포팅, 토큰만 사용 — 라이트 테마 재정의 호환) ══ */
+.nfx-page{max-width:1040px;margin:0 auto;padding:26px 22px 80px;display:flex;flex-direction:column;gap:26px;position:relative}
+.nfx-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1200px;height:420px;background:radial-gradient(ellipse 60% 50% at 50% -20%,rgba(61,110,240,.10),transparent 75%);pointer-events:none;z-index:0}
+.nfx-page>*:not(.nfx-glow){position:relative;z-index:1}
+.nfx-head{display:flex;flex-direction:column;gap:6px}
+.nfx-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--gt);margin:0}
+.nfx-sub{font-size:13.5px;color:var(--gt3)}
+.nfx-bc{font-size:12.5px;color:var(--gt3);display:flex;gap:6px;align-items:center}
+.nfx-bc .lk{cursor:pointer;color:var(--gt3);transition:color .15s}
+.nfx-bc .lk:hover{color:var(--gt)}
+.nfx-tabs{display:inline-flex;background:var(--g1);padding:4px;border-radius:12px;border:1px solid var(--gl);gap:2px;margin-top:8px;align-self:flex-start}
+.nfx-tab{border:none;background:transparent;color:var(--gt3);font-size:13.5px;font-weight:500;padding:8px 18px;border-radius:9px;cursor:pointer;transition:color .2s var(--ease),transform .15s var(--ease);font-family:inherit}
+.nfx-tab:hover{color:var(--gt)}
+.nfx-tab:active{transform:scale(.97)}
+.nfx-tab.on{background:var(--inv-bg);color:var(--inv-fg);font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.nfx-grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+.nfx-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nfx-card{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:22px 24px;position:relative;overflow:hidden;transition:border-color .2s var(--ease);animation:nfxIn .35s var(--ease) both}
+.nfx-card:hover{border-color:var(--gl2)}
+.nfx-card-hero{padding:26px 28px;display:flex;flex-direction:column;gap:20px}
+.nfx-chead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nfx-ctitle{font-size:14px;font-weight:600;color:var(--gt2);letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.nfx-badge{display:inline-flex;align-items:center;gap:4.5px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;line-height:1.2;letter-spacing:.02em;background:var(--g3);color:var(--gt3);border:1px solid var(--gl)}
+.nfx-badge.pro{background:rgba(78,192,141,.14);color:var(--gg);border-color:rgba(78,192,141,.3)}
+.nfx-badge.blue{background:rgba(61,110,240,.15);color:var(--gb2);border-color:rgba(61,110,240,.3)}
+.nfx-badge.warn{background:rgba(217,168,78,.15);color:var(--ga);border-color:rgba(217,168,78,.32)}
+.nfx-badge.danger{background:rgba(224,96,75,.15);color:var(--gr);border-color:rgba(224,96,75,.3)}
+.nfx-badge.sim{background:rgba(217,168,78,.12);color:var(--ga);border-color:rgba(217,168,78,.28)}
+.nfx-dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;flex-shrink:0}
+@keyframes nfxPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.nfx-dot.pulse{animation:nfxPulse 1.8s ease-in-out infinite}
+.nfx-hero-label{font-size:12.5px;color:var(--gt3);font-weight:500}
+.nfx-hero{font-size:38px;font-weight:700;color:var(--gt);letter-spacing:-.035em;line-height:1.1;display:flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.nfx-hero.cg{color:var(--gg)}
+.nfx-hero.cw{color:var(--ga)}
+.nfx-hero.cx{color:var(--gt3)}
+.nfx-hero.cb{color:var(--gb2)}
+.nfx-hero.cr{color:var(--gr)}
+.nfx-hero-sub{font-size:19px;font-weight:600;color:var(--gt2)}
+.nfx-hero-desc{font-size:13.5px;color:var(--gt2);line-height:1.55}
+.nfx-gauge{display:flex;flex-direction:column;gap:8px}
+.nfx-gtrack{width:100%;height:9px;background:var(--g3);border-radius:999px;position:relative;overflow:visible}
+.nfx-gfill{height:100%;border-radius:999px;background:var(--gg);transition:width .7s var(--ease),background-color .4s var(--ease);min-width:0}
+.nfx-gfill.warn{background:var(--ga)}
+.nfx-gfill.empty{background:var(--gt3);width:0!important}
+.nfx-gfill.inf{background:linear-gradient(90deg,var(--gg),var(--gb));width:100%!important;position:relative;overflow:hidden}
+.nfx-gfill.inf::after{content:'';position:absolute;inset:0;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:nfxShimmer 2s infinite linear}
+@keyframes nfxShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.nfx-gpin{position:absolute;top:-4px;width:2px;height:17px;background:var(--ga);border-radius:1px;transform:translateX(-50%);z-index:2;opacity:.85}
+.nfx-gpin::before{content:'';position:absolute;top:-3px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--ga)}
+.nfx-glabels{display:flex;justify-content:space-between;font-size:12px;color:var(--gt3);font-weight:500}
+.nfx-glabels b{color:var(--gt);font-weight:600}
+.nfx-cta{display:flex;gap:10px;flex-wrap:wrap}
+.nfx-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 18px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:transform .15s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease);white-space:nowrap;color:var(--gt)}
+.nfx-btn:hover{transform:translateY(-1px)}
+.nfx-btn:active{transform:scale(.98)}
+.nfx-btn.pri{background:var(--gb);color:#fff;box-shadow:0 4px 14px rgba(61,110,240,.35)}
+.nfx-btn.pri:hover{background:var(--gb2);box-shadow:0 6px 20px rgba(61,110,240,.45)}
+.nfx-btn.sec{background:var(--g3);color:var(--gt);border-color:var(--gl)}
+.nfx-btn.sec:hover{background:var(--pop);border-color:var(--gl2)}
+.nfx-btn.out{background:transparent;color:var(--gt2);border-color:var(--gl2)}
+.nfx-btn.out:hover{background:var(--hoverline);color:var(--gt);border-color:var(--gt3)}
+.nfx-btn.dng{background:transparent;color:var(--gr);border-color:rgba(224,96,75,.4)}
+.nfx-btn.dng:hover{background:rgba(224,96,75,.08)}
+.nfx-foot{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--gt3);line-height:1.5;padding-top:14px;border-top:1px solid var(--gl)}
+.nfx-sechead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.nfx-sectit{font-size:14px;font-weight:600;color:var(--gt2);letter-spacing:-.01em;margin:0}
+.nfx-rows{display:flex;flex-direction:column;gap:8px}
+.nfx-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;background:var(--g2);border:1px solid var(--gl);border-radius:12px;transition:transform .15s var(--ease),border-color .15s var(--ease),background-color .15s var(--ease)}
+.nfx-row.lk{cursor:pointer}
+.nfx-row:hover{background:var(--g3);border-color:var(--gl2)}
+.nfx-row.lk:hover{transform:translateY(-1px)}
+.nfx-rl{display:flex;align-items:center;gap:12px;min-width:0}
+.nfx-ric{width:36px;height:36px;border-radius:10px;background:var(--pill);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gt2)}
+.nfx-ric.gg{color:var(--gg);background:rgba(78,192,141,.08);border-color:rgba(78,192,141,.2)}
+.nfx-ric.gb{color:var(--gb2);background:rgba(61,110,240,.08);border-color:rgba(61,110,240,.2)}
+.nfx-ric.ga{color:var(--ga);background:rgba(217,168,78,.08);border-color:rgba(217,168,78,.2)}
+.nfx-ric.gr{color:var(--gr);background:rgba(224,96,75,.08);border-color:rgba(224,96,75,.2)}
+.nfx-rtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.nfx-rlb{font-size:13.5px;font-weight:600;color:var(--gt);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nfx-rds{font-size:12px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nfx-rr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nfx-rval{font-size:14px;font-weight:600;color:var(--gt);text-align:right;font-variant-numeric:tabular-nums}
+.nfx-rval.gain{color:var(--gg)}
+.nfx-rval.loss{color:var(--gr)}
+.nfx-arrow{color:var(--gt3);opacity:.5;transition:opacity .15s,transform .15s;flex-shrink:0}
+.nfx-row:hover .nfx-arrow{opacity:1;transform:translateX(2px)}
+.nfx-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.nfx-mbox{background:var(--g2);border:1px solid var(--gl);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:4px}
+.nfx-mtit{font-size:12px;color:var(--gt3);font-weight:500}
+.nfx-mval{font-size:16px;font-weight:600;color:var(--gt);font-variant-numeric:tabular-nums}
+.nfx-sw{position:relative;display:inline-block;width:46px;height:28px;cursor:pointer;flex-shrink:0}
+.nfx-sw input{opacity:0;width:0;height:0;position:absolute}
+.nfx-slider{position:absolute;inset:0;background:var(--g3);border:1px solid var(--gl2);border-radius:999px;transition:background-color .25s var(--ease),border-color .25s var(--ease)}
+.nfx-slider::before{position:absolute;content:'';height:22px;width:22px;left:2px;bottom:2px;background:var(--inv-bg);border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,.45);transition:transform .25s var(--ease),width .18s var(--ease)}
+.nfx-sw input:checked+.nfx-slider{background:var(--gb);border-color:var(--gb)}
+.nfx-sw input:checked+.nfx-slider.grn{background:var(--gg);border-color:var(--gg)}
+.nfx-sw input:checked+.nfx-slider::before{transform:translateX(18px)}
+.nfx-sw:active .nfx-slider::before{width:26px}
+.nfx-sw input:disabled+.nfx-slider{opacity:.6;cursor:not-allowed}
+.nfx-stag{opacity:0;transform:translateY(10px);animation:nfxUp .35s var(--ease) forwards}
+.nfx-stag.s1{animation-delay:40ms}.nfx-stag.s2{animation-delay:80ms}.nfx-stag.s3{animation-delay:120ms}.nfx-stag.s4{animation-delay:160ms}.nfx-stag.s5{animation-delay:200ms}.nfx-stag.s6{animation-delay:240ms}.nfx-stag.s7{animation-delay:280ms}.nfx-stag.s8{animation-delay:320ms}
+@keyframes nfxUp{to{opacity:1;transform:translateY(0)}}
+@keyframes nfxIn{from{opacity:0}to{opacity:1}}
+.nfx-glowonce{animation:nfxGlow 1.2s var(--ease) 1}
+@keyframes nfxGlow{0%{box-shadow:0 0 0 0 rgba(61,110,240,.4)}70%{box-shadow:0 0 0 12px rgba(61,110,240,0)}100%{box-shadow:0 0 0 0 rgba(61,110,240,0)}}
+.nfx-empty{padding:44px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:var(--g2);border:1px dashed var(--gl2);border-radius:16px;gap:10px;animation:nfxIn .4s var(--ease)}
+.nfx-eicon{width:54px;height:54px;border-radius:50%;background:var(--pill);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;color:var(--gt3);margin-bottom:4px}
+.nfx-etit{font-size:15px;font-weight:600;color:var(--gt)}
+.nfx-edesc{font-size:13px;color:var(--gt3);max-width:320px;line-height:1.5}
+@media (max-width:640px){
+  .nfx-page{padding:16px 12px 60px}
+  .nfx-grid2,.nfx-grid3{grid-template-columns:1fr;gap:14px}
+  .nfx-title{font-size:22px}
+  .nfx-card{padding:18px 16px;border-radius:16px}
+  .nfx-card-hero{padding:20px 16px}
+  .nfx-hero{font-size:32px}
+  .nfx-metrics{grid-template-columns:1fr}
+  .nfx-cta .nfx-btn{flex:1}
+  .nfx-tabs{align-self:stretch;display:flex}
+  .nfx-tab{flex:1}
+}
+/* nfx — 내 트레이딩 대시보드 (mock-trade 포팅) */
+.nfxt-banner{display:flex;align-items:center;gap:12px;border:1px solid rgba(217,168,78,.32);background:linear-gradient(90deg,rgba(217,168,78,.08),rgba(217,168,78,.03));border-radius:14px;padding:13px 16px;font-size:13px;color:var(--gt2);animation:nfxIn .3s var(--ease) both}
+.nfxt-banner b{color:var(--ga)}
+.nfxt-banner .sp{flex:1}
+.nfxt-banner.blue{border-color:rgba(61,110,240,.3);background:linear-gradient(90deg,rgba(61,110,240,.08),rgba(61,110,240,.03))}
+.nfxt-banner.blue b{color:var(--gb2)}
+.nfxt-conn{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--g1);border:1px solid var(--gl);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--gt2)}
+.nfxt-conn .nfx-dot{background:var(--gg)}
+.nfxt-conn .tag{font-size:11px;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:6px;padding:2px 7px}
+.nfxt-conn .ok{color:var(--gg);display:inline-flex;align-items:center;gap:5px;font-weight:600}
+.nfxt-hgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.nfxt-asset{background:linear-gradient(160deg,var(--g2),var(--g1) 55%);border:1px solid var(--gl);border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:16px;justify-content:space-between}
+.nfxt-asset .lbl{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--gt3)}
+.nfxt-asset .big{font-size:40px;font-weight:800;letter-spacing:-.035em;color:var(--gt);line-height:1.05;font-variant-numeric:tabular-nums}
+.nfxt-pnl{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;font-variant-numeric:tabular-nums;align-self:flex-start}
+.nfxt-pnl.up{color:var(--gg);background:rgba(78,192,141,.1);border:1px solid rgba(78,192,141,.28)}
+.nfxt-pnl.dn{color:var(--gr);background:rgba(224,96,75,.1);border:1px solid rgba(224,96,75,.28)}
+.nfxt-pnl .cap{font-weight:500;color:var(--gt3)}
+.nfxt-side{display:flex;flex-direction:column;gap:14px}
+.nfxt-mini{background:var(--g1);border:1px solid var(--gl);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;flex:1;justify-content:center}
+.nfxt-mini .k{font-size:12px;color:var(--gt3);display:flex;align-items:center;justify-content:space-between}
+.nfxt-mini .v{font-size:22px;font-weight:700;color:var(--gt);font-variant-numeric:tabular-nums}
+.nfxt-mini .s{font-size:11.5px;color:var(--gt3)}
+.nfxt-cols{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+.nfxt-coin{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;background:var(--pill);border:1px solid var(--gl);color:var(--gt2)}
+.nfxt-sbar{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--gt3)}
+.nfxt-sbar i{display:inline-block;width:52px;height:4px;border-radius:2px;background:var(--g3);position:relative;overflow:hidden}
+.nfxt-sbar i::after{content:'';position:absolute;left:0;top:0;bottom:0;width:var(--w,60%);background:var(--gb);border-radius:2px}
+.nfxt-st{display:inline-flex;align-items:center;gap:5px;padding:2.5px 9px;border-radius:999px;font-size:11px;font-weight:600}
+.nfxt-st.live{background:rgba(78,192,141,.12);color:var(--gg)}
+.nfxt-st.paper{background:rgba(61,110,240,.12);color:var(--gb2)}
+.nfxt-st.ready{background:rgba(217,168,78,.12);color:var(--ga)}
+.nfxt-st.stop{background:var(--g3);color:var(--gt3)}
+.nfxt-side-tag{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:3px 8px;border-radius:7px;font-size:11.5px;font-weight:700;flex-shrink:0}
+.nfxt-side-tag.b{background:rgba(78,192,141,.12);color:var(--gg);border:1px solid rgba(78,192,141,.25)}
+.nfxt-side-tag.s{background:rgba(224,96,75,.12);color:var(--gr);border:1px solid rgba(224,96,75,.25)}
+@media (max-width:900px){.nfxt-hgrid{grid-template-columns:1fr}.nfxt-cols{grid-template-columns:1fr}.nfxt-asset .big{font-size:32px}}
+/* nfx — 리포트 계열 (mock-report 포팅) */
+.nfxr-hero{position:relative;overflow:hidden}
+.nfxr-hero.win::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 90% at 85% 15%,rgba(78,192,141,.13),transparent 70%);pointer-events:none}
+.nfxr-hero.loss::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 90% at 85% 15%,rgba(224,96,75,.12),transparent 70%);pointer-events:none}
+.nfxr-hero>*{position:relative}
+.nfxr-chiprow{display:flex;gap:8px;flex-wrap:wrap}
+.nfxr-chip{display:inline-flex;align-items:center;gap:6px;background:var(--g2);border:1px solid var(--gl);border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--gt2)}
+.nfxr-chip b{color:var(--gt);font-weight:600}
+.nfxr-steps{display:flex;flex-direction:column;gap:10px}
+.nfxr-step{display:flex;gap:14px;padding:16px 18px;background:var(--g2);border:1px solid var(--gl);border-radius:14px;transition:border-color .15s}
+.nfxr-step:hover{border-color:var(--gl2)}
+.nfxr-sic{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--gl);background:var(--pill);color:var(--gt2)}
+.nfxr-sic.e{color:var(--gb2);border-color:rgba(61,110,240,.25)}
+.nfxr-sic.x{color:var(--gg);border-color:rgba(78,192,141,.25)}
+.nfxr-sic.g{color:var(--ga);border-color:rgba(217,168,78,.25)}
+.nfxr-sic.r{color:var(--gr);border-color:rgba(224,96,75,.25)}
+.nfxr-stag{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--gt3);border:1px solid var(--gl);border-radius:6px;padding:1px 7px;display:inline-block;margin-right:8px;vertical-align:1px}
+.nfxr-stit{font-size:14px;font-weight:700;color:var(--gt)}
+.nfxr-sbody{font-size:13px;color:var(--gt2);line-height:1.6;margin-top:5px}
+.nfxr-stats{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.nfxr-ring{position:relative;width:58px;height:58px;flex-shrink:0}
+.nfxr-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.nfxr-ring .bg{stroke:var(--gl2);fill:none;stroke-width:7}
+.nfxr-ring .fg{stroke:var(--gg);fill:none;stroke-width:7;stroke-linecap:round;stroke-dasharray:163.4;stroke-dashoffset:163.4;transition:stroke-dashoffset 1.2s var(--ease)}
+.nfxr-ring .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gt)}
+/* nfx — 봇 상세 전용 (mock-bot 포팅) */
+.nfxb-hero{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:22px 26px;display:flex;flex-direction:column;gap:16px;animation:nfxIn .3s var(--ease) both}
+.nfxb-toprow{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.nfxb-tline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nfxb-title{font-size:24px;font-weight:700;letter-spacing:-.03em;color:var(--gt);margin:0}
+.nfxb-st{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.nfxb-st.live{background:rgba(78,192,141,.12);color:var(--gg);border:1px solid rgba(78,192,141,.3)}
+.nfxb-st.paper{background:rgba(61,110,240,.12);color:var(--gb2);border:1px solid rgba(61,110,240,.3)}
+.nfxb-st.ready{background:rgba(217,168,78,.12);color:var(--ga);border:1px solid rgba(217,168,78,.3)}
+.nfxb-st.stop{background:var(--g3);color:var(--gt3);border:1px solid var(--gl)}
+.nfxb-origin{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:999px;padding:4px 11px;margin-top:8px}
+.nfxb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.nfxb-notice{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:10px;padding:9px 13px}
+.nfxb-mgrid{display:grid;grid-template-columns:300px 1fr 1fr;gap:14px}
+.nfxb-mcard{background:var(--g1);border:1px solid var(--gl);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:border-color .2s var(--ease),transform .2s var(--ease)}
+.nfxb-mcard:hover{border-color:var(--gl2);transform:translateY(-2px)}
+.nfxb-mcard.score{background:linear-gradient(175deg,rgba(61,110,240,.05),var(--g1) 40%)}
+.nfxb-mhd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nfxb-mlb{font-size:12.5px;color:var(--gt3);font-weight:500}
+.nfxb-chipp{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--g2);color:var(--gt2);border:1px solid var(--gl);white-space:nowrap}
+.nfxb-scorebody{display:flex;align-items:center;gap:16px}
+.nfxb-ring{position:relative;width:76px;height:76px;flex-shrink:0}
+.nfxb-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.nfxb-ring .bg{stroke:var(--gl2);fill:none;stroke-width:8}
+.nfxb-ring .fg{stroke:var(--gg);fill:none;stroke-width:8;stroke-linecap:round;stroke-dasharray:251.3;stroke-dashoffset:251.3;transition:stroke-dashoffset 1.4s var(--ease)}
+.nfxb-ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:var(--gt);letter-spacing:-.03em}
+.nfxb-ring .mx{font-size:9px;color:var(--gt3);font-weight:500;margin-top:-2px}
+.nfxb-smeta{display:flex;flex-direction:column;gap:4px;min-width:0}
+.nfxb-srank{font-size:14.5px;font-weight:700;color:var(--gg)}
+.nfxb-sdesc{font-size:12px;color:var(--gt3);line-height:1.45}
+.nfxb-bigval{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--gt)}
+.nfxb-bigval.up{color:var(--gg)}
+.nfxb-bigval.dn{color:var(--gr)}
+.nfxb-subtx{font-size:12px;color:var(--gt3);margin-top:4px}
+.nfxb-rbar{margin-top:12px;width:100%;height:6px;border-radius:999px;background:var(--g2);overflow:hidden}
+.nfxb-rbar i{display:block;height:100%;border-radius:999px;transition:width 1s var(--ease)}
+.nfxb-chart{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:22px 24px}
+.nfxb-chd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.nfxb-ctit{font-size:15.5px;font-weight:700;color:var(--gt);display:flex;align-items:center;gap:10px;margin:0}
+.nfxb-cbadge{font-size:11px;font-weight:600;color:var(--gb2);background:rgba(61,110,240,.1);border:1px solid rgba(61,110,240,.25);padding:2px 8px;border-radius:999px}
+.nfxb-cstats{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--gt3);flex-wrap:wrap}
+.nfxb-cstats b{font-weight:600;color:var(--gt)}
+.nfxb-spark{width:100%;height:140px;position:relative}
+.nfxb-spark svg{width:100%;height:100%;overflow:visible}
+.nfxb-grid{stroke:var(--gl);stroke-dasharray:4 4;stroke-width:1}
+.nfxb-line{fill:none;stroke:var(--gg);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 8px rgba(78,192,141,.3))}
+.nfxb-line.dn{stroke:var(--gr);filter:drop-shadow(0 2px 8px rgba(224,96,75,.3))}
+.nfxb-area{opacity:.85}
+.nfxb-grid2{display:grid;grid-template-columns:1.45fr 1fr;gap:20px;align-items:start}
+.nfxb-scard{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:20px 22px}
+.nfxb-fee{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gt2);background:var(--g2);border:1px solid var(--gl);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.nfxb-fee b{color:var(--gg);font-weight:700}
+.nfxb-posbox{background:var(--g2);border:1px dashed var(--gl2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.nfxb-postit{font-size:14px;font-weight:600;color:var(--gt)}
+.nfxb-posdesc{font-size:12.5px;color:var(--gt3);line-height:1.55}
+.nfxb-check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gt2)}
+.nfxb-check .d{width:6px;height:6px;border-radius:50%;background:var(--ga);animation:nfxPulse 1.8s ease-in-out infinite;flex-shrink:0}
+.nfxb-pill-amber{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ga);background:rgba(217,168,78,.1);border:1px solid rgba(217,168,78,.25);border-radius:999px;padding:3px 9px}
+.nfxb-specs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nfxb-spec{background:var(--g2);border:1px solid var(--gl);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.nfxb-spec .k{font-size:11.5px;color:var(--gt3)}
+.nfxb-spec .v{font-size:12.5px;font-weight:600;color:var(--gt)}
+@media (max-width:900px){.nfxb-mgrid{grid-template-columns:1fr}.nfxb-grid2{grid-template-columns:1fr}}
+@media (max-width:640px){.nfxb-title{font-size:20px}.nfxb-bigval{font-size:30px}.nfxb-specs{grid-template-columns:1fr}.nfxb-actions{width:100%}.nfxb-actions .nfx-btn{flex:1}.nfxb-hero{padding:18px 16px}}
+@media (prefers-reduced-motion:reduce){
+  .nfx-stag,.nfx-card,.nfx-glowonce,.nfxb-hero{animation:none!important;opacity:1!important;transform:none!important}
+  .nfx-gfill,.nfx-btn,.nfx-row,.nfxb-ring .fg,.nfxb-rbar i{transition:none!important}
+  .nfx-gfill.inf::after,.nfx-dot.pulse,.nfxb-check .d{animation:none!important}
 }
 
 /* ══ TETH 전략 위임 플로우 (인테이크→검증→점수→리포트→실행→온보딩→대시보드→커뮤니티) ══ */
@@ -7082,7 +7354,11 @@ function tfConnectView(){
   if(step===1) body=t.plan==='paid'?tfPayHtml():tfPlanHtml();
   else if(step===2) body=t.plan==='partner'?tfFreeHtml():tfExHtml('바로 연결할 거래소를 선택해주세요.');
   else if(step===3) body=tfApiHtml();
-  else { tfNav('#/strategy/done'); return; }
+  else {
+    /* 연결을 마쳤고 복귀 대상 봇이 있으면 새 봇 생성 없이 그 봇을 시작 (codex NF P0) */
+    if(window.TF_NF_RESUME&&tfBotFind(window.TF_NF_RESUME.id)){ var rz=window.TF_NF_RESUME; window.TF_NF_RESUME=null; t.conn=true; tfSave(); tfBotCtl(rz.id,rz.act); return; }
+    tfNav('#/strategy/done'); return;
+  }
   TF_RENDERING=true;
   gContent('<div class="tfw" style="max-width:640px">'
     +tfHead('전략 실행','' ,'')
@@ -7289,7 +7565,7 @@ function tfCnApi(){
     t.ob.st='api_verified'; t.ob.err=null;
     t.api={ex:t.ob.ex,last4:kv.slice(-4)}; /* 키 원문은 저장하지 않는다 */
     tfSave();
-    tfNav('#/strategy/done');
+    tfNav('#/strategy/connect'); /* 4단계 분기 경유 — 복귀 대상 봇(TF_NF_RESUME)이 있으면 done 대신 그 봇 시작 (codex NF P0-3) */
   },ppv);
 }
 /* ── §19 완료 화면 라우트 #/strategy/done ── */
@@ -7360,37 +7636,76 @@ function tfDashView(){
   var budget=TF_BUDGET[(t.intake.budget||{}).i!=null?t.intake.budget.i:1];
   var pnl=t.cur?budget*(t.cur.ret/100):0;
   var e=t.api?tfExOf(t.api.ex):(t.ex?tfExOf(t.ex):null);
-  gContent('<div class="tf-page">'
-    +'<h2>'+gEsc(TFCOPY.dashTitle)+'</h2>'
-    +'<div class="pd">'+(e?gEsc(e.name)+' 연결됨 (API ••••'+gEsc((t.api||{}).last4||'')+'), 출금 권한 없음':'거래소 미연결')+(t.plan==='partner'?', 파트너 0원 플랜':t.plan==='paid'?', 구독 중':'')+'</div>'
-    +'<h2 style="font-size:16px;margin:4px 0 10px">내 전략</h2>'
-    +(t.strat.length?t.strat.map(function(x,i){
-      /* '오늘 수익률'은 점수 공식으로 만든 합성 수치라 제거 — 실계산 값만 표시 (codex F12) */
-      return '<div class="tf-strat" style="margin-bottom:10px"><span class="nm">'+gEsc(x.name)+'</span>'
-        +'<span class="st '+(x.status==='live'?'live':'off')+'">'+(x.status==='live'?'Running':'중지됨')+'</span>'
-        +'<span class="m">TETH <b>'+x.score+'</b></span>'
-        +'<span class="m">검증 수익 <b>'+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%</b></span>'
-        +'<button class="go" style="margin-left:auto;border:1px solid var(--gl2,rgba(255,255,255,.2));border-radius:10px;padding:7px 13px;font-size:12px;color:var(--gt);cursor:pointer" onclick="tfStratToggle('+i+')">'+(x.status==='live'?'중지':'재개')+'</button></div>';
-    }).join(''):'<div class="pd">아직 실행 중인 전략이 없어요. 채팅에서 전략을 맡겨보세요.</div>')
-    +'<h2 style="font-size:16px;margin:26px 0 10px">현황</h2>'
-    +'<div class="tf-grid">'
-    +'<div class="tf-dcard"><div class="k">총 자산 (시뮬레이션)</div><div class="v">'+tfWon(budget+pnl)+'</div></div>'
-    +'<div class="tf-dcard"><div class="k">전략 누적 손익 (시뮬레이션)</div><div class="v"><small class="'+(pnl>=0?'u':'d')+'">'+(pnl>=0?'+':'')+tfWon(pnl)+'</small></div></div>'
-    +'<div class="tf-dcard"><div class="k">실행 중인 전략</div><div class="v">'+t.strat.filter(function(x){return x.status==='live';}).length+'개</div></div>'
-    +'<div class="tf-dcard"><div class="k">누적 공유 보상</div><div class="v">'+tfWon(t.reward||0)+'</div></div>'
-    +'</div>'
-    +'<h2 style="font-size:16px;margin:26px 0 10px">최근 체결 (검증 시뮬레이션 재현)</h2>'
-    +(t.fills.length?'<div class="tf-fills">'+t.fills.map(function(f){
-      /* 백테스트 체결 재현 — 실제 주문 시각처럼 보이는 합성 타임스탬프는 표시하지 않는다 (codex F12) */
-      return '<div class="tf-fill"><span class="sd '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span><span>'+gEsc(f.label)+'</span><span style="color:'+(f.pnl>=0?'#56c486':'#ee766a')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span><span class="tm">시뮬레이션</span></div>';
-    }).join('')+'</div>':'<div class="pd">아직 체결 내역이 없어요.</div>')
-    +'</div>');
+  var tt=tfNFInit();
+  var strat=t.strat||[]; var liveN=strat.filter(function(x){return x.status==='live';}).length;
+  var readyBot=strat.find(function(x){ return x.status==='ready'; });
+  /* 상태 배지 2축 — status × env (codex NF 계약: paper 는 status 가 아니다) */
+  function stB(x){
+    if(x.status==='ready') return ['시작 대기','ready'];
+    if(x.status==='off') return ['중지됨'+(x.env==='paper'?' · 가상':''),'stop'];
+    if(x.env==='paper') return ['가상 실행','paper'];
+    return ['Running','live'];
+  }
+  /* 목록 제어도 상세와 동일 계약 — ready 는 재개가 아니라 시작 (codex NF P0) */
+  function ctl(x,i){
+    var id=String(x.at);
+    if(x.status==='ready') return '<button class="nfx-btn pri" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfBotCtl(\''+id+'\',\'start\')">지금 시작</button>';
+    if(x.status==='off') return '<button class="nfx-btn sec" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfStratToggle('+i+')">재개</button>';
+    return '<button class="nfx-btn out" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfStratToggle('+i+')">중지</button>';
+  }
+  var banner='';
+  if(readyBot) banner='<div class="nfxt-banner" id="nf-ready-banner"><span class="nfx-dot pulse" style="color:var(--ga);background:var(--ga)"></span>'
+    +'<span>대기 중인 전략이 있어요: <b>'+gEsc(readyBot.name)+'</b></span><span class="sp"></span>'
+    +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNav(\'#/trade/bot/'+readyBot.at+'\')">지금 시작하기</button></div>';
+  else if(!tt.uidLinked&&!t.payDone) banner='<div class="nfxt-banner blue" id="nf-ready-banner"><span class="nfx-dot" style="color:var(--gb2);background:var(--gb2)"></span>'
+    +'<span><b>UID 를 무료로 연동</b>하면 PRO 분석 크레딧을 받아요</span><span class="sp"></span>'
+    +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFLinkUid()">Fast API 연동</button></div>';
+  gContent('<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<h2 class="nfx-title">'+gEsc(TFCOPY.dashTitle)+'</h2>'
+    +banner
+    +'<div class="nfxt-conn">'+(e?'<span class="nfx-dot"></span><b style="color:var(--gt)">'+gEsc(e.name)+' 연결됨</b><span class="tag">API ••••'+gEsc((t.api||{}).last4||'')+'</span><span class="ok">✓ 출금 권한 없음</span>':'<span style="color:var(--gt3)">거래소 미연결</span>')
+    +(t.plan==='partner'?'<span class="tag">파트너 0원 플랜</span>':t.plan==='paid'?'<span class="tag">구독 중</span>':'')+'</div>'
+    +'<div class="nfxt-hgrid">'
+    +'<section class="nfxt-asset"><div class="lbl"><span>총 자산 <span class="nfx-badge sim">시뮬레이션</span></span></div>'
+    +'<div class="big" id="nfxt-asset-num">'+tfWon(budget+pnl)+'</div>'
+    +'<span class="nfxt-pnl '+(pnl>=0?'up':'dn')+'">'+(pnl>=0?'+':'')+tfWon(pnl)+' ('+(pnl>=0?'+':'')+(t.cur?t.cur.ret.toFixed(1):'0.0')+'%)<span class="cap">전략 누적 손익</span></span>'
+    +'</section>'
+    +'<div class="nfxt-side">'
+    +'<div class="nfxt-mini"><span class="k">실행 중인 전략'+(liveN?'<span class="nfx-dot pulse" style="color:var(--gg);background:var(--gg)"></span>':'')+'</span><span class="v">'+liveN+'개</span><span class="s">전체 '+strat.length+'개 전략 중</span></div>'
+    +'<div class="nfxt-mini"><span class="k">누적 공유 보상</span><span class="v">'+tfWon(t.reward||0)+'</span><span class="s">전략 공유 프로그램</span></div>'
+    +'</div></div>'
+    +'<div class="nfxt-cols">'
+    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">내 전략 <span class="nfx-badge">'+strat.length+'</span></h2></div>'
+    +(strat.length?'<div class="nfx-rows">'+strat.map(function(x,i){
+        var sb=stB(x); var id=String(x.at);
+        return '<div class="nfx-row lk tf-strat nf-click nfx-stag s'+Math.min(i+1,8)+'" onclick="if(event.target.closest(\'button\'))return;tfNav(\'#/trade/bot/'+id+'\')">'
+          +'<div class="nfx-rl"><div class="nfxt-coin">'+gEsc(x.name.charAt(0))+'</div>'
+          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(x.name)+' <span class="nfxt-st '+sb[1]+'"><span class="nfx-dot'+(sb[1]==='live'?' pulse':'')+'"></span>'+sb[0]+'</span></span>'
+          +'<span class="nfx-rds"><span class="nfxt-sbar">TETH <b style="color:var(--gt)">'+x.score+'</b><i style="--w:'+Math.min(100,x.score)+'%"></i></span> 검증 수익 <b style="color:var('+(x.ret>=0?'--gg':'--gr')+')">'+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%</b></span></div></div>'
+          +'<div class="nfx-rr">'+ctl(x,i)+NFX_IC.chev+'</div></div>';
+      }).join('')+'</div>'
+      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 실행 중인 전략이 없어요</div>'
+      +'<div class="nfx-edesc">채팅에서 전략을 맡기면 검증을 거쳐 여기에 등록돼요.</div>'
+      +'<button class="nfx-btn pri" style="margin-top:6px" onclick="tfBackToChat()">채팅에서 전략 맡기기</button></div>')
+    +'</section>'
+    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">최근 체결 <span class="nfx-badge sim">시뮬레이션</span></h2><span class="nfx-badge">검증 재현</span></div>'
+    +(t.fills.length?'<div class="nfx-rows">'+t.fills.map(function(f,i){
+        var rv=f.fid?tt.reviews.find(function(r){ return r.fid===f.fid; }):null;
+        return '<div class="nfx-row tf-fill'+(rv?' lk nf-click':'')+' nfx-stag s'+Math.min(i+1,8)+'"'+(rv?' onclick="tfNav(\'#/review/'+rv.id+'\')"':'')+'>'
+          +'<div class="nfx-rl"><span class="nfxt-side-tag '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span>'
+          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(f.label)+'</span>'+(rv?'<span class="nfx-rds">복기 리포트 보기</span>':'')+'</div></div>'
+          +'<div class="nfx-rr"><span class="nfx-rval '+(f.pnl>=0?'gain':'loss')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span>'+(rv?NFX_IC.chev:'')+'</div></div>';
+      }).join('')+'</div>'
+      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 체결 내역이 없어요</div>'
+      +'<div class="nfx-edesc">전략이 실행되어 체결이 발생하면 여기에 표시돼요.</div></div>')
+    +'</section>'
+    +'</div></div>');
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
-  if(typeof tfDashEnhance==='function') tfDashEnhance(); /* nf: 행 클릭/배너/주기 보고서 (마크업 불변) */
+  if(typeof tfDashEnhance==='function') tfDashEnhance(); /* nf: 주기 보고서 체크 + 유틸바 동기화 */
 }
 function tfStratToggle(i){
   var t=tfS(); if(!t.strat[i]) return;
-  if(t.strat[i].status!=='live'&&typeof tfNFCanRun==='function'&&!tfNFCanRun()) return; /* 재개도 상세와 동일 실행 가드 (codex NF P0-04) */
+  if(t.strat[i].status!=='live'&&typeof tfNFCanRun==='function'&&!tfNFCanRun()){ window.TF_NF_RESUME={id:String(t.strat[i].at),act:'resume'}; return; } /* 재개도 상세와 동일 가드 + 연결 후 복귀 (codex NF P0-04) */
   t.strat[i].status=t.strat[i].status==='live'?'off':'live';
   tfSave(); tfDashView();
 }
@@ -8104,6 +8419,10 @@ function tfNotify(type,key,title,body,link){
   t.notifs.unshift(n);
   if(t.notifs.length>100) t.notifs=t.notifs.slice(0,100);
   tfSave(); tfNFBar();
+  /* 새 알림 도착 모션 — 벨 흔들림 + 배지 팝 (mock-notif) */
+  var bl=$('nf-bell'), bd=$('nf-bell-bd');
+  if(bl){ bl.classList.remove('shake'); void bl.offsetWidth; bl.classList.add('shake'); }
+  if(bd){ bd.classList.remove('pop'); void bd.offsetWidth; bd.classList.add('pop'); }
   return n;
 }
 function tfNFTime(at){
@@ -8153,16 +8472,21 @@ function tfNotifRender(){
   var p=$('nf-notif'); if(!p) return;
   var t=tfNFInit();
   var TABS=[['all','전체'],['pos','포지션'],['review','거래복기'],['rebate','정산']];
-  var rows=t.notifs.filter(function(n){ return NF_TAB==='all'||n.type===NF_TAB||(NF_TAB==='pos'&&(n.type==='pos'||n.type==='bot')); });
-  p.innerHTML='<div class="hd">알림 센터<button onclick="event.stopPropagation();tfNotifReadAll()">모두 읽음</button></div>'
-    +'<div class="tabs">'+TABS.map(function(tb){ return '<button class="'+(NF_TAB===tb[0]?'on':'')+'" onclick="event.stopPropagation();NF_TAB=\''+tb[0]+'\';tfNotifRender()">'+tb[1]+'</button>'; }).join('')+'</div>'
+  function inTab(n,k){ return k==='all'||n.type===k||(k==='pos'&&(n.type==='pos'||n.type==='bot')); }
+  var rows=t.notifs.filter(function(n){ return inTab(n,NF_TAB); });
+  p.innerHTML='<div id="nf-grab"></div><div class="hd">알림 센터'+(t.notifs.filter(function(n){return !n.read;}).length?'<span class="nfx-badge blue" style="margin-left:8px">'+t.notifs.filter(function(n){return !n.read;}).length+'개 안읽음</span>':'')+'<button onclick="event.stopPropagation();tfNotifReadAll()">모두 읽음</button></div>'
+    +'<div class="tabs">'+TABS.map(function(tb){ var c=t.notifs.filter(function(n){return inTab(n,tb[0]);}).length; return '<button class="'+(NF_TAB===tb[0]?'on':'')+'" onclick="event.stopPropagation();NF_TAB=\''+tb[0]+'\';tfNotifRender()">'+tb[1]+(c?'<span class="ct">'+c+'</span>':'')+'</button>'; }).join('')+'</div>'
     +'<div class="list">'+(rows.length?rows.map(function(n){
       var tg={credit:'크레딧',pos:'포지션',bot:'전략',review:'거래복기',rebate:'정산',report:'보고서'}[n.type]||n.type;
+      /* 우측 값 배지 — 제목의 실수치(±%·₩)만 추출 표시, 발명 금지 */
+      var mv=''; var m1=n.title.match(/([+-]\d+(?:\.\d+)?)%/); var m2=n.title.match(/\+₩([\d,]+)/);
+      if(m1) mv='<span class="mv '+(m1[1].charAt(0)==='+'?'up':'dn')+'">'+m1[1]+'%</span>';
+      else if(m2) mv='<span class="mv up">+₩'+m2[1]+'</span>';
       return '<div class="nf-item'+(n.read?' read':'')+'" onclick="event.stopPropagation();tfNotifGo(\''+n.id+'\')"><span class="ic"></span><div class="bx">'
-        +'<div class="tt"><span class="tg">'+tg+'</span>'+gEsc(n.title)+'</div>'
+        +'<div class="tt" style="display:flex;align-items:flex-start"><span style="flex:1;min-width:0"><span class="tg t-'+n.type+'">'+tg+'</span>'+gEsc(n.title)+'</span>'+mv+'</div>'
         +(n.body?'<div class="bd2">'+gEsc(n.body)+'</div>':'')
         +'<div class="tm num">'+tfNFTime(n.at)+'</div></div></div>';
-    }).join(''):'<div class="empty">아직 알림이 없어요.<br>전략이 실행되면 체결, 복기, 정산 소식이 여기로 와요.</div>')+'</div>'
+    }).join(''):(t.notifs.length?'<div class="empty">이 분류의 알림이 없어요.<br>다른 탭에서 '+t.notifs.length+'건을 확인할 수 있어요.</div>':'<div class="empty">아직 알림이 없어요.<br>전략이 실행되면 체결, 복기, 정산 소식이 여기로 와요.</div>'))+'</div>'
     +'<div class="ft"><button onclick="tfNotifClose();tfNav(\'#/plan/alerts\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>알림 수신 설정</button></div>';
 }
 function tfNotifReadAll(){ var t=tfNFInit(); t.notifs.forEach(function(n){ n.read=true; }); tfSave(); tfNFBar(); tfNotifRender(); }
@@ -8244,61 +8568,143 @@ function tfNFView(name,title,html){
   TF_RENDERING=false;
   tfNFBar();
 }
+/* ── nfx 공용: 아이콘/카운트업/행 이동 (목업 포팅) ── */
+var NFX_IC={
+  link:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  trend:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+  card:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+  chip:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+  won:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+  bell:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  warn:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  doc:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  star:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  chat:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+  send:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  mail:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+  info:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  zap:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  chev:'<svg class="nfx-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  empty:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>'
+};
+function tfNFCount(id,end,pre,suf){
+  var el=$(id); if(el==null) return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent=(pre||'')+end.toLocaleString()+(suf||''); return; }
+  var s=performance.now();
+  (function u(n){
+    var p=Math.min((n-s)/650,1), e2=1-Math.pow(1-p,3);
+    el.textContent=(pre||'')+Math.round(end*e2).toLocaleString()+(suf||'');
+    if(p<1) requestAnimationFrame(u);
+  })(s);
+}
+function tfNFPrefI(k,inp){ var t=tfNFInit(); t.notifPrefs[k]=!!inp.checked; tfSave(); }
+/* 정산 행 → 관련 복기, 없으면 봇 상세 (codex NF P1) */
+function tfNFRebGo(fid,botId){
+  var t=tfNFInit();
+  var rv=t.reviews.find(function(r){ return r.fid===fid; });
+  if(rv){ tfNav('#/review/'+rv.id); return; }
+  if(botId&&tfBotFind(botId)){ tfNav('#/trade/bot/'+botId); return; }
+  toast('연결된 복기가 보관 기간을 지나 정리됐어요');
+}
+function tfNFRow(o){ /* {ic,icc,lb,ds,val,valc,arrow,click,stag} */
+  return '<div class="nfx-row'+(o.click?' lk':'')+(o.stag?' nfx-stag s'+o.stag:'')+'"'+(o.click?' onclick="'+o.click+'" role="link" tabindex="0" onkeydown="if(event.key===\'Enter\'){'+o.click+'}"':'')+'>'
+    +'<div class="nfx-rl"><div class="nfx-ric'+(o.icc?' '+o.icc:'')+'">'+(NFX_IC[o.ic]||'')+'</div>'
+    +'<div class="nfx-rtx"><span class="nfx-rlb">'+o.lb+'</span>'+(o.ds?'<span class="nfx-rds">'+o.ds+'</span>':'')+'</div></div>'
+    +'<div class="nfx-rr">'+(o.val||'')+(o.arrow?NFX_IC.chev:'')+'</div></div>';
+}
 function tfPlanView(tab){
   tab=tab||'plan';
   var t=tfNFInit(), e=tfEnt(), C=TFC.credit;
   var tabs=[['plan','플랜'],['rebates','정산'],['alerts','알림 설정']];
   var body='';
   if(tab==='plan'){
-    var pct=e.why==='credit'||e.why==='credit-out'?Math.round(t.creditBal/C.uidGrant*100):null;
-    body='<div class="nf-card"><div class="hd"><b>현재 AI 수준</b><span class="nf-tier"><span class="badge '+(e.tier==='high'?'hi':'lo')+'">'+(e.tier==='high'?'PRO':'기본')+'</span></span></div>'
-      +'<div style="font-size:13px;color:var(--gt2);line-height:1.6">'+({
-        paid:'구독 중이라 PRO 분석이 무제한이에요.',
-        trade:'파트너 거래소 거래가 활성 상태라 PRO 분석이 무제한이에요. (거래 인정 기간 '+C.activityDays+'일)',
-        credit:'UID 연동 크레딧으로 PRO 분석을 사용 중이에요. 거래가 1회 체결되면 무제한으로 전환돼요.',
-        'credit-out':'크레딧이 소진되어 기본 분석으로 응답해요. 거래 1회 체결 또는 구독으로 PRO 를 복구할 수 있어요.',
-        guest:'파트너 거래소 UID 를 연동하면 무료로 PRO 크레딧 '+C.uidGrant.toLocaleString()+'을 받아요.'
-      }[e.why]||'')+'</div>'
-      +(pct!=null?'<div class="nf-gauge'+(t.creditBal<=C.uidGrant*(1-C.warnRatio)?' warn':'')+'"><i style="width:'+Math.max(2,pct)+'%"></i></div>'
-        +'<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gt3)"><span>잔여 '+t.creditBal.toLocaleString()+'C</span><span>지급 '+C.uidGrant.toLocaleString()+'C</span></div>':'')
-      +'<div class="nf-cta">'
-      +(!t.uidLinked?'<button class="tf-btn p" style="height:42px" onclick="tfNFLinkUid()">무료로 UID 연동하기 (Fast API)</button>':'')
-      +(!t.payDone?'<button class="tf-btn s" style="height:42px" onclick="tfNFUpgrade()">구독으로 업그레이드</button>':'')
+    var warnAt=Math.round(C.uidGrant*(1-C.warnRatio));
+    var bal=t.creditBal||0, st;
+    if(e.why==='paid') st={bt:'PRO 멤버십',bc:'blue',hv:'PRO',hu:'무제한',hc:'cb',g:'inf',gl:'멤버십: 구독 중',gr:'무제한 이용',pin:false,pri:null,sec:null,
+      desc:'구독 중이라 PRO 분석이 무제한이에요.'};
+    else if(e.why==='trade') st={bt:'PRO 활성 (무제한)',bc:'pro',hv:'무제한',hu:'',hc:'cg',g:'inf',gl:'이용 상태: 무제한 활성',gr:'만료일 '+new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR'),pin:false,
+      pri:!t.payDone?['구독으로 업그레이드','tfNFUpgrade()','sec']:null,sec:null,
+      desc:'파트너 거래소 거래가 활성 상태라 PRO 분석이 무제한이에요. (거래 인정 기간 '+C.activityDays+'일)'};
+    else if(e.why==='credit') st={bt:bal<=warnAt?'PRO (소진 임박)':'PRO',bc:bal<=warnAt?'warn':'pro',hv:bal,hu:'C',hc:bal<=warnAt?'cw':'cg',g:bal<=warnAt?'warn':'',gl:'잔여 <b>'+bal.toLocaleString()+'C</b>',gr:'지급 <b>'+C.uidGrant.toLocaleString()+'C</b>',pin:true,
+      pri:['구독으로 업그레이드','tfNFUpgrade()','pri'],sec:null,
+      desc:'UID 연동 크레딧으로 PRO 분석을 사용 중이에요. 거래가 1회 체결되면 무제한으로 전환돼요.'};
+    else if(e.why==='credit-out') st={bt:'기본 (크레딧 소진)',bc:'danger',hv:0,hu:'C',hc:'cx',g:'empty',gl:'잔여 <b>0C</b>',gr:'지급 '+C.uidGrant.toLocaleString()+'C (소진)',pin:true,
+      pri:['구독으로 업그레이드','tfNFUpgrade()','pri'],sec:['거래 체결하고 무제한 받기','tfNav(&quot;#/trade&quot;)','out'],
+      desc:'크레딧이 소진되어 기본 분석으로 응답해요. 거래 1회 체결 또는 구독으로 PRO 를 복구할 수 있어요.'};
+    else st={bt:'기본',bc:'',hv:0,hu:'C',hc:'cx',g:'empty',gl:'잔여 0C',gr:'연동 시 지급 '+C.uidGrant.toLocaleString()+'C',pin:true,
+      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:!t.payDone?['구독으로 업그레이드','tfNFUpgrade()','out']:null,
+      desc:'파트너 거래소 UID 를 연동하면 무료로 PRO 크레딧 '+C.uidGrant.toLocaleString()+'을 받아요.'};
+    var pct=typeof st.hv==='number'?Math.max(st.hv>0?2:0,Math.round(bal/C.uidGrant*100)):100;
+    var uidBadge=t.uidLinked?(e.why==='credit-out'?['연동됨 (크레딧 소진)','warn']:['연동됨 (무료)','pro']):['미연동',''];
+    var trBadge=(t.tradeActiveUntil&&Date.now()<t.tradeActiveUntil)?[new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR')+' 까지 활성','pro']:['없음',''];
+    var subBadge=t.payDone?['구독 중','blue']:['없음',''];
+    body='<div class="nfx-grid2">'
+      +'<section class="nfx-card nfx-card-hero nfx-glowonce">'
+      +'<div class="nfx-chead"><span class="nfx-ctitle">현재 AI 수준</span><span class="nfx-badge '+st.bc+'"><span class="nfx-dot'+(e.tier==='high'?' pulse':'')+'"></span>'+st.bt+'</span></div>'
+      +'<div><div class="nfx-hero-label">'+(typeof st.hv==='number'?'잔여 AI 분석 크레딧':'이용 상태')+'</div>'
+      +'<div class="nfx-hero '+st.hc+'"><span id="nfx-pnum">'+(typeof st.hv==='number'?st.hv.toLocaleString():st.hv)+'</span>'+(st.hu?'<span class="nfx-hero-sub">'+st.hu+'</span>':'')+'</div>'
+      +'<div class="nfx-hero-desc" style="margin-top:6px">'+st.desc+'</div></div>'
+      +'<div class="nfx-gauge"><div class="nfx-gtrack">'
+      +(st.pin?'<div class="nfx-gpin" style="left:'+Math.round(warnAt/C.uidGrant*100)+'%" title="'+warnAt+'C 경고 임계점"></div>':'')
+      +'<div class="nfx-gfill '+st.g+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="nfx-glabels"><span>'+st.gl+'</span><span>'+st.gr+'</span></div></div>'
+      +'<div class="nfx-cta">'
+      +(st.pri?'<button class="nfx-btn '+st.pri[2]+'" onclick="'+st.pri[1]+'">'+NFX_IC.zap+st.pri[0]+'</button>':'')
+      +(st.sec?'<button class="nfx-btn '+st.sec[2]+'" onclick="'+st.sec[1]+'">'+st.sec[0]+'</button>':'')
       +'</div>'
-      +'<div class="nf-note">체험 모드에서는 응답 모델이 동일하며 크레딧 차감만 재현돼요. 크레딧 정책 v'+C.version+'.</div></div>'
-      +'<div class="nf-card"><div class="hd"><b>상태</b></div>'
-      +'<div class="nf-kv"><span>UID 연동</span><b>'+(t.uidLinked?'연동됨 (무료)':'미연동')+'</b></div>'
-      +'<div class="nf-kv"><span>파트너 거래 활성</span><b>'+(t.tradeActiveUntil&&Date.now()<t.tradeActiveUntil?new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR')+' 까지':'없음')+'</b></div>'
-      +'<div class="nf-kv"><span>구독</span><b>'+(t.payDone?'구독 중':'없음')+'</b></div>'
-      +'<div class="nf-kv"><span>고급 응답 비용</span><b>'+C.costHigh+'C / 회</b></div></div>';
+      +'<div class="nfx-foot">'+NFX_IC.info+'<span>체험 모드에서는 응답 모델이 동일하며 크레딧 차감만 재현돼요. 크레딧 정책 v'+C.version+'.</span></div>'
+      +'</section>'
+      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">상태 및 연동 상세</h2></div><div class="nfx-rows">'
+      +tfNFRow({ic:'link',icc:t.uidLinked?'gg':'',lb:'UID 연동',ds:'거래소 파트너 연동 계정',val:'<span class="nfx-badge '+uidBadge[1]+'">'+uidBadge[0]+'</span>',stag:1})
+      +tfNFRow({ic:'trend',icc:trBadge[1]?'gg':'',lb:'파트너 거래 활성',ds:'체결 1회 시 '+C.activityDays+'일 무제한 적용',val:'<span class="nfx-badge '+trBadge[1]+'">'+trBadge[0]+'</span>',stag:2})
+      +tfNFRow({ic:'card',icc:subBadge[1]?'gb':'',lb:'구독 멤버십',ds:'월간 PRO 정기 결제 플랜',val:'<span class="nfx-badge '+subBadge[1]+'">'+subBadge[0]+'</span>',stag:3})
+      +tfNFRow({ic:'chip',icc:'gb',lb:'고급 응답 비용',ds:'PRO 심층 분석 1회당 차감',val:'<span class="nfx-rval">'+(e.tier==='high'&&e.bal==null?'차감 없음':C.costHigh+'C / 회')+'</span>',stag:4})
+      +'</div></section></div>';
   }else if(tab==='rebates'){
     var total=t.rebates.reduce(function(a,r){return a+r.amt;},0);
-    body='<div class="nf-card"><div class="hd"><b>누적 적립 (시뮬레이션)</b><b style="font-size:20px">'+tfWon(total)+'</b></div>'
-      +'<div class="nf-kv"><span>적립 건수</span><b>'+t.rebates.length+'건</b></div>'
-      +'<div class="nf-kv"><span>적립률</span><b>수수료(0.2%)의 10%</b></div>'
-      +'<div class="nf-note">체결 건별로 적립되며, 적립금은 이용료 차감에 사용될 예정이에요. 시뮬레이션 체결 기준이며 실제 정산이 아니에요.</div></div>'
-      +'<div class="nf-card"><div class="hd"><b>적립 내역</b></div>'
-      +(t.rebates.length?'<div style="overflow-x:auto"><table class="nf-tbl"><thead><tr><th>일시</th><th>체결</th><th style="text-align:right">적립</th></tr></thead><tbody>'
-        +t.rebates.slice().sort(function(a,b){return b.at-a.at;}).slice(0,30).map(function(r){
-          return '<tr><td class="num">'+new Date(r.at).toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'})+'</td><td class="num">체결 '+gEsc(String(r.fid).split('-').pop())+'</td><td class="num" style="text-align:right;color:#56c486">+'+tfWon(r.amt)+'</td></tr>';
-        }).join('')+'</tbody></table></div>'
-        :'<div class="nf-note" style="text-align:center;padding:20px 0">아직 적립 내역이 없어요. 전략이 실행되어 체결이 발생하면 여기에 쌓여요.</div>')+'</div>';
+    var rows=t.rebates.slice().sort(function(a,b){return b.at-a.at;}).slice(0,30);
+    body='<div class="nfx-grid2">'
+      +'<section class="nfx-card nfx-card-hero">'
+      +'<div class="nfx-chead"><span class="nfx-ctitle">누적 적립<span class="nfx-badge sim">시뮬레이션</span></span></div>'
+      +'<div><div class="nfx-hero-label">현재까지 누적된 거래 수수료 적립</div>'
+      +'<div class="nfx-hero cg"><span id="nfx-rnum">₩'+total.toLocaleString()+'</span></div>'
+      +'<div class="nfx-hero-desc" style="margin-top:6px">체결 건별로 적립되며, 적립금은 이용료 차감에 사용될 예정이에요. 시뮬레이션 체결 기준이며 실제 정산이 아니에요.</div></div>'
+      +'<div class="nfx-metrics"><div class="nfx-mbox"><span class="nfx-mtit">적립 건수</span><span class="nfx-mval">'+t.rebates.length+'건</span></div>'
+      +'<div class="nfx-mbox"><span class="nfx-mtit">적립률</span><span class="nfx-mval">수수료(0.2%)의 10%</span></div></div>'
+      +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(\'#/trade\')">'+NFX_IC.zap+'내 트레이딩으로 이동</button></div>'
+      +'</section>'
+      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">적립 내역</h2><span class="nfx-badge">'+(rows.length?'최근 '+rows.length+'건 표시':'내역 없음')+'</span></div>'
+      +(rows.length?'<div class="nfx-rows">'+rows.map(function(r,i){
+          return tfNFRow({ic:'won',icc:'gg',lb:'체결 '+gEsc(String(r.fid).split('-').pop()),ds:new Date(r.at).toLocaleDateString('ko-KR')+' · 체결 확정',
+            val:'<span class="nfx-rval gain">+'+tfWon(r.amt)+'</span>',arrow:true,stag:Math.min(i+1,8),
+            click:'tfNFRebGo(\''+gEsc(String(r.fid))+'\',\''+gEsc(String(r.botId||''))+'\')'});
+        }).join('')+'</div>'
+        :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 적립된 내역이 없어요</div>'
+        +'<div class="nfx-edesc">전략 거래가 체결되면 파트너 거래 수수료의 10%가 이곳에 자동으로 적립돼요.</div>'
+        +'<button class="nfx-btn out" style="margin-top:6px" onclick="tfNav(\'#/trade\')">내 트레이딩으로 이동하기</button></div>')
+      +'</section></div>';
   }else{
     var P=t.notifPrefs;
-    var TOG=[['pos','포지션 진입/청산','전략의 체결이 확정될 때'],['loss','손실 단계 경고','평가 손실이 단계에 진입할 때'],['review','거래복기 리포트','체결 복기가 생성될 때'],['rebate','수수료 적립','적립이 확정될 때'],['watch','관심 종목 소식','데모에서는 실행 이벤트만 수신해요']];
-    var CH=[['chW','앱 내 수신함','기본, 항상 동작'],['chK','카카오톡','데모에서는 설정만 저장돼요'],['chT','텔레그램','데모에서는 설정만 저장돼요'],['chM','이메일 리포트','데모에서는 설정만 저장돼요']];
-    body='<div class="nf-card"><div class="hd"><b>어떤 알림을 받을까요</b></div>'
-      +TOG.map(function(o){ return '<div class="nf-tog"><div><div class="lb2">'+o[1]+'</div><div class="ds">'+o[2]+'</div></div>'
-        +'<span class="tf-swch'+(P[o[0]]?' on':'')+'" role="switch" aria-checked="'+(!!P[o[0]])+'" tabindex="0" onclick="tfNFPref(\''+o[0]+'\',this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();tfNFPref(\''+o[0]+'\',this);}"><i></i></span></div>'; }).join('')+'</div>'
-      +'<div class="nf-card"><div class="hd"><b>수신 채널</b></div>'
-      +CH.map(function(o){ return '<div class="nf-tog"><div><div class="lb2">'+o[1]+'</div><div class="ds">'+o[2]+'</div></div>'
-        +'<span class="tf-swch'+(P[o[0]]?' on':'')+'" role="switch" aria-checked="'+(!!P[o[0]])+'" tabindex="0" onclick="tfNFPref(\''+o[0]+'\',this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();tfNFPref(\''+o[0]+'\',this);}"><i></i></span></div>'; }).join('')
-      +'<div class="nf-note">체험 모드에서는 외부 채널 발송이 일어나지 않아요. 설정은 저장돼요.</div></div>';
+    var TOG=[['pos','포지션 진입/청산','전략의 체결이 확정될 때','trend','gb'],['loss','손실 단계 경고','평가 손실이 단계에 진입할 때','warn','ga'],['review','거래복기 리포트','체결 복기가 생성될 때','doc','gb'],['rebate','수수료 적립','적립이 확정될 때','won','gg'],['watch','관심 종목 소식','데모에서는 실행 이벤트만 수신해요','star','']];
+    var CH=[['chK','카카오톡','데모에서는 설정만 저장돼요','chat'],['chT','텔레그램','데모에서는 설정만 저장돼요','send'],['chM','이메일 리포트','데모에서는 설정만 저장돼요','mail']];
+    function sw(k,on,dis,grn){ return '<label class="nfx-sw"><input type="checkbox"'+(on?' checked':'')+(dis?' disabled':' onchange="tfNFPrefI(\''+k+'\',this)"')+'><span class="nfx-slider'+(grn?' grn':'')+'"></span></label>'; }
+    body='<div class="nfx-grid2">'
+      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">어떤 알림을 받을까요</h2><span class="nfx-badge">'+TOG.length+'개 항목</span></div><div class="nfx-rows">'
+      +TOG.map(function(o,i){ return tfNFRow({ic:o[3],icc:o[4],lb:o[1],ds:o[2],val:sw(o[0],!!P[o[0]]),stag:i+1}); }).join('')
+      +'</div></section>'
+      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">수신 채널</h2><span class="nfx-badge">4개 채널</span></div><div class="nfx-rows">'
+      +tfNFRow({ic:'bell',icc:'gg',lb:'앱 내 수신함',ds:'기본 채널이라 항상 동작해요',val:'<span class="nfx-badge pro" style="margin-right:4px">기본</span>'+sw('chW',true,true,true),stag:1})
+      +CH.map(function(o,i){ return tfNFRow({ic:o[3],lb:o[1],ds:o[2],val:sw(o[0],!!P[o[0]]),stag:i+2}); }).join('')
+      +'</div><div class="nfx-foot" style="margin-top:14px">'+NFX_IC.info+'<span>체험 모드에서는 외부 채널 발송이 일어나지 않아요. 설정은 저장돼요.</span></div></section></div>';
   }
   tfNFView('nfplan','PLAN 및 크레딧',
-    '<div class="nf-page"><h2>PLAN 및 크레딧</h2><div class="sub">AI 수준, 수수료 적립, 알림 수신을 관리해요</div>'
-    +'<div class="nf-tabs">'+tabs.map(function(tb){ return '<button class="'+(tab===tb[0]?'on':'')+'" onclick="tfNav(\'#/plan'+(tb[0]==='plan'?'':'/'+tb[0])+'\')">'+tb[1]+'</button>'; }).join('')+'</div>'
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-head"><h1 class="nfx-title">PLAN 및 크레딧</h1><div class="nfx-sub">AI 수준, 수수료 적립, 알림 수신을 관리해요</div>'
+    +'<div class="nfx-tabs">'+tabs.map(function(tb){ return '<button class="nfx-tab'+(tab===tb[0]?' on':'')+'" onclick="tfNav(\'#/plan'+(tb[0]==='plan'?'':'/'+tb[0])+'\')">'+tb[1]+'</button>'; }).join('')+'</div></div>'
     +body+'</div>');
+  var t2=tfNFInit();
+  if(tab==='plan'&&(tfEnt().why==='credit')) tfNFCount('nfx-pnum',t2.creditBal,'','');
+  if(tab==='rebates') tfNFCount('nfx-rnum',t2.rebates.reduce(function(a,r){return a+r.amt;},0),'₩','');
 }
 function tfNFPref(k,el){
   var t=tfNFInit(); t.notifPrefs[k]=!t.notifPrefs[k];
@@ -8322,13 +8728,14 @@ function tfNFLinkUid(){
     tfCreditGrant('uid',TFC.credit.uidGrant,'파트너 UID 연동이 확인됐어요. PRO 분석을 사용해보세요.');
     toast('UID 연동 완료, PRO 크레딧이 지급됐어요');
     if(G.mode==='nfplan') tfPlanView('plan');
+    else if(G.mode==='tfdash') tfDashView(); /* 배너 즉시 갱신 — 연동 CTA 잔존 방지 (codex NF P1) */
   });
 }
 /* ── 봇 상세 (#/trade/bot/<id>) ── */
 function tfBotFind(id){ var t=tfS(); return (t.strat||[]).find(function(x){ return String(x.at)===String(id); }); }
 function tfBotView(id){
   var t=tfNFInit(); var b=tfBotFind(id);
-  if(!b){ toast('전략을 찾을 수 없어요'); tfNav('#/trade'); return; }
+  if(!b){ if(!window.TF_STATE_READY) return; toast('전략을 찾을 수 없어요'); tfNav('#/trade'); return; } /* 복원 전 폴백 금지 (codex NF P0) */
   var botId=String(b.at);
   /* 봇별 체결은 누적 원장(fillLog) 우선 — 새 봇 시작 후에도 이전 봇 내역 유지 (codex NF P1) */
   var fills=(t.fillLog||[]).filter(function(f){ return String(f.botId)===botId; });
@@ -8337,30 +8744,98 @@ function tfBotView(id){
   var env=b.status==='ready'?'ready':(b.status==='off'?'stop':(b.env==='paper'?'paper':'live'));
   var envL={ready:'시작 대기',stop:'중지됨',paper:'가상 실행',live:'라이브 (시뮬레이션)'}[env];
   var rb=t.rebates.filter(function(r){ return String(r.botId)===botId; }).reduce(function(a,r){ return a+r.amt; },0);
+  var p=b.p||{sl:-5,tp:null,rsiTh:44,trendFilter:true};
+  var asset=b.name.replace(' 위임 전략','');
+  /* 검증 수익 곡선 — 저장된 파라미터로 실계산 재현 (합성 곡선 금지) */
+  var eqPath='', eqArea='', eqUp=b.ret>=0;
+  try{
+    var r0=runBacktest({sl:p.sl,tp:p.tp,rsiTh:p.rsiTh,trendFilter:p.trendFilter,startI:p.startI,endI:p.endI,purpose:'view'});
+    var eq=r0.eq||[];
+    if(eq.length>1){
+      var mn=Infinity,mx=-Infinity;
+      eq.forEach(function(q){ if(q.v<mn)mn=q.v; if(q.v>mx)mx=q.v; });
+      if(mx-mn<1e-9) mx=mn+1e-9;
+      var pts=eq.map(function(q,i){ return [Math.round(i/(eq.length-1)*800), Math.round(130-((q.v-mn)/(mx-mn))*115) ]; });
+      eqPath=pts.map(function(pt,i){ return (i?'L ':'M ')+pt[0]+' '+pt[1]; }).join(' ');
+      eqArea=eqPath+' L 800 140 L 0 140 Z';
+    }
+  }catch(e){}
+  var days=(p.endI!=null&&p.startI!=null)?(p.endI-p.startI):null;
+  var ruleTxt='RSI '+p.rsiTh+' 눌림 진입 · 손절 '+p.sl+'% · '+(p.tp!=null?'익절 +'+p.tp+'%':'기간 청산')+(p.trendFilter?' · 추세 필터':'');
+  var acts='';
+  if(b.status==='live') acts='<button class="nfx-btn dng" onclick="tfBotCtl(\''+botId+'\',\'pause\')">실행 일시정지</button>'
+    +'<button class="nfx-btn sec" onclick="tfBotCtl(\''+botId+'\',\'env\')">'+(b.env==='paper'?'라이브(시뮬레이션)로 전환':'가상 시뮬레이션으로 전환')+'</button>';
+  else if(b.status==='off') acts='<button class="nfx-btn pri" onclick="tfBotCtl(\''+botId+'\',\'resume\')">'+NFX_IC.zap+'재개</button>';
+  else if(b.status==='ready') acts='<button class="nfx-btn pri" onclick="tfBotCtl(\''+botId+'\',\'start\')">'+NFX_IC.zap+'지금 시작하기</button>';
+  var ex=t.api?tfExOf(t.api.ex):(t.ex?tfExOf(t.ex):null);
+  var posPill=b.status==='live'?(b.env==='paper'?'가상 신호 탐색 중':'신호 탐색 중'):'실행 대기';
   tfNFView('nfbot',b.name,
-    '<div class="nf-page">'
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span> / <span>'+gEsc(b.name)+'</span></div>'
-    +'<div class="nf-bot-hd"><h2>'+gEsc(b.name)+'</h2><span class="nf-env '+env+'">'+envL+'</span>'+(b.src?'<span style="font-size:12px;color:var(--gt3)">원본 '+gEsc(b.src)+'</span>':'')+'</div>'
-    +'<div class="sub">TETH Score '+b.score+', 검증 수익 '+(b.ret>=0?'+':'')+b.ret.toFixed(1)+'%, 최대 낙폭 '+b.mdd.toFixed(1)+'%</div>'
-    +'<div class="nf-card"><div class="hd"><b>제어</b></div><div class="nf-cta">'
-    +(b.status==='live'?'<button class="ss3-dbtn" onclick="tfBotCtl(\''+botId+'\',\'pause\')">실행 일시정지</button>':'')
-    +(b.status==='off'?'<button class="tf-btn p" style="height:42px" onclick="tfBotCtl(\''+botId+'\',\'resume\')">재개</button>':'')
-    +(b.status==='ready'?'<button class="tf-btn p" style="height:42px" onclick="tfBotCtl(\''+botId+'\',\'start\')">지금 시작하기</button>':'')
-    +(b.status==='live'?'<button class="tf-btn s" style="height:42px" onclick="tfBotCtl(\''+botId+'\',\'env\')">'+(b.env==='paper'?'라이브(시뮬레이션)로 전환':'가상 시뮬레이션으로 전환')+'</button>':'')
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+gEsc(b.name)+'</span></div>'
+    +'<section class="nfxb-hero"><div class="nfxb-toprow">'
+    +'<div style="min-width:0"><div class="nfxb-tline"><h1 class="nfxb-title">'+gEsc(b.name)+'</h1>'
+    +'<span class="nfxb-st '+env+'"><span class="nfx-dot'+(b.status==='live'?' pulse':'')+'"></span>'+envL+'</span>'
+    +'<span class="nfx-badge sim">시뮬레이션</span></div>'
+    +(b.src?'<span class="nfxb-origin">원본: <b style="color:var(--gt)">'+gEsc(b.src)+'</b></span>':'')
     +'</div>'
-    +'<div class="nf-note">'+(env==='paper'?'가상 실행은 자산 차감 없이 신호와 체결을 재현해요.':'체험 모드 — 이 화면의 실행과 체결은 시뮬레이션이에요.')+'</div></div>'
-    +'<div class="nf-card"><div class="hd"><b>현재 포지션</b></div>'
-    +'<div class="nf-note" style="padding:8px 0;text-align:center">현재 열린 포지션이 없어요. 신호가 발생하면 여기에 표시돼요. (시뮬레이션)</div></div>'
-    +'<div class="nf-card"><div class="hd"><b>주문 내역 (시뮬레이션)</b><span style="font-size:12px;color:var(--gt3)">수수료 적립 누계 +'+tfWon(rb)+'</span></div>'
-    +(fills.length?'<div style="overflow-x:auto"><table class="nf-tbl"><thead><tr><th>구분</th><th>자산</th><th style="text-align:right">손익</th><th style="text-align:right">복기</th></tr></thead><tbody>'
-      +fills.map(function(f){
+    +'<div class="nfxb-actions">'+acts+'</div></div>'
+    +'<div class="nfxb-notice">'+NFX_IC.info+'<span>'+(env==='paper'?'가상 실행은 자산 차감 없이 신호와 체결을 재현해요.':'체험 모드 — 이 화면의 실행과 체결은 시뮬레이션이에요.')+'</span></div>'
+    +'</section>'
+    +'<section class="nfxb-mgrid">'
+    +'<div class="nfxb-mcard score"><div class="nfxb-mhd"><span class="nfxb-mlb">TETH Score</span><span class="nfxb-chipp">검증 '+(b.n||0)+'회</span></div>'
+    +'<div class="nfxb-scorebody"><div class="nfxb-ring"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="40"/><circle class="fg" id="nfxb-ringfg" cx="50" cy="50" r="40"/></svg>'
+    +'<div class="val"><span>'+b.score+'</span><span class="mx">/100</span></div></div>'
+    +'<div class="nfxb-smeta"><span class="nfxb-srank">'+(b.score>=TFC.score.pass?'검증 통과 전략':'재검증 필요')+'</span>'
+    +'<span class="nfxb-sdesc">'+ruleTxt+'</span></div></div></div>'
+    +'<div class="nfxb-mcard"><div class="nfxb-mhd"><span class="nfxb-mlb">검증 수익률</span><span class="nfx-badge sim">시뮬레이션</span></div>'
+    +'<div><div class="nfxb-bigval '+(b.ret>=0?'up':'dn')+'">'+(b.ret>=0?'+':'')+b.ret.toFixed(1)+'%</div>'
+    +'<div class="nfxb-subtx">검증 체결 '+(b.n||0)+'회 · 승률 '+Math.round(b.winRate||0)+'%</div></div>'
+    +'<div class="nfxb-rbar"><i style="width:'+Math.min(100,Math.max(4,Math.round(Math.abs(b.ret)*4)))+'%;background:var('+(b.ret>=0?'--gg':'--gr')+')"></i></div></div>'
+    +'<div class="nfxb-mcard"><div class="nfxb-mhd"><span class="nfxb-mlb">최대 낙폭 (MDD)</span><span class="nfxb-chipp">리스크</span></div>'
+    +'<div><div class="nfxb-bigval">'+b.mdd.toFixed(1)+'%</div>'
+    +'<div class="nfxb-subtx">손절 '+p.sl+'% 규칙 안에서 관리된 낙폭</div></div>'
+    +'<div class="nfxb-rbar"><i style="width:'+Math.min(100,Math.max(4,Math.round(Math.abs(b.mdd)*4)))+'%;background:linear-gradient(90deg,var(--gg),var(--ga))"></i></div></div>'
+    +'</section>'
+    +(eqPath?'<section class="nfxb-chart"><div class="nfxb-chd"><h2 class="nfxb-ctit">검증 수익 곡선<span class="nfxb-cbadge">검증 시뮬레이션</span></h2>'
+      +'<div class="nfxb-cstats"><span>기준 자산: <b>'+gEsc(asset)+'</b></span>'+(days?'<span>검증 기간: <b>'+days+'일</b></span>':'')+'<span>승률: <b style="color:var(--gg)">'+Math.round(b.winRate||0)+'%</b></span></div></div>'
+      +'<div class="nfxb-spark"><svg viewBox="0 0 800 140" preserveAspectRatio="none">'
+      +'<defs><linearGradient id="nfxbGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity=".32"/><stop offset="60%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity=".08"/><stop offset="100%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity="0"/></linearGradient></defs>'
+      +'<line class="nfxb-grid" x1="0" y1="20" x2="800" y2="20"/><line class="nfxb-grid" x1="0" y1="70" x2="800" y2="70"/><line class="nfxb-grid" x1="0" y1="120" x2="800" y2="120"/>'
+      +'<path class="nfxb-area" fill="url(#nfxbGrad)" d="'+eqArea+'"/>'
+      +'<path class="nfxb-line'+(eqUp?'':' dn')+'" d="'+eqPath+'"/>'
+      +'</svg></div></section>':'')
+    +'<div class="nfxb-grid2">'
+    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">주문 내역 <span class="nfx-badge sim">시뮬레이션</span></h2>'
+    +'<span class="nfxb-fee">'+NFX_IC.won+'적립 누계 <b>+'+tfWon(rb)+'</b></span></div>'
+    +(fills.length?'<div class="nfx-rows">'+fills.map(function(f,i){
         var rv=revs.find(function(r){ return r.fid===f.fid; });
-        return '<tr class="nf-fillrow" onclick="'+(rv?'tfNav(\'#/review/'+rv.id+'\')':'void 0')+'"><td>'+(f.side==='b'?'매수':'매도')+'</td><td>'+gEsc(f.label)+'</td>'
-          +'<td class="num" style="text-align:right;color:'+(f.pnl>=0?'#56c486':'#ee766a')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</td>'
-          +'<td style="text-align:right;color:var(--gt3)">'+(rv?'보기 →':'-')+'</td></tr>';
-      }).join('')+'</tbody></table></div>'
-      :'<div class="nf-note" style="text-align:center;padding:16px 0">아직 체결이 없어요.</div>')+'</div>'
+        var kindL={sl:'손절',tp:'익절',time:'기간 청산'}[f.kind]||'청산';
+        return tfNFRow({ic:'trend',icc:f.side==='b'?'gg':'gr',lb:(f.side==='b'?'매수':'매도')+' · '+gEsc(f.label),ds:kindL+(rv?' · 복기 리포트 도착':''),
+          val:'<span class="nfx-rval '+(f.pnl>=0?'gain':'loss')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span>',
+          arrow:!!rv,stag:Math.min(i+1,8),click:rv?'tfNav(&quot;#/review/'+rv.id+'&quot;)':null});
+      }).join('')+'</div>'
+      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 체결이 없어요</div>'
+      +'<div class="nfx-edesc">'+(b.status==='ready'?'전략을 시작하면 검증 시뮬레이션 체결이 여기에 쌓여요.':'신호가 발생해 체결이 확정되면 여기에 표시돼요.')+'</div>'
+      +(b.status==='ready'?'<button class="nfx-btn pri" style="margin-top:6px" onclick="tfBotCtl(\''+botId+'\',\'start\')">지금 시작하기</button>':'')+'</div>')
+    +'</section>'
+    +'<div style="display:flex;flex-direction:column;gap:20px">'
+    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">현재 포지션 <span class="nfx-badge sim">시뮬레이션</span></h2>'
+    +'<span class="nfxb-pill-amber"><span class="nfx-dot'+(b.status==='live'?' pulse':'')+'"></span>'+posPill+'</span></div>'
+    +'<div class="nfxb-posbox"><div><div class="nfxb-postit">현재 열린 포지션이 없어요</div>'
+    +'<div class="nfxb-posdesc">진입 신호가 발생하면 여기에 표시돼요. (시뮬레이션)</div></div>'
+    +'<div class="nfxb-check"><span class="d"></span><span>신호 규칙: RSI '+p.rsiTh+' 이하 눌림 후 반등 진입'+(p.trendFilter?' (추세 필터)':'')+'</span></div>'
+    +'<div class="nfxb-check"><span class="d"></span><span>리스크 가드: 손절 '+p.sl+'% 규칙 적용</span></div>'
+    +'</div></section>'
+    +'<section class="nfxb-scard"><div class="nfx-sechead"><h2 class="nfx-sectit">전략 실행 환경</h2><span class="nfxb-chipp">설정 요약</span></div>'
+    +'<div class="nfxb-specs">'
+    +'<div class="nfxb-spec"><span class="k">연결 거래소</span><span class="v">'+(ex?gEsc(ex.name):'미연결')+'</span></div>'
+    +'<div class="nfxb-spec"><span class="k">실행 환경</span><span class="v">'+envL+'</span></div>'
+    +'<div class="nfxb-spec"><span class="k">실행 권한</span><span class="v" style="color:var(--gg)">출금 권한 없음</span></div>'
+    +'<div class="nfxb-spec"><span class="k">등록일</span><span class="v">'+new Date(b.at).toLocaleDateString('ko-KR')+'</span></div>'
+    +'</div></section>'
+    +'</div></div>'
     +'</div>');
+  setTimeout(function(){ var fg=$('nfxb-ringfg'); if(fg) fg.style.strokeDashoffset=String(251.3*(1-Math.min(100,b.score)/100)); },60);
 }
 /* 실행 자격 공통 가드 — 시작/재개/라이브 전환은 연결 완료 상태에서만 (codex NF P0-04) */
 function tfNFCanRun(){
@@ -8373,10 +8848,10 @@ function tfNFCanRun(){
 function tfBotCtl(botId,act){
   var t=tfNFInit(); var b=tfBotFind(botId); if(!b) return;
   if(act==='pause'){ b.status='off'; tfNotify('bot','bp:'+botId+':'+Date.now(),b.name+' 을 중지했어요','새 진입이 차단돼요. 언제든 재개할 수 있어요.','#/trade/bot/'+botId); }
-  else if(act==='resume'){ if(!tfNFCanRun()) return; b.status='live'; tfNotify('bot','br:'+botId+':'+Date.now(),b.name+' 을 재개했어요','','#/trade/bot/'+botId); }
+  else if(act==='resume'){ if(!tfNFCanRun()){ window.TF_NF_RESUME={id:botId,act:act}; return; } b.status='live'; tfNotify('bot','br:'+botId+':'+Date.now(),b.name+' 을 재개했어요','','#/trade/bot/'+botId); }
   else if(act==='start'){
     /* ready 봇을 해당 ID 그대로 ready→live 전이 — done 화면 우회 dead-end 제거 (codex NF P0-03) */
-    if(!tfNFCanRun()) return;
+    if(!tfNFCanRun()){ window.TF_NF_RESUME={id:botId,act:act}; return; } /* 연결 완료 후 이 봇으로 복귀 (codex NF P0) */
     b.status='live'; b.env=b.env||'live';
     tfNotify('bot','bs:'+botId,b.name+' 실행 시작 ('+(b.env==='paper'?'가상':'라이브 시뮬레이션')+')','체결이 발생하면 알림과 복기 리포트가 도착해요.','#/trade/bot/'+botId);
     toast('전략이 시작됐어요'); tfSideSync();
@@ -8391,73 +8866,77 @@ function tfBotCtl(botId,act){
 /* ── 복기 상세 (#/review/<id>) / 주간·월간 (#/periodic/<id>) ── */
 function tfReviewView(id){
   var t=tfNFInit(); var r=t.reviews.find(function(x){ return x.id===id; });
-  if(!r){ toast('복기 리포트를 찾을 수 없어요'); tfNav('#/trade'); return; }
+  if(!r){ if(!window.TF_STATE_READY) return; toast('복기 리포트를 찾을 수 없어요'); tfNav('#/trade'); return; }
   var won=r.pnl>=0;
+  var pd=t.periodics.find(function(x){ return r.at<x.until&&(x.from==null||r.at>=x.from); });
+  var b=tfBotFind(r.botId);
+  var STEP={'진입 근거':['ENTRY','e','doc'],'청산 근거':['EXIT','x','trend'],'손실 원인':['CAUSE','r','warn'],'규칙 평가':['RULE','x','doc'],'다음 제안':['SUGGESTION','g','star']};
   tfNFView('nfreview','거래복기',
-    '<div class="nf-page">'
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span> / <span>거래복기</span></div>'
-    +'<div class="nf-review-hero"><h3>'+gEsc(r.asset)+' '+r.kindL+' 복기 (시뮬레이션)</h3>'
-    +'<div class="one">'+(won?'규칙이 작동한 거래예요. 진입과 청산 모두 검증된 조건대로 실행됐어요.':'손절 규칙이 손실을 제한한 거래예요.')+'</div>'
-    +'<div class="meta2"><span>실현 손익<b style="color:'+(won?'#56c486':'#ee766a')+'">'+(won?'+':'')+(r.pnl*100).toFixed(1)+'%</b></span>'
-    +'<span>구분<b>'+r.kindL+'</b></span>'
-    +'<span>수수료 적립<b>+'+tfWon(Math.round(r.budget*0.002*TFC.rebate.rate))+'</b></span></div></div>'
-    +'<div class="nf-card"><div class="hd"><b>TETH 의 인과 분석</b></div>'
-    +r.causes.map(function(c){ return '<div class="nf-cause"><b>'+gEsc(c[0])+'</b>'+gEsc(c[1])+'</div>'; }).join('')+'</div>'
-    +'<div class="nf-cta"><button class="tf-btn p" style="height:44px" onclick="tfNav(\'#/trade/bot/'+r.botId+'\')">이 전략 상세로</button>'
-    +'<button class="tf-btn ghost" style="height:44px" onclick="tfNav(\'#/trade\')">내 트레이딩</button></div>'
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">거래복기</span></div>'
+    +'<section class="nfx-card nfx-card-hero nfxr-hero '+(won?'win':'loss')+'">'
+    +'<div class="nfx-chead"><span class="nfx-ctitle">'+gEsc(r.asset)+' '+r.kindL+' 복기<span class="nfx-badge sim">시뮬레이션</span></span>'
+    +(pd?'<button class="nfx-btn out" style="padding:7px 13px;font-size:12.5px" onclick="tfNav(&quot;#/periodic/'+pd.id+'&quot;)">'+pd.label+' 보고서로</button>':'')
+    +'</div>'
+    +'<div><div class="nfx-hero-label">실현 손익 · '+(won?'규칙 작동':'손실 제한')+'</div>'
+    +'<div class="nfx-hero '+(won?'cg':'cr')+'">'+(won?'+':'')+(r.pnl*100).toFixed(1)+'%</div>'
+    +'<div class="nfx-hero-desc" style="margin-top:6px">'+(won?'규칙이 작동한 거래예요. 진입과 청산 모두 검증된 조건대로 실행됐어요.':'손절 규칙이 손실을 제한한 거래예요.')+'</div></div>'
+    +'<div class="nfxr-chiprow">'
+    +'<span class="nfxr-chip">구분 <b>'+r.kindL+'</b></span>'
+    +'<span class="nfxr-chip">수수료 적립 <b style="color:var(--gg)">+'+tfWon(Math.round(r.budget*0.002*TFC.rebate.rate))+'</b></span>'
+    +(b?'<span class="nfxr-chip">전략 <b>'+gEsc(b.name)+'</b></span>':'')
+    +'</div></section>'
+    +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">TETH 의 인과 분석</h2><span class="nfx-badge">규칙 엔진 신호 기준</span></div>'
+    +'<div class="nfxr-steps">'
+    +r.causes.map(function(c,i){
+      var m=STEP[c[0]]||['STEP','','doc'];
+      return '<div class="nfxr-step nfx-stag s'+(i+1)+'"><div class="nfxr-sic '+m[1]+'">'+NFX_IC[m[2]]+'</div>'
+        +'<div style="min-width:0"><div><span class="nfxr-stag">'+('0'+(i+1))+' '+m[0]+'</span><span class="nfxr-stit">'+gEsc(c[0])+'</span></div>'
+        +'<div class="nfxr-sbody">'+gEsc(c[1])+'</div></div></div>';
+    }).join('')+'</div></section>'
+    +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(&quot;#/trade/bot/'+r.botId+'&quot;)">'+NFX_IC.zap+'이 전략 상세로</button>'
+    +'<button class="nfx-btn out" onclick="tfNav(&quot;#/trade&quot;)">내 트레이딩</button></div>'
     +'</div>');
 }
 function tfPeriodicView(id){
   var t=tfNFInit(); var p=t.periodics.find(function(x){ return x.id===id; });
-  if(!p){ toast('보고서를 찾을 수 없어요'); tfNav('#/trade'); return; }
+  if(!p){ if(!window.TF_STATE_READY) return; toast('보고서를 찾을 수 없어요'); tfNav('#/trade'); return; }
+  var wr=p.n?Math.round(p.wins/p.n*100):0;
+  var evs=t.reviews.filter(function(r){ return r.at<p.until&&(p.from==null||r.at>=p.from); }).slice(0,10);
   tfNFView('nfperiodic',p.label+' 보고서',
-    '<div class="nf-page">'
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span> / <span>'+p.label+' 보고서</span></div>'
-    +'<div class="nf-review-hero"><h3>'+p.label+' 성과 보고서 (시뮬레이션)</h3>'
-    +'<div class="meta2"><span>체결<b>'+p.n+'회</b></span><span>승률<b>'+(p.n?Math.round(p.wins/p.n*100):0)+'%</b></span>'
-    +'<span>합산 손익<b style="color:'+(p.pnl>=0?'#56c486':'#ee766a')+'">'+(p.pnl>=0?'+':'')+(p.pnl*100).toFixed(1)+'%</b></span>'
-    +'<span>수수료 적립<b>+'+tfWon(p.rebate)+'</b></span></div></div>'
-    +'<div class="nf-card"><div class="hd"><b>기간 체결 복기</b></div>'
-    +t.reviews.filter(function(r){ return r.at<p.until&&(p.from==null||r.at>=p.from); }).slice(0,10).map(function(r){
-      return '<div class="nf-cause" style="cursor:pointer" onclick="tfNav(\'#/review/'+r.id+'\')"><b>'+gEsc(r.asset)+' '+r.kindL+' '+(r.pnl>=0?'+':'')+(r.pnl*100).toFixed(1)+'%</b>복기 보기 →</div>';
-    }).join('')+'</div>'
+    '<div class="nfx-page"><div class="nfx-glow"></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+p.label+' 보고서</span></div>'
+    +'<section class="nfx-card nfx-card-hero nfxr-hero '+(p.pnl>=0?'win':'loss')+'">'
+    +'<div class="nfx-chead"><span class="nfx-ctitle">'+p.label+' 성과 보고서<span class="nfx-badge sim">시뮬레이션</span></span>'
+    +'<span class="nfx-badge">'+new Date(p.from||p.until-1).toLocaleDateString('ko-KR')+' ~ '+new Date(p.until-1).toLocaleDateString('ko-KR')+'</span></div>'
+    +'<div><div class="nfx-hero-label">기간 합산 손익</div>'
+    +'<div class="nfx-hero '+(p.pnl>=0?'cg':'cr')+'">'+(p.pnl>=0?'+':'')+(p.pnl*100).toFixed(1)+'%</div></div>'
+    +'<div class="nfxr-stats">'
+    +'<div class="nfxr-ring"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="nfxr-wring" cx="30" cy="30" r="26"/></svg><span class="val">'+wr+'%</span></div>'
+    +'<div class="nfx-mbox" style="min-width:120px"><span class="nfx-mtit">체결</span><span class="nfx-mval">'+p.n+'회</span></div>'
+    +'<div class="nfx-mbox" style="min-width:120px"><span class="nfx-mtit">승률</span><span class="nfx-mval">'+wr+'%</span></div>'
+    +'<div class="nfx-mbox" style="min-width:140px"><span class="nfx-mtit">수수료 적립</span><span class="nfx-mval" style="color:var(--gg)">+'+tfWon(p.rebate)+'</span></div>'
+    +'</div></section>'
+    +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">기간 체결 복기</h2><span class="nfx-badge">'+(evs.length?evs.length+'건':'없음')+'</span></div>'
+    +(evs.length?'<div class="nfx-rows">'+evs.map(function(r,i){
+        return tfNFRow({ic:'doc',icc:r.pnl>=0?'gg':'gr',lb:gEsc(r.asset)+' '+r.kindL,ds:new Date(r.at).toLocaleDateString('ko-KR'),
+          val:'<span class="nfx-rval '+(r.pnl>=0?'gain':'loss')+'">'+(r.pnl>=0?'+':'')+(r.pnl*100).toFixed(1)+'%</span>',
+          arrow:true,stag:Math.min(i+1,8),click:'tfNav(&quot;#/review/'+r.id+'&quot;)'});
+      }).join('')+'</div>'
+      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">현재 조회 가능한 복기가 없어요</div>'
+      +'<div class="nfx-edesc">이 기간의 복기 리포트가 보관 기간을 지나 정리됐어요. 요약 수치는 위에 그대로 남아 있어요.</div></div>')
+    +'</section>'
+    +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(&quot;#/trade&quot;)">'+NFX_IC.zap+'내 트레이딩</button>'
+    +'<button class="nfx-btn out" onclick="tfNav(&quot;#/plan/rebates&quot;)">정산 내역 보기 (전체)</button></div>'
     +'</div>');
+  setTimeout(function(){ var fg=$('nfxr-wring'); if(fg) fg.style.strokeDashoffset=String(163.4*(1-wr/100)); },60);
 }
 /* ── 내 트레이딩 확장: 기존 tfDashView 출력 뒤에 훅 (마크업 불변, 추가만) ── */
 function tfDashEnhance(){
-  var t=tfNFInit();
+  /* 행 클릭·배너는 tfDashView 마크업에 인라인 통합됨 (nfx 포팅) — 여기는 주기 보고서/플래그/유틸바만 */
+  tfNFInit();
   tfPeriodicCheck();
-  /* 전략 행 클릭 활성 (D3) */
-  var rows=document.querySelectorAll('.tf-strat');
-  var strat=(t.strat||[]);
-  rows.forEach(function(row,i){
-    var b=strat[i]; if(!b) return;
-    row.classList.add('nf-click');
-    row.addEventListener('click',function(e){ if(e.target.closest('button')) return; tfNav('#/trade/bot/'+b.at); });
-  });
-  /* 체결 행 클릭 → 복기 (D2) */
-  document.querySelectorAll('.tf-fill').forEach(function(row,i){
-    var f=(t.fills||[])[i]; if(!f||!f.fid) return;
-    var rv=t.reviews.find(function(r){ return r.fid===f.fid; });
-    if(!rv) return;
-    row.classList.add('nf-click');
-    row.addEventListener('click',function(){ tfNav('#/review/'+rv.id); });
-  });
-  /* ready 봇 배너 (D8) */
-  var ready=strat.find(function(x){ return x.status==='ready'; });
-  var host=$('g-content')&&$('g-content').firstElementChild;
-  if(host&&!$('nf-ready-banner')){
-    var bn=null;
-    if(ready){
-      bn=document.createElement('div'); bn.id='nf-ready-banner'; bn.className='nf-banner';
-      bn.innerHTML='대기 중인 전략이 있어요: '+gEsc(ready.name)+'<span class="sp"></span><button onclick="tfNav(\'#/trade/bot/'+ready.at+'\')">지금 시작하기</button>';
-    }else if(!t.uidLinked&&!t.payDone){
-      bn=document.createElement('div'); bn.id='nf-ready-banner'; bn.className='nf-banner blue';
-      bn.innerHTML='UID 를 무료로 연동하면 PRO 분석 크레딧을 받아요<span class="sp"></span><button onclick="tfNFLinkUid()">Fast API 연동</button>';
-    }
-    if(bn) host.insertBefore(bn,host.firstChild.nextSibling);
-  }
-  TF_ONNF=true;
+  TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false;
   tfNFBar();
 }
 /* ── 실행 훅: tfStartStrategy 커밋 시 원장/복기/알림 생성 (1회, fid dedup) ── */
@@ -8507,6 +8986,8 @@ function tfNFOnLater(){
 /* ── 라우팅 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 ── */
 function tfNFRoute(h){
   var m;
+  /* 게스트 접근 — 기존 로그인 UI로 연결. 복원(TF_STATE_READY) 전에는 판단 유보 — 딥링크 보존 (codex NF P0-4) */
+  if(!S.user){ if(window.TF_STATE_READY){ toast('로그인하면 트레이딩과 크레딧을 관리할 수 있어요'); try{ authOpen('login'); }catch(e){} gHome(); } return true; }
   if(h==='#/trade'){ tfDashView(); return true; }
   if((m=h.match(/^#\/trade\/bot\/([A-Za-z0-9]+)$/))){ tfBotView(m[1]); return true; }
   if((m=h.match(/^#\/plan(?:\/(rebates|alerts))?$/))){ tfPlanView(m[1]||'plan'); return true; }
