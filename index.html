@@ -5535,7 +5535,8 @@ signupDone=function(){
     STORE.flush(); /* 로그인 즉시 영속화 — 새로고침해도 로그아웃 전까지 로그인 유지 */
     toast(AUTH&&AUTH.mode==='login'?'다시 만나서 반가워요':'계정 준비 완료, 시장은 기다려주지 않아요');
     if(G.pendingRun){ G.pendingRun=false; delay(300,gStartRunGo); }
-    if(G.pendingNew!=null){ var pn=G.pendingNew; G.pendingNew=null; delay(300,function(){ gNew(pn); }); }
+    if(G.pendingNew!=null){ var pn=G.pendingNew; G.pendingNew=null; AUTH.draft=null; delay(300,function(){ gNew(pn); }); }
+    else if(AUTH&&AUTH.draft){ var dr=AUTH.draft; AUTH.draft=null; delay(300,function(){ gNew(dr); }); } /* 전송 전 입력도 가입 직후 이어서 전송 (사용자 지시) */
     return;
   }
   _signupDoneV2();
@@ -10231,6 +10232,8 @@ openModal=function(id){ if(id==='modal-manage') renderManage(); _openModal(id); 
 var AUTH={mode:'signup',email:'',doneName:'',pwDone:false};
 function authOpen(mode){
   AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName=''; AUTH.pwDone=false;
+  /* 게스트가 쳐 둔 질문 보존 — 전송 전에 팝업이 떠도(무료 시작·로그인 버튼 등) 가입 완료 후 이어서 전송 */
+  try{ var _d=$('g-home-in'); AUTH.draft=(_d&&_d.value.trim())||null; if(!AUTH.draft){ _d=$('g-in'); AUTH.draft=(_d&&_d.value.trim())||null; } }catch(e){ AUTH.draft=null; }
   ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el){el.value=''; el.classList.remove('bad','shake');}});
   document.querySelectorAll('#modal-auth .au-err').forEach(function(x){x.classList.remove('on');});
   if(AUTH.rt){ clearInterval(AUTH.rt); AUTH.rt=null; } AUTH.cool=0;
