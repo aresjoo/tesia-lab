@@ -1901,10 +1901,288 @@ body.g-inchat #nf-util{right:14px}
   .nfxh-wrap.mt-chart .nfxh-chart{display:block;min-height:calc(100vh - 190px)}
   .nfxh-wrap.mt-side .nfxh-side{display:flex}
   .nfxh-pane.on{display:none}
-  .nfxh-wrap.mt-strat .nfxh-pane[data-p="strat"],.nfxh-wrap.mt-fills .nfxh-pane[data-p="fills"],.nfxh-wrap.mt-pos .nfxh-pane[data-p="pos"],.nfxh-wrap.mt-pnl .nfxh-pane[data-p="pnl"],.nfxh-wrap.mt-rebates .nfxh-pane[data-p="rebates"],.nfxh-wrap.mt-alerts .nfxh-pane[data-p="alerts"],.nfxh-wrap.mt-reports .nfxh-pane[data-p="reports"]{display:block}
+  .nfxh-wrap.mt-strat .nfxh-pane[data-p="strat"],.nfxh-wrap.mt-fills .nfxh-pane[data-p="fills"],.nfxh-wrap.mt-pos .nfxh-pane[data-p="pos"],.nfxh-wrap.mt-pnl .nfxh-pane[data-p="pnl"],.nfxh-wrap.mt-rebates .nfxh-pane[data-p="rebates"],.nfxh-wrap.mt-alerts .nfxh-pane[data-p="alerts"],.nfxh-wrap.mt-reports .nfxh-pane[data-p="reports"],.nfxh-wrap.mt-open .nfxh-pane[data-p="open"],.nfxh-wrap.mt-orders .nfxh-pane[data-p="orders"],.nfxh-wrap.mt-closed .nfxh-pane[data-p="closed"],.nfxh-wrap.mt-assets .nfxh-pane[data-p="assets"]{display:block}
   .nfxh-stat3{grid-template-columns:1fr}
   .nfxh-top{padding:10px 12px;gap:10px}
   .nfxh-pair{font-size:15px}
+}
+/* ══ 자율 전략 터미널 (tft-) — 1px 알파 보더·radius≤6·8px 그리드, 기관용 밀도 (agy-term) ══ */
+.tft-page{padding:0!important;max-width:none}
+.tft-page .nfx-glow{display:none}
+.tft-banner{padding:10px 14px 0}
+.tft-grid{display:grid;grid-template-columns:264px minmax(0,1fr) var(--tftr,392px);grid-template-rows:auto minmax(400px,48vh);grid-template-areas:"rail ctx brain" "rail chart brain";border-bottom:1px solid var(--gl)}
+/* 좌 — 전략 매니저 */
+.tft-rail{grid-area:rail;border-right:1px solid var(--gl);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.tft-rh{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--gl)}
+.tft-rh b{font-size:13px;font-weight:700;color:var(--gt)}
+.tft-rh .ct2{font-size:10.5px;color:var(--gt3);font-variant-numeric:tabular-nums}
+.tft-new{border:1px solid var(--gl2);background:none;color:var(--gt);font-size:12px;font-weight:600;padding:5px 10px;border-radius:6px;cursor:pointer}
+.tft-new:hover{border-color:var(--gt3)}
+.tft-rf{padding:8px 12px;border-bottom:1px solid var(--gl);display:flex;flex-direction:column;gap:6px}
+.tft-rf input{height:28px;border-radius:6px;border:1px solid var(--gl);background:var(--g1);color:var(--gt);font-size:12px;padding:0 9px;outline:none;width:100%;box-sizing:border-box}
+.tft-rf input:focus{border-color:var(--gl2)}
+.tft-rf .fr2{display:flex;gap:6px}
+.tft-rf select{flex:1;min-width:0;height:26px;border-radius:6px;border:1px solid var(--gl);background:var(--g1);color:var(--gt2);font-size:11.5px;padding:0 5px;outline:none}
+.tft-rl{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin}
+.tft-card{padding:9px 14px 9px 10px;border-bottom:1px solid var(--gl);border-left:2px solid transparent;cursor:pointer}
+.tft-card:hover{background:var(--g1)}
+.tft-card.on{background:var(--g1);border-left-color:var(--gb)}
+.tft-card .r1{display:flex;align-items:center;gap:7px;min-width:0}
+.exb{flex:none;width:17px;height:17px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;letter-spacing:.02em}
+.exb.sm{width:15px;height:15px;font-size:7.5px;vertical-align:-3px}
+.tft-card .nm{flex:1;min-width:0;font-size:12.5px;font-weight:650;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tft-card .mn{flex:none;background:none;border:0;color:var(--gt3);font-size:13px;line-height:1;padding:2px 4px;cursor:pointer;border-radius:4px;letter-spacing:1px}
+.tft-card .mn:hover{color:var(--gt);background:var(--g2)}
+.st{font-size:10px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.st.st-live{color:var(--gg)}
+.st.st-off{color:var(--gt3)}
+.st.st-ready{color:var(--ga)}
+.st.st-err{color:var(--gr)}
+.tft-card .r2{display:flex;align-items:center;justify-content:space-between;margin-top:3px;font-size:10.5px;color:var(--gt3)}
+.tft-card .r2 .ver{font-variant-numeric:tabular-nums}
+.tft-card .r3{display:flex;align-items:baseline;justify-content:space-between;margin-top:5px;font-variant-numeric:tabular-nums}
+.tft-card .r3 .cap{font-size:11px;color:var(--gt2)}
+.tft-card .r3 .cap i{font-style:normal;color:var(--gt3)}
+.tft-card .r3 .pnl{font-size:11.5px;font-weight:700}
+.tft-card .r3 .pnl small{font-weight:600;font-size:10.5px;opacity:.85}
+.up{color:var(--gg)}.dn{color:var(--gr)}.zz{color:var(--gt3)}
+.tft-card .r4{margin-top:5px;font-size:10.5px;color:var(--gr);line-height:1.45}
+.tft-card .r4 a{color:var(--gb2);cursor:pointer;margin-left:4px}
+.tft-rfoot{padding:8px 12px;font-size:10px;color:var(--gt3);border-top:1px solid var(--gl);line-height:1.5}
+.tft-empty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:34px 14px}
+.tft-empty b{font-size:13px;color:var(--gt)}
+.tft-empty span{font-size:12px;color:var(--gt3);line-height:1.55}
+/* 중앙 컨텍스트 */
+.tft-ctx{grid-area:ctx;border-bottom:1px solid var(--gl);background:var(--g1)}
+.tft-ctxin{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;min-width:0;overflow:hidden}
+.tft-ctxin .sy{font-size:13px;font-weight:700;color:var(--gt);white-space:nowrap}
+.tft-ctxin .mut{font-size:11px;color:var(--gt3);white-space:nowrap}
+.tft-ctxin .dv{width:1px;height:14px;background:var(--gl2);flex:none}
+.tft-ctxin .nm2{font-size:12px;font-weight:600;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tft-ctxin .nm2 small{color:var(--gt3);font-weight:500;font-variant-numeric:tabular-nums}
+.tft-halt{height:24px;padding:0 10px;border:1px solid rgba(224,96,75,.5);border-radius:5px;background:none;color:var(--gr);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex:none}
+.tft-halt:hover{background:rgba(224,96,75,.1)}
+.tft-go{height:24px;padding:0 10px;border:1px solid rgba(78,192,141,.5);border-radius:5px;background:none;color:var(--gg);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex:none}
+.tft-go:hover{background:rgba(78,192,141,.1)}
+.tft-ctx2{padding:0 14px 6px;font-size:10px;color:var(--gt3);background:var(--g1)}
+.tft-chart{grid-area:chart;position:relative;min-height:0}
+/* 우 — Strategy Brain */
+.tft-brain{grid-area:brain;border-left:1px solid var(--gl);position:relative;display:flex;min-height:0;min-width:0;overflow:hidden}
+@media (min-width:961px){ .tft-grid{grid-template-rows:auto minmax(430px,calc(100vh - 320px))} .tft-brain,.tft-rail{max-height:calc(100vh - 254px)} }
+.tft-resz{position:absolute;left:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:6;touch-action:none}
+.tft-resz:hover{background:rgba(91,138,247,.15)}
+.tft-brainin{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+.tft-bh{padding:9px 14px 7px;border-bottom:1px solid var(--gl)}
+.tft-bh .t1{display:flex;align-items:center;gap:7px;min-width:0}
+.tft-bh .t1 b{font-size:13.5px;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tft-bh .t1 small{color:var(--gt3);font-variant-numeric:tabular-nums}
+.tft-bh .t2{font-size:11px;color:var(--gt3);margin-top:2px}
+.tft-btabs{display:flex;border-bottom:1px solid var(--gl)}
+.tft-btabs button{flex:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--gt3);font-size:12px;font-weight:600;padding:8px 12px;cursor:pointer;font-family:inherit}
+.tft-btabs button:hover{color:var(--gt2)}
+.tft-btabs button.on{color:var(--gt);border-bottom-color:var(--gb)}
+.tft-bbody{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin}
+.tft-fsec{padding:10px 14px 6px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--gt3)}
+.tft-fsec small{font-weight:500;letter-spacing:0;margin-left:6px}
+.ffc{border:1px solid var(--gl);background:none;border-radius:999px;color:var(--gt3);font-size:10px;font-weight:600;padding:2px 8px;cursor:pointer;letter-spacing:0}
+.ffc.on{color:var(--gt);border-color:var(--gt3)}
+/* Agent 이벤트 — 감사 로그 (말풍선 금지) */
+.tft-ev{position:relative;display:flex;gap:10px;padding:9px 14px 9px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+.tft-ev .ax{flex:none;width:8px;position:relative}
+.tft-ev .ax::before{content:'';position:absolute;left:3px;top:-9px;bottom:-9px;width:1px;background:var(--gl)}
+.tft-ev .ax i{position:absolute;left:0;top:5px;width:7px;height:7px;border-radius:50%;background:var(--gt3)}
+.tft-ev.en .ax i{background:var(--gg)}
+.tft-ev.tp .ax i{background:var(--gg)}
+.tft-ev.sl .ax i{background:var(--gr)}
+.tft-ev.tm .ax i{background:var(--gb2)}
+.tft-ev.wa .ax i{background:transparent;border:1.5px solid var(--gt3);width:6px;height:6px}
+.tft-ev.up .ax i{background:var(--ga)}
+.tft-ev.op .ax i{background:var(--gb2)}
+.tft-ev .bd{flex:1;min-width:0}
+.tft-ev .mh{display:flex;align-items:center;gap:8px}
+.tft-ev .tm{font-size:10px;color:var(--gt3);font-variant-numeric:tabular-nums}
+.tft-ev .bg{font-size:10px;font-weight:800;letter-spacing:.05em}
+.tft-ev.en .bg{color:var(--gg)}.tft-ev.tp .bg{color:var(--gg)}.tft-ev.sl .bg{color:var(--gr)}
+.tft-ev.tm .bg{color:var(--gb2)}.tft-ev.wa .bg,.tft-ev.ho .bg{color:var(--gt3)}
+.tft-ev.up .bg{color:var(--ga)}.tft-ev.op .bg{color:var(--gt2)}
+.tft-ev .vr{font-size:10px;color:var(--gt3)}
+.tft-ev .tx{font-size:12px;line-height:1.55;color:var(--gt2);margin-top:3px}
+.tft-ev .tx2{font-size:11px;line-height:1.5;color:var(--gt3);margin-top:3px}
+.dt2{background:none;border:0;padding:3px 0 0;color:var(--gt3);font-size:10.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.dt2:hover{color:var(--gt)}
+.tft-more{display:block;width:calc(100% - 28px);margin:10px 14px;border:1px solid var(--gl);background:none;border-radius:6px;color:var(--gt3);font-size:11.5px;padding:8px;cursor:pointer}
+.tft-more:hover{color:var(--gt);border-color:var(--gl2)}
+/* 세부 정보 */
+.tft-det{margin-top:8px;border:1px solid var(--gl);border-radius:6px;background:var(--g0);padding:10px;display:flex;flex-direction:column;gap:10px}
+.tft-dsec summary{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--gt3);cursor:pointer}
+.tft-dsec summary small{font-weight:500;letter-spacing:0}
+.tft-dsec .kv{display:flex;gap:10px;font-size:11.5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.tft-dsec .kv span{flex:none;width:72px;color:var(--gt3)}
+.tft-dsec .kv b{color:var(--gt2);font-weight:500;line-height:1.5}
+.tft-raw{margin-top:6px}
+.tft-raw summary{font-size:10px;color:var(--gt3);cursor:pointer}
+.tft-raw pre{font-size:10.5px;color:var(--gt3);background:var(--g1);border:1px solid var(--gl);border-radius:4px;padding:8px;overflow-x:auto;margin:6px 0 0}
+.dh3{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--gt3);margin-bottom:6px}
+.tft-dsec2 .an{margin-bottom:8px}
+.tft-dsec2 .an b{display:block;font-size:11px;color:var(--gt);margin-bottom:2px}
+.tft-dsec2 .an p{font-size:11.5px;line-height:1.6;color:var(--gt2);margin:0}
+/* 트레이딩 티켓 */
+.tft-tk{border:1px solid var(--gl);border-radius:6px;background:var(--g1);padding:8px}
+.tft-tk .th2{display:flex;align-items:center;gap:8px}
+.tft-tk .sg{font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.04em}
+.tft-tk .sg.b{background:var(--gg);color:#0f1012}
+.tft-tk .sg.c{background:var(--gb);color:#fff}
+.tft-tk .sg.h{background:var(--g3);color:var(--gt2)}
+.tft-tk .th2 b{font-size:12px;color:var(--gt)}
+.tft-tk .as2{margin-left:auto;font-size:10.5px;color:var(--gt3);font-variant-numeric:tabular-nums}
+.tft-tk .tg2{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gl);border:1px solid var(--gl);border-radius:4px;overflow:hidden;margin-top:8px}
+.tft-tk .c3{background:var(--g0);padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.tft-tk .c3 small{font-size:9.5px;color:var(--gt3)}
+.tft-tk .c3 b{font-size:11.5px;color:var(--gt);font-weight:650}
+.tft-tk .js{margin-top:8px;font-size:11px;line-height:1.55;color:var(--gt2)}
+.tft-tk .js small{display:block;font-size:9px;font-weight:800;letter-spacing:.07em;color:var(--gt3);margin-bottom:2px}
+.tft-tk .js.iv{color:var(--gt3)}
+/* 컴포저 */
+.tft-comp{border-top:1px solid var(--gl);padding:6px 12px 8px;background:var(--g1)}
+.tft-comp .chips{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:6px}
+.tft-comp .chips button{border:1px solid var(--gl);background:none;border-radius:999px;color:var(--gt3);font-size:10.5px;padding:3px 9px;cursor:pointer;white-space:nowrap;flex:none}
+.tft-comp .chips button:hover{color:var(--gt);border-color:var(--gl2)}
+.tft-comp .row{display:flex;gap:6px}
+.tft-comp input{flex:1;min-width:0;height:30px;border-radius:7px;border:1px solid var(--gl2);background:var(--g0);color:var(--gt);font-size:12px;padding:0 11px;outline:none}
+.tft-comp input:focus{border-color:var(--gt3)}
+.tft-comp .snd{width:30px;height:30px;border-radius:7px;border:0;background:var(--gb);color:#fff;font-size:13px;cursor:pointer;flex:none}
+.tft-comp .snd:hover{background:var(--gb2)}
+/* 제안·응답 카드 */
+.tft-ans{border:1px solid var(--gl2);border-radius:8px;background:var(--g0);padding:10px 12px;margin-bottom:8px}
+.tft-ans b{font-size:12px;color:var(--gt)}
+.tft-ans p{font-size:11.5px;line-height:1.6;color:var(--gt2);margin:5px 0 0}
+.tft-ans .acts{display:flex;gap:8px;margin-top:8px}
+.tft-ans .acts button{border:1px solid var(--gl);background:none;border-radius:6px;color:var(--gt2);font-size:11px;padding:5px 10px;cursor:pointer}
+.tft-ans .acts button:hover{color:var(--gt)}
+.tft-diff{border:1px solid var(--gl2);border-radius:8px;background:var(--g0);padding:10px 12px;margin-bottom:8px}
+.tft-diff .dh4{font-size:12px;font-weight:700;color:var(--gt);margin-bottom:8px}
+.tft-diff .dh4 small{font-weight:500;color:var(--gt3);margin-left:6px}
+.dt3{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr);gap:1px;background:var(--gl);border:1px solid var(--gl);border-radius:4px;overflow:hidden;font-size:11px}
+.dt3>span{background:var(--g1);padding:6px 8px;color:var(--gt2)}
+.dt3 .hd5{background:var(--g0);font-size:9.5px;font-weight:800;letter-spacing:.05em;color:var(--gt3)}
+.dt3 .cu{color:var(--gt3)}
+.dt3 .pp2{color:var(--gt);font-weight:700;background:rgba(91,138,247,.07)}
+.dt3 .dl{color:var(--ga);font-size:10.5px}
+.tft-diff .imp{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:9px}
+.tft-diff .imp span{display:flex;flex-direction:column;gap:1px}
+.tft-diff .imp small{font-size:9.5px;color:var(--gt3)}
+.tft-diff .imp b{font-size:11.5px;color:var(--gt2);font-weight:600}
+.tft-diff .imp em{font-style:normal}
+.tft-diff .nt2{font-size:10.5px;color:var(--gt3);line-height:1.55;margin-top:8px}
+.tft-diff .nt2.warn{color:var(--ga)}
+.tft-diff .acts2{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.tft-diff .rej{border:1px solid var(--gl);background:none;border-radius:6px;color:var(--gt2);font-size:11.5px;padding:6px 12px;cursor:pointer}
+.tft-diff .ap{border:0;background:var(--gb);border-radius:6px;color:#fff;font-size:11.5px;font-weight:700;padding:6px 14px;cursor:pointer}
+.tft-diff .ap:hover{background:var(--gb2)}
+.tft-diff .ap:disabled{background:var(--g3);color:var(--gt3);cursor:not-allowed}
+/* 대시보드 매트릭스 */
+.tft-pm{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gl);border-bottom:1px solid var(--gl)}
+.tft-pm .c4{background:var(--g1);padding:9px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tft-pm small{font-size:9.5px;color:var(--gt3);letter-spacing:.03em}
+.tft-pm small i{font-style:normal;color:var(--gt3);opacity:.7}
+.tft-pm b{font-size:14px;font-weight:700;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tft-pm b em{font-style:normal;font-size:11.5px;font-weight:600}
+.tft-nav{padding:10px 12px;border-bottom:1px solid var(--gl);background:var(--g0)}
+.tft-nav .nh2{font-size:10.5px;font-weight:700;color:var(--gt3);margin-bottom:6px}
+.tft-nav .nh2 small{font-weight:500}
+.tft-mg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gl);border-bottom:1px solid var(--gl)}
+.tft-mg .c5{background:var(--g1);padding:7px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.tft-mg small{font-size:10px;color:var(--gt3)}
+.tft-mg b{font-size:11.5px;font-weight:700;color:var(--gt);white-space:nowrap}
+.tft-mg b.dn{color:var(--gr)}
+/* 포지션 블록/완료 거래 카드 */
+.tft-posb{margin:4px 14px 10px;border:1px solid var(--gl);border-radius:6px;padding:9px 11px;background:var(--g1)}
+.tft-posb .pr1{display:flex;align-items:center;gap:8px}
+.tft-posb .pr1 b{font-size:12.5px;color:var(--gt)}
+.sd{font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.04em}
+.sd.lg{background:rgba(78,192,141,.15);color:var(--gg)}
+.sd.sh{background:rgba(224,96,75,.15);color:var(--gr)}
+.tft-posb .pr2{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 10px;margin-top:8px}
+.tft-posb .pr2 span{display:flex;flex-direction:column;gap:1px}
+.tft-posb .pr2 small{font-size:9.5px;color:var(--gt3)}
+.tft-posb .pr2 b{font-size:11.5px;color:var(--gt2);font-weight:600}
+.tft-ct{margin:4px 14px 10px;border:1px solid var(--gl);border-radius:6px;padding:9px 11px;background:var(--g1)}
+.tft-ct .h4{display:flex;align-items:center;gap:8px}
+.tft-ct .h4 b{font-size:12.5px;color:var(--gt)}
+.tft-ct .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.tft-ct .g4 span{display:flex;flex-direction:column;gap:1px}
+.tft-ct .g4 small{font-size:9.5px;color:var(--gt3)}
+.tft-ct .g4 b{font-size:11px;color:var(--gt2);font-weight:600}
+.tft-ct .wy{margin-top:8px;font-size:11px;line-height:1.55;color:var(--gt2)}
+.tft-ct .wy small{display:block;font-size:9px;font-weight:800;letter-spacing:.07em;color:var(--gt3);margin-bottom:1px}
+.tft-vh{padding:10px 14px 16px}
+.tft-vh a{font-size:11.5px;color:var(--gb2);cursor:pointer}
+/* 라이프사이클 */
+.tft-lc{display:flex;flex-direction:column}
+.tft-lc .lc1{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.tft-lc .n2{flex:none;width:20px;height:20px;border-radius:50%;background:var(--g2);border:1px solid var(--gl2);color:var(--gt2);font-size:10.5px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.tft-lc .b2{flex:1;min-width:0}
+.tft-lc .b2 b{font-size:12px;color:var(--gt)}
+.tft-lc .b2 .v2{margin-left:8px;font-size:11.5px;color:var(--gt2)}
+.tft-lc .b2 p{margin:2px 0 0;font-size:11px;line-height:1.5;color:var(--gt3)}
+/* 하단 */
+.tft-bottom{min-height:220px}
+.tft-botbar{display:flex;align-items:center;border-bottom:1px solid var(--gl);padding-right:10px}
+.tft-scope select{height:26px;border-radius:6px;border:1px solid var(--gl);background:var(--g1);color:var(--gt2);font-size:11.5px;padding:0 7px;outline:none}
+.tft-tnote{font-size:10px;color:var(--gt3);margin-bottom:8px}
+.tft-tblw{overflow-x:auto;scrollbar-width:thin}
+.tft-tbl{width:100%;border-collapse:collapse;font-size:11.5px;min-width:640px}
+.tft-tbl th{position:sticky;top:0;background:var(--g1);text-align:left;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--gt3);padding:6px 8px;border-bottom:1px solid var(--gl);white-space:nowrap}
+.tft-tbl th.r{text-align:right}
+.tft-tbl td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--gt2);white-space:nowrap}
+.tft-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.tft-tbl tbody tr:hover{background:var(--g1)}
+.tft-tbl .stlk{color:var(--gt2);cursor:pointer;text-decoration:none;border-bottom:1px dotted var(--gt3)}
+.tft-tbl .stlk:hover{color:var(--gb2)}
+.tft-tbl .okst{font-size:10.5px;color:var(--gg)}
+.tft-tbl .tbtn{border:1px solid var(--gl);background:none;border-radius:5px;color:var(--gt3);font-size:10.5px;padding:3px 8px;cursor:pointer}
+.tft-tbl .tbtn:hover{color:var(--gr);border-color:rgba(224,96,75,.4)}
+.tft-tbl .mut{font-size:10px;color:var(--gt3)}
+.tft-assets{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.tft-asx{border:1px solid var(--gl);border-radius:6px;background:var(--g1);padding:10px 12px}
+.tft-asx .ah2{display:flex;align-items:center;gap:8px}
+.tft-asx .ah2 b{font-size:12.5px;color:var(--gt)}
+.tft-asx .ah2 .mut{font-size:10.5px;color:var(--gt3);margin-left:auto}
+.tft-asx .ag2{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}
+.tft-asx .ag2 span{display:flex;flex-direction:column;gap:1px}
+.tft-asx .ag2 small{font-size:9.5px;color:var(--gt3)}
+.tft-asx .ag2 b{font-size:11px;color:var(--gt2);font-weight:650}
+.tft-asx .af2{margin-top:8px;font-size:10px;color:var(--gt3)}
+/* ··· 메뉴 */
+.tft-menu{position:fixed;z-index:340;background:var(--g2);border:1px solid var(--gl2);border-radius:8px;padding:5px;min-width:168px;box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.tft-menu button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:5px;color:var(--gt);font-size:12px;padding:7px 10px;cursor:pointer;font-family:inherit}
+.tft-menu button:hover{background:rgba(255,255,255,.06)}
+.tft-menu .sep{height:1px;background:var(--gl);margin:4px 2px}
+.tft-menu .del{color:var(--gr)}
+/* 하단 pane 내부 스크롤 — 고정 헤더가 항상 작동, 탭바 시야 유지 (agy-term2 P0-3) */
+.tft-bottom .nfxh-pane{max-height:420px;overflow-y:auto;scrollbar-width:thin}
+/* 반응형 */
+@media (max-width:1240px){
+  .tft-grid{grid-template-columns:232px minmax(0,1fr) 340px}
+}
+@media (max-width:1120px) and (min-width:961px){
+  .tft-grid{grid-template-columns:200px minmax(0,1fr) 300px} /* 1024: 차트 ≥500px 확보 (agy-term2 P0-5) */
+  .tft-ctxin .mut{max-width:150px;overflow:hidden;text-overflow:ellipsis}
+}
+@media (max-width:960px){
+  .tft-grid{display:block;border-bottom:0}
+  .tft-rail,.tft-brain,.tft-ctx,.tft-chart{display:none}
+  .nfxh-wrap.mt-chart .tft-ctx{display:block}
+  .nfxh-wrap.mt-chart .tft-chart{display:block;height:52vh;position:relative}
+  .nfxh-wrap.mt-strats .tft-rail{display:flex;border-right:0;max-height:none}
+  .nfxh-wrap.mt-brain .tft-brain{display:flex;border-left:0;min-height:calc(100vh - 170px)}
+  .tft-resz{display:none}
+  .tft-botbar .d-only{display:none}
+  .tft-botbar{justify-content:flex-end;padding:6px 10px;border-bottom:0}
+  .tft-ctxin{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .tft-pm b{font-size:13px}
+  .tft-ct .g4,.tft-asx .ag2{grid-template-columns:repeat(2,1fr)}
+  .tft-posb .pr2{grid-template-columns:repeat(2,1fr)}
 }
 /* nfx — 내 트레이딩 대시보드 (mock-trade 포팅) */
 .nfxt-banner{display:flex;align-items:center;gap:12px;border:1px solid rgba(217,168,78,.32);background:linear-gradient(90deg,rgba(217,168,78,.08),rgba(217,168,78,.03));border-radius:14px;padding:13px 16px;font-size:13px;color:var(--gt2);animation:nfxIn .3s var(--ease) both}
@@ -8012,137 +8290,820 @@ function tfStartStrategy(){
 }
 
 function tfSideSync(){ var b=$('g-tf-dash-btn'); if(b) b.hidden=false; } /* 항상 노출 — 게스트=로그인 유도, 미연결=잠금 터미널 (사용자 지시) */
-/* ── §8 대시보드 ── */
+/* ══ 자율 전략 터미널 (#/trade) — 멀티전략·멀티거래소 4존 (NOF1 기능 참조, term-codex 계약) ══
+   원칙: 수치는 전부 엔진 파생(발명 금지)·복리 대사, 데모는 오버레이 격리, VM 키 user:<at>/demo:<id>/clone:<id> */
+/* 데모 파라미터는 엔진 실측 점수 기준 — 실행 중(live)은 전부 80점 게이트 통과 설정 (제품 계약과 일치) */
+var TF_TERM_DEMO=[
+  {id:'d1',name:'BTC 돌파 추종',ex:'binance',asset:'비트코인',sym:'BTC/USDT',mkt:'현물',tv:'BINANCE:BTCUSDT',cap:14000000,ver:'v3.4',status:'live',
+   p:{sl:-5,tp:10,rsiTh:40,trendFilter:true,startI:61,endI:null}},
+  {id:'d2',name:'ETH 추세 추종',ex:'okx',asset:'이더리움',sym:'ETH/USDT',mkt:'현물',tv:'BINANCE:ETHUSDT',cap:7000000,ver:'v2.1',status:'off',
+   p:{sl:-5,tp:8,rsiTh:46,trendFilter:true,startI:-730,endI:null}},
+  {id:'d3',name:'SOL 되돌림',ex:'woox',asset:'솔라나',sym:'SOL/USDT',mkt:'현물',tv:'BINANCE:SOLUSDT',cap:4000000,ver:'v1.3',status:'live',
+   p:{sl:-3,tp:8,rsiTh:38,trendFilter:false,startI:-365,endI:null}},
+  {id:'d4',name:'BTC 평균회귀',ex:'okx',asset:'비트코인',sym:'BTC/USDT',mkt:'현물',tv:'BINANCE:BTCUSDT',cap:28000000,ver:'v5.0',status:'live',
+   p:{sl:-8,tp:10,rsiTh:40,trendFilter:true,startI:61,endI:null}},
+  {id:'d5',name:'ARB 모멘텀',ex:'binance',asset:'아비트럼',sym:'ARB/USDT',mkt:'현물',tv:'BINANCE:ARBUSDT',cap:7000000,ver:'v1.0',status:'ready',
+   p:{sl:-3,tp:10,rsiTh:38,trendFilter:false,startI:-365,endI:null}},
+  {id:'d6',name:'LINK 분할 매집',ex:'woox',asset:'체인링크',sym:'LINK/USDT',mkt:'현물',tv:'BINANCE:LINKUSDT',cap:7000000,ver:'v2.2',status:'err',
+   errMsg:'거래소 API 응답 없음 — 마지막 동기화 이후 주문이 전송되지 않았어요',
+   p:{sl:-8,tp:10,rsiTh:46,trendFilter:false,startI:-548,endI:null}}
+];
+var TF_TM={sel:null,tab:'agent',bot:'pos',scope:'cur',q:'',fst:'all',fex:'all',gen:0,tvSym:null,feedN:14,exp:{}};
+var TF_TM_C={}; /* 파생 캐시 — 세션 한정, canonical p 키 (term-codex C) */
+function tfTmOv(id){ var t=tfS(); t.termDemo=t.termDemo||{}; return t.termDemo[id]||null; }
+function tfTmDel(){ var t=tfS(); if(!Array.isArray(t.termDel)) t.termDel=[]; return t.termDel; }
+function tfTmClones(){ var t=tfS(); if(!Array.isArray(t.termClones)) t.termClones=[]; return t.termClones; }
+function tfTmP(p){ /* startI 음수=끝에서 N봉, 깊은 복사 정규화 */
+  var end=PRICE.length-1;
+  var s2=p.startI==null?61:(p.startI<0?Math.max(61,end+p.startI):p.startI);
+  return {sl:p.sl,tp:p.tp!=null?p.tp:null,rsiTh:p.rsiTh,trendFilter:!!p.trendFilter,startI:s2,endI:p.endI!=null?p.endI:end};
+}
+function tfTmKey(p){ return [p.sl,p.tp,p.rsiTh,p.trendFilter?1:0,p.startI,p.endI].join('|'); }
+/* VM 목록 — 사용자 전략 + 데모(오버레이) + 클론. 인덱스 금지, key 로만 식별 (term-codex 1.6) */
+function tfTmAll(){
+  var t=tfS(), out=[];
+  (t.strat||[]).forEach(function(x){
+    if(!x||!x.p) return;
+    var info=t.intake&&t.intake.assetInfo;
+    out.push({key:'user:'+x.at,src:'user',ref:x,name:x.name,ver:x.ver||'v1.0',
+      status:x.status==='live'?'live':(x.status==='ready'?'ready':'off'),
+      ex:t.api?t.api.ex:null,exL:t.api?(tfExOf(t.api.ex)||{}).name:'연결 거래소',
+      asset:x.name.replace(' 위임 전략',''),sym:x.name.replace(' 위임 전략','')+'/KRW',mkt:'위임 실행',
+      tv:(info&&info.tv)||'BINANCE:BTCUSDT',
+      cap:TF_BUDGET[(t.intake.budget||{}).i!=null?t.intake.budget.i:1],capShared:true,
+      p:tfTmP(x.p),at:+x.at||Date.now()});
+  });
+  TF_TERM_DEMO.forEach(function(d){
+    if(tfTmDel().indexOf(d.id)>=0) return;
+    var ov=tfTmOv(d.id)||{};
+    out.push({key:'demo:'+d.id,src:'demo',ref:d,name:ov.name||d.name,ver:ov.ver||d.ver,
+      status:ov.status||d.status,errMsg:ov.status?null:d.errMsg,
+      ex:d.ex,exL:(tfExOf(d.ex)||{name:d.ex}).name,
+      asset:d.asset,sym:d.sym,mkt:d.mkt,tv:d.tv,
+      cap:ov.cap!=null?ov.cap:d.cap,
+      p:tfTmP(ov.p||d.p),at:0});
+  });
+  tfTmClones().forEach(function(cx){
+    out.push({key:'clone:'+cx.id,src:'clone',ref:cx,name:cx.name,ver:cx.ver,status:cx.status,
+      ex:cx.ex,exL:(tfExOf(cx.ex)||{name:cx.ex}).name,asset:cx.asset,sym:cx.sym,mkt:cx.mkt,tv:cx.tv,
+      cap:cx.cap,p:tfTmP(cx.p),at:cx.id});
+  });
+  return out;
+}
+function tfTmOf(key){ var all=tfTmAll(); for(var i=0;i<all.length;i++) if(all[i].key===key) return all[i]; return null; }
+function tfExOf2(ex){ /* 색·이니셜은 TF_BROKERS 가 정본 — TFC.exchanges 엔 col 이 없다 (agy-term2 P0-2) */
+  var b=(typeof TF_BROKERS!=='undefined')&&TF_BROKERS.find(function(x){ return x.id===ex; });
+  if(b) return {id:b.id,name:b.name,col:b.col,fg:b.fg,conn:b.conn};
+  var e=tfExOf(ex);
+  if(e) return {id:e.id,name:e.name,col:'#3a4254',fg:'#dbdbdb'};
+  return {id:ex,name:ex?String(ex).toUpperCase():'미연결',col:'#3a4254',fg:'#dbdbdb'};
+}
+/* 파생 계산 — 캐시. 수수료는 엔진 pnl 에 이미 반영(재차감 금지), 실현/미실현 복리 대사 (term-codex 1.3) */
+function tfTmCalc(s){
+  var p=s.p, ck=tfTmKey(p);
+  var c=TF_TM_C[ck];
+  if(!c){
+    var r=runBacktest(p);
+    var L2=tfBotLogEvents(p);
+    /* 열린 포지션: 마지막 미청산 진입 이벤트에서 파생 */
+    var openI=null;
+    for(var k2=L2.evs.length-1;k2>=0;k2--){ var e2=L2.evs[k2]; if(!e2) continue;
+      if(e2.k.indexOf('exit')===0) break;
+      if(e2.k==='entry'){ openI=e2.i; break; } }
+    c=TF_TM_C[ck]={r:r,score:tfScore(r),L:L2,openI:L2.last.inPos?openI:null};
+  }
+  var r2=c.r, cap=s.cap;
+  /* 복리 대사: capClosed=cap×∏(1+pnl) → realized, unreal=NAV-capClosed (term-codex 1.3) */
+  var capW=cap, feeEst=0, tRows=[];
+  r2.trades.forEach(function(tr){
+    feeEst+=capW*0.002;
+    var pk=capW*tr.pnl;
+    tRows.push({entry:tr.entry,exit:tr.exit,pnl:tr.pnl,kind:tr.kind,krw:pk,capB:capW});
+    capW*=(1+tr.pnl);
+  });
+  var nav=cap*(1+r2.ret/100);
+  var realized=capW-cap;
+  var unreal=nav-capW;
+  var pos=null;
+  if(c.openI!=null){
+    var ep=PRICE[c.openI], cp=PRICE[p.endI];
+    pos={entryI:c.openI,entryP:ep,curP:cp,qty:capW/ep,chg:cp/ep-1,krw:unreal,
+      stopP:ep*(1+p.sl/100),tpP:p.tp!=null?ep*(1+p.tp/100):null,bars:p.endI-c.openI};
+  }
+  return {r:r2,score:c.score,L:c.L,cap:cap,nav:nav,pnl:nav-cap,pnlPct:r2.ret,
+    realized:realized,unreal:unreal,feeEst:feeEst,trades:tRows,pos:pos};
+}
+function tfTmWon(n){ return (n<0?'-':'')+'₩'+Math.round(Math.abs(n)).toLocaleString(); }
+function tfTmWonS(n){ return (n>=0?'+':'-')+'₩'+Math.round(Math.abs(n)).toLocaleString(); } /* 부호 항상 명시 (agy-term 5-4) */
+function tfTmPct(n,d2){ return (n>=0?'+':'')+n.toFixed(d2!=null?d2:1)+'%'; }
+function tfTmSign(n){ return n>0?'up':(n<0?'dn':'zz'); }
+/* 상태 메타 — 아이콘+라벨 (색만으로 전달 금지, spec E) */
+var TF_TM_ST={live:['●','실행 중','live'],off:['Ⅱ','중지','off'],ready:['○','실행 전','ready'],err:['⚠','오류','err']};
+/* 운영 이벤트 로그 — 저장 (term-codex D). key 별, 최근 30 */
+function tfTmLog(key){ var t=tfS(); t.termLog=t.termLog||{}; if(!Array.isArray(t.termLog[key])) t.termLog[key]=[]; return t.termLog[key]; }
+function tfTmLogAdd(key,type,txt,extra){
+  var lg=tfTmLog(key);
+  lg.push({id:Date.now()+''+Math.floor(Math.random()*999),at:Date.now(),type:type,txt:txt,ver:(tfTmOf(key)||{}).ver,extra:extra||null});
+  if(lg.length>30) lg.shift();
+}
+/* 상태 전이 — 공통 함수 (알림+로그, ready→live 는 STARTED) */
+function tfTmSetStatus(key,ns,reason){
+  var s=tfTmOf(key); if(!s) return false;
+  var os=s.status; if(os===ns) return false;
+  if(ns==='live'&&os==='err'){ toast('연결 오류 상태예요 — 먼저 다시 연결해주세요'); return false; }
+  if(ns==='live'&&s.src!=='user'){
+    var sc0=tfTmCalc(s).score;
+    if(sc0<TFC.score.pass){ toast('재검증 점수 '+sc0+'점 — 실행 기준('+TFC.score.pass+'점) 미달이에요. 전략을 수정해 기준을 넘겨주세요'); return false; } /* 실행 게이트는 데모에도 동일 (제품 계약) */
+  }
+  if(s.src==='user'){
+    /* 기존 가드·복귀 계약 경유 + silent(터미널 유지) — 실제 전이 여부는 상태로 재확인 후에만 로그 (term-codex2 2/3) */
+    tfBotCtl(String(s.ref.at),ns==='live'?(os==='ready'?'start':'resume'):'pause',true);
+    if(s.ref.status!==ns) return false; /* 연결 가드 등으로 전이 실패 — RESUMED 허위 기록 금지 */
+  } else if(s.src==='demo'){
+    var t=tfS(); t.termDemo=t.termDemo||{}; var ov=t.termDemo[s.ref.id]=t.termDemo[s.ref.id]||{};
+    ov.status=ns;
+  } else { s.ref.status=ns; }
+  var evT=ns==='live'?(os==='ready'?'STARTED':'RESUMED'):(ns==='off'?'PAUSED':ns.toUpperCase());
+  tfTmLogAdd(key,evT,ns==='live'?(os==='ready'?'전략 실행을 시작했어요':'전략 실행을 재개했어요'):'전략 실행을 중지했어요'+(reason?' — '+reason:''));
+  tfSaveNow();
+  return true;
+}
+
+/* ── 터미널 셸 — tfDashView 는 기존 진입점 유지 (tfStartStrategy/UID연동/ss3 직접 호출, term-codex 1.1) ── */
 function tfDashView(){
   var t=tfS();
   G.cur=null; G.mode='tfdash'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead(TFCOPY.dashTitle,'',null);
-  var budget=TF_BUDGET[(t.intake.budget||{}).i!=null?t.intake.budget.i:1];
-  var pnl=t.cur?budget*(t.cur.ret/100):0;
-  var e=t.api?tfExOf(t.api.ex):(t.ex?tfExOf(t.ex):null);
+  tfPeriodicCheck(); /* 보고서 생성 → 마운트 → 알림 → 딥링크 순 (term-codex 1.1) */
   var tt=tfNFInit();
-  var strat=t.strat||[]; var liveN=strat.filter(function(x){return x.status==='live';}).length;
-  var offN=strat.filter(function(x){return x.status==='off';}).length;
-  var readyBot=strat.find(function(x){ return x.status==='ready'; });
-  var locked=!t.conn&&!strat.length; /* 미연결 신규 계정 = 잠금 (Hyperliquid connect-wallet 게이트 대응) */
-  /* 상태 배지 2축 — status × env (codex NF 계약: paper 는 status 가 아니다) */
-  function stB(x){
-    if(x.status==='ready') return ['시작 대기','ready'];
-    if(x.status==='off') return ['중지됨'+(x.env==='paper'?' · 가상':''),'stop'];
-    if(x.env==='paper') return ['가상 실행','paper'];
-    return ['Running','live'];
+  var all=tfTmAll();
+  /* 기본 선택: 유지 → 최근 활성 → 첫 번째 (spec G) */
+  if(!TF_TM.sel||!all.some(function(x){return x.key===TF_TM.sel;})){
+    var lv=all.filter(function(x){return x.status==='live';}).sort(function(a,b){return b.at-a.at;});
+    TF_TM.sel=lv.length?lv[0].key:(all.length?all[0].key:null);
   }
-  /* 목록 제어도 상세와 동일 계약 — ready 는 재개가 아니라 시작 (codex NF P0) */
-  function ctl(x,i){
-    var id=String(x.at);
-    if(x.status==='ready') return '<button class="nfx-btn pri" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfBotCtl(\''+id+'\',\'start\')">지금 시작</button>';
-    if(x.status==='off') return '<button class="nfx-btn sec" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfStratToggle('+i+')">재개</button>';
-    return '<button class="nfx-btn out" style="padding:7px 14px;font-size:12.5px" onclick="event.stopPropagation();tfStratToggle('+i+')">중지</button>';
-  }
+  var readyBot=(t.strat||[]).find(function(x){ return x.status==='ready'; });
   var banner='';
   if(readyBot) banner='<div class="nfxt-banner" id="nf-ready-banner"><span class="nfx-dot pulse" style="color:var(--ga);background:var(--ga)"></span>'
     +'<span>대기 중인 전략이 있어요: <b>'+gEsc(readyBot.name)+'</b></span><span class="sp"></span>'
-    +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNav(\'#/trade/bot/'+readyBot.at+'\')">지금 시작하기</button></div>';
+    +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNav(&quot;#/trade/bot/'+readyBot.at+'&quot;)">지금 시작하기</button></div>';
   else if(!tt.uidLinked&&!t.payDone) banner='<div class="nfxt-banner blue" id="nf-ready-banner"><span class="nfx-dot" style="color:var(--gb2);background:var(--gb2)"></span>'
     +'<span><b>UID 를 무료로 연동</b>하면 PRO 분석 크레딧을 받아요</span><span class="sp"></span>'
     +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFLinkUid()">Fast API 연동</button></div>';
-  var pairL=(t.intake&&t.intake.asset&&t.intake.asset.label)||'비트코인';
-  var tvSym=(t.intake&&t.intake.assetInfo&&t.intake.assetInfo.tv)||'BINANCE:BTCUSDT';
-  function lockGate(what){
-    return '<div class="nfxh-lock"><div class="ic">'+NFX_IC.lock+'</div><div class="t">거래소를 연결하면 '+what+' 열려요</div>'
-      +'<div class="d">TETH 는 검증을 통과한 전략만 대신 실행해요. 연결과 실행 모두 체험 모드 시뮬레이션이에요.</div>'
-      +'<button class="nfx-btn pri" onclick="tfNFHUnlock()">'+NFX_IC.zap+'거래소 연결하기</button></div>';
-  }
-  var paneStrat=locked?lockGate('내 전략이')
-    :(strat.length?'<div class="nfx-rows">'+strat.map(function(x,i){
-        var sb=stB(x); var id=String(x.at);
-        return '<div class="nfx-row lk tf-strat nf-click nfx-stag s'+Math.min(i+1,8)+'" onclick="if(event.target.closest(\'button\'))return;tfNav(\'#/trade/bot/'+id+'\')">'
-          +'<div class="nfx-rl"><div class="nfxt-coin">'+gEsc(x.name.charAt(0))+'</div>'
-          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(x.name)+' <span class="nfxt-st '+sb[1]+'"><span class="nfx-dot'+(sb[1]==='live'?' pulse':'')+'"></span>'+sb[0]+'</span></span>'
-          +'<span class="nfx-rds"><span class="nfxt-sbar">TETH <b style="color:var(--gt)">'+x.score+'</b><i style="--w:'+Math.min(100,x.score)+'%"></i></span> 검증 수익 <b style="color:var('+(x.ret>=0?'--gg':'--gr')+')">'+(x.ret>=0?'+':'')+x.ret.toFixed(1)+'%</b></span></div></div>'
-          +'<div class="nfx-rr">'+ctl(x,i)+NFX_IC.chev+'</div></div>';
-      }).join('')+'</div>'
-      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 실행 중인 전략이 없어요</div>'
-      +'<div class="nfx-edesc">채팅에서 전략을 맡기거나, 공유된 전략을 따라할 수 있어요.</div>'
-      +'<div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center"><button class="nfx-btn pri" onclick="tfBackToChat()">채팅에서 전략 맡기기</button>'
-      +'<button class="nfx-btn out" onclick="tfShareHub(&quot;find&quot;)">전략 둘러보기</button></div></div>');
-  var paneFills=locked?lockGate('주문 내역이')
-    :(t.fills.length?'<div class="nfx-rows">'+t.fills.map(function(f,i){
-        var rv=f.fid?tt.reviews.find(function(r){ return r.fid===f.fid; }):null;
-        return '<div class="nfx-row tf-fill'+(rv?' lk nf-click':'')+' nfx-stag s'+Math.min(i+1,8)+'"'+(rv?' onclick="tfNav(\'#/review/'+rv.id+'\')"':'')+'>'
-          +'<div class="nfx-rl"><span class="nfxt-side-tag '+(f.side==='b'?'b':'s')+'">'+(f.side==='b'?'매수':'매도')+'</span>'
-          +'<div class="nfx-rtx"><span class="nfx-rlb">'+gEsc(f.label)+' <span class="nfx-badge sim">시뮬레이션</span></span>'+(rv?'<span class="nfx-rds">복기 리포트 보기</span>':'')+'</div></div>'
-          +'<div class="nfx-rr"><span class="nfx-rval '+(f.pnl>=0?'gain':'loss')+'">'+(f.pnl>=0?'+':'')+(f.pnl*100).toFixed(1)+'%</span>'+(rv?NFX_IC.chev:'')+'</div></div>';
-      }).join('')+'</div>'
-      :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 체결 내역이 없어요</div>'
-      +'<div class="nfx-edesc">전략이 실행되어 체결이 발생하면 여기에 표시돼요.</div></div>');
-  var panePos=locked?lockGate('포지션이')
-    :'<div class="nfxb-posbox"><div><div class="nfxb-postit">현재 열린 포지션이 없어요</div>'
-    +'<div class="nfxb-posdesc">'+(liveN?'실행 중인 전략 '+liveN+'개가 신호를 탐색하고 있어요. 진입 신호가 발생하면 여기에 표시돼요. (시뮬레이션)':'전략을 시작하면 신호 탐색이 시작돼요. (시뮬레이션)')+'</div></div>'
-    +(liveN?'<div class="nfxb-check"><span class="d"></span><span>신호 탐색 중 — 실행 '+liveN+'개</span></div>':'')+'</div>';
-  var panePnl=locked?lockGate('손익 현황이')
-    :'<div class="nfxh-stat3">'
-    +'<div class="nfxt-mini tap" role="button" tabindex="0" onclick="tfNFTermSheet(\'asset\')"><span class="k">총 자산 ⓘ <span class="nfx-badge sim">시뮬레이션</span></span><span class="v">'+tfWon(budget+pnl)+'</span><span class="s">위임 예산 + 전략 손익</span></div>'
-    +'<div class="nfxt-mini tap" role="button" tabindex="0" onclick="tfNFTermSheet(\'pnl\')"><span class="k">전략 누적 손익 ⓘ</span><span class="v" style="color:var('+(pnl>=0?'--gg':'--gr')+')">'+(pnl>=0?'+':'')+tfWon(pnl)+'</span><span class="s">'+(t.cur?(t.cur.ret>=0?'+':'')+t.cur.ret.toFixed(1)+'% 검증 수익률':'검증 전')+'</span></div>'
-    +'<div class="nfxt-mini tap" role="button" tabindex="0" onclick="tfNFTermSheet(\'reward\')"><span class="k">누적 공유 보상 ⓘ</span><span class="v">'+tfWon(t.reward||0)+'</span><span class="s">전략 공유 프로그램</span></div></div>';
-  var rebT=tt.rebates.reduce(function(a,r){return a+r.amt;},0);
-  var paneReb=locked?lockGate('정산 내역이')
-    :'<div class="nfxh-stat3" style="grid-template-columns:repeat(2,1fr)">'
-    +'<div class="nfxt-mini"><span class="k">누적 적립 <span class="nfx-badge sim">시뮬레이션</span></span><span class="v" style="color:var(--gg)">'+tfWon(rebT)+'</span><span class="s">수수료(0.2%)의 10%</span></div>'
-    +'<div class="nfxt-mini"><span class="k">적립 건수</span><span class="v">'+tt.rebates.length+'건</span><span class="s">체결 건별 적립</span></div></div>'
-    +'<div class="nfx-cta" style="margin-top:12px"><button class="nfx-btn out" onclick="tfNav(&quot;#/plan/rebates&quot;)">전체 적립 내역 보기</button></div>';
-  var sideHtml=locked?lockGate('전략 실행 패널이')
-    :'<div class="nfxh-shd">전략 실행 <span class="nfx-badge sim">시뮬레이션</span></div>'
-    +'<div class="nfxh-kv"><span>실행 중</span><b style="color:var(--gg)">'+liveN+'개</b></div>'
-    +'<div class="nfxh-kv"><span>시작 대기</span><b'+(readyBot?' style="color:var(--ga)"':'')+'>'+strat.filter(function(x){return x.status==='ready';}).length+'개</b></div>'
-    +'<div class="nfxh-kv"><span>중지됨</span><b>'+offN+'개</b></div>'
-    +'<div class="nfxh-kv"><span>모의 손익 (현재 검증 설정)</span><b style="color:var('+(pnl>=0?'--gg':'--gr')+')">'+(pnl>=0?'+':'')+tfWon(pnl)+'</b></div>'
-    +(e?'<div class="nfxh-kv"><span>연결</span><b>'+gEsc(e.name)+' · 출금 권한 없음</b></div>':'')
-    +'<div style="flex:1"></div>'
-    +(readyBot?'<button class="nfx-btn pri" onclick="tfBotCtl(\''+String(readyBot.at)+'\',\'start\')">'+NFX_IC.zap+gEsc(readyBot.name)+' 시작</button>':'')
-    +'<button class="nfx-btn '+(readyBot?'out':'pri')+'" onclick="tfBackToChat()">새 전략 맡기기</button>'
-    +'<div class="nfx-foot" style="border-top:0;padding-top:4px">'+NFX_IC.info+'<span>주문은 검증된 전략이 대신 실행해요. 직접 주문 입력은 제공하지 않아요.</span></div>';
-  /* 알림·보고서 탭은 잠금 대상 제외 — 로그인만 해도 열람 (codex flow3 A). 렌더 전에 주기 보고서 생성 */
-  tfPeriodicCheck();
   var unread=tt.notifs.filter(function(n){return !n.read;}).length;
-  var TABS=[['strat','내 전략'],['fills','주문 내역'],['pos','포지션'],['pnl','손익'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
-  var CNT={alerts:unread,reports:(tt.periodics||[]).length,strat:strat.length};
-  function strip(list,onKey){ return list.map(function(tb){ var c=CNT[tb[0]]; return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(\''+tb[0]+'\',this)">'+tb[1]+(c?'<span class="ct" id="nfxh-ct-'+tb[0]+'-'+(list.length>7?'m':'d')+'">'+c+'</span>':'')+'</button>'; }).join(''); }
-  gContent('<div class="nfx-page nfxh-page nfxh-wrap mt-chart" id="nfxh-wrap">'
-    +'<div class="nfxh-top"><span class="nfxh-title">내 트레이딩</span>'
-    +'<span class="nfxh-pair">'+gEsc(pairL)+'<span class="tag">실시세 차트 · 실행은 시뮬레이션</span></span>'
-    +'<span class="nfxh-sp"></span>'
-    +'<span class="nfxh-conn">'+(e?'<span class="nfx-dot" style="background:var(--gg);color:var(--gg)"></span><b style="color:var(--gt)">'+gEsc(e.name)+' 연결됨</b><span class="tag" style="font-size:10.5px;color:var(--gt3);background:var(--g2);border:1px solid var(--gl);border-radius:6px;padding:2px 7px">API ••••'+gEsc((t.api||{}).last4||'')+'</span>'
-      :'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFHUnlock()">거래소 연결하기</button>')+'</span></div>'
-    +(banner?'<div style="padding:12px 18px 0">'+banner+'</div>':'')
-    +'<div class="nfxh-tabs m-only">'+strip([['chart','차트'],['side','실행']].concat(TABS),'chart')+'</div>'
-    +'<div class="nfxh-main">'
-    +'<div class="nfxh-chart"><div class="ph" id="nfxh-ph">차트 불러오는 중…</div><div id="nfxh-tv"></div></div>'
-    +'<div class="nfxh-side">'+sideHtml+'</div></div>'
-    +'<div class="nfxh-tabs d-only">'+strip(TABS,'strat')+'</div>'
-    +'<div class="nfxh-pane on" data-p="strat">'+paneStrat+'</div>'
-    +'<div class="nfxh-pane" data-p="fills">'+paneFills+'</div>'
-    +'<div class="nfxh-pane" data-p="pos">'+panePos+'</div>'
-    +'<div class="nfxh-pane" data-p="pnl">'+panePnl+'</div>'
-    +'<div class="nfxh-pane" data-p="rebates">'+paneReb+'</div>'
-    +'<div class="nfxh-pane" data-p="alerts"><div id="nfxh-alerts"></div></div>'
-    +'<div class="nfxh-pane" data-p="reports">'+tfNFReportsPane()+'</div>'
+  var BTABS=[['pos','포지션'],['open','미체결 주문'],['orders','주문 내역'],['fills','체결 내역'],['closed','종료 포지션'],['assets','자산'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
+  var MTABS=[['chart','차트'],['strats','전략'],['brain','Agent']].concat(BTABS);
+  var CNT={alerts:unread,reports:(tt.periodics||[]).length,strats:all.length,pos:all.filter(function(x){return tfTmCalc(x).pos&&x.status==='live';}).length};
+  function strip(list,onKey,sfx){ /* 접미사는 명시 인자 (term-codex 1.7) */
+    return list.map(function(tb){ var c2=CNT[tb[0]]; return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(&quot;'+tb[0]+'&quot;,this)">'+tb[1]+(c2?'<span class="ct" id="nfxh-ct-'+tb[0]+'-'+sfx+'">'+c2+'</span>':'')+'</button>'; }).join('');
+  }
+  var rz=0; try{ rz=parseInt(localStorage.getItem('TETH_TFT_R')||'0',10)||0; }catch(e){}
+  var rw=rz>=320&&rz<=560?rz:392;
+  TF_TM.tvSym=null; TF_TM.gen++;
+  TF_RENDERING=true; document.body.classList.remove('tf-route');
+  gContent('<div class="nfx-page nfxh-page nfxh-wrap tft-page mt-chart" id="nfxh-wrap" style="--tftr:'+rw+'px">'
+    +(banner?'<div class="tft-banner">'+banner+'</div>':'')
+    +'<div class="nfxh-tabs m-only">'+strip(MTABS,'chart','m')+'</div>'
+    +'<div class="tft-grid">'
+    +'<aside class="tft-rail" id="tft-rail"></aside>'
+    +'<div class="tft-ctx" id="tft-ctx"></div>'
+    +'<div class="tft-chart"><div class="ph" id="nfxh-ph">차트 불러오는 중…</div><div id="nfxh-tv"></div></div>'
+    +'<aside class="tft-brain" id="tft-brain"><div class="tft-resz" id="tft-resz" title="패널 폭 조절"></div><div class="tft-brainin" id="tft-brainin"></div></aside>'
+    +'</div>'
+    +'<div class="tft-bottom">'
+    +'<div class="tft-botbar"><div class="nfxh-tabs d-only" style="border-bottom:0;flex:1;min-width:0">'+strip(BTABS,'pos','d')+'</div>'
+    +'<div class="tft-scope"><select id="tft-scope" onchange="TF_TM.scope=this.value;tfTmBottom()" aria-label="데이터 범위">'
+    +'<option value="cur"'+(TF_TM.scope==='cur'?' selected':'')+'>현재 전략</option><option value="all"'+(TF_TM.scope==='all'?' selected':'')+'>전체 전략</option></select></div></div>'
+    +BTABS.map(function(tb){ return '<div class="nfxh-pane'+(tb[0]==='pos'?' on':'')+'" data-p="'+tb[0]+'">'
+      +(tb[0]==='alerts'?'<div id="nfxh-alerts"></div>':tb[0]==='reports'?tfNFReportsPane():'<div id="tft-p-'+tb[0]+'"></div>')+'</div>'; }).join('')
+    +'</div>'
     +'</div>');
+  TF_RENDERING=false;
+  tfTmRail(); tfTmCtx(); tfTmBrain(); tfTmBottom(); tfTmChart();
   tfNFAlertsRender();
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
-  if(typeof tfDashEnhance==='function') tfDashEnhance(); /* nf: 주기 보고서 체크 + 유틸바 동기화 */
-  if(window.TF_NFH_OPEN){ tfNFHTab(window.TF_NFH_OPEN); window.TF_NFH_OPEN=null; } /* 벨 등 외부 진입 탭 지정 */
-  /* 트레이딩뷰 차트 마운트 (실시세, 실행과 무관 — 라벨로 명시) */
+  if(typeof tfDashEnhance==='function') tfDashEnhance();
+  if(window.TF_NFH_OPEN){ tfNFHTab(window.TF_NFH_OPEN); window.TF_NFH_OPEN=null; } /* 딥링크는 마운트 뒤 적용 (term-codex 1.1) */
+  tfTmReszInit();
+}
+/* ── 좌 — 전략 매니저 ── */
+function tfTmRail(){
+  var host=$('tft-rail'); if(!host) return;
+  var all=tfTmAll();
+  var rows=all.filter(function(s){
+    if(TF_TM.fst!=='all'&&s.status!==TF_TM.fst) return false;
+    if(TF_TM.fex!=='all'&&s.ex!==TF_TM.fex) return false;
+    if(TF_TM.q&&(s.name+' '+s.sym).toLowerCase().indexOf(TF_TM.q.toLowerCase())<0) return false;
+    return true;
+  });
+  var exs={}; all.forEach(function(s){ if(s.ex) exs[s.ex]=1; });
+  var h='<div class="tft-rh"><b>전략</b><span class="ct2">'+all.length+'</span><span style="flex:1"></span>'
+    +'<button type="button" class="tft-new" onclick="tfBackToChat()">+ 새 전략</button></div>'
+    +'<div class="tft-rf"><input type="search" placeholder="전략 검색" value="'+gEsc(TF_TM.q)+'" oninput="TF_TM.q=this.value;tfTmRail()" aria-label="전략 검색">'
+    +'<div class="fr2"><select onchange="TF_TM.fst=this.value;tfTmRail()" aria-label="상태 필터">'
+    +[['all','전체 상태'],['live','실행 중'],['off','중지'],['ready','실행 전'],['err','오류']].map(function(o){ return '<option value="'+o[0]+'"'+(TF_TM.fst===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select>'
+    +'<select onchange="TF_TM.fex=this.value;tfTmRail()" aria-label="거래소 필터"><option value="all">전체 거래소</option>'
+    +Object.keys(exs).map(function(x){ return '<option value="'+x+'"'+(TF_TM.fex===x?' selected':'')+'>'+gEsc(tfExOf2(x).name)+'</option>'; }).join('')+'</select></div></div>'
+    +'<div class="tft-rl">';
+  if(!all.length){
+    h+='<div class="tft-empty"><b>아직 실행 중인 전략이 없습니다.</b><span>채팅에서 전략을 맡기면 검증을 거쳐 여기에 등록돼요.</span>'
+      +'<button class="nfx-btn pri" onclick="tfBackToChat()">TETH와 전략 만들기</button>'
+      +(tfTmDel().length?'<button class="nfx-btn out" onclick="tfTmRestoreDemo()">데모 전략 복원</button>':'')+'</div>';
+  } else if(!rows.length){
+    h+='<div class="tft-empty"><b>조건에 맞는 전략이 없어요</b><span>검색어나 필터를 조정해보세요.</span></div>';
+  } else h+=rows.map(function(s){
+    var c=tfTmCalc(s), st=TF_TM_ST[s.status]||TF_TM_ST.off, ex=tfExOf2(s.ex);
+    var on=TF_TM.sel===s.key;
+    return '<div class="tft-card'+(on?' on':'')+' st-'+s.status+'" onclick="if(event.target.closest(&quot;button&quot;))return;tfTmSelect(&quot;'+s.key+'&quot;)">'
+      +'<div class="r1"><span class="exb" style="background:'+ex.col+';color:'+(ex.fg||'#0f1012')+'">'+gEsc(ex.name.slice(0,2).toUpperCase())+'</span>'
+      +'<span class="nm" title="'+gEsc(s.name)+'">'+gEsc(s.name)+'</span>'
+      +'<span class="st st-'+st[2]+'">'+st[0]+' '+st[1]+'</span>'
+      +'<button type="button" class="mn" aria-label="전략 메뉴" onclick="tfTmMenu(event,&quot;'+s.key+'&quot;)">···</button></div>'
+      +'<div class="r2"><span class="sy">'+gEsc(s.sym)+' · '+gEsc(s.mkt)+'</span><span class="ver">'+gEsc(s.ver)+'</span></div>'
+      +'<div class="r3 num"><span class="cap">'+tfTmWon(s.cap)+(s.capShared?'<i title="위임 예산 공용">*</i>':'')+'</span>'
+      +'<span class="pnl '+tfTmSign(c.pnl)+'">'+tfTmWonS(c.pnl)+' <small>'+tfTmPct(c.pnlPct)+'</small></span></div>'
+      +(s.status==='err'&&s.errMsg?'<div class="r4">'+gEsc(s.errMsg.split(' — ')[0])+' <a onclick="event.stopPropagation();tfTmReconnect(&quot;'+s.key+'&quot;)">다시 연결</a></div>':'')
+      +'</div>';
+  }).join('');
+  h+='</div><div class="tft-rfoot">실행·체결·손익은 체험 모드 시뮬레이션이에요'+(all.some(function(x){return x.capShared;})?' · *위임 예산 공용':'')+'</div>';
+  host.innerHTML=h;
+}
+function tfTmSelect(key){
+  if(TF_TM.sel===key) return;
+  TF_TM.sel=key; TF_TM.exp={}; TF_TM.feedN=14;
+  /* 부분 리렌더 — gContent 전체 교체 금지 (term-codex F) */
+  tfTmRail(); tfTmCtx(); tfTmBrain(); tfTmBottom(); tfTmChart();
+  tfTrack('term_select',{key:key});
+}
+/* ── 중앙 컨텍스트 헤더 + 차트 ── */
+function tfTmCtx(){
+  var host=$('tft-ctx'); if(!host) return;
+  var s=TF_TM.sel?tfTmOf(TF_TM.sel):null;
+  if(!s){ host.innerHTML='<div class="tft-ctxin"><span class="mut">전략을 선택하면 시장 컨텍스트가 여기 표시돼요</span></div>'; return; }
+  var st=TF_TM_ST[s.status], ex=tfExOf2(s.ex);
+  host.innerHTML='<div class="tft-ctxin">'
+    +'<span class="exb" style="background:'+ex.col+';color:'+(ex.fg||'#0f1012')+'">'+gEsc(ex.name.slice(0,2).toUpperCase())+'</span>'
+    +'<b class="sy num">'+gEsc(s.sym)+'</b><span class="mut">'+gEsc(ex.name)+' '+gEsc(s.mkt)+'</span>'
+    +'<span class="dv"></span>'
+    +'<span class="nm2">'+gEsc(s.name)+' <small>'+gEsc(s.ver)+'</small></span>'
+    +'<span class="st st-'+st[2]+'">'+st[0]+' '+st[1]+'</span>'
+    +'<span class="dv"></span>'
+    +'<span class="mut num">'+(s.status==='live'?'최근 평가 방금 전 · 다음 평가 다음 봉 (시뮬레이션 주기)':s.status==='err'?'평가 중단됨':'평가 대기')+'</span>'
+    +'<span style="flex:1"></span>'
+    +(s.status==='live'?'<button type="button" class="tft-halt" onclick="tfTmSetStatus(&quot;'+s.key+'&quot;,&quot;off&quot;,&quot;수동 중지&quot;)&&tfTmAfter()">중지</button>'
+      :s.status==='off'?'<button type="button" class="tft-go" onclick="tfTmSetStatus(&quot;'+s.key+'&quot;,&quot;live&quot;)&&tfTmAfter()">재개</button>'
+      :s.status==='ready'?'<button type="button" class="tft-go" onclick="tfTmSetStatus(&quot;'+s.key+'&quot;,&quot;live&quot;)&&tfTmAfter()">지금 시작</button>'
+      :'<button type="button" class="tft-go" onclick="tfTmReconnect(&quot;'+s.key+'&quot;)">다시 연결</button>')
+    +'</div>'
+    +'<div class="tft-ctx2 num">차트 실시세 · 검증·체결 데이터는 일봉 시뮬레이션 — 마커는 검증 구간 기준이에요</div>';
+}
+function tfTmAfter(){ tfTmRail(); tfTmCtx(); tfTmBrain(); tfTmBottom(); }
+function tfTmChart(){
+  var s=TF_TM.sel?tfTmOf(TF_TM.sel):null;
+  var sym=s?s.tv:'BINANCE:BTCUSDT';
+  if(TF_TM.tvSym===sym) return; /* 심볼 동일 — iframe 유지 (term-codex F) */
+  TF_TM.tvSym=sym;
+  var gen=++TF_TM.gen;
+  var host=$('nfxh-tv'); if(host) host.innerHTML='';
+  var ph=$('nfxh-ph'); if(ph) ph.hidden=false;
   if(typeof taiTv==='function') taiTv(function(){
     try{
-      var host=$('nfxh-tv'); if(!host||host.childNodes.length) return;
-      new TradingView.widget({container_id:'nfxh-tv',symbol:tvSym,interval:'60',autosize:true,theme:'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
-      var ph=$('nfxh-ph'); if(ph) ph.hidden=true;
+      if(gen!==TF_TM.gen) return; /* 늦은 콜백의 오마운트 방지 (term-codex F) */
+      var h2=$('nfxh-tv'); if(!h2||h2.childNodes.length) return;
+      new TradingView.widget({container_id:'nfxh-tv',symbol:sym,interval:'60',autosize:true,theme:'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:false,save_image:false,hide_top_toolbar:false});
+      var ph2=$('nfxh-ph'); if(ph2) ph2.hidden=true;
     }catch(err){}
   });
 }
+function tfTmReconnect(key){
+  var s=tfTmOf(key); if(!s) return;
+  toast('연결을 다시 시도하는 중…');
+  delay(900,function(){
+    if(s.src==='demo'){ var t=tfS(); t.termDemo=t.termDemo||{}; (t.termDemo[s.ref.id]=t.termDemo[s.ref.id]||{}).status='off'; }
+    else if(s.src==='clone') s.ref.status='off';
+    tfTmLogAdd(key,'RECONNECTED','거래소 연결을 복구했어요 — 전략은 중지 상태로 대기해요. 확인 후 재개하세요.');
+    tfSaveNow(); toast('연결이 복구됐어요 — 전략은 중지 상태예요'); tfTmAfter();
+  });
+}
+function tfTmRestoreDemo(){ var t=tfS(); t.termDel=[]; tfSaveNow(); toast('데모 전략을 복원했어요'); TF_TM.sel=null; tfDashView(); }
+/* 패널 리사이즈 — 진행 중엔 폭만, 종료 시 저장 (term-codex F) */
+function tfTmReszInit(){
+  var rz=$('tft-resz'), wrap=$('nfxh-wrap'); if(!rz||!wrap) return;
+  rz.onpointerdown=function(e0){
+    e0.preventDefault(); rz.setPointerCapture(e0.pointerId);
+    var x0=e0.clientX, w0=parseInt(getComputedStyle(wrap).getPropertyValue('--tftr'))||392;
+    rz.onpointermove=function(e2){ var w2=Math.max(320,Math.min(560,w0+(x0-e2.clientX))); wrap.style.setProperty('--tftr',w2+'px'); };
+    rz.onpointerup=function(){ rz.onpointermove=null; rz.onpointerup=null;
+      try{ localStorage.setItem('TETH_TFT_R',parseInt(getComputedStyle(wrap).getPropertyValue('--tftr'))||392); }catch(e){} };
+  };
+}
+
+/* ── 우 — Strategy Brain ── */
+var TF_TM_EVM={entry:['진입','en'],'exit-tp':['익절 청산','tp'],'exit-sl':['손절 청산','sl'],'exit-time':['기간 청산','tm'],watch:['관망','wa'],risk:['보유 점검','ho']};
+var TF_TM_OPM={STARTED:['실행 시작','op'],RESUMED:['재개','op'],PAUSED:['중지','wa'],STRATEGY_UPDATED:['전략 업데이트','up'],RENAMED:['이름 변경','op'],CLONED:['복제됨','op'],RECONNECTED:['연결 복구','op'],CAP_UPDATED:['운용 자금 변경','up']};
+function tfTmBrain(){
+  var host=$('tft-brainin'); if(!host) return;
+  var s=TF_TM.sel?tfTmOf(TF_TM.sel):null;
+  if(!s){
+    host.innerHTML='<div class="tft-empty" style="padding:60px 20px"><b>전략이 없습니다</b><span>채팅에서 첫 전략을 만들면 AI의 판단 기록이 여기에 쌓여요.</span><button class="nfx-btn pri" onclick="tfBackToChat()">TETH와 전략 만들기</button></div>';
+    return;
+  }
+  var st=TF_TM_ST[s.status], ex=tfExOf2(s.ex);
+  var TABS=[['agent','Agent'],['dash','대시보드'],['done','완료된 거래']];
+  var h='<div class="tft-bh"><div class="t1"><b>'+gEsc(s.name)+'</b><small>'+gEsc(s.ver)+'</small><span class="st st-'+st[2]+'">'+st[0]+' '+st[1]+'</span></div>'
+    +'<div class="t2">'+gEsc(ex.name)+' · '+gEsc(s.sym)+' · 운용 '+tfTmWon(s.cap)+'</div></div>'
+    +'<div class="tft-btabs">'+TABS.map(function(tb){ return '<button class="'+(TF_TM.tab===tb[0]?'on':'')+'" onclick="TF_TM.tab=&quot;'+tb[0]+'&quot;;tfTmBrain()">'+tb[1]+'</button>'; }).join('')+'</div>'
+    +'<div class="tft-bbody" id="tft-bbody">';
+  var c=tfTmCalc(s);
+  if(TF_TM.tab==='agent') h+=tfTmFeed(s,c);
+  else if(TF_TM.tab==='dash') h+=tfTmDash(s,c);
+  else h+=tfTmDone(s,c);
+  h+='</div>';
+  if(TF_TM.tab==='agent'){
+    h+='<div class="tft-comp"><div id="tft-prop"></div>'
+      +'<div class="chips">'
+      +'<button onclick="tfTmSay(&quot;리스크 낮춰줘&quot;)">리스크 낮춰줘</button>'
+      +'<button onclick="tfTmSay(&quot;손절 기준 설명&quot;)">손절 기준 설명</button>'
+      +'<button onclick="tfTmSay(&quot;이번 판단 다시 분석&quot;)">이번 판단 다시 분석</button>'
+      +'</div>'
+      +'<div class="row"><input id="tft-say" placeholder="TETH에게 말해보세요… 예: 손절 -3%로 바꿔줘" onkeydown="if(event.key===&quot;Enter&quot;)tfTmSayGo()">'
+      +'<button class="snd" onclick="tfTmSayGo()" aria-label="보내기">↵</button></div></div>';
+  }
+  host.innerHTML=h;
+}
+/* Agent 피드 — 감사 로그 구조 (챗 말풍선 금지, agy-term 3) */
+function tfTmFeed(s,c){
+  var h='';
+  var ops=tfTmLog(s.key).slice().reverse();
+  if(ops.length){
+    h+='<div class="tft-fsec">운영 기록</div>'
+      +ops.slice(0,6).map(function(o){
+        var m=TF_TM_OPM[o.type]||[o.type,'op'];
+        return '<div class="tft-ev '+m[1]+'"><span class="ax"><i></i></span><div class="bd">'
+          +'<div class="mh"><span class="tm num">'+tfNFTime(o.at)+'</span><span class="bg">'+m[0]+'</span>'+(o.ver?'<span class="vr num">'+gEsc(o.ver)+'</span>':'')+'</div>'
+          +'<div class="tx">'+gEsc(o.txt)+'</div>'
+          +(o.extra&&o.extra.diff?'<div class="tx2">'+gEsc(o.extra.diff)+'</div>':'')
+          +'</div></div>';
+      }).join('');
+  }
+  if(s.status==='err') h+='<div class="tft-ev sl"><span class="ax"><i></i></span><div class="bd"><div class="mh"><span class="bg">오류</span></div><div class="tx">'+gEsc(s.errMsg||'거래소 연결 오류')+'</div><div class="tx2"><a onclick="tfTmReconnect(&quot;'+s.key+'&quot;)" style="color:var(--gb2);cursor:pointer">다시 연결</a></div></div></div>';
+  var evs=c.L.evs.slice().reverse().filter(Boolean);
+  if(TF_TM.fmode==='act') evs=evs.filter(function(e){ return e.k==='entry'||e.k.indexOf('exit')===0; });
+  var show=evs.slice(0,TF_TM.feedN);
+  h+='<div class="tft-fsec" style="display:flex;align-items:center;gap:8px">판단 기록 <small>검증 구간 리플레이 · 일봉 시뮬레이션</small><span style="flex:1"></span>'
+    +'<button type="button" class="ffc'+(TF_TM.fmode!=='act'?' on':'')+'" onclick="TF_TM.fmode=&quot;all&quot;;tfTmBrain()">전체</button>'
+    +'<button type="button" class="ffc'+(TF_TM.fmode==='act'?' on':'')+'" onclick="TF_TM.fmode=&quot;act&quot;;tfTmBrain()">체결만</button></div>';
+  if(!show.length) h+='<div class="tft-empty" style="padding:40px 16px"><b>아직 Agent 판단 기록이 없습니다.</b><span>전략이 첫 번째 평가를 완료하면 여기에 표시됩니다.</span></div>';
+  h+=show.map(function(ev){
+    var m=TF_TM_EVM[ev.k]||['판단','ho'];
+    var xk='r'+ev.i, open=!!TF_TM.exp[xk];
+    return '<div class="tft-ev '+m[1]+'"><span class="ax"><i></i></span><div class="bd">'
+      +'<div class="mh"><span class="tm num">'+fmtDate(idxToDate(ev.i))+'</span><span class="bg">'+m[0]+'</span></div>'
+      +'<div class="tx">'+gEsc(ev.txt)+'</div>'
+      +'<button type="button" class="dt2" onclick="TF_TM.exp[&quot;'+xk+'&quot;]=!TF_TM.exp[&quot;'+xk+'&quot;];tfTmBrain()">'+(open?'세부 정보 접기 ▴':'세부 정보 ▾')+'</button>'
+      +(open?tfTmEvDetail(s,c,ev):'')
+      +'</div></div>';
+  }).join('');
+  if(evs.length>TF_TM.feedN) h+='<button type="button" class="tft-more" onclick="TF_TM.feedN+=20;tfTmBrain()">이전 판단 더 보기 ('+(evs.length-TF_TM.feedN)+')</button>';
+  return h;
+}
+function tfTmEvDetail(s,c,ev){
+  var p=s.p, i=ev.i;
+  var rp=rsi(PRICE,i-1), s20=sma(PRICE,20,i), s60=sma(PRICE,60,i), gap=Math.abs(s20-s60)/PRICE[i]*100;
+  var raw=JSON.stringify(p,null,1);
+  var promptH='<details class="tft-dsec"><summary>USER PROMPT <small>이 주기에 적용된 저장 전략 설정</small></summary>'
+    +'<div class="kv"><span>자산</span><b>'+gEsc(s.asset)+' ('+gEsc(s.sym)+')</b></div>'
+    +'<div class="kv"><span>운용 자금</span><b class="num">'+tfTmWon(s.cap)+'</b></div>'
+    +'<div class="kv"><span>진입 규칙</span><b>전봉 RSI '+p.rsiTh+' 이하 + 당일 +0.5% 반등'+(p.trendFilter?' + 추세 필터(20/60 이평)':'')+'</b></div>'
+    +'<div class="kv"><span>청산 규칙</span><b>손절 '+p.sl+'% → '+(p.tp!=null?'익절 +'+p.tp+'% → ':'')+'25봉 기간 청산</b></div>'
+    +'<div class="kv"><span>제약</span><b>검증 통과 설정만 실행 · 출금 권한 없음 · 시뮬레이션</b></div>'
+    +'<details class="tft-raw"><summary>Raw 설정 보기</summary><pre>'+gEsc(raw)+'</pre></details></details>';
+  var inPos=ev.k==='risk'||ev.k.indexOf('exit')===0;
+  var anaH='<div class="tft-dsec2"><div class="dh3">판단 근거</div>'
+    +'<div class="an"><b>시장 상태</b><p>전봉 RSI '+rp.toFixed(1)+' (임계 '+p.rsiTh+'), 20/60 이평 괴리 '+gap.toFixed(1)+'%'+(p.trendFilter?(gap>3?' — 추세 필터 충족':' — 추세 필터 미충족'):'')+'.</p></div>'
+    +(inPos?'<div class="an"><b>포지션 상태</b><p>보유 중 — 청산 규칙(손절 '+p.sl+'%'+(p.tp!=null?' · 익절 +'+p.tp+'%':'')+' · 25봉)을 매 봉 평가합니다.</p></div>':'')
+    +'<div class="an"><b>규칙 평가</b><p>'+gEsc(ev.txt)+'</p></div>'
+    +'<div class="an"><b>결론</b><p>'+(ev.k==='entry'?'진입 조건이 모두 충족되어 매수를 실행했습니다.':ev.k==='watch'?'조건 미충족 — 신규 진입 없이 다음 봉을 기다립니다.':ev.k==='risk'?'청산 조건 미도달 — 포지션을 유지합니다.':'청산 규칙이 실행되어 포지션을 종료했습니다.')+'</p></div></div>';
+  var px=PRICE[i], qty=s.cap/px;
+  var tk='';
+  if(ev.k==='entry'){
+    tk=tfTmTicket('BUY','매수 진입',s,[['기준가','₩'+Math.round(px).toLocaleString()],['수량 환산',''+qty.toFixed(4)],['손절가','₩'+Math.round(px*(1+p.sl/100)).toLocaleString()],[p.tp!=null?'목표가':'목표','' + (p.tp!=null?'₩'+Math.round(px*(1+p.tp/100)).toLocaleString():'기간 청산')],['위험액','약 '+tfTmWon(s.cap*Math.abs(p.sl)/100)],['보유 한도','25봉']],
+      ev.txt,'종가가 손절선 ₩'+Math.round(px*(1+p.sl/100)).toLocaleString()+' 아래로 마감하면 이 진입 구조는 무효화됩니다.');
+  } else if(ev.k.indexOf('exit')===0){
+    var rsn=ev.k==='exit-sl'?'손절 규칙':(ev.k==='exit-tp'?'익절 규칙':'기간 규칙');
+    tk=tfTmTicket('CLOSE','전량 청산 — '+rsn,s,[['체결 기준','규칙가 (시뮬레이션)'],['청산가','₩'+Math.round(px).toLocaleString()]],ev.txt,null);
+  } else {
+    tk=tfTmTicket('HOLD',ev.k==='watch'?'신규 진입 보류':'포지션 유지',s,[['평가 결과','행동 없음']],ev.txt,null);
+  }
+  return '<div class="tft-det">'+promptH+anaH+'<div class="tft-dsec2"><div class="dh3">TRADING DECISIONS</div>'+tk+'</div></div>';
+}
+function tfTmTicket(sig,title,s,kvs,just,inval){
+  var cls=sig==='BUY'?'b':(sig==='CLOSE'?'c':'h');
+  return '<div class="tft-tk"><div class="th2"><span class="sg '+cls+'">'+sig+'</span><b>'+gEsc(title)+'</b><span class="as2">'+gEsc(s.sym)+'</span></div>'
+    +'<div class="tg2 num">'+kvs.map(function(kv){ return '<span class="c3"><small>'+kv[0]+'</small><b>'+kv[1]+'</b></span>'; }).join('')+'</div>'
+    +(just?'<div class="js"><small>JUSTIFICATION</small>'+gEsc(just)+'</div>':'')
+    +(inval?'<div class="js iv"><small>INVALIDATION</small>'+gEsc(inval)+'</div>':'')
+    +'</div>';
+}
+/* 대시보드 탭 — 1px 그리드 매트릭스 (카드 금지, agy-term 4) */
+function tfTmDash(s,c){
+  var r=c.r;
+  var pf=r.lossCount===0&&r.n>0?'>9.9':(r.pf||0).toFixed(2);
+  var wins=Math.round(r.n*(r.winRate||0)/100);
+  var big=0,bigL=0,capW=s.cap;
+  c.trades.forEach(function(tr){ if(tr.krw>big) big=tr.krw; if(tr.krw<bigL) bigL=tr.krw; });
+  var h='<div class="tft-pm num">'
+    +'<span class="c4"><small>운용 자금</small><b>'+tfTmWon(s.cap)+'</b></span>'
+    +'<span class="c4"><small>전략 NAV <i>시뮬레이션</i></small><b>'+tfTmWon(c.nav)+'</b></span>'
+    +'<span class="c4"><small>Total P&L</small><b class="'+tfTmSign(c.pnl)+'">'+tfTmWonS(c.pnl)+' <em>'+tfTmPct(c.pnlPct)+'</em></b></span>'
+    +'<span class="c4"><small>실현 / 미실현</small><b><em class="'+tfTmSign(Math.abs(c.realized)<1?0:c.realized)+'">'+tfTmWonS(c.realized)+'</em> / <em class="'+tfTmSign(Math.abs(c.unreal)<1?0:c.unreal)+'">'+tfTmWonS(c.unreal)+'</em></b></span>'
+    +'<span class="c4" style="grid-column:span 2"><small>수수료 (왕복 0.2% · 손익에 반영됨)</small><b class="zz">-'+tfTmWon(c.feeEst).replace('-','')+' 추정</b></span>'
+    +'</div>';
+  h+='<div class="tft-nav"><div class="nh2">NAV 곡선 <small>검증 구간 · 시뮬레이션</small></div>'+(r.eq&&r.eq.length>1?tfSS3Eq(r.eq,700,150,{dates:true}):'<div class="tft-empty" style="padding:30px"><b>곡선 데이터가 없어요</b></div>')+'</div>';
+  h+='<div class="tft-mg num">'
+    +[['승률',Math.round(r.winRate||0)+'% ('+wins+'W/'+(r.lossCount||0)+'L)',''],
+      ['최대 낙폭',(r.mdd||0).toFixed(1)+'%','dn'],
+      ['손익비',pf,''],
+      ['샤프',(r.sharpe||0).toFixed(2),''],
+      ['평균 보유',(r.avgHold||0).toFixed(1)+'봉',''],
+      ['시장 노출',Math.round(r.exposure||0)+'%',''],
+      ['거래 수',r.n+'회',''],
+      ['최대 익/손',(big?'+'+tfTmWon(big).replace('-',''):'—')+' / '+(bigL?tfTmWon(bigL):'—'),'']]
+    .map(function(m){ return '<span class="c5"><small>'+m[0]+'</small><b class="'+m[2]+'">'+m[1]+'</b></span>'; }).join('')+'</div>';
+  h+='<div class="tft-fsec">현재 포지션</div>';
+  if(c.pos&&s.status==='live'){
+    var pchg=c.pos.chg*100;
+    h+='<div class="tft-posb num"><div class="pr1"><span class="sd lg">LONG</span><b>'+gEsc(s.sym)+'</b><span class="'+tfTmSign(pchg)+'" style="margin-left:auto;font-weight:700">'+tfTmWonS(c.pos.krw)+' ('+tfTmPct(pchg,1)+')</span></div>'
+      +'<div class="pr2"><span><small>진입가</small><b>₩'+Math.round(c.pos.entryP).toLocaleString()+'</b></span><span><small>현재가</small><b>₩'+Math.round(c.pos.curP).toLocaleString()+'</b></span>'
+      +'<span><small>수량</small><b>'+c.pos.qty.toFixed(4)+'</b></span><span><small>손절가</small><b>₩'+Math.round(c.pos.stopP).toLocaleString()+'</b></span>'
+      +(c.pos.tpP?'<span><small>목표가</small><b>₩'+Math.round(c.pos.tpP).toLocaleString()+'</b></span>':'')+'<span><small>보유</small><b>'+c.pos.bars+'봉</b></span></div></div>';
+  } else h+='<div class="tft-empty" style="padding:26px 16px"><b>현재 포지션이 없습니다.</b><span>'+(s.status==='live'?'진입 신호를 탐색하는 중이에요.':'전략이 실행 중이 아니에요.')+'</span></div>';
+  var lt=c.trades.slice(-25).reverse();
+  h+='<div class="tft-fsec">최근 거래 <small>'+lt.length+'건</small></div>';
+  h+=lt.length?('<div class="tft-tblw"><table class="tft-tbl"><thead><tr><th>청산일</th><th>구분</th><th class="r">진입가</th><th class="r">청산가</th><th class="r">보유</th><th class="r">손익</th></tr></thead><tbody>'
+    +lt.map(function(tr){
+      var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
+      return '<tr onclick="tfTmTradeDlg(&quot;'+s.key+'&quot;,'+tr.entry+')"><td>'+fmtDate(idxToDate(tr.exit))+'</td><td>'+({sl:'손절',tp:'익절',time:'기간'}[tr.kind]||tr.kind)+'</td>'
+        +'<td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
+        +'<td class="r num">'+(tr.exit-tr.entry)+'봉</td><td class="r num '+tfTmSign(tr.krw)+'">'+tfTmWonS(tr.krw)+'</td></tr>';
+    }).join('')+'</tbody></table></div>'):('<div class="tft-empty" style="padding:22px"><b>이 구간 체결이 없어요</b></div>');
+  h+='<div class="tft-vh"><a onclick="tfTmVerDlg(&quot;'+s.key+'&quot;)">버전 기록 보기 ('+gEsc(s.ver)+')</a></div>';
+  return h;
+}
+/* 완료된 거래 탭 — 전략 단위 완결 거래 + 라이프사이클 (spec Z/AA) */
+function tfTmDone(s,c){
+  var tr=c.trades.slice().reverse().slice(0,12);
+  if(!tr.length) return '<div class="tft-empty" style="padding:50px 16px"><b>완료된 거래가 없어요</b><span>검증 구간에서 완결된 거래가 생기면 여기에 정리돼요.</span></div>';
+  return '<div class="tft-fsec">완료된 거래 <small>'+c.trades.length+'건 중 최근 '+tr.length+' · 시뮬레이션</small></div>'
+    +tr.map(function(t2){
+      var evE=c.L.evs[t2.entry-s.p.startI], evX=c.L.evs[t2.exit-s.p.startI];
+      var xp=t2.kind==='sl'?PRICE[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?PRICE[t2.entry]*(1+s.p.tp/100):PRICE[t2.exit]);
+      return '<div class="tft-ct num"><div class="h4"><span class="sd lg">LONG</span><b>'+gEsc(s.asset)+'</b>'
+        +'<span class="'+tfTmSign(t2.krw)+'" style="margin-left:auto;font-weight:700">'+tfTmWonS(t2.krw)+' <small>('+tfTmPct(t2.pnl*100,1)+')</small></span></div>'
+        +'<div class="g4"><span><small>진입</small><b>₩'+Math.round(PRICE[t2.entry]).toLocaleString()+'</b></span><span><small>청산</small><b>₩'+Math.round(xp).toLocaleString()+'</b></span>'
+        +'<span><small>보유</small><b>'+(t2.exit-t2.entry)+'봉</b></span><span><small>수수료</small><b>'+tfTmWon(t2.capB*0.002)+'</b></span></div>'
+        +'<div class="wy"><small>WHY ENTERED</small>'+gEsc(evE?evE.txt:'진입 조건 충족')+'</div>'
+        +'<div class="wy"><small>WHY EXITED</small>'+gEsc(evX?evX.txt:'청산 규칙 실행')+'</div>'
+        +'<button type="button" class="dt2" onclick="tfTmTradeDlg(&quot;'+s.key+'&quot;,'+t2.entry+')">전체 판단 기록 →</button></div>';
+    }).join('');
+}
+/* 거래 라이프사이클 상세 (spec AA) */
+function tfTmTradeDlg(key,entryI){
+  var s=tfTmOf(key); if(!s) return;
+  var c=tfTmCalc(s);
+  var t2=null; c.trades.forEach(function(x){ if(x.entry===entryI) t2=x; });
+  if(!t2) return;
+  var evE=c.L.evs[t2.entry-s.p.startI];
+  var holdN=Math.max(0,t2.exit-t2.entry-1);
+  var evX=c.L.evs[t2.exit-s.p.startI];
+  var xp=t2.kind==='sl'?PRICE[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?PRICE[t2.entry]*(1+s.p.tp/100):PRICE[t2.exit]);
+  var steps=[
+    ['진입 결정',fmtDate(idxToDate(t2.entry)),evE?evE.txt:'조건 충족'],
+    ['주문 생성','시장가 매수 · 수량 '+(t2.capB/PRICE[t2.entry]).toFixed(4),'검증 통과 설정으로 자동 생성'],
+    ['체결','₩'+Math.round(PRICE[t2.entry]).toLocaleString(),'전량 체결 (시뮬레이션)'],
+    ['포지션 관리',holdN+'봉 보유',holdN?'매 봉 손절 '+s.p.sl+'%'+(s.p.tp!=null?' · 익절 +'+s.p.tp+'%':'')+' · 25봉 규칙 평가 — 조건 미도달로 유지':'진입 직후 청산 조건 도달'],
+    ['청산 결정',fmtDate(idxToDate(t2.exit)),evX?evX.txt:'규칙 실행'],
+    ['청산 체결','₩'+Math.round(xp).toLocaleString(),({sl:'손절 규칙가',tp:'익절 규칙가',time:'종가'}[t2.kind]||'')+' 기준 (시뮬레이션)'],
+    ['최종 결과',tfTmWonS(t2.krw)+' ('+tfTmPct(t2.pnl*100,1)+')','수수료 왕복 0.2% 반영']
+  ];
+  tfSS3Dlg(s.asset+' LONG — 거래 추적','<div class="tft-lc num">'
+    +steps.map(function(sp,i2){ return '<div class="lc1"><span class="n2">'+(i2+1)+'</span><div class="b2"><b>'+sp[0]+'</b><span class="v2">'+gEsc(sp[1])+'</span><p>'+gEsc(sp[2])+'</p></div></div>'; }).join('')
+    +'</div>',true);
+}
+function tfTmVerDlg(key){
+  var s=tfTmOf(key); if(!s) return;
+  var vh=(s.src==='user'?(s.ref.verHist||[]):s.src==='demo'?((tfTmOv(s.ref.id)||{}).verHist||[]):(s.ref.verHist||[])).slice().reverse();
+  tfSS3Dlg('버전 기록 — '+s.name,'<div class="ss3-cp">'
+    +'<div class="sumr num"><span>현재 버전</span><b>'+gEsc(s.ver)+'</b></div>'
+    +(vh.length?vh.map(function(v){ return '<div class="sumr num"><span>'+gEsc(v.from)+' → '+gEsc(v.to)+'<br><small style="color:var(--gt3)">'+tfNFTime(v.at)+' · '+gEsc(v.by||'사용자')+'</small></span><b style="font-weight:400;font-size:12.5px;text-align:right;max-width:280px">'+gEsc(v.diff)+'</b></div>'; }).join('')
+      :'<div class="ntc" style="margin-top:14px">아직 수정 이력이 없어요. Agent 패널에서 자연어로 전략을 수정하면 버전이 생성돼요.</div>')
+    +'</div>');
+}
+
+/* ── 자연어 전략 수정 — 파서→감사 대조표→검증→확인→적용 (spec R/S, term-codex E) ── */
+var TF_TM_CAND=null;
+function tfTmSayGo(){ var el=$('tft-say'); if(!el||!el.value.trim()) return; var v=el.value.trim(); el.value=''; tfTmSay(v); }
+/* onclick 문자열에 사용자 텍스트를 넣지 않는 위임 핸들러 (term-codex2 1) */
+function tfTmAskDeep(){
+  var s=TF_TM.sel?tfTmOf(TF_TM.sel):null; if(!s) return;
+  var c=tfTmCalc(s);
+  tfIns2Ask(s.name+' 전략('+s.sym+', 검증 수익 '+c.r.ret.toFixed(1)+'%, MDD '+c.r.mdd.toFixed(1)+'%)에 대해 더 깊게 분석해줘');
+}
+function tfTmAskLast(){
+  var q=window.TF_TM_LASTQ||''; if(!q) return;
+  tfIns2Ask(q+' — 이 전략 변경이 가능한지 알려줘');
+}
+function tfTmSnap(v,arr){ var best=arr[0]; arr.forEach(function(a){ if(Math.abs(a-v)<Math.abs(best-v)) best=a; }); return best; }
+function tfTmSay(msg){
+  var s=TF_TM.sel?tfTmOf(TF_TM.sel):null; if(!s){ toast('전략을 먼저 선택하세요'); return; }
+  var host=$('tft-prop'); if(!host) return;
+  var c=tfTmCalc(s), p=s.p;
+  /* 설명·분석 요청 — 엔진 실값 기반 결정적 응답 (모델 호출 없음, 발명 금지) */
+  if(/설명|분석|왜|어떻게/.test(msg)&&!/바꿔|수정|변경|으로|낮춰|높여|올려|내려/.test(msg)){
+    var last=c.L.evs[c.L.evs.length-1];
+    host.innerHTML='<div class="tft-ans"><b>'+(/손절/.test(msg)?'손절 기준':'최근 판단')+'</b>'
+      +'<p>'+(/손절/.test(msg)
+        ?('이 전략의 손절선은 진입가 대비 '+p.sl+'%예요. 검증 구간에서 이 규칙이 최대 낙폭을 '+c.r.mdd.toFixed(1)+'% 안에서 관리했고, 손절 청산은 총 '+c.trades.filter(function(x){return x.kind==='sl';}).length+'회 실행됐어요. 손절 폭을 좁히면 낙폭은 줄지만 거래가 짧게 끊길 수 있어요 — "손절 -3%로 바꿔줘"라고 하면 실제 재검증 수치로 비교해드려요.')
+        :('마지막 평가: '+gEsc(last?last.txt:'기록 없음')+'. 현재 설정은 전봉 RSI '+p.rsiTh+' 이하 + 반등 확인 진입, 손절 '+p.sl+'%'+(p.tp!=null?' · 익절 +'+p.tp+'%':'')+' 규칙이에요. 검증 성과는 수익 '+tfTmPct(c.r.ret)+', MDD '+c.r.mdd.toFixed(1)+'%, 승률 '+Math.round(c.r.winRate||0)+'%입니다.'))+'</p>'
+      +'<div class="acts"><button onclick="tfTmAskDeep()">채팅에서 깊게 분석 →</button><button onclick="$(&quot;tft-prop&quot;).innerHTML=&quot;&quot;">닫기</button></div></div>'; /* 이름은 onclick 문자열에 넣지 않는다 — 저장형 XSS 차단 (term-codex2 1) */
+    return;
+  }
+  /* 필드 파싱 — 허용 집합 스냅 (term-codex E3) */
+  var ch={}, notes=[], un=[];
+  var m;
+  if((m=msg.match(/손절[^0-9\-+]*(-?\d+(?:\.\d+)?)\s*%/))){ var sv=-Math.abs(parseFloat(m[1])); var sn=tfTmSnap(sv,TF_STOP); ch.sl=sn; if(sn!==sv) notes.push('손절 '+sv+'% → 허용값 '+sn+'%로 조정'); }
+  if((m=msg.match(/(?:익절|목표)[^0-9]*\+?(\d+(?:\.\d+)?)\s*%/))){ var tv=parseFloat(m[1]); var tn=tfTmSnap(tv,[8,10,12,15]); ch.tp=tn; if(tn!==tv) notes.push('익절 +'+tv+'% → 허용값 +'+tn+'%로 조정'); }
+  if((m=msg.match(/RSI\s*(\d+)/i))){ var rv=parseInt(m[1],10); var rn=tfTmSnap(rv,[38,40,42,44,46]); ch.rsiTh=rn; if(rn!==rv) notes.push('RSI '+rv+' → 허용값 '+rn+'으로 조정'); }
+  if(/추세\s*필터/.test(msg)){ if(/(꺼|끄|제거|해제|빼)/.test(msg)) ch.trendFilter=false; else if(/(켜|사용|추가|넣)/.test(msg)) ch.trendFilter=true; }
+  if(/리스크/.test(msg)&&/(낮|줄)/.test(msg)){ var ci=TF_STOP.indexOf(p.sl); if(ci>0){ ch.sl=TF_STOP[ci-1]; notes.push('리스크 축소 → 손절 '+p.sl+'% → '+ch.sl+'%'); } else notes.push('손절이 이미 가장 타이트한 값('+p.sl+'%)이에요'); if(!ch.trendFilter&&!p.trendFilter){ ch.trendFilter=true; notes.push('리스크 축소 → 추세 필터 추가'); } }
+  if(/리스크/.test(msg)&&/(높|키|올)/.test(msg)){ var ci2=TF_STOP.indexOf(p.sl); if(ci2>=0&&ci2<TF_STOP.length-1){ ch.sl=TF_STOP[ci2+1]; notes.push('리스크 확대 → 손절 '+p.sl+'% → '+ch.sl+'%'); } }
+  /* 현재 값과 동일한 필드는 변경안에서 제외 — Δ '추가/변경' 오표기 방지 (agy-term2 P1-6) */
+  Object.keys(ch).forEach(function(k3){ if(ch[k3]===p[k3]) delete ch[k3]; });
+  /* 미지원 구절 감지 (term-codex E2 — 조용한 부분 적용 금지) */
+  [[/EMA|이평.*마감|이동평균\s*\d+/i,'EMA 조건'],[/절반|50%\s*축소|부분\s*청산/,'부분 청산 규칙'],[/레버리지|배율/,'레버리지'],[/시간대|봉\s*주기|타임프레임/i,'타임프레임 변경']].forEach(function(u){ if(u[0].test(msg)) un.push(u[1]); });
+  var keys=Object.keys(ch);
+  if(!keys.length){
+    host.innerHTML='<div class="tft-ans"><b>이 요청은 아직 자동 변환을 지원하지 않아요</b>'
+      +'<p>지원: 손절(%) · 익절(%) · 진입 RSI 임계 · 추세 필터 켜기/끄기 · 리스크 낮춰/높여.'+(un.length?' 요청하신 <b>'+un.join(', ')+'</b>은 아직 규칙 엔진이 지원하지 않아 적용할 수 없어요.':'')+'</p>'
+      +'<div class="acts"><button onclick="tfTmAskLast()">채팅에서 논의 →</button><button onclick="$(&quot;tft-prop&quot;).innerHTML=&quot;&quot;">닫기</button></div></div>'; /* 원문은 상태로 전달 — onclick 문자열 삽입 금지 (term-codex2 1) */
+    window.TF_TM_LASTQ=msg;
+    return;
+  }
+  var p2={sl:ch.sl!=null?ch.sl:p.sl,tp:ch.tp!=null?ch.tp:p.tp,rsiTh:ch.rsiTh!=null?ch.rsiTh:p.rsiTh,trendFilter:ch.trendFilter!=null?ch.trendFilter:p.trendFilter,startI:p.startI,endI:p.endI};
+  if(tfTmKey(tfTmP(p2))===tfTmKey(p)){ host.innerHTML='<div class="tft-ans"><b>변경 사항이 없어요</b><p>요청한 값이 현재 설정과 같아요 — 버전을 만들지 않았어요.</p><div class="acts"><button onclick="$(&quot;tft-prop&quot;).innerHTML=&quot;&quot;">닫기</button></div></div>'; return; }
+  var r2=runBacktest(p2), sc2=tfScore(r2), pass=sc2>=TFC.score.pass;
+  TF_TM_CAND={key:s.key,baseVer:s.ver,pKey:tfTmKey(p),p2:p2,sc2:sc2,r2:{ret:r2.ret,mdd:r2.mdd,n:r2.n,winRate:r2.winRate}};
+  var rows=[];
+  if(ch.sl!=null) rows.push(['손절선',p.sl+'%',p2.sl+'%',(p2.sl>p.sl?'▲':'▼')+' '+(p2.sl-p.sl)+'%p']);
+  if(ch.tp!=null) rows.push(['익절 목표',p.tp!=null?'+'+p.tp+'%':'없음','+'+p2.tp+'%',p.tp!=null?((p2.tp>p.tp?'▲':'▼')+' '+(p2.tp-p.tp)+'%p'):'신설']);
+  if(ch.rsiTh!=null) rows.push(['진입 RSI 임계',String(p.rsiTh),String(p2.rsiTh),(p2.rsiTh>p.rsiTh?'▲':'▼')+' '+(p2.rsiTh-p.rsiTh)]);
+  if(ch.trendFilter!=null) rows.push(['추세 필터',p.trendFilter?'사용':'미사용',p2.trendFilter?'사용':'미사용',p2.trendFilter?'추가':'제거']);
+  var live=s.status==='live';
+  host.innerHTML='<div class="tft-diff num">'
+    +'<div class="dh4">전략 변경안 <small>'+gEsc(s.ver)+' 기준 · 재검증 실계산</small></div>'
+    +'<div class="dt3"><span class="hd5">항목</span><span class="hd5">CURRENT</span><span class="hd5">PROPOSED</span><span class="hd5">Δ</span>'
+    +rows.map(function(rw){ return '<span>'+rw[0]+'</span><span class="cu">'+rw[1]+'</span><span class="pp2">'+rw[2]+'</span><span class="dl">'+rw[3]+'</span>'; }).join('')+'</div>'
+    +'<div class="imp"><span><small>검증 수익</small><b>'+tfTmPct(c.r.ret)+' → <em class="'+tfTmSign(r2.ret-c.r.ret)+'">'+tfTmPct(r2.ret)+'</em></b></span>'
+    +'<span><small>최대 낙폭</small><b>'+c.r.mdd.toFixed(1)+'% → <em class="'+tfTmSign(r2.mdd-c.r.mdd)+'">'+r2.mdd.toFixed(1)+'%</em></b></span>'
+    +'<span><small>거래 수</small><b>'+c.r.n+' → '+r2.n+'회</b></span>'
+    +'<span><small>재검증 점수</small><b class="'+(pass?'up':'dn')+'">'+sc2+'점 '+(pass?'통과':'기준 미달')+'</b></span></div>'
+    +(notes.length?'<div class="nt2">'+notes.map(gEsc).join(' · ')+'</div>':'')
+    +(un.length?'<div class="nt2 warn">미지원이라 반영 안 됨: '+un.join(', ')+'</div>':'')
+    +'<div class="nt2">요청 원문: "'+gEsc(msg.length>60?msg.slice(0,60)+'…':msg)+'" — 위 표의 항목만 반영돼요. 원문의 다른 표현은 해석되지 않았어요.</div>'
+    +(live?'<div class="nt2">적용 시 이 전략은 <b>중지</b>돼요. 자동 재개는 없으며, 확인 후 직접 재개해야 해요.</div>':'')
+    +'<div class="acts2"><button class="rej" onclick="TF_TM_CAND=null;$(&quot;tft-prop&quot;).innerHTML=&quot;&quot;">취소</button>'
+    +(pass?'<button class="ap" onclick="tfTmApply()">'+(live?'중지하고 적용':'변경 적용')+'</button>'
+      :'<button class="ap" disabled title="재검증 기준(80점) 미달">기준 미달 — 적용 불가</button>')
+    +'</div></div>';
+  tfTrack('term_nl_propose',{fields:keys.join(',')});
+}
+function tfTmApply(){
+  var cd=TF_TM_CAND; if(!cd) return;
+  var s=tfTmOf(cd.key);
+  if(!s||s.key!==TF_TM.sel||s.ver!==cd.baseVer||tfTmKey(s.p)!==cd.pKey){ toast('전략 상태가 바뀌어 변경안이 무효화됐어요. 다시 요청해주세요'); TF_TM_CAND=null; var h0=$('tft-prop'); if(h0) h0.innerHTML=''; return; } /* 후보 지문 검증 (term-codex E6) */
+  var nv='v'+(Math.round((parseFloat(s.ver.replace('v',''))||1)*10+1)/10).toFixed(1);
+  var diffTxt='손절 '+cd.p2.sl+'% · '+(cd.p2.tp!=null?'익절 +'+cd.p2.tp+'%':'익절 없음')+' · RSI '+cd.p2.rsiTh+' · 추세필터 '+(cd.p2.trendFilter?'ON':'OFF');
+  var wasLive=s.status==='live';
+  var vh={at:Date.now(),from:s.ver,to:nv,by:'사용자 (자연어 요청)',diff:diffTxt,p:JSON.parse(JSON.stringify(cd.p2))};
+  if(s.src==='user'){
+    var b=s.ref;
+    b.p={sl:cd.p2.sl,tp:cd.p2.tp,rsiTh:cd.p2.rsiTh,trendFilter:cd.p2.trendFilter,startI:cd.p2.startI,endI:cd.p2.endI};
+    b.score=cd.sc2; b.ret=cd.r2.ret; b.mdd=cd.r2.mdd; b.n=cd.r2.n; b.winRate=cd.r2.winRate;
+    b.ver=nv; b.verHist=b.verHist||[]; b.verHist.push(vh);
+    if(wasLive) b.status='off';
+    tfNotify('bot','tmup:'+b.at+':'+Date.now(),b.name+' 전략을 '+nv+'로 업데이트했어요',wasLive?'적용을 위해 중지됐어요. 재개하면 새 설정으로 실행돼요.':'다음 실행부터 적용돼요.','#/trade');
+  } else if(s.src==='demo'){
+    var t=tfS(); t.termDemo=t.termDemo||{}; var ov=t.termDemo[s.ref.id]=t.termDemo[s.ref.id]||{};
+    ov.p=JSON.parse(JSON.stringify(cd.p2)); ov.ver=nv; ov.verHist=(ov.verHist||[]); ov.verHist.push(vh);
+    if(wasLive) ov.status='off';
+  } else {
+    s.ref.p=JSON.parse(JSON.stringify(cd.p2)); s.ref.ver=nv; s.ref.verHist=(s.ref.verHist||[]); s.ref.verHist.push(vh);
+    if(wasLive) s.ref.status='off';
+  }
+  tfTmLogAdd(cd.key,'STRATEGY_UPDATED','전략이 업데이트되었습니다. '+s.ver+' → '+nv,{diff:'변경: '+diffTxt+' · 변경 주체: 사용자'});
+  if(wasLive) tfTmLogAdd(cd.key,'PAUSED','전략 실행을 중지했어요 — 설정 적용을 위해 중지 (자동 재개 없음)');
+  TF_TM_CAND=null;
+  tfSaveNow();
+  toast('전략이 '+nv+'로 업데이트됐어요'+(wasLive?' — 중지됨':''));
+  tfTmAfter();
+  tfTrack('term_nl_apply',{to:nv});
+}
+/* ── 카드 ··· 메뉴 (spec F) ── */
+function tfTmMenu(ev,key){
+  ev.stopPropagation();
+  tfTmMenuOff();
+  var s=tfTmOf(key); if(!s) return;
+  var live=s.status==='live';
+  var mn=document.createElement('div'); mn.className='tft-menu'; mn.id='tft-menu';
+  mn.innerHTML=[
+    ['전략 상세','tfTmSelect(&quot;'+key+'&quot;);TF_TM.tab=&quot;dash&quot;;tfTmBrain()'],
+    ['이름 변경','tfTmRename(&quot;'+key+'&quot;)'],
+    ['복제','tfTmClone(&quot;'+key+'&quot;,null)'],
+    ['다른 거래소에 복제','tfTmCloneEx(&quot;'+key+'&quot;)'],
+    live?['일시 중지','tfTmSetStatus(&quot;'+key+'&quot;,&quot;off&quot;,&quot;수동 중지&quot;)&&tfTmAfter()']
+      :s.status==='off'?['다시 시작','tfTmSetStatus(&quot;'+key+'&quot;,&quot;live&quot;)&&tfTmAfter()']
+      :s.status==='ready'?['지금 시작','tfTmSetStatus(&quot;'+key+'&quot;,&quot;live&quot;)&&tfTmAfter()']:null,
+    ['버전 기록','tfTmVerDlg(&quot;'+key+'&quot;)']
+  ].filter(Boolean).map(function(it){ return '<button onclick="tfTmMenuOff();'+it[1]+'">'+it[0]+'</button>'; }).join('')
+  +'<div class="sep"></div><button class="del" onclick="tfTmMenuOff();tfTmDelete(&quot;'+key+'&quot;)">삭제</button>';
+  document.body.appendChild(mn);
+  var r=ev.target.getBoundingClientRect();
+  mn.style.top=Math.min(window.innerHeight-mn.offsetHeight-10,r.bottom+4)+'px';
+  mn.style.left=Math.max(10,Math.min(window.innerWidth-mn.offsetWidth-10,r.left-140))+'px';
+  setTimeout(function(){ document.addEventListener('click',tfTmMenuOff); },0);
+}
+function tfTmMenuOff(){ var mn=$('tft-menu'); if(mn) mn.remove(); document.removeEventListener('click',tfTmMenuOff); }
+function tfTmRename(key){
+  var s=tfTmOf(key); if(!s) return;
+  tfSS3Dlg('이름 변경','<div class="ss3-cp"><div class="fld3"><label for="tft-rn">전략 이름</label><input type="text" id="tft-rn" maxlength="30" value="'+gEsc(s.name)+'"></div>'
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" onclick="tfTmRenameGo(&quot;'+key+'&quot;)">저장</button></div></div>');
+}
+function tfTmRenameGo(key){
+  var s=tfTmOf(key), el=$('tft-rn'); if(!s||!el) return;
+  var nm=el.value.trim(); if(!nm){ toast('이름을 입력해주세요'); return; }
+  if(s.src==='user') s.ref.name=nm;
+  else if(s.src==='demo'){ var t=tfS(); t.termDemo=t.termDemo||{}; (t.termDemo[s.ref.id]=t.termDemo[s.ref.id]||{}).name=nm; }
+  else s.ref.name=nm;
+  tfTmLogAdd(key,'RENAMED','전략 이름을 "'+nm+'"(으)로 변경했어요');
+  tfSaveNow(); tfSS3DlgClose(); toast('이름을 변경했어요'); tfTmAfter();
+}
+function tfTmClone(key,ex){
+  var s=tfTmOf(key); if(!s) return;
+  var cl={id:Date.now(),name:s.name+(ex?' ('+tfExOf2(ex).name+')':' 사본'),ex:ex||s.ex,asset:s.asset,sym:s.sym,mkt:s.mkt,tv:s.tv,cap:s.cap,ver:'v1.0',status:'ready',p:JSON.parse(JSON.stringify(s.p)),verHist:[]};
+  tfTmClones().push(cl);
+  tfTmLogAdd('clone:'+cl.id,'CLONED','"'+s.name+'" '+gEsc(s.ver)+'에서 복제됨 — 실행 전 상태로 대기');
+  tfSaveNow(); toast('전략을 복제했어요 — 실행 전 상태예요');
+  TF_TM.sel='clone:'+cl.id; tfTmAfter(); tfTmChart();
+}
+function tfTmCloneEx(key){
+  var s=tfTmOf(key); if(!s) return;
+  var exs=TF_BROKERS.map(function(b){return b.id;}).filter(function(x){return x!==s.ex;});
+  tfSS3Dlg('다른 거래소에 복제','<div class="ss3-cp"><div class="ntc">"'+gEsc(s.name)+'" 설정 그대로 다른 거래소에 실행 전 상태로 복제해요. (시뮬레이션)</div>'
+    +exs.map(function(x){ var e=tfExOf2(x); return '<button type="button" class="ss3-radio" onclick="tfSS3DlgClose();tfTmClone(&quot;'+key+'&quot;,&quot;'+x+'&quot;)"><span class="rn">'+gEsc(e.name)+'</span><span class="rs">'+(e.conn?'파트너 거래소':'거래소')+' · 복제 후 검증 상태 유지</span></button>'; }).join('')
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()" style="flex:1">취소</button></div></div>');
+}
+function tfTmDelete(key){
+  var s=tfTmOf(key); if(!s) return;
+  if(s.status==='live'){
+    tfSS3Dlg('삭제할 수 없어요','<div class="ss3-cp"><div class="ntc">이 전략은 현재 <b>실행 중</b>입니다.<br>삭제하려면 먼저 전략 실행을 중지해야 합니다.</div>'
+      +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+      +'<button type="button" class="wbtn" onclick="tfSS3DlgClose();tfTmSetStatus(&quot;'+key+'&quot;,&quot;off&quot;,&quot;삭제 준비&quot;);tfTmAfter()">전략 중지</button></div></div>');
+    return;
+  }
+  tfSS3Dlg('전략 삭제','<div class="ss3-cp"><div class="ntc">"'+gEsc(s.name)+'" 전략을 삭제할까요?<br>판단 기록과 버전 이력도 함께 사라져요. 되돌릴 수 없어요.</div>'
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="ss3-dbtn" style="flex:1" onclick="tfTmDeleteGo(&quot;'+key+'&quot;)">삭제</button></div></div>');
+}
+function tfTmDeleteGo(key){
+  var s=tfTmOf(key); if(!s) return;
+  var t=tfS();
+  if(s.src==='demo'){ tfTmDel().push(s.ref.id); }
+  else if(s.src==='clone'){ t.termClones=tfTmClones().filter(function(x){ return 'clone:'+x.id!==key; }); }
+  else { t.strat=(t.strat||[]).filter(function(x){ return 'user:'+x.at!==key; }); }
+  if(t.termLog) delete t.termLog[key];
+  if(TF_TM.sel===key) TF_TM.sel=null;
+  tfSaveNow(); tfSS3DlgClose(); toast('전략을 삭제했어요');
+  tfDashView();
+}
+
+/* ── 하단 실행 패널 — 스코프(현재/전체), 모든 행에 거래소·전략 (spec AB~AH) ── */
+function tfTmScopeList(){
+  var all=tfTmAll();
+  if(TF_TM.scope==='all'||!TF_TM.sel) return all;
+  return all.filter(function(s){ return s.key===TF_TM.sel; });
+}
+function tfTmCellEx(s){ var e=tfExOf2(s.ex); return '<span class="exb sm" style="background:'+e.col+';color:'+(e.fg||'#0f1012')+'">'+gEsc(e.name.slice(0,2).toUpperCase())+'</span> '+gEsc(e.name); }
+function tfTmCellSt(s){ return '<a class="stlk" onclick="tfTmSelect(&quot;'+s.key+'&quot;)">'+gEsc(s.name)+'</a>'; }
+function tfTmBottom(){
+  ['pos','open','orders','fills','closed','assets','rebates'].forEach(function(k){ var el=$('tft-p-'+k); if(el) el.innerHTML=tfTmPane(k); });
+}
+function tfTmPane(k){
+  var list=tfTmScopeList();
+  var note='<div class="tft-tnote">검증 시뮬레이션 파생 기록이에요 · '+(TF_TM.scope==='all'?'전체 전략':'현재 전략')+' 범위</div>';
+  function empty(tt,ds){ return '<div class="tft-empty" style="padding:34px 16px"><b>'+tt+'</b><span>'+ds+'</span></div>'; }
+  function wrap(head,rows,emptyH){
+    if(!rows.length) return note+emptyH;
+    return note+'<div class="tft-tblw"><table class="tft-tbl"><thead><tr>'+head+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>';
+  }
+  if(k==='pos'){
+    var rows=[];
+    list.forEach(function(s){ if(s.status!=='live') return; var c=tfTmCalc(s); if(!c.pos) return;
+      var pc=c.pos.chg*100;
+      rows.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">LONG</span></td>'
+        +'<td class="r num">'+c.pos.qty.toFixed(4)+'</td><td class="r num">'+Math.round(c.pos.entryP).toLocaleString()+'</td><td class="r num">'+Math.round(c.pos.curP).toLocaleString()+'</td>'
+        +'<td class="r num">'+Math.round(c.pos.stopP).toLocaleString()+'</td>'
+        +'<td class="r num '+tfTmSign(c.pos.krw)+'">'+tfTmWonS(c.pos.krw)+'</td><td class="r num '+tfTmSign(pc)+'">'+tfTmPct(pc,1)+'</td>'
+        +'<td class="r"><button class="tbtn" onclick="tfTmSetStatus(&quot;'+s.key+'&quot;,&quot;off&quot;,&quot;수동 중지&quot;)&&tfTmAfter()">중지</button></td></tr>');
+    });
+    return wrap('<th>거래소</th><th>전략</th><th>심볼</th><th>방향</th><th class="r">수량</th><th class="r">진입가</th><th class="r">현재가</th><th class="r">손절가</th><th class="r">미실현</th><th class="r">%</th><th class="r"></th>',rows,empty('현재 포지션이 없습니다.','실행 중 전략이 진입하면 여기에 표시돼요.'));
+  }
+  if(k==='open'){
+    var rows2=[];
+    list.forEach(function(s){ if(s.status!=='live') return; var c=tfTmCalc(s); if(!c.pos) return;
+      rows2.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td>손절 STOP</td>'
+        +'<td class="r num">'+Math.round(c.pos.stopP).toLocaleString()+'</td><td class="r num">'+c.pos.qty.toFixed(4)+'</td><td>대기</td>'
+        +'<td class="r"><span class="mut">규칙 주문 · 취소는 전략 중지로</span></td></tr>');
+      if(c.pos.tpP) rows2.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td>익절 LIMIT</td>'
+        +'<td class="r num">'+Math.round(c.pos.tpP).toLocaleString()+'</td><td class="r num">'+c.pos.qty.toFixed(4)+'</td><td>대기</td><td class="r"><span class="mut">규칙 주문</span></td></tr>');
+    });
+    return wrap('<th>거래소</th><th>전략</th><th>심볼</th><th>방향</th><th>유형</th><th class="r">가격</th><th class="r">수량</th><th>상태</th><th class="r"></th>',rows2,empty('미체결 주문이 없습니다.','포지션이 열리면 규칙 기반 손절·익절 주문이 여기 걸려요.'));
+  }
+  if(k==='orders'||k==='fills'){
+    var rows3=[];
+    list.forEach(function(s){
+      var c=tfTmCalc(s);
+      c.trades.slice(-8).reverse().forEach(function(tr){
+        var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
+        var qty=(tr.capB/PRICE[tr.entry]);
+        if(k==='orders'){
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.exit))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td>'+({sl:'손절 STOP',tp:'익절 LIMIT',time:'기간 시장가'}[tr.kind])+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td><span class="okst">체결 완료</span></td></tr>');
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td>진입 시장가</td><td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td><span class="okst">체결 완료</span></td></tr>');
+        } else {
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.exit))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td class="r num">'+Math.round(xp).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td class="r num">'+tfTmWon(tr.capB*0.001)+'</td></tr>');
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td class="r num">'+tfTmWon(tr.capB*0.001)+'</td></tr>');
+        }
+      });
+    });
+    return k==='orders'
+      ?wrap('<th>거래소</th><th>전략</th><th>일자</th><th>심볼</th><th>방향</th><th>유형</th><th class="r">가격</th><th class="r">수량</th><th>상태</th>',rows3,empty('주문 내역이 없어요','전략이 거래를 실행하면 주문 이벤트가 기록돼요.'))
+      :wrap('<th>거래소</th><th>전략</th><th>일자</th><th>심볼</th><th>방향</th><th class="r">체결가</th><th class="r">수량</th><th class="r">수수료</th>',rows3,empty('체결 내역이 없어요','체결이 발생하면 여기에 표시돼요.'));
+  }
+  if(k==='closed'){
+    var rows4=[];
+    list.forEach(function(s){
+      var c=tfTmCalc(s);
+      c.trades.slice(-10).reverse().forEach(function(tr){
+        var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
+        rows4.push('<tr onclick="tfTmSelect(&quot;'+s.key+'&quot;);TF_TM.tab=&quot;done&quot;;tfTmBrain();tfTmTradeDlg(&quot;'+s.key+'&quot;,'+tr.entry+')" style="cursor:pointer"><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">LONG</span></td>'
+          +'<td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
+          +'<td class="r num">'+(tr.exit-tr.entry)+'봉</td><td class="r num">'+tfTmWon(tr.capB*0.002)+'</td>'
+          +'<td class="r num '+tfTmSign(tr.krw)+'">'+tfTmWonS(tr.krw)+' ('+tfTmPct(tr.pnl*100,1)+')</td></tr>');
+      });
+    });
+    return wrap('<th>거래소</th><th>전략</th><th>심볼</th><th>방향</th><th class="r">진입</th><th class="r">청산</th><th class="r">보유</th><th class="r">수수료</th><th class="r">실현 손익</th>',rows4,empty('종료된 포지션이 없어요','완결된 거래가 생기면 Agent 판단 기록과 연결돼요.'));
+  }
+  if(k==='assets'){
+    /* 자산은 항상 계정 전체 범위 — 공용 위임 예산은 거래소당 1회만 합산 (term-codex2 4) */
+    var all=tfTmAll(), byEx={};
+    all.forEach(function(s){
+      var ek=s.ex||'unlinked';
+      var g=byEx[ek]=byEx[ek]||{eq:0,used:0,un:0,n:0,shared:false,sharedCapDone:false};
+      var c=tfTmCalc(s);
+      if(s.capShared){ if(!g.sharedCapDone){ g.eq+=s.cap; g.sharedCapDone=true; } g.eq+=c.pnl; }
+      else g.eq+=c.nav;
+      g.un+=(s.status==='live'&&c.pos)?c.pos.krw:0;
+      g.used+=(s.status==='live'&&c.pos)?(s.capShared&&g.usedSharedDone?0:s.cap):0;
+      if(s.capShared&&s.status==='live'&&c.pos) g.usedSharedDone=true;
+      g.n++; if(s.capShared) g.shared=true;
+    });
+    var ks=Object.keys(byEx);
+    note='<div class="tft-tnote">계정 전체 범위 · 검증 시뮬레이션 파생이에요</div>';
+    if(!ks.length) return note+empty('연결된 자산이 없어요','전략을 만들면 거래소별 자산 현황이 여기 모여요.');
+    return note+'<div class="tft-assets">'+ks.map(function(ek){
+      var g=byEx[ek], e=ek==='unlinked'?{name:'미연결 (위임 대기)',col:'#3a4254',fg:'#dbdbdb'}:tfExOf2(ek);
+      return '<div class="tft-asx num"><div class="ah2"><span class="exb" style="background:'+e.col+';color:'+(e.fg||'#0f1012')+'">'+gEsc(e.name.slice(0,2).toUpperCase())+'</span><b>'+gEsc(e.name)+'</b><span class="mut">전략 '+g.n+'개</span></div>'
+        +'<div class="ag2">'
+        +'<span><small>Equity</small><b>'+tfTmWon(g.eq)+'</b></span>'
+        +'<span><small>Available</small><b>'+tfTmWon(g.eq-g.used)+'</b></span>'
+        +'<span><small>Used</small><b>'+tfTmWon(g.used)+'</b></span>'
+        +'<span><small>미실현</small><b class="'+tfTmSign(g.un)+'">'+tfTmWonS(g.un)+'</b></span>'
+        +'</div><div class="af2">단위 KRW 환산 · 마지막 동기화 방금 전 · 시뮬레이션'+(g.shared?' · 위임 예산 공용':'')+'</div></div>';
+    }).join('')+'</div>';
+  }
+  if(k==='rebates'){
+    var t=tfS(), tt=tfNFInit();
+    var rebT=tt.rebates.reduce(function(a,r){return a+r.amt;},0);
+    return '<div class="tft-tnote">계정 전체 범위 · UID 파트너 적립 (시뮬레이션)</div>'
+      +'<div class="tft-assets"><div class="tft-asx num"><div class="ah2"><b>수수료 적립</b></div><div class="ag2">'
+      +'<span><small>누적 적립</small><b class="up">'+tfTmWon(rebT)+'</b></span><span><small>적립 건수</small><b>'+tt.rebates.length+'건</b></span></div>'
+      +'<div class="af2">수수료(0.2%)의 10% · <a style="color:var(--gb2);cursor:pointer" onclick="tfNav(&quot;#/plan/rebates&quot;)">전체 내역 보기</a></div></div></div>';
+  }
+  return '';
+}
+
 /* 터미널 탭 전환 — 모바일은 차트/실행 포함 전 섹션, 데스크톱은 하단 컨텐츠 탭만 */
 function tfNFHTab(k,btn){
   var w=$('nfxh-wrap'); if(!w) return;
@@ -9670,7 +10631,7 @@ function tfNFCanRun(){
   if(t.cur&&t.score>=TFC.score.pass) tfNav('#/strategy/connect');
   return false;
 }
-function tfBotCtl(botId,act){
+function tfBotCtl(botId,act,silent){ /* silent=터미널 내 제어 — 상태 전환만, 봇 상세 이동 없음 (term-codex2 2) */
   var t=tfNFInit(); var b=tfBotFind(botId); if(!b) return;
   tfTrack('bot_ctl',{act:act});
   if(act==='pause'){ b.status='off'; tfNotify('bot','bp:'+botId+':'+Date.now(),b.name+' 을 중지했어요','새 진입이 차단돼요. 언제든 재개할 수 있어요.','#/trade/bot/'+botId); }
@@ -9687,7 +10648,8 @@ function tfBotCtl(botId,act){
     if(toLive&&!tfNFCanRun()) return;
     b.env=toLive?'live':'paper'; toast(b.env==='paper'?'가상 실행으로 전환했어요':'라이브(시뮬레이션)로 전환했어요');
   }
-  tfSave(); tfBotView(botId);
+  tfSave();
+  if(!silent) tfBotView(botId);
 }
 /* ── AI 행동 로그 — 저장 없음, 렌더 시 엔진 규칙 재생(발명 금지·합성 최신성 금지, codex flow3 E) ── */
 function tfBotLogEvents(p){
