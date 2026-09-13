@@ -527,12 +527,13 @@ body{
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);
   mask-image:linear-gradient(to bottom,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);
   padding-top:4px}
-.g-util:hover{background:rgba(255,255,255,.06)}
-/* 현재 위치 표시 — 토널 필 (agy qa3 LNB active). '새 전략'은 액션이라 제외 */
-.g-util.cur{background:rgba(91,138,247,.14);color:var(--gt)}
-.g-util.cur:hover{background:rgba(91,138,247,.18)}
-.g-util.cur svg{opacity:1;color:var(--gb2)}
-body.light .g-util.cur{background:rgba(11,87,208,.1)}
+.g-util:hover{background:rgba(255,255,255,.08)}
+/* 현재 위치 표시 — Gemini식 중립 그레이 필 (사용자 지시: 파랑 금지, 호버보다 한 단계 진하게) */
+.g-util.cur{background:rgba(255,255,255,.12);color:#fff}
+.g-util.cur:hover{background:rgba(255,255,255,.15)}
+.g-util.cur svg{opacity:1}
+body.light .g-util:hover{background:rgba(0,0,0,.05)}
+body.light .g-util.cur{background:#e2e6ec;color:#1f1f1f}
 .g-util svg{flex-shrink:0;stroke:currentColor;opacity:.9}
 .g-sec{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--gt3);padding:14px 13px 5px}
 .g-sec button{color:var(--gt3);font-size:14px}
@@ -1902,7 +1903,7 @@ body.g-inchat #nf-util{right:14px}
 .nfxh-kv:last-child{border-bottom:0}
 .nfxh-kv b{color:var(--gt);font-weight:600;font-variant-numeric:tabular-nums}
 .nfxh-stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.nfxh-tabs.m-only{display:none}
+.nfxh-tabs.m-only,.nfxh-tabs.m2-only{display:none}
 @media (max-width:960px){
   /* 모바일 = 단일 탭 스트립이 전 섹션(차트 포함)을 전환 — Hyperliquid 모바일 패턴 */
   .nfxh-tabs.m-only{display:flex;position:sticky;top:0;background:var(--g0);z-index:5}
@@ -2190,6 +2191,10 @@ body.g-inchat #nf-util{right:14px}
   .tft-resz{display:none}
   .tft-botbar .d-only{display:none}
   .tft-botbar{justify-content:flex-end;padding:6px 10px;border-bottom:0}
+  /* 차트 아래 2차 실행 탭 스트립 — 차트 섹션에서만, 정산·알림·보고서 제외 (사용자 지시) */
+  .nfxh-wrap.mt-chart .nfxh-tabs.m2-only{display:flex;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--gl)}
+  .nfxh-wrap.mt-chart .nfxh-pane.on{display:block}
+  .nfxh-wrap.mt-strats .tft-bottom,.nfxh-wrap.mt-brain .tft-bottom{display:none}
   .tft-ctxin{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   .tft-pm b{font-size:13px}
   .tft-ct .g4,.tft-asx .ag2{grid-template-columns:repeat(2,1fr)}
@@ -8637,7 +8642,8 @@ function tfDashView(){
     +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFLinkUid()">Fast API 연동</button></div>';
   var unread=tt.notifs.filter(function(n){return !n.read;}).length;
   var BTABS=[['pos','포지션'],['open','미체결 주문'],['orders','주문 내역'],['fills','체결 내역'],['closed','종료 포지션'],['assets','자산'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
-  var MTABS=[['chart','차트'],['strats','전략'],['brain','Agent']].concat(BTABS);
+  var MTABS=[['chart','차트'],['strats','전략'],['brain','Agent']]; /* 모바일 상단 = 3개만 — 실행 탭은 차트 아래 2차 스트립 (사용자 지시) */
+  var M6=BTABS.slice(0,6); /* 포지션/미체결/주문/체결/종료 포지션/자산 — 정산·알림·보고서는 모바일 스트립 제외 */
   var CNT={alerts:unread,reports:(tt.periodics||[]).length,strats:all.length,pos:all.filter(function(x){return tfTmCalc(x).pos&&x.status==='live';}).length};
   function strip(list,onKey,sfx){ /* 접미사는 명시 인자 (term-codex 1.7) */
     return list.map(function(tb){ var c2=CNT[tb[0]]; return '<button class="nfxh-tab'+(tb[0]===onKey?' on':'')+'" data-k="'+tb[0]+'" onclick="tfNFHTab(&quot;'+tb[0]+'&quot;,this)">'+tb[1]+(c2?'<span class="ct" id="nfxh-ct-'+tb[0]+'-'+sfx+'">'+c2+'</span>':'')+'</button>'; }).join('');
@@ -8656,6 +8662,7 @@ function tfDashView(){
     +'<aside class="tft-brain" id="tft-brain"><div class="tft-resz" id="tft-resz" title="패널 폭 조절"></div><div class="tft-brainin" id="tft-brainin"></div></aside>'
     +'</div>'
     +'<div class="tft-bottom">'
+    +'<div class="nfxh-tabs m2-only">'+M6.map(function(tb){ var c2=CNT[tb[0]]; return '<button class="nfxh-tab'+(tb[0]==='pos'?' on':'')+'" data-k="'+tb[0]+'" onclick="tfTmMTab2(&quot;'+tb[0]+'&quot;,this)">'+tb[1]+(c2?'<span class="ct">'+c2+'</span>':'')+'</button>'; }).join('')+'</div>'
     +'<div class="tft-botbar"><div class="nfxh-tabs d-only" style="border-bottom:0;flex:1;min-width:0">'+strip(BTABS,'pos','d')+'</div>'
     +'<div class="tft-scope"><select id="tft-scope" onchange="TF_TM.scope=this.value;tfTmBottom()" aria-label="데이터 범위">'
     +'<option value="cur"'+(TF_TM.scope==='cur'?' selected':'')+'>현재 전략</option><option value="all"'+(TF_TM.scope==='all'?' selected':'')+'>전체 전략</option></select></div></div>'
@@ -9290,11 +9297,17 @@ function tfTmPane(k){
 }
 
 /* 터미널 탭 전환 — 모바일은 차트/실행 포함 전 섹션, 데스크톱은 하단 컨텐츠 탭만 */
+/* 모바일 차트 아래 2차 실행 탭 — 섹션(mt-*)은 유지하고 pane 만 전환 (사용자 지시) */
+function tfTmMTab2(k,btn){
+  document.querySelectorAll('.nfxh-tabs.m2-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b===btn); });
+  document.querySelectorAll('.nfxh-pane').forEach(function(p){ p.classList.toggle('on',p.getAttribute('data-p')===k); });
+  document.querySelectorAll('.nfxh-tabs.d-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
+}
 function tfNFHTab(k,btn){
   var w=$('nfxh-wrap'); if(!w) return;
   w.className=w.className.replace(/\s*mt-[a-z]+/g,'')+' mt-'+k;
   document.querySelectorAll('.nfxh-tabs.m-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
-  if(k!=='chart'&&k!=='side'){
+  if(k!=='chart'&&k!=='side'&&k!=='strats'&&k!=='brain'){ /* 섹션 탭은 하단 pane 선택을 건드리지 않는다 — 차트 복귀 시 pane 증발 방지 (mterm) */
     document.querySelectorAll('.nfxh-pane').forEach(function(p){ p.classList.toggle('on',p.getAttribute('data-p')===k); });
     document.querySelectorAll('.nfxh-tabs.d-only .nfxh-tab').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
   }
