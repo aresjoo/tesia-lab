@@ -73,10 +73,13 @@
     var cfg = window.TETH_CONFIG || {};
     if (cfg.zendeskKey) {
       if (window.zE) { window.zE('webWidget','open'); return; }
+      /* 로딩 중 재클릭 시 스니펫 중복 삽입 방지 + 실패 시 재시도 허용 (codex qa3 P2-6) */
+      if (document.getElementById('ze-snippet')) return;
       var s = document.createElement('script');
       s.id = 'ze-snippet';
       s.src = 'https://static.zdassets.com/ekr/snippet.js?key=' + encodeURIComponent(cfg.zendeskKey);
       s.onload = function(){ if (window.zE) window.zE('webWidget','open'); };
+      s.onerror = function(){ try{ s.remove(); }catch(e){} };
       document.body.appendChild(s);
       return;
     }
