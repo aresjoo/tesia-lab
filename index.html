@@ -3259,6 +3259,34 @@ body:has(#g-content .nfz-page) #teth-help,body:has(#g-content .nfz-page) #teth-h
 .nfz-card .sm{font-size:13px;line-height:19px}
 .nfz-sh{margin:32px 0 16px}
 .nfz-sh h2{font-size:19px}
+/* Finimize 3존 홈 — 좌 소형 2장 / 중앙 히어로 / 우 트렌딩, 하단 3열 그리드 + 토픽 레일 (사용자 지시) */
+.nfz-top3{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
+.nfz-top3 .c1{display:flex;flex-direction:column;gap:30px}
+.nfz-top3 .c1 .nfz-card h4{font-size:16.5px;line-height:23px}
+.nfz-top3 .c1 .nfz-card .sm{-webkit-line-clamp:3}
+.nfz-bigc .nfz-art{aspect-ratio:1.5;margin-bottom:14px}
+.nfz-bigc h4{font-size:25px;line-height:33px;-webkit-line-clamp:3}
+.nfz-bigc .sm{font-size:14px;line-height:22px;-webkit-line-clamp:3}
+.nfz-low{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
+.nfz-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 26px}
+.nfz-grid3 .nfz-card h4{font-size:16.5px;line-height:23px}
+.nfz-rail2{position:sticky;top:14px}
+@media (min-width:1121px){
+  .nfz-top3{grid-template-columns:284px minmax(0,1fr) 300px;gap:0 32px}
+  .nfz-low{grid-template-columns:minmax(0,1fr) 300px;gap:0 32px}
+}
+@media (max-width:1120px){
+  .nfz-top3 .c2{order:-1;margin-bottom:28px}
+  .nfz-top3 .c1{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+  .nfz-top3 .c3{margin-top:40px}
+  .nfz-top3 .c3 .nfz-rail,.nfz-rail2{position:static;max-width:560px}
+  .nfz-grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nfz-rail2{margin-top:40px}
+}
+@media (max-width:760px){
+  .nfz-top3 .c1{grid-template-columns:minmax(0,1fr)}
+  .nfz-grid3{grid-template-columns:minmax(0,1fr)}
+}
 /* R24 — FOR YOU 그리드 카드 (파스텔 엣지 + 소프트 글로우, 네온 금지) */
 .nfz-fycard{position:relative;border:1px solid rgba(165,180,252,.28);border-radius:12px;padding:14px 14px 16px;background:linear-gradient(180deg,rgba(30,32,48,.5) 0%,rgba(17,18,24,.72) 100%);box-shadow:0 0 24px -2px rgba(129,140,248,.14),inset 0 1px 0 rgba(255,255,255,.06)}
 .nfz-fycard .fyl{position:absolute;top:10px;left:10px;z-index:2;font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:5px;background:rgba(99,102,241,.22);color:#c7d2fe;border:1px solid rgba(129,140,248,.35)}
@@ -3876,14 +3904,14 @@ button{-webkit-tap-highlight-color:transparent}
         <span class="g-ico-pill" id="gp-close">사이드바 닫기</span>
       </div>
       <button class="g-new" onclick="gHome()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg><span class="lb">새 전략</span><span class="g-ico-pill lbp" id="gp-new">새 전략</span></button>
+      <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
+      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
+      <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">전략들</span><span class="g-ico-pill lbp">전략들</span></button>
       <button class="g-util" id="gu-insight" onclick="tfNav('#/insight')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="lb">인사이트</span><span class="g-ico-pill lbp">인사이트</span></button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
-      <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
-      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
-      <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">전략들</span><span class="g-ico-pill lbp">전략들</span></button>
       <button class="g-util" onclick="tfBrokersView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg><span class="lb">지원 거래소</span><span class="g-ico-pill lbp">지원 거래소</span></button>
       <div class="g-sec">최근</div>
       <div id="g-sess-list"></div>
@@ -11400,11 +11428,11 @@ function tfIns2Home(tag){
   var topics=Object.keys(tcnt).sort(function(a,b){ return tcnt[b]-tcnt[a]; }).slice(0,12);
   var topicsH='<div class="nfz-topics"><div class="th5">더 많은 주제를 탐험하세요</div><div class="tw">'
     +topics.map(function(t2){ return '<button type="button" class="tp'+(tag===t2?' on':'')+'" onclick="tfNav(&quot;#/insight/t/'+encodeURIComponent(t2)+'&quot;)"><span>'+gEsc(t2)+'</span></button>'; }).join('')+'</div></div>';
-  var trH='<div class="nfz-rail">'+topicsH+'<div class="rh">인기 급상승</div>'
-    +tfIns2Trend().map(function(p){
+  var trendRows=tfIns2Trend().map(function(p){
       return '<div class="nfz-tr"><div class="by"><span>'+tfIns2Meta(p,true)+'</span></div>'
         +'<div class="t" onclick="tfNav(&quot;#/insight/'+p.slug+'&quot;)">'+gEsc(p.title)+'</div></div>';
-    }).join('')+'</div>';
+    }).join('');
+  var trH='<div class="nfz-rail">'+topicsH+'<div class="rh">인기 급상승</div>'+trendRows+'</div>'; /* 태그 뷰용 결합 레일 */
   function cardH(p,big){
     return '<div class="nfz-card" onclick="tfNav(&quot;#/insight/'+p.slug+'&quot;)">'
       +'<div class="nfz-art" style="aspect-ratio:1.78"><span class="cat">'+gEsc(p.cat)+'</span>'+tfInsArt(p.art,'wide')+'</div>'
@@ -11420,34 +11448,30 @@ function tfIns2Home(tag){
       +'<div class="mt"><span class="nfz-au"><svg class="av2" width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="fyav" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#5B8AF7"/></linearGradient></defs><circle cx="16" cy="16" r="16" fill="url(#fyav)"/><path d="M8 19.5l4-6 3 4 3.4-8 5.6 9.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nm3">맞춤 분석 • 방금 전</span></span></div>'
       +'<h4>'+gEsc(pd.title)+'</h4><div class="sm">'+gEsc(pd.sub)+'</div></div>';
   }
-  var head=null,t1=[],t2s=[],t3=[];
-  rows.forEach(function(p){ if(!tag&&p.lv===1&&!head) head=p; else if(!tag&&p.lv===2&&t1.length<2) t1.push(p); else if(!tag&&p.lv===3&&t2s.length<3) t2s.push(p); else t3.push(p); });
-  var listH;
+  var head=null,t1=[],t3=[];
+  rows.forEach(function(p){ if(!tag&&p.lv===1&&!head) head=p; else if(!tag&&p.lv===2&&t1.length<2) t1.push(p); else t3.push(p); });
+  var mid;
   if(tag){
-    listH='<div class="nfz-sh" style="margin-top:0"><h2>태그: '+gEsc(tag)+'</h2><div class="s">'+rows.length+'개의 인사이트 • <a style="color:var(--gb2);cursor:pointer" onclick="tfNav(&quot;#/insight&quot;)">전체 보기</a></div></div>'
+    var listH='<div class="nfz-sh" style="margin-top:0"><h2>태그: '+gEsc(tag)+'</h2><div class="s">'+rows.length+'개의 인사이트 • <a style="color:var(--gb2);cursor:pointer" onclick="tfNav(&quot;#/insight&quot;)">전체 보기</a></div></div>'
       +(rows.length?'<div class="nfz-t1">'+rows.map(function(p){ return cardH(p); }).join('')+'</div>':'<div class="nfx-empty" style="padding:60px 0"><div class="nfx-etit">이 태그의 인사이트가 아직 없어요</div><div class="nfx-edesc">다른 태그를 눌러보거나 전체 목록으로 돌아가세요.</div></div>');
+    mid='<div class="nfz-cols"><div>'+listH+'</div>'+trH+'</div>';
   } else {
-    /* FOR YOU 는 메인과 동일 선상 — 헤드와 나란히 (R24) */
-    var headCard=head?cardH(head):'';
-    var topRow=fyH?('<div class="nfz-t1" style="margin-bottom:26px">'+headCard+fyH+'</div>')
-      :(head?('<div class="nfz-head" onclick="tfNav(&quot;#/insight/'+head.slug+'&quot;)">'
-        +'<div class="nfz-art nfz-ar"><span class="cat">'+gEsc(head.cat)+'</span>'+tfInsArt(head.art,'hero')+'</div>'
-        +'<div class="tx"><div class="mt"><span class="nfz-au">'+tfInsAvatar(head.au,17)+'<span class="nm3">'+tfIns2Meta(head)+'</span></span></div>'
-        +'<h3>'+gEsc(head.title)+'</h3><div class="sm">'+gEsc(head.sub)+'</div>'
-        +'<div style="margin-top:12px" class="nfz-tags">'+head.tags.slice(0,3).map(function(tg2){ return '<span class="tg" style="height:24px;font-size:11px" onclick="event.stopPropagation();tfNav(&quot;#/insight/t/'+encodeURIComponent(tg2)+'&quot;)">'+gEsc(tg2)+'</span>'; }).join('')+'</div>'
-        +'</div></div>'):'');
-    listH=topRow
-      +(t1.length?'<div class="nfz-t1">'+t1.map(function(p){ return cardH(p); }).join('')+'</div>':'')
+    /* Finimize 3존: 좌 소형 2장 / 중앙 히어로 카드 / 우 트렌딩 — 하단은 3열 그리드 + 토픽 레일 (사용자 지시) */
+    var bigH=head?('<div class="nfz-card nfz-bigc" onclick="tfNav(&quot;#/insight/'+head.slug+'&quot;)">'
+      +'<div class="nfz-art"><span class="cat">'+gEsc(head.cat)+'</span>'+tfInsArt(head.art,'hero')+'</div>'
+      +'<div class="mt"><span class="nfz-au">'+tfInsAvatar(head.au,16)+'<span class="nm3">'+tfIns2Meta(head)+'</span></span></div>'
+      +'<h4>'+gEsc(head.title)+'</h4><div class="sm">'+gEsc(head.sub)+'</div></div>'):'';
+    var gridH=fyH+t3.map(function(p){ return cardH(p); }).join(''); /* FOR YOU 는 그리드 동일 선상 첫 카드 (R24) */
+    mid='<div class="nfz-top3"><div class="c1">'+t1.map(function(p){ return cardH(p); }).join('')+'</div>'
+      +'<div class="c2">'+bigH+'</div>'
+      +'<div class="c3"><div class="nfz-rail"><div class="rh">인기 급상승</div>'+trendRows+'</div></div></div>'
       +'<div class="nfz-sh"><h2>새로운 인사이트</h2><div class="s">최근 72시간, 시장에서 꼭 알아야 할 변화</div></div>'
-      +(t2s.length?'<div class="nfz-t1">'+t2s.map(function(p){ return cardH(p); }).join('')+(t3.length&&t2s.length%2===1?cardH(t3.shift()):'')+'</div>':'')
-      +(t3.length?'<div style="margin-top:4px">'+t3.map(function(p){
-        return '<div class="nfz-row3" onclick="tfNav(&quot;#/insight/'+p.slug+'&quot;)"><span class="ic3">'+NFX_IC.doc+'</span>'
-          +'<span class="t">'+gEsc(p.title)+'</span><span class="mt">'+gEsc(p.cat)+' • '+tfIns2Ago(tfIns2Ts(p))+'</span></div>'; }).join('')+'</div>':'');
+      +'<div class="nfz-low"><div class="nfz-grid3">'+gridH+'</div><div class="nfz-rail2">'+topicsH+'</div></div>';
   }
   tfNFView('nfins','인사이트',
     '<div class="nfz-page">'
     +'<div class="nfz-open"><h1>'+tfIns2DateLine()+', 무슨 일이 벌어지고 있는 걸까요?<br><em>그리고 왜 당신이 관심을 가져야 할까요?</em></h1></div>' /* 날짜는 h1 첫 줄에 동일 선상 결합 — 별도 소형 라인 금지 (사용자 지시) */
-    +'<div class="nfz-cols"><div>'+listH+'</div>'+trH+'</div>'
+    +mid
     +'</div>');
 }
 var TF_INS2_IC={
