@@ -867,6 +867,26 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 .g-plus-pop p{font-size:13.5px;color:var(--gt2);line-height:1.65}
 .g-plus-pop .row{display:flex;justify-content:flex-end;margin-top:14px}
 .g-plus-pop .go{height:36px;padding:0 20px;border-radius:999px;background:var(--inv-bg);color:var(--inv-fg);font-size:13px;font-weight:600}
+/* ── 홈 템플릿 갤러리 (Gemini 카드 문법 — 사용자 지시) ── */
+.g-tplwrap{width:min(760px,94%);margin:26px auto 0;position:relative;z-index:1}
+.g-tpls{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px}
+.g-tpl{position:relative;border:0;padding:0;border-radius:18px;overflow:hidden;cursor:pointer;background:var(--g1);aspect-ratio:220/124;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .15s var(--ease),box-shadow .15s;font-family:inherit}
+.g-tpl svg{position:absolute;inset:0;width:100%;height:100%}
+.g-tpl:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 8px 24px rgba(0,0,0,.35)}
+.g-tpl .lb{position:absolute;left:11px;bottom:9px;font-size:12.5px;font-weight:600;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.75);z-index:1}
+.g-tpl.on{box-shadow:0 0 0 2.5px #a8c7fa,inset 0 0 0 1px rgba(255,255,255,.1)}
+.g-tpl .ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#a8c7fa;display:flex;align-items:center;justify-content:center;z-index:1}
+.g-pill.has-tpl{flex-wrap:wrap}
+.g-tpl-sel{flex:0 0 100%;order:-2;display:flex;gap:8px;flex-wrap:wrap;padding:4px 2px 9px}
+.g-tpl-sel .tchip{display:inline-flex;align-items:center;gap:8px;background:var(--g2);border:1px solid var(--gl2);border-radius:10px;padding:4px 6px 4px 4px;font-size:12.5px;color:var(--gt)}
+.g-tpl-sel .th{display:inline-flex;border-radius:6px;overflow:hidden}
+.g-tpl-sel .tchip button{border:0;background:none;color:var(--gt3);font-size:15px;line-height:1;cursor:pointer;padding:0 3px}
+.g-tpl-sel .tchip button:hover{color:var(--gt)}
+@media(max-width:860px){
+  .g-tplwrap{width:auto;align-self:stretch;margin:20px 16px 0} /* 센터 정렬 flex에서 width:auto 수축 방지 */
+  .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .g-home{justify-content:flex-start;padding-top:12vh} /* 모바일: 수직 센터링 해제 — 카드가 폴드 위로 살짝 보이게 (Gemini 스크롤 갤러리) */
+}
 /* 화면 맨 아래 고정, 사이드바 폭(펼침 256/접힘 64)을 따라 콘텐츠 영역 정중앙 정렬 */
 .g-terms{position:fixed;bottom:6px;left:0;right:0;text-align:center;font-size:12px;color:var(--gt3);z-index:20;padding:0 16px 0 272px}
 #g-root:has(.g-side.collapsed) .g-terms{padding-left:80px}
@@ -5932,8 +5952,113 @@ function gCosmosStart(){
 }
 
 /* ── home ── */
+/* ══ 홈 템플릿 갤러리 — Gemini 동영상 템플릿 문법: 카드 선택 → 컴포저 칩 + 맥락 플레이스홀더 (사용자 지시) ══ */
+var TF_TPL={act:null,asset:null};
+var TF_TPL_ACTS=[
+  {id:'auto',lb:'AI가 대신 거래',q0:'AI가 어떤 종목을 대신 거래해 드릴까요?',q:'AI가 어떻게 {A} 거래를 해드릴까요?',cmd0:'AI가 대신 거래하는 전략을 만들어줘',cmd:'{A} 거래를 AI에게 맡기는 전략을 만들어줘'},
+  {id:'ind',lb:'지표 생성 후, 거래',q0:'어떤 종목에 쓸 지표를 만들어 볼까요?',q:'{A}에 어떤 지표를 만들어 거래해 볼까요?',cmd0:'나만의 지표를 만들어 그 신호로 거래하는 전략을 만들어줘',cmd:'{A}에 맞는 지표를 만들고 그 신호로 거래하는 전략을 만들어줘'},
+  {id:'rank',lb:'전략 랭킹',q0:'어떤 종목의 전략 랭킹이 궁금하세요?',q:'{A} 전략 랭킹을 보여드릴까요?',cmd0:'요즘 인기 전략 랭킹을 보여줘',cmd:'{A} 인기 전략 랭킹을 보여줘'},
+  {id:'anal',lb:'시장/종목 분석',q0:'어떤 시장이나 종목을 분석해 드릴까요?',q:'{A}{obj} 어떻게 분석해 드릴까요?',cmd0:'지금 시장 전반을 분석해줘',cmd:'{A} 지금 시장 상태를 분석해줘'},
+  {id:'port',lb:'포트폴리오 분석',q0:'포트폴리오를 어떻게 나눠 볼까요?',q:'포트폴리오에서 {A}{obj} 어떻게 가져갈까요?',cmd0:'내 포트폴리오 구성을 분석해줘',cmd:'{A}{obj} 포함한 포트폴리오 구성을 분석해줘'}
+];
+var TF_TPL_ASSETS=[
+  {id:'spx',lb:'S&P 500'},{id:'ndx',lb:'NASDAQ 100'},{id:'btc',lb:'BTC'},{id:'eth',lb:'ETH'},
+  {id:'sec',lb:'삼성전자'},{id:'hyx',lb:'SK하이닉스'},{id:'tsla',lb:'TSLA'},{id:'spcx',lb:'SPACE X'}
+];
+/* 을/를 조사 — 받침 유무 (영문·숫자로 끝나면 '를') */
+function tfJosa(w){ var c=w.charCodeAt(w.length-1); if(c<0xAC00||c>0xD7A3) return '를'; return ((c-0xAC00)%28)?'을':'를'; }
+function tfTplArt(id,w,h){
+  w=w||220; h=h||124; var s='<svg viewBox="0 0 220 124" width="'+w+'" height="'+h+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true">';
+  var e='</svg>';
+  function bg(c1,c2){ return '<defs><linearGradient id="tg'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c1+'"/><stop offset="1" stop-color="'+c2+'"/></linearGradient></defs><rect width="220" height="124" fill="url(#tg'+id+')"/>'; }
+  if(id==='auto') return s+bg('#16233f','#0d1220')
+    +'<rect x="28" y="78" width="12" height="24" rx="2" fill="#4ec08d"/><rect x="46" y="62" width="12" height="40" rx="2" fill="#4ec08d"/><rect x="64" y="70" width="12" height="32" rx="2" fill="#ee766a"/><rect x="82" y="46" width="12" height="56" rx="2" fill="#4ec08d"/>'
+    +'<path d="M128 96c22 0 20-34 44-34" fill="none" stroke="#5B8AF7" stroke-width="3.5" stroke-linecap="round"/><circle cx="172" cy="62" r="13" fill="none" stroke="#5B8AF7" stroke-width="3.5"/><circle cx="172" cy="62" r="4.5" fill="#5B8AF7"/>'
+    +'<rect x="120" y="26" width="34" height="22" rx="6" fill="none" stroke="#8fb2ff" stroke-width="2.5"/><circle cx="130" cy="37" r="2.6" fill="#8fb2ff"/><circle cx="144" cy="37" r="2.6" fill="#8fb2ff"/><path d="M137 20v6" stroke="#8fb2ff" stroke-width="2.5"/>'+e;
+  if(id==='ind') return s+bg('#1c1530','#0d1220')
+    +'<path d="M24 92 60 66 96 78 138 40 196 52" fill="none" stroke="#c7a4ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    +'<circle cx="138" cy="40" r="5" fill="#c7a4ff"/><path d="M24 106 H196" stroke="#3a3355" stroke-width="2"/>'
+    +'<text x="26" y="36" font-family="Consolas,monospace" font-size="15" fill="#8fb2ff">f(x) = σ</text>'+e;
+  if(id==='rank') return s+bg('#241a10','#120d08')
+    +'<rect x="52" y="58" width="34" height="46" fill="#8a6a3a"/><rect x="94" y="38" width="34" height="66" fill="#E59E35"/><rect x="136" y="70" width="34" height="34" fill="#6a5228"/>'
+    +'<text x="111" y="62" text-anchor="middle" font-family="Arial" font-weight="700" font-size="17" fill="#120d08">1</text>'
+    +'<text x="69" y="80" text-anchor="middle" font-family="Arial" font-weight="700" font-size="14" fill="#120d08">2</text>'
+    +'<text x="153" y="90" text-anchor="middle" font-family="Arial" font-weight="700" font-size="14" fill="#120d08">3</text>'
+    +'<path d="M104 26l7 8 7-8" fill="none" stroke="#E59E35" stroke-width="3" stroke-linecap="round"/>'+e;
+  if(id==='anal') return s+bg('#0f2430','#0b131c')
+    +'<path d="M24 90 52 72 80 82 108 56 132 64" fill="none" stroke="#4ec08d" stroke-width="3" stroke-linecap="round"/>'
+    +'<circle cx="142" cy="56" r="26" fill="rgba(78,192,141,.1)" stroke="#e3e3e3" stroke-width="3.5"/><path d="M161 76l20 20" stroke="#e3e3e3" stroke-width="5" stroke-linecap="round"/>'
+    +'<path d="M132 62l10-10 10 6" fill="none" stroke="#4ec08d" stroke-width="3" stroke-linecap="round"/>'+e;
+  if(id==='port') return s+bg('#101c2e','#0c1018')
+    +'<circle cx="110" cy="62" r="34" fill="none" stroke="#22304a" stroke-width="16"/>'
+    +'<path d="M110 28a34 34 0 0 1 32 23" fill="none" stroke="#5B8AF7" stroke-width="16"/>'
+    +'<path d="M142 51a34 34 0 0 1-14 38" fill="none" stroke="#4ec08d" stroke-width="16"/>'
+    +'<path d="M128 89a34 34 0 0 1-34-2" fill="none" stroke="#E59E35" stroke-width="16"/>'+e;
+  if(id==='spx') return s+bg('#101728','#0a0f1a')
+    +'<text x="110" y="58" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="26" fill="#e9edf5">S&amp;P 500</text>'
+    +'<rect x="58" y="72" width="104" height="5" fill="#c8102e"/><path d="M58 96 86 84 114 90 146 76 162 80" fill="none" stroke="#3f4d68" stroke-width="2.5"/>'+e;
+  if(id==='ndx') return s+bg('#081a2e','#060d18')
+    +'<g transform="translate(80,22) scale(2.1)"><path d="M0 40 6.6 18h4.4L4.4 40z" fill="#4AA8E0"/><path d="M9.2 40 15.8 18h4.4L13.6 40z" fill="#1E7BC4"/><path d="M18.4 40 25 18c3.2 1 5 4.3 4.1 7.6l-2.4 8.1c-.9 3.1-3.4 6.3-7 6.3z" fill="#77C3EF"/></g>'+e;
+  if(id==='btc') return s+bg('#241505','#140b03')+'<circle cx="110" cy="62" r="44" fill="rgba(247,147,26,.14)"/><g transform="translate(84,36)">'+ (typeof tfAssetIcon==='function'?tfAssetIcon('BTC',52).replace('<svg','<svg x="0" y="0"'):'') +'</g>'+e;
+  if(id==='eth') return s+bg('#151a33','#0b0e1c')+'<circle cx="110" cy="62" r="44" fill="rgba(98,126,234,.14)"/><g transform="translate(84,36)">'+ (typeof tfAssetIcon==='function'?tfAssetIcon('ETH',52).replace('<svg','<svg x="0" y="0"'):'') +'</g>'+e;
+  if(id==='sec') return s+bg('#0f2050','#0a1430')
+    +'<ellipse cx="110" cy="62" rx="76" ry="30" fill="none" stroke="#dbe6ff" stroke-width="3" transform="rotate(-8 110 62)"/>'
+    +'<text x="110" y="68" text-anchor="middle" font-family="Arial" font-weight="700" font-size="17" letter-spacing="1.5" fill="#fff">SAMSUNG</text>'+e;
+  if(id==='hyx') return s+bg('#2a1108','#170a05')
+    +'<text x="110" y="60" text-anchor="middle" font-family="Arial" font-weight="800" font-size="24" fill="#ff5a1e">SK</text>'
+    +'<text x="110" y="86" text-anchor="middle" font-family="Arial" font-weight="600" font-size="16" letter-spacing="2" fill="#f2ded4">hynix</text>'
+    +'<circle cx="164" cy="42" r="5" fill="#ffb43a"/><circle cx="178" cy="52" r="3.4" fill="#ff5a1e"/>'+e;
+  if(id==='tsla') return s+bg('#25090c','#120507')
+    +'<path d="M110 52v44" stroke="#e82127" stroke-width="10" stroke-linecap="round"/>'
+    +'<path d="M70 36c14-8 66-8 80 0l-11 15c-9-6-49-6-58 0z" fill="#e82127"/>'+e;
+  if(id==='spcx') return s+bg('#0b0d12','#05060a')
+    +'<path d="M24 96C66 78 148 50 194 44" fill="none" stroke="#8fb2ff" stroke-width="2.5" stroke-dasharray="1 9" stroke-linecap="round"/>'
+    +'<path d="M174 38l17-6-6 17-8-3z" fill="#e9edf5"/>'
+    +'<text x="104" y="70" text-anchor="middle" font-family="Arial" font-weight="700" font-style="italic" font-size="16" letter-spacing="4" fill="#e9edf5">SPACEX</text>'+e;
+  return s+bg('#1a1c22','#101216')+e;
+}
+function tfTplCards(){
+  function card(kind,t){ var on=(TF_TPL[kind]===t.id);
+    return '<button type="button" class="g-tpl'+(on?' on':'')+'" data-k="'+kind+'" data-id="'+t.id+'" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')" aria-pressed="'+on+'">'
+      +tfTplArt(t.id)+'<span class="lb">'+t.lb+'</span>'+(on?'<span class="ck"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0f1012" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>':'')+'</button>'; }
+  return TF_TPL_ACTS.map(function(t){ return card('act',t); }).join('')
+    +TF_TPL_ASSETS.map(function(t){ return card('asset',t); }).join('');
+}
+function tfTplOf(kind,id){ return (kind==='act'?TF_TPL_ACTS:TF_TPL_ASSETS).filter(function(x){return x.id===id;})[0]||null; }
+function tfTplText(){
+  var a=TF_TPL.act?tfTplOf('act',TF_TPL.act):null, s=TF_TPL.asset?tfTplOf('asset',TF_TPL.asset):null;
+  if(!a&&!s) return null;
+  function fill(t){ return t.replace('{A}{obj}',s?s.lb+tfJosa(s.lb):'').replace('{A}',s?s.lb:''); }
+  if(a&&s) return {q:fill(a.q),cmd:fill(a.cmd)};
+  if(a) return {q:a.q0,cmd:a.cmd0};
+  return {q:s.lb+(tfJosa(s.lb)==='을'?'에':'에')+' 대해 무엇이 궁금하세요?',cmd:s.lb+' 지금 어떤 상황인지 분석해줘'};
+}
+function tfTplPick(kind,id){
+  TF_TPL[kind]=(TF_TPL[kind]===id)?null:id;
+  tfTplSync();
+}
+function tfTplSync(){
+  var g=$('g-tpls'); if(g) g.innerHTML=tfTplCards();
+  var row=$('g-tpl-sel');
+  if(row){
+    var chips=[];
+    ['act','asset'].forEach(function(kind){ var t=TF_TPL[kind]&&tfTplOf(kind,TF_TPL[kind]); if(t)
+      chips.push('<span class="tchip"><span class="th">'+tfTplArt(t.id,34,20)+'</span>'+t.lb+'<button type="button" aria-label="'+t.lb+' 선택 해제" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')">×</button></span>'); });
+    row.innerHTML=chips.join('');
+    row.style.display=chips.length?'flex':'none';
+  }
+  var inEl=$('g-home-in'), t2=tfTplText();
+  if(inEl){
+    inEl.placeholder=t2?t2.q:((typeof L==='function')?L('home.ph'):'예: 비트코인이 떨어졌을 때 사는 전략');
+    if(t2) try{ inEl.focus(); }catch(e){}
+  }
+  var pill=$('g-pill'); if(pill) pill.classList.toggle('has-tpl',!!t2);
+  var sb=$('g-home-send'); /* 칩만 선택해도 전송 가능 — 빈 입력이면 플레이스홀더 질문이 전송된다 */
+  if(sb&&!(inEl&&inEl.value.trim())) sb.style.display=t2?'inline-flex':'none';
+}
 function gHome(){
   G.cur=null; G.mode='home'; G.tabs=[]; G.activeTab=null; /* 진행 중인 연구 타이머는 유지, 내비게이션이 런을 중단하지 않는다 */
+  TF_TPL={act:null,asset:null}; /* 홈 재진입 시 템플릿 선택 초기화 */
   TAI.chart=null; TAI.ohlc=null; /* 홈에선 활성 세션 컨텍스트 없음 */
   document.body.classList.remove('kb-open'); /* 키보드 상태 잔존으로 배너, 칩이 숨은 채 남지 않게 */
   $('g-chead').hidden=true; gComposer(false);
@@ -5962,7 +6087,7 @@ function gHome(){
     '<span class="g-hero-spark brand-bg"></span>'+
     '<div class="g-hello">'+GR.h+'</div>'+
     '<div class="g-sub">'+GR.s+'</div>'+
-    '<div class="g-pill" id="g-pill"><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="'+TR('plus.t','더 많은 기능 사용하기')+'">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="'+TR('home.idea','연구 아이디어')+'"></textarea>'+
+    '<div class="g-pill" id="g-pill"><div class="g-tpl-sel" id="g-tpl-sel" style="display:none"></div><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="'+TR('plus.t','더 많은 기능 사용하기')+'">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="'+TR('home.idea','연구 아이디어')+'"></textarea>'+
     '<button class="g-exp" id="g-exp" onclick="gExpToggle(event)" aria-label="'+TR('comp.full','전체 화면')+'">'+
     '<svg class="i-exp" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>'+
     '<svg class="i-col" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10h-6V4M14 10l7-7M4 14h6v6M10 14l-7 7"/></svg>'+
@@ -5971,13 +6096,10 @@ function gHome(){
     '<div class="g-plus-pop" id="g-plus-pop" onmouseenter="gPlusStay()" onmouseleave="gPlusLeave()"><b>'+TR('plus.t','더 많은 기능 사용하기')+'</b><p>'+TR('plus.b','로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.')+'</p><div class="row"><button class="go" onclick="authOpen(\'login\')">'+TR('nav.login','로그인')+'</button></div></div>'+
     '</div>'+
     '<div class="g-chipstack">'+
-    '<div class="g-home-chips">'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.1','하락 후 반등 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.2','추세 추종 전략')+'</button>'+
-    '<button class="g-qchip" onclick="gNew(this.textContent)">'+TR('chip.3','막연한 아이디어부터')+'</button>'+
-    '</div>'+
     (S.user?'':'<div class="g-free-row"><button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','영원히 $0, 신용카드 필요 없음')+'</span></button></div>')+
     '</div>'+
+    /* 템플릿 갤러리 — 기존 예시 칩 3개 대체 (Gemini 템플릿 문법, 사용자 지시) */
+    '<div class="g-tplwrap"><div class="g-tpls" id="g-tpls">'+tfTplCards()+'</div></div>'+
     '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
       .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
@@ -6092,7 +6214,11 @@ function gPillDropEnd(d){
 }
 function gNew(preset){
   var inEl=$('g-home-in');
-  var text=preset||(inEl?inEl.value.trim():'')||'비트코인이 떨어졌을 때 사는 전략';
+  var typed=preset||(inEl?inEl.value.trim():'');
+  var tpl=(typeof tfTplText==='function')?tfTplText():null;
+  /* 템플릿 칩: 입력 없으면 합성 명령 그대로, 입력 있으면 맥락+입력 결합 (Gemini 템플릿 동작) */
+  var text=tpl?(typed?tpl.cmd+'. '+typed:tpl.cmd):(typed||'비트코인이 떨어졌을 때 사는 전략');
+  TF_TPL={act:null,asset:null};
   /* 비로그인 상태에서 채팅 전송 시 로그인/회원가입 팝업, 로그인하면 이어서 시작 */
   if(!S.user){ G.pendingNew=text; authOpen('signup'); return; }
   if(TAI.ok!==false&&typeof tfAiGate==='function'&&!tfAiGate()) return; /* 무료 소진 — 세션 생성 전 차단, 입력 보존 (codex flow3) */
@@ -13689,6 +13815,7 @@ function phRotStart(){
   G.phT=setInterval(function(){
     var hi=$('g-home-in');
     if(!hi){ clearInterval(G.phT); G.phT=null; return; } /* 홈 이탈 시 자동 정리 */
+    if(TF_TPL&&(TF_TPL.act||TF_TPL.asset)) return; /* 템플릿 칩 활성 시 맥락 플레이스홀더를 덮지 않는다 */
     var pre=preF(); /* 창 크기 변경 시 프리픽스 즉시 반영 */
     var cur=list[pi];
     if(mode==='type'){
