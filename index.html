@@ -6366,7 +6366,17 @@ function gHome(){
   var TR=function(k,d){ return (typeof L==='function')?L(k):d; }; /* i18n 정의 전 초기 부트 폴백 */
   var GPOOL=(LANG!=='ko'&&typeof GREETS_ALL!=='undefined'&&GREETS_ALL[LANG])?GREETS_ALL[LANG]:GREETS;
   var GR=GPOOL[Math.floor(Math.random()*GPOOL.length)];
-  GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GR.s};
+  /* 서브카피는 로테이션 없이 고정 (Gemini 문법, 사용자 지시) — GREETS의 s 는 미사용 */
+  var GSUB={
+    ko:'템플릿을 사용해 보거나 채팅으로 투자를 설명하세요. TETH 모델로 만듭니다.',
+    en:'Try a template or describe your investing idea in chat. The TETH model will build it.',
+    ja:'テンプレートを試すか、チャットで投資を説明してください。TETHモデルが作ります。',
+    'zh-CN':'试试模板，或在聊天中描述你的投资。由TETH模型来构建。',
+    'zh-TW':'試試模板，或在聊天中描述你的投資。由TETH模型來構建。',
+    es:'Prueba una plantilla o describe tu inversión en el chat. El modelo TETH la construye.',
+    fr:"Essayez un modèle ou décrivez votre investissement dans le chat. Le modèle TETH s'en charge."
+  };
+  GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GSUB[LANG]||GSUB.ko};
   gContent(
     '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
     '<canvas class="g-cosmos" id="g-cosmos" aria-hidden="true"></canvas>'+
