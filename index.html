@@ -601,6 +601,8 @@ body.light .g-cosmos{opacity:.8}
 .g-hello{font-size:clamp(30px,3.8vw,44px);font-weight:500;letter-spacing:-.02em;line-height:1.28;color:var(--gt);text-align:center;word-break:keep-all} /* 1.6 상속 금지, Gemini 히어로 수준으로 타이트하게 */
 @media (max-width:860px){.g-hello .hseg{display:block}} /* 모바일만 지정된 지점에서 개행, 데스크톱은 공백 포함 한 줄 */
 .g-sub{font-size:clamp(14px,1.3vw,17px);color:var(--gt2);text-align:center;margin-top:10px;word-break:keep-all}
+.g-sub .sbr{display:none} /* 서브카피 지정 줄바꿈 — 데스크톱 1줄, 모바일에서만 문장 경계로 꺾임 (사용자 지시) */
+@media (max-width:860px){ .g-sub .sbr{display:inline} }
 .g-pill{position:relative;width:min(760px,94%);margin-top:34px;min-height:58px;border-radius:999px;background:var(--pill);box-shadow:var(--shadow-pill);display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;padding:8px 10px 8px 20px}
 .g-pill textarea{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:14.5px;font-family:inherit;resize:none;line-height:21px;height:21px;max-height:147px;padding:0;margin:6px 0;overflow-y:auto}
 .g-pill textarea::placeholder{color:var(--gt3)}
@@ -6350,33 +6352,31 @@ function gHome(){
   $('g-chead').hidden=true; gComposer(false);
   $('g-aux').style.display='none';
   gSideRender(); gTeamRender(); gArtRender();
-  var GREETS=[
-    {h:'오늘 밤 시장,\n어떻게 볼까요?',s:'AI와 대화하며 시장을 읽고, 전략까지 만들어보세요'},
-    {h:'차트 볼 줄\n몰라도 됩니다',s:'궁금한 걸 말하면 TETH가 검증 가능한 전략으로 바꿔드려요'},
-    {h:'시장은 혼자\n이기기 어렵습니다',s:'당신 편에서 싸우는 AI 트레이딩 에이전트, TETH'},
-    {h:'시장은\n기다려주지 않아요',s:'아이디어를 바로 전략으로, 검증은 TETH가 할게요'},
-    {h:'뉴스는 늦고,\n시장은 빠릅니다',s:'TETH가 24시간 시장을 지켜보고 있어요'},
-    {h:'지금 사도 될까요?\n물어보세요',s:'감이 아니라 데이터로 과거 시장에서 검증해드려요'},
-    {h:'삼성전자 vs SK하이닉스,\n뭘 살까요?',s:'AI와 대화하며 비교하고, 전략으로 만들어보세요'},
-    {h:'주식, 암호화폐, 금,\n시장이면 다 물어보세요',s:'무엇이든 검증 가능한 전략이 됩니다'},
-    {h:'테슬라 왜 떨어졌어요?\n물어보세요',s:'이유를 이해하고, 다음 전략까지 만들어보세요'},
-    {h:'TETH와 함께\n시장을 정복하세요',s:'아이디어부터 검증, 실행까지 한 곳에서'}
+  var GREETS=[ /* 히어로 카피 6종 로테이션 (사용자 확정) — 서브카피는 GSUB 고정 */
+    {h:'차트 볼 줄\n몰라도 됩니다'},
+    {h:'차트 대신\n말로 하세요'},
+    {h:'투자 아이디어만\n있으면 됩니다'},
+    {h:'당신의 생각을\n투자 전략으로'},
+    {h:'투자도 그냥\n말하면 됩니다'},
+    {h:'시장은 혼자\n이기기 어렵습니다'}
   ];
   var LANG=(typeof GLC!=='undefined')?GLC.lang:'ko';
   var TR=function(k,d){ return (typeof L==='function')?L(k):d; }; /* i18n 정의 전 초기 부트 폴백 */
   var GPOOL=(LANG!=='ko'&&typeof GREETS_ALL!=='undefined'&&GREETS_ALL[LANG])?GREETS_ALL[LANG]:GREETS;
   var GR=GPOOL[Math.floor(Math.random()*GPOOL.length)];
-  /* 서브카피는 로테이션 없이 고정 (Gemini 문법, 사용자 지시) — GREETS의 s 는 미사용 */
+  /* 서브카피는 로테이션 없이 고정 (Gemini 문법, 사용자 지시) — GREETS의 s 는 미사용.
+     '\n' = 모바일 전용 줄바꿈 지점 (.sbr, 문장 경계) */
   var GSUB={
-    ko:'템플릿을 사용해 보거나 채팅으로 투자를 설명하세요. TETH 모델로 만듭니다.',
-    en:'Try a template or describe your investing idea in chat. The TETH model will build it.',
-    ja:'テンプレートを試すか、チャットで投資を説明してください。TETHモデルが作ります。',
-    'zh-CN':'试试模板，或在聊天中描述你的投资。由TETH模型来构建。',
-    'zh-TW':'試試模板，或在聊天中描述你的投資。由TETH模型來構建。',
-    es:'Prueba una plantilla o describe tu inversión en el chat. El modelo TETH la construye.',
-    fr:"Essayez un modèle ou décrivez votre investissement dans le chat. Le modèle TETH s'en charge."
+    ko:'템플릿을 사용해 보거나 채팅으로 투자를 설명하세요.\nTETH 모델로 만듭니다.',
+    en:'Try a template or describe your investing idea in chat.\nThe TETH model will build it.',
+    ja:'テンプレートを試すか、チャットで投資を説明してください。\nTETHモデルが作ります。',
+    'zh-CN':'试试模板，或在聊天中描述你的投资。\n由TETH模型来构建。',
+    'zh-TW':'試試模板，或在聊天中描述你的投資。\n由TETH模型來構建。',
+    es:'Prueba una plantilla o describe tu inversión en el chat.\nEl modelo TETH la construye.',
+    fr:"Essayez un modèle ou décrivez votre investissement dans le chat.\nLe modèle TETH s'en charge."
   };
-  GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),s:GSUB[LANG]||GSUB.ko};
+  GR={h:GR.h.split('\n').map(function(t){return '<span class="hseg">'+t+'</span>';}).join(' '),
+    s:(GSUB[LANG]||GSUB.ko).replace('\n',' <br class="sbr">')};
   gContent(
     '<div class="g-home" style="min-height:calc(100vh - 120px);position:relative">'+
     '<canvas class="g-cosmos" id="g-cosmos" aria-hidden="true"></canvas>'+
