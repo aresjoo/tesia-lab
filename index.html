@@ -879,17 +879,21 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 /* 종목 = 실제 로고 타일 / 기능 배지·브랜드 마크 (사용자 지시) */
 .g-tpl .timg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .g-tpl .timg img{max-width:56%;max-height:52%;object-fit:contain;display:block}
+.g-tpl .timg img.inv,.g-tpl-sel .th .timg img.inv{filter:brightness(0) invert(1)} /* 다크 배경 화이트 리버스 */
 .g-tpl .tbdg{position:absolute;top:10px;right:10px;z-index:1;font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:rgba(91,138,247,.92);color:#fff}
 .g-tpl .tbdg.hot{background:#e0604b}
 .g-tpl .tbrandmark{position:absolute;top:9px;left:10px;z-index:1;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(15,16,18,.88)}
 .g-tpl-sel .th .timg{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .g-tpl-sel .th .timg img{max-width:72%;max-height:72%;object-fit:contain}
-/* 채팅은 갤러리 아래, 스크롤 시 하단 고정 (Gemini) — 모바일은 기존 fixed 유지 */
-.g-home .g-pill{position:sticky;bottom:22px;z-index:20;margin-top:30px}
+/* 채팅바 밴드 — 아래는 검정, 위는 그라데이션 쉐도잉 (사용자 지시). 데스크톱=스티키, 모바일=fixed */
+@media (min-width:861px){
+  .g-pillband{position:sticky;bottom:0;z-index:20;align-self:stretch;display:flex;justify-content:center;margin-top:26px;padding:30px 0 16px;background:linear-gradient(to top,#0f1012 56%,rgba(15,16,18,0))}
+}
+.g-pillband .g-pill{margin-top:0}
 .g-home .g-plus-pop{top:auto;bottom:70px}
 .g-tplwrap{margin-bottom:8px}
 .g-tpl .ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#a8c7fa;display:flex;align-items:center;justify-content:center;z-index:1}
-.g-pill.has-tpl{flex-wrap:wrap}
+.g-pill.has-tpl{flex-wrap:wrap;border-radius:28px} /* 2줄 상태에서 스타디움 곡률 밖으로 전송버튼이 나가지 않게 (.multi와 동일 처리) */
 .g-tpl-sel{flex:0 0 100%;order:-2;display:flex;gap:8px;flex-wrap:wrap;padding:4px 2px 10px;animation:gTselIn .2s var(--ease)}
 /* Gemini 칩: 필 형태 + 원형 썸네일 + × (레퍼런스 영상) */
 .g-tpl-sel .tchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:0;border-radius:999px;padding:5px 7px 5px 5px;font-size:13px;font-weight:500;color:var(--gt);animation:gTchipIn .18s var(--ease)}
@@ -902,8 +906,9 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 @media (prefers-reduced-motion: reduce){ .g-tpl-sel,.g-tpl-sel .tchip{animation:none} }
 @media(max-width:860px){
   .g-tplwrap{width:auto;align-self:stretch;margin:20px 16px 0} /* 센터 정렬 flex에서 width:auto 수축 방지 */
-  .g-tpls{grid-template-columns:minmax(0,1fr);gap:14px} /* Gemini 모바일 = 1열 풀폭 카드 (레퍼런스 영상) */
-  .g-tpl{border-radius:26px}
+  .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px} /* 모바일 2×N (사용자 지시) */
+  .g-tpl{border-radius:20px}
+  .g-tpl .lb{font-size:12.5px;left:10px;bottom:8px}
   .g-home{padding-top:9vh}
   body:has(#g-content .g-home) #teth-help{bottom:152px} /* 홈 고정 컴포저의 전송 버튼과 FAB 겹침 방지 */
 }
@@ -1544,7 +1549,9 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
   .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
-  .g-pill{position:fixed;left:16px;right:16px;bottom:64px;width:auto;margin:0;z-index:30;animation:gRiseIn .5s var(--ease) .1s both}
+  .g-pillband{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:14px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#0f1012 76%,rgba(15,16,18,0));animation:gRiseIn .5s var(--ease) .1s both}
+  .g-pill{width:auto;margin:0}
+  .g-terms{z-index:31}
   .g-plus-pop{top:auto;bottom:70px}
   .g-chipstack{position:fixed;left:16px;right:16px;bottom:136px;z-index:25}
   .g-home-chips{animation:gRiseIn .5s var(--ease) .18s both}
@@ -5993,17 +6000,18 @@ var TF_TPL_ACTS=[
    frag:'{A} 중심의 포트폴리오 구성을 분석해주',frag0:'포트폴리오 구성을 분석해주',more:'포트폴리오 구성 분석도 해주'}
 ];
 /* 종목 = 실제 로고 파일 (assets/logos, 다크/라이트 배경은 로고 원색 대비 기준) — 사용자 지시: 담백하게 로고만 */
+/* 전 종목 다크 배경 통일 — 어두운 원색 로고는 화이트 리버스(inv, 공식 reverse 표기 관행) (사용자 지시) */
 var TF_TPL_ASSETS=[
-  {id:'spx',lb:'S&P 500',img:'assets/logos/spx.svg',bg:'#111318'},
-  {id:'ndx',lb:'NASDAQ 100',img:'assets/logos/ndx.svg',bg:'#eef1f5'},
+  {id:'spx',lb:'S&P 500',img:'assets/logos/spx.svg',bg:'#12141a'},
+  {id:'ndx',lb:'NASDAQ 100',img:'assets/logos/ndx.svg',bg:'#0a1522',inv:1},
   {id:'btc',lb:'BTC',img:'assets/logos/btc.svg',bg:'#16100a'},
-  {id:'eth',lb:'ETH',img:'assets/logos/eth.svg',bg:'#eef1f5'},
-  {id:'sec',lb:'삼성전자',img:'assets/logos/sec.svg',bg:'#f2f4f8'},
-  {id:'hyx',lb:'SK하이닉스',img:'assets/logos/hyx.svg',bg:'#f4f2ee'},
+  {id:'eth',lb:'ETH',img:'assets/logos/eth.svg',bg:'#12131f',inv:1},
+  {id:'sec',lb:'삼성전자',img:'assets/logos/sec.svg',bg:'#0c1630',inv:1},
+  {id:'hyx',lb:'SK하이닉스',img:'assets/logos/hyx.svg',bg:'#1c0f0a',inv:1},
   {id:'tsla',lb:'TSLA',img:'assets/logos/tsla.svg',bg:'#150a0c'},
-  {id:'spcx',lb:'SPACEX',img:'assets/logos/spcx.svg',bg:'#eef1f5'},
-  {id:'nvda',lb:'NVDA',img:'assets/logos/nvda.svg',bg:'#eef3ea'},
-  {id:'aapl',lb:'AAPL',img:'assets/logos/aapl.svg',bg:'#eef1f5'}
+  {id:'spcx',lb:'SPACEX',img:'assets/logos/spcx.svg',bg:'#0b0f16',inv:1},
+  {id:'nvda',lb:'NVDA',img:'assets/logos/nvda.svg',bg:'#0d130c',inv:1},
+  {id:'aapl',lb:'AAPL',img:'assets/logos/aapl.svg',bg:'#101216',inv:1}
 ];
 /* 을/를, 와/과 조사 — 받침 유무 (영문·숫자로 끝나면 를/와) */
 function tfJosa(w){ var c=w.charCodeAt(w.length-1); if(c<0xAC00||c>0xD7A3) return '를'; return ((c-0xAC00)%28)?'을':'를'; }
@@ -6264,7 +6272,7 @@ function tfTplArt(id,w,h){
   return s+a+'</svg>';
 }
 function tfTplThumb(t,w,h){
-  if(t.img) return '<span class="timg" style="background:'+t.bg+'"><img src="'+t.img+'" alt="'+t.lb+'"></span>';
+  if(t.img) return '<span class="timg" style="background:'+t.bg+'"><img'+(t.inv?' class="inv"':'')+' src="'+t.img+'" alt="'+t.lb+'"></span>';
   return tfTplArt(t.id,w||220,h||124);
 }
 function tfTplCards(){
@@ -6319,7 +6327,7 @@ function tfTplSync(){
   if(row){
     var chips=[];
     [['acts',TF_TPL.acts],['assets',TF_TPL.assets]].forEach(function(kv){ kv[1].forEach(function(id){ var t=tfTplOf(kv[0],id); if(t)
-      chips.push('<span class="tchip"><span class="th">'+(t.img?'<span class="timg" style="background:'+t.bg+'"><img src="'+t.img+'" alt=""></span>':tfTplArt(t.id,42,42))+'</span>'+t.lb+'<button type="button" aria-label="'+t.lb+' 선택 해제" onclick="tfTplPick(\''+kv[0]+'\',\''+id+'\')">×</button></span>'); }); });
+      chips.push('<span class="tchip"><span class="th">'+(t.img?tfTplThumb(t):tfTplArt(t.id,42,42))+'</span>'+t.lb+'<button type="button" aria-label="'+t.lb+' 선택 해제" onclick="tfTplPick(\''+kv[0]+'\',\''+id+'\')">×</button></span>'); }); });
     row.innerHTML=chips.join('');
     row.style.display=chips.length?'flex':'none';
   }
@@ -6368,14 +6376,14 @@ function gHome(){
     '<div class="g-chipstack">'+
     (S.user?'':'<div class="g-free-row"><button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','영원히 $0, 신용카드 필요 없음')+'</span></button></div>')+
     '</div>'+
-    '<div class="g-pill" id="g-pill"><div class="g-tpl-sel" id="g-tpl-sel" style="display:none"></div><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="'+TR('plus.t','더 많은 기능 사용하기')+'">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="'+TR('home.idea','연구 아이디어')+'"></textarea>'+
+    '<div class="g-pillband"><div class="g-pill" id="g-pill"><div class="g-tpl-sel" id="g-tpl-sel" style="display:none"></div><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="'+TR('plus.t','더 많은 기능 사용하기')+'">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="'+TR('home.idea','연구 아이디어')+'"></textarea>'+
     '<button class="g-exp" id="g-exp" onclick="gExpToggle(event)" aria-label="'+TR('comp.full','전체 화면')+'">'+
     '<svg class="i-exp" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>'+
     '<svg class="i-col" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10h-6V4M14 10l7-7M4 14h6v6M10 14l-7 7"/></svg>'+
     '<span class="tip" id="g-exp-tip">'+TR('comp.full','전체 화면')+'</span></button>'+
     '<span class="g-pill-sp"></span><button class="g-send" id="g-home-send" onclick="gNew()" aria-label="'+TR('home.send','연구 시작')+'" style="display:none">↑</button>'+
     '<div class="g-plus-pop" id="g-plus-pop" onmouseenter="gPlusStay()" onmouseleave="gPlusLeave()"><b>'+TR('plus.t','더 많은 기능 사용하기')+'</b><p>'+TR('plus.b','로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.')+'</p><div class="row"><button class="go" onclick="authOpen(\'login\')">'+TR('nav.login','로그인')+'</button></div></div>'+
-    '</div>'+
+    '</div></div>'+
     '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
       .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
