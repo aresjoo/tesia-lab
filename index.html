@@ -916,7 +916,7 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 @media (prefers-reduced-motion: reduce){ .g-tpl-sel,.g-tpl-sel .tchip{animation:none} }
 @media(max-width:860px){
   .g-tplwrap{width:auto;align-self:stretch;margin:20px 16px 0} /* 센터 정렬 flex에서 width:auto 수축 방지 */
-  .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px} /* 모바일 2×N (사용자 지시) */
+  .g-tpls{grid-template-columns:minmax(0,1fr);gap:14px} /* 모바일 1열 풀폭 — Gemini 동영상 갤러리 문법 (사용자 지시) */
   .g-tpl{border-radius:20px;aspect-ratio:220/142} /* 모바일 카드 세로 +15% (사용자 지시) */
   .g-tpl .lb{font-size:12.5px;left:10px;bottom:8px}
   .g-home{padding-top:9vh}
@@ -6227,7 +6227,47 @@ var TF_TPL_ASSETS=[
   {id:'tsla',lb:'TSLA',img:'assets/logos/tsla.svg',bg:'#150a0c'},
   {id:'spcx',lb:'SPACEX',img:'assets/logos/spcx.svg',bg:'#0b0f16',inv:1},
   {id:'nvda',lb:'NVDA',img:'assets/logos/nvda.svg',bg:'#0d130c',inv:1},
-  {id:'aapl',lb:'AAPL',img:'assets/logos/aapl.svg',bg:'#101216',inv:1}
+  {id:'aapl',lb:'AAPL',img:'assets/logos/aapl.svg',bg:'#101216',inv:1},
+  {id:'msft',lb:'MSFT',img:'assets/logos/msft.svg',bg:'#0e1420'},
+  {id:'googl',lb:'GOOGL',img:'assets/logos/googl.svg',bg:'#101216'},
+  {id:'amzn',lb:'AMZN',img:'assets/logos/amzn.svg',bg:'#10120f',inv:1},
+  {id:'meta',lb:'META',img:'assets/logos/meta.svg',bg:'#0a1220',inv:1},
+  {id:'avgo',lb:'AVGO',img:'assets/logos/avgo.svg',bg:'#170b0b',inv:1},
+  {id:'tsm',lb:'TSM',img:'assets/logos/tsm.svg',bg:'#0d1118'},
+  {id:'brk',lb:'BRK.B',img:'assets/logos/brk.svg',bg:'#12100c',inv:1},
+  {id:'lly',lb:'LLY',img:'assets/logos/lly.svg',bg:'#160a0c'},
+  {id:'wmt',lb:'WMT',img:'assets/logos/wmt.svg',bg:'#0d1526'},
+  {id:'jpm',lb:'JPM',img:'assets/logos/jpm.svg',bg:'#12100e',inv:1},
+  {id:'visa',lb:'VISA',img:'assets/logos/visa.svg',bg:'#0c1226'},
+  {id:'ma',lb:'마스터카드',img:'assets/logos/ma.svg',bg:'#140e0a'},
+  {id:'nflx',lb:'NFLX',img:'assets/logos/nflx.svg',bg:'#140a0a'},
+  {id:'xom',lb:'XOM',img:'assets/logos/xom.svg',bg:'#150b0b'},
+  {id:'orcl',lb:'ORCL',img:'assets/logos/orcl.svg',bg:'#150b0b'},
+  {id:'cost',lb:'COST',img:'assets/logos/cost.svg',bg:'#101425'},
+  {id:'pg',lb:'P&G',img:'assets/logos/pg.svg',bg:'#0c1322'},
+  {id:'aramco',lb:'아람코',img:'assets/logos/aramco.png',bg:'#0b1512',inv:1},
+  {id:'sap',lb:'SAP',img:'assets/logos/sap.svg',bg:'#0a1322'},
+  {id:'asml',lb:'ASML',img:'assets/logos/asml.svg',bg:'#0d1118'},
+  {id:'bac',lb:'BAC',img:'assets/logos/bac.svg',bg:'#141019',inv:1},
+  {id:'hd',lb:'홈디포',img:'assets/logos/hd.svg',bg:'#170e07'},
+  {id:'cola',lb:'코카콜라',img:'assets/logos/cola.svg',bg:'#160909',inv:1},
+  {id:'mcd',lb:'MCD',img:'assets/logos/mcd.svg',bg:'#141006'},
+  {id:'tm',lb:'토요타',img:'assets/logos/tm.svg',bg:'#131013'},
+  {id:'amd',lb:'AMD',img:'assets/logos/amd.svg',bg:'#101214',inv:1},
+  {id:'intc',lb:'INTC',img:'assets/logos/intc.svg',bg:'#0a1420'},
+  {id:'crm',lb:'CRM',img:'assets/logos/crm.svg',bg:'#081420'},
+  {id:'pltr',lb:'PLTR',img:'assets/logos/pltr.svg',bg:'#101216',inv:1},
+  {id:'tcehy',lb:'텐센트',img:'assets/logos/tcehy.svg',bg:'#0a1424'},
+  {id:'baba',lb:'알리바바',img:'assets/logos/baba.svg',bg:'#170f08'},
+  {id:'lvmh',lb:'LVMH',img:'assets/logos/lvmh.svg',bg:'#121014',inv:1},
+  {id:'hmc',lb:'현대차',img:'assets/logos/hmc.svg',bg:'#0c1424',inv:1},
+  {id:'nvr',lb:'NAVER',img:'assets/logos/nvr.svg',bg:'#0a140c'},
+  {id:'kko',lb:'카카오',img:'assets/logos/kko.svg',bg:'#141006'},
+  {id:'xrp',lb:'XRP',img:'assets/logos/xrp.svg',bg:'#101216',inv:1},
+  {id:'sol',lb:'SOL',img:'assets/logos/sol.svg',bg:'#0d0a16'},
+  {id:'bnb',lb:'BNB',img:'assets/logos/bnb.svg',bg:'#141006'},
+  {id:'doge',lb:'DOGE',img:'assets/logos/doge.png',bg:'#141006'},
+  {id:'ada',lb:'ADA',img:'assets/logos/ada.svg',bg:'#0a1220',inv:1}
 ];
 /* 을/를, 와/과 조사 — 받침 유무 (영문·숫자로 끝나면 를/와) */
 function tfJosa(w){ var c=w.charCodeAt(w.length-1); if(c<0xAC00||c>0xD7A3) return '를'; return ((c-0xAC00)%28)?'을':'를'; }
