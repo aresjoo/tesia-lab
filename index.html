@@ -2972,6 +2972,210 @@ body.tf-route #teth-help{bottom:88px}
   .tfbk-faq .q{font-size:17px;padding:18px 4px}
   .tfbk-cats .cc{font-size:14px;height:32px;padding:0 13px}
 }
+/* ══ 지원 거래소 v3 (bk2-) — TV 정보설계의 TETH 다크 재해석 (bk-agy·bk-codex 판정 채택안).
+   ss3가 공유하는 .tfbk-* 캐논은 건드리지 않는다 — 거래소 전용 신규 네임스페이스 ══ */
+.bk2-page{max-width:1200px;margin:0 auto;padding:0 32px 90px}
+/* 히어로 — 숫자 제거, 3포인트 메시지 (PDF p1) */
+.bk2-hero{text-align:center;padding:64px 0 42px}
+.bk2-hero h2{font-size:clamp(40px,5.4vw,64px);line-height:1.1;font-weight:800;letter-spacing:-.03em;color:var(--gt);margin:0 0 26px}
+.bk2-pts{display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+.bk2-pts span{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;color:var(--gt2)}
+.bk2-pts svg{color:var(--gg);opacity:.75;flex:none}
+.bk2-bar .tfbk-dropwrap .tfbk-drop{border-radius:10px}
+/* 정렬 vs 필터 — 역할 분리 (드롭다운 | 세로 디바이더 | 칩 그룹) */
+.bk2-bar{display:flex;align-items:center;gap:14px;justify-content:center;margin:8px 0 40px;flex-wrap:wrap}
+.bk2-bar .dv{width:1px;height:24px;background:var(--gl2);flex:none}
+.bk2-bar .fp{height:38px;border-radius:19px;padding:0 16px;font-size:13px;font-weight:500;color:var(--gt2);background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer}
+.bk2-bar .fp:hover{background:rgba(255,255,255,.08)}
+.bk2-bar .fp.on{background:#f2f2f2;color:#0f1012;font-weight:600}
+/* 카드 — 좌 정보/우 아이콘 스택, 우하단 어둠 연결 (보더는 상단·좌측만, 하단은 페이드) */
+.bk2-card{position:relative;border-radius:24px;margin-bottom:26px;padding:34px 40px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:center;
+  background:linear-gradient(135deg,#171a21 0%,#121419 55%,rgba(15,16,18,0) 100%);overflow:hidden}
+.bk2-card::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  border:1px solid rgba(255,255,255,.09);
+  -webkit-mask-image:linear-gradient(135deg,#000 0%,#000 30%,transparent 72%);mask-image:linear-gradient(135deg,#000 0%,#000 30%,transparent 72%)}
+.bk2-card .nmrow{display:flex;align-items:center;gap:12px;margin-bottom:7px;flex-wrap:wrap}
+.bk2-card .nm{font-size:26px;font-weight:600;letter-spacing:-.015em;color:#fff;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
+.bk2-card .nm:hover{text-decoration:underline;text-underline-offset:4px}
+.bk2-bdg{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:6px;font-size:11.5px;font-weight:600}
+.bk2-bdg.ok{background:rgba(78,192,141,.12);color:var(--gg);border:1px solid rgba(78,192,141,.28)}
+.bk2-bdg.soon{background:rgba(255,255,255,.05);color:var(--gt3);border:1px solid rgba(255,255,255,.09)}
+.bk2-bdg.tag{background:rgba(91,138,247,.1);color:#a7c0ff;border:1px solid rgba(91,138,247,.22)}
+.bk2-card .as{font-size:13px;color:var(--gt3);margin-bottom:16px}
+.bk2-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;font-size:13px;color:var(--gt3)}
+.bk2-meta .rt{display:inline-flex;align-items:center;gap:7px}
+.bk2-meta .rt b{font-size:14px;color:#eaecef;font-weight:700}
+.bk2-meta .m{display:inline-flex;align-items:baseline;gap:5px}
+.bk2-meta .m b{font-size:13.5px;font-weight:700;color:#eaecef;font-variant-numeric:tabular-nums}
+.bk2-stars{display:inline-flex;gap:1.5px}
+.bk2-stars svg{width:13px;height:12px;fill:rgba(255,255,255,.16)}
+.bk2-stars svg.on{fill:#F0B90B}
+.bk2-card .pr{margin-bottom:20px}
+.bk2-card .pr small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--ga);margin-bottom:4px}
+.bk2-card .pr b{font-size:19px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.bk2-card .bt{display:flex;gap:12px;flex-wrap:wrap}
+.bk2-btn{height:40px;display:inline-flex;align-items:center;gap:7px;padding:0 20px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;border:0;font-family:inherit;transition:filter .12s,background .12s}
+.bk2-btn.pri{background:#fff;color:#0f1012}
+.bk2-btn.pri:hover{filter:brightness(.92)}
+.bk2-btn.gho{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);color:#eaecef}
+.bk2-btn.gho:hover{background:rgba(255,255,255,.1)}
+.bk2-btn.acc{background:var(--gb);color:#fff}
+.bk2-btn.acc:hover{background:var(--gb2)}
+.bk2-btn[disabled]{opacity:.45;cursor:default;pointer-events:none}
+/* 아이콘 스택 — 실제 공식 앱 아이콘 3장 (front 원본, 뒤 2장 감광) */
+.bk2-stack{position:relative;width:230px;height:210px;justify-self:end;pointer-events:none}
+.bk2-stack img{position:absolute;width:172px;height:172px;border-radius:40px;object-fit:cover;left:0;top:12px;box-shadow:0 16px 36px rgba(0,0,0,.5);z-index:3}
+.bk2-stack img:nth-child(2){transform:rotate(7deg) translate(20px,8px);filter:brightness(.42);opacity:.85;z-index:2;box-shadow:0 12px 24px rgba(0,0,0,.35)}
+.bk2-stack img:nth-child(3){transform:rotate(14deg) translate(40px,16px);filter:brightness(.2);opacity:.55;z-index:1;box-shadow:0 8px 16px rgba(0,0,0,.25)}
+.bk2-empty{text-align:center;color:var(--gt3);font-size:14px;padding:60px 0}
+.bk2-note{font-size:12px;color:var(--gt3);text-align:center;margin-top:28px}
+/* ── 상세 ── */
+.bk2-glow{height:150px;margin:0 -32px;pointer-events:none}
+.bk2-bc{font-size:12.5px;color:var(--gt3);margin:-96px 0 26px;position:relative}
+.bk2-bc button{background:none;border:0;padding:0;color:var(--gt3);cursor:pointer;font-family:inherit;font-size:12.5px}
+.bk2-bc button:hover{color:var(--gt)}
+.bk2-head{display:flex;align-items:center;gap:24px;margin-bottom:34px;flex-wrap:wrap;position:relative}
+.bk2-head .ico{width:92px;height:92px;border-radius:24px;object-fit:cover;box-shadow:0 12px 32px rgba(0,0,0,.45);flex:none}
+.bk2-head .hi{flex:1;min-width:220px}
+.bk2-head .nmrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.bk2-head .nm{font-size:30px;font-weight:700;letter-spacing:-.02em;color:#fff}
+.bk2-head .rrow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.bk2-rc{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:8px;background:rgba(240,185,11,.1);border:1px solid rgba(240,185,11,.22);color:#F0B90B;font-size:13.5px;font-weight:700;cursor:pointer}
+.bk2-st{display:flex;gap:0}
+.bk2-st span{display:flex;flex-direction:column;gap:3px;padding:0 22px;border-left:1px solid rgba(255,255,255,.08)}
+.bk2-st span:first-child{padding-left:0;border-left:0}
+.bk2-st small{font-size:12px;color:var(--gt3)}
+.bk2-st b{font-size:20px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+.bk2-head .ha{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+.bk2-conn{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 16px;border-radius:9px;background:rgba(78,192,141,.1);border:1px solid rgba(78,192,141,.3);color:var(--gg);font-size:13.5px;font-weight:600}
+.bk2-tabs{display:flex;gap:26px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:34px}
+.bk2-tabs .tb{height:44px;background:none;border:0;border-bottom:2px solid transparent;font-size:15px;font-weight:500;color:var(--gt3);cursor:pointer;font-family:inherit;padding:0 2px}
+.bk2-tabs .tb.on{color:#fff;font-weight:600;border-bottom-color:#fff}
+.bk2-sh{font-size:20px;font-weight:700;letter-spacing:-.015em;color:var(--gt);margin:44px 0 18px;display:flex;align-items:center;gap:10px}
+.bk2-sh:first-child{margin-top:0}
+.bk2-sh .sp{flex:1}
+/* 리뷰 캐러셀 — 스크롤바 0, 좌우 마스크, 양방향 화살표 */
+.bk2-rvwrap{position:relative}
+.bk2-rvrow{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x mandatory;scroll-padding:0 34px;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 34px,#000 calc(100% - 84px),transparent);mask-image:linear-gradient(to right,transparent,#000 34px,#000 calc(100% - 84px),transparent);padding:2px 34px}
+.bk2-rvrow::-webkit-scrollbar{display:none;height:0}
+#g-root .bk2-rvrow,#g-root .bk2-bar{scrollbar-width:none}
+.bk2-rvc{flex:0 0 300px;scroll-snap-align:start;background:#14161c;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 20px;cursor:pointer}
+.bk2-rvc:hover{border-color:rgba(255,255,255,.13)}
+.bk2-rvc p{font-size:13.5px;line-height:1.6;color:var(--gt2);margin:10px 0 12px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.bk2-rvc .by{font-size:12px;color:var(--gt3)}
+.bk2-rvc .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.bk2-rvc .tags em{font-style:normal;font-size:11px;color:var(--gt3);background:rgba(255,255,255,.05);border-radius:5px;padding:2px 7px}
+.bk2-arw{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(20,23,31,.85);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:15px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
+.bk2-arw.l{left:-6px}.bk2-arw.r{right:-6px}
+.bk2-arw[disabled]{opacity:0;pointer-events:none}
+/* 파트너 혜택 — 배너가 아니라 benefit 카드 (브랜드 액센트 절제) */
+.bk2-benefit{display:flex;align-items:center;gap:18px;border-radius:14px;padding:18px 22px;margin-top:30px;
+  background:rgba(240,185,11,.05);border:1px solid rgba(240,185,11,.15)}
+.bk2-benefit .gi{flex:none;width:40px;height:40px;border-radius:11px;background:rgba(240,185,11,.12);display:flex;align-items:center;justify-content:center;color:#F0B90B}
+.bk2-benefit .bx{flex:1;min-width:0}
+.bk2-benefit small{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;color:#F0B90B;margin-bottom:3px}
+.bk2-benefit b{display:block;font-size:16.5px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.bk2-benefit p{font-size:12.5px;color:var(--gt3);margin:4px 0 0;line-height:1.5}
+.bk2-benefit .ac{display:flex;gap:10px;flex:none;flex-wrap:wrap}
+/* 자산 chips */
+.bk2-assets{display:flex;gap:10px;flex-wrap:wrap}
+.bk2-assets span{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:7px;background:rgba(255,255,255,.05);font-size:12.5px;font-weight:500;color:var(--gt2)}
+/* About 5열 메타 */
+.bk2-about .mg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.bk2-about .mg small{display:block;font-size:12px;color:var(--gt3);margin-bottom:5px}
+.bk2-about .mg b,.bk2-about .mg a{font-size:14px;font-weight:500;color:#eaecef;text-decoration:none}
+.bk2-about .mg a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.bk2-about p{font-size:14.5px;line-height:1.7;color:var(--gt2);max-width:840px;margin:0}
+/* 기능 매트릭스 */
+.bk2-feat{border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden}
+.bk2-feat .gh{height:38px;display:flex;align-items:center;padding:0 18px;background:#15171d;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--gt3)}
+.bk2-feat .fr{display:flex;align-items:center;gap:16px;min-height:52px;padding:9px 18px;border-top:1px solid rgba(255,255,255,.04)}
+.bk2-feat .fr span{flex:1;min-width:0}
+.bk2-feat .fr b{display:block;font-size:14px;font-weight:600;color:#fff}
+.bk2-feat .fr small{display:block;font-size:12px;color:var(--gt3);margin-top:2px;line-height:1.45}
+.bk2-feat .ok{color:var(--gg);font-size:17px;font-style:normal;flex:none}
+.bk2-feat .no{color:#474d57;font-size:16px;font-style:normal;flex:none}
+/* FAQ 2열 */
+.bk2-faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.bk2-faq .fq{background:#13151b;border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden}
+.bk2-faq .q{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:15px 18px;font-size:14px;font-weight:600;color:#eaecef;cursor:pointer;font-family:inherit}
+.bk2-faq .q i{margin-left:auto;font-style:normal;color:var(--gt3);transition:transform .18s var(--ease)}
+.bk2-faq .fq.on .q i{transform:rotate(45deg)}
+.bk2-faq .a{display:none;padding:0 18px 15px;font-size:13px;line-height:1.65;color:var(--gt2)}
+.bk2-faq .fq.on .a{display:block}
+/* 평점 분포 */
+.bk2-dist{max-width:520px;display:flex;flex-direction:column;gap:9px;margin-bottom:8px}
+.bk2-dist .dr{display:flex;align-items:center;gap:12px}
+.bk2-dist .sl{width:30px;font-size:12.5px;color:var(--gt2);font-variant-numeric:tabular-nums}
+.bk2-dist .bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden}
+.bk2-dist .bar i{display:block;height:100%;background:#F0B90B;border-radius:3px}
+.bk2-dist .n{width:22px;text-align:right;font-size:12px;color:var(--gt3);font-variant-numeric:tabular-nums}
+.bk2-rvgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.bk2-rvgrid .bk2-rvc{flex:none}
+.bk2-cats{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.bk2-cats .cc{height:32px;padding:0 13px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid transparent;color:var(--gt2);font-size:12.5px;cursor:pointer;font-family:inherit}
+.bk2-cats .cc.on{background:#f2f2f2;color:#0f1012;font-weight:600}
+.bk2-mine{border-color:rgba(91,138,247,.35)!important;background:rgba(91,138,247,.05)!important}
+.bk2-mine p{display:block;-webkit-line-clamp:unset;overflow:visible} /* 내 리뷰는 모달이 없어 전문 표시 */
+/* 리뷰 작성 모달 */
+.bk2-wm .stars{display:flex;gap:6px;margin:16px 0 14px}
+.bk2-wm .stars button{background:none;border:0;padding:2px;cursor:pointer}
+.bk2-wm .stars svg{width:30px;height:28px;fill:rgba(255,255,255,.14);transition:fill .1s}
+.bk2-wm .stars button.on svg,.bk2-wm .stars button:hover svg{fill:#F0B90B}
+.bk2-wm textarea{width:100%;min-height:120px;border-radius:11px;border:1px solid var(--gl2);background:var(--g0);color:var(--gt);font-size:13.5px;line-height:1.6;padding:12px 14px;outline:none;box-sizing:border-box;resize:vertical;font-family:inherit}
+.bk2-wm textarea:focus{border-color:var(--gt3)}
+.bk2-wm .desc{font-size:12.5px;color:var(--gt3);line-height:1.6}
+/* 반응형 */
+@media (max-width:1024px){
+  .bk2-card{grid-template-columns:minmax(0,1fr) 220px;padding:28px 30px}
+  .bk2-stack{width:180px;height:170px}
+  .bk2-stack img{width:136px;height:136px;border-radius:32px}
+  .bk2-rvgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bk2-about .mg{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:768px){
+  .bk2-page{padding:0 18px 70px}
+  .bk2-hero{padding:46px 0 30px}
+  .bk2-pts{flex-direction:column;gap:10px;align-items:flex-start;width:fit-content;margin:0 auto}
+  .bk2-bar{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;margin-left:-18px;margin-right:-18px;padding:0 18px 6px;scrollbar-width:none}
+  .bk2-bar::-webkit-scrollbar{display:none;height:0}
+  .bk2-bar .fp{height:34px;padding:0 13px;font-size:12.5px;flex:none;white-space:nowrap}
+  .bk2-bar .tfbk-dropwrap{flex:none}
+  .bk2-head .ico{width:64px;height:64px;border-radius:16px}
+  .bk2-head .nm{font-size:24px}
+  .bk2-card .bt .bk2-btn{flex:1;justify-content:center}
+  .bk2-card{grid-template-columns:minmax(0,1fr) 96px;padding:22px 20px;gap:14px}
+  .bk2-card .nm{font-size:20px}
+  .bk2-stack{width:96px;height:96px;top:0}
+  .bk2-stack img{width:82px;height:82px;border-radius:20px;top:4px}
+  .bk2-stack img:nth-child(2){transform:rotate(7deg) translate(9px,4px)}
+  .bk2-stack img:nth-child(3){display:none}
+  .bk2-glow{margin:0 -18px}
+  .bk2-st span{padding:0 14px}
+  .bk2-st b{font-size:17px}
+  .bk2-rvgrid{grid-template-columns:minmax(0,1fr)}
+  .bk2-faq{grid-template-columns:minmax(0,1fr)}
+  .bk2-about .mg{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bk2-benefit{flex-direction:column;align-items:flex-start}
+  .bk2-rvrow{padding:2px 18px;scroll-padding:0 18px;-webkit-mask-image:linear-gradient(to right,transparent,#000 18px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(to right,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
+  .bk2-arw{display:none}
+}
+/* 리뷰 취소 확인 — 모달 위 모달 (자체 dim, ss3-dlgw z320 위) */
+#bk2-cfm{position:fixed;inset:0;z-index:340;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.55)}
+#bk2-cfm .cin2{width:400px;max-width:100%;background:#111318;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:26px 28px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+#bk2-cfm .cin2 b{display:block;font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+#bk2-cfm .cin2 p{font-size:13px;line-height:1.6;color:var(--gt3);margin:0}
+#bk2-cfm .acts3{display:flex;gap:12px;margin-top:22px}
+#bk2-cfm .acts3 .obtn{flex:1;height:44px;padding:0;border-radius:8px;background:transparent;color:#fff;font-size:14px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,.4);font-family:inherit}
+#bk2-cfm .acts3 .wbtn{flex:1;height:44px;padding:0;border-radius:8px;background:#fff;color:#0f0f0f;font-size:14px;font-weight:600;cursor:pointer;border:0;font-family:inherit}
+/* 리뷰 작성 — 모바일 바텀 시트 */
+@media (max-width:760px){
+  .ss3-dlgw.sheet{align-items:flex-end;padding:0}
+  .ss3-dlgw.sheet .ss3-dlg{width:100%;max-width:100%;border-radius:22px 22px 0 0;animation:sheetUp .26s var(--ease)}
+  .ss3-dlgw.sheet .din{border-radius:21px 21px 0 0;padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+}
+
 /* ══ 전략 공유 v3 (ss3) — 캐논=지원 거래소(.tfbk) 클래스 직접 재사용. 근거: agy-visual-spec.md ══
    히어로/필/드롭다운/풀폭 카드/버튼은 .tfbk 문법 그대로. 아래는 전략 전용 확장만. */
 .ss3-by{font-size:16px;font-weight:400;color:#848a94;margin-left:2px}
@@ -12223,15 +12427,15 @@ function tfNFRoute(h){
 /* ── §9.5 지원 거래소: 목록 + 상세 (TradingView Brokers 구조의 TETH 변형, 수치는 데모) ── */
 var TF_BROKERS=[
   {id:'binance',name:'Binance',tag:'거래소',assets:'암호화폐',conn:true,rating:4.2,traders:'1.2천',fw0:830,lev:'현물 1:1',col:'#F3BA2F',fg:'#181818',
-   promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료예요. 가입 즉시 자동 연결됩니다.',
+   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료예요. 가입 즉시 자동 연결됩니다.',
    site:'binance.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.10%',tk:'0.10%'},
    about:'글로벌 최대 거래량의 암호화폐 거래소예요. 현물, 선물과 폭넓은 알트코인을 지원하고, 유동성이 깊어 체결이 안정적입니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
   {id:'okx',name:'OKX',tag:'거래소',assets:'암호화폐',conn:true,rating:4.1,traders:'640',fw0:410,lev:'현물 1:1',col:'#0a0a0c',fg:'#fff',
-   promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 이용료가 무료예요. API 연결 시 Passphrase까지 함께 준비해주세요.',
+   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 이용료가 무료예요. API 연결 시 Passphrase까지 함께 준비해주세요.',
    site:'okx.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.08%',tk:'0.10%'},
    about:'파생상품과 웹3 지갑까지 아우르는 종합 거래소예요. API 인증에 Passphrase가 필요한 점이 다른 거래소와 달라요. TETH 연결은 조회와 거래 권한만 사용합니다.'},
   {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',col:'#0a0a0a',fg:'#fff',
-   promo:'파트너 가입 시 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴 가입 시 이용료가 무료예요.',
+   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴 가입 시 이용료가 무료예요.',
    site:'woox.io',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.02%',tk:'0.05%'},
    about:'낮은 수수료와 깊은 유동성을 내세우는 거래소예요. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
   {id:'upbit',name:'업비트',tag:'거래소',assets:'암호화폐 (KRW)',conn:false,rating:4.3,traders:'준비 중',fw0:520,lev:'현물 1:1',col:'#093687',fg:'#fff',site:'upbit.com',
@@ -12241,6 +12445,50 @@ var TF_BROKERS=[
   {id:'kiwoom',name:'키움증권',tag:'증권사',assets:'국내, 미국 주식',conn:false,rating:3.9,traders:'준비 중',fw0:190,lev:'현금 1:1',col:'#5b2d86',fg:'#fff',site:'kiwoom.com',
    about:'국내 개인 투자자 점유율 1위 증권사예요. 주식 전략 연결은 준비 중입니다.'}
 ];
+/* 공식 소스 실조사 데이터 (bitget/bk-research.json, 2026-09-13 조사) — 'unknown' 항목은 UI에서 행 생략 (추측 금지 원칙) */
+var TF_BK_INFO={
+  binance:{founded:'2017',hq:'글로벌 (ADGM 규제 법인)',docsUrl:'https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints',
+    community:'Binance Square',communityUrl:'https://www.binance.com/en/square',
+    assetsList:['암호화폐 현물','USDⓈ-M 선물 · 무기한'],rvN:10,traderN:1200,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:true,trailingStop:true,oco:true,postOnly:true,reduceOnly:true,demoAccount:true,publicApi:true,level2:true},
+    about:'2017년 7월 출범한 글로벌 블록체인 생태계로, 거래량 기준 세계 최대 디지털 자산 거래소로 스스로를 소개해요. 현물과 파생상품 거래 외에 Academy, Research, Binance Square 같은 생태계 서비스를 함께 운영하고 40개 언어의 24/7 고객 지원을 제공합니다.',
+    faq:[{q:'실거래 전에 테스트할 수 있는 환경이 있나요?',a:'네. 현물 API용 테스트넷(testnet.binance.vision)이 공식 문서에 명시되어 있어, 실제 자산 없이 주문 로직을 검증할 수 있어요.'},
+      {q:'OCO 주문을 지원하나요?',a:'네. 현물에서 OCO(One-Cancels-the-Other) 주문 리스트를 지원해요. 한쪽 주문이 활성화되면 다른 쪽이 즉시 취소되는 구조입니다.'}]},
+  okx:{founded:'2017',hq:'세이셸',docsUrl:'https://www.okx.com/docs-v5/en/',
+    community:'@okx',communityUrl:'https://x.com/okx',
+    assetsList:['암호화폐 현물','마진','만기 선물','무기한 선물','옵션'],rvN:9,traderN:640,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:true,trailingStop:true,oco:'unknown',postOnly:true,reduceOnly:'unknown',demoAccount:true,publicApi:true,level2:true},
+    about:'2017년 설립된 암호화폐 거래소로, 100개국 이상 수백만 사용자에게 서비스한다고 소개해요. 현물·마진·만기/무기한 선물·옵션 거래와 DeFi, 렌딩 같은 부가 금융 서비스를 제공하고, 2022년 OKEx에서 OKX로 리브랜딩했습니다.',
+    faq:[{q:'데모 트레이딩을 API로도 쓸 수 있나요?',a:'네. 공식 v5 API 문서에 데모 트레이딩 지원이 명시되어 있어요. 요청 헤더에 x-simulated-trading: 1을 추가해 사용합니다.'},
+      {q:'어떤 주문 유형을 지원하나요?',a:'지정가·시장가·post only·FOK·IOC 기본 주문에 더해 트리거 주문·TP/SL·트레일링 스탑·아이스버그·TWAP 같은 알고 주문을 v5 API에서 지원해요.'}]},
+  woox:{founded:'2021',docsUrl:'https://docs.woox.io/',
+    community:'@_WOO_X',communityUrl:'https://x.com/_WOO_X',
+    assetsList:['암호화폐 현물','무기한 선물','소셜 트레이딩'],rvN:7,traderN:220,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:true,trailingStop:true,oco:true,postOnly:true,reduceOnly:true,demoAccount:true,publicApi:true,level2:true},
+    about:'멀티전략 트레이딩 회사 Kronos Research가 인큐베이팅한 거래소로, 2021년 출범했어요. 트레이더·거래소·기관·DeFi 플랫폼을 연결해 낮은 비용으로 깊은 유동성과 좋은 체결 품질에 접근하게 하는 것을 목표로 소개하며, 리드 트레이더의 거래를 복제하는 소셜 트레이딩도 제공합니다.',
+    faq:[{q:'API 개발용 테스트 환경이 있나요?',a:'네. 공식 API 문서에 프로덕션 배포 전 테스트할 수 있는 스테이징 환경(api.staging.woox.io)이 명시되어 있어요.'},
+      {q:'스탑·트레일링 같은 조건 주문은 어떻게 내나요?',a:'알고 주문(algoType)으로 STOP, OCO, TRAILING_STOP, BRACKET을 지원해요. 무기한 선물에서는 reduce_only 옵션으로 포지션 축소 전용 주문도 가능합니다.'}]},
+  upbit:{founded:'2017',hq:'서울 (두나무)',docsUrl:'https://docs.upbit.com/',
+    assetsList:['암호화폐 현물 (원화 마켓)'],rvN:8,traderN:0,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:false,stopLimitOrder:false,trailingStop:false,oco:false,postOnly:true,reduceOnly:false,demoAccount:'unknown',publicApi:true,level2:true},
+    about:'두나무가 운영하는 국내 최대 디지털 자산 거래소로, 2017년 10월 서비스를 시작했어요. 국내 1호 가상자산사업자로 오픈 API와 호가 데이터를 공식 제공합니다.',
+    faq:[{q:'시장가 주문은 API에서 어떻게 내나요?',a:'매수는 ord_type=price로 주문 총액을 지정하고, 매도는 ord_type=market으로 수량을 지정해요. 이 외에 지정가(limit)와 최유리 지정가(best) 주문을 지원합니다.'},
+      {q:'스톱로스(조건부) 주문을 지원하나요?',a:'공식 API 문서 기준 주문 유형은 limit/price/market/best 4가지이며 스톱·조건부 주문은 제공되지 않아요. 대신 지정가 주문에 IOC·FOK·post_only 체결 조건을 붙일 수 있습니다.'}]},
+  bybit:{founded:'2018',hq:'두바이, UAE',docsUrl:'https://bybit-exchange.github.io/docs/v5/intro',
+    community:'@Bybit_Official',communityUrl:'https://x.com/Bybit_Official',
+    assetsList:['암호화폐 현물','무기한 · 선물','옵션'],rvN:7,traderN:0,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:true,trailingStop:true,oco:'unknown',postOnly:true,reduceOnly:true,demoAccount:true,publicApi:true,level2:true},
+    about:'2018년 출범한 글로벌 암호화폐 거래소로, 현물과 무기한 선물(linear·inverse), 옵션 파생상품을 v5 통합 API로 제공해요. 조건부 주문, TP/SL, 트레일링 스탑, 포지션 축소 전용 주문 등 파생상품 중심의 주문 기능이 폭넓게 지원됩니다.',
+    faq:[{q:'테스트넷이 있나요?',a:'네. 공식 v5 API 문서에 테스트넷 엔드포인트(api-testnet.bybit.com)가 명시되어 있어요.'},
+      {q:'조건부(트리거) 주문은 어떻게 동작하나요?',a:'주문에 triggerPrice를 설정하면 자동으로 조건부 주문으로 전환되고, 트리거 전에는 증거금을 점유하지 않아요. 파생상품 포지션에는 가격 거리 기반 트레일링 스탑도 설정할 수 있습니다.'}]},
+  kiwoom:{founded:'2000',hq:'서울 여의도',docsUrl:'https://openapi.kiwoom.com/main/home',
+    assetsList:['국내 주식 · ETF','해외 주식 (미국)','국내 선물 · 옵션','해외 선물 · 옵션'],rvN:6,traderN:0,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:'unknown',trailingStop:true,oco:'unknown',postOnly:'unknown',reduceOnly:'unknown',demoAccount:true,publicApi:true,level2:true},
+    about:'2000년 설립된 온라인 중심 증권사로, 국내 주식시장 점유율 1위를 다년간 유지해 왔다고 소개해요. HTS 영웅문과 함께 국내·미국 주식용 키움 REST API 포털을 운영하고, 모의투자와 스탑로스·자동감시주문 같은 조건부 주문 기능을 제공합니다.',
+    faq:[{q:'API로 자동매매를 하려면 무엇을 쓰나요?',a:'키움 REST API 포털(openapi.kiwoom.com)에서 국내주식·미국주식 API를 제공해요. JSON 기반 스펙과 모의투자 이용안내를 함께 안내합니다.'},
+      {q:'스탑로스나 트레일링스탑 주문이 되나요?',a:'네. 영웅문의 스탑로스 기능은 이익실현·이익보존·손실제한과 트레일링스탑 감시를 지원해요. 자동감시주문(서버자동주문)은 HTS를 꺼도 서버에서 감시·주문됩니다.'}]}
+};
+(function(){ TF_BROKERS.forEach(function(b){ var i=TF_BK_INFO[b.id]; if(!i) return; if(i.assetsList) b.assetsList=i.assetsList; b.rvN=i.rvN; b.traderN=i.traderN; }); })();
 function tfBkOf(id){ for(var i=0;i<TF_BROKERS.length;i++) if(TF_BROKERS[i].id===id) return TF_BROKERS[i]; return TF_BROKERS[0]; }
 /* 데모 리뷰 풀 — 표시용임을 페이지 하단에 고지 */
 function tfBkRev(b){
@@ -12346,165 +12594,305 @@ function tfBkReel(target){
     }
   },450);
 }
+/* ── 지원 거래소 v3 헬퍼 ── */
+function tfBk2Icon(b,sz,cls){ return '<img class="'+(cls||'')+'" src="assets/logos/app-'+b.id+'.png" alt="'+gEsc(b.name)+' 로고" width="'+sz+'" height="'+sz+'" style="border-radius:'+Math.round(sz*0.23)+'px">'; }
+function tfBk2Stack(b){ var s='assets/logos/app-'+b.id+'.png';
+  return '<div class="bk2-stack" aria-hidden="true"><img src="'+s+'" alt=""><img src="'+s+'" alt=""><img src="'+s+'" alt=""></div>'; }
+function tfBk2Stars(r){
+  var f=Math.round(r),s='';
+  for(var i=1;i<=5;i++) s+='<svg class="'+(i<=f?'on':'')+'" viewBox="0 0 16 15" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>';
+  return '<span class="bk2-stars" role="img" aria-label="별점 '+r+'">'+s+'</span>';
+}
+function tfBk2Rv(b){ return tfBkRev(b).slice(0,b.rvN||10); }
+function tfBk2Conn(b){ var t=tfS(); return !!(S.user&&b.conn&&t.api&&t.api.ex===b.id); }
+var TFBK2_CK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+/* ── 리스팅 — PDF p1~5: 히어로 3포인트, 정렬/필터 분리, TV 카드 재해석 ── */
 function tfBrokersView(){
   var t=tfS();
   G.cur=null; G.mode='tfbrokers'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead('지원 거래소','',null);
-  t.bkSort=t.bkSort||'rating'; t.bkFilter=t.bkFilter||'all';
+  if(['rating','reviews','users'].indexOf(t.bkSort)<0) t.bkSort='rating';
+  if(['all','ex','stock','fx','conn','soon'].indexOf(t.bkFilter)<0) t.bkFilter='all'; /* 구값 crypto 등 정규화 */
   var rows=TF_BROKERS.slice();
   if(t.bkFilter==='conn') rows=rows.filter(function(b){return b.conn;});
   if(t.bkFilter==='soon') rows=rows.filter(function(b){return !b.conn;});
-  if(t.bkFilter==='crypto') rows=rows.filter(function(b){return b.assets.indexOf('암호화폐')>=0;});
+  if(t.bkFilter==='ex') rows=rows.filter(function(b){return b.tag==='거래소';});
   if(t.bkFilter==='stock') rows=rows.filter(function(b){return b.tag==='증권사';});
-  rows.sort(t.bkSort==='name'?function(a,b){return a.name.localeCompare(b.name,'ko');}:function(a,b){return (b.conn-a.conn)||(b.rating-a.rating);}); /* 연결 지원 우선, 그 안에서 평점순 */
-  var pills=[['all','전체 거래소'],['crypto','암호화폐'],['stock','증권사'],['conn','연결 지원'],['soon','지원 예정']];
-  gContent('<div class="tf-page tfbk">'
-    +'<div class="tfbk-hero"><div class="planet" aria-hidden="true"></div>'
-    +'<h2>연결하면, 실행됩니다</h2>'
-    +'<div class="cnt" id="tfbk-cnt"></div>'
-    +'<div class="cs">모의 검증으로 계산된 거래</div>'
-    +'<div class="cs2">출금 권한을 요구한 연결 0건, 모든 연결은 조회와 거래 권한만 사용해요</div></div>'
-    +'<div class="tfbk-filters">'
-    +tfBkDrop('tfbk-m-sort',[['rating','평점순'],['name','이름순']],t.bkSort,'tfBkSortPick')
-    +pills.map(function(p){ return '<button class="fp'+(t.bkFilter===p[0]?' on':'')+'" onclick="tfBkSet(\'bkFilter\',\''+p[0]+'\')">'+p[1]+'</button>'; }).join('')
-    +tfBkDrop('tfbk-m-cat',pills,t.bkFilter,'tfBkFilterPick',0,0,'tfbk-catdrop')
+  if(t.bkFilter==='fx') rows=rows.filter(function(b){return b.tag==='FX';});
+  /* 정렬 이름과 실제 순서 일치 (bk-codex P2) */
+  rows.sort(t.bkSort==='reviews'?function(a,b){return (b.rvN||0)-(a.rvN||0)||b.rating-a.rating;}
+    :t.bkSort==='users'?function(a,b){return (b.traderN||0)-(a.traderN||0)||b.rating-a.rating;}
+    :function(a,b){return b.rating-a.rating||(b.rvN||0)-(a.rvN||0);});
+  var pills=[['all','전체'],['ex','거래소'],['stock','증권사'],['fx','FX'],['conn','연결 지원'],['soon','지원 예정']];
+  gContent('<div class="tf-page bk2-page">'
+    +'<div class="bk2-hero"><h2>연결하면, 실행됩니다</h2>'
+    +'<div class="bk2-pts">'
+    +'<span>'+TFBK2_CK+'5분이면 준비 끝</span>'
+    +'<span>'+TFBK2_CK+'연결하고, TETH에게 거래를 맡기세요</span>'
+    +'<span>'+TFBK2_CK+'출금 권한 필요 없음 · 언제든 연결 해제</span>'
+    +'</div></div>'
+    +'<div class="bk2-bar">'
+    +tfBkDrop('tfbk-m-sort',[['rating','최고 평점'],['reviews','최다 리뷰'],['users','최다 사용자']],t.bkSort,'tfBkSortPick')
+    +'<span class="dv" aria-hidden="true"></span>'
+    +pills.map(function(p){ return '<button type="button" class="fp'+(t.bkFilter===p[0]?' on':'')+'" onclick="tfBkSet(\'bkFilter\',\''+p[0]+'\')">'+p[1]+'</button>'; }).join('')
     +'</div>'
-    +rows.map(function(b){
-      var rv=tfBkRev(b);
-      return '<div class="tfbk-card"><div class="cin">'
+    +(rows.length?rows.map(function(b){
+      var connected=tfBk2Conn(b);
+      return '<div class="bk2-card">'
         +'<div class="lft">'
-        +'<div class="nmrow"><button type="button" class="nm" onclick="tfBrokerView(\''+b.id+'\')">'+gEsc(b.name)+'</button><span class="bdg'+(b.conn?'':' soon')+'">'+(b.conn?'연결 지원':'지원 예정')+'</span></div>'
-        +'<div class="as">거래 가능 자산: '+gEsc(b.assets)+'</div>'
-        +'<div class="rtrow">'
-        +'<span class="rt"><b>'+b.rating.toFixed(1)+' '+(b.rating>=4.5?'아주 좋음':b.rating>=4?'좋음':'보통')+'</b>'+tfBkStars(b.rating)+'</span>'
-        +'<span class="ctc"><b>'+TFBK_IC_CHAT+rv.length+'</b><small>리뷰</small></span>'
-        +'<span class="ctc"><b>'+TFBK_IC_USER+gEsc(String(b.traders))+'</b><small>연결 계정</small></span>'
+        +'<div class="nmrow"><button type="button" class="nm" onclick="tfBrokerView(\''+b.id+'\')">'+gEsc(b.name)+'</button>'
+        +(connected?'<span class="bk2-bdg ok">'+TFBK2_CK+' 연결됨</span>':'<span class="bk2-bdg '+(b.conn?'ok':'soon')+'">'+(b.conn?'연결 지원':'지원 예정')+'</span>')+'</div>'
+        +'<div class="as">'+gEsc((b.assetsList||[b.assets]).join(', '))+'</div>'
+        +'<div class="bk2-meta">'
+        +'<span class="rt"><b>'+b.rating.toFixed(1)+'</b>'+tfBk2Stars(b.rating)+'</span>'
+        +'<span class="m"><b>'+((b.rvN||0)+((t.bkRev||{})[b.id]?1:0))+'</b>리뷰</span>'
+        +(b.conn?'<span class="m"><b>'+gEsc(String(b.traders))+'</b>연결 계정</span>':'')
         +'</div>'
-        +(b.conn&&b.promo?'<div class="pr"><b>'+gEsc(b.promo)+'</b><small>프로모션</small></div>':'')
-        +'<div class="bt">'+(b.conn?'<button class="wbtn" onclick="tfBkOpenAcct(\''+b.id+'\')">계좌 개설 <span aria-hidden="true">↗</span></button>':'')
-        +'<button class="obtn" onclick="tfBrokerView(\''+b.id+'\')">자세히</button></div>'
+        +(b.conn&&b.promo?'<div class="pr"><small>PARTNER</small><b>'+gEsc(b.promo)+'</b></div>':'')
+        +'<div class="bt">'
+        +(b.conn?'<button class="bk2-btn pri" onclick="tfBkOpenAcct(\''+b.id+'\')">계정 개설 <span aria-hidden="true">↗</span></button>':'')
+        +'<button class="bk2-btn gho" onclick="tfBrokerView(\''+b.id+'\')">자세히 보기</button></div>'
         +'</div>'
-        +'<div class="lgo">'+tfBkLogo(b,250)+'</div>'
-        +'</div></div>';
-    }).join('')
-    +'<div class="tfbk-note">수수료는 각 거래소 공지 기준으로 달라질 수 있습니다.</div>'
+        +tfBk2Stack(b)
+        +'</div>';
+    }).join(''):'<div class="bk2-empty">'+(t.bkFilter==='fx'?'FX 사업자는 준비 중이에요. 준비되는 대로 이곳에 먼저 표시됩니다.':'조건에 맞는 사업자가 없어요.')+'</div>')
+    +'<div class="bk2-note">평점과 리뷰는 데모 표시용 예시입니다. 수수료는 각 사업자 공지 기준으로 달라질 수 있습니다.</div>'
     +'</div>');
   tfBkDropInit();
-  tfBkReel(1247306);
 }
 function tfBkSet(k,v){ var t=tfS(); t[k]=v; tfSave(); tfBrokersView(); }
 function tfBkOpenAcct(id){ var e=(TFC.exchanges||[]).find(function(x){return x.id===id;}); var b=tfBkOf(id); try{ window.open((e&&e.ref)||('https://'+b.site),'_blank','noopener'); }catch(er){} }
-function tfBkFollow(id,btn){
-  var t=tfS(); t.bkFollow=t.bkFollow||{};
-  t.bkFollow[id]=!t.bkFollow[id]; tfSave();
-  toast(t.bkFollow[id]?'팔로우했어요. 이 거래소 소식과 연결 업데이트를 모아볼게요':'팔로우를 해제했어요');
-  tfBrokerView(id,tfS().bkTab);
-}
 function tfBkConnect(id){
-  var t=tfS();
-  if(!tfBkOf(id).conn){ toast('이 거래소 연결은 준비 중이에요'); return; }
+  var t=tfS(); var b=tfBkOf(id);
+  if(!b.conn){ return; }
+  if(!S.user){ authOpen('login'); return; } /* 비로그인 → 로그인 (bk-codex P1) */
+  if(tfBk2Conn(b)){ tfNav('#/trade'); return; } /* 이미 연결됨 → 내 트레이딩 */
   if(t.score>=TFC.score.pass&&(t.stage==='report'||t.stage==='verified'||t.stage==='connect'||t.stage==='pay'||t.stage==='done')){
-    t.ob.ex=null; tfNav('#/strategy/connect');
+    t.ob.ex=null; if(t.ob.st) t.ob.st=null; /* 이전 연결 온보딩 잔여 단계 초기화 — 완료 화면 스킵 방지 (bk2-codex2 P0) */ tfNav('#/strategy/connect');
   } else toast('검증을 통과한 전략이 있어야 연결할 수 있어요. 채팅에서 전략을 만들고 검증해보세요');
 }
 function tfBkTab(id,tab){ var t=tfS(); t.bkTab=tab; tfSave(); tfBrokerView(id,tab); }
+/* ── 상세 — PDF p6~13: 팔로우 제거, 앰비언트 글로우, benefit 카드, 매트릭스, FAQ ── */
 function tfBrokerView(id,tab){
   var t=tfS(); var b=tfBkOf(id); tab=tab||'overview'; t.bkTab=tab; TFBK_CUR=b.id;
   G.cur=null; G.mode='tfbroker'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead(b.name,'',null);
-  var rv=tfBkRev(b); var fw=(b.fw0||0)+((t.bkFollow||{})[b.id]?1:0);
-  /* 브랜드 밴드: 실측 320h + 라운드 디바이더 20h (자체 렌더링, 외부 이미지 없음) */
-  var band='<div class="tfbk-banner" style="background:linear-gradient(120deg,'+(b.col||'#16181d')+'ee,'+(b.col||'#16181d')+') ">'
-    +'<div class="bmark" style="color:'+(b.fg||'#fff')+'">'+tfBkMark(b)+'<span>'+gEsc(b.name)+'</span></div></div>'
-    +'<div class="tfbk-bdivider"></div>';
-  var head=band
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfBrokersView()">지원 거래소</span> / <span>'+gEsc(b.name)+'</span>'+(tab==='reviews'?' / <span>리뷰</span>':'')+'</div>'
-    +'<div class="tfbk-head">'
-    +tfBkLogo(b,168)
+  var info=(window.TF_BK_INFO||{})[b.id]||{};
+  var rv=tfBk2Rv(b); var mine=(t.bkRev||{})[b.id]||null;
+  var connected=tfBk2Conn(b);
+  var col=b.col&&b.col!=='#0a0a0a'&&b.col!=='#0a0a0c'?b.col:'#5b8af7';
+  var head='<div class="bk2-glow" style="background:radial-gradient(ellipse 62% 90% at 50% -30%,'+col+'26 0%,rgba(15,16,18,0) 100%)" aria-hidden="true"></div>'
+    +'<div class="bk2-bc"><button type="button" onclick="tfBrokersView()">지원 거래소</button> / <span>'+gEsc(b.name)+'</span></div>'
+    +'<div class="bk2-head">'
+    +tfBk2Icon(b,92,'ico')
     +'<div class="hi">'
-    +'<div class="nmrow"><span class="nm">'+gEsc(b.name)+'</span><span class="bdg'+(b.conn?'':' soon')+'">'+gEsc(b.tag)+'</span></div>'
-    +'<div class="bdgs"><button type="button" class="rc" title="평점 분포 보기" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg viewBox="0 0 16 15" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>'
-    +'<div class="st3">'
-    +'<span><small>평가</small><b>'+rv.length+'</b></span>'
+    +'<div class="nmrow"><span class="nm">'+gEsc(b.name)+'</span><span class="bk2-bdg tag">'+gEsc(b.tag)+'</span>'
+    +(connected?'<span class="bk2-bdg ok">'+TFBK2_CK+' 연결됨</span>':(b.conn?'':'<span class="bk2-bdg soon">지원 예정</span>'))+'</div>'
+    +'<div class="rrow"><button type="button" class="bk2-rc" title="평점 분포 보기" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg width="13" height="12" viewBox="0 0 16 15" fill="currentColor" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>'
+    +'<div class="bk2-st">'
+    +'<span><small>평가</small><b>'+(rv.length+(mine?1:0))+'</b></span>'
     +'<span><small>연결 계정</small><b>'+gEsc(String(b.traders))+'</b></span>'
-    +'<span><small>팔로워</small><b>'+fw+'</b></span>'
     +'</div></div>'
     +'<div class="ha">'
-    +'<button class="obtn" onclick="tfBkFollow(\''+b.id+'\')">'+(((t.bkFollow||{})[b.id])?'팔로잉 ✓':'팔로우')+'</button>'
-    +(b.conn?'<button class="gbtn" onclick="tfBkConnect(\''+b.id+'\')">TETH로 연결</button><button class="wbtn" onclick="tfBkOpenAcct(\''+b.id+'\')">계좌 개설 ↗</button>':'<span class="soonlb">연결 준비 중</span>')
+    +(connected
+      ?'<span class="bk2-conn">'+TFBK2_CK+' TETH에 연결됨</span><button class="bk2-btn gho" onclick="tfNav(\'#/trade\')">연결 관리</button>'
+      :(b.conn
+        ?'<button class="bk2-btn acc" onclick="tfBkConnect(\''+b.id+'\')">TETH로 연결</button><button class="bk2-btn gho" onclick="tfBkOpenAcct(\''+b.id+'\')">계정 개설 ↗</button>'
+        :''))
     +'</div></div>'
-    +'<div class="tfbk-tabs" role="tablist"><button type="button" role="tab" aria-selected="'+(tab==='overview')+'" class="tb'+(tab==='overview'?' on':'')+'" onclick="tfBkTab(\''+b.id+'\',\'overview\')">개요</button><button type="button" role="tab" aria-selected="'+(tab==='reviews')+'" class="tb'+(tab==='reviews'?' on':'')+'" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">리뷰</button></div>';
+    +'<div class="bk2-tabs" role="tablist"><button type="button" role="tab" aria-selected="'+(tab==='overview')+'" class="tb'+(tab==='overview'?' on':'')+'" onclick="tfBkTab(\''+b.id+'\',\'overview\')">개요</button><button type="button" role="tab" aria-selected="'+(tab==='reviews')+'" class="tb'+(tab==='reviews'?' on':'')+'" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">리뷰</button></div>';
   var body='';
   if(tab==='overview'){
-    body='<div class="sh2" style="margin-top:0">리뷰 <span class="more" role="button" tabindex="0" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">›</span></div>'
-      +'<div class="tfbk-rvrow-wrap"><div class="tfbk-rvrow" id="tfbk-rvrow">'
-      +rv.slice(0,6).map(function(r){ return '<div class="rvc" role="button" tabindex="0" onclick="tfBkRevModal(\''+b.id+'\','+r.id+')" onkeydown="if(event.key===\'Enter\')tfBkRevModal(\''+b.id+'\','+r.id+')">'+tfBkStars(r.r)+'<p>'+gEsc(r.txt)+'</p><span class="by">by '+gEsc(r.by)+'<br>'+gEsc(r.d)+'</span></div>'; }).join('')
-      +'</div><button class="arw" aria-label="다음 리뷰" onclick="document.getElementById(\'tfbk-rvrow\').scrollBy({left:320,behavior:\'smooth\'})">›</button></div>'
-      +'<span class="lk2" role="button" tabindex="0" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">'+gEsc(b.name)+' 리뷰 전체 보기 ›</span>'
-      +(b.conn?'<div class="tfbk-promo" style="margin-top:32px"><div><b>'+gEsc(b.promo)+'</b><p>'+gEsc(b.promoSub||'')+'</p></div>'
-        +'<button class="lvbtn" style="margin-left:auto" onclick="tfBkPromoMore(\''+b.id+'\')">자세히</button></div>':'')
-      +'<div class="sh2">거래 조건, 수수료</div>'
+    var assets=b.assetsList||[b.assets];
+    body='<div class="bk2-sh" style="margin-top:0">거래 가능 자산</div>'
+      +'<div class="bk2-assets">'+assets.map(function(a){ return '<span>'+gEsc(a)+'</span>'; }).join('')+'</div>'
+      +(b.conn&&b.promo?'<div class="bk2-benefit"><span class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v8h14v-8"/><path d="M12 8v12"/><path d="M12 8c-3.5 0-4.5-4-2-4 2 0 2 4 2 4zm0 0c3.5 0 4.5-4 2-4-2 0-2 4-2 4z"/></svg></span>'
+        +'<div class="bx"><small>PARTNER BENEFIT</small><b>'+gEsc(b.promo)+'</b><p>'+gEsc(b.promoSub||'')+'</p></div>'
+        +'<span class="ac"><button class="bk2-btn gho" onclick="tfBkPromoMore(\''+b.id+'\')">혜택 자세히</button><button class="bk2-btn pri" onclick="tfBkOpenAcct(\''+b.id+'\')">계정 개설 ↗</button></span></div>':'')
+      +'<div class="bk2-sh">리뷰 <span class="sp"></span><button class="bk2-btn gho" style="height:34px;font-size:12.5px" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">전체 보기</button></div>'
+      +'<div class="bk2-rvwrap">'
+      +'<button class="bk2-arw l" id="bk2-arw-l" aria-label="이전 리뷰" onclick="tfBk2Car(-1)">‹</button>'
+      +'<div class="bk2-rvrow" id="bk2-rvrow">'
+      +rv.slice(0,8).map(function(r){ return '<div class="bk2-rvc" role="button" tabindex="0" onclick="tfBkRevModal(\''+b.id+'\','+r.id+')" onkeydown="if(event.key===\'Enter\')tfBkRevModal(\''+b.id+'\','+r.id+')">'+tfBk2Stars(r.r)+'<p>'+gEsc(r.txt)+'</p><span class="by">'+gEsc(r.by)+' · '+gEsc(r.d)+'</span></div>'; }).join('')
+      +'</div>'
+      +'<button class="bk2-arw r" id="bk2-arw-r" aria-label="다음 리뷰" onclick="tfBk2Car(1)">›</button>'
+      +'</div>'
+      +'<div class="bk2-sh">거래 조건, 수수료</div>'
       +'<div class="tfbk-fees">'
-      +'<div><small>거래 가능 자산</small><b>'+gEsc(b.assets)+'</b></div>'
       +'<div><small>최대 레버리지</small><b>'+gEsc(b.lev||'해당 없음')+'</b></div>'
       +'<div><small>입금 수수료</small><b>'+gEsc(b.fees?b.fees.dep:'확인 예정')+'</b></div>'
       +'<div><small>출금 수수료</small><b>'+gEsc(b.fees?b.fees.wd:'확인 예정')+'</b></div>'
       +'<div><small>휴면 수수료</small><b>'+gEsc(b.fees?b.fees.ina:'확인 예정')+'</b></div>'
+      +(b.fees&&b.fees.mk?'<div><small>현물 Maker / Taker</small><b>'+gEsc(b.fees.mk)+' / '+gEsc(b.fees.tk)+'</b></div>':'')
       +'</div>'
-      +(b.fees?'<div class="tfbk-fee2"><b>추가 상세</b><span>현물 마켓 Maker '+b.fees.mk+', Taker '+b.fees.tk+'</span><span>거래소 등급과 이벤트에 따라 달라질 수 있어요. 정확한 값은 거래소 공지 기준입니다.</span></div>':'')
-      +'<div class="sh2">'+gEsc(b.name)+' 소개</div>'
-      +'<div class="tfbk-about"><div class="row"><span><small>웹사이트</small><a href="https://'+gEsc(b.site)+'" target="_blank" rel="noopener noreferrer">'+gEsc(b.site)+' ↗</a></span></div>'
-      +'<p id="tfbk-about-p" class="clamp">'+gEsc(b.about)+' TETH는 이 거래소와 연결할 때 조회와 거래 권한만 사용하고, 출금 권한은 어떤 경우에도 요구하지 않아요. 연결 후에도 설정에서 언제든 끊을 수 있습니다.</p>'
-      +'<button type="button" class="lk2m" aria-expanded="false" onclick="var p=document.getElementById(\'tfbk-about-p\');p.classList.toggle(\'clamp\');var open=!p.classList.contains(\'clamp\');this.setAttribute(\'aria-expanded\',open);this.textContent=open?\'접기\':\'더 보기\'">더 보기</button></div>'
-      +'<div class="sh2">도구, 기능</div>'
-      +'<div class="tfbk-feat">'
-      +'<div class="gh">주문 유형</div>'
-      +'<div class="fr"><span><b>시장가 주문</b><small>현재 가격으로 즉시 사고파는 주문이에요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="fr"><span><b>지정가 주문</b><small>정한 가격에 도달할 때만 체결되는 주문이에요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="fr"><span><b>스톱 주문</b><small>가격이 기준선에 닿으면 시장가로 실행돼요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="fr"><span><b>스톱 리밋 주문</b><small>기준선 도달 시 지정가 주문으로 걸리는 방식이에요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="gh">TETH 연결 권한</div>'
-      +'<div class="fr"><span><b>잔고, 시세 조회</b><small>전략 계산과 리스크 확인에 사용해요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="fr"><span><b>주문 실행</b><small>전략 조건이 맞을 때 매수와 매도를 실행해요.</small></span><i class="ok">✓</i></div>'
-      +'<div class="fr"><span><b>출금</b><small>TETH는 자산을 옮길 수 없어요. 요구하지 않습니다.</small></span><i class="no">✕</i></div>'
+      +'<div class="bk2-sh">'+gEsc(b.name)+'에 대하여</div>'
+      +'<div class="bk2-about"><div class="mg">'
+      +'<div><small>설립</small><b>'+gEsc(info.founded||'—')+'</b></div>'
+      +'<div><small>본사</small><b>'+gEsc(info.hq||'—')+'</b></div>'
+      +'<div><small>문서</small>'+(info.docsUrl?'<a href="'+gEsc(info.docsUrl)+'" target="_blank" rel="noopener noreferrer">공식 문서 ↗</a>':'<b>—</b>')+'</div>'
+      +'<div><small>웹사이트</small><a href="https://'+gEsc(b.site)+'" target="_blank" rel="noopener noreferrer">'+gEsc(b.site)+' ↗</a></div>'
+      +'<div><small>커뮤니티</small>'+(info.community?'<a href="'+gEsc(info.communityUrl||('https://x.com/'+String(info.community).replace('@','')))+'" target="_blank" rel="noopener noreferrer">'+gEsc(info.community)+' ↗</a>':'<b>—</b>')+'</div>'
       +'</div>'
-      +'<div class="tfbk-cta">'+(b.conn?'<button class="wbtn" onclick="tfBkOpenAcct(\''+b.id+'\')">'+gEsc(b.name)+' 계좌 개설 ↗</button>':'')+'<button class="obtn" onclick="tfBrokersView()">다른 거래소와 비교</button></div>'
-      +'<div class="faqh">자주 묻는 질문</div>'
-      +'<div class="tfbk-faq">'+[
-        ['TETH 연결에 출금 권한이 필요한가요?','아니요. 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요. API 생성 시 출금 권한은 켜지 마세요.'],
-        ['연결하면 기존 자산이 옮겨지나요?','아니요. 자산은 거래소에 그대로 있고, TETH는 전략 조건에 맞을 때 주문만 넣어요.'],
-        ['수수료는 얼마인가요?','거래소 자체 수수료가 그대로 적용돼요. 파트너 가입 경로면 TETH 이용료는 무료입니다.'],
-        ['연결을 끊고 싶으면 어떻게 하나요?','설정에서 언제든 연결을 해제할 수 있어요. 거래소에서 API 키를 삭제해도 즉시 끊깁니다.'],
-        ['전략 실행 중 직접 거래해도 되나요?','권장하지 않아요. 필요하면 전략을 먼저 일시 정지하세요. 수동 거래가 섞이면 상태가 어긋날 수 있어요.'],
-        ['하나의 계정으로 여러 전략을 돌릴 수 있나요?','가능하지만, 전략 전용 서브계정을 나눠 쓰는 걸 권장해요. 영향 범위가 그 계정 예치금으로 한정됩니다.'],
-        ['왜 거래소 연결이 필요한가요?','검증을 통과한 전략을 실제 계좌에서 자동 실행하려면 주문을 넣을 통로가 필요해요.'],
-        ['지원 예정 거래소는 언제 열리나요?','준비되는 대로 이 페이지에 먼저 표시돼요. 팔로우해두시면 알림으로 알려드릴게요.']
-      ].map(function(q,i){ return '<div class="fq"><button type="button" class="q" aria-expanded="false" onclick="var f=this.parentElement;f.classList.toggle(\'on\');this.setAttribute(\'aria-expanded\',f.classList.contains(\'on\'))">'+gEsc(q[0])+'<i aria-hidden="true">+</i></button><div class="a">'+gEsc(q[1])+'</div></div>'; }).join('')+'</div>';
+      +'<p>'+gEsc(info.about||b.about)+' TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요. 연결 후에도 설정에서 언제든 끊을 수 있습니다.</p></div>'
+      +'<div class="bk2-sh">도구 및 기능</div>'
+      +tfBk2Feat(b,info)
+      +'<div class="bk2-sh">자주 묻는 질문</div>'
+      +'<div class="bk2-faq">'+tfBk2Faq(b,info).map(function(q){ return '<div class="fq"><button type="button" class="q" aria-expanded="false" onclick="var f=this.parentElement;f.classList.toggle(\'on\');this.setAttribute(\'aria-expanded\',f.classList.contains(\'on\'))">'+gEsc(q[0])+'<i aria-hidden="true">+</i></button><div class="a">'+gEsc(q[1])+'</div></div>'; }).join('')+'</div>';
   } else {
-    t.bkCat=t.bkCat||'all'; t.bkSortR=t.bkSortR||'useful';
+    t.bkCat=t.bkCat||'all'; t.bkSortR=t.bkSortR||'rating';
     var cats=['전체','거래 조건','플랫폼 사용성','고객 지원','거래 기능','계정 관리','신뢰와 보안','기술 안정성','모바일'];
     var list=rv.slice();
     if(t.bkCat!=='all') list=list.filter(function(r){ return r.cat.indexOf(t.bkCat)>=0; });
-    list.sort(t.bkSortR==='recent'?function(a,b){return b.id-a.id;}:function(a,b){return b.r-a.r;});
-    var dist=[0,0,0,0,0]; rv.forEach(function(r){ dist[5-r.r]++; });
-    body='<div class="sh2" style="margin-top:0">평점 분포</div>'
-      +'<div class="tfbk-dist">'+[5,4,3,2,1].map(function(s,i){ var n=dist[i],mx=Math.max.apply(null,dist)||1;
-        return '<div class="dr"><span class="drl"><span class="sl">'+s+'★</span><span class="n">'+n+'</span></span><span class="bar"><i style="width:'+(n/mx*100)+'%"></i></span></div>'; }).join('')+'</div>'
-      +'<div class="sh2 tfbk-rvhead">실사용 리뷰 <span class="sp">'
-      +tfBkDrop('tfbk-m-rvsort',[['useful','유용한 순'],['recent','최신순']],t.bkSortR,'tfBkRevSortPick',1,1)
-      +'<button type="button" class="lvbtn" onclick="fbOpen()">리뷰 남기기</button></span></div>'
-      +'<div class="tfbk-cats">'+cats.map(function(c){ var v=c==='전체'?'all':c; return '<button type="button" class="cc'+(t.bkCat===v?' on':'')+'" onclick="tfS().bkCat=\''+v+'\';tfSave();tfBrokerView(\''+b.id+'\',\'reviews\')">'+gEsc(c)+'</button>'; }).join('')+'</div>'
-      +'<div class="tfbk-rvgrid">'+(list.length?list.map(function(r){ return '<div class="rvc" role="button" tabindex="0" onclick="tfBkRevModal(\''+b.id+'\','+r.id+')" onkeydown="if(event.key===\'Enter\')tfBkRevModal(\''+b.id+'\','+r.id+')">'+tfBkStars(r.r)+'<p>'+gEsc(r.txt)+'</p><span class="by">by '+gEsc(r.by)+', '+gEsc(r.d)+'</span><span class="tags">'+r.cat.map(function(c){return '<em>'+gEsc(c)+'</em>';}).join('')+'</span></div>'; }).join(''):'<div class="pd">이 카테고리의 리뷰가 아직 없어요.</div>')+'</div>';
+    list.sort(t.bkSortR==='recent'?function(a,b){return a.id-b.id;}:function(a,b){return b.r-a.r;}); /* 데모 풀은 id 0 이 최신 */
+    var dist=[0,0,0,0,0]; rv.forEach(function(r){ dist[5-r.r]++; }); if(mine) dist[5-mine.r]++;
+    body='<div class="bk2-sh" style="margin-top:0">평점 분포</div>'
+      +'<div class="bk2-dist">'+[5,4,3,2,1].map(function(s,i){ var n=dist[i],mx=Math.max.apply(null,dist)||1;
+        return '<div class="dr"><span class="sl">'+s+'★</span><span class="bar"><i style="width:'+(n/mx*100)+'%"></i></span><span class="n">'+n+'</span></div>'; }).join('')+'</div>'
+      +'<div class="bk2-sh">리뷰 <span class="sp"></span>'
+      +tfBkDrop('tfbk-m-rvsort',[['rating','별점 높은 순'],['recent','최신순']],t.bkSortR,'tfBkRevSortPick',1,1)
+      +'<button type="button" class="bk2-btn pri" style="height:36px;font-size:13px" onclick="tfBk2Write(\''+b.id+'\')">리뷰 남기기</button></div>'
+      +'<div class="bk2-cats">'+cats.map(function(c){ var v=c==='전체'?'all':c; return '<button type="button" class="cc'+(t.bkCat===v?' on':'')+'" onclick="tfS().bkCat=\''+v+'\';tfSave();tfBrokerView(\''+b.id+'\',\'reviews\')">'+gEsc(c)+'</button>'; }).join('')+'</div>'
+      +'<div class="bk2-rvgrid">'
+      +(mine?'<div class="bk2-rvc bk2-mine">'+tfBk2Stars(mine.r)+'<p>'+gEsc(mine.txt)+'</p><span class="by">나 · '+(function(dd){return (dd.getMonth()+1)+'월 '+dd.getDate()+'일';})(new Date(mine.at||Date.now()))+'</span></div>':'')
+      +(list.length?list.map(function(r){ return '<div class="bk2-rvc" role="button" tabindex="0" onclick="tfBkRevModal(\''+b.id+'\','+r.id+')" onkeydown="if(event.key===\'Enter\')tfBkRevModal(\''+b.id+'\','+r.id+')">'+tfBk2Stars(r.r)+'<p>'+gEsc(r.txt)+'</p><span class="by">'+gEsc(r.by)+' · '+gEsc(r.d)+'</span><span class="tags">'+r.cat.map(function(c){return '<em>'+gEsc(c)+'</em>';}).join('')+'</span></div>'; }).join(''):(mine?'':'<div class="bk2-empty" style="grid-column:1/-1">이 카테고리의 리뷰가 아직 없어요.</div>'))
+      +'</div>'
+      +'<div class="bk2-note" style="text-align:left">표시된 리뷰는 데모용 예시입니다. 내 리뷰는 이 기기에 저장돼요.</div>';
   }
-  gContent('<div class="tf-page tfbk tfbk-detail">'+head+body
-    +'<div class="tfbk-note">수수료와 조건은 거래소 공지 기준으로 확인하세요.</div>'
-    +'</div>');
+  gContent('<div class="tf-page bk2-page bk2-det">'+head+body+'</div>');
   tfBkDropInit();
+  tfBk2CarInit();
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
+}
+/* 캐러셀 — 양방향, 끝 감지, 휠 가로 변환, 스크롤바 0 (PDF p7) */
+function tfBk2Car(dir){ var row=$('bk2-rvrow'); if(!row) return; row.scrollBy({left:dir*316,behavior:'smooth'}); }
+function tfBk2CarInit(){
+  var row=$('bk2-rvrow'); if(!row) return;
+  function sync(){ var l=$('bk2-arw-l'),r=$('bk2-arw-r'); if(!l||!r) return;
+    l.disabled=row.scrollLeft<=4; r.disabled=row.scrollLeft>=row.scrollWidth-row.clientWidth-4; }
+  row.addEventListener('scroll',sync,{passive:true});
+  row.addEventListener('wheel',function(e){ if(e.ctrlKey) return; /* 확대 제스처 통과 */
+    if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;
+    var mx=row.scrollWidth-row.clientWidth;
+    if((e.deltaY>0&&row.scrollLeft<mx-1)||(e.deltaY<0&&row.scrollLeft>1)){ row.scrollLeft+=e.deltaY; e.preventDefault(); } /* 끝에서는 페이지 스크롤 양보 */ },{passive:false});
+  sync();
+}
+/* 기능 매트릭스 — 리서치 caps 기반, unknown 은 행 생략 (추측 금지) */
+function tfBk2Feat(b,info){
+  var c=info.caps||{};
+  function row(k,ttl,sub){ if(c[k]==null||c[k]==='unknown') return ''; return '<div class="fr"><span><b>'+ttl+'</b><small>'+sub+'</small></span><i class="'+(c[k]?'ok':'no')+'">'+(c[k]?'✓':'—')+'</i></div>'; }
+  var g1=row('marketOrder','시장가 주문','현재 가격으로 즉시 사고파는 주문이에요.')
+    +row('limitOrder','지정가 주문','정한 가격에 도달할 때만 체결되는 주문이에요.')
+    +row('stopOrder','스톱 주문','가격이 기준선에 닿으면 실행되는 주문이에요.')
+    +row('stopLimitOrder','스톱 리밋 주문','기준선 도달 시 지정가 주문으로 걸리는 방식이에요.')
+    +row('trailingStop','트레일링 스탑','가격을 일정 거리로 따라가는 동적 손절이에요.');
+  var g2=row('oco','OCO 주문','두 주문 중 하나가 체결되면 나머지가 취소돼요.')
+    +row('postOnly','포스트 온리','메이커로만 체결되게 제한하는 옵션이에요.')
+    +row('reduceOnly','리듀스 온리','포지션을 줄이는 방향으로만 체결돼요.');
+  var g3=row('demoAccount','데모 계정','실제 자금 없이 연습할 수 있는 환경이에요.')
+    +row('publicApi','공개 API','외부 프로그램으로 조회와 주문이 가능해요.')
+    +row('level2','호가 데이터','매수·매도 호가 잔량을 볼 수 있어요.');
+  return '<div class="bk2-feat">'
+    +(g1?'<div class="gh">주문 유형</div>'+g1:'')
+    +(g2?'<div class="gh">주문 기능</div>'+g2:'')
+    +(g3?'<div class="gh">기타</div>'+g3:'')
+    +'<div class="gh">TETH 연결 권한</div>'
+    +'<div class="fr"><span><b>잔고, 시세 조회</b><small>전략 계산과 리스크 확인에 사용해요.</small></span><i class="ok">✓</i></div>'
+    +'<div class="fr"><span><b>주문 실행</b><small>전략 조건이 맞을 때 매수와 매도를 실행해요.</small></span><i class="ok">✓</i></div>'
+    +'<div class="fr"><span><b>출금</b><small>TETH는 자산을 옮길 수 없어요. 요구하지 않습니다.</small></span><i class="no">—</i></div>'
+    +'</div>';
+}
+/* FAQ — TETH 연결 질문 우선 + 사업자 고유 질문 (PDF·지시 §21) */
+function tfBk2Faq(b,info){
+  var base=[
+    ['TETH와 어떻게 연결하나요?',b.conn?'전략 검증을 통과한 뒤 연결 화면에서 '+b.name+' API 키를 등록하면 돼요. 약 5분이면 끝납니다.':'아직 준비 중이에요. 지원이 열리면 이 페이지와 알림으로 가장 먼저 알려드릴게요.'],
+    ['어떤 권한이 필요한가요?','조회와 거래 권한만 사용해요. API 생성 시 출금 권한은 켜지 마세요.'],
+    ['출금 권한이 필요한가요?','아니요. TETH는 자산을 옮길 수 없고, 출금 권한은 어떤 경우에도 요구하지 않아요.'],
+    ['기존 계정도 연결할 수 있나요?',b.conn?'네. 이미 쓰던 계정 그대로 API 키만 만들어 연결할 수 있어요.':'지원이 열리면 기존 계정 그대로 API 키로 연결할 수 있도록 준비하고 있어요.'],
+    ['계정 개설 혜택은 무엇인가요?',b.conn&&b.promo?'파트너 링크로 가입하면 TETH 이용료가 영원히 ₩0이에요. 가입 즉시 자동 연결됩니다.':'현재 준비 중이에요. 지원이 열리면 이 페이지에 먼저 표시됩니다.'],
+    ['연결을 해제하면 어떻게 되나요?','실행 중인 전략이 멈추고, TETH는 더 이상 계정에 접근할 수 없어요. 자산은 그대로 남습니다.']
+  ];
+  return base.concat((info.faq||[]).map(function(f){ return [f.q,f.a]; })).slice(0,8);
+}
+/* ── 리뷰 작성 플로우 — PDF p10~11: 로그인 게이트/별점별 프롬프트/입력량 상태/취소 확인 ── */
+var TF_BK2W=null;
+function tfBk2Write(id){
+  if(!S.user){ authOpen('login'); return; }
+  if($('bk2-wmw')) tfBk2WKill(); /* 중복 오픈 가드 */
+  var b=tfBkOf(id);
+  TF_BK2W={id:id,r:0};
+  var w=document.createElement('div'); w.className='ss3-dlgw'; w.id='bk2-wmw';
+  w.innerHTML='<div class="ss3-dlg"><div class="din bk2-wm">'
+    +'<button type="button" class="dx" aria-label="닫기" onclick="tfBk2WClose()">✕</button>'
+    +'<h3 style="margin:0 0 10px;font-size:19px">'+gEsc(b.name)+'에 대해 다른 사람들과 의견 나누기</h3>'
+    +'<div class="desc">개방적이고 투명한 커뮤니티를 위해 실제 계정 소유자의 리뷰만 남길 수 있어요. 솔직한 경험이 다른 사용자에게 큰 도움이 됩니다.</div>'
+    +'<div class="stars" role="radiogroup" aria-label="별점 선택">'+[1,2,3,4,5].map(function(i){ return '<button type="button" data-i="'+i+'" role="radio" aria-checked="false" aria-label="'+i+'점" onclick="tfBk2WStar('+i+')"><svg viewBox="0 0 16 15"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg></button>'; }).join('')+'</div>'
+    +'<textarea id="bk2-wtxt" maxlength="600" placeholder="먼저 별점을 선택해주세요" oninput="tfBk2WSync()"></textarea>'
+    +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfBk2WClose()">취소</button>'
+    +'<button type="button" class="wbtn" id="bk2-wgo" disabled onclick="tfBk2WGo()">별점을 선택해주세요</button></div>'
+    +'</div></div>';
+  document.body.appendChild(w);
+  document.addEventListener('keydown',tfBk2WEsc);
+  if(innerWidth<=760) w.classList.add('sheet');
+  requestAnimationFrame(function(){ w.classList.add('on'); });
+}
+function tfBk2WEsc(e){ if(e.key==='Escape'){ e.stopPropagation(); if($('bk2-cfm')){ tfBk2CfmKeep(); } else tfBk2WClose(); } }
+function tfBk2WStar(i){
+  if(!TF_BK2W) return; TF_BK2W.r=i;
+  document.querySelectorAll('#bk2-wmw .stars button').forEach(function(bt){ var on=+bt.getAttribute('data-i')<=i; bt.classList.toggle('on',on); bt.setAttribute('aria-checked',+bt.getAttribute('data-i')===i?'true':'false'); });
+  var ta=$('bk2-wtxt');
+  if(ta) ta.placeholder=i<=2?'어떤 점이 불편했나요? 어떤 문제가 있었는지 알려주시면 개선에 도움이 돼요.'
+    :i===3?'어떤 점이 괜찮았고, 어떤 부분이 아쉬웠나요?'
+    :'어떤 점이 특히 좋았나요? 다른 사용자에게 추천하고 싶은 기능이 있다면 함께 알려주세요.';
+  tfBk2WSync();
+}
+function tfBk2WSync(){
+  if(!TF_BK2W) return;
+  var ta=$('bk2-wtxt'),go=$('bk2-wgo'); if(!ta||!go) return;
+  var n=ta.value.trim().length;
+  if(!TF_BK2W.r){ go.disabled=true; go.textContent='별점을 선택해주세요'; }
+  else if(n===0){ go.disabled=true; go.textContent='리뷰 남기기'; }
+  else if(n<8){ go.disabled=true; go.textContent='조금 더 알려주세요'; }
+  else { go.disabled=false; go.textContent='리뷰 남기기'; }
+}
+function tfBk2WClose(){
+  if(!TF_BK2W) return;
+  if($('bk2-cfm')) return; /* 확인창이 결정 주체 — 뒤 모달의 닫기 요청 무시 (bk2-codex2 P1) */
+  var ta=$('bk2-wtxt');
+  var dirty=(TF_BK2W.r>0)||(ta&&ta.value.trim().length>0);
+  if(dirty&&!$('bk2-cfm')){
+    /* 작성 내용이 있으면 확인 모달 (모달 위 모달 — 자체 z, 포커스 이동) */
+    var c=document.createElement('div'); c.id='bk2-cfm';
+    c.innerHTML='<div class="cin2"><b>작성 중인 리뷰를 지울까요?</b><p>지금 닫으면 별점과 내용이 저장되지 않아요.</p>'
+      +'<div class="acts3"><button type="button" class="obtn" onclick="tfBk2CfmKeep()">계속 작성</button><button type="button" class="wbtn" style="background:var(--gr)" onclick="tfBk2CfmDrop()">삭제</button></div></div>';
+    document.body.appendChild(c);
+    var kb=c.querySelector('.obtn'); if(kb) kb.focus();
+    return;
+  }
+  tfBk2WKill();
+}
+function tfBk2CfmKeep(){ var c=$('bk2-cfm'); if(c) c.remove(); var ta=$('bk2-wtxt'); if(ta) ta.focus(); }
+function tfBk2CfmDrop(){ var c=$('bk2-cfm'); if(c) c.remove(); tfBk2WKill(); }
+function tfBk2WKill(){
+  var w=$('bk2-wmw'); if(w){ w.id=''; w.classList.remove('on'); setTimeout(function(){ w.remove(); },180); } /* ID 즉시 해제 — 재오픈 레이스 차단 */
+  var c=$('bk2-cfm'); if(c) c.remove();
+  document.removeEventListener('keydown',tfBk2WEsc);
+  TF_BK2W=null;
+}
+function tfBk2WGo(){
+  if(!TF_BK2W) return;
+  var ta=$('bk2-wtxt'); var txt=ta?ta.value.trim():'';
+  if(!TF_BK2W.r||txt.length<8) return;
+  var t=tfS(); t.bkRev=t.bkRev||{};
+  t.bkRev[TF_BK2W.id]={r:TF_BK2W.r,txt:txt.slice(0,600),at:Date.now()};
+  var id=TF_BK2W.id;
+  TF_BK2W.r=0; if(ta) ta.value=''; /* 정리 후 확인 모달 없이 닫기 */
+  tfBk2WKill();
+  tfSave();
+  tfBrokerView(id,'reviews');
 }
 function tfBkPromoMore(id){
   var b=tfBkOf(id);
@@ -12529,7 +12917,7 @@ function tfNav(r){ if(location.hash===r) tfRoute(); else location.hash=r; }
 function tfRoute(){
   var h=location.hash;
   tfSS3DlgClose(true); /* 라우트 전환 시 공유 다이얼로그 잔존 방지 (codex F09) */
-  try{ tfDrawerClose(); }catch(e){} try{ tfUpClose(); }catch(e){} /* 드로어·업그레이드 시트도 라우트 이탈 시 정리 (codex qa3 P2-3) */
+  try{ tfDrawerClose(); }catch(e){} try{ tfUpClose(); }catch(e){} try{ tfBk2WKill(); }catch(e){} /* 리뷰 작성 모달도 라우트 이탈 시 정리 (bk2-codex2 P1) */ /* 드로어·업그레이드 시트도 라우트 이탈 시 정리 (codex qa3 P2-3) */
   /* nf 라우트 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 */
   if(/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(h)){ TF_ONNF=true; if(tfNFRoute(h)) return; }
   if(TF_ONNF&&h.indexOf('#/strategy/')!==0&&h.indexOf('#/share/s/')!==0){ TF_ONNF=false; tfBackToChat(); return; } /* nf 화면에서 뒤로가기 */
