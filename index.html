@@ -883,7 +883,7 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 .g-tpl::after{content:'';position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,0) 100%);pointer-events:none} /* 라벨 스크림 — Gemini 급 농도 (agy tpl P1) */
 .g-tpl:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .g-tpl:hover::before{box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
-.g-tpl .lb{position:absolute;left:13px;bottom:11px;font-size:14px;font-weight:500;letter-spacing:0;color:#fff;z-index:1}
+.g-tpl .lb{position:absolute;left:14px;bottom:12px;font-size:16px;font-weight:500;letter-spacing:0;color:#fff;z-index:1}
 .g-tpl.on{box-shadow:0 0 0 2.5px #a8c7fa}
 .g-tpl.on:hover{box-shadow:0 0 0 2.5px #a8c7fa,0 8px 24px rgba(0,0,0,.35)} /* 선택 상태에서도 hover 부양 유지 (codex fc) */
 /* 종목 = 실제 로고 타일 / 기능 배지, 브랜드 마크 (사용자 지시) */
@@ -907,6 +907,9 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 #g-root .g-home .g-pillband .g-terms{position:static;left:auto;right:auto;bottom:auto;padding:2px 16px 0;z-index:auto;text-align:center} /* collapsed has-셀렉터(1,3,0)와 동률+후행 — 중앙정렬 보장 */
 .g-home .g-plus-pop{top:auto;bottom:70px}
 .g-tplwrap{margin-bottom:8px}
+/* 카드 열 정책: 3열(>1100) / 2열(601~1100, 태블릿) / 1열(<=600, 폰) — Gemini 갤러리 (사용자 지시) */
+@media(max-width:1100px){ .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px} .g-tpl .lb{font-size:17px} }
+@media(max-width:600px){ .g-tpls{grid-template-columns:minmax(0,1fr)} .g-tpl .lb{font-size:18px} }
 .g-tpl .ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#a8c7fa;display:flex;align-items:center;justify-content:center;z-index:1}
 .g-pill.has-tpl{flex-wrap:wrap;border-radius:28px} /* 2줄 상태에서 스타디움 곡률 밖으로 전송버튼이 나가지 않게 (.multi와 동일 처리) */
 .g-tpl-sel{flex:0 0 100%;order:-2;display:flex;gap:8px;flex-wrap:wrap;padding:4px 2px 10px;animation:gTselIn .2s var(--ease)}
@@ -921,9 +924,7 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 @media (prefers-reduced-motion: reduce){ .g-tpl-sel,.g-tpl-sel .tchip{animation:none} }
 @media(max-width:860px){
   .g-tplwrap{width:auto;align-self:stretch;margin:20px 16px 0} /* 센터 정렬 flex에서 width:auto 수축 방지 */
-  .g-tpls{grid-template-columns:minmax(0,1fr);gap:14px} /* 모바일 1열 풀폭 — Gemini 동영상 갤러리 문법 (사용자 지시) */
   .g-tpl{border-radius:20px;aspect-ratio:220/142} /* 모바일 카드 세로 +15% (사용자 지시) */
-  .g-tpl .lb{font-size:12.5px;left:10px;bottom:8px}
   .g-home{padding-top:9vh}
   body:has(#g-content .g-home) #teth-help{bottom:152px} /* 홈 고정 컴포저의 전송 버튼과 FAB 겹침 방지 */
 }
@@ -6454,10 +6455,10 @@ function gHome(){
     '<span class="g-pill-sp"></span><button class="g-send" id="g-home-send" onclick="gNew()" aria-label="'+TR('home.send','연구 시작')+'" style="display:none">↑</button>'+
     '<div class="g-plus-pop" id="g-plus-pop" onmouseenter="gPlusStay()" onmouseleave="gPlusLeave()"><b>'+TR('plus.t','더 많은 기능 사용하기')+'</b><p>'+TR('plus.b','로그인하면 차트와 포트폴리오 파일을 첨부하고, 거래소를 연결하고, 전략을 저장하는 등 더 많은 기능을 사용할 수 있어요.')+'</p><div class="row"><button class="go" onclick="authOpen(\'login\')">'+TR('nav.login','로그인')+'</button></div></div>'+
     '</div>'+
-    '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.')
+    '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다.{BR}TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
       .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
-      .replace(/\{\/\}/g,'</a>')+'</div>'+
+      .replace(/\{\/\}/g,'</a>').replace('{BR}','<br>')+'</div>'+
     '</div>'+
     '</div>');
   gCosmosStart();
@@ -14304,7 +14305,7 @@ var I18N={
   'banner.sub':{ko:'TETH에서 제공하는 AI 트레이딩 에이전트',en:'AI trading agent from TETH',ja:'TETHのAIトレーディングエージェント','zh-CN':'TETH推出的AI交易代理','zh-TW':'TETH推出的AI交易代理',es:'Agente de trading con IA de TETH',fr:'Agent de trading IA par TETH'},
   'banner.dl':{ko:'다운로드',en:'Download',ja:'ダウンロード','zh-CN':'下载','zh-TW':'下載',es:'Descargar',fr:'Télécharger'},
   'home.ph':{ko:'예: 비트코인이 떨어졌을 때 사는 전략',en:'e.g. A strategy that buys Bitcoin dips',ja:'例：ビットコイン下落時に買う戦略','zh-CN':'例如：比特币下跌时买入的策略','zh-TW':'例如：比特幣下跌時買入的策略',es:'p. ej. Una estrategia que compra caídas de Bitcoin',fr:'p. ex. Une stratégie qui achète les baisses du Bitcoin'},
-  'home.terms':{ko:'{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다. TETH는 AI이며 실수를 할 수 있습니다.',en:'{T}TETH Terms{/} and the {P}TETH Privacy Policy{/} apply. TETH is an AI and can make mistakes.',ja:'{T}TETH利用規約{/}と{P}TETHプライバシーポリシー{/}が適用されます。TETHはAIであり、間違えることがあります。','zh-CN':'适用{T}TETH条款{/}和{P}TETH隐私政策{/}。TETH是AI，可能会出错。','zh-TW':'適用{T}TETH條款{/}和{P}TETH隱私權政策{/}。TETH是AI，可能會出錯。',es:'Se aplican los {T}Términos de TETH{/} y la {P}Política de privacidad de TETH{/}. TETH es una IA y puede cometer errores.',fr:"Les {T}Conditions TETH{/} et la {P}Politique de confidentialité TETH{/} s'appliquent. TETH est une IA et peut faire des erreurs."},
+  'home.terms':{ko:'{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다.{BR}TETH는 AI이며 실수를 할 수 있습니다.',en:'{T}TETH Terms{/} and the {P}TETH Privacy Policy{/} apply.{BR}TETH is an AI and can make mistakes.',ja:'{T}TETH利用規約{/}と{P}TETHプライバシーポリシー{/}が適用されます。{BR}TETHはAIであり、間違えることがあります。','zh-CN':'适用{T}TETH条款{/}和{P}TETH隐私政策{/}。{BR}TETH是AI，可能会出错。','zh-TW':'適用{T}TETH條款{/}和{P}TETH隱私權政策{/}。{BR}TETH是AI，可能會出錯。',es:'Se aplican los {T}Términos de TETH{/} y la {P}Política de privacidad de TETH{/}.{BR}TETH es una IA y puede cometer errores.',fr:"Les {T}Conditions TETH{/} et la {P}Politique de confidentialité TETH{/} s'appliquent.{BR}TETH est une IA et peut faire des erreurs."},
   'chip.1':{ko:'하락 후 반등 전략',en:'Buy-the-dip strategy',ja:'押し目買い戦略','zh-CN':'低吸反弹策略','zh-TW':'低接反彈策略',es:'Estrategia de comprar caídas',fr:"Stratégie d'achat sur repli"},
   'chip.2':{ko:'추세 추종 전략',en:'Trend-following strategy',ja:'トレンドフォロー戦略','zh-CN':'趋势跟踪策略','zh-TW':'趨勢跟蹤策略',es:'Estrategia de seguir la tendencia',fr:'Stratégie de suivi de tendance'},
   'chip.3':{ko:'막연한 아이디어부터',en:'Start from a vague idea',ja:'漠然としたアイデアから','zh-CN':'从模糊的想法开始','zh-TW':'從模糊的想法開始',es:'Empieza con una idea vaga',fr:"Partir d'une idée vague"},
