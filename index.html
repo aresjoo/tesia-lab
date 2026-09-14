@@ -607,7 +607,8 @@ body.light .g-cosmos{opacity:.8}
 @media (max-width:860px){.g-hello .hseg{display:block}} /* 모바일만 지정된 지점에서 개행, 데스크톱은 공백 포함 한 줄 */
 .g-sub{font-size:clamp(14px,1.3vw,17px);color:var(--gt2);text-align:center;margin-top:10px;word-break:keep-all}
 .g-sub .sbr{display:none} /* 서브카피 지정 줄바꿈 — 데스크톱 1줄, 모바일에서만 문장 경계로 꺾임 (사용자 지시) */
-@media (max-width:860px){ .g-sub .sbr{display:inline} }
+.g-terms .tbr{display:none} /* 약관도 동일 규칙: PC 1줄, 모바일만 문장 경계 2줄 (사용자 지시) */
+@media (max-width:860px){ .g-sub .sbr,.g-terms .tbr{display:inline} }
 .g-pill{position:relative;width:min(760px,94%);margin-top:34px;min-height:58px;border-radius:999px;background:var(--pill);box-shadow:var(--shadow-pill);display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;padding:8px 10px 8px 20px}
 .g-pill textarea{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--gt);font-size:14.5px;font-family:inherit;resize:none;line-height:21px;height:21px;max-height:147px;padding:0;margin:6px 0;overflow-y:auto}
 .g-pill textarea::placeholder{color:var(--gt3)}
@@ -6458,7 +6459,7 @@ function gHome(){
     '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다.{BR}TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
       .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
-      .replace(/\{\/\}/g,'</a>').replace('{BR}','<br>')+'</div>'+
+      .replace(/\{\/\}/g,'</a>').replace('{BR}','<br class="tbr">')+'</div>'+
     '</div>'+
     '</div>');
   gCosmosStart();
