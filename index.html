@@ -2267,6 +2267,7 @@ body.g-inchat #nf-util{right:14px}
   .tft-posb .pr2{grid-template-columns:repeat(2,1fr)}
 }
 /* nfx — 내 트레이딩 대시보드 (mock-trade 포팅) */
+body:has(.tft-grid) #teth-help,body:has(.tft-grid) #teth-help-pop{display:none!important} /* 내 트레이딩에서는 상담원 위젯 제거 (사용자 지시 bk3 p1) */
 .nfxt-banner{display:flex;align-items:center;gap:12px;border:1px solid rgba(217,168,78,.32);background:linear-gradient(90deg,rgba(217,168,78,.08),rgba(217,168,78,.03));border-radius:14px;padding:13px 16px;font-size:13px;color:var(--gt2);animation:nfxIn .3s var(--ease) both}
 .nfxt-banner b{color:var(--ga)}
 .nfxt-banner .sp{flex:1}
@@ -2805,8 +2806,8 @@ body.tf-route #teth-help{bottom:88px}
 .tfbk-card .pr small{display:block;font-size:14px;line-height:18px;color:#dbdbdb;margin-top:6px}
 /* actions: 위 32, 버튼 h48 r8 pad 0 31 fs16/500, gap 12 */
 .tfbk-card .bt{display:flex;gap:12px;margin-top:32px}
-.tfbk .wbtn,.ss3-dlg .wbtn,.bk2-page .wbtn{height:48px;padding:0 31px;border-radius:8px;background:#fff;color:#0f0f0f;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
-.tfbk .wbtn:hover,.ss3-dlg .wbtn:hover,.bk2-page .wbtn:hover{background:#f2f2f2;border-color:#f2f2f2}
+.tfbk .wbtn,.ss3-dlg .wbtn,.bk2-page .wbtn,.tf-drawer .wbtn{height:48px;padding:0 31px;border-radius:8px;background:#fff;color:#0f0f0f;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
+.tfbk .wbtn:hover,.ss3-dlg .wbtn:hover,.bk2-page .wbtn:hover,.tf-drawer .wbtn:hover{background:#f2f2f2;border-color:#f2f2f2}
 .tfbk .obtn,.ss3-dlg .obtn,.bk2-page .obtn{height:48px;padding:0 31px;border-radius:8px;background:transparent;color:#fff;font-size:16px;font-weight:500;cursor:pointer;border:1px solid #fff;transition:none}
 .tfbk .obtn:hover,.ss3-dlg .obtn:hover,.bk2-page .obtn:hover{background:rgba(255,255,255,.08)}
 /* 로고: TV 카드 이미지 291x272 스케일. 스택 타일 + 마크 */
@@ -9127,9 +9128,7 @@ function tfDashView(){
   if(readyBot) banner='<div class="nfxt-banner" id="nf-ready-banner"><span class="nfx-dot pulse" style="color:var(--ga);background:var(--ga)"></span>'
     +'<span>대기 중인 전략이 있어요: <b>'+gEsc(readyBot.name)+'</b></span><span class="sp"></span>'
     +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNav(&quot;#/trade/bot/'+readyBot.at+'&quot;)">지금 시작하기</button></div>';
-  else if(!tt.uidLinked&&!t.payDone) banner='<div class="nfxt-banner blue" id="nf-ready-banner"><span class="nfx-dot" style="color:var(--gb2);background:var(--gb2)"></span>'
-    +'<span><b>UID 를 무료로 연동</b>하면 PRO 분석 크레딧을 받아요</span><span class="sp"></span>'
-    +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNFLinkUid()">Fast API 연동</button></div>';
+  /* UID 연동 유도 배너 제거 — 연동 유도는 하단 탭의 연결 빈 상태가 담당 (사용자 지시 bk3 p2) */
   var unread=tt.notifs.filter(function(n){return !n.read;}).length;
   var BTABS=[['pos','포지션'],['open','미체결 주문'],['orders','주문 내역'],['fills','체결 내역'],['closed','종료 포지션'],['assets','자산'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
   var MTABS=[['chart','차트'],['strats','전략'],['brain','Agent']]; /* 모바일 상단 = 3개만 — 실행 탭은 차트 아래 2차 스트립 (사용자 지시) */
@@ -9683,6 +9682,12 @@ function tfTmBottom(){
   ['pos','open','orders','fills','closed','assets','rebates'].forEach(function(k){ var el=$('tft-p-'+k); if(el) el.innerHTML=tfTmPane(k); });
 }
 function tfTmPane(k){
+  /* 거래소 미연결이면 계좌성 탭은 연결 빈 상태 — API 연동 후 데이터 노출 (사용자 지시 bk3 p2, Hyperliquid 문법) */
+  if(!tfS().api&&['pos','open','orders','fills','closed','assets','rebates'].indexOf(k)>=0){
+    return '<div class="tft-empty tft-connempty" style="padding:46px 16px;text-align:center"><b>거래소를 연결하면 실계좌 데이터가 표시돼요</b>'
+      +'<span>포지션, 주문, 자산, 정산 내역은 API 연결 후 이 자리에 나타납니다.</span>'
+      +'<button type="button" class="nfx-btn pri" style="margin:16px auto 0" onclick="tfTmConnGo()">거래소 연결하기</button></div>';
+  }
   var list=tfTmScopeList();
   var note='<div class="tft-tnote">검증 시뮬레이션 파생 기록이에요, '+(TF_TM.scope==='all'?'전체 전략':'현재 전략')+' 범위</div>';
   function empty(tt,ds){ return '<div class="tft-empty" style="padding:34px 16px"><b>'+tt+'</b><span>'+ds+'</span></div>'; }
@@ -12845,7 +12850,7 @@ function tfBrokerView(id,tab){
       +'<div class="bk2-assets">'+assets.map(function(a){ return '<span>'+gEsc(a)+'</span>'; }).join('')+'</div>'
       +(b.conn&&b.promo?'<div class="bk2-promo" style="background:linear-gradient(100deg,'+col+'2e 0%,'+col+'14 34%,rgba(20,22,28,.9) 72%,rgba(15,16,18,.6) 100%)">'
         +'<div class="tx"><small>프로모션</small><b>'+gEsc(b.promo)+'</b><p>'+gEsc(b.promoSub||'')+'</p></div>'
-        +'<div class="ac"><button class="obtn" onclick="tfBkPromoMore(\''+b.id+'\')">혜택 자세히</button><button class="wbtn" onclick="tfBkOpenAcct(\''+b.id+'\')">계정 개설 ↗</button></div></div>':'')
+        +'<div class="ac"><button class="wbtn" onclick="tfBkPromoMore(\''+b.id+'\')">혜택 자세히</button></div></div>':'')
       +'<div class="bk2-sh">리뷰 <span class="sp"></span><button class="obtn sm" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">전체 보기</button></div>'
       +'<div class="bk2-rvwrap">'
       +'<button class="bk2-arw l" id="bk2-arw-l" aria-label="이전 리뷰" onclick="tfBk2Car(-1)">‹</button>'
@@ -12918,6 +12923,7 @@ function tfBk2PgHtml(cur,max,id){
     +'<button type="button" class="nv"'+(cur>=max?' disabled':'')+' aria-label="다음 페이지" onclick="tfBk2Pg(\''+id+'\','+(cur+1)+')">→</button></div>';
 }
 function tfBk2Pg(id,p){ var t=tfS(); t.bkPg=p; tfSave(); tfBrokerView(id,'reviews'); }
+function tfTmConnGo(){ var t=tfS(); if(t.cur&&t.score>=TFC.score.pass){ tfNav('#/strategy/connect'); } else { tfBrokersView(); } }
 /* 캐러셀 — 양방향, 끝 감지, 휠 가로 변환, 스크롤바 0 (PDF p7) */
 function tfBk2Car(dir){ var row=$('bk2-rvrow'); if(!row) return; row.scrollBy({left:dir*316,behavior:'smooth'}); }
 function tfBk2CarInit(){
@@ -13052,7 +13058,8 @@ function tfBkPromoMore(id){
     +'<div class="g">TETH 파트너 링크로 '+gEsc(b.name)+'에 가입하면 이용료가 ₩0이에요.</div>'
     +'<div class="g">거래소가 유동성 수수료 일부를 TETH에 지원하는 구조라, 사용자에게 추가 비용이 없습니다.</div>'
     +'<div class="g">이미 계정이 있다면 기존 계정 그대로 API로 연결할 수 있어요 (유료 플랜).</div>'
-    +'</div><div style="font-size:12px;color:var(--gt3)">파트너 관계는 추천 순서에 영향을 줄 수 있어요. 연결 권한은 어느 경로든 동일하게 조회와 거래만 사용합니다.</div>');
+    +'</div><div style="font-size:12px;color:var(--gt3)">파트너 관계는 추천 순서에 영향을 줄 수 있어요. 연결 권한은 어느 경로든 동일하게 조회와 거래만 사용합니다.</div>'
+    +'<button type="button" class="wbtn" style="width:100%;margin-top:18px" onclick="tfBkOpenAcct(\''+id+'\')">'+gEsc(b.name)+' 계정 개설 ↗</button>');
 }
 function tfBkRevModal(id,ri){
   var b=tfBkOf(id); var r=tfBkRev(b)[ri]; if(!r) return;
