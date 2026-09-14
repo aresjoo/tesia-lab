@@ -3192,6 +3192,21 @@ body.tf-route #teth-help{bottom:88px}
   .ss3-dlgw.sheet .din{border-radius:21px 21px 0 0;padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px))}
 }
 
+/* 데모 상태 조작 패널 (QA) — 우측 상단, 상태 분기 토글 (사용자 지시) */
+#tf-devbtn{position:fixed;top:64px;right:16px;z-index:200;height:26px;padding:0 10px;border-radius:13px;border:1px solid rgba(255,255,255,.16);background:rgba(20,22,27,.85);color:rgba(255,255,255,.55);font-size:10.5px;font-weight:700;letter-spacing:.04em;cursor:pointer;font-family:inherit;backdrop-filter:blur(6px)}
+#tf-devbtn:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+#tf-devbtn.on{color:#0f1012;background:#f2f2f2;border-color:#f2f2f2}
+#tf-devpanel{position:fixed;top:98px;right:16px;z-index:200;width:252px;background:#16181d;border:1px solid rgba(255,255,255,.13);border-radius:16px;padding:14px;box-shadow:0 18px 48px rgba(0,0,0,.55)}
+#tf-devpanel h4{margin:0 0 4px;font-size:12px;font-weight:700;color:var(--gt3);letter-spacing:.03em}
+#tf-devpanel .hint{font-size:10.5px;color:rgba(255,255,255,.35);margin-bottom:10px}
+#tf-devpanel .row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none;border:0;padding:8px 6px;border-radius:9px;cursor:pointer;font-family:inherit}
+#tf-devpanel .row:hover{background:rgba(255,255,255,.06)}
+#tf-devpanel .row span{font-size:12.5px;color:var(--gt)}
+#tf-devpanel .row .st{flex:none;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--gt3)}
+#tf-devpanel .row .st.on{background:rgba(78,192,141,.15);color:var(--gg)}
+#tf-devpanel .reset{width:100%;margin-top:8px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--gt2);font-size:11.5px;cursor:pointer;font-family:inherit}
+#tf-devpanel .reset:hover{background:rgba(255,255,255,.06)}
+@media (max-width:860px){ #tf-devbtn{top:auto;bottom:96px;right:14px} #tf-devpanel{top:auto;bottom:130px;right:12px} }
 /* 상세 차트 애니메이션 — 드로우온 + 리빌 + 엔드 펄스 + 최고점 라벨 (레퍼런스 영상 재해석, 기간 토글마다 재생) */
 @keyframes ss3Draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes ss3Rvl{from{transform:scaleX(0)}to{transform:scaleX(1)}}
@@ -6483,7 +6498,7 @@ function gHome(){
     '<div class="g-terms">'+TR('home.terms','{T}TETH 약관{/}과 {P}TETH 개인정보처리방침{/}이 적용됩니다.{BR}TETH는 AI이며 실수를 할 수 있습니다.')
       .replace('{T}','<a href="policies/#terms" target="_blank" rel="noopener noreferrer">')
       .replace('{P}','<a href="policies/#privacy" target="_blank" rel="noopener noreferrer">')
-      .replace(/\{\/\}/g,'</a>').replace('{BR}','<br class="tbr">')+'</div>'+
+      .replace(/\{\/\}/g,'</a>').replace('{BR}',' <br class="tbr">')+'</div>'+
     '</div>'+
     '</div>');
   gCosmosStart();
@@ -13206,6 +13221,87 @@ function tfDrawerClose(){
   if(TF_DRAWER_TRIG&&TF_DRAWER_TRIG.focus){ try{ TF_DRAWER_TRIG.focus(); }catch(e){} }
   TF_DRAWER_TRIG=null;
 }
+/* ── 데모 상태 조작 패널 (QA) — UI 분기 상태 토글, 현재 화면 즉시 재렌더 (사용자 지시) ── */
+var TF_DEV_ROWS=[
+  ['login','로그인'],
+  ['uid','UID 연동'],
+  ['pay','구독 결제'],
+  ['api','거래소 연결 (Binance)'],
+  ['free','무료 분석 소진'],
+  ['strat','검증 통과 전략']
+];
+function tfDevSt(k){
+  var t=tfS();
+  if(k==='login') return !!S.user;
+  if(k==='uid') return !!t.uidLinked;
+  if(k==='pay') return !!t.payDone;
+  if(k==='api') return !!t.api;
+  if(k==='free') return (t.freeUsed||0)>=((TFC.credit&&TFC.credit.freeQuota)||10);
+  if(k==='strat') return !!(t.cur&&t.score>=TFC.score.pass);
+  return false;
+}
+function tfDevTgl(k){
+  var t=tfS(), on=tfDevSt(k);
+  if(k==='login'){
+    if(on){ S.user=null; t.api=null; } /* 로그아웃 시 연결 상태도 게스트 기준으로 */
+    else S.user={name:'김도현',email:'demo@teth.ai'};
+    try{ authSyncUI(); }catch(e){}
+  }
+  if(k==='uid'){ t.uidLinked=!on; t.uid=!on?'38291042':null; }
+  if(k==='pay'){ t.payDone=!on; if(!on){ t.plan='paid'; } else if(t.plan==='paid'&&!t.payDone){ t.plan=null; } }
+  if(k==='api'){ t.api=on?null:{ex:'binance',uid:'38291042'}; if(!on&&!S.user){ S.user={name:'김도현',email:'demo@teth.ai'}; try{ authSyncUI(); }catch(e){} } }
+  if(k==='free'){ var fq=(TFC.credit&&TFC.credit.freeQuota)||10; t.freeUsed=on?0:fq; }
+  if(k==='strat'){
+    if(on){ t.score=0; t.stage='intake'; t.cur=null; }
+    else { t.cur=t.cur||{id:'dev1'}; t.intake=(t.intake&&t.intake.asset)?t.intake:{asset:'비트코인'}; t.score=92; t.stage='verified'; }
+  }
+  tfSave(); tfDevRefresh();
+}
+function tfDevRefresh(){
+  try{
+    var m=G.mode;
+    if(m==='home') gHome();
+    else if(m==='tfbrokers') tfBrokersView();
+    else if(m==='tfbroker'&&typeof TFBK_CUR!=='undefined'&&TFBK_CUR) tfBrokerView(TFBK_CUR,tfS().bkTab);
+    else if(m==='tfdash'&&typeof tfDashView==='function') tfDashView();
+    else if(m==='nfplan'&&typeof tfPlanView==='function') tfPlanView('plan');
+    else if(m==='tfss3'&&typeof tfShareHub==='function') tfShareHub((tfSSState().ss||{}).tab||'find');
+  }catch(e){}
+  tfDevSync();
+}
+function tfDevSync(){
+  var p=$('tf-devpanel'); if(!p) return;
+  TF_DEV_ROWS.forEach(function(r){
+    var el=p.querySelector('[data-k="'+r[0]+'"] .st'); if(!el) return;
+    var on=tfDevSt(r[0]);
+    el.textContent=on?'ON':'OFF'; el.classList.toggle('on',on);
+  });
+}
+function tfDevPanelTgl(){
+  var p=$('tf-devpanel'), b=$('tf-devbtn');
+  if(p){ p.remove(); if(b) b.classList.remove('on'); return; }
+  if(b) b.classList.add('on');
+  p=document.createElement('div'); p.id='tf-devpanel';
+  p.innerHTML='<h4>데모 상태 조작</h4><div class="hint">토글하면 현재 화면이 그 상태로 다시 그려져요</div>'
+    +TF_DEV_ROWS.map(function(r){ return '<button type="button" class="row" data-k="'+r[0]+'" onclick="tfDevTgl(\''+r[0]+'\')"><span>'+r[1]+'</span><span class="st">OFF</span></button>'; }).join('')
+    +'<button type="button" class="reset" onclick="tfDevReset()">전부 초기화 (게스트)</button>';
+  document.body.appendChild(p);
+  tfDevSync();
+}
+function tfDevReset(){
+  var t=tfS();
+  S.user=null; t.api=null; t.uidLinked=false; t.uid=null; t.payDone=false; t.plan=null; t.freeUsed=0;
+  t.score=0; t.stage='intake'; t.cur=null; t.ob={}; t.bkRev={}; t.bkPg=1;
+  try{ authSyncUI(); }catch(e){}
+  tfSave(); tfDevRefresh();
+}
+(function(){
+  if(document.getElementById('tf-devbtn')) return;
+  var b=document.createElement('button'); b.id='tf-devbtn'; b.type='button'; b.textContent='QA';
+  b.setAttribute('aria-label','데모 상태 조작 패널');
+  b.onclick=tfDevPanelTgl;
+  document.body.appendChild(b);
+})();
 /* 구버전(채팅 스택형) 카드 호환: 저장된 옛 CTA는 현재 단계로 재진입만 시킨다 */
 function tfPlans(){ tfResume(); }
 function tfCycle(){ tfResume(); }
