@@ -7427,12 +7427,15 @@ var STORE={t:0,
   },
   load:function(cb){
     function local(){ try{ return JSON.parse(localStorage.getItem('teth.state')||'null'); }catch(e){ return null; } }
+    /* 콜백은 문서 파싱 완료 후에만 — 프록시 응답이 뒤 스크립트(authSyncUI)와 teth-copy.js(TFC) 파싱보다
+       먼저 도착하면 ReferenceError로 복원이 결손되던 로드 레이스 (fullqa) */
+    function ready(p){ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',function(){ cb(p); }); } else cb(p); }
     var su=taiStateUrl();
-    if(!su){ cb(local()); return; }
+    if(!su){ ready(local()); return; }
     /* 상태 서버가 응답을 끝내지 않아도 복원이 무기한 대기하지 않게 4s 타임아웃 → 로컬 폴백.
        늦게 도착한 서버 응답은 폐기(done 가드) — 이미 사용 중인 상태를 덮지 않는다 (codex qa3 P1-8) */
     var done=false;
-    function once(p){ if(done) return; done=true; cb(p); }
+    function once(p){ if(done) return; done=true; ready(p); }
     setTimeout(function(){ once(local()); },4000);
     fetch(su)
       .then(function(r){ return r.ok?r.json():null; })
@@ -9721,7 +9724,7 @@ function tfTmBottom(){
 }
 function tfTmPane(k){
   /* 거래소 미연결이면 계좌성 탭은 연결 빈 상태 — API 연동 후 데이터 노출 (사용자 지시 bk3 p2, Hyperliquid 문법) */
-  if(!tfS().api&&['pos','open','orders','fills','closed','assets','rebates'].indexOf(k)>=0){
+  if(!tfS().api&&['pos','open','orders','fills','closed','assets'].indexOf(k)>=0){ /* rebates 는 원장 기반이라 연결과 무관하게 표시 (codex-fullqa P2-03) */
     return '<div class="tft-empty tft-connempty" style="padding:46px 16px;text-align:center"><b>거래소를 연결하면 실계좌 데이터가 표시돼요</b>'
       +'<span>포지션, 주문, 자산, 정산 내역은 API 연결 후 이 자리에 나타납니다.</span>'
       +'<button type="button" class="nfx-btn pri" style="margin:16px auto 0" onclick="tfTmConnGo()">거래소 연결하기</button></div>';
@@ -10272,7 +10275,9 @@ function tfSS3XhInit(){
   function vx(i){ return H.padL+(i-H.i0)/Math.max(1,H.i1-H.i0)*(H.w-H.padL-10); }
   function vy(v){ return 18+H.chh-(v-H.min)/(H.max-H.min)*H.chh; }
   svg.addEventListener('mousemove',function(e){
-    var r=svg.getBoundingClientRect(); var sx=(e.clientX-r.left)*(H.w/r.width);
+    var r=svg.getBoundingClientRect(); var sx;
+    try{ var m=svg.getScreenCTM().inverse(); var pt=new DOMPoint(e.clientX,e.clientY).matrixTransform(m); sx=pt.x; }
+    catch(er){ sx=(e.clientX-r.left)*(H.w/r.width); } /* 종횡비 레터박스 보정 (codex-fullqa P2-01) */
     if(sx<H.padL||sx>H.w-10){ xh.style.display='none'; tip.hidden=true; return; }
     var ti=H.i0+(sx-H.padL)/(H.w-H.padL-10)*(H.i1-H.i0);
     var best=H.pts[0],bd=1e18;
@@ -10284,7 +10289,9 @@ function tfSS3XhInit(){
     var dt=idxToDate(best[0]); var pct=(best[1]-1)*100;
     tip.innerHTML='<small>'+dt.getFullYear()+'.'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0')+'</small><b class="'+(pct>=0?'up':'dn')+'">'+(pct>=0?'+':'')+pct.toFixed(2)+'%</b>';
     tip.hidden=false;
-    var px=cx/H.w*r.width, py=cy/H.h*r.height;
+    var px,py;
+    try{ var m2=svg.getScreenCTM(); var p2=new DOMPoint(cx,cy).matrixTransform(m2); var wr=svg.parentNode.getBoundingClientRect(); px=p2.x-wr.left; py=p2.y-wr.top; }
+    catch(er2){ px=cx/H.w*r.width; py=cy/H.h*r.height; }
     var tw=tip.offsetWidth||120;
     tip.style.left=Math.min(Math.max(px-tw/2,4),r.width-tw-4)+'px';
     tip.style.top=Math.max(py-52,2)+'px';
@@ -13243,17 +13250,25 @@ function tfDevSt(k){
 function tfDevTgl(k){
   var t=tfS(), on=tfDevSt(k);
   if(k==='login'){
-    if(on){ S.user=null; t.api=null; } /* 로그아웃 시 연결 상태도 게스트 기준으로 */
-    else S.user={name:'김도현',email:'demo@teth.ai'};
+    if(on){ try{ gLogout(); }catch(e){ S.user=null; } tfDevSync(); return; } /* 실로그아웃 재사용 — 보호 화면 이탈, 저장 로그인 제거 (codex-fullqa P1-02) */
+    S.user={name:'김도현',email:'demo@teth.ai'};
     try{ authSyncUI(); }catch(e){}
   }
   if(k==='uid'){ t.uidLinked=!on; t.uid=!on?'38291042':null; }
   if(k==='pay'){ t.payDone=!on; if(!on){ t.plan='paid'; } else if(t.plan==='paid'&&!t.payDone){ t.plan=null; } }
-  if(k==='api'){ t.api=on?null:{ex:'binance',uid:'38291042'}; if(!on&&!S.user){ S.user={name:'김도현',email:'demo@teth.ai'}; try{ authSyncUI(); }catch(e){} } }
+  if(k==='api'){ t.api=on?null:{ex:'binance',uid:'38291042'};
+    if(on){ t.conn=false; t.ob=t.ob||{}; if(t.ob.st) t.ob.st=null; t.ob.ex=null; } /* 연결 해제 시 완료 단계 잔존 정규화 (codex-fullqa P1-03) */
+    if(!on&&!S.user){ S.user={name:'김도현',email:'demo@teth.ai'}; try{ authSyncUI(); }catch(e){} } }
   if(k==='free'){ var fq=(TFC.credit&&TFC.credit.freeQuota)||10; t.freeUsed=on?0:fq; }
   if(k==='strat'){
-    if(on){ t.score=0; t.stage='intake'; t.cur=null; }
-    else { t.cur=t.cur||{id:'dev1'}; t.intake=(t.intake&&t.intake.asset)?t.intake:{asset:'비트코인'}; t.score=92; t.stage='verified'; }
+    if(on){ t.score=0; t.stage='intake'; t.cur=null; if(typeof TF_SS_TOKEN!=='undefined') TF_SS_TOKEN++; }
+    else { /* 실백테스트로 완전한 검증 상태 생성 — 가짜 cur 의 리포트 역참조 예외 방지 (codex-fullqa P1-01) */
+      var p0={sl:-5,tp:12,rsiTh:44,trendFilter:true,startI:61,endI:PRICE.length-1};
+      var r0=runBacktest(p0);
+      t.intake={asset:{i:0,label:'비트코인'},assetInfo:tfAssetLookup('비트코인'),style:{i:1,label:'중립적으로'},budget:{i:1,label:'500만원'},period:{i:2,label:'전체 기간'},stop:{i:1,label:'-5%까지'}};
+      t.cur={p:p0,ret:r0.ret,mdd:r0.mdd,winRate:r0.winRate,n:r0.n,trades:r0.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl,kind:x.kind};}),startI:p0.startI,endI:p0.endI};
+      t.score=tfScore(r0); t.stage='verified'; t.upFor=String(t.cur.ret)+'|'+t.cur.n+'|'+t.score; /* 리포트 진입 시 업그레이드 시트 자동 팝 방지 */
+    }
   }
   tfSave(); tfDevRefresh();
 }
@@ -13290,9 +13305,14 @@ function tfDevPanelTgl(){
 }
 function tfDevReset(){
   var t=tfS();
+  if(typeof TF_SS_TOKEN!=='undefined') TF_SS_TOKEN++; /* 진행 중 검증 콜백 무효화 (codex-fullqa P1-04) */
   S.user=null; t.api=null; t.uidLinked=false; t.uid=null; t.payDone=false; t.plan=null; t.freeUsed=0;
   t.score=0; t.stage='intake'; t.cur=null; t.ob={}; t.bkRev={}; t.bkPg=1;
+  t.creditBal=0; t.creditGrants={}; t.creditSeen={}; t.creditReqs=[]; t.tradeActiveUntil=0; /* 자격 원장 (codex-fullqa P2-02) */
+  t.strat=[]; t.conn=false; t.upFor=null; t.intake={};
+  try{ localStorage.removeItem('teth.state'); }catch(e){} /* 저장 로그인 잔존 방지 */
   try{ authSyncUI(); }catch(e){}
+  var m=G.mode; if(m==='tfconnect'||m==='tfwork'||m==='tfreport'||m==='tfdone'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); tfDevSync(); tfSave(); return; }
   tfSave(); tfDevRefresh();
 }
 (function(){
