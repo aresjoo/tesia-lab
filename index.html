@@ -9172,7 +9172,7 @@ function tfDashView(){
     +'<button class="nfx-btn pri" style="padding:8px 16px;font-size:12.5px" onclick="tfNav(&quot;#/trade/bot/'+readyBot.at+'&quot;)">지금 시작하기</button></div>';
   /* UID 연동 유도 배너 제거 — 연동 유도는 하단 탭의 연결 빈 상태가 담당 (사용자 지시 bk3 p2) */
   var unread=tt.notifs.filter(function(n){return !n.read;}).length;
-  var BTABS=[['pos','포지션'],['open','미체결 주문'],['orders','주문 내역'],['fills','체결 내역'],['closed','종료 포지션'],['assets','자산'],['rebates','정산'],['alerts','알림'],['reports','보고서']];
+  var BTABS=[['pos','포지션'],['open','미체결 주문'],['orders','주문 내역'],['fills','체결 내역'],['closed','종료 포지션'],['assets','자산']]; /* 정산, 알림, 보고서 탭 제거 (사용자 지시) — 정산은 PLAN, 알림 pane 은 벨 전용 딥링크로만 유지 */
   var MTABS=[['chart','차트'],['strats','전략'],['brain','Agent']]; /* 모바일 상단 = 3개만 — 실행 탭은 차트 아래 2차 스트립 (사용자 지시) */
   var M6=BTABS.slice(0,6); /* 포지션/미체결/주문/체결/종료 포지션/자산 — 정산, 알림, 보고서는 모바일 스트립 제외 */
   var CNT={alerts:unread,reports:(tt.periodics||[]).length,strats:all.length,pos:all.filter(function(x){return tfTmCalc(x).pos&&x.status==='live';}).length};
@@ -9197,8 +9197,8 @@ function tfDashView(){
     +'<div class="tft-botbar"><div class="nfxh-tabs d-only" style="border-bottom:0;flex:1;min-width:0">'+strip(BTABS,'pos','d')+'</div>'
     +'<div class="tft-scope"><select id="tft-scope" onchange="TF_TM.scope=this.value;tfTmBottom()" aria-label="데이터 범위">'
     +'<option value="cur"'+(TF_TM.scope==='cur'?' selected':'')+'>현재 전략</option><option value="all"'+(TF_TM.scope==='all'?' selected':'')+'>전체 전략</option></select></div></div>'
-    +BTABS.map(function(tb){ return '<div class="nfxh-pane'+(tb[0]==='pos'?' on':'')+'" data-p="'+tb[0]+'">'
-      +(tb[0]==='alerts'?'<div id="nfxh-alerts"></div>':tb[0]==='reports'?tfNFReportsPane():'<div id="tft-p-'+tb[0]+'"></div>')+'</div>'; }).join('')
+    +BTABS.map(function(tb){ return '<div class="nfxh-pane'+(tb[0]==='pos'?' on':'')+'" data-p="'+tb[0]+'"><div id="tft-p-'+tb[0]+'"></div></div>'; }).join('')
+    +'<div class="nfxh-pane" data-p="alerts"><div id="nfxh-alerts"></div></div>' /* 탭 없는 벨 전용 pane */
     +'</div>'
     +'</div>');
   TF_RENDERING=false;
@@ -9721,7 +9721,7 @@ function tfTmScopeList(){
 function tfTmCellEx(s){ var e=tfExOf2(s.ex); return '<span class="exb sm" style="background:'+e.col+';color:'+(e.fg||'#0f1012')+'">'+gEsc(e.name.slice(0,2).toUpperCase())+'</span> '+gEsc(e.name); }
 function tfTmCellSt(s){ return '<a class="stlk" onclick="tfTmSelect(&quot;'+s.key+'&quot;)">'+gEsc(s.name)+'</a>'; }
 function tfTmBottom(){
-  ['pos','open','orders','fills','closed','assets','rebates'].forEach(function(k){ var el=$('tft-p-'+k); if(el) el.innerHTML=tfTmPane(k); });
+  ['pos','open','orders','fills','closed','assets'].forEach(function(k){ var el=$('tft-p-'+k); if(el) el.innerHTML=tfTmPane(k); });
 }
 function tfTmPane(k){
   /* 거래소 미연결이면 계좌성 탭은 연결 빈 상태 — API 연동 후 데이터 노출 (사용자 지시 bk3 p2, Hyperliquid 문법) */
