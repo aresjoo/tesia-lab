@@ -6642,14 +6642,15 @@ function gNew(preset){
   var _drop=gPillDropStart(); /* 홈 뷰가 교체되기 전에 필 위치를 복제해 둔다 */
   S.strategy=newStrategy(); S.versions=[]; S.activeVer=0;
   var sx={id:'s'+Date.now(), title:'새 전략', status:'draft', strategy:S.strategy, versions:S.versions,
-    artifacts:[], team:{}, actRows:[], convo:[], thread:[], tabs:[{id:'__act',title:'대화'}], live:false};
+    artifacts:[], team:{}, actRows:[], convo:[], thread:[], tabs:[{id:'__act',title:'대화'}], live:false,
+    rawIntent:typed||null, step:null, pendingChips:null}; /* 원문과 인테이크 진행 상태 영속화 (audit P0-1, P0-2) */
   G.sessions.unshift(sx); G.cur=sx;
   taiBind(sx); STORE.save(); /* 새 세션 = 새 컨텍스트, 이전 세션 메모리 복사 없음 */
   G.tabs=sx.tabs; G.activeTab='__act';
   $('g-aux').style.display='none'; /* 아티팩트가 생기면 그때 열림 */
   gSideRender(); gTeamRender(); gArtRender();
   gShowConv();
-  gConvUser(text);
+  gConvUser(typed||text); /* 말풍선에는 사용자가 실제로 쓴 문장만 — 합성 명령은 해석에만 사용 (audit P0-1b) */
   gPillDropEnd(_drop); /* 채팅 레이아웃이 그려진 뒤 도킹 컴포저 위치로 낙하 */
   /* 첫 메시지부터 스크립트 없이 실제 AI 대화로 니즈 파악, 프록시가 없을 때만 기존 스크립트 */
   if(TAI.ok!==false&&typeof taiMarket==='function'){ gStep=null; gUserPin(); taiMarket(text,null,function(){ gConvInterpret(text); }); }
@@ -6669,10 +6670,18 @@ function gShowConv(){
     if(TAI.qcfg&&TAI.qcfg[e.id]) taiAskRender(e.id);
     else { cur0.convo=cur0.convo.filter(function(h){ return h.indexOf(e.id)<0; }); e.remove(); }
   });
+  gStep=cur0.step||null; /* 인테이크 단계 복원 (audit P0-2) */
   if(thEl) thEl.querySelectorAll('.g-chiprow[id]').forEach(function(e){
     if(window.TF_CHIPS&&TF_CHIPS[e.id]) gChipBind(e,e.id);
+    else if(cur0.pendingChips&&cur0.pendingChips.id===e.id) gChipBind(e,e.id); /* 리로드 후에도 저장 스펙으로 재바인딩 */
     else { cur0.convo=cur0.convo.filter(function(h){ return h.indexOf(e.id)<0; }); e.remove(); }
   });
+  /* 칩 행 자체가 유실됐지만 대기 선택지가 남아 있으면 다시 그려준다 */
+  if(cur0.pendingChips&&!document.getElementById(cur0.pendingChips.id)){
+    var pcr=cur0.pendingChips; cur0.pendingChips=null;
+    if(pcr.step) gSetStep(pcr.step);
+    gConvChips(pcr.items);
+  }
   /* 세션 복원 시 트레이딩뷰 위젯 재생성 (기록의 카드 컨테이너에 다시 마운트) */
   var ai0=G.cur&&G.cur.ai;
   if(ai0&&ai0.chart&&$(ai0.chart.cid)){ TAI.chart=ai0.chart; taiTv(taiChartRender); }
@@ -6729,18 +6738,47 @@ function gConvChips(items){
   var html='<div class="g-chiprow" id="'+id+'">'+items.map(function(it,i){ return '<button class="g-qchip" data-i="'+i+'">'+it.label+'</button>'; }).join('')+'</div>';
   var el=gThreadAdd(html);
   window.TF_CHIPS=window.TF_CHIPS||{}; TF_CHIPS[id]=items; /* 화면 이동 복원 시 재바인딩용 (codex qa3 P1-3) */
+  if(G.cur){ /* 리로드 복원용 직렬화 — 콜백이 아니라 액션 스펙을 저장한다 (audit P0-2) */
+    G.cur.pendingChips={id:id, step:gStep, items:items.map(function(it){ return {label:it.label, act:it.act||null, arg:(it.arg===undefined?null:it.arg)}; })};
+    STORE.save();
+  }
   if(el) gChipBind(el,id);
 }
 function gChipBind(el,id){
-  var items=(window.TF_CHIPS||{})[id]; if(!items) return;
-  el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){ el.remove(); delete TF_CHIPS[id]; if(G.cur) G.cur.convo=G.cur.convo.filter(function(h){return h.indexOf(id)<0;}); items[i].fn(); }; });
+  var sess=G.cur;
+  var items=(window.TF_CHIPS||{})[id]||(sess&&sess.pendingChips&&sess.pendingChips.id===id?sess.pendingChips.items:null);
+  if(!items) return;
+  el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){
+    el.remove(); if(window.TF_CHIPS) delete TF_CHIPS[id];
+    if(sess){ sess.convo=sess.convo.filter(function(h){return h.indexOf(id)<0;}); if(sess.pendingChips&&sess.pendingChips.id===id) sess.pendingChips=null; STORE.save(); }
+    var it=items[i];
+    if(it.fn) it.fn(); else gChipAct(it.act,it.arg,it.label);
+  }; });
 }
 function gThink(label,ms,fn){
   var sess=G.cur; /* 콜백은 시작 세션에 바인딩 — 이동 후 null 참조, 타 세션 기록 삭제 방지 (codex QA P2) */
-  var el=gThreadAdd('<div class="g-think"><span class="tdots"><i></i><i></i><i></i></span><span>'+label+'</span></div>');
-  delay(ms,function(){ if(el) el.remove(); if(sess&&sess.convo) sess.convo.pop(); if(G.cur===sess) fn(); });
+  var tid='gth'+Date.now()+Math.floor(Math.random()*1e4);
+  var el=gThreadAdd('<div class="g-think" data-tid="'+tid+'"><span class="tdots"><i></i><i></i><i></i></span><span>'+label+'</span></div>');
+  /* pop 금지 — 연속 전송 뒤 세션 전환 시 마지막 사용자 메시지가 지워지던 레이스 (audit P0-1c) */
+  delay(ms,function(){ if(el) el.remove(); if(sess&&sess.convo) sess.convo=sess.convo.filter(function(h){ return h.indexOf(tid)<0; }); if(G.cur===sess) fn(); });
 }
 var gStep=null;
+function gSetStep(st){ gStep=st; if(G.cur) G.cur.step=st; }
+/* 칩을 직렬화 가능한 액션으로 실행 — 복원, 자유 텍스트 매칭과 공유 (audit P0-2) */
+function gChipAct(act,arg,label,silent){
+  if(act==='mode'){ if(!silent) gConvUser(label); S.strategy.entryMode=arg; delay(250,gNextAfterMode); return; }
+  if(act==='mode-diff'){ if(!silent) gConvUser('차이 설명'); gConvAI('반등 매수는 과매도 후 회복을 노립니다, 거래가 적고 느립니다. 추세 진입은 상승 확인 후 따라갑니다, 거래가 잦고 빠릅니다.'); delay(350,gAskMode); return; }
+  if(act==='pair'){ gPickPair(arg, silent?null:arg); return; }
+  if(act==='pair-reco'){ if(!silent) gConvUser('추천'); gConvAI('거래량과 데이터 안정성 기준으로 BTC/USDT를 권장합니다.'); gPickPair('BTC/USDT',null); return; }
+  if(act==='tf'){ gPickTf(arg, silent?null:label); return; }
+  if(act==='tf-reco'){ if(!silent) gConvUser('추천'); gConvAI('반등형 조건에는 1시간봉이 균형점입니다.'); gPickTf('1시간봉',null); return; }
+  if(act==='risk'){ gPickRisk(parseFloat(arg), silent); return; }
+  if(act==='tp'){
+    if(arg==null||arg==='null'){ if(!silent) gConvUser('익절 없이 진행'); S.strategy.tpNum=null; S.strategy.tp='미설정'; }
+    else { if(!silent) gConvUser('익절 +'+arg+'% 설정'); S.strategy.tpNum=parseFloat(arg); S.strategy.tp='+'+arg+'%'; }
+    delay(300,gMakePlan); return;
+  }
+}
 function gConvInterpret(text){
   gThink('아이디어 확인 중',800,function(){
     var dip=/떨어|하락|급락|폭락|반등|저가|눌림|물타/.test(text), trend=/오르|추세|상승|따라|돌파/.test(text);
@@ -6749,8 +6787,15 @@ function gConvInterpret(text){
     /* 문장에서 이미 말한 자산은 다시 묻지 않는다 */
     if(/이더리움|이더|eth/i.test(text)) S.strategy.pair='ETH/USDT';
     else if(/비트코인|비트|btc/i.test(text)) S.strategy.pair='BTC/USDT';
+    /* 문장에서 말한 손절, 익절 수치는 다시 묻지 않고 그대로 반영한다 (audit P0-1a) */
+    var mSl=text.match(/[-−]?\s*(\d+(?:\.\d+)?)\s*%[^0-9%]{0,4}손절/)||text.match(/(?:손절|손실)[^0-9%]{0,6}[-−]?\s*(\d+(?:\.\d+)?)\s*%/);
+    var mTp=text.match(/\+?\s*(\d+(?:\.\d+)?)\s*%[^0-9%]{0,4}익절/)||text.match(/(?:익절|목표)[^0-9%]{0,6}\+?\s*(\d+(?:\.\d+)?)\s*%/);
+    if(mSl) S.strategy._slIntent=Math.abs(parseFloat(mSl[1]));
+    if(mTp) S.strategy._tpIntent=Math.abs(parseFloat(mTp[1]));
     var ack=S.strategy.pair?' 대상은 '+S.strategy.pair+'로 이해했습니다.':'';
-    gConvAI('아이디어를 확인했습니다.'+ack+' 검증 가능한 조건으로 만들기 위해 몇 가지를 확인합니다.');
+    var said=[]; if(mSl) said.push('손절 -'+S.strategy._slIntent+'%'); if(mTp) said.push('익절 +'+S.strategy._tpIntent+'%');
+    var ack2=said.length?' 말씀하신 '+said.join('와 ')+'는 그대로 반영해두겠습니다.':'';
+    gConvAI('아이디어를 확인했습니다.'+ack+ack2+' 검증 가능한 조건으로 만들기 위해 몇 가지를 확인합니다.');
     delay(400, S.strategy.entryMode ? gNextAfterMode : gAskMode);
   });
 }
@@ -6759,21 +6804,21 @@ function gNextAfterMode(){
   else gAskPair();
 }
 function gAskMode(){
-  gStep='mode';
+  gSetStep('mode');
   gConvAI('진입 방식을 선택하세요.');
   gConvChips([
-    {label:'내려왔을 때 반등 매수', fn:function(){ gConvUser('내려왔을 때 반등 매수'); S.strategy.entryMode='dip'; delay(250,gNextAfterMode); }},
-    {label:'오르는 흐름에 진입', fn:function(){ gConvUser('오르는 흐름에 진입'); S.strategy.entryMode='trend'; delay(250,gNextAfterMode); }},
-    {label:'차이 설명', fn:function(){ gConvUser('차이 설명'); gConvAI('반등 매수는 과매도 후 회복을 노립니다, 거래가 적고 느립니다. 추세 진입은 상승 확인 후 따라갑니다, 거래가 잦고 빠릅니다.'); delay(350,gAskMode); }}
+    {label:'내려왔을 때 반등 매수', act:'mode', arg:'dip'},
+    {label:'오르는 흐름에 진입', act:'mode', arg:'trend'},
+    {label:'차이 설명', act:'mode-diff'}
   ]);
 }
 function gAskPair(){
-  gStep='pair';
+  gSetStep('pair');
   gConvAI('대상 자산을 선택하세요.');
   gConvChips([
-    {label:'BTC/USDT', fn:function(){ gPickPair('BTC/USDT','BTC/USDT'); }},
-    {label:'ETH/USDT', fn:function(){ gPickPair('ETH/USDT','ETH/USDT'); }},
-    {label:'추천', fn:function(){ gConvUser('추천'); gConvAI('거래량과 데이터 안정성 기준으로 BTC/USDT를 권장합니다.'); gPickPair('BTC/USDT',null); }}
+    {label:'BTC/USDT', act:'pair', arg:'BTC/USDT'},
+    {label:'ETH/USDT', act:'pair', arg:'ETH/USDT'},
+    {label:'추천', act:'pair-reco'}
   ]);
 }
 function gPickPair(pair,label){
@@ -6785,12 +6830,12 @@ function gPickPair(pair,label){
   delay(350,gAskTf);
 }
 function gAskTf(){
-  gStep='tf';
+  gSetStep('tf');
   gConvAI('확인 주기를 선택하세요. 짧을수록 거래가 잦아집니다.');
   gConvChips([
-    {label:'1시간', fn:function(){ gPickTf('1시간봉','1시간'); }},
-    {label:'하루 1회', fn:function(){ gPickTf('일봉','하루 1회'); }},
-    {label:'추천', fn:function(){ gConvUser('추천'); gConvAI('반등형 조건에는 1시간봉이 균형점입니다.'); gPickTf('1시간봉',null); }}
+    {label:'1시간', act:'tf', arg:'1시간봉'},
+    {label:'하루 1회', act:'tf', arg:'일봉'},
+    {label:'추천', act:'tf-reco'}
   ]);
 }
 function gPickTf(tf,label){
@@ -6800,23 +6845,37 @@ function gPickTf(tf,label){
   delay(350,gAskRisk);
 }
 function gAskRisk(){
-  gStep='risk';
+  if(S.strategy._slIntent!=null){ /* 이미 말한 손절은 다시 묻지 않는다 (audit P0-1a) */
+    var s0=-Math.abs(S.strategy._slIntent);
+    gConvAI('손실 한도는 말씀하신 '+s0+'%로 설정합니다. 이 선에서 자동 손절해요.');
+    delay(450,function(){ gPickRisk(s0,true); });
+    return;
+  }
+  gSetStep('risk');
   gConvAI('1회 거래의 손실 한도를 선택하세요. 이 선에서 자동 손절합니다.');
   gConvChips([
-    {label:'−2%', fn:function(){ gPickRisk(-2); }},
-    {label:'−3% (표준)', fn:function(){ gPickRisk(-3); }},
-    {label:'−5%', fn:function(){ gPickRisk(-5); }}
+    {label:'-2%', act:'risk', arg:'-2'},
+    {label:'-3% (표준)', act:'risk', arg:'-3'},
+    {label:'-5%', act:'risk', arg:'-5'}
   ]);
 }
-function gPickRisk(sl){
-  gConvUser(sl+'%');
+function gPickRisk(sl,silent){
+  if(!silent) gConvUser(sl+'%');
   S.strategy.slNum=sl; S.strategy.sl=sl+'%';
   S.strategy.risk=sl===-2?'낮음':sl===-3?'보통':'다소 높음';
   gThink('전략 점검 중',900,function(){
+    if(S.strategy._tpIntent!=null){ /* 이미 말한 익절도 그대로 (audit P0-1a) */
+      var tp0=Math.abs(S.strategy._tpIntent);
+      S.strategy.tpNum=tp0; S.strategy.tp='+'+tp0+'%';
+      gConvAI('익절은 말씀하신 +'+tp0+'%로 설정했습니다.');
+      delay(350,gMakePlan);
+      return;
+    }
+    gSetStep('tp');
     gConvAI('익절 기준이 없습니다. 수익 확정 지점이 없으면 낙폭이 커질 수 있습니다.');
     gConvChips([
-      {label:'익절 +8% 설정', fn:function(){ gConvUser('익절 +8% 설정'); S.strategy.tpNum=8; S.strategy.tp='+8%'; delay(300,gMakePlan); }},
-      {label:'익절 없이 진행', fn:function(){ gConvUser('익절 없이 진행'); S.strategy.tpNum=null; S.strategy.tp='미설정'; delay(300,gMakePlan); }}
+      {label:'익절 +8% 설정', act:'tp', arg:'8'},
+      {label:'익절 없이 진행', act:'tp', arg:null}
     ]);
   });
 }
@@ -6852,11 +6911,17 @@ function gShowActivity(){
   G.mode='activity'; G.activeTab='__act';
   if(G.tabs.length && G.tabs[0].id==='__act') G.tabs[0].title='Activity';
   gTabsRender(); gArtRender();
-  gChead(G.cur.title, G.cur.sub||'', G.cur.status==='run'?'<span class="g-dot run"></span>연구 진행 중':null);
+  gChead(G.cur.title, G.cur.sub||'', G.cur.status==='run'?'<span class="g-dot run"></span>연구 진행 중':(G.cur.status==='stopped'?'중단됨':null));
   gComposer(G.cur.status!=='run', null);
   gContent('<div class="g-doc"><div class="g-act" id="g-act-list"></div><div id="g-act-done"></div></div>');
   gRenderActivityRows();
   if(G.cur.status!=='run' && G.cur.doneHTML){ $('g-act-done').innerHTML=G.cur.doneHTML; }
+  if(G.cur.status==='stopped'){ /* 새로고침으로 끊긴 연구의 복구 경로 (audit P0-3) */
+    $('g-act-done').innerHTML='<div style="max-width:760px;margin:14px auto 0;border-top:1px solid var(--gl);padding-top:14px">'
+      +'<div style="font-size:14px;font-weight:600;color:var(--gt)">연구가 중단됐어요</div>'
+      +'<div class="g-note" style="margin-top:4px">새로고침으로 진행이 끊겼습니다. 같은 조건으로 처음부터 다시 검증합니다.</div>'
+      +'<div style="display:flex;gap:8px;margin-top:12px"><button class="g-btn g-btn-p" onclick="gStartRun()">이어서 진행</button><button class="g-btn g-btn-t" onclick="gOpen(&quot;plan&quot;)">연구 계획 보기</button></div></div>';
+  }
 }
 
 /* ── research run ── */
@@ -6908,8 +6973,10 @@ signupDone=function(){
 };
 function gStartRunGo(){
   var sx=G.cur; if(!sx) return;
-  if(G.sessions.some(function(x){return x!==sx && x.status==='run';})){ toast('다른 연구가 진행 중입니다, 완료 후 시작하세요'); return; }
+  var busyRun=G.sessions.find(function(x){return x!==sx && x.status==='run';});
+  if(busyRun){ toast('다른 연구가 진행 중이에요: '+(busyRun.title||'이름 없는 전략')+'. 완료 후 시작할 수 있어요'); return; } /* 사유 있는 피드백 (audit P0-4) */
   sx.status='run'; sx.actRows=[]; gSideRender();
+  STORE.save(); /* 시작 즉시 영속화 — 리로드 시 중단 정규화가 잡을 수 있게 (audit P0-3) */
   G.t0=Date.now(); gClearTimers();
   /* 런은 시작한 세션(sx)에 바인딩 — 내비게이션으로 G.cur가 바뀌어도 상태는 sx에 기록된다 */
   var T=function(n,s2){ gTeamFor(sx,n,s2); };
@@ -7053,7 +7120,11 @@ function gDocPlan(){
     gRowC('거래 비용','수수료, 슬리피지 포함')+
     gRowC('검증','7단계, 위험 조정 수익 우선')+
     '</div>'+
-    '<div style="display:flex;gap:8px;margin-top:18px"><button class="g-btn g-btn-p" onclick="gStartRun()">연구 시작</button><button class="g-btn g-btn-t" onclick="gShowConv()">조건 수정</button></div>';
+    (function(){
+      var busy=G.sessions.find(function(x){return x!==G.cur && x.status==='run';});
+      if(busy) return '<div style="display:flex;gap:10px;margin-top:18px;align-items:center;flex-wrap:wrap"><button class="g-btn g-btn-p" disabled style="opacity:.45;cursor:not-allowed">연구 시작</button><span class="g-note">다른 연구가 진행 중이에요: '+gEsc(busy.title||'이름 없는 전략')+'</span></div>';
+      return '<div style="display:flex;gap:8px;margin-top:18px"><button class="g-btn g-btn-p" onclick="gStartRun()">연구 시작</button><button class="g-btn g-btn-t" onclick="gShowConv()">조건 수정</button></div>';
+    })();
 }
 function gRowComment(btn){
   var row=btn.closest('.g-row');
@@ -7248,7 +7319,7 @@ function gLiveStop(btn){
 /* ── 연구 기록 / 예약된 검증 ── */
 function gStatusLabel(sx){
   if(sx.live) return sx.liveMode==='paper'?'Paper 실행 중':'실행 중';
-  return sx.status==='run'?'진행 중':sx.status==='review'?'검토 필요':sx.status==='done'?'완료':'초안';
+  return sx.status==='run'?'진행 중':sx.status==='stopped'?'중단됨':sx.status==='review'?'검토 필요':sx.status==='done'?'완료':'초안';
 }
 /* ── 연구 기록: Gemini 채팅 검색 화면 재현 — 검색 필 + 최근 + 일자, 20개씩 무한 스크롤 ── */
 var GH={q:'',limit:20};
@@ -7424,6 +7495,7 @@ var STORE={t:0,
       sessions:G.sessions.slice(0,20).map(function(sx){
         return {id:sx.id,title:sx.title,status:sx.status,convo:sx.convo,thread:sx.thread,
           strategy:sx.strategy,versions:sx.versions,artifacts:sx.artifacts,ai:sx.ai||null,acts:sx.acts||{},
+          rawIntent:sx.rawIntent||null,step:sx.step||null,pendingChips:sx.pendingChips||null, /* 인테이크 복원 (audit P0-2) */
           pinned:!!sx.pinned, /* 사이드바 고정 상태 영속화 */
           live:!!sx.live,liveMode:sx.liveMode||null,livePaused:!!sx.livePaused}; /* 실행 상태도 저장 — 리로드 후 실행 목록, Paper 구분 유실 방지 (codex QA2 P1) */
       })};
@@ -7472,6 +7544,7 @@ var STORE={t:0,
     if(Array.isArray(p.alerts)) S.alerts=p.alerts;
     setTimeout(function(){ if(typeof tfSideSync==='function') tfSideSync(); },0);
     (p.sessions||[]).forEach(function(sx){
+      if(sx.status==='run') sx.status='stopped'; /* 실행 타이머는 복원되지 않는다 — 중단으로 정규화하고 이어서 진행을 제공 (audit P0-3) */
       sx.team=sx.team||{}; sx.actRows=sx.actRows||[]; sx.tabs=sx.tabs||[{id:'__act',title:'대화'}];
       sx.convo=sx.convo||[]; sx.thread=sx.thread||[]; sx.artifacts=sx.artifacts||[]; sx.versions=sx.versions||[]; sx.acts=sx.acts||{};
       G.sessions.push(sx);
@@ -14151,8 +14224,39 @@ function gSend(){
     gConvUser(t);
     if(gStep==='pair'&&/이더|eth/i.test(t)){ gThink('확인 중',450,function(){ gPickPair('ETH/USDT',null); }); return; }
     if(gStep==='pair'&&/비트|btc/i.test(t)){ gThink('확인 중',450,function(){ gPickPair('BTC/USDT',null); }); return; }
-    if(gStep==='risk'){ var m=t.match(/(\d+)\s*%?/); if(m){ gThink('확인 중',450,function(){ gPickRisk(-Math.abs(+m[1])); }); return; } }
-    var cannedC=function(){ gConvAI('선택지에서 고르면 가장 정확합니다. 이후 언제든 수정할 수 있습니다.'); };
+    if(gStep==='mode'&&/반등|눌림|내려|떨어|저가/.test(t)){ gThink('확인 중',450,function(){ S.strategy.entryMode='dip'; gNextAfterMode(); }); return; }
+    if(gStep==='mode'&&/추세|오르|돌파|따라/.test(t)){ gThink('확인 중',450,function(){ S.strategy.entryMode='trend'; gNextAfterMode(); }); return; }
+    if(gStep==='tf'&&/1\s*시간|시간봉/.test(t)){ gThink('확인 중',450,function(){ gPickTf('1시간봉',null); }); return; }
+    if(gStep==='tf'&&/하루|일봉|매일/.test(t)){ gThink('확인 중',450,function(){ gPickTf('일봉',null); }); return; }
+    if((gStep==='risk'||gStep==='tp')&&/(\d+(?:\.\d+)?)\s*%?/.test(t)){
+      var m=t.match(/(\d+(?:\.\d+)?)\s*%?/);
+      if(gStep==='risk'){ gThink('확인 중',450,function(){ gPickRisk(-Math.abs(parseFloat(m[1])),true); }); return; }
+      if(/없|안 |스킵/.test(t)===false){ gThink('확인 중',450,function(){ gChipAct('tp',String(Math.abs(parseFloat(m[1]))),null,true); }); return; }
+    }
+    if(gStep==='tp'&&/없|안 할|그냥 진행/.test(t)){ gThink('확인 중',450,function(){ gChipAct('tp',null,null,true); }); return; }
+    /* 대기 중인 선택지 라벨과 직접 매칭 — 말로도 같은 진행 (audit P0-2) */
+    var pcS=G.cur&&G.cur.pendingChips;
+    if(pcS){
+      var baseL=function(x){ return x.replace(/\s*\(.*\)$/,'').trim(); };
+      var hit=null;
+      pcS.items.forEach(function(it){ if(hit) return; var bl=baseL(it.label); if(bl&&(t.indexOf(bl)>=0||bl.indexOf(t)>=0)) hit=it; });
+      if(hit){
+        var row=document.getElementById(pcS.id); if(row) row.remove();
+        G.cur.convo=G.cur.convo.filter(function(h){ return h.indexOf(pcS.id)<0; });
+        G.cur.pendingChips=null;
+        gThink('확인 중',400,function(){ gChipAct(hit.act,hit.arg,hit.label,true); });
+        return;
+      }
+    }
+    var cannedC=function(){
+      var pc2=G.cur&&G.cur.pendingChips;
+      if(pc2){ /* 선택지가 있으면 그 선택지를 다시 눈앞에 (audit P0-2 폴백) */
+        gConvAI('아래에서 골라주세요. 원하는 답이 없으면 비슷하게 적어주셔도 돼요.');
+        if(!document.getElementById(pc2.id)){ G.cur.pendingChips=null; if(pc2.step) gSetStep(pc2.step); gConvChips(pc2.items); }
+      } else {
+        gConvAI('무슨 뜻인지 확실하지 않아요. 예를 들어 "손절 -3%로", "비트코인으로", "반등 매수로"처럼 적어주시면 이어갈 수 있어요.');
+      }
+    };
     if(S.user&&TAI.ok!==false){ gUserPin(); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC); /* 차감, 게이트는 taiMarket 단일 경계로 이동 (codex flow3) */
     return;
   }
