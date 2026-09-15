@@ -2036,7 +2036,8 @@ body.g-inchat #nf-util{right:14px}
 .tft-ctxin .sy{font-size:13px;font-weight:700;color:var(--gt);white-space:nowrap}
 .tft-ctxin .mut{font-size:11px;color:var(--gt3);white-space:nowrap}
 .tft-ctxin .dv{width:1px;height:14px;background:var(--gl2);flex:none}
-.tft-ctxin .nm2{font-size:12px;font-weight:600;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tft-ctxin .nm2{font-size:12px;font-weight:600;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;max-width:240px} /* 전략명 우선 표시, 평가 상태 문구가 대신 줄어듦 (agy-fullqa d10) */
+.tft-ctxin>.mut.num{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .tft-ctxin .nm2 small{color:var(--gt3);font-weight:500;font-variant-numeric:tabular-nums}
 .tft-halt{height:24px;padding:0 10px;border:1px solid rgba(224,96,75,.5);border-radius:5px;background:none;color:var(--gr);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex:none}
 .tft-halt:hover{background:rgba(224,96,75,.1)}
@@ -3206,7 +3207,7 @@ body.tf-route #teth-help{bottom:88px}
 #tf-devpanel .row .st.on{background:rgba(78,192,141,.15);color:var(--gg)}
 #tf-devpanel .reset{width:100%;margin-top:8px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--gt2);font-size:11.5px;cursor:pointer;font-family:inherit}
 #tf-devpanel .reset:hover{background:rgba(255,255,255,.06)}
-@media (max-width:860px){ #tf-devbtn{top:auto;bottom:96px;right:14px} #tf-devpanel{top:auto;bottom:130px;right:12px} }
+@media (max-width:860px){ #tf-devbtn{top:auto;bottom:212px;right:14px} #tf-devpanel{top:auto;bottom:246px;right:12px} } /* 헤드셋 FAB 위로 스택, 입력바 겹침 해소 (agy-fullqa m01) */
 /* 상세 차트 애니메이션 — 드로우온 + 리빌 + 엔드 펄스 + 최고점 라벨 (레퍼런스 영상 재해석, 기간 토글마다 재생) */
 @keyframes ss3Draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes ss3Rvl{from{transform:scaleX(0)}to{transform:scaleX(1)}}
