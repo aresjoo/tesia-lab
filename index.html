@@ -2084,6 +2084,25 @@ body.g-inchat #nf-util{right:14px}
 .tft-ev.en .bg{color:var(--gg)}.tft-ev.tp .bg{color:var(--gg)}.tft-ev.sl .bg{color:var(--gr)}
 .tft-ev.tm .bg{color:var(--gb2)}.tft-ev.wa .bg,.tft-ev.ho .bg{color:var(--gt3)}
 .tft-ev.up .bg{color:var(--ga)}.tft-ev.op .bg{color:var(--gt2)}
+/* Agent 판단 카드: 에이전트 헤더 + 요약 말풍선 + 접이식 3섹션 (사용자 레퍼런스) */
+.tft-agc{border:1px solid var(--gl);border-radius:10px;padding:12px 12px 4px;margin:0 12px 12px;background:var(--g1)}
+.tft-agc .agh{display:flex;align-items:center;gap:8px;margin-bottom:9px;min-width:0}
+.tft-agc .agh .sp2{color:var(--gb2);font-size:13px;flex:none}
+.tft-agc .agh b{font-size:12.5px;font-weight:800;color:var(--gb2);letter-spacing:.02em;white-space:nowrap}
+.tft-agc .agh .dv2{width:1px;height:12px;background:var(--gl2);flex:none}
+.tft-agc .agh .evb{font-size:10px;font-weight:800;letter-spacing:.05em;white-space:nowrap}
+.tft-agc .agh .evb.en,.tft-agc .agh .evb.tp{color:var(--gg)}
+.tft-agc .agh .evb.sl{color:var(--gr)}
+.tft-agc .agh .evb.tm{color:var(--gb2)}
+.tft-agc .agh .evb.wa,.tft-agc .agh .evb.ho{color:var(--gt3)}
+.tft-agc .agh .tm{margin-left:auto;font-size:10.5px;color:var(--gt3);white-space:nowrap}
+.tft-agc .agb{border:1px solid var(--gl2);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;color:var(--gt2);background:var(--g2)}
+.tft-agc .ags{border-top:1px solid var(--gl);margin-top:8px}
+.tft-agc .agb+.ags{border-top:0}
+.tft-agc .agt{display:flex;align-items:center;gap:7px;width:100%;background:none;border:0;color:var(--gb2);font-size:12px;font-weight:700;padding:10px 2px;cursor:pointer;font-family:inherit;text-align:left}
+.tft-agc .agt:hover{color:var(--gt)}
+.tft-agc .agt .ar{font-size:9px;width:10px;flex:none;color:var(--gt3)}
+.tft-agc .agx{border:1px solid var(--gl);border-radius:8px;padding:11px 12px;margin:0 0 10px}
 .tft-ev .vr{font-size:10px;color:var(--gt3)}
 .tft-ev .tx{font-size:12px;line-height:1.55;color:var(--gt2);margin-top:3px}
 .tft-ev .tx2{font-size:11px;line-height:1.5;color:var(--gt3);margin-top:3px}
@@ -9381,46 +9400,62 @@ function tfTmFeed(s,c){
   if(!show.length) h+='<div class="tft-empty" style="padding:40px 16px"><b>아직 Agent 판단 기록이 없습니다.</b><span>전략이 첫 번째 평가를 완료하면 여기에 표시됩니다.</span></div>';
   h+=show.map(function(ev){
     var m=TF_TM_EVM[ev.k]||['판단','ho'];
-    var xk='r'+ev.i, open=!!TF_TM.exp[xk];
-    return '<div class="tft-ev '+m[1]+'"><span class="ax"><i></i></span><div class="bd">'
-      +'<div class="mh"><span class="tm num">'+fmtDate(idxToDate(ev.i))+'</span><span class="bg">'+m[0]+'</span></div>'
-      +'<div class="tx">'+gEsc(ev.txt)+'</div>'
-      +'<button type="button" class="dt2" onclick="TF_TM.exp[&quot;'+xk+'&quot;]=!TF_TM.exp[&quot;'+xk+'&quot;];tfTmBrain()">'+(open?'세부 정보 접기 ▴':'세부 정보 ▾')+'</button>'
-      +(open?tfTmEvDetail(s,c,ev):'')
-      +'</div></div>';
+    var xk='r'+ev.i;
+    var secs=[['p','사용자 프롬프트'],['c','생각의 사슬'],['d','거래 결정']];
+    return '<div class="tft-agc">'
+      +'<div class="agh"><span class="sp2" aria-hidden="true">✦</span><b>TETH 에이전트</b><span class="dv2"></span><span class="evb '+m[1]+'">'+m[0]+'</span><span class="tm num">'+fmtDate(idxToDate(ev.i))+'</span></div>'
+      +'<div class="agb">'+tfTmEvSum(s,ev)+'</div>'
+      +secs.map(function(sc){ var k2=xk+sc[0], on=!!TF_TM.exp[k2];
+        return '<div class="ags"><button type="button" class="agt" aria-expanded="'+on+'" onclick="TF_TM.exp[&quot;'+k2+'&quot;]=!TF_TM.exp[&quot;'+k2+'&quot;];tfTmBrain()"><span class="ar">'+(on?'▼':'▶')+'</span>'+sc[1]+'</button>'
+          +(on?'<div class="agx">'+(sc[0]==='p'?tfTmEvPrompt(s,ev):sc[0]==='c'?tfTmEvChain(s,c,ev):tfTmEvDecision(s,c,ev))+'</div>':'')
+          +'</div>'; }).join('')
+      +'</div>';
   }).join('');
   if(evs.length>TF_TM.feedN) h+='<button type="button" class="tft-more" onclick="TF_TM.feedN+=20;tfTmBrain()">이전 판단 더 보기 ('+(evs.length-TF_TM.feedN)+')</button>';
   return h;
 }
-function tfTmEvDetail(s,c,ev){
-  var p=s.p, i=ev.i;
-  var rp=rsi(PRICE,i-1), s20=sma(PRICE,20,i), s60=sma(PRICE,60,i), gap=Math.abs(s20-s60)/PRICE[i]*100;
+function tfTmEvSum(s,ev){
+  var p=s.p, px=PRICE[ev.i];
+  var slP='₩'+Math.round(px*(1+p.sl/100)).toLocaleString();
+  var tpP=p.tp!=null?'₩'+Math.round(px*(1+p.tp/100)).toLocaleString():null;
+  if(ev.k==='entry') return gEsc('저는 '+s.asset+' 반등 진입에 베팅합니다. 전봉 RSI가 임계 '+p.rsiTh+' 아래로 내려온 뒤 당일 반등이 확인되어 좋은 매수 기회라고 판단했습니다. '+(tpP?'목표가는 '+tpP+', ':'')+'손절은 '+slP+'에 설정했습니다.');
+  if(ev.k==='exit-sl') return gEsc('손절 규칙이 실행되어 전량 청산했습니다. 계획된 위험 한도 안에서 손실을 제한했고, 다음 진입 신호를 다시 기다립니다.');
+  if(ev.k==='exit-tp') return gEsc('목표가에 도달해 전량 청산했습니다. 계획대로 수익을 확정했고, 새 진입 조건 탐색으로 돌아갑니다.');
+  if(ev.k==='exit-time') return gEsc('보유 25봉이 만료되어 전량 청산했습니다. 기간 청산은 추세가 소멸한 자리에서 자금을 회수하기 위한 안전장치입니다.');
+  if(ev.k==='risk') return gEsc('보유 포지션을 유지합니다. 손절 '+p.sl+'%'+(p.tp!=null?'와 익절 +'+p.tp+'%':'')+' 규칙을 매 봉 평가 중이며 아직 청산 조건에 도달하지 않았습니다.');
+  return gEsc('이번 봉은 관망합니다. '+ev.txt+'. 조건이 갖춰질 때까지 신규 진입 없이 다음 봉을 기다립니다.');
+}
+function tfTmEvPrompt(s,ev){
+  var p=s.p;
   var raw=JSON.stringify(p,null,1);
-  var promptH='<details class="tft-dsec"><summary>USER PROMPT <small>이 주기에 적용된 저장 전략 설정</small></summary>'
-    +'<div class="kv"><span>자산</span><b>'+gEsc(s.asset)+' ('+gEsc(s.sym)+')</b></div>'
+  return '<div class="kv"><span>자산</span><b>'+gEsc(s.asset)+' ('+gEsc(s.sym)+')</b></div>'
     +'<div class="kv"><span>운용 자금</span><b class="num">'+tfTmWon(s.cap)+'</b></div>'
     +'<div class="kv"><span>진입 규칙</span><b>전봉 RSI '+p.rsiTh+' 이하 + 당일 +0.5% 반등'+(p.trendFilter?' + 추세 필터(20/60 이평)':'')+'</b></div>'
     +'<div class="kv"><span>청산 규칙</span><b>손절 '+p.sl+'% → '+(p.tp!=null?'익절 +'+p.tp+'% → ':'')+'25봉 기간 청산</b></div>'
     +'<div class="kv"><span>제약</span><b>검증 통과 설정만 실행, 출금 권한 없음, 시뮬레이션</b></div>'
-    +'<details class="tft-raw"><summary>Raw 설정 보기</summary><pre>'+gEsc(raw)+'</pre></details></details>';
+    +'<details class="tft-raw"><summary>Raw 설정 보기</summary><pre>'+gEsc(raw)+'</pre></details>';
+}
+function tfTmEvChain(s,c,ev){
+  var p=s.p, i=ev.i;
+  var rp=rsi(PRICE,i-1), s20=sma(PRICE,20,i), s60=sma(PRICE,60,i), gap=Math.abs(s20-s60)/PRICE[i]*100;
   var inPos=ev.k==='risk'||ev.k.indexOf('exit')===0;
-  var anaH='<div class="tft-dsec2"><div class="dh3">판단 근거</div>'
-    +'<div class="an"><b>시장 상태</b><p>전봉 RSI '+rp.toFixed(1)+' (임계 '+p.rsiTh+'), 20/60 이평 괴리 '+gap.toFixed(1)+'%'+(p.trendFilter?(gap>3?', 추세 필터 충족':', 추세 필터 미충족'):'')+'.</p></div>'
+  return '<div class="an"><b>시장 상태</b><p>전봉 RSI '+rp.toFixed(1)+' (임계 '+p.rsiTh+'), 20/60 이평 괴리 '+gap.toFixed(1)+'%'+(p.trendFilter?(gap>3?', 추세 필터 충족':', 추세 필터 미충족'):'')+'.</p></div>'
     +(inPos?'<div class="an"><b>포지션 상태</b><p>보유 중, 청산 규칙(손절 '+p.sl+'%'+(p.tp!=null?', 익절 +'+p.tp+'%':'')+', 25봉)을 매 봉 평가합니다.</p></div>':'')
     +'<div class="an"><b>규칙 평가</b><p>'+gEsc(ev.txt)+'</p></div>'
-    +'<div class="an"><b>결론</b><p>'+(ev.k==='entry'?'진입 조건이 모두 충족되어 매수를 실행했습니다.':ev.k==='watch'?'조건 미충족, 신규 진입 없이 다음 봉을 기다립니다.':ev.k==='risk'?'청산 조건 미도달, 포지션을 유지합니다.':'청산 규칙이 실행되어 포지션을 종료했습니다.')+'</p></div></div>';
+    +'<div class="an"><b>결론</b><p>'+(ev.k==='entry'?'진입 조건이 모두 충족되어 매수를 실행했습니다.':ev.k==='watch'?'조건 미충족, 신규 진입 없이 다음 봉을 기다립니다.':ev.k==='risk'?'청산 조건 미도달, 포지션을 유지합니다.':'청산 규칙이 실행되어 포지션을 종료했습니다.')+'</p></div>';
+}
+function tfTmEvDecision(s,c,ev){
+  var p=s.p, i=ev.i;
   var px=PRICE[i], qty=s.cap/px;
-  var tk='';
   if(ev.k==='entry'){
-    tk=tfTmTicket('BUY','매수 진입',s,[['기준가','₩'+Math.round(px).toLocaleString()],['수량 환산',''+qty.toFixed(4)],['손절가','₩'+Math.round(px*(1+p.sl/100)).toLocaleString()],[p.tp!=null?'목표가':'목표','' + (p.tp!=null?'₩'+Math.round(px*(1+p.tp/100)).toLocaleString():'기간 청산')],['위험액','약 '+tfTmWon(s.cap*Math.abs(p.sl)/100)],['보유 한도','25봉']],
+    return tfTmTicket('BUY','매수 진입',s,[['기준가','₩'+Math.round(px).toLocaleString()],['수량 환산',''+qty.toFixed(4)],['손절가','₩'+Math.round(px*(1+p.sl/100)).toLocaleString()],[p.tp!=null?'목표가':'목표','' + (p.tp!=null?'₩'+Math.round(px*(1+p.tp/100)).toLocaleString():'기간 청산')],['위험액','약 '+tfTmWon(s.cap*Math.abs(p.sl)/100)],['보유 한도','25봉']],
       ev.txt,'종가가 손절선 ₩'+Math.round(px*(1+p.sl/100)).toLocaleString()+' 아래로 마감하면 이 진입 구조는 무효화됩니다.');
-  } else if(ev.k.indexOf('exit')===0){
-    var rsn=ev.k==='exit-sl'?'손절 규칙':(ev.k==='exit-tp'?'익절 규칙':'기간 규칙');
-    tk=tfTmTicket('CLOSE','전량 청산: '+rsn,s,[['체결 기준','규칙가 (시뮬레이션)'],['청산가','₩'+Math.round(px).toLocaleString()]],ev.txt,null);
-  } else {
-    tk=tfTmTicket('HOLD',ev.k==='watch'?'신규 진입 보류':'포지션 유지',s,[['평가 결과','행동 없음']],ev.txt,null);
   }
-  return '<div class="tft-det">'+promptH+anaH+'<div class="tft-dsec2"><div class="dh3">TRADING DECISIONS</div>'+tk+'</div></div>';
+  if(ev.k.indexOf('exit')===0){
+    var rsn=ev.k==='exit-sl'?'손절 규칙':(ev.k==='exit-tp'?'익절 규칙':'기간 규칙');
+    return tfTmTicket('CLOSE','전량 청산: '+rsn,s,[['체결 기준','규칙가 (시뮬레이션)'],['청산가','₩'+Math.round(px).toLocaleString()]],ev.txt,null);
+  }
+  return tfTmTicket('HOLD',ev.k==='watch'?'신규 진입 보류':'포지션 유지',s,[['평가 결과','행동 없음']],ev.txt,null);
 }
 function tfTmTicket(sig,title,s,kvs,just,inval){
   var cls=sig==='BUY'?'b':(sig==='CLOSE'?'c':'h');
