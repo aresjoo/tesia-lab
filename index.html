@@ -2104,6 +2104,13 @@ body.g-inchat #nf-util{right:14px}
 .tft-agc .agt:hover{color:var(--gt)}
 .tft-agc .agt .ar{font-size:9px;width:10px;flex:none;color:var(--gt3)}
 .tft-agc .agx{border:1px solid var(--gl);border-radius:8px;padding:11px 12px;margin:0 0 10px}
+/* 지금 상태 배너 + 관망 묶음 + 적용 완료 카드 (audit C6, C7) */
+.tft-nowbar{border-left:3px solid var(--gb);background:var(--g2);border-radius:0 8px 8px 0;padding:9px 12px;margin:0 12px 12px;font-size:12px;line-height:1.6;color:var(--gt2)}
+.tft-agc.wfold{background:transparent;border-style:dashed}
+.tft-agc.wfold .agb{background:transparent;border-style:dashed;color:var(--gt3)}
+.tft-applied{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--gl2);border-radius:8px;background:var(--g2);padding:9px 12px;font-size:12px;color:var(--gt2);margin-bottom:8px}
+.tft-applied button{border:0;border-radius:6px;background:var(--gb);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;font-family:inherit}
+.tft-card .pnl .vl{color:var(--gt3);font-weight:500;font-size:10px;margin-right:3px}
 .tft-ev .vr{font-size:10px;color:var(--gt3)}
 .tft-ev .tx{font-size:12px;line-height:1.55;color:var(--gt2);margin-top:3px}
 .tft-ev .tx2{font-size:11px;line-height:1.5;color:var(--gt3);margin-top:3px}
@@ -9373,7 +9380,7 @@ function tfTmRail(listOnly){
       +'<button type="button" class="mn" aria-label="전략 메뉴" onclick="tfTmMenu(event,&quot;'+s.key+'&quot;)">⋯</button></div>'
       +'<div class="r2"><span class="sy">'+gEsc(s.sym)+', '+gEsc(s.mkt)+'</span><span class="ver">'+gEsc(s.ver)+'</span></div>'
       +'<div class="r3 num"><span class="cap">'+tfTmWon(s.cap)+(s.capShared?'<i title="위임 예산 공용">*</i>':'')+'</span>'
-      +'<span class="pnl '+tfTmSign(c.pnl)+'">'+tfTmWonS(c.pnl)+' <small>'+tfTmPct(c.pnlPct)+'</small></span></div>'
+      +'<span class="pnl '+tfTmSign(c.pnl)+'">'+(s.status==='live'?'':'<small class="vl">검증</small>')+tfTmWonS(c.pnl)+' <small>'+tfTmPct(c.pnlPct)+'</small></span></div>'
       +(s.status==='err'&&s.errMsg?'<div class="r4">'+gEsc(s.errMsg.split('. ')[0])+' <a onclick="event.stopPropagation();tfTmReconnect(&quot;'+s.key+'&quot;)">다시 연결</a></div>':'')
       +'</div>';
   }).join('');
@@ -9516,11 +9523,33 @@ function tfTmFeed(s,c){
   evs=evs.reverse();
   if(TF_TM.fmode==='act') evs=evs.filter(function(e){ return e.k==='entry'||e.k.indexOf('exit')===0; });
   var show=evs.slice(0,TF_TM.feedN);
+  var lastEv=evs[0];
+  if(lastEv){ /* 10초 안에 "지금 뭐 하는지" 답하는 고정 배너 (audit C6) */
+    var nowTxt;
+    if(lastEv.k==='risk') nowTxt='지금 포지션 보유 중이에요. 손절 '+s.p.sl+'%'+(s.p.tp!=null?'와 익절 +'+s.p.tp+'%':'')+' 규칙을 매 봉 점검해요.';
+    else if(lastEv.k==='entry') nowTxt='방금 진입했어요. 이제부터 청산 규칙을 매 봉 점검해요.';
+    else if(lastEv.k==='watch'||lastEv.k==='scan') nowTxt='지금 관망 중이에요. 진입 기준(RSI '+s.p.rsiTh+' 이하 반등)에 닿으면 검토를 시작해요.';
+    else nowTxt='포지션 없이 다음 진입 신호를 기다리고 있어요.';
+    h+='<div class="tft-nowbar">'+nowTxt+'</div>';
+  }
   h+='<div class="tft-fsec" style="display:flex;align-items:center;gap:8px">판단 기록 <small>검증 리플레이와 주기 시장 스캔, 일봉 시뮬레이션</small><span style="flex:1"></span>'
     +'<button type="button" class="ffc'+(TF_TM.fmode!=='act'?' on':'')+'" onclick="TF_TM.fmode=&quot;all&quot;;tfTmBrain()">전체</button>'
     +'<button type="button" class="ffc'+(TF_TM.fmode==='act'?' on':'')+'" onclick="TF_TM.fmode=&quot;act&quot;;tfTmBrain()">체결만</button></div>';
   if(!show.length) h+='<div class="tft-empty" style="padding:40px 16px"><b>아직 Agent 판단 기록이 없습니다.</b><span>전략이 첫 번째 평가를 완료하면 여기에 표시됩니다.</span></div>';
-  h+=show.map(function(ev){
+  var packed=[]; (function(){ var i9=0; while(i9<show.length){ var e9=show[i9];
+    if(e9.k==='watch'){ var j9=i9; while(j9+1<show.length&&show[j9+1].k==='watch') j9++;
+      if(j9-i9+1>=2){ packed.push({grp:show.slice(i9,j9+1)}); i9=j9+1; continue; } }
+    packed.push(e9); i9++; } })(); /* 연속 관망은 1장으로 접는다 (audit C6, agy 6절) */
+  h+=packed.map(function(ev){
+    if(ev.grp){
+      var gF=ev.grp[0], wk='wf'+(s.key||s.at||'')+'_'+gF.i, wOpen=!!TF_TM.exp[wk];
+      return '<div class="tft-agc wfold">'
+        +'<div class="agh"><span class="sp2" aria-hidden="true">✦</span><b>TETH 에이전트</b><span class="dv2"></span><span class="evb wa">관망</span><span class="tm num">'+fmtDate(idxToDate(ev.grp[ev.grp.length-1].i))+'</span></div>'
+        +'<div class="agb">'+ev.grp.length+'봉 연속 관망 중이에요. 진입 기준(RSI '+s.p.rsiTh+' 이하 반등)에 아직 닿지 않아 그대로 기다립니다.</div>'
+        +'<div class="ags"><button type="button" class="agt" aria-expanded="'+wOpen+'" onclick="TF_TM.exp[&quot;'+wk+'&quot;]=!TF_TM.exp[&quot;'+wk+'&quot;];tfTmBrain()"><span class="ar">'+(wOpen?'▼':'▶')+'</span>봉별 판단 '+ev.grp.length+'건 보기</button>'
+        +(wOpen?'<div class="agx">'+ev.grp.map(function(e2){ return '<div class="an"><b class="num">'+fmtDate(idxToDate(e2.i))+'</b><p>'+gEsc(e2.txt)+'</p></div>'; }).join('')+'</div>':'')
+        +'</div></div>';
+    }
     var m=TF_TM_EVM[ev.k]||['판단','ho'];
     var xk='r'+(s.key||s.at||'')+'_'+ev.i;
     var secs=[['p','사용자 프롬프트'],['c','생각의 사슬'],['d','거래 결정']];
@@ -9743,6 +9772,12 @@ function tfTmSay(msg){
   /* 미지원 구절 감지 (term-codex E2 — 조용한 부분 적용 금지) */
   [[/EMA|이평.*마감|이동평균\s*\d+/i,'EMA 조건'],[/절반|50%\s*축소|부분\s*청산/,'부분 청산 규칙'],[/레버리지|배율/,'레버리지'],[/시간대|봉\s*주기|타임프레임/i,'타임프레임 변경']].forEach(function(u){ if(u[0].test(msg)) un.push(u[1]); });
   var keys=Object.keys(ch);
+  if(!keys.length&&notes.length){ /* 허용값으로 스냅했더니 현재 설정과 같아진 경우 — 미지원이 아니다 (audit fix4) */
+    host.innerHTML='<div class="tft-ans"><b>조정하면 지금 설정과 같아져요</b>'
+      +'<p>'+notes.map(gEsc).join('<br>')+'<br>현재 설정이 요청값에 가장 가까운 허용값이라 바꿀 것이 없어요.</p>'
+      +'<div class="acts"><button onclick="$(&quot;tft-prop&quot;).innerHTML=&quot;&quot;">닫기</button></div></div>';
+    return;
+  }
   if(!keys.length){
     host.innerHTML='<div class="tft-ans"><b>이 요청은 아직 자동 변환을 지원하지 않아요</b>'
       +'<p>지원: 손절(%), 익절(%), 진입 RSI 임계, 추세 필터 켜기/끄기, 리스크 낮춰/높여.'+(un.length?' 요청하신 <b>'+un.join(', ')+'</b>은 아직 규칙 엔진이 지원하지 않아 적용할 수 없어요.':'')+'</p>'
@@ -9807,6 +9842,11 @@ function tfTmApply(){
   tfSaveNow();
   toast('전략이 '+nv+'로 업데이트됐어요'+(wasLive?' (중지됨)':''));
   tfTmAfter();
+  if(wasLive){ /* 적용으로 멈춘 전략을 그 자리에서 재개 (audit P1-2) */
+    var hp=$('tft-prop');
+    if(hp) hp.innerHTML='<div class="tft-applied"><span>'+nv+' 적용 완료. 안전을 위해 전략은 중지 상태예요.</span>'
+      +'<button type="button" onclick="tfTmSetStatus(&quot;'+cd.key+'&quot;,&quot;live&quot;)&&tfTmAfter();var p=document.getElementById(&quot;tft-prop&quot;);if(p)p.innerHTML=&quot;&quot;;">바로 재개</button></div>';
+  }
   tfTrack('term_nl_apply',{to:nv});
 }
 /* ── 카드 ··· 메뉴 (spec F) ── */
