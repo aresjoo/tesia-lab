@@ -9418,12 +9418,13 @@ function tfTmEvSum(s,ev){
   var p=s.p, px=PRICE[ev.i];
   var slP='₩'+Math.round(px*(1+p.sl/100)).toLocaleString();
   var tpP=p.tp!=null?'₩'+Math.round(px*(1+p.tp/100)).toLocaleString():null;
-  if(ev.k==='entry') return gEsc('저는 '+s.asset+' 반등 진입에 베팅합니다. 전봉 RSI가 임계 '+p.rsiTh+' 아래로 내려온 뒤 당일 반등이 확인되어 좋은 매수 기회라고 판단했습니다. '+(tpP?'목표가는 '+tpP+', ':'')+'손절은 '+slP+'에 설정했습니다.');
-  if(ev.k==='exit-sl') return gEsc('손절 규칙이 실행되어 전량 청산했습니다. 계획된 위험 한도 안에서 손실을 제한했고, 다음 진입 신호를 다시 기다립니다.');
-  if(ev.k==='exit-tp') return gEsc('목표가에 도달해 전량 청산했습니다. 계획대로 수익을 확정했고, 새 진입 조건 탐색으로 돌아갑니다.');
-  if(ev.k==='exit-time') return gEsc('보유 25봉이 만료되어 전량 청산했습니다. 기간 청산은 추세가 소멸한 자리에서 자금을 회수하기 위한 안전장치입니다.');
-  if(ev.k==='risk') return gEsc('보유 포지션을 유지합니다. 손절 '+p.sl+'%'+(p.tp!=null?'와 익절 +'+p.tp+'%':'')+' 규칙을 매 봉 평가 중이며 아직 청산 조건에 도달하지 않았습니다.');
-  return gEsc('이번 봉은 관망합니다. '+ev.txt+'. 조건이 갖춰질 때까지 신규 진입 없이 다음 봉을 기다립니다.');
+  var rp=rsi(PRICE,ev.i-1);
+  if(ev.k==='entry') return gEsc('저는 지금 '+s.asset+' 반등에 올라탑니다. RSI가 '+p.rsiTh+' 아래로 눌렸다가 오늘 반등이 확인돼서 좋은 자리라고 봤어요. '+(tpP?'목표가는 '+tpP+', ':'')+'손절은 '+slP+'에 걸어뒀으니 틀려도 손실은 계획 안에서 끝납니다.');
+  if(ev.k==='exit-sl') return gEsc('손절 라인에 닿아서 미련 없이 정리했습니다. 손실은 계획했던 '+p.sl+'% 안에서 끝났고, 자금을 지켰으니 다음 기회를 노립니다.');
+  if(ev.k==='exit-tp') return gEsc('목표가에 도달해서 전량 익절했습니다. 계획했던 +'+p.tp+'%를 그대로 챙겼고, 이제 다음 진입 신호를 기다립니다.');
+  if(ev.k==='exit-time') return gEsc('25봉 동안 결판이 안 나서 규칙대로 정리했습니다. 추세가 사라진 자리에 돈을 묶어두지 않는 것이 제 원칙이에요.');
+  if(ev.k==='risk') return gEsc('포지션은 그대로 들고 갑니다. 추세가 아직 제 편이고, 손절 '+p.sl+'%'+(p.tp!=null?'와 익절 +'+p.tp+'%':'')+' 라인 어느 쪽에도 닿지 않았거든요. 규칙대로 매 봉 점검만 계속합니다.');
+  return gEsc('이번 봉은 쉬어갑니다. RSI가 '+rp.toFixed(1)+'이라 제 기준('+p.rsiTh+' 이하)까지 내려오지 않았거든요. 조건이 맞을 때까지 무리해서 들어가지 않겠습니다.');
 }
 function tfTmEvPrompt(s,ev){
   var p=s.p;
