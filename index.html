@@ -7274,26 +7274,50 @@ function gDocRunConfirm(){
     gRowC('투자금',fmtMoney(5000)+', 1회 최대 손실 '+fmtMoney(50))+
     gRowC('검증', pct(fin.ret)+', 낙폭 '+fin.mdd.toFixed(1)+'%, Holdout '+(holdoutOf(fin).ret>0?'통과':'경고'))+
     '</div>'+
-    '<div class="g-note" style="margin-top:12px">실제 주문이 발생할 수 있습니다. Paper 모드는 가상 체결로 먼저 검증합니다.</div>'+
-    '<div style="display:flex;gap:8px;margin-top:16px"><button class="g-btn g-btn-p" onclick="gGoLive(\'paper\')">Paper 시뮬레이션 시작</button><button class="g-btn g-btn-s" onclick="gGoLive(\'real\')">실제 자금으로 시작</button></div>';
+    '<div class="g-note" style="margin-top:12px">가상 검증은 실제 주문 없이 실시간으로 체결을 재현합니다. 시작하면 내 트레이딩에서 관리해요.</div>'+
+    '<div style="display:flex;gap:8px;margin-top:16px"><button class="g-btn g-btn-p" onclick="gGoLive(\'paper\')">가상 검증으로 시작</button><button class="g-btn g-btn-s" onclick="gGoLive(\'real\')" style="opacity:.55">실전 시작 (데모 잠금)</button></div>';
+}
+/* 연구 결과를 내 트레이딩 원장으로 변환 합류 — 신구 이중 실행 제거 (audit C4) */
+function gToTerminal(sx){
+  sx=sx||G.cur; if(!sx) return false;
+  var fin=sx.versions&&sx.versions[sx.versions.length-1];
+  if(!fin){ toast('연구 결과가 없어요, 연구를 먼저 완료해주세요'); return false; }
+  var t=tfS(); t.strat=t.strat||[];
+  var dup=t.strat.filter(function(b){ return b.sessionId===sx.id; })[0];
+  if(dup){ tfNav('#/trade'); return true; } /* 같은 연구는 한 번만 — 멱등 (codex 중복 가드 대체) */
+  var pr=fin.params||{};
+  var stg=sx.strategy||S.strategy||{};
+  var pair=stg.pair||'BTC/USDT';
+  var AKO={BTC:'비트코인',ETH:'이더리움',SOL:'솔라나',XRP:'리플'};
+  var p={sl:(pr.sl!=null?pr.sl:(stg.slNum!=null?stg.slNum:-3)), tp:(pr.tp!==undefined?pr.tp:(stg.tpNum!=null?stg.tpNum:null)), rsiTh:(pr.rsiTh!=null?pr.rsiTh:40), trendFilter:!!pr.trendFilter};
+  var score=(typeof tfScore==='function')?tfScore(fin):80;
+  var bot={key:'rs'+Date.now(), at:Date.now(), name:sx.title||stg.name||'연구 전략',
+    sym:pair, ex:(t.api&&t.api.ex)||'binance', status:'live', ver:'v1.0',
+    cap:7000000, env:'paper', asset:AKO[pair.split('/')[0]]||pair.split('/')[0],
+    score:score, ret:fin.ret, mdd:fin.mdd, n:fin.n, winRate:fin.winRate,
+    p:p, src:'research', sessionId:sx.id};
+  t.strat.unshift(bot);
+  sx.strategyAt=bot.at;
+  tfSave(); STORE.save();
+  return true;
 }
 function gGoLive(mode){
-  G.cur.live=true; G.cur.liveMode=mode; G.cur.status='done';
+  if(!G.cur) return;
+  if(mode==='real'){ toast('실제 자금 실행은 데모에서 잠겨 있어요. 가상 검증으로 먼저 확인해보세요.'); return; } /* 가짜 실전 제거 (audit P1-4) */
+  if(!gToTerminal(G.cur)) return;
+  G.cur.live=true; G.cur.liveMode='paper'; G.cur.status='done';
   gSideRender(); STORE.save();
-  toast(mode==='paper'?'Paper 시뮬레이션 시작':'전략 실행 시작');
-  gOpen('live');
+  toast('전략이 내 트레이딩에 추가됐어요. 가상 검증으로 실행합니다');
+  tfNav('#/trade');
 }
 function gDocLive(){
   var stg=(G.cur&&G.cur.strategy)||S.strategy;
   var base=((stg&&stg.pair)||'BTC/USDT').split('/')[0];
   var mode=G.cur.liveMode==='paper'?'Paper, 가상 체결':'Live';
   var paused=!!G.cur.livePaused;
-  return '<h3>'+stg.name+'</h3><div class="meta"><span class="g-tag ok"><span class="g-dot ok"></span>'+mode+'</span>'+(paused?', 일시 정지됨':'')+', Binance, 시작 후 21일</div>'+
-    '<div class="g-vstat">'+
-    '<div><div class="k">시작 후</div><div class="v" style="color:var(--gg)">+3.2%</div></div>'+
-    '<div><div class="k">오늘</div><div class="v" style="color:var(--gg)">+0.4%</div></div>'+
-    '<div><div class="k">거래</div><div class="v">9회</div></div>'+
-    '<div><div class="k">현재 포지션</div><div class="v">'+base+' 롱 +0.8%</div></div></div>'+
+  return '<h3>'+stg.name+'</h3><div class="meta"><span class="g-tag ok"><span class="g-dot ok"></span>'+mode+'</span>'+(paused?', 일시 정지됨':'')+', Binance</div>'+
+    '<div class="g-note" style="margin-top:10px">이 전략은 내 트레이딩에서 실행 중이에요. 실시간 판단과 성과는 터미널에서 확인하세요.</div>'+
+    '<div style="display:flex;gap:8px;margin:12px 0 4px"><button class="g-btn g-btn-p" onclick="tfNav(\'#/trade\')">내 트레이딩에서 열기</button></div>'+
     '<h3>최근 활동</h3><table class="g-table"><tbody>'+
     liveTradesFor((stg&&stg.pair)||'BTC/USDT').slice(0,4).map(function(t){ var c=t[4]===true?'var(--gg)':t[4]===false?'var(--gr)':'var(--gt2)'; var pv=String(t[3]).trim()===','?'':t[3]; return '<tr><td class="num" style="color:var(--gt3)">'+t[0]+'</td><td>'+t[1]+'</td><td class="num">'+t[2]+'</td><td class="num" style="text-align:right;color:'+c+'">'+pv+'</td></tr>'; }).join('')+
     '</tbody></table>'+
