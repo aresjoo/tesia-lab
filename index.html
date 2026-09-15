@@ -1988,9 +1988,9 @@ body.g-inchat #nf-util{right:14px}
 .tft-page{padding:0!important;max-width:none}
 .tft-page .nfx-glow{display:none}
 .tft-banner{padding:10px 14px 0}
-.tft-grid{display:grid;grid-template-columns:264px minmax(0,1fr) var(--tftr,392px);grid-template-rows:auto minmax(400px,48vh);grid-template-areas:"rail ctx brain" "rail chart brain";border-bottom:1px solid var(--gl)}
+.tft-grid{display:grid;grid-template-columns:minmax(0,1fr) 264px var(--tftr,392px);grid-template-rows:auto minmax(400px,48vh);grid-template-areas:"ctx rail brain" "chart rail brain";border-bottom:1px solid var(--gl)} /* 차트 맨 왼쪽, 전략 목록과 Agent 오른쪽 몰기 (사용자 지시) */
 /* 좌 — 전략 매니저 */
-.tft-rail{grid-area:rail;border-right:1px solid var(--gl);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.tft-rail{grid-area:rail;border-left:1px solid var(--gl);display:flex;flex-direction:column;min-height:0;overflow:hidden}
 .tft-rh{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--gl)}
 .tft-rh b{font-size:13px;font-weight:700;color:var(--gt)}
 .tft-rh .ct2{font-size:10.5px;color:var(--gt3);font-variant-numeric:tabular-nums}
@@ -2242,10 +2242,10 @@ body.g-inchat #nf-util{right:14px}
 .tft-bottom .nfxh-pane{max-height:420px;overflow-y:auto;scrollbar-width:thin}
 /* 반응형 */
 @media (max-width:1240px){
-  .tft-grid{grid-template-columns:232px minmax(0,1fr) 340px}
+  .tft-grid{grid-template-columns:minmax(0,1fr) 232px 340px}
 }
 @media (max-width:1120px) and (min-width:961px){
-  .tft-grid{grid-template-columns:200px minmax(0,1fr) 300px} /* 1024: 차트 ≥500px 확보 (agy-term2 P0-5) */
+  .tft-grid{grid-template-columns:minmax(0,1fr) 200px 300px} /* 1024: 차트 ≥500px 확보 (agy-term2 P0-5) */
   .tft-ctxin .mut{max-width:150px;overflow:hidden;text-overflow:ellipsis}
 }
 @media (max-width:960px){
