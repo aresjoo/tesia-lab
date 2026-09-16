@@ -13752,7 +13752,11 @@ var TF_DEV_ROWS=[
   ['pay','구독 결제'],
   ['api','거래소 연결 (Binance)'],
   ['free','무료 분석 소진'],
-  ['strat','검증 통과 전략']
+  ['strat','검증 통과 전략'],
+  /* 과금 상태 (7단계 QA) — 원장 엔트리(reason qa)로 조작해 원장 원칙 유지 */
+  ['card','카드 등록 (월 충전)'],
+  ['bwarn','크레딧 임계 경고'],
+  ['bwatch','크레딧 관망 모드']
 ];
 function tfDevSt(k){
   var t=tfS();
@@ -13762,7 +13766,22 @@ function tfDevSt(k){
   if(k==='api') return !!t.api;
   if(k==='free') return (t.freeUsed||0)>=((TFC.credit&&TFC.credit.freeQuota)||10);
   if(k==='strat') return !!(t.cur&&t.score>=TFC.score.pass);
+  if(k==='card') return !!(typeof bcInit==='function'&&bcInit().cardOn);
+  if(k==='bwarn') return !!(typeof bcInit==='function'&&bcInit().mode==='grace');
+  if(k==='bwatch') return !!(typeof bcInit==='function'&&bcInit().mode==='watch');
   return false;
+}
+/* 과금 QA 공용: 로그인 보장 + 원장 조작 (append-only 유지, reason qa) */
+function tfDevBillUser(){
+  if(!S.user){ S.user={name:'김도현',email:'demo@teth.ai'}; try{ authSyncUI(); }catch(e){} }
+}
+function tfDevBillGrant(){ /* 경고선 위로 복구 */
+  bcAppend('charge','qa',Math.ceil(bcWarnBase()*0.5)+50,null,'qa'+Date.now()+Math.random());
+  bcAfterChange('qa');
+}
+function tfDevBillDrain(target){ /* 지정 잔액까지 소진 */
+  var d=bcBalance()-target;
+  if(d>0){ bcAppend('debit','qa',-d,null,'qa'+Date.now()+Math.random()); bcAfterChange('ai'); }
 }
 function tfDevTgl(k){
   var t=tfS(), on=tfDevSt(k);
@@ -13785,6 +13804,31 @@ function tfDevTgl(k){
       t.intake={asset:{i:0,label:'비트코인'},assetInfo:tfAssetLookup('비트코인'),style:{i:1,label:'중립적으로'},budget:{i:1,label:'500만원'},period:{i:2,label:'전체 기간'},stop:{i:1,label:'-5%까지'}};
       t.cur={p:p0,ret:r0.ret,mdd:r0.mdd,winRate:r0.winRate,n:r0.n,trades:r0.trades.slice(-40).map(function(x){return {e:x.entry,x:x.exit,pnl:x.pnl,kind:x.kind};}),startI:p0.startI,endI:p0.endI};
       t.score=tfScore(r0); t.stage='verified'; t.upFor=String(t.cur.ret)+'|'+t.cur.n+'|'+t.score; /* 리포트 진입 시 업그레이드 시트 자동 팝 방지 */
+    }
+  }
+  if(k==='card'){
+    tfDevBillUser();
+    if(on){ bcCardOn(false); }
+    else { bcCardOn(true); bcCardCharged('cyqa'+Date.now()); } /* 등록 즉시 이번 달 충전까지 재현 */
+  }
+  if(k==='bwarn'){
+    tfDevBillUser();
+    if(on){ tfDevBillGrant(); } /* grace 해제 → active */
+    else {
+      if(bcInit().mode==='watch') tfDevBillGrant(); /* watch 에서 진입 시 먼저 재개 */
+      var wAt=Math.floor(bcWarnBase()*((TFC.billing&&TFC.billing.THRESHOLD_WARN)||0.2));
+      if(bcBalance()<=wAt) tfDevBillGrant(); /* 이미 아래면 위로 올렸다가 */
+      tfDevBillDrain(Math.max(0,wAt)); /* 경고선 정확히 아래로 → warn 이벤트+grace */
+    }
+  }
+  if(k==='bwatch'){
+    tfDevBillUser();
+    if(on){ tfDevBillGrant(); } /* 즉시 재개 규칙 재사용 */
+    else {
+      var b9=bcInit();
+      if(b9.mode==='active') tfDevBillDrain(0); else { bcAppend('debit','qa',-bcBalance(),null,'qa'+Date.now()+Math.random()); bcAfterChange('ai'); }
+      b9.graceAt=Date.now()-(((TFC.billing&&TFC.billing.GRACE_HOURS)||24)+1)*36e5; /* 유예 경과 시뮬 */
+      bcTick();
     }
   }
   tfSave(); tfDevRefresh();
