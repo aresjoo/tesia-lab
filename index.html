@@ -9030,6 +9030,8 @@ function tfCnUid(){
     /* 기존 UID 성공과 신규 자격을 동일 지점으로 통합 (codex NF P1) — 최초 1회만 지급 */
     t.uidLinked=true;
     if(typeof tfCreditGrant==='function') tfCreditGrant('uid',TFC.credit.uidGrant,'파트너 UID 연동이 확인됐어요. PRO 분석을 사용해보세요.');
+    if(typeof bcPromoCardUid==='function') bcPromoCardUid(); /* CARD 상태에서 UID 연동 시 "AI 이용 크레딧 $100" (3단계) */
+    if(typeof bcAfterChange==='function') bcAfterChange('uid-link'); /* 연동 즉시 복구 트리거 */
     tfSave();
     toast('연동 확인 완료');
     tfConnectView();
@@ -11103,6 +11105,80 @@ function bcInit(){
   if(b.cardFails===undefined) b.cardFails=0;      /* dunning 재시도 카운터 */
   return b;
 }
+/* ═══ 크레딧 엔진 (3단계): 충전/차감/지급/임계 판정 ═══ */
+function bcEnsureWelcome(){
+  if(!S.user) return false;
+  var cfg=bcCfg();
+  var ok=bcAppend('grant','welcome',cfg.WELCOME_CREDIT||0,null,'welcome'); /* 1회 멱등 */
+  if(ok){ bcEvent('welcome',{amt:cfg.WELCOME_CREDIT}); bcAfterChange('welcome'); }
+  return ok;
+}
+/* 거래량 비례 실시간 충전 — 체결 파이프라인 훅. cap 초과분은 소멸 기록 (질문 2 임시) */
+function bcVolumeCharge(fid,ex,market,notional){
+  var cfg=bcCfg(), tbl=cfg.VOLUME_TO_CREDIT_RATE||{};
+  var rate=(tbl[ex]&&tbl[ex][market||'spot'])||(tbl.binance&&tbl.binance.spot)||0;
+  var credit=Math.round(notional*rate);
+  if(credit<=0) return 0;
+  var bal=bcBalance(), cap=cfg.UID_CREDIT_CAP||Infinity;
+  var expire=0;
+  if(bal+credit>cap){ expire=bal+credit-cap; credit=Math.max(0,cap-bal); }
+  if(credit>0){
+    if(!bcAppend('charge','volume',credit,fid,'vol:'+fid)) return 0; /* fid 멱등 */
+    if(expire>0) bcEvent('cap-expire',{fid:fid,expired:expire});
+    bcAfterChange('volume'); /* 관망 복구 트리거 포함 (질문 5 임시: 거래량 충전도 복구) */
+  } else if(expire>0&&bcAppend('charge','volume',0,fid,'vol:'+fid)){ bcEvent('cap-expire',{fid:fid,expired:expire}); }
+  return credit;
+}
+/* 자유형 AI 사용 차감 — 0 하한, 부족 시 STOP 이벤트 (질문 10 임시) */
+function bcAiDebit(reqId){
+  var cfg=bcCfg(), cost=cfg.AI_CALL_COST||0, bal=bcBalance();
+  var amt=Math.min(cost,Math.max(0,bal));
+  if(amt>0){ if(!bcAppend('debit','ai',-amt,reqId,'ai:'+reqId)) return; }
+  else if(!bcAppend('debit','ai',0,reqId,'ai:'+reqId)) return;
+  bcAfterChange('ai');
+}
+/* CARD 유저 UID 연동 프로모 — "AI 이용 크레딧 $100" 표기 고정 (원장 ref 로 표기 근거 보존) */
+function bcPromoCardUid(){
+  if(bcTier()!=='CARD_UID') return false;
+  var cfg=bcCfg();
+  var ok=bcAppend('grant','promo',cfg.PROMO_AI_CREDIT_USD||0,'usd100','promo-carduid');
+  if(ok){ bcEvent('promo-carduid',{amt:cfg.PROMO_AI_CREDIT_USD}); bcAfterChange('promo'); }
+  return ok;
+}
+/* 임계 판정 + 모드 전이. 모수 = max(당월 총 유입, 웰컴) (질문 6 임시) */
+function bcWarnBase(){ var cfg=bcCfg(); return Math.max(bcMonthInflow(), cfg.WELCOME_CREDIT||1); }
+function bcAfterChange(src){
+  var b=bcInit(), cfg=bcCfg(), bal=bcBalance();
+  var warnAt=bcWarnBase()*(cfg.THRESHOLD_WARN!=null?cfg.THRESHOLD_WARN:0.2);
+  var inflow=(src!=='ai'); /* 차감 외 전부 유입 계열 (volume/welcome/promo/uid-link/card) */
+  if(b.mode==='watch' && inflow && bal>0){
+    /* 스펙: 충전/연동/결제 즉시 재개 — 잔액이 경고선 아래여도 관망은 해제, 아래에서 grace 재진입 */
+    b.mode='active'; b.graceAt=null;
+    bcEvent('recover',{from:'watch',src:src,bal:bal});
+    if(typeof bcRoute==='function') bcRoute('recover');
+  } else if(b.mode==='grace' && bal>warnAt){
+    b.mode='active'; b.graceAt=null;
+    bcEvent('recover',{from:'grace',src:src,bal:bal});
+    if(typeof bcRoute==='function') bcRoute('recover');
+  }
+  if(b.mode==='active' && bal<=warnAt){
+    b.mode='grace'; b.graceAt=Date.now(); /* 재진입도 새 유예 24h 부여 */
+    bcEvent('warn',{bal:bal,warnAt:Math.round(warnAt),tier:bcTier(),src:src});
+    if(typeof bcRoute==='function') bcRoute('warn');
+  }
+  bcTick();
+  tfSave();
+}
+/* 시간 경과 판정 — 부팅과 주요 행동 시 호출. 경고 후 GRACE_HOURS 지나고 잔량 STOP 이하면 관망 */
+function bcTick(){
+  var b=bcInit(), cfg=bcCfg(), bal=bcBalance();
+  if(b.mode==='grace' && bal<=(cfg.THRESHOLD_STOP||0) && b.graceAt && Date.now()-b.graceAt>=(cfg.GRACE_HOURS||24)*36e5){
+    b.mode='watch';
+    bcEvent('watch-enter',{bal:bal,tier:bcTier()});
+    if(typeof bcRoute==='function') bcRoute('watch');
+    tfSave();
+  }
+}
 /* 등급은 저장하지 않고 상태에서 파생 — 이중 원천 금지 */
 function bcTier(){
   var t=tfNFInit(), b=bcInit();
@@ -11159,6 +11235,9 @@ function tfAiSpend(reqId){
 /* 실AI 발송 게이트 — free-out 이면 차단하고 업그레이드 시트 (하드 게이트, mock, 로컬 경로 무관) */
 function tfAiGate(){
   if(!S.user||(window.TAI&&TAI.ok===false)) return true;
+  bcEnsureWelcome(); /* FREE 웰컴 1회 (멱등, 3단계) */
+  bcTick(); /* 경과 시간 기준 grace→watch 판정 */
+  if(bcInit().mode==='watch'){ if(typeof bcRoute==='function') bcRoute('blocked'); else toast('크레딧이 소진되어 AI 기능이 잠시 멈춰 있어요'); return false; }
   if(tfEnt().why!=='free-out') return true;
   tfUpSheet('quota');
   return false;
@@ -11172,6 +11251,10 @@ function tfCreditGrant(key,amt,reason){
 }
 /* 실AI 요청 1건당 고급 모델 비용 확정 — requestId 로 중복 차감 금지, mock/레거시 무차감 */
 function tfCreditSpend(reqId){
+  /* 신 원장 차감 (3단계) — 과금 정본. 자유형 AI 호출만 이 함수에 도달한다.
+     템플릿 기반 백테스팅(인테이크/연구 스크립트 경로)은 이 함수를 부르지 않으므로 무제한 (질문 11 임시). */
+  if(typeof bcAiDebit==='function') bcAiDebit(reqId);
+  /* ↓ 구 creditBal 경로 — 표시 미러 전용, 5단계 비노출 정리 시 이 블록과 관련 UI 를 함께 제거 */
   var t=tfNFInit(), C=TFC.credit;
   var e=tfEnt();
   if(e.why!=='credit') return; /* 크레딧 소진형 상태에서만 차감 */
@@ -11284,6 +11367,10 @@ function tfRebateCommit(botId,fills,budget){
     var fee=budget*0.002; /* 기존 엔진 수수료율 재사용 */
     var amt=Math.round(fee*TFC.rebate.rate);
     t.rebates.push({fid:f.fid,botId:botId,amt:amt,at:f.at,sim:true});
+    if(t.uidLinked&&typeof bcVolumeCharge==='function'){ /* UID 등급: 거래량 비례 실시간 충전 (3단계) */
+      var bot=(t.strat||[]).filter(function(x){return String(x.at)===String(botId);})[0];
+      bcVolumeCharge(f.fid,(bot&&bot.ex)||(t.ob&&t.ob.ex)||'binance',(bot&&bot.mkt==='선물')?'futures':'spot',budget);
+    }
     sum+=amt;
   });
   if(sum>0&&t.notifPrefs.rebate) tfNotify('rebate','rb:'+botId,'수수료 적립 +'+tfWon(sum)+' (시뮬레이션)','거래 수수료의 10%가 적립됐어요. 적립 내역은 PLAN 정산 탭에서 확인할 수 있어요.','#/plan/rebates'); /* 수신 설정 반영 (codex NF P1) */
@@ -11573,6 +11660,8 @@ function tfNFLinkUid(cb){
   delay(900,function(){
     t.uidLinked=true;
     tfCreditGrant('uid',TFC.credit.uidGrant,'파트너 UID 연동이 확인됐어요. PRO 분석을 사용해보세요.');
+    if(typeof bcPromoCardUid==='function') bcPromoCardUid(); /* CARD 상태에서 UID 연동 시 프로모 (3단계) */
+    if(typeof bcAfterChange==='function') bcAfterChange('uid-link');
     toast('UID 연동 완료, PRO 크레딧이 지급됐어요');
     if(G.mode==='nfplan') tfPlanView('plan');
     else if(G.mode==='tfdash') tfDashView(); /* 배너 즉시 갱신 — 연동 CTA 잔존 방지 (codex NF P1) */
@@ -15235,6 +15324,7 @@ function authSyncUI(){
   var m=$('g-me-name'); if(m) m.textContent=S.user?S.user.name:'';
   var av=$('g-me-av'); if(av) av.textContent=(S.user&&S.user.name)?S.user.name.trim().charAt(0).toUpperCase():'';
   var s=$('g-side'); if(s) s.classList.toggle('authed',!!S.user);
+  if(S.user&&typeof bcEnsureWelcome==='function') bcEnsureWelcome(); /* 가입 즉시 웰컴 1회 (멱등, 3단계) */
   if(typeof tfNFBar==='function') tfNFBar(); /* nf: 크레딧/알림 클러스터 */
   document.querySelectorAll('[onclick="gProfileClick(event)"]').forEach(function(el){
     el.setAttribute('aria-label',S.user?(S.user.name||'프로필'):(typeof L==='function'?L('nav.login'):'로그인'));
