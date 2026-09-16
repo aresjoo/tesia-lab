@@ -3022,6 +3022,41 @@ body.tf-route #teth-help{bottom:88px}
   .cpp .cpp-chips .lb{font-size:12px;color:var(--gt3)}
   .cpp .cpp-foot{margin-top:18px;font-size:11.5px;color:rgba(255,255,255,.35)}
   @media (max-width:760px){ .cpp .cpp-grid{grid-template-columns:repeat(2,1fr)} .cpp .cpp-head{padding:16px} }
+  /* ── 카피 설정 (cps) ── */
+  .cps-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+  .cps-form{border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:20px;background:rgba(255,255,255,.02)}
+  .cps-modes{display:flex;gap:8px;margin-bottom:6px}
+  .cps-modes button{flex:1;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:none;color:var(--gt2);font-size:13.5px;cursor:pointer;font-family:inherit}
+  .cps-modes button.on{border-color:rgba(143,178,255,.55);background:rgba(143,178,255,.1);color:var(--gt);font-weight:600}
+  .cps-modenote{font-size:12px;color:var(--gt3);margin:0 0 18px;line-height:1.6}
+  .cps-fld{margin-bottom:18px}
+  .cps-fld label{display:block;font-size:12.5px;color:var(--gt2);margin-bottom:7px}
+  .cps-in{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:0 8px 0 14px;height:46px;background:rgba(0,0,0,.18)}
+  .cps-in:focus-within{border-color:rgba(143,178,255,.55)}
+  .cps-in input{flex:1;min-width:0;border:0;background:none;color:var(--gt);font-size:15px;outline:none;font-family:inherit}
+  .cps-in .un{font-size:12px;color:var(--gt3)}
+  .cps-in .mx{border:0;background:rgba(143,178,255,.14);color:#a9c4ff;font-size:11.5px;font-weight:600;border-radius:8px;padding:6px 10px;cursor:pointer;font-family:inherit}
+  .cps-bal{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--gt3);margin-top:7px}
+  .cps-bal .plus{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:none;color:var(--gt2);cursor:pointer;font-size:13px;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+  .cps-err{font-size:12px;color:#ee9a91;margin-top:7px;display:none}
+  .cps-fld.bad .cps-err{display:block}
+  .cps-fld.bad .cps-in{border-color:rgba(238,118,106,.6)}
+  .cps-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;color:var(--gt2)}
+  .cps-row b{color:var(--gt);font-weight:600}
+  .cps-adv{margin:14px 0 4px;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px 14px}
+  .cps-adv summary{cursor:pointer;font-size:13px;color:var(--gt2);padding:11px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  .cps-adv summary::-webkit-details-marker{display:none}
+  .cps-adv summary .sm{color:var(--gt3);font-size:12px}
+  .cps-adv .cps-row:last-child{border-bottom:0}
+  .cps-static{font-size:13px;color:var(--gt3)}
+  .cps-cta{width:100%;margin-top:18px;height:48px;border-radius:14px;border:0;background:#8fb2ff;color:#0c1120;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+  .cps-cta:disabled{opacity:.4;cursor:not-allowed}
+  .cps-side{border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:18px;background:rgba(255,255,255,.02);position:sticky;top:12px}
+  .cps-side .nk{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+  .cps-side .nk b{font-size:15px;color:var(--gt)}
+  .cps-side .bio{font-size:12px;color:var(--gt3);margin-bottom:12px;line-height:1.6}
+  .cps-side .cps-row{font-size:12.5px}
+  @media (max-width:900px){ .cps-wrap{grid-template-columns:1fr} .cps-side{position:static} }
   .tfbk-catdrop{display:inline-flex}
   .tfbk-drop{height:34px;border-radius:17px;padding:0 15px;border-width:1px;background:#000;min-width:132px}
   /* 카운터 소형: 21x32 r4 pad4 6, 글리프 20/700 lh24 */
@@ -10338,7 +10373,7 @@ function tfSS3Card(s){
     +'<div class="pr"><b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">검증 수익 '+(up?'+':'')+r.ret.toFixed(1)+'%</b><small>누적 백테스트 성과</small></div>'
     +'<div class="bt">'+(s.me
       ?'<button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>'
-      :'<button class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">따라하기</button><button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>')
+      :'<button class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피하기</button><button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>') /* 따라하기 = 카피 (cp 3단계) */
     +'</div></div>'
     +'<div class="lgo">'+tfSS3Eq(r.eq,528,260,{dates:true,tag:true})+'</div>'
     +'</div></div>';
@@ -10490,14 +10525,14 @@ function cpProfileView(ne,tab){
     +'<div class="cpp-meta num"><span>트레이딩 '+m.days+'일차</span><span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span><span>'+gEsc(s.asset)+' 주력</span><span class="num">마지막 거래 '+lastTr+'</span></div>'
     +'<div class="cpp-bio">'+gEsc(m.bio)+'</div></div>'
     +'<div class="cpp-acts">'
-    +'<button type="button" class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">카피하기</button>' /* 3단계에서 카피 설정 화면으로 교체 */
+    +'<button type="button" class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피하기</button>' /* 카피 설정 화면 (cp 3단계) */
     +'<button type="button" class="obtn" id="cpp-watch" onclick="tfSS3WatchTgl(\''+ne+'\');cpProfileView(\''+ne+'\',\''+tab+'\')">'+(watching?'알림 끄기':'알림받기')+'</button>'
     +'</div></div>'
     +'<div class="tfbk-filters cpp-tabs">'+TABS.map(function(t2){ return '<button type="button" class="fp'+(tab===t2[0]?' on':'')+'" aria-pressed="'+(tab===t2[0])+'" onclick="cpProfileGo(\''+ne+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</div>'
     +body
     +'<div class="cpp-chips"><span class="lb">이어서 물어보기</span>'
     +'<button type="button" class="obtn" onclick="tfSS3Ask(\''+ne+'\',\'all\')">이 트레이더의 위험 신호 분석시키기</button>' /* 제안 칩: 질문 유도 */
-    +'<button type="button" class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">카피 시작하기</button>' /* 액션 칩: 기능 실행 */
+    +'<button type="button" class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피 시작하기</button>' /* 액션 칩: 기능 실행 (cp 3단계) */
     +'</div>'
     +'<div class="cpp-foot">전 자산 USDT 표기, 시뮬레이션 데이터 기준. 통계는 시간 단위로 갱신돼요.</div>'
     +'</div>');
@@ -10564,7 +10599,7 @@ function cpEmptyTab(s,m,tab){
   if(tab==='pos') return '<div class="cpp-empty"><b>지금은 표시할 오픈 포지션이 없어요</b>'
     +'트레이더가 새로 진입하면 여기에 나타나고, 카피 중이라면 자동으로 함께 진입해요.'
     +'<span class="nx">카피 시작 전에는 오픈 포지션이 '+(cfg.DELAY_HOURS||1)+'시간 지연 공개돼요. 카피를 시작하면 실시간으로 따라갑니다.</span>'
-    +'<button type="button" class="wbtn" style="margin-top:16px" onclick="tfSS3Copy(\''+ne+'\')">카피 시작하기</button></div>';
+    +'<button type="button" class="wbtn" style="margin-top:16px" onclick="cpSetupGo(\''+ne+'\')">카피 시작하기</button></div>';
   if(tab==='cal') return '<div class="cpp-empty"><b>내 카피 손익 캘린더는 첫 청산 후에 채워져요</b>'
     +'카피를 시작하고 첫 거래가 청산되면 일별 손익이 달력으로 쌓여요.'
     +'<span class="nx">이 트레이더의 검증 구간 일별 손익은 전략 상세 캘린더에서 지금도 볼 수 있어요.</span>'
@@ -10575,6 +10610,155 @@ function cpEmptyTab(s,m,tab){
   return '<div class="cpp-empty"><b>카피하는 사람들 랭킹을 준비하고 있어요</b>'
     +'지금 '+m.copiers+'명이 이 트레이더를 카피하고 있어요. 투자금과 수익 기준 랭킹이 곧 여기에 표시돼요.'
     +'<span class="nx">카피를 시작하면 내 순위도 이 목록에서 확인할 수 있어요.</span></div>';
+}
+/* ── 카피 상태 (3단계): t.cp — 저장은 원시값, 표시는 파생 ── */
+function cpState(){
+  var t=tfS();
+  if(!t.cp) t.cp={v:1,spot:1000,copies:[]}; /* 데모 스팟 잔고 1000 USDT 시드 */
+  if(!Array.isArray(t.cp.copies)) t.cp.copies=[];
+  if(t.cp.spot==null) t.cp.spot=1000;
+  return t.cp;
+}
+function cpFind(id){ return cpState().copies.find(function(x){ return x.id===id; })||null; }
+var TF_CPS={mode:'ratio',pairs:null};
+/* 진입 게이트: 로그인 + 관망 차단 (신규 카피 시작은 AI 판단 수반) */
+function cpSetupGo(ne){
+  if(!S.user){ authOpen('signup'); return; }
+  if(typeof tfAiGate==='function'&&!tfAiGate()) return;
+  tfTrack('cp_setup_open',{ne:ne});
+  TF_CPS={mode:'ratio',pairs:null};
+  var r='#/share/copy/'+ne;
+  try{ if(location.hash.indexOf('#/share/copy/')===0) history.replaceState(null,'',location.pathname+location.search+r);
+       else history.pushState(null,'',location.pathname+location.search+r); }catch(e){}
+  cpSetupView(ne);
+}
+function cpSetupRoute(h){
+  var m=h.match(/^#\/share\/copy\/([^\/]+)$/);
+  if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
+  cpSetupView(m[1]);
+}
+function cpSetupView(ne){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
+  var s2=tfSSFind(nick);
+  if(!s2||s2.me){ toast('지금은 카피할 수 없는 트레이더예요'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('find'); return; }
+  tfSS3DlgClose(true);
+  TF_ONSHARE=true; TF_ONSTRAT=false; window.TF_ONNF=false;
+  G.cur=null; G.mode='tfcps'; G.tabs=[]; G.activeTab=null;
+  document.body.classList.remove('kb-open'); gComposer(false);
+  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
+  gChead('카피 설정','',null);
+  var m=cpMeta(nick), cp=cpState(), cfg=cpCfg();
+  var pf=cpPerf(s2,180);
+  var mainPair=CPP_PAIR[s2.asset]||s2.asset;
+  var pairs=TF_CPS.pairs||[mainPair];
+  var mode=TF_CPS.mode||'ratio';
+  var form= mode==='margin'
+    ?'<div class="cps-modenote">고정 마진: 트레이더의 비중과 무관하게 주문마다 정해둔 금액만큼만 따라가요.</div>'
+      +'<div class="cpp-empty" style="margin:6px 0 4px"><b>고정 마진 모드는 준비 중이에요</b>'
+      +'지금은 비율 따라가기로 시작할 수 있어요. 고정 마진이 열리면 알림으로 알려드릴게요.'
+      +'<button type="button" class="obtn" style="margin-top:14px" onclick="TF_CPS.mode=\'ratio\';cpSetupView(\''+ne+'\')">비율 따라가기로 설정하기</button></div>'
+    :'<div class="cps-modenote">비율 따라가기: 트레이더가 자기 자산의 몇 %를 쓰면, 내 카피 금액에서도 같은 비율만큼 따라 들어가요.</div>'
+      +'<div class="cps-fld" id="cps-amt-fld"><label for="cps-amt">카피 금액</label>'
+      +'<div class="cps-in"><input id="cps-amt" type="number" inputmode="decimal" min="'+(cfg.MIN_COPY_USDT||50)+'" placeholder="최소 '+(cfg.MIN_COPY_USDT||50)+'" oninput="cpFormSync()"><span class="un">USDT</span>'
+      +'<button type="button" class="mx" onclick="$(\'cps-amt\').value='+cp.spot+';cpFormSync()">최대</button></div>'
+      +'<div class="cps-bal">스팟 잔고 <b class="num" id="cps-spot">'+cpUsd(cp.spot,2)+'</b>'
+      +'<button type="button" class="plus" aria-label="스팟 충전" onclick="cpTopup(\''+ne+'\')">+</button><span>충전은 스팟 계좌에서 카피 계좌로 옮겨져요</span></div>'
+      +'<div class="cps-err" id="cps-amt-err"></div></div>'
+      +'<div class="cps-row"><span>따라갈 페어</span><b id="cps-pairs">'+gEsc(pairs[0])+(pairs.length>1?' 외 '+(pairs.length-1)+'개':'')+'</b>'
+      +'<button type="button" class="obtn" onclick="cpPairSheet(\''+ne+'\')">변경</button></div>'
+      +'<details class="cps-adv"><summary><span>고급 설정</span><span class="sm">트레이더 설정 그대로 따름</span></summary>'
+      +'<div class="cps-row"><span>마진 모드</span><span class="cps-static">교차, 트레이더 설정을 따라요</span></div>' /* 죽은 드롭다운 대신 정적 텍스트 (수정 지침) */
+      +'<div class="cps-row"><span>레버리지</span><span class="cps-static">트레이더 레버리지 따름</span></div>'
+      +'<div class="cps-row"><span title="Max entry slippage">체결가 차이 허용</span><span class="cps-static">시스템 기본</span></div>'
+      +'<div class="cps-row"><span>주문당 마진 상한</span><span class="cps-static num">95%</span></div>'
+      +'<div class="cps-row"><span>최대 포지션 금액</span><span class="cps-static num" id="cps-maxpos">카피 금액의 5배까지, 자동</span></div>' /* 무의미한 기본값 노출 금지 — 금액 기준 자동 스케일 */
+      +'</details>'
+      +'<button type="button" class="cps-cta" id="cps-cta" disabled onclick="cpStart(\''+ne+'\')">카피 시작</button>'
+      +'<div class="cpp-foot" style="margin-top:12px">시작 후에도 언제든 중지할 수 있어요. 수익이 나면 '+Math.round(m.share*100)+'%를 트레이더와 나눠요.</div>';
+  TF_RENDERING=true; document.body.classList.remove('tf-route');
+  gContent('<div class="tf-page tfbk ss3 cpp cps">'
+    +'<button type="button" class="ss3-back" onclick="cpProfileGo(\''+ne+'\')">← 트레이더 프로필</button>'
+    +'<div class="cps-wrap">'
+    +'<div class="cps-form">'
+    +'<div class="cps-modes" role="tablist"><button type="button" class="'+(mode==='ratio'?'on':'')+'" onclick="TF_CPS.mode=\'ratio\';cpSetupView(\''+ne+'\')">비율 따라가기</button>'
+    +'<button type="button" class="'+(mode==='margin'?'on':'')+'" onclick="TF_CPS.mode=\'margin\';cpSetupView(\''+ne+'\')">고정 마진</button></div>'
+    +form
+    +'</div>'
+    +'<aside class="cps-side">'
+    +'<div class="nk"><div class="cpp-ava" style="width:40px;height:40px;font-size:17px">'+gEsc(nick.slice(0,1))+'</div><div><b>'+gEsc(nick)+'</b><div class="cps-static num">트레이딩 '+m.days+'일차</div></div></div>'
+    +'<div class="bio">'+gEsc(m.bio)+'</div>'
+    +'<div class="cps-row"><span title="Profit share ratio">수익 분배</span><b class="num">'+Math.round(m.share*100)+'%</b></div>'
+    +'<div class="cps-row"><span>180일 수익률</span><b class="num" style="color:'+(pf.roi>=0?'#56c486':'#ee766a')+'">'+(pf.roi>=0?'+':'')+pf.roi.toFixed(2)+'%</b></div>'
+    +'<div class="cps-row"><span>180일 손익</span><b class="num">'+cpUsd(pf.pnl)+'</b></div>'
+    +'<div class="cps-row"><span>카피어 누적 수익</span><b class="num">'+cpUsd(pf.copiersPnl)+'</b></div>'
+    +'<div class="cps-row"><span title="AUM">운용 자산</span><b class="num">'+cpUsd(m.aum,0)+'</b></div>'
+    +cpAiHtml(cpAiNote('trust',{days:m.days,roi:s2.r.ret}))
+    +'</aside>'
+    +'</div>'
+    +'<div class="cpp-foot">전 자산 USDT 표기, 시뮬레이션 데이터 기준</div>'
+    +'</div>');
+  TF_RENDERING=false;
+  cpFormSync();
+  var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
+}
+function cpFormSync(){
+  var el=$('cps-amt'), cta=$('cps-cta'), fld=$('cps-amt-fld'), err=$('cps-amt-err');
+  if(!el||!cta) return true;
+  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value);
+  var msg='';
+  if(el.value!==''&&(!isFinite(v)||v<(cfg.MIN_COPY_USDT||50))) msg='최소 '+(cfg.MIN_COPY_USDT||50)+' USDT부터 시작할 수 있어요';
+  else if(isFinite(v)&&v>cp.spot) msg='스팟 잔고보다 커요. 충전(+)하거나 금액을 줄여주세요';
+  if(fld){ fld.classList.toggle('bad',!!msg); }
+  if(err){ err.textContent=msg; }
+  var ok=el.value!==''&&isFinite(v)&&v>=(cfg.MIN_COPY_USDT||50)&&v<=cp.spot;
+  cta.disabled=!ok;
+  var mp=$('cps-maxpos'); if(mp&&isFinite(v)&&v>0) mp.textContent=cpUsd(v*5,0)+'까지, 자동'; else if(mp) mp.textContent='카피 금액의 5배까지, 자동';
+  return ok;
+}
+/* 스팟 충전 — 데모 입금 (실서버: 입금 플로우 연결 지점) */
+function cpTopup(ne){
+  tfSS3Dlg('스팟 충전','<div class="ntc">체험용 스팟 잔고를 충전해요.<br>실서비스에서는 거래소 입금 플로우가 연결됩니다.</div>'
+    +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" onclick="cpState().spot+=1000;tfSaveNow();tfSS3DlgClose();toast(\'1,000 USDT를 충전했어요\');cpSetupView(\''+ne+'\')">+1,000 USDT 충전</button></div>');
+}
+function cpPairSheet(ne){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
+  var s2=tfSSFind(nick); if(!s2) return;
+  var mainPair=CPP_PAIR[s2.asset]||s2.asset;
+  var all=[mainPair,'ETH/USDT','SOL/USDT'].filter(function(x,i,a){ return a.indexOf(x)===i; });
+  var cur=TF_CPS.pairs||[mainPair];
+  var amtNow=($('cps-amt')||{}).value||'';
+  tfSS3Dlg('따라갈 페어 선택','<div class="ntc">트레이더가 이 페어에서 거래할 때만 따라가요.</div>'
+    +all.map(function(p2,i){ return '<label style="display:flex;gap:10px;align-items:center;padding:10px 2px;font-size:13.5px;color:var(--gt)"><input type="checkbox" id="cps-p'+i+'" '+(cur.indexOf(p2)>=0?'checked':'')+' data-pair="'+gEsc(p2)+'">'+gEsc(p2)+(p2===mainPair?' <span style="color:#848a94;font-size:12px">주력</span>':'')+'</label>'; }).join('')
+    +'<div class="acts3" style="margin-top:14px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" onclick="cpPairApply(\''+ne+'\',\''+gEsc(amtNow)+'\')">적용</button></div>');
+}
+function cpPairApply(ne,amtKeep){
+  var sel=[].map.call(document.querySelectorAll('#ss3-dlgw input[type=checkbox]'),function(x){ return x.checked?x.getAttribute('data-pair'):null; }).filter(Boolean);
+  if(!sel.length){ toast('최소 1개 페어는 선택해야 해요'); return; }
+  TF_CPS.pairs=sel;
+  tfSS3DlgClose();
+  cpSetupView(ne);
+  var el=$('cps-amt'); if(el&&amtKeep){ el.value=amtKeep; cpFormSync(); } /* 입력 보존 */
+}
+function cpStart(ne){
+  if(!cpFormSync()){ toast('입력을 확인해주세요'); return; }
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
+  var s2=tfSSFind(nick); if(!s2||s2.me) return;
+  var amt=parseFloat($('cps-amt').value);
+  var cp=cpState();
+  var mainPair=CPP_PAIR[s2.asset]||s2.asset;
+  var c2={id:'cp'+Date.now(), nick:nick, mode:'ratio', amount:amt, pairs:(TF_CPS.pairs||[mainPair]).slice(),
+    adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5},
+    at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt}]}; /* 입출금은 append-only */
+  cp.spot=Math.max(0,cp.spot-amt);
+  cp.copies.push(c2);
+  tfSaveNow();
+  tfTrack('cp_start',{nick:nick,amt:amt});
+  toast(nick+' 님 카피를 시작했어요. 다음 진입부터 자동으로 따라갑니다');
+  TF_ONSHARE=false;
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  tfShareHub('follow');
 }
 /* ── 상세: 딥링크 라우트 #/share/s/<ne>[/<pd>] ── */
 var TF_ONSHARE=false;
@@ -11081,13 +11265,15 @@ function tfSS3WatchSec(){
 }
 function tfSS3FollowTab(){
   var t=tfSSState();
+  var cpN=(t.cp&&t.cp.copies?t.cp.copies.filter(function(x){return x.status==='active';}).length:0);
+  var cpLine=cpN?'<div class="cpp-ai"><span class="sp">✦</span><span>실시간 카피 '+cpN+'건이 진행 중이에요. 카피 대시보드가 곧 이 탭에 표시돼요.</span></div>':'';
   if(!t.follows.length)
-    return '<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 복제해보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>'+tfSS3WatchSec();
+    return cpLine+'<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 복제해보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>'+tfSS3WatchSec();
   var act=0,arc=0;
   t.follows.forEach(function(f){ var st=tfSSFollowStatus(f); if(st.live) act++; else arc++; });
   var fills=(tfS().fills||[]);
   var myPnl=fills.length?fills.reduce(function(a,x){return a+x.pnl;},0)*100:null;
-  return '<div class="ss3-tiles num">'
+  return cpLine+'<div class="ss3-tiles num">'
     +'<div class="tl"><small>복제한 전략</small><b>'+t.follows.length+'개</b></div>'
     +'<div class="tl"><small>진행 중</small><b>'+act+'개</b></div>'
     +'<div class="tl"><small>보관됨</small><b>'+arc+'개</b></div></div>'
@@ -13907,6 +14093,7 @@ function tfRoute(){
   TF_ONNF=false; /* 여기부터는 share/strategy 계열 — nf 플래그가 남아 뒤로가기 폴백을 가로채지 않게 */
   /* 전략 공유 상세 딥링크 (#/share/s/<닉>[/기간]) — 퍼널 라우트(#/strategy/*)와 네임스페이스 분리 */
   if(h.indexOf('#/share/t/')===0){ TF_ONNF=false; cpProfileRoute(h); return; } /* 카피트레이딩: 트레이더 프로필 (cp 2단계) */
+  if(h.indexOf('#/share/copy/')===0){ TF_ONNF=false; cpSetupRoute(h); return; } /* 카피 설정 (cp 3단계) */
   if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }
   if(TF_ONSHARE&&h.indexOf('#/strategy/')!==0){ TF_ONSHARE=false; tfShareHub(tfSSState().ss.tab||'find'); return; } /* 상세에서 뒤로가기 → 허브 */
   TF_ONSHARE=false;
