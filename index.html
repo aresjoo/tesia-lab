@@ -3189,6 +3189,7 @@ body.tf-route #teth-help{bottom:88px}
 .bk2-empty{text-align:center;color:var(--gt3);font-size:14px;padding:60px 0}
 .bk2-note{font-size:12px;color:var(--gt3);text-align:center;margin-top:28px}
 .bk2-asof{font-size:11.5px;color:rgba(255,255,255,.38);margin:10px 2px 0} /* T7: 수수료 스냅샷 날짜 각주 */
+.bk2-meta .rt .rtsrc{font-size:10px;color:var(--gt3);margin-left:5px;letter-spacing:0} /* T7: 평점 출처 병기 */
 /* T8: 카드형 추가질문 (gcl) */
 .gcl-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--gt3);padding:6px 12px;border:1px solid var(--gl);border-radius:999px;margin-bottom:10px}
 .gcl-badge .dot{width:6px;height:6px;border-radius:50%;background:#8fb2ff}
@@ -13984,28 +13985,86 @@ function tfNFRoute(h){
   return false;
 }
 /* ── §9.5 지원 거래소: 목록 + 상세 (TradingView Brokers 구조의 TETH 변형, 수치는 데모) ── */
+/* T6/T7 전면 개편 (2026.09): 연결 지원 6종은 공식 문서 검증 수치(VIP0), 지원 예정 15종.
+   수치 미확인은 null 로 두고 UI 에서 — 처리 (추측 금지). 조사 원본: scratchpad/research/cex-a,b + upcoming.json */
 var TF_BROKERS=[
-  {id:'binance',name:'Binance',tag:'거래소',assets:'암호화폐',conn:true,rating:4.2,traders:'1.2천',fw0:830,lev:'현물 1:1',col:'#F3BA2F',fg:'#181818',
-   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료예요. 가입 즉시 자동 연결됩니다.',
-   site:'binance.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.10%',tk:'0.10%'},
-   about:'글로벌 최대 거래량의 암호화폐 거래소예요. 현물, 선물과 폭넓은 알트코인을 지원하고, 유동성이 깊어 체결이 안정적입니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
-  {id:'okx',name:'OKX',tag:'거래소',assets:'암호화폐',conn:true,rating:4.1,traders:'640',fw0:410,lev:'현물 1:1',col:'#0a0a0c',fg:'#fff',
-   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴로 가입하면 이용료가 무료예요. API 연결 시 Passphrase까지 함께 준비해주세요.',
-   site:'okx.com',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.08%',tk:'0.10%'},
-   about:'파생상품과 웹3 지갑까지 아우르는 종합 거래소예요. API 인증에 Passphrase가 필요한 점이 다른 거래소와 달라요. TETH 연결은 조회와 거래 권한만 사용합니다.'},
-  {id:'woox',name:'WOO X',tag:'거래소',assets:'암호화폐',conn:true,rating:4.0,traders:'220',fw0:150,lev:'현물 1:1',col:'#0a0a0a',fg:'#fff',
-   promo:'이용 시 영원히 TETH 이용료 ₩0',promoSub:'파트너 리퍼럴 가입 시 이용료가 무료예요.',
-   site:'woox.io',fees:{dep:'없음 (암호화폐 입금)',wd:'네트워크 수수료',ina:'없음',mk:'0.02%',tk:'0.05%'},
-   about:'낮은 수수료와 깊은 유동성을 내세우는 거래소예요. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.'},
-  {id:'upbit',name:'업비트',tag:'거래소',assets:'암호화폐 (KRW)',conn:false,rating:4.3,traders:'준비 중',fw0:520,lev:'현물 1:1',col:'#093687',fg:'#fff',site:'upbit.com',
-   about:'국내 최대 원화 마켓 거래소예요. TETH 연결은 준비 중입니다.'},
-  {id:'bybit',name:'Bybit',tag:'거래소',assets:'암호화폐',conn:false,rating:4.0,traders:'준비 중',fw0:280,lev:'현물 1:1',col:'#15192a',fg:'#f7a600',site:'bybit.com',
-   about:'파생상품 중심의 글로벌 거래소예요. TETH 연결은 준비 중입니다.'},
-  {id:'kiwoom',name:'키움증권',tag:'증권사',assets:'국내, 미국 주식',conn:false,rating:3.9,traders:'준비 중',fw0:190,lev:'현금 1:1',col:'#5b2d86',fg:'#fff',site:'kiwoom.com',
+  {id:"binance",name:"Binance",ord:1,tag:'거래소',assets:'암호화폐',conn:true,rating:4.7,ratingSrc:"App Store 영국 기준, 약 12만 개 평가",traders:"1.2천",fw0:830,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 150x"},col:"#F3BA2F",fg:"#181818",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"binance.com",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.10%","tk":"0.10%","fmk":"0.02%","ftk":"0.05%"},
+   about:"글로벌 최대 거래량의 암호화폐 거래소예요. 현물, 선물과 폭넓은 알트코인을 지원하고, 유동성이 깊어 체결이 안정적입니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"okx",name:"OKX",ord:2,tag:'거래소',assets:'암호화폐',conn:true,rating:4.6,ratingSrc:"App Store 미국 기준, 약 2.3만 개 평가",traders:"640",fw0:410,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 100x"},col:"#0a0a0c",fg:"#fff",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"okx.com",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.10%","tk":"0.20%","fmk":"0.02%","ftk":"0.05%"},feeNote:"현물 수수료는 지역에 따라 다를 수 있다고 공식 페이지가 고지해요. 표기값은 싱가포르 일반 등급 기준.",
+   about:"파생상품과 웹3 지갑까지 아우르는 종합 거래소예요. API 인증에 Passphrase가 필요한 점이 다른 거래소와 달라요. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"bybit",name:"Bybit",ord:3,tag:'거래소',assets:'암호화폐',conn:true,rating:4.7,ratingSrc:"App Store 미국 기준",traders:"410",fw0:280,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 150x"},col:"#15192a",fg:"#f7a600",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"bybit.com",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.10%","tk":"0.10%","fmk":"0.02%","ftk":"0.055%"},
+   about:"파생상품 중심의 글로벌 거래소예요. 현물과 무기한 선물, 옵션을 v5 통합 API로 제공하고 조건부 주문 기능이 폭넓습니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"bitget",name:"Bitget",ord:4,tag:'거래소',assets:'암호화폐',conn:true,rating:4.6,ratingSrc:"App Store 미국 기준, 약 5.5천 개 평가",traders:"310",fw0:240,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 125x"},col:"#00F0FF",fg:"#00251f",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"bitget.com",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.10%","tk":"0.10%","fmk":"0.02%","ftk":"0.06%"},
+   about:"2018년 출범해 세이셸 등록 법인이 운영하는 글로벌 거래소예요. 카피 트레이딩 기능으로 특히 잘 알려져 있고, 현물과 USDT 무기한 선물을 폭넓게 지원합니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"mexc",name:"MEXC",ord:5,tag:'거래소',assets:'암호화폐',conn:true,rating:4.7,ratingSrc:"App Store 미국 기준, 약 8.3천 개 평가",traders:"270",fw0:200,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 500x"},col:"#00b897",fg:"#04150f",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"mexc.com",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.0000%","tk":"0.0500%","fmk":"0.000%","ftk":"0.020%"},feeNote:"선물 요율은 웹과 앱의 일반 주문 기준이에요. API 주문은 별도 요율이 적용된다고 공식 고지돼 있어요.",
+   about:"2018년 설립된 글로벌 거래소로, 낮은 수수료와 넓은 알트코인 상장 폭으로 알려져 있어요. BTC와 ETH 무기한 선물에서는 최대 500배 레버리지를 제공합니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"woox",name:"WOO X",ord:6,tag:'거래소',assets:'암호화폐',conn:true,rating:null,ratingSrc:null,traders:"220",fw0:150,asof:'2026.09',
+   lev2:{spot:'1:1',fut:"최대 100x"},col:"#0a0a0a",fg:"#fff",
+   promo:'이용 시 영원히 TETH 이용료 ₩0',site:"woox.io",fees:{"dep":"없음 (암호화폐 입금)","wd":"네트워크 수수료","ina":"없음","mk":"0.08%","tk":"0.10%","fmk":"0.00%","ftk":null},feeNote:"선물 Taker 요율은 2026년 5월 개편 뒤 공식 공개 표가 없어 미표기예요.",
+   about:"낮은 수수료와 깊은 유동성을 내세우는 거래소예요. 리드 트레이더를 복제하는 소셜 트레이딩도 함께 제공합니다. TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"upbit",name:"업비트",ord:7,tag:"거래소",assets:"암호화폐 현물 (원화 마켓)",assetsList:["암호화폐 현물 (원화 마켓)","암호화폐 현물 (BTC, USDT 마켓)","스테이킹"],conn:false,rating:null,traders:'준비 중',fw0:520,col:"#093687",fg:"#fff",site:"upbit.com",
+   about:"업비트는 두나무가 2017년에 출시한 국내 최대 규모의 디지털 자산 거래소예요. 원화 마켓을 중심으로 BTC, USDT 마켓과 스테이킹 서비스를 함께 제공합니다. 케이뱅크 실명계좌 연동과 자체 보안 인증 체계로 국내 투자자에게 가장 익숙한 거래 환경으로 꼽혀요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"coinbase",name:"Coinbase",ord:8,tag:"거래소",assets:"암호화폐 현물",assetsList:["암호화폐 현물","암호화폐 파생상품 (일부 지역)","스테이킹"],conn:false,rating:null,traders:'준비 중',fw0:490,col:"#0052FF",fg:"#fff",site:"coinbase.com",
+   about:"Coinbase는 2012년 설립된 미국 최대 규모의 암호화폐 거래소예요. 2021년 나스닥에 상장했으며 규제 준수를 중시하는 운영으로 기관과 개인 투자자 모두에게 널리 쓰입니다. 현물 거래 외에 스테이킹, 커스터디, 일부 지역의 파생상품까지 폭넓게 제공해요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"kis",name:"한국투자증권",ord:9,tag:"증권사",assets:"국내 주식",assetsList:["국내 주식","해외 주식","ETF","채권","펀드","연금, ISA"],conn:false,rating:null,traders:'준비 중',fw0:460,col:"#5F4B3C",fg:"#fff",site:"koreainvestment.com",
+   about:"한국투자증권은 1974년 설립된 동원증권을 모태로 하는 한국투자금융지주 계열의 종합 증권사예요. 국내 주식과 해외 주식은 물론 채권, 펀드, 연금까지 아우르는 풀서비스 라인업을 갖추고 있습니다. 자기자본 기준 국내 최상위권 증권사로 IB와 리테일 양쪽에서 강한 입지를 보여줘요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"robinhood",name:"Robinhood",ord:10,tag:"브로커",assets:"미국 주식",assetsList:["미국 주식","ETF","옵션","암호화폐","선물"],conn:false,rating:null,traders:'준비 중',fw0:430,col:"#00C805",fg:"#fff",site:"robinhood.com",
+   about:"Robinhood는 2013년 설립되어 수수료 없는 주식 거래를 대중화한 미국의 모바일 브로커예요. 미국 주식과 ETF, 옵션에 더해 암호화폐와 선물까지 지원 범위를 넓혀 왔습니다. 간결한 앱 경험으로 젊은 개인 투자자층에서 특히 많이 쓰여요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"ibkr",name:"Interactive Brokers",ord:11,tag:"브로커",assets:"글로벌 주식",assetsList:["글로벌 주식","ETF","옵션","선물","외환","채권","펀드"],conn:false,rating:null,traders:'준비 중',fw0:400,col:"#D81222",fg:"#fff",site:"interactivebrokers.com",
+   about:"Interactive Brokers는 1978년 토머스 피터피가 세운 글로벌 온라인 브로커예요. 전 세계 다수의 거래소에 하나의 계좌로 접근할 수 있고 주식, 옵션, 선물, 외환, 채권까지 폭넓은 자산군을 지원합니다. 낮은 수수료와 전문가급 트레이딩 도구로 액티브 트레이더와 기관에서 널리 쓰여요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"schwab",name:"Charles Schwab",ord:12,tag:"증권사",assets:"미국 주식",assetsList:["미국 주식","ETF","옵션","선물","채권","뮤추얼펀드"],conn:false,rating:null,traders:'준비 중',fw0:370,col:"#00A0DF",fg:"#fff",site:"schwab.com",
+   about:"Charles Schwab은 1971년 설립된 미국의 대형 종합 증권사예요. 할인 브로커리지의 개척자로 꼽히며 TD Ameritrade 인수 이후 thinkorswim 등 강력한 트레이딩 플랫폼도 함께 제공합니다. 주식과 ETF부터 채권, 뮤추얼펀드, 자산관리 서비스까지 폭넓게 다뤄요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"fidelity",name:"Fidelity",ord:13,tag:"증권사",assets:"미국 주식",assetsList:["미국 주식","ETF","옵션","채권","뮤추얼펀드","암호화폐 (일부)"],conn:false,rating:null,traders:'준비 중',fw0:340,col:"#64A70B",fg:"#fff",site:"fidelity.com",
+   about:"Fidelity는 1946년 설립된 미국의 대표적인 자산운용사이자 리테일 증권사예요. 뮤추얼펀드와 퇴직연금 시장에서 오랜 강자로, 개인 투자자 대상 브로커리지에서도 최대 규모급 고객 기반을 갖고 있습니다. 주식과 ETF, 채권 외에 비트코인 등 일부 암호화폐 거래도 지원해요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"etrade",name:"E*TRADE",ord:14,tag:"증권사",assets:"미국 주식",assetsList:["미국 주식","ETF","옵션","선물","채권","뮤추얼펀드"],conn:false,rating:null,traders:'준비 중',fw0:310,col:"#6633CC",fg:"#fff",site:"etrade.com",
+   about:"E*TRADE는 1982년 출발한 온라인 주식 거래의 선구자격 증권사예요. 2020년 모건스탠리에 인수되어 현재는 E*TRADE from Morgan Stanley로 서비스되고 있습니다. 미국 주식과 ETF, 옵션, 선물까지 지원하며 Power E*TRADE 플랫폼이 트레이더들에게 잘 알려져 있어요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"webull",name:"Webull",ord:15,tag:"브로커",assets:"미국 주식",assetsList:["미국 주식","ETF","옵션","선물"],conn:false,rating:null,traders:'준비 중',fw0:280,col:"#007CFF",fg:"#fff",site:"webull.com",
+   about:"Webull은 2017년 설립된 모바일 중심의 미국 브로커 플랫폼이에요. 수수료 없는 주식과 ETF, 옵션 거래에 더해 상세한 차트와 시장 데이터를 무료로 제공하는 것이 강점입니다. 미국 외에도 여러 국가에서 현지 법인을 통해 서비스를 운영하고 있어요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"etoro",name:"eToro",ord:16,tag:"브로커",assets:"글로벌 주식",assetsList:["글로벌 주식","ETF","암호화폐","CFD (지역별)"],conn:false,rating:null,traders:'준비 중',fw0:250,col:"#13C636",fg:"#fff",site:"etoro.com",
+   about:"eToro는 2007년 이스라엘에서 설립된 글로벌 소셜 트레이딩 플랫폼이에요. 다른 투자자의 포트폴리오를 따라 투자하는 카피 트레이딩 기능으로 잘 알려져 있습니다. 주식과 ETF, 암호화폐를 지원하며 지역에 따라 CFD 상품도 제공해요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"saxo",name:"Saxo Bank",ord:17,tag:"브로커",assets:"글로벌 주식",assetsList:["글로벌 주식","ETF","옵션","선물","외환","채권","CFD"],conn:false,rating:null,traders:'준비 중',fw0:220,col:"#14143C",fg:"#fff",site:"home.saxo",
+   about:"Saxo Bank는 1992년 덴마크에서 설립된 온라인 트레이딩과 투자 전문 은행이에요. 외환 거래에서 출발해 지금은 주식, ETF, 옵션, 선물, 채권까지 아우르는 멀티에셋 플랫폼을 제공합니다. SaxoTraderGO 등 자체 플랫폼과 기관 대상 화이트라벨 사업으로도 알려져 있어요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"ig",name:"IG",ord:18,tag:"브로커",assets:"CFD",assetsList:["CFD","외환","지수 파생","주식 (일부 지역)","스프레드 베팅 (영국)"],conn:false,rating:null,traders:'준비 중',fw0:190,col:"#E40613",fg:"#fff",site:"ig.com",
+   about:"IG는 1974년 영국 런던에서 설립된 파생상품 트레이딩의 선구자예요. CFD와 스프레드 베팅 분야에서 세계 최대급 사업자로 꼽히며 런던 증시에 상장된 IG Group이 운영합니다. 외환과 지수, 원자재 등 폭넓은 기초자산을 다루고 일부 지역에서는 현물 주식 거래도 지원해요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"moomoo",name:"moomoo",ord:19,tag:"브로커",assets:"미국 주식",assetsList:["미국 주식","홍콩 주식","ETF","옵션","선물 (일부 지역)"],conn:false,rating:null,traders:'준비 중',fw0:160,col:"#FF6900",fg:"#fff",site:"moomoo.com",
+   about:"moomoo는 나스닥 상장사인 Futu Holdings 계열의 글로벌 트레이딩 플랫폼으로 2018년 미국에서 서비스를 시작했어요. 미국 주식과 홍콩 주식, ETF, 옵션을 지원하며 기관급 시세 데이터와 분석 도구를 앱에서 무료에 가깝게 제공하는 것이 특징입니다. 미국, 싱가포르, 일본, 호주 등 여러 시장에서 운영되고 있어요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:"tiger",name:"Tiger Brokers",ord:20,tag:"브로커",assets:"미국 주식",assetsList:["미국 주식","홍콩 주식","싱가포르 주식","ETF","옵션","선물"],conn:false,rating:null,traders:'준비 중',fw0:130,col:"#FF7300",fg:"#fff",site:"itiger.com",
+   about:"Tiger Brokers는 2014년 설립된 UP Fintech Holding이 운영하는 온라인 브로커예요. 나스닥 상장사이며 미국, 홍콩, 싱가포르 등 여러 시장의 주식과 ETF, 옵션, 선물 거래를 하나의 앱에서 지원합니다. 중화권과 동남아시아 투자자 기반이 특히 두터운 것으로 알려져 있어요. TETH 연결은 준비 중이며, 연결이 열리면 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요."},
+  {id:'kiwoom',name:'키움증권',ord:21,tag:'증권사',assets:'국내, 미국 주식',conn:false,rating:null,traders:'준비 중',fw0:190,lev:'현금 1:1',col:'#5b2d86',fg:'#fff',site:'kiwoom.com',
    about:'국내 개인 투자자 점유율 1위 증권사예요. 주식 전략 연결은 준비 중입니다.'}
 ];
 /* 공식 소스 실조사 데이터 (bitget/bk-research.json, 2026-09-13 조사) — 'unknown' 항목은 UI에서 행 생략 (추측 금지 원칙) */
 var TF_BK_INFO={
+  bitget:{founded:'2018',hq:'세이셸 (Bitget Limited)',communityUrl:'https://x.com/bitgetglobal',community:'@bitgetglobal',
+    assetsList:['암호화폐 현물','USDT 무기한 선물','카피 트레이딩'],rvN:21,traderN:310,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:'unknown',trailingStop:'unknown',oco:'unknown',postOnly:'unknown',reduceOnly:'unknown',demoAccount:'unknown',publicApi:true,level2:true}},
+  mexc:{founded:'2018',hq:'세이셸 빅토리아',communityUrl:'https://x.com/MEXC_Official',community:'@MEXC_Official',
+    assetsList:['암호화폐 현물','USDT 무기한 선물'],rvN:17,traderN:270,
+    caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:'unknown',trailingStop:'unknown',oco:'unknown',postOnly:'unknown',reduceOnly:'unknown',demoAccount:'unknown',publicApi:true,level2:true}},
+  upbit:{founded:"2017",hq:"대한민국 서울"},
+  coinbase:{founded:"2012",hq:"미국 (원격 우선 체제)"},
+  kis:{founded:"1974",hq:"대한민국 서울"},
+  robinhood:{founded:"2013",hq:"미국 캘리포니아"},
+  ibkr:{founded:"1978",hq:"미국 코네티컷"},
+  schwab:{founded:"1971",hq:"미국 텍사스"},
+  fidelity:{founded:"1946",hq:"미국 매사추세츠"},
+  etrade:{founded:"1982",hq:"미국 버지니아"},
+  webull:{founded:"2017",hq:"미국 플로리다"},
+  etoro:{founded:"2007",hq:"이스라엘"},
+  saxo:{founded:"1992",hq:"덴마크 코펜하겐"},
+  ig:{founded:"1974",hq:"영국 런던"},
+  moomoo:{founded:"2018",hq:"미국 뉴저지"},
+  tiger:{founded:"2014",hq:"중국 베이징 (국제 사업 거점 싱가포르)"},
   binance:{founded:'2017',hq:'글로벌 (ADGM 규제 법인)',docsUrl:'https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints',
     community:'Binance Square',communityUrl:'https://www.binance.com/en/square',
     assetsList:['암호화폐 현물','USDⓈ-M 선물, 무기한'],rvN:44,traderN:1200,
@@ -14020,7 +14079,7 @@ var TF_BK_INFO={
     about:'2017년 설립된 암호화폐 거래소로, 100개국 이상 수백만 사용자에게 서비스한다고 소개해요. 현물, 마진, 만기/무기한 선물, 옵션 거래와 DeFi, 렌딩 같은 부가 금융 서비스를 제공하고, 2022년 OKEx에서 OKX로 리브랜딩했습니다.',
     faq:[{q:'데모 트레이딩을 API로도 쓸 수 있나요?',a:'네. 공식 v5 API 문서에 데모 트레이딩 지원이 명시되어 있어요. 요청 헤더에 x-simulated-trading: 1을 추가해 사용합니다.'},
       {q:'어떤 주문 유형을 지원하나요?',a:'지정가, 시장가, post only, FOK, IOC 기본 주문에 더해 트리거 주문, TP/SL, 트레일링 스탑, 아이스버그, TWAP 같은 알고 주문을 v5 API에서 지원해요.'}]},
-  woox:{founded:'2021',docsUrl:'https://docs.woox.io/',
+  woox:{founded:'2021 (플랫폼 출시)',hq:'WOOTECH Limited Corp. 운영 (공식 약관 기준)',docsUrl:'https://docs.woox.io/',
     community:'@_WOO_X',communityUrl:'https://x.com/_WOO_X',
     assetsList:['암호화폐 현물','무기한 선물','소셜 트레이딩'],rvN:23,traderN:220,
     caps:{marketOrder:true,limitOrder:true,stopOrder:true,stopLimitOrder:true,trailingStop:true,oco:true,postOnly:true,reduceOnly:true,demoAccount:true,publicApi:true,level2:true},
@@ -14270,7 +14329,7 @@ function tfBrokersView(){
         +(connected?'<span class="bk2-bdg ok">'+TFBK2_CK+' 연결됨</span>':'<span class="bk2-bdg '+(b.conn?'ok':'soon')+'">'+(b.conn?'연결 지원':'지원 예정')+'</span>')+'</div>'
         +'<div class="as">'+gEsc((b.assetsList||[b.assets]).join(', '))+'</div>'
         +'<div class="bk2-meta">'
-        +'<span class="rt"><b>'+b.rating.toFixed(1)+'</b>'+tfBk2Stars(b.rating)+'</span>'
+        +(b.rating!=null?'<span class="rt" title="'+gEsc(b.ratingSrc||'앱스토어 공개 평점 기준')+'"><b>'+b.rating.toFixed(1)+'</b>'+tfBk2Stars(b.rating)+'<small class="rtsrc">App Store</small></span>':'')
         +'<span class="m"><b>'+((b.rvN||0)+((t.bkRev||{})[b.id]?1:0))+'</b>리뷰</span>'
         +(b.conn?'<span class="m"><b>'+gEsc(String(b.traders))+'</b>연결 계정</span>':'')
         +'</div>'
@@ -14337,7 +14396,7 @@ function tfBrokerView(id,tab){
     +'<div class="hi">'
     +'<div class="nmrow"><span class="nm">'+gEsc(b.name)+'</span><span class="bk2-bdg tag">'+gEsc(b.tag)+'</span>'
     +(connected?'<span class="bk2-bdg ok">'+TFBK2_CK+' 연결됨</span>':(b.conn?'':'<span class="bk2-bdg soon">지원 예정</span>'))+'</div>'
-    +'<div class="rrow"><button type="button" class="bk2-rc" title="평점 분포 보기" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg width="13" height="12" viewBox="0 0 16 15" fill="currentColor" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>'
+    +(b.rating==null?'':'<div class="rrow"><button type="button" class="bk2-rc" title="'+gEsc(b.ratingSrc||'앱스토어 공개 평점 기준')+'" onclick="tfBkTab(\''+b.id+'\',\'reviews\')"><svg width="13" height="12" viewBox="0 0 16 15" fill="currentColor" aria-hidden="true"><path d="M8 .8l2 4.6 5 .5-3.8 3.3 1.1 4.9L8 11.5 3.7 14l1.1-4.9L1 5.9l5-.5z"/></svg>'+b.rating.toFixed(1)+'</button></div>')
     +'<div class="bk2-st">'
     +'<span><small>평가</small><b>'+(rv.length+(mine?1:0))+'</b></span>'
     +'<span><small>연결 계정</small><b>'+gEsc(String(b.traders))+'</b></span>'
@@ -14378,7 +14437,7 @@ function tfBrokerView(id,tab){
       +(b.fees&&(b.fees.fmk||b.fees.ftk)?'<div><small>선물 Maker / Taker</small><b>'+gEsc(b.fees.fmk||'—')+' / '+gEsc(b.fees.ftk||'—')+'</b></div>'
         :(b.lev2&&b.lev2.fut?'<div><small>선물 Maker / Taker</small><b>—</b></div>':''))
       +'</div>'
-      +'<div class="bk2-asof">수수료와 레버리지는 기본 등급(VIP0) 공식 문서 기준, '+gEsc(b.asof||'2026.09')+' 기준 스냅샷이에요.</div>'
+      +'<div class="bk2-asof">'+(b.feeNote?gEsc(b.feeNote)+' ':'')+'수수료와 레버리지는 기본 등급(VIP0) 공식 문서 기준, '+gEsc(b.asof||'2026.09')+' 기준 스냅샷이에요.</div>'
       +'<div class="bk2-sh">'+gEsc(b.name)+'에 대하여</div>'
       +'<div class="bk2-about"><div class="mg">'
       +'<div><small>설립</small><b>'+gEsc(info.founded||'-')+'</b></div>'
@@ -14387,7 +14446,7 @@ function tfBrokerView(id,tab){
       +'<div><small>웹사이트</small><a href="https://'+gEsc(b.site)+'" target="_blank" rel="noopener noreferrer">'+gEsc(b.site)+' ↗</a></div>'
       +'<div><small>커뮤니티</small>'+(info.community?'<a href="'+gEsc(info.communityUrl||('https://x.com/'+String(info.community).replace('@','')))+'" target="_blank" rel="noopener noreferrer">'+gEsc(info.community)+' ↗</a>':'<b>-</b>')+'</div>'
       +'</div>'
-      +'<p>'+gEsc(info.about||b.about)+' TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요. 연결 후에도 설정에서 언제든 끊을 수 있습니다.</p></div>'
+      +(function(){ var ab=info.about||b.about||''; return '<p>'+gEsc(ab)+(ab.indexOf('출금 권한')>=0?'':' TETH 연결은 조회와 거래 권한만 사용하고 출금 권한은 요구하지 않아요.')+' 연결 후에도 설정에서 언제든 끊을 수 있습니다.</p></div>'; })()
       +'<div class="bk2-sh">도구 및 기능</div>'
       +tfBk2Feat(b,info)
       +'<div class="bk2-sh">자주 묻는 질문</div>'
