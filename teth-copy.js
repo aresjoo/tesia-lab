@@ -59,6 +59,8 @@ window.TFC = {
       woox:    { spot: 0.00050, futures: 0.00070 }
     },
     GRACE_HOURS: 24,                /* 경고 후 관망 전환 유예 */
+    CARD_PLAN_PRICE_USD: 49,        /* CARD 월 플랜가 (값 미확정) — 청구액 = 플랜가 x (1-상쇄율), 하한 0 */
+    DUNNING_RETRY_MAX: 3,           /* 결제 실패 재시도 상한 — 초과 시 관망 (성역 유지) */
     DISCOUNT_RESCUE: 0.90,          /* 임계점 카드 등록 할인 — 반복 수령 가능, 수령 이력 기록 (질문 8: 임시 다음 1회분) */
     PROMO_AI_CREDIT_USD: 100        /* CARD 유저 UID 연동 프로모 — 문구 고정 "AI 이용 크레딧 $100" */
   },
