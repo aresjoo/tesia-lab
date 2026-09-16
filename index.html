@@ -3057,6 +3057,28 @@ body.tf-route #teth-help{bottom:88px}
   .cps-side .bio{font-size:12px;color:var(--gt3);margin-bottom:12px;line-height:1.6}
   .cps-side .cps-row{font-size:12.5px}
   @media (max-width:900px){ .cps-wrap{grid-template-columns:1fr} .cps-side{position:static} }
+  /* ── 카피 대시보드 (cpd) ── */
+  .cpd-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:4px 0 16px}
+  .cpd-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px;background:rgba(255,255,255,.02);margin-bottom:12px}
+  .cpd-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cpd-hd .tag{font-size:11px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--gt3)}
+  .cpd-hd .tag.on{background:rgba(86,196,134,.14);color:#7ed6a8}
+  .cpd-hd .tag.off{background:rgba(255,255,255,.06);color:#848a94}
+  .cpd-kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px 14px;margin:12px 0 4px}
+  .cpd-kv div small{display:block;font-size:11px;color:var(--gt3);margin-bottom:3px}
+  .cpd-kv div b{font-size:13.5px;color:var(--gt)}
+  .cpd-kv div b.u{color:#56c486}.cpd-kv div b.d{color:#ee766a}
+  .cpd-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .cpd-flt{display:flex;gap:6px;align-items:center;margin:2px 0 12px}
+  .cpd-flt button{border:0;background:rgba(255,255,255,.05);color:var(--gt3);font-size:12px;padding:6px 13px;border-radius:999px;cursor:pointer;font-family:inherit}
+  .cpd-flt button.on{background:rgba(143,178,255,.15);color:var(--gt)}
+  /* Adjust balance 모달 내부 */
+  .cpa-tgl{display:flex;gap:6px;margin-bottom:14px}
+  .cpa-tgl button{flex:1;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:none;color:var(--gt2);font-size:13px;cursor:pointer;font-family:inherit}
+  .cpa-tgl button.on{border-color:rgba(143,178,255,.55);background:rgba(143,178,255,.1);color:var(--gt);font-weight:600}
+  .cpa-note{font-size:12px;color:var(--gt3);margin-top:10px;line-height:1.6}
+  .cpa-pnl{margin:0 0 12px;padding:10px 13px;border-radius:11px;background:rgba(255,255,255,.04);font-size:12.5px;color:var(--gt2)}
+  .cpa-pnl b.u{color:#56c486}.cpa-pnl b.d{color:#ee766a}
   .tfbk-catdrop{display:inline-flex}
   .tfbk-drop{height:34px;border-radius:17px;padding:0 15px;border-width:1px;background:#000;min-width:132px}
   /* 카운터 소형: 21x32 r4 pad4 6, 글리프 20/700 lh24 */
@@ -10620,6 +10642,159 @@ function cpState(){
   return t.cp;
 }
 function cpFind(id){ return cpState().copies.find(function(x){ return x.id===id; })||null; }
+/* 파생 계산 단일 함수 — 서머리/카드/상세가 전부 이걸 쓴다 (수치 불일치 구조적 차단).
+   데모: 카피 시작을 시뮬레이션 30봉 전으로 간주 (실서버: 실시간 체결 스트림) */
+function cpCalc(c2){
+  var s2=tfSSFind(c2.nick), m=s2?cpMeta(c2.nick):null;
+  var inv=c2.ledger.reduce(function(a,e){ return a+(e.type==='add'?e.amt:-e.amt); },0);
+  if(!s2||!s2.r.eq||s2.r.eq.length<32) return {inv:inv,pnlPct:0,total:0,realized:0,unreal:0,share:0,net:0,est:inv,avail:inv,posOpen:false};
+  var eq=s2.r.eq;
+  var startI=c2.simStartI!=null?c2.simStartI:eq[eq.length-31].i;
+  var e0=null,e1=eq[eq.length-1];
+  for(var k=0;k<eq.length;k++){ if(eq[k].i>=startI){ e0=eq[k]; break; } }
+  if(!e0) e0=eq[0];
+  var pnlPct=e1.v/e0.v-1;
+  var total=c2.amount*pnlPct; /* 증액분은 다음 진입부터 반영 — 데모 단순화: 초기 금액 기준 */
+  var closed=(s2.r.trades||[]).filter(function(x){ return (x.exit!=null?x.exit:x.entry)>=startI; });
+  var realized=c2.amount*closed.reduce(function(a,x){ return a+x.pnl; },0);
+  var unreal=total-realized;
+  var share=Math.max(0,realized)*(m?m.share:0.1);
+  var net=total-share;
+  var posOpen=Math.abs(unreal)>c2.amount*0.002;
+  var est=inv+net;
+  var avail=Math.max(0,est-(posOpen?c2.amount*0.4:0));
+  return {inv:inv,pnlPct:pnlPct,total:total,realized:realized,unreal:unreal,share:share,net:net,est:est,avail:avail,posOpen:posOpen,closedN:closed.length};
+}
+/* ── Adjust balance 모달 — 따라가기 탭과 카피 상세가 공유 (핵심 원칙 4: 손실 중 입금 보호) ── */
+var TF_CPA={dir:'add'};
+function cpAdjDlg(cid){
+  var c2=cpFind(cid); if(!c2||c2.status!=='active'){ toast('진행 중인 카피가 아니에요'); return; }
+  TF_CPA={dir:'add'};
+  cpAdjRender(cid);
+}
+function cpAdjRender(cid){
+  var c2=cpFind(cid); if(!c2) return;
+  var cp=cpState(), d=cpCalc(c2), dir=TF_CPA.dir, cfg=cpCfg();
+  var pnlP=d.pnlPct*100, up=pnlP>=0;
+  tfSS3Dlg('잔고 조정, '+c2.nick,
+    '<div class="cpa-pnl">이 카피의 현재 수익률 <b class="num '+(up?'u':'d')+'">'+(up?'+':'')+pnlP.toFixed(1)+'%</b>'
+    +(!up&&pnlP<=(cfg.LOSS_GUARD||-0.2)*100?'<br><span style="color:#e8d49a">손실 구간에서 추가 입금은 평균 단가를 낮추지만 위험도 같이 커져요.</span>':'')+'</div>'
+    +'<div class="cpa-tgl"><button type="button" class="'+(dir==='add'?'on':'')+'" onclick="TF_CPA.dir=\'add\';cpAdjRender(\''+cid+'\')">추가 입금</button>'
+    +'<button type="button" class="'+(dir==='out'?'on':'')+'" onclick="TF_CPA.dir=\'out\';cpAdjRender(\''+cid+'\')">출금</button></div>'
+    +'<div class="cps-fld" style="margin-bottom:6px"><div class="cps-in"><input id="cpa-amt" type="number" inputmode="decimal" placeholder="금액" oninput="cpAdjSync(\''+cid+'\')"><span class="un">USDT</span>'
+    +'<button type="button" class="mx" onclick="$(\'cpa-amt\').value='+(dir==='add'?cp.spot:Math.floor(d.avail*100)/100)+';cpAdjSync(\''+cid+'\')">최대</button></div>'
+    +'<div class="cps-bal">'+(dir==='add'?'추가 가능 (스팟 잔고) <b class="num">'+cpUsd(cp.spot,2)+'</b>':'출금 가능 <b class="num">'+cpUsd(d.avail,2)+'</b>')+'</div>'
+    +'<div class="cps-err" id="cpa-err" style="display:block;color:#ee9a91"></div></div>'
+    +'<div class="cpa-note">'+(dir==='add'?'스팟 계좌에서 카피 계좌로 옮겨져요. 추가한 금액은 다음 진입부터 반영돼요.':'카피 계좌에서 스팟 계좌로 옮겨져요. 포지션에 잡혀 있는 금액은 출금할 수 없어요.')+'</div>'
+    +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
+    +'<button type="button" class="wbtn" id="cpa-go" disabled onclick="cpAdjGo(\''+cid+'\')">확인</button></div>');
+}
+function cpAdjSync(cid){
+  var c2=cpFind(cid); if(!c2) return false;
+  var cp=cpState(), d=cpCalc(c2), el=$('cpa-amt'), go=$('cpa-go'), err=$('cpa-err');
+  var v=parseFloat(el&&el.value), dir=TF_CPA.dir, msg='';
+  if(el&&el.value!==''){
+    if(!isFinite(v)||v<=0) msg='0보다 큰 금액을 입력해주세요';
+    else if(dir==='add'&&v>cp.spot) msg='스팟 잔고보다 커요';
+    else if(dir==='out'&&v>d.avail+1e-9) msg='출금 가능 금액을 넘었어요';
+  }
+  if(err) err.textContent=msg;
+  var ok=el&&el.value!==''&&isFinite(v)&&v>0&&!msg;
+  if(go) go.disabled=!ok;
+  return ok;
+}
+function cpAdjGo(cid){
+  if(!cpAdjSync(cid)) return;
+  var c2=cpFind(cid), cp=cpState(), d=cpCalc(c2), cfg=cpCfg();
+  var v=parseFloat($('cpa-amt').value), dir=TF_CPA.dir;
+  /* 보호 장치: 손실 -20% 이하에서 추가 입금은 확인 1단계 추가 (핵심 원칙 4) */
+  if(dir==='add'&&d.pnlPct<=(cfg.LOSS_GUARD||-0.2)&&!TF_CPA.confirmed){
+    TF_CPA.confirmed=false;
+    tfSS3Dlg('잠깐, 손실 구간이에요',
+      '<div class="ntc">이 카피는 지금 <b style="color:#ee766a">'+(d.pnlPct*100).toFixed(1)+'%</b> 손실 중이에요.<br>'
+      +'손실 후 반복 입금은 수익률을 실제보다 부풀려 보이게 하고, 같은 전략에 위험만 키울 수 있어요.<br>그래도 추가할까요?</div>'
+      +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="TF_CPA.confirmed=false;cpAdjRender(\''+cid+'\')">다시 생각할게요</button>'
+      +'<button type="button" class="wbtn" onclick="TF_CPA.confirmed=true;cpAdjCommit(\''+cid+'\','+v+',\'add\')">'+cpUsd(v,0)+' 추가할게요</button></div>');
+    return;
+  }
+  cpAdjCommit(cid,v,dir);
+}
+function cpAdjCommit(cid,v,dir){
+  var c2=cpFind(cid), cp=cpState(); if(!c2) return;
+  if(dir==='add'){ if(v>cp.spot){ toast('스팟 잔고가 부족해요'); return; } cp.spot-=v; }
+  else { cp.spot+=v; }
+  c2.ledger.push({at:Date.now(),type:dir,amt:v}); /* append-only */
+  TF_CPA.confirmed=false;
+  tfSaveNow(); tfSS3DlgClose();
+  tfTrack('cp_adjust',{id:cid,dir:dir,amt:v});
+  toast(dir==='add'?cpUsd(v,0)+'를 카피 계좌에 추가했어요':cpUsd(v,0)+'를 스팟으로 출금했어요');
+  if(G.mode==='tfss3') tfShareHub('follow');
+}
+/* 카피 종료 — 정산: 분배 차감 후 회수, 원장 close 엔트리 (강제 청산 아님: 수동 결정) */
+function cpCloseDlg(cid){
+  var c2=cpFind(cid); if(!c2||c2.status!=='active') return;
+  var d=cpCalc(c2);
+  tfSS3Dlg('카피 종료, '+c2.nick,
+    '<div class="ntc">보유 중인 카피 포지션은 현재가로 정리되고, 정산 후 남은 금액이 스팟으로 돌아와요.</div>'
+    +'<div class="cpd-kv" style="margin:14px 0">'
+    +'<div><small>순손익 (분배 차감 후)</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
+    +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>'
+    +'<div><small>돌려받을 금액</small><b class="num">'+cpUsd(Math.max(0,d.est))+'</b></div></div>'
+    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">계속 카피</button>'
+    +'<button type="button" class="ss3-dbtn" onclick="cpClose(\''+cid+'\')">종료하고 정산</button></div>');
+}
+function cpClose(cid){
+  var c2=cpFind(cid), cp=cpState(); if(!c2||c2.status!=='active') return;
+  var d=cpCalc(c2);
+  var back=Math.max(0,d.est);
+  c2.status='closed'; c2.closedAt=Date.now(); c2.settle={net:d.net,share:d.share,back:back};
+  c2.ledger.push({at:Date.now(),type:'out',amt:back}); /* 정산 회수도 원장 */
+  cp.spot+=back;
+  tfSaveNow(); tfSS3DlgClose();
+  tfTrack('cp_close',{id:cid,net:d.net});
+  toast('카피를 종료했어요. '+cpUsd(back,0)+'가 스팟으로 돌아왔어요');
+  tfShareHub('follow');
+}
+/* 대시보드 (따라가기 탭 상단) — 서머리 6지표 + 카피 카드, 전부 cpCalc 단일 소스 */
+var TF_CPD={flt:'active'};
+function cpDashSec(){
+  var cp=cpState();
+  var all=cp.copies.slice().reverse();
+  if(!all.length) return '';
+  var act=all.filter(function(x){return x.status==='active';});
+  var sum={est:0,avail:0,net:0,unreal:0,realized:0,share:0};
+  act.forEach(function(c2){ var d=cpCalc(c2); sum.est+=d.est; sum.avail+=d.avail; sum.net+=d.net; sum.unreal+=d.unreal; sum.realized+=d.realized; sum.share+=d.share; });
+  var K=function(lb,v,tip){ var cls=v>=0?'u':'d'; return '<div class="cpp-kpi"><small'+(tip?' title="'+tip+'"':'')+'>'+lb+'</small><b class="num '+(lb.indexOf('평가')>=0||lb.indexOf('가용')>=0?'':cls)+'">'+cpUsd(v)+'</b></div>'; };
+  var rows=(TF_CPD.flt==='active'?act:all).map(function(c2){
+    var d=cpCalc(c2), ne=tfSSNe(c2.nick), on=c2.status==='active';
+    return '<div class="cpd-card"><div class="cpd-hd">'
+      +'<button type="button" class="nm" style="font-size:15px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button>'
+      +'<span class="tag">비율 따라가기</span><span class="tag" title="Profit share ratio">분배 '+Math.round((cpMeta(c2.nick).share)*100)+'%</span>'
+      +'<span class="tag '+(on?'on':'off')+'">'+(on?'카피 중':'종료됨')+'</span>'
+      +'<span style="flex:1"></span><span class="cps-static num">'+new Date(c2.at).toLocaleDateString('ko-KR')+' 시작</span></div>'
+      +'<div class="cpd-kv">'
+      +'<div><small>순손익</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
+      +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>'
+      +'<div><small>평가 금액</small><b class="num">'+cpUsd(d.est)+'</b></div>'
+      +'<div><small>가용</small><b class="num">'+cpUsd(d.avail)+'</b></div>'
+      +'<div><small>누적 투자</small><b class="num">'+cpUsd(d.inv)+'</b></div>'
+      +'</div>'
+      +(on?'<div class="cpd-acts"><button type="button" class="obtn" onclick="cpAdjDlg(\''+c2.id+'\')">잔고 조정</button>'
+        +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+c2.id+'\')">카피 종료</button></div>'
+        :'<div class="cps-static" style="margin-top:8px">정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</div>')
+      +'</div>';
+  }).join('');
+  return '<div class="ss3-ch" style="margin:4px 0 12px"><b>실시간 카피</b><span class="mt2">'+act.length+'건 진행 중, 전 자산 USDT 표기</span></div>'
+    +'<div class="cpd-sum num">'
+    +K('카피 자산 평가',sum.est)+K('가용 잔고',sum.avail)+K('순손익 (분배 차감 후)',sum.net)
+    +K('미실현 손익',sum.unreal)+K('실현 손익',sum.realized)+K('수익 분배 지급',sum.share,'Profit share amount')
+    +'</div>'
+    +(sum.net<0?cpAiHtml({w:1,t:'지금은 손실 구간이에요. 카피는 트레이더의 손절 규칙까지 그대로 따라가니, 원칙이 지켜지는지 프로필의 판단 기록을 확인해보세요.'}):cpAiHtml({w:0,t:'수익 분배는 실현 수익에서만 차감돼요. 미실현 수익에는 분배가 붙지 않아요.'}))
+    +'<div class="cpd-flt"><button type="button" class="'+(TF_CPD.flt==='active'?'on':'')+'" onclick="TF_CPD.flt=\'active\';tfShareHub(\'follow\')">카피 중</button>'
+    +'<button type="button" class="'+(TF_CPD.flt==='all'?'on':'')+'" onclick="TF_CPD.flt=\'all\';tfShareHub(\'follow\')">종료 포함</button></div>'
+    +rows
+    +'<div class="ss3-ch" style="margin:26px 0 12px"><b>복제 검증</b><span class="mt2">전략을 복제해 내 계정으로 재검증한 기록</span></div>';
+}
 var TF_CPS={mode:'ratio',pairs:null};
 /* 진입 게이트: 로그인 + 관망 차단 (신규 카피 시작은 AI 판단 수반) */
 function cpSetupGo(ne){
@@ -10753,7 +10928,9 @@ function cpStart(ne){
   var amt=parseFloat($('cps-amt').value);
   var cp=cpState();
   var mainPair=CPP_PAIR[s2.asset]||s2.asset;
+  var eqA=s2.r.eq||[];
   var c2={id:'cp'+Date.now(), nick:nick, mode:'ratio', amount:amt, pairs:(TF_CPS.pairs||[mainPair]).slice(),
+    simStartI:eqA.length>31?eqA[eqA.length-31].i:null, /* 데모: 시작을 30봉 전으로 시뮬 (표기: 시뮬레이션) */
     adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5},
     at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt}]}; /* 입출금은 append-only */
   cp.spot=Math.max(0,cp.spot-amt);
@@ -11270,8 +11447,7 @@ function tfSS3WatchSec(){
 }
 function tfSS3FollowTab(){
   var t=tfSSState();
-  var cpN=(t.cp&&t.cp.copies?t.cp.copies.filter(function(x){return x.status==='active';}).length:0);
-  var cpLine=cpN?'<div class="cpp-ai"><span class="sp">✦</span><span>실시간 카피 '+cpN+'건이 진행 중이에요. 카피 대시보드가 곧 이 탭에 표시돼요.</span></div>':'';
+  var cpLine=(typeof cpDashSec==='function')?cpDashSec():''; /* 카피 대시보드 (cp 4단계) */
   if(!t.follows.length)
     return cpLine+'<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 복제해보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>'+tfSS3WatchSec();
   var act=0,arc=0;
