@@ -28,6 +28,21 @@ window.TFC = {
       '라벨에 TETH 입력 후 생성, 보안 인증 완료',
       'Enable Reading과 Enable Spot Trading만 체크 (출금 권한은 켜지 마세요)',
       'API Key와 Secret Key를 복사해 아래에 붙여넣기' ] },
+    { id: 'bybit', name: 'Bybit', rank: 4, ref: 'https://www.bybit.com/invite?ref=TETHAI', uidLabel: 'Bybit UID', apiGuide: [
+      'Bybit 로그인 후 프로필, API 메뉴로 이동',
+      'API 키 생성 선택, 이름에 TETH 입력',
+      '권한은 읽기와 거래(현물, 파생)만 선택 (출금 제외)',
+      'API Key와 Secret Key를 복사해 아래에 붙여넣기' ] },
+    { id: 'bitget', name: 'Bitget', rank: 5, ref: 'https://www.bitget.com/referral/register?from=TETHAI', uidLabel: 'Bitget UID', apiGuide: [
+      'Bitget 로그인 후 프로필, API 관리로 이동',
+      'API 키 생성, 이름에 TETH 입력, 패스프레이즈 설정',
+      '권한은 읽기 전용과 거래만 선택 (출금 제외)',
+      'API Key와 Secret Key를 복사해 아래에 붙여넣기' ] },
+    { id: 'mexc', name: 'MEXC', rank: 6, ref: 'https://www.mexc.com/register?inviteCode=TETHAI', uidLabel: 'MEXC UID', apiGuide: [
+      'MEXC 로그인 후 계정, API 관리로 이동',
+      'API 키 생성, 메모에 TETH 입력',
+      '권한은 시세 조회와 거래만 선택 (출금 제외)',
+      'API Key와 Secret Key를 복사해 아래에 붙여넣기' ] },
     { id: 'okx', name: 'OKX', rank: 2, ref: 'https://www.okx.com/join/TETHAI', uidLabel: 'OKX UID', apiGuide: [
       'OKX 로그인 후 프로필, API 메뉴로 이동',
       'API 키 생성 선택, 이름에 TETH 입력',
