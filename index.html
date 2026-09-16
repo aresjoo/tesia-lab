@@ -11115,6 +11115,7 @@ function bcEnsureWelcome(){
 }
 /* 거래량 비례 실시간 충전 — 체결 파이프라인 훅. cap 초과분은 소멸 기록 (질문 2 임시) */
 function bcVolumeCharge(fid,ex,market,notional){
+  if(!tfNFInit().uidLinked) return 0; /* 거래량 충전은 UID 연동 등급 전용 — 호출부 가드와 별개의 엔진 가드 */
   var cfg=bcCfg(), tbl=cfg.VOLUME_TO_CREDIT_RATE||{};
   var rate=(tbl[ex]&&tbl[ex][market||'spot'])||(tbl.binance&&tbl.binance.spot)||0;
   var credit=Math.round(notional*rate);
@@ -11129,7 +11130,7 @@ function bcVolumeCharge(fid,ex,market,notional){
   } else if(expire>0&&bcAppend('charge','volume',0,fid,'vol:'+fid)){ bcEvent('cap-expire',{fid:fid,expired:expire}); }
   return credit;
 }
-/* 자유형 AI 사용 차감 — 0 하한, 부족 시 STOP 이벤트 (질문 10 임시) */
+/* 자유형 AI 사용 차감 — 0 하한, 부족분 미차감. 0 도달/차단 판정은 bcAfterChange 의 grace/watch 전이가 담당 (질문 10 임시) */
 function bcAiDebit(reqId){
   var cfg=bcCfg(), cost=cfg.AI_CALL_COST||0, bal=bcBalance();
   var amt=Math.min(cost,Math.max(0,bal));
