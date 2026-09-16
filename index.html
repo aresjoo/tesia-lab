@@ -11379,7 +11379,7 @@ function tfAiSpend(reqId){
   t.freeUsed=(t.freeUsed||0)+1;
   var fq=TFC.credit.freeQuota!=null?TFC.credit.freeQuota:10;
   if(t.freeUsed>=fq) tfNotify('credit','freeout:'+Math.floor(Date.now()/864e5),'무료 분석 사용량을 모두 썼어요','UID 연동(무료) 또는 구독으로 계속 사용할 수 있어요.','#/plan');
-  else if(fq-t.freeUsed<=2) tfNotify('credit','freewarn:'+Math.floor(Date.now()/864e5),'무료 분석이 '+(fq-t.freeUsed)+'회 남았어요','UID 를 연동하면 AI 이용 크레딧 $100 혜택을 받아요.','#/plan');
+  else if(fq-t.freeUsed<=2) tfNotify('credit','freewarn:'+Math.floor(Date.now()/864e5),'무료 분석이 얼마 남지 않았어요','UID 를 연동하면 AI 이용 크레딧 $100 혜택을 받아요.','#/plan'); /* 임계 경고는 허용, 수치는 비노출 (사용자 확정) */
   tfSaveNow(); tfNFBar();
 }
 /* 실AI 발송 게이트 — free-out 이면 차단하고 업그레이드 시트 (하드 게이트, mock, 로컬 경로 무관) */
@@ -11462,7 +11462,7 @@ function tfNFBar(){
   var e=tfEnt(), t=tfNFInit();
   var tx=$('nf-credit-tx'), cp=$('nf-credit');
   if(tx){
-    if(e.why==='free') tx.innerHTML='무료 <b>'+e.freeLeft+'회</b> 남음';
+    if(e.why==='free') tx.innerHTML='<b>무료 체험</b> 이용 중'; /* 횟수 비노출 (사용자 확정) */
     else if(e.why==='free-out') tx.innerHTML='<b>업그레이드 필요</b>';
     else if(e.tier==='high'&&e.bal==null) tx.innerHTML='<b>PRO</b> '+(e.why==='paid'?'구독':'무제한');
     else if(e.why==='credit') tx.innerHTML='<b>PRO</b> 이용 중'; /* 잔액 수치 비노출 (5단계) — 요소 부활 대비 방어 */
@@ -11651,12 +11651,12 @@ function tfPlanView(tab){
     else if(e.why==='credit') st={bt:'PRO',bc:'pro',hv:'PRO',hu:'이용 중',hc:'cg',g:'inf',gl:'이용 상태: 정상',gr:'거래량 연동 자동 충전',pin:false,
       pri:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','pri'],sec:null,
       desc:'UID 연동으로 PRO 분석을 사용 중이에요. 거래량에 따라 자동으로 충전돼요.'}; /* 잔액 수치 비노출 (5단계) */
-    else if(e.why==='free'){ var fq2=C.freeQuota!=null?C.freeQuota:10;
-      st={bt:'무료 체험',bc:'blue',hv:e.freeLeft,hu:'회 남음',hc:e.freeLeft<=2?'cw':'cb',g:e.freeLeft<=2?'warn':'',gl:'무료 고급 분석 <b>'+e.freeLeft+'회</b>',gr:'제공 '+fq2+'회',pin:false,
+    else if(e.why==='free'){ /* 무료 잔여 횟수도 크레딧 파생 수치 — 비노출 (사용자 확정) */
+      st={bt:'무료 체험',bc:'blue',hv:e.freeLeft<=2?'얼마 남지 않음':'무료',hu:e.freeLeft<=2?'':'체험 중',hc:e.freeLeft<=2?'cw':'cb',g:e.freeLeft<=2?'warn':'inf',gl:'이용 상태: 무료 체험',gr:'UID 연동 시 상시 무료',pin:false,
       pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
-      desc:'로그인 무료 체험으로 고급 분석을 사용 중이에요. UID 를 연동하면 AI 이용 크레딧 $100 혜택을 받아요.',fpct:Math.max(2,Math.round(e.freeLeft/fq2*100))}; /* 프로모 고정 문구 (비노출 예외 2) */
+      desc:'로그인 무료 체험으로 고급 분석을 사용 중이에요. UID 를 연동하면 AI 이용 크레딧 $100 혜택을 받아요.'}; /* 프로모 고정 문구 (비노출 예외 2) */
     }
-    else st={bt:'업그레이드 필요',bc:'danger',hv:0,hu:'회 남음',hc:'cx',g:'empty',gl:'무료 고급 분석 <b>0회</b>',gr:'소진됨',pin:false,
+    else st={bt:'업그레이드 필요',bc:'danger',hv:'소진',hu:'',hc:'cx',g:'empty',gl:'무료 체험 소진',gr:'연동 또는 구독으로 계속',pin:false,
       pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
       desc:'무료 분석 사용량을 모두 썼어요. UID 연동(무료) 또는 구독으로 계속 사용할 수 있어요.'};
     if(typeof bcInit==='function'&&bcInit().mode==='watch'){ st.bt='관망 중'; st.bc='warn'; st.hv='관망'; st.hu='';
