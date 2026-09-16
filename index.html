@@ -10742,9 +10742,14 @@ function cpPairApply(ne,amtKeep){
   var el=$('cps-amt'); if(el&&amtKeep){ el.value=amtKeep; cpFormSync(); } /* 입력 보존 */
 }
 function cpStart(ne){
+  if(typeof tfAiGate==='function'&&!tfAiGate()) return; /* 딥링크 진입 우회 방지 — 관망 중 신규 카피 금지 */
   if(!cpFormSync()){ toast('입력을 확인해주세요'); return; }
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
   var s2=tfSSFind(nick); if(!s2||s2.me) return;
+  if(cpState().copies.some(function(x){ return x.nick===nick&&x.status==='active'; })){ /* 트레이더당 활성 카피 1건 */
+    toast('이미 이 트레이더를 카피하고 있어요. 따라가기 탭에서 관리할 수 있어요');
+    TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return;
+  }
   var amt=parseFloat($('cps-amt').value);
   var cp=cpState();
   var mainPair=CPP_PAIR[s2.asset]||s2.asset;
