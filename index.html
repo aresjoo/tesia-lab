@@ -11180,6 +11180,68 @@ function bcTick(){
     tfSave();
   }
 }
+/* ═══ 임계 이벤트 라우터 (4단계): 5분기 메시지, i18n 키만 (문구 더미) ═══
+   ① UID+거래량0: 전략 조정 유도  ② UID+미미: 솔직 고지+증액+카드 대안
+   ③ UID+과다: 카드+90% 할인      ④ FREE 소진: UID(0원)/카드 갈림길
+   ⑤ CARD 결제 직후: UID 크로스셀 (bcCardCharged 에서 상시) */
+function bcMonthVol(){ /* 당월 거래량 충전 유입 (분기 판정 모수) */
+  var b=bcInit(), from=b.cycleAt?b.cycleAt-30*864e5:Date.now()-30*864e5;
+  return b.ledger.filter(function(e){ return e.at>=from&&e.reason==='volume'&&e.amt>0; }).reduce(function(a,e){ return a+e.amt; },0);
+}
+function bcMonthSpend(){ /* 당월 차감 합 (양수 반환) */
+  var b=bcInit(), from=b.cycleAt?b.cycleAt-30*864e5:Date.now()-30*864e5;
+  return -b.ledger.filter(function(e){ return e.at>=from&&e.amt<0&&e.type==='debit'; }).reduce(function(a,e){ return a+e.amt; },0);
+}
+function bcBranch(){
+  var tier=bcTier(), cfg=bcCfg();
+  if(tier==='FREE') return 'free.out';
+  if(tier==='CARD') return 'card.out'; /* CARD 단독 월중 소진 (질문 13 임시: UID 연동 제안) */
+  var v=bcMonthVol(), u=bcMonthSpend();
+  if(v<=0) return 'uid.novol';
+  if(u>=(cfg.CARD_CREDIT_MONTHLY||3000)*0.5) return 'uid.heavy'; /* 카드 플랜급 소비 = 과다 (질문 14 임시) */
+  return 'uid.small';
+}
+/* 트리거: warn(경고 진입) / watch(관망 전환) / blocked(관망 중 시도) / recover(재개)
+   메시지는 tfNotify 재사용, 일 1회 dedup (질문 7 임시: 재경고 일 1회) — 수치/잔액 비노출 */
+function bcRoute(trigger){
+  var day=Math.floor(Date.now()/864e5);
+  if(trigger==='recover'){
+    tfNotify('bill','bill.recover:'+day, L('bill.recover.t'), L('bill.recover.b'), null);
+    return;
+  }
+  if(trigger==='watch')
+    tfNotify('bill','bill.watch:'+day, L('bill.watch.t'), L('bill.watch.b'), '#/plan');
+  var br=bcBranch();
+  tfNotify('bill','bill.'+br+':'+day, L('bill.'+br+'.t'), L('bill.'+br+'.b'), '#/plan');
+  if(br==='uid.heavy') bcEvent('rescue-offer',{day:day}); /* 90% 할인 제안 노출 기록 */
+}
+/* 90% 구제 쿠폰 — 반복 수령 가능, 수령 이력은 coupons[] (스펙: 쿠폰 엔티티+이력) */
+function bcCouponGrant(kind){
+  var b=bcInit();
+  var c={id:'C'+Date.now()+Math.floor(Math.random()*1e3), kind:kind||'rescue90', rate:bcCfg().DISCOUNT_RESCUE||0.9, at:Date.now(), usedAt:null};
+  b.coupons.push(c);
+  bcEvent('coupon-grant',{id:c.id,kind:c.kind});
+  tfSave();
+  return c;
+}
+/* 카드 등록/해지 — 결제 사이클 실행은 6단계, 여기는 상태와 앵커만 */
+function bcCardOn(on){
+  var b=bcInit();
+  b.cardOn=!!on;
+  if(on){ if(!b.cycleAt) b.cycleAt=Date.now()+30*864e5; /* 결제일 앵커 (질문 9 임시) */ bcEvent('card-on',{}); bcAfterChange('card'); }
+  else { bcEvent('card-off',{}); tfSave(); }
+  return b.cardOn;
+}
+/* 결제 성공 훅 (6단계 사이클이 호출) — 월 충전 + ⑤ UID 크로스셀 상시 */
+function bcCardCharged(cycleKey){
+  var cfg=bcCfg();
+  if(!bcAppend('charge','card',cfg.CARD_CREDIT_MONTHLY||0,cycleKey,'card:'+cycleKey)) return false;
+  bcEvent('card-charged',{cycle:cycleKey});
+  if(!tfNFInit().uidLinked)
+    tfNotify('bill','bill.card.cross:'+cycleKey, L('bill.card.cross.t'), L('bill.card.cross.b'), '#/plan');
+  bcAfterChange('card');
+  return true;
+}
 /* 등급은 저장하지 않고 상태에서 파생 — 이중 원천 금지 */
 function bcTier(){
   var t=tfNFInit(), b=bcInit();
@@ -14942,6 +15004,24 @@ var I18N={
   'help.title':{ko:'24/7 고객지원',en:'24/7 Support',ja:'24時間サポート','zh-CN':'24/7客服支持','zh-TW':'24/7客服支援',es:'Soporte 24/7',fr:'Assistance 24h/24'},
   'help.body':{ko:'무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.',en:'Ask us anything. Our agents are available around the clock.',ja:'何でもお尋ねください。担当者が24時間365日対応します。','zh-CN':'有任何问题都可以咨询，客服全年无休24小时在线。','zh-TW':'有任何問題都可以諮詢，客服全年無休24小時在線。',es:'Pregúntanos lo que sea. Nuestro equipo está disponible 24/7.',fr:'Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.'},
   'help.sub':{ko:'실시간 채팅은 곧 제공돼요. support@teth.ai',en:'Live chat coming soon. support@teth.ai',ja:'ライブチャットは近日提供予定です。support@teth.ai','zh-CN':'在线聊天即将上线。support@teth.ai','zh-TW':'線上聊天即將上線。support@teth.ai',es:'El chat en vivo llegará pronto. support@teth.ai',fr:'Le chat en direct arrive bientôt. support@teth.ai'}
+,
+  /* ── 과금 임계 메시지 (4단계, 문구 더미) ── */
+  'bill.watch.t':{ko:'크레딧이 소진되어 잠시 관망 모드로 전환했어요',en:'Credits ran out, switching to standby'},
+  'bill.watch.b':{ko:'실행 중인 손절과 목표가 관리는 그대로 유지돼요. 충전이나 연동 즉시 다시 시작할 수 있어요.',en:'Your stop-loss and take-profit rules stay active. Recharge or link to resume instantly.'},
+  'bill.recover.t':{ko:'AI 기능이 다시 켜졌어요',en:'AI features are back on'},
+  'bill.recover.b':{ko:'크레딧이 충전되어 모든 기능을 다시 사용할 수 있어요.',en:'Credits recharged, everything is available again.'},
+  'bill.uid.novol.t':{ko:'최근 거래가 없어 크레딧 충전이 멈췄어요',en:'No recent trades, so credit top-ups paused'},
+  'bill.uid.novol.b':{ko:'전략 점검이 필요할 수 있어요. 새 연구로 지금 시장에 맞는 전략을 찾아보세요.',en:'Your strategy may need a check. Try a new research run for the current market.'},
+  'bill.uid.small.t':{ko:'거래 규모보다 AI 사용량이 많아요',en:'AI usage is outpacing your trading volume'},
+  'bill.uid.small.b':{ko:'현재 거래량으로는 충전이 사용량을 따라가지 못해요. 거래 규모를 늘리거나 카드 등록을 고려해보세요.',en:'Top-ups from your volume cannot keep up. Consider trading more or adding a card.'},
+  'bill.uid.heavy.t':{ko:'AI 사용량이 많은 편이에요',en:'You are a heavy AI user'},
+  'bill.uid.heavy.b':{ko:'카드를 등록하면 90% 할인으로 시작할 수 있어요. 거래량 충전분은 카드 요금에서 계속 차감돼요.',en:'Add a card to start with a 90% discount. Volume top-ups keep reducing your card bill.'},
+  'bill.free.out.t':{ko:'웰컴 크레딧을 모두 사용했어요',en:'Welcome credits are used up'},
+  'bill.free.out.b':{ko:'거래소 UID 연동은 0원으로 계속 쓸 수 있어요. 카드 등록으로도 이어갈 수 있어요.',en:'Link an exchange UID to continue for free, or add a card.'},
+  'bill.card.out.t':{ko:'이번 달 크레딧을 모두 사용했어요',en:'This month\'s credits are used up'},
+  'bill.card.out.b':{ko:'UID 연동으로 거래량 충전을 더할 수 있어요. 다음 결제일에는 자동으로 다시 채워져요.',en:'Link a UID to add volume top-ups. Credits refill automatically next billing day.'},
+  'bill.card.cross.t':{ko:'거래소 연동으로 요금을 아껴보세요',en:'Save on your bill by linking an exchange'},
+  'bill.card.cross.b':{ko:'UID를 연동하면 거래량만큼 크레딧이 충전되고 다음 결제에서 그만큼 할인돼요. AI 이용 크레딧 $100 혜택도 받을 수 있어요.',en:'Link a UID to earn credits from your volume and cut your next bill. Includes $100 in AI credits.'}
 };
 function L(k){ var e=I18N[k]; return e?(e[GLC.lang]||e.en||e.ko):k; }
 /* 언어별 인사말 풀 — ko는 gHome 내부 기본 배열, 나머지는 여기서 */
