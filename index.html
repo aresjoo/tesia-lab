@@ -10988,7 +10988,7 @@ function cpDashSec(){
       +(on?'<div class="cpd-acts"><button type="button" class="wbtn" onclick="cpDetailGo(\''+c2.id+'\')">상세</button>'
         +'<button type="button" class="obtn" onclick="cpAdjDlg(\''+c2.id+'\')">잔고 조정</button>'
         +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+c2.id+'\')">카피 종료</button></div>'
-        :'<div class="cps-static" style="margin-top:8px">정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</div>')
+        :'<div class="cpd-acts"><button type="button" class="obtn" onclick="cpDetailGo(\''+c2.id+'\')">기록 보기</button><span class="cps-static" style="align-self:center">정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</span></div>')
       +'</div>';
   }).join('');
   return '<div class="ss3-ch" style="margin:4px 0 12px"><b>실시간 카피</b><span class="mt2">'+act.length+'건 진행 중, 전 자산 USDT 표기</span></div>'
