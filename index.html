@@ -11078,6 +11078,59 @@ function tfNFInit(){
   return t;
 }
 /* 자격 판정 단일 지점 — paid > trade > credit > free > free-out, 비로그인은 guest (codex flow3 B) */
+/* ═══ 크레딧 과금 데이터 모델 (2단계) ═══
+   등급 전이:  FREE --UID 연동--> UID --카드 등록--> CARD_UID
+               FREE --카드 등록--> CARD --UID 연동--> CARD_UID (PROMO_AI_CREDIT 지급)
+   모드 전이:  active --잔량<=WARN--> grace(경고 이벤트, graceAt 기록)
+               grace --GRACE_HOURS 경과 && 잔량<=STOP--> watch(관망, 성역 유지)
+               grace --잔량 회복--> active(해제 이벤트)
+               watch --충전/연동/결제(거래량 충전 포함, 질문 5 임시)--> active
+   원장: append-only. 잔액 = 엔트리 합산(bcBalance). 기존 엔트리 수정 금지, 정정은 adjust 엔트리 추가.
+   월말 초기화(CARD)는 잔액만큼 음수 reset 엔트리로 표현. */
+function bcCfg(){ return (window.TFC&&TFC.billing)||{}; }
+function bcInit(){
+  var t=tfNFInit();
+  if(!t.bill) t.bill={v:1};
+  var b=t.bill;
+  if(!Array.isArray(b.ledger)) b.ledger=[];      /* {id,at,type,reason,amt,ref} */
+  if(!b.seen) b.seen={};                          /* 멱등 키: reqId, fid, 월키, 쿠폰키 */
+  if(!Array.isArray(b.coupons)) b.coupons=[];     /* {id,kind,at,usedAt} — 수령 이력 조회용 */
+  if(!Array.isArray(b.events)) b.events=[];       /* {at,key,data} — 임계/전환/복구 분포 분석용 */
+  if(!b.mode) b.mode='active';                    /* active | grace | watch */
+  if(b.graceAt===undefined) b.graceAt=null;
+  if(b.cardOn===undefined) b.cardOn=false;
+  if(b.cycleAt===undefined) b.cycleAt=null;       /* 다음 월 결제 시각 (질문 9 임시: 결제일 앵커) */
+  if(b.cardFails===undefined) b.cardFails=0;      /* dunning 재시도 카운터 */
+  return b;
+}
+/* 등급은 저장하지 않고 상태에서 파생 — 이중 원천 금지 */
+function bcTier(){
+  var t=tfNFInit(), b=bcInit();
+  var uid=!!t.uidLinked, card=!!b.cardOn;
+  return card&&uid?'CARD_UID':card?'CARD':uid?'UID':'FREE';
+}
+/* 잔액 = 원장 합산 (파생값, 별도 잔액 변수 금지) */
+function bcBalance(){
+  return bcInit().ledger.reduce(function(a,e){ return a+(e.amt||0); },0);
+}
+/* append-only 기록 원시형: 멱등 키 중복이면 무시하고 false */
+function bcAppend(type,reason,amt,ref,idemKey){
+  var b=bcInit();
+  if(idemKey){ if(b.seen[idemKey]) return false; b.seen[idemKey]=Date.now(); }
+  b.ledger.push({id:'L'+Date.now()+Math.floor(Math.random()*1e4), at:Date.now(), type:type, reason:reason, amt:amt, ref:ref||null});
+  if(b.ledger.length>2000) b.ledger=b.ledger.slice(-2000); /* 데모 상한 — 실서버는 무제한 append */
+  return true;
+}
+function bcEvent(key,data){
+  var b=bcInit();
+  b.events.push({at:Date.now(), key:key, data:data||null});
+  if(b.events.length>500) b.events=b.events.slice(-500);
+}
+/* 당월 유입 합계 (경고 임계 모수, 질문 6 임시: 당월 총 유입) */
+function bcMonthInflow(){
+  var b=bcInit(), from=b.cycleAt?b.cycleAt-30*864e5:Date.now()-30*864e5;
+  return b.ledger.filter(function(e){ return e.at>=from&&e.amt>0; }).reduce(function(a,e){ return a+e.amt; },0);
+}
 function tfEnt(){
   var t=tfNFInit(), C=TFC.credit;
   if(!S.user) return {tier:'low', why:'guest', label:'기본 분석', bal:null}; /* 잔존 플래그로 고급 자격 금지 */

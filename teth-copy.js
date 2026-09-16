@@ -44,6 +44,24 @@ window.TFC = {
   community: { rewardRate: 0.10, currency: 'KRW' },
   /* nf: AI 티어링 크레딧 정책 (phase6 계약 — 버전 관리) */
   credit: { version: 1, uidGrant: 1000, costHigh: 10, warnRatio: 0.8, activityDays: 30, freeQuota: 10 },
+  /* ── 크레딧 과금 시스템 config (확정 스펙 2026-09-16) — 값은 전부 추후 확정, 엔진은 이 블록만 참조 ── */
+  billing: {
+    version: 1,
+    WELCOME_CREDIT: 100,            /* FREE 웰컴 1회 (값 미확정) */
+    UID_CREDIT_CAP: 2000,           /* UID 거래량 충전 상한 (질문 2: 초과분 임시 소멸) */
+    CARD_CREDIT_MONTHLY: 3000,      /* CARD 월 충전 (이월 없음) */
+    AI_CALL_COST: 10,               /* 자유형 AI 1회 차감 (값 미확정) */
+    THRESHOLD_WARN: 0.20,           /* 잔량 비율 경고 (질문 6: 모수는 당월 총 유입, 임시) */
+    THRESHOLD_STOP: 0,
+    VOLUME_TO_CREDIT_RATE: {        /* 거래소별 x 현물/선물 가중 (커미션 수익 비례, 값 미확정) */
+      binance: { spot: 0.00040, futures: 0.00060 },
+      okx:     { spot: 0.00040, futures: 0.00060 },
+      woox:    { spot: 0.00050, futures: 0.00070 }
+    },
+    GRACE_HOURS: 24,                /* 경고 후 관망 전환 유예 */
+    DISCOUNT_RESCUE: 0.90,          /* 임계점 카드 등록 할인 — 반복 수령 가능, 수령 이력 기록 (질문 8: 임시 다음 1회분) */
+    PROMO_AI_CREDIT_USD: 100        /* CARD 유저 UID 연동 프로모 — 문구 고정 "AI 이용 크레딧 $100" */
+  },
   rebate: { rate: 0.10 }
 };
 
