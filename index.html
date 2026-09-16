@@ -3188,6 +3188,23 @@ body.tf-route #teth-help{bottom:88px}
 .bk2-stack img:nth-child(3){transform:rotate(14deg) translate(40px,16px);filter:brightness(.2);opacity:.55;z-index:1;box-shadow:0 8px 16px rgba(0,0,0,.25)}
 .bk2-empty{text-align:center;color:var(--gt3);font-size:14px;padding:60px 0}
 .bk2-note{font-size:12px;color:var(--gt3);text-align:center;margin-top:28px}
+.bk2-asof{font-size:11.5px;color:rgba(255,255,255,.38);margin:10px 2px 0} /* T7: 수수료 스냅샷 날짜 각주 */
+/* T8: 카드형 추가질문 (gcl) */
+.gcl-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--gt3);padding:6px 12px;border:1px solid var(--gl);border-radius:999px;margin-bottom:10px}
+.gcl-badge .dot{width:6px;height:6px;border-radius:50%;background:#8fb2ff}
+.gcl{border:1px solid var(--gl2);border-radius:16px;background:var(--g1);padding:18px;max-width:520px}
+.gcl .hd{display:flex;align-items:flex-start;gap:10px}
+.gcl .hd .pg{flex:none;font-size:11px;color:var(--gt3);border:1px solid var(--gl);border-radius:999px;padding:3px 9px;margin-top:2px}
+.gcl .hd b{flex:1;font-size:15px;color:var(--gt);line-height:1.5}
+.gcl .hd .x{flex:none;border:0;background:none;color:var(--gt3);font-size:14px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.gcl .hd .x:hover{background:rgba(255,255,255,.07);color:var(--gt)}
+.gcl .sub{font-size:12.5px;color:var(--gt3);margin:6px 0 14px}
+.gcl .op{display:block;width:100%;text-align:left;border:1px solid var(--gl);background:none;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-family:inherit}
+.gcl .op:hover{border-color:var(--gl2);background:rgba(255,255,255,.04)}
+.gcl .op b{display:block;font-size:13.5px;color:var(--gt);font-weight:600}
+.gcl .op span{display:block;font-size:12px;color:var(--gt3);margin-top:3px;line-height:1.5}
+.gcl .free{display:block;width:100%;border:1px dashed var(--gl);background:none;border-radius:12px;padding:11px 14px;color:var(--gt3);font-size:12.5px;cursor:pointer;font-family:inherit;text-align:left}
+.gcl .free:hover{border-color:var(--gl2);color:var(--gt2)}
 /* ── 상세 ── */
 .bk2-glow{height:150px;margin:0 -32px;pointer-events:none}
 .bk2-bc{font-size:12.5px;color:var(--gt3);margin:-96px 0 26px;position:relative}
@@ -6824,7 +6841,7 @@ function gShowConv(){
   if(cur0.pendingChips&&!document.getElementById(cur0.pendingChips.id)){
     var pcr=cur0.pendingChips; cur0.pendingChips=null;
     if(pcr.step) gSetStep(pcr.step);
-    gConvChips(pcr.items);
+    gConvChips(pcr.items,pcr.card||null); /* T8: 카드도 카드로 복원 */
   }
   /* 세션 복원 시 트레이딩뷰 위젯 재생성 (기록의 카드 컨테이너에 다시 마운트) */
   var ai0=G.cur&&G.cur.ai;
@@ -6877,13 +6894,28 @@ function gConvUser(t){
 function taiUCopy(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; try{ navigator.clipboard.writeText(tx).catch(function(){}); }catch(e){} toast('복사 완료'); }
 function taiUEdit(b){ var m=b.closest('.g-urow'); var tx=m?m.querySelector('.g-umsg').textContent:''; var f=$('g-in'); if(f){ f.value=tx; f.focus(); f.style.height='auto'; f.style.height=Math.min(f.scrollHeight,120)+'px'; var cp=f.closest('.g-composer'); if(cp&&innerWidth>860) cp.classList.toggle('multi',f.scrollHeight>30); } }
 function gConvAI(html){ gThreadAdd('<div class="g-amsg">'+html+'</div>'); }
-function gConvChips(items){
+function gConvChips(items,card){
   var id='gc'+Date.now();
-  var html='<div class="g-chiprow" id="'+id+'">'+items.map(function(it,i){ return '<button class="g-qchip" data-i="'+i+'">'+it.label+'</button>'; }).join('')+'</div>';
+  var html;
+  if(card){ /* T8: 젠스파크형 질문 카드 — 배지+카드가 한 컨테이너라 제거/복원이 칩과 동일 경로 */
+    html='<div class="g-chiprow gclw" id="'+id+'">'
+      +'<div class="gcl-badge"><span class="dot"></span>입력이 필요합니다, 아래 카드에서 답해주세요</div>'
+      +'<div class="gcl" role="group" aria-label="'+gEsc(card.title)+'">'
+      +'<div class="hd"><span class="pg num">질문 '+card.pg[0]+' / '+card.pg[1]+'</span><b>'+gEsc(card.title)+'</b>'
+      +'<button type="button" class="x" data-skip="1" aria-label="이 질문 건너뛰기 (추천값으로 진행)">✕</button></div>'
+      +(card.sub?'<div class="sub">'+gEsc(card.sub)+'</div>':'')
+      +items.map(function(it,i){ return '<button type="button" class="op" data-i="'+i+'"><b>'+gEsc(it.label)+'</b>'+(it.desc?'<span>'+gEsc(it.desc)+'</span>':'')+'</button>'; }).join('')
+      +'<button type="button" class="free" data-free="1">직접 답변 작성'+(card.freeHint?'<span style="display:block;font-size:11.5px;margin-top:2px;opacity:.8">'+gEsc(card.freeHint)+'</span>':'')+'</button>'
+      +'</div></div>';
+  } else {
+    html='<div class="g-chiprow" id="'+id+'">'+items.map(function(it,i){ return '<button class="g-qchip" data-i="'+i+'">'+it.label+'</button>'; }).join('')+'</div>';
+  }
   var el=gThreadAdd(html);
-  window.TF_CHIPS=window.TF_CHIPS||{}; TF_CHIPS[id]=items; /* 화면 이동 복원 시 재바인딩용 (codex qa3 P1-3) */
-  if(G.cur){ /* 리로드 복원용 직렬화 — 콜백이 아니라 액션 스펙을 저장한다 (audit P0-2) */
-    G.cur.pendingChips={id:id, step:gStep, items:items.map(function(it){ return {label:it.label, act:it.act||null, arg:(it.arg===undefined?null:it.arg)}; })};
+  window.TF_CHIPS=window.TF_CHIPS||{}; TF_CHIPS[id]=items;
+  window.TF_CARDS=window.TF_CARDS||{}; if(card) TF_CARDS[id]=card;
+  if(G.cur){ /* 리로드 복원용 직렬화 — 콜백이 아니라 액션 스펙을 저장한다 (audit P0-2, T8 card 확장) */
+    G.cur.pendingChips={id:id, step:gStep, card:card||null,
+      items:items.map(function(it){ return {label:it.label, desc:it.desc||null, act:it.act||null, arg:(it.arg===undefined?null:it.arg)}; })};
     STORE.save();
   }
   if(el) gChipBind(el,id);
@@ -6892,6 +6924,21 @@ function gChipBind(el,id){
   var sess=G.cur;
   var items=(window.TF_CHIPS||{})[id]||(sess&&sess.pendingChips&&sess.pendingChips.id===id?sess.pendingChips.items:null);
   if(!items) return;
+  var card=(window.TF_CARDS||{})[id]||(sess&&sess.pendingChips&&sess.pendingChips.id===id?sess.pendingChips.card:null);
+  if(card){ /* T8 카드 바인딩 */
+    var done=function(){ el.remove(); if(window.TF_CHIPS) delete TF_CHIPS[id]; if(window.TF_CARDS) delete TF_CARDS[id];
+      if(sess){ sess.convo=sess.convo.filter(function(h){return h.indexOf(id)<0;}); if(sess.pendingChips&&sess.pendingChips.id===id) sess.pendingChips=null; STORE.save(); } };
+    el.querySelectorAll('.op').forEach(function(b){ b.onclick=function(){
+      var it=items[+b.getAttribute('data-i')]; if(!it) return; done();
+      if(it.act) gChipAct(it.act,it.arg,it.label); }; });
+    var xb=el.querySelector('[data-skip]');
+    if(xb) xb.onclick=function(){ done(); gConvAI('이 질문은 건너뛰고 추천값으로 진행할게요.'); if(card.skipAct) gChipAct(card.skipAct,card.skipArg===undefined?null:card.skipArg,null,true); };
+    var fb=el.querySelector('[data-free]');
+    if(fb) fb.onclick=function(){ /* 카드 유지 — 입력창 답변도 같은 질문에 매칭된다 (기존 라벨/수치 해석 재사용) */
+      var f2=$('g-in')||$('g-home-in'); if(f2){ if(card.freeHint) f2.placeholder=card.freeHint; try{ f2.focus(); }catch(e){} }
+      toast('아래 입력창에 편하게 적어주세요. 예를 들어 숫자만 적어도 알아들어요'); };
+    return;
+  }
   el.querySelectorAll('button').forEach(function(b,i){ b.onclick=function(){
     el.remove(); if(window.TF_CHIPS) delete TF_CHIPS[id];
     if(sess){ sess.convo=sess.convo.filter(function(h){return h.indexOf(id)<0;}); if(sess.pendingChips&&sess.pendingChips.id===id) sess.pendingChips=null; STORE.save(); }
@@ -6909,7 +6956,18 @@ function gThink(label,ms,fn){
 var gStep=null;
 function gSetStep(st){ gStep=st; if(G.cur) G.cur.step=st; }
 /* 칩을 직렬화 가능한 액션으로 실행 — 복원, 자유 텍스트 매칭과 공유 (audit P0-2) */
+/* T8: 답변이 어떤 경로(칩 클릭, 카드, 타이핑 해석)로 커밋되든 대기 중 질문 UI 는 반드시 걷어낸다
+   — 타이핑 답변 시 칩 행이 남던 잠복 버그가 카드에서 스테일 스택으로 가시화된 것 수정 */
+function gClDropPending(){
+  var pc=G.cur&&G.cur.pendingChips; if(!pc) return;
+  var row=document.getElementById(pc.id); if(row) row.remove();
+  if(window.TF_CHIPS) delete TF_CHIPS[pc.id];
+  if(window.TF_CARDS) delete TF_CARDS[pc.id];
+  G.cur.convo=G.cur.convo.filter(function(h){ return h.indexOf(pc.id)<0; });
+  G.cur.pendingChips=null; STORE.save();
+}
 function gChipAct(act,arg,label,silent){
+  if(['mode','pair','pair-reco','tf','tf-reco','risk','tp'].indexOf(act)>=0) gClDropPending();
   if(act==='mode'){ if(!silent) gConvUser(label); S.strategy.entryMode=arg; delay(250,gNextAfterMode); return; }
   if(act==='mode-diff'){ if(!silent) gConvUser('차이 설명'); gConvAI('반등 매수는 과매도 후 회복을 노립니다, 거래가 적고 느립니다. 추세 진입은 상승 확인 후 따라갑니다, 거래가 잦고 빠릅니다.'); delay(350,gAskMode); return; }
   if(act==='pair'){ gPickPair(arg, silent?null:arg); return; }
@@ -6936,6 +6994,11 @@ function gConvInterpret(text){
     var mTp=text.match(/\+?\s*(\d+(?:\.\d+)?)\s*%[^0-9%]{0,4}익절/)||text.match(/(?:익절|목표)[^0-9%]{0,6}\+?\s*(\d+(?:\.\d+)?)\s*%/);
     if(mSl) S.strategy._slIntent=Math.abs(parseFloat(mSl[1]));
     if(mTp) S.strategy._tpIntent=Math.abs(parseFloat(mTp[1]));
+    if(G.cur){ /* T8: 물어볼 질문 개수 = 비어 있는 슬롯만 (N개 중 M 페이지네이션) */
+      G.cur.clN=(S.strategy.entryMode?0:1)+(S.strategy.pair?0:1)+1
+        +(S.strategy._slIntent!=null?0:1)+(S.strategy._tpIntent!=null?0:1);
+      G.cur.clI=0;
+    }
     var ack=S.strategy.pair?' 대상은 '+S.strategy.pair+'로 이해했습니다.':'';
     var said=[]; if(mSl) said.push('손절 -'+S.strategy._slIntent+'%'); if(mTp) said.push('익절 +'+S.strategy._tpIntent+'%');
     var ack2=said.length?' 말씀하신 '+said.join('와 ')+'는 그대로 반영해두겠습니다.':'';
@@ -6947,26 +7010,37 @@ function gNextAfterMode(){
   if(S.strategy.pair) gPickPair(S.strategy.pair,null);
   else gAskPair();
 }
+/* 실AI 경로: 시스템 프롬프트에 "모호한 자산/기간/예산/성향 등 전략 품질에 직결되는 정보가 빠졌을 때만
+   {clarification_needed:true, questions:[{title,sub,options:[{label,desc,value}],key}]} JSON 을 내라"고 지시하고
+   응답을 이 어댑터로 넘기면 데모와 동일한 카드 UI 에 바인딩된다. 단순 정보 질문에는 묻지 않는 절제 기준 포함. */
+function gClarifyFromAI(j){
+  if(!j||!j.clarification_needed||!Array.isArray(j.questions)||!j.questions.length) return false;
+  if(G.cur){ G.cur.clN=j.questions.length; G.cur.clI=0; }
+  var q=j.questions[0];
+  gConvChips((q.options||[]).map(function(o){ return {label:o.label, desc:o.desc||null, act:'ai-clar', arg:JSON.stringify({key:q.key,value:o.value!==undefined?o.value:o.label})}; }),
+    {title:q.title||'조금만 더 알려주세요', sub:q.sub||null, pg:gClPg(), skipAct:null, freeHint:'아래 입력창에 직접 적어주셔도 돼요'});
+  return true;
+}
+function gClPg(){ var c=G.cur||{}; c.clI=(c.clI||0)+1; return [Math.min(c.clI,c.clN||c.clI), c.clN||c.clI]; }
 function gAskMode(){
   gSetStep('mode');
-  gConvAI('진입 방식을 선택하세요.');
   gConvChips([
-    {label:'내려왔을 때 반등 매수', act:'mode', arg:'dip'},
-    {label:'오르는 흐름에 진입', act:'mode', arg:'trend'},
-    {label:'차이 설명', act:'mode-diff'}
-  ]);
+    {label:'내려왔을 때 반등 매수', desc:'과매도 후 되돌림을 노려요. 거래가 적고 느긋해요.', act:'mode', arg:'dip'},
+    {label:'오르는 흐름에 진입', desc:'상승 확인 후 따라가요. 거래가 잦고 빠릅니다.', act:'mode', arg:'trend'},
+    {label:'차이를 더 알려주세요', desc:'두 방식의 차이를 설명해드려요.', act:'mode-diff'}
+  ],{title:'진입 방식을 정해주세요', sub:'전략의 성격을 결정하는 질문이에요.', pg:gClPg(), skipAct:'mode', skipArg:'dip', freeHint:'예: 반등 매수로'});
 }
 function gAskPair(){
   gSetStep('pair');
-  gConvAI('대상 자산을 선택하세요.');
   gConvChips([
-    {label:'BTC/USDT', act:'pair', arg:'BTC/USDT'},
-    {label:'ETH/USDT', act:'pair', arg:'ETH/USDT'},
-    {label:'추천', act:'pair-reco'}
-  ]);
+    {label:'BTC/USDT', desc:'유동성이 가장 깊어 검증 데이터가 안정적이에요.', act:'pair', arg:'BTC/USDT'},
+    {label:'ETH/USDT', desc:'변동성이 조금 더 커서 기회와 위험이 함께 커져요.', act:'pair', arg:'ETH/USDT'},
+    {label:'AI 추천으로', desc:'거래량과 데이터 안정성 기준으로 골라드려요.', act:'pair-reco'}
+  ],{title:'어떤 자산으로 할까요?', sub:'검증과 실행의 대상이 되는 자산이에요.', pg:gClPg(), skipAct:'pair-reco', freeHint:'예: 비트코인으로'});
 }
 function gPickPair(pair,label){
   if(!G.cur||!S.strategy) return; /* 인테이크 진행 중 다른 화면으로 이탈한 뒤 지연 체인이 늦게 도착하면 무시 (T3 전수 점검 부수 발견) */
+  gClDropPending(); /* T8 */
   if(label) gConvUser(label);
   S.strategy.pair=pair;
   var AKO={'BTC/USDT':'비트코인','ETH/USDT':'이더리움'};
@@ -6980,14 +7054,14 @@ function gPickPair(pair,label){
 }
 function gAskTf(){
   gSetStep('tf');
-  gConvAI('확인 주기를 선택하세요. 짧을수록 거래가 잦아집니다.');
   gConvChips([
-    {label:'1시간', act:'tf', arg:'1시간봉'},
-    {label:'하루 1회', act:'tf', arg:'일봉'},
-    {label:'추천', act:'tf-reco'}
-  ]);
+    {label:'1시간마다', desc:'기회를 자주 잡지만 거래도 잦아져요.', act:'tf', arg:'1시간봉'},
+    {label:'하루 1회', desc:'느긋하게 굵직한 흐름만 봐요.', act:'tf', arg:'일봉'},
+    {label:'AI 추천으로', desc:'진입 방식에 맞는 균형점을 골라드려요.', act:'tf-reco'}
+  ],{title:'얼마나 자주 확인할까요?', sub:'짧을수록 거래가 잦아집니다.', pg:gClPg(), skipAct:'tf-reco', freeHint:'예: 1시간마다'});
 }
 function gPickTf(tf,label){
+  gClDropPending(); /* T8 */
   if(label) gConvUser(label);
   S.strategy.tf=tf;
   S.strategy.entry = S.strategy.entryMode==='trend' ? '20일 이동평균 상향 돌파 + 거래량 확인' : 'RSI 30 이하 과매도 후 20일 이동평균 회복';
@@ -7001,14 +7075,14 @@ function gAskRisk(){
     return;
   }
   gSetStep('risk');
-  gConvAI('1회 거래의 손실 한도를 선택하세요. 이 선에서 자동 손절합니다.');
   gConvChips([
-    {label:'-2%', act:'risk', arg:'-2'},
-    {label:'-3% (표준)', act:'risk', arg:'-3'},
-    {label:'-5%', act:'risk', arg:'-5'}
-  ]);
+    {label:'-2%', desc:'보수적으로. 손실은 작지만 자주 잘릴 수 있어요.', act:'risk', arg:'-2'},
+    {label:'-3% (표준)', desc:'대부분의 검증에서 균형이 좋았던 기본값이에요.', act:'risk', arg:'-3'},
+    {label:'-5%', desc:'여유를 주는 대신 한 번의 손실이 커져요.', act:'risk', arg:'-5'}
+  ],{title:'한 번의 거래에서 얼마까지 잃어도 될까요?', sub:'이 선에 닿으면 자동으로 손절해요.', pg:gClPg(), skipAct:'risk', skipArg:'-3', freeHint:'예: -3%'});
 }
 function gPickRisk(sl,silent){
+  gClDropPending(); /* T8 */
   if(!silent) gConvUser(sl+'%');
   S.strategy.slNum=sl; S.strategy.sl=sl+'%';
   S.strategy.risk=sl===-2?'낮음':sl===-3?'보통':'다소 높음';
@@ -7021,11 +7095,10 @@ function gPickRisk(sl,silent){
       return;
     }
     gSetStep('tp');
-    gConvAI('익절 기준이 없습니다. 수익 확정 지점이 없으면 낙폭이 커질 수 있습니다.');
     gConvChips([
-      {label:'익절 +8% 설정', act:'tp', arg:'8'},
-      {label:'익절 없이 진행', act:'tp', arg:null}
-    ]);
+      {label:'익절 +8% 설정', desc:'수익 확정 지점을 두고 낙폭을 관리해요.', act:'tp', arg:'8'},
+      {label:'익절 없이 진행', desc:'추세를 끝까지 따라가요. 되돌림은 감수합니다.', act:'tp', arg:null}
+    ],{title:'수익은 어디서 확정할까요?', sub:'확정 지점이 없으면 벌었다가 되돌려줄 수 있어요.', pg:gClPg(), skipAct:'tp', skipArg:'8', freeHint:'예: +8% 또는 없이'});
   });
 }
 function gMakePlan(){
@@ -14163,7 +14236,7 @@ function tfBrokersView(){
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead('지원 거래소','',null);
-  if(['rating','reviews','users'].indexOf(t.bkSort)<0) t.bkSort='rating';
+  if(['order','rating','reviews','users'].indexOf(t.bkSort)<0) t.bkSort='order'; /* T6: 기본은 고정 순서 (지원 6개 -> 지원 예정) */
   if(t.bkFilter==='fx') t.bkFilter='broker'; if(['all','ex','stock','broker','conn','soon'].indexOf(t.bkFilter)<0) t.bkFilter='all'; /* 구값 crypto 등 정규화 */
   var rows=TF_BROKERS.slice();
   if(t.bkFilter==='conn') rows=rows.filter(function(b){return b.conn;});
@@ -14171,10 +14244,11 @@ function tfBrokersView(){
   if(t.bkFilter==='ex') rows=rows.filter(function(b){return b.tag==='거래소';});
   if(t.bkFilter==='stock') rows=rows.filter(function(b){return b.tag==='증권사';});
   if(t.bkFilter==='broker') rows=rows.filter(function(b){return b.tag==='브로커';});
-  /* 정렬 이름과 실제 순서 일치 (bk-codex P2) */
-  rows.sort(t.bkSort==='reviews'?function(a,b){return (b.rvN||0)-(a.rvN||0)||b.rating-a.rating;}
-    :t.bkSort==='users'?function(a,b){return (b.traderN||0)-(a.traderN||0)||b.rating-a.rating;}
-    :function(a,b){return b.rating-a.rating||(b.rvN||0)-(a.rvN||0);});
+  /* 정렬 이름과 실제 순서 일치 (bk-codex P2). 기본 순서 = ord (T6 고정 순서) */
+  rows.sort(t.bkSort==='reviews'?function(a,b){return (b.rvN||0)-(a.rvN||0)||(b.rating||0)-(a.rating||0);}
+    :t.bkSort==='users'?function(a,b){return (b.traderN||0)-(a.traderN||0)||(b.rating||0)-(a.rating||0);}
+    :t.bkSort==='rating'?function(a,b){return (b.rating||0)-(a.rating||0)||(b.rvN||0)-(a.rvN||0);}
+    :function(a,b){return (a.ord||99)-(b.ord||99);});
   var pills=[['all','전체'],['ex','거래소'],['stock','증권사'],['broker','브로커'],['conn','연결 지원'],['soon','지원 예정']];
   gContent('<div class="tf-page bk2-page">'
     +'<div class="bk2-hero"><h2>연결하면, 실행됩니다</h2>'
@@ -14184,7 +14258,7 @@ function tfBrokersView(){
     +'<span>'+TFBK2_CK+'출금 권한 필요 없음, 언제든 연결 해제</span>'
     +'</div></div>'
     +'<div class="bk2-bar">'
-    +tfBkDrop('tfbk-m-sort',[['rating','최고 평점'],['reviews','최다 리뷰'],['users','최다 사용자']],t.bkSort,'tfBkSortPick')
+    +tfBkDrop('tfbk-m-sort',[['order','기본 순서'],['rating','최고 평점'],['reviews','최다 리뷰'],['users','최다 사용자']],t.bkSort,'tfBkSortPick')
     +'<span class="dv" aria-hidden="true"></span>'
     +pills.map(function(p){ return '<button type="button" class="fp'+(t.bkFilter===p[0]?' on':'')+'" onclick="tfBkSet(\'bkFilter\',\''+p[0]+'\')">'+p[1]+'</button>'; }).join('')
     +'</div>'
@@ -14295,12 +14369,16 @@ function tfBrokerView(id,tab){
       +'</div>'
       +'<div class="bk2-sh">거래 조건, 수수료</div>'
       +'<div class="tfbk-fees">'
-      +'<div><small>최대 레버리지</small><b>'+gEsc(b.lev||'해당 없음')+'</b></div>'
-      +'<div><small>입금 수수료</small><b>'+gEsc(b.fees?b.fees.dep:'확인 예정')+'</b></div>'
-      +'<div><small>출금 수수료</small><b>'+gEsc(b.fees?b.fees.wd:'확인 예정')+'</b></div>'
-      +'<div><small>휴면 수수료</small><b>'+gEsc(b.fees?b.fees.ina:'확인 예정')+'</b></div>'
+      /* T7: 현물/선물 분리 표기 — lev2:{spot,fut} 신 스키마, 구 lev 문자열은 폴백. 미확인 값은 — (추측 금지) */
+      +'<div><small>최대 레버리지</small><b>'+gEsc(b.lev2?('현물 '+(b.lev2.spot||'—')+(b.lev2.fut?', 선물 '+b.lev2.fut:'')):(b.lev||'—'))+'</b></div>'
+      +'<div><small>입금 수수료</small><b>'+gEsc((b.fees&&b.fees.dep)||'—')+'</b></div>'
+      +'<div><small>출금 수수료</small><b>'+gEsc((b.fees&&b.fees.wd)||'—')+'</b></div>'
+      +'<div><small>휴면 수수료</small><b>'+gEsc((b.fees&&b.fees.ina)||'—')+'</b></div>'
       +(b.fees&&b.fees.mk?'<div><small>현물 Maker / Taker</small><b>'+gEsc(b.fees.mk)+' / '+gEsc(b.fees.tk)+'</b></div>':'')
+      +(b.fees&&(b.fees.fmk||b.fees.ftk)?'<div><small>선물 Maker / Taker</small><b>'+gEsc(b.fees.fmk||'—')+' / '+gEsc(b.fees.ftk||'—')+'</b></div>'
+        :(b.lev2&&b.lev2.fut?'<div><small>선물 Maker / Taker</small><b>—</b></div>':''))
       +'</div>'
+      +'<div class="bk2-asof">수수료와 레버리지는 기본 등급(VIP0) 공식 문서 기준, '+gEsc(b.asof||'2026.09')+' 기준 스냅샷이에요.</div>'
       +'<div class="bk2-sh">'+gEsc(b.name)+'에 대하여</div>'
       +'<div class="bk2-about"><div class="mg">'
       +'<div><small>설립</small><b>'+gEsc(info.founded||'-')+'</b></div>'
