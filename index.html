@@ -14471,7 +14471,7 @@ function tfBkReel(target){
 /* ── 지원 거래소 v3 헬퍼 ── */
 /* 확보된 공식 로고 에셋만 이미지로, 나머지는 브랜드 컬러 타일 — 404 회색 박스 방지 (QA).
    공식 프레스킷 미공개 엔티티는 타일 유지 (허위 로고 크롤 금지 원칙) */
-var TFBK_LOGOS={binance:'png',bybit:'png',kiwoom:'png',okx:'png',upbit:'png',woox:'png',mexc:'svg'};
+var TFBK_LOGOS={binance:'png',bybit:'png',kiwoom:'png',okx:'png',upbit:'png',woox:'png',mexc:'png',bitget:'png',coinbase:'png',kis:'png',robinhood:'png',ibkr:'png',schwab:'png',fidelity:'png',etrade:'png',webull:'png',etoro:'png',saxo:'png',ig:'png',moomoo:'png',tiger:'png'}; /* 실제 앱스토어 아이콘 (iTunes API, 사용자 지시) */
 function tfBkTile(b,sz,cls){
   return '<span class="'+(cls||'')+' bk2-tile" aria-hidden="true" style="width:'+sz+'px;height:'+sz+'px;border-radius:'+Math.round(sz*0.23)+'px;background:'+b.col+';color:'+(b.fg||'#fff')+';font-size:'+Math.round(sz*0.42)+'px">'+gEsc(b.name.slice(0,1))+'</span>';
 }
@@ -14623,7 +14623,7 @@ function tfBrokerView(id,tab){
       +'<div class="bk2-assets">'+assets.map(function(a){ return '<span>'+gEsc(a)+'</span>'; }).join('')+'</div>'
       +(b.conn&&b.promo?'<div class="bk2-promo" style="background:linear-gradient(100deg,'+col+'2e 0%,'+col+'14 34%,rgba(20,22,28,.9) 72%,rgba(15,16,18,.6) 100%)">'
         /* T5: 프로모 카피 전 거래소 공통 확정 문구 — 강제 줄바꿈 없음 (PC 줄바꿈 금지, 사용자 확정), 자연 개행만 */
-        +'<div class="tx"><small>프로모션</small><b>'+gEsc(b.promo)+'</b><p>파트너 리퍼럴이 아니라 TETH 초대코드로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료에요. 가입 즉시 자동 연결됩니다.</p></div>'
+        +'<div class="tx"><small>프로모션</small><b>'+gEsc(b.promo)+'</b><p>TETH 초대코드로 가입하면 유동성 수수료 지원으로 TETH 이용료가 무료에요. 가입 즉시 자동 연결됩니다.</p></div>'
         +'<div class="ac"><button class="wbtn" onclick="tfBkPromoMore(\''+b.id+'\')">혜택 자세히</button></div></div>':'')
       +'<div class="bk2-sh">리뷰 <span class="sp"></span><button class="obtn sm" onclick="tfBkTab(\''+b.id+'\',\'reviews\')">전체 보기</button></div>'
       +'<div class="bk2-rvwrap">'
