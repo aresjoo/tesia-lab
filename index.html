@@ -11120,9 +11120,10 @@ function bcVolumeCharge(fid,ex,market,notional){
   var rate=(tbl[ex]&&tbl[ex][market||'spot'])||(tbl.binance&&tbl.binance.spot)||0;
   var credit=Math.round(notional*rate);
   if(credit<=0) return 0;
-  var bal=bcBalance(), cap=cfg.UID_CREDIT_CAP||Infinity;
+  /* cap 은 당월 거래량 충전 누계 기준 — 총 잔액 기준이면 카드 월 충전(캡 초과)이 거래량 충전을 영구 차단한다 (질문 2 임시) */
+  var used=bcMonthVol(), cap=cfg.UID_CREDIT_CAP||Infinity;
   var expire=0;
-  if(bal+credit>cap){ expire=bal+credit-cap; credit=Math.max(0,cap-bal); }
+  if(used+credit>cap){ expire=used+credit-cap; credit=Math.max(0,cap-used); }
   if(credit>0){
     if(!bcAppend('charge','volume',credit,fid,'vol:'+fid)) return 0; /* fid 멱등 */
     if(expire>0) bcEvent('cap-expire',{fid:fid,expired:expire});
@@ -11197,7 +11198,8 @@ function bcBranch(){
   if(tier==='FREE') return 'free.out';
   if(tier==='CARD') return 'card.out'; /* CARD 단독 월중 소진 (질문 13 임시: UID 연동 제안) */
   var v=bcMonthVol(), u=bcMonthSpend();
-  if(v<=0) return 'uid.novol';
+  if(v<=0) return 'uid.novol'; /* 거래량 0 은 CARD_UID 도 동일: 전략 조정 유도 */
+  if(tier==='CARD_UID') return 'carduid.out'; /* 카드 보유자에게 카드 제안 금지 (질문 15 임시: 결제일 재충전 안내) */
   if(u>=(cfg.CARD_CREDIT_MONTHLY||3000)*0.5) return 'uid.heavy'; /* 카드 플랜급 소비 = 과다 (질문 14 임시) */
   return 'uid.small';
 }
@@ -15020,6 +15022,8 @@ var I18N={
   'bill.free.out.b':{ko:'거래소 UID 연동은 0원으로 계속 쓸 수 있어요. 카드 등록으로도 이어갈 수 있어요.',en:'Link an exchange UID to continue for free, or add a card.'},
   'bill.card.out.t':{ko:'이번 달 크레딧을 모두 사용했어요',en:'This month\'s credits are used up'},
   'bill.card.out.b':{ko:'UID 연동으로 거래량 충전을 더할 수 있어요. 다음 결제일에는 자동으로 다시 채워져요.',en:'Link a UID to add volume top-ups. Credits refill automatically next billing day.'},
+  'bill.carduid.out.t':{ko:'이번 달 크레딧을 모두 사용했어요',en:'This month\'s credits are used up'},
+  'bill.carduid.out.b':{ko:'다음 결제일에 자동으로 다시 채워져요. 그동안 쌓이는 거래량 충전분은 다음 결제에서 할인으로 이어져요.',en:'Credits refill automatically next billing day. Volume top-ups keep cutting your next bill.'},
   'bill.card.cross.t':{ko:'거래소 연동으로 요금을 아껴보세요',en:'Save on your bill by linking an exchange'},
   'bill.card.cross.b':{ko:'UID를 연동하면 거래량만큼 크레딧이 충전되고 다음 결제에서 그만큼 할인돼요. AI 이용 크레딧 $100 혜택도 받을 수 있어요.',en:'Link a UID to earn credits from your volume and cut your next bill. Includes $100 in AI credits.'}
 };
