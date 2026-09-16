@@ -10772,13 +10772,19 @@ function cpDashSec(){
       +'<span class="tag">비율 따라가기</span><span class="tag" title="Profit share ratio">분배 '+Math.round((cpMeta(c2.nick).share)*100)+'%</span>'
       +'<span class="tag '+(on?'on':'off')+'">'+(on?'카피 중':'종료됨')+'</span>'
       +'<span style="flex:1"></span><span class="cps-static num">'+new Date(c2.at).toLocaleDateString('ko-KR')+' 시작</span></div>'
-      +'<div class="cpd-kv">'
+      +(on?'<div class="cpd-kv">'
       +'<div><small>순손익</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
       +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>'
       +'<div><small>평가 금액</small><b class="num">'+cpUsd(d.est)+'</b></div>'
       +'<div><small>가용</small><b class="num">'+cpUsd(d.avail)+'</b></div>'
       +'<div><small>누적 투자</small><b class="num">'+cpUsd(d.inv)+'</b></div>'
       +'</div>'
+      /* 종료 카드는 정산 시점 고정값 — 라이브 재계산으로 수치가 흐르지 않게 */
+      :'<div class="cpd-kv">'
+      +'<div><small>순손익 (정산 확정)</small><b class="num '+(((c2.settle&&c2.settle.net)||0)>=0?'u':'d')+'">'+cpUsd((c2.settle&&c2.settle.net)||0)+'</b></div>'
+      +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd((c2.settle&&c2.settle.share)||0)+'</b></div>'
+      +'<div><small>회수 금액</small><b class="num">'+cpUsd((c2.settle&&c2.settle.back)||0)+'</b></div>'
+      +'</div>')
       +(on?'<div class="cpd-acts"><button type="button" class="obtn" onclick="cpAdjDlg(\''+c2.id+'\')">잔고 조정</button>'
         +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+c2.id+'\')">카피 종료</button></div>'
         :'<div class="cps-static" style="margin-top:8px">정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</div>')
