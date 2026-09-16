@@ -11381,7 +11381,7 @@ function tfNFBar(){
     if(e.why==='free') tx.innerHTML='무료 <b>'+e.freeLeft+'회</b> 남음';
     else if(e.why==='free-out') tx.innerHTML='<b>업그레이드 필요</b>';
     else if(e.tier==='high'&&e.bal==null) tx.innerHTML='<b>PRO</b> '+(e.why==='paid'?'구독':'무제한');
-    else if(e.why==='credit') tx.innerHTML='<b>'+e.bal.toLocaleString()+'C</b> 남음';
+    else if(e.why==='credit') tx.innerHTML='<b>PRO</b> 이용 중'; /* 잔액 수치 비노출 (5단계) — 요소 부활 대비 방어 */
     else tx.innerHTML='기본 분석';
     cp.classList.toggle('warn',(e.why==='credit'&&e.bal<=TFC.credit.uidGrant*(1-TFC.credit.warnRatio))||(e.why==='free'&&e.freeLeft<=2));
     cp.classList.toggle('low',e.tier==='low');
