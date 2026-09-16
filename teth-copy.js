@@ -64,6 +64,18 @@ window.TFC = {
     DISCOUNT_RESCUE: 0.90,          /* 임계점 카드 등록 할인 — 반복 수령 가능, 수령 이력 기록 (질문 8: 임시 다음 1회분) */
     PROMO_AI_CREDIT_USD: 100        /* CARD 유저 UID 연동 프로모 — 문구 고정 "AI 이용 크레딧 $100" */
   },
+  /* ── 카피트레이딩 config (docs/bitget-copytrading-spec.md 재해석, 전 자산 USDT 표기) ── */
+  copytrade: {
+    version: 1,
+    PROFIT_SHARE: 0.10,          /* 수익 분배율 */
+    COPIER_CAP: 500,             /* 카피어 상한 */
+    DELAY_HOURS: 1,              /* 비카피어 오픈 포지션 지연 공개 */
+    LOSS_GUARD: -0.20,           /* 손실 중 추가 입금 보호 임계 (핵심 원칙 4) */
+    MIN_COPY_USDT: 50,           /* 카피 금액 하한 */
+    MARGIN_RANGE: [10, 100000],  /* Fixed margin 주문당 범위 */
+    TRUST_MIN_DAYS: 90,          /* 신뢰도 코멘트: 검증 기간 짧음 판정 */
+    TRUST_HI_ROI: 50             /* 신뢰도 코멘트: 고수익 판정 % */
+  },
   rebate: { rate: 0.10 }
 };
 
