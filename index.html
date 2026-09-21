@@ -4433,7 +4433,7 @@ button{-webkit-tap-highlight-color:transparent}
       <button class="g-new" onclick="gHome()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg><span class="lb">새 전략</span><span class="g-ico-pill lbp" id="gp-new">새 전략</span></button>
       <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
       <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
-      <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">AI 전략 리그</span><span class="g-ico-pill lbp">AI 전략 리그</span></button>
+      <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">전략 따라하기</span><span class="g-ico-pill lbp">전략 따라하기</span></button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
@@ -10709,7 +10709,7 @@ function tfShareHub(tab){
   G.cur=null; G.mode='tfss3'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead('AI 전략 리그','',null);
+  gChead('전략 따라하기','',null);
   var fN=t.follows.filter(function(f){return !f.archived;}).length;
   var nav=[['find','전략 찾기'],['follow','따라가는 중'+(fN?' '+fN:'')],['mine','내 전략']];
   var controls='<div class="tfbk-filters">'
@@ -10838,7 +10838,7 @@ function cpProfileView(ne,tab){
   var body=tab==='ov'?cpOvTab(s,m):cpEmptyTab(s,m,tab);
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   gContent('<div class="tf-page tfbk ss3 cpp">'
-    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(tfSSState().ss.tab||\'find\')">← AI 전략 리그</button>'
+    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(tfSSState().ss.tab||\'find\')">← 전략 따라하기</button>'
     +'<div class="cpp-head">'
     +'<div class="cpp-ava" aria-hidden="true">'+gEsc(nick.slice(0,1))+'</div>'
     +'<div class="cpp-idm"><div class="cpp-nick">'+gEsc(nick)+'</div>'
@@ -11731,7 +11731,7 @@ function tfSS3WatchTgl(ne){
   var t=tfS(); t.watch=t.watch||[];
   var i=t.watch.indexOf(nick);
   if(i>=0){ t.watch.splice(i,1); toast('관심 전략에서 제외했어요'); }
-  else { t.watch.push(nick); toast('관심 전략에 추가했어요. AI 전략 리그의 따라가기 탭에서 모아볼 수 있어요'); }
+  else { t.watch.push(nick); toast('관심 전략에 추가했어요. 전략 따라하기 화면에서 모아볼 수 있어요'); }
   tfSave(); tfTrack('strategy_watch',{nick:nick,on:i<0});
   var b=$('ss3-watch-btn'); if(b){ b.innerHTML=tfSS3WatchLb(i<0); b.setAttribute('aria-pressed',String(i<0)); }
   else if(G.mode==='tfss3') tfShareHub('follow'); /* 팔로우 탭의 관심 섹션에서 해제한 경우 목록 재렌더 */
