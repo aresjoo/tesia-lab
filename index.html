@@ -1512,7 +1512,6 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 /* 게스트: 새 연구 비활성 + 안내, 목록은 로그인 후에만 */
 .g-side:not(.authed) .g-new{opacity:.45;pointer-events:none} /* 게스트는 접힘 레일에서도 새 전략 비활성 (Gemini 동일), 라벨은 자체 opacity:0이라 안전 */
 .g-side:not(.authed) .g-util,.g-side:not(.authed) .g-sec,.g-side:not(.authed) #g-sess-list,.g-side:not(.authed) #g-live-list{display:none}
-.g-side:not(.authed) #gu-insight{display:flex} /* 인사이트는 공개 콘텐츠 — 게스트에게도 사이드바 진입점 (Finimize 리서치 지시) */
 #g-guest-note{display:none;align-items:flex-start;gap:9px;padding:12px 13px;font-size:13px;color:var(--gt2);line-height:1.5}
 #g-guest-note svg{flex-shrink:0;margin-top:2px}
 #g-guest-note a{text-decoration:none;border-bottom:1.5px dotted var(--gt2);padding-bottom:1px;cursor:pointer;color:var(--gt)} /* border 방식이라 공백 포함 점선이 끊기지 않는다 */
@@ -4435,12 +4434,10 @@ button{-webkit-tap-highlight-color:transparent}
       <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
       <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
       <button class="g-util" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">전략들</span><span class="g-ico-pill lbp">전략들</span></button>
-      <button class="g-util" id="gu-insight" onclick="tfNav('#/insight')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="lb">인사이트</span><span class="g-ico-pill lbp">인사이트</span></button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
         <span>시장을 이길 전략, <a onclick="authOpen('login')">로그인</a>하고 바로 시작하세요.</span>
       </div>
-      <button class="g-util" onclick="tfBrokersView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg><span class="lb">지원 거래소</span><span class="g-ico-pill lbp">지원 거래소</span></button>
       <div class="g-sec">최근</div>
       <div id="g-sess-list"></div>
       <div class="g-sec" id="g-live-sec" hidden>Live</div>
@@ -4521,6 +4518,14 @@ button{-webkit-tap-highlight-color:transparent}
         <button onclick="glcOpen(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span id="gm-glc-lbl">언어 및 통화</span><span class="gm-val" id="g-side-glc-label">한국어 / USD</span></button>
       </div>
     </div>
+    <button class="gm-item" onclick="gSetMenuClose();tfNav('#/insight')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      인사이트
+    </button>
+    <button class="gm-item" onclick="gSetMenuClose();tfBrokersView()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg>
+      지원 거래소
+    </button>
     <button class="gm-item" onclick="fbOpen()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H8l-4 4z"/><path d="M12 8.2v.4M12 11v3"/></svg>
       의견 보내기
@@ -6354,11 +6359,10 @@ function gContent(html){
 function gSideCur(){
   var m=String(G.mode||'');
   /* '새 전략'은 액션이지 위치가 아니다 — Gemini와 동일하게 활성 표시 없음 (사용자 지시) */
-  [['#gu-insight', m.indexOf('nfins')===0],
-   ['#g-tf-dash-btn', m==='tfdash'||(m.indexOf('nf')===0&&m.indexOf('nfins')!==0)],
+  /* 인사이트/지원 거래소는 설정 메뉴로 이동 (사용자 지시 IA v2) — 사이드바 인디케이터 대상 제외 */
+  [['#g-tf-dash-btn', m==='tfdash'||(m.indexOf('nf')===0&&m.indexOf('nfins')!==0)],
    ['.g-side .g-util[onclick="gHistory()"]', m==='history'],
-   ['.g-side .g-util[onclick="tfShareView()"]', m==='tfss3'||m==='tfss3d'],
-   ['.g-side .g-util[onclick="tfBrokersView()"]', m==='tfbrokers'||m==='tfbroker']
+   ['.g-side .g-util[onclick="tfShareView()"]', m==='tfss3'||m==='tfss3d']
   ].forEach(function(x){ var el=document.querySelector(x[0]); if(el) el.classList.toggle('cur',!!x[1]); });
 }
 /* 하단 추적은 "사용자 의도" 상태(G.stick)로 판정한다 — 렌더 시점의 gap 재계산은
