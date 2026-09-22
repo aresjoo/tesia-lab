@@ -4088,26 +4088,28 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .t5-pvb .ln{display:grid;grid-template-columns:44px minmax(0,1fr);gap:9px;font-size:12.5px;line-height:1.55;color:var(--gt2)}
 #g-root .t5-pvb .ln+.ln{margin-top:7px}
 #g-root .t5-pvb .ln i{font-style:normal;color:var(--gt3);font-size:11.5px;padding-top:1px}
-/* ── 3. Multi-Model 궤도 ── */
-#g-root .t5-mmw{position:relative;height:600px;display:flex;align-items:center;justify-content:center}
-#g-root .t5-ring{position:absolute;width:460px;height:460px;border:1px dashed rgba(255,255,255,.09);border-radius:50%}
-#g-root .t5-orb{position:absolute;width:460px;height:460px;animation:t5spin 40s linear infinite}
-#g-root .t5-orb .rl{position:absolute;inset:0;width:100%;height:100%}
-#g-root .t5-orb .pl{stroke:rgba(200,244,60,.5);stroke-width:1;opacity:0;animation:t5plx var(--dp,2.4s) ease-in-out var(--dl,1s) infinite}
-@keyframes t5plx{0%,55%{opacity:0}70%{opacity:.75}85%,100%{opacity:0}}
-#g-root .t5-orb .it{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;transform:rotate(var(--a,0deg)) translateY(var(--r,-230px))}
-#g-root .t5-orb .iun{display:block;width:100%;height:100%;transform:rotate(calc(-1 * var(--a,0deg)))}
-#g-root .t5-orb .iu{display:block;width:100%;height:100%;position:relative;animation:t5spinrev 40s linear infinite}
-#g-root .t5-orb .ic{display:block;width:56px;height:56px;border-radius:16px;overflow:hidden;border:1px solid var(--gl2);background:#101013;box-shadow:0 10px 28px rgba(0,0,0,.55)}
-#g-root .t5-orb .ic img{width:100%;height:100%;display:block}
-#g-root .t5-orb .tip{position:absolute;left:50%;top:-12px;transform:translate(-50%,-100%) scale(.92);opacity:0;transition:opacity .25s cubic-bezier(.32,.72,0,1),transform .25s cubic-bezier(.32,.72,0,1);background:#131316;border:1px solid var(--gl2);border-radius:12px;padding:11px 14px;width:206px;font-size:12px;line-height:1.55;color:var(--gt2);pointer-events:none;box-shadow:0 14px 36px rgba(0,0,0,.5)}
-#g-root .t5-orb .tip b{display:block;font-size:12px;color:var(--gt);margin-bottom:3px}
-#g-root .t5-orb .it:hover .tip{opacity:1;transform:translate(-50%,-100%) scale(1)}
-#g-root .t5-mmw:hover .t5-orb,#g-root .t5-mmw:hover .iu{animation-play-state:paused}
-#g-root .t5-core{position:absolute;width:88px;height:88px;border-radius:50%;background:radial-gradient(circle,rgba(200,244,60,.22),rgba(10,10,11,.92) 72%);border:1px solid rgba(200,244,60,.6);color:#c8f43c;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:.03em;box-shadow:0 0 36px rgba(200,244,60,.26),inset 0 0 16px rgba(200,244,60,.16)}
-#g-root .t5-ring2{position:absolute;width:580px;height:580px;border:1px solid rgba(255,255,255,.045);border-radius:50%}
-@keyframes t5spin{to{transform:rotate(360deg)}}
-@keyframes t5spinrev{to{transform:rotate(-360deg)}}
+/* ── 3. Multi-Model routing ── */
+#g-root .t5-mmw{display:grid;grid-template-columns:210px minmax(0,440px);justify-content:center;align-items:center;gap:64px;padding:28px 32px;border:1px solid var(--gl);border-radius:20px;background:#0a0a0b}
+#g-root .t5-core{position:relative;width:150px;justify-self:center;text-align:center}
+#g-root .t5-core::after{content:"";position:absolute;left:100%;top:50%;width:70px;height:1px;background:rgba(200,244,60,.4)}
+#g-root .t5-coremark{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(200,244,60,.5);border-radius:999px;padding:14px 24px;color:#c8f43c;font-size:19px;font-weight:800;letter-spacing:.04em}
+#g-root .t5-coremark::before{content:"";width:6px;height:6px;border-radius:50%;background:#c8f43c}
+#g-root .t5-mmw.in .t5-coremark::before{animation:t5route 2s ease-in-out 2}
+#g-root .t5-core p{position:absolute;top:100%;left:0;width:100%;margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--gt2)}
+#g-root .t5-routes{margin:0;padding:0;list-style:none;min-width:0}
+#g-root .t5-route{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 20px 124px;gap:16px;align-items:center;min-height:76px;border-bottom:1px solid var(--gl)}
+#g-root .t5-route:last-child{border-bottom:0}
+#g-root .t5-route::before{content:"";position:absolute;left:-24px;top:0;bottom:0;width:1px;background:rgba(200,244,60,.4)}
+#g-root .t5-route:first-child::before{top:50%}
+#g-root .t5-route:last-child::before{bottom:50%}
+#g-root .t5-route::after{content:"";position:absolute;left:-24px;top:50%;width:16px;height:1px;background:rgba(200,244,60,.4)}
+#g-root .t5-job{min-width:0}
+#g-root .t5-job b{display:block;font-size:15px;line-height:1.5;font-weight:600;color:var(--gt)}
+#g-root .t5-job span{display:block;margin-top:3px;font-size:12px;line-height:1.5;color:var(--gt2)}
+#g-root .t5-routearrow{color:#c8f43c;font-size:18px;text-align:center}
+#g-root .t5-model{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--gt);white-space:nowrap}
+#g-root .t5-model img{display:block;width:32px;height:32px;border-radius:9px;border:1px solid var(--gl2)}
+@keyframes t5route{0%,100%{opacity:1}50%{opacity:.35}}
 /* ── 4. 3-Step ── */
 #g-root .t5-stg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 #g-root .t5-stc{border:1px solid var(--gl);border-radius:16px;background:#0d0d0f;padding:28px 26px}
@@ -4191,13 +4193,21 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .t5-row{grid-template-columns:26px minmax(0,1fr) 50px 62px;padding:13px 14px}
   #g-root .t5-row .t5-wr,#g-root .t5-row .t5-cp{display:none}
   #g-root .t5-md img{width:16px;height:16px;border-radius:5px;margin-left:-5px}
-  #g-root .t5-mmw{height:400px}
-  #g-root .t5-ring,#g-root .t5-orb{width:300px;height:300px}
-  #g-root .t5-ring2{width:376px;height:376px}
-  #g-root .t5-orb .it{--r:-140px;width:44px;height:44px;margin:-22px 0 0 -22px}
-  #g-root .t5-orb .ic{width:44px;height:44px;border-radius:12px}
-  #g-root .t5-orb .tip{width:170px}
-  #g-root .t5-core{width:66px;height:66px;font-size:12px}
+  #g-root .t5-mmw{grid-template-columns:minmax(0,1fr);gap:14px;padding:20px 16px;border-radius:16px}
+  #g-root .t5-core{display:flex;align-items:center;gap:14px;width:auto;justify-self:stretch;padding-bottom:14px;text-align:left}
+  #g-root .t5-core::after{left:18.5px;top:auto;bottom:0;width:1px;height:15px}
+  #g-root .t5-coremark{padding:10px 15px;font-size:16px}
+  #g-root .t5-core p{position:static;width:auto;margin:0;font-size:12px}
+  #g-root .t5-routes{padding-left:32px}
+  #g-root .t5-route{grid-template-columns:minmax(0,1fr) 12px 102px;gap:8px;min-height:66px}
+  #g-root .t5-route::before{left:-13.5px}
+  #g-root .t5-route:first-child::before{top:-14px}
+  #g-root .t5-route::after{left:-13.5px;width:9.5px}
+  #g-root .t5-job b{font-size:13px}
+  #g-root .t5-job span{font-size:11px}
+  #g-root .t5-routearrow{font-size:13px}
+  #g-root .t5-model{gap:7px;font-size:12px}
+  #g-root .t5-model img{width:26px;height:26px;border-radius:7px}
   #g-root .t5-stg,#g-root .t5-dc,#g-root .t5-sf{grid-template-columns:1fr}
   #g-root .t5-ph{width:100%;max-width:340px}
   #g-root .t5-phf{border:0;padding:0;height:auto;border-radius:0;background:none}
@@ -4206,8 +4216,7 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .t5-ft .fin{padding:28px 18px;gap:16px}
 }
 @media (prefers-reduced-motion:reduce){
-  #g-root .t5-orb,#g-root .t5-orb .iu{animation:none}
-  #g-root .t5-orb .pl{animation:none;opacity:.2}
+  #g-root .t5-mmw.in .t5-coremark::before{animation:none;opacity:1}
   #g-root .t5-nt{animation:none;opacity:1}
   #g-root .t5-stop:hover{animation:none}
 }
@@ -14591,7 +14600,7 @@ function tfIntroView(force){
   /* ── tin5 데이터: 리더보드/모델 배지/스파크라인/궤도/타임라인 (히어로 하단 재구성) ── */
   var LOGOS=['claude','chatgpt','gemini','grok','deepseek'];
   var LOGONM={claude:'Claude',chatgpt:'GPT',gemini:'Gemini',grok:'Grok',deepseek:'DeepSeek'};
-  var MMJOB={claude:'논리 체인이 긴 백테스팅과 규칙 검증',chatgpt:'차트 이미지 판독과 패턴 인식',gemini:'실시간 뉴스와 온체인 데이터 요약',grok:'X 실시간 심리 지표와 이벤트 감지',deepseek:'수학적 최적화와 파라미터 튜닝'};
+  var MMJOB={claude:['백테스팅','규칙과 논리 검증'],chatgpt:['차트 판독','이미지와 패턴 분석'],gemini:['뉴스 요약','뉴스와 온체인 데이터'],grok:['시장 심리','X 반응과 이벤트 감지'],deepseek:['파라미터 튜닝','수학적 최적화']};
   var RETS=['+12.4%','+9.8%','+8.1%','+6.3%','+4.7%'];
   var WRS=[62,58,57,54,52];
   var MODROW=[[0,1,2],[1,4],[2,3],[0,4],[3,1]];
@@ -14620,11 +14629,10 @@ function tfIntroView(force){
       +'<button type="button" class="t5-cp" onclick="event.stopPropagation();tfNav(\'#/share/s/'+tfSSNe(r.nick)+'\')">복제하기</button></div>';
   });
   window.TF_TIN5PV=t5pvArr;
-  var t5orb='<svg class="rl" viewBox="0 0 460 460" aria-hidden="true">';
-  LOGOS.forEach(function(k,i){ var A=i*72; t5orb+='<line class="pl" x1="230" y1="230" x2="230" y2="46" transform="rotate('+A+' 230 230)" style="--dl:'+(0.4+i*0.55).toFixed(2)+'s;--dp:'+(2.1+(i%3)*0.6).toFixed(1)+'s"/>'; });
-  t5orb+='</svg>';
-  LOGOS.forEach(function(k,i){ var A=i*72;
-    t5orb+='<span class="it" style="--a:'+A+'deg"><span class="iun"><span class="iu"><span class="ic"><img src="logos/'+k+'.png" alt="'+LOGONM[k]+'" loading="lazy"></span><span class="tip"><b>'+LOGONM[k]+'</b>'+MMJOB[k]+'</span></span></span></span>';
+  var t5routes='';
+  LOGOS.forEach(function(k){
+    t5routes+='<li class="t5-route"><div class="t5-job"><b>'+MMJOB[k][0]+'</b><span>'+MMJOB[k][1]+'</span></div>'
+      +'<span class="t5-routearrow" aria-hidden="true">→</span><div class="t5-model"><img src="logos/'+k+'.png" alt="" width="32" height="32" loading="lazy"><span>'+LOGONM[k]+'</span></div></li>';
   });
   var T5EV=[['','22:41','시장 이벤트','BTC가 30분 만에 3.2% 하락했어요. 조건과 비교 시작해요.'],
     ['l','22:41','분석 중','낙폭 조건은 충족. 반등 신호를 기다려요. 아직은 아니에요.'],
@@ -14652,9 +14660,9 @@ function tfIntroView(force){
     +t5rows+'</div>'
     +'<div class="t5-pv tin-rv"><div class="cap">전략 미리 보기</div><div class="t5-pvb" id="t5-pvb">'+t5pvArr[0]+'</div></div>'
     +'</div></section>'
-    +'<section><h2 class="tin-rv">작업마다, 가장 잘하는 모델이 붙어요</h2>'
-    +'<p class="sb tin-rv">백테스팅은 Claude, 차트 판독은 GPT, 뉴스 요약은 Gemini. 한 모델에 갇히지 않아요.</p>'
-    +'<div class="t5-mmw tin-rv"><span class="t5-ring2"></span><span class="t5-ring"></span><div class="t5-orb">'+t5orb+'</div><span class="t5-core">TETH</span></div></section>'
+    +'<section class="t5-mmsec" aria-labelledby="t5-mm-title"><h2 id="t5-mm-title" class="tin-rv">작업마다, 가장 잘하는 모델이 붙어요</h2>'
+    +'<p class="sb tin-rv">TETH가 작업에 맞는 모델로 연결해요. 한 모델에 갇히지 않아요.</p>'
+    +'<div class="t5-mmw tin-rv"><div class="t5-core"><span class="t5-coremark">TETH</span><p>작업에 맞춰 연결</p></div><ul class="t5-routes" aria-label="작업별 담당 모델">'+t5routes+'</ul></div></section>'
     +'<section><h2 class="tin-rv">직접 만드는 것도, 세 마디면 끝나요</h2>'
     +'<p class="sb tin-rv">긴 설정 화면 없이, 대화 세 번이면 전략이 돌아가요.</p>'
     +'<div class="t5-stg">'
