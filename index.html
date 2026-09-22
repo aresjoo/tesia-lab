@@ -3916,7 +3916,7 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tin section{scroll-margin-top:24px}
 #g-root .tin :is(button,[role="button"]):focus-visible{outline:2px solid var(--gb2);outline-offset:2px}
 /* 히어로 v3: 블랙 풀블리드 + 대형 세리프 + 라임 CTA + 아이소메트릭 타일 필드 (사용자 지시: 로빈후드 톤 이식, 자체 제작 비주얼) */
-#g-root .tin3-hero{background:#000;text-align:center;padding:60px 24px 0;overflow:hidden;position:relative}
+#g-root .tin3-hero{background:#000;text-align:center;padding:60px 24px 0;overflow:hidden;position:relative;display:flex;flex-direction:column;min-height:var(--tin3h,auto);box-sizing:border-box}
 #g-root .tin3-hero .tin-back{position:absolute;left:20px;top:16px;z-index:2;margin:0}
 #g-root .tin3-hero h1{font-family:'Noto Serif KR',serif;font-size:68px;line-height:1.16;font-weight:500;color:#fff;letter-spacing:-.005em;margin:0 auto 26px;max-width:880px}
 #g-root .tin3-hero .sub{font-size:15.5px;line-height:1.68;color:#e8e8e8;max-width:600px;margin:0 auto 30px;word-break:keep-all}
@@ -3927,8 +3927,8 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tin3-cta:active{transform:scale(.985)}
 /* 타일 필드 — 영상(assets/hero-tiles.mp4, 1440x480, 6.7초). 블랙 페이드인 후 정지 프레임으로 끝나므로
    루프하지 않고 1회 재생 뒤 마지막 프레임 유지. reduced-motion 은 마지막 프레임 이미지만 */
-#g-root .tin3-tiles{position:relative;margin:42px auto 0;width:100%;max-width:1600px;aspect-ratio:3/1;overflow:hidden;pointer-events:none;background:#000}
-#g-root .tin3-tiles video,#g-root .tin3-tiles img{display:block;width:100%;height:100%;object-fit:cover}
+#g-root .tin3-tiles{position:relative;flex:1 0 auto;margin:42px auto 0;width:100%;max-width:1600px;min-height:clamp(240px,26vw,520px);overflow:hidden;pointer-events:none;background:#000}
+#g-root .tin3-tiles video,#g-root .tin3-tiles img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
 /* 좌우만 히어로 블랙으로 번지고, 하단은 영상을 끝까지 살린 채 헤어라인으로 섹션 구분 */
 #g-root .tin3-tiles::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,#000,transparent 14%,transparent 86%,#000)}
 #g-root .tin3-hero{border-bottom:1px solid rgba(255,255,255,.14)}
@@ -4034,8 +4034,8 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .tin3-hero .free{font-size:12px;margin-top:12px}
   #g-root .tin3-cta{height:48px;padding:0 30px}
   /* 모바일: 영상을 확대 크롭해 풀폭 세로로 크게 (타일 약 2개 폭), 좌우 페이드 없음 */
-  #g-root .tin3-tiles{margin-top:40px;width:calc(100% + 36px);margin-left:-18px;aspect-ratio:6/5}
-  #g-root .tin3-tiles video,#g-root .tin3-tiles img{object-position:50% 100%}
+  #g-root .tin3-hero .tin-back{align-self:center}
+  #g-root .tin3-tiles{margin-top:40px;width:calc(100% + 36px);max-width:none;margin-left:-18px;min-height:calc(100vw * .72)}
   #g-root .tin3-tiles::after{display:none}
   #g-root .tin-cta{width:100%;height:46px}
   #g-root .tin-sec{margin-top:60px}
@@ -14690,8 +14690,21 @@ function tfIntroView(force){
     +'<span class="cp">© 2026 TETH AI</span></div></footer></div>');
   TF_RENDERING=false;
   tfIntroFx();
+  tin3Fit();
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
 }
+/* 인트로 히어로 = 스크롤 영역 가시 높이(PC, 모바일 공통). 모바일 주소창 접힘 같은 세로만의 변화는 무시 */
+function tin3Fit(){
+  var h=document.querySelector('.tin3-hero'); if(!h) return;
+  var sc=h.closest('.g-scroll');
+  if(!sc){ h.style.removeProperty('--tin3h'); return; }
+  var top=h.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop;
+  h.style.setProperty('--tin3h',Math.max(0,Math.round(sc.clientHeight-top))+'px');
+}
+(function(){ var w=window.innerWidth, hh=window.innerHeight; window.addEventListener('resize',function(){
+  var mob=window.matchMedia('(max-width:860px)').matches;
+  if(window.innerWidth!==w||(!mob&&window.innerHeight!==hh)){ w=window.innerWidth; hh=window.innerHeight; tin3Fit(); }
+}); })();
 /* ── 라우팅 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 ── */
 function tfNFRoute(h){
   var m;
