@@ -4088,28 +4088,139 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .t5-pvb .ln{display:grid;grid-template-columns:44px minmax(0,1fr);gap:9px;font-size:12.5px;line-height:1.55;color:var(--gt2)}
 #g-root .t5-pvb .ln+.ln{margin-top:7px}
 #g-root .t5-pvb .ln i{font-style:normal;color:var(--gt3);font-size:11.5px;padding-top:1px}
-/* ── 3. Multi-Model routing ── */
-#g-root .t5-mmw{display:grid;grid-template-columns:210px minmax(0,440px);justify-content:center;align-items:center;gap:64px;padding:28px 32px;border:1px solid var(--gl);border-radius:20px;background:#0a0a0b}
-#g-root .t5-core{position:relative;width:150px;justify-self:center;text-align:center}
-#g-root .t5-core::after{content:"";position:absolute;left:100%;top:50%;width:70px;height:1px;background:rgba(200,244,60,.4)}
-#g-root .t5-coremark{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(200,244,60,.5);border-radius:999px;padding:14px 24px;color:#c8f43c;font-size:19px;font-weight:800;letter-spacing:.04em}
-#g-root .t5-coremark::before{content:"";width:6px;height:6px;border-radius:50%;background:#c8f43c}
-#g-root .t5-mmw.in .t5-coremark::before{animation:t5route 2s ease-in-out 2}
-#g-root .t5-core p{position:absolute;top:100%;left:0;width:100%;margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--gt2)}
-#g-root .t5-routes{margin:0;padding:0;list-style:none;min-width:0}
-#g-root .t5-route{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 20px 124px;gap:16px;align-items:center;min-height:76px;border-bottom:1px solid var(--gl)}
-#g-root .t5-route:last-child{border-bottom:0}
-#g-root .t5-route::before{content:"";position:absolute;left:-24px;top:0;bottom:0;width:1px;background:rgba(200,244,60,.4)}
-#g-root .t5-route:first-child::before{top:50%}
-#g-root .t5-route:last-child::before{bottom:50%}
-#g-root .t5-route::after{content:"";position:absolute;left:-24px;top:50%;width:16px;height:1px;background:rgba(200,244,60,.4)}
-#g-root .t5-job{min-width:0}
-#g-root .t5-job b{display:block;font-size:15px;line-height:1.5;font-weight:600;color:var(--gt)}
-#g-root .t5-job span{display:block;margin-top:3px;font-size:12px;line-height:1.5;color:var(--gt2)}
-#g-root .t5-routearrow{color:#c8f43c;font-size:18px;text-align:center}
-#g-root .t5-model{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--gt);white-space:nowrap}
-#g-root .t5-model img{display:block;width:32px;height:32px;border-radius:9px;border:1px solid var(--gl2)}
-@keyframes t5route{0%,100%{opacity:1}50%{opacity:.35}}
+/* Static Isometric Substrate. Internal depth, surface reflection and partial optical rim are separate layers. */
+#g-root .t5-mmsec{position:relative;isolation:isolate;display:grid;grid-template-columns:42% 58%;height:max(800px,calc(100vh - 44px));margin-top:112px;background:#050507;overflow:hidden;text-align:left}
+#g-root .t5-copy{position:relative;z-index:2;align-self:start;padding:216px 32px 0 clamp(40px,6.4vw,92px);pointer-events:none}
+#g-root .t5-mmsec .t5-copy h2{font-family:'Noto Serif KR',serif;font-size:clamp(34px,3.2vw,46px);font-weight:400;line-height:1.46;letter-spacing:-.065em;margin:0 0 28px;color:#eeeae4}
+#g-root .t5-mmsec .t5-copy .sb{font-size:14px;line-height:1.95;color:#a0a2a8;margin:0;max-width:390px;word-break:keep-all}
+#g-root .t5-task{margin-top:30px;font-size:12px;font-weight:500;letter-spacing:.035em;color:#b4b8bd}
+#g-root .t5-mmw{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#g-root .t5-substrate{position:absolute;left:18vw;top:310px;width:1400px;height:1500px;transform-origin:0 0;transform:matrix(.84,-.38,.68,.47,0,0)}
+/* Three widths and two aspect ratios; the 324 x 240 core remains the largest plate. */
+#g-root .t5-plate{position:absolute;left:var(--x);top:var(--y);width:270px;height:200px;border-radius:20px;--key:.13;--light-x:18%;--light-y:0%;--reflection-angle:145deg;--reflection-stop:22%;--rim-x:12%;--rim-y:0%;--rim:.65}
+#g-root .t5-lift::before{content:"";position:absolute;inset:0;border-radius:inherit;transform:translate(-3px,6px);background:linear-gradient(155deg,#4b57695c,#0e1521 24%,#020407 70%);box-shadow:-2px 5px 3px #000e,-7px 17px 17px #0009,2px 30px 38px #0005}
+#g-root .t5-surface{position:absolute;inset:0;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse 90% 110% at 70% 85%,#16243888,transparent 70%),linear-gradient(155deg,#111821,#05080e 48%,#0a101b);box-shadow:inset 0 -2px 3px #000e,inset 2px 0 4px #839cba12}
+#g-root .t5-depth{position:absolute;inset:2px 3px 5px;border-radius:18px;background:radial-gradient(ellipse 85% 100% at 78% 95%,#4c739c20,transparent 62%),linear-gradient(165deg,#02050b22,transparent 40%,#24354c1a);box-shadow:inset 0 2px 10px #01030880,inset -1px -3px 8px #9ebee52a}
+/* Broad external reflection passes over the engraving; the rim catches only part of the perimeter. */
+#g-root .t5-surface::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(ellipse 85% 160% at var(--light-x) var(--light-y),rgb(191 210 233 / var(--key)),transparent 58%),linear-gradient(var(--reflection-angle),#d5e6ff0d,transparent var(--reflection-stop),#0000000a 58%,transparent 80%)}
+#g-root .t5-rim{position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(ellipse 90% 110% at var(--rim-x) var(--rim-y),rgb(191 220 255 / var(--rim)),#678ec04d 38%,transparent 74%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none}
+#g-root .t5-wordmark{position:absolute;left:30px;bottom:30px;font-family:Arial,sans-serif;font-size:17px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;line-height:1;color:#606d80;text-shadow:0 -1px .5px #000,0 .5px 0 #b5c8e01a}
+#g-root .t5-core{--x:0px;--y:450px;width:324px;height:240px;border-radius:24px;--key:.12;--light-x:12%;--light-y:15%;--rim:.86;z-index:3}
+#g-root .t5-core .t5-lift::before{transform:translate(-4px,8px);background:linear-gradient(150deg,#5c799b66,#11253b 36%,#040912 80%);box-shadow:-3px 7px 5px #000,0 20px 32px #0009}
+#g-root .t5-core .t5-surface{background:radial-gradient(ellipse 43% 27% at calc(50.68% + 7.286px) 87%,#79a6c9 0%,#396da6 18%,#204c8d 38%,#102c59 65%,transparent 100%),radial-gradient(ellipse 86% 95% at 63% 88%,#163c7699,transparent 80%),linear-gradient(145deg,#17212d,#060c17 55%,#0b1932)}
+#g-root .t5-core .t5-depth{inset:3px 4px 7px;border-radius:21px;background:radial-gradient(ellipse 70% 30% at 58% 90%,#80aeb11a,transparent 75%),linear-gradient(170deg,#01071533,transparent 42%,#04152e15 72%,#01050c33);box-shadow:inset 1px 2px 9px #02071088,inset -1px -3px 9px #88b8f044}
+/* A 1.2px edge-parallel filament beneath the surface: white-lime focus, cobalt refraction, wider dim scatter. */
+#g-root .t5-core .t5-surface::before{content:"";position:absolute;left:16%;bottom:9%;width:68%;height:1.2px;border-radius:999px;background:linear-gradient(90deg,transparent,#5590ab55 14%,#88b766 34%,#f3ffcb 51%,#a9d377 62%,#4d859a55 84%,transparent);box-shadow:0 -1px 0 #d4e7f033,0 0 2px .5px #e5ffc46b,0 -4px 9px 2px #4e9bdd65,0 -11px 23px 6px #77a87138;filter:blur(.25px)}
+#g-root .t5-core .t5-wordmark{left:34px;top:46px;bottom:auto;font-size:35px;font-weight:600;letter-spacing:.18em;color:#54677d70;text-shadow:0 -1px 1px #01060de6,0 1px 1px #cfdef533}
+#g-root .t5-claude{--x:348px;--y:70px;--light-x:-8%;--light-y:28%;--key:.17;--rim-y:25%}
+#g-root .t5-gpt{--x:662px;--y:344px;--light-x:85%;--light-y:-24%;--key:.12;--reflection-angle:205deg;--reflection-stop:42%;--rim-x:100%;--rim:.45}
+/* The receiving bed and cast shadow stay on the substrate, independent of the lifted glass. */
+#g-root .t5-gemini{--x:340px;--y:330px;transform:translate(28px,-65px);z-index:4;--key:.14;--light-x:2%;--light-y:5%;--rim:.85}
+
+#g-root .t5-gemini .t5-wordmark{left:32px;bottom:43px;color:#d4dde1;transform:translate(-3px,-4px);text-shadow:2px 6px 6px #0009,0 0 12px #d4e7f024}
+#g-root .t5-grok{--x:384px;--y:730px;width:216px;height:216px;--key:.09;--light-x:5%;--light-y:90%;--reflection-angle:35deg;--reflection-stop:35%;--rim-x:0%;--rim-y:80%;--rim:.43}
+#g-root .t5-deepseek{--x:655px;--y:83px;width:216px;height:160px;--key:.075;--light-x:80%;--rim:.4}
+#g-root .t5-deepseek .t5-wordmark{font-size:14px;left:22px}
+#g-root .t5-silent-a{--x:450px;--y:-130px;width:216px;height:216px;--key:.10;--rim:.4}
+#g-root .t5-silent-b{--x:945px;--y:68px;--key:.12;--light-x:-12%;--rim:.45}
+#g-root .t5-silent-c{--x:692px;--y:-164px;width:216px;height:216px;--key:.07;--rim:.35}
+#g-root .t5-silent-d{--x:970px;--y:307px;--key:.06;--light-x:90%;--rim-x:90%;--rim:.3}
+#g-root .t5-silent-e{--x:908px;--y:558px;width:216px;height:216px;--key:.05;--light-x:-25%;--rim:.3}
+#g-root .t5-silent-floor-a{--x:-365px;--y:435px;--key:.12;--light-x:70%;--light-y:100%;--rim-x:75%;--rim-y:100%;--rim:.48;--reflection-angle:30deg}
+#g-root .t5-silent-floor-b{--x:-650px;--y:530px;--key:.045;--light-x:15%;--light-y:20%;--rim:.48}
+#g-root .t5-continuation.t5in{padding-top:112px}
+@media (min-width:701px) and (max-width:1100px){
+  #g-root .t5-mmsec{height:max(724px,calc(100vh - 44px))}
+  #g-root .t5-copy{padding:150px 24px 0 36px}
+  #g-root .t5-mmsec .t5-copy h2{font-size:35px}
+  #g-root .t5-mmsec .t5-copy .sb{font-size:13px;line-height:1.9}
+  #g-root .t5-substrate{left:110px;top:258px;transform:matrix(.72,-.34,.60,.44,0,0)}
+  #g-root .t5-core{--x:38px;--y:475px}
+  #g-root .t5-gpt{--x:650px;--y:275px}
+  #g-root .t5-deepseek{--y:38px}
+  #g-root .t5-grok{--x:384px;--y:630px}
+  #g-root .t5-silent-a{--x:540px;--y:-130px}
+  #g-root .t5-silent-floor-a{--x:-350px;--y:430px}
+  #g-root .t5-silent-floor-b{--x:-630px;--y:535px}
+}
+@media (max-width:700px){
+  #g-root .t5-mmsec{display:block;height:max(800px,calc(100svh - 44px));margin-top:64px}
+  #g-root .t5-copy{padding:42px 26px 0;z-index:2}
+  #g-root .t5-mmsec .t5-copy h2{font-size:32px;line-height:1.48;margin-bottom:19px;letter-spacing:-.055em}
+  #g-root .t5-mmsec .t5-copy .sb{font-size:12px;line-height:1.95;max-width:360px}
+  #g-root .t5-task{margin-top:24px;font-size:11px}
+  #g-root .t5-mmw{top:290px;bottom:0;mask-image:linear-gradient(transparent,#000 45px)}
+  /* A larger macro projection places the core across the bottom crop. */
+  #g-root .t5-substrate{left:-385px;top:146px;transform:matrix(1.15,-.27,.82,.50,0,0)}
+  #g-root .t5-core{--x:-75px;--y:490px}
+  #g-root .t5-gemini{--x:260px;--y:270px}
+  #g-root .t5-claude{--x:250px;--y:35px;--key:.09}
+  #g-root .t5-gpt{--x:605px;--y:145px;--key:.035}
+  #g-root .t5-grok{--x:580px;--y:610px;--key:.025}
+  #g-root .t5-deepseek{--x:895px;--y:50px}
+  #g-root .t5-silent-a{--x:-50px;--y:245px;--key:.07}
+  #g-root .t5-silent-b{--x:600px;--y:-100px;--key:.035}
+  #g-root .t5-silent-c{--x:345px;--y:-330px}
+  #g-root .t5-silent-d{--x:935px;--y:320px}
+  #g-root .t5-silent-e{--x:855px;--y:680px}
+  #g-root .t5-silent-floor-a{--x:-335px;--y:575px;--key:.08}
+  #g-root .t5-silent-floor-b{--x:-610px;--y:670px;--key:.05}
+  #g-root .t5-core .t5-wordmark{left:50px;font-size:35px}
+  #g-root .t5-gemini .t5-wordmark{font-size:18px}
+  #g-root .t5-continuation.t5in{padding-top:64px}
+}
+
+/* Motion layers: a fixed receiving plane, lifted glass, and independent internal light. */
+#g-root .t5-task{position:relative;display:flex;align-items:baseline;gap:9px;min-height:30px;width:max-content}
+#g-root .t5-task::before{content:"";width:4px;height:4px;border-radius:50%;background:#c0d987;box-shadow:0 0 7px #b8d98628;flex:none;transform:translateY(-2px)}
+#g-root .t5-task-model{display:none;color:#a2adb9;font-size:10px;letter-spacing:.04em}
+#g-root .t5-moving .t5-task-model{display:inline}
+#g-root .t5-motion-toggle{position:absolute;left:calc(100% + 8px);top:-10px;display:none;place-items:center;width:44px;height:44px;padding:0;border:0;background:transparent;color:#a2adb9;font-size:11px;cursor:pointer;pointer-events:auto;opacity:0;transition:opacity .2s}
+#g-root .t5-moving .t5-motion-toggle{display:grid}
+#g-root .t5-motion-toggle:hover{opacity:.6;color:#dce8ce}
+#g-root .t5-motion-toggle:focus{opacity:1}
+#g-root .t5-motion-toggle:focus-visible{opacity:1;outline:2px solid #c0d987;outline-offset:2px}
+#g-root .t5-lift{position:absolute;inset:0;border-radius:inherit;--light-u:0px;--light-v:0px}
+#g-root .t5-plate{translate:0 var(--response,0px)}
+#g-root .t5-gemini{transform:none}
+#g-root .t5-gemini .t5-lift{transform:translate(22px,-54px)}
+#g-root .t5-bed{position:absolute;inset:-10px -12px -20px;border-radius:inherit;background:radial-gradient(ellipse at 50% 60%,#293644,#202a35 55%,#10161e 76%,transparent 94%);filter:blur(7px);opacity:.85}
+#g-root .t5-shadow{position:absolute;inset:12px 12px -3px 0;border-radius:inherit;background:#010205;filter:blur(2px);opacity:.86}
+#g-root .t5-penumbra{position:absolute;inset:3px 0 -14px -9px;border-radius:inherit;background:#000;box-shadow:6px 12px 16px #000b;filter:blur(4px);opacity:.62;mask-image:linear-gradient(90deg,transparent,#000 6px calc(100% - 6px),transparent),linear-gradient(#000 calc(100% - 10px),transparent calc(100% - 4px));mask-size:calc(100% + 24px) calc(100% + 24px);mask-position:center;mask-repeat:no-repeat;mask-clip:no-clip;mask-composite:intersect}
+#g-root .t5-gemini .t5-shadow{filter:blur(5px);opacity:.74}
+#g-root .t5-gemini .t5-penumbra{filter:blur(12px);opacity:.46}
+#g-root .t5-selection{position:absolute;inset:0;border-radius:inherit;opacity:0;background:radial-gradient(ellipse 75% 85% at 55% 77%,#56769570,#21364c38 49%,transparent 82%);pointer-events:none}
+#g-root .t5-gemini .t5-selection{opacity:1}
+#g-root .t5-reveal{opacity:0;color:#d4dde1;text-shadow:0 -1px 1px #000,0 0 12px #d4e7f024}
+#g-root .t5-gemini .t5-reveal{opacity:1}
+#g-root .t5-plate:not(.t5-core) .t5-wordmark{color:#8390a1}
+#g-root .t5-plate .t5-reveal{color:#d4dde1}
+#g-root .t5-gemini .t5-wordmark{left:32px;bottom:43px;transform:none;text-shadow:0 -1px .5px #000,0 .5px 0 #b5c8e01a}
+#g-root .t5-gemini .t5-reveal{color:#d4dde1}
+#g-root .t5-signal{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 67.037% 4% at 52% 65%,#e0e8dc 0%,#b3c7d0 24%,#7e9bad70 57%,transparent 100%),radial-gradient(ellipse 69.037% 17% at 52% 65%,#7f9ba32e,transparent 85%);opacity:0;pointer-events:none}
+#g-root .t5-glow{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 45% 22% at calc(50.68% + 3.4px) 89%,#9ccbdb88,#648cca40 42%,transparent 90%);opacity:.35;pointer-events:none}
+#g-root .t5-core .t5-surface::before{z-index:2;opacity:var(--breath,.72)}
+#g-root .t5-surface::after{background:radial-gradient(ellipse 85% 160% at calc(var(--light-x) + var(--light-u)) calc(var(--light-y) + var(--light-v)),rgb(191 210 233 / var(--key)),transparent 58%),linear-gradient(var(--reflection-angle),#d5e6ff0d,transparent var(--reflection-stop),#0000000a 58%,transparent 80%)}
+#g-root .t5-rim{background:radial-gradient(ellipse 55% 70% at var(--rim-u,var(--rim-x)) var(--rim-v,var(--rim-y)),rgb(191 220 255 / var(--rim)),#678ec035 38%,transparent 74%)}
+@media (min-width:701px) and (max-width:1100px){
+  #g-root .t5-silent-b{--x:975px}
+  #g-root .t5-silent-c{--y:-194px}
+}
+@media (max-width:700px){
+  #g-root .t5-substrate{left:-355px;top:146px;transform:matrix(1.05,-.25,.75,.46,0,0);translate:var(--camera-x,8px) var(--camera-y,-6px)}
+  /* A staggered perimeter keeps model engravings inside the macro crop. */
+  #g-root .t5-gpt{--x:535px;--y:35px}
+  #g-root .t5-gpt .t5-wordmark{left:0;bottom:40px;font-size:15px}
+  #g-root .t5-deepseek{--x:262px;--y:490px}
+  #g-root .t5-deepseek .t5-wordmark{left:0;top:16px;bottom:auto;font-size:12px;letter-spacing:.12em}
+  #g-root .t5-grok{--x:-50px;--y:245px}
+  #g-root .t5-grok .t5-wordmark{left:134px;bottom:36px;font-size:15px}
+  #g-root .t5-silent-a{--x:-350px;--y:245px}
+  #g-root .t5-silent-b{--x:860px;--y:-100px}
+  #g-root .t5-silent-floor-a{--x:-365px;--y:575px}
+}
+@media (prefers-reduced-motion:reduce){#g-root .t5-motion-toggle{display:none}}
+
 /* ── 4. 3-Step ── */
 #g-root .t5-stg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 #g-root .t5-stc{border:1px solid var(--gl);border-radius:16px;background:#0d0d0f;padding:28px 26px}
@@ -4193,21 +4304,6 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .t5-row{grid-template-columns:26px minmax(0,1fr) 50px 62px;padding:13px 14px}
   #g-root .t5-row .t5-wr,#g-root .t5-row .t5-cp{display:none}
   #g-root .t5-md img{width:16px;height:16px;border-radius:5px;margin-left:-5px}
-  #g-root .t5-mmw{grid-template-columns:minmax(0,1fr);gap:14px;padding:20px 16px;border-radius:16px}
-  #g-root .t5-core{display:flex;align-items:center;gap:14px;width:auto;justify-self:stretch;padding-bottom:14px;text-align:left}
-  #g-root .t5-core::after{left:18.5px;top:auto;bottom:0;width:1px;height:15px}
-  #g-root .t5-coremark{padding:10px 15px;font-size:16px}
-  #g-root .t5-core p{position:static;width:auto;margin:0;font-size:12px}
-  #g-root .t5-routes{padding-left:32px}
-  #g-root .t5-route{grid-template-columns:minmax(0,1fr) 12px 102px;gap:8px;min-height:66px}
-  #g-root .t5-route::before{left:-13.5px}
-  #g-root .t5-route:first-child::before{top:-14px}
-  #g-root .t5-route::after{left:-13.5px;width:9.5px}
-  #g-root .t5-job b{font-size:13px}
-  #g-root .t5-job span{font-size:11px}
-  #g-root .t5-routearrow{font-size:13px}
-  #g-root .t5-model{gap:7px;font-size:12px}
-  #g-root .t5-model img{width:26px;height:26px;border-radius:7px}
   #g-root .t5-stg,#g-root .t5-dc,#g-root .t5-sf{grid-template-columns:1fr}
   #g-root .t5-ph{width:100%;max-width:340px}
   #g-root .t5-phf{border:0;padding:0;height:auto;border-radius:0;background:none}
@@ -4216,7 +4312,6 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .t5-ft .fin{padding:28px 18px;gap:16px}
 }
 @media (prefers-reduced-motion:reduce){
-  #g-root .t5-mmw.in .t5-coremark::before{animation:none;opacity:1}
   #g-root .t5-nt{animation:none;opacity:1}
   #g-root .t5-stop:hover{animation:none}
 }
@@ -6661,6 +6756,7 @@ function gComposer(on,ctx){
   $('g-ctx-chip').innerHTML=ctx?'<span class="g-ctx">컨텍스트, '+gLbl(ctx)+'</span>':'';
 }
 function gContent(html){
+  if(window.TF_T5_MOTION) window.TF_T5_MOTION.destroy();
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
     if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
@@ -14575,6 +14671,145 @@ function tfIntroFx(){
     }
   }
 }
+/* Substrate motion: one pausable scene clock, no per-phase timers. */
+function tfT5Motion(){
+  if(window.TF_T5_MOTION) window.TF_T5_MOTION.destroy();
+  var root=document.querySelector('.t5-mmsec');
+  if(!root) return;
+  var scene=root.querySelector('.t5-mmw'), substrate=root.querySelector('.t5-substrate'), label=root.querySelector('.t5-task-name');
+  var modelLabel=root.querySelector('.t5-task-model'), button=root.querySelector('.t5-motion-toggle');
+  var mq=matchMedia('(prefers-reduced-motion: reduce)');
+  var tasks=[['백테스팅','claude','Claude'],['차트 분석','gpt','GPT'],['뉴스 분석','gemini','Gemini'],['시장 심리','grok','Grok'],['파라미터 최적화','deepseek','DeepSeek']];
+  var duration=5500, elapsed=0, last=null, frame=0, visible=false, paused=false, dead=false, cycle=-1, phase='static';
+  var plates=[].slice.call(root.querySelectorAll('.t5-plate')).map(function(el){
+    return {el:el, id:el.dataset.model, lift:el.querySelector('.t5-lift'), shadow:el.querySelector('.t5-shadow'),
+      penumbra:el.querySelector('.t5-penumbra'), reveal:el.querySelector('.t5-reveal'), selected:el.querySelector('.t5-selection'), signal:el.querySelector('.t5-signal')};
+  });
+  var core=root.querySelector('.t5-core'), glow=root.querySelector('.t5-glow');
+  function set(el,key,value){ if(el&&el.style.getPropertyValue(key)!==String(value)) el.style.setProperty(key,value); }
+  function ease(t,start,length){ var p=Math.max(0,Math.min(1,(t-start)/length)); return 1-Math.pow(1-p,4); }
+  // Zero velocity at both ends: illumination must never blink at a phase boundary.
+  function smooth(t,start,length){ var p=Math.max(0,Math.min(1,(t-start)/length)); return (1-Math.cos(Math.PI*p))/2; }
+  function notify(){
+    root.dataset.phase=phase;
+    root.dispatchEvent(new CustomEvent('t5motionstate',{detail:{task:label.textContent,model:root.dataset.model,phase:phase,elapsed:Math.round(elapsed)}}));
+  }
+  function select(k){
+    var task=tasks[k];
+    label.textContent=task[0]; modelLabel.textContent=task[2]; root.dataset.model=task[1];
+    scene.setAttribute('aria-label',task[0]+'에 '+task[2]+' 선택. 표면의 신호광이 TETH 코어로 전달됩니다.');
+    route(task[1]);
+  }
+  function route(id){
+    var source=plates.find(function(p){return p.id===id;}).el;
+    var ax=source.offsetLeft+source.offsetWidth/2, ay=source.offsetTop+source.offsetHeight/2;
+    var vx=core.offsetLeft+core.offsetWidth*.55-ax, vy=core.offsetTop+core.offsetHeight*.89-ay;
+    plates.forEach(function(p){
+      var style=getComputedStyle(p.el);
+      p.rimX=parseFloat(style.getPropertyValue('--rim-x'))*p.el.offsetWidth/100;
+      p.rimY=parseFloat(style.getPropertyValue('--rim-y'))*p.el.offsetHeight/100;
+      var px=p.el.offsetLeft+p.el.offsetWidth/2-ax, py=p.el.offsetTop+p.el.offsetHeight/2-ay;
+      var u=(px*vx+py*vy)/(vx*vx+vy*vy), distance=Math.hypot(px-u*vx,py-u*vy);
+      p.route=p.id===id?0:p.id==='core'?1:(u>.12&&u<.9&&distance<180?u:-1);
+      p.graze=false;
+    });
+    // A single adjacent silent surface anticipates the main transfer by 200ms.
+    var silent=plates.filter(function(p){return p.id.indexOf('silent')===0;}).sort(function(a,b){
+      function distance(p){return Math.hypot(p.el.offsetLeft+p.el.offsetWidth/2-ax,p.el.offsetTop+p.el.offsetHeight/2-ay);}
+      return distance(a)-distance(b);
+    })[0];
+    silent.graze=true;
+  }
+  function render(){
+    var n=Math.floor(elapsed/duration), t=elapsed%duration, index=n%tasks.length;
+    if(n!==cycle){ cycle=n; select(index); phase=''; }
+    var nextPhase=t<200?'label':t<450?'space':t<800?'reflection':t<1200?'lift':t<1700?'signal':t<1900?'arrival':t<2600?'response':'hold';
+    if(phase!==nextPhase){ phase=nextPhase; notify(); }
+    var current=tasks[index][1], previous=n===0?'gemini':tasks[(index+4)%5][1];
+    var rise=ease(t,800,1050), land=1-ease(t,200,1200);
+    // Camera moves in screen pixels; the approved macro projection remains intact.
+    var cameras=[[12,4],[-14,8],[8,-6],[12,-16],[-8,-4]];
+    var from=cameras[n===0?2:(index+4)%5],to=cameras[index],pan=ease(t,200,1050);
+    set(substrate,'--camera-x',(from[0]+(to[0]-from[0])*pan).toFixed(3)+'px');
+    set(substrate,'--camera-y',(from[1]+(to[1]-from[1])*pan).toFixed(3)+'px');
+    var reaction=10*(smooth(t,200,400)-smooth(t,650,850));
+    plates.forEach(function(p){
+      var height=p.id===current?rise:p.id===previous?land:0;
+      var dx=22*height, dy=-54*height;
+      // Glass moves; the receiving-plane shadow never translates with it.
+      set(p.lift,'transform','translate('+dx.toFixed(3)+'px,'+dy.toFixed(3)+'px)');
+      set(p.shadow,'filter','blur('+(2+3*height).toFixed(2)+'px)');
+      set(p.shadow,'opacity',(.86-.12*height).toFixed(3));
+      set(p.penumbra,'filter','blur('+(4+8*height).toFixed(2)+'px)');
+      set(p.penumbra,'opacity',(.62-.16*height).toFixed(3));
+      // Counter-translate the external light field in local coordinates. The rim mask stays 1px.
+      var offset=p.id==='core'?0:reaction*(p.id.indexOf('silent')===0?1:.55);
+      set(p.lift,'--light-u',(-dx).toFixed(3)+'px'); set(p.lift,'--light-v',(-dy-offset).toFixed(3)+'px');
+      // All operands are substrate-local: M * (translation + inverse translation) = 0.
+      // Resolve the light centre to pixels before moving the mask; no moving percentage anchor.
+      set(p.lift,'--rim-u',(p.rimX-dx).toFixed(3)+'px');
+      set(p.lift,'--rim-v',(p.rimY-dy-offset).toFixed(3)+'px');
+      set(p.el,'--response',offset.toFixed(3)+'px');
+      set(p.el,'z-index',height>0?'4':p.id==='core'?'3':'');
+      var reflection=p.id===current?smooth(t,450,650):p.id===previous?1-smooth(t,200,950):0;
+      set(p.selected,'opacity',reflection.toFixed(3));
+      set(p.reveal,'opacity',height.toFixed(3));
+      if(p.signal){
+        // Thin specular bands remain clipped to the glass. Adjacent surfaces overlap in time.
+        var delay=p.graze?1000:1200+Math.max(0,p.route)*500;
+        var strength=p.graze?.16:p.route<0?0:p.id===current?.68:p.id==='core'?.56:.72;
+        var envelope=smooth(t,delay,220)*(1-smooth(t,delay+470,430));
+        set(p.signal,'opacity',(strength*envelope).toFixed(3));
+        var travel=smooth(t,delay,900);
+        set(p.signal,'transform','translate('+(-8+16*travel).toFixed(2)+'px,'+(-12+24*travel).toFixed(2)+'px)');
+      }
+    });
+    // Continuous 3.2s sine breath; the slower response envelope rides underneath it.
+    var breath=Math.sin(elapsed*Math.PI*2/3200);
+    var response=1-smooth(t,0,850)+smooth(t,1900,700);
+    set(core,'--breath',(.70+.25*breath).toFixed(4));
+    set(glow,'opacity',(.28+.055*breath+.08*response).toFixed(4));
+  }
+  function cancel(){ if(frame) cancelAnimationFrame(frame); frame=0; last=null; }
+  function tick(now){
+    frame=0;
+    if(!root.isConnected){ destroy(); return; }
+    if(last!==null) elapsed+=now-last;
+    last=now; render(); frame=requestAnimationFrame(tick);
+  }
+  function sync(){
+    cancel();
+    if(!dead&&visible&&!document.hidden&&!mq.matches&&!paused) frame=requestAnimationFrame(tick);
+    root.dataset.running=frame?'true':'false';
+  }
+  function reset(){
+    cancel(); elapsed=0; cycle=-1; phase='static';
+    plates.forEach(function(p){[p.el,p.lift,p.shadow,p.penumbra,p.selected,p.reveal,p.signal].forEach(function(el){ if(el) el.removeAttribute('style'); });});
+    substrate.removeAttribute('style');
+    glow.removeAttribute('style'); root.classList.toggle('t5-moving',!mq.matches);
+    label.textContent='뉴스 분석'; modelLabel.textContent='Gemini'; root.dataset.model='gemini';
+    scene.setAttribute('aria-label','뉴스 분석에 Gemini가 선택된 상태. 부상한 Gemini 플레이트와 내부광이 켜진 TETH 코어.');
+    notify(); sync();
+  }
+  function toggle(){
+    paused=!paused; button.setAttribute('aria-pressed',String(paused));
+    button.setAttribute('aria-label',paused?'모션 재생':'모션 일시정지'); button.textContent=paused?'▷':'Ⅱ'; sync();
+  }
+  function destroy(){
+    if(dead) return; dead=true; cancel(); observer.disconnect();
+    document.removeEventListener('visibilitychange',sync); window.removeEventListener('pagehide',destroy);
+    mq.removeEventListener('change',reset); button.removeEventListener('click',toggle); resize.disconnect();
+    if(window.TF_T5_MOTION===controller) window.TF_T5_MOTION=null;
+  }
+  var observer=new IntersectionObserver(function(entries){visible=entries[0].isIntersecting; sync();},{root:document.getElementById('g-scroll'),threshold:0});
+  var resize=new ResizeObserver(function(){if(cycle>=0) route(tasks[cycle%5][1]);});
+  var controller={destroy:destroy,snapshot:function(){return {elapsed:elapsed,cycle:cycle,phase:phase,model:root.dataset.model,running:!!frame,visible:visible,paused:paused,reduced:mq.matches};}};
+  window.TF_T5_MOTION=controller;
+  button.addEventListener('click',toggle); document.addEventListener('visibilitychange',sync);
+  window.addEventListener('pagehide',destroy); mq.addEventListener('change',reset);
+  reset(); observer.observe(root); resize.observe(root);
+}
+
 function tfIntroView(force){
   G.cur=null; G.mode='tfintro'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
@@ -14600,7 +14835,6 @@ function tfIntroView(force){
   /* ── tin5 데이터: 리더보드/모델 배지/스파크라인/궤도/타임라인 (히어로 하단 재구성) ── */
   var LOGOS=['claude','chatgpt','gemini','grok','deepseek'];
   var LOGONM={claude:'Claude',chatgpt:'GPT',gemini:'Gemini',grok:'Grok',deepseek:'DeepSeek'};
-  var MMJOB={claude:['백테스팅','규칙과 논리 검증'],chatgpt:['차트 판독','이미지와 패턴 분석'],gemini:['뉴스 요약','뉴스와 온체인 데이터'],grok:['시장 심리','X 반응과 이벤트 감지'],deepseek:['파라미터 튜닝','수학적 최적화']};
   var RETS=['+12.4%','+9.8%','+8.1%','+6.3%','+4.7%'];
   var WRS=[62,58,57,54,52];
   var MODROW=[[0,1,2],[1,4],[2,3],[0,4],[3,1]];
@@ -14629,11 +14863,11 @@ function tfIntroView(force){
       +'<button type="button" class="t5-cp" onclick="event.stopPropagation();tfNav(\'#/share/s/'+tfSSNe(r.nick)+'\')">복제하기</button></div>';
   });
   window.TF_TIN5PV=t5pvArr;
-  var t5routes='';
-  LOGOS.forEach(function(k){
-    t5routes+='<li class="t5-route"><div class="t5-job"><b>'+MMJOB[k][0]+'</b><span>'+MMJOB[k][1]+'</span></div>'
-      +'<span class="t5-routearrow" aria-hidden="true">→</span><div class="t5-model"><img src="logos/'+k+'.png" alt="" width="32" height="32" loading="lazy"><span>'+LOGONM[k]+'</span></div></li>';
-  });
+  /* Complete substrate at every phase: fixed shadows and independent glass layers. */
+  var t5plates=[['core','TETH'],['claude','Claude'],['gpt','GPT'],['gemini','Gemini'],['grok','Grok'],['deepseek','DeepSeek'],['silent-a',''],['silent-b',''],['silent-c',''],['silent-d',''],['silent-e',''],['silent-floor-a',''],['silent-floor-b','']].map(function(p){
+    var model=p[1]&&p[0]!=='core', word=p[1]?'<span class="t5-wordmark">'+p[1]+'</span>':'';
+    return '<div class="t5-plate t5-'+p[0]+'" data-model="'+p[0]+'">'+(model?'<span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-bed"></span><span class="t5-penumbra"></span><span class="t5-shadow"></span>':'')+'<div class="t5-lift"><div class="t5-surface"><span class="t5-depth"></span><span class="t5-selection"></span>'+word+(model?'<span class="t5-wordmark t5-reveal">'+p[1]+'</span>':'')+'<span class="t5-signal"></span>'+(p[0]==='core'?'<span class="t5-glow"></span>':'')+'<span class="t5-rim"></span></div></div></div>';
+  }).join('');
   var T5EV=[['','22:41','시장 이벤트','BTC가 30분 만에 3.2% 하락했어요. 조건과 비교 시작해요.'],
     ['l','22:41','분석 중','낙폭 조건은 충족. 반등 신호를 기다려요. 아직은 아니에요.'],
     ['a','22:43','보류','반등이 약해요. 이번 자리는 건너뛸게요.'],
@@ -14660,9 +14894,12 @@ function tfIntroView(force){
     +t5rows+'</div>'
     +'<div class="t5-pv tin-rv"><div class="cap">전략 미리 보기</div><div class="t5-pvb" id="t5-pvb">'+t5pvArr[0]+'</div></div>'
     +'</div></section>'
-    +'<section class="t5-mmsec" aria-labelledby="t5-mm-title"><h2 id="t5-mm-title" class="tin-rv">작업마다, 가장 잘하는 모델이 붙어요</h2>'
-    +'<p class="sb tin-rv">TETH가 작업에 맞는 모델로 연결해요. 한 모델에 갇히지 않아요.</p>'
-    +'<div class="t5-mmw tin-rv"><div class="t5-core"><span class="t5-coremark">TETH</span><p>작업에 맞춰 연결</p></div><ul class="t5-routes" aria-label="작업별 담당 모델">'+t5routes+'</ul></div></section>'
+    +'</div><section class="t5-mmsec" aria-labelledby="t5-mm-title">'
+    +'<div class="t5-copy"><h2 id="t5-mm-title">한 모델에<br>맡기지 않습니다.</h2>'
+    +'<p class="sb">백테스트부터 차트, 뉴스, 시장 심리까지.<br>TETH가 작업마다 가장 적합한 AI를 선택합니다.</p>'
+    +'<div class="t5-task"><span class="t5-task-name">뉴스 분석</span><span class="t5-task-model">Gemini</span><button type="button" class="t5-motion-toggle" aria-label="모션 일시정지" aria-pressed="false">Ⅱ</button></div></div>'
+    +'<div class="t5-mmw" role="img" aria-label="뉴스 분석에 Gemini가 선택된 상태. 부상한 Gemini 플레이트와 내부광이 켜진 TETH 코어.">'
+    +'<div class="t5-substrate" aria-hidden="true">'+t5plates+'</div></div></section><div class="t5in t5-continuation">'
     +'<section><h2 class="tin-rv">직접 만드는 것도, 세 마디면 끝나요</h2>'
     +'<p class="sb tin-rv">긴 설정 화면 없이, 대화 세 번이면 전략이 돌아가요.</p>'
     +'<div class="t5-stg">'
@@ -14699,6 +14936,7 @@ function tfIntroView(force){
     +'<span class="cp">© 2026 TETH AI</span></div></footer></div>');
   TF_RENDERING=false;
   tfIntroFx();
+  tfT5Motion();
   tin3Fit(); [300,900,2000].forEach(function(ms){ setTimeout(tin3Fit,ms); });
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
 }
