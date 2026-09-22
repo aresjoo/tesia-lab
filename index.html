@@ -3916,14 +3916,11 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tin section{scroll-margin-top:24px}
 #g-root .tin :is(button,[role="button"]):focus-visible{outline:2px solid var(--gb2);outline-offset:2px}
 /* 히어로 v3: 블랙 풀블리드 + 대형 세리프 + 라임 CTA + 아이소메트릭 타일 필드 (사용자 지시: 로빈후드 톤 이식, 자체 제작 비주얼) */
-#g-root .tin3-hero{background:#000;text-align:center;padding:76px 24px 0;overflow:hidden;position:relative}
+#g-root .tin3-hero{background:#000;text-align:center;padding:60px 24px 0;overflow:hidden;position:relative}
 #g-root .tin3-hero .tin-back{position:absolute;left:20px;top:16px;z-index:2;margin:0}
-#g-root .tin3-hero .ey{display:block;font-size:15px;font-weight:400;color:#fff;letter-spacing:.01em;margin-bottom:10px}
 #g-root .tin3-hero h1{font-family:'Noto Serif KR',serif;font-size:68px;line-height:1.16;font-weight:500;color:#fff;letter-spacing:-.005em;margin:0 auto 26px;max-width:880px}
-#g-root .tin3-hero .sub{font-size:15.5px;line-height:1.68;color:#e8e8e8;max-width:520px;margin:0 auto 20px}
-#g-root .tin3-hero .dis{display:inline-flex;align-items:center;gap:7px;background:none;border:0;padding:0;font-size:12.5px;color:#cfcfcf;cursor:pointer;margin-bottom:26px}
-#g-root .tin3-hero .dis:hover{color:#fff}
-#g-root .tin3-hero .dis svg{opacity:.85}
+#g-root .tin3-hero .sub{font-size:15.5px;line-height:1.68;color:#e8e8e8;max-width:560px;margin:0 auto 30px;text-wrap:balance;word-break:keep-all}
+#g-root .tin3-hero .free{display:block;font-size:12.5px;color:#9aa0a6;margin-top:14px}
 #g-root .tin3-cta{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 36px;border-radius:999px;border:0;background:#c8f43c;color:#0a0a0a;font-size:15.5px;font-weight:600;cursor:pointer;transition:filter .15s,transform .15s}
 #g-root .tin3-cta:hover{filter:brightness(1.07)}
 #g-root .tin3-cta:active{transform:scale(.985)}
@@ -4029,10 +4026,11 @@ button{-webkit-tap-highlight-color:transparent}
 @media (max-width:860px){
   #g-root .tin{padding:4px 16px 64px}
   /* 모바일 히어로 v3: 세리프 축소 + 타일 필드 축소 */
-  #g-root .tin3-hero{padding:44px 18px 0}
+  #g-root .tin3-hero{padding:32px 18px 0}
+  #g-root .tin3-hero .tin-back{position:static;display:inline-flex;margin:0 0 18px}
   #g-root .tin3-hero h1{font-size:36px;line-height:1.22;margin-bottom:18px}
-  #g-root .tin3-hero .sub{font-size:14px;margin-bottom:16px}
-  #g-root .tin3-hero .dis{margin-bottom:20px}
+  #g-root .tin3-hero .sub{font-size:14px;margin-bottom:24px}
+  #g-root .tin3-hero .free{font-size:12px;margin-top:12px}
   #g-root .tin3-cta{height:48px;padding:0 30px}
   #g-root .tin3-tiles{margin-top:26px;width:calc(100% + 36px);margin-left:-18px;aspect-ratio:2/1}
   #g-root .tin-cta{width:100%;height:46px}
@@ -14637,11 +14635,9 @@ function tfIntroView(force){
     :'<video src="assets/hero-tiles.mp4" poster="assets/hero-tiles-end.jpg" muted autoplay playsinline preload="auto" disablepictureinpicture></video>';
   gContent('<section class="tin3-hero tin-hero">'
     +(force&&!tfIntroNeed()?'<button type="button" class="tin-back" onclick="tfDashView()">← 내 트레이딩으로 돌아가기</button>':'')
-    +'<span class="ey">AI 트레이딩</span>'
-    +'<h1>AI가 거래하도록 하세요</h1>'
-    +'<p class="sub">AI 거래를 위한 시장 접근 권한을 몇 분 만에 연결하고, 승인한 규칙대로만 움직이는 암호화폐 자동 투자를 시작하세요.</p>'
-    +'<div><button type="button" class="dis" onclick="tfIntroGo(\'tin-logsec\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>운영 방식 안내</button></div>'
-    +'<div><button type="button" class="tin3-cta" onclick="tfIntroGo(\'tin-pick\')">시작하기</button></div>'
+    +'<h1>AI가 거래하게 만드세요</h1>'
+    +'<p class="sub">시장 접근 권한을 몇 분 만에 연결하고, AI가 주식, 옵션 및 암호화폐 거래를 시작하게 만드세요.</p>'
+    +'<div><button type="button" class="tin3-cta" onclick="tfIntroGo(\'tin-pick\')">시작하기</button><span class="free">영원히 무료, 신용카드 필요 없음</span></div>'
     +'<div class="tin3-tiles" aria-hidden="true">'+tiles+'</div>'
         +'</section><div class="tin5"><div class="t5in">'
     +'<section id="tin-pick"><h2 class="tin-rv">이번 주 1위 전략을 그대로 복제하세요</h2>'
