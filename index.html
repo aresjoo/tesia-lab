@@ -4033,7 +4033,10 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .tin3-hero .sub{font-size:14px;margin-bottom:24px}
   #g-root .tin3-hero .free{font-size:12px;margin-top:12px}
   #g-root .tin3-cta{height:48px;padding:0 30px}
-  #g-root .tin3-tiles{margin-top:26px;width:calc(100% + 36px);margin-left:-18px;aspect-ratio:2/1}
+  /* 모바일: 영상을 확대 크롭해 풀폭 세로로 크게 (타일 약 2개 폭), 좌우 페이드 없음 */
+  #g-root .tin3-tiles{margin-top:40px;width:calc(100% + 36px);margin-left:-18px;aspect-ratio:6/5}
+  #g-root .tin3-tiles video,#g-root .tin3-tiles img{object-position:50% 100%}
+  #g-root .tin3-tiles::after{display:none}
   #g-root .tin-cta{width:100%;height:46px}
   #g-root .tin-sec{margin-top:60px}
   #g-root .tin-grid{grid-template-columns:1fr}
