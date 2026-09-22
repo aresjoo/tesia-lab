@@ -3927,29 +3927,13 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tin3-cta{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 36px;border-radius:999px;border:0;background:#c8f43c;color:#0a0a0a;font-size:15.5px;font-weight:600;cursor:pointer;transition:filter .15s,transform .15s}
 #g-root .tin3-cta:hover{filter:brightness(1.07)}
 #g-root .tin3-cta:active{transform:scale(.985)}
-/* 타일 필드 — CSS 3D 자체 제작. 타일은 고정, 블러 광원 2개가 평면 아래를 드리프트하며
-   반투명 타일을 통과해 발광이 번진다 (영상 분석: 슬로우 드리프트, 엣지 하이라이트, 블랙 페이드) */
-#g-root .tin3-tiles{position:relative;height:540px;margin-top:42px;perspective:1050px;overflow:hidden;pointer-events:none}
-#g-root .tin3-tiles .pl{position:absolute;left:50%;top:64%;width:1560px;height:1560px;margin:-780px 0 0 -780px;transform:rotateX(58deg) rotateZ(45deg);display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:20px;background:#000}
-#g-root .tin3-tiles .lux{position:absolute;z-index:0;width:920px;height:920px;border-radius:50%;filter:blur(70px);background:radial-gradient(circle,rgba(214,230,255,1),rgba(96,146,245,.72) 42%,rgba(40,80,200,.3) 62%,transparent 74%);animation:tin3drift 7s ease-in-out infinite alternate;will-change:transform}
-#g-root .tin3-tiles .lux.b{width:680px;height:680px;background:radial-gradient(circle,rgba(150,185,255,.9),rgba(58,102,220,.55) 50%,transparent 72%);animation:tin3drift2 10s ease-in-out infinite alternate}
-@keyframes tin3drift{0%{transform:translate(120px,820px);opacity:.3}50%{transform:translate(660px,380px);opacity:1}100%{transform:translate(960px,840px);opacity:.4}}
-@keyframes tin3drift2{0%{transform:translate(920px,260px);opacity:.25}55%{opacity:1}100%{transform:translate(240px,640px);opacity:.35}}
-#g-root .tin3-tiles.paused .lux,#g-root .tin3-tiles.paused .t::after{animation-play-state:paused}
-#g-root .tin3-tiles .t{position:relative;z-index:1;border-radius:46px;background:linear-gradient(150deg,rgba(104,152,240,.4),rgba(11,18,42,.62) 62%);box-shadow:inset 0 0 0 1.5px rgba(165,200,255,.2),inset 0 20px 52px rgba(180,212,255,.16),inset 0 -26px 46px rgba(0,0,10,.5)}
-#g-root .tin3-tiles .t::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(226,238,255,.4),transparent 30%),linear-gradient(340deg,rgba(140,180,255,.16),transparent 26%);animation:tin3sheen 5.5s ease-in-out infinite}
-#g-root .tin3-tiles .t:nth-child(5n+1)::after{animation-delay:0s}
-#g-root .tin3-tiles .t:nth-child(5n+2)::after{animation-delay:.7s}
-#g-root .tin3-tiles .t:nth-child(5n+3)::after{animation-delay:1.4s}
-#g-root .tin3-tiles .t:nth-child(5n+4)::after{animation-delay:2.1s}
-#g-root .tin3-tiles .t:nth-child(5n)::after{animation-delay:2.8s}
-@keyframes tin3sheen{0%,100%{opacity:.35}50%{opacity:1}}
-#g-root .tin3-tiles::after{content:"";position:absolute;inset:-2px;background:radial-gradient(60% 54% at 50% 60%,transparent 30%,rgba(0,0,0,.5) 62%,#000 88%)}
-@media (prefers-reduced-motion:reduce){
-  #g-root .tin3-tiles .lux{animation-duration:40s}
-  #g-root .tin3-tiles .lux.b{animation-duration:52s}
-  #g-root .tin3-tiles .t::after{animation:none;opacity:.8}
-}
+/* 타일 필드 — 영상(assets/hero-tiles.mp4, 1440x480, 6.7초). 블랙 페이드인 후 정지 프레임으로 끝나므로
+   루프하지 않고 1회 재생 뒤 마지막 프레임 유지. reduced-motion 은 마지막 프레임 이미지만 */
+#g-root .tin3-tiles{position:relative;margin:42px auto 0;width:100%;max-width:1600px;aspect-ratio:3/1;overflow:hidden;pointer-events:none;background:#000}
+#g-root .tin3-tiles video,#g-root .tin3-tiles img{display:block;width:100%;height:100%;object-fit:cover}
+/* 좌우만 히어로 블랙으로 번지고, 하단은 영상을 끝까지 살린 채 헤어라인으로 섹션 구분 */
+#g-root .tin3-tiles::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,#000,transparent 14%,transparent 86%,#000)}
+#g-root .tin3-hero{border-bottom:1px solid rgba(255,255,255,.14)}
 #g-root .tin-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 26px;border-radius:999px;border:0;background:var(--gb);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:filter .15s,transform .15s}
 #g-root .tin-cta:hover{filter:brightness(1.09)}
 #g-root .tin-cta:active{transform:scale(.985)}
@@ -4046,15 +4030,11 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .tin{padding:4px 16px 64px}
   /* 모바일 히어로 v3: 세리프 축소 + 타일 필드 축소 */
   #g-root .tin3-hero{padding:44px 18px 0}
-  #g-root .tin3-tiles .lux{width:600px;height:600px;filter:blur(52px)}
-  #g-root .tin3-tiles .lux.b{width:460px;height:460px}
   #g-root .tin3-hero h1{font-size:36px;line-height:1.22;margin-bottom:18px}
   #g-root .tin3-hero .sub{font-size:14px;margin-bottom:16px}
   #g-root .tin3-hero .dis{margin-bottom:20px}
   #g-root .tin3-cta{height:48px;padding:0 30px}
-  #g-root .tin3-tiles{height:300px;margin-top:26px}
-  #g-root .tin3-tiles .pl{width:940px;height:940px;margin:-470px 0 0 -470px;gap:12px}
-  #g-root .tin3-tiles .t{border-radius:24px}
+  #g-root .tin3-tiles{margin-top:26px;width:calc(100% + 36px);margin-left:-18px;aspect-ratio:2/1}
   #g-root .tin-cta{width:100%;height:46px}
   #g-root .tin-sec{margin-top:60px}
   #g-root .tin-grid{grid-template-columns:1fr}
@@ -14534,9 +14514,6 @@ function tfIntroFx(){
       try{ if(fx.mq){ if(fx.mq.addEventListener) fx.mq.addEventListener('change',fx.mqh); else if(fx.mq.addListener) fx.mq.addListener(fx.mqh); } }catch(e){}
     }
   }
-  /* 탭 숨김 시 타일 광원 애니메이션 일시정지 (codex gate5 P2) */
-  fx.vh=function(){ var tl=document.querySelector('.tin3-tiles'); if(tl) tl.classList.toggle('paused',!!document.hidden); };
-  try{ document.addEventListener('visibilitychange',fx.vh); }catch(e){}
   /* tin5: 리더보드 hover 프리뷰 스왑 (200ms 크로스페이드) */
   var pvb=document.getElementById('t5-pvb');
   if(pvb&&window.TF_TIN5PV){
@@ -14655,7 +14632,9 @@ function tfIntroView(force){
   var IC_S1='<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9h26v17H17l-7 6v-6H7z"/><line x1="12" y1="16" x2="28" y2="16" stroke="#c8f43c"/><line x1="12" y1="21" x2="22" y2="21"/></svg>';
   var IC_S2='<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h13l7 7v21H10z"/><path d="M23 6v7h7"/><line x1="15" y1="19" x2="25" y2="19"/><path d="M15 27l3 3 7-7" stroke="#c8f43c"/></svg>';
   var IC_S3='<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="13"/><path d="M17 15l8 5-8 5z" stroke="#c8f43c"/></svg>';
-  var tiles=''; for(var ti=0;ti<25;ti++) tiles+='<i class="t"></i>';
+  var tilesRm=false; try{ tilesRm=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  var tiles=tilesRm?'<img src="assets/hero-tiles-end.jpg" alt="">'
+    :'<video src="assets/hero-tiles.mp4" poster="assets/hero-tiles-end.jpg" muted autoplay playsinline preload="auto" disablepictureinpicture></video>';
   gContent('<section class="tin3-hero tin-hero">'
     +(force&&!tfIntroNeed()?'<button type="button" class="tin-back" onclick="tfDashView()">← 내 트레이딩으로 돌아가기</button>':'')
     +'<span class="ey">AI 트레이딩</span>'
@@ -14663,7 +14642,7 @@ function tfIntroView(force){
     +'<p class="sub">AI 거래를 위한 시장 접근 권한을 몇 분 만에 연결하고, 승인한 규칙대로만 움직이는 암호화폐 자동 투자를 시작하세요.</p>'
     +'<div><button type="button" class="dis" onclick="tfIntroGo(\'tin-logsec\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>운영 방식 안내</button></div>'
     +'<div><button type="button" class="tin3-cta" onclick="tfIntroGo(\'tin-pick\')">시작하기</button></div>'
-    +'<div class="tin3-tiles" aria-hidden="true"><div class="pl"><span class="lux"></span><span class="lux b"></span>'+tiles+'</div></div>'
+    +'<div class="tin3-tiles" aria-hidden="true">'+tiles+'</div>'
         +'</section><div class="tin5"><div class="t5in">'
     +'<section id="tin-pick"><h2 class="tin-rv">이번 주 1위 전략을 그대로 복제하세요</h2>'
     +'<p class="sb tin-rv">실제 검증된 AI 전략의 조건, 예산, 리스크 규칙을 그대로 옮겨받아요.</p>'
