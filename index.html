@@ -3931,17 +3931,24 @@ button{-webkit-tap-highlight-color:transparent}
    반투명 타일을 통과해 발광이 번진다 (영상 분석: 슬로우 드리프트, 엣지 하이라이트, 블랙 페이드) */
 #g-root .tin3-tiles{position:relative;height:540px;margin-top:42px;perspective:1050px;overflow:hidden;pointer-events:none}
 #g-root .tin3-tiles .pl{position:absolute;left:50%;top:64%;width:1560px;height:1560px;margin:-780px 0 0 -780px;transform:rotateX(58deg) rotateZ(45deg);display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:20px;background:#000}
-#g-root .tin3-tiles .lux{position:absolute;z-index:0;width:920px;height:920px;border-radius:50%;filter:blur(70px);background:radial-gradient(circle,rgba(214,230,255,1),rgba(96,146,245,.72) 42%,rgba(40,80,200,.3) 62%,transparent 74%);animation:tin3drift 13s ease-in-out infinite alternate;will-change:transform}
-#g-root .tin3-tiles .lux.b{width:680px;height:680px;background:radial-gradient(circle,rgba(150,185,255,.9),rgba(58,102,220,.55) 50%,transparent 72%);animation:tin3drift2 17s ease-in-out infinite alternate}
-@keyframes tin3drift{0%{transform:translate(190px,760px);opacity:.45}50%{transform:translate(640px,430px);opacity:1}100%{transform:translate(900px,800px);opacity:.55}}
-@keyframes tin3drift2{0%{transform:translate(860px,320px);opacity:.4}55%{opacity:.95}100%{transform:translate(300px,600px);opacity:.5}}
-#g-root .tin3-tiles.paused .lux{animation-play-state:paused}
+#g-root .tin3-tiles .lux{position:absolute;z-index:0;width:920px;height:920px;border-radius:50%;filter:blur(70px);background:radial-gradient(circle,rgba(214,230,255,1),rgba(96,146,245,.72) 42%,rgba(40,80,200,.3) 62%,transparent 74%);animation:tin3drift 7s ease-in-out infinite alternate;will-change:transform}
+#g-root .tin3-tiles .lux.b{width:680px;height:680px;background:radial-gradient(circle,rgba(150,185,255,.9),rgba(58,102,220,.55) 50%,transparent 72%);animation:tin3drift2 10s ease-in-out infinite alternate}
+@keyframes tin3drift{0%{transform:translate(120px,820px);opacity:.3}50%{transform:translate(660px,380px);opacity:1}100%{transform:translate(960px,840px);opacity:.4}}
+@keyframes tin3drift2{0%{transform:translate(920px,260px);opacity:.25}55%{opacity:1}100%{transform:translate(240px,640px);opacity:.35}}
+#g-root .tin3-tiles.paused .lux,#g-root .tin3-tiles.paused .t::after{animation-play-state:paused}
 #g-root .tin3-tiles .t{position:relative;z-index:1;border-radius:46px;background:linear-gradient(150deg,rgba(104,152,240,.4),rgba(11,18,42,.62) 62%);box-shadow:inset 0 0 0 1.5px rgba(165,200,255,.2),inset 0 20px 52px rgba(180,212,255,.16),inset 0 -26px 46px rgba(0,0,10,.5)}
-#g-root .tin3-tiles .t::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(226,238,255,.34),transparent 30%),linear-gradient(340deg,rgba(140,180,255,.14),transparent 26%)}
+#g-root .tin3-tiles .t::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(226,238,255,.4),transparent 30%),linear-gradient(340deg,rgba(140,180,255,.16),transparent 26%);animation:tin3sheen 5.5s ease-in-out infinite}
+#g-root .tin3-tiles .t:nth-child(5n+1)::after{animation-delay:0s}
+#g-root .tin3-tiles .t:nth-child(5n+2)::after{animation-delay:.7s}
+#g-root .tin3-tiles .t:nth-child(5n+3)::after{animation-delay:1.4s}
+#g-root .tin3-tiles .t:nth-child(5n+4)::after{animation-delay:2.1s}
+#g-root .tin3-tiles .t:nth-child(5n)::after{animation-delay:2.8s}
+@keyframes tin3sheen{0%,100%{opacity:.35}50%{opacity:1}}
 #g-root .tin3-tiles::after{content:"";position:absolute;inset:-2px;background:radial-gradient(60% 54% at 50% 60%,transparent 30%,rgba(0,0,0,.5) 62%,#000 88%)}
 @media (prefers-reduced-motion:reduce){
-  #g-root .tin3-tiles .lux{animation:none;transform:translate(640px,430px)}
-  #g-root .tin3-tiles .lux.b{animation:none;transform:translate(300px,600px)}
+  #g-root .tin3-tiles .lux{animation-duration:40s}
+  #g-root .tin3-tiles .lux.b{animation-duration:52s}
+  #g-root .tin3-tiles .t::after{animation:none;opacity:.8}
 }
 #g-root .tin-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 26px;border-radius:999px;border:0;background:var(--gb);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:filter .15s,transform .15s}
 #g-root .tin-cta:hover{filter:brightness(1.09)}
