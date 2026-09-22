@@ -165,7 +165,7 @@ window.TFCOPY = {
   obDone: '모든 연결이 끝났어요! 이제 TETH가 당신 대신 시장을 지켜봅니다.',
 
   /* §8 대시보드 */
-  dashTitle: '내 트레이딩',
+  dashTitle: 'AI 트레이딩',
 
   /* §9 커뮤니티 */
   rankTitle: '전략 랭킹',

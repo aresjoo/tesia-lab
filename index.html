@@ -1512,7 +1512,7 @@ body.g-dark .modal .e-btn{background:#26282c;border-color:rgba(255,255,255,.14);
 /* 게스트: 새 연구 비활성 + 안내, 목록은 로그인 후에만 */
 .g-side:not(.authed) .g-new{opacity:.45;pointer-events:none} /* 게스트는 접힘 레일에서도 새 전략 비활성 (Gemini 동일), 라벨은 자체 opacity:0이라 안전 */
 .g-side:not(.authed) .g-util,.g-side:not(.authed) .g-sec,.g-side:not(.authed) #g-sess-list,.g-side:not(.authed) #g-live-list{display:none}
-.g-side:not(.authed) #g-tf-dash-btn,.g-side:not(.authed) #g-tf-share-btn{display:flex} /* 게스트도 둘러보기 가능: 내 트레이딩=인트로, 전략 따라하기=허브 (상태 변경은 각 액션에서 로그인 가드) */
+.g-side:not(.authed) #g-tf-dash-btn,.g-side:not(.authed) #g-tf-share-btn{display:flex} /* 게스트도 둘러보기 가능: AI 트레이딩=인트로, 전략 따라하기=허브 (상태 변경은 각 액션에서 로그인 가드) */
 #g-guest-note{display:none;align-items:flex-start;gap:9px;padding:12px 13px;font-size:13px;color:var(--gt2);line-height:1.5}
 #g-guest-note svg{flex-shrink:0;margin-top:2px}
 #g-guest-note a{text-decoration:none;border-bottom:1.5px dotted var(--gt2);padding-bottom:1px;cursor:pointer;color:var(--gt)} /* border 방식이라 공백 포함 점선이 끊기지 않는다 */
@@ -1933,7 +1933,7 @@ body.g-inchat #nf-util{right:14px}
   #tf-upsheet::before{content:'';display:block;width:44px;height:4px;border-radius:2px;background:var(--gl2);margin:0 auto 14px}
   .nfxu-cards{grid-template-columns:1fr}
 }
-/* nfx — 내 트레이딩 터미널 (Hyperliquid 레이아웃: 좌 차트 / 우 실행 패널 / 하단 탭, 미연결=잠금) */
+/* nfx — AI 트레이딩 터미널 (Hyperliquid 레이아웃: 좌 차트 / 우 실행 패널 / 하단 탭, 미연결=잠금) */
 .nfxh-page{max-width:none;padding:0 0 40px;gap:0}
 .nfxh-top{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--gl);flex-wrap:wrap}
 .nfxh-title{font-size:13px;font-weight:600;color:var(--gt3);letter-spacing:.01em}
@@ -2295,8 +2295,8 @@ body.g-inchat #nf-util{right:14px}
   .tft-ct .g4,.tft-asx .ag2{grid-template-columns:repeat(2,1fr)}
   .tft-posb .pr2{grid-template-columns:repeat(2,1fr)}
 }
-/* nfx — 내 트레이딩 대시보드 (mock-trade 포팅) */
-body:has(.tft-grid) #teth-help,body:has(.tft-grid) #teth-help-pop{display:none!important} /* 내 트레이딩에서는 상담원 위젯 제거 (사용자 지시 bk3 p1) */
+/* nfx — AI 트레이딩 대시보드 (mock-trade 포팅) */
+body:has(.tft-grid) #teth-help,body:has(.tft-grid) #teth-help-pop{display:none!important} /* AI 트레이딩에서는 상담원 위젯 제거 (사용자 지시 bk3 p1) */
 .nfxt-banner{display:flex;align-items:center;gap:12px;border:1px solid rgba(217,168,78,.32);background:linear-gradient(90deg,rgba(217,168,78,.08),rgba(217,168,78,.03));border-radius:14px;padding:13px 16px;font-size:13px;color:var(--gt2);animation:nfxIn .3s var(--ease) both}
 .nfxt-banner b{color:var(--ga)}
 .nfxt-banner .sp{flex:1}
@@ -3911,7 +3911,7 @@ button{-webkit-tap-highlight-color:transparent}
   .tfbk-card .bt{grid-column:1/-1;flex-direction:column;gap:8px;margin-top:16px}
   .tfbk-card .bt button{width:100%}
 }
-/* ══ 내 트레이딩 인트로 랜딩 (tin v2) — 로그인+전략0 전용. 좌정렬 히어로+판단 상태 카드,
+/* ══ AI 트레이딩 인트로 랜딩 (tin v2) — 로그인+전략0 전용. 좌정렬 히어로+판단 상태 카드,
    타임라인 로그, 연결 플로우 4스텝. 라우팅/분기는 v1 그대로 (intro-v2, 3자 병합 재구현) ══ */
 #g-root .tin{max-width:1080px;margin:0 auto;padding:8px 32px 88px;word-break:keep-all}
 #g-root .tin section{scroll-margin-top:24px}
@@ -4745,7 +4745,7 @@ button{-webkit-tap-highlight-color:transparent}
       </div>
       <button class="g-new" onclick="gHome()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg><span class="lb">새 전략</span><span class="g-ico-pill lbp" id="gp-new">새 전략</span></button>
       <button class="g-util" onclick="gHistory()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">연구 기록</span><span class="g-ico-pill lbp">연구 기록</span></button>
-      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">내 트레이딩</span><span class="g-ico-pill lbp">내 트레이딩</span></button>
+      <button class="g-util" id="g-tf-dash-btn" onclick="tfNav('#/trade')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg><span class="lb">AI 트레이딩</span><span class="g-ico-pill lbp">AI 트레이딩</span></button>
       <button class="g-util" id="g-tf-share-btn" onclick="tfShareView()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg><span class="lb">전략 따라하기</span><span class="g-ico-pill lbp">전략 따라하기</span></button>
       <div id="g-guest-note">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.5"/></svg>
@@ -7998,10 +7998,10 @@ function gDocRunConfirm(){
     gRowC('투자금',fmtMoney(5000)+', 1회 최대 손실 '+fmtMoney(50))+
     gRowC('검증', pct(fin.ret)+', 낙폭 '+fin.mdd.toFixed(1)+'%, Holdout '+(holdoutOf(fin).ret>0?'통과':'경고'))+
     '</div>'+
-    '<div class="g-note" style="margin-top:12px">가상 검증은 실제 주문 없이 실시간으로 체결을 재현합니다. 시작하면 내 트레이딩에서 관리해요.</div>'+
+    '<div class="g-note" style="margin-top:12px">가상 검증은 실제 주문 없이 실시간으로 체결을 재현합니다. 시작하면 AI 트레이딩에서 관리해요.</div>'+
     '<div style="display:flex;gap:8px;margin-top:16px"><button class="g-btn g-btn-p" onclick="gGoLive(\'paper\')">가상 검증으로 시작</button><button class="g-btn g-btn-s" onclick="gGoLive(\'real\')" style="opacity:.55">실전 시작 (데모 잠금)</button></div>';
 }
-/* 연구 결과를 내 트레이딩 원장으로 변환 합류 — 신구 이중 실행 제거 (audit C4) */
+/* 연구 결과를 AI 트레이딩 원장으로 변환 합류 — 신구 이중 실행 제거 (audit C4) */
 function gToTerminal(sx){
   sx=sx||G.cur; if(!sx) return false;
   var fin=sx.versions&&sx.versions[sx.versions.length-1];
@@ -8031,7 +8031,7 @@ function gGoLive(mode){
   if(!gToTerminal(G.cur)) return;
   G.cur.live=true; G.cur.liveMode='paper'; G.cur.status='done';
   gSideRender(); STORE.save();
-  toast('전략이 내 트레이딩에 추가됐어요. 가상 검증으로 실행합니다');
+  toast('전략이 AI 트레이딩에 추가됐어요. 가상 검증으로 실행합니다');
   tfNav('#/trade');
 }
 function gDocLive(){
@@ -8040,8 +8040,8 @@ function gDocLive(){
   var mode=G.cur.liveMode==='paper'?'가상 검증, 실제 주문 없음':'실전';
   var paused=!!G.cur.livePaused;
   return '<h3>'+stg.name+'</h3><div class="meta"><span class="g-tag ok"><span class="g-dot ok"></span>'+mode+'</span>'+(paused?', 일시 정지됨':'')+', Binance</div>'+
-    '<div class="g-note" style="margin-top:10px">이 전략은 내 트레이딩에서 실행 중이에요. 실시간 판단과 성과는 터미널에서 확인하세요.</div>'+
-    '<div style="display:flex;gap:8px;margin:12px 0 4px"><button class="g-btn g-btn-p" onclick="tfNav(\'#/trade\')">내 트레이딩에서 열기</button></div>'+
+    '<div class="g-note" style="margin-top:10px">이 전략은 AI 트레이딩에서 실행 중이에요. 실시간 판단과 성과는 터미널에서 확인하세요.</div>'+
+    '<div style="display:flex;gap:8px;margin:12px 0 4px"><button class="g-btn g-btn-p" onclick="tfNav(\'#/trade\')">AI 트레이딩에서 열기</button></div>'+
     '<h3>최근 활동</h3><table class="g-table"><tbody>'+
     liveTradesFor((stg&&stg.pair)||'BTC/USDT').slice(0,4).map(function(t){ var c=t[4]===true?'var(--gg)':t[4]===false?'var(--gr)':'var(--gt2)'; var pv=String(t[3]).trim()===','?'':t[3]; return '<tr><td class="num" style="color:var(--gt3)">'+t[0]+'</td><td>'+t[1]+'</td><td class="num">'+t[2]+'</td><td class="num" style="text-align:right;color:'+c+'">'+pv+'</td></tr>'; }).join('')+
     '</tbody></table>'+
@@ -9826,7 +9826,7 @@ function tfLater(){
   if(typeof tfNFOnLater==='function') tfNFOnLater(); /* nf: 시작 대기 봇 저장 (D8) */
   var t=tfS(); t.conn=true; tfSideSync(); tfSave();
   tfBackToChat();
-  delay(300,function(){ tfAiMsg('연결은 끝났어요. 준비되면 사이드바의 내 트레이딩에서 언제든 전략을 시작할 수 있어요.'); });
+  delay(300,function(){ tfAiMsg('연결은 끝났어요. 준비되면 사이드바의 AI 트레이딩에서 언제든 전략을 시작할 수 있어요.'); });
 }
 /* ── §20 전략 시작 → 대시보드 (방금 만든 전략이 맨 위) ── */
 function tfStartStrategy(){
@@ -9847,7 +9847,7 @@ function tfStartStrategy(){
   }
   tfSideSync(); tfSave();
   var sx=G.cur||G.sessions[0];
-  if(sx&&sx.convo){ sx.convo.push('<div class="g-amsg"><span class="tai-txt">'+gEsc(asset)+' 전략이 시작됐어요. 내 트레이딩에서 언제든 현황을 볼 수 있어요.</span></div>'); STORE.save(); }
+  if(sx&&sx.convo){ sx.convo.push('<div class="g-amsg"><span class="tai-txt">'+gEsc(asset)+' 전략이 시작됐어요. AI 트레이딩에서 언제든 현황을 볼 수 있어요.</span></div>'); STORE.save(); }
   try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
   toast('전략이 시작됐어요');
   tfDashView();
@@ -12023,7 +12023,7 @@ function tfSS3MetricSheet(key){
   tfSS3Dlg(m[0],'<div class="ss3-cp"><div class="ntc" style="font-size:13.5px;line-height:1.7">'+m[1]+'</div>'
     +'<div class="mt2">모든 수치는 과거 데이터 검증 시뮬레이션이며 미래 수익을 보장하지 않아요.</div></div>');
 }
-/* 내 트레이딩 손익 탭 용어 시트 (spec B2 — 산출 근거를 숨기지 않는다) */
+/* AI 트레이딩 손익 탭 용어 시트 (spec B2 — 산출 근거를 숨기지 않는다) */
 function tfNFTermSheet(key){
   var M={
     asset:['총 자산','위임 예산에 전략 손익 시뮬레이션을 더한 값이에요. 실제 거래소 잔고가 아니라, 검증 통과 설정을 그대로 실행했다고 가정한 체험 모드 수치예요.'],
@@ -12291,7 +12291,7 @@ function tfSS3CopyF(fid){
 }
 function tfSS3Stop(fid){
   var t=tfSSState(); var f=t.follows.find(function(x){ return x.id===fid; }); if(!f) return;
-  tfSS3Dlg('따라가기 중지','<div class="ntc">'+gEsc(f.nick)+' 전략 따라가기를 중지할까요?<br>항목은 보관 처리되고, 이미 실행 중인 전략은 내 트레이딩에서 계속 관리할 수 있어요.</div>'
+  tfSS3Dlg('따라가기 중지','<div class="ntc">'+gEsc(f.nick)+' 전략 따라가기를 중지할까요?<br>항목은 보관 처리되고, 이미 실행 중인 전략은 AI 트레이딩에서 계속 관리할 수 있어요.</div>'
     +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
     +'<button type="button" class="ss3-dbtn" style="flex:1" onclick="tfSS3StopGo('+fid+')">중지하고 보관</button></div>');
 }
@@ -13083,7 +13083,7 @@ function tfPlanView(tab){
       +'<div class="nfx-hero-desc" style="margin-top:6px">체결 건별로 적립되며, 적립금은 이용료 차감에 사용될 예정이에요. 시뮬레이션 체결 기준이며 실제 정산이 아니에요.</div></div>'
       +'<div class="nfx-metrics"><div class="nfx-mbox"><span class="nfx-mtit">적립 건수</span><span class="nfx-mval">'+t.rebates.length+'건</span></div>'
       +'<div class="nfx-mbox"><span class="nfx-mtit">적립률</span><span class="nfx-mval">수수료(0.2%)의 10%</span></div></div>'
-      +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(\'#/trade\')">'+NFX_IC.zap+'내 트레이딩으로 이동</button></div>'
+      +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(\'#/trade\')">'+NFX_IC.zap+'AI 트레이딩으로 이동</button></div>'
       +'</section>'
       +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">적립 내역</h2><span class="nfx-badge">'+(rows.length?'최근 '+rows.length+'건 표시':'내역 없음')+'</span></div>'
       +(rows.length?'<div class="nfx-rows">'+rows.map(function(r,i){
@@ -13093,7 +13093,7 @@ function tfPlanView(tab){
         }).join('')+'</div>'
         :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">아직 적립된 내역이 없어요</div>'
         +'<div class="nfx-edesc">전략 거래가 체결되면 파트너 거래 수수료의 10%가 이곳에 자동으로 적립돼요.</div>'
-        +'<button class="nfx-btn out" style="margin-top:6px" onclick="tfNav(\'#/trade\')">내 트레이딩으로 이동하기</button></div>')
+        +'<button class="nfx-btn out" style="margin-top:6px" onclick="tfNav(\'#/trade\')">AI 트레이딩으로 이동하기</button></div>')
       +'</section></div>';
   }else{
     var P=t.notifPrefs;
@@ -13251,7 +13251,7 @@ function tfBotView(id){
   var posPill=b.status==='live'?(b.env==='paper'?'가상 신호 탐색 중':'신호 탐색 중'):'실행 대기';
   tfNFView('nfbot',b.name,
     '<div class="nfx-page"><div class="nfx-glow"></div>'
-    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+gEsc(b.name)+'</span></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">AI 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+gEsc(b.name)+'</span></div>'
     +'<section class="nfxb-hero"><div class="nfxb-toprow">'
     +'<div style="min-width:0"><div class="nfxb-tline"><h1 class="nfxb-title">'+gEsc(b.name)+'</h1>'
     +'<span class="nfxb-st '+env+'"><span class="nfx-dot'+(b.status==='live'?' pulse':'')+'"></span>'+envL+'</span>'
@@ -13464,7 +13464,7 @@ function tfReviewView(id){
   var STEP={'진입 근거':['ENTRY','e','doc'],'청산 근거':['EXIT','x','trend'],'손실 원인':['CAUSE','r','warn'],'규칙 평가':['RULE','x','doc'],'다음 제안':['SUGGESTION','g','star']};
   tfNFView('nfreview','거래복기',
     '<div class="nfx-page"><div class="nfx-glow"></div>'
-    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">거래복기</span></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">AI 트레이딩</span><span>/</span><span style="color:var(--gt2)">거래복기</span></div>'
     +'<section class="nfx-card nfx-card-hero nfxr-hero '+(won?'win':'loss')+'">'
     +'<div class="nfx-chead"><span class="nfx-ctitle">'+gEsc(r.asset)+' '+r.kindL+' 복기<span class="nfx-badge sim">시뮬레이션</span></span>'
     +(pd?'<button class="nfx-btn out" style="padding:7px 13px;font-size:12.5px" onclick="tfNav(&quot;#/periodic/'+pd.id+'&quot;)">'+pd.label+' 보고서로</button>':'')
@@ -13486,7 +13486,7 @@ function tfReviewView(id){
         +'<div class="nfxr-sbody">'+gEsc(c[1])+'</div></div></div>';
     }).join('')+'</div></section>'
     +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(&quot;#/trade/bot/'+r.botId+'&quot;)">'+NFX_IC.zap+'이 전략 상세로</button>'
-    +'<button class="nfx-btn out" onclick="tfNav(&quot;#/trade&quot;)">내 트레이딩</button></div>'
+    +'<button class="nfx-btn out" onclick="tfNav(&quot;#/trade&quot;)">AI 트레이딩</button></div>'
     +'</div>');
 }
 function tfPeriodicView(id){
@@ -13496,7 +13496,7 @@ function tfPeriodicView(id){
   var evs=t.reviews.filter(function(r){ return r.at<p.until&&(p.from==null||r.at>=p.from); }).slice(0,10);
   tfNFView('nfperiodic',p.label+' 보고서',
     '<div class="nfx-page"><div class="nfx-glow"></div>'
-    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">내 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+p.label+' 보고서</span></div>'
+    +'<div class="nfx-bc"><span class="lk" onclick="tfNav(\'#/trade\')">AI 트레이딩</span><span>/</span><span style="color:var(--gt2)">'+p.label+' 보고서</span></div>'
     +'<section class="nfx-card nfx-card-hero nfxr-hero '+(p.pnl>=0?'win':'loss')+'">'
     +'<div class="nfx-chead"><span class="nfx-ctitle">'+p.label+' 성과 보고서<span class="nfx-badge sim">시뮬레이션</span></span>'
     +'<span class="nfx-badge">'+new Date(p.from||p.until-1).toLocaleDateString('ko-KR')+' ~ '+new Date(p.until-1).toLocaleDateString('ko-KR')+'</span></div>'
@@ -13517,12 +13517,12 @@ function tfPeriodicView(id){
       :'<div class="nfx-empty"><div class="nfx-eicon">'+NFX_IC.empty+'</div><div class="nfx-etit">현재 조회 가능한 복기가 없어요</div>'
       +'<div class="nfx-edesc">이 기간의 복기 리포트가 보관 기간을 지나 정리됐어요. 요약 수치는 위에 그대로 남아 있어요.</div></div>')
     +'</section>'
-    +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(&quot;#/trade&quot;)">'+NFX_IC.zap+'내 트레이딩</button>'
+    +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(&quot;#/trade&quot;)">'+NFX_IC.zap+'AI 트레이딩</button>'
     +'<button class="nfx-btn out" onclick="tfNav(&quot;#/plan/rebates&quot;)">정산 내역 보기 (전체)</button></div>'
     +'</div>');
   setTimeout(function(){ var fg=$('nfxr-wring'); if(fg) fg.style.strokeDashoffset=String(163.4*(1-wr/100)); },60);
 }
-/* ── 내 트레이딩 확장: 기존 tfDashView 출력 뒤에 훅 (마크업 불변, 추가만) ── */
+/* ── AI 트레이딩 확장: 기존 tfDashView 출력 뒤에 훅 (마크업 불변, 추가만) ── */
 function tfDashEnhance(){
   /* 행 클릭, 배너는 tfDashView 마크업에 인라인 통합됨 (nfx 포팅) — 여기는 주기 보고서/플래그/유틸바만 */
   tfNFInit();
@@ -13570,7 +13570,7 @@ function tfNFOnLater(){
   var asset=(t.intake&&t.intake.asset&&t.intake.asset.label)||'자산';
   if(!(t.strat||[]).some(function(x){ return x.status==='ready'&&x.name.indexOf(asset)===0; })){
     t.strat.unshift({name:asset+' 위임 전략',score:t.score,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p,src:t.cloneFrom||null,fid:t.followId!=null?t.followId:null,status:'ready',env:'live',at:Date.now()});
-    tfNotify('bot','rd:'+Date.now(),asset+' 전략이 시작 대기 중이에요','내 트레이딩에서 언제든 시작할 수 있어요.','#/trade');
+    tfNotify('bot','rd:'+Date.now(),asset+' 전략이 시작 대기 중이에요','AI 트레이딩에서 언제든 시작할 수 있어요.','#/trade');
     tfSave();
   }
 }
@@ -14475,7 +14475,7 @@ function tfInsRoute(h){
   tfIns2Home(null);
 }
 
-/* ══ 내 트레이딩 인트로 랜딩 — 로그인+전략0 전용 (intro-v1, 3자 병합 스펙) ══
+/* ══ AI 트레이딩 인트로 랜딩 — 로그인+전략0 전용 (intro-v1, 3자 병합 스펙) ══
    분기: 로그인X=사이드바 미노출 / 로그인+내 전략0=인트로 / 전략 1개 이상=터미널.
    CTA는 연동·결제가 아니라 전략 선택으로 — 게이트는 확정 플로우(백테스팅 진입 시) 위치 유지. */
 function tfIntroUk(){ return S.user?String(S.user.email||S.user.name||'u'):''; } /* PEEK 는 현재 계정에만 유효 (codex-in 6) */
@@ -14581,7 +14581,7 @@ function tfIntroView(force){
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false; /* 뒤로가기 해시 복귀 규약 (codex-in 3) */
-  gChead('내 트레이딩','',null);
+  gChead('AI 트레이딩','',null);
   /* 성향별 카드 3종 — 페르소나를 순번이 아니라 실제 전략 파라미터로 배정, 엔진에 없는 보호 약속 금지 (codex gate3 P1)
      엔진 사실: 진입=하락 후 RSI 조건+반등 확인, trendFilter=추세 강도(방향 아님) 필터. 문구는 이 범위 안에서만 약속한다 */
   var PERS_TF=['안정 추세형','큰 흐름을 확인하고 움직여요','추세가 뚜렷하고 잠깐 눌린 자리가 올 때만 사요','추세가 뚜렷하지 않으면 새로 사지 않아요',['추세 확인','눌림 진입','규칙 청산']];
@@ -14647,7 +14647,7 @@ function tfIntroView(force){
   var tiles=tilesRm?'<img src="assets/hero-tiles-end.jpg" alt="">'
     :'<video src="assets/hero-tiles.mp4" poster="assets/hero-tiles-end.jpg" muted autoplay playsinline preload="auto" disablepictureinpicture></video>';
   gContent('<section class="tin3-hero tin-hero">'
-    +(force&&!tfIntroNeed()?'<button type="button" class="tin-back" onclick="tfDashView()">← 내 트레이딩으로 돌아가기</button>':'')
+    +(force&&!tfIntroNeed()?'<button type="button" class="tin-back" onclick="tfDashView()">← AI 트레이딩으로 돌아가기</button>':'')
     +'<h1>AI가 거래하게 만드세요</h1>'
     +'<p class="sub"><span>AI 에이전트에게 시장 접근 권한을 몇 분 만에 연결하세요.</span><span>당신을 위해 주식, 옵션 및 암호화폐 거래를 시작하게 만드세요.</span></p>'
     +'<div><button type="button" class="tin3-cta" onclick="tfIntroGo(\'tin-pick\')">시작하기</button><span class="free">영원히 무료, 신용카드 필요 없음</span></div>'
@@ -14729,7 +14729,7 @@ function tfNFRoute(h){
     tfInsRoute(h);
     return true;
   }
-  /* 게스트의 내 트레이딩 = 인트로 둘러보기 (로그인 없이 열람, 복제, 시작은 각 액션에서 인증) */
+  /* 게스트의 AI 트레이딩 = 인트로 둘러보기 (로그인 없이 열람, 복제, 시작은 각 액션에서 인증) */
   if(!S.user&&h==='#/trade'){ tfIntroView(); return true; }
   /* 게스트 접근 — 기존 로그인 UI로 연결. 복원(TF_STATE_READY) 전에는 판단 유보 — 딥링크 보존 (codex NF P0-4) */
   if(!S.user){ if(window.TF_STATE_READY){ toast('로그인하면 트레이딩과 크레딧을 관리할 수 있어요'); try{ authOpen('login'); }catch(e){} gHome(); } return true; }
