@@ -14610,6 +14610,8 @@ function tfIntroNeed(){
   return !!S.user&&!((t.strat||[]).length)&&!((t.termClones||[]).length)&&window.TF_INTRO_PEEK!==tfIntroUk();
 }
 function tfIntroPeek(){ window.TF_INTRO_PEEK=tfIntroUk(); tfDashView(); }
+/* 히어로 시작하기: 비회원은 회원가입/로그인 팝업, 회원은 전략 선택 섹션으로 */
+function tfIntroStart(){ if(!S.user){ authOpen('signup'); return; } tfIntroGo('tin-pick'); }
 function tfIntroGo(id){
   var el=document.getElementById(id); if(!el) return;
   var rm=false; try{ rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
@@ -14960,7 +14962,7 @@ function tfIntroView(force){
     +(force&&!tfIntroNeed()?'<button type="button" class="tin-back" onclick="tfDashView()">← AI 트레이딩으로 돌아가기</button>':'')
     +'<h1>AI가 거래하게 만드세요</h1>'
     +'<p class="sub"><span>AI 에이전트에게 시장 접근 권한을 몇 분 만에 연결하세요.</span><span>당신을 위해 주식, 옵션 및 암호화폐 거래를 시작하게 만드세요.</span></p>'
-    +'<div><button type="button" class="tin3-cta" onclick="tfIntroGo(\'tin-pick\')">시작하기</button><span class="free">영원히 무료, 신용카드 필요 없음</span></div>'
+    +'<div><button type="button" class="tin3-cta" onclick="tfIntroStart()">시작하기</button><span class="free">영원히 무료, 신용카드 필요 없음</span></div>'
     +'<div class="tin3-tiles" aria-hidden="true">'+tiles+'</div>'
         +'</section><div class="tin5"><div class="t5in">'
     +'<section id="tin-pick"><h2 class="tin-rv">이번 주 1위 전략을 그대로 복제하세요</h2>'
