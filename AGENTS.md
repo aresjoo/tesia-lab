@@ -94,6 +94,7 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
 | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
 | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+| `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
 | `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
 | `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
 | `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |

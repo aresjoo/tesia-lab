@@ -10809,7 +10809,7 @@ function tfNFAlertsRender(){
   var host=$('nfxh-alerts'); if(!host) return;
   var t=tfNFInit();
   function inTab(n,k){ return k==='all'||n.type===k||(k==='pos'&&(n.type==='pos'||n.type==='bot')); }
-  var TB=[['all','전체'],['pos','포지션'],['bot','전략'],['review','거래복기'],['rebate','정산']];
+  var TB=[['all','전체'],['pos','포지션'],['bot','전략'],['review','거래복기']];
   var rows=t.notifs.filter(function(n){ return inTab(n,NF_TAB); });
   var unread=t.notifs.filter(function(n){ return !n.read; }).length;
   host.innerHTML='<div class="nfx-sechead"><h2 class="nfx-sectit">알림'+(unread?' <span class="nfx-badge blue">'+unread+'개 안읽음</span>':'')+'</h2>'
@@ -12746,7 +12746,7 @@ function tfNotifOpen(){
 function tfNotifRender(){
   var p=$('nf-notif'); if(!p) return;
   var t=tfNFInit();
-  var TABS=[['all','전체'],['pos','포지션'],['bot','전략'],['review','거래복기'],['rebate','정산']];
+  var TABS=[['all','전체'],['pos','포지션'],['bot','전략'],['review','거래복기']];
   function inTab(n,k){ return k==='all'||n.type===k||(k==='pos'&&(n.type==='pos'||n.type==='bot')); }
   var rows=t.notifs.filter(function(n){ return inTab(n,NF_TAB); });
   p.innerHTML='<div id="nf-grab"></div><div class="hd">알림 센터'+(t.notifs.filter(function(n){return !n.read;}).length?'<span class="nfx-badge blue" style="margin-left:8px">'+t.notifs.filter(function(n){return !n.read;}).length+'개 안읽음</span>':'')+'<button onclick="event.stopPropagation();tfNotifReadAll()">모두 읽음</button></div>'
@@ -12786,7 +12786,7 @@ function tfRebateCommit(botId,fills,budget){
     }
     sum+=amt;
   });
-  if(sum>0&&t.notifPrefs.rebate) tfNotify('rebate','rb:'+botId,'수수료 적립 +'+tfWon(sum)+' (시뮬레이션)','거래 수수료의 10%가 적립됐어요. 적립 내역은 PLAN 정산 탭에서 확인할 수 있어요.','#/plan/rebates'); /* 수신 설정 반영 (codex NF P1) */
+  if(false) tfNotify('rebate','rb:'+botId,'수수료 적립 +'+tfWon(sum)+' (시뮬레이션)','거래 수수료의 10%가 적립됐어요. 적립 내역은 PLAN 정산 탭에서 확인할 수 있어요.','#/plan/rebates'); /* 수신 설정 반영 (codex NF P1) */
   return sum;
 }
 /* ── 거래복기: 체결 이벤트 커밋 시 1회 생성 (eventId dedup) — 엔진 실존 신호만 인용 ── */
@@ -12896,7 +12896,7 @@ function tfNFRow(o){ /* {ic,icc,lb,ds,val,valc,arrow,click,stag} */
 function tfPlanView(tab){
   tab=tab||'plan';
   var t=tfNFInit();
-  var tabs=[['plan','이용 현황'],['rebates','정산'],['alerts','알림 설정']];
+  var tabs=[['plan','이용 현황'],['alerts','알림 설정']]; if(tab==='rebates') tab='plan';
   var body='';
   if(tab==='plan'){
     /* 이용 현황 — 모든 값은 tfDerive()에서만 읽는다 (S3, D06, D14) */
@@ -12908,9 +12908,7 @@ function tfPlanView(tab){
     body='<div class="nfx-grid2">'
       +'<section class="nfx-card nfx-card-hero us-hero">'
       +'<div class="us-status">'+gEsc(d.statusLine||'')+'</div>'
-      +'<div class="us-bar"><div class="us-bar-h"><span>거래 혜택 상쇄</span><b>'+pct+'%</b></div>'
-      +'<div class="nfx-gtrack"><div class="nfx-gfill" style="width:'+pct+'%"></div></div>'
-      +'<div class="us-line">'+gEsc(d.bill.line||'')+'</div></div>'
+      +'<div class="us-bar"><div class="us-line">'+gEsc(d.bill.display||'')+'</div></div>'
       +(d.reduceHint?'<div class="us-hint"><b>줄이는 방법</b> '+gEsc(d.reduceHint)+'</div>':'')
       +(cta?'<div class="nfx-cta us-cta"><button class="ac-btn p" onclick="'+cta.action+'">'+gEsc(cta.label)+'</button></div>':'')
       +'<div class="us-foot">시뮬레이션 데이터예요</div>'
@@ -12946,7 +12944,7 @@ function tfPlanView(tab){
       +'</section></div>';
   }else{
     var P=t.notifPrefs;
-    var TOG=[['pos','포지션 진입/청산','전략의 체결이 확정될 때','trend','gb'],['loss','손실 단계 경고','평가 손실이 단계에 진입할 때','warn','ga'],['review','거래복기 리포트','체결 복기가 생성될 때','doc','gb'],['rebate','수수료 적립','적립이 확정될 때','won','gg'],['watch','관심 종목 소식','데모에서는 실행 이벤트만 수신해요','star','']];
+    var TOG=[['pos','포지션 진입/청산','전략의 체결이 확정될 때','trend','gb'],['loss','손실 단계 경고','평가 손실이 단계에 진입할 때','warn','ga'],['review','거래복기 리포트','체결 복기가 생성될 때','doc','gb'],['watch','관심 종목 소식','데모에서는 실행 이벤트만 수신해요','star','']];
     var CH=[['chK','카카오톡','데모에서는 설정만 저장돼요','chat'],['chT','텔레그램','데모에서는 설정만 저장돼요','send'],['chM','이메일 리포트','데모에서는 설정만 저장돼요','mail']];
     function sw(k,on,dis,grn){ return '<label class="nfx-sw"><input type="checkbox"'+(on?' checked':'')+(dis?' disabled':' onchange="tfNFPrefI(\''+k+'\',this)"')+'><span class="nfx-slider'+(grn?' grn':'')+'"></span></label>'; }
     body='<div class="nfx-grid2">'
@@ -12964,7 +12962,7 @@ function tfPlanView(tab){
     +'<div class="nfx-tabs">'+tabs.map(function(tb){ return '<button class="nfx-tab'+(tab===tb[0]?' on':'')+'" onclick="tfNav(\'#/plan'+(tb[0]==='plan'?'':'/'+tb[0])+'\')">'+tb[1]+'</button>'; }).join('')+'</div></div>'
     +body+'</div>');
   var t2=tfNFInit();
-  if(tab==='rebates') tfNFCount('nfx-rnum',t2.rebates.reduce(function(a,r){return a+r.amt;},0),'₩','');
+  
 }
 function tfNFPref(k,el){
   var t=tfNFInit(); t.notifPrefs[k]=!t.notifPrefs[k];
@@ -14959,7 +14957,9 @@ function tfDerive(){
   if(!user) line='';
   else if(plan) line='플랜 '+W(planFee)+(overage>0?' + 추가 사용 '+W(overage):'')+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+' = 청구 '+W(due);
   else if(due>0) line='추가 사용 '+W(overage)+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+(freeKrw>0?' - 무료 혜택 '+W(Math.min(freeKrw,Math.max(0,gross-Math.min(commission,gross)))):'')+' = 청구 '+W(due);
-  else line='이번 달 청구 ₩0'+(freeLeft>0&&key==='signed'?', 무료 체험 '+freeLeft+'회 남음':(commission>0?', 거래 혜택으로 상쇄':''));
+  else line='이번 달 청구 ₩0'+(commission>0?', 거래 혜택으로 상쇄':'');
+  var offsetWord=commission<=0?'':(due===0?'거래 혜택으로 전액 상쇄됐어요':'거래 혜택으로 일부 상쇄됐어요');
+  var display=!user?'':('이번 달 예상 청구 '+W(due)+(offsetWord?', '+offsetWord:(plan?'':(freeLeft>0?', 무료 체험 중':''))));
   var coverage;
   if(!user) coverage='none';
   else if(watch) coverage='blocked';
@@ -14972,11 +14972,11 @@ function tfDerive(){
   var exName=tfExName(ex)||'거래소';
   var ST={
     guest:'',
-    signed:'무료 체험 '+freeLeft+'회 남았어요. 연결이나 결제 없이 만들고 검증할 수 있어요',
+    signed:'무료 체험 중이에요. 연결이나 결제 없이 만들고 검증할 수 있어요',
     'linked-zero':exName+' 연결이 끝났어요. 첫 거래부터 이용료 상쇄가 시작돼요',
-    'linked-low':'이용료 '+W(gross)+' 중 '+W(Math.min(commission,gross))+'가 거래 혜택으로 상쇄됐어요. 부족분은 카드로 청구돼요',
+    'linked-low':'거래 혜택으로 이용료 일부가 상쇄됐어요. 부족분은 카드로 청구돼요',
     'linked-high':'이번 달 이용료가 거래 혜택으로 충당됐어요',
-    'plan-high-unlinked':'AI를 많이 쓰고 있어요. 거래소를 연결하면 거래 혜택만큼 줄어요',
+    'plan-high-unlinked':'AI를 많이 쓰고 있어요. 거래소를 연결하면 거래 혜택으로 이용료가 줄 수 있어요',
     'plan-low-unlinked':'플랜을 정상 이용 중이에요',
     'plan-high-high':'거래 혜택이 플랜과 추가 사용료를 상쇄하고 있어요',
     'plan-high-low':'AI 사용이 많아 추가 사용료가 있어요. 거래 혜택으로 일부 상쇄됐어요',
@@ -14986,6 +14986,7 @@ function tfDerive(){
   };
   var statusLine=ST[key]||'';
   if(user&&freeLeft===0&&key==='signed') statusLine='무료 체험을 다 썼어요. 거래소를 연결하거나 카드를 등록하면 계속 쓸 수 있어요';
+  else if(user&&freeLeft<=2&&key==='signed') statusLine='무료 체험이 곧 끝나요. 중단 없이 쓰려면 거래소를 연결하거나 카드를 등록하세요';
   if(watch) statusLine='AI 기능이 잠시 멈춰 있어요. 카드 등록이나 거래소 연결 즉시 다시 켜져요';
   var reduceHint=null;
   if(user&&!uid) reduceHint='거래소를 연결하면 거래 혜택으로 이용료가 상쇄돼요';
@@ -15011,7 +15012,7 @@ function tfDerive(){
     facts:{loggedIn:user,uid:uid,api:api,ex:ex,plan:plan,usage:usage,usageBand:usageBand,trade:trade,tradeBand:tradeBand,freeLeft:freeLeft,freeQuota:fq,balance:bal,watch:watch,owned:owned,draft:draft},
     entitlement:{browse:true,chat:user&&!watch&&(freeLeft>0||plan||bal>0),backtest:user&&!watch&&(freeLeft>0||plan||bal>0),paper:user,live:user&&api&&(draft||owned>0),follow:user&&api},
     coverage:coverage,
-    bill:{plan:planFee,overage:overage,commission:commission,free:freeKrw,due:due,offsetPct:offsetPct,line:line},
+    bill:{plan:planFee,overage:overage,commission:commission,free:freeKrw,due:due,offsetPct:offsetPct,line:line,display:display,offsetWord:offsetWord},
     primaryCTA:pri, secondaryCTA:sec,
     activation:{uid:uid?'done':'none',api:api?'done':'none',card:plan?'done':'none',message:actMsg,ex:ex},
     statusLine:statusLine, reduceHint:reduceHint, interrupt:interrupt,
@@ -15292,10 +15293,10 @@ function tfTradeInactiveView(){
   var free='';
   if(!f.plan){
     var pct=f.freeQuota>0?Math.round(f.freeLeft/f.freeQuota*100):0;
-    free='<div class="tx-free"><div class="tx-free-hd"><span>무료 체험</span><b>'+f.freeLeft+'회 남음</b></div><div class="tx-bar"><i style="width:'+pct+'%"></i></div>'
+    free='<div class="tx-free"><div class="tx-free-hd"><span>무료 체험</span><b>'+(f.freeLeft>0?'이용 중':'다 썼어요')+'</b></div>'
       +'<p>'+(f.freeLeft>0?'만들기와 검증에 써요. 모의 실행은 횟수를 쓰지 않아요.':'거래소를 연결하거나 카드를 등록하면 계속 쓸 수 있어요.')+'</p></div>';
   } else if(d.bill.line){
-    free='<div class="tx-free"><div class="tx-free-hd"><span>이번 달</span><b>'+gEsc(d.bill.line)+'</b></div>'+(d.reduceHint?'<p>'+gEsc(d.reduceHint)+'</p>':'')+'</div>';
+    free='<div class="tx-free"><div class="tx-free-hd"><span>청구</span><b>'+gEsc(d.bill.display)+'</b></div>'+(d.reduceHint?'<p>'+gEsc(d.reduceHint)+'</p>':'')+'</div>';
   }
   var apiDone=d.activation.api==='done', cardDone=d.activation.card==='done';
   var ac='';
