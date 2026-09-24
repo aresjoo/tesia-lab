@@ -894,6 +894,8 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 /* 배지 — 톤온톤 플랫 칩 (원색 솔리드 금지, agy fc) */
 .g-tpl .tbdg{position:absolute;top:10px;right:10px;z-index:1;font-size:10.5px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:6px;background:rgba(91,138,247,.14);border:1px solid rgba(91,138,247,.28);color:#a7c0ff}
 .g-tpl .tbdg.hot{background:rgba(224,96,75,.13);border-color:rgba(224,96,75,.3);color:#f2a89b}
+/* 무료로 시작: AI 트레이딩 시작하기 CTA와 같은 라임 솔리드, 사각 배지 문법 유지 (X1 시안 채택, 사용자 지시 2026-09-24) */
+.g-tpl .tbdg.free{padding:4px 10px;border:1px solid rgba(255,255,255,.28);background:#c8f43c;color:#172006;font-size:11.5px;font-weight:800;line-height:1.4;letter-spacing:0;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.24)}
 .g-tpl-sel .th .timg{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .g-tpl-sel .th .timg img{max-width:72%;max-height:72%;object-fit:contain}
 /* 채팅바 밴드 — 아래는 검정, 위는 그라데이션 쉐도잉 (사용자 지시). 데스크톱=스티키, 모바일=fixed */
@@ -910,7 +912,7 @@ body.light #teth-help svg rect{fill:#1f1f1f}
 .g-tplwrap{margin-bottom:8px}
 /* 카드 열 정책: 3열(>1100) / 2열(601~1100, 태블릿) / 1열(<=600, 폰) — Gemini 갤러리 (사용자 지시) */
 @media(max-width:1100px){ .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px} .g-tpl .lb{font-size:17px} }
-@media(max-width:600px){ .g-tpls{grid-template-columns:minmax(0,1fr)} .g-tpl .lb{font-size:18px} }
+@media(max-width:600px){ .g-tpls{grid-template-columns:minmax(0,1fr)} .g-tpl .lb{font-size:18px} .g-tpl .tbdg.free{padding:5px 11px;font-size:12.5px} }
 .g-tpl .ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#a8c7fa;display:flex;align-items:center;justify-content:center;z-index:1}
 .g-pill.has-tpl{flex-wrap:wrap;border-radius:28px} /* 2줄 상태에서 스타디움 곡률 밖으로 전송버튼이 나가지 않게 (.multi와 동일 처리) */
 .g-tpl-sel{flex:0 0 100%;order:-2;display:flex;gap:8px;flex-wrap:wrap;padding:4px 2px 10px;animation:gTselIn .2s var(--ease)}
@@ -6901,13 +6903,13 @@ function gCosmosStart(){
 var TF_TPL={acts:[],assets:[]};
 var TF_TPL_MAX=10;
 var TF_TPL_ACTS=[
-  {id:'auto',lb:'AI가 대신 거래',bdg:'강력',brand:1,
+  {id:'auto',lb:'AI가 대신 거래',bdg:'무료로 시작',bk:'free',brand:1,
    q0:'AI가 어떤 종목을 대신 거래해 드릴까요?',q:'AI가 어떻게 {A} 거래를 해드릴까요?',
    frag:'{A} 거래를 AI에게 맡기는 전략을 만들',frag0:'AI가 대신 거래하는 전략을 만들',more:'AI 위임 거래 전략도 만들'},
-  {id:'ind',lb:'지표 생성 후, 거래',bdg:'강력',
+  {id:'ind',lb:'지표 생성 후, 거래',bdg:'무료로 시작',bk:'free',
    q0:'어떤 종목에 쓸 지표를 만들어 볼까요?',q:'{A}에 어떤 지표를 만들어 거래해 볼까요?',
    frag:'{A}에 맞는 지표를 만들어 그 신호로 거래하는 전략을 만들',frag0:'나만의 지표를 만들어 그 신호로 거래하는 전략을 만들',more:'전용 지표 기반 전략도 만들'},
-  {id:'rank',lb:'전략 랭킹',bdg:'HOT',
+  {id:'rank',lb:'전략 랭킹',bdg:'HOT',bk:'hot',
    q0:'어떤 종목의 전략 랭킹이 궁금하세요?',q:'{A} 전략 랭킹을 보여드릴까요?',
    frag:'{A} 인기 전략 랭킹을 보여주',frag0:'요즘 인기 전략 랭킹을 보여주',more:'인기 전략 랭킹도 보여주'},
   {id:'anal',lb:'시장/종목 분석',
@@ -7025,9 +7027,9 @@ function tfTplThumb(t,w,h){
 function tfTplCards(){
   function card(kind,t,i){ var on=TF_TPL[kind].indexOf(t.id)>=0;
     var dl=window.TF_TPL_ENTR?(' style="--d:'+((kind==='acts'?0.24+i*0.07:0.55+Math.min(i,14)*0.035)).toFixed(2)+'s"'):'';
-    return '<button type="button" class="g-tpl'+(on?' on':'')+'"'+dl+' data-k="'+kind+'" data-id="'+t.id+'" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')" aria-pressed="'+on+'">'
+    return '<button type="button" class="g-tpl'+(on?' on':'')+'"'+dl+' data-k="'+kind+'" data-id="'+t.id+'" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')" aria-pressed="'+on+'" aria-label="'+t.lb+(t.bdg?', '+t.bdg:'')+'">'
       +tfTplThumb(t)
-      +(t.bdg?'<span class="tbdg'+(t.bdg==='HOT'?' hot':'')+'">'+t.bdg+'</span>':'')
+      +(t.bdg?'<span class="tbdg'+((t.bk||(t.bdg==='HOT'&&'hot'))?' '+(t.bk||'hot'):'')+'" aria-hidden="true">'+t.bdg+'</span>':'') /* 스크린리더는 카드 이름 먼저 (aria-label 합성) */
       +'<span class="lb">'+t.lb+'</span></button>'; } /* 체크 배지 없음 — Gemini 동일 (사용자 지시) */
   var out=TF_TPL_ACTS.map(function(t,i){ return card('acts',t,i); }).join('')
     +TF_TPL_ASSETS.map(function(t,i){ return card('assets',t,i); }).join('');
