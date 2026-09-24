@@ -6909,7 +6909,7 @@ var TF_TPL_ACTS=[
   {id:'ind',lb:'지표 생성 후, 거래',bdg:'무료로 시작',bk:'free',
    q0:'어떤 종목에 쓸 지표를 만들어 볼까요?',q:'{A}에 어떤 지표를 만들어 거래해 볼까요?',
    frag:'{A}에 맞는 지표를 만들어 그 신호로 거래하는 전략을 만들',frag0:'나만의 지표를 만들어 그 신호로 거래하는 전략을 만들',more:'전용 지표 기반 전략도 만들'},
-  {id:'rank',lb:'전략 따라하기',bdg:'무료로 시작',bk:'free',go:1, /* 선택 토글 대신 전략 따라하기 탭으로 이동 (사용자 지시 2026-09-24) */
+  {id:'rank',lb:'전략 랭킹',bdg:'HOT',bk:'hot',
    q0:'어떤 종목의 전략 랭킹이 궁금하세요?',q:'{A} 전략 랭킹을 보여드릴까요?',
    frag:'{A} 인기 전략 랭킹을 보여주',frag0:'요즘 인기 전략 랭킹을 보여주',more:'인기 전략 랭킹도 보여주'},
   {id:'anal',lb:'시장/종목 분석',
@@ -7027,7 +7027,7 @@ function tfTplThumb(t,w,h){
 function tfTplCards(){
   function card(kind,t,i){ var on=TF_TPL[kind].indexOf(t.id)>=0;
     var dl=window.TF_TPL_ENTR?(' style="--d:'+((kind==='acts'?0.24+i*0.07:0.55+Math.min(i,14)*0.035)).toFixed(2)+'s"'):'';
-    return '<button type="button" class="g-tpl'+(on?' on':'')+'"'+dl+' data-k="'+kind+'" data-id="'+t.id+'" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')"'+(t.go?'':' aria-pressed="'+on+'"')+' aria-label="'+t.lb+(t.bdg?', '+t.bdg:'')+(t.go?', 화면 이동':'')+'">'
+    return '<button type="button" class="g-tpl'+(on?' on':'')+'"'+dl+' data-k="'+kind+'" data-id="'+t.id+'" onclick="tfTplPick(\''+kind+'\',\''+t.id+'\')" aria-pressed="'+on+'" aria-label="'+t.lb+(t.bdg?', '+t.bdg:'')+'">'
       +tfTplThumb(t)
       +(t.bdg?'<span class="tbdg'+((t.bk||(t.bdg==='HOT'&&'hot'))?' '+(t.bk||'hot'):'')+'" aria-hidden="true">'+t.bdg+'</span>':'') /* 스크린리더는 카드 이름 먼저 (aria-label 합성) */
       +'<span class="lb">'+t.lb+'</span></button>'; } /* 체크 배지 없음 — Gemini 동일 (사용자 지시) */
@@ -7064,13 +7064,6 @@ function tfTplText(){
   return {q:q,cmd:cmd};
 }
 function tfTplPick(kind,id){
-  var go=tfTplOf(kind,id);
-  if(go&&go.go){ /* 이동 카드: 전략 찾기 탭, 검증 수익순. 홈에서 고른 자산이 하나고 필터에 있으면 이어받는다 */
-    var t=tfSSState(), am={btc:'비트코인',eth:'이더리움',ndx:'나스닥'};
-    t.ss.sort='ret'; t.ss.dir='desc';
-    t.ss.asset=(TF_TPL.assets.length===1&&am[TF_TPL.assets[0]])||'all';
-    tfShareHub('find'); return;
-  }
   var arr=TF_TPL[kind], i=arr.indexOf(id);
   if(i>=0) arr.splice(i,1);
   else{
