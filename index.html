@@ -7248,7 +7248,7 @@ function gHome(){
     /* 밴드 = CTA(게스트) + 채팅바 + 약관 — 겹침 원천 차단, 아래 검정/위 쉐도잉 (사용자 지시) */
     '<div class="g-pillband">'+
     '<div class="g-chipstack">'+
-    (S.user?'':'<div class="g-free-row"><button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','영원히 $0, 신용카드 필요 없음')+'</span></button></div>')+
+    (S.user?'':'<div class="g-free-row"><button class="g-freecta" onclick="authOpen(\'signup\')"><span>'+TR('auth.free','무료로 시작, 카드 등록 없음')+'</span></button></div>')+
     '</div>'+
     '<div class="g-pill" id="g-pill"><div class="g-tpl-sel" id="g-tpl-sel" style="display:none"></div><span class="plus" onclick="gPlusPop(event)" onmouseenter="gPlusHover()" onmouseleave="gPlusLeave()" role="button" aria-label="'+TR('plus.t','더 많은 기능 사용하기')+'">＋</span><textarea id="g-home-in" rows="1" placeholder="'+TR('home.ph','예: 비트코인이 떨어졌을 때 사는 전략')+'" aria-label="'+TR('home.idea','연구 아이디어')+'"></textarea>'+
     '<button class="g-exp" id="g-exp" onclick="gExpToggle(event)" aria-label="'+TR('comp.full','전체 화면')+'">'+
@@ -10020,7 +10020,7 @@ function tfTmAll(){
       status:x.status==='live'?'live':(x.status==='ready'?'ready':'off'),
       ex:xe,exL:tfExName(xe)||'연결 거래소',
       asset:xa,sym:tfAssetTicker(xa)+'/USDT',mkt:'현물',
-      tv:x.tv||(info&&info.tv)||'BINANCE:BTCUSDT',
+      tv:(function(){ var t0=x.tv||(info&&info.tv)||'BINANCE:BTCUSDT'; var ex0=x.ex||(t.api&&t.api.ex); return (ex0==='bitget'&&/^BINANCE:/.test(t0))?t0.replace(/^BINANCE:/,'BITGET:'):t0; })(),
       cap:x.cap!=null?x.cap:TF_BUDGET[bi],capShared:x.cap==null,
       p:pp,at:+x.at||Date.now()});
   });
@@ -17309,7 +17309,7 @@ var I18N={
   'nav.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
   'nav.signup':{ko:'무료로 시작',en:'Start free',ja:'無料で始める','zh-CN':'免费开始','zh-TW':'免費開始',es:'Empieza gratis',fr:'Commencer gratuitement'},
   'chip.free':{ko:'카드 등록 없이 무료',en:'Free, no card needed',ja:'カード登録なしで無料','zh-CN':'免费，无需绑卡','zh-TW':'免費，無需綁卡',es:'Gratis, sin tarjeta',fr:'Gratuit, sans carte'},
-  'auth.free':{ko:'영원히 $0, 신용카드 필요 없음',en:'$0 forever, no credit card needed',ja:'ずっと$0、クレジットカード不要','zh-CN':'永久$0，无需信用卡','zh-TW':'永久$0，無需信用卡',es:'$0 para siempre, sin tarjeta de crédito',fr:'$0 pour toujours, sans carte bancaire'},
+  'auth.free':{ko:'무료로 시작, 카드 등록 없음',en:'Free to start, no card needed',ja:'無料で始める、カード登録不要','zh-CN':'免费开始，无需绑卡','zh-TW':'免費開始，無需綁卡',es:'Empieza gratis, sin tarjeta',fr:'Commencez gratuitement, sans carte'},
   'side.new':{ko:'＋ 새 전략',en:'＋ New strategy',ja:'＋ 新しい戦略','zh-CN':'＋ 新策略','zh-TW':'＋ 新策略',es:'＋ Nueva estrategia',fr:'＋ Nouvelle stratégie'},
   'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하세요.',en:'|Log in| and start beating the market.',ja:'市場に勝つ戦略、|ログイン|して今すぐ始めましょう。','zh-CN':'战胜市场的策略，|登录|即刻开始。','zh-TW':'戰勝市場的策略，|登入|即刻開始。',es:'Estrategias para ganar al mercado, |inicia sesión| y empieza ya.',fr:'Des stratégies pour battre le marché, |connectez-vous| et commencez.'},
   'side.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
