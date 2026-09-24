@@ -4380,6 +4380,101 @@ button{-webkit-tap-highlight-color:transparent}
 .tf-kind-sub{color:rgba(255,255,255,.45);border-style:dashed}
 /* ==CSS:tx== */
 /* ==CSS:ac== */
+/* 활성화 시트 (.ac-) — 데스크톱 중앙 모달, 모바일 바텀시트, 인라인(.ac-pick.inline) 공용 */
+.ac-scrim{position:fixed;inset:0;background:rgba(8,9,11,.62);backdrop-filter:blur(3px);z-index:120;animation:nfxIn .18s var(--ease)}
+.ac-sheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,94vw);max-height:90vh;overflow-y:auto;scrollbar-width:thin;background:var(--g1);border:1px solid var(--gl2);border-radius:20px;box-shadow:var(--shadow-pop);z-index:121;padding:24px 24px 20px;animation:nfxuIn .22s var(--ease)}
+.ac-x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt3);background:transparent;border:none;cursor:pointer;font-size:14px;font-family:inherit}
+.ac-x:hover{background:var(--hoverline);color:var(--gt)}
+.ac-title{font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--gt);margin:0 0 4px;padding-right:36px}
+.ac-sub{font-size:13px;color:var(--gt3);line-height:1.55;margin-bottom:14px;word-break:keep-all}
+.ac-h2{font-size:17px;font-weight:700;color:var(--gt);margin:0 0 4px;letter-spacing:-.01em}
+.ac-blk{border:1px solid var(--gl);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.02);margin-bottom:10px}
+.ac-blk.rec{border-color:rgba(200,244,60,.3)}
+.ac-blk.rec.on{border-color:rgba(200,244,60,.7);box-shadow:0 0 0 1px rgba(200,244,60,.25)}
+.ac-blk.alt.on{border-color:var(--gl2);box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.ac-bh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ac-tag{font-size:11px;font-weight:700;color:#c8f43c;letter-spacing:.03em}
+.ac-tag.alt{color:var(--gt3)}
+.ac-nm{font-size:15px;font-weight:700;color:var(--gt)}
+.ac-nm b{font-weight:700;color:var(--gt);font-variant-numeric:tabular-nums}
+.ac-meta{font-size:12px;color:var(--gt3);margin-left:auto}
+.ac-ul{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
+.ac-ul li{font-size:12.5px;color:var(--gt2);display:flex;gap:7px;line-height:1.5;word-break:keep-all}
+.ac-ul li::before{content:'✓';color:#c8f43c;font-weight:700;flex-shrink:0}
+.ac-btn{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;height:46px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid transparent;transition:filter .15s,background .12s,color .12s}
+.ac-btn.p{background:#c8f43c;color:#101208}
+.ac-btn.p:hover{filter:brightness(1.06)}
+.ac-btn.p:disabled{opacity:.55;cursor:default;filter:none}
+.ac-btn.s{background:transparent;border-color:var(--gl2);color:var(--gt2);font-weight:600}
+.ac-btn.s:hover{background:rgba(255,255,255,.05);color:var(--gt)}
+.ac-btn.s:disabled{opacity:.5;cursor:default}
+.ac-link{display:inline-block;font-size:12.5px;color:var(--gt3);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ac-link:hover{color:var(--gt)}
+.ac-blk .ac-btn+.ac-link{margin-top:10px}
+.ac-alt-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ac-alt-row>div{min-width:0;flex:1}
+.ac-alt-row .ac-btn{width:auto;padding:0 18px;height:40px;flex-shrink:0}
+.ac-help{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--gt3);margin-top:12px;padding-top:12px;border-top:1px solid var(--gl);word-break:keep-all}
+.ac-lnk{background:transparent;border:none;color:var(--gt);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;padding:0}
+.ac-lnk:hover{color:#c8f43c}
+.ac-pick.inline{max-width:560px}
+.ac-conn,.ac-form{max-width:480px}
+.ac-conn .tf-perm{margin:6px 0 12px}
+.ac-guide{counter-reset:acg;display:flex;flex-direction:column;gap:7px;margin:0 0 14px}
+.ac-guide .g{display:flex;gap:9px;font-size:12.5px;color:var(--gt2);line-height:1.55;word-break:keep-all}
+.ac-guide .g::before{counter-increment:acg;content:counter(acg);flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.08);color:var(--gt2);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+.ac-conn .tf-fld input:disabled{opacity:.6}
+.ac-rows{display:flex;flex-direction:column;gap:6px;margin:12px 0 14px}
+.ac-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--gl);border-radius:11px;padding:10px 13px;font-size:13px;color:var(--gt2)}
+.ac-row .ic{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.ac-row .lb{font-weight:600;color:var(--gt)}
+.ac-row .ds{font-size:12px;color:var(--gt3);margin-left:auto;text-align:right}
+.ac-row .msg{width:100%;font-size:12px;color:#ee766a;line-height:1.5;padding-left:28px;word-break:keep-all}
+.ac-row.run .ic{border-color:transparent}
+.ac-row.run .ic i{width:11px;height:11px;border:1.6px solid rgba(200,244,60,.9);border-top-color:transparent;border-radius:50%;display:block;animation:gSpin .7s linear infinite}
+.ac-row.run .ds{color:var(--gt2)}
+.ac-row.ok{border-color:rgba(86,196,134,.35)}
+.ac-row.ok .ic{border-color:transparent;background:rgba(86,196,134,.15);color:#56c486}
+.ac-row.ok .ds{color:#56c486}
+.ac-row.fail{border-color:rgba(238,118,106,.45)}
+.ac-row.fail .ic{border-color:transparent;background:rgba(238,118,106,.15);color:#ee766a}
+.ac-row.fail .ds{color:#ee766a}
+.ac-note{font-size:11.5px;color:var(--gt3);margin-top:10px;text-align:center}
+.ac-done{text-align:center;padding:10px 0 4px;max-width:440px;margin:0 auto}
+.ac-done .ck{width:56px;height:56px;border-radius:50%;background:rgba(200,244,60,.14);color:#c8f43c;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ac-done h3{font-size:20px;font-weight:700;color:var(--gt);margin:0 0 8px}
+.ac-done .p1{font-size:14px;color:var(--gt2);line-height:1.65;margin-bottom:6px;word-break:keep-all}
+.ac-done .p2{font-size:13px;color:var(--gt3);line-height:1.6;margin-bottom:18px;word-break:keep-all;min-height:6px}
+@media (max-width:640px){
+  .ac-sheet{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;max-width:100vw;max-height:88vh;border-radius:22px 22px 0 0;animation:gSheetUp .22s var(--ease);padding:18px 16px calc(16px + env(safe-area-inset-bottom))}
+  .ac-sheet::before{content:'';display:block;width:44px;height:4px;border-radius:2px;background:var(--gl2);margin:0 auto 12px}
+  .ac-meta{margin-left:0;width:100%}
+  .ac-alt-row .ac-btn{width:100%}
+  .ac-blk{padding:14px 14px}
+}
+/* 이용 현황 (.us-) */
+.us-hero{gap:16px}
+.us-status{font-size:17px;font-weight:600;color:var(--gt);line-height:1.5;word-break:keep-all;letter-spacing:-.01em}
+.us-bar{display:flex;flex-direction:column;gap:8px}
+.us-bar-h{display:flex;justify-content:space-between;font-size:12.5px;color:var(--gt3)}
+.us-bar-h b{color:var(--gt);font-variant-numeric:tabular-nums}
+.us-line{font-size:13.5px;color:var(--gt2);font-variant-numeric:tabular-nums;word-break:keep-all}
+.us-hint{font-size:13px;color:var(--gt3);line-height:1.55;word-break:keep-all}
+.us-hint b{color:var(--gt2);font-weight:600;margin-right:4px}
+.us-cta{margin-top:0}
+.us-cta .ac-btn{width:auto;padding:0 22px}
+.us-foot{font-size:11.5px;color:var(--gt3)}
+.us-rows{display:flex;flex-direction:column;gap:8px}
+.us-row{display:flex;align-items:center;gap:12px;border:1px solid var(--gl);border-radius:12px;padding:12px 14px;flex-wrap:wrap}
+.us-row>div:first-child{min-width:0;flex:1}
+.us-row .lb{font-size:13.5px;font-weight:600;color:var(--gt)}
+.us-row .ds{font-size:12px;color:var(--gt3);margin-top:2px;word-break:keep-all}
+.us-row .rt{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.us-row .ac-btn{width:auto;height:34px;padding:0 14px;font-size:12.5px}
+@media (max-width:640px){
+  .us-status{font-size:16px}
+  .us-cta .ac-btn{width:100%}
+}
 /* ==CSS:mk== */
 /* ==CSS:cx== */
 /* ==CSS:tm== */
@@ -5023,7 +5118,7 @@ button{-webkit-tap-highlight-color:transparent}
     </div>
     <button class="gm-item" id="gm-plan" hidden onclick="gSetMenuClose();tfNav('#/plan')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
-      PLAN 및 크레딧
+      이용 현황
     </button>
     <button class="gm-item" id="gm-logout" hidden onclick="gSetMenuClose();gLogout()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
@@ -9709,15 +9804,14 @@ var TF_ADAPTER={
   pay:function(info,cb){ setTimeout(function(){ /^0000/.test(info.num)?cb({code:'declined'}):cb(null,{ok:true}); },1400); }
 };
 function tfExOf(exId){ for(var i=0;i<TFC.exchanges.length;i++) if(TFC.exchanges[i].id===exId) return TFC.exchanges[i]; return TFC.exchanges[0]; }
-/* ── §12 실행 온보딩 라우트 #/strategy/connect — progress 4단계 ── */
+/* ── §12 실행 온보딩 라우트 #/strategy/connect — 활성화 → 연결 → 확인 → 시작 (S3, 1단계는 활성화 시트 인라인) ── */
 function tfCnStep(t){
   if(t.ob.st==='api_verified'||t.ob.st==='completed') return 4;
-  if(t.ob.st==='uid_verified'||t.ob.st==='api_pending') return 3;
   if(t.plan==='partner'||(t.plan==='paid'&&t.payDone)) return 2;
   return 1;
 }
 function tfProgHtml(cur){
-  var names=['실행 방법','거래소 연결','연결 확인','시작'];
+  var names=['활성화','연결','확인','시작'];
   return '<div class="tf-prog">'+names.map(function(n,i){
     var s=i+1, cls=s<cur?'ok':s===cur?'on':'';
     return '<span class="p '+cls+'"><span class="n">'+(s<cur?'✓':s)+'</span>'+n+'</span>'+(s<4?'<span class="ln"></span>':'');
@@ -9729,13 +9823,15 @@ function tfConnectView(){
   if(t.stage!=='pay') t.stage='connect';
   tfSave();
   tfPageMode('tfconnect','전략 실행');
+  var A=window.TF_AC; if(!A||A.mode!=='inline'){ A=window.TF_AC={mode:'inline',view:null,kind:'bitget',tok:0}; }
   var step=tfCnStep(t);
   var body='';
-  if(step===1) body=t.plan==='paid'?tfPayHtml():tfPlanHtml();
-  else if(step===2) body=t.plan==='partner'?tfFreeHtml():tfExHtml('바로 연결할 거래소를 선택해주세요.');
-  else if(step===3) body=tfApiHtml();
+  if(A.view==='done'){ step=3; body=tfAcDoneHtml(); }
+  else if(step===1){ if(A.view==='card'&&!(t.plan==='paid'&&t.pay)){ A.view=null; } body=A.view==='card'?tfPayHtml():tfAcSheetHtml(A.kind,true); }
+  else if(step===2){ A.view='conn'; body=tfAcConnHtml(); }
   else {
     /* 연결을 마쳤고 복귀 대상 봇이 있으면 새 봇 생성 없이 그 봇을 시작 (codex NF P0) */
+    A.view=null;
     if(window.TF_NF_RESUME&&tfBotFind(window.TF_NF_RESUME.id)){ var rz=window.TF_NF_RESUME; window.TF_NF_RESUME=null; t.conn=true; tfSave(); tfBotCtl(rz.id,rz.act); return; }
     tfNav('#/strategy/done'); return;
   }
@@ -9746,70 +9842,37 @@ function tfConnectView(){
     +body
     +'</div>');
   TF_RENDERING=false;
+  tfAcAfterRender();
 }
-/* 1단계: 실행 방법 — 조용한 2옵션 */
-function tfPlanHtml(){
-  var mo=TFC.price.month,yr=TFC.price.year;
-  return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:6px">어떻게 실행할까요?</div>'
-    +'<div style="font-size:11.5px;color:var(--gt3);margin-bottom:12px">현재는 체험 모드예요. 이 화면의 결제, 연동, 주문은 실제로 실행되지 않습니다.</div>'
-    +'<div class="tf-opts">'
-    +'<div class="tf-optc rec"><div class="top"><span class="nm">TETH 파트너 거래소로 시작</span><span class="tag">추천</span><span class="pr">₩0</span></div>'
-    +'<div class="ds">파트너 거래소의 유동성 수수료 지원으로 이용료가 없어요. <b>약 2분 소요</b>, 연 최대 <b>'+tfWon(yr)+'</b> 절약.</div>'
-    +'<button class="tf-btn p" onclick="tfPlanPick(\'partner\')">무료로 시작</button></div>'
-    +'<div class="tf-optc"><div class="top"><span class="nm">기존 거래소 연결</span><span class="pr">'+tfWon(mo)+' <small>/ 월</small></span></div>'
-    +'<div class="ds">이미 사용 중인 거래소를 그대로 사용해요.</div>'
-    +'<button class="tf-btn s" onclick="tfPlanPick(\'paid\')">기존 계정 연결</button></div>'
-    +'</div>';
-}
-function tfPlanPick(plan){
-  var t=tfS(); t.plan=plan;
-  if(plan==='paid'){ t.stage='pay'; t.pay={step:'plan',cycle:t.cycle||'year'}; }
-  else { t.ob.st='plan_free'; t.stage='connect'; }
-  tfSave(); tfConnectView();
-}
-/* 1단계(유료): Checkout — Plan → Payment → Confirm → Complete */
+/* 1단계: 활성화 (구 tfPlanHtml — 활성화 시트 인라인 변형으로 대체) */
+function tfPlanHtml(){ return tfAcSheetHtml((window.TF_AC&&TF_AC.kind)||'bitget',true); }
+function tfPlanPick(plan){ tfAcGo(plan==='paid'?'card':'bitget'); }
+/* 카드 등록 — 월 ₩49,000 고정 (주기 선택 없음), 데모 카드 폼 → 확인 */
 function tfPayHtml(){
-  var t=tfS(),p=t.pay||{step:'plan',cycle:'year'};
-  var mo=TFC.price.month,yr=TFC.price.year;
-  var save=mo*12-yr, moEq=Math.round(yr/12/1000)*1000;
-  var amt=p.cycle==='year'?yr:mo;
-  if(p.step==='plan'){
-    return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:14px">결제 주기를 선택해주세요</div>'
-      +'<div class="tf-payp"><div class="tf-cycrow">'
-      +'<div class="tf-cyc2'+(p.cycle==='year'?' on':'')+'" onclick="tfPayCycle(\'year\')" role="radio" aria-checked="'+(p.cycle==='year')+'"><span class="rd"></span><span><span class="t">연 결제</span><span class="d" style="display:block">월 약 '+tfWon(moEq)+'</span></span><span class="pr">'+tfWon(yr)+' / 년<small>'+tfWon(save)+' 절약</small></span></div>'
-      +'<div class="tf-cyc2'+(p.cycle==='month'?' on':'')+'" onclick="tfPayCycle(\'month\')" role="radio" aria-checked="'+(p.cycle==='month')+'"><span class="rd"></span><span><span class="t">월 결제</span></span><span class="pr">'+tfWon(mo)+' / 월</span></div>'
-      +'</div>'
-      +'<button class="tf-btn p" onclick="tfPayStep(\'card\')">계속</button>'
-      +'<button class="tf-btn ghost" onclick="tfPayBack()">실행 방법 다시 선택</button></div>';
-  }
-  if(p.step==='card'){
-    return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:14px">결제 정보</div>'
-      +'<div class="tf-payp">'
-      +(p.err?'<div class="tf-errb">'+gEsc(p.err)+'<button onclick="tfPayErrClear()">다시 입력</button></div>':'')
-      +'<div class="tf-fld"><label for="tfp-num">카드 번호</label><input id="tfp-num" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="19" value="'+gEsc(p.num||'')+'"><div class="err">카드 번호 16자리를 확인해주세요</div></div>'
-      +'<div class="tf-row2"><div class="tf-fld"><label for="tfp-exp">유효기간</label><input id="tfp-exp" placeholder="MM/YY" maxlength="5" value="'+gEsc(p.exp||'')+'"><div class="err">MM/YY</div></div>'
-      +'<div class="tf-fld"><label for="tfp-cvc">CVC</label><input id="tfp-cvc" inputmode="numeric" placeholder="000" maxlength="3"><div class="err">3자리</div></div></div>'
-      +'<div class="tf-fld"><label for="tfp-nm">카드 소유자 이름</label><input id="tfp-nm" placeholder="홍길동" value="'+gEsc(p.nm||'')+'"><div class="err">이름을 입력해주세요</div></div>'
-      +'<button class="tf-btn p" onclick="tfPayCardNext()">계속</button>'
-      +'<button class="tf-btn ghost" onclick="tfPayStep(\'plan\')">이전</button>'
-      +'<div class="tf-risk">데모 환경입니다. 실제 결제가 발생하지 않습니다.</div></div>';
-  }
+  var t=tfS(),p=t.pay||(t.pay={step:'card',cycle:'month'});
+  var amt=tfDeriveCfg().PLAN_KRW;
   if(p.step==='confirm'){
-    return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:14px">결제 확인</div>'
-      +'<div class="tf-payp"><div class="tf-donec" style="margin:0;max-width:none;text-align:left"><div class="rows" style="margin-bottom:16px">'
-      +'<div class="r"><span class="k">플랜</span><span class="v">'+(p.cycle==='year'?'연 결제':'월 결제')+'</span></div>'
-      +'<div class="r"><span class="k">결제 금액</span><span class="v">'+tfWon(amt)+'</span></div>'
+    return '<div class="ac-form"><div class="ac-h2">결제 확인</div><div class="ac-sub">월 '+tfWon(amt)+', 연결 없이 바로 쓸 수 있어요</div>'
+      +'<div class="tf-donec" style="margin:0;max-width:none;text-align:left"><div class="rows" style="margin-bottom:16px">'
+      +'<div class="r"><span class="k">이용료</span><span class="v">'+tfWon(amt)+' / 월</span></div>'
       +'<div class="r"><span class="k">카드</span><span class="v">•••• '+gEsc((p.num||'').replace(/\s/g,'').slice(-4))+'</span></div>'
       +'</div></div>'
-      +'<button class="tf-btn p" id="tfp-go" onclick="tfPayConfirm()">'+tfWon(amt)+' 결제하기</button>'
+      +'<button class="ac-btn p" id="tfp-go" onclick="tfPayConfirm()">'+tfWon(amt)+' 결제하기</button>'
       +'<button class="tf-btn ghost" onclick="tfPayStep(\'card\')">이전</button></div>';
   }
-  return '';
+  return '<div class="ac-form"><div class="ac-h2">카드 등록</div><div class="ac-sub">월 '+tfWon(amt)+', 연결 없이 바로 쓸 수 있어요</div>'
+    +(p.err?'<div class="tf-errb">'+gEsc(p.err)+'<button onclick="tfPayErrClear()">다시 입력</button></div>':'')
+    +'<div class="tf-fld"><label for="tfp-num">카드 번호</label><input id="tfp-num" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="19" value="'+gEsc(p.num||'')+'"><div class="err">카드 번호 16자리를 확인해주세요</div></div>'
+    +'<div class="tf-row2"><div class="tf-fld"><label for="tfp-exp">유효기간</label><input id="tfp-exp" placeholder="MM/YY" maxlength="5" value="'+gEsc(p.exp||'')+'"><div class="err">MM/YY</div></div>'
+    +'<div class="tf-fld"><label for="tfp-cvc">CVC</label><input id="tfp-cvc" inputmode="numeric" placeholder="000" maxlength="3"><div class="err">3자리</div></div></div>'
+    +'<div class="tf-fld"><label for="tfp-nm">카드 소유자 이름</label><input id="tfp-nm" placeholder="홍길동" value="'+gEsc(p.nm||'')+'"><div class="err">이름을 입력해주세요</div></div>'
+    +'<button class="ac-btn p" onclick="tfPayCardNext()">계속</button>'
+    +'<button class="tf-btn ghost" onclick="tfPayBack()">이전</button>'
+    +'<div class="ac-note">시뮬레이션 데이터예요. 실제 결제는 일어나지 않아요</div></div>';
 }
-function tfPayCycle(c){ var t=tfS(); t.pay.cycle=c; t.cycle=c; tfSave(); tfConnectView(); }
-function tfPayStep(s){ var t=tfS(); tfPayKeep(); t.pay.step=s; t.pay.err=null; tfSave(); tfConnectView(); if(s==='card') tfPayBind(); }
-function tfPayBack(){ var t=tfS(); t.plan=null; t.pay=null; t.stage='connect'; tfSave(); tfConnectView(); }
-function tfPayErrClear(){ var t=tfS(); t.pay.err=null; tfConnectView(); tfPayBind(); }
+function tfPayStep(s){ var t=tfS(); tfPayKeep(); t.pay=t.pay||{step:'card',cycle:'month'}; t.pay.step=s; t.pay.err=null; tfSave(); tfAcRender(); }
+function tfPayBack(){ var t=tfS(); if(!t.payDone){ t.plan=null; t.pay=null; } if(t.stage==='pay') t.stage='connect'; if(window.TF_AC) TF_AC.view=null; tfSave(); tfAcRender(); }
+function tfPayErrClear(){ var t=tfS(); if(t.pay) t.pay.err=null; tfAcRender(); }
 function tfPayKeep(){
   var t=tfS(); if(!t.pay) return;
   var n=$('tfp-num'),e=$('tfp-exp'),m=$('tfp-nm');
@@ -9821,7 +9884,7 @@ function tfPayBind(){
 }
 function tfPayCardNext(){
   var ok=true;
-  function chk(id,test){ var f=$(id); var bad=!test(f.value.trim()); f.closest('.tf-fld').classList.toggle('bad',bad); if(bad) ok=false; }
+  function chk(id,test){ var f=$(id); if(!f) return; var bad=!test(f.value.trim()); f.closest('.tf-fld').classList.toggle('bad',bad); if(bad) ok=false; }
   chk('tfp-num',function(v){ return v.replace(/\s/g,'').length===16; });
   chk('tfp-exp',function(v){ return /^\d{2}\/\d{2}$/.test(v); });
   chk('tfp-cvc',function(v){ return /^\d{3}$/.test(v); });
@@ -9833,126 +9896,34 @@ function tfPayConfirm(){
   var t=tfS(),go=$('tfp-go');
   if(!t.pay||t.pay.step!=='confirm') return; /* 단계 가드 */
   if(go){ go.disabled=true; go.textContent='결제 확인 중...'; }
-  var cyc0=t.pay.cycle; /* 요청 시점 캡처 — 대기 중 이탈하면 늦은 콜백이 null 접근, 유령 결제를 만들지 않게 (codex qa3 P0-3) */
-  TF_ADAPTER.pay({num:(t.pay.num||'').replace(/\s/g,''),cycle:cyc0},function(err){
+  TF_ADAPTER.pay({num:(t.pay.num||'').replace(/\s/g,''),cycle:'month'},function(err){
     if(!t.pay||t.pay.step!=='confirm'){ return; } /* 결제 대기 중 이전 단계, 이탈 — 이 시도는 취소로 간주 */
-    if(err){ t.pay.err='카드사 승인이 거절됐어요. 다른 카드로 시도해주세요.'; t.pay.step='card'; tfSave(); tfConnectView(); tfPayBind(); return; }
-    t.payDone=true; t.pay={step:'done',cycle:cyc0}; t.stage='connect'; tfSave(); /* 승인 즉시 카드 정보 메모리에서 소거 */
-    toast('결제가 완료됐어요');
-    tfConnectView();
-  });
-}
-/* 2단계(무료): 거래소 선택 → 새 탭 가입 → 돌아와서 UID */
-function tfFreeHtml(){
-  var t=tfS(),st=t.ob.st;
-  if(st==='plan_free'||st==='idle') return tfExHtml('어느 거래소로 시작할까요? 하나만 고르면 돼요.');
-  var e=tfExOf(t.ob.ex);
-  if(st==='exchange_selected'||st==='referral_opened'){
-    return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:10px">'+gEsc(e.name)+' 가입</div>'
-      +'<div class="tf-wait">'+gEsc(e.name)+' 가입 페이지가 새 탭에서 열렸어요.<br>가입을 완료한 뒤 이 화면으로 돌아오세요.'
-      +'<div class="tf-mini3"><span class="s on">① 가입</span><span class="s">② UID 확인</span><span class="s">③ 연결</span></div></div>'
-      +'<button class="tf-btn p" onclick="tfCnJoined()">가입 완료했어요</button>'
-      +'<button class="tf-btn ghost" onclick="tfCnRefOpen()">가입 링크 다시 열기</button>'
-      +'<button class="tf-btn ghost" onclick="tfCnExBack()">다른 거래소 선택</button>';
-  }
-  /* uid_pending */
-  return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:10px">'+gEsc(e.name)+' UID 연동</div>'
-    +'<div class="tf-mini3" style="max-width:340px"><span class="s ok">① 가입</span><span class="s on">② UID 확인</span><span class="s">③ 연결</span></div>'
-    +(t.ob.err?'<div class="tf-errb">'+gEsc(t.ob.err)+'<button onclick="tfCnUidRetry()">다시 시도</button></div>':'')
-    +'<div class="tf-fld" style="max-width:340px;margin-top:12px"><label for="tfcn-uid">'+gEsc(e.uidLabel)+'</label><input id="tfcn-uid" inputmode="numeric" autocomplete="off" placeholder="예: 38291042" value="'+gEsc(t.ob.uid||'')+'"><div class="err">UID 숫자 5~12자리를 확인해주세요</div></div>'
-    +'<a style="font-size:12px;color:var(--gt3);text-decoration:underline;text-underline-offset:3px;cursor:pointer" onclick="tfUidGuide()">UID가 어디 있어요?</a>'
-    +'<div style="max-width:340px;margin-top:14px"><button class="tf-btn p" id="tfcn-uidgo" onclick="tfCnUid()">연동 확인하기</button>'
-    +'<button class="tf-btn ghost" onclick="tfCnExBack()">다른 거래소 선택</button></div>'; /* 연동 대기 화면 탈출 경로 (agy IA-01) */
-}
-function tfExHtml(msg){
-  var exs=TFC.exchanges.slice().sort(function(a,b){ return a.rank-b.rank; });
-  var t=tfS();
-  return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:14px">'+gEsc(msg)+'</div>'
-    +'<div class="tf-exs" style="max-width:520px">'
-    +exs.map(function(e){ return '<button class="tf-ex" onclick="tfCnEx(\''+e.id+'\')">'+(e.rank===1&&t.plan==='partner'?'<span class="rb">추천</span>':'')+'<span class="lg">'+gEsc(e.name)+'</span></button>'; }).join('')
-    +'</div>';
-}
-function tfCnEx(exId){
-  var t=tfS(); t.ob.ex=exId; t.ob.err=null;
-  if(t.plan==='partner'){ t.ob.st='exchange_selected'; tfSave(); tfCnRefOpen(); }
-  else { t.ob.st='api_pending'; tfSave(); tfConnectView(); }
-}
-function tfCnRefOpen(){
-  var t=tfS(),e=tfExOf(t.ob.ex);
-  try{ window.open(e.ref,'_blank','noopener'); }catch(er){}
-  t.ob.st='referral_opened'; tfSave(); tfConnectView();
-}
-function tfCnExBack(){ var t=tfS(); t.ob.st='plan_free'; t.ob.ex=null; tfSave(); tfConnectView(); }
-function tfCnJoined(){ var t=tfS(); t.ob.st='uid_pending'; t.ob.err=null; tfSave(); tfConnectView(); }
-function tfCnUidRetry(){ var t=tfS(); t.ob.err=null; tfSave(); tfConnectView(); }
-function tfCnUid(){
-  var t=tfS(),f=$('tfcn-uid'); var v=(f&&f.value.trim())||'';
-  t.ob.uid=v;
-  if(!/^\d{5,12}$/.test(v)){ if(f) f.closest('.tf-fld').classList.add('bad'); return; }
-  if(f) f.closest('.tf-fld').classList.remove('bad');
-  var go=$('tfcn-uidgo'); if(go){ go.disabled=true; go.textContent='연동 확인 중...'; }
-  TF_ADAPTER.verifyUid(t.ob.ex,v,function(err){
-    if(err){ t.ob.err='해당 UID로 가입 내역을 찾지 못했어요. 파트너 링크로 가입한 계정의 UID인지 확인해주세요.'; tfSave(); tfConnectView(); return; }
-    t.ob.st='uid_verified'; t.ob.err=null; t.uid=v;
-    /* 기존 UID 성공과 신규 자격을 동일 지점으로 통합 (codex NF P1) — 최초 1회만 지급 */
-    t.uidLinked=true;
-    if(typeof tfCreditGrant==='function') tfCreditGrant('uid',TFC.credit.uidGrant,'파트너 UID 연동이 확인됐어요. PRO 분석을 사용해보세요.');
-    if(typeof bcPromoCardUid==='function') bcPromoCardUid(); /* CARD 상태에서 UID 연동 시 "AI 이용 크레딧 $100" (3단계) */
-    if(typeof bcAfterChange==='function') bcAfterChange('uid-link'); /* 연동 즉시 복구 트리거 */
+    if(err){ t.pay.err='카드사 승인이 거절됐어요. 다른 카드로 시도해주세요.'; t.pay.step='card'; tfSave(); tfAcRender(); return; }
+    t.payDone=true; t.plan='paid'; t.pay={step:'done',cycle:'month'}; if(t.stage==='pay') t.stage='connect'; /* 승인 즉시 카드 정보 메모리에서 소거 */
+    if(typeof bcCardOn==='function') bcCardOn(true);
+    if(typeof bcCardCharged==='function') bcCardCharged('cy'+Date.now());
     tfSave();
-    toast('연동 확인 완료');
-    tfConnectView();
+    toast('카드 등록이 끝났어요');
+    tfAcCardDone();
   });
 }
-/* UID 찾기 가이드 — drawer (닫아도 입력 유지) */
+/* 2단계: Bitget 연결 한 폼 (UID + API Key + Secret) — 구 tfFreeHtml/tfApiHtml 경로 통합 (D13) */
+function tfFreeHtml(){ return tfAcConnHtml(); }
+function tfApiHtml(){ return tfAcConnHtml(); }
+function tfCnRefOpen(){ var e=tfExOf((tfS().ob&&tfS().ob.ex)||'bitget'); try{ window.open(e.ref,'_blank','noopener'); }catch(er){} }
+function tfCnUid(){ tfAcConnect('uid'); }
+function tfCnApi(){ tfAcConnect('api'); }
+/* 계정 번호 찾기 가이드 — drawer (닫아도 입력 유지) */
 function tfUidGuide(){
-  var e=tfExOf(tfS().ob.ex);
-  tfDrawer('UID 확인 방법','<div class="tf-guide">'
-    +['거래소 앱 또는 웹에서 로그인','우측 상단 프로필 아이콘 선택','프로필 화면 상단에 표시된 숫자가 UID예요'].map(function(s){ return '<div class="g">'+gEsc(s)+'</div>'; }).join('')
-    +'</div><div style="font-size:12px;color:var(--gt3)">'+gEsc(e.name)+' 기준이며 다른 거래소도 위치가 비슷해요.</div>');
-}
-/* 3단계: API 연결 — 신뢰 헤더 + 입력. 가이드는 drawer로 분리 */
-function tfApiHtml(){
-  var t=tfS(),e=tfExOf(t.ob.ex);
-  return '<div style="font-size:15px;color:var(--gt);font-weight:600;margin-bottom:6px">'+gEsc(e.name)+' API 연결</div>'
-    +'<div style="font-size:13px;color:var(--gt2);margin-bottom:4px">TETH는 출금 권한을 요구하지 않습니다.</div>'
-    +'<div class="tf-perm"><span class="yes">✓ 조회</span><span class="yes">✓ 거래</span><span class="no">✕ 출금</span></div>'
-    +(t.ob.err?'<div class="tf-errb">'+gEsc(t.ob.err)+'<button onclick="tfCnUidRetry()">다시 시도</button></div>':'')
-    +'<div style="max-width:400px">'
-    +'<div class="tf-fld"><label for="tfcn-k">API Key</label><input id="tfcn-k" autocomplete="off" placeholder="발급받은 API Key"><div class="err">API Key를 확인해주세요 (10자 이상)</div></div>'
-    +'<div class="tf-fld"><label for="tfcn-s">Secret Key</label><input id="tfcn-s" type="password" autocomplete="off" placeholder="발급받은 Secret Key"><div class="err">Secret Key를 확인해주세요 (10자 이상)</div></div>'
-    +(t.ob.ex==='okx'?'<div class="tf-fld"><label for="tfcn-p">Passphrase</label><input id="tfcn-p" type="password" autocomplete="off" placeholder="API 생성 시 설정한 Passphrase"><div class="err">Passphrase를 확인해주세요</div></div>':'') /* OKX는 Passphrase 없이는 인증 불가 (agy IA-08) */
-    +'<a style="font-size:12px;color:var(--gt3);text-decoration:underline;text-underline-offset:3px;cursor:pointer" onclick="tfApiGuide()">발급 방법 보기</a>'
-    +'<div style="margin-top:14px"><button class="tf-btn p" id="tfcn-apigo" onclick="tfCnApi()">권한 확인하고 연결하기</button>'
-    +'<button class="tf-btn ghost" onclick="tfCnExBack()">다른 거래소 선택</button></div>' /* API 화면 탈출 경로 (agy IA-01) */
-    +'</div>';
+  var e=tfExOf((tfS().ob&&tfS().ob.ex)||'bitget');
+  tfDrawer('계정 번호 확인 방법','<div class="tf-guide">'
+    +['거래소 앱 또는 웹에서 로그인','우측 상단 프로필 아이콘 선택','프로필 화면 상단에 표시된 숫자가 계정 번호예요'].map(function(s){ return '<div class="g">'+gEsc(s)+'</div>'; }).join('')
+    +'</div><div style="font-size:12px;color:var(--gt3)">'+gEsc(e.name)+' 기준이에요.</div>');
 }
 function tfApiGuide(){
-  var e=tfExOf(tfS().ob.ex);
+  var e=tfExOf((tfS().ob&&tfS().ob.ex)||'bitget');
   tfDrawer(e.name+' API Key 발급 방법','<div class="tf-guide">'+e.apiGuide.map(function(s){ return '<div class="g">'+gEsc(s)+'</div>'; }).join('')+'</div>'
     +'<div class="tf-trust"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5v-6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><span>'+gEsc(TFCOPY.obNoWithdraw)+'</span></div>');
-}
-function tfCnApi(){
-  var t=tfS(),k=$('tfcn-k'),s=$('tfcn-s'),ok=true;
-  [[k,10],[s,10]].forEach(function(x){ var bad=!x[0]||x[0].value.trim().length<x[1]; if(x[0]) x[0].closest('.tf-fld').classList.toggle('bad',bad); if(bad) ok=false; });
-  var pp=$('tfcn-p'); if(pp){ var bad=pp.value.trim().length<1; pp.closest('.tf-fld').classList.toggle('bad',bad); if(bad) ok=false; } /* OKX passphrase 필수 */
-  if(!ok) return;
-  var go=$('tfcn-apigo'); if(go) go.disabled=true;
-  var kv=k.value.trim();
-  var msgs=['읽기 권한 확인 중...','거래 권한 확인 중...','출금 권한 없음 확인 중...'],mi=0;
-  var tick=setInterval(function(){ if(go&&mi<msgs.length) go.textContent=msgs[mi++]; },650);
-  var ppv=pp?pp.value.trim():null; /* okx passphrase — 존재 검사만 하고 버리던 결함 수정, 원문은 저장하지 않는다 (codex QA2 P2) */
-  var ex0=t.ob.ex; /* 요청 시점 거래소 캡처 — 대기 중 거래소를 바꾸면 늦은 응답 폐기 (codex qa3 P0-2) */
-  TF_ADAPTER.verifyApi(t.ob.ex,kv,s.value.trim(),function(err){
-    clearInterval(tick);
-    if(t.ob.ex!==ex0){ return; } /* 다른 거래소로 전환된 뒤 도착한 응답 — 무시 */
-    if(err&&err.code==='missing_passphrase'){ t.ob.err='Passphrase를 확인해주세요. OKX는 API 생성 시 설정한 Passphrase가 필요해요.'; tfSave(); tfConnectView(); return; }
-    if(err){ t.ob.err='API Key 권한 확인에 실패했어요. 읽기와 거래 권한이 켜져 있는지 확인해주세요.'; tfSave(); tfConnectView(); return; }
-    t.ob.st='api_verified'; t.ob.err=null;
-    t.api={ex:t.ob.ex,last4:kv.slice(-4)}; /* 키 원문은 저장하지 않는다 */
-    tfSave();
-    tfNav('#/strategy/connect'); /* 4단계 분기 경유 — 복귀 대상 봇(TF_NF_RESUME)이 있으면 done 대신 그 봇 시작 (codex NF P0-3) */
-  },ppv);
 }
 /* ── §19 완료 화면 라우트 #/strategy/done ── */
 function tfDoneView(){
@@ -9974,7 +9945,6 @@ function tfDoneView(){
     +'<div class="r"><span class="k">TETH Score</span><span class="v">'+t.score+'</span></div>'
     +'<div class="r"><span class="k">투자금</span><span class="v">'+tfWon(budget)+'</span></div>'
     +'<div class="r"><span class="k">거래소</span><span class="v">'+gEsc(e.name)+' (API •••• '+gEsc(t.api.last4)+')</span></div>'
-    +(t.plan==='partner'?'<div class="r"><span class="k">이용료</span><span class="v">₩0, 파트너 플랜</span></div>':'')
     +'</div>'
     +'<button class="tf-btn p" style="height:50px" onclick="tfStartStrategy()">전략 시작</button>'
     +'<button class="tf-btn s" onclick="TF_NF_ENV=\'paper\';tfStartStrategy()">가상으로 먼저 시작</button>'
@@ -13183,55 +13153,31 @@ function tfNFRow(o){ /* {ic,icc,lb,ds,val,valc,arrow,click,stag} */
 }
 function tfPlanView(tab){
   tab=tab||'plan';
-  var t=tfNFInit(), e=tfEnt(), C=TFC.credit;
-  var tabs=[['plan','플랜'],['rebates','정산'],['alerts','알림 설정']];
+  var t=tfNFInit();
+  var tabs=[['plan','이용 현황'],['rebates','정산'],['alerts','알림 설정']];
   var body='';
   if(tab==='plan'){
-    var warnAt=Math.round(C.uidGrant*(1-C.warnRatio));
-    var bal=t.creditBal||0, st;
-    if(e.why==='paid') st={bt:'PRO 멤버십',bc:'blue',hv:'PRO',hu:'무제한',hc:'cb',g:'inf',gl:'멤버십: 구독 중',gr:'무제한 이용',pin:false,pri:null,sec:null,
-      desc:'구독 중이라 PRO 분석이 무제한이에요.'};
-    else if(e.why==='trade') st={bt:'PRO 활성 (무제한)',bc:'pro',hv:'무제한',hu:'',hc:'cg',g:'inf',gl:'이용 상태: 무제한 활성',gr:'만료일 '+new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR'),pin:false,
-      pri:!t.payDone?['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','sec']:null,sec:null,
-      desc:'파트너 거래소 거래가 활성 상태라 PRO 분석이 무제한이에요. (거래 인정 기간 '+C.activityDays+'일)'};
-    else if(e.why==='credit') st={bt:'PRO',bc:'pro',hv:'PRO',hu:'이용 중',hc:'cg',g:'inf',gl:'이용 상태: 정상',gr:'거래량 연동 자동 충전',pin:false,
-      pri:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','pri'],sec:null,
-      desc:'UID 연동으로 PRO 분석을 사용 중이에요. 거래량에 따라 자동으로 충전돼요.'}; /* 잔액 수치 비노출 (5단계) */
-    else if(e.why==='free'){ /* 무료 잔여 횟수도 크레딧 파생 수치 — 비노출 (사용자 확정) */
-      st={bt:'무료 체험',bc:'blue',hv:e.freeLeft<=2?'얼마 남지 않음':'무료',hu:e.freeLeft<=2?'':'체험 중',hc:e.freeLeft<=2?'cw':'cb',g:e.freeLeft<=2?'warn':'inf',gl:'이용 상태: 무료 체험',gr:'UID 연동 시 상시 무료',pin:false,
-      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
-      desc:'로그인 무료 체험으로 고급 분석을 사용 중이에요. UID 를 연동하면 AI 이용 크레딧 $100 혜택을 받아요.'}; /* 프로모 고정 문구 (비노출 예외 2) */
-    }
-    else st={bt:'업그레이드 필요',bc:'danger',hv:'소진',hu:'',hc:'cx',g:'empty',gl:'무료 체험 소진',gr:'연동 또는 구독으로 계속',pin:false,
-      pri:['무료로 UID 연동하기 (Fast API)','tfNFLinkUid()','pri'],sec:['구독으로 업그레이드','tfUpSheet(&quot;plan&quot;)','out'],
-      desc:'무료 분석 사용량을 모두 썼어요. UID 연동(무료) 또는 구독으로 계속 사용할 수 있어요.'};
-    if(typeof bcInit==='function'&&bcInit().mode==='watch'){ st.bt='관망 중'; st.bc='warn'; st.hv='관망'; st.hu='';
-      st.desc='크레딧이 소진되어 AI 기능이 잠시 멈춰 있어요. 실행 중인 손절과 목표가 관리는 그대로 유지되고, 충전이나 연동 즉시 재개돼요.'; } /* 5단계 */
-    var pct=st.fpct!=null?st.fpct:(typeof st.hv==='number'?Math.max(st.hv>0?2:0,Math.round(bal/C.uidGrant*100)):100);
-    var uidBadge=t.uidLinked?(e.why==='credit-out'?['연동됨 (크레딧 소진)','warn']:['연동됨 (무료)','pro']):['미연동',''];
-    var trBadge=(t.tradeActiveUntil&&Date.now()<t.tradeActiveUntil)?[new Date(t.tradeActiveUntil).toLocaleDateString('ko-KR')+' 까지 활성','pro']:['없음',''];
-    var subBadge=t.payDone?['구독 중','blue']:['없음',''];
+    /* 이용 현황 — 모든 값은 tfDerive()에서만 읽는다 (S3, D06, D14) */
+    var d=tfDerive();
+    var pct=d.bill.offsetPct||0;
+    var exOn=d.facts.uid&&d.facts.api, exName=tfExName(d.facts.ex)||'Bitget';
+    var exTxt=exOn?exName+' 연결됨':(d.facts.uid?'요금 연동만 끝났어요':(d.facts.api?'실행 연결만 끝났어요':'미연결'));
+    var cta=(d.primaryCTA&&/tfAcSheet\(/.test(d.primaryCTA.action))?d.primaryCTA:null;
     body='<div class="nfx-grid2">'
-      +'<section class="nfx-card nfx-card-hero nfx-glowonce">'
-      +'<div class="nfx-chead"><span class="nfx-ctitle">현재 AI 수준</span><span class="nfx-badge '+st.bc+'"><span class="nfx-dot'+(e.tier==='high'?' pulse':'')+'"></span>'+st.bt+'</span></div>'
-      +'<div><div class="nfx-hero-label">'+(typeof st.hv==='number'?'남은 무료 분석':'이용 상태')+'</div>'
-      +'<div class="nfx-hero '+st.hc+'"><span id="nfx-pnum">'+(typeof st.hv==='number'?st.hv.toLocaleString():st.hv)+'</span>'+(st.hu?'<span class="nfx-hero-sub">'+st.hu+'</span>':'')+'</div>'
-      +'<div class="nfx-hero-desc" style="margin-top:6px">'+st.desc+'</div></div>'
-      +'<div class="nfx-gauge"><div class="nfx-gtrack">'
-      +(st.pin?'<div class="nfx-gpin" style="left:'+Math.round(warnAt/C.uidGrant*100)+'%" title="'+warnAt+'C 경고 임계점"></div>':'')
-      +'<div class="nfx-gfill '+st.g+'" style="width:'+pct+'%"></div></div>'
-      +'<div class="nfx-glabels"><span>'+st.gl+'</span><span>'+st.gr+'</span></div></div>'
-      +'<div class="nfx-cta">'
-      +(st.pri?'<button class="nfx-btn '+st.pri[2]+'" onclick="'+st.pri[1]+'">'+NFX_IC.zap+st.pri[0]+'</button>':'')
-      +(st.sec?'<button class="nfx-btn '+st.sec[2]+'" onclick="'+st.sec[1]+'">'+st.sec[0]+'</button>':'')
-      +'</div>'
-      +'<div class="nfx-foot">'+NFX_IC.info+'<span>체험 모드에서는 응답 모델이 동일하며 크레딧 차감만 재현돼요. 크레딧 정책 v'+C.version+'.</span></div>'
+      +'<section class="nfx-card nfx-card-hero us-hero">'
+      +'<div class="us-status">'+gEsc(d.statusLine||'')+'</div>'
+      +'<div class="us-bar"><div class="us-bar-h"><span>거래 혜택 상쇄</span><b>'+pct+'%</b></div>'
+      +'<div class="nfx-gtrack"><div class="nfx-gfill" style="width:'+pct+'%"></div></div>'
+      +'<div class="us-line">'+gEsc(d.bill.line||'')+'</div></div>'
+      +(d.reduceHint?'<div class="us-hint"><b>줄이는 방법</b> '+gEsc(d.reduceHint)+'</div>':'')
+      +(cta?'<div class="nfx-cta us-cta"><button class="ac-btn p" onclick="'+cta.action+'">'+gEsc(cta.label)+'</button></div>':'')
+      +'<div class="us-foot">시뮬레이션 데이터예요</div>'
       +'</section>'
-      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">상태 및 연동 상세</h2></div><div class="nfx-rows">'
-      +tfNFRow({ic:'link',icc:t.uidLinked?'gg':'',lb:'UID 연동',ds:'거래소 파트너 연동 계정',val:'<span class="nfx-badge '+uidBadge[1]+'">'+uidBadge[0]+'</span>',stag:1})
-      +tfNFRow({ic:'trend',icc:trBadge[1]?'gg':'',lb:'파트너 거래 활성',ds:'체결 1회 시 '+C.activityDays+'일 무제한 적용',val:'<span class="nfx-badge '+trBadge[1]+'">'+trBadge[0]+'</span>',stag:2})
-      +tfNFRow({ic:'card',icc:subBadge[1]?'gb':'',lb:'구독 멤버십',ds:'월간 PRO 정기 결제 플랜',val:'<span class="nfx-badge '+subBadge[1]+'">'+subBadge[0]+'</span>',stag:3})
-      +tfNFRow({ic:'chip',icc:'gb',lb:'고급 응답 비용',ds:'PRO 심층 분석 사용량 기반',val:'<span class="nfx-rval">'+(e.tier==='high'&&e.bal==null?'차감 없음':'이용량 기반 차감')+'</span>',stag:4})
+      +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">연결 상태</h2></div><div class="us-rows">'
+      +'<div class="us-row"><div><div class="lb">거래소 연결</div><div class="ds">'+gEsc(exTxt)+'</div></div>'
+      +'<div class="rt"><span class="nfx-badge'+(exOn?' pro':'')+'">'+(exOn?'연결됨':'미연결')+'</span>'+(exOn?'':'<button class="ac-btn s" onclick="tfAcSheet(\'bitget\')">연결하기</button>')+'</div></div>'
+      +'<div class="us-row"><div><div class="lb">카드</div><div class="ds">'+(d.facts.plan?'월 '+tfWon(tfDeriveCfg().PLAN_KRW)+', 거래 혜택만큼 상쇄돼요':'등록하면 연결 없이도 쓸 수 있어요')+'</div></div>'
+      +'<div class="rt"><span class="nfx-badge'+(d.facts.plan?' blue':'')+'">'+(d.facts.plan?'등록됨':'없음')+'</span>'+(d.facts.plan?'':'<button class="ac-btn s" onclick="tfAcSheet(\'card\')">등록</button>')+'</div></div>'
       +'</div></section></div>';
   }else if(tab==='rebates'){
     var total=t.rebates.reduce(function(a,r){return a+r.amt;},0);
@@ -13241,7 +13187,7 @@ function tfPlanView(tab){
       +'<div class="nfx-chead"><span class="nfx-ctitle">누적 적립<span class="nfx-badge sim">시뮬레이션</span></span></div>'
       +'<div><div class="nfx-hero-label">현재까지 누적된 거래 수수료 적립</div>'
       +'<div class="nfx-hero cg"><span id="nfx-rnum">₩'+total.toLocaleString()+'</span></div>'
-      +'<div class="nfx-hero-desc" style="margin-top:6px">체결 건별로 적립되며, 적립금은 이용료 차감에 사용될 예정이에요. 시뮬레이션 체결 기준이며 실제 정산이 아니에요.</div></div>'
+      +'<div class="nfx-hero-desc" style="margin-top:6px">체결 건별로 적립되며, 적립금은 이용료 상쇄에 쓰여요. 시뮬레이션 체결 기준이며 실제 정산이 아니에요.</div></div>'
       +'<div class="nfx-metrics"><div class="nfx-mbox"><span class="nfx-mtit">적립 건수</span><span class="nfx-mval">'+t.rebates.length+'건</span></div>'
       +'<div class="nfx-mbox"><span class="nfx-mtit">적립률</span><span class="nfx-mval">수수료(0.2%)의 10%</span></div></div>'
       +'<div class="nfx-cta"><button class="nfx-btn pri" onclick="tfNav(\'#/trade\')">'+NFX_IC.zap+'AI 트레이딩으로 이동</button></div>'
@@ -13268,15 +13214,14 @@ function tfPlanView(tab){
       +'<section class="nfx-card"><div class="nfx-sechead"><h2 class="nfx-sectit">수신 채널</h2><span class="nfx-badge">4개 채널</span></div><div class="nfx-rows">'
       +tfNFRow({ic:'bell',icc:'gg',lb:'앱 내 수신함',ds:'기본 채널이라 항상 동작해요',val:'<span class="nfx-badge pro" style="margin-right:4px">기본</span>'+sw('chW',true,true,true),stag:1})
       +CH.map(function(o,i){ return tfNFRow({ic:o[3],lb:o[1],ds:o[2],val:sw(o[0],!!P[o[0]]),stag:i+2}); }).join('')
-      +'</div><div class="nfx-foot" style="margin-top:14px">'+NFX_IC.info+'<span>체험 모드에서는 외부 채널 발송이 일어나지 않아요. 설정은 저장돼요.</span></div></section></div>';
+      +'</div><div class="nfx-foot" style="margin-top:14px">'+NFX_IC.info+'<span>시뮬레이션 데이터예요. 외부 채널 발송은 일어나지 않고 설정만 저장돼요.</span></div></section></div>';
   }
-  tfNFView('nfplan','PLAN 및 크레딧',
+  tfNFView('nfplan','이용 현황',
     '<div class="nfx-page"><div class="nfx-glow"></div>'
-    +'<div class="nfx-head"><h1 class="nfx-title">PLAN 및 크레딧</h1><div class="nfx-sub">AI 수준, 수수료 적립, 알림 수신을 관리해요</div>'
+    +'<div class="nfx-head"><h1 class="nfx-title">이용 현황</h1><div class="nfx-sub">지금 무료인지, 얼마를 내는지, 어떻게 줄이는지</div>'
     +'<div class="nfx-tabs">'+tabs.map(function(tb){ return '<button class="nfx-tab'+(tab===tb[0]?' on':'')+'" onclick="tfNav(\'#/plan'+(tb[0]==='plan'?'':'/'+tb[0])+'\')">'+tb[1]+'</button>'; }).join('')+'</div></div>'
     +body+'</div>');
   var t2=tfNFInit();
-  /* credit 잔액 카운트업 제거 — 크레딧 수치 비노출 (5단계), 정산 원화 카운트업은 유지 */
   if(tab==='rebates') tfNFCount('nfx-rnum',t2.rebates.reduce(function(a,r){return a+r.amt;},0),'₩','');
 }
 function tfNFPref(k,el){
@@ -13287,46 +13232,13 @@ function tfNFPref(k,el){
 /* ── 공용 업그레이드 시트 — 4 진입점(따라하기/백테스트 직후/사용량 소진/설정) 단일 컴포넌트.
    복귀 컨텍스트는 TF_UP_CTX 로 분리 — TF_NF_RESUME(봇 재개 전용)와 혼용 금지 (codex flow3 C P0) ── */
 var TF_UP_CTX=null;
+/* 4 진입점(따라하기/백테스트 직후/사용량 소진/설정/거래소)은 모두 활성화 시트로 통일 (S3). 복귀 컨텍스트 TF_UP_CTX 규약은 그대로 */
 function tfUpSheet(ctx,opt){
   tfUpClose();
   TF_UP_CTX={ctx:ctx,sid:G.cur&&G.cur.id,opt:opt||null};
-  var t=tfNFInit(), fq=TFC.credit.freeQuota!=null?TFC.credit.freeQuota:10;
-  var HD={
-    follow:['이 전략을 따라하려면 연결이 필요해요','전략 설정을 복제해 내 조건으로 재검증한 뒤 실행해요. 계좌 미러링이 아니라 검증을 통과해야 실행됩니다.'],
-    backtest:['검증을 통과했어요. 실행하려면 연결하세요','지금 연결하면 이 전략을 바로 실행 단계로 이어갈 수 있어요.'],
-    quota:['무료 분석 사용량을 모두 썼어요','UID 를 연동(무료)하거나 구독하면 바로 계속할 수 있어요. 입력한 내용은 그대로 남아 있어요.'],
-    plan:['PRO 로 업그레이드','UID 무료 연동 또는 구독으로 고급 분석을 계속 사용할 수 있어요.'],
-    bk:[(opt&&opt.name?opt.name+' 연결에는 플랜이 필요해요':'연결에는 플랜이 필요해요'),'UID 무료 연동 또는 구독으로 시작할 수 있어요. 연동은 1분이면 끝나요.']
-  }[ctx]||['업그레이드',''];
-  var sc=document.createElement('div'); sc.id='tf-upscrim'; sc.onclick=tfUpClose;
-  var m=document.createElement('div'); m.id='tf-upsheet';
-  m.innerHTML='<button class="x" onclick="tfUpClose()" aria-label="닫기">✕</button>'
-    +'<div class="nfxu-tags"><span class="nfx-badge sim">시뮬레이션</span>'+(ctx==='follow'&&opt&&opt.name?'<span class="nfx-badge">'+gEsc(opt.name)+'</span>':'')+'</div>'
-    +'<h2 class="nfxu-hd">'+HD[0]+'</h2>'
-    +'<div class="nfxu-sub">'+HD[1]+'</div>'
-    +(ctx==='quota'?'<div class="nfxu-quota"><div class="r"><span>무료 고급 분석</span><b>'+Math.min(t.freeUsed||0,fq)+' / '+fq+'회 사용</b></div>'
-      +'<div class="nfx-gtrack" style="height:7px"><div class="nfx-gfill empty"></div></div></div>':'')
-    +'<div class="nfxu-cards">'
-    +'<div class="nfxu-card hot"><div class="bd1"><span class="nfx-badge pro">무료</span><span class="nfx-badge">소요 1분</span></div>'
-    +'<div class="t">UID 무료 연동 (Fast API)</div>'
-    +'<div class="big">1,000C <span style="font-size:13px;font-weight:600;color:var(--gt2)">지급</span></div>'
-    +'<div class="d">거래 1회 체결 시 무제한 전환</div>'
-    +'<ul><li>거래소 UID 입력만으로 1분 연동</li><li>출금 권한 없는 조회와 거래 전용</li><li>PRO 심층 분석 '+Math.round(TFC.credit.uidGrant/TFC.credit.costHigh)+'회분 크레딧</li></ul>'
-    +'<span class="sp"></span><button class="nfx-btn pri" onclick="tfUpDoUid()">'+NFX_IC.zap+'무료로 연동하기</button></div>'
-    +'<div class="nfxu-card"><div class="bd1"><span class="nfx-badge blue">PRO 무제한</span></div>'
-    +'<div class="t">구독</div>'
-    +'<div class="big pro">무제한</div>'
-    +'<div class="d">모든 고급 분석, 차감 없음</div>'
-    +'<ul><li>AI 심층 분석 무제한</li><li>검증 통과 전략 실행</li><li>알림, 복기, 정산 전체 이용</li></ul>'
-    +'<span class="sp"></span><button class="nfx-btn sec" onclick="tfUpDoPay()">구독으로 업그레이드</button></div>'
-    +'</div>'
-    +'<div class="nfxu-foot"><span>체험 모드예요. 결제와 연동은 시뮬레이션이에요.</span>'
-    +(ctx!=='quota'?'<button class="nfxu-later" onclick="tfUpLater()">나중에 하기</button>':'')
-    +'</div>';
-  var host=$('g-root')||document.body;
-  host.appendChild(sc); host.appendChild(m);
+  tfAcSheetView(ctx==='plan'?'card':'bitget',{ctx:ctx,opt:opt||null});
 }
-function tfUpClose(){ var a=$('tf-upscrim'),b=$('tf-upsheet'); if(a)a.remove(); if(b)b.remove(); }
+function tfUpClose(){ var a=$('tf-upscrim'),b=$('tf-upsheet'); if(a)a.remove(); if(b)b.remove(); if(typeof tfAcSheetClose==='function') tfAcSheetClose(); }
 function tfUpLater(){
   var c=TF_UP_CTX; tfUpClose(); TF_UP_CTX=null;
   /* 따라하기는 유도 없이도 계속 진행 가능 — 소진 게이트만 하드. 재유도는 세션당 1회 (codex flow3 C) */
@@ -13359,13 +13271,13 @@ function tfNFUpgrade(){
 function tfNFLinkUid(cb){
   var t=tfNFInit();
   if(t.uidLinked){ toast('이미 연동되어 있어요'); if(typeof cb==='function') cb(); return; }
-  toast('Fast API 연동 확인 중');
+  toast('요금 연동 확인 중');
   delay(900,function(){
     t.uidLinked=true;
-    tfCreditGrant('uid',TFC.credit.uidGrant,'파트너 UID 연동이 확인됐어요. PRO 분석을 사용해보세요.');
+    tfCreditGrant('uid',TFC.credit.uidGrant,'거래소 요금 연동이 확인됐어요. 거래하면 이용료가 상쇄돼요');
     if(typeof bcPromoCardUid==='function') bcPromoCardUid(); /* CARD 상태에서 UID 연동 시 프로모 (3단계) */
     if(typeof bcAfterChange==='function') bcAfterChange('uid-link');
-    toast('UID 연동 완료, PRO 크레딧이 지급됐어요');
+    toast('요금 연동이 끝났어요');
     if(G.mode==='nfplan') tfPlanView('plan');
     else if(G.mode==='tfdash') tfDashView(); /* 배너 즉시 갱신 — 연동 CTA 잔존 방지 (codex NF P1) */
     if(typeof cb==='function') cb(); /* 업그레이드 시트 등 호출부 복귀 (codex flow3 C) */
@@ -16167,6 +16079,248 @@ function tfDevReset(){ tfQaPreset('01'); var m=G.mode; if(m==='tfconnect'||m==='
 })();
 /* ==JS:tx== (AI 트레이딩 게스트/미활성 뷰 전용 함수는 이 아래에 추가) */
 /* ==JS:ac== (활성화 시트/이용 현황 전용 함수) */
+/* ═══ 활성화 시트 (S3) — 시트(모바일 바텀시트/데스크톱 모달)와 인라인(#/strategy/connect 1단계) 공용 컴포넌트.
+   상태: window.TF_AC={mode:'sheet'|'inline', view:null|'conn'|'card'|'done', kind:'bitget'|'card', rows, err, vals, tok}
+   정본: ux/spec/UX_PAGE_SPEC.md S3, UX_DECISION_LOG D05/D12/D13/D27/D28/D29 ═══ */
+function tfAcEx(){ var t=tfS(); return (t.api&&t.api.ex)||(t.ob&&t.ob.ex)||'bitget'; }
+function tfAcSheetView(kind,opt){
+  tfAcSheetClose();
+  if(!S.user){ try{ authOpen('signup'); }catch(e){} return; }
+  window.TF_AC={mode:'sheet',view:null,kind:kind==='card'?'card':'bitget',tok:0,opt:opt||null};
+  var sc=document.createElement('div'); sc.className='ac-scrim'; sc.id='ac-scrim'; sc.onclick=tfAcClose;
+  var m=document.createElement('div'); m.className='ac-sheet'; m.id='ac-sheet';
+  m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-label','TETH 활성화');
+  m.innerHTML='<button class="ac-x" onclick="tfAcClose()" aria-label="닫기">✕</button><div class="ac-body" id="ac-body">'+tfAcBodyHtml()+'</div>';
+  var host=$('g-root')||document.body;
+  host.appendChild(sc); host.appendChild(m);
+  if(!window.TF_AC_ESC){ window.TF_AC_ESC=true; document.addEventListener('keydown',function(ev){ if(ev.key==='Escape'&&$('ac-sheet')) tfAcClose(); }); }
+  tfAcAfterRender();
+}
+function tfAcSheetClose(){ var a=$('ac-scrim'),b=$('ac-sheet'); if(a) a.remove(); if(b) b.remove(); if(window.TF_AC&&TF_AC.mode==='sheet'){ TF_AC.tok=(TF_AC.tok||0)+1; TF_AC.vals=null; } }
+/* 닫기 — 따라하기 게이트에서 열렸으면 기존 tfUpLater 규약(세션 1회 재유도)으로 이어감 */
+function tfAcClose(){
+  var c=window.TF_UP_CTX;
+  tfAcSheetClose();
+  if(c&&c.ctx==='follow'&&typeof tfUpLater==='function'){ tfUpLater(); return; }
+  window.TF_UP_CTX=null;
+}
+function tfAcBodyHtml(){
+  var A=window.TF_AC||{};
+  if(A.view==='conn') return tfAcConnHtml();
+  if(A.view==='card') return tfPayHtml();
+  if(A.view==='done') return tfAcDoneHtml();
+  return tfAcSheetHtml(A.kind,A.mode==='inline');
+}
+function tfAcRender(){
+  var A=window.TF_AC; if(!A) return;
+  if(A.mode==='inline'){ if(G.mode==='tfconnect') tfConnectView(); return; }
+  var b=$('ac-body'); if(!b) return;
+  b.innerHTML=tfAcBodyHtml();
+  tfAcAfterRender();
+}
+function tfAcAfterRender(){
+  var A=window.TF_AC; if(!A) return;
+  if(A.view==='card'){ tfPayBind(); return; }
+  if(A.mode!=='sheet') return;
+  var el=null;
+  if(!A.view) el=$(A.kind==='card'?'ac-card':'ac-pri');
+  else if(A.view==='conn') el=$('ac-uid')||$('ac-key');
+  if(el){ try{ el.focus({preventScroll:true}); }catch(e){} }
+}
+/* 시트 본문 — 추천 Bitget 연결 / 대안 카드 / 도움 행 */
+function tfAcSheetHtml(kind,inline){
+  var t=tfS(), e=tfExOf('bitget'), amt=tfDeriveCfg().PLAN_KRW;
+  var exOn=!!(t.uidLinked&&t.api&&t.api.ex), cardOn=!!t.payDone;
+  return '<div class="ac-pick'+(inline?' inline':'')+'">'
+    +'<div class="ac-title">TETH 활성화</div>'
+    +'<div class="ac-sub">'+(inline?'실행하려면 둘 중 하나가 필요해요. 언제든 바꿀 수 있어요':'둘 중 하나면 바로 쓸 수 있어요')+'</div>'
+    +'<div class="ac-blk rec'+(kind!=='card'?' on':'')+'">'
+    +'<div class="ac-bh"><span class="ac-tag">추천</span><span class="ac-nm">Bitget 연결</span><span class="ac-meta">약 1분, 자산 이동 없음</span></div>'
+    +'<ul class="ac-ul"><li>거래하면 TETH 이용료가 상쇄돼요</li><li>출금 권한은 요구하지 않아요</li><li>Claude, GPT, Gemini 등 멀티 AI 이용료를 TETH가 부담해요</li></ul>'
+    +'<button class="ac-btn p" id="ac-pri" onclick="tfAcGo(\'bitget\')">'+(exOn?'Bitget 연결 확인':'Bitget 연결하기')+'</button>'
+    +'<a class="ac-link" href="'+gEsc(e.ref||'https://www.bitget.com')+'" target="_blank" rel="noopener noreferrer">계정이 없어요 → 만들기(약 2분)</a>'
+    +'</div>'
+    +'<div class="ac-blk alt'+(kind==='card'?' on':'')+'"><div class="ac-alt-row">'
+    +'<div><div class="ac-bh" style="margin-bottom:2px"><span class="ac-tag alt">대안</span><span class="ac-nm">카드로 이용하기 <b>'+tfWon(amt)+'/월</b></span></div>'
+    +'<div class="ac-meta" style="margin-left:0">연결 없이 쓰고 싶다면</div></div>'
+    +'<button class="ac-btn s" id="ac-card" onclick="tfAcGo(\'card\')"'+(cardOn?' disabled':'')+'>'+(cardOn?'등록됨':'카드 등록')+'</button>'
+    +'</div></div>'
+    +'<div class="ac-help">막히면 24/7 고객지원에 바로 문의하세요 <button class="ac-lnk" type="button" onclick="tfAcHelp(event)">문의하기</button></div>'
+    +'</div>';
+}
+function tfAcHelp(ev){ if(ev&&ev.stopPropagation) ev.stopPropagation(); if(window.tethHelpOpen){ tethHelpOpen(); } else toast('고객지원 창을 불러오지 못했어요'); }
+/* 블록 선택 → 연결 폼 / 카드 폼 */
+function tfAcGo(kind){
+  if(!S.user){ try{ authOpen('signup'); }catch(e){} return; }
+  var t=tfS(), A=window.TF_AC||(window.TF_AC={mode:'sheet',view:null,kind:kind,tok:0});
+  A.kind=kind;
+  if(kind==='card'){
+    if(t.payDone){ toast('카드가 이미 등록돼 있어요'); return; }
+    t.plan='paid'; t.pay={step:'card',cycle:'month'}; if(A.mode==='inline') t.stage='pay';
+    A.view='card';
+  } else {
+    t.ob=t.ob||{};
+    if(t.uidLinked&&t.api&&t.api.ex){ A.view='done'; tfSave(); tfAcRender(); return; }
+    if(!(t.plan==='paid'&&t.payDone)) t.plan='partner';
+    if(t.ob.st!=='completed'&&t.ob.st!=='api_verified') t.ob.st='plan_free';
+    t.ob.ex=tfAcEx(); t.ob.err=null; /* 신규 연결 기본 거래소 bitget, 기존 api.ex 유지 (D29) */
+    if(A.mode==='inline') t.stage='connect';
+    A.view='conn'; A.rows=null; A.err=null; A.vals=null;
+  }
+  tfSave(); tfAcRender();
+}
+function tfAcBack(){ var A=window.TF_AC; if(!A) return; var t=tfS(); if(A.rows&&(A.rows.uid==='run'||A.rows.api==='run')) return; A.view=null; A.rows=null; A.err=null; A.vals=null; if(A.mode==='inline'&&!(t.plan==='paid'&&t.payDone)){ t.plan=null; if(t.ob&&t.ob.st!=='completed') t.ob.st=null; tfSave(); } tfAcRender(); }
+/* 연결 폼 — 한 폼(UID + API Key + Secret), 진행은 두 체크 행(요금 연동 / 실행 연결), 실패 행만 재시도 (D13) */
+function tfAcConnHtml(){
+  var t=tfS(), A=window.TF_AC||{}, ex=tfAcEx(), e=tfExOf(ex), name=tfExName(ex)||e.name;
+  var R=A.rows||{}, E=A.err||{}, V=A.vals||{};
+  var needUid=!t.uidLinked, needApi=!(t.api&&t.api.ex);
+  var stU=needUid?(R.uid||'idle'):'ok', stA=needApi?(R.api||'idle'):'ok';
+  var running=stU==='run'||stA==='run', failed=stU==='fail'||stA==='fail', started=!!A.rows;
+  var dis=running?' disabled':'';
+  function row(st,lb,ds,msg){
+    var ic=st==='ok'?'✓':st==='fail'?'!':st==='run'?'<i></i>':'';
+    var d=st==='ok'?'완료':st==='run'?'확인 중...':st==='fail'?'실패':ds;
+    return '<div class="ac-row '+st+'"><span class="ic">'+ic+'</span><span class="lb">'+lb+'</span><span class="ds">'+d+'</span>'+(st==='fail'&&msg?'<div class="msg">'+gEsc(msg)+'</div>':'')+'</div>';
+  }
+  var fields='';
+  if(needUid) fields+='<div class="tf-fld"><label for="ac-uid">'+gEsc(e.uidLabel||name+' UID')+'</label><input id="ac-uid" inputmode="numeric" autocomplete="off" placeholder="예: 38291042" value="'+gEsc(V.uid||t.ob.uid||'')+'"'+dis+'><div class="err">숫자 5~12자리를 확인해주세요</div></div>';
+  if(needApi) fields+='<div class="tf-fld"><label for="ac-key">API Key</label><input id="ac-key" autocomplete="off" placeholder="발급받은 API Key" value="'+gEsc(V.key||'')+'"'+dis+'><div class="err">API Key를 확인해주세요 (10자 이상)</div></div>'
+    +'<div class="tf-fld"><label for="ac-sec">Secret Key</label><input id="ac-sec" type="password" autocomplete="off" placeholder="발급받은 Secret Key" value="'+gEsc(V.sec||'')+'"'+dis+'><div class="err">Secret Key를 확인해주세요 (10자 이상)</div></div>';
+  var canBack=!running&&!(A.mode==='inline'&&t.plan==='paid'&&t.payDone);
+  return '<div class="ac-conn">'
+    +'<div class="ac-h2">'+gEsc(name)+' 연결</div>'
+    +'<div class="ac-sub">출금 권한은 요구하지 않아요. 조회와 거래 권한만 사용해요</div>'
+    +'<div class="tf-perm"><span class="yes">✓ 조회</span><span class="yes">✓ 거래</span><span class="no">✕ 출금</span></div>'
+    +'<div class="ac-guide">'
+    +'<div class="g">'+gEsc(name)+' 로그인 후 프로필 상단의 계정 번호를 복사해요</div>'
+    +'<div class="g">API 관리에서 새 키를 만들고 읽기와 거래 권한만 켜요</div>'
+    +'<div class="g">발급된 키 두 개를 아래 칸에 붙여넣어요</div>'
+    +'</div>'
+    +fields
+    +(needApi?'<a class="ac-link" onclick="tfApiGuide()">발급 방법 자세히 보기</a>':'')
+    +'<div class="ac-rows">'
+    +row(stU,'요금 연동','거래하면 이용료가 상쇄돼요',E.uid)
+    +row(stA,'실행 연결','전략이 주문을 낼 수 있어요',E.api)
+    +'</div>'
+    +'<button class="ac-btn p" id="ac-go" onclick="tfAcConnect(\'all\')"'+dis+'>'+(running?'확인 중...':(failed?'다시 시도':name+' 연결하기'))+'</button>'
+    +(canBack?'<button class="tf-btn ghost" onclick="tfAcBack()">이전</button>':'')
+    +(!started?'<div class="ac-note"><a class="ac-link" href="'+gEsc(e.ref||'https://www.bitget.com')+'" target="_blank" rel="noopener noreferrer">계정이 없어요 → 만들기(약 2분)</a></div>':'')
+    +'</div>';
+}
+/* 검증 실행 — 내부 정본은 UID 검증과 API 검증 2건으로 분리, 성공한 행은 유지하고 실패 행만 다시 돌린다 */
+function tfAcConnect(which){
+  var t=tfS(), A=window.TF_AC||(window.TF_AC={mode:'sheet',view:'conn',kind:'bitget',tok:0});
+  var ex=tfAcEx();
+  var needUid=!t.uidLinked, needApi=!(t.api&&t.api.ex);
+  var doUid=needUid&&(which==='all'||which==='uid'), doApi=needApi&&(which==='all'||which==='api');
+  if(!doUid&&!doApi){ tfAcFinish(); return; }
+  var f=$('ac-uid'), k=$('ac-key'), s=$('ac-sec'), ok=true, uv='', kv='', sv='';
+  function mark(el,bad){ if(el&&el.closest('.tf-fld')) el.closest('.tf-fld').classList.toggle('bad',bad); if(bad) ok=false; }
+  if(doUid){ uv=f?f.value.trim():''; mark(f,!/^\d{5,12}$/.test(uv)); }
+  if(doApi){ kv=k?k.value.trim():''; sv=s?s.value.trim():''; mark(k,kv.length<10); mark(s,sv.length<10); }
+  if(!ok) return;
+  A.tok=(A.tok||0)+1; var tok=A.tok;
+  A.rows=A.rows||{}; A.err=A.err||{};
+  if(doUid){ A.rows.uid='run'; A.err.uid=null; }
+  if(doApi){ A.rows.api='run'; A.err.api=null; }
+  A.vals={uid:uv||(A.vals&&A.vals.uid)||'',key:kv||(A.vals&&A.vals.key)||'',sec:sv||(A.vals&&A.vals.sec)||''};
+  tfAcRender();
+  var pend=(doUid?1:0)+(doApi?1:0);
+  function fin(){
+    pend--; if(pend>0) return;
+    var t2=tfS();
+    if(t2.uidLinked&&t2.api&&t2.api.ex){ tfAcFinish(tok); return; }
+    tfSave(); if(tok===A.tok) tfAcRender();
+  }
+  if(doUid){
+    TF_ADAPTER.verifyUid(ex,uv,function(err){
+      if(err){ if(tok===A.tok){ A.rows.uid='fail'; A.err.uid='가입 내역을 찾지 못했어요. 파트너 링크로 가입한 계정의 번호인지 확인해주세요'; } fin(); return; }
+      t.uid=uv; t.ob=t.ob||{}; t.ob.uid=uv; t.ob.ex=ex; t.uidLinked=true;
+      if(t.ob.st!=='completed'&&t.ob.st!=='api_verified') t.ob.st='uid_verified';
+      if(typeof tfCreditGrant==='function') tfCreditGrant('uid',TFC.credit.uidGrant,'거래소 요금 연동이 확인됐어요. 거래하면 이용료가 상쇄돼요'); /* 최초 1회만 지급 */
+      if(typeof bcPromoCardUid==='function') bcPromoCardUid();
+      if(typeof bcAfterChange==='function') bcAfterChange('uid-link');
+      if(tok===A.tok) A.rows.uid='ok';
+      fin();
+    });
+  }
+  if(doApi){
+    TF_ADAPTER.verifyApi(ex,kv,sv,function(err){
+      if(err){ if(tok===A.tok){ A.rows.api='fail'; A.err.api=err.code==='missing_passphrase'?'Passphrase가 필요한 거래소예요. 키를 다시 확인해주세요':'권한 확인에 실패했어요. 읽기와 거래 권한이 켜져 있는지 확인해주세요'; } fin(); return; }
+      t.api={ex:ex,last4:kv.slice(-4)}; /* 키 원문은 저장하지 않는다 */
+      t.ob=t.ob||{}; t.ob.ex=ex;
+      if(tok===A.tok) A.rows.api='ok';
+      fin();
+    });
+  }
+}
+/* 두 행 모두 성공 → 기존 상태 그대로 확정하고 완료 화면 1회 */
+function tfAcFinish(tok){
+  var t=tfS(), A=window.TF_AC;
+  t.ob=t.ob||{}; t.ob.st='completed'; t.ob.err=null; t.ob.ex=tfAcEx(); t.conn=true;
+  if(A){ A.vals=null; A.rows={uid:'ok',api:'ok'}; A.err=null; }
+  tfSave(); tfSideSync();
+  if(A&&(tok==null||tok===A.tok)) tfAcDone();
+  else toast(tfExName(tfAcEx())+' 연결이 끝났어요');
+}
+function tfAcDone(){ var A=window.TF_AC||(window.TF_AC={mode:'sheet',kind:'bitget',tok:0}); A.view='done'; tfAcRender(); }
+function tfAcDoneHtml(){
+  var d=tfDerive();
+  var offset=d.coverage==='covered'||d.coverage==='partial'||d.facts.uid; /* D27 */
+  return '<div class="ac-done">'
+    +'<div class="ck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>'
+    +'<h3>연결 완료</h3>'
+    +'<div class="p1">이제 TETH가 Claude, GPT, Gemini, Grok, DeepSeek 등을 작업에 맞게 골라 씁니다.</div>'
+    +(offset?'<div class="p2">거래하는 동안 TETH 이용료는 거래 혜택으로 상쇄돼요</div>':'<div class="p2"></div>')
+    +'<button class="ac-btn p" onclick="tfAcContinue()">전략 실행 이어가기</button>'
+    +'</div>';
+}
+/* 완료 → 복귀 대상 봇(TF_NF_RESUME) → 검증 통과 초안이면 #/strategy/done → 아니면 #/trade */
+function tfAcContinue(){
+  var A=window.TF_AC, c=window.TF_UP_CTX; window.TF_UP_CTX=null;
+  if(A) A.view=null;
+  tfAcSheetClose();
+  if(c&&tfAcAfter(c)) return;
+  var rz=window.TF_NF_RESUME;
+  if(rz&&tfBotFind(rz.id)){ window.TF_NF_RESUME=null; tfBotCtl(rz.id,rz.act); return; }
+  var t=tfS();
+  if(t.cur&&t.score>=TFC.score.pass){ tfNav('#/strategy/done'); return; }
+  tfNav('#/trade');
+}
+/* 카드 등록 완료 → 인라인이면 연결 단계로, 시트면 열린 곳으로 복귀 */
+function tfAcCardDone(){
+  var A=window.TF_AC||{mode:'sheet'}, c=window.TF_UP_CTX;
+  A.view=null;
+  if(A.mode==='inline'){ tfAcRender(); return; }
+  window.TF_UP_CTX=null;
+  tfAcSheetClose();
+  if(c&&tfAcAfter(c)) return;
+  tfAcRefresh();
+}
+/* 시트 진입 컨텍스트(TF_UP_CTX) 복귀 — 기존 tfUpDoUid 규약 유지 */
+function tfAcAfter(c){
+  if(!c) return false;
+  if(c.ctx==='follow'&&c.opt){ window.TF_UP_SKIP=true; try{ tfSS3Copy(c.opt.ne,c.opt.fp,c.opt.fid); }finally{ window.TF_UP_SKIP=false; } return true; }
+  if(c.ctx==='bk'&&c.opt&&c.opt.bk){ if(G.mode==='tfbroker'||G.mode==='tfbrokers'){ tfBrokerView(c.opt.bk); if(typeof tfBkConnect==='function') tfBkConnect(c.opt.bk); } else tfAcRefresh(); return true; }
+  if(c.ctx==='quota'){ toast('이어서 보내보세요'); tfAcRefresh(); return true; }
+  if(c.ctx==='plan'){ if(G.mode==='nfplan') tfPlanView('plan'); else tfAcRefresh(); return true; }
+  return false;
+}
+/* 현재 화면 재렌더 (상태 반영) */
+function tfAcRefresh(){
+  try{
+    var m=G.mode;
+    if(m==='home') gHome();
+    else if(m==='nfplan') tfPlanView('plan');
+    else if(m==='tfbrokers'&&typeof tfBrokersView==='function') tfBrokersView();
+    else if(m==='tfbroker'&&typeof TFBK_CUR!=='undefined'&&TFBK_CUR) tfBrokerView(TFBK_CUR,tfS().bkTab);
+    else if(m==='tfdash'||m==='tfintro'||m==='tfinactive'){ if(location.hash==='#/trade'&&typeof tfNFRoute==='function') tfNFRoute('#/trade'); else tfNav('#/trade'); }
+    else if(m==='tfss3'&&typeof tfShareHub==='function') tfShareHub((tfSSState().ss||{}).tab||'find');
+    else if(m==='tfconnect') tfConnectView();
+  }catch(e){}
+  if(typeof tfNFBar==='function') tfNFBar();
+}
 /* ==JS:mk== (전략 따라하기 전용 함수) */
 /* ==JS:cx== (거래소 연결 전용 함수) */
 /* ==JS:tm== (터미널/판단 로그 전용 함수) */
