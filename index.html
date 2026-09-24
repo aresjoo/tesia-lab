@@ -14936,7 +14936,7 @@ function tfDerive(){
   var line;
   if(!user) line='';
   else if(plan) line='플랜 '+W(planFee)+(overage>0?' + 추가 사용 '+W(overage):'')+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+' = 청구 '+W(due);
-  else if(due>0) line='추가 사용 '+W(overage)+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+' = 청구 '+W(due);
+  else if(due>0) line='추가 사용 '+W(overage)+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+(freeKrw>0?' - 무료 혜택 '+W(Math.min(freeKrw,Math.max(0,gross-Math.min(commission,gross)))):'')+' = 청구 '+W(due);
   else line='이번 달 청구 ₩0'+(freeLeft>0&&key==='signed'?', 무료 체험 '+freeLeft+'회 남음':(commission>0?', 거래 혜택으로 상쇄':''));
   var coverage;
   if(!user) coverage='none';
