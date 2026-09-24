@@ -15007,12 +15007,12 @@ var TF_ASSET_TICKER={'비트코인':'BTC','이더리움':'ETH','솔라나':'SOL'
 function tfAssetTicker(a){ if(!a) return ''; if(typeof a==='object') a=a.label||a.name||''; return TF_ASSET_TICKER[a]||String(a).replace(/\/.*$/,''); }
 function tfStratTitle(p,asset,opt){
   p=p||{}; opt=opt||{};
-  var tk=tfAssetTicker(asset);
-  var beh=(p.rsiTh!=null&&p.rsiTh<=40&&!p.trendFilter)?'급락 후 반등 매수':'눌림목 반등 매수';
+  var tk=tfAssetTicker(asset), r=p.rsiTh!=null?p.rsiTh:44;
+  var beh=r<=38?'급락 반등 매수':(r<=41?'깊은 눌림 반등 매수':'눌림목 반등 매수');
   var suf=[];
   if(p.trendFilter) suf.push('추세 구간');
-  if(p.sl!=null&&p.sl>=-3) suf.push('보수형'); else if(p.tp!=null&&p.tp>=15) suf.push('공격형');
-  if(opt.long) suf.push('장기');
+  if(p.sl!=null&&p.sl>=-3) suf.push('보수형'); else if(p.tp!=null&&p.tp>=15) suf.push('공격형'); else if(p.tp!=null&&p.tp<=8) suf.push('짧은 익절'); else if(p.sl!=null&&p.sl<=-8) suf.push('넓은 손절');
+  if(opt.long&&!suf.length) suf.push('장기');
   return (tk?tk+' ':'')+beh+(suf.length?', '+suf.join(', '):'');
 }
 function tfStratSub(p){
