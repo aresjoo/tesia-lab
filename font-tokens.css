@@ -1,0 +1,55 @@
+/**
+ * TETH Master Typography Token System
+ * --------------------------------------------------------------------------
+ * Synthesis of Multi-Agent Typography Audit:
+ * - UI & CJK Body: Pretendard Variable + Inter (Flawless Korean/Latin balance, optical counters)
+ * - Numerics & Telemetry: Geist Mono (Strict fixed-pitch, true tabular-nums, zero ticker jitter)
+ * - Headings & Brand Anchors: Inter Display / Pretendard (Crisp Swiss neo-grotesque)
+ * - Selective Editorial Accent: Cormorant Garamond (High-end institutional prestige for hero quotes)
+ *
+ * All typefaces licensed under SIL Open Font License (OFL) 1.1 — 100% Free for Commercial Use.
+ */
+
+:root {
+  /* Core Base Typography */
+  --font-body: "Pretendard Variable", "Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-display: "Inter", "Pretendard Variable", "Pretendard", -apple-system, sans-serif;
+  --font-serif-editorial: "Cormorant Garamond", "Noto Serif KR", Georgia, serif;
+  
+  /* Telemetry, Order Books & Tabular Figures */
+  --font-num: "Geist Mono", "Geist", "SF Mono", Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-num);
+
+  /* Aliases for Full Backward-Compatibility */
+  --font: var(--font-body);
+  --num: var(--font-num);
+  --fnum: var(--font-num); /* Fixes previously undefined CSS variable bug in index.html */
+
+  /* OpenType Numeric Settings */
+  --num-features: "tnum" 1, "zero" 1, "cv02" 1;
+}
+
+/* Global Tabular Numeric Enforcement */
+.num,
+[data-num],
+.kpi-val,
+.m-v,
+.mc-v,
+.st-kpi .v,
+.an-timer,
+.an-ev .ev-time,
+.vd-stat .v,
+.g-act-row .ts,
+.g-vstat > div .v {
+  font-family: var(--font-num) !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: var(--num-features);
+  letter-spacing: -0.01em;
+}
+
+/* Editorial Prestige Accent Class */
+.font-editorial-quote {
+  font-family: var(--font-serif-editorial);
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
