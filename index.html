@@ -4011,6 +4011,214 @@ button{-webkit-tap-highlight-color:transparent}
   .us-cta .ac-btn{width:100%}
 }
 /* ==CSS:mk== */
+/* ═══ S7 전략 따라하기 (mk) — 허브, 카드, 상세 5탭, 따라가기 시트, 중단 3택. 라임은 1차 CTA(.mk-pri)에만 ═══ */
+.mk{max-width:1240px}
+.mk-up{color:#56c486}.mk-dn{color:#ee766a}
+.mk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:10px 0 18px}
+.mk-head h2{font-size:26px;font-weight:700;color:var(--gt);margin:0;line-height:1.3}
+.mk-lead{font-size:13.5px;color:var(--gt2);margin-top:4px}
+.mk-demo{font-size:12px;color:var(--gt3);white-space:nowrap}
+.mk-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
+.mk-tabs::-webkit-scrollbar{display:none}
+.mk-tab{flex:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--gt3);font-size:14px;font-weight:600;padding:10px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-bottom:-1px;transition:none}
+.mk-tab:hover{color:var(--gt2)}
+.mk-tab.on{color:var(--gt);border-bottom-color:#fff}
+.mk-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.mk-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mk-chips .lb{font-size:12px;color:var(--gt3);margin-right:2px}
+.mk-chips .mk-sp{width:1px;height:18px;background:rgba(255,255,255,.12);margin:0 6px}
+.mk-chip{height:32px;border-radius:16px;padding:0 13px;font-size:13px;color:var(--gt2);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);cursor:pointer;font-family:inherit;transition:none;white-space:nowrap}
+.mk-chip:hover{background:rgba(255,255,255,.09)}
+.mk-chip.on{background:#f2f2f2;color:#0f0f0f;border-color:#f2f2f2}
+.mk-pdrow{margin-bottom:14px}
+.mk-flt{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mk-flt .ss3-search{height:40px;border-width:1px;flex:1 1 200px;max-width:none;min-width:160px}
+.mk .tfbk-drop{height:40px;border-radius:20px;border-width:1px;font-size:13px;padding:0 16px;min-width:0}
+.mk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mk-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:20px;background:rgba(255,255,255,.02);display:flex;flex-direction:column;gap:14px;min-width:0}
+.mk-c-tt{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mk-c-tt h3{margin:0;font-size:17px;font-weight:700;line-height:1.35;min-width:0}
+.mk-c-tb{background:none;border:0;padding:0;color:var(--gt);font:inherit;font-weight:700;cursor:pointer;text-align:left;word-break:keep-all}
+.mk-c-tb:hover{text-decoration:underline;text-underline-offset:3px}
+.mk-c-sub{font-size:13px;color:var(--gt2);line-height:1.55;margin-top:5px;word-break:keep-all}
+.mk-c-by{font-size:12px;color:var(--gt3);margin-top:5px}
+.mk-c-main{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mk-c-ret{min-width:0}
+.mk-c-ret b{display:block;font-size:34px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.mk-c-ret small{display:block;font-size:12px;color:var(--gt3);margin-top:4px}
+.mk-badges{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mk-badge{display:inline-flex;align-items:center;font-size:11px;line-height:1;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--gt2);white-space:nowrap}
+.mk-badge.mk-micro{font-size:10px;padding:3px 7px;color:var(--gt3);border-style:dashed}
+.mk-spark{width:150px;height:60px;flex:none;display:block;margin-top:4px}
+.mk-c-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.mk-c-stats small{display:block;font-size:11px;color:var(--gt3);margin-bottom:3px;white-space:nowrap}
+.mk-c-stats b{font-size:14px;font-weight:600;color:var(--gt);font-variant-numeric:tabular-nums}
+.mk-c-risk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gt2)}
+.mk-c-risk small{color:var(--gt3);font-size:11.5px}
+.mk-risk{display:inline-flex;align-items:center;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;line-height:1}
+.mk-risk.lo{background:rgba(86,196,134,.14);color:#7ed6a8}.mk-risk.mid{background:rgba(234,179,8,.12);color:#e8d49a}.mk-risk.hi{background:rgba(238,118,106,.14);color:#f0a097}
+.mk-c-acts{display:flex;gap:10px;margin-top:auto}
+.mk-pri{height:44px;padding:0 22px;border-radius:10px;background:#c8f43c;color:#0f1a05;border:1px solid #c8f43c;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;flex:1;transition:none;white-space:nowrap}
+.mk-pri:hover{background:#d6f766}
+.mk-pri:disabled{opacity:.4;cursor:not-allowed}
+.mk-btn2{height:44px;padding:0 18px;border-radius:10px;background:transparent;color:var(--gt);border:1px solid rgba(255,255,255,.22);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:none;white-space:nowrap}
+.mk-btn2:hover{background:rgba(255,255,255,.06)}
+.mk-lnk{background:none;border:0;padding:0;color:#8fbcff;font:inherit;font-size:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+/* 상세 */
+.mk-detail .tfbk-bc{margin:4px 0 8px}
+.mk-d-head{margin:0 0 14px}
+.mk-d-tt{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mk-d-tt h2{font-size:26px;font-weight:700;color:var(--gt);margin:0;line-height:1.3;word-break:keep-all}
+.mk-d-sub{font-size:14px;color:var(--gt2);line-height:1.6;margin-top:8px;word-break:keep-all}
+.mk-d-by{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--gt3);margin-top:8px}
+.mk-d-by .mk-badges{margin-top:0}
+.mk-d-acts{display:flex;align-items:center;gap:10px;margin-top:16px}
+.mk-d-acts .mk-pri{flex:0 0 auto;min-width:160px}
+.mk-more{position:relative}
+.mk-more-b{width:44px;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:transparent;color:var(--gt);font-size:20px;line-height:1;cursor:pointer;font-family:inherit;transition:none}
+.mk-more-b:hover{background:rgba(255,255,255,.06)}
+.mk-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:200px;background:#1a1a1a;border:1px solid rgba(255,255,255,.1);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.5);padding:6px;z-index:90}
+.mk-menu button{display:flex;align-items:center;gap:8px;width:100%;height:38px;border-radius:7px;padding:0 10px;font-size:13.5px;color:#dbdbdb;background:transparent;border:0;cursor:pointer;text-align:left;font-family:inherit;white-space:nowrap;transition:none}
+.mk-menu button:hover{background:#2e2e2e;color:#fff}
+.mk-menu button svg{width:14px;height:14px}
+.mk-dtabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
+.mk-dtabs::-webkit-scrollbar{display:none}
+.mk-dbody{min-width:0}
+.mk-kpis{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+.mk-kpis.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mk-kpi{padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);min-width:0}
+.mk-kpi small{display:block;font-size:11.5px;color:var(--gt3);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-kpi b{display:block;font-size:22px;font-weight:700;line-height:1.15;color:var(--gt);font-variant-numeric:tabular-nums}
+.mk-kpi.big b{font-size:34px}
+.mk-kpi .mk-badges{margin-top:10px}
+.mk-perf-bd{margin:-8px 0 18px}
+.mk-sec{margin-bottom:22px}
+.mk-sec-hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.mk-sec-hd b{font-size:16px;font-weight:700;color:var(--gt)}
+.mk-det-hd{margin-top:22px}
+.mk-det-hd b{font-size:13px}
+.mk-st-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px;color:var(--gt2);margin-bottom:10px}
+.mk-res{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:7px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.07);color:var(--gt2);flex:none}
+.mk-res.in{background:rgba(86,196,134,.16);color:#7ed6a8}
+.mk-res.out{background:rgba(238,118,106,.16);color:#f0a097}
+.mk-res.hold{background:rgba(143,188,255,.14);color:#a9c4ff}
+.mk-lc-rows{display:flex;flex-direction:column;gap:6px;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 14px;background:rgba(0,0,0,.18)}
+.mk-rr{display:grid;grid-template-columns:minmax(0,1fr) auto 20px;gap:10px;align-items:center;font-size:13px;color:var(--gt2);min-width:0}
+.mk-rr .k{color:var(--gt);min-width:0;word-break:keep-all}
+.mk-rr .v{color:var(--gt3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.mk-rr i{font-style:normal;font-weight:700;text-align:center}
+.mk-rr i.ok{color:#56c486}.mk-rr i.no{color:#ee766a}
+.mk-st-next{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gt2);margin-top:10px}
+.mk-st-next small,.mk-lc-ft small{font-size:11px;color:var(--gt3);display:block;margin-bottom:3px}
+.mk-rules{display:flex;flex-direction:column;gap:8px}
+.mk-rule{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;font-size:13.5px;color:var(--gt2);line-height:1.6;word-break:keep-all}
+.mk-rule small{font-size:12px;color:var(--gt3);padding-top:2px}
+.mk-riskrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--gt2);padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:14px}
+.mk-det{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px 16px 12px;margin-bottom:22px}
+.mk-det summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--gt);padding:12px 0;list-style:none;display:flex;align-items:center;gap:10px}
+.mk-det summary::-webkit-details-marker{display:none}
+.mk-det summary::before{content:'▸';color:var(--gt3);font-size:12px}
+.mk-det[open] summary::before{content:'▾'}
+.mk-tblw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mk-log{display:flex;flex-direction:column;gap:10px}
+.mk-lc{border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.02)}
+.mk-lc-hd{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--gt3);margin-bottom:10px}
+.mk-lc-k{font-weight:700;color:var(--gt2)}
+.mk-lc-d{margin-left:auto}
+.mk-lc-ft{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;font-size:12.5px;color:var(--gt2)}
+.mk-lc-ft>div{min-width:0}
+.mk-lc-ft span{word-break:keep-all}
+.mk-lrun{border:1px dashed rgba(255,255,255,.14);border-radius:14px;padding:0 16px}
+.mk-lrun summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:pointer;list-style:none;padding:12px 0;font-size:12.5px;color:var(--gt3)}
+.mk-lrun summary::-webkit-details-marker{display:none}
+.mk-lrun-x{color:#8fbcff}
+.mk-lrun[open] .mk-lrun-x::after{content:' (접기)'}
+.mk-lrun .mk-lc{margin-bottom:10px}
+.mk-info{display:flex;flex-direction:column}
+.mk-info-r{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13.5px;color:var(--gt);align-items:center;word-break:keep-all}
+.mk-info-r small{font-size:12.5px;color:var(--gt3)}
+.mk-info-r span{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* 내 따라가기 계정 라벨 (원본 검증 수치와 구분, D25) */
+.mk-acct{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.mk-acct b{font-size:15px;color:var(--gt)}
+.mk-acct span{font-size:12px;color:var(--gt3)}
+/* 따라가기 시트 */
+.mk-follow-w{position:fixed;inset:0;z-index:330;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);animation:ss3fade .15s linear}
+.mk-follow{width:460px;max-width:100%;max-height:90vh;overflow-y:auto;background:#0d0f14;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px 24px 20px;box-sizing:border-box}
+.mk-f-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mk-f-hd b{font-size:19px;font-weight:700;color:var(--gt)}
+.mk-f-x{background:none;border:0;color:var(--gt3);font-size:17px;cursor:pointer;padding:4px}
+.mk-f-x:hover{color:#fff}
+.mk-f-strat{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:18px}
+.mk-f-strat .t{font-size:14.5px;font-weight:700;color:var(--gt);display:flex;align-items:center;gap:8px;flex-wrap:wrap;word-break:keep-all}
+.mk-f-strat .s{font-size:12.5px;color:var(--gt3);margin-top:5px;line-height:1.6}
+.mk-f-fld{margin-bottom:16px}
+.mk-f-fld label{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--gt2);margin-bottom:8px}
+.mk-f-fld label b{color:var(--gt)}
+.mk-f-in{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:0 8px 0 14px;height:46px;background:rgba(0,0,0,.25)}
+.mk-f-in:focus-within{border-color:rgba(200,244,60,.6)}
+.mk-f-in input{flex:1;min-width:0;border:0;background:none;color:var(--gt);font-size:16px;outline:none;font-family:inherit}
+.mk-f-in .un{font-size:12px;color:var(--gt3)}
+.mk-f-in .mx{border:0;background:rgba(255,255,255,.1);color:var(--gt);font-size:11.5px;font-weight:600;border-radius:8px;padding:6px 10px;cursor:pointer;font-family:inherit}
+.mk-f-in.sm{height:36px;width:96px;padding:0 10px}
+.mk-f-in.sm input{font-size:14px;text-align:right}
+.mk-f-hint{font-size:12px;color:var(--gt3);margin-top:7px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.mk-f-err{font-size:12px;color:#ee9a91;margin-top:6px;display:none}
+.mk-f-fld.bad .mk-f-err{display:block}
+.mk-f-fld.bad .mk-f-in{border-color:rgba(238,118,106,.6)}
+.mk-f-fld input[type=range]{width:100%;accent-color:#c8f43c;margin:2px 0}
+.mk-f-sum{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--gt2);line-height:1.7;margin-bottom:12px;word-break:keep-all}
+.mk-f-sum b{color:var(--gt)}
+.mk-f-adv{border-top:1px solid rgba(255,255,255,.08);margin-bottom:14px}
+.mk-f-adv summary{cursor:pointer;font-size:13px;color:var(--gt3);padding:11px 0;list-style:none}
+.mk-f-adv summary::-webkit-details-marker{display:none}
+.mk-f-adv summary::after{content:' ▾'}
+.mk-f-adv[open] summary::after{content:' ▴'}
+.mk-f-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;font-size:13px;color:var(--gt2)}
+.mk-seg{display:inline-flex;gap:4px;background:rgba(255,255,255,.05);border-radius:9px;padding:3px}
+.mk-seg button{border:0;background:none;color:var(--gt3);font-size:12px;padding:6px 10px;border-radius:7px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.mk-seg button.on{background:rgba(255,255,255,.14);color:var(--gt);font-weight:600}
+.mk-f-cta{width:100%;height:48px;font-size:15px}
+.mk-f-gate{font-size:12.5px;color:#e8d49a;margin-bottom:8px}
+.mk-f-foot{font-size:11.5px;color:var(--gt3);margin-top:12px;line-height:1.6}
+/* 중단 3택 */
+.mk-stop{display:flex;flex-direction:column;gap:8px}
+.mk-stop-o{display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;text-align:left;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 14px;background:none;cursor:pointer;font-family:inherit;transition:none}
+.mk-stop-o:hover{border-color:#fff;background:rgba(255,255,255,.04)}
+.mk-stop-o b{font-size:14px;color:#fff}
+.mk-stop-o span{font-size:12.5px;color:#848a94;line-height:1.5;word-break:keep-all}
+/* 따라가는 중 탭의 cp 요약 타일, AI 메모 — 허브 페이지에는 .cpp 스코프가 없어 무스타일이던 것 (mk 스코프로 보강) */
+.mk .cpp-kpi{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);min-width:0}
+.mk .cpp-kpi small{display:block;font-size:11px;color:var(--gt3);margin-bottom:5px}
+.mk .cpp-kpi b{font-size:16.5px;font-weight:700;color:var(--gt)}
+.mk .cpp-kpi b.u{color:#56c486}.mk .cpp-kpi b.d{color:#ee766a}
+.mk .cpp-ai{display:flex;gap:8px;align-items:flex-start;margin:2px 0 16px;padding:11px 14px;border-radius:12px;background:rgba(143,178,255,.07);font-size:12.5px;font-weight:400;color:var(--gt2);line-height:1.6}
+.mk .cpp-ai.warn{background:rgba(234,179,8,.09);color:#e8d49a}
+.mk .cpp-ai .sp{flex:none}
+.mk-lc-rows{max-width:760px}
+.mk-fnone{font-size:13px;color:var(--gt3);padding:18px 0 8px;line-height:1.7}
+@media (max-width:768px){ .mk{padding-top:28px} .mk-detail{padding-top:22px} }
+@media (max-width:900px){
+  .mk-grid{grid-template-columns:minmax(0,1fr)}
+  .mk-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mk-kpis.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mk-kpi.big{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .mk-head h2{font-size:22px}
+  .mk-card{padding:16px}
+  .mk-c-ret b{font-size:28px}
+  .mk-spark{width:110px;height:48px}
+  .mk-c-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mk-d-tt h2{font-size:22px}
+  .mk-d-acts .mk-pri{flex:1;min-width:0}
+  .mk-lc-ft{grid-template-columns:1fr}
+  .mk-info-r{grid-template-columns:1fr;gap:4px}
+  .mk-rule{grid-template-columns:60px minmax(0,1fr)}
+  .mk-follow-w{align-items:flex-end;padding:0}
+  .mk-follow{width:100%;max-height:92vh;border-radius:20px 20px 0 0;border-bottom:0;animation:ss3up .2s ease-out}
+  .mk-menu{left:auto;right:0}
+}
 /* ==CSS:cx== */
 /* ══ 거래소 연결 (cx) — S8: Bitget 추천 카드가 화면 대부분, 지원 거래소 행, 준비 중 접힘 (UX_PAGE_SPEC S8, D05/D28) ══ */
 .cx-page{max-width:1040px;padding-top:18px}
@@ -10663,7 +10871,7 @@ var TF_SEEDS=null;
    구 진입점 보존: tfRankView/tfShareView/tfFollow. 데이터 계약: t.follows(+archived)/t.followId/t.sharedSnap(+desc,at) */
 function tfRankView(){ tfShareHub('find'); }
 function tfShareView(){ var t=tfSSState(); tfShareHub(t.ss.tab||'find'); }
-function tfFollow(i){ var rows=tfRankSeeds(); var r=rows[Math.min(i,rows.length-1)]; if(!r) return; tfSS3Copy(tfSSNe(r.nick)); }
+function tfFollow(i){ var rows=tfRankSeeds(); var r=rows[Math.min(i,rows.length-1)]; if(!r) return; cpSetupGo(tfSSNe(r.nick)); }
 var TF_SS_CACHE=null,TF_SS_Q='',TF_SS_PREV=null,TF_SS_TOKEN=0;
 var TF_SS3_CP_BUSY=false;
 /* 확정 액션(복제/공개/중지)은 디바운스 없이 즉시 저장 — 확정 직후 새로고침 유실 방지 (codex F11) */
@@ -10790,33 +10998,10 @@ function tfSS3YearBars(byYear,w,h){
   return '<svg class="ss3-chart ss3-bars" viewBox="0 0 '+w+' 200" style="height:200px" role="img" aria-label="연도별 검증 손익"><line x1="12" y1="'+mid+'" x2="'+(w-12)+'" y2="'+mid+'"/>'+out+'</svg>';
 }
 /* 풀폭 전략 카드 — 캐논 .tfbk-card 문법 (agy-visual-spec §7) */
-function tfSS3Card(s){
-  var r=s.r, up=r.ret>=0, ne=tfSS3Rid(s);
-  var title=s.me?(s.title||'내 전략'):s.nick;
-  return '<div class="tfbk-card"><div class="cin">'
-    +'<div class="lft">'
-    +'<div class="nmrow"><button type="button" class="nm" onclick="'+(s.me?'tfSS3Go':'cpProfileGo')+'(\''+ne+'\')">'+gEsc(title)+'</button>' /* 닉 클릭 = 트레이더 프로필 (cp 2단계), 내 전략은 구 상세 */
-    +'<span class="bdg">'+gEsc(s.asset)+'</span>'
-    +(s.me?'<span class="ss3-by">by '+gEsc(s.nick)+' (나)</span>':'')
-    +'</div>'
-    +'<div class="as">'+gEsc(s.desc||('검증 완료 전략, 거래 비용 0.2% 반영 백테스트'))+'</div>'
-    +'<div class="rtrow num">'
-    +'<span class="ctc"><b>'+s.score+'점</b><small>TETH 점수</small></span>'
-    +'<span class="ctc"><b>'+r.mdd.toFixed(1)+'%</b><small>최대 낙폭</small></span>'
-    +'<span class="ctc"><b>'+(r.winRate||0).toFixed(0)+'%</b><small>승률 ('+r.n+'회)</small></span>'
-    +'<span class="ctc"><b>'+Number(s.fw||0).toLocaleString()+'명</b><small>팔로워</small></span>'
-    +'</div>'
-    +'<div class="pr"><b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">검증 수익 '+(up?'+':'')+r.ret.toFixed(1)+'%</b><small>누적 백테스트 성과</small></div>'
-    +'<div class="bt">'+(s.me
-      ?'<button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>'
-      :'<button class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피하기</button><button class="obtn" onclick="tfSS3Go(\''+ne+'\')">자세히</button>') /* 따라하기 = 카피 (cp 3단계) */
-    +'</div></div>'
-    +'<div class="lgo">'+tfSS3Eq(r.eq,528,260,{dates:true,tag:true})+'</div>'
-    +'</div></div>';
-}
+function tfSS3Card(s){ return mkCard(s); } /* S7: 카드 렌더는 mkCard 단일 경로 (내 공유 미리보기, 공개 온보딩 미리보기 공용) */
 /* 허브: 캐논 히어로 + 필 컨트롤 + 탭 바디 */
 function tfShareHub(tab){
-  tfSS3DlgClose(true); /* 화면 전환 시 떠 있는 다이얼로그 정리 (codex F09) */
+  tfSS3DlgClose(true); mkFollowClose(true); /* 화면 전환 시 떠 있는 다이얼로그, 시트 정리 (codex F09) */
   var t=tfSSState(); tab=tab||t.ss.tab||'find'; t.ss.tab=tab; tfSave();
   if(G.cur) TF_SS_PREV=G.cur.id;
   /* 허브는 해시 주소가 없다 — 상세/퍼널 해시가 남아 새로고침, 뒤로가기가 꼬이지 않게 정리 */
@@ -10827,39 +11012,45 @@ function tfShareHub(tab){
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead('전략 따라하기','',null);
   var fN=t.follows.filter(function(f){return !f.archived;}).length;
-  var nav=[['find','전략 찾기'],['follow','따라가는 중'+(fN?' '+fN:'')],['mine','내 전략']];
-  var controls='<div class="tfbk-filters">'
-    +nav.map(function(n){ return '<button type="button" class="fp'+(tab===n[0]?' on':'')+'" aria-pressed="'+(tab===n[0])+'" onclick="tfShareHub(\''+n[0]+'\')">'+n[1]+'</button>'; }).join('')
-    +(tab==='find'
-      ?'<span class="ss3-div"></span>'
-      +tfBkDrop('ss3-m-sort',[['ret','검증 수익순'],['score','TETH 점수순'],['mdd','최대 낙폭 낮은순'],['winrate','승률순'],['fw','팔로워순']].map(function(it){ return t.ss.dir==='asc'&&it[0]===t.ss.sort?[it[0],it[1]+' (역순)']:it; }),t.ss.sort,'tfSS3SortPick') /* 방향 표시 (codex N02) */
-      +tfBkDrop('ss3-m-asset',[['all','전체 자산군'],['비트코인','비트코인'],['이더리움','이더리움'],['나스닥','나스닥']],t.ss.asset,'tfSS3AssetPick')
+  try{ fN+=cpState().copies.filter(function(c){ return c.status==='active'; }).length; }catch(e){}
+  var nav=[['find','전략 찾기'],['follow','따라가는 중'+(fN?' '+fN:'')],['mine','내 공유']];
+  var tabs='<div class="mk-tabs" role="tablist">'+nav.map(function(n){ return '<button type="button" role="tab" class="mk-tab'+(tab===n[0]?' on':'')+'" aria-selected="'+(tab===n[0])+'" onclick="tfShareHub(\''+n[0]+'\')">'+n[1]+'</button>'; }).join('')+'</div>';
+  var controls='';
+  if(tab==='find'){
+    var pd=mkPd(), sort=mkSortKey(t);
+    controls='<div class="mk-bar">'
+      +'<div class="mk-chips" aria-label="정렬과 기간"><span class="lb">정렬</span>'+[['ret','검증 수익률'],['mdd','안정성(MDD)'],['n','거래 수'],['months','검증 기간']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')
+      +'<span class="mk-sp"></span><span class="lb">기간</span>'+[['1y','1년'],['2y','2년'],['all','전체']].map(function(o){ var on=pd===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3PdPick(\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>'
+      +'<div class="mk-flt">'
+      +tfBkDrop('ss3-m-asset',[['all','시장 전체'],['비트코인','BTC'],['이더리움','ETH'],['나스닥','NASDAQ']],t.ss.asset||'all','tfSS3AssetPick')
+      +tfBkDrop('mk-m-kind',[['all','유형 전체'],['rule','규칙'],['agent','AI 판단']],t.ss.kind||'all','mkKindPick')
+      +tfBkDrop('mk-m-risk',[['all','위험도 전체'],['lo','낮음'],['mid','보통'],['hi','높음']],t.ss.risk||'all','mkRiskPick')
       +'<label class="ss3-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
       +'<input id="ss3-q" type="search" placeholder="전략 또는 작성자 검색" value="'+gEsc(TF_SS_Q||'')+'" aria-label="전략 검색" oninput="tfSS3Search(this.value)"></label>'
-      :'')
-    +'</div>';
+      +'</div></div>';
+  }
   var body= tab==='follow'?tfSS3FollowTab(): tab==='mine'?tfSS3MineTab(): '<div id="ss3-grid">'+tfSS3GridHtml()+'</div>';
-  gContent('<div class="tf-page tfbk ss3">'
-    +'<div class="tfbk-hero"><div class="planet" aria-hidden="true"></div>'
-    +'<h2>검증되면, 복제됩니다</h2>'
-    +'<div class="cnt" id="tfbk-cnt"></div>'
-    +'<div class="cs">모의 검증으로 계산된 거래</div>'
-    +'<div class="cs2">과거 검증 성과가 미래 수익을 보장하지 않으며, 모든 검증은 수수료와 슬리피지를 반영해요</div></div>'
-    +controls+body
+  gContent('<div class="tf-page tfbk ss3 mk">'
+    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">검증된 전략을 내 예산으로 그대로 따라가요</div></div><span class="mk-demo">시뮬레이션 데이터예요</span></div>'
+    +tabs+controls+body
     +'</div>');
   tfBkDropInit();
-  tfBkReel(1247306);
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
 }
 function tfSS3GridHtml(){
-  var t=tfSSState(), rows=tfSSRows();
+  var t=tfSSState(), rows=tfSSRows(), pd=mkPd();
   if(t.ss.asset&&t.ss.asset!=='all') rows=rows.filter(function(s){ return s.asset===t.ss.asset; });
-  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||(s.title||'').toLowerCase().indexOf(q)>=0; }); }
-  var f={ret:function(a,b){return b.r.ret-a.r.ret;},score:function(a,b){return b.score-a.score;},mdd:function(a,b){return b.r.mdd-a.r.mdd;},winrate:function(a,b){return (b.r.winRate||0)-(a.r.winRate||0);},fw:function(a,b){return (b.fw||0)-(a.fw||0);}}[t.ss.sort];
-  if(f) rows.sort(f);
+  if(t.ss.kind&&t.ss.kind!=='all') rows=rows.filter(function(s){ return (s.kind||'rule')===t.ss.kind; });
+  if(t.ss.risk&&t.ss.risk!=='all') rows=rows.filter(function(s){ return mkRisk(tfSS3PdCalc(s,pd).mdd).k===t.ss.risk; });
+  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||mkTitle(s).toLowerCase().indexOf(q)>=0; }); }
+  var f={ret:function(a,b){return tfSS3PdCalc(b,pd).ret-tfSS3PdCalc(a,pd).ret;},
+    mdd:function(a,b){return tfSS3PdCalc(b,pd).mdd-tfSS3PdCalc(a,pd).mdd;}, /* 낙폭이 얕을수록 앞 */
+    n:function(a,b){return tfSS3PdCalc(b,pd).n-tfSS3PdCalc(a,pd).n;},
+    months:function(a,b){return mkMonths(b.r)-mkMonths(a.r);}}[mkSortKey(t)];
+  rows.sort(f);
   if(t.ss.dir==='asc') rows.reverse(); /* 같은 정렬 키 재선택 = 방향 전환 (codex F17) */
-  if(!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없어요<br><button type="button" class="obtn" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
-  return rows.map(tfSS3Card).join('');
+  if(!rows.length) return '<div class="ss3-empty">'+(t.ss.kind==='agent'?'AI 판단 전략은 아직 공개된 것이 없어요':'조건에 맞는 전략이 없어요')+'<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
+  return '<div class="mk-grid">'+rows.map(mkCard).join('')+'</div>';
 }
 function tfSS3Apply(){ var g=$('ss3-grid'); if(g) g.innerHTML=tfSS3GridHtml(); }
 function tfSS3SortPick(v){
@@ -10870,7 +11061,7 @@ function tfSS3SortPick(v){
 }
 function tfSS3AssetPick(v){ var t=tfSSState(); t.ss.asset=v; tfSave(); tfShareHub('find'); }
 function tfSS3Search(v){ TF_SS_Q=v.trim(); tfSS3Apply(); }
-function tfSS3Reset(){ TF_SS_Q=''; var t=tfSSState(); t.ss.asset='all'; tfSave(); tfShareHub('find'); }
+function tfSS3Reset(){ TF_SS_Q=''; var t=tfSSState(); t.ss.asset='all'; t.ss.kind='all'; t.ss.risk='all'; tfSave(); tfShareHub('find'); }
 /* ═══ 카피트레이딩 (cp) — docs/bitget-copytrading-spec.md 의 TETH 재해석 (2단계: 트레이더 프로필) ═══
    원칙: 모든 수치에 AI 코멘트, 빈 상태는 상황 설명형, 쉬운 용어(+title 툴팁 원어),
    기간 셀렉터 화면당 1종, 전 자산 USDT 표기 (사용자 확정: 따라하기 = 카피 단일 개념). */
@@ -10926,54 +11117,18 @@ function cpAiNote(kind,d){
 function cpAiHtml(note){ return note?'<div class="cpp-ai'+(note.w?' warn':'')+'"><span class="sp">'+(note.w?'⚠':'✦')+'</span><span>'+note.t+'</span></div>':''; }
 /* ── 프로필 라우트: #/share/t/<ne>[/<탭>] ── */
 var TF_CPP={pd:30};
-function cpProfileGo(ne,tab){
-  tfTrack('cp_profile_open',{ne:ne,tab:tab||'ov'});
-  var r='#/share/t/'+ne+(tab&&tab!=='ov'?'/'+tab:'');
-  try{ if(location.hash.indexOf('#/share/t/')===0) history.replaceState(null,'',location.pathname+location.search+r);
-       else history.pushState(null,'',location.pathname+location.search+r); }catch(e){}
-  cpProfileView(ne,tab||'ov');
-}
+function cpProfileGo(ne,tab){ tfSS3Go(ne,null,'ov'); } /* D25: 프로필 = 상세 개요 탭 */
 function cpProfileRoute(h){
   var m=h.match(/^#\/share\/t\/([^\/]+?)(?:\/(ov|pos|cal|bal|cop))?$/);
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
-  cpProfileView(m[1],m[2]||'ov');
+  cpProfileView(m[1],'ov');
 }
+/* 트레이더 프로필은 상세 개요 탭으로 통합 — 라우트 #/share/t/<nick> 유지, 수치는 tfSS3PdCalc 1벌 (D25) */
 function cpProfileView(ne,tab){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
-  var s=tfSSFind(nick);
-  if(!s||s.me){ toast('지금은 볼 수 없는 트레이더예요'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('find'); return; }
-  tfSS3DlgClose(true);
-  TF_ONSHARE=true; TF_ONSTRAT=false; window.TF_ONNF=false;
-  G.cur=null; G.mode='tfcpp'; G.tabs=[]; G.activeTab=null;
-  document.body.classList.remove('kb-open'); gComposer(false);
-  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead('트레이더 프로필','',null);
-  var m=cpMeta(nick), watching=(tfS().watch||[]).indexOf(nick)>=0;
-  var TABS=[['ov','개요'],['pos','포지션'],['cal','손익 캘린더'],['bal','자금 이동'],['cop','카피하는 사람들']];
-  var lastTr=m.lastTradeMin<60?m.lastTradeMin+'분 전':Math.round(m.lastTradeMin/60)+'시간 전';
-  var body=tab==='ov'?cpOvTab(s,m):cpEmptyTab(s,m,tab);
-  TF_RENDERING=true; document.body.classList.remove('tf-route');
-  gContent('<div class="tf-page tfbk ss3 cpp">'
-    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(tfSSState().ss.tab||\'find\')">← 전략 따라하기</button>'
-    +'<div class="cpp-head">'
-    +'<div class="cpp-ava" aria-hidden="true">'+gEsc(nick.slice(0,1))+'</div>'
-    +'<div class="cpp-idm"><div class="cpp-nick">'+gEsc(nick)+'</div>'
-    +'<div class="cpp-meta num"><span>트레이딩 '+m.days+'일차</span><span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span><span>'+gEsc(s.asset)+' 주력</span><span class="num">마지막 거래 '+lastTr+'</span></div>'
-    +'<div class="cpp-bio">'+gEsc(m.bio)+'</div></div>'
-    +'<div class="cpp-acts">'
-    +'<button type="button" class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피하기</button>' /* 카피 설정 화면 (cp 3단계) */
-    +'<button type="button" class="obtn" id="cpp-watch" onclick="tfSS3WatchTgl(\''+ne+'\');cpProfileView(\''+ne+'\',\''+tab+'\')">'+(watching?'알림 끄기':'알림받기')+'</button>'
-    +'</div></div>'
-    +'<div class="tfbk-filters cpp-tabs">'+TABS.map(function(t2){ return '<button type="button" class="fp'+(tab===t2[0]?' on':'')+'" aria-pressed="'+(tab===t2[0])+'" onclick="cpProfileGo(\''+ne+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</div>'
-    +body
-    +'<div class="cpp-chips"><span class="lb">이어서 물어보기</span>'
-    +'<button type="button" class="obtn" onclick="tfSS3Ask(\''+ne+'\',\'all\')">이 트레이더의 위험 신호 분석시키기</button>' /* 제안 칩: 질문 유도 */
-    +'<button type="button" class="wbtn" onclick="cpSetupGo(\''+ne+'\')">카피 시작하기</button>' /* 액션 칩: 기능 실행 (cp 3단계) */
-    +'</div>'
-    +'<div class="cpp-foot">전 자산 USDT 표기, 시뮬레이션 데이터 기준. 통계는 시간 단위로 갱신돼요.</div>'
-    +'</div>');
-  TF_RENDERING=false;
-  var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
+  var ne2=tfSSNe(nick), pd=mkPd();
+  try{ history.replaceState(null,'',location.pathname+location.search+'#/share/s/'+ne2+'/'+pd); }catch(e){}
+  tfSS3DetailRender(ne2,pd,'ov');
 }
 function cpPdPick(ne,d){ TF_CPP.pd=d; cpProfileView(ne,'ov'); }
 function cpOvTab(s,m){
@@ -11091,7 +11246,7 @@ function cpCalc(c2){
 /* ── Adjust balance 모달 — 따라가기 탭과 카피 상세가 공유 (핵심 원칙 4: 손실 중 입금 보호) ── */
 var TF_CPA={dir:'add'};
 function cpAdjDlg(cid){
-  var c2=cpFind(cid); if(!c2||c2.status!=='active'){ toast('진행 중인 카피가 아니에요'); return; }
+  var c2=cpFind(cid); if(!c2||c2.status!=='active'){ toast('진행 중인 따라가기가 아니에요'); return; }
   TF_CPA={dir:'add'};
   cpAdjRender(cid);
 }
@@ -11099,16 +11254,16 @@ function cpAdjRender(cid){
   var c2=cpFind(cid); if(!c2) return;
   var cp=cpState(), d=cpCalc(c2), dir=TF_CPA.dir, cfg=cpCfg();
   var pnlP=d.pnlPct*100, up=pnlP>=0;
-  tfSS3Dlg('잔고 조정, '+c2.nick,
-    '<div class="cpa-pnl">이 카피의 현재 수익률 <b class="num '+(up?'u':'d')+'">'+(up?'+':'')+pnlP.toFixed(1)+'%</b>'
+  tfSS3Dlg('예산 조정, '+c2.nick,
+    '<div class="cpa-pnl">이 따라가기의 현재 수익률 <b class="num '+(up?'u':'d')+'">'+(up?'+':'')+pnlP.toFixed(1)+'%</b>'
     +(!up&&pnlP<=(cfg.LOSS_GUARD||-0.2)*100?'<br><span style="color:#e8d49a">손실 구간에서 추가 입금은 평균 단가를 낮추지만 위험도 같이 커져요.</span>':'')+'</div>'
-    +'<div class="cpa-tgl"><button type="button" class="'+(dir==='add'?'on':'')+'" onclick="TF_CPA.dir=\'add\';cpAdjRender(\''+cid+'\')">추가 입금</button>'
-    +'<button type="button" class="'+(dir==='out'?'on':'')+'" onclick="TF_CPA.dir=\'out\';cpAdjRender(\''+cid+'\')">출금</button></div>'
+    +'<div class="cpa-tgl"><button type="button" class="'+(dir==='add'?'on':'')+'" onclick="TF_CPA.dir=\'add\';cpAdjRender(\''+cid+'\')">예산 추가</button>'
+    +'<button type="button" class="'+(dir==='out'?'on':'')+'" onclick="TF_CPA.dir=\'out\';cpAdjRender(\''+cid+'\')">회수</button></div>'
     +'<div class="cps-fld" style="margin-bottom:6px"><div class="cps-in"><input id="cpa-amt" type="number" inputmode="decimal" placeholder="금액" oninput="cpAdjSync(\''+cid+'\')"><span class="un">USDT</span>'
     +'<button type="button" class="mx" onclick="$(\'cpa-amt\').value='+(dir==='add'?cp.spot:Math.floor(d.avail*100)/100)+';cpAdjSync(\''+cid+'\')">최대</button></div>'
-    +'<div class="cps-bal">'+(dir==='add'?'추가 가능 (스팟 잔고) <b class="num">'+cpUsd(cp.spot,2)+'</b>':'출금 가능 <b class="num">'+cpUsd(d.avail,2)+'</b>')+'</div>'
+    +'<div class="cps-bal">'+(dir==='add'?'추가 가능 <b class="num">'+cpUsd(cp.spot,2)+'</b>':'회수 가능 <b class="num">'+cpUsd(d.avail,2)+'</b>')+'</div>'
     +'<div class="cps-err" id="cpa-err" style="display:block;color:#ee9a91"></div></div>'
-    +'<div class="cpa-note">'+(dir==='add'?'스팟 계좌에서 카피 계좌로 옮겨져요. 추가한 금액은 다음 진입부터 반영돼요.':'카피 계좌에서 스팟 계좌로 옮겨져요. 포지션에 잡혀 있는 금액은 출금할 수 없어요.')+'</div>'
+    +'<div class="cpa-note">'+(dir==='add'?'추가한 금액은 다음 진입부터 반영돼요.':'포지션에 잡혀 있는 금액은 회수할 수 없어요.')+'</div>'
     +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
     +'<button type="button" class="wbtn" id="cpa-go" disabled onclick="cpAdjGo(\''+cid+'\')">확인</button></div>');
 }
@@ -11118,8 +11273,8 @@ function cpAdjSync(cid){
   var v=parseFloat(el&&el.value), dir=TF_CPA.dir, msg='';
   if(el&&el.value!==''){
     if(!isFinite(v)||v<=0) msg='0보다 큰 금액을 입력해주세요';
-    else if(dir==='add'&&v>cp.spot) msg='스팟 잔고보다 커요';
-    else if(dir==='out'&&v>d.avail+1e-9) msg='출금 가능 금액을 넘었어요';
+    else if(dir==='add'&&v>cp.spot) msg='사용 가능 금액보다 커요';
+    else if(dir==='out'&&v>d.avail+1e-9) msg='회수 가능 금액을 넘었어요';
   }
   if(err) err.textContent=msg;
   var ok=el&&el.value!==''&&isFinite(v)&&v>0&&!msg;
@@ -11134,7 +11289,7 @@ function cpAdjGo(cid){
   if(dir==='add'&&d.pnlPct<=(cfg.LOSS_GUARD||-0.2)&&!TF_CPA.confirmed){
     TF_CPA.confirmed=false;
     tfSS3Dlg('잠깐, 손실 구간이에요',
-      '<div class="ntc">이 카피는 지금 <b style="color:#ee766a">'+(d.pnlPct*100).toFixed(1)+'%</b> 손실 중이에요.<br>'
+      '<div class="ntc">이 따라가기는 지금 <b style="color:#ee766a">'+(d.pnlPct*100).toFixed(1)+'%</b> 손실 중이에요.<br>'
       +'손실 후 반복 입금은 수익률을 실제보다 부풀려 보이게 하고, 같은 전략에 위험만 키울 수 있어요.<br>그래도 추가할까요?</div>'
       +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="TF_CPA.confirmed=false;cpAdjRender(\''+cid+'\')">다시 생각할게요</button>'
       +'<button type="button" class="wbtn" onclick="TF_CPA.confirmed=true;cpAdjCommit(\''+cid+'\','+v+',\'add\')">'+cpUsd(v,0)+' 추가할게요</button></div>');
@@ -11144,29 +11299,18 @@ function cpAdjGo(cid){
 }
 function cpAdjCommit(cid,v,dir){
   var c2=cpFind(cid), cp=cpState(); if(!c2) return;
-  if(dir==='add'){ if(v>cp.spot){ toast('스팟 잔고가 부족해요'); return; } cp.spot-=v; }
+  if(dir==='add'){ if(v>cp.spot){ toast('사용 가능 금액이 부족해요'); return; } cp.spot-=v; }
   else { cp.spot+=v; }
   c2.ledger.push({at:Date.now(),type:dir,amt:v}); /* append-only */
   TF_CPA.confirmed=false;
   tfSaveNow(); tfSS3DlgClose();
   tfTrack('cp_adjust',{id:cid,dir:dir,amt:v});
-  toast(dir==='add'?cpUsd(v,0)+'를 카피 계좌에 추가했어요':cpUsd(v,0)+'를 스팟으로 출금했어요');
+  toast(dir==='add'?cpUsd(v,0)+'를 예산에 추가했어요':cpUsd(v,0)+'를 회수했어요');
   if(G.mode==='tfss3') tfShareHub('follow');
   else if(G.mode==='tfcpx') cpDetailView(cid,'bal'); /* 상세에서 조정하면 자금 이동 탭으로 (cp 5단계) */
 }
 /* 카피 종료 — 정산: 분배 차감 후 회수, 원장 close 엔트리 (강제 청산 아님: 수동 결정) */
-function cpCloseDlg(cid){
-  var c2=cpFind(cid); if(!c2||c2.status!=='active') return;
-  var d=cpCalc(c2);
-  tfSS3Dlg('카피 종료, '+c2.nick,
-    '<div class="ntc">보유 중인 카피 포지션은 현재가로 정리되고, 정산 후 남은 금액이 스팟으로 돌아와요.</div>'
-    +'<div class="cpd-kv" style="margin:14px 0">'
-    +'<div><small>순손익 (분배 차감 후)</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
-    +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>'
-    +'<div><small>돌려받을 금액</small><b class="num">'+cpUsd(Math.max(0,d.est))+'</b></div></div>'
-    +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">계속 카피</button>'
-    +'<button type="button" class="ss3-dbtn" onclick="cpClose(\''+cid+'\')">종료하고 정산</button></div>');
-}
+function cpCloseDlg(cid){ mkStopDlg(cid); } /* S7: 중단 3택 (지금 정리 / 원본 청산 대기 / 직접 관리) */
 function cpClose(cid){
   var c2=cpFind(cid), cp=cpState(); if(!c2||c2.status!=='active') return;
   var d=cpCalc(c2);
@@ -11176,7 +11320,7 @@ function cpClose(cid){
   cp.spot+=back;
   tfSaveNow(); tfSS3DlgClose();
   tfTrack('cp_close',{id:cid,net:d.net});
-  toast('카피를 종료했어요. '+cpUsd(back,0)+'가 스팟으로 돌아왔어요');
+  toast('따라가기를 중단했어요'+(c2.stopMode&&c2.stopMode!=='now'?' ('+MK_STOP_L[c2.stopMode]+')':'')+'. '+cpUsd(back,0)+'가 예산으로 돌아왔어요');
   tfShareHub('follow');
 }
 /* ── Copy details (5단계): 카피별 상세 5탭 — 헤더/탭 전부 cpCalc 단일 소스 ── */
@@ -11194,37 +11338,38 @@ function cpDetailRoute(h){
 }
 function cpDetailView(cid,tab){
   var c2=cpFind(cid);
-  if(!c2){ toast('카피 기록을 찾을 수 없어요'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return; }
+  if(!c2){ toast('따라가기 기록을 찾을 수 없어요'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return; }
   tfSS3DlgClose(true);
   TF_ONSHARE=true; TF_ONSTRAT=false; window.TF_ONNF=false;
   G.cur=null; G.mode='tfcpx'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead('카피 상세','',null);
+  gChead('따라가기 상세','',null);
   var d=cpCalc(c2), m=cpMeta(c2.nick), ne=tfSSNe(c2.nick), on=c2.status==='active';
   var TABS=[['pos','포지션'],['hist','청산 이력'],['share','수익 분배'],['bal','자금 이동'],['tx','거래 내역']];
   var body= tab==='pos'?cpxPos(c2,d):tab==='hist'?cpxHist(c2,d):tab==='share'?cpxShare(c2,d,m):tab==='bal'?cpxBal(c2,d):cpxTx(c2,d);
   var K=function(lb,v,clr,tip){ return '<div class="cpp-kpi"><small'+(tip?' title="'+tip+'"':'')+'>'+lb+'</small><b class="num'+(clr?(v>=0?' u':' d'):'')+'">'+cpUsd(v)+'</b></div>'; };
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   gContent('<div class="tf-page tfbk ss3 cpp cpx">'
-    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(\'follow\')">← 따라가기</button>'
+    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(\'follow\')">← 따라가는 중</button>'
     +'<div class="cpp-head"><div class="cpp-ava" aria-hidden="true">'+gEsc(c2.nick.slice(0,1))+'</div>'
     +'<div class="cpp-idm"><div class="cpp-nick"><button type="button" class="nm" style="font-size:19px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button></div>'
     +'<div class="cpp-meta num"><span>비율 따라가기</span><span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span>'
     +'<span>'+new Date(c2.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+' 시작</span>'
-    +'<span class="'+(on?'':'')+'">'+(on?'카피 중':'종료됨')+'</span></div></div>'
+    +'<span class="'+(on?'':'')+'">'+(on?'따라가는 중':'중단됨')+'</span></div></div>'
     +'<div class="cpp-acts">'
-    +(on?'<button type="button" class="obtn" onclick="cpAdjDlg(\''+cid+'\')">잔고 조정</button>'
+    +(on?'<button type="button" class="obtn" onclick="cpAdjDlg(\''+cid+'\')">예산 조정</button>'
       +'<button type="button" class="obtn" onclick="cpEditSheet(\''+cid+'\')">설정</button>'
-      +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+cid+'\')">카피 종료</button>':'')
+      +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+cid+'\')">중단</button>':'')
     +'</div></div>'
+    +'<div class="mk-acct"><b>내 따라가기 계정</b><span>내 예산 기준 손익이에요. 원본 전략의 검증 수치와는 달라요</span></div>'
     +'<div class="cpd-sum num">'
     +K('평가 금액',d.est)+K('가용',d.avail)+K('순손익 (분배 차감 후)',d.net,1)
     +K('미실현 손익',d.unreal,1)+K('실현 손익',d.realized,1)+K('수익 분배 지급',d.share,0,'Profit share amount')
     +'</div>'
     +'<div class="tfbk-filters cpp-tabs">'+TABS.map(function(t2){ return '<button type="button" class="fp'+(tab===t2[0]?' on':'')+'" aria-pressed="'+(tab===t2[0])+'" onclick="cpDetailGo(\''+cid+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</div>'
     +body
-    +'<div class="cpp-foot">전 자산 USDT 표기, 시뮬레이션 데이터 기준</div>'
+    +'<div class="cpp-foot">USDT 표기. 시뮬레이션 데이터예요</div>'
     +'</div>');
   TF_RENDERING=false;
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
@@ -11232,21 +11377,21 @@ function cpDetailView(cid,tab){
 /* 설정 — 데모 범위: 페어 변경만 즉시, 모드/금액은 종료 후 재시작 안내 (상황 설명형) */
 function cpEditSheet(cid){
   var c2=cpFind(cid); if(!c2) return;
-  tfSS3Dlg('카피 설정, '+c2.nick,
-    '<div class="ntc">따라갈 페어: <b>'+c2.pairs.map(gEsc).join(', ')+'</b><br>모드와 카피 금액 변경은 카피를 종료한 뒤 다시 시작할 때 고를 수 있어요.<br>잔고는 잔고 조정에서 언제든 바꿀 수 있어요.</div>'
+  tfSS3Dlg('따라가기 설정, '+c2.nick,
+    '<div class="ntc">따라갈 페어: <b>'+c2.pairs.map(gEsc).join(', ')+'</b><br>최대 손실 '+((c2.adv&&c2.adv.maxLoss)||-20)+'%. 최대 손실 변경은 중단한 뒤 다시 시작할 때 고를 수 있어요.<br>예산은 예산 조정에서 언제든 바꿀 수 있어요.</div>'
     +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">닫기</button>'
-    +'<button type="button" class="wbtn" onclick="tfSS3DlgClose();cpAdjDlg(\''+cid+'\')">잔고 조정 열기</button></div>');
+    +'<button type="button" class="wbtn" onclick="tfSS3DlgClose();cpAdjDlg(\''+cid+'\')">예산 조정 열기</button></div>');
 }
 /* 포지션 탭 — 오픈 포지션 파생 + 수동 정리 (성역: 크레딧과 무관하게 항상 가능) */
 function cpxPos(c2,d){
   var s2=tfSSFind(c2.nick);
   if(!d.posOpen||c2.status!=='active')
-    return '<div class="cpp-empty"><b>지금 열려 있는 카피 포지션이 없어요</b>'
-      +'트레이더가 진입하면 자동으로 함께 진입하고, 여기에 실시간으로 표시돼요.'
-      +'<span class="nx">'+(c2.status==='active'?'포지션이 없는 동안에도 카피는 유지돼요.':'종료된 카피예요. 기록 탭에서 이력을 볼 수 있어요.')+'</span></div>';
+    return '<div class="cpp-empty"><b>지금 열려 있는 따라가기 포지션이 없어요</b>'
+      +'원본 전략이 진입하면 자동으로 함께 진입하고, 여기에 실시간으로 표시돼요.'
+      +'<span class="nx">'+(c2.status==='active'?'포지션이 없는 동안에도 따라가기는 유지돼요.':'중단된 따라가기예요. 청산 이력 탭에서 기록을 볼 수 있어요.')+'</span></div>';
   var eq=s2.r.eq, px=PRICE[PRICE.length-1], entryPx=px/(1+d.unreal/Math.max(1,c2.amount));
   var size=c2.amount*0.4, up=d.unreal>=0, roe=d.unreal/size*100;
-  return '<div class="cpx-sumline">포지션 1건이 열려 있어요. 미실현 손익 <b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">'+cpUsd(d.unreal)+'</b>. 트레이더의 손절 규칙까지 그대로 따라가요.</div>'
+  return '<div class="cpx-sumline">포지션 1건이 열려 있어요. 미실현 손익 <b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">'+cpUsd(d.unreal)+'</b>. 원본 전략의 손절 규칙까지 그대로 따라가요.</div>'
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
     +'<th>페어</th><th>방향</th><th>규모</th><th>평균 진입가</th><th>현재가</th><th title="Est. liquidation price">청산 위험</th><th>손절 / 목표</th><th title="Unrealized PnL (ROE)">미실현 손익</th>'
     +'</tr></thead><tbody><tr>'
@@ -11259,7 +11404,7 @@ function cpxPos(c2,d){
 }
 function cpFlatDlg(cid){
   var c2=cpFind(cid); if(!c2) return; var d=cpCalc(c2);
-  tfSS3Dlg('포지션 전체 정리','<div class="ntc">열려 있는 카피 포지션을 현재가로 정리해요.<br>미실현 '+cpUsd(d.unreal)+'이 실현 손익으로 확정되고, 카피는 유지되어 다음 진입부터 다시 따라가요.</div>'
+  tfSS3Dlg('포지션 전체 정리','<div class="ntc">열려 있는 따라가기 포지션을 현재가로 정리해요.<br>미실현 '+cpUsd(d.unreal)+'이 실현 손익으로 확정되고, 따라가기는 유지되어 다음 진입부터 다시 따라가요.</div>'
     +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
     +'<button type="button" class="ss3-dbtn" onclick="cpFlat(\''+cid+'\')">정리하기</button></div>');
 }
@@ -11277,7 +11422,7 @@ function cpxHist(c2,d){
   var s2=tfSSFind(c2.nick);
   var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.flatI!=null?c2.flatI:1e15;
   var tr=(s2?s2.r.trades||[]:[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=endI; }).slice(-30).reverse();
-  if(!tr.length) return '<div class="cpp-empty"><b>아직 청산된 카피 거래가 없어요</b>첫 거래가 청산되면 진입가, 청산가, 손익이 여기에 쌓여요.</div>';
+  if(!tr.length) return '<div class="cpp-empty"><b>아직 청산된 따라가기 거래가 없어요</b>첫 거래가 청산되면 진입가, 청산가, 손익이 여기에 쌓여요.</div>';
   var wins=tr.filter(function(x){return x.pnl>0;}).length;
   var sum=tr.reduce(function(a,x){return a+x.pnl;},0)*c2.amount;
   var KIND={sl:'손절 규칙',tp:'목표가 도달',time:'기간 청산'};
@@ -11302,7 +11447,7 @@ function cpxHist(c2,d){
 function cpxShare(c2,d,m){
   if(d.realized<=0&&d.share<=0)
     return '<div class="cpp-empty"><b>아직 지급된 수익 분배가 없어요</b>'
-      +'실현 수익이 나면 그중 '+Math.round(m.share*100)+'%가 트레이더에게 분배되고 내역이 여기에 남아요.'
+      +'실현 수익이 나면 그중 '+Math.round(m.share*100)+'%가 작성자에게 분배되고 내역이 여기에 남아요.'
       +'<span class="nx">미실현 수익에는 분배가 붙지 않아요. 손실에는 당연히 없어요.</span></div>';
   return cpAiHtml({w:0,t:'분배는 실현 수익에서만 차감돼요. 지금까지 실현 수익 '+cpUsd(Math.max(0,d.realized))+' 중 '+Math.round(m.share*100)+'%가 분배됐어요.'})
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
@@ -11321,15 +11466,15 @@ function cpxBal(c2,d){
   var adds=c2.ledger.filter(function(e){return e.type==='add';}).length;
   var warn=(adds>=3&&d.pnlPct<0)?cpAiHtml({w:1,t:'손실 구간에서 입금이 '+adds+'회 반복됐어요. 반복 충전은 수익률을 실제보다 부풀려 보이게 해요. 금액을 늘리기 전에 전략 자체를 다시 점검해보세요.'}):'';
   return warn
-    +'<div class="cpx-sumline">입출금 '+rows.length+'건. 모든 이동은 스팟 계좌와 카피 계좌 사이에서 일어나요 (최근 180일).</div>'
+    +'<div class="cpx-sumline">예산 추가와 회수 '+rows.length+'건 (최근 180일).</div>'
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
     +'<th>시각</th><th>유형</th><th>금액</th><th>자산</th><th>방향</th>'
     +'</tr></thead><tbody>'
     +rows.map(function(e){
       var add=e.type==='add';
       return '<tr><td class="num">'+new Date(e.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</td>'
-        +'<td>'+(add?'입금':'출금')+'</td><td class="num '+(add?'u':'')+'">'+(add?'+':'-')+cpUsd(e.amt)+'</td>'
-        +'<td>USDT</td><td>'+(add?'스팟 → 카피':'카피 → 스팟')+'</td></tr>';
+        +'<td>'+(add?'추가':'회수')+'</td><td class="num '+(add?'u':'')+'">'+(add?'+':'-')+cpUsd(e.amt)+'</td>'
+        +'<td>USDT</td><td>'+(add?'예산 → 따라가기':'따라가기 → 예산')+'</td></tr>';
     }).join('')
     +'</tbody></table></div>';
 }
@@ -11346,10 +11491,10 @@ function cpxTx(c2,d){
     rows.push({at:idxToDate(x.entry),k:'진입',pair:c2.pairs[0],qty:cpUsd(c2.amount*0.4,0),fee:cpUsd(c2.amount*0.001),chg:'-'+cpUsd(c2.amount*0.001)});
     rows.push({at:idxToDate(x.exit!=null?x.exit:x.entry),k:'청산',pair:c2.pairs[0],qty:cpUsd(c2.amount*0.4,0),fee:cpUsd(c2.amount*0.001),chg:(x.pnl>=0?'+':'')+cpUsd(x.pnl*c2.amount)});
   });
-  c2.ledger.forEach(function(e){ rows.push({at:new Date(e.at),k:e.type==='add'?'이체 입금':'이체 출금',pair:'-',qty:cpUsd(e.amt,0),fee:'0.00 USDT',chg:(e.type==='add'?'+':'-')+cpUsd(e.amt)}); });
+  c2.ledger.forEach(function(e){ rows.push({at:new Date(e.at),k:e.type==='add'?'예산 추가':'예산 회수',pair:'-',qty:cpUsd(e.amt,0),fee:'0.00 USDT',chg:(e.type==='add'?'+':'-')+cpUsd(e.amt)}); });
   rows.sort(function(a,b){ return b.at-a.at; });
-  return '<div class="cpx-sumline">이 카피에서 지금까지 <b>체결 '+tr.length*2+'건</b>이 있었고, 수수료로 약 <b class="num">'+cpUsd(fee)+'</b>, 펀딩비로 약 <b class="num" style="color:#ee766a">'+cpUsd(funding)+'</b>를 지출했어요.</div>'
-    +cpAiHtml({w:0,t:'펀딩비는 포지션을 들고 있는 동안 주기적으로 오가는 비용이에요. 트레이더가 포지션을 오래 들수록 커져요.'})
+  return '<div class="cpx-sumline">이 따라가기에서 지금까지 <b>체결 '+tr.length*2+'건</b>이 있었고, 수수료로 약 <b class="num">'+cpUsd(fee)+'</b>, 펀딩비로 약 <b class="num" style="color:#ee766a">'+cpUsd(funding)+'</b>를 지출했어요.</div>'
+    +cpAiHtml({w:0,t:'펀딩비는 포지션을 들고 있는 동안 주기적으로 오가는 비용이에요. 원본 전략이 포지션을 오래 들수록 커져요.'})
     +'<details class="cpx-raw"><summary>원본 거래 내역 표 펼치기 ('+rows.length+'건)</summary>'
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
     +'<th>시각</th><th>구분</th><th>페어</th><th>수량</th><th>수수료</th><th>잔고 변화</th>'
@@ -11374,8 +11519,8 @@ function cpDashSec(){
     var d=cpCalc(c2), ne=tfSSNe(c2.nick), on=c2.status==='active';
     return '<div class="cpd-card"><div class="cpd-hd">'
       +'<button type="button" class="nm" style="font-size:15px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button>'
-      +'<span class="tag">비율 따라가기</span><span class="tag" title="Profit share ratio">분배 '+Math.round((cpMeta(c2.nick).share)*100)+'%</span>'
-      +'<span class="tag '+(on?'on':'off')+'">'+(on?'카피 중':'종료됨')+'</span>'
+      +'<span class="tag">비율 따라가기</span><span class="tag" title="Profit share ratio">분배 '+Math.round((cpMeta(c2.nick).share)*100)+'%</span><span class="tag num">최대 손실 '+((c2.adv&&c2.adv.maxLoss)||-20)+'%</span>'
+      +'<span class="tag '+(on?'on':'off')+'">'+(on?'따라가는 중':'중단됨')+'</span>'
       +'<span style="flex:1"></span><span class="cps-static num">'+new Date(c2.at).toLocaleDateString('ko-KR')+' 시작</span></div>'
       +(on?'<div class="cpd-kv">'
       +'<div><small>순손익</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
@@ -11391,21 +11536,21 @@ function cpDashSec(){
       +'<div><small>회수 금액</small><b class="num">'+cpUsd((c2.settle&&c2.settle.back)||0)+'</b></div>'
       +'</div>')
       +(on?'<div class="cpd-acts"><button type="button" class="wbtn" onclick="cpDetailGo(\''+c2.id+'\')">상세</button>'
-        +'<button type="button" class="obtn" onclick="cpAdjDlg(\''+c2.id+'\')">잔고 조정</button>'
-        +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+c2.id+'\')">카피 종료</button></div>'
-        :'<div class="cpd-acts"><button type="button" class="obtn" onclick="cpDetailGo(\''+c2.id+'\')">기록 보기</button><span class="cps-static" style="align-self:center">정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</span></div>')
+        +'<button type="button" class="obtn" onclick="cpAdjDlg(\''+c2.id+'\')">예산 조정</button>'
+        +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+c2.id+'\')">중단</button></div>'
+        :'<div class="cpd-acts"><button type="button" class="obtn" onclick="cpDetailGo(\''+c2.id+'\')">기록 보기</button><span class="cps-static" style="align-self:center">'+(c2.stopMode&&MK_STOP_L[c2.stopMode]?MK_STOP_L[c2.stopMode]+'로 중단, ':'')+'정산 완료, '+cpUsd((c2.settle&&c2.settle.back)||0,0)+' 회수</span></div>')
       +'</div>';
   }).join('');
-  return '<div class="ss3-ch" style="margin:4px 0 12px"><b>실시간 카피</b><span class="mt2">'+act.length+'건 진행 중, 전 자산 USDT 표기</span></div>'
+  return '<div class="ss3-ch" style="margin:4px 0 12px"><b>내 따라가기 계정</b><span class="mt2">'+act.length+'건 진행 중, 내 예산 기준 손익 (원본 검증 수치와 달라요), USDT 표기</span></div>'
     +'<div class="cpd-sum num">'
-    +K('카피 자산 평가',sum.est)+K('가용 잔고',sum.avail)+K('순손익 (분배 차감 후)',sum.net)
+    +K('평가 금액',sum.est)+K('가용 잔고',sum.avail)+K('순손익 (분배 차감 후)',sum.net)
     +K('미실현 손익',sum.unreal)+K('실현 손익',sum.realized)+K('수익 분배 지급',sum.share,'Profit share amount')
     +'</div>'
-    +(sum.net<0?cpAiHtml({w:1,t:'지금은 손실 구간이에요. 카피는 트레이더의 손절 규칙까지 그대로 따라가니, 원칙이 지켜지는지 프로필의 판단 기록을 확인해보세요.'}):cpAiHtml({w:0,t:'수익 분배는 실현 수익에서만 차감돼요. 미실현 수익에는 분배가 붙지 않아요.'}))
-    +'<div class="cpd-flt"><button type="button" class="'+(TF_CPD.flt==='active'?'on':'')+'" onclick="TF_CPD.flt=\'active\';tfShareHub(\'follow\')">카피 중</button>'
-    +'<button type="button" class="'+(TF_CPD.flt==='all'?'on':'')+'" onclick="TF_CPD.flt=\'all\';tfShareHub(\'follow\')">종료 포함</button></div>'
+    +(sum.net<0?cpAiHtml({w:1,t:'지금은 손실 구간이에요. 따라가기는 원본의 손절 규칙까지 그대로 따라가요. 원칙이 지켜지는지 상세의 활동 탭에서 확인해보세요.'}):cpAiHtml({w:0,t:'수익 분배는 실현 수익에서만 차감돼요. 미실현 수익에는 분배가 붙지 않아요.'}))
+    +'<div class="cpd-flt"><button type="button" class="'+(TF_CPD.flt==='active'?'on':'')+'" onclick="TF_CPD.flt=\'active\';tfShareHub(\'follow\')">따라가는 중</button>'
+    +'<button type="button" class="'+(TF_CPD.flt==='all'?'on':'')+'" onclick="TF_CPD.flt=\'all\';tfShareHub(\'follow\')">중단 포함</button></div>'
     +rows
-    +'<div class="ss3-ch" style="margin:26px 0 12px"><b>복제 검증</b><span class="mt2">전략을 복제해 내 계정으로 재검증한 기록</span></div>';
+    +'<div class="ss3-ch" style="margin:26px 0 12px"><b>가져온 설정</b><span class="mt2">설정을 가져와 내 조건으로 다시 검증한 기록</span></div>';
 }
 var TF_CPS={mode:'ratio',pairs:null};
 /* 진입 게이트: 로그인 + 관망 차단 (신규 카피 시작은 AI 판단 수반) */
@@ -11414,99 +11559,37 @@ function cpSetupGo(ne){
   if(typeof tfAiGate==='function'&&!tfAiGate()) return;
   tfTrack('cp_setup_open',{ne:ne});
   TF_CPS={mode:'ratio',pairs:null};
-  var r='#/share/copy/'+ne;
-  try{ if(location.hash.indexOf('#/share/copy/')===0) history.replaceState(null,'',location.pathname+location.search+r);
-       else history.pushState(null,'',location.pathname+location.search+r); }catch(e){}
-  cpSetupView(ne);
+  mkFollowSheet(ne); /* D17: 바텀시트 1장 (예산 → 최대 손실 → 요약 → 시작), 해시 이동 없음 */
 }
+/* 딥링크 #/share/copy/<nick> — 상세 개요를 그리고 그 위에 시트를 연다 (라우트 유지) */
 function cpSetupRoute(h){
   var m=h.match(/^#\/share\/copy\/([^\/]+)$/);
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
-  cpSetupView(m[1]);
+  var nick; try{ nick=decodeURIComponent(m[1]); }catch(e){ nick=m[1]; }
+  var ne=tfSSNe(nick), pd=mkPd();
+  try{ history.replaceState(null,'',location.pathname+location.search+'#/share/s/'+ne+'/'+pd); }catch(e){}
+  tfSS3DetailRender(ne,pd,'ov');
+  if(window.TF_STATE_READY&&tfSSFind(nick)) cpSetupGo(ne);
 }
-function cpSetupView(ne){
-  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
-  var s2=tfSSFind(nick);
-  if(!s2||s2.me){ toast('지금은 카피할 수 없는 트레이더예요'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('find'); return; }
-  tfSS3DlgClose(true);
-  TF_ONSHARE=true; TF_ONSTRAT=false; window.TF_ONNF=false;
-  G.cur=null; G.mode='tfcps'; G.tabs=[]; G.activeTab=null;
-  document.body.classList.remove('kb-open'); gComposer(false);
-  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  gChead('카피 설정','',null);
-  var m=cpMeta(nick), cp=cpState(), cfg=cpCfg();
-  var pf=cpPerf(s2,180);
-  var mainPair=CPP_PAIR[s2.asset]||s2.asset;
-  var pairs=TF_CPS.pairs||[mainPair];
-  var mode=TF_CPS.mode||'ratio';
-  var form= mode==='margin'
-    ?'<div class="cps-modenote">고정 마진: 트레이더의 비중과 무관하게 주문마다 정해둔 금액만큼만 따라가요.</div>'
-      +'<div class="cpp-empty" style="margin:6px 0 4px"><b>고정 마진 모드는 준비 중이에요</b>'
-      +'지금은 비율 따라가기로 시작할 수 있어요. 고정 마진이 열리면 알림으로 알려드릴게요.'
-      +'<button type="button" class="obtn" style="margin-top:14px" onclick="TF_CPS.mode=\'ratio\';cpSetupView(\''+ne+'\')">비율 따라가기로 설정하기</button></div>'
-    :'<div class="cps-modenote">비율 따라가기: 트레이더가 자기 자산의 몇 %를 쓰면, 내 카피 금액에서도 같은 비율만큼 따라 들어가요.</div>'
-      +'<div class="cps-fld" id="cps-amt-fld"><label for="cps-amt">카피 금액</label>'
-      +'<div class="cps-in"><input id="cps-amt" type="number" inputmode="decimal" min="'+(cfg.MIN_COPY_USDT||50)+'" placeholder="최소 '+(cfg.MIN_COPY_USDT||50)+'" oninput="cpFormSync()"><span class="un">USDT</span>'
-      +'<button type="button" class="mx" onclick="$(\'cps-amt\').value='+cp.spot+';cpFormSync()">최대</button></div>'
-      +'<div class="cps-bal">스팟 잔고 <b class="num" id="cps-spot">'+cpUsd(cp.spot,2)+'</b>'
-      +'<button type="button" class="plus" aria-label="스팟 충전" onclick="cpTopup(\''+ne+'\')">+</button><span>충전은 스팟 계좌에서 카피 계좌로 옮겨져요</span></div>'
-      +'<div class="cps-err" id="cps-amt-err"></div></div>'
-      +'<div class="cps-row"><span>따라갈 페어</span><b id="cps-pairs">'+gEsc(pairs[0])+(pairs.length>1?' 외 '+(pairs.length-1)+'개':'')+'</b>'
-      +'<button type="button" class="obtn" onclick="cpPairSheet(\''+ne+'\')">변경</button></div>'
-      +'<details class="cps-adv"><summary><span>고급 설정</span><span class="sm">트레이더 설정 그대로 따름</span></summary>'
-      +'<div class="cps-row"><span>마진 모드</span><span class="cps-static">교차, 트레이더 설정을 따라요</span></div>' /* 죽은 드롭다운 대신 정적 텍스트 (수정 지침) */
-      +'<div class="cps-row"><span>레버리지</span><span class="cps-static">트레이더 레버리지 따름</span></div>'
-      +'<div class="cps-row"><span title="Max entry slippage">체결가 차이 허용</span><span class="cps-static">시스템 기본</span></div>'
-      +'<div class="cps-row"><span>주문당 마진 상한</span><span class="cps-static num">95%</span></div>'
-      +'<div class="cps-row"><span>최대 포지션 금액</span><span class="cps-static num" id="cps-maxpos">카피 금액의 5배까지, 자동</span></div>' /* 무의미한 기본값 노출 금지 — 금액 기준 자동 스케일 */
-      +'</details>'
-      +'<button type="button" class="cps-cta" id="cps-cta" disabled onclick="cpStart(\''+ne+'\')">카피 시작</button>'
-      +'<div class="cpp-foot" style="margin-top:12px">시작 후에도 언제든 중지할 수 있어요. 수익이 나면 '+Math.round(m.share*100)+'%를 트레이더와 나눠요.</div>';
-  TF_RENDERING=true; document.body.classList.remove('tf-route');
-  gContent('<div class="tf-page tfbk ss3 cpp cps">'
-    +'<button type="button" class="ss3-back" onclick="cpProfileGo(\''+ne+'\')">← 트레이더 프로필</button>'
-    +'<div class="cps-wrap">'
-    +'<div class="cps-form">'
-    +'<div class="cps-modes" role="tablist"><button type="button" class="'+(mode==='ratio'?'on':'')+'" onclick="TF_CPS.mode=\'ratio\';cpSetupView(\''+ne+'\')">비율 따라가기</button>'
-    +'<button type="button" class="'+(mode==='margin'?'on':'')+'" onclick="TF_CPS.mode=\'margin\';cpSetupView(\''+ne+'\')">고정 마진</button></div>'
-    +form
-    +'</div>'
-    +'<aside class="cps-side">'
-    +'<div class="nk"><div class="cpp-ava" style="width:40px;height:40px;font-size:17px">'+gEsc(nick.slice(0,1))+'</div><div><b>'+gEsc(nick)+'</b><div class="cps-static num">트레이딩 '+m.days+'일차</div></div></div>'
-    +'<div class="bio">'+gEsc(m.bio)+'</div>'
-    +'<div class="cps-row"><span title="Profit share ratio">수익 분배</span><b class="num">'+Math.round(m.share*100)+'%</b></div>'
-    +'<div class="cps-row"><span>180일 수익률</span><b class="num" style="color:'+(pf.roi>=0?'#56c486':'#ee766a')+'">'+(pf.roi>=0?'+':'')+pf.roi.toFixed(2)+'%</b></div>'
-    +'<div class="cps-row"><span>180일 손익</span><b class="num">'+cpUsd(pf.pnl)+'</b></div>'
-    +'<div class="cps-row"><span>카피어 누적 수익</span><b class="num">'+cpUsd(pf.copiersPnl)+'</b></div>'
-    +'<div class="cps-row"><span title="AUM">운용 자산</span><b class="num">'+cpUsd(m.aum,0)+'</b></div>'
-    +cpAiHtml(cpAiNote('trust',{days:m.days,roi:s2.r.ret}))
-    +'</aside>'
-    +'</div>'
-    +'<div class="cpp-foot">전 자산 USDT 표기, 시뮬레이션 데이터 기준</div>'
-    +'</div>');
-  TF_RENDERING=false;
-  cpFormSync();
-  var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
-}
+function cpSetupView(ne){ mkFollowSheet(ne); }
 function cpFormSync(){
   var el=$('cps-amt'), cta=$('cps-cta'), fld=$('cps-amt-fld'), err=$('cps-amt-err');
-  if(!el||!cta) return true;
-  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value);
-  var msg='';
-  if(el.value!==''&&(!isFinite(v)||v<(cfg.MIN_COPY_USDT||50))) msg='최소 '+(cfg.MIN_COPY_USDT||50)+' USDT부터 시작할 수 있어요';
-  else if(isFinite(v)&&v>cp.spot) msg='스팟 잔고보다 커요. 충전(+)하거나 금액을 줄여주세요';
-  if(fld){ fld.classList.toggle('bad',!!msg); }
-  if(err){ err.textContent=msg; }
-  var ok=el.value!==''&&isFinite(v)&&v>=(cfg.MIN_COPY_USDT||50)&&v<=cp.spot;
-  cta.disabled=!ok;
-  var mp=$('cps-maxpos'); if(mp&&isFinite(v)&&v>0) mp.textContent=cpUsd(v*5,0)+'까지, 자동'; else if(mp) mp.textContent='카피 금액의 5배까지, 자동';
+  if(!el) return true;
+  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value), min=cfg.MIN_COPY_USDT||50, msg='';
+  if(el.value!==''&&(!isFinite(v)||v<min)) msg='최소 '+min+' USDT부터 시작할 수 있어요';
+  else if(isFinite(v)&&v>cp.spot) msg='사용 가능 금액보다 커요';
+  if(fld) fld.classList.toggle('bad',!!msg);
+  if(err) err.textContent=msg;
+  var ok=el.value!==''&&isFinite(v)&&v>=min&&v<=cp.spot;
+  if(cta) cta.disabled=!ok;
+  mkFollowSum(ok?v:null);
   return ok;
 }
-/* 스팟 충전 — 데모 입금 (실서버: 입금 플로우 연결 지점) */
+/* 체험 예산 추가 — 데모 입금 (실서버: 입금 플로우 연결 지점). 지갑 어휘 없이 "예산"으로만 */
 function cpTopup(ne){
-  tfSS3Dlg('스팟 충전','<div class="ntc">체험용 스팟 잔고를 충전해요.<br>실서비스에서는 거래소 입금 플로우가 연결됩니다.</div>'
+  tfSS3Dlg('체험 예산 추가','<div class="ntc">체험용 예산을 추가해요. 시뮬레이션 데이터예요.</div>'
     +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
-    +'<button type="button" class="wbtn" onclick="cpState().spot+=1000;tfSaveNow();tfSS3DlgClose();toast(\'1,000 USDT를 충전했어요\');cpSetupView(\''+ne+'\')">+1,000 USDT 충전</button></div>');
+    +'<button type="button" class="wbtn" onclick="cpState().spot+=1000;tfSaveNow();tfSS3DlgClose();toast(\'1,000 USDT를 추가했어요\');mkFollowSheet(\''+ne+'\')">+1,000 USDT 추가</button></div>');
 }
 function cpPairSheet(ne){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
@@ -11530,13 +11613,13 @@ function cpPairApply(ne,amtKeep){
 }
 function cpStart(ne){
   if(!S.user){ authOpen('signup'); return; } /* 상태 변경 경계의 로그인 가드 — 딥링크 우회 차단 (codex P2-12) */
-  if(typeof tfAiGate==='function'&&!tfAiGate()) return; /* 관망 중 신규 카피 금지 */
+  if(typeof tfAiGate==='function'&&!tfAiGate()) return; /* 관망 중 신규 따라가기 금지 */
   if(!cpFormSync()){ toast('입력을 확인해주세요'); return; }
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
   var s2=tfSSFind(nick); if(!s2||s2.me) return;
-  if(cpState().copies.some(function(x){ return x.nick===nick&&x.status==='active'; })){ /* 트레이더당 활성 카피 1건 */
-    toast('이미 이 트레이더를 카피하고 있어요. 따라가기 탭에서 관리할 수 있어요');
-    TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return;
+  if(cpState().copies.some(function(x){ return x.nick===nick&&x.status==='active'; })){ /* 전략당 활성 따라가기 1건 */
+    toast('이미 이 전략을 따라가고 있어요. 따라가는 중 탭에서 관리할 수 있어요');
+    mkFollowClose(true); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return;
   }
   var amt=parseFloat($('cps-amt').value);
   var cp=cpState();
@@ -11544,24 +11627,28 @@ function cpStart(ne){
   var eqA=s2.r.eq||[];
   var c2={id:'cp'+Date.now(), nick:nick, mode:'ratio', amount:amt, pairs:(TF_CPS.pairs||[mainPair]).slice(),
     simStartI:eqA.length>31?eqA[eqA.length-31].i:null, /* 데모: 시작을 30봉 전으로 시뮬 (표기: 시뮬레이션) */
-    adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5},
-    at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt}]}; /* 입출금은 append-only */
+    adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:TF_MKF.cap||95,maxPosX:5,maxLoss:TF_MKF.loss||-20,existing:TF_MKF.existing||'skip'},
+    at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt}]}; /* 입출금은 append-only, 예산은 기존 스팟 배분 로직 그대로 */
   cp.spot=Math.max(0,cp.spot-amt);
   cp.copies.push(c2);
   tfSaveNow();
-  tfTrack('cp_start',{nick:nick,amt:amt});
-  toast(nick+' 님 카피를 시작했어요. 다음 진입부터 자동으로 따라갑니다');
+  tfTrack('cp_start',{nick:nick,amt:amt,maxLoss:c2.adv.maxLoss});
+  mkFollowClose(true);
+  toast(nick+' 님의 전략을 따라가기 시작했어요. 다음 진입부터 자동으로 따라가요');
   TF_ONSHARE=false;
   try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
   tfShareHub('follow');
 }
 /* ── 상세: 딥링크 라우트 #/share/s/<ne>[/<pd>] ── */
 var TF_ONSHARE=false;
-function tfSS3Go(ne,pd){
-  tfTrack('strategy_detail_open',{ne:ne,pd:pd||'all'});
-  var r='#/share/s/'+ne+(pd&&pd!=='all'?'/'+pd:'');
+function tfSS3Go(ne,pd,tab){
+  var t=tfSSState();
+  if(pd&&MK_PD_OK[pd]){ t.ss.pd=pd; tfSave(); } /* 상세 기간 선택 = 허브 카드 기간 (수치 1벌) */
+  pd=mkPd(); tab=(tab&&MK_TAB_OK[tab])?tab:'ov';
+  tfTrack('strategy_detail_open',{ne:ne,pd:pd,tab:tab});
+  var r='#/share/s/'+ne+'/'+pd+(tab!=='ov'?'/'+tab:'');
   var h=location.hash;
-  /* 같은 상세 안 기간 전환은 히스토리를 쌓지 않는다 — 뒤로가기 한 번이면 허브 (참조: 기간 칩 in-place) */
+  /* 같은 상세 안 기간·탭 전환은 히스토리를 쌓지 않는다 — 뒤로가기 한 번이면 허브 */
   if(TF_ONSHARE&&(h==='#/share/s/'+ne||h.indexOf('#/share/s/'+ne+'/')===0)){
     try{ history.replaceState(null,'',location.pathname+location.search+r); }catch(e){}
     tfSS3DetailRender._keep=true;
@@ -11571,14 +11658,14 @@ function tfSS3Go(ne,pd){
   tfNav(r);
 }
 function tfSS3Route(h){
-  tfSS3DlgClose(true); /* 라우트 이동 시 떠 있는 다이얼로그 정리 (codex F09) */
-  var m=h.match(/^#\/share\/s\/([^/]+)(?:\/(1y|2y))?$/); /* 끝 경계 엄격 (codex F14) */
+  tfSS3DlgClose(true); mkFollowClose(true); /* 라우트 이동 시 떠 있는 다이얼로그, 시트 정리 (codex F09) */
+  var m=h.match(/^#\/share\/s\/([^/]+)(?:\/(all|1y|2y))?(?:\/(ov|perf|trades|log|info))?$/); /* 끝 경계 엄격 (codex F14) */
   if(!m){
     if(h.indexOf('#/share/s/')===0){ TF_ONSHARE=false; tfShareHub('find'); return; } /* 깨진 상세 URL은 허브로 */
     if(TF_ONSHARE){ TF_ONSHARE=false; tfShareHub(tfSSState().ss.tab||'find'); }
     return;
   }
-  tfSS3DetailRender(m[1],m[2]||'all');
+  tfSS3DetailRender(m[1],m[2]||null,m[3]||null);
 }
 var TF_SS3_PDC={};
 function tfSS3PdCalc(s,pd){
@@ -11592,93 +11679,54 @@ function tfSS3PdCalc(s,pd){
   }
   return TF_SS3_PDC[key];
 }
-function tfSS3DetailRender(ne,pd){
+function tfSS3DetailRender(ne,pd,tab){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ TF_ONSHARE=false; tfShareHub('find'); return; } /* 비정규 인코딩 (codex F14) */
   ne=tfSSNe(nick); /* URL 원문을 그대로 onclick 에 넣지 않는다 — 항상 재정규화 (codex F13) */
   var s=tfSSFind(nick);
   if(!s){
-    if(!window.TF_STATE_READY){ return; } /* 저장 복원 전에는 부재 판정 금지 — 복원 후 tfRoute 재진입이 다시 그린다 (codex F01) */
+    if(!window.TF_STATE_READY){ return; } /* 저장 복원 전에는 부재 판정 금지 (codex F01) */
     toast('전략을 찾을 수 없어요'); tfShareHub('find'); return;
   }
-  pd=pd||'all';
-  /* 기간 전환(_keep): 스크롤 위치와 기간 선택 포커스를 재렌더 후 복원 (codex F16) */
+  pd=(pd&&MK_PD_OK[pd])?pd:mkPd(); tab=(tab&&MK_TAB_OK[tab])?tab:'ov';
   var keep=!!tfSS3DetailRender._keep, st0=keep&&$('g-scroll')?$('g-scroll').scrollTop:0;
   TF_ONSHARE=true;
   if(G.cur) TF_SS_PREV=G.cur.id;
   G.cur=null; G.mode='tfss3d'; G.tabs=[]; G.activeTab=null;
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
-  var title=s.me?(s.title||'내 전략'):s.nick;
+  var title=mkTitle(s);
   gChead(title,'',null);
-  var r=tfSS3PdCalc(s,pd), up=r.ret>=0;
-  var pdl={all:'전체 기간','2y':'최근 2년','1y':'최근 1년'}[pd];
-  var wl=r.n?Math.round(r.winRate):0, wins=Math.round(r.n*(r.winRate||0)/100);
-  var pps=[['all','전체'],['2y','최근 2년'],['1y','최근 1년']].map(function(o){
-    return '<button type="button" class="p'+(pd===o[0]?' on':'')+'" aria-pressed="'+(pd===o[0])+'" onclick="tfSS3Go(\''+ne+'\',\''+o[0]+'\')">'+o[1]+'</button>'; }).join('');
-  var tr=(r.trades||[]).slice(-12).reverse();
-  var fdt=function(i){ var d=idxToDate(i); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); };
+  var r=tfSS3PdCalc(s,pd);
   TF_SS3_CALM=0; TF_SS3_CALCTX={nick:nick,pd:pd}; /* 캘린더 이동 컨텍스트 — 렌더마다 최신 월로 리셋 */
+  var watching=false; try{ watching=(tfS().watch||[]).indexOf(nick)>=0; }catch(e){}
+  var TABS=[['ov','개요'],['perf','성과'],['trades','거래'],['log','활동'],['info','정보']];
+  var body= tab==='perf'?mkPerfTab(s,r,pd,ne): tab==='trades'?mkTradesTab(s,r,pd,ne): tab==='log'?mkLogTab(s,r): tab==='info'?mkInfoTab(s,r,ne): mkOvTab(s,r,pd,ne);
   TF_RENDERING=true; document.body.classList.remove('tf-route'); /* 해시 정리 가드가 상세 자신의 #/share 해시를 지우지 않게 */
-  gContent('<div class="tf-page tfbk ss3">'
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfShareHub(\'find\')">전략 공유</span> / <span>'+gEsc(title)+'</span></div>'
-    +'<div class="tfbk-hero" style="padding-top:56px;padding-bottom:8px">'
-    +'<div class="planet" aria-hidden="true"></div>'
-    +'<h2 class="ss3-dtitle">'+gEsc(title)+'<span class="bdg">'+gEsc(s.asset)+'</span></h2>'
-    +'<div class="ss3-dsub num">작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'<span class="dim">, '+pdl+' 검증, 거래 '+r.n+'회</span></div>'
-    +'<div class="ss3-dbig num '+(up?'up':'dn')+'">'+(up?'+':'')+r.ret.toFixed(1)+'%</div>'
-    +'<div class="ss3-dbigl">검증 수익률 ('+pdl+')</div>'
-    +'<div class="ss3-dchips num">'
-    +'<div class="dc tap" role="button" tabindex="0" title="점수 산출 근거 보기" onclick="tfSS3ScoreSheet(\''+ne+'\')" onkeydown="if(event.key===\'Enter\')tfSS3ScoreSheet(\''+ne+'\')"><b>'+s.score+'점</b><small>TETH 점수, 근거 보기</small></div>'
-    +'<div class="dc"><b>'+r.mdd.toFixed(1)+'%</b><small>최대 낙폭</small></div>'
-    +'<div class="dc"><b>'+wl+'%</b><small>승률 ('+r.n+'전 '+wins+'승 '+(r.lossCount||0)+'패)</small></div>'
-    +'</div>'
-    +'<div class="ss3-dacts">'
-    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button class="wbtn" onclick="tfSS3Copy(\''+ne+'\')">따라하기</button>')
-    +'<button class="obtn" onclick="tfSS3Ask(\''+ne+'\',\''+pd+'\')">TETH에게 분석시키기</button>'
-    +(s.me?'':'<button class="obtn" id="ss3-watch-btn" style="display:inline-flex;align-items:center;gap:7px" aria-pressed="'+(function(){try{return (tfS().watch||[]).indexOf(nick)>=0;}catch(e){return false;}})()+'" onclick="tfSS3WatchTgl(\''+ne+'\')">'+tfSS3WatchLb((function(){try{return (tfS().watch||[]).indexOf(nick)>=0;}catch(e){return false;}})())+'</button>')
-    +'<button class="obtn" onclick="tfSS3CopyLink(\''+ne+'\',\''+pd+'\')">전략 링크 복사</button>'
-    +'</div>'
-    +'</div>'
-    +'<div class="tfbk-card" style="margin-top:44px"><div class="cin ss3-blk">'
-    +'<div class="ss3-ch"><b>누적 수익 곡선</b><span style="display:inline-flex;gap:14px;align-items:center;flex-wrap:wrap"><span class="ss3-pp">'+pps+'</span><span class="mt2">수수료 0.2% 반영</span></span></div>'
-    +'<div class="ss3-bigwrap" id="ss3-bigchart">'+tfSS3Chart(r.eq,1216,360)+'<div class="ss3-xtip" id="ss3-xtip" hidden></div></div>'
-    +tfSS3DD(r.eq,1216,120)
-    +'</div></div>'
-    +'<div class="tfbk-card"><div class="cin ss3-blk">'
-    +'<div class="ss3-ch"><b>검증 성과 지표</b><span class="mt2">'+pdl+', 지표를 누르면 뜻을 볼 수 있어요</span></div>'
-    +'<div class="ss3-matrix num">'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3MetricSheet(\'ret\')"><small>검증 수익 ⓘ</small><b style="color:'+(up?'#56c486':'#ee766a')+'">'+(up?'+':'')+r.ret.toFixed(1)+'%</b></div>'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3ScoreSheet(\''+ne+'\')"><small>TETH 점수 ⓘ</small><b>'+s.score+'점</b></div>'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3MetricSheet(\'mdd\')"><small>최대 낙폭 ⓘ</small><b>'+r.mdd.toFixed(1)+'%</b></div>'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3MetricSheet(\'pf\')"><small>손익비 ⓘ</small><b>'+(r.pf||0).toFixed(2)+':1</b></div>'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3MetricSheet(\'hold\')"><small>평균 보유일 ⓘ</small><b>'+(r.avgHold||0).toFixed(1)+'일</b></div>'
-    +'<div class="mx tap" role="button" tabindex="0" onclick="tfSS3MetricSheet(\'n\')"><small>거래 수 ⓘ</small><b>'+r.n+'회 (이익 '+wins+', 손실 '+(r.lossCount||0)+')</b></div>'
+  gContent('<div class="tf-page tfbk ss3 mk mk-detail">'
+    +'<div class="tfbk-bc"><span class="lk" onclick="tfShareHub(\'find\')">전략 따라하기</span> / <span>'+gEsc(title)+'</span></div>'
+    +'<header class="mk-d-head">'
+    +'<div class="mk-d-tt"><h2>'+gEsc(title)+'</h2>'+tfKindBadge('rule')+'</div>'
+    +'<div class="mk-d-sub">'+gEsc(mkSub(s))+'</div>'
+    +'<div class="mk-d-by num"><span>작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'</span><span class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</span></div>'
+    +'<div class="mk-d-acts">'
+    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')
+    +'<div class="mk-more"><button type="button" class="mk-more-b" id="mk-menu-b" aria-haspopup="menu" aria-expanded="false" aria-label="더 보기" onclick="mkMenuTgl(event)">⋯</button>'
+    +'<div class="mk-menu" id="mk-menu" role="menu" hidden>'
+    +'<button type="button" role="menuitem" onclick="tfSS3Ask(\''+ne+'\',\''+pd+'\')">TETH에게 분석시키기</button>'
+    +(s.me?'':'<button type="button" role="menuitem" id="ss3-watch-btn" aria-pressed="'+watching+'" onclick="tfSS3WatchTgl(\''+ne+'\')">'+tfSS3WatchLb(watching)+'</button>')
+    +'<button type="button" role="menuitem" onclick="tfSS3CopyLink(\''+ne+'\',\''+pd+'\')">링크 복사</button>'
+    +(s.me?'':'<button type="button" role="menuitem" onclick="tfSS3Copy(\''+ne+'\')">설정 가져오기</button>')
     +'</div></div></div>'
-    +'<div class="tfbk-card"><div class="cin ss3-blk">'
-    +'<div id="ss3-cal-host">'+tfSS3CalHtml(r,0)+'</div>'
-    +tfSS3HoldHtml(r)
-    +'</div></div>'
-    +'<div class="tfbk-card"><div class="cin ss3-blk">'
-    +'<div class="ss3-ch"><b>연도별 손익, 체결 이력</b><span class="mt2">최근 '+tr.length+'건, 검증 시뮬레이션 체결</span></div>'
-    +tfSS3YearBars(r.byYear||{},1216,200)
-    +'<div style="overflow-x:auto;margin-top:24px"><table class="ss3-tbl"><thead><tr><th>진입일</th><th>청산일</th><th>보유</th><th>자산</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익률</th></tr></thead><tbody>'
-    +(tr.length?tr.map(function(x){
-      var kind={sl:'손절',tp:'익절',time:'기간 청산'}[x.kind]||x.kind;
-      var p1=PRICE[x.entry],p2=PRICE[x.exit];
-      return '<tr><td>'+fdt(x.entry)+'</td><td>'+fdt(x.exit)+'</td><td>'+(x.exit-x.entry)+'봉</td><td>'+gEsc(s.asset)+'</td><td>'+kind+'</td>'
-        +'<td style="text-align:right">'+(p1!=null?Math.round(p1).toLocaleString():'-')+'</td>'
-        +'<td style="text-align:right">'+(p2!=null?Math.round(p2).toLocaleString():'-')+'</td>'
-        +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+(x.pnl>=0?'+':'')+(x.pnl*100).toFixed(2)+'%</td></tr>';
-    }).join(''):'<tr><td colspan="8" style="text-align:center;height:80px">이 기간에는 체결이 없어요</td></tr>')
-    +'</tbody></table></div>'
-    +'</div></div>'
-    +'<div class="tfbk-note">검증 수치는 과거 데이터 기반 백테스트 결과이며 미래 수익을 보장하지 않아요.</div>'
+    +'</header>'
+    +'<nav class="mk-dtabs" role="tablist">'+TABS.map(function(t2){ return '<button type="button" role="tab" class="mk-tab'+(tab===t2[0]?' on':'')+'" aria-selected="'+(tab===t2[0])+'" onclick="tfSS3Go(\''+ne+'\',\''+pd+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</nav>'
+    +'<div class="mk-dbody">'+body+'</div>'
+    +'<div class="tfbk-note">시뮬레이션 데이터예요</div>'
     +'</div>');
   TF_RENDERING=false;
   var sc=$('g-scroll'); if(sc) sc.scrollTop=keep?st0:0;
-  if(keep){ var pf=document.querySelector('.ss3-pp .p[aria-pressed="true"]'); if(pf) try{ pf.focus(); }catch(e){} }
+  if(keep){ var pf=document.querySelector('.mk-dtabs .mk-tab.on'); if(pf) try{ pf.focus(); }catch(e){} }
   tfSS3DetailRender._keep=false;
-  tfSS3XhInit();
+  if(tab==='perf') tfSS3XhInit();
 }
 /* 크로스헤어 + 툴팁 — 레퍼런스 영상: 세로 점선 + 도트 + 날짜/수익률 (호버 전용, 터치 무시) */
 function tfSS3XhInit(){
@@ -11869,7 +11917,7 @@ function tfSS3Ask(ne,pd){
   gNew(q);
 }
 function tfSS3CopyLink(ne,pd){
-  var url=location.origin+location.pathname+'#/share/s/'+ne+(pd&&pd!=='all'?'/'+pd:''); /* 보고 있는 기간 포함 (codex F14) */
+  var url=location.origin+location.pathname+'#/share/s/'+ne+'/'+(pd&&MK_PD_OK[pd]?pd:mkPd()); /* 보고 있는 기간 포함 (codex F14) */
   try{ navigator.clipboard.writeText(url).then(function(){ toast('전략 링크를 복사했어요'); },function(){ toast(url); }); }
   catch(e){ toast(url); }
 }
@@ -11926,10 +11974,10 @@ function tfSS3Copy(ne,fp,fid){
   TF_SS3_CP_BUSY=busy; /* 확정 시점 재검사용 — 열 때의 busy 상태 기록 (codex F04) */
   var budgets=TFCOPY.intakeOpt.budget, stops=TFCOPY.intakeOpt.stop;
   var bi0=1; if(fx&&fx.budget){ budgets.forEach(function(b,i){ if(b[0]===fx.budget) bi0=i; }); } /* 설정 변경: 저장된 예산 복원 (codex P0-8) */
-  tfSS3Dlg('전략 따라하기','<div class="ss3-cp">'
+  tfSS3Dlg('설정 가져오기','<div class="ss3-cp">'
     +'<div class="sumb">'+'<div><div class="nm3">'+gEsc(s.nick)+' ('+gEsc(s.asset)+' 전략)</div>'
     +'<div class="sb3">검증 수익 '+(s.r.ret>=0?'+':'')+s.r.ret.toFixed(1)+'%'+(s.score!=null?', TETH '+s.score+'점':'')+', 최대 낙폭 '+s.r.mdd.toFixed(1)+'%'+(s.ghost?' (보관된 설정으로 재검증)':'')+'</div></div></div>'
-    +'<div class="ntc">이 전략의 설정을 복제해 내 조건으로 다시 검증한 뒤 실행해요. 계좌를 실시간으로 미러링하는 방식이 아니라, 검증을 통과해야 실행됩니다.</div>'
+    +'<div class="ntc">이 전략의 설정을 가져와 내 조건으로 다시 검증한 뒤 실행해요. 예산으로 그대로 따라가는 따라가기와 달리, 검증을 통과해야 실행돼요.</div>'
     +'<div class="fld3"><label for="ss3-cp-bu">시작 예산</label><select id="ss3-cp-bu">'+budgets.map(function(b,i){ return '<option value="'+i+'"'+(i===bi0?' selected':'')+'>'+b[0]+' ('+b[1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="ss3-cp-sl">손절선</label><select id="ss3-cp-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===base.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="ss3-cp-tp">익절 목표</label><select id="ss3-cp-tp">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
@@ -12056,13 +12104,13 @@ function tfSS3FollowTab(){
   var t=tfSSState();
   var cpLine=(typeof cpDashSec==='function')?cpDashSec():''; /* 카피 대시보드 (cp 4단계) */
   if(!t.follows.length)
-    return cpLine+'<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 복제해보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>'+tfSS3WatchSec();
+    return cpLine+(cpLine?'<div class="mk-fnone">가져온 설정은 아직 없어요. 상세의 ⋯ 메뉴에서 설정 가져오기를 누르면 여기에 쌓여요</div>':'<div class="ss3-empty">아직 따라가는 전략이 없어요<br>전략 찾기에서 마음에 드는 전략을 골라 따라가 보세요<br><button type="button" class="wbtn" style="margin-top:20px" onclick="tfShareHub(\'find\')">전략 찾기로 가기</button></div>')+tfSS3WatchSec();
   var act=0,arc=0;
   t.follows.forEach(function(f){ var st=tfSSFollowStatus(f); if(st.live) act++; else arc++; });
   var fills=(tfS().fills||[]);
   var myPnl=fills.length?fills.reduce(function(a,x){return a+x.pnl;},0)*100:null;
   return cpLine+'<div class="ss3-tiles num">'
-    +'<div class="tl"><small>복제한 전략</small><b>'+t.follows.length+'개</b></div>'
+    +'<div class="tl"><small>가져온 설정</small><b>'+t.follows.length+'개</b></div>'
     +'<div class="tl"><small>진행 중</small><b>'+act+'개</b></div>'
     +'<div class="tl"><small>보관됨</small><b>'+arc+'개</b></div></div>'
     +t.follows.slice().reverse().map(function(f){
@@ -12071,7 +12119,7 @@ function tfSS3FollowTab(){
         +'<div class="lft">'
         +'<div class="nmrow"><button type="button" class="nm" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(f.nick)+'</button>' /* 프로필로 (cp 2단계) */
         +'<span class="ss3-st'+(st.live?'':' idle')+'">'+st.label+'</span></div>'
-        +'<div class="as num">복제 설정: 손절 '+f.p.sl+'%, 익절 +'+f.p.tp+'%'+(f.budget?', 예산 '+gEsc(f.budget):'')+'<span style="color:#848a94"> (시작 '+gEsc(f.at)+')</span></div>'
+        +'<div class="as num">가져온 설정: 손절 '+f.p.sl+'%, 익절 +'+f.p.tp+'%'+(f.budget?', 예산 '+gEsc(f.budget):'')+'<span style="color:#848a94"> (시작 '+gEsc(f.at)+')</span></div>'
         +'<div class="rtrow num">'
         +(r?'<span class="ctc"><b style="color:'+(r.ret>=0?'#56c486':'#ee766a')+'">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</b><small>원 전략 검증 수익</small></span>':'')
         +(st.running&&myPnl!=null?'<span class="ctc"><b style="color:'+(myPnl>=0?'#56c486':'#ee766a')+'">'+(myPnl>=0?'+':'')+myPnl.toFixed(1)+'%</b><small>실행 시뮬레이션 손익</small></span>':'')
@@ -15512,6 +15560,300 @@ function tfAcRefresh(){
   if(typeof tfNFBar==='function') tfNFBar();
 }
 /* ==JS:mk== (전략 따라하기 전용 함수) */
+/* ═══ S7 전략 따라하기 (mk) — 정본: ux/spec/UX_PAGE_SPEC.md S7, UX_DECISION_LOG D07 / D08(R1) / D17 / D21 / D23 / D24 / D25.
+   시드는 전부 규칙 전략(백테스트) — 출처 배지 "검증 기준(백테스트 N개월)", 팔로워 수익은 데이터 없음 "-"(합성 금지). ═══ */
+var MK_PD_OK={all:1,'2y':1,'1y':1};
+var MK_TAB_OK={ov:1,perf:1,trades:1,log:1,info:1};
+var MK_STOP_L={now:'지금 정리',wait:'원본 청산 대기',manual:'직접 관리'};
+function mkPd(){ var t=tfSSState(); if(!t.ss.pd||!MK_PD_OK[t.ss.pd]) t.ss.pd='1y'; return t.ss.pd; }
+function mkPdLabel(pd){ return {all:'전체 기간','2y':'최근 2년','1y':'최근 1년'}[pd]||'전체 기간'; }
+function mkSortKey(t){ if(!{ret:1,mdd:1,n:1,months:1}[t.ss.sort]) t.ss.sort='ret'; return t.ss.sort; }
+function mkMonths(r){ var p=(r&&r.params)||{}; var a=p.startI!=null?p.startI:61, b=p.endI!=null?p.endI:PRICE.length-1; return Math.max(1,Math.round((b-a)/30.44)); }
+function mkSrcBadge(r){ return '<span class="mk-badge">검증 기준(백테스트 '+mkMonths(r)+'개월)</span>'; }
+function mkFeeBadge(){ return '<span class="mk-badge mk-micro">수수료 반영</span>'; }
+/* 위험도 = 최대 낙폭 기준: -8% 안쪽 낮음, -12% 안쪽 보통, 그 외 높음 */
+function mkRisk(mdd){ if(mdd>-8) return {k:'lo',l:'낮음'}; if(mdd>-12) return {k:'mid',l:'보통'}; return {k:'hi',l:'높음'}; }
+function mkTitle(s){ if(s.p) return tfSeedTitle(s); return s.title||s.nick; }
+function mkSub(s){ return s.p?tfStratSub(s.p):(s.desc||''); }
+function mkPct(v,d){ return (v>=0?'+':'')+v.toFixed(d!=null?d:1)+'%'; }
+function mkDate(i){ var d=idxToDate(i); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
+function mkSpark(eq,w,h){
+  if(!eq||eq.length<2) return '<span class="mk-spark"></span>';
+  var min=1e18,max=-1e18,i0=eq[0].i,i1=eq[eq.length-1].i;
+  eq.forEach(function(e){ if(e.v<min)min=e.v; if(e.v>max)max=e.v; }); if(max-min<1e-9) max=min+1e-9;
+  var step=Math.max(1,Math.floor(eq.length/60)), pts=[];
+  var Y=function(v){ return (h-2-(v-min)/(max-min)*(h-4)).toFixed(1); };
+  for(var k=0;k<eq.length;k+=step) pts.push(((eq[k].i-i0)/Math.max(1,i1-i0)*w).toFixed(1)+','+Y(eq[k].v));
+  pts.push(w+','+Y(eq[eq.length-1].v));
+  var up=eq[eq.length-1].v>=1;
+  return '<svg class="mk-spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="'+(up?'#2fb98a':'#ee766a')+'" stroke-width="1.8" vector-effect="non-scaling-stroke" points="'+pts.join(' ')+'"/></svg>';
+}
+/* 카드 — 제목(tfSeedTitle) + 유형 배지 + 부제 + 작성자 → 선택 기간 수익률 + 출처/수수료 배지 → MDD, 검증 기간, 팔로워, 팔로워 수익(-) → 위험도 → [따라가기] [자세히] */
+function mkCard(s){
+  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), rk=mkRisk(r.mdd);
+  return '<article class="mk-card">'
+    +'<div class="mk-c-head"><div class="mk-c-tt"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkTitle(s))+'</button></h3>'+tfKindBadge('rule')+'</div>'
+    +'<div class="mk-c-sub">'+gEsc(mkSub(s))+'</div>'
+    +'<div class="mk-c-by">작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'</div></div>'
+    +'<div class="mk-c-main"><div class="mk-c-ret"><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b><small>'+mkPdLabel(pd)+' 검증 수익률</small><div class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</div></div>'
+    +mkSpark(r.eq,150,60)+'</div>'
+    +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>검증 기간</small><b>'+mkMonths(r)+'개월</b></div><div><small>팔로워</small><b>'+Number(s.fw||0).toLocaleString()+'명</b></div><div><small>팔로워 수익</small><b>-</b></div></div>'
+    +'<div class="mk-c-risk"><span>위험도</span><span class="mk-risk '+rk.k+'">'+rk.l+'</span><small>최대 낙폭 기준</small></div>'
+    +'<div class="mk-c-acts">'+(s.me?'':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')+'<button type="button" class="mk-btn2" onclick="tfSS3Go(\''+ne+'\')">자세히</button></div>'
+    +'</article>';
+}
+function tfSS3PdPick(v){ var t=tfSSState(); if(MK_PD_OK[v]) t.ss.pd=v; tfSave(); tfShareHub('find'); }
+function mkKindPick(v){ var t=tfSSState(); t.ss.kind=v; tfSave(); tfShareHub('find'); }
+function mkRiskPick(v){ var t=tfSSState(); t.ss.risk=v; tfSave(); tfShareHub('find'); }
+function mkPdChips(ne,pd,tab){
+  return '<div class="mk-chips mk-pdrow" aria-label="검증 기간"><span class="lb">검증 기간</span>'+[['1y','최근 1년'],['2y','최근 2년'],['all','전체']].map(function(o){
+    return '<button type="button" class="mk-chip'+(pd===o[0]?' on':'')+'" aria-pressed="'+(pd===o[0])+'" onclick="tfSS3Go(\''+ne+'\',\''+o[0]+'\',\''+tab+'\')">'+o[1]+'</button>'; }).join('')+'</div>';
+}
+/* ── 규칙 판정 (D24: 실제 판정식 runBacktest 와 동일, 발명 금지) ── */
+function mkRuleEval(p,i){
+  var rsiPrev=rsi(PRICE,i-1), bounce=PRICE[i]/PRICE[i-1]-1, s20=sma(PRICE,20,i), s60=sma(PRICE,60,i);
+  var gap=(s20!=null&&s60!=null)?Math.abs(s20-s60)/PRICE[i]:0;
+  return {rsiPrev:rsiPrev, rsiOk:rsiPrev<p.rsiTh, bounce:bounce*100, bounceOk:bounce>0.005, gap:gap*100, trendOk:!p.trendFilter||gap>0.03};
+}
+/* 마지막 체결 이후 구간을 재생해 관측 종료 시점의 보유 포지션을 찾는다 (엔진: 청산 다음 봉부터 진입 재검사) */
+function mkOpenPos(p,r){
+  var P=r.params||p, endI=P.endI!=null?P.endI:PRICE.length-1, startI=P.startI!=null?P.startI:61;
+  var tr=r.trades||[], from=tr.length?tr[tr.length-1].exit+1:startI;
+  for(var i=Math.max(from,61);i<=endI;i++){ var e=mkRuleEval(p,i); if(e.rsiOk&&e.bounceOk&&e.trendOk) return {entry:i,entryP:PRICE[i],chg:(PRICE[endI]/PRICE[i]-1)*100,held:endI-i}; }
+  return null;
+}
+function mkRow(lb,val,ok){ return '<div class="mk-rr"><span class="k">'+lb+'</span><span class="v num">'+val+'</span><i class="'+(ok?'ok':'no')+'" aria-label="'+(ok?'충족':'미충족')+'">'+(ok?'✓':'✗')+'</i></div>'; }
+function mkRuleRows(p,e){
+  var h=mkRow('RSI(14) 전봉 < '+p.rsiTh,'전봉 '+e.rsiPrev.toFixed(0),e.rsiOk)+mkRow('반등 +0.5% 초과','이번 봉 '+mkPct(e.bounce,2),e.bounceOk);
+  if(p.trendFilter) h+=mkRow('이평 괴리 3% 초과 (20일, 60일)','괴리 '+e.gap.toFixed(1)+'%',e.trendOk);
+  return h;
+}
+function mkRiskRules(p){ return '손절 '+p.sl+'%, 익절 +'+p.tp+'%, 25봉 경과 시 청산'; }
+function mkRuleSummary(p){
+  if(!p) return '<div class="mt2">규칙 원본은 공개되지 않아요</div>';
+  return '<div class="mk-rules">'
+    +'<div class="mk-rule"><small>진입</small><span>전봉 RSI(14)가 '+p.rsiTh+' 아래였고 이번 봉이 +0.5% 넘게 반등'+(p.trendFilter?'하고, 20일과 60일 이동평균 괴리가 3%보다 클 때':'할 때')+' 시장가 매수</span></div>'
+    +'<div class="mk-rule"><small>청산</small><span>'+p.sl+'% 손절, +'+p.tp+'% 익절, 25봉이 지나면 기간 청산</span></div>'
+    +'<div class="mk-rule"><small>검사 주기</small><span>봉 마감마다 1회</span></div></div>';
+}
+/* "지금 뭘 하나" 상태 블록 — 규칙 전략: 백테스트 재생의 마지막 판정 */
+function mkStatusHtml(s,r){
+  var next='<div class="mk-st-next"><small>다음 확인</small><span>다음 봉 마감에 규칙을 검사해요</span></div>';
+  if(!s.p) return '<div class="mk-st-top"><b class="mk-res wait">대기</b><span>규칙 원본이 비공개라 판정 내역은 볼 수 없어요</span></div>'+next;
+  var p=s.p, P=r.params||p, endI=P.endI!=null?P.endI:PRICE.length-1;
+  var open=mkOpenPos(p,r);
+  if(open){
+    var held=endI-open.entry;
+    return '<div class="mk-st-top"><b class="mk-res in">포지션 보유 중</b><span class="num">'+mkDate(open.entry)+' 진입, 진입가 '+Math.round(open.entryP).toLocaleString()+', 현재 <b class="'+(open.chg>=0?'mk-up':'mk-dn')+'">'+mkPct(open.chg)+'</b></span></div>'
+      +'<div class="mk-lc-rows">'+mkRow('손절 '+p.sl+'%','현재 '+mkPct(open.chg),open.chg<=p.sl)+mkRow('익절 +'+p.tp+'%','현재 '+mkPct(open.chg),open.chg>=p.tp)+mkRow('25봉 경과','보유 '+held+'봉',held>=25)+'</div>'+next;
+  }
+  var e=mkRuleEval(p,endI), met=[e.rsiOk,e.bounceOk,p.trendFilter?e.trendOk:null].filter(function(x){ return x===true; }).length, tot=p.trendFilter?3:2;
+  return '<div class="mk-st-top"><b class="mk-res wait">대기</b><span class="num">마지막 검사 '+mkDate(endI)+', 조건 '+met+' / '+tot+' 충족, 포지션 없음</span></div>'
+    +'<div class="mk-lc-rows">'+mkRuleRows(p,e)+'</div>'+next;
+}
+/* ── 상세 탭 ── */
+function mkOvTab(s,r,pd,ne){
+  var up=r.ret>=0, rk=mkRisk(r.mdd);
+  return mkPdChips(ne,pd,'ov')
+    +'<div class="mk-kpis">'
+    +'<div class="mk-kpi big"><small>검증 수익률 ('+mkPdLabel(pd)+')</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b><span class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</span></div>'
+    +'<div class="mk-kpi"><small>최대 낙폭</small><b class="num">'+r.mdd.toFixed(1)+'%</b></div>'
+    +'<div class="mk-kpi"><small>거래 수</small><b class="num">'+r.n+'회</b></div>'
+    +'<div class="mk-kpi"><small>팔로워</small><b class="num">'+Number(s.fw||0).toLocaleString()+'명</b></div>'
+    +'</div>'
+    +'<section class="mk-sec"><div class="mk-sec-hd"><b>지금 뭘 하나</b><span class="mt2">규칙 전략, 검증 시뮬레이션 마지막 봉 기준</span></div>'+mkStatusHtml(s,r)+'</section>'
+    +'<section class="mk-sec"><div class="mk-sec-hd"><b>규칙</b><span class="mt2">이 전략이 사고 파는 조건</span></div>'+mkRuleSummary(s.p)+'</section>'
+    +'<div class="mk-riskrow"><span>위험도</span><span class="mk-risk '+rk.k+'">'+rk.l+'</span><span class="mt2">최대 낙폭 '+r.mdd.toFixed(1)+'% 기준 (-8% 안쪽 낮음, -12% 안쪽 보통)</span></div>';
+}
+function mkPerfTab(s,r,pd,ne){
+  var up=r.ret>=0, wl=r.n?Math.round(r.winRate):0;
+  return mkPdChips(ne,pd,'perf')
+    +'<div class="mk-kpis four">'
+    +'<div class="mk-kpi"><small>검증 수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b></div>'
+    +'<div class="mk-kpi"><small>최대 낙폭</small><b class="num">'+r.mdd.toFixed(1)+'%</b></div>'
+    +'<div class="mk-kpi"><small>승률</small><b class="num">'+wl+'%</b></div>'
+    +'<div class="mk-kpi"><small>거래 수</small><b class="num">'+r.n+'회</b></div>'
+    +'</div>'
+    +'<div class="mk-badges mk-perf-bd">'+mkSrcBadge(r)+mkFeeBadge()+'</div>'
+    +'<section class="mk-sec"><div class="mk-sec-hd"><b>누적 수익 곡선</b><span class="mt2">'+mkPdLabel(pd)+'</span></div>'
+    +'<div class="ss3-bigwrap" id="ss3-bigchart">'+tfSS3Chart(r.eq,1216,360)+'<div class="ss3-xtip" id="ss3-xtip" hidden></div></div>'
+    +tfSS3DD(r.eq,1216,120)+'</section>'
+    +'<section class="mk-sec"><div id="ss3-cal-host">'+tfSS3CalHtml(r,0)+'</div></section>'
+    +'<details class="mk-det"><summary>자세히<span class="mt2">보유기간 분포, 연도별 손익, 체결 이력</span></summary>'
+    +tfSS3HoldHtml(r)
+    +'<div class="mk-sec-hd mk-det-hd"><b>연도별 손익</b></div>'+tfSS3YearBars(r.byYear||{},1216,200)
+    +'<div class="mk-sec-hd mk-det-hd"><b>체결 이력</b><span class="mt2">최근 12건</span></div>'+mkTradesTable(s,r,12)
+    +'</details>';
+}
+function mkTradesTable(s,r,limit){
+  var tr=(r.trades||[]).slice(); if(limit) tr=tr.slice(-limit); tr.reverse();
+  return '<div class="mk-tblw"><table class="ss3-tbl"><thead><tr><th>진입일</th><th>청산일</th><th>보유</th><th>자산</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익률</th></tr></thead><tbody>'
+    +(tr.length?tr.map(function(x){
+      var kind={sl:'손절',tp:'익절',time:'기간 청산'}[x.kind]||x.kind;
+      var p1=PRICE[x.entry],p2=PRICE[x.exit];
+      return '<tr><td>'+mkDate(x.entry)+'</td><td>'+mkDate(x.exit)+'</td><td>'+(x.exit-x.entry)+'봉</td><td>'+gEsc(s.asset)+'</td><td>'+kind+'</td>'
+        +'<td style="text-align:right">'+(p1!=null?Math.round(p1).toLocaleString():'-')+'</td>'
+        +'<td style="text-align:right">'+(p2!=null?Math.round(p2).toLocaleString():'-')+'</td>'
+        +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+mkPct(x.pnl*100,2)+'</td></tr>';
+    }).join(''):'<tr><td colspan="8" style="text-align:center;height:80px">이 기간에는 체결이 없어요</td></tr>')
+    +'</tbody></table></div>';
+}
+function mkTradesTab(s,r,pd,ne){
+  return mkPdChips(ne,pd,'trades')+'<div class="mk-sec-hd"><b>체결 이력</b><span class="mt2">'+mkPdLabel(pd)+', '+r.n+'건, 검증 시뮬레이션 체결, 수수료 반영</span></div>'+mkTradesTable(s,r,0);
+}
+/* 활동 — 백테스트 체결과 봉별 규칙 판정에서 생성 (S5 규칙 카드 형식: 시각, 규칙 검사, 결과, 주문, 리스크 규칙) */
+function mkLogCard(p,it){
+  var i=it.i, rows='', res='', ord='', hd='규칙 검사';
+  if(it.k==='entry'){
+    var e=mkRuleEval(p,i); rows=mkRuleRows(p,e); res='<b class="mk-res in">진입</b>'; ord='시장가 매수, 진입가 '+Math.round(PRICE[i]).toLocaleString();
+  } else if(it.k==='exit'||it.k==='hold'){
+    hd='리스크 규칙 검사';
+    var t=it.t, chg=(PRICE[i]/PRICE[t.entry]-1)*100, held=i-t.entry;
+    rows=mkRow('손절 '+p.sl+'%','현재 '+mkPct(chg),chg<=p.sl)+mkRow('익절 +'+p.tp+'%','현재 '+mkPct(chg),chg>=p.tp)+mkRow('25봉 경과','보유 '+held+'봉',held>=25);
+    if(it.k==='exit'){ var K={sl:'손절',tp:'익절',time:'기간 청산'}[t.kind]||'청산'; res='<b class="mk-res out">청산 ('+K+')</b>'; ord='시장가 매도, 손익 '+mkPct(t.pnl*100,2)+' (수수료 반영)'; }
+    else { res='<b class="mk-res hold">보유 유지</b>'; ord='주문 없음'; }
+  } else {
+    var e2=mkRuleEval(p,i); rows=mkRuleRows(p,e2); res='<b class="mk-res wait">대기</b>'; ord='주문 없음';
+  }
+  return '<article class="mk-lc"><div class="mk-lc-hd"><span class="num">'+mkDate(i)+'</span><span class="mk-lc-k">'+hd+'</span></div>'
+    +'<div class="mk-lc-rows">'+rows+'</div>'
+    +'<div class="mk-lc-ft"><div><small>결과</small>'+res+'</div><div><small>주문</small><span>'+ord+'</span></div><div><small>리스크 규칙</small><span class="num">'+mkRiskRules(p)+'</span></div></div></article>';
+}
+function mkLogTab(s,r){
+  if(!s.p) return '<div class="ss3-empty">규칙 원본이 비공개라 활동 기록을 만들 수 없어요</div>';
+  var p=s.p, P=r.params||p, startI=P.startI!=null?P.startI:61, endI=P.endI!=null?P.endI:PRICE.length-1;
+  var trades=(r.trades||[]).slice(), open=mkOpenPos(p,r);
+  var byEn={}, byEx={}; trades.forEach(function(t){ byEn[t.entry]=t; byEx[t.exit]=t; });
+  if(open) byEn[open.entry]={entry:open.entry,exit:null};
+  var anchor=trades.length>=2?trades[trades.length-2].entry:(trades.length?trades[trades.length-1].entry:endI); /* 최근 90봉 안에 체결이 없으면 마지막 두 체결까지 거슬러 올라간다 */
+  var from=Math.max(startI+1,Math.min(endI-90,anchor-3)), items=[];
+  for(var i=from;i<=endI;i++){
+    if(byEx[i]){ items.push({k:'exit',i:i,t:byEx[i]}); continue; }
+    if(byEn[i]){ items.push({k:'entry',i:i,t:byEn[i]}); continue; }
+    var hold=null; for(var q=0;q<trades.length;q++){ if(trades[q].entry<i&&i<trades[q].exit){ hold=trades[q]; break; } }
+    if(!hold&&open&&i>open.entry) hold={entry:open.entry,exit:null};
+    items.push(hold?{k:'hold',i:i,t:hold}:{k:'wait',i:i});
+  }
+  var groups=[]; items.forEach(function(it){ var g=groups[groups.length-1]; if(g&&(it.k==='wait'||it.k==='hold')&&g.k===it.k) g.items.push(it); else groups.push({k:it.k,items:[it]}); });
+  groups.reverse();
+  var out=groups.map(function(g){
+    if(g.items.length===1) return mkLogCard(p,g.items[0]);
+    var n=g.items.length, first=g.items[0].i, last=g.items[n-1].i;
+    return '<details class="mk-lrun"><summary><span class="mk-lc-k">'+(g.k==='wait'?'관망 유지':'보유 유지')+'</span><span class="num">'+n+'회, '+(last-first+1)+'일</span><span class="mk-lc-d num">'+mkDate(first)+' ~ '+mkDate(last)+'</span><span class="mk-lrun-x">펼치기</span></summary>'
+      +g.items.slice(-20).reverse().map(function(it){ return mkLogCard(p,it); }).join('')+(n>20?'<div class="mt2" style="padding:0 0 12px">이전 '+(n-20)+'회는 생략했어요</div>':'')+'</details>';
+  }).join('');
+  return '<div class="mk-sec-hd"><b>활동</b><span class="mt2">최근 '+(endI-from+1)+'봉의 규칙 검사 기록, 검증 시뮬레이션에서 생성, 최신순</span></div><div class="mk-log">'+out+'</div>';
+}
+function mkInfoTab(s,r,ne){
+  var P=(s.p||r.params||{}), a=P.startI!=null?P.startI:61, b=P.endI!=null?P.endI:PRICE.length-1;
+  var row=function(k,v){ return '<div class="mk-info-r"><small>'+k+'</small><span>'+v+'</span></div>'; };
+  return '<div class="mk-info">'
+    +row('만든 방법','대화로 만든 규칙 전략')
+    +row('유형',tfKindBadge('rule')+' <span>RSI 눌림목 반등 매수</span>')
+    +row('이번 판단에 사용','Claude, Gemini (규칙 구조화와 설명)')
+    +row('버전','v1, '+mkDate(b)+' 검증')
+    +row('검증 기간',mkDate(a)+' ~ '+mkDate(b)+' ('+Math.max(1,Math.round((b-a)/30.44))+'개월), 수수료 0.2% 반영')
+    +row('시장',gEsc(CPP_PAIR[s.asset]||s.asset)+', Bitget')
+    +row('작성자',gEsc(s.nick)+(s.me?' (나)':''))
+    +(s.score!=null?row('검증 점수','<button type="button" class="mk-lnk" onclick="tfSS3ScoreSheet(\''+ne+'\')">'+s.score+'점, 근거 보기</button>'):'')
+    +'</div>';
+}
+/* ⋯ 메뉴 */
+function mkMenuTgl(e){
+  if(e) e.stopPropagation();
+  var m=$('mk-menu'), b=$('mk-menu-b'); if(!m) return;
+  var open=!m.hidden; m.hidden=open; if(b) b.setAttribute('aria-expanded',String(!open));
+  document.removeEventListener('click',mkMenuDoc);
+  if(!open) setTimeout(function(){ document.addEventListener('click',mkMenuDoc); },0);
+}
+function mkMenuDoc(){ var m=$('mk-menu'), b=$('mk-menu-b'); if(m) m.hidden=true; if(b) b.setAttribute('aria-expanded','false'); document.removeEventListener('click',mkMenuDoc); }
+/* ── 따라가기 설정 바텀시트 (D17): 예산 → 최대 손실 → 요약 2줄 → [따라가기 시작], 고급 접힘 ── */
+var TF_MKF={loss:-20,existing:'skip',cap:95,ne:null,nick:null};
+function mkFollowEsc(e){ if(e.key==='Escape') mkFollowClose(); }
+function mkFollowClose(silent){
+  var w=$('mk-follow'); if(w){ w.id=''; w.remove(); }
+  document.removeEventListener('keydown',mkFollowEsc);
+  var gs=$('g-scroll'); if(gs&&!$('ss3-dlgw')) gs.style.overflow='';
+  if(!silent&&TF_MKF.trig&&TF_MKF.trig.focus){ try{ TF_MKF.trig.focus(); }catch(e){} }
+  TF_MKF.trig=null;
+}
+function mkFollowSheet(ne){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
+  ne=tfSSNe(nick);
+  var s2=tfSSFind(nick);
+  if(!s2||s2.me){ toast('지금은 따라갈 수 없는 전략이에요'); return; }
+  mkFollowClose(true); tfSS3DlgClose(true);
+  TF_MKF={loss:-20,existing:'skip',cap:95,ne:ne,nick:nick,trig:document.activeElement};
+  var cp=cpState(), cfg=cpCfg(), pd=mkPd(), r=tfSS3PdCalc(s2,pd), d=tfDerive();
+  var can=!!(d.entitlement&&d.entitlement.follow), min=cfg.MIN_COPY_USDT||50;
+  var w=document.createElement('div'); w.className='mk-follow-w'; w.id='mk-follow';
+  w.innerHTML='<div class="mk-follow" role="dialog" aria-modal="true" aria-labelledby="mk-f-t">'
+    +'<div class="mk-f-hd"><b id="mk-f-t">따라가기</b><button type="button" class="mk-f-x" aria-label="닫기" onclick="mkFollowClose()">✕</button></div>'
+    +'<div class="mk-f-strat"><div class="t">'+gEsc(mkTitle(s2))+' '+tfKindBadge('rule')+'</div><div class="s num">작성자 '+gEsc(s2.nick)+', 검증 수익률 <b class="'+(r.ret>=0?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b> ('+mkPdLabel(pd)+', 백테스트 '+mkMonths(r)+'개월, 수수료 반영)</div></div>'
+    +'<div class="mk-f-fld" id="cps-amt-fld"><label for="cps-amt">예산 (USDT)</label>'
+    +'<div class="mk-f-in"><input id="cps-amt" type="number" inputmode="decimal" min="'+min+'" placeholder="최소 '+min+'" oninput="cpFormSync()"><span class="un">USDT</span><button type="button" class="mx" onclick="$(\'cps-amt\').value='+Math.floor(cp.spot)+';cpFormSync()">최대</button></div>'
+    +'<div class="mk-f-hint">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>'+(cp.spot<min?' <button type="button" class="mk-lnk" onclick="cpTopup(\''+ne+'\')">체험 예산 추가</button>':'')+'</div>'
+    +'<div class="mk-f-err" id="cps-amt-err"></div></div>'
+    +'<div class="mk-f-fld"><label for="mk-f-loss">최대 손실 <b class="num" id="mk-f-lossv">-20%</b></label>'
+    +'<input id="mk-f-loss" type="range" min="-50" max="-5" step="5" value="-20" oninput="mkFollowLoss(this.value)">'
+    +'<div class="mk-f-hint" id="mk-f-lossh">예산의 20%를 잃으면 자동으로 멈춰요</div></div>'
+    +'<div class="mk-f-sum" id="mk-f-sum"></div>'
+    +'<details class="mk-f-adv"><summary>고급</summary>'
+    +'<div class="mk-f-row"><span>기존 포지션 처리</span><span class="mk-seg" id="mk-f-ex"><button type="button" class="on" onclick="mkFollowExisting(\'skip\',this)">건너뛰기</button><button type="button" onclick="mkFollowExisting(\'copy\',this)">지금 따라 들어가기</button></span></div>'
+    +'<div class="mk-f-row"><span>주문당 상한</span><span class="mk-f-in sm"><input id="mk-f-cap" type="number" inputmode="numeric" min="5" max="95" step="5" value="95" oninput="mkFollowCap(this.value)"><span class="un">%</span></span></div>'
+    +'<div class="mk-f-hint">건너뛰기는 다음 진입부터 따라가요. 주문당 상한은 한 번의 주문에 쓰는 예산 비율이에요.</div>'
+    +'</details>'
+    +(can?'<button type="button" class="mk-pri mk-f-cta" id="cps-cta" disabled onclick="cpStart(\''+ne+'\')">따라가기 시작</button>'
+      :'<div class="mk-f-gate">따라가기는 거래소 연결 뒤에 시작할 수 있어요</div><button type="button" class="mk-pri mk-f-cta" onclick="mkFollowClose(true);tfAcSheet(\'bitget\')">거래소 연결하기</button>')
+    +'<div class="mk-f-foot">시작 후에도 언제든 중단할 수 있어요. 수익이 나면 '+Math.round(cpMeta(nick).share*100)+'%를 작성자와 나눠요.</div>'
+    +'</div>';
+  w.addEventListener('click',function(e){ if(e.target===w) mkFollowClose(); });
+  document.body.appendChild(w);
+  var gs=$('g-scroll'); if(gs) gs.style.overflow='hidden';
+  document.addEventListener('keydown',mkFollowEsc);
+  cpFormSync();
+  var inp=$('cps-amt'); if(inp&&innerWidth>760){ try{ inp.focus(); }catch(e){} }
+}
+function mkFollowLoss(v){
+  TF_MKF.loss=+v;
+  var l=$('mk-f-lossv'), h=$('mk-f-lossh');
+  if(l) l.textContent=TF_MKF.loss+'%';
+  if(h) h.textContent='예산의 '+Math.abs(TF_MKF.loss)+'%를 잃으면 자동으로 멈춰요';
+  cpFormSync();
+}
+function mkFollowExisting(v,btn){
+  TF_MKF.existing=v;
+  var seg=$('mk-f-ex'); if(seg) [].forEach.call(seg.querySelectorAll('button'),function(b){ b.classList.toggle('on',b===btn); });
+  cpFormSync();
+}
+function mkFollowCap(v){ var n=parseInt(v,10); if(isFinite(n)) TF_MKF.cap=Math.max(5,Math.min(95,n)); }
+function mkFollowSum(v){
+  var el=$('mk-f-sum'); if(!el) return;
+  if(v==null){ el.innerHTML='<span class="mt2">예산을 입력하면 요약이 여기에 보여요</span>'; return; }
+  el.innerHTML='<div>예산 <b class="num">'+cpUsd(v,0)+'</b>로 '+gEsc(TF_MKF.nick||'')+' 님의 전략을 그대로 따라가요.</div>'
+    +'<div>손실이 <b class="num">'+cpUsd(v*Math.abs(TF_MKF.loss)/100,0)+'</b> ('+TF_MKF.loss+'%)에 닿으면 자동으로 멈춰요.'+(TF_MKF.existing==='copy'?' 열려 있는 포지션도 지금 따라 들어가요.':'')+'</div>';
+}
+/* ── 중단 3택 (지금 정리 / 원본 청산 대기 / 직접 관리) — 데모 엔진은 즉시 정산만 지원, 선택은 상태 메모로 기록 ── */
+function mkStopDlg(cid){
+  var c2=cpFind(cid); if(!c2||c2.status!=='active') return;
+  var d=cpCalc(c2);
+  var opt=function(k,t,sub){ return '<button type="button" class="mk-stop-o" onclick="mkStopGo(\''+cid+'\',\''+k+'\')"><b>'+t+'</b><span>'+sub+'</span></button>'; };
+  tfSS3Dlg('따라가기 중단, '+c2.nick,
+    '<div class="ntc">어떻게 정리할지 골라주세요. 어떤 선택이든 새 진입은 바로 멈춰요.</div>'
+    +'<div class="cpd-kv" style="margin:0 0 14px"><div><small>순손익 (분배 차감 후)</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div><div><small>돌려받을 예산</small><b class="num">'+cpUsd(Math.max(0,d.est))+'</b></div></div>'
+    +'<div class="mk-stop">'
+    +opt('now','지금 정리',d.posOpen?'열린 포지션을 현재가로 정리하고 예산을 바로 돌려받아요':'열린 포지션이 없어요. 예산을 바로 돌려받아요')
+    +opt('wait','원본 청산 대기','새 진입은 멈추고, 열린 포지션은 원본 전략이 청산할 때 함께 정리해요')
+    +opt('manual','직접 관리','새 진입은 멈추고, 열린 포지션은 내가 직접 정리해요')
+    +'</div>'
+    +'<div class="acts3" style="margin-top:14px"><button type="button" class="obtn" style="width:100%" onclick="tfSS3DlgClose()">계속 따라가기</button></div>');
+}
+function mkStopGo(cid,mode){
+  var c2=cpFind(cid); if(!c2||c2.status!=='active') return;
+  c2.stopMode=MK_STOP_L[mode]?mode:'now';
+  cpClose(cid);
+}
+window.addEventListener('hashchange',function(){ mkFollowClose(true); });
 /* ==JS:cx== (거래소 연결 전용 함수) */
 /* 연결 상태 — tfDerive().activation 만 읽는다. 카드/행 배지 5종: none(미연결) pending(연결 중) partial(부분 완료) done(연결됨) error(오류)
    UID 연동은 거래소 무관 데이터라 ex 가 비어 있으면 추천 거래소(Bitget) 카드가 그 상태를 받는다 */
