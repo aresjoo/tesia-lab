@@ -52,9 +52,9 @@ planActive:
 ```
 
 ## 청구 계산 (데모 정책, TFC.derive)
-- PLAN_KRW = 49,000. 초과 종량 = max(0, usageUnits - INCLUDED(1000)) × UNIT_KRW(10). 커미션 크레딧 = tradeCredit × KRW_PER_CREDIT(10). 무료 크레딧 = 로그인 월 WELCOME 100 × 10.
+- 현재 데모 구현: PLAN_KRW = 49,000. 종량 = max(0, usageUnits - (planActive ? INCLUDED(1000) : 0)) × UNIT_KRW(10). 거래 상쇄 = tradeCredit × KRW_PER_CREDIT(25). 무료 혜택 = 로그인한 비플랜 계정에 WELCOME_KRW(1000), 카드 플랜에는 0. 이 값은 병합 코드의 `tfDeriveCfg` 기준이며 이번 수정에서 과금 값 자체는 변경하지 않는다.
 - due = max(0, (planActive ? PLAN_KRW : 0) + overage - commission - free). offsetPct = min(100, round(commission / (plan + overage) × 100)).
-- 비플랜(2~5)은 plan=0이므로 due는 초과 종량에서 상쇄 후 잔액. coverage: free(2, freeLeft>0) / covered(due=0) / partial(due>0 & commission>0) / postpaid(due>0 & !commission & planActive) / blocked(freeLeft=0 & !planActive & balance<=0, 또는 billMode=watch).
+- 비플랜(2~5)은 plan=0이므로 due는 종량에서 거래 상쇄와 무료 혜택을 뺀 잔액이다. 청구가 남으면 무료 혜택 항도 수식에 표시한다. 프리셋 04는 `25,000 - 15,000 - 1,000 = 9,000`이다. coverage: free(2, freeLeft>0) / covered(due=0) / partial(due>0 & commission>0) / postpaid(due>0 & !commission & planActive) / blocked(freeLeft=0 & !planActive & balance<=0, 또는 billMode=watch).
 
 ## 11행 (사용자에게 보이는 것)
 | # | key | 상태 문장(statusLine) | 1차 CTA | 2차 CTA | 청구 라인 | interrupt | 미활성 뷰 헤드 |

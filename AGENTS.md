@@ -92,6 +92,10 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | 경로 | 현재 역할 |
 | --- | --- |
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+| `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+| `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+| `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
+| `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
 | `font-tokens.css` | 공용 타이포그래피 토큰 및 글꼴 규격 정의. Pretendard Variable, Inter Display, Geist Mono(고정폭 tabular-nums), Cormorant Garamond 에디토리얼 세리프 변수를 관리한다. |
 | `typography-specimen.html` | 상업용 글꼴 시안 3종 및 마스터 종합 타이포그래피 인터랙티브 검증·테스트 벤치. 실시간 프리셋 전환, 퀀트 메트릭 산출물, 에이전트 담화, 7개 언어 조화, 라이선스 검증표를 제공한다. |
 | `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |
@@ -153,7 +157,7 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 
 ## 검증 기준
 
-현재 자동 테스트, 린터, 빌드 검증은 없다. 변경 범위에 맞게 최소한 다음을 수동 확인한다.
+공용 린터·빌드 검증은 없다. 병합 UX 회귀 검증은 정적 서버 8781과 Chrome CDP 9333을 준비한 뒤 `rtk proxy node ux/review/CODEX_VERIFY.mjs all`로 실행한다. 드라이버 경로는 `CDP_DRIVER`, 증거 저장 경로는 `CODEX_QA_OUT` 환경 변수로 바꿀 수 있다. 자세한 실행 및 범위는 `ux/review/CODEX_FIX_REPORT.md`를 따른다. 변경 범위에 맞게 다음도 확인한다.
 
 - `rtk git diff --check`
 - 로컬 HTTP 서버에서 `/`, `/about/`, `/download/`, `/policies/`가 오류 없이 열리는지 확인
@@ -167,6 +171,8 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 네트워크 의존 서비스가 없어 확인하지 못한 항목은 성공으로 간주하지 말고 최종 보고에 미검증 사유를 적는다.
 
 ## 완료 조건
+
+병합 UX의 현재 상태 규칙: 미활성 뷰는 `tfDerive().primaryCTA`의 활성화 액션을 우선하며 API와 카드 모두 없는 경우에만 활성화 선택 카드를 보인다. 연결 완료는 로컬 저장을 즉시 확정한다. 마켓의 기본 검증 기간은 전체다. 터미널의 시세는 USDT, 규칙 전략 예산·손익은 원화다. 따라가기 계정은 `cpCalc`의 USDT 원장을 별도 행으로 표시하고, 긴급 정지는 규칙 전략 중지와 따라가기 계정 정산을 모두 처리한다. preview의 6개 예시는 소유 전략 수에 포함하지 않는다.
 
 작업은 코드만 동작한다고 끝난 것이 아니다. 구현, 사용자 문구, 공용 설정, 정책 문구, 링크, 이 기준 문서가 서로 일치하고, 대체된 레거시 문서와 그 참조가 제거되며, 수행한 검증과 수행하지 못한 검증이 최종 보고에 명확히 기록되어야 완료다.
 

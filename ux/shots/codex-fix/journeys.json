@@ -1,0 +1,294 @@
+{
+  "checks": [
+    {
+      "name": "guest",
+      "pass": true,
+      "got": "tfintro"
+    },
+    {
+      "name": "same trade login",
+      "pass": true,
+      "got": "tfinactive"
+    },
+    {
+      "name": "paper launch and toast",
+      "pass": true,
+      "got": {
+        "mode": "tfdash",
+        "owned": 1,
+        "env": "paper",
+        "toast": false
+      }
+    },
+    {
+      "name": "paper persistence",
+      "pass": true,
+      "got": {
+        "mode": "tfdash",
+        "owned": 1
+      }
+    },
+    {
+      "name": "halt confirmation",
+      "pass": true,
+      "got": {
+        "live": "live",
+        "dialog": true
+      }
+    },
+    {
+      "name": "halt stop",
+      "pass": true,
+      "got": "off"
+    },
+    {
+      "name": "paper resume without API",
+      "pass": true,
+      "got": "live"
+    },
+    {
+      "name": "preview isolation",
+      "pass": true,
+      "got": {
+        "mode": "tfdash",
+        "owned": 0,
+        "count": 6,
+        "src": true
+      }
+    },
+    {
+      "name": "preview close",
+      "pass": true,
+      "got": {
+        "mode": "tfintro",
+        "count": 0
+      }
+    },
+    {
+      "name": "inline direct form",
+      "pass": true,
+      "got": {
+        "view": "conn",
+        "uid": true
+      }
+    },
+    {
+      "name": "partial API failure",
+      "pass": true,
+      "got": {
+        "uid": "done",
+        "api": "none",
+        "rows": {
+          "uid": "ok",
+          "api": "fail"
+        }
+      }
+    },
+    {
+      "name": "API retry keeps UID, D27 completion",
+      "pass": true,
+      "got": {
+        "act": {
+          "uid": "done",
+          "api": "done",
+          "card": "none",
+          "message": "Bitget 연결됨",
+          "ex": "bitget"
+        },
+        "view": "done",
+        "done": 1,
+        "offset": false
+      }
+    },
+    {
+      "name": "completion dismissed",
+      "pass": true,
+      "got": {
+        "done": 0,
+        "ctx": null,
+        "resume": null
+      }
+    },
+    {
+      "name": "completion not replayed on reload",
+      "pass": true,
+      "got": {
+        "done": 0,
+        "api": true
+      }
+    },
+    {
+      "name": "partial UID failure",
+      "pass": true,
+      "got": {
+        "uid": "none",
+        "api": "done",
+        "rows": {
+          "uid": "fail",
+          "api": "ok"
+        }
+      }
+    },
+    {
+      "name": "UID retry",
+      "pass": true,
+      "got": "done"
+    },
+    {
+      "name": "card activates derive plan",
+      "pass": true,
+      "got": {
+        "plan": true,
+        "card": true,
+        "pay": true,
+        "sheet": false
+      }
+    },
+    {
+      "name": "copy deeplink sheet",
+      "pass": true,
+      "got": {
+        "mode": "tfss3d",
+        "sheet": true
+      }
+    },
+    {
+      "name": "follow start ledger and identity",
+      "pass": true,
+      "got": {
+        "spot": 900,
+        "c": {
+          "id": "cp1790268568826",
+          "nick": "세븐틴층",
+          "mode": "ratio",
+          "amount": 100,
+          "pairs": [
+            "BTC/USDT"
+          ],
+          "simStartI": 1120,
+          "adv": {
+            "marginMode": "follow",
+            "lev": "follow",
+            "slip": "sys",
+            "maxMarginPct": 95,
+            "maxPosX": 5,
+            "maxLoss": -20,
+            "existing": "skip"
+          },
+          "at": 1790268568826,
+          "status": "active",
+          "ledger": [
+            {
+              "at": 1790268568826,
+              "type": "add",
+              "amt": 100
+            }
+          ]
+        },
+        "mode": "tfss3",
+        "tab": "follow",
+        "nick": "세븐틴층"
+      }
+    },
+    {
+      "name": "follow-only trade matches derive",
+      "pass": true,
+      "got": {
+        "mode": "tfdash",
+        "terminal": "active",
+        "owned": 1,
+        "text": "AI 트레이딩\n긴급 정지\n따라가는 중\nBTC 눌림목 반등 매수, 추세 구간\n작성자 세븐틴층, 내 따라가기 계정\n운용 100.00 USDT, 순손익 1.98 USDT\n관리\n\n시뮬레이션 데이터예요"
+      }
+    },
+    {
+      "name": "stop three choices",
+      "pass": true,
+      "got": [
+        "지금 정리",
+        "원본 청산 대기",
+        "직접 관리"
+      ]
+    },
+    {
+      "name": "close ledger conservation",
+      "pass": true,
+      "got": {
+        "diff": 2.842170943040401e-14,
+        "status": "closed",
+        "out": 1,
+        "again": true
+      }
+    },
+    {
+      "name": "profile redirect",
+      "pass": true,
+      "got": {
+        "hash": "#/share/s/세븐틴층/all",
+        "mode": "tfss3d",
+        "nick": "세븐틴층"
+      }
+    },
+    {
+      "name": "performance deeplink",
+      "pass": true,
+      "got": {
+        "tab": "성과",
+        "kpis": 4,
+        "chart": true
+      }
+    },
+    {
+      "name": "route flags trade",
+      "pass": true,
+      "got": {
+        "nf": true,
+        "share": false
+      }
+    },
+    {
+      "name": "route flags market",
+      "pass": true,
+      "got": {
+        "nf": false,
+        "share": false
+      }
+    },
+    {
+      "name": "owned terminal no demo and correct chart",
+      "pass": true,
+      "got": {
+        "all": [
+          {
+            "src": "user",
+            "tv": "BITGET:BTCUSDT"
+          }
+        ],
+        "agent": 0,
+        "price": "TETH가 보고 있어요\nBTC/USDT Bitget, 마지막 봉 52,276 USDT\n포지션 없음\n기다리는 것\nRSI 44 아래 눌림 뒤 반등 (+0.5% 초과), 20/60 이평 괴리 3% 초과\n다음 확인\n다음 봉 마감\n마지막 확인\n0초 전"
+      }
+    },
+    {
+      "name": "watch fold",
+      "pass": true,
+      "got": {
+        "n": 1,
+        "txt": "2026.03.24 ~ 2026.08.28\n관망 유지, 158회, 158일\n펼치기"
+      }
+    },
+    {
+      "name": "watch expand",
+      "pass": true,
+      "got": "true"
+    },
+    {
+      "name": "mobile terminal",
+      "pass": true,
+      "got": {
+        "summary": "운용 ₩5,000,000\n누적 +₩734,250 (+14.7%)",
+        "overflow": 0,
+        "scroll": 0
+      }
+    }
+  ],
+  "errors": []
+}
