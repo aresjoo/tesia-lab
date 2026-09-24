@@ -14959,7 +14959,7 @@ function tfDerive(){
   else if(due>0) line='추가 사용 '+W(overage)+(commission>0?' - 상쇄 '+W(Math.min(commission,gross)):'')+(freeKrw>0?' - 무료 혜택 '+W(Math.min(freeKrw,Math.max(0,gross-Math.min(commission,gross)))):'')+' = 청구 '+W(due);
   else line='이번 달 청구 ₩0'+(commission>0?', 거래 혜택으로 상쇄':'');
   var offsetWord=commission<=0?'':(due===0?'거래 혜택으로 전액 상쇄됐어요':'거래 혜택으로 일부 상쇄됐어요');
-  var display=!user?'':('이번 달 예상 청구 '+W(due)+(offsetWord?', '+offsetWord:(plan?'':(freeLeft>0?', 무료 체험 중':''))));
+  var display=!user?'':('이번 달 예상 청구 '+W(due)+(offsetWord?', '+offsetWord:''));
   var coverage;
   if(!user) coverage='none';
   else if(watch) coverage='blocked';
@@ -14972,7 +14972,7 @@ function tfDerive(){
   var exName=tfExName(ex)||'거래소';
   var ST={
     guest:'',
-    signed:'무료 체험 중이에요. 연결이나 결제 없이 만들고 검증할 수 있어요',
+    signed:'연결이나 결제 없이 만들고 검증할 수 있어요',
     'linked-zero':exName+' 연결이 끝났어요. 첫 거래부터 이용료 상쇄가 시작돼요',
     'linked-low':'거래 혜택으로 이용료 일부가 상쇄됐어요. 부족분은 카드로 청구돼요',
     'linked-high':'이번 달 이용료가 거래 혜택으로 충당됐어요',
@@ -14985,14 +14985,14 @@ function tfDerive(){
     'plan-linked-zero':'준비 완료예요. 첫 거래부터 이용료 상쇄가 시작돼요'
   };
   var statusLine=ST[key]||'';
-  if(user&&freeLeft===0&&key==='signed') statusLine='무료 체험을 다 썼어요. 거래소를 연결하거나 카드를 등록하면 계속 쓸 수 있어요';
-  else if(user&&freeLeft<=2&&key==='signed') statusLine='무료 체험이 곧 끝나요. 중단 없이 쓰려면 거래소를 연결하거나 카드를 등록하세요';
+  if(user&&freeLeft===0&&key==='signed') statusLine='무료로 쓸 수 있는 만큼 다 썼어요. 거래소를 연결하거나 카드를 등록하면 계속 쓸 수 있어요';
+  else if(user&&freeLeft<=2&&key==='signed') statusLine='무료로 쓸 수 있는 분량이 곧 끝나요. 중단 없이 쓰려면 거래소를 연결하거나 카드를 등록하세요';
   if(watch) statusLine='AI 기능이 잠시 멈춰 있어요. 카드 등록이나 거래소 연결 즉시 다시 켜져요';
   var reduceHint=null;
   if(user&&!uid) reduceHint='거래소를 연결하면 거래 혜택으로 이용료가 상쇄돼요';
   else if(user&&!plan&&due>0) reduceHint='카드를 등록하면 부족분이 자동으로 청구돼요';
   /* CTA */
-  var exec=owned>0?{label:'터미널 열기',action:"tfNav('#/trade')"}:(draft?{label:'이 전략 실행하기',action:"tfNav('#/strategy/connect')"}:{label:'대표 전략 모의로 켜보기',action:'tfXLaunchDemo()'});
+  var exec=owned>0?{label:'터미널 열기',action:"tfNav('#/trade')"}:(draft?{label:'이 전략 실행하기',action:"tfNav('#/strategy/connect')"}:{label:'공개 전략 골라보기',action:"tfShareHub('find')"});
   var pri=null,sec=null;
   if(!user){ pri={label:'무료로 시작',action:"authOpen('signup')"}; sec={label:'터미널 미리 보기',action:'tfPreviewOpen()'}; }
   else if(key==='signed'){ pri=exec; sec=draft?{label:'직접 만들기',action:'gHome()'}:{label:'직접 만들기',action:'gHome()'}; }
@@ -15071,8 +15071,8 @@ var TF_QA_OVERLAYS=[
 ];
 var TF_QA_EXPECT={
   guest:['무료로 시작','없음','없음','미연결','guest','#/trade, 따라하기, 거래소 연결'],
-  signed:['대표 전략 모의로 켜보기','₩0, 무료 체험','무료 N회','미연결','inactive','#/trade, 이용 현황'],
-  'linked-zero':['이 전략 실행하기 / 모의로 켜보기','₩0','가능','연결됨','inactive','#/trade, 이용 현황, 거래소 연결'],
+  signed:['공개 전략 골라보기','₩0','가능','미연결','inactive','#/trade, 이용 현황'],
+  'linked-zero':['이 전략 실행하기 / 공개 전략 골라보기','₩0','가능','연결됨','inactive','#/trade, 이용 현황, 거래소 연결'],
   'linked-low':['터미널/실행','공식(부족분)','가능','연결됨','inactive','이용 현황(상쇄 바 부분)'],
   'linked-high':['터미널/실행','₩0 상쇄','가능','연결됨','inactive','이용 현황(충당 문구)'],
   'plan-high-unlinked':['거래소 연결','플랜 + 추가','가능','미연결','inactive','이용 현황, 거래소 연결'],
@@ -15259,9 +15259,9 @@ function tfTradeInactiveView(){
   TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false;
   gChead('AI 트레이딩','',null);
   var strat=t.strat||[];
-  var paperSeen=f.owned>0||!!t.txPaperAt||strat.some(function(x){ return x&&x.env==='paper'; });
+  var pickSeen=f.owned>0||f.draft||!!(t.follows&&t.follows.length)||!!(t.cp&&t.cp.copies&&t.cp.copies.length);
   var liveSeen=strat.some(function(x){ return x&&x.status==='live'&&x.env!=='paper'; });
-  var steps=[['가입',true],['모의로 보기',paperSeen],['거래소 연결',d.activation.api==='done'],['첫 실행',liveSeen]];
+  var steps=[['가입',true],['전략 고르기',pickSeen],['거래소 연결',d.activation.api==='done'],['첫 실행',liveSeen]];
   var curI=-1; steps.forEach(function(s,i){ if(curI<0&&!s[1]) curI=i; });
   var onb='<ol class="tx-onb" aria-label="시작 단계">'+steps.map(function(s,i){
     return '<li class="'+(s[1]?'done':(i===curI?'cur':''))+'"><span class="no">'+(s[1]?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>':(i+1))+'</span><span class="lb">'+s[0]+'</span></li>';
@@ -15273,9 +15273,8 @@ function tfTradeInactiveView(){
   var layer='';
   if(!draft){
     layer='<div class="tx-launch">'
-      +'<button type="button" class="tx-lrow'+(activationCTA?'':' pri')+'" onclick="tfTradeInactiveLaunch()"><span class="tx-lrow-t"><b>대표 전략 모의로 켜보기</b><span>TETH 공식 예시 전략을 모의로 바로 실행해요. 연결이나 결제 없이.</span></span><span class="tx-arr" aria-hidden="true">→</span></button>'
+      +'<button type="button" class="tx-lrow'+(activationCTA?'':' pri')+'" onclick="tfShareHub(\'find\')"><span class="tx-lrow-t"><b>공개 전략 골라보기</b><span>검증된 전략을 골라 내 예산으로 따라가요.</span></span><span class="tx-arr" aria-hidden="true">→</span></button>'
       +'<button type="button" class="tx-lrow" onclick="gHome()"><span class="tx-lrow-t"><b>직접 만들기</b><span>원하는 전략을 한 문장으로 말하면 TETH가 만들고 검증해요.</span></span><span class="tx-arr" aria-hidden="true">→</span></button>'
-      +'<button type="button" class="tx-lrow" onclick="tfShareHub(\'find\')"><span class="tx-lrow-t"><b>공개 전략 골라보기</b><span>다른 사용자의 검증된 전략을 내 예산으로 따라가요.</span></span><span class="tx-arr" aria-hidden="true">→</span></button>'
       +'</div>';
   } else {
     var asset=(t.intake&&t.intake.asset&&t.intake.asset.label)||'자산', p=draft.p||{};
@@ -15292,9 +15291,7 @@ function tfTradeInactiveView(){
   if(activationCTA) layer='<div class="tx-launch"><button type="button" class="tx-lrow pri" onclick="'+gEsc(activationCTA.action)+'"><span class="tx-lrow-t"><b>'+gEsc(activationCTA.label)+'</b><span>'+gEsc(d.reduceHint||'')+'</span></span><span class="tx-arr" aria-hidden="true">→</span></button></div>'+layer;
   var free='';
   if(!f.plan){
-    var pct=f.freeQuota>0?Math.round(f.freeLeft/f.freeQuota*100):0;
-    free='<div class="tx-free"><div class="tx-free-hd"><span>무료 체험</span><b>'+(f.freeLeft>0?'이용 중':'다 썼어요')+'</b></div>'
-      +'<p>'+(f.freeLeft>0?'만들기와 검증에 써요. 모의 실행은 횟수를 쓰지 않아요.':'거래소를 연결하거나 카드를 등록하면 계속 쓸 수 있어요.')+'</p></div>';
+    free='';
   } else if(d.bill.line){
     free='<div class="tx-free"><div class="tx-free-hd"><span>청구</span><b>'+gEsc(d.bill.display)+'</b></div>'+(d.reduceHint?'<p>'+gEsc(d.reduceHint)+'</p>':'')+'</div>';
   }
