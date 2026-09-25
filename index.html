@@ -4333,8 +4333,8 @@ button{-webkit-tap-highlight-color:transparent}
 .cx-site a{color:var(--gt2);text-decoration:none}
 .cx-site a:hover{color:var(--gt);text-decoration:underline;text-underline-offset:3px}
 .cx-tile{display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex:none} /* 로고 폴백 타일 */
-/* 사이드바 1급 버튼 — 게스트에게도 노출 (전략 따라하기와 동일 규칙) */
-.g-side:not(.authed) #g-tf-cx-btn{display:flex}
+/* 사이드바 거래소 연결: 로그인 사용자만 노출 (사용자 지시, 비로그인 제거) */
+.g-side:not(.authed) #g-tf-cx-btn{display:none}
 @media (max-width:1024px){
   .cx-main{grid-template-columns:minmax(0,1fr) 260px;gap:0 28px;padding:32px 30px 22px}
 }
