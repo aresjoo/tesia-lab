@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TETH AI 아이콘 벽</title>
+<style>
+  :root{
+    --bg0:#0f1012;
+    --bg1:#17181b;
+    --bg2:#1f2024;
+    --t1:#f1f1f3;
+    --t2:#a3a5ab;
+    --t3:#7d8087;
+    --t4:#4a4c52;
+    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+    --sans:Pretendard,system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg0);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+
+  /* hero floor context: the dark bottom of the hero video fading into page bg */
+  .floor{height:160px;background:linear-gradient(180deg,#10131c 0%,#0f1117 45%,var(--bg0) 100%)}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+  .ai{padding:24px 0 112px;text-align:center}
+  .ai h2{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1.3;letter-spacing:-.01em;margin:0}
+  .ai .lead{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--t2)}
+
+  .wall{list-style:none;margin:48px auto 0;padding:0;max-width:880px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .wall li{margin:0}
+  .tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;width:100%;height:100%;
+        padding:32px 22px 30px;background:var(--bg1);border-radius:16px;text-align:center;cursor:default}
+  .tile img{width:56px;height:56px;border-radius:13px;display:block;background:#222}
+  .tile .nm{margin-top:14px;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--t1)}
+  .tile .rl{margin-top:6px;font-size:13.5px;line-height:1.5;color:var(--t3);word-break:keep-all;text-wrap:balance;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+  .hint{display:none}
+  .tm{margin:20px 0 0;font-size:12px;color:var(--t4)}
+  .panel{display:none}
+
+  .next{padding:0 0 80px}
+  .next h2{font-family:var(--serif);font-weight:500;font-size:36px;color:var(--t1);opacity:.28;max-width:880px;margin:0 auto}
+
+  /* ---------- 390: 3x3 icon grid, role behind a tap, one role panel ---------- */
+  @media (max-width:640px){
+    .floor{height:120px}
+    .wrap{padding:0 16px}
+    .ai{padding:8px 0 72px}
+    .ai h2{font-size:27px}
+    .ai .lead{display:none}
+    .hint{display:block;margin:10px 0 0;font-size:13px;color:var(--t3)}
+    .wall{margin-top:28px;gap:8px}
+    .tile{padding:18px 6px 14px;border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+          transition:background-color .15s ease}
+    .tile img{width:52px;height:52px;border-radius:12px}
+    .tile .nm{margin-top:10px;font-size:12.5px;font-weight:500;color:var(--t2)}
+    .tile .rl{display:none}
+    .tile[aria-pressed="true"]{background:var(--bg2)}
+    .tile[aria-pressed="true"] .nm{color:var(--t1);font-weight:600}
+    .tile:focus-visible{outline:1.5px solid var(--t2);outline-offset:2px}
+
+    .panel{display:block;margin-top:8px;background:var(--bg1);border-radius:14px;padding:16px 18px;text-align:left;min-height:76px}
+    .panel .pn{font-size:14px;font-weight:600;color:var(--t1)}
+    .panel .pr{margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--t2)}
+    .tm{margin-top:14px;font-size:11.5px}
+    .next h2{font-size:26px}
+  }
+  @media (prefers-reduced-motion:reduce){ .tile{transition:none} }
+</style>
+</head>
+<body>
+  <div class="floor" aria-hidden="true"></div>
+
+  <section class="ai" aria-labelledby="aiTitle">
+    <div class="wrap">
+      <h2 id="aiTitle">상황에 맞는 AI를 골라 써요</h2>
+      <p class="lead">뉴스를 읽을 때, 숫자를 셀 때, 이유를 쓸 때 잘하는 AI가 달라요.</p>
+
+      <p class="hint">아이콘을 누르면 하는 일이 보여요</p>
+
+      <ul class="wall" id="wall"></ul>
+
+      <div class="panel" id="panel" aria-live="polite">
+        <div class="pn" id="pn"></div>
+        <div class="pr" id="pr"></div>
+      </div>
+
+      <p class="tm">각 로고는 해당 회사의 상표예요</p>
+    </div>
+  </section>
+
+  <section class="next">
+    <div class="wrap"><h2>지금 TETH가 하는 일</h2></div>
+  </section>
+
+<script>
+  const AIS = [
+    ['chatgpt','ChatGPT','복잡한 상황을 정리해 판단해요'],
+    ['claude','Claude','왜 그렇게 했는지 차분한 문장으로 써요'],
+    ['gemini','Gemini','구글 검색으로 최신 정보를 확인해요'],
+    ['grok','Grok','X의 실시간 여론을 읽어요'],
+    ['deepseek','DeepSeek','시장을 쉬지 않고 훑어요'],
+    ['qwen','Qwen','여러 종목을 한꺼번에 비교해요'],
+    ['perplexity','Perplexity','뉴스와 공시의 출처를 찾아요'],
+    ['kimi','Kimi','긴 보고서와 자료를 읽어요'],
+    ['mistral','Le Chat (Mistral)','내부 서버에서 돌리는 예비 판단이에요'],
+  ];
+  const wall = document.getElementById('wall');
+  const pn = document.getElementById('pn'), pr = document.getElementById('pr');
+  wall.innerHTML = AIS.map(([k,n,r],i)=>
+    `<li><button class="tile" type="button" data-i="${i}" aria-pressed="${i===0}">
+       <img src="../../assets/ai/${k}.png" alt="" width="56" height="56" loading="eager">
+       <span class="nm">${n}</span><span class="rl">${r}</span>
+     </button></li>`).join('');
+  function pick(i){
+    wall.querySelectorAll('.tile').forEach(t=>t.setAttribute('aria-pressed', String(+t.dataset.i===i)));
+    pn.textContent = AIS[i][1]; pr.textContent = AIS[i][2];
+  }
+  wall.addEventListener('click', e=>{ const t=e.target.closest('.tile'); if(t) pick(+t.dataset.i); });
+  pick(0);
+</script>
+</body>
+</html>

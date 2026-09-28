@@ -1,0 +1,1102 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0e659-03d1-7f72-be44-2d50ca640e0e
+--------
+user
+당신은 CODEX. ux-audit/ai/CRITIQUE_BRIEF.md 를 읽고 당신 안(codex)을 제외한 claude 와 grid 를 채점한다. PNG는 실제로 열어서 본다. 산출 ux-audit/ai/CRIT-codex.md. 코드 수정 금지.
+
+codex
+평가 브리프를 읽고 claude와 grid의 PNG를 직접 열어 비교한 뒤, `ux-audit/ai/CRIT-codex.md`에 채점 결과를 작성하겠습니다. 코드는 수정하지 않겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 253ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 342ms:
+codex 인박스 : (비어 있음)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 12ms:
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'ux-audit/ai/CRITIQUE_BRIEF.md' -Encoding UTF8; Get-Content -LiteralPath 'AGENTS.md' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk rg --files ux-audit/ai' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 51ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ succeeded in 280ms:
+# "TETH가 쓰는 AI" 섹션 시안 비판 브리프
+- 구조, 외부 의존성, 다국어 키 체계처럼 되돌리기 어려운 결정을 하기 전. `-Type proposal`로 먼저 의견을 구한다.
+- 검증하지 못한 항목을 남긴 채 작업을 넘길 때. `-Type handoff`로 무엇을 확인하지 못했는지 적는다.
+
+### 메시지 종류
+
+`note` 공유 · `question` 질문 · `answer` 답변 · `proposal` 제안 · `review` 지적 · `claim` 편집 영역 선점 · `release` 선점 해제 · `handoff` 인계
+
+### 작성 규칙
+
+- 근거를 담는다. 파일과 줄 번호, 실행한 명령과 출력, 재현 절차를 적는다. "좋아 보인다", "문제 없어 보인다" 같은 인상만 적은 메시지는 보내지 않는다.
+- 반대할 때는 대안을 함께 제시한다.
+- 받은 `claim`을 무시하고 같은 영역을 고치지 않는다. 먼저 손대야 하면 `question`으로 협의한다.
+- 상대의 주장을 검증 없이 사실로 받아들이지 않는다. 코드와 실제 동작이 언제나 우선이다.
+- 메시지는 저장소에 커밋하지 않는다. 결론은 코드와 이 문서에 남기고, 우체통은 그 과정을 위한 임시 통로로만 쓴다.
+
+### 한계와 주의
+
+- 알림이 없다. 보낸 메시지는 상대가 다음 턴을 시작할 때 읽는다. 즉시 답이 필요하면 사용자에게 직접 알린다.
+- `claim`은 잠금이 아니라 합의 장치다. 강제되지 않으므로 편집 전 `check`로 상대의 선점을 반드시 확인한다.
+- `.mailbox/mail.ps1`을 수정할 때는 UTF-8 BOM을 유지한다. Windows PowerShell 5.1은 BOM이 없는 스크립트를 ANSI로 읽어 한글이 깨지고 구문 오류가 난다.
+
+## 현재 프로젝트 개요
+
+TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 웹 프로토타입이다. 사용자가 자연어로 전략 아이디어를 입력하고, 전략을 구조화하며, 브라우저에서 생성한 데모 데이터로 리서치와 백테스트 결과를 확인하고, 거래소 연결 및 라이브 운용 화면까지 체험하는 흐름을 제공한다.
+
+현재 구현은 바닐라 HTML, CSS, JavaScript로만 구성된 클라이언트 측 데모다. 별도의 백엔드, 데이터베이스, 실제 AI 모델 호출, 실거래 API, 사용자 계정 서버, 빌드 파이프라인은 이 저장소에 없다. 백테스트·인증·거래소 연결·라이브 거래·에이전트 협업 화면은 브라우저 안에서 시뮬레이션된다. 정책 페이지에 적힌 보안 또는 데이터 처리 설명도 이 저장소에서 구현 여부를 증명하는 것은 아니다.
+
+주요 사용자 경험은 다음과 같다.
+
+- 대화형 전략 생성과 조건 보완
+- 결정론적 데모 시세를 이용한 백테스트, 차트, 성과 지표
+- 전략 설계·퀀트·리스크·검증 역할을 표현한 리서치 진행 화면과 보고서
+- 홀드아웃, 민감도, 스트레스 등 검증 결과의 데모 표현
+- 거래소 연결, 실행 확인, 일시 정지와 종료를 포함한 모의 라이브 운용
+- 로그인·회원가입·프로필·설정·피드백의 클라이언트 데모
+- 한국어, 영어, 일본어, 중국어 간체·번체, 스페인어, 프랑스어 UI
+- 통화 표시, 소개, 요금제, 앱 다운로드, 정책·안전 정보, 고객지원 위젯
+
+## 파일과 책임
+
+| 경로 | 현재 역할 |
+| --- | --- |
+| `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+| `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+| `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+| `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+| `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
+| `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
+| `ux-audit/hero/mock-codex.html`, `NOTE-codex.md`, `mock-codex-*.png`, `frame3-codex.png` | 실제 제품이 먼저 보이는 Codex 히어로 경쟁 시안, 구현 노트, 1440px·390px 렌더와 영상 3초 참고 프레임. 한국어 전용 독립 데모로, 포트 8793에서 확인하며 제품 본문과 인증 흐름은 변경하지 않는다. |
+| `ux-audit/hero/CRIT-codex.md` | claude와 light 히어로 시안의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 8개 항목 점수, 근거, 단일 채택 추천과 필수 수정 조건을 기록하며 구현 완료 명세는 아니다. |
+| `ux-audit/research/AI_MODELS_TRADING.md`, `ux-audit/research/CODEX_VERIFY_MODELS.md` | 거래 판단과 Pine Script 작성 모델의 Claude 조사 초안 및 Codex 항목별 검증. 공식 출처 대조, 미확정 수치, 호출 비용과 조합 수정안을 기록한다. 실제 모델 성능 실험이나 제품 구현 완료 명세가 아니다. |
+| `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |
+| `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+| `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+| `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+| `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+| `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+| `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+| `policies/index.html` | 해시 라우팅으로 개요, 개인정보처리방침, 서비스 약관, 기술·안전 설명, FAQ를 보여 준다. 법률·정책 문구 변경 시 시행일과 실제 서비스 상태를 별도로 검증해야 한다. |
+| `assets/` | 로고, 소형 로고, 파비콘 PNG 원본을 보관한다. |
+| `.nojekyll` | GitHub Pages에서 Jekyll 처리를 비활성화한다. |
+| `.mailbox/mail.ps1` | claude·codex·agy 세션 간 우체통 구현. UTF-8 BOM으로 저장해야 한다. |
+| `.mailbox/mail.cmd` | 위 스크립트의 실행 래퍼. PowerShell 실행 정책에 막히지 않도록 `-ExecutionPolicy Bypass`로 호출한다. |
+| `.mailbox/inbox/`, `.mailbox/archive/` | 주고받은 메시지 파일. Git에서 제외되며 제품 소스가 아니다. |
+| `.gitignore` | 로컬 전용 `.claude/` 설정과 우체통 메시지를 제외한다. |
+| `.claude/launch.json` | Git에서 제외된 로컬 실행 설정이다. `http-server`를 8788 포트에서 실행한다. 제품 소스나 공유 문서로 간주하지 않는다. |
+
+새 파일이나 디렉터리를 추가하거나 역할을 바꾸면 위 표를 즉시 수정한다. 삭제된 경로는 표에서도 제거한다.
+
+## 런타임과 외부 의존성
+
+- 패키지 매니저, 번들러, 프레임워크, 설치 단계가 없다.
+- HTML 파일을 `file://`로 직접 열지 말고 저장소 루트에서 HTTP 서버로 제공한다.
+- 로컬 실행: `rtk npx -y http-server -p 8788 -c-1 .`
+- 기본 확인 주소: `http://localhost:8788/`
+- Google Fonts를 네트워크에서 불러온다.
+- 다운로드 QR 코드는 `api.qrserver.com`에 스토어 URL을 전달해 생성한다.
+- `site-config.js`에 `zendeskKey`가 설정된 경우에만 Zendesk 스니펫을 동적으로 불러온다.
+- 언어와 통화 등 일부 UI 선택은 `localStorage`에 저장한다. 영구 서버 상태로 문서화하지 않는다.
+
+외부 URL, 스토어 ID, 가격, 지원 이메일, 정책 시행일은 변경되기 쉬운 운영 값이다. 관련 작업에서는 코드 전체를 검색해 중복 값과 오래된 문구가 없는지 확인한다. 비밀 값이나 실제 거래소 키를 저장소에 넣지 않는다.
+
+## 구현 규칙
+
+- 명시적인 리팩터링 요청이 없다면 기존의 정적 파일 구조와 바닐라 JavaScript 방식을 유지한다.
+- `index.html`의 DOM ID, 전역 상태, 전역 함수는 서로 강하게 연결되어 있다. 이름이나 화면 구조를 바꾸기 전에 정의와 모든 호출부를 검색한다.
+- 공용 가격, 스토어 URL, Zendesk 설정은 페이지에 복제하지 않고 `site-config.js`에서 관리한다.
+- 사용자에게 보이는 문구를 추가하거나 바꾸면 지원하는 7개 언어의 번역 키와 `document.documentElement.lang` 적용을 함께 확인한다. 고객지원 문구는 `help-widget.js`에도 별도 번역 배열이 있다.
+- 다크 단일 테마가 현재 제품 규칙이다. 라이트 테마나 테마 토글을 잔존 코드만 보고 복원하지 않는다.
+- 상대 경로는 페이지 깊이에 따라 달라진다. 루트는 `./`, 하위 페이지는 `../` 기준 링크와 자산 경로를 각각 검증한다.
+- 새 창 링크에는 `rel="noopener noreferrer"`를 유지한다.
+- 모바일 레이아웃, 키보드 포커스, ARIA 레이블, `prefers-reduced-motion` 처리를 기능 변경과 함께 보존한다.
+- 금융 수치와 자동매매 결과는 데모임을 명확히 유지하고, 투자 수익을 보장하는 표현을 추가하지 않는다.
+- 정책·개인정보·보안 문구는 일반 UI 카피처럼 임의 수정하지 않는다. 요청된 변경의 근거와 실제 구현을 확인하고 시행일이 있으면 함께 갱신한다.
+
+## 문서 최신화 및 레거시 제거 절차
+
+문서 작업은 다음 순서로 수행한다.
+
+1. `rtk rg --files`와 `rtk git status --short`로 현재 구조와 사용자 변경분을 확인한다.
+2. 구현과 문서를 함께 검색해 현재 동작, 설정, 명칭, 링크를 교차 검증한다.
+3. 변경으로 영향을 받는 설명을 같은 작업 안에서 갱신한다. 최소한 이 파일의 프로젝트 개요, 파일 표, 실행 방법, 외부 의존성, 검증 절차를 확인한다.
+4. 동일한 내용을 설명하는 문서가 여러 개면 하나의 현재 문서로 통합하고 나머지는 삭제한다. `old`, `legacy`, `backup`, 날짜 접미사를 붙인 문서 사본을 저장소 안에 만들지 않는다.
+5. 삭제한 문서를 가리키는 링크, 목차, 스크립트, 에이전트 지침도 함께 제거하거나 새 기준 문서로 연결한다.
+6. 문서의 명령, 경로, URL을 실제로 확인하고 `rtk git diff --check`로 형식 오류를 검사한다.
+
+레거시 여부는 단순히 오래되었다는 이유가 아니라 현재 구현과 목적에 더 이상 대응하지 않는지로 판단한다. 법률상 보존해야 하는 정책 이력, 사용자가 명시적으로 보관을 요청한 기록, 아직 참조되는 마이그레이션 자료는 임의 삭제하지 않는다. 보존이 필요한 경우 현재 문서와 명확히 구분하고 보존 이유를 적는다.
+
+새 문서를 만들기 전에 기존 문서에 통합할 수 있는지 먼저 판단한다. `README.md`가 추후 추가되면 사용자용 설치·사용 안내에 집중하고, 에이전트 작업 규칙과 구조 설명은 이 파일을 기준으로 하여 중복을 최소화한다.
+
+## 검증 기준
+
+공용 린터·빌드 검증은 없다. 병합 UX 회귀 검증은 정적 서버 8781과 Chrome CDP 9333을 준비한 뒤 `rtk proxy node ux/review/CODEX_VERIFY.mjs all`로 실행한다. 드라이버 경로는 `CDP_DRIVER`, 증거 저장 경로는 `CODEX_QA_OUT` 환경 변수로 바꿀 수 있다. 자세한 실행 및 범위는 `ux/review/CODEX_FIX_REPORT.md`를 따른다. 변경 범위에 맞게 다음도 확인한다.
+
+- `rtk git diff --check`
+- 로컬 HTTP 서버에서 `/`, `/about/`, `/download/`, `/policies/`가 오류 없이 열리는지 확인
+- 정책 페이지의 `#overview`, `#privacy`, `#terms`, `#technologies`, `#faq` 라우팅과 목차 이동 확인
+- 데스크톱과 약 390px 모바일 폭에서 레이아웃, 메뉴, 모달, 고객지원 버튼 겹침 확인
+- 브라우저 콘솔의 JavaScript 오류와 깨진 자산·링크 확인
+- 앱의 전략 생성 → 리서치/백테스트 → 보고서 → 연결/실행 흐름 확인
+- 로그인/가입, 언어, 통화, 피드백, 프로필 및 세션 메뉴의 주요 상호작용 확인
+- 소개 페이지 요금제가 `site-config.js`와 일치하는지, 다운로드 페이지의 두 스토어 링크와 QR이 같은 URL을 쓰는지 확인
+
+네트워크 의존 서비스가 없어 확인하지 못한 항목은 성공으로 간주하지 말고 최종 보고에 미검증 사유를 적는다.
+
+## 완료 조건
+
+병합 UX의 현재 상태 규칙: 미활성 뷰는 `tfDerive().primaryCTA`의 활성화 액션을 우선하며 API와 카드 모두 없는 경우에만 활성화 선택 카드를 보인다. 연결 완료는 로컬 저장을 즉시 확정한다. 마켓의 기본 검증 기간은 전체다. 터미널의 시세는 USDT, 규칙 전략 예산·손익은 원화다. 따라가기 계정은 `cpCalc`의 USDT 원장을 별도 행으로 표시하고, 긴급 정지는 규칙 전략 중지와 따라가기 계정 정산을 모두 처리한다. preview의 6개 예시는 소유 전략 수에 포함하지 않는다.
+
+작업은 코드만 동작한다고 끝난 것이 아니다. 구현, 사용자 문구, 공용 설정, 정책 문구, 링크, 이 기준 문서가 서로 일치하고, 대체된 레거시 문서와 그 참조가 제거되며, 수행한 검증과 수행하지 못한 검증이 최종 보고에 명확히 기록되어야 완료다.
+
+여기에 더해 자신의 인박스에 처리하지 않은 메시지가 없어야 하고, 선점한 `claim`은 `release`로 해제되어 있어야 하며, 다른 세션이 이어받아야 할 미검증 항목은 `handoff`로 전달되어 있어야 한다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg --files ux-audit/ai' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'ux-audit/ai/BRIEF.md','ux-audit/ai/NOTE-claude.md','ux-audit/ai/NOTE-grid.md','ux-audit/ai/mock-claude.html','ux-audit/ai/mock-grid.html' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 83ms:
+ux-audit/ai\prompt-codex.md
+ux-audit/ai\prompt-codex-crit.md
+ux-audit/ai\NOTE-grid.md
+ux-audit/ai\NOTE-codex.md
+ux-audit/ai\NOTE-claude.md
+ux-audit/ai\mock-grid.html
+ux-audit/ai\mock-grid-m390.png
+ux-audit/ai\mock-grid-d1440.png
+ux-audit/ai\mock-codex.html
+ux-audit/ai\mock-codex-m390.png
+ux-audit/ai\mock-codex-d1440.png
+ux-audit/ai\mock-claude.html
+ux-audit/ai\mock-claude-m390.png
+ux-audit/ai\mock-claude-d1440.png
+ux-audit/ai\log-codex.txt
+ux-audit/ai\log-codex-crit.txt
+ux-audit/ai\CRITIQUE_BRIEF.md
+ux-audit/ai\BRIEF.md
+
+ succeeded in 93ms:
+ M AGENTS.md
+?? ux-audit/ai/CRITIQUE_BRIEF.md
+?? ux-audit/ai/NOTE-claude.md
+?? ux-audit/ai/NOTE-codex.md
+?? ux-audit/ai/NOTE-grid.md
+?? ux-audit/ai/log-codex-crit.txt
+?? ux-audit/ai/log-codex.txt
+?? ux-audit/ai/mock-claude-d1440.png
+?? ux-audit/ai/mock-claude-m390.png
+?? ux-audit/ai/mock-claude.html
+?? ux-audit/ai/mock-codex-d1440.png
+?? ux-audit/ai/mock-codex-m390.png
+?? ux-audit/ai/mock-codex.html
+?? ux-audit/ai/mock-grid-d1440.png
+?? ux-audit/ai/mock-grid-m390.png
+?? ux-audit/ai/mock-grid.html
+?? ux-audit/ai/prompt-codex-crit.md
+?? ux-audit/card2/
+?? ux-audit/hero/frame3-codex.png
+?? ux-audit/hero/frame3.png
+?? ux-audit/hero/log-agy.txt
+?? ux-audit/hero/log-codex-crit.txt
+?? ux-audit/hero/log-codex.txt
+?? ux-audit/hero/prompt-agy.md
+?? ux-audit/hero/prompt-codex-crit.md
+?? ux-audit/hero/prompt-codex.md
+?? ux-audit/logs/
+?? ux-audit/research/log-codex-verify.txt
+?? ux-audit/review/
+
+ succeeded in 314ms:
+# "TETH가 쓰는 AI" 섹션 시안 경쟁 브리프
+
+위치: AI 트레이딩 랜딩(index.html `tfIntroView`)에서 히어로(영상 바닥) 바로 아래, "지금 TETH가 하는 일" 섹션 바로 위에 새 섹션을 넣는다. 페이지 맥락: ux-audit/hero/final-d1440.png, ux-audit/card/final-d1440.png. 다크 배경(#0f1012 계열), 제목은 히어로와 같은 세리프 스택("Noto Serif KR","Nanum Myeongjo",Batang,serif), 본문은 system-ui/Pretendard 계열, 라임 금지(이 섹션에 1차 행동 없음), 콘텐츠 폭은 페이지와 같은 최대 1140px(사이드바 제외 영역), 카드 열은 최대 680~900px 범위에서 자유.
+
+## 메시지
+TETH는 하나의 AI가 아니라, 시장 상황과 전략에 맞는 AI를 골라 쓴다. 섹션 제목은 아래 3안 중 하나를 고르고 노트에 이유를 쓴다(수정 금지, 선택만).
+1. "상황에 맞는 AI를 골라 써요"
+2. "AI 하나에 맡기지 않아요"
+3. "시장이 바뀌면 쓰는 AI도 바뀌어요"
+리드 문장(선택, 최대 1줄): "뉴스를 읽을 때, 숫자를 셀 때, 이유를 쓸 때 잘하는 AI가 달라요." 를 쓰거나 생략.
+
+## AI 9개와 역할 한 줄 (아이콘: assets/ai/<key>.png, 앱스토어 아이콘 512px, 둥근 사각으로 표시)
+| key | 표시 이름 | 역할 한 줄 (그대로 사용) |
+|---|---|---|
+| chatgpt | ChatGPT | 복잡한 상황을 정리해 판단해요 |
+| claude | Claude | 왜 그렇게 했는지 차분한 문장으로 써요 |
+| gemini | Gemini | 구글 검색으로 최신 정보를 확인해요 |
+| grok | Grok | X의 실시간 여론을 읽어요 |
+| deepseek | DeepSeek | 시장을 쉬지 않고 훑어요 |
+| qwen | Qwen | 여러 종목을 한꺼번에 비교해요 |
+| perplexity | Perplexity | 뉴스와 공시의 출처를 찾아요 |
+| kimi | Kimi | 긴 보고서와 자료를 읽어요 |
+| mistral | Le Chat (Mistral) | 내부 서버에서 돌리는 예비 판단이에요 |
+아이콘이 없으면(assets/ai/SOURCES.json 의 ok:false) 그 항목은 빼고 노트에 적는다. 회사명·사용자 수·순위·수익률·"최고"류 표현 금지. 각 AI가 TETH의 파트너라는 인상(제휴 표기, "공식")도 금지. 아이콘 아래나 옆에 작은 글씨로 "각 로고는 해당 회사의 상표예요" 한 줄을 넣을지 여부는 시안 재량(노트에 이유).
+
+## 반드시 지킬 것
+- 산출 `ux-audit/ai/mock-<이름>.html` 독립 HTML(인라인 CSS, 외부 라이브러리 없음, 이미지 경로 `../../assets/ai/...`). 페이지는 히어로 바닥 느낌의 어두운 상단 여백 + 이 섹션 + 아래에 "지금 TETH가 하는 일" 제목만 흐리게(맥락용).
+- 1440과 390 모두 설계. 390에서 9개가 세로로 길게 늘어지지 않게(가로 스크롤 행, 2열 그리드, 접힘 등 자유, 단 문서 가로 스크롤은 금지).
+- 모션은 없거나 1종(예: 가로 행의 느린 자동 흐름)까지. 장식 글로우 금지.
+- 스크린샷 2장: `mock-<이름>-d1440.png`(1440x900 뷰포트, 섹션 전체가 보이게 높이 맞춤), `mock-<이름>-m390.png`(390x844 mobile). 드라이버 `C:/Users/hyun1/AppData/Local/Temp/claude/C--Users-hyun1-OneDrive------/3eeecebb-9375-4ed0-850b-52929f00da99/scratchpad/pw/cdp.mjs`(newPage, closePage, goto, evala, viewport, shot, sleep, 사용 전 읽기), 헤드리스 Chrome 127.0.0.1:9333, 정적 서버 각자 포트(`node "C:/Users/hyun1/AppData/Local/Temp/claude/C--Users-hyun1-OneDrive------/3eeecebb-9375-4ed0-850b-52929f00da99/scratchpad/srv/serve.mjs" "<저장소 절대경로>" <포트>` 백그라운드): claude 8811, grid 8812, codex 8813.
+- 노트 `ux-audit/ai/NOTE-<이름>.md` 8줄 이내: 콘셉트 한 문장, 고른 제목과 이유, 아이콘·역할 배치 원리, 390 대응, 상표 문구 여부, 위험 1개.
+- index.html 수정 금지. 스크린샷 없이 보고 금지.
+# NOTE-claude: 역할 목록
+- 콘셉트: AI 9개를 로고 진열이 아니라 "누가 무슨 일을 맡는지" 읽히는 역할 명단으로 보여줘, 페이지 아래 "내 돈은 어떻게 지키나요" 목록과 같은 헤어라인 리듬으로 이어지게 했어요.
+- 제목: 1안 "상황에 맞는 AI를 골라 써요". 역할 목록이 곧 "골라 쓰는 기준"이라 제목과 목록이 한 문장처럼 읽히고, 2안은 불신 뉘앙스, 3안은 시장 변화를 증명할 장치가 이 섹션에 없어요. 리드는 역할 목록으로 넘어가는 다리라 사용했어요.
+- 배치: 2열, 왼쪽 열부터 위에서 아래로 채우는 세로 흐름(브리프 순서 유지). 행 = 40px 둥근 사각 아이콘 + 이름(15px 600) + 역할 한 줄(15px, #9aa0a6, 줄바꿈 없음). 카드 없이 열 머리 헤어라인(.13)과 행 구분선(.07)만, 폭 904px은 페이지 .txh-wrap 과 동일. 어두운 아이콘(Grok, Kimi)은 안쪽 1px 헤어라인으로 윤곽만 살렸어요.
+- 390: 한 열로 접고 행 패딩을 10px로 줄여 제목부터 9번째 행까지 첫 화면(844) 안에 끝나요(마지막 구분선 y=834). 역할 문장은 모두 한 줄에 들어가고 문서 가로 스크롤 없음(scrollWidth 390).
+- 상표 문구: 넣지 않았어요. 이 목업은 규제/면책 문구를 다루지 않는 원칙이고, 역할 문장이 "TETH가 도구로 쓴다"는 관계를 이미 말해 제휴 인상을 만들지 않아요. 실제 출시 때는 섹션이 아니라 푸터 법적 고지 한 줄로 모으는 게 이 섹션의 고요함을 지켜요.
+- 아이콘 누락 없음(SOURCES.json 9개 모두 ok:true). 라임, 글로우, 숫자, 모션 없음.
+- 위험: 9행 전부가 같은 무게라 훑어보는 사용자에게는 "AI 이름 나열"로만 읽히고 역할 문장까지 내려가지 않을 수 있어요(특히 390의 긴 한 열).
+# NOTE-grid (아이콘 벽)
+- 콘셉트: 9개 AI를 같은 크기, 같은 무게의 타일로 한 벽에 세워 "하나가 아니라 여럿을 골라 쓴다"를 구성 자체로 보여준다.
+- 제목: 1안 "상황에 맞는 AI를 골라 써요". 벽은 고르는 대상의 진열이라 "골라 써요"와 그대로 맞고, 2안은 부정형이라 히어로의 긍정 톤과 어긋나며, 3안은 시간 변화를 말하는데 정적인 벽은 그 변화를 보여주지 못한다. 리드 문장은 1440에서만 쓴다(390에서는 1줄을 넘겨 생략).
+- 배치: 880px 폭 3x3, bg1(#17181b) 타일, 테두리와 글로우 없음. 56px 둥근 사각 아이콘, 이름 15.5px, 역할 13.5px 흐린 색(keep-all, balance, 최대 2줄 클램프; 실측 9개 모두 1줄). 순서는 브리프 표 그대로, 강조 타일 없음(순위 인상 차단).
+- 390: 3열 아이콘 그리드 + 아래 역할 패널 1개(탭한 아이콘의 이름과 역할, 기본 ChatGPT). 자동 흐름 행은 13.5px 역할 문장이 읽히기 전에 바뀌어 메시지(역할 차이)가 새므로 버렸다. 그리드는 데스크톱 벽과 같은 형태를 유지하고 높이 약 350px로 끝나며, 모션 0종.
+- 상표 문구: 넣음(12px, 가장 흐린 색, 벽 아래 가운데). 제3자 로고 9개가 한 면에 모이면 제휴처럼 읽히기 쉬워, 한 줄로 그 인상을 끊는 비용이 작다.
+- 위험: 390에서 역할이 탭 뒤에 숨어 대부분의 사용자는 ChatGPT 한 줄만 보고 지나갈 수 있다(첫 화면 안내 문구 "아이콘을 누르면 하는 일이 보여요"로 완화).
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TETH가 쓰는 AI (claude)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500&display=swap">
+<style>
+  :root{
+    --g0:#0f1012;--gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);
+    --gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;
+    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+    --sans:Pretendard,"Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--g0)}
+  body{font-family:var(--sans);color:var(--gt);word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  /* 페이지 맥락: 사이드바 64px 를 뺀 본문 영역, 섹션 폭은 index.html .txh-wrap 과 같은 1000px - 좌우 48px */
+  main{padding-left:64px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 48px}
+
+  /* 히어로 바닥(맥락용): 실제 페이지의 영상 마지막 프레임을 같은 마스크로 아랫부분만 */
+  .floor{position:relative;height:220px;overflow:hidden;pointer-events:none;mix-blend-mode:screen;opacity:.9;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 30%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to bottom,#000 0,#000 30%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+  .floor img{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:50% 100%;display:block}
+
+  /* 섹션 */
+  .ai{padding-top:48px}
+  h2{font-family:var(--serif);font-weight:500;font-size:36px;line-height:1.3;letter-spacing:-.02em;color:var(--gt)}
+  .lead{margin-top:12px;font-size:15.5px;line-height:1.7;color:var(--gt3);max-width:560px}
+
+  /* 역할 목록: 2열, 왼쪽 열을 먼저 채우는 세로 흐름(브리프 순서 그대로 위에서 아래로 읽힘) */
+  .roles{list-style:none;margin-top:36px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:56px}
+  .roles li{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--gl)}
+  .roles li:nth-child(1),.roles li:nth-child(6){border-top:1px solid var(--gl2)}
+  .ic{position:relative;width:40px;height:40px;border-radius:10px;overflow:hidden;background:#1d1f23}
+  .ic img{display:block;width:100%;height:100%;object-fit:cover}
+  /* 어두운 아이콘(Grok 등)이 배경에 묻히지 않게 안쪽 헤어라인 */
+  .ic::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);pointer-events:none}
+  .tx{min-width:0;display:flex;flex-direction:column;gap:2px}
+  .nm{font-size:15px;font-weight:600;line-height:1.4;color:var(--gt);letter-spacing:-.005em}
+  .rl{font-size:15px;line-height:1.4;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* 다음 섹션(맥락용, 흐리게) */
+  .next{padding:104px 0 96px;opacity:.28}
+
+  @media (max-width:899px){ main{padding-left:0} }
+  @media (max-width:720px){
+    .wrap{padding:0 20px}
+    .floor{height:108px}
+    .ai{padding-top:20px}
+    h2{font-size:28px}
+    .lead{font-size:14.5px;margin-top:10px;text-wrap:balance}
+    .roles{margin-top:24px;grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}
+    .roles li{padding:10px 0}
+    .roles li:nth-child(6){border-top:0}
+    .next{padding:76px 0 64px}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="floor" aria-hidden="true"><img src="../../assets/hero-tiles-end.jpg" alt="" width="1440" height="480"></div>
+
+  <div class="wrap">
+    <section class="ai" aria-labelledby="ai-h">
+      <h2 id="ai-h">상황에 맞는 AI를 골라 써요</h2>
+      <p class="lead">뉴스를 읽을 때, 숫자를 셀 때, 이유를 쓸 때 잘하는 AI가 달라요.</p>
+
+      <ul class="roles">
+        <li><span class="ic"><img src="../../assets/ai/chatgpt.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">ChatGPT</span><span class="rl">복잡한 상황을 정리해 판단해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/claude.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Claude</span><span class="rl">왜 그렇게 했는지 차분한 문장으로 써요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/gemini.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Gemini</span><span class="rl">구글 검색으로 최신 정보를 확인해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/grok.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Grok</span><span class="rl">X의 실시간 여론을 읽어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/deepseek.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">DeepSeek</span><span class="rl">시장을 쉬지 않고 훑어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/qwen.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Qwen</span><span class="rl">여러 종목을 한꺼번에 비교해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/perplexity.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Perplexity</span><span class="rl">뉴스와 공시의 출처를 찾아요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/kimi.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Kimi</span><span class="rl">긴 보고서와 자료를 읽어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/mistral.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Le Chat (Mistral)</span><span class="rl">내부 서버에서 돌리는 예비 판단이에요</span></span></li>
+      </ul>
+    </section>
+
+    <section class="next" aria-hidden="true">
+      <h2>지금 TETH가 하는 일</h2>
+    </section>
+  </div>
+</main>
+</body>
+</html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TETH AI 아이콘 벽</title>
+<style>
+  :root{
+    --bg0:#0f1012;
+    --bg1:#17181b;
+    --bg2:#1f2024;
+    --t1:#f1f1f3;
+    --t2:#a3a5ab;
+    --t3:#7d8087;
+    --t4:#4a4c52;
+    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+    --sans:Pretendard,system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg0);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+
+  /* hero floor context: the dark bottom of the hero video fading into page bg */
+  .floor{height:160px;background:linear-gradient(180deg,#10131c 0%,#0f1117 45%,var(--bg0) 100%)}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+  .ai{padding:24px 0 112px;text-align:center}
+  .ai h2{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1.3;letter-spacing:-.01em;margin:0}
+  .ai .lead{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--t2)}
+
+  .wall{list-style:none;margin:48px auto 0;padding:0;max-width:880px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .wall li{margin:0}
+  .tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;width:100%;height:100%;
+        padding:32px 22px 30px;background:var(--bg1);border-radius:16px;text-align:center;cursor:default}
+  .tile img{width:56px;height:56px;border-radius:13px;display:block;background:#222}
+  .tile .nm{margin-top:14px;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--t1)}
+  .tile .rl{margin-top:6px;font-size:13.5px;line-height:1.5;color:var(--t3);word-break:keep-all;text-wrap:balance;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+  .hint{display:none}
+  .tm{margin:20px 0 0;font-size:12px;color:var(--t4)}
+  .panel{display:none}
+
+  .next{padding:0 0 80px}
+  .next h2{font-family:var(--serif);font-weight:500;font-size:36px;color:var(--t1);opacity:.28;max-width:880px;margin:0 auto}
+
+  /* ---------- 390: 3x3 icon grid, role behind a tap, one role panel ---------- */
+  @media (max-width:640px){
+    .floor{height:120px}
+    .wrap{padding:0 16px}
+    .ai{padding:8px 0 72px}
+    .ai h2{font-size:27px}
+    .ai .lead{display:none}
+    .hint{display:block;margin:10px 0 0;font-size:13px;color:var(--t3)}
+    .wall{margin-top:28px;gap:8px}
+    .tile{padding:18px 6px 14px;border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+          transition:background-color .15s ease}
+    .tile img{width:52px;height:52px;border-radius:12px}
+    .tile .nm{margin-top:10px;font-size:12.5px;font-weight:500;color:var(--t2)}
+    .tile .rl{display:none}
+    .tile[aria-pressed="true"]{background:var(--bg2)}
+    .tile[aria-pressed="true"] .nm{color:var(--t1);font-weight:600}
+    .tile:focus-visible{outline:1.5px solid var(--t2);outline-offset:2px}
+
+    .panel{display:block;margin-top:8px;background:var(--bg1);border-radius:14px;padding:16px 18px;text-align:left;min-height:76px}
+    .panel .pn{font-size:14px;font-weight:600;color:var(--t1)}
+    .panel .pr{margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--t2)}
+    .tm{margin-top:14px;font-size:11.5px}
+    .next h2{font-size:26px}
+  }
+  @media (prefers-reduced-motion:reduce){ .tile{transition:none} }
+</style>
+</head>
+<body>
+  <div class="floor" aria-hidden="true"></div>
+
+  <section class="ai" aria-labelledby="aiTitle">
+    <div class="wrap">
+      <h2 id="aiTitle">상황에 맞는 AI를 골라 써요</h2>
+      <p class="lead">뉴스를 읽을 때, 숫자를 셀 때, 이유를 쓸 때 잘하는 AI가 달라요.</p>
+
+      <p class="hint">아이콘을 누르면 하는 일이 보여요</p>
+
+      <ul class="wall" id="wall"></ul>
+
+      <div class="panel" id="panel" aria-live="polite">
+        <div class="pn" id="pn"></div>
+        <div class="pr" id="pr"></div>
+      </div>
+
+      <p class="tm">각 로고는 해당 회사의 상표예요</p>
+    </div>
+  </section>
+
+  <section class="next">
+    <div class="wrap"><h2>지금 TETH가 하는 일</h2></div>
+  </section>
+
+<script>
+  const AIS = [
+    ['chatgpt','ChatGPT','복잡한 상황을 정리해 판단해요'],
+    ['claude','Claude','왜 그렇게 했는지 차분한 문장으로 써요'],
+    ['gemini','Gemini','구글 검색으로 최신 정보를 확인해요'],
+    ['grok','Grok','X의 실시간 여론을 읽어요'],
+    ['deepseek','DeepSeek','시장을 쉬지 않고 훑어요'],
+    ['qwen','Qwen','여러 종목을 한꺼번에 비교해요'],
+    ['perplexity','Perplexity','뉴스와 공시의 출처를 찾아요'],
+    ['kimi','Kimi','긴 보고서와 자료를 읽어요'],
+    ['mistral','Le Chat (Mistral)','내부 서버에서 돌리는 예비 판단이에요'],
+  ];
+  const wall = document.getElementById('wall');
+  const pn = document.getElementById('pn'), pr = document.getElementById('pr');
+  wall.innerHTML = AIS.map(([k,n,r],i)=>
+    `<li><button class="tile" type="button" data-i="${i}" aria-pressed="${i===0}">
+       <img src="../../assets/ai/${k}.png" alt="" width="56" height="56" loading="eager">
+       <span class="nm">${n}</span><span class="rl">${r}</span>
+     </button></li>`).join('');
+  function pick(i){
+    wall.querySelectorAll('.tile').forEach(t=>t.setAttribute('aria-pressed', String(+t.dataset.i===i)));
+    pn.textContent = AIS[i][1]; pr.textContent = AIS[i][2];
+  }
+  wall.addEventListener('click', e=>{ const t=e.target.closest('.tile'); if(t) pick(+t.dataset.i); });
+  pick(0);
+</script>
+</body>
+</html>
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff -- AGENTS.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 71ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+diff --git a/AGENTS.md b/AGENTS.md
+index 5484855..8fe140b 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -97,7 +97,13 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+ | `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
+ | `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
++| `ux-audit/hero/mock-codex.html`, `NOTE-codex.md`, `mock-codex-*.png`, `frame3-codex.png` | 실제 제품이 먼저 보이는 Codex 히어로 경쟁 시안, 구현 노트, 1440px·390px 렌더와 영상 3초 참고 프레임. 한국어 전용 독립 데모로, 포트 8793에서 확인하며 제품 본문과 인증 흐름은 변경하지 않는다. |
++| `ux-audit/hero/CRIT-codex.md` | claude와 light 히어로 시안의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 8개 항목 점수, 근거, 단일 채택 추천과 필수 수정 조건을 기록하며 구현 완료 명세는 아니다. |
++| `ux-audit/research/AI_MODELS_TRADING.md`, `ux-audit/research/CODEX_VERIFY_MODELS.md` | 거래 판단과 Pine Script 작성 모델의 Claude 조사 초안 및 Codex 항목별 검증. 공식 출처 대조, 미확정 수치, 호출 비용과 조합 수정안을 기록한다. 실제 모델 성능 실험이나 제품 구현 완료 명세가 아니다. |
+ | `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |
++| `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
++| `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
++| `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+ | `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+ | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+ | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'assets/ai/SOURCES.json' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 258ms:
+[
+ {
+  "key": "chatgpt",
+  "ok": true,
+  "app": "ChatGPT",
+  "seller": "OpenAI OpCo, LLC",
+  "bytes": 40532
+ },
+ {
+  "key": "claude",
+  "ok": true,
+  "app": "Claude by Anthropic",
+  "seller": "Anthropic PBC",
+  "bytes": 27826
+ },
+ {
+  "key": "gemini",
+  "ok": true,
+  "app": "Google Gemini",
+  "seller": "Google LLC",
+  "bytes": 19684
+ },
+ {
+  "key": "grok",
+  "ok": true,
+  "app": "Grok AI",
+  "seller": "X Corp.",
+  "bytes": 28197
+ },
+ {
+  "key": "deepseek",
+  "ok": true,
+  "app": "DeepSeek - AI Assistant",
+  "seller": "Hangzhou DeepSeek Artificial Intelligence Co., Ltd",
+  "bytes": 28127
+ },
+ {
+  "key": "qwen",
+  "ok": true,
+  "app": "QwenLM GitHub organisation avatar (official Qwen mark; no official Alibaba Qwen app found on the US App Store)",
+  "seller": "Alibaba Cloud / QwenLM",
+  "bytes": 53565
+ },
+ {
+  "key": "perplexity",
+  "ok": true,
+  "app": "Perplexity - AI Search & Chat",
+  "seller": "Perplexity AI Inc.",
+  "bytes": 34591
+ },
+ {
+  "key": "kimi",
+  "ok": true,
+  "app": "Kimi - Kimi K3 is Live",
+  "seller": "Beijing Moonshot Technology Co., Ltd",
+  "bytes": 63951
+ },
+ {
+  "key": "mistral",
+  "ok": true,
+  "app": "Vibe by Mistral (ex-Le Chat)",
+  "seller": "MISTRAL AI",
+  "bytes": 21673
+ }
+]
+
+codex
+PNG 6장을 직접 확인했습니다. claude는 역할 문장을 한눈에 비교하기 좋고 기존 페이지와도 자연스럽게 이어지지만, 모바일 9행이 길게 느껴집니다. grid는 모바일 높이가 짧은 대신 첫 화면에서 8개 AI의 역할이 숨겨지고, 큰 아이콘 타일이 설명보다 먼저 눈에 들어옵니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "$files = @('"'ux-audit/ai/mock-claude-d1440.png','ux-audit/ai/mock-claude-m390.png','ux-audit/ai/mock-grid-d1440.png','ux-audit/ai/mock-grid-m390.png'); foreach ("'$p in $files) { $b = [System.IO.File]::ReadAllBytes((Join-Path (Get-Location) $p)); $w = [int]$b[16]*16777216 + [int]$b[17]*65536 + [int]$b[18]*256 + [int]$b[19]; $h = [int]$b[20]*16777216 + [int]$b[21]*65536 + [int]$b[22]*256 + [int]$b[23]; Write-Output ($p + '"' ' + "'$w + '"'x' + "'$h) }"' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n \"\\.rl|\\.lead|\\.roles|\\.tile|\\.panel|\\.tm|function pick|wall.addEventListener|const AIS|<h2|<ul|\\.wrap|--serif|stylesheet\" ux-audit/ai/mock-claude.html ux-audit/ai/mock-grid.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 71ms:
+ux-audit/ai/mock-claude.html:7:<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500&display=swap">
+ux-audit/ai/mock-claude.html:12:    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+ux-audit/ai/mock-claude.html:21:  .wrap{max-width:1000px;margin:0 auto;padding:0 48px}
+ux-audit/ai/mock-claude.html:31:  h2{font-family:var(--serif);font-weight:500;font-size:36px;line-height:1.3;letter-spacing:-.02em;color:var(--gt)}
+ux-audit/ai/mock-claude.html:32:  .lead{margin-top:12px;font-size:15.5px;line-height:1.7;color:var(--gt3);max-width:560px}
+ux-audit/ai/mock-claude.html:35:  .roles{list-style:none;margin-top:36px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:56px}
+ux-audit/ai/mock-claude.html:36:  .roles li{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--gl)}
+ux-audit/ai/mock-claude.html:37:  .roles li:nth-child(1),.roles li:nth-child(6){border-top:1px solid var(--gl2)}
+ux-audit/ai/mock-claude.html:44:  .rl{font-size:15px;line-height:1.4;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ux-audit/ai/mock-claude.html:51:    .wrap{padding:0 20px}
+ux-audit/ai/mock-claude.html:55:    .lead{font-size:14.5px;margin-top:10px;text-wrap:balance}
+ux-audit/ai/mock-claude.html:56:    .roles{margin-top:24px;grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}
+ux-audit/ai/mock-claude.html:57:    .roles li{padding:10px 0}
+ux-audit/ai/mock-claude.html:58:    .roles li:nth-child(6){border-top:0}
+ux-audit/ai/mock-claude.html:69:      <h2 id="ai-h">상황에 맞는 AI를 골라 써요</h2>
+ux-audit/ai/mock-claude.html:72:      <ul class="roles">
+ux-audit/ai/mock-claude.html:86:      <h2>지금 TETH가 하는 일</h2>
+ux-audit/ai/mock-grid.html:16:    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+ux-audit/ai/mock-grid.html:26:  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+ux-audit/ai/mock-grid.html:29:  .ai h2{font-family:var(--serif);font-weight:500;font-size:40px;line-height:1.3;letter-spacing:-.01em;margin:0}
+ux-audit/ai/mock-grid.html:30:  .ai .lead{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--t2)}
+ux-audit/ai/mock-grid.html:34:  .tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;width:100%;height:100%;
+ux-audit/ai/mock-grid.html:36:  .tile img{width:56px;height:56px;border-radius:13px;display:block;background:#222}
+ux-audit/ai/mock-grid.html:37:  .tile .nm{margin-top:14px;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--t1)}
+ux-audit/ai/mock-grid.html:38:  .tile .rl{margin-top:6px;font-size:13.5px;line-height:1.5;color:var(--t3);word-break:keep-all;text-wrap:balance;
+ux-audit/ai/mock-grid.html:42:  .tm{margin:20px 0 0;font-size:12px;color:var(--t4)}
+ux-audit/ai/mock-grid.html:43:  .panel{display:none}
+ux-audit/ai/mock-grid.html:46:  .next h2{font-family:var(--serif);font-weight:500;font-size:36px;color:var(--t1);opacity:.28;max-width:880px;margin:0 auto}
+ux-audit/ai/mock-grid.html:51:    .wrap{padding:0 16px}
+ux-audit/ai/mock-grid.html:54:    .ai .lead{display:none}
+ux-audit/ai/mock-grid.html:57:    .tile{padding:18px 6px 14px;border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+ux-audit/ai/mock-grid.html:59:    .tile img{width:52px;height:52px;border-radius:12px}
+ux-audit/ai/mock-grid.html:60:    .tile .nm{margin-top:10px;font-size:12.5px;font-weight:500;color:var(--t2)}
+ux-audit/ai/mock-grid.html:61:    .tile .rl{display:none}
+ux-audit/ai/mock-grid.html:62:    .tile[aria-pressed="true"]{background:var(--bg2)}
+ux-audit/ai/mock-grid.html:63:    .tile[aria-pressed="true"] .nm{color:var(--t1);font-weight:600}
+ux-audit/ai/mock-grid.html:64:    .tile:focus-visible{outline:1.5px solid var(--t2);outline-offset:2px}
+ux-audit/ai/mock-grid.html:66:    .panel{display:block;margin-top:8px;background:var(--bg1);border-radius:14px;padding:16px 18px;text-align:left;min-height:76px}
+ux-audit/ai/mock-grid.html:67:    .panel .pn{font-size:14px;font-weight:600;color:var(--t1)}
+ux-audit/ai/mock-grid.html:68:    .panel .pr{margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--t2)}
+ux-audit/ai/mock-grid.html:69:    .tm{margin-top:14px;font-size:11.5px}
+ux-audit/ai/mock-grid.html:72:  @media (prefers-reduced-motion:reduce){ .tile{transition:none} }
+ux-audit/ai/mock-grid.html:80:      <h2 id="aiTitle">상황에 맞는 AI를 골라 써요</h2>
+ux-audit/ai/mock-grid.html:85:      <ul class="wall" id="wall"></ul>
+ux-audit/ai/mock-grid.html:97:    <div class="wrap"><h2>지금 TETH가 하는 일</h2></div>
+ux-audit/ai/mock-grid.html:101:  const AIS = [
+ux-audit/ai/mock-grid.html:119:  function pick(i){
+ux-audit/ai/mock-grid.html:120:    wall.querySelectorAll('.tile').forEach(t=>t.setAttribute('aria-pressed', String(+t.dataset.i===i)));
+ux-audit/ai/mock-grid.html:123:  wall.addEventListener('click', e=>{ const t=e.target.closest('.tile'); if(t) pick(+t.dataset.i); });
+
+ exited 1 in 312ms:
+At line:1 char:155
++ ... -grid-d1440.png','ux-audit/ai/mock-grid-m390.png'); foreach ( in ) {  ...
++                                                                  ~
+Missing variable name after foreach.
+At line:1 char:159
++ ... -d1440.png','ux-audit/ai/mock-grid-m390.png'); foreach ( in ) {  = [S ...
++                                                                 ~
+Unexpected token ')' in expression or statement.
+At line:1 char:396
++ ... 5536 + [int][22]*256 + [int][23]; Write-Output ( + ' ' +  + 'x' + ) }
++                                                                      ~
+You must provide a value expression following the '+' operator.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingVariableNameAfterForeach
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy python -c \"import struct,pathlib; [print(str(p),str(struct.unpack('>II',p.read_bytes()[16:24]))) for p in pathlib.Path('ux-audit/ai').glob('mock-*.png') if 'codex' not in p.name]\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 211ms:
+rtk: Failed to execute command: python: The file cannot be accessed by the system. (os error 1920)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command '"'$files = Get-ChildItem -Path ux-audit/ai/mock-claude-*.png,ux-audit/ai/mock-grid-*.png; foreach ($p in $files) { $b = [System.IO.File]::ReadAllBytes($p.FullName); $w = [int]$b[16]*16777216 + [int]$b[17]*65536 + [int]$b[18]*256 + [int]$b[19]; $h = [int]$b[20]*16777216 + [int]$b[21]*65536 + [int]$b[22]*256 + [int]$b[23]; Write-Output ($p.Name, $w, $h) }'"'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 312ms:
+mock-claude-d1440.png
+1425
+1022
+mock-claude-m390.png
+390
+1010
+mock-grid-d1440.png
+1425
+1163
+mock-grid-m390.png
+390
+870
+
+apply patch
+patch: completed
+C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\AGENTS.md
+C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\ux-audit\ai\CRIT-codex.md
+diff --git a/AGENTS.md b/AGENTS.md
+index 8e1a1f0295d77fcd2354ad67f7d1682d0a09f8bd..3eb28b4ffd2c17deb1de69b0f9453ad6e758d7ea
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -104,7 +104,8 @@
+ | `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+ | `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+ | `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+-| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
++| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
++| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+ | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+ | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+ | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+diff --git a/ux-audit/ai/CRIT-codex.md b/ux-audit/ai/CRIT-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7ed3615b017fc46c9bf0bffab71f5e9a5c3c17e
+--- /dev/null
++++ b/ux-audit/ai/CRIT-codex.md
+@@ -0,0 +1,54 @@
++# AI 섹션 시안 평가: CODEX
++
++claude를 채택한다. 역할 문장을 펼쳐 놓은 목록이 AI를 골라 쓰는 이유를 더 잘 보여 주고, 기존 판단 카드로 시선을 이어 주기 때문이다. codex는 평가에서 제외했다. 점수는 항목별 10점, 동일 가중치다.
++
++## 확인한 근거
++
++- `CRITIQUE_BRIEF.md`, `BRIEF.md`, 두 안의 `NOTE`와 HTML을 읽었다. AI 9개의 표시 이름과 역할 문장은 모두 원안과 일치하며, `assets/ai/SOURCES.json`의 9개 항목은 모두 `ok:true`다.
++- `mock-claude-d1440.png`, `mock-claude-m390.png`, `mock-grid-d1440.png`, `mock-grid-m390.png`를 실제로 열어 확인했다.
++- 페이지 맥락은 `../hero/final-d1440.png`, `../card/final-d1440.png`를 실제로 열어 대조했다. 본문 제목의 왼쪽 정렬, 세리프 서체, 낮은 채도의 설명과 구분선을 기준으로 삼았다.
++- PNG 헤더에서 확인한 실제 크기는 claude 데스크톱 1425×1022, 모바일 390×1010, grid 데스크톱 1425×1163, 모바일 390×870이다. 지정된 1440×900, 390×844와 다르다. 촬영 당시 뷰포트 크기는 이 파일만으로 확정할 수 없으므로 전체 PNG가 한 화면에 들어온다고 판단하지 않았다.
++- 3초 전달력은 화면의 시각적 우선순위에 대한 평가이며 사용자 시간 측정 결과는 아니다. 탭 전환과 키보드 조작은 HTML만 확인했고 브라우저에서 실행 검증하지 않았다.
++
++## claude: 49/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 8 | 제목이 선택의 원칙을 바로 말하고 역할이 이름 바로 아래 보이지만, 동일한 무게의 9개 항목을 읽어야 구체적인 차이를 알 수 있다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문을 지켰고 금지된 홍보 표현도 없으나, 모바일 리드는 2줄이며 제출 PNG 크기가 지정 크기와 다르다. |
++| 페이지 톤 일치 | 9 | 제목과 목록의 왼쪽 시작점이 판단 카드의 x=300과 맞고, 세리프 제목과 얇은 구분선이 기존 본문에 자연스럽게 이어진다. |
++| 아이콘 취급 | 9 | 40px 아이콘이 이름과 역할 옆의 표식으로 머물러 로고 진열의 인상이 약하며, 제휴를 주장하는 문구도 없다. |
++| 390 대응 | 6 | 역할 9개가 모두 읽히지만 목록만 약 586px이고 마지막 구분선이 y=834에 있어 844px 화면 대부분을 차지한다. |
++| 구현 현실성 | 9 | 정적 목록과 CSS 그리드만으로 구성돼 상태 관리 없이 옮기기 쉽고, 전역 선택자와 역할 말줄임 처리만 통합 때 정리하면 된다. |
++
++가장 좋은 것: 로고를 작게 두고 역할을 항상 공개해, 무엇을 쓰는지와 왜 쓰는지를 같은 자리에서 읽게 한다. 특히 데스크톱은 타일 배경 없이도 두 열의 행 구조가 충분히 선명하다.
++
++반드시 고칠 것: 390px에서 9행이 이어지는 길이를 줄여야 한다. 모바일 리드는 생략하고 아이콘과 행 여백을 줄이되, 9개 역할 원문은 모두 읽히게 유지한다. `mock-claude.html:44`의 `white-space:nowrap`과 말줄임은 글자 확대나 다른 폭에서 정보가 잘릴 수 있으므로 줄바꿈을 허용하는 편이 낫다. 제출된 390px PNG에서 실제 말줄임이 보인다는 뜻은 아니다.
++
++## grid: 38/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 7 | 제목과 3×3 배열로 AI가 여러 개라는 점은 빠르게 보이나, 모바일에서는 ChatGPT 외 8개의 역할이 숨겨져 고르는 이유가 약하다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문, 허용된 제목, 상표 문구를 지켰으나 지정 크기의 스크린샷이 아니며 데스크톱 상표 문구는 y=900 아래에 있다. |
++| 페이지 톤 일치 | 6 | 어두운 배경과 세리프는 맞지만, 중앙 정렬 제목과 큰 9개 타일이 왼쪽 정렬 본문 사이에서 별도 제품 소개 영역처럼 두드러진다. |
++| 아이콘 취급 | 5 | 56px 아이콘을 넓은 타일 중앙에 반복해 역할보다 브랜드가 먼저 보이고, 작고 흐린 상표 문구만으로 제휴 진열 같은 인상을 줄이기 어렵다. |
++| 390 대응 | 6 | 3×3 배열과 단일 패널로 높이는 줄였지만 첫 화면에 역할은 하나뿐이며, 나머지를 비교하려면 각각 눌러 앞선 내용을 기억해야 한다. |
++| 구현 현실성 | 6 | 짧은 배열과 클릭 처리로 구현 가능하나 전역 ID와 CSS 격리가 필요하고, 데스크톱에도 버튼이 남는데 포커스 표시는 모바일 CSS에만 정의돼 있다. |
++
++가장 좋은 것: 모바일에서 9개 AI의 존재를 한 덩어리로 파악할 수 있고, 다음 섹션 제목도 약 y=760에 보여 페이지의 진행이 끊기지 않는다. 선택 패널은 원문을 그대로 보여 주도록 구현돼 있다.
++
++반드시 고칠 것: 역할 설명을 모바일 탭 뒤에만 두지 말아야 한다. 타일 안에 각 역할 원문을 읽을 수 있게 배치하고 아이콘 크기와 여백을 함께 줄이는 수정이 필요하다. 현재 `mock-grid.html:61`은 모든 타일의 역할을 숨기고, `:119`의 `pick()`은 선택한 하나만 패널에 넣는다. 탭 안내 문구는 조작 방법을 알려 줄 뿐 역할 비교의 부담을 없애지는 못한다.
++
++## 단일 채택 추천과 필수 수정
++
++추천은 **claude**다. 이 섹션은 뒤의 실제 판단 내용을 읽기 전에 AI별 역할을 이해시키는 자리다. 작은 아이콘 옆에 역할이 계속 보이는 목록이 목적에 더 맞는다. 두 안을 합치지 않고 claude의 목록 구조를 유지한다.
++
++필수 수정은 두 가지다.
++
++1. 모바일 리드를 생략하고 행의 아이콘 크기와 여백을 줄여 9개 역할 목록을 압축한다. 역할 원문을 유지하고 말줄임 대신 줄바꿈을 허용한다.
++2. 수정본을 실제 1440×900과 390×844 뷰포트로 다시 촬영한다. 데스크톱 섹션 전체가 보이는지, 모바일의 9개 역할이 잘리지 않는지 확인하고 전체 페이지 캡처와 구분해 제출한다.
++
++이 문서는 시안 평가다. 제품 코드 수정, 실제 AI 연동 확인, 브라우저 상호작용 검증은 수행하지 않았다.
++
++ux-audit/ai/CRIT-codex.md
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 8e1a1f0295d77fcd2354ad67f7d1682d0a09f8bd..3eb28b4ffd2c17deb1de69b0f9453ad6e758d7ea
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -104,7 +104,8 @@
+ | `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+ | `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+ | `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+-| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
++| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
++| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+ | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+ | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+ | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+diff --git a/ux-audit/ai/CRIT-codex.md b/ux-audit/ai/CRIT-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7ed3615b017fc46c9bf0bffab71f5e9a5c3c17e
+--- /dev/null
++++ b/ux-audit/ai/CRIT-codex.md
+@@ -0,0 +1,54 @@
++# AI 섹션 시안 평가: CODEX
++
++claude를 채택한다. 역할 문장을 펼쳐 놓은 목록이 AI를 골라 쓰는 이유를 더 잘 보여 주고, 기존 판단 카드로 시선을 이어 주기 때문이다. codex는 평가에서 제외했다. 점수는 항목별 10점, 동일 가중치다.
++
++## 확인한 근거
++
++- `CRITIQUE_BRIEF.md`, `BRIEF.md`, 두 안의 `NOTE`와 HTML을 읽었다. AI 9개의 표시 이름과 역할 문장은 모두 원안과 일치하며, `assets/ai/SOURCES.json`의 9개 항목은 모두 `ok:true`다.
++- `mock-claude-d1440.png`, `mock-claude-m390.png`, `mock-grid-d1440.png`, `mock-grid-m390.png`를 실제로 열어 확인했다.
++- 페이지 맥락은 `../hero/final-d1440.png`, `../card/final-d1440.png`를 실제로 열어 대조했다. 본문 제목의 왼쪽 정렬, 세리프 서체, 낮은 채도의 설명과 구분선을 기준으로 삼았다.
++- PNG 헤더에서 확인한 실제 크기는 claude 데스크톱 1425×1022, 모바일 390×1010, grid 데스크톱 1425×1163, 모바일 390×870이다. 지정된 1440×900, 390×844와 다르다. 촬영 당시 뷰포트 크기는 이 파일만으로 확정할 수 없으므로 전체 PNG가 한 화면에 들어온다고 판단하지 않았다.
++- 3초 전달력은 화면의 시각적 우선순위에 대한 평가이며 사용자 시간 측정 결과는 아니다. 탭 전환과 키보드 조작은 HTML만 확인했고 브라우저에서 실행 검증하지 않았다.
++
++## claude: 49/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 8 | 제목이 선택의 원칙을 바로 말하고 역할이 이름 바로 아래 보이지만, 동일한 무게의 9개 항목을 읽어야 구체적인 차이를 알 수 있다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문을 지켰고 금지된 홍보 표현도 없으나, 모바일 리드는 2줄이며 제출 PNG 크기가 지정 크기와 다르다. |
++| 페이지 톤 일치 | 9 | 제목과 목록의 왼쪽 시작점이 판단 카드의 x=300과 맞고, 세리프 제목과 얇은 구분선이 기존 본문에 자연스럽게 이어진다. |
++| 아이콘 취급 | 9 | 40px 아이콘이 이름과 역할 옆의 표식으로 머물러 로고 진열의 인상이 약하며, 제휴를 주장하는 문구도 없다. |
++| 390 대응 | 6 | 역할 9개가 모두 읽히지만 목록만 약 586px이고 마지막 구분선이 y=834에 있어 844px 화면 대부분을 차지한다. |
++| 구현 현실성 | 9 | 정적 목록과 CSS 그리드만으로 구성돼 상태 관리 없이 옮기기 쉽고, 전역 선택자와 역할 말줄임 처리만 통합 때 정리하면 된다. |
++
++가장 좋은 것: 로고를 작게 두고 역할을 항상 공개해, 무엇을 쓰는지와 왜 쓰는지를 같은 자리에서 읽게 한다. 특히 데스크톱은 타일 배경 없이도 두 열의 행 구조가 충분히 선명하다.
++
++반드시 고칠 것: 390px에서 9행이 이어지는 길이를 줄여야 한다. 모바일 리드는 생략하고 아이콘과 행 여백을 줄이되, 9개 역할 원문은 모두 읽히게 유지한다. `mock-claude.html:44`의 `white-space:nowrap`과 말줄임은 글자 확대나 다른 폭에서 정보가 잘릴 수 있으므로 줄바꿈을 허용하는 편이 낫다. 제출된 390px PNG에서 실제 말줄임이 보인다는 뜻은 아니다.
++
++## grid: 38/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 7 | 제목과 3×3 배열로 AI가 여러 개라는 점은 빠르게 보이나, 모바일에서는 ChatGPT 외 8개의 역할이 숨겨져 고르는 이유가 약하다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문, 허용된 제목, 상표 문구를 지켰으나 지정 크기의 스크린샷이 아니며 데스크톱 상표 문구는 y=900 아래에 있다. |
++| 페이지 톤 일치 | 6 | 어두운 배경과 세리프는 맞지만, 중앙 정렬 제목과 큰 9개 타일이 왼쪽 정렬 본문 사이에서 별도 제품 소개 영역처럼 두드러진다. |
++| 아이콘 취급 | 5 | 56px 아이콘을 넓은 타일 중앙에 반복해 역할보다 브랜드가 먼저 보이고, 작고 흐린 상표 문구만으로 제휴 진열 같은 인상을 줄이기 어렵다. |
++| 390 대응 | 6 | 3×3 배열과 단일 패널로 높이는 줄였지만 첫 화면에 역할은 하나뿐이며, 나머지를 비교하려면 각각 눌러 앞선 내용을 기억해야 한다. |
++| 구현 현실성 | 6 | 짧은 배열과 클릭 처리로 구현 가능하나 전역 ID와 CSS 격리가 필요하고, 데스크톱에도 버튼이 남는데 포커스 표시는 모바일 CSS에만 정의돼 있다. |
++
++가장 좋은 것: 모바일에서 9개 AI의 존재를 한 덩어리로 파악할 수 있고, 다음 섹션 제목도 약 y=760에 보여 페이지의 진행이 끊기지 않는다. 선택 패널은 원문을 그대로 보여 주도록 구현돼 있다.
++
++반드시 고칠 것: 역할 설명을 모바일 탭 뒤에만 두지 말아야 한다. 타일 안에 각 역할 원문을 읽을 수 있게 배치하고 아이콘 크기와 여백을 함께 줄이는 수정이 필요하다. 현재 `mock-grid.html:61`은 모든 타일의 역할을 숨기고, `:119`의 `pick()`은 선택한 하나만 패널에 넣는다. 탭 안내 문구는 조작 방법을 알려 줄 뿐 역할 비교의 부담을 없애지는 못한다.
++
++## 단일 채택 추천과 필수 수정
++
++추천은 **claude**다. 이 섹션은 뒤의 실제 판단 내용을 읽기 전에 AI별 역할을 이해시키는 자리다. 작은 아이콘 옆에 역할이 계속 보이는 목록이 목적에 더 맞는다. 두 안을 합치지 않고 claude의 목록 구조를 유지한다.
++
++필수 수정은 두 가지다.
++
++1. 모바일 리드를 생략하고 행의 아이콘 크기와 여백을 줄여 9개 역할 목록을 압축한다. 역할 원문을 유지하고 말줄임 대신 줄바꿈을 허용한다.
++2. 수정본을 실제 1440×900과 390×844 뷰포트로 다시 촬영한다. 데스크톱 섹션 전체가 보이는지, 모바일의 9개 역할이 잘리지 않는지 확인하고 전체 페이지 캡처와 구분해 제출한다.
++
++이 문서는 시안 평가다. 제품 코드 수정, 실제 AI 연동 확인, 브라우저 상호작용 검증은 수행하지 않았다.
++
++ux-audit/ai/CRIT-codex.md
+
+codex
+claude 49점, grid 38점으로 채점해 claude를 단일 추천안으로 정리했습니다. 제출 PNG의 실제 크기가 지정 규격과 달라, 모바일 목록 압축과 지정 뷰포트 재촬영을 필수 수정 조건으로 적었습니다. 코드는 건드리지 않고 평가 문서와 `AGENTS.md`의 파일 안내만 갱신했습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff --check' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 0ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 94ms:
+ M AGENTS.md
+?? ux-audit/ai/CRIT-claude.md
+?? ux-audit/ai/CRIT-codex.md
+?? ux-audit/ai/CRIT-lead.md
+?? ux-audit/ai/CRITIQUE_BRIEF.md
+?? ux-audit/ai/NOTE-claude.md
+?? ux-audit/ai/NOTE-codex.md
+?? ux-audit/ai/NOTE-grid.md
+?? ux-audit/ai/log-codex-crit.txt
+?? ux-audit/ai/log-codex.txt
+?? ux-audit/ai/mock-claude-d1440.png
+?? ux-audit/ai/mock-claude-m390.png
+?? ux-audit/ai/mock-claude.html
+?? ux-audit/ai/mock-codex-d1440.png
+?? ux-audit/ai/mock-codex-m390.png
+?? ux-audit/ai/mock-codex.html
+?? ux-audit/ai/mock-grid-d1440.png
+?? ux-audit/ai/mock-grid-m390.png
+?? ux-audit/ai/mock-grid.html
+?? ux-audit/ai/prompt-codex-crit.md
+?? ux-audit/card2/
+?? ux-audit/hero/frame3-codex.png
+?? ux-audit/hero/frame3.png
+?? ux-audit/hero/log-agy.txt
+?? ux-audit/hero/log-codex-crit.txt
+?? ux-audit/hero/log-codex.txt
+?? ux-audit/hero/prompt-agy.md
+?? ux-audit/hero/prompt-codex-crit.md
+?? ux-audit/hero/prompt-codex.md
+?? ux-audit/logs/
+?? ux-audit/research/log-codex-verify.txt
+?? ux-audit/review/
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n "[—·]" ux-audit/ai/CRIT-codex.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 64ms:
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff --stat' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 76ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+ AGENTS.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd send codex all \"AI 시안 평가 완료: claude 추천\" \"ux-audit/ai/CRIT-codex.md 작성. PNG 6장 직접 확인 후 claude 49/60, grid 38/60. claude는 역할 상시 노출과 기존 x=300 정렬이 장점이나 모바일 마지막 행이 y=834라 길이 압축 필요. grid는 mock-grid.html:61에서 역할을 숨겨 초기 화면에는 하나만 보임. 대안은 역할을 타일에 공개하고 아이콘과 여백 축소. 추천은 claude 단독이며 코드 수정 없음.\" -Type review" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 372ms:
+보냄 -> claude : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\claude\20260928-125146-codex-ai-시안-평가-완료-claude-추천.md
+보냄 -> agy : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\agy\20260928-125146-codex-ai-시안-평가-완료-claude-추천.md
+id: 20260928-125146-codex-ai-시안-평가-완료-claude-추천
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd send codex all \"AI 시안 평가의 미검증 범위\" \"평가 근거는 ux-audit/ai/CRIT-codex.md. 브라우저 탭과 키보드 실행 검증은 하지 않았고 HTML만 확인. PNG 실제 크기는 claude 1425x1022 및 390x1010, grid 1425x1163 및 390x870. 촬영 당시 뷰포트는 미확인. 채택 후에는 1440x900 및 390x844 뷰포트 재촬영과 모바일 원문 노출 확인 필요. 이번 요청은 평가만이므로 구현과 재촬영은 수행하지 않음.\" -Type handoff" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 355ms:
+보냄 -> claude : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\claude\20260928-125146-codex-ai-시안-평가의-미검증-범위.md
+보냄 -> agy : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\agy\20260928-125146-codex-ai-시안-평가의-미검증-범위.md
+id: 20260928-125146-codex-ai-시안-평가의-미검증-범위
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 325ms:
+codex 인박스 : (비어 있음)
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 8e1a1f0295d77fcd2354ad67f7d1682d0a09f8bd..3eb28b4ffd2c17deb1de69b0f9453ad6e758d7ea
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -104,7 +104,8 @@
+ | `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+ | `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+ | `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+-| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
++| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
++| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+ | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+ | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+ | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+diff --git a/ux-audit/ai/CRIT-codex.md b/ux-audit/ai/CRIT-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7ed3615b017fc46c9bf0bffab71f5e9a5c3c17e
+--- /dev/null
++++ b/ux-audit/ai/CRIT-codex.md
+@@ -0,0 +1,54 @@
++# AI 섹션 시안 평가: CODEX
++
++claude를 채택한다. 역할 문장을 펼쳐 놓은 목록이 AI를 골라 쓰는 이유를 더 잘 보여 주고, 기존 판단 카드로 시선을 이어 주기 때문이다. codex는 평가에서 제외했다. 점수는 항목별 10점, 동일 가중치다.
++
++## 확인한 근거
++
++- `CRITIQUE_BRIEF.md`, `BRIEF.md`, 두 안의 `NOTE`와 HTML을 읽었다. AI 9개의 표시 이름과 역할 문장은 모두 원안과 일치하며, `assets/ai/SOURCES.json`의 9개 항목은 모두 `ok:true`다.
++- `mock-claude-d1440.png`, `mock-claude-m390.png`, `mock-grid-d1440.png`, `mock-grid-m390.png`를 실제로 열어 확인했다.
++- 페이지 맥락은 `../hero/final-d1440.png`, `../card/final-d1440.png`를 실제로 열어 대조했다. 본문 제목의 왼쪽 정렬, 세리프 서체, 낮은 채도의 설명과 구분선을 기준으로 삼았다.
++- PNG 헤더에서 확인한 실제 크기는 claude 데스크톱 1425×1022, 모바일 390×1010, grid 데스크톱 1425×1163, 모바일 390×870이다. 지정된 1440×900, 390×844와 다르다. 촬영 당시 뷰포트 크기는 이 파일만으로 확정할 수 없으므로 전체 PNG가 한 화면에 들어온다고 판단하지 않았다.
++- 3초 전달력은 화면의 시각적 우선순위에 대한 평가이며 사용자 시간 측정 결과는 아니다. 탭 전환과 키보드 조작은 HTML만 확인했고 브라우저에서 실행 검증하지 않았다.
++
++## claude: 49/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 8 | 제목이 선택의 원칙을 바로 말하고 역할이 이름 바로 아래 보이지만, 동일한 무게의 9개 항목을 읽어야 구체적인 차이를 알 수 있다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문을 지켰고 금지된 홍보 표현도 없으나, 모바일 리드는 2줄이며 제출 PNG 크기가 지정 크기와 다르다. |
++| 페이지 톤 일치 | 9 | 제목과 목록의 왼쪽 시작점이 판단 카드의 x=300과 맞고, 세리프 제목과 얇은 구분선이 기존 본문에 자연스럽게 이어진다. |
++| 아이콘 취급 | 9 | 40px 아이콘이 이름과 역할 옆의 표식으로 머물러 로고 진열의 인상이 약하며, 제휴를 주장하는 문구도 없다. |
++| 390 대응 | 6 | 역할 9개가 모두 읽히지만 목록만 약 586px이고 마지막 구분선이 y=834에 있어 844px 화면 대부분을 차지한다. |
++| 구현 현실성 | 9 | 정적 목록과 CSS 그리드만으로 구성돼 상태 관리 없이 옮기기 쉽고, 전역 선택자와 역할 말줄임 처리만 통합 때 정리하면 된다. |
++
++가장 좋은 것: 로고를 작게 두고 역할을 항상 공개해, 무엇을 쓰는지와 왜 쓰는지를 같은 자리에서 읽게 한다. 특히 데스크톱은 타일 배경 없이도 두 열의 행 구조가 충분히 선명하다.
++
++반드시 고칠 것: 390px에서 9행이 이어지는 길이를 줄여야 한다. 모바일 리드는 생략하고 아이콘과 행 여백을 줄이되, 9개 역할 원문은 모두 읽히게 유지한다. `mock-claude.html:44`의 `white-space:nowrap`과 말줄임은 글자 확대나 다른 폭에서 정보가 잘릴 수 있으므로 줄바꿈을 허용하는 편이 낫다. 제출된 390px PNG에서 실제 말줄임이 보인다는 뜻은 아니다.
++
++## grid: 38/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 7 | 제목과 3×3 배열로 AI가 여러 개라는 점은 빠르게 보이나, 모바일에서는 ChatGPT 외 8개의 역할이 숨겨져 고르는 이유가 약하다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문, 허용된 제목, 상표 문구를 지켰으나 지정 크기의 스크린샷이 아니며 데스크톱 상표 문구는 y=900 아래에 있다. |
++| 페이지 톤 일치 | 6 | 어두운 배경과 세리프는 맞지만, 중앙 정렬 제목과 큰 9개 타일이 왼쪽 정렬 본문 사이에서 별도 제품 소개 영역처럼 두드러진다. |
++| 아이콘 취급 | 5 | 56px 아이콘을 넓은 타일 중앙에 반복해 역할보다 브랜드가 먼저 보이고, 작고 흐린 상표 문구만으로 제휴 진열 같은 인상을 줄이기 어렵다. |
++| 390 대응 | 6 | 3×3 배열과 단일 패널로 높이는 줄였지만 첫 화면에 역할은 하나뿐이며, 나머지를 비교하려면 각각 눌러 앞선 내용을 기억해야 한다. |
++| 구현 현실성 | 6 | 짧은 배열과 클릭 처리로 구현 가능하나 전역 ID와 CSS 격리가 필요하고, 데스크톱에도 버튼이 남는데 포커스 표시는 모바일 CSS에만 정의돼 있다. |
++
++가장 좋은 것: 모바일에서 9개 AI의 존재를 한 덩어리로 파악할 수 있고, 다음 섹션 제목도 약 y=760에 보여 페이지의 진행이 끊기지 않는다. 선택 패널은 원문을 그대로 보여 주도록 구현돼 있다.
++
++반드시 고칠 것: 역할 설명을 모바일 탭 뒤에만 두지 말아야 한다. 타일 안에 각 역할 원문을 읽을 수 있게 배치하고 아이콘 크기와 여백을 함께 줄이는 수정이 필요하다. 현재 `mock-grid.html:61`은 모든 타일의 역할을 숨기고, `:119`의 `pick()`은 선택한 하나만 패널에 넣는다. 탭 안내 문구는 조작 방법을 알려 줄 뿐 역할 비교의 부담을 없애지는 못한다.
++
++## 단일 채택 추천과 필수 수정
++
++추천은 **claude**다. 이 섹션은 뒤의 실제 판단 내용을 읽기 전에 AI별 역할을 이해시키는 자리다. 작은 아이콘 옆에 역할이 계속 보이는 목록이 목적에 더 맞는다. 두 안을 합치지 않고 claude의 목록 구조를 유지한다.
++
++필수 수정은 두 가지다.
++
++1. 모바일 리드를 생략하고 행의 아이콘 크기와 여백을 줄여 9개 역할 목록을 압축한다. 역할 원문을 유지하고 말줄임 대신 줄바꿈을 허용한다.
++2. 수정본을 실제 1440×900과 390×844 뷰포트로 다시 촬영한다. 데스크톱 섹션 전체가 보이는지, 모바일의 9개 역할이 잘리지 않는지 확인하고 전체 페이지 캡처와 구분해 제출한다.
++
++이 문서는 시안 평가다. 제품 코드 수정, 실제 AI 연동 확인, 브라우저 상호작용 검증은 수행하지 않았다.
++
++ux-audit/ai/CRIT-codex.md
+
+codex
+PNG를 직접 열어 평가했습니다. claude **49/60**, grid **38/60**으로 claude를 단일 추천했습니다. 코드 수정은 없습니다. 브라우저 상호작용은 미검증으로 명시했습니다.
+
+[ux-audit/ai/CRIT-codex.md](</C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/ux-audit/ai/CRIT-codex.md>)
+diff --git a/AGENTS.md b/AGENTS.md
+index 8e1a1f0295d77fcd2354ad67f7d1682d0a09f8bd..3eb28b4ffd2c17deb1de69b0f9453ad6e758d7ea
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -104,7 +104,8 @@
+ | `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+ | `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+ | `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+-| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
++| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
++| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+ | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+ | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+ | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+diff --git a/ux-audit/ai/CRIT-codex.md b/ux-audit/ai/CRIT-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7ed3615b017fc46c9bf0bffab71f5e9a5c3c17e
+--- /dev/null
++++ b/ux-audit/ai/CRIT-codex.md
+@@ -0,0 +1,54 @@
++# AI 섹션 시안 평가: CODEX
++
++claude를 채택한다. 역할 문장을 펼쳐 놓은 목록이 AI를 골라 쓰는 이유를 더 잘 보여 주고, 기존 판단 카드로 시선을 이어 주기 때문이다. codex는 평가에서 제외했다. 점수는 항목별 10점, 동일 가중치다.
++
++## 확인한 근거
++
++- `CRITIQUE_BRIEF.md`, `BRIEF.md`, 두 안의 `NOTE`와 HTML을 읽었다. AI 9개의 표시 이름과 역할 문장은 모두 원안과 일치하며, `assets/ai/SOURCES.json`의 9개 항목은 모두 `ok:true`다.
++- `mock-claude-d1440.png`, `mock-claude-m390.png`, `mock-grid-d1440.png`, `mock-grid-m390.png`를 실제로 열어 확인했다.
++- 페이지 맥락은 `../hero/final-d1440.png`, `../card/final-d1440.png`를 실제로 열어 대조했다. 본문 제목의 왼쪽 정렬, 세리프 서체, 낮은 채도의 설명과 구분선을 기준으로 삼았다.
++- PNG 헤더에서 확인한 실제 크기는 claude 데스크톱 1425×1022, 모바일 390×1010, grid 데스크톱 1425×1163, 모바일 390×870이다. 지정된 1440×900, 390×844와 다르다. 촬영 당시 뷰포트 크기는 이 파일만으로 확정할 수 없으므로 전체 PNG가 한 화면에 들어온다고 판단하지 않았다.
++- 3초 전달력은 화면의 시각적 우선순위에 대한 평가이며 사용자 시간 측정 결과는 아니다. 탭 전환과 키보드 조작은 HTML만 확인했고 브라우저에서 실행 검증하지 않았다.
++
++## claude: 49/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 8 | 제목이 선택의 원칙을 바로 말하고 역할이 이름 바로 아래 보이지만, 동일한 무게의 9개 항목을 읽어야 구체적인 차이를 알 수 있다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문을 지켰고 금지된 홍보 표현도 없으나, 모바일 리드는 2줄이며 제출 PNG 크기가 지정 크기와 다르다. |
++| 페이지 톤 일치 | 9 | 제목과 목록의 왼쪽 시작점이 판단 카드의 x=300과 맞고, 세리프 제목과 얇은 구분선이 기존 본문에 자연스럽게 이어진다. |
++| 아이콘 취급 | 9 | 40px 아이콘이 이름과 역할 옆의 표식으로 머물러 로고 진열의 인상이 약하며, 제휴를 주장하는 문구도 없다. |
++| 390 대응 | 6 | 역할 9개가 모두 읽히지만 목록만 약 586px이고 마지막 구분선이 y=834에 있어 844px 화면 대부분을 차지한다. |
++| 구현 현실성 | 9 | 정적 목록과 CSS 그리드만으로 구성돼 상태 관리 없이 옮기기 쉽고, 전역 선택자와 역할 말줄임 처리만 통합 때 정리하면 된다. |
++
++가장 좋은 것: 로고를 작게 두고 역할을 항상 공개해, 무엇을 쓰는지와 왜 쓰는지를 같은 자리에서 읽게 한다. 특히 데스크톱은 타일 배경 없이도 두 열의 행 구조가 충분히 선명하다.
++
++반드시 고칠 것: 390px에서 9행이 이어지는 길이를 줄여야 한다. 모바일 리드는 생략하고 아이콘과 행 여백을 줄이되, 9개 역할 원문은 모두 읽히게 유지한다. `mock-claude.html:44`의 `white-space:nowrap`과 말줄임은 글자 확대나 다른 폭에서 정보가 잘릴 수 있으므로 줄바꿈을 허용하는 편이 낫다. 제출된 390px PNG에서 실제 말줄임이 보인다는 뜻은 아니다.
++
++## grid: 38/60
++
++| 항목 | 점수 | 한 줄 근거 |
++| --- | ---: | --- |
++| 메시지 전달 | 7 | 제목과 3×3 배열로 AI가 여러 개라는 점은 빠르게 보이나, 모바일에서는 ChatGPT 외 8개의 역할이 숨겨져 고르는 이유가 약하다. |
++| 브리프 준수 | 8 | 9개 이름과 역할 원문, 허용된 제목, 상표 문구를 지켰으나 지정 크기의 스크린샷이 아니며 데스크톱 상표 문구는 y=900 아래에 있다. |
++| 페이지 톤 일치 | 6 | 어두운 배경과 세리프는 맞지만, 중앙 정렬 제목과 큰 9개 타일이 왼쪽 정렬 본문 사이에서 별도 제품 소개 영역처럼 두드러진다. |
++| 아이콘 취급 | 5 | 56px 아이콘을 넓은 타일 중앙에 반복해 역할보다 브랜드가 먼저 보이고, 작고 흐린 상표 문구만으로 제휴 진열 같은 인상을 줄이기 어렵다. |
++| 390 대응 | 6 | 3×3 배열과 단일 패널로 높이는 줄였지만 첫 화면에 역할은 하나뿐이며, 나머지를 비교하려면 각각 눌러 앞선 내용을 기억해야 한다. |
++| 구현 현실성 | 6 | 짧은 배열과 클릭 처리로 구현 가능하나 전역 ID와 CSS 격리가 필요하고, 데스크톱에도 버튼이 남는데 포커스 표시는 모바일 CSS에만 정의돼 있다. |
++
++가장 좋은 것: 모바일에서 9개 AI의 존재를 한 덩어리로 파악할 수 있고, 다음 섹션 제목도 약 y=760에 보여 페이지의 진행이 끊기지 않는다. 선택 패널은 원문을 그대로 보여 주도록 구현돼 있다.
++
++반드시 고칠 것: 역할 설명을 모바일 탭 뒤에만 두지 말아야 한다. 타일 안에 각 역할 원문을 읽을 수 있게 배치하고 아이콘 크기와 여백을 함께 줄이는 수정이 필요하다. 현재 `mock-grid.html:61`은 모든 타일의 역할을 숨기고, `:119`의 `pick()`은 선택한 하나만 패널에 넣는다. 탭 안내 문구는 조작 방법을 알려 줄 뿐 역할 비교의 부담을 없애지는 못한다.
++
++## 단일 채택 추천과 필수 수정
++
++추천은 **claude**다. 이 섹션은 뒤의 실제 판단 내용을 읽기 전에 AI별 역할을 이해시키는 자리다. 작은 아이콘 옆에 역할이 계속 보이는 목록이 목적에 더 맞는다. 두 안을 합치지 않고 claude의 목록 구조를 유지한다.
++
++필수 수정은 두 가지다.
++
++1. 모바일 리드를 생략하고 행의 아이콘 크기와 여백을 줄여 9개 역할 목록을 압축한다. 역할 원문을 유지하고 말줄임 대신 줄바꿈을 허용한다.
++2. 수정본을 실제 1440×900과 390×844 뷰포트로 다시 촬영한다. 데스크톱 섹션 전체가 보이는지, 모바일의 9개 역할이 잘리지 않는지 확인하고 전체 페이지 캡처와 구분해 제출한다.
++
++이 문서는 시안 평가다. 제품 코드 수정, 실제 AI 연동 확인, 브라우저 상호작용 검증은 수행하지 않았다.
++
++ux-audit/ai/CRIT-codex.md
+
+tokens used
+46,172
+PNG를 직접 열어 평가했습니다. claude **49/60**, grid **38/60**으로 claude를 단일 추천했습니다. 코드 수정은 없습니다. 브라우저 상호작용은 미검증으로 명시했습니다.
+
+[ux-audit/ai/CRIT-codex.md](</C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/ux-audit/ai/CRIT-codex.md>)

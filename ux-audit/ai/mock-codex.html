@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="TETH가 쓰는 AI — 상황별 묶음 디자인 시안">
+  <title>TETH가 쓰는 AI · codex 시안</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400&display=swap">
+  <style>
+    :root { color-scheme: dark; font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #e8e8e6; background: #0f1012; }
+    * { box-sizing: border-box; }
+    body { margin: 0; -webkit-font-smoothing: antialiased; }
+    .hero-tail { height: 128px; background: linear-gradient(#0c0e12, #0f1012); }
+    main { width: min(1140px, calc(100% - 64px)); margin-inline: auto; }
+    .ai-section { max-width: 900px; margin-inline: auto; }
+    .eyebrow { margin: 0 0 15px; color: #969ba3; font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+    h1, .next-heading { font-family: "Noto Serif KR", "Nanum Myeongjo", Batang, serif; font-weight: 400; word-break: keep-all; }
+    h1 { margin: 0; font-size: 38px; line-height: 1.45; letter-spacing: -.045em; text-wrap: balance; }
+    .situations { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 42px; }
+    .situation { min-width: 0; padding: 25px 22px 23px; border: 1px solid #2b2d31; border-radius: 16px; background: #151719; }
+    h2 { margin: 0 0 28px; padding-bottom: 20px; border-bottom: 1px solid #303237; font-size: 18px; font-weight: 600; line-height: 1.5; letter-spacing: -.035em; }
+    .models { display: grid; grid-auto-rows: minmax(70px, auto); gap: 23px; list-style: none; padding: 0; margin: 0; }
+    .model { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 13px; align-items: start; align-content: start; }
+    .model img { display: block; width: 40px; height: 40px; object-fit: cover; border-radius: 10px; grid-row: span 2; }
+    .name { margin: 0; font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -.02em; }
+    .role { margin: 5px 0 0; color: #aeb3bb; font-size: 13px; line-height: 1.65; word-break: keep-all; overflow-wrap: break-word; letter-spacing: -.025em; }
+    .trademark { margin: 22px 0 0; color: #92979f; font-size: 11px; line-height: 1.6; }
+    .next { max-width: 900px; margin: 88px auto 0; padding: 36px 0 48px; border-top: 1px solid #212327; }
+    .next-heading { margin: 0; font-size: 30px; line-height: 1.5; color: #6c7179; letter-spacing: -.04em; }
+    @media (max-width: 760px) {
+      .hero-tail { height: 38px; }
+      main { width: calc(100% - 40px); }
+      .eyebrow { margin-bottom: 12px; font-size: 11px; }
+      h1 { max-width: 310px; font-size: 29px; line-height: 1.45; letter-spacing: -.055em; }
+      .situations { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 26px; }
+      .situation { padding: 17px 0 20px; border: 0; border-top: 1px solid #303237; border-radius: 0; background: transparent; }
+      h2 { margin: 0 0 15px; padding: 0; border: 0; font-size: 16px; }
+      .models { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: auto; gap: 14px; }
+      .model { display: flex; flex-direction: column; align-items: flex-start; }
+      .model img { width: 36px; height: 36px; border-radius: 9px; margin-bottom: 8px; }
+      .name { font-size: 12px; line-height: 18px; white-space: nowrap; letter-spacing: -.035em; }
+      .role { margin-top: 5px; font-size: 12px; line-height: 18px; letter-spacing: -.035em; }
+      .trademark { margin-top: 2px; font-size: 10px; }
+      .next { margin-top: 30px; padding: 22px 0 30px; }
+      .next-heading { font-size: 24px; }
+    }
+    @media (max-width: 359px) {
+      main { width: calc(100% - 32px); }
+      .models { gap: 10px; }
+      .name { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-tail" aria-hidden="true"></div>
+  <main>
+    <section class="ai-section" aria-labelledby="ai-title">
+      <header>
+        <p class="eyebrow">TETH가 쓰는 AI</p>
+        <h1 id="ai-title">상황에 맞는 AI를 골라 써요</h1>
+      </header>
+      <div class="situations">
+        <section class="situation" aria-labelledby="news-title">
+          <h2 id="news-title">뉴스를 확인할 때</h2>
+          <ul class="models">
+            <li class="model"><img src="../../assets/ai/gemini.png" alt="" width="40" height="40"><h3 class="name">Gemini</h3><p class="role">구글 검색으로 최신 정보를 확인해요</p></li>
+            <li class="model"><img src="../../assets/ai/grok.png" alt="" width="40" height="40"><h3 class="name">Grok</h3><p class="role">X의 실시간 여론을 읽어요</p></li>
+            <li class="model"><img src="../../assets/ai/perplexity.png" alt="" width="40" height="40"><h3 class="name">Perplexity</h3><p class="role">뉴스와 공시의 출처를 찾아요</p></li>
+          </ul>
+        </section>
+        <section class="situation" aria-labelledby="market-title">
+          <h2 id="market-title">시장을 살펴볼 때</h2>
+          <ul class="models">
+            <li class="model"><img src="../../assets/ai/deepseek.png" alt="" width="40" height="40"><h3 class="name">DeepSeek</h3><p class="role">시장을 쉬지 않고 훑어요</p></li>
+            <li class="model"><img src="../../assets/ai/qwen.png" alt="" width="40" height="40"><h3 class="name">Qwen</h3><p class="role">여러 종목을 한꺼번에 비교해요</p></li>
+            <li class="model"><img src="../../assets/ai/kimi.png" alt="" width="40" height="40"><h3 class="name">Kimi</h3><p class="role">긴 보고서와 자료를 읽어요</p></li>
+          </ul>
+        </section>
+        <section class="situation" aria-labelledby="decision-title">
+          <h2 id="decision-title">판단을 정리할 때</h2>
+          <ul class="models">
+            <li class="model"><img src="../../assets/ai/chatgpt.png" alt="" width="40" height="40"><h3 class="name">ChatGPT</h3><p class="role">복잡한 상황을 정리해 판단해요</p></li>
+            <li class="model"><img src="../../assets/ai/claude.png" alt="" width="40" height="40"><h3 class="name">Claude</h3><p class="role">왜 그렇게 했는지 차분한 문장으로 써요</p></li>
+            <li class="model"><img src="../../assets/ai/mistral.png" alt="" width="40" height="40"><h3 class="name">Le Chat (Mistral)</h3><p class="role">내부 서버에서 돌리는 예비 판단이에요</p></li>
+          </ul>
+        </section>
+      </div>
+      <p class="trademark">각 로고는 해당 회사의 상표예요</p>
+    </section>
+    <div class="next" aria-hidden="true"><p class="next-heading">지금 TETH가 하는 일</p></div>
+  </main>
+</body>
+</html>

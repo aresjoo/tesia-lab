@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TETH가 쓰는 AI (claude)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500&display=swap">
+<style>
+  :root{
+    --g0:#0f1012;--gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);
+    --gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;
+    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+    --sans:Pretendard,"Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--g0)}
+  body{font-family:var(--sans);color:var(--gt);word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  /* 페이지 맥락: 사이드바 64px 를 뺀 본문 영역, 섹션 폭은 index.html .txh-wrap 과 같은 1000px - 좌우 48px */
+  main{padding-left:64px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 48px}
+
+  /* 히어로 바닥(맥락용): 실제 페이지의 영상 마지막 프레임을 같은 마스크로 아랫부분만 */
+  .floor{position:relative;height:220px;overflow:hidden;pointer-events:none;mix-blend-mode:screen;opacity:.9;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 30%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to bottom,#000 0,#000 30%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+  .floor img{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:50% 100%;display:block}
+
+  /* 섹션 */
+  .ai{padding-top:48px}
+  h2{font-family:var(--serif);font-weight:500;font-size:36px;line-height:1.3;letter-spacing:-.02em;color:var(--gt)}
+  .lead{margin-top:12px;font-size:15.5px;line-height:1.7;color:var(--gt3);max-width:560px}
+
+  /* 역할 목록: 2열, 왼쪽 열을 먼저 채우는 세로 흐름(브리프 순서 그대로 위에서 아래로 읽힘) */
+  .roles{list-style:none;margin-top:36px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:56px}
+  .roles li{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--gl)}
+  .roles li:nth-child(1),.roles li:nth-child(6){border-top:1px solid var(--gl2)}
+  .ic{position:relative;width:40px;height:40px;border-radius:10px;overflow:hidden;background:#1d1f23}
+  .ic img{display:block;width:100%;height:100%;object-fit:cover}
+  /* 어두운 아이콘(Grok 등)이 배경에 묻히지 않게 안쪽 헤어라인 */
+  .ic::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);pointer-events:none}
+  .tx{min-width:0;display:flex;flex-direction:column;gap:2px}
+  .nm{font-size:15px;font-weight:600;line-height:1.4;color:var(--gt);letter-spacing:-.005em}
+  .rl{font-size:15px;line-height:1.4;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* 다음 섹션(맥락용, 흐리게) */
+  .next{padding:104px 0 96px;opacity:.28}
+
+  @media (max-width:899px){ main{padding-left:0} }
+  @media (max-width:720px){
+    .wrap{padding:0 20px}
+    .floor{height:108px}
+    .ai{padding-top:20px}
+    h2{font-size:28px}
+    .lead{font-size:14.5px;margin-top:10px;text-wrap:balance}
+    .roles{margin-top:24px;grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}
+    .roles li{padding:10px 0}
+    .roles li:nth-child(6){border-top:0}
+    .next{padding:76px 0 64px}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="floor" aria-hidden="true"><img src="../../assets/hero-tiles-end.jpg" alt="" width="1440" height="480"></div>
+
+  <div class="wrap">
+    <section class="ai" aria-labelledby="ai-h">
+      <h2 id="ai-h">상황에 맞는 AI를 골라 써요</h2>
+      <p class="lead">뉴스를 읽을 때, 숫자를 셀 때, 이유를 쓸 때 잘하는 AI가 달라요.</p>
+
+      <ul class="roles">
+        <li><span class="ic"><img src="../../assets/ai/chatgpt.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">ChatGPT</span><span class="rl">복잡한 상황을 정리해 판단해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/claude.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Claude</span><span class="rl">왜 그렇게 했는지 차분한 문장으로 써요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/gemini.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Gemini</span><span class="rl">구글 검색으로 최신 정보를 확인해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/grok.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Grok</span><span class="rl">X의 실시간 여론을 읽어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/deepseek.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">DeepSeek</span><span class="rl">시장을 쉬지 않고 훑어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/qwen.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Qwen</span><span class="rl">여러 종목을 한꺼번에 비교해요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/perplexity.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Perplexity</span><span class="rl">뉴스와 공시의 출처를 찾아요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/kimi.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Kimi</span><span class="rl">긴 보고서와 자료를 읽어요</span></span></li>
+        <li><span class="ic"><img src="../../assets/ai/mistral.png" alt="" width="40" height="40"></span><span class="tx"><span class="nm">Le Chat (Mistral)</span><span class="rl">내부 서버에서 돌리는 예비 판단이에요</span></span></li>
+      </ul>
+    </section>
+
+    <section class="next" aria-hidden="true">
+      <h2>지금 TETH가 하는 일</h2>
+    </section>
+  </div>
+</main>
+</body>
+</html>
