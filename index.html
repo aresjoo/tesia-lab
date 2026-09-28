@@ -3742,9 +3742,6 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tx h1,#g-root .tx h2,#g-root .tx p{margin:0}
 #g-root .tx section{scroll-margin-top:24px}
 #g-root .tx :is(button,[role="button"]):focus-visible{outline:2px solid var(--gb2);outline-offset:2px}
-#g-root .tx-rv{opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,0,0,1),transform .5s cubic-bezier(.2,0,0,1)}
-#g-root .tx-rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){ #g-root .tx-rv{opacity:1;transform:none;transition:none} }
 /* 버튼 */
 #g-root .tx-cta{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 26px;border-radius:12px;border:0;background:#c8f43c;color:#0a0a0b;font-family:inherit;font-size:15px;font-weight:800;letter-spacing:-.01em;cursor:pointer;transition:filter .15s,transform .15s}
 #g-root .tx-cta:hover{filter:brightness(1.06);transform:translateY(-1px)}
@@ -3752,85 +3749,129 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tx-btn:hover{filter:brightness(.94)}
 #g-root .tx-btn.ghost{background:transparent;color:var(--gt);border-color:var(--gl2)}
 #g-root .tx-btn.ghost:hover{background:var(--gl)}
-#g-root .tx-link{background:none;border:0;padding:0;font-family:inherit;font-size:13.5px;color:var(--gt3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-#g-root .tx-link:hover{color:var(--gt)}
-#g-root .tx-cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-#g-root .tx-cta-note{font-size:13px;color:var(--gt3)}
-#g-root .tx-back{background:none;border:0;padding:0 0 18px;font-family:inherit;font-size:13px;color:var(--gt3);cursor:pointer}
-/* 히어로 + 라이브 카드 */
-#g-root .tx-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.85fr);gap:40px;align-items:center;padding:36px 0 56px}
-#g-root .tx-hero h1{font-size:40px;line-height:1.22;font-weight:800;letter-spacing:-.02em;color:var(--gt);text-wrap:balance}
-#g-root .tx-sub{font-size:17px;line-height:1.6;color:var(--gt2);margin:18px 0 26px}
-#g-root .tx-hero .tx-dlink{display:inline-block;margin-top:18px}
-#g-root .tx-live{border:1px solid var(--gl2);border-radius:16px;background:var(--g1);padding:18px 20px 14px}
-#g-root .tx-live-hd{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--gt)}
-#g-root .tx-live-hd b{font-weight:700}
-#g-root .tx-live-sym{margin-left:auto;font-family:var(--num);font-size:12px;color:var(--gt3);border:1px solid var(--gl2);border-radius:999px;padding:2px 9px}
-#g-root .tx-live-dot{width:9px;height:9px;border-radius:50%;background:var(--gg);box-shadow:0 0 0 0 rgba(78,192,141,.45);animation:txPulse 2.4s ease-out infinite}
-#g-root .tx-live-dot.busy{background:var(--gt)}
-@keyframes txPulse{0%{box-shadow:0 0 0 0 rgba(78,192,141,.45)}100%{box-shadow:0 0 0 12px rgba(78,192,141,0)}}
-@media (prefers-reduced-motion:reduce){ #g-root .tx-live-dot{animation:none} }
-#g-root .tx-live dl{margin:14px 0 0;display:grid;gap:9px}
-#g-root .tx-live dl>div{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;line-height:1.4}
-#g-root .tx-live dt{color:var(--gt3)}
-#g-root .tx-live dd{margin:0;color:var(--gt);font-weight:600;text-align:right}
-#g-root .tx-live #tx-live-tm{font-family:var(--num);font-variant-numeric:tabular-nums}
-#g-root .tx-note{margin-top:14px;padding-top:10px;border-top:1px dashed var(--gl2);font-size:11.5px;color:var(--gt3)}
 /* 섹션 공통 */
 #g-root .tx section+section{margin-top:64px}
 #g-root .tx h2{font-size:24px;line-height:1.3;font-weight:800;letter-spacing:-.015em;color:var(--gt)}
-#g-root .tx-sb{margin-top:8px;font-size:14.5px;line-height:1.6;color:var(--gt2);max-width:620px}
-/* 전략 유형 카드 */
-#g-root .tx-type-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
-#g-root .tx-type{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:18px 18px 16px;border-radius:14px;border:1px solid var(--gl2);background:var(--g1);color:var(--gt);font-family:inherit;cursor:pointer;transition:border-color .15s,background .15s}
-#g-root .tx-type:hover{border-color:rgba(255,255,255,.28);background:var(--g2)}
-#g-root .tx-type-hd{display:flex;gap:6px}
-#g-root .tx-type>b{font-size:16px;line-height:1.35;font-weight:700}
-#g-root .tx-type>p{font-size:13px;line-height:1.55;color:var(--gt2)}
 #g-root .tx-stats{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:auto;padding-top:10px;font-size:12.5px;color:var(--gt3);font-family:var(--num)}
 #g-root .tx-stats .big{font-size:20px;font-weight:700;color:var(--gg);letter-spacing:-.01em}
 #g-root .tx-stats .tx-micro{font-size:10.5px;border:1px solid var(--gl2);border-radius:999px;padding:1px 7px;color:var(--gt3);font-family:inherit}
 #g-root .tx-stats .tx-author{font-family:inherit}
-/* 판단 카드 (S5 형식의 정적 fixture) */
-#g-root .tx-log-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
-#g-root .tx-card{border:1px solid var(--gl2);border-radius:14px;background:var(--g1);padding:16px 18px}
-#g-root .tx-card header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-#g-root .tx-when{font-family:var(--num);font-size:12px;color:var(--gt3)}
-#g-root .tx-verb{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid var(--gl2);color:var(--gt)}
-#g-root .tx-card-agent .tx-verb{color:var(--gb2);border-color:rgba(91,138,247,.45)}
-#g-root .tx-lbl{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--gt3);margin:10px 0 6px}
-#g-root .tx-chips{display:flex;flex-wrap:wrap;gap:6px}
-#g-root .tx-chips span{font-size:12px;padding:4px 9px;border-radius:8px;background:var(--gl);color:var(--gt2);font-family:var(--num)}
-#g-root .tx-why{margin:0;padding-left:18px;display:grid;gap:4px;font-size:13.5px;line-height:1.55;color:var(--gt)}
-#g-root .tx-kv{display:flex;gap:12px;justify-content:space-between;align-items:baseline;padding:8px 0 0;font-size:13px;line-height:1.5}
-#g-root .tx-kv span{color:var(--gt3);flex:none}
-#g-root .tx-kv b{font-weight:600;color:var(--gt);text-align:right}
-#g-root .tx-rr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--gl);font-size:13px}
-#g-root .tx-rr span{color:var(--gt2)}
-#g-root .tx-rr b{font-family:var(--num);font-weight:600;color:var(--gt)}
-#g-root .tx-rr i{font-style:normal;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px}
-#g-root .tx-rr.ok i{color:var(--gg);background:rgba(78,192,141,.14)}
-#g-root .tx-rr.no i{color:var(--gt3);background:var(--gl)}
-/* 3 스텝 */
-#g-root .tx-step-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
-#g-root .tx-step{padding:18px;border-radius:14px;border:1px solid var(--gl);background:transparent}
-#g-root .tx-step .no{display:block;font-family:var(--num);font-size:12px;font-weight:700;color:var(--gg);letter-spacing:.06em}
-#g-root .tx-step b{display:block;margin-top:10px;font-size:16px;font-weight:700}
-#g-root .tx-step p{margin-top:6px;font-size:13.5px;line-height:1.6;color:var(--gt2)}
-/* 통제 */
-#g-root .tx-ctl-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-top:22px}
-#g-root .tx-ctl{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-#g-root .tx-ctl li{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--gt)}
-#g-root .tx-ctl svg{color:var(--gg);flex:none}
-#g-root .tx-stop{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:var(--gt3)}
-#g-root .tx-stop-btn{height:46px;padding:0 24px;border-radius:12px;border:1px solid rgba(224,96,75,.5);background:rgba(224,96,75,.1);color:var(--gr);font-family:inherit;font-size:14px;font-weight:800;opacity:.7;cursor:not-allowed}
-/* 반복 CTA + 미니 푸터 */
-#g-root .tx-cta-sec{margin-top:72px;padding:32px 28px;border-radius:18px;background:var(--g1);border:1px solid var(--gl);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
-#g-root .tx-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:40px;padding-top:18px;border-top:1px solid var(--gl);font-size:12.5px;color:var(--gt3)}
-#g-root .tx-foot .lg{font-weight:800;color:var(--gt2)}
-#g-root .tx-foot button{background:none;border:0;padding:0;font-family:inherit;font-size:12.5px;color:var(--gt3);cursor:pointer}
-#g-root .tx-foot button:hover{color:var(--gt)}
-#g-root .tx-foot .cp{margin-left:auto}
+/* ══ txh: AI 트레이딩 게스트 랜딩 (에디토리얼 캄, ux-audit/hero/DECISION.md). 세리프 헤드라인 + halo.mp4 타일 바닥.
+   라임 #c8f43c 는 히어로 CTA 1개만, 마지막 CTA 는 흰 외곽선. 스크롤 등장 효과 없음 ══ */
+#g-root .txh{word-break:keep-all;overflow-wrap:anywhere;color:var(--gt);overflow-x:clip}
+#g-root .txh *{box-sizing:border-box}
+#g-root .txh :where(h1,h2,p,ol,ul){margin:0}
+#g-root .txh section{scroll-margin-top:24px}
+#g-root .txh :is(button,[role="button"]):focus-visible{outline:2px solid var(--gb2);outline-offset:3px}
+#g-root .txh-m{display:none}
+/* 히어로: 영상 합성 기준면이라 테마와 무관하게 다크 페이지색으로 고정 */
+#g-root .txh-hero{position:relative;isolation:isolate;background:#0f1012;color:#fff;text-align:center;padding:72px 24px 0;overflow:hidden}
+#g-root .txh-hero.has-back{padding-top:84px}
+#g-root .txh-copy{position:relative;z-index:1}
+#g-root .txh-back{position:absolute;left:24px;top:20px;z-index:2;background:none;border:0;padding:0;font-family:inherit;font-size:13px;color:#9aa0a6;cursor:pointer}
+#g-root .txh-back:hover{color:#fff}
+#g-root .txh-eyebrow{font-size:14px;color:#c4c7c5;margin-bottom:18px}
+/* 세리프: font-tokens.css 의 --font-serif-editorial 은 Cormorant Garamond(라틴 전용) 우선이라 한글 세리프 스택을 직접 쓴다. Noto Serif KR 은 head 의 기존 폰트 링크로 이미 로드됨 */
+#g-root .txh-hero h1,#g-root .txh h2,#g-root .txh-step .n{font-family:"Noto Serif KR","Nanum Myeongjo",Batang,serif}
+#g-root .txh-hero h1{font-weight:500;font-size:68px;line-height:1.16;letter-spacing:-.025em;color:#fff}
+#g-root .txh-sub{font-size:17px;line-height:1.7;color:#c4c7c5;max-width:480px;margin:22px auto 34px;text-wrap:balance}
+#g-root .txh-cta{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border-radius:999px;border:0;background:#c8f43c;color:#0c0d0f;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:filter .15s}
+#g-root .txh-cta:hover{filter:brightness(1.06)}
+#g-root .txh-more-row{margin-top:18px}
+#g-root .txh-more{background:none;border:0;border-bottom:1px solid rgba(154,160,166,.4);padding:0 0 1px;font-family:inherit;font-size:13.5px;color:#9aa0a6;cursor:pointer}
+#g-root .txh-more:hover{color:#fff}
+/* 영상 바닥: 포스터(=영상 마지막 프레임) 위에 영상. 그룹 전체를 screen 합성해 검정 픽셀이 배경에 녹고, 네 변 마스크로 페이지에 스민다.
+   글자는 바닥 위쪽의 마스크 투명 구간에만 걸리고 밝은 타일과 겹치지 않는다 */
+#g-root .txh-floor{position:relative;height:clamp(300px,40vw,600px);margin:-40px -24px 0;pointer-events:none;mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 60%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 60%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+#g-root .txh-floor img,#g-root .txh-floor video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block}
+#g-root .txh-floor video{opacity:0}
+#g-root .txh-floor video.on{opacity:1;transition:opacity .8s ease}
+@media (prefers-reduced-motion:reduce){ #g-root .txh-floor video{display:none} }
+/* 섹션 공통 */
+#g-root .txh-wrap{max-width:1000px;margin:0 auto;padding:0 48px 32px}
+#g-root .txh-sec{padding-top:104px}
+#g-root .txh-sec.first{padding-top:48px}
+#g-root .txh h2{font-weight:500;font-size:36px;line-height:1.3;letter-spacing:-.02em;color:var(--gt)}
+#g-root .txh-lead{margin-top:12px;font-size:15.5px;line-height:1.7;color:var(--gt3);max-width:560px}
+/* 지금 TETH가 하는 일: 판단 카드 1장 (시뮬레이션 예시) */
+#g-root .txh-now{margin-top:32px;max-width:680px;background:var(--g1);border:1px solid var(--gl2);border-radius:18px;padding:24px}
+#g-root .txh-now-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#g-root .txh-chip{display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--gl);color:var(--gt)}
+#g-root .txh-asset{font-size:13.5px;font-weight:600;color:var(--gt)}
+#g-root .txh-sim{margin-left:auto;font-size:12px;color:var(--gt3);border:1px dashed var(--gl2);border-radius:999px;padding:2px 10px}
+#g-root .txh-say{margin-top:16px;font-size:17px;line-height:1.72;color:var(--gt)}
+#g-root .txh-why{list-style:none;padding:14px 0 0;margin-top:18px;border-top:1px solid var(--gl);display:grid;gap:10px}
+#g-root .txh-why li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;font-size:14.5px;line-height:1.6;color:var(--gt2)}
+#g-root .txh-why i{font-style:normal;font-family:var(--num);font-size:12px;color:var(--gt3);padding-top:2px}
+#g-root .txh-now-ft{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:16px;font-size:13px;color:var(--gt3)}
+#g-root .txh-now-ft b{font-weight:600;color:var(--gt2);margin-left:6px}
+/* 이런 전략을 돌려요 */
+#g-root .txh-kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
+#g-root .txh-kind{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:var(--g1);border:1px solid var(--gl2);border-radius:18px;padding:26px 24px 24px;color:var(--gt);font-family:inherit;cursor:pointer;transition:border-color .15s}
+#g-root .txh-kind:hover{border-color:var(--gt3)}
+#g-root .txh-kind .lb{display:block;font-size:12.5px;color:var(--gt3);margin-bottom:14px}
+#g-root .txh-kind b{display:block;font-size:19px;font-weight:700;line-height:1.4;margin-bottom:10px}
+#g-root .txh-kind .ds{display:block;font-size:14.5px;line-height:1.7;color:var(--gt2);margin-bottom:22px}
+#g-root .txh-kind .ex{display:block;margin-top:auto;border-left:2px solid var(--gl2);padding:2px 0 2px 12px;font-size:14px;line-height:1.6;color:var(--gt)}
+#g-root .txh-kind .ex small{display:block;font-size:11.5px;color:var(--gt3);margin-bottom:3px}
+/* 어떻게 시작하나요 */
+#g-root .txh-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:32px}
+#g-root .txh-step{border-top:1px solid var(--gl2);padding-top:22px}
+#g-root .txh-step .n{display:block;font-size:30px;line-height:1;color:var(--gt3);margin-bottom:18px}
+#g-root .txh-step b{display:block;font-size:18px;font-weight:700;margin-bottom:8px}
+#g-root .txh-step p{font-size:14.5px;line-height:1.7;color:var(--gt2)}
+/* 내 돈은 어떻게 지키나요 */
+#g-root .txh-safe{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}
+#g-root .txh-safe ul{list-style:none;padding:0;border-top:1px solid var(--gl2)}
+#g-root .txh-safe li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:20px 0;border-bottom:1px solid var(--gl)}
+#g-root .txh-safe li svg{grid-row:span 2;margin-top:2px;color:var(--gt2)}
+#g-root .txh-safe li b{font-size:16px;font-weight:700;color:var(--gt)}
+#g-root .txh-safe li span{font-size:14px;line-height:1.65;color:var(--gt3)}
+/* 마지막 CTA: 흰 외곽선 알약 (라임은 히어로 1개) */
+#g-root .txh-end{text-align:center;padding:128px 0 96px}
+#g-root .txh-end h2{font-size:40px}
+#g-root .txh-end .txh-lead{margin:14px auto 32px;max-width:480px;text-wrap:balance}
+#g-root .txh-ghost{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border-radius:999px;border:1px solid var(--gt);background:transparent;color:var(--gt);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:background .15s}
+#g-root .txh-ghost:hover{background:var(--gl)}
+#g-root .txh-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;border-top:1px solid var(--gl);font-size:12.5px;color:var(--gt3)}
+#g-root .txh-foot .lg{font-weight:800;color:var(--gt2)}
+#g-root .txh-foot button{background:none;border:0;padding:0;font-family:inherit;font-size:12.5px;color:var(--gt3);cursor:pointer}
+#g-root .txh-foot button:hover{color:var(--gt)}
+#g-root .txh-foot .cp{margin-left:auto}
+@media (max-width:960px){
+  #g-root .txh-kinds,#g-root .txh-steps{grid-template-columns:1fr}
+  #g-root .txh-kinds{gap:12px}
+  #g-root .txh-steps{gap:26px}
+}
+@media (max-width:860px){
+  #g-root .txh-hero{padding:40px 20px 0}
+  #g-root .txh-hero.has-back{padding-top:52px}
+  #g-root .txh-back{left:16px;top:14px}
+  #g-root .txh-eyebrow{font-size:13px;margin-bottom:14px}
+  #g-root .txh-hero h1{font-size:40px;line-height:1.24}
+  #g-root .txh-m{display:inline}
+  #g-root .txh-sub{font-size:15.5px;margin:18px auto 28px}
+  #g-root .txh-floor{height:280px;margin:-24px -20px 0;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 58%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 58%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%)}
+  #g-root .txh-wrap{padding:0 20px 24px}
+  #g-root .txh-sec{padding-top:76px}
+  #g-root .txh-sec.first{padding-top:32px}
+  #g-root .txh h2{font-size:28px}
+  #g-root .txh-lead{font-size:14.5px}
+  #g-root .txh-now{padding:20px;margin-top:24px}
+  #g-root .txh-say{font-size:16px}
+  #g-root .txh-sim{margin-left:0}
+  #g-root .txh-kinds,#g-root .txh-steps{margin-top:24px}
+  #g-root .txh-kind{padding:22px 20px}
+  #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
+  #g-root .txh-end{padding:88px 0 64px}
+  #g-root .txh-end h2{font-size:30px}
+  #g-root .txh-dlink{display:none!important}
+  #g-root .txh-foot .cp{margin-left:0;flex-basis:100%}
+}
 /* 미활성 뷰 */
 #g-root .tx-inactive{max-width:760px}
 #g-root .tx-onb{list-style:none;margin:0 0 26px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
@@ -3891,24 +3932,11 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .tx-help button:hover{background:var(--gl)}
 #g-root .tx-foot-l{margin-top:22px}
 /* 반응형 */
-@media (max-width:960px){
-  #g-root .tx-hero{grid-template-columns:1fr;gap:26px;padding:16px 0 40px}
-  #g-root .tx-hero h1{font-size:32px}
-  #g-root .tx-type-grid,#g-root .tx-step-grid{grid-template-columns:1fr}
-}
 @media (max-width:860px){
   #g-root .tx{padding:18px 16px 72px}
-  #g-root .tx-dlink{display:none!important}
-  #g-root .tx-hero h1{font-size:27px}
-  #g-root .tx-sub{font-size:15px}
   #g-root .tx section+section{margin-top:48px}
   #g-root .tx h2{font-size:20px}
-  #g-root .tx-log-grid{grid-template-columns:1fr}
-  #g-root .tx-ctl-grid{grid-template-columns:1fr}
-  #g-root .tx-stop{flex-direction:row;justify-content:flex-start}
-  #g-root .tx-cta-sec{padding:22px 18px}
-  #g-root .tx-cta-sec .tx-cta,#g-root .tx-hero .tx-cta,#g-root .tx-draft .tx-cta{width:100%}
-  #g-root .tx-foot .cp{margin-left:0;flex-basis:100%}
+  #g-root .tx-draft .tx-cta{width:100%}
   #g-root .tx-onb{grid-template-columns:repeat(2,minmax(0,1fr))}
   #g-root .tx-head h1{font-size:22px}
   #g-root .tx-ac-row.alt{flex-direction:column;align-items:flex-start}
@@ -6914,6 +6942,7 @@ function gComposer(on,ctx){
 }
 function gContent(html){
   if(window.TF_T5_MOTION) window.TF_T5_MOTION.destroy();
+  if(window.TF_TIN_FX&&typeof tfIntroDestroy==='function') tfIntroDestroy(); /* 게스트 랜딩 영상 정지, 분리된 video 재생 방지 */
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
     if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
@@ -14302,63 +14331,63 @@ function tfIntroGo(id){
   try{ el.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'}); }catch(e){ el.scrollIntoView(); }
   try{ var h=el.querySelector('h2')||el; h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }catch(e){}
 }
-/* 게스트 뷰 모션: 라이브 카드 1초 틱 + 스크롤 등장. 이탈 시 타이머와 옵저버 일괄 해제 */
+/* 게스트 랜딩 효과: 타일 바닥 영상만 (스크롤 등장 효과 없음). 포스터 먼저, 바닥이 보일 때 영상을 지연 생성,
+   화면 밖이나 탭 숨김이면 정지, 동작 줄이기면 포스터만. halo.mp4(6.7초)는 0~4.6초가 검정에서 밝아지는 도입부이고
+   4.6초 이후는 정지 프레임(=포스터 hero-tiles-end.jpg). 루프 재시작의 암전을 숨기려고 끝 0.2초와 재시작 직후에는
+   영상을 투명하게 두고(아래 포스터가 같은 프레임), TXH_LOOP_IN 으로 건너뛴 뒤 페이드로 다시 켠다 */
+var TXH_LOOP_IN=2.0;
 function tfIntroDestroy(){
   var fx=window.TF_TIN_FX; if(!fx) return;
-  try{ if(fx.iv) clearInterval(fx.iv); if(fx.wd) clearInterval(fx.wd); if(fx.ob) fx.ob.disconnect();
-    if(fx.mq&&fx.mqh){ if(fx.mq.removeEventListener) fx.mq.removeEventListener('change',fx.mqh); else if(fx.mq.removeListener) fx.mq.removeListener(fx.mqh); } }catch(e){}
   window.TF_TIN_FX=null;
+  try{ if(fx.wd) clearInterval(fx.wd); if(fx.vob) fx.vob.disconnect();
+    if(fx.vis) document.removeEventListener('visibilitychange',fx.vis);
+    if(fx.mq&&fx.mqh){ if(fx.mq.removeEventListener) fx.mq.removeEventListener('change',fx.mqh); else if(fx.mq.removeListener) fx.mq.removeListener(fx.mqh); }
+    if(fx.v){ fx.v.pause(); fx.v.removeAttribute('src'); fx.v.load(); } }catch(e){}
 }
 function tfIntroFx(){
   tfIntroDestroy();
-  var fx={iv:null,wd:null,ob:null,mq:null,mqh:null,t0:Date.now()}; window.TF_TIN_FX=fx;
-  var rm=false; try{ fx.mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)'); rm=!!(fx.mq&&fx.mq.matches); }catch(e){}
-  /* 라이브 카드: 15초마다 확인이 돌고 "N초 전"이 1초씩 오른다 (결정론, 난수 없음) */
-  var tm=document.getElementById('tx-live-tm'), dot=document.getElementById('tx-live-dot');
-  function tick(){
-    if(!tm) return;
-    var n=Math.floor((Date.now()-fx.t0)/1000)%15;
-    tm.textContent=n===0?'방금':n+'초 전';
-    if(dot) dot.classList.toggle('busy',n===0);
+  var floor=document.querySelector('#g-content .txh-floor'); if(!floor) return;
+  var fx={wd:null,vob:null,vis:null,mq:null,mqh:null,v:null,seen:false}; window.TF_TIN_FX=fx;
+  try{ fx.mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)'); }catch(e){}
+  function rm(){ return !!(fx.mq&&fx.mq.matches); }
+  function sync(){
+    var v=fx.v; if(!v) return;
+    if(fx.seen&&!document.hidden&&!rm()){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+    else v.pause();
   }
-  if(tm){ tick(); fx.iv=setInterval(function(){ if(G.mode!=='tfintro'||!document.getElementById('tx-live-tm')){ tfIntroDestroy(); return; } if(document.hidden) return; tick(); },1000); }
-  fx.wd=setInterval(function(){ if(G.mode!=='tfintro') tfIntroDestroy(); },5000);
-  var rv=[].slice.call(document.querySelectorAll('.tx-rv'));
-  if(rm||typeof IntersectionObserver==='undefined'){ rv.forEach(function(el){ el.classList.add('in'); }); return; }
-  /* root=실제 스크롤 컨테이너(g-scroll). 위쪽 마진을 크게 열어 앵커 점프로 지나친 요소도 등장 */
-  var sroot=document.getElementById('g-scroll')||null;
-  fx.ob=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); fx.ob.unobserve(en.target); } }); },{root:sroot,threshold:.08,rootMargin:'9999px 0px -24px 0px'});
-  rv.forEach(function(el){ fx.ob.observe(el); });
-  fx.mqh=function(e){ if(e&&e.matches){ rv.forEach(function(el){ el.classList.add('in'); }); } };
+  function frame(t){
+    var v=fx.v; if(!v) return;
+    var d=isFinite(v.duration)&&v.duration>0?v.duration:6.67;
+    if(t<TXH_LOOP_IN-0.02){ v.classList.remove('on'); if(!v.seeking&&v.readyState>=1){ try{ v.currentTime=TXH_LOOP_IN; }catch(e){} } }
+    else if(t>d-0.2||rm()) v.classList.remove('on');
+    else v.classList.add('on');
+  }
+  function mount(){
+    if(fx.v||!fx.seen||document.hidden||rm()||window.TF_TIN_FX!==fx) return;
+    var v=document.createElement('video');
+    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.preload='metadata'; v.tabIndex=-1;
+    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('disablepictureinpicture',''); v.setAttribute('aria-hidden','true');
+    v.poster='assets/hero-tiles-end.jpg';
+    v.addEventListener('loadedmetadata',function(){ frame(v.currentTime); });
+    v.addEventListener('timeupdate',function(){ frame(v.currentTime); });
+    v.addEventListener('error',function(){ v.classList.remove('on'); });
+    if(typeof v.requestVideoFrameCallback==='function'){
+      var cb=function(now,md){ if(fx.v!==v) return; frame(md.mediaTime); v.requestVideoFrameCallback(cb); };
+      v.requestVideoFrameCallback(cb);
+    }
+    v.src='assets/halo.mp4';
+    floor.appendChild(v); fx.v=v; sync();
+  }
+  fx.wd=setInterval(function(){ if(G.mode!=='tfintro'||!document.body.contains(floor)) tfIntroDestroy(); },5000);
+  if(typeof IntersectionObserver!=='undefined'){
+    fx.vob=new IntersectionObserver(function(es){ fx.seen=es[es.length-1].isIntersecting; mount(); sync(); },{root:document.getElementById('g-scroll')||null,threshold:0});
+    fx.vob.observe(floor);
+  } else { fx.seen=true; mount(); }
+  fx.vis=function(){ mount(); sync(); }; document.addEventListener('visibilitychange',fx.vis);
+  fx.mqh=function(){ if(fx.v&&rm()) fx.v.classList.remove('on'); mount(); sync(); };
   try{ if(fx.mq){ if(fx.mq.addEventListener) fx.mq.addEventListener('change',fx.mqh); else if(fx.mq.addListener) fx.mq.addListener(fx.mqh); } }catch(e){}
 }
 function tfTxPct(v,d){ if(typeof v!=='number'||!isFinite(v)) return '-'; return (v>=0?'+':'')+v.toFixed(d==null?1:d)+'%'; }
-/* 규칙 카드 — 실제 판정식(runBacktest)을 마지막 봉에 그대로 적용해 생성. 발명 금지 (D24) */
-function tfTxRuleCardHtml(p,when){
-  p=p||{sl:-5,tp:12,rsiTh:44,trendFilter:true};
-  var i=PRICE.length-1, r0=rsi(PRICE,i-1), bounce=PRICE[i]/PRICE[i-1]-1, gap=Math.abs(sma(PRICE,20,i)-sma(PRICE,60,i))/PRICE[i];
-  var okR=r0<p.rsiTh, okB=bounce>0.005, okT=!p.trendFilter||gap>0.03, all=okR&&okB&&okT;
-  function row(lbl,val,ok){ return '<div class="tx-rr'+(ok?' ok':' no')+'"><span>'+lbl+'</span><b>'+val+'</b><i>'+(ok?'충족':'미충족')+'</i></div>'; }
-  var h='<article class="tx-card tx-card-rule"><header><span class="tx-when">'+gEsc(when||'최근 봉')+'</span><span class="tx-verb">규칙 검사</span></header>'
-    +row('전봉 RSI(14) < '+p.rsiTh,r0.toFixed(0),okR)
-    +row('반등 +0.5% 초과',tfTxPct(bounce*100,2),okB)
-    +(p.trendFilter?row('이평 괴리 3% 초과 (추세 구간)',(gap*100).toFixed(1)+'%',okT):'')
-    +'<div class="tx-kv"><span>결과</span><b>'+(all?'진입 조건 충족, 진입':'진입 조건 미충족, 대기')+'</b></div>'
-    +'<div class="tx-kv"><span>주문</span><b>'+(all?'시장가 매수, 예산 전액':'없음')+'</b></div>'
-    +'<div class="tx-kv"><span>리스크 규칙</span><b>손절 '+p.sl+'%, '+(p.tp!=null?'익절 +'+p.tp+'%, ':'')+'25봉 지나면 청산</b></div>'
-    +'</article>';
-  return h;
-}
-/* 에이전트 카드 — 정적 fixture(대표 예시 전략). 확률 수치 없음, 판단 동사는 대기/진입/추가/축소/청산만 */
-function tfTxAgentCardHtml(){
-  var chips=['BTC $64,120','1H 하락','4H 횡보','거래량 20봉 평균 -8%','포지션 없음'];
-  return '<article class="tx-card tx-card-agent"><header><span class="tx-when">22:41</span><span class="tx-verb">대기</span></header>'
-    +'<div class="tx-lbl">확인한 것</div><div class="tx-chips">'+chips.map(function(c){ return '<span>'+c+'</span>'; }).join('')+'</div>'
-    +'<div class="tx-lbl">이유</div><ul class="tx-why"><li>1시간봉은 내려오고 있지만 4시간봉은 아직 방향이 없어요.</li><li>거래량이 평균보다 적어서 반등이 이어질 근거가 부족해요.</li><li>지금 들어가면 손절 폭에 비해 기대 폭이 작아요.</li></ul>'
-    +'<div class="tx-kv"><span>행동</span><b>주문 없음</b></div>'
-    +'<div class="tx-kv"><span>다음 확인</span><b>다음 15분봉 마감</b></div>'
-    +'</article>';
-}
 function tfIntroView(force){
   /* 회원은 미활성 뷰가 정본. force(사용 방법 링크)로만 랜딩을 다시 볼 수 있다 */
   if(S.user&&!force){ tfTradeInactiveView(); return; }
@@ -14368,65 +14397,60 @@ function tfIntroView(force){
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false;
   gChead('AI 트레이딩','',null);
-  var seedsAll=(typeof tfRankSeeds==='function'?tfRankSeeds():[]);
-  var rule=null, eth=null;
-  seedsAll.forEach(function(r){ if(!rule&&r.score>=TFC.score.pass) rule=r; });
-  rule=rule||seedsAll[0]||null;
-  seedsAll.forEach(function(r){ if(!eth&&r!==rule&&r.asset==='이더리움') eth=r; });
-  eth=eth||seedsAll.filter(function(r){ return r!==rule; })[0]||rule;
   var ctaAct=S.user?"tfNav('#/trade')":"authOpen('signup')", ctaLbl=S.user?'AI 트레이딩으로 돌아가기':'무료로 시작';
-  var cardAct=S.user?"tfNav('#/trade')":"authOpen('signup')";
-  var IC_CHK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>';
-  var ruleCard=rule?'<button type="button" class="tx-type tx-rv" style="transition-delay:60ms" onclick="'+cardAct+'">'
-      +'<div class="tx-type-hd">'+tfKindBadge('rule')+'</div>'
-      +'<b>'+gEsc(tfSeedTitle(rule))+'</b><p>'+gEsc(tfStratSub(rule.p))+'</p>'
-      +'<div class="tx-stats"><span class="big">'+tfTxPct(rule.ret)+'</span><span>검증 기준</span><span>MDD '+tfTxPct(rule.mdd)+'</span><span class="tx-micro">수수료 반영</span></div>'
-      +'</button>':'';
-  var followCard=eth?'<button type="button" class="tx-type tx-rv" style="transition-delay:120ms" onclick="tfShareHub(\'find\')">'
-      +'<div class="tx-type-hd">'+tfKindBadge('follow')+'</div>'
-      +'<b>'+gEsc(tfSeedTitle(eth))+'</b><p>다른 사용자의 전략을 내 예산으로 따라가요.</p>'
-      +'<div class="tx-stats"><span class="big">'+tfTxPct(eth.ret)+'</span><span>검증 기준</span><span>팔로워 '+(eth.fw||0).toLocaleString()+'</span><span class="tx-author">작성자 '+gEsc(eth.nick)+'</span></div>'
-      +'</button>':'';
-  gContent('<div class="tx tx-guest">'
-    +(S.user?'<button type="button" class="tx-back" onclick="tfNav(\'#/trade\')">← AI 트레이딩으로 돌아가기</button>':'')
-    +'<section class="tx-hero"><div class="tx-hero-copy">'
-    +'<h1>밤새 차트 보지 마세요.<br>TETH가 전략을 만들고, 검증하고, 24시간 대신 거래합니다</h1>'
-    +'<p class="tx-sub">매 판단의 이유까지 보여줘요</p>'
-    +'<div class="tx-cta-row"><button type="button" class="tx-cta" onclick="'+ctaAct+'">'+ctaLbl+'</button><span class="tx-cta-note">카드 등록 없이 시작해요</span></div>'
-    +'<button type="button" class="tx-link tx-dlink" onclick="tfPreviewOpen()">터미널 미리 보기</button>'
-    +'</div>'
-    +'<aside class="tx-live" aria-label="대표 전략 현재 상태"><div class="tx-live-hd"><span class="tx-live-dot" id="tx-live-dot"></span><b>TETH가 보고 있어요</b><span class="tx-live-sym">BTC/USDT</span></div>'
-    +'<dl><div><dt>포지션</dt><dd>없음</dd></div><div><dt>기다리는 것</dt><dd>4시간봉 모멘텀 확인</dd></div><div><dt>다음 확인</dt><dd>다음 봉 마감</dd></div><div><dt>마지막 확인</dt><dd id="tx-live-tm">방금</dd></div></dl>'
-    +'<div class="tx-note">시뮬레이션 데이터예요</div></aside>'
+  function ic(p){ return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
+  /* 전략 유형 카드: 시드 제목(tfSeedTitle)은 지표 용어가 섞여 있어 쓰지 않고 쉬운 말 고정 문구 (수익률, 팔로워 수 비노출) */
+  function kind(lb,t,ds,ex,act){ return '<button type="button" class="txh-kind" onclick="'+act+'"><span class="lb">'+lb+'</span><b>'+t+'</b><span class="ds">'+ds+'</span><span class="ex"><small>이렇게 말하면 돼요</small>“'+ex+'”</span></button>'; }
+  function step(n,t,p){ return '<div class="txh-step"><span class="n">'+n+'</span><b>'+t+'</b><p>'+p+'</p></div>'; }
+  function safe(svg,t,p){ return '<li>'+ic(svg)+'<b>'+t+'</b><span>'+p+'</span></li>'; }
+  gContent('<div class="txh tx-guest">'
+    +'<section class="txh-hero'+(S.user?' has-back':'')+'" aria-labelledby="txh-h">'
+    +(S.user?'<button type="button" class="txh-back" onclick="tfNav(\'#/trade\')">← AI 트레이딩으로 돌아가기</button>':'')
+    +'<div class="txh-copy"><p class="txh-eyebrow">AI 트레이딩</p>'
+    +'<h1 id="txh-h">내 기준대로,<br class="txh-m"> AI가 거래해요</h1>'
+    +'<p class="txh-sub">말로 정한 기준 안에서 AI가 코인 시장을 지켜보고 사고팔며, 판단할 때마다 이유를 남겨요.</p>'
+    +'<button type="button" class="txh-cta" onclick="'+ctaAct+'">'+ctaLbl+'</button>'
+    +'<div class="txh-more-row"><button type="button" class="txh-more" onclick="tfIntroGo(\'txh-now\')">TETH가 어떻게 판단하는지 볼게요</button></div></div>'
+    +'<div class="txh-floor" aria-hidden="true"><img src="assets/hero-tiles-end.jpg" alt="" width="1440" height="480" decoding="async"></div>'
     +'</section>'
-    +'<section class="tx-types" id="tx-types"><h2 class="tx-rv">이런 전략을 돌려요</h2><div class="tx-type-grid">'
-    +'<button type="button" class="tx-type tx-rv" onclick="'+cardAct+'">'
-    +'<div class="tx-type-hd">'+tfKindBadge('agent')+'</div>'
-    +'<b>BTC 시장 맥락 판단</b><p>15분마다 진입, 추가, 축소, 청산, 대기를 결정해요.</p>'
-    +'<div class="tx-stats"><span class="big">15분</span><span>판단 주기</span><span>판단 기록 공개</span></div>'
-    +'</button>'
-    +ruleCard+followCard
+    +'<div class="txh-wrap">'
+    +'<section class="txh-sec first" id="txh-now" aria-labelledby="txh-now-h"><h2 id="txh-now-h">지금 TETH가 하는 일</h2>'
+    +'<p class="txh-lead">사고팔 때만이 아니라 기다릴 때도, 왜 그렇게 했는지 직접 적어둬요.</p>'
+    +'<article class="txh-now"><div class="txh-now-hd"><span class="txh-chip">지금은 기다려요</span><span class="txh-asset">비트코인</span><span class="txh-sim">시뮬레이션 예시</span></div>'
+    +'<p class="txh-say">가격이 내려오다 멈춘 것처럼 보이지만, 다시 오를 힘은 아직 확인되지 않았어요. 그래서 이번엔 사지 않고 지켜보기로 했어요.</p>'
+    +'<ol class="txh-why"><li><i>1</i><span>몇 시간째 가격이 조금씩 내려오고 있어요.</span></li>'
+    +'<li><i>2</i><span>사고파는 사람이 평소보다 적어서, 오르더라도 오래가기 어려워 보여요.</span></li>'
+    +'<li><i>3</i><span>지금 사면 잃을 수 있는 폭에 비해 기대할 수 있는 폭이 작아요.</span></li></ol>'
+    +'<div class="txh-now-ft"><span>주문<b>없음</b></span><span>다음 확인<b>15분 뒤</b></span></div></article></section>'
+    +'<section class="txh-sec" aria-labelledby="txh-k-h"><h2 id="txh-k-h">이런 전략을 돌려요</h2>'
+    +'<p class="txh-lead">어렵게 설정할 필요 없어요. 말하는 방식에 따라 세 가지로 움직여요.</p><div class="txh-kinds">'
+    +kind('AI가 판단','AI에게 맡기기','시장 흐름을 읽고 살지, 팔지, 쉴지를 AI가 그때그때 정해요. 정한 한도에 닿으면 스스로 멈춰요.','비트코인, 흐름이 좋을 때만 들어가 줘',ctaAct)
+    +kind('규칙대로','내 규칙 지키기','말로 정한 규칙 그대로 사고팔아요. 원하면 AI가 한 번 더 살펴보고, 애매한 자리는 건너뛰어요.','하루에 5% 넘게 빠지면 세 번에 나눠 사줘',ctaAct)
+    +kind('따라하기','다른 전략 따라가기','공개된 전략의 판단 기록을 먼저 읽어보고, 마음에 들면 내 예산 안에서 따라 해요. 언제든 멈출 수 있어요.','이 전략, 내 예산 20%로만 따라 해줘','tfShareHub(\'find\')')
     +'</div></section>'
-    +'<section class="tx-logs"><h2 class="tx-rv">판단마다 이유가 남아요</h2><p class="tx-sb tx-rv">AI 판단은 무엇을 보고 결정했는지, 규칙은 어떤 조건이 맞았는지 그대로 보여줘요.</p>'
-    +'<div class="tx-log-grid tx-rv">'+tfTxAgentCardHtml()+tfTxRuleCardHtml(rule?rule.p:null,'최근 봉')+'</div></section>'
-    +'<section class="tx-steps"><h2 class="tx-rv">세 단계면 돌아가요</h2><div class="tx-step-grid">'
-    +'<div class="tx-step tx-rv"><span class="no">01</span><b>말하기</b><p>원하는 전략을 한 문장으로 말해요. 조건과 예산은 TETH가 되물어요.</p></div>'
-    +'<div class="tx-step tx-rv" style="transition-delay:60ms"><span class="no">02</span><b>검증</b><p>과거 데이터로 돌려보고 위험을 검토해요. 통과한 전략만 실행할 수 있어요.</p></div>'
-    +'<div class="tx-step tx-rv" style="transition-delay:120ms"><span class="no">03</span><b>연결, 실행</b><p>거래소를 연결하면 정한 예산 안에서 24시간 대신 거래해요.</p></div>'
+    +'<section class="txh-sec" id="txh-how" aria-labelledby="txh-w-h"><h2 id="txh-w-h">어떻게 시작하나요</h2>'
+    +'<p class="txh-lead">대화 몇 번이면 충분해요.</p><div class="txh-steps">'
+    +step(1,'말로 정해요','무엇을, 얼마까지, 언제 멈출지 대화로 정해요. 복잡한 설정 화면은 없어요.')
+    +step(2,'먼저 돌려봐요','지난 시장에서 미리 돌려보고, 정리된 기준을 읽어본 뒤 직접 승인해요.')
+    +step(3,'연결하고 켜요','쓰던 거래소를 연결하면 정한 예산 안에서 거래를 시작해요.')
     +'</div></section>'
-    +'<section class="tx-control"><h2 class="tx-rv">결정권은 항상 회원님에게 있어요</h2><div class="tx-ctl-grid tx-rv">'
-    +'<ul class="tx-ctl"><li>'+IC_CHK+'<span>전략마다 정한 예산 안에서만 거래해요</span></li><li>'+IC_CHK+'<span>실행은 직접 승인한 뒤에만 시작돼요</span></li><li>'+IC_CHK+'<span>출금 권한은 요구하지 않아요</span></li><li>'+IC_CHK+'<span>언제든 한 번에 멈출 수 있어요</span></li></ul>'
-    +'<div class="tx-stop"><button type="button" class="tx-stop-btn" disabled aria-disabled="true">긴급 정지</button><span>터미널에서 언제든</span></div>'
-    +'</div></section>'
-    +'<section class="tx-cta-sec tx-rv"><h2>오늘 밤부터 차트는 TETH가 봐요</h2>'
-    +'<div class="tx-cta-row"><button type="button" class="tx-cta" onclick="'+ctaAct+'">'+ctaLbl+'</button><span class="tx-cta-note">카드 등록 없이 시작해요</span></div></section>'
-    +'<footer class="tx-foot"><span class="lg">TETH AI</span>'
+    +'<section class="txh-sec" aria-labelledby="txh-g-h"><div class="txh-safe"><div><h2 id="txh-g-h">내 돈은 어떻게 지키나요</h2>'
+    +'<p class="txh-lead">맡기는 건 판단이지 돈이 아니에요. 멈추는 버튼은 늘 내 손에 있어요.</p></div><ul>'
+    +safe('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>','돈은 내 거래소에 그대로 있어요, 출금 권한은 받지 않아요','TETH는 연결할 때 주문에 필요한 권한만 요청해요.')
+    +safe('<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12l6 4"/>','정한 예산만 써요','전략마다 쓸 예산을 따로 정하고, 그 밖의 돈으로는 주문하지 않아요.')
+    +safe('<path d="M4 6h16"/><path d="M4 18h16"/><path d="M8 12h8"/>','정한 한도에 닿으면 스스로 멈춰요','하루 손실 한도와 전략별 손실 한도를 정해두면, 닿았을 때 새 주문을 멈춰요.')
+    +safe('<circle cx="12" cy="12" r="8.5"/><rect x="9" y="9" width="6" height="6" rx="1"/>','언제든 한 번에 멈출 수 있어요','버튼 하나로 전략을 끄고, 들고 있던 포지션도 정리해요.')
+    +'</ul></div></section>'
+    +'<section class="txh-end" aria-labelledby="txh-e-h"><h2 id="txh-e-h">작게 켜두고,<br class="txh-m"> 읽어보고, 늘려요</h2>'
+    +'<p class="txh-lead">처음엔 적은 예산으로 켜두고 판단 기록을 읽어보세요. 믿음이 생기면 그때 늘려도 늦지 않아요.</p>'
+    +'<button type="button" class="txh-ghost" onclick="'+ctaAct+'">'+ctaLbl+'</button></section>'
+    +'<footer class="txh-foot"><span class="lg">TETH AI</span>'
     +'<button type="button" onclick="tfShareHub(\'find\')">전략 따라하기</button>'
     +'<button type="button" onclick="tfNav(\'#/insight\')">인사이트</button>'
     +'<button type="button" onclick="tfBackToChat()">새 전략 만들기</button>'
-    +'<button type="button" class="tx-dlink" onclick="tfPreviewOpen()">터미널 미리 보기</button>'
+    +'<button type="button" class="txh-dlink" onclick="tfPreviewOpen()">터미널 미리 보기</button>'
     +'<span class="cp">© 2026 TETH AI</span></footer>'
-    +'</div>');
+    +'</div></div>');
   TF_RENDERING=false;
   tfIntroFx();
   try{ if(location.hash!=='#/trade') history.replaceState(null,'','#/trade'); }catch(e){}
