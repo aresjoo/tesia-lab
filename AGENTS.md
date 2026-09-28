@@ -97,8 +97,20 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
 | `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
 | `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
+| `ux-audit/hero/mock-codex.html`, `NOTE-codex.md`, `mock-codex-*.png`, `frame3-codex.png` | 실제 제품이 먼저 보이는 Codex 히어로 경쟁 시안, 구현 노트, 1440px·390px 렌더와 영상 3초 참고 프레임. 한국어 전용 독립 데모로, 포트 8793에서 확인하며 제품 본문과 인증 흐름은 변경하지 않는다. |
+| `ux-audit/hero/CRIT-codex.md` | claude와 light 히어로 시안의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 8개 항목 점수, 근거, 단일 채택 추천과 필수 수정 조건을 기록하며 구현 완료 명세는 아니다. |
+| `ux-audit/research/AI_MODELS_TRADING.md`, `ux-audit/research/CODEX_VERIFY_MODELS.md` | 거래 판단과 Pine Script 작성 모델의 Claude 조사 초안 및 Codex 항목별 검증. 공식 출처 대조, 미확정 수치, 호출 비용과 조합 수정안을 기록한다. 실제 모델 성능 실험이나 제품 구현 완료 명세가 아니다. |
 | `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |
+| `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+| `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+| `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+| `ux-audit/card2/mock-codex.html`, `ux-audit/card2/NOTE-codex.md`, `ux-audit/card2/mock-codex-d1440.png`, `ux-audit/card2/mock-codex-m390.png`, `ux-audit/card2/mock-codex-tip.png` | 장부형 2카드 Codex 경쟁 시안과 8줄 노트, 1440×900 기본·용어 설명 렌더 및 390×844 뷰포트에서 확인한 390×1052 전체 모바일 렌더. 포트 8823의 한국어 독립 HTML로 Google Fonts와 기존 아바타·거래소 자산을 사용한다. 용어 호버·탭·키보드·ARIA 연결을 CDP로 검증했으며 AGY 외부 검토는 인증·접근 오류로 미완료다. 본문 앱에는 적용하지 않았다. |
+| `ux-audit/card2/CRIT-codex.md` | claude와 stat의 기본, 모바일, 용어 설명 PNG 6장을 직접 확인한 Codex 평가. 6개 항목 점수와 단일 채택 추천을 담고 닫힘 처리는 HTML로 확인했다. 제품 코드에는 적용하지 않았다. |
+| `site-footer.js` | 사이트 푸터의 단일 출처. `TETH_FOOTER.html({spa:true})`는 SPA용(onclick 액션), `mount(el,{base:'../'})`는 about, policies, download 독립 페이지용이며 CSS는 `#teth-footer-css`로 주입한다. 링크 4칼럼(제품, 회사, 도움, 약관), 오른쪽 문단, Powered by Bitget, SVG 거대 워드마크로 구성된다. index.html의 `gftPlace()`가 PC 푸터 페이지에서 body.gft-doc 문서 스크롤로 전환해 사이드바 아래 전체 폭에 배치한다. |
 | `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+| `ux-audit/footer/mock-codex.html`, `ux-audit/footer/NOTE-codex.md`, `ux-audit/footer/mock-codex-lime-d1440.png`, `ux-audit/footer/mock-codex-dark-d1440.png`, `ux-audit/footer/mock-codex-lime-m390.png`, `ux-audit/footer/mock-codex-dark-m390.png` | Codex 푸터 경쟁 시안, 8줄 노트와 라임 및 다크 4장 렌더. 포트 8833의 한국어 독립 HTML로 `?bg=lime` 또는 `?bg=dark`를 사용한다. 외부 폰트 및 라이브러리 없이 SVG textLength로 워드마크 폭을 맞추며 데스크톱 1440×900, 모바일 390×987 전체 렌더를 확인했다. 본문 앱에는 적용하지 않았다. 실제 페이지 링크 4개 외 메뉴는 안내 데모이며 제공된 운영 문구의 사실 검증과 AGY 외부 검토는 미완료다. |
+| `ux-audit/footer/CRIT-codex.md` | claude와 bleed 푸터의 PNG 8장을 직접 확인한 Codex 평가. 7개 항목 점수, 배경 판정, 단일 채택 추천과 필수 수정 2개를 기록한다. 구현 현실성은 HTML 소스 검토이며 사이드바 폭 변화의 브라우저 검증과 제품 적용은 하지 않았다. |
 | `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
 | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
 | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
