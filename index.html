@@ -4137,7 +4137,7 @@ body.gft-doc #gft-slot{display:block}
 .mk-pg[aria-current="page"]{background:rgba(255,255,255,.12);color:var(--gt);font-weight:700}
 .mk-pg:disabled{opacity:.3;cursor:default;background:none}
 .mk-v2{gap:12px;padding:16px;border-radius:14px}
-.mk-v2 .mk-c-head{display:flex;align-items:flex-start;gap:12px;min-height:66px}
+.mk-v2 .mk-c-head{display:flex;align-items:flex-start;gap:12px;min-height:48px}
 .mk-v2 .mk-c-av{flex:none;width:44px;height:44px;border-radius:50%;display:block;background:#1d2024}
 .mk-c-meta{display:flex;align-items:center;gap:10px;margin-top:4px;min-width:0}
 .mk-c-ai{font-size:12.5px;font-weight:600;color:var(--gt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -4150,7 +4150,7 @@ body.gft-doc #gft-slot{display:block}
 .mk-v2 .mk-c-hd h3{margin:0;font-size:15px;font-weight:700;line-height:1.35}
 .mk-v2 .mk-c-tb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mk-v2 .mk-c-xn{margin-top:2px;font-size:12.5px;color:var(--gt3)}
-.mk-v2 .mk-c-one{margin:0;font-size:12.5px;line-height:1.5;color:var(--gt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-v2 .mk-c-one{margin:0;font-size:12.5px;line-height:1.5;color:var(--gt2);min-height:37.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all;text-wrap:balance}
 .mk-v2 .mk-c-main{align-items:flex-end}
 .mk-v2 .mk-c-ret small{margin:0 0 3px;font-size:12px}
 .mk-v2 .mk-c-ret b{font-size:26px}
@@ -5611,6 +5611,26 @@ var PRICE=(function(){
   return p;
 })();
 var HOLD_RET=null, HOLD_MDD=null;
+/* 전략 카탈로그용 가격 데이터. 자산마다 따로 만든다(난수 없이 씨앗으로 결정, 길이는 PRICE 와 같음).
+   시드 데이터다. 실제 시세 API 를 붙일 때는 mkPx 가 응답 배열을 돌려주게만 바꾸면 된다 */
+var PRICE0=PRICE, MK_PXC={};
+function mkPx(key){
+  if(!key) return PRICE0;
+  if(MK_PXC[key]) return MK_PXC[key];
+  var c=(window.MK_PX_CFG||{})[key]; if(!c) return PRICE0;
+  var rng=mulberry32(c[0]), p0=c[1], vol=c[2], N=PRICE0.length, p=[p0], i=1;
+  while(i<N){
+    var len=90+Math.floor(rng()*240), drift=(rng()*2.6-0.7)*0.001;
+    for(var k=0;k<len&&i<N;k++,i++){
+      var sh=(rng()-.5)*vol; if(rng()<0.014) sh+=(rng()-.66)*vol*3.2;
+      p.push(Math.max(p0*0.18,p[i-1]*(1+drift+sh)));
+    }
+  }
+  return (MK_PXC[key]=p);
+}
+/* fn 을 실행하는 동안만 전역 PRICE 를 해당 자산 가격으로 바꾼다 */
+function mkWithPx(key,fn){ var keep=PRICE; PRICE=mkPx(key); try{ return fn(); } finally{ PRICE=keep; } }
+function mkPxFmt(v){ if(v==null||!isFinite(v)) return '-'; var a=Math.abs(v); return a>=1000?Math.round(v).toLocaleString():a>=100?v.toFixed(1):a>=1?v.toFixed(2):v.toFixed(4); }
 function sma(arr,n,i){ if(i<n-1) return null; var s=0; for(var k=i-n+1;k<=i;k++) s+=arr[k]; return s/n; }
 function rsi(arr,i){
   var n=14; if(i<n) return 50;
@@ -5625,7 +5645,8 @@ function idxToDate(i){
 }
 function fmtDate(d){ return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0'); }
 var RUNSTATS={total:0,by:{}};
-function runBacktest(params){
+function runBacktest(params){ return mkWithPx(params&&params.px,function(){ return runBacktestCore(params); }); }
+function runBacktestCore(params){
   RUNSTATS.total++; var pu=params.purpose||'candidate'; RUNSTATS.by[pu]=(RUNSTATS.by[pu]||0)+1;
   var sl=params.sl/100, tp=params.tp!=null?params.tp/100:null, rsiTh=params.rsiTh, trendFilter=params.trendFilter;
   var startI=params.startI!=null?params.startI:61, endI=params.endI!=null?params.endI:PRICE.length-1;
@@ -11052,32 +11073,12 @@ function tfStratToggle(i){
 /* ── §9 커뮤니티: 랭킹 + 전략 공유 ── */
 function tfRankSeeds(){
   if(TF_SEEDS) return TF_SEEDS;
-  var cfgs=[
-    {nick:'세븐틴층',asset:'비트코인',p:{sl:-5,tp:12,rsiTh:44,trendFilter:true,startI:61,endI:PRICE.length-1},fw:1284},
-    {nick:'단타는안해요',asset:'이더리움',p:{sl:-8,tp:15,rsiTh:47,trendFilter:true,startI:61,endI:PRICE.length-1},fw:911},
-    {nick:'월급두배',asset:'비트코인',p:{sl:-5,tp:8,rsiTh:38,trendFilter:true,startI:61,endI:PRICE.length-1},fw:640},
-    {nick:'조용한복리',asset:'나스닥',p:{sl:-3,tp:10,rsiTh:41,trendFilter:true,startI:Math.max(61,PRICE.length-1-730),endI:PRICE.length-1},fw:377},
-    {nick:'바닥만줍는사람',asset:'비트코인',p:{sl:-8,tp:12,rsiTh:41,trendFilter:true,startI:61,endI:PRICE.length-1},fw:512},
-    {nick:'느긋한스윙',asset:'이더리움',p:{sl:-5,tp:10,rsiTh:44,trendFilter:true,startI:Math.max(61,PRICE.length-1-730),endI:PRICE.length-1},fw:298},
-    {nick:'리스크헌터',asset:'나스닥',p:{sl:-5,tp:15,rsiTh:44,trendFilter:true,startI:61,endI:PRICE.length-1},fw:203},
-    {nick:'천천히꾸준히',asset:'비트코인',p:{sl:-3,tp:8,rsiTh:38,trendFilter:true,startI:Math.max(61,PRICE.length-1-365),endI:PRICE.length-1},fw:156}
-  ];
-  /* 목록 200개(20개 x 10페이지)를 채우는 규칙 조합. 난수 없이 인덱스로 결정 */
-  var NK=['새벽매수','눌림장인','반등헌터','느린거북','복리기계','차트안봄','주말농부','월급루팡','손절칼같이','익절요정','묵묵히','한방은없다','꾸준함이답','저점줍줍','분할의신','쉬는것도투자','물타기금지','원칙주의','파도타기','야수의심장'];
-  var AS=['비트코인','이더리움','나스닥','비트코인','이더리움','비트코인','나스닥','솔라나','엔비디아','테슬라','금','리플'];
-  var SL=[-3,-4,-5,-6,-8], TP=[6,8,10,12,15,18], RS=[35,38,41,44,47], WN=[0,730,365];
-  var seenT={}, made=0; cfgs.forEach(function(c){ seenT[mkHook(c)]=1; });
-  for(var gi=0;gi<6000&&made<760;gi++){
-    var e=PRICE.length-1, z=(Math.imul(gi+1,2654435761)>>>0), zz=(Math.imul(z^(z>>>15),2246822519)>>>0), w=WN[zz%3]; /* 인덱스 해시로 항목을 서로 독립되게 고른다 */
-    var c2={nick:NK[gi%NK.length]+(Math.floor(gi/NK.length)+2), asset:AS[(zz>>>3)%AS.length], fw:30+((zz>>>7)%2400),
-      p:{sl:SL[(zz>>>11)%5],tp:TP[(zz>>>15)%6],rsiTh:RS[(zz>>>19)%5],trendFilter:((zz>>>23)%4!==3),startI:w?Math.max(61,e-w):61,endI:e}};
-    var tt=mkHook(c2); if(seenT[tt]) continue; seenT[tt]=1; cfgs.push(c2); made++; /* 제목이 겹치는 조합은 건너뛴다 */
-  }
-  TF_SEEDS=cfgs.map(function(c){
-    var r=runBacktest(c.p); /* 리더보드 수치도 실계산 */
-    return {nick:c.nick,asset:c.asset,p:c.p,fw:c.fw,score:tfScore(r),ret:r.ret,mdd:r.mdd,n:r.n};
-  }).filter(function(x){ return x.score>=TFC.score.pass-8; })
-    .sort(function(a,b){ return b.score-a.score||b.ret-a.ret; }).slice(0,200);
+  /* 목록의 실제 전략은 카탈로그 20종(MK_CAT). 200칸(20 x 10페이지)은 화면에서 이 20종을 반복해 채운다 */
+  TF_SEEDS=MK_CAT.map(function(c,k){
+    var p={sl:c.sl,tp:c.tp,rsiTh:c.rsiTh,trendFilter:!!c.tf,startI:c.startI,endI:PRICE0.length-1,px:c.px};
+    var r=runBacktest(p);
+    return {id:c.id,ord:k+1,nick:c.name,name:c.name,one:c.one,asset:c.asset,ex:c.ex,av:c.id,p:p,fw:c.fw,score:tfScore(r),ret:r.ret,mdd:r.mdd,n:r.n};
+  });
   return TF_SEEDS;
 }
 var TF_SEEDS=null;
@@ -11109,7 +11110,7 @@ function tfSSState(){
   return t;
 }
 function tfSSRows(){
-  if(!TF_SS_CACHE) TF_SS_CACHE=tfRankSeeds().map(function(s){ var r=runBacktest(s.p); return {nick:s.nick,asset:s.asset,p:s.p,fw:s.fw,score:s.score,r:r}; });
+  if(!TF_SS_CACHE) TF_SS_CACHE=tfRankSeeds().map(function(s){ var r=runBacktest(s.p); return {id:s.id,ord:s.ord,nick:s.nick,name:s.name,one:s.one,ex:s.ex,av:s.av,asset:s.asset,p:s.p,fw:s.fw,score:s.score,r:r}; });
   var t=tfSSState(), rows=TF_SS_CACHE.slice();
   if(t.shared&&t.sharedSnap){
     var sn=t.sharedSnap;
@@ -11279,15 +11280,20 @@ function tfSS3GridHtml(){
   if(t.ss.asset&&t.ss.asset!=='all') rows=rows.filter(function(s){ return s.asset===t.ss.asset; });
   if(t.ss.kind&&t.ss.kind!=='all') rows=rows.filter(function(s){ return (s.kind||'rule')===t.ss.kind; });
   if(t.ss.risk&&t.ss.risk!=='all') rows=rows.filter(function(s){ return mkRisk(tfSS3PdCalc(s,pd).mdd).k===t.ss.risk; });
-  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||mkTitle(s).toLowerCase().indexOf(q)>=0; }); }
-  var f={ret:function(a,b){return (mk30(b).ret-mk30(a).ret)||(tfSS3PdCalc(b,pd).ret-tfSS3PdCalc(a,pd).ret);}, /* 카드에 보이는 30일 수익률 순 */
+  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||mkTitle(s).toLowerCase().indexOf(q)>=0||String(s.one||'').toLowerCase().indexOf(q)>=0; }); }
+  var f={pick:function(a,b){return (a.ord||0)-(b.ord||0);}, /* 기본 순서: 카탈로그에 적힌 순서 */
+    ret:function(a,b){return (mk30(b).ret-mk30(a).ret)||(tfSS3PdCalc(b,pd).ret-tfSS3PdCalc(a,pd).ret);}, /* 카드에 보이는 30일 수익률 순 */
     mdd:function(a,b){return tfSS3PdCalc(b,pd).mdd-tfSS3PdCalc(a,pd).mdd;}, /* 낙폭이 얕을수록 앞 */
     n:function(a,b){return tfSS3PdCalc(b,pd).n-tfSS3PdCalc(a,pd).n;},
     months:function(a,b){return mkMonths(b.r)-mkMonths(a.r);}}[mkSortKey(t)];
   rows.sort(f);
   if(t.ss.dir==='asc') rows.reverse(); /* 같은 정렬 키 재선택 = 방향 전환 (codex F17) */
   if(!rows.length) return '<div class="ss3-empty">'+(t.ss.kind==='agent'?'AI 판단 전략은 아직 공개된 것이 없어요':'조건에 맞는 전략이 없어요')+'<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
-  var PER=20, MAXP=10; rows=rows.slice(0,PER*MAXP);
+  var PER=20, MAXP=10;
+  /* 필터와 검색이 없을 때만 20종을 10페이지로 반복한다. 정렬은 반복 전에 끝낸다(같은 전략이 뭉치지 않게). 내 공개 전략은 첫 바퀴에만 나온다 */
+  var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&(!t.ss.risk||t.ss.risk==='all')&&!TF_SS_Q;
+  if(plain){ var base=rows.filter(function(s){ return !s.me; }), all=rows.slice(); for(var rp=1;rp<MAXP&&base.length;rp++) all=all.concat(base); rows=all; }
+  rows=rows.slice(0,PER*MAXP);
   var sig=[t.ss.asset,t.ss.kind,t.ss.risk,TF_SS_Q,mkSortKey(t),t.ss.dir,pd].join('|'); if(t.ss.pgSig!==sig){ t.ss.pgSig=sig; t.ss.page=1; }
   var pages=Math.max(1,Math.ceil(rows.length/PER)), pg=Math.min(pages,Math.max(1,t.ss.page||1)); t.ss.page=pg;
   var pager='';
@@ -11308,7 +11314,7 @@ function tfSS3SortPick(v){
 }
 function tfSS3AssetPick(v){ var t=tfSSState(); t.ss.asset=v; tfSave(); tfShareHub('find'); }
 function tfSS3Search(v){ TF_SS_Q=v.trim(); tfSS3Apply(); }
-function tfSS3Page(i){ var t=tfSSState(); t.ss.page=i; tfSave(); var g=$('ss3-grid'); if(g){ g.innerHTML=tfSS3GridHtml(); var y=g.getBoundingClientRect().top; if(y<0){ var sc=$('g-scroll'); if(document.body.classList.contains('gft-doc')) window.scrollBy(0,y-90); else if(sc) sc.scrollTop+=y-90; } } }
+function tfSS3Page(i){ var t=tfSSState(); t.ss.page=i; tfSave(); var g=$('ss3-grid'); if(g){ g.innerHTML=tfSS3GridHtml(); var y=g.getBoundingClientRect().top; if(y<0){ var sc=$('g-scroll'); var off=window.innerWidth<=860?148:90; if(document.body.classList.contains('gft-doc')) window.scrollBy(0,y-off); else if(sc) sc.scrollTop+=y-off; } } }
 function tfSS3Reset(){ TF_SS_Q=''; var t=tfSSState(); t.ss.asset='all'; t.ss.kind='all'; t.ss.risk='all'; tfSave(); tfShareHub('find'); }
 /* ═══ 카피트레이딩 (cp) — docs/bitget-copytrading-spec.md 의 TETH 재해석 (2단계: 트레이더 프로필) ═══
    원칙: 모든 수치에 AI 코멘트, 빈 상태는 상황 설명형, 쉬운 용어(+title 툴팁 원어),
@@ -11316,7 +11322,7 @@ function tfSS3Reset(){ TF_SS_Q=''; var t=tfSSState(); t.ss.asset='all'; t.ss.kin
 function cpCfg(){ return (window.TFC&&TFC.copytrade)||{}; }
 function cpUsd(n,d){ var dd=d!=null?d:2; return (n<0?'-':'')+Math.abs(n).toLocaleString(undefined,{minimumFractionDigits:dd,maximumFractionDigits:dd})+' USDT'; }
 function cpHash(str){ var h=0; for(var i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))>>>0; return h; }
-var CPP_PAIR={'비트코인':'BTC/USDT','이더리움':'ETH/USDT','나스닥':'NAS100/USDT'};
+var CPP_PAIR={'비트코인':'BTC/USDT','이더리움':'ETH/USDT','나스닥':'NAS100/USDT','솔라나':'SOL/USDT','리플':'XRP/USDT','도지코인':'DOGE/USDT','S&P 500':'SPX500/USDT','테슬라':'TSLA/USDT','엔비디아':'NVDA/USDT','애플':'AAPL/USDT','금':'XAU/USDT'};
 /* 트레이더 메타 — 닉 결정적 파생. 실서버: 거래소 API 응답으로 교체 */
 function cpMeta(nick){
   var cfg=cpCfg(), h=cpHash(nick);
@@ -11638,7 +11644,7 @@ function cpxPos(c2,d){
     return '<div class="cpp-empty"><b>지금 열려 있는 따라가기 포지션이 없어요</b>'
       +'원본 전략이 진입하면 자동으로 함께 진입하고, 여기에 실시간으로 표시돼요.'
       +'<span class="nx">'+(c2.status==='active'?'포지션이 없는 동안에도 따라가기는 유지돼요.':'중단된 따라가기예요. 청산 이력 탭에서 기록을 볼 수 있어요.')+'</span></div>';
-  var eq=s2.r.eq, px=PRICE[PRICE.length-1], entryPx=px/(1+d.unreal/Math.max(1,c2.amount));
+  var eq=s2.r.eq, PXA=mkPx(s2.p&&s2.p.px), px=PXA[PXA.length-1], entryPx=px/(1+d.unreal/Math.max(1,c2.amount));
   var size=c2.amount*0.4, up=d.unreal>=0, roe=d.unreal/size*100;
   return '<div class="cpx-sumline">포지션 1건이 열려 있어요. 미실현 손익 <b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">'+cpUsd(d.unreal)+'</b>. 원본 전략의 손절 규칙까지 그대로 따라가요.</div>'
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
@@ -11681,10 +11687,10 @@ function cpxHist(c2,d){
     +'</tr></thead><tbody>'
     +tr.map(function(x){
       var pnlU=x.pnl*c2.amount, up=x.pnl>=0;
-      var eP=PRICE[x.entry]||0, xP=PRICE[x.exit]||eP;
+      var PXB=mkPx(s2&&s2.p&&s2.p.px), eP=PXB[x.entry]||0, xP=(s2&&s2.p&&x.kind==='sl')?eP*(1+s2.p.sl/100):(s2&&s2.p&&x.kind==='tp'&&s2.p.tp!=null)?eP*(1+s2.p.tp/100):(PXB[x.exit]||eP);
       var dt=idxToDate(x.exit!=null?x.exit:x.entry);
       return '<tr><td>'+gEsc(c2.pairs[0])+'</td><td class="u">롱</td>'
-        +'<td class="num">'+eP.toFixed(0)+'</td><td class="num">'+xP.toFixed(0)+'</td>'
+        +'<td class="num">'+mkPxFmt(eP)+'</td><td class="num">'+mkPxFmt(xP)+'</td>'
         +'<td class="num '+(up?'u':'d')+'">'+cpUsd(pnlU)+'</td>'
         +'<td class="num '+(up?'u':'d')+'">'+(up?'+':'')+(x.pnl*100).toFixed(1)+'%</td>'
         +'<td>'+(KIND[x.kind]||'규칙 청산')+'</td>'
@@ -11826,7 +11832,7 @@ function cpSetupView(ne){ mkFollowSheet(ne); }
 function cpFormSync(){
   var el=$('cps-amt'), cta=$('cps-cta'), fld=$('cps-amt-fld'), err=$('cps-amt-err');
   if(!el) return true;
-  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value), min=cfg.MIN_COPY_USDT||50, msg='';
+  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value), min=(window.TF_MKF&&TF_MKF.min)||cfg.MIN_COPY_USDT||50, msg='';
   if(el.value!==''&&(!isFinite(v)||v<min)) msg='최소 '+min+' USDT부터 시작할 수 있어요';
   else if(isFinite(v)&&v>cp.spot) msg='사용 가능 금액보다 커요';
   if(fld) fld.classList.toggle('bad',!!msg);
@@ -11923,15 +11929,20 @@ var TF_SS3_PDC={};
 function tfSS3PdCalc(s,pd){
   if(pd==='all'||!s.p) return s.r;
   /* 캐시 키에 파라미터 포함 — 재공개 후 이전 결과 재사용 방지 (codex F03) */
-  var key=tfSS3Rid(s)+'|'+pd+'|'+[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI].join(',');
+  var key=tfSS3Rid(s)+'|'+pd+'|'+[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI,s.p.px||''].join(',');
   if(!TF_SS3_PDC[key]){
     var days=pd==='1y'?365:730;
-    var p2={sl:s.p.sl,tp:s.p.tp,rsiTh:s.p.rsiTh,trendFilter:s.p.trendFilter,startI:Math.max(61,s.p.endI-days),endI:s.p.endI};
+    var p2={sl:s.p.sl,tp:s.p.tp,rsiTh:s.p.rsiTh,trendFilter:s.p.trendFilter,startI:Math.max(61,s.p.startI||61,s.p.endI-days),endI:s.p.endI,px:s.p.px};
     TF_SS3_PDC[key]=runBacktest(p2);
   }
   return TF_SS3_PDC[key];
 }
+/* 상세는 그 전략의 자산 가격으로 그린다(체결가, 규칙 판정, 현재 상태가 성과 수치와 같은 데이터를 본다) */
 function tfSS3DetailRender(ne,pd,tab){
+  var s0=null; try{ s0=tfSSFind(decodeURIComponent(ne)); }catch(e){}
+  return mkWithPx(s0&&s0.p&&s0.p.px,function(){ return tfSS3DetailRenderCore(ne,pd,tab); });
+}
+function tfSS3DetailRenderCore(ne,pd,tab){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ TF_ONSHARE=false; tfShareHub('find'); return; } /* 비정규 인코딩 (codex F14) */
   ne=tfSSNe(nick); /* URL 원문을 그대로 onclick 에 넣지 않는다 — 항상 재정규화 (codex F13) */
   var s=tfSSFind(nick);
@@ -11960,7 +11971,7 @@ function tfSS3DetailRender(ne,pd,tab){
     +'<div class="mkd-top"><img src="assets/logos/'+mkEx(s)[0]+'.png" alt="" width="26" height="26"><span class="ex">'+mkEx(s)[1]+'</span><h2>'+gEsc(mkHook(s))+'</h2>'
     +'<button type="button" class="mkd-ic" aria-label="링크 복사" onclick="tfSS3CopyLink(\''+ne+'\',\''+pd+'\')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8 11l8-4M8 13l8 4"/></svg></button>'
     +(s.me?'':'<button type="button" class="mkd-fav" aria-pressed="'+watching+'" onclick="tfSS3WatchTgl(\''+ne+'\');this.setAttribute(\'aria-pressed\',String(this.getAttribute(\'aria-pressed\')!==\'true\'))">★ 즐겨찾기</button>')+'</div>'
-    +'<div class="mkd-since num"><span>운용 시작 '+mkdSince(s)+'</span><img src="assets/avatars/'+mkAi(s)[0]+'.svg" alt="" width="18" height="18"><span>'+mkAi(s)[1]+'</span></div>'
+    +'<div class="mkd-since num"><span>운용 시작 '+mkdSince(s)+'</span><img src="assets/avatars/'+mkAi(s)[0]+'.svg" alt="" width="18" height="18"><span>'+(s.name?'TETH AI 트레이더':mkAi(s)[1])+'</span></div>'
     +'<div class="mk-d-acts">'
     +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button><span class="mk-d-min">최소 <b>'+mkMin(s)+' USDT</b>부터</span>')
     +'<div class="mk-more"><button type="button" class="mk-more-b" id="mk-menu-b" aria-haspopup="menu" aria-expanded="false" aria-label="더 보기" onclick="mkMenuTgl(event)">⋯</button>'
@@ -12232,7 +12243,7 @@ function tfSS3Copy(ne,fp,fid){
     +'<div class="ntc">이 전략의 설정을 가져와 내 조건으로 다시 검증한 뒤 실행해요. 예산으로 그대로 따라가는 따라가기와 달리, 검증을 통과해야 실행돼요.</div>'
     +'<div class="fld3"><label for="ss3-cp-bu">시작 예산</label><select id="ss3-cp-bu">'+budgets.map(function(b,i){ return '<option value="'+i+'"'+(i===bi0?' selected':'')+'>'+b[0]+' ('+b[1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="ss3-cp-sl">손절선</label><select id="ss3-cp-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===base.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
-    +'<div class="fld3"><label for="ss3-cp-tp">익절 목표</label><select id="ss3-cp-tp">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
+    +'<div class="fld3"><label for="ss3-cp-tp">익절 목표</label><select id="ss3-cp-tp">'+[8,10,12,15].concat([8,10,12,15].indexOf(base.tp)<0&&base.tp!=null?[base.tp]:[]).sort(function(a,b){return a-b;}).map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
     +(busy?'<div class="warn3">진행 중인 전략 작업이 있어요. 지금 시작하면 현재 작업이 이 전략의 검증으로 교체됩니다.</div>':'')
     +'<div class="cpstep num">1 / 3, 조건 설정</div>'
     +'<div class="acts3"><button type="button" class="obtn" onclick="tfSS3DlgClose()">취소</button>'
@@ -12254,7 +12265,7 @@ function tfSS3CopyPrev(ne,fid){
   tfTrack('copy_preview',{nick:s.nick,sl:sl,tp:tp});
   var t=tfS(), fx=fid!=null?(t.follows||[]).find(function(f){ return f.id===fid; }):null;
   var bp=(fx&&fx.p)||s.p;
-  var p={sl:sl,tp:tp,rsiTh:bp.rsiTh,trendFilter:bp.trendFilter,startI:bp.startI,endI:bp.endI};
+  var p={sl:sl,tp:tp,rsiTh:bp.rsiTh,trendFilter:bp.trendFilter,startI:bp.startI,endI:bp.endI,px:bp.px};
   var r2=runBacktest(p), sc2=tfScore(r2), pass=(TFC.score&&TFC.score.pass)||80;
   var budgets=TFCOPY.intakeOpt.budget, busy=TF_SS3_CP_BUSY;
   var chg=(sl!==s.p.sl||tp!==s.p.tp);
@@ -12292,7 +12303,7 @@ function tfSS3CopyGo(ne,fid,biA,slA,tpA){
   /* 설정 변경/재검증(fid)은 저장된 기록의 rsiTh/trendFilter/기간을 보존한다 (codex F05) */
   var fx2=fid!=null?(t.follows||[]).find(function(f){ return f.id===fid; }):null;
   var bp=(fx2&&fx2.p)||s.p;
-  var p={sl:sl,tp:tp,rsiTh:bp.rsiTh,trendFilter:bp.trendFilter,startI:bp.startI,endI:bp.endI};
+  var p={sl:sl,tp:tp,rsiTh:bp.rsiTh,trendFilter:bp.trendFilter,startI:bp.startI,endI:bp.endI,px:bp.px};
   t.intake={asset:{i:0,label:s.asset},assetInfo:tfAssetLookup(s.asset),style:{i:1,label:'중립적으로'},budget:{i:bi,label:budgets[bi][0]},period:{i:bp.startI>61?1:2,label:tfSSPeriodLabel(bp)},stop:{i:TF_STOP.indexOf(sl),label:sl+'%까지'}};
   t.qi=TF_QS.length; t.tries=[]; t.stage='verify'; t.workDone=false; t.pendingP=tfParams(p);
   t.cloneFrom=s.nick;
@@ -15897,13 +15908,13 @@ var MK_TAB_OK={ov:1,perf:1,trades:1,log:1,info:1};
 var MK_STOP_L={now:'지금 정리',wait:'원본 청산 대기',manual:'직접 관리'};
 function mkPd(){ var t=tfSSState(); if(!t.ss.pd||!MK_PD_OK[t.ss.pd]) t.ss.pd='all'; return t.ss.pd; }
 function mkPdLabel(pd){ return {all:'전체 기간','2y':'최근 2년','1y':'최근 1년'}[pd]||'전체 기간'; }
-function mkSortKey(t){ if(!{ret:1,mdd:1,n:1,months:1}[t.ss.sort]) t.ss.sort='ret'; return t.ss.sort; }
+function mkSortKey(t){ if(t.ss.v!==2){ t.ss.v=2; t.ss.sort='pick'; t.ss.dir='desc'; } if(!{pick:1,ret:1,mdd:1,n:1,months:1}[t.ss.sort]) t.ss.sort='pick'; return t.ss.sort; }
 function mkMonths(r){ var p=(r&&r.params)||{}; var a=p.startI!=null?p.startI:61, b=p.endI!=null?p.endI:PRICE.length-1; return Math.max(1,Math.round((b-a)/30.44)); }
 function mkSrcBadge(r){ return '<span class="mk-badge">검증 기준(백테스트 '+mkMonths(r)+'개월)</span>'; }
 function mkFeeBadge(){ return '<span class="mk-badge mk-micro">수수료 반영</span>'; }
 /* 위험도 = 최대 낙폭 기준: -8% 안쪽 낮음, -12% 안쪽 보통, 그 외 높음 */
 function mkRisk(mdd){ if(mdd>-8) return {k:'lo',l:'낮음'}; if(mdd>-12) return {k:'mid',l:'보통'}; return {k:'hi',l:'높음'}; }
-function mkTitle(s){ if(s.p) return tfSeedTitle(s); return s.title||s.nick; }
+function mkTitle(s){ if(s.name) return s.name; if(s.p) return tfSeedTitle(s); return s.title||s.nick; }
 function mkSub(s){ return s.p?tfStratSub(s.p):(s.desc||''); }
 function mkPct(v,d){ return (v>=0?'+':'')+v.toFixed(d!=null?d:1)+'%'; }
 function mkDate(i){ var d=idxToDate(i); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
@@ -15933,12 +15944,41 @@ function mkSpark(eq,w,h){
     +'<g clip-path="url(#'+id+'cd)"><path d="'+area+'" fill="url(#'+id+'d)"/><path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></g>'
     +'</svg>';
 }
+/*MK_CAT_BEGIN*/
+/* ═══ 전략 카탈로그: 목록에 나오는 20종 (시드 데이터) ═══
+   이름, 한줄소개, 거래소, 규칙값을 여기서만 관리한다. 성과 수치는 적어 넣지 않는다: 아래 규칙값을 자산별 가격(MK_PX_CFG)에 돌린 엔진 계산 결과다.
+   실제 운용 데이터가 생기면 이 배열과 mkPx 를 API 응답으로 바꾼다. MK_PX_CFG 값은 [씨앗, 시작가, 하루 변동 폭] */
+var MK_PX_CFG={'비트코인':[799688,34120,0.07],'이더리움':[173287,1730,0.06],'테슬라':[700351,94.56,0.075],'금':[38266,1982,0.018],'나스닥':[463868,13680,0.024],'S&P 500':[313180,3696,0.023],'도지코인':[343292,0.09424,0.07],'엔비디아':[477311,16.31,0.07],'리플':[252221,0.4109,0.055],'솔라나':[769198,28.53,0.075],'애플':[321947,118.4,0.032]};
+var MK_CAT=[
+  {id:'t10',name:'비트코인 바겐세일',one:'크게 밀린 비트코인이 반등할 때만 삽니다. 목표는 20%.',asset:'비트코인',ex:'okx',px:'비트코인',sl:-8,tp:20,rsiTh:26,tf:0,startI:400,fw:1284},
+  {id:'t02',name:'김대리의 나스닥',one:'나스닥이 4% 오르면 미련 없이 팝니다. 더 기다리지 않아요.',asset:'나스닥',ex:'okx',px:'나스닥',sl:-3,tp:4,rsiTh:52,tf:0,startI:200,fw:911},
+  {id:'t06',name:'손절은 칼같이',one:'이더리움이 3% 밀리면 정리. 자주 틀리지만 맞으면 15%.',asset:'이더리움',ex:'bitget',px:'이더리움',sl:-3,tp:15,rsiTh:52,tf:1,startI:200,fw:640},
+  {id:'t13',name:'애플 농부',one:'눌린 애플을 사서 6%를 노립니다. 서두르지 않아요.',asset:'애플',ex:'binance',px:'애플',sl:-5,tp:6,rsiTh:38,tf:0,startI:300,fw:188},
+  {id:'t05',name:'테슬라 역발상가',one:'테슬라가 크게 밀렸다 돌아설 때 삽니다. 한 번에 18%를 봅니다.',asset:'테슬라',ex:'binance',px:'테슬라',sl:-8,tp:18,rsiTh:30,tf:0,startI:300,fw:512},
+  {id:'t09',name:'리플 잔돈 수집가',one:'리플에서 4%씩만 노립니다. 손절은 5%, 평균 보유 9일.',asset:'리플',ex:'bitget',px:'리플',sl:-5,tp:4,rsiTh:46,tf:0,startI:61,fw:431},
+  {id:'t07',name:'느림보',one:'S&P 500이 한쪽으로 뚜렷하게 움직일 때만 삽니다. 쉬는 날이 더 많아요.',asset:'S&P 500',ex:'binance',px:'S&P 500',sl:-5,tp:6,rsiTh:48,tf:1,startI:61,fw:203},
+  {id:'t17',name:'솔라나 서퍼',one:'솔라나가 한쪽으로 세게 움직이는 장에서만 탑니다. 목표는 10%.',asset:'솔라나',ex:'binance',px:'솔라나',sl:-5,tp:10,rsiTh:45,tf:1,startI:61,fw:462},
+  {id:'t01',name:'폭락 다음 날',one:'이더리움이 크게 밀린 뒤, 반등이 확인된 날에만 삽니다.',asset:'이더리움',ex:'binance',px:'이더리움',sl:-5,tp:12,rsiTh:32,tf:0,startI:300,fw:822},
+  {id:'t16',name:'티끌 모으는 중',one:'S&P 500에서 3%를 목표로 작게, 여러 번 거래해요.',asset:'S&P 500',ex:'okx',px:'S&P 500',sl:-3,tp:3,rsiTh:56,tf:0,startI:61,fw:593},
+  {id:'t12',name:'야수의 심장',one:'도지코인 반등에 들어가 18%를 노려요. 8% 밀리면 정리.',asset:'도지코인',ex:'bitget',px:'도지코인',sl:-8,tp:18,rsiTh:38,tf:0,startI:200,fw:705},
+  {id:'t04',name:'골드핑거',one:'금이 깊게 밀렸다 돌아설 때만 삽니다. 거래가 드문 편.',asset:'금',ex:'okx',px:'금',sl:-3,tp:6,rsiTh:30,tf:1,startI:200,fw:377},
+  {id:'t08',name:'엔비디아 숨 고를 때',one:'눌렸다 다시 오르는 엔비디아에 타서 15%를 노립니다.',asset:'엔비디아',ex:'okx',px:'엔비디아',sl:-5,tp:15,rsiTh:50,tf:1,startI:600,fw:156},
+  {id:'t14',name:'한 박자 늦게',one:'나스닥이 돌아서는 걸 보고 삽니다. 바닥을 맞히려 하지 않아요.',asset:'나스닥',ex:'bitget',px:'나스닥',sl:-5,tp:10,rsiTh:36,tf:0,startI:300,fw:349},
+  {id:'t18',name:'제로백',one:'테슬라 반등에 타고, 3% 밀리면 그날 정리합니다.',asset:'테슬라',ex:'okx',px:'테슬라',sl:-3,tp:8,rsiTh:48,tf:0,startI:400,fw:318},
+  {id:'t11',name:'버티는 쪽',one:'비트코인 목표도 손절도 12%. 흔들려도 25일까지 들고 갑니다.',asset:'비트코인',ex:'binance',px:'비트코인',sl:-12,tp:12,rsiTh:42,tf:0,startI:600,fw:267},
+  {id:'t20',name:'비트코인은 기다림',one:'방향이 뚜렷해질 때까지 지켜보다가 삽니다. 2026년 1월 시작.',asset:'비트코인',ex:'bitget',px:'비트코인',sl:-5,tp:15,rsiTh:40,tf:1,startI:1100,fw:97},
+  {id:'t03',name:'짧게 먹고 내린다',one:'솔라나가 5% 오르면 내려요. 평균 보유 6일.',asset:'솔라나',ex:'bitget',px:'솔라나',sl:-3,tp:5,rsiTh:52,tf:0,startI:61,fw:274},
+  {id:'t15',name:'끝까지는 안 가',one:'엔비디아가 8% 오르면 더 갈 것 같아도 팝니다.',asset:'엔비디아',ex:'okx',px:'엔비디아',sl:-5,tp:8,rsiTh:48,tf:0,startI:400,fw:141},
+  {id:'t19',name:'금은 4%면 충분',one:'손절은 3%. 욕심내지 않습니다.',asset:'금',ex:'binance',px:'금',sl:-3,tp:4,rsiTh:48,tf:0,startI:200,fw:233}
+];
+/*MK_CAT_END*/
 /* 카드 v2: 거래소 로고 + AI 제목(행동 문장) + 한 줄 소개 → 수익률 + 그래프 → 최대 낙폭, 승률, 최소 금액 → [따라가기] [자세히]. 작성자, 위험도, 팔로워, 검증 배지는 카드에서 뺀다(상세에 있음) */
 var MK_EX=[['app-bitget','Bitget'],['app-binance','Binance'],['app-okx','OKX']];
-function mkEx(s){ if(s.me) return MK_EX[0]; var seeds=tfRankSeeds(), i=-1; for(var k=0;k<seeds.length;k++){ if(seeds[k].nick===s.nick){ i=k; break; } } return MK_EX[(i<0?0:i)%MK_EX.length]; } /* 시드 순서대로 세 거래소를 돌려 배정 */
+function mkEx(s){ if(s.ex){ for(var q=0;q<MK_EX.length;q++) if(MK_EX[q][0]==='app-'+s.ex) return MK_EX[q]; } if(s.me) return MK_EX[0]; var seeds=tfRankSeeds(), i=-1; for(var k=0;k<seeds.length;k++){ if(seeds[k].nick===s.nick){ i=k; break; } } return MK_EX[(i<0?0:i)%MK_EX.length]; } /* 시드 순서대로 세 거래소를 돌려 배정 */
 function mkAssetKo(a){ return a||'자산'; }
 /* 제목: 규칙 파라미터를 행동 문장으로 요약 (진입 깊이 + 익절 폭 + 손절 폭) */
 function mkHook(s){
+  if(s.name) return s.name;
   if(!s.p) return s.title||s.nick;
   var p=s.p, a=mkAssetKo(s.asset), tp=Math.abs(p.tp), sl=Math.abs(p.sl);
   var h=0, k=String(s.nick||''); for(var i=0;i<k.length;i++) h=(h*31+k.charCodeAt(i))>>>0;
@@ -15948,6 +15988,7 @@ function mkHook(s){
   return a+' '+inn+' '+out+(p.trendFilter?'':', 추세 안 가림');
 }
 function mkOne(s){
+  if(s.one) return s.one;
   if(!s.p) return (s.desc||'').split(/[.\n]/)[0];
   var d=s.p.rsiTh<=38?'급락 뒤':s.p.rsiTh<=42?'깊게 빠진 뒤':'살짝 눌린 뒤';
   return d+' 반등에 사서 +'+Math.abs(s.p.tp)+'% 익절, -'+Math.abs(s.p.sl)+'% 손절';
@@ -15955,24 +15996,25 @@ function mkOne(s){
 function mkMin(s){ var sl=s.p?Math.abs(s.p.sl):5; return (sl>=8?500:sl>=5?200:100); }
 /* AI 프로필 5종. 전략마다 하나씩 결정적으로 배정 */
 var MK_AI=[['buffett','워렌 버핏 AI'],['wonyotti','워뇨띠 AI'],['soros','조지 소로스 AI'],['rsi','RSI AI'],['bollinger','볼린저밴드 AI']];
-function mkAi(s){ var h=0, k=String(s.nick||''); for(var i=0;i<k.length;i++) h=(h*33+k.charCodeAt(i))>>>0; return MK_AI[h%MK_AI.length]; }
+function mkAi(s){ if(s.av) return [s.av,s.name||'']; if(!s.me) return ['rsi','TETH AI']; var h=0, k=String(s.nick||''); for(var i=0;i<k.length;i++) h=(h*33+k.charCodeAt(i))>>>0; return MK_AI[h%MK_AI.length]; }
 function mkExTag(s,cls){ var ex=mkEx(s); return '<span class="mk-xtag'+(cls?' '+cls:'')+'"><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16" loading="lazy">'+ex[1]+'</span>'; }
 /* 기준가 기록은 보유 중인 날만 찍혀 있다. 비는 날은 직전 값으로 채워 하루 단위로 만든다 */
 function mkDaily(eq,endI){ if(!eq||!eq.length) return []; var o=[], k=0, e=Math.max(endI||0,eq[eq.length-1].i); for(var i=eq[0].i;i<=e;i++){ while(k+1<eq.length&&eq[k+1].i<=i) k++; o.push({i:i,v:eq[k].v}); } return o; }
 var MK_D30={};
 function mk30(s){
-  var r=s.r||tfSS3PdCalc(s,'all'), key=tfSS3Rid(s)+'|'+(s.p?[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI].join(','):'')+'|'+((r.eq||[]).length);
-  if(!MK_D30[key]){ var d=mkDaily(r.eq,s.p?s.p.endI:0).slice(-31); MK_D30[key]={ret:d.length>1?(d[d.length-1].v/d[0].v-1)*100:0, eq:d}; }
+  var r=s.r||tfSS3PdCalc(s,'all'), key=tfSS3Rid(s)+'|'+(s.p?[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI,s.p.px||''].join(','):'')+'|'+((r.eq||[]).length);
+  if(!MK_D30[key]){ var d=mkDaily(r.eq,s.p?s.p.endI:0).slice(-31), b0=d.length?d[0].v:1; d=d.map(function(x){ return {i:x.i,v:x.v/b0}; }); /* 30일 첫날을 1로 다시 맞춘다: 미니 차트 기준선과 색이 30일 손익과 일치 */
+    MK_D30[key]={ret:d.length>1?(d[d.length-1].v-1)*100:0, eq:d}; }
   return MK_D30[key];
 }
 function mkCard(s){
   var pd=mkPd(), r=tfSS3PdCalc(s,pd), m30=mk30(s), up=m30.ret>=0, ne=tfSS3Rid(s), ai=mkAi(s);
   var w=(typeof r.winRate==='number'&&isFinite(r.winRate)&&(r.n||0)>=5)?Math.round(r.winRate)+'%':'-';
   return '<article class="mk-card mk-v2">'
-    +'<div class="mk-c-head"><img class="mk-c-av" src="assets/avatars/'+ai[0]+'.svg" alt="'+ai[1]+'" title="'+ai[1]+'" width="44" height="44" loading="lazy">'
+    +'<div class="mk-c-head"><img class="mk-c-av" src="assets/avatars/'+ai[0]+'.svg" alt="" width="44" height="44" loading="lazy">'
     +'<div class="mk-c-hd"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3>'
     +'<div class="mk-c-meta">'+mkExTag(s)+'</div></div></div>'
-    +'<p class="mk-c-one">'+gEsc(mkOne(s))+'</p>'
+    +'<p class="mk-c-one">'+gEsc(mkOne(s)).replace(/%(?=[가-힣])/g,'%\u2060')+'</p>'
     +'<div class="mk-c-main"><div class="mk-c-ret"><small>30일 수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(m30.ret)+'</b></div>'+mkSpark(m30.eq,104,42)+'</div>'
     +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>거래 수</small><b>'+Number(r.n||0).toLocaleString()+'회</b></div></div>'
     +'<div class="mk-c-acts">'+(s.me?'':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')+'<button type="button" class="mk-btn2" onclick="tfSS3Go(\''+ne+'\')">자세히</button></div>'
@@ -16020,7 +16062,7 @@ function mkStatusHtml(s,r){
   var open=mkOpenPos(p,r);
   if(open){
     var held=endI-open.entry;
-    return '<div class="mk-st-top"><b class="mk-res in">포지션 보유 중</b><span class="num">'+mkDate(open.entry)+' 진입, 진입가 '+Math.round(open.entryP).toLocaleString()+', 현재 <b class="'+(open.chg>=0?'mk-up':'mk-dn')+'">'+mkPct(open.chg)+'</b></span></div>'
+    return '<div class="mk-st-top"><b class="mk-res in">포지션 보유 중</b><span class="num">'+mkDate(open.entry)+' 진입, 진입가 '+mkPxFmt(open.entryP)+', 현재 <b class="'+(open.chg>=0?'mk-up':'mk-dn')+'">'+mkPct(open.chg)+'</b></span></div>'
       +'<div class="mk-lc-rows">'+mkRow('손절 '+p.sl+'%','현재 '+mkPct(open.chg),open.chg<=p.sl)+mkRow('익절 +'+p.tp+'%','현재 '+mkPct(open.chg),open.chg>=p.tp)+mkRow('25봉 경과','보유 '+held+'봉',held>=25)+'</div>'+next;
   }
   var e=mkRuleEval(p,endI), met=[e.rsiOk,e.bounceOk,p.trendFilter?e.trendOk:null].filter(function(x){ return x===true; }).length, tot=p.trendFilter?3:2;
@@ -16039,7 +16081,7 @@ function mkdSum(s){
   if(!s.p) return gEsc((s.desc||'').trim()||'공개한 전략이에요.');
   var p=s.p, a=mkAssetKo(s.asset), dep=p.rsiTh<=38?'크게 떨어진 뒤':p.rsiTh<=42?'깊게 빠진 뒤':'조금 눌린 뒤';
   return gEsc(a)+mkdJosa(a)+' '+dep+' 다시 오르기 시작할 때만 사요. 산 가격보다 '+Math.abs(p.tp)+'% 오르면 팔고, '+Math.abs(p.sl)+'% 내리면 바로 '+mkdTerm('정리','들고 있던 것을 팔아 손실을 더 키우지 않는 거예요')+'해요. '
-    +(p.trendFilter?mkdTerm('오르내림이 뚜렷한 장','가격이 한 방향으로 꾸준히 움직이는 때예요')+'에서만 움직이고, 방향이 애매하면 쉬어요.':'장 분위기를 가리지 않고 조건이 맞으면 들어가요.');
+    +(p.trendFilter?mkdTerm('오르내림이 뚜렷한 장','가격이 한 방향으로 꾸준히 움직이는 때예요')+'에서만 움직이고, 방향이 애매하면 쉬어요.':'장 분위기를 가리지 않고 조건이 맞으면 들어가요.')+' 어느 쪽에도 닿지 않으면 25일째에 정리해요.';
 }
 function mkdSeries(){
   var eq=MKD.eq||[], src=MKD.per?eq.slice(-MKD.per-1):eq.slice(); if(src.length<2) return [];
@@ -16109,7 +16151,7 @@ function mkOvTab(s,r,pd,ne){
   var sg=function(v){ return v>0?' mkd-up':v<0?' mkd-dn':''; };
   return '<div class="mkd-boxes"><div class="mkd-box"><h3>필수사항</h3><div class="mkd-kv"><span>거래소</span><b><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16">'+ex[1]+'</b></div><div class="mkd-kv"><span>최소 자산</span><b class="num">'+mkMin(s)+' USDT</b></div></div>'
     +'<div class="mkd-box"><h3>AI 요약</h3><p class="mkd-sum">'+mkdSum(s)+'</p></div></div>'
-    +'<div class="mkd-head"><div><div class="lb">수익률</div><div class="mkd-big num'+sg(tot)+'">'+mkPct(tot)+'</div><div class="mkd-day">지난 24시간<b class="num'+sg(d1)+'">'+mkPct(d1,2)+'</b></div></div>'
+    +'<div class="mkd-head"><div><div class="lb">누적 수익률</div><div class="mkd-big num'+sg(tot)+'">'+mkPct(tot)+'</div><div class="mkd-day">지난 24시간<b class="num'+sg(d1)+'">'+mkPct(d1,2)+'</b></div></div>'
     +'<div class="mkd-stats"><div><small>이번 달 수익률</small><b class="num'+sg(mo)+'">'+mkPct(mo)+'</b></div><div><small>최대 낙폭</small><b class="num mkd-dn">'+R0.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b class="num">'+w+'</b></div><div><small>거래 수</small><b class="num">'+Number(R0.n||0).toLocaleString()+'회</b></div></div></div>'
     +'<div class="mkd-ctl" id="mkd-ctl">'+mkdCtlHtml()+'</div><p class="mkd-hint" id="mkd-hint"></p><div class="mkd-chart" id="mkd-chart" onpointermove="mkdHover(event)" onpointerdown="mkdHover(event)" onpointerleave="mkdHover(null)">'+mkdChartHtml()+'</div>'
     +'<section class="mk-sec"><div class="mk-sec-hd"><b>지금 뭘 하나</b></div>'+mkStatusHtml(s,r)+'</section>'
@@ -16140,10 +16182,10 @@ function mkTradesTable(s,r,limit){
   return '<div class="mk-tblw"><table class="ss3-tbl"><thead><tr><th>진입일</th><th>청산일</th><th>보유</th><th>자산</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익률</th></tr></thead><tbody>'
     +(tr.length?tr.map(function(x){
       var kind={sl:'손절',tp:'익절',time:'기간 청산'}[x.kind]||x.kind;
-      var p1=PRICE[x.entry],p2=PRICE[x.exit];
+      var p1=PRICE[x.entry],p2=(s.p&&x.kind==='sl')?p1*(1+s.p.sl/100):(s.p&&x.kind==='tp'&&s.p.tp!=null)?p1*(1+s.p.tp/100):PRICE[x.exit]; /* 익절, 손절은 정한 가격에 체결된 것으로 계산하므로 표시도 그 가격 */
       return '<tr><td>'+mkDate(x.entry)+'</td><td>'+mkDate(x.exit)+'</td><td>'+(x.exit-x.entry)+'봉</td><td>'+gEsc(s.asset)+'</td><td>'+kind+'</td>'
-        +'<td style="text-align:right">'+(p1!=null?Math.round(p1).toLocaleString():'-')+'</td>'
-        +'<td style="text-align:right">'+(p2!=null?Math.round(p2).toLocaleString():'-')+'</td>'
+        +'<td style="text-align:right">'+mkPxFmt(p1)+'</td>'
+        +'<td style="text-align:right">'+mkPxFmt(p2)+'</td>'
         +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+mkPct(x.pnl*100,2)+'</td></tr>';
     }).join(''):'<tr><td colspan="8" style="text-align:center;height:80px">이 기간에는 체결이 없어요</td></tr>')
     +'</tbody></table></div>';
@@ -16155,7 +16197,7 @@ function mkTradesTab(s,r,pd,ne){
 function mkLogCard(p,it){
   var i=it.i, rows='', res='', ord='', hd='규칙 검사';
   if(it.k==='entry'){
-    var e=mkRuleEval(p,i); rows=mkRuleRows(p,e); res='<b class="mk-res in">진입</b>'; ord='시장가 매수, 진입가 '+Math.round(PRICE[i]).toLocaleString();
+    var e=mkRuleEval(p,i); rows=mkRuleRows(p,e); res='<b class="mk-res in">진입</b>'; ord='시장가 매수, 진입가 '+mkPxFmt(PRICE[i]);
   } else if(it.k==='exit'||it.k==='hold'){
     hd='리스크 규칙 검사';
     var t=it.t, chg=(PRICE[i]/PRICE[t.entry]-1)*100, held=i-t.entry;
@@ -16203,8 +16245,8 @@ function mkInfoTab(s,r,ne){
     +row('이번 판단에 사용','Claude, Gemini (규칙 구조화와 설명)')
     +row('버전','v1, '+mkDate(b)+' 검증')
     +row('검증 기간',mkDate(a)+' ~ '+mkDate(b)+' ('+Math.max(1,Math.round((b-a)/30.44))+'개월), 수수료 0.2% 반영')
-    +row('시장',gEsc(CPP_PAIR[s.asset]||s.asset)+', Bitget')
-    +row('작성자',gEsc(s.nick)+(s.me?' (나)':''))
+    +row('시장',gEsc(CPP_PAIR[s.asset]||s.asset)+', '+mkEx(s)[1])
+    +row('작성자',(s.name?'TETH AI':gEsc(s.nick))+(s.me?' (나)':''))
     +(s.score!=null?row('검증 점수','<button type="button" class="mk-lnk" onclick="tfSS3ScoreSheet(\''+ne+'\')">'+s.score+'점, 근거 보기</button>'):'')
     +'</div>';
 }
@@ -16235,7 +16277,7 @@ function mkFollowSheet(ne){
   mkFollowClose(true); tfSS3DlgClose(true);
   TF_MKF={loss:-20,existing:'skip',cap:95,ne:ne,nick:nick,trig:document.activeElement};
   var cp=cpState(), cfg=cpCfg(), pd=mkPd(), r=tfSS3PdCalc(s2,pd), d=tfDerive();
-  var can=!!(d.entitlement&&d.entitlement.follow), min=cfg.MIN_COPY_USDT||50;
+  var can=!!(d.entitlement&&d.entitlement.follow), min=mkMin(s2); TF_MKF.min=min; /* 상세의 최소 자산과 같은 값 */
   var w=document.createElement('div'); w.className='mk-follow-w'; w.id='mk-follow';
   w.innerHTML='<div class="mk-follow" role="dialog" aria-modal="true" aria-labelledby="mk-f-t">'
     +'<div class="mk-f-hd"><b id="mk-f-t">따라가기</b><button type="button" class="mk-f-x" aria-label="닫기" onclick="mkFollowClose()">✕</button></div>'
