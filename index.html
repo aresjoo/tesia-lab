@@ -1568,7 +1568,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-hero-spark{display:block;animation:gRiseIn .55s var(--ease) both,gSparkPulse 4.5s ease-in-out 1.4s infinite}
   .g-hello{animation:gRiseIn .55s var(--ease) .06s both}
   .g-sub{animation:gRiseIn .55s var(--ease) .12s both}
-  .g-pillband{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;flex-direction:column;gap:8px;padding:14px 16px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#0f1012 76%,rgba(15,16,18,0));animation:gRiseIn .5s var(--ease) .1s both}
+  .g-pillband{position:sticky;bottom:0;z-index:30;align-self:stretch;margin:auto calc(50% - 50vw) 0;display:flex;flex-direction:column;gap:8px;padding:14px 16px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#0f1012 76%,rgba(15,16,18,0));animation:gRiseIn .5s var(--ease) .1s both}
   .g-pill{width:auto;margin:0}
   .g-pillband .g-terms{padding:0 4px;font-size:10px;line-height:1.35}
   .g-home .g-hero-spark{display:none} /* 모바일 히어로 위 로고 제거 (사용자 지시) */
@@ -1576,7 +1576,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-chipstack{position:fixed;left:16px;right:16px;bottom:136px;z-index:25}
   .g-home-chips{animation:gRiseIn .5s var(--ease) .18s both}
   .g-terms{bottom:4px;padding:0 64px 0 16px;font-size:10.5px;line-height:1.35} /* 3줄 랩 시 컴포저 필과 겹치지 않게 압축 (qa3 P1) */
-  .g-home{padding-bottom:224px} /* 하단 고정 독(칩+채팅바) 높이만큼 여백 — 짧은 창에서 칩이 히어로 문구를 덮는 겹침 방지 */
+  .g-home{padding-bottom:0} /* 입력창이 sticky 라 하단 고정 독 여백 불필요 */
   .g-side{position:fixed;top:0;left:0;bottom:0;z-index:90;width:min(300px,85vw);background:var(--g1);border-radius:0 16px 16px 0;transform:translateX(-105%);transition:transform .22s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.5)}
   .g-side.collapsed{width:min(300px,85vw)}
   .g-side.mobile-open{transform:translateX(0)}
@@ -1596,7 +1596,7 @@ img.imgfail{visibility:hidden} /* 로고류 로드 실패 시 깨진 아이콘 �
   .g-hello{font-size:24px}
   .g-sub{font-size:13px}
   .g-chipstack{position:static;margin:16px 0 0}
-  .g-home{padding-bottom:140px}
+  .g-home{padding-bottom:0}
 }
 #g-brand-row{display:flex;align-items:center;gap:10px;height:46px;padding:0 2px 0 10px;margin-bottom:6px;flex-shrink:0}
 /* 로고 마크는 양 상태에서 같은 자리 — 워드마크만 페이드 (Gemini 동일) */
@@ -3876,14 +3876,14 @@ body.gft-doc #gft-slot{display:block}
   #g-root .txh-steps,#g-root .txh-ai-cols{gap:26px}
 }
 @media (max-width:860px){
-  #g-root .txh-hero{padding:40px 20px 0}
+  #g-root .txh-hero{padding:40px 20px 0;display:flex;flex-direction:column;align-items:center;min-height:var(--txh-vh,calc(100svh - 150px))} /* 첫 화면 꽉 채움, --txh-vh 는 tfIntroFx 가 .g-scroll 높이로 세팅 */
   #g-root .txh-hero.has-back{padding-top:52px}
   #g-root .txh-back{left:16px;top:14px}
   #g-root .txh-eyebrow{font-size:13px;margin-bottom:14px}
   #g-root .txh-hero h1{font-size:40px;line-height:1.24}
   #g-root .txh-m{display:inline}
   #g-root .txh-sub{font-size:15.5px;margin:18px auto 28px}
-  #g-root .txh-floor{height:280px;margin:-24px -20px 0;
+  #g-root .txh-floor{flex:1 0 auto;align-self:stretch;height:auto;min-height:220px;margin:-24px -20px 0;
     -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 58%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);
     mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 58%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%)}
   #g-root .txh-wrap{padding:0 20px 40px} /* 모바일은 푸터 margin-top 48px 이 더해져 88px */
@@ -3902,6 +3902,8 @@ body.gft-doc #gft-slot{display:block}
   #g-root .txh-ai-col h3{margin-bottom:16px}
   #g-root .txh-ai-col ul{gap:16px}
   #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
+  #g-root .txh-safe>div{display:contents} /* 왼쪽 칼럼을 풀어 순서 재배치 */
+  #g-root .txh-safe h2{order:1} #g-root .txh-safe .txh-lead{order:2;margin-top:0} #g-root .txh-safe ul{order:3} #g-root .txh-safe .txh-cta{order:4;margin-top:8px;justify-self:start} #g-root .txh-safe .txh-more-row{order:5;margin-top:-8px}
 }
 /* 미활성 뷰 */
 #g-root .tx-inactive{max-width:760px}
@@ -14425,6 +14427,7 @@ function txhTipSoon(){ if(TXH_TIP.pin) return; clearTimeout(TXH_TIP.t); TXH_TIP.
   window.addEventListener('resize',function(){ if(TXH_TIP.b) txhTipPlace(); });
 })();
 function tfIntroDestroy(){
+  var f0=window.TF_TIN_FX; if(f0&&f0.rs){ window.removeEventListener('resize',f0.rs); f0.rs=null; }
   txhTipClose(false,true); /* 랜딩 해제 시 용어 설명 상자도 닫고 떼어냄 */
   var fx=window.TF_TIN_FX; if(!fx) return;
   window.TF_TIN_FX=null;
@@ -14436,11 +14439,15 @@ function tfIntroDestroy(){
 function tfIntroFx(){
   tfIntroDestroy();
   var floor=document.querySelector('#g-content .txh-floor'); if(!floor) return;
-  var fx={wd:null,vob:null,vis:null,mq:null,mqh:null,v:null,seen:false}; window.TF_TIN_FX=fx;
+  var fx={wd:null,vob:null,vis:null,mq:null,mqh:null,v:null,seen:false,done:false,rs:null}; window.TF_TIN_FX=fx;
+  /* 모바일 첫 화면: 히어로 최소 높이 = .g-scroll 높이 (배너, 상단 바 제외한 실제 보이는 높이) */
+  function fit(){ var h=document.querySelector('#g-content .txh-hero'), sc=document.getElementById('g-scroll'); if(!h) return; if(sc&&window.innerWidth<=860) h.style.setProperty('--txh-vh',sc.clientHeight+'px'); else h.style.removeProperty('--txh-vh'); }
+  fit(); fx.rs=function(){ fit(); }; window.addEventListener('resize',fx.rs);
   try{ fx.mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)'); }catch(e){}
   function rm(){ return !!(fx.mq&&fx.mq.matches); }
   function sync(){
     var v=fx.v; if(!v) return;
+    if(fx.done){ v.pause(); return; }
     if(fx.seen&&!document.hidden&&!rm()){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
     else v.pause();
   }
@@ -14453,7 +14460,7 @@ function tfIntroFx(){
   function mount(){
     if(fx.v||!fx.seen||document.hidden||rm()||window.TF_TIN_FX!==fx) return;
     var v=document.createElement('video');
-    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.preload='metadata'; v.tabIndex=-1;
+    v.muted=true; v.defaultMuted=true; v.loop=false; v.autoplay=true; v.playsInline=true; v.preload='metadata'; v.tabIndex=-1;
     v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('disablepictureinpicture',''); v.setAttribute('aria-hidden','true');
     v.poster='assets/hero-tiles-end.jpg';
     v.addEventListener('loadedmetadata',function(){ frame(v.currentTime); });
@@ -14461,6 +14468,7 @@ function tfIntroFx(){
     v.addEventListener('error',function(){ v.classList.remove('on'); floor.classList.remove('playing'); });
     v.addEventListener('playing',function(){ if(!rm()) floor.classList.add('playing'); });
     v.addEventListener('pause',function(){ floor.classList.remove('playing'); });
+    v.addEventListener('ended',function(){ fx.done=true; v.classList.remove('on'); floor.classList.remove('playing'); }); /* 1회 재생 후 정지, 포스터(마지막 프레임) 유지 */
     if(typeof v.requestVideoFrameCallback==='function'){
       var cb=function(now,md){ if(fx.v!==v) return; frame(md.mediaTime); v.requestVideoFrameCallback(cb); };
       v.requestVideoFrameCallback(cb);
