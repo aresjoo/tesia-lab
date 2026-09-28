@@ -4228,7 +4228,17 @@ body.gft-doc #gft-slot{display:block}
 .mkd-seg button[aria-pressed="true"]{background:#0f1012;color:#fff;font-weight:600;outline:1px solid #fff;outline-offset:-1px;border-radius:3px}
 .mkd-per{height:28px;min-width:118px;padding:0 8px;border:1px solid rgba(255,255,255,.14);border-radius:4px;background:#17191c;color:var(--gt);font:inherit;font-size:12px}
 .mkd-hint{min-height:18px;margin:10px 0 0;font-size:12px;color:var(--gt3)}
-.mkd-chart{margin:2px 0 30px}.mkd-chart svg{display:block;width:100%;height:auto}
+.mkd-chart{position:relative;margin:2px 0 30px;touch-action:pan-y}.mkd-chart svg{display:block;width:100%;height:auto}
+.mkd-mk{animation:mkdfade .35s ease .85s both}
+@keyframes mkdfade{from{opacity:0}to{opacity:1}}
+.mkd-cur{opacity:0;pointer-events:none}
+.mkd-chart.hov .mkd-cur{opacity:1}
+.mkd-chart.hov .mkd-mk{opacity:.28;animation:none}
+.mkd-ht{position:absolute;z-index:3;left:0;top:0;padding:8px 12px;border-radius:8px;background:#4b525d;color:#fff;font-size:12.5px;line-height:1.5;text-align:center;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,14px);font-variant-numeric:tabular-nums;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.mkd-ht.up{transform:translate(-50%,calc(-100% - 14px))}
+.mkd-chart.hov .mkd-ht{opacity:1}
+.mkd-ht b{display:block;font-weight:700}
+@media (prefers-reduced-motion:reduce){.mkd-mk{animation:none}}
 @media (max-width:760px){
   .mkd-top{flex-wrap:wrap;row-gap:6px}.mkd-top h2{order:5;flex:0 0 100%;white-space:normal;font-size:16px;font-weight:600}.mkd-since{margin:6px 0 0}
   .mkd-boxes{grid-template-columns:minmax(0,1fr);margin-bottom:22px}.mkd-box{min-height:0}
@@ -11270,7 +11280,7 @@ function tfSS3GridHtml(){
   if(t.ss.kind&&t.ss.kind!=='all') rows=rows.filter(function(s){ return (s.kind||'rule')===t.ss.kind; });
   if(t.ss.risk&&t.ss.risk!=='all') rows=rows.filter(function(s){ return mkRisk(tfSS3PdCalc(s,pd).mdd).k===t.ss.risk; });
   if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return s.nick.toLowerCase().indexOf(q)>=0||s.asset.toLowerCase().indexOf(q)>=0||mkTitle(s).toLowerCase().indexOf(q)>=0; }); }
-  var f={ret:function(a,b){return tfSS3PdCalc(b,pd).ret-tfSS3PdCalc(a,pd).ret;},
+  var f={ret:function(a,b){return (mk30(b).ret-mk30(a).ret)||(tfSS3PdCalc(b,pd).ret-tfSS3PdCalc(a,pd).ret);}, /* 카드에 보이는 30일 수익률 순 */
     mdd:function(a,b){return tfSS3PdCalc(b,pd).mdd-tfSS3PdCalc(a,pd).mdd;}, /* 낙폭이 얕을수록 앞 */
     n:function(a,b){return tfSS3PdCalc(b,pd).n-tfSS3PdCalc(a,pd).n;},
     months:function(a,b){return mkMonths(b.r)-mkMonths(a.r);}}[mkSortKey(t)];
@@ -15947,15 +15957,23 @@ function mkMin(s){ var sl=s.p?Math.abs(s.p.sl):5; return (sl>=8?500:sl>=5?200:10
 var MK_AI=[['buffett','워렌 버핏 AI'],['wonyotti','워뇨띠 AI'],['soros','조지 소로스 AI'],['rsi','RSI AI'],['bollinger','볼린저밴드 AI']];
 function mkAi(s){ var h=0, k=String(s.nick||''); for(var i=0;i<k.length;i++) h=(h*33+k.charCodeAt(i))>>>0; return MK_AI[h%MK_AI.length]; }
 function mkExTag(s,cls){ var ex=mkEx(s); return '<span class="mk-xtag'+(cls?' '+cls:'')+'"><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16" loading="lazy">'+ex[1]+'</span>'; }
+/* 기준가 기록은 보유 중인 날만 찍혀 있다. 비는 날은 직전 값으로 채워 하루 단위로 만든다 */
+function mkDaily(eq,endI){ if(!eq||!eq.length) return []; var o=[], k=0, e=Math.max(endI||0,eq[eq.length-1].i); for(var i=eq[0].i;i<=e;i++){ while(k+1<eq.length&&eq[k+1].i<=i) k++; o.push({i:i,v:eq[k].v}); } return o; }
+var MK_D30={};
+function mk30(s){
+  var r=s.r||tfSS3PdCalc(s,'all'), key=tfSS3Rid(s)+'|'+(s.p?[s.p.sl,s.p.tp,s.p.rsiTh,s.p.trendFilter?1:0,s.p.startI,s.p.endI].join(','):'')+'|'+((r.eq||[]).length);
+  if(!MK_D30[key]){ var d=mkDaily(r.eq,s.p?s.p.endI:0).slice(-31); MK_D30[key]={ret:d.length>1?(d[d.length-1].v/d[0].v-1)*100:0, eq:d}; }
+  return MK_D30[key];
+}
 function mkCard(s){
-  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), ai=mkAi(s);
+  var pd=mkPd(), r=tfSS3PdCalc(s,pd), m30=mk30(s), up=m30.ret>=0, ne=tfSS3Rid(s), ai=mkAi(s);
   var w=(typeof r.winRate==='number'&&isFinite(r.winRate)&&(r.n||0)>=5)?Math.round(r.winRate)+'%':'-';
   return '<article class="mk-card mk-v2">'
     +'<div class="mk-c-head"><img class="mk-c-av" src="assets/avatars/'+ai[0]+'.svg" alt="'+ai[1]+'" title="'+ai[1]+'" width="44" height="44" loading="lazy">'
     +'<div class="mk-c-hd"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3>'
     +'<div class="mk-c-meta"><span class="mk-c-ai">'+ai[1]+'</span>'+mkExTag(s)+'</div></div></div>'
     +'<p class="mk-c-one">'+gEsc(mkOne(s))+'</p>'
-    +'<div class="mk-c-main"><div class="mk-c-ret"><small>수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b></div>'+mkSpark(r.eq,104,42)+'</div>'
+    +'<div class="mk-c-main"><div class="mk-c-ret"><small>30일 수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(m30.ret)+'</b></div>'+mkSpark(m30.eq,104,42)+'</div>'
     +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>거래 수</small><b>'+Number(r.n||0).toLocaleString()+'회</b></div></div>'
     +'<div class="mk-c-acts">'+(s.me?'':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')+'<button type="button" class="mk-btn2" onclick="tfSS3Go(\''+ne+'\')">자세히</button></div>'
     +'</article>';
@@ -16039,6 +16057,8 @@ function mkdChartHtml(){
   for(var i=0;i<A.length-1;i++){ var p0=A[Math.max(0,i-1)],p1=A[i],p2=A[i+1],p3=A[Math.min(A.length-1,i+2)]; d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+cl(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+cl(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1); }
   var yb=Y(base), area=d+' L'+A[A.length-1][0].toFixed(1)+' '+yb.toFixed(1)+' L'+A[0][0].toFixed(1)+' '+yb.toFixed(1)+' Z', G='#2fb98a', R='#f0566a';
   var dec=Math.abs(mx-mn)<4?2:Math.abs(mx-mn)<20?1:0, fmt=function(v){ return MKD.tab==='ret'?(v>0?'+':'')+v.toFixed(dec)+'%':Math.round(v).toLocaleString(); };
+  var still=false; try{ still=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  MKD.geo={A:A,P:P,W:W,H:H,pb:pb};
   var g=T.map(function(v){ return '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="rgba(255,255,255,'+(v===base?'.24':'.08')+')"/><text x="'+(pl-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+fmt(v)+'</text>'; }).join('');
   var nx=Math.min(5,P.length), xl='', long=MKD.gran==='month'||!MKD.per||MKD.per>200;
   for(var k=0;k<nx;k++){ var ix=Math.round(k*(P.length-1)/(nx-1||1)); xl+='<text x="'+X(ix).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(k===0?'start':k===nx-1?'end':'middle')+'" font-size="11" fill="#8b9096">'+(long?P[ix].d.slice(2,7).replace('-','.'):P[ix].d.slice(5).replace('-','.'))+'</text>'; }
@@ -16048,21 +16068,40 @@ function mkdChartHtml(){
   return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+({ret:'수익률',pnl:'번 돈',bal:'든 돈'}[MKD.tab])+' 그래프"><defs>'
     +'<linearGradient id="mkdgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".02"/></linearGradient>'
     +'<linearGradient id="mkdgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+(H-pb)+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
-    +'<clipPath id="mkdcu"><rect x="0" y="0" width="'+W+'" height="'+yb.toFixed(1)+'"/></clipPath><clipPath id="mkdcd"><rect x="0" y="'+yb.toFixed(1)+'" width="'+W+'" height="'+(H-yb).toFixed(1)+'"/></clipPath></defs>'+g+xl
+    +'<clipPath id="mkdcu"><rect x="0" y="0" width="'+W+'" height="'+yb.toFixed(1)+'"/></clipPath><clipPath id="mkdcd"><rect x="0" y="'+yb.toFixed(1)+'" width="'+W+'" height="'+(H-yb).toFixed(1)+'"/></clipPath>'
+    +'<clipPath id="mkdrv"><rect x="0" y="0" height="'+H+'" width="'+(still?W:0)+'">'+(still?'':'<animate attributeName="width" from="'+pl+'" to="'+W+'" dur="0.9s" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .2 1" fill="freeze"/>')+'</rect></clipPath></defs>'+g+xl+'<g clip-path="url(#mkdrv)">'
     +'<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.6"/>'
     +'<g clip-path="url(#mkdcu)"><path d="'+area+'" fill="url(#mkdgu)"/><path d="'+d+'" fill="none" stroke="'+G+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></g>'
     +'<g clip-path="url(#mkdcd)"><path d="'+area+'" fill="url(#mkdgd)"/><path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></g>'
-    +(iMx!==iMn?(iMx>0?mark(iMx,'Max'):'')+(iMn>0?mark(iMn,'Min'):''):'')+'</svg>'; /* 시작점(기준)과 겹치는 표시는 생략 */
+    +'</g><g class="mkd-mk">'+(iMx!==iMn?(iMx>0?mark(iMx,'Max'):'')+(iMn>0?mark(iMn,'Min'):''):'')+'</g>' /* 시작점(기준)과 겹치는 표시는 생략 */
+    +'<g class="mkd-cur"><line id="mkd-cl" x1="0" x2="0" y1="'+pt+'" y2="'+(H-pb)+'" stroke="rgba(255,255,255,.75)" stroke-dasharray="4 4"/><circle id="mkd-cc" r="5" fill="#17191c" stroke="#fff" stroke-width="2.2"/></g></svg>'
+    +'<div class="mkd-ht" id="mkd-ht" role="status"></div>';
+}
+/* 차트 호버: 가장 가까운 날짜의 값 표시 */
+function mkdHover(ev){
+  var box=$('mkd-chart'), q=MKD.geo; if(!box||!q) return;
+  var svg=box.querySelector('svg'); if(!ev||!svg){ box.classList.remove('hov'); return; }
+  var rc=svg.getBoundingClientRect(); if(!rc.width) return;
+  var x=(ev.clientX-rc.left)/rc.width*q.W, bi=0, bd=1e9;
+  for(var i=0;i<q.A.length;i++){ var dd=Math.abs(q.A[i][0]-x); if(dd<bd){ bd=dd; bi=i; } }
+  var a=q.A[bi], p=q.P[bi], l=$('mkd-cl'), c=$('mkd-cc'), tip=$('mkd-ht'); if(!l||!c||!tip) return;
+  l.setAttribute('x1',a[0].toFixed(1)); l.setAttribute('x2',a[0].toFixed(1)); c.setAttribute('cx',a[0].toFixed(1)); c.setAttribute('cy',a[1].toFixed(1));
+  var d=(MKD.gran==='month'&&bi>0?p.d.slice(0,7):p.d).replace(/-/g,'.');
+  var v=MKD.tab==='ret'?'수익률 '+mkPct(p.y,2):MKD.tab==='pnl'?'번 돈 '+(p.y>=0?'+':'-')+Math.abs(Math.round(p.y)).toLocaleString()+' USDT':'든 돈 '+Math.round(p.y).toLocaleString()+' USDT';
+  tip.innerHTML=d+'<b>'+v+'</b>';
+  var up=a[1]>q.H-q.pb-70, tw=tip.offsetWidth/2+4, px=Math.max(tw,Math.min(rc.width-tw,a[0]/q.W*rc.width));
+  tip.className='mkd-ht'+(up?' up':''); tip.style.left=px.toFixed(1)+'px'; tip.style.top=(a[1]/q.H*rc.height).toFixed(1)+'px';
+  box.classList.add('hov');
 }
 function mkdCtlHtml(){
   var tip='이 전략이 매매로 번 비율이에요. 돈을 더 넣거나 빼도 수익률은 그대로예요. 수수료를 뺀 실제 수익이에요. 이 전략의 거래만 계산해요.';
-  return '<div class="mkd-pills" role="group" aria-label="그래프 종류">'+[['ret','수익률',1],['pnl','번 돈'],['bal','든 돈']].map(function(t){ return '<button type="button" class="mkd-pill" aria-pressed="'+(MKD.tab===t[0])+'" onclick="mkdSet(\'tab\',\''+t[0]+'\')">'+t[1]+(t[2]?'<i aria-hidden="true">i</i><span class="mkd-tip" role="tooltip">'+tip+'</span>':'')+'</button>'; }).join('')+'</div>'
+  return '<div class="mkd-pills" role="group" aria-label="그래프 종류">'+[['ret','수익률',tip],['pnl','번 돈','1,000 USDT로 시작했다면 지금까지 벌거나 잃은 금액이에요. 수수료를 뺀 금액이에요.'],['bal','든 돈','1,000 USDT로 시작했다면 지금 들어 있는 금액이에요. 처음 넣은 1,000 USDT에 번 돈을 더한 값이에요.']].map(function(t){ return '<button type="button" class="mkd-pill" aria-pressed="'+(MKD.tab===t[0])+'" onclick="mkdSet(\'tab\',\''+t[0]+'\')">'+t[1]+(t[2]?'<i aria-hidden="true">i</i><span class="mkd-tip" role="tooltip">'+t[2]+'</span>':'')+'</button>'; }).join('')+'</div>'
     +'<div class="mkd-right"><div class="mkd-seg" role="group" aria-label="간격">'+[['day','일별'],['month','월별']].map(function(g){ return '<button type="button" aria-pressed="'+(MKD.gran===g[0])+'" onclick="mkdSet(\'gran\',\''+g[0]+'\')">'+g[1]+'</button>'; }).join('')+'</div>'
     +'<select class="mkd-per" aria-label="기간 선택" onchange="mkdSet(\'per\',+this.value)">'+[[30,'최근 1개월'],[90,'최근 3개월'],[365,'최근 1년'],[0,'전체']].map(function(o){ return '<option value="'+o[0]+'"'+(MKD.per===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></div>';
 }
-function mkdSet(k,v){ MKD[k]=v; var c=$('mkd-ctl'), h=$('mkd-hint'), g=$('mkd-chart'); if(c) c.innerHTML=mkdCtlHtml(); if(h) h.textContent=MKD.tab==='ret'?'':'1,000 USDT로 시작했다면'; if(g) g.innerHTML=mkdChartHtml(); }
+function mkdSet(k,v){ MKD[k]=v; var c=$('mkd-ctl'), h=$('mkd-hint'), g=$('mkd-chart'); if(c) c.innerHTML=mkdCtlHtml(); if(h) h.textContent=MKD.tab==='ret'?'':'1,000 USDT로 시작했다면'; if(g){ g.classList.remove('hov'); g.innerHTML=mkdChartHtml(); } }
 function mkOvTab(s,r,pd,ne){
-  var R0=s.r||r, eq=R0.eq||[], ex=mkEx(s); MKD.eq=eq; MKD.tab='ret'; MKD.gran='day'; MKD.per=30;
+  var R0=s.r||r, eq=mkDaily(R0.eq||[],s.p?s.p.endI:0), ex=mkEx(s); MKD.eq=eq; MKD.tab='ret'; MKD.gran='day'; MKD.per=30;
   var last=eq.length?eq[eq.length-1].v:1, first=eq.length?eq[0].v:1, tot=(last/first-1)*100;
   var d1=eq.length>1?(last/eq[eq.length-2].v-1)*100:0;
   var mi=eq.length-1, lm=eq.length?mkdDate(eq[mi].i).slice(0,7):''; while(mi>0&&mkdDate(eq[mi-1].i).slice(0,7)===lm) mi--; var mo=eq.length?(last/eq[Math.max(0,mi-1)].v-1)*100:0;
@@ -16072,7 +16111,7 @@ function mkOvTab(s,r,pd,ne){
     +'<div class="mkd-box"><h3>AI 요약</h3><p class="mkd-sum">'+mkdSum(s)+'</p></div></div>'
     +'<div class="mkd-head"><div><div class="lb">수익률</div><div class="mkd-big num'+sg(tot)+'">'+mkPct(tot)+'</div><div class="mkd-day">지난 24시간<b class="num'+sg(d1)+'">'+mkPct(d1,2)+'</b></div></div>'
     +'<div class="mkd-stats"><div><small>이번 달 수익률</small><b class="num'+sg(mo)+'">'+mkPct(mo)+'</b></div><div><small>최대 낙폭</small><b class="num mkd-dn">'+R0.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b class="num">'+w+'</b></div><div><small>거래 수</small><b class="num">'+Number(R0.n||0).toLocaleString()+'회</b></div></div></div>'
-    +'<div class="mkd-ctl" id="mkd-ctl">'+mkdCtlHtml()+'</div><p class="mkd-hint" id="mkd-hint"></p><div class="mkd-chart" id="mkd-chart">'+mkdChartHtml()+'</div>'
+    +'<div class="mkd-ctl" id="mkd-ctl">'+mkdCtlHtml()+'</div><p class="mkd-hint" id="mkd-hint"></p><div class="mkd-chart" id="mkd-chart" onpointermove="mkdHover(event)" onpointerdown="mkdHover(event)" onpointerleave="mkdHover(null)">'+mkdChartHtml()+'</div>'
     +'<section class="mk-sec"><div class="mk-sec-hd"><b>지금 뭘 하나</b></div>'+mkStatusHtml(s,r)+'</section>'
     +'<section class="mk-sec"><div class="mk-sec-hd"><b>규칙</b><span class="mt2">이 전략이 사고 파는 조건</span></div>'+mkRuleSummary(s.p)+'</section>';
 }
