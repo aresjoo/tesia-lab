@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>전략 따라하기 10월 전략 리그</title>
+<style>
+:root{
+  --g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;
+  --gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);
+  --gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;
+  --gg:#4ec08d;--gr:#e0604b;--lime:#c8f43c;
+  --gold:#f0c65a;--silver:#cfd5dd;--bronze:#d39a6b;
+  --zoneA:rgba(200,244,60,.9);--zoneB:rgba(91,138,247,.85);--zoneC:rgba(154,160,166,.55);
+  --font:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--g0);color:var(--gt);font-family:var(--font);font-size:13.5px;line-height:1.4;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+.shell{display:flex;min-height:100vh}
+/* 접힌 사이드바 64px */
+.side{width:64px;flex-shrink:0;background:var(--g0);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:6px}
+.side .ib{width:40px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:var(--gt3)}
+.side .ib.on{background:rgba(255,255,255,.08);color:var(--gt)}
+.side svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.side .sp{flex:1}
+.side .av{width:32px;height:32px;border-radius:999px;background:#3d6ef0;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.chead{height:44px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 18px;font-size:14px;font-weight:500;position:sticky;top:0;background:var(--g0);z-index:30}
+.wrap{padding:6px 24px 28px;max-width:1360px;width:100%}
+/* 현행 탭 줄 */
+.mk-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px}
+.mk-tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--gt3);font-size:14px;font-weight:600;padding:10px 12px;white-space:nowrap;margin-bottom:-1px}
+.mk-tab.on{color:var(--gt);border-bottom-color:#fff}
+/* 시즌 헤더 */
+.season{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:6px 0 14px;flex-wrap:wrap}
+.season h1{font-size:22px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.season h1 .live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--lime);border:1px solid rgba(200,244,60,.4);border-radius:999px;padding:2px 8px;letter-spacing:.02em}
+.season h1 .live i{width:6px;height:6px;border-radius:999px;background:var(--lime);display:inline-block}
+.season .sub{color:var(--gt3);font-size:12.5px;margin-top:4px}
+.stats{display:flex;gap:28px;align-items:flex-end}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat .k{font-size:11px;color:var(--gt3);letter-spacing:.02em}
+.stat .v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--gt)}
+.stat .v.cd{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:17px}
+.stat .v small{font-size:12px;font-weight:500;color:var(--gt2);margin-left:3px}
+.stat .spon{font-size:12.5px;color:var(--gt2);display:flex;align-items:center;gap:6px;padding-bottom:3px}
+.stat .spon b{color:#1fc7a8;font-weight:700}
+/* 기준 선언 바 */
+.basis{display:flex;align-items:center;gap:10px;border:1px solid var(--gl);background:var(--g1);border-radius:8px;padding:9px 14px;font-size:12.5px;color:var(--gt2);margin-bottom:12px}
+.basis svg{width:14px;height:14px;stroke:var(--lime);fill:none;stroke-width:2;flex-shrink:0}
+.basis b{color:var(--gt);font-weight:600}
+.basis .r{margin-left:auto;color:var(--gt3);font-size:12px;white-space:nowrap}
+/* 기간 토글 + 보조 */
+.ctl{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--g1);border:1px solid var(--gl);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:var(--gt3);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px}
+.seg button.on{background:var(--g3);color:var(--gt)}
+.ctl .meta{font-size:12px;color:var(--gt3);display:flex;gap:14px;align-items:center}
+.ctl .meta span b{color:var(--gt2);font-weight:500}
+/* 순위표 */
+.tbl{border-top:1px solid var(--gl2)}
+.row,.hrow{display:grid;grid-template-columns:52px 48px minmax(0,1fr) 64px 68px 100px 88px 104px 100px 92px 18px;align-items:center;column-gap:8px;border-bottom:1px solid var(--gl);position:relative}
+.hrow{height:38px;font-size:11.5px;color:var(--gt3);font-weight:500;letter-spacing:.01em;position:sticky;top:44px;background:var(--g0);z-index:20;border-bottom:1px solid var(--gl2)}
+.hrow .c.sort{color:var(--gt);font-weight:600}
+.hrow .c.sort::after{content:"▼";font-size:8px;margin-left:4px;color:var(--lime)}
+.row{height:54px;transition:background .12s}
+.row:hover{background:rgba(255,255,255,.035)}
+.c{min-width:0;font-variant-numeric:tabular-nums}
+.c.num{text-align:right;color:var(--gt2);font-size:13px}
+.c.cen{text-align:center}
+.rk{font-size:15px;font-weight:700;color:var(--gt);padding-left:10px;display:flex;align-items:center;gap:5px}
+.rk .rn{display:inline-flex;align-items:center;gap:4px}
+.rk svg{width:13px;height:13px;flex-shrink:0;display:none}
+.row.t1 .rk,.row.t2 .rk,.row.t3 .rk{font-size:17px}
+.row.t1 .rk{color:var(--gold)}.row.t2 .rk{color:var(--silver)}.row.t3 .rk{color:var(--bronze)}
+.row.t1 .rk svg,.row.t2 .rk svg,.row.t3 .rk svg{display:inline-block}
+.row.top::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lime)}
+.row.top{background:linear-gradient(90deg,rgba(200,244,60,.06),transparent 40%)}
+.row.zlast{border-bottom:1px dashed rgba(255,255,255,.22)}
+.chg{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.chg.up{color:var(--gg)}.chg.dn{color:var(--gr)}.chg.same{color:var(--gt3);font-weight:400}
+.chg.new{color:var(--lime);font-size:10.5px;letter-spacing:.04em;border:1px solid rgba(200,244,60,.45);border-radius:4px;padding:1px 5px}
+.st{display:flex;align-items:center;gap:10px;min-width:0}
+.avt{width:32px;height:32px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gt);background:var(--g3);border:1px solid var(--gl2)}
+.avt.ai{background:#20303f;color:#8fc4ff}.avt.tr{background:#2c2a1e;color:var(--gold)}
+.st .tx{min-width:0;display:flex;flex-direction:column;gap:2px}
+.st .nm{font-size:14px;font-weight:600;color:var(--gt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.st .nm span{overflow:hidden;text-overflow:ellipsis}
+.bd{font-size:10.5px;font-weight:600;line-height:1;padding:3px 6px;border-radius:4px;flex-shrink:0;letter-spacing:.01em}
+.bd.rule{color:var(--gt2);background:rgba(255,255,255,.08)}
+.bd.ai{color:#8fc4ff;background:rgba(91,138,247,.16)}
+.bd.tr{color:var(--gold);background:rgba(240,198,90,.16)}
+.st .au{font-size:12px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:inline-flex;gap:5px;justify-content:center;width:100%}
+.dots i{width:9px;height:9px;border-radius:999px;background:#3a3d43;display:inline-block}
+.dots i.w{background:var(--gg)}
+.mdd{color:var(--gt2)}
+.ret{font-size:15.5px;font-weight:700;color:var(--lime);text-align:right;padding-right:6px}
+.fbtn{height:28px;padding:0 12px;border-radius:999px;border:1px solid rgba(200,244,60,.6);background:transparent;color:var(--lime);font-size:12px;font-weight:600;white-space:nowrap;transition:background .12s}
+.fbtn:hover{background:rgba(200,244,60,.12)}
+.zone{height:100%;width:100%;position:relative}
+.zone::before{content:"";position:absolute;right:0;top:0;bottom:0;width:4px;background:var(--zb,transparent)}
+.row.zA{--zb:var(--zoneA)}.row.zB{--zb:var(--zoneB)}.row.zC{--zb:var(--zoneC)}
+.row.zC .zone::before{background:repeating-linear-gradient(180deg,var(--zoneC) 0 4px,transparent 4px 8px)}
+/* 구간 시작 표식 */
+.ztag{position:absolute;right:-2px;bottom:-8px;font-size:10px;color:var(--gt3);background:var(--g0);padding:0 4px;white-space:nowrap;z-index:2;letter-spacing:.01em}
+.row.t3 .ztag{color:var(--lime)}
+.row.z10 .ztag{color:#8fc4ff}
+/* 하단 */
+.legend{display:flex;align-items:center;gap:18px;padding:12px 4px 0;font-size:12px;color:var(--gt3);flex-wrap:wrap}
+.legend .lg{display:inline-flex;align-items:center;gap:7px}
+.legend .lg i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.legend .lg b{color:var(--gt2);font-weight:600}
+.more{margin-top:14px;display:flex;justify-content:center}
+.more button{background:none;border:1px solid var(--gl2);color:var(--gt2);border-radius:999px;padding:7px 18px;font-size:12.5px}
+.foot{font-size:11.5px;color:var(--gt3);margin-top:14px;padding-top:12px;border-top:1px solid var(--gl)}
+/* 내 순위 스티키 바 */
+.mine-bar{position:sticky;bottom:0;z-index:40;margin-top:auto;background:rgba(23,24,27,.96);backdrop-filter:blur(8px);border-top:1px solid var(--gl2)}
+.mine-bar .in{max-width:1360px;padding:0 24px;height:56px;display:grid;grid-template-columns:52px 48px minmax(0,1fr) 64px 68px 100px 88px 104px 100px 92px 18px;align-items:center;column-gap:8px}
+.mine-bar .rk{font-size:15px;color:var(--gt);white-space:nowrap;grid-column:1/3;gap:8px}
+.mine-bar .rk .chg{font-size:12px}
+.mine-bar .chg-c{display:none}
+.mine-bar .rk small{font-size:10px;color:var(--gt3);font-weight:500;margin-right:2px}
+.mine-bar .st .nm{font-size:13.5px}
+.mine-bar .next{grid-column:4/8;text-align:right;color:var(--gt2);font-size:12px;white-space:nowrap}
+.mine-bar .next b{color:var(--lime);font-weight:700}
+.mine-bar .ret{font-size:15px}
+.mine-bar .fbtn{border-color:var(--gl2);color:var(--gt)}
+/* 390 */
+@media (max-width:640px){
+  .side{display:none}
+  .chead{padding:0 14px}
+  .wrap{padding:4px 12px 20px}
+  .mk-tabs{gap:0}.mk-tab{flex:1;padding:12px 6px;font-size:13px;text-align:center}
+  .season{align-items:flex-start;flex-direction:column;gap:8px;padding-bottom:10px}
+  .season h1{font-size:19px}
+  .stats{gap:16px;width:100%;flex-wrap:wrap}
+  .stat .v{font-size:15px}.stat .v.cd{font-size:14px}
+  .stat.sp{flex-basis:100%}
+  .basis{font-size:12px;padding:8px 10px}.basis .r{display:none}
+  .ctl .meta{display:none}
+  .row,.hrow{grid-template-columns:40px minmax(0,1fr) 54px 82px 6px;column-gap:4px}
+  .hrow .c.sort{font-size:11px;white-space:nowrap;letter-spacing:0;padding-right:2px!important}
+  .hrow .c.sort::after{margin-left:2px}
+  .dots{gap:4px}.dots i{width:8px;height:8px}
+  .row .avt{display:none}
+  .st{gap:0}
+  .hrow .h-chg,.hrow .h-n,.hrow .h-d,.hrow .h-mdd,.hrow .h-fl,.hrow .h-btn{display:none}
+  .chg-c,.n-c,.d-c,.mdd-c,.fl-c,.btn-c{display:none}
+  .row{height:auto;min-height:60px;padding:8px 0}
+  .rk{padding-left:7px;flex-direction:column;align-items:flex-start;gap:1px;font-size:14px}
+  .rk .rn{gap:2px}
+  .rk svg{width:11px;height:11px}
+  .rk .mchg{font-size:10.5px}
+  .st .nm{font-size:13px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25}
+  .st .nm .bd{display:none}
+  .st .au{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:visible}
+  .st .au>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:100px}
+  .st .au .bd{display:inline-block;flex-shrink:0}
+  .st .au .mini{width:22px;height:22px;padding:0;border-radius:999px;border:1px solid rgba(200,244,60,.6);background:transparent;color:var(--lime);font-size:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+  .st .au .mini::before{content:"+";font-size:15px;line-height:1;font-weight:600}
+  .ret{font-size:15px;padding-right:4px;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+  .ret .msub{font-size:10.5px;font-weight:500;color:var(--gt3)}
+  .ztag{display:none}
+  .row.top{background:linear-gradient(90deg,rgba(200,244,60,.06),transparent 60%)}
+  .mine-bar .in{padding:8px 12px;height:auto;min-height:56px;grid-template-columns:40px minmax(0,1fr) 82px;column-gap:4px;row-gap:2px}
+  .mine-bar .st{gap:8px}
+  .mine-bar .chg-c{display:none}
+  .mine-bar .rk{grid-column:1;grid-row:1;flex-direction:column;align-items:flex-start;gap:1px}
+  .mine-bar .rk small{display:none}
+  .mine-bar .st{grid-column:2;grid-row:1}
+  .mine-bar .ret{grid-column:3;grid-row:1}
+  .mine-bar .next{grid-column:1/4;grid-row:2;text-align:left;white-space:normal;font-size:11.5px}
+  .mine-bar .fbtn,.mine-bar .mdd-c,.mine-bar .in>div:last-child{display:none}
+}
+@media (min-width:641px){
+  .st .au .mini{display:none}
+  .st .au .bd{display:none}
+  .rk .mchg{display:none}
+  .ret .msub{display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side" aria-label="사이드바">
+    <div class="ib"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
+    <div class="ib"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+    <div class="ib"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
+    <div class="ib on"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9"/><path d="M14 6h6v6"/></svg></div>
+    <div class="ib"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+    <div class="sp"></div>
+    <div class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+    <div class="av">H</div>
+  </aside>
+  <div class="main">
+    <div class="chead">전략 따라하기</div>
+    <div class="wrap">
+      <div class="mk-tabs" role="tablist">
+        <button class="mk-tab on" role="tab" aria-selected="true">전략 찾기</button>
+        <button class="mk-tab" role="tab">따라가는 중 2</button>
+        <button class="mk-tab" role="tab">내 공유</button>
+      </div>
+
+      <header class="season">
+        <div>
+          <h1><span id="ttl">10월 전략 리그</span><span class="live"><i></i>진행 중</span></h1>
+          <div class="sub" id="subttl">10월 1일 00:00 부터 10월 31일 23:59 까지, 시즌 수익률 하나로 줄을 세웁니다</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="k">종료까지</span><span class="v cd" id="cd">D-3 12:41:05</span></div>
+          <div class="stat"><span class="k">상금 풀</span><span class="v">1,000,000<small>USDT</small></span></div>
+          <div class="stat"><span class="k">참가 전략</span><span class="v">2,418</span></div>
+          <div class="stat sp"><span class="k">후원</span><span class="spon">파트너 거래소 <b>Bitget</b> 공동 후원</span></div>
+        </div>
+      </header>
+
+      <div class="basis">
+        <svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
+        <span><b>같은 엔진, 같은 수수료, 같은 기간</b>으로 실제 체결한 결과만 집계합니다. 동률이면 최대 낙폭이 낮은 전략이 위.</span>
+        <span class="r">매 정각 갱신, 마지막 갱신 12:00</span>
+      </div>
+
+      <div class="ctl">
+        <div class="seg" role="tablist">
+          <button class="on" id="segS" role="tab" aria-selected="true">이번 시즌</button>
+          <button id="segH" role="tab" aria-selected="false">명예의 전당</button>
+        </div>
+        <div class="meta">
+          <span>순위 기준 <b>시즌 수익률</b></span>
+          <span>유형 <b>규칙 7</b> <b>AI 판단 4</b> <b>AI 트레이더 1</b></span>
+          <span>표시 <b>상위 12</b> / 300</span>
+        </div>
+      </div>
+
+      <section class="tbl" aria-label="10월 전략 리그 순위표">
+        <div class="hrow">
+          <div class="c" style="padding-left:10px">#</div>
+          <div class="c h-chg">변동</div>
+          <div class="c">전략</div>
+          <div class="c num h-n">거래</div>
+          <div class="c num h-d">실행일</div>
+          <div class="c cen">최근 5거래</div>
+          <div class="c num h-mdd">최대 낙폭</div>
+          <div class="c num sort" style="padding-right:6px">시즌 수익률</div>
+          <div class="c num h-fl">따라가는 사람</div>
+          <div class="c h-btn"></div>
+          <div class="c"></div>
+        </div>
+        <div id="rows"></div>
+      </section>
+
+      <div class="legend" aria-label="상금 구간">
+        <span>상금 구간</span>
+        <span class="lg"><i style="background:var(--zoneA)"></i><b>1~3위</b> 150,000 / 70,000 / 40,000 USDT</span>
+        <span class="lg"><i style="background:var(--zoneB)"></i><b>4~10위</b> 15,000 USDT</span>
+        <span class="lg"><i style="background:repeating-linear-gradient(180deg,var(--zoneC) 0 2px,transparent 2px 4px)"></i><b>11~50위</b> 3,000 USDT</span>
+        <span class="lg"><i style="border:1px solid var(--zoneC)"></i><b>51~300위</b> 800 USDT</span>
+      </div>
+      <div class="more"><button type="button">13위부터 300위까지 더 보기</button></div>
+      <div class="foot">전략 단위로 줄을 세웁니다. 한 사람이 여러 전략으로 여러 행에 오를 수 있습니다. 시즌이 끝나면 순위가 확정되고 상금은 다음 달 5일에 지급됩니다.</div>
+    </div>
+    <div class="mine-bar" aria-label="내 순위">
+      <div class="in">
+        <div class="rk"><span><small>내 순위</small>#143</span><span class="chg up">▲5</span></div>
+        <div class="c chg-c"><span class="chg up">▲5</span></div>
+        <div class="st">
+          <div class="avt">H</div>
+          <div class="tx"><div class="nm"><span>ETH 야간 변동성 매도</span><span class="bd rule">규칙</span></div><div class="au">내 전략, 실행 9일</div></div>
+        </div>
+        <div class="next">다음 상금 구간 <b>51~300위 800 USDT</b> 까지 <b>+0.8%p</b></div>
+        <div class="ret">+4.1%</div>
+        <div class="c num mdd-c" style="color:var(--gt3);font-size:12px">MDD -6.3%</div>
+        <button class="fbtn" type="button">내 전략 보기</button>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+var ROWS=[
+ [1,'▲2','BTC 급락 반동 매수, 짧은 익절','rule','월급두배','+23.9%','-9.0%','WWLWW',14,21,'640'],
+ [2,'▼1','NVDA 추세 추종','ai','세븐틴층','+19.4%','-11.2%','WLWWW',9,21,'1,284'],
+ [3,'▼1','ETH 눌림목 반동 매수','rule','바닥만줍는사람','+14.7%','-9.2%','WWWLL',11,20,'412'],
+ [4,'NEW','워렌 버핏 AI_버전13','tr','TETH','+12.8%','-6.1%','WWWWL',6,12,'2,930'],
+ [5,'▲3','NASDAQ 눌림목, 공격형','rule','리스크헌터','+11.1%','-14.0%','LWWLW',17,21,'388'],
+ [6,'-','SOL 거래량 급증 추종','ai','야간근무','+9.6%','-12.5%','WLLWW',22,19,'151'],
+ [7,'▼2','TSLA 실적 후 갭 매수','rule','코인만세','+8.3%','-7.7%','WWLWL',5,15,'97'],
+ [8,'▲1','BTC 주말 변동성 매도','rule','새벽거래소','+7.9%','-5.4%','WWWWW',8,21,'733'],
+ [9,'▼1','AAPL 이동평균 교차','rule','평균회귀','+6.2%','-8.8%','LWLWW',12,21,'260'],
+ [10,'▲4','XRP 뉴스 반응 매매','ai','뉴스먼저','+5.5%','-10.3%','WLWLW',31,18,'84'],
+ [11,'▼3','금 ETF 추세','rule','안전제일','+4.1%','-3.9%','WWLWW',4,21,'512'],
+ [12,'-','DOGE 급등 추격','ai','밈장인','+3.8%','-16.2%','LLWWL',26,14,'45']
+];
+var TYPE={rule:'규칙',ai:'AI 판단',tr:'AI 트레이더'};
+var MEDAL='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6" fill="currentColor"/><path d="M8 14l-2 7 6-3 6 3-2-7" fill="currentColor" opacity=".7"/></svg>';
+function chg(v){
+  if(v==='NEW') return '<span class="chg new">NEW</span>';
+  if(v==='-') return '<span class="chg same">-</span>';
+  var up=v.charAt(0)==='▲';
+  return '<span class="chg '+(up?'up':'dn')+'">'+v+'</span>';
+}
+function render(){
+  var h='';
+  ROWS.forEach(function(r){
+    var rank=r[0], cls='row';
+    if(rank<=3) cls+=' top t'+rank+' zA';
+    else if(rank<=10) cls+=' zB';
+    else cls+=' zC';
+    if(rank===3||rank===10) cls+=' zlast';
+    if(rank===10) cls+=' z10';
+    var tag='';
+    if(rank===3) tag='<span class="ztag">1~3위 상금 구간 150,000 / 70,000 / 40,000 USDT</span>';
+    if(rank===10) tag='<span class="ztag">4~10위 상금 구간 15,000 USDT</span>';
+    if(rank===12) tag='<span class="ztag">11~50위 상금 구간 3,000 USDT</span>';
+    var dots=r[7].split('').map(function(c){return '<i class="'+(c==='W'?'w':'l')+'"></i>';}).join('');
+    var avc=r[3]==='ai'?' ai':(r[3]==='tr'?' tr':'');
+    h+='<div class="'+cls+'" data-rank="'+rank+'">'
+      +'<div class="c rk"><span class="rn">'+(rank<=3?MEDAL:'')+'<span>'+rank+'</span></span><span class="mchg">'+chg(r[1])+'</span></div>'
+      +'<div class="c chg-c">'+chg(r[1])+'</div>'
+      +'<div class="c st"><div class="avt'+avc+'">'+r[4].charAt(0)+'</div><div class="tx">'
+        +'<div class="nm"><span>'+r[2]+'</span><span class="bd '+r[3]+'">'+TYPE[r[3]]+'</span></div>'
+        +'<div class="au"><span>'+r[4]+'</span><span class="bd '+r[3]+'">'+TYPE[r[3]]+'</span><button type="button" class="mini" aria-label="따라가기">따라가기</button></div>'
+      +'</div></div>'
+      +'<div class="c num n-c">'+r[8]+'</div>'
+      +'<div class="c num d-c">'+r[9]+'일</div>'
+      +'<div class="c cen"><span class="dots" aria-label="최근 5거래 '+r[7]+'">'+dots+'</span></div>'
+      +'<div class="c num mdd mdd-c">'+r[6]+'</div>'
+      +'<div class="c ret">'+r[5]+'<span class="msub">MDD '+r[6]+'</span></div>'
+      +'<div class="c num fl-c">'+r[10]+'</div>'
+      +'<div class="c btn-c" style="text-align:right"><button type="button" class="fbtn">따라가기</button></div>'
+      +'<div class="c zone">'+tag+'</div>'
+      +'</div>';
+  });
+  document.getElementById('rows').innerHTML=h;
+}
+render();
+/* 카운트다운 */
+var left=3*86400+12*3600+41*60+5;
+function tick(){
+  var d=Math.floor(left/86400),s=left%86400,hh=Math.floor(s/3600),mm=Math.floor(s%3600/60),ss=s%60;
+  function p(n){return (n<10?'0':'')+n;}
+  document.getElementById('cd').textContent='D-'+d+' '+p(hh)+':'+p(mm)+':'+p(ss);
+  left--;
+}
+tick(); setInterval(tick,1000);
+/* 기간 토글 */
+var segS=document.getElementById('segS'),segH=document.getElementById('segH');
+function seg(hall){
+  segS.classList.toggle('on',!hall); segH.classList.toggle('on',hall);
+  segS.setAttribute('aria-selected',!hall); segH.setAttribute('aria-selected',hall);
+  document.getElementById('ttl').textContent=hall?'명예의 전당':'10월 전략 리그';
+  document.getElementById('subttl').textContent=hall?'역대 시즌 우승 전략과 누적 수익률 상위 전략':'10월 1일 00:00 부터 10월 31일 23:59 까지, 시즌 수익률 하나로 줄을 세웁니다';
+  document.querySelector('.hrow .sort').textContent=hall?'누적 수익률':'시즌 수익률';
+}
+segS.onclick=function(){seg(false)}; segH.onclick=function(){seg(true)};
+</script>
+</body>
+</html>
