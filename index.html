@@ -4137,8 +4137,15 @@ body.gft-doc #gft-slot{display:block}
 .mk-pg[aria-current="page"]{background:rgba(255,255,255,.12);color:var(--gt);font-weight:700}
 .mk-pg:disabled{opacity:.3;cursor:default;background:none}
 .mk-v2{gap:12px;padding:16px;border-radius:14px}
-.mk-v2 .mk-c-head{display:flex;align-items:flex-start;gap:10px;min-height:62px}
-.mk-v2 .mk-c-ex{flex:none;width:30px;height:30px;border-radius:8px;display:block}
+.mk-v2 .mk-c-head{display:flex;align-items:flex-start;gap:12px;min-height:66px}
+.mk-v2 .mk-c-av{flex:none;width:44px;height:44px;border-radius:50%;display:block;background:#1d2024}
+.mk-c-meta{display:flex;align-items:center;gap:10px;margin-top:4px;min-width:0}
+.mk-c-ai{font-size:12.5px;font-weight:600;color:var(--gt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-xtag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--gt3);white-space:nowrap;flex:none}
+.mk-xtag img{width:16px;height:16px;border-radius:4px;display:block}
+.mk-d-by .mk-xtag{color:var(--gt2)}
+.mk-d-min{align-self:center;font-size:13px;color:var(--gt3);white-space:nowrap}.mk-d-min b{color:var(--gt);font-weight:600}
+.mk-d-ai{display:inline-flex;align-items:center;gap:6px;color:var(--gt2)}.mk-d-ai img{width:24px;height:24px;border-radius:50%;display:block}
 .mk-v2 .mk-c-hd{min-width:0}
 .mk-v2 .mk-c-hd h3{margin:0;font-size:15px;font-weight:700;line-height:1.35}
 .mk-v2 .mk-c-tb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -4316,6 +4323,7 @@ body.gft-doc #gft-slot{display:block}
 @media (max-width:768px){ .mk{padding-top:28px} .mk-detail{padding-top:22px} }
 @media (max-width:900px){
   .mk-grid{grid-template-columns:minmax(0,1fr)}
+  .mk-v2 .mk-pri,.mk-v2 .mk-btn2{height:44px;font-size:14px}
   .mk-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mk-kpis.four{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mk-kpi.big{grid-column:1/-1}
@@ -11881,7 +11889,7 @@ function tfSS3DetailRender(ne,pd,tab){
   document.body.classList.remove('kb-open'); gComposer(false);
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   var title=mkTitle(s);
-  gChead(title,'',null);
+  gChead(mkHook(s),'',null);
   var r=tfSS3PdCalc(s,pd);
   TF_SS3_CALM=0; TF_SS3_CALCTX={nick:nick,pd:pd}; /* 캘린더 이동 컨텍스트 — 렌더마다 최신 월로 리셋 */
   var watching=false; try{ watching=(tfS().watch||[]).indexOf(nick)>=0; }catch(e){}
@@ -11889,13 +11897,13 @@ function tfSS3DetailRender(ne,pd,tab){
   var body= tab==='perf'?mkPerfTab(s,r,pd,ne): tab==='trades'?mkTradesTab(s,r,pd,ne): tab==='log'?mkLogTab(s,r): tab==='info'?mkInfoTab(s,r,ne): mkOvTab(s,r,pd,ne);
   TF_RENDERING=true; document.body.classList.remove('tf-route'); /* 해시 정리 가드가 상세 자신의 #/share 해시를 지우지 않게 */
   gContent('<div class="tf-page tfbk ss3 mk mk-detail">'
-    +'<div class="tfbk-bc"><span class="lk" onclick="tfShareHub(\'find\')">전략 따라하기</span> / <span>'+gEsc(title)+'</span></div>'
+    +'<div class="tfbk-bc"><span class="lk" onclick="tfShareHub(\'find\')">전략 따라하기</span> / <span>'+gEsc(mkHook(s))+'</span></div>'
     +'<header class="mk-d-head">'
-    +'<div class="mk-d-tt"><h2>'+gEsc(title)+'</h2>'+tfKindBadge('rule')+'</div>'
+    +'<div class="mk-d-tt"><h2>'+gEsc(mkHook(s))+'</h2>'+tfKindBadge('rule')+'</div>'
     +'<div class="mk-d-sub">'+gEsc(mkSub(s))+'</div>'
-    +'<div class="mk-d-by num"><span>작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'</span><span class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</span></div>'
+    +'<div class="mk-d-by num"><span class="mk-d-ai"><img src="assets/avatars/'+mkAi(s)[0]+'.svg" alt="" width="24" height="24">'+mkAi(s)[1]+'</span>'+mkExTag(s)+'<span>작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'</span><span class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</span></div>'
     +'<div class="mk-d-acts">'
-    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')
+    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button><span class="mk-d-min">최소 <b>'+mkMin(s)+' USDT</b>부터</span>')
     +'<div class="mk-more"><button type="button" class="mk-more-b" id="mk-menu-b" aria-haspopup="menu" aria-expanded="false" aria-label="더 보기" onclick="mkMenuTgl(event)">⋯</button>'
     +'<div class="mk-menu" id="mk-menu" role="menu" hidden>'
     +'<button type="button" role="menuitem" onclick="tfSS3Ask(\''+ne+'\',\''+pd+'\')">TETH에게 분석시키기</button>'
@@ -15887,16 +15895,20 @@ function mkOne(s){
   return d+' 반등에 사서 +'+Math.abs(s.p.tp)+'% 익절, -'+Math.abs(s.p.sl)+'% 손절';
 }
 function mkMin(s){ var sl=s.p?Math.abs(s.p.sl):5; return (sl>=8?500:sl>=5?200:100); }
+/* AI 프로필 5종. 전략마다 하나씩 결정적으로 배정 */
+var MK_AI=[['buffett','워렌 버핏 AI'],['wonyotti','워뇨띠 AI'],['soros','조지 소로스 AI'],['rsi','RSI AI'],['bollinger','볼린저밴드 AI']];
+function mkAi(s){ var h=0, k=String(s.nick||''); for(var i=0;i<k.length;i++) h=(h*33+k.charCodeAt(i))>>>0; return MK_AI[h%MK_AI.length]; }
+function mkExTag(s,cls){ var ex=mkEx(s); return '<span class="mk-xtag'+(cls?' '+cls:'')+'"><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16" loading="lazy">'+ex[1]+'</span>'; }
 function mkCard(s){
-  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), ex=mkEx(s);
+  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), ai=mkAi(s);
   var w=(typeof r.winRate==='number'&&isFinite(r.winRate)&&(r.n||0)>=5)?Math.round(r.winRate)+'%':'-';
   return '<article class="mk-card mk-v2">'
-    +'<div class="mk-c-head"><img class="mk-c-ex" src="assets/logos/'+ex[0]+'.png" alt="" width="36" height="36" loading="lazy">'
+    +'<div class="mk-c-head"><img class="mk-c-av" src="assets/avatars/'+ai[0]+'.svg" alt="'+ai[1]+'" title="'+ai[1]+'" width="44" height="44" loading="lazy">'
     +'<div class="mk-c-hd"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3>'
-    +'<div class="mk-c-xn">'+ex[1]+'</div></div></div>'
+    +'<div class="mk-c-meta"><span class="mk-c-ai">'+ai[1]+'</span>'+mkExTag(s)+'</div></div></div>'
     +'<p class="mk-c-one">'+gEsc(mkOne(s))+'</p>'
     +'<div class="mk-c-main"><div class="mk-c-ret"><small>수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b></div>'+mkSpark(r.eq,104,42)+'</div>'
-    +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>최소 금액</small><b>'+mkMin(s)+' USDT</b></div></div>'
+    +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>거래 수</small><b>'+Number(r.n||0).toLocaleString()+'회</b></div></div>'
     +'<div class="mk-c-acts">'+(s.me?'':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')+'<button type="button" class="mk-btn2" onclick="tfSS3Go(\''+ne+'\')">자세히</button></div>'
     +'</article>';
 }
