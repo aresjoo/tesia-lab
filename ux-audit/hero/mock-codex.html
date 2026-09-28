@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="TETH AI 트레이딩의 오늘 결과와 판단 이유를 먼저 보여주는 디자인 시안">
+<link rel="icon" href="../../assets/favicon.png">
+<title>TETH | 판단이 보이는 AI 트레이딩</title>
+<style>
+:root{--bg:#0c0d0f;--panel:#15171b;--text:#f4f5f7;--muted:#a6abb5;--line:#292c33;--blue:#aac4ff;--lime:#c8f43c;--font:"Pretendard Variable","Pretendard","Inter",-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+*{box-sizing:border-box}html{scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}a{color:inherit;text-decoration:none}button{color:inherit}a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:5px}h1,h2,h3,p{margin:0}svg{flex-shrink:0}button svg,a svg{pointer-events:none}.icon{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.skip{position:fixed;left:16px;top:-80px;z-index:10;padding:12px;background:white;color:black}.skip:focus{top:12px}
+.sidebar{position:fixed;inset:0 auto 0 0;width:300px;padding:34px 22px 22px;background:#111214;border-right:1px solid #222429;display:flex;flex-direction:column;z-index:5}.brand{display:inline-flex;align-items:center;gap:11px;font-size:24px;letter-spacing:1px;font-weight:700;line-height:1}.brand img{width:30px;height:19px;object-fit:contain}.sidebar .brand{padding:0 14px}.nav{margin-top:51px;display:grid;gap:8px}.nav a,.nav button{display:flex;align-items:center;gap:13px;padding:13px 15px;border:0;border-radius:9px;background:none;font-size:14px;text-align:left;color:#babdc5}.nav a[aria-current]{background:#24262a;color:white}.nav button:disabled{opacity:.48;cursor:default}.sidebar-bottom{margin-top:auto;border-top:1px solid var(--line);padding:22px 12px 0}.sidebar-bottom p{font-size:12px;color:var(--muted);margin-bottom:15px}.login{min-height:42px;border:1px solid #45484f;border-radius:24px;background:transparent;padding:8px 22px;font-size:13px;font-weight:600}.sidebar .login{width:100%}.login:hover{background:#24262b}.mobile-header{display:none}main{margin-left:300px}.page-top{height:66px;display:flex;align-items:center;justify-content:space-between;margin:0 42px;border-bottom:1px solid #1e2025;font-size:12px;color:var(--muted)}.page-top span:first-child{color:#e0e2e8;font-weight:500}.page-top span:last-child{font-size:11px;letter-spacing:1.6px}
+.hero{position:relative;isolation:isolate;overflow:hidden;padding:45px 32px 50px;background:#0c0d0f}.hero-media{position:absolute;inset:auto 0 0;height:480px;z-index:-2;pointer-events:none}.hero-media img,.hero-media video{position:absolute;width:100%;height:100%;object-fit:cover;object-position:50% 70%}.hero-media video{opacity:0}.hero-media video.ready{opacity:1}.hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(#0c0d0f 0%,rgba(12,13,15,.27) 28%,rgba(12,13,15,.05) 65%,#0c0d0f 100%)}.hero-copy{text-align:center;position:relative}.eyebrow{color:var(--blue);font-size:11px;font-weight:600;letter-spacing:2px}.hero h1{font-size:54px;letter-spacing:-2.8px;line-height:1.21;font-weight:600;margin-top:17px}.hero-sub{color:#b8bdc7;font-size:15px;line-height:1.8;margin-top:19px;word-break:keep-all}.actions{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:25px}.primary{display:inline-flex;align-items:center;justify-content:center;gap:22px;min-height:50px;border:0;border-radius:28px;padding:12px 26px;background:var(--lime);color:#141800;font-weight:650;font-size:14px}.primary:hover{background:#d4fc63}.secondary{display:inline-flex;gap:8px;align-items:center;min-height:44px;font-size:13px;color:#d1d5dd}.secondary:hover{text-decoration:underline;text-underline-offset:5px}.command{max-width:790px;margin:38px auto 0;border:1px solid #48536c;border-radius:15px;background:#13161cf5;box-shadow:0 18px 70px #0008;text-align:left;overflow:hidden;scroll-margin-top:30px}.command-head{height:51px;padding:0 24px;border-bottom:1px solid #2c323e;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#1a1e27}.command-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px}.status-dot{width:6px;height:6px;border-radius:50%;background:#a8c2ff}.demo-badge{font-size:10px;color:#c0c8d9;border:1px solid #485163;padding:2px 8px;border-radius:5px}.command-body{display:grid;grid-template-columns:230px 1fr;padding:24px;gap:27px}.result{border-right:1px solid #30343d;padding-right:24px}.result-label{font-size:12px;color:#c2c6cf;display:flex;justify-content:space-between}.result-label span{font-size:10px;color:#929bab}.amount{font-size:32px;letter-spacing:-1px;line-height:1.2;font-weight:550;font-variant-numeric:tabular-nums;margin-top:10px;color:#f3ddd8}.amount small{font-size:16px;font-weight:400;margin-left:4px}.result-note{font-size:10px;color:#a3aab7;margin-top:8px}.result dl{margin:23px 0 0;display:flex;justify-content:space-between;font-size:11px}.result dt{color:var(--muted)}.result dd{margin:0;color:#e3e6ed;font-weight:500}.decision-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px;color:#a9b2c3}.symbol{display:flex;gap:7px;align-items:center;color:#dce1eb;letter-spacing:.4px;font-size:11px}.symbol img{width:19px;height:19px}.decision h2{font-size:20px;font-weight:550;letter-spacing:-.7px;margin:15px 0 8px}.decision p{font-size:12px;line-height:1.8;color:#bec5d1;word-break:keep-all;max-width:370px}.decision-foot{display:flex;align-items:center;gap:10px;border-top:1px solid #2d333f;padding-top:13px;margin-top:18px;font-size:10px;color:#c0c7d4}.wait-tag{padding:2px 8px;border-radius:4px;background:#2b3446;color:#cbd9f9}.demo-note{font-size:10px;color:#aeb6c8;text-align:center;margin-top:15px}.media-control{display:flex;justify-content:center;margin-top:10px}.media-control button{display:flex;gap:6px;align-items:center;min-height:32px;padding:3px 11px;background:#12161ee6;border:1px solid #323a4b;border-radius:18px;font-size:10px;color:#c1c8d6}.media-control button:disabled{cursor:default}.media-control svg{width:10px;height:10px}
+.content{max-width:960px;margin:auto;padding:0 48px}.section{padding:68px 0;border-bottom:1px solid var(--line)}.section-kicker{font-size:10px;letter-spacing:1.8px;color:#9fa7b7;display:block;margin-bottom:12px}.section h2{font-size:29px;line-height:1.35;letter-spacing:-1.1px;font-weight:550}.section-lead{font-size:13px;color:var(--muted);margin-top:11px;word-break:keep-all}.strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:29px}.strategy{border:1px solid #2d3037;border-radius:12px;padding:22px 21px;background:#14161a;display:flex;flex-direction:column;min-height:222px}.strategy .strategy-icon{height:35px;display:flex;align-items:flex-start;color:#b2c6f1}.strategy-icon svg{width:23px;height:23px}.strategy h3{font-size:16px;font-weight:550;margin:8px 0}.strategy p{font-size:12px;line-height:1.85;color:#adb3bf;word-break:keep-all}.strategy-meta{margin-top:auto;padding-top:20px;font-size:10px;color:#b3bfd4;display:flex;align-items:center;gap:7px}.strategy-meta:before{content:"";width:4px;height:4px;background:#829ac8;border-radius:50%}.steps{list-style:none;padding:0;margin:31px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:30px;counter-reset:steps}.steps li{position:relative;border-top:1px solid #434955;padding-top:20px}.step-no{font-size:11px;color:#a3b6dc;font-variant-numeric:tabular-nums;letter-spacing:1px}.steps h3{font-size:16px;font-weight:550;margin:12px 0 8px}.steps p{font-size:12px;line-height:1.85;color:var(--muted);word-break:keep-all}.control-section{display:grid;grid-template-columns:1fr 1.12fr;gap:36px;padding-bottom:64px}.control-copy h2{max-width:310px}.control-copy .section-lead{max-width:300px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:25px 20px;padding-top:4px}.control-item svg{color:#a5bade;width:19px;height:19px;margin-bottom:9px}.control-item h3{font-size:13px;font-weight:550;margin-bottom:5px}.control-item p{font-size:11px;color:var(--muted);line-height:1.8;word-break:keep-all}.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 0 35px;color:#969da9;font-size:10px}.footer strong{color:#c2c6ce;letter-spacing:1px;font-size:12px}.toast{position:fixed;bottom:22px;left:calc(50% + 150px);transform:translateX(-50%);width:max-content;max-width:calc(100vw - 36px);background:#252a34;color:#f1f4fa;box-shadow:0 6px 32px #0008;border:1px solid #53617b;border-radius:10px;padding:14px 19px;font-size:13px;z-index:20}.toast:empty{display:none}
+@media(min-width:1600px){.hero{padding-top:64px}.hero h1{font-size:62px}}
+@media(max-width:1100px) and (min-width:701px){.sidebar{width:240px}main{margin-left:240px}.hero h1{font-size:43px}.command-body{grid-template-columns:175px 1fr;padding:20px;gap:20px}.amount{font-size:28px}.content{padding:0 32px}.strategy-grid{gap:9px}.strategy{padding:18px 15px}.control-section{grid-template-columns:1fr}.toast{left:calc(50% + 120px)}}
+@media(max-width:700px){.sidebar,.page-top{display:none}.mobile-header{height:66px;padding:0 21px;display:flex;align-items:center;justify-content:space-between;background:#101113;border-bottom:1px solid #23252a}.mobile-header .brand{font-size:21px;gap:8px}.mobile-header .brand img{width:25px;height:17px}.mobile-header .login{font-size:11px;min-height:36px;padding:6px 16px}main{margin-left:0}.hero{padding:33px 20px 30px}.hero h1{font-size:34px;letter-spacing:-1.6px;line-height:1.28;margin-top:14px}.eyebrow{font-size:10px;letter-spacing:1.5px}.hero-sub{font-size:12px;line-height:1.85;margin-top:16px}.actions{margin-top:21px;gap:19px}.primary{font-size:12px;min-height:46px;padding:10px 21px;gap:15px}.secondary{font-size:11px}.hero-media{height:440px;bottom:0}.hero-media img,.hero-media video{object-fit:cover;object-position:50% 75%}.hero-media:after{background:linear-gradient(#0c0d0f,rgba(12,13,15,.15) 25%,rgba(12,13,15,.08) 65%,#0c0d0f)}.command{margin-top:29px;border-radius:12px}.command-head{height:44px;padding:0 17px}.command-title{font-size:11px}.demo-badge{font-size:9px}.command-body{display:block;padding:17px}.result{border-right:0;border-bottom:1px solid #303641;padding:0 0 17px;display:grid;grid-template-columns:1fr auto;column-gap:10px}.result-label{font-size:11px;grid-column:1;gap:9px;justify-content:flex-start}.result-label span{font-size:9px}.amount{font-size:27px;margin-top:7px;grid-column:1}.amount small{font-size:13px}.result-note{grid-column:1;font-size:9px;margin-top:5px}.result dl{grid-column:2;grid-row:1/4;flex-direction:column;justify-content:center;gap:8px;align-items:flex-end;margin:0;font-size:10px}.result dl div{display:flex;gap:10px}.decision{padding-top:17px}.decision-top{font-size:9px}.symbol{font-size:10px}.symbol img{width:17px;height:17px}.decision h2{font-size:18px;margin-top:12px;letter-spacing:-.7px}.decision p{font-size:11px;line-height:1.85}.decision-foot{font-size:9px;margin-top:15px;padding-top:12px;gap:8px}.demo-note{font-size:9px;margin-top:13px}.media-control{margin-top:9px}.content{padding:0 23px}.section{padding:43px 0}.section-kicker{font-size:9px;margin-bottom:10px}.section h2{font-size:25px;letter-spacing:-1px;line-height:1.4}.section-lead{font-size:12px;line-height:1.85;margin-top:10px}.strategy-grid{grid-template-columns:1fr;gap:10px;margin-top:23px}.strategy{min-height:0;padding:19px 19px 18px;display:grid;grid-template-columns:32px 1fr;column-gap:9px}.strategy .strategy-icon{grid-row:1/4;padding-top:5px}.strategy h3{margin:0 0 6px;font-size:15px}.strategy p{font-size:11px}.strategy-meta{padding-top:12px;font-size:9px;grid-column:2}.steps{grid-template-columns:1fr;gap:0;margin-top:22px}.steps li{padding:18px 0 19px 40px;border-top:1px solid #30343c}.step-no{position:absolute;top:22px;left:0;font-size:10px}.steps h3{font-size:15px;margin:0 0 6px}.steps p{font-size:11px}.control-section{grid-template-columns:1fr;gap:27px}.control-copy h2{max-width:none}.controls{gap:25px 22px}.control-item p{font-size:11px}.control-item h3{font-size:13px}.footer{align-items:flex-start;font-size:9px;line-height:1.9;padding:22px 0 30px}.footer span{max-width:235px;text-align:right}.toast{left:50%;font-size:12px;bottom:16px}}
+@media(prefers-reduced-motion:reduce){.hero-media video{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<aside class="sidebar" aria-label="주 메뉴">
+  <a class="brand" href="#main" aria-label="TETH 홈"><img src="../../assets/logo-sm.png" alt="">TETH</a>
+  <nav class="nav">
+    <button type="button" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>새 전략</button>
+    <a href="#main" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7 15 3-4 3 2 4-5"/></svg>AI 트레이딩</a>
+    <a href="#follow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 12 4 4M5 19l3-7 9-8 3 3-8 9-7 3ZM14 7l3 3M4 7h5M17 17v4"/></svg>전략 따라하기</a>
+  </nav>
+  <div class="sidebar-bottom"><p>내 전략을 이어서 관리해요</p><button class="login" type="button" data-demo>로그인</button></div>
+</aside>
+<header class="mobile-header"><a class="brand" href="#main" aria-label="TETH 홈"><img src="../../assets/logo-sm.png" alt="">TETH</a><button class="login" type="button" data-demo>로그인</button></header>
+<main id="main">
+  <div class="page-top"><span>AI 트레이딩</span><span>TETH AI</span></div>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true"><img src="../../assets/hero-tiles-end.jpg" alt="" width="1440" height="480" fetchpriority="high"><template id="video-template"><video autoplay muted loop playsinline preload="none" src="../../assets/halo.mp4" poster="../../assets/hero-tiles-end.jpg" tabindex="-1"></video></template></div>
+    <div class="hero-copy"><p class="eyebrow">판단이 보이는 AI 트레이딩</p><h1 id="hero-title">TETH가 거래하고,<br>이유까지 보여줘요.</h1><p class="hero-sub">전략을 만들고, 검증하고, 실행해요.<br>오늘 무슨 일이 있었는지 한 화면에서 확인해요.</p><div class="actions"><button class="primary" type="button" data-demo>무료로 시작 <span aria-hidden="true">↗</span></button><a class="secondary" href="#command">상황실 먼저 보기 <span aria-hidden="true">↓</span></a></div></div>
+    <div class="command" id="command" role="region" aria-label="TETH 상황실 데모">
+      <div class="command-head"><span class="command-title"><span class="status-dot" aria-hidden="true"></span>TETH 상황실</span><span class="demo-badge">화면 예시</span></div>
+      <div class="command-body">
+        <div class="result"><div class="result-label">오늘 결과 <span>00:00부터</span></div><div class="amount">−2,400<small>원</small></div><p class="result-note">실현 손익, 수수료 포함</p><dl><div><dt>체결</dt><dd>2건</dd></div><div><dt>보유 포지션</dt><dd>없음</dd></div></dl></div>
+        <article class="decision"><div class="decision-top"><span class="symbol"><img src="../../assets/logos/btc.svg" alt="">BTC / USDT</span><span>TETH의 판단 <time>14:30</time></span></div><h2>지금은 사지 않고 기다려요.</h2><p>가격은 올랐지만 거래량이 충분하지 않아요.<br>추격 매수 대신, 다음 신호를 확인해요.</p><div class="decision-foot"><span class="wait-tag">관망</span><span>다음 확인 14:45</span><span aria-hidden="true">/</span><span>15분마다 판단해요</span></div></article>
+      </div>
+    </div>
+    <p class="demo-note">가상 데이터로 구성한 화면이에요. 실제 거래 결과가 아니에요.</p>
+    <div class="media-control"><button id="motion-toggle" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2v8M8 2v8"/></svg><span>배경 영상 멈추기</span></button></div>
+  </section>
+  <div class="content">
+    <section class="section" aria-labelledby="strategies-title"><span class="section-kicker">01 / 내 방식으로</span><h2 id="strategies-title">맡기는 방식도, 내가 정해요.</h2><p class="section-lead">AI의 판단부터 직접 만든 규칙까지, 나에게 맞는 전략으로 시작해요.</p><div class="strategy-grid">
+      <article class="strategy"><div class="strategy-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 6.2L21 12l-6.2 2.8L12 21l-2.8-6.2L3 12l6.2-2.8Z"/></svg></div><h3>AI가 판단해요</h3><p>시장 흐름을 살피고 매수할지,<br>기다릴지 이유와 함께 알려줘요.</p><span class="strategy-meta">상황에 따라 달라지는 판단</span></article>
+      <article class="strategy"><div class="strategy-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M12 4v16M19 4v16"/><path d="M2 8h6M9 16h6M16 10h6"/></svg></div><h3>내 규칙대로 실행해요</h3><p>언제 사고팔지 직접 정해요.<br>조건이 맞으면 전략을 실행해요.</p><span class="strategy-meta">내가 정한 조건으로 거래</span></article>
+      <article class="strategy" id="follow"><div class="strategy-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 5V4H4v11h1M12 14h4M14 12v4"/></svg></div><h3>다른 전략을 따라가요</h3><p>전략의 기록과 위험을 살펴보고,<br>내 예산으로 따라가요.</p><span class="strategy-meta">기록을 확인하고 선택</span></article>
+    </div></section>
+    <section class="section" id="start" aria-labelledby="start-title"><span class="section-kicker">02 / 생각에서 실행까지</span><h2 id="start-title">한 문장이 전략의 시작이에요.</h2><p class="section-lead">바로 거래하지 않아요. 먼저 만들고, 살펴보고, 결정해요.</p><ol class="steps"><li><span class="step-no">01</span><h3>원하는 전략을 말해요</h3><p>“비트코인이 급하게 오르면<br>추격하지 말고 기다려줘.”</p></li><li><span class="step-no">02</span><h3>먼저 검증해요</h3><p>과거 데이터로 결과를 살펴보고,<br>손실이 컸던 구간도 확인해요.</p></li><li><span class="step-no">03</span><h3>확인한 뒤 실행해요</h3><p>예산과 거래소를 확인하고,<br>내가 승인하면 시작해요.</p></li></ol></section>
+    <section class="section control-section" aria-labelledby="control-title"><div class="control-copy"><span class="section-kicker">03 / 결정권은 나에게</span><h2 id="control-title">맡겨도, 통제는<br>내 손에 있어요.</h2><p class="section-lead">얼마를 쓸지, 언제 멈출지.<br>실행 전에도 실행 중에도 확인해요.</p></div><div class="controls">
+      <article class="control-item"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 9h18M15 14h3"/></svg><h3>전략별 예산</h3><p>전략에 사용할 금액을<br>직접 정해요.</p></article>
+      <article class="control-item"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><h3>실행 전 승인</h3><p>조건을 확인한 뒤<br>내가 실행을 결정해요.</p></article>
+      <article class="control-item"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7zM10 8h4M10 12h4M10 16h2"/></svg><h3>판단과 거래 기록</h3><p>무엇을 보고 거래했는지<br>기록으로 되짚어봐요.</p></article>
+      <article class="control-item"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 8v8M15 8v8"/></svg><h3>언제든 멈추기</h3><p>상황실에서 운용 상태를 보고<br>전략을 멈출 수 있어요.</p></article>
+    </div></section>
+    <footer class="footer"><strong>TETH</strong><span>AI 트레이딩 디자인 시안<br>모든 화면과 거래 데이터는 데모예요.</span></footer>
+  </div>
+</main>
+<div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<script>
+(() => {
+  const media = document.querySelector('.hero-media');
+  const button = document.querySelector('#motion-toggle');
+  const label = button.querySelector('span');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let video, observer, visible = false, userPaused = false, scheduled = false, failed = false;
+  const updateLabel = () => {
+    button.disabled = reduced.matches || failed;
+    button.setAttribute('aria-pressed', String(userPaused));
+    label.textContent = reduced.matches || failed ? '정지 이미지로 보고 있어요' : userPaused ? '배경 영상 재생하기' : '배경 영상 멈추기';
+  };
+  const sync = () => {
+    updateLabel();
+    if (!video) return;
+    if (reduced.matches || userPaused || !visible || document.hidden || failed) video.pause();
+    else video.play().catch(() => { userPaused = true; updateLabel(); });
+  };
+  const mount = () => {
+    scheduled = false;
+    if (video || reduced.matches || !visible || document.hidden) return;
+    media.append(document.querySelector('#video-template').content.cloneNode(true));
+    video = media.querySelector('video');
+    video.muted = true;
+    const showFrame = time => video.classList.toggle('ready', time >= .3 && !failed);
+    video.addEventListener('timeupdate', () => showFrame(video.currentTime));
+    if ('requestVideoFrameCallback' in video) {
+      const nextFrame = (_, metadata) => { showFrame(metadata.mediaTime); video.requestVideoFrameCallback(nextFrame); };
+      video.requestVideoFrameCallback(nextFrame);
+    }
+    video.addEventListener('error', () => { failed = true; video.classList.remove('ready'); sync(); });
+    sync();
+  };
+  const schedule = () => {
+    if (video || scheduled || reduced.matches || !visible) return;
+    scheduled = true;
+    if ('requestIdleCallback' in window) requestIdleCallback(mount, {timeout: 700});
+    else setTimeout(mount, 120);
+  };
+  observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; schedule(); sync(); }, {threshold: 0});
+  observer.observe(document.querySelector('.hero'));
+  button.addEventListener('click', () => { userPaused = !userPaused; schedule(); sync(); });
+  reduced.addEventListener('change', () => { schedule(); sync(); });
+  document.addEventListener('visibilitychange', () => { schedule(); sync(); });
+  updateLabel();
+  let toastTimer;
+  document.querySelectorAll('[data-demo]').forEach(el => el.addEventListener('click', () => {
+    const toast = document.querySelector('.toast');
+    toast.textContent = '디자인 시안이에요. 실제 가입이나 거래는 진행되지 않아요.';
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { toast.textContent = ''; }, 4500);
+  }));
+})();
+</script>
+</body>
+</html>

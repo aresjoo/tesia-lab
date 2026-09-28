@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TETH AI 트레이딩 시안 light</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#0c0d0f; --bg-2:#111215; --card:#15171b; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --t1:#f4f5f7; --t2:rgba(244,245,247,.72); --t3:rgba(244,245,247,.52);
+  --lime:#c8f43c; --lime-ink:#101300; --blue:#8fb2ff;
+  --font:"Pretendard Variable","Pretendard","Inter",-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --serif:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --side:300px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{background:linear-gradient(90deg,var(--bg-2) 0 var(--side),rgba(255,255,255,.08) var(--side) calc(var(--side) + 1px),var(--bg) calc(var(--side) + 1px));color:var(--t1);font-family:var(--font);-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ── 가짜 사이드바 (현재 구조 그대로: 새 전략 / AI 트레이딩 / 전략 따라하기 + 하단 로그인) ── */
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--bg-2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:10}
+.side .logo{display:flex;align-items:center;gap:9px;padding:4px 10px 22px;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.side .logo img{width:30px;height:auto}
+.side .it{display:flex;align-items:center;gap:11px;height:40px;padding:0 12px;border-radius:10px;font-size:14.5px;color:var(--t2)}
+.side .it svg{flex:none;opacity:.9}
+.side .it.on{background:rgba(255,255,255,.07);color:var(--t1);font-weight:600}
+.side .grow{flex:1}
+.side .login{height:44px;border-radius:999px;border:1px solid var(--line-2);font-weight:600;font-size:14.5px;color:var(--t1)}
+.topbar{display:none}
+.mbr{display:none}
+
+main{margin-left:var(--side);min-width:0}
+
+/* ── 히어로: 빛 위에 서 있는 한 문장 ── */
+.hero{position:relative;height:clamp(640px,82vh,800px);overflow:hidden;isolation:isolate;background:var(--bg)}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;z-index:-2}
+/* 위쪽은 페이지 바탕으로 녹여 여백을 만들고, 글자 뒤에만 아주 옅은 타원 그늘을 깐다 */
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 40% 21% at 50% 45%,rgba(4,6,14,.62) 0%,rgba(4,6,14,.35) 55%,rgba(4,6,14,0) 100%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg) 18%,rgba(12,13,15,.6) 24%,rgba(12,13,15,.15) 36%,rgba(12,13,15,0) 44%),
+    linear-gradient(0deg,var(--bg) 0%,rgba(12,13,15,0) 9%)}
+.hero-in{position:absolute;left:0;right:0;top:27%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 32px}
+.eyebrow{font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--t2)}
+.h1{margin-top:18px;font-family:var(--serif);font-weight:600;font-size:clamp(44px,5.2vw,72px);line-height:1.12;letter-spacing:-.025em;color:#fff;text-shadow:0 2px 24px rgba(0,0,10,.55)}
+.sub{margin-top:18px;font-size:17px;line-height:1.55;color:rgba(255,255,255,.9);text-shadow:0 1px 14px rgba(0,0,10,.7)}
+.cta-row{margin-top:34px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.cta{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border-radius:999px;background:var(--lime);color:var(--lime-ink);font-weight:700;font-size:16.5px;box-shadow:0 10px 40px rgba(200,244,60,.22),0 2px 0 rgba(255,255,255,.35) inset}
+/* 보조 링크는 빛 한가운데 떨어지므로 어두운 유리 캡슐로 대비를 스스로 확보한다 */
+.ghost-link{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:600;color:#fff;background:rgba(6,8,16,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+
+/* ── 아래 섹션 공통 ── */
+.sec{max-width:1000px;margin:0 auto;padding:112px 40px 0}
+.kicker{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+.h2{margin-top:12px;font-size:34px;line-height:1.3;font-weight:700;letter-spacing:-.025em}
+.lead{margin-top:12px;font-size:16.5px;line-height:1.65;color:var(--t2);max-width:560px}
+
+/* 1. 지금 TETH가 하는 일 */
+.now{margin-top:36px;display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.jc{padding:26px 28px}
+.jc-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pair{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
+.dot{width:8px;height:8px;border-radius:50%;background:#7cd992;box-shadow:0 0 0 4px rgba(124,217,146,.14)}
+.tag{font-size:12px;font-weight:600;color:var(--t3);border:1px solid var(--line-2);border-radius:999px;padding:4px 10px}
+.verdict{margin-top:22px;font-size:26px;font-weight:700;letter-spacing:-.02em}
+.verdict small{display:block;margin-top:6px;font-size:14.5px;font-weight:500;color:var(--t2);letter-spacing:0}
+.why{margin-top:22px;border-top:1px solid var(--line);padding-top:18px;display:grid;gap:12px}
+.why li{list-style:none;display:grid;grid-template-columns:22px 1fr;font-size:15px;line-height:1.55;color:var(--t2)}
+.why li b{color:var(--t1);font-weight:600}
+.why i{font-style:normal;color:var(--blue);font-weight:700;font-size:13px;padding-top:2px}
+.jc-foot{margin-top:20px;font-size:13px;color:var(--t3)}
+.side-note{padding:26px 28px;display:flex;flex-direction:column;gap:22px}
+.sn h3{font-size:15.5px;font-weight:700}
+.sn p{margin-top:6px;font-size:14.5px;line-height:1.6;color:var(--t2)}
+
+/* 2. 이런 방식으로 돌려요 */
+.modes{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mode{padding:26px 24px 24px;display:flex;flex-direction:column}
+.chip{align-self:flex-start;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(143,178,255,.12);color:var(--blue)}
+.mode h3{margin-top:16px;font-size:19px;font-weight:700;letter-spacing:-.015em;line-height:1.4}
+.mode p{margin-top:10px;font-size:14.5px;line-height:1.65;color:var(--t2)}
+.mode .fit{margin-top:auto;padding-top:20px;font-size:13.5px;color:var(--t3)}
+.mode .fit b{color:var(--t1);font-weight:600}
+
+/* 3. 어떻게 시작하나요 */
+.steps{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line-2)}
+.step{padding:24px 24px 0 0}
+.step + .step{padding-left:24px;border-left:1px solid var(--line)}
+.step .n{font-size:13px;font-weight:700;color:var(--t3)}
+.step h3{margin-top:10px;font-size:18px;font-weight:700;letter-spacing:-.015em}
+.step p{margin-top:8px;font-size:14.5px;line-height:1.65;color:var(--t2)}
+.step .eg{margin-top:14px;display:inline-block;font-size:13.5px;color:var(--t1);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:9px 12px;line-height:1.5}
+
+/* 4. 내 돈은 어떻게 지키나요 */
+.guards{margin-top:36px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.guard{padding:24px 26px;display:grid;grid-template-columns:40px 1fr;gap:4px 14px;align-items:start}
+.guard .ic{grid-row:span 2;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.05);display:grid;place-items:center;color:var(--t1)}
+.guard h3{font-size:17px;font-weight:700;letter-spacing:-.01em;padding-top:2px}
+.guard p{font-size:14.5px;line-height:1.65;color:var(--t2)}
+
+/* 마지막: 빛으로 한 번 더 */
+.final{position:relative;margin:120px 0 0;height:420px;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:86px;text-align:center}
+.final .bgimg{position:absolute;inset:0;z-index:-2;background:url(../../assets/hero-tiles-end.jpg) 50% 100%/cover no-repeat;opacity:.55}
+.final::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--bg) 0%,rgba(12,13,15,.9) 30%,rgba(12,13,15,.35) 70%,rgba(12,13,15,.2) 100%)}
+.final h2{font-family:var(--serif);font-weight:600;font-size:40px;letter-spacing:-.02em;line-height:1.25}
+.final p{margin-top:12px;font-size:16px;color:var(--t2)}
+.final .btn2{margin-top:28px;height:48px;padding:0 28px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(12,13,15,.5);font-weight:700;font-size:15.5px;display:inline-flex;align-items:center}
+footer{padding:28px 40px 40px;text-align:center;font-size:12.5px;color:var(--t3)}
+
+/* ── 390: 사이드바 대신 상단 바, 헤드라인을 먼저 세우고 그 아래 빛의 가운데만 잘라 보여준다 ── */
+@media (max-width:760px){
+  .side{display:none}
+  body{background:var(--bg)}
+  .mbr{display:inline}
+  main{margin-left:0}
+  .topbar{display:flex;position:sticky;top:0;z-index:10;height:56px;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(12,13,15,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+  .topbar .logo img{width:26px}
+  .topbar .login{height:34px;padding:0 16px;border-radius:999px;border:1px solid var(--line-2);font-size:13.5px;font-weight:600}
+
+  .hero{height:auto;overflow:visible;background:var(--bg);display:flex;flex-direction:column}
+  .hero::before{display:none}
+  .hero-in{position:static;padding:44px 20px 0;order:1}
+  .h1{font-size:40px;line-height:1.18;margin-top:14px}
+  .sub{font-size:15.5px;margin-top:14px}
+  .cta-row{display:none}
+  .stage{order:2;position:relative;height:360px;margin-top:-6px;overflow:hidden;isolation:isolate}
+  .stage video{position:absolute;left:50%;right:auto;bottom:0;top:auto;width:auto;height:100%;transform:translateX(-50%);object-fit:cover;z-index:-2}
+  .stage::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--bg) 0%,rgba(12,13,15,.55) 16%,rgba(12,13,15,0) 34%),linear-gradient(0deg,var(--bg) 0%,rgba(12,13,15,0) 12%)}
+  .stage .cta-row.m{display:flex;margin-top:0;position:absolute;left:0;right:0;top:52px}
+  .cta{height:54px;padding:0 36px}
+  .sec{padding:84px 16px 0}
+  .h2{font-size:26px}
+  .lead{font-size:15.5px}
+  .now,.modes,.guards{grid-template-columns:1fr}
+  .jc,.side-note{padding:22px 20px}
+  .verdict{font-size:23px}
+  .steps{grid-template-columns:1fr;border-top:0}
+  .step,.step + .step{padding:20px 0;border-left:0;border-top:1px solid var(--line)}
+  .guard{padding:20px}
+  .final{height:380px;padding:72px 16px 0;margin-top:92px}
+  .final h2{font-size:30px}
+  footer{padding:24px 16px 36px}
+}
+@media (min-width:761px){ .stage{position:absolute;left:0;right:0;top:18%;bottom:0;z-index:-2} .stage .cta-row.m{display:none} }
+</style>
+</head>
+<body>
+
+<aside class="side" aria-label="사이드바">
+  <div class="logo"><img src="../../assets/logo-sm.png" alt="">TETH</div>
+  <a class="it" href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z"/></svg>새 전략</a>
+  <a class="it on" href="#" aria-current="page"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 15l3-4 2.5 2.5L17 9"/></svg>AI 트레이딩</a>
+  <a class="it" href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z"/><path d="M9 12H4s.5-3.6 2-5c1.6-1.5 5 0 5 0"/><path d="M12 15v5s3.6-.5 5-2c1.5-1.6 0-5 0-5"/></svg>전략 따라하기</a>
+  <div class="grow"></div>
+  <button class="login">로그인</button>
+</aside>
+
+<main>
+  <header class="topbar">
+    <div class="logo"><img src="../../assets/logo-sm.png" alt="">TETH</div>
+    <button class="login">로그인</button>
+  </header>
+
+  <section class="hero" aria-label="AI 트레이딩">
+    <div class="stage">
+      <video autoplay muted loop playsinline src="../../assets/halo.mp4" poster="../../assets/hero-tiles-end.jpg"></video>
+      <div class="cta-row m">
+        <a class="cta" href="#">무료로 시작</a>
+        <a class="ghost-link" href="#now">먼저 어떻게 판단하는지 볼게요</a>
+      </div>
+    </div>
+    <div class="hero-in">
+      <div class="eyebrow">AI 트레이딩</div>
+      <h1 class="h1">차트는 <br class="mbr">TETH가 볼게요</h1>
+      <p class="sub">AI가 시장을 보고 사고, 팔고, 기다려요.<br>왜 그랬는지도 매번 남겨요.</p>
+      <div class="cta-row">
+        <a class="cta" href="#">무료로 시작</a>
+        <a class="ghost-link" href="#now">먼저 어떻게 판단하는지 볼게요</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. 추상을 구체로: 지금 이 순간의 판단 한 장 -->
+  <section class="sec" id="now">
+    <div class="kicker">지금 TETH가 하는 일</div>
+    <h2 class="h2">지금 이 순간에도 이렇게 판단하고 있어요</h2>
+    <p class="lead">사고 파는 것만이 판단이 아니에요. 들어가지 않고 기다리는 것도 판단이고, 그 이유를 그대로 보여드려요.</p>
+    <div class="now">
+      <article class="card jc">
+        <div class="jc-top">
+          <div class="pair"><span class="dot"></span>BTC/USDT</div>
+          <span class="tag">시뮬레이션 예시예요</span>
+        </div>
+        <div class="verdict">지금은 기다려요<small>다음 4시간봉이 닫히면 다시 봐요</small></div>
+        <ul class="why">
+          <li><i>1</i><span><b>큰 흐름은 아직 위쪽이에요.</b> 하루 단위 추세가 꺾이지 않았어요.</span></li>
+          <li><i>2</i><span><b>그런데 힘이 빠지고 있어요.</b> 최근 오름폭이 점점 작아지고 있어요.</span></li>
+          <li><i>3</i><span><b>그래서 서두르지 않아요.</b> 확인이 한 번 더 되면 작게 들어가요.</span></li>
+        </ul>
+        <div class="jc-foot">이 판단은 기록에 남고, 언제든 다시 열어볼 수 있어요.</div>
+      </article>
+      <div class="card side-note">
+        <div class="sn"><h3>밤에도 같은 기준으로 봐요</h3><p>피곤하거나 겁이 나도 기준이 흔들리지 않아요. 정해 둔 방식대로 계속 확인해요.</p></div>
+        <div class="sn"><h3>이유 없는 매매는 없어요</h3><p>들어갈 때도, 나올 때도, 참을 때도 한 줄씩 이유를 남겨요.</p></div>
+        <div class="sn"><h3>이해가 안 되면 물어보면 돼요</h3><p>판단 카드마다 "왜?"를 누르면 쉬운 말로 다시 설명해요.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 내게 맞는 방식 고르기 -->
+  <section class="sec">
+    <div class="kicker">이런 방식으로 돌려요</div>
+    <h2 class="h2">세 가지 중에 편한 방식을 고르면 돼요</h2>
+    <div class="modes">
+      <article class="card mode">
+        <span class="chip">AI 판단</span>
+        <h3>AI가 직접 보고 결정해요</h3>
+        <p>차트, 뉴스 흐름, 시장 분위기를 함께 보고 들어갈지, 줄일지, 기다릴지 정해요.</p>
+        <div class="fit"><b>이런 분께 맞아요</b> 전략을 짤 시간이 없을 때</div>
+      </article>
+      <article class="card mode">
+        <span class="chip">규칙</span>
+        <h3>내가 말한 규칙대로 움직여요</h3>
+        <p>"많이 떨어졌다가 반등하면 사고 싶어"처럼 말하면 규칙으로 바꾸고, 과거 데이터로 먼저 확인해요.</p>
+        <div class="fit"><b>이런 분께 맞아요</b> 내 생각을 그대로 돌려보고 싶을 때</div>
+      </article>
+      <article class="card mode">
+        <span class="chip">따라가기</span>
+        <h3>다른 사람의 전략을 따라가요</h3>
+        <p>공개된 전략의 판단 기록을 보고, 마음에 들면 내 예산 안에서 그대로 따라가요.</p>
+        <div class="fit"><b>이런 분께 맞아요</b> 처음이라 기준이 없을 때</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 3. 시작 장벽 낮추기 -->
+  <section class="sec">
+    <div class="kicker">어떻게 시작하나요</div>
+    <h2 class="h2">말로 시작해서, 확인하고, 작게 켜요</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1단계</div>
+        <h3>하고 싶은 걸 말해요</h3>
+        <p>어려운 용어는 몰라도 돼요. 평소 말투로 적으면 TETH가 전략으로 옮겨요.</p>
+        <span class="eg">"비트코인 크게 빠질 때만 조금씩 사고 싶어요"</span>
+      </div>
+      <div class="step">
+        <div class="n">2단계</div>
+        <h3>돈 넣기 전에 먼저 확인해요</h3>
+        <p>지난 시장에서 이 전략이 어떻게 움직였을지, 좋았던 때와 나빴던 때를 함께 보여줘요.</p>
+      </div>
+      <div class="step">
+        <div class="n">3단계</div>
+        <h3>내 거래소에 연결하고 켜요</h3>
+        <p>쓰던 거래소 계정을 연결하고, 부담 없는 금액부터 켜요. 언제든 끌 수 있어요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 마지막 망설임: 내 돈 -->
+  <section class="sec">
+    <div class="kicker">내 돈은 어떻게 지키나요</div>
+    <h2 class="h2">돈은 내 계정에, 한도는 내가 정해요</h2>
+    <div class="guards">
+      <div class="card guard">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+        <h3>돈은 내 거래소에 그대로 있어요</h3>
+        <p>TETH로 돈을 옮기지 않아요. 출금 권한 없이 주문만 할 수 있게 연결해요.</p>
+      </div>
+      <div class="card guard">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M4 6h10"/><path d="M4 18h6"/></svg></span>
+        <h3>쓸 수 있는 금액을 내가 정해요</h3>
+        <p>전략마다 예산과 하루 손실 한도를 걸어요. 한도에 닿으면 스스로 멈춰요.</p>
+      </div>
+      <div class="card guard">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+        <h3>한 번 누르면 바로 멈춰요</h3>
+        <p>마음이 바뀌면 언제든 멈출 수 있어요. 들고 있는 걸 정리할지, 그대로 둘지도 골라요.</p>
+      </div>
+      <div class="card guard">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h9l3 3v13H6z"/><path d="M9 11h6"/><path d="M9 15h6"/></svg></span>
+        <h3>모든 판단이 기록으로 남아요</h3>
+        <p>언제, 무엇을, 왜 했는지 전부 남아요. 숨겨진 매매는 없어요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final" aria-label="시작하기">
+    <div class="bgimg" aria-hidden="true"></div>
+    <h2>오늘은 지켜보기만 해도 돼요</h2>
+    <p>가입하면 AI가 어떻게 판단하는지 먼저 볼 수 있어요.</p>
+    <a class="btn2" href="#">무료로 시작</a>
+  </section>
+  <footer>TETH</footer>
+</main>
+</body>
+</html>
