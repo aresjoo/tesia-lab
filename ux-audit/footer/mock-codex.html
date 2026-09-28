@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko" data-bg="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TETH | Codex footer study</title>
+  <link rel="icon" href="data:,">
+  <script>document.documentElement.dataset.bg = new URLSearchParams(location.search).get('bg') === 'lime' ? 'lime' : 'dark';</script>
+  <style>
+    * { box-sizing: border-box; }
+    html { background: #0f1012; color: #fff; font-family: Arial, 'Malgun Gothic', sans-serif; }
+    body { margin: 0; }
+    a { color: inherit; }
+    button { font: inherit; }
+    :focus-visible { outline: 2px solid currentColor; outline-offset: 5px; border-radius: 2px; }
+    .rail { position: fixed; inset: 0 auto 0 0; width: 64px; background: #101113; border-right: 1px solid #28292c; display: flex; align-items: center; flex-direction: column; gap: 29px; padding: 24px 0; color: #797b81; }
+    .rail-logo { color: #c8f43c; font-size: 26px; font-weight: 900; letter-spacing: -3px; margin-left: -3px; }
+    .rail svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .rail .rail-bottom { margin-top: auto; }
+    .page { margin-left: 64px; min-width: 0; }
+    .context { height: 140px; padding: 26px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .eyebrow { color: #85878c; font-size: 11px; letter-spacing: 1.5px; margin: 0 0 11px; }
+    .context h1 { font-family: Georgia, 'Batang', serif; font-weight: 400; color: #a2a3a7; font-size: 30px; letter-spacing: -1.4px; margin: 0; }
+    .study { color: #85878c; font-size: 11px; white-space: nowrap; }
+    .footer { --muted: #b4b5b8; --rule: #36373a; color: #fff; background: #0f1012; border-top: 1px solid var(--rule); padding: 37px 0 14px; min-height: calc(100svh - 140px); display: flex; flex-direction: column; }
+    [data-bg="lime"] .footer { --muted: #354016; --rule: #91b12c; color: #0c0d0f; background: #c8f43c; }
+    .footer-top { padding: 0 48px; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 64px; }
+    .footer-nav { display: grid; grid-template-columns: 1.05fr .85fr .85fr 1.15fr; gap: 22px; align-items: start; }
+    .footer-nav h2 { color: var(--muted); font-size: 12px; font-weight: 400; margin: 1px 0 15px; }
+    .footer-nav ul { margin: 0; padding: 0; list-style: none; }
+    .footer-nav a { display: flex; align-items: center; min-height: 40px; width: fit-content; font-size: 14px; letter-spacing: -.45px; text-decoration: none; line-height: 1.5; }
+    .footer-nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .disclosure { font-size: 14px; line-height: 1.85; letter-spacing: -.2px; word-break: keep-all; overflow-wrap: anywhere; }
+    .disclosure p { margin: 0; }
+    .disclosure .partner { margin-top: 14px; }
+    .disclosure .risk { border-top: 1px solid var(--rule); margin-top: 20px; padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .disclosure .copyright { color: var(--muted); font-size: 11px; margin-top: 17px; }
+    .brand { margin-top: auto; padding-top: 36px; }
+    .powered { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; line-height: 20px; margin: 0 0 22px; }
+    .powered span { color: var(--muted); margin-right: 2px; }
+    .powered img { height: 20px; width: 20px; border-radius: 5px; }
+    .powered strong { font-weight: 600; font-size: 14px; }
+    .wordmark { display: block; width: calc(100% - 24px); height: auto; margin: 0 12px; overflow: visible; }
+    .wordmark text { font-family: 'Arial Black', Arial, sans-serif; font-weight: 900; fill: currentColor; }
+    dialog { background: #18191c; color: #fff; border: 1px solid #48494d; border-radius: 12px; padding: 28px; max-width: 420px; width: calc(100% - 40px); }
+    dialog::backdrop { background: #000a; }
+    dialog h2 { font-size: 20px; margin: 0 0 16px; }
+    dialog p { font-size: 14px; line-height: 1.8; color: #c1c2c6; }
+    dialog button { background: #c8f43c; border: 0; border-radius: 6px; padding: 12px 22px; color: #0c0d0f; cursor: pointer; }
+    @media (max-width: 1100px) {
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+      .footer-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .disclosure { max-width: 680px; }
+    }
+    @media (max-width: 600px) {
+      .rail { display: none; }
+      .page { margin-left: 0; }
+      .context { height: 134px; padding: 25px 24px; display: block; }
+      .context h1 { font-size: 26px; }
+      .eyebrow { font-size: 10px; margin-bottom: 10px; }
+      .study { display: block; margin-top: 12px; font-size: 10px; }
+      .footer { min-height: 0; padding: 29px 0 12px; }
+      .footer-top { padding: 0 24px; gap: 30px; }
+      .footer-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; row-gap: 27px; }
+      .footer-nav h2 { margin-bottom: 9px; }
+      .footer-nav a { min-height: 44px; font-size: 14px; }
+      .disclosure { border-top: 1px solid var(--rule); padding-top: 25px; font-size: 14px; }
+      .disclosure .risk { margin-top: 18px; padding-top: 17px; }
+      .disclosure .copyright { margin-top: 16px; }
+      .brand { padding-top: 34px; }
+      .powered { margin-bottom: 19px; font-size: 12px; }
+      .powered img { width: 18px; height: 18px; border-radius: 4px; }
+      .powered strong { font-size: 13px; }
+      .wordmark { width: calc(100% - 12px); margin: 0 6px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="rail" aria-hidden="true">
+    <span class="rail-logo">T</span>
+    <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-6v-6h-4v6H4Z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M4 17 9 12l4 3 7-10M16 5h4v4"/></svg>
+    <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 10h16M8 15h4"/></svg>
+    <svg class="rail-bottom" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4m0 2v1"/></svg>
+  </aside>
+  <div class="page">
+    <main class="context">
+      <div><p class="eyebrow">YOUR STRATEGY. YOUR CONTROL.</p><h1>내 돈은 어떻게 지키나요</h1></div>
+      <span class="study">TETH 푸터 디자인 시안</span>
+    </main>
+    <footer class="footer" aria-label="TETH 사이트 정보">
+      <div class="footer-top">
+        <nav class="footer-nav" aria-label="하단 메뉴">
+          <section aria-labelledby="nav-product"><h2 id="nav-product">제품</h2><ul>
+            <li><a href="../../" data-preview>AI 트레이딩</a></li>
+            <li><a href="../../" data-preview>전략 따라하기</a></li>
+            <li><a href="../../" data-preview>새 전략 만들기</a></li>
+            <li><a href="../../" data-preview>거래소 연결</a></li>
+          </ul></section>
+          <section aria-labelledby="nav-company"><h2 id="nav-company">회사</h2><ul>
+            <li><a href="../../about/">TETH 정보</a></li>
+            <li><a href="../../" data-preview>인사이트</a></li>
+            <li><a href="../../download/">앱 다운로드</a></li>
+          </ul></section>
+          <section aria-labelledby="nav-help"><h2 id="nav-help">도움</h2><ul>
+            <li><a href="../../" data-preview>24시간 상담</a></li>
+            <li><a href="../../" data-preview>이용 현황</a></li>
+          </ul></section>
+          <section aria-labelledby="nav-legal"><h2 id="nav-legal">약관</h2><ul>
+            <li><a href="../../policies/#terms">서비스 약관</a></li>
+            <li><a href="../../policies/#privacy">개인정보처리방침</a></li>
+          </ul></section>
+        </nav>
+        <div class="disclosure">
+          <p>TETH는 말로 만든 전략을 AI가 판단하고 거래하는 서비스예요. 거래는 연결한 거래소 계정 안에서만 이뤄지고, TETH는 출금 권한을 받지 않아요.</p>
+          <p class="partner">TETH는 Bitget의 1등 파트너예요.</p>
+          <p class="risk">가상자산 거래는 원금 손실이 생길 수 있어요. 과거 결과가 앞으로의 수익을 보장하지 않아요.</p>
+          <p class="copyright">© 2026 TETH AI. 모든 권리 보유.</p>
+        </div>
+      </div>
+      <div class="brand">
+        <p class="powered"><span>Powered by</span><img src="../../assets/logos/bitget-512.png" alt="" width="20" height="20"><strong>Bitget</strong></p>
+        <svg class="wordmark" viewBox="0 0 1000 270" role="img" aria-label="TETH" focusable="false"><text x="0" y="266" font-size="365" textLength="1000" lengthAdjust="spacingAndGlyphs">TETH</text></svg>
+      </div>
+    </footer>
+  </div>
+  <dialog aria-labelledby="preview-title" aria-describedby="preview-description">
+    <h2 id="preview-title"></h2>
+    <p id="preview-description">푸터 디자인 시안입니다. 이 메뉴의 실제 서비스 연결은 포함하지 않았어요.</p>
+    <form method="dialog"><button autofocus>닫기</button></form>
+  </dialog>
+  <script>
+    const preview = document.querySelector('dialog');
+    document.querySelectorAll('[data-preview]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        document.getElementById('preview-title').textContent = link.textContent;
+        preview.showModal();
+      });
+    });
+  </script>
+</body>
+</html>

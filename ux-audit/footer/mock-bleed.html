@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TETH 푸터 시안 bleed</title>
+<style>
+:root{
+  --page:#0f1012;--line:rgba(255,255,255,.08);
+  --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --gut:40px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{position:relative;min-height:100vh;background:var(--page);color:#fff;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* 64px 접힌 사이드바 흉내 */
+.side{position:absolute;left:0;top:0;bottom:0;width:64px;border-right:1px solid var(--line);background:#0c0d0f;display:flex;flex-direction:column;align-items:center;padding:18px 0;gap:22px;z-index:5}
+.side .logo{width:26px;height:14px;border-radius:7px;border:3px solid #c8f43c;border-right-color:#3cc8f4}
+.side .ic{width:16px;height:16px;border-radius:5px;border:1.5px solid rgba(255,255,255,.35)}
+.side .sp{flex:1}
+.main{margin-left:64px;min-width:0}
+
+/* 맥락용 다크 콘텐츠 */
+.ctx{max-width:880px;margin:0 auto;padding:120px 24px 140px;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;opacity:.42}
+.ctx h2{font-family:var(--serif);font-weight:500;font-size:36px;line-height:1.3;letter-spacing:-.02em;margin:0 0 14px}
+.ctx p{margin:0;font-size:14px;line-height:1.6;color:rgba(255,255,255,.6)}
+.ctx ul{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.14)}
+.ctx li{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:14px;font-weight:600}
+.ctx li span{display:block;font-weight:400;font-size:12.5px;color:rgba(255,255,255,.55);margin-top:5px}
+
+/* ───── 푸터 ───── */
+.ft{--bg:#c8f43c;--fg:#0c0d0f;--mut:rgba(12,13,15,.6);--hair:rgba(12,13,15,.16);
+  background:var(--bg);color:var(--fg);padding:44px var(--gut) 0;position:relative}
+.ft.dark{--bg:#0f1012;--fg:#fff;--mut:rgba(255,255,255,.52);--hair:rgba(255,255,255,.1);border-top:1px solid var(--line)}
+
+/* 1. Powered by 뱃지: 중앙 상단, 조용하게 */
+.pw{display:flex;justify-content:center}
+.pw a{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px 0 12px;border:1px solid var(--hair);border-radius:999px;font-size:12.5px;line-height:1}
+.pw .by{color:var(--mut)}
+.pw img{width:19px;height:19px;border-radius:5px;display:block}
+.pw b{font-weight:600;letter-spacing:-.005em}
+
+/* 2. 링크 + 문단 한 줄 밴드 */
+.band{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,2.3fr);column-gap:28px;margin-top:40px;padding-top:26px;border-top:1px solid var(--hair)}
+.col h4{margin:0 0 12px;font-size:12px;font-weight:600;color:var(--mut);letter-spacing:.01em}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.col a{font-size:13.5px;line-height:1.35}
+.col a:hover{text-decoration:underline;text-underline-offset:3px}
+.para{font-size:12.5px;line-height:1.65;color:var(--mut)}
+.para p{margin:0 0 8px}
+.para p:first-child{color:var(--fg)}
+.para .cp{margin:14px 0 0}
+
+/* 3. 거대 TETH: 콘텐츠 폭 fit + 바닥으로 약 12% 잘림 */
+.wm{position:relative;overflow:hidden;margin:44px calc(var(--gut) * -1) 0;padding:0 var(--gut);height:calc((100vw - 64px) * .21)}
+.wm-t{position:absolute;left:var(--gut);top:0;margin:0;white-space:nowrap;line-height:1;
+  font-family:var(--serif);font-weight:500;letter-spacing:-.02em;color:var(--fg);
+  font-size:calc((100vw - 64px) * .33);user-select:none}
+.wm-t i{display:inline-block;width:0;height:0;vertical-align:baseline}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (max-width:1100px){
+  .band{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:28px}
+  .para{grid-column:1 / -1;max-width:640px}
+}
+@media (max-width:760px){
+  :root{--gut:16px}
+  .side{display:none}
+  .main{margin-left:0}
+  .ctx{grid-template-columns:1fr;gap:28px;padding:72px 16px 88px}
+  .ctx h2{font-size:28px}
+  .ft{padding-top:32px}
+  .band{grid-template-columns:1fr 1fr;row-gap:26px;column-gap:16px;margin-top:30px;padding-top:24px}
+  .para{grid-column:1 / -1}
+  .wm{margin-top:34px;height:calc(100vw * .21)}
+  .wm-t{font-size:calc(100vw * .33)}
+}
+</style>
+</head>
+<body>
+<nav class="side" aria-hidden="true"><span class="logo"></span><span class="ic"></span><span class="ic"></span><span class="ic"></span><span class="sp"></span><span class="ic"></span><span class="ic"></span></nav>
+<div class="main">
+  <section class="ctx" aria-hidden="true">
+    <div><h2>내 돈은 어떻게<br>지키나요</h2><p>맡기는 건 판단이지 돈이 아니에요. 멈추는 버튼은 늘 내 손에 있어요.</p></div>
+    <ul>
+      <li>돈은 내 거래소에 그대로 있어요, 출금 권한은 받지 않아요<span>TETH는 연결할 때 주문에 필요한 권한만 요청해요.</span></li>
+      <li>정한 예산만 써요<span>전략마다 쓸 예산을 따로 정하고, 그 밖의 돈으로는 주문하지 않아요.</span></li>
+      <li>정한 한도에 닿으면 스스로 멈춰요<span>하루 손실 한도와 전략별 손실 한도를 정해두면, 닿았을 때 새 주문을 멈춰요.</span></li>
+    </ul>
+  </section>
+
+  <footer class="ft" id="ft">
+    <div class="pw"><a href="#"><span class="by">Powered by</span><img src="../../assets/logos/bitget-512.png" alt=""><b>Bitget</b></a></div>
+
+    <div class="band">
+      <nav class="col"><h4>제품</h4><ul><li><a href="#">AI 트레이딩</a></li><li><a href="#">전략 따라하기</a></li><li><a href="#">새 전략 만들기</a></li><li><a href="#">거래소 연결</a></li></ul></nav>
+      <nav class="col"><h4>회사</h4><ul><li><a href="#">TETH 정보</a></li><li><a href="#">인사이트</a></li><li><a href="#">앱 다운로드</a></li></ul></nav>
+      <nav class="col"><h4>도움</h4><ul><li><a href="#">24시간 상담</a></li><li><a href="#">이용 현황</a></li></ul></nav>
+      <nav class="col"><h4>약관</h4><ul><li><a href="#">서비스 약관</a></li><li><a href="#">개인정보처리방침</a></li></ul></nav>
+      <div class="para">
+        <p>TETH는 말로 만든 전략을 AI가 판단하고 거래하는 서비스예요. 거래는 연결한 거래소 계정 안에서만 이뤄지고, TETH는 출금 권한을 받지 않아요.</p>
+        <p>TETH는 Bitget의 1등 파트너예요.</p>
+        <p>가상자산 거래는 원금 손실이 생길 수 있어요. 과거 결과가 앞으로의 수익을 보장하지 않아요.</p>
+        <p class="cp">© 2026 TETH AI. 모든 권리 보유.</p>
+      </div>
+    </div>
+
+    <div class="wm" id="wm"><span class="sr">TETH</span><p class="wm-t" id="wmt" aria-hidden="true">TETH<i></i></p></div>
+  </footer>
+</div>
+<script>
+(function(){
+  var bg=new URLSearchParams(location.search).get('bg');
+  if(bg==='dark') document.getElementById('ft').classList.add('dark');
+
+  var LS=-0.02, BLEED=0.12, R=1000;
+  var wm=document.getElementById('wm'), t=document.getElementById('wmt'), mk=t.querySelector('i');
+  var ctx=document.createElement('canvas').getContext('2d');
+  function fit(){
+    var cs=getComputedStyle(wm), ts=getComputedStyle(t);
+    var padL=parseFloat(cs.paddingLeft), W=wm.clientWidth-padL-parseFloat(cs.paddingRight);
+    ctx.font=ts.fontWeight+' '+R+'px '+ts.fontFamily;
+    if('letterSpacing' in ctx) ctx.letterSpacing=(LS*R)+'px';
+    var m=ctx.measureText('TETH');
+    var ink=m.actualBoundingBoxLeft+m.actualBoundingBoxRight;
+    if(!ink) return;
+    var k=W/ink, F=R*k;
+    t.style.fontSize=F+'px';
+    t.style.letterSpacing=(LS*F)+'px';
+    t.style.left=(padL+m.actualBoundingBoxLeft*k)+'px';
+    var capH=m.actualBoundingBoxAscent*k;
+    t.style.top='0px';
+    var base=mk.getBoundingClientRect().bottom-t.getBoundingClientRect().top;
+    t.style.top=(-(base-capH))+'px';
+    wm.style.height=(capH*(1-BLEED))+'px';
+  }
+  fit();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  var raf; addEventListener('resize',function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(fit);});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TETH footer mock (claude)</title>
+<style>
+  :root{
+    --page:#0f1012;
+    --ui:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+    --serif:"Noto Serif KR","Nanum Myeongjo",Batang,serif;
+    --mark:-apple-system,"SF Pro Display","Helvetica Neue","Segoe UI Black","Segoe UI","Arial Black",system-ui,sans-serif;
+    /* footer theme, lime default */
+    --ft-bg:#c8f43c; --ft-fg:#0c0d0f; --ft-fg2:rgba(12,13,15,.74); --ft-fg3:rgba(12,13,15,.58); --ft-line:transparent;
+  }
+  html[data-bg="dark"]{
+    --ft-bg:#0f1012; --ft-fg:#ffffff; --ft-fg2:rgba(255,255,255,.66); --ft-fg3:rgba(255,255,255,.46); --ft-line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--page);color:#e9eaec;font-family:var(--ui);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+  a{color:inherit;text-decoration:none}
+
+  /* collapsed sidebar mock */
+  .side{position:fixed;left:0;top:0;bottom:0;width:64px;background:#0c0d0f;border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;align-items:center;padding:18px 0;gap:22px;z-index:5}
+  .side .logo{width:26px;height:14px;border:3px solid #c8f43c;border-radius:10px;margin-bottom:12px}
+  .side i{width:16px;height:16px;border:1.5px solid rgba(255,255,255,.34);border-radius:5px;display:block}
+  .side .sp{flex:1}
+  .main{margin-left:64px;min-height:100vh}
+
+  /* page context chunk, dimmed */
+  .ctx{max-width:904px;margin:0 auto;padding:96px 0 140px;display:grid;grid-template-columns:1fr 1fr;gap:48px;opacity:.42}
+  .ctx h2{font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.3;color:#fff;letter-spacing:-.01em}
+  .ctx p.sub{margin-top:14px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.6)}
+  .ctx ul{list-style:none;border-top:1px solid rgba(255,255,255,.12)}
+  .ctx li{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+  .ctx li b{display:block;font-size:15px;color:#fff;font-weight:600}
+  .ctx li span{display:block;margin-top:6px;font-size:13px;color:rgba(255,255,255,.55)}
+
+  /* footer */
+  .ft{background:var(--ft-bg);color:var(--ft-fg);border-top:1px solid var(--ft-line);padding:64px 40px 0}
+  .ft-top{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .ft-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;align-content:start}
+  .ft-col h3{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:16px;letter-spacing:-.005em}
+  .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .ft-col a{font-size:14px;line-height:1.35;color:var(--ft-fg2);transition:color .15s}
+  .ft-col a:hover{color:var(--ft-fg);text-decoration:underline;text-underline-offset:3px}
+  .ft-text{font-size:13.5px;line-height:1.7;color:var(--ft-fg2)}
+  .ft-text p+p{margin-top:12px}
+  .ft-text .lead{color:var(--ft-fg)}
+  .ft-text .strong{color:var(--ft-fg);font-weight:700}
+  .ft-text .copy{color:var(--ft-fg3)}
+
+  .ft-mark{padding-top:120px;padding-bottom:22px}
+  .ft-powered{display:flex;align-items:center;gap:8px;font-size:15px;line-height:1;color:var(--ft-fg);font-weight:500;margin-bottom:18px}
+  .ft-powered .by{color:var(--ft-fg2);font-weight:400}
+  .ft-powered .ico{width:22px;height:22px;border-radius:6px;overflow:hidden;display:inline-block;flex:none}
+  .ft-powered .ico img{width:100%;height:100%;display:block;transform:scale(1.14)}
+  .ft-powered b{font-weight:700}
+  .ft-word{display:block;width:100%;height:auto;overflow:visible}
+  .ft-word text{fill:var(--ft-fg);text-rendering:geometricPrecision;font-family:var(--mark);font-weight:900}
+
+  @media (max-width:767px){
+    .side{display:none}
+    .main{margin-left:0}
+    .ctx{grid-template-columns:1fr;padding:64px 20px 96px;gap:28px}
+    .ctx h2{font-size:30px}
+    .ft{padding:48px 20px 0}
+    .ft-top{grid-template-columns:1fr;gap:44px}
+    .ft-cols{grid-template-columns:1fr 1fr;row-gap:36px;column-gap:20px}
+    .ft-mark{padding-top:72px;padding-bottom:14px}
+    .ft-powered{font-size:14px;margin-bottom:12px}
+  }
+</style>
+<script>
+  (function(){var b=new URLSearchParams(location.search).get('bg');document.documentElement.setAttribute('data-bg',b==='dark'?'dark':'lime');})();
+</script>
+</head>
+<body>
+<aside class="side" aria-hidden="true"><span class="logo"></span><i></i><i></i><i></i><span class="sp"></span><i></i><i></i></aside>
+
+<div class="main">
+  <section class="ctx" aria-hidden="true">
+    <div>
+      <h2>내 돈은 어떻게<br>지키나요</h2>
+      <p class="sub">맡기는 건 판단이지 돈이 아니에요. 멈추는 버튼은 늘 내 손에 있어요.</p>
+    </div>
+    <ul>
+      <li><b>돈은 내 거래소에 그대로 있어요, 출금 권한은 받지 않아요</b><span>TETH는 연결할 때 주문에 필요한 권한만 요청해요.</span></li>
+      <li><b>정한 예산만 써요</b><span>전략마다 쓸 예산을 따로 정하고, 그 밖의 돈으로는 주문하지 않아요.</span></li>
+      <li><b>정한 한도에 닿으면 스스로 멈춰요</b><span>하루 손실 한도와 전략별 손실 한도를 정해두면 새 주문을 멈춰요.</span></li>
+      <li><b>언제든 한 번에 멈출 수 있어요</b><span>버튼 하나로 전략을 끄고, 들고 있던 포지션도 정리해요.</span></li>
+    </ul>
+  </section>
+
+  <footer class="ft">
+    <div class="ft-top">
+      <nav class="ft-cols" aria-label="사이트 링크">
+        <div class="ft-col"><h3>제품</h3><ul><li><a href="#">AI 트레이딩</a></li><li><a href="#">전략 따라하기</a></li><li><a href="#">새 전략 만들기</a></li><li><a href="#">거래소 연결</a></li></ul></div>
+        <div class="ft-col"><h3>회사</h3><ul><li><a href="#">TETH 정보</a></li><li><a href="#">인사이트</a></li><li><a href="#">앱 다운로드</a></li></ul></div>
+        <div class="ft-col"><h3>도움</h3><ul><li><a href="#">24시간 상담</a></li><li><a href="#">이용 현황</a></li></ul></div>
+        <div class="ft-col"><h3>약관</h3><ul><li><a href="#">서비스 약관</a></li><li><a href="#">개인정보처리방침</a></li></ul></div>
+      </nav>
+      <div class="ft-text">
+        <p class="lead">TETH는 말로 만든 전략을 AI가 판단하고 거래하는 서비스예요. 거래는 연결한 거래소 계정 안에서만 이뤄지고, TETH는 출금 권한을 받지 않아요.</p>
+        <p class="strong">TETH는 Bitget의 1등 파트너예요.</p>
+        <p>가상자산 거래는 원금 손실이 생길 수 있어요. 과거 결과가 앞으로의 수익을 보장하지 않아요.</p>
+        <p class="copy">© 2026 TETH AI. 모든 권리 보유.</p>
+      </div>
+    </div>
+
+    <div class="ft-mark">
+      <p class="ft-powered"><span class="by">Powered by</span><span class="ico"><img src="../../assets/logos/bitget-512.png" alt=""></span><b>Bitget</b></p>
+      <svg class="ft-word" id="ftWord" viewBox="38 -718 2517 718" role="img" aria-label="TETH" preserveAspectRatio="xMidYMax meet">
+        <text x="0" y="0" font-size="1000" style="letter-spacing:-40px">TETH</text>
+      </svg>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Fit the wordmark to its ink bounds at the real rendered size.
+  // The SVG user unit is 1 CSS px (viewBox = content width x cap height). The font size is
+  // solved so the painted width of "TETH" (canvas measureText ink box) equals the content width:
+  // T touches the left edge, H the right edge, the baseline is the SVG bottom. Refits whenever the SVG box width changes (ResizeObserver).
+  // Without JS the static viewBox above still gives a near fit.
+  (function(){
+    var svg=document.getElementById('ftWord'); if(!svg) return;
+    var t=svg.querySelector('text'), TRACK=-0.04, ctx=document.createElement('canvas').getContext('2d');
+    function ink(fs,fam,wt){
+      ctx.font=wt+' '+fs+'px '+fam;
+      if('letterSpacing' in ctx) ctx.letterSpacing=(TRACK*fs)+'px';
+      var m=ctx.measureText('TETH');
+      return {l:m.actualBoundingBoxLeft,w:m.actualBoundingBoxLeft+m.actualBoundingBoxRight,a:m.actualBoundingBoxAscent};
+    }
+    function fit(){
+      var W=svg.getBoundingClientRect().width;
+      var cs=getComputedStyle(t), fam=cs.fontFamily, wt=cs.fontWeight;
+      var r=ink(1000,fam,wt); if(!(r.w>0)||!(W>0)) return;
+      var fs=1000*W/r.w;
+      for(var i=0;i<3;i++){ r=ink(fs,fam,wt); fs=fs*W/r.w; }
+      r=ink(fs,fam,wt);
+      t.setAttribute('font-size',fs.toFixed(3));
+      t.style.letterSpacing=(TRACK*fs).toFixed(3)+'px';
+      t.setAttribute('x',r.l.toFixed(3));
+      t.setAttribute('y',r.a.toFixed(3));
+      svg.setAttribute('viewBox','0 0 '+W.toFixed(3)+' '+r.a.toFixed(3));
+    }
+    (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fit);
+    var lastW=0;
+    if('ResizeObserver' in window) new ResizeObserver(function(){var w=svg.getBoundingClientRect().width;if(Math.abs(w-lastW)>.5){lastW=w;fit();}}).observe(svg);
+    else addEventListener('resize',fit);
+  })();
+</script>
+</body>
+</html>
