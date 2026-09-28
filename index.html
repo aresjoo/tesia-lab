@@ -3765,7 +3765,7 @@ html.gft-doc{overflow-y:auto;height:auto}
 body.gft-doc{height:auto;min-height:100%;overflow:visible}
 body.gft-doc #g-root{position:static;inset:auto;height:auto;min-height:100vh}
 body.gft-doc .g-body{min-height:100vh;flex:none}
-body.gft-doc .g-side{position:sticky;top:0;height:100vh;box-sizing:border-box;align-self:flex-start}
+body.gft-doc .g-side{position:sticky;top:0;height:100vh;box-sizing:border-box;align-self:flex-start;z-index:40} /* sticky 는 stacking context 를 만들므로 호버 pill(.g-ico-pill z 40) 과 같은 층으로 올려 .g-center 콘텐츠 아래로 깔리지 않게 */
 body.gft-doc .g-center{min-height:100vh}
 body.gft-doc .g-scroll{overflow:visible;min-height:0;flex:1 0 auto}
 body.gft-doc #gft-slot{display:block}
@@ -5231,7 +5231,8 @@ body.tm-helpon #teth-help-pop.on{display:block!important}
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script src="site-config.js?v=2"></script><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
+<script src="site-config.js?v=2"></script>
+<script src="site-footer.js?v=1"></script><!-- gBoot 의 첫 렌더가 gSiteFooter() 를 부르므로 부팅 전에 로드 --><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
 <script>
 "use strict";
 /* ═══════════ state ═══════════ */
@@ -14485,7 +14486,7 @@ function tfIntroFx(){
 }
 function tfTxPct(v,d){ if(typeof v!=='number'||!isFinite(v)) return '-'; return (v>=0?'+':'')+v.toFixed(d==null?1:d)+'%'; }
 /* 사이트 푸터: 끝이 있는 스크롤 페이지에만 gContent 가 맨 끝에 붙인다 (고정 아님). 채팅, 터미널 제외 */
-var GFT_MODES={tfintro:1,tfinactive:1,tfss3:1,tfss3d:1,tfbrokers:1,tfbroker:1,tfcpx:1,nfplan:1,nfbot:1,nfins:1,nfreview:1,nfperiodic:1}; /* 끝이 있는 열람 페이지 전부. 채팅(home/conv), 터미널(tfdash), 전략 퍼널 단계는 제외 */
+var GFT_MODES={home:1,tfintro:1,tfinactive:1,tfss3:1,tfss3d:1,tfbrokers:1,tfbroker:1,tfcpx:1,nfplan:1,nfbot:1,nfins:1,nfreview:1,nfperiodic:1}; /* 끝이 있는 열람 페이지 전부. 채팅(home/conv), 터미널(tfdash), 전략 퍼널 단계는 제외 */
 var GFT_WM='M0 0h1000v240h-1000zM350 0h300v1000h-300zM1070 0h300v1000h-300zM1070 0h760v240h-760zM1070 390h700v220h-700zM1070 760h760v240h-760zM1900 0h1000v240h-1000zM2250 0h300v1000h-300zM2970 0h300v1000h-300zM3670 0h300v1000h-300zM2970 390h1000v220h-1000z';
 function gSiteFooter(){ return window.TETH_FOOTER?TETH_FOOTER.html({spa:true}):''; }
 /* 푸터 배치: PC(861px 이상)에서는 body.gft-doc + #gft-slot(전체 폭, 사이드바 아래), 그 외에는 #g-content 안. 모드가 바뀌면 원복 */
@@ -18091,5 +18092,4 @@ applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
 <script src="teth-copy.js?v=1"></script>
-<script src="site-footer.js?v=1"></script>
 <script src="help-widget.js?v=11"></script>
