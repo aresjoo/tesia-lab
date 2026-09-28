@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>TETH 전략 개요</title>
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#0f1012;--panel:#17191c;--text:#e3e3e3;--muted:#9aa0a6;--green:#2fb98a;--red:#f0566a;--line:#303236}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Malgun Gothic",sans-serif;font-size:12px;-webkit-font-smoothing:antialiased}button,select{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:2px solid #c8f43c;outline-offset:4px}button{background:none;border:0}main{max-width:1160px;margin:90px auto 0;padding:12px}body{padding-left:64px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;height:34px}.identity{display:flex;gap:7px;align-items:center;min-width:0}.logo{width:24px;height:24px;object-fit:contain}.heading{min-width:0}.title-row{display:flex;align-items:center;gap:5px}h1{font-size:14px;line-height:19px;font-weight:400;margin:0}h1 strong{font-weight:700}.since{font-size:10px;line-height:15px;color:var(--muted);margin-top:1px}.icon{padding:0;width:20px;height:22px;display:grid;place-items:center;color:var(--muted)}.icon svg{width:15px;height:15px}.favorite{border:1px solid var(--line);border-radius:3px;font-size:11px;white-space:nowrap;padding:6px 10px;color:var(--muted)}.favorite[aria-pressed=true]{color:#c8f43c;border-color:#c8f43c}.boxes{display:grid;grid-template-columns:21.4% 1fr;gap:7px;margin-top:14px}.panel{height:98px;background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:13px 15px}.panel h2{font-size:12px;font-weight:700;margin:0 0 14px}.requirement{display:flex;align-items:center;justify-content:space-between;line-height:22px;color:var(--muted)}.requirement strong{color:var(--text);font-weight:400}.exchange{display:flex;align-items:center;gap:4px}.exchange img{width:14px;height:14px}.summary h2{margin-bottom:7px}.summary p{font-size:12px;line-height:21px;color:var(--muted);margin:0;max-width:790px}.term{color:inherit;padding:0;border-bottom:1px dotted var(--muted);line-height:17px}.tooltip{position:fixed;z-index:10;padding:11px 13px;max-width:300px;border:1px solid #45484d;border-radius:5px;background:#24272b;box-shadow:0 5px 20px #0008;font-size:12px;line-height:19px;color:var(--text);pointer-events:none}.tooltip[hidden]{display:none}.metrics{display:flex;justify-content:space-between;gap:24px;margin-top:26px;min-height:80px;align-items:center}.primary{align-self:flex-start}.primary-label{line-height:18px}.hero-number{font-size:34px;font-weight:700;letter-spacing:-1.3px;line-height:43px;margin:0}.daily{color:var(--muted);font-size:11px;line-height:19px}.positive{color:var(--green)}.negative{color:var(--red)}.daily strong{margin-left:6px;font-weight:400}.secondary{display:flex;gap:42px;padding-top:0}.stat-label{font-size:12px;color:var(--muted);line-height:21px}.stat-value{font-size:20px;font-weight:700;line-height:27px;white-space:nowrap}.controls{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:26px;height:34px}.tabs{display:flex;gap:6px;align-items:center}.tab{border:1px solid var(--line);border-radius:20px;height:33px;padding:0 12px;font-size:12px;color:var(--muted)}.tab[aria-pressed=true]{border-color:var(--text);color:var(--text)}.tab-first{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:20px;height:33px;padding:0 10px}.tab-first:has(.tab[aria-pressed=true]){border-color:var(--text)}.tab-first .tab{padding:0;border:0;height:30px}.info{padding:0;color:var(--muted);width:13px;height:18px;font-size:11px;display:grid;place-items:center}.info span{border:1px solid currentColor;border-radius:50%;width:11px;height:11px;line-height:10px;font-family:Georgia,serif}.right-controls{display:flex;gap:7px;align-items:center}.segment{display:flex}.segment button{width:65px;height:27px;border:1px solid var(--line);color:var(--muted);font-size:11px}.segment button:first-child{border-radius:3px 0 0 3px}.segment button:last-child{border-radius:0 3px 3px 0;margin-left:-1px}.segment button[aria-pressed=true]{border-color:var(--text);color:var(--text);z-index:1}select{background:var(--panel);border:1px solid var(--line);border-radius:2px;height:27px;width:118px;padding:0 8px;font-size:11px;cursor:pointer}.chart-wrap{margin-top:22px;position:relative}.chart-note{position:absolute;left:44px;top:0;font-size:10px;color:var(--muted);margin:0;line-height:15px}.chart{display:block;width:100%;height:222px;overflow:visible}.chart text{font-family:Arial,"Malgun Gothic",sans-serif}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 16px;background:var(--panel);border:1px solid var(--line);border-radius:5px;font-size:12px}.toast:empty{display:none}
+@media(max-width:700px){body{padding-left:0}main{margin-top:22px;padding:16px}header{height:auto;align-items:flex-start;gap:8px}.identity{align-items:flex-start}.title-row{align-items:flex-start}h1{font-size:13px;line-height:19px}.identity>.logo{margin-top:2px}.favorite{font-size:10px;padding:6px;flex-shrink:0}.since{margin-top:4px}.boxes{grid-template-columns:1fr;margin-top:18px;gap:8px}.panel{height:auto;min-height:98px;padding:13px 14px}.summary{min-height:123px}.summary p{font-size:12px;line-height:22px}.metrics{display:block;margin-top:24px}.hero-number{font-size:34px}.secondary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:19px}.stat-label{font-size:10px;white-space:nowrap}.stat-value{font-size:18px}.controls{height:auto;flex-wrap:wrap;gap:14px;margin-top:25px}.right-controls{width:100%;justify-content:space-between}.segment button{width:61px;height:30px}select{height:30px;width:118px}.chart-wrap{margin-top:18px}.chart{height:230px}.chart-note{left:43px;font-size:9px}}
+.secondary{display:grid;grid-template-columns:1.1fr 1fr .85fr .7fr;width:48%;gap:24px}.summary p,h1{word-break:keep-all}.chart{height:208px}
+@media(max-width:700px){.secondary{width:100%;grid-template-columns:repeat(4,1fr);gap:8px}.chart{height:230px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main aria-label="전략 개요">
+ <header>
+  <div class="identity"><img class="logo" src="../../assets/logos/app-binance.png" alt=""><div class="heading"><div class="title-row"><h1><strong>Binance</strong> 비트코인 급락하면 줍고 8% 먹고 나온다</h1><button class="icon" id="share" aria-label="전략 공유"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="m6 9 7-4M6 11l7 4"/><circle cx="4" cy="10" r="2.3"/><circle cx="15" cy="4" r="2.3"/><circle cx="15" cy="16" r="2.3"/></svg></button></div><div class="since">운용 시작 2025.07.14</div></div></div>
+  <button class="favorite" id="favorite" aria-pressed="false">★ 즐겨찾기</button>
+ </header>
+ <div class="boxes">
+  <section class="panel"><h2>필수사항</h2><div class="requirement"><span>거래소</span><strong class="exchange"><img src="../../assets/logos/app-binance.png" alt="">Binance</strong></div><div class="requirement"><span>최소 자산</span><strong>200 USDT</strong></div></section>
+  <section class="panel summary"><h2>AI 요약</h2><p>비트코인이 크게 떨어진 뒤 다시 오르기 시작할 때만 사요. 산 가격보다 8% 오르면 팔고, 5% 내리면 바로 <button class="term" data-tip="들고 있던 것을 팔아 손실을 더 키우지 않는 거예요">정리</button>해요. <button class="term" data-tip="가격이 한 방향으로 꾸준히 움직이는 때예요">오르내림이 뚜렷한 장</button>에서만 움직이고, 방향이 애매하면 쉬어요.</p></section>
+ </div>
+ <section class="metrics" aria-label="전략 성과">
+  <div class="primary"><div class="primary-label">수익률</div><p class="hero-number">+23.9%</p><div class="daily">지난 24시간<strong class="positive">+0.4%</strong></div></div>
+  <div class="secondary"><div><div class="stat-label">이번 달 수익률</div><div class="stat-value positive">+2.1%</div></div><div><div class="stat-label">최대 낙폭</div><div class="stat-value negative">-9.0%</div></div><div><div class="stat-label">승률</div><div class="stat-value">67%</div></div><div><div class="stat-label">거래 수</div><div class="stat-value">12회</div></div></div>
+ </section>
+ <div class="controls">
+  <div class="tabs" role="group" aria-label="차트 지표"><div class="tab-first"><button class="tab" data-mode="return" aria-pressed="true">수익률</button><button class="info" aria-label="수익률 계산 안내" data-tip="이 전략이 매매로 번 비율이에요. 돈을 더 넣거나 빼도 수익률은 그대로예요. 수수료를 뺀 실제 수익이에요. 이 전략의 거래만 계산해요."><span>i</span></button></div><button class="tab" data-mode="profit" aria-pressed="false">번 돈</button><button class="tab" data-mode="money" aria-pressed="false">든 돈</button></div>
+  <div class="right-controls"><div class="segment" role="group" aria-label="차트 간격"><button data-step="day" aria-pressed="true">일별</button><button data-step="month" aria-pressed="false">월별</button></div><select id="period" aria-label="차트 기간"><option value="1">최근 1개월</option><option value="3">최근 3개월</option><option value="12">최근 1년</option><option value="all">전체</option></select></div>
+ </div>
+ <div class="chart-wrap"><p class="chart-note" id="chart-note" hidden>1,000 USDT로 시작했다면</p><svg class="chart" id="chart" role="img" aria-label="수익률 차트"></svg></div>
+</main>
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div><div class="toast" id="toast" role="status"></div>
+<script src="data.js"></script>
+<script>
+'use strict';
+const state={mode:'return',step:'day',period:'1'};
+const chart=document.getElementById('chart');
+const dateNumber=d=>Date.parse(d+'T00:00:00Z');
+function periodRows(){
+ const source=window.DETAIL_NAV,end=new Date(dateNumber(source[source.length-1].d));
+ if(state.period==='all')return source.slice();
+ const day=end.getUTCDate();end.setUTCDate(1);end.setUTCMonth(end.getUTCMonth()-Number(state.period));
+ const lastDay=new Date(Date.UTC(end.getUTCFullYear(),end.getUTCMonth()+1,0)).getUTCDate();end.setUTCDate(Math.min(day,lastDay));
+ return source.filter(p=>dateNumber(p.d)>=end.getTime());
+}
+function chartRows(){
+ const selected=periodRows(),base=selected[0].v;
+ let rows=selected;
+ if(state.step==='month'){const months=new Map();for(const p of rows)months.set(p.d.slice(0,7),p);rows=[...months.values()];}
+ return rows.map(p=>({d:p.d,v:p.v,value:state.mode==='return'?(p.v/base-1)*100:state.mode==='money'?1000*p.v:1000*p.v-1000}));
+}
+// Monotone cubic interpolation keeps the curve smooth without inventing extrema.
+function curve(points){
+ const n=points.length;if(n===1)return `M${points[0].x},${points[0].y}`;
+ const slopes=points.slice(1).map((p,i)=>(p.y-points[i].y)/(p.x-points[i].x));
+ const tangent=points.map((p,i)=>i===0?slopes[0]:i===n-1?slopes[n-2]:slopes[i-1]*slopes[i]<=0?0:2/(1/slopes[i-1]+1/slopes[i]));
+ let path=`M${points[0].x},${points[0].y}`;
+ for(let i=0;i<n-1;i++){const a=points[i],b=points[i+1],h=(b.x-a.x)/3;path+=` C${a.x+h},${a.y+h*tangent[i]} ${b.x-h},${b.y-h*tangent[i+1]} ${b.x},${b.y}`;}
+ return path;
+}
+function render(){
+ const rows=chartRows(),w=chart.clientWidth,h=chart.clientHeight,L=44,R=w-5,T=20,B=h-38;
+ const baseline=state.mode==='money'?1000:0,vals=rows.map(p=>p.value);
+ const lo=Math.min(baseline,...vals),hi=Math.max(baseline,...vals),span=Math.max(hi-lo,state.mode==='return'?0.1:1);
+ const tick=(span*1.14)/5,magnitude=10**Math.floor(Math.log10(tick));
+ const unit=[1,2,2.5,5,10].map(n=>n*magnitude).find(n=>n>=tick)||10*magnitude;
+ const min=Math.floor((lo-span*.06)/unit)*unit,max=Math.ceil((hi+span*.06)/unit)*unit;
+ const y=v=>B-(v-min)/(max-min)*(B-T),start=dateNumber(rows[0].d),end=dateNumber(rows[rows.length-1].d);
+ const x=d=>L+(dateNumber(d)-start)/(end-start||1)*(R-L);
+ const points=rows.map(p=>({...p,x:x(p.d),y:y(p.value)})),line=curve(points),zero=y(baseline);
+ const area=line+` L${points.at(-1).x},${zero} L${points[0].x},${zero} Z`;
+ const fmt=(v,extreme=false)=>state.mode==='return'?`${v>0?'+':''}${v.toFixed(2)}%`:`${state.mode==='profit'&&v>0?'+':''}${v.toLocaleString('en-US',{minimumFractionDigits:extreme?2:0,maximumFractionDigits:extreme?2:0})}`;
+ let grid='';for(let v=min;v<=max+unit*.01;v+=unit){const value=Math.abs(v)<unit*.0001?0:v;grid+=`<line x1="${L}" x2="${R}" y1="${y(value)}" y2="${y(value)}" stroke="#303236" stroke-width="${Math.abs(value-baseline)<unit*.001?1.2:.7}"/><text x="${L-6}" y="${y(value)+3}" fill="#9aa0a6" font-size="9" text-anchor="end">${fmt(value)}</text>`;}
+ const count=w<500?3:5;let dates='';for(let i=0;i<count;i++){const p=rows[Math.round(i*(rows.length-1)/(count-1))];if(i&&p===rows[Math.round((i-1)*(rows.length-1)/(count-1))])continue;dates+=`<text x="${x(p.d)}" y="${h-5}" fill="#9aa0a6" font-size="9" text-anchor="${i===0?'start':i===count-1?'end':'middle'}">${state.period==='all'||state.period==='12'?p.d.slice(2,7).replace('-','.') : p.d.slice(5).replace('-','.')}</text>`;}
+ const low=points.reduce((a,b)=>b.value<a.value?b:a),high=points.reduce((a,b)=>b.value>a.value?b:a);
+ function marker(p,label){const anchor=p.x<L+65?'start':p.x>R-65?'end':'middle';return `<circle cx="${p.x}" cy="${p.y}" r="2.6" fill="#e3e3e3"/><text x="${p.x}" y="${p.y+(label==='Max'?-10:17)}" fill="#e3e3e3" font-size="10" font-weight="700" text-anchor="${anchor}">${label} ${fmt(p.value,true)}</text>`;}
+ chart.setAttribute('viewBox',`0 0 ${w} ${h}`);chart.setAttribute('aria-label',`${state.mode==='return'?'수익률':state.mode==='money'?'든 돈':'번 돈'}, ${rows[0].d}부터 ${rows.at(-1).d}, 최저 ${fmt(low.value,true)}, 최고 ${fmt(high.value,true)}${state.mode==='return'?'':' USDT'}`);
+ chart.innerHTML=`<defs><linearGradient id="gain" x1="0" x2="0" y1="${T}" y2="${zero}" gradientUnits="userSpaceOnUse"><stop stop-color="#2fb98a" stop-opacity=".22"/><stop offset="1" stop-color="#2fb98a" stop-opacity="0"/></linearGradient><linearGradient id="loss" x1="0" x2="0" y1="${B}" y2="${zero}" gradientUnits="userSpaceOnUse"><stop stop-color="#f0566a" stop-opacity=".22"/><stop offset="1" stop-color="#f0566a" stop-opacity="0"/></linearGradient><clipPath id="above"><rect x="${L}" y="0" width="${R-L}" height="${zero}"/></clipPath><clipPath id="below"><rect x="${L}" y="${zero}" width="${R-L}" height="${h-zero}"/></clipPath></defs>${grid}<path d="${area}" fill="url(#gain)" clip-path="url(#above)"/><path d="${area}" fill="url(#loss)" clip-path="url(#below)"/><path d="${line}" fill="none" stroke="#2fb98a" stroke-width="1.7" clip-path="url(#above)"/><path d="${line}" fill="none" stroke="#f0566a" stroke-width="1.7" clip-path="url(#below)"/>${marker(high,'Max')}${marker(low,'Min')}${dates}`;
+ document.getElementById('chart-note').hidden=state.mode==='return';
+}
+document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{state.mode=button.dataset.mode;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b===button));render();}));
+document.querySelectorAll('[data-step]').forEach(button=>button.addEventListener('click',()=>{state.step=button.dataset.step;document.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',b===button));render();}));
+document.getElementById('period').addEventListener('change',e=>{state.period=e.target.value;render();});
+const tip=document.getElementById('tooltip');let tipOwner=null;
+function hideTip(){tip.hidden=true;if(tipOwner)tipOwner.removeAttribute('aria-describedby');tipOwner=null;}
+function showTip(button){hideTip();tipOwner=button;tip.textContent=button.dataset.tip;tip.hidden=false;button.setAttribute('aria-describedby','tooltip');const rect=button.getBoundingClientRect();tip.style.left=Math.max(12,Math.min(innerWidth-tip.offsetWidth-12,rect.left))+'px';tip.style.top=(rect.bottom+tip.offsetHeight+10>innerHeight?rect.top-tip.offsetHeight-8:rect.bottom+8)+'px';}
+document.querySelectorAll('[data-tip]').forEach(b=>{b.addEventListener('mouseenter',()=>showTip(b));b.addEventListener('mouseleave',()=>{if(document.activeElement!==b)hideTip();});b.addEventListener('focus',()=>showTip(b));b.addEventListener('blur',hideTip);b.addEventListener('click',()=>showTip(b));});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip();});document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-tip]'))hideTip();});window.addEventListener('scroll',hideTip,{passive:true});
+document.getElementById('favorite').addEventListener('click',e=>{const b=e.currentTarget;b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');});
+let toastTimer;document.getElementById('share').addEventListener('click',async()=>{const toast=document.getElementById('toast');try{await navigator.clipboard.writeText(location.href);toast.textContent='전략 링크를 복사했어요.';}catch{toast.textContent='주소창에서 전략 링크를 복사해 주세요.';}clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.textContent='',2500);});
+new ResizeObserver(render).observe(chart);render();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>detail mock claude</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#0f1012;color:#e3e3e3;font-family:-apple-system,"Segoe UI","Noto Sans KR",sans-serif;font-size:14px;line-height:1.5}
+.page{margin-left:64px;padding:26px 32px 60px}.wrap{max-width:1160px;margin:0 auto;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:18px 16px 8px;background:#121416}
+.top{display:flex;align-items:center;gap:10px}.top img{width:26px;height:26px;border-radius:6px}.top b{font-size:16px;font-weight:600}.top .nm{font-size:16px;color:#e3e3e3}
+.top .sh{width:18px;height:18px;color:#9aa0a6}.top .fav{margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:1px solid rgba(255,255,255,.14);border-radius:4px;background:none;color:#c4c7c5;font:inherit;font-size:12.5px;cursor:pointer}
+.since{margin:1px 0 14px 36px;font-size:12px;color:#9aa0a6}
+.boxes{display:grid;grid-template-columns:244px minmax(0,1fr);gap:8px;margin-bottom:26px}
+.box{border:1px solid rgba(255,255,255,.1);border-radius:4px;background:#1a1c1f;padding:16px 20px 18px;min-height:122px}
+.box h3{margin:0 0 16px;font-size:13.5px;font-weight:600;color:#e3e3e3}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;color:#c4c7c5;margin-top:8px}.kv b{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:600}.kv img{width:16px;height:16px;border-radius:4px}
+.sum{margin:0;font-size:14px;line-height:1.75;color:#c4c7c5;max-width:760px}
+.term{position:relative;border:0;background:none;padding:0;font:inherit;color:#e3e3e3;border-bottom:1px dashed rgba(255,255,255,.5);cursor:help}
+.tip{position:absolute;left:0;bottom:calc(100% + 8px);width:max-content;max-width:280px;padding:10px 12px;border-radius:8px;background:#23262b;border:1px solid rgba(255,255,255,.12);color:#e3e3e3;font-size:12.5px;line-height:1.6;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .12s;z-index:5}
+.term:hover .tip,.term:focus .tip,.pill:hover .tip,.pill:focus-within .tip{opacity:1}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px}
+.head .lb{font-size:13px;font-weight:600;color:#e3e3e3;margin-bottom:6px}.big{font-size:40px;font-weight:700;line-height:1.1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.big.up,.up{color:#2fb98a}.dn{color:#f0566a}.day{margin-top:6px;font-size:12.5px;color:#9aa0a6}.day b{font-weight:500}
+.stats{display:flex;gap:44px}.stats div small{display:block;font-size:12px;color:#9aa0a6;margin-bottom:6px}.stats div b{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;color:#fff}
+.ctl{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.pills{display:flex;gap:8px;flex-wrap:wrap}.pill{position:relative;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:none;color:#9aa0a6;font:inherit;font-size:13.5px;cursor:pointer}
+.pill[aria-pressed="true"]{border-color:#fff;color:#fff;font-weight:600}.pill i{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1px solid currentColor;border-radius:50%;font-style:normal;font-size:10px;line-height:1}
+.pill .tip{top:calc(100% + 8px);bottom:auto;white-space:normal}
+.right{display:flex;gap:8px;align-items:center}.seg{display:inline-flex;border:1px solid rgba(255,255,255,.14);border-radius:4px;overflow:hidden}
+.seg button{width:66px;height:30px;border:0;background:none;color:#9aa0a6;font:inherit;font-size:12.5px;cursor:pointer}.seg button[aria-pressed="true"]{background:#0f1012;color:#fff;outline:1px solid #fff;outline-offset:-1px;font-weight:600}
+select{height:30px;min-width:118px;padding:0 10px;border:1px solid rgba(255,255,255,.14);border-radius:4px;background:#1a1c1f;color:#e3e3e3;font:inherit;font-size:12.5px}
+.hint{min-height:20px;margin:4px 0 0;font-size:12.5px;color:#9aa0a6}
+.chart{position:relative;margin-top:4px}.chart svg{display:block;width:100%;height:auto}
+@media (max-width:760px){.page{margin-left:0;padding:14px 12px 40px}.wrap{padding:14px 12px 6px}.boxes{grid-template-columns:1fr}.box{min-height:0}.head{flex-direction:column;align-items:flex-start;gap:18px}.big{font-size:34px}.stats{gap:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px;width:100%}.stats div b{font-size:18px}.pill{height:34px;padding:0 13px;font-size:13px}.right{width:100%}.seg{flex:1}.seg button{flex:1;width:auto}select{flex:1}.tip{max-width:240px}}
+</style></head><body><div class="page"><div class="wrap">
+<div class="top"><img id="exl" alt=""><b id="exn"></b><span class="nm" id="ttl"></span><svg class="sh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8 11l8-4M8 13l8 4"/></svg><button class="fav" type="button">★ 즐겨찾기</button></div>
+<div class="since" id="since"></div>
+<div class="boxes"><div class="box"><h3>필수사항</h3><div class="kv"><span>거래소</span><b><img id="exl2" alt=""><span id="exn2"></span></b></div><div class="kv"><span>최소 자산</span><b id="min"></b></div></div>
+<div class="box"><h3>AI 요약</h3><p class="sum">비트코인이 크게 떨어진 뒤 다시 오르기 시작할 때만 사요. 산 가격보다 8% 오르면 팔고, 5% 내리면 바로 <button type="button" class="term">정리<span class="tip">들고 있던 것을 팔아 손실을 더 키우지 않는 거예요</span></button>해요. <button type="button" class="term">오르내림이 뚜렷한 장<span class="tip">가격이 한 방향으로 꾸준히 움직이는 때예요</span></button>에서만 움직이고, 방향이 애매하면 쉬어요.</p></div></div>
+<div class="head"><div><div class="lb">수익률</div><div class="big" id="big"></div><div class="day">지난 24시간 <b id="d1"></b></div></div>
+<div class="stats"><div><small>이번 달 수익률</small><b id="mo"></b></div><div><small>최대 낙폭</small><b id="mdd"></b></div><div><small>승률</small><b id="win"></b></div><div><small>거래 수</small><b id="trd"></b></div></div></div>
+<div class="ctl"><div class="pills" id="pills"></div><div class="right"><div class="seg" id="seg"></div><select id="per" aria-label="기간 선택"><option value="30">최근 1개월</option><option value="90">최근 3개월</option><option value="365">최근 1년</option><option value="0">전체</option></select></div></div>
+<p class="hint" id="hint"></p>
+<div class="chart" id="chart"></div>
+</div></div>
+<script src="data.js"></script>
+<script>
+var M=DETAIL_META, NAV=DETAIL_NAV, ST={tab:'ret',gran:'day',per:30};
+var q=new URLSearchParams(location.search); if(q.get('tab'))ST.tab=q.get('tab'); if(q.get('gran'))ST.gran=q.get('gran'); if(q.get('per')!==null&&q.get('per')!=='')ST.per=+q.get('per');
+function $(i){return document.getElementById(i);}
+$('exl').src=$('exl2').src='../../assets/logos/'+M.exLogo+'.png'; $('exn').textContent=$('exn2').textContent=M.ex; $('ttl').textContent=M.title; $('since').textContent='운용 시작 '+M.since; $('min').textContent=M.min;
+$('mdd').textContent=M.mdd; $('win').textContent=M.win; $('trd').textContent=M.trades;
+function pct(v,d){return (v>=0?'+':'')+v.toFixed(d==null?1:d)+'%';}
+function cls(el,v){el.className=(el.className.replace(/ ?(up|dn)\b/g,''))+(v>=0?' up':' dn');}
+var last=NAV[NAV.length-1].v, tot=(last/NAV[0].v-1)*100; $('big').textContent=pct(tot); cls($('big'),tot);
+var d1=(last/NAV[NAV.length-2].v-1)*100; $('d1').textContent=pct(d1,2); cls($('d1'),d1);
+var lm=NAV[NAV.length-1].d.slice(0,7), mi=NAV.length-1; while(mi>0&&NAV[mi-1].d.slice(0,7)===lm)mi--; var mo=(last/NAV[Math.max(0,mi-1)].v-1)*100; $('mo').textContent=pct(mo); cls($('mo'),mo);
+var TABS=[['ret','수익률',true],['pnl','번 돈'],['bal','든 돈']];
+function ui(){
+  $('pills').innerHTML=TABS.map(function(t){return '<button type="button" class="pill" aria-pressed="'+(ST.tab===t[0])+'" data-t="'+t[0]+'">'+t[1]+(t[2]?'<i>i</i><span class="tip">이 전략이 매매로 번 비율이에요. 돈을 더 넣거나 빼도 수익률은 그대로예요. 수수료를 뺀 실제 수익이에요. 이 전략의 거래만 계산해요.</span>':'')+'</button>';}).join('');
+  $('seg').innerHTML=[['day','일별'],['month','월별']].map(function(g){return '<button type="button" aria-pressed="'+(ST.gran===g[0])+'" data-g="'+g[0]+'">'+g[1]+'</button>';}).join('');
+  $('per').value=String(ST.per);
+  $('hint').textContent=ST.tab==='ret'?'':'1,000 USDT로 시작했다면';
+  draw();
+}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-t]'); if(b){ST.tab=b.dataset.t;ui();return;} var g=e.target.closest('[data-g]'); if(g){ST.gran=g.dataset.g;ui();}});
+$('per').addEventListener('change',function(){ST.per=+this.value;ui();});
+function series(){
+  var src=ST.per?NAV.slice(-ST.per-1):NAV.slice(), base=src[0].v, pts=src;
+  if(ST.gran==='month'){var m={},o=[];src.forEach(function(p){var k=p.d.slice(0,7);if(!m[k]){m[k]=1;o.push(k);}m[k]=p;});pts=[src[0]].concat(o.map(function(k){return m[k];}).filter(function(p){return p!==src[0];}));}
+  return pts.map(function(p){var r=p.v/base; return {d:p.d, y: ST.tab==='ret'?(r-1)*100: ST.tab==='pnl'?1000*(r-1): 1000*r};});
+}
+function nice(a,b,n){var span=(b-a)||1,st=Math.pow(10,Math.floor(Math.log10(span/n))),e=span/n/st;st*=e>=5?5:e>=2?2:1;var lo=Math.floor(a/st)*st,hi=Math.ceil(b/st)*st,t=[];for(var v=lo;v<=hi+st/2;v+=st)t.push(+v.toFixed(6));return t;}
+function draw(){
+  var P=series(), W=1128,H=300,pl=58,pr=14,pt=22,pb=34, base=ST.tab==='bal'?1000:0;
+  var ys=P.map(function(p){return p.y;}), mn=Math.min.apply(null,ys.concat(base)), mx=Math.max.apply(null,ys.concat(base)), T=nice(mn,mx,5); mn=T[0]; mx=T[T.length-1];
+  var X=function(i){return pl+i/Math.max(1,P.length-1)*(W-pl-pr);}, Y=function(v){return pt+(1-(v-mn)/(mx-mn))*(H-pt-pb);};
+  var A=P.map(function(p,i){return [X(i),Y(p.y)];}), d='M'+A[0][0].toFixed(1)+' '+A[0][1].toFixed(1), cl=function(y){return Math.max(pt,Math.min(H-pb,y));};
+  for(var i=0;i<A.length-1;i++){var p0=A[Math.max(0,i-1)],p1=A[i],p2=A[i+1],p3=A[Math.min(A.length-1,i+2)];d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+cl(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+cl(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1);}
+  var yb=Y(base), area=d+' L'+A[A.length-1][0].toFixed(1)+' '+yb.toFixed(1)+' L'+A[0][0].toFixed(1)+' '+yb.toFixed(1)+' Z', G='#2fb98a',R='#f0566a';
+  var fmt=function(v){return ST.tab==='ret'?v.toFixed(Math.abs(mx-mn)<4?2:0)+'%':Math.round(v).toLocaleString();};
+  var g=T.map(function(v){return '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="rgba(255,255,255,'+(v===base?'.22':'.08')+')"/><text x="'+(pl-12)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+fmt(v)+'</text>';}).join('');
+  var nx=Math.min(5,P.length), xl=''; for(var k=0;k<nx;k++){var ix=Math.round(k*(P.length-1)/(nx-1||1)); xl+='<text x="'+X(ix).toFixed(1)+'" y="'+(H-10)+'" text-anchor="'+(k===0?'start':k===nx-1?'end':'middle')+'" font-size="11" fill="#8b9096">'+(ST.gran==='month'||ST.per===0||ST.per>200?P[ix].d.slice(2,7).replace('-','.'):P[ix].d.slice(5).replace('-','.'))+'</text>';}
+  var iMx=ys.indexOf(Math.max.apply(null,ys)), iMn=ys.indexOf(Math.min.apply(null,ys));
+  var mark=function(i,lb,up){var x=A[i][0],y=A[i][1],tx=Math.max(pl+44,Math.min(W-pr-44,x));return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.6" fill="#fff"/><text x="'+tx.toFixed(1)+'" y="'+(up?y-12:y+20).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">'+lb+' '+(ST.tab==='ret'?pct(P[i].y,2):Math.round(P[i].y).toLocaleString()+' USDT')+'</text>';};
+  $('chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="차트"><defs>'
+   +'<linearGradient id="gu" gradientUnits="userSpaceOnUse" x1="0" y1="'+pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".02"/></linearGradient>'
+   +'<linearGradient id="gd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+(H-pb)+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
+   +'<clipPath id="cu"><rect x="0" y="0" width="'+W+'" height="'+yb.toFixed(1)+'"/></clipPath><clipPath id="cd"><rect x="0" y="'+yb.toFixed(1)+'" width="'+W+'" height="'+(H-yb).toFixed(1)+'"/></clipPath></defs>'+g+xl
+   +'<g clip-path="url(#cu)"><path d="'+area+'" fill="url(#gu)"/><path d="'+d+'" fill="none" stroke="'+G+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></g>'
+   +'<g clip-path="url(#cd)"><path d="'+area+'" fill="url(#gd)"/><path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></g>'
+   +(iMx!==iMn?mark(iMx,'Max',true)+mark(iMn,'Min',false):'')+'</svg>';
+}
+ui();
+</script></body></html>
