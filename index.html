@@ -4095,7 +4095,18 @@ body.gft-doc #gft-slot{display:block}
 .mk-flt{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .mk-flt .ss3-search{height:40px;border-width:1px;flex:1 1 200px;max-width:none;min-width:160px}
 .mk .tfbk-drop{height:40px;border-radius:20px;border-width:1px;font-size:13px;padding:0 16px;min-width:0}
-.mk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:1180px){.mk-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mk-v2{gap:16px;padding:22px}
+.mk-v2 .mk-c-head{display:flex;align-items:flex-start;gap:12px}
+.mk-v2 .mk-c-ex{flex:none;width:36px;height:36px;border-radius:10px;display:block}
+.mk-v2 .mk-c-hd{min-width:0}
+.mk-v2 .mk-c-hd h3{margin:0;font-size:17px;font-weight:700;line-height:1.35}
+.mk-v2 .mk-c-xn{margin-top:3px;font-size:13px;color:var(--gt3)}
+.mk-v2 .mk-c-one{margin:0;font-size:13.5px;line-height:1.5;color:var(--gt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-v2 .mk-c-main{align-items:flex-end}
+.mk-v2 .mk-c-ret small{margin:0 0 4px;font-size:12.5px}
+.mk-v2 .mk-c-stats small{font-size:12px}.mk-v2 .mk-c-stats b{font-size:15px}
 .mk-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:20px;background:rgba(255,255,255,.02);display:flex;flex-direction:column;gap:14px;min-width:0}
 .mk-c-tt{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .mk-c-tt h3{margin:0;font-size:17px;font-weight:700;line-height:1.35;min-width:0}
@@ -11101,7 +11112,7 @@ function tfShareHub(tab){
   if(tab==='find'){
     var pd=mkPd(), sort=mkSortKey(t);
     controls='<div class="mk-bar">'
-      +'<div class="mk-chips" aria-label="정렬과 기간"><span class="lb">정렬</span>'+[['ret','검증 수익률'],['mdd','안정성(MDD)'],['n','거래 수'],['months','검증 기간']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')
+      +'<div class="mk-chips" aria-label="정렬과 기간"><span class="lb">정렬</span>'+[['ret','수익률'],['mdd','안정성'],['n','거래 수']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')
       +'<span class="mk-sp"></span><span class="lb">기간</span>'+[['1y','1년'],['2y','2년'],['all','전체']].map(function(o){ var on=pd===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3PdPick(\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>'
       +'<div class="mk-flt">'
       +tfBkDrop('ss3-m-asset',[['all','시장 전체'],['비트코인','BTC'],['이더리움','ETH'],['나스닥','NASDAQ']],t.ss.asset||'all','tfSS3AssetPick')
@@ -11113,7 +11124,7 @@ function tfShareHub(tab){
   }
   var body= tab==='follow'?tfSS3FollowTab(): tab==='mine'?tfSS3MineTab(): '<div id="ss3-grid">'+tfSS3GridHtml()+'</div>';
   gContent('<div class="tf-page tfbk ss3 mk">'
-    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">검증된 전략을 내 예산으로 그대로 따라가요</div></div><span class="mk-demo">시뮬레이션 데이터예요</span></div>'
+    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">검증된 전략을 내 예산으로 그대로 따라가요</div></div></div>'
     +tabs+controls+body
     +'</div>');
   tfBkDropInit();
@@ -15752,17 +15763,34 @@ function mkSpark(eq,w,h){
   var up=eq[eq.length-1].v>=1;
   return '<svg class="mk-spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="'+(up?'#2fb98a':'#ee766a')+'" stroke-width="1.8" vector-effect="non-scaling-stroke" points="'+pts.join(' ')+'"/></svg>';
 }
-/* 카드 — 제목(tfSeedTitle) + 유형 배지 + 부제 + 작성자 → 선택 기간 수익률 + 출처/수수료 배지 → MDD, 검증 기간, 팔로워, 팔로워 수익(-) → 위험도 → [따라가기] [자세히] */
+/* 카드 v2: 거래소 로고 + AI 제목(행동 문장) + 한 줄 소개 → 수익률 + 그래프 → 최대 낙폭, 승률, 최소 금액 → [따라가기] [자세히]. 작성자, 위험도, 팔로워, 검증 배지는 카드에서 뺀다(상세에 있음) */
+var MK_EX=[['app-bitget','Bitget'],['app-binance','Binance'],['app-okx','OKX']];
+function mkEx(s){ if(s.me) return MK_EX[0]; var seeds=tfRankSeeds(), i=-1; for(var k=0;k<seeds.length;k++){ if(seeds[k].nick===s.nick){ i=k; break; } } return MK_EX[(i<0?0:i)%MK_EX.length]; } /* 시드 순서대로 세 거래소를 돌려 배정 */
+function mkAssetKo(a){ return a==='나스닥'?'나스닥':a==='이더리움'?'이더리움':a==='비트코인'?'비트코인':(a||'자산'); }
+/* 제목: 규칙 파라미터를 행동 문장으로 요약 (진입 깊이 + 익절 폭 + 손절 폭) */
+function mkHook(s){
+  if(!s.p) return s.title||s.nick;
+  var p=s.p, a=mkAssetKo(s.asset), tp=Math.abs(p.tp), sl=Math.abs(p.sl);
+  var inn=p.rsiTh<=38?'급락하면 줍고':p.rsiTh<=42?'깊게 빠지면 사서':'눌릴 때 사서';
+  var out=sl>=8?'흔들려도 '+tp+'%까지 버틴다':sl<=3?'짧게 끊고 '+tp+'% 챙긴다':tp<=8?tp+'% 먹고 나온다':tp<=12?tp+'%까지 들고 간다':tp+'% 크게 노린다';
+  return a+' '+inn+' '+out;
+}
+function mkOne(s){
+  if(!s.p) return (s.desc||'').split(/[.\n]/)[0];
+  var d=s.p.rsiTh<=38?'급락 뒤':s.p.rsiTh<=42?'깊게 빠진 뒤':'살짝 눌린 뒤';
+  return d+' 반등하면 사고, +'+Math.abs(s.p.tp)+'%에 팔고 -'+Math.abs(s.p.sl)+'%면 멈춰요';
+}
+function mkMin(s){ var sl=s.p?Math.abs(s.p.sl):5; return (sl>=8?500:sl>=5?200:100); }
 function mkCard(s){
-  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), rk=mkRisk(r.mdd);
-  return '<article class="mk-card">'
-    +'<div class="mk-c-head"><div class="mk-c-tt"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkTitle(s))+'</button></h3>'+tfKindBadge('rule')+'</div>'
-    +'<div class="mk-c-sub">'+gEsc(mkSub(s))+'</div>'
-    +'<div class="mk-c-by">작성자 '+gEsc(s.nick)+(s.me?' (나)':'')+'</div></div>'
-    +'<div class="mk-c-main"><div class="mk-c-ret"><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b><small>'+mkPdLabel(pd)+' 검증 수익률</small><div class="mk-badges">'+mkSrcBadge(r)+mkFeeBadge()+'</div></div>'
-    +mkSpark(r.eq,150,60)+'</div>'
-    +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>검증 기간</small><b>'+mkMonths(r)+'개월</b></div><div><small>팔로워</small><b>'+Number(s.fw||0).toLocaleString()+'명</b></div>'+(typeof s.fpnl==='number'&&isFinite(s.fpnl)?'<div><small>팔로워 수익</small><b>'+cpUsd(s.fpnl)+'</b></div>':'')+'</div>'
-    +'<div class="mk-c-risk"><span>위험도</span><span class="mk-risk '+rk.k+'">'+rk.l+'</span><small>최대 낙폭 기준</small></div>'
+  var pd=mkPd(), r=tfSS3PdCalc(s,pd), up=r.ret>=0, ne=tfSS3Rid(s), ex=mkEx(s);
+  var w=(typeof r.winRate==='number'&&isFinite(r.winRate)&&(r.n||0)>=5)?Math.round(r.winRate)+'%':'-';
+  return '<article class="mk-card mk-v2">'
+    +'<div class="mk-c-head"><img class="mk-c-ex" src="assets/logos/'+ex[0]+'.png" alt="" width="36" height="36" loading="lazy">'
+    +'<div class="mk-c-hd"><h3><button type="button" class="mk-c-tb" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3>'
+    +'<div class="mk-c-xn">'+ex[1]+'</div></div></div>'
+    +'<p class="mk-c-one">'+gEsc(mkOne(s))+'</p>'
+    +'<div class="mk-c-main"><div class="mk-c-ret"><small>수익률</small><b class="num '+(up?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b></div>'+mkSpark(r.eq,150,56)+'</div>'
+    +'<div class="mk-c-stats num"><div><small>최대 낙폭</small><b>'+r.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>최소 금액</small><b>'+mkMin(s)+' USDT</b></div></div>'
     +'<div class="mk-c-acts">'+(s.me?'':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')+'<button type="button" class="mk-btn2" onclick="tfSS3Go(\''+ne+'\')">자세히</button></div>'
     +'</article>';
 }
