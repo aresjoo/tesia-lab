@@ -3864,12 +3864,7 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh-safe li b{font-size:16px;font-weight:700;color:var(--gt)}
 #g-root .txh-safe li span{font-size:14px;line-height:1.65;color:var(--gt3)}
 /* 마지막 CTA: 흰 외곽선 알약 (라임은 히어로 1개) */
-#g-root .txh-end{text-align:center;padding:128px 0 96px}
-#g-root .txh-end h2{font-size:40px}
-#g-root .txh-end .txh-lead{margin:14px auto 32px;max-width:480px;text-wrap:balance}
-#g-root .txh-ghost{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border-radius:999px;border:1px solid var(--gt);background:transparent;color:var(--gt);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:background .15s}
-#g-root .txh-ghost:hover{background:var(--gl)}
-#g-root .txh-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;border-top:1px solid var(--gl);font-size:12.5px;color:var(--gt3)}
+#g-root .txh-foot{display:flex;margin-top:96px;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;border-top:1px solid var(--gl);font-size:12.5px;color:var(--gt3)}
 #g-root .txh-foot .lg{font-weight:800;color:var(--gt2)}
 #g-root .txh-foot button{background:none;border:0;padding:0;font-family:inherit;font-size:12.5px;color:var(--gt3);cursor:pointer}
 #g-root .txh-foot button:hover{color:var(--gt)}
@@ -3881,6 +3876,7 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .txh-steps,#g-root .txh-ai-cols{gap:26px}
 }
 @media (max-width:860px){
+  #g-root .txh-foot{margin-top:64px}
   #g-root .txh-hero{padding:40px 20px 0}
   #g-root .txh-hero.has-back{padding-top:52px}
   #g-root .txh-back{left:16px;top:14px}
@@ -3908,8 +3904,6 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .txh-ai-col ul{gap:16px}
   #g-root .txh-kind{padding:22px 20px}
   #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
-  #g-root .txh-end{padding:88px 0 64px}
-  #g-root .txh-end h2{font-size:30px}
   #g-root .txh-dlink{display:none!important}
   #g-root .txh-foot .cp{margin-left:0;flex-basis:100%}
 }
@@ -14550,9 +14544,6 @@ function tfIntroView(force){
     +safe('<path d="M4 6h16"/><path d="M4 18h16"/><path d="M8 12h8"/>','정한 한도에 닿으면 스스로 멈춰요','하루 손실 한도와 전략별 손실 한도를 정해두면, 닿았을 때 새 주문을 멈춰요.')
     +safe('<circle cx="12" cy="12" r="8.5"/><rect x="9" y="9" width="6" height="6" rx="1"/>','언제든 한 번에 멈출 수 있어요','버튼 하나로 전략을 끄고, 들고 있던 포지션도 정리해요.')
     +'</ul></div></section>'
-    +'<section class="txh-end" aria-labelledby="txh-e-h"><h2 id="txh-e-h">작게 켜두고,<br class="txh-m"> 읽어보고, 늘려요</h2>'
-    +'<p class="txh-lead">처음엔 적은 예산으로 켜두고 판단 기록을 읽어보세요. 믿음이 생기면 그때 늘려도 늦지 않아요.</p>'
-    +'<button type="button" class="txh-ghost" onclick="'+ctaAct+'">'+ctaLbl+'</button></section>'
     +'<footer class="txh-foot"><span class="lg">TETH AI</span>'
     +'<button type="button" onclick="tfShareHub(\'find\')">전략 따라하기</button>'
     +'<button type="button" onclick="tfNav(\'#/insight\')">인사이트</button>'
