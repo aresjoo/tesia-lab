@@ -3821,6 +3821,17 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh-step .n{display:block;font-size:30px;line-height:1;color:var(--gt3);margin-bottom:18px}
 #g-root .txh-step b{display:block;font-size:18px;font-weight:700;margin-bottom:8px}
 #g-root .txh-step p{font-size:14.5px;line-height:1.7;color:var(--gt2)}
+/* TETH가 쓰는 AI: 상황 3묶음, "어떻게 시작하나요" 와 같은 상단 헤어라인 열 (카드, 배경 없음). 아이콘은 이름 옆 부속 */
+#g-root .txh-kick{font-size:13px;color:var(--gt3);margin:0 0 10px}
+#g-root .txh-ai-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:32px}
+#g-root .txh-ai-col{border-top:1px solid var(--gl2);padding-top:22px;min-width:0}
+#g-root .txh-ai-col h3{margin:0 0 20px;font-size:16px;font-weight:600;line-height:1.4;color:var(--gt)}
+#g-root .txh-ai-col ul{list-style:none;padding:0;display:grid;gap:20px}
+#g-root .txh-ai-col li{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:14px;align-items:start}
+#g-root .txh-ai-col img{grid-row:span 2;display:block;width:40px;height:40px;border-radius:10px;object-fit:cover;outline:1px solid var(--gl);outline-offset:-1px}
+#g-root .txh-ai-col b{font-size:15px;font-weight:600;line-height:1.4;color:var(--gt)}
+#g-root .txh-ai-col span{margin-top:2px;font-size:13.5px;line-height:1.55;color:var(--gt3);text-wrap:pretty}
+#g-root .txh-tm{margin-top:28px;text-align:right;font-size:12.5px;line-height:1.5;color:var(--gt3)}
 /* 내 돈은 어떻게 지키나요 */
 #g-root .txh-safe{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}
 #g-root .txh-safe ul{list-style:none;padding:0;border-top:1px solid var(--gl2)}
@@ -3840,9 +3851,9 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh-foot button:hover{color:var(--gt)}
 #g-root .txh-foot .cp{margin-left:auto}
 @media (max-width:960px){
-  #g-root .txh-kinds,#g-root .txh-steps{grid-template-columns:1fr}
+  #g-root .txh-kinds,#g-root .txh-steps,#g-root .txh-ai-cols{grid-template-columns:1fr}
   #g-root .txh-kinds{gap:12px}
-  #g-root .txh-steps{gap:26px}
+  #g-root .txh-steps,#g-root .txh-ai-cols{gap:26px}
 }
 @media (max-width:860px){
   #g-root .txh-hero{padding:40px 20px 0}
@@ -3863,7 +3874,11 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .txh-now{padding:22px 22px 26px;margin-top:24px}
   #g-root .txh-by{gap:14px}
   #g-root .txh-body{margin-left:0}
-  #g-root .txh-kinds,#g-root .txh-steps{margin-top:24px}
+  #g-root .txh-kinds,#g-root .txh-steps,#g-root .txh-ai-cols{margin-top:24px}
+  #g-root .txh-ai-col{padding-top:18px}
+  #g-root .txh-ai-col h3{margin-bottom:16px}
+  #g-root .txh-ai-col ul{gap:16px}
+  #g-root .txh-tm{margin-top:20px}
   #g-root .txh-kind{padding:22px 20px}
   #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
   #g-root .txh-end{padding:88px 0 64px}
@@ -14402,6 +14417,9 @@ function tfIntroView(force){
   /* 전략 유형 카드: 시드 제목(tfSeedTitle)은 지표 용어가 섞여 있어 쓰지 않고 쉬운 말 고정 문구 (수익률, 팔로워 수 비노출) */
   function kind(lb,t,ds,ex,act){ return '<button type="button" class="txh-kind" onclick="'+act+'"><span class="lb">'+lb+'</span><b>'+t+'</b><span class="ds">'+ds+'</span><span class="ex"><small>이렇게 말하면 돼요</small>“'+ex+'”</span></button>'; }
   function step(n,t,p){ return '<div class="txh-step"><span class="n">'+n+'</span><b>'+t+'</b><p>'+p+'</p></div>'; }
+  /* TETH가 쓰는 AI: 상황별 묶음 (ux-audit/ai 경쟁 codex 안 채택). 이름, 역할 문장은 브리프 원문 그대로, 로고는 장식이라 alt="" */
+  function aiRow(k,n,r){ return '<li><img src="assets/ai/'+k+'.png" alt="" width="40" height="40" loading="lazy" decoding="async"><b>'+n+'</b><span>'+r+'</span></li>'; }
+  function aiCol(id,t,rows){ return '<div class="txh-ai-col"><h3 id="'+id+'">'+t+'</h3><ul aria-labelledby="'+id+'">'+rows+'</ul></div>'; }
   function safe(svg,t,p){ return '<li>'+ic(svg)+'<b>'+t+'</b><span>'+p+'</span></li>'; }
   gContent('<div class="txh tx-guest">'
     +'<section class="txh-hero'+(S.user?' has-back':'')+'" aria-labelledby="txh-h">'
@@ -14414,7 +14432,12 @@ function tfIntroView(force){
     +'<div class="txh-floor" aria-hidden="true"><img src="assets/hero-tiles-end.jpg" alt="" width="1440" height="480" decoding="async"></div>'
     +'</section>'
     +'<div class="txh-wrap">'
-    +'<section class="txh-sec first" id="txh-now" aria-labelledby="txh-now-h"><h2 id="txh-now-h">지금 TETH가 하는 일</h2>'
+    +'<section class="txh-sec first" id="txh-ai" aria-labelledby="txh-ai-h"><p class="txh-kick">TETH가 쓰는 AI</p><h2 id="txh-ai-h">상황에 맞는 AI를 골라 써요</h2><div class="txh-ai-cols">'
+    +aiCol('txh-ai-news','뉴스를 확인할 때',aiRow('gemini','Gemini','구글 검색으로 최신 정보를 확인해요')+aiRow('grok','Grok','X의 실시간 여론을 읽어요')+aiRow('perplexity','Perplexity','뉴스와 공시의 출처를 찾아요'))
+    +aiCol('txh-ai-mkt','시장을 살펴볼 때',aiRow('deepseek','DeepSeek','시장을 쉬지 않고 훑어요')+aiRow('qwen','Qwen','여러 종목을 한꺼번에 비교해요')+aiRow('kimi','Kimi','긴 보고서와 자료를 읽어요'))
+    +aiCol('txh-ai-dec','판단을 정리할 때',aiRow('chatgpt','ChatGPT','복잡한 상황을 정리해 판단해요')+aiRow('claude','Claude','왜 그렇게 했는지 차분한 문장으로 써요')+aiRow('mistral','Le Chat (Mistral)','내부 서버에서 돌리는 예비 판단이에요'))
+    +'</div><p class="txh-tm">각 로고는 해당 회사의 상표예요</p></section>'
+    +'<section class="txh-sec" id="txh-now" aria-labelledby="txh-now-h"><h2 id="txh-now-h">지금 TETH가 하는 일</h2>'
     +'<p class="txh-lead">사고팔 때만이 아니라 기다릴 때도, 왜 그렇게 했는지 직접 적어둬요.</p>'
     +'<article class="txh-now"><header class="txh-by"><span class="txh-av"><img class="txh-face" src="assets/buffett.jpg" alt="" width="56" height="56"><img class="txh-ex" src="assets/logos/app-binance.png" alt="바이낸스" width="20" height="20"></span><span class="txh-name">워렌 버핏 AI_버전13</span></header>'
     +'<p class="txh-body">제 분석에 따르면 NVDA와 MSFT 같은 AI 관련 기업들의 강세가 지속될 것으로 예상되어, 주말 유동성 감소와 거시 경제 이벤트 위험에도 불구하고 <b>기존 롱 포지션을 유지하고 있으며</b>, 당분간 <b>신규 거래나 헤지 포지션은 추가하지 않을 예정입니다</b>. NVDA의 지지선과 MSFT의 상승 추세를 면밀히 모니터링하며, 추세가 무너질 경우 조정할 준비를 하고 있습니다.</p></article></section>'
