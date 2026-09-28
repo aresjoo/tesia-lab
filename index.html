@@ -4075,6 +4075,39 @@ body.gft-doc #gft-slot{display:block}
 /* ═══ S7 전략 따라하기 (mk) — 허브, 카드, 상세 5탭, 따라가기 시트, 중단 3택. 라임은 1차 CTA(.mk-pri)에만 ═══ */
 .mk{max-width:1240px}
 .mk-up{color:#56c486}.mk-dn{color:#ee766a}
+/* 허브 히어로: 전폭 밴드(box-shadow 로 좌우 확장) + 제목, 부제, 공지 + 배너 캐러셀 3장 */
+.mkh{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:center;padding:34px 0 38px;margin:0 0 26px;background:#16181b;box-shadow:0 0 0 100vmax #16181b;clip-path:inset(0 -100vmax)}
+.mkh h2{margin:0;font-size:48px;font-weight:800;letter-spacing:-.025em;line-height:1.15;color:#fff}
+.mkh-sub{margin:12px 0 0;font-size:18px;line-height:1.55;color:var(--gt2)}
+.mkh-note{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:0;background:none;border:0;font:inherit;font-size:14.5px;color:var(--gt);cursor:pointer}
+.mkh-note span{text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.45)}
+.mkh-note svg{flex:none;color:#c8f43c}
+.mkh-ban{position:relative;min-width:0}
+.mkh-view{position:relative;height:210px;border-radius:14px;overflow:hidden;background:#0b0c0e}
+.mkh-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 34px;border:0;text-align:left;font:inherit;color:#fff;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .45s ease}
+.mkh-slide.on{opacity:1;pointer-events:auto}
+.mkh-slide small{font-size:13px;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.72)}
+.mkh-slide b{display:block;margin-top:8px;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.22}
+.mkh-slide b em{font-style:normal;color:#c8f43c}
+.mkh-slide span{display:block;margin-top:10px;font-size:14.5px;color:rgba(255,255,255,.78)}
+.mkh-s1{background:radial-gradient(ellipse 46% 90% at 84% 100%,rgba(200,244,60,.16),rgba(200,244,60,0) 70%),#101309}
+.mkh-slide .mkh-pod{position:absolute;right:40px;bottom:0;display:flex;align-items:flex-end;gap:8px;height:150px;margin:0} /* .mkh-slide span 규칙보다 우선 */
+.mkh-pod i{display:flex;align-items:flex-start;justify-content:center;width:44px;padding-top:10px;border-radius:8px 8px 0 0;font-style:normal;font-size:15px;font-weight:800;color:#0c0d0f;background:#c8f43c}
+.mkh-pod i:nth-child(1){height:96px;background:rgba(200,244,60,.55)}.mkh-pod i:nth-child(2){height:138px}.mkh-pod i:nth-child(3){height:68px;background:rgba(200,244,60,.32)}
+.mkh-cta{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-style:normal;font-size:13.5px;font-weight:700;color:#fff}
+.mkh-cta::after{content:"\2192";font-weight:400}
+.mkh-slide:hover .mkh-cta,.mkh-slide:focus-visible .mkh-cta{text-decoration:underline;text-underline-offset:4px}
+.mkh-slide:focus-visible{outline:2px solid #c8f43c;outline-offset:-2px}
+.mkh-s2{background:linear-gradient(90deg,rgba(11,12,14,.94) 0%,rgba(11,12,14,.62) 52%,rgba(11,12,14,.12) 100%),url(assets/hero-tiles-end.jpg) 70% 60%/cover no-repeat}
+.mkh-s3{background:radial-gradient(ellipse 50% 110% at 86% 50%,rgba(0,229,255,.26),rgba(0,229,255,0) 64%),linear-gradient(120deg,#0b0e10 0%,#0c1417 100%)}
+.mkh-s3 img{position:absolute;right:44px;top:50%;width:92px;height:92px;margin-top:-46px;border-radius:22px;box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.mkh-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.mkh-dots button{width:54px;height:28px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+.mkh-dots button::before{content:"";position:absolute;left:0;right:0;top:13px;height:2px;border-radius:2px;background:rgba(255,255,255,.22)}
+.mkh-dots button[aria-current="true"]::before{background:#fff}
+@media (max-width:1100px){.mkh{grid-template-columns:minmax(0,1fr);gap:26px}.mkh-ban{max-width:640px}}
+@media (max-width:640px){.mkh{padding:18px 0 12px;margin-bottom:14px;gap:14px}.mkh h2{font-size:32px}.mkh-sub{font-size:15.5px;margin-top:8px}.mkh-note{display:none}.mkh-view{height:150px}.mkh-slide{padding:0 96px 0 20px}.mkh-cta{margin-top:10px;font-size:12.5px}.mkh-slide .mkh-pod{display:flex;right:18px;height:104px;gap:5px}.mkh-pod i{width:22px;font-size:11px;padding-top:6px}.mkh-pod i:nth-child(1){height:64px}.mkh-pod i:nth-child(2){height:92px}.mkh-pod i:nth-child(3){height:44px}.mkh-slide b{font-size:20px}.mkh-slide span{display:none}.mkh-s3 img{right:20px;width:64px;height:64px;margin-top:-32px;border-radius:16px}}
+@media (prefers-reduced-motion:reduce){.mkh-slide{transition:none}}
 .mk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:28px 0 30px} /* 허브 히어로: 큰 제목 + 한 줄 문구 (Binance, League of Traders 문법) */
 .mk-head h2{font-size:44px;font-weight:800;letter-spacing:-.02em;color:var(--gt);margin:0;line-height:1.2}
 .mk-lead{font-size:17px;line-height:1.6;color:var(--gt2);margin-top:12px}
@@ -11093,6 +11126,29 @@ function tfSS3YearBars(byYear,w,h){
 /* 풀폭 전략 카드 — 캐논 .tfbk-card 문법 (agy-visual-spec §7) */
 function tfSS3Card(s){ return mkCard(s); } /* S7: 카드 렌더는 mkCard 단일 경로 (내 공유 미리보기, 공개 온보딩 미리보기 공용) */
 /* 허브: 캐논 히어로 + 필 컨트롤 + 탭 바디 */
+/* 허브 히어로 배너 3장. 5초마다 넘어가고, 점(막대) 클릭으로 이동. 화면을 떠나면 타이머 정리 */
+var MKH_I=0, MKH_T=0;
+function mkhGo(i){
+  var v=document.querySelector('.mkh-view'); if(!v){ clearInterval(MKH_T); MKH_T=0; return; }
+  var sl=v.querySelectorAll('.mkh-slide'), ds=document.querySelectorAll('.mkh-dots button'); MKH_I=(i+sl.length)%sl.length;
+  for(var k=0;k<sl.length;k++){ sl[k].classList.toggle('on',k===MKH_I); sl[k].tabIndex=k===MKH_I?0:-1; if(ds[k]) ds[k].setAttribute('aria-current',String(k===MKH_I)); }
+}
+function mkhStart(){ clearInterval(MKH_T); var rm=false; try{ rm=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){} if(rm) return;
+  MKH_T=setInterval(function(){ var b=document.querySelector('.mkh-ban'); if(document.hidden||(b&&(b.matches(':hover')||b.contains(document.activeElement)))) return; mkhGo(MKH_I+1); },5000); }
+function mkhPick(i){ mkhGo(i); mkhStart(); }
+function mkHero(){
+  setTimeout(function(){ mkhGo(MKH_I); mkhStart(); },0);
+  var slide=function(i,cls,act,sm,b,sp,extra){ return '<button type="button" class="mkh-slide '+cls+(i===MKH_I?' on':'')+'" onclick="'+act+'"><small>'+sm+'</small><b>'+b+'</b><span>'+sp+'</span>'+(extra||'')+'</button>'; };
+  return '<section class="mkh" aria-label="전략 따라하기 소개">'
+    +'<div><h2>전략 따라하기</h2><p class="mkh-sub">잘 되는 전략을 골라 내 계정에서 그대로 거래하세요.</p>'
+    +'<button type="button" class="mkh-note" onclick="tfBrokersView()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4h3l5 4V6L6 10H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8.5 8.5 0 0 1 0 12"/></svg><span>OKX 거래소 연결이 추가됐어요</span></button></div>'
+    +'<div class="mkh-ban"><div class="mkh-view">'
+    +slide(0,'mkh-s1',"tfShareHub('mine')",'10월 전략 리그','총상금 <em>1,000,000 USDT</em>','10월 1일 시작, 수익률 상위 전략에 상금','<i class="mkh-cta">내 전략 공개하기</i><span class="mkh-pod" aria-hidden="true"><i>2</i><i>1</i><i>3</i></span>')
+    +slide(1,'mkh-s2',"tfNav('#/trade')",'AI 트레이딩','AI가 스스로<br>판단하며 거래','사고팔 때마다 이유를 기록으로 남겨요','<i class="mkh-cta">AI 트레이딩 보기</i>')
+    +slide(2,'mkh-s3',"tfBrokersView()",'Powered by Bitget','Bitget 계정 하나로<br>주식, 옵션, 암호화폐','출금 권한 없이 주문 권한만 연결해요','<i class="mkh-cta">거래소 연결하기</i><img src="assets/logos/bitget-512.png" alt="" width="92" height="92">')
+    +'</div><div class="mkh-dots" role="group" aria-label="배너 선택">'+[0,1,2].map(function(i){ return '<button type="button" aria-label="배너 '+(i+1)+'" aria-current="'+(i===MKH_I)+'" onclick="mkhPick('+i+')"></button>'; }).join('')+'</div></div>'
+    +'</section>';
+}
 function tfShareHub(tab){
   tfSS3DlgClose(true); mkFollowClose(true); /* 화면 전환 시 떠 있는 다이얼로그, 시트 정리 (codex F09) */
   var t=tfSSState(); tab=tab||t.ss.tab||'find'; t.ss.tab=tab; tfSave();
@@ -11124,7 +11180,7 @@ function tfShareHub(tab){
   }
   var body= tab==='follow'?tfSS3FollowTab(): tab==='mine'?tfSS3MineTab(): '<div id="ss3-grid">'+tfSS3GridHtml()+'</div>';
   gContent('<div class="tf-page tfbk ss3 mk">'
-    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">잘 되는 전략을 고르면 내 거래소 계정에서 같은 판단으로 거래해요. 클릭 한 번이면 시작돼요.</div></div></div>'
+    +mkHero()
     +tabs+controls+body
     +'</div>');
   tfBkDropInit();
