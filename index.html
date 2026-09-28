@@ -3780,7 +3780,7 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh-more-row{margin-top:18px}
 #g-root .txh-more{background:none;border:0;border-bottom:1px solid rgba(154,160,166,.4);padding:0 0 1px;font-family:inherit;font-size:13.5px;color:#9aa0a6;cursor:pointer}
 #g-root .txh-more:hover{color:#fff}
-#g-root .txh-note{font-size:13.5px;color:#9aa0a6}
+#g-root .txh-note{display:inline-block;font-size:13.5px;color:#9aa0a6;border-bottom:1px solid rgba(154,160,166,.4);padding:0 0 1px}
 /* 영상 바닥: 포스터(=영상 마지막 프레임) 위에 영상. 그룹 전체를 screen 합성해 검정 픽셀이 배경에 녹고, 네 변 마스크로 페이지에 스민다.
    글자는 바닥 위쪽의 마스크 투명 구간에만 걸리고 밝은 타일과 겹치지 않는다 */
 #g-root .txh-floor{position:relative;height:clamp(300px,40vw,600px);margin:-40px -24px 0;pointer-events:none;mix-blend-mode:screen;
@@ -14400,7 +14400,7 @@ function tfIntroView(force){
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false;
   gChead('AI 트레이딩','',null);
-  var ctaAct=S.user?"tfNav('#/trade')":"authOpen('signup')", ctaLbl=S.user?'AI 트레이딩으로 돌아가기':'무료로 시작';
+  var ctaAct=S.user?"tfNav('#/trade')":"authOpen('signup')", ctaLbl=S.user?'AI 트레이딩으로 돌아가기':'시작하기';
   function ic(p){ return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
   /* 전략 유형 카드: 시드 제목(tfSeedTitle)은 지표 용어가 섞여 있어 쓰지 않고 쉬운 말 고정 문구 (수익률, 팔로워 수 비노출) */
   function kind(lb,t,ds,ex,act){ return '<button type="button" class="txh-kind" onclick="'+act+'"><span class="lb">'+lb+'</span><b>'+t+'</b><span class="ds">'+ds+'</span><span class="ex"><small>이렇게 말하면 돼요</small>“'+ex+'”</span></button>'; }
