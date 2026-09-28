@@ -3759,6 +3759,31 @@ button{-webkit-tap-highlight-color:transparent}
 /* ══ txh: AI 트레이딩 게스트 랜딩 (에디토리얼 캄, ux-audit/hero/DECISION.md). 세리프 헤드라인 + halo.mp4 타일 바닥.
    라임 #c8f43c 는 히어로 CTA 1개만, 마지막 CTA 는 흰 외곽선. 스크롤 등장 효과 없음 ══ */
 #g-root .txh{word-break:keep-all;overflow-wrap:anywhere;color:var(--gt);overflow-x:clip}
+/* 사이트 푸터 (ux-audit/footer/DECISION.md): 라임 면, 링크 4칼럼 + 문단, Powered by Bitget, SVG 도형 TETH. 푸터 자체 폭 기준 반응형 */
+#g-content .gft{container-type:inline-size;margin-top:48px;background:#c8f43c;color:#0c0d0f;word-break:keep-all;overflow-wrap:anywhere}
+#g-content .gft-in{padding:64px 40px 28px}
+#g-content .gft-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px 56px}
+#g-content .gft-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+#g-content .gft-col h3{margin:0 0 14px;font-size:13px;font-weight:700;line-height:1.4;color:#0c0d0f}
+#g-content .gft-col a,#g-content .gft-col button{display:block;width:fit-content;margin:0 0 10px;padding:0;background:none;border:0;font:inherit;font-size:14px;line-height:1.5;color:#0c0d0f;text-decoration:none;text-align:left;cursor:pointer}
+#g-content .gft-col a:hover,#g-content .gft-col button:hover{text-decoration:underline;text-underline-offset:3px}
+#g-content .gft a:focus-visible,#g-content .gft button:focus-visible{outline:2px solid #0c0d0f;outline-offset:3px;border-radius:2px}
+#g-content .gft-copy p{margin:0 0 12px;font-size:13.5px;line-height:1.7;color:#0c0d0f}
+#g-content .gft-copy .dim{color:#39441a}
+#g-content .gft-pw{display:flex;align-items:center;gap:8px;margin-top:72px;font-size:15px;color:#39441a}
+#g-content .gft-pw img{width:22px;height:22px;border-radius:6px;box-shadow:0 0 0 1px rgba(12,13,15,.55)}
+#g-content .gft-pw b{font-weight:700;color:#0c0d0f}
+#g-content .gft-wm{display:block;width:100%;height:auto;margin-top:14px;fill:#0c0d0f}
+@container (max-width:900px){
+  #g-content .gft-top{grid-template-columns:minmax(0,1fr)}
+  #g-content .gft-cols{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
+}
+@container (max-width:600px){
+  #g-content .gft-in{padding:48px 20px 20px}
+  #g-content .gft-pw{margin-top:44px}
+  #g-content .gft-col h3{margin-bottom:4px}
+  #g-content .gft-col a,#g-content .gft-col button{display:flex;align-items:center;min-height:44px;margin:0}
+}
 #g-root .txh *{box-sizing:border-box}
 #g-root .txh :where(h1,h2,p,ol,ul){margin:0}
 #g-root .txh section{scroll-margin-top:24px}
@@ -3864,11 +3889,6 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh-safe li b{font-size:16px;font-weight:700;color:var(--gt)}
 #g-root .txh-safe li span{font-size:14px;line-height:1.65;color:var(--gt3)}
 /* 마지막 CTA: 흰 외곽선 알약 (라임은 히어로 1개) */
-#g-root .txh-foot{display:flex;margin-top:96px;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;border-top:1px solid var(--gl);font-size:12.5px;color:var(--gt3)}
-#g-root .txh-foot .lg{font-weight:800;color:var(--gt2)}
-#g-root .txh-foot button{background:none;border:0;padding:0;font-family:inherit;font-size:12.5px;color:var(--gt3);cursor:pointer}
-#g-root .txh-foot button:hover{color:var(--gt)}
-#g-root .txh-foot .cp{margin-left:auto}
 @media (max-width:960px){
   #g-root .txh-kinds,#g-root .txh-steps,#g-root .txh-ai-cols{grid-template-columns:1fr}
   #g-root .txh-now{grid-template-columns:1fr;gap:16px}
@@ -3876,7 +3896,6 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .txh-steps,#g-root .txh-ai-cols{gap:26px}
 }
 @media (max-width:860px){
-  #g-root .txh-foot{margin-top:64px}
   #g-root .txh-hero{padding:40px 20px 0}
   #g-root .txh-hero.has-back{padding-top:52px}
   #g-root .txh-back{left:16px;top:14px}
@@ -3904,8 +3923,6 @@ button{-webkit-tap-highlight-color:transparent}
   #g-root .txh-ai-col ul{gap:16px}
   #g-root .txh-kind{padding:22px 20px}
   #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
-  #g-root .txh-dlink{display:none!important}
-  #g-root .txh-foot .cp{margin-left:0;flex-basis:100%}
 }
 /* 미활성 뷰 */
 #g-root .tx-inactive{max-width:760px}
@@ -6981,7 +6998,7 @@ function gContent(html){
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
     if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
-  $('g-content').innerHTML=html; $('g-scroll').scrollTop=0;
+  $('g-content').innerHTML=html+(window.GFT_MODES&&GFT_MODES[G.mode]?gSiteFooter():''); $('g-scroll').scrollTop=0;
   if(window.gSideMobClose) gSideMobClose(); /* 드로어에서 뷰를 골랐으면 드로어는 닫는다 */
   setTimeout(gSideCur,0); /* 사이드바 현재 위치 표시 — G.mode 확정 이후 (agy qa3 LNB active) */
 }
@@ -14480,6 +14497,28 @@ function tfIntroFx(){
   try{ if(fx.mq){ if(fx.mq.addEventListener) fx.mq.addEventListener('change',fx.mqh); else if(fx.mq.addListener) fx.mq.addListener(fx.mqh); } }catch(e){}
 }
 function tfTxPct(v,d){ if(typeof v!=='number'||!isFinite(v)) return '-'; return (v>=0?'+':'')+v.toFixed(d==null?1:d)+'%'; }
+/* 사이트 푸터: 끝이 있는 스크롤 페이지에만 gContent 가 맨 끝에 붙인다 (고정 아님). 채팅, 터미널 제외 */
+var GFT_MODES={tfintro:1,tfinactive:1,tfss3:1,tfss3d:1,tfbrokers:1,tfbroker:1,nfplan:1};
+var GFT_WM='M0 0h1000v240h-1000zM350 0h300v1000h-300zM1070 0h300v1000h-300zM1070 0h760v240h-760zM1070 390h700v220h-700zM1070 760h760v240h-760zM1900 0h1000v240h-1000zM2250 0h300v1000h-300zM2970 0h300v1000h-300zM3670 0h300v1000h-300zM2970 390h1000v220h-1000z';
+function gSiteFooter(){
+  function b(label,act){ return '<button type="button" onclick="'+act+'">'+label+'</button>'; }
+  function a(label,href,blank){ return '<a href="'+href+'"'+(blank?' target="_blank" rel="noopener noreferrer"':'')+'>'+label+'</a>'; }
+  function col(h,items){ return '<div class="gft-col"><h3>'+h+'</h3>'+items.join('')+'</div>'; }
+  return '<footer class="gft" aria-label="사이트 정보"><div class="gft-in"><div class="gft-top">'
+    +'<nav class="gft-cols" aria-label="바닥글 메뉴">'
+    +col('제품',[b('AI 트레이딩',"tfNav('#/trade')"),b('전략 따라하기',"tfShareHub('find')"),b('새 전략 만들기','gHome()'),b('거래소 연결','tfBrokersView()')])
+    +col('회사',[a('TETH 정보','about/'),b('인사이트',"tfNav('#/insight')"),a('앱 다운로드','download/',true)])
+    +col('도움',[b('24시간 상담','event.stopPropagation();tfTxHelp()'),b('이용 현황',"tfNav('#/plan')")])
+    +col('약관',[a('서비스 약관','policies/#terms',true),a('개인정보처리방침','policies/#privacy',true)])
+    +'</nav><div class="gft-copy">'
+    +'<p>TETH는 말로 만든 전략을 AI가 판단하고 거래하는 서비스예요. 거래는 연결한 거래소 계정 안에서만 이뤄지고, TETH는 출금 권한을 받지 않아요.</p>'
+    +'<p><b>TETH는 Bitget의 1등 파트너예요.</b></p>'
+    +'<p class="dim">가상자산 거래는 원금 손실이 생길 수 있어요. 과거 결과가 앞으로의 수익을 보장하지 않아요.</p>'
+    +'<p class="dim">© 2026 TETH AI. 모든 권리 보유.</p></div></div>'
+    +'<div class="gft-pw">Powered by <img src="assets/logos/bitget-512.png" alt="" width="22" height="22" loading="lazy"><b>Bitget</b></div>'
+    +'<svg class="gft-wm" viewBox="0 0 3970 1000" role="img" aria-label="TETH"><path d="'+GFT_WM+'"/></svg>'
+    +'</div></footer>';
+}
 function tfIntroView(force){
   /* 회원은 미활성 뷰가 정본. force(사용 방법 링크)로만 랜딩을 다시 볼 수 있다 */
   if(S.user&&!force){ tfTradeInactiveView(); return; }
@@ -14544,12 +14583,6 @@ function tfIntroView(force){
     +safe('<path d="M4 6h16"/><path d="M4 18h16"/><path d="M8 12h8"/>','정한 한도에 닿으면 스스로 멈춰요','하루 손실 한도와 전략별 손실 한도를 정해두면, 닿았을 때 새 주문을 멈춰요.')
     +safe('<circle cx="12" cy="12" r="8.5"/><rect x="9" y="9" width="6" height="6" rx="1"/>','언제든 한 번에 멈출 수 있어요','버튼 하나로 전략을 끄고, 들고 있던 포지션도 정리해요.')
     +'</ul></div></section>'
-    +'<footer class="txh-foot"><span class="lg">TETH AI</span>'
-    +'<button type="button" onclick="tfShareHub(\'find\')">전략 따라하기</button>'
-    +'<button type="button" onclick="tfNav(\'#/insight\')">인사이트</button>'
-    +'<button type="button" onclick="tfBackToChat()">새 전략 만들기</button>'
-    +'<button type="button" class="txh-dlink" onclick="tfPreviewOpen()">터미널 미리 보기</button>'
-    +'<span class="cp">© 2026 TETH AI</span></footer>'
     +'</div></div>');
   TF_RENDERING=false;
   tfIntroFx();
