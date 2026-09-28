@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>spark mock claude</title>
+<style>
+body{margin:0;background:#0f1012;color:#e3e3e3;font-family:-apple-system,"Segoe UI","Noto Sans KR",sans-serif;padding:28px 32px}
+h1{font-size:18px;margin:0 0 4px}p.s{margin:0 0 22px;font-size:13px;color:#9aa0a6}
+table{border-collapse:separate;border-spacing:14px 14px}th{font-size:13px;font-weight:600;color:#9aa0a6;text-align:left;padding:0 4px}
+td{vertical-align:top}.card{background:#151619;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:16px;width:312px}
+.row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.lb{font-size:12px;color:#9aa0a6;margin-bottom:3px}
+.ret{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}.up{color:#56c486}.dn{color:#ee766a}
+svg.sp{display:block;width:104px;height:42px}.big svg.sp{width:312px;height:126px}.big{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+</style></head><body>
+<h1>스파크라인 시안 (Claude)</h1><p class="s">A: 기준선 위 초록, 아래 빨강 분리 + 면 채움 / B: 최종 결과 한 색 + 면 채움. 위는 실제 카드 크기 104x42, 아래는 3배 확대</p>
+<table id="t"></table>
+<script src="data.js"></script>
+<script>
+var N=0;
+function spark(eq,w,h,mode){
+  var K=Math.min(26,eq.length),pts=[],i,k;
+  for(i=0;i<K;i++){var a0=Math.floor(i*eq.length/K),a1=Math.max(a0+1,Math.floor((i+1)*eq.length/K)),s=0;for(k=a0;k<a1;k++)s+=eq[k].v;pts.push(s/(a1-a0));}
+  pts[0]=eq[0].v;pts[K-1]=eq[eq.length-1].v;
+  var base=1,min=base,max=base;pts.forEach(function(v){if(v<min)min=v;if(v>max)max=v;});
+  var pad=4,X=function(j){return j/(K-1)*w;},Y=function(v){return pad+(1-(v-min)/(max-min))*(h-pad*2);},cl=function(y){return Math.max(pad,Math.min(h-pad,y));};
+  var P=pts.map(function(v,j){return [X(j),Y(v)];}),d='M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1);
+  for(i=0;i<K-1;i++){var p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(K-1,i+2)];
+    d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+cl(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+cl(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1);}
+  var yb=Y(base),id='s'+(++N),G='#2fb98a',R='#f0566a',line='<line x1="0" y1="'+yb.toFixed(1)+'" x2="'+w+'" y2="'+yb.toFixed(1)+'" stroke="rgba(255,255,255,.22)" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>';
+  var st=' fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"';
+  var area=d+' L'+w+' '+yb.toFixed(1)+' L0 '+yb.toFixed(1)+' Z';
+  if(mode==='B'){var c=pts[K-1]>=base?G:R;
+    return '<svg class="sp" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c+'" stop-opacity=".30"/><stop offset="1" stop-color="'+c+'" stop-opacity="0"/></linearGradient></defs>'+line+'<path d="'+d+' L'+w+' '+h+' L0 '+h+' Z" fill="url(#'+id+')"/><path d="'+d+'" stroke="'+c+'"'+st+'/></svg>';}
+  return '<svg class="sp" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><defs>'
+   +'<linearGradient id="'+id+'u" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".03"/></linearGradient>'
+   +'<linearGradient id="'+id+'d" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+h+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".03"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
+   +'<clipPath id="'+id+'cu"><rect x="-2" y="-2" width="'+(w+4)+'" height="'+(yb+2).toFixed(1)+'"/></clipPath><clipPath id="'+id+'cd"><rect x="-2" y="'+yb.toFixed(1)+'" width="'+(w+4)+'" height="'+(h-yb+2).toFixed(1)+'"/></clipPath></defs>'+line
+   +'<g clip-path="url(#'+id+'cu)"><path d="'+area+'" fill="url(#'+id+'u)"/><path d="'+d+'" stroke="'+G+'"'+st+'/></g>'
+   +'<g clip-path="url(#'+id+'cd)"><path d="'+area+'" fill="url(#'+id+'d)"/><path d="'+d+'" stroke="'+R+'"'+st+'/></g></svg>';
+}
+var h='<tr><th></th>'+SPARK_CASES.map(function(c){return '<th>'+c.label+'</th>';}).join('')+'</tr>';
+['A','B'].forEach(function(m){ h+='<tr><th>'+m+'</th>'+SPARK_CASES.map(function(c){ var up=c.ret.charAt(0)==='+';
+  return '<td><div class="card"><div class="row"><div><div class="lb">수익률</div><div class="ret '+(up?'up':'dn')+'">'+c.ret+'</div></div>'+spark(c.eq,104,42,m)+'</div><div class="big">'+spark(c.eq,312,126,m)+'</div></div></td>'; }).join('')+'</tr>'; });
+document.getElementById('t').innerHTML=h;
+</script></body></html>

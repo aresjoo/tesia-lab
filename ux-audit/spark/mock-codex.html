@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TETH 미니 차트 비교 | Codex</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:32px;background:#0f1012;color:#e9ecef;font-family:Arial,"Malgun Gothic",sans-serif}main{max-width:1136px;margin:auto}.eyebrow{font-size:11px;letter-spacing:2px;color:#92989f}h1{font-size:22px;font-weight:600;margin:10px 0}header p{color:#a0a6ad;font-size:13px;margin:0;line-height:1.7}section{margin-top:28px}.variant{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}.variant h2{font-size:16px;margin:0}.variant p{font-size:12px;color:#979ea6;margin:0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.case{font-size:12px;font-weight:500;color:#aab0b7;margin:0 0 10px 2px}.card{background:#151619;border:1px solid #292b30;border-radius:14px;padding:18px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.label{font-size:12px;color:#9ba2aa;margin-bottom:4px}.ret{font-size:26px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums}.up{color:#2fb98a}.down{color:#f0566a}.spark{display:block;flex:none;width:104px;height:42px}.big{margin-top:18px;border-top:1px solid #27292d;padding-top:12px}.scale{font-size:10px;letter-spacing:.4px;color:#767e87;margin-bottom:10px}.big .spark{width:312px;height:126px}.foot{font-size:11px;color:#7f8790;margin:20px 0 0;line-height:1.8}@media(max-width:1100px){.grid{grid-template-columns:1fr}.card{max-width:362px}.variant{display:block}.variant p{margin-top:8px}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">TETH / SPARK STUDY / CODEX</div><h1>작은 차트, 같은 데이터, 두 가지 표현</h1><p>104 × 42 실제 크기와 312 × 126 확대. 시작값 1을 기준으로 초록은 수익, 빨강은 손해입니다.</p></header>
+<div id="variants"></div>
+<p class="foot">공용 데모 데이터 60개를 모두 통과하는 곡선. 케이스별 세로축 자동 조정으로 차트 간 변동폭은 직접 비교할 수 없습니다.<br>수익률 숫자는 공용 데이터의 ret 표기를 유지했습니다. 실제 마지막 샘플의 변화율과는 차이가 있습니다.</p>
+</main>
+<script src="data.js"></script>
+<script>
+'use strict';
+let serial=0;
+const GREEN='#2fb98a',RED='#f0566a';
+// Monotone cubic Hermite interpolation keeps every input point and local extrema.
+function curve(points){
+  const slopes=points.slice(1).map((p,i)=>(p[1]-points[i][1])/(p[0]-points[i][0]));
+  const tangents=points.map((p,i)=>i===0?slopes[0]:i===points.length-1?slopes.at(-1):slopes[i-1]*slopes[i]<=0?0:2*slopes[i-1]*slopes[i]/(slopes[i-1]+slopes[i]));
+  const f=n=>n.toFixed(4);
+  let d=`M ${points[0].map(f).join(' ')}`;
+  for(let i=0;i<points.length-1;i++){
+    const a=points[i],b=points[i+1],dx=(b[0]-a[0])/3;
+    d+=` C ${f(a[0]+dx)} ${f(a[1]+dx*tangents[i])} ${f(b[0]-dx)} ${f(b[1]-dx*tangents[i+1])} ${f(b[0])} ${f(b[1])}`;
+  }
+  return d;
+}
+function spark(c,mode,large){
+  const id='spark'+(++serial),pad=4,values=c.eq.map(p=>p.v),lo=Math.min(1,...values),hi=Math.max(1,...values),span=hi-lo||1;
+  const y=v=>pad+(hi-v)/span*(42-pad*2),base=y(1),points=c.eq.map((p,i)=>[pad+i/(c.eq.length-1)*(104-pad*2),y(p.v)]);
+  const d=curve(points),end=points.at(-1),area=`${d} L 100 ${base} L 4 ${base} Z`,under=`${d} L 100 42 L 4 42 Z`;
+  const clip=(suffix,top,height)=>`<clipPath id="${id+suffix}"><rect x="0" y="${top}" width="104" height="${height}"/></clipPath>`;
+  const grad=(suffix,color,start,finish,a,b)=>`<linearGradient id="${id+suffix}" gradientUnits="userSpaceOnUse" x1="0" y1="${start}" x2="0" y2="${finish}"><stop stop-color="${color}" stop-opacity="${a}"/><stop offset="1" stop-color="${color}" stop-opacity="${b}"/></linearGradient>`;
+  let defs=clip('upper',0,base)+clip('lower',base,42-base)+`<clipPath id="${id}under"><path d="${under}"/></clipPath>`;
+  defs+=grad('green',GREEN,pad,base,.22,0)+grad('red',RED,base,42-pad,0,.17);
+  defs+=`<linearGradient id="${id}soft" gradientUnits="userSpaceOnUse" x1="0" y1="${base-.8}" x2="0" y2="${base+.8}"><stop stop-color="${GREEN}"/><stop offset=".5" stop-color="#97a19c"/><stop offset="1" stop-color="${RED}"/></linearGradient>`;
+  const path=(color,width)=>`<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  let fill='',line='';
+  if(mode==='C'){
+    fill=`<path d="${area}" fill="url(#${id}green)" clip-path="url(#${id}upper)"/><path d="${area}" fill="url(#${id}red)" clip-path="url(#${id}lower)"/>`;
+    line=path(`url(#${id}soft)`,1.55)+`<circle cx="${end[0]}" cy="${end[1]}" r="1.85" fill="${values.at(-1)>=1?GREEN:RED}" stroke="#151619" stroke-width=".7"/>`;
+  }else{
+    // A shallow fade follows the curve, retaining the original sign at every x.
+    // Original and translated baseline clips prevent a positive section casting a red fill.
+    for(const [suffix,color] of [['upper',GREEN],['lower',RED]]){
+      let band='';
+      for(let step=1;step<=24;step++){
+        const offset=step*.4,opacity=.23*Math.pow(1-step/25,1.7);
+        band+=`<g transform="translate(0 ${offset})"><g clip-path="url(#${id+suffix})">${path(color,.65).replace('stroke-width=',`stroke-opacity="${opacity}" stroke-width=`)}</g></g>`;
+      }
+      fill+=`<g clip-path="url(#${id}under)"><g clip-path="url(#${id+suffix})">${band}</g></g>`;
+      line+=`<g clip-path="url(#${id+suffix})">${path(color,1.7)}</g>`;
+    }
+  }
+  const title=`${mode} ${c.label}, ${large?'312 × 126':'104 × 42'}, 시작값 기준 자산 곡선`;
+  return `<svg class="spark" width="${large?312:104}" height="${large?126:42}" viewBox="0 0 104 42" role="img" aria-labelledby="${id}title"><title id="${id}title">${title}</title><defs>${defs}</defs>${fill}<line x1="4" y1="${base}" x2="100" y2="${base}" stroke="#69717b" stroke-opacity=".65" stroke-width=".65" stroke-dasharray="1.2 2.1"/>${line}</svg>`;
+}
+document.getElementById('variants').innerHTML=[
+  ['C','부드러운 색 전환과 끝점','기준선 주변 1.6px에서 색 전환 / 1.55px 선 / 기준선까지 옅은 면'],
+  ['D','곡선 아래 짧은 그라데이션','기준선에서 색 분리 / 1.7px 선 / 곡선 아래 9.6px 안에서 사라지는 면']
+].map(([mode,title,description])=>`<section><div class="variant"><h2>${mode} &nbsp; ${title}</h2><p>${description}</p></div><div class="grid">${SPARK_CASES.map(c=>`<article><h3 class="case">${c.label}</h3><div class="card"><div class="row"><div><div class="label">수익률</div><div class="ret ${c.ret.startsWith('+')?'up':'down'}">${c.ret}</div></div>${spark(c,mode,false)}</div><div class="big"><div class="scale">3× DETAIL / 312 × 126</div>${spark(c,mode,true)}</div></div></article>`).join('')}</div></section>`).join('');
+</script>
+</body>
+</html>
