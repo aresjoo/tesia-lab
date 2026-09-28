@@ -1,0 +1,1 @@
+당신은 CODEX, 프로덕트 엔지니어 겸 디자이너. ux-audit/footer/BRIEF.md 를 읽고 푸터 시안 경쟁의 codex 안을 만든다(이름 codex, 포트 8833). 레퍼런스 이미지 ux-audit/footer/ref-robinhood-1.webp, ref-robinhood-2.webp 를 열어 본다. 방향: 당신이 초보자 신뢰와 구현 안정성 기준으로 가장 낫다고 보는 배치. 거대 TETH 폭 맞춤은 SVG textLength 또는 JS 측정 중 성능과 리사이즈에 강한 방법을 쓰고 노트에 적는다. 반드시 스크린샷 4장을 렌더해 저장하고 NOTE-codex.md 를 쓴다. 마지막 줄에 만든 파일 경로 6개 출력. index.html 수정 금지.
