@@ -3784,6 +3784,10 @@ button{-webkit-tap-highlight-color:transparent}
   #g-content .gft-col h3{margin-bottom:4px}
   #g-content .gft-col a,#g-content .gft-col button{display:flex;align-items:center;min-height:44px;margin:0}
 }
+/* 푸터가 보이는 만큼 사이드바도 라임으로 (PC만). --gft-h 는 gftSync 가 스크롤마다 갱신 */
+#g-side{background-image:linear-gradient(to top,#c8f43c 0,#c8f43c var(--gft-h,0px),transparent var(--gft-h,0px))} /* id 선택자: .g-side.collapsed{background} 단축 속성보다 우선 */
+#g-side.gft-cover .g-side-bottom .g-ico-btn,#g-side.gft-cover .g-side-bottom button,#g-side.gft-cover .g-side-bottom a,#g-side.gft-cover #g-me-row{color:#0c0d0f}
+#g-side.gft-cover .g-side-bottom .g-ico-btn:hover,#g-side.gft-cover #g-me-row:hover{background:rgba(12,13,15,.1);color:#0c0d0f}
 #g-root .txh *{box-sizing:border-box}
 #g-root .txh :where(h1,h2,p,ol,ul){margin:0}
 #g-root .txh section{scroll-margin-top:24px}
@@ -6998,7 +7002,7 @@ function gContent(html){
   /* 전략 라우트가 아닌 뷰가 그려지면 남은 전략 해시를 정리해 히스토리 꼬임 방지 */
   if(!window.TF_RENDERING){ document.body.classList.remove('tf-route');
     if(window.TF_BOOTED&&(location.hash.indexOf('#/strategy')===0||location.hash.indexOf('#/share/')===0||/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(location.hash))){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} window.TF_ONSTRAT=false; window.TF_ONSHARE=false; window.TF_ONNF=false; } }
-  $('g-content').innerHTML=html+(window.GFT_MODES&&GFT_MODES[G.mode]?gSiteFooter():''); $('g-scroll').scrollTop=0;
+  $('g-content').innerHTML=html+(window.GFT_MODES&&GFT_MODES[G.mode]?gSiteFooter():''); $('g-scroll').scrollTop=0; if(window.gftQueue) gftQueue();
   if(window.gSideMobClose) gSideMobClose(); /* 드로어에서 뷰를 골랐으면 드로어는 닫는다 */
   setTimeout(gSideCur,0); /* 사이드바 현재 위치 표시 — G.mode 확정 이후 (agy qa3 LNB active) */
 }
@@ -14519,6 +14523,20 @@ function gSiteFooter(){
     +'<svg class="gft-wm" viewBox="0 0 3970 1000" role="img" aria-label="TETH"><path d="'+GFT_WM+'"/></svg>'
     +'</div></footer>';
 }
+/* 사이드바 라임 동기화: 푸터 상단선 아래만큼 사이드바 하단을 라임으로. 모바일 드로어(position fixed)와 푸터 없는 화면은 0 */
+var GFT_RAF=0;
+function gftSync(){
+  var side=$('g-side'); if(!side) return;
+  var f=document.querySelector('#g-content .gft'), h=0, cover=false;
+  if(f&&window.innerWidth>860&&getComputedStyle(side).position!=='fixed'){
+    var r=f.getBoundingClientRect(), sb=side.getBoundingClientRect();
+    h=Math.max(0,Math.min(sb.height,sb.bottom-r.top));
+    var b=side.querySelector('.g-side-bottom'); if(h>0&&b){ var br=b.getBoundingClientRect(); cover=(sb.bottom-h)<=br.top+6; }
+  }
+  side.style.setProperty('--gft-h',Math.round(h)+'px'); side.classList.toggle('gft-cover',cover);
+}
+function gftQueue(){ if(GFT_RAF) return; GFT_RAF=requestAnimationFrame(function(){ GFT_RAF=0; gftSync(); }); }
+(function(){ var sc=document.getElementById('g-scroll'); if(sc) sc.addEventListener('scroll',gftQueue,{passive:true}); window.addEventListener('resize',gftQueue); })();
 function tfIntroView(force){
   /* 회원은 미활성 뷰가 정본. force(사용 방법 링크)로만 랜딩을 다시 볼 수 있다 */
   if(S.user&&!force){ tfTradeInactiveView(); return; }
