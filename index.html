@@ -3761,7 +3761,10 @@ button{-webkit-tap-highlight-color:transparent}
 #g-root .txh{word-break:keep-all;overflow-wrap:anywhere;color:var(--gt);overflow-x:clip}
 /* 사이트 푸터 CSS 와 HTML 은 site-footer.js 가 단일 출처 (SPA 와 about/policies/download 공용) */
 /* 푸터 페이지(PC): 앱 껍데기를 문서 스크롤로 전환. 사이드바는 푸터 전까지 sticky, 푸터는 .g-body 아래 전체 폭 */
-html.gft-doc{overflow-y:auto;height:auto}
+html.gft-doc{overflow-y:auto;height:auto;scrollbar-width:none}
+html.gft-doc::-webkit-scrollbar{display:none}
+#g-root .g-scroll{scrollbar-width:none}
+#g-root .g-scroll::-webkit-scrollbar{display:none} /* 우측 스크롤바 전부 숨김 (사용자 지시). 스크롤 자체는 그대로 */
 body.gft-doc{height:auto;min-height:100%;overflow:visible}
 body.gft-doc #g-root{position:static;inset:auto;height:auto;min-height:100vh}
 body.gft-doc .g-body{min-height:100vh;flex:none}
@@ -3842,21 +3845,6 @@ body.gft-doc #gft-slot{display:block}
 #g-root .txh-tip:not(.above) .txh-tip-a{top:-6px;border-right:0;border-bottom:0}
 #g-root .txh-tip.above .txh-tip-a{bottom:-6px;border-left:0;border-top:0}
 @media (prefers-reduced-motion:reduce){ #g-root .txh-tip,#g-root .txh-tip.on{transition:none;transform:none} }
-/* 이런 전략을 돌려요 */
-#g-root .txh-kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
-#g-root .txh-kind{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:var(--g1);border:1px solid var(--gl2);border-radius:18px;padding:26px 24px 24px;color:var(--gt);font-family:inherit;cursor:pointer;transition:border-color .15s}
-#g-root .txh-kind:hover{border-color:var(--gt3)}
-#g-root .txh-kind .lb{display:block;font-size:12.5px;color:var(--gt3);margin-bottom:14px}
-#g-root .txh-kind b{display:block;font-size:19px;font-weight:700;line-height:1.4;margin-bottom:10px}
-#g-root .txh-kind .ds{display:block;font-size:14.5px;line-height:1.7;color:var(--gt2);margin-bottom:22px}
-#g-root .txh-kind .ex{display:block;margin-top:auto;border-left:2px solid var(--gl2);padding:2px 0 2px 12px;font-size:14px;line-height:1.6;color:var(--gt)}
-#g-root .txh-kind .ex small{display:block;font-size:11.5px;color:var(--gt3);margin-bottom:3px}
-/* 어떻게 시작하나요 */
-#g-root .txh-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:32px}
-#g-root .txh-step{border-top:1px solid var(--gl2);padding-top:22px}
-#g-root .txh-step .n{display:block;font-size:30px;line-height:1;color:var(--gt3);margin-bottom:18px}
-#g-root .txh-step b{display:block;font-size:18px;font-weight:700;margin-bottom:8px}
-#g-root .txh-step p{font-size:14.5px;line-height:1.7;color:var(--gt2)}
 /* TETH가 쓰는 AI: 상황 3묶음, "어떻게 시작하나요" 와 같은 상단 헤어라인 열 (카드, 배경 없음). 아이콘은 이름 옆 부속 */
 #g-root .txh-kick{font-size:13px;color:var(--gt3);margin:0 0 10px}
 #g-root .txh-ai-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:32px}
@@ -3874,11 +3862,11 @@ body.gft-doc #gft-slot{display:block}
 #g-root .txh-safe li svg{grid-row:span 2;margin-top:2px;color:var(--gt2)}
 #g-root .txh-safe li b{font-size:16px;font-weight:700;color:var(--gt)}
 #g-root .txh-safe li span{font-size:14px;line-height:1.65;color:var(--gt3)}
+#g-root .txh-safe .txh-cta{margin-top:28px}
 /* 마지막 CTA: 흰 외곽선 알약 (라임은 히어로 1개) */
 @media (max-width:960px){
-  #g-root .txh-kinds,#g-root .txh-steps,#g-root .txh-ai-cols{grid-template-columns:1fr}
+  #g-root .txh-steps,#g-root .txh-ai-cols{grid-template-columns:1fr}
   #g-root .txh-now{grid-template-columns:1fr;gap:16px}
-  #g-root .txh-kinds{gap:12px}
   #g-root .txh-steps,#g-root .txh-ai-cols{gap:26px}
 }
 @media (max-width:860px){
@@ -3903,11 +3891,10 @@ body.gft-doc #gft-slot{display:block}
   #g-root .txh-stats{--sg:25px;margin-top:18px}
   #g-root .txh-stat{padding:14px 0 15px}
   #g-root .txh-body{margin-top:16px}
-  #g-root .txh-kinds,#g-root .txh-steps,#g-root .txh-ai-cols{margin-top:24px}
+  #g-root .txh-steps,#g-root .txh-ai-cols{margin-top:24px}
   #g-root .txh-ai-col{padding-top:18px}
   #g-root .txh-ai-col h3{margin-bottom:16px}
   #g-root .txh-ai-col ul{gap:16px}
-  #g-root .txh-kind{padding:22px 20px}
   #g-root .txh-safe{grid-template-columns:1fr;gap:24px}
 }
 /* 미활성 뷰 */
@@ -14498,6 +14485,7 @@ function gftPlace(){
   else { if(inS){ $('g-content').appendChild(inS); } else if(!inC){ $('g-content').insertAdjacentHTML('beforeend',gSiteFooter()); } }
   document.documentElement.classList.toggle('gft-doc',doc); document.body.classList.toggle('gft-doc',doc);
   if(slot) slot.hidden=!doc;
+  var f=document.querySelector('.gft'); if(f) f.classList.toggle('gft-lime',G.mode==='home'); /* 메인 홈만 라임, 나머지는 검정 */
 }
 (function(){ var t=0; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(gftPlace,120); }); })();
 function tfIntroView(force){
@@ -14512,10 +14500,11 @@ function tfIntroView(force){
   var ctaAct=S.user?"tfNav('#/trade')":"authOpen('signup')", ctaLbl=S.user?'AI 트레이딩으로 돌아가기':'시작하기';
   function ic(p){ return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
   /* 전략 유형 카드: 시드 제목(tfSeedTitle)은 지표 용어가 섞여 있어 쓰지 않고 쉬운 말 고정 문구 (수익률, 팔로워 수 비노출) */
-  function kind(lb,t,ds,ex,act){ return '<button type="button" class="txh-kind" onclick="'+act+'"><span class="lb">'+lb+'</span><b>'+t+'</b><span class="ds">'+ds+'</span><span class="ex"><small>이렇게 말하면 돼요</small>“'+ex+'”</span></button>'; }
   function step(n,t,p){ return '<div class="txh-step"><span class="n">'+n+'</span><b>'+t+'</b><p>'+p+'</p></div>'; }
   /* 지금 TETH가 하는 일: 전략 카드 (ux-audit/card2 claude 안 채택). 아바타 + 도킹 거래소 로고, 숫자 띠(현재 잔고, 수익률, PnL), 판단 문단 */
   function nowStat(l,v,u,c){ return '<div class="txh-stat"><dt>'+l+'</dt><dd'+(c?' class="'+c+'"':'')+'>'+v+(u?'<span class="u">'+u+'</span>':'')+'</dd></div>'; }
+  /* 금액은 USD 기준 데모 수치를 표시 통화(지구본 설정)로 변환, 단위는 통화 코드로 통일. 통화를 바꾸면 applyCurrency 가 다시 채운다 */
+  function nowMoneyStat(l,usd,sign,c){ return '<div class="txh-stat"><dt>'+l+'</dt><dd'+(c?' class="'+c+'"':'')+' data-usd-unit="'+usd+'"'+(sign?' data-sign="'+sign+'"':'')+'>'+nowMoneyHtml(usd,sign)+'</dd></div>'; }
   function nowCard(av,ex,n,xn,stats,body){ return '<article class="txh-card"><header class="txh-by"><span class="txh-av">'+av+'<img class="txh-ex" src="assets/logos/'+ex+'.png" alt="" width="20" height="20"></span><span class="txh-who"><span class="txh-name">'+n+'</span><span class="txh-xch">'+xn+'</span></span></header><dl class="txh-stats">'+stats+'</dl><p class="txh-body">'+body+'</p></article>'; }
   /* TETH가 쓰는 AI: 상황별 묶음 (ux-audit/ai 경쟁 codex 안 채택). 이름, 역할 문장은 브리프 원문 그대로, 로고는 장식이라 alt="" */
   function aiRow(k,n,r){ return '<li><img src="assets/ai/'+k+'.png" alt="" width="40" height="40" loading="lazy" decoding="async"><b>'+n+'</b><span>'+r+'</span></li>'; }
@@ -14532,7 +14521,7 @@ function tfIntroView(force){
     +'<div class="txh-floor" aria-hidden="true"><img src="assets/hero-tiles-end.jpg" alt="" width="1440" height="480" decoding="async"></div>'
     +'</section>'
     +'<div class="txh-wrap">'
-    +'<section class="txh-sec first" id="txh-ai" aria-labelledby="txh-ai-h"><p class="txh-kick">TETH가 쓰는 AI</p><h2 id="txh-ai-h">상황에 맞는 AI를 골라 써요</h2><div class="txh-ai-cols">'
+    +'<section class="txh-sec first" id="txh-ai" aria-labelledby="txh-ai-h"><p class="txh-kick">TETH가 쓰는 AI</p><h2 id="txh-ai-h">투자를 위해 최적화된 AI</h2><p class="txh-lead">각 상황에 맞는 최고의 AI를 사용합니다.</p><div class="txh-ai-cols">'
     +aiCol('txh-ai-news','뉴스를 확인할 때',aiRow('gemini','Gemini','구글 검색으로 최신 정보를 확인해요')+aiRow('grok','Grok','X의 실시간 여론을 읽어요')+aiRow('perplexity','Perplexity','뉴스와 공시의 출처를 찾아요'))
     +aiCol('txh-ai-mkt','시장을 살펴볼 때',aiRow('deepseek','DeepSeek','시장을 쉬지 않고 훑어요')+aiRow('qwen','Qwen','여러 종목을 한꺼번에 비교해요')+aiRow('kimi','Kimi','긴 보고서와 자료를 읽어요'))
     +aiCol('txh-ai-dec','판단을 정리할 때',aiRow('chatgpt','ChatGPT','복잡한 상황을 정리해 판단해요')+aiRow('claude','Claude','왜 그렇게 했는지 차분한 문장으로 써요')+aiRow('mistral','Le Chat (Mistral)','내부 서버에서 돌리는 예비 판단이에요'))
@@ -14540,16 +14529,10 @@ function tfIntroView(force){
     +'<section class="txh-sec" id="txh-now" aria-labelledby="txh-now-h"><h2 id="txh-now-h">지금 TETH가 하는 일</h2>'
     +'<p class="txh-lead">사고팔 때만이 아니라 기다릴 때도, 왜 그렇게 했는지 직접 적어둬요.</p>'
     +'<div class="txh-now">'
-    +nowCard('<img class="txh-face" src="assets/buffett.jpg" alt="" width="56" height="56">','app-binance','워렌 버핏 AI_버전13','바이낸스',nowStat('현재 잔고','$12,480','')+nowStat('수익률','+8.2%','','up')+nowStat('PnL','+$946','','up'),
+    +nowCard('<img class="txh-face" src="assets/buffett.jpg" alt="" width="56" height="56">','app-binance','워렌 버핏 AI_버전13','Binance',nowMoneyStat('현재 잔고',12480,'')+nowStat('수익률','+8.2%','','up')+nowMoneyStat('PnL',946,'+','up'),
       '제 분석에 따르면 NVDA와 MSFT 같은 AI 관련 기업들의 강세가 지속될 것으로 예상되어, 주말 '+txhT('유동성')+' 감소와 '+txhT('거시 경제 이벤트')+' 위험에도 불구하고 <b>기존 '+txhT('롱 포지션')+'을 유지하고 있으며</b>, 당분간 <b>신규 거래나 '+txhT('헤지 포지션')+'은 추가하지 않을 예정입니다</b>. NVDA의 '+txhT('지지선')+'과 MSFT의 '+txhT('상승 추세')+'를 면밀히 모니터링하며, 추세가 무너질 경우 조정할 준비를 하고 있습니다.')
-    +nowCard('<svg class="txh-face" viewBox="0 0 56 56" width="56" height="56" aria-hidden="true"><circle cx="28" cy="28" r="28" fill="#1d2024"/><path d="M11 31A17 17 0 0 1 45 31" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3.2"/><path d="M11 31A17 17 0 0 1 18.01 17.25" fill="none" stroke="#7c9cff" stroke-width="3.2"/><line x1="28" y1="31" x2="19.72" y2="20.98" stroke="#e3e3e3" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="31" r="2.4" fill="#e3e3e3"/><text x="28" y="44" text-anchor="middle" font-family="Geist,&quot;Noto Sans KR&quot;,sans-serif" font-size="10.5" font-weight="700" fill="#e3e3e3">28</text></svg>','app-bitget','RSI 반등 규칙_버전2','비트겟',nowStat('현재 잔고','1,000','USDT')+nowStat('수익률','+3.1%','','up')+nowStat('PnL','+31','USDT','up'),
+    +nowCard('<svg class="txh-face" viewBox="0 0 56 56" width="56" height="56" aria-hidden="true"><circle cx="28" cy="28" r="28" fill="#1d2024"/><path d="M11 31A17 17 0 0 1 45 31" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3.2"/><path d="M11 31A17 17 0 0 1 18.01 17.25" fill="none" stroke="#7c9cff" stroke-width="3.2"/><line x1="28" y1="31" x2="19.72" y2="20.98" stroke="#e3e3e3" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="31" r="2.4" fill="#e3e3e3"/><text x="28" y="44" text-anchor="middle" font-family="Geist,&quot;Noto Sans KR&quot;,sans-serif" font-size="10.5" font-weight="700" fill="#e3e3e3">28</text></svg>','app-bitget','RSI 반등 규칙_버전2','Bitget',nowMoneyStat('현재 잔고',1000,'')+nowStat('수익률','+3.1%','','up')+nowMoneyStat('PnL',31,'+','up'),
       '비트코인 가격이 며칠째 내려와서 '+txhT('RSI')+'가 28까지 떨어졌어요. 이 정도면 '+txhT('과매도 구간')+'이라 '+txhT('반등')+'이 나올 수 있지만, 규칙상 '+txhT('RSI')+'가 30을 다시 넘어 올라올 때만 사기로 정해 뒀어요. 그래서 <b>지금은 사지 않고 지켜보는 중</b>이고, 산 뒤에는 산 가격보다 5% 내리면 팔고 12% 오르면 절반을 정리해요.')
-    +'</div></section>'
-    +'<section class="txh-sec" aria-labelledby="txh-k-h"><h2 id="txh-k-h">이런 전략을 돌려요</h2>'
-    +'<p class="txh-lead">어렵게 설정할 필요 없어요. 말하는 방식에 따라 세 가지로 움직여요.</p><div class="txh-kinds">'
-    +kind('AI가 판단','AI에게 맡기기','시장 흐름을 읽고 살지, 팔지, 쉴지를 AI가 그때그때 정해요. 정한 한도에 닿으면 스스로 멈춰요.','비트코인, 흐름이 좋을 때만 들어가 줘',ctaAct)
-    +kind('규칙대로','내 규칙 지키기','말로 정한 규칙 그대로 사고팔아요. 원하면 AI가 한 번 더 살펴보고, 애매한 자리는 건너뛰어요.','하루에 5% 넘게 빠지면 세 번에 나눠 사줘',ctaAct)
-    +kind('따라하기','다른 전략 따라가기','공개된 전략의 판단 기록을 먼저 읽어보고, 마음에 들면 내 예산 안에서 따라 해요. 언제든 멈출 수 있어요.','이 전략, 내 예산 20%로만 따라 해줘','tfShareHub(\'find\')')
     +'</div></section>'
     +'<section class="txh-sec" id="txh-how" aria-labelledby="txh-w-h"><h2 id="txh-w-h">몇 분만에 설치 가능</h2>'
     +'<p class="txh-lead">대화 몇 번이면 충분해요.</p><div class="txh-steps">'
@@ -14558,7 +14541,9 @@ function tfIntroView(force){
     +step(3,'연결하고 켜요','쓰던 거래소를 연결하면 정한 예산 안에서 거래를 시작해요.')
     +'</div></section>'
     +'<section class="txh-sec" aria-labelledby="txh-g-h"><div class="txh-safe"><div><h2 id="txh-g-h">내 돈은 어떻게 지키나요</h2>'
-    +'<p class="txh-lead">맡기는 건 판단이지 돈이 아니에요. 멈추는 버튼은 늘 내 손에 있어요.</p></div><ul>'
+    +'<p class="txh-lead">맡기는 건 판단이지 돈이 아니에요. 멈추는 버튼은 늘 내 손에 있어요.</p>'
+    +'<button type="button" class="txh-cta" onclick="'+ctaAct+'">'+ctaLbl+'</button>'
+    +'<div class="txh-more-row"><span class="txh-note">영원히 무료, 카드 등록 필요없음</span></div></div><ul>'
     +safe('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>','돈은 내 거래소에 그대로 있어요, 출금 권한은 받지 않아요','TETH는 연결할 때 주문에 필요한 권한만 요청해요.')
     +safe('<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12l6 4"/>','정한 예산만 써요','전략마다 쓸 예산을 따로 정하고, 그 밖의 돈으로는 주문하지 않아요.')
     +safe('<path d="M4 6h16"/><path d="M4 18h16"/><path d="M8 12h8"/>','정한 한도에 닿으면 스스로 멈춰요','하루 손실 한도와 전략별 손실 한도를 정해두면, 닿았을 때 새 주문을 멈춰요.')
@@ -17428,12 +17413,17 @@ if(!GLC_LANGS.some(function(l){return l.c===GLC.lang;})) GLC.lang='ko';
 if(!GLC_CURS.some(function(c){return c.c===GLC.cur;})) GLC.cur='USD';
 try{ document.documentElement.lang=GLC.lang; }catch(e){}
 function curInfo(){ return GLC_CURS.find(function(c){return c.c===GLC.cur;})||GLC_CURS[0]; }
+function fmtMoneyNum(usd){ /* 데모 수치(USD 기준)를 표시 통화 숫자로 (기호 없음) */
+  var ci=curInfo(); var v=usd*ci.r;
+  if(ci.c==='BTC') return v.toFixed(6);
+  if(ci.r>=100 || Math.abs(v)>=100) return Math.round(v).toLocaleString();
+  return v.toLocaleString(undefined,{maximumFractionDigits:2});
+}
 function fmtMoney(usd){ /* 데모 수치(USD 기준)를 표시 통화로 변환 */
-  var ci=curInfo(); var v=usd*ci.r; var str;
-  if(ci.c==='BTC') str=v.toFixed(6);
-  else if(ci.r>=100 || Math.abs(v)>=100) str=Math.round(v).toLocaleString();
-  else str=v.toLocaleString(undefined,{maximumFractionDigits:2});
-  return (ci.s||ci.c+' ')+str;
+  var ci=curInfo(); return (ci.s||ci.c+' ')+fmtMoneyNum(usd);
+}
+function nowMoneyHtml(usd,sign){ /* 랜딩 카드 숫자 띠: 숫자 + 통화 코드 단위 (두 카드 동일 형식) */
+  return (sign||'')+fmtMoneyNum(usd)+'<span class="u">'+curInfo().c+'</span>';
 }
 function glcRender(){
   var ll=$('glc-lang-list'), cl=$('glc-cur-list');
@@ -17807,6 +17797,7 @@ function applyCurrency(){
     var sign=el.dataset.sign||'';
     el.textContent=sign+fmtMoney(Math.abs(v));
   });
+  document.querySelectorAll('[data-usd-unit]').forEach(function(el){ el.innerHTML=nowMoneyHtml(parseFloat(el.dataset.usdUnit),el.dataset.sign||''); });
 }
 
 /* ══ 설정 메뉴 ══ */
