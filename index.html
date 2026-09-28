@@ -4075,9 +4075,9 @@ body.gft-doc #gft-slot{display:block}
 /* ═══ S7 전략 따라하기 (mk) — 허브, 카드, 상세 5탭, 따라가기 시트, 중단 3택. 라임은 1차 CTA(.mk-pri)에만 ═══ */
 .mk{max-width:1240px}
 .mk-up{color:#56c486}.mk-dn{color:#ee766a}
-.mk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:10px 0 18px}
-.mk-head h2{font-size:26px;font-weight:700;color:var(--gt);margin:0;line-height:1.3}
-.mk-lead{font-size:13.5px;color:var(--gt2);margin-top:4px}
+.mk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:28px 0 30px} /* 허브 히어로: 큰 제목 + 한 줄 문구 (Binance, League of Traders 문법) */
+.mk-head h2{font-size:44px;font-weight:800;letter-spacing:-.02em;color:var(--gt);margin:0;line-height:1.2}
+.mk-lead{font-size:17px;line-height:1.6;color:var(--gt2);margin-top:12px}
 .mk-demo{font-size:12px;color:var(--gt3);white-space:nowrap}
 .mk-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
 .mk-tabs::-webkit-scrollbar{display:none}
@@ -4277,7 +4277,7 @@ body.gft-doc #gft-slot{display:block}
   .mk-kpi.big{grid-column:1/-1}
 }
 @media (max-width:640px){
-  .mk-head h2{font-size:22px}
+  .mk-head{margin:14px 0 20px}.mk-head h2{font-size:30px}.mk-lead{font-size:15px;margin-top:8px}
   .mk-card{padding:16px}
   .mk-c-ret b{font-size:28px}
   .mk-spark{width:110px;height:48px}
@@ -11124,7 +11124,7 @@ function tfShareHub(tab){
   }
   var body= tab==='follow'?tfSS3FollowTab(): tab==='mine'?tfSS3MineTab(): '<div id="ss3-grid">'+tfSS3GridHtml()+'</div>';
   gContent('<div class="tf-page tfbk ss3 mk">'
-    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">검증된 전략을 내 예산으로 그대로 따라가요</div></div></div>'
+    +'<div class="mk-head"><div><h2>전략 따라하기</h2><div class="mk-lead">잘 되는 전략을 고르면 내 거래소 계정에서 같은 판단으로 거래해요. 클릭 한 번이면 시작돼요.</div></div></div>'
     +tabs+controls+body
     +'</div>');
   tfBkDropInit();
