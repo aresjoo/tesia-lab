@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TETH 푸터 2차 시안 rail</title>
+<style>
+  :root{--font:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo",sans-serif}
+  html,body{margin:0;background:#0f1012}
+  body{font-family:var(--font);font-size:14px;line-height:1.6;color:#e8e9ea;-webkit-font-smoothing:antialiased;word-break:keep-all}
+  .ctx{height:300px;box-sizing:border-box;padding:56px 40px 0;background:#0f1012}
+  .ctx h1{margin:0;font-size:28px;font-weight:700;line-height:1.3;color:rgba(232,233,234,.28)}
+  .ctx p{margin:14px 0 0;max-width:560px;font-size:14px;line-height:1.7;color:rgba(232,233,234,.16)}
+
+  /* rail: 상단 바를 라임 안 최상단(.gft-in 맨 앞)에 두는 로빈후드 그대로 배치 */
+  .gft .gft-in{padding-top:28px}
+  .rl-bar{display:flex;align-items:center;justify-content:space-between;gap:16px 24px;min-height:60px;margin:0 0 48px;border-bottom:1px solid rgba(12,13,15,.35)}
+  .rl-crs{display:inline-flex;align-items:center;min-height:44px;font-size:14px;line-height:1.4;font-weight:500;color:#0c0d0f;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  .rl-crs:hover{text-decoration-thickness:2px}
+  .rl-follow{display:flex;align-items:center;gap:2px;margin-right:-12px}
+  .rl-follow .rl-lb{margin-right:6px;font-size:14px;line-height:1.4;font-weight:500;color:#0c0d0f;white-space:nowrap}
+  .rl-follow a{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;color:#0c0d0f;border-radius:6px}
+  .rl-follow a:hover{background:rgba(12,13,15,.08)}
+  .rl-follow svg{display:block;width:20px;height:20px;fill:currentColor}
+  @container (max-width:600px){
+    .gft .gft-in{padding-top:16px}
+    .rl-bar{flex-direction:column;align-items:flex-start;gap:0;min-height:0;padding-bottom:6px;margin-bottom:36px}
+    .rl-follow{margin-left:-12px;margin-right:0}
+    .rl-follow .rl-lb{margin-left:12px}
+  }
+</style>
+</head>
+<body>
+<section class="ctx" aria-hidden="true">
+  <h1>내 돈은 어떻게 지키나요</h1>
+  <p>TETH는 조회와 주문 권한만 받고, 자산은 고객의 Bitget 계정에 그대로 둡니다. 한도와 중지는 언제나 고객이 정합니다.</p>
+</section>
+
+<script src="../../site-config.js?v=2"></script>
+<script src="../../site-footer.js?v=1"></script>
+<script src="icons.js"></script>
+<div id="site-footer"></div>
+<script>
+  TETH_FOOTER.mount(document.getElementById('site-footer'),{base:'../../'});
+  (function(){
+    var inEl = document.querySelector('.gft-in');
+    var soc = (window.TETH_CONFIG && TETH_CONFIG.social) || {};
+    var ic = window.TETH_SNS_ICONS || {};
+    var items = [['x','X'],['instagram','Instagram'],['youtube','YouTube'],['telegram','Telegram']];
+    var glyphs = items.map(function(it){
+      return '<a href="'+(soc[it[0]]||'#')+'" target="_blank" rel="noopener noreferrer" aria-label="'+it[1]+'">'
+        +'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="'+(ic[it[0]]||'')+'"/></svg></a>';
+    }).join('');
+    var bar = document.createElement('div');
+    bar.className = 'rl-bar';
+    bar.innerHTML = '<a class="rl-crs" href="../../policies/teth-crs.pdf" target="_blank" rel="noopener noreferrer">고객 관계 요약</a>'
+      +'<div class="rl-follow"><span class="rl-lb">팔로우하세요</span>'+glyphs+'</div>';
+    inEl.insertBefore(bar, inEl.firstChild);
+
+    var copy = document.querySelector('.gft-copy');
+    copy.innerHTML = '<p>TETH는 고객이 말로 정한 전략을 AI 에이전트가 판단하고 실행하는 AI 트레이딩 서비스입니다. 고객이 각 거래에 직접 개입하지 않아도 AI 에이전트가 주식, 옵션, 암호화폐 거래를 실행할 수 있으며, 모든 거래는 고객이 연결한 Bitget 계정 안에서 이루어집니다.</p>'
+      +'<p><b>Bitget이 선정한 최고의 AI입니다.</b></p>'
+      +'<p class="dim">TETH는 조회와 주문 권한만 사용하며 출금 권한은 요청하지 않습니다. 거래 한도는 고객이 직접 설정하고, 언제든지 전략을 중지하거나 연결을 해제할 수 있습니다. 판단 근거는 거래마다 기록으로 남깁니다.</p>'
+      +'<p class="dim">© 2026 TETH AI. 모든 권리 보유.</p>';
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TETH 푸터 상단 바 시안 | Codex</title>
+  <link rel="icon" href="data:,">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0c0d0f; font-family: Arial, "Malgun Gothic", sans-serif; }
+    .context { height: 300px; padding: 0 40px; display: flex; align-items: center; }
+    .context h1 { margin: 0; color: #68696b; font-size: clamp(26px, 3vw, 40px); font-weight: 500; letter-spacing: -1.2px; }
+    .cx-bar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; min-height: 64px; padding-bottom: 1px; margin-bottom: 48px; border-bottom: 1px solid rgba(12, 13, 15, .35); color: #0c0d0f; font-size: 14px; line-height: 1.5; }
+    .cx-summary { display: flex; align-items: center; min-height: 44px; width: fit-content; color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    .cx-follow { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .cx-follow-label { white-space: nowrap; }
+    .cx-social { display: flex; align-items: center; gap: 4px; }
+    .cx-social a { display: flex; flex: 0 0 44px; width: 44px; height: 44px; align-items: center; justify-content: center; color: inherit; border-radius: 50%; }
+    .cx-social svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+    .cx-summary:hover { text-decoration-thickness: 2px; }
+    .cx-social a:hover { background: rgba(12, 13, 15, .09); }
+    .cx-social a:active { background: rgba(12, 13, 15, .16); }
+    @media (max-width: 900px) {
+      .cx-bar { grid-template-columns: auto minmax(0, 1fr); gap: 32px; }
+      .cx-follow { justify-content: flex-end; }
+    }
+    @media (max-width: 600px) {
+      .context { padding: 0 20px; }
+      .cx-bar { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-bottom: 12px; }
+      .cx-follow { justify-content: space-between; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="context"><h1>내 돈은 어떻게 지키나요</h1></main>
+  <script src="../../site-config.js?v=2"></script>
+  <script src="../../site-footer.js?v=1"></script>
+  <script src="icons.js"></script>
+  <div id="site-footer"></div>
+  <script>
+    TETH_FOOTER.mount(document.getElementById('site-footer'), { base: '../../' });
+
+    // Align the follow label with the existing right-hand copy column.
+    const bar = document.createElement('div');
+    bar.className = 'cx-bar';
+    bar.innerHTML = '<a class="cx-summary" href="../../policies/teth-crs.pdf" target="_blank" rel="noopener noreferrer">고객 관계 요약</a>'
+      + '<div class="cx-follow"><span class="cx-follow-label" id="cx-follow-label">팔로우하세요</span><nav class="cx-social" aria-labelledby="cx-follow-label"></nav></div>';
+    const social = bar.querySelector('.cx-social');
+    [['x', 'X'], ['instagram', 'Instagram'], ['youtube', 'YouTube'], ['telegram', 'Telegram']].forEach(([key, name]) => {
+      const link = document.createElement('a');
+      link.href = TETH_CONFIG.social[key];
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', name);
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'currentColor');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', TETH_SNS_ICONS[key]);
+      svg.append(path);
+      link.append(svg);
+      social.append(link);
+    });
+    document.querySelector('.gft-in').prepend(bar);
+
+    const paragraphs = document.querySelectorAll('.gft-copy p');
+    paragraphs[0].textContent = 'TETH는 고객이 말로 정한 전략을 AI 에이전트가 판단하고 실행하는 AI 트레이딩 서비스입니다. 고객이 각 거래에 직접 개입하지 않아도 AI 에이전트가 주식, 옵션, 암호화폐 거래를 실행할 수 있으며, 모든 거래는 고객이 연결한 Bitget 계정 안에서 이루어집니다.';
+    paragraphs[1].querySelector('b').textContent = 'Bitget이 선정한 최고의 AI입니다.';
+    paragraphs[2].textContent = 'TETH는 조회와 주문 권한만 사용하며 출금 권한은 요청하지 않습니다. 거래 한도는 고객이 직접 설정하고, 언제든지 전략을 중지하거나 연결을 해제할 수 있습니다. 판단 근거는 거래마다 기록으로 남깁니다.';
+    paragraphs[3].textContent = '© 2026 TETH AI. 모든 권리 보유.';
+  </script>
+</body>
+</html>

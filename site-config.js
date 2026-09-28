@@ -11,6 +11,14 @@ window.TETH_CONFIG = {
   /* Zendesk Web Widget 키, TODO: Zendesk 가입 후 키 입력. 입력하면 우측 하단 고객센터 버튼이 실제 Zendesk 채팅을 연다. */
   zendeskKey: "",
 
+  /* SNS 채널, 사이트 푸터의 팔로우 아이콘이 이 값을 쓴다. TODO: 실제 계정 주소로 교체 */
+  social: {
+    x: "https://x.com/teth_ai",
+    instagram: "https://www.instagram.com/teth.ai",
+    youtube: "https://www.youtube.com/@teth_ai",
+    telegram: "https://t.me/teth_ai"
+  },
+
   /* 배포용 AI 프록시(Cloudflare Workers) 오리진. 비어 있으면 배포 사이트는 스크립트 폴백으로 동작.
      로컬(localhost)은 이 값과 무관하게 항상 localhost:8799 프록시를 쓴다. */
   aiProxy: "",
