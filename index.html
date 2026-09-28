@@ -3786,8 +3786,9 @@ button{-webkit-tap-highlight-color:transparent}
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 60%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
   mask-image:linear-gradient(to bottom,transparent 0,#000 20%,#000 60%,transparent 100%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
 #g-root .txh-floor img,#g-root .txh-floor video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block}
-#g-root .txh-floor video{opacity:0}
-#g-root .txh-floor video.on{opacity:1;transition:opacity .8s ease}
+#g-root .txh-floor video{opacity:0;transition:opacity .35s ease}
+#g-root .txh-floor video.on{opacity:1;transition:opacity .6s ease}
+#g-root .txh-floor.playing img{opacity:0;transition:opacity .4s ease}
 @media (prefers-reduced-motion:reduce){ #g-root .txh-floor video{display:none} }
 /* 섹션 공통 */
 #g-root .txh-wrap{max-width:1000px;margin:0 auto;padding:0 48px 32px}
@@ -14335,7 +14336,7 @@ function tfIntroGo(id){
    화면 밖이나 탭 숨김이면 정지, 동작 줄이기면 포스터만. halo.mp4(6.7초)는 0~4.6초가 검정에서 밝아지는 도입부이고
    4.6초 이후는 정지 프레임(=포스터 hero-tiles-end.jpg). 루프 재시작의 암전을 숨기려고 끝 0.2초와 재시작 직후에는
    영상을 투명하게 두고(아래 포스터가 같은 프레임), TXH_LOOP_IN 으로 건너뛴 뒤 페이드로 다시 켠다 */
-var TXH_LOOP_IN=2.0;
+var TXH_FADE_OUT=0.35; /* 클립 끝에서만 짧게 끄고 원본대로 검정에서 다시 켜진다 (사용자: 영상 그대로) */
 function tfIntroDestroy(){
   var fx=window.TF_TIN_FX; if(!fx) return;
   window.TF_TIN_FX=null;
@@ -14358,8 +14359,7 @@ function tfIntroFx(){
   function frame(t){
     var v=fx.v; if(!v) return;
     var d=isFinite(v.duration)&&v.duration>0?v.duration:6.67;
-    if(t<TXH_LOOP_IN-0.02){ v.classList.remove('on'); if(!v.seeking&&v.readyState>=1){ try{ v.currentTime=TXH_LOOP_IN; }catch(e){} } }
-    else if(t>d-0.2||rm()) v.classList.remove('on');
+    if(t>d-TXH_FADE_OUT||rm()) v.classList.remove('on');
     else v.classList.add('on');
   }
   function mount(){
@@ -14370,7 +14370,9 @@ function tfIntroFx(){
     v.poster='assets/hero-tiles-end.jpg';
     v.addEventListener('loadedmetadata',function(){ frame(v.currentTime); });
     v.addEventListener('timeupdate',function(){ frame(v.currentTime); });
-    v.addEventListener('error',function(){ v.classList.remove('on'); });
+    v.addEventListener('error',function(){ v.classList.remove('on'); floor.classList.remove('playing'); });
+    v.addEventListener('playing',function(){ if(!rm()) floor.classList.add('playing'); });
+    v.addEventListener('pause',function(){ floor.classList.remove('playing'); });
     if(typeof v.requestVideoFrameCallback==='function'){
       var cb=function(now,md){ if(fx.v!==v) return; frame(md.mediaTime); v.requestVideoFrameCallback(cb); };
       v.requestVideoFrameCallback(cb);
@@ -14407,8 +14409,8 @@ function tfIntroView(force){
     +'<section class="txh-hero'+(S.user?' has-back':'')+'" aria-labelledby="txh-h">'
     +(S.user?'<button type="button" class="txh-back" onclick="tfNav(\'#/trade\')">← AI 트레이딩으로 돌아가기</button>':'')
     +'<div class="txh-copy"><p class="txh-eyebrow">AI 트레이딩</p>'
-    +'<h1 id="txh-h">내 기준대로,<br class="txh-m"> AI가 거래해요</h1>'
-    +'<p class="txh-sub">말로 정한 기준 안에서 AI가 코인 시장을 지켜보고 사고팔며, 판단할 때마다 이유를 남겨요.</p>'
+    +'<h1 id="txh-h">AI가 스스로<br class="txh-m"> 판단하며 거래</h1>'
+    +'<p class="txh-sub">오직 거래를 위한 AI에 시장 접근 권한을 연결하세요.<br>서버를 통해 주식, 옵션 및 암호화폐 거래를 합니다.</p>'
     +'<button type="button" class="txh-cta" onclick="'+ctaAct+'">'+ctaLbl+'</button>'
     +'<div class="txh-more-row"><button type="button" class="txh-more" onclick="tfIntroGo(\'txh-now\')">TETH가 어떻게 판단하는지 볼게요</button></div></div>'
     +'<div class="txh-floor" aria-hidden="true"><img src="assets/hero-tiles-end.jpg" alt="" width="1440" height="480" decoding="async"></div>'
