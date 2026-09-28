@@ -14427,7 +14427,7 @@ function txhTipSoon(){ if(TXH_TIP.pin) return; clearTimeout(TXH_TIP.t); TXH_TIP.
   window.addEventListener('resize',function(){ if(TXH_TIP.b) txhTipPlace(); });
 })();
 function tfIntroDestroy(){
-  var f0=window.TF_TIN_FX; if(f0&&f0.rs){ window.removeEventListener('resize',f0.rs); f0.rs=null; }
+  var f0=window.TF_TIN_FX; if(f0&&f0.rs){ window.removeEventListener('resize',f0.rs); f0.rs=null; } if(f0&&f0.ro){ try{ f0.ro.disconnect(); }catch(e){} f0.ro=null; }
   txhTipClose(false,true); /* 랜딩 해제 시 용어 설명 상자도 닫고 떼어냄 */
   var fx=window.TF_TIN_FX; if(!fx) return;
   window.TF_TIN_FX=null;
@@ -14443,6 +14443,7 @@ function tfIntroFx(){
   /* 모바일 첫 화면: 히어로 최소 높이 = .g-scroll 높이 (배너, 상단 바 제외한 실제 보이는 높이) */
   function fit(){ var h=document.querySelector('#g-content .txh-hero'), sc=document.getElementById('g-scroll'); if(!h) return; if(sc&&window.innerWidth<=860) h.style.setProperty('--txh-vh',sc.clientHeight+'px'); else h.style.removeProperty('--txh-vh'); }
   fit(); fx.rs=function(){ fit(); }; window.addEventListener('resize',fx.rs);
+  try{ if(window.ResizeObserver){ fx.ro=new ResizeObserver(fit); fx.ro.observe(document.getElementById('g-scroll')); } }catch(e){} /* 배너 닫힘 등 창 크기 변화 없이 .g-scroll 높이만 바뀌는 경우 */
   try{ fx.mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)'); }catch(e){}
   function rm(){ return !!(fx.mq&&fx.mq.matches); }
   function sync(){
