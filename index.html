@@ -5710,6 +5710,17 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
   #g-root .mk3-kpis>div:nth-child(even) .mkd-tip{left:auto;right:0}
   #g-root .mkd-pill:nth-child(n+2) .mkd-tip{left:auto;right:0}
 }
+
+/* 값이 변하지 않은 기간의 그래프 안내 */
+.mkd-flat{position:absolute;left:54px;right:6px;top:30%;text-align:center;font-size:13px;color:var(--gt3);pointer-events:none}
+@media (max-width:640px){ .mkd-flat{left:46px;font-size:12.5px} }
+
+/* 떠 있는 버튼이 목록의 버튼 위에 올 때 */
+body.mk-fab-dodge #teth-help,body.mk-fab-dodge #tf-devbtn{opacity:0;pointer-events:none}
+#tf-devbtn{transition:opacity .15s ease}
+
+/* 좁은 화면: 정렬 칩 넷이 한 줄에 들어가게 */
+@media (max-width:640px){ #g-root .mk3-flt .mk-chips{gap:6px} #g-root .mk3-flt .mk-chips .mk-chip{padding:0 10px;font-size:12.5px;letter-spacing:-.01em} }
 /*RD_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -11579,13 +11590,7 @@ function tfShareHub(tab){
   tfBkDropInit();
   var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
 }
-function tfSS3Apply(){ var g=$('ss3-grid'); if(g) g.innerHTML=tfSS3GridHtml(); }
-function tfSS3SortPick(v){
-  var t=tfSSState();
-  if(t.ss.sort===v){ t.ss.dir=t.ss.dir==='asc'?'desc':'asc'; } /* 재선택 = 방향 전환 (codex F17) */
-  else { t.ss.sort=v; t.ss.dir='desc'; }
-  tfSave(); tfShareHub('find');
-}
+function tfSS3Apply(){ var g=$('ss3-grid'); if(g) g.innerHTML=tfSS3GridHtml(); }
 function tfSS3AssetPick(v){ var t=tfSSState(); t.ss.asset=v; tfSave(); tfShareHub('find'); }
 function tfSS3Search(v){ TF_SS_Q=v.trim(); tfSS3Apply(); }
 function tfSS3Page(i){ var t=tfSSState(); t.ss.page=i; tfSave(); var g=$('ss3-grid'); if(g){ g.innerHTML=tfSS3GridHtml(); var y=g.getBoundingClientRect().top; if(y<0){ var sc=$('g-scroll'); var off=window.innerWidth<=860?148:90; if(document.body.classList.contains('gft-doc')) window.scrollBy(0,y-off); else if(sc) sc.scrollTop+=y-off; } } }
@@ -11749,6 +11754,12 @@ function cpCalc(c2){
   if(!s2||!s2.r.eq||s2.r.eq.length<32) return none;
   var eq=s2.r.eq, last=eq[eq.length-1], st=s2.r.state||{}, T=last.i;
   var startI=c2.simStartI!=null?c2.simStartI:eq[eq.length-31].i;
+  /* 끝 봉(endBar): 따라가기를 끝낸 봉. 수동 정리 봉(manI): 따라가는 중에 포지션만 정리한 봉, 다음 진입부터 다시 들어간다.
+     멈춘 봉(stopI): 새 진입을 멈춘 봉. 그때 들고 있던 포지션이 모두 끝나는 봉(windEnd)까지만 따라간다 */
+  var endBar=c2.endI!=null?c2.endI:(c2.status==='closed'&&c2.flatI!=null?c2.flatI:null);
+  var manI=(c2.flatI!=null&&!(c2.endI==null&&c2.status==='closed'))?c2.flatI:null;
+  var mans=(c2.flats&&c2.flats.length?c2.flats.slice():(manI!=null?[manI]:[])).sort(function(a,b){ return a-b; }); /* 수동 정리는 여러 번일 수 있다 */
+  var stopI=(c2.winding&&c2.status==='active')||c2.stopI!=null?(c2.stopI!=null?c2.stopI:T):null;
   /* 봉 i의 기준가(그 봉 이전의 마지막 값) */
   var navAt=function(i){ var v=null; for(var k=0;k<eq.length;k++){ if(eq[k].i>i) break; v=eq[k].v; } return v!=null?v:eq[0].v; };
   var immediate=s2.kind==='agent'||!!(c2.adv&&c2.adv.existing==='copy');
@@ -11756,58 +11767,73 @@ function cpCalc(c2){
   var entries=(s2.r.trades||[]).map(function(x){ return x.entry; });
   var op=st.open; (op?(op.length!=null?op:[op]):[]).forEach(function(o){ if(o&&o.entry!=null) entries.push(o.entry); });
   entries=entries.filter(function(i){ return i!=null; }).sort(function(a,b){ return a-b; });
+  var windEnd=null;
+  if(stopI!=null){ var held=(s2.r.trades||[]).filter(function(x){ return x.entry<=stopI&&x.exit!=null&&x.exit>stopI; }), stillOpen=(op?(op.length!=null?op:[op]):[]).some(function(o){ return o&&o.entry!=null&&o.entry<=stopI; });
+    windEnd=stillOpen?null:(held.length?Math.max.apply(null,held.map(function(x){ return x.exit; })):stopI); }
+  /* 멈춘 뒤의 기준가: 멈춘 봉의 기준가에, 그때 들고 있던 종목의 값 변화만 더한다. 원본이 그 뒤에 새로 산 종목은 넣지 않는다 */
+  var frozen=null;
+  if(stopI!=null){ var hp=(s2.r.trades||[]).filter(function(x){ return x.entry<=stopI&&x.exit!=null&&x.exit>stopI&&x.units!=null; }).map(function(x){ return {k:x.asset,u:x.units,exit:x.exit,got:x.got}; });
+    (op?(op.length!=null?op:[op]):[]).forEach(function(o){ if(o&&o.entry!=null&&o.entry<=stopI&&o.units!=null) hp.push({k:o.k,u:o.units,exit:null,got:null}); });
+    var n0=navAt(stopI), pxs={}; hp.forEach(function(h){ if(!pxs[h.k]) pxs[h.k]=mkPx(h.k); });
+    frozen=function(i){ var v=n0, b=Math.min(i,T); hp.forEach(function(h){ var P=pxs[h.k], a=h.u*P[stopI]; v+=((h.exit!=null&&b>=h.exit)?h.got:h.u*P[b])-a; }); return v; }; }
+  var navF=function(i){ return frozen&&i>stopI?frozen(i):navAt(i); };
   var investAt=function(i){
-    if(immediate&&(c2.flatI==null||i<c2.flatI)) return i;
-    /* 입금은 그 봉의 진입부터 함께 간다. 수동 정리 뒤에는 정리한 봉 다음 진입부터 */
-    var after=c2.flatI!=null&&i>=c2.flatI, from=after?Math.max(i,c2.flatI):i;
-    for(var k=0;k<entries.length;k++) if(after?entries[k]>from:entries[k]>=from) return entries[k];
+    if((endBar!=null&&i>=endBar)||(stopI!=null&&i>stopI)) return null;
+    /* 수동 정리 뒤 아직 원본이 새로 진입하지 않은 동안(현금 상태)의 입금은 다음 진입부터. 그 밖에는 판단 방식대로 */
+    var inCash=mans.some(function(m){ if(m>i) return false; for(var k=0;k<entries.length;k++) if(entries[k]>m) return entries[k]>i; return true; });
+    if(immediate&&!inCash) return i;
+    for(var k=0;k<entries.length;k++) if(inCash?entries[k]>i:entries[k]>=i) return entries[k];
     return null;
   };
   var ev=led.map(function(e,idx){ var i=e.i!=null?e.i:(idx===0?startI:T); return {type:e.type,amt:e.amt,i:i,inv:e.type==='add'?investAt(i):null,idx:idx}; });
   /* 봉 b까지 원장을 재생한 내 계좌: 좌수(u)와 그 매입 원금(cb), 대기 현금(w)과 그 원금(cbw) */
   var stateAt=function(b){
-    var u=0,cb=0,w=0,cbw=0,dep=0,wd=0,pend=[],flat=false;
-    var conv=function(x){ pend=pend.filter(function(p){ if(p.inv!=null&&p.inv<=x){ u+=p.amt/navAt(p.inv); cb+=p.amt; w-=p.amt; cbw-=p.amt; return false; } return true; }); };
-    var doFlat=function(x){ if(flat) return; flat=true; w+=u*navAt(x); cbw+=cb; u=0; cb=0; };
+    var u=0,cb=0,w=0,cbw=0,dep=0,wd=0,pend=[],dead=false;
+    var nextEntry=function(x){ for(var k=0;k<entries.length;k++) if(entries[k]>x) return entries[k]; return null; };
+    var conv=function(x){ if(dead) return; pend=pend.filter(function(p){ if(p.inv!=null&&p.inv<=x&&(stopI==null||p.inv<=stopI)){ var c0=p.cost!=null?p.cost:p.amt; u+=p.amt/navF(p.inv); cb+=c0; w-=p.amt; cbw-=c0; return false; } return true; }); };
+    /* 정리: 좌수를 그 봉의 기준가로 현금으로 바꾼다. 수동 정리(re)는 그 돈을 다음 진입의 대기금으로 두고 매입 원금도 이어 간다 */
+    var doFlat=function(x,re){ if(u>1e-12){ var P=u*navF(x); w+=P; cbw+=cb; if(re) pend.push({amt:P,cost:cb,inv:nextEntry(x)}); u=0; cb=0; } if(!re) dead=true; };
+    var flats=[]; mans.forEach(function(m){ flats.push({i:m,re:true}); }); if(windEnd!=null) flats.push({i:windEnd,re:false}); if(endBar!=null) flats.push({i:endBar,re:false});
     var bars=[]; ev.forEach(function(e){ if(e.i<=b&&bars.indexOf(e.i)<0) bars.push(e.i); });
-    if(c2.flatI!=null&&c2.flatI<=b&&bars.indexOf(c2.flatI)<0) bars.push(c2.flatI);
+    flats.forEach(function(f){ if(f.i<=b&&bars.indexOf(f.i)<0) bars.push(f.i); });
     bars.sort(function(a,b2){ return a-b2; });
     bars.forEach(function(x){
       ev.forEach(function(e){ if(e.i===x&&e.type==='add'){ dep+=e.amt; w+=e.amt; cbw+=e.amt; pend.push({amt:e.amt,inv:e.inv}); } });
       conv(x);
-      if(c2.flatI===x) doFlat(x);
+      flats.forEach(function(f){ if(f.i===x) doFlat(x,f.re); });
       ev.forEach(function(e){ if(e.i===x&&e.type!=='add'){
         var r=e.amt; wd+=e.amt;
         var fw=Math.min(r,Math.max(0,w)); /* 대기 현금부터 뺀다 */
-        if(fw>0){ var k2=(w-fw)/w; cbw*=k2; pend.forEach(function(p){ p.amt*=k2; }); w-=fw; r-=fw; }
-        if(r>1e-9&&u>1e-12){ var nv=navAt(x), sold=Math.min(u,r/nv); cb-=cb*(sold/u); u-=sold; } /* 나머지는 좌수를 판다. 평균 매입 원금도 같은 비율로 줄인다 */
+        if(fw>0){ var k2=(w-fw)/w; cbw*=k2; pend.forEach(function(p){ p.amt*=k2; if(p.cost!=null) p.cost*=k2; }); w-=fw; r-=fw; }
+        if(r>1e-9&&u>1e-12){ var nv=navF(x), sold=Math.min(u,r/nv); cb-=cb*(sold/u); u-=sold; } /* 나머지는 좌수를 판다. 평균 매입 원금도 같은 비율로 줄인다 */
       } });
     });
-    conv(b); if(c2.flatI!=null&&c2.flatI<=b) doFlat(c2.flatI);
-    var nv2=navAt(b), invested=u*nv2, value=invested+w;
+    conv(b);
+    var nv2=navF(b), invested=u*nv2, value=invested+w;
     return {units:u,cb:cb,waiting:w,cbw:cbw,invested:invested,value:value,dep:dep,wd:wd,pnl:value+wd-dep,cost:cb+cbw};
   };
   var S=stateAt(T), total=S.pnl;
-  var endI=c2.flatI!=null?c2.flatI:T, pnlPct=navAt(endI)/navAt(startI)-1; /* 같은 기간 전략 수익률: 넣고 뺀 돈과 무관 */
+  var endI=endBar!=null?endBar:(windEnd!=null?windEnd:T), pnlPct=navAt(endI)/navAt(startI)-1; /* 같은 기간 전략 수익률: 넣고 뺀 돈과 무관 */
   var myPct=S.cost>1e-9?S.value/S.cost-1:0; /* 내 수익률: 평균 매입 기준가 대비 */
   var closed=(s2.r.trades||[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=T; });
   var exits=closed.map(function(x){ return x.exit!=null?x.exit:x.entry; }).sort(function(a,b){ return a-b; });
   /* 실현 = 마지막 청산 봉까지의 손익. 미실현 = 그 뒤의 변화 (같은 척도라 가상 포지션이 생기지 않는다) */
   var realized=exits.length?stateAt(exits[exits.length-1]).pnl:0;
   var hwm=0; exits.forEach(function(x){ var p=stateAt(x).pnl; if(p>hwm) hwm=p; }); /* 분배는 실현 손익의 최고점을 넘긴 부분에만 (이중 부과 방지) */
-  if(c2.flatI!=null){ realized=total; if(total>hwm) hwm=total; }
+  if(endBar!=null||windEnd!=null){ realized=total; if(total>hwm) hwm=total; }
+  else if(mans.length){ mans.forEach(function(m){ var pm=stateAt(m).pnl; if(pm>hwm) hwm=pm; }); var lm=mans[mans.length-1]; if(!exits.length||exits[exits.length-1]<lm) realized=stateAt(lm).pnl; } /* 수동 정리도 손익을 확정한다 */
   var unreal=total-realized;
   var share=Math.max(0,hwm)*(m?m.share:0.1);
   var net=total-share;
   var hasOpen=s2.kind==='agent'?!!(st.open&&st.open.length):!!st.open;
-  var posOpen=c2.flatI==null&&S.units>1e-9&&hasOpen;
+  var posOpen=endBar==null&&windEnd==null&&S.units>1e-9&&hasOpen;
   var cashRatio=s2.kind==='agent'?(st.cash!=null?st.cash:1):(st.open?0:1);
   var est=S.value-share;
-  var avail=Math.max(0,S.waiting+S.invested*(c2.flatI!=null?1:cashRatio)-share);
+  var avail=Math.max(0,S.waiting+S.invested*(endBar!=null?1:cashRatio)-share);
   var lots=[]; ev.forEach(function(e){ lots[e.idx]={i:e.i,inv:e.inv}; });
   return {inv:inv,grossIn:grossIn,pnlPct:pnlPct,myPct:myPct,total:total,realized:realized,unreal:unreal,share:share,net:net,est:est,avail:avail,
     value:S.value,invested:S.invested,waiting:S.waiting,units:S.units,posOpen:posOpen,closedN:closed.length,immediate:immediate,
-    entriesYear:entries.filter(function(i){ return i>T-365; }).length,lots:lots,at:stateAt};
+    entriesYear:entries.filter(function(i){ return i>T-365; }).length,lots:lots,at:stateAt,stopI:stopI,windEnd:windEnd,endBar:endBar};
 }
 /* 입금 반영 시점 안내 (D34): 판단 방식과 기존 포지션 설정에 따라 다르다 */
 function cpAddNote(c2,d){
@@ -11824,9 +11850,10 @@ function cpAddNote(c2,d){
 /* 상세 머리글 아래: 대기 금액과, 내 수익률과 전략 수익률이 벌어진 이유 */
 function cpMixNote(c2,d){
   var h='';
+  if(c2.status!=='active') return h; /* 끝낸 따라가기에는 기다리는 돈이 없다 */
   if(d.waiting>0.005) h+='<div class="cpx-sumline">투자 중 <b class="num">'+cpUsd(d.invested)+'</b>, 다음 진입 대기 <b class="num">'+cpUsd(d.waiting)+'</b>. 대기 중인 금액은 원본이 새로 진입할 때 함께 들어가요.</div>';
   var gap=(d.myPct-d.pnlPct)*100;
-  if(d.grossIn>0&&Math.abs(gap)>=5) h+=cpAiHtml({w:0,t:'내 수익률('+mkPct0(d.myPct*100,1)+')과 같은 기간 전략 수익률('+mkPct0(d.pnlPct*100,1)+')이 달라요. '+(gap<0?'기준가가 높을 때 추가한 금액이 있어서 전략보다 낮아요.':'기준가가 낮을 때 추가한 금액이 있어서 전략보다 높아요.')+' 전략 수익률은 넣고 뺀 돈과 무관해요.'});
+  if(d.grossIn>0&&Math.abs(gap)>=5) h+=cpAiHtml({w:0,t:'내 수익률('+mkPct0(d.myPct*100,1)+')과 같은 기간 전략 수익률('+mkPct0(d.pnlPct*100,1)+')이 달라요. '+(d.waiting>0.05*Math.max(1,d.value)?'넣은 돈 중 '+cpUsd(d.waiting,0)+'가 아직 다음 진입을 기다리고 있어서 전략과 달라요.':gap<0?'기준가가 높을 때 추가한 금액이 있어서 전략보다 낮아요.':'기준가가 낮을 때 추가한 금액이 있어서 전략보다 높아요.')+' 전략 수익률은 넣고 뺀 돈과 무관해요.'});
   return h;
 }
 /* ── Adjust balance 모달 — 따라가기 탭과 카피 상세가 공유 (핵심 원칙 4: 손실 중 입금 보호) ── */
@@ -11929,7 +11956,7 @@ function cpDetailView(cid,tab){
     +'<div class="cpp-head"><div class="cpp-ava" aria-hidden="true">'+gEsc(c2.nick.slice(0,1))+'</div>'
     +'<div class="cpp-idm"><div class="cpp-nick"><button type="button" class="nm" style="font-size:19px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button></div>'
     +'<div class="cpp-meta num"><span>비율 따라가기</span><span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span>'
-    +'<span>'+new Date(c2.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+' 시작</span>'
+    +'<span>'+mkDT(c2.at)+' 시작</span>'
     +'<span class="'+(on?'':'')+'">'+(on?(c2.winding?'정리 대기':'따라가는 중'):'중단됨')+'</span></div></div>'
     +'<div class="cpp-acts">'
     +(on&&c2.winding?mkWindActs(cid):on?'<button type="button" class="obtn" onclick="cpAdjDlg(\''+cid+'\')">예산 조정</button>'
@@ -11963,7 +11990,7 @@ function cpEditSheet(cid){
 /* 청산 이력 탭 */
 function cpxHist(c2,d){
   var s2=tfSSFind(c2.nick);
-  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.flatI!=null?c2.flatI:1e15;
+  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.endI!=null?c2.endI:(c2.status==='closed'&&c2.flatI!=null?c2.flatI:1e15);
   var tr=(s2?s2.r.trades||[]:[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=endI; }).slice(-30).reverse();
   if(!tr.length) return '<div class="cpp-empty"><b>아직 청산된 따라가기 거래가 없어요</b>첫 거래가 청산되면 진입가, 청산가, 손익이 여기에 쌓여요.</div>';
   var wins=tr.filter(function(x){return x.pnl>0;}).length;
@@ -12010,15 +12037,15 @@ function cpxBal(c2,d){
   var adds=c2.ledger.filter(function(e){return e.type==='add';}).length;
   var warn=(adds>=3&&d.myPct<0)?cpAiHtml({w:1,t:'손실 구간에서 입금이 '+adds+'회 반복됐어요. 반복 충전은 수익률을 실제보다 부풀려 보이게 해요. 금액을 늘리기 전에 전략 자체를 다시 점검해보세요.'}):'';
   /* 반영 시점: 그 입금이 좌수로 바뀐 봉. 아직이면 다음 진입 대기 (D34) */
-  var when=function(r){ var l=(d.lots||[])[r.ix]; if(r.e.type!=='add'||!l) return '-'; if(l.inv==null) return '다음 진입 대기'; if(l.inv===l.i) return '바로'; return mkMD(l.inv)+' 진입 때'; };
+  var when=function(r){ var l=(d.lots||[])[r.ix]; if(r.e.type!=='add'||!l) return '-'; if(l.inv==null||(d.stopI!=null&&l.inv>d.stopI)) return c2.status==='active'&&d.stopI==null?'다음 진입 대기':'투입 전 회수'; if(l.inv===l.i) return '바로'; return mkMD(l.inv)+' 진입 때'; };
   return warn
-    +'<div class="cpx-sumline">예산 추가와 회수 '+rows.length+'건 (최근 180일).'+(d.waiting>0.005?' 다음 진입을 기다리는 금액 <b class="num">'+cpUsd(d.waiting)+'</b>.':'')+'</div>'
+    +'<div class="cpx-sumline">예산 추가와 회수 '+rows.length+'건 (최근 180일).'+(c2.status==='active'&&d.waiting>0.005?' 다음 진입을 기다리는 금액 <b class="num">'+cpUsd(d.waiting)+'</b>.':'')+'</div>'
     +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
     +'<th>시각</th><th>유형</th><th>금액</th><th>자산</th><th>방향</th><th>반영</th>'
     +'</tr></thead><tbody>'
     +rows.map(function(r){
       var e=r.e, add=e.type==='add';
-      return '<tr><td class="num">'+new Date(e.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</td>'
+      return '<tr><td class="num">'+mkDT(e.at)+'</td>'
         +'<td>'+(add?'추가':'회수')+'</td><td class="num '+(add?'u':'')+'">'+(add?'+':'-')+cpUsd(e.amt)+'</td>'
         +'<td>USDT</td><td>'+(add?'예산 → 따라가기':'따라가기 → 예산')+'</td><td>'+when(r)+'</td></tr>';
     }).join('')
@@ -12027,7 +12054,7 @@ function cpxBal(c2,d){
 /* 거래 내역 탭 — 자연어 요약 우선, 원본 테이블은 접이식 (핵심 원칙 1) */
 function cpxTx(c2,d){
   var s2=tfSSFind(c2.nick);
-  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.flatI!=null?c2.flatI:1e15;
+  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.endI!=null?c2.endI:(c2.status==='closed'&&c2.flatI!=null?c2.flatI:1e15);
   var tr=(s2?s2.r.trades||[]:[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=endI; }).slice(-10);
   var days=Math.max(1,Math.round((Date.now()-c2.at)/864e5))+30; /* 시뮬 30봉 포함 */
   var base=Math.max(d.value,0), funding=-(base*0.0001*Math.min(days,45));
@@ -12336,7 +12363,7 @@ function tfSS3CalHtml(r,mOff){
   return '<div class="ss3-ch" style="margin-bottom:10px"><b style="font-size:13px">'
     +'<button type="button" class="cal-nav" '+(mi<=0?'disabled':'')+' onclick="TF_SS3_CALM--;tfSS3CalRe()">‹</button> '
     +y+'년 '+(mo+1)+'월 <button type="button" class="cal-nav" '+(mi>=months.length-1?'disabled':'')+' onclick="TF_SS3_CALM++;tfSS3CalRe()">›</button></b>'
-    +'<span class="mt2">월 합산 '+(mtot>=0?'+':'')+mtot.toFixed(1)+'%, 끝난 거래 '+trM.length+'건'+(trM.length?', 승률 '+Math.round(wM/trM.length*100)+'%':'')+'</span></div>'
+    +'<span class="mt2">'+(mo+1)+'월 수익률 '+(mtot>=0?'+':'')+mtot.toFixed(1)+'%, 끝난 거래 '+trM.length+'회'+(false&&trM.length?', 승률 '+Math.round(wM/trM.length*100)+'%':'')+'</span></div>'
     +'<div class="cal-hd">'+['일','월','화','수','목','금','토'].map(function(x){return '<span>'+x+'</span>';}).join('')+'</div>'
     +'<div class="cal-g">'+cells+'</div>'
     +'<div class="mt2" style="margin-top:8px">평가 기록이 있는 봉만 색이 칠해져요. 지난 봉 기준이에요.</div>';
@@ -16302,16 +16329,17 @@ function mkdSum(s){
   return gEsc(a)+mkdJosa(a)+' '+dep+' 다시 오르기 시작할 때만 사요. 산 가격보다 '+Math.abs(p.tp)+'% 오르면 팔고, '+Math.abs(p.sl)+'% 내리면 바로 '+mkdTerm('정리','들고 있던 것을 팔아 손실을 더 키우지 않는 거예요')+'해요. '
     +(p.trendFilter?mkdTerm('오르내림이 뚜렷한 장','가격이 한 방향으로 꾸준히 움직이는 때예요')+'에서만 움직이고, 방향이 애매하면 쉬어요.':'장 분위기를 가리지 않고 조건이 맞으면 들어가요.')+' 어느 쪽에도 닿지 않으면 25일째에 정리해요.';
 }
-function mkdTicks(a,b,n){ var span=(b-a)||1, st=Math.pow(10,Math.floor(Math.log10(span/n))), e=span/n/st; st*=e<1.5?1:e<3?2:e<7?5:10; var lo=Math.floor(a/st)*st, hi=Math.ceil(b/st)*st, t=[]; for(var v=lo;v<=hi+st/2;v+=st) t.push(+v.toFixed(6)); return t; }
+function mkdTicks(a,b,n){ if(!(b-a>1e-9*Math.max(1,Math.abs(a)))){ var pd=Math.abs(a)>=100?Math.max(10,Math.round(Math.abs(a)*0.01)):1; return [a-pd,a,a+pd]; } /* 최저와 최고가 같으면 위아래로 여유를 둔다 */ var span=(b-a)||1, st=Math.pow(10,Math.floor(Math.log10(span/n))), e=span/n/st; st*=e<1.5?1:e<3?2:e<7?5:10; var lo=Math.floor(a/st)*st, hi=Math.ceil(b/st)*st, t=[]; for(var v=lo;v<=hi+st/2;v+=st) t.push(+v.toFixed(6)); return t; }
 function mkdChartHtml(){
   var P=mkdSeries(); if(P.length<2) return '<div class="mt2" style="padding:40px 0;text-align:center">아직 그릴 기록이 없어요</div>';
   var W=mkChartW(), mob=W<560, H=mob?236:280,pl=mob?46:54,pr=6,pt=24,pb=32, base=MKD.tab==='bal'?1000:0; /* 좌표 폭을 화면 폭에 맞춘다(글자 크기 유지) */
-  var ys=P.map(function(p){return p.y;}), T=mkdTicks(Math.min.apply(null,ys.concat(base)),Math.max.apply(null,ys.concat(base)),5), mn=T[0], mx=T[T.length-1];
+  var dsrc=MKD.per?(MKD.eq||[]).slice(-MKD.per-1):(MKD.eq||[]), flat=dsrc.length>1&&dsrc.every(function(p){ return Math.abs(p.v-dsrc[0].v)<1e-12; }); /* 하루 단위 값으로 본다 */
+  var ys=P.map(function(p){return p.y;}), flatBase=flat&&Math.abs(ys[0]-base)<1e-9, T=mkdTicks(Math.min.apply(null,ys.concat(base)),Math.max.apply(null,ys.concat(base)),5), mn=T[0], mx=T[T.length-1];
   var X=function(i){return pl+i/Math.max(1,P.length-1)*(W-pl-pr);}, Y=function(v){return pt+(1-(v-mn)/(mx-mn))*(H-pt-pb);}, cl=function(y){return Math.max(pt,Math.min(H-pb,y));};
   var A=P.map(function(p,i){return [X(i),Y(p.y)];}), d='M'+A[0][0].toFixed(1)+' '+A[0][1].toFixed(1);
   for(var i=0;i<A.length-1;i++){ var p0=A[Math.max(0,i-1)],p1=A[i],p2=A[i+1],p3=A[Math.min(A.length-1,i+2)]; d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+cl(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+cl(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1); }
-  var yb=Y(base), area=d+' L'+A[A.length-1][0].toFixed(1)+' '+yb.toFixed(1)+' L'+A[0][0].toFixed(1)+' '+yb.toFixed(1)+' Z', G='#2fb98a', R='#f0566a';
-  var dec=Math.abs(mx-mn)<4?2:Math.abs(mx-mn)<20?1:0, fmt=function(v){ return MKD.tab==='ret'?(v>0?'+':'')+v.toFixed(dec)+'%':Math.round(v).toLocaleString(); };
+  var yb=Y(base), area=d+' L'+A[A.length-1][0].toFixed(1)+' '+yb.toFixed(1)+' L'+A[0][0].toFixed(1)+' '+yb.toFixed(1)+' Z', G=flatBase?'#8b9096':'#2fb98a', R=flatBase?'#8b9096':'#f0566a';
+  var dec=flat?0:Math.abs(mx-mn)<4?2:Math.abs(mx-mn)<20?1:0, fmt=function(v){ return MKD.tab==='ret'?(v>0?'+':'')+v.toFixed(dec)+'%':Math.round(v).toLocaleString(); };
   var still=false; try{ still=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
   MKD.geo={A:A,P:P,W:W,H:H,pb:pb};
   var g=T.map(function(v){ return '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="rgba(255,255,255,'+(v===base?'.24':'.08')+')"/><text x="'+(pl-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+fmt(v)+'</text>'; }).join('');
@@ -16330,7 +16358,7 @@ function mkdChartHtml(){
     +'<g clip-path="url(#mkdcd)"><path d="'+area+'" fill="url(#mkdgd)"/><path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></g>'
     +'</g><g class="mkd-mk">'+(iMx!==iMn?(iMx>0?mark(iMx,'Max'):'')+(iMn>0?mark(iMn,'Min'):''):'')+'</g>' /* 시작점(기준)과 겹치는 표시는 생략 */
     +'<g class="mkd-cur"><line id="mkd-cl" x1="0" x2="0" y1="'+pt+'" y2="'+(H-pb)+'" stroke="rgba(255,255,255,.75)" stroke-dasharray="4 4"/><circle id="mkd-cc" r="5" fill="#17191c" stroke="#fff" stroke-width="2.2"/></g></svg>'
-    +'<div class="mkd-ht" id="mkd-ht" role="status"></div>';
+    +'<div class="mkd-ht" id="mkd-ht" role="status"></div>'+(flat?'<div class="mkd-flat">이 기간에는 '+({ret:'수익률',pnl:'수익금',bal:'잔고'}[MKD.tab])+' 변화가 없어요</div>':'');
 }
 /* 차트 호버: 가장 가까운 날짜의 값 표시 */
 function mkdHover(ev){
@@ -17841,7 +17869,7 @@ function mkMigrate(){
       /* 데이터 세대가 바뀌면 저장된 봉 번호를 같은 날짜의 새 봉 번호로 옮긴다 */
       var g=c.gen, now={asof:MK_ASOF.slice(),len:PRICE0.length};
       if(!g){ g=c.gen={asof:MK_GEN0.asof.slice(),len:MK_GEN0.len}; ch=true; }
-      if(g.len!==now.len||g.asof.join('-')!==now.asof.join('-')){ var d0=new Date(g.asof[0],g.asof[1]-1,g.asof[2]), d1=new Date(now.asof[0],now.asof[1]-1,now.asof[2]), sh=(now.len-g.len)-Math.round((d1-d0)/86400000); ['simStartI','flatI'].forEach(function(k){ if(c[k]!=null) c[k]=Math.max(0,Math.min(now.len-1,c[k]+sh)); }); (c.ledger||[]).forEach(function(e){ if(e.i!=null) e.i=Math.max(0,Math.min(now.len-1,e.i+sh)); }); c.gen=now; ch=true; }
+      if(g.len!==now.len||g.asof.join('-')!==now.asof.join('-')){ var d0=new Date(g.asof[0],g.asof[1]-1,g.asof[2]), d1=new Date(now.asof[0],now.asof[1]-1,now.asof[2]), sh=(now.len-g.len)-Math.round((d1-d0)/86400000); ['simStartI','flatI','endI','stopI'].forEach(function(k){ if(c[k]!=null) c[k]=Math.max(0,Math.min(now.len-1,c[k]+sh)); }); if(c.flats) c.flats=c.flats.map(function(x){ return Math.max(0,Math.min(now.len-1,x+sh)); }); (c.ledger||[]).forEach(function(e){ if(e.i!=null) e.i=Math.max(0,Math.min(now.len-1,e.i+sh)); }); c.gen=now; ch=true; }
       /* 봉 번호가 없는 입출금(이전 형식)은 첫 건을 시작 봉, 나머지를 마지막 봉으로 본다 */
       (c.ledger||[]).forEach(function(e,ix){ if(e.i==null){ e.i=(ix===0&&c.simStartI!=null)?c.simStartI:now.len-1; ch=true; } }); });
     if(ch) tfSave(); }catch(e){}
@@ -17977,17 +18005,26 @@ function mkCard(s){
     +'<div class="mk3-meta">'+(s.by?'<span class="mk3-by">@'+gEsc(s.by)+'</span>':'')+'<span class="mk3-ex"><img src="assets/logos/'+ex[0]+'.png" alt="" width="12" height="12" loading="lazy">'+ex[1]+'에서 실행</span></div>'
     +'<div class="mk3-how"><b>'+MK_KIND[s.kind]+'</b><span>'+gEsc(mkScope(s))+'</span></div>'
     +'<p class="mk-c-one mk3-one">'+gEsc(mkOne(s)).replace(/%(?=[가-힣])/g,'%⁠')+'</p>'
-    +'<div class="mk3-now"><small>지금</small><span>'+gEsc(mkNowLine(s))+'</span></div>'
+    +'<div class="mk3-now"><small>지금</small><span>'+gEsc(mkNowLine(s)).replace(/ (\S+) 중$/,' $1&nbsp;중')+'</span></div>'
     +'<div class="mk3-perf"><div class="mk-c-ret mk3-ret"><small>30일 수익률</small><b class="num'+mkSign(m30.ret)+'">'+mkPct0(m30.ret)+'</b></div>'+mkSpark3(m30.eq)+'</div>'
     +'<div class="mk3-facts">'+(win?'<div><small>전체 기간 수익 낸 거래</small><b class="num">'+win+'</b></div>':'')+(fw?mkFwHtml(s.fw):'')+'</div>'
     +'<div class="mk3-foot">'+(s.me?'':bF)+bD+'</div>'
     +'</article>';
 }
+var MK_WIN_MIN=20; /* 승률 정렬에서 앞에 설 수 있는 최소 거래 수 */
+/* 추천순은 방향을 바꾸지 않는다 */
+function tfSS3SortPick(v){
+  var t=tfSSState();
+  if(v==='pick'){ t.ss.sort='pick'; t.ss.dir='desc'; }
+  else if(t.ss.sort===v){ t.ss.dir=t.ss.dir==='asc'?'desc':'asc'; }
+  else { t.ss.sort=v; t.ss.dir='desc'; }
+  tfSave(); tfShareHub('find');
+}
 function tfSS3GridHtml(){
   var t=tfSSState(), rows=tfSSRows(); mkSortKey(t);
   if(t.ss.asset&&t.ss.asset!=='all') rows=rows.filter(function(s){ return s.mkt===t.ss.asset; });
   if(t.ss.kind&&t.ss.kind!=='all') rows=rows.filter(function(s){ return (s.kind||'rule')===t.ss.kind; });
-  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return [s.nick,s.asset,mkTitle(s),s.one||'',s.by?'@'+s.by:'',s.id||'',mkOldNames(s.id),MK_KIND[s.kind]||'',mkUni(s).list.join(' ')].join(' ').toLowerCase().indexOf(q)>=0; }); }
+  if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return [s.nick,s.asset,mkTitle(s),s.one||'',s.by?'@'+s.by:'',s.id||'',mkOldNames(s.id),MK_KIND[s.kind]||'',mkUni(s).list.join(' '),mkUni(s).list.map(mkTk).join(' '),mkTk(s.asset||'')].join(' ').toLowerCase().indexOf(q)>=0; }); }
   var f={pick:function(a,b){return (a.ord||0)-(b.ord||0);},
     ret:function(a,b){return mk30(b).ret-mk30(a).ret;},
     fw:function(a,b){return (b.fw||0)-(a.fw||0);},
@@ -18000,6 +18037,7 @@ function tfSS3GridHtml(){
   var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&!TF_SS_Q;
   if(plain){ var base=rows.filter(function(s){ return !s.me; }), all=rows.slice(); for(var rp=1;rp<MAXP&&base.length;rp++) all=all.concat(base); rows=all; }
   rows=rows.slice(0,PER*MAXP);
+  if(mkSortKey(t)==='win'){ var few=function(s){ return ((s.r&&s.r.n)||0)<MK_WIN_MIN; }; rows=rows.filter(function(s){ return !few(s); }).concat(rows.filter(few)); }
   var sig=[t.ss.asset,t.ss.kind,TF_SS_Q,mkSortKey(t),t.ss.dir].join('|'); if(t.ss.pgSig!==sig){ t.ss.pgSig=sig; t.ss.page=1; }
   var pages=Math.max(1,Math.ceil(rows.length/PER)), pg=Math.min(pages,Math.max(1,t.ss.page||1)); t.ss.page=pg;
   var pager='';
@@ -18019,7 +18057,7 @@ function mk3Controls(t){
     +'<div class="mk3-kindrow"><div class="mk3-seg" role="group" aria-label="판단 방식">'+[['all','전체'],['agent','AI 판단'],['rule','차트 규칙'],['mix','혼합 전략']].map(function(o){ var on=kind===o[0]; return '<button type="button" aria-pressed="'+on+'" onclick="mkKindPick(\''+o[0]+'\')">'+o[1]+'<i class="num">'+cnt[o[0]]+'</i></button>'; }).join('')+'</div>'
     +'<p class="mk3-kindhelp">'+({all:'AI 판단은 AI가 종목과 비중을 정해요. 차트 규칙은 정해 둔 가격 조건만 따라요. 혼합 전략은 AI가 종목을 고르고 규칙이 시점을 정하되, 조건이 맞아도 시장이 위험하면 AI가 진입을 보류해요.',agent:'여러 종목을 비교해 무엇을 얼마나 들지 AI가 정해요. 시장이 약하면 새로 사지 않아요.',rule:'정해 둔 자산에서 정해 둔 조건이 맞을 때만 사고팔아요. AI는 끼어들지 않아요.',mix:'거래할 종목은 AI가 고르고, 사고파는 시점은 규칙이 정해요. 규칙 조건이 맞아도 큰 악재나 약한 시장이면 AI가 진입을 보류해요.'}[kind])+'</p></div>'
     +'<div class="mk-flt mk3-flt">'
-    +'<div class="mk-chips" aria-label="정렬"><span class="lb">정렬</span>'+[['ret','30일 수익률'],['fw','따라가는 사람'],['win','거래 승률']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')+'</div>'
+    +'<div class="mk-chips" aria-label="정렬"><span class="lb">정렬</span>'+[['pick','추천순'],['ret','30일 수익률'],['fw','따라가는 사람'],['win','거래 승률']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on&&o[0]!=='pick'?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')+'</div>'
     +tfBkDrop('ss3-m-asset',[['all','시장 전체'],['crypto','가상자산'],['stock','미국 주식'],['index','지수와 금'],['multi','여러 시장']],t.ss.asset||'all','mkMktPick')
     +'<button type="button" class="mk-search-toggle" aria-label="전략 검색" aria-expanded="false" onclick="tfMkSearchToggle(this)">⌕</button><label class="ss3-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
     +'<input id="ss3-q" type="search" placeholder="이름, 종목, 등록자 검색" value="'+gEsc(TF_SS_Q||'')+'" aria-label="전략 검색" oninput="tfSS3Search(this.value)"></label>'
@@ -18246,7 +18284,7 @@ function mkStopGo(cid,mode){
   c2.stopMode=MK_STOP_L[mode]?mode:'now';
   var d=cpCalc(c2);
   if(c2.stopMode==='now'||!d.posOpen||d.missing){ cpClose(cid); return; }
-  c2.winding=true; c2.windAt=Date.now();
+  c2.winding=true; c2.windAt=Date.now(); { var sw=tfSSFind(c2.nick); if(sw&&sw.r&&sw.r.eq&&sw.r.eq.length) c2.stopI=sw.r.eq[sw.r.eq.length-1].i; }
   tfSaveNow(); tfSS3DlgClose();
   toast('새 진입을 멈췄어요. 열린 포지션은 '+(c2.stopMode==='wait'?'원본 전략이 청산할 때 함께 정리해요':'내가 정리할 때까지 남아 있어요'));
   if(location.hash.indexOf('#/share/c/')===0) cpDetailView(cid,'pos'); else tfShareHub('follow');
@@ -18270,14 +18308,14 @@ function cpFlat(cid){
   var c2=cpFind(cid); if(!c2||c2.status!=='active') return;
   var s2=tfSSFind(c2.nick); if(!s2||!s2.r.eq||!s2.r.eq.length) return;
   tfTrack('cp_flat',{id:cid});
-  if(c2.winding){ c2.flatI=null; cpClose(cid); return; } /* 정산은 cpClose 한 곳에서: 보유 실현, 봉 고정, 반환 한 번 */
-  c2.flatI=s2.r.eq[s2.r.eq.length-1].i; /* 이후 손익 계산 구간을 여기서 고정 */
+  if(c2.winding){ cpClose(cid); return; } /* 정산은 cpClose 한 곳에서: 보유 실현, 봉 고정, 반환 한 번 */
+  { var fb=s2.r.eq[s2.r.eq.length-1].i; if(!c2.flats) c2.flats=c2.flatI!=null?[c2.flatI]:[]; if(c2.flats.indexOf(fb)<0) c2.flats.push(fb); c2.flatI=fb; } /* 정리한 봉을 차례로 남긴다 */
   tfSaveNow(); tfSS3DlgClose();
   toast('포지션을 정리했어요. 다음 진입부터 다시 따라갑니다');
   cpDetailView(cid,'pos');
 }
 /* 따라가는 중 화면을 열 때 정리 대기 계정을 확인한다 */
-var mkHub0=tfShareHub; tfShareHub=function(tab){ try{ mkWindCheck(); }catch(e){} var prev=G.mode==='tfss3'?MK_HUB_TAB:null, out=mkHub0.apply(this,arguments); MK_HUB_TAB=tab||'find'; if(MK_HUB_TAB==='find'&&prev!=='find') try{ mkCardsEnter(); }catch(e){} return out; };
+var mkHub0=tfShareHub; tfShareHub=function(tab){ try{ mkWindCheck(); }catch(e){} var prev=G.mode==='tfss3'?MK_HUB_TAB:null, out=mkHub0.apply(this,arguments); MK_HUB_TAB=tab||'find'; if(MK_HUB_TAB==='find'&&prev!=='find') try{ mkCardsEnter(); }catch(e){} try{ setTimeout(mkFabTick,60); }catch(e){} return out; };
 /* 즐겨찾기: 저장 상태에서 머리글 버튼과 더 보기 버튼을 함께 맞춘다 */
 function mkWatchSync(ne){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
@@ -18295,6 +18333,7 @@ function cpxPos(c2,d){
       +'원본 전략이 진입하면 자동으로 함께 진입하고, 여기에 실시간으로 표시돼요.'
       +'<span class="nx">'+(c2.status==='active'?'포지션이 없는 동안에도 따라가기는 유지돼요.':'중단된 따라가기예요. 청산 이력 탭에서 기록을 볼 수 있어요.')+'</span></div>';
   var c=s2.cfg||{}, st=(s2.r&&s2.r.state)||{}, o=st.open, list=!o?[]:o.length!=null?o:[o], up=d.unreal>=0;
+  if(d.stopI!=null) list=list.filter(function(x){ return x.entry==null||x.entry<=d.stopI; }); /* 새 진입을 멈춘 뒤에 원본이 산 종목은 내 포지션이 아니다 */
   var wsum=list.reduce(function(a,x){ return a+(x.w!=null?x.w:1); },0)||1;
   var rule=s2.kind==='agent'?'고점에서 '+c.trail+'% 밀리면':(c.sl!=null?c.sl+'% / +'+c.tp+'%':(s2.p?s2.p.sl+'% / +'+s2.p.tp+'%':'원본과 같음'));
   var rows=list.map(function(x){ var w=(x.w!=null?x.w:1)/wsum;
@@ -18315,10 +18354,10 @@ function cpxPos(c2,d){
 function cpClose(cid,silent){
   var c2=cpFind(cid), cp=cpState(); if(!c2||c2.status!=='active') return;
   var s2=tfSSFind(c2.nick);
-  if(s2&&s2.r&&s2.r.eq&&s2.r.eq.length&&c2.flatI==null) c2.flatI=s2.r.eq[s2.r.eq.length-1].i;
+  if(s2&&s2.r&&s2.r.eq&&s2.r.eq.length) c2.endI=s2.r.eq[s2.r.eq.length-1].i;
   var d=cpCalc(c2), back=Math.max(0,d.est);
   c2.status='closed'; c2.closedAt=Date.now(); c2.settle={net:d.net,share:d.share,back:back};
-  c2.ledger.push({at:Date.now(),type:'out',amt:back,i:c2.flatI});
+  c2.ledger.push({at:Date.now(),type:'out',amt:back,i:c2.endI});
   cp.spot+=back;
   tfSaveNow(); tfSS3DlgClose();
   tfTrack('cp_close',{id:cid,net:d.net});
@@ -18400,9 +18439,9 @@ function tfSS3PdCalc(s,pd){
 /* 지표 이름에 붙는 설명 */
 var MK_TIP={ret:'고른 기간 동안 이 전략이 거둔 수익의 비율이에요. 수수료를 뺀 값이에요.',
   ret30:'최근 30일 동안 이 전략이 거둔 수익의 비율이에요. 수수료를 뺀 값이에요.',
-  mdd:'가장 높았던 때에서 가장 많이 내려간 폭이에요. 값이 클수록 중간에 크게 흔들렸다는 뜻이에요.',
-  win:'끝난 거래 중 이익으로 끝난 거래의 비율이에요. 고른 기간에 끝난 거래가 5번 미만이면 - 로 표시해요.',
-  n:'사고팔기를 끝낸 횟수예요.',
+  mdd:'고른 기간 안에서, 가장 높았던 때에서 가장 많이 내려간 폭이에요. 값이 클수록 중간에 크게 흔들렸다는 뜻이에요.',
+  win:'전체 기간에 끝난 거래 중 이익으로 끝난 거래의 비율이에요. 끝난 거래가 5번 미만이면 - 로 표시해요.',
+  n:'전체 기간에 사고팔기를 끝낸 횟수예요.',
   ex:'이 전략의 주문이 실제로 나가는 거래소예요. 따라가려면 이 거래소 계정을 연결해야 해요.'};
 function mkKpi4(cls,item,a,b,c,d){ return '<div class="'+cls+'">'+[a,b,c,d].map(function(x){ return '<div'+(item?' class="'+item+'"':'')+'><small>'+mkdTerm(x[0],MK_TIP[x[1]])+'</small><b class="num'+(x[3]||'')+'">'+x[2]+'</b></div>'; }).join('')+'</div>'; }
 /* 성과 탭: 기간, 지표 넷, 월별 달력 */
@@ -18414,6 +18453,7 @@ function mkInfoTab(s,r,ne){
   return '<div class="mk-info">'
     +row('판단 방식',MK_KIND[s.kind]||'차트 규칙')
     +row('거래 대상',gEsc(s.cfg&&s.cfg.uni?mkUni(s).list.join(', '):(CPP_PAIR[s.asset]||s.asset)))
+    +row('거래 상품',mkInstList(s).join(', '))
     +row('실행 거래소',mkEx(s)[1])
     +row('기록 기간',mkDate(a)+' ~ '+mkDate(b)+' ('+Math.max(1,Math.round((b-a)/30.44))+'개월)')
     +row('등록',s.me?gEsc(s.nick)+' (나)':(s.by?'@'+gEsc(s.by):'TETH'))
@@ -18422,7 +18462,7 @@ function mkInfoTab(s,r,ne){
 /* 개요 그래프의 조작 줄: 수익률, 수익금, 잔고. 기간에 최근 7일 */
 function mkdCtlHtml(){
   var tip='이 전략이 매매로 번 비율이에요. 돈을 더 넣거나 빼도 수익률은 그대로예요. 수수료를 뺀 실제 수익이에요. 이 전략의 거래만 계산해요.';
-  return '<div class="mkd-pills" role="group" aria-label="그래프 종류">'+[['ret','수익률',tip],['pnl','수익금','처음에 1,000 USDT로 시작한 계좌에서, 고른 기간 동안 늘거나 줄어든 금액이에요. 수수료를 뺀 금액이에요.'],['bal','잔고','처음에 1,000 USDT로 시작한 계좌에 그날 들어 있던 금액이에요. 아래 거래내역의 금액과 같은 기준이에요.']].map(function(t){ return '<button type="button" class="mkd-pill" aria-pressed="'+(MKD.tab===t[0])+'" onclick="mkdSet(\'tab\',\''+t[0]+'\')">'+t[1]+(t[2]?'<i aria-hidden="true">i</i><span class="mkd-tip" role="tooltip">'+t[2]+'</span>':'')+'</button>'; }).join('')+'</div>'
+  return '<div class="mkd-pills" role="group" aria-label="그래프 종류">'+[['ret','수익률',tip],['pnl','수익금','고른 기간의 첫날에 1,000 USDT를 넣었다면 늘거나 줄어든 금액이에요. 수수료를 뺀 금액이에요.'],['bal','잔고','고른 기간의 첫날에 1,000 USDT를 넣었다면 그날 계좌에 들어 있던 금액이에요.']].map(function(t){ return '<button type="button" class="mkd-pill" aria-pressed="'+(MKD.tab===t[0])+'" onclick="mkdSet(\'tab\',\''+t[0]+'\')">'+t[1]+(t[2]?'<i aria-hidden="true">i</i><span class="mkd-tip" role="tooltip">'+t[2]+'</span>':'')+'</button>'; }).join('')+'</div>'
     +'<div class="mkd-right"><div class="mkd-seg" role="group" aria-label="간격">'+[['day','일별'],['month','월별']].map(function(g){ return '<button type="button" aria-pressed="'+(MKD.gran===g[0])+'" onclick="mkdSet(\'gran\',\''+g[0]+'\')">'+g[1]+'</button>'; }).join('')+'</div>'
     +'<select class="mkd-per" aria-label="기간 선택" onchange="mkdSet(\'per\',+this.value)">'+[[7,'최근 7일'],[30,'최근 30일'],[90,'최근 3개월'],[365,'최근 1년'],[0,'전체']].map(function(o){ return '<option value="'+o[0]+'"'+(MKD.per===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></div>';
 }
@@ -18430,14 +18470,15 @@ function mkdCtlHtml(){
 /* ── 상세를 한 페이지로: 성과(지표, 그래프, 달력) → 판단 기록 → 거래내역. 탭은 개요와 정보. 거래내역 전체는 따로 연다 ── */
 MK_TAB_OK={ov:1,info:1,trades:1}; /* 성과, 활동 탭은 없앴다. 옛 주소는 개요로 */
 var MK_PER_L={7:'최근 7일',30:'최근 30일',90:'최근 3개월',365:'최근 1년',0:'전체 기간'};
-/* 지표 넷은 그래프에서 고른 기간을 따른다 */
+/* 수익률과 최대 낙폭은 그래프에서 고른 기간을 따르고, 승률과 거래 수는 늘 전체 기간이다(짧은 기간의 거래 한두 건이 성과처럼 읽히지 않게) */
 function mkOvKpi(s,per){
-  var r=per?mkSlice(s,per):s.r, w=(typeof r.winRate==='number'&&(r.n||0)>=5)?Math.round(r.winRate)+'%':'-';
-  return mkKpi4('mk3-kpis num','',[MK_PER_L[per]+' 수익률','ret',mkPct0(r.ret),mkSign(r.ret)],['최대 낙폭','mdd',r.mdd.toFixed(1)+'%'],['승률','win',w],['거래 수','n',Number(r.n||0).toLocaleString()+'회']);
+  var r=per?mkSlice(s,per):s.r, a=s.r||r, w=(typeof a.winRate==='number'&&(a.n||0)>=5)?Math.round(a.winRate)+'%':'-';
+  return mkKpi4('mk3-kpis num','',[MK_PER_L[per]+' 수익률','ret',mkPct0(r.ret),mkSign(r.ret)],[MK_PER_L[per]+' 최대 낙폭','mdd',r.mdd.toFixed(1)+'%'],['전체 기간 승률','win',w],['전체 기간 거래 수','n',Number(a.n||0).toLocaleString()+'회']);
 }
+function mkdHintTxt(){ return MKD.per?MK_PER_L[MKD.per].replace('최근 ','')+' 전에 1,000 USDT를 넣었다면':'시작한 날에 1,000 USDT를 넣었다면'; }
 function mkdSet(k,v){
   MKD[k]=v; var c=$('mkd-ctl'), h=$('mkd-hint'), g=$('mkd-chart'), q=$('mk3-kpi-host');
-  if(c) c.innerHTML=mkdCtlHtml(); if(h) h.textContent=MKD.tab==='ret'?'':'1,000 USDT로 시작했다면';
+  if(c) c.innerHTML=mkdCtlHtml(); if(h) h.textContent=MKD.tab==='ret'?'':mkdHintTxt();
   if(g){ g.classList.remove('hov'); g.innerHTML=mkdChartHtml(); }
   if(k==='per'&&q&&MKD.s) q.innerHTML=mkOvKpi(MKD.s,MKD.per);
 }
@@ -18479,7 +18520,7 @@ function mkQty(v){ var a=Math.abs(v); return a>=1000?Math.round(v).toLocaleStrin
 function mkOrdersTable(s,rows){
   return '<div class="mk-tblw"><table class="ss3-tbl mko-tbl"><thead><tr><th>종목</th><th>구분</th><th>시간</th><th class="r">가격</th><th class="r">수량</th><th class="r">합계</th></tr></thead><tbody>'
     +(rows.length?rows.map(function(x){
-      return '<tr class="'+(x.side==='in'?'in':'out')+'"><td><span class="mko-s" aria-hidden="true">'+(x.side==='in'?'+':'−')+'</span><b>'+gEsc(x.a)+'</b></td><td>'+x.label+(x.open?'<small> 보유 중</small>':'')+'</td><td class="num">'+x.when+'</td>'
+      return '<tr class="'+(x.side==='in'?'in':'out')+'"><td><span class="mko-s" aria-hidden="true">'+(x.side==='in'?'+':'−')+'</span><b>'+gEsc(mkTk(x.a))+'</b></td><td>'+x.label+(x.open?'<small> 보유 중</small>':'')+'</td><td class="num">'+x.when+'</td>'
         +'<td class="num r">'+mkPxU(x.a,x.px)+'</td><td class="num r">'+mkQty(x.q)+'</td><td class="num r">'+Math.round(x.sum).toLocaleString()+' USDT'+(x.pnl!=null?'<small class="'+(x.pnl>=0?'up':'dn')+'"> '+mkPct0(x.pnl)+'</small>':'')+'</td></tr>'; }).join('')
       :'<tr><td colspan="6" class="mko-e">아직 거래가 없어요</td></tr>')
     +'</tbody></table></div>';
@@ -18487,7 +18528,7 @@ function mkOrdersTable(s,rows){
 function mkOrdersSec(s,ne){
   var o=s.cfg?mkOrders(s):[];
   if(!s.cfg) return '<section class="mk3-sec mko"><div class="mk3-sec-h"><h3>거래내역</h3></div>'+mkTradesTable(s,s.r,5)+'</section>';
-  return '<section class="mk3-sec mko"><div class="mk3-sec-h"><h3><button type="button" class="mko-go" onclick="mkGoTrades(\''+ne+'\')">거래내역<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></h3><span class="mko-n num">전체 '+o.length.toLocaleString()+'건, 1,000 USDT로 시작한 기준</span></div>'
+  return '<section class="mk3-sec mko"><div class="mk3-sec-h"><h3><button type="button" class="mko-go" onclick="mkGoTrades(\''+ne+'\')">거래내역<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></h3><span class="mko-n num">주문 '+o.length.toLocaleString()+'건, 1,000 USDT로 시작한 기준</span></div>'
     +mkOrdersTable(s,o.slice(0,5))+'</section>';
 }
 /* 거래내역 전체 화면 */
@@ -18496,7 +18537,7 @@ function mkTradesTab(s,r,pd,ne){
   if(!s.cfg) return '<div class="mk-sec-hd"><b>거래내역</b></div>'+mkTradesTable(s,s.r);
   var o=mkOrders(s); MK_ORD_N=30; window.MK_ORD_S=s;
   return '<div class="mko mko-all"><button type="button" class="mko-go mko-back" onclick="mkBackOv(\''+ne+'\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>개요로 돌아가기</button>'
-    +'<div class="mk3-sec-h"><h3>거래내역</h3><span class="mko-n num">전체 '+o.length.toLocaleString()+'건, 1,000 USDT로 시작한 기준</span></div>'
+    +'<div class="mk3-sec-h"><h3>거래내역</h3><span class="mko-n num">주문 '+o.length.toLocaleString()+'건, 1,000 USDT로 시작한 기준</span></div>'
     +'<div id="mko-host">'+mkOrdersTable(s,o.slice(0,MK_ORD_N))+'</div>'
     +(o.length>MK_ORD_N?'<button type="button" class="mkc-more mko-more" id="mko-more" onclick="mkOrdMore()">이전 거래 더 보기</button>':'')+'<button type="button" class="mko-go mko-back mko-back2" onclick="mkBackOv(\''+ne+'\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>개요로 돌아가기</button></div>';
 }
@@ -18504,12 +18545,12 @@ function mkOrdMore(){ var s=window.MK_ORD_S, h=$('mko-host'), b=$('mko-more'); i
 
 /* ── 한 페이지 상세: Codex 검수 반영 ── */
 /* 그래프 값의 기준. 수익률은 고른 기간의 첫 값이 기준이고, 전체 기간은 처음 넣은 돈(1)이 기준이다.
-   잔고는 1,000 USDT 로 시작한 계좌의 그 시점 금액이고, 수익금은 고른 기간 동안 그 계좌에서 늘거나 준 금액이다 */
+   잔고와 수익금도 같은 기준이다: 고른 기간의 첫날에 1,000 USDT 를 넣은 계좌(전체 기간은 시작한 날). 그래서 세 값이 서로 맞는다 */
 function mkdSeries(){
   var eq=MKD.eq||[], src=MKD.per?eq.slice(-MKD.per-1):eq.slice(); if(src.length<2) return [];
   var base=MKD.per?src[0].v:1, pts=src;
   if(MKD.gran==='month'){ var seen={}, order=[]; src.forEach(function(p){ var k=mkdDate(p.i).slice(0,7); if(!seen[k]) order.push(k); seen[k]=p; }); pts=[src[0]].concat(order.map(function(k){ return seen[k]; }).filter(function(p){ return p!==src[0]; })); }
-  return pts.map(function(p){ return {d:mkdDate(p.i), y:MKD.tab==='ret'?(p.v/base-1)*100:MKD.tab==='pnl'?1000*(p.v-base):1000*p.v}; });
+  return pts.map(function(p){ return {d:mkdDate(p.i), y:MKD.tab==='ret'?(p.v/base-1)*100:MKD.tab==='pnl'?1000*(p.v/base-1):1000*p.v/base}; });
 }
 /* 달력은 어느 주소로 들어와도 전체 기록으로 그린다 */
 function tfSS3CalRe(){ var c=TF_SS3_CALCTX; if(!c) return; var host=$('ss3-cal-host'); if(!host) return;
@@ -18536,6 +18577,10 @@ var MK_VOICE={"d1":{"now":"비앤비, 에이다, 비트코인 세 종목을 그�
 var MK_CRYPTO={'비트코인':1,'이더리움':1,'솔라나':1,'리플':1,'도지코인':1,'에이다':1,'아발란체':1,'비앤비':1};
 function mkList(a){ return a.join(', '); }
 function mkPxU(a,v){ return mkPxFmt(v)+(MK_CRYPTO[a]?' USDT':(a==='나스닥'||a==='S&P 500')?'포인트':' USD'); }
+/* 거래하는 상품. 가상자산 거래소에서 주식, 지수, 금은 가격을 따라가는 토큰으로 거래한다 */
+function mkInst(a){ return MK_CRYPTO[a]?'현물':(a==='나스닥'||a==='S&P 500')?'토큰화 지수':a==='금'?'토큰화 금':'토큰화 주식'; }
+function mkInstList(s){ var l=s.cfg&&s.cfg.uni?mkUni(s).list:[s.asset], o=[]; l.forEach(function(a){ var k=mkInst(a); if(o.indexOf(k)<0) o.push(k); }); return o; }
+function mkTagIO(s,a,out){ var W=mkWords(s); return W.inst==='선물'?(out?W.tagOut:W.tagIn):mkInst(a)+(out?' 매도':' 매수'); }
 /* 주문 용어: 현물은 매수와 매도, 선물은 방향(롱, 숏)과 진입, 청산. 설정에 inst, dir 이 없으면 현물 롱 */
 function mkWords(s){
   var c=s.cfg||{}, fut=c.inst==='futures', sh=c.dir==='short';
@@ -18634,10 +18679,10 @@ function mkChatEv(s,e){
   var c=s.cfg||{}, R=mkRules(s,e.of), W=mkWords(s), held=function(){ return e.held&&e.held.length?mkJ(mkList(e.held),'은','는')+' 계속 '+W.hold+'한다.':''; };
   if(s.kind==='agent'){
     if(e.t==='enter'){ var g={held:[],below:[],weak:[]}; (e.skip||[]).forEach(function(x){ g[x.why].push(x.k); });
-      return {k:'buy',tag:W.tagIn,a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 신규 '+W.buy+'했다.',e.of+'종 중 '+e.up+'종이 상승 추세였고, '+e.a+'의 최근 '+c.look+'일 상승률은 '+mkPct0(e.mom,0)+'다.',
+      return {k:'buy',tag:mkTagIO(s,e.a,0),a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 신규 '+W.buy+'했다.',e.of+'종 중 '+e.up+'종이 상승 추세였고, '+e.a+'의 최근 '+c.look+'일 상승률은 '+mkPct0(e.mom,0)+'다.',
         g.below.length?mkJ(mkList(g.below),'은','는')+' 순위가 더 높았으나 60일 이동평균 아래여서 제외했다.':'',g.held.length?mkJ(mkList(g.held),'은','는')+' 이미 보유 중이었다.':'',
         '자산의 '+Math.round(e.w*100)+'%를 체결가 '+mkPxU(e.a,e.px)+'에 투입했다.'+(e.cut?' 변동성이 커서 비중을 줄였다.':'')],[R.sell,R.size,R.swap,R.what],R)}; }
-    if(e.t==='exit') return {k:'sell',tag:W.tagOut,a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.sell+'했다.',MK_WHY_P[e.why]+'.','실현 손익은 비용 차감 후 '+mkPct0(e.pnl)+'다.'],[mkHeldTxt(s.r,e.tid),e.why==='trail'?R.sell:R.swap,e.pnl<0?'손실로 끝나는 거래도 있다. 하락하는 종목을 오래 들고 있지 않기 위한 규칙이다.':'',R.what,e.why==='trail'?R.swap:R.sell,R.rest],R)};
+    if(e.t==='exit') return {k:'sell',tag:mkTagIO(s,e.a,1),a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.sell+'했다.',MK_WHY_P[e.why]+'.','실현 손익은 비용 차감 후 '+mkPct0(e.pnl)+'다.'],[mkHeldTxt(s.r,e.tid),e.why==='trail'?R.sell:R.swap,e.pnl<0?'손실로 끝나는 거래도 있다. 하락하는 종목을 오래 들고 있지 않기 위한 규칙이다.':'',R.what,e.why==='trail'?R.swap:R.sell,R.rest],R)};
     if(e.t==='skip'&&e.why==='gate') return {k:'wait',tag:'관망',t:mkSay(['신규 '+W.buy+'를 하지 않았다.',e.of+'종 중 '+e.up+'종만 상승 추세여서 시장 약세로 판단했다.',held()],[R.rest,R.what,R.sell,R.skip],R)};
     if(e.t==='skip') return {k:'wait',tag:'관망',t:mkSay(['신규 '+W.buy+'를 하지 않았다.','기준을 넘는 종목이 없었다.'+((e.top||[]).length?' 순위 상위는 '+mkTopTxt(e.top)+'였다. 순위는 상승률을 변동성으로 나눠 매긴다.':''),held()],[R.skip,R.what,R.size,R.sell],R)};
     return {k:'hold',tag:'보유 유지',t:mkSay(['종목을 교체하지 않았다.',W.hold+' 중인 '+mkJ(mkList(e.held),'이','가')+' 여전히 상위권이다.',(e.top||[]).length?'순위 상위는 '+mkTopTxt(e.top)+'다. 순위는 상승률을 변동성으로 나눠 매기므로 상승률 순서와 다를 수 있다.':''],[R.swap,R.sell,R.what,R.rest],R)};
@@ -18645,8 +18690,8 @@ function mkChatEv(s,e){
   if(e.t==='pick') return {k:'pick',tag:'종목 선정',a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 거래 대상으로 선정했다.','최근 '+c.look+'일 상승률이 가장 높았다.'+((e.top||[]).length?' 비교 결과는 '+e.top.slice(0,3).map(function(x){ return x.k+' '+mkPct0(x.mom,0); }).join(', ')+'였다.':''),'아직 '+W.buy+'하지는 않았다.'],[R.buy,R.rest,R.sell,R.cap,R.what],R)};
   if(e.t==='unpick') return {k:'wait',tag:'관망',t:mkSay(['거래 대상을 비웠다.','60일 이동평균 위에 있는 종목이 없었다.'],[R.pick,R.again,R.what,R.buy,R.sell],R)};
   if(e.t==='veto') return {k:'wait',tag:'관망',a:e.a,t:mkSay([mkJ(e.a,'이','가')+' 되돌림 후 반등했으나 진입하지 않았다.',e.of+'종 중 '+e.up+'종만 상승 추세여서 시장 약세로 판단했다.'],[R.rest,R.what,R.buy,R.sell],R)};
-  if(e.t==='enter') return {k:'buy',tag:W.tagIn,a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.buy+'했다.','되돌림 후 하루 만에 '+mkPct0(e.bounce)+' 반등해 진입 조건이 충족됐다.',R.size],[mkDipTxt(e.a,e.i),R.sell,R.cap,s.kind==='mix'?R.again:R.what,R.tf,R.rest],R)};
-  return {k:'sell',tag:W.tagOut,a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.sell+'했다.',MK_WHY_P[e.why]+'.','실현 손익은 비용 차감 후 '+mkPct0(e.pnl)+'다.'],[mkHeldTxt(s.r,e.tid),e.why==='time'?'25일은 최대 보유 기간이다. 목표에 닿지 않아도 그날 청산한다.':e.why==='sl'?Math.abs(c.sl)+'% 이상 하락하면 추가로 기다리지 않도록 정해 두었다.':'익절 목표는 진입가 대비 +'+c.tp+'%다.',s.kind==='mix'?R.again:R.what,s.kind==='mix'?R.pick:R.rest,R.tf,R.buy],R)};
+  if(e.t==='enter') return {k:'buy',tag:mkTagIO(s,e.a,0),a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.buy+'했다.','되돌림 후 하루 만에 '+mkPct0(e.bounce)+' 반등해 진입 조건이 충족됐다.',R.size],[mkDipTxt(e.a,e.i),R.sell,R.cap,s.kind==='mix'?R.again:R.what,R.tf,R.rest],R)};
+  return {k:'sell',tag:mkTagIO(s,e.a,1),a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.sell+'했다.',MK_WHY_P[e.why]+'.','실현 손익은 비용 차감 후 '+mkPct0(e.pnl)+'다.'],[mkHeldTxt(s.r,e.tid),e.why==='time'?'25일은 최대 보유 기간이다. 목표에 닿지 않아도 그날 청산한다.':e.why==='sl'?Math.abs(c.sl)+'% 이상 하락하면 추가로 기다리지 않도록 정해 두었다.':'익절 목표는 진입가 대비 +'+c.tp+'%다.',s.kind==='mix'?R.again:R.what,s.kind==='mix'?R.pick:R.rest,R.tf,R.buy],R)};
 }
 /* 최신순. 맨 위는 현재 상태, 그 아래로 최근 판단, 맨 아래는 전략 개요. 같은 결론이 이어지면 하나로 묶는다 */
 function mkChatMsgs(s,r,n){
@@ -18690,7 +18735,10 @@ var MK_GLOSS={
  '반등':'내리던 가격이 다시 오르는 움직임.',
  '종가':'하루 거래가 끝났을 때의 가격.',
  '고점':'일정 기간 중 가장 높았던 가격.',
- '현물':'코인이나 주식을 실제로 사서 보유하는 거래. 가격이 오르면 이익이 난다.',
+ '토큰화 주식':'주식의 가격을 그대로 따라가도록 만든 디지털 자산. 가상자산 거래소에서 USDT로 사고판다.',
+ '토큰화 지수':'나스닥 같은 지수의 가격을 그대로 따라가도록 만든 디지털 자산. 가상자산 거래소에서 USDT로 사고판다.',
+ '토큰화 금':'금의 가격을 그대로 따라가도록 만든 디지털 자산. 가상자산 거래소에서 USDT로 사고판다.',
+ '현물':'코인을 실제로 사서 보유하는 거래. 가격이 오르면 이익이 난다.',
  '선물':'실물을 사지 않고 가격의 방향에 거는 거래. 오르는 쪽(롱)과 내리는 쪽(숏) 모두 가능하다.',
  '매수':'사는 주문.',
  '매도':'파는 주문.',
@@ -18738,6 +18786,21 @@ function mkChatHtml(s,r,ne,pd){
     +(ms.length>3?'<button type="button" class="mkc-more" onclick="mkChatMore(this)">이전 기록 '+(ms.length-3)+'건 더 보기</button>':'')
     +'</section>';
 }
+
+/* ── 좁은 화면에서 떠 있는 버튼(고객지원, QA)이 목록의 버튼을 가리지 않게 ── */
+var MK_FAB_T=0;
+function mkFabDodge(){
+  var on=false;
+  if(innerWidth<=640&&G.mode==='tfss3'){
+    var fabs=[$('teth-help'),$('tf-devbtn')].filter(function(x){ return x&&x.offsetWidth; }), tg=document.querySelectorAll('.mk3-foot .mk3-b, .mk-pager .mk-pg');
+    for(var i=0;i<fabs.length&&!on;i++){ var f=fabs[i].getBoundingClientRect();
+      for(var k=0;k<tg.length;k++){ var r=tg[k].getBoundingClientRect(); if(r.bottom<0||r.top>innerHeight) continue; if(r.left<f.right+4&&r.right>f.left-4&&r.top<f.bottom+4&&r.bottom>f.top-4){ on=true; break; } } }
+  }
+  document.body.classList.toggle('mk-fab-dodge',on);
+}
+function mkFabTick(){ if(MK_FAB_T) return; MK_FAB_T=requestAnimationFrame(function(){ MK_FAB_T=0; try{ mkFabDodge(); }catch(e){} }); }
+document.addEventListener('scroll',mkFabTick,true); window.addEventListener('resize',mkFabTick); window.addEventListener('hashchange',function(){ setTimeout(mkFabTick,400); });
+function mkDT(ms){ var t=new Date(ms), p=function(n){ return (n<10?'0':'')+n; }; return t.getFullYear()+'.'+p(t.getMonth()+1)+'.'+p(t.getDate())+' '+p(t.getHours())+':'+p(t.getMinutes()); }
 /*RD_CORE_END*/
 </script>
 <script>

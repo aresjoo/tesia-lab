@@ -27,9 +27,7 @@ rep("var PXB=mkPx(s2&&s2.p&&s2.p.px), eP=PXB[x.entry]||0, xP=(s2&&s2.p&&x.kind==
 // 4. 따라가기 시트의 유형과 주체
 rep(`'+gEsc(mkTitle(s2))+' '+tfKindBadge('rule')+'</div><div class="s num">작성자 '+gEsc(s2.nick)+', 검증 수익률 <b class="'+(r.ret>=0?'mk-up':'mk-dn')+'">'+mkPct(r.ret)+'</b> ('+mkPdLabel(pd)+', 백테스트 '+mkMonths(r)+'개월, 수수료 반영)</div></div>'`,
     `'+gEsc(mkTitle(s2))+'</div><div class="s num">'+gEsc(mkFollowLine(s2))+'</div></div>'`,true);
-// 5. 원본을 찾지 못한 따라가기는 0 으로 바꿔 보이지 않고 표시한다
-rep("if(!s2||!s2.r.eq||s2.r.eq.length<32) return {inv:inv,pnlPct:0,total:0,realized:0,unreal:0,share:0,net:0,est:inv,avail:inv,posOpen:false};",
-    "if(!s2||!s2.r.eq||s2.r.eq.length<32) return {inv:inv,pnlPct:0,total:0,realized:0,unreal:0,share:0,net:0,est:inv,avail:inv,posOpen:false,missing:!s2};",true);
+// 5. (뺌) 원본을 찾지 못한 따라가기 표시: 좌수 계산으로 다시 쓴 cpCalc 의 none 값에 missing 이 들어 있다
 // 5b. 따라가기 시트의 성과는 시작 이후 전체(목록에서 기간 선택을 없앴다)
 rep("var cp=cpState(), cfg=cpCfg(), pd=mkPd(), r=tfSS3PdCalc(s2,pd), d=tfDerive();","var cp=cpState(), cfg=cpCfg(), pd='all', r=s2.r, d=tfDerive();",true);
 // 5c. 가격 캐시 키: 설정, 길이, 데이터 버전
@@ -80,7 +78,13 @@ rep("(all|1y|2y))?(?:","(all|1y|2y|30d|7d))?(?:",true);
 // 5v. 달력의 월 요약에서 시뮬레이션 문구를 뺀다
 rep("+'%':'')+', 검증 시뮬레이션</span></div>'","+'%':'')+'</span></div>'",true);
 // 5w. 달력의 월 요약: 세는 것은 끝난 거래다
-rep("'%, 체결 '+trM.length+'회'","'%, 끝난 거래 '+trM.length+'건'",true);
+rep("'%, 체결 '+trM.length+'회'","'%, 끝난 거래 '+trM.length+'회'",true);
+// 5x. 달력 머리: 달의 승률은 보이지 않는다(승률은 성과 줄의 전체 기간 값 하나만). 이름은 그 달 수익률
+rep("'회'+(trM.length?', 승률 '","'회'+(false&&trM.length?', 승률 '",true);
+rep("<span class=\"mt2\">월 합산 '+(mtot>=0","<span class=\"mt2\">'+(mo+1)+'월 수익률 '+(mtot>=0",true);
+// 5y. 따라가기의 입출금 표: 날짜 형식을 거래내역과 같게
+rep("new Date(e.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})","mkDT(e.at)",true);
+rep("new Date(c2.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})","mkDT(c2.at)",true);
 // 6. rd 블록이 선언하는 함수의 옛 정의를 지운다(정의는 하나만 남긴다)
 const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
 { const names=[...core.matchAll(/^function ([A-Za-z0-9_]+)\(/gm)].map(m=>m[1]), removed=[];

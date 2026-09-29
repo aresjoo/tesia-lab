@@ -322,7 +322,9 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
 .mko-tbl small.up{color:#2ebd85}
 .mko-tbl small.dn{color:#f0566a}
 .mko-e{text-align:center;color:var(--gt3);padding:28px 0}
-.mko-back{display:inline-block;margin:0 0 18px}
+.mko-all{margin-top:22px}
+.mko-back{display:inline-flex;margin:0 0 20px;color:var(--gt3);font-size:13.5px}
+.mko-back:hover svg{transform:translateX(-2px)}
 .mko-more{margin-left:0}
 
 /* 상세 머리글: 판단 방식, 범위, 등록자가 좁은 화면에서 낱말 중간에 끊기지 않게 */
@@ -357,3 +359,14 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
   #g-root .mk3-kpis>div:nth-child(even) .mkd-tip{left:auto;right:0}
   #g-root .mkd-pill:nth-child(n+2) .mkd-tip{left:auto;right:0}
 }
+
+/* 값이 변하지 않은 기간의 그래프 안내 */
+.mkd-flat{position:absolute;left:54px;right:6px;top:30%;text-align:center;font-size:13px;color:var(--gt3);pointer-events:none}
+@media (max-width:640px){ .mkd-flat{left:46px;font-size:12.5px} }
+
+/* 떠 있는 버튼이 목록의 버튼 위에 올 때 */
+body.mk-fab-dodge #teth-help,body.mk-fab-dodge #tf-devbtn{opacity:0;pointer-events:none}
+#tf-devbtn{transition:opacity .15s ease}
+
+/* 좁은 화면: 정렬 칩 넷이 한 줄에 들어가게 */
+@media (max-width:640px){ #g-root .mk3-flt .mk-chips{gap:6px} #g-root .mk3-flt .mk-chips .mk-chip{padding:0 10px;font-size:12.5px;letter-spacing:-.01em} }
