@@ -71,6 +71,12 @@ rep("    +(on?'<button type=\"button\" class=\"obtn\" onclick=\"cpAdjDlg(\\''+ci
 rep("      +(on?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'","      +(on&&c2.winding?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'+mkWindActs(c2.id)+'</div>':on?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'",true);
 // 5s. 전략 따라하기 상단 소개 영역(제목, 공지, 배너)을 없앤다
 rep("  gContent('<div class=\"tf-page tfbk ss3 mk\">'\n    +mkHero()\n    +tabs+controls+body","  gContent('<div class=\"tf-page tfbk ss3 mk\">'\n    +tabs+controls+body",true);
+// 5t. 활동 탭 삭제, 그래프 이름(수익금, 잔고)
+rep("  var TABS=[['ov','개요'],['perf','성과'],['trades','거래'],['log','활동'],['info','정보']];","  var TABS=[['ov','개요'],['perf','성과'],['trades','거래'],['info','정보']];",true);
+rep("aria-label=\"'+({ret:'수익률',pnl:'번 돈',bal:'든 돈'}[MKD.tab])+' 그래프\"","aria-label=\"'+({ret:'수익률',pnl:'수익금',bal:'잔고'}[MKD.tab])+' 그래프\"",true);
+rep("MKD.tab==='pnl'?'번 돈 '+(p.y>=0?'+':'-')+Math.abs(Math.round(p.y)).toLocaleString()+' USDT':'든 돈 '+Math.round(p.y).toLocaleString()+' USDT';","MKD.tab==='pnl'?'수익금 '+(p.y>=0?'+':'-')+Math.abs(Math.round(p.y)).toLocaleString()+' USDT':'잔고 '+Math.round(p.y).toLocaleString()+' USDT';",true);
+// 5u. 주소의 기간 값에 30일, 7일
+rep("(all|1y|2y))?(?:","(all|1y|2y|30d|7d))?(?:",true);
 // 6. rd 블록이 선언하는 함수의 옛 정의를 지운다(정의는 하나만 남긴다)
 const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
 { const names=[...core.matchAll(/^function ([A-Za-z0-9_]+)\(/gm)].map(m=>m[1]), removed=[];

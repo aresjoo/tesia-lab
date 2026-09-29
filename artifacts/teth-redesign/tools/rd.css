@@ -256,3 +256,49 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
 #g-root .mk3v2 .mk3-facts .mk3-fw{display:flex;align-items:center;gap:6px;font-size:13px;color:#aeb3ba}
 #g-root .mk3v2 .mk3-fw svg{flex:none;display:block}
 #g-root .mk3v2 .mk3-fw b{font-weight:700;color:#e3e5e8}
+
+/* 개요의 대화 */
+.mkc{margin-top:40px}
+.mkc-tz{font-size:12px;color:var(--gt3)}
+.mkc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px}
+.mkc-list>li:nth-child(n+4){display:none}
+.mkc-list.all>li:nth-child(n+4){display:flex}
+.mkc-m{display:flex;gap:12px;align-items:flex-start;max-width:840px}
+.mkc-av{flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.mkc-av svg{display:block;border-radius:10px}
+.mkc-b{min-width:0;flex:1}
+.mkc-h{display:flex;align-items:center;gap:8px;min-height:36px;margin:0 0 6px;min-width:0}
+.mkc-h b{font-size:14px;font-weight:600;color:#f2f3f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mkc-tag{flex:none;font-size:11.5px;font-weight:600;line-height:1;padding:4px 7px;border:1px solid rgba(255,255,255,.16);border-radius:6px;color:#aeb3ba;white-space:nowrap}
+.mkc-tag .mkg{font-weight:600;line-height:1}
+.k-now .mkc-tag{color:#f2f3f5;border-color:rgba(255,255,255,.42)}
+.mkc-h time{flex:none;margin-left:auto;font-size:12.5px;letter-spacing:.01em;color:#8b9098;font-variant-numeric:tabular-nums}
+.mkc-t{padding:16px 18px;border:1px solid rgba(255,255,255,.10);border-radius:3px 15px 15px 15px;background:#131517}
+.mkc-t p{margin:0;font-size:15px;line-height:1.8;color:#cfd2d6}
+.mkc-t strong{font-weight:600;color:#f7f8f9}
+.mkc-m.first .mkc-t{border-color:rgba(255,255,255,.18);background:#15181b}
+.mkc-m.first .mkc-t strong{display:block;margin-bottom:4px;font-size:16px}
+.mkc-t i{font-style:normal}
+.mkc-t i.up{color:#2ebd85}
+.mkc-t i.dn{color:#f0566a}
+.mkg{display:inline;padding:0;margin:0;border:0;background:none;color:inherit;font:inherit;cursor:help;text-decoration:underline dotted rgba(255,255,255,.5);text-underline-offset:4px;text-decoration-thickness:1px}
+.mkg:hover,.mkg[aria-expanded="true"]{color:#fff;text-decoration-color:#fff}
+.mkg:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:3px}
+.mkg-pop{position:fixed;z-index:400;width:min(300px,calc(100vw - 24px));padding:12px 14px 13px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#1d2024;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.mkg-pop b{display:block;font-size:13.5px;font-weight:700;color:#f7f8f9}
+.mkg-pop p{margin:4px 0 0;font-size:13.5px;line-height:1.6;color:#cfd2d6}
+.mkc-n{margin:8px 0 0;font-size:12px;color:var(--gt3)}
+.k-intro .mkc-t{background:transparent}
+.mkc-more{margin:22px 0 0 48px;height:42px;padding:0 16px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:none;color:#e9ebee;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.mkc-more:hover{background:rgba(255,255,255,.06)}
+.mkc-more:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* 지표 이름의 설명 */
+.mk3-kpis small .mkd-term,.mk-kpi small .mkd-term,.mk3-dh-meta .mkd-term{font:inherit;color:inherit}
+@media (max-width:640px){
+  .mkc-m{gap:9px}
+  .mkc-av,.mkc-av svg{width:28px;height:28px}
+  .mkc-h{flex-wrap:wrap;gap:6px 8px;min-height:28px;margin-bottom:8px}
+  .mkc-h time{flex:1 0 100%;margin-left:0}
+  .mkc-t{padding:14px 15px}
+  .mkc-more{margin-left:37px;height:44px}
+}
