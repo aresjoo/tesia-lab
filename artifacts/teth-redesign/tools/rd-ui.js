@@ -380,13 +380,8 @@ function mkOvTab(s,r,pd,ne){
   var chart='<div class="mkd-ctl" id="mkd-ctl">'+mkdCtlHtml()+'</div><p class="mkd-hint" id="mkd-hint"></p><div class="mkd-chart" id="mkd-chart" onpointermove="mkdHover(event)" onpointerdown="mkdHover(event)" onpointerleave="mkdHover(null)">'+mkdChartHtml()+'</div>';
   if(!s.cfg) return '<div class="mk3-ov"><section class="mk3-sec" style="margin-top:0"><h3>성과</h3>'+chart+'</section></div>';
   var m30=mk30(s), w=(typeof R0.winRate==='number'&&(R0.n||0)>=5)?Math.round(R0.winRate)+'%':'-';
-  var does=mkDoes(s), how=mkHowRows(s), evs=mkEvFold(mkEvents(s,R0),4);
   return '<div class="mk3-ov">'
-    +'<div class="mk3-two">'+mkNowPanel(s,R0)+'<section class="mk3-panel mk3-does"><h3>하는 일</h3>'+does.map(function(d){ return '<div class="mk3-kv"><small>'+d[0]+'</small><span>'+gEsc(d[1])+'</span></div>'; }).join('')+'</section></div>'
-    +'<section class="mk3-sec"><h3>움직이는 방식</h3><div class="mk3-how4">'+how.map(function(h){ return '<div><small>'+h[0]+'</small><p>'+gEsc(h[1])+'</p></div>'; }).join('')+'</div></section>'
-    +'<section class="mk3-sec"><div class="mk3-sec-h"><h3>최근 판단</h3><button type="button" class="mk-lnk" onclick="tfSS3Go(\''+ne+'\',\''+pd+'\',\'log\')">전체 기록</button></div>'
-    +(evs.length?'<ol class="mk3-evs">'+evs.map(function(e,i){ return mkEvRow(e,i===0); }).join('')+'</ol>':'<p class="mt2">아직 기록이 없어요</p>')+'</section>'
-    +'<section class="mk3-sec"><h3>성과</h3>'
+    +'<section class="mk3-sec" style="margin-top:0"><h3>성과</h3>'
     +'<div class="mk3-kpis num"><div><small>30일 수익률</small><b class="'+mkSign(m30.ret).trim()+'">'+mkPct0(m30.ret)+'</b></div><div><small>최대 낙폭</small><b>'+R0.mdd.toFixed(1)+'%</b></div><div><small>승률</small><b>'+w+'</b></div><div><small>거래 수</small><b>'+Number(R0.n||0).toLocaleString()+'회</b></div></div>'
     +chart+'<p class="mk3-since num">'+mkdSince(s)+' 시작 이후 '+mkPct0(R0.ret)+'</p></section>'
     +'</div>';
