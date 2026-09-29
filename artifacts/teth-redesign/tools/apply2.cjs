@@ -9,7 +9,7 @@ function block(tag,body,placeBefore,wrapO,wrapC){ const B='/*'+tag+'_BEGIN*/', E
 const cd=JSON.parse(fs.readFileSync(D+'cat-data.json','utf8')), cp=JSON.parse(fs.readFileSync(D+'copy.json','utf8'));
 const q=s=>"'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'";
 const MKT=s=>{ if(s.kind==='rule'){ const a=s.asset; return ['비트코인','이더리움','솔라나','리플','도지코인'].includes(a)?'crypto':['나스닥','S&P 500','금'].includes(a)?'index':'stock'; } return {coin8:'crypto',big3:'crypto',tech8:'stock',idx3:'index',macro6:'multi'}[s.uni]; };
-const FW=[1284,911,640,512,431,377,822,298,203,593,705,188,462,349,318,267,156,274,141,233];
+const FW=[1284,911,640,512,431,377,822,298,203,593,705,188,462,349,318,267,156,274,141,233,486];
 const px=Object.keys(cd.cfg).map(k=>q(k)+':['+cd.cfg[k].join(',')+']').join(',');
 const uni=Object.keys(cd.uni).map(k=>k+':{label:'+q(cd.uni[k].label)+',list:['+cd.uni[k].list.map(q).join(',')+']}').join(',\r\n  ');
 const rows=cd.list.map((s,i)=>{ const c=cp[s.id]; if(!c) throw new Error('copy '+s.id); let f='id:'+q(s.id)+',kind:'+q(s.kind)+',mkt:'+q(MKT(s))+',name:'+q(c.name)+',one:'+q(c.one)+',ex:'+q(s.ex)+',fw:'+FW[i]+',by:'+q(c.by);

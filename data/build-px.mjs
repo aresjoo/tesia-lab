@@ -24,15 +24,15 @@ async function yahoo(sym) {
   return m;
 }
 function align(m, name) {
-  const out = []; let prev = null, firstReal = null, filled = 0;
+  const out = [], open = []; let prev = null, firstReal = null, filled = 0;
   /* 시작일 이전 마지막 값으로 출발한다(1월 1일은 주식 휴장) */
   for (const [d, v] of [...m.entries()].sort()) if (d < START) prev = v;
-  for (const d of days) { if (m.has(d)) { prev = m.get(d); if (!firstReal) firstReal = d; } else filled++; if (prev == null) throw new Error(name + " no value at " + d); out.push(+prev.toPrecision(7)); }
-  return { out, filled };
+  for (const d of days) { if (m.has(d)) { prev = m.get(d); if (!firstReal) firstReal = d; open.push(1); } else { filled++; open.push(0); } if (prev == null) throw new Error(name + " no value at " + d); out.push(+prev.toPrecision(7)); }
+  return { out, filled, open: open.join("") };
 }
-const px = {}, meta = {};
+const px = {}, meta = {}, open = {};
 for (const [name, sym] of Object.entries(SYM)) {
-  const m = await yahoo(sym); const { out, filled } = align(m, name);
+  const m = await yahoo(sym); const { out, filled, open: o } = align(m, name); if (filled) open[name] = o; /* 거래일 표시(1=그날 실제 거래). 코인은 매일이라 생략 */
   px[name] = out; meta[name] = { sym, real: out.length - filled, filled };
   console.log(name.padEnd(8), sym.padEnd(8), "days", out.length, "real", out.length - filled, "first", out[0], "last", out[out.length - 1]);
 }
@@ -42,6 +42,6 @@ const fm = new Map(fj.data.map((x) => [day(+x.timestamp * 1000), +x.value]));
 let fp = null; const fng = days.map((d) => { if (fm.has(d)) fp = fm.get(d); return fp; });
 console.log("fng days", fng.filter((x) => x != null).length, "last", fng[fng.length - 1]);
 const src = "/* 백테스트용 실제 일봉 시세. data/build-px.mjs 로 만든다. 손으로 고치지 않는다.\n   출처: Yahoo Finance 일봉 종가, alternative.me 공포 탐욕 지수. 쉬는 날은 직전 종가. */\n"
-  + "window.TETH_PX=" + JSON.stringify({ v: last + ".real", start: START, asof: last, made: new Date().toISOString(), src: { px: "Yahoo Finance 일봉 종가", fng: "alternative.me Fear & Greed" }, meta, px, fng }) + ";\n";
+  + "window.TETH_PX=" + JSON.stringify({ v: last + ".real", start: START, asof: last, made: new Date().toISOString(), src: { px: "Yahoo Finance 일봉 종가", fng: "alternative.me Fear & Greed" }, meta, open, px, fng }) + ";\n";
 fs.writeFileSync(new URL("./px-daily.js", import.meta.url), src);
 console.log("wrote", (src.length / 1024).toFixed(0) + "KB", days[0], "→", last, days.length, "days");
