@@ -208,4 +208,5 @@ function btFinish(){
   $('bt-mcta').innerHTML='<div><b class="num'+mkSign(R.ret)+'">'+mkPct0(R.ret,1)+'</b><span>'+btPerL()+'</span></div><button type="button" class="bt-cta" onclick="btUse()">이 전략 실행하기</button>';
   btChartDraw(); requestAnimationFrame(function(){ if(BT.phase==='result'&&$('bt-chart')&&BT.G&&Math.abs($('bt-chart').clientWidth-BT.G.W)>2) btChartDraw(); }); /* 자리가 잡힌 뒤의 폭으로 다시 잰다 */
   try{ var t=tfS(); t.bt=t.bt||{}; t.bt.id=BT.id; t.bt.per=BT.per; t.bt.amt=BT.amt; t.bt.done=1; t.bt.ret=R.ret; t.bt.mdd=R.mdd; t.bt.fin=R.final; tfSave(); tfTrack('bt_done',{id:BT.id,ret:R.ret}); }catch(e){}
+  if(BT.s&&BT.s.mine) btMineDone();
 }

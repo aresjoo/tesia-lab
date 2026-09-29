@@ -71,6 +71,7 @@ function tfSSRows(){
 }
 /* 조회: 전략 ID, 현재 이름, 옛 이름(별칭) 모두 같은 전략을 돌려준다 */
 function tfSSFind(nick){
+  if(nick==='mine') return typeof btMine==='function'?btMine():null; /* 대화로 만든 내 전략(아직 공개 전) */
   var rows=tfSSRows();
   if(nick==='me'){
     for(var k=0;k<rows.length;k++) if(rows[k].me) return rows[k];
@@ -374,7 +375,7 @@ function mk3Head(s,ne,pd,watching){
     +(s.me?'':'<button type="button" class="mkd-fav" aria-pressed="'+watching+'" onclick="tfSS3WatchTgl(\''+ne+'\');mkWatchSync(\''+ne+'\')">★ 즐겨찾기</button>')+'</div>'
     +'<p class="mk3-dh-one">'+gEsc(mkOne(s))+'</p>'
     +'<div class="mk-d-acts mk3-dh-acts">'
-    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>')
+    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>'+(s.cfg?'<button type="button" class="mk3-bt" onclick="btOpen(\''+ne+'\')">내 조건으로 백테스트</button>':''))
     +'<span class="mk3-dh-meta"><span class="mk-xtag"><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16">'+mkdTerm(ex[1],MK_TIP.ex)+'</span><span>최소 '+mkMin(s)+' USDT</span><span>'+mkdSince(s)+' 시작</span></span>'
     +'<div class="mk-more"><button type="button" class="mk-more-b" id="mk-menu-b" aria-haspopup="menu" aria-expanded="false" aria-label="더 보기" onclick="mkMenuTgl(event)">⋯</button>'
     +'<div class="mk-menu" id="mk-menu" role="menu" hidden>'
@@ -551,7 +552,7 @@ function cpClose(cid,silent){
 }
 
 /* 목록, 상세, 시트를 잇는 열쇠는 고정 ID. 이름은 표시용 */
-function tfSS3Rid(s){ return s.me?'me':tfSSNe(s.id||s.nick); }
+function tfSS3Rid(s){ return s.mine?'mine':s.me?'me':tfSSNe(s.id||s.nick); }
 function mkOldNames(id){ if(!id) return ''; var o=[]; for(var k in MK_ALIAS) if(MK_ALIAS[k]===id) o.push(k); return o.join(' '); }
 
 function mkFlatAtBase(eq,base,X,Y,G){ var d=''; for(var i=0;i<eq.length-1;i++) if(Math.abs(eq[i].v-base)<1e-12&&Math.abs(eq[i+1].v-base)<1e-12) d+='M'+X(i).toFixed(1)+' '+Y(base).toFixed(1)+' L'+X(i+1).toFixed(1)+' '+Y(base).toFixed(1)+' '; return d?'<path d="'+d+'" fill="none" stroke="'+G+'" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/>':''; }

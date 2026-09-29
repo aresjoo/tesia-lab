@@ -98,7 +98,7 @@ function mkHybridRun(c){
         if(q.rsiOk&&q.bounceOk&&q.trendOk){ var up2=q.up;
           if(!q.mktOk) ev.push({i:i,t:'veto',a:pick,up:up2,of:U.length,rsi:q.rsi,bounce:q.bounce});
           else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],units:b.units,cost:b.cost,fee:b.fee,rsi:q.rsi,bounce:q.bounce,up:up2,of:U.length}); } } } }
-    else if(i>p.ei){ var v=px(p.k), chg=(v/p.ep-1)*100, why=chg<=c.sl?'sl':chg>=c.tp?'tp':(i-p.ei>=25?'time':null);
+    else if(i>p.ei){ var v=px(p.k), chg=(v/p.ep-1)*100, why=chg<=c.sl?'sl':(c.tp!=null&&chg>=c.tp)?'tp':(i-p.ei>=25?'time':null);
       if(why){ var t=L.sell(p,v,i,why); ev.push({i:i,t:'exit',a:p.k,why:why,tid:t.id,px:v,units:t.units,got:t.got,fee:t.fee,chg:chg,pnl:t.pnl*100}); } }
     var v3=L.value(px); eq.push({i:i,v:v3}); invested+=(v3-L.cash)/v3;
   }

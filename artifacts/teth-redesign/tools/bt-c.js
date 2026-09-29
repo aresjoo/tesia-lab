@@ -22,7 +22,7 @@ function btMini(a,i1,i2,marks,lines,hold){
 function btTradeOf(tid){ var t=null; BT.R.tr.forEach(function(x){ if(x.id===tid) t=x; }); return t; }
 function btTradeMini(t){
   var c=BT.s.cfg||{};
-  return btMini(t.a,t.e-14,(t.x!=null?t.x:BT.R.T)+10,[[t.e,'매수','#2fb98a']].concat(t.x!=null?[[t.x,'매도',t.pnl>=0?'#2fb98a':'#f0566a']]:[]),BT.s.kind==='agent'?[]:[[t.ep*(1+c.tp/100),'목표 +'+c.tp+'%','#2fb98a'],[t.ep*(1+c.sl/100),'손절 '+c.sl+'%','#f0566a']],[t.e,t.x!=null?t.x:BT.R.T]);
+  return btMini(t.a,t.e-14,(t.x!=null?t.x:BT.R.T)+10,[[t.e,'매수','#2fb98a']].concat(t.x!=null?[[t.x,'매도',t.pnl>=0?'#2fb98a':'#f0566a']]:[]),BT.s.kind==='agent'?[]:(c.tp!=null?[[t.ep*(1+c.tp/100),'목표 +'+c.tp+'%','#2fb98a']]:[]).concat([[t.ep*(1+c.sl/100),'손절 '+c.sl+'%','#f0566a']]),[t.e,t.x!=null?t.x:BT.R.T]);
 }
 function btFacts(L,gl){ return '<dl class="bt-dl">'+L.map(function(f){ return '<div><dt>'+(gl?mkGloss(gEsc(f[0]),0):gEsc(f[0]))+'</dt><dd class="num">'+f[1]+'</dd></div>'; }).join('')+'</dl>'; }
 function btUpsHtml(ups){ if(!ups) return ''; return '<div class="bt-ups"><small>그날 오름세로 본 종목 <i>가격이 60일 평균보다 위</i></small><ul>'+BT.R.list.map(function(k){ var on=ups.indexOf(k)>=0; return '<li class="'+(on?'y':'n')+'">'+gEsc(mkTk(k))+'</li>'; }).join('')+'</ul></div>'; }
@@ -100,9 +100,33 @@ function btSelDec(ix){ var d=BT.R.D[ix]; BT.sel=(BT.sel&&BT.sel.t==='d'&&BT.sel.
 function btSelEv(ix){ var E=BT.R.EV[ix]; BT.sel=(BT.sel&&BT.sel.t==='e'&&BT.sel.ix===ix)?null:{t:'e',ix:ix,j:E.j}; btEvRe(); }
 function btSelTr(id){ var t=btTradeOf(id); BT.sel=(BT.sel&&BT.sel.t==='t'&&BT.sel.id===id)?null:{t:'t',id:id,j:Math.max(0,Math.min(BT.R.N-1,t.e-BT.R.i0))}; btEvRe(); }
 
+/* ── 내 전략: 대화에서 정한 조건을 새 백테스트 화면이 쓰는 차트 규칙 전략으로 옮긴다 ── */
+var BT_MINE_ALIAS={'나스닥 종합':'나스닥'};
+function btMineAsset(){ var t=tfS(), a=((t.intake||{}).asset||{}).label||''; a=BT_MINE_ALIAS[a]||a; return MK_PX_CFG[a]?a:null; }
+function btMine(){
+  var t=tfS(); if(!S.user||!t.intake||!t.intake.asset) return null;
+  var a=btMineAsset(); if(!a) return null;
+  var p=t.pendingP||tfParams(), iv=t.intake, st=((iv.style||{}).label||'').replace(/으로$/,''), sl=Math.abs(p.sl);
+  var cfg={id:'mine',kind:'rule',asset:a,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:p.trendFilter?1:0,startI:61};
+  var sig=JSON.stringify(cfg), h=0; for(var i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))>>>0;
+  var name=(t.cloneFrom?t.cloneFrom+' 님 전략, ':'')+a+' 반등 매수';
+  var one=mkJ(a,'이','가')+' 내려왔다가 다시 오르는 날 사요. '+(p.tp!=null?'산 가격보다 '+p.tp+'% 오르거나 ':'산 가격보다 ')+sl+'% 내려가면, 또는 25일이 지나면 팔아요.';
+  return {id:'mine-'+h.toString(36),mine:true,kind:'rule',mkt:/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a)?'crypto':'stock',
+    nick:name,name:name,one:one,asset:a,uni:null,cfg:cfg,ex:null,p:p,fw:0,by:'',style:st};
+}
+/* 결과가 나오면 대화 흐름이 쓰는 검증 기록(t.cur)을 이 결과로 채운다. 점수 게이트는 없다 */
+function btMineDone(){
+  var t=tfS(), s=BT.s, R=BT.R; if(!s||!s.mine||!R) return;
+  var p={}; for(var k in s.p) p[k]=s.p[k]; p.startI=R.eq[0].i; p.endI=R.eq[R.N-1].i;
+  t.pendingP=s.p; t.cur={ret:R.ret,mdd:R.mdd,n:R.tr.length,winRate:R.tr.length?R.wins/R.tr.length*100:0,p:p,
+    trades:R.tr.map(function(x){ return {entry:x.e,exit:x.x,pnl:x.pnl,kind:x.why||x.kind}; })};
+  try{ var sc=tfScore(mkRunCfg(s.cfg,p.startI)); t.score=isFinite(sc)?sc:0; }catch(e){ t.score=0; }
+  t.workDone=true; if(t.stage==='verify'||t.stage==='ready'||!t.stage) t.stage='connect'; tfSave();
+}
+
 /* ── 들어오고 나가기 ── */
 function btOpen(ne){ location.hash='#/share/bt/'+ne; }
-function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }
+function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } if(BT.s&&BT.s.mine){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} TF_ONSTRAT=false; tfBackToChat(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }
 function btView(){
   tfPageMode('tfbt','백테스트'); TF_RENDERING=true; gContent(btPage()); TF_RENDERING=false;
   var t=tfS().bt||{};
@@ -113,9 +137,11 @@ function btRoute(h){
   var m=h.match(/^#\/share\/bt\/([^/]+)(?:\/(go))?$/); TF_ONSHARE=true;
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
   var s=null; try{ s=tfSSFind(decodeURIComponent(m[1])); }catch(e){}
+  if(!s&&m[1]==='mine'){ TF_ONSHARE=false; toast('이 자산은 아직 백테스트할 가격 자료가 없어요'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfBackToChat(); return; }
   if(!s||!s.cfg){ TF_ONSHARE=false; tfShareHub('find'); return; }
+  if(s.mine){ TF_ONSHARE=false; TF_ONSTRAT=true; } /* 뒤로 가면 전략 목록이 아니라 대화로 */
   var t=tfS().bt||{};
-  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } }
+  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var pi=((tfS().intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365; } }
   BT.s=s;
   if(!m[2]){ btView(); return; }
   if(!BT.R) btCompute();

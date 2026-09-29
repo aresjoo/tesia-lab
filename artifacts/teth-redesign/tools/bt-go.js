@@ -199,8 +199,14 @@ function btApiGo(){
 /* 끝: 바로 다음 한 가지 */
 function btGoNext(){
   var f=btF();
+  if(BT.s&&BT.s.mine){ var t=tfS(), bud=TF_BUDGET[((t.intake||{}).budget||{}).i!=null?t.intake.budget.i:1];
+    return '<section class="btg-next"><h3>다음은 전략 시작이에요</h3><p>대화에서 정한 투자금으로 바로 시작하거나, 가상으로 먼저 돌려 볼 수 있어요.</p>'
+      +'<dl class="bt-dl"><div><dt>실행 계정</dt><dd>'+btExLogo(f.api.ex,16)+btExName(f.api.ex)+'</dd></div><div><dt>투자금</dt><dd>'+tfWon(bud)+'</dd></div><div><dt>TETH 이용료</dt><dd>'+(f.path==='own'?'월 49,000원, 시작하는 날부터':'0원')+'</dd></div></dl></section>'
+      +'<button type="button" class="bt-cta" onclick="btFinal()">시작 준비로</button>'; }
   return '<section class="btg-next"><h3>다음은 계정에서 사용할 금액이에요</h3><p>백테스트에서는 '+btUsd(BT.amt)+'로 봤어요. 이 전략이 계정에서 쓸 금액을 정하면, 멈추는 기준을 확인하고 직접 시작 버튼을 눌러요.</p>'
     +'<dl class="bt-dl"><div><dt>실행 계정</dt><dd>'+btExLogo(f.api.ex,16)+btExName(f.api.ex)+'</dd></div><div><dt>TETH 이용료</dt><dd>'+(f.path==='own'?'월 49,000원, 시작하는 날부터':'0원')+'</dd></div></dl></section>'
     +'<button type="button" class="bt-cta" onclick="btFinal()">사용할 금액 정하기</button>';
 }
-function btFinal(){ try{ tfTrack('bt_final',{id:BT.id}); }catch(e){} cpSetupGo(btNe()); }
+function btFinal(){ try{ tfTrack('bt_final',{id:BT.id}); }catch(e){}
+  if(BT.s&&BT.s.mine){ var t=tfS(); if(!t.cur) btMineDone(); t.stage='done'; tfSave(); tfNav('#/strategy/done'); return; }
+  cpSetupGo(btNe()); }

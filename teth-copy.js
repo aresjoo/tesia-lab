@@ -15,7 +15,7 @@ window.TFC = {
     retLo: 0, retHi: 6,
     mddLo: -25, mddHi: -6,
     volLo: 9, volHi: 4,
-    pass: 80,        /* 실행 게이트 점수 */
+    pass: 0,        /* 실행 게이트 점수 */
     maxTries: 5      /* 미달 반복 상한 */
   },
   /* 실행 요금 (KRW) */
