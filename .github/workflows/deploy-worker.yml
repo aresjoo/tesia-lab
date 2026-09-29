@@ -1,0 +1,25 @@
+# AI 프록시(Cloudflare Workers) 자동 배포.
+# main 에 server/ 변경이 올라오면 wrangler deploy 를 실행한다. 수동 실행도 된다(Actions 탭 → Run workflow).
+# 필요한 저장소 시크릿: CLOUDFLARE_API_TOKEN (Workers Scripts:Edit 권한). 계정이 여럿이면 CLOUDFLARE_ACCOUNT_ID 도.
+name: deploy-worker
+on:
+  push:
+    branches: [main]
+    paths: ["server/**", ".github/workflows/deploy-worker.yml"]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --omit=dev
+        working-directory: server
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: server
+          command: deploy
