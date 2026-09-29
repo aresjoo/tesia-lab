@@ -82,7 +82,7 @@ window.TFC = {
   /* ── 카피트레이딩 config (docs/bitget-copytrading-spec.md 재해석, 전 자산 USDT 표기) ── */
   copytrade: {
     version: 1,
-    PROFIT_SHARE: 0.10,          /* 수익 분배율 */
+    PROFIT_SHARE: 0,          /* 수익 분배율. 따라가기는 무료(파운더 결정 2026-09-29) */
     COPIER_CAP: 500,             /* 카피어 상한 */
     DELAY_HOURS: 1,              /* 비카피어 오픈 포지션 지연 공개 */
     LOSS_GUARD: -0.20,           /* 손실 중 추가 입금 보호 임계 (핵심 원칙 4) */

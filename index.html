@@ -4361,6 +4361,12 @@ body.gft-doc #gft-slot{display:block}
 .mk-seg button.on{background:rgba(255,255,255,.14);color:var(--gt);font-weight:600}
 .mk-f-cta{width:100%;height:48px;font-size:15px}
 .mk-f-gate{font-size:12.5px;color:#e8d49a;margin-bottom:8px}
+.mk-f-steps{list-style:none;margin:4px 0 18px;padding:0;display:grid;gap:14px;counter-reset:mkfs}
+.mk-f-steps li{position:relative;padding-left:34px;counter-increment:mkfs;display:grid;gap:3px}
+.mk-f-steps li::before{content:counter(mkfs);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;border:1px solid var(--gl2);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--gt2);font-family:var(--num)}
+.mk-f-steps li:first-child::before{background:#c8f43c;border-color:#c8f43c;color:#0a0a0b}
+.mk-f-steps b{font-size:14px;font-weight:700;color:var(--gt)}
+.mk-f-steps span{font-size:12.5px;line-height:1.55;color:var(--gt3)}
 .mk-f-foot{font-size:11.5px;color:var(--gt3);margin-top:12px;line-height:1.6}
 /* 중단 3택 */
 .mk-stop{display:flex;flex-direction:column;gap:8px}
@@ -12886,7 +12892,7 @@ function cpDetailView(cid,tab){
   $('g-aux').style.display='none'; gSideRender(); gTabsRender();
   gChead('따라가기 상세','',null);
   var d=cpCalc(c2), m=cpMeta(c2.nick), ne=tfSSNe(c2.nick), on=c2.status==='active';
-  var TABS=[['pos','포지션'],['hist','청산 이력'],['share','수익 분배'],['bal','자금 이동'],['tx','거래 내역']];
+  var TABS=[['pos','포지션'],['hist','청산 이력']].concat(m.share>0?[['share','수익 분배']]:[]).concat([['bal','자금 이동'],['tx','거래 내역']]); if(tab==='share'&&!(m.share>0)) tab='pos';
   var body= tab==='pos'?cpxPos(c2,d):tab==='hist'?cpxHist(c2,d):tab==='share'?cpxShare(c2,d,m):tab==='bal'?cpxBal(c2,d):cpxTx(c2,d);
   var K=function(lb,v,clr,tip){ return '<div class="cpp-kpi"><small'+(tip?' title="'+tip+'"':'')+'>'+lb+'</small><b class="num'+(clr?(v>=0?' u':' d'):'')+'">'+cpUsd(v)+'</b></div>'; };
   TF_RENDERING=true; document.body.classList.remove('tf-route');
@@ -12894,7 +12900,7 @@ function cpDetailView(cid,tab){
     +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(\'follow\')">← 따라가는 중</button>'
     +'<div class="cpp-head"><div class="cpp-ava" aria-hidden="true">'+gEsc(c2.nick.slice(0,1))+'</div>'
     +'<div class="cpp-idm"><div class="cpp-nick"><button type="button" class="nm" style="font-size:19px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button></div>'
-    +'<div class="cpp-meta num"><span>비율 따라가기</span><span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span>'
+    +'<div class="cpp-meta num"><span>비율 따라가기</span>'+(m.share>0?'<span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span>':'<span>이용료 없음</span>')
     +'<span>'+mkDT(c2.at)+' 시작</span>'
     +'<span class="'+(on?'':'')+'">'+(on?(c2.winding?'정리 대기':'따라가는 중'):'중단됨')+'</span></div></div>'
     +'<div class="cpp-acts">'
@@ -12906,8 +12912,8 @@ function cpDetailView(cid,tab){
     +'<div class="mk-acct"><b>내 따라가기 계정</b><span>내 예산 기준 손익이에요. 원본 전략의 검증 수치와는 달라요</span></div>'
     +'<div class="cpd-sum num">'
     +K('평가 금액',d.est)+'<div class="cpp-kpi"><small>내 수익률</small><b class="num'+(d.myPct>=0?' u':' d')+'">'+mkPct0(d.myPct*100,1)+'</b><small style="margin:4px 0 0">같은 기간 전략 '+mkPct0(d.pnlPct*100,1)+'</small></div>'
-    +K('가용',d.avail)+K('순손익 (분배 차감 후)',d.net,1)
-    +K('미실현 손익',d.unreal,1)+K('실현 손익',d.realized,1)+K('수익 분배 지급',d.share,0,'Profit share amount')
+    +K('가용',d.avail)+K(m.share>0?'순손익 (분배 차감 후)':'순손익',d.net,1)
+    +K('미실현 손익',d.unreal,1)+K('실현 손익',d.realized,1)+(m.share>0?K('수익 분배 지급',d.share,0,'Profit share amount'):'')
     +'</div>'
     +cpMixNote(c2,d)
     +'<div class="tfbk-filters cpp-tabs">'+TABS.map(function(t2){ return '<button type="button" class="fp'+(tab===t2[0]?' on':'')+'" aria-pressed="'+(tab===t2[0])+'" onclick="cpDetailGo(\''+cid+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</div>'
@@ -13037,7 +13043,7 @@ function cpDashSec(){
       +'<span style="flex:1"></span><span class="cps-static num">'+new Date(c2.at).toLocaleDateString('ko-KR')+' 시작</span></div>'
       +(d.missing?'<div class="cpd-kv"><div><small>넣은 금액</small><b class="num">'+cpUsd(d.inv)+'</b></div></div>':on?'<div class="cpd-kv">'
       +'<div><small>순손익</small><b class="num '+(d.net>=0?'u':'d')+'">'+cpUsd(d.net)+'</b></div>'
-      +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>'
+      +(d.share>0?'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(d.share)+'</b></div>':'')
       +'<div><small>평가 금액</small><b class="num">'+cpUsd(d.est)+'</b></div>'
       +'<div><small>가용</small><b class="num">'+cpUsd(d.avail)+'</b></div>'
       +'<div><small>누적 투자</small><b class="num">'+cpUsd(d.inv)+'</b></div>'
@@ -13047,7 +13053,7 @@ function cpDashSec(){
       /* 종료 카드는 정산 시점 고정값 — 라이브 재계산으로 수치가 흐르지 않게 */
       :'<div class="cpd-kv">'
       +'<div><small>순손익 (정산 확정)</small><b class="num '+(((c2.settle&&c2.settle.net)||0)>=0?'u':'d')+'">'+cpUsd((c2.settle&&c2.settle.net)||0)+'</b></div>'
-      +'<div><small>수익 분배 지급</small><b class="num">'+cpUsd((c2.settle&&c2.settle.share)||0)+'</b></div>'
+      +((c2.settle&&c2.settle.share)>0?'<div><small>수익 분배 지급</small><b class="num">'+cpUsd(c2.settle.share)+'</b></div>':'')
       +'<div><small>회수 금액</small><b class="num">'+cpUsd((c2.settle&&c2.settle.back)||0)+'</b></div>'
       +'</div>')
       +(on&&c2.winding?'<div class="cpd-acts"><button type="button" class="wbtn" onclick="cpDetailGo(\''+c2.id+'\')">상세</button>'+mkWindActs(c2.id)+'</div>':on?'<div class="cpd-acts"><button type="button" class="wbtn" onclick="cpDetailGo(\''+c2.id+'\')">상세</button>'
@@ -13059,7 +13065,7 @@ function cpDashSec(){
   return '<div class="ss3-ch" style="margin:4px 0 12px"><b>내 따라가기 계정</b><span class="mt2">'+act.filter(function(x){ return !cpCalc(x).missing; }).length+'건 진행 중'+(act.some(function(x){ return cpCalc(x).missing; })?', 원본을 찾을 수 없는 계정 '+act.filter(function(x){ return cpCalc(x).missing; }).length+'건은 합계에서 뺐어요':'')+', 내 예산 기준 손익, USDT 표기</span></div>'
     +'<div class="cpd-sum num">'
     +K('평가 금액',sum.est)+K('가용 잔고',sum.avail)+K('순손익 (분배 차감 후)',sum.net)
-    +K('미실현 손익',sum.unreal)+K('실현 손익',sum.realized)+K('수익 분배 지급',sum.share,'Profit share amount')
+    +K('미실현 손익',sum.unreal)+K('실현 손익',sum.realized)+(sum.share>0?K('수익 분배 지급',sum.share,'Profit share amount'):'')
     +'</div>'
     +(sum.net<0?cpAiHtml({w:1,t:'지금은 손실 구간이에요. 따라가기는 원본의 손절 규칙까지 그대로 따라가요. 원칙이 지켜지는지 상세의 활동 탭에서 확인해보세요.'}):cpAiHtml({w:0,t:'수익 분배는 실현 수익에서만 차감돼요. 미실현 수익에는 분배가 붙지 않아요.'}))
     +'<div class="cpd-flt"><button type="button" class="'+(TF_CPD.flt==='active'?'on':'')+'" onclick="TF_CPD.flt=\'active\';tfShareHub(\'follow\')">따라가는 중</button>'
@@ -17379,22 +17385,23 @@ function mkFollowSheet(ne){
   w.innerHTML='<div class="mk-follow" role="dialog" aria-modal="true" aria-labelledby="mk-f-t">'
     +'<div class="mk-f-hd"><b id="mk-f-t">따라가기</b><button type="button" class="mk-f-x" aria-label="닫기" onclick="mkFollowClose()">✕</button></div>'
     +'<div class="mk-f-strat"><div class="t">'+gEsc(mkTitle(s2))+'</div><div class="s num">'+gEsc(mkFollowLine(s2))+'</div></div>'
-    +'<div class="mk-f-fld" id="cps-amt-fld"><label for="cps-amt">예산 (USDT)</label>'
+    +(!can?'<ol class="mk-f-steps"><li><b>거래소 연결</b><span>쓰고 있는 거래소 계정을 연결해요. 돈은 그 계정에 그대로 있어요.</span></li><li><b>예산 정하기</b><span>연결한 계정의 잔고를 보고, 이 전략에 쓸 금액을 정해요.</span></li><li><b>따라가기 시작</b><span>원본이 쓰는 비율대로 내 예산 안에서 같이 사고팔아요.</span></li></ol>':'')
+    +(can?'<div class="mk-f-fld" id="cps-amt-fld"><label for="cps-amt">예산 (USDT)</label>'
     +'<div class="mk-f-in"><input id="cps-amt" type="number" inputmode="decimal" min="'+min+'" placeholder="최소 '+min+'" oninput="cpFormSync()"><span class="un">USDT</span><button type="button" class="mx" onclick="$(\'cps-amt\').value='+Math.floor(cp.spot)+';cpFormSync()">최대</button></div>'
     +'<div class="mk-f-hint">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>'+(cp.spot<min?' <button type="button" class="mk-lnk" onclick="cpTopup(\''+ne+'\')">체험 예산 추가</button>':'')+'</div>'
     +'<div class="mk-f-err" id="cps-amt-err"></div></div>'
     +'<div class="mk-f-fld"><label for="mk-f-loss">최대 손실 <b class="num" id="mk-f-lossv">-20%</b></label>'
     +'<input id="mk-f-loss" type="range" min="-50" max="-5" step="5" value="-20" oninput="mkFollowLoss(this.value)">'
     +'<div class="mk-f-hint" id="mk-f-lossh">예산의 20%를 잃으면 자동으로 멈춰요</div></div>'
-    +'<div class="mk-f-sum" id="mk-f-sum"></div><div id="mk-f-live" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>'
-    +'<details class="mk-f-adv"><summary>고급</summary>'
+    +'<div class="mk-f-sum" id="mk-f-sum"></div><div id="mk-f-live" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>':'')+'<div id="mk-f-live" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>'
+    +(can?'<details class="mk-f-adv"><summary>고급</summary>'
     +'<div class="mk-f-row"><span>기존 포지션 처리</span><span class="mk-seg" id="mk-f-ex"><button type="button" class="on" onclick="mkFollowExisting(\'skip\',this)">건너뛰기</button><button type="button" onclick="mkFollowExisting(\'copy\',this)">지금 따라 들어가기</button></span></div>'
     +'<div class="mk-f-row"><span>주문당 상한</span><span class="mk-f-in sm"><input id="mk-f-cap" type="number" inputmode="numeric" min="5" max="95" step="5" value="95" oninput="mkFollowCap(this.value)"><span class="un">%</span></span></div>'
     +'<div class="mk-f-hint">건너뛰기는 다음 진입부터 따라가요. 주문당 상한은 한 번의 주문에 쓰는 예산 비율이에요.</div>'
-    +'</details>'
+    +'</details>':'')
     +(can?'<button type="button" class="mk-pri mk-f-cta" id="cps-cta" disabled onclick="cpStart(\''+ne+'\')">따라가기 시작</button>'
-      :'<div class="mk-f-gate">따라가기는 거래소 연결 뒤에 시작할 수 있어요</div><button type="button" class="mk-pri mk-f-cta" onclick="tfMkActivate()">거래소 연결하기</button>')
-    +'<div class="mk-f-foot">시작 후에도 언제든 중단할 수 있어요. 수익이 나면 그중 '+Math.round(cpMeta(nick).share*100)+'%가 전략 이용료로 나가요.</div>'
+      :'<button type="button" class="mk-pri mk-f-cta" onclick="tfMkActivate()">거래소 연결하기</button>')
+    +'<div class="mk-f-foot">따라가기는 무료예요. 시작한 뒤에도 언제든 멈출 수 있어요.</div>'
     +'</div>';
   w.addEventListener('click',function(e){ if(e.target===w) mkFollowClose(); });
   document.body.appendChild(w);
