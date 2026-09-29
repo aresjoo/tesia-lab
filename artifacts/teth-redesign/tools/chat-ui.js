@@ -43,7 +43,7 @@ function mkGlossOpen(b,ev){
   if(ev) ev.stopPropagation();
   var was=b.getAttribute('aria-expanded')==='true'; mkGlossClose(); if(was) return;
   var k=b.getAttribute('data-g'), p=document.createElement('div'); p.id='mkg-pop'; p.className='mkg-pop'; p.setAttribute('role','dialog'); p.setAttribute('aria-label',k+' 뜻');
-  p.innerHTML='<b>'+gEsc(k)+'</b><p>'+gEsc(MK_GLOSS[k]||'')+'</p>';
+  p.innerHTML='<b>'+gEsc(k)+'</b><p>'+gEsc(mkPolite(MK_GLOSS[k]||'').split(/(?<=[.])s+/).map(function(x){ return /니다[.]$/.test(x)?x:x.replace(/[.]$/,'입니다.'); }).join(' '))+'</p>';
   document.body.appendChild(p); b.setAttribute('aria-expanded','true');
   var r=b.getBoundingClientRect(), w=p.offsetWidth, h=p.offsetHeight, x=Math.max(12,Math.min(innerWidth-w-12,r.left+r.width/2-w/2)), y=r.bottom+8; if(y+h>innerHeight-12) y=Math.max(12,r.top-h-8);
   p.style.left=x+'px'; p.style.top=y+'px';
@@ -66,7 +66,7 @@ function mkChatRow(s,m,first){
 function mkChatMore(b){ var l=b.parentNode.querySelector('.mkc-list'); if(!l) return; l.classList.add('all'); b.remove(); }
 function mkChatHtml(s,r,ne,pd){
   var ms=mkChatMsgs(s,r,6); if(!ms.length) return '';
-  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3></div>'
+  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>판단 기록</h3></div>'
     +'<ol class="mkc-list">'+ms.map(function(m,i){ return mkChatRow(s,m,i===0); }).join('')+'</ol>'
     +(ms.length>3?'<button type="button" class="mkc-more" onclick="mkChatMore(this)">이전 기록 '+(ms.length-3)+'건 더 보기</button>':'')
     +'</section>';

@@ -671,9 +671,22 @@ function mkTS(s,i,a,salt){
   var p=function(n){ return (n<10?'0':'')+n; };
   return (t.getFullYear()!==now.getFullYear()?t.getFullYear()+'/':'')+p(t.getMonth()+1)+'/'+p(t.getDate())+' '+p(t.getHours())+':'+p(t.getMinutes())+':'+p(t.getSeconds());
 }
+/* 문장 끝을 합니다체로. 끝 글자의 받침을 보고 바꾼다: 한다 → 합니다, 했다 → 했습니다, 있다 → 있습니다, 않는다 → 않습니다, 이다와 명사 뒤의 다 → 입니다 */
+function mkPolite(x){
+  return String(x||'').replace(/(.)(.)다\.(?=\s|$)/g,function(m,a,b){
+    var cb=b.charCodeAt(0), han=cb>=0xAC00&&cb<=0xD7A3, j=han?(cb-0xAC00)%28:-1;
+    if(b==='이') return a+'입니다.';
+    if(b==='하') return a+'합니다.';
+    if(b==='는') return a+'습니다.';
+    if(j===20||j===18) return a+b+'습니다.';
+    if(j===4) return a+String.fromCharCode(cb-4+17)+'니다.';
+    return a+b+'입니다.';
+  });
+}
 function mkSay(core,opt,R){
+  core=core.map(mkPolite); opt=opt.map(mkPolite);
   var t=core.filter(Boolean).join(' '), i=0, all=opt.slice();
-  if(R) for(var k in R) all.push(R[k]);
+  if(R) for(var k in R) all.push(mkPolite(R[k]));
   for(;i<all.length&&t.length<205;i++){ var x=all[i]; if(!x||t.indexOf(x)>=0) continue; if(t.length+1+x.length>300) continue; t+=' '+x; }
   return t;
 }
@@ -747,7 +760,7 @@ function mkChatEv(s,e){
         '자산의 '+Math.round(e.w*100)+'%를 체결가 '+mkPxU(e.a,e.px)+'에 투입했다.'+(e.cut?' 변동성이 커서 비중을 줄였다.':'')],[R.sell,R.size,R.swap,R.what],R)}; }
     if(e.t==='exit') return {k:'sell',tag:W.tagOut,a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 체결가 '+mkPxU(e.a,e.px)+'에 '+W.sell+'했다.',MK_WHY_P[e.why]+'.','실현 손익은 비용 차감 후 '+mkPct0(e.pnl)+'다.'],[mkHeldTxt(s.r,e.tid),e.why==='trail'?R.sell:R.swap,e.pnl<0?'손실로 끝나는 거래도 있다. 하락하는 종목을 오래 들고 있지 않기 위한 규칙이다.':'',R.what,e.why==='trail'?R.swap:R.sell,R.rest],R)};
     if(e.t==='skip'&&e.why==='gate') return {k:'wait',tag:'관망',t:mkSay(['신규 '+W.buy+'를 하지 않았다.',e.of+'종 중 '+e.up+'종만 상승 추세여서 시장 약세로 판단했다.',held()],[R.rest,R.what,R.sell,R.skip],R)};
-    if(e.t==='skip') return {k:'wait',tag:'관망',t:mkSay(['신규 '+W.buy+'를 하지 않았다.','기준을 넘는 종목이 없었다.'+((e.top||[]).length?' 순위 상위는 '+mkTopTxt(e.top)+'였다(괄호 없이 적은 값은 상승률, 순위는 상승률을 변동성으로 나눠 매긴다).':''),held()],[R.skip,R.what,R.size,R.sell],R)};
+    if(e.t==='skip') return {k:'wait',tag:'관망',t:mkSay(['신규 '+W.buy+'를 하지 않았다.','기준을 넘는 종목이 없었다.'+((e.top||[]).length?' 순위 상위는 '+mkTopTxt(e.top)+'였다. 순위는 상승률을 변동성으로 나눠 매긴다.':''),held()],[R.skip,R.what,R.size,R.sell],R)};
     return {k:'hold',tag:'보유 유지',t:mkSay(['종목을 교체하지 않았다.',W.hold+' 중인 '+mkJ(mkList(e.held),'이','가')+' 여전히 상위권이다.',(e.top||[]).length?'순위 상위는 '+mkTopTxt(e.top)+'다. 순위는 상승률을 변동성으로 나눠 매기므로 상승률 순서와 다를 수 있다.':''],[R.swap,R.sell,R.what,R.rest],R)};
   }
   if(e.t==='pick') return {k:'pick',tag:'종목 선정',a:e.a,t:mkSay([mkJ(e.a,'을','를')+' 거래 대상으로 선정했다.','최근 '+c.look+'일 상승률이 가장 높았다.'+((e.top||[]).length?' 비교 결과는 '+e.top.slice(0,3).map(function(x){ return x.k+' '+mkPct0(x.mom,0); }).join(', ')+'였다.':''),'아직 '+W.buy+'하지는 않았다.'],[R.buy,R.rest,R.sell,R.cap,R.what],R)};
@@ -814,7 +827,7 @@ function mkGlossOpen(b,ev){
   if(ev) ev.stopPropagation();
   var was=b.getAttribute('aria-expanded')==='true'; mkGlossClose(); if(was) return;
   var k=b.getAttribute('data-g'), p=document.createElement('div'); p.id='mkg-pop'; p.className='mkg-pop'; p.setAttribute('role','dialog'); p.setAttribute('aria-label',k+' 뜻');
-  p.innerHTML='<b>'+gEsc(k)+'</b><p>'+gEsc(MK_GLOSS[k]||'')+'</p>';
+  p.innerHTML='<b>'+gEsc(k)+'</b><p>'+gEsc(mkPolite(MK_GLOSS[k]||'').split(/(?<=[.])s+/).map(function(x){ return /니다[.]$/.test(x)?x:x.replace(/[.]$/,'입니다.'); }).join(' '))+'</p>';
   document.body.appendChild(p); b.setAttribute('aria-expanded','true');
   var r=b.getBoundingClientRect(), w=p.offsetWidth, h=p.offsetHeight, x=Math.max(12,Math.min(innerWidth-w-12,r.left+r.width/2-w/2)), y=r.bottom+8; if(y+h>innerHeight-12) y=Math.max(12,r.top-h-8);
   p.style.left=x+'px'; p.style.top=y+'px';
@@ -837,7 +850,7 @@ function mkChatRow(s,m,first){
 function mkChatMore(b){ var l=b.parentNode.querySelector('.mkc-list'); if(!l) return; l.classList.add('all'); b.remove(); }
 function mkChatHtml(s,r,ne,pd){
   var ms=mkChatMsgs(s,r,6); if(!ms.length) return '';
-  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3></div>'
+  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>판단 기록</h3></div>'
     +'<ol class="mkc-list">'+ms.map(function(m,i){ return mkChatRow(s,m,i===0); }).join('')+'</ol>'
     +(ms.length>3?'<button type="button" class="mkc-more" onclick="mkChatMore(this)">이전 기록 '+(ms.length-3)+'건 더 보기</button>':'')
     +'</section>';
