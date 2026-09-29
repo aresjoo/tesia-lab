@@ -7,8 +7,8 @@
  * 크레딧 보호: 허용 오리진 제한 + IP당 분당 버스트 제한 + KV 일일 총량 상한. */
 import Anthropic from "@anthropic-ai/sdk";
 
-const MODEL_DEFAULT = "claude-fable-5";
-const EFFORT_DEFAULT = "high";
+const MODEL_DEFAULT = "claude-opus-5-5";
+const EFFORT_DEFAULT = "medium";
 const DAILY_CAP = 400; /* KV 바인딩(RL) 있을 때 하루 chat 요청 총량 상한 */
 const BURST_MAX = 8;   /* IP당 60초 내 chat 요청 상한 (아이솔레이트 단위 근사) */
 const ORIGIN_OK = [/^https:\/\/aresjoo\.github\.io$/, /^https?:\/\/localhost(?::\d+)?$/, /^https?:\/\/127\.0\.0\.1(?::\d+)?$/];

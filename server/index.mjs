@@ -16,8 +16,8 @@ try {
 } catch { /* .env ì—†ìœ¼ë©´ SDK ê¸°ë³¸ ìžê²© ì¦ëª… í•´ì„ì— ë§¡ê¸´ë‹¤ */ }
 
 for (const k of ["ANTHROPIC_API_KEY", "TETH_AI_MODEL", "TETH_AI_EFFORT", "TETH_AI_PORT", "TETH_AI_MOCK"]) if (!env[k] && process.env[k]) env[k] = process.env[k];
-const MODEL = env.TETH_AI_MODEL || "claude-opus-5";
-const EFFORT = env.TETH_AI_EFFORT || "low";
+const MODEL = env.TETH_AI_MODEL || "claude-opus-5-5";
+const EFFORT = env.TETH_AI_EFFORT || "medium";
 const PORT = Number(env.TETH_AI_PORT || 8799);
 let client = null, clientErr = "";
 try {
