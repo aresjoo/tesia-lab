@@ -66,7 +66,7 @@ function mkChatRow(s,m,first){
 function mkChatMore(b){ var l=b.parentNode.querySelector('.mkc-list'); if(!l) return; l.classList.add('all'); b.remove(); }
 function mkChatHtml(s,r,ne,pd){
   var ms=mkChatMsgs(s,r,6); if(!ms.length) return '';
-  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3><span class="mkc-tz">한국 시각, 종가 판단</span></div>'
+  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3></div>'
     +'<ol class="mkc-list">'+ms.map(function(m,i){ return mkChatRow(s,m,i===0); }).join('')+'</ol>'
     +(ms.length>3?'<button type="button" class="mkc-more" onclick="mkChatMore(this)">이전 기록 '+(ms.length-3)+'건 더 보기</button>':'')
     +'</section>';

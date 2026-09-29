@@ -18337,13 +18337,13 @@ function mkWords(s){
   if(!fut) return {inst:'현물',tagIn:'현물 매수',tagOut:'현물 매도',buy:'매수',sell:'매도',hold:'보유'};
   return {inst:'선물',tagIn:'선물 '+(sh?'숏':'롱')+' 진입',tagOut:'선물 '+(sh?'숏':'롱')+' 청산',buy:(sh?'숏':'롱')+' 진입',sell:(sh?'숏':'롱')+' 청산',hold:(sh?'숏':'롱')+' 포지션 유지'};
 }
-/* 판단 시각: 하루 한 번 종가에 판단한다. 가상자산은 09:00(한국 시각, UTC 0시), 미국 시장은 다음 날 05:00(한국 시각, 뉴욕 16시). 초는 기록마다 고정 */
+/* 판단 시각: 기록의 실제 시점(가상자산은 UTC 0시, 미국 시장은 뉴욕 16시 = UTC 20시)을 보는 사람의 브라우저 시간대로 바꿔 보여 준다. 초는 기록마다 고정 */
 function mkTS(s,i,a,salt){
   var cr=a?!!MK_CRYPTO[a]:(s.mkt==='crypto'||s.mkt==='multi'), d=idxToDate(i), h=0, k=String(s.id||s.nick)+'|'+i+'|'+(salt||0);
   for(var x=0;x<k.length;x++) h=(h*31+k.charCodeAt(x))>>>0;
-  if(!cr) d=new Date(d.getTime()+86400000);
+  var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),cr?0:20,0,2+h%47)), now=new Date(Date.UTC(MK_ASOF[0],MK_ASOF[1]-1,MK_ASOF[2],20,0,0));
   var p=function(n){ return (n<10?'0':'')+n; };
-  return (d.getFullYear()!==MK_ASOF[0]?d.getFullYear()+'/':'')+p(d.getMonth()+1)+'/'+p(d.getDate())+' '+(cr?'09':'05')+':00:'+p(2+h%47);
+  return (t.getFullYear()!==now.getFullYear()?t.getFullYear()+'/':'')+p(t.getMonth()+1)+'/'+p(t.getDate())+' '+p(t.getHours())+':'+p(t.getMinutes())+':'+p(t.getSeconds());
 }
 function mkSay(core,opt,R){
   var t=core.filter(Boolean).join(' '), i=0, all=opt.slice();
@@ -18511,7 +18511,7 @@ function mkChatRow(s,m,first){
 function mkChatMore(b){ var l=b.parentNode.querySelector('.mkc-list'); if(!l) return; l.classList.add('all'); b.remove(); }
 function mkChatHtml(s,r,ne,pd){
   var ms=mkChatMsgs(s,r,6); if(!ms.length) return '';
-  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3><span class="mkc-tz">한국 시각, 종가 판단</span></div>'
+  return '<section class="mk3-sec mkc"><div class="mk3-sec-h"><h3>'+gEsc(mkHook(s))+'의 판단 기록</h3></div>'
     +'<ol class="mkc-list">'+ms.map(function(m,i){ return mkChatRow(s,m,i===0); }).join('')+'</ol>'
     +(ms.length>3?'<button type="button" class="mkc-more" onclick="mkChatMore(this)">이전 기록 '+(ms.length-3)+'건 더 보기</button>':'')
     +'</section>';
