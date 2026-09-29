@@ -85,6 +85,9 @@ rep("<span class=\"mt2\">월 합산 '+(mtot>=0","<span class=\"mt2\">'+(mo+1)+'�
 // 5y. 따라가기의 입출금 표: 날짜 형식을 거래내역과 같게
 rep("new Date(e.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})","mkDT(e.at)",true);
 rep("new Date(c2.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})","mkDT(c2.at)",true);
+// 5z. 백테스트 여정의 주소(#/share/bt/<id>)를 라우터에 잇는다
+rep("  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }","  if(h.indexOf('#/share/bt/')===0){ TF_ONNF=false; btRoute(h); return; } /* 백테스트 여정 */\n  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }",true);
+if(!t.includes('share\\/(s|t|copy|c|bt)')){ const n0=t.split('share\\/(s|t|copy|c)').length-1; if(n0<2) throw new Error('route regex '+n0); t=t.split('share\\/(s|t|copy|c)').join('share\\/(s|t|copy|c|bt)'); }
 // 6. rd 블록이 선언하는 함수의 옛 정의를 지운다(정의는 하나만 남긴다)
 const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
 { const names=[...core.matchAll(/^function ([A-Za-z0-9_]+)\(/gm)].map(m=>m[1]), removed=[];
@@ -97,4 +100,10 @@ const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-
 // 7. 코드 블록과 스타일
 block('RD_CORE',core,'</script>\r\n<script>\r\n');
 block('RD_CSS',fs.readFileSync(D+'rd.css','utf8'),'<script src="site-config.js','<style>\r\n','\r\n</style>');
+// 8. 백테스트 여정: 코드와 스타일을 따로 둔다
+function blockAfter(tag,body,after){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\r\n'+nl(body).trim()+'\r\n'+E;
+  if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }
+  const k=t.indexOf(after); if(k<0||t.indexOf(after,k+1)>=0) throw new Error('after '+tag); t=t.slice(0,k+after.length)+'\r\n'+txt+t.slice(k+after.length); }
+blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
+blockAfter('BT_CSS',fs.readFileSync(D+'bt.css','utf8'),'/*RD_CSS_END*/');
 fs.writeFileSync(F,t); console.log('applied', t.length);
