@@ -1,0 +1,1379 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0eaec-90bf-75d1-a8e6-33f60df2c863
+--------
+user
+# ROUND 1 교차 검증 (Codex, Astra)
+
+읽을 것(이 폴더): `r1-claude.md`(Claude 독립 비평), `r1-cross-claude.md`(네 비평에 대한 Claude 판정). 네 것은 `r1-codex.md`.
+
+## 할 일 (짧게)
+1. `r1-claude.md` 의 비판 13개 각각 ACCEPT / REJECT / MODIFY / TEST 와 근거 한 줄.
+2. `r1-cross-claude.md` 에서 약한 수용, 근거 없는 거절, 타협을 공격. 특히 식별 재대결(B1 대 B2), D4 거절(최근 판단 4건 유지), 혼합 상태 지표 시점 거절, 이름 교체 확정안(자리바꿈, 번갈이).
+3. 식별 재대결의 판정 기준을 스크린샷으로 확인 가능한 문장 3개 이내로 확정. B1 을 고칠 때 같은 유형 안에서 구별을 만드는 구체 방법(어떤 값을 어떤 모양으로)을 제안.
+4. Round 2(신뢰) 구현 전 반드시 고쳐야 할 것을 우선순위 순으로 10개 이내로.
+
+## 제약
+index.html 수정 금지. em dash, 가운뎃점 금지. 새 고지나 라벨 금지. 사용자 확정 제약(KPI 넷, 버튼 문구, 4열 x 5행, 10페이지 반복, 30일은 수익률만)은 재론하지 않는다. 산출 `artifacts/teth-redesign/r1-cross-codex.md`, 90줄 이내.
+
+codex
+세 비평 문서와 관련 스크린샷을 대조해 교차 판정을 작성하겠습니다. `index.html`은 수정하지 않겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 243ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 339ms:
+codex 인박스 : (비어 있음)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 53ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g AGENTS.md -g '*r1*' -g '*B1*' -g '*B2*' -g '*D4*'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 61ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'artifacts/teth-redesign/r1-claude.md','artifacts/teth-redesign/r1-cross-claude.md','artifacts/teth-redesign/r1-codex.md' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 254ms:
+# ROUND 1 (Claude Code): 독립 스크린샷 비평
+
+Codex 결과를 보기 전에 작성. 대상: `r1-name-*.png`, `r1-id-*.png`, `r1-cta-*.png`, `r1-main*.png`, `r1-detail-*.png`.
+
+## 후보 판정
+| 비교 | 승자 | 근거(스크린샷) |
+|---|---|---|
+| 이름 | C(고유 이름) 조건부 | A 는 제목이 아래 설명과 같은 말을 되풀이한다("강한 코인 셋 고르기" 아래 "강한 셋을 나눠 듭니다"). 8장이 전부 "~기", "~반등"으로 끝나 목록이 설명서처럼 읽힌다. B 는 "TETH" 가 8번 반복되고 "NDX", "ETH" 같은 부호가 섞여 내부 상품 코드처럼 보인다. C 는 짧아서 제목과 설명의 역할이 갈린다. 단 "거름", "돌림", "분업"은 뜻이 다르게 읽히거나 약하다 |
+| 식별 | B1(도식) | A 는 28px 단색 얼굴이 뭉개지고 여전히 사람이다. B2 는 고리 8개가 서로 비슷하고 아무 뜻도 전하지 않는다. B1 은 점 묶음(탐색), 꺾인 선(조건), 둘의 결합(혼합)으로 유형이 한눈에 갈린다 |
+| 버튼 | 미정, 제3안 필요 | P0 는 라임 20개가 화면을 지배. P1 과 P2 는 흰 채움 20개가 새로운 띠를 만든다. 둘 다 외곽선으로 두고 굵기나 밝기로만 주종을 나누는 안을 추가로 렌더해야 한다 |
+
+## 시험
+| 시험 | 판정 | 근거 |
+|---|---|---|
+| 3초: AI 전략을 고르는 곳인가 | PASS | 상단 "어떤 방식으로 판단하는 AI에게 거래를 맡길지", 판단 방식 선택기 |
+| 10초: 세 유형 구분 | 부분 PASS | 판단 줄의 "직접 탐색 / 조건 실행 / 혼합"은 12.5px 로 작다. 도식과 "지금" 줄이 도와주지만 유형 글자가 설명보다 약하다 |
+| 30초: 눌러보고 싶은 이유 | PASS | "지금 엔비디아 반등 대기", "시장이 약하면 보류" 처럼 상태와 행동이 다르다 |
+
+## 구체 비판
+| # | 등급 | 요소 → 문제 → 사용자 해석 → 제안 |
+|---|---|---|
+| 1 | P1 | 카드의 유형 글자(12.5px 굵게) → 설명 14px 보다 작아 위계가 뒤집힘 → 유형을 놓치고 이름과 수익률만 봄 → 유형 글자를 13.5px, 범위와 한 줄로 유지하되 도식 바로 옆이 아닌 이름 아래 첫 줄로 강조 |
+| 2 | P1 | 카드 버튼(흰 채움 "자세히") → 20장에 흰 덩어리 20개 → 새로운 강조 띠 → 제3안: 둘 다 외곽선, 따라가기만 글자 굵게 |
+| 3 | P1 | 30일 수익률 색(초록 17px) → 카드에서 유일한 색 → 여전히 첫 시선 → 채도를 더 낮추거나 크기 16px, 미니 차트 채움 제거 |
+| 4 | P2 | 미니 차트 → 72px 폭에서 채움 그라데이션이 뭉침 → 장식처럼 보임 → 선만, 채움 없음 |
+| 5 | P1 | 상세 "하는 일" 상자와 "지금" 상자가 같은 크기 → 정적 설명과 살아 있는 상태가 같은 무게 → 상태가 묻힘 → "지금"을 왼쪽 넓게, "하는 일"은 오른쪽 좁게 또는 아래로 |
+| 6 | P1 | 상세 조건 실행 "충분히 밀렸나: 아직 아니에요" → 얼마나 남았는지 모름 → 막연함 → 기준 대비 현재 위치를 짧은 막대로(하락 강도 기준 26, 지금 84 같은 숫자는 풀어서) |
+| 7 | P1 | 상세 성과의 "시작 이후 +97.8%" → 다섯 번째 칸으로 KPI 넷과 같은 줄 → 큰 누적 수익이 다시 눈에 띔 → 차트 아래 작은 글씨로 |
+| 8 | P2 | 상세 "최근 판단"의 조사 없는 문장 "보유를 끝냄", "바꾸지 않음" → 기록 말투가 딱딱 → 해요체로 통일 |
+| 9 | P1 | 상세 머리글 라임 "따라가기"가 이름 바로 아래 → 판단을 읽기 전에 결제성 버튼 → 위치는 유지하되 크기 축소, 또는 "지금" 뒤로 |
+| 10 | P2 | 목록 조작 줄 → 선택기, 설명 문장, 정렬, 시장, 검색이 세 줄 → 카드 첫 줄이 y=590 까지 밀림 → 설명 문장을 선택기 오른쪽에 붙여 한 줄 줄임 |
+| 11 | P1 | 조건 실행 기록의 "하락 강도 20" → 뜻 모를 숫자 → 지표 원문과 다를 바 없음 → "2주 동안 거의 계속 내림" 같은 말로 |
+| 12 | P2 | 모바일 카드 설명 1줄일 때 아래 빈 줄 → 카드마다 공백이 다름 → 모바일에서는 최소 높이 해제 |
+| 13 | P1 | 낙폭 -38.2%(환승), -32.8% → 숫자는 정직하지만 카드에서 다른 숫자와 같은 회색 → 위험 신호가 안 보임 → 색은 쓰지 않되(손익만 색) 정렬 "낙폭 낮은 순"으로 찾게 함. 유지 |
+# ROUND 1 교차 검증: Claude 판정
+
+`r1-codex.md` 의 각 항목에 대한 판정. 내 독립 비평은 `r1-claude.md`.
+
+## 후보
+| 축 | Codex | Claude | 판정 |
+|---|---|---|---|
+| 이름 | C | C | 확정 C. 개별 교체는 아래 |
+| 식별 | B2 | B1 | **TEST 재대결.** B2 는 유형 정보를 전혀 담지 않는다. 네 3초 시험이 "세 권한의 즉시 구별"에서 FAIL 이었는데, B1 은 점 묶음, 꺾인 선, 결합으로 바로 그 구별을 돕는다. 네가 B1 을 떨어뜨린 근거는 "상태에 따라 내부 값이 바뀐다"는 Round 0 기준인데, 너도 고정 도식이 잘못은 아니라고 했다. 대신 네 지적(같은 유형 안에서 서로 비슷함)은 수용해 B1 을 고친다. Round 2 에서 B1 수정안과 B2 를 같은 20장으로 다시 렌더하고, 기준을 "유형 구분에 기여하는가"와 "같은 유형 안에서 구별되는가" 둘로 명시한다 |
+| 버튼 | P1 동일 폭 80x36 | 둘 다 외곽선 | **TEST.** P1 수정안(자세히 채움, 80x36 동일 폭)과 P3(둘 다 외곽선, 동일 폭, 따라가기 글자만 굵게)을 렌더 |
+
+## 목록
+| # | 판정 | 조치 |
+|---|---|---|
+| M1 배너 제목 | ACCEPT | "직접 고르기, 조건 실행,<br>둘을 나눠 맡기" |
+| M2 조건 대기 | ACCEPT | 실제 미충족 원인으로: 하락 대기, 반등 대기, 방향 대기 |
+| M3 건널목 범위 | ACCEPT | 범위 "지수, 금, 주식, 가상자산 6종", 설명 교체, "한 달" 대신 20일 |
+| M4 동행 | ACCEPT | 설명 교체 |
+| M5 환승 | ACCEPT | 설명 교체. 행동 값은 그대로 |
+| M6 KPI 간격 | ACCEPT | 위 묶음과 아래 묶음 사이 16px |
+| M7 작은 걸음 | MODIFY | "리플 반등에 들어가 4% 오르거나 5% 밀리면 정리합니다." |
+
+## 상세
+| # | 판정 | 조치 |
+|---|---|---|
+| D1 모바일 따라가기 겹침 | ACCEPT (P0) | 버튼 고정 폭, 메타는 다음 줄 |
+| D2 모바일 순서 | ACCEPT | 지금, 최근 판단 첫 건, 하는 일 순 |
+| D3 순위 시점 | ACCEPT (P0) | 상태의 순위와 오르는 종목 수는 기준일 종가로 다시 계산. 주문은 재평가 주기대로 |
+| D4 최근 판단 1건만 | REJECT | 사용자 요구가 "최근 판단" 목록(본 것, 판단, 행동 여러 건)이다. 정보 위계 근거: 기록은 신뢰의 핵심 증거라 개요에 남긴다. 다만 4건으로 줄이고 "움직이는 방식"을 그 위로 올려 정책을 먼저 읽게 한다 |
+| D5 하락 조건 값 | MODIFY | 숫자만 넣으면 지표 원문으로 돌아간다. 기준과 현재 위치를 짧은 막대로 그리고 값은 작게 병기. 렌더로 확인 |
+| D6 일정 둘 | ACCEPT | "규칙 확인 9월 29일, 종목 재선택 10월 4일" |
+| D7 비중 문구 | ACCEPT | |
+| 혼합 상태의 지표 시점 | REJECT | 진입 판단은 전날 값(i-1)을 쓴다. 상태에 보이는 값은 기준일(endI) 값이고, 이는 "다음 확인"에 쓰일 입력이다. 두 값이 다른 것이 정상. 대신 행 이름을 "다음 확인에 쓰일 값"의 뜻이 드러나게 고친다 |
+
+## 이름 C 교체
+| ID | 기존 | Codex 제안 | 확정 | 이유 |
+|---|---|---|---|---|
+| r3 | 한계선 | 물러섬 | 물러섬 | |
+| h2 | 거름 | 추림 | 추림 | |
+| d4 | 돌림 | 세 자리 | 자리바꿈 | "세 갈래"와 겹침 |
+| h3 | 이음 | 세 지평 | 번갈이 | "세"가 세 번 반복되는 것을 피함 |
+| r5 | 깊은 숨 | 깊은 되돌림 | 깊은 되돌림 | |
+| r6 | 한구간 | 한 구간 | 한 구간 | |
+| h4 | 길잡이 | 갈림길 | 갈림길 | |
+| h5 | 분업 | 고른 뒤 | 고른 뒤 | |
+| r9 | 길목 | 방향선 | 방향선 | |
+설명 교체(r3, r4, r8)는 ACCEPT.
+
+## 구현
+| 항목 | 판정 | 조치 |
+|---|---|---|
+| mk30, 기간 캐시 키 (P0) | ACCEPT | 키에 id, 행동 값 전체, 가격 설정, 종료 봉 포함 |
+| 이름 기반 연결 (P0) | MODIFY | 비교용 이름 전환은 Round 2 에서 제거하고 이름을 확정한다. 옛 이름으로 저장된 즐겨찾기와 따라가기는 행동 값이 같은 조건 실행 9종만 별칭으로 연결한다. 나머지는 추정하지 않는다 |
+| 뒤에서 다시 선언 (P1) | ACCEPT | 마지막 라운드에서 옛 정의를 지우고 단일 정의로 정리 |
+| 원장 방어 (P1) | ACCEPT | 중복 청산 거절, 유한한 양수 가격, 현금 범위 |
+| 사건에 수량과 비용 (P1) | ACCEPT | 사건에 units, cost, fee 포함 |
+| 조건 실행이 원장을 안 씀 (P1) | ACCEPT | 조건 실행도 같은 원장 계산기로 옮긴다(자산 하나로 고정된 혼합과 같은 구조). 세 유형이 비용, 열린 포지션, 연도 성과를 같은 방식으로 계산 |
+| 입력 검사 (P1) | ACCEPT | 길이, every, look 범위 |
+| 날짜 기준 (P1) | MODIFY | 기준일을 세션 시작 때 한 번 정하는 현재 방식 유지. 자정 넘김은 새로고침으로 갱신 |
+| 따라가기 시트의 유형과 작성자 (P1) | ACCEPT | |
+| underwaterDays 꼬리 (P2) | ACCEPT | |
+**ROUND 1 | Codex Astra 독립 평가 | 2026-09-29**
+
+채택 방향은 **이름 C, 식별 B2, 버튼 P1의 동일 폭 수정안**이다. 화면은 수익 상품 진열에서 판단 방식 비교로 분명히 이동했다. 그러나 현재 렌더 그대로의 최종 합격은 아니다. 모바일 상세 버튼, 현재 상태의 시각 혼합, 이름 기반 저장 연결, 캐시 충돌을 먼저 고쳐야 한다.
+
+**범위와 판정 기준**
+
+- Claude의 `r1-claude.md`와 Round 1 작업 로그는 읽지 않았다. 지정된 후보 PNG 9장, 목록 5장, 상세 7장, `baseline-main-top.png`를 직접 확인했다.
+- 8843 서버를 다시 열고 CDP 9333의 별도 탭에서 C/B1/P1을 렌더했다. 4열을 다섯 행으로 스크롤 캡처해 **20개 카드 모두** 확인했다. C/B2/P1과 390px 상세도 재렌더했다. 제품 파일은 수정하지 않았다.
+- 기준은 `r0-cross-codex.md`의 후보별 합격선이다. 이후 사용자 확정인 KPI 넷, 30일 수익률과 나머지 전체 기간, 4열 x 5행, 10페이지 반복, 버튼 문구를 우선한다. 이전의 KPI 기간 통일 제안은 재요구하지 않는다.
+- 이번 이름 비교의 고정 식별자는 B1이다. Round 0 요청의 B2와 다르지만 후보 사이에는 동일하므로 이름 비교 자체는 유효하다. B2 결합은 추가 렌더로 확인했다.
+- 아래 PASS/FAIL은 화면 및 구현 검사다. 실제 참가자 시간 제한 시험, 기억성, 신뢰 상승, 전환율을 측정한 결과가 아니다. 비판의 사용자 해석도 검증할 가설이다.
+- 우선순위 P0는 기능 또는 사실 연결 차단, P1은 선택과 이해를 방해하는 문제, P2는 식별과 마감 문제다. 버튼 후보의 P0/P1/P2와 구분한다.
+
+**1. 후보별 판정과 단일 선택**
+
+| 축 / 후보 | Round 0 합격선 적용 | 판정과 선택 이유 |
+| --- | --- | --- |
+| 이름 A | 280px에 가까운 279.5px 카드에서 앞 여덟 제목과 설명이 잘리지 않고 기준선도 맞는다. | 시각 PASS. 하지만 ‘매일 1등으로 갈아타기’는 실제 보유 유지 정책보다 강한 주장이다. 즉시 이해는 좋지만 이름으로 긴 실행 조건까지 떠맡긴다. 비채택. |
+| 이름 B | TETH 뒤의 구별 단어와 BTC, ETH, NDX가 모두 보이고 설명에서 역할을 구분할 수 있다. | 시각 PASS. 공통 접두사가 20번 반복되고 컷라인, 엑시트 같은 단어의 해독 비용이 남는다. ‘반등실행’과 ‘단기실행’ 계열은 자산 약자에 식별을 의존한다. 비채택. |
+| 이름 C | 20개 모두 이름 한 줄, 설명 두 줄 이내, 행동 생략이나 말줄임 없음. 1280px 4열과 390px 한 열에서도 지정 렌더가 유지된다. | **PASS, 승자 C.** 설명을 읽는 폭을 가장 잘 보존한다. 이름의 기억 효과는 미입증이며 약한 개별 이름은 5절에서 교체한다. |
+| 식별 A | 28px라 이름을 압도하지 않지만 여덟 외곽은 대부분 같은 원이다. 안경, 머리, 복장 차이에 의존한다. | **FAIL.** 흑백 외곽 실루엣 구별 기준을 못 채운다. 단색화했어도 사람 운영자 해석을 줄이는 이점은 작다. |
+| 식별 B1 | 점과 선은 읽힌다. 다만 혼합의 맞물림과 거름이 특히 비슷하고 규칙형은 작은 반등 선을 반복한다. | **FAIL, 원래 계약 기준.** 현재점이 바뀌는 도식이 아니라 고정 설정 도식이다. 보유/대기 때 내부 값이 달라진다는 Round 0 기준은 충족하지 않는다. 고정 도식 자체가 잘못이라는 뜻은 아니지만 이를 실시간 판단 증거로 읽게 할 이유도 없다. |
+| 식별 B2 | 여덟 기호의 끊김, 겹침, 방향 차이가 28px에서 보인다. 흑백이며 트로피나 등급 표식이 없다. | **PASS, 승자 B2.** 고정 기호라는 역할이 명확하다. 보유 배열을 비워도 같은 SVG였고 20개 SVG의 완전 중복은 없었다. 20개를 사람이 모두 기억하거나 구분한다는 증명은 아니다. |
+| 버튼 P0 | 같은 위치지만 라임 따라가기 여덟 개가 카드 하단을 지배한다. | **FAIL.** Round 0의 중립색 비교 조건에서 벗어나며 먼저 읽을 행동을 약화한다. |
+| 버튼 P1 | 자세히 채움, 따라가기 외곽선, 문구 잘림 없음. 하지만 실측 폭은 각각 67.27px, 79.69px다. 높이는 모두 36px. | **FAIL, 동일 폭 기준. 후보 중 우선순위는 승자.** 설명 확인 경로가 시각적으로 우선한다. |
+| 버튼 P2 | P1과 위치와 치수를 유지하고 채움만 바꾼다. 역시 두 버튼 폭은 다르다. | **FAIL, 동일 폭 기준.** 중립색 효과는 있으나 따라가기 전에 근거를 읽히려는 목적에는 P1보다 약하다. |
+
+버튼은 원안 합격자가 없으므로 **P1 수정안** 하나를 확정 제안한다. 순서와 문구는 `따라가기`, `자세히` 그대로, 각각 80×36px, 사이 8px, 자세히만 `#e9ebee` 채움과 `#111315` 글자, 따라가기는 1px 중립 외곽선이다. 390px에서는 둘 다 80×44px로 한다. 이름과 수익률은 현재 모두 17px라 ‘수익 숫자가 이름보다 큼’ 탈락 조건은 발생하지 않았다. 최종 조정 시작값은 이름 18px, 설명 15px, 수익률 16px다. 수정안 자체는 아직 렌더하지 않았다.
+
+**2. 목록의 3초, 10초, 30초 시험**
+
+| 시험과 성공 조건 | 판정 | PNG 근거 |
+| --- | --- | --- |
+| 3초: 세 유형에서 누가 대상을 고르고 누가 실행하는지 분류 | **FAIL** | `main-top`의 큰 배너는 ‘세 가지’라면서 직접 고르는 AI와 조건 실행 둘만 제목에 올린다. 첫 행에는 세 유형이 있지만 혼합의 권한 분담은 두 줄 설명을 읽어야 한다. 유형이 있다는 발견은 성공, 세 권한의 즉시 구별까지는 부족하다. |
+| 10초: 첫 행에서 원하는 행동과 현재 상태를 보고 자세히로 갈 카드 선택 | **PASS, 데스크톱** | `main`, `main-1280`에서 세 갈래는 셋 보유, 되짚기는 조건 대기, 맞물림은 엔비디아 반등 대기로 읽힌다. 설명과 지금이 수익보다 앞선다. 390px는 온전한 카드 하나와 다음 카드 일부만 보여 세 방식의 동시 비교는 FAIL이다. |
+| 30초: 선택한 둘의 실제 차이, 지표 기간, 현재 기다리는 이유까지 설명 | **FAIL** | 상태 대부분이 ‘조건 대기’로 끝난다. 30일 수익률과 전체 거래 수가 가까워 같은 기간으로 묶어 읽기 쉽다. `main-full`의 동행은 ‘아무것도 안 합니다’와 두 종목 보유가 함께 보인다. 이를 사용자가 정확히 풀 근거가 목록에 없다. |
+
+기간과 반복은 확정 제약이므로 지표를 다시 계산하거나 페이지를 줄이지 않는다. 기간 혼합의 잔여 오인 가능성을 인정하고, 기존 구분선 아래 전체 KPI 묶음과 위 30일 묶음의 간격을 16px로 벌린다. 새 기간 라벨로 해결했다고 주장하지 않는다.
+
+**3. 구체 비판: 목록 7개, 상세 7개**
+
+| # / 우선순위 | 요소 → 문제 → 사용자 해석 → 제안 |
+| --- | --- |
+| M1 / P1 | 목록 상단 배너 → 세 가지라고 해놓고 제목은 두 방식만 말함 → “혼합은 별도 방식인가 부속 옵션인가” → 기존 제목을 `직접 고르기, 조건 실행,\n둘을 나눠 맡기`로 교체. 24px, 줄높이 32px, 두 줄로 유지. |
+| M2 / P1 | 반복되는 ‘조건 대기’ → 무엇을 기다리는지 모든 규칙형이 같음 → “자산만 다른 같은 전략” → 현재 상태 슬롯 안에서 `하락 조건 대기`, `반등 대기`, `방향 조건 대기` 중 실제 미충족 원인을 출력. 상태 행을 새로 늘리지 않는다. |
+| M3 / P1 | 건널목의 ‘지수, 금, 가상자산’ 설명과 엔비디아 보유 → 소개한 범위 밖의 종목이 실제 상태에 나옴 → “설명과 거래 대상이 다르다” → 기존 범위 문구를 `지수, 금, 주식, 가상자산 6종`, 소개를 `네 시장의 여섯 종목 중 둘을 골라 20일마다 다시 봅니다.`로 교체. |
+| M4 / P1 | 동행의 ‘아니면 아무것도 안 합니다’ → 보유 유지와 청산 권한까지 멈춘다고 읽힘 → “대기인데 왜 두 종목을 들고 있나” → 소개를 `기술주 다수가 오를 때 새로 사고, 보유 종목은 계속 관리합니다.`로 교체. |
+| M5 / P1 | 환승의 ‘가장 강한 하나만’, A의 ‘매일 1등’ → 최상위 교체 보장이지만 계산기는 상위권 보유를 유지함 → “오늘 1위가 바뀌면 반드시 갈아탄다” → 소개를 `매일 가상자산을 비교하고, 보유 종목이 약해지면 바꿉니다.`로 수정. 행동값을 설명에 맞추려고 성과를 다시 고르지 않는다. |
+| M6 / P1 | KPI 묶음 → 30일과 전체가 인접하고 전체 구간 길이도 전략마다 다름 → “103회와 9회가 모두 한 달의 빈도다” → 고정 계산 기준은 보존하고 위 묶음과 아래 세 KPI의 간격을 16px로 통일. 거래 수를 빈도처럼 설명하지 않는다. 이 제약에서 기간 이해 완전 합격은 보류. |
+| M7 / P2 | 작은 걸음의 ‘작은 폭만 가져갑니다’ → 청산 목표를 결과처럼 단정 → “반등마다 작은 이익이 확보된다” → 기존 소개를 `리플 반등에 진입하고 4% 상승이나 5% 하락을 확인하면 정리합니다.`로 교체. 두 줄을 넘으면 카드 내부 여백을 조정하고 말줄임하지 않는다. |
+| D1 / P0 | 390px 상세 따라가기 → 버튼은 46×44px인데 내용 폭은 75px로 옆 거래소와 겹침 → “눌러야 할 글자가 깨졌다” → `flex:0 0 120px`, 높이 44px로 고정하고 거래소, 최소금액, 시작일 묶음은 다음 줄 전체 폭으로 이동. |
+| D2 / P1 | 모바일 ‘하는 일’ 다음 ‘지금’ → 지금 패널 시작이 y=788.47px, 상태 본문은 844px 밖 → “설명만 있고 현재 행동은 안 보인다” → 모바일에서 기존 지금 패널과 최근 판단 첫 한 건을 하는 일 앞으로 이동. 앱 배너와 고정 헤더를 포함해 다시 확인. |
+| D3 / P0 | 세 갈래의 ‘지금’ 후보 순위 → 9월 24일 탐색값과 9월 28일 평가액을 하나의 기준 시각 아래 표시 → “9월 28일의 강한 종목 순위다” → 순위와 오르는 종목 수는 9월 28일 입력으로 다시 표시하되 주문은 기존 재평가 주기대로 유지. 또는 기존 기준 날짜 문구 안에서 두 시각을 명시. 새 행이나 라벨을 만들지 않는다. |
+| D4 / P1 | 최근 판단 다섯 건 → 직접 탐색은 8월 4일 사건까지 동일 무게로 펼쳐 움직이는 방식을 아래로 밀음 → “여러 기록을 읽어야 정책을 알 수 있다” → 첫 결론 한 건만 개요에 남기고 네 건은 이미 있는 전체 기록에서 제공. 기준일, 체결가, 결과는 첫 건에 유지. |
+| D5 / P1 | 되짚기의 ‘충분히 밀렸나, 아직 아니에요’ → 하락 조건의 현재 값과 문턱이 사라짐 → “기다리는 이유를 검증할 수 없다” → 기존 값 셀을 `하락 강도 [실제 값], 기준 26 미만`으로 교체. 새 설명 카드나 배지는 추가하지 않는다. |
+| D6 / P1 | 맞물림 단계도의 다음 일정 → 10월 4일 종목 재선택만 보이고 그전의 매일 규칙 검사가 안 보임 → “10월 4일까지 아무것도 하지 않는다” → 기존 일정 값에 `규칙 확인 9월 29일, 종목 재선택 10월 4일`을 표시. 대기 상태는 실제 평가에 쓴 전봉 지표로 출력. |
+| D7 / P1 | 세 갈래의 보유 비중과 행동 방식 → 현재 비트코인 36%인데 아래에는 한 종목 최대 33% → “한도를 위반했거나 숫자가 틀렸다” → 기존 얼마나 사나 문장을 `매수할 때 한 종목에 최대 33%. 보유 중 비중은 가격에 따라 변해요.`로 교체. 보유 비중을 억지로 33%로 자르지 않는다. |
+
+**4. 상세 유형별 정보 우선순위 판정**
+
+**같은 틀에 문구만 바꾼 화면은 아니다.** 상단 두 패널과 최근 판단, 방식, 성과의 큰 순서는 같지만 오른쪽 패널의 읽기 과제가 다르다. 공통 외곽은 비교에 도움이 되므로 유지한다.
+
+| 유형 | PNG에서 실제로 먼저 읽히는 정보 | 판정과 다음 조정 |
+| --- | --- | --- |
+| 직접 탐색 / 세 갈래 | 3종목 보유, 현재 비중과 손익, 탐색 후보, 다음 재평가. 최근 기록은 새 선택과 유지 판단. | 역할 차이 PASS. 최신 순위와 보유 이유의 연결은 FAIL. 이더리움이 가장 강한데 보유하지 않는 이유를 기존 최근 판단 문장에서 유지 기준과 연결해야 한다. |
+| 조건 실행 / 되짚기 | 하락과 반등 두 조건의 충족 여부, 다음 확인. 최근 기록은 진입과 청산. | 역할 차이 PASS. 빨간 실패 표시 제거는 개선이다. 하지만 두 조건을 ‘아직 아니에요’로만 압축해 정량 판단 근거는 약해졌다. |
+| 혼합 / 맞물림 | 종목 고르기 → 반등 기다리기 → 보유와 정리의 현재 단계. 최근 기록에서 선택과 보류는 AI, 진입과 청산은 규칙으로 분리. | 세 유형 중 권한 분담이 가장 명확하다. 다만 재선택 일정과 매일 규칙 확인 일정, 시장 보류 조건을 같은 현재 상태로 연결하는 작업이 남는다. |
+
+세 상세 모두 과거 누적 수익보다 하는 일과 지금을 앞세운 점은 Round 0 지적을 반영했다. 모바일에서는 단순 세로 쌓기로 이 우선순위가 다시 깨지므로 데스크톱 합격을 모바일 합격으로 확장하지 않는다.
+
+**5. 이름 C의 20개 전수 평가**
+
+1페이지 다섯 행의 실제 카드와 행동 설명을 함께 읽었다. 아래 대안은 인물 직함, 수익 보장, 안전 등급, 모델 브랜드, 기술 약자 없이 기존 이름 슬롯을 바꾸는 제안이다. 공통 치수는 이름 18px 한 줄, 설명 15px 최대 두 줄이며 이름만으로 동작 전체를 설명하려 하지 않는다.
+
+| ID | 현재 이름 | 판정과 대안 |
+| --- | --- | --- |
+| d1 | 세 갈래 | 유지. 최대 세 종목이라는 구체적 기억 단서가 있다. |
+| r1 | 되짚기 | 유지. 하락 뒤 반등 확인과 연결된다. |
+| h1 | 맞물림 | 유지. 선택과 실행의 맞물림이 실제 단계도와 맞는다. |
+| r2 | 짧은 호흡 | 유지. 작은 익절 목표와 짧은 보유 의도를 설명이 받쳐 준다. |
+| d2 | 건널목 | 유지. 시장 사이 선택의 비유가 유효하다. 범위 설명은 M3대로 수정. |
+| r3 | 한계선 | 약함. 손실을 정확히 3% 안으로 막는 이름처럼 읽힐 수 있다. **물러섬** 제안. 기존 설명도 `3% 하락을 확인한 날 정리합니다.`로 고쳐 발동 조건과 체결 손실을 구분. |
+| h2 | 거름 | 약함. 비료 뜻이 먼저 떠오를 수 있고 맞물림과의 차이도 약하다. **추림** 제안. 기존 소개의 시장 보류 문장은 유지. |
+| d3 | 환승 | 유지. 교체를 기억시키되 매일 1위 교체 약속은 M5대로 제거. |
+| r4 | 두 문턱 | 이름은 유지. 소개가 깊은 하락과 반등만 말해 선택적 방향 조건을 놓친다. 기존 설명을 `금의 반등과 평균선 간격을 함께 확인한 뒤 삽니다.`로 교체. |
+| d4 | 돌림 | 약함. 돌리는 대상도 수량도 남지 않고 환승과 겹친다. **세 자리** 제안. 기술주 셋을 나눠 든다는 설명과 결합. |
+| h3 | 이음 | 약함. 혼합 전체에 붙일 수 있어 개별 기억 단서가 없다. **세 지평** 제안. 나스닥, S&P 500, 금이라는 세 후보를 설명에서 유지. |
+| r5 | 깊은 숨 | 약함. 짧은 호흡과 이름 계열은 같지만 자산과 진입 깊이 차이를 가린다. **깊은 되돌림** 제안. 큰 하락 뒤 반등을 확인한다는 설명과 결합. |
+| r6 | 한구간 | 의미는 유지하되 **한 구간**으로 띄어 쓴다. 단기 왕복이라는 단서를 보존. |
+| d5 | 동행 | 유지. 기술주 다수의 동반 상승과 연결된다. 아무것도 안 한다는 설명만 M4대로 수정. |
+| h4 | 길잡이 | 약함. 조언하는 사람을 떠올리게 하고 길목과 혼동된다. **갈림길** 제안. 여러 시장 중 선택한다는 설명과 결합. |
+| r7 | 작은 걸음 | 유지. 작은 청산 목표의 비유로 제한하고 이익 확보 문구는 M7대로 수정. |
+| d6 | 외길 | 유지. 한 종목 보유라는 단서가 명확하다. 영구 단일 자산으로 읽히지 않게 세 후보 설명을 유지. |
+| r8 | 마침표 | 유지. 정한 조건에서 정리한다는 행동과 맞는다. ‘정해 둔 곳’은 가격 보장 대신 `8% 상승을 확인한 날`로 설명 교체. |
+| h5 | 분업 | 약함. 모든 혼합형의 분류명이어서 제품별 차이가 없다. **고른 뒤** 제안. AI가 세 후보 중 선택한 뒤 규칙에 맡긴다는 기존 설명과 결합. |
+| r9 | 길목 | 약함. 건널목, 길잡이와 길 비유가 겹치고 방향 필터가 숨는다. **방향선** 제안. 비트코인 반등과 평균선 간격이라는 설명을 유지. |
+
+대안의 기억성 우월은 아직 미검증이다. 특히 ‘세 지평’과 ‘고른 뒤’는 설명 없이 의미를 맞히는 이름이 아니므로 C의 이름과 설명 결합을 유지해야 한다.
+
+**6. 구현 감사: 증거와 수정 우선순위**
+
+줄 번호는 이번에 읽은 `index.html` 기준이다. `RD_CORE_BEGIN` 17646, `MK_CAT_BEGIN` 16033. 아래 실행은 별도 브라우저 탭의 임시 계측이며 원본 함수를 복원했다. 실제 AI 호출이나 실거래 성능 검증은 아니다.
+
+| 우선순위 / 위치 | 확인한 사실과 재현 | 판정 / 필요한 조치 |
+| --- | --- | --- |
+| 통과 / 17655~17743 | 직접 탐색 6종과 혼합 5종의 매수/매도 호출에서 수량, 가격, 수수료를 따로 수집해 현금과 보유를 재생했다. 모든 봉의 평가액 최대 오차는 1.34e-15 미만, 비용 합계 차이는 0. | 정상 카탈로그의 원장 보존 PASS. 미세한 음수 현금 약 1e-15는 부동소수점 오차이지 차입 반례가 아니다. |
+| 통과 / 17658~17739 | Round 0 반례 재실행: 100→200→100, 비중 0.5에서 곡선 -0.0999001%, 거래 -0.1998002%. 혼합 101→101 열린 포지션 -0.0999001%. 혼합 101→80 청산가는 80, 거래 -20.9503368%. | 두 회계 반례와 관측 불가능한 손절 체결 수정 확인. 거래 수익률에 초기 비중 0.5를 적용하면 곡선과 일치한다. |
+| P1 / 17658~17660 | 동일 포지션을 두 번 sell하면 현금 0.999001→1.498002로 증가한다. 0 가격, NaN 금액, 소유하지 않은 포지션도 방어하지 않는다. 현재 정상 카탈로그가 중복 청산했다는 증거는 없다. | 원장 API 불변식은 아직 불완전. 활성 체결 ID 확인, 중복 청산 거절, 유한한 양수 가격과 수량, 허용 현금 범위를 원장 경계에서 검사. |
+| P1 / 17696~17717 | 사건에 tid와 가격은 있지만 매수 수량과 비용은 없고 열린 포지션 반환에도 units와 cost가 없다. 이번 원장 재생은 반환 events만으로 한 것이 아니라 L.buy/L.sell 계측을 사용했다. | ‘원장 계산 통과’와 ‘저장 사건만으로 독립 재생 가능’을 구분. 영속 체결 객체에 수량, 현금 증감, 비용을 남기고 이벤트와 현재 상태가 이를 참조하도록 한다. |
+| P1 / 5758~5839 | 조건 실행은 mkLedger를 사용하지 않는다. 고정 가격 열린 포지션 반례의 ret와 costImpact가 여전히 0이다. 비용은 완료 거래에서 0.2%를 빼고 연도 성과도 완료 거래로 계산한다. | fill:'close' 수정은 확인했지만 세 유형 공통 원장이 됐다고 승인할 수 없다. 규칙 엔진의 진입 비용, 열린 보유, 연도 경계도 같은 원장 기준으로 맞춘다. |
+| 통과 / 17686, 17726 | 실제 가격과 지표 함수를 사용하고 1200번 이후 가격만 변경했다. 11종 모두 1200번까지 곡선과 사건이 동일했다. | 직접 미래 참조 반례 없음. 현재 종가 판단과 같은 종가 체결은 이번 합의된 시뮬레이션 계약으로 수용하며 실제 체결 가능성의 증명으로 확대하지 않는다. |
+| P1 / 17682~17683, 17723 | 직접 탐색만 자산 배열 길이를 검사한다. 혼합은 길이 검사도 없고 양쪽 모두 날짜 정렬, 결측, 가격 유효성, every 및 look 범위 검사가 없다. | 현재 생성 배열의 정상 실행과 외부 데이터 준비 상태를 구분. 입력 계약을 추가하고 비교 구간 밖은 오류로 처리. |
+| P0 / 16098~16102 | d1의 마지막 eq 값만 10% 높이고 길이와 이름을 유지하면 mk30은 10.8016%를 재사용한다. MK_D30을 비우면 21.8818%다. cfg, 가격 버전, fill 등이 키에 없다. | stale cache 재현. 표시 이름과 배열 길이 대신 불변 ID, 정책 버전, 가격 버전, 종료 봉, 비용 및 체결 계약을 키로 사용. |
+| P0 / 17787~17794 | d1의 1년 계산 후 cfg.top만 3→1로 바꾸면 기존 85.6417%를 반환한다. TF_SS3_PDC를 비우면 127.9988%다. | 기간 캐시에도 전체 cfg가 필요하다. TF_SEEDS, TF_SS_CACHE, MK_D30, TF_SS3_PDC를 같은 버전 경계에서 무효화. |
+| P0 / 11232~11244, 11570~11574, 12244~12247 | d1의 이름을 C→A로 전환하고 시드 캐시를 재생성하면 tfSSFind('세 갈래')가 null이다. 찾지 못하는 저장 따라가기에는 cpCalc가 원금 100, 손익 0, 보유 없음으로 조용히 대체한다. watch도 nick 배열이다. | ID가 있어도 라우트와 저장 연결에 쓰지 않는다. 불변 ID 참조, 구이름 별칭, 저장 버전 마이그레이션이 필요하다. 새 d1 등과 구전략의 대응을 임의 추정하지 말고 검증된 매핑만 이전한다. |
+| P1 / 17748~17756 | mkCard, tfRankSeeds, tfSSRows, idxToDate 등을 뒤에서 다시 선언한다. 같은 script의 선언은 호이스팅되므로 ‘그 줄에 도달하면 교체’하는 구조가 아니다. 새 함수가 뒤쪽 var 초기화보다 먼저 호출될 위험도 생긴다. | 현재 첫 로드 예외는 관찰하지 않았다. 옛 함수의 같은 이름 수정을 해도 제품에는 반영되지 않는 유지보수 위험은 확정. 원래 정의를 교체하고 단일 정의로 정리한 뒤 호출부 회귀. |
+| P1 / 17755~17756 | 날짜 기준은 세션의 첫 호출 때 정해지고 MK_D0에 고정된다. 같은 생성 가격을 다른 날 다시 로드하면 전체 이력 날짜가 함께 이동한다. 열린 탭의 자정에는 갱신되지 않는다. | 이번 어제 기준은 정확히 2026.09.28이었다. 날짜, 데이터 버전, 저장 simStartI의 의미를 묶은 실행 기준 시각이 필요하며 전역 idxToDate 변경이 기존 연구 화면에도 영향을 주는지 별도 회귀. |
+| P0 / 17716~17717, 17983~17988 | d1의 state.lastEval은 9월 24일인데 패널 기준일은 9월 28일. 저장 순위는 이더리움, 비앤비, 비트코인이고 28일 동일 산식 순위는 도지코인, 이더리움, 솔라나다. | D3의 시각 불일치 재현. 보유 평가와 탐색 입력의 시점을 혼합하지 않는다. |
+| P1 / 17730~17743, 17992~17994 | 혼합 진입은 rsi(P,i-1), 상태는 rsi(P,endI)를 쓴다. h1은 사용 지표 58.7841, 표시 판정용 55.4615, 문턱 50이다. 이번 값은 둘 다 미충족이지만 경계에서 서로 다른 결론을 낼 수 있다. | 실행한 마지막 조건 평가 객체를 상태에도 사용. 별도 재계산으로 판정 시점을 바꾸지 않는다. |
+| P1 / 16050, 16053, 16061, 17700 | macro6에는 엔비디아가 포함되지만 범위 설명은 주식을 빼먹는다. every:20을 한 달로 부른다. d3는 순위가 top+1을 넘을 때 교체하므로 항상 1위를 보유하지 않는다. 2024.09.25 기록은 이더리움 1위인데 도지코인 유지다. | M3~M5의 설명 오류는 취향이 아니라 계약 불일치다. 행동값을 유지하고 설명을 실제 정책에 맞춘다. |
+| P1 / 16378 mkFollowSheet | 직접 탐색 세 갈래로 시트를 직접 열면 기존 tfKindBadge('rule') 때문에 ‘규칙’, ‘작성자 세 갈래’가 나온다. | 목록과 상세 이후 실행 직전의 유형과 주체가 되돌아간다. 기존 필드에 실제 kind와 만든 곳을 연결하고 세 유형 진입 회귀. |
+| P2 / 17665~17674 | mkStatsOf의 underwaterDays는 회복된 구간만 갱신하고 마지막 미회복 꼬리를 누락한다. costImpact는 비용 합계인데 기존 rule은 비용 제외 성과와의 차이라 의미도 다르다. | 현재 개요 KPI 넷의 오류로 확대하지 않는다. 이 필드를 소비하는 성과 화면에서는 계산 정의를 먼저 통일. |
+
+**7. 수행한 검증과 다음 인계**
+
+실행 완료: 지정 PNG 직접 평가, C 카드 20개 재렌더, B2 결합 렌더, 모바일 버튼 재현, 11종 체결 재생과 미래 구간 변경 검사, 회계 반례 3건, 원장 중복 청산 반례, 캐시 충돌 2건, 이름 전환 조회 실패, 따라가기 시트 유형 확인. 신규 목록 렌더에서 JavaScript 예외는 0건이었다.
+
+미검증: 실제 참가자 3/10/30초 시험, 제안한 문구와 치수의 수정 렌더, 모든 구저장 상태의 마이그레이션, 즐겨찾기와 따라가기의 1페이지/10페이지 동작 일치, 전체 앱과 7개 언어 회귀, 실거래 체결. 이 항목들은 성공으로 간주하지 않는다. 제품 담당자에게 보고서의 재현값과 함께 인계하며, 이번 작업은 제품 코드 변경이나 최종 출시 승인 보고가 아니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'AGENTS.md' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg --files -g AGENTS.md -g '*r1*'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 75ms:
+ M AGENTS.md
+ M index.html
+ M ux-audit/card3/grid4-1440.png
+ M ux-audit/card3/grid4-pager-1440.png
+?? artifacts/
+?? ux-audit/card3/log-codex-card3.txt
+?? ux-audit/card3/log-codex-hero.txt
+?? ux-audit/detail/fx-mid-1440.png
+?? ux-audit/detail/log-codex-crit.txt
+?? ux-audit/detail/log-codex.txt
+?? ux-audit/footer2/black-spa-390.png
+?? ux-audit/footer2/live-trade-footer-1440.png
+?? ux-audit/footer2/log-codex-bar.txt
+?? ux-audit/footer2/log-codex-crit.txt
+?? ux-audit/footer2/log-codex.txt
+?? ux-audit/footer2/ours-bar-390.png
+?? ux-audit/footer2/r3-gap-1440.png
+?? ux-audit/footer2/r5-hero-next-390.png
+?? ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ux-audit/footer2/video-frame-3s.jpg
+?? ux-audit/footer2/video-frame-5s.jpg
+?? ux-audit/footer2/video-frame-6.2s.jpg
+?? ux-audit/hero/frame3-codex.png
+?? ux-audit/hero/frame3.png
+?? ux-audit/hero/log-agy.txt
+?? ux-audit/hero/log-codex-crit.txt
+?? ux-audit/hero/log-codex.txt
+?? ux-audit/hero/prompt-agy.md
+?? ux-audit/hero/prompt-codex-crit.md
+?? ux-audit/hero/prompt-codex.md
+?? ux-audit/logs/
+?? ux-audit/research/log-codex-verify.txt
+?? ux-audit/review/
+?? ux-audit/spark/log-codex.txt
+
+ succeeded in 62ms:
+AGENTS.md
+artifacts\teth-redesign\r1-name-C.png
+artifacts\teth-redesign\r1-name-B.png
+artifacts\teth-redesign\r1-name-A.png
+artifacts\teth-redesign\r1-main.png
+artifacts\teth-redesign\r1-main-top.png
+artifacts\teth-redesign\r1-main-full.png
+artifacts\teth-redesign\r1-main-390.png
+artifacts\teth-redesign\r1-main-1280.png
+artifacts\teth-redesign\r1-id-B2.png
+artifacts\teth-redesign\r1-id-B1.png
+artifacts\teth-redesign\r1-id-A.png
+artifacts\teth-redesign\r1-detail-390.png
+artifacts\teth-redesign\r1-detail-3.png
+artifacts\teth-redesign\r1-detail-3-full.png
+artifacts\teth-redesign\r1-detail-2.png
+artifacts\teth-redesign\r1-detail-2-full.png
+artifacts\teth-redesign\r1-detail-1.png
+artifacts\teth-redesign\r1-detail-1-full.png
+artifacts\teth-redesign\r1-cta-P2.png
+artifacts\teth-redesign\r1-cta-P1.png
+artifacts\teth-redesign\r1-cta-P0.png
+artifacts\teth-redesign\r1-cross-codex-brief.md
+artifacts\teth-redesign\r1-cross-claude.md
+artifacts\teth-redesign\r1-codex.md
+artifacts\teth-redesign\r1-codex-brief.md
+artifacts\teth-redesign\r1-claude.md
+artifacts\teth-redesign\log-r1x.txt
+artifacts\teth-redesign\log-r1.txt
+
+ succeeded in 286ms:
+# TETH 프로젝트 작업 지침
+
+이 파일은 이 저장소의 에이전트용 기준 문서다. 작업을 시작할 때 실제 코드와 함께 읽고, 구조·동작·실행 방법이 바뀌면 같은 변경 안에서 이 문서도 갱신한다.
+
+## 작업 원칙
+
+1. 현재 코드와 실제 브라우저 동작을 최우선 사실로 삼는다. 문서가 코드와 다르면 코드를 확인한 뒤 문서를 즉시 바로잡는다.
+2. 기능 변경과 문서 변경을 분리하지 않는다. 사용자 흐름, 파일 역할, 설정, 외부 의존성, 실행 또는 검증 방법이 바뀌면 관련 문서를 같은 작업에서 수정한다.
+3. 저장소에는 현재 상태를 설명하는 문서만 둔다. 더 이상 유효하지 않은 문서, 중복 문서, 폐기된 설계안과 예전 사용법은 새 이름으로 보관하지 말고 참조 링크를 정리한 뒤 삭제한다. 과거 내용은 Git 이력으로 확인한다.
+4. 미래 기능이나 화면의 홍보 문구를 이미 구현된 기능처럼 문서화하지 않는다. 확인할 수 없는 내용은 추측하지 말고 `미구현`, `데모`, `확인 필요`로 표시한다.
+5. 사용자 변경분을 보존한다. 작업 전후에 `git status --short`와 diff를 확인하고, 요청 범위 밖의 변경은 되돌리거나 덮어쓰지 않는다.
+6. 셸 명령은 전역 지침인 `C:\Users\hyun1\.codex\RTK.md`에 따라 `rtk`를 앞에 붙여 실행한다.
+7. 이 저장소는 claude, codex, agy 세 대화형 세션이 함께 작업한다. 작업 범위가 겹치거나 다른 세션의 결과에 의견이 있으면 추측하지 말고 아래 우체통으로 주고받는다.
+
+## 에이전트 간 협업 (우체통)
+
+세 세션은 서로의 대화를 볼 수 없고 알림도 받지 못한다. `.mailbox/`는 그 사이를 잇는 유일한 통로다. 메시지는 YAML 머리말이 붙은 Markdown 파일이므로 스크립트 없이 직접 읽어도 된다.
+
+```
+.mailbox/inbox/<받는이>/<id>.md     아직 처리하지 않은 메시지
+.mailbox/archive/<받는이>/<id>.md   처리를 마친 메시지
+```
+
+참여자 이름은 `claude`, `codex`, `agy` 셋뿐이다. 자기 자신에게는 보내지 않는다.
+
+### 명령
+
+저장소 루트에서 실행한다. `<나>`에는 자신의 이름을 넣는다.
+
+```
+.\.mailbox\mail.cmd check <나>
+.\.mailbox\mail.cmd read  <나> [<id>]
+.\.mailbox\mail.cmd send  <나> <상대|all> "<제목>" "<본문>" [-Type <종류>] [-ReplyTo <id>]
+.\.mailbox\mail.cmd done  <나> <id>
+.\.mailbox\mail.cmd log   [건수]
+```
+
+본문이 길면 파일에 쓴 뒤 `"@경로"` 형태로 넘긴다. 예: `.\.mailbox\mail.cmd send codex claude "백테스트 지표 검토" "@review.md" -Type review`
+
+### 매 턴 지켜야 할 순서
+
+1. 턴을 시작하면 먼저 `check <나>`를 실행한다. 알림이 없으므로 이 확인을 건너뛰면 상대의 요청은 영원히 읽히지 않는다.
+2. `question`, `claim`, `handoff`는 그 턴 안에서 처리한다. 질문에는 `-Type answer -ReplyTo <원본 id>`로 답장한 뒤 `done` 처리한다.
+3. 처리하지 않은 메시지를 `done`으로 치우지 않는다. 아직 답할 수 없으면 그 이유를 답장으로 보내고 인박스에 남겨 둔다.
+4. 작업을 마치면 결과와 미검증 항목을 관련된 상대에게 보낸다.
+
+### 반드시 보내야 하는 경우
+
+- `index.html`을 편집하기 전. 447KB 단일 파일이라 두 세션이 동시에 고치면 충돌이 확실하다. `-Type claim`으로 `all`에 건드릴 영역을 알리고, 끝나면 `-Type release`를 보낸다.
+- `site-config.js`의 공용 값(요금제, 스토어 URL, Zendesk 키)을 바꿀 때.
+- 다른 세션의 결과에서 문제를 발견했을 때. `-Type review`로 근거와 함께 보낸다.
+- 구조, 외부 의존성, 다국어 키 체계처럼 되돌리기 어려운 결정을 하기 전. `-Type proposal`로 먼저 의견을 구한다.
+- 검증하지 못한 항목을 남긴 채 작업을 넘길 때. `-Type handoff`로 무엇을 확인하지 못했는지 적는다.
+
+### 메시지 종류
+
+`note` 공유 · `question` 질문 · `answer` 답변 · `proposal` 제안 · `review` 지적 · `claim` 편집 영역 선점 · `release` 선점 해제 · `handoff` 인계
+
+### 작성 규칙
+
+- 근거를 담는다. 파일과 줄 번호, 실행한 명령과 출력, 재현 절차를 적는다. "좋아 보인다", "문제 없어 보인다" 같은 인상만 적은 메시지는 보내지 않는다.
+- 반대할 때는 대안을 함께 제시한다.
+- 받은 `claim`을 무시하고 같은 영역을 고치지 않는다. 먼저 손대야 하면 `question`으로 협의한다.
+- 상대의 주장을 검증 없이 사실로 받아들이지 않는다. 코드와 실제 동작이 언제나 우선이다.
+- 메시지는 저장소에 커밋하지 않는다. 결론은 코드와 이 문서에 남기고, 우체통은 그 과정을 위한 임시 통로로만 쓴다.
+
+### 한계와 주의
+
+- 알림이 없다. 보낸 메시지는 상대가 다음 턴을 시작할 때 읽는다. 즉시 답이 필요하면 사용자에게 직접 알린다.
+- `claim`은 잠금이 아니라 합의 장치다. 강제되지 않으므로 편집 전 `check`로 상대의 선점을 반드시 확인한다.
+- `.mailbox/mail.ps1`을 수정할 때는 UTF-8 BOM을 유지한다. Windows PowerShell 5.1은 BOM이 없는 스크립트를 ANSI로 읽어 한글이 깨지고 구문 오류가 난다.
+
+## 현재 프로젝트 개요
+
+TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 웹 프로토타입이다. 사용자가 자연어로 전략 아이디어를 입력하고, 전략을 구조화하며, 브라우저에서 생성한 데모 데이터로 리서치와 백테스트 결과를 확인하고, 거래소 연결 및 라이브 운용 화면까지 체험하는 흐름을 제공한다.
+
+현재 구현은 바닐라 HTML, CSS, JavaScript로만 구성된 클라이언트 측 데모다. 별도의 백엔드, 데이터베이스, 실제 AI 모델 호출, 실거래 API, 사용자 계정 서버, 빌드 파이프라인은 이 저장소에 없다. 백테스트·인증·거래소 연결·라이브 거래·에이전트 협업 화면은 브라우저 안에서 시뮬레이션된다. 정책 페이지에 적힌 보안 또는 데이터 처리 설명도 이 저장소에서 구현 여부를 증명하는 것은 아니다.
+
+주요 사용자 경험은 다음과 같다.
+
+- 대화형 전략 생성과 조건 보완
+- 결정론적 데모 시세를 이용한 백테스트, 차트, 성과 지표
+- 전략 설계·퀀트·리스크·검증 역할을 표현한 리서치 진행 화면과 보고서
+- 홀드아웃, 민감도, 스트레스 등 검증 결과의 데모 표현
+- 거래소 연결, 실행 확인, 일시 정지와 종료를 포함한 모의 라이브 운용
+- 로그인·회원가입·프로필·설정·피드백의 클라이언트 데모
+- 한국어, 영어, 일본어, 중국어 간체·번체, 스페인어, 프랑스어 UI
+- 통화 표시, 소개, 요금제, 앱 다운로드, 정책·안전 정보, 고객지원 위젯
+
+## 파일과 책임
+
+| 경로 | 현재 역할 |
+| --- | --- |
+| `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+| `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+| `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
+| `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+| `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+| `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+| `ux/review/CODEX_VERIFY.mjs` | 외부 CDP 드라이버를 사용하는 제품 회귀 검증. 11 프리셋과 활성화·따라가기·터미널 여정을 검사하며 localhost:8781의 목업 저장 상태를 교체한다. |
+| `ux/shots/codex-fix/` | 위 검증의 1440px·390px 스크린샷과 `matrix.json`, `journeys.json`, `extra.json` 증거. |
+| `ux-audit/hero/mock-codex.html`, `NOTE-codex.md`, `mock-codex-*.png`, `frame3-codex.png` | 실제 제품이 먼저 보이는 Codex 히어로 경쟁 시안, 구현 노트, 1440px·390px 렌더와 영상 3초 참고 프레임. 한국어 전용 독립 데모로, 포트 8793에서 확인하며 제품 본문과 인증 흐름은 변경하지 않는다. |
+| `ux-audit/hero/CRIT-codex.md` | claude와 light 히어로 시안의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 8개 항목 점수, 근거, 단일 채택 추천과 필수 수정 조건을 기록하며 구현 완료 명세는 아니다. |
+| `ux-audit/research/AI_MODELS_TRADING.md`, `ux-audit/research/CODEX_VERIFY_MODELS.md` | 거래 판단과 Pine Script 작성 모델의 Claude 조사 초안 및 Codex 항목별 검증. 공식 출처 대조, 미확정 수치, 호출 비용과 조합 수정안을 기록한다. 실제 모델 성능 실험이나 제품 구현 완료 명세가 아니다. |
+| `site-config.js` | 자주 바뀌는 공용 설정의 단일 진실 공급원. 앱 진입 경로, iOS·Android 스토어 URL, Zendesk 키, 요금제 데이터를 관리한다. |
+| `ux-audit/card/mock-codex.html`, `ux-audit/card/NOTE-codex.md`, `ux-audit/card/mock-codex-d1440.png`, `ux-audit/card/mock-codex-m390.png` | 판단 카드 경쟁의 Codex 트레이더 프로필 시안, 6줄 구현 노트와 1440×900·390×844 렌더. 포트 8803의 한국어 전용 독립 HTML이며 본문 앱에는 적용하지 않았다. |
+| `ux-audit/card/CRIT-codex.md` | claude와 quote 판단 카드의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+| `ux-audit/ai/mock-codex.html`, `ux-audit/ai/NOTE-codex.md`, `ux-audit/ai/mock-codex-d1440.png`, `ux-audit/ai/mock-codex-m390.png` | “TETH가 쓰는 AI” 경쟁의 Codex 상황별 묶음 시안과 8줄 노트, 1440×900·390×844 CDP 렌더. 뉴스 확인·시장 살피기·판단 정리로 9개 AI를 한 번씩 배치한다. 포트 8813의 한국어 독립 HTML이며 Google Fonts와 `assets/ai/` 아이콘을 사용한다. 실제 AI 연동이나 본문 적용은 없으며 외부 AGY 검토는 인증·접근 오류로 미완료다. |
+| `ux-audit/ai/CRIT-codex.md` | claude와 grid AI 섹션의 데스크톱 및 모바일 PNG를 직접 확인한 Codex 평가. 6개 항목 점수, 단일 채택 추천과 필수 수정 조건을 기록하며 제품 코드에는 적용하지 않았다. |
+| `ux-audit/card2/mock-codex.html`, `ux-audit/card2/NOTE-codex.md`, `ux-audit/card2/mock-codex-d1440.png`, `ux-audit/card2/mock-codex-m390.png`, `ux-audit/card2/mock-codex-tip.png` | 장부형 2카드 Codex 경쟁 시안과 8줄 노트, 1440×900 기본·용어 설명 렌더 및 390×844 뷰포트에서 확인한 390×1052 전체 모바일 렌더. 포트 8823의 한국어 독립 HTML로 Google Fonts와 기존 아바타·거래소 자산을 사용한다. 용어 호버·탭·키보드·ARIA 연결을 CDP로 검증했으며 AGY 외부 검토는 인증·접근 오류로 미완료다. 본문 앱에는 적용하지 않았다. |
+| `ux-audit/card2/CRIT-codex.md` | claude와 stat의 기본, 모바일, 용어 설명 PNG 6장을 직접 확인한 Codex 평가. 6개 항목 점수와 단일 채택 추천을 담고 닫힘 처리는 HTML로 확인했다. 제품 코드에는 적용하지 않았다. |
+| `policies/crs.html`, `policies/teth-crs.pdf` | TETH AI Customer Relationship Summary(영어). HTML 이 원본이고 PDF 는 헤드리스 Chrome Page.printToPDF 로 생성한다(2페이지, table 레이아웃). 푸터 상단 바의 고객 관계 요약 링크가 이 PDF 를 연다. 요금(Direct, Partner), 파트너 거래소 제휴 유인, AI 모델 비용 유인, AI 에이전트 한계를 Form CRS 구조로 적었다. |
+| `ux-audit/footer2/` | 푸터 상단 바 시안 경쟁 기록. BRIEF, icons.js(SNS 글리프), mock-rail, mock-band, mock-codex 와 PNG, NOTE, CRIT-lead, CRIT-codex, DECISION(rail 채택), final-*.png 실제 반영 스크린샷. |
+| `site-footer.js` | 사이트 푸터의 단일 출처. `TETH_FOOTER.html({spa:true})`는 SPA용(onclick 액션), `mount(el,{base:'../'})`는 about, policies, download 독립 페이지용이며 CSS는 `#teth-footer-css`로 주입한다. 상단 바(고객 관계 요약 PDF 링크, 팔로우하세요 + X, Instagram, YouTube, Telegram 단색 글리프, 링크는 site-config.js 의 social, 아래 hairline), 링크 4칼럼(제품, 회사, 도움, 약관), 오른쪽 형식체 문단, Powered by Bitget, SVG 거대 워드마크로 구성된다. 글자는 전부 흰색 500(제목 700) 16px 로 통일. 배경은 검정이 기본이고 메인 홈(채팅 랜딩)만 .gft-lime 라임(gftPlace 가 모드별 토글). 상단 바 치수는 ux-audit/footer2/MEASURE-rh.md 의 로빈후드 실측값. 모바일(컨테이너 600px 이하)은 로빈후드 모바일 순서: 요약 링크, 구분선(.gft-rule), 메뉴 한 칼럼씩 세로, 팔로우하세요, 문단, Powered by, 워드마크. index.html의 `gftPlace()`가 PC 푸터 페이지에서 body.gft-doc 문서 스크롤로 전환해 사이드바 아래 전체 폭에 배치한다. |
+| `index.html` 의 `MK_CAT`, `MK_PX_CFG`, `mkPx`, `assets/avatars/t01~t20.svg`, `ux-audit/strat20/` | 전략 찾기 목록의 20종 카탈로그(시드 데이터). 이름, 한줄소개, 거래소, 규칙값은 `MK_CAT` 에서만 관리하고 성과는 적어 넣지 않는다(자산별 가격 `mkPx` 에 엔진을 돌린 결과). 200칸은 20종을 정렬한 뒤 10페이지로 반복. `runBacktest` 는 `params.px` 로 자산 가격을 고른다. 결정 기록과 재생성 도구는 `ux-audit/strat20/DECISION.md`, `tools/`. |
+| `help-widget.js` | 모든 페이지에서 재사용하는 다국어 고객지원 플로팅 버튼. Zendesk 키가 없으면 준비 안내를 표시한다. |
+| `ux-audit/footer/mock-codex.html`, `ux-audit/footer/NOTE-codex.md`, `ux-audit/footer/mock-codex-lime-d1440.png`, `ux-audit/footer/mock-codex-dark-d1440.png`, `ux-audit/footer/mock-codex-lime-m390.png`, `ux-audit/footer/mock-codex-dark-m390.png` | Codex 푸터 경쟁 시안, 8줄 노트와 라임 및 다크 4장 렌더. 포트 8833의 한국어 독립 HTML로 `?bg=lime` 또는 `?bg=dark`를 사용한다. 외부 폰트 및 라이브러리 없이 SVG textLength로 워드마크 폭을 맞추며 데스크톱 1440×900, 모바일 390×987 전체 렌더를 확인했다. 본문 앱에는 적용하지 않았다. 실제 페이지 링크 4개 외 메뉴는 안내 데모이며 제공된 운영 문구의 사실 검증과 AGY 외부 검토는 미완료다. |
+| `ux-audit/footer/CRIT-codex.md` | claude와 bleed 푸터의 PNG 8장을 직접 확인한 Codex 평가. 7개 항목 점수, 배경 판정, 단일 채택 추천과 필수 수정 2개를 기록한다. 구현 현실성은 HTML 소스 검토이며 사이드바 폭 변화의 브라우저 검증과 제품 적용은 하지 않았다. |
+| `theme.js` | 다크 테마만 강제하고 `tethTheme` 값을 저장한다. 현재 테마 선택 기능은 없다. |
+| `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
+| `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
+| `policies/index.html` | 해시 라우팅으로 개요, 개인정보처리방침, 서비스 약관, 기술·안전 설명, FAQ를 보여 준다. 법률·정책 문구 변경 시 시행일과 실제 서비스 상태를 별도로 검증해야 한다. |
+| `assets/` | 로고, 소형 로고, 파비콘 PNG 원본을 보관한다. |
+| `.nojekyll` | GitHub Pages에서 Jekyll 처리를 비활성화한다. |
+| `.mailbox/mail.ps1` | claude·codex·agy 세션 간 우체통 구현. UTF-8 BOM으로 저장해야 한다. |
+| `.mailbox/mail.cmd` | 위 스크립트의 실행 래퍼. PowerShell 실행 정책에 막히지 않도록 `-ExecutionPolicy Bypass`로 호출한다. |
+| `.mailbox/inbox/`, `.mailbox/archive/` | 주고받은 메시지 파일. Git에서 제외되며 제품 소스가 아니다. |
+| `.gitignore` | 로컬 전용 `.claude/` 설정과 우체통 메시지를 제외한다. |
+| `.claude/launch.json` | Git에서 제외된 로컬 실행 설정이다. `http-server`를 8788 포트에서 실행한다. 제품 소스나 공유 문서로 간주하지 않는다. |
+
+새 파일이나 디렉터리를 추가하거나 역할을 바꾸면 위 표를 즉시 수정한다. 삭제된 경로는 표에서도 제거한다.
+
+## 런타임과 외부 의존성
+
+- 패키지 매니저, 번들러, 프레임워크, 설치 단계가 없다.
+- HTML 파일을 `file://`로 직접 열지 말고 저장소 루트에서 HTTP 서버로 제공한다.
+- 로컬 실행: `rtk npx -y http-server -p 8788 -c-1 .`
+- 기본 확인 주소: `http://localhost:8788/`
+- Google Fonts를 네트워크에서 불러온다.
+- 다운로드 QR 코드는 `api.qrserver.com`에 스토어 URL을 전달해 생성한다.
+- `site-config.js`에 `zendeskKey`가 설정된 경우에만 Zendesk 스니펫을 동적으로 불러온다.
+- 언어와 통화 등 일부 UI 선택은 `localStorage`에 저장한다. 영구 서버 상태로 문서화하지 않는다.
+
+외부 URL, 스토어 ID, 가격, 지원 이메일, 정책 시행일은 변경되기 쉬운 운영 값이다. 관련 작업에서는 코드 전체를 검색해 중복 값과 오래된 문구가 없는지 확인한다. 비밀 값이나 실제 거래소 키를 저장소에 넣지 않는다.
+
+## 구현 규칙
+
+- 명시적인 리팩터링 요청이 없다면 기존의 정적 파일 구조와 바닐라 JavaScript 방식을 유지한다.
+- `index.html`의 DOM ID, 전역 상태, 전역 함수는 서로 강하게 연결되어 있다. 이름이나 화면 구조를 바꾸기 전에 정의와 모든 호출부를 검색한다.
+- 공용 가격, 스토어 URL, Zendesk 설정은 페이지에 복제하지 않고 `site-config.js`에서 관리한다.
+- 사용자에게 보이는 문구를 추가하거나 바꾸면 지원하는 7개 언어의 번역 키와 `document.documentElement.lang` 적용을 함께 확인한다. 고객지원 문구는 `help-widget.js`에도 별도 번역 배열이 있다.
+- 다크 단일 테마가 현재 제품 규칙이다. 라이트 테마나 테마 토글을 잔존 코드만 보고 복원하지 않는다.
+- 상대 경로는 페이지 깊이에 따라 달라진다. 루트는 `./`, 하위 페이지는 `../` 기준 링크와 자산 경로를 각각 검증한다.
+- 새 창 링크에는 `rel="noopener noreferrer"`를 유지한다.
+- 모바일 레이아웃, 키보드 포커스, ARIA 레이블, `prefers-reduced-motion` 처리를 기능 변경과 함께 보존한다.
+- 금융 수치와 자동매매 결과는 데모임을 명확히 유지하고, 투자 수익을 보장하는 표현을 추가하지 않는다.
+- 정책·개인정보·보안 문구는 일반 UI 카피처럼 임의 수정하지 않는다. 요청된 변경의 근거와 실제 구현을 확인하고 시행일이 있으면 함께 갱신한다.
+
+## 문서 최신화 및 레거시 제거 절차
+
+문서 작업은 다음 순서로 수행한다.
+
+1. `rtk rg --files`와 `rtk git status --short`로 현재 구조와 사용자 변경분을 확인한다.
+2. 구현과 문서를 함께 검색해 현재 동작, 설정, 명칭, 링크를 교차 검증한다.
+3. 변경으로 영향을 받는 설명을 같은 작업 안에서 갱신한다. 최소한 이 파일의 프로젝트 개요, 파일 표, 실행 방법, 외부 의존성, 검증 절차를 확인한다.
+4. 동일한 내용을 설명하는 문서가 여러 개면 하나의 현재 문서로 통합하고 나머지는 삭제한다. `old`, `legacy`, `backup`, 날짜 접미사를 붙인 문서 사본을 저장소 안에 만들지 않는다.
+5. 삭제한 문서를 가리키는 링크, 목차, 스크립트, 에이전트 지침도 함께 제거하거나 새 기준 문서로 연결한다.
+6. 문서의 명령, 경로, URL을 실제로 확인하고 `rtk git diff --check`로 형식 오류를 검사한다.
+
+레거시 여부는 단순히 오래되었다는 이유가 아니라 현재 구현과 목적에 더 이상 대응하지 않는지로 판단한다. 법률상 보존해야 하는 정책 이력, 사용자가 명시적으로 보관을 요청한 기록, 아직 참조되는 마이그레이션 자료는 임의 삭제하지 않는다. 보존이 필요한 경우 현재 문서와 명확히 구분하고 보존 이유를 적는다.
+
+새 문서를 만들기 전에 기존 문서에 통합할 수 있는지 먼저 판단한다. `README.md`가 추후 추가되면 사용자용 설치·사용 안내에 집중하고, 에이전트 작업 규칙과 구조 설명은 이 파일을 기준으로 하여 중복을 최소화한다.
+
+## 검증 기준
+
+공용 린터·빌드 검증은 없다. 병합 UX 회귀 검증은 정적 서버 8781과 Chrome CDP 9333을 준비한 뒤 `rtk proxy node ux/review/CODEX_VERIFY.mjs all`로 실행한다. 드라이버 경로는 `CDP_DRIVER`, 증거 저장 경로는 `CODEX_QA_OUT` 환경 변수로 바꿀 수 있다. 자세한 실행 및 범위는 `ux/review/CODEX_FIX_REPORT.md`를 따른다. 변경 범위에 맞게 다음도 확인한다.
+
+- `rtk git diff --check`
+- 로컬 HTTP 서버에서 `/`, `/about/`, `/download/`, `/policies/`가 오류 없이 열리는지 확인
+- 정책 페이지의 `#overview`, `#privacy`, `#terms`, `#technologies`, `#faq` 라우팅과 목차 이동 확인
+- 데스크톱과 약 390px 모바일 폭에서 레이아웃, 메뉴, 모달, 고객지원 버튼 겹침 확인
+- 브라우저 콘솔의 JavaScript 오류와 깨진 자산·링크 확인
+- 앱의 전략 생성 → 리서치/백테스트 → 보고서 → 연결/실행 흐름 확인
+- 로그인/가입, 언어, 통화, 피드백, 프로필 및 세션 메뉴의 주요 상호작용 확인
+- 소개 페이지 요금제가 `site-config.js`와 일치하는지, 다운로드 페이지의 두 스토어 링크와 QR이 같은 URL을 쓰는지 확인
+
+네트워크 의존 서비스가 없어 확인하지 못한 항목은 성공으로 간주하지 말고 최종 보고에 미검증 사유를 적는다.
+
+## 완료 조건
+
+병합 UX의 현재 상태 규칙: 미활성 뷰는 `tfDerive().primaryCTA`의 활성화 액션을 우선하며 API와 카드 모두 없는 경우에만 활성화 선택 카드를 보인다. 연결 완료는 로컬 저장을 즉시 확정한다. 마켓의 기본 검증 기간은 전체다. 터미널의 시세는 USDT, 규칙 전략 예산·손익은 원화다. 따라가기 계정은 `cpCalc`의 USDT 원장을 별도 행으로 표시하고, 긴급 정지는 규칙 전략 중지와 따라가기 계정 정산을 모두 처리한다. preview의 6개 예시는 소유 전략 수에 포함하지 않는다.
+
+작업은 코드만 동작한다고 끝난 것이 아니다. 구현, 사용자 문구, 공용 설정, 정책 문구, 링크, 이 기준 문서가 서로 일치하고, 대체된 레거시 문서와 그 참조가 제거되며, 수행한 검증과 수행하지 못한 검증이 최종 보고에 명확히 기록되어야 완료다.
+
+여기에 더해 자신의 인박스에 처리하지 않은 메시지가 없어야 하고, 선점한 `claim`은 `release`로 해제되어 있어야 하며, 다른 세션이 이어받아야 할 미검증 항목은 `handoff`로 전달되어 있어야 한다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n \"function mkIdent|function mkGlyph|function mk.*Icon|function mkHybrid|rsi\\(P|id:'d4'|id:'h3'|mkIdent|B1|RD_ID|MK_ID\" index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 61ms:
+3:<style>:root{--logo-uri:url("data:image/png;base64,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")}.brand-bg{background:var(--logo-uri) center/contain no-repeat;display:block}</style>
+5767:      var wasLow = rsi(PRICE,i-1) < rsiTh;
+10311:  {id:'d4',name:'BTC 평균회귀',ex:'okx',asset:'비트코인',sym:'BTC/USDT',mkt:'현물',tv:'BINANCE:BTCUSDT',cap:28000000,ver:'v5.0',status:'live',
+13499:      var rp=rsi(PRICE,i-1), wasLow=rp<p.rsiTh, bounce=PRICE[i]>PRICE[i-1]*1.005;
+13520:  var li=endI, lr=rsi(PRICE,li), ls20=sma(PRICE,20,li), ls60=sma(PRICE,60,li);
+16056:  {id:'d4',kind:'agent',mkt:'stock',nA:'기술주 셋 돌려 들기',nB:'TETH 기술순환',nC:'돌림',one:'미국 기술주 8종에서 흐름이 좋은 셋을 골라 나눠 듭니다.',ex:'binance',av:'t10',fw:593,uni:'tech8',look:40,top:3,gate:0.4,every:5,trail:12,volT:0.02,minS:0.4,startI:300},
+16057:  {id:'h3',kind:'mix',mkt:'index',nA:'지수와 금 골라 짧게',nB:'TETH 지수선별',nC:'이음',one:'나스닥, S&P 500, 금 중 AI가 고르고 규칙이 짧게 거래합니다.',ex:'binance',av:'t11',fw:705,uni:'idx3',every:20,look:60,rsiTh:50,tp:5,sl:-3,gate:0.34,startI:61},
+16126:  var rsiPrev=rsi(PRICE,i-1), bounce=PRICE[i]/PRICE[i-1]-1, s20=sma(PRICE,20,i), s60=sma(PRICE,60,i);
+16574:    var rp=rsi(PRICE,i-1), chg=(PRICE[i]/PRICE[i-1]-1)*100;
+16641:  var p=s.p, e=p.endI, rp=rsi(PRICE,e-1), rn=rsi(PRICE,e), chg=(PRICE[e]/PRICE[e-1]-1)*100;
+17722:function mkHybridRun(c){
+17732:    if(!p){ if(pick!==null){ var P=PX[J[pick]], rv=rsi(P,i-1);
+17744:    rsi:Pn?rsi(Pn,endI):null,bounce:Pn?(Pn[endI]/Pn[endI-1]-1)*100:null,lastEval:startI+Math.floor((endI-startI)/c.every)*c.every,nextEval:startI+(Math.floor((endI-startI)/c.every)+1)*c.every};
+17751:var MK_VAR=window.MK_VAR||{name:'C',id:'B1',cta:'P1'}; /* 비교 렌더용 변형 스위치 */
+17801:/* B1: 전략의 고정 값으로 그리는 도식. 상태가 바뀌어도 그림은 같다 */
+17802:function mkGlyphB1(s,z){
+17821:function mkGlyphB2(s,z){
+17826:function mkGlyph(s,z){
+17830:  return MK_VAR.id==='B2'?mkGlyphB2(s,z):mkGlyphB1(s,z);
+17940:    var rv=rsi(P,t.entry-1), bo=(P[t.entry]/P[t.entry-1]-1)*100, chg=(P[t.exit]/P[t.entry]-1)*100;
+
+codex
+B1은 유형 차이를 드러내지만, 맞물림과 거름의 도식은 거의 같습니다. 제 이전 평가도 고정 도식이라는 이유로 B1을 탈락시킨 부분은 철회해야 합니다. 다만 Claude의 최근 판단 4건 유지안과 지표 시점을 다음 입력으로 바꾸는 안은 원래 문제를 해결했는지 별도 근거가 필요합니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "$lines = Get-Content -LiteralPath '"'index.html' -Encoding UTF8; foreach ("'$span in @(@(16041,16063),@(17722,17745),@(17801,17825),@(17984,18002))) { for ($n = $span[0]; $n -le $span[1]; $n++) { '"'{0}: {1}' -f "'$n, $lines[$n-1] } }; Get-FileHash -LiteralPath '"'index.html' -Algorithm SHA256\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff --stat' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg --files artifacts/teth-redesign' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 109ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+ AGENTS.md                           |   2 +
+ index.html                          | 625 +++++++++++++++++++++++++++++++++---
+ ux-audit/card3/grid4-1440.png       | Bin 134402 -> 135457 bytes
+ ux-audit/card3/grid4-pager-1440.png | Bin 129860 -> 133366 bytes
+ 4 files changed, 575 insertions(+), 52 deletions(-)
+
+ succeeded in 100ms:
+artifacts/teth-redesign\r1-name-C.png
+artifacts/teth-redesign\r1-name-B.png
+artifacts/teth-redesign\r1-name-A.png
+artifacts/teth-redesign\r1-main.png
+artifacts/teth-redesign\r1-main-top.png
+artifacts/teth-redesign\r1-main-full.png
+artifacts/teth-redesign\r1-main-390.png
+artifacts/teth-redesign\r1-main-1280.png
+artifacts/teth-redesign\r1-id-B2.png
+artifacts/teth-redesign\r1-id-B1.png
+artifacts/teth-redesign\r1-id-A.png
+artifacts/teth-redesign\r1-detail-390.png
+artifacts/teth-redesign\r1-detail-3.png
+artifacts/teth-redesign\r1-detail-3-full.png
+artifacts/teth-redesign\r1-detail-2.png
+artifacts/teth-redesign\r1-detail-2-full.png
+artifacts/teth-redesign\r1-detail-1.png
+artifacts/teth-redesign\r1-detail-1-full.png
+artifacts/teth-redesign\r1-cta-P2.png
+artifacts/teth-redesign\r1-cta-P1.png
+artifacts/teth-redesign\r1-cta-P0.png
+artifacts/teth-redesign\r1-cross-codex-brief.md
+artifacts/teth-redesign\r1-cross-claude.md
+artifacts/teth-redesign\r1-codex.md
+artifacts/teth-redesign\r1-codex-brief.md
+artifacts/teth-redesign\r1-claude.md
+artifacts/teth-redesign\r0-cross-codex.md
+artifacts/teth-redesign\r0-cross-codex-brief.md
+artifacts/teth-redesign\r0-cross-claude.md
+artifacts/teth-redesign\r0-codex.md
+artifacts/teth-redesign\r0-codex-brief.md
+artifacts/teth-redesign\r0-claude.md
+artifacts/teth-redesign\log-r1x.txt
+artifacts/teth-redesign\log-r1.txt
+artifacts/teth-redesign\log-r0x.txt
+artifacts/teth-redesign\log-r0.txt
+artifacts/teth-redesign\baseline-main.png
+artifacts/teth-redesign\baseline-main-top.png
+artifacts/teth-redesign\baseline-main-full.png
+artifacts/teth-redesign\baseline-main-390.png
+artifacts/teth-redesign\baseline-main-1280.png
+artifacts/teth-redesign\baseline-detail.png
+artifacts/teth-redesign\baseline-detail-full.png
+artifacts/teth-redesign\baseline-detail-390.png
+
+ exited 1 in 277ms:
+At line:1 char:67
++ ... t-Content -LiteralPath 'index.html' -Encoding UTF8; foreach ( in @(@( ...
++                                                                  ~
+Missing variable name after foreach.
+At line:1 char:133
++ ... @(16041,16063),@(17722,17745),@(17801,17825),@(17984,18002))) { for ( ...
++                                                                 ~
+Unexpected token ')' in expression or statement.
+At line:1 char:162
++ ... ),@(17801,17825),@(17984,18002))) { for ( = [0];  -le [1]; ++) { '{0} ...
++                                                                  ~
+Missing expression after unary operator '++'.
+At line:1 char:183
++ ... 984,18002))) { for ( = [0];  -le [1]; ++) { '{0}: {1}' -f , [-1] } }; ...
++                                                                  ~
+Missing type name after '['.
+At line:1 char:181
++ ... 17984,18002))) { for ( = [0];  -le [1]; ++) { '{0}: {1}' -f , [-1] }  ...
++                                                                  ~
+Missing expression after unary operator ','.
+At line:1 char:182
++ ... ,18002))) { for ( = [0];  -le [1]; ++) { '{0}: {1}' -f , [-1] } }; Ge ...
++                                                              ~~~~
+Unexpected token '[-1]' in expression or statement.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingVariableNameAfterForeach
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "`$lines = Get-Content -LiteralPath '"'index.html' -Encoding UTF8; foreach ("'`$span in @(@(16041,16063),@(17722,17745),@(17801,17825),@(17984,18002))) { for (`$n = `$span[0]; `$n -le `$span[1]; `$n++) { '"'{0}: {1}' -f "'`$n, `$lines[`$n-1] } }; Get-FileHash -LiteralPath '"'index.html' -Algorithm SHA256\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 504ms:
+16041:   tech8:{label:'미국 기술주 8종',list:['엔비디아','테슬라','애플','마이크로소프트','아마존','메타','알파벳','에이엠디']},
+16042:   macro6:{label:'지수, 금, 가상자산 6종',list:['나스닥','S&P 500','금','비트코인','이더리움','엔비디아']},
+16043:   big3:{label:'가상자산 대표 3종',list:['비트코인','이더리움','솔라나']},
+16044:   idx3:{label:'지수와 금 3종',list:['나스닥','S&P 500','금']}
+16045: };
+16046: var MK_CAT=[
+16047:   {id:'d1',kind:'agent',mkt:'crypto',nA:'강한 코인 셋 고르기',nB:'TETH 강도탐색',nC:'세 갈래',one:'가상자산 8종을 닷새마다 비교해 강한 셋을 나눠 듭니다.',ex:'binance',av:'t01',fw:1284,uni:'coin8',look:20,top:3,gate:0.4,every:5,trail:12,volT:0.03,minS:0.4,startI:400},
+16048:   {id:'r1',kind:'rule',mkt:'crypto',nA:'비트코인 큰 하락 뒤 반등',nB:'TETH 반등실행 BTC',nC:'되짚기',one:'비트코인이 크게 밀린 뒤 반등을 확인하면 삽니다.',ex:'okx',av:'t02',fw:911,asset:'비트코인',sl:-8,tp:20,rsiTh:26,tf:0,startI:400},
+16049:   {id:'h1',kind:'mix',mkt:'stock',nA:'고른 기술주 눌림 매수',nB:'TETH 선별반등',nC:'맞물림',one:'AI가 기술주 하나를 고르면, 눌렸다 반등할 때 규칙이 삽니다.',ex:'bitget',av:'t03',fw:640,uni:'tech8',every:20,look:40,rsiTh:50,tp:10,sl:-5,gate:0.4,startI:300},
+16050:   {id:'r2',kind:'rule',mkt:'index',nA:'나스닥 짧은 반등',nB:'TETH 단기실행 NDX',nC:'짧은 호흡',one:'나스닥 반등에 사서 조금 오르면 바로 팝니다.',ex:'okx',av:'t04',fw:512,asset:'나스닥',sl:-3,tp:4,rsiTh:52,tf:0,startI:200},
+16051:   {id:'d2',kind:'agent',mkt:'multi',nA:'시장 넘나들며 둘 고르기',nB:'TETH 시장전환',nC:'건널목',one:'지수, 금, 가상자산 중 둘을 골라 한 달마다 다시 봅니다.',ex:'bitget',av:'t05',fw:431,uni:'macro6',look:60,top:2,gate:0.5,every:20,trail:10,volT:0.03,minS:0.4,startI:200},
+16052:   {id:'r3',kind:'rule',mkt:'crypto',nA:'이더리움 3% 손절',nB:'TETH 컷라인 ETH',nC:'한계선',one:'이더리움이 3% 밀리면 정리합니다. 자주 틀리는 대신 길게 봅니다.',ex:'bitget',av:'t06',fw:377,asset:'이더리움',sl:-3,tp:15,rsiTh:52,tf:1,startI:200},
+16053:   {id:'h2',kind:'mix',mkt:'crypto',nA:'고른 코인 반등 매수',nB:'TETH 선별진입',nC:'거름',one:'AI가 고른 가상자산이 반등하면 규칙이 삽니다. 시장이 약하면 보류.',ex:'binance',av:'t07',fw:822,uni:'coin8',every:10,look:60,rsiTh:45,tp:15,sl:-8,gate:0.4,startI:400},
+16054:   {id:'d3',kind:'agent',mkt:'crypto',nA:'매일 1등으로 갈아타기',nB:'TETH 일일교체',nC:'환승',one:'매일 다시 비교해 가장 강한 가상자산 하나만 듭니다.',ex:'okx',av:'t08',fw:298,uni:'coin8',look:10,top:1,gate:0.5,every:1,trail:8,volT:0.02,minS:0.4,startI:600},
+16055:   {id:'r4',kind:'rule',mkt:'index',nA:'금 깊은 하락 뒤 반등',nB:'TETH 간격실행 GOLD',nC:'두 문턱',one:'금이 깊게 밀렸다 돌아설 때만 삽니다. 거래가 드뭅니다.',ex:'okx',av:'t09',fw:203,asset:'금',sl:-3,tp:6,rsiTh:30,tf:1,startI:200},
+16056:   {id:'d4',kind:'agent',mkt:'stock',nA:'기술주 셋 돌려 들기',nB:'TETH 기술순환',nC:'돌림',one:'미국 기술주 8종에서 흐름이 좋은 셋을 골라 나눠 듭니다.',ex:'binance',av:'t10',fw:593,uni:'tech8',look:40,top:3,gate:0.4,every:5,trail:12,volT:0.02,minS:0.4,startI:300},
+16057:   {id:'h3',kind:'mix',mkt:'index',nA:'지수와 금 골라 짧게',nB:'TETH 지수선별',nC:'이음',one:'나스닥, S&P 500, 금 중 AI가 고르고 규칙이 짧게 거래합니다.',ex:'binance',av:'t11',fw:705,uni:'idx3',every:20,look:60,rsiTh:50,tp:5,sl:-3,gate:0.34,startI:61},
+16058:   {id:'r5',kind:'rule',mkt:'stock',nA:'테슬라 큰 하락 뒤 반등',nB:'TETH 반등실행 TSLA',nC:'깊은 숨',one:'테슬라가 크게 밀렸다 돌아설 때 사서 오래 기다립니다.',ex:'binance',av:'t12',fw:188,asset:'테슬라',sl:-8,tp:18,rsiTh:30,tf:0,startI:300},
+16059:   {id:'r6',kind:'rule',mkt:'crypto',nA:'솔라나 짧은 반등',nB:'TETH 단기실행 SOL',nC:'한구간',one:'솔라나 반등에 타서 짧게 들고 내립니다. 거래가 잦습니다.',ex:'bitget',av:'t13',fw:462,asset:'솔라나',sl:-3,tp:5,rsiTh:52,tf:0,startI:61},
+16060:   {id:'d5',kind:'agent',mkt:'stock',nA:'다 같이 오를 때만',nB:'TETH 동반확인',nC:'동행',one:'기술주 대부분이 오를 때만 삽니다. 아니면 아무것도 안 합니다.',ex:'okx',av:'t14',fw:349,uni:'tech8',look:20,top:2,gate:0.7,every:5,trail:10,volT:0.02,minS:0.4,startI:500},
+16061:   {id:'h4',kind:'mix',mkt:'multi',nA:'시장 골라 반등 매수',nB:'TETH 시장선별',nC:'길잡이',one:'AI가 시장을 넘나들며 하나를 고르고, 규칙이 반등에 진입합니다.',ex:'okx',av:'t15',fw:318,uni:'macro6',every:10,look:40,rsiTh:45,tp:8,sl:-5,gate:0.5,startI:200},
+16062:   {id:'r7',kind:'rule',mkt:'crypto',nA:'리플 작은 반등',nB:'TETH 스텝실행 XRP',nC:'작은 걸음',one:'리플 반등마다 작은 폭만 가져갑니다.',ex:'bitget',av:'t16',fw:267,asset:'리플',sl:-5,tp:4,rsiTh:46,tf:0,startI:61},
+16063:   {id:'d6',kind:'agent',mkt:'crypto',nA:'셋 중 하나만',nB:'TETH 단일선택',nC:'외길',one:'비트코인, 이더리움, 솔라나 중 하나만 골라 듭니다.',ex:'bitget',av:'t17',fw:156,uni:'big3',look:40,top:1,gate:0.34,every:10,trail:15,volT:0.03,minS:0.4,startI:300},
+17722: function mkHybridRun(c){
+17723:   var U=c.uni, PX=U.map(function(k){ return mkPx(k); }), N=PX[0].length, endI=N-1, startI=Math.max(61,c.look+1,c.startI||61);
+17724:   var J={}; U.forEach(function(k,j){ J[k]=j; });
+17725:   var L=mkLedger(), eq=[], ev=[], pick=null, cur=startI, lastTop=null, invested=0, lastEv=null, px=function(k){ return PX[J[k]][cur]; };
+17726:   function choose(i){ var rows=U.map(function(k,j){ var P=PX[j]; return {k:k,mom:P[i]/P[i-c.look]-1,above:P[i]>sma(P,60,i)}; }); var up=rows.filter(function(r){ return r.above; }); up.sort(function(a,b){ return b.mom-a.mom; }); return {rows:up,up:up.length}; }
+17727:   for(var i=startI;i<=endI;i++){
+17728:     cur=i; var p=L.pos[0]||null;
+17729:     if(!p&&(i-startI)%c.every===0){ var C=choose(i); lastTop=C.rows.slice(0,3).map(function(r){ return {k:r.k,mom:r.mom*100}; });
+17730:       if(!C.rows.length){ if(pick!==null) ev.push({i:i,t:'unpick'}); pick=null; }
+17731:       else if(pick!==C.rows[0].k){ pick=C.rows[0].k; ev.push({i:i,t:'pick',a:pick,mom:C.rows[0].mom*100,top:lastTop}); } }
+17732:     if(!p){ if(pick!==null){ var P=PX[J[pick]], rv=rsi(P,i-1);
+17733:         if(rv<c.rsiTh&&P[i]>P[i-1]*1.005){ var up2=0; for(var u=0;u<U.length;u++) if(PX[u][i]>sma(PX[u],60,i)) up2++;
+17734:           if(c.gate&&up2/U.length<c.gate) ev.push({i:i,t:'veto',a:pick,up:up2,of:U.length,rsi:rv});
+17735:           else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],rsi:rv,bounce:(P[i]/P[i-1]-1)*100,up:up2,of:U.length}); } } } }
+17736:     else if(i>p.ei){ var v=px(p.k), chg=(v/p.ep-1)*100, why=chg<=c.sl?'sl':chg>=c.tp?'tp':(i-p.ei>=25?'time':null);
+17737:       if(why){ var t=L.sell(p,v,i,why); ev.push({i:i,t:'exit',a:p.k,why:why,tid:t.id,px:v,chg:chg,pnl:t.pnl*100}); } }
+17738:     var v3=L.value(px); eq.push({i:i,v:v3}); invested+=(v3-L.cash)/v3;
+17739:   }
+17740:   cur=endI;
+17741:   var r=mkStatsOf(eq,L,{startI:startI,endI:endI,sl:c.sl,tp:c.tp,rsiTh:c.rsiTh},startI,endI,invested), o=L.pos[0]||null, Pn=pick!==null?PX[J[pick]]:null;
+17742:   r.events=ev;
+17743:   r.state={asOf:endI,pick:pick,top:lastTop,open:o?{k:o.k,tid:o.id,entry:o.ei,ep:o.ep,px:px(o.k),chg:(px(o.k)/o.ep-1)*100,held:endI-o.ei}:null,
+17744:     rsi:Pn?rsi(Pn,endI):null,bounce:Pn?(Pn[endI]/Pn[endI-1]-1)*100:null,lastEval:startI+Math.floor((endI-startI)/c.every)*c.every,nextEval:startI+(Math.floor((endI-startI)/c.every)+1)*c.every};
+17745:   return r;
+17801: /* B1: 전략의 고정 값으로 그리는 도식. 상태가 바뀌어도 그림은 같다 */
+17802: function mkGlyphB1(s,z){
+17803:   var c=s.cfg||{}, o='', W='#e9ebee', D='rgba(233,235,238,.30)', h=mkHash(s.id||s.nick);
+17804:   if(s.kind==='agent'){
+17805:     var n=mkUni(s).list.length, cols=n<=3?3:n<=6?3:4, rows=Math.ceil(n/cols), gx=n<=3?8:cols===3?8:6.4, gy=rows===1?0:rows===2?9:7, x0=14-(cols-1)*gx/2, y0=14-(rows-1)*gy/2, top=c.top||1, pick={};
+17806:     for(var q=0;q<top;q++) pick[(h+q*3)%n]=1;
+17807:     for(var i=0;i<n;i++){ var x=x0+(i%cols)*gx, y=y0+Math.floor(i/cols)*gy; o+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(pick[i]?2.6:1.5)+'" fill="'+(pick[i]?W:D)+'"/>'; }
+17808:   } else if(s.kind==='mix'){
+17809:     var ps=(h%3); for(var j=0;j<3;j++) o+='<circle cx="6.5" cy="'+(7+j*7)+'" r="'+(j===ps?2.6:1.5)+'" fill="'+(j===ps?W:D)+'"/>';
+17810:     o+='<path d="M10.5 '+(7+ps*7)+'H13" stroke="'+W+'" stroke-width="1.4" stroke-linecap="round"/>';
+17811:     o+='<path d="M14 9l3.2 8 2.6-3.4 3.2-5" fill="none" stroke="'+W+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 19.5h10" stroke="'+D+'" stroke-width="1.2" stroke-dasharray="1.6 1.8"/>';
+17812:   } else {
+17813:     var dep=Math.max(3,Math.min(11,(60-(c.rsiTh||40))/3.2)), yb=8, yl=yb+dep, tp=Math.max(2,Math.min(9,(c.tp||8)/2.2));
+17814:     o+='<path d="M4 '+(yl-1.5).toFixed(1)+'h20" stroke="'+D+'" stroke-width="1.2" stroke-dasharray="1.6 1.8"/>';
+17815:     o+='<path d="M4 '+yb+'l5 '+(dep*0.55).toFixed(1)+' 4 '+(dep*0.75).toFixed(1)+' 4.500 -'+(dep*0.5).toFixed(1)+' 6 -'+tp.toFixed(1)+'" fill="none" stroke="'+W+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>';
+17816:     o+='<circle cx="17.5" cy="'+(yb+dep*0.8).toFixed(1)+'" r="2" fill="'+W+'"/>';
+17817:   }
+17818:   return '<svg class="mk3-g" width="'+z+'" height="'+z+'" viewBox="0 0 28 28" aria-hidden="true"><rect x=".5" y=".5" width="27" height="27" rx="7" fill="#1a1d21" stroke="rgba(255,255,255,.14)"/>'+o+'</svg>';
+17819: }
+17820: /* B2: TETH 로고의 두 고리에서 파생한 고정 기호. 간격, 크기, 끊김 위치로 구별 */
+17821: function mkGlyphB2(s,z){
+17822:   var h=mkHash((s.id||s.nick)+'b2'), W='#e9ebee', r1=5+(h%3), r2=5+((h>>>3)%3), dx=3.2+((h>>>6)%4)*0.9, a1=(h>>>9)%6*60, a2=(h>>>13)%6*60, g1=6+((h>>>17)%3)*4, g2=6+((h>>>20)%3)*4;
+17823:   var ring=function(cx,r,rot,gap){ var c=2*Math.PI*r; return '<circle cx="'+cx.toFixed(1)+'" cy="14" r="'+r+'" fill="none" stroke="'+W+'" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="'+(c-gap).toFixed(1)+' '+gap+'" transform="rotate('+rot+' '+cx.toFixed(1)+' 14)"/>'; };
+17824:   return '<svg class="mk3-g" width="'+z+'" height="'+z+'" viewBox="0 0 28 28" aria-hidden="true"><rect x=".5" y=".5" width="27" height="27" rx="7" fill="#1a1d21" stroke="rgba(255,255,255,.14)"/>'+ring(14-dx,r1,a1,g1)+ring(14+dx,r2,a2,g2)+'</svg>';
+17825: }
+17984:   if(s.kind==='agent'&&st){
+17985:     head=st.open.length?st.open.length+'종목 보유 중':(st.scan&&st.scan.weak?'시장 약세로 대기 중':'살 종목을 찾는 중');
+17986:     rows+=row('보는 범위',gEsc(mkUni(s).label)+', 오르는 종목 '+st.scan.up+' / '+st.scan.of);
+17987:     rows+=row('지금 든 것',st.open.length?st.open.map(function(o){ return '<b>'+gEsc(o.k)+'</b> 자산의 '+Math.round(o.w*100)+'%, <i class="num'+mkSign(o.chg)+'">'+mkPct0(o.chg)+'</i>'; }).join('<br>'):'없음, 현금 '+Math.round(st.cash*100)+'%');
+17988:     rows+=row('가장 강한 종목',st.scan.top.slice(0,3).map(function(x){ return gEsc(x.k)+' <i class="num">'+mkPct0(x.mom,0)+'</i>'; }).join(', '));
+17989:     rows+=row('다음 재평가',mkMD(st.nextEval)+' 장 마감');
+17990:   } else if(s.kind==='mix'&&st){
+17991:     var step=st.open?3:st.pick?2:1;
+17992:     head=st.open?gEsc(st.open.k)+' 보유 중':st.pick?gEsc(st.pick)+' 반등을 기다리는 중':'고를 종목을 찾는 중';
+17993:     rows+='<ol class="mk3-steps"><li class="'+(step===1?'on':'done')+'"><small>AI</small><b>종목 고르기</b><span>'+(st.pick?gEsc(st.pick):'오름세 종목 없음')+'</span></li><li class="'+(step===2?'on':step>2?'done':'')+'"><small>규칙</small><b>반등 기다리기</b><span>'+(step===2?(st.rsi<s.cfg.rsiTh?'충분히 밀림, 반등 대기':'아직 덜 밀림'):step>2?'조건 충족':'')+'</span></li><li class="'+(step===3?'on':'')+'"><small>규칙</small><b>보유와 정리</b><span>'+(st.open?'<i class="num'+mkSign(st.open.chg)+'">'+mkPct0(st.open.chg)+'</i>, '+st.open.held+'일째':'')+'</span></li></ol>';
+17994:     rows+=row('다음 종목 재선택',st.open?'보유를 정리한 뒤':mkMD(st.nextEval)+' 장 마감');
+17995:   } else if(s.p){
+17996:     var o=mkOpenPos(s.p,r), e=mkRuleEval(s.p,end);
+17997:     if(o){ head=gEsc(s.asset)+' 보유 중'; rows+=row('진입',mkMD(o.entry)+', '+mkPxFmt(o.entryP)); rows+=row('지금 손익','<i class="num'+mkSign(o.chg)+'">'+mkPct0(o.chg)+'</i>, '+o.held+'일째'); rows+=row('정리 조건','+'+Math.abs(s.p.tp)+'% 또는 '+s.p.sl+'%, 아니면 '+(25-o.held>0?(25-o.held)+'일 뒤':'오늘')); }
+17998:     else { head='조건을 기다리는 중'; rows+=row('충분히 밀렸나',e.rsiOk?'<b>예</b>':'아직 아니에요'); rows+=row('반등했나',e.bounceOk?'<b>예</b>, 어제 '+mkPct0(e.bounce,2):'아직 아니에요, 어제 '+mkPct0(e.bounce,2)); if(s.p.trendFilter) rows+=row('방향이 뚜렷한가',e.trendOk?'<b>예</b>':'아직 아니에요'); }
+17999:     rows+=row('다음 확인',mkMD(end+1)+' 장 마감');
+18000:   }
+18001:   return '<section class="mk3-panel mk3-nowp"><h3>지금</h3><p class="mk3-state">'+head+'</p>'+rows+'<p class="mk3-asof num">'+mkMD(end)+' 장 마감 기준</p></section>';
+18002: }
+
+Algorithm       Hash                                                                   Path                            
+---------       ----                                                                   ----                            
+SHA256          3C5D85E59B2F0055A496B03B2511486353B6E2E371652263851B81D3CCA7B58E       C:\Users\hyun1\OneDrive\바탕 화면...
+
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'index.html' -Encoding UTF8 | Select-Object -Skip 16063 -First 7; Get-Content -LiteralPath 'artifacts/teth-redesign/r1-cross-codex-brief.md' -Encoding UTF8; Get-Content -LiteralPath 'index.html' -Encoding UTF8 | Select-Object -Skip 17756 -First 22\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 473ms:
+  {id:'r8',kind:'rule',mkt:'stock',nA:'엔비디아 정한 곳에서 매도',nB:'TETH 엑시트 NVDA',nC:'마침표',one:'엔비디아가 오르면 더 갈 것 같아도 정해 둔 곳에서 팝니다.',ex:'okx',av:'t18',fw:274,asset:'엔비디아',sl:-5,tp:8,rsiTh:48,tf:0,startI:400},
+  {id:'h5',kind:'mix',mkt:'crypto',nA:'고르기는 AI, 매매는 규칙',nB:'TETH 역할분리',nC:'분업',one:'AI는 셋 중 하나를 고르기만 합니다. 사고파는 건 전부 규칙.',ex:'binance',av:'t19',fw:141,uni:'big3',every:20,look:60,rsiTh:40,tp:12,sl:-5,gate:0,startI:600},
+  {id:'r9',kind:'rule',mkt:'crypto',nA:'비트코인 방향 확인 뒤',nB:'TETH 방향실행 BTC',nC:'길목',one:'비트코인 방향이 뚜렷해질 때까지 기다렸다 삽니다.',ex:'binance',av:'t20',fw:233,asset:'비트코인',sl:-5,tp:15,rsiTh:40,tf:1,startI:1100}
+];
+/*MK_CAT_END*/
+/* 카드 v2: 거래소 로고 + AI 제목(행동 문장) + 한 줄 소개 → 수익률 + 그래프 → 최대 낙폭, 승률, 최소 금액 → [따라가기] [자세히]. 작성자, 위험도, 팔로워, 검증 배지는 카드에서 뺀다(상세에 있음) */
+var MK_EX=[['app-bitget','Bitget'],['app-binance','Binance'],['app-okx','OKX']];
+# ROUND 1 교차 검증 (Codex, Astra)
+
+읽을 것(이 폴더): `r1-claude.md`(Claude 독립 비평), `r1-cross-claude.md`(네 비평에 대한 Claude 판정). 네 것은 `r1-codex.md`.
+
+## 할 일 (짧게)
+1. `r1-claude.md` 의 비판 13개 각각 ACCEPT / REJECT / MODIFY / TEST 와 근거 한 줄.
+2. `r1-cross-claude.md` 에서 약한 수용, 근거 없는 거절, 타협을 공격. 특히 식별 재대결(B1 대 B2), D4 거절(최근 판단 4건 유지), 혼합 상태 지표 시점 거절, 이름 교체 확정안(자리바꿈, 번갈이).
+3. 식별 재대결의 판정 기준을 스크린샷으로 확인 가능한 문장 3개 이내로 확정. B1 을 고칠 때 같은 유형 안에서 구별을 만드는 구체 방법(어떤 값을 어떤 모양으로)을 제안.
+4. Round 2(신뢰) 구현 전 반드시 고쳐야 할 것을 우선순위 순으로 10개 이내로.
+
+## 제약
+index.html 수정 금지. em dash, 가운뎃점 금지. 새 고지나 라벨 금지. 사용자 확정 제약(KPI 넷, 버튼 문구, 4열 x 5행, 10페이지 반복, 30일은 수익률만)은 재론하지 않는다. 산출 `artifacts/teth-redesign/r1-cross-codex.md`, 90줄 이내.
+function mkMD(i){ var d=idxToDate(i); return (d.getMonth()+1)+'월 '+d.getDate()+'일'; }
+function mkUni(s){ return MK_UNI[s.uni]||{label:s.asset||'',list:[]}; }
+function mkScope(s){ return s.kind==='rule'?s.asset:mkUni(s).label; }
+
+/* ── 데이터 ── */
+function mkRunCfg(c,startI){
+  if(c.kind==='agent') return mkAgentRun({uni:MK_UNI[c.uni].list,look:c.look,top:c.top,gate:c.gate,every:c.every,trail:c.trail,volT:c.volT,minS:c.minS,startI:startI!=null?startI:c.startI});
+  if(c.kind==='mix') return mkHybridRun({uni:MK_UNI[c.uni].list,every:c.every,look:c.look,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,gate:c.gate,startI:startI!=null?startI:c.startI});
+  return runBacktest({sl:c.sl,tp:c.tp,rsiTh:c.rsiTh,trendFilter:!!c.tf,startI:startI!=null?startI:c.startI,endI:PRICE0.length-1,px:c.asset,fill:'close'});
+}
+function mkNameOf(c){ return c['n'+MK_VAR.name]||c.nC; }
+function tfRankSeeds(){
+  if(TF_SEEDS) return TF_SEEDS;
+  TF_SEEDS=MK_CAT.map(function(c,k){
+    var r=mkRunCfg(c), nm=mkNameOf(c);
+    var p=c.kind==='rule'?{sl:c.sl,tp:c.tp,rsiTh:c.rsiTh,trendFilter:!!c.tf,startI:c.startI,endI:PRICE0.length-1,px:c.asset,fill:'close'}:null;
+    return {id:c.id,ord:k+1,kind:c.kind,mkt:c.mkt,nick:nm,name:nm,one:c.one,asset:c.kind==='rule'?c.asset:MK_UNI[c.uni].label,uni:c.uni||null,cfg:c,ex:c.ex,av:c.av,p:p,fw:c.fw,score:tfScore(r),ret:r.ret,mdd:r.mdd,n:r.n,r:r};
+  });
+  return TF_SEEDS;
+}
+function tfSSRows(){
+  if(!TF_SS_CACHE) TF_SS_CACHE=tfRankSeeds().map(function(s){ var o={}; for(var k in s) o[k]=s[k]; return o; });
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff -- AGENTS.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 69ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+diff --git a/AGENTS.md b/AGENTS.md
+index af2f8da..890e8b7 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -92,6 +92,8 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 
+ | 경로 | 현재 역할 |
+ | --- | --- |
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
++| `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
++| `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 346ms:
+codex 인박스 : (비어 있음)
+
+apply patch
+patch: completed
+C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\AGENTS.md
+C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\artifacts\teth-redesign\r1-cross-codex.md
+diff --git a/AGENTS.md b/AGENTS.md
+index 64f5324baff0df898bd31f7a2d699f543c0a8cd3..5ecc52b273af9ad0e6a1dd7b6ee0889f42f54caa
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,6 +94,7 @@
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+ | `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+ | `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+diff --git a/artifacts/teth-redesign/r1-cross-codex.md b/artifacts/teth-redesign/r1-cross-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e1c23a49b272c00eef93f12d250084eb69a1460
+--- /dev/null
++++ b/artifacts/teth-redesign/r1-cross-codex.md
+@@ -0,0 +1,62 @@
++# ROUND 1 교차 검증: Codex Astra
++
++세 비평 문서, 식별 PNG 2장, 목록 PNG 2장, 상세 PNG 4장을 직접 대조했다. 아래 코드 줄은 현재 `index.html` 기준이다. 제품 수정과 신규 렌더는 하지 않았다. 확정 제약은 유지하며 기존 슬롯의 문구와 배치만 제안한다.
++
++**1. Claude 독립 비판 13개 판정**
++
++| # | 판정 | 근거와 조치 |
++| --- | --- | --- |
++| 1 | MODIFY | 유형은 이미 이름 아래 첫 줄이다(`r1-id-B1.png`). 이동 요구는 중복이며 13.5px 굵기 조정만 시험하고 범위와의 한 줄 유지를 확인한다. |
++| 2 | TEST | 흰 버튼 띠는 보이지만 P3의 따라가기 굵게는 행동 우선순위를 다시 뒤집는다. 동일 치수의 P1과 P3을 20장 전체로 비교하고 자세히의 발견성을 함께 판정한다. |
++| 3 | MODIFY | 수익률이 유일한 색이라는 진단은 거래소 로고와 차트 때문에 부정확하다. 이름 18px, 수익률 16px로 조정하되 PNG만으로 첫 시선을 측정했다고 쓰지 않는다. |
++| 4 | ACCEPT | `r1-id-B1.png`의 작은 채움은 변화량 판독에 보탬이 적다. 미니 차트만 선으로 바꾸고 상승과 하락 구간은 보존한다. |
++| 5 | MODIFY | 넓히기만 하면 상태가 먼저 보인다는 보장은 없다. 데스크톱은 지금을 왼쪽, 모바일은 지금을 첫 패널로 두고 필요한 내용으로 폭을 정한다. |
++| 6 | MODIFY | 막대만으로는 무엇에 가까운지 검증할 수 없다. 기존 값 셀 안에 실제 값, 기준 26 미만, 경계선과 현재점을 함께 두며 완료율처럼 채우지 않는다. |
++| 7 | ACCEPT | `r1-detail-1-full.png`는 시작 이후 수익이 같은 지표 줄의 다섯 번째 칸이다. 기존 문구와 값을 차트 아래로 옮긴다. |
++| 8 | MODIFY | 문제는 조사 누락이 아니라 말투 혼재다. 행동 제목의 명사형을 모두 늘리지 말고 판단 설명과 행동 결과 문장부터 해요체로 맞춘다. |
++| 9 | MODIFY | 상세의 단일 CTA와 목록의 20개 CTA는 상황이 다르다. 위치는 유지하고 120x44px를 시작값으로 쓰되 모바일 겹침부터 없앤다(`r1-detail-390.png`). |
++| 10 | MODIFY | `r1-main-top.png`의 첫 카드가 약 y=592인 것은 맞지만 설명 전체를 옆에 붙이면 좁은 폭에서 다시 감긴다. 넓은 화면만 병렬 배치하고 1280px와 390px에서 읽힘을 보존한다. |
++| 11 | REJECT | 하락 강도 20을 2주 동안 거의 계속 내림으로 바꾸면 지표를 하락 일수로 오역한다. 기존 기록 문장 안에서 실제 값과 문턱의 관계를 설명한다. |
++| 12 | ACCEPT | `r1-main-390.png`의 되짚기 한 줄 설명 아래에 불필요한 빈 줄이 보인다. 모바일 설명 최소 높이만 해제한다. |
++| 13 | MODIFY | 낙폭 낮은 순은 이미 있다(`r1-id-B1.png`). 유지에는 동의하지만 정렬이 기본 화면의 위험 발견을 해결했다는 판정은 기각하며 수치의 가독성은 유지한다. |
++
++**2. Claude 교차 판정에서 철회하거나 보강할 것**
++
++| 쟁점 | 재판정과 근거 |
++| --- | --- |
++| B1 대 B2 | TEST 수용. 내 이전 B1 탈락 사유 중 고정 도식이라는 이유는 철회한다. 다만 3초 시험의 실패는 권한 분담 설명까지 포함했으므로 점과 선만으로 해결됐다는 Claude의 추론도 성립하지 않는다. B1의 맞물림과 거름은 거의 같고 B2의 서로 다른 SVG 문자열도 시각 구별 증명이 아니다. |
++| D4, 최근 판단 4건 | REJECT의 근거 부족. 여러 판단이 필요하다는 요구가 개요에 정확히 4건을 펼칠 근거는 아니다. `r1-detail-1-full.png`의 5건을 4건으로 줄여도 네 사건의 본문은 남는다. 정책을 위로 올리는 조치는 수용하되, 같은 순서에서 1건과 4건을 렌더해 정책 도달 위치와 전체 기록 접근을 비교한다. 내 1건안도 검증 전 확정하지 않는다. |
++| 혼합 지표 시점 | REJECT를 기각한다. 17732~17735는 전봉 RSI와 당일 반등을 함께 검사하지만 17744는 당일 RSI와 당일 반등을 묶는다. 이것은 마지막 판단도 다음 판단의 완성된 입력도 아니다. 17993의 현재 대기 이유를 마지막 평가 객체에서 출력하고 기준 시각을 기존 날짜 문구에 반영해야 한다. 행 이름을 미래형으로 바꿔도 잘못된 조합은 남는다. |
++| 이름 자리바꿈 | 확정 철회, TEST. 세 자리와 세 갈래의 유사성은 유효한 우려지만 자리바꿈은 이미 있는 환승과 교체 의미가 겹친다. d4는 셋 보유 정책이지 매번 교체 보장이 아니다(16056). 세 자리와 자리바꿈을 각각 세 갈래, 환승 옆에 놓아 비교할 때까지 승자는 없다. |
++| 이름 번갈이 | REJECT. h3는 순위로 하나를 고르며 같은 종목이면 선택 사건도 만들지 않는다(17726~17731). 번갈이는 교대 순서를 암시하므로 세라는 음절 중복을 피하려다 행동 오인을 만든다. 세 지평 또는 지수와 금을 기존 이름 슬롯의 시험 후보로 되돌린다. |
++| M6와 D5의 수용 | 간격 16px는 기간 이해의 증명이 아니며 수치 없는 막대는 정량 근거가 아니다. 각각 묶음 분리와 기준 대비 현재 위치라는 제한된 개선으로 기록하고 전체 이해 PASS로 확대하지 않는다. |
++| 이름 연결 MODIFY | 비교 스위치를 지워도 다음 이름 교체와 저장 이름 조회 실패는 남는다. 검증된 구전략 별칭만 이전하는 원칙은 수용하되 저장, 라우트, 즐겨찾기, 따라가기를 불변 ID로 연결해야 한다. 미매핑 저장은 보존하고 원금과 손익 0의 정상 결과로 조용히 대체하지 않는다. |
++| 뒤쪽 재선언 ACCEPT | 마지막 라운드로 미루는 것은 수용이 아니라 위험 연장이다. 신뢰 화면이 어느 계산 함수를 쓰는지 확정해야 하므로 Round 2 계산 변경 전에 단일 정의로 정리한다. |
++| 날짜 기준 MODIFY | 세션 고정은 허용할 수 있지만 새로고침만으로 해결되지는 않는다. 같은 생성 가격의 이력 날짜가 이동하고 저장 시작 봉의 의미도 달라지는 문제에 데이터 버전과 기준 날짜를 함께 고정해야 한다. |
++
++**3. 식별 재대결의 확정 판정 기준, 3문장**
++
++1. 동일한 20개 전략, 순서, 이름, 버튼으로 1440px와 1280px의 4열 전체 및 390px 목록을 캡처하고, 실제 28px 흑백 기호에서 이름을 가린 같은 유형의 모든 쌍에 점 개수, 연결 구조 또는 3px 이상 위치 차이 중 하나가 보여야 개별 식별 PASS다.
++2. 이름과 기존 유형 문구를 다시 보인 PNG에서 기호를 직접 탐색, 조건 실행, 혼합으로 일관되게 묶는 시각 규칙이 있으면 유형 보조 PASS, 문구에만 의존하면 보조 없음으로 기록하되 기호만 보고 권한을 이해했다고 판정하지 않는다.
++3. 같은 ID의 목록, 상세, 보유 및 대기 캡처에서 기호 구조가 유지되고 잘림이나 이름 침범이 없어야 하며, 개별 식별과 안정성을 모두 통과한 후보 중 유형 보조가 있는 쪽을 채택하고 둘 다 실패하면 재설계한다.
++
++**B1 수정안: 상태가 아닌 실제 설정으로 고정 차이 만들기**
++
++- 직접 탐색: 후보 수를 점 개수, 최대 보유 `top`을 채운 점 개수로 유지하고 `uni`에 따라 coin8과 big3는 원, tech8은 사각, macro6는 마름모로 바꾼다. d1과 d4는 8개 중 3개가 같아도 원과 사각으로 갈리고, d4와 d5는 채운 점 3개와 2개로 갈린다. ID 해시로 밝은 점 위치를 고르는 17806 방식은 제거한다.
++- 조건 실행: V자 공통 구조를 유지하되 `rsiTh` 26/30/40/46/48/52를 골 깊이 19/16/13/10/7/4px에, `tp` 4/5/6/8/15/18/20을 오른쪽 끝점 x=6/9/12/15/18/21/24px에 대응시킨다. `tf=1`만 V 앞에 짧은 세로 관문을 둔다. r2와 r6는 같은 문턱이어도 끝점이 3px 갈린다. 비례 차트가 아닌 순서화된 고정 기호이며 성과선으로 쓰지 않는다.
++- 혼합: 왼쪽 후보 묶음과 오른쪽 관문의 연결은 유지하고 `uni`를 원 8개, 사각 8개, 마름모 6개, 원 3개, 마름모 3개로 구별한다. 실제 후보 수와 모양만으로 h1부터 h5가 갈리므로 현재의 해시 기반 3점 위치 변경(17809)을 버린다. 28px 안에서 8점과 관문이 뭉치면 이 안도 탈락이며 세부 수치를 더 넣어 해결하지 않는다.
++
++**4. Round 2 신뢰 구현 전 수정 순서**
++
++1. P0: 불변 ID 연결과 검증된 구저장 이전을 완료하고, 이름 변경 및 1페이지와 10페이지에서 같은 즐겨찾기와 따라가기 계정을 가리키는지 확인한다.
++2. P0: 전체 정책, 가격 데이터 버전, 종료 봉, 비용과 체결 계약으로 캐시를 구분하고 관련 시드와 기간 캐시를 함께 무효화한다.
++3. P0: 최신 순위의 기준 시점과 마지막 규칙 판단 객체를 분리해 정확히 연결하고, 혼합의 문턱 통과 전후 반례에서 표시 이유와 실제 행동을 대조한다.
++4. P0: 390px 상세 버튼 겹침을 없애고 지금을 첫 패널로 이동해 앱 배너를 포함한 첫 화면에서 실제 상태 본문이 보이게 한다.
++5. P1: 계산 함수 중복 선언을 제거한 뒤 조건 실행까지 공통 원장으로 옮기고 진입 비용, 열린 보유, 연도 경계, 비용 지표 정의를 맞춘다.
++6. P1: 원장 중복 청산과 비정상 입력을 거절하고 체결 사건에 수량, 현금 증감, 비용을 저장해 반환 사건만으로 잔고를 재생한다.
++7. P1: 데이터 기준 날짜와 저장 시작 봉의 관계를 고정하고 자정 전후 새로고침에서 같은 데이터의 날짜와 성과 연결이 보존되는지 확인한다.
++8. P1: 건널목의 범위와 주기, 동행과 환승의 행동 설명, 혼합의 두 일정, 매수 시 비중 문구, 따라가기 시트의 유형과 주체를 실제 정책에 맞춘다.
++9. P1: 조건 값과 문턱을 기존 셀에서 확인할 수 있게 하고, 성과의 누적 수익 위치를 옮긴 뒤 정책 순서를 고정한 1건 대 4건 렌더로 D4를 결정한다.
++10. P1: 위 3문장으로 B1과 B2, 동일 치수로 P1과 P3을 재대결하고 이름 두 건의 확정을 철회한 상태에서 20개 이름 조합을 재검토한다.
++
++검증 범위: 기존 PNG 8장 직접 확인과 코드 대조만 수행했다. 이번에는 계산 반례를 재실행하지 않았으며 이전 재현은 `r1-codex.md`에 있다. 수정 렌더, 실제 사용자 식별 시험, 구저장 이전 및 앱 회귀는 미검증이다.
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 64f5324baff0df898bd31f7a2d699f543c0a8cd3..5ecc52b273af9ad0e6a1dd7b6ee0889f42f54caa
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,6 +94,7 @@
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+ | `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+ | `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+diff --git a/artifacts/teth-redesign/r1-cross-codex.md b/artifacts/teth-redesign/r1-cross-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e1c23a49b272c00eef93f12d250084eb69a1460
+--- /dev/null
++++ b/artifacts/teth-redesign/r1-cross-codex.md
+@@ -0,0 +1,62 @@
++# ROUND 1 교차 검증: Codex Astra
++
++세 비평 문서, 식별 PNG 2장, 목록 PNG 2장, 상세 PNG 4장을 직접 대조했다. 아래 코드 줄은 현재 `index.html` 기준이다. 제품 수정과 신규 렌더는 하지 않았다. 확정 제약은 유지하며 기존 슬롯의 문구와 배치만 제안한다.
++
++**1. Claude 독립 비판 13개 판정**
++
++| # | 판정 | 근거와 조치 |
++| --- | --- | --- |
++| 1 | MODIFY | 유형은 이미 이름 아래 첫 줄이다(`r1-id-B1.png`). 이동 요구는 중복이며 13.5px 굵기 조정만 시험하고 범위와의 한 줄 유지를 확인한다. |
++| 2 | TEST | 흰 버튼 띠는 보이지만 P3의 따라가기 굵게는 행동 우선순위를 다시 뒤집는다. 동일 치수의 P1과 P3을 20장 전체로 비교하고 자세히의 발견성을 함께 판정한다. |
++| 3 | MODIFY | 수익률이 유일한 색이라는 진단은 거래소 로고와 차트 때문에 부정확하다. 이름 18px, 수익률 16px로 조정하되 PNG만으로 첫 시선을 측정했다고 쓰지 않는다. |
++| 4 | ACCEPT | `r1-id-B1.png`의 작은 채움은 변화량 판독에 보탬이 적다. 미니 차트만 선으로 바꾸고 상승과 하락 구간은 보존한다. |
++| 5 | MODIFY | 넓히기만 하면 상태가 먼저 보인다는 보장은 없다. 데스크톱은 지금을 왼쪽, 모바일은 지금을 첫 패널로 두고 필요한 내용으로 폭을 정한다. |
++| 6 | MODIFY | 막대만으로는 무엇에 가까운지 검증할 수 없다. 기존 값 셀 안에 실제 값, 기준 26 미만, 경계선과 현재점을 함께 두며 완료율처럼 채우지 않는다. |
++| 7 | ACCEPT | `r1-detail-1-full.png`는 시작 이후 수익이 같은 지표 줄의 다섯 번째 칸이다. 기존 문구와 값을 차트 아래로 옮긴다. |
++| 8 | MODIFY | 문제는 조사 누락이 아니라 말투 혼재다. 행동 제목의 명사형을 모두 늘리지 말고 판단 설명과 행동 결과 문장부터 해요체로 맞춘다. |
++| 9 | MODIFY | 상세의 단일 CTA와 목록의 20개 CTA는 상황이 다르다. 위치는 유지하고 120x44px를 시작값으로 쓰되 모바일 겹침부터 없앤다(`r1-detail-390.png`). |
++| 10 | MODIFY | `r1-main-top.png`의 첫 카드가 약 y=592인 것은 맞지만 설명 전체를 옆에 붙이면 좁은 폭에서 다시 감긴다. 넓은 화면만 병렬 배치하고 1280px와 390px에서 읽힘을 보존한다. |
++| 11 | REJECT | 하락 강도 20을 2주 동안 거의 계속 내림으로 바꾸면 지표를 하락 일수로 오역한다. 기존 기록 문장 안에서 실제 값과 문턱의 관계를 설명한다. |
++| 12 | ACCEPT | `r1-main-390.png`의 되짚기 한 줄 설명 아래에 불필요한 빈 줄이 보인다. 모바일 설명 최소 높이만 해제한다. |
++| 13 | MODIFY | 낙폭 낮은 순은 이미 있다(`r1-id-B1.png`). 유지에는 동의하지만 정렬이 기본 화면의 위험 발견을 해결했다는 판정은 기각하며 수치의 가독성은 유지한다. |
++
++**2. Claude 교차 판정에서 철회하거나 보강할 것**
++
++| 쟁점 | 재판정과 근거 |
++| --- | --- |
++| B1 대 B2 | TEST 수용. 내 이전 B1 탈락 사유 중 고정 도식이라는 이유는 철회한다. 다만 3초 시험의 실패는 권한 분담 설명까지 포함했으므로 점과 선만으로 해결됐다는 Claude의 추론도 성립하지 않는다. B1의 맞물림과 거름은 거의 같고 B2의 서로 다른 SVG 문자열도 시각 구별 증명이 아니다. |
++| D4, 최근 판단 4건 | REJECT의 근거 부족. 여러 판단이 필요하다는 요구가 개요에 정확히 4건을 펼칠 근거는 아니다. `r1-detail-1-full.png`의 5건을 4건으로 줄여도 네 사건의 본문은 남는다. 정책을 위로 올리는 조치는 수용하되, 같은 순서에서 1건과 4건을 렌더해 정책 도달 위치와 전체 기록 접근을 비교한다. 내 1건안도 검증 전 확정하지 않는다. |
++| 혼합 지표 시점 | REJECT를 기각한다. 17732~17735는 전봉 RSI와 당일 반등을 함께 검사하지만 17744는 당일 RSI와 당일 반등을 묶는다. 이것은 마지막 판단도 다음 판단의 완성된 입력도 아니다. 17993의 현재 대기 이유를 마지막 평가 객체에서 출력하고 기준 시각을 기존 날짜 문구에 반영해야 한다. 행 이름을 미래형으로 바꿔도 잘못된 조합은 남는다. |
++| 이름 자리바꿈 | 확정 철회, TEST. 세 자리와 세 갈래의 유사성은 유효한 우려지만 자리바꿈은 이미 있는 환승과 교체 의미가 겹친다. d4는 셋 보유 정책이지 매번 교체 보장이 아니다(16056). 세 자리와 자리바꿈을 각각 세 갈래, 환승 옆에 놓아 비교할 때까지 승자는 없다. |
++| 이름 번갈이 | REJECT. h3는 순위로 하나를 고르며 같은 종목이면 선택 사건도 만들지 않는다(17726~17731). 번갈이는 교대 순서를 암시하므로 세라는 음절 중복을 피하려다 행동 오인을 만든다. 세 지평 또는 지수와 금을 기존 이름 슬롯의 시험 후보로 되돌린다. |
++| M6와 D5의 수용 | 간격 16px는 기간 이해의 증명이 아니며 수치 없는 막대는 정량 근거가 아니다. 각각 묶음 분리와 기준 대비 현재 위치라는 제한된 개선으로 기록하고 전체 이해 PASS로 확대하지 않는다. |
++| 이름 연결 MODIFY | 비교 스위치를 지워도 다음 이름 교체와 저장 이름 조회 실패는 남는다. 검증된 구전략 별칭만 이전하는 원칙은 수용하되 저장, 라우트, 즐겨찾기, 따라가기를 불변 ID로 연결해야 한다. 미매핑 저장은 보존하고 원금과 손익 0의 정상 결과로 조용히 대체하지 않는다. |
++| 뒤쪽 재선언 ACCEPT | 마지막 라운드로 미루는 것은 수용이 아니라 위험 연장이다. 신뢰 화면이 어느 계산 함수를 쓰는지 확정해야 하므로 Round 2 계산 변경 전에 단일 정의로 정리한다. |
++| 날짜 기준 MODIFY | 세션 고정은 허용할 수 있지만 새로고침만으로 해결되지는 않는다. 같은 생성 가격의 이력 날짜가 이동하고 저장 시작 봉의 의미도 달라지는 문제에 데이터 버전과 기준 날짜를 함께 고정해야 한다. |
++
++**3. 식별 재대결의 확정 판정 기준, 3문장**
++
++1. 동일한 20개 전략, 순서, 이름, 버튼으로 1440px와 1280px의 4열 전체 및 390px 목록을 캡처하고, 실제 28px 흑백 기호에서 이름을 가린 같은 유형의 모든 쌍에 점 개수, 연결 구조 또는 3px 이상 위치 차이 중 하나가 보여야 개별 식별 PASS다.
++2. 이름과 기존 유형 문구를 다시 보인 PNG에서 기호를 직접 탐색, 조건 실행, 혼합으로 일관되게 묶는 시각 규칙이 있으면 유형 보조 PASS, 문구에만 의존하면 보조 없음으로 기록하되 기호만 보고 권한을 이해했다고 판정하지 않는다.
++3. 같은 ID의 목록, 상세, 보유 및 대기 캡처에서 기호 구조가 유지되고 잘림이나 이름 침범이 없어야 하며, 개별 식별과 안정성을 모두 통과한 후보 중 유형 보조가 있는 쪽을 채택하고 둘 다 실패하면 재설계한다.
++
++**B1 수정안: 상태가 아닌 실제 설정으로 고정 차이 만들기**
++
++- 직접 탐색: 후보 수를 점 개수, 최대 보유 `top`을 채운 점 개수로 유지하고 `uni`에 따라 coin8과 big3는 원, tech8은 사각, macro6는 마름모로 바꾼다. d1과 d4는 8개 중 3개가 같아도 원과 사각으로 갈리고, d4와 d5는 채운 점 3개와 2개로 갈린다. ID 해시로 밝은 점 위치를 고르는 17806 방식은 제거한다.
++- 조건 실행: V자 공통 구조를 유지하되 `rsiTh` 26/30/40/46/48/52를 골 깊이 19/16/13/10/7/4px에, `tp` 4/5/6/8/15/18/20을 오른쪽 끝점 x=6/9/12/15/18/21/24px에 대응시킨다. `tf=1`만 V 앞에 짧은 세로 관문을 둔다. r2와 r6는 같은 문턱이어도 끝점이 3px 갈린다. 비례 차트가 아닌 순서화된 고정 기호이며 성과선으로 쓰지 않는다.
++- 혼합: 왼쪽 후보 묶음과 오른쪽 관문의 연결은 유지하고 `uni`를 원 8개, 사각 8개, 마름모 6개, 원 3개, 마름모 3개로 구별한다. 실제 후보 수와 모양만으로 h1부터 h5가 갈리므로 현재의 해시 기반 3점 위치 변경(17809)을 버린다. 28px 안에서 8점과 관문이 뭉치면 이 안도 탈락이며 세부 수치를 더 넣어 해결하지 않는다.
++
++**4. Round 2 신뢰 구현 전 수정 순서**
++
++1. P0: 불변 ID 연결과 검증된 구저장 이전을 완료하고, 이름 변경 및 1페이지와 10페이지에서 같은 즐겨찾기와 따라가기 계정을 가리키는지 확인한다.
++2. P0: 전체 정책, 가격 데이터 버전, 종료 봉, 비용과 체결 계약으로 캐시를 구분하고 관련 시드와 기간 캐시를 함께 무효화한다.
++3. P0: 최신 순위의 기준 시점과 마지막 규칙 판단 객체를 분리해 정확히 연결하고, 혼합의 문턱 통과 전후 반례에서 표시 이유와 실제 행동을 대조한다.
++4. P0: 390px 상세 버튼 겹침을 없애고 지금을 첫 패널로 이동해 앱 배너를 포함한 첫 화면에서 실제 상태 본문이 보이게 한다.
++5. P1: 계산 함수 중복 선언을 제거한 뒤 조건 실행까지 공통 원장으로 옮기고 진입 비용, 열린 보유, 연도 경계, 비용 지표 정의를 맞춘다.
++6. P1: 원장 중복 청산과 비정상 입력을 거절하고 체결 사건에 수량, 현금 증감, 비용을 저장해 반환 사건만으로 잔고를 재생한다.
++7. P1: 데이터 기준 날짜와 저장 시작 봉의 관계를 고정하고 자정 전후 새로고침에서 같은 데이터의 날짜와 성과 연결이 보존되는지 확인한다.
++8. P1: 건널목의 범위와 주기, 동행과 환승의 행동 설명, 혼합의 두 일정, 매수 시 비중 문구, 따라가기 시트의 유형과 주체를 실제 정책에 맞춘다.
++9. P1: 조건 값과 문턱을 기존 셀에서 확인할 수 있게 하고, 성과의 누적 수익 위치를 옮긴 뒤 정책 순서를 고정한 1건 대 4건 렌더로 D4를 결정한다.
++10. P1: 위 3문장으로 B1과 B2, 동일 치수로 P1과 P3을 재대결하고 이름 두 건의 확정을 철회한 상태에서 20개 이름 조합을 재검토한다.
++
++검증 범위: 기존 PNG 8장 직접 확인과 코드 대조만 수행했다. 이번에는 계산 반례를 재실행하지 않았으며 이전 재현은 `r1-codex.md`에 있다. 수정 렌더, 실제 사용자 식별 시험, 구저장 이전 및 앱 회귀는 미검증이다.
+
+codex
+13개 판정과 우선순위 10개를 작성했습니다. 혼합 상태는 코드상 당일 RSI와 당일 반등을 묶어 표시하지만, 실제 진입 검사는 전봉 RSI를 쓰므로 행 이름 변경만으로 해결되지 않습니다. `번갈이`도 실제 선택 규칙에 없는 교대를 암시해 교체 확정을 기각했습니다. 이제 줄 수, 금지 문자, 변경 범위를 확인하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "`$report = Get-Content -LiteralPath '"'artifacts/teth-redesign/r1-cross-codex.md' -Encoding UTF8; 'lines=' + "'`$report.Count; '"'forbidden=' + (("'`$report | Select-String -Pattern '"'[—·]').Count); Get-FileHash -LiteralPath 'index.html' -Algorithm SHA256\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff --check' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 95ms:
+ M AGENTS.md
+ M index.html
+ M ux-audit/card3/grid4-1440.png
+ M ux-audit/card3/grid4-pager-1440.png
+?? artifacts/
+?? ux-audit/card3/log-codex-card3.txt
+?? ux-audit/card3/log-codex-hero.txt
+?? ux-audit/detail/fx-mid-1440.png
+?? ux-audit/detail/log-codex-crit.txt
+?? ux-audit/detail/log-codex.txt
+?? ux-audit/footer2/black-spa-390.png
+?? ux-audit/footer2/live-trade-footer-1440.png
+?? ux-audit/footer2/log-codex-bar.txt
+?? ux-audit/footer2/log-codex-crit.txt
+?? ux-audit/footer2/log-codex.txt
+?? ux-audit/footer2/ours-bar-390.png
+?? ux-audit/footer2/r3-gap-1440.png
+?? ux-audit/footer2/r5-hero-next-390.png
+?? ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ux-audit/footer2/video-frame-3s.jpg
+?? ux-audit/footer2/video-frame-5s.jpg
+?? ux-audit/footer2/video-frame-6.2s.jpg
+?? ux-audit/hero/frame3-codex.png
+?? ux-audit/hero/frame3.png
+?? ux-audit/hero/log-agy.txt
+?? ux-audit/hero/log-codex-crit.txt
+?? ux-audit/hero/log-codex.txt
+?? ux-audit/hero/prompt-agy.md
+?? ux-audit/hero/prompt-codex-crit.md
+?? ux-audit/hero/prompt-codex.md
+?? ux-audit/logs/
+?? ux-audit/research/log-codex-verify.txt
+?? ux-audit/review/
+?? ux-audit/spark/log-codex.txt
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff -- AGENTS.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 132ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+
+ succeeded in 76ms:
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+diff --git a/AGENTS.md b/AGENTS.md
+index af2f8da..d979363 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -92,6 +92,9 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 
+ | 경로 | 현재 역할 |
+ | --- | --- |
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
++| `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
++| `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+
+ succeeded in 396ms:
+lines=62
+forbidden=0
+
+Algorithm       Hash                                                                   Path                            
+---------       ----                                                                   ----                            
+SHA256          3C5D85E59B2F0055A496B03B2511486353B6E2E371652263851B81D3CCA7B58E       C:\Users\hyun1\OneDrive\바탕 화면...
+
+
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 64f5324baff0df898bd31f7a2d699f543c0a8cd3..5ecc52b273af9ad0e6a1dd7b6ee0889f42f54caa
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,6 +94,7 @@
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+ | `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+ | `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+diff --git a/artifacts/teth-redesign/r1-cross-codex.md b/artifacts/teth-redesign/r1-cross-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e1c23a49b272c00eef93f12d250084eb69a1460
+--- /dev/null
++++ b/artifacts/teth-redesign/r1-cross-codex.md
+@@ -0,0 +1,62 @@
++# ROUND 1 교차 검증: Codex Astra
++
++세 비평 문서, 식별 PNG 2장, 목록 PNG 2장, 상세 PNG 4장을 직접 대조했다. 아래 코드 줄은 현재 `index.html` 기준이다. 제품 수정과 신규 렌더는 하지 않았다. 확정 제약은 유지하며 기존 슬롯의 문구와 배치만 제안한다.
++
++**1. Claude 독립 비판 13개 판정**
++
++| # | 판정 | 근거와 조치 |
++| --- | --- | --- |
++| 1 | MODIFY | 유형은 이미 이름 아래 첫 줄이다(`r1-id-B1.png`). 이동 요구는 중복이며 13.5px 굵기 조정만 시험하고 범위와의 한 줄 유지를 확인한다. |
++| 2 | TEST | 흰 버튼 띠는 보이지만 P3의 따라가기 굵게는 행동 우선순위를 다시 뒤집는다. 동일 치수의 P1과 P3을 20장 전체로 비교하고 자세히의 발견성을 함께 판정한다. |
++| 3 | MODIFY | 수익률이 유일한 색이라는 진단은 거래소 로고와 차트 때문에 부정확하다. 이름 18px, 수익률 16px로 조정하되 PNG만으로 첫 시선을 측정했다고 쓰지 않는다. |
++| 4 | ACCEPT | `r1-id-B1.png`의 작은 채움은 변화량 판독에 보탬이 적다. 미니 차트만 선으로 바꾸고 상승과 하락 구간은 보존한다. |
++| 5 | MODIFY | 넓히기만 하면 상태가 먼저 보인다는 보장은 없다. 데스크톱은 지금을 왼쪽, 모바일은 지금을 첫 패널로 두고 필요한 내용으로 폭을 정한다. |
++| 6 | MODIFY | 막대만으로는 무엇에 가까운지 검증할 수 없다. 기존 값 셀 안에 실제 값, 기준 26 미만, 경계선과 현재점을 함께 두며 완료율처럼 채우지 않는다. |
++| 7 | ACCEPT | `r1-detail-1-full.png`는 시작 이후 수익이 같은 지표 줄의 다섯 번째 칸이다. 기존 문구와 값을 차트 아래로 옮긴다. |
++| 8 | MODIFY | 문제는 조사 누락이 아니라 말투 혼재다. 행동 제목의 명사형을 모두 늘리지 말고 판단 설명과 행동 결과 문장부터 해요체로 맞춘다. |
++| 9 | MODIFY | 상세의 단일 CTA와 목록의 20개 CTA는 상황이 다르다. 위치는 유지하고 120x44px를 시작값으로 쓰되 모바일 겹침부터 없앤다(`r1-detail-390.png`). |
++| 10 | MODIFY | `r1-main-top.png`의 첫 카드가 약 y=592인 것은 맞지만 설명 전체를 옆에 붙이면 좁은 폭에서 다시 감긴다. 넓은 화면만 병렬 배치하고 1280px와 390px에서 읽힘을 보존한다. |
++| 11 | REJECT | 하락 강도 20을 2주 동안 거의 계속 내림으로 바꾸면 지표를 하락 일수로 오역한다. 기존 기록 문장 안에서 실제 값과 문턱의 관계를 설명한다. |
++| 12 | ACCEPT | `r1-main-390.png`의 되짚기 한 줄 설명 아래에 불필요한 빈 줄이 보인다. 모바일 설명 최소 높이만 해제한다. |
++| 13 | MODIFY | 낙폭 낮은 순은 이미 있다(`r1-id-B1.png`). 유지에는 동의하지만 정렬이 기본 화면의 위험 발견을 해결했다는 판정은 기각하며 수치의 가독성은 유지한다. |
++
++**2. Claude 교차 판정에서 철회하거나 보강할 것**
++
++| 쟁점 | 재판정과 근거 |
++| --- | --- |
++| B1 대 B2 | TEST 수용. 내 이전 B1 탈락 사유 중 고정 도식이라는 이유는 철회한다. 다만 3초 시험의 실패는 권한 분담 설명까지 포함했으므로 점과 선만으로 해결됐다는 Claude의 추론도 성립하지 않는다. B1의 맞물림과 거름은 거의 같고 B2의 서로 다른 SVG 문자열도 시각 구별 증명이 아니다. |
++| D4, 최근 판단 4건 | REJECT의 근거 부족. 여러 판단이 필요하다는 요구가 개요에 정확히 4건을 펼칠 근거는 아니다. `r1-detail-1-full.png`의 5건을 4건으로 줄여도 네 사건의 본문은 남는다. 정책을 위로 올리는 조치는 수용하되, 같은 순서에서 1건과 4건을 렌더해 정책 도달 위치와 전체 기록 접근을 비교한다. 내 1건안도 검증 전 확정하지 않는다. |
++| 혼합 지표 시점 | REJECT를 기각한다. 17732~17735는 전봉 RSI와 당일 반등을 함께 검사하지만 17744는 당일 RSI와 당일 반등을 묶는다. 이것은 마지막 판단도 다음 판단의 완성된 입력도 아니다. 17993의 현재 대기 이유를 마지막 평가 객체에서 출력하고 기준 시각을 기존 날짜 문구에 반영해야 한다. 행 이름을 미래형으로 바꿔도 잘못된 조합은 남는다. |
++| 이름 자리바꿈 | 확정 철회, TEST. 세 자리와 세 갈래의 유사성은 유효한 우려지만 자리바꿈은 이미 있는 환승과 교체 의미가 겹친다. d4는 셋 보유 정책이지 매번 교체 보장이 아니다(16056). 세 자리와 자리바꿈을 각각 세 갈래, 환승 옆에 놓아 비교할 때까지 승자는 없다. |
++| 이름 번갈이 | REJECT. h3는 순위로 하나를 고르며 같은 종목이면 선택 사건도 만들지 않는다(17726~17731). 번갈이는 교대 순서를 암시하므로 세라는 음절 중복을 피하려다 행동 오인을 만든다. 세 지평 또는 지수와 금을 기존 이름 슬롯의 시험 후보로 되돌린다. |
++| M6와 D5의 수용 | 간격 16px는 기간 이해의 증명이 아니며 수치 없는 막대는 정량 근거가 아니다. 각각 묶음 분리와 기준 대비 현재 위치라는 제한된 개선으로 기록하고 전체 이해 PASS로 확대하지 않는다. |
++| 이름 연결 MODIFY | 비교 스위치를 지워도 다음 이름 교체와 저장 이름 조회 실패는 남는다. 검증된 구전략 별칭만 이전하는 원칙은 수용하되 저장, 라우트, 즐겨찾기, 따라가기를 불변 ID로 연결해야 한다. 미매핑 저장은 보존하고 원금과 손익 0의 정상 결과로 조용히 대체하지 않는다. |
++| 뒤쪽 재선언 ACCEPT | 마지막 라운드로 미루는 것은 수용이 아니라 위험 연장이다. 신뢰 화면이 어느 계산 함수를 쓰는지 확정해야 하므로 Round 2 계산 변경 전에 단일 정의로 정리한다. |
++| 날짜 기준 MODIFY | 세션 고정은 허용할 수 있지만 새로고침만으로 해결되지는 않는다. 같은 생성 가격의 이력 날짜가 이동하고 저장 시작 봉의 의미도 달라지는 문제에 데이터 버전과 기준 날짜를 함께 고정해야 한다. |
++
++**3. 식별 재대결의 확정 판정 기준, 3문장**
++
++1. 동일한 20개 전략, 순서, 이름, 버튼으로 1440px와 1280px의 4열 전체 및 390px 목록을 캡처하고, 실제 28px 흑백 기호에서 이름을 가린 같은 유형의 모든 쌍에 점 개수, 연결 구조 또는 3px 이상 위치 차이 중 하나가 보여야 개별 식별 PASS다.
++2. 이름과 기존 유형 문구를 다시 보인 PNG에서 기호를 직접 탐색, 조건 실행, 혼합으로 일관되게 묶는 시각 규칙이 있으면 유형 보조 PASS, 문구에만 의존하면 보조 없음으로 기록하되 기호만 보고 권한을 이해했다고 판정하지 않는다.
++3. 같은 ID의 목록, 상세, 보유 및 대기 캡처에서 기호 구조가 유지되고 잘림이나 이름 침범이 없어야 하며, 개별 식별과 안정성을 모두 통과한 후보 중 유형 보조가 있는 쪽을 채택하고 둘 다 실패하면 재설계한다.
++
++**B1 수정안: 상태가 아닌 실제 설정으로 고정 차이 만들기**
++
++- 직접 탐색: 후보 수를 점 개수, 최대 보유 `top`을 채운 점 개수로 유지하고 `uni`에 따라 coin8과 big3는 원, tech8은 사각, macro6는 마름모로 바꾼다. d1과 d4는 8개 중 3개가 같아도 원과 사각으로 갈리고, d4와 d5는 채운 점 3개와 2개로 갈린다. ID 해시로 밝은 점 위치를 고르는 17806 방식은 제거한다.
++- 조건 실행: V자 공통 구조를 유지하되 `rsiTh` 26/30/40/46/48/52를 골 깊이 19/16/13/10/7/4px에, `tp` 4/5/6/8/15/18/20을 오른쪽 끝점 x=6/9/12/15/18/21/24px에 대응시킨다. `tf=1`만 V 앞에 짧은 세로 관문을 둔다. r2와 r6는 같은 문턱이어도 끝점이 3px 갈린다. 비례 차트가 아닌 순서화된 고정 기호이며 성과선으로 쓰지 않는다.
++- 혼합: 왼쪽 후보 묶음과 오른쪽 관문의 연결은 유지하고 `uni`를 원 8개, 사각 8개, 마름모 6개, 원 3개, 마름모 3개로 구별한다. 실제 후보 수와 모양만으로 h1부터 h5가 갈리므로 현재의 해시 기반 3점 위치 변경(17809)을 버린다. 28px 안에서 8점과 관문이 뭉치면 이 안도 탈락이며 세부 수치를 더 넣어 해결하지 않는다.
++
++**4. Round 2 신뢰 구현 전 수정 순서**
++
++1. P0: 불변 ID 연결과 검증된 구저장 이전을 완료하고, 이름 변경 및 1페이지와 10페이지에서 같은 즐겨찾기와 따라가기 계정을 가리키는지 확인한다.
++2. P0: 전체 정책, 가격 데이터 버전, 종료 봉, 비용과 체결 계약으로 캐시를 구분하고 관련 시드와 기간 캐시를 함께 무효화한다.
++3. P0: 최신 순위의 기준 시점과 마지막 규칙 판단 객체를 분리해 정확히 연결하고, 혼합의 문턱 통과 전후 반례에서 표시 이유와 실제 행동을 대조한다.
++4. P0: 390px 상세 버튼 겹침을 없애고 지금을 첫 패널로 이동해 앱 배너를 포함한 첫 화면에서 실제 상태 본문이 보이게 한다.
++5. P1: 계산 함수 중복 선언을 제거한 뒤 조건 실행까지 공통 원장으로 옮기고 진입 비용, 열린 보유, 연도 경계, 비용 지표 정의를 맞춘다.
++6. P1: 원장 중복 청산과 비정상 입력을 거절하고 체결 사건에 수량, 현금 증감, 비용을 저장해 반환 사건만으로 잔고를 재생한다.
++7. P1: 데이터 기준 날짜와 저장 시작 봉의 관계를 고정하고 자정 전후 새로고침에서 같은 데이터의 날짜와 성과 연결이 보존되는지 확인한다.
++8. P1: 건널목의 범위와 주기, 동행과 환승의 행동 설명, 혼합의 두 일정, 매수 시 비중 문구, 따라가기 시트의 유형과 주체를 실제 정책에 맞춘다.
++9. P1: 조건 값과 문턱을 기존 셀에서 확인할 수 있게 하고, 성과의 누적 수익 위치를 옮긴 뒤 정책 순서를 고정한 1건 대 4건 렌더로 D4를 결정한다.
++10. P1: 위 3문장으로 B1과 B2, 동일 치수로 P1과 P3을 재대결하고 이름 두 건의 확정을 철회한 상태에서 20개 이름 조합을 재검토한다.
++
++검증 범위: 기존 PNG 8장 직접 확인과 코드 대조만 수행했다. 이번에는 계산 반례를 재실행하지 않았으며 이전 재현은 `r1-codex.md`에 있다. 수정 렌더, 실제 사용자 식별 시험, 구저장 이전 및 앱 회귀는 미검증이다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd send codex claude \"Round 1 교차 판정과 재대결 기준\" \"@artifacts/teth-redesign/r1-cross-codex.md\" -Type review" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 361ms:
+보냄 -> claude : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\claude\20260929-101226-codex-round-1-교차-판정과-재대결-기준.md
+id: 20260929-101226-codex-round-1-교차-판정과-재대결-기준
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd send codex claude \"Round 2 선행 검증 인계\" \"artifacts/teth-redesign/r1-cross-codex.md 작성 완료. 기존 PNG 8장과 index.html 코드만 대조했고 제품 파일은 수정하지 않았습니다. 혼합 지표 시점은 index.html 17732~17744와 17993 근거로 거절 판정을 기각했습니다. 보고서의 B1 도식, P1/P3, 최근 판단 1건/4건, 이름 수정안은 신규 렌더 미검증입니다. 구저장 ID 이전, 계산 반례 재실행, 앱 회귀도 이번에는 수행하지 않았으며 4절 순서로 확인해야 합니다. 62줄, 금지 문자 0개, git diff --check 통과, index.html SHA256 전후 동일 확인.\" -Type handoff" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 358ms:
+보냄 -> claude : C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\.mailbox\inbox\claude\20260929-101226-codex-round-2-선행-검증-인계.md
+id: 20260929-101226-codex-round-2-선행-검증-인계
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 338ms:
+codex 인박스 : (비어 있음)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "`$report = Get-Content -LiteralPath '"'artifacts/teth-redesign/r1-cross-codex.md' -Encoding UTF8; 'verdict_rows=' + (("'`$report | Select-String -Pattern '"'"'^'"\\| [0-9]+ \\| (ACCEPT|REJECT|MODIFY|TEST) \\|').Count); 'trailing_whitespace=' + (("'`$report | Select-String -Pattern '"'[ \\t]+"'$'"').Count)\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 302ms:
+verdict_rows=13
+trailing_whitespace=0
+
+diff --git a/AGENTS.md b/AGENTS.md
+index 64f5324baff0df898bd31f7a2d699f543c0a8cd3..5ecc52b273af9ad0e6a1dd7b6ee0889f42f54caa
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,6 +94,7 @@
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+ | `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+ | `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+diff --git a/artifacts/teth-redesign/r1-cross-codex.md b/artifacts/teth-redesign/r1-cross-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e1c23a49b272c00eef93f12d250084eb69a1460
+--- /dev/null
++++ b/artifacts/teth-redesign/r1-cross-codex.md
+@@ -0,0 +1,62 @@
++# ROUND 1 교차 검증: Codex Astra
++
++세 비평 문서, 식별 PNG 2장, 목록 PNG 2장, 상세 PNG 4장을 직접 대조했다. 아래 코드 줄은 현재 `index.html` 기준이다. 제품 수정과 신규 렌더는 하지 않았다. 확정 제약은 유지하며 기존 슬롯의 문구와 배치만 제안한다.
++
++**1. Claude 독립 비판 13개 판정**
++
++| # | 판정 | 근거와 조치 |
++| --- | --- | --- |
++| 1 | MODIFY | 유형은 이미 이름 아래 첫 줄이다(`r1-id-B1.png`). 이동 요구는 중복이며 13.5px 굵기 조정만 시험하고 범위와의 한 줄 유지를 확인한다. |
++| 2 | TEST | 흰 버튼 띠는 보이지만 P3의 따라가기 굵게는 행동 우선순위를 다시 뒤집는다. 동일 치수의 P1과 P3을 20장 전체로 비교하고 자세히의 발견성을 함께 판정한다. |
++| 3 | MODIFY | 수익률이 유일한 색이라는 진단은 거래소 로고와 차트 때문에 부정확하다. 이름 18px, 수익률 16px로 조정하되 PNG만으로 첫 시선을 측정했다고 쓰지 않는다. |
++| 4 | ACCEPT | `r1-id-B1.png`의 작은 채움은 변화량 판독에 보탬이 적다. 미니 차트만 선으로 바꾸고 상승과 하락 구간은 보존한다. |
++| 5 | MODIFY | 넓히기만 하면 상태가 먼저 보인다는 보장은 없다. 데스크톱은 지금을 왼쪽, 모바일은 지금을 첫 패널로 두고 필요한 내용으로 폭을 정한다. |
++| 6 | MODIFY | 막대만으로는 무엇에 가까운지 검증할 수 없다. 기존 값 셀 안에 실제 값, 기준 26 미만, 경계선과 현재점을 함께 두며 완료율처럼 채우지 않는다. |
++| 7 | ACCEPT | `r1-detail-1-full.png`는 시작 이후 수익이 같은 지표 줄의 다섯 번째 칸이다. 기존 문구와 값을 차트 아래로 옮긴다. |
++| 8 | MODIFY | 문제는 조사 누락이 아니라 말투 혼재다. 행동 제목의 명사형을 모두 늘리지 말고 판단 설명과 행동 결과 문장부터 해요체로 맞춘다. |
++| 9 | MODIFY | 상세의 단일 CTA와 목록의 20개 CTA는 상황이 다르다. 위치는 유지하고 120x44px를 시작값으로 쓰되 모바일 겹침부터 없앤다(`r1-detail-390.png`). |
++| 10 | MODIFY | `r1-main-top.png`의 첫 카드가 약 y=592인 것은 맞지만 설명 전체를 옆에 붙이면 좁은 폭에서 다시 감긴다. 넓은 화면만 병렬 배치하고 1280px와 390px에서 읽힘을 보존한다. |
++| 11 | REJECT | 하락 강도 20을 2주 동안 거의 계속 내림으로 바꾸면 지표를 하락 일수로 오역한다. 기존 기록 문장 안에서 실제 값과 문턱의 관계를 설명한다. |
++| 12 | ACCEPT | `r1-main-390.png`의 되짚기 한 줄 설명 아래에 불필요한 빈 줄이 보인다. 모바일 설명 최소 높이만 해제한다. |
++| 13 | MODIFY | 낙폭 낮은 순은 이미 있다(`r1-id-B1.png`). 유지에는 동의하지만 정렬이 기본 화면의 위험 발견을 해결했다는 판정은 기각하며 수치의 가독성은 유지한다. |
++
++**2. Claude 교차 판정에서 철회하거나 보강할 것**
++
++| 쟁점 | 재판정과 근거 |
++| --- | --- |
++| B1 대 B2 | TEST 수용. 내 이전 B1 탈락 사유 중 고정 도식이라는 이유는 철회한다. 다만 3초 시험의 실패는 권한 분담 설명까지 포함했으므로 점과 선만으로 해결됐다는 Claude의 추론도 성립하지 않는다. B1의 맞물림과 거름은 거의 같고 B2의 서로 다른 SVG 문자열도 시각 구별 증명이 아니다. |
++| D4, 최근 판단 4건 | REJECT의 근거 부족. 여러 판단이 필요하다는 요구가 개요에 정확히 4건을 펼칠 근거는 아니다. `r1-detail-1-full.png`의 5건을 4건으로 줄여도 네 사건의 본문은 남는다. 정책을 위로 올리는 조치는 수용하되, 같은 순서에서 1건과 4건을 렌더해 정책 도달 위치와 전체 기록 접근을 비교한다. 내 1건안도 검증 전 확정하지 않는다. |
++| 혼합 지표 시점 | REJECT를 기각한다. 17732~17735는 전봉 RSI와 당일 반등을 함께 검사하지만 17744는 당일 RSI와 당일 반등을 묶는다. 이것은 마지막 판단도 다음 판단의 완성된 입력도 아니다. 17993의 현재 대기 이유를 마지막 평가 객체에서 출력하고 기준 시각을 기존 날짜 문구에 반영해야 한다. 행 이름을 미래형으로 바꿔도 잘못된 조합은 남는다. |
++| 이름 자리바꿈 | 확정 철회, TEST. 세 자리와 세 갈래의 유사성은 유효한 우려지만 자리바꿈은 이미 있는 환승과 교체 의미가 겹친다. d4는 셋 보유 정책이지 매번 교체 보장이 아니다(16056). 세 자리와 자리바꿈을 각각 세 갈래, 환승 옆에 놓아 비교할 때까지 승자는 없다. |
++| 이름 번갈이 | REJECT. h3는 순위로 하나를 고르며 같은 종목이면 선택 사건도 만들지 않는다(17726~17731). 번갈이는 교대 순서를 암시하므로 세라는 음절 중복을 피하려다 행동 오인을 만든다. 세 지평 또는 지수와 금을 기존 이름 슬롯의 시험 후보로 되돌린다. |
++| M6와 D5의 수용 | 간격 16px는 기간 이해의 증명이 아니며 수치 없는 막대는 정량 근거가 아니다. 각각 묶음 분리와 기준 대비 현재 위치라는 제한된 개선으로 기록하고 전체 이해 PASS로 확대하지 않는다. |
++| 이름 연결 MODIFY | 비교 스위치를 지워도 다음 이름 교체와 저장 이름 조회 실패는 남는다. 검증된 구전략 별칭만 이전하는 원칙은 수용하되 저장, 라우트, 즐겨찾기, 따라가기를 불변 ID로 연결해야 한다. 미매핑 저장은 보존하고 원금과 손익 0의 정상 결과로 조용히 대체하지 않는다. |
++| 뒤쪽 재선언 ACCEPT | 마지막 라운드로 미루는 것은 수용이 아니라 위험 연장이다. 신뢰 화면이 어느 계산 함수를 쓰는지 확정해야 하므로 Round 2 계산 변경 전에 단일 정의로 정리한다. |
++| 날짜 기준 MODIFY | 세션 고정은 허용할 수 있지만 새로고침만으로 해결되지는 않는다. 같은 생성 가격의 이력 날짜가 이동하고 저장 시작 봉의 의미도 달라지는 문제에 데이터 버전과 기준 날짜를 함께 고정해야 한다. |
++
++**3. 식별 재대결의 확정 판정 기준, 3문장**
++
++1. 동일한 20개 전략, 순서, 이름, 버튼으로 1440px와 1280px의 4열 전체 및 390px 목록을 캡처하고, 실제 28px 흑백 기호에서 이름을 가린 같은 유형의 모든 쌍에 점 개수, 연결 구조 또는 3px 이상 위치 차이 중 하나가 보여야 개별 식별 PASS다.
++2. 이름과 기존 유형 문구를 다시 보인 PNG에서 기호를 직접 탐색, 조건 실행, 혼합으로 일관되게 묶는 시각 규칙이 있으면 유형 보조 PASS, 문구에만 의존하면 보조 없음으로 기록하되 기호만 보고 권한을 이해했다고 판정하지 않는다.
++3. 같은 ID의 목록, 상세, 보유 및 대기 캡처에서 기호 구조가 유지되고 잘림이나 이름 침범이 없어야 하며, 개별 식별과 안정성을 모두 통과한 후보 중 유형 보조가 있는 쪽을 채택하고 둘 다 실패하면 재설계한다.
++
++**B1 수정안: 상태가 아닌 실제 설정으로 고정 차이 만들기**
++
++- 직접 탐색: 후보 수를 점 개수, 최대 보유 `top`을 채운 점 개수로 유지하고 `uni`에 따라 coin8과 big3는 원, tech8은 사각, macro6는 마름모로 바꾼다. d1과 d4는 8개 중 3개가 같아도 원과 사각으로 갈리고, d4와 d5는 채운 점 3개와 2개로 갈린다. ID 해시로 밝은 점 위치를 고르는 17806 방식은 제거한다.
++- 조건 실행: V자 공통 구조를 유지하되 `rsiTh` 26/30/40/46/48/52를 골 깊이 19/16/13/10/7/4px에, `tp` 4/5/6/8/15/18/20을 오른쪽 끝점 x=6/9/12/15/18/21/24px에 대응시킨다. `tf=1`만 V 앞에 짧은 세로 관문을 둔다. r2와 r6는 같은 문턱이어도 끝점이 3px 갈린다. 비례 차트가 아닌 순서화된 고정 기호이며 성과선으로 쓰지 않는다.
++- 혼합: 왼쪽 후보 묶음과 오른쪽 관문의 연결은 유지하고 `uni`를 원 8개, 사각 8개, 마름모 6개, 원 3개, 마름모 3개로 구별한다. 실제 후보 수와 모양만으로 h1부터 h5가 갈리므로 현재의 해시 기반 3점 위치 변경(17809)을 버린다. 28px 안에서 8점과 관문이 뭉치면 이 안도 탈락이며 세부 수치를 더 넣어 해결하지 않는다.
++
++**4. Round 2 신뢰 구현 전 수정 순서**
++
++1. P0: 불변 ID 연결과 검증된 구저장 이전을 완료하고, 이름 변경 및 1페이지와 10페이지에서 같은 즐겨찾기와 따라가기 계정을 가리키는지 확인한다.
++2. P0: 전체 정책, 가격 데이터 버전, 종료 봉, 비용과 체결 계약으로 캐시를 구분하고 관련 시드와 기간 캐시를 함께 무효화한다.
++3. P0: 최신 순위의 기준 시점과 마지막 규칙 판단 객체를 분리해 정확히 연결하고, 혼합의 문턱 통과 전후 반례에서 표시 이유와 실제 행동을 대조한다.
++4. P0: 390px 상세 버튼 겹침을 없애고 지금을 첫 패널로 이동해 앱 배너를 포함한 첫 화면에서 실제 상태 본문이 보이게 한다.
++5. P1: 계산 함수 중복 선언을 제거한 뒤 조건 실행까지 공통 원장으로 옮기고 진입 비용, 열린 보유, 연도 경계, 비용 지표 정의를 맞춘다.
++6. P1: 원장 중복 청산과 비정상 입력을 거절하고 체결 사건에 수량, 현금 증감, 비용을 저장해 반환 사건만으로 잔고를 재생한다.
++7. P1: 데이터 기준 날짜와 저장 시작 봉의 관계를 고정하고 자정 전후 새로고침에서 같은 데이터의 날짜와 성과 연결이 보존되는지 확인한다.
++8. P1: 건널목의 범위와 주기, 동행과 환승의 행동 설명, 혼합의 두 일정, 매수 시 비중 문구, 따라가기 시트의 유형과 주체를 실제 정책에 맞춘다.
++9. P1: 조건 값과 문턱을 기존 셀에서 확인할 수 있게 하고, 성과의 누적 수익 위치를 옮긴 뒤 정책 순서를 고정한 1건 대 4건 렌더로 D4를 결정한다.
++10. P1: 위 3문장으로 B1과 B2, 동일 치수로 P1과 P3을 재대결하고 이름 두 건의 확정을 철회한 상태에서 20개 이름 조합을 재검토한다.
++
++검증 범위: 기존 PNG 8장 직접 확인과 코드 대조만 수행했다. 이번에는 계산 반례를 재실행하지 않았으며 이전 재현은 `r1-codex.md`에 있다. 수정 렌더, 실제 사용자 식별 시험, 구저장 이전 및 앱 회귀는 미검증이다.
+
+codex
+[r1-cross-codex.md](<C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/artifacts/teth-redesign/r1-cross-codex.md>) 작성 완료했습니다. 62줄에 13개 판정, 핵심 반론, 식별 기준 3문장, B1 수정안, 선행 수정 10개를 담았습니다.
+
+금지 문자 0개, 형식 검사 통과. `index.html`은 변경하지 않았습니다. 수정안 신규 렌더는 미검증으로 명시했습니다.
+diff --git a/AGENTS.md b/AGENTS.md
+index 64f5324baff0df898bd31f7a2d699f543c0a8cd3..5ecc52b273af9ad0e6a1dd7b6ee0889f42f54caa
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,6 +94,7 @@
+ | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+ | `artifacts/teth-redesign/r0-cross-codex.md` | Round 0 교차 검증. Claude 비판 15개 판정, 계산기 원장 결함의 줄 단위 근거와 재현, 고정 UI 제약 안의 Round 1 후보 및 이름 24안을 기록한다. 제품 구현이나 신규 렌더 완료 보고가 아니다. |
+ | `artifacts/teth-redesign/r1-codex.md` | Round 1 독립 PNG 비평. 이름 C 20개 재렌더, 이름·식별·버튼 선택, 목록 시간별 평가, 상세 유형 비교와 계산기·캐시·저장 호환 재현을 기록한다. 제품 수정이나 최종 승인 보고가 아니다. |
++| `artifacts/teth-redesign/r1-cross-codex.md` | Round 1 교차 검증. Claude 비판 13개 판정, 교차 판정 반론, 식별 재대결의 시각 기준과 B1 설정 도식안, Round 2 선행 수정 순서를 기록한다. 기존 PNG와 코드 대조이며 제품 수정이나 신규 렌더 완료 보고가 아니다. |
+ | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
+ | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
+ | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
+diff --git a/artifacts/teth-redesign/r1-cross-codex.md b/artifacts/teth-redesign/r1-cross-codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e1c23a49b272c00eef93f12d250084eb69a1460
+--- /dev/null
++++ b/artifacts/teth-redesign/r1-cross-codex.md
+@@ -0,0 +1,62 @@
++# ROUND 1 교차 검증: Codex Astra
++
++세 비평 문서, 식별 PNG 2장, 목록 PNG 2장, 상세 PNG 4장을 직접 대조했다. 아래 코드 줄은 현재 `index.html` 기준이다. 제품 수정과 신규 렌더는 하지 않았다. 확정 제약은 유지하며 기존 슬롯의 문구와 배치만 제안한다.
++
++**1. Claude 독립 비판 13개 판정**
++
++| # | 판정 | 근거와 조치 |
++| --- | --- | --- |
++| 1 | MODIFY | 유형은 이미 이름 아래 첫 줄이다(`r1-id-B1.png`). 이동 요구는 중복이며 13.5px 굵기 조정만 시험하고 범위와의 한 줄 유지를 확인한다. |
++| 2 | TEST | 흰 버튼 띠는 보이지만 P3의 따라가기 굵게는 행동 우선순위를 다시 뒤집는다. 동일 치수의 P1과 P3을 20장 전체로 비교하고 자세히의 발견성을 함께 판정한다. |
++| 3 | MODIFY | 수익률이 유일한 색이라는 진단은 거래소 로고와 차트 때문에 부정확하다. 이름 18px, 수익률 16px로 조정하되 PNG만으로 첫 시선을 측정했다고 쓰지 않는다. |
++| 4 | ACCEPT | `r1-id-B1.png`의 작은 채움은 변화량 판독에 보탬이 적다. 미니 차트만 선으로 바꾸고 상승과 하락 구간은 보존한다. |
++| 5 | MODIFY | 넓히기만 하면 상태가 먼저 보인다는 보장은 없다. 데스크톱은 지금을 왼쪽, 모바일은 지금을 첫 패널로 두고 필요한 내용으로 폭을 정한다. |
++| 6 | MODIFY | 막대만으로는 무엇에 가까운지 검증할 수 없다. 기존 값 셀 안에 실제 값, 기준 26 미만, 경계선과 현재점을 함께 두며 완료율처럼 채우지 않는다. |
++| 7 | ACCEPT | `r1-detail-1-full.png`는 시작 이후 수익이 같은 지표 줄의 다섯 번째 칸이다. 기존 문구와 값을 차트 아래로 옮긴다. |
++| 8 | MODIFY | 문제는 조사 누락이 아니라 말투 혼재다. 행동 제목의 명사형을 모두 늘리지 말고 판단 설명과 행동 결과 문장부터 해요체로 맞춘다. |
++| 9 | MODIFY | 상세의 단일 CTA와 목록의 20개 CTA는 상황이 다르다. 위치는 유지하고 120x44px를 시작값으로 쓰되 모바일 겹침부터 없앤다(`r1-detail-390.png`). |
++| 10 | MODIFY | `r1-main-top.png`의 첫 카드가 약 y=592인 것은 맞지만 설명 전체를 옆에 붙이면 좁은 폭에서 다시 감긴다. 넓은 화면만 병렬 배치하고 1280px와 390px에서 읽힘을 보존한다. |
++| 11 | REJECT | 하락 강도 20을 2주 동안 거의 계속 내림으로 바꾸면 지표를 하락 일수로 오역한다. 기존 기록 문장 안에서 실제 값과 문턱의 관계를 설명한다. |
++| 12 | ACCEPT | `r1-main-390.png`의 되짚기 한 줄 설명 아래에 불필요한 빈 줄이 보인다. 모바일 설명 최소 높이만 해제한다. |
++| 13 | MODIFY | 낙폭 낮은 순은 이미 있다(`r1-id-B1.png`). 유지에는 동의하지만 정렬이 기본 화면의 위험 발견을 해결했다는 판정은 기각하며 수치의 가독성은 유지한다. |
++
++**2. Claude 교차 판정에서 철회하거나 보강할 것**
++
++| 쟁점 | 재판정과 근거 |
++| --- | --- |
++| B1 대 B2 | TEST 수용. 내 이전 B1 탈락 사유 중 고정 도식이라는 이유는 철회한다. 다만 3초 시험의 실패는 권한 분담 설명까지 포함했으므로 점과 선만으로 해결됐다는 Claude의 추론도 성립하지 않는다. B1의 맞물림과 거름은 거의 같고 B2의 서로 다른 SVG 문자열도 시각 구별 증명이 아니다. |
++| D4, 최근 판단 4건 | REJECT의 근거 부족. 여러 판단이 필요하다는 요구가 개요에 정확히 4건을 펼칠 근거는 아니다. `r1-detail-1-full.png`의 5건을 4건으로 줄여도 네 사건의 본문은 남는다. 정책을 위로 올리는 조치는 수용하되, 같은 순서에서 1건과 4건을 렌더해 정책 도달 위치와 전체 기록 접근을 비교한다. 내 1건안도 검증 전 확정하지 않는다. |
++| 혼합 지표 시점 | REJECT를 기각한다. 17732~17735는 전봉 RSI와 당일 반등을 함께 검사하지만 17744는 당일 RSI와 당일 반등을 묶는다. 이것은 마지막 판단도 다음 판단의 완성된 입력도 아니다. 17993의 현재 대기 이유를 마지막 평가 객체에서 출력하고 기준 시각을 기존 날짜 문구에 반영해야 한다. 행 이름을 미래형으로 바꿔도 잘못된 조합은 남는다. |
++| 이름 자리바꿈 | 확정 철회, TEST. 세 자리와 세 갈래의 유사성은 유효한 우려지만 자리바꿈은 이미 있는 환승과 교체 의미가 겹친다. d4는 셋 보유 정책이지 매번 교체 보장이 아니다(16056). 세 자리와 자리바꿈을 각각 세 갈래, 환승 옆에 놓아 비교할 때까지 승자는 없다. |
++| 이름 번갈이 | REJECT. h3는 순위로 하나를 고르며 같은 종목이면 선택 사건도 만들지 않는다(17726~17731). 번갈이는 교대 순서를 암시하므로 세라는 음절 중복을 피하려다 행동 오인을 만든다. 세 지평 또는 지수와 금을 기존 이름 슬롯의 시험 후보로 되돌린다. |
++| M6와 D5의 수용 | 간격 16px는 기간 이해의 증명이 아니며 수치 없는 막대는 정량 근거가 아니다. 각각 묶음 분리와 기준 대비 현재 위치라는 제한된 개선으로 기록하고 전체 이해 PASS로 확대하지 않는다. |
++| 이름 연결 MODIFY | 비교 스위치를 지워도 다음 이름 교체와 저장 이름 조회 실패는 남는다. 검증된 구전략 별칭만 이전하는 원칙은 수용하되 저장, 라우트, 즐겨찾기, 따라가기를 불변 ID로 연결해야 한다. 미매핑 저장은 보존하고 원금과 손익 0의 정상 결과로 조용히 대체하지 않는다. |
++| 뒤쪽 재선언 ACCEPT | 마지막 라운드로 미루는 것은 수용이 아니라 위험 연장이다. 신뢰 화면이 어느 계산 함수를 쓰는지 확정해야 하므로 Round 2 계산 변경 전에 단일 정의로 정리한다. |
++| 날짜 기준 MODIFY | 세션 고정은 허용할 수 있지만 새로고침만으로 해결되지는 않는다. 같은 생성 가격의 이력 날짜가 이동하고 저장 시작 봉의 의미도 달라지는 문제에 데이터 버전과 기준 날짜를 함께 고정해야 한다. |
++
++**3. 식별 재대결의 확정 판정 기준, 3문장**
++
++1. 동일한 20개 전략, 순서, 이름, 버튼으로 1440px와 1280px의 4열 전체 및 390px 목록을 캡처하고, 실제 28px 흑백 기호에서 이름을 가린 같은 유형의 모든 쌍에 점 개수, 연결 구조 또는 3px 이상 위치 차이 중 하나가 보여야 개별 식별 PASS다.
++2. 이름과 기존 유형 문구를 다시 보인 PNG에서 기호를 직접 탐색, 조건 실행, 혼합으로 일관되게 묶는 시각 규칙이 있으면 유형 보조 PASS, 문구에만 의존하면 보조 없음으로 기록하되 기호만 보고 권한을 이해했다고 판정하지 않는다.
++3. 같은 ID의 목록, 상세, 보유 및 대기 캡처에서 기호 구조가 유지되고 잘림이나 이름 침범이 없어야 하며, 개별 식별과 안정성을 모두 통과한 후보 중 유형 보조가 있는 쪽을 채택하고 둘 다 실패하면 재설계한다.
++
++**B1 수정안: 상태가 아닌 실제 설정으로 고정 차이 만들기**
++
++- 직접 탐색: 후보 수를 점 개수, 최대 보유 `top`을 채운 점 개수로 유지하고 `uni`에 따라 coin8과 big3는 원, tech8은 사각, macro6는 마름모로 바꾼다. d1과 d4는 8개 중 3개가 같아도 원과 사각으로 갈리고, d4와 d5는 채운 점 3개와 2개로 갈린다. ID 해시로 밝은 점 위치를 고르는 17806 방식은 제거한다.
++- 조건 실행: V자 공통 구조를 유지하되 `rsiTh` 26/30/40/46/48/52를 골 깊이 19/16/13/10/7/4px에, `tp` 4/5/6/8/15/18/20을 오른쪽 끝점 x=6/9/12/15/18/21/24px에 대응시킨다. `tf=1`만 V 앞에 짧은 세로 관문을 둔다. r2와 r6는 같은 문턱이어도 끝점이 3px 갈린다. 비례 차트가 아닌 순서화된 고정 기호이며 성과선으로 쓰지 않는다.
++- 혼합: 왼쪽 후보 묶음과 오른쪽 관문의 연결은 유지하고 `uni`를 원 8개, 사각 8개, 마름모 6개, 원 3개, 마름모 3개로 구별한다. 실제 후보 수와 모양만으로 h1부터 h5가 갈리므로 현재의 해시 기반 3점 위치 변경(17809)을 버린다. 28px 안에서 8점과 관문이 뭉치면 이 안도 탈락이며 세부 수치를 더 넣어 해결하지 않는다.
++
++**4. Round 2 신뢰 구현 전 수정 순서**
++
++1. P0: 불변 ID 연결과 검증된 구저장 이전을 완료하고, 이름 변경 및 1페이지와 10페이지에서 같은 즐겨찾기와 따라가기 계정을 가리키는지 확인한다.
++2. P0: 전체 정책, 가격 데이터 버전, 종료 봉, 비용과 체결 계약으로 캐시를 구분하고 관련 시드와 기간 캐시를 함께 무효화한다.
++3. P0: 최신 순위의 기준 시점과 마지막 규칙 판단 객체를 분리해 정확히 연결하고, 혼합의 문턱 통과 전후 반례에서 표시 이유와 실제 행동을 대조한다.
++4. P0: 390px 상세 버튼 겹침을 없애고 지금을 첫 패널로 이동해 앱 배너를 포함한 첫 화면에서 실제 상태 본문이 보이게 한다.
++5. P1: 계산 함수 중복 선언을 제거한 뒤 조건 실행까지 공통 원장으로 옮기고 진입 비용, 열린 보유, 연도 경계, 비용 지표 정의를 맞춘다.
++6. P1: 원장 중복 청산과 비정상 입력을 거절하고 체결 사건에 수량, 현금 증감, 비용을 저장해 반환 사건만으로 잔고를 재생한다.
++7. P1: 데이터 기준 날짜와 저장 시작 봉의 관계를 고정하고 자정 전후 새로고침에서 같은 데이터의 날짜와 성과 연결이 보존되는지 확인한다.
++8. P1: 건널목의 범위와 주기, 동행과 환승의 행동 설명, 혼합의 두 일정, 매수 시 비중 문구, 따라가기 시트의 유형과 주체를 실제 정책에 맞춘다.
++9. P1: 조건 값과 문턱을 기존 셀에서 확인할 수 있게 하고, 성과의 누적 수익 위치를 옮긴 뒤 정책 순서를 고정한 1건 대 4건 렌더로 D4를 결정한다.
++10. P1: 위 3문장으로 B1과 B2, 동일 치수로 P1과 P3을 재대결하고 이름 두 건의 확정을 철회한 상태에서 20개 이름 조합을 재검토한다.
++
++검증 범위: 기존 PNG 8장 직접 확인과 코드 대조만 수행했다. 이번에는 계산 반례를 재실행하지 않았으며 이전 재현은 `r1-codex.md`에 있다. 수정 렌더, 실제 사용자 식별 시험, 구저장 이전 및 앱 회귀는 미검증이다.
+
+tokens used
+83,978
+[r1-cross-codex.md](<C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/artifacts/teth-redesign/r1-cross-codex.md>) 작성 완료했습니다. 62줄에 13개 판정, 핵심 반론, 식별 기준 3문장, B1 수정안, 선행 수정 10개를 담았습니다.
+
+금지 문자 0개, 형식 검사 통과. `index.html`은 변경하지 않았습니다. 수정안 신규 렌더는 미검증으로 명시했습니다.

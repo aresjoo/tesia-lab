@@ -92,6 +92,7 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | 경로 | 현재 역할 |
 | --- | --- |
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
+| `artifacts/teth-redesign/` | 전략 목록과 상세 개편(2026-09-29)의 기록. 라운드별 Claude, Codex 비평(`r0` ~ `r8`), 기준과 최종 스크린샷, `tools/` 에 `index.html` 의 `MK_CAT`, `RD_CORE`, `RD_CSS` 블록을 만드는 소스와 적용 스크립트가 있다. 세 판단 방식(직접 탐색, 조건 실행, 혼합)은 하나의 원장 엔진으로 계산한다. |
 | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
 | `ux/review/CODEX_FIX_REPORT.md` | 병합 수정 라운드의 재현, 수용·기각 판정, 변경 함수, 검증 결과와 남은 목업 한계. |
 | `ux/review/USAGE_3WAY_CODEX.md` | 이용 현황 수치 비노출, 청구 이유, 체험 게이트, 창작자 보상과 상업 상태별 문구에 대한 CODEX 제품 판정 제안. 구현 완료 명세가 아니다. |
