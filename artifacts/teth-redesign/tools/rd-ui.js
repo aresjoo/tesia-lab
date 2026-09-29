@@ -163,7 +163,7 @@ function tfSS3GridHtml(){
   rows.sort(f);
   if(t.ss.dir==='asc') rows.reverse();
   if(!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없어요<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
-  var PER=20, MAXP=10;
+  var PER=10, MAXP=10; /* 2열 5행 */
   /* 필터와 검색이 없을 때만 20종을 10페이지로 반복한다. 정렬은 반복 전에 끝낸다. 모든 페이지가 같은 전략 ID 를 가리킨다 */
   var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&!TF_SS_Q;
   if(plain){ var base=rows.filter(function(s){ return !s.me; }), all=rows.slice(); for(var rp=1;rp<MAXP&&base.length;rp++) all=all.concat(base); rows=all; }

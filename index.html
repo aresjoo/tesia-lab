@@ -5350,9 +5350,8 @@ body.tm-helpon #teth-help-pop.on{display:block!important}
 <style>
 /*RD_CSS_BEGIN*/
 /* ═══ 판단 방식 중심 목록과 상세 (rd) ═══ */
-#g-root .mk3-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-@media (max-width:1180px){#g-root .mk3-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:1000px){#g-root .mk3-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#g-root .mk3-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:1100px){#g-root .mk3-grid{gap:14px}}
 @media (max-width:640px){#g-root .mk3-grid{grid-template-columns:minmax(0,1fr)}}
 #g-root .mk3{gap:0;padding:18px 18px 16px;border-radius:14px;border-color:rgba(255,255,255,.10);background:#131517}
 .mk3-head{display:flex;align-items:center;gap:10px;min-height:28px}
@@ -5541,6 +5540,25 @@ body.tm-helpon #teth-help-pop.on{display:block!important}
 
 /* Round 7: 따라가기 시트 위에서 여는 대화 상자는 시트보다 위 */
 body:has(#mk-follow) #ss3-dlgw{z-index:340}
+
+/* 2열 가로형 카드: 왼쪽은 무엇을 하는 시스템인지, 오른쪽은 성과와 버튼. 1280 미만은 2열 세로형, 640 이하는 1열 */
+@media (min-width:1280px){
+  #g-root .mk3{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:32px;align-items:start;padding:24px 26px 22px}
+  #g-root .mk3 .mk3-head{grid-column:1;grid-row:1}
+  #g-root .mk3 .mk3-head h3,#g-root .mk3 .mk3-t{font-size:20px}
+  #g-root .mk3 .mk3-how{grid-column:1;grid-row:2}
+  #g-root .mk3 .mk3-one{grid-column:1;grid-row:3;margin-top:8px;font-size:15px;min-height:45px}
+  #g-root .mk3 .mk3-now{grid-column:1;grid-row:4;margin-top:16px;padding-top:12px;font-size:13px}
+  #g-root .mk3 .mk3-perf{grid-column:2;grid-row:1 / span 2;margin:0;gap:18px}
+  #g-root .mk3 .mk3-ret b{font-size:22px}
+  #g-root .mk3 .mk-spark{width:112px;height:42px}
+  #g-root .mk3 .mk3-stats{grid-column:2;grid-row:3;margin:14px 0 0;align-self:end}
+  #g-root .mk3 .mk3-foot{grid-column:2;grid-row:4;margin-top:16px}
+}
+@media (min-width:1280px) and (max-width:1439px){
+  #g-root .mk3{column-gap:26px}
+  #g-root .mk3 .mk3-one{font-size:14.5px;min-height:44px}
+}
 /*RD_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -17749,7 +17767,7 @@ function tfSS3GridHtml(){
   rows.sort(f);
   if(t.ss.dir==='asc') rows.reverse();
   if(!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없어요<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
-  var PER=20, MAXP=10;
+  var PER=10, MAXP=10; /* 2열 5행 */
   /* 필터와 검색이 없을 때만 20종을 10페이지로 반복한다. 정렬은 반복 전에 끝낸다. 모든 페이지가 같은 전략 ID 를 가리킨다 */
   var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&!TF_SS_Q;
   if(plain){ var base=rows.filter(function(s){ return !s.me; }), all=rows.slice(); for(var rp=1;rp<MAXP&&base.length;rp++) all=all.concat(base); rows=all; }
