@@ -48,7 +48,7 @@ function mkFutRun(c){
     cur=i;
     /* ① 전날 정한 주문: 시가 체결. 닫고 나서 연다 */
     if(pend.length){ var opx=function(k){ return DT[J[k]].o[i]; };
-      pend.forEach(function(o){ if(o.t!=='close'||L.pos.indexOf(o.p)<0){ if(o.t==='close') o.ev._drop=1; return; } fillExit(o.ev,L.close(o.p,opx(o.p.k),i,o.why)); });
+      pend.forEach(function(o){ if(o.t!=='close'||L.pos.indexOf(o.p)<0){ if(o.t==='close') o.ev._drop=1; return; } var po=opx(o.p.k), lq=L.liqPx(o.p), gl=o.p.side>0?po<=lq:po>=lq; if(gl) o.ev.why='liq'; fillExit(o.ev,L.close(o.p,po,i,gl?'liq':o.why,gl)); });
       var tot=L.cash; L.pos.forEach(function(p){ tot+=Math.max(0,L.eqOf(p,opx(p.k))); });
       pend.forEach(function(o){ if(o.t!=='open') return; var p=L.open(o.k,o.side,o.w*tot,lev,opx(o.k),i,{w:o.w}), e=o.ev; if(!p){ e._drop=1; return; } delete e._pend; e.xi=i; e.tid=p.id; e.px=p.ep; e.units=p.units; e.cost=p.cost; e.fee=p.fee; e.liq=L.liqPx(p); });
       pend=[]; }

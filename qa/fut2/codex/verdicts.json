@@ -1,0 +1,197 @@
+[
+  {
+    "id": "f1",
+    "verdict": "KEEP WITH LOWER LEVERAGE",
+    "reason": "2→1배: 563.6 / −31.3; 비용 스트레스 440.7. 이웃 MDD −70.5% 때문에 감축.",
+    "config": {
+      "id": "f1",
+      "kind": "rule",
+      "asset": "비앤비",
+      "mode": "ma",
+      "fast": 20,
+      "slow": 70,
+      "trail": 25,
+      "sl": 10,
+      "lev": 1,
+      "claude": {
+        "ret": 2085.6,
+        "mdd": -45
+      }
+    }
+  },
+  {
+    "id": "f2",
+    "verdict": "KEEP WITH LOWER LEVERAGE",
+    "reason": "2→1배: 650.2 / −30.3; 비용 스트레스 536.4. 이웃의 후반 손실·MDD −70.7% 때문에 감축.",
+    "config": {
+      "id": "f2",
+      "kind": "rule",
+      "asset": "도지코인",
+      "mode": "ma",
+      "fast": 10,
+      "slow": 100,
+      "trail": 20,
+      "sl": 10,
+      "lev": 1,
+      "claude": {
+        "ret": 1888,
+        "mdd": -49.5
+      }
+    }
+  },
+  {
+    "id": "f3",
+    "verdict": "KEEP",
+    "reason": "1배 유지. 전체·후반·이웃·비용 검사에서 가장 일관된 축.",
+    "config": {
+      "id": "f3",
+      "kind": "rule",
+      "asset": "아발란체",
+      "mode": "brk",
+      "n": 55,
+      "exitN": 10,
+      "trail": 20,
+      "reg": 200,
+      "lev": 1,
+      "claude": {
+        "ret": 770.9,
+        "mdd": -33
+      }
+    }
+  },
+  {
+    "id": "f4",
+    "verdict": "KEEP WITH LOWER LEVERAGE",
+    "reason": "2→1배: 204.7 / −23.9; 비용 스트레스 158.5. trail 15→12에서 2배 MDD −61.1%.",
+    "config": {
+      "id": "f4",
+      "kind": "rule",
+      "asset": "이더리움",
+      "mode": "brk",
+      "n": 70,
+      "exitN": 20,
+      "trail": 15,
+      "reg": 200,
+      "lev": 1,
+      "claude": {
+        "ret": 644.4,
+        "mdd": -42.6
+      }
+    }
+  },
+  {
+    "id": "f5",
+    "verdict": "KEEP",
+    "reason": "1배·현재 정의 유지. 모든 재시작 통과; look·exitN 민감도는 큼.",
+    "config": {
+      "id": "f5",
+      "kind": "mix",
+      "uni": "big3",
+      "mode": "brk",
+      "every": 3,
+      "look": 45,
+      "gate": 0.5,
+      "n": 20,
+      "exitN": 15,
+      "sl": 10,
+      "lev": 1,
+      "claude": {
+        "ret": 480.1,
+        "mdd": -45.4
+      }
+    }
+  },
+  {
+    "id": "f6",
+    "verdict": "KEEP",
+    "reason": "1배 유지. 후반 81.6%; slow=35 이웃은 후반 −9.2%, 증액 근거는 약함.",
+    "config": {
+      "id": "f6",
+      "kind": "rule",
+      "asset": "에이다",
+      "mode": "ma",
+      "fast": 15,
+      "slow": 50,
+      "trail": 20,
+      "lev": 1,
+      "claude": {
+        "ret": 440.8,
+        "mdd": -47.3
+      }
+    }
+  },
+  {
+    "id": "f7",
+    "verdict": "KEEP",
+    "reason": "1배 유지. 위상 최저 163.9%도 양수지만 548.9%를 대표 성과로 삼기 어려움.",
+    "config": {
+      "id": "f7",
+      "kind": "agent",
+      "uni": "coin8",
+      "every": 3,
+      "look": 60,
+      "top": 1,
+      "gate": 0.88,
+      "lev": 1,
+      "claude": {
+        "ret": 548.9,
+        "mdd": -37.4
+      }
+    }
+  },
+  {
+    "id": "f8",
+    "verdict": "KEEP",
+    "reason": "1배 유지. 이웃·비용 검사가 강함. f3와 같은 AVAX이므로 독립 분산으로 세지 않음.",
+    "config": {
+      "id": "f8",
+      "kind": "rule",
+      "asset": "아발란체",
+      "mode": "ma",
+      "fast": 20,
+      "slow": 100,
+      "trail": 20,
+      "sl": 10,
+      "lev": 1,
+      "claude": {
+        "ret": 628.1,
+        "mdd": -33.1
+      }
+    }
+  },
+  {
+    "id": "f9",
+    "verdict": "KEEP",
+    "reason": "1배 유지. 위상 수익 224.4~272.6%; 비용×위상 동시 검사에서는 한 위상 현물 미달.",
+    "config": {
+      "id": "f9",
+      "kind": "agent",
+      "uni": "coin8",
+      "every": 3,
+      "look": 60,
+      "top": 2,
+      "gate": 0.88,
+      "lev": 1,
+      "claude": {
+        "ret": 273,
+        "mdd": -46
+      }
+    }
+  },
+  {
+    "id": "f10",
+    "verdict": "REPLACE",
+    "reason": "BTC 돌파 n55·exitN6·trail15·reg200·2배: 276.1 / −33.0. 대체 연구안으로 한정.",
+    "config": {
+      "id": "f10",
+      "kind": "rule",
+      "asset": "비트코인",
+      "mode": "brk",
+      "n": 55,
+      "exitN": 6,
+      "trail": 15,
+      "reg": 200,
+      "lev": 2
+    }
+  }
+]

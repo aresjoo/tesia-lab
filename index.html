@@ -17179,11 +17179,11 @@ var MK_CAT=[
   {id:'f3',kind:'rule',mkt:'crypto',name:'아발란체 추세 양방향',one:'아발란체 선물이 55일 최고가를 넘으면 롱, 최저가를 깨면 숏으로 따라가요.',ex:'bitget',fw:731,by:'kite_r',asset:'아발란체',inst:'futures',fut:1,kind:'rule',mode:'brk',n:55,exitN:10,trail:20,reg:200,lev:1,startI:101},
   {id:'f4',kind:'rule',mkt:'crypto',name:'이더리움 추세 양방향 2배',one:'이더리움 선물이 70일 최고가를 넘으면 롱, 최저가를 깨면 숏으로 2배 따라가요.',ex:'bitget',fw:496,by:'dohyun_k',asset:'이더리움',inst:'futures',fut:1,kind:'rule',mode:'brk',n:70,exitN:20,trail:15,reg:200,lev:2,startI:101},
   {id:'f8',kind:'rule',mkt:'crypto',name:'아발란체 평균선 양방향',one:'아발란체 선물의 20일 평균이 100일 평균을 넘으면 롱, 밑돌면 숏으로 바꿔 타요.',ex:'okx',fw:455,by:'woo_l',asset:'아발란체',inst:'futures',fut:1,kind:'rule',mode:'ma',fast:20,slow:100,trail:20,sl:10,lev:1,startI:101},
-  {id:'f7',kind:'agent',mkt:'crypto',name:'가장 강한 코인 롱숏',one:'AI가 3일마다 코인 8종을 비교해, 모두 오름세면 가장 강한 하나를 롱, 모두 꺾였으면 가장 약한 하나를 숏으로 잡아요.',ex:'binance',fw:389,by:'haneul',uni:'coin8',inst:'futures',fut:1,kind:'agent',every:3,look:60,top:1,gate:0.88,lev:1,startI:101},
+  {id:'f7',kind:'agent',mkt:'crypto',name:'가장 강한 코인 롱숏',one:'AI가 3일마다 코인 8종을 비교해, 모두 오름세면 가장 강한 하나를 롱, 모두 꺾였으면 가장 약한 하나를 숏으로 잡아요.',ex:'binance',fw:389,by:'haneul',uni:'coin8',inst:'futures',fut:1,kind:'agent',every:3,look:60,top:1,gate:0.88,lev:1,startI:101,ph:2},
   {id:'f5',kind:'mix',mkt:'crypto',name:'대표 코인 돌파 따라가기',one:'AI가 비트코인, 이더리움, 솔라나 중 방향과 종목을 고르고, 20일 돌파가 나오면 롱이나 숏으로 들어가요.',ex:'bitget',fw:342,by:'sorae',uni:'big3',inst:'futures',fut:1,kind:'mix',mode:'brk',every:3,look:45,gate:0.5,n:20,exitN:15,sl:10,lev:1,startI:101},
   {id:'f6',kind:'rule',mkt:'crypto',name:'에이다 평균선 양방향',one:'에이다 선물의 15일 평균이 50일 평균을 넘으면 롱, 밑돌면 숏으로 바꿔 타요.',ex:'bitget',fw:527,by:'mira_q',asset:'에이다',inst:'futures',fut:1,kind:'rule',mode:'ma',fast:15,slow:50,trail:20,lev:1,startI:101},
   {id:'f9',kind:'agent',mkt:'crypto',name:'코인 둘 롱숏 갈아타기',one:'AI가 3일마다 코인 8종을 비교해, 모두 오름세면 강한 둘을 롱, 모두 꺾였으면 약한 둘을 숏으로 잡아요.',ex:'okx',fw:418,by:'pebble',uni:'coin8',inst:'futures',fut:1,kind:'agent',every:3,look:60,top:2,gate:0.88,lev:1,startI:101},
-  {id:'f10',kind:'rule',mkt:'crypto',name:'비트코인 추세 양방향 3배',one:'비트코인 선물이 55일 최고가를 넘으면 롱, 최저가를 깨면 숏으로 3배 따라가요.',ex:'bitget',fw:377,by:'june07',asset:'비트코인',inst:'futures',fut:1,kind:'rule',mode:'brk',n:55,exitN:5,trail:15,reg:200,lev:3,startI:101},
+  {id:'f10',kind:'rule',mkt:'crypto',name:'비트코인 추세 양방향 2배',one:'비트코인 선물이 55일 최고가를 넘으면 롱, 최저가를 깨면 숏으로 2배 따라가요.',ex:'bitget',fw:377,by:'june07',asset:'비트코인',inst:'futures',fut:1,kind:'rule',mode:'brk',n:55,exitN:6,trail:15,reg:200,lev:2,startI:101},
   {id:'d1',kind:'agent',mkt:'crypto',name:'코인 셋 나눠 담기',one:'AI가 코인 8종을 5일마다 비교해, 많이 오른 최대 세 종목에 나눠 담아요.',ex:'binance',fw:1284,by:'haneul',uni:'coin8',look:20,top:3,gate:0.4,every:5,trail:12,volT:0.03,minS:0.4,startI:400},
   {id:'r1',kind:'rule',mkt:'crypto',name:'비트코인 큰 하락 뒤',one:'비트코인이 크게 떨어진 뒤 다시 오르는 걸 확인하고 사요.',ex:'okx',fw:911,by:'dohyun_k',asset:'비트코인',rsiTh:26,tp:20,sl:-8,tf:0,startI:400},
   {id:'h1',kind:'mix',mkt:'stock',name:'기술주 회복 기다리기',one:'AI가 미국 기술주 중 하나를 골라, 떨어졌다가 다시 오를 때 사요.',ex:'bitget',fw:640,by:'june07',uni:'tech8',every:20,look:40,rsiTh:50,tp:10,sl:-5,gate:0.4,startI:300},
@@ -18849,7 +18849,7 @@ function mkFutRun(c){
     cur=i;
     /* ① 전날 정한 주문: 시가 체결. 닫고 나서 연다 */
     if(pend.length){ var opx=function(k){ return DT[J[k]].o[i]; };
-      pend.forEach(function(o){ if(o.t!=='close'||L.pos.indexOf(o.p)<0){ if(o.t==='close') o.ev._drop=1; return; } fillExit(o.ev,L.close(o.p,opx(o.p.k),i,o.why)); });
+      pend.forEach(function(o){ if(o.t!=='close'||L.pos.indexOf(o.p)<0){ if(o.t==='close') o.ev._drop=1; return; } var po=opx(o.p.k), lq=L.liqPx(o.p), gl=o.p.side>0?po<=lq:po>=lq; if(gl) o.ev.why='liq'; fillExit(o.ev,L.close(o.p,po,i,gl?'liq':o.why,gl)); });
       var tot=L.cash; L.pos.forEach(function(p){ tot+=Math.max(0,L.eqOf(p,opx(p.k))); });
       pend.forEach(function(o){ if(o.t!=='open') return; var p=L.open(o.k,o.side,o.w*tot,lev,opx(o.k),i,{w:o.w}), e=o.ev; if(!p){ e._drop=1; return; } delete e._pend; e.xi=i; e.tid=p.id; e.px=p.ep; e.units=p.units; e.cost=p.cost; e.fee=p.fee; e.liq=L.liqPx(p); });
       pend=[]; }
