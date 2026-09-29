@@ -1,0 +1,22 @@
+// R01: 손님이 "내 조건으로 성과 확인"을 누르면 인증 창이 뜨고, 인증 뒤 바로 그 전략의 백테스트로 이어지는지
+import { newPage, closePage, goto, evala, viewport, shot, sleep } from 'file:///C:/Users/hyun1/AppData/Local/Temp/claude/C--Users-hyun1-OneDrive------/3eeecebb-9375-4ed0-850b-52929f00da99/scratchpad/pw/cdp.mjs';
+import fs from 'fs';
+const round=process.argv[2]||'round-1';
+const DIR=decodeURIComponent(new URL('./'+round+'/',import.meta.url).pathname).replace(/^\/([A-Za-z]:)/,'$1');
+const p=await newPage(); await viewport(p,1440,900,{mobile:false}); const log=[];
+const say=async(l,x)=>{ let v; try{ v=await evala(p,x); }catch(e){ v='ERR '+String(e).slice(0,200); } console.log(l,String(v).slice(0,600)); log.push(l+' '+v); return v; };
+const B='http://127.0.0.1:8765/index.html';
+await goto(p,B+'?v='+Date.now()); await sleep(600); await evala(p,`localStorage.clear(); sessionStorage.clear()`); await goto(p,B+'?v='+Date.now()); await sleep(3800);
+await evala(p,`(function(){ var s=document.createElement('style'); s.textContent='#tf-devbtn,#tf-devpanel{display:none!important}'; document.head.appendChild(s); })()`);
+await evala(p,`tfSS3Go('f1','all','ov')`); await sleep(2500);
+await say('guest',`JSON.stringify({user:!!S.user,hash:location.hash})`);
+await say('click',`(function(){ var b=document.querySelector('.mk3-bt2'); if(!b) return 'NO BUTTON'; b.click(); return b.innerText.replace(/\s+/g,' '); })()`); await sleep(900);
+await say('R01 auth open',`JSON.stringify({modal:(function(){ var m=document.getElementById('modal-auth'); return !!m&&(m.classList.contains('open')||m.classList.contains('on')||getComputedStyle(m).display!=='none'); })(),intent:tfIntentPeek(),hash:location.hash})`);
+await shot(p,DIR+'R01-guest-auth.png',{full:false});
+await say('signup',`(function(){ authOauth('Google'); return 'ok'; })()`); await sleep(600);
+await say('after oauth',`JSON.stringify({user:!!S.user,hash:location.hash,age:(function(){ var e=document.querySelector('#modal-auth .au-step.on, #modal-auth .on'); return e?e.id:''; })()})`);
+await shot(p,DIR+'R01-auth-age-step.png',{full:false}); await evala(p,`(function(){ var a=document.getElementById('au-age-in'); a.value='31'; authAgeFinish(); })()`); await sleep(4200);
+await say('R01 resumed',`JSON.stringify({user:!!S.user,hash:location.hash,mode:G.mode,bt:typeof BT!=='undefined'&&BT.s?BT.s.id:null,phase:typeof BT!=='undefined'?BT.phase:null,intent:tfIntentPeek()})`);
+await shot(p,DIR+'R01-resumed-backtest.png',{full:false});
+fs.writeFileSync(DIR+'r01-check.txt',log.join('\n'));
+await closePage(p); process.exit(0);

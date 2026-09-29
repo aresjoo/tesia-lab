@@ -128,7 +128,16 @@ function btMineDone(){
 }
 
 /* ── 들어오고 나가기 ── */
-function btOpen(ne){ location.hash='#/share/bt/'+ne; }
+/* 하려던 일 하나를 기억한다. 인증이나 실행 준비가 끝나면 한 번만 꺼내 그 자리로 간다 */
+function tfIntentSet(o){ o.at=Date.now(); window.TF_INTENT=o; try{ sessionStorage.setItem('teth.intent',JSON.stringify(o)); }catch(e){} }
+function tfIntentPeek(){ var o=window.TF_INTENT; if(!o){ try{ o=JSON.parse(sessionStorage.getItem('teth.intent')||'null'); }catch(e){} } return o&&Date.now()-o.at<1800000?o:null; }
+function tfIntentClear(){ window.TF_INTENT=null; try{ sessionStorage.removeItem('teth.intent'); }catch(e){} }
+function tfIntentRun(){ var o=tfIntentPeek(); if(!o||!S.user) return false; tfIntentClear();
+  if(o.kind==='bt'){ location.hash='#/share/bt/'+o.id; return true; }
+  if(o.kind==='copy'){ if(location.hash.indexOf('#/share/s/')!==0) tfSS3Go(o.id,'all','ov'); setTimeout(function(){ cpSetupGo(o.id); },500); return true; }
+  if(o.kind==='start'&&typeof acStart==='function'){ acStart(o); return true; }
+  return false; }
+function btOpen(ne){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:ne,from:location.hash}); try{ tfTrack('bt_guest_gate',{id:ne}); }catch(e){} return; } location.hash='#/share/bt/'+ne; }
 function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } if(BT.s&&BT.s.mine){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} TF_ONSTRAT=false; tfBackToChat(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }
 function btView(){
   tfPageMode('tfbt','백테스트'); TF_RENDERING=true; gContent(btPage()); TF_RENDERING=false;
@@ -138,7 +147,10 @@ function btView(){
 }
 function btRoute(h){
   var m=h.match(/^#\/share\/bt\/([^/]+)(?:\/(go))?$/); TF_ONSHARE=true;
-  if(m&&m[1]==='mine'&&!window.TF_STATE_READY){ TF_ONSHARE=false; return; } /* 부팅이 끝나면 다시 불린다 */
+  if(m&&!window.TF_STATE_READY){ TF_ONSHARE=false; return; } /* 저장된 로그인 상태가 복원된 뒤에 판단한다. 부팅이 끝나면 다시 불린다 */
+  if(m&&!S.user){ /* 비회원: 그 전략의 상세로 보내고, 인증이 끝나면 이 백테스트로 돌아온다 */
+    TF_ONSHARE=false; if(m[1]==='mine'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); return; }
+    try{ history.replaceState(null,'','#/share/s/'+m[1]); }catch(e){} tfRoute(); var gid=m[1]; setTimeout(function(){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:gid}); } },400); return; }
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
   var s=null; try{ s=tfSSFind(decodeURIComponent(m[1])); }catch(e){}
   if(!s&&m[1]==='mine'){ TF_ONSHARE=false; toast('이 자산은 아직 백테스트할 가격 자료가 없어요'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfBackToChat(); return; }

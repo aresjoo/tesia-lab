@@ -1,0 +1,40 @@
+PASS | A | 인증 창이 열린다
+PASS | A | 하려던 일이 저장된다
+PASS | A | 인증 뒤 같은 전략의 백테스트로 이어진다 | {"hash":"#/share/bt/f3","id":"f3","phase":"ready"}
+PASS | A | 바로 결과 보기 단추가 없다
+PASS | B | 목록 단추는 전략 복사하기, 따라가기 없음 | ["전략 복사하기","전략 복사하기","전략 복사하기","전략 복사하기"]
+PASS | B | 활성화 창이 전략의 거래소를 유지한다
+PASS | B | 거래소를 다시 묻지 않는다
+PASS | B | 계정 없음 → 가입 안내
+PASS | B | 가입 주소가 있고 API 키 입력이 없다 | {"a":"https://accounts.binance.com/register?ref=TETH_AI","key":false}
+PASS | B | 안내 뒤 연결 승인
+PASS | B | 승인과 초대 계정 확인 뒤 완료
+PASS | B | 초대 회원, 이용료 없음
+PASS | C | 초대 계정 확인 실패가 표시된다
+PASS | C | UID, 레퍼럴 같은 말 없이 설명하고 선택지 3개 | {"n":3}
+PASS | C | 연결된 것으로 처리하지 않는다
+PASS | C | 구독으로 바꾸면 결제 단계
+PASS | D | 결제 단계에 카드 입력
+PASS | D | 결제 실패가 표시된다
+PASS | D | 실패하면 연결되지 않는다
+PASS | D | 다시 시도해 결제 성공
+PASS | D | 승인 뒤 완료
+PASS | D | 결제 내역에 실패와 성공이 남는다 | {"bill":["paid","failed"],"via":"paid"}
+PASS | E | 같은 거래소는 창 없이 진행
+PASS | E | 구독 회원의 다른 거래소: 승인만 남는다 | {"sheet":true,"ex":"okx","step":"auth","steps":["ex","auth"]}
+PASS | E | 구독 만료: 준비 안 됨, 결제 단계로 | {"ready":false,"step":"pay","acc":"none"}
+PASS | E | 만료 회원의 AI 트레이딩은 시작 화면
+PASS | F | 설정 단추가 전용 화면을 연다
+PASS | F | 언어만 고르고 통화 선택은 없다 | {"lang":7}
+PASS | F | 계정 삭제는 확인 창과 입력을 거친다 | {"open":true,"dis":true,"user":true}
+PASS | F | 삭제를 입력하면 단추가 켜진다
+PASS | F | 초대 회원에게 구독이나 다음 결제일을 보여 주지 않는다
+PASS | G | 시작을 누르면 인증 창
+PASS | G | 인증 뒤 실행 방식 선택으로 이어진다 | {"sheet":true,"step":"route","t":"✕ 전략을 실행할 계정을 연결합니다 주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다. 5단계 남았습니다. 1 이용 방식 TETH 초대로 가입한 거래소 계정 TETH를 통해 거래소에 가입하면 이용료가 계속 무료입니다. 카드 등록이 필요 없습니다. 계정이 없으면 여기서 바로 만듭니다. TETH 초대 계정의 거래 수수료 환급 Bitge"}
+PASS | G | 전략을 먼저 고르라고 하지 않는다
+PASS | G | 연결 완료
+PASS | G | 전략 없이도 터미널에 들어간다 | {"hash":"#/trade","rdy":true,"term":false}
+PASS | 공통 | 전략 목록: 해요체 0, 원화 0, USDT 금액 0, 오류 0 | {"yo":0,"won":0,"usdt":0,"errs":[]}
+PASS | 공통 | 전략 상세: 해요체 0, 원화 0, USDT 금액 0, 칩 없음 | {"yo":[],"won":0,"usdt":0,"chips":false,"errs":[]}
+
+TOTAL 38 / 38 passed

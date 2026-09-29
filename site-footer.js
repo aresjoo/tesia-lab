@@ -13,7 +13,7 @@
   function bar(base){
     var so = (window.TETH_CONFIG && TETH_CONFIG.social) || {};
     return '<div class="gft-bar"><a class="gft-crs" href="'+base+'policies/teth-crs.pdf" target="_blank" rel="noopener noreferrer">고객 관계 요약</a>'
-      +'<div class="gft-follow"><span class="gft-fl">팔로우하세요</span>'+sns('x','X',so.x)+sns('instagram','Instagram',so.instagram)+sns('youtube','YouTube',so.youtube)+sns('telegram','Telegram',so.telegram)+'</div></div>';
+      +'<div class="gft-follow"><span class="gft-fl">팔로우하십시오</span>'+sns('x','X',so.x)+sns('instagram','Instagram',so.instagram)+sns('youtube','YouTube',so.youtube)+sns('telegram','Telegram',so.telegram)+'</div></div>';
   }
   function col(h, items){ return '<div class="gft-col"><h3>'+h+'</h3>'+items.join('')+'</div>'; }
   function html(opts){

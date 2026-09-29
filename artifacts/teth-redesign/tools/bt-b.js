@@ -11,7 +11,7 @@ function btSteps(){
 }
 function btLegend(){
   var s=BT.s;
-  return '<div class="bt-leg"><span class="a">이 전략</span><span class="b">그냥 들고 있었다면 <i class="num">'+(BT.R?mkPct0(BT.R.benchRet,1):'')+'</i></span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 1l4.5 8h-9z" fill="#2fb98a"/></svg>매수</span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 9l4.5 -8h-9z" fill="none" stroke="#cfd3d8" stroke-width="1.4" stroke-linejoin="round"/></svg>매도</span>'
+  return '<div class="bt-leg"><span class="a">이 전략</span><span class="b">그냥 들고 있었다면 <i class="num">'+(BT.R&&BT.phase==='result'?mkPct0(BT.R.benchRet,1):'')+'</i></span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 1l4.5 8h-9z" fill="#2fb98a"/></svg>매수</span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 9l4.5 -8h-9z" fill="none" stroke="#cfd3d8" stroke-width="1.4" stroke-linejoin="round"/></svg>매도</span>'
     +(btAi(s)?'<span class="m"><svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><rect x="2.4" y="2.4" width="6.2" height="6.2" transform="rotate(45 5.5 5.5)" fill="none" stroke="#f0b840" stroke-width="1.5"/></svg>'+btSkipL(s)+'</span>':'')+'</div>';
 }
 function btPage(){
@@ -83,7 +83,7 @@ function btReadyRail(){
 function btReady(){
   BT.phase='ready'; BT.sel=null; BT.grp=null; BT.trf='all'; btStop(); btCompute(); BT.filt=btDefFilt(BT.s);
   var root=$('bt-root'); if(root){ root.setAttribute('data-phase','ready'); root.classList.remove('cur'); }
-  btSub(); btChartDraw(); { var lg=document.querySelector('.bt-leg .b i'); if(lg) lg.textContent=mkPct0(BT.R.benchRet,1); }
+  btSub(); btChartDraw(); { var lg=document.querySelector('.bt-leg .b i'); if(lg) lg.textContent=''; } /* 비교 수익률은 결과에서만 */
   btCap('시작 금액',btUsd(BT.amt),'','');
   var s=BT.s; btPanelInit(btAi(s)?'다시 돌리는 동안 '+(s.kind==='agent'?'AI가 판단할 때마다':'기회가 생길 때마다')+' 확인 과정이 여기에 보여요':'다시 돌리는 동안 사는 조건이 맞을 때마다 여기에 보여요');
   $('bt-rail').innerHTML=btReadyRail(); $('bt-ev').innerHTML=''; $('bt-mcta').innerHTML='';
@@ -134,6 +134,8 @@ function btLatest(j){ var S=BT.R.stops, o=null; for(var i=0;i<S.length;i++){ if(
 function btLastTxt(){ var st=BT.lastSt; return st?(BT.s.kind==='agent'?'마지막 재평가 ':'마지막 매수 판단 ')+btYMD(BT.R.eq[st.j].i):''; } /* 패널은 살지 말지의 판단을 담는다. 매도는 기록 줄에 남는다 */
 function btTick(now){
   if(BT.phase!=='run'||!$('bt-root')){ BT.raf=0; return; }
+  /* 모델의 판단 문장을 기다리거나 보여 주는 동안에는 시계가 멈춘다 */
+  if(BT.pause){ BT.t0+=now-(BT.pt||now); BT.pt=now; BT.raf=requestAnimationFrame(btTick); return; } BT.pt=now;
   var e=now-BT.t0, R=BT.R, t1=R.prepMs, t2=t1+R.runMs, t3=t2+R.wrapMs;
   if(e<t1){
     if(BT.ph<0){ BT.ph=0; btStep('prep','run'); btCap('시작 금액',btUsd(BT.amt),'',''); btCursor(-1); }

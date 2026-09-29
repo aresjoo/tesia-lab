@@ -1,0 +1,142 @@
+
+/* ═══ 4판: Codex 2차 검수 반영 ═══ */
+/* 폭: 어느 자식도 기둥보다 넓어지지 않는다 */
+.bt-main,.bt-main>*,.bt-rail,.bt-ev,.bt-ev>*,.bt-list,.bt-row,.bt-dd-in,.bt-dd-c,.bt-dd-f{min-width:0;max-width:100%}
+.bt-ev{width:100%}
+.bt-mini{width:100%;height:auto}
+
+/* 가장 나빴던 구간은 시간 축의 띠 */
+.bt-chart .bt-dd rect{transition:none}
+
+/* 판단 패널 */
+.bt-panel .ph{gap:10px}
+.bt-panel .ph em{font-style:normal;margin-left:auto;font-size:12px;color:var(--gt3);white-space:nowrap}
+.bt-panel .ph em:empty{display:none}
+.bt-panel .ph .bt-skip{margin-left:auto;flex-shrink:0}
+.bt-panel .ph em:not(:empty)+.bt-skip{margin-left:14px}
+.bt-panel .cell b,.bt-panel .cell span{transition:opacity .12s ease,transform .16s cubic-bezier(.2,.8,.3,1)}
+.bt-panel.rest .cell.on{opacity:.62}
+.bt-panel.rest .cell.on small{color:var(--gt3)}
+.bt-panel.sum .cell{background:none}
+.bt-panel.sum .cell.on{opacity:1}
+.bt-panel.sum .cell small{color:var(--gt3)}
+.bt-panel.sum .cell small i{border-color:rgba(255,255,255,.18);color:var(--gt3)}
+.bt-panel.sum .cell b{display:flex;flex-wrap:wrap;gap:4px 14px;color:#fff;font-size:17px}
+.bt-panel.sum .cell b button{display:inline-flex;align-items:center;gap:3px;padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:4px}
+.bt-panel.sum .cell b button svg{color:var(--gt3);transition:transform .15s,color .15s}
+.bt-panel.sum .cell b button:hover{color:#c8f43c}
+.bt-panel.sum .cell b button:hover svg{color:#c8f43c;transform:translateX(2px)}
+.bt-panel.sum .cell b button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.bt-panel.sum .cell b .k-skip{color:#f0b840}
+.bt-panel.sum .cell b .k-loss{color:#f58a98}
+.bt[data-phase=result] .bt-panel .pc{display:grid}
+.bt[data-phase=result] .bt-panel .ph{border-bottom:1px solid rgba(255,255,255,.07)}
+.bt-panel.sum .cell{animation:btUp .3s cubic-bezier(.2,.8,.3,1) both}
+.bt-panel.sum .cell:nth-child(2){animation-delay:.06s}
+.bt-panel.sum .cell:nth-child(3){animation-delay:.12s}
+.bt[data-phase=result] .bt-panel.sum .cell{animation:none}
+
+/* 오른쪽: 돌리는 동안 */
+.bt-feedbox[hidden]{display:none}
+.bt-feed{min-height:0;max-height:none;gap:0}
+.bt-fr{display:grid;grid-template-columns:44px 46px minmax(0,auto) minmax(0,1fr);gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12.5px;animation:btIn .22s ease both}
+.bt-fr:last-child{border-bottom:0}
+.bt-fr time{color:var(--gt3);font-size:11.5px}
+.bt-fr .tg{font-size:11px;text-align:center;border:1px solid rgba(255,255,255,.14);border-radius:5px;padding:1px 0;color:var(--gt2)}
+.bt-fr.k-buy .tg{color:#2fb98a;border-color:rgba(47,185,138,.4)}
+.bt-fr.k-skip .tg{color:#f0b840;border-color:rgba(240,184,64,.45)}
+.bt-fr b{font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt-fr .wy{color:var(--gt2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt-fr .wy i{font-style:normal;font-weight:600}
+.bt-fr .wy i.mk-up{color:#2fb98a}.bt-fr .wy i.mk-dn{color:#f0566a}
+
+/* 준비: 규칙과 조건은 접을 수 있다 */
+.bt-fold summary{display:flex;align-items:center;justify-content:space-between;list-style:none;cursor:pointer}
+.bt-fold summary::-webkit-details-marker{display:none}
+.bt-fold summary h3{margin:0}
+.bt-fold summary .cv{color:var(--gt3);transition:transform .18s}
+.bt-fold[open] summary .cv{transform:rotate(180deg)}
+.bt-fold[open] summary{margin-bottom:12px}
+@media (min-width:901px){ .bt-fold summary{cursor:default;pointer-events:none} .bt-fold summary .cv{display:none} }
+
+/* 결과 */
+.bt-k3 em{grid-column:1/-1;font-style:normal;font-size:11.5px;color:var(--gt3);margin-top:-1px}
+.bt-rail .bt-read p{font-size:13.5px;line-height:1.55;margin:0 0 8px;color:var(--gt)}
+.bt-rail .bt-read p:first-of-type{color:#fff;font-weight:500}
+.bt-rail .bt-read p:last-child{color:var(--gt2);margin-bottom:0}
+
+/* 근거 */
+.bt-short{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.bt-short small{font-size:12px;color:var(--gt3);margin-right:2px}
+.bt-short button{height:30px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--gt);font-size:12.5px;cursor:pointer;font-family:inherit}
+.bt-short button:hover{border-color:rgba(255,255,255,.3)}
+.bt-short button i{font-style:normal;color:var(--gt3);margin-left:4px}
+.bt-rb{grid-template-columns:92px 54px minmax(60px,130px) minmax(0,1fr) 18px}
+.bt-rb .wy{font-size:13px}
+.bt-row.grp{background:rgba(240,184,64,.05)}
+.bt-row.grp .bt-rb time{color:#f0b840}
+.bt-cap2{font-size:11.5px;color:var(--gt3);margin:6px 0 0}
+.bt-dd-in.one{grid-template-columns:minmax(0,1fr)}
+.bt-dd-in.one .bt-dd-f{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.bt-dd-in.one .bt-blk+.bt-blk{margin-top:0;padding-top:0;border-top:0}
+.bt-sec-b header .bt-chips{margin-left:auto}
+
+/* 실행 준비 */
+.btg-guide{list-style:none;margin:16px 0 0;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.035);display:block}
+.btg-guide ol{list-style:none;counter-reset:g;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:7px}
+.btg-guide li{counter-increment:g;display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:13px;line-height:1.55;color:var(--gt2)}
+.btg-guide li::before{content:counter(g);font-variant-numeric:tabular-nums;color:var(--gt3)}
+a.btg-out{text-decoration:none}
+.btg-out{background:rgba(255,255,255,.04)}
+.bt-cta svg{margin-left:7px}
+.btg-chkw{display:none}
+.btg-chkw.on{display:block;animation:btUp .25s ease both}
+.btg-chkw .btg-chk{display:block;margin:0 0 16px}
+.btg-tgt{display:none;align-items:center;gap:8px;margin:14px 0 10px;font-size:14px;color:#fff;font-weight:600}
+.btg-tgt img{border-radius:5px}
+.btg-tgt span{font-weight:500;color:var(--gt2)}
+/* 확인하는 동안: 입력한 것은 접고, 무엇을 확인하는지와 확인 줄만 남긴다 */
+.btg-st .sb.chk>*:not(.btg-chkw):not(.bt-cta){display:none}
+.btg-st .sb.chk .btg-tgt{display:flex}
+.btg-me .mret{display:none;margin-left:auto;padding:0;border:0;background:none;text-align:right;cursor:pointer;font-family:inherit}
+.btg-me .mret i{display:block;font-style:normal;font-weight:700;font-size:15px}
+.btg-me .mret i.mk-up{color:#2fb98a}.btg-me .mret i.mk-dn{color:#f0566a}
+.btg-me .mret em{display:block;font-style:normal;font-size:11px;color:var(--gt3);text-decoration:underline;text-underline-offset:2px}
+
+@media (max-width:900px){
+  .bt-grid{display:flex;flex-direction:column;gap:18px;width:100%}
+  .bt-main{width:100%}
+  .bt[data-phase=ready] .bt-rail .bt-box:not(.bt-set){display:block}
+  /* 결과: 그래프와 요약 칸, 그다음 결과 요약, 그다음 근거 */
+  .bt[data-phase=result] .bt-grid{gap:0}
+  .bt[data-phase=result] .bt-main{display:contents}
+  .bt[data-phase=result] .bt-cap{order:1;width:100%}
+  .bt[data-phase=result] .bt-chart{order:2;width:100%}
+  .bt[data-phase=result] .bt-panel{order:3;width:100%}
+  .bt[data-phase=result] .bt-rail{order:4;margin-top:18px}
+  .bt[data-phase=result] .bt-ev{order:5;margin-top:30px;width:100%}
+  .bt[data-phase=result] .bt-rail .bt-cta{display:none}
+  .bt[data-phase=result] .bt-rail .bt-sec{display:block}
+  .btg-me .mret{display:block}
+}
+@media (max-width:640px){
+  .bt-panel .ph{flex-wrap:wrap;padding:8px 14px;min-height:0;row-gap:2px}
+  .bt-panel .ph em{flex:0 0 100%;margin:0;order:5}
+  .bt-panel .ph .bt-skip{margin-left:auto}
+  .bt-panel.sum .cell b{font-size:15px}
+  .bt-rb{grid-template-columns:auto auto minmax(0,1fr) 18px}
+  .bt-rb b{grid-column:1/4;grid-row:2}
+  .bt-rb .wy{grid-column:1/4;grid-row:3;white-space:normal;font-size:12.5px}
+  .bt-dd-in.one .bt-dd-f{grid-template-columns:minmax(0,1fr);gap:14px}
+  .bt-sec-b header{align-items:flex-start;flex-direction:column;gap:10px}
+  .bt-sec-b header .bt-chips{margin-left:0;max-width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:2px}
+  .bt-sec-b header .bt-chips::-webkit-scrollbar{display:none}
+  .bt-chips button{flex-shrink:0}
+  .bt-dd-f .bt-dl>div{grid-template-columns:92px minmax(0,1fr)}
+  .bt-id{padding-right:52px}
+}
+/* 좁은 화면의 백테스트와 실행 준비는 한 가지 일에 집중하는 화면이다. 알림 단추가 전략 요약을 덮지 않게 한다 */
+@media (max-width:900px){ body:has(#g-content .bt) #nf-util{display:none} }
+
+/* 선물 거래의 방향 표시 */
+.bt-sd{font-style:normal;font-size:11.5px;font-weight:700;color:#2fb98a;margin-left:4px}.bt-sd.s{color:#b08cf5}

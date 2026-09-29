@@ -1,0 +1,10 @@
+// 백테스트 여정을 제품에 끼운다: 블록 둘(BT_CORE, BT_CSS), 라우터, 상세의 들어가는 단추
+const fs=require('fs'), D=__dirname+'/';
+const one=(s,x,y)=>{ const c=s.split(x).length-1; if(c!==1) throw new Error('x'+c+': '+x.slice(0,70)); return s.replace(x,()=>y); };
+let a=fs.readFileSync(D+'apply2.cjs','utf8'); if(a.includes('BT_CORE')) throw new Error('dup');
+a=one(a,"// 6. rd 블록이 선언하는 함수의 옛 정의를 지운다","// 5z. 백테스트 여정의 주소(#/share/bt/<id>)를 라우터에 잇는다\nrep(\"  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }\",\"  if(h.indexOf('#/share/bt/')===0){ TF_ONNF=false; btRoute(h); return; } /* 백테스트 여정 */\\n  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }\",true);\nif(!t.includes('share\\\\/(s|t|copy|c|bt)')){ const n0=t.split('share\\\\/(s|t|copy|c)').length-1; if(n0<2) throw new Error('route regex '+n0); t=t.split('share\\\\/(s|t|copy|c)').join('share\\\\/(s|t|copy|c|bt)'); }\n// 6. rd 블록이 선언하는 함수의 옛 정의를 지운다");
+a=one(a,"fs.writeFileSync(F,t); console.log('applied', t.length);","// 8. 백테스트 여정: 코드와 스타일을 따로 둔다\nfunction blockAfter(tag,body,after){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\\r\\n'+nl(body).trim()+'\\r\\n'+E;\n  if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }\n  const k=t.indexOf(after); if(k<0||t.indexOf(after,k+1)>=0) throw new Error('after '+tag); t=t.slice(0,k+after.length)+'\\r\\n'+txt+t.slice(k+after.length); }\nblockAfter('BT_CORE',fs.readFileSync(D+'bt.js','utf8')+'\\n'+fs.readFileSync(D+'bt-go.js','utf8'),'/*RD_CORE_END*/');\nblockAfter('BT_CSS',fs.readFileSync(D+'bt.css','utf8'),'/*RD_CSS_END*/');\nfs.writeFileSync(F,t); console.log('applied', t.length);");
+fs.writeFileSync(D+'apply2.cjs',a);
+let s=fs.readFileSync(D+'rd-ui.js','utf8');
+s=one(s,"'<button type=\"button\" class=\"mk-pri\" onclick=\"cpSetupGo(\\''+ne+'\\')\">따라가기</button>')","'<button type=\"button\" class=\"mk-pri\" onclick=\"cpSetupGo(\\''+ne+'\\')\">따라가기</button>'+(s.cfg?'<button type=\"button\" class=\"mk3-bt\" onclick=\"btOpen(\\''+ne+'\\')\">내 조건으로 백테스트</button>':''))");
+fs.writeFileSync(D+'rd-ui.js',s); console.log('ok');

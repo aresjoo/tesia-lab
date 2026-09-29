@@ -1,7 +1,8 @@
 // rd 블록을 index.html 에 넣는다(여러 번 실행해도 같은 결과). 사용: node apply2.cjs
 const fs=require('fs'); const F='C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/index.html'; let t=fs.readFileSync(F,'utf8');
 const nl=s=>s.replace(/\r?\n/g,'\r\n'), D=__dirname+'/';
-function rep(a,b,opt){ a=nl(a); b=nl(b); if(opt&&t.includes(b)) return; const n=t.split(a).length-1; if(n!==1){ if(opt&&t.includes(b)) return; throw new Error('anchor x'+n+': '+a.slice(0,80)); } t=t.replace(a,()=>b); }
+const HP0=require('./hapnida.cjs').convText, RN=require('./rename.cjs').renameText, US=require('./usd.cjs').usdText, HP=s=>RN(HP0(s)), HU=s=>US(HP(s));
+function rep(a,b,opt){ a=nl(a); b=nl(b); if(opt&&t.includes(b)) return; if(t.indexOf(a)<0){ /* 합니다체로 바뀐 뒤의 본문에도 맞춘다 */ const V=[[HU(a),HU(b)],[HP(a),HP(b)],[HP0(a),HP0(b)],[US(a),US(b)]]; for(const [a2,b2] of V){ if(t.includes(b2)&&(opt||t.indexOf(a2)<0)) return; if(t.indexOf(a2)>=0){ a=a2; b=b2; break; } } } const n=t.split(a).length-1; if(n!==1){ if(opt&&t.includes(b)) return; throw new Error('anchor x'+n+': '+a.slice(0,80)); } t=t.replace(a,()=>b); }
 function block(tag,body,placeBefore,wrapO,wrapC){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\r\n'+nl(body).trim()+'\r\n'+E;
   if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }
   const k=t.indexOf(nl(placeBefore)); if(k<0||t.indexOf(nl(placeBefore),k+1)>=0) throw new Error('place '+tag); t=t.slice(0,k)+(wrapO||'')+txt+(wrapC||'')+'\r\n'+t.slice(k); }
@@ -105,6 +106,6 @@ block('RD_CSS',fs.readFileSync(D+'rd.css','utf8'),'<script src="site-config.js',
 function blockAfter(tag,body,after){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\r\n'+nl(body).trim()+'\r\n'+E;
   if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }
   const k=t.indexOf(after); if(k<0||t.indexOf(after,k+1)>=0) throw new Error('after '+tag); t=t.slice(0,k+after.length)+'\r\n'+txt+t.slice(k+after.length); }
-blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js','bt-fut.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
+blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js','ac.js','st.js','bt-v2.js','bt-fut.js','p16.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
 blockAfter('BT_CSS',fs.readFileSync(D+'bt.css','utf8'),'/*RD_CSS_END*/');
 fs.writeFileSync(F,t); console.log('applied', t.length);

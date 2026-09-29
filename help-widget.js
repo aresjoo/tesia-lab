@@ -8,8 +8,8 @@
   var HW_LANGS=['ko','en','ja','zh-CN','zh-TW','es','fr'];
   var HW={
     tip:['24/7 고객지원','24/7 Support','24時間サポート','24/7客服支持','24/7客服支援','Soporte 24/7','Assistance 24h/24'],
-    body:['무엇이든 물어보세요. 상담원이 연중무휴 24시간 대기하고 있어요.','Ask us anything. Our agents are available around the clock.','何でもお尋ねください。担当者が24時間365日対応します。','有任何问题都可以咨询，客服全年无休24小时在线。','有任何問題都可以諮詢，客服全年無休24小時在線。','Pregúntanos lo que sea. Nuestro equipo está disponible 24/7.','Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.'],
-    sub:['실시간 채팅은 곧 제공돼요. support@teth.ai','Live chat coming soon. support@teth.ai','ライブチャットは近日提供予定です。support@teth.ai','在线聊天即将上线。support@teth.ai','線上聊天即將上線。support@teth.ai','El chat en vivo llegará pronto. support@teth.ai','Le chat en direct arrive bientôt. support@teth.ai']
+    body:['무엇이든 물어보십시오. 상담원이 연중무휴 24시간 대기하고 있습니다.','Ask us anything. Our agents are available around the clock.','何でもお尋ねください。担当者が24時間365日対応します。','有任何问题都可以咨询，客服全年无休24小时在线。','有任何問題都可以諮詢，客服全年無休24小時在線。','Pregúntanos lo que sea. Nuestro equipo está disponible 24/7.','Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.'],
+    sub:['상담원이 24시간 답합니다. support@teth.ai','Our team answers 24/7. support@teth.ai','ライブチャットは近日提供予定です。support@teth.ai','在线聊天即将上线。support@teth.ai','線上聊天即將上線。support@teth.ai','El chat en vivo llegará pronto. support@teth.ai','Le chat en direct arrive bientôt. support@teth.ai']
   };
   var hwIdx=0; try{ hwIdx=HW_LANGS.indexOf(localStorage.getItem('tethLang')||'ko'); }catch(e){}
   if(hwIdx<0) hwIdx=0;

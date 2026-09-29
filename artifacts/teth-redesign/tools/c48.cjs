@@ -1,0 +1,14 @@
+const fs=require('fs'), D=__dirname+'/';
+let g=fs.readFileSync(D+'bt-go.js','utf8');
+if(g.indexOf('function btSave')>=0) throw new Error('already');
+g=g.split('tfSave()').join('btSave()');
+g=g.replace("function btExName(id)","/* 계정에 관한 상태는 곧바로 저장한다. 미뤄 두면 새로고침 때 앞선 계정의 확인이 되살아난다 */\nfunction btSave(){ tfSave(); try{ clearTimeout(STORE.t); STORE.flush(); }catch(e){} }\nfunction btExName(id)");
+fs.writeFileSync(D+'bt-go.js',g);
+let c=fs.readFileSync(D+'bt-c.js','utf8');
+const a="var tg=bt.querySelectorAll('.bt-cta, .bt-sec, .bt-again, .btg-out'), tries=['',20,150,230,310];";
+if(c.split(a).length!==2) throw new Error('anchor');
+c=c.replace(a,"h.style.visibility=''; var tg=bt.querySelectorAll('.bt-cta, .bt-sec, .btg-out, #bt-rail p, #bt-rail b, #bt-rail dd, #bt-rail .num, .btg-flow p, .btg-flow .sm, .btg-flow .ed, .btg-flow input, .btg-flow li'), tries=['',20,150,230,310,400,500];");
+const b="    if(!hit) return;\n  }\n}";
+if(c.split(b).length!==2) throw new Error('anchor2');
+c=c.replace(b,"    if(!hit) return;\n  }\n  h.style.bottom=''; h.style.visibility='hidden'; /* 비켜 설 자리가 없으면 내용을 덮지 않고 물러난다 */\n}");
+fs.writeFileSync(D+'bt-c.js',c); console.log('ok');

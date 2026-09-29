@@ -370,3 +370,37 @@ body.mk-fab-dodge #teth-help,body.mk-fab-dodge #tf-devbtn{opacity:0;pointer-even
 
 /* 좁은 화면: 정렬 칩 넷이 한 줄에 들어가게 */
 @media (max-width:640px){ #g-root .mk3-flt .mk-chips{gap:6px} #g-root .mk3-flt .mk-chips .mk-chip{padding:0 10px;font-size:12.5px;letter-spacing:-.01em} }
+
+/* ── 16-fixes ── */
+/* R06 분류: 숫자 없이, 고른 분류의 한 줄만 */
+.mk3-kindhelp.one{margin:0;font-size:13px;line-height:1.5;color:#9aa0a6;align-self:center}
+/* R15 카드: 밝은 단추 하나, 자세히는 조용히 */
+#g-root .mk3v2 .mk3-foot{gap:4px}
+#g-root .mk3v2 .mk3-foot .mk3-b.fill{flex:1 1 auto}
+#g-root .mk3v2 .mk3-foot .mk3-b.quiet{flex:0 0 auto;width:auto;padding:0 14px;border-color:transparent;background:transparent;color:#aeb3ba;font-weight:500}
+#g-root .mk3v2 .mk3-foot .mk3-b.quiet:hover{color:#fff;background:rgba(255,255,255,.06)}
+/* R16 상세: 첫째는 복사, 둘째는 내 조건으로 성과 확인 */
+.mk3-bt2{display:inline-flex;align-items:center;gap:11px;height:48px;padding:0 18px 0 15px;border-radius:12px;border:0;background:#f2f3f5;color:#0e0f11;font:inherit;cursor:pointer;text-align:left;transition:background-color .12s ease,transform .12s ease}
+.mk3-bt2:hover{background:#fff}
+.mk3-bt2:active{transform:scale(.985)}
+.mk3-bt2 svg{flex:none;color:#0e0f11}
+.mk3-bt2 span{display:flex;flex-direction:column;gap:1px;min-width:0}
+.mk3-bt2 b{font-size:14.5px;font-weight:700;line-height:1.25;letter-spacing:-.005em}
+.mk3-bt2 small{font-size:11.5px;line-height:1.25;color:#5b6067;font-weight:500}
+.mk3-dh-acts .mk-pri{height:48px;border-radius:12px;font-size:15px;font-weight:800}
+@media (max-width:640px){ .mk3-bt2{flex:1 1 100%;height:52px} .mk3-dh-acts .mk-pri{flex:1 1 100%;height:52px} }
+/* R05 판단 기록: 칩 대신 기호, 제목, 결과, 시각 */
+.mkc-m.v2{gap:14px;padding:16px 0;border-top:1px solid rgba(255,255,255,.07)}
+.mkc-list .mkc-m.v2:first-child{border-top:0;padding-top:4px}
+.mkc-ic{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#aeb3ba;background:rgba(255,255,255,.06)}
+.k-buy>.mkc-ic{color:#2fb98a;background:rgba(47,185,138,.13)}
+.k-sell>.mkc-ic{color:#e9ebee;background:rgba(255,255,255,.1)}
+.k-now>.mkc-ic{color:#c8f43c;background:rgba(200,244,60,.1)}
+.mkc-m.v2 .mkc-h{min-height:30px;margin:0 0 4px;gap:10px}
+.mkc-m.v2 .mkc-h b{font-size:15px;font-weight:700;letter-spacing:-.005em}
+.mkc-out{font-style:normal;font-size:13.5px;font-weight:600}
+.mkc-out.up{color:#2fb98a}.mkc-out.dn{color:#f0566a}
+.mkc-m.v2 .mkc-t{background:none;border:0;padding:0}
+.mkc-m.v2 .mkc-t p{margin:0;font-size:14px;line-height:1.7;color:#aeb3ba}
+.mkc-m.v2 .mkc-t p strong{color:#e9ebee;font-weight:600}
+@media (max-width:640px){ .mkc-m.v2{gap:10px} .mkc-m.v2 .mkc-h{flex-wrap:wrap} .mkc-m.v2 .mkc-h time{flex:1 0 100%;margin-left:0} }

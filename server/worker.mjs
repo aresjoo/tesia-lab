@@ -223,6 +223,20 @@ export default {
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, baseURL: AI_GATEWAY_BASE });
     ctx.waitUntil((async () => {
       try {
+        /* plain: 도구와 검색 없이 본 모델이 짧은 글만 쓴다(백테스트 판단 문장, 결과 해석). 입력은 클라이언트가 계산한 값뿐이다 */
+        if (payload.plain === true) {
+          const stream = client.beta.messages.stream({
+            model: env.TETH_AI_MODEL || MODEL_DEFAULT,
+            max_tokens: 900,
+            output_config: { effort: "low" },
+            system: String(payload.system || "").slice(0, 6000),
+            messages,
+          });
+          stream.on("text", (delta) => send({ text: delta }));
+          const final = await stream.finalMessage();
+          await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+          return;
+        }
         const isThink = payload.think === true;
         if (isThink) {
           const stream = client.beta.messages.stream({

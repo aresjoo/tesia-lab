@@ -1,0 +1,13 @@
+const fs=require('fs'), D=__dirname+'/';
+const rep=(s,x,y,n)=>{ const c=s.split(x).length-1; if(c!==(n||1)) throw new Error('x'+c+': '+x.slice(0,60)); return s.split(x).join(y); };
+let b=fs.readFileSync(D+'bt-b.js','utf8');
+b=rep(b,"var b=c.querySelector('b'), sp=c.querySelector('span'), t=T[i]||['',''];","var b=c.querySelector('b'), sp=c.lastElementChild, t=T[i]||['',''];");
+b=rep(b,"    c.querySelector('span').textContent=x[2]; });","    c.lastElementChild.textContent=x[2]; });");
+b=rep(b,":stage===1?'AI가 그날의 시장을 확인해요':gEsc(g.st.ds[0].p2[0]),''); }",":stage===1?'AI가 그날의 시장을 확인해요':gEsc(g.st.kind==='skip'&&g.st.ds[0].tk?g.st.ds[0].tk+' 매수 보류':g.st.ds[0].p2[0]),''); }");
+fs.writeFileSync(D+'bt-b.js',b);
+let a=fs.readFileSync(D+'bt-a.js','utf8');
+a=rep(a,"('AI가 고른 종목, '+look+'일 '+mkPct0(pk2.mom,0)+'로 가장 강함')","('AI가 고른 종목, '+look+'일 상승률 1위 '+mkPct0(pk2.mom,0))");
+a=rep(a,"('AI가 고른 종목, '+look+'일 '+mkPct0(pk3.mom,0)+'로 가장 강함')","('AI가 고른 종목, '+look+'일 상승률 1위 '+mkPct0(pk3.mom,0))");
+a=rep(a,"['종목을 고른 이유','최근 '+look+'일 '+mkPct0(pk2.mom,0)+', '+n8+'종목 중 가장 강함']","['종목을 고른 이유',n8+'종목 중 최근 '+look+'일 상승률 1위, '+mkPct0(pk2.mom,0)]");
+a=rep(a,"['종목을 고른 이유','최근 '+look+'일 '+mkPct0(pk3.mom,0)+', '+n8+'종목 중 가장 강함']","['종목을 고른 이유',n8+'종목 중 최근 '+look+'일 상승률 1위, '+mkPct0(pk3.mom,0)]");
+fs.writeFileSync(D+'bt-a.js',a); console.log('ok');

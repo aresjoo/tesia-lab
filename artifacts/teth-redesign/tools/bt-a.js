@@ -56,7 +56,7 @@ function btCompute(){
   var pkTxt=function(p){ return 'AI가 '+md(p.i)+'에 고른 종목, 그날 '+look+'일 상승률 '+mkPct0(p.mom,1); };
   var pkFacts=function(p,e){ return [['AI가 고른 날',btYMD(p.i)+', 오름세 종목 중 '+look+'일 상승률 1위 '+mkPct0(p.mom,1)],['이날의 '+look+'일 상승률',mkPct0(momAt(e.a,e.i),1)]]; };
   var top1=function(e){ var t=(e.top||[])[0]; return t?('점수 1위 '+mkTk(t.k)+', '+look+'일 '+mkPct0(t.mom,1)):''; };
-  var push=function(d,e){ d.i=e.i; d.j=Math.max(0,Math.min(N-1,e.i-i0)); d.a=e.a; d.tk=e.a?mkTk(e.a):''; d.tid=e.tid; d.ix=D.length; D.push(d); return d; };
+  var push=function(d,e){ d.e=e; d.i=e.i; d.j=Math.max(0,Math.min(N-1,e.i-i0)); d.a=e.a; d.tk=e.a?mkTk(e.a):''; d.tid=e.tid; d.ix=D.length; D.push(d); return d; };
   ev.forEach(function(e){
     var tk=e.a?mkTk(e.a):'';
     if(c.fut){ var fd=fuBtDec(s,e,{n8:n8,upsOf:upsOf}); if(fd) push(fd,e); return; }
@@ -80,7 +80,7 @@ function btCompute(){
         p0:[n8+'종목 비교',top1(e)],p1:weak?brd(e):['살 만한 종목 0개','오름세이고 충분히 강해야 해요'],p2:['새로 사지 않음',weak?'시장이 약해 쉬었어요':'살 종목이 없어 쉬었어요'],ups:upsOf(e),
         facts:[['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상'],['쉬어 간 이유',weak?'오름세 종목이 기준보다 적었어요':'오름세이면서 충분히 강한 종목이 없었어요']].concat(e.held&&e.held.length?[['들고 있던 종목',e.held.map(mkTk).join(', ')]]:[])},e); return; }
     if(e.t==='hold'){ push({k:'hold',tag:'유지',title:'그대로 유지',cmp:(e.held||[]).map(mkTk).join(', ')+' 보유',why:'이미 '+(e.held||[]).length+'종목을 들고 있어 그대로 뒀어요',
-        p0:[n8+'종목 비교',top1(e)],p1:['빈자리 0개','이미 '+(e.held||[]).length+'종목 보유 중'],p2:['그대로 유지','든 종목을 계속 들었어요'],ups:upsOf(e),
+        p0:[n8+'종목 비교',top1(e)],p1:['빈자리 0개','이미 '+(e.held||[]).length+'종목 보유 중'],p2:['그대로 유지','보유 종목을 그대로 유지했어요'],ups:upsOf(e),
         facts:[['들고 있던 종목',(e.held||[]).map(mkTk).join(', ')],['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상']]},e); }
   });
   /* AI 판단 전략: 재평가 한 번이 한 줄. 그날 산 종목, 유지, 쉬어 감을 결과로 적는다 */
@@ -106,14 +106,15 @@ function btPlan(){
   var R=BT.R, s=BT.s, stops=[], by={};
   R.D.forEach(function(d){ if(d.k!=='buy'&&d.k!=='skip'&&d.k!=='hold') return; if(!by[d.j]){ by[d.j]={j:d.j,ds:[]}; stops.push(by[d.j]); } by[d.j].ds.push(d); });
   stops.sort(function(a,b){ return a.j-b.j; });
-  var ai=btAi(s), seenBuy=0, seenSkip=0, nBrief=0, gap=Math.max(2,Math.round(R.N/110));
+  var ai=btAi(s), seenBuy=0, seenSkip=0, nBrief=0, gap=Math.max(2,Math.round(R.N/110)), imp={};
+  if(ai){ var cl=R.tr.filter(function(t){ return !t.open; }).slice().sort(function(a,b){ return a.pnl-b.pnl; }); if(cl.length>=4) [cl[0],cl[cl.length-1]].forEach(function(t){ R.D.forEach(function(d){ if(d.k==='buy'&&d.tid===t.id) imp[d.j]=1; }); }); }
   stops.forEach(function(st,ix){ var hasBuy=st.ds.some(function(d){ return d.k==='buy'; }), hold=!hasBuy&&st.ds[0].k==='hold', sk=!hasBuy&&!hold, prev=stops[ix-1]; st.sk=sk; st.hold=hold; st.kind=hasBuy?'buy':hold?'hold':'skip';
     if(hold){ st.dw=0; return; }
-    if(sk?!seenSkip:!seenBuy){ st.full=1; st.t=ai?[900,1000,1300]:[900,0,1200]; st.dw=st.t[0]+st.t[1]+st.t[2]; if(sk) seenSkip=1; else seenBuy=1; }
+    if((sk?!seenSkip:!seenBuy)||imp[st.j]){ st.full=1; st.t=ai?[900,1000,1300]:[900,0,1200]; st.dw=st.t[0]+st.t[1]+st.t[2]; if(sk) seenSkip=1; else seenBuy=1; }
     else if(prev&&prev.dw>0&&!prev.full&&st.j-prev.j<=gap&&prev.sk===sk){ st.dw=0; }
     else if(nBrief<7){ st.dw=ai?420:320; nBrief++; }
     else st.dw=0; });
-  var bar=Math.max(2.4,Math.min(8,2400/R.N)), seg=[], t=0, pj=-1;
+  var bar=Math.max(4.5,Math.min(14,5200/R.N)), seg=[], t=0, pj=-1; /* 지나가는 날의 속도: 그래프가 자라는 것이 보일 만큼 */
   /* 기회가 있는 날에는 멈춤 구간만 들어간다. 지나가는 구간은 그 전날까지 */
   stops.forEach(function(st){ var to=st.dw>0?st.j-1:st.j; if(to>pj){ var dt=(to-pj)*bar; seg.push({k:'go',a:pj,b:to,t0:t,t1:t+dt}); t+=dt; pj=to; } if(st.dw>0){ seg.push({k:'stop',j:st.j,st:st,t0:t,t1:t+st.dw}); t+=st.dw; pj=st.j; } });
   if(pj<R.N-1){ var d2=(R.N-1-pj)*bar; seg.push({k:'go',a:pj,b:R.N-1,t0:t,t1:t+d2}); t+=d2; }
@@ -160,7 +161,7 @@ function btChartSvg(){
     /* 가장 나빴던 구간: 시간 축을 따라 놓인 띠와 이름표. 그래프 전체를 칠하지 않는다 */
     +'<g class="bt-dd" id="bt-dd"><rect id="bt-ddr" x="0" y="'+(base+3)+'" width="0" height="4" rx="2" fill="#f0566a"/><line id="bt-dda" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="rgba(240,86,106,.32)" stroke-dasharray="2 5"/><line id="bt-ddb" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="rgba(240,86,106,.32)" stroke-dasharray="2 5"/>'
     +'<text id="bt-ddt" x="0" y="'+(base-8)+'" text-anchor="middle" font-size="11.5" font-weight="600" fill="#f58a98"></text></g>'
-    +'<path class="bt-bench" d="'+btPath(R.bench,G)+'" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.3" stroke-dasharray="2 4"/>'
+    +'<g clip-path="url(#btrv)"><path class="bt-bench" d="'+btPath(R.bench,G)+'" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.3" stroke-dasharray="2 4"/></g>' /* 비교 선도 지나온 날까지만 */
     +'<g clip-path="url(#btrv)">'
     +'<g clip-path="url(#btcu)"><path d="'+area+'" fill="url(#btgu)"/><path d="'+line+'" fill="none" stroke="'+G1+'" stroke-width="1.9" stroke-linejoin="round"/></g>'
     +'<g clip-path="url(#btcd)"><path d="'+area+'" fill="url(#btgd)"/><path d="'+line+'" fill="none" stroke="'+R1+'" stroke-width="1.9" stroke-linejoin="round"/></g>'

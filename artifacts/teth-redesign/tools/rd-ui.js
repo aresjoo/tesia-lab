@@ -186,7 +186,7 @@ function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.
 function mkCard(s){
   if(!s.kind) s.kind='rule';
   var r=tfSS3PdCalc(s,'all'), m30=mk30(s), ne=tfSS3Rid(s), ex=mkEx(s), win=mkWinTxt(r), fw=mkFwTxt(s.fw);
-  var bF='<button type="button" class="mk3-b" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>', bD='<button type="button" class="mk3-b fill" onclick="tfSS3Go(\''+ne+'\')">자세히</button>';
+  var bF='<button type="button" class="mk3-b fill" onclick="cpSetupGo(\''+ne+'\')">전략 복사하기</button>', bD='<button type="button" class="mk3-b quiet" onclick="tfSS3Go(\''+ne+'\')">자세히</button>';
   return '<article class="mk-card mk3 mk3v2 k-'+s.kind+'">'
     +'<div class="mk3-head">'+mkGlyph(s,28)+'<h3><button type="button" class="mk-c-tb mk3-t" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3></div>'
     +'<div class="mk3-meta">'+(s.by?'<span class="mk3-by">@'+gEsc(s.by)+'</span>':'')+'<span class="mk3-ex"><img src="assets/logos/'+ex[0]+'.png" alt="" width="12" height="12" loading="lazy">'+ex[1]+'에서 실행</span></div>'
@@ -241,8 +241,8 @@ function mk3Controls(t){
   var sort=mkSortKey(t), kind=t.ss.kind||'all', cnt={all:0,agent:0,rule:0,mix:0};
   tfSSRows().forEach(function(s){ if(s.me) return; cnt.all++; cnt[s.kind||'rule']++; });
   return '<div class="mk-bar mk3-bar">'
-    +'<div class="mk3-kindrow"><div class="mk3-seg" role="group" aria-label="판단 방식">'+[['all','전체'],['agent','AI 판단'],['rule','차트 규칙'],['mix','혼합 전략']].map(function(o){ var on=kind===o[0]; return '<button type="button" aria-pressed="'+on+'" onclick="mkKindPick(\''+o[0]+'\')">'+o[1]+'<i class="num">'+cnt[o[0]]+'</i></button>'; }).join('')+'</div>'
-    +'<p class="mk3-kindhelp">'+({all:'AI 판단은 AI가 종목과 비중을 정해요. 차트 규칙은 정해 둔 가격 조건만 따라요. 혼합 전략은 AI가 종목을 고르고 규칙이 시점을 정하되, 조건이 맞아도 시장이 위험하면 AI가 진입을 보류해요.',agent:'여러 종목을 비교해 무엇을 얼마나 들지 AI가 정해요. 시장이 약하면 새로 사지 않아요.',rule:'정해 둔 자산에서 정해 둔 조건이 맞을 때만 사고팔아요. AI는 끼어들지 않아요.',mix:'거래할 종목은 AI가 고르고, 사고파는 시점은 규칙이 정해요. 규칙 조건이 맞아도 큰 악재나 약한 시장이면 AI가 진입을 보류해요.'}[kind])+'</p></div>'
+    +'<div class="mk3-kindrow"><div class="mk3-seg" role="group" aria-label="판단 방식">'+[['all','전체'],['agent','AI 판단'],['rule','차트 규칙'],['mix','혼합 전략']].map(function(o){ var on=kind===o[0]; return '<button type="button" aria-pressed="'+on+'" title="'+({all:'모든 전략',agent:'AI가 종목과 시점, 비중을 정합니다',rule:'정해 둔 가격 조건이 맞을 때만 거래합니다',mix:'AI가 고르고, 규칙이 시점을 정합니다'}[o[0]])+'" onclick="mkKindPick(\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>'
+    +(kind==='all'?'':'<p class="mk3-kindhelp one">'+({agent:'AI가 종목과 시점, 비중을 정합니다.',rule:'정해 둔 가격 조건이 맞을 때만 거래합니다.',mix:'AI가 종목을 고르고, 규칙이 시점을 정합니다.'}[kind])+'</p>')+'</div>'
     +'<div class="mk-flt mk3-flt">'
     +'<div class="mk-chips" aria-label="정렬"><span class="lb">정렬</span>'+[['pick','추천순'],['ret','30일 수익률'],['fw','따라가는 사람'],['win','거래 승률']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on&&o[0]!=='pick'?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')+'</div>'
     +tfBkDrop('ss3-m-asset',[['all','시장 전체'],['crypto','가상자산'],['stock','미국 주식'],['index','지수와 금'],['multi','여러 시장']],t.ss.asset||'all','mkMktPick')
@@ -286,7 +286,7 @@ function mkEvAgent(s,e){
   if(e.t==='exit') return {k:'sell',obs:e.a+', '+MK_WHY[e.why],dec:e.a+' 보유를 끝냈어요',act:'전량 매도, 체결가 '+mkPxFmt(e.px)+', 손익 '+mkPct0(e.pnl)};
   if(e.t==='skip'&&e.why==='gate') return {k:'wait',obs:e.of+'종 중 '+e.up+'종만 오름세',dec:'시장이 약해 새로 사지 않았어요',act:e.held.length?e.held.join(', ')+' 보유 유지':'주문 없음'};
   if(e.t==='skip') return {k:'wait',obs:'기준을 넘는 종목이 없음. 가장 강한 건 '+mkTopTxt(e.top),dec:'새로 사지 않았어요',act:e.held.length?e.held.join(', ')+' 보유 유지':'주문 없음'};
-  return {k:'hold',obs:'든 종목이 여전히 상위권. 가장 강한 건 '+mkTopTxt(e.top),dec:'바꾸지 않았어요',act:e.held.join(', ')+' 보유 유지'};
+  return {k:'hold',obs:'보유 종목이 여전히 상위권. 가장 강한 건 '+mkTopTxt(e.top),dec:'바꾸지 않았어요',act:e.held.join(', ')+' 보유 유지'};
 }
 function mkEvMix(s,e){
   var c=s.cfg, ai=s.kind==='mix';
@@ -381,7 +381,7 @@ function mk3Head(s,ne,pd,watching){
     +(s.me?'':'<button type="button" class="mkd-fav" aria-pressed="'+watching+'" onclick="tfSS3WatchTgl(\''+ne+'\');mkWatchSync(\''+ne+'\')">★ 즐겨찾기</button>')+'</div>'
     +'<p class="mk3-dh-one">'+gEsc(mkOne(s))+'</p>'
     +'<div class="mk-d-acts mk3-dh-acts">'
-    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">따라가기</button>'+(s.cfg?'<button type="button" class="mk3-bt" onclick="btOpen(\''+ne+'\')">내 조건으로 백테스트</button>':''))
+    +(s.me?'<span class="ss3-st">내가 공유한 전략</span>':'<button type="button" class="mk-pri" onclick="cpSetupGo(\''+ne+'\')">전략 복사하기</button>'+(s.cfg?'<button type="button" class="mk3-bt2" onclick="btOpen(\''+ne+'\')" aria-label="내 조건으로 성과 확인, 백테스트"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7.5 15l3.5-4 3 2.5 4.5-6"/></svg><span><b>내 조건으로 성과 확인</b><small>기간과 금액을 정해 과거 성과를 확인</small></span></button>':''))
     +'<span class="mk3-dh-meta"><span class="mk-xtag"><img src="assets/logos/'+ex[0]+'.png" alt="" width="16" height="16">'+mkdTerm(ex[1],MK_TIP.ex)+'</span><span>최소 '+mkMin(s)+' USDT</span><span>'+mkdSince(s)+' 시작</span></span>'
     +'<div class="mk-more"><button type="button" class="mk-more-b" id="mk-menu-b" aria-haspopup="menu" aria-expanded="false" aria-label="더 보기" onclick="mkMenuTgl(event)">⋯</button>'
     +'<div class="mk-menu" id="mk-menu" role="menu" hidden>'
@@ -966,10 +966,16 @@ function mkChatBody(t){
   var g=mkGloss(gEsc(head)+'\u0003'+gEsc(rest),true).split('\u0003');
   return '<strong>'+col(g[0])+'</strong>'+(g[1]?' '+col(g[1]):'');
 }
+var MKC_IC={buy:'<path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/>',sell:'<path d="M12 5v13M6.5 12.500L12 18l5.500-5.500"/>',now:'<circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="8"/>',wait:'<path d="M9 6v12M15 6v12"/>',hold:'<path d="M6 12h12"/>',pick:'<path d="M5 12.500l4.500 4.500L19 7.500"/>',intro:'<path d="M6 5h12v14H6zM9 9h6M9 13h6"/>'};
+function mkChatTitle(s,m){ var a=m.a?mkTk(m.a):'', fut=/^선물 /.test(m.tag||''), t=fut?m.tag.replace(/^선물 /,''):'';
+  if(m.k==='now') return '현재 판단'; if(m.k==='intro') return '전략 개요';
+  if(m.k==='buy') return a+' '+(fut?t:'매수'); if(m.k==='sell') return a+' '+(fut?t:'매도');
+  if(m.k==='pick') return a+(fut?' '+t:' 선정'); if(m.k==='hold') return '보유 유지'; return a?a+' 관망':'관망'; }
+function mkChatOut(m){ if(m.k!=='sell') return ''; var x=/손익은[^+\-]*([+\-]\d[\d,]*(?:\.\d+)?%)/.exec(m.t||''); return x?'<i class="mkc-out num '+(x[1].charAt(0)==='+'?'up':'dn')+'">'+x[1]+'</i>':''; }
 function mkChatRow(s,m,first){
-  return '<li class="mkc-m k-'+m.k+(first?' first':'')+'">'
-    +'<div class="mkc-av" aria-hidden="true">'+mkGlyph(s,36)+'</div>'
-    +'<div class="mkc-b"><div class="mkc-h"><b>'+gEsc(mkHook(s))+'</b><span class="mkc-tag">'+mkGloss(gEsc(m.tag))+'</span><time class="num">'+m.ts+'</time></div>'
+  return '<li class="mkc-m v2 k-'+m.k+(first?' first':'')+'">'
+    +'<div class="mkc-ic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(MKC_IC[m.k]||MKC_IC.wait)+'</svg></div>'
+    +'<div class="mkc-b"><div class="mkc-h"><b>'+gEsc(mkChatTitle(s,m))+'</b>'+mkChatOut(m)+'<time class="num">'+m.ts+'</time></div>'
     +'<div class="mkc-t"><p>'+mkChatBody(m.t)+'</p></div>'
     +(m.cnt?'<p class="mkc-n num">같은 판단 '+m.cnt+'회 연속, '+mkTS(s,m.from,null,3).replace(/ .*$/,'')+'부터</p>':'')
     +'</div></li>';

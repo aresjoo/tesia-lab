@@ -28,7 +28,7 @@ window.TETH_CONFIG = {
     {
       id: "direct",
       name: "TETH Direct",
-      price: "월 599,000원",
+      price: "월 $280",
       tagline: "쓰던 거래소 그대로, 바로 시작",
       features: [
         "무제한 전략 연구, 백테스트",
