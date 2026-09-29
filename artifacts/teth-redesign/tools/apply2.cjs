@@ -8,12 +8,13 @@ function block(tag,body,placeBefore,wrapO,wrapC){ const B='/*'+tag+'_BEGIN*/', E
 // 1. 카탈로그 데이터
 const cd=JSON.parse(fs.readFileSync(D+'cat-data.json','utf8')), cp=JSON.parse(fs.readFileSync(D+'copy.json','utf8'));
 const q=s=>"'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'";
-const MKT=s=>{ if(s.kind==='rule'){ const a=s.asset; return ['비트코인','이더리움','솔라나','리플','도지코인'].includes(a)?'crypto':['나스닥','S&P 500','금'].includes(a)?'index':'stock'; } return {coin8:'crypto',big3:'crypto',tech8:'stock',idx3:'index',macro6:'multi'}[s.uni]; };
-const FW=[1284,911,640,512,431,377,822,298,203,593,705,188,462,349,318,267,156,274,141,233,486];
+const MKT=s=>{ if(s.c&&s.c.fut) return 'crypto'; if(s.kind==='rule'){ const a=s.asset; return ['비트코인','이더리움','솔라나','리플','도지코인'].includes(a)?'crypto':['나스닥','S&P 500','금'].includes(a)?'index':'stock'; } return {coin8:'crypto',big3:'crypto',tech8:'stock',idx3:'index',macro6:'multi'}[s.uni]; };
+const FW=[612,548,731,496,455,389,342,527,418,377,1284,911,640,512,431,377,822,298,203,593,705,188,462,349,318,267,156,274,141,233,486];
 const px=Object.keys(cd.cfg).map(k=>q(k)+':['+cd.cfg[k].join(',')+']').join(',');
 const uni=Object.keys(cd.uni).map(k=>k+':{label:'+q(cd.uni[k].label)+',list:['+cd.uni[k].list.map(q).join(',')+']}').join(',\r\n  ');
 const rows=cd.list.map((s,i)=>{ const c=cp[s.id]; if(!c) throw new Error('copy '+s.id); let f='id:'+q(s.id)+',kind:'+q(s.kind)+',mkt:'+q(MKT(s))+',name:'+q(c.name)+',one:'+q(c.one)+',ex:'+q(s.ex)+',fw:'+FW[i]+',by:'+q(c.by);
-  if(s.kind==='rule') f+=',asset:'+q(s.asset)+',rsiTh:'+s.p.rsiTh+',tp:'+s.p.tp+',sl:'+s.p.sl+',tf:'+(s.p.trendFilter?1:0)+',startI:'+s.p.startI;
+  if(s.c&&s.c.fut) f+=(s.asset?',asset:'+q(s.asset):',uni:'+q(s.uni))+',inst:'+q('futures')+','+Object.keys(s.c).map(k=>k+':'+(typeof s.c[k]==='string'?q(s.c[k]):s.c[k])).join(',');
+  else if(s.kind==='rule') f+=',asset:'+q(s.asset)+',rsiTh:'+s.p.rsiTh+',tp:'+s.p.tp+',sl:'+s.p.sl+',tf:'+(s.p.trendFilter?1:0)+',startI:'+s.p.startI;
   else f+=',uni:'+q(s.uni)+','+Object.keys(s.c).map(k=>k+':'+s.c[k]).join(',');
   return '  {'+f+'}'; }).join(',\r\n');
 const cat='/* ═══ 전략 카탈로그 20종 (시드 데이터) ═══\n   판단 방식(kind): agent 직접 탐색, rule 조건 실행, mix 혼합. 이름, 설명, 거래소, 행동 값을 여기서만 관리한다.\n   성과와 판단 기록은 적어 넣지 않는다. 아래 값을 자산별 가격(MK_PX_CFG)에 돌린 계산 결과다. 값은 성과를 보기 전에 행동으로 정했다.\n   id 는 바꾸지 않는다(저장된 즐겨찾기와 따라가기의 기준). 이름을 바꾸면 옛 이름을 MK_ALIAS 에 추가한다.\n   실제 운용 데이터가 생기면 이 배열과 mkPx, mkRunCfg 를 API 응답으로 바꾼다. MK_PX_CFG 값은 [씨앗, 시작가, 하루 변동 폭] */\nvar MK_PX_CFG={'+px+'};\nvar MK_UNI={\n  '+uni+'\n};\nvar MK_CAT=[\n'+rows+'\n];';
@@ -89,7 +90,7 @@ rep("new Date(c2.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:
 rep("  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }","  if(h.indexOf('#/share/bt/')===0){ TF_ONNF=false; btRoute(h); return; } /* 백테스트 여정 */\n  if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }",true);
 if(!t.includes('share\\/(s|t|copy|c|bt)')){ const n0=t.split('share\\/(s|t|copy|c)').length-1; if(n0<2) throw new Error('route regex '+n0); t=t.split('share\\/(s|t|copy|c)').join('share\\/(s|t|copy|c|bt)'); }
 // 6. rd 블록이 선언하는 함수의 옛 정의를 지운다(정의는 하나만 남긴다)
-const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
+const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'fut-core.js','utf8')+'\n'+fs.readFileSync(D+'fut-ui.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
 { const names=[...core.matchAll(/^function ([A-Za-z0-9_]+)\(/gm)].map(m=>m[1]), removed=[];
   for(const nm of names){ for(;;){ const lim=t.indexOf('/*RD_CORE_BEGIN*/'), head='\nfunction '+nm+'(', i=t.indexOf(head); if(i<0||(lim>=0&&i>lim)) break;
       let k=t.indexOf('{',i), d=0, inS=null;
@@ -104,6 +105,6 @@ block('RD_CSS',fs.readFileSync(D+'rd.css','utf8'),'<script src="site-config.js',
 function blockAfter(tag,body,after){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\r\n'+nl(body).trim()+'\r\n'+E;
   if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }
   const k=t.indexOf(after); if(k<0||t.indexOf(after,k+1)>=0) throw new Error('after '+tag); t=t.slice(0,k+after.length)+'\r\n'+txt+t.slice(k+after.length); }
-blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
+blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js','bt-fut.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
 blockAfter('BT_CSS',fs.readFileSync(D+'bt.css','utf8'),'/*RD_CSS_END*/');
 fs.writeFileSync(F,t); console.log('applied', t.length);

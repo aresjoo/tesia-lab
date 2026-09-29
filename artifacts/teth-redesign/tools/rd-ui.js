@@ -26,6 +26,7 @@ function mkSign(v){ var x=+v.toFixed(1); return x>0?' mk-up':x<0?' mk-dn':''; }
 /* ── 데이터 ── */
 function mkRunCfg(c,startI){
   var st=startI!=null?startI:c.startI;
+  if(c.fut){ var f={}; for(var k in c) f[k]=c[k]; if(c.uni) f.uni=MK_UNI[c.uni].list; f.startI=st; return mkFutRun(f); }
   if(c.kind==='agent') return mkAgentRun({uni:MK_UNI[c.uni].list,look:c.look,top:c.top,gate:c.gate,every:c.every,trail:c.trail,volT:c.volT,minS:c.minS,startI:st});
   if(c.kind==='mix') return mkHybridRun({uni:MK_UNI[c.uni].list,every:c.every,look:c.look,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,gate:c.gate,startI:st});
   return mkRuleRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:!!c.tf,fng:c.fng,startI:st});
@@ -134,6 +135,7 @@ function mkWaitPlain(q,tf){ return !q?'조건이 맞기를 기다리는 중':!q.
 function mkNowLine(s){
   var r=s.r||{}, st=r.state; if(!st) return s.me?'내가 공유한 전략':'';
   var pos=function(){ return ''; };
+  if(fuIs(s)) return fuNowLine(s);
   if(s.kind==='agent'){ if(st.open.length) return st.open.map(function(o){ return mkTk(o.k); }).join(', ')+' 보유 중'; return st.scan&&st.scan.weak?'시장이 약해 기다리는 중':'살 종목을 찾는 중'; }
   if(st.open) return mkTk(st.open.k)+' 보유 중';
   if(s.kind==='mix') return st.pick?mkTk(st.pick)+', '+mkWaitPlain(st.cond,false):'고를 종목이 없어 기다리는 중';
@@ -295,6 +297,7 @@ function mkEvMix(s,e){
   return {k:'sell',who:ai?'규칙':null,obs:e.a+' 진입가 대비 '+mkPct0(e.chg)+'. '+MK_WHY[e.why],dec:e.why==='tp'?'목표에 닿아 팔았어요':e.why==='sl'?'손절 기준에 닿아 팔았어요':'25일째라 팔았어요',act:'전량 매도, 체결가 '+mkPxFmt(e.px)+', 손익 '+mkPct0(e.pnl)};
 }
 function mkEvents(s,r){
+  if(fuIs(s)) return (r.events||[]).map(function(e){ var x=fuEv(s,e); x.i=e.i; x.tid=e.tid; return x; });
   var f=s.kind==='agent'?mkEvAgent:mkEvMix;
   return (r.events||[]).map(function(e){ var x=f(s,e); x.i=e.i; x.tid=e.tid; return x; });
 }
@@ -312,6 +315,7 @@ function mkEvRow(e,first){
 /* ── 상세: 하는 일, 지금, 움직이는 방식 ── */
 function mkDepth(th){ return th<=32?'크게':th<=44?'깊게':'조금'; }
 function mkDoes(s){
+  if(fuIs(s)) return fuDoes(s);
   var c=s.cfg||{}, u=mkUni(s);
   if(s.kind==='agent') return [['보는 것',u.label+'의 최근 '+c.look+'일 흐름과 흔들림. '+u.list.join(', ')],['AI가 정하는 것','무엇을 살지, 얼마나 살지, 언제 바꿀지. 오름폭을 흔들림으로 나눠 순위를 매기고, 한 번에 최대 '+c.top+'종목'],['바뀌지 않는 한도','든 뒤 고점에서 '+c.trail+'% 밀리면 팔아요. 오르는 종목이 '+Math.round(c.gate*100)+'% 미만이면 새로 사지 않아요']];
   if(s.kind==='mix') return [['AI가 정하는 것','거래할 종목 하나. '+u.label+' 가운데 60일 평균 가격 위에 있고 '+c.look+'일 동안 가장 많이 오른 종목. 보유하지 않을 때 '+c.every+'일마다 다시 골라요'+(c.gate?'. 규칙 조건이 맞아도 시장이 약하면 진입을 보류해요':'')],['규칙이 정하는 것','사는 때와 파는 때. 고른 종목이 밀렸다가 반등하면 사요'],['바뀌지 않는 한도',c.tp+'% 오르거나 '+Math.abs(c.sl)+'% 밀린 날 팔아요. 길어도 25일']];
@@ -319,6 +323,7 @@ function mkDoes(s){
   return [];
 }
 function mkHowRows(s){
+  if(fuIs(s)) return fuHow(s);
   var c=s.cfg||{};
   if(s.kind==='agent') return [['언제 사나',(c.every===1?'매일':c.every+'일마다')+' 종목을 다시 비교해서, 흐름이 강한 종목이 기준을 넘을 때'],['언제 파나','재평가 날에 든 종목의 힘이 꺾였거나 순위가 '+(c.top+2)+'위 밖이면 팔아요. 고점에서 '+c.trail+'% 밀리면 그날 바로 팔아요'],['언제 쉬나','오르는 종목이 '+Math.round(c.gate*100)+'%가 안 될 때. 새로 사지 않고, 든 종목의 정리 조건은 계속 확인해요'],['얼마나 사나','살 때 한 종목에 자산의 최대 '+Math.round(100/c.top)+'%. 든 뒤에는 가격에 따라 비중이 변해요']];
   if(s.kind==='mix') return [['누가 고르나','AI가 '+c.every+'일마다 거래할 종목을 다시 골라요. 보유 중에는 바꾸지 않아요'],['언제 사나','고른 종목이 밀렸다가 하루 0.5% 넘게 반등한 날'+(c.gate?'. 단, 오르는 종목이 '+Math.round(c.gate*100)+'% 미만이면 AI가 보류':'')],['언제 파나',c.tp+'% 오르거나 '+Math.abs(c.sl)+'% 밀린 날, 아니면 25일째'],['얼마나 사나','한 번에 한 종목, 가진 금액 전부']];
@@ -342,6 +347,7 @@ function mkCondRows(q,c,row){
   return o;
 }
 function mkNowPanel(s,r){
+  if(fuIs(s)) return fuNow(s,r);
   var st=r.state, end=PRICE0.length-1, rows='', head='', c=s.cfg||{};
   var row=function(k,v){ return '<div class="mk3-kv"><small>'+k+'</small><span>'+v+'</span></div>'; };
   if(!st) return '';
@@ -395,11 +401,11 @@ function mkLogTab(s,r){
 }
 function mkTradesTable(s,r,limit){
   var tr=(r.trades||[]).slice(); if(limit) tr=tr.slice(-limit); tr.reverse();
-  var KN={sl:'손절',tp:'익절',time:'기간 청산',trail:'고점 이탈',weak:'힘 약화',rot:'순위 밀림'};
+  var KN={sl:'손절',tp:'익절',time:'기간 청산',trail:s.cfg&&s.cfg.fut?'추적 손절':'고점 이탈',weak:'힘 약화',rot:'순위 밀림',chan:'추세 꺾임',flip:'방향 전환',liq:'강제 청산',rest:'쉬어 감'};
   return '<div class="mk-tblw"><table class="ss3-tbl"><thead><tr><th>진입일</th><th>청산일</th><th>보유</th><th>자산</th><th>구분</th><th style="text-align:right">진입가</th><th style="text-align:right">청산가</th><th style="text-align:right">손익률</th></tr></thead><tbody>'
     +(tr.length?tr.map(function(x){
       var p1=x.ep!=null?x.ep:PRICE[x.entry], p2=x.xp!=null?x.xp:PRICE[x.exit];
-      return '<tr><td>'+mkDate(x.entry)+'</td><td>'+mkDate(x.exit)+'</td><td>'+(x.exit-x.entry)+'일</td><td>'+gEsc(x.asset||s.asset)+'</td><td>'+(KN[x.kind]||x.kind)+'</td>'
+      return '<tr><td>'+mkDate(x.entry)+'</td><td>'+mkDate(x.exit)+'</td><td>'+(x.exit-x.entry)+'일</td><td>'+gEsc(x.asset||s.asset)+(x.side?' '+(x.side>0?'롱':'숏')+(x.lev>1?' '+x.lev+'배':''):'')+'</td><td>'+(KN[x.kind]||x.kind)+'</td>'
         +'<td style="text-align:right">'+mkPxFmt(p1)+'</td><td style="text-align:right">'+mkPxFmt(p2)+'</td>'
         +'<td class="'+(x.pnl>=0?'up':'dn')+'" style="text-align:right">'+mkPct(x.pnl*100,2)+'</td></tr>';
     }).join(''):'<tr><td colspan="8" style="text-align:center;height:80px">이 기간에는 체결이 없어요</td></tr>')
@@ -434,7 +440,7 @@ function mkChartW(){ var vw=window.innerWidth||1200; return Math.round(Math.max(
 var MK_CW=mkChartW();
 window.addEventListener('resize',function(){ var w=mkChartW(); if(w===MK_CW) return; MK_CW=w; var g=document.getElementById('mkd-chart'); if(g&&typeof mkdChartHtml==='function'){ g.classList.remove('hov'); g.innerHTML=mkdChartHtml(); } });
 /* 따라가기 시트의 전략 요약: 수익이 아니라 판단 방식과 주기 */
-function mkFollowLine(s){ var c=s.cfg||{}, by=s.by?'@'+s.by+' 등록, ':''; if(!s.cfg) return by+(MK_KIND[s.kind]||'차트 규칙')+', '+mkScope(s); return by+MK_KIND[s.kind]+', '+mkScope(s)+', '+(s.kind==='agent'?(c.every===1?'매일':c.every+'일마다')+' 종목을 다시 비교':s.kind==='mix'?c.every+'일마다 종목을 고르고 매일 조건 확인':'매일 조건 확인'); }
+function mkFollowLine(s){ if(fuIs(s)) return fuLine(s); var c=s.cfg||{}, by=s.by?'@'+s.by+' 등록, ':''; if(!s.cfg) return by+(MK_KIND[s.kind]||'차트 규칙')+', '+mkScope(s); return by+MK_KIND[s.kind]+', '+mkScope(s)+', '+(s.kind==='agent'?(c.every===1?'매일':c.every+'일마다')+' 종목을 다시 비교':s.kind==='mix'?c.every+'일마다 종목을 고르고 매일 조건 확인':'매일 조건 확인'); }
 
 /* 세대 기록을 넣기 전 저장의 데이터 세대 */
 var MK_GEN0={asof:[2026,9,28],len:1335};
@@ -520,9 +526,9 @@ function cpxPos(c2,d){
   var c=s2.cfg||{}, st=(s2.r&&s2.r.state)||{}, o=st.open, list=!o?[]:o.length!=null?o:[o], up=d.unreal>=0;
   if(d.stopI!=null) list=list.filter(function(x){ return x.entry==null||x.entry<=d.stopI; }); /* 새 진입을 멈춘 뒤에 원본이 산 종목은 내 포지션이 아니다 */
   var wsum=list.reduce(function(a,x){ return a+(x.w!=null?x.w:1); },0)||1;
-  var rule=s2.kind==='agent'?'고점에서 '+c.trail+'% 밀리면':(c.sl!=null?c.sl+'% / +'+c.tp+'%':(s2.p?s2.p.sl+'% / +'+s2.p.tp+'%':'원본과 같음'));
+  var rule=fuIs(s2)?(c.trail?'유리했던 가격에서 '+c.trail+'% 되돌리면':c.sl?'진입가에서 '+c.sl+'% 불리하면':c.exitN?c.exitN+'일 기준선 이탈':'방향이 바뀌면'):s2.kind==='agent'?'고점에서 '+c.trail+'% 밀리면':(c.sl!=null?c.sl+'% / +'+c.tp+'%':(s2.p?s2.p.sl+'% / +'+s2.p.tp+'%':'원본과 같음'));
   var rows=list.map(function(x){ var w=(x.w!=null?x.w:1)/wsum;
-    return '<tr><td>'+gEsc(mkTk(x.k))+'</td><td class="u">롱</td><td class="num">'+cpUsd(d.invested*w,0)+'</td>'
+    return '<tr><td>'+gEsc(mkTk(x.k))+'</td><td class="'+(x.side<0?'d':'u')+'">'+(x.side<0?'숏':'롱')+(x.lev>1?' '+x.lev+'배':'')+'</td><td class="num">'+cpUsd(d.invested*w,0)+'</td>'
       +'<td class="num">'+mkPxFmt(x.ep)+'</td><td class="num">'+mkPxFmt(x.px)+'</td>'
       +'<td class="num">'+rule+'</td>'
       +'<td class="num '+(x.chg>=0?'u':'d')+'">'+mkPct0(x.chg,1)+'</td></tr>'; }).join('');
@@ -692,13 +698,13 @@ function mkOrders(s){
   var r=s.r||{}, o=[], st=r.state, W=mkWords(s), B=1000;
   (r.trades||[]).forEach(function(t){
     if(t.units==null||t.ep==null) return;
-    o.push({i:t.entry,side:'in',a:t.asset,px:t.ep,q:t.units*B,sum:t.cost*B,id:t.id});
-    o.push({i:t.exit,side:'out',a:t.asset,px:t.xp,q:t.units*B,sum:t.got*B,id:t.id,pnl:t.pnl*100});
+    o.push({i:t.entry,side:'in',a:t.asset,px:t.ep,q:Math.abs(t.units)*B,sum:t.cost*B,id:t.id,ps:t.side});
+    o.push({i:t.exit,side:'out',a:t.asset,px:t.xp,q:Math.abs(t.units)*B,sum:t.got*B,id:t.id,pnl:t.pnl*100,ps:t.side});
   });
   var op=!st?[]:st.open&&st.open.length!=null?st.open:st.open?[st.open]:[];
-  op.forEach(function(p){ if(p.units!=null) o.push({i:p.entry,side:'in',a:p.k,px:p.ep,q:p.units*B,sum:p.cost*B,id:p.tid,open:true}); });
+  op.forEach(function(p){ if(p.units!=null) o.push({i:p.entry,side:'in',a:p.k,px:p.ep,q:Math.abs(p.units)*B,sum:p.cost*B,id:p.tid,open:true,ps:p.side}); });
   o.sort(function(x,y){ return y.i-x.i||(x.side===y.side?y.id-x.id:(x.side==='out'?1:-1)); });
-  o.forEach(function(x){ x.label=x.side==='in'?W.buy:W.sell; x.when=mkWhen(s,x.i,x.a,x.id+(x.side==='in'?0:7)); });
+  o.forEach(function(x){ x.label=(x.ps?(x.ps>0?'롱 ':'숏 '):'')+(x.side==='in'?W.buy:W.sell); x.when=mkWhen(s,x.i,x.a,x.id+(x.side==='in'?0:7)); });
   return o;
 }
 function mkQty(v){ var a=Math.abs(v); return a>=1000?Math.round(v).toLocaleString():a>=10?v.toFixed(2):a>=0.1?v.toFixed(3):v.toFixed(5); }
@@ -764,11 +770,12 @@ function mkList(a){ return a.join(', '); }
 function mkPxU(a,v){ return mkPxFmt(v)+(MK_CRYPTO[a]?' USDT':(a==='나스닥'||a==='S&P 500')?'포인트':' USD'); }
 /* 거래하는 상품. 가상자산 거래소에서 주식, 지수, 금은 가격을 따라가는 토큰으로 거래한다 */
 function mkInst(a){ return MK_CRYPTO[a]?'현물':(a==='나스닥'||a==='S&P 500')?'토큰화 지수':a==='금'?'토큰화 금':'토큰화 주식'; }
-function mkInstList(s){ var l=s.cfg&&s.cfg.uni?mkUni(s).list:[s.asset], o=[]; l.forEach(function(a){ var k=mkInst(a); if(o.indexOf(k)<0) o.push(k); }); return o; }
+function mkInstList(s){ if(fuIs(s)) return fuInst(s); var l=s.cfg&&s.cfg.uni?mkUni(s).list:[s.asset], o=[]; l.forEach(function(a){ var k=mkInst(a); if(o.indexOf(k)<0) o.push(k); }); return o; }
 function mkTagIO(s,a,out){ var W=mkWords(s); return W.inst==='선물'?(out?W.tagOut:W.tagIn):mkInst(a)+(out?' 매도':' 매수'); }
 /* 주문 용어: 현물은 매수와 매도, 선물은 방향(롱, 숏)과 진입, 청산. 설정에 inst, dir 이 없으면 현물 롱 */
 function mkWords(s){
   var c=s.cfg||{}, fut=c.inst==='futures', sh=c.dir==='short';
+  if(c.fut) return {inst:'선물',tagIn:'선물 진입',tagOut:'선물 청산',buy:'진입',sell:'청산',hold:'포지션 유지'};
   if(!fut) return {inst:'현물',tagIn:'현물 매수',tagOut:'현물 매도',buy:'매수',sell:'매도',hold:'보유'};
   return {inst:'선물',tagIn:'선물 '+(sh?'숏':'롱')+' 진입',tagOut:'선물 '+(sh?'숏':'롱')+' 청산',buy:(sh?'숏':'롱')+' 진입',sell:(sh?'숏':'롱')+' 청산',hold:(sh?'숏':'롱')+' 포지션 유지'};
 }
@@ -802,6 +809,7 @@ function mkSay(core,opt,R){
 function mkDepthN(th){ return th<=32?'깊은':th<=44?'중간 폭의':'얕은'; }
 /* 하는 일, 움직이는 방식을 한 문장씩 */
 function mkRules(s,of){
+  if(fuIs(s)) return fuRules(s);
   var c=s.cfg||{}, u=mkUni(s), W=mkWords(s), ev=c.every===1?'매일':c.every+'일마다', n=of||u.list.length, need=Math.ceil((c.gate||0)*n);
   var sell='진입 후 '+c.tp+'% 이상 오르면 익절, '+Math.abs(c.sl)+'% 이상 내리면 손절한다.', cap='둘 다 아니면 매수 후 25일이 지난 날 청산한다.';
   if(s.kind==='agent') return {
@@ -833,6 +841,7 @@ function mkDipAt(a,i){ var P=mkPx(a), hi=0; for(var k=Math.max(0,i-19);k<=i;k++)
 function mkDipTxt(a,i){ var d=mkDipAt(a,i); return d<-0.05?'진입 시점에 '+mkJ(a,'은','는')+' 최근 20일 고점 대비 '+Math.abs(d).toFixed(1)+'% 아래에 있었다.':''; }
 function mkDipNow(a){ var d=mkDipAt(a,mkPx(a).length-1); return d<-0.05?'현재 '+mkJ(a,'은','는')+' 최근 20일 고점 대비 '+Math.abs(d).toFixed(1)+'% 아래에 있다.':'현재 '+mkJ(a,'은','는')+' 최근 20일 고점에 있다.'; }
 function mkChatIntro(s){
+  if(fuIs(s)) return fuChatIntro(s);
   var R=mkRules(s), u=mkUni(s);
   if(s.kind==='agent') return mkSay([R.what,R.skip,R.size],[R.swap,R.sell,R.rest,'비교 대상은 '+mkList(u.list)+'다.'],R);
   if(s.kind==='mix') return mkSay([R.what,R.pick,R.buy],[R.sell,R.cap,R.rest,R.size,R.again],R);
@@ -847,6 +856,7 @@ function mkChatWait(q,tf,a){
   return '진입 조건 충족을 기다린다.';
 }
 function mkChatNow(s,r){
+  if(fuIs(s)) return fuChatNow(s,r);
   var st=r.state, c=s.cfg||{}, W=mkWords(s); if(!st) return '';
   var R=mkRules(s,st.scan&&st.scan.of);
   if(s.kind==='agent'){
@@ -861,6 +871,7 @@ function mkChatNow(s,r){
   return mkSay(['현재 미보유, 진입 대기 중이다.',mkChatWait(st.cond,c.tf,s.asset),'다음 확인은 다음 거래일 종가다.'],[mkDipNow(s.asset),R.what,R.tf,R.sell,R.cap,R.size,R.rest],R);
 }
 function mkChatEv(s,e){
+  if(fuIs(s)) return fuChatEv(s,e);
   var c=s.cfg||{}, R=mkRules(s,e.of), W=mkWords(s), held=function(){ return e.held&&e.held.length?mkJ(mkList(e.held),'은','는')+' 계속 '+W.hold+'한다.':''; };
   if(s.kind==='agent'){
     if(e.t==='enter'){ var g={held:[],below:[],weak:[]}; (e.skip||[]).forEach(function(x){ g[x.why].push(x.k); });

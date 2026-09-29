@@ -59,6 +59,7 @@ function btCompute(){
   var push=function(d,e){ d.i=e.i; d.j=Math.max(0,Math.min(N-1,e.i-i0)); d.a=e.a; d.tk=e.a?mkTk(e.a):''; d.tid=e.tid; d.ix=D.length; D.push(d); return d; };
   ev.forEach(function(e){
     var tk=e.a?mkTk(e.a):'';
+    if(c.fut){ var fd=fuBtDec(s,e,{n8:n8,upsOf:upsOf}); if(fd) push(fd,e); return; }
     if(e.t==='pick'){ lastPick[e.a]=e; push({k:'pick',tag:'선정',title:tk,cmp:'오름세 종목 중 '+look+'일 상승률 1위 '+mkPct0(e.mom,1),why:'오름세 종목 중 최근 '+look+'일 상승률이 '+mkPct0(e.mom,1)+'로 가장 높았어요',facts:(e.top||[]).slice(0,3).map(function(x,q){ return [(q+1)+'위',mkTk(x.k)+' '+mkPct0(x.mom,0)]; })},e); return; }
     if(e.t==='enter'){
       if(agent){ push({k:'buy',tag:'매수',title:tk,cmp:'흔들림까지 본 순위 '+(e.rank||1)+'위, '+look+'일 '+mkPct0(e.mom,1),why:'가격 흔들림까지 고려한 순위에서 '+(e.rank||1)+'번째였어요. 최근 '+look+'일 상승률은 '+mkPct0(e.mom,1)+'예요',
@@ -86,8 +87,8 @@ function btCompute(){
   var EV=[]; if(agent){ var byD={}; D.forEach(function(d){ if(d.k!=='buy'&&d.k!=='skip'&&d.k!=='hold') return; if(!byD[d.j]){ byD[d.j]={j:d.j,i:d.i,ds:[]}; EV.push(byD[d.j]); } byD[d.j].ds.push(d); });
     EV.forEach(function(E,q){ var b=E.ds.filter(function(d){ return d.k==='buy'; }), f=E.ds[0]; E.ix=q; E.out=b.length?'buy':f.k; E.tag=b.length?'매수':f.tag; E.title=b.length?b.map(function(d){ return d.tk; }).join(', '):f.title; E.cmp=b.length===1?b[0].cmp:b.length?b.map(function(d){ return d.tk+' '+d.cmp; }).join(' / '):f.cmp; E.why=f.why; E.ups=f.ups; E.k=b.length?'buy':f.k; }); }
   var op=r.state&&r.state.open?(r.state.open.length!=null?r.state.open:[r.state.open]):[];
-  var tr=(r.trades||[]).map(function(t){ return {id:t.id,a:t.asset,e:t.entry,x:t.exit,ep:t.ep,xp:t.xp,pnl:t.pnl*100,why:t.kind,cost:t.cost,got:t.got,fee:t.fee,days:t.exit-t.entry}; });
-  op.forEach(function(o){ tr.push({id:o.tid,a:o.k,e:o.entry,x:null,ep:o.ep,xp:o.px,pnl:o.chg,why:null,cost:o.cost,got:null,fee:null,days:T-o.entry,open:1}); });
+  var tr=(r.trades||[]).map(function(t){ return {id:t.id,a:t.asset,e:t.entry,x:t.exit,ep:t.ep,xp:t.xp,pnl:t.pnl*100,why:t.kind,cost:t.cost,got:t.got,fee:t.fee,days:t.exit-t.entry,side:t.side,lev:t.lev,fund:t.fund}; });
+  op.forEach(function(o){ tr.push({id:o.tid,a:o.k,e:o.entry,x:null,ep:o.ep,xp:o.px,pnl:o.pnl!=null?o.pnl:o.chg,why:null,cost:o.cost,got:null,fee:null,days:T-o.entry,open:1,side:o.side,lev:o.lev}); });
   tr.sort(function(a,b){ return b.e-a.e; });
   var wins=tr.filter(function(t){ return !t.open&&t.pnl>0; }), loss=tr.filter(function(t){ return !t.open&&t.pnl<=0; });
   var avg=function(a){ return a.length?a.reduce(function(x,t){ return x+t.pnl; },0)/a.length:0; };
@@ -135,7 +136,7 @@ function btMarkList(group){
   R.D.forEach(function(d){ if(d.k==='pick'||d.k==='hold') return;
     if(group&&d.k==='skip'&&last&&G.X(d.j)-G.X(last.j2)<12){ last.n++; last.j2=d.j; last.ix2=d.ix; return; }
     if(d.k==='buy'&&lastB&&lastB.j===d.j){ lastB.n++; lastB.t+=', '+d.tk; return; }
-    var m={k:d.k,j:d.j,j2:d.j,ix:d.ix,ix2:d.ix,n:1,pnl:d.pnl,t:(d.tk?d.tk+' ':'')+d.tag}; out.push(m); if(d.k==='skip'){ last=m; } else if(d.k==='buy'){ last=null; lastB=m; } });
+    var m={k:d.k,side:d.side,j:d.j,j2:d.j,ix:d.ix,ix2:d.ix,n:1,pnl:d.pnl,t:(d.tk?d.tk+' ':'')+d.tag}; out.push(m); if(d.k==='skip'){ last=m; } else if(d.k==='buy'){ last=null; lastB=m; } });
   return out;
 }
 function btChartSvg(){
@@ -145,10 +146,11 @@ function btChartSvg(){
   var line=btPath(R.eq.map(function(p){ return p.v; }),G), area=line+' L'+G.X(R.N-1).toFixed(1)+' '+yb.toFixed(1)+' L'+G.X(0).toFixed(1)+' '+yb.toFixed(1)+' Z';
   var ML=btMarkList(res), dense=ML.length>60, sz=dense?0.72:1;
   var mk=ML.map(function(m){ var x=G.X(m.j), y=G.Y(R.eq[m.j].v), s, col=m.pnl>=0?G1:R1, a=5*sz, h=8*sz;
-    if(m.k==='buy') s='<path d="M'+x.toFixed(1)+' '+(y+7).toFixed(1)+' l'+a+' '+h+' h-'+(2*a)+' z" fill="'+G1+'"/>';
+    if(m.k==='buy'&&m.side<0) s='<path d="M'+x.toFixed(1)+' '+(y-7).toFixed(1)+' l'+a+' -'+h+' h-'+(2*a)+' z" fill="#b08cf5"/>';
+    else if(m.k==='buy') s='<path d="M'+x.toFixed(1)+' '+(y+7).toFixed(1)+' l'+a+' '+h+' h-'+(2*a)+' z" fill="'+G1+'"/>';
     else if(m.k==='sell') s='<path d="M'+x.toFixed(1)+' '+(y-7).toFixed(1)+' l'+a+' -'+h+' h-'+(2*a)+' z" fill="#15171a" stroke="'+col+'" stroke-width="1.5" stroke-linejoin="round"/>';
     else s='<rect x="'+(x-4.5).toFixed(1)+'" y="'+(y-24.5).toFixed(1)+'" width="9" height="9" transform="rotate(45 '+x.toFixed(1)+' '+(y-20).toFixed(1)+')" fill="#15171a" stroke="#f0b840" stroke-width="1.7"/>'+(m.n>1?'<text x="'+(x+9).toFixed(1)+'" y="'+(y-27).toFixed(1)+'" font-size="10.5" font-weight="700" fill="#f0b840">'+m.n+'번</text>':'');
-    return '<g class="bt-m k-'+m.k+'" data-j="'+m.j+'" data-ix="'+m.ix+'" tabindex="-1" role="button" aria-label="'+gEsc(btYMD(R.eq[m.j].i)+' '+m.t+(m.n>1&&m.k==='skip'?' 외 '+(m.n-1)+'번':''))+'" onclick="event.stopPropagation();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')}"><rect x="'+(x-11).toFixed(1)+'" y="'+(y-(m.k==='buy'?-2:34)).toFixed(1)+'" width="22" height="'+(m.k==='skip'?34:20)+'" fill="transparent"/>'+s+'</g>'; }).join('');
+    return '<g class="bt-m k-'+m.k+'" data-j="'+m.j+'" data-ix="'+m.ix+'" tabindex="-1" role="button" aria-label="'+gEsc(btYMD(R.eq[m.j].i)+' '+m.t+(m.n>1&&m.k==='skip'?' 외 '+(m.n-1)+'번':''))+'" onclick="event.stopPropagation();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')}"><rect x="'+(x-11).toFixed(1)+'" y="'+(y-((m.k==='buy'&&!(m.side<0))?-2:34)).toFixed(1)+'" width="22" height="'+(m.k==='skip'?34:20)+'" fill="transparent"/>'+s+'</g>'; }).join('');
   return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="잔고 그래프"><defs>'
     +'<linearGradient id="btgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+G.pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G1+'" stop-opacity=".26"/><stop offset="1" stop-color="'+G1+'" stop-opacity=".02"/></linearGradient>'
     +'<linearGradient id="btgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+base+'"><stop offset="0" stop-color="'+R1+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R1+'" stop-opacity=".26"/></linearGradient>'
