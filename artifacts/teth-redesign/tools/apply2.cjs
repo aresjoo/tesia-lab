@@ -69,6 +69,8 @@ rep("    +'<div class=\"mk-f-sum\" id=\"mk-f-sum\"></div>'","    +'<div class=\"
 rep("'\">'+(on?'따라가는 중':'중단됨')+'</span></div></div>'","'\">'+(on?(c2.winding?'정리 대기':'따라가는 중'):'중단됨')+'</span></div></div>'",true);
 rep("    +(on?'<button type=\"button\" class=\"obtn\" onclick=\"cpAdjDlg(\\''+cid+'\\')\">예산 조정</button>'","    +(on&&c2.winding?mkWindActs(cid):on?'<button type=\"button\" class=\"obtn\" onclick=\"cpAdjDlg(\\''+cid+'\\')\">예산 조정</button>'",true);
 rep("      +(on?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'","      +(on&&c2.winding?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'+mkWindActs(c2.id)+'</div>':on?'<div class=\"cpd-acts\"><button type=\"button\" class=\"wbtn\" onclick=\"cpDetailGo(\\''+c2.id+'\\')\">상세</button>'",true);
+// 5s. 전략 따라하기 상단 소개 영역(제목, 공지, 배너)을 없앤다
+rep("  gContent('<div class=\"tf-page tfbk ss3 mk\">'\n    +mkHero()\n    +tabs+controls+body","  gContent('<div class=\"tf-page tfbk ss3 mk\">'\n    +tabs+controls+body",true);
 // 6. rd 블록이 선언하는 함수의 옛 정의를 지운다(정의는 하나만 남긴다)
 const core=fs.readFileSync(D+'agent-core.js','utf8')+'\n'+fs.readFileSync(D+'rd-ui.js','utf8');
 { const names=[...core.matchAll(/^function ([A-Za-z0-9_]+)\(/gm)].map(m=>m[1]), removed=[];
