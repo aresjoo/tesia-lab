@@ -165,17 +165,18 @@ function mkSpark3(eq){
   var ln=function(col){ return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'; };
   if(!neg) return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true">'+ln(G)+'</svg>';
   return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><defs>'
-    +'<clipPath id="'+id+'u"><rect x="-2" y="-2" width="'+(W+4)+'" height="'+(yb+3.2).toFixed(1)+'"/></clipPath>'
-    +'<clipPath id="'+id+'d"><rect x="-2" y="'+(yb+1.2).toFixed(1)+'" width="'+(W+4)+'" height="'+(H-yb+2).toFixed(1)+'"/></clipPath></defs>'
+    +'<clipPath id="'+id+'u"><rect x="-2" y="-2" width="'+(W+4)+'" height="'+(yb+2).toFixed(1)+'"/></clipPath>'
+    +'<clipPath id="'+id+'d"><rect x="-2" y="'+yb.toFixed(1)+'" width="'+(W+4)+'" height="'+(H-yb+2).toFixed(1)+'"/></clipPath></defs>'
     +'<line x1="0" y1="'+yb.toFixed(1)+'" x2="'+W+'" y2="'+yb.toFixed(1)+'" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>'
-    +'<g clip-path="url(#'+id+'u)">'+ln(G)+'</g><g clip-path="url(#'+id+'d)">'+ln(Rd)+'</g></svg>';
+    +'<g clip-path="url(#'+id+'u)">'+ln(G)+'</g><g clip-path="url(#'+id+'d)">'+ln(Rd)+'</g>'+mkFlatAtBase(eq,base,X,Y,G)+'</svg>';
 }
 /* ── 카드 ── */
 /* 수익 낸 거래를 횟수로 말한다. 10번 미만은 실제 횟수 그대로, 그 이상은 10번 기준으로 환산 */
 function mkWinTxt(r){
   var n=r&&r.n||0, w=r&&r.winRate; if(!n||typeof w!=='number'||!isFinite(w)) return '';
   if(n<10) return n+'번 중 '+Math.round(w*n/100)+'번';
-  var k=Math.round(w/10); if((k===0&&w>0)||(k===10&&w<100)) return (w<1||w>99?w.toFixed(1):String(Math.round(w)))+'%';
+  if(w<=0) return n.toLocaleString()+'번 중 0번'; if(w>=100) return n.toLocaleString()+'번 모두';
+  var k=Math.round(w/10); if((k===0&&w>0)||(k===10&&w<100)) return w<1?'1% 미만':w>99?'99% 넘게':Math.round(w)+'%';
   return '10번 중 약 '+k+'번';
 }
 function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.round(n/1000)/10)+'만 명':n.toLocaleString()+'명')+'이 따라가는 중'; }
@@ -230,7 +231,7 @@ function mk3Controls(t){
     +'<div class="mk3-kindrow"><div class="mk3-seg" role="group" aria-label="판단 방식">'+[['all','전체'],['agent','직접 탐색'],['rule','조건 실행'],['mix','혼합']].map(function(o){ var on=kind===o[0]; return '<button type="button" aria-pressed="'+on+'" onclick="mkKindPick(\''+o[0]+'\')">'+o[1]+'<i class="num">'+cnt[o[0]]+'</i></button>'; }).join('')+'</div>'
     +'<p class="mk3-kindhelp">'+({all:'직접 탐색은 AI가 종목을 고르고, 조건 실행은 정해 둔 조건만 따르고, 혼합은 둘이 나눠 맡아요.',agent:'여러 종목을 비교해 무엇을 얼마나 들지 AI가 정해요. 시장이 약하면 새로 사지 않아요.',rule:'정해 둔 자산에서 정해 둔 조건이 맞을 때만 사고팔아요.',mix:'거래할 종목은 AI가 고르고, 사고파는 시점은 규칙이 정해요.'}[kind])+'</p></div>'
     +'<div class="mk-flt mk3-flt">'
-    +'<div class="mk-chips" aria-label="정렬"><span class="lb">정렬</span>'+[['ret','30일 수익률'],['fw','따라가는 사람'],['win','수익 낸 거래']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')+'</div>'
+    +'<div class="mk-chips" aria-label="정렬"><span class="lb">정렬</span>'+[['ret','30일 수익률'],['fw','따라가는 사람'],['win','거래 승률']].map(function(o){ var on=sort===o[0]; return '<button type="button" class="mk-chip'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tfSS3SortPick(\''+o[0]+'\')">'+o[1]+(on?(t.ss.dir==='asc'?' ↑':' ↓'):'')+'</button>'; }).join('')+'</div>'
     +tfBkDrop('ss3-m-asset',[['all','시장 전체'],['crypto','가상자산'],['stock','미국 주식'],['index','지수와 금'],['multi','여러 시장']],t.ss.asset||'all','mkMktPick')
     +'<button type="button" class="mk-search-toggle" aria-label="전략 검색" aria-expanded="false" onclick="tfMkSearchToggle(this)">⌕</button><label class="ss3-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
     +'<input id="ss3-q" type="search" placeholder="이름, 종목, 등록자 검색" value="'+gEsc(TF_SS_Q||'')+'" aria-label="전략 검색" oninput="tfSS3Search(this.value)"></label>'
@@ -355,7 +356,7 @@ function mkNowPanel(s,r){
   return '<section class="mk3-panel mk3-nowp"><div class="mk3-nowh"><h3>지금</h3><span class="mk3-asof num">'+mkMD(end)+' 장 마감 기준</span></div><p class="mk3-state">'+head+'</p>'+rows+'</section>';
 }
 function mk3Head(s,ne,pd,watching){
-  watching=(tfS().watch||[]).indexOf(s.nick)>=0; /* 어떤 주소로 들어와도 현재 이름으로 판정 */
+  watching=!!S.user&&(tfS().watch||[]).indexOf(s.nick)>=0; /* 어떤 주소로 들어와도 현재 이름으로 판정. 비로그인은 저장하지 않는다 */
   var ex=mkEx(s);
   return '<header class="mk-d-head mk3-dh">'
     +'<div class="mk3-dh-top">'+mkGlyph(s,44)+'<div class="mk3-dh-t"><h2>'+gEsc(mkHook(s))+'</h2><p><b>'+(MK_KIND[s.kind]||'조건 실행')+'</b><span>'+gEsc(mkScope(s))+'</span>'+(s.by?'<span class="mk3-by">@'+gEsc(s.by)+' 등록</span>':'')+'</p></div>'
@@ -534,12 +535,12 @@ function cpFlat(cid){
   cpDetailView(cid,'pos');
 }
 /* 따라가는 중 화면을 열 때 정리 대기 계정을 확인한다 */
-var mkHub0=tfShareHub; tfShareHub=function(){ try{ mkWindCheck(); }catch(e){} return mkHub0.apply(this,arguments); };
+var mkHub0=tfShareHub; tfShareHub=function(tab){ try{ mkWindCheck(); }catch(e){} var prev=G.mode==='tfss3'?MK_HUB_TAB:null, out=mkHub0.apply(this,arguments); MK_HUB_TAB=tab||'find'; if(MK_HUB_TAB==='find'&&prev!=='find') try{ mkCardsEnter(); }catch(e){} return out; };
 /* 즐겨찾기: 저장 상태에서 머리글 버튼과 더 보기 버튼을 함께 맞춘다 */
 function mkWatchSync(ne){
   var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
   try{ tfSaveNow(); }catch(e){}
-  var s=tfSSFind(nick), on=(tfS().watch||[]).indexOf(s?s.nick:nick)>=0;
+  var s=tfSSFind(nick), on=!!S.user&&(tfS().watch||[]).indexOf(s?s.nick:nick)>=0;
   var h=document.querySelector('.mkd-fav'), b=$('ss3-watch-btn');
   if(h) h.setAttribute('aria-pressed',String(on));
   if(b){ b.innerHTML=tfSS3WatchLb(on); b.setAttribute('aria-pressed',String(on)); }
@@ -587,3 +588,38 @@ function cpClose(cid,silent){
 /* 목록, 상세, 시트를 잇는 열쇠는 고정 ID. 이름은 표시용 */
 function tfSS3Rid(s){ return s.me?'me':tfSSNe(s.id||s.nick); }
 function mkOldNames(id){ if(!id) return ''; var o=[]; for(var k in MK_ALIAS) if(MK_ALIAS[k]===id) o.push(k); return o.join(' '); }
+
+function mkFlatAtBase(eq,base,X,Y,G){ var d=''; for(var i=0;i<eq.length-1;i++) if(Math.abs(eq[i].v-base)<1e-12&&Math.abs(eq[i+1].v-base)<1e-12) d+='M'+X(i).toFixed(1)+' '+Y(base).toFixed(1)+' L'+X(i+1).toFixed(1)+' '+Y(base).toFixed(1)+' '; return d?'<path d="'+d+'" fill="none" stroke="'+G+'" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/>':''; }
+
+/* 관심 전략: 로그인한 사람만 저장한다. 비로그인이면 가입 창을 띄우고, 가입이나 로그인을 마치면 누르려던 전략을 추가한다 */
+function mkAuthHook(){
+  if(window.MK_AUTH_HOOKED) return; window.MK_AUTH_HOOKED=true;
+  var ao=window.authOpen; if(typeof ao==='function') window.authOpen=function(){ window.MK_WATCH_RESUME=null; return ao.apply(this,arguments); };
+  var sd=window.signupDone; if(typeof sd==='function') window.signupDone=function(){
+    var r=window.MK_WATCH_RESUME; window.MK_WATCH_RESUME=null;
+    var out=sd.apply(this,arguments);
+    if(r&&S.user){ setTimeout(function(){ var s=tfSSFind(decodeURIComponent(r.ne)); if(!s||s.me) return; var t=tfS(); t.watch=t.watch||[]; if(t.watch.indexOf(s.nick)<0){ t.watch.push(s.nick); tfSave(); toast('관심 전략에 추가했어요'); } mkWatchSync(r.ne); },400); }
+    return out;
+  };
+}
+function tfSS3WatchTgl(ne){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
+  if(!S.user){ mkAuthHook(); authOpen('signup'); window.MK_WATCH_RESUME={ne:ne}; return; } /* authOpen 이 비우므로 그 뒤에 기록 */
+  var sW=tfSSFind(nick); if(sW&&!sW.me) nick=sW.nick;
+  var t=tfS(); t.watch=t.watch||[];
+  var i=t.watch.indexOf(nick);
+  if(i>=0){ t.watch.splice(i,1); toast('관심 전략에서 제외했어요'); }
+  else { t.watch.push(nick); toast('관심 전략에 추가했어요. 전략 따라하기 화면에서 모아볼 수 있어요'); }
+  tfSave(); tfTrack('strategy_watch',{nick:nick,on:i<0});
+  var b=$('ss3-watch-btn'); if(b){ b.innerHTML=tfSS3WatchLb(i<0); b.setAttribute('aria-pressed',String(i<0)); }
+  else if(G.mode==='tfss3') tfShareHub('follow'); /* 팔로우 탭의 관심 섹션에서 해제한 경우 목록 재렌더 */
+}
+/* 목록에 처음 들어올 때만 카드가 차례로 올라온다. 정렬, 판단 방식 전환, 검색은 그대로 바뀐다 */
+var MK_HUB_TAB=null;
+function mkCardsEnter(){
+  var g=document.querySelector('.mk3-grid'); if(!g) return;
+  try{ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  [].forEach.call(g.children,function(c,i){ c.style.setProperty('--i',i); });
+  g.classList.add('mk3-enter');
+  setTimeout(function(){ g.classList.remove('mk3-enter'); },1400);
+}

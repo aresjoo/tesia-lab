@@ -246,3 +246,8 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
 
 /* 좁은 화면: 떠 있는 상담 버튼이 마지막 카드의 버튼을 가리지 않게 */
 @media (max-width:640px){ #g-root .mk .mk-pager{margin-bottom:84px} }
+
+/* 목록에 처음 들어올 때 카드가 차례로 올라온다 */
+@keyframes mk3In{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+#g-root .mk3-grid.mk3-enter>.mk3{animation:mk3In .52s cubic-bezier(.2,.75,.2,1) both;animation-delay:calc(var(--i,0) * 60ms)}
+@media (prefers-reduced-motion:reduce){#g-root .mk3-grid.mk3-enter>.mk3{animation:none}}
