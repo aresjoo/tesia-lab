@@ -70,7 +70,7 @@ function mkAgentRun(c){
   cur=endI; var now=scan(endI);
   var r3=mkStatsOf(eq,L,{startI:startI,endI:endI},startI,endI,invested), total2=L.value(px);
   r3.events=ev;
-  r3.state={asOf:endI,cash:L.cash/total2,open:L.pos.map(function(p){ var v=px(p.k); return {k:p.k,tid:p.id,entry:p.ei,ep:p.ep,px:v,chg:(v/p.ep-1)*100,w:p.units*v/total2,hi:p.hi,stop:p.hi*(1-c.trail/100)}; }),
+  r3.state={asOf:endI,cash:L.cash/total2,open:L.pos.map(function(p){ var v=px(p.k); return {k:p.k,tid:p.id,entry:p.ei,ep:p.ep,units:p.units,cost:p.cost,px:v,chg:(v/p.ep-1)*100,w:p.units*v/total2,hi:p.hi,stop:p.hi*(1-c.trail/100)}; }),
     scan:{up:now.up,of:now.of,weak:now.breadth<c.gate,top:now.rows.slice(0,4).map(function(x){ return {k:x.k,mom:x.mom*100,above:x.above}; }),
       rows:now.rows.map(function(x,q){ return {k:x.k,rank:q+1,mom:x.mom*100,above:x.above,ok:x.above&&x.score>=c.minS,held:L.pos.some(function(p){ return p.k===x.k; })}; })},
     lastEval:startI+Math.floor((endI-startI)/c.every)*c.every,nextEval:startI+(Math.floor((endI-startI)/c.every)+1)*c.every};
@@ -105,7 +105,7 @@ function mkHybridRun(c){
   cur=endI;
   var r=mkStatsOf(eq,L,{startI:startI,endI:endI,sl:c.sl,tp:c.tp,rsiTh:c.rsiTh},startI,endI,invested), o=L.pos[0]||null, Pn=pick!==null?PX[J[pick]]:null, ev1=c.every||1;
   r.events=ev;
-  r.state={asOf:endI,pick:pick,top:lastTop,topAt:topAt,open:o?{k:o.k,tid:o.id,entry:o.ei,ep:o.ep,px:px(o.k),chg:(px(o.k)/o.ep-1)*100,held:endI-o.ei}:null,
+  r.state={asOf:endI,pick:pick,top:lastTop,topAt:topAt,open:o?{k:o.k,tid:o.id,entry:o.ei,ep:o.ep,units:o.units,cost:o.cost,px:px(o.k),chg:(px(o.k)/o.ep-1)*100,held:endI-o.ei}:null,
     cond:Pn?cond(Pn,endI):null,lastEval:startI+Math.floor((endI-startI)/ev1)*ev1,nextEval:startI+(Math.floor((endI-startI)/ev1)+1)*ev1};
   return r;
 }

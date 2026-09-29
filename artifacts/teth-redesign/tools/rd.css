@@ -302,3 +302,58 @@ body:has(#mk-follow) #ss3-dlgw{z-index:340}
   .mkc-t{padding:14px 15px}
   .mkc-more{margin-left:37px;height:44px}
 }
+
+/* 한 페이지 상세: 달력, 거래내역 */
+.mk3-cal{margin-top:28px}
+.mko{margin-top:44px}
+.mko-go{display:inline-flex;align-items:center;gap:4px;padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.mko-go:hover{color:#fff}
+.mko-go:hover svg{transform:translateX(2px)}
+.mko-go svg{transition:transform .12s ease}
+.mko-go:focus-visible{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
+.mko-n{font-size:12px;color:var(--gt3)}
+#g-root .mko-tbl th.r,#g-root .mko-tbl td.r{text-align:right}
+#g-root .mko-tbl td{padding-top:16px;padding-bottom:16px;white-space:nowrap}
+#g-root .mko-tbl td b{font-weight:600;color:#f2f3f5}
+.mko-s{display:inline-block;width:16px;font-weight:700}
+.mko-tbl tr.in .mko-s{color:#2ebd85}
+.mko-tbl tr.out .mko-s{color:#f0566a}
+.mko-tbl small{font-size:12px;color:var(--gt3)}
+.mko-tbl small.up{color:#2ebd85}
+.mko-tbl small.dn{color:#f0566a}
+.mko-e{text-align:center;color:var(--gt3);padding:28px 0}
+.mko-back{display:inline-block;margin:0 0 18px}
+.mko-more{margin-left:0}
+
+/* 상세 머리글: 판단 방식, 범위, 등록자가 좁은 화면에서 낱말 중간에 끊기지 않게 */
+.mk3-dh-t p{flex-wrap:wrap;row-gap:2px}
+.mk3-dh-t p b,.mk3-dh-t p span{white-space:nowrap}
+/* 거래내역: 좁은 화면에서는 한 건을 두 줄로(종목과 합계, 그 아래 구분과 시간과 가격과 수량) */
+@media (max-width:640px){
+  .mko-n{display:block;margin-top:4px}
+  .mko .mk3-sec-h{display:block}
+  #g-root .mko-tbl thead{display:none}
+  #g-root .mko-tbl,#g-root .mko-tbl tbody{display:block}
+  #g-root .mko-tbl tr{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:4px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  #g-root .mko-tbl td{display:block;padding:0;border:0;white-space:normal;font-size:13px;color:var(--gt2)}
+  #g-root .mko-tbl td:nth-child(1){grid-column:1;grid-row:1;font-size:15px}
+  #g-root .mko-tbl td:nth-child(6){grid-column:2;grid-row:1;font-size:15px;color:#f2f3f5}
+  #g-root .mko-tbl td:nth-child(2){grid-column:1;grid-row:2}
+  #g-root .mko-tbl td:nth-child(3){grid-column:2;grid-row:2;text-align:right}
+  #g-root .mko-tbl td:nth-child(4){grid-column:1;grid-row:3}
+  #g-root .mko-tbl td:nth-child(4):before{content:"가격 ";color:var(--gt3)}
+  #g-root .mko-tbl td:nth-child(5){grid-column:2;grid-row:3}
+  #g-root .mko-tbl td:nth-child(5):before{content:"수량 ";color:var(--gt3)}
+  #g-root .mko-tbl td.r{text-align:right}
+  #g-root .mko-tbl td:nth-child(4).r{text-align:left}
+  #g-root .mko-tbl td.mko-e{grid-column:1 / -1}
+}
+
+/* 거래내역 전체 화면 아래쪽의 돌아가기, 좁은 화면의 줄 간격, 지표 설명이 화면 밖으로 나가지 않게 */
+.mko-back2{display:block;margin:26px 0 0}
+@media (max-width:640px){
+  #g-root .mko-tbl tr{padding:12px 0;row-gap:2px}
+  #g-root .mk3-kpis .mkd-tip,#g-root .mkd-pill .mkd-tip{max-width:calc(100vw - 48px)}
+  #g-root .mk3-kpis>div:nth-child(even) .mkd-tip{left:auto;right:0}
+  #g-root .mkd-pill:nth-child(n+2) .mkd-tip{left:auto;right:0}
+}

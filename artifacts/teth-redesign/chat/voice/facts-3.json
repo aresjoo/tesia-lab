@@ -1,0 +1,2141 @@
+[
+ {
+  "id": "h3",
+  "name": "지수와 금 짧게",
+  "kind": "AI+규칙",
+  "market": "index",
+  "oneLiner": "AI가 나스닥, S&P 500, 금 중 하나를 골라, 산 가격보다 5% 넘게 오른 날 팔아요.",
+  "since": "2023.04.04",
+  "totalReturn": 42.56,
+  "maxDrawdown": -9.57,
+  "winRate": 66.67,
+  "trades": 21,
+  "rules": {
+   "pickEvery": "20일",
+   "lookback": "60일",
+   "takeProfit": "+5%",
+   "stopLoss": "-3%",
+   "maxHoldDays": 25,
+   "marketGate": "34%",
+   "universe": [
+    "나스닥",
+    "S&P 500",
+    "금"
+   ]
+  },
+  "msgs": [
+   {
+    "key": "now",
+    "kind": "now",
+    "tag": "현재 상태",
+    "date": "9월 28일",
+    "ts": "09/29 05:00:43",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 42.56,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -1.08,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "S&P 500",
+      "result": 4.44,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "return30d": 4.44,
+    "winRateAll": 66.67,
+    "tradesAll": 21,
+    "waiting": {
+     "picked": "S&P 500",
+     "dipScore": 36,
+     "dipNeeded": 50,
+     "dipOk": false,
+     "todayChange": 1.19,
+     "bounceNeeded": 0.5,
+     "bounceOk": true,
+     "trendGap": null,
+     "trendNeeded": null,
+     "marketOk": true,
+     "uptrendCount": "3/3",
+     "belowRecentHigh": 0
+    },
+    "pickedFrom": [
+     {
+      "asset": "S&P 500",
+      "rise": 7.28
+     }
+    ],
+    "nextPick": "10월 5일"
+   },
+   {
+    "key": "e1332_S&P 500_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "9월 26일",
+    "ts": "09/27 05:00:02",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 42.56,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -1.08,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "S&P 500",
+     "price": "6,460포인트",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "time",
+     "priceChange": 4.65,
+     "resultAfterCost": 4.44
+    },
+    "holdingPeriod": {
+     "days": 25,
+     "bestDuring": 4.65,
+     "worstDuring": -0.27,
+     "entryPrice": "6,173포인트",
+     "entryDate": "9월 1일"
+    }
+   },
+   {
+    "key": "e1307_S&P 500_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "9월 1일",
+    "ts": "09/02 05:00:06",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 36.36,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -1.08,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "S&P 500",
+     "price": "6,173포인트",
+     "uptrendCount": "2/3",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 1.01,
+     "dipScore": 55,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": 0
+   },
+   {
+    "key": "e1306_S&P 500_wait",
+    "kind": "wait",
+    "tag": "관망",
+    "date": "8월 31일",
+    "ts": "09/01 05:00:12",
+    "repeated": 3,
+    "repeatedFrom": "8월 27일",
+    "totalReturnSoFar": 36.5,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -1.08,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "veto",
+     "asset": "S&P 500",
+     "price": null,
+     "uptrendCount": "1/3",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 0.74,
+     "dipScore": 58,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1281_S&P 500_pick",
+    "kind": "pick",
+    "tag": "종목 선정",
+    "date": "8월 6일",
+    "ts": "08/07 05:00:32",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 36.5,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -1.08,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "pick",
+     "asset": "S&P 500",
+     "price": null,
+     "uptrendCount": null,
+     "rise": 7.69,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "S&P 500",
+       "rise": 7.69
+      },
+      {
+       "asset": "나스닥",
+       "rise": -0.33
+      }
+     ],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1279_나스닥_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "8월 4일",
+    "ts": "08/05 05:00:04",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 36.5,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.1,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "나스닥",
+     "price": "23,540포인트",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "time",
+     "priceChange": -0.88,
+     "resultAfterCost": -1.08
+    },
+    "holdingPeriod": {
+     "days": 25,
+     "bestDuring": 2.16,
+     "worstDuring": -1,
+     "entryPrice": "23,750포인트",
+     "entryDate": "7월 10일"
+    }
+   },
+   {
+    "key": "e1254_나스닥_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "7월 10일",
+    "ts": "07/11 05:00:02",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 37.86,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": -0.1,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "나스닥",
+      "result": -0.87,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "금",
+      "result": 0.76,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "나스닥",
+     "price": "23,750포인트",
+     "uptrendCount": "3/3",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 0.69,
+     "dipScore": 53,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -1.78
+   },
+   {
+    "key": "intro",
+    "kind": "intro",
+    "tag": "전략 개요",
+    "date": "4월 4일",
+    "ts": "2023/04/05 05:00:17",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 0,
+    "lastThreeClosedTrades": []
+   }
+  ]
+ },
+ {
+  "id": "r5",
+  "name": "테슬라 큰 하락 뒤",
+  "kind": "차트 규칙",
+  "market": "stock",
+  "oneLiner": "테슬라가 크게 떨어진 뒤 다시 오르면 사서, 18% 오르거나 25일 지나면 팔아요.",
+  "since": "2023.11.29",
+  "totalReturn": 122.2,
+  "maxDrawdown": -21.05,
+  "winRate": 61.9,
+  "trades": 21,
+  "rules": {
+   "asset": "테슬라",
+   "dipDepth": "깊은",
+   "takeProfit": "+18%",
+   "stopLoss": "-8%",
+   "maxHoldDays": 25,
+   "needClearTrend": false
+  },
+  "msgs": [
+   {
+    "key": "now",
+    "kind": "now",
+    "tag": "현재 상태",
+    "date": "9월 28일",
+    "ts": "09/29 05:00:07",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 122.2,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": 3.71,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "테슬라",
+      "result": -11.02,
+      "days": 5,
+      "why": "sl"
+     },
+     {
+      "asset": "테슬라",
+      "result": 21.15,
+      "days": 21,
+      "why": "tp"
+     }
+    ],
+    "return30d": 16.63,
+    "winRateAll": 61.9,
+    "tradesAll": 21,
+    "waiting": {
+     "picked": "테슬라",
+     "dipScore": 38,
+     "dipNeeded": 70,
+     "dipOk": false,
+     "todayChange": 3.3,
+     "bounceNeeded": 0.5,
+     "bounceOk": true,
+     "trendGap": null,
+     "trendNeeded": null,
+     "marketOk": true,
+     "uptrendCount": "1/1",
+     "belowRecentHigh": 0
+    }
+   },
+   {
+    "key": "e1321_테슬라_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "9월 15일",
+    "ts": "09/16 05:00:35",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 122.2,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     },
+     {
+      "asset": "테슬라",
+      "result": 3.71,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "테슬라",
+      "result": -11.02,
+      "days": 5,
+      "why": "sl"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "테슬라",
+     "price": "410.2 USD",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "tp",
+     "priceChange": 21.39,
+     "resultAfterCost": 21.15
+    },
+    "holdingPeriod": {
+     "days": 21,
+     "bestDuring": 21.39,
+     "worstDuring": -1.92,
+     "entryPrice": "337.9 USD",
+     "entryDate": "8월 25일"
+    }
+   },
+   {
+    "key": "e1300_테슬라_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "8월 25일",
+    "ts": "08/26 05:00:05",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 83.23,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     },
+     {
+      "asset": "테슬라",
+      "result": 3.71,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "테슬라",
+      "result": -11.02,
+      "days": 5,
+      "why": "sl"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "테슬라",
+     "price": "337.9 USD",
+     "uptrendCount": "0/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 1.37,
+     "dipScore": 76,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -20.55
+   },
+   {
+    "key": "e1297_테슬라_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "8월 22일",
+    "ts": "08/23 05:00:08",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 83.41,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": -8.93,
+      "days": 6,
+      "why": "sl"
+     },
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     },
+     {
+      "asset": "테슬라",
+      "result": 3.71,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "테슬라",
+     "price": "346.3 USD",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "sl",
+     "priceChange": -10.84,
+     "resultAfterCost": -11.02
+    },
+    "holdingPeriod": {
+     "days": 5,
+     "bestDuring": 2.03,
+     "worstDuring": -10.84,
+     "entryPrice": "388.4 USD",
+     "entryDate": "8월 17일"
+    }
+   },
+   {
+    "key": "e1292_테슬라_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "8월 17일",
+    "ts": "08/18 05:00:42",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 105.92,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": -8.93,
+      "days": 6,
+      "why": "sl"
+     },
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     },
+     {
+      "asset": "테슬라",
+      "result": 3.71,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "테슬라",
+     "price": "388.4 USD",
+     "uptrendCount": "0/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 0.64,
+     "dipScore": 70,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -12.82
+   },
+   {
+    "key": "e1263_테슬라_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "7월 19일",
+    "ts": "07/20 05:00:27",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 106.12,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": 5.49,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "테슬라",
+      "result": -8.93,
+      "days": 6,
+      "why": "sl"
+     },
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "테슬라",
+     "price": "402.6 USD",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "time",
+     "priceChange": 3.92,
+     "resultAfterCost": 3.71
+    },
+    "holdingPeriod": {
+     "days": 25,
+     "bestDuring": 14.65,
+     "worstDuring": 0,
+     "entryPrice": "387.4 USD",
+     "entryDate": "6월 24일"
+    }
+   },
+   {
+    "key": "e1238_테슬라_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "6월 24일",
+    "ts": "06/25 05:00:31",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 98.54,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "테슬라",
+      "result": 5.49,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "테슬라",
+      "result": -8.93,
+      "days": 6,
+      "why": "sl"
+     },
+     {
+      "asset": "테슬라",
+      "result": 18.76,
+      "days": 24,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "테슬라",
+     "price": "387.4 USD",
+     "uptrendCount": "1/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 2.34,
+     "dipScore": 80,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -11.2
+   },
+   {
+    "key": "intro",
+    "kind": "intro",
+    "tag": "전략 개요",
+    "date": "11월 29일",
+    "ts": "2023/11/30 05:00:21",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 0,
+    "lastThreeClosedTrades": []
+   }
+  ]
+ },
+ {
+  "id": "r6",
+  "name": "솔라나 짧게 자주",
+  "kind": "차트 규칙",
+  "market": "crypto",
+  "oneLiner": "솔라나가 다시 오를 때 사서, 5% 넘게 오르거나 3% 넘게 떨어진 날 팔아요.",
+  "since": "2023.04.04",
+  "totalReturn": 389.45,
+  "maxDrawdown": -26.33,
+  "winRate": 60.67,
+  "trades": 89,
+  "rules": {
+   "asset": "솔라나",
+   "dipDepth": "얕은",
+   "takeProfit": "+5%",
+   "stopLoss": "-3%",
+   "maxHoldDays": 25,
+   "needClearTrend": false
+  },
+  "msgs": [
+   {
+    "key": "now",
+    "kind": "now",
+    "tag": "현재 상태",
+    "date": "9월 28일",
+    "ts": "09/28 09:00:05",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 389.45,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": -4.85,
+      "days": 5,
+      "why": "sl"
+     },
+     {
+      "asset": "솔라나",
+      "result": 8.26,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": 5.32,
+      "days": 6,
+      "why": "tp"
+     }
+    ],
+    "return30d": 9.82,
+    "winRateAll": 60.67,
+    "tradesAll": 89,
+    "waiting": {
+     "picked": "솔라나",
+     "dipScore": 35,
+     "dipNeeded": 48,
+     "dipOk": false,
+     "todayChange": -2.86,
+     "bounceNeeded": 0.5,
+     "bounceOk": false,
+     "trendGap": null,
+     "trendNeeded": null,
+     "marketOk": true,
+     "uptrendCount": "0/1",
+     "belowRecentHigh": -5.94
+    }
+   },
+   {
+    "key": "e1328_솔라나_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "9월 22일",
+    "ts": "09/22 09:00:34",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 389.45,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": -4.85,
+      "days": 5,
+      "why": "sl"
+     },
+     {
+      "asset": "솔라나",
+      "result": 8.26,
+      "days": 4,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "솔라나",
+     "price": "220.5 USDT",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "tp",
+     "priceChange": 5.53,
+     "resultAfterCost": 5.32
+    },
+    "holdingPeriod": {
+     "days": 6,
+     "bestDuring": 5.53,
+     "worstDuring": -0.23,
+     "entryPrice": "209.0 USDT",
+     "entryDate": "9월 16일"
+    }
+   },
+   {
+    "key": "e1322_솔라나_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "9월 16일",
+    "ts": "09/16 09:00:19",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 364.27,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": -4.85,
+      "days": 5,
+      "why": "sl"
+     },
+     {
+      "asset": "솔라나",
+      "result": 8.26,
+      "days": 4,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "솔라나",
+     "price": "209.0 USDT",
+     "uptrendCount": "0/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 1.77,
+     "dipScore": 50,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -2.01
+   },
+   {
+    "key": "e1320_솔라나_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "9월 14일",
+    "ts": "09/14 09:00:29",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 364.73,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": 6.7,
+      "days": 11,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": -4.85,
+      "days": 5,
+      "why": "sl"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "솔라나",
+     "price": "206.4 USDT",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "tp",
+     "priceChange": 8.48,
+     "resultAfterCost": 8.26
+    },
+    "holdingPeriod": {
+     "days": 4,
+     "bestDuring": 8.48,
+     "worstDuring": 0,
+     "entryPrice": "190.2 USDT",
+     "entryDate": "9월 10일"
+    }
+   },
+   {
+    "key": "e1316_솔라나_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "9월 10일",
+    "ts": "09/10 09:00:48",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 328.84,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": 6.7,
+      "days": 11,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": -4.85,
+      "days": 5,
+      "why": "sl"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "솔라나",
+     "price": "190.2 USDT",
+     "uptrendCount": "0/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 5.4,
+     "dipScore": 85,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -18.34
+   },
+   {
+    "key": "e1307_솔라나_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "9월 1일",
+    "ts": "09/01 09:00:24",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 329.27,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": -3.14,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "솔라나",
+      "result": 6.7,
+      "days": 11,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "솔라나",
+     "price": "205.6 USDT",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "sl",
+     "priceChange": -4.66,
+     "resultAfterCost": -4.85
+    },
+    "holdingPeriod": {
+     "days": 5,
+     "bestDuring": 0,
+     "worstDuring": -4.66,
+     "entryPrice": "215.6 USDT",
+     "entryDate": "8월 27일"
+    }
+   },
+   {
+    "key": "e1302_솔라나_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "8월 27일",
+    "ts": "08/27 09:00:27",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 350.71,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "솔라나",
+      "result": -3.14,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "솔라나",
+      "result": 6.7,
+      "days": 11,
+      "why": "tp"
+     },
+     {
+      "asset": "솔라나",
+      "result": 5.11,
+      "days": 3,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "솔라나",
+     "price": "215.6 USDT",
+     "uptrendCount": "0/1",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 1.21,
+     "dipScore": 64,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -10
+   },
+   {
+    "key": "intro",
+    "kind": "intro",
+    "tag": "전략 개요",
+    "date": "4월 4일",
+    "ts": "2023/04/04 09:00:29",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 0,
+    "lastThreeClosedTrades": []
+   }
+  ]
+ },
+ {
+  "id": "d5",
+  "name": "기술주 함께 오를 때",
+  "kind": "AI 판단",
+  "market": "stock",
+  "oneLiner": "기술주 8종 중 여섯 이상이 두 달 평균 가격보다 높을 때만 AI가 새로 사요.",
+  "since": "2024.06.16",
+  "totalReturn": 67.85,
+  "maxDrawdown": -13.95,
+  "winRate": 49.12,
+  "trades": 57,
+  "rules": {
+   "compareEvery": "5일",
+   "lookback": "20일",
+   "maxHoldings": 2,
+   "trailingStopFromPeak": "10%",
+   "needUptrendShare": "70%",
+   "universe": [
+    "엔비디아",
+    "테슬라",
+    "애플",
+    "마이크로소프트",
+    "아마존",
+    "메타",
+    "알파벳",
+    "에이엠디"
+   ]
+  },
+  "msgs": [
+   {
+    "key": "now",
+    "kind": "now",
+    "tag": "현재 상태",
+    "date": "9월 28일",
+    "ts": "09/29 05:00:42",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 67.85,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     },
+     {
+      "asset": "아마존",
+      "result": 4.52,
+      "days": 30,
+      "why": "weak"
+     }
+    ],
+    "return30d": -1.18,
+    "winRateAll": 49.12,
+    "tradesAll": 57,
+    "holdings": [
+     {
+      "asset": "에이엠디",
+      "since": "9월 24일",
+      "daysHeld": 4,
+      "entryPrice": "165.3 USD",
+      "now": "160.0 USD",
+      "resultSoFar": -3.23,
+      "weight": "48%",
+      "peakSinceEntry": "171.5 USD",
+      "stopPrice": "154.3 USD",
+      "roomToStop": -3.55
+     },
+     {
+      "asset": "테슬라",
+      "since": "9월 24일",
+      "daysHeld": 4,
+      "entryPrice": "406.8 USD",
+      "now": "420.0 USD",
+      "resultSoFar": 3.25,
+      "weight": "45%",
+      "peakSinceEntry": "420.0 USD",
+      "stopPrice": "378.0 USD",
+      "roomToStop": -10
+     }
+    ],
+    "cash": "6%",
+    "ranking": [
+     {
+      "rank": 1,
+      "asset": "아마존",
+      "rise": 9.08,
+      "status": "후보"
+     },
+     {
+      "rank": 2,
+      "asset": "엔비디아",
+      "rise": 13.46,
+      "status": "후보"
+     },
+     {
+      "rank": 3,
+      "asset": "알파벳",
+      "rise": 5.67,
+      "status": "후보"
+     },
+     {
+      "rank": 4,
+      "asset": "테슬라",
+      "rise": 11.64,
+      "status": "보유"
+     },
+     {
+      "rank": 5,
+      "asset": "애플",
+      "rise": 3.51,
+      "status": "후보"
+     },
+     {
+      "rank": 6,
+      "asset": "에이엠디",
+      "rise": 5.25,
+      "status": "보유"
+     },
+     {
+      "rank": 7,
+      "asset": "메타",
+      "rise": 0.93,
+      "status": "기준 미달"
+     },
+     {
+      "rank": 8,
+      "asset": "마이크로소프트",
+      "rise": -0.99,
+      "status": "60일 평균 아래"
+     }
+    ],
+    "uptrendCount": "7/8",
+    "nextCompare": "9월 29일"
+   },
+   {
+    "key": "e1330_테슬라_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "9월 24일",
+    "ts": "09/25 05:00:15",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 68.17,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     },
+     {
+      "asset": "아마존",
+      "result": 4.52,
+      "days": 30,
+      "why": "weak"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "테슬라",
+     "price": "406.8 USD",
+     "uptrendCount": "6/8",
+     "rise": 13.03,
+     "rank": 2,
+     "weight": "44%",
+     "sizeCutForVolatility": true,
+     "skipped": [
+      {
+       "asset": "에이엠디",
+       "why": "이미 보유"
+      }
+     ],
+     "top": [
+      {
+       "asset": "에이엠디",
+       "rise": 15.03
+      },
+      {
+       "asset": "테슬라",
+       "rise": 13.03
+      },
+      {
+       "asset": "아마존",
+       "rise": 5.18
+      }
+     ],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -1.74
+   },
+   {
+    "key": "e1330_에이엠디_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "9월 24일",
+    "ts": "09/25 05:00:14",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 68.17,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     },
+     {
+      "asset": "아마존",
+      "result": 4.52,
+      "days": 30,
+      "why": "weak"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "에이엠디",
+     "price": "165.3 USD",
+     "uptrendCount": "6/8",
+     "rise": 15.03,
+     "rank": 1,
+     "weight": "50%",
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "에이엠디",
+       "rise": 15.03
+      },
+      {
+       "asset": "테슬라",
+       "rise": 13.03
+      },
+      {
+       "asset": "아마존",
+       "rise": 5.18
+      }
+     ],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -0.35
+   },
+   {
+    "key": "e1325_wait",
+    "kind": "wait",
+    "tag": "관망",
+    "date": "9월 19일",
+    "ts": "09/20 05:00:15",
+    "repeated": 5,
+    "repeatedFrom": "8월 30일",
+    "totalReturnSoFar": 68.33,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     },
+     {
+      "asset": "아마존",
+      "result": 4.52,
+      "days": 30,
+      "why": "weak"
+     }
+    ],
+    "event": {
+     "type": "skip",
+     "asset": null,
+     "price": null,
+     "uptrendCount": "5/8",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "엔비디아",
+       "rise": 16.64
+      },
+      {
+       "asset": "에이엠디",
+       "rise": 13.07
+      },
+      {
+       "asset": "테슬라",
+       "rise": 13.8
+      }
+     ],
+     "stillHolding": [],
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "gate",
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1305_아마존_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "8월 30일",
+    "ts": "08/31 05:00:22",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 68.33,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "애플",
+      "result": -4.72,
+      "days": 10,
+      "why": "rot"
+     },
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "아마존",
+     "price": "208.9 USD",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "weak",
+     "priceChange": null,
+     "resultAfterCost": 4.52
+    },
+    "holdingPeriod": {
+     "days": 30,
+     "bestDuring": 11.05,
+     "worstDuring": 0,
+     "entryPrice": "199.4 USD",
+     "entryDate": "7월 31일"
+    }
+   },
+   {
+    "key": "e1300_wait",
+    "kind": "wait",
+    "tag": "관망",
+    "date": "8월 25일",
+    "ts": "08/26 05:00:04",
+    "repeated": 3,
+    "repeatedFrom": "8월 15일",
+    "totalReturnSoFar": 70.32,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "애플",
+      "result": -4.72,
+      "days": 10,
+      "why": "rot"
+     },
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     },
+     {
+      "asset": "엔비디아",
+      "result": 2.36,
+      "days": 15,
+      "why": "rot"
+     }
+    ],
+    "event": {
+     "type": "skip",
+     "asset": null,
+     "price": null,
+     "uptrendCount": "3/8",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "엔비디아",
+       "rise": 10.6
+      },
+      {
+       "asset": "아마존",
+       "rise": 3.88
+      },
+      {
+       "asset": "메타",
+       "rise": 2.84
+      }
+     ],
+     "stillHolding": [
+      "아마존"
+     ],
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "gate",
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1290_엔비디아_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "8월 15일",
+    "ts": "08/16 05:00:39",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 70.78,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "에이엠디",
+      "result": -0.12,
+      "days": 5,
+      "why": "rot"
+     },
+     {
+      "asset": "애플",
+      "result": -4.72,
+      "days": 10,
+      "why": "rot"
+     },
+     {
+      "asset": "마이크로소프트",
+      "result": -0.64,
+      "days": 20,
+      "why": "weak"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "엔비디아",
+     "price": "138.9 USD",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "rot",
+     "priceChange": null,
+     "resultAfterCost": 2.36
+    },
+    "holdingPeriod": {
+     "days": 15,
+     "bestDuring": 10.33,
+     "worstDuring": 0,
+     "entryPrice": "135.4 USD",
+     "entryDate": "7월 31일"
+    }
+   },
+   {
+    "key": "intro",
+    "kind": "intro",
+    "tag": "전략 개요",
+    "date": "6월 16일",
+    "ts": "2024/06/17 05:00:08",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 0,
+    "lastThreeClosedTrades": []
+   }
+  ]
+ },
+ {
+  "id": "h4",
+  "name": "네 시장 회복 기다리기",
+  "kind": "AI+규칙",
+  "market": "multi",
+  "oneLiner": "AI가 지수, 금, 주식, 코인 중 하나를 골라, 떨어졌다가 다시 오를 때 사요.",
+  "since": "2023.08.21",
+  "totalReturn": 109.93,
+  "maxDrawdown": -14.06,
+  "winRate": 66.67,
+  "trades": 24,
+  "rules": {
+   "pickEvery": "10일",
+   "lookback": "40일",
+   "takeProfit": "+8%",
+   "stopLoss": "-5%",
+   "maxHoldDays": 25,
+   "marketGate": "50%",
+   "universe": [
+    "나스닥",
+    "S&P 500",
+    "금",
+    "비트코인",
+    "이더리움",
+    "엔비디아"
+   ]
+  },
+  "msgs": [
+   {
+    "key": "now",
+    "kind": "now",
+    "tag": "현재 상태",
+    "date": "9월 28일",
+    "ts": "09/28 09:00:46",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 109.93,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.92,
+      "days": 5,
+      "why": "tp"
+     },
+     {
+      "asset": "비트코인",
+      "result": -6.08,
+      "days": 4,
+      "why": "sl"
+     }
+    ],
+    "return30d": 0,
+    "winRateAll": 66.67,
+    "tradesAll": 24,
+    "waiting": {
+     "picked": "엔비디아",
+     "dipScore": 41,
+     "dipNeeded": 55,
+     "dipOk": false,
+     "todayChange": -0.76,
+     "bounceNeeded": 0.5,
+     "bounceOk": false,
+     "trendGap": null,
+     "trendNeeded": null,
+     "marketOk": true,
+     "uptrendCount": "6/6",
+     "belowRecentHigh": -4.75
+    },
+    "pickedFrom": [
+     {
+      "asset": "엔비디아",
+      "rise": 20.19
+     },
+     {
+      "asset": "이더리움",
+      "rise": 6.62
+     },
+     {
+      "asset": "비트코인",
+      "rise": 6.19
+     }
+    ],
+    "nextPick": "10월 4일"
+   },
+   {
+    "key": "e1300_엔비디아_pick",
+    "kind": "pick",
+    "tag": "종목 선정",
+    "date": "8월 25일",
+    "ts": "08/26 05:00:37",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 109.93,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.92,
+      "days": 5,
+      "why": "tp"
+     },
+     {
+      "asset": "비트코인",
+      "result": -6.08,
+      "days": 4,
+      "why": "sl"
+     }
+    ],
+    "event": {
+     "type": "pick",
+     "asset": "엔비디아",
+     "price": null,
+     "uptrendCount": null,
+     "rise": 14.83,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "엔비디아",
+       "rise": 14.83
+      },
+      {
+       "asset": "비트코인",
+       "rise": 6.33
+      },
+      {
+       "asset": "S&P 500",
+       "rise": 4.5
+      }
+     ],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1299_비트코인_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "8월 24일",
+    "ts": "08/24 09:00:48",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 109.93,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "이더리움",
+      "result": 8.71,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.92,
+      "days": 5,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "비트코인",
+     "price": "93,821 USDT",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "sl",
+     "priceChange": -5.89,
+     "resultAfterCost": -6.08
+    },
+    "holdingPeriod": {
+     "days": 4,
+     "bestDuring": 0,
+     "worstDuring": -5.89,
+     "entryPrice": "99,694 USDT",
+     "entryDate": "8월 20일"
+    }
+   },
+   {
+    "key": "e1295_비트코인_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "8월 20일",
+    "ts": "08/20 09:00:24",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 123.29,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "이더리움",
+      "result": 8.71,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.92,
+      "days": 5,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "비트코인",
+     "price": "99,694 USDT",
+     "uptrendCount": "3/6",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 3.1,
+     "dipScore": 67,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -9.12
+   },
+   {
+    "key": "e1270_비트코인_pick",
+    "kind": "pick",
+    "tag": "종목 선정",
+    "date": "7월 26일",
+    "ts": "07/26 09:00:22",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 123.52,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "이더리움",
+      "result": 8.71,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.92,
+      "days": 5,
+      "why": "tp"
+     }
+    ],
+    "event": {
+     "type": "pick",
+     "asset": "비트코인",
+     "price": null,
+     "uptrendCount": null,
+     "rise": 24.71,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [
+      {
+       "asset": "비트코인",
+       "rise": 24.71
+      },
+      {
+       "asset": "엔비디아",
+       "rise": 20.16
+      },
+      {
+       "asset": "이더리움",
+       "rise": 9.12
+      }
+     ],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    }
+   },
+   {
+    "key": "e1262_이더리움_sell",
+    "kind": "sell",
+    "tag": "현물 매도",
+    "date": "7월 18일",
+    "ts": "07/18 09:00:36",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 123.52,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "이더리움",
+      "result": 9.03,
+      "days": 9,
+      "why": "tp"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.71,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "exit",
+     "asset": "이더리움",
+     "price": "4,679 USDT",
+     "uptrendCount": null,
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": null,
+     "dipScore": null,
+     "exitReason": "tp",
+     "priceChange": 9.14,
+     "resultAfterCost": 8.92
+    },
+    "holdingPeriod": {
+     "days": 5,
+     "bestDuring": 9.14,
+     "worstDuring": 0,
+     "entryPrice": "4,288 USDT",
+     "entryDate": "7월 13일"
+    }
+   },
+   {
+    "key": "e1257_이더리움_buy",
+    "kind": "buy",
+    "tag": "현물 매수",
+    "date": "7월 13일",
+    "ts": "07/13 09:00:29",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 105.01,
+    "lastThreeClosedTrades": [
+     {
+      "asset": "이더리움",
+      "result": 9.03,
+      "days": 9,
+      "why": "tp"
+     },
+     {
+      "asset": "이더리움",
+      "result": 8.71,
+      "days": 4,
+      "why": "tp"
+     },
+     {
+      "asset": "나스닥",
+      "result": 1.73,
+      "days": 25,
+      "why": "time"
+     }
+    ],
+    "event": {
+     "type": "enter",
+     "asset": "이더리움",
+     "price": "4,288 USDT",
+     "uptrendCount": "6/6",
+     "rise": null,
+     "rank": null,
+     "weight": null,
+     "sizeCutForVolatility": false,
+     "skipped": [],
+     "top": [],
+     "stillHolding": null,
+     "oneDayRebound": 2.85,
+     "dipScore": 59,
+     "exitReason": null,
+     "priceChange": null,
+     "resultAfterCost": null
+    },
+    "belowRecentHighAtEntry": -5.15
+   },
+   {
+    "key": "intro",
+    "kind": "intro",
+    "tag": "전략 개요",
+    "date": "8월 21일",
+    "ts": "2023/08/21 09:00:43",
+    "repeated": null,
+    "repeatedFrom": null,
+    "totalReturnSoFar": 0,
+    "lastThreeClosedTrades": []
+   }
+  ]
+ }
+]

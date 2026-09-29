@@ -15,7 +15,7 @@ for(const q of ['엔비디아','혼합','비트코인 큰 하락 뒤','@june07',
 await J(`tfSS3Search('')`); await J(`tfSS3Page(7)`); await sleep(600);
 console.log('page7', await J(`document.querySelector('.mk3 .mk3-t').innerText+' / '+document.querySelectorAll('.mk3').length`));
 // 상세 탭: 유형별
-for(const nm of ['세 갈래','되짚기','맞물림']){ for(const tb of ['ov','perf','trades','info']){ await J(`tfSS3Go(tfSSNe(${JSON.stringify(nm)}),'all','${tb}')`); await sleep(900); const tx=await J(`(document.querySelector('.mk-dbody')||{innerText:'NO BODY'}).innerText.replace(/\\s+/g,' ').slice(0,150)`); console.log(nm,tb,'|',tx); } }
+for(const nm of ['세 갈래','되짚기','맞물림']){ for(const tb of ['ov','trades','info']){ await J(`tfSS3Go(tfSSNe(${JSON.stringify(nm)}),'all','${tb}')`); await sleep(900); const tx=await J(`(document.querySelector('.mk-dbody')||{innerText:'NO BODY'}).innerText.replace(/\\s+/g,' ').slice(0,150)`); console.log(nm,tb,'|',tx); } }
 await J(`tfSS3Go(tfSSNe('세 갈래'),'1y','perf')`); await sleep(1000); console.log('1y perf', await J(`(document.querySelector('.mk-kpis')||{innerText:''}).innerText.replace(/\\s+/g,' ')`));
 // 옛 이름과 ID 로 조회
 console.log('find', await J(`JSON.stringify(['d1','세 갈래','비트코인 바겐세일','김대리의 나스닥','애플 농부'].map(k=>{const s=tfSSFind(k);return k+'→'+(s?s.id:'null')}))`));

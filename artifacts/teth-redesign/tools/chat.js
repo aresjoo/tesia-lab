@@ -128,5 +128,8 @@ function mkChatMsgs(s,r,n){
   }
   var i0=s.cfg&&s.cfg.startI!=null?s.cfg.startI:0;
   out.push({i:i0,k:'intro',tag:'전략 개요',t:mkChatIntro(s),ts:mkTS(s,i0,null,1)});
+  /* 미리 써 둔 글이 있으면 그 글을 쓴다. 열쇠는 기록의 종류와 날짜 번호와 종목 */
+  var V=(typeof MK_VOICE!=='undefined'&&MK_VOICE[s.id])||null;
+  if(V) out.forEach(function(m){ var key=m.k==='now'?'now':m.k==='intro'?'intro':'e'+m.i+(m.a?'_'+m.a:'')+'_'+m.k; if(V[key]) m.t=V[key]; });
   return out;
 }
