@@ -14,7 +14,7 @@ var MK_ALIAS={'비트코인 바겐세일':'r1','김대리의 나스닥':'r2','�
   /* 2026-09-29 이름 개편 전 이름 */
   '세 갈래':'d1','건널목':'d2','환승':'d3','기술주 셋':'d4','동행':'d5','외길':'d6','맞물림':'h1','추림':'h2','지수와 금':'h3','갈림길':'h4','고른 뒤':'h5','되짚기':'r1','짧은 호흡':'r2','물러섬':'r3','두 문턱':'r4','깊은 되돌림':'r5','한 구간':'r6','작은 걸음':'r7','마침표':'r8','방향선':'r9'};
 /* 데이터 기준일: 마지막 봉의 날짜. 가격 데이터를 바꿀 때 함께 바꾼다. 날짜, 판단 기록, 기간 계산, 저장된 시작 봉이 모두 이 기준에 묶인다 */
-var MK_ASOF=[2026,9,28], MK_DATA_V='2026-09-28.1', MK_D0=null, MK_D0K='';
+var MK_ASOF=window.TETH_PX?TETH_PX.asof.split('-').map(Number):[2026,9,28], MK_DATA_V=window.TETH_PX?TETH_PX.v:'2026-09-28.1', MK_D0=null, MK_D0K='';
 function idxToDate(i){ var dk=MK_ASOF.join('-')+'|'+PRICE0.length+'|'+MK_DATA_V; if(!MK_D0||MK_D0K!==dk){ MK_D0K=dk; MK_D0=new Date(MK_ASOF[0],MK_ASOF[1]-1,MK_ASOF[2]); MK_D0.setDate(MK_D0.getDate()-(PRICE0.length-1)); } var t=new Date(MK_D0.getTime()); t.setDate(t.getDate()+i); return t; }
 function mkMD(i){ var d=idxToDate(i); return (d.getMonth()+1)+'월 '+d.getDate()+'일'; }
 function mkUni(s){ return MK_UNI[s.uni]||{label:s.asset||'',list:s.asset?[s.asset]:[]}; }
@@ -28,7 +28,7 @@ function mkRunCfg(c,startI){
   var st=startI!=null?startI:c.startI;
   if(c.kind==='agent') return mkAgentRun({uni:MK_UNI[c.uni].list,look:c.look,top:c.top,gate:c.gate,every:c.every,trail:c.trail,volT:c.volT,minS:c.minS,startI:st});
   if(c.kind==='mix') return mkHybridRun({uni:MK_UNI[c.uni].list,every:c.every,look:c.look,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,gate:c.gate,startI:st});
-  return mkRuleRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:!!c.tf,startI:st});
+  return mkRuleRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:!!c.tf,fng:c.fng,startI:st});
 }
 /* 캐시 키: 전략 ID, 행동 값 전체, 쓰는 자산의 가격 설정, 마지막 봉, 비용 */
 function mkSig(s){ if(!s.cfg) return tfSS3Rid(s)+'|'+(s.p?JSON.stringify(s.p):'')+'|'+((s.r&&s.r.eq||[]).length); var c=s.cfg, ks=c.asset?[c.asset]:MK_UNI[c.uni].list; return c.id+'|'+JSON.stringify(c)+'|'+ks.map(function(k){ return (MK_PX_CFG[k]||[]).join('/'); }).join(',')+'|'+PRICE0.length+'|'+MK_FEE+'|'+MK_DATA_V; }

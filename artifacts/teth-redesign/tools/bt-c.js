@@ -106,20 +106,23 @@ function btMineAsset(){ var t=tfS(), a=((t.intake||{}).asset||{}).label||''; a=B
 function btMine(){
   var t=tfS(); if(!S.user||!t.intake||!t.intake.asset) return null;
   var a=btMineAsset(); if(!a) return null;
-  var p=t.pendingP||tfParams(), iv=t.intake, st=((iv.style||{}).label||'').replace(/으로$/,''), sl=Math.abs(p.sl);
-  var cfg={id:'mine',kind:'rule',asset:a,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:p.trendFilter?1:0,startI:61};
-  var sig=JSON.stringify(cfg), h=0; for(var i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))>>>0;
-  var name=(t.cloneFrom?t.cloneFrom+' 님 전략, ':'')+a+' 반등 매수';
-  var one=mkJ(a,'이','가')+' 내려왔다가 다시 오르는 날 사요. '+(p.tp!=null?'산 가격보다 '+p.tp+'% 오르거나 ':'산 가격보다 ')+sl+'% 내려가면, 또는 25일이 지나면 팔아요.';
+  var p=(t.cloneFrom&&t.pendingP)?t.pendingP:tfParams(t.aiSpec?{sl:t.aiSpec.sl,tp:t.aiSpec.tp,rsiTh:t.aiSpec.rsiTh,trendFilter:!!t.aiSpec.tf,fng:t.aiSpec.fng}:null), iv=t.intake, st=((iv.style||{}).label||'').replace(/으로$/,''), sl=Math.abs(p.sl);
+  var cfg={id:'mine',kind:'rule',asset:a,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:p.trendFilter?1:0,fng:p.fng!=null?p.fng:null,startI:61};
+  var sig=JSON.stringify(cfg)+'|'+((iv.period||{}).i)+'|'+(t.cloneFrom||'')+'|'+(t.cloneFrom&&p.startI!=null?p.startI:''), h=0; for(var i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))>>>0;
+  var name=(t.cloneFrom?t.cloneFrom+' 님 전략, ':'')+(t.aiSpec&&t.aiSpec.name?t.aiSpec.name:a+' 반등 매수');
+  var one=mkJ(a,'이','가')+' 내려왔다가 다시 오르는 날 사요. '+(p.tp!=null?'산 가격보다 '+p.tp+'% 오르거나 ':'산 가격보다 ')+sl+'% 내려가면, 또는 25일이 지나면 팔아요.'+(p.fng!=null?' 공포 탐욕 지수가 '+p.fng+' 이하일 때만 사요.':'');
   return {id:'mine-'+h.toString(36),mine:true,kind:'rule',mkt:/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a)?'crypto':'stock',
     nick:name,name:name,one:one,asset:a,uni:null,cfg:cfg,ex:null,p:p,fw:0,by:'',style:st};
 }
+/* 지금 조건과 다른 결과인가. 대화에서 만든 결과(sig 있음)만 따진다 */
+function btMineStale(){ var t=tfS(), c=t.cur; if(!c||!c.sig) return false; var m=btMine(); return !m||m.id!==c.sig; }
 /* 결과가 나오면 대화 흐름이 쓰는 검증 기록(t.cur)을 이 결과로 채운다. 점수 게이트는 없다 */
 function btMineDone(){
   var t=tfS(), s=BT.s, R=BT.R; if(!s||!s.mine||!R) return;
-  var p={}; for(var k in s.p) p[k]=s.p[k]; p.startI=R.eq[0].i; p.endI=R.eq[R.N-1].i;
-  t.pendingP=s.p; t.cur={ret:R.ret,mdd:R.mdd,n:R.tr.length,winRate:R.tr.length?R.wins/R.tr.length*100:0,p:p,
-    trades:R.tr.map(function(x){ return {entry:x.e,exit:x.x,pnl:x.pnl,kind:x.why||x.kind}; })};
+  var p={}; for(var k in s.p) p[k]=s.p[k]; p.startI=R.eq[0].i; p.endI=R.eq[R.N-1].i; p.px=s.asset; p.eng='mk';
+  var done=R.tr.filter(function(x){ return !x.open; });
+  t.cur={ret:R.ret,mdd:R.mdd,n:done.length,winRate:done.length?R.wins.length/done.length*100:0,p:p,sig:s.id,asset:s.asset,
+    trades:done.map(function(x){ return {entry:x.e,exit:x.x,pnl:x.pnl/100,kind:x.why||x.kind}; })};
   try{ var sc=tfScore(mkRunCfg(s.cfg,p.startI)); t.score=isFinite(sc)?sc:0; }catch(e){ t.score=0; }
   t.workDone=true; if(t.stage==='verify'||t.stage==='ready'||!t.stage) t.stage='connect'; tfSave();
 }
@@ -135,13 +138,15 @@ function btView(){
 }
 function btRoute(h){
   var m=h.match(/^#\/share\/bt\/([^/]+)(?:\/(go))?$/); TF_ONSHARE=true;
+  if(m&&m[1]==='mine'&&!window.TF_STATE_READY){ TF_ONSHARE=false; return; } /* 부팅이 끝나면 다시 불린다 */
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
   var s=null; try{ s=tfSSFind(decodeURIComponent(m[1])); }catch(e){}
   if(!s&&m[1]==='mine'){ TF_ONSHARE=false; toast('이 자산은 아직 백테스트할 가격 자료가 없어요'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfBackToChat(); return; }
   if(!s||!s.cfg){ TF_ONSHARE=false; tfShareHub('find'); return; }
   if(s.mine){ TF_ONSHARE=false; TF_ONSTRAT=true; } /* 뒤로 가면 전략 목록이 아니라 대화로 */
   var t=tfS().bt||{};
-  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var pi=((tfS().intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365; } }
+  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var t9=tfS(), pi=((t9.intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365;
+    if(t9.cloneFrom&&s.p&&s.p.startI!=null){ var span=(PRICE0.length-1)-s.p.startI, best=0, bd=1e9; BT_PER.forEach(function(o){ var d=Math.abs((o[0]||PRICE0.length)-span); if(d<bd){ bd=d; best=o[0]; } }); BT.per=best; } } }
   BT.s=s;
   if(!m[2]){ btView(); return; }
   if(!BT.R) btCompute();

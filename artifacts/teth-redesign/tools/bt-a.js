@@ -25,7 +25,7 @@ function btRules(s){
     o.push(['파는 때','든 뒤 가장 높았던 가격에서 '+c.trail+'% 밀리면']);
   } else {
     if(s.kind==='mix') o.push(['종목 고르기','AI가 '+c.every+'일마다 '+u.label+' 중 가장 강한 하나']);
-    o.push(['사는 때','되돌림 점수가 '+c.rsiTh+' 아래로 내려간 뒤 하루 만에 0.5% 넘게 다시 오르면'+(c.tf?', 오름세일 때만':'')]);
+    o.push(['사는 때','되돌림 점수가 '+c.rsiTh+' 아래로 내려간 뒤 하루 만에 0.5% 넘게 다시 오르면'+(c.tf?', 오름세일 때만':'')+(c.fng!=null?', 공포 탐욕 지수가 '+c.fng+' 이하일 때만':'')]);
     if(btGate(s)) o.push(['AI 확인','조건이 맞아도 오름세 종목이 '+n+'개 중 '+btNeed(s)+'개 미만이면 사지 않음']);
     o.push(['파는 때',(c.tp!=null?'+'+c.tp+'% 오르거나 ':'')+c.sl+'% 내리면, 또는 25일이 지나면']);
   }
@@ -68,7 +68,7 @@ function btCompute(){
       push({k:'buy',tag:'매수',title:tk,chain:gate?1:0,cmp:gate?('오름세 '+e.up+' / '+e.of+', 기준 '+need):('하루 반등 '+mkPct0(e.bounce,1)),
         why:gate?('오름세 종목이 '+e.of+'개 중 '+e.up+'개라 샀어요'):('떨어진 뒤 하루 만에 '+mkPct0(e.bounce,1)+' 다시 올랐어요'),
         p0:[tk+' 하루 반등 '+mkPct0(e.bounce,1),pkT],p1:gate&&e.of?brd(e):null,p2:[tk+' 매수',gate?'기준을 넘어 샀어요':'조건이 맞아 샀어요'],ups:gate&&e.of?upsOf(e):null,
-        facts:(pk2?pkFacts(pk2,e):[]).concat([['하루 반등',mkPct0(e.bounce,1)+', 기준 0.5% 넘게'],['되돌림 점수',Math.round(e.rsi)+', 기준 '+c.rsiTh+' 아래']]).concat(gate&&e.of?[['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상']]:[]).concat([['산 가격',btPx(e.px)]])},e); return; }
+        facts:(pk2?pkFacts(pk2,e):[]).concat([['하루 반등',mkPct0(e.bounce,1)+', 기준 0.5% 넘게'],['되돌림 점수',Math.round(e.rsi)+', 기준 '+c.rsiTh+' 아래']]).concat(gate&&e.of?[['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상']]:[]).concat(c.fng!=null&&e.fng!=null?[['공포 탐욕 지수',e.fng+', 기준 '+c.fng+' 이하']]:[]).concat([['산 가격',btPx(e.px)]])},e); return; }
     if(e.t==='exit'){ push({k:'sell',tag:'매도',title:tk,pnl:e.pnl,cmp:MK_WHY[e.why]||'',why:MK_WHY[e.why]||'',facts:[['판 가격',btPx(e.px)],['이 거래의 손익',mkPct0(e.pnl,1)],['판 이유',MK_WHY[e.why]||'']]},e); return; }
     if(e.t==='veto'){ var pk3=lastPick[e.a];
       push({k:'skip',tag:'보류',title:tk,chain:1,cmp:'오름세 '+e.up+' / '+e.of+', 기준 '+need,why:'오름세 종목이 '+e.of+'개 중 '+e.up+'개뿐이라 사지 않았어요',

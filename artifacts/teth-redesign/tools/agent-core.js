@@ -80,12 +80,14 @@ function mkAgentRun(c){
    진입과 청산은 규칙: 떨어진 뒤(rsi) 반등(+0.5% 초과)에 사서, 익절 또는 손절 조건에 닿은 날 종가에, 아니면 25일째 종가에 판다.
    c = {uni, every, look, rsiTh, tp, sl, gate, startI} */
 /* 조건 실행: 종목이 하나로 고정된 같은 계산기. c = {asset, rsiTh, tp, sl, tf, startI} */
-function mkRuleRun(c){ return mkHybridRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:c.tf,every:1,gate:0,startI:c.startI}); }
+function mkRuleRun(c){ return mkHybridRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:c.tf,fng:c.fng,every:1,gate:0,startI:c.startI}); }
+/* 공포 탐욕 지수(그날 00시 UTC 발표, 그날 종가 판단에 쓸 수 있음). 자료가 없으면 null */
+function mkFng(i){ var f=window.TETH_PX&&TETH_PX.fng; return f&&f[i]!=null?f[i]:null; }
 function mkHybridRun(c){
   var fixed=c.asset||null, U=fixed?[fixed]:c.uni, PX=U.map(function(k){ return mkPx(k); }), N=PX[0].length, endI=N-1, startI=Math.max(61,(c.look||0)+1,c.startI||61);
   mkCheckIn(PX,N,{every:c.every||1,look:c.look});
   function upN(i){ var u=0; for(var z=0;z<U.length;z++) if(PX[z][i]>sma(PX[z],60,i)) u++; return u; }
-  function cond(P,i){ var rv=rsi(P,i-1), bo=(P[i]/P[i-1]-1)*100, s20=sma(P,20,i), s60=sma(P,60,i), gap=Math.abs(s20-s60)/P[i]*100, up=upN(i); return {i:i,rsi:rv,rsiOk:rv<c.rsiTh,bounce:bo,bounceOk:bo>0.5,gap:gap,trendOk:!c.tf||gap>3,up:up,of:U.length,mktOk:!!fixed||!c.gate||up/U.length>=c.gate}; }
+  function cond(P,i){ var rv=rsi(P,i-1), bo=(P[i]/P[i-1]-1)*100, s20=sma(P,20,i), s60=sma(P,60,i), gap=Math.abs(s20-s60)/P[i]*100, up=upN(i); return {i:i,rsi:rv,rsiOk:rv<c.rsiTh,bounce:bo,bounceOk:bo>0.5,gap:gap,trendOk:!c.tf||gap>3,fng:mkFng(i),fngOk:c.fng==null||(mkFng(i)!=null&&mkFng(i)<=c.fng),up:up,of:U.length,mktOk:!!fixed||!c.gate||up/U.length>=c.gate}; }
   var J={}; U.forEach(function(k,j){ J[k]=j; });
   var L=mkLedger(), eq=[], ev=[], pick=fixed, cur=startI, topAt=null, lastTop=null, invested=0, lastEv=null, px=function(k){ return PX[J[k]][cur]; };
   function choose(i){ var rows=U.map(function(k,j){ var P=PX[j]; return {k:k,mom:P[i]/P[i-c.look]-1,above:P[i]>sma(P,60,i)}; }); var up=rows.filter(function(r){ return r.above; }); up.sort(function(a,b){ return b.mom-a.mom; }); return {rows:up,up:up.length}; }
@@ -95,9 +97,9 @@ function mkHybridRun(c){
       if(!C.rows.length){ if(pick!==null) ev.push({i:i,t:'unpick'}); pick=null; }
       else if(pick!==C.rows[0].k){ pick=C.rows[0].k; ev.push({i:i,t:'pick',a:pick,mom:C.rows[0].mom*100,top:lastTop}); } }
     if(!p){ if(pick!==null){ var P=PX[J[pick]], q=cond(P,i);
-        if(q.rsiOk&&q.bounceOk&&q.trendOk){ var up2=q.up;
+        if(q.rsiOk&&q.bounceOk&&q.trendOk&&q.fngOk){ var up2=q.up;
           if(!q.mktOk) ev.push({i:i,t:'veto',a:pick,up:up2,of:U.length,rsi:q.rsi,bounce:q.bounce});
-          else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],units:b.units,cost:b.cost,fee:b.fee,rsi:q.rsi,bounce:q.bounce,up:up2,of:U.length}); } } } }
+          else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],units:b.units,cost:b.cost,fee:b.fee,rsi:q.rsi,bounce:q.bounce,fng:q.fng,up:up2,of:U.length}); } } } }
     else if(i>p.ei){ var v=px(p.k), chg=(v/p.ep-1)*100, why=chg<=c.sl?'sl':(c.tp!=null&&chg>=c.tp)?'tp':(i-p.ei>=25?'time':null);
       if(why){ var t=L.sell(p,v,i,why); ev.push({i:i,t:'exit',a:p.k,why:why,tid:t.id,px:v,units:t.units,got:t.got,fee:t.fee,chg:chg,pnl:t.pnl*100}); } }
     var v3=L.value(px); eq.push({i:i,v:v3}); invested+=(v3-L.cash)/v3;

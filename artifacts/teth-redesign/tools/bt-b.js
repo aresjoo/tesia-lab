@@ -173,7 +173,9 @@ function btWinTxt(){ var R=BT.R, n=R.wins.length+R.loss.length; return n?n+'번 
 /* 해석: 세 문장. 평가, 움직인 방식, 조심할 점 */
 function btRead(){
   var R=BT.R, s=BT.s, n=R.wins.length+R.loss.length, diff=Math.round(R.final)-Math.round(R.benchFinal), ex=Math.round(Math.min(100,R.r.exposure||0)), calm=Math.abs(R.mdd)<Math.abs(R.benchMdd), a=Math.abs(diff).toLocaleString()+' USDT';
-  var v=diff>=0?(calm?'그냥 들고 있었을 때보다 '+a+' 더 벌었고, 덜 흔들렸어요.':'그냥 들고 있었을 때보다 '+a+' 더 벌었지만, 더 크게 흔들렸어요.'):(calm?'그냥 들고 있었을 때보다 '+a+' 덜 벌었지만, 덜 흔들렸어요.':'그냥 들고 있었을 때보다 '+a+' 덜 벌었고, 더 크게 흔들렸어요.');
+  /* 손실끼리 비교할 때는 '덜 벌었다'가 아니라 '더 잃었다'. 전략이 손실이면 앞선 경우도 '덜 잃었다' */
+  var won=R.final>=BT.amt, bwon=R.benchFinal>=BT.amt, vb=diff>=0?(won?'더 벌었':'덜 잃었'):(won?'덜 벌었':(bwon?'적게 남겼':'더 잃었'));
+  var v='그냥 들고 있었을 때보다 '+a+' '+vb+(diff>=0?(calm?'고, 덜 흔들렸어요.':'지만, 더 크게 흔들렸어요.'):(calm?'지만, 덜 흔들렸어요.':'고, 더 크게 흔들렸어요.'));
   var b=btGate(s)?('기회 '+R.nOpp+'번 중 '+R.nSkip+'번은 AI가 사지 않았고, 전체 기간의 '+ex+'%만 종목을 들고 있었어요.'):s.kind==='agent'?('AI가 '+R.nOpp+'번 다시 비교했고, 그중 '+R.nSkip+'번은 새로 사지 않고 쉬었어요.'):('사는 조건은 '+R.nBuy+'번 맞았고, 전체 기간의 '+ex+'%만 종목을 들고 있었어요.');
   var c=n&&n<20?('거래가 '+n+'번뿐이라 몇 번의 거래가 결과를 좌우해요.'):('가장 나빴던 때는 '+mkMD(R.r.mddStartI)+'부터 '+mkMD(R.r.mddEndI)+'까지였어요.');
   return [v,b,c];

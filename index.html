@@ -6603,6 +6603,7 @@ a.btg-out{text-decoration:none}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
+<script src="data/px-daily.js?v=2026-09-28"></script>
 <script src="site-footer.js?v=14"></script><!-- gBoot 의 첫 렌더가 gSiteFooter() 를 부르므로 부팅 전에 로드 --><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
 <script>
 "use strict";
@@ -6856,6 +6857,7 @@ function convSend(){
 /* ═══════════ backtest engine ═══════════ */
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 var PRICE=(function(){
+  if(window.TETH_PX&&TETH_PX.px&&TETH_PX.px['비트코인']) return TETH_PX.px['비트코인'].slice(); /* 실제 비트코인 일봉. 없을 때만 아래 씨앗 데이터 */
   var rng=mulberry32(3), p=[16500], regimes=[[0,365,.0016],[365,660,.00003],[660,1050,.0013],[1050,1335,.0004]];
   for(var i=1;i<1335;i++){
     var drift=.0005;
@@ -6871,6 +6873,7 @@ var HOLD_RET=null, HOLD_MDD=null;
 var PRICE0=PRICE, MK_PXC={};
 function mkPx(key){
   if(!key) return PRICE0;
+  if(window.TETH_PX&&TETH_PX.px&&TETH_PX.px[key]) return TETH_PX.px[key]; /* 실제 일봉(쉬는 날은 직전 종가) */
   var c=(window.MK_PX_CFG||{})[key]; if(!c) return PRICE0;
   var ck=key+'|'+c.join('/')+'|'+PRICE0.length+'|'+(window.MK_DATA_V||''); if(MK_PXC[ck]) return MK_PXC[ck];
   var rng=mulberry32(c[0]), p0=c[1], vol=c[2], N=PRICE0.length, p=[p0], i=1;
@@ -7680,7 +7683,7 @@ var RESEARCH_V2=(function(){
   }catch(e){ return true; }
 })();
 function setResearchUx(v){ try{ localStorage.setItem('AI_RESEARCH_UX_V2', v==='v2'?'true':'false'); location.reload(); }catch(e){} }
-var DEV_END=909, HOLD_START=910, FULL_END=1334;
+var FULL_END=PRICE.length-1, HOLD_START=FULL_END-424, DEV_END=HOLD_START-1;
 if(RESEARCH_V2){ window.HOLD_SHADE=HOLD_START; }
 
 function baseParamsV2(st){ var p=baseParams(st); p.startI=61; p.endI=DEV_END; p.purpose='candidate'; return p; }
@@ -10164,6 +10167,7 @@ function taiMarketRules(){
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
    +'\n태그는 줄 하나에만, 자산이 특정될 때만 붙인다. 이미 같은 차트가 열려 있으면 붙이지 않는다.'
    +'\n핵심 비즈니스는 자동매매 전략 생성이다. 예측이나 시장 분석 답변의 끝에는 한 문장으로, 원하면 이 분석을 시장에서 싸우는 자동매매 전략으로 만들어줄 수 있고 자는 동안에도 자동으로 매매된다는 제안을 자연스럽게 덧붙여라. 사용자가 전혀 다른 주제를 물으면 먼저 그 질문에 응대한 뒤 가볍게 전략 제안으로 돌아오라. 단, 직전 답변에서 이미 제안했다면 똑같은 제안을 반복해 부담 주지 마라.'
+   +'\n전략 설계서: 사용자가 사고파는 조건을 구체적으로 말하거나(예: "비트코인 크게 빠지면 사서 10% 오르면 팔아", "공포 지수 낮을 때만 사") 전략을 직접 설계해 달라고 하면, SETUP 대신 답변 마지막 줄에 정확히 이 형식의 태그를 붙여라: [STRATEGY {"asset":"비트코인","depth":"deep","tp":10,"sl":-5,"fng":25,"trend":false,"period":"1y","name":"공포에 사는 비트코인"}]. asset 은 비트코인, 이더리움, 솔라나, 리플, 도지코인, 에이다, 아발란체, 비앤비, 테슬라, 엔비디아, 애플, 마이크로소프트, 아마존, 메타, 알파벳, 에이엠디, 금, 나스닥, S&P 500 중 하나. depth 는 얼마나 밀렸을 때 살지로 shallow(조금), mid(보통), deep(크게). tp 는 익절 %(없으면 null), sl 은 손절 %(음수, -1에서 -15). fng 는 공포 탐욕 지수 상한(그 값 이하일 때만 산다, 코인에만, 없으면 null). trend 가 true 면 가격이 한쪽으로 뚜렷할 때만 산다. period 는 1y, 2y, all. name 은 14자 이내. 이 엔진이 계산할 수 있는 것은 "밀렸다가 하루 0.5% 넘게 반등한 날 산다"는 사는 방식 하나와 익절, 손절, 25일 보유 한도, 공포 탐욕 지수 상한뿐이다. 사용자의 조건이 이 틀과 다르면 가장 가까운 값으로 옮기고, 무엇이 달라졌는지 한 문장으로 솔직하게 말하라. 뉴스, 거래량, 다른 지표처럼 계산할 수 없는 조건은 빼고 뺐다고 말하라. 수익률을 예상하거나 숫자를 지어내지 마라. 결과는 화면의 백테스트가 실제 시세로 계산한다. 이 태그를 붙이면 NEXT, ACT, SETUP 은 붙이지 않는다.'
    +'\n사용자가 자동매매 전략 생성, 매매 위임, 조건부 실행을 원하거나 제안에 동의하면, 답변 마지막 줄에 반드시 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 자산이 BTC나 ETH가 아니면 pair는 null로 두고, 자동 실행은 코인 페어부터 지원되니 같은 구조를 BTC/ETH로 만들어 보자고 한 문장으로 안내하라. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라. 태그 없이 "아래에서 설정하세요" 같은 말은 절대 하지 마라, 태그가 있어야 화면에 설정이 뜬다.'
    +'\n요청이 광범위해서 분석 방향 확인이 필요하면(예: 막연한 "차트 분석해줘"), 한두 문장 안내 후 답변 마지막 줄에 [ASK {"steps":[{"title":"어떤 방식으로 분석해드릴까요?","multi":true,"options":[{"t":"항목","d":"짧은 부연"}]},{"title":"가격 표시 통화는?","multi":false,"options":[{"t":"USD (달러)","d":"글로벌 표준"},{"t":"KRW (원화)","d":"업비트 기준"}]}]}] 형식으로 선택지를 제시하라. 확인할 축이 하나면 steps에 1개만, 최대 2단계. 각 단계 선택지는 4~6개. 정말 필요할 때만, 연속 사용 금지.'
    +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 두 번째 답변부터는 절대 붙이지 않는다.'
@@ -10906,7 +10910,7 @@ function tfStart(act){
   var t=tfS();
   t.cloneFrom=null; t.followId=null; /* 새 독립 작업은 팔로우 기록에 귀속되지 않는다 (codex F07) */
   if(typeof TF_SS_TOKEN!=='undefined') TF_SS_TOKEN++; /* 진행 중이던 이전 검증 콜백 무효화 (codex F06) */
-  t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null;
+  t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null; t.aiSpec=null;
   t.ob={st:'idle',ex:null,uid:'',err:null};
   var sell=/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
   t.sell=sell;
@@ -10962,6 +10966,31 @@ function tfAssetLookup(label){
   return {label:label,tv:null,data:'none'};
 }
 /* 질문 완료 → 요약 카드 하나. 검증은 여기서 시작 버튼으로만 (채팅에서 작업하지 않는다) */
+/* AI 가 채운 전략서 → 카드 한 장. 값은 여기서 다시 검사한다(프롬프트를 믿지 않는다) */
+var TF_AI_DEPTH={shallow:52,mid:44,deep:38};
+function tfAiStrategy(sp){
+  var t=tfS(), a=String(sp&&sp.asset||''); a=(typeof BT_MINE_ALIAS!=='undefined'&&BT_MINE_ALIAS[a])||a;
+  if(!(window.TETH_PX&&TETH_PX.px[a])){ tfAiMsg(gEsc(a||'이 자산')+'은 아직 백테스트할 가격 자료가 없어요. 비트코인, 이더리움, 미국 대형주, 금, 나스닥 같은 자산으로 바꿔 볼까요?'); return; }
+  var num=function(v,lo,hi){ v=Number(v); return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v*10)/10)):null; };
+  var crypto=/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a);
+  var spec={rsiTh:TF_AI_DEPTH[sp.depth]||44,tp:sp.tp==null?null:num(sp.tp,1,60),sl:-Math.abs(num(sp.sl,-15,-1)||5),fng:(crypto&&sp.fng!=null)?num(sp.fng,5,95):null,tf:!!sp.trend,name:String(sp.name||'').slice(0,14)||null};
+  if(spec.sl>-1) spec.sl=-1; if(spec.sl<-15) spec.sl=-15;
+  var pi=sp.period==='2y'?1:sp.period==='all'?2:0, PL=TFCOPY.intakeOpt.period;
+  t.cloneFrom=null; t.followId=null; t.pendingP=null; t.cur=null; t.score=0; t.workDone=false; t.aiSpec=spec;
+  t.intake={asset:{i:0,label:a},assetInfo:tfAssetLookup(a),style:{i:1,label:'AI 설계'},budget:{i:1,label:TFCOPY.intakeOpt.budget[1][0]},period:{i:pi,label:PL[pi][0]},stop:{i:0,label:spec.sl+'%까지'}};
+  t.qi=TF_QS.length; t.stage='ready'; tfSave();
+  TAI.nn=(TAI.nn||0)+1; var id='tfai'+Date.now().toString(36)+TAI.nn;
+  var dep={52:'조금 밀렸다가',44:'적당히 밀렸다가',38:'크게 밀렸다가'}[spec.rsiTh]||'밀렸다가';
+  var row=function(k,v){ return '<div class="r"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; };
+  var html='<div class="tf-sum" id="'+id+'"><div class="h">'+gEsc(spec.name||a+' 전략')+'</div><div class="rows">'
+    +row('자산',gEsc(a))
+    +row('사는 때',dep+' 하루 0.5% 넘게 반등한 날'+(spec.tf?', 방향이 뚜렷할 때만':'')+(spec.fng!=null?', 공포 탐욕 지수 '+spec.fng+' 이하일 때만':''))
+    +row('파는 때',(spec.tp!=null?'+'+spec.tp+'% 오르거나 ':'')+spec.sl+'% 내리면, 또는 25일이 지나면')
+    +row('돌려 볼 기간',gEsc(PL[pi][0]))
+    +'</div><div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:-4px 0 13px">실제 일봉 시세로 하루씩 다시 돌려요. 살 때와 팔 때마다 수수료 0.1%를 빼요.</div>'
+    +'<button class="tf-btn p" onclick="tfVerifyGo(\''+id+'\')">과거로 돌려 보기</button></div>';
+  taiThreadAdd(html); gScrollBottom();
+}
 function tfIntakeDone(){
   var t=tfS(); t.stage='ready';
   TAI.nn=(TAI.nn||0)+1; var id='tfsum'+Date.now().toString(36)+TAI.nn;
@@ -10987,7 +11016,7 @@ function tfIntakeDone(){
 }
 function tfIntakeRedo(id){
   var el=$(id); if(el){ el.remove(); taiRecFix(id,null); }
-  var t=tfS(); t.intake={}; t.qi=0; t.stage='intake'; tfSave();
+  var t=tfS(); t.intake={}; t.qi=0; t.stage='intake'; t.aiSpec=null; if(t.cur&&t.cur.sig){ t.cur=null; t.score=0; t.workDone=false; } if(!t.cloneFrom) t.pendingP=null; tfSave();
   tfIntakeNext();
 }
 /* 요약 카드 → 검증 워크스페이스 라우트로 전환. 채팅에는 재진입 CTA만 남긴다 */
@@ -11408,6 +11437,7 @@ function tfApiGuide(){
 /* ── §19 완료 화면 라우트 #/strategy/done ── */
 function tfDoneView(){
   var t=tfS();
+  if(typeof btMineStale==='function'&&btMineStale()){ toast('조건이 바뀌어서 다시 돌려 볼게요'); tfNav('#/share/bt/mine'); return; }
   if(!t.api){ tfNav('#/strategy/connect'); return; }
   /* 현재 설정의 검증 통과 없이는 완료 진입 불가 — 복제 직후 잔존 API로 우회 차단 (CODEX-POST P0-001) */
   if(!(t.cur&&t.score>=TFC.score.pass)){ toast('현재 설정의 검증을 먼저 통과해야 해요'); tfNav('#/strategy/backtest'); return; }
@@ -11441,6 +11471,7 @@ function tfLater(){
 /* ── §20 전략 시작 → 대시보드 (방금 만든 전략이 맨 위) ── */
 function tfStartStrategy(){
   var t=tfS();
+  if(typeof btMineStale==='function'&&btMineStale()){ toast('조건이 바뀌어서 다시 돌려 볼게요'); tfNav('#/share/bt/mine'); return; }
   if(!(t.cur&&t.score>=TFC.score.pass)){ toast('현재 설정의 검증을 먼저 통과해야 해요'); tfNav('#/strategy/backtest'); return; }
   tfTrack('strategy_start',{score:t.score,clone:!!t.cloneFrom});
   t.conn=true; t.stage='live';
@@ -11490,9 +11521,14 @@ function tfTmClones(){ var t=tfS(); if(!Array.isArray(t.termClones)) t.termClone
 function tfTmP(p){ /* startI 음수=끝에서 N봉, 깊은 복사 정규화 */
   var end=PRICE.length-1;
   var s2=p.startI==null?61:(p.startI<0?Math.max(61,end+p.startI):p.startI);
-  return {sl:p.sl,tp:p.tp!=null?p.tp:null,rsiTh:p.rsiTh,trendFilter:!!p.trendFilter,startI:s2,endI:p.endI!=null?p.endI:end};
+  return {sl:p.sl,tp:p.tp!=null?p.tp:null,rsiTh:p.rsiTh,trendFilter:!!p.trendFilter,startI:s2,endI:p.endI!=null?p.endI:end,px:p.px||null,eng:p.eng||null,fng:p.fng!=null?p.fng:null};
 }
-function tfTmKey(p){ return [p.sl,p.tp,p.rsiTh,p.trendFilter?1:0,p.startI,p.endI].join('|'); }
+function tfTmKey(p){ return [p.sl,p.tp,p.rsiTh,p.trendFilter?1:0,p.startI,p.endI,p.px||'',p.eng||'',p.fng!=null?p.fng:''].join('|'); }
+/* 새 백테스트 엔진 결과를 예전 엔진 결과 모양으로. 백테스트 화면에서 본 숫자와 터미널 숫자를 같게 한다 */
+function tfMkBt(p){ var r=mkRuleRun({asset:p.px,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:!!p.trendFilter,fng:p.fng,startI:p.startI});
+  var tr=(r.trades||[]).map(function(t){ return {entry:t.entry,exit:t.exit,pnl:t.pnl,kind:t.kind}; }), w=tr.filter(function(t){ return t.pnl>0; });
+  return {ret:r.ret,mdd:r.mdd,n:tr.length,winRate:tr.length?w.length/tr.length*100:0,pf:r.pf,avgHold:r.avgHold,trades:tr,eq:r.eq,params:p,byYear:{},lossCount:tr.length-w.length,cagr:r.cagr,tradeVol:r.tradeVol}; }
+function tfSPx(s){ return mkPx((s&&s.p&&s.p.px)||null); } /* 봇이 쓰는 자산의 가격 줄 */
 /* VM 목록 — preview 면 데모 6개만, 아니면 소유 전략(user + clone)만. 상태(ready/running/paused/error)로 숨기지 않는다 (S6, A10). key 로만 식별 */
 function tfTmAll(){
   var t=tfS(), out=[];
@@ -11540,8 +11576,8 @@ function tfTmCalc(s){
   var p=s.p, ck=tfTmKey(p);
   var c=TF_TM_C[ck];
   if(!c){
-    var r=runBacktest(p);
-    var L2=tfBotLogEvents(p);
+    var r=p.eng==='mk'?tfMkBt(p):runBacktest(p);
+    var L2=mkWithPx(p.px,function(){ return tfBotLogEvents(p); });
     /* 열린 포지션: 마지막 미청산 진입 이벤트에서 파생 */
     var openI=null;
     for(var k2=L2.evs.length-1;k2>=0;k2--){ var e2=L2.evs[k2]; if(!e2) continue;
@@ -11563,7 +11599,7 @@ function tfTmCalc(s){
   var unreal=nav-capW;
   var pos=null, fl=tfTmFlat(s.key); if(fl&&s.status==='live') fl=null; /* 긴급 정지 정리 표시 — 재개 전까지 (D31) */
   if(c.openI!=null&&!fl){
-    var ep=PRICE[c.openI], cp=PRICE[p.endI];
+    var ep=tfSPx(s)[c.openI], cp=tfSPx(s)[p.endI];
     pos={entryI:c.openI,entryP:ep,curP:cp,qty:capW/ep,chg:cp/ep-1,krw:unreal,
       stopP:ep*(1+p.sl/100),tpP:p.tp!=null?ep*(1+p.tp/100):null,bars:p.endI-c.openI};
   }
@@ -11890,9 +11926,9 @@ function tfTmDash(s,c){
   h+='<div class="tft-fsec">최근 거래 <small>'+lt.length+'건</small></div>';
   h+=lt.length?('<div class="tft-tblw"><table class="tft-tbl"><thead><tr><th>청산일</th><th>구분</th><th class="r">진입가</th><th class="r">청산가</th><th class="r">보유</th><th class="r">손익</th></tr></thead><tbody>'
     +lt.map(function(tr){
-      var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
+      var xp=tr.kind==='sl'?tfSPx(s)[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?tfSPx(s)[tr.entry]*(1+s.p.tp/100):tfSPx(s)[tr.exit]);
       return '<tr onclick="tfTmTradeDlg(&quot;'+s.key+'&quot;,'+tr.entry+')"><td>'+fmtDate(idxToDate(tr.exit))+'</td><td>'+({sl:'손절',tp:'익절',time:'기간'}[tr.kind]||tr.kind)+'</td>'
-        +'<td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
+        +'<td class="r num">'+Math.round(tfSPx(s)[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
         +'<td class="r num">'+(tr.exit-tr.entry)+'봉</td><td class="r num '+tfTmSign(tr.krw)+'">'+tfTmWonS(tr.krw)+'</td></tr>';
     }).join('')+'</tbody></table></div>'):('<div class="tft-empty" style="padding:22px"><b>이 구간 체결이 없어요</b></div>');
   h+='<div class="tft-vh"><a onclick="tfTmVerDlg(&quot;'+s.key+'&quot;)">버전 기록 보기 ('+gEsc(s.ver)+')</a></div>';
@@ -11905,10 +11941,10 @@ function tfTmDone(s,c){
   return '<div class="tft-fsec">완료된 거래 <small>'+c.trades.length+'건 중 최근 '+tr.length+', 시뮬레이션</small></div>'
     +tr.map(function(t2){
       var evE=c.L.evs[t2.entry-s.p.startI], evX=c.L.evs[t2.exit-s.p.startI];
-      var xp=t2.kind==='sl'?PRICE[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?PRICE[t2.entry]*(1+s.p.tp/100):PRICE[t2.exit]);
+      var xp=t2.kind==='sl'?tfSPx(s)[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?tfSPx(s)[t2.entry]*(1+s.p.tp/100):tfSPx(s)[t2.exit]);
       return '<div class="tft-ct num"><div class="h4"><span class="sd lg">LONG</span><b>'+gEsc(s.asset)+'</b>'
         +'<span class="'+tfTmSign(t2.krw)+'" style="margin-left:auto;font-weight:700">'+tfTmWonS(t2.krw)+' <small>('+tfTmPct(t2.pnl*100,1)+')</small></span></div>'
-        +'<div class="g4"><span><small>진입</small><b>₩'+Math.round(PRICE[t2.entry]).toLocaleString()+'</b></span><span><small>청산</small><b>₩'+Math.round(xp).toLocaleString()+'</b></span>'
+        +'<div class="g4"><span><small>진입</small><b>₩'+Math.round(tfSPx(s)[t2.entry]).toLocaleString()+'</b></span><span><small>청산</small><b>₩'+Math.round(xp).toLocaleString()+'</b></span>'
         +'<span><small>보유</small><b>'+(t2.exit-t2.entry)+'봉</b></span><span><small>수수료</small><b>'+tfTmWon(t2.capB*0.002)+'</b></span></div>'
         +'<div class="wy"><small>WHY ENTERED</small>'+gEsc(evE?evE.txt:'진입 조건 충족')+'</div>'
         +'<div class="wy"><small>WHY EXITED</small>'+gEsc(evX?evX.txt:'청산 규칙 실행')+'</div>'
@@ -11924,11 +11960,11 @@ function tfTmTradeDlg(key,entryI){
   var evE=c.L.evs[t2.entry-s.p.startI];
   var holdN=Math.max(0,t2.exit-t2.entry-1);
   var evX=c.L.evs[t2.exit-s.p.startI];
-  var xp=t2.kind==='sl'?PRICE[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?PRICE[t2.entry]*(1+s.p.tp/100):PRICE[t2.exit]);
+  var xp=t2.kind==='sl'?tfSPx(s)[t2.entry]*(1+s.p.sl/100):(t2.kind==='tp'?tfSPx(s)[t2.entry]*(1+s.p.tp/100):tfSPx(s)[t2.exit]);
   var steps=[
     ['진입 결정',fmtDate(idxToDate(t2.entry)),evE?evE.txt:'조건 충족'],
-    ['주문 생성','시장가 매수, 수량 '+(t2.capB/PRICE[t2.entry]).toFixed(4),'검증 통과 설정으로 자동 생성'],
-    ['체결','₩'+Math.round(PRICE[t2.entry]).toLocaleString(),'전량 체결 (시뮬레이션)'],
+    ['주문 생성','시장가 매수, 수량 '+(t2.capB/tfSPx(s)[t2.entry]).toFixed(4),'검증 통과 설정으로 자동 생성'],
+    ['체결','₩'+Math.round(tfSPx(s)[t2.entry]).toLocaleString(),'전량 체결 (시뮬레이션)'],
     ['포지션 관리',holdN+'봉 보유',holdN?'매 봉 손절 '+s.p.sl+'%'+(s.p.tp!=null?', 익절 +'+s.p.tp+'%':'')+', 25봉 규칙 평가, 조건 미도달로 유지':'진입 직후 청산 조건 도달'],
     ['청산 결정',fmtDate(idxToDate(t2.exit)),evX?evX.txt:'규칙 실행'],
     ['청산 체결','₩'+Math.round(xp).toLocaleString(),({sl:'손절 규칙가',tp:'익절 규칙가',time:'종가'}[t2.kind]||'')+' 기준 (시뮬레이션)'],
@@ -12201,14 +12237,14 @@ function tfTmPane(k){
     list.forEach(function(s){
       var c=tfTmCalc(s);
       c.trades.slice(-8).reverse().forEach(function(tr){
-        var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
-        var qty=(tr.capB/PRICE[tr.entry]);
+        var xp=tr.kind==='sl'?tfSPx(s)[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?tfSPx(s)[tr.entry]*(1+s.p.tp/100):tfSPx(s)[tr.exit]);
+        var qty=(tr.capB/tfSPx(s)[tr.entry]);
         if(k==='orders'){
           rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.exit))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td>'+({sl:'손절 STOP',tp:'익절 LIMIT',time:'기간 시장가'}[tr.kind])+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td><span class="okst">체결 완료</span></td></tr>');
-          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td>진입 시장가</td><td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td><span class="okst">체결 완료</span></td></tr>');
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td>진입 시장가</td><td class="r num">'+Math.round(tfSPx(s)[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td><span class="okst">체결 완료</span></td></tr>');
         } else {
           rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.exit))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd sh">SELL</span></td><td class="r num">'+Math.round(xp).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td class="r num">'+tfTmWon(tr.capB*0.001)+'</td></tr>');
-          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td class="r num">'+tfTmWon(tr.capB*0.001)+'</td></tr>');
+          rows3.push('<tr><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+fmtDate(idxToDate(tr.entry))+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">BUY</span></td><td class="r num">'+Math.round(tfSPx(s)[tr.entry]).toLocaleString()+'</td><td class="r num">'+qty.toFixed(4)+'</td><td class="r num">'+tfTmWon(tr.capB*0.001)+'</td></tr>');
         }
       });
     });
@@ -12221,9 +12257,9 @@ function tfTmPane(k){
     list.forEach(function(s){
       var c=tfTmCalc(s);
       c.trades.slice(-10).reverse().forEach(function(tr){
-        var xp=tr.kind==='sl'?PRICE[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?PRICE[tr.entry]*(1+s.p.tp/100):PRICE[tr.exit]);
+        var xp=tr.kind==='sl'?tfSPx(s)[tr.entry]*(1+s.p.sl/100):(tr.kind==='tp'?tfSPx(s)[tr.entry]*(1+s.p.tp/100):tfSPx(s)[tr.exit]);
         rows4.push('<tr onclick="tfTmSelect(&quot;'+s.key+'&quot;);TF_TM.tab=&quot;done&quot;;tfTmBrain();tfTmTradeDlg(&quot;'+s.key+'&quot;,'+tr.entry+')" style="cursor:pointer"><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">LONG</span></td>'
-          +'<td class="r num">'+Math.round(PRICE[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
+          +'<td class="r num">'+Math.round(tfSPx(s)[tr.entry]).toLocaleString()+'</td><td class="r num">'+Math.round(xp).toLocaleString()+'</td>'
           +'<td class="r num">'+(tr.exit-tr.entry)+'봉</td><td class="r num">'+tfTmWon(tr.capB*0.002)+'</td>'
           +'<td class="r num '+tfTmSign(tr.krw)+'">'+tfTmWonS(tr.krw)+' ('+tfTmPct(tr.pnl*100,1)+')</td></tr>');
       });
@@ -13312,7 +13348,7 @@ function tfSS3ScoreSheet(ne){
         +(bm!=null?'<div class="mt2">공유 전략 중앙값 '+(+bm).toFixed(1)+a[2]+' 대비 '+(a[1]>=bm?'위':'아래')+'</div>':'')+'</div>';
     }).join('')
     +(pen?'<div class="warn3">'+pen+'</div>':'')
-    +'<div class="mt2" style="margin-top:10px">기준 구간: 승률 '+c.winLo+'~'+c.winHi+'%, CAGR '+c.retLo+'~'+c.retHi+'%, 낙폭 '+c.mddLo+'~'+c.mddHi+'%. 80점 이상만 실행 자격이 있어요.</div>'
+    +'<div class="mt2" style="margin-top:10px">기준 구간: 승률 '+c.winLo+'~'+c.winHi+'%, CAGR '+c.retLo+'~'+c.retHi+'%, 낙폭 '+c.mddLo+'~'+c.mddHi+'%.</div>'
     +'</div>');
   function nzBm(key,v,c2){ if(key==='winRate') return (v-c2.winLo)/(c2.winHi-c2.winLo); if(key==='cagr') return (v-c2.retLo)/(c2.retHi-c2.retLo); if(key==='mdd') return (v-c2.mddLo)/(c2.mddHi-c2.mddLo); return (v-c2.volLo)/(c2.volHi-c2.volLo); }
 }
@@ -13409,7 +13445,7 @@ function tfSS3Copy(ne,fp,fid){
   tfSS3Dlg('설정 가져오기','<div class="ss3-cp">'
     +'<div class="sumb">'+'<div><div class="nm3">'+gEsc(s.nick)+' ('+gEsc(s.asset)+' 전략)</div>'
     +'<div class="sb3">검증 수익 '+(s.r.ret>=0?'+':'')+s.r.ret.toFixed(1)+'%'+(s.score!=null?', TETH '+s.score+'점':'')+', 최대 낙폭 '+s.r.mdd.toFixed(1)+'%'+(s.ghost?' (보관된 설정으로 재검증)':'')+'</div></div></div>'
-    +'<div class="ntc">이 전략의 설정을 가져와 내 조건으로 다시 검증한 뒤 실행해요. 예산으로 그대로 따라가는 따라가기와 달리, 검증을 통과해야 실행돼요.</div>'
+    +'<div class="ntc">이 전략의 설정을 가져와 내 조건으로 과거를 다시 돌려 본 뒤 실행해요. 예산으로 그대로 따라가는 따라가기와 달리, 결과를 직접 보고 정해요.</div>'
     +'<div class="fld3"><label for="ss3-cp-bu">시작 예산</label><select id="ss3-cp-bu">'+budgets.map(function(b,i){ return '<option value="'+i+'"'+(i===bi0?' selected':'')+'>'+b[0]+' ('+b[1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="ss3-cp-sl">손절선</label><select id="ss3-cp-sl">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===base.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="ss3-cp-tp">익절 목표</label><select id="ss3-cp-tp">'+[8,10,12,15].concat([8,10,12,15].indexOf(base.tp)<0&&base.tp!=null?[base.tp]:[]).sort(function(a,b){return a-b;}).map(function(v){ return '<option value="'+v+'"'+(v===base.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
@@ -14629,7 +14665,7 @@ function tfBotEdit(botId){
   var p=b.p;
   var stops=TFCOPY.intakeOpt.stop;
   tfSS3Dlg('전략 수정: '+b.name,'<div class="ss3-cp">'
-    +'<div class="ntc">설정을 바꾸면 같은 검증 구간에서 다시 검증해요. 재검증을 통과해야 이 전략에 적용됩니다.'+(b.status==='live'?' 적용 시 실행이 일시정지돼요.':'')+'</div>'
+    +'<div class="ntc">설정을 바꾸면 같은 구간에서 다시 돌려 봐요. 결과를 보고 이 전략에 적용할 수 있어요.'+(b.status==='live'?' 적용 시 실행이 일시정지돼요.':'')+'</div>'
     +'<div class="fld3"><label for="tfbe-sl">손절선</label><select id="tfbe-sl" onchange="tfBotEditDirty()">'+TF_STOP.map(function(v,i){ return '<option value="'+v+'"'+(v===p.sl?' selected':'')+'>'+stops[i][0]+' ('+stops[i][1]+')</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="tfbe-tp">익절 목표</label><select id="tfbe-tp" onchange="tfBotEditDirty()">'+[8,10,12,15].map(function(v){ return '<option value="'+v+'"'+(v===p.tp?' selected':'')+'>+'+v+'%</option>'; }).join('')+'</select></div>'
     +'<div class="fld3"><label for="tfbe-rsi">진입 RSI 임계</label><select id="tfbe-rsi" onchange="tfBotEditDirty()">'+[38,40,42,44,46].map(function(v){ return '<option value="'+v+'"'+(v===p.rsiTh?' selected':'')+'>RSI '+v+' 이하</option>'; }).join('')+'</select></div>'
@@ -14660,7 +14696,7 @@ function tfBotEditDirty(){
 }
 function tfBotEditApply(botId){
   var c=TF_EDIT_CAND;
-  if(!c||c.id!==botId){ toast('먼저 재검증을 통과해야 해요'); return; }
+  if(!c||c.id!==botId){ toast('먼저 바꾼 설정으로 다시 돌려 봐 주세요'); return; }
   /* 적용 직전 현재 입력과 후보 지문 대조 — DOM이 살아 있으면 불일치 시 거부 */
   var slE=$('tfbe-sl');
   if(slE&&(+slE.value!==c.p.sl||+$('tfbe-tp').value!==c.p.tp||+$('tfbe-rsi').value!==c.p.rsiTh||($('tfbe-tf').value==='1')!==c.p.trendFilter)){ tfBotEditDirty(); return; }
@@ -18172,7 +18208,7 @@ function taiMarket(t,fin,fallback){
     var cmdH=null,cmdN=0; /* 연속 '검색 결과 정리' 행 접기용 공유 핸들 */
     var stripTags=function(s){
       var a=taiTagJson(s,'ASK'); if(a) s=s.split(a.raw).join(''); /* 균형 제거 — 탐욕 정규식의 뒷태그 삼킴 방지 */
-      return s.replace(/\[(?:CHART|SETUP|GAUGE)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[(?:NEXT|ACT|TLINE)\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim();
+      return s.replace(/\[(?:CHART|SETUP|STRATEGY|GAUGE)\s+\{[\s\S]*?\}\s*\]/g,'').replace(/\[(?:NEXT|ACT|TLINE)\s+\[[\s\S]*?\]\s*\]/g,'').replace(/\[TITLE\s+"[^"\n]*"\s*\]/g,'').trim();
     };
     /* Genspark 리듬(작업↔말 교대)의 말풍선 단위: 텍스트 세그먼트마다 새 말풍선을 열고,
        도구가 끼어드는 순간 직전 말풍선을 확정 렌더로 봉인한다 */
@@ -18222,7 +18258,7 @@ function taiMarket(t,fin,fallback){
         if(nw-lastR>120||delta.indexOf('\n')>=0){
           lastR=nw;
           gScrollBottom(); /* 하단 추적은 사용자 의도(G.stick) 기준 */
-          var vis=segAcc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0]
+          var vis=segAcc.split(/\[(?:CHART|SETUP|STRATEGY|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0]
             .replace(/\[[A-Z]{0,6}$/,''); /* 청크 경계에서 잘린 태그 조각([CHA 등) 원문 노출 방지 */
           var cut=vis.lastIndexOf('\n');
           var head=cut>=0?vis.slice(0,cut):'';
@@ -18240,6 +18276,7 @@ function taiMarket(t,fin,fallback){
     },function(){
       var mC=acc.match(/\[CHART\s+(\{[\s\S]*?\})\s*\]/),info=null; if(mC){ try{ info=JSON.parse(mC[1]); }catch(e){} }
       var mS=acc.match(/\[SETUP\s+(\{[\s\S]*?\})\s*\]/),setup=null; if(mS){ setup={}; try{ setup=JSON.parse(mS[1])||{}; }catch(e){} }
+      var mSp=acc.match(/\[STRATEGY\s+(\{[\s\S]*?\})\s*\]/),spec=null; if(mSp){ try{ spec=JSON.parse(mSp[1]); }catch(e){} } if(spec) setup=null; /* AI 가 채운 전략서가 있으면 질문 카드 대신 그것으로 */
       var _ask=taiTagJson(acc,'ASK'),ask=null; if(_ask){ try{ ask=JSON.parse(_ask.json); }catch(e){} } /* 균형 추출 — ASK 뒤 ACT/NEXT 공존 허용 */
       var mN=acc.match(/\[NEXT\s+(\[[\s\S]*?\])\s*\]/),nexts=null; if(mN){ try{ nexts=JSON.parse(mN[1]); }catch(e){} }
       var mG=acc.match(/\[GAUGE\s+(\{[\s\S]*?\})\s*\]/),gauge=null; if(mG){ try{ gauge=JSON.parse(mG[1]); }catch(e){} }
@@ -18287,7 +18324,8 @@ function taiMarket(t,fin,fallback){
         delay(900,function(){ stc.done(null); if(G.cur===sess) taiChartOpen(info); });
       }
       if(live&&isPred&&ai.ohlc&&ai.ohlc.rows&&ai.chart) delay(500,taiForecast); /* 미래 구간 시나리오 드로잉 */
-      if(setup&&conv&&live){ /* 자동매매 동의 → 최신 위임 퍼널로 직행 (구버전 스크립트 빌더로 튕기던 라우팅 결함 수정) */
+      if(spec&&live){ delay(info?1400:600,function(){ if(G.cur===sess) tfAiStrategy(spec); }); }
+      else if(setup&&conv&&live){ /* 자동매매 동의 → 최신 위임 퍼널로 직행 (구버전 스크립트 빌더로 튕기던 라우팅 결함 수정) */
         if(setup.entryMode==='dip'||setup.entryMode==='trend') S.strategy.entryMode=setup.entryMode;
         if(setup.pair==='BTC/USDT'||setup.pair==='ETH/USDT') S.strategy.pair=setup.pair;
         delay(info?1600:800,function(){ if(G.mode==='conv'&&G.cur===sess) tfStart({type:'delegate_trade',label:'자동매매 전략 시작'}); });
@@ -18311,8 +18349,8 @@ function taiMarket(t,fin,fallback){
       stopNarr();
       actFinish(run,kind==='abort-partial'?'abort':'error');
       var live=(G.cur===sess);
-      var clean=acc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0].trim();
-      var segCut=segAcc.split(/\[(?:CHART|SETUP|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0].trim(); /* 마지막 말풍선 몫 */
+      var clean=acc.split(/\[(?:CHART|SETUP|STRATEGY|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0].trim();
+      var segCut=segAcc.split(/\[(?:CHART|SETUP|STRATEGY|NEXT|ASK|TITLE|GAUGE|ACT|TLINE)/)[0].trim(); /* 마지막 말풍선 몫 */
       if(out.innerHTML!==undefined&&live) out.innerHTML=taiMd(segCut);
       /* 부분 생성물은 미완성으로 명시 저장 — 다음 턴이 끊긴 수치를 완결 답변으로 전제하지 않게 */
       taiPushHist(sess,t,clean+'\n\n[이 답변은 전송이 중단된 미완성 초안이며 결론과 출처 검증이 끝나지 않았다]');
@@ -18689,12 +18727,14 @@ function mkAgentRun(c){
    진입과 청산은 규칙: 떨어진 뒤(rsi) 반등(+0.5% 초과)에 사서, 익절 또는 손절 조건에 닿은 날 종가에, 아니면 25일째 종가에 판다.
    c = {uni, every, look, rsiTh, tp, sl, gate, startI} */
 /* 조건 실행: 종목이 하나로 고정된 같은 계산기. c = {asset, rsiTh, tp, sl, tf, startI} */
-function mkRuleRun(c){ return mkHybridRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:c.tf,every:1,gate:0,startI:c.startI}); }
+function mkRuleRun(c){ return mkHybridRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:c.tf,fng:c.fng,every:1,gate:0,startI:c.startI}); }
+/* 공포 탐욕 지수(그날 00시 UTC 발표, 그날 종가 판단에 쓸 수 있음). 자료가 없으면 null */
+function mkFng(i){ var f=window.TETH_PX&&TETH_PX.fng; return f&&f[i]!=null?f[i]:null; }
 function mkHybridRun(c){
   var fixed=c.asset||null, U=fixed?[fixed]:c.uni, PX=U.map(function(k){ return mkPx(k); }), N=PX[0].length, endI=N-1, startI=Math.max(61,(c.look||0)+1,c.startI||61);
   mkCheckIn(PX,N,{every:c.every||1,look:c.look});
   function upN(i){ var u=0; for(var z=0;z<U.length;z++) if(PX[z][i]>sma(PX[z],60,i)) u++; return u; }
-  function cond(P,i){ var rv=rsi(P,i-1), bo=(P[i]/P[i-1]-1)*100, s20=sma(P,20,i), s60=sma(P,60,i), gap=Math.abs(s20-s60)/P[i]*100, up=upN(i); return {i:i,rsi:rv,rsiOk:rv<c.rsiTh,bounce:bo,bounceOk:bo>0.5,gap:gap,trendOk:!c.tf||gap>3,up:up,of:U.length,mktOk:!!fixed||!c.gate||up/U.length>=c.gate}; }
+  function cond(P,i){ var rv=rsi(P,i-1), bo=(P[i]/P[i-1]-1)*100, s20=sma(P,20,i), s60=sma(P,60,i), gap=Math.abs(s20-s60)/P[i]*100, up=upN(i); return {i:i,rsi:rv,rsiOk:rv<c.rsiTh,bounce:bo,bounceOk:bo>0.5,gap:gap,trendOk:!c.tf||gap>3,fng:mkFng(i),fngOk:c.fng==null||(mkFng(i)!=null&&mkFng(i)<=c.fng),up:up,of:U.length,mktOk:!!fixed||!c.gate||up/U.length>=c.gate}; }
   var J={}; U.forEach(function(k,j){ J[k]=j; });
   var L=mkLedger(), eq=[], ev=[], pick=fixed, cur=startI, topAt=null, lastTop=null, invested=0, lastEv=null, px=function(k){ return PX[J[k]][cur]; };
   function choose(i){ var rows=U.map(function(k,j){ var P=PX[j]; return {k:k,mom:P[i]/P[i-c.look]-1,above:P[i]>sma(P,60,i)}; }); var up=rows.filter(function(r){ return r.above; }); up.sort(function(a,b){ return b.mom-a.mom; }); return {rows:up,up:up.length}; }
@@ -18704,9 +18744,9 @@ function mkHybridRun(c){
       if(!C.rows.length){ if(pick!==null) ev.push({i:i,t:'unpick'}); pick=null; }
       else if(pick!==C.rows[0].k){ pick=C.rows[0].k; ev.push({i:i,t:'pick',a:pick,mom:C.rows[0].mom*100,top:lastTop}); } }
     if(!p){ if(pick!==null){ var P=PX[J[pick]], q=cond(P,i);
-        if(q.rsiOk&&q.bounceOk&&q.trendOk){ var up2=q.up;
+        if(q.rsiOk&&q.bounceOk&&q.trendOk&&q.fngOk){ var up2=q.up;
           if(!q.mktOk) ev.push({i:i,t:'veto',a:pick,up:up2,of:U.length,rsi:q.rsi,bounce:q.bounce});
-          else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],units:b.units,cost:b.cost,fee:b.fee,rsi:q.rsi,bounce:q.bounce,up:up2,of:U.length}); } } } }
+          else { var b=L.buy(pick,P[i],L.cash,i,{w:1}); ev.push({i:i,t:'enter',a:pick,tid:b.id,px:P[i],units:b.units,cost:b.cost,fee:b.fee,rsi:q.rsi,bounce:q.bounce,fng:q.fng,up:up2,of:U.length}); } } } }
     else if(i>p.ei){ var v=px(p.k), chg=(v/p.ep-1)*100, why=chg<=c.sl?'sl':(c.tp!=null&&chg>=c.tp)?'tp':(i-p.ei>=25?'time':null);
       if(why){ var t=L.sell(p,v,i,why); ev.push({i:i,t:'exit',a:p.k,why:why,tid:t.id,px:v,units:t.units,got:t.got,fee:t.fee,chg:chg,pnl:t.pnl*100}); } }
     var v3=L.value(px); eq.push({i:i,v:v3}); invested+=(v3-L.cash)/v3;
@@ -18735,7 +18775,7 @@ var MK_ALIAS={'비트코인 바겐세일':'r1','김대리의 나스닥':'r2','�
   /* 2026-09-29 이름 개편 전 이름 */
   '세 갈래':'d1','건널목':'d2','환승':'d3','기술주 셋':'d4','동행':'d5','외길':'d6','맞물림':'h1','추림':'h2','지수와 금':'h3','갈림길':'h4','고른 뒤':'h5','되짚기':'r1','짧은 호흡':'r2','물러섬':'r3','두 문턱':'r4','깊은 되돌림':'r5','한 구간':'r6','작은 걸음':'r7','마침표':'r8','방향선':'r9'};
 /* 데이터 기준일: 마지막 봉의 날짜. 가격 데이터를 바꿀 때 함께 바꾼다. 날짜, 판단 기록, 기간 계산, 저장된 시작 봉이 모두 이 기준에 묶인다 */
-var MK_ASOF=[2026,9,28], MK_DATA_V='2026-09-28.1', MK_D0=null, MK_D0K='';
+var MK_ASOF=window.TETH_PX?TETH_PX.asof.split('-').map(Number):[2026,9,28], MK_DATA_V=window.TETH_PX?TETH_PX.v:'2026-09-28.1', MK_D0=null, MK_D0K='';
 function idxToDate(i){ var dk=MK_ASOF.join('-')+'|'+PRICE0.length+'|'+MK_DATA_V; if(!MK_D0||MK_D0K!==dk){ MK_D0K=dk; MK_D0=new Date(MK_ASOF[0],MK_ASOF[1]-1,MK_ASOF[2]); MK_D0.setDate(MK_D0.getDate()-(PRICE0.length-1)); } var t=new Date(MK_D0.getTime()); t.setDate(t.getDate()+i); return t; }
 function mkMD(i){ var d=idxToDate(i); return (d.getMonth()+1)+'월 '+d.getDate()+'일'; }
 function mkUni(s){ return MK_UNI[s.uni]||{label:s.asset||'',list:s.asset?[s.asset]:[]}; }
@@ -18749,7 +18789,7 @@ function mkRunCfg(c,startI){
   var st=startI!=null?startI:c.startI;
   if(c.kind==='agent') return mkAgentRun({uni:MK_UNI[c.uni].list,look:c.look,top:c.top,gate:c.gate,every:c.every,trail:c.trail,volT:c.volT,minS:c.minS,startI:st});
   if(c.kind==='mix') return mkHybridRun({uni:MK_UNI[c.uni].list,every:c.every,look:c.look,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,gate:c.gate,startI:st});
-  return mkRuleRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:!!c.tf,startI:st});
+  return mkRuleRun({asset:c.asset,rsiTh:c.rsiTh,tp:c.tp,sl:c.sl,tf:!!c.tf,fng:c.fng,startI:st});
 }
 /* 캐시 키: 전략 ID, 행동 값 전체, 쓰는 자산의 가격 설정, 마지막 봉, 비용 */
 function mkSig(s){ if(!s.cfg) return tfSS3Rid(s)+'|'+(s.p?JSON.stringify(s.p):'')+'|'+((s.r&&s.r.eq||[]).length); var c=s.cfg, ks=c.asset?[c.asset]:MK_UNI[c.uni].list; return c.id+'|'+JSON.stringify(c)+'|'+ks.map(function(k){ return (MK_PX_CFG[k]||[]).join('/'); }).join(',')+'|'+PRICE0.length+'|'+MK_FEE+'|'+MK_DATA_V; }
@@ -19736,7 +19776,7 @@ function btRules(s){
     o.push(['파는 때','든 뒤 가장 높았던 가격에서 '+c.trail+'% 밀리면']);
   } else {
     if(s.kind==='mix') o.push(['종목 고르기','AI가 '+c.every+'일마다 '+u.label+' 중 가장 강한 하나']);
-    o.push(['사는 때','되돌림 점수가 '+c.rsiTh+' 아래로 내려간 뒤 하루 만에 0.5% 넘게 다시 오르면'+(c.tf?', 오름세일 때만':'')]);
+    o.push(['사는 때','되돌림 점수가 '+c.rsiTh+' 아래로 내려간 뒤 하루 만에 0.5% 넘게 다시 오르면'+(c.tf?', 오름세일 때만':'')+(c.fng!=null?', 공포 탐욕 지수가 '+c.fng+' 이하일 때만':'')]);
     if(btGate(s)) o.push(['AI 확인','조건이 맞아도 오름세 종목이 '+n+'개 중 '+btNeed(s)+'개 미만이면 사지 않음']);
     o.push(['파는 때',(c.tp!=null?'+'+c.tp+'% 오르거나 ':'')+c.sl+'% 내리면, 또는 25일이 지나면']);
   }
@@ -19779,7 +19819,7 @@ function btCompute(){
       push({k:'buy',tag:'매수',title:tk,chain:gate?1:0,cmp:gate?('오름세 '+e.up+' / '+e.of+', 기준 '+need):('하루 반등 '+mkPct0(e.bounce,1)),
         why:gate?('오름세 종목이 '+e.of+'개 중 '+e.up+'개라 샀어요'):('떨어진 뒤 하루 만에 '+mkPct0(e.bounce,1)+' 다시 올랐어요'),
         p0:[tk+' 하루 반등 '+mkPct0(e.bounce,1),pkT],p1:gate&&e.of?brd(e):null,p2:[tk+' 매수',gate?'기준을 넘어 샀어요':'조건이 맞아 샀어요'],ups:gate&&e.of?upsOf(e):null,
-        facts:(pk2?pkFacts(pk2,e):[]).concat([['하루 반등',mkPct0(e.bounce,1)+', 기준 0.5% 넘게'],['되돌림 점수',Math.round(e.rsi)+', 기준 '+c.rsiTh+' 아래']]).concat(gate&&e.of?[['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상']]:[]).concat([['산 가격',btPx(e.px)]])},e); return; }
+        facts:(pk2?pkFacts(pk2,e):[]).concat([['하루 반등',mkPct0(e.bounce,1)+', 기준 0.5% 넘게'],['되돌림 점수',Math.round(e.rsi)+', 기준 '+c.rsiTh+' 아래']]).concat(gate&&e.of?[['오름세 종목',e.of+'개 중 '+e.up+'개, 기준 '+need+'개 이상']]:[]).concat(c.fng!=null&&e.fng!=null?[['공포 탐욕 지수',e.fng+', 기준 '+c.fng+' 이하']]:[]).concat([['산 가격',btPx(e.px)]])},e); return; }
     if(e.t==='exit'){ push({k:'sell',tag:'매도',title:tk,pnl:e.pnl,cmp:MK_WHY[e.why]||'',why:MK_WHY[e.why]||'',facts:[['판 가격',btPx(e.px)],['이 거래의 손익',mkPct0(e.pnl,1)],['판 이유',MK_WHY[e.why]||'']]},e); return; }
     if(e.t==='veto'){ var pk3=lastPick[e.a];
       push({k:'skip',tag:'보류',title:tk,chain:1,cmp:'오름세 '+e.up+' / '+e.of+', 기준 '+need,why:'오름세 종목이 '+e.of+'개 중 '+e.up+'개뿐이라 사지 않았어요',
@@ -20106,7 +20146,9 @@ function btWinTxt(){ var R=BT.R, n=R.wins.length+R.loss.length; return n?n+'번 
 /* 해석: 세 문장. 평가, 움직인 방식, 조심할 점 */
 function btRead(){
   var R=BT.R, s=BT.s, n=R.wins.length+R.loss.length, diff=Math.round(R.final)-Math.round(R.benchFinal), ex=Math.round(Math.min(100,R.r.exposure||0)), calm=Math.abs(R.mdd)<Math.abs(R.benchMdd), a=Math.abs(diff).toLocaleString()+' USDT';
-  var v=diff>=0?(calm?'그냥 들고 있었을 때보다 '+a+' 더 벌었고, 덜 흔들렸어요.':'그냥 들고 있었을 때보다 '+a+' 더 벌었지만, 더 크게 흔들렸어요.'):(calm?'그냥 들고 있었을 때보다 '+a+' 덜 벌었지만, 덜 흔들렸어요.':'그냥 들고 있었을 때보다 '+a+' 덜 벌었고, 더 크게 흔들렸어요.');
+  /* 손실끼리 비교할 때는 '덜 벌었다'가 아니라 '더 잃었다'. 전략이 손실이면 앞선 경우도 '덜 잃었다' */
+  var won=R.final>=BT.amt, bwon=R.benchFinal>=BT.amt, vb=diff>=0?(won?'더 벌었':'덜 잃었'):(won?'덜 벌었':(bwon?'적게 남겼':'더 잃었'));
+  var v='그냥 들고 있었을 때보다 '+a+' '+vb+(diff>=0?(calm?'고, 덜 흔들렸어요.':'지만, 더 크게 흔들렸어요.'):(calm?'지만, 덜 흔들렸어요.':'고, 더 크게 흔들렸어요.'));
   var b=btGate(s)?('기회 '+R.nOpp+'번 중 '+R.nSkip+'번은 AI가 사지 않았고, 전체 기간의 '+ex+'%만 종목을 들고 있었어요.'):s.kind==='agent'?('AI가 '+R.nOpp+'번 다시 비교했고, 그중 '+R.nSkip+'번은 새로 사지 않고 쉬었어요.'):('사는 조건은 '+R.nBuy+'번 맞았고, 전체 기간의 '+ex+'%만 종목을 들고 있었어요.');
   var c=n&&n<20?('거래가 '+n+'번뿐이라 몇 번의 거래가 결과를 좌우해요.'):('가장 나빴던 때는 '+mkMD(R.r.mddStartI)+'부터 '+mkMD(R.r.mddEndI)+'까지였어요.');
   return [v,b,c];
@@ -20252,20 +20294,23 @@ function btMineAsset(){ var t=tfS(), a=((t.intake||{}).asset||{}).label||''; a=B
 function btMine(){
   var t=tfS(); if(!S.user||!t.intake||!t.intake.asset) return null;
   var a=btMineAsset(); if(!a) return null;
-  var p=t.pendingP||tfParams(), iv=t.intake, st=((iv.style||{}).label||'').replace(/으로$/,''), sl=Math.abs(p.sl);
-  var cfg={id:'mine',kind:'rule',asset:a,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:p.trendFilter?1:0,startI:61};
-  var sig=JSON.stringify(cfg), h=0; for(var i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))>>>0;
-  var name=(t.cloneFrom?t.cloneFrom+' 님 전략, ':'')+a+' 반등 매수';
-  var one=mkJ(a,'이','가')+' 내려왔다가 다시 오르는 날 사요. '+(p.tp!=null?'산 가격보다 '+p.tp+'% 오르거나 ':'산 가격보다 ')+sl+'% 내려가면, 또는 25일이 지나면 팔아요.';
+  var p=(t.cloneFrom&&t.pendingP)?t.pendingP:tfParams(t.aiSpec?{sl:t.aiSpec.sl,tp:t.aiSpec.tp,rsiTh:t.aiSpec.rsiTh,trendFilter:!!t.aiSpec.tf,fng:t.aiSpec.fng}:null), iv=t.intake, st=((iv.style||{}).label||'').replace(/으로$/,''), sl=Math.abs(p.sl);
+  var cfg={id:'mine',kind:'rule',asset:a,rsiTh:p.rsiTh,tp:p.tp,sl:p.sl,tf:p.trendFilter?1:0,fng:p.fng!=null?p.fng:null,startI:61};
+  var sig=JSON.stringify(cfg)+'|'+((iv.period||{}).i)+'|'+(t.cloneFrom||'')+'|'+(t.cloneFrom&&p.startI!=null?p.startI:''), h=0; for(var i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))>>>0;
+  var name=(t.cloneFrom?t.cloneFrom+' 님 전략, ':'')+(t.aiSpec&&t.aiSpec.name?t.aiSpec.name:a+' 반등 매수');
+  var one=mkJ(a,'이','가')+' 내려왔다가 다시 오르는 날 사요. '+(p.tp!=null?'산 가격보다 '+p.tp+'% 오르거나 ':'산 가격보다 ')+sl+'% 내려가면, 또는 25일이 지나면 팔아요.'+(p.fng!=null?' 공포 탐욕 지수가 '+p.fng+' 이하일 때만 사요.':'');
   return {id:'mine-'+h.toString(36),mine:true,kind:'rule',mkt:/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a)?'crypto':'stock',
     nick:name,name:name,one:one,asset:a,uni:null,cfg:cfg,ex:null,p:p,fw:0,by:'',style:st};
 }
+/* 지금 조건과 다른 결과인가. 대화에서 만든 결과(sig 있음)만 따진다 */
+function btMineStale(){ var t=tfS(), c=t.cur; if(!c||!c.sig) return false; var m=btMine(); return !m||m.id!==c.sig; }
 /* 결과가 나오면 대화 흐름이 쓰는 검증 기록(t.cur)을 이 결과로 채운다. 점수 게이트는 없다 */
 function btMineDone(){
   var t=tfS(), s=BT.s, R=BT.R; if(!s||!s.mine||!R) return;
-  var p={}; for(var k in s.p) p[k]=s.p[k]; p.startI=R.eq[0].i; p.endI=R.eq[R.N-1].i;
-  t.pendingP=s.p; t.cur={ret:R.ret,mdd:R.mdd,n:R.tr.length,winRate:R.tr.length?R.wins/R.tr.length*100:0,p:p,
-    trades:R.tr.map(function(x){ return {entry:x.e,exit:x.x,pnl:x.pnl,kind:x.why||x.kind}; })};
+  var p={}; for(var k in s.p) p[k]=s.p[k]; p.startI=R.eq[0].i; p.endI=R.eq[R.N-1].i; p.px=s.asset; p.eng='mk';
+  var done=R.tr.filter(function(x){ return !x.open; });
+  t.cur={ret:R.ret,mdd:R.mdd,n:done.length,winRate:done.length?R.wins.length/done.length*100:0,p:p,sig:s.id,asset:s.asset,
+    trades:done.map(function(x){ return {entry:x.e,exit:x.x,pnl:x.pnl/100,kind:x.why||x.kind}; })};
   try{ var sc=tfScore(mkRunCfg(s.cfg,p.startI)); t.score=isFinite(sc)?sc:0; }catch(e){ t.score=0; }
   t.workDone=true; if(t.stage==='verify'||t.stage==='ready'||!t.stage) t.stage='connect'; tfSave();
 }
@@ -20281,13 +20326,15 @@ function btView(){
 }
 function btRoute(h){
   var m=h.match(/^#\/share\/bt\/([^/]+)(?:\/(go))?$/); TF_ONSHARE=true;
+  if(m&&m[1]==='mine'&&!window.TF_STATE_READY){ TF_ONSHARE=false; return; } /* 부팅이 끝나면 다시 불린다 */
   if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
   var s=null; try{ s=tfSSFind(decodeURIComponent(m[1])); }catch(e){}
   if(!s&&m[1]==='mine'){ TF_ONSHARE=false; toast('이 자산은 아직 백테스트할 가격 자료가 없어요'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfBackToChat(); return; }
   if(!s||!s.cfg){ TF_ONSHARE=false; tfShareHub('find'); return; }
   if(s.mine){ TF_ONSHARE=false; TF_ONSTRAT=true; } /* 뒤로 가면 전략 목록이 아니라 대화로 */
   var t=tfS().bt||{};
-  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var pi=((tfS().intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365; } }
+  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var t9=tfS(), pi=((t9.intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365;
+    if(t9.cloneFrom&&s.p&&s.p.startI!=null){ var span=(PRICE0.length-1)-s.p.startI, best=0, bd=1e9; BT_PER.forEach(function(o){ var d=Math.abs((o[0]||PRICE0.length)-span); if(d<bd){ bd=d; best=o[0]; } }); BT.per=best; } } }
   BT.s=s;
   if(!m[2]){ btView(); return; }
   if(!BT.R) btCompute();
@@ -20514,9 +20561,9 @@ function btApiGo(){
 function btGoNext(){
   var f=btF();
   if(BT.s&&BT.s.mine){ var t=tfS(), bud=TF_BUDGET[((t.intake||{}).budget||{}).i!=null?t.intake.budget.i:1];
-    return '<section class="btg-next"><h3>다음은 전략 시작이에요</h3><p>대화에서 정한 투자금으로 바로 시작하거나, 가상으로 먼저 돌려 볼 수 있어요.</p>'
+    return '<section class="btg-next"><h3>이제 시작할 수 있어요</h3><p>대화에서 정한 투자금으로 바로 시작하거나, 가상으로 먼저 돌려 볼 수 있어요.</p>'
       +'<dl class="bt-dl"><div><dt>실행 계정</dt><dd>'+btExLogo(f.api.ex,16)+btExName(f.api.ex)+'</dd></div><div><dt>투자금</dt><dd>'+tfWon(bud)+'</dd></div><div><dt>TETH 이용료</dt><dd>'+(f.path==='own'?'월 49,000원, 시작하는 날부터':'0원')+'</dd></div></dl></section>'
-      +'<button type="button" class="bt-cta" onclick="btFinal()">시작 준비로</button>'; }
+      +'<button type="button" class="bt-cta" onclick="btMineStart(\'live\')">전략 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'paper\')">가상으로 먼저 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'later\')">나중에 시작</button>'; }
   return '<section class="btg-next"><h3>다음은 계정에서 사용할 금액이에요</h3><p>백테스트에서는 '+btUsd(BT.amt)+'로 봤어요. 이 전략이 계정에서 쓸 금액을 정하면, 멈추는 기준을 확인하고 직접 시작 버튼을 눌러요.</p>'
     +'<dl class="bt-dl"><div><dt>실행 계정</dt><dd>'+btExLogo(f.api.ex,16)+btExName(f.api.ex)+'</dd></div><div><dt>TETH 이용료</dt><dd>'+(f.path==='own'?'월 49,000원, 시작하는 날부터':'0원')+'</dd></div></dl></section>'
     +'<button type="button" class="bt-cta" onclick="btFinal()">사용할 금액 정하기</button>';
@@ -20524,6 +20571,8 @@ function btGoNext(){
 function btFinal(){ try{ tfTrack('bt_final',{id:BT.id}); }catch(e){}
   if(BT.s&&BT.s.mine){ var t=tfS(); if(!t.cur) btMineDone(); t.stage='done'; tfSave(); tfNav('#/strategy/done'); return; }
   cpSetupGo(btNe()); }
+/* 내 전략: 연결 화면에서 바로 시작한다(완료 화면을 한 번 더 거치지 않는다) */
+function btMineStart(m){ var t=tfS(); if(!t.cur) btMineDone(); if(typeof btMineStale==='function'&&btMineStale()){ toast('조건이 바뀌어서 다시 돌려 볼게요'); btGoTo(''); return; } t.stage='done'; if(t.ob) t.ob.st='completed'; tfSave(); if(m==='later'){ tfLater(); return; } if(m==='paper') TF_NF_ENV='paper'; tfStartStrategy(); }
 /*BT_CORE_END*/
 </script>
 <script>
