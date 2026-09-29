@@ -9,6 +9,8 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const MODEL_DEFAULT = "claude-opus-5-5";
 const EFFORT_DEFAULT = "medium";
+/* 빠름(fast) 모드: TETH_AI_SPEED="fast" 이면 켠다. 계정에 권한이 없어 거절되면 10분 동안 표준으로 돌린다 */
+let FAST_OFF_UNTIL = 0;
 const DAILY_CAP = 400; /* KV 바인딩(RL) 있을 때 하루 chat 요청 총량 상한 */
 const BURST_MAX = 8;   /* IP당 60초 내 chat 요청 상한 (아이솔레이트 단위 근사) */
 const ORIGIN_OK = [/^https:\/\/aresjoo\.github\.io$/, /^https?:\/\/localhost(?::\d+)?$/, /^https?:\/\/127\.0\.0\.1(?::\d+)?$/];
@@ -245,13 +247,15 @@ export default {
         const convo = messages.map((m) => ({ role: m.role, content: m.content }));
         const mdCache = new Map();
         let modelCalls = 0, toolCalls = 0, totIn = 0, totOut = 0, tokBase = 0;
+        let useFast = env.TETH_AI_SPEED === "fast" && Date.now() > FAST_OFF_UNTIL;
         const mkStream = () => client.beta.messages.stream({
+          ...(useFast ? { speed: "fast" } : {}),
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
           max_tokens: 16000,
           thinking: { type: "adaptive", display: "summarized" }, // display 미지정 시 기본 omitted — thinking_delta 가 빈 값으로 온다
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
           tools: TOOLS,
-          betas: ["server-side-fallback-2026-07-01"],
+          betas: useFast ? ["server-side-fallback-2026-07-01", "fast-mode-2026-02-01"] : ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
           system: String(payload.system || "").slice(0, 12000), /* 고정 지침(~7.6k)+실시세 ctx 가 8k 를 넘으며 꼬리(스냅샷)가 잘리던 문제 — 상향 */
           messages: convo,
@@ -376,7 +380,14 @@ export default {
           const blocks = {};
           const stream = mkStream();
           attach(stream, blocks);
-          final = await stream.finalMessage();
+          try { final = await stream.finalMessage(); }
+          catch (e) {
+            /* 빠름 권한이 없거나 한도를 넘으면 같은 요청을 표준 속도로 다시 보낸다 (아직 아무것도 흘려보내지 않은 경우만) */
+            if (useFast && e && (e.status === 429 || e.status === 400) && /fast/i.test(String(e.message || "")) && !Object.keys(blocks).length) {
+              console.error("fast mode unavailable, standard speed:", e.status); useFast = false; FAST_OFF_UNTIL = Date.now() + 600000; modelCalls--; continue;
+            }
+            throw e;
+          }
           if (final.usage) { totIn += final.usage.input_tokens || 0; totOut += final.usage.output_tokens || 0; tokBase = totOut; }
           /* 사고 서명·툴 상태 보존을 위해 assistant content 원본 그대로 이어붙인다 (재구성 금지) */
           convo.push({ role: "assistant", content: final.content });

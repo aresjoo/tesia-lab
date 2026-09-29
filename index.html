@@ -8867,8 +8867,11 @@ function gNew(preset){
   gConvUser(typed||text); /* 말풍선에는 사용자가 실제로 쓴 문장만 — 합성 명령은 해석에만 사용 (audit P0-1b) */
   gPillDropEnd(_drop); /* 채팅 레이아웃이 그려진 뒤 도킹 컴포저 위치로 낙하 */
   /* 첫 메시지부터 스크립트 없이 실제 AI 대화로 니즈 파악, 프록시가 없을 때만 기존 스크립트 */
-  if(TAI.ok!==false&&typeof taiMarket==='function'){ gStep=null; gUserPin(); taiMarket(text,null,function(){ gConvInterpret(text); }); }
-  else gConvInterpret(text);
+  taiEnsure(function(ok){
+    if(ok&&typeof taiMarket==='function'){ gStep=null; gUserPin(); taiMarket(text,null,function(){ gConvInterpret(text); }); }
+    else if(taiIsStratText(text)) gConvInterpret(text);
+    else taiOffline(text,function(){ gStep=null; gUserPin(); taiMarket(text,null,function(){ gConvInterpret(text); }); });
+  });
 }
 function gShowConv(){
   G.mode='conv'; G.activeTab='__act'; gTabsRender();
@@ -10015,12 +10018,34 @@ var STORE={t:0,
 };
 /* 개발용 컨텍스트 인스펙터: 마지막 AI 요청에 실제로 전달된 컨텍스트 확인 */
 window.taiDebug=function(){ return TAI.lastCtx||null; };
-function taiPing(){
+function taiPing(done){
+  var fin=false, end=function(v){ if(fin) return; fin=true; TAI.ok=v; if(done) done(v); };
+  setTimeout(function(){ end(false); },3500);
   try{
     fetch(TAI.url.replace('/api/chat','/api/ping')).then(function(r){ return r.json(); })
-      .then(function(j){ TAI.ok=!!j.ok; }).catch(function(){ TAI.ok=false; });
-  }catch(e){ TAI.ok=false; }
+      .then(function(j){ end(!!j.ok); }).catch(function(){ end(false); });
+  }catch(e){ end(false); }
 }
+/* 보내기 직전 연결 확인. 끊김으로 표시돼 있으면 한 번 더 확인하고, 로컬 프록시가 없으면 배포 프록시로 넘어간다 */
+function taiEnsure(cb){
+  if(TAI.ok!==false){ cb(true); return; }
+  taiPing(function(v){
+    if(v){ cb(true); return; }
+    var loc=/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(TAI.url);
+    if(!loc){ taiResolveProxy(function(){ taiPing(function(v2){ cb(v2); }); }); return; }
+    fetch('https://raw.githubusercontent.com/aresjoo/tesia-lab/proxy-url/PROXY_URL?t='+Date.now()).then(function(r){ return r.ok?r.text():''; })
+      .then(function(u){ u=(u||'').trim(); if(/^https:\/\/[\w.-]+$/.test(u)){ TAI.url=u+'/api/chat'; taiPing(function(v2){ cb(v2); }); } else cb(false); })
+      .catch(function(){ cb(false); });
+  });
+}
+/* AI 가 정말 닿지 않을 때: 전략 이야기면 기존 질문 카드로, 아니면 가짜 답 대신 사실대로 알린다 */
+function taiIsStratText(t){ return /전략|자동매매|매매|매수|매도|사고|팔고|떨어|하락|급락|반등|눌림|오르|추세|상승|돌파|손절|익절|물타/.test(t||''); }
+function taiOffline(t,retry){
+  var id='goff'+Date.now(); window.TAI_OFFQ=window.TAI_OFFQ||{}; TAI_OFFQ[id]=retry;
+  gConvAI('지금 AI 서버에 연결되지 않아 답을 드리지 못했어요. 잠시 뒤 다시 보내 주세요.');
+  try{ var th=$('g-thread'); if(th) th.insertAdjacentHTML('beforeend','<div class="g-nextcol" id="'+id+'"><button class="g-nextq" onclick="taiOffRetry(\''+id+'\')"><span>다시 보내기</span><span class="ar">→</span></button></div>'); }catch(e){}
+}
+function taiOffRetry(id){ var f=(window.TAI_OFFQ||{})[id], e=$(id); if(e) e.remove(); if(!f) return; TAI.ok=null; taiEnsure(function(ok){ if(ok) f(); else toast('아직 AI 서버에 연결되지 않아요'); }); }
 function taiSystem(fin){
   var s='너는 TETH, 최고 수준의 시니어 금융 리서치 AI다. 한국어로 답한다. "안녕하세요", "알려드리겠습니다" 같은 서론 미사여구를 완전히 배제하고 본론과 핵심 데이터부터 시작한다. 얕은 요약 대신 구체적 수치, 지표, 기준선을 근거로 대는 고밀도 답변을 쓴다. 가벼운 대화는 2~4문장 평문으로, 정보량이 많은 답변은 "### 섹션 헤더"와 번호 문단("1." "2.")으로 구조화하되 각 항목은 사실과 해석이 이어지는 2~4문장 서술형 문단으로 쓴다. 핵심 수치는 **볼드**, 도트 불릿 나열은 금지, 지표 비교만 | 표 |, 주의사항은 "> 콜아웃". 확정 수익 약속이나 투자 권유는 하지 않는다. 이 서비스는 2023-2026 일봉 시뮬레이션 데이터로 전략을 백테스트하는 리서치 도구다.';
   if(fin){
@@ -18469,7 +18494,7 @@ function gSend(){
         gConvAI('무슨 뜻인지 확실하지 않아요. 예를 들어 "손절 -3%로", "비트코인으로", "반등 매수로"처럼 적어주시면 이어갈 수 있어요.');
       }
     };
-    if(S.user&&TAI.ok!==false){ gUserPin(); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC); /* 차감, 게이트는 taiMarket 단일 경계로 이동 (codex flow3) */
+    if(S.user) taiEnsure(function(ok){ if(ok){ gUserPin(); taiAskConv(t,cannedC); } else gThink('확인 중',600,cannedC); }); else gThink('확인 중',600,cannedC); /* 차감, 게이트는 taiMarket 단일 경계로 이동 (codex flow3) */
     return;
   }
   /* artifact / activity context */
@@ -18514,7 +18539,7 @@ function gSend(){
     gDocThread('<div class="g-amsg">'+a+'</div>');
   };
   /* 로그인 상태 + 프록시 살아있으면 실제 AI, 아니면 기존 mock 답변 */
-  if(S.user&&TAI.ok!==false) taiAsk(t,fin,canned);
+  if(S.user) taiEnsure(function(ok){ if(ok) taiAsk(t,fin,canned); else delay(900,canned); });
   else delay(900,canned);
 }
 
