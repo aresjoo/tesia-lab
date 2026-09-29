@@ -191,7 +191,7 @@ function mkCard(s){
     +'<p class="mk-c-one mk3-one">'+gEsc(mkOne(s)).replace(/%(?=[가-힣])/g,'%⁠')+'</p>'
     +'<div class="mk3-now"><small>지금</small><span>'+gEsc(mkNowLine(s))+'</span></div>'
     +'<div class="mk3-perf"><div class="mk-c-ret mk3-ret"><small>30일 수익률</small><b class="num'+mkSign(m30.ret)+'">'+mkPct0(m30.ret)+'</b></div>'+mkSpark3(m30.eq)+'</div>'
-    +'<div class="mk3-facts">'+(win?'<div><small>전체 기간 수익 낸 거래</small><b class="num">'+win+'</b></div>':'')+(fw?'<div class="mk3-fw num">'+fw+'</div>':'')+'</div>'
+    +'<div class="mk3-facts">'+(win?'<div><small>전체 기간 수익 낸 거래</small><b class="num">'+win+'</b></div>':'')+(fw?mkFwHtml(s.fw):'')+'</div>'
     +'<div class="mk3-foot">'+(s.me?'':bF)+bD+'</div>'
     +'</article>';
 }
@@ -623,3 +623,9 @@ function mkCardsEnter(){
   g.classList.add('mk3-enter');
   setTimeout(function(){ g.classList.remove('mk3-enter'); },1400);
 }
+
+/* 따라가는 사람 줄. 구간: 1,000명 이상, 500명 이상, 그 아래. 수익과 손실 색(초록, 빨강)과 버튼 색(라임)은 쓰지 않는다 */
+function mkFwTier(n){ return n>=1000?'t3':n>=500?'t2':'t1'; }
+function mkFwHtml(n){ n=+n||0; if(n<=0) return '';
+  var num=n>=10000?'약 '+(Math.round(n/1000)/10)+'만':n.toLocaleString();
+  return '<div class="mk3-fw num '+mkFwTier(n)+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span><b>'+num+'명</b>이 따라가는 중</span></div>'; }
