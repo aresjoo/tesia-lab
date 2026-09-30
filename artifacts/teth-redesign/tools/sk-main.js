@@ -59,3 +59,12 @@ function skIntroCopy(){
   /* 통화를 다시 칠하는 함수가 카드 금액을 되돌리지 않게 */
   if(typeof applyCurrency==='function'){ var ac0=applyCurrency; applyCurrency=function(){ var r=ac0.apply(this,arguments); try{ if(document.querySelector('.txh-card')) skIntroCopy(); }catch(e){} return r; }; }
 })();
+/* 다른 전략 만들기: 결과를 붙인 새 대화 대신 메인 홈으로 */
+rvNew=function(){ try{ RV.on=false; history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); };
+/* 전략 이름의 코인은 심볼로 표기: 비앤비 평균선 양방향 2배 → BNB 평균선 양방향 2배 */
+var SK_SYM={'비트코인':'BTC','이더리움':'ETH','솔라나':'SOL','리플':'XRP','도지코인':'DOGE','에이다':'ADA','아발란체':'AVAX','비앤비':'BNB'};
+function skSym(t){ return String(t==null?'':t).replace(/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/g,function(k){ return SK_SYM[k]; }); }
+(function(){
+  if(typeof MK_CAT!=='undefined') MK_CAT.forEach(function(s){ if(s&&s.name) s.name=skSym(s.name); });
+  var mt=mkTitle; mkTitle=function(){ return skSym(mt.apply(this,arguments)); };
+})();

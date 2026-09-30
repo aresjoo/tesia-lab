@@ -138,3 +138,15 @@ body.g-dark #g-appbanner{background:#000}
   #g-root .txh-step{border-radius:20px;padding:22px 20px}
   #g-root .txh-safe ul{border-radius:20px;padding:2px 18px}
 }
+/* 질문 패널 압축: 선택지는 카드가 아니라 한 줄 행(제목 옆에 흐린 설명), 스크롤 없이 한눈에 */
+.ska .hd{padding:12px 12px 6px 20px;background:transparent}
+.ska .ops{gap:2px;padding:2px 8px 4px;max-height:none;overflow:visible}
+.ska .op{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:10px;padding:10px 12px;border:0;border-radius:12px;background:transparent}
+.ska .op:hover{background:rgba(255,255,255,.06);border-color:transparent}
+.ska .op.on{background:rgba(255,255,255,.1);border-color:transparent}
+.ska .op b{font-size:15px;font-weight:400;white-space:nowrap}
+.ska .op span{font-size:14px;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ska .op.free{background:#262626;margin:2px 0}
+.ska .ft{padding:4px 20px 12px}
+body:has(#g-askdock .ska) #g-newmsg{display:none!important}
+@media (max-width:760px){ .ska .op{grid-template-columns:minmax(0,1fr);gap:1px;padding:9px 12px} .ska .op span{white-space:normal} }
