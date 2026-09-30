@@ -1,0 +1,1105 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f3db-8dbe-7fc0-9f60-a3adb0b364e3
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드입니다. 1단계 분석(qa/gpt-skin/copy/s1/CODEX_RAW.md)의 제안을 반영해 다시 만든 TETH "전략 복사" 창을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+
+참고: 1. ref-B-checkout.png (ChatGPT 플랜 구성) 2. K2-sub-dlg.png (TETH 설정 창 기준) 3. X3-auth.png (TETH 연결 화면 기준)
+다시 만든 창: 4. K1-empty.png (빈 상태) 5. K2-under-min.png (최소 미달) 6. K3-filled-adv.png (금액 입력, 30% 선택, 복사 설정 펼침, 현재 포지션부터) 7. K1-empty-m.png, K3-filled-adv-m.png (모바일 390)
+
+반영한 것: 창 유지, #303030 반경 26, 제목 26px 400, 전략 이름 아래 레버리지 한 줄, 복사 예산 칸($, 최대), 손실 중단 기준 알약 10 / 20 / 30 / 50%, 확인 행 4개(예산, 손실 중단, 시작 시점, 주문당 예산 한도), 복사 설정 접힘, 흰 알약 단추, 하단 한 줄. 거래소 미연결 회원은 이 창 대신 플랜 화면.
+파운더와 제가 정한 것(바꾸지 않음): 손실 기준은 숫자 입력 대신 알약, 금액은 "$800" 표기(제품 전체 표기), 레버리지는 원본을 그대로 따라감.
+
+해야 할 일
+A. 이 창이 기준(2, 3)과 같은 제품처럼 보이는지 판정하십시오. 아닌 곳은 픽셀 근거와 고칠 값을 MUST와 NICE로 나누십시오.
+B. 카피: 어색한 문장, 다음 행동을 못 고를 문장을 현재 → 제안으로. 합니다체, 단추는 서술어로 끝나지 않게, 면책 금지, 가운뎃점 금지.
+C. 처음 보는 사용자로서 이 창에서 무엇을 누를지, 망설이는 곳과 이유. 특히 레버리지 한 줄을 읽고 무엇을 이해하는지.
+D. 한 문장으로: 1단계 판정(안쪽 재구성)이 해결되었는지.
+
+형식: 표와 짧은 문단. 600단어 이내. 근거 없는 칭찬은 쓰지 마십시오.
+
+codex
+1단계 분석과 현재 화면을 대조해, 기준 화면과의 시각적 차이와 선택을 망설이게 하는 문구를 확인하겠습니다. 파일은 읽기만 하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ succeeded in 65ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ exited 1 in 54ms:
+rtk: Failed to resolve '.\.mailbox\mail.cmd' via PATH, falling back to direct exec: Binary '.\.mailbox\mail.cmd' not found on PATH
+The system cannot find the path specified.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 's1/CODEX_RAW.md' -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ succeeded in 264ms:
+**????? ???? ?? ??? ?? ???????.** ??? ??? ?? ?? ? ?????. ?? ?? ??? ?? ? ???, ?? ???? ? ?? ?? ?? ???? ??? ??? ?? ????.
+
+???? ?? ??, ?? ??? ??? ??? ??????. ?? ?? ??? ??? ?? ??????.
+
+**?. ?? ???? ??? ??**
+
+| ?? | ??? ?? | ?? |
+|---|---|---|
+| ?? ?? | ?? ?? `#0d0f14`, ?? 20?????. ??? `#303030`, ?? 26?????. ?? ?? ???? ????? ????? ?? ??? ??????. | ???? ????? ?? ??? ?? ?????. |
+| ??? ???? | ?? ??? ?? 46?????. ?????? ? ? ?? ?? `-20%`? ?????. ?? ??? ? ??? ?? ?? ?????. | ?? ??? ?? ? ???, ??? ?? ???? ??? ?? ?????. |
+| ??? ?? | ??? 19?? ?? 700, ?? ??? 13??, ??? 12?????. ? ??? 460??? ?? ?? ?? ? 520???? ????. | ?? ??? ??? ??? ?? ???? ????. ???? ? ?? ??? 24~28???? ????. |
+| ?? | ? ?? ??? ? 586??, ??? ??? ? 784?????. ?????? ?? ?? ?? ? 584??? ?????. | ?? ??? ?? ??? ?? ?? ??? ?? ????. |
+| ??? ?? | ??  ??  ??  ??  ?? ?????. ??? ?? ??? ? ? ?? ??? ?????. | ?? ?? ?? ??? ??? ????. ?? ??? ?? ??? ?????. |
+| ?? | `??? ???? ??? ??? ????`? ????? ?????. `?? ??` ???? ?? ?? ??? ?????. `?? ? ??`? `?? ??? ??`? ??? ????. | ??? ??, ??? ??, ?? ??? ?? ????. |
+| ???? | ?? ??? ???? `2?`? ???, ?? ??? ??? ????? ??? ????. | ?? ?????? ??? ?? ??? ???? ????. |
+
+**?. ?? ??**
+
+?? ??? ?? **?? 520??, ?? `#303030`, ?? 26??**? ????? ?????. ??? 26?? ?? ??, ??? 16??? ?????. ??? ?? ??? ?? ??? ?? ???, ?? ??? ?? ???? ?????.
+
+??? **?? ??? ???  ??  ?? ??  ?? ?  ??**???. ???? ? ?? ????, ??? ???? ?? ??? ??????.
+
+| ?? | ?? ?? | ??? | ? ? ?? |
+|---|---|---|---|
+| ?? ?? | ?? ???, ?? ??, `?? ??` ?? ?? | ?? | ? ??? ??? ??? ????. |
+| ?? ?? ?? | ?? ???, `%` ?? | 20%, ?? ?? 5~50% | ??? 20%? ??? ??? ???? ?????. |
+| ?? ?? ?? | `?? ????`? `?? ?????` ?? ?? | ?? ???? | ??? ?? ???? ?????. |
+| ??? ?? ?? | ?? ???, `%` ?? | 95%, ?? ?? 5~95% | ? ??? ??? ?? ??? ????. |
+
+??? ? ??? ?? ???? ????. ?? ???? **?? ???**? ?? ????, ?? ?? `?? ??`?? ????. ??? ??? ????? ????? ? ???.
+
+? ?? ??? ?? ?? ??? ????.
+
+| ?? ?? | 800?? ?? ? ?? |
+|---|---|
+| ?? ?? | 800?? |
+| ?? ?? | ?? 160??, ??? 20% |
+| ?? ?? | ?? ???? |
+| ??? ?? ?? | 95% |
+
+????? ?? ?? ??? ?? **"???? ??? ??? ????. ?? 2????."**? ?????. ?? ?? 7???? ?? ?? ??? ????. ?? ??? ???? ??? ??? ????? ????? ?? ????.
+
+??? ??? ????? ?? ???? ???, ??? 3?? ?? ?? ?????.
+
+**?. ?? ???**
+
+| ?? | ?? |
+|---|---|
+| ?? (USD) | ?? ?? |
+| ?? 500 | ??? ? ??: ?? 500???? ??? ? ????. |
+| ?? ?? $1,000 | ?? ?? ?? 1,000?? |
+| ?? | ?? ?? |
+| ?? $500?? ??? ? ???? | 500?? ?? ???? ???. |
+| ?? ?? | ?? ?? ?? |
+| ??? 20%? ??? ???? ???? | ??? 20%? ??? ??? ???? ?????. |
+| ??? ???? ??? ??? ???? | ??. ? ?? ?? `???`?? ?????. |
+| ?? $800?. ?? ???? ????? | ? ?? ??? ?????. |
+| ?? | ?? ?? |
+| ?? ??? ?? | ?? ?? ?? |
+| ???? / ?? ?? ???? | ?? ???? / ?? ????? |
+| ??? ?? | ??? ?? ?? |
+| ?? ?? ?? | ?? ?? |
+| ?? ??? ?????. ??? ??? ??? ?? ? ????. | ?? ???? ?????. ??? ??? ? ????. |
+
+**?. ???? ??? ????, ??? ??? ??? ??? ?? ??? ??? ?? ???? ?? ???? ?? ?????? ?????.**
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ exited 1 in 68ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g AGENTS.md -g '*mail*' -g '*.html' -g '*.js' -g '*.md' . ../../.." in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy python -c \"import pathlib,json; print(json.dumps(pathlib.Path('s1/CODEX_RAW.md').read_text(encoding='utf-8'), ensure_ascii=True))\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ exited 1 in 70ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 223ms:
+rtk: Failed to execute command: python: The file cannot be accessed by the system. (os error 1920)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const fs=require('fs'); process.stdout.write(fs.readFileSync('s1/CODEX_RAW.md','utf8'));\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ succeeded in 105ms:
+**대화상자를 유지하고 내부 구성을 다시 설계하겠습니다.** 결정은 예산과 중단 기준 두 가지입니다. 전략 상세 위에서 끝낼 수 있으며, 플랜 구성처럼 두 열로 나눌 만큼 독립적인 입력과 요약이 많지 않습니다.
+
+브리프와 첨부 화면, 현재 스타일 코드를 근거로 판단했습니다. 아래 화면 치수는 이미지 기준 근삿값입니다.
+
+**가. 다른 제품처럼 보이는 원인**
+
+| 구분 | 확인된 근거 | 판단 |
+|---|---|---|
+| 색과 형태 | 현재 창은 `#0d0f14`, 반경 20픽셀입니다. 기준은 `#303030`, 반경 26픽셀입니다. 현재 입력 포커스와 슬라이더는 연두색이며 시작 단추도 연두색입니다. | 표면부터 강조색까지 기준 화면과 다른 체계입니다. |
+| 입력과 슬라이더 | 예산 입력은 높이 46픽셀입니다. 슬라이더에는 양 끝 값이 없고 `-20%`만 표시됩니다. 기준 화면의 주 단추는 흰색 알약 형태입니다. | 조절 범위를 읽을 수 없으며, 연두색 선이 예산보다 강하게 눈에 들어옵니다. |
+| 위계와 여백 | 제목은 19픽셀 굵기 700, 필드 라벨은 13픽셀, 힌트는 12픽셀입니다. 창 너비는 460픽셀로 설정 기준 창의 약 520픽셀보다 좁습니다. | 작은 글자와 촘촘한 정보가 설정 도구처럼 보입니다. 브리프의 창 제목 기준인 24~28픽셀과도 다릅니다. |
+| 구조 | 빈 상태 높이는 약 586픽셀, 고급을 펼치면 약 784픽셀입니다. 모바일에서는 창이 화면 아래 약 584픽셀을 차지합니다. | 고급 설정이 핵심 결정과 시작 단추 사이를 크게 벌립니다. |
+| 요약과 순서 | 예산 → 손실 → 요약 → 고급 → 시작 순서입니다. 고급의 선택 결과가 그 위 요약 문단에 들어갑니다. | 입력 뒤에 최종 확인이 모이지 않습니다. 전략 이름과 손실 설명도 반복됩니다. |
+| 카피 | `예산을 입력하면 요약이 여기에 보입니다`는 인터페이스 설명입니다. `최대 손실` 아래에는 자동 중단 동작을 설명합니다. `지금 든 종목`과 `기존 포지션 처리`도 어휘가 다릅니다. | 사용자 결정, 시스템 동작, 전문 용어가 섞여 있습니다. |
+| 레버리지 | 전략 이름과 설명에는 `2배`가 있지만, 이후 원본의 변경도 따라간다는 문장은 없습니다. | 현재 배수만으로는 확정된 추종 동작을 전달하지 못합니다. |
+
+**나. 제안 구성**
+
+설정 기준과 같은 **너비 520픽셀, 배경 `#303030`, 반경 26픽셀**의 대화상자를 사용합니다. 제목은 26픽셀 보통 굵기, 본문은 16픽셀로 구성합니다. 입력은 플랜 구성의 회색 표면과 중립 테두리, 시작 단추는 흰색 알약으로 통일합니다.
+
+순서는 **전략 이름과 작성자 → 예산 → 중단 기준 → 확인 행 → 시작**입니다. 모바일은 한 열을 유지하고, 높이가 부족하면 내용 영역을 스크롤합니다.
+
+| 필드 | 조작 요소 | 기본값 | 한 줄 설명 |
+|---|---|---|---|
+| 복사 예산 | 금액 입력칸, 단위 표시, `최대 금액` 보조 단추 | 빈칸 | 이 전략에 사용할 금액을 정합니다. |
+| 손실 중단 기준 | 숫자 입력칸, `%` 표시 | 20%, 허용 범위 5~50% | 예산의 20%를 잃으면 복사를 자동으로 중단합니다. |
+| 복사 시작 시점 | `다음 진입부터`와 `현재 포지션부터` 알약 선택 | 다음 진입부터 | 원본의 다음 진입부터 따라갑니다. |
+| 주문당 예산 한도 | 숫자 입력칸, `%` 표시 | 95%, 허용 범위 5~95% | 한 주문에 사용할 예산 비율을 정합니다. |
+
+마지막 두 설정은 기본 화면에서 접습니다. 확인 영역에는 **현재 선택값**을 항상 표시하고, 밑줄 링크 `복사 설정`으로 펼칩니다. 수정한 뒤에도 기본값으로 표시해서는 안 됩니다.
+
+긴 요약 문단은 다음 확인 행으로 바꿉니다.
+
+| 확인 항목 | 800달러 입력 시 표시 |
+|---|---|
+| 복사 예산 | 800달러 |
+| 중단 기준 | 손실 160달러, 예산의 20% |
+| 시작 시점 | 다음 진입부터 |
+| 주문당 예산 한도 | 95% |
+
+레버리지는 전략 이름 아래에 항상 **“레버리지 변경도 원본을 따릅니다. 현재 2배입니다.”**로 표시합니다. 공백 기준 7어절이며 고급 안에 숨기지 않습니다. 변경 알림은 브리프상 확인이 필요한 제안이므로 제공한다고 쓰지 않습니다.
+
+미연결 회원은 브리프대로 플랜 화면으로 보내고, 현재의 3단계 안내 창은 제거합니다.
+
+**다. 카피 교체안**
+
+| 현재 | 제안 |
+|---|---|
+| 예산 (USD) | 복사 예산 |
+| 최소 500 | 입력칸 밖 힌트: 최소 500달러부터 시작할 수 있습니다. |
+| 사용 가능 $1,000 | 사용 가능 금액 1,000달러 |
+| 최대 | 최대 금액 |
+| 최소 $500부터 시작할 수 있습니다 | 500달러 이상 입력해야 합니다. |
+| 최대 손실 | 손실 중단 기준 |
+| 예산의 20%를 잃으면 자동으로 멈춥니다 | 예산의 20%를 잃으면 복사를 자동으로 중단합니다. |
+| 예산을 입력하면 요약이 여기에 보입니다 | 삭제. 빈 확인 값은 `미입력`으로 표시합니다. |
+| 예산 $800로… 다음 진입부터 따라갑니다 | 위 확인 행으로 대체합니다. |
+| 고급 | 복사 설정 |
+| 기존 포지션 처리 | 복사 시작 시점 |
+| 건너뛰기 / 지금 따라 들어가기 | 다음 진입부터 / 현재 포지션부터 |
+| 주문당 상한 | 주문당 예산 한도 |
+| 전략 복사 시작 | 복사 시작 |
+| 전략 복사는 무료입니다. 시작한 뒤에도 언제든 멈출 수 있습니다. | 복사 이용료는 무료입니다. 언제든 중단할 수 있습니다. |
+
+**라. 대화상자 형식은 유지하되, 요약과 설정의 배치를 포함한 내부 구성은 통째로 다시 만들어야 하며 스타일과 카피 교체만으로는 부족합니다.**
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy cmd /c ..\\..\\..\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ exited 1 in 313ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ succeeded in 82ms:
+ M ../../../artifacts/teth-redesign/r2-follow-sheet.png
+ M ../../16-fixes/FLOWS_RESULT.txt
+ M ../../16-fixes/R11-conversions.txt
+ M ../../16-fixes/rail/rail-check.txt
+ M ../../16-fixes/rail/st-full-check.txt
+ M ../../16-fixes/round-2/R01-auth-age-step.png
+ M ../../16-fixes/round-2/R01-guest-auth.png
+ M ../../16-fixes/round-2/R01-resumed-backtest.png
+ M ../../16-fixes/round-2/R02-reading-loading-h1.png
+ M ../../16-fixes/round-2/R02-result-h1.png
+ M ../../16-fixes/round-2/R03-decision-open-h1.png
+ M ../../16-fixes/round-2/R03-decisions-h1.png
+ M ../../16-fixes/round-2/R04-early-h1.png
+ M ../../16-fixes/round-2/R04-judgment-1-h1.png
+ M ../../16-fixes/round-2/R04-judgment-2-h1.png
+ M ../../16-fixes/round-2/R04-judgment-3-h1.png
+ M ../../16-fixes/round-2/R04-judgment-4-h1.png
+ M ../../16-fixes/round-2/R08-consent-gate.png
+ M ../../16-fixes/round-2/R08-consent.png
+ M ../../16-fixes/round-2/R08-page-bottom.png
+ M ../../16-fixes/round-2/R08-page-connected.png
+ M ../../16-fixes/round-2/R08-page.png
+ M ../../16-fixes/round-2/R09-A-route.png
+ M ../../16-fixes/round-2/R09-B-exchange.png
+ M ../../16-fixes/round-2/R09-C-account.png
+ M ../../16-fixes/round-2/R09-D-guide.png
+ M ../../16-fixes/round-2/R09-E-authorize.png
+ M ../../16-fixes/round-2/R09-F-auth-cancel.png
+ M ../../16-fixes/round-2/R09-G-uid-checking.png
+ M ../../16-fixes/round-2/R09-H-uid-fail.png
+ M ../../16-fixes/round-2/R09-I-done.png
+ M ../../16-fixes/round-2/R09-J-pay.png
+ M ../../16-fixes/round-2/R09-K-pay-fail.png
+ M ../../16-fixes/round-2/R09-L-pay-ok.png
+ M ../../16-fixes/round-2/R09-M-paid-done.png
+ M ../../16-fixes/round-2/R10-expired-subscription.png
+ M ../../16-fixes/round-2/R10-other-exchange.png
+ M ../../16-fixes/round-2/R12-delete-confirm.png
+ M ../../16-fixes/round-2/R12-settings-account-paid-bottom.png
+ M ../../16-fixes/round-2/R12-settings-account-paid.png
+ M ../../16-fixes/round-2/R12-settings-general-paid.png
+ M ../../16-fixes/round-2/R12-settings-notify-paid.png
+ M ../../16-fixes/round-2/R12-settings-security-paid.png
+ M ../../16-fixes/round-2/R13-cancel-confirm.png
+ M ../../16-fixes/round-2/R13-settings-billing-expired.png
+ M ../../16-fixes/round-2/R13-settings-billing-none.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid-bottom.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid.png
+ M ../../16-fixes/round-2/R13-settings-billing-partner.png
+ M ../../16-fixes/round-2/R14-entry.png
+ M ../../16-fixes/round-2/R14-guest-auth.png
+ M ../../16-fixes/round-2/R14-guest-landing.png
+ M ../../16-fixes/round-2/R14-terminal-ready.png
+ M ../../16-fixes/round-2/ac-check.txt
+ M ../../16-fixes/round-2/bt-check-h1.txt
+ M ../../16-fixes/round-2/r01-check.txt
+ M ../../ex-plan/r/P1-plan-guest.png
+ M ../../ex-plan/r/P1-plan-member.png
+ M ../../ex-plan/r/P1-plan-with-backtest.png
+ M ../../ex-plan/r/P2A-checkout-fail.png
+ M ../../ex-plan/r/P2A-checkout.png
+ M ../../ex-plan/r/P2B-free-guide.png
+ M ../../ex-plan/r/P3-free-done.png
+ M ../../ex-plan/r/P3-paid-auth.png
+ M ../../ex-plan/r/P4-kyc-gate-fail.png
+ M ../../ex-plan/r/P5-paid-limit.png
+ M ../../ex-plan/r/pl-check.txt
+ M ../../ex-plan/s6/r/X1-ex.png
+ M ../../ex-plan/s6/r/X1b-ex-after-pay.png
+ M ../../ex-plan/s6/r/X2-acct.png
+ M ../../ex-plan/s6/r/X2b-acct-joined.png
+ M ../../ex-plan/s6/r/X3-auth-paid.png
+ M ../../ex-plan/s6/r/X3-auth.png
+ M ../../ex-plan/s6/r/X4-uid.png
+ M ../../ex-plan/s6/r/X5-done.png
+ M ../../ex-plan/s6/r/X6-kyc.png
+ M ../../ex-plan/s6/r/X7-list.png
+ M ../../ex-plan/s6/r/X8-third.png
+ M s2/K1-empty.png
+ M s2/K2-under-min.png
+ M s2/K3-filled-adv.png
+ M ../../../ux-audit/card3/grid4-1440.png
+ M ../../../ux-audit/card3/grid4-pager-1440.png
+?? ../../../artifacts/teth-redesign/card2/c1-codex.log
+?? ../../../artifacts/teth-redesign/card2/c2-codex.log
+?? ../../../artifacts/teth-redesign/card2/c3-codex.log
+?? ../../../artifacts/teth-redesign/card2/c8-1024.png
+?? ../../../artifacts/teth-redesign/card2/c8-1100.png
+?? ../../../artifacts/teth-redesign/card2/c8-1101.png
+?? ../../../artifacts/teth-redesign/card2/c8-1280.png
+?? ../../../artifacts/teth-redesign/card2/c8-1440.png
+?? ../../../artifacts/teth-redesign/card2/c8-1920.png
+?? ../../../artifacts/teth-redesign/card2/c8-390.png
+?? ../../../artifacts/teth-redesign/card2/c8-768.png
+?? ../../../artifacts/teth-redesign/card2/r1-info-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-log-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-ov-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-perf-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-trades-full.png
+?? ../../16-fixes/an/an-1-bubble.png
+?? ../../16-fixes/an/an-2-shots.png
+?? ../../16-fixes/an/an-3-shot-zoom.png
+?? ../../16-fixes/an/an-4-answer.png
+?? ../../16-fixes/an/probe-h2i.png
+?? ../../16-fixes/presets/p02-account.png
+?? ../../16-fixes/presets/p02-billing-2.png
+?? ../../16-fixes/presets/p02-billing.png
+?? ../../16-fixes/presets/p02-brokers.png
+?? ../../16-fixes/presets/p02-security-2.png
+?? ../../16-fixes/presets/p02-security.png
+?? ../../16-fixes/presets/p02-trade-start.png
+?? ../../16-fixes/presets/p02-trade.png
+?? ../../16-fixes/presets/p12-account.png
+?? ../../16-fixes/presets/p12-billing-2.png
+?? ../../16-fixes/presets/p12-billing.png
+?? ../../16-fixes/presets/p12-brokers.png
+?? ../../16-fixes/presets/p12-security-2.png
+?? ../../16-fixes/presets/p12-security.png
+?? ../../16-fixes/presets/p12-trade.png
+?? ../../16-fixes/presets/p13-account.png
+?? ../../16-fixes/presets/p13-billing-2.png
+?? ../../16-fixes/presets/p13-billing.png
+?? ../../16-fixes/presets/p13-brokers.png
+?? ../../16-fixes/presets/p13-security-2.png
+?? ../../16-fixes/presets/p13-security.png
+?? ../../16-fixes/presets/p13-trade.png
+?? ../../16-fixes/presets/p14-account.png
+?? ../../16-fixes/presets/p14-billing-2.png
+?? ../../16-fixes/presets/p14-billing.png
+?? ../../16-fixes/presets/p14-brokers.png
+?? ../../16-fixes/presets/p14-security-2.png
+?? ../../16-fixes/presets/p14-security.png
+?? ../../16-fixes/presets/p14-trade.png
+?? ../../16-fixes/presets/p15-account.png
+?? ../../16-fixes/presets/p15-billing-2.png
+?? ../../16-fixes/presets/p15-billing.png
+?? ../../16-fixes/presets/p15-brokers.png
+?? ../../16-fixes/presets/p15-security-2.png
+?? ../../16-fixes/presets/p15-security.png
+?? ../../16-fixes/presets/p15-trade.png
+?? ../../16-fixes/rail/card-fw.png
+?? ../../16-fixes/rail/chat-guest.png
+?? ../../16-fixes/rail/chat-user.png
+?? ../../16-fixes/rail/detail-cta.png
+?? "../../16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/guest-g-gear-btn.png
+?? ../../16-fixes/rail/guest-g-login-btn.png
+?? ../../16-fixes/rail/guest-menu.png
+?? "../../16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "../../16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/st-collapsed-hover.png
+?? ../../16-fixes/rail/st-collapsed.png
+?? ../../16-fixes/rail/st-full-1440.png
+?? ../../16-fixes/rail/st-full-2000.png
+?? ../../16-fixes/rail/st-full-390.png
+?? ../../16-fixes/rail/st-full-notify-1440.png
+?? ../../16-fixes/rail/st-full-notify-2000.png
+?? ../../16-fixes/rail/st-full-notify-390.png
+?? ../../16-fixes/rail/st-open-hover.png
+?? ../../16-fixes/rail/st-open.png
+?? ../../16-fixes/rail/tail.log
+?? ../../16-fixes/rail/tail.log.mark
+?? ../../16-fixes/rail/user-after.png
+?? ../../16-fixes/rail/user-collapsed-hover.png
+?? ../../16-fixes/rail/user-expanded-menu.png
+?? "../../16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-home-g-gear-btn.png
+?? ../../16-fixes/rail/user-home-g-me-row.png
+?? "../../16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/user-menu.png
+?? ../../16-fixes/rail/user-settings-g-gear-btn.png
+?? ../../16-fixes/rail/user-settings-g-me-row.png
+?? "../../16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-strategies-g-gear-btn.png
+?? ../../16-fixes/rail/user-strategies-g-me-row.png
+?? "../../16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-trade-g-gear-btn.png
+?? ../../16-fixes/rail/user-trade-g-me-row.png
+?? "../../16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../ai/
+?? ../../baseline/
+?? ../../final/S01-backtest-ready.png
+?? ../../final/S02-early-processing.png
+?? ../../final/S02a-preparing.png
+?? ../../final/S02b-first-decision.png
+?? ../../final/S03-mid-processing.png
+?? ../../final/S03a-skip-signal.png
+?? ../../final/S03b-skip-review.png
+?? ../../final/S03c-between-events.png
+?? ../../final/S04-final-processing.png
+?? ../../final/S05-results-above-fold.png
+?? ../../final/S05b-results-hover.png
+?? ../../final/S06-results-evidence.png
+?? ../../final/S07-decision-detail.png
+?? ../../final/S08-trade-detail.png
+?? ../../final/S08b-result-full-page.png
+?? ../../final/S09-activation-choice.png
+?? ../../final/S10-card-path.png
+?? ../../final/S11-exchange-connection.png
+?? ../../final/S11a-exchange-form.png
+?? ../../final/S12-partner-exchange.png
+?? ../../final/S12b-partner-new-account.png
+?? ../../final/S13-uid-verification.png
+?? ../../final/S14-api-connection.png
+?? ../../final/S14a-api-form.png
+?? ../../final/S15-success.png
+?? ../../final/S15b-success-own-account.png
+?? ../../final/X01-uid-not-found.png
+?? ../../final/d1-w1440/S01-backtest-ready.png
+?? ../../final/d1-w1440/S02-early-processing.png
+?? ../../final/d1-w1440/S02a-preparing.png
+?? ../../final/d1-w1440/S03-mid-processing.png
+?? ../../final/d1-w1440/S04-final-processing.png
+?? ../../final/d1-w1440/S05-results-above-fold.png
+?? ../../final/d1-w1440/S06-results-evidence.png
+?? ../../final/d1-w1440/S07-decision-detail.png
+?? ../../final/d1-w1440/S08-trade-detail.png
+?? ../../final/d1-w1440/S09-activation-choice.png
+?? ../../final/d1-w1440/S10-card-path.png
+?? ../../final/d1-w1440/S11-exchange-connection.png
+?? ../../final/d1-w1440/S12-partner-exchange.png
+?? ../../final/d1-w1440/S13-uid-verification.png
+?? ../../final/d1-w1440/S14-api-connection.png
+?? ../../final/d1-w1440/S15-success.png
+?? ../../final/h1-w1440/S01-backtest-ready.png
+?? ../../final/h1-w1440/S02-early-processing.png
+?? ../../final/h1-w1440/S02a-preparing.png
+?? ../../final/h1-w1440/S03-mid-processing.png
+?? ../../final/h1-w1440/S04-final-processing.png
+?? ../../final/h1-w1440/S05-results-above-fold.png
+?? ../../final/h1-w1440/S06-results-evidence.png
+?? ../../final/h1-w1440/S07-decision-detail.png
+?? ../../final/h1-w1440/S08-trade-detail.png
+?? ../../final/h1-w1440/S09-activation-choice.png
+?? ../../final/h1-w1440/S10-card-path.png
+?? ../../final/h1-w1440/S11-exchange-connection.png
+?? ../../final/h1-w1440/S12-partner-exchange.png
+?? ../../final/h1-w1440/S13-uid-verification.png
+?? ../../final/h1-w1440/S14-api-connection.png
+?? ../../final/h1-w1440/S15-success.png
+?? ../../final/r1-w1440/S01-backtest-ready.png
+?? ../../final/r1-w1440/S02a-preparing.png
+?? ../../final/r1-w1440/S04-final-processing.png
+?? ../../final/r1-w1440/S05-results-above-fold.png
+?? ../../final/r1-w1440/S06-results-evidence.png
+?? ../../final/r1-w1440/S07-decision-detail.png
+?? ../../final/r1-w1440/S08-trade-detail.png
+?? ../../final/r1-w1440/S09-activation-choice.png
+?? ../../final/r1-w1440/S10-card-path.png
+?? ../../final/r1-w1440/S11-exchange-connection.png
+?? ../../final/r1-w1440/S12-partner-exchange.png
+?? ../../final/r1-w1440/S13-uid-verification.png
+?? ../../final/r1-w1440/S14-api-connection.png
+?? ../../final/r1-w1440/S15-success.png
+?? ../../final/seq/
+?? ../../final/w1280/S01-backtest-ready.png
+?? ../../final/w1280/S02-early-processing.png
+?? ../../final/w1280/S02a-preparing.png
+?? ../../final/w1280/S03-mid-processing.png
+?? ../../final/w1280/S04-final-processing.png
+?? ../../final/w1280/S05-results-above-fold.png
+?? ../../final/w1280/S06-results-evidence.png
+?? ../../final/w1280/S07-decision-detail.png
+?? ../../final/w1280/S08-trade-detail.png
+?? ../../final/w1280/S09-activation-choice.png
+?? ../../final/w1280/S10-card-path.png
+?? ../../final/w1280/S11-exchange-connection.png
+?? ../../final/w1280/S12-partner-exchange.png
+?? ../../final/w1280/S13-uid-verification.png
+?? ../../final/w1280/S14-api-connection.png
+?? ../../final/w1280/S15-success.png
+?? ../../final/w390/S01-backtest-ready.png
+?? ../../final/w390/S02-early-processing.png
+?? ../../final/w390/S02a-preparing.png
+?? ../../final/w390/S03-mid-processing.png
+?? ../../final/w390/S04-final-processing.png
+?? ../../final/w390/S05-results-above-fold.png
+?? ../../final/w390/S06-results-evidence.png
+?? ../../final/w390/S07-decision-detail.png
+?? ../../final/w390/S08-trade-detail.png
+?? ../../final/w390/S09-activation-choice.png
+?? ../../final/w390/S10-card-path.png
+?? ../../final/w390/S11-exchange-connection.png
+?? ../../final/w390/S12-partner-exchange.png
+?? ../../final/w390/S13-uid-verification.png
+?? ../../final/w390/S14-api-connection.png
+?? ../../final/w390/S15-success.png
+?? ../../final2/F01-a-uid-failed.png
+?? ../../final2/F01-b-after-continue.png
+?? ../../final2/F01-c-changed-uid-needs-api.png
+?? ../../final2/F01-d-success-valid.png
+?? ../../final2/F02-pick-reason.png
+?? ../../final2/F03-travel-1.png
+?? ../../final2/F03-travel-2.png
+?? ../../final2/F03-travel-3.png
+?? ../../final2/F03-travel-4.png
+?? ../../final2/R09-all-activity-d1.png
+?? ../../final2/S01-backtest-ready.png
+?? ../../final2/S02-early-processing.png
+?? ../../final2/S02a-preparing.png
+?? ../../final2/S02b-first-decision.png
+?? ../../final2/S03-mid-processing.png
+?? ../../final2/S03a-skip-signal.png
+?? ../../final2/S03b-skip-review.png
+?? ../../final2/S03c-between-events.png
+?? ../../final2/S04-final-processing.png
+?? ../../final2/S05-results-above-fold.png
+?? ../../final2/S05b-results-hover.png
+?? ../../final2/S06-results-evidence.png
+?? ../../final2/S07-decision-detail.png
+?? ../../final2/S08-trade-detail.png
+?? ../../final2/S08b-result-full-page.png
+?? ../../final2/S09-activation-choice.png
+?? ../../final2/S10-card-path.png
+?? ../../final2/S11-exchange-connection.png
+?? ../../final2/S11a-exchange-form.png
+?? ../../final2/S12-partner-exchange.png
+?? ../../final2/S12b-partner-new-account.png
+?? ../../final2/S13-uid-verification.png
+?? ../../final2/S14-api-connection.png
+?? ../../final2/S14a-api-form.png
+?? ../../final2/S15-success.png
+?? ../../final2/S15b-success-own-account.png
+?? ../../final2/X01-uid-not-found.png
+?? ../../final2/d1-w1440/S01-backtest-ready.png
+?? ../../final2/d1-w1440/S02-early-processing.png
+?? ../../final2/d1-w1440/S02a-preparing.png
+?? ../../final2/d1-w1440/S03-mid-processing.png
+?? ../../final2/d1-w1440/S04-final-processing.png
+?? ../../final2/d1-w1440/S05-results-above-fold.png
+?? ../../final2/d1-w1440/S06-results-evidence.png
+?? ../../final2/d1-w1440/S07-decision-detail.png
+?? ../../final2/d1-w1440/S08-trade-detail.png
+?? ../../final2/d1-w1440/S09-activation-choice.png
+?? ../../final2/d1-w1440/S10-card-path.png
+?? ../../final2/d1-w1440/S11-exchange-connection.png
+?? ../../final2/d1-w1440/S12-partner-exchange.png
+?? ../../final2/d1-w1440/S13-uid-verification.png
+?? ../../final2/d1-w1440/S14-api-connection.png
+?? ../../final2/d1-w1440/S15-success.png
+?? ../../final2/h1-w1440/S01-backtest-ready.png
+?? ../../final2/h1-w1440/S02-early-processing.png
+?? ../../final2/h1-w1440/S02a-preparing.png
+?? ../../final2/h1-w1440/S03-mid-processing.png
+?? ../../final2/h1-w1440/S04-final-processing.png
+?? ../../final2/h1-w1440/S05-results-above-fold.png
+?? ../../final2/h1-w1440/S06-results-evidence.png
+?? ../../final2/h1-w1440/S07-decision-detail.png
+?? ../../final2/h1-w1440/S08-trade-detail.png
+?? ../../final2/h1-w1440/S09-activation-choice.png
+?? ../../final2/h1-w1440/S10-card-path.png
+?? ../../final2/h1-w1440/S11-exchange-connection.png
+?? ../../final2/h1-w1440/S12-partner-exchange.png
+?? ../../final2/h1-w1440/S13-uid-verification.png
+?? ../../final2/h1-w1440/S14-api-connection.png
+?? ../../final2/h1-w1440/S15-success.png
+?? ../../final2/r1-w1440/S01-backtest-ready.png
+?? ../../final2/r1-w1440/S02a-preparing.png
+?? ../../final2/r1-w1440/S04-final-processing.png
+?? ../../final2/r1-w1440/S05-results-above-fold.png
+?? ../../final2/r1-w1440/S06-results-evidence.png
+?? ../../final2/r1-w1440/S07-decision-detail.png
+?? ../../final2/r1-w1440/S08-trade-detail.png
+?? ../../final2/r1-w1440/S09-activation-choice.png
+?? ../../final2/r1-w1440/S10-card-path.png
+?? ../../final2/r1-w1440/S11-exchange-connection.png
+?? ../../final2/r1-w1440/S12-partner-exchange.png
+?? ../../final2/r1-w1440/S13-uid-verification.png
+?? ../../final2/r1-w1440/S14-api-connection.png
+?? ../../final2/r1-w1440/S15-success.png
+?? ../../final2/seq/
+?? ../../final2/w1280/S01-backtest-ready.png
+?? ../../final2/w1280/S02-early-processing.png
+?? ../../final2/w1280/S02a-preparing.png
+?? ../../final2/w1280/S03-mid-processing.png
+?? ../../final2/w1280/S04-final-processing.png
+?? ../../final2/w1280/S05-results-above-fold.png
+?? ../../final2/w1280/S06-results-evidence.png
+?? ../../final2/w1280/S07-decision-detail.png
+?? ../../final2/w1280/S08-trade-detail.png
+?? ../../final2/w1280/S09-activation-choice.png
+?? ../../final2/w1280/S10-card-path.png
+?? ../../final2/w1280/S11-exchange-connection.png
+?? ../../final2/w1280/S12-partner-exchange.png
+?? ../../final2/w1280/S13-uid-verification.png
+?? ../../final2/w1280/S14-api-connection.png
+?? ../../final2/w1280/S15-success.png
+?? ../../final2/w390/S01-backtest-ready.png
+?? ../../final2/w390/S02-early-processing.png
+?? ../../final2/w390/S02a-preparing.png
+?? ../../final2/w390/S03-mid-processing.png
+?? ../../final2/w390/S04-final-processing.png
+?? ../../final2/w390/S05-results-above-fold.png
+?? ../../final2/w390/S06-results-evidence.png
+?? ../../final2/w390/S07-decision-detail.png
+?? ../../final2/w390/S08-trade-detail.png
+?? ../../final2/w390/S09-activation-choice.png
+?? ../../final2/w390/S10-card-path.png
+?? ../../final2/w390/S11-exchange-connection.png
+?? ../../final2/w390/S12-partner-exchange.png
+?? ../../final2/w390/S13-uid-verification.png
+?? ../../final2/w390/S14-api-connection.png
+?? ../../final2/w390/S15-success.png
+?? ../../final3/F01-a-uid-failed.png
+?? ../../final3/F01-b-after-continue.png
+?? ../../final3/F01-c-changed-uid-needs-api.png
+?? ../../final3/F01-d-success-valid.png
+?? ../../final3/F01R-reload-150ms.png
+?? ../../final3/F01R-reload-after-exchange-change.png
+?? ../../final3/F02-pick-reason.png
+?? ../../final3/F03-travel-1.png
+?? ../../final3/F03-travel-2.png
+?? ../../final3/F03-travel-3.png
+?? ../../final3/F03-travel-4.png
+?? ../../final3/R09-all-activity-d1.png
+?? ../../final3/S01-backtest-ready.png
+?? ../../final3/S02-early-processing.png
+?? ../../final3/S02a-preparing.png
+?? ../../final3/S02b-first-decision.png
+?? ../../final3/S03-mid-processing.png
+?? ../../final3/S03a-skip-signal.png
+?? ../../final3/S03b-skip-review.png
+?? ../../final3/S03c-between-events.png
+?? ../../final3/S04-final-processing.png
+?? ../../final3/S05-results-above-fold.png
+?? ../../final3/S05b-results-hover.png
+?? ../../final3/S06-results-evidence.png
+?? ../../final3/S07-decision-detail.png
+?? ../../final3/S08-trade-detail.png
+?? ../../final3/S08b-result-full-page.png
+?? ../../final3/S09-activation-choice.png
+?? ../../final3/S10-card-path.png
+?? ../../final3/S11-exchange-connection.png
+?? ../../final3/S11a-exchange-form.png
+?? ../../final3/S12-partner-exchange.png
+?? ../../final3/S12b-partner-new-account.png
+?? ../../final3/S13-uid-verification.png
+?? ../../final3/S14-api-connection.png
+?? ../../final3/S14a-api-form.png
+?? ../../final3/S15-success.png
+?? ../../final3/S15b-success-own-account.png
+?? ../../final3/X01-uid-not-found.png
+?? ../../final3/d1-w1440/S01-backtest-ready.png
+?? ../../final3/d1-w1440/S02-early-processing.png
+?? ../../final3/d1-w1440/S02a-preparing.png
+?? ../../final3/d1-w1440/S03-mid-processing.png
+?? ../../final3/d1-w1440/S04-final-processing.png
+?? ../../final3/d1-w1440/S05-results-above-fold.png
+?? ../../final3/d1-w1440/S06-results-evidence.png
+?? ../../final3/d1-w1440/S07-decision-detail.png
+?? ../../final3/d1-w1440/S08-trade-detail.png
+?? ../../final3/d1-w1440/S09-activation-choice.png
+?? ../../final3/d1-w1440/S10-card-path.png
+?? ../../final3/d1-w1440/S11-exchange-connection.png
+?? ../../final3/d1-w1440/S12-partner-exchange.png
+?? ../../final3/d1-w1440/S13-uid-verification.png
+?? ../../final3/d1-w1440/S14-api-connection.png
+?? ../../final3/d1-w1440/S15-success.png
+?? ../../final3/seq/
+?? ../../final3/w1280/P-help-button.png
+?? ../../final3/w1280/S01-backtest-ready.png
+?? ../../final3/w1280/S02-early-processing.png
+?? ../../final3/w1280/S02a-preparing.png
+?? ../../final3/w1280/S03-mid-processing.png
+?? ../../final3/w1280/S04-final-processing.png
+?? ../../final3/w1280/S05-results-above-fold.png
+?? ../../final3/w1280/S06-results-evidence.png
+?? ../../final3/w1280/S07-decision-detail.png
+?? ../../final3/w1280/S08-trade-detail.png
+?? ../../final3/w1280/S09-activation-choice.png
+?? ../../final3/w1280/S10-card-path.png
+?? ../../final3/w1280/S11-exchange-connection.png
+?? ../../final3/w1280/S12-partner-exchange.png
+?? ../../final3/w1280/S13-uid-verification.png
+?? ../../final3/w1280/S14-api-connection.png
+?? ../../final3/w1280/S15-success.png
+?? ../../final3/w390/S01-backtest-ready.png
+?? ../../final3/w390/S02-early-processing.png
+?? ../../final3/w390/S02a-preparing.png
+?? ../../final3/w390/S03-mid-processing.png
+?? ../../final3/w390/S04-final-processing.png
+?? ../../final3/w390/S05-results-above-fold.png
+?? ../../final3/w390/S06-results-evidence.png
+?? ../../final3/w390/S07-decision-detail.png
+?? ../../final3/w390/S08-trade-detail.png
+?? ../../final3/w390/S09-activation-choice.png
+?? ../../final3/w390/S10-card-path.png
+?? ../../final3/w390/S11-exchange-connection.png
+?? ../../final3/w390/S12-partner-exchange.png
+?? ../../final3/w390/S13-uid-verification.png
+?? ../../final3/w390/S14-api-connection.png
+?? ../../final3/w390/S15-success.png
+?? ../../fut/shots/U01-finder-top.png
+?? ../../fut/shots/U02-detail-f1.png
+?? ../../fut/shots/U02-detail-f5.png
+?? ../../fut/shots/U02-detail-f7.png
+?? ../../fut/shots/U03-replay-f1.png
+?? ../../fut/shots/U03-replay-f5.png
+?? ../../fut/shots/U03-replay-f7.png
+?? ../../fut/shots/U04-result-f1.png
+?? ../../fut/shots/U04-result-f5.png
+?? ../../fut/shots/U04-result-f7.png
+?? ../../fut/shots/U05-decision-f1.png
+?? ../../fut/shots/U05-decision-f5.png
+?? ../../fut/shots/U05-decision-f7.png
+?? ../../fut/shots/U06-trade-f1.png
+?? ../../fut/shots/U06-trade-f5.png
+?? ../../fut/shots/U06-trade-f7.png
+?? ../../fut/shots/U07-follow.png
+?? s3/
+?? ../../mine-walk/
+?? ../../mine/M01-ready.png
+?? ../../mine/M02-replay.png
+?? ../../mine/M03-result.png
+?? ../../mine/M04-activation.png
+?? ../../mine/M05-connected.png
+?? ../../mine/M06-start.png
+?? ../../mine/verify-mine-log.txt
+?? ../../mine/w390/
+?? ../../mine2/
+?? ../../real/A01-chat-card.png
+?? ../../real/A02-ready.png
+?? ../../real/A03-result.png
+?? ../../round-1/S01-backtest-ready.png
+?? ../../round-1/S02-early-processing.png
+?? ../../round-1/S02a-preparing.png
+?? ../../round-1/S02b-first-decision.png
+?? ../../round-1/S03-mid-processing.png
+?? ../../round-1/S03b-between-events.png
+?? ../../round-1/S04-final-processing.png
+?? ../../round-1/S05-results-above-fold.png
+?? ../../round-1/S05b-results-hover.png
+?? ../../round-1/S06-results-evidence.png
+?? ../../round-1/S07-decision-detail.png
+?? ../../round-1/S08-trade-detail.png
+?? ../../round-1/S08b-result-full-page.png
+?? ../../round-1/S09-activation-choice.png
+?? ../../round-1/S10-card-path.png
+?? ../../round-1/S11-exchange-connection.png
+?? ../../round-1/S12-partner-exchange.png
+?? ../../round-1/S13-uid-verification.png
+?? ../../round-1/S14-api-connection.png
+?? ../../round-1/S14a-api-form.png
+?? ../../round-1/S15-success.png
+?? ../../round-1/S15b-success-own-exchange.png
+?? ../../round-1/S15c-success-full-page.png
+?? ../../round-1/X01-uid-not-found.png
+?? ../../round-1/d1-w1440/S01-backtest-ready.png
+?? ../../round-1/d1-w1440/S02-early-processing.png
+?? ../../round-1/d1-w1440/S02a-preparing.png
+?? ../../round-1/d1-w1440/S04-final-processing.png
+?? ../../round-1/d1-w1440/S05-results-above-fold.png
+?? ../../round-1/d1-w1440/S06-results-evidence.png
+?? ../../round-1/d1-w1440/S07-decision-detail.png
+?? ../../round-1/d1-w1440/S08-trade-detail.png
+?? ../../round-1/d1-w1440/S09-activation-choice.png
+?? ../../round-1/d1-w1440/S10-card-path.png
+?? ../../round-1/d1-w1440/S11-exchange-connection.png
+?? ../../round-1/d1-w1440/S12-partner-exchange.png
+?? ../../round-1/d1-w1440/S13-uid-verification.png
+?? ../../round-1/d1-w1440/S14-api-connection.png
+?? ../../round-1/d1-w1440/S15-success.png
+?? ../../round-1/r1-w1440/S01-backtest-ready.png
+?? ../../round-1/r1-w1440/S02-early-processing.png
+?? ../../round-1/r1-w1440/S02a-preparing.png
+?? ../../round-1/r1-w1440/S04-final-processing.png
+?? ../../round-1/r1-w1440/S05-results-above-fold.png
+?? ../../round-1/r1-w1440/S06-results-evidence.png
+?? ../../round-1/r1-w1440/S07-decision-detail.png
+?? ../../round-1/r1-w1440/S08-trade-detail.png
+?? ../../round-1/r1-w1440/S09-activation-choice.png
+?? ../../round-1/r1-w1440/S10-card-path.png
+?? ../../round-1/r1-w1440/S11-exchange-connection.png
+?? ../../round-1/r1-w1440/S12-partner-exchange.png
+?? ../../round-1/r1-w1440/S13-uid-verification.png
+?? ../../round-1/r1-w1440/S14-api-connection.png
+?? ../../round-1/r1-w1440/S15-success.png
+?? ../../round-1/seq/
+?? ../../round-1/w1280/S01-backtest-ready.png
+?? ../../round-1/w1280/S02-early-processing.png
+?? ../../round-1/w1280/S02a-preparing.png
+?? ../../round-1/w1280/S03-mid-processing.png
+?? ../../round-1/w1280/S04-final-processing.png
+?? ../../round-1/w1280/S05-results-above-fold.png
+?? ../../round-1/w1280/S06-results-evidence.png
+?? ../../round-1/w1280/S07-decision-detail.png
+?? ../../round-1/w1280/S08-trade-detail.png
+?? ../../round-1/w1280/S09-activation-choice.png
+?? ../../round-1/w1280/S10-card-path.png
+?? ../../round-1/w1280/S11-exchange-connection.png
+?? ../../round-1/w1280/S12-partner-exchange.png
+?? ../../round-1/w1280/S13-uid-verification.png
+?? ../../round-1/w1280/S14-api-connection.png
+?? ../../round-1/w1280/S15-success.png
+?? ../../round-1/w390/S01-backtest-ready.png
+?? ../../round-1/w390/S02-early-processing.png
+?? ../../round-1/w390/S02a-preparing.png
+?? ../../round-1/w390/S03-mid-processing.png
+?? ../../round-1/w390/S04-final-processing.png
+?? ../../round-1/w390/S05-results-above-fold.png
+?? ../../round-1/w390/S06-results-evidence.png
+?? ../../round-1/w390/S07-decision-detail.png
+?? ../../round-1/w390/S08-trade-detail.png
+?? ../../round-1/w390/S09-activation-choice.png
+?? ../../round-1/w390/S10-card-path.png
+?? ../../round-1/w390/S11-exchange-connection.png
+?? ../../round-1/w390/S12-partner-exchange.png
+?? ../../round-1/w390/S13-uid-verification.png
+?? ../../round-1/w390/S14-api-connection.png
+?? ../../round-1/w390/S15-success.png
+?? ../../round-2/S01-backtest-ready.png
+?? ../../round-2/S02-early-processing.png
+?? ../../round-2/S02a-preparing.png
+?? ../../round-2/S02b-first-decision.png
+?? ../../round-2/S03-mid-processing.png
+?? ../../round-2/S03a-skip-signal.png
+?? ../../round-2/S03b-skip-review.png
+?? ../../round-2/S03c-between-events.png
+?? ../../round-2/S04-final-processing.png
+?? ../../round-2/S05-results-above-fold.png
+?? ../../round-2/S05b-results-hover.png
+?? ../../round-2/S06-results-evidence.png
+?? ../../round-2/S07-decision-detail.png
+?? ../../round-2/S08-trade-detail.png
+?? ../../round-2/S08b-result-full-page.png
+?? ../../round-2/S09-activation-choice.png
+?? ../../round-2/S10-card-path.png
+?? ../../round-2/S11-exchange-connection.png
+?? ../../round-2/S11a-exchange-form.png
+?? ../../round-2/S12-partner-exchange.png
+?? ../../round-2/S12b-partner-new-account.png
+?? ../../round-2/S13-uid-verification.png
+?? ../../round-2/S14-api-connection.png
+?? ../../round-2/S14a-api-form.png
+?? ../../round-2/S15-success.png
+?? ../../round-2/S15b-success-own-account.png
+?? ../../round-2/X01-uid-not-found.png
+?? ../../round-2/d1-w1440/S01-backtest-ready.png
+?? ../../round-2/d1-w1440/S02-early-processing.png
+?? ../../round-2/d1-w1440/S02a-preparing.png
+?? ../../round-2/d1-w1440/S03-mid-processing.png
+?? ../../round-2/d1-w1440/S04-final-processing.png
+?? ../../round-2/d1-w1440/S05-results-above-fold.png
+?? ../../round-2/d1-w1440/S06-results-evidence.png
+?? ../../round-2/d1-w1440/S07-decision-detail.png
+?? ../../round-2/d1-w1440/S08-trade-detail.png
+?? ../../round-2/d1-w1440/S09-activation-choice.png
+?? ../../round-2/d1-w1440/S10-card-path.png
+?? ../../round-2/d1-w1440/S11-exchange-connection.png
+?? ../../round-2/d1-w1440/S12-partner-exchange.png
+?? ../../round-2/d1-w1440/S13-uid-verification.png
+?? ../../round-2/d1-w1440/S14-api-connection.png
+?? ../../round-2/d1-w1440/S15-success.png
+?? ../../round-2/h1-w1440/S01-backtest-ready.png
+?? ../../round-2/h1-w1440/S02-early-processing.png
+?? ../../round-2/h1-w1440/S02a-preparing.png
+?? ../../round-2/h1-w1440/S03-mid-processing.png
+?? ../../round-2/h1-w1440/S04-final-processing.png
+?? ../../round-2/h1-w1440/S05-results-above-fold.png
+?? ../../round-2/h1-w1440/S06-results-evidence.png
+?? ../../round-2/h1-w1440/S07-decision-detail.png
+?? ../../round-2/h1-w1440/S08-trade-detail.png
+?? ../../round-2/h1-w1440/S09-activation-choice.png
+?? ../../round-2/h1-w1440/S10-card-path.png
+?? ../../round-2/h1-w1440/S11-exchange-connection.png
+?? ../../round-2/h1-w1440/S12-partner-exchange.png
+?? ../../round-2/h1-w1440/S13-uid-verification.png
+?? ../../round-2/h1-w1440/S14-api-connection.png
+?? ../../round-2/h1-w1440/S15-success.png
+?? ../../round-2/r1-w1440/S01-backtest-ready.png
+?? ../../round-2/r1-w1440/S02a-preparing.png
+?? ../../round-2/r1-w1440/S04-final-processing.png
+?? ../../round-2/r1-w1440/S05-results-above-fold.png
+?? ../../round-2/r1-w1440/S06-results-evidence.png
+?? ../../round-2/r1-w1440/S07-decision-detail.png
+?? ../../round-2/r1-w1440/S08-trade-detail.png
+?? ../../round-2/r1-w1440/S09-activation-choice.png
+?? ../../round-2/r1-w1440/S10-card-path.png
+?? ../../round-2/r1-w1440/S11-exchange-connection.png
+?? ../../round-2/r1-w1440/S12-partner-exchange.png
+?? ../../round-2/r1-w1440/S13-uid-verification.png
+?? ../../round-2/r1-w1440/S14-api-connection.png
+?? ../../round-2/r1-w1440/S15-success.png
+?? ../../round-2/seq/
+?? ../../round-2/w1280/S01-backtest-ready.png
+?? ../../round-2/w1280/S02-early-processing.png
+?? ../../round-2/w1280/S02a-preparing.png
+?? ../../round-2/w1280/S03-mid-processing.png
+?? ../../round-2/w1280/S04-final-processing.png
+?? ../../round-2/w1280/S05-results-above-fold.png
+?? ../../round-2/w1280/S06-results-evidence.png
+?? ../../round-2/w1280/S07-decision-detail.png
+?? ../../round-2/w1280/S08-trade-detail.png
+?? ../../round-2/w1280/S09-activation-choice.png
+?? ../../round-2/w1280/S10-card-path.png
+?? ../../round-2/w1280/S11-exchange-connection.png
+?? ../../round-2/w1280/S12-partner-exchange.png
+?? ../../round-2/w1280/S13-uid-verification.png
+?? ../../round-2/w1280/S14-api-connection.png
+?? ../../round-2/w1280/S15-success.png
+?? ../../round-2/w390/S01-backtest-ready.png
+?? ../../round-2/w390/S02-early-processing.png
+?? ../../round-2/w390/S02a-preparing.png
+?? ../../round-2/w390/S03-mid-processing.png
+?? ../../round-2/w390/S04-final-processing.png
+?? ../../round-2/w390/S05-results-above-fold.png
+?? ../../round-2/w390/S06-results-evidence.png
+?? ../../round-2/w390/S07-decision-detail.png
+?? ../../round-2/w390/S08-trade-detail.png
+?? ../../round-2/w390/S09-activation-choice.png
+?? ../../round-2/w390/S10-card-path.png
+?? ../../round-2/w390/S11-exchange-connection.png
+?? ../../round-2/w390/S12-partner-exchange.png
+?? ../../round-2/w390/S13-uid-verification.png
+?? ../../round-2/w390/S14-api-connection.png
+?? ../../round-2/w390/S15-success.png
+?? ../../../ux-audit/card3/log-codex-card3.txt
+?? ../../../ux-audit/card3/log-codex-hero.txt
+?? ../../../ux-audit/detail/fx-mid-1440.png
+?? ../../../ux-audit/detail/log-codex-crit.txt
+?? ../../../ux-audit/detail/log-codex.txt
+?? ../../../ux-audit/footer2/black-spa-390.png
+?? ../../../ux-audit/footer2/live-trade-footer-1440.png
+?? ../../../ux-audit/footer2/log-codex-bar.txt
+?? ../../../ux-audit/footer2/log-codex-crit.txt
+?? ../../../ux-audit/footer2/log-codex.txt
+?? ../../../ux-audit/footer2/ours-bar-390.png
+?? ../../../ux-audit/footer2/r3-gap-1440.png
+?? ../../../ux-audit/footer2/r5-hero-next-390.png
+?? ../../../ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ../../../ux-audit/footer2/video-frame-3s.jpg
+?? ../../../ux-audit/footer2/video-frame-5s.jpg
+?? ../../../ux-audit/footer2/video-frame-6.2s.jpg
+?? ../../../ux-audit/hero/frame3-codex.png
+?? ../../../ux-audit/hero/frame3.png
+?? ../../../ux-audit/hero/log-agy.txt
+?? ../../../ux-audit/hero/log-codex-crit.txt
+?? ../../../ux-audit/hero/log-codex.txt
+?? ../../../ux-audit/hero/prompt-agy.md
+?? ../../../ux-audit/hero/prompt-codex-crit.md
+?? ../../../ux-audit/hero/prompt-codex.md
+?? ../../../ux-audit/logs/
+?? ../../../ux-audit/research/log-codex-verify.txt
+?? ../../../ux-audit/review/
+?? ../../../ux-audit/spark/log-codex.txt
+
+codex
+창의 표면과 기본 입력 구성은 기준에 가까워졌습니다. 다만 설정을 펼치면 시작 단추가 화면 밖으로 밀리고, 최소 미달 금액을 입력했는데 확인 행에는 ‘미입력’으로 표시되는 문제가 남아 있습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const fs=require('fs');for(const p of ['.','s2','../../../.mailbox/inbox/codex']){console.log(p);try{console.log(fs.readdirSync(p).join('\\n'))}catch(e){console.log(e.message)}}\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\copy
+ succeeded in 102ms:
+.
+BRIEF.md
+r
+s1
+s2
+s3
+skc-check.mjs
+s2
+C1-empty-m.png
+C1-empty.png
+C2-under-min-m.png
+C2-under-min.png
+C3-filled-adv-m.png
+C3-filled-adv.png
+C4-not-connected.png
+K1-empty-m.png
+K1-empty.png
+K2-under-min-m.png
+K2-under-min.png
+K3-filled-adv-m.png
+K3-filled-adv.png
+skc-check-m.txt
+skc-check.txt
+../../../.mailbox/inbox/codex
+
+
+codex
+**판정: 기준 ②·③과 같은 제품으로 보입니다.** ②와 같은 약 520픽셀 너비, `#303030` 표면, 26픽셀 모서리, 좌우 약 29픽셀 여백이 일치합니다. 남은 문제는 설정을 펼친 뒤의 완료 동선과 작은 설명 글자입니다. 아래 치수는 첨부 이미지 기준 근삿값입니다.
+
+| 우선순위 | 근거 | 고칠 값 |
+|---|---|---|
+| 필수 | 펼친 상태 ⑥은 창이 세로 약 810픽셀인데 시작 단추가 보이지 않습니다. ⑧도 844픽셀 화면 안에서 시작 단추가 사라집니다. | 시작 단추를 하단 고정 영역으로 분리합니다. 높이 52픽셀, 위아래 여백 16픽셀을 확보하고 설정 본문만 스크롤합니다. |
+| 필수 | 기준 ②·③의 주요 본문은 약 16픽셀입니다. 현재 필드 이름과 확인 행은 약 14픽셀이고, 레버리지 설명도 작고 굵어 보조 주석처럼 보입니다. | 필드 이름과 확인 값은 16픽셀, 보조 설명은 14픽셀로 구분합니다. 레버리지 문장은 16픽셀 보통 굵기, 줄높이 24픽셀로 조정합니다. |
+| 필수 | ⑤는 `$50`을 입력했지만 확인 행에는 ‘미입력’이라고 표시합니다. 입력 상태와 요약이 모순됩니다. | 확인 값에 `$50`을 표시합니다. 최소 미달 설명은 입력칸 아래에 유지하고 시작 단추는 비활성 상태로 둡니다. |
+| 권장 | ④의 입력칸 오른쪽은 약 951픽셀, 스크롤바가 생긴 ⑥은 약 941픽셀입니다. 펼치는 순간 내용 폭이 약 10픽셀 줄어듭니다. | 스크롤바 공간을 처음부터 확보해 펼침 전후 입력칸과 확인 영역의 너비를 유지합니다. |
+| 권장 | 데스크톱 예산 칸에는 중립 테두리가 있지만 모바일 ⑦·⑧에서는 보이지 않습니다. | 모바일에도 같은 1픽셀 중립 테두리를 적용합니다. 오류 테두리와 선택 알약의 강조는 유지합니다. |
+
+제목 26픽셀은 유지해도 됩니다. 입력이 있는 작업 창이라는 위계를 만듭니다. 흰색 시작 단추의 **활성 상태는 첨부 화면에서 보이지 않아** 기준 ③과의 일치 여부를 판정할 수 없습니다.
+
+**문구 수정안**
+
+| 현재 | 제안 |
+|---|---|
+| 레버리지 변경도 원본을 따릅니다. 현재 2배입니다. | 현재 레버리지는 2배입니다. 원본에서 변경하면 내 복사에도 적용됩니다. |
+| 최대 | 최대 금액 |
+| 사용 가능 $1,000, 최소 $500 | 사용 가능 금액 $1,000 / 최소 예산 $500 |
+| 최소 $500부터 시작할 수 있습니다 | $500 이상 입력해야 합니다. |
+| 예산의 20%를 잃으면 복사를 자동으로 멈춥니다. | 예산의 20%를 잃으면 복사를 자동으로 중단합니다. |
+| 손실 중단 | 손실 중단 기준 |
+| 복사 설정 / 복사 설정 접기 | 세부 설정 / 세부 설정 접기 |
+| 전략 복사 시작 | 복사 시작 |
+| 복사는 무료이며 언제든 멈출 수 있습니다. | 복사 이용료는 무료입니다. 언제든 중단할 수 있습니다. |
+
+**처음 사용하는 사람의 행동**
+
+먼저 예산 칸을 누릅니다. `$500`이 연하게 보여 예시인지 이미 입력된 값인지 잠깐 망설이지만, 확인 행의 ‘미입력’으로 구분할 수 있습니다. `$800`을 입력하고 30%를 선택하면 `$240 (30%)`이 보여 선택 결과를 이해합니다.
+
+다음으로 ‘다음 진입부터’와 ‘95%’의 의미를 확인하려고 세부 설정을 엽니다. 여기서 시작 단추가 사라져 완료까지의 거리가 늘어납니다. ‘현재 포지션부터’는 지금 가격으로 즉시 진입한다는 뜻인지 불명확합니다. 선택지 아래에 실제 진입 동작을 한 문장으로 설명해야 합니다. ‘복사 중단’도 새 주문만 중단하는지 보유 포지션까지 정리하는지 현재 문구로는 알 수 없습니다.
+
+레버리지 문장은 **현재 2배이고, 이후 원본이 배수를 바꾸면 내 복사에도 반영된다**는 뜻으로 읽힙니다. 정책은 전달되지만 ‘변경도’가 앞서 나와 한 번 되읽게 되므로 현재 값부터 설명하는 편이 명확합니다.
+
+**1단계의 ‘안쪽 재구성’은 기본 화면에서 해결되었지만, 설정을 펼친 뒤에도 확인과 시작이 이어지도록 만드는 작업은 남았습니다.**
+tokens used
+41,141
+**판정: 기준 ②·③과 같은 제품으로 보입니다.** ②와 같은 약 520픽셀 너비, `#303030` 표면, 26픽셀 모서리, 좌우 약 29픽셀 여백이 일치합니다. 남은 문제는 설정을 펼친 뒤의 완료 동선과 작은 설명 글자입니다. 아래 치수는 첨부 이미지 기준 근삿값입니다.
+
+| 우선순위 | 근거 | 고칠 값 |
+|---|---|---|
+| 필수 | 펼친 상태 ⑥은 창이 세로 약 810픽셀인데 시작 단추가 보이지 않습니다. ⑧도 844픽셀 화면 안에서 시작 단추가 사라집니다. | 시작 단추를 하단 고정 영역으로 분리합니다. 높이 52픽셀, 위아래 여백 16픽셀을 확보하고 설정 본문만 스크롤합니다. |
+| 필수 | 기준 ②·③의 주요 본문은 약 16픽셀입니다. 현재 필드 이름과 확인 행은 약 14픽셀이고, 레버리지 설명도 작고 굵어 보조 주석처럼 보입니다. | 필드 이름과 확인 값은 16픽셀, 보조 설명은 14픽셀로 구분합니다. 레버리지 문장은 16픽셀 보통 굵기, 줄높이 24픽셀로 조정합니다. |
+| 필수 | ⑤는 `$50`을 입력했지만 확인 행에는 ‘미입력’이라고 표시합니다. 입력 상태와 요약이 모순됩니다. | 확인 값에 `$50`을 표시합니다. 최소 미달 설명은 입력칸 아래에 유지하고 시작 단추는 비활성 상태로 둡니다. |
+| 권장 | ④의 입력칸 오른쪽은 약 951픽셀, 스크롤바가 생긴 ⑥은 약 941픽셀입니다. 펼치는 순간 내용 폭이 약 10픽셀 줄어듭니다. | 스크롤바 공간을 처음부터 확보해 펼침 전후 입력칸과 확인 영역의 너비를 유지합니다. |
+| 권장 | 데스크톱 예산 칸에는 중립 테두리가 있지만 모바일 ⑦·⑧에서는 보이지 않습니다. | 모바일에도 같은 1픽셀 중립 테두리를 적용합니다. 오류 테두리와 선택 알약의 강조는 유지합니다. |
+
+제목 26픽셀은 유지해도 됩니다. 입력이 있는 작업 창이라는 위계를 만듭니다. 흰색 시작 단추의 **활성 상태는 첨부 화면에서 보이지 않아** 기준 ③과의 일치 여부를 판정할 수 없습니다.
+
+**문구 수정안**
+
+| 현재 | 제안 |
+|---|---|
+| 레버리지 변경도 원본을 따릅니다. 현재 2배입니다. | 현재 레버리지는 2배입니다. 원본에서 변경하면 내 복사에도 적용됩니다. |
+| 최대 | 최대 금액 |
+| 사용 가능 $1,000, 최소 $500 | 사용 가능 금액 $1,000 / 최소 예산 $500 |
+| 최소 $500부터 시작할 수 있습니다 | $500 이상 입력해야 합니다. |
+| 예산의 20%를 잃으면 복사를 자동으로 멈춥니다. | 예산의 20%를 잃으면 복사를 자동으로 중단합니다. |
+| 손실 중단 | 손실 중단 기준 |
+| 복사 설정 / 복사 설정 접기 | 세부 설정 / 세부 설정 접기 |
+| 전략 복사 시작 | 복사 시작 |
+| 복사는 무료이며 언제든 멈출 수 있습니다. | 복사 이용료는 무료입니다. 언제든 중단할 수 있습니다. |
+
+**처음 사용하는 사람의 행동**
+
+먼저 예산 칸을 누릅니다. `$500`이 연하게 보여 예시인지 이미 입력된 값인지 잠깐 망설이지만, 확인 행의 ‘미입력’으로 구분할 수 있습니다. `$800`을 입력하고 30%를 선택하면 `$240 (30%)`이 보여 선택 결과를 이해합니다.
+
+다음으로 ‘다음 진입부터’와 ‘95%’의 의미를 확인하려고 세부 설정을 엽니다. 여기서 시작 단추가 사라져 완료까지의 거리가 늘어납니다. ‘현재 포지션부터’는 지금 가격으로 즉시 진입한다는 뜻인지 불명확합니다. 선택지 아래에 실제 진입 동작을 한 문장으로 설명해야 합니다. ‘복사 중단’도 새 주문만 중단하는지 보유 포지션까지 정리하는지 현재 문구로는 알 수 없습니다.
+
+레버리지 문장은 **현재 2배이고, 이후 원본이 배수를 바꾸면 내 복사에도 반영된다**는 뜻으로 읽힙니다. 정책은 전달되지만 ‘변경도’가 앞서 나와 한 번 되읽게 되므로 현재 값부터 설명하는 편이 명확합니다.
+
+**1단계의 ‘안쪽 재구성’은 기본 화면에서 해결되었지만, 설정을 펼친 뒤에도 확인과 시작이 이어지도록 만드는 작업은 남았습니다.**

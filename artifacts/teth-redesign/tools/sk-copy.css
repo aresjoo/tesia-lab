@@ -64,3 +64,18 @@
 .skc-sum .r{min-height:40px}
 .skc-more{margin:8px 2px 14px}
 @media (max-width:760px){ .mk-follow.skc{padding:22px 16px calc(18px + env(safe-area-inset-bottom))} }
+
+/* 픽셀 검수 1차 반영: 본문만 스크롤, 단추는 아래 고정, 글자 16/14 */
+.mk-follow.skc{display:flex;flex-direction:column;padding:0;overflow:hidden;max-height:min(90vh,860px)}
+.skc-body{flex:1;min-height:0;overflow-y:auto;scrollbar-gutter:stable;padding:24px 28px 8px}
+.skc-ft{flex:none;padding:14px 28px 18px;border-top:1px solid rgba(255,255,255,.08);background:#303030}
+.skc-fld>label,.skc-fld>.lb{font-size:16px}
+.skc-sum .r{font-size:16px}
+.skc-hint{font-size:14px}
+.skc-lev{font-size:16px;line-height:24px;font-weight:400;color:#dbe6ff}
+.skc-in{border-color:rgba(255,255,255,.12)}
+@media (max-width:760px){
+  .mk-follow.skc{padding:0;max-height:92vh}
+  .skc-body{padding:22px 16px 8px}
+  .skc-ft{padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+}

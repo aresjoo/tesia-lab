@@ -151,7 +151,7 @@ function pxList(){
 var PX_TV={binance:'BINANCE',okx:'OKX',bybit:'BYBIT',bitget:'BITGET',mexc:'MEXC',woox:'WOONETWORK',gate:'GATEIO'};
 function pxTermEmpty(){
   var ex=acConnList()[0]||'binance', sym=(PX_TV[ex]||'BINANCE')+':BTCUSDT';
-  var br=document.getElementById('tft-brainin'); if(br) br.innerHTML='<div class="px-tbrain"><b>실행 중인 전략이 없습니다</b><span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span><button type="button" class="pl-cta pl-cta-w" onclick="tfShareHub()">전략 찾기</button><button type="button" class="pl-link" onclick="tfBackToChat()">새 전략 만들기</button></div>';
+  var br=document.getElementById('tft-brainin'); if(br) br.innerHTML=pxTermSide();
   var note=document.querySelector('.tm-simnote'); if(note) note.remove();
   var host=document.getElementById('nfxh-tv'); if(!host) return;
   if(typeof taiTv==='function') taiTv(function(){ var h=document.getElementById('nfxh-tv'); if(!h||h.childNodes.length) return;
@@ -174,3 +174,11 @@ function pxSubRoute(){ var a=acS(); a.route='paid'; a.has=null; a.g=0; acSave();
   /* Gate: 앱스토어 앱 아이콘 */
   var lg0=acLogo; acLogo=function(id,z){ if(id==='gate'){ z=z||28; return '<img src="assets/logos/app-gate.jpg" alt="" width="'+z+'" height="'+z+'" loading="lazy">'; } return lg0.apply(this,arguments); };
 })();
+
+/* 터미널 오른쪽 칸: 복사한 전략이 있으면 목록(이름, 운용, 순손익, 관리), 없으면 전략 찾기 */
+function pxTermSide(){
+  var cps=[]; try{ cps=((tfS().cp&&tfS().cp.copies)||[]).filter(function(c){ return c.status==='active'; }); }catch(e){}
+  if(!cps.length) return '<div class="px-tbrain"><b>실행 중인 전략이 없습니다</b><span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span><button type="button" class="pl-cta pl-cta-w" onclick="tfShareHub()">전략 찾기</button><button type="button" class="pl-link" onclick="tfBackToChat()">새 전략 만들기</button></div>';
+  return '<div class="px-tbrain"><b>복사한 전략 '+cps.length+'개가 실행 중입니다</b><div class="px-tcps">'+cps.map(function(c){ var d=cpCalc(c), s=tfSSFind(c.nick);
+    return '<div class="r"><div><b>'+gEsc(s?mkTitle(s):c.nick)+'</b><span class="num">운용 '+cpUsd(d.inv,0)+', 순손익 <i class="'+(d.net>=0?'mk-up':'mk-dn')+'">'+cpUsd(d.net)+'</i></span></div><button type="button" class="pl-link" onclick="cpDetailGo(&quot;'+c.id+'&quot;)">관리</button></div>'; }).join('')+'</div><button type="button" class="pl-link" onclick="tfShareHub()">전략 더 찾기</button></div>';
+}
