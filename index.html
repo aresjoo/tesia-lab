@@ -7733,6 +7733,120 @@ body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 .acx-ac li::before{border-color:#00f0ff}
 .px-card.px-hi{animation-name:pxHiC}
 @keyframes pxHiC{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(0,240,255,0)}50%{box-shadow:0 0 0 6px rgba(0,240,255,.16)}to{border-color:rgba(0,240,255,.55);box-shadow:0 0 0 0 rgba(0,240,255,0)}}
+/* ═══ 전략 복사 상세 (sk-detail): DESIGN_PROMPT.md 정본, Codex s1 표. 요소와 순서는 그대로, 글자 위계와 여백, 단추만 ═══ */
+.tf-page.mk-detail{color:#ececec}
+.mk-detail .tfbk-bc{font-size:14px;color:#9a9a9a;margin:4px 0 16px}
+.mk-detail .tfbk-bc .lk{color:#cdcdcd}
+/* 머리: 제목 32/400, 설명 18, 부가 14 */
+.mk-detail .mk3-dh-t h2{font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
+.mk-detail .mk3-dh-t p{margin:8px 0 0;font-size:14px;color:#cdcdcd;gap:10px}
+.mk-detail .mk3-dh-t p b{font-weight:400;color:#cdcdcd}
+.mk-detail .mk3-dh-one{margin:18px 0 0;font-size:18px;line-height:1.55;color:#ececec}
+.mk-detail .mkd-ic{width:36px;height:36px;border-radius:999px;background:#2f2f2f;color:#ececec}
+.mk-detail .mkd-fav{height:36px;padding:0 14px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;font-weight:400}
+.mk-detail .mkd-fav:hover,.mk-detail .mkd-ic:hover{background:#3a3a3a}
+/* 단추 줄: 흰 알약 하나, 직접 검증하기는 밑줄 링크 */
+.mk-detail .mk3-dh-acts{margin-top:24px;gap:20px}
+.mk-detail .mk3-dh-acts .mk-pri{height:48px;min-width:0;padding:0 24px;border-radius:999px;background:#fff;border-color:#fff;color:#000;font-size:16px;font-weight:500}
+.mk-detail .mk3-dh-acts .mk-pri:hover{background:#e5e5e5;border-color:#e5e5e5}
+.mk-detail .mk3-bt2{height:48px;padding:0;border-radius:0;background:none;color:#ececec;font-size:16px}
+.mk-detail .mk3-bt2 b{font-weight:400;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.mk-detail .mk3-bt2 svg{display:none}
+.mk-detail .mk3-bt2:hover{background:none;color:#fff}
+.mk-detail .mk3-dh-meta{font-size:14px;color:#cdcdcd;gap:16px}
+.mk-detail .mkd-term{border-bottom:0;text-decoration:none}
+.mk-detail .mkd-term:hover{text-decoration:underline;text-underline-offset:3px}
+.mk-detail .mk-more-b{width:36px;height:36px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:18px}
+.mk-detail .mk-more-b:hover{background:#3a3a3a}
+/* 탭 16/400 */
+.mk-detail .mk-dtabs{margin:32px 0 28px;border-bottom:1px solid rgba(255,255,255,.1)}
+.mk-detail .mk-tab{font-size:16px;font-weight:400;color:#cdcdcd;padding:12px 14px}
+.mk-detail .mk-tab.on{color:#fff}
+/* 섹션 */
+.mk-detail .mk3-sec{margin:44px 0 0}
+.mk-detail .mk3-sec:first-child{margin-top:0}
+.mk-detail .mk3-sec h3,.mk-detail .mk3-sec-h h3{font-size:18px;font-weight:400;color:#fff;letter-spacing:0}
+/* 성과 지표: 라벨 16, 숫자 32/400, 점선 없음 */
+.mk-detail .mk3-kpis{gap:16px;margin:16px 0 28px;padding:20px 0;border-color:rgba(255,255,255,.1)}
+.mk-detail .mk3-kpis small{font-size:16px;color:#cdcdcd;margin:0 0 6px}
+.mk-detail .mk3-kpis small .mkd-term{font-size:16px;color:#cdcdcd}
+.mk-detail .mk3-kpis b{font-size:32px;font-weight:400;color:#fff;letter-spacing:-.01em}
+.mk-detail .mk3-kpis b.mk-up{color:#58b892}
+.mk-detail .mk3-kpis b.mk-dn{color:#d97a72}
+/* 차트 조작: 알약 16, 선택은 2px 회색 테두리, 기간 입력면 #212121 */
+.mk-detail .mkd-pill{height:40px;padding:0 16px;font-size:16px;font-weight:400;color:#cdcdcd;border:1px solid rgba(255,255,255,.14)}
+.mk-detail .mkd-pill[aria-pressed="true"],.mk-detail .mkd-pill.on{border:2px solid #9a9a9a;color:#fff;font-weight:400}
+.mk-detail .mkd-pill i{font-style:normal;font-size:12px;color:#9a9a9a}
+.mk-detail .mkd-seg{border:0;border-radius:999px;background:#212121;padding:3px}
+.mk-detail .mkd-seg button{height:32px;border-radius:999px;font-size:14px;color:#cdcdcd}
+.mk-detail .mkd-seg button[aria-pressed="true"]{background:#303030;color:#fff;font-weight:400;outline:0}
+.mk-detail .mkd-right select{height:38px;padding:0 14px;border:0;border-radius:19px;background:#212121;color:#ececec;font-size:14px}
+.mk-detail .mkd-hint{font-size:14px;color:#9a9a9a;margin-top:12px}
+.mk-detail .mk3-since{margin-top:16px;font-size:14px;color:#cdcdcd}
+/* 달력: 칸은 #303030, 색은 숫자에만 */
+.mk-detail .mk3-cal{margin-top:36px}
+.mk-detail .mk3-cal .cal-hd b,.mk-detail .mk3-cal > div:first-child b{font-size:18px;font-weight:400;color:#fff}
+.mk-detail .cal-hd{font-size:14px;color:#9a9a9a;gap:6px;margin-bottom:8px}
+.mk-detail .cal-g{gap:6px}
+.mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:58px;border-radius:14px;background:#303030;font-size:14px;color:#cdcdcd;padding:8px 10px;border:0}
+.mk-detail .cal-c.off{background:transparent;color:#5d5d5d}
+.mk-detail .cal-c i{font-style:normal;font-size:14px}
+.mk-detail .cal-c.u i{color:#58b892}
+.mk-detail .cal-c.d i{color:#d97a72}
+.mk-detail .mt2{font-size:14px;color:#cdcdcd}
+.mk-detail .cal-nav{width:32px;height:32px;border-radius:999px;border:0;background:#2f2f2f;color:#ececec}
+/* 판단 기록: 제목 18, 본문 16, 시각 14, 아이콘은 중립 */
+.mk-detail .mkc-m.v2{gap:16px;padding:24px 0;border-top:1px solid rgba(255,255,255,.1)}
+.mk-detail .mkc-m.v2 .mkc-h b{font-size:18px;font-weight:400;color:#fff}
+.mk-detail .mkc-m.v2 .mkc-h time{font-size:14px;color:#9a9a9a}
+.mk-detail .mkc-m.v2 .mkc-t p{font-size:16px;line-height:1.7;color:#cdcdcd}
+.mk-detail .mkc-m.v2 .mkc-t p strong{font-weight:400;color:#fff}
+.mk-detail .mkc-m.first .mkc-t strong{font-size:16px}
+.mk-detail .mkg{font-weight:400}
+.mk-detail .mkc-ic,.mk-detail .k-buy>.mkc-ic,.mk-detail .k-sell>.mkc-ic,.mk-detail .k-now>.mkc-ic{width:32px;height:32px;background:#2f2f2f;color:#ececec}
+.mk-detail .mkc-out{font-size:16px;font-weight:400}
+.mk-detail .mkc-more{height:44px;margin-left:48px;padding:0 20px;border:1px solid rgba(255,255,255,.14);border-radius:999px;font-size:16px;font-weight:400;color:#ececec}
+/* 거래 내역 표: 머리 14, 행 16 */
+.mk-detail .mko-go{font-size:18px;font-weight:400;color:#fff}
+.mk-detail .mko-n{font-size:14px;color:#9a9a9a;margin-top:6px}
+.mk-detail .ss3-tbl th{font-size:14px;color:#9a9a9a;padding-bottom:14px;border-bottom-color:rgba(255,255,255,.1)}
+.mk-detail .ss3-tbl td{height:60px;font-size:16px;color:#ececec;border-bottom-color:rgba(255,255,255,.1)}
+.mk-detail .ss3-tbl td b{font-weight:400}
+.mk-detail .ss3-tbl td small{font-size:14px;color:#9a9a9a}
+.mk-detail .mko-s{font-weight:400}
+/* 전략 정보 탭: 라벨과 값 16 */
+.mk-detail .mk-info-r{grid-template-columns:180px minmax(0,1fr);padding:20px 0;border-bottom-color:rgba(255,255,255,.1);font-size:16px;color:#fff}
+.mk-detail .mk-info-r small{font-size:16px;color:#cdcdcd}
+@media (max-width:768px){
+  .tf-page.mk-detail{padding-left:16px;padding-right:16px}
+  .mk-detail .mk3-dh-t h2{font-size:28px}
+  .mk-detail .mk3-dh-one{font-size:16px}
+  .mk-detail .mk3-dh-acts{gap:12px 20px}
+  .mk-detail .mk3-dh-acts .mk-pri{flex:1 1 100%;min-width:0;height:48px}
+  .mk-detail .mk3-bt2{flex:0 0 auto;height:40px}
+  .mk-detail .mk-tab{font-size:16px;padding:12px 6px}
+  .mk-detail .mk3-kpis b{font-size:28px}
+  .mk-detail .mk3-kpis small,.mk-detail .mk3-kpis small .mkd-term{font-size:14px}
+  .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:44px;border-radius:10px;padding:5px 6px;font-size:12px}
+  .mk-detail .cal-c i{font-size:11px}
+  .mk-detail .mk-info-r{grid-template-columns:1fr;gap:6px}
+  .mk-detail .mkc-more{margin-left:0}
+}
+/* 굵기 정리: 판단 기록 첫 줄, 표의 종목, 차트 최고와 최저도 400 */
+.mk-detail .mkc-t strong,.mk-detail .mkc-t b{font-weight:400;color:#fff}
+.mk-detail .ss3-tbl b,.mk-detail .mko-tbl b,.mk-detail .tfbk-bc .lk{font-weight:400}
+.mk-detail svg text{font-weight:400}
+/* 달력 칸이 중립색이 된 만큼 모바일에서도 수익률 숫자를 보인다 */
+.mk-detail .cal-c i{display:block;position:static;margin-top:4px;font-weight:400;overflow:hidden;text-overflow:clip}
+@media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:48px;font-size:11px;padding:5px 4px} .mk-detail .cal-c i{font-size:10.5px;margin-top:2px;letter-spacing:-.02em} }
+/* Codex s3: 차트는 회색 선 하나, 면적 채움 없음, 색은 숫자에만 */
+.mk-detail .mkd-chart path[fill^="url(#mkdg"]{display:none}
+.mk-detail .mkd-chart path[stroke="#2fb98a"],.mk-detail .mkd-chart path[stroke="#f0566a"]{stroke:#ececec}
+.mk-detail .mkd-chart .mkd-mk text{font-weight:400}
+/* 달력 제목 18, 셀 반경 */
+.mk-detail .mk3-cal b{font-size:18px;font-weight:400}
+.mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:20px}
+@media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:12px} .mk-detail .mk3-dh-t h2,.mk-detail .mk-tab,.mk-detail .mk3-dh-one{font-weight:400} }
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -23620,6 +23734,81 @@ function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value
     };
     try{ return ai1.call(this,sp2); } finally{ taiThreadAdd=ta; delete TF_AI_DEPTH.__rsi; }
   };
+})();
+
+/* ═══ 전략 복사 상세 카피 (sk-detail) ═══
+   요소는 그대로 두고 글자만 바꾼다. 탭 전환, 기간 변경처럼 부분만 다시 그려도 적용되게 #g-content 를 지켜본다.
+   교체는 여러 번 적용해도 결과가 같게(멱등) 짠다. 코인 이름은 전략 이름처럼 심볼로(skSym). */
+var SKD_EXACT={'★ 즐겨찾기':'즐겨찾기','정보':'전략 정보','수익금':'손익','현재 판단':'현재 포지션','거래내역':'거래 내역',
+  '구분':'거래 유형','시간':'체결 시각','가격':'체결가','실행 거래소':'운용 거래소','등록':'등록자','선물 롱/숏 2배':'선물, 롱과 숏, 레버리지 2배'};
+function skdDate(y,m,d){ return y+'. '+(+m)+'. '+(+d)+'.'; }
+var SKD_RE=[
+  [/니입니다/g,'니다'],
+  [/반대 방향 신호가 나오면 닫고 방향을 바꿉니다/g,'반대 신호가 나오면 청산하고 방향을 바꿉니다'],
+  [/에서 25% 되돌리면 닫습니다/g,'에서 25% 되돌아오면 청산합니다'],
+  [/불리하게 움직이면 닫습니다/g,'불리하게 움직이면 청산합니다'],
+  [/반대 방향 신호가 나와 포지션을 닫았습니다/g,'반대 신호가 나와 포지션을 청산했습니다'],
+  [/넣은 돈 기준 손익은/g,'투입 금액 대비 손익은'],
+  [/넣은 돈 기준/g,'투입 금액 대비'],
+  [/^@(\S+) 등록$/,'등록자 @$1'],
+  [/^최소 (\$[0-9,]+)$/,'최소 운용 금액 $1'],
+  [/^(\d{4})\.(\d{2})\.(\d{2}) 시작$/,function(_,y,m,d){ return '시작일 '+skdDate(y,m,d); }],
+  [/^(\d{4})\.(\d{2})\.(\d{2}) 시작 이후 ([+-][0-9.,]+%)$/,function(_,y,m,d,v){ return y+'년 '+(+m)+'월 '+(+d)+'일부터 누적 수익률은 '+v+'입니다.'; }],
+  [/^(\d{4})\.(\d{2})\.(\d{2}) (\d{2}:\d{2})$/,function(_,y,m,d,t){ return skdDate(y,m,d)+' '+t; }],
+  [/손익은 [A-Z]{2,6}(\s*)$/,'손익은$1'],
+  [/^(\s*)가장 유리했던(\s*)$/,'$1진입 후 가장 유리했던$2'],
+  [/([.。] )가장 유리했던(\s*)$/,'$1진입 후 가장 유리했던$2'],
+  [/가에서 (\d+)% 불리하게 움직이면 청산합니다/g,'가 대비 $1% 손실 방향으로 움직이면 청산합니다'],
+  [/ ?손실은 포지션에 넣은 증거금으로 한정됩니다\./g,''],
+  [/(^\s*|\. )[A-Z]{2,6}, (\d+일 평균이 \d+일 평균을 (?:위|아래)로) 넘음\./g,'$1$2 넘었습니다.'],
+  [/^(\d{4})\.(\d{2})\.(\d{2}) ~ (\d{4})\.(\d{2})\.(\d{2})/,function(_,a,b,c,d,e,f){ return skdDate(a,b,c)+' ~ '+skdDate(d,e,f); }],
+  [/^Max /,'최고 '],[/^Min /,'최저 '],
+  [/, 끝난 거래 (\d+)회/,', 종료 거래 $1회'],
+  [/^평가 기록이 있는 봉만 색이 칠해집니다\. 지난 봉 기준입니다\.$/,'종료된 봉의 평가 기록을 날짜별로 표시합니다.'],
+  [/^이전 기록 (\d+)건 더 보기$/,'이전 기록 $1건 보기'],
+  [/^주문 (\d+)건, (\$[0-9,]+)로 시작한 기준$/,'초기 운용 금액 $2, 주문 $1건'],
+  [/선물의 (\d+일) 평균이 (\d+일) 평균을 넘으면 롱, 밑돌면 숏으로 (\d+배 )?바꿔 탑니다\./,'선물에서 $1 평균선이 $2 평균선보다 높으면 롱, 낮으면 숏으로 $3운용합니다.']
+];
+function skdText(t){
+  var k=t.trim(); if(SKD_EXACT[k]&&k===t.trim()) return t.replace(k,SKD_EXACT[k]);
+  for(var i=0;i<SKD_RE.length;i++) t=t.replace(SKD_RE[i][0],SKD_RE[i][1]);
+  if(typeof skSym==='function') t=skSym(t);
+  return t;
+}
+function skdApply(root){
+  if(!root) return;
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), n, L=[];
+  while((n=w.nextNode())){ var pe=n.parentElement; if(!pe||/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(pe.tagName)) continue; L.push(n); }
+  L.forEach(function(x){ var v=x.nodeValue, nv=skdText(v);
+    /* 정확히 일치 교체는 짧은 라벨(탭, 표 머리, 정보 행)에만 */
+    var k=v.trim(); if(SKD_EXACT[k]){ var pe=x.parentElement, ok=pe&&(pe.closest('.mk-dtabs,.mko-tbl thead,.ss3-tbl thead,.mk-info-r small,.mk-info-r span,.mkd-pills,.mkd-pill,.mkd-fav,.mkc-h,.mko-go,.mko-h')); if(!ok) nv=v; }
+    if(nv!==v) x.nodeValue=nv; });
+}
+var SKD_RULE=/레버리지는|반대 신호가 나오면 청산하고|되돌아오면 청산합니다|손실 방향으로 움직이면 청산합니다|한 종목을|양방향으로 거래합니다/;
+function skdDedupe(root){
+  [].forEach.call(root.querySelectorAll('.mkc-m.v2'),function(li){
+    if(li.dataset.skdd) return; var hb=li.querySelector('.mkc-h b'); var ttl=hb?hb.textContent.trim():'';
+    if(li.classList.contains('k-now')||/전략 개요|현재 포지션/.test(ttl)) { li.dataset.skdd='1'; return; }
+    /* 판단 기록의 시각은 신호 시각이다. 체결은 다음 날 시가라 거래 내역 날짜와 하루 다를 수 있어 화면에서 구분한다 (Codex s5) */
+    var tm=li.querySelector('.mkc-h time');
+    if(tm&&/진입|청산/.test(ttl)){ var mt=tm.textContent.trim().match(/^(\d{2})\/(\d{2}) (\d{2}:\d{2})/); if(mt) tm.textContent='신호 '+(+mt[1])+'. '+(+mt[2])+'. '+mt[3]+', 다음 날 시가 체결'; }
+    [].forEach.call(li.querySelectorAll('.mkc-t p'),function(p){
+      /* 글자 노드를 문장 끝(다. )에서 쪼갠 뒤 문장별로 노드를 묶는다 */
+      [].slice.call(p.childNodes).forEach(function(n){ if(n.nodeType!==3) return; var v=n.nodeValue, i, cur=n;
+        while((i=cur.nodeValue.search(/다\. ?/))>=0&&i+2<cur.nodeValue.length){ var cut=i+2+(cur.nodeValue.charAt(i+2)===' '?1:0); if(cut>=cur.nodeValue.length) break; cur=cur.splitText(cut); } });
+      var sent=[], all=[]; [].slice.call(p.childNodes).forEach(function(n){ sent.push(n); var t=n.textContent||''; if(/다\. ?$/.test(t)){ all.push(sent); sent=[]; } }); if(sent.length) all.push(sent);
+      all.forEach(function(g){ var txt=g.map(function(n){ return n.textContent; }).join(''); if(SKD_RULE.test(txt)) g.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); }); });
+    });
+    li.dataset.skdd='1';
+  });
+}
+(function(){
+  var busy=false, mo=null;
+  function run(){ var r=document.querySelector('#g-content .mk-detail'); if(!r) return; busy=true; try{ skdApply(r); skdDedupe(r); }finally{ busy=false; } }
+  function watch(){ var c=document.getElementById('g-content'); if(!c||mo) return;
+    mo=new MutationObserver(function(){ if(busy) return; if(document.querySelector('#g-content .mk-detail')) run(); });
+    mo.observe(c,{childList:true,subtree:true,characterData:true}); }
+  var r0=tfSS3DetailRender; tfSS3DetailRender=function(){ var r=r0.apply(this,arguments); try{ watch(); run(); }catch(e){} return r; };
 })();
 /*BT_CORE_END*/
 </script>
