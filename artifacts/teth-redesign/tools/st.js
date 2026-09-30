@@ -27,9 +27,7 @@ function stRail(){ var I=function(p){ return '<svg width="18" height="18" viewBo
   var it=function(lb,on,p){ return '<button type="button" class="stg-ri" aria-label="'+lb+'" onclick="'+on+'">'+I(p)+'<span class="tip">'+lb+'</span></button>'; };
   return '<aside class="stg-rail" aria-label="바로 가기"><button type="button" class="stg-rl" aria-label="사이드바 표시/숨기기" onclick="stNavToggle()"><span class="logo brand-mark brand-bg"></span><span class="tg">'+ST_TG+'</span><span class="tip">사이드바 표시/숨기기</span></button>'
     +it('새 전략','stBack()','<path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.800 2.800l3.400 3.400L13 14.400l-4 .600.600-4z"/>')
-    +it('AI 트레이딩','stBack();tfNav(\'#/trade\')','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 13l3-3 3 2 4-4"/>')
     +it('전략 복사','stBack();tfShareHub()','<path d="M5 19c2-4 4-6 8-8"/><path d="M14 4a6 6 0 0 1 6 6c-3 0-5 1-6 2-1-1-2-3-2-6a6 6 0 0 1 2-2z"/><circle cx="15" cy="9" r="1"/>')
-    +it('거래소 연결','stBack();tfBrokersView()','<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')
     +'</aside>'; }
 function stNavToggle(){ ST.navHid=!ST.navHid; try{ localStorage.setItem('teth.stnav',ST.navHid?'0':'1'); }catch(e){} var r=document.getElementById('st-root'); if(r) r.classList.toggle('nav-hid',ST.navHid); var b=document.getElementById('st-tg'); if(b) b.setAttribute('aria-expanded',String(!ST.navHid)); }
 function stView(){
