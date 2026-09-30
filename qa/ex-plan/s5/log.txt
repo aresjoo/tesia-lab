@@ -1,0 +1,153 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f35f-569c-7040-a539-21a8ece04610
+--------
+user
+# TETH plan page, second pixel pass (fresh context)
+
+Do not modify any file. Judge the pixels from scratch.
+
+TETH's exchange connection is a ChatGPT-style plan page. Attached pairs, reference first then TETH:
+1. ref-A (ChatGPT plan upgrade, desktop) vs P1-plan-member (TETH desktop)
+2. ref-C (ChatGPT plan upgrade, mobile) vs P1-plan-member-m and P1-plan-member-open-m (TETH mobile, top and scrolled)
+3. ref-B (ChatGPT plan configuration) vs P2A-checkout and P2A-checkout-m (TETH desktop and mobile)
+Then P1-plan-with-backtest (plan page reached from a good backtest; the result card on the left is the founder's decision, do not flag its presence or size).
+
+Policy to accept, do not flag: free card is the highlighted one; only one price per card; TETH branding only.
+
+For each pair list the visible differences a designer would still flag, each marked MUST or NICE, with the px change you would make. Then quote any Korean line that is off-tone (register of ChatGPT Korean: short 합니다체 sentences, noun-phrase items, no jargon) with a replacement. End with: same impression as the reference, yes or no, and the three remaining changes that matter most. Korean, short.
+
+codex
+파일은 수정하지 않고, 첨부 이미지의 간격·색상·모바일 잘림과 문구를 기준으로 비교하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 272ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 296ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+codex
+px는 스크린샷 기준 근사치이며, 모바일은 **390px 너비로 환산**했습니다.
+
+**1. 데스크톱 플랜 — ref-A / P1**
+
+- **MUST** 강조 카드의 상단부터 파란색이 강합니다. 상단 **0~120px는 #222에 가깝게**, 아래쪽은 채도를 낮춘 청회색으로 전환하세요. 레퍼런스보다 전체적으로 푸른 패널처럼 보입니다.
+- **NICE** 가격→버튼 간격이 약 **28px**로 촘촘합니다. **44px로 +16px** 늘리면 가격과 행동 영역이 더 차분하게 분리됩니다.
+- **NICE** 무료 가격의 숫자만 연보라색이라 따로 강조됩니다. 크기 **44px 유지**, 숫자도 흰색으로 통일하세요.
+
+**2. 모바일 플랜 — ref-C / P1 상단·스크롤**
+
+- **MUST** 상단 바가 제목을 자르고, 스크롤 화면에서는 카드 내용이 두 헤더 사이로 보입니다. 약 **124px의 이중 헤더를 64px 한 줄로** 정리하고, 본문 시작을 **80px**로 맞추세요.
+- **MUST** 상담 버튼이 환급 설명을 가립니다. 모바일에서는 **32×32px 헤더 버튼**으로 옮기세요. 완료 토스트도 혜택 목록 위 대신 **헤더 아래 12px**에 배치하세요.
+- **NICE** 기능 행 간격이 약 **39px**로, 환산한 레퍼런스의 약 **33px**보다 느슨합니다. **34px로 −5px** 줄이면 하단 안내까지 흐름이 덜 늘어집니다.
+
+카드 좌우 여백과 내부 패딩은 이미 레퍼런스에 가깝습니다.
+
+**3. 결제 — ref-B / P2A 데스크톱·모바일**
+
+- **MUST** 모바일 입력칸이 화면 오른쪽으로 잘립니다. 폼 전체 폭을 **380px**, 만료일·보안 코드 각각 **185px**, 사이 간격 **10px**로 제한하세요. 카드 로고까지 이 폭 안에 들어와야 합니다.
+- **MUST** 상담 버튼이 보안 코드 입력칸을 덮습니다. 위와 같이 헤더로 옮기세요.
+- **NICE** 데스크톱 요약 카드 내부가 조금 더 촘촘합니다. 기능 행 간격 **42→44px**, 구분선 아래 첫 행 여백 **26→32px**로 조정하세요.
+- **NICE** 요약 카드의 아이콘이 회색이라 레퍼런스의 시각적 연결감이 약합니다. **18px 크기는 유지**, 옅은 청색으로 맞추세요.
+
+**4. 백테스트에서 진입한 플랜**
+
+결과 카드의 존재와 크기를 제외하면 **추가 MUST는 없습니다**. 거래소 로고가 다음 줄로 내려갈 때 시작점만 기능 문구와 맞추면 좋겠습니다. **NICE: 로고 묶음 왼쪽 약 −6px**, 문구 아래 간격 **6px**.
+
+**한국어 문구**
+
+- “거래하는 사람을 위해” → “거래에 필요한 기능”
+- “지금 쓰는 계정 그대로” → “기존 계정으로 시작”
+- “TETH 초대로 가입한 거래소 계정으로 이용합니다. 초대 계정이 없다면 거래소에 새로 가입합니다.” → “TETH 초대로 가입한 거래소 계정을 연결합니다. 계정이 없으면 새로 가입할 수 있습니다.”
+- “구독당 거래소 최대 2곳 연결” → “구독 하나로 거래소 최대 2곳 연결”
+- “연결 권한: 잔고 조회와 주문” → “잔고 조회 및 주문 권한”
+- “그냥 들고 있었다면 +139.5%” → “단순 보유 수익률 +139.5%”
+- “가장 크게 내려간 폭 -45.0%” → “최대 하락률 -45.0%”
+
+**레퍼런스와 같은 인상인가: 아니요.** 구조는 가깝지만, 남은 핵심 세 가지는 **모바일 이중 헤더 정리, 결제 입력칸 잘림·가림 해소, 강조 카드의 파란색 완화**입니다.
+tokens used
+34,880
+px는 스크린샷 기준 근사치이며, 모바일은 **390px 너비로 환산**했습니다.
+
+**1. 데스크톱 플랜 — ref-A / P1**
+
+- **MUST** 강조 카드의 상단부터 파란색이 강합니다. 상단 **0~120px는 #222에 가깝게**, 아래쪽은 채도를 낮춘 청회색으로 전환하세요. 레퍼런스보다 전체적으로 푸른 패널처럼 보입니다.
+- **NICE** 가격→버튼 간격이 약 **28px**로 촘촘합니다. **44px로 +16px** 늘리면 가격과 행동 영역이 더 차분하게 분리됩니다.
+- **NICE** 무료 가격의 숫자만 연보라색이라 따로 강조됩니다. 크기 **44px 유지**, 숫자도 흰색으로 통일하세요.
+
+**2. 모바일 플랜 — ref-C / P1 상단·스크롤**
+
+- **MUST** 상단 바가 제목을 자르고, 스크롤 화면에서는 카드 내용이 두 헤더 사이로 보입니다. 약 **124px의 이중 헤더를 64px 한 줄로** 정리하고, 본문 시작을 **80px**로 맞추세요.
+- **MUST** 상담 버튼이 환급 설명을 가립니다. 모바일에서는 **32×32px 헤더 버튼**으로 옮기세요. 완료 토스트도 혜택 목록 위 대신 **헤더 아래 12px**에 배치하세요.
+- **NICE** 기능 행 간격이 약 **39px**로, 환산한 레퍼런스의 약 **33px**보다 느슨합니다. **34px로 −5px** 줄이면 하단 안내까지 흐름이 덜 늘어집니다.
+
+카드 좌우 여백과 내부 패딩은 이미 레퍼런스에 가깝습니다.
+
+**3. 결제 — ref-B / P2A 데스크톱·모바일**
+
+- **MUST** 모바일 입력칸이 화면 오른쪽으로 잘립니다. 폼 전체 폭을 **380px**, 만료일·보안 코드 각각 **185px**, 사이 간격 **10px**로 제한하세요. 카드 로고까지 이 폭 안에 들어와야 합니다.
+- **MUST** 상담 버튼이 보안 코드 입력칸을 덮습니다. 위와 같이 헤더로 옮기세요.
+- **NICE** 데스크톱 요약 카드 내부가 조금 더 촘촘합니다. 기능 행 간격 **42→44px**, 구분선 아래 첫 행 여백 **26→32px**로 조정하세요.
+- **NICE** 요약 카드의 아이콘이 회색이라 레퍼런스의 시각적 연결감이 약합니다. **18px 크기는 유지**, 옅은 청색으로 맞추세요.
+
+**4. 백테스트에서 진입한 플랜**
+
+결과 카드의 존재와 크기를 제외하면 **추가 MUST는 없습니다**. 거래소 로고가 다음 줄로 내려갈 때 시작점만 기능 문구와 맞추면 좋겠습니다. **NICE: 로고 묶음 왼쪽 약 −6px**, 문구 아래 간격 **6px**.
+
+**한국어 문구**
+
+- “거래하는 사람을 위해” → “거래에 필요한 기능”
+- “지금 쓰는 계정 그대로” → “기존 계정으로 시작”
+- “TETH 초대로 가입한 거래소 계정으로 이용합니다. 초대 계정이 없다면 거래소에 새로 가입합니다.” → “TETH 초대로 가입한 거래소 계정을 연결합니다. 계정이 없으면 새로 가입할 수 있습니다.”
+- “구독당 거래소 최대 2곳 연결” → “구독 하나로 거래소 최대 2곳 연결”
+- “연결 권한: 잔고 조회와 주문” → “잔고 조회 및 주문 권한”
+- “그냥 들고 있었다면 +139.5%” → “단순 보유 수익률 +139.5%”
+- “가장 크게 내려간 폭 -45.0%” → “최대 하락률 -45.0%”
+
+**레퍼런스와 같은 인상인가: 아니요.** 구조는 가깝지만, 남은 핵심 세 가지는 **모바일 이중 헤더 정리, 결제 입력칸 잘림·가림 해소, 강조 카드의 파란색 완화**입니다.
