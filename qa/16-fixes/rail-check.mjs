@@ -39,7 +39,7 @@ for(const [name,go] of pages){
 // 예전에 먹통이 되던 순서: 주소는 이미 설정인데 다른 화면이 그려진 상태
 await ev(`history.replaceState(null,'','#/settings/general'); gHome()`); await sleep(700);
 await press(GEAR); await press(ITEM,1100); s=await J(st); ok('주소가 이미 설정일 때도 설정 페이지가 그려진다',s.mode==='tfset'&&s.tab==='일반',s);
-await press(GEAR); s=await J(st); ok('설정 페이지 안에서 톱니 → 팝업',s.menu,s.items); await shot(p,DIR+'user-menu.png',{full:false}); await reset();
+s=await J(`{side:getComputedStyle(document.getElementById('g-side')).display}`); ok('설정 페이지에서는 앱 사이드바가 감춰진다(GPT 방식)',s.side==='none',s); await shot(p,DIR+'user-menu.png',{full:false}); await reset();
 s=await J(`window.__errs`); ok('콘솔 오류 없음',Array.isArray(s)&&s.length===0,s);
 const pass=out.filter(x=>x.startsWith('PASS')).length, all=out.length; out.push('','TOTAL '+pass+' / '+all); console.log(out[out.length-1]);
 fs.writeFileSync(DIR+'rail-check.txt',out.join('\n'));

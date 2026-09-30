@@ -12,7 +12,7 @@ function stHandle(){ var s=stS(); if(s.handle) return s.handle; var e=(S.user&&S
 function stIc(p){ return '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
 function stDate(ms){ var d=new Date(ms); return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.'; }
 function stGo(tab){ var h='#/settings/'+(tab||'general'); if(location.hash===h){ stRoute(h); return; } location.hash=h; } /* 같은 주소면 hashchange가 없다 */
-function stBack(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); }
+function stBack(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} document.body.classList.remove('st-full'); gHome(); }
 function stRoute(h){
   var m=h.match(/^#\/settings(?:\/([a-z]+))?$/); if(!m) return false;
   if(!window.TF_STATE_READY) return true;

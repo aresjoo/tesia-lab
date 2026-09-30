@@ -232,3 +232,20 @@ body.light .stg,body.light .acx-page,body.light .acx-entry{color:#16181b}
 .bt-s4 button b i{font-style:normal;font-size:12px;font-weight:500;color:#8b9096;margin-left:2px}
 /* Round 2: 좁은 화면에서 위쪽 막대와 상담 단추가 내용을 가리지 않게 */
 @media (max-width:900px){ .acx-page{padding-top:76px} .stg{padding-top:20px} .stg-r .a,.acx-now .r button,.stg-tr{margin-right:0} .stg-main,.acx-pg{padding-right:0} .stg-sec:last-child,.acx-help{margin-bottom:72px} }
+
+/* 설정 전체 화면 (GPT 방식): 앱 사이드바, 위쪽 막대, 알림 단추를 감추고 설정 메뉴가 왼쪽 전체 높이를 쓴다 */
+body.st-full #g-side,body.st-full #g-chead,body.st-full #nf-util,body.st-full #g-hamburger,body.st-full #g-auth-btns,body.st-full #g-globe,body.st-full .g-terms{display:none!important}
+body.st-full .stg{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:none;margin:0;padding:0;min-height:100%}
+body.st-full .stg-nav{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;width:280px;z-index:40;display:flex;flex-direction:column;gap:2px;padding:14px 10px 20px;background:var(--g1,#171717);overflow-y:auto;scrollbar-width:thin}
+body.st-full .stg-nav small{margin:20px 12px 6px}
+body.st-full .stg-back{height:40px;margin-bottom:4px;font-size:14px;color:#e9ebee}
+body.st-full .stg-main{width:100%;max-width:820px;margin:0 auto;padding:48px 40px 120px}
+body.st-full .stg-main h1{font-size:28px;margin-bottom:30px}
+@media (max-width:900px){
+  body.st-full .stg{display:block}
+  body.st-full .stg-nav{position:sticky;top:0;bottom:auto;width:auto;height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:4px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.08);background:var(--g0,#0e0f11)}
+  body.st-full .stg-nav small{display:none}
+  body.st-full .stg-back{position:sticky;left:-12px;z-index:2;flex:none;margin:0 4px 0 -12px;font-size:0;width:50px;padding:0 0 0 12px;justify-content:center;background:var(--g0,#0e0f11);border-radius:0;box-shadow:8px 0 10px -4px var(--g0,#0e0f11)}
+  body.st-full .stg-back svg{width:18px;height:18px}
+  body.st-full .stg-main{margin:0;padding:20px 16px 120px;max-width:none}
+}

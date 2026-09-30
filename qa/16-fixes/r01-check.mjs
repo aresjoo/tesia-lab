@@ -1,4 +1,4 @@
-// R01: 손님이 "과거에 돌려보기"를 누르면 인증 창이 뜨고, 인증 뒤 바로 그 전략의 백테스트로 이어지는지
+// R01: 손님이 "직접 검증하기"를 누르면 인증 창이 뜨고, 인증 뒤 바로 그 전략의 백테스트로 이어지는지
 import { newPage, closePage, goto, evala, viewport, shot, sleep } from 'file:///C:/Users/hyun1/AppData/Local/Temp/claude/C--Users-hyun1-OneDrive------/3eeecebb-9375-4ed0-850b-52929f00da99/scratchpad/pw/cdp.mjs';
 import fs from 'fs';
 const round=process.argv[2]||'round-1';

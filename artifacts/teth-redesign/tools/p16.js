@@ -49,6 +49,11 @@ function btGoCtx(){ var s=BT.s; return {need:s.ex&&acEx(s.ex)?s.ex:null,name:mkH
   tfMkActivate=function(){ var s=null, ne=TF_MKF.ne; try{ s=tfSSFind(TF_MKF.nick); }catch(e){} mkFollowClose(true); acStart({need:s&&s.ex&&acEx(s.ex)?s.ex:null,name:s?mkHook(s):null,after:{kind:'copy',id:ne}}); };
   tfIntroStart=function(){ acStart({after:{kind:'terminal'}}); };
   tfTradeInactiveView=function(){ acEntryView(); };
+  /* 설정 화면에 있는 동안만 전체 화면 모드. 어떤 화면이 그려지든 G.mode 로 다시 판정한다 */
+  var stFull=function(){ document.body.classList.toggle('st-full',!!(window.G&&G.mode==='tfset')); };
+  var gc0=gContent; gContent=function(){ var r=gc0.apply(this,arguments); stFull(); return r; };
+  var gh0=gHome; gHome=function(){ var r=gh0.apply(this,arguments); stFull(); return r; };
+  window.addEventListener('hashchange',function(){ setTimeout(stFull,0); });
   /* 좁은 화면: 지금 보는 설정 탭이 보이게 */
   var sv0=stView; stView=function(){ var r=sv0.apply(this,arguments); try{ var n=document.querySelector('.stg-ni.on'), w=n&&n.parentNode; if(w&&w.scrollWidth>w.clientWidth) w.scrollLeft=Math.max(0,n.offsetLeft-w.clientWidth/2+n.offsetWidth/2); }catch(e){} return r; };
   btGoFlow=function(){ return '<div id="ac-head">'+acHeadHtml()+'</div><div class="acx-flow" id="ac-flow">'+acFlowHtml()+'</div>'; };
