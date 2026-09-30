@@ -55,7 +55,7 @@ function plView(ctx){
     +'<li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
     +'<p class="pl-foot">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';
   TF_RENDERING=true;
-  gContent('<div class="pl" id="pl-root"><header class="pl-head"><h1>거래소 연결</h1>'+(need?'<p class="pl-need">이 전략은 '+need+'에서 실행됩니다. '+need+' 계정을 연결합니다.</p>':'')+'</header>'
+  gContent('<div class="pl'+(bt?' pl-wide':'')+'" id="pl-root"><header class="pl-head"><h1>거래소 연결</h1>'+(need?'<p class="pl-need">이 전략은 '+need+'에서 실행됩니다. '+need+' 계정을 연결합니다.</p>':'')+'</header>'
     +'<div class="pl-grid'+(bt?' has-bt':'')+'">'+plBtCard(bt)+free+paid+'</div>'+acHelp()+'</div>');
   TF_RENDERING=false;
 }
@@ -75,7 +75,7 @@ function plCheckout(ctx){
   tfPageMode('tfbrokers','플랜 구성'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark');
   var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0], useSaved=!!sv&&!a.newCard, f=a.pay.st==='fail';
   var fixed=ctx.need&&acEx(ctx.need)?ctx.need:null, cur=fixed||a.exSel||a.ex||acExs()[0].id; if(!fixed) a.exSel=cur;
-  var exs='<div class="pl-exs" role="radiogroup" aria-label="거래소">'+acExs().map(function(b){ var on=cur===b.id, off=fixed&&fixed!==b.id; return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(off?' off':'')+'"'+(off?' disabled':'')+' onclick="plPickEx(\''+b.id+'\')">'+acLogo(b.id,22)+'<b>'+b.name+'</b>'+(a.conn[b.id]?'<small>연결됨</small>':fixed===b.id?'<small>이 전략의 거래소</small>':'')+'</button>'; }).join('')+'</div>';
+  var exs=''; var exs0='<div class="pl-exs" role="radiogroup" aria-label="거래소">'+acExs().map(function(b){ var on=cur===b.id, off=fixed&&fixed!==b.id; return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(off?' off':'')+'"'+(off?' disabled':'')+' onclick="plPickEx(\''+b.id+'\')">'+acLogo(b.id,22)+'<b>'+b.name+'</b>'+(a.conn[b.id]?'<small>연결됨</small>':fixed===b.id?'<small>이 전략의 거래소</small>':'')+'</button>'; }).join('')+'</div>';
   var pay=useSaved?'<div class="pl-saved"><div class="r on">'+plI('card')+'<span><b>'+gEsc(sv.brand)+' •••• '+gEsc(sv.last4)+'</b><small>저장한 카드, '+gEsc(sv.exp)+'</small></span><i>'+AC_CK+'</i></div><button type="button" class="pl-link" onclick="acS().newCard=1;plCheckout()">다른 결제 수단 사용</button></div>'
     :'<button type="button" class="pl-apple" onclick="plApple()" aria-label="Apple Pay로 결제"><svg width="16" height="19" viewBox="0 0 16 19" aria-hidden="true"><path fill="currentColor" d="M13.1 10.1c0-2.4 2-3.6 2.1-3.6-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9s-1.9-.9-3.2-.8C3.2 4.7 1.7 5.6.8 7.2c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8s1.9.8 3.2.8c1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-4.1zM10.7 3c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Pay</span></button>'
     +'<div class="pl-or"><span>또는</span></div>'
@@ -85,21 +85,21 @@ function plCheckout(ctx){
     +'<div class="pl-in"><input id="ac-ch" placeholder="카드에 적힌 이름" autocomplete="cc-name" oninput="acErr(\'ac-ch\',\'\')" aria-label="카드에 적힌 이름"></div>'
     +'<span class="er" id="ac-cn-e"></span><span class="er" id="ac-ce-e" hidden></span><span class="er" id="ac-cc-e" hidden></span><span class="er" id="ac-ch-e" hidden></span>'
     +'<label class="pl-ck"><input type="checkbox" id="pl-save" checked><span>다음 결제에도 이 카드 사용</span></label></div>';
-  var acct=a.conn[cur]?'연결할 계정: '+acName(cur)+', 이미 연결됨':'연결할 계정: '+acName(cur);
+  var acct='';
   TF_RENDERING=true;
   gContent('<div class="pl pl-co" id="pl-root"><header class="pl-cohead"><button type="button" class="pl-back" aria-label="뒤로" onclick="plView(PL.ctx)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1>플랜 구성</h1></header>'
-    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'먼저 연결할 거래소를 고르십시오. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.')+'</p>'+exs
-    +'<h3 class="pl-t3 mt">결제 수단 선택하기</h3>'+pay+'</section>'
+    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3 pl-hid">TETH 구독</h3><p class="pl-d2">결제를 마치면 거래소를 연결합니다. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.</p>'+exs
+    +'<h3 class="pl-t3 mt0">결제 수단 선택하기</h3>'+pay+'</section>'
     +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
     +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li><li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li><li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li><li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
-    +'<div class="pl-lines"><div><span>'+acct+'</span></div><div><span>매월 구독료</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div><div class="tot"><span>오늘 결제 금액</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div></div>'
+    +'<div class="pl-lines"><div><span>매월 구독료</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div><div class="tot"><span>오늘 결제 금액</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div></div>'
     +'<button type="button" class="pl-cta pl-cta-w" id="ac-go" onclick="'+(useSaved?'plPaySaved()':'plPay()')+'">'+acUsd(AC_CFG.price)+' 결제하고 시작하기</button></div>'
     +'<p class="pl-legal">해지할 때까지 매월 '+acUsd(AC_CFG.price)+'이 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></aside></div>'+acHelp()+'</div>');
   TF_RENDERING=false;
 }
 function plPickEx(id){ var a=acS(); a.exSel=id; plCheckout(); }
 /* 결제 뒤에는 고른 거래소로 승인 단계로 간다 */
-function plAfterPay(){ var a=acS(), ctx=PL.ctx||{}, ex=(ctx.need&&acEx(ctx.need))?ctx.need:(a.exSel||a.ex); a.newCard=0; if(ex){ a.ex=ex; a.exSel=null; } acSave(); acPageView(ex||null); }
+function plAfterPay(){ var a=acS(), ctx=PL.ctx||{}, ex=(ctx.need&&acEx(ctx.need))?ctx.need:null; a.newCard=0; a.exSel=null; a.ex=ex; if(!ex){ a.auth={st:'idle'}; a.adding=acConnList().length?1:0; } acSave(); acPageView(ex); }
 function plPay(){ var c=acCardRead('ac-'); if(!c) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중'); var save=!!(document.getElementById('pl-save')||{checked:true}).checked;
   setTimeout(function(){ if(my!==AC_RUN) return; var a=acS(), t=tfS();
     if(!acCharge(c)){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',c,AC_CFG.price); acSave(); var keep={}; ['ac-cn','ac-ce','ac-ch'].forEach(function(i){ var e=document.getElementById(i); if(e) keep[i]=e.value; }); plCheckout(); for(var k in keep){ var e=document.getElementById(k); if(e) e.value=keep[k]; } return; }

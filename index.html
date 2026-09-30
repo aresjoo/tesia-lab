@@ -7183,6 +7183,16 @@ body.pl-page #teth-help,body.pl-page .hw-fab,body.pl-page #hw-fab,body.pl-page [
   .pl-items{gap:14px}
   .pl-in{padding:0 14px}.pl-brands i{width:28px;height:18px;font-size:8px}
 }
+
+/* 결과 카드까지 세 장일 때는 폭을 넓힌다 (카드가 좁아 제목이 두 줄로 꺾이지 않게) */
+.pl.pl-wide{max-width:1520px}
+.pl.pl-wide .pl-grid.has-bt{gap:24px}
+
+/* 결제 화면은 돈만 받는다: 거래소 칸 없음. 폭 제한이 풀리지 않게 */
+.pl.pl-co{max-width:1120px}
+.pl-t3.pl-hid{display:none}
+.pl-t3.mt0{margin:0 0 6px}
+.pl-left .pl-d2{margin:0 0 18px}
 /* ── 플랜 뒤 화면 (px): 검정 바탕 한 열, 제목 하나, 한 줄, 단추 하나 ── */
 .px{max-width:640px;padding-top:0}
 .px .px-head{margin-bottom:10px}
@@ -7292,6 +7302,24 @@ body.pl-page .gft{display:none!important}
 
 /* 네 번째 검수: 본인 확인 소제목은 가입보다 한 단계 가볍게 */
 .px-steps li:nth-child(2) b{font-weight:500;color:#cdcdcd}
+/* 가입 화면을 열고 돌아온 상태: 플랜 화면 무료 카드와 같은 파란 그라데이션 */
+.px-card.px-hi{background:linear-gradient(180deg,#232323 0%,#22304a 48%,#26456f 100%);border-color:#5a8dff;animation:pxHi .45s ease both}
+@keyframes pxHi{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(90,141,255,.0)}50%{box-shadow:0 0 0 6px rgba(90,141,255,.18)}to{border-color:#5a8dff;box-shadow:0 0 0 0 rgba(90,141,255,0)}}
+.px-hi .px-steps li.ok b{display:flex;align-items:center;gap:8px;color:#fff}
+.px-hi .px-steps li.ok b svg{color:#8fb4ff}
+.px-hi .px-steps li.ok span{color:#dbe6ff}
+.px-cta.pl-cta-hi{background:#2f6fed;border-color:#2f6fed;color:#fff;font-weight:500}
+.px-cta.pl-cta-hi:hover{background:#2b64d6}
+@media (prefers-reduced-motion:reduce){ .px-card.px-hi{animation:none} }
+/* 실행 준비 화면: 검정 바탕, 요약 행 카드 */
+body.px-go #teth-help,body.px-go #teth-help-pop{display:none!important}
+.px-rows{padding:6px 26px}
+.px-rows .r{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;border-top:1px solid rgba(255,255,255,.1);font-size:16px}
+.px-rows .r:first-child{border-top:0}
+.px-rows .r span{color:#cdcdcd}
+.px-rows .r b{display:inline-flex;align-items:center;gap:8px;font-weight:400;color:#fff}
+.px-rows .r b img,.px-rows .r b .acx-mono{border-radius:6px}
+.px-rows .r i{font-style:normal;color:#cdcdcd}
 /* ── 설정을 ChatGPT 설정 어휘로 (sk-settings) ── */
 body.st-full #g-content,body.st-full #g-scroll,body.st-full .g-center{background:#000}
 body.st-full #teth-help,body.st-full #teth-help-pop,body.st-full #g-appbanner,body.st-full .gft{display:none!important}
@@ -22629,7 +22657,7 @@ function plView(ctx){
     +'<li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
     +'<p class="pl-foot">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';
   TF_RENDERING=true;
-  gContent('<div class="pl" id="pl-root"><header class="pl-head"><h1>거래소 연결</h1>'+(need?'<p class="pl-need">이 전략은 '+need+'에서 실행됩니다. '+need+' 계정을 연결합니다.</p>':'')+'</header>'
+  gContent('<div class="pl'+(bt?' pl-wide':'')+'" id="pl-root"><header class="pl-head"><h1>거래소 연결</h1>'+(need?'<p class="pl-need">이 전략은 '+need+'에서 실행됩니다. '+need+' 계정을 연결합니다.</p>':'')+'</header>'
     +'<div class="pl-grid'+(bt?' has-bt':'')+'">'+plBtCard(bt)+free+paid+'</div>'+acHelp()+'</div>');
   TF_RENDERING=false;
 }
@@ -22649,7 +22677,7 @@ function plCheckout(ctx){
   tfPageMode('tfbrokers','플랜 구성'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark');
   var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0], useSaved=!!sv&&!a.newCard, f=a.pay.st==='fail';
   var fixed=ctx.need&&acEx(ctx.need)?ctx.need:null, cur=fixed||a.exSel||a.ex||acExs()[0].id; if(!fixed) a.exSel=cur;
-  var exs='<div class="pl-exs" role="radiogroup" aria-label="거래소">'+acExs().map(function(b){ var on=cur===b.id, off=fixed&&fixed!==b.id; return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(off?' off':'')+'"'+(off?' disabled':'')+' onclick="plPickEx(\''+b.id+'\')">'+acLogo(b.id,22)+'<b>'+b.name+'</b>'+(a.conn[b.id]?'<small>연결됨</small>':fixed===b.id?'<small>이 전략의 거래소</small>':'')+'</button>'; }).join('')+'</div>';
+  var exs=''; var exs0='<div class="pl-exs" role="radiogroup" aria-label="거래소">'+acExs().map(function(b){ var on=cur===b.id, off=fixed&&fixed!==b.id; return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(off?' off':'')+'"'+(off?' disabled':'')+' onclick="plPickEx(\''+b.id+'\')">'+acLogo(b.id,22)+'<b>'+b.name+'</b>'+(a.conn[b.id]?'<small>연결됨</small>':fixed===b.id?'<small>이 전략의 거래소</small>':'')+'</button>'; }).join('')+'</div>';
   var pay=useSaved?'<div class="pl-saved"><div class="r on">'+plI('card')+'<span><b>'+gEsc(sv.brand)+' •••• '+gEsc(sv.last4)+'</b><small>저장한 카드, '+gEsc(sv.exp)+'</small></span><i>'+AC_CK+'</i></div><button type="button" class="pl-link" onclick="acS().newCard=1;plCheckout()">다른 결제 수단 사용</button></div>'
     :'<button type="button" class="pl-apple" onclick="plApple()" aria-label="Apple Pay로 결제"><svg width="16" height="19" viewBox="0 0 16 19" aria-hidden="true"><path fill="currentColor" d="M13.1 10.1c0-2.4 2-3.6 2.1-3.6-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9s-1.9-.9-3.2-.8C3.2 4.7 1.7 5.6.8 7.2c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8s1.9.8 3.2.8c1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-4.1zM10.7 3c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Pay</span></button>'
     +'<div class="pl-or"><span>또는</span></div>'
@@ -22659,21 +22687,21 @@ function plCheckout(ctx){
     +'<div class="pl-in"><input id="ac-ch" placeholder="카드에 적힌 이름" autocomplete="cc-name" oninput="acErr(\'ac-ch\',\'\')" aria-label="카드에 적힌 이름"></div>'
     +'<span class="er" id="ac-cn-e"></span><span class="er" id="ac-ce-e" hidden></span><span class="er" id="ac-cc-e" hidden></span><span class="er" id="ac-ch-e" hidden></span>'
     +'<label class="pl-ck"><input type="checkbox" id="pl-save" checked><span>다음 결제에도 이 카드 사용</span></label></div>';
-  var acct=a.conn[cur]?'연결할 계정: '+acName(cur)+', 이미 연결됨':'연결할 계정: '+acName(cur);
+  var acct='';
   TF_RENDERING=true;
   gContent('<div class="pl pl-co" id="pl-root"><header class="pl-cohead"><button type="button" class="pl-back" aria-label="뒤로" onclick="plView(PL.ctx)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1>플랜 구성</h1></header>'
-    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'먼저 연결할 거래소를 고르십시오. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.')+'</p>'+exs
-    +'<h3 class="pl-t3 mt">결제 수단 선택하기</h3>'+pay+'</section>'
+    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3 pl-hid">TETH 구독</h3><p class="pl-d2">결제를 마치면 거래소를 연결합니다. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.</p>'+exs
+    +'<h3 class="pl-t3 mt0">결제 수단 선택하기</h3>'+pay+'</section>'
     +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
     +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li><li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li><li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li><li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
-    +'<div class="pl-lines"><div><span>'+acct+'</span></div><div><span>매월 구독료</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div><div class="tot"><span>오늘 결제 금액</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div></div>'
+    +'<div class="pl-lines"><div><span>매월 구독료</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div><div class="tot"><span>오늘 결제 금액</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div></div>'
     +'<button type="button" class="pl-cta pl-cta-w" id="ac-go" onclick="'+(useSaved?'plPaySaved()':'plPay()')+'">'+acUsd(AC_CFG.price)+' 결제하고 시작하기</button></div>'
     +'<p class="pl-legal">해지할 때까지 매월 '+acUsd(AC_CFG.price)+'이 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></aside></div>'+acHelp()+'</div>');
   TF_RENDERING=false;
 }
 function plPickEx(id){ var a=acS(); a.exSel=id; plCheckout(); }
 /* 결제 뒤에는 고른 거래소로 승인 단계로 간다 */
-function plAfterPay(){ var a=acS(), ctx=PL.ctx||{}, ex=(ctx.need&&acEx(ctx.need))?ctx.need:(a.exSel||a.ex); a.newCard=0; if(ex){ a.ex=ex; a.exSel=null; } acSave(); acPageView(ex||null); }
+function plAfterPay(){ var a=acS(), ctx=PL.ctx||{}, ex=(ctx.need&&acEx(ctx.need))?ctx.need:null; a.newCard=0; a.exSel=null; a.ex=ex; if(!ex){ a.auth={st:'idle'}; a.adding=acConnList().length?1:0; } acSave(); acPageView(ex); }
 function plPay(){ var c=acCardRead('ac-'); if(!c) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중'); var save=!!(document.getElementById('pl-save')||{checked:true}).checked;
   setTimeout(function(){ if(my!==AC_RUN) return; var a=acS(), t=tfS();
     if(!acCharge(c)){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',c,AC_CFG.price); acSave(); var keep={}; ['ac-cn','ac-ce','ac-ch'].forEach(function(i){ var e=document.getElementById(i); if(e) keep[i]=e.value; }); plCheckout(); for(var k in keep){ var e=document.getElementById(k); if(e) e.value=keep[k]; } return; }
@@ -22808,6 +22836,7 @@ function pxTitle(){
   if(cur==='uid'){ var u=a.uid.ex===a.ex?a.uid:{st:'none'}; return u.st==='fail'?{h:'TETH 초대 계정이 아닙니다',s:'이 '+n+' 계정은 TETH 초대로 만든 계정이 아닙니다. 아래에서 하나를 고르십시오.',back:''}:{h:n+' 연결 확인 중',s:'승인한 계정을 확인하고 있습니다.',back:''}; }
   if(cur==='limit') return {h:'거래소 '+AC_PAID_MAX+'곳이 연결되어 있습니다',s:'구독 하나로 '+AC_PAID_MAX+'곳까지 연결됩니다. '+n+' 연결 방법을 고르십시오.',back:'plan'};
   if(cur==='pay') return {h:'플랜 구성',s:'',back:''};
+  if(cur==='done'&&ctx.doneHtml&&BT.s&&BT.s.mine) return {h:'전략 시작',s:gEsc(ctx.name||mkHook(BT.s))+' 전략을 '+acName(a.ex||acConnList()[0])+' 계정에서 실행합니다.',back:'result'};
   if(cur==='done') return {h:'연결되었습니다',s:'이제 '+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+'시작하면 '+acName(a.ex||acConnList()[0])+' 계정에서 실행됩니다.',back:''};
   return {h:'거래소 연결',s:'',back:''};
 }
@@ -22817,6 +22846,7 @@ function pxBack(k){
   if(k==='plan'){ if(acConnList().length){ a.ex=null; a.adding=0; a.edit=null; acSave(); acPageView(); } else plView(ctx); return; }
   if(k==='ex'){ a.edit='ex'; a.exSel=a.ex; acSave(); acRe(); return; }
   if(k==='acct'){ a.has=null; a.g=0; a.edit=null; acSave(); acRe(); return; }
+  if(k==='result'){ btGoTo(''); return; }
 }
 function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
 /* 거래소: 타일을 누르면 바로 다음 화면 */
@@ -22829,8 +22859,8 @@ function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
 /* 계정: 초대 가입 안내 한 카드, 단추 하나, 작은 갈래 둘 */
 function pxBAcct(){
   var a=acS(), n=acName(a.ex), j=!!a.joined&&a.has==='no';
-  return '<div class="px-card"><ul class="px-steps"><li><b>TETH 초대 링크로 가입</b><span>이메일이나 전화번호로 가입합니다.</span></li><li><b>본인 확인</b><span>전략을 시작하기 전에 '+n+'에서 마칩니다.</span></li></ul></div>'
-    +(j?'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a></p>'
+  return '<div class="px-card'+(j?' px-hi':'')+'"><ul class="px-steps"><li'+(j?' class="ok"':'')+'><b>'+(j?AC_CK:'')+'TETH 초대 링크로 가입</b><span>'+(j?n+' 가입 화면을 열었습니다. 가입을 마쳤다면 계정을 연결합니다.':'이메일이나 전화번호로 가입합니다.')+'</span></li><li><b>본인 확인</b><span>전략을 시작하기 전에 '+n+'에서 마칩니다.</span></li></ul></div>'
+    +(j?'<button type="button" class="pl-cta pl-cta-hi px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a></p>'
       :'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="pxJoined()">'+n+' 가입 화면 열기'+AC_OUT+'</a><p class="px-links"><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">기존 초대 계정 연결</button></p>');
 }
 function pxJoined(){ acGuideOpen(); setTimeout(acRe,50); }
@@ -22857,10 +22887,21 @@ function pxBLimit(){
 }
 /* 완료: 계정 한 줄, 단추 하나 */
 function pxBDone(){
-  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{};
+  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{}, ctx=AC_CTX||{};
+  if(ctx.doneHtml&&BT.s&&BT.s.mine) return pxBStart();
   return '<div class="px-card"><p class="px-acct">'+acLogo(ex,22)+'<b>'+acName(ex)+'</b>'+(c.uid?'<span class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</span>':'')+'<em>'+(c.via==='paid'?'구독':'TETH 초대 계정')+'</em></p></div>'
     +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acSheetDone()">'+pxDoneLabel()+'</button>'
     +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+}
+/* 내 전략 실행 준비: 연결은 끝났고 여기서 전략을 시작한다. 실행 계정, 사용할 금액, 이용료, 단추 하나와 작은 갈래 둘 */
+function pxBStart(){
+  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{}, t=tfS(), bi=((t.intake||{}).budget||{}).i, bud=TF_BUDGET[bi!=null?bi:1];
+  return '<div class="px-card px-rows">'
+    +'<div class="r"><span>실행 계정</span><b>'+acLogo(ex,20)+acName(ex)+(c.uid?' <i class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</i>':'')+'</b></div>'
+    +'<div class="r"><span>사용할 금액</span><b class="num">'+tfWon(bud)+'</b></div>'
+    +'<div class="r"><span>TETH 이용료</span><b>'+(c.via==='paid'?'구독, 월 '+acUsd(AC_CFG.price):'없음')+'</b></div></div>'
+    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="btMineStart(\'live\')">전략 시작하기</button>'
+    +'<p class="px-links"><button type="button" class="pl-link" onclick="btMineStart(\'paper\')">가상으로 먼저 시작</button><button type="button" class="pl-link" onclick="btMineStart(\'later\')">나중에 시작</button></p>';
 }
 /* 연결된 거래소 목록 화면 */
 function pxList(){
@@ -22872,6 +22913,20 @@ function pxList(){
 (function(){
   /* 구독 하나로 거래소 7곳 전부 연결한다. 한도 화면은 쓰지 않는다 */
   acPaidFull=function(){ return false; };
+  /* 연결 끊기: 예전 방식 연결 기록(t.api)을 먼저 지운다. 그대로 두면 acS()가 방금 지운 거래소를 되살린다 */
+  acDisc=function(k){
+    acConfirm({title:acName(k)+' 연결을 끊으시겠습니까?',body:'이 거래소에서 돌아가는 전략은 새 주문을 내지 않습니다. 열려 있는 포지션은 거래소에 그대로 남습니다.',ok:'연결 끊기',danger:1,run:function(){
+      var t=tfS(); if(t.api&&t.api.ex===k){ t.api=null; t.conn=false; t.uidLinked=false; }
+      var a=acS(); delete a.conn[k]; if(a.ex===k){ a.ex=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; }
+      var L=Object.keys(a.conn).filter(function(x){ return !!acEx(x); });
+      if(L.length){ t.api={ex:L[0],last4:null,oauth:true}; t.conn=true; } else { t.api=null; t.conn=false; t.uidLinked=false; }
+      acSave(); toast(acName(k)+' 연결을 끊었습니다');
+      if(G.mode==='tfbrokers') acPageView(); else if(typeof stRe==='function') stRe(); }});
+  };
+  /* 연결을 마치면 "더 연결하기" 상태를 푼다. 다음에 들어오면 목록 */
+  var cm0=acCommit; acCommit=function(){ var r=cm0.apply(this,arguments); var a=acS(); if(a.adding){ a.adding=0; acSave(); } return r; };
+  /* 실행 준비 화면(#/share/bt/…/go)도 플랜 뒤 화면과 같은 검정 바탕 */
+  var gv0=btGoView; btGoView=function(){ var r=gv0.apply(this,arguments); if(document.getElementById('bt-root')) document.body.classList.add('pl-page','pl-dark','px-go'); return r; };
   /* 머리와 몸을 화면 단위로. acRe()가 #ac-head, #ac-flow 를 다시 그리므로 페이지와 백테스트 실행 준비가 함께 바뀐다 */
   acHeadHtml=function(){ var ctx=AC_CTX||{}, a=acS(), L=acConnList();
     if(ctx.page&&L.length&&!L.some(acConnOk)) return pxHead({h:'구독이 끝났습니다',s:'연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.',back:''});
@@ -22892,7 +22947,8 @@ function pxList(){
     var L=acConnList(), OK=L.filter(acConnOk);
     if(!ex&&L.length&&!OK.length&&!a.adding){ a.ex=L[0]; a.route='paid'; a.pay=a.pay.st==='fail'?a.pay:{st:'none'}; acSave(); }
     if(!ex&&L.length&&a.ex&&!a.conn[a.ex]&&!a.adding){ a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); }
-    var list=OK.length&&((!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)); AC_CTX.list=list?1:0;
+    /* "거래소 더 연결하기"를 누른 뒤(adding)에는 목록이 아니라 거래소 선택으로 */
+    var list=OK.length&&!a.adding&&(!a.ex||acConnOk(a.ex)); AC_CTX.list=list?1:0;
     TF_RENDERING=true;
     gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+(list?pxList()+pxHelp():acFlowHtml())+'</div></div>');
     TF_RENDERING=false; if(acStep()==='uid') acUidRun();

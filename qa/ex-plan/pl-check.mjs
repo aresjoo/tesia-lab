@@ -55,14 +55,14 @@ await ev(`try{ tfSS3DlgClose(true); }catch(e){} try{ mkFollowClose(true); }catch
 // 구독 경로: 결제가 먼저(참고 B), 그다음 거래소
 await ev(RESET); await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(400); await ev(`tfBrokersView()`); await sleep(900); await ev(`plPick('paid')`); await sleep(900);
 s=await J(`{co:!!document.querySelector('.pl-co'),h1:(document.querySelector('.pl-cohead h1')||{}).innerText,apple:!!document.querySelector('.pl-apple'),exs:document.querySelectorAll('.pl-exs button').length,tot:(document.querySelector('.pl-lines .tot b')||{}).innerText,cta:(document.getElementById('ac-go')||{}).innerText,tax:/세액/.test(document.body.innerText)}`);
-ok('구독 선택 → 플랜 구성(결제) 화면: Apple Pay, 카드, 거래소 7곳, 오늘 결제 금액, 세액 없음',s.co&&s.h1==='플랜 구성'&&s.apple&&s.exs===7&&s.tot==='$280.00'&&/결제하고 시작하기/.test(s.cta)&&!s.tax,s);
+ok('구독 선택 → 플랜 구성(결제) 화면: 돈만 받는다(거래소 칸 없음), Apple Pay, 카드, 오늘 결제 금액, 세액 없음',s.co&&s.h1==='플랜 구성'&&s.apple&&s.exs===0&&s.tot==='$280.00'&&/결제하고 시작하기/.test(s.cta)&&!s.tax,s);
 await snap('P2A-checkout');
 const fill=(n)=>`(function(){ var v={'ac-cn':'${n}','ac-ce':'12 / 29','ac-cc':'123','ac-ch':'KIM DOHYUN'}; for(var k in v){ var e=document.getElementById(k); if(e){ e.value=v[k]; e.dispatchEvent(new Event('input',{bubbles:true})); } } return 'ok'; })()`;
-await ev(`plPickEx('bybit')`); await sleep(400); await ev(fill('0000 1111 2222 3333')); await ev(`plPay()`); await sleep(2200);
+await ev(fill('0000 1111 2222 3333')); await ev(`plPay()`); await sleep(2200);
 s=await J(`{fail:acS().pay.st,txt:${TXT('.acx-fail')},kept:(document.getElementById('ac-cn')||{}).value}`); ok('결제 실패: 안내, 입력값 유지',s.fail==='fail'&&/승인되지 않았습니다/.test(s.txt)&&/0000/.test(s.kept),s);
 await snap('P2A-checkout-fail');
-await ev(fill('4242 4242 4242 4242')); await ev(`plPay()`); ok('결제 성공 → 거래소 승인 단계로(결제가 먼저)',await waitFor(`acSubOn()===true&&acStep()==='auth'&&acS().ex==='bybit'`,9000),await J(`{sub:acSubOn(),step:acStep(),ex:acS().ex}`));
-await snap('P3-paid-auth');
+await ev(fill('4242 4242 4242 4242')); await ev(`plPay()`); ok('결제 성공 → 거래소 선택(결제가 먼저, 연결 흐름은 무료와 같음)',await waitFor(`acSubOn()===true&&acStep()==='ex'`,9000),await J(`{sub:acSubOn(),step:acStep(),ex:acS().ex}`));
+await ev(`pxPickEx('bybit')`); await sleep(600); ok('거래소 고르면 승인 단계',(await ev(`acStep()`))==='auth'&&(await ev(`acS().ex`))==='bybit'); await snap('P3-paid-auth');
 await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('승인 → 완료',await waitFor(`acStep()==='done'`,9000));
 s=await J(`{conn:Object.keys(acS().conn),bill:acS().bill.map(function(b){ return b.st; })}`); ok('결제 내역에 실패와 성공',s.bill.indexOf('failed')>=0&&s.bill.indexOf('paid')>=0&&s.conn[0]==='bybit',s);
 // 구독 거래소 한도 2곳
@@ -73,7 +73,7 @@ await snap('P5-paid-limit');
 
 // Apple Pay
 await ev(RESET); await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(400); await ev(`tfBrokersView()`); await sleep(900); await ev(`plPick('paid')`); await sleep(900); await ev(`plApple()`);
-ok('Apple Pay → 결제 완료 → 승인 단계',await waitFor(`acSubOn()===true&&acStep()==='auth'`,9000),await J(`{card:acS().cards[0]&&acS().cards[0].brand}`));
+ok('Apple Pay → 결제 완료 → 거래소 선택',await waitFor(`acSubOn()===true&&acStep()==='ex'`,9000),await J(`{card:acS().cards[0]&&acS().cards[0].brand}`));
 // 모바일 접기
 if(M){ await ev(RESET); await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(400); await ev(`tfBrokersView()`); await sleep(900);
   s=await J(`{items:getComputedStyle(document.querySelector('.pl-hi .pl-items')).display,more:(document.querySelector('.pl-hi .pl-more')||{}).innerText,order:[].map.call(document.querySelectorAll('.pl-grid>.pl-card'),function(c){ return getComputedStyle(c).order; })}`);

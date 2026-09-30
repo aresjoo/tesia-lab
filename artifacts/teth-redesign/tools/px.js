@@ -13,6 +13,7 @@ function pxTitle(){
   if(cur==='uid'){ var u=a.uid.ex===a.ex?a.uid:{st:'none'}; return u.st==='fail'?{h:'TETH 초대 계정이 아닙니다',s:'이 '+n+' 계정은 TETH 초대로 만든 계정이 아닙니다. 아래에서 하나를 고르십시오.',back:''}:{h:n+' 연결 확인 중',s:'승인한 계정을 확인하고 있습니다.',back:''}; }
   if(cur==='limit') return {h:'거래소 '+AC_PAID_MAX+'곳이 연결되어 있습니다',s:'구독 하나로 '+AC_PAID_MAX+'곳까지 연결됩니다. '+n+' 연결 방법을 고르십시오.',back:'plan'};
   if(cur==='pay') return {h:'플랜 구성',s:'',back:''};
+  if(cur==='done'&&ctx.doneHtml&&BT.s&&BT.s.mine) return {h:'전략 시작',s:gEsc(ctx.name||mkHook(BT.s))+' 전략을 '+acName(a.ex||acConnList()[0])+' 계정에서 실행합니다.',back:'result'};
   if(cur==='done') return {h:'연결되었습니다',s:'이제 '+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+'시작하면 '+acName(a.ex||acConnList()[0])+' 계정에서 실행됩니다.',back:''};
   return {h:'거래소 연결',s:'',back:''};
 }
@@ -22,6 +23,7 @@ function pxBack(k){
   if(k==='plan'){ if(acConnList().length){ a.ex=null; a.adding=0; a.edit=null; acSave(); acPageView(); } else plView(ctx); return; }
   if(k==='ex'){ a.edit='ex'; a.exSel=a.ex; acSave(); acRe(); return; }
   if(k==='acct'){ a.has=null; a.g=0; a.edit=null; acSave(); acRe(); return; }
+  if(k==='result'){ btGoTo(''); return; }
 }
 function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
 /* 거래소: 타일을 누르면 바로 다음 화면 */
@@ -34,8 +36,8 @@ function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
 /* 계정: 초대 가입 안내 한 카드, 단추 하나, 작은 갈래 둘 */
 function pxBAcct(){
   var a=acS(), n=acName(a.ex), j=!!a.joined&&a.has==='no';
-  return '<div class="px-card"><ul class="px-steps"><li><b>TETH 초대 링크로 가입</b><span>이메일이나 전화번호로 가입합니다.</span></li><li><b>본인 확인</b><span>전략을 시작하기 전에 '+n+'에서 마칩니다.</span></li></ul></div>'
-    +(j?'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a></p>'
+  return '<div class="px-card'+(j?' px-hi':'')+'"><ul class="px-steps"><li'+(j?' class="ok"':'')+'><b>'+(j?AC_CK:'')+'TETH 초대 링크로 가입</b><span>'+(j?n+' 가입 화면을 열었습니다. 가입을 마쳤다면 계정을 연결합니다.':'이메일이나 전화번호로 가입합니다.')+'</span></li><li><b>본인 확인</b><span>전략을 시작하기 전에 '+n+'에서 마칩니다.</span></li></ul></div>'
+    +(j?'<button type="button" class="pl-cta pl-cta-hi px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a></p>'
       :'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="pxJoined()">'+n+' 가입 화면 열기'+AC_OUT+'</a><p class="px-links"><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">기존 초대 계정 연결</button></p>');
 }
 function pxJoined(){ acGuideOpen(); setTimeout(acRe,50); }
@@ -62,10 +64,21 @@ function pxBLimit(){
 }
 /* 완료: 계정 한 줄, 단추 하나 */
 function pxBDone(){
-  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{};
+  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{}, ctx=AC_CTX||{};
+  if(ctx.doneHtml&&BT.s&&BT.s.mine) return pxBStart();
   return '<div class="px-card"><p class="px-acct">'+acLogo(ex,22)+'<b>'+acName(ex)+'</b>'+(c.uid?'<span class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</span>':'')+'<em>'+(c.via==='paid'?'구독':'TETH 초대 계정')+'</em></p></div>'
     +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acSheetDone()">'+pxDoneLabel()+'</button>'
     +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+}
+/* 내 전략 실행 준비: 연결은 끝났고 여기서 전략을 시작한다. 실행 계정, 사용할 금액, 이용료, 단추 하나와 작은 갈래 둘 */
+function pxBStart(){
+  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{}, t=tfS(), bi=((t.intake||{}).budget||{}).i, bud=TF_BUDGET[bi!=null?bi:1];
+  return '<div class="px-card px-rows">'
+    +'<div class="r"><span>실행 계정</span><b>'+acLogo(ex,20)+acName(ex)+(c.uid?' <i class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</i>':'')+'</b></div>'
+    +'<div class="r"><span>사용할 금액</span><b class="num">'+tfWon(bud)+'</b></div>'
+    +'<div class="r"><span>TETH 이용료</span><b>'+(c.via==='paid'?'구독, 월 '+acUsd(AC_CFG.price):'없음')+'</b></div></div>'
+    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="btMineStart(\'live\')">전략 시작하기</button>'
+    +'<p class="px-links"><button type="button" class="pl-link" onclick="btMineStart(\'paper\')">가상으로 먼저 시작</button><button type="button" class="pl-link" onclick="btMineStart(\'later\')">나중에 시작</button></p>';
 }
 /* 연결된 거래소 목록 화면 */
 function pxList(){
@@ -77,6 +90,20 @@ function pxList(){
 (function(){
   /* 구독 하나로 거래소 7곳 전부 연결한다. 한도 화면은 쓰지 않는다 */
   acPaidFull=function(){ return false; };
+  /* 연결 끊기: 예전 방식 연결 기록(t.api)을 먼저 지운다. 그대로 두면 acS()가 방금 지운 거래소를 되살린다 */
+  acDisc=function(k){
+    acConfirm({title:acName(k)+' 연결을 끊으시겠습니까?',body:'이 거래소에서 돌아가는 전략은 새 주문을 내지 않습니다. 열려 있는 포지션은 거래소에 그대로 남습니다.',ok:'연결 끊기',danger:1,run:function(){
+      var t=tfS(); if(t.api&&t.api.ex===k){ t.api=null; t.conn=false; t.uidLinked=false; }
+      var a=acS(); delete a.conn[k]; if(a.ex===k){ a.ex=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; }
+      var L=Object.keys(a.conn).filter(function(x){ return !!acEx(x); });
+      if(L.length){ t.api={ex:L[0],last4:null,oauth:true}; t.conn=true; } else { t.api=null; t.conn=false; t.uidLinked=false; }
+      acSave(); toast(acName(k)+' 연결을 끊었습니다');
+      if(G.mode==='tfbrokers') acPageView(); else if(typeof stRe==='function') stRe(); }});
+  };
+  /* 연결을 마치면 "더 연결하기" 상태를 푼다. 다음에 들어오면 목록 */
+  var cm0=acCommit; acCommit=function(){ var r=cm0.apply(this,arguments); var a=acS(); if(a.adding){ a.adding=0; acSave(); } return r; };
+  /* 실행 준비 화면(#/share/bt/…/go)도 플랜 뒤 화면과 같은 검정 바탕 */
+  var gv0=btGoView; btGoView=function(){ var r=gv0.apply(this,arguments); if(document.getElementById('bt-root')) document.body.classList.add('pl-page','pl-dark','px-go'); return r; };
   /* 머리와 몸을 화면 단위로. acRe()가 #ac-head, #ac-flow 를 다시 그리므로 페이지와 백테스트 실행 준비가 함께 바뀐다 */
   acHeadHtml=function(){ var ctx=AC_CTX||{}, a=acS(), L=acConnList();
     if(ctx.page&&L.length&&!L.some(acConnOk)) return pxHead({h:'구독이 끝났습니다',s:'연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.',back:''});
@@ -97,7 +124,8 @@ function pxList(){
     var L=acConnList(), OK=L.filter(acConnOk);
     if(!ex&&L.length&&!OK.length&&!a.adding){ a.ex=L[0]; a.route='paid'; a.pay=a.pay.st==='fail'?a.pay:{st:'none'}; acSave(); }
     if(!ex&&L.length&&a.ex&&!a.conn[a.ex]&&!a.adding){ a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); }
-    var list=OK.length&&((!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)); AC_CTX.list=list?1:0;
+    /* "거래소 더 연결하기"를 누른 뒤(adding)에는 목록이 아니라 거래소 선택으로 */
+    var list=OK.length&&!a.adding&&(!a.ex||acConnOk(a.ex)); AC_CTX.list=list?1:0;
     TF_RENDERING=true;
     gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+(list?pxList()+pxHelp():acFlowHtml())+'</div></div>');
     TF_RENDERING=false; if(acStep()==='uid') acUidRun();

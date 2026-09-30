@@ -51,12 +51,12 @@ await ev(`window.AC_QA=null; acUidAlt('paid')`); await sleep(600); ok('C','구�
 
 // D 구독: 결제가 먼저(실패 → 다시 → 성공) → 거래소 승인 → 완료, 결제 내역 기록
 await fresh(true);
-await ev(`acStart({after:{kind:'terminal'}})`); await sleep(500); await ev(`plPick('paid')`); await sleep(600); await ev(`plPickEx('bybit')`); await sleep(300);
+await ev(`acStart({after:{kind:'terminal'}})`); await sleep(500); await ev(`plPick('paid')`); await sleep(600);
 const fill=(n)=>`(function(){ var v={'ac-cn':'${n}','ac-ce':'12 / 29','ac-cc':'123','ac-ch':'KIM TETH'}; var c=0; for(var k in v){ var e=document.getElementById(k); if(e){ e.value=v[k]; e.dispatchEvent(new Event('input',{bubbles:true})); c++; } } return c; })()`;
 ok('D','플랜 구성 화면에 카드 입력',(await ev(fill('0000 1111 2222 3333')))>=3);
 await ev(`plPay()`); ok('D','결제 실패가 표시된다',await waitFor(`acS().pay.st==='fail'`,8000));
 ok('D','실패하면 연결되지 않는다',(await ev(`acReady(null)`))===false);
-await ev(fill('4242 4242 4242 4242')); await ev(`plPay()`); ok('D','다시 시도해 결제 성공 → 승인 단계',await waitFor(`acSubOn()===true&&acStep()==='auth'`,8000));
+await ev(fill('4242 4242 4242 4242')); await ev(`plPay()`); ok('D','다시 시도해 결제 성공 → 거래소 선택',await waitFor(`acSubOn()===true&&acStep()==='ex'`,8000)); await ev(`pxPickEx('bybit')`); await sleep(500); ok('D','거래소 고르면 승인 단계',(await ev(`acStep()`))==='auth');
 await sleep(300); await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('D','승인 뒤 완료',await waitFor(`acStep()==='done'`,8000));
 s=await J(`{bill:acS().bill.map(function(b){ return b.st; }),via:acS().conn.bybit.via}`); ok('D','결제 내역에 실패와 성공이 남는다',s.bill.length===2&&s.via==='paid',s);
 

@@ -107,3 +107,21 @@ body.pl-page .gft{display:none!important}
 
 /* 네 번째 검수: 본인 확인 소제목은 가입보다 한 단계 가볍게 */
 .px-steps li:nth-child(2) b{font-weight:500;color:#cdcdcd}
+/* 가입 화면을 열고 돌아온 상태: 플랜 화면 무료 카드와 같은 파란 그라데이션 */
+.px-card.px-hi{background:linear-gradient(180deg,#232323 0%,#22304a 48%,#26456f 100%);border-color:#5a8dff;animation:pxHi .45s ease both}
+@keyframes pxHi{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(90,141,255,.0)}50%{box-shadow:0 0 0 6px rgba(90,141,255,.18)}to{border-color:#5a8dff;box-shadow:0 0 0 0 rgba(90,141,255,0)}}
+.px-hi .px-steps li.ok b{display:flex;align-items:center;gap:8px;color:#fff}
+.px-hi .px-steps li.ok b svg{color:#8fb4ff}
+.px-hi .px-steps li.ok span{color:#dbe6ff}
+.px-cta.pl-cta-hi{background:#2f6fed;border-color:#2f6fed;color:#fff;font-weight:500}
+.px-cta.pl-cta-hi:hover{background:#2b64d6}
+@media (prefers-reduced-motion:reduce){ .px-card.px-hi{animation:none} }
+/* 실행 준비 화면: 검정 바탕, 요약 행 카드 */
+body.px-go #teth-help,body.px-go #teth-help-pop{display:none!important}
+.px-rows{padding:6px 26px}
+.px-rows .r{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;border-top:1px solid rgba(255,255,255,.1);font-size:16px}
+.px-rows .r:first-child{border-top:0}
+.px-rows .r span{color:#cdcdcd}
+.px-rows .r b{display:inline-flex;align-items:center;gap:8px;font-weight:400;color:#fff}
+.px-rows .r b img,.px-rows .r b .acx-mono{border-radius:6px}
+.px-rows .r i{font-style:normal;color:#cdcdcd}

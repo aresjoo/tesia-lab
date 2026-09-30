@@ -53,7 +53,7 @@ s=await J(SCREEN); s.rows=await ev(`document.querySelectorAll('#ac-flow .px-list
 await snap('X7-list');
 // 구독 경로: 결제 뒤 승인 화면, 한도 화면
 await ev(RESET); await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(400); await ev(`tfBrokersView()`); await sleep(900); await ev(`plPick('paid')`); await sleep(900);
-await ev(`plPickEx('bybit')`); await sleep(400); await ev(`plApple()`); ok('구독 결제 → 승인 화면',await waitFor(`acSubOn()===true&&acStep()==='auth'&&acS().ex==='bybit'`,9000));
+await ev(`plApple()`); ok('구독 결제 → 거래소 선택 화면(무료와 같은 흐름)',await waitFor(`acSubOn()===true&&acStep()==='ex'`,9000)); await sleep(500); s=await J(SCREEN); ok('결제 뒤 거래소 선택: 같은 화면',clean(s)&&s.h1==='거래소 선택',s); await snap('X1b-ex-after-pay'); await ev(`pxPickEx('bybit')`); await sleep(600);
 await sleep(500); s=await J(SCREEN); ok('구독 승인 화면 "Bybit 연결", 뒤로 가기 있음(거래소 바꾸기)',clean(s)&&s.h1==='Bybit 연결'&&s.ctas[0]==='Bybit에서 승인하기'&&s.back,s);
 await snap('X3-auth-paid');
 await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('승인 → 완료',await waitFor(`acStep()==='done'`,9000)); await sleep(400);
