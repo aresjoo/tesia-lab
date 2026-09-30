@@ -1,0 +1,106 @@
+/* ── 플랜 뒤 화면 (px): 검정 바탕 한 열, 제목 하나, 한 줄, 단추 하나 ── */
+.px{max-width:640px;padding-top:0}
+.px .px-head{margin-bottom:10px}
+.px-lead{margin:0 0 26px;font-size:18px;line-height:1.5;color:#cdcdcd}
+.px-body{display:block}
+.px-card{padding:24px 26px;border-radius:26px;background:#303030;border:1px solid rgba(255,255,255,.1);color:#ececec;margin:0 0 20px}
+.px-cta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;height:52px;font-size:16px}
+.px-cta img,.px-cta .acx-mono{border-radius:6px}
+.px-cta svg{width:15px;height:15px}
+.px-links{display:flex;gap:22px;flex-wrap:wrap;margin:16px 2px 0}
+.px-links .pl-link{font-size:14px;color:#cdcdcd}
+.px-links .pl-link:hover{color:#fff}
+.px-help{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:44px 2px 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px;color:#9a9a9a}
+.px-help .pl-link{font-size:13.5px}
+/* 거래소 타일 */
+.px-exs{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.px-exs button{gap:10px;padding:20px 8px 18px}
+.px-exs button img,.px-exs button .acx-mono{border-radius:8px}
+.px-exs button:hover{border-color:#9a9a9a;background:#2c2c2c}
+.px-exs button b{font-size:16px}
+.px-exs button small{font-size:12px;color:#9a9a9a}
+/* 안내 줄 */
+.px-steps{list-style:none;margin:0;padding:0;display:grid;gap:18px;counter-reset:px}
+.px-steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;counter-increment:px}
+.px-steps li::before{content:counter(px);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.px-steps b{display:block;font-size:16px;font-weight:600;color:#fff;line-height:28px}
+.px-steps span{display:block;font-size:14.5px;line-height:1.55;color:#cdcdcd}
+/* 권한 두 줄 */
+.px-perm{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.px-perm li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;align-items:start;color:#8fb4ff}
+.px-perm li svg{margin-top:3px}
+.px-perm b{display:block;font-size:16px;font-weight:600;color:#fff}
+.px-perm span span,.px-perm li>span{color:#cdcdcd;font-size:14.5px;line-height:1.55}
+.px-perm li>span b{margin-bottom:2px}
+.px-note{margin:0 0 16px;font-size:14px;color:#cdcdcd}
+.px-fail{border-radius:16px;font-size:14px}
+/* 계정 한 줄 */
+.px-acct{display:flex;align-items:center;gap:10px;margin:0;font-size:16px;color:#ececec;flex-wrap:wrap}
+.px-acct img,.px-acct .acx-mono{border-radius:6px}
+.px-acct b{font-weight:600;color:#fff}
+.px-acct .num{color:#cdcdcd}
+.px-acct em{font-style:normal;font-size:13.5px;color:#9a9a9a;margin-left:auto}
+.px-acct .pl-link{font-size:13px;margin-left:12px}
+.px-acct.px-now{margin:0 0 18px;gap:16px;font-size:15px;color:#cdcdcd}
+.px-acct.px-now i{display:inline-flex;align-items:center;gap:6px;font-style:normal}
+.px-list{padding:6px 26px}
+.px-list .px-acct{padding:16px 0;border-top:1px solid rgba(255,255,255,.1)}
+.px-list .px-acct:first-child{border-top:0}
+/* 갈래 카드 */
+.px-col{display:grid;gap:12px;margin:0 0 4px}
+.px-ch{display:flex;flex-direction:column;gap:4px;padding:20px 24px;border-radius:20px;border:2px solid transparent;background:#303030;color:#ececec;font:inherit;text-align:left;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.px-ch:hover{border-color:#9a9a9a;background:#2c2c2c}
+.px-ch b{font-size:16px;font-weight:600;color:#fff}
+.px-ch span{font-size:14px;color:#cdcdcd}
+/* 확인 목록 */
+.px-chk{margin:16px 0 0;border:0;border-top:1px solid rgba(255,255,255,.1);border-radius:0}
+.px-chk li{padding:12px 0;border-bottom:0;color:#cdcdcd;font-size:14px}
+.px-chk li b{color:#fff}
+.px-chk li.run .ic i{border-top-color:#fff}
+/* 본인 확인 관문 */
+.acx-cf.px-cf .bx{width:min(480px,100%);padding:32px 30px 26px;border-radius:26px;background:#303030;border:1px solid rgba(255,255,255,.1)}
+.acx-cf.px-cf h3{font-size:24px;font-weight:400;letter-spacing:-.01em;color:#fff;margin-bottom:10px}
+.acx-cf.px-cf .px-lead{font-size:16px;margin-bottom:22px}
+.acx-cf.px-cf .bts{justify-content:flex-start;margin-top:8px}
+.acx-cf.px-cf .bts .pl-link{height:auto;padding:0;border:0;font-size:14px;color:#cdcdcd;font-weight:400}
+.acx-cf.px-cf .bts .ok{height:48px;border-radius:999px;padding:0 22px}
+.acx-cf.px-cf .bts .ok[hidden]{display:none}
+.acx-cf.px-cf .px-links{margin-top:14px}
+.acx-cf.px-cf .px-kyc.st-ok .px-lead{margin-bottom:0}
+/* 승인 창 */
+.acx-aw{border-radius:26px;background:#212121}
+.acx-ac h3{font-weight:600}
+.acx-ac .bts .ok{border-radius:999px}
+@media (max-width:900px){
+  .px-exs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .px-exs button{padding:14px 6px 12px}
+  .px-card{padding:20px 18px;border-radius:19px}
+  .px-lead{font-size:16px;margin-bottom:20px}
+  .px-ch{padding:16px 18px;border-radius:16px}
+}
+/* 안내 줄의 설명은 번호 옆 열에 */
+.px-steps li>span{grid-column:2}
+.px-chk{display:block}
+/* 모바일: 위쪽 메뉴 단추 띠 아래에서 시작 */
+@media (max-width:900px){ body.pl-page .pl-co{padding-top:72px} .px .px-head{margin-bottom:6px} .px .px-head h1{font-size:26px} }
+@media (max-width:900px){ .px{padding-left:16px;padding-right:16px} .px .px-head{align-items:flex-start} .px .px-head .pl-back{margin-top:2px} .px .px-head h1{line-height:1.3} }
+
+/* 플랜 화면들에는 사이트 푸터를 두지 않는다 */
+body.pl-page .gft{display:none!important}
+
+/* 세 번째 검수 반영: 타일과 카드 반경 26, 번호 없는 안내, 모바일도 제목 32 */
+.px-exs button{background:#303030;border-radius:26px;border-color:transparent}
+.px-exs button:hover{background:#3a3a3a;border-color:transparent}
+.px-ch{border-radius:26px}
+.px-steps li::before{display:none}
+.px-steps li{grid-template-columns:minmax(0,1fr)}
+.px-steps li>span{grid-column:1}
+.px-steps b{line-height:1.4;margin-bottom:4px}
+.px-perm li>span{font-size:16px}
+.px-acct em{font-size:14px}
+.acx-cf.px-cf .bx{position:relative}
+.acx-cf.px-cf .bx>.x{position:absolute;right:18px;top:18px;width:34px;height:34px;border-radius:50%;border:0;background:none;color:#cdcdcd;font-size:15px;cursor:pointer}
+.acx-cf.px-cf .bx>.x:hover{background:rgba(255,255,255,.08);color:#fff}
+.acx-cf.px-cf h3{font-size:32px;padding-right:40px}
+.acx-cf.px-cf .bts:empty{display:none}
+@media (max-width:900px){ .px .px-head h1{font-size:32px} .px-card,.px-ch{border-radius:26px} .px-exs button{border-radius:20px} }

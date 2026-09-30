@@ -44,7 +44,7 @@ ok('B','초대 회원, 이용료 없음',(await J(`{acc:acAccess(),via:acS().con
 await fresh(true);
 await ev(`window.AC_QA={uid:'fail'}; acStart({after:{kind:'terminal'}})`); await sleep(500); await ev(`plPick('partner')`); await sleep(400); await ev(`acPickEx('okx'); acExGo(); acHas('yes'); acAuthOpen(); acAuthYes()`);
 ok('C','초대 계정 확인 실패가 표시된다',await waitFor(`acS().uid.st==='fail'`,9000));
-s=await J(`{t:document.getElementById('ac-flow').innerText.replace(/\\s+/g,' '),n:document.querySelectorAll('#ac-flow .acx-ch').length}`);
+s=await J(`{t:document.getElementById('ac-flow').innerText.replace(/\\s+/g,' '),n:document.querySelectorAll('#ac-flow .px-ch').length}`);
 ok('C','UID, 레퍼럴 같은 말 없이 설명하고 선택지 3개',!/UID|레퍼럴|referral/i.test(s.t)&&s.n===3,{n:s.n});
 ok('C','연결된 것으로 처리하지 않는다',(await ev(`acReady('okx')`))===false);
 await ev(`window.AC_QA=null; acUidAlt('paid')`); await sleep(600); ok('C','구독으로 바꾸면 결제(플랜 구성) 화면',(await ev(`!!document.querySelector('.pl-co')`))===true);
@@ -63,7 +63,7 @@ s=await J(`{bill:acS().bill.map(function(b){ return b.st; }),via:acS().conn.bybi
 
 // E 이미 충족: 다시 묻지 않음, 다른 거래소는 그 거래소만, 만료는 결제만
 ok('E','같은 거래소는 창 없이 진행',(await J(`(function(){ acSheetClose(true); acStart({need:'bybit',after:{kind:'terminal'}}); return {sheet:!!document.getElementById('ac-sheet')}; })()`)).sheet===false);
-s=await J(`(function(){ acStart({need:'okx',after:{kind:'terminal'}}); return {sheet:!!document.getElementById('ac-sheet'),ex:acS().ex,step:acStep(),steps:acSteps().map(function(x){ return x[0]; })}; })()`);
+s=await J(`(function(){ acStart({need:'okx',after:{kind:'terminal'}}); return {sheet:!!document.getElementById('pl-root'),ex:acS().ex,step:acStep(),steps:acSteps().map(function(x){ return x[0]; })}; })()`);
 ok('E','구독 회원의 다른 거래소: 승인만 남는다',s.sheet&&s.ex==='okx'&&s.step==='auth'&&s.steps.indexOf('pay')<0,s);
 await ev(`acSheetClose(true)`);
 s=await J(`(function(){ var a=acS(); a.sub={st:'cancelled',until:Date.now()-1000}; tfS().payDone=false; acSave(); acOpen({ex:'bybit'}); return {ready:acReady('bybit'),step:acStep(),acc:acAccess()}; })()`);

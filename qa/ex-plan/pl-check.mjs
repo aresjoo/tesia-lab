@@ -38,8 +38,8 @@ await ev(`(function(){ var L=document.querySelectorAll('#bt-root .bt-sec'); for(
 s=await J(`{pl:!!document.getElementById('pl-root'),bt:!!document.querySelector('.pl-bt')}`); ok('갈래 2: 나쁜 결과에서 실행 → 플랜 화면, 결과 카드 없음',s.pl&&!s.bt,s);
 // 무료 경로: 가입 안내가 기본, 작은 링크로 바로 연결
 await ev(`plPick('partner')`); await sleep(900);
-s=await J(`{step:acStep(),txt:${TXT('#ac-flow')}}`); ok('무료 선택 → 전략의 거래소가 정해져 있어 거래소 단계를 건너뛴다',s.step==='acct',{step:s.step,ex:await ev(`acS().ex`)}); s=await J(`{step:acStep(),guide:!!document.querySelector('#ac-flow .acx-g'),have:(document.querySelector('.acx-have button')||{}).innerText,join:!!document.querySelector('#ac-flow a.acx-a'),steps:document.querySelectorAll('#ac-flow .acx-g li').length}`);
-ok('계정 단계: 가입 안내가 기본(가입, 본인 확인, TETH 연결), 작은 링크 "이미 있습니까"',s.step==='acct'&&s.guide&&/이미 있습니까/.test(s.have)&&s.join&&s.steps===3,s);
+s=await J(`{step:acStep(),txt:${TXT('#ac-flow')}}`); ok('무료 선택 → 전략의 거래소가 정해져 있어 거래소 단계를 건너뛴다',s.step==='acct',{step:s.step,ex:await ev(`acS().ex`)}); s=await J(`{step:acStep(),guide:!!document.querySelector('#ac-flow .px-steps'),have:(document.querySelector('.acx-have')||{}).innerText,join:!!document.querySelector('#ac-flow a.acx-a'),steps:document.querySelectorAll('#ac-flow .px-steps li').length}`);
+ok('계정 단계: 가입 안내가 기본(가입, 본인 확인, TETH 연결), 작은 링크 "이미 있습니까"',s.step==='acct'&&s.guide&&/기존 초대 계정 연결/.test(s.have)&&s.join&&s.steps===2,s);
 await snap('P2B-free-guide');
 await ev(`acHas('yes')`); await sleep(400); ok('이미 있음 → 바로 승인 단계',(await ev(`acStep()`))==='auth');
 await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('승인 → 초대 확인 → 완료(본인 확인은 여기서 검사하지 않음)',await waitFor(`acStep()==='done'`,9000));
@@ -48,7 +48,7 @@ await snap('P3-free-done');
 // 실행 직전 본인 확인 관문
 await ev(`window.AC_QA={kyc:'fail'}`); await ev(`cpStart('r1')`); await sleep(1600);
 s=await J(`{dlg:!!document.getElementById('ac-cf'),txt:${TXT('#ac-cf')},go:(document.getElementById('ac-kyc-go')||{}).disabled}`);
-ok('전략 시작 직전: 본인 확인 미완료면 막고 안내(연결은 유지)',s.dlg&&/본인 확인을 완료해 주십시오/.test(s.txt)&&s.go===true,{txt:s.txt.slice(0,120)});
+ok('전략 시작 직전: 본인 확인 미완료면 막고 안내(연결은 유지)',s.dlg&&/본인 확인/.test(s.txt)&&s.go===true,{txt:s.txt.slice(0,120)});
 await snap('P4-kyc-gate-fail');
 await ev(`window.AC_QA=null; acKycRun('okx')`); await sleep(1800); s=await J(`{dlg:!!document.getElementById('ac-cf'),kyc:acS().conn.okx.kyc}`); ok('다시 확인 → 완료되면 창이 닫히고 진행',!s.dlg&&s.kyc==='ok',s);
 await ev(`try{ tfSS3DlgClose(true); }catch(e){} try{ mkFollowClose(true); }catch(e){}`);
@@ -68,9 +68,9 @@ s=await J(`{conn:Object.keys(acS().conn),bill:acS().bill.map(function(b){ return
 // 구독 거래소 한도 2곳
 await ev(`(function(){ var a=acS(); a.conn.okx={via:'paid',at:Date.now(),uid:'',kyc:'none'}; acSave(); })()`);
 await ev(`acStart({need:'bitget',after:{kind:'terminal'}})`); await sleep(800);
-s=await J(`{step:acStep(),txt:${TXT('#ac-sheet #ac-flow')},sheet:!!document.getElementById('ac-sheet')}`); ok('구독 거래소 2곳 뒤 셋째: 한도 안내와 세 갈래',s.step==='limit'&&/연결 한도에 도달/.test(s.txt)&&/구독 추가/.test(s.txt),{step:s.step});
+s=await J(`{step:acStep(),page:!!document.getElementById('pl-root')}`); ok('구독 거래소 2곳 뒤 셋째: 한도 없이 승인 화면(구독 하나로 7곳 전부)',s.step==='auth'&&s.page,s);
 await snap('P5-paid-limit');
-await ev(`acLimitAlt('partner')`); await sleep(500); ok('한도에서 초대 계정으로 → 계정 단계',(await ev(`acStep()`))==='acct'); await ev(`acSheetClose(true)`);
+
 // Apple Pay
 await ev(RESET); await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(400); await ev(`tfBrokersView()`); await sleep(900); await ev(`plPick('paid')`); await sleep(900); await ev(`plApple()`);
 ok('Apple Pay → 결제 완료 → 승인 단계',await waitFor(`acSubOn()===true&&acStep()==='auth'`,9000),await J(`{card:acS().cards[0]&&acS().cards[0].brand}`));

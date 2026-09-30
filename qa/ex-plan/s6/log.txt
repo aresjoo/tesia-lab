@@ -1,0 +1,387 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f36e-a7c7-7f11-954b-922dc09a62a8
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드로 빙의합니다. 웹앱 TETH(암호화폐 거래소 계정에 전략을 연결해 자동 매매하는 서비스)의 "거래소 연결" 여정을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+
+첨부 이미지
+1. ref-A-plan-desktop.png: ChatGPT 요금제 화면 (참고 원본)
+2. ref-B-checkout.png: ChatGPT 결제 화면 (참고 원본)
+3. P1-plan-member.png: TETH 플랜 화면. 파운더가 "이건 괜찮다"고 한 화면
+4. now-free-exchange.png: 플랜에서 무료를 고른 뒤 나오는 화면 (거래소 고르기, 5단계 스텝퍼)
+5. now-paid-auth.png: 구독 결제 뒤 나오는 화면 (연결 승인, 3단계 스텝퍼)
+6. P2B-free-guide.png: 무료 경로의 거래소 계정 안내 단계
+7. P3-free-done.png: 연결 완료 화면
+8. P5-paid-limit.png: 구독 거래소 한도 안내
+
+파운더 평가: "첫 화면(3번)은 괜찮은데 그 이후(4~8번)가 형편없다. 3번처럼 ChatGPT가 만든 것 같게 가고 싶다. 말투, UI, UX 구성, 카피 전부."
+
+해야 할 일
+A. 4~8번이 3번, 그리고 ChatGPT(1, 2번)와 비교해 왜 다른 제품처럼 보이는지 원인을 짚으십시오. 겉모습(색, 여백, 위계, 컴포넌트)과 구조(스텝퍼, 화면당 질문 수, 정보 순서)와 카피(문장 길이, 어미, 설명 과잉, 불안 유발 문구)로 나눠서, 각 원인마다 어느 화면의 어느 요소인지 픽셀이나 문구를 근거로 대십시오. 추측으로 채우지 마십시오.
+B. ChatGPT라면 이 여정을 어떻게 만들었을지 화면 단위로 제안하십시오. 화면 수, 각 화면의 제목, 한 줄 설명, 입력 요소, 주 단추 문구, 보조 행동을 표로 적으십시오. 색과 형태는 1, 2번의 어휘(검정 배경, #303030 카드, 반경 큰 흰 단추, 얇은 구분선, 400 굵기 큰 제목)만 쓰십시오. 현재의 연두색 단추와 번호 스텝퍼를 유지할지 버릴지 근거와 함께 정하십시오.
+C. 카피 교체안을 표로 적으십시오. 현재 문구 → 제안 문구. 합니다체, 단추는 서술어로 끝나지 않게(예: "Binance에서 승인하기"), 규제 고지나 면책 같은 말은 넣지 마십시오. 특히 "주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다. N단계 남았습니다"와 "요청하지 않습니다. TETH는 자산을 옮길 수 없습니다" 같은 문장의 필요 여부를 판단하십시오.
+D. 한 문장으로: 4~8번을 통째로 다시 만들어야 하는지, 아니면 스타일과 카피만 바꾸면 되는지.
+
+형식: 표와 짧은 문단. 750단어 이내. 근거 없는 칭찬은 쓰지 마십시오.
+
+codex
+첨부 화면의 배치와 문구를 기준으로 비교하겠습니다. 저장소 지침과 우체통은 읽기만 확인하고, 파일은 수정하지 않겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 70ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Location; Get-Item -LiteralPath '..\\..\\.mailbox\\mail.cmd' -ErrorAction SilentlyContinue; Get-Content -LiteralPath '..\\..\\.mailbox\\mail.ps1' -TotalCount 180 -ErrorAction SilentlyContinue\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 283ms:
+
+Path                                                     
+----                                                     
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\qa\ex-plan
+
+LastWriteTime : 6/9/2026 1:10:24 am
+Length        : 81
+Name          : mail.cmd
+
+#Requires -Version 5.1
+<#
+.SYNOPSIS
+    Project mailbox: file-based message exchange between the claude, codex and
+    agy interactive sessions working on this repository.
+
+.DESCRIPTION
+    There is no notification channel. Each session checks its own inbox at the
+    start of a turn and archives what it has handled. Messages are plain
+    Markdown files with YAML frontmatter, so any agent can read them without
+    this script.
+
+        .mailbox/inbox/<agent>/<id>.md    unread
+        .mailbox/archive/<agent>/<id>.md  handled
+
+.EXAMPLE
+    mail.cmd check codex
+    mail.cmd read codex 20260906-011500-claude-rtk-scope
+    mail.cmd send claude all "claim: index.html research panel" "??? ??? ????" -Type claim
+    mail.cmd send codex claude "re: rtk scope" @reply.md -Type answer -ReplyTo 20260906-011500-claude-rtk-scope
+    mail.cmd done codex 20260906-011500-claude-rtk-scope
+    mail.cmd log 20
+#>
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $true, Position = 0)]
+    [ValidateSet('check', 'read', 'send', 'done', 'log')]
+    [string]$Verb,
+
+    [Parameter(Position = 1)][string]$A1,
+    [Parameter(Position = 2)][string]$A2,
+    [Parameter(Position = 3)][string]$A3,
+    [Parameter(Position = 4)][string]$A4,
+
+    # note | question | answer | proposal | review | claim | release | handoff
+    [string]$Type = 'note',
+    [string]$ReplyTo = '-'
+)
+
+$ErrorActionPreference = 'Stop'
+try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch { }
+
+$Agents  = @('claude', 'codex', 'agy')
+$MailDir = $PSScriptRoot
+$Inbox   = Join-Path $MailDir 'inbox'
+$Archive = Join-Path $MailDir 'archive'
+$Utf8    = New-Object System.Text.UTF8Encoding($false)
+
+function Assert-Agent([string]$name, [string]$what) {
+    if ($Agents -notcontains $name) {
+        throw "$what must be one of: $($Agents -join ', ') (got '$name')"
+    }
+}
+
+function Get-Box([string]$agent, [switch]$Archived) {
+    $base = $Inbox
+    if ($Archived) { $base = $Archive }
+    $dir = Join-Path $base $agent
+    if (-not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    return $dir
+}
+
+function Read-Header([string]$path) {
+    $h = [ordered]@{ id = [IO.Path]::GetFileNameWithoutExtension($path); from = '?'; to = '?'; type = '?'; subject = ''; reply_to = '-'; created = '' }
+    foreach ($line in (Get-Content -LiteralPath $path -Encoding UTF8 -TotalCount 20)) {
+        if ($line -eq '---') { continue }
+        if ($line -match '^([a-z_]+):\s*(.*)$') {
+            $k = $Matches[1]
+            if ($h.Contains($k)) { $h[$k] = $Matches[2].Trim() }
+        } elseif ($line.Trim() -eq '') { break }
+    }
+    return [pscustomobject]$h
+}
+
+function Show-List($files, [string]$label) {
+    if (-not $files -or $files.Count -eq 0) { Write-Host "$label : (?? ??)"; return }
+    Write-Host "$label : $($files.Count)?"
+    foreach ($f in $files) {
+        $h = Read-Header $f.FullName
+        $flag = ' '
+        if (@('question', 'claim', 'handoff') -contains $h.type) { $flag = '!' }
+        Write-Host ("  {0} [{1,-8}] {2}  <- {3}" -f $flag, $h.type, $h.subject, $h.from)
+        Write-Host ("      id: {0}" -f $h.id)
+    }
+}
+
+function New-Id([string]$from, [string]$subject) {
+    # Keep Unicode letters so Korean subjects stay readable in the id.
+    $slug = ($subject -replace '[^\p{L}\p{N}]+', '-').Trim('-').ToLower()
+    if ($slug.Length -gt 40) { $slug = $slug.Substring(0, 40).Trim('-') }
+    if (-not $slug) { $slug = 'msg' }
+    return '{0}-{1}-{2}' -f (Get-Date -Format 'yyyyMMdd-HHmmss'), $from, $slug
+}
+
+function Find-Message([string]$agent, [string]$id) {
+    foreach ($dir in @((Get-Box $agent), (Get-Box $agent -Archived))) {
+        $p = Join-Path $dir "$id.md"
+        if (Test-Path -LiteralPath $p) { return $p }
+    }
+    return $null
+}
+
+switch ($Verb) {
+
+    'check' {
+        $agent = $A1; Assert-Agent $agent '<agent>'
+        $files = @(Get-ChildItem -LiteralPath (Get-Box $agent) -Filter '*.md' -File | Sort-Object Name)
+        Show-List $files "$agent ???"
+        if ($files.Count -gt 0) {
+            Write-Host ''
+            Write-Host "??: mail.cmd read $agent [<id>]"
+            Write-Host "?? ??: mail.cmd done $agent <id>"
+        }
+    }
+
+    'read' {
+        $agent = $A1; Assert-Agent $agent '<agent>'
+        if ($A2) {
+            $p = Find-Message $agent $A2
+            if (-not $p) { throw "???? ?? ? ????: $A2 (??? $agent)" }
+            Get-Content -LiteralPath $p -Raw -Encoding UTF8
+        } else {
+            $files = @(Get-ChildItem -LiteralPath (Get-Box $agent) -Filter '*.md' -File | Sort-Object Name)
+            if ($files.Count -eq 0) { Write-Host "$agent ??? : (?? ??)"; break }
+            foreach ($f in $files) {
+                Write-Host ('=' * 72)
+                Get-Content -LiteralPath $f.FullName -Raw -Encoding UTF8
+            }
+        }
+    }
+
+    'send' {
+        $from = $A1; Assert-Agent $from '<from>'
+        $to = $A2
+        if ($to -ne 'all') { Assert-Agent $to '<to>' }
+        $subject = $A3
+        if (-not $subject) { throw '??? ?????: mail.cmd send <from> <to> "<??>" "<??>"' }
+
+        $body = $A4
+        if (-not $body) { throw '??? ?????. ? ??? @???? ??? ?????.' }
+        if ($body.StartsWith('@')) {
+            $bodyPath = $body.Substring(1)
+            if (-not (Test-Path -LiteralPath $bodyPath)) { throw "?? ??? ????: $bodyPath" }
+            $body = Get-Content -LiteralPath $bodyPath -Raw -Encoding UTF8
+        }
+
+        $targets = @($to)
+        if ($to -eq 'all') { $targets = $Agents | Where-Object { $_ -ne $from } }
+        $id = New-Id $from $subject
+        $created = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ssK')
+
+        foreach ($t in $targets) {
+            $head = @(
+                '---'
+                "id: $id"
+                "from: $from"
+                "to: $t"
+                "type: $Type"
+                "subject: $subject"
+                "reply_to: $ReplyTo"
+                "created: $created"
+                '---'
+                ''
+            ) -join "`n"
+            $path = Join-Path (Get-Box $t) "$id.md"
+            [IO.File]::WriteAllText($path, $head + $body.TrimEnd() + "`n", $Utf8)
+            Write-Host "?? -> $t : $path"
+        }
+        Write-Host "id: $id"
+    }
+
+    'done' {
+        $agent = $A1; Assert-Agent $agent '<agent>'
+        if (-not $A2) { throw 'id? ?????: mail.cmd done <agent> <id>' }
+        $src = Join-Path (Get-Box $agent) "$($A2).md"
+        if (-not (Test-Path -LiteralPath $src)) { throw "???? ????: $A2" }
+        Move-Item -LiteralPath $src -Destination (Join-Path (Get-Box $agent -Archived) "$($A2).md") -Force
+        Write-Host "?? ??? ??: $agent / $A2"
+    }
+
+
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"if (Test-Path -LiteralPath '..\\..\\.mailbox\\inbox\\codex') { & '..\\..\\.mailbox\\mail.cmd' check codex }\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 534ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-ChildItem -LiteralPath '..\\..\\.mailbox\\inbox\\codex' -Filter '*.md' -File | Get-Content -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 274ms:
+codex
+핵심은 색보다 **화면을 조직하는 방식의 단절**입니다. 3번은 선택지를 비교하는 제품 화면인데, 4~8번은 절차와 설명을 펼쳐 놓은 설정 화면입니다. 아래 평가는 첨부 화면에 한정합니다.
+
+**A. 다른 제품처럼 보이는 원인**
+
+| 구분 | 화면에서 확인되는 근거 | 차이를 만드는 원인 |
+|---|---|---|
+| 겉모습·색 | 1·3번은 회색 바탕과 파란 강조 카드, 2번은 검정 바탕·회색 카드·흰 단추입니다. 4~8번의 주 행동은 연두색입니다. | 플랜 선택 직후 강조색과 표면 구성이 동시에 바뀝니다. |
+| 겉모습·위계 | 같은 1440×900인 3번은 약 1032px 폭의 두 카드, 6·7번은 약 672px 폭의 본문입니다. 3번의 큰 소개 문구 대신 6번은 작은 설명과 단계명이 중심입니다. | 선택을 돕던 큰 제목과 카드가 사라지고, 절차 목록이 화면의 중심이 됩니다. |
+| 겉모습·컴포넌트 | 2번은 입력 영역과 요약 카드를 분리합니다. 5번은 완료 행·번호·권한 표·긴 단추를 한 열에 쌓습니다. | 입력과 확인 정보의 역할이 구분되지 않고 모두 같은 흐름에 놓입니다. |
+| 구조·스텝퍼 | 4번은 5단계, 5번은 3단계입니다. 8번은 두 단계 행을 보여 주면서 “1단계 남았습니다”라고 합니다. | 완료·현재·남은 단계의 관계를 사용자가 해석해야 합니다. 경로마다 절차의 틀도 달라집니다. |
+| 구조·질문 수 | 4번의 실제 질문은 거래소 선택 하나입니다. 그런데 이용 방식과 이후 세 단계까지 노출합니다. 6번에는 계정 만들기·본인 확인·연결, 가입 완료, 기존 계정 연결이 함께 있습니다. | 한 화면의 결정에 미래 작업과 다른 경로가 섞입니다. 2번은 입력칸이 여러 개여도 ‘결제’라는 하나의 목적에 모입니다. |
+| 구조·정보 순서 | 5번에는 이미 결제 완료 행이 있습니다. 8번에서는 연결 한도 때문에 초대 계정 또는 추가 구독을 다시 고릅니다. | 비용·연결 가능 여부·승인이라는 판단이 분산되어 있습니다. 다만 이미지로는 한도를 언제 처음 안내했는지 확인할 수 없습니다. |
+| 카피·설명 과잉 | 4~6번은 제목 아래에 “주문은…나갑니다. 자산은…있습니다. N단계 남았습니다”를 반복합니다. | 현재 선택보다 계정 구조와 진행 설명이 먼저 읽힙니다. |
+| 카피·불안과 기대 | 5번의 “바로 실행합니다”, “TETH는 자산을 옮길 수 없습니다”; 7번의 “실행할 수 있습니다”. | 연결이 자동 실행을 뜻하는지 모호합니다. 출금 부정문은 승인에 필요한 권한보다 강하게 부각됩니다. |
+| 카피·완료감 | 7번은 “거래소 연결 완료”와 “OKX 계정이 연결되었습니다”를 연속 표시합니다. | 같은 결과를 반복하면서, 연결 후 무엇을 할지는 작은 설명에 묻힙니다. |
+
+**B. 참고 화면의 설계 원칙으로 다시 구성**
+
+플랜 화면을 출발점으로 유지하고, 이후는 **무료 신규 계정 4화면, 무료 기존 계정 3화면, 유료 신규 구독 4화면**으로 구성합니다. 거래소의 외부 가입·승인 화면은 별도입니다. 한도 안내는 해당할 때만 표시합니다.
+
+| 화면 | 제목 | 한 줄 설명 | 입력·선택 | 주 단추 | 보조 행동 |
+|---|---|---|---|---|---|
+| 공통 1 | 거래소 선택 | 전략을 실행할 거래소를 선택합니다. | 거래소 선택 카드 | 계속 | 뒤로 |
+| 무료 신규 2 | 거래소 계정 | TETH 초대로 가입한 계정을 연결합니다. | 새 계정 / 기존 초대 계정 | OKX 가입 화면 열기 | 기존 계정 연결 |
+| 유료 신규 2 | 구독 구성 | 월 $280으로 거래소 최대 2곳을 연결합니다. | 결제 수단, 선택 거래소·가격 요약 | 구독 결제 | 거래소 변경 |
+| 공통 3 | Binance 연결 | Binance에서 잔고 조회와 주문 권한을 승인합니다. | 권한 요약, 입력 없음 | Binance에서 승인하기 | 뒤로 |
+| 공통 4 | OKX 연결 완료 | 연결한 계정에서 전략을 실행할 수 있습니다. | 계정·이용 방식 요약 | 터미널로 이동 | 연결 계정 보기 |
+| 한도 예외 | Bitget 연결 방법 | 현재 구독의 거래소 연결 한도 2곳을 모두 사용하고 있습니다. | 초대 계정 / 월 $280 구독 추가 | 계속 | 취소 |
+
+외부 가입에서 돌아온 뒤 같은 화면의 주 단추를 ‘계정 연결’로 바꿉니다. 초대 계정 확인은 승인 후 처리 상태로 보여 주고, 사용자가 할 일이 없다면 별도 단계로 만들지 않습니다.
+
+검정 배경, **#303030 카드**, 큰 반경의 흰 단추, 얇은 구분선, **400 굵기의 큰 제목**을 공통으로 적용합니다. 결제만 2번처럼 입력과 요약을 나눕니다. 연두색 단추는 버립니다. 지정된 참고 화면의 행동 색과 맞지 않습니다. 번호 스텝퍼도 버립니다. 분기마다 달라지는 전체 절차보다 현재 결정과 뒤로 가기가 중요합니다.
+
+**C. 카피 교체**
+
+| 현재 문구 | 제안 문구 |
+|---|---|
+| 전략을 실행할 계정을 연결합니다 | 거래소 선택 |
+| 주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다. N단계 남았습니다 | 반복 삭제. 승인 화면에만 “연결한 거래소 계정에서 전략 주문을 실행합니다.” |
+| 거래소 계정을 연결하면 바로 실행합니다 | Binance 연결 |
+| 키를 만들거나 붙여 넣지 않습니다 | 삭제. 주 행동 ‘Binance에서 승인하기’로 연결 방식을 전달합니다. |
+| 요청하지 않습니다. TETH는 자산을 옮길 수 없습니다 | 권한 요약의 “출금 권한 · 요청 안 함” |
+| 본인 확인은 전략 시작 전에 필요합니다 | 가입 안내에서 “전략 실행 전 거래소 본인 확인이 필요합니다.”를 한 번만 표시합니다. |
+| TETH 초대 계정이 이미 있습니까? 바로 연결 | 기존 초대 계정 연결 |
+| 현재 구독의 연결 한도에 도달했습니다 | 거래소 2곳이 연결되어 있습니다 |
+| 구독 추가 | 구독 추가 · 월 $280 |
+| 막히는 곳이 있으면 상담원이 도와드립니다. 24시간 응답합니다 | 고객지원 |
+| 거래소 연결 완료 / OKX 계정이 연결되었습니다 | OKX 연결 완료 |
+
+자산 위치 설명은 매 화면에 필요하지 않습니다. 출금 권한 정보는 승인 판단에 필요하므로 짧게 남기고, 불가능을 단정하는 문장은 제거합니다.
+
+**D. 4~8번은 스타일과 카피 수정만으로 해결되지 않으며, 기존 연결 기능을 유지하되 화면 분기와 정보 순서부터 다시 구성해야 합니다.**
+tokens used
+41,617
+핵심은 색보다 **화면을 조직하는 방식의 단절**입니다. 3번은 선택지를 비교하는 제품 화면인데, 4~8번은 절차와 설명을 펼쳐 놓은 설정 화면입니다. 아래 평가는 첨부 화면에 한정합니다.
+
+**A. 다른 제품처럼 보이는 원인**
+
+| 구분 | 화면에서 확인되는 근거 | 차이를 만드는 원인 |
+|---|---|---|
+| 겉모습·색 | 1·3번은 회색 바탕과 파란 강조 카드, 2번은 검정 바탕·회색 카드·흰 단추입니다. 4~8번의 주 행동은 연두색입니다. | 플랜 선택 직후 강조색과 표면 구성이 동시에 바뀝니다. |
+| 겉모습·위계 | 같은 1440×900인 3번은 약 1032px 폭의 두 카드, 6·7번은 약 672px 폭의 본문입니다. 3번의 큰 소개 문구 대신 6번은 작은 설명과 단계명이 중심입니다. | 선택을 돕던 큰 제목과 카드가 사라지고, 절차 목록이 화면의 중심이 됩니다. |
+| 겉모습·컴포넌트 | 2번은 입력 영역과 요약 카드를 분리합니다. 5번은 완료 행·번호·권한 표·긴 단추를 한 열에 쌓습니다. | 입력과 확인 정보의 역할이 구분되지 않고 모두 같은 흐름에 놓입니다. |
+| 구조·스텝퍼 | 4번은 5단계, 5번은 3단계입니다. 8번은 두 단계 행을 보여 주면서 “1단계 남았습니다”라고 합니다. | 완료·현재·남은 단계의 관계를 사용자가 해석해야 합니다. 경로마다 절차의 틀도 달라집니다. |
+| 구조·질문 수 | 4번의 실제 질문은 거래소 선택 하나입니다. 그런데 이용 방식과 이후 세 단계까지 노출합니다. 6번에는 계정 만들기·본인 확인·연결, 가입 완료, 기존 계정 연결이 함께 있습니다. | 한 화면의 결정에 미래 작업과 다른 경로가 섞입니다. 2번은 입력칸이 여러 개여도 ‘결제’라는 하나의 목적에 모입니다. |
+| 구조·정보 순서 | 5번에는 이미 결제 완료 행이 있습니다. 8번에서는 연결 한도 때문에 초대 계정 또는 추가 구독을 다시 고릅니다. | 비용·연결 가능 여부·승인이라는 판단이 분산되어 있습니다. 다만 이미지로는 한도를 언제 처음 안내했는지 확인할 수 없습니다. |
+| 카피·설명 과잉 | 4~6번은 제목 아래에 “주문은…나갑니다. 자산은…있습니다. N단계 남았습니다”를 반복합니다. | 현재 선택보다 계정 구조와 진행 설명이 먼저 읽힙니다. |
+| 카피·불안과 기대 | 5번의 “바로 실행합니다”, “TETH는 자산을 옮길 수 없습니다”; 7번의 “실행할 수 있습니다”. | 연결이 자동 실행을 뜻하는지 모호합니다. 출금 부정문은 승인에 필요한 권한보다 강하게 부각됩니다. |
+| 카피·완료감 | 7번은 “거래소 연결 완료”와 “OKX 계정이 연결되었습니다”를 연속 표시합니다. | 같은 결과를 반복하면서, 연결 후 무엇을 할지는 작은 설명에 묻힙니다. |
+
+**B. 참고 화면의 설계 원칙으로 다시 구성**
+
+플랜 화면을 출발점으로 유지하고, 이후는 **무료 신규 계정 4화면, 무료 기존 계정 3화면, 유료 신규 구독 4화면**으로 구성합니다. 거래소의 외부 가입·승인 화면은 별도입니다. 한도 안내는 해당할 때만 표시합니다.
+
+| 화면 | 제목 | 한 줄 설명 | 입력·선택 | 주 단추 | 보조 행동 |
+|---|---|---|---|---|---|
+| 공통 1 | 거래소 선택 | 전략을 실행할 거래소를 선택합니다. | 거래소 선택 카드 | 계속 | 뒤로 |
+| 무료 신규 2 | 거래소 계정 | TETH 초대로 가입한 계정을 연결합니다. | 새 계정 / 기존 초대 계정 | OKX 가입 화면 열기 | 기존 계정 연결 |
+| 유료 신규 2 | 구독 구성 | 월 $280으로 거래소 최대 2곳을 연결합니다. | 결제 수단, 선택 거래소·가격 요약 | 구독 결제 | 거래소 변경 |
+| 공통 3 | Binance 연결 | Binance에서 잔고 조회와 주문 권한을 승인합니다. | 권한 요약, 입력 없음 | Binance에서 승인하기 | 뒤로 |
+| 공통 4 | OKX 연결 완료 | 연결한 계정에서 전략을 실행할 수 있습니다. | 계정·이용 방식 요약 | 터미널로 이동 | 연결 계정 보기 |
+| 한도 예외 | Bitget 연결 방법 | 현재 구독의 거래소 연결 한도 2곳을 모두 사용하고 있습니다. | 초대 계정 / 월 $280 구독 추가 | 계속 | 취소 |
+
+외부 가입에서 돌아온 뒤 같은 화면의 주 단추를 ‘계정 연결’로 바꿉니다. 초대 계정 확인은 승인 후 처리 상태로 보여 주고, 사용자가 할 일이 없다면 별도 단계로 만들지 않습니다.
+
+검정 배경, **#303030 카드**, 큰 반경의 흰 단추, 얇은 구분선, **400 굵기의 큰 제목**을 공통으로 적용합니다. 결제만 2번처럼 입력과 요약을 나눕니다. 연두색 단추는 버립니다. 지정된 참고 화면의 행동 색과 맞지 않습니다. 번호 스텝퍼도 버립니다. 분기마다 달라지는 전체 절차보다 현재 결정과 뒤로 가기가 중요합니다.
+
+**C. 카피 교체**
+
+| 현재 문구 | 제안 문구 |
+|---|---|
+| 전략을 실행할 계정을 연결합니다 | 거래소 선택 |
+| 주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다. N단계 남았습니다 | 반복 삭제. 승인 화면에만 “연결한 거래소 계정에서 전략 주문을 실행합니다.” |
+| 거래소 계정을 연결하면 바로 실행합니다 | Binance 연결 |
+| 키를 만들거나 붙여 넣지 않습니다 | 삭제. 주 행동 ‘Binance에서 승인하기’로 연결 방식을 전달합니다. |
+| 요청하지 않습니다. TETH는 자산을 옮길 수 없습니다 | 권한 요약의 “출금 권한 · 요청 안 함” |
+| 본인 확인은 전략 시작 전에 필요합니다 | 가입 안내에서 “전략 실행 전 거래소 본인 확인이 필요합니다.”를 한 번만 표시합니다. |
+| TETH 초대 계정이 이미 있습니까? 바로 연결 | 기존 초대 계정 연결 |
+| 현재 구독의 연결 한도에 도달했습니다 | 거래소 2곳이 연결되어 있습니다 |
+| 구독 추가 | 구독 추가 · 월 $280 |
+| 막히는 곳이 있으면 상담원이 도와드립니다. 24시간 응답합니다 | 고객지원 |
+| 거래소 연결 완료 / OKX 계정이 연결되었습니다 | OKX 연결 완료 |
+
+자산 위치 설명은 매 화면에 필요하지 않습니다. 출금 권한 정보는 승인 판단에 필요하므로 짧게 남기고, 불가능을 단정하는 문장은 제거합니다.
+
+**D. 4~8번은 스타일과 카피 수정만으로 해결되지 않으며, 기존 연결 기능을 유지하되 화면 분기와 정보 순서부터 다시 구성해야 합니다.**

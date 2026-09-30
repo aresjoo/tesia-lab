@@ -50,7 +50,7 @@ function plView(ctx){
     +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li>'
     +'<li>'+plI('grid')+'<span>연결 가능한 거래소 7곳 '+plLogos(16)+'</span></li>'
     +'<li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li>'
-    +'<li>'+plI('cal')+'<span>구독당 거래소 최대 '+AC_PAID_MAX+'곳 연결</span></li>'
+    +'<li>'+plI('cal')+'<span>거래소 7곳 모두 연결</span></li>'
     +'<li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li>'
     +'<li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
     +'<p class="pl-foot">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';
@@ -88,7 +88,7 @@ function plCheckout(ctx){
   var acct=a.conn[cur]?'연결할 계정: '+acName(cur)+', 이미 연결됨':'연결할 계정: '+acName(cur);
   TF_RENDERING=true;
   gContent('<div class="pl pl-co" id="pl-root"><header class="pl-cohead"><button type="button" class="pl-back" aria-label="뒤로" onclick="plView(PL.ctx)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1>플랜 구성</h1></header>'
-    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'연결할 거래소를 고르십시오. 구독 하나로 '+AC_PAID_MAX+'곳까지 연결합니다.')+'</p>'+exs
+    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'먼저 연결할 거래소를 고르십시오. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.')+'</p>'+exs
     +'<h3 class="pl-t3 mt">결제 수단 선택하기</h3>'+pay+'</section>'
     +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
     +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li><li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li><li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li><li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'

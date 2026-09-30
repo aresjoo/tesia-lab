@@ -1,0 +1,1673 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f37f-bb57-7f41-bcbf-8d0f0c88a99d
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드입니다. 지난 검수(qa/ex-plan/s6/CODEX_RAW.md)에서 "플랜 뒤 화면은 스타일 수정만으로 안 되고 화면 분기와 정보 순서부터 다시 구성해야 한다"고 판정했습니다. 그 판정대로 다시 만든 화면을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+
+참고 원본
+1. ref-A-plan-desktop.png: ChatGPT 요금제
+2. ref-B-checkout.png: ChatGPT 플랜 구성
+
+다시 만든 TETH 화면 (데스크톱 1440, 모바일 390)
+3. X1-ex.png: 거래소 선택 (타일을 누르면 바로 다음)
+4. X2-acct.png: 거래소 계정 (무료 경로, 초대 가입 안내)
+5. X3-auth.png: 연결 승인
+6. X5-done.png: 완료
+7. X8-limit.png: 구독 거래소 한도
+8. X6-kyc.png: 전략 시작 직전 본인 확인 관문
+9. X2-acct-m.png, X8-limit-m.png: 모바일
+
+원칙: 화면당 결정 하나, 제목 32px 400, 한 줄 설명, #303030 카드 반경 26, 흰 알약 단추, 뒤로 가기 하나, 스텝퍼와 진행률 없음, 연두색 없음. 파운더가 정한 것(바꾸지 않음): 완료 단추 "전략 시작하기", 출금 줄 삭제, 타일이 곧 선택.
+
+해야 할 일
+A. 각 화면이 ChatGPT가 만든 화면처럼 보이는지 판정하십시오. 아닌 곳은 픽셀 근거(위치, 크기, 간격, 색)를 들어 MUST와 NICE로 나누십시오. 예: "제목과 한 줄 사이 간격이 참고 대비 몇 px 좁다", "카드 안 여백이 참고 카드와 다르다", "링크 두 개가 나란히 있어 위계가 없다".
+B. 카피를 보십시오. 어색한 문장, 사용자가 다음 행동을 못 고를 문장, 참고 제품이 쓰지 않을 표현을 현재 → 제안으로 적으십시오. 합니다체, 단추는 서술어로 끝나지 않게, 규제 고지나 면책 문구는 넣지 마십시오.
+C. 처음 보는 사용자로서 각 화면에서 무엇을 누를지 한 줄씩 적고, 망설이는 곳이 있으면 그 이유를 적으십시오.
+D. 한 문장으로: 지난 검수의 "다시 구성해야 한다"가 해결되었는지.
+
+형식: 표와 짧은 문단. 700단어 이내. 근거 없는 칭찬은 쓰지 마십시오.
+
+codex
+지난 검수와 현재 화면 소스를 읽고, 첨부 이미지의 간격·크기·정보 순서를 대조하겠습니다. 파일은 수정하지 않습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md' -Raw\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 372ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"if (Test-Path -LiteralPath '..\\..\\.mailbox\\mail.cmd') { & '..\\..\\.mailbox\\mail.cmd' check codex } else { Write-Output 'Mailbox wrapper not found at repository-relative path' }\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 627ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 62ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g '*RAW*' -g '*.html' -g '*.css' -g '*AGENTS*' -g '*X*.png' -g 'ref-*.png'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 56ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 's6\\CODEX_RAW.md' -Raw; Get-ChildItem -LiteralPath '..\\..\\.mailbox\\inbox\\codex' -File | Select-Object Name\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg --files -g '*RAW*' -g '*.html' -g '*.css' -g '*AGENTS*' -g '*X*.png' -g 'ref-*.png'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 95ms:
+ M ../../artifacts/teth-redesign/r2-follow-sheet.png
+ M ../../artifacts/teth-redesign/tools/apply2.cjs
+ M ../../artifacts/teth-redesign/tools/build.sh
+ M ../../index.html
+ M ../16-fixes/FLOWS_RESULT.txt
+ M ../16-fixes/R11-conversions.txt
+ M ../16-fixes/rail/rail-check.txt
+ M ../16-fixes/rail/st-full-check.txt
+ M ../16-fixes/round-2/R01-auth-age-step.png
+ M ../16-fixes/round-2/R01-guest-auth.png
+ M ../16-fixes/round-2/R01-resumed-backtest.png
+ M ../16-fixes/round-2/R02-reading-loading-h1.png
+ M ../16-fixes/round-2/R02-result-h1.png
+ M ../16-fixes/round-2/R03-decision-open-h1.png
+ M ../16-fixes/round-2/R03-decisions-h1.png
+ M ../16-fixes/round-2/R04-early-h1.png
+ M ../16-fixes/round-2/R04-judgment-1-h1.png
+ M ../16-fixes/round-2/R04-judgment-2-h1.png
+ M ../16-fixes/round-2/R04-judgment-3-h1.png
+ M ../16-fixes/round-2/R04-judgment-4-h1.png
+ M ../16-fixes/round-2/R08-consent-gate.png
+ M ../16-fixes/round-2/R08-consent.png
+ M ../16-fixes/round-2/R08-page-bottom.png
+ M ../16-fixes/round-2/R08-page-connected.png
+ M ../16-fixes/round-2/R08-page.png
+ M ../16-fixes/round-2/R09-A-route.png
+ M ../16-fixes/round-2/R09-B-exchange.png
+ M ../16-fixes/round-2/R09-C-account.png
+ M ../16-fixes/round-2/R09-D-guide.png
+ M ../16-fixes/round-2/R09-E-authorize.png
+ M ../16-fixes/round-2/R09-F-auth-cancel.png
+ M ../16-fixes/round-2/R09-G-uid-checking.png
+ M ../16-fixes/round-2/R09-H-uid-fail.png
+ M ../16-fixes/round-2/R09-I-done.png
+ M ../16-fixes/round-2/R09-J-pay.png
+ M ../16-fixes/round-2/R09-K-pay-fail.png
+ M ../16-fixes/round-2/R09-L-pay-ok.png
+ M ../16-fixes/round-2/R09-M-paid-done.png
+ M ../16-fixes/round-2/R10-expired-subscription.png
+ M ../16-fixes/round-2/R10-other-exchange.png
+ M ../16-fixes/round-2/R12-delete-confirm.png
+ M ../16-fixes/round-2/R12-settings-account-paid-bottom.png
+ M ../16-fixes/round-2/R12-settings-account-paid.png
+ M ../16-fixes/round-2/R12-settings-general-paid.png
+ M ../16-fixes/round-2/R12-settings-notify-paid.png
+ M ../16-fixes/round-2/R12-settings-security-paid.png
+ M ../16-fixes/round-2/R13-cancel-confirm.png
+ M ../16-fixes/round-2/R13-settings-billing-expired.png
+ M ../16-fixes/round-2/R13-settings-billing-none.png
+ M ../16-fixes/round-2/R13-settings-billing-paid-bottom.png
+ M ../16-fixes/round-2/R13-settings-billing-paid.png
+ M ../16-fixes/round-2/R13-settings-billing-partner.png
+ M ../16-fixes/round-2/R14-entry.png
+ M ../16-fixes/round-2/R14-guest-auth.png
+ M ../16-fixes/round-2/R14-guest-landing.png
+ M ../16-fixes/round-2/R14-terminal-ready.png
+ M ../16-fixes/round-2/ac-check.txt
+ M ../16-fixes/round-2/bt-check-h1.txt
+ M ../16-fixes/round-2/r01-check.txt
+ M r/P1-plan-guest.png
+ M r/P1-plan-member.png
+ M r/P1-plan-with-backtest.png
+ M r/P2A-checkout-fail.png
+ M r/P2B-free-guide.png
+ M r/P4-kyc-gate-fail.png
+ M r/P5-paid-limit.png
+ M r/pl-check.txt
+ M ../../ux-audit/card3/grid4-1440.png
+ M ../../ux-audit/card3/grid4-pager-1440.png
+?? ../../artifacts/teth-redesign/card2/c1-codex.log
+?? ../../artifacts/teth-redesign/card2/c2-codex.log
+?? ../../artifacts/teth-redesign/card2/c3-codex.log
+?? ../../artifacts/teth-redesign/card2/c8-1024.png
+?? ../../artifacts/teth-redesign/card2/c8-1100.png
+?? ../../artifacts/teth-redesign/card2/c8-1101.png
+?? ../../artifacts/teth-redesign/card2/c8-1280.png
+?? ../../artifacts/teth-redesign/card2/c8-1440.png
+?? ../../artifacts/teth-redesign/card2/c8-1920.png
+?? ../../artifacts/teth-redesign/card2/c8-390.png
+?? ../../artifacts/teth-redesign/card2/c8-768.png
+?? ../../artifacts/teth-redesign/card2/r1-info-full.png
+?? ../../artifacts/teth-redesign/card2/r1-log-full.png
+?? ../../artifacts/teth-redesign/card2/r1-ov-full.png
+?? ../../artifacts/teth-redesign/card2/r1-perf-full.png
+?? ../../artifacts/teth-redesign/card2/r1-trades-full.png
+?? ../../artifacts/teth-redesign/tools/px.css
+?? ../../artifacts/teth-redesign/tools/px.js
+?? ../16-fixes/an/an-1-bubble.png
+?? ../16-fixes/an/an-2-shots.png
+?? ../16-fixes/an/an-3-shot-zoom.png
+?? ../16-fixes/an/an-4-answer.png
+?? ../16-fixes/an/probe-h2i.png
+?? ../16-fixes/presets/p02-account.png
+?? ../16-fixes/presets/p02-billing-2.png
+?? ../16-fixes/presets/p02-billing.png
+?? ../16-fixes/presets/p02-brokers.png
+?? ../16-fixes/presets/p02-security-2.png
+?? ../16-fixes/presets/p02-security.png
+?? ../16-fixes/presets/p02-trade-start.png
+?? ../16-fixes/presets/p02-trade.png
+?? ../16-fixes/presets/p12-account.png
+?? ../16-fixes/presets/p12-billing-2.png
+?? ../16-fixes/presets/p12-billing.png
+?? ../16-fixes/presets/p12-brokers.png
+?? ../16-fixes/presets/p12-security-2.png
+?? ../16-fixes/presets/p12-security.png
+?? ../16-fixes/presets/p12-trade.png
+?? ../16-fixes/presets/p13-account.png
+?? ../16-fixes/presets/p13-billing-2.png
+?? ../16-fixes/presets/p13-billing.png
+?? ../16-fixes/presets/p13-brokers.png
+?? ../16-fixes/presets/p13-security-2.png
+?? ../16-fixes/presets/p13-security.png
+?? ../16-fixes/presets/p13-trade.png
+?? ../16-fixes/presets/p14-account.png
+?? ../16-fixes/presets/p14-billing-2.png
+?? ../16-fixes/presets/p14-billing.png
+?? ../16-fixes/presets/p14-brokers.png
+?? ../16-fixes/presets/p14-security-2.png
+?? ../16-fixes/presets/p14-security.png
+?? ../16-fixes/presets/p14-trade.png
+?? ../16-fixes/presets/p15-account.png
+?? ../16-fixes/presets/p15-billing-2.png
+?? ../16-fixes/presets/p15-billing.png
+?? ../16-fixes/presets/p15-brokers.png
+?? ../16-fixes/presets/p15-security-2.png
+?? ../16-fixes/presets/p15-security.png
+?? ../16-fixes/presets/p15-trade.png
+?? ../16-fixes/rail/card-fw.png
+?? ../16-fixes/rail/chat-guest.png
+?? ../16-fixes/rail/chat-user.png
+?? ../16-fixes/rail/detail-cta.png
+?? "../16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../16-fixes/rail/guest-g-gear-btn.png
+?? ../16-fixes/rail/guest-g-login-btn.png
+?? ../16-fixes/rail/guest-menu.png
+?? "../16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "../16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../16-fixes/rail/st-collapsed-hover.png
+?? ../16-fixes/rail/st-collapsed.png
+?? ../16-fixes/rail/st-full-1440.png
+?? ../16-fixes/rail/st-full-2000.png
+?? ../16-fixes/rail/st-full-390.png
+?? ../16-fixes/rail/st-full-notify-1440.png
+?? ../16-fixes/rail/st-full-notify-2000.png
+?? ../16-fixes/rail/st-full-notify-390.png
+?? ../16-fixes/rail/st-open-hover.png
+?? ../16-fixes/rail/st-open.png
+?? ../16-fixes/rail/tail.log
+?? ../16-fixes/rail/tail.log.mark
+?? ../16-fixes/rail/user-after.png
+?? ../16-fixes/rail/user-collapsed-hover.png
+?? ../16-fixes/rail/user-expanded-menu.png
+?? "../16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../16-fixes/rail/user-home-g-gear-btn.png
+?? ../16-fixes/rail/user-home-g-me-row.png
+?? "../16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "../16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../16-fixes/rail/user-menu.png
+?? ../16-fixes/rail/user-settings-g-gear-btn.png
+?? ../16-fixes/rail/user-settings-g-me-row.png
+?? "../16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "../16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../16-fixes/rail/user-strategies-g-gear-btn.png
+?? ../16-fixes/rail/user-strategies-g-me-row.png
+?? "../16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "../16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "../16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../16-fixes/rail/user-trade-g-gear-btn.png
+?? ../16-fixes/rail/user-trade-g-me-row.png
+?? "../16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "../16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../ai/
+?? ../baseline/
+?? px-check.mjs
+?? s6/
+?? s7/
+?? ../final/S01-backtest-ready.png
+?? ../final/S02-early-processing.png
+?? ../final/S02a-preparing.png
+?? ../final/S02b-first-decision.png
+?? ../final/S03-mid-processing.png
+?? ../final/S03a-skip-signal.png
+?? ../final/S03b-skip-review.png
+?? ../final/S03c-between-events.png
+?? ../final/S04-final-processing.png
+?? ../final/S05-results-above-fold.png
+?? ../final/S05b-results-hover.png
+?? ../final/S06-results-evidence.png
+?? ../final/S07-decision-detail.png
+?? ../final/S08-trade-detail.png
+?? ../final/S08b-result-full-page.png
+?? ../final/S09-activation-choice.png
+?? ../final/S10-card-path.png
+?? ../final/S11-exchange-connection.png
+?? ../final/S11a-exchange-form.png
+?? ../final/S12-partner-exchange.png
+?? ../final/S12b-partner-new-account.png
+?? ../final/S13-uid-verification.png
+?? ../final/S14-api-connection.png
+?? ../final/S14a-api-form.png
+?? ../final/S15-success.png
+?? ../final/S15b-success-own-account.png
+?? ../final/X01-uid-not-found.png
+?? ../final/d1-w1440/S01-backtest-ready.png
+?? ../final/d1-w1440/S02-early-processing.png
+?? ../final/d1-w1440/S02a-preparing.png
+?? ../final/d1-w1440/S03-mid-processing.png
+?? ../final/d1-w1440/S04-final-processing.png
+?? ../final/d1-w1440/S05-results-above-fold.png
+?? ../final/d1-w1440/S06-results-evidence.png
+?? ../final/d1-w1440/S07-decision-detail.png
+?? ../final/d1-w1440/S08-trade-detail.png
+?? ../final/d1-w1440/S09-activation-choice.png
+?? ../final/d1-w1440/S10-card-path.png
+?? ../final/d1-w1440/S11-exchange-connection.png
+?? ../final/d1-w1440/S12-partner-exchange.png
+?? ../final/d1-w1440/S13-uid-verification.png
+?? ../final/d1-w1440/S14-api-connection.png
+?? ../final/d1-w1440/S15-success.png
+?? ../final/h1-w1440/S01-backtest-ready.png
+?? ../final/h1-w1440/S02-early-processing.png
+?? ../final/h1-w1440/S02a-preparing.png
+?? ../final/h1-w1440/S03-mid-processing.png
+?? ../final/h1-w1440/S04-final-processing.png
+?? ../final/h1-w1440/S05-results-above-fold.png
+?? ../final/h1-w1440/S06-results-evidence.png
+?? ../final/h1-w1440/S07-decision-detail.png
+?? ../final/h1-w1440/S08-trade-detail.png
+?? ../final/h1-w1440/S09-activation-choice.png
+?? ../final/h1-w1440/S10-card-path.png
+?? ../final/h1-w1440/S11-exchange-connection.png
+?? ../final/h1-w1440/S12-partner-exchange.png
+?? ../final/h1-w1440/S13-uid-verification.png
+?? ../final/h1-w1440/S14-api-connection.png
+?? ../final/h1-w1440/S15-success.png
+?? ../final/r1-w1440/S01-backtest-ready.png
+?? ../final/r1-w1440/S02a-preparing.png
+?? ../final/r1-w1440/S04-final-processing.png
+?? ../final/r1-w1440/S05-results-above-fold.png
+?? ../final/r1-w1440/S06-results-evidence.png
+?? ../final/r1-w1440/S07-decision-detail.png
+?? ../final/r1-w1440/S08-trade-detail.png
+?? ../final/r1-w1440/S09-activation-choice.png
+?? ../final/r1-w1440/S10-card-path.png
+?? ../final/r1-w1440/S11-exchange-connection.png
+?? ../final/r1-w1440/S12-partner-exchange.png
+?? ../final/r1-w1440/S13-uid-verification.png
+?? ../final/r1-w1440/S14-api-connection.png
+?? ../final/r1-w1440/S15-success.png
+?? ../final/seq/
+?? ../final/w1280/S01-backtest-ready.png
+?? ../final/w1280/S02-early-processing.png
+?? ../final/w1280/S02a-preparing.png
+?? ../final/w1280/S03-mid-processing.png
+?? ../final/w1280/S04-final-processing.png
+?? ../final/w1280/S05-results-above-fold.png
+?? ../final/w1280/S06-results-evidence.png
+?? ../final/w1280/S07-decision-detail.png
+?? ../final/w1280/S08-trade-detail.png
+?? ../final/w1280/S09-activation-choice.png
+?? ../final/w1280/S10-card-path.png
+?? ../final/w1280/S11-exchange-connection.png
+?? ../final/w1280/S12-partner-exchange.png
+?? ../final/w1280/S13-uid-verification.png
+?? ../final/w1280/S14-api-connection.png
+?? ../final/w1280/S15-success.png
+?? ../final/w390/S01-backtest-ready.png
+?? ../final/w390/S02-early-processing.png
+?? ../final/w390/S02a-preparing.png
+?? ../final/w390/S03-mid-processing.png
+?? ../final/w390/S04-final-processing.png
+?? ../final/w390/S05-results-above-fold.png
+?? ../final/w390/S06-results-evidence.png
+?? ../final/w390/S07-decision-detail.png
+?? ../final/w390/S08-trade-detail.png
+?? ../final/w390/S09-activation-choice.png
+?? ../final/w390/S10-card-path.png
+?? ../final/w390/S11-exchange-connection.png
+?? ../final/w390/S12-partner-exchange.png
+?? ../final/w390/S13-uid-verification.png
+?? ../final/w390/S14-api-connection.png
+?? ../final/w390/S15-success.png
+?? ../final2/F01-a-uid-failed.png
+?? ../final2/F01-b-after-continue.png
+?? ../final2/F01-c-changed-uid-needs-api.png
+?? ../final2/F01-d-success-valid.png
+?? ../final2/F02-pick-reason.png
+?? ../final2/F03-travel-1.png
+?? ../final2/F03-travel-2.png
+?? ../final2/F03-travel-3.png
+?? ../final2/F03-travel-4.png
+?? ../final2/R09-all-activity-d1.png
+?? ../final2/S01-backtest-ready.png
+?? ../final2/S02-early-processing.png
+?? ../final2/S02a-preparing.png
+?? ../final2/S02b-first-decision.png
+?? ../final2/S03-mid-processing.png
+?? ../final2/S03a-skip-signal.png
+?? ../final2/S03b-skip-review.png
+?? ../final2/S03c-between-events.png
+?? ../final2/S04-final-processing.png
+?? ../final2/S05-results-above-fold.png
+?? ../final2/S05b-results-hover.png
+?? ../final2/S06-results-evidence.png
+?? ../final2/S07-decision-detail.png
+?? ../final2/S08-trade-detail.png
+?? ../final2/S08b-result-full-page.png
+?? ../final2/S09-activation-choice.png
+?? ../final2/S10-card-path.png
+?? ../final2/S11-exchange-connection.png
+?? ../final2/S11a-exchange-form.png
+?? ../final2/S12-partner-exchange.png
+?? ../final2/S12b-partner-new-account.png
+?? ../final2/S13-uid-verification.png
+?? ../final2/S14-api-connection.png
+?? ../final2/S14a-api-form.png
+?? ../final2/S15-success.png
+?? ../final2/S15b-success-own-account.png
+?? ../final2/X01-uid-not-found.png
+?? ../final2/d1-w1440/S01-backtest-ready.png
+?? ../final2/d1-w1440/S02-early-processing.png
+?? ../final2/d1-w1440/S02a-preparing.png
+?? ../final2/d1-w1440/S03-mid-processing.png
+?? ../final2/d1-w1440/S04-final-processing.png
+?? ../final2/d1-w1440/S05-results-above-fold.png
+?? ../final2/d1-w1440/S06-results-evidence.png
+?? ../final2/d1-w1440/S07-decision-detail.png
+?? ../final2/d1-w1440/S08-trade-detail.png
+?? ../final2/d1-w1440/S09-activation-choice.png
+?? ../final2/d1-w1440/S10-card-path.png
+?? ../final2/d1-w1440/S11-exchange-connection.png
+?? ../final2/d1-w1440/S12-partner-exchange.png
+?? ../final2/d1-w1440/S13-uid-verification.png
+?? ../final2/d1-w1440/S14-api-connection.png
+?? ../final2/d1-w1440/S15-success.png
+?? ../final2/h1-w1440/S01-backtest-ready.png
+?? ../final2/h1-w1440/S02-early-processing.png
+?? ../final2/h1-w1440/S02a-preparing.png
+?? ../final2/h1-w1440/S03-mid-processing.png
+?? ../final2/h1-w1440/S04-final-processing.png
+?? ../final2/h1-w1440/S05-results-above-fold.png
+?? ../final2/h1-w1440/S06-results-evidence.png
+?? ../final2/h1-w1440/S07-decision-detail.png
+?? ../final2/h1-w1440/S08-trade-detail.png
+?? ../final2/h1-w1440/S09-activation-choice.png
+?? ../final2/h1-w1440/S10-card-path.png
+?? ../final2/h1-w1440/S11-exchange-connection.png
+?? ../final2/h1-w1440/S12-partner-exchange.png
+?? ../final2/h1-w1440/S13-uid-verification.png
+?? ../final2/h1-w1440/S14-api-connection.png
+?? ../final2/h1-w1440/S15-success.png
+?? ../final2/r1-w1440/S01-backtest-ready.png
+?? ../final2/r1-w1440/S02a-preparing.png
+?? ../final2/r1-w1440/S04-final-processing.png
+?? ../final2/r1-w1440/S05-results-above-fold.png
+?? ../final2/r1-w1440/S06-results-evidence.png
+?? ../final2/r1-w1440/S07-decision-detail.png
+?? ../final2/r1-w1440/S08-trade-detail.png
+?? ../final2/r1-w1440/S09-activation-choice.png
+?? ../final2/r1-w1440/S10-card-path.png
+?? ../final2/r1-w1440/S11-exchange-connection.png
+?? ../final2/r1-w1440/S12-partner-exchange.png
+?? ../final2/r1-w1440/S13-uid-verification.png
+?? ../final2/r1-w1440/S14-api-connection.png
+?? ../final2/r1-w1440/S15-success.png
+?? ../final2/seq/
+?? ../final2/w1280/S01-backtest-ready.png
+?? ../final2/w1280/S02-early-processing.png
+?? ../final2/w1280/S02a-preparing.png
+?? ../final2/w1280/S03-mid-processing.png
+?? ../final2/w1280/S04-final-processing.png
+?? ../final2/w1280/S05-results-above-fold.png
+?? ../final2/w1280/S06-results-evidence.png
+?? ../final2/w1280/S07-decision-detail.png
+?? ../final2/w1280/S08-trade-detail.png
+?? ../final2/w1280/S09-activation-choice.png
+?? ../final2/w1280/S10-card-path.png
+?? ../final2/w1280/S11-exchange-connection.png
+?? ../final2/w1280/S12-partner-exchange.png
+?? ../final2/w1280/S13-uid-verification.png
+?? ../final2/w1280/S14-api-connection.png
+?? ../final2/w1280/S15-success.png
+?? ../final2/w390/S01-backtest-ready.png
+?? ../final2/w390/S02-early-processing.png
+?? ../final2/w390/S02a-preparing.png
+?? ../final2/w390/S03-mid-processing.png
+?? ../final2/w390/S04-final-processing.png
+?? ../final2/w390/S05-results-above-fold.png
+?? ../final2/w390/S06-results-evidence.png
+?? ../final2/w390/S07-decision-detail.png
+?? ../final2/w390/S08-trade-detail.png
+?? ../final2/w390/S09-activation-choice.png
+?? ../final2/w390/S10-card-path.png
+?? ../final2/w390/S11-exchange-connection.png
+?? ../final2/w390/S12-partner-exchange.png
+?? ../final2/w390/S13-uid-verification.png
+?? ../final2/w390/S14-api-connection.png
+?? ../final2/w390/S15-success.png
+?? ../final3/F01-a-uid-failed.png
+?? ../final3/F01-b-after-continue.png
+?? ../final3/F01-c-changed-uid-needs-api.png
+?? ../final3/F01-d-success-valid.png
+?? ../final3/F01R-reload-150ms.png
+?? ../final3/F01R-reload-after-exchange-change.png
+?? ../final3/F02-pick-reason.png
+?? ../final3/F03-travel-1.png
+?? ../final3/F03-travel-2.png
+?? ../final3/F03-travel-3.png
+?? ../final3/F03-travel-4.png
+?? ../final3/R09-all-activity-d1.png
+?? ../final3/S01-backtest-ready.png
+?? ../final3/S02-early-processing.png
+?? ../final3/S02a-preparing.png
+?? ../final3/S02b-first-decision.png
+?? ../final3/S03-mid-processing.png
+?? ../final3/S03a-skip-signal.png
+?? ../final3/S03b-skip-review.png
+?? ../final3/S03c-between-events.png
+?? ../final3/S04-final-processing.png
+?? ../final3/S05-results-above-fold.png
+?? ../final3/S05b-results-hover.png
+?? ../final3/S06-results-evidence.png
+?? ../final3/S07-decision-detail.png
+?? ../final3/S08-trade-detail.png
+?? ../final3/S08b-result-full-page.png
+?? ../final3/S09-activation-choice.png
+?? ../final3/S10-card-path.png
+?? ../final3/S11-exchange-connection.png
+?? ../final3/S11a-exchange-form.png
+?? ../final3/S12-partner-exchange.png
+?? ../final3/S12b-partner-new-account.png
+?? ../final3/S13-uid-verification.png
+?? ../final3/S14-api-connection.png
+?? ../final3/S14a-api-form.png
+?? ../final3/S15-success.png
+?? ../final3/S15b-success-own-account.png
+?? ../final3/X01-uid-not-found.png
+?? ../final3/d1-w1440/S01-backtest-ready.png
+?? ../final3/d1-w1440/S02-early-processing.png
+?? ../final3/d1-w1440/S02a-preparing.png
+?? ../final3/d1-w1440/S03-mid-processing.png
+?? ../final3/d1-w1440/S04-final-processing.png
+?? ../final3/d1-w1440/S05-results-above-fold.png
+?? ../final3/d1-w1440/S06-results-evidence.png
+?? ../final3/d1-w1440/S07-decision-detail.png
+?? ../final3/d1-w1440/S08-trade-detail.png
+?? ../final3/d1-w1440/S09-activation-choice.png
+?? ../final3/d1-w1440/S10-card-path.png
+?? ../final3/d1-w1440/S11-exchange-connection.png
+?? ../final3/d1-w1440/S12-partner-exchange.png
+?? ../final3/d1-w1440/S13-uid-verification.png
+?? ../final3/d1-w1440/S14-api-connection.png
+?? ../final3/d1-w1440/S15-success.png
+?? ../final3/seq/
+?? ../final3/w1280/P-help-button.png
+?? ../final3/w1280/S01-backtest-ready.png
+?? ../final3/w1280/S02-early-processing.png
+?? ../final3/w1280/S02a-preparing.png
+?? ../final3/w1280/S03-mid-processing.png
+?? ../final3/w1280/S04-final-processing.png
+?? ../final3/w1280/S05-results-above-fold.png
+?? ../final3/w1280/S06-results-evidence.png
+?? ../final3/w1280/S07-decision-detail.png
+?? ../final3/w1280/S08-trade-detail.png
+?? ../final3/w1280/S09-activation-choice.png
+?? ../final3/w1280/S10-card-path.png
+?? ../final3/w1280/S11-exchange-connection.png
+?? ../final3/w1280/S12-partner-exchange.png
+?? ../final3/w1280/S13-uid-verification.png
+?? ../final3/w1280/S14-api-connection.png
+?? ../final3/w1280/S15-success.png
+?? ../final3/w390/S01-backtest-ready.png
+?? ../final3/w390/S02-early-processing.png
+?? ../final3/w390/S02a-preparing.png
+?? ../final3/w390/S03-mid-processing.png
+?? ../final3/w390/S04-final-processing.png
+?? ../final3/w390/S05-results-above-fold.png
+?? ../final3/w390/S06-results-evidence.png
+?? ../final3/w390/S07-decision-detail.png
+?? ../final3/w390/S08-trade-detail.png
+?? ../final3/w390/S09-activation-choice.png
+?? ../final3/w390/S10-card-path.png
+?? ../final3/w390/S11-exchange-connection.png
+?? ../final3/w390/S12-partner-exchange.png
+?? ../final3/w390/S13-uid-verification.png
+?? ../final3/w390/S14-api-connection.png
+?? ../final3/w390/S15-success.png
+?? ../fut/shots/U01-finder-top.png
+?? ../fut/shots/U02-detail-f1.png
+?? ../fut/shots/U02-detail-f5.png
+?? ../fut/shots/U02-detail-f7.png
+?? ../fut/shots/U03-replay-f1.png
+?? ../fut/shots/U03-replay-f5.png
+?? ../fut/shots/U03-replay-f7.png
+?? ../fut/shots/U04-result-f1.png
+?? ../fut/shots/U04-result-f5.png
+?? ../fut/shots/U04-result-f7.png
+?? ../fut/shots/U05-decision-f1.png
+?? ../fut/shots/U05-decision-f5.png
+?? ../fut/shots/U05-decision-f7.png
+?? ../fut/shots/U06-trade-f1.png
+?? ../fut/shots/U06-trade-f5.png
+?? ../fut/shots/U06-trade-f7.png
+?? ../fut/shots/U07-follow.png
+?? ../mine-walk/
+?? ../mine/M01-ready.png
+?? ../mine/M02-replay.png
+?? ../mine/M03-result.png
+?? ../mine/M04-activation.png
+?? ../mine/M05-connected.png
+?? ../mine/M06-start.png
+?? ../mine/verify-mine-log.txt
+?? ../mine/w390/
+?? ../mine2/
+?? ../real/A01-chat-card.png
+?? ../real/A02-ready.png
+?? ../real/A03-result.png
+?? ../round-1/S01-backtest-ready.png
+?? ../round-1/S02-early-processing.png
+?? ../round-1/S02a-preparing.png
+?? ../round-1/S02b-first-decision.png
+?? ../round-1/S03-mid-processing.png
+?? ../round-1/S03b-between-events.png
+?? ../round-1/S04-final-processing.png
+?? ../round-1/S05-results-above-fold.png
+?? ../round-1/S05b-results-hover.png
+?? ../round-1/S06-results-evidence.png
+?? ../round-1/S07-decision-detail.png
+?? ../round-1/S08-trade-detail.png
+?? ../round-1/S08b-result-full-page.png
+?? ../round-1/S09-activation-choice.png
+?? ../round-1/S10-card-path.png
+?? ../round-1/S11-exchange-connection.png
+?? ../round-1/S12-partner-exchange.png
+?? ../round-1/S13-uid-verification.png
+?? ../round-1/S14-api-connection.png
+?? ../round-1/S14a-api-form.png
+?? ../round-1/S15-success.png
+?? ../round-1/S15b-success-own-exchange.png
+?? ../round-1/S15c-success-full-page.png
+?? ../round-1/X01-uid-not-found.png
+?? ../round-1/d1-w1440/S01-backtest-ready.png
+?? ../round-1/d1-w1440/S02-early-processing.png
+?? ../round-1/d1-w1440/S02a-preparing.png
+?? ../round-1/d1-w1440/S04-final-processing.png
+?? ../round-1/d1-w1440/S05-results-above-fold.png
+?? ../round-1/d1-w1440/S06-results-evidence.png
+?? ../round-1/d1-w1440/S07-decision-detail.png
+?? ../round-1/d1-w1440/S08-trade-detail.png
+?? ../round-1/d1-w1440/S09-activation-choice.png
+?? ../round-1/d1-w1440/S10-card-path.png
+?? ../round-1/d1-w1440/S11-exchange-connection.png
+?? ../round-1/d1-w1440/S12-partner-exchange.png
+?? ../round-1/d1-w1440/S13-uid-verification.png
+?? ../round-1/d1-w1440/S14-api-connection.png
+?? ../round-1/d1-w1440/S15-success.png
+?? ../round-1/r1-w1440/S01-backtest-ready.png
+?? ../round-1/r1-w1440/S02-early-processing.png
+?? ../round-1/r1-w1440/S02a-preparing.png
+?? ../round-1/r1-w1440/S04-final-processing.png
+?? ../round-1/r1-w1440/S05-results-above-fold.png
+?? ../round-1/r1-w1440/S06-results-evidence.png
+?? ../round-1/r1-w1440/S07-decision-detail.png
+?? ../round-1/r1-w1440/S08-trade-detail.png
+?? ../round-1/r1-w1440/S09-activation-choice.png
+?? ../round-1/r1-w1440/S10-card-path.png
+?? ../round-1/r1-w1440/S11-exchange-connection.png
+?? ../round-1/r1-w1440/S12-partner-exchange.png
+?? ../round-1/r1-w1440/S13-uid-verification.png
+?? ../round-1/r1-w1440/S14-api-connection.png
+?? ../round-1/r1-w1440/S15-success.png
+?? ../round-1/seq/
+?? ../round-1/w1280/S01-backtest-ready.png
+?? ../round-1/w1280/S02-early-processing.png
+?? ../round-1/w1280/S02a-preparing.png
+?? ../round-1/w1280/S03-mid-processing.png
+?? ../round-1/w1280/S04-final-processing.png
+?? ../round-1/w1280/S05-results-above-fold.png
+?? ../round-1/w1280/S06-results-evidence.png
+?? ../round-1/w1280/S07-decision-detail.png
+?? ../round-1/w1280/S08-trade-detail.png
+?? ../round-1/w1280/S09-activation-choice.png
+?? ../round-1/w1280/S10-card-path.png
+?? ../round-1/w1280/S11-exchange-connection.png
+?? ../round-1/w1280/S12-partner-exchange.png
+?? ../round-1/w1280/S13-uid-verification.png
+?? ../round-1/w1280/S14-api-connection.png
+?? ../round-1/w1280/S15-success.png
+?? ../round-1/w390/S01-backtest-ready.png
+?? ../round-1/w390/S02-early-processing.png
+?? ../round-1/w390/S02a-preparing.png
+?? ../round-1/w390/S03-mid-processing.png
+?? ../round-1/w390/S04-final-processing.png
+?? ../round-1/w390/S05-results-above-fold.png
+?? ../round-1/w390/S06-results-evidence.png
+?? ../round-1/w390/S07-decision-detail.png
+?? ../round-1/w390/S08-trade-detail.png
+?? ../round-1/w390/S09-activation-choice.png
+?? ../round-1/w390/S10-card-path.png
+?? ../round-1/w390/S11-exchange-connection.png
+?? ../round-1/w390/S12-partner-exchange.png
+?? ../round-1/w390/S13-uid-verification.png
+?? ../round-1/w390/S14-api-connection.png
+?? ../round-1/w390/S15-success.png
+?? ../round-2/S01-backtest-ready.png
+?? ../round-2/S02-early-processing.png
+?? ../round-2/S02a-preparing.png
+?? ../round-2/S02b-first-decision.png
+?? ../round-2/S03-mid-processing.png
+?? ../round-2/S03a-skip-signal.png
+?? ../round-2/S03b-skip-review.png
+?? ../round-2/S03c-between-events.png
+?? ../round-2/S04-final-processing.png
+?? ../round-2/S05-results-above-fold.png
+?? ../round-2/S05b-results-hover.png
+?? ../round-2/S06-results-evidence.png
+?? ../round-2/S07-decision-detail.png
+?? ../round-2/S08-trade-detail.png
+?? ../round-2/S08b-result-full-page.png
+?? ../round-2/S09-activation-choice.png
+?? ../round-2/S10-card-path.png
+?? ../round-2/S11-exchange-connection.png
+?? ../round-2/S11a-exchange-form.png
+?? ../round-2/S12-partner-exchange.png
+?? ../round-2/S12b-partner-new-account.png
+?? ../round-2/S13-uid-verification.png
+?? ../round-2/S14-api-connection.png
+?? ../round-2/S14a-api-form.png
+?? ../round-2/S15-success.png
+?? ../round-2/S15b-success-own-account.png
+?? ../round-2/X01-uid-not-found.png
+?? ../round-2/d1-w1440/S01-backtest-ready.png
+?? ../round-2/d1-w1440/S02-early-processing.png
+?? ../round-2/d1-w1440/S02a-preparing.png
+?? ../round-2/d1-w1440/S03-mid-processing.png
+?? ../round-2/d1-w1440/S04-final-processing.png
+?? ../round-2/d1-w1440/S05-results-above-fold.png
+?? ../round-2/d1-w1440/S06-results-evidence.png
+?? ../round-2/d1-w1440/S07-decision-detail.png
+?? ../round-2/d1-w1440/S08-trade-detail.png
+?? ../round-2/d1-w1440/S09-activation-choice.png
+?? ../round-2/d1-w1440/S10-card-path.png
+?? ../round-2/d1-w1440/S11-exchange-connection.png
+?? ../round-2/d1-w1440/S12-partner-exchange.png
+?? ../round-2/d1-w1440/S13-uid-verification.png
+?? ../round-2/d1-w1440/S14-api-connection.png
+?? ../round-2/d1-w1440/S15-success.png
+?? ../round-2/h1-w1440/S01-backtest-ready.png
+?? ../round-2/h1-w1440/S02-early-processing.png
+?? ../round-2/h1-w1440/S02a-preparing.png
+?? ../round-2/h1-w1440/S03-mid-processing.png
+?? ../round-2/h1-w1440/S04-final-processing.png
+?? ../round-2/h1-w1440/S05-results-above-fold.png
+?? ../round-2/h1-w1440/S06-results-evidence.png
+?? ../round-2/h1-w1440/S07-decision-detail.png
+?? ../round-2/h1-w1440/S08-trade-detail.png
+?? ../round-2/h1-w1440/S09-activation-choice.png
+?? ../round-2/h1-w1440/S10-card-path.png
+?? ../round-2/h1-w1440/S11-exchange-connection.png
+?? ../round-2/h1-w1440/S12-partner-exchange.png
+?? ../round-2/h1-w1440/S13-uid-verification.png
+?? ../round-2/h1-w1440/S14-api-connection.png
+?? ../round-2/h1-w1440/S15-success.png
+?? ../round-2/r1-w1440/S01-backtest-ready.png
+?? ../round-2/r1-w1440/S02a-preparing.png
+?? ../round-2/r1-w1440/S04-final-processing.png
+?? ../round-2/r1-w1440/S05-results-above-fold.png
+?? ../round-2/r1-w1440/S06-results-evidence.png
+?? ../round-2/r1-w1440/S07-decision-detail.png
+?? ../round-2/r1-w1440/S08-trade-detail.png
+?? ../round-2/r1-w1440/S09-activation-choice.png
+?? ../round-2/r1-w1440/S10-card-path.png
+?? ../round-2/r1-w1440/S11-exchange-connection.png
+?? ../round-2/r1-w1440/S12-partner-exchange.png
+?? ../round-2/r1-w1440/S13-uid-verification.png
+?? ../round-2/r1-w1440/S14-api-connection.png
+?? ../round-2/r1-w1440/S15-success.png
+?? ../round-2/seq/
+?? ../round-2/w1280/S01-backtest-ready.png
+?? ../round-2/w1280/S02-early-processing.png
+?? ../round-2/w1280/S02a-preparing.png
+?? ../round-2/w1280/S03-mid-processing.png
+?? ../round-2/w1280/S04-final-processing.png
+?? ../round-2/w1280/S05-results-above-fold.png
+?? ../round-2/w1280/S06-results-evidence.png
+?? ../round-2/w1280/S07-decision-detail.png
+?? ../round-2/w1280/S08-trade-detail.png
+?? ../round-2/w1280/S09-activation-choice.png
+?? ../round-2/w1280/S10-card-path.png
+?? ../round-2/w1280/S11-exchange-connection.png
+?? ../round-2/w1280/S12-partner-exchange.png
+?? ../round-2/w1280/S13-uid-verification.png
+?? ../round-2/w1280/S14-api-connection.png
+?? ../round-2/w1280/S15-success.png
+?? ../round-2/w390/S01-backtest-ready.png
+?? ../round-2/w390/S02-early-processing.png
+?? ../round-2/w390/S02a-preparing.png
+?? ../round-2/w390/S03-mid-processing.png
+?? ../round-2/w390/S04-final-processing.png
+?? ../round-2/w390/S05-results-above-fold.png
+?? ../round-2/w390/S06-results-evidence.png
+?? ../round-2/w390/S07-decision-detail.png
+?? ../round-2/w390/S08-trade-detail.png
+?? ../round-2/w390/S09-activation-choice.png
+?? ../round-2/w390/S10-card-path.png
+?? ../round-2/w390/S11-exchange-connection.png
+?? ../round-2/w390/S12-partner-exchange.png
+?? ../round-2/w390/S13-uid-verification.png
+?? ../round-2/w390/S14-api-connection.png
+?? ../round-2/w390/S15-success.png
+?? ../../ux-audit/card3/log-codex-card3.txt
+?? ../../ux-audit/card3/log-codex-hero.txt
+?? ../../ux-audit/detail/fx-mid-1440.png
+?? ../../ux-audit/detail/log-codex-crit.txt
+?? ../../ux-audit/detail/log-codex.txt
+?? ../../ux-audit/footer2/black-spa-390.png
+?? ../../ux-audit/footer2/live-trade-footer-1440.png
+?? ../../ux-audit/footer2/log-codex-bar.txt
+?? ../../ux-audit/footer2/log-codex-crit.txt
+?? ../../ux-audit/footer2/log-codex.txt
+?? ../../ux-audit/footer2/ours-bar-390.png
+?? ../../ux-audit/footer2/r3-gap-1440.png
+?? ../../ux-audit/footer2/r5-hero-next-390.png
+?? ../../ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ../../ux-audit/footer2/video-frame-3s.jpg
+?? ../../ux-audit/footer2/video-frame-5s.jpg
+?? ../../ux-audit/footer2/video-frame-6.2s.jpg
+?? ../../ux-audit/hero/frame3-codex.png
+?? ../../ux-audit/hero/frame3.png
+?? ../../ux-audit/hero/log-agy.txt
+?? ../../ux-audit/hero/log-codex-crit.txt
+?? ../../ux-audit/hero/log-codex.txt
+?? ../../ux-audit/hero/prompt-agy.md
+?? ../../ux-audit/hero/prompt-codex-crit.md
+?? ../../ux-audit/hero/prompt-codex.md
+?? ../../ux-audit/logs/
+?? ../../ux-audit/research/log-codex-verify.txt
+?? ../../ux-audit/review/
+?? ../../ux-audit/spark/log-codex.txt
+
+ succeeded in 201ms:
+s6\r\X8-limit.png
+s6\r\X8-limit-m.png
+s6\r\X7-list.png
+s6\r\X7-list-m.png
+s6\r\X6-kyc.png
+s6\r\X6-kyc-m.png
+s6\r\X5-done.png
+s6\r\X5-done-m.png
+s6\r\X4-uid.png
+s6\r\X4-uid-m.png
+s6\r\X3-auth.png
+s6\r\X3-auth-paid.png
+s6\r\X3-auth-paid-m.png
+s6\r\X3-auth-m.png
+s6\r\X2-acct.png
+s6\r\X2-acct-m.png
+s6\r\X1-ex.png
+s6\r\X1-ex-m.png
+s6\CODEX_RAW.md
+s5\CODEX_RAW.md
+s4\CODEX_RAW.md
+s3\CODEX_RAW.md
+s1\CODEX_RAW.md
+ref-C-plan-mobile.png
+ref-B-checkout.png
+ref-A-plan-desktop.png
+
+ succeeded in 401ms:
+��<��?? ��%�3'�< **�T"�c'�?, ����?�~�S" ��c�<?�?~ �<"��^**�z.�<^�<. 3��^�?? �,���?�?��� �1,��?�~�S" ��o�'^ �T"�c'�?,�?�, 4~8��^�?? ��^��"�T? �,��.�?, �Z��3? �+"�?? �,�� �T"�c'�z.�<^�<. �,�z~ �?%��?�S" ��"�? �T"�c'�-? �o���c�<^�<.
+
+**A. �<��, ��o�'^��~�Y� �3'�?'�S" �>?�?,**
+
+| �檉, | �T"�c'�-?�,o �T�?,�?~�S" ������ | ��"�?'��� �O�"o�S" �>?�?, |
+|---|---|---|
+| ��%��"�S�A���% | 1A�3��^�?? �sO��% ��"���3� �OO�z? ����� �1'�"o, 2��^�?? ��?�� ��"��A��sO��% �1'�"oA��?� �<"�"�z.�<^�<. 4~8��^�?~ ��� �-%�?T�?? �-��`?��%�z.�<^�<. | �"O�zo �,���? �?�>, �������%�3� �`o�c' �檍,�?' �?T�<o�-? ��"�??�<^�<. |
+| ��%��"�S�A��o,�3, | ��T�?? 1440A-900�?, 3��^�?? �� 1032px �?-�?~ �`? �1'�"o, 6A�7��^�?? �� 672px �?-�?~ �3,��,�z.�<^�<. 3��^�?~ �?� �+O��o ��,�� �O?�<� 6��^�?? �z`�?? �,��.�3� �<"�3,��.�?' �`�<��z.�<^�<. | �,���?�?, �?�?~ �?� ��o��c�3� �1'�"o��? �,��?��?�3�, ��^��" ��c��?�?' �T"�c'�?~ �`�<��?' �?c�<^�<. |
+| ��%��"�S�A���'�?��,O�S, | 2��^�?? �z.��� �~?�--�3� �s"�� �1'�"o��� �,�ݪ�c�<^�<. 5��^�?? �T,��O �-%A���^�~,A��O�o �`oA��,' �<"�"��� �o �-'�-? �O"�S�<^�<. | �z.����3� �T�?, ���3'�?~ �--���?' �檉,�?~�? �S�3� ��"�`? ��T�?? �??��,�-? �+"�z.�<^�<. |
+| �檍��A��S�.?�?� | 4��^�?? 5�<"�3,, 5��^�?? 3�<"�3,�z.�<^�<. 8��^�?? �`? �<"�3, �-%�?, �3'�-� ����c'�,o �?o1�<"�3, �,"�~�S�<^�<�??�?��3� �c�<^�<. | �T,��OA��~,�z�A��,"�?? �<"�3,�?~ �'?�3,��� �,��sc�z?��? �'�,?�'�� �c�<^�<. �����o�^�< ��^��"�?~ �<?�?, �<��?��`�<^�<. |
+| �檍��A��^��, �^~ | 4��^�?~ �<��o �^��,�?? ����z~�+O �,���? �~�,~�z.�<^�<. ��,�Y��?� �?'�sc ��c�<?�3� �?'�>, �,, �<"�3,�1O�? �.,�o�c�<^�<. 6��^�-?�S" �3,�� �O�"�,�A��3,�?, �T�?,A��-����, ��?�z. �T,��O, �,���' �3,�� �-�����?' �"��~ �z^�S�<^�<. | �o �T"�c'�?~ ������-? �_,�z~ �z`�-.�3� �<��, �����o��? �,z�z.�<^�<. 2��^�?? �z.����1,�?' �-��Y� ��o�-��?, �?~�����o�?T�?��S" �~�,~�?~ ��c��?�-? ��"�z.�<^�<. |
+| �檍��A����3' �^o�,o | 5��^�-?�S" �?'�_, �����o �T,��O �-%�?' �z^�S�<^�<. 8��^�-?�,o�S" �-���� �o�?, �O��,�-? �'^�O? �3,�� �~?�S" �"��? �檉?.�?, �<�<o �3���.�<^�<. | �1,�scA��-���� ��?�S� �-��?A��S1�?,�?'�?��S" �O?�<"�?' �,�,��?~�-' �z^�S�<^�<. �<�O �?'�_,�?��o�S" �o�?,��� �-,��o ��~�?O �^�,'�-^�S"�? �T�?,�� �^~ �-+�S�<^�<. |
+| �1'�"�A��,��. �3��z% | 4~6��^�?? ��o��c �,�z~�-? �?o�����,�??�?݉,~��`�<^�<. �z?�,��??�?ݍz^�S�<^�<. N�<"�3, �,"�~�S�<^�<�??��� ��~�3�c�<^�<. | �~,�z� �,���?�3'�< �3,�� �檍���T? �,�-% �,��.�?' �"���? �?��zT�<^�<. |
+| �1'�"�A��^�^�3� �,��O? | 5��^�?~ �?o��"��o �<�-%�c�<^�<�??, �?oTETH�S" �z?�,��?, �~r�,, �^~ �-+�S�<^�<�??; 7��^�?~ �?o�<�-%�� �^~ �z^�S�<^�<�??. | �-�����?' �z?�?T �<�-%�?, �o��~�S"�? ��"�~,�c�<^�<. �o�,^ �?����,�?? �S1�?,�-? �,�s"�o �O�o�3'�< ���~��O �?��?�?c�<^�<. |
+| �1'�"�A��T,��O��? | 7��^�?? �?o����z~�+O �-���� �T,��O�??�T? �?oOKX �3,���?' �-�����?~�-^�S�<^�<�??��� �-��+? �`o�<o�c�<^�<. | ��T�?? ����3���� ��~�3�~�c'�,o, �-���� �>, ��'�-؍?, ���?�S" �z`�?? �,��.�-? ����zT�<^�<. |
+
+**B. ��,�3� �T"�c'�?~ �,�3, �>?�1T�o���o �<�<o �檍,�**
+
+�"O�zo �T"�c'�?, �o��o��?�o���o �o��?�~�3�, �?'�>,�S" **��'��O �<���o �3,�� 4�T"�c', ��'��O �,���' �3,�� 3�T"�c', �o���O �<���o �檉?. 4�T"�c'**�o���o �檍,�c�<^�<. ����z~�+O�?~ �T,�? ��?�z.A��S1�?, �T"�c'�?? �3,�?,�z.�<^�<. �o�?, �^�,'�S" �'�<1�� �O�O �`o�<o�c�<^�<.
+
+| �T"�c' | ��o��c | �o �, �,��. | �z.���A��,���? | ��� �<"�" | �3'��� �-%�?T |
+|---|---|---|---|---|---|
+| �3�+� 1 | ����z~�+O �,���? | ��,�z�?, �<�-%�� ����z~�+O��� �,���?�c�<^�<. | ����z~�+O �,���? �1'�"o | �3,�+? | �'��o |
+| ��'��O �<���o 2 | ����z~�+O �3,�� | TETH �'^�O?��o ��?�z.�o �3,���?, �-�����c�<^�<. | ��^ �3,�� / �,���' �'^�O? �3,�� | OKX ��?�z. �T"�c' �-'�,� | �,���' �3,�� �-���� |
+| �o���O �<���o 2 | �檉?. �檍,� | �>" $280�o���o ����z~�+O ��o�O? 2�33�?, �-�����c�<^�<. | �����o �^~�<", �,���? ����z~�+OA���?��c �s"�� | �檉?. �����o | ����z~�+O �3?��� |
+| �3�+� 3 | Binance �-���� | Binance�-?�,o �z"�3� ����sO�T? �����, �O�o�?, �S1�?,�c�<^�<. | �O�o �s"��, �z.��� �-+�?O | Binance�-?�,o �S1�?,�~�,� | �'��o |
+| �3�+� 4 | OKX �-���� �T,��O | �-�����o �3,���-?�,o ��,�z�?, �<�-%�� �^~ �z^�S�<^�<. | �3,��A��?'�sc ��c�<? �s"�� | �,��_,�,?��o �?'�?T | �-���� �3,�� �3'�,� |
+| �o�?, �~^�T, | Bitget �-���� ��c�� | �~,�z� �檉?.�?~ ����z~�+O �-���� �o�?, 2�33�?, ��"�`? �,��sc�~�3� �z^�S�<^�<. | �'^�O? �3,�� / �>" $280 �檉?. �"��? | �3,�+? | ��"�+O |
+
+�T,�? ��?�z.�-?�,o �?O�,�~" �' ��T�?? �T"�c'�?~ ��� �<"�"��� �?~�3,�� �-�����?T��o ��"��%�<^�<. �'^�O? �3,�� �T�?,�?? �S1�?, �>, ��~�ݪ ��?��o��o �3'�-� ����3�, �,��sc�z?��? �� �?��?' �-+�<�c' �3,�?, �<"�3,��o �O�"�? �S�S�<^�<.
+
+��?�� ������, **#303030 �1'�"o**, �?� ��~����?~ �?� �<"�", �-؍?? �檉,�,�, **400 ���,��?~ �?� ��o��c**�?, �3�+�o���o ��?�sc�c�<^�<. �����o�O 2��^��~�Y� �z.����3� �s"���?, �,~�^�<^�<. �-��`?��% �<"�"�S" ��,�ݫ�<^�<. �?���?o ��,�3� �T"�c'�?~ �-%�?T ��%�3� �z�? �S�S�<^�<. ��^�~, �S�.?�?��?, ��,�ݫ�<^�<. �,�,��^�< �<��?��?�S" ��,��' ��^��"�3'�< �~,�z� ������3� �'��o ��?�,���? �`�s"�c�<^�<.
+
+**C. �1'�"� ��?��'**
+
+| �~,�z� ��,�� | ��o�^ ��,�� |
+|---|---|
+| ��,�z�?, �<�-%�� �3,���?, �-�����c�<^�< | ����z~�+O �,���? |
+| �����,�?? �sO�>?�<~�?~ ����z~�+O �3,���-?�,o �,~��`�<^�<. �z?�,��?? �3,�+? ��, �3,���-? �z^�S�<^�<. N�<"�3, �,"�~�S�<^�< | ��~�3� �,-��o. �S1�?, �T"�c'�-?�O �?o�-�����o ����z~�+O �3,���-?�,o ��,�z� �����,�?, �<�-%�c�<^�<.�?? |
+| ����z~�+O �3,���?, �-�����~�c' ��"��o �<�-%�c�<^�< | Binance �-���� |
+| �,��� �O�"����,~ �T�-� �,��? �S�S�<^�< | �,-��o. ��� �-%�?T �?~Binance�-?�,o �S1�?,�~�,��?T��o �-���� ��c�<?�?, ��,�<��c�<^�<. |
+| �s"��-�~�? �S�S�<^�<. TETH�S" �z?�,��?, �~r�,, �^~ �-+�S�<^�< | �O�o �s"���?~ �?o�o�,^ �O�o A� �s"��- �^ �"�?? |
+| �3,�?, �T�?,�?? ��,�z� �<o�z` ��,�-? �,�s"�c�<^�< | ��?�z. �^�,'�-?�,o �?o��,�z� �<�-% ��, ����z~�+O �3,�?, �T�?,�?' �,�s"�c�<^�<.�??��� �o ��^�O �`o�<o�c�<^�<. |
+| TETH �'^�O? �3,���?' �?'�_, �z^�S�<^�1O? ��"��o �-���� | �,���' �'^�O? �3,�� �-���� |
+| �~,�z� �檉?.�?~ �-���� �o�?,�-? �?,�<��-^�S�<^�< | ����z~�+O 2�33�?' �-�����?~�-' �z^�S�<^�< |
+| �檉?. �"��? | �檉?. �"��? A� �>" $280 |
+| �%�z^�S" �33�?' �z^�o��c' ��?�<'�>?�?' �?,�T?�"o�ݫ�<^�<. 24�<o��, �?`�<�c�<^�< | �3���?�?�>? |
+| ����z~�+O �-���� �T,��O / OKX �3,���?' �-�����?~�-^�S�<^�< | OKX �-���� �T,��O |
+
+�z?�,� �o,�1~ �,��.�?? � �T"�c'�-? �,�s"�~�? �S�S�<^�<. �o�,^ �O�o ���3'�S" �S1�?, �O?�<"�-? �,�s"�~�_?��o ���O �,"�,��3�, �^��?�S��?, �<"���~�S" ��,�z��?? ��o����c�<^�<.
+
+**D. 4~8��^�?? �S��?�?��3� �1'�"� �^~���O�o���o �'����?~�? �S�o��c�, �,���' �-���� �,��S��?, �o��?�~�?~ �T"�c' �,�,��T? ���3' �^o�,o�?�,� �<�<o �檍,�'�� �c�<^�<.**
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 's6\\CODEX_RAW.md' -Encoding UTF8 -Raw\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg --files s6' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n 'OKX에서|초대 계정으로 바로|거래소 2곳|막히면 상담원|plx-|exflow|ex-flow' ../../index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 77ms:
+s6\sha-before.txt
+s6\r\X8-limit.png
+s6\r\X8-limit-m.png
+s6\r\X7-list.png
+s6\r\X7-list-m.png
+s6\r\X6-kyc.png
+s6\r\X6-kyc-m.png
+s6\r\X5-done.png
+s6\r\X5-done-m.png
+s6\r\X4-uid.png
+s6\r\X4-uid-m.png
+s6\r\X3-auth.png
+s6\r\X3-auth-paid.png
+s6\r\X3-auth-paid-m.png
+s6\r\X3-auth-m.png
+s6\r\X2-acct.png
+s6\r\X2-acct-m.png
+s6\r\X1-ex.png
+s6\r\X1-ex-m.png
+s6\r\px-check.txt
+s6\r\px-check-m.txt
+s6\PROMPT.md
+s6\now-paid-auth.png
+s6\now-free-exchange.png
+s6\log.txt
+s6\CODEX_RAW.md
+s6\CLAUDE_ANALYSIS.md
+
+ succeeded in 73ms:
+22433:   화면 2A 구독 결제(참고 B). 결제가 먼저, 그다음 거래소 연결. 구독 하나로 거래소 2곳까지.
+22677:function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
+22690:    +'<p class="px-links"><button type="button" class="pl-link" onclick="acGuide(2)">가입 완료</button><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">초대 계정으로 바로 연결</button></p>';
+
+ succeeded in 272ms:
+??? ??? **??? ???? ??? ??**???. 3?? ???? ???? ?? ????, 4~8?? ??? ??? ?? ?? ?? ?????. ?? ??? ?? ??? ?????.
+
+**A. ?? ???? ??? ??**
+
+| ?? | ???? ???? ?? | ??? ??? ?? |
+|---|---|---|
+| ???�? | 1�3?? ?? ??? ?? ?? ??, 2?? ?? ??�?? ??�? ?????. 4~8?? ? ??? ??????. | ?? ?? ?? ???? ?? ??? ??? ????. |
+| ???�?? | ?? 1440x900? 3?? ? 1032px ?? ? ??, 6�7?? ? 672px ?? ?????. 3?? ? ?? ?? ?? 6?? ?? ??? ???? ?????. | ??? ?? ? ??? ??? ????, ?? ??? ??? ??? ???. |
+| ???�???? | 2?? ?? ??? ?? ??? ?????. 5?? ?? ?�??�?? ?�? ??? ? ?? ????. | ??? ?? ??? ??? ???? ?? ?? ?? ??? ????. |
+| ??�??? | 4?? 5??, 5?? 3?????. 8?? ? ?? ?? ?? ??? "1?? ?????"?? ???. | ??�??�?? ??? ??? ???? ???? ???. ???? ??? ?? ?????. |
+| ??�?? ? | 4?? ?? ??? ??? ?? ?????. ??? ?? ??? ?? ? ???? ?????. 6??? ?? ???�?? ??�??, ?? ??, ?? ?? ??? ?? ????. | ? ??? ??? ?? ??? ?? ??? ????. 2?? ???? ?? ??? `??'?? ??? ??? ????. |
+| ??�?? ?? | 5??? ?? ?? ?? ?? ????. 8???? ?? ?? ??? ?? ?? ?? ?? ??? ?? ????. | ??�?? ?? ??�????? ??? ???? ????. ?? ????? ??? ?? ?? ????? ??? ? ????. |
+| ??�?? ?? | 4~6?? ?? ??? "???.????. ???.????. N?? ?????"? ?????. | ?? ???? ?? ??? ?? ??? ?? ????. |
+| ??�??? ?? | 5?? "?? ?????", "TETH? ??? ?? ? ????"; 7?? "??? ? ????". | ??? ?? ??? ???? ?????. ?? ???? ??? ??? ???? ??? ?????. |
+| ??�??? | 7?? "??? ?? ??"? "OKX ??? ???????"? ?? ?????. | ?? ??? ?????, ?? ? ??? ??? ?? ??? ????. |
+
+**B. ?? ??? ?? ???? ?? ??**
+
+?? ??? ????? ????, ??? **?? ?? ?? 4??, ?? ?? ?? 3??, ?? ?? ?? 4??**?? ?????. ???? ?? ??�?? ??? ?????. ?? ??? ??? ?? ?????.
+
+| ?? | ?? | ? ? ?? | ??�?? | ? ?? | ?? ?? |
+|---|---|---|---|---|---|
+| ?? 1 | ??? ?? | ??? ??? ???? ?????. | ??? ?? ?? | ?? | ?? |
+| ?? ?? 2 | ??? ?? | TETH ??? ??? ??? ?????. | ? ?? / ?? ?? ?? | OKX ?? ?? ?? | ?? ?? ?? |
+| ?? ?? 2 | ?? ?? | ? $280?? ??? ?? 2?? ?????. | ?? ??, ?? ???�?? ?? | ?? ?? | ??? ?? |
+| ?? 3 | Binance ?? | Binance?? ?? ??? ?? ??? ?????. | ?? ??, ?? ?? | Binance?? ???? | ?? |
+| ?? 4 | OKX ?? ?? | ??? ???? ??? ??? ? ????. | ??�?? ?? ?? | ???? ?? | ?? ?? ?? |
+| ?? ?? | Bitget ?? ?? | ?? ??? ??? ?? ?? 2?? ?? ???? ????. | ?? ?? / ? $280 ?? ?? | ?? | ?? |
+
+?? ???? ??? ? ?? ??? ? ??? `?? ??'? ????. ?? ?? ??? ?? ? ?? ??? ?? ??, ???? ? ?? ??? ?? ??? ??? ????.
+
+?? ??, **#303030 ??**, ? ??? ? ??, ?? ???, **400 ??? ? ??**? ???? ?????. ??? 2??? ??? ??? ????. ??? ??? ????. ??? ?? ??? ?? ?? ?? ????. ?? ???? ????. ???? ???? ?? ???? ?? ??? ?? ??? ?????.
+
+**C. ?? ??**
+
+| ?? ?? | ?? ?? |
+|---|---|
+| ??? ??? ??? ????? | ??? ?? |
+| ??? ???? ??? ???? ????. ??? ?? ? ??? ????. N?? ????? | ?? ??. ?? ???? "??? ??? ???? ?? ??? ?????." |
+| ??? ??? ???? ?? ????? | Binance ?? |
+| ?? ???? ?? ?? ???? | ??. ? ?? `Binance?? ????'? ?? ??? ?????. |
+| ???? ????. TETH? ??? ?? ? ???? | ?? ??? "?? ?? � ?? ? ?" |
+| ?? ??? ?? ?? ?? ????? | ?? ???? "?? ?? ? ??? ?? ??? ?????."? ? ?? ?????. |
+| TETH ?? ??? ?? ????? ?? ?? | ?? ?? ?? ?? |
+| ?? ??? ?? ??? ?????? | ??? 2?? ???? ???? |
+| ?? ?? | ?? ?? � ? $280 |
+| ??? ?? ??? ???? ??????. 24?? ????? | ???? |
+| ??? ?? ?? / OKX ??? ??????? | OKX ?? ?? |
+
+?? ?? ??? ? ??? ???? ????. ?? ?? ??? ?? ??? ????? ?? ???, ???? ???? ??? ?????.
+
+**D. 4~8?? ???? ?? ????? ???? ???, ?? ?? ??? ???? ?? ??? ?? ???? ?? ???? ???.**
+
+codex
+거래소 선택·계정 준비·승인·완료의 분리는 확인됩니다. 남은 핵심은 계정 화면의 중복 링크와 한도 화면의 선택 조건입니다. 모바일 제목 크기와 카드 규격도 소스 수치로 확인하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n '"'^'"' s6/CODEX_RAW.md" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 75ms:
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n -A 70 -B 4 '\\.px-wrap|\\.px-title|\\.px-card|\\.px-tiles' ../../index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n -A 175 -B 5 'function pxHelp' ../../index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ exited 1 in 47ms:
+'\.px-title' is not recognized as an internal or external command,
+operable program or batch file.
+
+ succeeded in 73ms:
+22672-  var a=acS(), ctx=AC_CTX||{};
+22673-  if(k==='plan'){ if(acConnList().length){ a.ex=null; a.adding=0; a.edit=null; acSave(); acPageView(); } else plView(ctx); return; }
+22674-  if(k==='ex'){ a.edit='ex'; a.exSel=a.ex; acSave(); acRe(); return; }
+22675-  if(k==='acct'){ a.has=null; a.g=0; a.edit=null; acSave(); acRe(); return; }
+22676-}
+22677:function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
+22678-/* 거래소: 타일을 누르면 바로 다음 화면 */
+22679-function pxBEx(){
+22680-  var a=acS(), ctx=AC_CTX||{};
+22681-  return '<div class="pl-exs px-exs" role="group" aria-label="거래소">'+acExs().map(function(b){ var cn=!!a.conn[b.id];
+22682-    return '<button type="button" onclick="pxPickEx(\''+b.id+'\')">'+acLogo(b.id,30)+'<b>'+b.name+'</b>'+(cn?'<small>연결됨</small>':'')+'</button>'; }).join('')+'</div>';
+22683-}
+22684-function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
+22685-/* 계정: 초대 가입 안내 한 카드, 단추 하나, 작은 갈래 둘 */
+22686-function pxBAcct(){
+22687-  var a=acS(), n=acName(a.ex);
+22688-  return '<div class="px-card"><ol class="px-steps"><li><b>TETH 초대 링크로 가입</b><span>이메일이나 전화번호로 가입합니다.</span></li><li><b>본인 확인</b><span>신분증으로 확인합니다. 전략을 시작하기 전까지 마치면 됩니다.</span></li></ol></div>'
+22689-    +'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="acGuideOpen()">'+n+' 가입 화면 열기'+AC_OUT+'</a>'
+22690-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acGuide(2)">가입 완료</button><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">초대 계정으로 바로 연결</button></p>';
+22691-}
+22692-/* 승인: 권한 두 줄, 단추 하나 */
+22693-function pxBAuth(){
+22694-  var a=acS(), n=acName(a.ex), st=a.auth.ex===a.ex?a.auth.st:'idle';
+22695-  return '<div class="px-card"><ul class="px-perm"><li>'+AC_CK+'<span><b>잔고 조회</b>전략 계산에 씁니다</span></li><li>'+AC_CK+'<span><b>주문</b>전략 조건이 맞을 때 사고팝니다</span></li></ul></div>'
+22696-    +(st==='fail'?'<p class="acx-fail px-fail" role="alert">'+n+'에서 승인을 마치지 못했습니다. 잠시 뒤 다시 시도해 주십시오.</p>':st==='cancel'?'<p class="px-note" role="status">승인을 취소했습니다. 연결된 것은 없습니다.</p>':'')
+22697-    +'<button type="button" class="pl-cta pl-cta-w px-cta" id="ac-go" onclick="acAuthOpen()">'+acLogo(a.ex,20)+n+'에서 승인하기</button>';
+22698-}
+22699-/* 초대 계정 확인: 진행 중이면 두 줄 목록, 아니면 세 갈래 */
+22700-function pxBUid(){
+22701-  var a=acS(), n=acName(a.ex), u=a.uid.ex===a.ex?a.uid:{st:'none'}, id=a.auth.uid||'';
+22702-  if(u.st==='fail') return '<div class="px-col"><button type="button" class="px-ch" onclick="acUidAlt(\'new\')"><b>TETH 초대로 새 계정 만들기</b><span>이용료 없이 씁니다</span></button><button type="button" class="px-ch" onclick="acUidAlt(\'paid\')"><b>이 계정을 그대로 쓰고 구독하기</b><span>월 '+acUsd(AC_CFG.price)+'</span></button><button type="button" class="px-ch" onclick="acUidAlt(\'ex\')"><b>다른 거래소 고르기</b><span>초대로 만든 계정이 다른 거래소에 있을 때</span></button></div>';
+22703-  return '<div class="px-card"><p class="px-acct">'+acLogo(a.ex,22)+'<b>'+n+'</b><span class="num">'+gEsc(String(id).slice(0,2))+'••••'+gEsc(String(id).slice(-2))+'</span></p>'
+22704-    +'<ul class="btg-chk acx-chk px-chk" id="ac-chk"><li class="run" id="ac-c0"><span class="ic"><i></i></span><b>계정 확인</b><span>승인한 계정을 읽는 중</span></li><li id="ac-c1"><span class="ic"></span><b>초대 계정 확인</b><span>TETH 초대로 만든 계정인지</span></li></ul></div>';
+22705-}
+22706-/* 한도: 갈래 둘, 작은 링크 하나 */
+22707-function pxBLimit(){
+22708-  var a=acS(), n=acName(a.ex), L=acConnList().filter(function(k){ return a.conn[k].via==='paid'; });
+22709-  return '<p class="px-acct px-now">'+L.map(function(k){ return '<i>'+acLogo(k,20)+acName(k)+'</i>'; }).join('')+'</p>'
+22710-    +'<div class="px-col"><button type="button" class="px-ch" onclick="acLimitAlt(\'partner\')"><b>'+n+'를 TETH 초대 계정으로 연결</b><span>이용료 없음. 초대 계정이 없으면 새로 가입합니다</span></button><button type="button" class="px-ch" onclick="acLimitAlt(\'more\')"><b>구독 추가</b><span>월 '+acUsd(AC_CFG.price)+', 거래소 '+AC_PAID_MAX+'곳 더 연결</span></button></div>'
+22711-    +(AC_CTX&&AC_CTX.need?'':'<p class="px-links"><button type="button" class="pl-link" onclick="acLimitAlt(\'ex\')">다른 거래소 고르기</button></p>');
+22712-}
+22713-/* 완료: 계정 한 줄, 단추 하나 */
+22714-function pxBDone(){
+22715-  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{};
+22716-  return '<div class="px-card"><p class="px-acct">'+acLogo(ex,22)+'<b>'+acName(ex)+'</b>'+(c.uid?'<span class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</span>':'')+'<em>'+(c.via==='paid'?'구독':'TETH 초대 계정')+'</em></p></div>'
+22717-    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acSheetDone()">'+pxDoneLabel()+'</button>'
+22718-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+22719-}
+22720-/* 연결된 거래소 목록 화면 */
+22721-function pxList(){
+22722-  var a=acS(), L=acConnList();
+22723-  return '<div class="px-card px-list">'+L.map(function(k){ var c=a.conn[k]; return '<p class="px-acct"><span class="lg">'+acLogo(k,22)+'</span><b>'+acName(k)+'</b><em>'+(!acConnOk(k)?'구독이 끝나 새 주문이 멈췄습니다':c.via==='paid'?'구독':'TETH 초대 계정')+'</em><button type="button" class="pl-link" onclick="acDisc(\''+k+'\')">연결 끊기</button></p>'; }).join('')+'</div>'
+22724-    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acGoTerminal()">터미널 열기</button>'
+22725-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+22726-}
+22727-(function(){
+22728-  /* 머리와 몸을 화면 단위로. acRe()가 #ac-head, #ac-flow 를 다시 그리므로 페이지와 백테스트 실행 준비가 함께 바뀐다 */
+22729-  acHeadHtml=function(){ var ctx=AC_CTX||{}, a=acS(), L=acConnList();
+22730-    if(ctx.page&&L.length&&!L.some(acConnOk)) return pxHead({h:'구독이 끝났습니다',s:'연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.',back:''});
+22731-    if(ctx.list) return pxHead({h:'거래소 연결',s:'',back:''});
+22732-    return pxHead(pxTitle()); };
+22733-  acFlowHtml=function(){ var cur=pxCur();
+22734-    if(cur==='route'){ setTimeout(function(){ plView(AC_CTX||{}); },0); return ''; }
+22735-    if(cur==='pay'){ setTimeout(function(){ plCheckout(AC_CTX||{}); },0); return '<p class="px-lead">결제 화면으로 이동합니다.</p>'; }
+22736-    var b={ex:pxBEx,acct:pxBAcct,guide:pxBAcct,auth:pxBAuth,uid:pxBUid,limit:pxBLimit,done:pxBDone}[cur];
+22737-    return (b?b():'')+pxHelp(); };
+22738-  /* 완료 단추: 창이든 화면이든 같은 길 */
+22739-  acSheetDone=function(){ var af=AC_CTX&&AC_CTX.after; AC_CTX=null; plPageOff(); acAfter(af); };
+22740-  /* 거래소 연결 화면: 검정 바탕 한 열 */
+22741-  acPageView=function(ex){
+22742-    if(!S.user){ plView({ex:ex||null}); return; }
+22743-    var a=acS(); if(!acRouteNow()&&!acConnList().length){ plView({ex:ex||null}); return; }
+22744-    tfPageMode('tfbrokers','거래소 연결'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark'); acOpen({ex:ex||null,page:1});
+22745-    var L=acConnList(), OK=L.filter(acConnOk);
+22746-    if(!ex&&L.length&&!OK.length&&!a.adding){ a.ex=L[0]; a.route='paid'; a.pay=a.pay.st==='fail'?a.pay:{st:'none'}; acSave(); }
+22747-    if(!ex&&L.length&&a.ex&&!a.conn[a.ex]&&!a.adding){ a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); }
+22748-    var list=OK.length&&((!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)); AC_CTX.list=list?1:0;
+22749-    TF_RENDERING=true;
+22750-    gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+(list?pxList()+pxHelp():acFlowHtml())+'</div></div>');
+22751-    TF_RENDERING=false; if(acStep()==='uid') acUidRun();
+22752-  };
+22753-  /* 활성화 창 대신 같은 화면 */
+22754-  acSheetOpen=function(ctx){ ctx=ctx||{}; ctx.sheet=0; acOpen(ctx); AC_CTX=ctx; AC_CTX.page=1;
+22755-    tfPageMode('tfbrokers','거래소 연결'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark');
+22756-    TF_RENDERING=true; gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+acFlowHtml()+'</div></div>'); TF_RENDERING=false;
+22757-    if(acStep()==='uid') acUidRun(); };
+22758-  acAddMore=function(){ var a=acS(); a.ex=null; a.adding=1; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.kyc={st:'none'}; a.doneAt=null; a.edit=null; acSave(); if(AC_CTX){ AC_CTX.need=null; AC_CTX.ex=null; } acPageView(); };
+22759-  /* 승인 창(거래소 화면 흉내): 출금 줄 없이 */
+22760-  var ao0=acAuthOpen; acAuthOpen=function(){ ao0.apply(this,arguments); var w=document.getElementById('ac-auth'); if(!w) return; var li=w.querySelector('li.pm-n'); if(li) li.remove(); };
+22761-  /* 본인 확인 관문: 제목 하나, 한 줄, 단추 하나 */
+22762-  acKycHtml=function(ex){ var a=acS(), c=a.conn[ex]||{}, n=acName(ex), st=c.kyc||'none';
+22763-    var s=st==='ok'?'본인 확인이 끝났습니다. 전략을 시작합니다.':st==='run'?n+'에서 본인 확인 상태를 보는 중입니다.':st==='review'?n+'에서 본인 확인을 검토하고 있습니다. 끝나면 전략을 시작할 수 있습니다.':st==='err'?'본인 확인 상태를 불러오지 못했습니다. 잠시 뒤 다시 확인해 주십시오.':'본인 확인이 끝나면 전략을 시작할 수 있습니다.';
+22764-    var act=st==='ok'?'':st==='run'?'<button type="button" class="pl-cta pl-cta-w px-cta" disabled><i class="acx-sp"></i>확인 중</button>'
+22765-      :(st==='fail'||st==='none'?'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(ex))+'" target="_blank" rel="noopener">'+n+'에서 본인 확인하기'+AC_OUT+'</a>':'')+'<p class="px-links"><button type="button" class="pl-link" onclick="acKycRun(\''+ex+'\')">'+(st==='err'?'다시 확인하기':'확인을 마쳤습니다')+'</button></p>';
+22766-    return '<div class="px-kyc st-'+st+'" id="ac-kyc"><p class="px-lead">'+s+'</p>'+act+'</div>'; };
+22767-  var rg0=acRunGate; acRunGate=function(ex,cb){ var a=acS(); ex=ex||acConnList()[0]; if(!ex||!a.conn[ex]||acRunOk(ex)){ cb(); return; }
+22768-    rg0.call(this,ex,cb); var d=document.getElementById('ac-cf'); if(!d) return; d.classList.add('px-cf'); var h=d.querySelector('h3'); if(h) h.textContent=acName(ex)+' 본인 확인이 필요합니다'; var bt=d.querySelector('.bts'); if(bt){ var no=bt.querySelector('button:not(.ok)'); if(no){ no.className='pl-link'; no.textContent='닫기'; } } };
+22769-})();
+22770-/*BT_CORE_END*/
+22771-</script>
+22772-<script>
+22773-"use strict";
+22774-/* ══ teth ai auth flow (MOCK) ══ */
+22775-var AUTH={mode:'signup',email:'',doneName:'',pwDone:false};
+22776-function authOpen(mode){
+22777-  AUTH.mode=mode||'signup'; AUTH.email=''; AUTH.doneName=''; AUTH.pwDone=false;
+22778-  window.TF_INS_RESUME=null; /* 이전(취소된) 인사이트 게이트 복귀 요청 폐기 — 게이트發 인증은 authOpen 뒤에 다시 세팅 (codex-ins2 1) */
+22779-  if(typeof tfIntentClear==='function') tfIntentClear(); /* 하려던 일도 같은 규약: 인증 창을 연 쪽이 연 다음에 다시 적는다 */
+22780-  window.TF_BK_RESUME=null; /* 거래소 상세 복귀 컨텍스트도 동일 규약 — 취소된 요청이 다른 로그인 경로에서 오복귀하지 않게 */
+22781-  /* 게스트가 쳐 둔 질문 보존 — 전송 전에 팝업이 떠도(무료 시작, 로그인 버튼 등) 가입 완료 후 이어서 전송 */
+22782-  try{ var _d=$('g-home-in'); AUTH.draft=(_d&&_d.value.trim())||null; if(!AUTH.draft){ _d=$('g-in'); AUTH.draft=(_d&&_d.value.trim())||null; } }catch(e){ AUTH.draft=null; }
+22783-  ['au-email','au-code-in','au-pwnew-in','au-pw-in'].forEach(function(id){var el=$(id); if(el){el.value=''; el.classList.remove('bad','shake');}});
+22784-  document.querySelectorAll('#modal-auth .au-err').forEach(function(x){x.classList.remove('on');});
+22785-  if(AUTH.rt){ clearInterval(AUTH.rt); AUTH.rt=null; } AUTH.cool=0;
+22786-  authShow('au-start');
+22787-  openModal('modal-auth');
+22788-}
+22789-function authI18n(){ /* 딥 화면 정적 텍스트를 현재 언어로, 화면 표시 직전마다 호출 */
+22790-  var T=function(id,k){var el=$(id); if(el) el.textContent=L(k);};
+22791-  T('au-code-title','code.title'); T('au-code-go','auth.continue');
+22792-  T('au-code-err','code.err'); T('au-code-div','auth.or'); T('au-code-pwbtn','code.pwbtn');
+22793-  var ci=$('au-code-in'); if(ci) ci.placeholder=L('code.ph');
+22794-  T('au-pwnew-title','pwnew.title'); var ps=$('au-pwnew-sub'); if(ps) ps.innerHTML=L('pwnew.sub');
+22795-  T('au-pwnew-lbl-email','auth.email'); T('au-pwnew-lbl-pw','pw.label'); T('au-edit','pwnew.edit');
+22796-  T('au-req-h','req.head');
+22797-  var rq=[['au-req-len','req.len'],['au-req-num','req.num'],['au-req-spec','req.spec']];
+22798-  rq.forEach(function(p){var el=$(p[0]); if(el) el.querySelector('.t').textContent=L(p[1]);});
+22799-  T('au-pwnew-go','auth.continue'); T('au-pwnew-div','auth.or'); T('au-pwnew-codebtn','pwnew.codebtn');
+22800-  T('au-pw-title','pw.title'); T('au-pw-lbl','pw.label'); T('au-pw-err','pw.err');
+22801-  T('au-pw-go','auth.continue'); T('au-pw-div','auth.or'); T('au-pw-codebtn','pw.codebtn');
+22802-  ['t1','t2','t3'].forEach(function(s){T('au-foot-'+s,'menu.terms');});
+22803-  ['p1','p2','p3'].forEach(function(s){T('au-foot-'+s,'menu.privacy');});
+22804-  var ee=$('au-email-err'); if(ee) ee.textContent=L('email.err');
+22805-  authResendLabel();
+22806-}
+22807-function authShow(id){
+22808-  document.querySelectorAll('#modal-auth .au-step').forEach(function(s){s.hidden=true;});
+22809-  $(id).hidden=false;
+22810-  authI18n();
+22811-  if(id!=='au-code' && AUTH.rt){ clearInterval(AUTH.rt); AUTH.rt=null; }
+22812-  if(id==='au-code'){
+22813-    $('au-code-sub').innerHTML=L(AUTH.mode==='login'?'code.sub.login':'code.sub.signup').replace('{e}','<b>'+authEsc(AUTH.email)+'</b>');
+22814-    /* 비밀번호 대안은 로그인 코드 화면에서만 — 회원가입 검증 코드에는 계정 비밀번호가 아직 없다 */
+22815-    var showPw=AUTH.mode==='login'&&!AUTH.pwDone;
+22816-    $('au-code-div').hidden=$('au-code-pwbtn').hidden=!showPw;
+22817-  }
+22818-  if(id==='au-pw'){ $('au-pw-sub').innerHTML=L('pw.sub').replace('{e}','<b>'+authEsc(AUTH.email)+'</b>'); }
+22819-  if(id==='au-pw-new'){ $('au-pwnew-email').value=AUTH.email; authPwReq(); }
+22820-  var f={'au-code':'au-code-in','au-pw-new':'au-pwnew-in','au-pw':'au-pw-in'}[id];
+22821-  if(f) setTimeout(function(){var el=$(f); if(el) el.focus();},80);
+22822-}
+22823-function authEsc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+22824-function authOauth(provider){ AUTH.doneName='김도현'; toast(provider+' 인증 완료'); if(AUTH.mode==='signup'){ authAgeShow(); return; } signupDone(); }
+22825-function authEmailNext(){
+22826-  var v=($('au-email').value||'').trim();
+22827-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ authBad('au-email','au-email-err'); return; }
+22828-  authGood('au-email','au-email-err');
+22829-  AUTH.email=v;
+22830-  if(AUTH.mode==='signup') authShow('au-pw-new');
+22831-  else authSendCode();
+22832-}
+22833-function authBad(inputId,errId){ /* 오류 상태: 빨간 테두리 + 흔들림 + 메시지 */
+22834-  var i=$(inputId), e=$(errId);
+22835-  if(e) e.classList.add('on');
+22836-  if(i){ i.classList.add('bad'); i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus(); }
+22837-}
+22838-function authGood(inputId,errId){ var i=$(inputId), e=$(errId); if(e) e.classList.remove('on'); if(i) i.classList.remove('bad'); }
+22839-function authResendLabel(){
+22840-  var b=$('au-resend'); if(!b) return;
+22841-  if(AUTH.cool>0){ b.textContent=L('code.wait').replace('{s}',AUTH.cool); b.disabled=true; b.style.opacity=.5; }
+22842-  else{ b.textContent=L('code.resend'); b.disabled=false; b.style.opacity=''; }
+22843-}
+22844-function authStartCool(){
+22845-  AUTH.cool=30; authResendLabel();
+22846-  if(AUTH.rt) clearInterval(AUTH.rt);
+22847-  AUTH.rt=setInterval(function(){
+22848-    AUTH.cool--; authResendLabel();
+22849-    if(AUTH.cool<=0){ clearInterval(AUTH.rt); AUTH.rt=null; }
+22850-  },1000);
+22851-}
+22852-function authResend(){
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n -A 70 -B 10 px-exs ../../index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n . s6/CODEX_RAW.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n -A 22 pxTitle ../../index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 84ms:
+7191-.px-card{padding:24px 26px;border-radius:26px;background:#303030;border:1px solid rgba(255,255,255,.1);color:#ececec;margin:0 0 20px}
+7192-.px-cta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;height:52px;font-size:16px}
+7193-.px-cta img,.px-cta .acx-mono{border-radius:6px}
+7194-.px-cta svg{width:15px;height:15px}
+7195-.px-links{display:flex;gap:22px;flex-wrap:wrap;margin:16px 2px 0}
+7196-.px-links .pl-link{font-size:14px;color:#cdcdcd}
+7197-.px-links .pl-link:hover{color:#fff}
+7198-.px-help{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:44px 2px 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px;color:#9a9a9a}
+7199-.px-help .pl-link{font-size:13.5px}
+7200-/* 거래소 타일 */
+7201:.px-exs{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+7202:.px-exs button{gap:10px;padding:20px 8px 18px}
+7203:.px-exs button img,.px-exs button .acx-mono{border-radius:8px}
+7204:.px-exs button:hover{border-color:#9a9a9a;background:#2c2c2c}
+7205:.px-exs button b{font-size:16px}
+7206:.px-exs button small{font-size:12px;color:#9a9a9a}
+7207-/* 안내 줄 */
+7208-.px-steps{list-style:none;margin:0;padding:0;display:grid;gap:18px;counter-reset:px}
+7209-.px-steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;counter-increment:px}
+7210-.px-steps li::before{content:counter(px);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+7211-.px-steps b{display:block;font-size:16px;font-weight:600;color:#fff;line-height:28px}
+7212-.px-steps span{display:block;font-size:14.5px;line-height:1.55;color:#cdcdcd}
+7213-/* 권한 두 줄 */
+7214-.px-perm{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+7215-.px-perm li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;align-items:start;color:#8fb4ff}
+7216-.px-perm li svg{margin-top:3px}
+7217-.px-perm b{display:block;font-size:16px;font-weight:600;color:#fff}
+7218-.px-perm span span,.px-perm li>span{color:#cdcdcd;font-size:14.5px;line-height:1.55}
+7219-.px-perm li>span b{margin-bottom:2px}
+7220-.px-note{margin:0 0 16px;font-size:14px;color:#cdcdcd}
+7221-.px-fail{border-radius:16px;font-size:14px}
+7222-/* 계정 한 줄 */
+7223-.px-acct{display:flex;align-items:center;gap:10px;margin:0;font-size:16px;color:#ececec;flex-wrap:wrap}
+7224-.px-acct img,.px-acct .acx-mono{border-radius:6px}
+7225-.px-acct b{font-weight:600;color:#fff}
+7226-.px-acct .num{color:#cdcdcd}
+7227-.px-acct em{font-style:normal;font-size:13.5px;color:#9a9a9a;margin-left:auto}
+7228-.px-acct .pl-link{font-size:13px;margin-left:12px}
+7229-.px-acct.px-now{margin:0 0 18px;gap:16px;font-size:15px;color:#cdcdcd}
+7230-.px-acct.px-now i{display:inline-flex;align-items:center;gap:6px;font-style:normal}
+7231-.px-list{padding:6px 26px}
+7232-.px-list .px-acct{padding:16px 0;border-top:1px solid rgba(255,255,255,.1)}
+7233-.px-list .px-acct:first-child{border-top:0}
+7234-/* 갈래 카드 */
+7235-.px-col{display:grid;gap:12px;margin:0 0 4px}
+7236-.px-ch{display:flex;flex-direction:column;gap:4px;padding:20px 24px;border-radius:20px;border:2px solid transparent;background:#303030;color:#ececec;font:inherit;text-align:left;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+7237-.px-ch:hover{border-color:#9a9a9a;background:#2c2c2c}
+7238-.px-ch b{font-size:16px;font-weight:600;color:#fff}
+7239-.px-ch span{font-size:14px;color:#cdcdcd}
+7240-/* 확인 목록 */
+7241-.px-chk{margin:16px 0 0;border:0;border-top:1px solid rgba(255,255,255,.1);border-radius:0}
+7242-.px-chk li{padding:12px 0;border-bottom:0;color:#cdcdcd;font-size:14px}
+7243-.px-chk li b{color:#fff}
+7244-.px-chk li.run .ic i{border-top-color:#fff}
+7245-/* 본인 확인 관문 */
+7246-.acx-cf.px-cf .bx{width:min(480px,100%);padding:32px 30px 26px;border-radius:26px;background:#303030;border:1px solid rgba(255,255,255,.1)}
+7247-.acx-cf.px-cf h3{font-size:24px;font-weight:400;letter-spacing:-.01em;color:#fff;margin-bottom:10px}
+7248-.acx-cf.px-cf .px-lead{font-size:16px;margin-bottom:22px}
+7249-.acx-cf.px-cf .bts{justify-content:flex-start;margin-top:8px}
+7250-.acx-cf.px-cf .bts .pl-link{height:auto;padding:0;border:0;font-size:14px;color:#cdcdcd;font-weight:400}
+7251-.acx-cf.px-cf .bts .ok{height:48px;border-radius:999px;padding:0 22px}
+7252-.acx-cf.px-cf .bts .ok[hidden]{display:none}
+7253-.acx-cf.px-cf .px-links{margin-top:14px}
+7254-.acx-cf.px-cf .px-kyc.st-ok .px-lead{margin-bottom:0}
+7255-/* 승인 창 */
+7256-.acx-aw{border-radius:26px;background:#212121}
+7257-.acx-ac h3{font-weight:600}
+7258-.acx-ac .bts .ok{border-radius:999px}
+7259-@media (max-width:900px){
+7260:  .px-exs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+7261:  .px-exs button{padding:14px 6px 12px}
+7262-  .px-card{padding:20px 18px;border-radius:19px}
+7263-  .px-lead{font-size:16px;margin-bottom:20px}
+7264-  .px-ch{padding:16px 18px;border-radius:16px}
+7265-}
+7266-/* 안내 줄의 설명은 번호 옆 열에 */
+7267-.px-steps li>span{grid-column:2}
+7268-.px-chk{display:block}
+7269-/* 모바일: 위쪽 메뉴 단추 띠 아래에서 시작 */
+7270-@media (max-width:900px){ body.pl-page .pl-co{padding-top:72px} .px .px-head{margin-bottom:6px} .px .px-head h1{font-size:26px} }
+7271-@media (max-width:900px){ .px{padding-left:16px;padding-right:16px} .px .px-head{align-items:flex-start} .px .px-head .pl-back{margin-top:2px} .px .px-head h1{line-height:1.3} }
+7272-
+7273-/* 플랜 화면들에는 사이트 푸터를 두지 않는다 */
+7274-body.pl-page .gft{display:none!important}
+7275-/*BT_CSS_END*/
+7276-</style>
+7277-<script src="site-config.js?v=2"></script>
+7278-<script src="data/px-daily.js?v=2026-09-28b"></script>
+7279-<script src="data/fut-daily.js?v=2026-09-28"></script>
+7280-<script src="site-footer.js?v=14"></script><!-- gBoot 의 첫 렌더가 gSiteFooter() 를 부르므로 부팅 전에 로드 --><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
+7281-<script>
+7282-"use strict";
+7283-/* ═══════════ state ═══════════ */
+7284-var S = {
+7285-  view:'home', stage:null, user:null, liveOn:false, paused:false,
+7286-  strategy:null, versions:[], activeVer:0, pendingBacktest:false
+7287-};
+7288-function $(id){ return document.getElementById(id); }
+7289-function toast(m){
+7290-  /* 연속 호출 큐잉: 표시 중이면 뒤에 줄 세워 순서대로 — 텍스트가 뚝뚝 바뀌며 타이머만 리셋되던 문제 방지 */
+7291-  var t=$('toast'); t._q=t._q||[];
+7292-  if(t.classList.contains('show')){ if(t._q.length<3&&t.textContent!==m) t._q.push(m); return; }
+7293-  t.textContent=m; t.classList.add('show');
+7294-  clearTimeout(t._h);
+7295-  t._h=setTimeout(function(){
+7296-    t.classList.remove('show');
+7297-    var next=t._q.shift();
+7298-    if(next) setTimeout(function(){ toast(next); },240);
+7299-  },2200);
+7300-}
+7301-function openModal(id){ $(id).classList.add('open'); var b=$(id).querySelector('button'); if(b)b.focus(); }
+7302-function closeModal(id){ $(id).classList.remove('open'); }
+7303-function closeMnav(){ $('mnav').classList.remove('open'); }
+7304-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ document.querySelectorAll('.modal-bg.open').forEach(function(m){m.classList.remove('open');}); $('mnav').classList.remove('open'); $('ssheet').classList.remove('open'); } });
+7305-
+7306-/* ═══════════ router ═══════════ */
+7307-var TITLES = {home:['홈',''], builder:['전략 만들기','AI와 대화하며 전략을 완성합니다'], analyze:['전략 검증','AI 팀이 분석, 검증하는 중'], backtest:['검증 보고서',''], connect:['거래소 연결',''], run:['실행 확인',''], live:['실행 현황',''], strategies:['내 전략',''], history:['거래 기록','']};
+7308-function show(v){
+7309-  document.querySelectorAll('.view').forEach(function(s){s.classList.remove('on');});
+7310-  $('v-'+v).classList.add('on');
+7311-  S.view=v;
+7312-  $('page-title').textContent=TITLES[v][0];
+7313-  $('page-sub').textContent=TITLES[v][1];
+7314-  var navKey = (v==='builder'||v==='analyze'||v==='backtest'||v==='connect'||v==='run') ? 'strategies' : v;
+7315-  document.querySelectorAll('#sidebar .nav-item[data-nav]').forEach(function(n){ n.classList.toggle('on', n.dataset.nav===navKey); });
+7316-  var flowStage = {builder:'build', analyze:'backtest', backtest:'backtest', connect:'connect', run:'connect', live:'live'}[v] || null;
+7317-  setStage(flowStage);
+7318-  $('sheet-toggle').classList.toggle('avail', v==='builder');
+7319-  $('content').scrollTop=0;
+7320-}
+7321-function nav(v){
+7322-  if(v==='live'){ show('live'); renderLive(); return; }
+7323-  if(v==='strategies'){ show('strategies'); renderStrategies(); return; }
+7324-  if(v==='history'){ show('history'); renderHistory(); return; }
+7325-  show(v);
+7326-}
+7327-function setStage(stage){
+7328-  var order=['build','backtest','connect','live'];
+7329-  var p=$('progress');
+7330-  if(!stage){ p.style.display='none'; return; }
+7331-  p.style.display='flex';
+--
+22671-function pxBack(k){
+22672-  var a=acS(), ctx=AC_CTX||{};
+22673-  if(k==='plan'){ if(acConnList().length){ a.ex=null; a.adding=0; a.edit=null; acSave(); acPageView(); } else plView(ctx); return; }
+22674-  if(k==='ex'){ a.edit='ex'; a.exSel=a.ex; acSave(); acRe(); return; }
+22675-  if(k==='acct'){ a.has=null; a.g=0; a.edit=null; acSave(); acRe(); return; }
+22676-}
+22677-function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
+22678-/* 거래소: 타일을 누르면 바로 다음 화면 */
+22679-function pxBEx(){
+22680-  var a=acS(), ctx=AC_CTX||{};
+22681:  return '<div class="pl-exs px-exs" role="group" aria-label="거래소">'+acExs().map(function(b){ var cn=!!a.conn[b.id];
+22682-    return '<button type="button" onclick="pxPickEx(\''+b.id+'\')">'+acLogo(b.id,30)+'<b>'+b.name+'</b>'+(cn?'<small>연결됨</small>':'')+'</button>'; }).join('')+'</div>';
+22683-}
+22684-function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
+22685-/* 계정: 초대 가입 안내 한 카드, 단추 하나, 작은 갈래 둘 */
+22686-function pxBAcct(){
+22687-  var a=acS(), n=acName(a.ex);
+22688-  return '<div class="px-card"><ol class="px-steps"><li><b>TETH 초대 링크로 가입</b><span>이메일이나 전화번호로 가입합니다.</span></li><li><b>본인 확인</b><span>신분증으로 확인합니다. 전략을 시작하기 전까지 마치면 됩니다.</span></li></ol></div>'
+22689-    +'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="acGuideOpen()">'+n+' 가입 화면 열기'+AC_OUT+'</a>'
+22690-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acGuide(2)">가입 완료</button><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">초대 계정으로 바로 연결</button></p>';
+22691-}
+22692-/* 승인: 권한 두 줄, 단추 하나 */
+22693-function pxBAuth(){
+22694-  var a=acS(), n=acName(a.ex), st=a.auth.ex===a.ex?a.auth.st:'idle';
+22695-  return '<div class="px-card"><ul class="px-perm"><li>'+AC_CK+'<span><b>잔고 조회</b>전략 계산에 씁니다</span></li><li>'+AC_CK+'<span><b>주문</b>전략 조건이 맞을 때 사고팝니다</span></li></ul></div>'
+22696-    +(st==='fail'?'<p class="acx-fail px-fail" role="alert">'+n+'에서 승인을 마치지 못했습니다. 잠시 뒤 다시 시도해 주십시오.</p>':st==='cancel'?'<p class="px-note" role="status">승인을 취소했습니다. 연결된 것은 없습니다.</p>':'')
+22697-    +'<button type="button" class="pl-cta pl-cta-w px-cta" id="ac-go" onclick="acAuthOpen()">'+acLogo(a.ex,20)+n+'에서 승인하기</button>';
+22698-}
+22699-/* 초대 계정 확인: 진행 중이면 두 줄 목록, 아니면 세 갈래 */
+22700-function pxBUid(){
+22701-  var a=acS(), n=acName(a.ex), u=a.uid.ex===a.ex?a.uid:{st:'none'}, id=a.auth.uid||'';
+22702-  if(u.st==='fail') return '<div class="px-col"><button type="button" class="px-ch" onclick="acUidAlt(\'new\')"><b>TETH 초대로 새 계정 만들기</b><span>이용료 없이 씁니다</span></button><button type="button" class="px-ch" onclick="acUidAlt(\'paid\')"><b>이 계정을 그대로 쓰고 구독하기</b><span>월 '+acUsd(AC_CFG.price)+'</span></button><button type="button" class="px-ch" onclick="acUidAlt(\'ex\')"><b>다른 거래소 고르기</b><span>초대로 만든 계정이 다른 거래소에 있을 때</span></button></div>';
+22703-  return '<div class="px-card"><p class="px-acct">'+acLogo(a.ex,22)+'<b>'+n+'</b><span class="num">'+gEsc(String(id).slice(0,2))+'••••'+gEsc(String(id).slice(-2))+'</span></p>'
+22704-    +'<ul class="btg-chk acx-chk px-chk" id="ac-chk"><li class="run" id="ac-c0"><span class="ic"><i></i></span><b>계정 확인</b><span>승인한 계정을 읽는 중</span></li><li id="ac-c1"><span class="ic"></span><b>초대 계정 확인</b><span>TETH 초대로 만든 계정인지</span></li></ul></div>';
+22705-}
+22706-/* 한도: 갈래 둘, 작은 링크 하나 */
+22707-function pxBLimit(){
+22708-  var a=acS(), n=acName(a.ex), L=acConnList().filter(function(k){ return a.conn[k].via==='paid'; });
+22709-  return '<p class="px-acct px-now">'+L.map(function(k){ return '<i>'+acLogo(k,20)+acName(k)+'</i>'; }).join('')+'</p>'
+22710-    +'<div class="px-col"><button type="button" class="px-ch" onclick="acLimitAlt(\'partner\')"><b>'+n+'를 TETH 초대 계정으로 연결</b><span>이용료 없음. 초대 계정이 없으면 새로 가입합니다</span></button><button type="button" class="px-ch" onclick="acLimitAlt(\'more\')"><b>구독 추가</b><span>월 '+acUsd(AC_CFG.price)+', 거래소 '+AC_PAID_MAX+'곳 더 연결</span></button></div>'
+22711-    +(AC_CTX&&AC_CTX.need?'':'<p class="px-links"><button type="button" class="pl-link" onclick="acLimitAlt(\'ex\')">다른 거래소 고르기</button></p>');
+22712-}
+22713-/* 완료: 계정 한 줄, 단추 하나 */
+22714-function pxBDone(){
+22715-  var a=acS(), ex=a.ex||acConnList()[0], c=a.conn[ex]||{};
+22716-  return '<div class="px-card"><p class="px-acct">'+acLogo(ex,22)+'<b>'+acName(ex)+'</b>'+(c.uid?'<span class="num">'+gEsc(String(c.uid).slice(0,2))+'••••'+gEsc(String(c.uid).slice(-2))+'</span>':'')+'<em>'+(c.via==='paid'?'구독':'TETH 초대 계정')+'</em></p></div>'
+22717-    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acSheetDone()">'+pxDoneLabel()+'</button>'
+22718-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+22719-}
+22720-/* 연결된 거래소 목록 화면 */
+22721-function pxList(){
+22722-  var a=acS(), L=acConnList();
+22723-  return '<div class="px-card px-list">'+L.map(function(k){ var c=a.conn[k]; return '<p class="px-acct"><span class="lg">'+acLogo(k,22)+'</span><b>'+acName(k)+'</b><em>'+(!acConnOk(k)?'구독이 끝나 새 주문이 멈췄습니다':c.via==='paid'?'구독':'TETH 초대 계정')+'</em><button type="button" class="pl-link" onclick="acDisc(\''+k+'\')">연결 끊기</button></p>'; }).join('')+'</div>'
+22724-    +'<button type="button" class="pl-cta pl-cta-w px-cta" onclick="acGoTerminal()">터미널 열기</button>'
+22725-    +'<p class="px-links"><button type="button" class="pl-link" onclick="acAddMore()">거래소 더 연결하기</button></p>';
+22726-}
+22727-(function(){
+22728-  /* 머리와 몸을 화면 단위로. acRe()가 #ac-head, #ac-flow 를 다시 그리므로 페이지와 백테스트 실행 준비가 함께 바뀐다 */
+22729-  acHeadHtml=function(){ var ctx=AC_CTX||{}, a=acS(), L=acConnList();
+22730-    if(ctx.page&&L.length&&!L.some(acConnOk)) return pxHead({h:'구독이 끝났습니다',s:'연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.',back:''});
+22731-    if(ctx.list) return pxHead({h:'거래소 연결',s:'',back:''});
+22732-    return pxHead(pxTitle()); };
+22733-  acFlowHtml=function(){ var cur=pxCur();
+22734-    if(cur==='route'){ setTimeout(function(){ plView(AC_CTX||{}); },0); return ''; }
+22735-    if(cur==='pay'){ setTimeout(function(){ plCheckout(AC_CTX||{}); },0); return '<p class="px-lead">결제 화면으로 이동합니다.</p>'; }
+22736-    var b={ex:pxBEx,acct:pxBAcct,guide:pxBAcct,auth:pxBAuth,uid:pxBUid,limit:pxBLimit,done:pxBDone}[cur];
+22737-    return (b?b():'')+pxHelp(); };
+22738-  /* 완료 단추: 창이든 화면이든 같은 길 */
+22739-  acSheetDone=function(){ var af=AC_CTX&&AC_CTX.after; AC_CTX=null; plPageOff(); acAfter(af); };
+22740-  /* 거래소 연결 화면: 검정 바탕 한 열 */
+22741-  acPageView=function(ex){
+22742-    if(!S.user){ plView({ex:ex||null}); return; }
+22743-    var a=acS(); if(!acRouteNow()&&!acConnList().length){ plView({ex:ex||null}); return; }
+22744-    tfPageMode('tfbrokers','거래소 연결'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark'); acOpen({ex:ex||null,page:1});
+22745-    var L=acConnList(), OK=L.filter(acConnOk);
+22746-    if(!ex&&L.length&&!OK.length&&!a.adding){ a.ex=L[0]; a.route='paid'; a.pay=a.pay.st==='fail'?a.pay:{st:'none'}; acSave(); }
+22747-    if(!ex&&L.length&&a.ex&&!a.conn[a.ex]&&!a.adding){ a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); }
+22748-    var list=OK.length&&((!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)); AC_CTX.list=list?1:0;
+22749-    TF_RENDERING=true;
+22750-    gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+(list?pxList()+pxHelp():acFlowHtml())+'</div></div>');
+22751-    TF_RENDERING=false; if(acStep()==='uid') acUidRun();
+
+ succeeded in 70ms:
+1:핵심은 색보다 **화면을 조직하는 방식의 단절**입니다. 3번은 선택지를 비교하는 제품 화면인데, 4~8번은 절차와 설명을 펼쳐 놓은 설정 화면입니다. 아래 평가는 첨부 화면에 한정합니다.
+3:**A. 다른 제품처럼 보이는 원인**
+5:| 구분 | 화면에서 확인되는 근거 | 차이를 만드는 원인 |
+6:|---|---|---|
+7:| 겉모습·색 | 1·3번은 회색 바탕과 파란 강조 카드, 2번은 검정 바탕·회색 카드·흰 단추입니다. 4~8번의 주 행동은 연두색입니다. | 플랜 선택 직후 강조색과 표면 구성이 동시에 바뀝니다. |
+8:| 겉모습·위계 | 같은 1440×900인 3번은 약 1032px 폭의 두 카드, 6·7번은 약 672px 폭의 본문입니다. 3번의 큰 소개 문구 대신 6번은 작은 설명과 단계명이 중심입니다. | 선택을 돕던 큰 제목과 카드가 사라지고, 절차 목록이 화면의 중심이 됩니다. |
+9:| 겉모습·컴포넌트 | 2번은 입력 영역과 요약 카드를 분리합니다. 5번은 완료 행·번호·권한 표·긴 단추를 한 열에 쌓습니다. | 입력과 확인 정보의 역할이 구분되지 않고 모두 같은 흐름에 놓입니다. |
+10:| 구조·스텝퍼 | 4번은 5단계, 5번은 3단계입니다. 8번은 두 단계 행을 보여 주면서 “1단계 남았습니다”라고 합니다. | 완료·현재·남은 단계의 관계를 사용자가 해석해야 합니다. 경로마다 절차의 틀도 달라집니다. |
+11:| 구조·질문 수 | 4번의 실제 질문은 거래소 선택 하나입니다. 그런데 이용 방식과 이후 세 단계까지 노출합니다. 6번에는 계정 만들기·본인 확인·연결, 가입 완료, 기존 계정 연결이 함께 있습니다. | 한 화면의 결정에 미래 작업과 다른 경로가 섞입니다. 2번은 입력칸이 여러 개여도 ‘결제’라는 하나의 목적에 모입니다. |
+12:| 구조·정보 순서 | 5번에는 이미 결제 완료 행이 있습니다. 8번에서는 연결 한도 때문에 초대 계정 또는 추가 구독을 다시 고릅니다. | 비용·연결 가능 여부·승인이라는 판단이 분산되어 있습니다. 다만 이미지로는 한도를 언제 처음 안내했는지 확인할 수 없습니다. |
+13:| 카피·설명 과잉 | 4~6번은 제목 아래에 “주문은…나갑니다. 자산은…있습니다. N단계 남았습니다”를 반복합니다. | 현재 선택보다 계정 구조와 진행 설명이 먼저 읽힙니다. |
+14:| 카피·불안과 기대 | 5번의 “바로 실행합니다”, “TETH는 자산을 옮길 수 없습니다”; 7번의 “실행할 수 있습니다”. | 연결이 자동 실행을 뜻하는지 모호합니다. 출금 부정문은 승인에 필요한 권한보다 강하게 부각됩니다. |
+15:| 카피·완료감 | 7번은 “거래소 연결 완료”와 “OKX 계정이 연결되었습니다”를 연속 표시합니다. | 같은 결과를 반복하면서, 연결 후 무엇을 할지는 작은 설명에 묻힙니다. |
+17:**B. 참고 화면의 설계 원칙으로 다시 구성**
+19:플랜 화면을 출발점으로 유지하고, 이후는 **무료 신규 계정 4화면, 무료 기존 계정 3화면, 유료 신규 구독 4화면**으로 구성합니다. 거래소의 외부 가입·승인 화면은 별도입니다. 한도 안내는 해당할 때만 표시합니다.
+21:| 화면 | 제목 | 한 줄 설명 | 입력·선택 | 주 단추 | 보조 행동 |
+22:|---|---|---|---|---|---|
+23:| 공통 1 | 거래소 선택 | 전략을 실행할 거래소를 선택합니다. | 거래소 선택 카드 | 계속 | 뒤로 |
+24:| 무료 신규 2 | 거래소 계정 | TETH 초대로 가입한 계정을 연결합니다. | 새 계정 / 기존 초대 계정 | OKX 가입 화면 열기 | 기존 계정 연결 |
+25:| 유료 신규 2 | 구독 구성 | 월 $280으로 거래소 최대 2곳을 연결합니다. | 결제 수단, 선택 거래소·가격 요약 | 구독 결제 | 거래소 변경 |
+26:| 공통 3 | Binance 연결 | Binance에서 잔고 조회와 주문 권한을 승인합니다. | 권한 요약, 입력 없음 | Binance에서 승인하기 | 뒤로 |
+27:| 공통 4 | OKX 연결 완료 | 연결한 계정에서 전략을 실행할 수 있습니다. | 계정·이용 방식 요약 | 터미널로 이동 | 연결 계정 보기 |
+28:| 한도 예외 | Bitget 연결 방법 | 현재 구독의 거래소 연결 한도 2곳을 모두 사용하고 있습니다. | 초대 계정 / 월 $280 구독 추가 | 계속 | 취소 |
+30:외부 가입에서 돌아온 뒤 같은 화면의 주 단추를 ‘계정 연결’로 바꿉니다. 초대 계정 확인은 승인 후 처리 상태로 보여 주고, 사용자가 할 일이 없다면 별도 단계로 만들지 않습니다.
+32:검정 배경, **#303030 카드**, 큰 반경의 흰 단추, 얇은 구분선, **400 굵기의 큰 제목**을 공통으로 적용합니다. 결제만 2번처럼 입력과 요약을 나눕니다. 연두색 단추는 버립니다. 지정된 참고 화면의 행동 색과 맞지 않습니다. 번호 스텝퍼도 버립니다. 분기마다 달라지는 전체 절차보다 현재 결정과 뒤로 가기가 중요합니다.
+34:**C. 카피 교체**
+36:| 현재 문구 | 제안 문구 |
+37:|---|---|
+38:| 전략을 실행할 계정을 연결합니다 | 거래소 선택 |
+39:| 주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다. N단계 남았습니다 | 반복 삭제. 승인 화면에만 “연결한 거래소 계정에서 전략 주문을 실행합니다.” |
+40:| 거래소 계정을 연결하면 바로 실행합니다 | Binance 연결 |
+41:| 키를 만들거나 붙여 넣지 않습니다 | 삭제. 주 행동 ‘Binance에서 승인하기’로 연결 방식을 전달합니다. |
+42:| 요청하지 않습니다. TETH는 자산을 옮길 수 없습니다 | 권한 요약의 “출금 권한 · 요청 안 함” |
+43:| 본인 확인은 전략 시작 전에 필요합니다 | 가입 안내에서 “전략 실행 전 거래소 본인 확인이 필요합니다.”를 한 번만 표시합니다. |
+44:| TETH 초대 계정이 이미 있습니까? 바로 연결 | 기존 초대 계정 연결 |
+45:| 현재 구독의 연결 한도에 도달했습니다 | 거래소 2곳이 연결되어 있습니다 |
+46:| 구독 추가 | 구독 추가 · 월 $280 |
+47:| 막히는 곳이 있으면 상담원이 도와드립니다. 24시간 응답합니다 | 고객지원 |
+48:| 거래소 연결 완료 / OKX 계정이 연결되었습니다 | OKX 연결 완료 |
+50:자산 위치 설명은 매 화면에 필요하지 않습니다. 출금 권한 정보는 승인 판단에 필요하므로 짧게 남기고, 불가능을 단정하는 문장은 제거합니다.
+52:**D. 4~8번은 스타일과 카피 수정만으로 해결되지 않으며, 기존 연결 기능을 유지하되 화면 분기와 정보 순서부터 다시 구성해야 합니다.**
+
+ succeeded in 76ms:
+22659:function pxTitle(){
+22660-  var a=acS(), cur=pxCur(), ctx=AC_CTX||{}, n=acName(a.ex), r=acRouteNow();
+22661-  if(cur==='ex') return {h:'거래소 선택',s:'전략을 실행할 거래소를 고르십시오.',back:'plan'};
+22662-  if(cur==='acct'||cur==='guide') return {h:n+' 계정',s:'TETH 초대 링크로 가입한 '+n+' 계정만 연결됩니다.',back:ctx.need?'plan':'ex'};
+22663-  if(cur==='auth') return {h:n+' 연결',s:n+'에서 승인하면 연결됩니다.',back:r==='partner'?'acct':(ctx.need?'':'ex')};
+22664-  if(cur==='uid'){ var u=a.uid.ex===a.ex?a.uid:{st:'none'}; return u.st==='fail'?{h:'TETH 초대 계정이 아닙니다',s:'이 '+n+' 계정은 TETH 초대로 만든 계정이 아닙니다. 아래에서 하나를 고르십시오.',back:''}:{h:n+' 연결 확인 중',s:'승인한 계정을 확인하고 있습니다.',back:''}; }
+22665-  if(cur==='limit') return {h:'거래소 '+AC_PAID_MAX+'곳이 연결되어 있습니다',s:'구독 하나로 '+AC_PAID_MAX+'곳까지 연결됩니다. '+n+' 연결 방법을 고르십시오.',back:'plan'};
+22666-  if(cur==='pay') return {h:'플랜 구성',s:'',back:''};
+22667-  if(cur==='done') return {h:'연결되었습니다',s:(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+acName(a.ex||acConnList()[0])+' 계정에서 실행합니다.',back:''};
+22668-  return {h:'거래소 연결',s:'',back:''};
+22669-}
+22670-function pxHead(t){ return '<header class="pl-cohead px-head">'+(t.back?'<button type="button" class="pl-back" aria-label="뒤로" onclick="pxBack(\''+t.back+'\')">'+PX_CHEV+'</button>':'')+'<h1>'+t.h+'</h1></header>'+(t.s?'<p class="px-lead">'+t.s+'</p>':''); }
+22671-function pxBack(k){
+22672-  var a=acS(), ctx=AC_CTX||{};
+22673-  if(k==='plan'){ if(acConnList().length){ a.ex=null; a.adding=0; a.edit=null; acSave(); acPageView(); } else plView(ctx); return; }
+22674-  if(k==='ex'){ a.edit='ex'; a.exSel=a.ex; acSave(); acRe(); return; }
+22675-  if(k==='acct'){ a.has=null; a.g=0; a.edit=null; acSave(); acRe(); return; }
+22676-}
+22677-function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시간 답합니다.</span><button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
+22678-/* 거래소: 타일을 누르면 바로 다음 화면 */
+22679-function pxBEx(){
+22680-  var a=acS(), ctx=AC_CTX||{};
+22681-  return '<div class="pl-exs px-exs" role="group" aria-label="거래소">'+acExs().map(function(b){ var cn=!!a.conn[b.id];
+--
+22732:    return pxHead(pxTitle()); };
+22733-  acFlowHtml=function(){ var cur=pxCur();
+22734-    if(cur==='route'){ setTimeout(function(){ plView(AC_CTX||{}); },0); return ''; }
+22735-    if(cur==='pay'){ setTimeout(function(){ plCheckout(AC_CTX||{}); },0); return '<p class="px-lead">결제 화면으로 이동합니다.</p>'; }
+22736-    var b={ex:pxBEx,acct:pxBAcct,guide:pxBAcct,auth:pxBAuth,uid:pxBUid,limit:pxBLimit,done:pxBDone}[cur];
+22737-    return (b?b():'')+pxHelp(); };
+22738-  /* 완료 단추: 창이든 화면이든 같은 길 */
+22739-  acSheetDone=function(){ var af=AC_CTX&&AC_CTX.after; AC_CTX=null; plPageOff(); acAfter(af); };
+22740-  /* 거래소 연결 화면: 검정 바탕 한 열 */
+22741-  acPageView=function(ex){
+22742-    if(!S.user){ plView({ex:ex||null}); return; }
+22743-    var a=acS(); if(!acRouteNow()&&!acConnList().length){ plView({ex:ex||null}); return; }
+22744-    tfPageMode('tfbrokers','거래소 연결'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark'); acOpen({ex:ex||null,page:1});
+22745-    var L=acConnList(), OK=L.filter(acConnOk);
+22746-    if(!ex&&L.length&&!OK.length&&!a.adding){ a.ex=L[0]; a.route='paid'; a.pay=a.pay.st==='fail'?a.pay:{st:'none'}; acSave(); }
+22747-    if(!ex&&L.length&&a.ex&&!a.conn[a.ex]&&!a.adding){ a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); }
+22748-    var list=OK.length&&((!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)); AC_CTX.list=list?1:0;
+22749-    TF_RENDERING=true;
+22750-    gContent('<div class="pl pl-co px" id="pl-root"><div id="ac-head">'+acHeadHtml()+'</div><div class="px-body" id="ac-flow">'+(list?pxList()+pxHelp():acFlowHtml())+'</div></div>');
+22751-    TF_RENDERING=false; if(acStep()==='uid') acUidRun();
+22752-  };
+22753-  /* 활성화 창 대신 같은 화면 */
+22754-  acSheetOpen=function(ctx){ ctx=ctx||{}; ctx.sheet=0; acOpen(ctx); AC_CTX=ctx; AC_CTX.page=1;
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n -F -e .pl-exs -e .px-head -e .px-lead ../../index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\ex-plan
+ succeeded in 57ms:
+7115:.pl-exs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+7116:.pl-exs button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 14px;border-radius:20px;border:2px solid transparent;background:#3a3a3a;color:#fff;font:inherit;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+7117:.pl-exs button img,.pl-exs button .acx-mono{border-radius:7px}
+7118:.pl-exs button b{font-size:15px;font-weight:600}.pl-exs button small{font-size:11.5px;color:#cdcdcd}
+7119:.pl-exs button.on{border-color:#9a9a9a;background:#2c2c2c}
+7120:.pl-exs button.off{opacity:.35;cursor:default}
+7169:  .pl-exs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pl-exs button{padding:12px 6px 10px;border-radius:14px}
+7188:.px .px-head{margin-bottom:10px}
+7189:.px-lead{margin:0 0 26px;font-size:18px;line-height:1.5;color:#cdcdcd}
+7248:.acx-cf.px-cf .px-lead{font-size:16px;margin-bottom:22px}
+7254:.acx-cf.px-cf .px-kyc.st-ok .px-lead{margin-bottom:0}
+7263:  .px-lead{font-size:16px;margin-bottom:20px}
+7270:@media (max-width:900px){ body.pl-page .pl-co{padding-top:72px} .px .px-head{margin-bottom:6px} .px .px-head h1{font-size:26px} }
+7271:@media (max-width:900px){ .px{padding-left:16px;padding-right:16px} .px .px-head{align-items:flex-start} .px .px-head .pl-back{margin-top:2px} .px .px-head h1{line-height:1.3} }
+
+codex
+**전체 재구성은 상당 부분 해결됐지만, 계정 화면은 아직 수정이 필수입니다.** 선택→계정 준비→승인→완료가 분리됐고, 검정 배경·회색 카드·흰 단추는 참고 2의 시각 체계에 가까워졌습니다. 아래 수치는 소스값이며, 이미지에서 읽은 위치는 근삿값입니다. 파일은 수정하지 않았습니다.
+
+**가. 화면별 판정**
+
+| 화면 | 판정 | 필수 수정 | 선택 개선 |
+|---|---|---|---|
+| 거래소 선택 | 대체로 가깝습니다. 약 139×108px 타일과 12px 간격이 하나의 선택에 집중합니다. | 타일 배경이 `#3a3a3a`, 반경이 20px입니다. 지정한 `#303030`·26px로 통일합니다. | 로고 상자는 같지만 Bybit 글리프는 다른 로고보다 작게 보입니다. 실제 도형의 시각적 크기를 맞춥니다. |
+| 거래소 계정 | 아직 절차 안내 화면의 성격이 강합니다. | 흰 단추 아래 ‘가입 완료’와 ‘초대 계정으로 바로 연결’이 22px 간격, 같은 14px 링크로 경쟁합니다. 가입 전에는 기존 계정 연결만 남기고, 가입 후에는 주 단추를 ‘계정 연결’로 바꿉니다. | 지름 28px의 번호 원 두 개는 진행 스텝퍼는 아니지만 단계 화면처럼 보이게 합니다. 번호를 없애고 본인 확인은 짧은 안내로 내립니다. |
+| 연결 승인 | 가장 가깝습니다. 권한 카드와 승인 행동의 관계가 명확합니다. | 시각적 필수 수정은 없습니다. | 카드 좌우 여백은 26px로 참고 2 요약 카드의 약 34px보다 8px 작습니다. 현재 폭에는 무리가 없으며, 권한 설명을 14.5→16px로 키우는 편이 더 유효합니다. |
+| 완료 | 가깝습니다. 높이 약 76px의 계정 카드, 20px 간격, 52px 흰 단추로 결과와 다음 행동이 구분됩니다. | 설명이 이미 실행 중인 것처럼 읽힙니다. 아래 카피 수정이 필요합니다. | ‘TETH 초대 계정’은 13.5px·회색입니다. 연결 방식 확인이 중요하다면 14px로 올립니다. |
+| 구독 한도 | 비교 구조는 가깝지만 선택 조건이 부족합니다. | 카드 반경이 데스크톱 20px·모바일 16px로 지정값과 다릅니다. 유료 카드에는 **기존 계정을 유지하는 선택인지** 명시해야 합니다. | 두 카드의 동일한 강조는 적절합니다. 무료 쪽만 강조하지 말고 비용과 계정 조건을 같은 순서로 배치합니다. |
+| 본인 확인 관문 | 표면은 가깝지만 행동 위계가 덜 정리됐습니다. | 제목은 24px로 지정한 32px보다 8px 작습니다. ‘확인을 마쳤습니다’와 ‘닫기’가 왼쪽 아래에 같은 링크로 쌓입니다. 상태 재확인은 본문에, 닫기는 우상단에 분리합니다. | 480px 폭과 좌우 30px 여백은 유지합니다. 제목을 짧게 만들면 크기를 올려도 수용하기 쉽습니다. |
+| 모바일 계정 | 데스크톱의 중복 행동 문제가 그대로 남습니다. | 제목 26px·카드 반경 19px를 각각 32px·26px로 맞춥니다. | 제목 시작점 약 144px와 메뉴 사이 여백은 급히 줄일 필요가 없습니다. |
+| 모바일 한도 | 긴 상태 문장이 화면 제목을 차지합니다. | 26px 제목도 두 줄입니다. ‘Bitget 연결 방법’으로 줄이고 32px를 적용합니다. 현재 설명은 두 문장·두 줄이므로 한도 설명 하나로 정리합니다. | 16px 좌우 여백과 12px 카드 간격은 유지합니다. |
+
+**나. 카피 수정**
+
+단추는 명사형으로 정리하되, 파운더가 고정한 **‘전략 시작하기’는 유지**합니다.
+
+| 현재 | 제안 |
+|---|---|
+| 전략을 실행할 거래소를 고르십시오. | 전략을 실행할 거래소를 선택합니다. |
+| TETH 초대 링크로 가입한 OKX 계정만 연결됩니다. | 이용료 없이 연결하려면 TETH 초대로 가입한 OKX 계정이 필요합니다. |
+| 신분증으로 확인합니다. 전략을 시작하기 전까지 마치면 됩니다. | 전략 실행 전 OKX에서 본인 확인을 완료합니다. |
+| OKX 가입 화면 열기 / 초대 계정으로 바로 연결 | OKX 가입 / 기존 초대 계정 연결 |
+| 전략 계산에 씁니다 | 전략에 사용할 잔고를 조회합니다. |
+| 전략 조건이 맞을 때 사고팝니다 | 전략 조건에 따라 매수·매도 주문을 실행합니다. |
+| OKX에서 승인하기 | OKX 연결 승인 |
+| 전략을 OKX 계정에서 실행합니다. | 전략 시작 시 연결한 OKX 계정을 사용합니다. |
+| 거래소 2곳이 연결되어 있습니다 | Bitget 연결 방법 |
+| 구독 하나로 2곳까지 연결됩니다. Bitget 연결 방법을 고르십시오. | 현재 구독의 연결 한도 2곳을 모두 사용하고 있습니다. |
+| 이용료 없음. 초대 계정이 없으면 새로 가입합니다 | TETH 이용료는 없습니다. 초대 계정이 없으면 새로 가입합니다. |
+| 구독 추가 | 기존 계정 연결 · 구독 추가 |
+| OKX 본인 확인이 필요합니다 | OKX 본인 확인 |
+| 확인을 마쳤습니다 | 본인 확인 상태 확인 |
+| 막히면 상담원이 24시간 답합니다. / 상담원에게 묻기 | 고객지원 |
+
+**다. 처음 보는 사용자의 행동**
+
+| 화면 | 누를 것과 망설임 |
+|---|---|
+| 거래소 선택 | 사용하는 거래소 타일을 누릅니다. |
+| 계정 | 신규 사용자는 ‘OKX 가입’을 누르지만, 돌아오면 두 연결 링크 중 무엇을 눌러야 하는지 망설입니다. |
+| 승인 | 권한을 읽고 흰 승인 단추를 누릅니다. |
+| 완료 | ‘전략 시작하기’를 누릅니다. 현재 설명 때문에 이미 실행됐는지는 잠깐 의심합니다. |
+| 한도 | 기존 계정을 유지하고 싶지만, 구독 추가가 그 목적에 맞는지 설명이 없어 망설입니다. |
+| 본인 확인 | OKX 본인 확인 단추를 누릅니다. 복귀 후 링크가 자기 신고인지 실제 상태 조회인지 불명확합니다. |
+| 모바일 계정·한도 | 누를 대상은 같으며, 중복 링크와 긴 제목 때문에 판단 시간이 더 늘어납니다. |
+
+**라. 지난 검수의 재구성 요구는 큰 흐름에서는 해결됐지만, 계정 화면의 복귀 상태와 한도 화면의 선택 조건까지 정리해야 완료로 판정합니다.**
+tokens used
+69,928
+**전체 재구성은 상당 부분 해결됐지만, 계정 화면은 아직 수정이 필수입니다.** 선택→계정 준비→승인→완료가 분리됐고, 검정 배경·회색 카드·흰 단추는 참고 2의 시각 체계에 가까워졌습니다. 아래 수치는 소스값이며, 이미지에서 읽은 위치는 근삿값입니다. 파일은 수정하지 않았습니다.
+
+**가. 화면별 판정**
+
+| 화면 | 판정 | 필수 수정 | 선택 개선 |
+|---|---|---|---|
+| 거래소 선택 | 대체로 가깝습니다. 약 139×108px 타일과 12px 간격이 하나의 선택에 집중합니다. | 타일 배경이 `#3a3a3a`, 반경이 20px입니다. 지정한 `#303030`·26px로 통일합니다. | 로고 상자는 같지만 Bybit 글리프는 다른 로고보다 작게 보입니다. 실제 도형의 시각적 크기를 맞춥니다. |
+| 거래소 계정 | 아직 절차 안내 화면의 성격이 강합니다. | 흰 단추 아래 ‘가입 완료’와 ‘초대 계정으로 바로 연결’이 22px 간격, 같은 14px 링크로 경쟁합니다. 가입 전에는 기존 계정 연결만 남기고, 가입 후에는 주 단추를 ‘계정 연결’로 바꿉니다. | 지름 28px의 번호 원 두 개는 진행 스텝퍼는 아니지만 단계 화면처럼 보이게 합니다. 번호를 없애고 본인 확인은 짧은 안내로 내립니다. |
+| 연결 승인 | 가장 가깝습니다. 권한 카드와 승인 행동의 관계가 명확합니다. | 시각적 필수 수정은 없습니다. | 카드 좌우 여백은 26px로 참고 2 요약 카드의 약 34px보다 8px 작습니다. 현재 폭에는 무리가 없으며, 권한 설명을 14.5→16px로 키우는 편이 더 유효합니다. |
+| 완료 | 가깝습니다. 높이 약 76px의 계정 카드, 20px 간격, 52px 흰 단추로 결과와 다음 행동이 구분됩니다. | 설명이 이미 실행 중인 것처럼 읽힙니다. 아래 카피 수정이 필요합니다. | ‘TETH 초대 계정’은 13.5px·회색입니다. 연결 방식 확인이 중요하다면 14px로 올립니다. |
+| 구독 한도 | 비교 구조는 가깝지만 선택 조건이 부족합니다. | 카드 반경이 데스크톱 20px·모바일 16px로 지정값과 다릅니다. 유료 카드에는 **기존 계정을 유지하는 선택인지** 명시해야 합니다. | 두 카드의 동일한 강조는 적절합니다. 무료 쪽만 강조하지 말고 비용과 계정 조건을 같은 순서로 배치합니다. |
+| 본인 확인 관문 | 표면은 가깝지만 행동 위계가 덜 정리됐습니다. | 제목은 24px로 지정한 32px보다 8px 작습니다. ‘확인을 마쳤습니다’와 ‘닫기’가 왼쪽 아래에 같은 링크로 쌓입니다. 상태 재확인은 본문에, 닫기는 우상단에 분리합니다. | 480px 폭과 좌우 30px 여백은 유지합니다. 제목을 짧게 만들면 크기를 올려도 수용하기 쉽습니다. |
+| 모바일 계정 | 데스크톱의 중복 행동 문제가 그대로 남습니다. | 제목 26px·카드 반경 19px를 각각 32px·26px로 맞춥니다. | 제목 시작점 약 144px와 메뉴 사이 여백은 급히 줄일 필요가 없습니다. |
+| 모바일 한도 | 긴 상태 문장이 화면 제목을 차지합니다. | 26px 제목도 두 줄입니다. ‘Bitget 연결 방법’으로 줄이고 32px를 적용합니다. 현재 설명은 두 문장·두 줄이므로 한도 설명 하나로 정리합니다. | 16px 좌우 여백과 12px 카드 간격은 유지합니다. |
+
+**나. 카피 수정**
+
+단추는 명사형으로 정리하되, 파운더가 고정한 **‘전략 시작하기’는 유지**합니다.
+
+| 현재 | 제안 |
+|---|---|
+| 전략을 실행할 거래소를 고르십시오. | 전략을 실행할 거래소를 선택합니다. |
+| TETH 초대 링크로 가입한 OKX 계정만 연결됩니다. | 이용료 없이 연결하려면 TETH 초대로 가입한 OKX 계정이 필요합니다. |
+| 신분증으로 확인합니다. 전략을 시작하기 전까지 마치면 됩니다. | 전략 실행 전 OKX에서 본인 확인을 완료합니다. |
+| OKX 가입 화면 열기 / 초대 계정으로 바로 연결 | OKX 가입 / 기존 초대 계정 연결 |
+| 전략 계산에 씁니다 | 전략에 사용할 잔고를 조회합니다. |
+| 전략 조건이 맞을 때 사고팝니다 | 전략 조건에 따라 매수·매도 주문을 실행합니다. |
+| OKX에서 승인하기 | OKX 연결 승인 |
+| 전략을 OKX 계정에서 실행합니다. | 전략 시작 시 연결한 OKX 계정을 사용합니다. |
+| 거래소 2곳이 연결되어 있습니다 | Bitget 연결 방법 |
+| 구독 하나로 2곳까지 연결됩니다. Bitget 연결 방법을 고르십시오. | 현재 구독의 연결 한도 2곳을 모두 사용하고 있습니다. |
+| 이용료 없음. 초대 계정이 없으면 새로 가입합니다 | TETH 이용료는 없습니다. 초대 계정이 없으면 새로 가입합니다. |
+| 구독 추가 | 기존 계정 연결 · 구독 추가 |
+| OKX 본인 확인이 필요합니다 | OKX 본인 확인 |
+| 확인을 마쳤습니다 | 본인 확인 상태 확인 |
+| 막히면 상담원이 24시간 답합니다. / 상담원에게 묻기 | 고객지원 |
+
+**다. 처음 보는 사용자의 행동**
+
+| 화면 | 누를 것과 망설임 |
+|---|---|
+| 거래소 선택 | 사용하는 거래소 타일을 누릅니다. |
+| 계정 | 신규 사용자는 ‘OKX 가입’을 누르지만, 돌아오면 두 연결 링크 중 무엇을 눌러야 하는지 망설입니다. |
+| 승인 | 권한을 읽고 흰 승인 단추를 누릅니다. |
+| 완료 | ‘전략 시작하기’를 누릅니다. 현재 설명 때문에 이미 실행됐는지는 잠깐 의심합니다. |
+| 한도 | 기존 계정을 유지하고 싶지만, 구독 추가가 그 목적에 맞는지 설명이 없어 망설입니다. |
+| 본인 확인 | OKX 본인 확인 단추를 누릅니다. 복귀 후 링크가 자기 신고인지 실제 상태 조회인지 불명확합니다. |
+| 모바일 계정·한도 | 누를 대상은 같으며, 중복 링크와 긴 제목 때문에 판단 시간이 더 늘어납니다. |
+
+**라. 지난 검수의 재구성 요구는 큰 흐름에서는 해결됐지만, 계정 화면의 복귀 상태와 한도 화면의 선택 조건까지 정리해야 완료로 판정합니다.**
