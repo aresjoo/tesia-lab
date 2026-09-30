@@ -7714,6 +7714,25 @@ body.g-dark #g-appbanner{background:#000}
 .ska .ft{padding:4px 20px 12px}
 body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 @media (max-width:760px){ .ska .op{grid-template-columns:minmax(0,1fr);gap:1px;padding:9px 12px} .ska .op span{white-space:normal} }
+/* 질문 중에는 바텀시트가 입력창 자리를 덮는다(Genspark식). 직접 답은 시트 안 입력칸으로 */
+.g-composer-wrap:has(#g-askdock .ska) .g-composer{display:none}
+.g-composer-wrap:has(#g-askdock .ska) #g-askdock{margin-bottom:0}
+.g-composer-wrap:has(#g-askdock .ska) .ska{box-shadow:0 -12px 32px rgba(0,0,0,.55)}
+/* 선택지로 답한 요약도 내 말풍선과 같은 어두운 색 */
+.g-usum{background:var(--g2);border-radius:18px}
+.g-usum .rw b{font-size:13px;font-weight:500;color:#cdcdcd}
+.g-usum .rw span{font-size:15px;color:#fff}
+/* Powered by Bitget: 강조 카드와 주 단추는 Bitget 청록. 카드는 어두운 청록이라 흰 글자 유지, 청록 바탕 단추만 검정 글자 */
+.pl-card.pl-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#0e0e0e 0%,#0a2a2e 48%,#0b4851 100%)}
+.px-card.px-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#141414 0%,#0a2a2e 48%,#0b4851 100%)}
+.pl-cta-hi,.px-cta.pl-cta-hi{background:#00f0ff;border-color:#00f0ff;color:#000;font-weight:500}
+.pl-cta-hi:hover,.px-cta.pl-cta-hi:hover{background:#5cf6ff;border-color:#5cf6ff}
+.pl-grad{background:linear-gradient(120deg,#e0feff 0%,#00f0ff 55%,#7ff7ff 100%);-webkit-background-clip:text;background-clip:text}
+.pl-hi .pl-items li svg,.pl-sumcard .pl-items li svg,.px-perm li,.px-hi .px-steps li.ok b svg{color:#00f0ff}
+.px-hi .px-steps li.ok span{color:#d9fbff}
+.acx-ac li::before{border-color:#00f0ff}
+.px-card.px-hi{animation-name:pxHiC}
+@keyframes pxHiC{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(0,240,255,0)}50%{box-shadow:0 0 0 6px rgba(0,240,255,.16)}to{border-color:rgba(0,240,255,.55);box-shadow:0 0 0 0 rgba(0,240,255,0)}}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -11283,10 +11302,10 @@ function taiMarketRules(){
    +'\n예시, 비트코인: [CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}] / 테슬라: [CHART {"tv":"NASDAQ:TSLA","data":"yahoo:TSLA","label":"테슬라"}] / S&P500: [CHART {"tv":"SP:SPX","data":"yahoo:^GSPC","label":"S&P 500"}] / 미국 부동산: [CHART {"tv":"AMEX:VNQ","data":"yahoo:VNQ","label":"미국 리츠 ETF"}] / 두바이 증시: [CHART {"tv":"DFM:DFMGI","data":"none","label":"두바이 종합지수"}]'
    +'\n태그는 줄 하나에만, 자산이 특정될 때만 붙인다. 이미 같은 차트가 열려 있으면 붙이지 않는다.'
    +'\n핵심 비즈니스는 자동매매 전략 생성이다. 예측이나 시장 분석 답변의 끝에는 한 문장으로, 원하면 이 분석을 시장에서 싸우는 자동매매 전략으로 만들어줄 수 있고 자는 동안에도 자동으로 매매된다는 제안을 자연스럽게 덧붙여라. 사용자가 전혀 다른 주제를 물으면 먼저 그 질문에 응대한 뒤 가볍게 전략 제안으로 돌아오라. 단, 직전 답변에서 이미 제안했다면 똑같은 제안을 반복해 부담 주지 마라.'
-   +'\n전략 설계서: 사용자가 사고파는 조건을 구체적으로 말하거나(예: "비트코인 크게 빠지면 사서 10% 오르면 팔아", "공포 지수 낮을 때만 사") 전략을 직접 설계해 달라고 하면, SETUP 대신 답변 마지막 줄에 정확히 이 형식의 태그를 붙여라: [STRATEGY {"asset":"비트코인","depth":"deep","tp":10,"sl":-5,"fng":25,"trend":false,"period":"1y","name":"공포에 사는 비트코인"}]. asset 은 비트코인, 이더리움, 솔라나, 리플, 도지코인, 에이다, 아발란체, 비앤비, 테슬라, 엔비디아, 애플, 마이크로소프트, 아마존, 메타, 알파벳, 에이엠디, 금, 나스닥, S&P 500 중 하나. depth 는 얼마나 밀렸을 때 살지로 shallow(조금), mid(보통), deep(크게). tp 는 익절 %(없으면 null), sl 은 손절 %(음수, -1에서 -15). fng 는 공포 탐욕 지수 상한(그 값 이하일 때만 산다, 코인에만, 없으면 null). trend 가 true 면 가격이 한쪽으로 뚜렷할 때만 산다. period 는 1y, 2y, all. name 은 14자 이내. 이 엔진이 계산할 수 있는 것은 "밀렸다가 하루 0.5% 넘게 반등한 날 산다"는 사는 방식 하나와 익절, 손절, 25일 보유 한도, 공포 탐욕 지수 상한뿐이다. 사용자의 조건이 이 틀과 다르면 가장 가까운 값으로 옮기고, 무엇이 달라졌는지 한 문장으로 솔직하게 말하라. 뉴스, 거래량, 다른 지표처럼 계산할 수 없는 조건은 빼고 뺐다고 말하라. 수익률을 예상하거나 숫자를 지어내지 마라. 결과는 화면의 백테스트가 실제 시세로 계산한다. 이 태그를 붙이면 NEXT, ACT, SETUP 은 붙이지 않는다.'
+   +'\n전략 설계서: 사용자가 사고파는 조건을 구체적으로 말하거나(예: "비트코인 크게 빠지면 사서 10% 오르면 팔아", "공포 지수 낮을 때만 사") 전략을 직접 설계해 달라고 하면, SETUP 대신 답변 마지막 줄에 정확히 이 형식의 태그를 붙여라: [STRATEGY {"asset":"비트코인","depth":"deep","tp":10,"sl":-5,"fng":25,"trend":false,"period":"1y","name":"공포에 사는 비트코인"}]. asset 은 비트코인, 이더리움, 솔라나, 리플, 도지코인, 에이다, 아발란체, 비앤비, 테슬라, 엔비디아, 애플, 마이크로소프트, 아마존, 메타, 알파벳, 에이엠디, 금, 나스닥, S&P 500 중 하나. depth 는 얼마나 밀렸을 때 살지로 shallow(조금), mid(보통), deep(크게). tp 는 익절 %(없으면 null), sl 은 손절 %(음수, -1에서 -15). fng 는 공포 탐욕 지수 상한(그 값 이하일 때만 산다, 코인에만, 없으면 null). trend 가 true 면 가격이 한쪽으로 뚜렷할 때만 산다. period 는 1y, 2y, all. name 은 14자 이내. 사용자가 RSI 숫자(예: RSI 10 미만)를 말하면 depth 대신 "rsi":10 처럼 그 숫자(5~70)를 넣어라, 엔진은 RSI(14)가 그 값 아래로 내려갔다가 반등한 날 산다. 이 엔진이 계산할 수 있는 것은 "밀렸다가 하루 0.5% 넘게 반등한 날 산다"는 사는 방식 하나와 익절, 손절, 25일 보유 한도, 공포 탐욕 지수 상한뿐이다. 사용자의 조건이 이 틀과 다르면 가장 가까운 값으로 옮기고, 무엇이 달라졌는지 한 문장으로 솔직하게 말하라. 뉴스, 거래량, 다른 지표처럼 계산할 수 없는 조건은 빼고 뺐다고 말하라. 사용자가 말한 조건은 하나도 조용히 버리지 마라: 레버리지, 하루보다 짧은 봉이나 확인 주기(1분, 1시간), 계산할 수 없는 지표처럼 반영하지 못한 조건은 "skip":["레버리지 20배","1분마다 확인"] 처럼 사용자의 말 그대로 태그에 넣고, 본문 첫 문장에서 무엇을 그대로 넣었고 무엇을 이번 검증에서 뺐는지 밝혀라(검증은 일봉 현물로 계산한다). 사용자가 새로 말한 조건이 앞선 답이나 선택과 다르면 새 말을 따르고, 새 말에 없는 값만 앞선 답에서 가져온다. 수익률을 예상하거나 숫자를 지어내지 마라. 결과는 화면의 백테스트가 실제 시세로 계산한다. 이 태그를 붙이면 NEXT, ACT, SETUP 은 붙이지 않는다.'
    +'\n사용자가 자동매매 전략 생성, 매매 위임, 조건부 실행을 원하거나 제안에 동의하면, 답변 마지막 줄에 반드시 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 자산이 BTC나 ETH가 아니면 pair는 null로 두고, 자동 실행은 코인 페어부터 지원되니 같은 구조를 BTC/ETH로 만들어 보자고 한 문장으로 안내하라. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라. 태그 없이 "아래에서 설정하십시오" 같은 말은 절대 하지 마라, 태그가 있어야 화면에 설정이 뜬다.'
    +'\n요청이 광범위해서 분석 방향 확인이 필요하면(예: 막연한 "차트 분석해줘"), 한두 문장 안내 후 답변 마지막 줄에 [ASK {"steps":[{"title":"어떤 방식으로 분석해드리면 되겠습니까?","multi":true,"options":[{"t":"항목","d":"짧은 부연"}]},{"title":"어느 기간을 보겠습니까?","multi":false,"options":[{"t":"최근 3개월","d":"단기 흐름"},{"t":"최근 1년","d":"큰 흐름"}]}]}] 형식으로 선택지를 제시하라. 확인할 축이 하나면 steps에 1개만, 최대 2단계. 각 단계 선택지는 4~6개. 정말 필요할 때만, 연속 사용 금지.'
-   +'\n전략 정보 확인: 사용자가 전략을 만들거나 대신 사고팔아 달라고 했는데 자산, 사는 때, 파는 때(익절이나 손절), 검증 기간 가운데 대화에서 알 수 없는 것이 있으면 STRATEGY 대신 [ASK]로 빠진 것만 물어라. 대화에서 이미 나온 것은 다시 묻지 마라. 최대 4단계, 단계마다 multi 는 false, 선택지 3~4개(t 는 10자 이내, d 는 한 줄). 이때 답변 본문은 "몇 가지만 여쭙겠습니다." 한 문장만 쓴다. 사용자가 알아서 하라고 하거나 질문에 이미 답했으면 다시 묻지 말고 합리적으로 채워 STRATEGY 로 바로 만든다.'
+   +'\n전략 정보 확인: 사용자가 전략을 만들거나 대신 사고팔아 달라고 했는데 자산, 사는 때, 파는 때(익절이나 손절), 검증 기간 가운데 대화에서 알 수 없는 것이 있으면 STRATEGY 대신 [ASK]로 빠진 것만 물어라. 대화에서 이미 나온 것은 다시 묻지 마라. 선택지는 사용자가 쓴 말과 지표로 만든다(예: 사용자가 RSI로 말했으면 "RSI 20 아래", "RSI 30 아래"처럼, "조금 밀릴 때" 같은 다른 틀로 바꿔 묻지 마라). 사용자가 말한 값이 있으면 그 값을 첫 선택지로 둔다. 최대 4단계, 단계마다 multi 는 false, 선택지 3~4개(t 는 10자 이내, d 는 한 줄). 이때 답변 본문은 "몇 가지만 여쭙겠습니다." 한 문장만 쓴다. 사용자가 알아서 하라고 하거나 질문에 이미 답했으면 다시 묻지 말고 합리적으로 채워 STRATEGY 로 바로 만든다.'
    +'\n면책 금지: "과거 성과일 뿐", "수익을 보장하지 않는다", "투자 권유가 아니다" 같은 면책이나 경고 문장, 경고 상자를 쓰지 마라. 사실과 조건만 말한다.'
    +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 두 번째 답변부터는 절대 붙이지 않는다.'
    +'\n방향성 확률: 사용자가 특정 자산의 방향(오를까, 내릴까, 사도 될까, 팔아야 할까)을 물으면 답변 마지막 줄에 정확히 이 형식의 태그를 하나만 붙여라: [GAUGE {"symbol":"TSLA","label":"테슬라","up":63,"down":37,"position":"top"}] — up과 down은 합이 100인 정수 확률로, 방금 분석한 지표와 구조에 근거해 정한다. position은 스스로 판단한다: 결론부터 궁금한 직접 질문("테슬라 오를까?")이면 "top"(확률을 먼저 보여주고 설명), 맥락 설명이 먼저 필요한 흐름이면 "bottom". 방향 질문이 아니면(가격 확인, 용어 질문, 일반 시장 잡담) 절대 붙이지 않는다.'
@@ -22787,9 +22806,14 @@ function rvActs(){
   var fix='<button type="button" class="bt-cta" onclick="rvFix()">규칙 수정하기</button>';
   var links=function(L){ return '<p class="rv-links">'+L.map(function(x){ return '<button type="button" onclick="'+x[1]+'">'+x[0]+'</button>'; }).join('<i>·</i>')+'</p>'; };
   var note=none?'<p class="rv-note">거래가 한 번도 없어 결과를 판단하기 어렵습니다. 조건을 넓히거나 기간을 바꿔 보십시오.</p>':'';
-  if(mine){ if(bad||none) return note+fix+runQ; return run+links([['규칙 수정하기','rvFix()']]); }
-  return note+run;
+  if(mine){ if(bad||none) return note+fix+runQ+links([['대화로 돌아가기','rvChat()']]); return run+links([['규칙 수정하기','rvFix()'],['대화로 돌아가기','rvChat()']]); }
+  return note+run+links([['다른 전략 둘러보기','rvBrowse()']]);
 }
+/* 들어온 곳으로 돌아가기: 내 전략은 그 전략을 만든 대화, 공개 전략은 전략 복사 목록 */
+function rvChat(){ var t=tfS(), sid=t.aiSpec&&t.aiSpec.sess, sx=sid?G.sessions.filter(function(x){ return x.id===sid; })[0]:null;
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  if(!sx){ gHome(); return; } gSelect(sx.id); if(G.mode!=='conv') gShowConv(); }
+function rvBrowse(){ tfShareHub('find'); }
 /* 이전 판과 비교: 같은 기간과 금액일 때만 숫자를 나란히 놓는다 */
 function rvCompare(){
   var t=tfS(), V=t.btVers||[], v=V[0], R=BT.R, s=BT.s; if(!v||!s||!s.mine||!R) return '';
@@ -23429,10 +23453,14 @@ function skcAutoPublish(){
   var t=tfS(), s=BT.s; if(!s||!s.mine||!t.cur) return;
   var nm=(s.name&&String(s.name).trim())||mkHook(s), first=!t.shared||!t.sharedSnap||t.sharedSnap.name!==nm;
   t.sharedName=nm;
-  t.sharedSnap={name:nm,asset:(t.intake&&t.intake.asset)||s.asset||'',score:t.score||0,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p?JSON.parse(JSON.stringify(t.cur.p)):null,srcAt:null,desc:'',at:new Date().toISOString().slice(0,10),auto:1};
+  t.sharedSnap={name:nm,asset:skcAssetName((t.intake&&t.intake.asset)||s.asset),score:t.score||0,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p?JSON.parse(JSON.stringify(t.cur.p)):null,srcAt:null,desc:'',at:new Date().toISOString().slice(0,10),auto:1};
   t.shared=true; tfSave();
   if(first) try{ tfTrack('ss_auto_publish',{name:nm}); }catch(e){}
 }
+
+/* 자산은 글자로만 저장한다(예전 저장분의 객체는 불러올 때 바로잡는다): [object Object] 제목 방지 */
+function skcAssetName(a){ return (a&&typeof a==='object')?String(a.label||a.name||''):String(a||''); }
+(function(){ var r0=tfSSRows; tfSSRows=function(){ try{ var t=tfS(); if(t&&t.sharedSnap&&t.sharedSnap.asset&&typeof t.sharedSnap.asset==='object'){ t.sharedSnap.asset=skcAssetName(t.sharedSnap.asset); tfSave(); } }catch(e){} return r0.apply(this,arguments); }; })();
 
 /* ═══ 첫 화면(AI 트레이딩 소개)과 전략 찾기 목록을 ChatGPT 어휘로 (sk-main) ═══
    첫 화면: 제목, 부제 문구만 바꾼다. 영상, "영원히 무료" 줄, 그 아래 섹션은 그대로.
@@ -23572,6 +23600,26 @@ function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value
   var ts0=tfStart; tfStart=function(act){
     if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); f.value=act.label; gSend(); return; }
     return ts0.apply(this,arguments); };
+})();
+/* 전략 설계서 카드가 사용자의 말을 그대로 보여 준다: RSI 숫자는 그대로 엔진 기준값으로, 계산하지 못한 조건은 "검증에서 뺀 조건"으로 */
+(function(){
+  var ai1=tfAiStrategy;
+  tfAiStrategy=function(sp){
+    if(!sp||(window.RV&&RV.on&&!RV.apply)) return ai1.apply(this,arguments);
+    var rsi=(sp.rsi!=null&&isFinite(+sp.rsi))?Math.max(5,Math.min(70,Math.round(+sp.rsi))):null;
+    var skip=Array.isArray(sp.skip)?sp.skip.map(function(x){ return String(x||'').trim(); }).filter(Boolean).slice(0,4):[];
+    if(rsi==null&&!skip.length) return ai1.apply(this,arguments);
+    var sp2={}; for(var k in sp) sp2[k]=sp[k]; if(rsi!=null){ TF_AI_DEPTH.__rsi=rsi; sp2.depth='__rsi'; }
+    var ta=taiThreadAdd;
+    taiThreadAdd=function(h){
+      if(typeof h==='string'&&h.indexOf('class="tf-sum"')>=0){
+        if(rsi!=null) h=h.replace(/(<span class="v">)[^<]*?밀렸다가 하루 0\.5% 넘게 반등한 날/,'$1RSI가 '+rsi+' 아래로 내려갔다가 하루 0.5% 넘게 반등한 날');
+        if(skip.length) h=h.replace('</div><div style="font-size:11.5px','<div class="r"><span class="k">검증에서 뺀 조건</span><span class="v">'+gEsc(skip.join(', '))+'</span></div></div><div style="font-size:11.5px');
+      }
+      return ta.apply(this,arguments.length?[h].concat([].slice.call(arguments,1)):arguments);
+    };
+    try{ return ai1.call(this,sp2); } finally{ taiThreadAdd=ta; delete TF_AI_DEPTH.__rsi; }
+  };
 })();
 /*BT_CORE_END*/
 </script>

@@ -71,7 +71,11 @@ function skcAutoPublish(){
   var t=tfS(), s=BT.s; if(!s||!s.mine||!t.cur) return;
   var nm=(s.name&&String(s.name).trim())||mkHook(s), first=!t.shared||!t.sharedSnap||t.sharedSnap.name!==nm;
   t.sharedName=nm;
-  t.sharedSnap={name:nm,asset:(t.intake&&t.intake.asset)||s.asset||'',score:t.score||0,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p?JSON.parse(JSON.stringify(t.cur.p)):null,srcAt:null,desc:'',at:new Date().toISOString().slice(0,10),auto:1};
+  t.sharedSnap={name:nm,asset:skcAssetName((t.intake&&t.intake.asset)||s.asset),score:t.score||0,ret:t.cur.ret,mdd:t.cur.mdd,n:t.cur.n,winRate:t.cur.winRate||0,p:t.cur.p?JSON.parse(JSON.stringify(t.cur.p)):null,srcAt:null,desc:'',at:new Date().toISOString().slice(0,10),auto:1};
   t.shared=true; tfSave();
   if(first) try{ tfTrack('ss_auto_publish',{name:nm}); }catch(e){}
 }
+
+/* 자산은 글자로만 저장한다(예전 저장분의 객체는 불러올 때 바로잡는다): [object Object] 제목 방지 */
+function skcAssetName(a){ return (a&&typeof a==='object')?String(a.label||a.name||''):String(a||''); }
+(function(){ var r0=tfSSRows; tfSSRows=function(){ try{ var t=tfS(); if(t&&t.sharedSnap&&t.sharedSnap.asset&&typeof t.sharedSnap.asset==='object'){ t.sharedSnap.asset=skcAssetName(t.sharedSnap.asset); tfSave(); } }catch(e){} return r0.apply(this,arguments); }; })();

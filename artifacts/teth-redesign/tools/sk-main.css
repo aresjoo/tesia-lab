@@ -150,3 +150,22 @@ body.g-dark #g-appbanner{background:#000}
 .ska .ft{padding:4px 20px 12px}
 body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 @media (max-width:760px){ .ska .op{grid-template-columns:minmax(0,1fr);gap:1px;padding:9px 12px} .ska .op span{white-space:normal} }
+/* 질문 중에는 바텀시트가 입력창 자리를 덮는다(Genspark식). 직접 답은 시트 안 입력칸으로 */
+.g-composer-wrap:has(#g-askdock .ska) .g-composer{display:none}
+.g-composer-wrap:has(#g-askdock .ska) #g-askdock{margin-bottom:0}
+.g-composer-wrap:has(#g-askdock .ska) .ska{box-shadow:0 -12px 32px rgba(0,0,0,.55)}
+/* 선택지로 답한 요약도 내 말풍선과 같은 어두운 색 */
+.g-usum{background:var(--g2);border-radius:18px}
+.g-usum .rw b{font-size:13px;font-weight:500;color:#cdcdcd}
+.g-usum .rw span{font-size:15px;color:#fff}
+/* Powered by Bitget: 강조 카드와 주 단추는 Bitget 청록. 카드는 어두운 청록이라 흰 글자 유지, 청록 바탕 단추만 검정 글자 */
+.pl-card.pl-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#0e0e0e 0%,#0a2a2e 48%,#0b4851 100%)}
+.px-card.px-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#141414 0%,#0a2a2e 48%,#0b4851 100%)}
+.pl-cta-hi,.px-cta.pl-cta-hi{background:#00f0ff;border-color:#00f0ff;color:#000;font-weight:500}
+.pl-cta-hi:hover,.px-cta.pl-cta-hi:hover{background:#5cf6ff;border-color:#5cf6ff}
+.pl-grad{background:linear-gradient(120deg,#e0feff 0%,#00f0ff 55%,#7ff7ff 100%);-webkit-background-clip:text;background-clip:text}
+.pl-hi .pl-items li svg,.pl-sumcard .pl-items li svg,.px-perm li,.px-hi .px-steps li.ok b svg{color:#00f0ff}
+.px-hi .px-steps li.ok span{color:#d9fbff}
+.acx-ac li::before{border-color:#00f0ff}
+.px-card.px-hi{animation-name:pxHiC}
+@keyframes pxHiC{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(0,240,255,0)}50%{box-shadow:0 0 0 6px rgba(0,240,255,.16)}to{border-color:rgba(0,240,255,.55);box-shadow:0 0 0 0 rgba(0,240,255,0)}}

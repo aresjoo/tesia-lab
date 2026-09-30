@@ -51,12 +51,24 @@ await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); a
 await ev(`location.hash='#/share/bt/r1'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
 s=await J(`{mine:!!BT.s.mine,bad:rvBad(),btns:[].map.call(document.querySelectorAll('#bt-root .bt-cta, #bt-root .bt-sec'),function(b){ return b.innerText.trim(); }),cmp:!!document.querySelector('.rv-cmp')}`);
 ok('복사 전략, 나쁜 결과: 이 전략 실행하기만, 다른 전략 만들기와 규칙 수정 없음',!s.mine&&s.bad&&s.btns[0]==='이 전략 실행하기'&&s.btns.indexOf('다른 전략 만들기')<0&&s.btns.indexOf('규칙 수정하기')<0&&!s.cmp,s);
+s=await J(`[].map.call(document.querySelectorAll('#bt-root .rv-links button'),function(b){ return b.innerText.trim(); })`);
+ok('복사 전략: 아래 링크는 다른 전략 둘러보기',Array.isArray(s)&&s.indexOf('다른 전략 둘러보기')>=0,s);
 await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); await shot(p,DIR+'R3-result-bad-copy.png',{full:false});
 // 좋은 결과
 await ev(`location.hash='#/share/bt/f1'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
 s=await J(`{bad:rvBad(),ret:+BT.R.ret.toFixed(0),btns:[].map.call(document.querySelectorAll('#bt-root .bt-cta'),function(b){ return b.innerText.trim(); }),links:[].map.call(document.querySelectorAll('#bt-root .rv-links button'),function(b){ return b.innerText.trim(); })}`);
 ok('좋은 결과: 이 전략 실행하기가 첫 단추, 다른 전략 만들기 없음',!s.bad&&s.btns[0]==='이 전략 실행하기'&&s.links.indexOf('다른 전략 만들기')<0,s);
 await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); await shot(p,DIR+'R1-result-good.png',{full:false});
+await ev(`rvBrowse()`); await sleep(2000);
+s=await J(`{hash:location.hash,bt:!!document.getElementById('bt-root'),cards:document.querySelectorAll('#g-content .mk3-card, #g-content .skf-card, #g-content [class*=skf]').length}`);
+ok('다른 전략 둘러보기: 전략 복사 목록으로 이동',!s.bt&&s.cards>0,s);
+// 내 전략 결과에서 대화로 돌아가기
+await ev(`location.hash='#/share/bt/mine'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
+s=await J(`[].map.call(document.querySelectorAll('#bt-root .rv-links button'),function(b){ return b.innerText.trim(); })`);
+ok('내 전략: 아래 링크에 대화로 돌아가기',Array.isArray(s)&&s.indexOf('대화로 돌아가기')>=0,s);
+await ev(`rvChat()`); await sleep(1500);
+s=await J(`{mode:G.mode,cur:G.cur&&G.cur.id,sess:tfS().aiSpec.sess,bt:!!document.getElementById('bt-root')}`);
+ok('대화로 돌아가기: 그 전략을 만든 대화로 이동',s.mode==='conv'&&s.cur===s.sess&&!s.bt,s);
 s=await J(`window.__errs`); ok('콘솔 오류 없음',Array.isArray(s)&&s.length===0,s);
 const pass=out.filter(x=>x.startsWith('PASS')).length; out.push('','TOTAL '+pass+' / '+out.length); console.log(out[out.length-1]);
 fs.writeFileSync(DIR+'rv-check.txt',out.join('\n'));

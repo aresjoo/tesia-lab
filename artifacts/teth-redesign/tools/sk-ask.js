@@ -66,3 +66,23 @@ function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value
     if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); f.value=act.label; gSend(); return; }
     return ts0.apply(this,arguments); };
 })();
+/* 전략 설계서 카드가 사용자의 말을 그대로 보여 준다: RSI 숫자는 그대로 엔진 기준값으로, 계산하지 못한 조건은 "검증에서 뺀 조건"으로 */
+(function(){
+  var ai1=tfAiStrategy;
+  tfAiStrategy=function(sp){
+    if(!sp||(window.RV&&RV.on&&!RV.apply)) return ai1.apply(this,arguments);
+    var rsi=(sp.rsi!=null&&isFinite(+sp.rsi))?Math.max(5,Math.min(70,Math.round(+sp.rsi))):null;
+    var skip=Array.isArray(sp.skip)?sp.skip.map(function(x){ return String(x||'').trim(); }).filter(Boolean).slice(0,4):[];
+    if(rsi==null&&!skip.length) return ai1.apply(this,arguments);
+    var sp2={}; for(var k in sp) sp2[k]=sp[k]; if(rsi!=null){ TF_AI_DEPTH.__rsi=rsi; sp2.depth='__rsi'; }
+    var ta=taiThreadAdd;
+    taiThreadAdd=function(h){
+      if(typeof h==='string'&&h.indexOf('class="tf-sum"')>=0){
+        if(rsi!=null) h=h.replace(/(<span class="v">)[^<]*?밀렸다가 하루 0\.5% 넘게 반등한 날/,'$1RSI가 '+rsi+' 아래로 내려갔다가 하루 0.5% 넘게 반등한 날');
+        if(skip.length) h=h.replace('</div><div style="font-size:11.5px','<div class="r"><span class="k">검증에서 뺀 조건</span><span class="v">'+gEsc(skip.join(', '))+'</span></div></div><div style="font-size:11.5px');
+      }
+      return ta.apply(this,arguments.length?[h].concat([].slice.call(arguments,1)):arguments);
+    };
+    try{ return ai1.call(this,sp2); } finally{ taiThreadAdd=ta; delete TF_AI_DEPTH.__rsi; }
+  };
+})();

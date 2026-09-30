@@ -34,7 +34,7 @@ ok('갈래 1: 좋은 결과에서 실행 → 결과 카드가 같은 크기로 �
 await snap('P1-plan-with-backtest');
 // 갈래 2: 나쁜 결과에서 실행 → 결과 카드 없음
 await ev(`location.hash='#/share/bt/r1'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(1500);
-await ev(`(function(){ var L=document.querySelectorAll('#bt-root .bt-sec'); for(var i=0;i<L.length;i++) if(/실행하기/.test(L[i].innerText)){ L[i].click(); return; } })()`); await sleep(1200);
+await ev(`(function(){ var L=document.querySelectorAll('#bt-root .bt-cta, #bt-root .bt-sec'); for(var i=0;i<L.length;i++) if(/실행하기/.test(L[i].innerText)){ L[i].click(); return; } })()`); await sleep(1200);
 s=await J(`{pl:!!document.getElementById('pl-root'),bt:!!document.querySelector('.pl-bt')}`); ok('갈래 2: 나쁜 결과에서 실행 → 플랜 화면, 결과 카드 없음',s.pl&&!s.bt,s);
 // 무료 경로: 가입 안내가 기본, 작은 링크로 바로 연결
 await ev(`plPick('partner')`); await sleep(900);
