@@ -70,6 +70,7 @@
   document.body.appendChild(btn); document.body.appendChild(pop);
 
   function hwOpen(){
+    pop._t = Date.now(); /* 링크로 열 때 같은 클릭이 문서까지 올라가 바로 닫히지 않게 */
     var cfg = window.TETH_CONFIG || {};
     if (cfg.zendeskKey) {
       if (window.zE) { window.zE('webWidget','open'); return; }
@@ -96,6 +97,7 @@
     setTimeout(fin, 260);
   }
   document.addEventListener('click', function(e){
+    if (Date.now() - (pop._t || 0) < 400) return;
     if (!pop.contains(e.target) && !btn.contains(e.target)) hwClose();
   });
 })();

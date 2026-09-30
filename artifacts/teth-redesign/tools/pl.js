@@ -88,7 +88,7 @@ function plCheckout(ctx){
   var acct='';
   TF_RENDERING=true;
   gContent('<div class="pl pl-co" id="pl-root"><header class="pl-cohead"><button type="button" class="pl-back" aria-label="뒤로" onclick="plView(PL.ctx)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1>플랜 구성</h1></header>'
-    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3 pl-hid">TETH 구독</h3><p class="pl-d2">결제를 마치면 거래소를 연결합니다. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.</p>'+exs
+    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3 pl-hid">TETH 구독</h3>'+exs
     +'<h3 class="pl-t3 mt0">결제 수단 선택하기</h3>'+pay+'</section>'
     +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
     +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li><li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li><li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li><li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'

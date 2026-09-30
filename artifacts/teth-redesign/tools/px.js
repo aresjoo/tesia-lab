@@ -37,8 +37,8 @@ function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
 function pxBAcct(){
   var a=acS(), n=acName(a.ex), j=!!a.joined&&a.has==='no';
   return '<div class="px-card'+(j?' px-hi':'')+'"><ul class="px-steps"><li'+(j?' class="ok"':'')+'><b>'+(j?AC_CK:'')+'TETH 초대 링크로 가입</b><span>'+(j?n+' 가입 화면을 열었습니다. 가입을 마쳤다면 계정을 연결합니다.':'이메일이나 전화번호로 가입합니다.')+'</span></li><li><b>본인 확인</b><span>전략을 시작하기 전에 '+n+'에서 마칩니다.</span></li></ul></div>'
-    +(j?'<button type="button" class="pl-cta pl-cta-hi px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a></p>'
-      :'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="pxJoined()">'+n+' 가입 화면 열기'+AC_OUT+'</a><p class="px-links"><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">기존 초대 계정 연결</button></p>');
+    +(j?'<button type="button" class="pl-cta pl-cta-hi px-cta" onclick="acGuide(2)">가입한 계정 연결</button><p class="px-links"><a class="pl-link acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener">'+n+' 가입 화면 다시 열기</a>'+pxPaidLink(n)+'</p>'
+      :'<a class="pl-cta pl-cta-w px-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="pxJoined()">'+n+' 가입 화면 열기'+AC_OUT+'</a><p class="px-links"><button type="button" class="pl-link acx-have" onclick="acHas(\'yes\')">기존 초대 계정 연결</button>'+pxPaidLink(n)+'</p>');
 }
 function pxJoined(){ acGuideOpen(); setTimeout(acRe,50); }
 /* 승인: 권한 두 줄, 단추 하나 */
@@ -46,7 +46,7 @@ function pxBAuth(){
   var a=acS(), n=acName(a.ex), st=a.auth.ex===a.ex?a.auth.st:'idle';
   return '<div class="px-card"><ul class="px-perm"><li>'+AC_CK+'<span><b>잔고 조회</b>전략에 쓸 잔고를 봅니다</span></li><li>'+AC_CK+'<span><b>주문</b>전략 조건에 맞을 때 주문을 냅니다</span></li></ul></div>'
     +(st==='fail'?'<p class="acx-fail px-fail" role="alert">'+n+'에서 승인을 마치지 못했습니다. 잠시 뒤 다시 시도해 주십시오.</p>':st==='cancel'?'<p class="px-note" role="status">승인을 취소했습니다. 연결된 것은 없습니다.</p>':'')
-    +'<button type="button" class="pl-cta pl-cta-w px-cta" id="ac-go" onclick="acAuthOpen()">'+acLogo(a.ex,20)+n+'에서 승인하기</button>';
+    +'<button type="button" class="pl-cta pl-cta-w px-cta" id="ac-go" onclick="acAuthOpen()">'+acLogo(a.ex,20)+n+'에서 승인하기</button>'+pxInviteLink();
 }
 /* 초대 계정 확인: 진행 중이면 두 줄 목록, 아니면 세 갈래 */
 function pxBUid(){
@@ -146,4 +146,31 @@ function pxList(){
     return '<div class="px-kyc st-'+st+'" id="ac-kyc"><p class="px-lead">'+s+'</p>'+act+'</div>'; };
   var rg0=acRunGate; acRunGate=function(ex,cb){ var a=acS(); ex=ex||acConnList()[0]; if(!ex||!a.conn[ex]||acRunOk(ex)){ cb(); return; }
     rg0.call(this,ex,cb); var d=document.getElementById('ac-cf'); if(!d) return; d.classList.add('px-cf'); var h=d.querySelector('h3'); if(h) h.textContent=acName(ex)+' 본인 확인'; var bt=d.querySelector('.bts'); if(bt){ var no=bt.querySelector('button:not(.ok)'); if(no) no.remove(); } var bx=d.querySelector('.bx'); if(bx) bx.insertAdjacentHTML('afterbegin','<button type="button" class="x" aria-label="닫기" onclick="acConfirmClose()">✕</button>'); };
+})();
+/* 연결은 됐는데 전략이 없을 때: 빈 안내 화면 대신 트레이딩뷰 차트가 있는 터미널을 바로 연다 */
+var PX_TV={binance:'BINANCE',okx:'OKX',bybit:'BYBIT',bitget:'BITGET',mexc:'MEXC',woox:'WOONETWORK',gate:'GATEIO'};
+function pxTermEmpty(){
+  var ex=acConnList()[0]||'binance', sym=(PX_TV[ex]||'BINANCE')+':BTCUSDT';
+  var br=document.getElementById('tft-brainin'); if(br) br.innerHTML='<div class="px-tbrain"><b>실행 중인 전략이 없습니다</b><span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span><button type="button" class="pl-cta pl-cta-w" onclick="tfShareHub()">전략 찾기</button><button type="button" class="pl-link" onclick="tfBackToChat()">새 전략 만들기</button></div>';
+  var note=document.querySelector('.tm-simnote'); if(note) note.remove();
+  var host=document.getElementById('nfxh-tv'); if(!host) return;
+  if(typeof taiTv==='function') taiTv(function(){ var h=document.getElementById('nfxh-tv'); if(!h||h.childNodes.length) return;
+    new TradingView.widget({container_id:'nfxh-tv',symbol:sym,interval:'60',autosize:true,theme:'dark',locale:'kr',hide_side_toolbar:true,allow_symbol_change:true,save_image:false,hide_top_toolbar:false});
+    var ph=document.getElementById('nfxh-ph'); if(ph) ph.hidden=true; });
+}
+(function(){
+  acReadyView=function(){ window.TF_TM_EMPTY=1; try{ tfDashView(); }finally{ window.TF_TM_EMPTY=0; } if(!tfTmAll().length) pxTermEmpty(); };
+})();
+
+/* 초대 계정이 아닌, 지금 쓰는 거래소 계정을 구독으로 연결: 결제 → 같은 거래소 승인 */
+function pxPaidLink(n){ return acSubOn()?'<button type="button" class="pl-link" onclick="pxSubRoute()">구독으로 연결</button>':'<button type="button" class="pl-link" onclick="pxPaidRoute()">지금 쓰는 '+n+' 계정으로 연결 (월 '+acUsd(AC_CFG.price)+')</button>'; }
+function pxPaidRoute(){ var a=acS(), ex=a.ex, ctx=AC_CTX||{}; a.route='paid'; a.has=null; a.g=0; acSave(); try{ tfTrack('px_paid_route',{ex:ex}); }catch(e){} var c={}; for(var k in ctx) c[k]=ctx[k]; c.need=ex; plCheckout(c); }
+
+/* 구독 회원이 이 거래소만 TETH 초대 계정으로 연결하고 싶을 때: 드문 경우라 승인 단추 아래 작은 링크 하나 */
+function pxInviteLink(){ var a=acS(); if(!acSubOn()||acRouteNow()!=='paid'||!a.ex||a.conn[a.ex]) return ''; return '<p class="px-links px-sm"><button type="button" class="pl-link" onclick="pxInviteRoute()">TETH 초대 계정으로 연결</button></p>'; }
+function pxInviteRoute(){ var a=acS(); a.route='partner'; a.has=null; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; acSave(); try{ tfTrack('px_invite_route',{ex:a.ex}); }catch(e){} acRe(); }
+function pxSubRoute(){ var a=acS(); a.route='paid'; a.has=null; a.g=0; acSave(); acRe(); }
+(function(){
+  /* Gate: 앱스토어 앱 아이콘 */
+  var lg0=acLogo; acLogo=function(id,z){ if(id==='gate'){ z=z||28; return '<img src="assets/logos/app-gate.jpg" alt="" width="'+z+'" height="'+z+'" loading="lazy">'; } return lg0.apply(this,arguments); };
 })();

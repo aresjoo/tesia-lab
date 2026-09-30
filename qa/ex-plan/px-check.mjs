@@ -27,7 +27,7 @@ s=await J(`{tiles:document.querySelectorAll('#ac-flow .px-exs button').length,co
 await snap('X1-ex');
 await ev(`pxPickEx('okx')`); await sleep(600); s=await J(SCREEN); ok('타일 누르면 바로 계정 화면 "OKX 계정"',clean(s)&&s.h1==='OKX 계정'&&(await ev(`acStep()`))==='acct',s);
 s=await J(`{steps:document.querySelectorAll('#ac-flow .px-steps li').length,join:(document.querySelector('#ac-flow a.acx-a')||{}).innerText,links:[].map.call(document.querySelectorAll('#ac-flow .px-links .pl-link'),function(b){ return b.innerText; }),lead:${TXT('.px-lead')}}`);
-ok('계정 화면: 안내 2줄, 주 단추 "OKX 가입 화면 열기", 작은 갈래 하나 "기존 초대 계정 연결"',s.steps===2&&/OKX 가입 화면 열기/.test(s.join)&&s.links.length===1&&/기존 초대 계정 연결/.test(s.links[0])&&/TETH 초대로 가입한 OKX 계정이 필요합니다/.test(s.lead),s);
+ok('계정 화면: 안내 2줄, 주 단추 "OKX 가입 화면 열기", 작은 갈래 하나 "기존 초대 계정 연결"',s.steps===2&&/OKX 가입 화면 열기/.test(s.join)&&/기존 초대 계정 연결/.test(s.links[0])&&(s.links.length===1||/지금 쓰는 OKX 계정으로 연결/.test(s.links[1]))&&/TETH 초대로 가입한 OKX 계정이 필요합니다/.test(s.lead),s);
 await snap('X2-acct');
 await ev(`pxBack('ex')`); await sleep(500); ok('계정 화면 뒤로 → 거래소 선택',(await ev(`acStep()`))==='ex'&&(await J(SCREEN)).h1==='거래소 선택');
 await ev(`pxPickEx('okx')`); await sleep(500); await ev(`pxJoined()`); await sleep(400); s=await J(`{cta:(document.querySelector('#ac-flow .px-cta')||{}).innerText,link:(document.querySelector('#ac-flow .px-links a')||{}).innerText}`); ok('가입 화면을 열고 돌아오면 주 단추가 "가입한 계정 연결", 작은 링크는 다시 열기',/가입한 계정 연결/.test(s.cta)&&/다시 열기/.test(s.link),s); await snap('X2b-acct-joined'); await ev(`acGuide(2)`); await sleep(500);
