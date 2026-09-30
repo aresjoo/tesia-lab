@@ -1,0 +1,23 @@
+PASS | 손님: 거래소 연결은 플랜 화면(무료, 구독 두 카드) | {"pl":true,"cards":2,"ctas":["무료로 시작하기","구독으로 시작하기"],"price":["0","280"]}
+PASS | 손님이 CTA를 누르면 가입 창, 고른 방식이 저장된다 | {"auth":true,"intent":{"kind":"start","route":"partner","ex":null,"need":null,"name":null,"after":null,"bt":null,"at":1790788832508}}
+PASS | 회원, 자격 없음: 플랜 화면, 결과 카드 없음 | {"pl":true,"bt":false}
+PASS | 갈래 1: 좋은 결과에서 실행 → 결과 카드가 같은 크기로 왼쪽, 단추 없음 | {"pl":true,"bt":true,"cols":3,"name":"비앤비 평균선 양방향 2배","need":"이 전략은 Binance에서 실행됩니다. Binance 계정을 연결합니다.","noBtn":true}
+PASS | 갈래 2: 나쁜 결과에서 실행 → 플랜 화면, 결과 카드 없음 | {"pl":true,"bt":false}
+PASS | 무료 선택 → 전략의 거래소가 정해져 있어 거래소 단계를 건너뛴다 | {"step":"acct","ex":"okx"}
+PASS | 계정 단계: 가입 안내가 기본(가입, 본인 확인, TETH 연결), 작은 링크 "이미 있습니까" | {"step":"acct","guide":true,"have":"TETH 초대 계정이 이미 있습니까? 바로 연결","join":true,"steps":3}
+PASS | 이미 있음 → 바로 승인 단계
+PASS | 승인 → 초대 확인 → 완료(본인 확인은 여기서 검사하지 않음)
+PASS | 완료 화면에 본인 확인 요구가 없다 | {"txt":"OKX 계정이 연결되었습니다 TETH 초대 계정으로 확인되었습니다. 이용료 없이 씁니다. 실행 계정 OKX 79••••84 TETH 이용료 없음 TETH 혜택 거래 수수료 20% 환급 터미널로 이동","kyc":"none"}
+PASS | 전략 시작 직전: 본인 확인 미완료면 막고 안내(연결은 유지) | {"txt":"전략을 시작하기 전에 본인 확인이 필요합니다 OKX에서 본인 확인을 완료해 주십시오 연결은 되었습니다. 본인 확인이 끝나야 전략이 주문을 낼 수 있습니다. 본인 확인하러 가기 다시 확인하기 닫기"}
+PASS | 다시 확인 → 완료되면 창이 닫히고 진행 | {"dlg":false,"kyc":"ok"}
+PASS | 구독 선택 → 플랜 구성(결제) 화면: Apple Pay, 카드, 거래소 7곳, 오늘 결제 금액, 세액 없음 | {"co":true,"h1":"플랜 구성","apple":true,"exs":7,"tot":"$280.00","cta":"$280 결제하고 시작하기","tax":false}
+PASS | 결제 실패: 안내, 입력값 유지 | {"fail":"fail","txt":"결제가 승인되지 않았습니다. 카드 한도나 해외 결제 설정을 확인하고 다시 시도하거나 다른 카드를 써 주십시오.","kept":"0000 1111 2222 3333"}
+PASS | 결제 성공 → 거래소 승인 단계로(결제가 먼저) | {"sub":true,"step":"auth","ex":"bybit"}
+PASS | 승인 → 완료
+PASS | 결제 내역에 실패와 성공 | {"conn":["bybit"],"bill":["paid","failed"]}
+PASS | 구독 거래소 2곳 뒤 셋째: 한도 안내와 세 갈래 | {"step":"limit"}
+PASS | 한도에서 초대 계정으로 → 계정 단계
+PASS | Apple Pay → 결제 완료 → 승인 단계 | {"card":"Apple Pay"}
+PASS | 콘솔 오류 없음 | []
+
+TOTAL 21 / 21

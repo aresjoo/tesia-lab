@@ -106,6 +106,6 @@ block('RD_CSS',fs.readFileSync(D+'rd.css','utf8'),'<script src="site-config.js',
 function blockAfter(tag,body,after){ const B='/*'+tag+'_BEGIN*/', E='/*'+tag+'_END*/', i=t.indexOf(B), j=t.indexOf(E); const txt=B+'\r\n'+nl(body).trim()+'\r\n'+E;
   if(i>=0&&j>i){ t=t.slice(0,i)+txt+t.slice(j+E.length); return; }
   const k=t.indexOf(after); if(k<0||t.indexOf(after,k+1)>=0) throw new Error('after '+tag); t=t.slice(0,k+after.length)+'\r\n'+txt+t.slice(k+after.length); }
-blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js','ac.js','st.js','bt-v2.js','bt-fut.js','an.js','rv.js','p16.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
+blockAfter('BT_CORE',['bt-a.js','bt-b.js','bt-c.js','bt-go.js','ac.js','st.js','bt-v2.js','bt-fut.js','an.js','rv.js','pl.js','p16.js'].map(f=>fs.readFileSync(D+f,'utf8')).join('\n'),'/*RD_CORE_END*/');
 blockAfter('BT_CSS',fs.readFileSync(D+'bt.css','utf8'),'/*RD_CSS_END*/');
 fs.writeFileSync(F,t); console.log('applied', t.length);

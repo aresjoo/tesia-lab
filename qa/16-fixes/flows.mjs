@@ -24,43 +24,42 @@ let s=await J(`{hash:location.hash,id:(window.BT&&BT.s)?BT.s.id:null,phase:windo
 ok('A','인증 뒤 같은 전략의 백테스트로 이어진다',s.hash==='#/share/bt/f3'&&s.id==='f3',s);
 ok('A','바로 결과 보기 단추가 없다',(await ev(`/바로 결과 보기/.test(document.body.innerText)`))===false);
 
-// B 손님 → 전략 복사 → 인증 → 활성화(초대, 계정 없음) → 복사 설정으로 이어짐
+// B 손님 → 전략 복사 → 인증 → 플랜 화면(무료) → 가입 안내 → 승인 → 초대 확인 → 완료
 await fresh(false);
 await ev(`tfShareHub()`); await sleep(2200);
-s=await J(`{btn:[].map.call(document.querySelectorAll('.mk-card button, .mk2-card button, [class*=card] button'),function(b){ return b.innerText.trim(); }).filter(function(x){ return /복사|따라/.test(x); }).slice(0,4)}`);
 s=await J(`{btn:[].map.call(document.querySelectorAll('.mk-card .mk3-foot button'),function(b){ return b.innerText.trim(); }).slice(0,6)}`);
 ok('B','목록 카드 단추는 전략 보기 하나',s.btn.length>0&&s.btn.every(x=>x==='전략 보기'),s.btn);
 await fresh(true);
-await ev(`acStart({need:'binance',name:'테스트 전략',after:{kind:'terminal'}})`); await sleep(500);
-ok('B','활성화 창이 전략의 거래소를 유지한다',(await J(`{ex:acS().ex,step:acStep()}`)).ex==='binance');
-await ev(`acPickRoute('partner'); acRouteGo()`); await sleep(200);
-ok('B','거래소를 다시 묻지 않는다',(await ev(`acStep()`))==='acct');
-await ev(`acHas('no')`); await sleep(200); ok('B','계정 없음 → 가입 안내',(await ev(`acStep()`))==='guide');
-s=await J(`{a:(document.querySelector('#ac-flow a.acx-a')||{}).href||'',key:/API|키를 입력|시크릿/i.test(document.getElementById('ac-flow').innerText.replace('키를 만들거나 붙여 넣지 않습니다',''))}`);
-ok('B','가입 주소가 있고 API 키 입력이 없다',!!s.a&&!s.key,s);
-await ev(`acGuide(1); acGuide(2); acGuide(3)`); await sleep(200); ok('B','안내 뒤 연결 승인',(await ev(`acStep()`))==='auth');
+await ev(`acStart({need:'binance',name:'테스트 전략',after:{kind:'terminal'}})`); await sleep(700);
+ok('B','자격이 없으면 플랜 화면(무료, 구독), 전략 거래소 고정',(await J(`{pl:!!document.getElementById('pl-root'),need:/Binance/.test((document.querySelector('.pl-need')||{}).innerText||'')}`)).pl===true);
+await ev(`plPick('partner')`); await sleep(500);
+ok('B','무료 → 거래소를 다시 묻지 않고 계정 단계(가입 안내)',(await J(`{ex:acS().ex,step:acStep()}`)).step==='acct');
+s=await J(`{a:(document.querySelector('#ac-flow a.acx-a')||{}).href||'',key:/API|키를 입력|시크릿/i.test(document.getElementById('ac-flow').innerText.replace('키를 만들거나 붙여 넣지 않습니다','')),have:!!document.querySelector('.acx-have')}`);
+ok('B','가입 주소가 있고 API 키 입력이 없고 바로 연결 링크가 있다',!!s.a&&!s.key&&s.have,s);
+await ev(`acGuide(1); acGuide(2)`); await sleep(200); ok('B','가입, 본인 확인 뒤 연결 승인',(await ev(`acStep()`))==='auth');
 await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('B','승인과 초대 계정 확인 뒤 완료',await waitFor(`acStep()==='done'`,9000));
 ok('B','초대 회원, 이용료 없음',(await J(`{acc:acAccess(),via:acS().conn.binance.via}`)).via==='partner');
 
 // C 있는 계정이 초대 계정이 아님 → 쉬운 말로 안내, 세 갈래
 await fresh(true);
-await ev(`window.AC_QA={uid:'fail'}; acStart({after:{kind:'terminal'}}); acPickRoute('partner'); acRouteGo(); acPickEx('okx'); acExGo(); acHas('yes'); acAuthOpen(); acAuthYes()`);
+await ev(`window.AC_QA={uid:'fail'}; acStart({after:{kind:'terminal'}})`); await sleep(500); await ev(`plPick('partner')`); await sleep(400); await ev(`acPickEx('okx'); acExGo(); acHas('yes'); acAuthOpen(); acAuthYes()`);
 ok('C','초대 계정 확인 실패가 표시된다',await waitFor(`acS().uid.st==='fail'`,9000));
 s=await J(`{t:document.getElementById('ac-flow').innerText.replace(/\\s+/g,' '),n:document.querySelectorAll('#ac-flow .acx-ch').length}`);
 ok('C','UID, 레퍼럴 같은 말 없이 설명하고 선택지 3개',!/UID|레퍼럴|referral/i.test(s.t)&&s.n===3,{n:s.n});
 ok('C','연결된 것으로 처리하지 않는다',(await ev(`acReady('okx')`))===false);
-await ev(`window.AC_QA=null; acUidAlt('paid')`); await sleep(300); ok('C','구독으로 바꾸면 결제 단계',(await ev(`acStep()`))==='pay');
+await ev(`window.AC_QA=null; acUidAlt('paid')`); await sleep(600); ok('C','구독으로 바꾸면 결제(플랜 구성) 화면',(await ev(`!!document.querySelector('.pl-co')`))===true);
 
-// D 구독: 카드 실패 → 다시 → 성공 → 승인 → 완료, 결제 내역 기록
+// D 구독: 결제가 먼저(실패 → 다시 → 성공) → 거래소 승인 → 완료, 결제 내역 기록
 await fresh(true);
-await ev(`acStart({after:{kind:'terminal'}}); acPickRoute('paid'); acRouteGo(); acPickEx('bybit'); acExGo()`); await sleep(400);
-const fill=(n)=>`(function(){ var L=document.querySelectorAll('#ac-flow input'); var v=['${n}','12 / 29','123','KIM TETH']; [].forEach.call(L,function(e,i){ e.value=v[i]; e.dispatchEvent(new Event('input',{bubbles:true})); }); return L.length; })()`;
-ok('D','결제 단계에 카드 입력',(await ev(fill('0000 1111 2222 3333')))>=3);
-await ev(`acPayGo()`); ok('D','결제 실패가 표시된다',await waitFor(`acS().pay.st==='fail'`,8000));
+await ev(`acStart({after:{kind:'terminal'}})`); await sleep(500); await ev(`plPick('paid')`); await sleep(600); await ev(`plPickEx('bybit')`); await sleep(300);
+const fill=(n)=>`(function(){ var v={'ac-cn':'${n}','ac-ce':'12 / 29','ac-cc':'123','ac-ch':'KIM TETH'}; var c=0; for(var k in v){ var e=document.getElementById(k); if(e){ e.value=v[k]; e.dispatchEvent(new Event('input',{bubbles:true})); c++; } } return c; })()`;
+ok('D','플랜 구성 화면에 카드 입력',(await ev(fill('0000 1111 2222 3333')))>=3);
+await ev(`plPay()`); ok('D','결제 실패가 표시된다',await waitFor(`acS().pay.st==='fail'`,8000));
 ok('D','실패하면 연결되지 않는다',(await ev(`acReady(null)`))===false);
-await ev(fill('4242 4242 4242 4242')); await ev(`acPayGo()`); ok('D','다시 시도해 결제 성공',await waitFor(`acSubOn()===true`,8000));
+await ev(fill('4242 4242 4242 4242')); await ev(`plPay()`); ok('D','다시 시도해 결제 성공 → 승인 단계',await waitFor(`acSubOn()===true&&acStep()==='auth'`,8000));
 await sleep(300); await ev(`acAuthOpen()`); await sleep(300); await ev(`acAuthYes()`); ok('D','승인 뒤 완료',await waitFor(`acStep()==='done'`,8000));
 s=await J(`{bill:acS().bill.map(function(b){ return b.st; }),via:acS().conn.bybit.via}`); ok('D','결제 내역에 실패와 성공이 남는다',s.bill.length===2&&s.via==='paid',s);
+
 
 // E 이미 충족: 다시 묻지 않음, 다른 거래소는 그 거래소만, 만료는 결제만
 ok('E','같은 거래소는 창 없이 진행',(await J(`(function(){ acSheetClose(true); acStart({need:'bybit',after:{kind:'terminal'}}); return {sheet:!!document.getElementById('ac-sheet')}; })()`)).sheet===false);
@@ -92,20 +91,23 @@ await ev(`location.hash='#/settings/general'`); await sleep(300); await ev(`loca
 s=await J(`{t:document.querySelector('.stg-main').innerText.replace(/\\s+/g,' ')}`);
 ok('F','초대 회원에게 구독이나 다음 결제일을 보여 주지 않는다',/TETH 초대 계정/.test(s.t)&&!/다음 결제일|280 . 월|구독 해지/.test(s.t));
 
-// G AI 트레이딩: 손님 소개 → 시작 → 인증 → 실행 방식 선택 → 연결 → 터미널, 전략 선택 강요 없음
+// G AI 트레이딩: 손님 소개 → 시작 → 플랜 화면 → 무료 → 인증 → 거래소 → 연결 → 터미널, 전략 선택 강요 없음
 await fresh(false);
 await ev(`location.hash='#/trade'`); await sleep(1500);
-await ev(`tfIntroStart()`); await sleep(600);
-ok('G','시작을 누르면 인증 창',await ev(modal)===true);
-await signup(); await sleep(800);
-s=await J(`{sheet:!!document.getElementById('ac-sheet'),step:typeof acStep==='function'?acStep():null,t:(document.getElementById('ac-sheet')||{innerText:''}).innerText.replace(/\\s+/g,' ').slice(0,200)}`);
-ok('G','인증 뒤 실행 방식 선택으로 이어진다',s.sheet&&s.step==='route',s);
+await ev(`tfIntroStart()`); await sleep(800);
+s=await J(`{pl:!!document.getElementById('pl-root'),t:(document.getElementById('pl-root')||{innerText:''}).innerText.replace(/\\s+/g,' ').slice(0,300)}`);
+ok('G','시작을 누르면 플랜 화면(무료, 구독)',s.pl,{t:s.t.slice(0,80)});
 ok('G','전략을 먼저 고르라고 하지 않는다',!/전략을 (먼저 )?(고르|선택)/.test(s.t));
-await ev(`acPickRoute('partner'); acRouteGo(); acPickEx('bitget'); acExGo(); acHas('yes'); acAuthOpen(); acAuthYes()`);
+await ev(`plPick('partner')`); await sleep(500); ok('G','무료를 누르면 인증 창',await ev(modal)===true);
+await signup(); await sleep(1200);
+s=await J(`{step:typeof acStep==='function'?acStep():null,route:acS().route,page:!!document.getElementById('bt-root')||!!document.getElementById('ac-sheet')}`);
+ok('G','인증 뒤 고른 방식(무료)으로 거래소 단계에 이어진다',s.route==='partner'&&s.step==='ex',s);
+await ev(`acPickEx('bitget'); acExGo(); acHas('yes'); acAuthOpen(); acAuthYes()`);
 ok('G','연결 완료',await waitFor(`acStep()==='done'`,9000));
-await ev(`acSheetDone()`); await sleep(1500);
+await ev(`(function(){ if(document.getElementById('ac-sheet')) acSheetDone(); else acGoTerminal(); })()`); await sleep(1500);
 s=await J(`{hash:location.hash,rdy:!!document.querySelector('.acx-entry.rdy'),term:!!document.querySelector('.tft-page, .tm-page, [class*=tm-]')}`);
 ok('G','전략 없이도 터미널에 들어간다',s.hash==='#/trade'&&(s.rdy||s.term),s);
+
 
 // 공통: 문체, 통화, 오류
 await ev(`tfShareHub()`); await sleep(2000);

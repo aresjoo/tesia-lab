@@ -48,6 +48,9 @@ function p16Late(){
     );
     var qp0=tfQaPreset; tfQaPreset=function(id){ var r=qp0.apply(this,arguments); var P=null; TF_QA_PRESETS.forEach(function(x){ if(x.id===id) P=x; }); if(P&&P.ac){ var t=tfS(); t.ac=null; var a=acS(); P.ac(a,t); acSave(); try{ tfDevRefresh(); }catch(e){} } return r; };
   }
+  /* 전략 시작 직전의 본인 확인 관문 */
+  if(typeof btMineStart==='function'&&!btMineStart.kyc){ var bm0=btMineStart; btMineStart=function(m){ var args=arguments, self=this; if(m==='live'){ acRunGate(acS().ex||acConnList()[0],function(){ bm0.apply(self,args); }); return; } return bm0.apply(self,args); }; btMineStart.kyc=1; }
+  if(typeof cpStart==='function'&&!cpStart.kyc){ var cs0=cpStart; cpStart=function(ne){ var args=arguments, self=this, s=null; try{ s=tfSSFind(decodeURIComponent(ne)); }catch(e){} var ex=s&&s.ex&&acEx(s.ex)&&acS().conn[s.ex]?s.ex:(acConnList()[0]||null); acRunGate(ex,function(){ cs0.apply(self,args); }); }; cpStart.kyc=1; }
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
@@ -64,7 +67,7 @@ function btGoCtx(){ var s=BT.s; return {need:s.ex&&acEx(s.ex)?s.ex:null,name:mkH
   tfTradeInactiveView=function(){ acEntryView(); };
   /* 설정 화면에 있는 동안만 전체 화면 모드. 어떤 화면이 그려지든 G.mode 로 다시 판정한다 */
   var stFull=function(){ document.body.classList.toggle('st-full',!!(window.G&&G.mode==='tfset')); };
-  var gc0=gContent; gContent=function(){ var r=gc0.apply(this,arguments); stFull(); return r; };
+  var gc0=gContent; gContent=function(){ var r=gc0.apply(this,arguments); stFull(); try{ if(!document.getElementById('pl-root')) plPageOff(); }catch(e){} return r; };
   var gh0=gHome; gHome=function(){ var r=gh0.apply(this,arguments); stFull(); return r; };
   window.addEventListener('hashchange',function(){ setTimeout(stFull,0); });
   /* 좁은 화면: 지금 보는 설정 탭이 보이게 */
@@ -77,7 +80,9 @@ function btGoCtx(){ var s=BT.s; return {need:s.ex&&acEx(s.ex)?s.ex:null,name:mkH
         +'<button type="button" class="bt-cta" onclick="btMineStart(\'live\')">전략 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'paper\')">가상으로 먼저 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'later\')">나중에 시작</button>'; }
     return '<section class="btg-next"><h3>다음은 이 전략에 쓸 금액입니다</h3><p>백테스트에서는 '+btUsd(BT.amt)+'로 봤습니다. 실제로 쓸 금액과 손실 한도를 정하면 시작합니다.</p></section><button type="button" class="bt-cta" onclick="btFinal()">사용할 금액 정하기</button>'; };
   /* 필요한 것이 이미 다 있으면 실행 준비 화면을 건너뛴다 */
-  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; } return u0.apply(this,arguments); };
+  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; }
+    if(!acReady(need)){ /* 실행 자격이 없으면 플랜 화면. 결과가 좋으면 왼쪽에 결과 카드 */ var R=BT.R, good=R&&typeof rvBad==='function'&&!rvBad()&&(R.wins.length+R.loss.length)>0; var bt=good?{name:mkHook(s),ex:need||(s.ex||'bitget'),per:btPerL(),amt:btUsd(BT.amt),ret:R.ret,bench:R.benchRet,mdd:R.mdd,n:R.wins.length+R.loss.length,eq:(function(){ var E=R.eq, o=[], k=Math.max(1,Math.floor(E.length/60)); for(var i=0;i<E.length;i+=k) o.push(E[i].v); o.push(E[E.length-1].v); return o; })()}:null; acStart({need:need,name:mkHook(s),after:s.mine?{kind:'bt',id:'mine'}:{kind:'copy',id:btNe()},bt:bt}); return; }
+    return u0.apply(this,arguments); };
   /* 설정 단추: 회원은 전용 화면으로, 손님은 기존 작은 메뉴 */
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',p16Late); else setTimeout(p16Late,0);
   /* R07 금액은 USD 하나 */

@@ -7,7 +7,7 @@ var AC_CFG={price:280,cur:'USD',
   order:['bitget','binance','okx','bybit','mexc','woox','gate']};
 var AC_CTX=null, AC_RUN=0;
 function acS(){ var t=tfS(); if(!t.ac) t.ac={route:null,ex:null,has:null,g:0,pay:{st:'none'},auth:{st:'idle'},uid:{st:'none'},conn:{},cards:[],bill:[],sub:null};
-  var a=t.ac; a.conn=a.conn||{}; a.pay=a.pay||{st:'none'}; a.auth=a.auth||{st:'idle'}; a.uid=a.uid||{st:'none'}; a.cards=a.cards||[]; a.bill=a.bill||[];
+  var a=t.ac; a.conn=a.conn||{}; a.pay=a.pay||{st:'none'}; a.auth=a.auth||{st:'idle'}; a.uid=a.uid||{st:'none'}; a.kyc=a.kyc||{st:'none'}; a.cards=a.cards||[]; a.bill=a.bill||[];
   /* 예전 방식으로 연결해 둔 계정을 옮겨 온다 */
   if(t.api&&t.api.ex&&!a.conn[t.api.ex]) a.conn[t.api.ex]={via:t.uidLinked?'partner':(t.payDone?'paid':'partner'),at:Date.now(),uid:t.uid||''};
   return a; }
@@ -25,6 +25,10 @@ function acUsd(n){ return '$'+Number(n).toLocaleString(); }
 function acConnOk(k){ var c=acS().conn[k]; return !!c&&!!acEx(k)&&(c.via==='partner'||acSubOn()); }
 /* 이미 연결해 둔 거래소는 승인을 다시 받지 않는다 */
 function acAuthOk(ex){ var a=acS(); return (a.auth.st==='ok'&&a.auth.ex===ex)||!!a.conn[ex]; }
+var AC_PAID_MAX=2; /* 구독 하나로 연결할 수 있는 거래소 수 */
+function acPaidCount(){ var a=acS(), n=0; for(var k in a.conn) if(a.conn[k].via==='paid'&&acEx(k)) n++; return n; }
+function acPaidFull(){ return acSubOn()&&acPaidCount()>=AC_PAID_MAX*((acS().sub&&acS().sub.n)||1); }
+function acKycOk(ex){ var a=acS(); return a.kyc.st==='ok'&&a.kyc.ex===ex; }
 function acReady(ex){ return ex?acConnOk(ex):acConnList().some(acConnOk); }
 /* 지금 해야 할 한 가지 */
 function acStep(){
@@ -33,15 +37,14 @@ function acStep(){
   if(a.edit) return a.edit;
   var r=acRouteNow();
   if(!r) return 'route';
-  if(!ex) return 'ex';
-  if(r==='partner'){ if(!a.has) return 'acct'; if(a.has==='no'&&a.g<3) return 'guide'; if(!acAuthOk(ex)) return 'auth'; if(a.uid.st!=='ok'||a.uid.ex!==ex) return 'uid'; }
-  else if(r==='paid'){ if(!acSubOn()) return 'pay'; if(!acAuthOk(ex)) return 'auth'; }
+  if(r==='paid'){ if(!acSubOn()||a.more) return 'pay'; if(!ex) return 'ex'; if(!a.conn[ex]&&acPaidFull()) return 'limit'; if(!acAuthOk(ex)) return 'auth'; }
+  else { if(!ex) return 'ex'; if(!a.has) return 'acct'; if(a.has==='no'&&a.g<2) return 'guide'; if(!acAuthOk(ex)) return 'auth'; if(a.uid.st!=='ok'||a.uid.ex!==ex) return 'uid'; }
   return 'commit';
 }
-function acRouteNow(){ var a=acS(); return acSubOn()?'paid':(a.route||(acAccess()==='partner'?'partner':null)); }
+function acRouteNow(){ var a=acS(); if(a.route==='partner'&&acSubOn()&&a.ex&&!a.conn[a.ex]) return 'partner'; /* 구독 회원이 한도 뒤 초대 계정으로 고른 경우 */ return acSubOn()?'paid':(a.route||(acAccess()==='partner'?'partner':null)); }
 function acCommit(){
   var a=acS(), t=tfS(), ex=a.ex, r=acRouteNow(); if(!ex) return;
-  a.conn[ex]={via:r==='paid'?'paid':'partner',at:Date.now(),uid:a.uid.ex===ex?(a.uid.v||''):''};
+  a.conn[ex]={via:r==='paid'?'paid':'partner',at:Date.now(),uid:a.uid.ex===ex?(a.uid.v||''):'',kyc:'none'};
   t.api={ex:ex,last4:null,oauth:true}; t.conn=true; if(a.conn[ex].via==='partner'){ t.uidLinked=true; t.uid=a.conn[ex].uid; } t.ob={st:'completed',ex:ex,uid:a.conn[ex].uid||'',err:null};
   a.doneAt=Date.now(); a.edit=null; acSave(); try{ tfTrack('ac_connected',{ex:ex,via:a.conn[ex].via}); tfSideSync&&tfSideSync(); }catch(e){}
 }
@@ -51,32 +54,31 @@ var AC_OUT='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="
 function acSteps(){
   var a=acS(), acc=acAccess(), r=acRouteNow()||a.routeSel||'partner', L=[];
   if(acc==='none'||(!acSubOn()&&a.route==='paid')) L.push(['route','이용 방식']);
-  L.push(['ex','거래소']);
-  if(r==='partner'){ L.push(['acct','거래소 계정']); L.push(['auth','연결 승인']); L.push(['uid','초대 계정 확인']); }
-  else { /* 결제는 아직 안 했거나 방금 이 흐름에서 마쳤을 때만 보인다 */ if(!acSubOn()||(a.pay.st==='ok'&&!acConnList().some(function(k){ return a.conn[k].via==='paid'; }))) L.push(['pay','결제']); L.push(['auth','연결 승인']); }
+  if(r==='partner'){ L.push(['ex','거래소']); L.push(['acct','거래소 계정']); L.push(['auth','연결 승인']); L.push(['uid','초대 계정 확인']); }
+  else { /* 결제가 먼저. 이미 구독 중이면 결제 단계는 보이지 않는다 */ if(!acSubOn()||(a.pay.st==='ok'&&!acConnList().some(function(k){ return a.conn[k].via==='paid'; }))) L.push(['pay','결제']); L.push(['ex','거래소']); L.push(['auth','연결 승인']); }
   return L;
 }
 function acSum(k){
   var a=acS();
   if(k==='route') return a.route==='paid'?'구독, 월 '+acUsd(AC_CFG.price):'TETH 초대 계정, 이용료 없음';
   if(k==='ex') return acLogo(a.ex,16)+acName(a.ex);
-  if(k==='acct') return a.has==='no'?'새 계정, 가입과 본인 확인 완료':'계정 있음';
+  if(k==='acct') return a.has==='no'?'새 계정, 가입 완료':'계정 있음';
   if(k==='guide') return '가입과 본인 확인 완료';
   if(k==='pay') return a.cards[0]?'카드 끝자리 <span class="num">'+gEsc(a.cards[0].last4)+'</span>, 월 '+acUsd(AC_CFG.price):'결제 완료';
   if(k==='auth') return acName(a.ex)+'에서 승인 완료';
   if(k==='uid') return 'TETH 초대 계정으로 확인';
   return ''; }
 function acDoneK(k){ var a=acS(), ex=a.ex;
-  return k==='route'?!!a.route:k==='ex'?!!ex:k==='acct'?(!!a.has&&(a.has!=='no'||a.g>=3)):k==='guide'?a.g>=3:k==='pay'?acSubOn():k==='auth'?acAuthOk(ex):k==='uid'?(a.uid.st==='ok'&&a.uid.ex===ex):false; }
+  return k==='route'?!!a.route:k==='ex'?!!ex:k==='acct'?(!!a.has&&(a.has!=='no'||a.g>=2)):k==='guide'?a.g>=3:k==='pay'?acSubOn():k==='auth'?acAuthOk(ex):k==='uid'?(a.uid.st==='ok'&&a.uid.ex===ex):false; }
 function acHelp(){ return '<p class="acx-help"><span>막히는 곳이 있으면 상담원이 도와드립니다. 24시간 응답합니다.</span><button type="button" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
 function acFlowHtml(){
-  var a=acS(), cur=acStep(), L=acSteps(), body={route:acBRoute,ex:acBEx,acct:acBAcct,guide:acBGuide,pay:acBPay,auth:acBAuth,uid:acBUid};
+  var a=acS(), cur=acStep(), L=acSteps(), body={route:acBRoute,ex:acBEx,acct:acBAcct,guide:acBGuide,pay:acBPay,auth:acBAuth,uid:acBUid,limit:acBLimit};
   if(cur==='commit'){ acCommit(); cur='done'; }
   if(cur==='done') return acDoneHtml();
-  var seen=false, sub=cur==='guide'; if(sub) cur='acct';
+  var seen=false, sub=cur==='guide'; if(sub) cur='acct'; var lim=cur==='limit'; if(lim) cur='ex';
   return '<ol class="btg-sts acx-sts">'+L.map(function(x,i){ var on=x[0]===cur, ok=!on&&!seen&&acDoneK(x[0]); if(on) seen=true;
     return '<li class="btg-st '+(on?'on':ok?'ok':'nx')+'"'+(on?' aria-current="step"':'')+'><div class="sh"><span class="sn num">'+(ok?AC_CK:(i+1))+'</span><b>'+x[1]+'</b>'+(ok?'<span class="sm">'+acSum(x[0])+'</span>'+((x[0]==='route'||x[0]==='ex'||x[0]==='acct')?'<button type="button" class="ed" onclick="acEdit(\''+x[0]+'\')">변경</button>':''):'')+'</div>'
-      +(on?'<div class="sb" id="ac-sb">'+body[sub?'guide':x[0]]()+'</div>':'')+'</li>'; }).join('')+'</ol>'+acHelp();
+      +(on?'<div class="sb" id="ac-sb">'+body[sub?'guide':lim?'limit':x[0]]()+'</div>':'')+'</li>'; }).join('')+'</ol>'+acHelp();
 }
 function acRe(){ AC_RUN++; var h=document.getElementById('ac-flow'); if(!h) return; h.innerHTML=acFlowHtml(); var hd=document.getElementById('ac-head'); if(hd) hd.innerHTML=acHeadHtml(); if(acStep()==='done'&&AC_CTX&&AC_CTX.onDone) try{ AC_CTX.onDone(); }catch(e){}
   var on=h.querySelector('.btg-st.on'); if(on&&AC_CTX&&AC_CTX.sheet) try{ on.scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
@@ -103,24 +105,24 @@ function acBEx(){
     +'<button type="button" class="bt-cta" onclick="acExGo()"'+(cur?'':' disabled')+'>'+(cur?acName(cur)+'로 계속':'거래소 선택')+'</button>';
 }
 function acPickEx(id){ acS().exSel=id; acRe(); }
-function acExGo(){ var a=acS(), id=a.exSel||a.ex||(AC_CTX&&AC_CTX.ex); if(!id) return; if(a.ex!==id){ a.has=null; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; } a.ex=id; a.exSel=null; a.edit=null; acSave(); acRe(); }
+function acExGo(){ var a=acS(), id=a.exSel||a.ex||(AC_CTX&&AC_CTX.ex); if(!id) return; if(a.ex!==id){ a.has=null; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; a.kyc={st:'none'}; a.doneAt=null; } a.ex=id; a.exSel=null; a.edit=null; acSave(); acRe(); }
 /* 거래소 계정이 있는가 */
 function acBAcct(){
   var a=acS(), n=acName(a.ex);
-  return '<p class="btg-p">'+n+' 계정이 있습니까? TETH 초대로 가입한 계정이면 이용료 없이 씁니다.</p>'
-    +'<div class="acx-two"><button type="button" class="acx-ch" onclick="acHas(\'yes\')"><b>계정 있음</b><span>바로 연결합니다</span></button><button type="button" class="acx-ch" onclick="acHas(\'no\')"><b>새로 만들기</b><span>TETH 초대로 가입합니다. 약 5분</span></button></div>';
+  return '<p class="btg-p">TETH 초대로 '+n+'에 가입하면 TETH 이용료 없이 이용합니다. 가입 후 계정을 연결합니다. 본인 확인은 전략 시작 전에 필요합니다. 도움이 필요하면 24시간 고객 지원을 이용할 수 있습니다.</p>'
+    +acBGuide()
+    +'<p class="acx-have"><button type="button" onclick="acHas(\'yes\')">TETH 초대 계정이 이미 있습니까? 바로 연결</button><small>승인 뒤에 TETH 초대로 가입한 계정인지 확인합니다.</small></p>';
 }
 function acHas(v){ var a=acS(); a.has=v; a.g=0; a.edit=null; acSave(); acRe(); }
 /* 계정 만들기: 한 번에 한 가지 */
 function acBGuide(){
-  var a=acS(), n=acName(a.ex), g=a.g||0, T=[['계정 만들기','TETH 초대 주소로 '+n+' 가입 화면이 새 창에 열립니다. 이메일이나 전화번호로 가입합니다.'],['본인 확인',n+' 앱이나 웹에서 신분증으로 본인 확인을 마칩니다. 보통 몇 분이면 끝납니다.'],['입금','전략이 쓸 금액을 '+n+' 계정에 넣습니다. 지금 건너뛰고 나중에 넣어도 연결은 할 수 있습니다.']];
-  return '<ol class="acx-g">'+T.map(function(x,i){ return '<li class="'+(i<g?'ok':i===g?'on':'')+'"><span class="n num">'+(i<g?AC_CK:(i+1))+'</span><div><b>'+x[0]+'</b>'+(i===g?'<p>'+x[1]+'</p>':'')+'</div></li>'; }).join('')+'<li><span class="n num">4</span><div><b>TETH 연결</b></div></li></ol>'
+  var a=acS(), n=acName(a.ex), g=a.g||0, T=[['계정 만들기','TETH 초대 주소로 '+n+' 가입 화면이 새 창에 열립니다. 이메일이나 전화번호로 가입합니다.'],['본인 확인',n+' 앱이나 웹에서 신분증으로 본인 확인을 마칩니다. 보통 몇 분이면 끝납니다. 입금은 나중에 전략을 시작할 때 안내합니다.']];
+  return '<ol class="acx-g acx-g2">'+T.map(function(x,i){ return '<li class="'+(i<g?'ok':i===g?'on':'')+'"><span class="n">'+(i<g?AC_CK:'')+'</span><div><b>'+x[0]+'</b>'+(i===g?'<p>'+x[1]+'</p>':'')+'</div></li>'; }).join('')+'<li><span class="n"></span><div><b>TETH 연결</b></div></li></ol>'
     +(g===0?'<a class="bt-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="acGuideOpen()">'+n+' 가입 화면 열기'+AC_OUT+'</a><button type="button" class="bt-sec" onclick="acGuide(1)">가입 완료</button>'
-      :g===1?'<button type="button" class="bt-cta" onclick="acGuide(2)">본인 확인 완료</button>'
-      :'<button type="button" class="bt-cta" onclick="acGuide(3)">입금 완료</button><button type="button" class="bt-sec" onclick="acGuide(3)">나중에 입금</button>');
+      :'<button type="button" class="bt-cta" onclick="acGuide(2)">본인 확인 완료</button>');
 }
-function acGuideOpen(){ try{ tfTrack('ac_join_open',{ex:acS().ex}); }catch(e){} acS().joined=1; acSave(); }
-function acGuide(n){ var a=acS(); a.g=n; if(n>=1) a.joined=1; acSave(); acRe(); }
+function acGuideOpen(){ var a=acS(); try{ tfTrack('ac_join_open',{ex:a.ex}); }catch(e){} a.joined=1; if(!a.has) a.has='no'; acSave(); }
+function acGuide(n){ var a=acS(); a.g=n; if(n>=1) a.joined=1; if(!a.has) a.has='no'; acSave(); acRe(); }
 /* 결제 */
 function acIn(id,lb,ph,attr){ return '<label class="btg-f" for="'+id+'"><span>'+lb+'</span><input id="'+id+'" class="num" placeholder="'+ph+'" autocomplete="off" spellcheck="false" aria-describedby="'+id+'-e" '+(attr||'')+'><small class="er" id="'+id+'-e" role="alert"></small></label>'; }
 function acErr(id,msg){ var e=document.getElementById(id+'-e'), i=document.getElementById(id); if(e) e.textContent=msg||''; if(i){ i.classList.toggle('bad',!!msg); if(msg) try{ i.focus(); }catch(x){} } }
@@ -152,7 +154,7 @@ function acBillAdd(st,card,amt,label){ var a=acS(); a.bill.unshift({id:'T'+Date.
 function acPaySaved(){ var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0]; if(!sv) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
   setTimeout(function(){ if(my!==AC_RUN) return; var t=tfS();
     if(window.AC_QA&&AC_QA.pay==='fail'){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',sv,AC_CFG.price); acSave(); acRe(); return; }
-    a.pay={st:'ok',at:Date.now()}; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',sv,AC_CFG.price); acSave(); acRe(); },1500);
+    a.pay={st:'ok',at:Date.now()}; var nS=(a.more&&a.sub&&a.sub.st==='active')?((a.sub.n||1)+1):1; a.more=0; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price,n:nS}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',sv,AC_CFG.price); acSave(); acRe(); },1500);
 }
 function acPayGo(){
   var c=acCardRead('ac-'); if(!c) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
@@ -160,7 +162,7 @@ function acPayGo(){
     if(!acCharge(c)){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',c,AC_CFG.price); acSave(); var keep={}; ['ac-cn','ac-ce','ac-ch'].forEach(function(i){ var e=document.getElementById(i); if(e) keep[i]=e.value; }); acRe(); for(var k in keep){ var e=document.getElementById(k); if(e) e.value=keep[k]; } return; }
     a.newCard=0;
     var card={id:'c'+Date.now().toString(36),last4:c.last4,brand:c.brand,exp:c.exp,name:c.name,def:true}; a.cards.forEach(function(x){ x.def=false; }); a.cards.unshift(card);
-    a.pay={st:'ok',at:Date.now()}; a.sub={st:'active',since:Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',card,AC_CFG.price);
+    a.pay={st:'ok',at:Date.now()}; var nS=(a.more&&a.sub&&a.sub.st==='active')?((a.sub.n||1)+1):1; a.more=0; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price,n:nS}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',card,AC_CFG.price);
     if(!a.billTo) a.billTo={email:(S.user&&S.user.email)||'',name:c.name,addr:''};
     acSave(); try{ tfTrack('ac_paid',{}); }catch(e){} acRe(); },1500);
 }
@@ -204,6 +206,32 @@ function acUidRun(){
     setTimeout(function(){ if(my!==AC_RUN) return; var bad=a.has!=='no'&&window.AC_QA&&AC_QA.uid==='fail';
       a.uid=bad?{st:'fail',ex:a.ex,v:a.auth.uid}:{st:'ok',ex:a.ex,v:a.auth.uid}; acSave(); acRe(); },900); },800);
 }
+/* 본인 확인(KYC): 연결을 막지 않는다. 전략 실행 전에만 확인한다 */
+function acKycRun(ex){ var a=acS(); ex=ex||a.ex; var c=a.conn[ex]; if(!c) return; var my=++AC_RUN; c.kyc='run'; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); }catch(e){}
+  setTimeout(function(){ if(my!==AC_RUN) return; var q=(window.AC_QA&&AC_QA.kyc)||'ok'; var st=(q==='fail'||q==='review'||q==='err')?q:'ok'; if(a.conn[ex]) a.conn[ex].kyc=st; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); var g=document.getElementById('ac-kyc-go'); if(g) g.disabled=st!=='ok'; }catch(e){} if(st==='ok'&&AC_GATE&&AC_GATE.ex===ex){ setTimeout(function(){ acConfirmClose(); var c=AC_GATE&&AC_GATE.cb; AC_GATE=null; if(c) c(); },500); } },1100); }
+/* 완료 화면과 설정에 쓰는 본인 확인 줄. 연결은 됐고, 전략 실행은 본인 확인이 끝나야 한다 */
+function acKycHtml(ex){ var a=acS(), c=a.conn[ex]||{}, n=acName(ex), st=c.kyc||'none';
+  var body=st==='ok'?'<b>본인 확인 완료</b><span>'+n+'에서 본인 확인이 끝났습니다. 전략을 실행할 수 있습니다.</span>'
+    :st==='run'?'<b>본인 확인 상태를 보는 중</b><span>'+n+'에서 확인하고 있습니다.</span>'
+    :st==='review'?'<b>'+n+'에서 본인 확인을 검토하고 있습니다</b><span>연결은 되었습니다. 검토가 끝나면 전략을 실행할 수 있습니다.</span>'
+    :st==='err'?'<b>본인 확인 상태를 불러오지 못했습니다</b><span>연결은 되었습니다. 잠시 뒤 다시 확인해 주십시오.</span>'
+    :'<b>'+n+'에서 본인 확인을 완료해 주십시오</b><span>연결은 되었습니다. 본인 확인이 끝나야 전략이 주문을 낼 수 있습니다.</span>';
+  var act=st==='ok'||st==='run'?'':(st==='fail'||st==='none'?'<a class="bt-cta acx-a" href="'+gEsc(acRef(ex))+'" target="_blank" rel="noopener">본인 확인하러 가기'+AC_OUT+'</a>':'')+'<button type="button" class="bt-sec" onclick="acKycRun(\''+ex+'\')">다시 확인하기</button>';
+  return '<div class="acx-kyc st-'+st+'" id="ac-kyc"><div class="t">'+(st==='ok'?AC_CK:st==='run'?'<i class="acx-sp"></i>':'<em></em>')+'<div>'+body+'</div></div>'+act+'</div>'; }
+function acRunOk(ex){ var a=acS(); return !!(a.conn[ex]&&a.conn[ex].kyc==='ok'); }
+/* 전략을 시작하기 직전에만 본인 확인을 본다. 연결 자체는 막지 않는다 */
+function acRunGate(ex,cb){ var a=acS(); ex=ex||acConnList()[0]; if(!ex||!a.conn[ex]){ cb(); return; } if(acRunOk(ex)){ cb(); return; }
+  var open=function(){ var w=document.getElementById('ac-cf'); if(w) w.remove(); var d=document.createElement('div'); d.id='ac-cf'; d.className='acx-cf'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.innerHTML='<div class="bx"><h3>전략을 시작하기 전에 본인 확인이 필요합니다</h3>'+acKycHtml(ex)+'<div class="bts"><button type="button" onclick="acConfirmClose()">닫기</button><button type="button" class="ok" id="ac-kyc-go" onclick="acRunGateGo()"'+(acRunOk(ex)?'':' hidden disabled')+'>전략 시작</button></div></div>'; document.body.appendChild(d); };
+  AC_GATE={ex:ex,cb:cb}; open();
+  var my=++AC_RUN; a.conn[ex].kyc='run'; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); }catch(e){}
+  setTimeout(function(){ if(my!==AC_RUN) return; var q=(window.AC_QA&&AC_QA.kyc)||'ok'; var st=(q==='fail'||q==='review'||q==='err')?q:'ok'; a.conn[ex].kyc=st; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); var g=document.getElementById('ac-kyc-go'); if(g) g.disabled=st!=='ok'; }catch(e){} if(st==='ok'){ setTimeout(function(){ acConfirmClose(); var c=AC_GATE&&AC_GATE.cb; AC_GATE=null; if(c) c(); },500); } },1100); }
+var AC_GATE=null;
+function acRunGateGo(){ var g=AC_GATE; AC_GATE=null; acConfirmClose(); if(g&&g.cb&&acRunOk(g.ex)) g.cb(); }
+function acBLimit(){ var a=acS(), n=acName(a.ex);
+  var L=acConnList().filter(function(k){ return a.conn[k].via==='paid'; });
+  return '<p class="acx-note" role="status"><b>현재 구독의 연결 한도에 도달했습니다</b><br>구독당 거래소 최대 '+AC_PAID_MAX+'곳입니다. 연결된 거래소: '+L.map(function(k){ return acLogo(k,16)+' '+acName(k); }).join(', ')+'</p>'
+    +'<div class="acx-col"><button type="button" class="acx-ch" onclick="acLimitAlt(\'partner\')"><b>'+n+'를 TETH 초대 계정으로 연결</b><span>이용료 없음. 초대 계정이 없으면 새로 가입합니다</span></button><button type="button" class="acx-ch" onclick="acLimitAlt(\'more\')"><b>구독 추가</b><span>월 '+acUsd(AC_CFG.price)+', 거래소 최대 '+AC_PAID_MAX+'곳 추가 연결</span></button>'+(AC_CTX&&AC_CTX.need?'':'<button type="button" class="acx-ch" onclick="acLimitAlt(\'ex\')"><b>다른 거래소 고르기</b><span>연결된 거래소 중에서 실행합니다</span></button>')+'</div>'; }
+function acLimitAlt(k){ var a=acS(); if(k==='partner'){ a.route='partner'; a.has=null; a.g=0; a.uid={st:'none'}; a.kyc={st:'none'}; } else if(k==='more'){ a.more=1; a.pay={st:'none'}; a.newCard=0; } else { a.ex=null; } acSave(); acRe(); }
 function acUidAlt(k){ var a=acS(); if(k==='new'){ a.has='no'; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; } else if(k==='paid'){ a.route='paid'; a.uid={st:'none'}; } else { a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; } acSave(); acRe(); }
 /* 끝 */
 function acDoneHtml(){
@@ -215,7 +243,7 @@ function acDoneHtml(){
 function acGoTerminal(){ acSheetClose(); tfNav('#/trade'); }
 function acHeadHtml(){
   var cur=acStep(), ctx=AC_CTX||{}, a=acS(), acc=acAccess(), left=acSteps().filter(function(x){ return !acDoneK(x[0]); }).length;
-  if(cur==='done') return '<h2 class="btg-h">실행 준비가 끝났습니다</h2><p class="btg-s">'+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+acName(a.ex||acConnList()[0])+' 계정에서 실행할 수 있습니다.</p>';
+  if(cur==='done') return '<h2 class="btg-h">거래소 연결 완료</h2><p class="btg-s">'+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+acName(a.ex||acConnList()[0])+' 계정에서 실행할 수 있습니다. 전략을 시작할 때 거래소의 본인 확인 상태를 봅니다.</p>';
   if(ctx.page&&acConnList().length&&!acConnList().some(acConnOk)) return '<h2 class="btg-h">구독이 끝났습니다</h2><p class="btg-s">연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.</p>';
   if(ctx.page&&acConnList().length&&!a.adding&&(!a.ex||acConnOk(a.ex))) return '<h2 class="btg-h">거래소 연결</h2><p class="btg-s">주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다.</p>';
   var h=ctx.need&&acConnList().length&&!a.conn[ctx.need]?'이 전략은 '+acName(ctx.need)+'에서 실행됩니다':acc==='paid'?'거래소 계정을 연결하면 바로 실행합니다':acc==='partner'?'거래소를 하나 더 연결합니다':(ctx.name?gEsc(ctx.name)+' 전략을 실행할 계정을 연결합니다':'전략을 실행할 계정을 연결합니다');
@@ -266,7 +294,7 @@ function acPageView(ex){
     +'<div class="btg-flow acx-flow" id="ac-flow">'+((OK.length&&!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)?(OK.length?'<button type="button" class="bt-cta" onclick="acGoTerminal()">터미널로 이동</button>'+acHelp():acFlowHtml()):acFlowHtml())+'</div></div></div>');
   TF_RENDERING=false; if(acStep()==='uid') acUidRun();
 }
-function acAddMore(){ var a=acS(); a.ex=null; a.adding=1; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; acSave(); acPageView(); }
+function acAddMore(){ var a=acS(); a.ex=null; a.adding=1; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.kyc={st:'none'}; a.doneAt=null; acSave(); acPageView(); }
 function acDisc(k){
   acConfirm({title:acName(k)+' 연결을 끊으시겠습니까?',body:'이 거래소에서 돌아가는 전략은 새 주문을 내지 않습니다. 열려 있는 포지션은 거래소에 그대로 남습니다.',ok:'연결 끊기',danger:1,run:function(){ var a=acS(), t=tfS(); delete a.conn[k]; if(a.ex===k){ a.ex=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; } var L=acConnList(); if(L.length){ t.api={ex:L[0],last4:null,oauth:true}; } else { t.api=null; t.conn=false; t.uidLinked=false; } acSave(); toast(acName(k)+' 연결을 끊었습니다'); if(G.mode==='tfbrokers') acPageView(); else if(typeof stRe==='function') stRe(); }});
 }

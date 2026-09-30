@@ -1,0 +1,13 @@
+const fs=require('fs');
+function ed(f,L){ let s=fs.readFileSync(f,'utf8'); for(const [a,b] of L){ const n=s.split(a).length-1; if(n!==1) throw new Error(f+' anchor '+n+' :: '+a.slice(0,70)); s=s.replace(a,()=>b); } fs.writeFileSync(f,s); }
+// 빌드 순서: pl.js 는 ac.js 뒤, p16.js 앞. CSS 도 합친다
+ed('apply2.cjs',[["'an.js','rv.js','p16.js'","'an.js','rv.js','pl.js','p16.js'"]]);
+ed('build.sh',[["cat bt.v0.css bt2.css bt3.css bt4.css bt5.css bt6.css > bt.css","cat bt.v0.css bt2.css bt3.css bt4.css bt5.css bt6.css pl.css > bt.css"]]);
+// 모바일: 카드 항목 접기 단추
+ed('pl.js',[["    +'<p class=\"pl-foot\">'+plRebate()+' 연결 과정에서 TETH 초대 계정 여부를 확인합니다.</p></article>';","    +'<button type=\"button\" class=\"pl-more\" onclick=\"plMore(this)\">혜택 자세히 보기</button><p class=\"pl-foot\">'+plRebate()+' 연결 과정에서 TETH 초대 계정 여부를 확인합니다.</p></article>';"],
+ ["    +'<p class=\"pl-foot\">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';","    +'<button type=\"button\" class=\"pl-more\" onclick=\"plMore(this)\">포함 내용 보기</button><p class=\"pl-foot\">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';"],
+ ["function plPick(route){","function plMore(b){ var c=b.closest('.pl-card'); var o=c.getAttribute('data-open')==='1'; c.setAttribute('data-open',o?'0':'1'); b.textContent=o?(c.classList.contains('pl-hi')?'혜택 자세히 보기':'포함 내용 보기'):'접기'; }\nfunction plPick(route){"]]);
+// 백테스트 실행하기: 자격이 없으면 플랜 화면으로. 결과가 좋으면 결과 카드를 같이 보낸다
+ed('p16.js',[["  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; } return u0.apply(this,arguments); };",
+ "  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; }\n    if(!acReady(need)){ /* 실행 자격이 없으면 플랜 화면. 결과가 좋으면 왼쪽에 결과 카드 */ var R=BT.R, good=R&&typeof rvBad==='function'&&!rvBad()&&(R.wins.length+R.loss.length)>0; var bt=good?{name:mkHook(s),ex:need||(s.ex||'bitget'),per:btPerL(),amt:btUsd(BT.amt),ret:R.ret,bench:R.benchRet,mdd:R.mdd,n:R.wins.length+R.loss.length,eq:(function(){ var E=R.eq, o=[], k=Math.max(1,Math.floor(E.length/60)); for(var i=0;i<E.length;i+=k) o.push(E[i].v); o.push(E[E.length-1].v); return o; })()}:null; acStart({need:need,name:mkHook(s),after:s.mine?{kind:'bt',id:'mine'}:{kind:'copy',id:btNe()},bt:bt}); return; }\n    return u0.apply(this,arguments); };"]]);
+console.log('ok');

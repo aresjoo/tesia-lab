@@ -7044,6 +7044,131 @@ body.st-full .stg{position:relative}
 .rv-det[open] summary::before{transform:rotate(45deg)}
 .rv-det .rv-rules{margin-top:8px}
 .rv-cmp-acts{display:flex;gap:14px;flex-wrap:wrap}
+
+/* 무료 경로: 이미 초대 계정이 있는 사람용 작은 링크 */
+.acx-have{margin:14px 0 0;text-align:center}
+.acx-have button{border:0;background:none;color:#aeb3ba;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.acx-have button:hover{color:#fff}.acx-have small{display:block;margin-top:4px;font-size:11.5px;color:#5b6067}
+/* 본인 확인 줄 */
+.acx-kyc{margin:0 0 14px;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
+.acx-kyc .t{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
+.acx-kyc .t>svg,.acx-kyc .t>em,.acx-kyc .t>i{margin-top:3px}
+.acx-kyc .t>em{display:block;width:14px;height:14px;border-radius:50%;border:2px solid #f0b840}
+.acx-kyc.st-ok .t>svg{color:#2fb98a}
+.acx-kyc b{display:block;font-size:14px;color:#f2f3f5}.acx-kyc span{display:block;font-size:12.5px;line-height:1.6;color:#8b9096;margin-top:2px}
+.acx-kyc .bt-sec{margin-top:10px}.acx-kyc .bt-sec+.bt-sec{margin-top:6px}
+.acx-kyc.st-fail,.acx-kyc.st-none{border-color:rgba(240,184,64,.35);background:rgba(240,184,64,.06)}
+
+.acx-g2 .n{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18);border:0;font-size:0;margin:7px}
+.acx-g2 li.on .n{background:#fff}.acx-g2 li.ok .n{background:transparent;color:#2fb98a;width:24px;height:24px;margin:0;font-size:12px}
+.acx-g2 li{grid-template-columns:24px minmax(0,1fr)}
+/* ── 거래소 연결 플랜 (참고: ChatGPT 플랜 업그레이드, 플랜 구성) ── */
+body.pl-page #g-content,body.pl-page #g-scroll,body.pl-page .g-center{background:#212121}
+body.pl-page.pl-dark #g-content,body.pl-page.pl-dark #g-scroll,body.pl-page.pl-dark .g-center{background:#000}
+body.pl-page #g-chead{background:transparent}
+body.pl-page #g-appbanner{display:none!important}
+.pl{max-width:1080px;margin:0 auto;padding:8px 24px 100px;color:#ececec;font-weight:400}
+.pl-head{text-align:center;margin:0 0 26px}
+.pl-head h1{margin:0;font-size:32px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.pl-need{margin:10px 0 0;font-size:15px;color:#b4b4b4}
+.pl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:27px;align-items:stretch}
+.pl-grid.has-bt{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pl-card{position:relative;display:flex;flex-direction:column;padding:26px;border-radius:26px;border:1px solid rgba(255,255,255,.16);background:#212121;min-width:0}
+.pl-card.pl-hi{border-color:#5a8dff;background:linear-gradient(180deg,#27303f 0%,#1f3556 45%,#1e4a8f 100%)}
+.pl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:28px}
+.pl-lb{font-size:20px;font-weight:600;color:#fff}
+.pl-h{margin:24px 0 0;font-size:32px;line-height:1.25;font-weight:400;letter-spacing:-.01em;color:#fff}
+.pl-d{margin:14px 0 0;font-size:18px;line-height:1.55;color:#cdcdcd;min-height:84px}
+.pl-price{display:flex;align-items:baseline;gap:4px;margin:34px 0 28px}
+.pl-price>i{font-style:normal;font-size:20px;color:#fff;align-self:flex-start;margin-top:8px}
+.pl-price>span{font-size:44px;font-weight:400;line-height:1;letter-spacing:-.01em;color:#fff}
+.pl-price>small{font-size:16px;color:#cdcdcd;margin-left:4px}
+.pl-grad{background:linear-gradient(120deg,#cfe0ff 0%,#8fb4ff 55%,#b39dff 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.pl-cta{width:100%;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:background-color .15s ease,border-color .15s ease}
+.pl-cta:hover{background:rgba(255,255,255,.08)}
+.pl-cta-hi{background:#2f6fed;border-color:#2f6fed;color:#fff}
+.pl-cta-hi:hover{background:#2b64d6}
+.pl-cta-w{background:#fff;border-color:#fff;color:#000;font-weight:500}
+.pl-cta-w:hover{background:#ececec}
+.pl-cta:disabled{opacity:.6;cursor:default}
+.pl-sub{margin:42px 0 16px;font-size:16px;color:#ececec}
+.pl-items{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.pl-items li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;align-items:center;font-size:16px;line-height:1.5;color:#ececec}
+.pl-items li svg{color:#cdcdcd}
+.pl-hi .pl-items li svg{color:#8fb4ff}
+.pl-items.sm{gap:18px}.pl-items.sm li{font-size:16px}
+.pl-logos{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}
+.pl-logos img,.pl-logos .acx-mono{border-radius:4px;vertical-align:0}
+.pl-foot{margin:auto 0 0;padding-top:34px;font-size:13px;line-height:1.6;color:#b4b4b4}
+.pl-bt .pl-price>span{font-size:40px}
+.pl-spark{width:100%;height:72px;margin:0 0 20px}
+.pl-more{display:none}
+/* 플랜 구성(결제) */
+.pl-co{max-width:1120px;padding-top:0}
+.pl-cohead{display:flex;align-items:center;gap:14px;margin:0 0 30px}
+.pl-cohead h1{margin:0;font-size:32px;font-weight:400;color:#fff}
+.pl-back{width:36px;height:36px;border:0;border-radius:10px;background:transparent;color:#ececec;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pl-back:hover{background:rgba(255,255,255,.08)}
+.pl-cogrid{display:grid;grid-template-columns:minmax(0,1fr) 437px;gap:79px;align-items:start}
+.pl-t3{margin:0 0 6px;font-size:18px;font-weight:600;color:#fff}.pl-t3.mt{margin-top:34px;margin-bottom:14px}
+.pl-d2{margin:0 0 14px;font-size:14px;color:#b4b4b4}
+.pl-exs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pl-exs button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 14px;border-radius:20px;border:2px solid transparent;background:#3a3a3a;color:#fff;font:inherit;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.pl-exs button img,.pl-exs button .acx-mono{border-radius:7px}
+.pl-exs button b{font-size:15px;font-weight:600}.pl-exs button small{font-size:11.5px;color:#cdcdcd}
+.pl-exs button.on{border-color:#9a9a9a;background:#2c2c2c}
+.pl-exs button.off{opacity:.35;cursor:default}
+.pl-apple{width:100%;height:47px;border-radius:18px;border:0;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:20px;font-weight:600;cursor:pointer;letter-spacing:-.01em}
+.pl-apple span{font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+.pl-apple:disabled{opacity:.7;cursor:default;font-size:14px}
+.pl-or{display:flex;align-items:center;gap:12px;margin:14px 0;color:#9a9a9a;font-size:12px}
+.pl-or::before,.pl-or::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.18)}
+.pl-form{display:grid;gap:10px}
+.pl-form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl-in{position:relative;display:flex;align-items:center;height:77px;padding:0 20px;border-radius:19px;background:#2f2f2f}
+.pl-in.big{height:78px}
+.pl-in input{flex:1;min-width:0;border:0;background:transparent;color:#fff;font:inherit;font-size:18px;font-weight:500;outline:0}
+.pl-in input::placeholder{color:#a5a5a5;font-weight:500}
+.pl-in input.bad{color:#ff9aa5}
+.pl-brands{display:flex;gap:4px}
+.pl-brands i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:22px;border-radius:4px;font-size:9px;font-weight:800;font-style:normal;letter-spacing:.02em}
+.pl-brands .visa{background:#1a1f71;color:#fff}.pl-brands .amex{background:#2e77bb;color:#fff}
+.pl-brands .mc{background:radial-gradient(circle at 35% 50%,#eb001b 0 45%,transparent 46%),radial-gradient(circle at 65% 50%,#f79e1b 0 45%,transparent 46%),#000}
+.pl-cvc{width:26px;height:18px;border-radius:3px;border:1.5px solid #a5a5a5;font-size:8px;color:#a5a5a5;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 2px 1px}
+.pl-form .er{display:none;font-size:12.5px;color:#f58a98}.pl-form .er:not(:empty){display:block}
+.pl-ck{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:15px;color:#ececec;cursor:pointer}
+.pl-ck input{width:18px;height:18px;accent-color:#fff}
+.pl-saved{display:grid;gap:10px}
+.pl-saved .r{display:grid;grid-template-columns:20px minmax(0,1fr) 18px;gap:12px;align-items:center;padding:18px 20px;border-radius:19px;background:#2f2f2f;border:2px solid #9a9a9a}
+.pl-saved .r b{display:block;font-size:16px;color:#fff}.pl-saved .r small{display:block;font-size:12px;color:#cdcdcd}
+.pl-saved .r i{color:#2fb98a}
+.pl-link{border:0;background:none;color:#cdcdcd;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.pl-sumcard{padding:34px;border-radius:36px;background:#303030;border:1px solid rgba(255,255,255,.1);color:#ececec}
+.pl-sumcard h2{margin:0 0 8px;font-size:32px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.pl-sumcard>p{margin:0 0 24px;font-size:15px;color:#cdcdcd}
+.pl-lines{margin:28px 0 24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);display:grid;gap:12px;font-size:15px;color:#cdcdcd}
+.pl-lines div{display:flex;justify-content:space-between;gap:16px}
+.pl-lines b{color:#fff;font-weight:400}
+.pl-lines .tot{margin-top:4px;font-size:17px;color:#fff}.pl-lines .tot b{font-weight:700}
+.pl-sumcard .pl-cta{height:65px;font-size:16px}
+.pl-legal{margin:18px 8px 0;font-size:13.5px;line-height:1.6;color:#d0d0d0}
+@media (max-width:1100px){ .pl-grid.has-bt{grid-template-columns:repeat(2,minmax(0,1fr))} .pl-bt{grid-column:1/-1} .pl-cogrid{grid-template-columns:minmax(0,1fr) 380px;gap:32px} }
+@media (max-width:900px){
+  .pl{padding:4px 5px 110px}
+  .pl-head{margin-bottom:16px}.pl-head h1{font-size:26px}
+  .pl-grid,.pl-grid.has-bt{grid-template-columns:1fr;gap:14px}
+  .pl-bt{grid-column:auto;order:0}.pl-hi{order:1}.pl-card:not(.pl-hi):not(.pl-bt){order:2}
+  .pl-card{padding:22px 20px;border-radius:19px}
+  .pl-lb{font-size:18px}.pl-h{font-size:26px;margin-top:18px}.pl-d{font-size:15px;min-height:0;margin-top:10px}
+  .pl-price{margin:22px 0 18px}.pl-price>span{font-size:36px}.pl-price>i{font-size:16px;margin-top:6px}
+  .pl-sub{margin:26px 0 12px}.pl-items{gap:16px}.pl-items li{font-size:15px}
+  .pl-foot{padding-top:24px}
+  .pl-cogrid{grid-template-columns:minmax(0,1fr);gap:24px}
+  .pl-right{order:2}.pl-left{order:1}
+  .pl-sumcard{padding:24px;border-radius:24px}.pl-sumcard h2{font-size:26px}
+  .pl-exs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pl-exs button{padding:12px 6px 10px;border-radius:14px}
+  .pl-in{height:64px;border-radius:14px}.pl-in.big{height:68px}.pl-in input{font-size:16px}
+}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -21280,7 +21405,7 @@ var AC_CFG={price:280,cur:'USD',
   order:['bitget','binance','okx','bybit','mexc','woox','gate']};
 var AC_CTX=null, AC_RUN=0;
 function acS(){ var t=tfS(); if(!t.ac) t.ac={route:null,ex:null,has:null,g:0,pay:{st:'none'},auth:{st:'idle'},uid:{st:'none'},conn:{},cards:[],bill:[],sub:null};
-  var a=t.ac; a.conn=a.conn||{}; a.pay=a.pay||{st:'none'}; a.auth=a.auth||{st:'idle'}; a.uid=a.uid||{st:'none'}; a.cards=a.cards||[]; a.bill=a.bill||[];
+  var a=t.ac; a.conn=a.conn||{}; a.pay=a.pay||{st:'none'}; a.auth=a.auth||{st:'idle'}; a.uid=a.uid||{st:'none'}; a.kyc=a.kyc||{st:'none'}; a.cards=a.cards||[]; a.bill=a.bill||[];
   /* 예전 방식으로 연결해 둔 계정을 옮겨 온다 */
   if(t.api&&t.api.ex&&!a.conn[t.api.ex]) a.conn[t.api.ex]={via:t.uidLinked?'partner':(t.payDone?'paid':'partner'),at:Date.now(),uid:t.uid||''};
   return a; }
@@ -21298,6 +21423,10 @@ function acUsd(n){ return '$'+Number(n).toLocaleString(); }
 function acConnOk(k){ var c=acS().conn[k]; return !!c&&!!acEx(k)&&(c.via==='partner'||acSubOn()); }
 /* 이미 연결해 둔 거래소는 승인을 다시 받지 않는다 */
 function acAuthOk(ex){ var a=acS(); return (a.auth.st==='ok'&&a.auth.ex===ex)||!!a.conn[ex]; }
+var AC_PAID_MAX=2; /* 구독 하나로 연결할 수 있는 거래소 수 */
+function acPaidCount(){ var a=acS(), n=0; for(var k in a.conn) if(a.conn[k].via==='paid'&&acEx(k)) n++; return n; }
+function acPaidFull(){ return acSubOn()&&acPaidCount()>=AC_PAID_MAX*((acS().sub&&acS().sub.n)||1); }
+function acKycOk(ex){ var a=acS(); return a.kyc.st==='ok'&&a.kyc.ex===ex; }
 function acReady(ex){ return ex?acConnOk(ex):acConnList().some(acConnOk); }
 /* 지금 해야 할 한 가지 */
 function acStep(){
@@ -21306,15 +21435,14 @@ function acStep(){
   if(a.edit) return a.edit;
   var r=acRouteNow();
   if(!r) return 'route';
-  if(!ex) return 'ex';
-  if(r==='partner'){ if(!a.has) return 'acct'; if(a.has==='no'&&a.g<3) return 'guide'; if(!acAuthOk(ex)) return 'auth'; if(a.uid.st!=='ok'||a.uid.ex!==ex) return 'uid'; }
-  else if(r==='paid'){ if(!acSubOn()) return 'pay'; if(!acAuthOk(ex)) return 'auth'; }
+  if(r==='paid'){ if(!acSubOn()||a.more) return 'pay'; if(!ex) return 'ex'; if(!a.conn[ex]&&acPaidFull()) return 'limit'; if(!acAuthOk(ex)) return 'auth'; }
+  else { if(!ex) return 'ex'; if(!a.has) return 'acct'; if(a.has==='no'&&a.g<2) return 'guide'; if(!acAuthOk(ex)) return 'auth'; if(a.uid.st!=='ok'||a.uid.ex!==ex) return 'uid'; }
   return 'commit';
 }
-function acRouteNow(){ var a=acS(); return acSubOn()?'paid':(a.route||(acAccess()==='partner'?'partner':null)); }
+function acRouteNow(){ var a=acS(); if(a.route==='partner'&&acSubOn()&&a.ex&&!a.conn[a.ex]) return 'partner'; /* 구독 회원이 한도 뒤 초대 계정으로 고른 경우 */ return acSubOn()?'paid':(a.route||(acAccess()==='partner'?'partner':null)); }
 function acCommit(){
   var a=acS(), t=tfS(), ex=a.ex, r=acRouteNow(); if(!ex) return;
-  a.conn[ex]={via:r==='paid'?'paid':'partner',at:Date.now(),uid:a.uid.ex===ex?(a.uid.v||''):''};
+  a.conn[ex]={via:r==='paid'?'paid':'partner',at:Date.now(),uid:a.uid.ex===ex?(a.uid.v||''):'',kyc:'none'};
   t.api={ex:ex,last4:null,oauth:true}; t.conn=true; if(a.conn[ex].via==='partner'){ t.uidLinked=true; t.uid=a.conn[ex].uid; } t.ob={st:'completed',ex:ex,uid:a.conn[ex].uid||'',err:null};
   a.doneAt=Date.now(); a.edit=null; acSave(); try{ tfTrack('ac_connected',{ex:ex,via:a.conn[ex].via}); tfSideSync&&tfSideSync(); }catch(e){}
 }
@@ -21324,32 +21452,31 @@ var AC_OUT='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="
 function acSteps(){
   var a=acS(), acc=acAccess(), r=acRouteNow()||a.routeSel||'partner', L=[];
   if(acc==='none'||(!acSubOn()&&a.route==='paid')) L.push(['route','이용 방식']);
-  L.push(['ex','거래소']);
-  if(r==='partner'){ L.push(['acct','거래소 계정']); L.push(['auth','연결 승인']); L.push(['uid','초대 계정 확인']); }
-  else { /* 결제는 아직 안 했거나 방금 이 흐름에서 마쳤을 때만 보인다 */ if(!acSubOn()||(a.pay.st==='ok'&&!acConnList().some(function(k){ return a.conn[k].via==='paid'; }))) L.push(['pay','결제']); L.push(['auth','연결 승인']); }
+  if(r==='partner'){ L.push(['ex','거래소']); L.push(['acct','거래소 계정']); L.push(['auth','연결 승인']); L.push(['uid','초대 계정 확인']); }
+  else { /* 결제가 먼저. 이미 구독 중이면 결제 단계는 보이지 않는다 */ if(!acSubOn()||(a.pay.st==='ok'&&!acConnList().some(function(k){ return a.conn[k].via==='paid'; }))) L.push(['pay','결제']); L.push(['ex','거래소']); L.push(['auth','연결 승인']); }
   return L;
 }
 function acSum(k){
   var a=acS();
   if(k==='route') return a.route==='paid'?'구독, 월 '+acUsd(AC_CFG.price):'TETH 초대 계정, 이용료 없음';
   if(k==='ex') return acLogo(a.ex,16)+acName(a.ex);
-  if(k==='acct') return a.has==='no'?'새 계정, 가입과 본인 확인 완료':'계정 있음';
+  if(k==='acct') return a.has==='no'?'새 계정, 가입 완료':'계정 있음';
   if(k==='guide') return '가입과 본인 확인 완료';
   if(k==='pay') return a.cards[0]?'카드 끝자리 <span class="num">'+gEsc(a.cards[0].last4)+'</span>, 월 '+acUsd(AC_CFG.price):'결제 완료';
   if(k==='auth') return acName(a.ex)+'에서 승인 완료';
   if(k==='uid') return 'TETH 초대 계정으로 확인';
   return ''; }
 function acDoneK(k){ var a=acS(), ex=a.ex;
-  return k==='route'?!!a.route:k==='ex'?!!ex:k==='acct'?(!!a.has&&(a.has!=='no'||a.g>=3)):k==='guide'?a.g>=3:k==='pay'?acSubOn():k==='auth'?acAuthOk(ex):k==='uid'?(a.uid.st==='ok'&&a.uid.ex===ex):false; }
+  return k==='route'?!!a.route:k==='ex'?!!ex:k==='acct'?(!!a.has&&(a.has!=='no'||a.g>=2)):k==='guide'?a.g>=3:k==='pay'?acSubOn():k==='auth'?acAuthOk(ex):k==='uid'?(a.uid.st==='ok'&&a.uid.ex===ex):false; }
 function acHelp(){ return '<p class="acx-help"><span>막히는 곳이 있으면 상담원이 도와드립니다. 24시간 응답합니다.</span><button type="button" onclick="tfTxHelp()">상담원에게 묻기</button></p>'; }
 function acFlowHtml(){
-  var a=acS(), cur=acStep(), L=acSteps(), body={route:acBRoute,ex:acBEx,acct:acBAcct,guide:acBGuide,pay:acBPay,auth:acBAuth,uid:acBUid};
+  var a=acS(), cur=acStep(), L=acSteps(), body={route:acBRoute,ex:acBEx,acct:acBAcct,guide:acBGuide,pay:acBPay,auth:acBAuth,uid:acBUid,limit:acBLimit};
   if(cur==='commit'){ acCommit(); cur='done'; }
   if(cur==='done') return acDoneHtml();
-  var seen=false, sub=cur==='guide'; if(sub) cur='acct';
+  var seen=false, sub=cur==='guide'; if(sub) cur='acct'; var lim=cur==='limit'; if(lim) cur='ex';
   return '<ol class="btg-sts acx-sts">'+L.map(function(x,i){ var on=x[0]===cur, ok=!on&&!seen&&acDoneK(x[0]); if(on) seen=true;
     return '<li class="btg-st '+(on?'on':ok?'ok':'nx')+'"'+(on?' aria-current="step"':'')+'><div class="sh"><span class="sn num">'+(ok?AC_CK:(i+1))+'</span><b>'+x[1]+'</b>'+(ok?'<span class="sm">'+acSum(x[0])+'</span>'+((x[0]==='route'||x[0]==='ex'||x[0]==='acct')?'<button type="button" class="ed" onclick="acEdit(\''+x[0]+'\')">변경</button>':''):'')+'</div>'
-      +(on?'<div class="sb" id="ac-sb">'+body[sub?'guide':x[0]]()+'</div>':'')+'</li>'; }).join('')+'</ol>'+acHelp();
+      +(on?'<div class="sb" id="ac-sb">'+body[sub?'guide':lim?'limit':x[0]]()+'</div>':'')+'</li>'; }).join('')+'</ol>'+acHelp();
 }
 function acRe(){ AC_RUN++; var h=document.getElementById('ac-flow'); if(!h) return; h.innerHTML=acFlowHtml(); var hd=document.getElementById('ac-head'); if(hd) hd.innerHTML=acHeadHtml(); if(acStep()==='done'&&AC_CTX&&AC_CTX.onDone) try{ AC_CTX.onDone(); }catch(e){}
   var on=h.querySelector('.btg-st.on'); if(on&&AC_CTX&&AC_CTX.sheet) try{ on.scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
@@ -21376,24 +21503,24 @@ function acBEx(){
     +'<button type="button" class="bt-cta" onclick="acExGo()"'+(cur?'':' disabled')+'>'+(cur?acName(cur)+'로 계속':'거래소 선택')+'</button>';
 }
 function acPickEx(id){ acS().exSel=id; acRe(); }
-function acExGo(){ var a=acS(), id=a.exSel||a.ex||(AC_CTX&&AC_CTX.ex); if(!id) return; if(a.ex!==id){ a.has=null; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; } a.ex=id; a.exSel=null; a.edit=null; acSave(); acRe(); }
+function acExGo(){ var a=acS(), id=a.exSel||a.ex||(AC_CTX&&AC_CTX.ex); if(!id) return; if(a.ex!==id){ a.has=null; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; a.kyc={st:'none'}; a.doneAt=null; } a.ex=id; a.exSel=null; a.edit=null; acSave(); acRe(); }
 /* 거래소 계정이 있는가 */
 function acBAcct(){
   var a=acS(), n=acName(a.ex);
-  return '<p class="btg-p">'+n+' 계정이 있습니까? TETH 초대로 가입한 계정이면 이용료 없이 씁니다.</p>'
-    +'<div class="acx-two"><button type="button" class="acx-ch" onclick="acHas(\'yes\')"><b>계정 있음</b><span>바로 연결합니다</span></button><button type="button" class="acx-ch" onclick="acHas(\'no\')"><b>새로 만들기</b><span>TETH 초대로 가입합니다. 약 5분</span></button></div>';
+  return '<p class="btg-p">TETH 초대로 '+n+'에 가입하면 TETH 이용료 없이 이용합니다. 가입 후 계정을 연결합니다. 본인 확인은 전략 시작 전에 필요합니다. 도움이 필요하면 24시간 고객 지원을 이용할 수 있습니다.</p>'
+    +acBGuide()
+    +'<p class="acx-have"><button type="button" onclick="acHas(\'yes\')">TETH 초대 계정이 이미 있습니까? 바로 연결</button><small>승인 뒤에 TETH 초대로 가입한 계정인지 확인합니다.</small></p>';
 }
 function acHas(v){ var a=acS(); a.has=v; a.g=0; a.edit=null; acSave(); acRe(); }
 /* 계정 만들기: 한 번에 한 가지 */
 function acBGuide(){
-  var a=acS(), n=acName(a.ex), g=a.g||0, T=[['계정 만들기','TETH 초대 주소로 '+n+' 가입 화면이 새 창에 열립니다. 이메일이나 전화번호로 가입합니다.'],['본인 확인',n+' 앱이나 웹에서 신분증으로 본인 확인을 마칩니다. 보통 몇 분이면 끝납니다.'],['입금','전략이 쓸 금액을 '+n+' 계정에 넣습니다. 지금 건너뛰고 나중에 넣어도 연결은 할 수 있습니다.']];
-  return '<ol class="acx-g">'+T.map(function(x,i){ return '<li class="'+(i<g?'ok':i===g?'on':'')+'"><span class="n num">'+(i<g?AC_CK:(i+1))+'</span><div><b>'+x[0]+'</b>'+(i===g?'<p>'+x[1]+'</p>':'')+'</div></li>'; }).join('')+'<li><span class="n num">4</span><div><b>TETH 연결</b></div></li></ol>'
+  var a=acS(), n=acName(a.ex), g=a.g||0, T=[['계정 만들기','TETH 초대 주소로 '+n+' 가입 화면이 새 창에 열립니다. 이메일이나 전화번호로 가입합니다.'],['본인 확인',n+' 앱이나 웹에서 신분증으로 본인 확인을 마칩니다. 보통 몇 분이면 끝납니다. 입금은 나중에 전략을 시작할 때 안내합니다.']];
+  return '<ol class="acx-g acx-g2">'+T.map(function(x,i){ return '<li class="'+(i<g?'ok':i===g?'on':'')+'"><span class="n">'+(i<g?AC_CK:'')+'</span><div><b>'+x[0]+'</b>'+(i===g?'<p>'+x[1]+'</p>':'')+'</div></li>'; }).join('')+'<li><span class="n"></span><div><b>TETH 연결</b></div></li></ol>'
     +(g===0?'<a class="bt-cta acx-a" href="'+gEsc(acRef(a.ex))+'" target="_blank" rel="noopener" onclick="acGuideOpen()">'+n+' 가입 화면 열기'+AC_OUT+'</a><button type="button" class="bt-sec" onclick="acGuide(1)">가입 완료</button>'
-      :g===1?'<button type="button" class="bt-cta" onclick="acGuide(2)">본인 확인 완료</button>'
-      :'<button type="button" class="bt-cta" onclick="acGuide(3)">입금 완료</button><button type="button" class="bt-sec" onclick="acGuide(3)">나중에 입금</button>');
+      :'<button type="button" class="bt-cta" onclick="acGuide(2)">본인 확인 완료</button>');
 }
-function acGuideOpen(){ try{ tfTrack('ac_join_open',{ex:acS().ex}); }catch(e){} acS().joined=1; acSave(); }
-function acGuide(n){ var a=acS(); a.g=n; if(n>=1) a.joined=1; acSave(); acRe(); }
+function acGuideOpen(){ var a=acS(); try{ tfTrack('ac_join_open',{ex:a.ex}); }catch(e){} a.joined=1; if(!a.has) a.has='no'; acSave(); }
+function acGuide(n){ var a=acS(); a.g=n; if(n>=1) a.joined=1; if(!a.has) a.has='no'; acSave(); acRe(); }
 /* 결제 */
 function acIn(id,lb,ph,attr){ return '<label class="btg-f" for="'+id+'"><span>'+lb+'</span><input id="'+id+'" class="num" placeholder="'+ph+'" autocomplete="off" spellcheck="false" aria-describedby="'+id+'-e" '+(attr||'')+'><small class="er" id="'+id+'-e" role="alert"></small></label>'; }
 function acErr(id,msg){ var e=document.getElementById(id+'-e'), i=document.getElementById(id); if(e) e.textContent=msg||''; if(i){ i.classList.toggle('bad',!!msg); if(msg) try{ i.focus(); }catch(x){} } }
@@ -21425,7 +21552,7 @@ function acBillAdd(st,card,amt,label){ var a=acS(); a.bill.unshift({id:'T'+Date.
 function acPaySaved(){ var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0]; if(!sv) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
   setTimeout(function(){ if(my!==AC_RUN) return; var t=tfS();
     if(window.AC_QA&&AC_QA.pay==='fail'){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',sv,AC_CFG.price); acSave(); acRe(); return; }
-    a.pay={st:'ok',at:Date.now()}; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',sv,AC_CFG.price); acSave(); acRe(); },1500);
+    a.pay={st:'ok',at:Date.now()}; var nS=(a.more&&a.sub&&a.sub.st==='active')?((a.sub.n||1)+1):1; a.more=0; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price,n:nS}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',sv,AC_CFG.price); acSave(); acRe(); },1500);
 }
 function acPayGo(){
   var c=acCardRead('ac-'); if(!c) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
@@ -21433,7 +21560,7 @@ function acPayGo(){
     if(!acCharge(c)){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',c,AC_CFG.price); acSave(); var keep={}; ['ac-cn','ac-ce','ac-ch'].forEach(function(i){ var e=document.getElementById(i); if(e) keep[i]=e.value; }); acRe(); for(var k in keep){ var e=document.getElementById(k); if(e) e.value=keep[k]; } return; }
     a.newCard=0;
     var card={id:'c'+Date.now().toString(36),last4:c.last4,brand:c.brand,exp:c.exp,name:c.name,def:true}; a.cards.forEach(function(x){ x.def=false; }); a.cards.unshift(card);
-    a.pay={st:'ok',at:Date.now()}; a.sub={st:'active',since:Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',card,AC_CFG.price);
+    a.pay={st:'ok',at:Date.now()}; var nS=(a.more&&a.sub&&a.sub.st==='active')?((a.sub.n||1)+1):1; a.more=0; a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price,n:nS}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',card,AC_CFG.price);
     if(!a.billTo) a.billTo={email:(S.user&&S.user.email)||'',name:c.name,addr:''};
     acSave(); try{ tfTrack('ac_paid',{}); }catch(e){} acRe(); },1500);
 }
@@ -21477,6 +21604,32 @@ function acUidRun(){
     setTimeout(function(){ if(my!==AC_RUN) return; var bad=a.has!=='no'&&window.AC_QA&&AC_QA.uid==='fail';
       a.uid=bad?{st:'fail',ex:a.ex,v:a.auth.uid}:{st:'ok',ex:a.ex,v:a.auth.uid}; acSave(); acRe(); },900); },800);
 }
+/* 본인 확인(KYC): 연결을 막지 않는다. 전략 실행 전에만 확인한다 */
+function acKycRun(ex){ var a=acS(); ex=ex||a.ex; var c=a.conn[ex]; if(!c) return; var my=++AC_RUN; c.kyc='run'; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); }catch(e){}
+  setTimeout(function(){ if(my!==AC_RUN) return; var q=(window.AC_QA&&AC_QA.kyc)||'ok'; var st=(q==='fail'||q==='review'||q==='err')?q:'ok'; if(a.conn[ex]) a.conn[ex].kyc=st; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); var g=document.getElementById('ac-kyc-go'); if(g) g.disabled=st!=='ok'; }catch(e){} if(st==='ok'&&AC_GATE&&AC_GATE.ex===ex){ setTimeout(function(){ acConfirmClose(); var c=AC_GATE&&AC_GATE.cb; AC_GATE=null; if(c) c(); },500); } },1100); }
+/* 완료 화면과 설정에 쓰는 본인 확인 줄. 연결은 됐고, 전략 실행은 본인 확인이 끝나야 한다 */
+function acKycHtml(ex){ var a=acS(), c=a.conn[ex]||{}, n=acName(ex), st=c.kyc||'none';
+  var body=st==='ok'?'<b>본인 확인 완료</b><span>'+n+'에서 본인 확인이 끝났습니다. 전략을 실행할 수 있습니다.</span>'
+    :st==='run'?'<b>본인 확인 상태를 보는 중</b><span>'+n+'에서 확인하고 있습니다.</span>'
+    :st==='review'?'<b>'+n+'에서 본인 확인을 검토하고 있습니다</b><span>연결은 되었습니다. 검토가 끝나면 전략을 실행할 수 있습니다.</span>'
+    :st==='err'?'<b>본인 확인 상태를 불러오지 못했습니다</b><span>연결은 되었습니다. 잠시 뒤 다시 확인해 주십시오.</span>'
+    :'<b>'+n+'에서 본인 확인을 완료해 주십시오</b><span>연결은 되었습니다. 본인 확인이 끝나야 전략이 주문을 낼 수 있습니다.</span>';
+  var act=st==='ok'||st==='run'?'':(st==='fail'||st==='none'?'<a class="bt-cta acx-a" href="'+gEsc(acRef(ex))+'" target="_blank" rel="noopener">본인 확인하러 가기'+AC_OUT+'</a>':'')+'<button type="button" class="bt-sec" onclick="acKycRun(\''+ex+'\')">다시 확인하기</button>';
+  return '<div class="acx-kyc st-'+st+'" id="ac-kyc"><div class="t">'+(st==='ok'?AC_CK:st==='run'?'<i class="acx-sp"></i>':'<em></em>')+'<div>'+body+'</div></div>'+act+'</div>'; }
+function acRunOk(ex){ var a=acS(); return !!(a.conn[ex]&&a.conn[ex].kyc==='ok'); }
+/* 전략을 시작하기 직전에만 본인 확인을 본다. 연결 자체는 막지 않는다 */
+function acRunGate(ex,cb){ var a=acS(); ex=ex||acConnList()[0]; if(!ex||!a.conn[ex]){ cb(); return; } if(acRunOk(ex)){ cb(); return; }
+  var open=function(){ var w=document.getElementById('ac-cf'); if(w) w.remove(); var d=document.createElement('div'); d.id='ac-cf'; d.className='acx-cf'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.innerHTML='<div class="bx"><h3>전략을 시작하기 전에 본인 확인이 필요합니다</h3>'+acKycHtml(ex)+'<div class="bts"><button type="button" onclick="acConfirmClose()">닫기</button><button type="button" class="ok" id="ac-kyc-go" onclick="acRunGateGo()"'+(acRunOk(ex)?'':' hidden disabled')+'>전략 시작</button></div></div>'; document.body.appendChild(d); };
+  AC_GATE={ex:ex,cb:cb}; open();
+  var my=++AC_RUN; a.conn[ex].kyc='run'; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); }catch(e){}
+  setTimeout(function(){ if(my!==AC_RUN) return; var q=(window.AC_QA&&AC_QA.kyc)||'ok'; var st=(q==='fail'||q==='review'||q==='err')?q:'ok'; a.conn[ex].kyc=st; acSave(); try{ var el=document.getElementById('ac-kyc'); if(el) el.outerHTML=acKycHtml(ex); var g=document.getElementById('ac-kyc-go'); if(g) g.disabled=st!=='ok'; }catch(e){} if(st==='ok'){ setTimeout(function(){ acConfirmClose(); var c=AC_GATE&&AC_GATE.cb; AC_GATE=null; if(c) c(); },500); } },1100); }
+var AC_GATE=null;
+function acRunGateGo(){ var g=AC_GATE; AC_GATE=null; acConfirmClose(); if(g&&g.cb&&acRunOk(g.ex)) g.cb(); }
+function acBLimit(){ var a=acS(), n=acName(a.ex);
+  var L=acConnList().filter(function(k){ return a.conn[k].via==='paid'; });
+  return '<p class="acx-note" role="status"><b>현재 구독의 연결 한도에 도달했습니다</b><br>구독당 거래소 최대 '+AC_PAID_MAX+'곳입니다. 연결된 거래소: '+L.map(function(k){ return acLogo(k,16)+' '+acName(k); }).join(', ')+'</p>'
+    +'<div class="acx-col"><button type="button" class="acx-ch" onclick="acLimitAlt(\'partner\')"><b>'+n+'를 TETH 초대 계정으로 연결</b><span>이용료 없음. 초대 계정이 없으면 새로 가입합니다</span></button><button type="button" class="acx-ch" onclick="acLimitAlt(\'more\')"><b>구독 추가</b><span>월 '+acUsd(AC_CFG.price)+', 거래소 최대 '+AC_PAID_MAX+'곳 추가 연결</span></button>'+(AC_CTX&&AC_CTX.need?'':'<button type="button" class="acx-ch" onclick="acLimitAlt(\'ex\')"><b>다른 거래소 고르기</b><span>연결된 거래소 중에서 실행합니다</span></button>')+'</div>'; }
+function acLimitAlt(k){ var a=acS(); if(k==='partner'){ a.route='partner'; a.has=null; a.g=0; a.uid={st:'none'}; a.kyc={st:'none'}; } else if(k==='more'){ a.more=1; a.pay={st:'none'}; a.newCard=0; } else { a.ex=null; } acSave(); acRe(); }
 function acUidAlt(k){ var a=acS(); if(k==='new'){ a.has='no'; a.g=0; a.auth={st:'idle'}; a.uid={st:'none'}; } else if(k==='paid'){ a.route='paid'; a.uid={st:'none'}; } else { a.ex=null; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; } acSave(); acRe(); }
 /* 끝 */
 function acDoneHtml(){
@@ -21488,7 +21641,7 @@ function acDoneHtml(){
 function acGoTerminal(){ acSheetClose(); tfNav('#/trade'); }
 function acHeadHtml(){
   var cur=acStep(), ctx=AC_CTX||{}, a=acS(), acc=acAccess(), left=acSteps().filter(function(x){ return !acDoneK(x[0]); }).length;
-  if(cur==='done') return '<h2 class="btg-h">실행 준비가 끝났습니다</h2><p class="btg-s">'+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+acName(a.ex||acConnList()[0])+' 계정에서 실행할 수 있습니다.</p>';
+  if(cur==='done') return '<h2 class="btg-h">거래소 연결 완료</h2><p class="btg-s">'+(ctx.name?gEsc(ctx.name)+' 전략을 ':'전략을 ')+acName(a.ex||acConnList()[0])+' 계정에서 실행할 수 있습니다. 전략을 시작할 때 거래소의 본인 확인 상태를 봅니다.</p>';
   if(ctx.page&&acConnList().length&&!acConnList().some(acConnOk)) return '<h2 class="btg-h">구독이 끝났습니다</h2><p class="btg-s">연결은 그대로 있습니다. 다시 구독하면 전략이 새 주문을 이어서 냅니다.</p>';
   if(ctx.page&&acConnList().length&&!a.adding&&(!a.ex||acConnOk(a.ex))) return '<h2 class="btg-h">거래소 연결</h2><p class="btg-s">주문은 회원님의 거래소 계정에서 나갑니다. 자산은 계속 그 계정에 있습니다.</p>';
   var h=ctx.need&&acConnList().length&&!a.conn[ctx.need]?'이 전략은 '+acName(ctx.need)+'에서 실행됩니다':acc==='paid'?'거래소 계정을 연결하면 바로 실행합니다':acc==='partner'?'거래소를 하나 더 연결합니다':(ctx.name?gEsc(ctx.name)+' 전략을 실행할 계정을 연결합니다':'전략을 실행할 계정을 연결합니다');
@@ -21539,7 +21692,7 @@ function acPageView(ex){
     +'<div class="btg-flow acx-flow" id="ac-flow">'+((OK.length&&!a.ex)||(a.ex&&acConnOk(a.ex)&&!a.adding)?(OK.length?'<button type="button" class="bt-cta" onclick="acGoTerminal()">터미널로 이동</button>'+acHelp():acFlowHtml()):acFlowHtml())+'</div></div></div>');
   TF_RENDERING=false; if(acStep()==='uid') acUidRun();
 }
-function acAddMore(){ var a=acS(); a.ex=null; a.adding=1; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; acSave(); acPageView(); }
+function acAddMore(){ var a=acS(); a.ex=null; a.adding=1; a.has=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.kyc={st:'none'}; a.doneAt=null; acSave(); acPageView(); }
 function acDisc(k){
   acConfirm({title:acName(k)+' 연결을 끊으시겠습니까?',body:'이 거래소에서 돌아가는 전략은 새 주문을 내지 않습니다. 열려 있는 포지션은 거래소에 그대로 남습니다.',ok:'연결 끊기',danger:1,run:function(){ var a=acS(), t=tfS(); delete a.conn[k]; if(a.ex===k){ a.ex=null; a.auth={st:'idle'}; a.uid={st:'none'}; a.doneAt=null; } var L=acConnList(); if(L.length){ t.api={ex:L[0],last4:null,oauth:true}; } else { t.api=null; t.conn=false; t.uidLinked=false; } acSave(); toast(acName(k)+' 연결을 끊었습니다'); if(G.mode==='tfbrokers') acPageView(); else if(typeof stRe==='function') stRe(); }});
 }
@@ -22172,6 +22325,136 @@ function rvOther(){ var f=$('g-in'); if(f){ f.value='다른 조건을 바꿔서 
   var ai0=tfAiStrategy; tfAiStrategy=function(sp){ if(RV.on&&!RV.apply){ rvProposal(sp); return; } var r=ai0.apply(this,arguments); try{ var t=tfS(); if(t.aiSpec&&G.cur) t.aiSpec.sess=G.cur.id; }catch(e){} return r; };
 })();
 
+/* ═══ 거래소 연결 플랜 화면 (pl): ChatGPT 플랜 업그레이드와 플랜 구성 화면을 따른다 ═══
+   화면 1 두 카드(무료: TETH 초대 계정, 구독: 월 $280). 결과가 좋은 백테스트에서 왔으면 왼쪽에 결과 카드.
+   화면 2A 구독 결제(참고 B). 결제가 먼저, 그다음 거래소 연결. 구독 하나로 거래소 2곳까지.
+   화면 2B 무료: 가입 안내가 기본, 작은 링크로 바로 연결. */
+var PL={ctx:null};
+var PL_IC={
+  bolt:'<path d="M13 2L4 14h6l-1 8 9-12h-6z"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.75 1.75 0 0 1 0 3.5h-3a1.75 1.75 0 0 0 0 3.5h4"/>',
+  card:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18"/>',
+  lock:'<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  head:'<path d="M4.5 13a7.5 7.5 0 0 1 15 0"/><rect x="3" y="12.5" width="4" height="6.5" rx="1.5"/><rect x="17" y="12.5" width="4" height="6.5" rx="1.5"/><path d="M19 19v1a2 2 0 0 1-2 2h-3"/>',
+  swap:'<path d="M7 7h11M15 4l3 3-3 3M17 17H6M9 14l-3 3 3 3"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM6 6H4a2 2 0 0 0 2 4M18 6h2a2 2 0 0 1-2 4M12 13v4M8 21h8M10 17h4"/>'
+};
+function plI(k){ return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+PL_IC[k]+'</svg>'; }
+function plLogos(z){ return '<span class="pl-logos">'+acExs().map(function(b){ return acLogo(b.id,z||18); }).join('')+'</span>'; }
+function plRebate(){ var B=AC_CFG.benefit, g20=[], g50=[]; acExs().forEach(function(b){ (B[b.id]>=50?g50:g20).push(b.name); }); return g20.join(', ')+'는 거래 수수료의 20%, '+g50.join('과 ')+'는 50%를 환급합니다.'; }
+/* 왼쪽 결과 카드: 이름, 거래소, 기간, 시작 금액, 수익률, 그냥 보유, 낙폭, 작은 그래프. 단추 없음 */
+function plBtCard(b){ if(!b) return '';
+  var eq=b.eq||[], W=280, H=72, mn=Math.min.apply(null,eq), mx=Math.max.apply(null,eq), rg=(mx-mn)||1;
+  var pts=eq.map(function(v,i){ return (i/(eq.length-1)*W).toFixed(1)+','+(H-((v-mn)/rg)*(H-6)-3).toFixed(1); }).join(' ');
+  return '<article class="pl-card pl-bt"><div class="pl-lb">실행할 전략</div><h2 class="pl-h">'+gEsc(b.name)+'</h2><p class="pl-d">'+gEsc(b.per)+', '+gEsc(b.amt)+'로 시작. '+acName(b.ex)+'에서 실행합니다.</p>'
+    +'<div class="pl-price"><span class="num'+mkSign(b.ret)+'">'+mkPct0(b.ret,1)+'</span><small>검증 수익률</small></div>'
+    +(eq.length>2?'<svg class="pl-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+pts+'" fill="none" stroke="'+(b.ret>=0?'#2fb98a':'#f0566a')+'" stroke-width="2"/></svg>':'')
+    +'<ul class="pl-items"><li>'+plI('coin')+'<span>그냥 들고 있었다면 '+mkPct0(b.bench,1)+'</span></li><li>'+plI('swap')+'<span>가장 크게 내려간 폭 '+b.mdd.toFixed(1)+'%</span></li><li>'+plI('cal')+'<span>거래 '+b.n+'번</span></li></ul></article>'; }
+function plView(ctx){
+  ctx=ctx||{}; PL.ctx=ctx; AC_CTX=ctx;
+  tfPageMode('tfbrokers','거래소 연결'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page'); document.body.classList.remove('pl-dark');
+  var bt=ctx.bt||null, need=ctx.need?acName(ctx.need):null;
+  var free='<article class="pl-card pl-hi"><div class="pl-top"><span class="pl-lb">TETH 초대 계정</span></div><h2 class="pl-h">거래하는 사람을 위해</h2>'
+    +'<p class="pl-d">TETH 초대로 가입한 거래소 계정으로 이용합니다. 초대 계정이 없다면 거래소에 새로 가입합니다.</p>'
+    +'<div class="pl-price"><i>$</i><span class="num pl-grad">0</span><small>/ 월</small></div>'
+    +'<button type="button" class="pl-cta pl-cta-hi" onclick="plPick(\'partner\')">무료로 시작하기</button>'
+    +'<div class="pl-sub">포함된 기능</div><ul class="pl-items">'
+    +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li>'
+    +'<li>'+plI('grid')+'<span>연결 가능한 거래소 7곳 '+plLogos(16)+'</span></li>'
+    +'<li>'+plI('coin')+'<span>거래 수수료 환급</span></li>'
+    +'<li>'+plI('trophy')+'<span>전략 대회 참가</span></li>'
+    +'<li>'+plI('card')+'<span>카드 등록 없이 이용</span></li>'
+    +'<li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li>'
+    +'<li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
+    +'<p class="pl-foot">'+plRebate()+' 연결 과정에서 TETH 초대 계정 여부를 확인합니다.</p></article>';
+  var paid='<article class="pl-card"><div class="pl-top"><span class="pl-lb">TETH 구독</span></div><h2 class="pl-h">지금 쓰는 계정 그대로</h2>'
+    +'<p class="pl-d">TETH 초대로 가입하지 않은 거래소 계정도 연결합니다. 기존 계정을 유지하며 전략을 실행합니다.</p>'
+    +'<div class="pl-price"><i>$</i><span class="num">280</span><small>/ 월</small></div>'
+    +'<button type="button" class="pl-cta" onclick="plPick(\'paid\')">구독으로 시작하기</button>'
+    +'<div class="pl-sub">구독 혜택</div><ul class="pl-items">'
+    +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li>'
+    +'<li>'+plI('grid')+'<span>연결 가능한 거래소 7곳 '+plLogos(16)+'</span></li>'
+    +'<li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li>'
+    +'<li>'+plI('cal')+'<span>구독당 거래소 최대 '+AC_PAID_MAX+'곳 연결</span></li>'
+    +'<li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li>'
+    +'<li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
+    +'<p class="pl-foot">매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></article>';
+  TF_RENDERING=true;
+  gContent('<div class="pl" id="pl-root"><header class="pl-head"><h1>거래소 연결</h1>'+(need?'<p class="pl-need">이 전략은 '+need+'에서 실행됩니다. '+need+' 계정을 연결합니다.</p>':'')+'</header>'
+    +'<div class="pl-grid'+(bt?' has-bt':'')+'">'+plBtCard(bt)+free+paid+'</div>'+acHelp()+'</div>');
+  TF_RENDERING=false;
+}
+function plPageOff(){ document.body.classList.remove('pl-page','pl-dark'); }
+function plMore(b){ var c=b.closest('.pl-card'); var o=c.getAttribute('data-open')==='1'; c.setAttribute('data-open',o?'0':'1'); b.textContent=o?(c.classList.contains('pl-hi')?'혜택 자세히 보기':'포함 내용 보기'):'접기'; }
+function plPick(route){
+  var ctx=PL.ctx||{};
+  if(!S.user){ authOpen('signup'); if(typeof tfIntentSet==='function') tfIntentSet({kind:'start',route:route,ex:ctx.ex||null,need:ctx.need||null,name:ctx.name||null,after:ctx.after||null,bt:ctx.bt||null}); return; }
+  var a=acS(); a.route=route; a.routeSel=null; a.edit=null; a.has=null; a.g=0; acSave();
+  try{ tfTrack('pl_pick',{route:route}); }catch(e){}
+  if(route==='paid'&&!acSubOn()){ plCheckout(ctx); return; }
+  acPageView(ctx.need||ctx.ex||null);
+}
+/* ── 화면 2A: 구독 결제 (참고 B) ── */
+function plCheckout(ctx){
+  ctx=ctx||PL.ctx||{}; PL.ctx=ctx; AC_CTX=ctx;
+  tfPageMode('tfbrokers','플랜 구성'); document.body.classList.remove('tf-route'); document.body.classList.add('pl-page','pl-dark');
+  var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0], useSaved=!!sv&&!a.newCard, f=a.pay.st==='fail';
+  var fixed=ctx.need&&acEx(ctx.need)?ctx.need:null, cur=fixed||a.exSel||a.ex||acExs()[0].id; if(!fixed) a.exSel=cur;
+  var exs='<div class="pl-exs" role="radiogroup" aria-label="거래소">'+acExs().map(function(b){ var on=cur===b.id, off=fixed&&fixed!==b.id; return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(off?' off':'')+'"'+(off?' disabled':'')+' onclick="plPickEx(\''+b.id+'\')">'+acLogo(b.id,22)+'<b>'+b.name+'</b>'+(a.conn[b.id]?'<small>연결됨</small>':fixed===b.id?'<small>이 전략의 거래소</small>':'')+'</button>'; }).join('')+'</div>';
+  var pay=useSaved?'<div class="pl-saved"><div class="r on">'+plI('card')+'<span><b>'+gEsc(sv.brand)+' •••• '+gEsc(sv.last4)+'</b><small>저장한 카드, '+gEsc(sv.exp)+'</small></span><i>'+AC_CK+'</i></div><button type="button" class="pl-link" onclick="acS().newCard=1;plCheckout()">다른 결제 수단 사용</button></div>'
+    :'<button type="button" class="pl-apple" onclick="plApple()" aria-label="Apple Pay로 결제"><svg width="16" height="19" viewBox="0 0 16 19" aria-hidden="true"><path fill="currentColor" d="M13.1 10.1c0-2.4 2-3.6 2.1-3.6-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9s-1.9-.9-3.2-.8C3.2 4.7 1.7 5.6.8 7.2c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8s1.9.8 3.2.8c1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-4.1zM10.7 3c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Pay</span></button>'
+    +'<div class="pl-or"><span>또는</span></div>'
+    +(f?'<p class="acx-fail" role="alert">결제가 승인되지 않았습니다. 카드 한도나 해외 결제 설정을 확인하고 다시 시도하거나 다른 카드를 써 주십시오.</p>':'')
+    +'<div class="pl-form"><div class="pl-in big"><input id="ac-cn" placeholder="카드 번호" inputmode="numeric" maxlength="19" autocomplete="cc-number" oninput="acCardFmt(this)" aria-label="카드 번호"><span class="pl-brands"><i class="visa">VISA</i><i class="mc"></i><i class="amex">AMEX</i></span></div>'
+    +'<div class="two"><div class="pl-in"><input id="ac-ce" placeholder="만료 날짜" inputmode="numeric" maxlength="7" autocomplete="cc-exp" oninput="acExpFmt(this)" aria-label="만료 날짜"></div><div class="pl-in"><input id="ac-cc" placeholder="보안 코드" inputmode="numeric" maxlength="4" type="password" autocomplete="cc-csc" oninput="acErr(\'ac-cc\',\'\')" aria-label="보안 코드"><span class="pl-cvc">123</span></div></div>'
+    +'<div class="pl-in"><input id="ac-ch" placeholder="카드에 적힌 이름" autocomplete="cc-name" oninput="acErr(\'ac-ch\',\'\')" aria-label="카드에 적힌 이름"></div>'
+    +'<span class="er" id="ac-cn-e"></span><span class="er" id="ac-ce-e" hidden></span><span class="er" id="ac-cc-e" hidden></span><span class="er" id="ac-ch-e" hidden></span>'
+    +'<label class="pl-ck"><input type="checkbox" id="pl-save" checked><span>다음 결제에도 이 카드 사용</span></label></div>';
+  var acct=a.conn[cur]?'연결할 계정: '+acName(cur)+', 이미 연결됨':'연결할 계정: '+acName(cur);
+  TF_RENDERING=true;
+  gContent('<div class="pl pl-co" id="pl-root"><header class="pl-cohead"><button type="button" class="pl-back" aria-label="뒤로" onclick="plView(PL.ctx)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1>플랜 구성</h1></header>'
+    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'연결할 거래소를 고르십시오. 구독 하나로 '+AC_PAID_MAX+'곳까지 연결합니다.')+'</p>'+exs
+    +'<h3 class="pl-t3 mt">결제 수단 선택하기</h3>'+pay+'</section>'
+    +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
+    +'<li>'+plI('bolt')+'<span>전략 자동 실행</span></li><li>'+plI('swap')+'<span>초대 가입 없이 계정 연결</span></li><li>'+plI('lock')+'<span>연결 권한: 잔고 조회와 주문</span></li><li>'+plI('head')+'<span>24시간 고객 지원</span></li></ul>'
+    +'<div class="pl-lines"><div><span>'+acct+'</span></div><div><span>매월 구독료</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div><div class="tot"><span>오늘 결제 금액</span><b class="num">'+acUsd(AC_CFG.price)+'.00</b></div></div>'
+    +'<button type="button" class="pl-cta pl-cta-w" id="ac-go" onclick="'+(useSaved?'plPaySaved()':'plPay()')+'">'+acUsd(AC_CFG.price)+' 결제하고 시작하기</button></div>'
+    +'<p class="pl-legal">해지할 때까지 매월 '+acUsd(AC_CFG.price)+'이 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.</p></aside></div>'+acHelp()+'</div>');
+  TF_RENDERING=false;
+}
+function plPickEx(id){ var a=acS(); a.exSel=id; plCheckout(); }
+/* 결제 뒤에는 고른 거래소로 승인 단계로 간다 */
+function plAfterPay(){ var a=acS(), ctx=PL.ctx||{}, ex=(ctx.need&&acEx(ctx.need))?ctx.need:(a.exSel||a.ex); a.newCard=0; if(ex){ a.ex=ex; a.exSel=null; } acSave(); acPageView(ex||null); }
+function plPay(){ var c=acCardRead('ac-'); if(!c) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중'); var save=!!(document.getElementById('pl-save')||{checked:true}).checked;
+  setTimeout(function(){ if(my!==AC_RUN) return; var a=acS(), t=tfS();
+    if(!acCharge(c)){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',c,AC_CFG.price); acSave(); var keep={}; ['ac-cn','ac-ce','ac-ch'].forEach(function(i){ var e=document.getElementById(i); if(e) keep[i]=e.value; }); plCheckout(); for(var k in keep){ var e=document.getElementById(k); if(e) e.value=keep[k]; } return; }
+    var card={id:'c'+Date.now().toString(36),last4:c.last4,brand:c.brand,exp:c.exp,name:c.name,def:true}; if(save){ a.cards.forEach(function(x){ x.def=false; }); a.cards.unshift(card); }
+    plPaid(card); },1500); }
+function plPaySaved(){ var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0]; if(!sv) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
+  setTimeout(function(){ if(my!==AC_RUN) return; if(window.AC_QA&&AC_QA.pay==='fail'){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',sv,AC_CFG.price); acSave(); plCheckout(); return; } plPaid(sv); },1500); }
+function plApple(){ var my=++AC_RUN; var b=document.querySelector('.pl-apple'); if(b){ b.disabled=true; b.innerHTML='<i class="acx-sp"></i>Apple Pay 승인 중'; }
+  setTimeout(function(){ if(my!==AC_RUN) return; var a=acS(); if(window.AC_QA&&AC_QA.pay==='fail'){ a.pay={st:'fail',at:Date.now()}; acBillAdd('failed',{brand:'Apple Pay',last4:''},AC_CFG.price); acSave(); plCheckout(); return; }
+    var card={id:'ap'+Date.now().toString(36),last4:'',brand:'Apple Pay',exp:'',name:'',def:true}; a.cards.forEach(function(x){ x.def=false; }); a.cards.unshift(card); plPaid(card); },1400); }
+function plPaid(card){ var a=acS(), t=tfS(); a.pay={st:'ok',at:Date.now()}; var nS=(a.more&&a.sub&&a.sub.st==='active')?((a.sub.n||1)+1):1; a.more=0;
+  a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:Date.now()+30*864e5,price:AC_CFG.price,n:nS}; t.payDone=true; t.cardOn=true; t.plan='paid'; acBillAdd('paid',card,AC_CFG.price);
+  if(!a.billTo) a.billTo={email:(S.user&&S.user.email)||'',name:card.name||'',addr:''}; acSave(); try{ tfTrack('ac_paid',{}); }catch(e){} toast('결제가 완료되었습니다'); plAfterPay(); }
+(function(){
+  /* 들어오는 길: 이용 자격이 없으면 플랜 화면. 손님도 플랜 화면을 본다 */
+  var st0=acStart; acStart=function(ctx){ ctx=ctx||{}; if(ctx.route&&S.user){ var a=acS(); a.route=ctx.route; acSave(); }
+    if(!S.user){ plView(ctx); return; }
+    if(acReady(ctx.need||ctx.ex||null)){ acAfter(ctx.after); return; }
+    if(!acRouteNow()){ plView(ctx); return; }
+    if(ctx.route==='paid'&&!acSubOn()){ plCheckout(ctx); return; }
+    return st0.apply(this,arguments); };
+  var pv0=acPageView; acPageView=function(ex){ if(!S.user){ plView({ex:ex||null}); return; } var a=acS(); if(!acRouteNow()&&!acConnList().length){ plView({ex:ex||null}); return; } return pv0.apply(this,arguments); };
+  /* 구독 경로의 결제 단계는 플랜 구성 화면에서 */
+  var bp0=acBPay; acBPay=function(){ var a=acS(); if(!(a.more)){ setTimeout(function(){ plCheckout(AC_CTX||{}); },0); return '<p class="btg-p">결제 화면으로 이동합니다.</p>'; } return bp0.apply(this,arguments); };
+  /* 가입 뒤 이어가기: 고른 방식과 결과 카드까지 */
+  var ir0=tfIntentRun; tfIntentRun=function(){ var o=tfIntentPeek(); if(o&&o.kind==='start'&&S.user){ tfIntentClear(); acStart({route:o.route||null,ex:o.ex||null,need:o.need||null,name:o.name||null,after:o.after||null,bt:o.bt||null}); return true; } return ir0.apply(this,arguments); };
+})();
+
 /* ═══ 16-fixes 연결: 예전 진입점을 새 상태 모델로 잇는다 ═══ */
 /* R14 AI 트레이딩 시작 화면(로그인했지만 실행 환경이 없는 회원). 전략을 먼저 고르게 하지 않는다 */
 function acMyList(){
@@ -22222,6 +22505,9 @@ function p16Late(){
     );
     var qp0=tfQaPreset; tfQaPreset=function(id){ var r=qp0.apply(this,arguments); var P=null; TF_QA_PRESETS.forEach(function(x){ if(x.id===id) P=x; }); if(P&&P.ac){ var t=tfS(); t.ac=null; var a=acS(); P.ac(a,t); acSave(); try{ tfDevRefresh(); }catch(e){} } return r; };
   }
+  /* 전략 시작 직전의 본인 확인 관문 */
+  if(typeof btMineStart==='function'&&!btMineStart.kyc){ var bm0=btMineStart; btMineStart=function(m){ var args=arguments, self=this; if(m==='live'){ acRunGate(acS().ex||acConnList()[0],function(){ bm0.apply(self,args); }); return; } return bm0.apply(self,args); }; btMineStart.kyc=1; }
+  if(typeof cpStart==='function'&&!cpStart.kyc){ var cs0=cpStart; cpStart=function(ne){ var args=arguments, self=this, s=null; try{ s=tfSSFind(decodeURIComponent(ne)); }catch(e){} var ex=s&&s.ex&&acEx(s.ex)&&acS().conn[s.ex]?s.ex:(acConnList()[0]||null); acRunGate(ex,function(){ cs0.apply(self,args); }); }; cpStart.kyc=1; }
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
@@ -22238,7 +22524,7 @@ function btGoCtx(){ var s=BT.s; return {need:s.ex&&acEx(s.ex)?s.ex:null,name:mkH
   tfTradeInactiveView=function(){ acEntryView(); };
   /* 설정 화면에 있는 동안만 전체 화면 모드. 어떤 화면이 그려지든 G.mode 로 다시 판정한다 */
   var stFull=function(){ document.body.classList.toggle('st-full',!!(window.G&&G.mode==='tfset')); };
-  var gc0=gContent; gContent=function(){ var r=gc0.apply(this,arguments); stFull(); return r; };
+  var gc0=gContent; gContent=function(){ var r=gc0.apply(this,arguments); stFull(); try{ if(!document.getElementById('pl-root')) plPageOff(); }catch(e){} return r; };
   var gh0=gHome; gHome=function(){ var r=gh0.apply(this,arguments); stFull(); return r; };
   window.addEventListener('hashchange',function(){ setTimeout(stFull,0); });
   /* 좁은 화면: 지금 보는 설정 탭이 보이게 */
@@ -22251,7 +22537,9 @@ function btGoCtx(){ var s=BT.s; return {need:s.ex&&acEx(s.ex)?s.ex:null,name:mkH
         +'<button type="button" class="bt-cta" onclick="btMineStart(\'live\')">전략 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'paper\')">가상으로 먼저 시작</button><button type="button" class="bt-sec" onclick="btMineStart(\'later\')">나중에 시작</button>'; }
     return '<section class="btg-next"><h3>다음은 이 전략에 쓸 금액입니다</h3><p>백테스트에서는 '+btUsd(BT.amt)+'로 봤습니다. 실제로 쓸 금액과 손실 한도를 정하면 시작합니다.</p></section><button type="button" class="bt-cta" onclick="btFinal()">사용할 금액 정하기</button>'; };
   /* 필요한 것이 이미 다 있으면 실행 준비 화면을 건너뛴다 */
-  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; } return u0.apply(this,arguments); };
+  var u0=btUse; btUse=function(){ var s=BT.s, need=s&&s.ex&&acEx(s.ex)?s.ex:null; if(S.user&&!s.mine&&acReady(need)){ try{ tfTrack('bt_use',{id:BT.id,skip:1}); }catch(e){} cpSetupGo(btNe()); return; } if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:btNe()+'/go'}); return; }
+    if(!acReady(need)){ /* 실행 자격이 없으면 플랜 화면. 결과가 좋으면 왼쪽에 결과 카드 */ var R=BT.R, good=R&&typeof rvBad==='function'&&!rvBad()&&(R.wins.length+R.loss.length)>0; var bt=good?{name:mkHook(s),ex:need||(s.ex||'bitget'),per:btPerL(),amt:btUsd(BT.amt),ret:R.ret,bench:R.benchRet,mdd:R.mdd,n:R.wins.length+R.loss.length,eq:(function(){ var E=R.eq, o=[], k=Math.max(1,Math.floor(E.length/60)); for(var i=0;i<E.length;i+=k) o.push(E[i].v); o.push(E[E.length-1].v); return o; })()}:null; acStart({need:need,name:mkHook(s),after:s.mine?{kind:'bt',id:'mine'}:{kind:'copy',id:btNe()},bt:bt}); return; }
+    return u0.apply(this,arguments); };
   /* 설정 단추: 회원은 전용 화면으로, 손님은 기존 작은 메뉴 */
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',p16Late); else setTimeout(p16Late,0);
   /* R07 금액은 USD 하나 */
