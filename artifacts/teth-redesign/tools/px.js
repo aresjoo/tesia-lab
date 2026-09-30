@@ -9,7 +9,7 @@ function pxTitle(){
   var a=acS(), cur=pxCur(), ctx=AC_CTX||{}, n=acName(a.ex), r=acRouteNow();
   if(cur==='ex') return {h:'거래소 선택',s:'전략을 실행할 거래소를 선택합니다.',back:'plan'};
   if(cur==='acct'||cur==='guide') return {h:n+' 계정',s:'이용료 없이 연결하려면 TETH 초대로 가입한 '+n+' 계정이 필요합니다.',back:ctx.need?'plan':'ex'};
-  if(cur==='auth') return {h:n+' 연결',s:n+'에서 승인하면 연결됩니다.',back:r==='partner'?'acct':(ctx.need?'':'ex')};
+  if(cur==='auth') return {h:n+' 연결',s:n+' 화면이 열리면 아래 두 권한을 허용합니다.',back:r==='partner'?'acct':(ctx.need?'':'ex')};
   if(cur==='uid'){ var u=a.uid.ex===a.ex?a.uid:{st:'none'}; return u.st==='fail'?{h:'TETH 초대 계정이 아닙니다',s:'이 '+n+' 계정은 TETH 초대로 만든 계정이 아닙니다. 아래에서 하나를 고르십시오.',back:''}:{h:n+' 연결 확인 중',s:'승인한 계정을 확인하고 있습니다.',back:''}; }
   if(cur==='limit') return {h:'거래소 '+AC_PAID_MAX+'곳이 연결되어 있습니다',s:'구독 하나로 '+AC_PAID_MAX+'곳까지 연결됩니다. '+n+' 연결 방법을 고르십시오.',back:'plan'};
   if(cur==='pay') return {h:'플랜 구성',s:'',back:''};

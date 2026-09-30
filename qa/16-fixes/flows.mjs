@@ -27,8 +27,8 @@ ok('A','바로 결과 보기 단추가 없다',(await ev(`/바로 결과 보기/
 // B 손님 → 전략 복사 → 인증 → 플랜 화면(무료) → 가입 안내 → 승인 → 초대 확인 → 완료
 await fresh(false);
 await ev(`tfShareHub()`); await sleep(2200);
-s=await J(`{btn:[].map.call(document.querySelectorAll('.mk-card .mk3-foot button'),function(b){ return b.innerText.trim(); }).slice(0,6)}`);
-ok('B','목록 카드 단추는 전략 보기 하나',s.btn.length>0&&s.btn.every(x=>x==='전략 보기'),s.btn);
+s=await J(`{links:document.querySelectorAll('.mk-card.skf[role=link]').length,btns:document.querySelectorAll('.mk-card.skf button').length}`);
+ok('B','목록 카드는 카드 전체가 상세로 가는 링크, 카드 안 단추 없음',s.links>0&&s.btns===0,s);
 await fresh(true);
 await ev(`acStart({need:'binance',name:'테스트 전략',after:{kind:'terminal'}})`); await sleep(700);
 ok('B','자격이 없으면 플랜 화면(무료, 구독), 전략 거래소 고정',(await J(`{pl:!!document.getElementById('pl-root'),need:/Binance/.test((document.querySelector('.pl-need')||{}).innerText||'')}`)).pl===true);

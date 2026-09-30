@@ -7342,6 +7342,17 @@ body.px-go #teth-help{display:none!important}
 .px-tcps .r i{font-style:normal}
 /* 복사한 전략만 있는 터미널: 아래에 따로 붙던 목록은 오른쪽 칸으로 옮겼으니 숨김 */
 .tft-page .tm-follow{display:none}
+/* 작은 링크 줄: 예전 .acx-have 여백이 끼어들지 않게 같은 기준선에 */
+.px-links{align-items:baseline}
+.px-links .pl-link,.px-links .acx-have{margin:0;padding:0;display:inline;line-height:1.5;font-size:14px;text-align:left}
+/* 거래소 승인 창: 연두 대신 흰 알약, 창은 설정 창과 같은 #2f2f2f */
+.acx-aw{background:#2f2f2f;border-color:rgba(255,255,255,.1)}
+.acx-ac .bts button{height:48px;border-radius:999px;font-weight:500}
+.acx-ac .bts .ok{background:#fff;border-color:#fff;color:#000}
+.acx-ac .bts .ok:hover{background:#e5e5e5}
+.acx-ac .bts .no{background:#3a3a3a;border-color:#3a3a3a;color:#ececec}
+.acx-ac ul{border-color:rgba(255,255,255,.14)}
+.acx-ac li::before{border-color:#8fb4ff}
 /* ── 설정을 ChatGPT 설정 어휘로 (sk-settings) ── */
 body.st-full #g-content,body.st-full #g-scroll,body.st-full .g-center{background:#000}
 body.st-full #teth-help,body.st-full #g-appbanner,body.st-full .gft{display:none!important}
@@ -7547,6 +7558,47 @@ body.st-full .stg-r .k span .num{white-space:nowrap}
   .skc-body{padding:22px 16px 8px}
   .skc-ft{padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
 }
+/* ── 메인 화면 바탕을 설정 화면처럼 완전 검정으로 (색만, 구성은 그대로) ── */
+body.g-dark,body.g-dark #g-root,body.g-dark .g-center{background:#000}
+body.g-dark .g-side{background:#000;border-right:1px solid rgba(255,255,255,.1)}
+/* ── AI 트레이딩 첫 화면: 명조 → 시스템 산세리프 400, 연두 → 흰 알약 (영상, 무료 줄, 아래 섹션은 그대로) ── */
+#g-root .txh-hero h1{font-family:var(--font),system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:400;font-size:48px;line-height:1.2;letter-spacing:-.02em}
+#g-root .txh-eyebrow{font-size:14px;color:#cdcdcd;margin-bottom:14px}
+#g-root .txh-sub{font-size:18px;line-height:1.6;color:#cdcdcd;max-width:640px;margin:18px auto 28px}
+#g-root .txh-hero .txh-cta{height:48px;padding:0 26px;background:#fff;color:#000;font-weight:500;font-size:16px}
+#g-root .txh-hero .txh-cta:hover{filter:none;background:#e5e5e5}
+@media (max-width:760px){
+  #g-root .txh-hero h1{font-size:32px;line-height:1.25}
+  #g-root .txh-sub{font-size:16px;margin:14px auto 24px}
+}
+/* ── 전략 찾기 카드: 정보 넷, 카드 전체가 링크, 윤곽 카드 반경 24 ── */
+.mk-grid.mk3-grid{gap:20px}
+.mk-card.skf{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border-radius:24px;border:1px solid rgba(255,255,255,.14);background:transparent;cursor:pointer;transition:background-color .15s ease,border-color .15s ease;min-height:0}
+.mk-card.skf:hover{background:#171717;border-color:rgba(255,255,255,.22)}
+.mk-card.skf:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.skf-top{display:flex;align-items:flex-start;gap:12px}
+.skf-nm{display:grid;gap:4px;min-width:0}
+.skf-nm h3{margin:0;font-size:18px;font-weight:400;line-height:1.35;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.skf-nm span{display:flex;align-items:center;gap:6px;font-size:14px;color:#afafaf}
+.skf-nm span img{border-radius:4px}
+.skf-perf{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:end;gap:16px}
+.skf-ret{display:grid;gap:2px}
+.skf-ret small{font-size:13px;color:#9a9a9a}
+.skf-ret b{font-size:26px;font-weight:400;letter-spacing:-.01em}
+.skf-perf svg{width:100%;height:44px}
+.skf-fw{font-size:14px;color:#afafaf;min-height:20px}
+.skf-fw b{font-weight:500;color:#ececec}
+.skf-fw svg{opacity:.7}
+.skf-sort{position:relative;display:inline-flex}
+.skf-sort .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skf-sort select{height:40px;padding:0 34px 0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:#000 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cdcdcd' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;color:#ececec;font:inherit;font-size:14px;appearance:none;-webkit-appearance:none;cursor:pointer}
+@media (max-width:760px){
+  .mk-card.skf{padding:18px 18px;gap:14px;border-radius:20px}
+  .skf-ret b{font-size:24px}
+}
+/* 첫 화면 바탕도 메인과 같은 검정 */
+#g-root .txh-hero,#g-root .txh{background:#000}
+.skf-fw .mk-fw,.skf-fw{display:flex;align-items:center;gap:6px}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -22935,7 +22987,7 @@ function pxTitle(){
   var a=acS(), cur=pxCur(), ctx=AC_CTX||{}, n=acName(a.ex), r=acRouteNow();
   if(cur==='ex') return {h:'거래소 선택',s:'전략을 실행할 거래소를 선택합니다.',back:'plan'};
   if(cur==='acct'||cur==='guide') return {h:n+' 계정',s:'이용료 없이 연결하려면 TETH 초대로 가입한 '+n+' 계정이 필요합니다.',back:ctx.need?'plan':'ex'};
-  if(cur==='auth') return {h:n+' 연결',s:n+'에서 승인하면 연결됩니다.',back:r==='partner'?'acct':(ctx.need?'':'ex')};
+  if(cur==='auth') return {h:n+' 연결',s:n+' 화면이 열리면 아래 두 권한을 허용합니다.',back:r==='partner'?'acct':(ctx.need?'':'ex')};
   if(cur==='uid'){ var u=a.uid.ex===a.ex?a.uid:{st:'none'}; return u.st==='fail'?{h:'TETH 초대 계정이 아닙니다',s:'이 '+n+' 계정은 TETH 초대로 만든 계정이 아닙니다. 아래에서 하나를 고르십시오.',back:''}:{h:n+' 연결 확인 중',s:'승인한 계정을 확인하고 있습니다.',back:''}; }
   if(cur==='limit') return {h:'거래소 '+AC_PAID_MAX+'곳이 연결되어 있습니다',s:'구독 하나로 '+AC_PAID_MAX+'곳까지 연결됩니다. '+n+' 연결 방법을 고르십시오.',back:'plan'};
   if(cur==='pay') return {h:'플랜 구성',s:'',back:''};
@@ -23210,7 +23262,7 @@ function skcSheet(ne){
     +(lev?'<p class="skc-lev">현재 레버리지는 <span class="num">'+lev+'배</span>입니다. 원본에서 바꾸면 내 복사에도 적용됩니다.</p>':'')+'</div>'
     +'<div class="skc-fld" id="cps-amt-fld"><label for="cps-amt">복사 예산</label>'
     +'<div class="skc-in"><i>$</i><input id="cps-amt" type="number" inputmode="decimal" min="'+min+'" placeholder="'+min+'" oninput="cpFormSync()" aria-describedby="skc-amt-h cps-amt-err"><button type="button" class="mx" onclick="$(\'cps-amt\').value='+Math.floor(cp.spot)+';cpFormSync()">최대</button></div>'
-    +'<div class="skc-hint" id="skc-amt-h">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>, 최소 <span class="num">'+cpUsd(min,0)+'</span>'+(cp.spot<min?' <button type="button" class="pl-link" onclick="cpTopup(\''+ne+'\')">체험 예산 추가</button>':'')+'</div>'
+    +'<div class="skc-hint" id="skc-amt-h">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>, 최소 <span class="num">'+cpUsd(min,0)+'</span>'+'</div>'
     +'<div class="skc-err" id="cps-amt-err" role="alert"></div></div>'
     +'<div class="skc-fld"><span class="lb" id="skc-loss-l">손실 중단 기준</span>'
     +'<div class="skc-pills" role="radiogroup" aria-labelledby="skc-loss-l">'+SKC_LOSS.map(function(v){ return '<button type="button" role="radio" aria-checked="'+(v===-20)+'" class="'+(v===-20?'on':'')+'" onclick="skcLoss('+v+',this)">'+Math.abs(v)+'%</button>'; }).join('')+'</div>'
@@ -23262,6 +23314,36 @@ function skcAutoPublish(){
   t.shared=true; tfSave();
   if(first) try{ tfTrack('ss_auto_publish',{name:nm}); }catch(e){}
 }
+
+/* ═══ 첫 화면(AI 트레이딩 소개)과 전략 찾기 목록을 ChatGPT 어휘로 (sk-main) ═══
+   첫 화면: 제목, 부제 문구만 바꾼다. 영상, "영원히 무료" 줄, 그 아래 섹션은 그대로.
+   전략 찾기: 카드 정보는 넷(이름, 판단 방식과 실행 거래소, 최근 30일 수익률과 작은 그래프, 복사한 사람 수). 카드 전체가 상세로 가는 링크.
+   정렬 알약 넷은 선택 메뉴 하나로. */
+(function(){
+  var iv0=tfIntroView; tfIntroView=function(){ var r=iv0.apply(this,arguments);
+    var h=document.getElementById('txh-h'); if(h) h.innerHTML='AI가 스스로<br class="txh-m"> 판단해 거래합니다';
+    var s=document.querySelector('.txh-hero .txh-sub'); if(s) s.innerHTML='거래소 계정을 한 번 승인으로 연결하면<br>전략이 그 계정에서 직접 주문합니다.';
+    return r; };
+})();
+function skfOpen(e,ne){ if(e&&e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ') return; if(e&&e.type==='keydown') e.preventDefault(); tfSS3Go(ne); }
+function skfCard(s){
+  if(!s.kind) s.kind='rule';
+  var m30=mk30(s), ne=tfSS3Rid(s), ex=mkEx(s), fw=s.fw?mkFwHtml(s.fw):'';
+  return '<article class="mk-card skf k-'+s.kind+'" role="link" tabindex="0" aria-label="'+gEsc(mkHook(s))+' 전략 보기" onclick="skfOpen(event,\''+ne+'\')" onkeydown="skfOpen(event,\''+ne+'\')">'
+    +'<div class="skf-top">'+mkGlyph(s,28)+'<div class="skf-nm"><h3>'+gEsc(mkHook(s))+'</h3><span><img src="assets/logos/'+ex[0]+'.png" alt="" width="14" height="14" loading="lazy">'+MK_KIND[s.kind]+', '+ex[1]+'에서 실행</span></div></div>'
+    +'<div class="skf-perf"><div class="skf-ret"><small>최근 30일</small><b class="num'+mkSign(m30.ret)+'">'+mkPct0(m30.ret)+'</b></div>'+mkSpark3(m30.eq)+'</div>'
+    +'<div class="skf-fw">'+fw+'</div>'
+    +'</article>';
+}
+(function(){
+  mkCard=skfCard; tfSS3Card=skfCard;
+  /* 정렬: 알약 넷 → 선택 메뉴 하나(승률순은 뺀다) */
+  var c0=mk3Controls; mk3Controls=function(t){ var h=c0.apply(this,arguments), sort=mkSortKey(t); if(sort==='win') sort='pick';
+    var sel='<label class="skf-sort"><span class="sr">정렬</span><select aria-label="정렬" onchange="tfSS3SortPick(this.value)">'+[['pick','추천순'],['ret','최근 30일 수익률순'],['fw','복사한 사람순']].map(function(o){ return '<option value="'+o[0]+'"'+(sort===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>';
+    var d=document.createElement('div'); d.innerHTML=h; var chips=d.querySelector('.mk-chips'); if(chips) chips.outerHTML=sel;
+    var q=d.querySelector('#ss3-q'); if(q) q.setAttribute('placeholder','전략 검색');
+    return d.innerHTML; };
+})();
 /*BT_CORE_END*/
 </script>
 <script>

@@ -23,7 +23,7 @@ function skcSheet(ne){
     +(lev?'<p class="skc-lev">현재 레버리지는 <span class="num">'+lev+'배</span>입니다. 원본에서 바꾸면 내 복사에도 적용됩니다.</p>':'')+'</div>'
     +'<div class="skc-fld" id="cps-amt-fld"><label for="cps-amt">복사 예산</label>'
     +'<div class="skc-in"><i>$</i><input id="cps-amt" type="number" inputmode="decimal" min="'+min+'" placeholder="'+min+'" oninput="cpFormSync()" aria-describedby="skc-amt-h cps-amt-err"><button type="button" class="mx" onclick="$(\'cps-amt\').value='+Math.floor(cp.spot)+';cpFormSync()">최대</button></div>'
-    +'<div class="skc-hint" id="skc-amt-h">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>, 최소 <span class="num">'+cpUsd(min,0)+'</span>'+(cp.spot<min?' <button type="button" class="pl-link" onclick="cpTopup(\''+ne+'\')">체험 예산 추가</button>':'')+'</div>'
+    +'<div class="skc-hint" id="skc-amt-h">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>, 최소 <span class="num">'+cpUsd(min,0)+'</span>'+'</div>'
     +'<div class="skc-err" id="cps-amt-err" role="alert"></div></div>'
     +'<div class="skc-fld"><span class="lb" id="skc-loss-l">손실 중단 기준</span>'
     +'<div class="skc-pills" role="radiogroup" aria-labelledby="skc-loss-l">'+SKC_LOSS.map(function(v){ return '<button type="button" role="radio" aria-checked="'+(v===-20)+'" class="'+(v===-20?'on':'')+'" onclick="skcLoss('+v+',this)">'+Math.abs(v)+'%</button>'; }).join('')+'</div>'

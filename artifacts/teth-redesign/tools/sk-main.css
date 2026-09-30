@@ -1,0 +1,41 @@
+/* ── 메인 화면 바탕을 설정 화면처럼 완전 검정으로 (색만, 구성은 그대로) ── */
+body.g-dark,body.g-dark #g-root,body.g-dark .g-center{background:#000}
+body.g-dark .g-side{background:#000;border-right:1px solid rgba(255,255,255,.1)}
+/* ── AI 트레이딩 첫 화면: 명조 → 시스템 산세리프 400, 연두 → 흰 알약 (영상, 무료 줄, 아래 섹션은 그대로) ── */
+#g-root .txh-hero h1{font-family:var(--font),system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:400;font-size:48px;line-height:1.2;letter-spacing:-.02em}
+#g-root .txh-eyebrow{font-size:14px;color:#cdcdcd;margin-bottom:14px}
+#g-root .txh-sub{font-size:18px;line-height:1.6;color:#cdcdcd;max-width:640px;margin:18px auto 28px}
+#g-root .txh-hero .txh-cta{height:48px;padding:0 26px;background:#fff;color:#000;font-weight:500;font-size:16px}
+#g-root .txh-hero .txh-cta:hover{filter:none;background:#e5e5e5}
+@media (max-width:760px){
+  #g-root .txh-hero h1{font-size:32px;line-height:1.25}
+  #g-root .txh-sub{font-size:16px;margin:14px auto 24px}
+}
+/* ── 전략 찾기 카드: 정보 넷, 카드 전체가 링크, 윤곽 카드 반경 24 ── */
+.mk-grid.mk3-grid{gap:20px}
+.mk-card.skf{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border-radius:24px;border:1px solid rgba(255,255,255,.14);background:transparent;cursor:pointer;transition:background-color .15s ease,border-color .15s ease;min-height:0}
+.mk-card.skf:hover{background:#171717;border-color:rgba(255,255,255,.22)}
+.mk-card.skf:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.skf-top{display:flex;align-items:flex-start;gap:12px}
+.skf-nm{display:grid;gap:4px;min-width:0}
+.skf-nm h3{margin:0;font-size:18px;font-weight:400;line-height:1.35;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.skf-nm span{display:flex;align-items:center;gap:6px;font-size:14px;color:#afafaf}
+.skf-nm span img{border-radius:4px}
+.skf-perf{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:end;gap:16px}
+.skf-ret{display:grid;gap:2px}
+.skf-ret small{font-size:13px;color:#9a9a9a}
+.skf-ret b{font-size:26px;font-weight:400;letter-spacing:-.01em}
+.skf-perf svg{width:100%;height:44px}
+.skf-fw{font-size:14px;color:#afafaf;min-height:20px}
+.skf-fw b{font-weight:500;color:#ececec}
+.skf-fw svg{opacity:.7}
+.skf-sort{position:relative;display:inline-flex}
+.skf-sort .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skf-sort select{height:40px;padding:0 34px 0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:#000 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cdcdcd' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;color:#ececec;font:inherit;font-size:14px;appearance:none;-webkit-appearance:none;cursor:pointer}
+@media (max-width:760px){
+  .mk-card.skf{padding:18px 18px;gap:14px;border-radius:20px}
+  .skf-ret b{font-size:24px}
+}
+/* 첫 화면 바탕도 메인과 같은 검정 */
+#g-root .txh-hero,#g-root .txh{background:#000}
+.skf-fw .mk-fw,.skf-fw{display:flex;align-items:center;gap:6px}
