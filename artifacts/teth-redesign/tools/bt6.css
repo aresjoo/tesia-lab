@@ -272,3 +272,31 @@ body:not(.st-full) .stg-tg{display:none}
 .an-shot{display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.12);margin:4px 0 2px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 .an-frame{visibility:visible}
 html.an-inner #tf-devbtn,html.an-inner #tf-devpanel,html.an-inner .g-terms{display:none!important}
+
+/* 설정 접힌 레일 (GPT 방식) */
+body.st-full .stg.nav-hid{grid-template-columns:64px minmax(0,1fr)}
+body.st-full .stg.nav-hid .stg-main{padding-left:40px}
+body.st-full .stg-rail{display:none;position:sticky;top:0;align-self:start;height:100vh;height:100dvh;width:64px;flex-direction:column;align-items:center;gap:6px;padding:10px 0;background:var(--g0,#0e0f11);border-right:1px solid rgba(255,255,255,.07);z-index:41}
+body.st-full .stg.nav-hid .stg-rail{display:flex;animation:stRailIn .28s cubic-bezier(.2,.7,.2,1) both}
+@keyframes stRailIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+body.st-full .stg.nav-hid .stg-tg{display:none}
+.stg-rl,.stg-ri{position:relative;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#cfd3d8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+.stg-rl{margin-bottom:8px}
+.stg-ri:hover{background:rgba(255,255,255,.08);color:#fff}
+.stg-rl .logo{width:26px;height:26px}
+.stg-rl .tg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s ease;color:#e9ebee}
+.stg-rl:hover .logo{opacity:0}.stg-rl:hover .tg{opacity:1}.stg-rl:hover{background:rgba(255,255,255,.08)}
+.stg-rl .tip,.stg-ri .tip,.stg-tg .tip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:7px 12px;border-radius:999px;background:#2a2d31;color:#f2f3f5;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .12s ease,transform .12s ease;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.stg-rl:hover .tip,.stg-ri:hover .tip,.stg-tg:hover .tip{opacity:1;transform:translateY(-50%)}
+.stg-tg{overflow:visible}
+@media (max-width:900px){ body.st-full .stg-rail{display:none!important} }
+/* 접힌 레일: 격자 자리 고정 (레일과 메뉴는 같은 칸, 본문은 둘째 칸) */
+body.st-full .stg{grid-template-rows:auto;grid-template-areas:"nav main"}
+body.st-full .stg-nav{grid-area:nav}
+body.st-full .stg-rail{grid-area:nav}
+body.st-full .stg-main{grid-area:main}
+body.st-full .stg.nav-hid .stg-nav{position:absolute;left:0;top:0;height:100vh;height:100dvh;width:280px}
+body.st-full .stg{position:relative}
+.stg-rl .logo{width:28px;height:28px;background-size:contain;background-position:center;background-repeat:no-repeat;transition:opacity .15s ease}
+.stg-rl .logo{background-image:var(--logo-uri)}
+.stg-tg .tip{left:calc(100% + 12px)}

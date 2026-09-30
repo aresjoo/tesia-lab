@@ -22,11 +22,20 @@ function stRoute(h){
 var ST_TG='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>';
 /* 설정 메뉴 접기: 기억해 둔다 */
 try{ ST.navHid=localStorage.getItem('teth.stnav')==='0'; }catch(e){}
+/* 접힌 상태의 아이콘 레일 (GPT: 로고에 올리면 토글 아이콘) */
+function stRail(){ var I=function(p){ return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; };
+  var it=function(lb,on,p){ return '<button type="button" class="stg-ri" aria-label="'+lb+'" onclick="'+on+'">'+I(p)+'<span class="tip">'+lb+'</span></button>'; };
+  return '<aside class="stg-rail" aria-label="바로 가기"><button type="button" class="stg-rl" aria-label="사이드바 표시/숨기기" onclick="stNavToggle()"><span class="logo brand-mark brand-bg"></span><span class="tg">'+ST_TG+'</span><span class="tip">사이드바 표시/숨기기</span></button>'
+    +it('새 전략','stBack()','<path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.800 2.800l3.400 3.400L13 14.400l-4 .600.600-4z"/>')
+    +it('AI 트레이딩','stBack();tfNav(\'#/trade\')','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 13l3-3 3 2 4-4"/>')
+    +it('전략 복사','stBack();tfShareHub()','<path d="M5 19c2-4 4-6 8-8"/><path d="M14 4a6 6 0 0 1 6 6c-3 0-5 1-6 2-1-1-2-3-2-6a6 6 0 0 1 2-2z"/><circle cx="15" cy="9" r="1"/>')
+    +it('거래소 연결','stBack();tfBrokersView()','<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')
+    +'</aside>'; }
 function stNavToggle(){ ST.navHid=!ST.navHid; try{ localStorage.setItem('teth.stnav',ST.navHid?'0':'1'); }catch(e){} var r=document.getElementById('st-root'); if(r) r.classList.toggle('nav-hid',ST.navHid); var b=document.getElementById('st-tg'); if(b) b.setAttribute('aria-expanded',String(!ST.navHid)); }
 function stView(){
   tfPageMode('tfset','설정'); document.body.classList.remove('tf-route');
   TF_RENDERING=true;
-  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'</button><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
+  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'<span class="tip">사이드바 표시/숨기기</span></button>'+stRail()+'<nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
     +'<small>설정</small>'+ST_TABS.map(function(x){ return '<button type="button" class="stg-ni'+(ST.tab===x[0]?' on':'')+'"'+(ST.tab===x[0]?' aria-current="page"':'')+' onclick="stGo(\''+x[0]+'\')">'+stIc(x[2])+x[1]+'</button>'; }).join('')
     +'<small>바로 가기</small><button type="button" class="stg-ni" onclick="tfBrokersView()">'+stIc('<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')+'거래소 연결</button><button type="button" class="stg-ni" onclick="tfTxHelp()">'+stIc('<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 1-1 1.700M12 17h.010"/>')+'상담원에게 묻기</button></nav>'
     +'<main class="stg-main" id="st-main">'+stBody()+'</main></div>');
@@ -122,9 +131,10 @@ function stSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(u
   return '<h1>보안</h1>'+stSec('로그인',
     stRow('비밀번호','',stBtn('변경','stPwDlg()'),s.pwAt?'<span class="num">'+stDate(s.pwAt)+'</span> 에 바꿨습니다':'12자 이상, 숫자와 특수문자를 포함합니다')
     +stRow('2단계 인증','','<button type="button" class="stg-sw" role="switch" aria-checked="'+!!s.twofa+'" aria-label="2단계 인증" onclick="stTwofa()"><i></i></button>','로그인할 때 이메일로 받은 번호를 한 번 더 확인합니다'))
-    +stSec('로그인된 기기',stRow(dev+', '+br,'<span class="stg-tag def">이 기기</span>','','지금 사용 중')+stRow('다른 기기 모두 로그아웃','',stBtn('로그아웃','stOutAll()'),'이 기기를 뺀 모든 곳에서 로그아웃합니다'))
-    +stSec('거래소 권한',stRow('TETH가 쓰는 권한','잔고 조회, 주문 실행','','출금 권한은 요청하지 않습니다. 승인은 거래소의 보안 설정에서 언제든 끊을 수 있습니다'));
+    +stSec('로그인된 기기',stRow(dev+', '+br,'<span class="stg-tag def">이 기기</span>','','지금 사용 중')+(s.devices||[]).map(function(d){ return stRow(d.n,'<span class="num">'+gEsc(d.at)+'</span>',stBtn('로그아웃','stOutOne(\''+d.id+'\')'),gEsc(d.where)); }).join('')+stRow('다른 기기 모두 로그아웃','',stBtn('로그아웃','stOutAll()'),'이 기기를 뺀 모든 곳에서 로그아웃합니다'))
+    +stSec('거래소 권한',(function(){ var a=acS(), L=acConnList(); if(!L.length) return stRow('연결된 거래소가 없습니다','',stBtn('거래소 연결','tfBrokersView()'),'연결하면 거래소별로 TETH가 받은 권한이 여기에 보입니다'); return L.map(function(k){ var c=a.conn[k]; return stRow('<img src="assets/logos/app-'+k+'.png" alt="" width="18" height="18" onerror="this.remove()">'+acName(k),'잔고 조회, 주문 실행',stBtn('권한 끊기','acDisc(\''+k+'\')'),(c.via==='partner'?'TETH 초대 계정':'구독으로 연결')+', <span class="num">'+stDate(c.at)+'</span> 승인. 출금 권한은 없습니다'); }).join(''); })());
 }
+function stOutOne(id){ var s=stS(); s.devices=(s.devices||[]).filter(function(d){ return d.id!==id; }); acSave(); stRe(); toast('그 기기에서 로그아웃했습니다'); }
 function stTwofa(){ var s=stS(); if(s.twofa){ acConfirm({title:'2단계 인증을 끄시겠습니까?',body:'비밀번호만으로 로그인하게 됩니다.',ok:'끄기',danger:1,run:function(){ s.twofa=false; acSave(); stRe(); }}); } else { s.twofa=true; acSave(); stRe(); toast('2단계 인증을 켰습니다'); } }
 function stOutAll(){ acConfirm({title:'다른 기기를 모두 로그아웃하시겠습니까?',body:'이 기기는 그대로 로그인되어 있습니다. 돌아가는 전략에는 영향이 없습니다.',ok:'모두 로그아웃',run:function(){ toast('다른 기기를 모두 로그아웃했습니다'); }}); }
 function stPwDlg(){ stDlg('<h3>비밀번호 변경</h3><label class="ty"><span>지금 비밀번호</span><input id="st-p0" type="password" autocomplete="current-password"></label><label class="ty"><span>새 비밀번호</span><input id="st-p1" type="password" autocomplete="new-password"></label><label class="ty"><span>새 비밀번호 확인</span><input id="st-p2" type="password" autocomplete="new-password"></label><small class="er" id="st-pw-e"></small><div class="bts"><button type="button" class="no" onclick="stDlgClose()">취소</button><button type="button" class="ok" onclick="stPwSave()">변경</button></div>','비밀번호 변경'); }

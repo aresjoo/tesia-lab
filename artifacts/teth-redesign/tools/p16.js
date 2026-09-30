@@ -20,6 +20,8 @@ function acReadyView(){
 }
 function acEntryView(){
   if(acReady(null)){ acReadyView(); return; }
+  /* 실행 환경이 없는 회원도 손님과 같은 소개 화면을 본다. 시작하기는 거래소 연결로 간다 */
+  if(typeof tfIntroView==='function'){ tfIntroView(true); return; }
   tfPageMode('tfinactive','AI 트레이딩');
   var L=acMyList(), pt=function(t,d,p){ return '<li><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg></span><b>'+t+'</b><span>'+d+'</span></li>'; };
   TF_RENDERING=true;
@@ -35,6 +37,17 @@ function acEntryView(){
 /* 뒤쪽 스크립트에 선언된 함수는 문서가 다 읽힌 뒤에 바꾼다 */
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
+  /* QA 프리셋: 실행 환경, 결제, 보안 상태를 한 번에 만든다 */
+  if(window.TF_QA_PRESETS&&!TF_QA_PRESETS.some(function(x){ return x.id==='12'; })){
+    var mk=function(k,via,at){ return {via:via,at:at||Date.now()-3*864e5,uid:via==='partner'?'38291042':''}; };
+    TF_QA_PRESETS.push(
+      {id:'12',key:'ac-partner',label:'⑫ 초대 회원, Bitget 1곳',login:true,ac:function(a,t){ a.route='partner'; a.ex='bitget'; a.conn={bitget:mk('bitget','partner')}; t.api={ex:'bitget',last4:null,oauth:true}; t.conn=true; t.uidLinked=true; t.uid='38291042'; }},
+      {id:'13',key:'ac-paid',label:'⑬ 구독 회원, Bybit, 카드와 결제 내역',login:true,ac:function(a,t){ a.route='paid'; a.ex='bybit'; a.conn={bybit:mk('bybit','paid',Date.now()-40*864e5)}; t.api={ex:'bybit',last4:'4242',oauth:true}; t.conn=true; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true},{id:'cqa2',last4:'0005',brand:'Mastercard',exp:'03/28',name:'KIM DOHYUN',def:false}]; a.sub={st:'active',since:Date.now()-40*864e5,next:Date.now()+20*864e5,price:AC_CFG.price}; a.billTo={email:S.user.email,name:'KIM DOHYUN',addr:'서울특별시 강남구 테헤란로 152'}; a.bill=[{id:'TQA3',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-10*864e5,card:'Visa •••• 4242'},{id:'TQA2',st:'failed',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-11*864e5,card:'Mastercard •••• 0005'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'}]; }},
+      {id:'14',key:'ac-two',label:'⑭ 두 곳 연결(Bitget 초대 + OKX 구독), 2단계 인증, 기기 2대',login:true,ac:function(a,t){ a.route='partner'; a.ex='bitget'; a.conn={bitget:mk('bitget','partner',Date.now()-60*864e5),okx:mk('okx','paid',Date.now()-5*864e5)}; t.api={ex:'bitget',last4:null,oauth:true}; t.conn=true; t.uidLinked=true; t.uid='38291042'; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'active',since:Date.now()-5*864e5,next:Date.now()+25*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-5*864e5,card:'Visa •••• 4242'}]; var s=(t.st=t.st||{}); s.twofa=true; s.pwAt=Date.now()-20*864e5; s.devices=[{id:'d1',n:'iPhone, Safari',at:'오늘 08:12',where:'서울'}]; }},
+      {id:'15',key:'ac-expired',label:'⑮ 구독 만료, 카드 있음',login:true,ac:function(a,t){ a.route='paid'; a.ex='bitget'; a.conn={bitget:mk('bitget','paid',Date.now()-70*864e5)}; t.api={ex:'bitget',last4:'4242',oauth:true}; t.conn=true; t.payDone=false; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'cancelled',since:Date.now()-70*864e5,until:Date.now()-2*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA2',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-70*864e5,card:'Visa •••• 4242'}]; }}
+    );
+    var qp0=tfQaPreset; tfQaPreset=function(id){ var r=qp0.apply(this,arguments); var P=null; TF_QA_PRESETS.forEach(function(x){ if(x.id===id) P=x; }); if(P&&P.ac){ var t=tfS(); t.ac=null; var a=acS(); P.ac(a,t); acSave(); try{ tfDevRefresh(); }catch(e){} } return r; };
+  }
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}

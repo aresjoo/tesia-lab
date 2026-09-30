@@ -6984,6 +6984,34 @@ body:not(.st-full) .stg-tg{display:none}
 .an-shot{display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.12);margin:4px 0 2px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 .an-frame{visibility:visible}
 html.an-inner #tf-devbtn,html.an-inner #tf-devpanel,html.an-inner .g-terms{display:none!important}
+
+/* 설정 접힌 레일 (GPT 방식) */
+body.st-full .stg.nav-hid{grid-template-columns:64px minmax(0,1fr)}
+body.st-full .stg.nav-hid .stg-main{padding-left:40px}
+body.st-full .stg-rail{display:none;position:sticky;top:0;align-self:start;height:100vh;height:100dvh;width:64px;flex-direction:column;align-items:center;gap:6px;padding:10px 0;background:var(--g0,#0e0f11);border-right:1px solid rgba(255,255,255,.07);z-index:41}
+body.st-full .stg.nav-hid .stg-rail{display:flex;animation:stRailIn .28s cubic-bezier(.2,.7,.2,1) both}
+@keyframes stRailIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+body.st-full .stg.nav-hid .stg-tg{display:none}
+.stg-rl,.stg-ri{position:relative;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#cfd3d8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+.stg-rl{margin-bottom:8px}
+.stg-ri:hover{background:rgba(255,255,255,.08);color:#fff}
+.stg-rl .logo{width:26px;height:26px}
+.stg-rl .tg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s ease;color:#e9ebee}
+.stg-rl:hover .logo{opacity:0}.stg-rl:hover .tg{opacity:1}.stg-rl:hover{background:rgba(255,255,255,.08)}
+.stg-rl .tip,.stg-ri .tip,.stg-tg .tip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:7px 12px;border-radius:999px;background:#2a2d31;color:#f2f3f5;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .12s ease,transform .12s ease;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.stg-rl:hover .tip,.stg-ri:hover .tip,.stg-tg:hover .tip{opacity:1;transform:translateY(-50%)}
+.stg-tg{overflow:visible}
+@media (max-width:900px){ body.st-full .stg-rail{display:none!important} }
+/* 접힌 레일: 격자 자리 고정 (레일과 메뉴는 같은 칸, 본문은 둘째 칸) */
+body.st-full .stg{grid-template-rows:auto;grid-template-areas:"nav main"}
+body.st-full .stg-nav{grid-area:nav}
+body.st-full .stg-rail{grid-area:nav}
+body.st-full .stg-main{grid-area:main}
+body.st-full .stg.nav-hid .stg-nav{position:absolute;left:0;top:0;height:100vh;height:100dvh;width:280px}
+body.st-full .stg{position:relative}
+.stg-rl .logo{width:28px;height:28px;background-size:contain;background-position:center;background-repeat:no-repeat;transition:opacity .15s ease}
+.stg-rl .logo{background-image:var(--logo-uri)}
+.stg-tg .tip{left:calc(100% + 12px)}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -16282,7 +16310,8 @@ function tfIntroView(force){
   TF_RENDERING=true; document.body.classList.remove('tf-route');
   TF_ONNF=true; window.TF_ONSHARE=false; window.TF_ONSTRAT=false;
   gChead('AI 트레이딩','',null);
-  var ctaAct=S.user?"tfNav('#/trade')":"authOpen('signup')", ctaLbl=S.user?'AI 트레이딩으로 돌아가기':'시작하기';
+  var rdy=!!(S.user&&typeof acReady==='function'&&acReady(null)); /* 실행 환경이 갖춰진 회원만 "돌아가기" */
+  var ctaAct=rdy?"tfNav('#/trade')":(S.user?"acStart({after:{kind:'terminal'}})":"authOpen('signup')"), ctaLbl=rdy?'AI 트레이딩으로 돌아가기':'시작하기';
   function ic(p){ return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
   /* 전략 유형 카드: 시드 제목(tfSeedTitle)은 지표 용어가 섞여 있어 쓰지 않고 쉬운 말 고정 문구 (수익률, 팔로워 수 비노출) */
   function step(n,t,p){ return '<div class="txh-step"><span class="n">'+n+'</span><b>'+t+'</b><p>'+p+'</p></div>'; }
@@ -16296,8 +16325,8 @@ function tfIntroView(force){
   function aiCol(id,t,rows){ return '<div class="txh-ai-col"><h3 id="'+id+'">'+t+'</h3><ul aria-labelledby="'+id+'">'+rows+'</ul></div>'; }
   function safe(svg,t,p){ return '<li>'+ic(svg)+'<b>'+t+'</b><span>'+p+'</span></li>'; }
   gContent('<div class="txh tx-guest">'
-    +'<section class="txh-hero'+(S.user?' has-back':'')+'" aria-labelledby="txh-h">'
-    +(S.user?'<button type="button" class="txh-back" onclick="tfNav(\'#/trade\')">← AI 트레이딩으로 돌아가기</button>':'')
+    +'<section class="txh-hero'+(rdy?' has-back':'')+'" aria-labelledby="txh-h">'
+    +(rdy?'<button type="button" class="txh-back" onclick="tfNav(\'#/trade\')">← AI 트레이딩으로 돌아가기</button>':'')
     +'<div class="txh-copy"><p class="txh-eyebrow">AI 트레이딩</p>'
     +'<h1 id="txh-h">AI가 스스로<br class="txh-m"> 판단하며 거래</h1>'
     +'<p class="txh-sub">오직 거래를 위한 AI에 시장 접근 권한을 연결하십시오.<br>서버를 통해 주식, 옵션 및 암호화폐 거래를 합니다.</p>'
@@ -21520,11 +21549,20 @@ function stRoute(h){
 var ST_TG='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>';
 /* 설정 메뉴 접기: 기억해 둔다 */
 try{ ST.navHid=localStorage.getItem('teth.stnav')==='0'; }catch(e){}
+/* 접힌 상태의 아이콘 레일 (GPT: 로고에 올리면 토글 아이콘) */
+function stRail(){ var I=function(p){ return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; };
+  var it=function(lb,on,p){ return '<button type="button" class="stg-ri" aria-label="'+lb+'" onclick="'+on+'">'+I(p)+'<span class="tip">'+lb+'</span></button>'; };
+  return '<aside class="stg-rail" aria-label="바로 가기"><button type="button" class="stg-rl" aria-label="사이드바 표시/숨기기" onclick="stNavToggle()"><span class="logo brand-mark brand-bg"></span><span class="tg">'+ST_TG+'</span><span class="tip">사이드바 표시/숨기기</span></button>'
+    +it('새 전략','stBack()','<path d="M12 3a9 9 0 1 0 9 9"/><path d="M17.800 2.800l3.400 3.400L13 14.400l-4 .600.600-4z"/>')
+    +it('AI 트레이딩','stBack();tfNav(\'#/trade\')','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 13l3-3 3 2 4-4"/>')
+    +it('전략 복사','stBack();tfShareHub()','<path d="M5 19c2-4 4-6 8-8"/><path d="M14 4a6 6 0 0 1 6 6c-3 0-5 1-6 2-1-1-2-3-2-6a6 6 0 0 1 2-2z"/><circle cx="15" cy="9" r="1"/>')
+    +it('거래소 연결','stBack();tfBrokersView()','<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')
+    +'</aside>'; }
 function stNavToggle(){ ST.navHid=!ST.navHid; try{ localStorage.setItem('teth.stnav',ST.navHid?'0':'1'); }catch(e){} var r=document.getElementById('st-root'); if(r) r.classList.toggle('nav-hid',ST.navHid); var b=document.getElementById('st-tg'); if(b) b.setAttribute('aria-expanded',String(!ST.navHid)); }
 function stView(){
   tfPageMode('tfset','설정'); document.body.classList.remove('tf-route');
   TF_RENDERING=true;
-  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'</button><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
+  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'<span class="tip">사이드바 표시/숨기기</span></button>'+stRail()+'<nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
     +'<small>설정</small>'+ST_TABS.map(function(x){ return '<button type="button" class="stg-ni'+(ST.tab===x[0]?' on':'')+'"'+(ST.tab===x[0]?' aria-current="page"':'')+' onclick="stGo(\''+x[0]+'\')">'+stIc(x[2])+x[1]+'</button>'; }).join('')
     +'<small>바로 가기</small><button type="button" class="stg-ni" onclick="tfBrokersView()">'+stIc('<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')+'거래소 연결</button><button type="button" class="stg-ni" onclick="tfTxHelp()">'+stIc('<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 1-1 1.700M12 17h.010"/>')+'상담원에게 묻기</button></nav>'
     +'<main class="stg-main" id="st-main">'+stBody()+'</main></div>');
@@ -21620,9 +21658,10 @@ function stSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(u
   return '<h1>보안</h1>'+stSec('로그인',
     stRow('비밀번호','',stBtn('변경','stPwDlg()'),s.pwAt?'<span class="num">'+stDate(s.pwAt)+'</span> 에 바꿨습니다':'12자 이상, 숫자와 특수문자를 포함합니다')
     +stRow('2단계 인증','','<button type="button" class="stg-sw" role="switch" aria-checked="'+!!s.twofa+'" aria-label="2단계 인증" onclick="stTwofa()"><i></i></button>','로그인할 때 이메일로 받은 번호를 한 번 더 확인합니다'))
-    +stSec('로그인된 기기',stRow(dev+', '+br,'<span class="stg-tag def">이 기기</span>','','지금 사용 중')+stRow('다른 기기 모두 로그아웃','',stBtn('로그아웃','stOutAll()'),'이 기기를 뺀 모든 곳에서 로그아웃합니다'))
-    +stSec('거래소 권한',stRow('TETH가 쓰는 권한','잔고 조회, 주문 실행','','출금 권한은 요청하지 않습니다. 승인은 거래소의 보안 설정에서 언제든 끊을 수 있습니다'));
+    +stSec('로그인된 기기',stRow(dev+', '+br,'<span class="stg-tag def">이 기기</span>','','지금 사용 중')+(s.devices||[]).map(function(d){ return stRow(d.n,'<span class="num">'+gEsc(d.at)+'</span>',stBtn('로그아웃','stOutOne(\''+d.id+'\')'),gEsc(d.where)); }).join('')+stRow('다른 기기 모두 로그아웃','',stBtn('로그아웃','stOutAll()'),'이 기기를 뺀 모든 곳에서 로그아웃합니다'))
+    +stSec('거래소 권한',(function(){ var a=acS(), L=acConnList(); if(!L.length) return stRow('연결된 거래소가 없습니다','',stBtn('거래소 연결','tfBrokersView()'),'연결하면 거래소별로 TETH가 받은 권한이 여기에 보입니다'); return L.map(function(k){ var c=a.conn[k]; return stRow('<img src="assets/logos/app-'+k+'.png" alt="" width="18" height="18" onerror="this.remove()">'+acName(k),'잔고 조회, 주문 실행',stBtn('권한 끊기','acDisc(\''+k+'\')'),(c.via==='partner'?'TETH 초대 계정':'구독으로 연결')+', <span class="num">'+stDate(c.at)+'</span> 승인. 출금 권한은 없습니다'); }).join(''); })());
 }
+function stOutOne(id){ var s=stS(); s.devices=(s.devices||[]).filter(function(d){ return d.id!==id; }); acSave(); stRe(); toast('그 기기에서 로그아웃했습니다'); }
 function stTwofa(){ var s=stS(); if(s.twofa){ acConfirm({title:'2단계 인증을 끄시겠습니까?',body:'비밀번호만으로 로그인하게 됩니다.',ok:'끄기',danger:1,run:function(){ s.twofa=false; acSave(); stRe(); }}); } else { s.twofa=true; acSave(); stRe(); toast('2단계 인증을 켰습니다'); } }
 function stOutAll(){ acConfirm({title:'다른 기기를 모두 로그아웃하시겠습니까?',body:'이 기기는 그대로 로그인되어 있습니다. 돌아가는 전략에는 영향이 없습니다.',ok:'모두 로그아웃',run:function(){ toast('다른 기기를 모두 로그아웃했습니다'); }}); }
 function stPwDlg(){ stDlg('<h3>비밀번호 변경</h3><label class="ty"><span>지금 비밀번호</span><input id="st-p0" type="password" autocomplete="current-password"></label><label class="ty"><span>새 비밀번호</span><input id="st-p1" type="password" autocomplete="new-password"></label><label class="ty"><span>새 비밀번호 확인</span><input id="st-p2" type="password" autocomplete="new-password"></label><small class="er" id="st-pw-e"></small><div class="bts"><button type="button" class="no" onclick="stDlgClose()">취소</button><button type="button" class="ok" onclick="stPwSave()">변경</button></div>','비밀번호 변경'); }
@@ -22017,6 +22056,8 @@ function acReadyView(){
 }
 function acEntryView(){
   if(acReady(null)){ acReadyView(); return; }
+  /* 실행 환경이 없는 회원도 손님과 같은 소개 화면을 본다. 시작하기는 거래소 연결로 간다 */
+  if(typeof tfIntroView==='function'){ tfIntroView(true); return; }
   tfPageMode('tfinactive','AI 트레이딩');
   var L=acMyList(), pt=function(t,d,p){ return '<li><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg></span><b>'+t+'</b><span>'+d+'</span></li>'; };
   TF_RENDERING=true;
@@ -22032,6 +22073,17 @@ function acEntryView(){
 /* 뒤쪽 스크립트에 선언된 함수는 문서가 다 읽힌 뒤에 바꾼다 */
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
+  /* QA 프리셋: 실행 환경, 결제, 보안 상태를 한 번에 만든다 */
+  if(window.TF_QA_PRESETS&&!TF_QA_PRESETS.some(function(x){ return x.id==='12'; })){
+    var mk=function(k,via,at){ return {via:via,at:at||Date.now()-3*864e5,uid:via==='partner'?'38291042':''}; };
+    TF_QA_PRESETS.push(
+      {id:'12',key:'ac-partner',label:'⑫ 초대 회원, Bitget 1곳',login:true,ac:function(a,t){ a.route='partner'; a.ex='bitget'; a.conn={bitget:mk('bitget','partner')}; t.api={ex:'bitget',last4:null,oauth:true}; t.conn=true; t.uidLinked=true; t.uid='38291042'; }},
+      {id:'13',key:'ac-paid',label:'⑬ 구독 회원, Bybit, 카드와 결제 내역',login:true,ac:function(a,t){ a.route='paid'; a.ex='bybit'; a.conn={bybit:mk('bybit','paid',Date.now()-40*864e5)}; t.api={ex:'bybit',last4:'4242',oauth:true}; t.conn=true; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true},{id:'cqa2',last4:'0005',brand:'Mastercard',exp:'03/28',name:'KIM DOHYUN',def:false}]; a.sub={st:'active',since:Date.now()-40*864e5,next:Date.now()+20*864e5,price:AC_CFG.price}; a.billTo={email:S.user.email,name:'KIM DOHYUN',addr:'서울특별시 강남구 테헤란로 152'}; a.bill=[{id:'TQA3',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-10*864e5,card:'Visa •••• 4242'},{id:'TQA2',st:'failed',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-11*864e5,card:'Mastercard •••• 0005'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'}]; }},
+      {id:'14',key:'ac-two',label:'⑭ 두 곳 연결(Bitget 초대 + OKX 구독), 2단계 인증, 기기 2대',login:true,ac:function(a,t){ a.route='partner'; a.ex='bitget'; a.conn={bitget:mk('bitget','partner',Date.now()-60*864e5),okx:mk('okx','paid',Date.now()-5*864e5)}; t.api={ex:'bitget',last4:null,oauth:true}; t.conn=true; t.uidLinked=true; t.uid='38291042'; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'active',since:Date.now()-5*864e5,next:Date.now()+25*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-5*864e5,card:'Visa •••• 4242'}]; var s=(t.st=t.st||{}); s.twofa=true; s.pwAt=Date.now()-20*864e5; s.devices=[{id:'d1',n:'iPhone, Safari',at:'오늘 08:12',where:'서울'}]; }},
+      {id:'15',key:'ac-expired',label:'⑮ 구독 만료, 카드 있음',login:true,ac:function(a,t){ a.route='paid'; a.ex='bitget'; a.conn={bitget:mk('bitget','paid',Date.now()-70*864e5)}; t.api={ex:'bitget',last4:'4242',oauth:true}; t.conn=true; t.payDone=false; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'cancelled',since:Date.now()-70*864e5,until:Date.now()-2*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA2',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-70*864e5,card:'Visa •••• 4242'}]; }}
+    );
+    var qp0=tfQaPreset; tfQaPreset=function(id){ var r=qp0.apply(this,arguments); var P=null; TF_QA_PRESETS.forEach(function(x){ if(x.id===id) P=x; }); if(P&&P.ac){ var t=tfS(); t.ac=null; var a=acS(); P.ac(a,t); acSave(); try{ tfDevRefresh(); }catch(e){} } return r; };
+  }
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}

@@ -28,7 +28,8 @@ ok('A','바로 결과 보기 단추가 없다',(await ev(`/바로 결과 보기/
 await fresh(false);
 await ev(`tfShareHub()`); await sleep(2200);
 s=await J(`{btn:[].map.call(document.querySelectorAll('.mk-card button, .mk2-card button, [class*=card] button'),function(b){ return b.innerText.trim(); }).filter(function(x){ return /복사|따라/.test(x); }).slice(0,4)}`);
-ok('B','목록 단추는 전략 복사하기, 따라가기 없음',s.btn.length>0&&s.btn.every(x=>x==='전략 복사하기'),s.btn);
+s=await J(`{btn:[].map.call(document.querySelectorAll('.mk-card .mk3-foot button'),function(b){ return b.innerText.trim(); }).slice(0,6)}`);
+ok('B','목록 카드 단추는 전략 보기 하나',s.btn.length>0&&s.btn.every(x=>x==='전략 보기'),s.btn);
 await fresh(true);
 await ev(`acStart({need:'binance',name:'테스트 전략',after:{kind:'terminal'}})`); await sleep(500);
 ok('B','활성화 창이 전략의 거래소를 유지한다',(await J(`{ex:acS().ex,step:acStep()}`)).ex==='binance');
