@@ -101,3 +101,24 @@ body.st-full .stg-hr:first-child{border-top:0}
   body.st-full .stg-sec:last-child{margin-bottom:40px}
   .acx-cf .bx{border-radius:22px;padding:24px 20px 20px}
 }
+
+/* 픽셀 검수 1차 반영 */
+body.st-full .stg-main h1{font-size:28px}
+body.st-full .stg-main{margin:0 max(0px,calc((100% - 840px) / 2 - 100px)) 0 auto}
+.acx-cf h3{font-weight:600}
+.stg-dlg .stg-r .k b,.stg-dlg .stg-r .v{font-size:16px;font-weight:400}
+.stg-dlg .stg-r .v b,.stg-dlg .stg-r .k b b{font-weight:400}
+body.st-full .stg-seg.multi{background:none;padding:0;gap:8px}
+body.st-full .stg-seg.multi button{height:34px;padding:0 14px;border-radius:999px;background:#2f2f2f;color:#cdcdcd;display:inline-flex;align-items:center;gap:6px}
+body.st-full .stg-seg.multi button[aria-pressed=true]{background:#fff;color:#000}
+body.st-full .stg-seg.multi button[aria-pressed=true]::before{content:'';width:9px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg) translateY(-1px)}
+body.st-full .stg-seg.multi button:disabled{opacity:.85}
+@media (max-width:900px){
+  body.st-full #g-scroll{padding-top:0}
+  body.st-full .stg-nav{padding-top:calc(24px + env(safe-area-inset-top))}
+  body.st-full .stg-main{margin:0;padding-top:calc(16px + env(safe-area-inset-top))}
+  body.st-full .stg-main h1{font-size:28px}
+}
+
+/* 최종 검수: 날짜 덩어리는 줄을 넘기지 않는다 */
+body.st-full .stg-r .k span .num{white-space:nowrap}

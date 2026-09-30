@@ -7395,6 +7395,27 @@ body.st-full .stg-hr:first-child{border-top:0}
   body.st-full .stg-sec:last-child{margin-bottom:40px}
   .acx-cf .bx{border-radius:22px;padding:24px 20px 20px}
 }
+
+/* 픽셀 검수 1차 반영 */
+body.st-full .stg-main h1{font-size:28px}
+body.st-full .stg-main{margin:0 max(0px,calc((100% - 840px) / 2 - 100px)) 0 auto}
+.acx-cf h3{font-weight:600}
+.stg-dlg .stg-r .k b,.stg-dlg .stg-r .v{font-size:16px;font-weight:400}
+.stg-dlg .stg-r .v b,.stg-dlg .stg-r .k b b{font-weight:400}
+body.st-full .stg-seg.multi{background:none;padding:0;gap:8px}
+body.st-full .stg-seg.multi button{height:34px;padding:0 14px;border-radius:999px;background:#2f2f2f;color:#cdcdcd;display:inline-flex;align-items:center;gap:6px}
+body.st-full .stg-seg.multi button[aria-pressed=true]{background:#fff;color:#000}
+body.st-full .stg-seg.multi button[aria-pressed=true]::before{content:'';width:9px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg) translateY(-1px)}
+body.st-full .stg-seg.multi button:disabled{opacity:.85}
+@media (max-width:900px){
+  body.st-full #g-scroll{padding-top:0}
+  body.st-full .stg-nav{padding-top:calc(24px + env(safe-area-inset-top))}
+  body.st-full .stg-main{margin:0;padding-top:calc(16px + env(safe-area-inset-top))}
+  body.st-full .stg-main h1{font-size:28px}
+}
+
+/* 최종 검수: 날짜 덩어리는 줄을 넘기지 않는다 */
+body.st-full .stg-r .k span .num{white-space:nowrap}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -22904,14 +22925,16 @@ var SK_NEXT='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke=
 function skMob(){ return window.innerWidth<=900; }
 function stMList(){ var h='#/settings'; if(location.hash===h){ stRoute(h); return; } location.hash=h; }
 function skDate(ms){ return stDate(ms); }
+function skDateK(ms){ var d=new Date(ms); return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일'; }
+function skExp(e){ var m=String(e||'').match(/([0-9]{2})[/]([0-9]{2})/); return m?'20'+m[2]+'년 '+(+m[1])+'월 만료':'만료 '+gEsc(e||''); }
 /* ── 결제 ── */
 function skBilling(){
   var a=acS(), acc=acAccess(), sub=a.sub, on=acSubOn(), cx=sub&&sub.st==='cancelled', def=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0];
   var price=acUsd((sub&&sub.price)||AC_CFG.price)+' / 월';
-  var plan=on?(cx?stRow('TETH 구독','<span class="num">'+price+'</span>',stBtn('다시 시작','stSubResume()'),'<span class="num">'+skDate(sub.until)+'</span>까지 이용할 수 있습니다.')
-      :stRow('TETH 구독','<span class="num">'+price+'</span>',stBtn('관리','skSubDlg()'),'<span class="num">'+skDate((sub&&sub.next)||Date.now()+30*864e5)+'</span>에 다음 결제가 진행됩니다.'))
+  var plan=on?(cx?stRow('TETH 구독','<span class="num">'+price+'</span>',stBtn('다시 시작','stSubResume()'),'<span class="num">'+skDateK(sub.until)+'</span>까지 이용할 수 있습니다.')
+      :stRow('TETH 구독','<span class="num">'+price+'</span>',stBtn('구독 관리','skSubDlg()'),'다음 결제일은 <span class="num">'+skDateK((sub&&sub.next)||Date.now()+30*864e5)+'</span>입니다.'))
     :acc==='partner'?stRow('TETH 초대 계정','','','이용료가 없습니다.')
-    :cx?stRow('구독이 종료되었습니다','',stBtn('다시 구독','tfBrokersView()','p'),'<span class="num">'+skDate(sub.until)+'</span>에 종료되었습니다. 전략의 신규 주문이 중단되었습니다.')
+    :cx?stRow('구독이 종료되었습니다','',stBtn('다시 구독','tfBrokersView()','p'),'<span class="num">'+skDateK(sub.until)+'</span>에 종료되어 전략의 신규 주문이 중단되었습니다.')
     :stRow('이용 중인 플랜이 없습니다','',stBtn('거래소 연결','tfBrokersView()','p'),'TETH 초대 계정은 무료, 구독은 월 '+acUsd(AC_CFG.price)+'입니다.');
   var showPay=!(acc==='partner'&&!a.cards.length&&!a.bill.length);
   var bt=a.billTo||{email:(S.user&&S.user.email)||''};
@@ -22920,7 +22943,7 @@ function skBilling(){
   var fail=a.pay&&a.pay.st==='fail'&&!on?'<p class="stg-warn" role="alert">마지막 결제가 승인되지 않았습니다. 결제 수단을 확인해 주십시오.</p>':'';
   var n=ST.allBill?a.bill.length:3;
   var hist=a.bill.length?'<div class="stg-card">'+a.bill.slice(0,n).map(function(b){ var bad=b.st==='failed';
-      return '<button type="button" class="stg-r stg-hr" onclick="stReceipt(\''+b.id+'\')"><div class="k"><b class="num">'+skDate(b.at)+'</b><span'+(bad?' class="bad"':'')+'>'+gEsc(b.label)+', '+({paid:'결제 완료',failed:'결제 실패',refunded:'환불 완료'}[b.st]||b.st)+'</span></div><div class="v num">'+acUsd(b.amt)+'</div><div class="a">'+SK_NEXT+'</div></button>'; }).join('')+'</div>'
+      return '<button type="button" class="stg-r stg-hr" onclick="stReceipt(\''+b.id+'\')"><div class="k"><b class="num">'+skDate(b.at)+'</b><span'+(bad?' class="bad"':'')+'>'+({paid:'결제 완료',failed:'결제 실패',refunded:'환불 완료'}[b.st]||b.st)+'</span></div><div class="v num">'+acUsd(b.amt)+'</div><div class="a">'+SK_NEXT+'</div></button>'; }).join('')+'</div>'
     :'<div class="stg-card"><div class="stg-r"><div class="k"><span>'+(acc==='partner'?'TETH 초대 계정은 결제 내역이 없습니다.':'아직 결제 내역이 없습니다.')+'</span></div></div></div>';
   return '<h1>결제</h1>'+fail
     +'<section class="stg-sec"><header><h2>구독</h2></header><div class="stg-card">'+plan+pay+'</div></section>'
@@ -22934,7 +22957,7 @@ function skSubDlg(){ var a=acS(), sub=a.sub||{}, def=a.cards.filter(function(c){
     +'</div><div class="bts"><button type="button" class="dg" onclick="stDlgClose();stSubCancel()">구독 해지</button></div>','TETH 구독'); }
 function skCardsDlg(){ var a=acS();
   stDlg('<button type="button" class="x" aria-label="닫기" onclick="stDlgClose()">✕</button><h3>결제 수단</h3><div class="stg-card">'
-    +a.cards.map(function(c){ return stRow(gEsc(c.brand)+' <span class="num">•••• '+gEsc(c.last4)+'</span>','',(c.def?'':stBtn('기본으로 지정','skCardDef(\''+c.id+'\')'))+stBtn('삭제','stDlgClose();stCardDel(\''+c.id+'\')'),(c.def?'기본 결제 수단, ':'')+'만료 <span class="num">'+gEsc(c.exp)+'</span>'); }).join('')
+    +a.cards.map(function(c){ return stRow(gEsc(c.brand)+' <span class="num">•••• '+gEsc(c.last4)+'</span>','',(c.def?'':stBtn('기본으로 설정','skCardDef(\''+c.id+'\')'))+stBtn('삭제','stDlgClose();stCardDel(\''+c.id+'\')'),(c.def?'기본 결제 수단, ':'')+'<span class="num">'+skExp(c.exp)+'</span>'); }).join('')
     +'</div><div class="bts"><button type="button" class="ok" onclick="stDlgClose();stCardDlg()">결제 수단 추가</button></div>','결제 수단'); }
 function skCardDef(id){ stCardDef(id); skCardsDlg(); }
 function skBillDlg(){ var a=acS(), bt=a.billTo||{email:(S.user&&S.user.email)||'',name:(S.user&&S.user.name)||'',addr:''};
@@ -22950,13 +22973,17 @@ function skSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(u
       +stRow('2단계 인증','','<button type="button" class="stg-sw" role="switch" aria-checked="'+!!s.twofa+'" aria-label="2단계 인증" onclick="stTwofa()"><i></i></button>','로그인할 때 이메일 인증번호를 확인합니다.'))
     +stSec('로그인한 기기',stRow(dev+', '+br,'','','현재 기기')
       +(s.devices||[]).map(function(d){ return stRow(gEsc(d.n),'',stBtn('로그아웃','stOutOne(\''+d.id+'\')'),gEsc(d.where)+', 마지막 활동 <span class="num">'+gEsc(d.at)+'</span>'); }).join('')
-      +stRow('다른 모든 기기','',stBtn('모두 로그아웃','stOutAll()'),'현재 기기는 로그인을 유지합니다.'))
+      +stRow('다른 모든 기기','',stBtn('모두 로그아웃','stOutAll()'),'이 기기의 로그인은 유지합니다.'))
     +stSec('거래소 연결',L.length?L.map(function(k){ return stRow(acLogo(k,20)+acName(k),'',stBtn('연결 끊기','acDisc(\''+k+'\')'),'잔고 조회와 주문'); }).join('')
       :stRow('연결된 거래소가 없습니다','',stBtn('거래소 연결','tfBrokersView()'),'연결하면 거래소마다 허용한 권한이 여기에 보입니다.'));
 }
 (function(){
   stBilling=skBilling; stSecurity=skSecurity;
   /* 프리셋이 만든 설정 상태에 알림 값이 없으면 알림 탭이 멈춘다 */
+  /* 알림: 설명 문장을 합니다체로, 한 섹션뿐이라 섹션 제목은 두지 않는다 */
+  var NF_D={fill:'전략의 주문이 체결되면 알립니다.',state:'전략이 중지되거나 오류가 발생하면 알립니다.',risk:'설정한 손실 한도에 도달하면 알립니다.',copy:'원본 전략의 설정이 변경되면 알립니다.',bill:'결제와 로그인 내역, 보안 설정 변경을 알립니다.',news:'새 기능과 전략을 안내합니다.'};
+  ST_NF.forEach(function(x){ if(NF_D[x[0]]) x[2]=NF_D[x[0]]; });
+  var nf0=stNotify; stNotify=function(){ return nf0.apply(this,arguments).replace('<header><h2>TETH</h2></header>',''); };
   var ss0=stS; stS=function(){ var s=ss0(); if(!s.notif) s.notif={}; return s; };
   /* 모바일 목록 → 상세 */
   var r0=stRoute; stRoute=function(h){ var m=h.match(/^#\/settings(?:\/([a-z]+))?$/); ST.mList=!!m&&!m[1]; return r0.apply(this,arguments); };
