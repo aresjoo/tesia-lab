@@ -1,0 +1,1 @@
+You have never seen this product. Do not read any file. Look only at the attached screens, in order (R2, R4, R5, R6, R3, R1). For each screen, in one sentence: what do you think just happened and what would you press next? Then say where you got confused and which word or number caused it. Korean, short, no headings.

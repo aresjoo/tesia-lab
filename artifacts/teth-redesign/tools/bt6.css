@@ -300,3 +300,35 @@ body.st-full .stg{position:relative}
 .stg-rl .logo{width:28px;height:28px;background-size:contain;background-position:center;background-repeat:no-repeat;transition:opacity .15s ease}
 .stg-rl .logo{background-image:var(--logo-uri)}
 .stg-tg .tip{left:calc(100% + 12px)}
+/* 나쁜 결과 뒤의 행동 */
+.rv-links{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 0;font-size:13px}
+.rv-links button{border:0;background:none;color:#aeb3ba;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rv-links button:hover{color:#fff}.rv-links i{color:#5b6067;font-style:normal}
+.rv-note{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(240,184,64,.1);color:#f0c668;font-size:13px;line-height:1.6}
+.rv-cmp{margin-bottom:12px}
+.rv-cmp>small{display:block;font-size:12px;color:#8b9096;margin-bottom:8px}
+.rv-same{margin:0 0 10px;font-size:12px;color:#5fd6a9}.rv-same.warn{color:#f0c668}
+.rv-rules{display:grid;gap:8px;margin:0 0 10px}
+.rv-rules>div{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04)}
+.rv-rules small{display:block;font-size:11px;color:#8b9096;margin-bottom:3px}
+.rv-rules p{margin:0;font-size:13px;line-height:1.55;color:#e9ebee}
+.rv-rows .r{display:grid;grid-template-columns:minmax(0,1fr) 72px 72px;gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:#aeb3ba;align-items:center}
+.rv-rows .r.h{border-top:0;color:#8b9096;font-size:11.5px}.rv-rows .r i{font-style:normal;text-align:right;color:#8b9096}.rv-rows .r b{text-align:right;color:#f2f3f5}
+.rv-prev{margin-top:10px;border:0;background:none;color:#8b9096;font:inherit;font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rv-card{padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e9ebee;min-width:300px}
+.rv-card>b{display:block;font-size:15px;font-weight:700}.rv-card>span{display:block;font-size:12px;color:#8b9096;margin:2px 0 10px}
+.rv-kv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.rv-kv small{display:block;font-size:11px;color:#8b9096}.rv-kv i{font-style:normal;font-size:15px;font-weight:700}
+.rv-card>em{display:block;margin-top:10px;font-style:normal;font-size:12.5px;color:#f58a98}
+.rv-prop .rv-rules{margin:8px 0 12px}
+.rv-prop .tf-btn.ghost{margin-top:6px}
+@media (max-width:640px){ .rv-kv{grid-template-columns:repeat(2,minmax(0,1fr))} .rv-card{min-width:0} }
+
+.rv-sum{margin:0 0 6px;font-size:14px;line-height:1.6;color:#f2f3f5;font-weight:600}
+.rv-why{margin:0 0 10px;font-size:12.5px;line-height:1.6;color:#8b9096}
+.rv-ch{margin:6px 0 10px;font-size:14.5px;line-height:1.6;color:#f2f3f5;font-weight:600}
+.rv-det{margin:0 0 12px}.rv-det summary{cursor:pointer;font-size:12.5px;color:#8b9096;list-style:none;display:flex;align-items:center;gap:6px}
+.rv-det summary::before{content:'';width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+.rv-det[open] summary::before{transform:rotate(45deg)}
+.rv-det .rv-rules{margin-top:8px}
+.rv-cmp-acts{display:flex;gap:14px;flex-wrap:wrap}

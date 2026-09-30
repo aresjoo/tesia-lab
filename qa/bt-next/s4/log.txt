@@ -1,0 +1,1172 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f31b-c79a-77f2-bc20-a2291de0ac34
+--------
+user
+# TETH: next actions after a backtest result. Screen review (fresh context)
+
+Assume this feature may have made the product worse. Judge the pixels and the flow from scratch. Do not modify any file.
+
+TETH is a Korean AI trading product. A user makes a strategy in chat, runs a backtest, and sees a result screen. When the result is bad (worse than simply holding, or a loss), the result screen now offers "규칙 수정하기" (edit rules) which returns to the chat that created the strategy; TETH proposes exactly one rule change with its trade-off; a proposal card shows the rule before and after; "수정한 규칙으로 다시 검증하기" re-runs the backtest and the new result shows a comparison with the previous run. Copied public strategies cannot have their rules edited, so they get "다른 전략 만들기" instead.
+
+Attached in order:
+- R0 the chat where the strategy was created (strategy sheet card)
+- R2 result, bad, my own strategy (+25% versus +273% for holding)
+- R4 the chat after pressing "규칙 수정하기": TETH's message and the proposal card
+- R5 the backtest setup screen after "수정한 규칙으로 다시 검증하기"
+- R6 the new result with the comparison block on the right
+- R3 result, bad, a copied public strategy
+- R1 result, good, a copied public strategy
+
+You may read `index.html` (search `rvActs`, `rvCompare`, `rvProposal`, `rvFix`) and `qa/bt-next/DECISIONS_1.md`.
+
+For each screen answer: does a beginner know what to do next within 3 seconds? What contradicts another screen? Then list defects as P0/P1/P2 with a concrete fix and exact Korean wording (formal 합니다체, no jargon such as 익절, no em dash, no middle dot). Check specifically: the comparison block claims "같은 기간, 같은 시작 금액, 같은 가격 자료" (is it true from the screens?), whether the proposal changes exactly one rule, whether the old link "조건을 바꿔 다시 돌리기" is gone, whether the good result screen still leads with running the strategy, and whether the copied strategy screen makes it clear why rules cannot be edited. End with: ready to show the founder, yes or no, and the three changes that matter most. Korean, short.
+
+codex
+화면의 다음 행동과 서로 어긋나는 안내를 먼저 판단하고, 지정하신 코드와 결정 문서로 확인하겠습니다. 파일은 수정하지 않겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md' -Raw\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 356ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 450ms:
+codex 인박스 : (비어 있음)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'qa/bt-next/DECISIONS_1.md' -Raw -Encoding UTF8\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk rg -n "rvActs|rvCompare|rvProposal|rvFix|조건을 바꿔 다시 돌리기|같은 기간|수정한 규칙으로" index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 57ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 73ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ succeeded in 297ms:
+# 나쁜 백테스트 결과의 다음 행동: 1단계 설계 비판 결정
+
+Codex 원문: `qa/bt-next/s1/CODEX_RAW.md` (수정 없음, 검수 전후 index.html 해시 동일)
+
+| Codex 지적 | 결정 | 처리 |
+|---|---|---|
+| 낮은 수익을 실패로 단정한다. 손실 폭이 줄었으면 그 장점을 같이 말해야 한다 | ACCEPT | "나쁨"은 단추 순서 기준일 뿐 딱지가 아니다. 결과 카드 문장에 낙폭이 줄었으면 함께 적는다 |
+| 관찰을 원인으로 단정한다 (8%에 팔아서 낮았다) | ACCEPT | TETH의 제안은 "비교해 볼 값"으로 말한다. "더 좋은 결과를 뜻하지 않는다"를 붙인다 |
+| 공개 전략의 규칙은 대화 전략 형식으로 옮길 수 없다 | ACCEPT | 카탈로그 전략(이동평균, 돌파, AI 판단)은 대화 전략(눌림 매수, 익절, 손절, 공포 지수) 형식이 아니다. 복사 전략에서는 "다른 전략 만들기"만 둔다. 결과 요약을 새 대화에 붙인다 |
+| 원래 대화가 없거나 AI가 실패할 때의 길이 없다 | ACCEPT | 대화 세션이 없으면 새 대화를 연다. AI가 실패하면 입력창에 수정 요청 초안을 넣어 사용자가 보내게 한다 |
+| 설정 화면으로 돌아갈 길은 남겨라 | ACCEPT | 결과 상단의 뒤로 화살표가 설정 화면이다. 기간과 금액 링크만 없앤다 |
+| 기준: 시작 돈보다 줄었거나 그냥 보유보다 낮으면 | ACCEPT | 둘 중 하나면 "규칙 수정하기"가 첫 단추. 거래 0회면 "결과를 판단하기 어렵습니다" |
+| TETH가 먼저, 변경은 한 번에 하나, 대가를 함께 | ACCEPT | 제안은 정확히 하나. 칩 둘: "N%로 바꾸어 비교하기", "다른 수정 요청하기" |
+| 새 버전은 다시 검증할 때만 만들고, 비교에는 규칙 문장 전후, 같은 조건 표시, 수익률과 낙폭과 거래 수, 이전 결과 다시 보기 | ACCEPT | 다시 검증하는 순간 이전 판을 저장(최대 5개). 결과 오른쪽에 "이전 판과 비교" 블록. 기간이 다르면 비교 대신 "조건이 달라 비교하지 않습니다" |
+| 문구 표 | ACCEPT | 규칙 수정하기 / 다른 전략 만들기 / 이 전략 실행 준비하기 / 수정한 규칙으로 다시 검증하기 |
+| 값싼 대안: 대화를 열고 입력창에 초안 | MODIFY | 대안은 실패 경로로 쓴다. 기본은 TETH가 먼저 한 가지를 제안한다(실제 AI) |
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n "rvActs|rvCompare|rvProposal|rvFix|조건을 바꿔 다시 돌리기|같은 기간|수정한 규칙으로" index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 95ms:
+ M artifacts/teth-redesign/r2-follow-sheet.png
+ M index.html
+ M qa/16-fixes/FLOWS_RESULT.txt
+ M qa/16-fixes/R11-conversions.txt
+ M qa/16-fixes/rail/rail-check.txt
+ M qa/16-fixes/rail/st-full-check.txt
+ M qa/16-fixes/round-2/R01-auth-age-step.png
+ M qa/16-fixes/round-2/R01-guest-auth.png
+ M qa/16-fixes/round-2/R01-resumed-backtest.png
+ M qa/16-fixes/round-2/r01-check.txt
+ M ux-audit/card3/grid4-1440.png
+ M ux-audit/card3/grid4-pager-1440.png
+?? artifacts/teth-redesign/card2/c1-codex.log
+?? artifacts/teth-redesign/card2/c2-codex.log
+?? artifacts/teth-redesign/card2/c3-codex.log
+?? artifacts/teth-redesign/card2/c8-1024.png
+?? artifacts/teth-redesign/card2/c8-1100.png
+?? artifacts/teth-redesign/card2/c8-1101.png
+?? artifacts/teth-redesign/card2/c8-1280.png
+?? artifacts/teth-redesign/card2/c8-1440.png
+?? artifacts/teth-redesign/card2/c8-1920.png
+?? artifacts/teth-redesign/card2/c8-390.png
+?? artifacts/teth-redesign/card2/c8-768.png
+?? artifacts/teth-redesign/card2/r1-info-full.png
+?? artifacts/teth-redesign/card2/r1-log-full.png
+?? artifacts/teth-redesign/card2/r1-ov-full.png
+?? artifacts/teth-redesign/card2/r1-perf-full.png
+?? artifacts/teth-redesign/card2/r1-trades-full.png
+?? qa/16-fixes/an/an-1-bubble.png
+?? qa/16-fixes/an/an-2-shots.png
+?? qa/16-fixes/an/an-3-shot-zoom.png
+?? qa/16-fixes/an/an-4-answer.png
+?? qa/16-fixes/an/probe-h2i.png
+?? qa/16-fixes/presets/p02-account.png
+?? qa/16-fixes/presets/p02-billing-2.png
+?? qa/16-fixes/presets/p02-billing.png
+?? qa/16-fixes/presets/p02-brokers.png
+?? qa/16-fixes/presets/p02-security-2.png
+?? qa/16-fixes/presets/p02-security.png
+?? qa/16-fixes/presets/p02-trade-start.png
+?? qa/16-fixes/presets/p02-trade.png
+?? qa/16-fixes/presets/p12-account.png
+?? qa/16-fixes/presets/p12-billing-2.png
+?? qa/16-fixes/presets/p12-billing.png
+?? qa/16-fixes/presets/p12-brokers.png
+?? qa/16-fixes/presets/p12-security-2.png
+?? qa/16-fixes/presets/p12-security.png
+?? qa/16-fixes/presets/p12-trade.png
+?? qa/16-fixes/presets/p13-account.png
+?? qa/16-fixes/presets/p13-billing-2.png
+?? qa/16-fixes/presets/p13-billing.png
+?? qa/16-fixes/presets/p13-brokers.png
+?? qa/16-fixes/presets/p13-security-2.png
+?? qa/16-fixes/presets/p13-security.png
+?? qa/16-fixes/presets/p13-trade.png
+?? qa/16-fixes/presets/p14-account.png
+?? qa/16-fixes/presets/p14-billing-2.png
+?? qa/16-fixes/presets/p14-billing.png
+?? qa/16-fixes/presets/p14-brokers.png
+?? qa/16-fixes/presets/p14-security-2.png
+?? qa/16-fixes/presets/p14-security.png
+?? qa/16-fixes/presets/p14-trade.png
+?? qa/16-fixes/presets/p15-account.png
+?? qa/16-fixes/presets/p15-billing-2.png
+?? qa/16-fixes/presets/p15-billing.png
+?? qa/16-fixes/presets/p15-brokers.png
+?? qa/16-fixes/presets/p15-security-2.png
+?? qa/16-fixes/presets/p15-security.png
+?? qa/16-fixes/presets/p15-trade.png
+?? qa/16-fixes/rail/card-fw.png
+?? qa/16-fixes/rail/chat-guest.png
+?? qa/16-fixes/rail/chat-user.png
+?? qa/16-fixes/rail/detail-cta.png
+?? "qa/16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? qa/16-fixes/rail/guest-g-gear-btn.png
+?? qa/16-fixes/rail/guest-g-login-btn.png
+?? qa/16-fixes/rail/guest-menu.png
+?? "qa/16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "qa/16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "qa/16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "qa/16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "qa/16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? qa/16-fixes/rail/st-collapsed-hover.png
+?? qa/16-fixes/rail/st-collapsed.png
+?? qa/16-fixes/rail/st-full-1440.png
+?? qa/16-fixes/rail/st-full-2000.png
+?? qa/16-fixes/rail/st-full-390.png
+?? qa/16-fixes/rail/st-full-notify-1440.png
+?? qa/16-fixes/rail/st-full-notify-2000.png
+?? qa/16-fixes/rail/st-full-notify-390.png
+?? qa/16-fixes/rail/st-open-hover.png
+?? qa/16-fixes/rail/st-open.png
+?? qa/16-fixes/rail/tail.log
+?? qa/16-fixes/rail/tail.log.mark
+?? qa/16-fixes/rail/user-after.png
+?? qa/16-fixes/rail/user-collapsed-hover.png
+?? qa/16-fixes/rail/user-expanded-menu.png
+?? "qa/16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? qa/16-fixes/rail/user-home-g-gear-btn.png
+?? qa/16-fixes/rail/user-home-g-me-row.png
+?? "qa/16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "qa/16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "qa/16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "qa/16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "qa/16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? qa/16-fixes/rail/user-menu.png
+?? qa/16-fixes/rail/user-settings-g-gear-btn.png
+?? qa/16-fixes/rail/user-settings-g-me-row.png
+?? "qa/16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "qa/16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? qa/16-fixes/rail/user-strategies-g-gear-btn.png
+?? qa/16-fixes/rail/user-strategies-g-me-row.png
+?? "qa/16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "qa/16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "qa/16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "qa/16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "qa/16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "qa/16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? qa/16-fixes/rail/user-trade-g-gear-btn.png
+?? qa/16-fixes/rail/user-trade-g-me-row.png
+?? "qa/16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "qa/16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "qa/16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "qa/16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "qa/16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? qa/ai/
+?? qa/baseline/
+?? qa/bt-next/
+?? qa/final/S01-backtest-ready.png
+?? qa/final/S02-early-processing.png
+?? qa/final/S02a-preparing.png
+?? qa/final/S02b-first-decision.png
+?? qa/final/S03-mid-processing.png
+?? qa/final/S03a-skip-signal.png
+?? qa/final/S03b-skip-review.png
+?? qa/final/S03c-between-events.png
+?? qa/final/S04-final-processing.png
+?? qa/final/S05-results-above-fold.png
+?? qa/final/S05b-results-hover.png
+?? qa/final/S06-results-evidence.png
+?? qa/final/S07-decision-detail.png
+?? qa/final/S08-trade-detail.png
+?? qa/final/S08b-result-full-page.png
+?? qa/final/S09-activation-choice.png
+?? qa/final/S10-card-path.png
+?? qa/final/S11-exchange-connection.png
+?? qa/final/S11a-exchange-form.png
+?? qa/final/S12-partner-exchange.png
+?? qa/final/S12b-partner-new-account.png
+?? qa/final/S13-uid-verification.png
+?? qa/final/S14-api-connection.png
+?? qa/final/S14a-api-form.png
+?? qa/final/S15-success.png
+?? qa/final/S15b-success-own-account.png
+?? qa/final/X01-uid-not-found.png
+?? qa/final/d1-w1440/S01-backtest-ready.png
+?? qa/final/d1-w1440/S02-early-processing.png
+?? qa/final/d1-w1440/S02a-preparing.png
+?? qa/final/d1-w1440/S03-mid-processing.png
+?? qa/final/d1-w1440/S04-final-processing.png
+?? qa/final/d1-w1440/S05-results-above-fold.png
+?? qa/final/d1-w1440/S06-results-evidence.png
+?? qa/final/d1-w1440/S07-decision-detail.png
+?? qa/final/d1-w1440/S08-trade-detail.png
+?? qa/final/d1-w1440/S09-activation-choice.png
+?? qa/final/d1-w1440/S10-card-path.png
+?? qa/final/d1-w1440/S11-exchange-connection.png
+?? qa/final/d1-w1440/S12-partner-exchange.png
+?? qa/final/d1-w1440/S13-uid-verification.png
+?? qa/final/d1-w1440/S14-api-connection.png
+?? qa/final/d1-w1440/S15-success.png
+?? qa/final/h1-w1440/S01-backtest-ready.png
+?? qa/final/h1-w1440/S02-early-processing.png
+?? qa/final/h1-w1440/S02a-preparing.png
+?? qa/final/h1-w1440/S03-mid-processing.png
+?? qa/final/h1-w1440/S04-final-processing.png
+?? qa/final/h1-w1440/S05-results-above-fold.png
+?? qa/final/h1-w1440/S06-results-evidence.png
+?? qa/final/h1-w1440/S07-decision-detail.png
+?? qa/final/h1-w1440/S08-trade-detail.png
+?? qa/final/h1-w1440/S09-activation-choice.png
+?? qa/final/h1-w1440/S10-card-path.png
+?? qa/final/h1-w1440/S11-exchange-connection.png
+?? qa/final/h1-w1440/S12-partner-exchange.png
+?? qa/final/h1-w1440/S13-uid-verification.png
+?? qa/final/h1-w1440/S14-api-connection.png
+?? qa/final/h1-w1440/S15-success.png
+?? qa/final/r1-w1440/S01-backtest-ready.png
+?? qa/final/r1-w1440/S02a-preparing.png
+?? qa/final/r1-w1440/S04-final-processing.png
+?? qa/final/r1-w1440/S05-results-above-fold.png
+?? qa/final/r1-w1440/S06-results-evidence.png
+?? qa/final/r1-w1440/S07-decision-detail.png
+?? qa/final/r1-w1440/S08-trade-detail.png
+?? qa/final/r1-w1440/S09-activation-choice.png
+?? qa/final/r1-w1440/S10-card-path.png
+?? qa/final/r1-w1440/S11-exchange-connection.png
+?? qa/final/r1-w1440/S12-partner-exchange.png
+?? qa/final/r1-w1440/S13-uid-verification.png
+?? qa/final/r1-w1440/S14-api-connection.png
+?? qa/final/r1-w1440/S15-success.png
+?? qa/final/seq/
+?? qa/final/w1280/S01-backtest-ready.png
+?? qa/final/w1280/S02-early-processing.png
+?? qa/final/w1280/S02a-preparing.png
+?? qa/final/w1280/S03-mid-processing.png
+?? qa/final/w1280/S04-final-processing.png
+?? qa/final/w1280/S05-results-above-fold.png
+?? qa/final/w1280/S06-results-evidence.png
+?? qa/final/w1280/S07-decision-detail.png
+?? qa/final/w1280/S08-trade-detail.png
+?? qa/final/w1280/S09-activation-choice.png
+?? qa/final/w1280/S10-card-path.png
+?? qa/final/w1280/S11-exchange-connection.png
+?? qa/final/w1280/S12-partner-exchange.png
+?? qa/final/w1280/S13-uid-verification.png
+?? qa/final/w1280/S14-api-connection.png
+?? qa/final/w1280/S15-success.png
+?? qa/final/w390/S01-backtest-ready.png
+?? qa/final/w390/S02-early-processing.png
+?? qa/final/w390/S02a-preparing.png
+?? qa/final/w390/S03-mid-processing.png
+?? qa/final/w390/S04-final-processing.png
+?? qa/final/w390/S05-results-above-fold.png
+?? qa/final/w390/S06-results-evidence.png
+?? qa/final/w390/S07-decision-detail.png
+?? qa/final/w390/S08-trade-detail.png
+?? qa/final/w390/S09-activation-choice.png
+?? qa/final/w390/S10-card-path.png
+?? qa/final/w390/S11-exchange-connection.png
+?? qa/final/w390/S12-partner-exchange.png
+?? qa/final/w390/S13-uid-verification.png
+?? qa/final/w390/S14-api-connection.png
+?? qa/final/w390/S15-success.png
+?? qa/final2/F01-a-uid-failed.png
+?? qa/final2/F01-b-after-continue.png
+?? qa/final2/F01-c-changed-uid-needs-api.png
+?? qa/final2/F01-d-success-valid.png
+?? qa/final2/F02-pick-reason.png
+?? qa/final2/F03-travel-1.png
+?? qa/final2/F03-travel-2.png
+?? qa/final2/F03-travel-3.png
+?? qa/final2/F03-travel-4.png
+?? qa/final2/R09-all-activity-d1.png
+?? qa/final2/S01-backtest-ready.png
+?? qa/final2/S02-early-processing.png
+?? qa/final2/S02a-preparing.png
+?? qa/final2/S02b-first-decision.png
+?? qa/final2/S03-mid-processing.png
+?? qa/final2/S03a-skip-signal.png
+?? qa/final2/S03b-skip-review.png
+?? qa/final2/S03c-between-events.png
+?? qa/final2/S04-final-processing.png
+?? qa/final2/S05-results-above-fold.png
+?? qa/final2/S05b-results-hover.png
+?? qa/final2/S06-results-evidence.png
+?? qa/final2/S07-decision-detail.png
+?? qa/final2/S08-trade-detail.png
+?? qa/final2/S08b-result-full-page.png
+?? qa/final2/S09-activation-choice.png
+?? qa/final2/S10-card-path.png
+?? qa/final2/S11-exchange-connection.png
+?? qa/final2/S11a-exchange-form.png
+?? qa/final2/S12-partner-exchange.png
+?? qa/final2/S12b-partner-new-account.png
+?? qa/final2/S13-uid-verification.png
+?? qa/final2/S14-api-connection.png
+?? qa/final2/S14a-api-form.png
+?? qa/final2/S15-success.png
+?? qa/final2/S15b-success-own-account.png
+?? qa/final2/X01-uid-not-found.png
+?? qa/final2/d1-w1440/S01-backtest-ready.png
+?? qa/final2/d1-w1440/S02-early-processing.png
+?? qa/final2/d1-w1440/S02a-preparing.png
+?? qa/final2/d1-w1440/S03-mid-processing.png
+?? qa/final2/d1-w1440/S04-final-processing.png
+?? qa/final2/d1-w1440/S05-results-above-fold.png
+?? qa/final2/d1-w1440/S06-results-evidence.png
+?? qa/final2/d1-w1440/S07-decision-detail.png
+?? qa/final2/d1-w1440/S08-trade-detail.png
+?? qa/final2/d1-w1440/S09-activation-choice.png
+?? qa/final2/d1-w1440/S10-card-path.png
+?? qa/final2/d1-w1440/S11-exchange-connection.png
+?? qa/final2/d1-w1440/S12-partner-exchange.png
+?? qa/final2/d1-w1440/S13-uid-verification.png
+?? qa/final2/d1-w1440/S14-api-connection.png
+?? qa/final2/d1-w1440/S15-success.png
+?? qa/final2/h1-w1440/S01-backtest-ready.png
+?? qa/final2/h1-w1440/S02-early-processing.png
+?? qa/final2/h1-w1440/S02a-preparing.png
+?? qa/final2/h1-w1440/S03-mid-processing.png
+?? qa/final2/h1-w1440/S04-final-processing.png
+?? qa/final2/h1-w1440/S05-results-above-fold.png
+?? qa/final2/h1-w1440/S06-results-evidence.png
+?? qa/final2/h1-w1440/S07-decision-detail.png
+?? qa/final2/h1-w1440/S08-trade-detail.png
+?? qa/final2/h1-w1440/S09-activation-choice.png
+?? qa/final2/h1-w1440/S10-card-path.png
+?? qa/final2/h1-w1440/S11-exchange-connection.png
+?? qa/final2/h1-w1440/S12-partner-exchange.png
+?? qa/final2/h1-w1440/S13-uid-verification.png
+?? qa/final2/h1-w1440/S14-api-connection.png
+?? qa/final2/h1-w1440/S15-success.png
+?? qa/final2/r1-w1440/S01-backtest-ready.png
+?? qa/final2/r1-w1440/S02a-preparing.png
+?? qa/final2/r1-w1440/S04-final-processing.png
+?? qa/final2/r1-w1440/S05-results-above-fold.png
+?? qa/final2/r1-w1440/S06-results-evidence.png
+?? qa/final2/r1-w1440/S07-decision-detail.png
+?? qa/final2/r1-w1440/S08-trade-detail.png
+?? qa/final2/r1-w1440/S09-activation-choice.png
+?? qa/final2/r1-w1440/S10-card-path.png
+?? qa/final2/r1-w1440/S11-exchange-connection.png
+?? qa/final2/r1-w1440/S12-partner-exchange.png
+?? qa/final2/r1-w1440/S13-uid-verification.png
+?? qa/final2/r1-w1440/S14-api-connection.png
+?? qa/final2/r1-w1440/S15-success.png
+?? qa/final2/seq/
+?? qa/final2/w1280/S01-backtest-ready.png
+?? qa/final2/w1280/S02-early-processing.png
+?? qa/final2/w1280/S02a-preparing.png
+?? qa/final2/w1280/S03-mid-processing.png
+?? qa/final2/w1280/S04-final-processing.png
+?? qa/final2/w1280/S05-results-above-fold.png
+?? qa/final2/w1280/S06-results-evidence.png
+?? qa/final2/w1280/S07-decision-detail.png
+?? qa/final2/w1280/S08-trade-detail.png
+?? qa/final2/w1280/S09-activation-choice.png
+?? qa/final2/w1280/S10-card-path.png
+?? qa/final2/w1280/S11-exchange-connection.png
+?? qa/final2/w1280/S12-partner-exchange.png
+?? qa/final2/w1280/S13-uid-verification.png
+?? qa/final2/w1280/S14-api-connection.png
+?? qa/final2/w1280/S15-success.png
+?? qa/final2/w390/S01-backtest-ready.png
+?? qa/final2/w390/S02-early-processing.png
+?? qa/final2/w390/S02a-preparing.png
+?? qa/final2/w390/S03-mid-processing.png
+?? qa/final2/w390/S04-final-processing.png
+?? qa/final2/w390/S05-results-above-fold.png
+?? qa/final2/w390/S06-results-evidence.png
+?? qa/final2/w390/S07-decision-detail.png
+?? qa/final2/w390/S08-trade-detail.png
+?? qa/final2/w390/S09-activation-choice.png
+?? qa/final2/w390/S10-card-path.png
+?? qa/final2/w390/S11-exchange-connection.png
+?? qa/final2/w390/S12-partner-exchange.png
+?? qa/final2/w390/S13-uid-verification.png
+?? qa/final2/w390/S14-api-connection.png
+?? qa/final2/w390/S15-success.png
+?? qa/final3/F01-a-uid-failed.png
+?? qa/final3/F01-b-after-continue.png
+?? qa/final3/F01-c-changed-uid-needs-api.png
+?? qa/final3/F01-d-success-valid.png
+?? qa/final3/F01R-reload-150ms.png
+?? qa/final3/F01R-reload-after-exchange-change.png
+?? qa/final3/F02-pick-reason.png
+?? qa/final3/F03-travel-1.png
+?? qa/final3/F03-travel-2.png
+?? qa/final3/F03-travel-3.png
+?? qa/final3/F03-travel-4.png
+?? qa/final3/R09-all-activity-d1.png
+?? qa/final3/S01-backtest-ready.png
+?? qa/final3/S02-early-processing.png
+?? qa/final3/S02a-preparing.png
+?? qa/final3/S02b-first-decision.png
+?? qa/final3/S03-mid-processing.png
+?? qa/final3/S03a-skip-signal.png
+?? qa/final3/S03b-skip-review.png
+?? qa/final3/S03c-between-events.png
+?? qa/final3/S04-final-processing.png
+?? qa/final3/S05-results-above-fold.png
+?? qa/final3/S05b-results-hover.png
+?? qa/final3/S06-results-evidence.png
+?? qa/final3/S07-decision-detail.png
+?? qa/final3/S08-trade-detail.png
+?? qa/final3/S08b-result-full-page.png
+?? qa/final3/S09-activation-choice.png
+?? qa/final3/S10-card-path.png
+?? qa/final3/S11-exchange-connection.png
+?? qa/final3/S11a-exchange-form.png
+?? qa/final3/S12-partner-exchange.png
+?? qa/final3/S12b-partner-new-account.png
+?? qa/final3/S13-uid-verification.png
+?? qa/final3/S14-api-connection.png
+?? qa/final3/S14a-api-form.png
+?? qa/final3/S15-success.png
+?? qa/final3/S15b-success-own-account.png
+?? qa/final3/X01-uid-not-found.png
+?? qa/final3/d1-w1440/S01-backtest-ready.png
+?? qa/final3/d1-w1440/S02-early-processing.png
+?? qa/final3/d1-w1440/S02a-preparing.png
+?? qa/final3/d1-w1440/S03-mid-processing.png
+?? qa/final3/d1-w1440/S04-final-processing.png
+?? qa/final3/d1-w1440/S05-results-above-fold.png
+?? qa/final3/d1-w1440/S06-results-evidence.png
+?? qa/final3/d1-w1440/S07-decision-detail.png
+?? qa/final3/d1-w1440/S08-trade-detail.png
+?? qa/final3/d1-w1440/S09-activation-choice.png
+?? qa/final3/d1-w1440/S10-card-path.png
+?? qa/final3/d1-w1440/S11-exchange-connection.png
+?? qa/final3/d1-w1440/S12-partner-exchange.png
+?? qa/final3/d1-w1440/S13-uid-verification.png
+?? qa/final3/d1-w1440/S14-api-connection.png
+?? qa/final3/d1-w1440/S15-success.png
+?? qa/final3/seq/
+?? qa/final3/w1280/P-help-button.png
+?? qa/final3/w1280/S01-backtest-ready.png
+?? qa/final3/w1280/S02-early-processing.png
+?? qa/final3/w1280/S02a-preparing.png
+?? qa/final3/w1280/S03-mid-processing.png
+?? qa/final3/w1280/S04-final-processing.png
+?? qa/final3/w1280/S05-results-above-fold.png
+?? qa/final3/w1280/S06-results-evidence.png
+?? qa/final3/w1280/S07-decision-detail.png
+?? qa/final3/w1280/S08-trade-detail.png
+?? qa/final3/w1280/S09-activation-choice.png
+?? qa/final3/w1280/S10-card-path.png
+?? qa/final3/w1280/S11-exchange-connection.png
+?? qa/final3/w1280/S12-partner-exchange.png
+?? qa/final3/w1280/S13-uid-verification.png
+?? qa/final3/w1280/S14-api-connection.png
+?? qa/final3/w1280/S15-success.png
+?? qa/final3/w390/S01-backtest-ready.png
+?? qa/final3/w390/S02-early-processing.png
+?? qa/final3/w390/S02a-preparing.png
+?? qa/final3/w390/S03-mid-processing.png
+?? qa/final3/w390/S04-final-processing.png
+?? qa/final3/w390/S05-results-above-fold.png
+?? qa/final3/w390/S06-results-evidence.png
+?? qa/final3/w390/S07-decision-detail.png
+?? qa/final3/w390/S08-trade-detail.png
+?? qa/final3/w390/S09-activation-choice.png
+?? qa/final3/w390/S10-card-path.png
+?? qa/final3/w390/S11-exchange-connection.png
+?? qa/final3/w390/S12-partner-exchange.png
+?? qa/final3/w390/S13-uid-verification.png
+?? qa/final3/w390/S14-api-connection.png
+?? qa/final3/w390/S15-success.png
+?? qa/fut/shots/U01-finder-top.png
+?? qa/fut/shots/U02-detail-f1.png
+?? qa/fut/shots/U02-detail-f5.png
+?? qa/fut/shots/U02-detail-f7.png
+?? qa/fut/shots/U03-replay-f1.png
+?? qa/fut/shots/U03-replay-f5.png
+?? qa/fut/shots/U03-replay-f7.png
+?? qa/fut/shots/U04-result-f1.png
+?? qa/fut/shots/U04-result-f5.png
+?? qa/fut/shots/U04-result-f7.png
+?? qa/fut/shots/U05-decision-f1.png
+?? qa/fut/shots/U05-decision-f5.png
+?? qa/fut/shots/U05-decision-f7.png
+?? qa/fut/shots/U06-trade-f1.png
+?? qa/fut/shots/U06-trade-f5.png
+?? qa/fut/shots/U06-trade-f7.png
+?? qa/fut/shots/U07-follow.png
+?? qa/mine-walk/
+?? qa/mine/M01-ready.png
+?? qa/mine/M02-replay.png
+?? qa/mine/M03-result.png
+?? qa/mine/M04-activation.png
+?? qa/mine/M05-connected.png
+?? qa/mine/M06-start.png
+?? qa/mine/verify-mine-log.txt
+?? qa/mine/w390/
+?? qa/mine2/
+?? qa/real/A01-chat-card.png
+?? qa/real/A02-ready.png
+?? qa/real/A03-result.png
+?? qa/round-1/S01-backtest-ready.png
+?? qa/round-1/S02-early-processing.png
+?? qa/round-1/S02a-preparing.png
+?? qa/round-1/S02b-first-decision.png
+?? qa/round-1/S03-mid-processing.png
+?? qa/round-1/S03b-between-events.png
+?? qa/round-1/S04-final-processing.png
+?? qa/round-1/S05-results-above-fold.png
+?? qa/round-1/S05b-results-hover.png
+?? qa/round-1/S06-results-evidence.png
+?? qa/round-1/S07-decision-detail.png
+?? qa/round-1/S08-trade-detail.png
+?? qa/round-1/S08b-result-full-page.png
+?? qa/round-1/S09-activation-choice.png
+?? qa/round-1/S10-card-path.png
+?? qa/round-1/S11-exchange-connection.png
+?? qa/round-1/S12-partner-exchange.png
+?? qa/round-1/S13-uid-verification.png
+?? qa/round-1/S14-api-connection.png
+?? qa/round-1/S14a-api-form.png
+?? qa/round-1/S15-success.png
+?? qa/round-1/S15b-success-own-exchange.png
+?? qa/round-1/S15c-success-full-page.png
+?? qa/round-1/X01-uid-not-found.png
+?? qa/round-1/d1-w1440/S01-backtest-ready.png
+?? qa/round-1/d1-w1440/S02-early-processing.png
+?? qa/round-1/d1-w1440/S02a-preparing.png
+?? qa/round-1/d1-w1440/S04-final-processing.png
+?? qa/round-1/d1-w1440/S05-results-above-fold.png
+?? qa/round-1/d1-w1440/S06-results-evidence.png
+?? qa/round-1/d1-w1440/S07-decision-detail.png
+?? qa/round-1/d1-w1440/S08-trade-detail.png
+?? qa/round-1/d1-w1440/S09-activation-choice.png
+?? qa/round-1/d1-w1440/S10-card-path.png
+?? qa/round-1/d1-w1440/S11-exchange-connection.png
+?? qa/round-1/d1-w1440/S12-partner-exchange.png
+?? qa/round-1/d1-w1440/S13-uid-verification.png
+?? qa/round-1/d1-w1440/S14-api-connection.png
+?? qa/round-1/d1-w1440/S15-success.png
+?? qa/round-1/r1-w1440/S01-backtest-ready.png
+?? qa/round-1/r1-w1440/S02-early-processing.png
+?? qa/round-1/r1-w1440/S02a-preparing.png
+?? qa/round-1/r1-w1440/S04-final-processing.png
+?? qa/round-1/r1-w1440/S05-results-above-fold.png
+?? qa/round-1/r1-w1440/S06-results-evidence.png
+?? qa/round-1/r1-w1440/S07-decision-detail.png
+?? qa/round-1/r1-w1440/S08-trade-detail.png
+?? qa/round-1/r1-w1440/S09-activation-choice.png
+?? qa/round-1/r1-w1440/S10-card-path.png
+?? qa/round-1/r1-w1440/S11-exchange-connection.png
+?? qa/round-1/r1-w1440/S12-partner-exchange.png
+?? qa/round-1/r1-w1440/S13-uid-verification.png
+?? qa/round-1/r1-w1440/S14-api-connection.png
+?? qa/round-1/r1-w1440/S15-success.png
+?? qa/round-1/seq/
+?? qa/round-1/w1280/S01-backtest-ready.png
+?? qa/round-1/w1280/S02-early-processing.png
+?? qa/round-1/w1280/S02a-preparing.png
+?? qa/round-1/w1280/S03-mid-processing.png
+?? qa/round-1/w1280/S04-final-processing.png
+?? qa/round-1/w1280/S05-results-above-fold.png
+?? qa/round-1/w1280/S06-results-evidence.png
+?? qa/round-1/w1280/S07-decision-detail.png
+?? qa/round-1/w1280/S08-trade-detail.png
+?? qa/round-1/w1280/S09-activation-choice.png
+?? qa/round-1/w1280/S10-card-path.png
+?? qa/round-1/w1280/S11-exchange-connection.png
+?? qa/round-1/w1280/S12-partner-exchange.png
+?? qa/round-1/w1280/S13-uid-verification.png
+?? qa/round-1/w1280/S14-api-connection.png
+?? qa/round-1/w1280/S15-success.png
+?? qa/round-1/w390/S01-backtest-ready.png
+?? qa/round-1/w390/S02-early-processing.png
+?? qa/round-1/w390/S02a-preparing.png
+?? qa/round-1/w390/S03-mid-processing.png
+?? qa/round-1/w390/S04-final-processing.png
+?? qa/round-1/w390/S05-results-above-fold.png
+?? qa/round-1/w390/S06-results-evidence.png
+?? qa/round-1/w390/S07-decision-detail.png
+?? qa/round-1/w390/S08-trade-detail.png
+?? qa/round-1/w390/S09-activation-choice.png
+?? qa/round-1/w390/S10-card-path.png
+?? qa/round-1/w390/S11-exchange-connection.png
+?? qa/round-1/w390/S12-partner-exchange.png
+?? qa/round-1/w390/S13-uid-verification.png
+?? qa/round-1/w390/S14-api-connection.png
+?? qa/round-1/w390/S15-success.png
+?? qa/round-2/S01-backtest-ready.png
+?? qa/round-2/S02-early-processing.png
+?? qa/round-2/S02a-preparing.png
+?? qa/round-2/S02b-first-decision.png
+?? qa/round-2/S03-mid-processing.png
+?? qa/round-2/S03a-skip-signal.png
+?? qa/round-2/S03b-skip-review.png
+?? qa/round-2/S03c-between-events.png
+?? qa/round-2/S04-final-processing.png
+?? qa/round-2/S05-results-above-fold.png
+?? qa/round-2/S05b-results-hover.png
+?? qa/round-2/S06-results-evidence.png
+?? qa/round-2/S07-decision-detail.png
+?? qa/round-2/S08-trade-detail.png
+?? qa/round-2/S08b-result-full-page.png
+?? qa/round-2/S09-activation-choice.png
+?? qa/round-2/S10-card-path.png
+?? qa/round-2/S11-exchange-connection.png
+?? qa/round-2/S11a-exchange-form.png
+?? qa/round-2/S12-partner-exchange.png
+?? qa/round-2/S12b-partner-new-account.png
+?? qa/round-2/S13-uid-verification.png
+?? qa/round-2/S14-api-connection.png
+?? qa/round-2/S14a-api-form.png
+?? qa/round-2/S15-success.png
+?? qa/round-2/S15b-success-own-account.png
+?? qa/round-2/X01-uid-not-found.png
+?? qa/round-2/d1-w1440/S01-backtest-ready.png
+?? qa/round-2/d1-w1440/S02-early-processing.png
+?? qa/round-2/d1-w1440/S02a-preparing.png
+?? qa/round-2/d1-w1440/S03-mid-processing.png
+?? qa/round-2/d1-w1440/S04-final-processing.png
+?? qa/round-2/d1-w1440/S05-results-above-fold.png
+?? qa/round-2/d1-w1440/S06-results-evidence.png
+?? qa/round-2/d1-w1440/S07-decision-detail.png
+?? qa/round-2/d1-w1440/S08-trade-detail.png
+?? qa/round-2/d1-w1440/S09-activation-choice.png
+?? qa/round-2/d1-w1440/S10-card-path.png
+?? qa/round-2/d1-w1440/S11-exchange-connection.png
+?? qa/round-2/d1-w1440/S12-partner-exchange.png
+?? qa/round-2/d1-w1440/S13-uid-verification.png
+?? qa/round-2/d1-w1440/S14-api-connection.png
+?? qa/round-2/d1-w1440/S15-success.png
+?? qa/round-2/h1-w1440/S01-backtest-ready.png
+?? qa/round-2/h1-w1440/S02-early-processing.png
+?? qa/round-2/h1-w1440/S02a-preparing.png
+?? qa/round-2/h1-w1440/S03-mid-processing.png
+?? qa/round-2/h1-w1440/S04-final-processing.png
+?? qa/round-2/h1-w1440/S05-results-above-fold.png
+?? qa/round-2/h1-w1440/S06-results-evidence.png
+?? qa/round-2/h1-w1440/S07-decision-detail.png
+?? qa/round-2/h1-w1440/S08-trade-detail.png
+?? qa/round-2/h1-w1440/S09-activation-choice.png
+?? qa/round-2/h1-w1440/S10-card-path.png
+?? qa/round-2/h1-w1440/S11-exchange-connection.png
+?? qa/round-2/h1-w1440/S12-partner-exchange.png
+?? qa/round-2/h1-w1440/S13-uid-verification.png
+?? qa/round-2/h1-w1440/S14-api-connection.png
+?? qa/round-2/h1-w1440/S15-success.png
+?? qa/round-2/r1-w1440/S01-backtest-ready.png
+?? qa/round-2/r1-w1440/S02a-preparing.png
+?? qa/round-2/r1-w1440/S04-final-processing.png
+?? qa/round-2/r1-w1440/S05-results-above-fold.png
+?? qa/round-2/r1-w1440/S06-results-evidence.png
+?? qa/round-2/r1-w1440/S07-decision-detail.png
+?? qa/round-2/r1-w1440/S08-trade-detail.png
+?? qa/round-2/r1-w1440/S09-activation-choice.png
+?? qa/round-2/r1-w1440/S10-card-path.png
+?? qa/round-2/r1-w1440/S11-exchange-connection.png
+?? qa/round-2/r1-w1440/S12-partner-exchange.png
+?? qa/round-2/r1-w1440/S13-uid-verification.png
+?? qa/round-2/r1-w1440/S14-api-connection.png
+?? qa/round-2/r1-w1440/S15-success.png
+?? qa/round-2/seq/
+?? qa/round-2/w1280/S01-backtest-ready.png
+?? qa/round-2/w1280/S02-early-processing.png
+?? qa/round-2/w1280/S02a-preparing.png
+?? qa/round-2/w1280/S03-mid-processing.png
+?? qa/round-2/w1280/S04-final-processing.png
+?? qa/round-2/w1280/S05-results-above-fold.png
+?? qa/round-2/w1280/S06-results-evidence.png
+?? qa/round-2/w1280/S07-decision-detail.png
+?? qa/round-2/w1280/S08-trade-detail.png
+?? qa/round-2/w1280/S09-activation-choice.png
+?? qa/round-2/w1280/S10-card-path.png
+?? qa/round-2/w1280/S11-exchange-connection.png
+?? qa/round-2/w1280/S12-partner-exchange.png
+?? qa/round-2/w1280/S13-uid-verification.png
+?? qa/round-2/w1280/S14-api-connection.png
+?? qa/round-2/w1280/S15-success.png
+?? qa/round-2/w390/S01-backtest-ready.png
+?? qa/round-2/w390/S02-early-processing.png
+?? qa/round-2/w390/S02a-preparing.png
+?? qa/round-2/w390/S03-mid-processing.png
+?? qa/round-2/w390/S04-final-processing.png
+?? qa/round-2/w390/S05-results-above-fold.png
+?? qa/round-2/w390/S06-results-evidence.png
+?? qa/round-2/w390/S07-decision-detail.png
+?? qa/round-2/w390/S08-trade-detail.png
+?? qa/round-2/w390/S09-activation-choice.png
+?? qa/round-2/w390/S10-card-path.png
+?? qa/round-2/w390/S11-exchange-connection.png
+?? qa/round-2/w390/S12-partner-exchange.png
+?? qa/round-2/w390/S13-uid-verification.png
+?? qa/round-2/w390/S14-api-connection.png
+?? qa/round-2/w390/S15-success.png
+?? ux-audit/card3/log-codex-card3.txt
+?? ux-audit/card3/log-codex-hero.txt
+?? ux-audit/detail/fx-mid-1440.png
+?? ux-audit/detail/log-codex-crit.txt
+?? ux-audit/detail/log-codex.txt
+?? ux-audit/footer2/black-spa-390.png
+?? ux-audit/footer2/live-trade-footer-1440.png
+?? ux-audit/footer2/log-codex-bar.txt
+?? ux-audit/footer2/log-codex-crit.txt
+?? ux-audit/footer2/log-codex.txt
+?? ux-audit/footer2/ours-bar-390.png
+?? ux-audit/footer2/r3-gap-1440.png
+?? ux-audit/footer2/r5-hero-next-390.png
+?? ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ux-audit/footer2/video-frame-3s.jpg
+?? ux-audit/footer2/video-frame-5s.jpg
+?? ux-audit/footer2/video-frame-6.2s.jpg
+?? ux-audit/hero/frame3-codex.png
+?? ux-audit/hero/frame3.png
+?? ux-audit/hero/log-agy.txt
+?? ux-audit/hero/log-codex-crit.txt
+?? ux-audit/hero/log-codex.txt
+?? ux-audit/hero/prompt-agy.md
+?? ux-audit/hero/prompt-codex-crit.md
+?? ux-audit/hero/prompt-codex.md
+?? ux-audit/logs/
+?? ux-audit/research/log-codex-verify.txt
+?? ux-audit/review/
+?? ux-audit/spark/log-codex.txt
+
+ succeeded in 75ms:
+7483:    ['총 수익률', pct(res.ret), res.ret>=0?'gain':'loss', '같은 기간 보유 '+pct(holdRet,0), null],
+7956:      '기간 전체(2023.01 ~ 2026.08) 누적 결과입니다. 같은 기간 그냥 보유하면 '+pct(HOLD_RET,0)+'였습니다.',
+7957:      '<span><b>같은 기간 보유와의 차이:</b> 보유가 수익은 더 높았지만 중간 낙폭이 <b class="num">'+HOLD_MDD.toFixed(0)+'%</b>에 달했습니다. 이 전략은 수익 일부를 포기하고 흔들림을 줄이는 쪽입니다.</span><span><b>연평균(CAGR):</b> <span class="num">'+pct(res.cagr)+'</span></span>')+
+13192:  var endI=endBar!=null?endBar:(windEnd!=null?windEnd:T), pnlPct=navAt(endI)/navAt(startI)-1; /* 같은 기간 전략 수익률: 넣고 뺀 돈과 무관 */
+13232:  if(d.grossIn>0&&Math.abs(gap)>=5) h+=cpAiHtml({w:0,t:'내 수익률('+mkPct0(d.myPct*100,1)+')과 같은 기간 전략 수익률('+mkPct0(d.pnlPct*100,1)+')이 다릅니다. '+(d.waiting>0.05*Math.max(1,d.value)?'넣은 돈 중 '+cpUsd(d.waiting,0)+'가 아직 다음 진입을 기다리고 있어서 전략과 다릅니다.':gap<0?'기준가가 높을 때 추가한 금액이 있어서 전략보다 낮습니다.':'기준가가 낮을 때 추가한 금액이 있어서 전략보다 높습니다.')+' 전략 수익률은 넣고 뺀 돈과 무관합니다.'});
+13247:    '<div class="cpa-pnl">내 수익률 <b class="num '+(up?'u':'d')+'">'+(up?'+':'')+pnlP.toFixed(1)+'%</b>, 같은 기간 전략 수익률 <b class="num">'+(sp>=0?'+':'')+sp.toFixed(1)+'%</b>'
+13347:    +K('평가 금액',d.est)+'<div class="cpp-kpi"><small>내 수익률</small><b class="num'+(d.myPct>=0?' u':' d')+'">'+mkPct0(d.myPct*100,1)+'</b><small style="margin:4px 0 0">같은 기간 전략 '+mkPct0(d.pnlPct*100,1)+'</small></div>'
+15521: {h:'매출과 지출의 속도 경쟁',ps:['대형 클라우드 사업자들의 AI 관련 매출은 분명히 늘고 있습니다. 그런데 같은 기간 인프라 투자(CapEx)는 그보다 더 빠르게 늘고 있습니다. 데이터센터, 칩, 전력 모두 미리 돈을 내야 하는 항목들입니다.','선투자 자체는 문제가 아닙니다. 문제는 회수 기간입니다. 오늘 지은 데이터센터가 몇 년 안에 그 비용을 벌어다 줄지에 대한 가정이 낙관적일수록, 실적 발표 시즌마다 검증대에 오르게 됩니다.']},
+20841:    +'<button type="button" class="bt-sec" onclick="btReady()">조건을 바꿔 다시 돌리기</button>'
+21871:    +'<button type="button" class="bt-sec" onclick="btReady()">조건을 바꿔 다시 돌리기</button>'
+22059:   내 전략: "규칙 수정하기" → 그 전략을 만든 대화로 돌아가 TETH가 근거 있는 변경 하나와 대가를 제안 → "수정한 규칙으로 다시 검증하기" → 이전 판과 비교
+22073:function rvActs(){
+22076:  var fix='<button type="button" class="bt-cta" onclick="rvFix()">규칙 수정하기</button>', mk='<button type="button" class="bt-sec" onclick="rvNew()">다른 전략 만들기</button>', mkC='<button type="button" class="bt-cta" onclick="rvNew()">다른 전략 만들기</button>';
+22079:  if(mine){ if(bad||none) return note+fix+mk+runQ; return run+links([['규칙 수정하기','rvFix()'],['다른 전략 만들기','rvNew()']]); }
+22083:/* 이전 판과 비교: 같은 기간과 금액일 때만 숫자를 나란히 놓는다 */
+22084:function rvCompare(){
+22089:    +(same?'<p class="rv-same">같은 기간, 같은 시작 금액, 같은 가격 자료로 비교했습니다</p>':'<p class="rv-same warn">기간이나 금액이 달라 숫자를 나란히 비교하지 않습니다</p>')
+22101:function rvFix(){
+22128:function rvProposal(sp){
+22133:    +'<button class="tf-btn p" onclick="rvApply(\''+id+'\')">수정한 규칙으로 다시 검증하기</button><button class="tf-btn ghost" onclick="rvOther()">다른 수정 요청하기</button></div>';
+22147:    var old='<button type="button" class="bt-cta" onclick="btUse()">이 전략 실행하기</button><button type="button" class="bt-sec" onclick="btReady()">조건을 바꿔 다시 돌리기</button>';
+22148:    if(h.indexOf(old)>=0) h=h.replace(old,rvCompare()+rvActs()); return h; };
+22150:  var ai0=tfAiStrategy; tfAiStrategy=function(sp){ if(RV.on&&!RV.apply){ rvProposal(sp); return; } var r=ai0.apply(this,arguments); try{ var t=tfS(); if(t.aiSpec&&G.cur) t.aiSpec.sess=G.cur.id; }catch(e){} return r; };
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "$src = Get-Content -LiteralPath '"'index.html' -Encoding UTF8; for ("'$i=22059; $i -le 22155; $i++) { '"'{0}: {1}' -f "'$i, $src[$i-1] }"' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 280ms:
+At line:1 char:85
++ ... Path 'index.html' -Encoding UTF8; for (=22059;  -le 22155; ++) { '{0} ...
++                                                                  ~
+Missing expression after unary operator '++'.
+At line:1 char:106
++ ... -Encoding UTF8; for (=22059;  -le 22155; ++) { '{0}: {1}' -f , [-1] }
++                                                                     ~
+Missing type name after '['.
+At line:1 char:104
++ ... -Encoding UTF8; for (=22059;  -le 22155; ++) { '{0}: {1}' -f , [-1] }
++                                                                   ~
+Missing expression after unary operator ','.
+At line:1 char:105
++ ... -Encoding UTF8; for (=22059;  -le 22155; ++) { '{0}: {1}' -f , [-1] }
++                                                                    ~~~~
+Unexpected token '[-1]' in expression or statement.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingExpressionAfterOperator
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n -A 100 '"'^function rvBad|''^var RV='"' index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 79ms:
+22062:var RV={on:false,prop:null};
+22063-function rvTrades(){ var R=BT.R; return R?(R.wins.length+R.loss.length):0; }
+22064:function rvBad(){ var R=BT.R; if(!R||!rvTrades()) return false; return R.final<BT.amt||R.final<R.benchFinal; }
+22065-function rvSpecNow(){ var t=tfS(), s=t.aiSpec||{}, iv=t.intake||{}; var depth=s.rsiTh>=52?'shallow':s.rsiTh<=38?'deep':'mid';
+22066-  return {asset:(iv.asset||{}).label||'',depth:depth,tp:s.tp==null?null:s.tp,sl:s.sl,fng:s.fng==null?null:s.fng,trend:!!s.tf,period:['1y','2y','all'][(iv.period||{}).i||0]||'1y',name:s.name||null}; }
+22067-function rvRuleText(sp){ var dep={shallow:'조금',mid:'적당히',deep:'크게'}[sp.depth]||'적당히';
+22068-  return '사는 때: '+sp.asset+'이 '+dep+' 밀렸다가 하루 0.5% 넘게 반등한 날'+(sp.trend?', 방향이 뚜렷할 때만':'')+(sp.fng!=null?', 공포 탐욕 지수 '+sp.fng+' 이하일 때만':'')+'. 파는 때: '+(sp.tp!=null?'산 가격보다 '+sp.tp+'% 오르거나 ':'')+Math.abs(sp.sl)+'% 내리면, 또는 25일이 지나면'; }
+22069-function rvSnapNow(){ var R=BT.R, sp=rvSpecNow(); return {at:Date.now(),spec:sp,rule:rvRuleText(sp),per:BT.per,amt:BT.amt,ret:R.ret,mdd:R.mdd,n:rvTrades(),bench:R.benchRet,final:R.final}; }
+22070-function rvSumCard(){ var R=BT.R, s=BT.s, diff=Math.round(R.final)-Math.round(R.benchFinal);
+22071-  return '<div class="rv-card"><b>'+gEsc(mkHook(s))+'</b><span>'+btPerL()+', '+btUsd(BT.amt)+'로 시작</span><div class="rv-kv"><div><small>수익률</small><i class="num'+mkSign(R.ret)+'">'+mkPct0(R.ret,1)+'</i></div><div><small>그냥 보유</small><i class="num">'+mkPct0(R.benchRet,1)+'</i></div><div><small>가장 크게 내려간 폭</small><i class="num">'+R.mdd.toFixed(1)+'%</i></div><div><small>거래</small><i class="num">'+rvTrades()+'번</i></div></div>'+(diff<0?'<em>그냥 보유보다 '+btUsd(Math.abs(diff))+' 덜 남겼습니다'+(Math.abs(R.mdd)<Math.abs(R.benchMdd)?'. 내려간 폭은 더 얕았습니다':'')+'</em>':'')+'</div>'; }
+22072-/* 결과 오른쪽 단추: 상태에 따라 순서가 바뀐다 */
+22073-function rvActs(){
+22074-  var s=BT.s, mine=!!(s&&s.mine), bad=rvBad(), none=!rvTrades();
+22075-  var run='<button type="button" class="bt-cta" onclick="btUse()">이 전략 실행하기</button>', runQ='<button type="button" class="bt-sec" onclick="btUse()">이 전략 실행하기</button>';
+22076-  var fix='<button type="button" class="bt-cta" onclick="rvFix()">규칙 수정하기</button>', mk='<button type="button" class="bt-sec" onclick="rvNew()">다른 전략 만들기</button>', mkC='<button type="button" class="bt-cta" onclick="rvNew()">다른 전략 만들기</button>';
+22077-  var links=function(L){ return '<p class="rv-links">'+L.map(function(x){ return '<button type="button" onclick="'+x[1]+'">'+x[0]+'</button>'; }).join('<i>·</i>')+'</p>'; };
+22078-  var note=none?'<p class="rv-note">거래가 한 번도 없어 결과를 판단하기 어렵습니다. 조건을 넓히거나 기간을 바꿔 보십시오.</p>':'';
+22079-  if(mine){ if(bad||none) return note+fix+mk+runQ; return run+links([['규칙 수정하기','rvFix()'],['다른 전략 만들기','rvNew()']]); }
+22080-  if(bad||none) return note+mkC+runQ;
+22081-  return run+links([['다른 전략 만들기','rvNew()']]);
+22082-}
+22083-/* 이전 판과 비교: 같은 기간과 금액일 때만 숫자를 나란히 놓는다 */
+22084-function rvCompare(){
+22085-  var t=tfS(), V=t.btVers||[], v=V[0], R=BT.R, s=BT.s; if(!v||!s||!s.mine||!R) return '';
+22086-  var same=v.per===BT.per&&v.amt===BT.amt, sp=rvSpecNow(), rule=rvRuleText(sp);
+22087-  var row=function(k,a,b,sg){ return '<div class="r"><span>'+k+'</span><i class="num">'+a+'</i><b class="num'+(sg||'')+'">'+b+'</b></div>'; };
+22088-  return '<section class="bt-box rv-cmp"><small>이전 판과 비교</small>'
+22089-    +(same?'<p class="rv-same">같은 기간, 같은 시작 금액, 같은 가격 자료로 비교했습니다</p>':'<p class="rv-same warn">기간이나 금액이 달라 숫자를 나란히 비교하지 않습니다</p>')
+22090-    +'<div class="rv-rules"><div><small>이전 규칙</small><p>'+gEsc(v.rule)+'</p></div><div><small>이번 규칙</small><p>'+gEsc(rule)+'</p></div></div>'
+22091-    +(same?'<div class="rv-rows"><div class="r h"><span></span><i>이전</i><b>이번</b></div>'+row('수익률',mkPct0(v.ret,1),mkPct0(R.ret,1),mkSign(R.ret-v.ret))+row('가장 크게 내려간 폭',v.mdd.toFixed(1)+'%',R.mdd.toFixed(1)+'%',mkSign(v.mdd-R.mdd))+row('거래 수',v.n+'번',rvTrades()+'번','')+'</div>':'')
+22092-    +'<button type="button" class="rv-prev" onclick="rvPrevOpen()">이전 판 '+V.length+'개 보기</button></section>';
+22093-}
+22094-function rvPrevOpen(){ var V=(tfS().btVers||[]); if(!V.length) return;
+22095-  acConfirm({title:'이전 판',body:'',list:V.map(function(v){ return stDate(v.at)+' '+mkPct0(v.ret,1)+' (낙폭 '+v.mdd.toFixed(1)+'%, 거래 '+v.n+'번). '+v.rule; }),ok:'닫기',run:function(){}}); }
+22096-/* 규칙 수정하기: 그 대화로 돌아가 TETH가 먼저 한 가지를 제안한다 */
+22097-function rvHidden(){ var sp=rvSpecNow(), F=btReadFacts();
+22098-  return '[규칙 수정 요청] 내가 만든 전략을 백테스트했더니 결과가 아쉽다. 규칙 하나만 고쳐 다시 검증하려고 한다.\n지금 규칙: '+rvRuleText(sp)+'\n설정값: '+JSON.stringify(sp)+'\n결과: '+JSON.stringify(F)
+22099-    +'\n지시: 결과 숫자를 근거로 바꿔 볼 조건을 정확히 하나만 고르고, 그 대가(예: 더 오래 들면 수익과 손실 폭이 함께 커질 수 있음)를 함께 말하라. 원인을 단정하지 말고 "비교해 볼 값"으로 말하고, 더 좋은 결과를 뜻하지 않는다고 덧붙여라. 합니다체 3~4문장. 익절, 손절 같은 용어 대신 "산 가격보다 8% 오르면 파는 조건"처럼 풀어 써라. 검색과 도구는 쓰지 마라. 질문 카드(ASK), 선택 칩(NEXT), 실행(ACT) 태그는 붙이지 마라. 마지막 줄에 바뀐 설정 전체를 [STRATEGY {...}] 태그로 붙이되 "change" 키에 바꾼 항목 이름 하나(depth, tp, sl, fng, trend 중 하나)를 넣어라. asset, period, name은 그대로 두고 바꾼 값 하나만 다르게 하라.'; }
+22100-function rvBubble(line){ return '<div class="an-card">'+rvSumCard()+'</div><div class="an-line">'+line+'</div>'; }
+22101-function rvFix(){
+22102-  var t=tfS(); if(!BT.s||!BT.s.mine||!BT.R) return;
+22103-  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중입니다, 끝나면 다시 눌러 주십시오'); return; }
+22104-  t.btLast=rvSnapNow(); tfSave();
+22105-  var hidden=rvHidden(), html=rvBubble('결과를 보고 규칙을 하나 고쳐 다시 검증하고 싶습니다');
+22106-  var sid=t.aiSpec&&t.aiSpec.sess, sx=sid?G.sessions.filter(function(x){ return x.id===sid; })[0]:null;
+22107-  RV.on=true; RV.prop=null;
+22108-  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+22109-  if(!sx){ gNew({text:hidden,html:html}); return; }
+22110-  gSelect(sx.id); if(G.mode!=='conv') gShowConv();
+22111-  gConvUser({html:html});
+22112-  taiEnsure(function(ok){ if(ok&&typeof taiMarket==='function'){ taiMarket(hidden,null,function(){ rvDraft(); }); } else rvDraft(); });
+22113-}
+22114-/* AI를 못 부르면 입력창에 초안을 넣어 사용자가 보내게 한다 */
+22115-function rvDraft(){ RV.on=false; var f=$('g-in'); if(f){ f.value='지금 규칙: '+rvRuleText(rvSpecNow())+'. 결과가 그냥 보유보다 낮았습니다. 파는 조건 하나를 바꿔 다시 검증하고 싶습니다.'; f.focus(); } toast('제안을 받지 못했습니다. 바꾸고 싶은 조건을 적어 보내 주십시오'); }
+22116-/* 다른 전략 만들기: 새 대화에 결과를 붙이고 다른 접근을 묻는다 */
+22117-function rvNew(){
+22118-  var s=BT.s, R=BT.R; if(!s||!R) return; var F=btReadFacts();
+22119-  var hidden='[새 전략 요청] "'+mkHook(s)+'" 전략을 백테스트했더니 결과가 아쉽다. 결과: '+JSON.stringify(F)+'\n지시: 이 결과를 근거로 같은 자산에서 접근이 다른 전략 방향 2가지를 짧게 제안하고, 어느 쪽으로 갈지 물어라. 각 방향은 사는 때와 파는 때를 한 문장씩. 합니다체. 더 좋은 결과를 보장하지 않는다고 덧붙여라. 검색과 도구는 쓰지 마라. 아직 [STRATEGY] 태그는 붙이지 말고, 사용자가 방향을 고르면 그때 붙여라.';
+22120-  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+22121-  RV.on=false; gNew({text:hidden,html:rvBubble('이 결과를 보고 다른 방식의 전략을 만들고 싶습니다')});
+22122-}
+22123-/* 제안 카드: 이전 규칙과 바뀐 규칙, 다시 검증하기 */
+22124-function rvOne(sp){ var cur=rvSpecNow(), F=['depth','tp','sl','fng','trend'], ch=(sp&&F.indexOf(sp.change)>=0)?sp.change:null;
+22125-  if(!ch){ var d=F.filter(function(k){ return String(sp[k])!==String(cur[k]); }); ch=d[0]||null; }
+22126-  var out={}; for(var k in cur) out[k]=cur[k]; if(ch){ out[ch]=sp[ch]; if(ch==='sl') out.sl=-Math.abs(Number(sp.sl)||5); if(ch==='tp') out.tp=sp.tp==null?null:Number(sp.tp); if(ch==='fng') out.fng=sp.fng==null?null:Number(sp.fng); if(ch==='trend') out.trend=!!sp.trend; }
+22127-  out.change=ch; return out; }
+22128-function rvProposal(sp){
+22129-  sp=rvOne(sp); var t=tfS(), before=rvRuleText(rvSpecNow()), after=rvRuleText(sp); RV.prop=sp;
+22130-  if(!sp.change||before===after){ taiThreadAdd('<div class="g-amsg"><p>바꿀 조건을 하나 고르지 못했습니다. 바꾸고 싶은 조건을 말해 주시면 그 조건으로 다시 검증합니다.</p></div>'); gScrollBottom(); return; }
+22131-  TAI.nn=(TAI.nn||0)+1; var id='rv'+Date.now().toString(36)+TAI.nn;
+22132-  var html='<div class="tf-sum rv-prop" id="'+id+'"><div class="h">바뀔 규칙</div><div class="rv-rules"><div><small>이전</small><p>'+gEsc(before)+'</p></div><div><small>이번</small><p>'+gEsc(after)+'</p></div></div>'
+22133-    +'<button class="tf-btn p" onclick="rvApply(\''+id+'\')">수정한 규칙으로 다시 검증하기</button><button class="tf-btn ghost" onclick="rvOther()">다른 수정 요청하기</button></div>';
+22134-  taiThreadAdd(html); gScrollBottom();
+22135-}
+22136-function rvApply(id){ var t=tfS(), sp=RV.prop; if(!sp) return; RV.on=false; RV.prop=null;
+22137-  if(t.btLast){ t.btVers=t.btVers||[]; t.btVers.unshift(t.btLast); t.btVers=t.btVers.slice(0,5); t.btLast=null; }
+22138-  var el=$(id); if(el){ var b=el.querySelectorAll('button'); [].forEach.call(b,function(x){ x.disabled=true; }); }
+22139-  RV.apply=true; try{ tfAiStrategy(sp); } finally{ RV.apply=false; }
+22140-  if(t.aiSpec) t.aiSpec.sess=G.cur&&G.cur.id; tfSave();
+22141-  setTimeout(function(){ location.hash='#/share/bt/mine'; },400);
+22142-}
+22143-function rvOther(){ var f=$('g-in'); if(f){ f.value='다른 조건을 바꿔서 제안해 주십시오: '; f.focus(); } }
+22144-(function(){
+22145-  /* 결과 오른쪽 단추를 상태에 맞게 바꾸고, 이전 판과 비교를 끼운다 */
+22146-  var rr0=btResultRail; btResultRail=function(){ var h=rr0.apply(this,arguments);
+22147-    var old='<button type="button" class="bt-cta" onclick="btUse()">이 전략 실행하기</button><button type="button" class="bt-sec" onclick="btReady()">조건을 바꿔 다시 돌리기</button>';
+22148-    if(h.indexOf(old)>=0) h=h.replace(old,rvCompare()+rvActs()); return h; };
+22149-  /* 규칙 수정 대화에서는 [STRATEGY] 태그를 바로 적용하지 않고 제안 카드로 보여 준다. 만든 대화의 세션을 기억한다 */
+22150-  var ai0=tfAiStrategy; tfAiStrategy=function(sp){ if(RV.on&&!RV.apply){ rvProposal(sp); return; } var r=ai0.apply(this,arguments); try{ var t=tfS(); if(t.aiSpec&&G.cur) t.aiSpec.sess=G.cur.id; }catch(e){} return r; };
+22151-})();
+22152-
+22153-/* ═══ 16-fixes 연결: 예전 진입점을 새 상태 모델로 잇는다 ═══ */
+22154-/* R14 AI 트레이딩 시작 화면(로그인했지만 실행 환경이 없는 회원). 전략을 먼저 고르게 하지 않는다 */
+22155-function acMyList(){
+22156-  var t=tfS(), o=[];
+22157-  if(t.intake&&t.intake.asset&&typeof btMine==='function'){ var m=btMine(); if(m) o.push({n:m.name,s:t.cur?'백테스트를 마쳤습니다':'아직 돌려 보지 않았습니다',f:"location.hash='#/share/bt/mine'"}); }
+22158-  try{ (cpState().copies||[]).forEach(function(c){ if(c.status==='active') o.push({n:c.nick,s:'복사한 전략',f:"tfShareHub('follow')"}); }); }catch(e){}
+22159-  (t.strat||[]).forEach(function(x){ if(x&&x.name) o.push({n:x.name,s:x.status==='live'?'실행 중':'준비됨',f:x.id?"tfNav('#/trade/bot/"+x.id+"')":"tfNav('#/trade')"}); });
+22160-  return o.slice(0,5);
+22161-}
+22162-function acReadyView(){
+22163-  tfPageMode('tfinactive','AI 트레이딩');
+22164-  var L=acMyList(), c=acS().conn, ks=acConnList();
+
+codex
+가장 큰 문제는 재검증 조건입니다. R2는 전체 기간, R5는 최근 2년, R6는 다시 전체 기간이라 화면만으로는 동일 조건 비교를 믿기 어렵습니다. 코드도 기간 선택값과 금액만 확인한 뒤 가격 자료까지 같다고 표시합니다. 제안 카드에서 바뀐 규칙은 5% 하락 시 매도에서 8% 하락 시 매도로 한 가지입니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n -A 24 '"'^function tfAiStrategy|''^function btOpen|''^function btReady|''^function btUse'"' index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git diff --numstat -- index.html qa/bt-next/DECISIONS_1.md' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 119ms:
+11408:function tfAiStrategy(sp){
+11409-  var t=tfS(), a=String(sp&&sp.asset||''); a=(typeof BT_MINE_ALIAS!=='undefined'&&BT_MINE_ALIAS[a])||a;
+11410-  if(!(window.TETH_PX&&TETH_PX.px[a])){ tfAiMsg(gEsc(a||'이 자산')+'은 아직 백테스트할 가격 자료가 없습니다. 비트코인, 이더리움, 미국 대형주, 금, 나스닥 같은 자산으로 바꿔 보겠습니까?'); return; }
+11411-  var num=function(v,lo,hi){ v=Number(v); return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v*10)/10)):null; };
+11412-  var crypto=/비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a);
+11413-  var spec={rsiTh:TF_AI_DEPTH[sp.depth]||44,tp:sp.tp==null?null:num(sp.tp,1,60),sl:-Math.abs(num(sp.sl,-15,-1)||5),fng:(crypto&&sp.fng!=null)?num(sp.fng,5,95):null,tf:!!sp.trend,name:String(sp.name||'').slice(0,14)||null};
+11414-  if(spec.sl>-1) spec.sl=-1; if(spec.sl<-15) spec.sl=-15;
+11415-  var pi=sp.period==='2y'?1:sp.period==='all'?2:0, PL=TFCOPY.intakeOpt.period;
+11416-  t.cloneFrom=null; t.followId=null; t.pendingP=null; t.cur=null; t.score=0; t.workDone=false; t.aiSpec=spec;
+11417-  t.intake={asset:{i:0,label:a},assetInfo:tfAssetLookup(a),style:{i:1,label:'AI 설계'},budget:{i:1,label:TFCOPY.intakeOpt.budget[1][0]},period:{i:pi,label:PL[pi][0]},stop:{i:0,label:spec.sl+'%까지'}};
+11418-  t.qi=TF_QS.length; t.stage='ready'; tfSave();
+11419-  TAI.nn=(TAI.nn||0)+1; var id='tfai'+Date.now().toString(36)+TAI.nn;
+11420-  var dep={52:'조금 밀렸다가',44:'적당히 밀렸다가',38:'크게 밀렸다가'}[spec.rsiTh]||'밀렸다가';
+11421-  var row=function(k,v){ return '<div class="r"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; };
+11422-  var html='<div class="tf-sum" id="'+id+'"><div class="h">'+gEsc(spec.name||a+' 전략')+'</div><div class="rows">'
+11423-    +row('자산',gEsc(a))
+11424-    +row('사는 때',dep+' 하루 0.5% 넘게 반등한 날'+(spec.tf?', 방향이 뚜렷할 때만':'')+(spec.fng!=null?', 공포 탐욕 지수 '+spec.fng+' 이하일 때만':''))
+11425-    +row('파는 때',(spec.tp!=null?'+'+spec.tp+'% 오르거나 ':'')+spec.sl+'% 내리면, 또는 25일이 지나면')
+11426-    +row('돌려 볼 기간',gEsc(PL[pi][0]))
+11427-    +'</div><div style="font-size:11.5px;color:var(--gt3);line-height:1.7;margin:-4px 0 13px">실제 일봉 시세로 하루씩 다시 돌립니다. 살 때와 팔 때마다 수수료 0.1%를 뺍니다.</div>'
+11428-    +'<button class="tf-btn p" onclick="tfVerifyGo(\''+id+'\')">과거로 돌려 보기</button></div>';
+11429-  taiThreadAdd(html); gScrollBottom();
+11430-}
+11431-function tfIntakeDone(){
+11432-  var t=tfS(); t.stage='ready';
+--
+20717:function btReadyRail(){
+20718-  var s=BT.s, R=BT.R;
+20719-  var opt=function(list,cur,fn){ return '<div class="bt-seg" role="group">'+list.map(function(o){ var on=o[0]===cur; return '<button type="button" aria-pressed="'+on+'" onclick="'+fn+'('+o[0]+')">'+o[1]+'</button>'; }).join('')+'</div>'; };
+20720-  var dl=function(L){ return '<dl class="bt-dl">'+L.map(function(r){ return '<div><dt>'+r[0]+'</dt><dd>'+mkGloss(gEsc(r[1]),1)+'</dd></div>'; }).join('')+'</dl>'; };
+20721-  var fold=function(t,b,cls){ return '<details class="bt-box bt-fold '+(cls||'')+'" '+(innerWidth>900?'open':'')+'><summary><h3>'+t+'</h3><svg class="cv" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>'+b+'</details>'; };
+20722-  return '<section class="bt-box bt-set"><h3>돌려 볼 조건</h3>'
+20723-    +'<div class="bt-f"><small>기간</small>'+opt(BT_PER,BT.per,'btSetPer')+'</div>'
+20724-    +'<div class="bt-f"><small>시작 금액</small>'+opt(BT_AMT.map(function(a){ return [a,a.toLocaleString()]; }),BT.amt,'btSetAmt')+'<em>USD</em></div>'
+20725-    +'<button type="button" class="bt-cta" onclick="btStart()">과거를 다시 돌려 보기</button>'
+20726-    +'<p class="bt-note">'+btYMD(R.eq[0].i)+'부터 '+btYMD(R.eq[R.N-1].i)+'까지, '+R.N.toLocaleString()+'일을 하루씩 다시 돌립니다.</p></section>'
+20727-    +fold('이 전략의 규칙',dl(btRules(s)))+fold('백테스트 조건',dl(btTerms()),'bt-terms');
+20728-}
+20729:function btReady(){
+20730-  BT.phase='ready'; BT.sel=null; BT.grp=null; BT.trf='all'; btStop(); btCompute(); BT.filt=btDefFilt(BT.s);
+20731-  var root=$('bt-root'); if(root){ root.setAttribute('data-phase','ready'); root.classList.remove('cur'); }
+20732-  btSub(); btChartDraw(); { var lg=document.querySelector('.bt-leg .b i'); if(lg) lg.textContent=''; } /* 비교 수익률은 결과에서만 */
+20733-  btCap('시작 금액',btUsd(BT.amt),'','');
+20734-  var s=BT.s; btPanelInit(btAi(s)?'다시 돌리는 동안 '+(s.kind==='agent'?'AI가 판단할 때마다':'기회가 생길 때마다')+' 확인 과정이 여기에 보입니다':'다시 돌리는 동안 사는 조건이 맞을 때마다 여기에 보입니다');
+20735-  $('bt-rail').innerHTML=btReadyRail(); $('bt-ev').innerHTML=''; $('bt-mcta').innerHTML='';
+20736-}
+20737-function btSetPer(v){ BT.per=v; btSaveSet(); btReady(); }
+20738-function btSetAmt(v){ BT.amt=v; btSaveSet(); btReady(); }
+20739-function btSaveSet(){ try{ var t=tfS(); t.bt=t.bt||{}; t.bt.per=BT.per; t.bt.amt=BT.amt; t.bt.id=BT.id; t.bt.done=0; tfSave(); }catch(e){} }
+20740-
+20741-/* ── 다시 돌리기 ── */
+20742-function btRunRail(){
+20743-  return '<section class="bt-box bt-stepbox"><h3>지금 하는 일</h3><ol class="bt-steps" id="bt-steps">'+btSteps().map(function(x){ return '<li id="bt-st-'+x[0]+'"><span class="ic"></span><span class="lb">'+x[1]+'</span><span class="evd num" id="bt-se-'+x[0]+'"></span></li>'; }).join('')+'</ol></section>'
+20744-    +'<section class="bt-box bt-feedbox" id="bt-feedbox" hidden><h3>내린 판단</h3><div class="bt-feed" id="bt-feed"></div></section>';
+20745-}
+20746-function btStep(id,st,evd){ var e=$('bt-st-'+id); if(!e) return; if(e.className!==st){ e.className=st; if(st==='ok') e.querySelector('.ic').innerHTML=TAI_CHECK; else if(st==='run') e.querySelector('.ic').innerHTML='<i></i>'; } if(evd!=null){ var x=$('bt-se-'+id); if(x&&x.textContent!==evd) x.textContent=evd; } }
+20747-/* 그날까지 공개된 판단만 센다 */
+20748-function btCount(j,decided){
+20749-  var R=BT.R, s=BT.s, o=0,b=0,sk=0,hd=0,cl=0,days={};
+20750-  R.D.forEach(function(d){ if(d.j>j||(d.j===j&&!decided)) return; if(d.k==='sell'){ cl++; return; } if(d.k==='buy'){ b++; days[d.j]=1; o++; } else if(d.k==='skip'){ sk++; days[d.j]=1; o++; } else if(d.k==='hold'){ hd++; days[d.j]=1; } });
+20751-  return {o:s.kind==='agent'?Object.keys(days).length:o,b:b,s:sk,h:hd,c:cl};
+20752-}
+20753-function btHolding(i){ var R=BT.R, h=[]; R.tr.forEach(function(t){ if(t.e<=i&&(t.x==null||t.x>i)) h.push(mkTk(t.a)); }); return h; }
+--
+21004:function btOpen(ne){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:ne,from:location.hash}); try{ tfTrack('bt_guest_gate',{id:ne}); }catch(e){} return; } location.hash='#/share/bt/'+ne; }
+21005-function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } if(BT.s&&BT.s.mine){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} TF_ONSTRAT=false; tfBackToChat(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }
+21006-function btView(){
+21007-  tfPageMode('tfbt','백테스트'); TF_RENDERING=true; gContent(btPage()); TF_RENDERING=false;
+21008-  var t=tfS().bt||{};
+21009-  if(t.id===BT.id&&t.done){ if(!BT.R) btCompute(); btSub(); btFinish(); }
+21010-  else btReady();
+21011-}
+21012-function btRoute(h){
+21013-  var m=h.match(/^#\/share\/bt\/([^/]+)(?:\/(go))?$/); TF_ONSHARE=true;
+21014-  if(m&&!window.TF_STATE_READY){ TF_ONSHARE=false; return; } /* 저장된 로그인 상태가 복원된 뒤에 판단한다. 부팅이 끝나면 다시 불린다 */
+21015-  if(m&&!S.user){ /* 비회원: 그 전략의 상세로 보내고, 인증이 끝나면 이 백테스트로 돌아온다 */
+21016-    TF_ONSHARE=false; if(m[1]==='mine'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); return; }
+21017-    try{ history.replaceState(null,'','#/share/s/'+m[1]); }catch(e){} tfRoute(); var gid=m[1]; setTimeout(function(){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:gid}); } },400); return; }
+21018-  if(!m){ TF_ONSHARE=false; tfShareHub('find'); return; }
+21019-  var s=null; try{ s=tfSSFind(decodeURIComponent(m[1])); }catch(e){}
+21020-  if(!s&&m[1]==='mine'){ TF_ONSHARE=false; toast('이 자산은 아직 백테스트할 가격 자료가 없습니다'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfBackToChat(); return; }
+21021-  if(!s||!s.cfg){ TF_ONSHARE=false; tfShareHub('find'); return; }
+21022-  if(s.mine){ TF_ONSHARE=false; TF_ONSTRAT=true; } /* 뒤로 가면 전략 목록이 아니라 대화로 */
+21023-  var t=tfS().bt||{};
+21024-  if(BT.id!==s.id){ btStop(); BT.id=s.id; BT.s=s; BT.R=null; BT.phase='ready'; BT.sel=null; BT.grp=null; BT.filt=null; BT.trf='all'; BT.decN=8; BT.ordN=8; if(t.id===s.id){ if(t.per!=null) BT.per=t.per; if(t.amt) BT.amt=t.amt; } else if(s.mine){ var t9=tfS(), pi=((t9.intake||{}).period||{}).i; BT.per=pi===0?365:pi===1?730:pi===2?0:365;
+21025-    if(t9.cloneFrom&&s.p&&s.p.startI!=null){ var span=(PRICE0.length-1)-s.p.startI, best=0, bd=1e9; BT_PER.forEach(function(o){ var d=Math.abs((o[0]||PRICE0.length)-span); if(d<bd){ bd=d; best=o[0]; } }); BT.per=best; } } }
+21026-  BT.s=s;
+21027-  if(!m[2]){ btView(); return; }
+21028-  if(!BT.R) btCompute();
+--
+21068:function btUse(){
+21069-  var ne=btNe();
+21070-  if(!S.user){ try{ authOpen('signup'); }catch(e){} window.BT_RESUME=ne; var n=0, iv=setInterval(function(){ n++; if(S.user&&window.BT_RESUME){ clearInterval(iv); var r=window.BT_RESUME; window.BT_RESUME=null; location.hash='#/share/bt/'+r+'/go'; } else if(n>360||!window.BT_RESUME) clearInterval(iv); },500); return; }
+21071-  try{ tfTrack('bt_use',{id:BT.id}); }catch(e){}
+21072-  btGoTo('go');
+21073-}
+21074-var BT_OUT='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+21075-/* 왼쪽: 실행할 전략. 백테스트에서 본 그 선을 작게 다시 그린다 */
+21076-function btGoSpark(){
+21077-  var R=BT.R, W=300, H=96, p=6, vs=R.eq.map(function(x){ return x.v; }), all=vs.concat(R.bench,[1]), mn=Math.min.apply(null,all), mx=Math.max.apply(null,all);
+21078-  var X=function(j){ return p+j/Math.max(1,R.N-1)*(W-2*p); }, Y=function(v){ return p+(1-(v-mn)/(mx-mn||1))*(H-2*p); }, d='', b='';
+21079-  vs.forEach(function(v,j){ d+=(j?' L':'M')+X(j).toFixed(1)+' '+Y(v).toFixed(1); }); R.bench.forEach(function(v,j){ b+=(j?' L':'M')+X(j).toFixed(1)+' '+Y(v).toFixed(1); });
+21080-  var up=R.ret>=0, col=up?'#2fb98a':'#f0566a';
+21081-  return '<svg class="btg-sp" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="백테스트 잔고 그래프"><defs><linearGradient id="btgsp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".22"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>'
+21082-    +'<line x1="'+p+'" x2="'+(W-p)+'" y1="'+Y(1).toFixed(1)+'" y2="'+Y(1).toFixed(1)+'" stroke="rgba(255,255,255,.16)"/>'
+21083-    +'<path d="'+b+'" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="1.1" stroke-dasharray="2 4"/>'
+21084-    +'<path d="'+d+' L'+X(R.N-1).toFixed(1)+' '+H+' L'+X(0).toFixed(1)+' '+H+' Z" fill="url(#btgsp)"/><path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="1.7" stroke-linejoin="round"/>'
+21085-    +'<circle cx="'+X(R.N-1).toFixed(1)+'" cy="'+Y(vs[R.N-1]).toFixed(1)+'" r="3.2" fill="'+col+'"/></svg>';
+21086-}
+21087-function btGoMe(){
+21088-  var s=BT.s, R=BT.R, ai=btAi(s), diff=Math.round(R.final)-Math.round(R.benchFinal);
+21089-  return '<aside class="btg-me"><small class="lb">실행할 전략</small><div class="hd">'+mkGlyph(s,34)+'<div><b>'+gEsc(mkHook(s))+'</b><span>'+MK_KIND[s.kind]+', '+gEsc(mkScope(s))+'</span></div><button type="button" class="mret" onclick="btGoTo(\'\')"><i class="num'+mkSign(R.ret)+'">'+mkPct0(R.ret,1)+'</i><em>'+btPerL()+' 결과 보기</em></button></div>'
+21090-    +'<div class="fig"><div><small>'+btPerL()+' 백테스트</small><b class="num'+mkSign(R.ret)+'">'+mkPct0(R.ret,1)+'</b></div><div class="r"><small>'+btUsd(BT.amt)+'가</small><b class="num">'+btUsd(R.final)+'</b></div></div>'
+21091-    +btGoSpark()
+21092-    +'<dl><div><dt>그냥 들고 있었을 때보다</dt><dd class="num '+(diff>=0?'mk-up':'mk-dn')+'">'+btUsdS(diff)+'</dd></div><div><dt>가장 크게 내려간 폭</dt><dd class="num">'+R.mdd.toFixed(1)+'%</dd></div>'
+
+ succeeded in 151ms:
+118	0	index.html
+
+ succeeded in 450ms:
+codex 인박스 : (비어 있음)
+
+codex
+**현재는 창업자에게 보여주기 어렵습니다.** 수정 경로는 생겼지만, 재검증 조건과 변경 효과를 사용자가 직접 추적해야 합니다. 파일은 수정하지 않았습니다.
+
+| 화면 | 3초 안에 다음 행동을 아는가 | 다른 화면과의 모순 |
+|---|---|---|
+| R0 전략 생성 | **아니요.** 같은 강조색 버튼이 두 개라 어느 전략이 현재 것인지 불명확합니다. | 아래 카드의 최근 2년이 R2에서는 전체 기간입니다. |
+| R2 내 전략의 부진한 결과 | **예.** ‘규칙 수정하기’가 명확합니다. | +25.3%가 크게 강조되지만 수정 이유를 설명할 해석은 로딩 중입니다. |
+| R4 수정 제안 | **부분적입니다.** 버튼은 보이지만 긴 문장 두 묶음에서 변경점을 찾아야 합니다. | ‘다시 검증하기’를 눌렀는데 R5에서는 다시 시작 버튼을 눌러야 합니다. |
+| R5 재검증 설정 | **예.** 시작 버튼은 명확합니다. | R2의 전체 기간이 최근 2년으로 바뀝니다. 매수 설명에도 앞서 없던 ‘점수 38’이 등장합니다. |
+| R6 수정 후 결과 | **아니요.** 비교 수치와 다음 행동이 화면 아래로 밀립니다. | R5는 최근 2년인데 다시 전체 기간이며, 동일 조건이라고 선언합니다. |
+| R3 복사 전략의 부진한 결과 | **예.** 다른 전략 만들기는 명확합니다. | R2와 달리 수정 버튼이 없는 이유가 없습니다. 수익은 낮지만 하락 폭은 줄었다는 장점도 설명하지 않습니다. |
+| R1 복사 전략의 좋은 결과 | **예.** 실행이 여전히 첫 행동입니다. | 결정 문서의 ‘실행 준비하기’와 달리 즉시 실행처럼 읽힙니다. |
+
+필수 확인 결과입니다.
+
+- **동일 조건 비교:** R2와 R6의 기간 표시와 시작 금액은 같습니다. 그러나 R5와 연결하면 일관되지 않습니다. 가격 자료의 동일성은 화면으로 확인할 수 없으며, [비교 코드](/C:/Users/hyun1/OneDrive/바탕%20화면/tesia-lab%20fork%201/index.html:22086)도 기간 선택값과 금액만 검사합니다.
+- **규칙 하나 변경:** R4에서는 맞습니다. 하락 시 매도 기준만 5%에서 8%로 바뀌며, 손실이 커질 수 있다는 설명도 있습니다. 기간 변경은 이 규칙 변경과 별개의 문제입니다.
+- **기존 링크:** 첨부 결과 화면에서는 사라졌습니다. 소스에는 남아 있고, 정확한 HTML 문자열을 찾아 치환하는 방식입니다.
+- **좋은 결과의 실행 우선:** 유지됐습니다.
+- **복사 전략의 수정 불가 이유:** 표시되지 않습니다.
+
+**P0:** 첨부 화면과 코드만으로 확정할 항목은 없습니다.
+
+**P1**
+
+1. **비교 조건의 신뢰가 깨집니다.** 직전 실행의 실제 시작일과 종료일, 금액, 자산과 가격 자료 버전을 보존하고 대조해야 합니다. 확인 전 문구는 **“이전 검사와 조건이 같은지 확인되지 않아 결과 비교를 제공하지 않습니다.”**로 표시합니다.
+
+2. **변경 효과와 다음 행동이 가려집니다.** R6의 비교 요약과 버튼을 긴 규칙 설명 위로 올립니다. 동일 조건 확인 후 **“수정 후 수익률은 +25.3%에서 -14.1%로 낮아졌습니다. 가장 크게 내려간 폭도 55.0%에서 58.6%로 커졌습니다.”**를 먼저 보여주고, **“이전 규칙으로 돌아갑니다”**를 제공합니다.
+
+3. **재검증 버튼이 약속한 행동과 다릅니다.** R4에서 이전 조건을 유지해 바로 검증하도록 연결합니다. 카드는 **“산 가격보다 5% 내리면 팔던 조건을 8% 내리면 파는 조건으로 바꿉니다. 한 거래에서 감수하는 손실이 커질 수 있습니다.”**, 버튼은 **“수정한 규칙으로 비교합니다”**로 줄입니다.
+
+4. **복사 전략의 제약을 설명하지 않습니다.** R3 버튼 위에 **“복사한 공개 전략은 규칙을 수정할 수 없습니다. 다른 전략을 직접 만들 수 있습니다.”**를 표시합니다. 결과 설명에는 **“그냥 보유했을 때보다 수익은 적지만, 가장 크게 내려간 폭은 작았습니다.”**를 함께 넣습니다.
+
+**P2**
+
+- R0의 이전 카드는 접고 최신 카드에 **“현재 검증할 전략입니다.”**를 표시합니다.
+- 전략명은 **“비트코인 반등 후 8% 상승 시 매도”**처럼 풀어 쓰고, R5의 매수 설명도 제안 카드와 통일합니다.
+- R1 버튼은 **“이 전략의 실행을 준비합니다”**로 바꿉니다. 해석 로딩이 실패하면 **“결과 해석을 불러오지 못했습니다. 계산 결과는 확인할 수 있습니다.”**를 표시합니다.
+
+**창업자에게 보여줄 준비: 아니요.** 가장 중요한 세 가지는 **비교 조건 보존과 검증, R6 첫 화면의 변경 효과 요약, R4에서 한 번에 재검증되는 흐름**입니다.
+tokens used
+51,399
+**현재는 창업자에게 보여주기 어렵습니다.** 수정 경로는 생겼지만, 재검증 조건과 변경 효과를 사용자가 직접 추적해야 합니다. 파일은 수정하지 않았습니다.
+
+| 화면 | 3초 안에 다음 행동을 아는가 | 다른 화면과의 모순 |
+|---|---|---|
+| R0 전략 생성 | **아니요.** 같은 강조색 버튼이 두 개라 어느 전략이 현재 것인지 불명확합니다. | 아래 카드의 최근 2년이 R2에서는 전체 기간입니다. |
+| R2 내 전략의 부진한 결과 | **예.** ‘규칙 수정하기’가 명확합니다. | +25.3%가 크게 강조되지만 수정 이유를 설명할 해석은 로딩 중입니다. |
+| R4 수정 제안 | **부분적입니다.** 버튼은 보이지만 긴 문장 두 묶음에서 변경점을 찾아야 합니다. | ‘다시 검증하기’를 눌렀는데 R5에서는 다시 시작 버튼을 눌러야 합니다. |
+| R5 재검증 설정 | **예.** 시작 버튼은 명확합니다. | R2의 전체 기간이 최근 2년으로 바뀝니다. 매수 설명에도 앞서 없던 ‘점수 38’이 등장합니다. |
+| R6 수정 후 결과 | **아니요.** 비교 수치와 다음 행동이 화면 아래로 밀립니다. | R5는 최근 2년인데 다시 전체 기간이며, 동일 조건이라고 선언합니다. |
+| R3 복사 전략의 부진한 결과 | **예.** 다른 전략 만들기는 명확합니다. | R2와 달리 수정 버튼이 없는 이유가 없습니다. 수익은 낮지만 하락 폭은 줄었다는 장점도 설명하지 않습니다. |
+| R1 복사 전략의 좋은 결과 | **예.** 실행이 여전히 첫 행동입니다. | 결정 문서의 ‘실행 준비하기’와 달리 즉시 실행처럼 읽힙니다. |
+
+필수 확인 결과입니다.
+
+- **동일 조건 비교:** R2와 R6의 기간 표시와 시작 금액은 같습니다. 그러나 R5와 연결하면 일관되지 않습니다. 가격 자료의 동일성은 화면으로 확인할 수 없으며, [비교 코드](/C:/Users/hyun1/OneDrive/바탕%20화면/tesia-lab%20fork%201/index.html:22086)도 기간 선택값과 금액만 검사합니다.
+- **규칙 하나 변경:** R4에서는 맞습니다. 하락 시 매도 기준만 5%에서 8%로 바뀌며, 손실이 커질 수 있다는 설명도 있습니다. 기간 변경은 이 규칙 변경과 별개의 문제입니다.
+- **기존 링크:** 첨부 결과 화면에서는 사라졌습니다. 소스에는 남아 있고, 정확한 HTML 문자열을 찾아 치환하는 방식입니다.
+- **좋은 결과의 실행 우선:** 유지됐습니다.
+- **복사 전략의 수정 불가 이유:** 표시되지 않습니다.
+
+**P0:** 첨부 화면과 코드만으로 확정할 항목은 없습니다.
+
+**P1**
+
+1. **비교 조건의 신뢰가 깨집니다.** 직전 실행의 실제 시작일과 종료일, 금액, 자산과 가격 자료 버전을 보존하고 대조해야 합니다. 확인 전 문구는 **“이전 검사와 조건이 같은지 확인되지 않아 결과 비교를 제공하지 않습니다.”**로 표시합니다.
+
+2. **변경 효과와 다음 행동이 가려집니다.** R6의 비교 요약과 버튼을 긴 규칙 설명 위로 올립니다. 동일 조건 확인 후 **“수정 후 수익률은 +25.3%에서 -14.1%로 낮아졌습니다. 가장 크게 내려간 폭도 55.0%에서 58.6%로 커졌습니다.”**를 먼저 보여주고, **“이전 규칙으로 돌아갑니다”**를 제공합니다.
+
+3. **재검증 버튼이 약속한 행동과 다릅니다.** R4에서 이전 조건을 유지해 바로 검증하도록 연결합니다. 카드는 **“산 가격보다 5% 내리면 팔던 조건을 8% 내리면 파는 조건으로 바꿉니다. 한 거래에서 감수하는 손실이 커질 수 있습니다.”**, 버튼은 **“수정한 규칙으로 비교합니다”**로 줄입니다.
+
+4. **복사 전략의 제약을 설명하지 않습니다.** R3 버튼 위에 **“복사한 공개 전략은 규칙을 수정할 수 없습니다. 다른 전략을 직접 만들 수 있습니다.”**를 표시합니다. 결과 설명에는 **“그냥 보유했을 때보다 수익은 적지만, 가장 크게 내려간 폭은 작았습니다.”**를 함께 넣습니다.
+
+**P2**
+
+- R0의 이전 카드는 접고 최신 카드에 **“현재 검증할 전략입니다.”**를 표시합니다.
+- 전략명은 **“비트코인 반등 후 8% 상승 시 매도”**처럼 풀어 쓰고, R5의 매수 설명도 제안 카드와 통일합니다.
+- R1 버튼은 **“이 전략의 실행을 준비합니다”**로 바꿉니다. 해석 로딩이 실패하면 **“결과 해석을 불러오지 못했습니다. 계산 결과는 확인할 수 있습니다.”**를 표시합니다.
+
+**창업자에게 보여줄 준비: 아니요.** 가장 중요한 세 가지는 **비교 조건 보존과 검증, R6 첫 화면의 변경 효과 요약, R4에서 한 번에 재검증되는 흐름**입니다.
