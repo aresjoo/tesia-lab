@@ -15,7 +15,7 @@ function skaCard(cfg){
   TAI.qn=(TAI.qn||0)+1; var id='gqc'+TAI.qn;
   TAI.qcfg=TAI.qcfg||{}; TAI.qcfg[id]={steps:steps,idx:0,picks:steps.map(function(){ return []; }),free:steps.map(function(){ return ''; })};
   /* 채팅 안에는 한 줄만 */
-  taiThreadAdd('<div class="ska-note" id="'+id+'-n">몇 가지만 여쭙겠습니다. 아래에서 '+steps.length+'개에 답해 주십시오 <span aria-hidden="true">↓</span></div>');
+  taiThreadAdd('<div class="ska-note" id="'+id+'-n">'+(steps.length>1?'몇 가지만 여쭙겠습니다. 아래에서 '+steps.length+'개에 답해 주십시오':'아래에서 골라 주십시오')+' <span aria-hidden="true">↓</span></div>');
   dock.innerHTML='<div class="ska" id="'+id+'" role="dialog" aria-label="TETH의 질문"></div>';
   skaRender(id);
 }

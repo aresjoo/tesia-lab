@@ -1,6 +1,6 @@
 /* ═══ 나쁜 백테스트 결과 뒤의 행동 (rv) ═══
    내 전략: "규칙 수정하기" → 그 전략을 만든 대화로 돌아가 TETH가 근거 있는 변경 하나와 대가를 제안 → "수정한 규칙으로 다시 검증하기" → 이전 판과 비교
-   복사 전략: 규칙을 대화 형식으로 옮길 수 없으니 "다른 전략 만들기"만. 결과 요약을 새 대화에 붙인다
+   복사 전략: 규칙을 고칠 수 없으니 실행 단추만 둔다 ("다른 전략 만들기"는 파운더 결정으로 뺐다)
    나쁨 = 시작 돈보다 줄었거나 그냥 보유보다 낮음. 단추 순서의 기준일 뿐 딱지가 아니다 */
 var RV={on:false,prop:null};
 function rvTrades(){ var R=BT.R; return R?(R.wins.length+R.loss.length):0; }
@@ -16,13 +16,11 @@ function rvSumCard(){ var R=BT.R, s=BT.s, diff=Math.round(R.final)-Math.round(R.
 function rvActs(){
   var s=BT.s, mine=!!(s&&s.mine), bad=rvBad(), none=!rvTrades();
   var run='<button type="button" class="bt-cta" onclick="btUse()">이 전략 실행하기</button>', runQ='<button type="button" class="bt-sec" onclick="btUse()">이 전략 실행하기</button>';
-  var fix='<button type="button" class="bt-cta" onclick="rvFix()">규칙 수정하기</button>', mk='<button type="button" class="bt-sec" onclick="rvNew()">다른 전략 만들기</button>', mkC='<button type="button" class="bt-cta" onclick="rvNew()">다른 전략 만들기</button>';
+  var fix='<button type="button" class="bt-cta" onclick="rvFix()">규칙 수정하기</button>';
   var links=function(L){ return '<p class="rv-links">'+L.map(function(x){ return '<button type="button" onclick="'+x[1]+'">'+x[0]+'</button>'; }).join('<i>·</i>')+'</p>'; };
   var note=none?'<p class="rv-note">거래가 한 번도 없어 결과를 판단하기 어렵습니다. 조건을 넓히거나 기간을 바꿔 보십시오.</p>':'';
-  if(mine){ if(bad||none) return note+fix+mk+runQ; return run+links([['규칙 수정하기','rvFix()'],['다른 전략 만들기','rvNew()']]); }
-  var why='<p class="rv-why">복사한 공개 전략은 규칙을 고칠 수 없습니다. 다른 전략을 직접 만들 수 있습니다.</p>';
-  if(bad||none) return note+why+mkC+runQ;
-  return run+links([['다른 전략 만들기','rvNew()']]);
+  if(mine){ if(bad||none) return note+fix+runQ; return run+links([['규칙 수정하기','rvFix()']]); }
+  return note+run;
 }
 /* 이전 판과 비교: 같은 기간과 금액일 때만 숫자를 나란히 놓는다 */
 function rvCompare(){
@@ -38,10 +36,11 @@ function rvCompare(){
 }
 function rvPrevOpen(){ var V=(tfS().btVers||[]); if(!V.length) return;
   acConfirm({title:'이전 판',body:'',list:V.map(function(v){ return stDate(v.at)+' '+mkPct0(v.ret,1)+' (낙폭 '+v.mdd.toFixed(1)+'%, 거래 '+v.n+'번). '+v.rule; }),ok:'닫기',run:function(){}}); }
-/* 규칙 수정하기: 그 대화로 돌아가 TETH가 먼저 한 가지를 제안한다 */
+/* 규칙 수정하기: 그 대화로 돌아가 TETH가 먼저 어느 쪽을 바꿀지 묻는다(선택지, 직접 입력, AI가 알아서 판단). 고르면 바뀔 조건 카드 */
 function rvHidden(){ var sp=rvSpecNow(), F=btReadFacts();
   return '[규칙 수정 요청] 내가 만든 전략을 백테스트했더니 결과가 아쉽다. 규칙 하나만 고쳐 다시 검증하려고 한다.\n지금 규칙: '+rvRuleText(sp)+'\n설정값: '+JSON.stringify(sp)+'\n결과: '+JSON.stringify(F)
-    +'\n지시: 결과 숫자를 근거로 바꿔 볼 조건을 정확히 하나만 고르고, 그 대가(예: 더 오래 들면 수익과 손실 폭이 함께 커질 수 있음)를 함께 말하라. 원인을 단정하지 말고 "비교해 볼 값"으로 말하고, 더 좋은 결과를 뜻하지 않는다고 덧붙여라. 합니다체 3~4문장. 익절, 손절 같은 용어 대신 "산 가격보다 8% 오르면 파는 조건"처럼 풀어 써라. 검색과 도구는 쓰지 마라. 질문 카드(ASK), 선택 칩(NEXT), 실행(ACT) 태그는 붙이지 마라. 마지막 줄에 바뀐 설정 전체를 [STRATEGY {...}] 태그로 붙이되 "change" 키에 바꾼 항목 이름 하나(depth, tp, sl, fng, trend 중 하나)를 넣어라. asset, period, name은 그대로 두고 바꾼 값 하나만 다르게 하라.'; }
+    +'\n지시 1(지금): 아직 바꿀 조건을 정하지 마라. 합니다체 2문장으로 짧게 답하라. 첫 문장은 결과에서 가장 눈에 띄는 숫자 하나(예: 24번 중 14번이 손실로 끝났습니다), 둘째 문장은 "어느 쪽을 바꿔 볼까요? 아래에서 고르시거나 원하는 방향을 적어 주십시오."처럼 방향을 묻는 말. 그리고 [ASK] 태그로 질문 하나를 붙여라: title은 "어느 조건을 바꿔 볼까요?", multi는 false, options는 이 결과에 맞는 수정 방향 4개. 각 선택지 t는 10자 안팎의 짧은 이름(예: 파는 조건 넓히기, 사는 조건 까다롭게, 오르면 파는 조건 추가, 방향 확인 켜기), d는 무엇이 바뀌고 무엇을 기대하는지 한 문장(결과 숫자 근거). 결과 근거로 가장 먼저 비교해 볼 선택지를 첫째에 두고 d 끝에 "(추천)"을 붙여라. 이번 답에는 [STRATEGY] 태그를 붙이지 마라.'
+    +'\n지시 2(사용자가 고르거나, 직접 적거나, 알아서 판단해 달라고 한 다음 답): 그 방향에서 바꿔 볼 조건을 정확히 하나만 고르고, 그 대가(예: 더 오래 들면 수익과 손실 폭이 함께 커질 수 있음)를 함께 말하라. 원인을 단정하지 말고 "비교해 볼 값"으로 말하고, 더 좋은 결과를 뜻하지 않는다고 덧붙여라. 합니다체 3~4문장. 익절, 손절 같은 용어 대신 "산 가격보다 8% 오르면 파는 조건"처럼 풀어 써라. 검색과 도구는 쓰지 마라. 그 답에는 질문 카드(ASK), 선택 칩(NEXT), 실행(ACT) 태그를 붙이지 마라. 다음 답의 마지막 줄에 바뀐 설정 전체를 [STRATEGY {...}] 태그로 붙이되 "change" 키에 바꾼 항목 이름 하나(depth, tp, sl, fng, trend 중 하나)를 넣어라. asset, period, name은 그대로 두고 바꾼 값 하나만 다르게 하라.'; }
 function rvBubble(line){ return '<div class="an-card">'+rvSumCard()+'</div><div class="an-line">'+line+'</div>'; }
 function rvFix(){
   var t=tfS(); if(!BT.s||!BT.s.mine||!BT.R) return;
@@ -96,7 +95,8 @@ function rvApply(id){ var t=tfS(), sp=RV.prop; if(!sp) return; RV.on=false; RV.p
 function rvRerun(per,amt){ setTimeout(function(){ location.hash='#/share/bt/mine'; var n=0, iv=setInterval(function(){ n++; if(window.BT&&BT.s&&BT.s.mine&&BT.phase==='ready'&&document.getElementById('bt-root')){ clearInterval(iv); var ch=false; if(per!=null&&BT.per!==per){ BT.per=per; ch=true; } if(amt!=null&&BT.amt!==amt){ BT.amt=amt; ch=true; } if(ch) btReady(); setTimeout(function(){ try{ btStart(); }catch(e){} },300); } else if(n>60) clearInterval(iv); },150); },400); }
 /* 이전 규칙으로 돌아가기: 저장해 둔 설정을 되살리고 같은 조건으로 다시 돌린다 */
 function rvRevert(){ var t=tfS(), V=t.btVers||[], v=V[0]; if(!v||!v.ai) return; var now=rvSnapNow(); t.aiSpec=JSON.parse(JSON.stringify(v.ai)); if(t.intake&&t.intake.period&&v.pi!=null){ t.intake.period.i=v.pi; } t.cur=null; t.score=0; t.workDone=false; V.shift(); V.unshift(now); t.btVers=V.slice(0,5); tfSave(); toast('이전 규칙으로 돌아갑니다'); rvRerun(v.per,v.amt); }
-function rvOther(){ var f=$('g-in'); if(f){ f.value='다른 조건을 바꿔서 제안해 주십시오: '; f.focus(); } }
+/* 다른 수정 요청하기: 같은 방식으로 다시 방향을 묻게 한다 */
+function rvOther(){ var f=$('g-in'); if(!f) return; RV.on=true; RV.prop=null; f.value='다른 조건을 바꿔 보고 싶습니다. 바꿀 수 있는 방향을 다시 선택지로 보여 주십시오'; gSend(); }
 (function(){
   /* 결과 오른쪽 단추를 상태에 맞게 바꾸고, 이전 판과 비교를 끼운다 */
   var rr0=btResultRail; btResultRail=function(){ var h=rr0.apply(this,arguments);

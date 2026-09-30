@@ -21,12 +21,18 @@ await shot(p,DIR+'R0-chat-strategy.png',{full:false});
 // 백테스트 결과 (나쁨)
 await ev(`location.hash='#/share/bt/mine'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
 s=await J(`{mine:!!BT.s.mine,ret:+BT.R.ret.toFixed(1),bench:+BT.R.benchRet.toFixed(1),bad:rvBad(),btns:[].map.call(document.querySelectorAll('#bt-root .bt-cta, #bt-root .bt-sec, #bt-root .rv-links button'),function(b){ return b.innerText.trim(); }),oldLink:/조건을 바꿔 다시 돌리기/.test(document.getElementById('bt-root').innerText)}`);
-ok('내 전략, 나쁜 결과: 규칙 수정하기가 첫 단추, 기간 링크 없음',s.mine&&s.bad&&s.btns[0]==='규칙 수정하기'&&s.btns.indexOf('다른 전략 만들기')>=0&&!s.oldLink,s);
+ok('내 전략, 나쁜 결과: 규칙 수정하기가 첫 단추, 다른 전략 만들기 없음, 기간 링크 없음',s.mine&&s.bad&&s.btns[0]==='규칙 수정하기'&&s.btns.indexOf('다른 전략 만들기')<0&&!s.oldLink,s);
 await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); await shot(p,DIR+'R2-result-bad-mine.png',{full:false});
 // 규칙 수정하기 → 그 대화로, TETH가 먼저 제안
 const nAns0=await ev(`document.querySelectorAll('#g-thread .g-amsg').length`); await ev(`rvFix()`); await sleep(1500);
 s=await J(`{mode:G.mode,cur:G.cur&&G.cur.id,sess:tfS().aiSpec.sess,card:!!document.querySelector('.an-umsg .rv-card'),line:(document.querySelector('.an-line')||{}).innerText}`);
 ok('규칙 수정하기: 만든 대화로 돌아가고 결과 카드가 내 말이 된다',s.mode==='conv'&&s.cur===s.sess&&s.card,s);
+// 먼저 TETH가 방향을 묻는다: 질문 패널(선택지, 직접 답변, AI가 알아서 판단), 제안 카드는 아직 없다
+const asked=await waitFor(`!!document.querySelector('#g-askdock .ska .op')&&!TAI.busy&&!TAI.req`,120000); await sleep(600);
+s=await J(`{prop:!!document.querySelector('.rv-prop'),ops:[].map.call(document.querySelectorAll('#g-askdock .ska .op b'),function(b){ return b.innerText.trim(); }),title:(document.querySelector('#g-askdock .ska .hd b')||{}).innerText,skip:!!document.querySelector('#g-askdock .ska .lk'),ans:[].slice.call(document.querySelectorAll('#g-thread .g-amsg')).pop().innerText.slice(0,300)}`);
+ok('규칙 수정하기: TETH가 먼저 어느 쪽을 바꿀지 묻고 선택지 4개, 직접 답변, AI가 알아서 판단이 뜬다',asked&&!s.prop&&s.ops.length>=4&&s.ops.indexOf('직접 답변 작성')>=0&&s.skip&&/니까[?]|까요[?]/.test(s.ans+s.title),s);
+await shot(p,DIR+'R3b-chat-ask.png',{full:false});
+await ev(`(function(){ var b=document.querySelector('#g-askdock .ska .op'); b&&b.click(); })()`);
 const got=await waitFor(`!!document.querySelector('.rv-prop')`,120000);
 s=await J(`{prop:!!document.querySelector('.rv-prop'),ans:(function(){ var p=document.querySelector('.rv-prop'); var e=p&&p.previousElementSibling; while(e&&(e.innerText||'').trim().length<80) e=e.previousElementSibling; return e?e.innerText.slice(0,400):''; })(),tags:/\\[STRATEGY|\\[NEXT|\\[ASK/.test((document.getElementById('g-thread')||{}).innerText||''),before:(document.querySelector('.rv-prop .rv-rules div:first-child p')||{}).textContent,after:(document.querySelector('.rv-prop .rv-rules div:last-child p')||{}).textContent,ch:(document.querySelector('.rv-prop .rv-ch')||{}).innerText}`);
 ok('TETH가 변경 하나를 제안하고 제안 카드(이전, 이번 규칙)가 붙는다',got&&s.prop&&s.before!==s.after&&!s.tags,{ans:s.ans.slice(0,200),before:s.before,after:s.after});
@@ -44,12 +50,12 @@ await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); a
 // 복사 전략, 나쁜 결과
 await ev(`location.hash='#/share/bt/r1'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
 s=await J(`{mine:!!BT.s.mine,bad:rvBad(),btns:[].map.call(document.querySelectorAll('#bt-root .bt-cta, #bt-root .bt-sec'),function(b){ return b.innerText.trim(); }),cmp:!!document.querySelector('.rv-cmp')}`);
-ok('복사 전략, 나쁜 결과: 이유 표시, 다른 전략 만들기가 첫 단추, 규칙 수정 없음',!s.mine&&s.bad&&s.btns[0]==='다른 전략 만들기'&&s.btns.indexOf('규칙 수정하기')<0&&!s.cmp&&(await ev(`/규칙을 고칠 수 없습니다/.test((document.querySelector('.rv-why')||{}).innerText||'')`))===true,s);
+ok('복사 전략, 나쁜 결과: 이 전략 실행하기만, 다른 전략 만들기와 규칙 수정 없음',!s.mine&&s.bad&&s.btns[0]==='이 전략 실행하기'&&s.btns.indexOf('다른 전략 만들기')<0&&s.btns.indexOf('규칙 수정하기')<0&&!s.cmp,s);
 await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); await shot(p,DIR+'R3-result-bad-copy.png',{full:false});
 // 좋은 결과
 await ev(`location.hash='#/share/bt/f1'`); await sleep(2500); await ev(`BT.per=0; btReady(); btCompute(); btFinish()`); await sleep(2500);
 s=await J(`{bad:rvBad(),ret:+BT.R.ret.toFixed(0),btns:[].map.call(document.querySelectorAll('#bt-root .bt-cta'),function(b){ return b.innerText.trim(); }),links:[].map.call(document.querySelectorAll('#bt-root .rv-links button'),function(b){ return b.innerText.trim(); })}`);
-ok('좋은 결과: 이 전략 실행하기가 첫 단추, 나머지는 작은 링크',!s.bad&&s.btns[0]==='이 전략 실행하기'&&s.links.length>=1,s);
+ok('좋은 결과: 이 전략 실행하기가 첫 단추, 다른 전략 만들기 없음',!s.bad&&s.btns[0]==='이 전략 실행하기'&&s.links.indexOf('다른 전략 만들기')<0,s);
 await ev(`document.getElementById('g-scroll').scrollTop=0`); await sleep(300); await shot(p,DIR+'R1-result-good.png',{full:false});
 s=await J(`window.__errs`); ok('콘솔 오류 없음',Array.isArray(s)&&s.length===0,s);
 const pass=out.filter(x=>x.startsWith('PASS')).length; out.push('','TOTAL '+pass+' / '+out.length); console.log(out[out.length-1]);
