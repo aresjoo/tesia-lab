@@ -1,0 +1,1250 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f399-0738-71e0-9e7f-4b00215a13fc
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드로 빙의합니다. 웹앱 TETH(거래소 계정에 전략을 연결해 자동 매매하는 서비스)의 "설정" 화면, 특히 결제 탭과 보안 탭을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+
+첨부 이미지
+1. ref-general.png: ChatGPT 설정 > 일반 (참고 원본, 2000px 폭 캡처)
+2. ref-appearance.png: ChatGPT 설정 > 모양 (참고 원본)
+3. ref-account.png: ChatGPT 설정 > 계정 (참고 원본)
+4. B1-billing-sub.png: TETH 결제 탭, 구독 회원 (1440)
+5. B2-billing-expired.png: TETH 결제 탭, 구독이 끝난 회원
+6. S1-security.png: TETH 보안 탭, 거래소 2곳 연결, 2단계 인증 켜짐, 기기 2대
+7. G1-general.png: TETH 일반 탭 (같은 설정 셸의 다른 탭)
+8. B1-billing-sub-m.png, S1-security-m.png: 모바일 390
+9. X3-auth.png: TETH가 이미 ChatGPT 어휘로 다시 만든 기준 화면 (거래소 연결 승인)
+
+사용자가 여기서 내리는 결정
+- 결제 탭: 구독을 유지할지 해지할지, 결제 카드를 바꿀지, 지난 결제를 볼지
+- 보안 탭: 거래소 권한을 끊을지, 2단계 인증을 켤지, 다른 기기를 로그아웃할지
+
+해야 할 일
+A. TETH 설정(4~8)이 ChatGPT 설정(1~3)과 다른 제품처럼 보이는 원인을 겉모습(배경과 레일 색, 제목과 섹션 제목의 크기와 굵기, 행 라벨 굵기, 카드 배경과 테두리와 반경, 오른쪽 조작 요소의 모양, 배지), 구조(섹션 순서, 한 행에 담긴 정보 수, 행마다 단추가 있는지, 모바일 탭 줄), 카피(행 설명 문장, 단추 문구, 상태 표시)로 나눠 적으십시오. 원인마다 어느 요소인지 픽셀이나 문구를 근거로 대십시오. 추측으로 채우지 마십시오.
+B. ChatGPT라면 이 두 탭을 어떻게 만들었을지 제안하십시오. 섹션마다: 섹션 제목, 행 목록(라벨, 보조 줄, 오른쪽 조작 요소 종류와 문구), 행을 눌렀을 때 열리는 것(창인지 화면인지). 결제 내역은 몇 건을 어떻게 보여줄지, 결제 정보(이메일, 이름, 주소)와 결제 수단은 어디에 둘지 정하십시오. 색과 형태는 1~3과 9의 어휘(검정 배경, 얇은 테두리 카드, 400 굵기 제목, 오른쪽 회색 알약 조작 요소, 파란 토글)만 쓰십시오. 모바일은 레일과 탭 줄을 어떻게 할지(ChatGPT 모바일 설정처럼 목록 → 상세)도 정하십시오. 지워도 되는 정보와 지우면 안 되는 정보를 구분하십시오.
+C. 카피 교체안을 현재 → 제안 표로. 합니다체, 단추는 서술어로 끝나지 않게("변경", "로그아웃", "권한 끊기" 같은 명사형 또는 "~하기"), 규제 고지나 면책은 넣지 마십시오. "회원님", 가운뎃점, em dash 금지. "출금 권한은 없습니다" 같은 부정문이 꼭 필요한지 판단하십시오.
+D. 이 설정 셸(레일, 제목, 섹션 카드)은 일반, 계정, 알림 탭도 함께 쓰는 구조입니다. 셸을 바꾸면 모든 탭이 같이 바뀝니다. 셸 전체를 ChatGPT 어휘로 바꿀지, 결제와 보안만 바꿀지 권고하십시오.
+E. 한 문장으로: 통째로 다시 만들어야 하는지, 스타일과 카피만 바꾸면 되는지.
+
+형식: 표와 짧은 문단. 800단어 이내. 근거 없는 칭찬은 쓰지 마십시오.
+
+codex
+첨부 화면과 설정 코드를 대조해 시각적 차이와 정보 구조를 구분하겠습니다. 파일은 읽기만 합니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+ succeeded in 273ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g '*.html' -g '*.css' -g '*.js' -g '*AGENTS*' -g '*.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git rev-parse --show-toplevel' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+ exited 1 in 60ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 60ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 69ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg --files -g '*.html' -g '*.css' -g '*.js' -g '*AGENTS*' -g '*.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git rev-parse --show-toplevel' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+ succeeded in 102ms:
+ M ../../../artifacts/teth-redesign/r2-follow-sheet.png
+ M ../../16-fixes/FLOWS_RESULT.txt
+ M ../../16-fixes/R11-conversions.txt
+ M ../../16-fixes/rail/rail-check.txt
+ M ../../16-fixes/rail/st-full-check.txt
+ M ../../16-fixes/round-2/R01-auth-age-step.png
+ M ../../16-fixes/round-2/R01-guest-auth.png
+ M ../../16-fixes/round-2/R01-resumed-backtest.png
+ M ../../16-fixes/round-2/R02-reading-loading-h1.png
+ M ../../16-fixes/round-2/R02-result-h1.png
+ M ../../16-fixes/round-2/R03-decision-open-h1.png
+ M ../../16-fixes/round-2/R03-decisions-h1.png
+ M ../../16-fixes/round-2/R04-early-h1.png
+ M ../../16-fixes/round-2/R04-judgment-1-h1.png
+ M ../../16-fixes/round-2/R04-judgment-2-h1.png
+ M ../../16-fixes/round-2/R04-judgment-3-h1.png
+ M ../../16-fixes/round-2/R04-judgment-4-h1.png
+ M ../../16-fixes/round-2/R08-consent-gate.png
+ M ../../16-fixes/round-2/R08-consent.png
+ M ../../16-fixes/round-2/R08-page-bottom.png
+ M ../../16-fixes/round-2/R08-page-connected.png
+ M ../../16-fixes/round-2/R08-page.png
+ M ../../16-fixes/round-2/R09-A-route.png
+ M ../../16-fixes/round-2/R09-B-exchange.png
+ M ../../16-fixes/round-2/R09-C-account.png
+ M ../../16-fixes/round-2/R09-D-guide.png
+ M ../../16-fixes/round-2/R09-E-authorize.png
+ M ../../16-fixes/round-2/R09-F-auth-cancel.png
+ M ../../16-fixes/round-2/R09-G-uid-checking.png
+ M ../../16-fixes/round-2/R09-H-uid-fail.png
+ M ../../16-fixes/round-2/R09-I-done.png
+ M ../../16-fixes/round-2/R09-J-pay.png
+ M ../../16-fixes/round-2/R09-K-pay-fail.png
+ M ../../16-fixes/round-2/R09-L-pay-ok.png
+ M ../../16-fixes/round-2/R09-M-paid-done.png
+ M ../../16-fixes/round-2/R10-expired-subscription.png
+ M ../../16-fixes/round-2/R10-other-exchange.png
+ M ../../16-fixes/round-2/R12-delete-confirm.png
+ M ../../16-fixes/round-2/R12-settings-account-paid-bottom.png
+ M ../../16-fixes/round-2/R12-settings-account-paid.png
+ M ../../16-fixes/round-2/R12-settings-general-paid.png
+ M ../../16-fixes/round-2/R12-settings-notify-paid.png
+ M ../../16-fixes/round-2/R12-settings-security-paid.png
+ M ../../16-fixes/round-2/R13-cancel-confirm.png
+ M ../../16-fixes/round-2/R13-settings-billing-expired.png
+ M ../../16-fixes/round-2/R13-settings-billing-none.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid-bottom.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid.png
+ M ../../16-fixes/round-2/R13-settings-billing-partner.png
+ M ../../16-fixes/round-2/R14-entry.png
+ M ../../16-fixes/round-2/R14-guest-auth.png
+ M ../../16-fixes/round-2/R14-guest-landing.png
+ M ../../16-fixes/round-2/R14-terminal-ready.png
+ M ../../16-fixes/round-2/ac-check.txt
+ M ../../16-fixes/round-2/bt-check-h1.txt
+ M ../../16-fixes/round-2/r01-check.txt
+ M ../../../ux-audit/card3/grid4-1440.png
+ M ../../../ux-audit/card3/grid4-pager-1440.png
+?? ../../../artifacts/teth-redesign/card2/c1-codex.log
+?? ../../../artifacts/teth-redesign/card2/c2-codex.log
+?? ../../../artifacts/teth-redesign/card2/c3-codex.log
+?? ../../../artifacts/teth-redesign/card2/c8-1024.png
+?? ../../../artifacts/teth-redesign/card2/c8-1100.png
+?? ../../../artifacts/teth-redesign/card2/c8-1101.png
+?? ../../../artifacts/teth-redesign/card2/c8-1280.png
+?? ../../../artifacts/teth-redesign/card2/c8-1440.png
+?? ../../../artifacts/teth-redesign/card2/c8-1920.png
+?? ../../../artifacts/teth-redesign/card2/c8-390.png
+?? ../../../artifacts/teth-redesign/card2/c8-768.png
+?? ../../../artifacts/teth-redesign/card2/r1-info-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-log-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-ov-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-perf-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-trades-full.png
+?? ../../16-fixes/an/an-1-bubble.png
+?? ../../16-fixes/an/an-2-shots.png
+?? ../../16-fixes/an/an-3-shot-zoom.png
+?? ../../16-fixes/an/an-4-answer.png
+?? ../../16-fixes/an/probe-h2i.png
+?? ../../16-fixes/presets/p02-account.png
+?? ../../16-fixes/presets/p02-billing-2.png
+?? ../../16-fixes/presets/p02-billing.png
+?? ../../16-fixes/presets/p02-brokers.png
+?? ../../16-fixes/presets/p02-security-2.png
+?? ../../16-fixes/presets/p02-security.png
+?? ../../16-fixes/presets/p02-trade-start.png
+?? ../../16-fixes/presets/p02-trade.png
+?? ../../16-fixes/presets/p12-account.png
+?? ../../16-fixes/presets/p12-billing-2.png
+?? ../../16-fixes/presets/p12-billing.png
+?? ../../16-fixes/presets/p12-brokers.png
+?? ../../16-fixes/presets/p12-security-2.png
+?? ../../16-fixes/presets/p12-security.png
+?? ../../16-fixes/presets/p12-trade.png
+?? ../../16-fixes/presets/p13-account.png
+?? ../../16-fixes/presets/p13-billing-2.png
+?? ../../16-fixes/presets/p13-billing.png
+?? ../../16-fixes/presets/p13-brokers.png
+?? ../../16-fixes/presets/p13-security-2.png
+?? ../../16-fixes/presets/p13-security.png
+?? ../../16-fixes/presets/p13-trade.png
+?? ../../16-fixes/presets/p14-account.png
+?? ../../16-fixes/presets/p14-billing-2.png
+?? ../../16-fixes/presets/p14-billing.png
+?? ../../16-fixes/presets/p14-brokers.png
+?? ../../16-fixes/presets/p14-security-2.png
+?? ../../16-fixes/presets/p14-security.png
+?? ../../16-fixes/presets/p14-trade.png
+?? ../../16-fixes/presets/p15-account.png
+?? ../../16-fixes/presets/p15-billing-2.png
+?? ../../16-fixes/presets/p15-billing.png
+?? ../../16-fixes/presets/p15-brokers.png
+?? ../../16-fixes/presets/p15-security-2.png
+?? ../../16-fixes/presets/p15-security.png
+?? ../../16-fixes/presets/p15-trade.png
+?? ../../16-fixes/rail/card-fw.png
+?? ../../16-fixes/rail/chat-guest.png
+?? ../../16-fixes/rail/chat-user.png
+?? ../../16-fixes/rail/detail-cta.png
+?? "../../16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/guest-g-gear-btn.png
+?? ../../16-fixes/rail/guest-g-login-btn.png
+?? ../../16-fixes/rail/guest-menu.png
+?? "../../16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "../../16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/st-collapsed-hover.png
+?? ../../16-fixes/rail/st-collapsed.png
+?? ../../16-fixes/rail/st-full-1440.png
+?? ../../16-fixes/rail/st-full-2000.png
+?? ../../16-fixes/rail/st-full-390.png
+?? ../../16-fixes/rail/st-full-notify-1440.png
+?? ../../16-fixes/rail/st-full-notify-2000.png
+?? ../../16-fixes/rail/st-full-notify-390.png
+?? ../../16-fixes/rail/st-open-hover.png
+?? ../../16-fixes/rail/st-open.png
+?? ../../16-fixes/rail/tail.log
+?? ../../16-fixes/rail/tail.log.mark
+?? ../../16-fixes/rail/user-after.png
+?? ../../16-fixes/rail/user-collapsed-hover.png
+?? ../../16-fixes/rail/user-expanded-menu.png
+?? "../../16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-home-g-gear-btn.png
+?? ../../16-fixes/rail/user-home-g-me-row.png
+?? "../../16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/user-menu.png
+?? ../../16-fixes/rail/user-settings-g-gear-btn.png
+?? ../../16-fixes/rail/user-settings-g-me-row.png
+?? "../../16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-strategies-g-gear-btn.png
+?? ../../16-fixes/rail/user-strategies-g-me-row.png
+?? "../../16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-trade-g-gear-btn.png
+?? ../../16-fixes/rail/user-trade-g-me-row.png
+?? "../../16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../ai/
+?? ../../baseline/
+?? ../../final/S01-backtest-ready.png
+?? ../../final/S02-early-processing.png
+?? ../../final/S02a-preparing.png
+?? ../../final/S02b-first-decision.png
+?? ../../final/S03-mid-processing.png
+?? ../../final/S03a-skip-signal.png
+?? ../../final/S03b-skip-review.png
+?? ../../final/S03c-between-events.png
+?? ../../final/S04-final-processing.png
+?? ../../final/S05-results-above-fold.png
+?? ../../final/S05b-results-hover.png
+?? ../../final/S06-results-evidence.png
+?? ../../final/S07-decision-detail.png
+?? ../../final/S08-trade-detail.png
+?? ../../final/S08b-result-full-page.png
+?? ../../final/S09-activation-choice.png
+?? ../../final/S10-card-path.png
+?? ../../final/S11-exchange-connection.png
+?? ../../final/S11a-exchange-form.png
+?? ../../final/S12-partner-exchange.png
+?? ../../final/S12b-partner-new-account.png
+?? ../../final/S13-uid-verification.png
+?? ../../final/S14-api-connection.png
+?? ../../final/S14a-api-form.png
+?? ../../final/S15-success.png
+?? ../../final/S15b-success-own-account.png
+?? ../../final/X01-uid-not-found.png
+?? ../../final/d1-w1440/S01-backtest-ready.png
+?? ../../final/d1-w1440/S02-early-processing.png
+?? ../../final/d1-w1440/S02a-preparing.png
+?? ../../final/d1-w1440/S03-mid-processing.png
+?? ../../final/d1-w1440/S04-final-processing.png
+?? ../../final/d1-w1440/S05-results-above-fold.png
+?? ../../final/d1-w1440/S06-results-evidence.png
+?? ../../final/d1-w1440/S07-decision-detail.png
+?? ../../final/d1-w1440/S08-trade-detail.png
+?? ../../final/d1-w1440/S09-activation-choice.png
+?? ../../final/d1-w1440/S10-card-path.png
+?? ../../final/d1-w1440/S11-exchange-connection.png
+?? ../../final/d1-w1440/S12-partner-exchange.png
+?? ../../final/d1-w1440/S13-uid-verification.png
+?? ../../final/d1-w1440/S14-api-connection.png
+?? ../../final/d1-w1440/S15-success.png
+?? ../../final/h1-w1440/S01-backtest-ready.png
+?? ../../final/h1-w1440/S02-early-processing.png
+?? ../../final/h1-w1440/S02a-preparing.png
+?? ../../final/h1-w1440/S03-mid-processing.png
+?? ../../final/h1-w1440/S04-final-processing.png
+?? ../../final/h1-w1440/S05-results-above-fold.png
+?? ../../final/h1-w1440/S06-results-evidence.png
+?? ../../final/h1-w1440/S07-decision-detail.png
+?? ../../final/h1-w1440/S08-trade-detail.png
+?? ../../final/h1-w1440/S09-activation-choice.png
+?? ../../final/h1-w1440/S10-card-path.png
+?? ../../final/h1-w1440/S11-exchange-connection.png
+?? ../../final/h1-w1440/S12-partner-exchange.png
+?? ../../final/h1-w1440/S13-uid-verification.png
+?? ../../final/h1-w1440/S14-api-connection.png
+?? ../../final/h1-w1440/S15-success.png
+?? ../../final/r1-w1440/S01-backtest-ready.png
+?? ../../final/r1-w1440/S02a-preparing.png
+?? ../../final/r1-w1440/S04-final-processing.png
+?? ../../final/r1-w1440/S05-results-above-fold.png
+?? ../../final/r1-w1440/S06-results-evidence.png
+?? ../../final/r1-w1440/S07-decision-detail.png
+?? ../../final/r1-w1440/S08-trade-detail.png
+?? ../../final/r1-w1440/S09-activation-choice.png
+?? ../../final/r1-w1440/S10-card-path.png
+?? ../../final/r1-w1440/S11-exchange-connection.png
+?? ../../final/r1-w1440/S12-partner-exchange.png
+?? ../../final/r1-w1440/S13-uid-verification.png
+?? ../../final/r1-w1440/S14-api-connection.png
+?? ../../final/r1-w1440/S15-success.png
+?? ../../final/seq/
+?? ../../final/w1280/S01-backtest-ready.png
+?? ../../final/w1280/S02-early-processing.png
+?? ../../final/w1280/S02a-preparing.png
+?? ../../final/w1280/S03-mid-processing.png
+?? ../../final/w1280/S04-final-processing.png
+?? ../../final/w1280/S05-results-above-fold.png
+?? ../../final/w1280/S06-results-evidence.png
+?? ../../final/w1280/S07-decision-detail.png
+?? ../../final/w1280/S08-trade-detail.png
+?? ../../final/w1280/S09-activation-choice.png
+?? ../../final/w1280/S10-card-path.png
+?? ../../final/w1280/S11-exchange-connection.png
+?? ../../final/w1280/S12-partner-exchange.png
+?? ../../final/w1280/S13-uid-verification.png
+?? ../../final/w1280/S14-api-connection.png
+?? ../../final/w1280/S15-success.png
+?? ../../final/w390/S01-backtest-ready.png
+?? ../../final/w390/S02-early-processing.png
+?? ../../final/w390/S02a-preparing.png
+?? ../../final/w390/S03-mid-processing.png
+?? ../../final/w390/S04-final-processing.png
+?? ../../final/w390/S05-results-above-fold.png
+?? ../../final/w390/S06-results-evidence.png
+?? ../../final/w390/S07-decision-detail.png
+?? ../../final/w390/S08-trade-detail.png
+?? ../../final/w390/S09-activation-choice.png
+?? ../../final/w390/S10-card-path.png
+?? ../../final/w390/S11-exchange-connection.png
+?? ../../final/w390/S12-partner-exchange.png
+?? ../../final/w390/S13-uid-verification.png
+?? ../../final/w390/S14-api-connection.png
+?? ../../final/w390/S15-success.png
+?? ../../final2/F01-a-uid-failed.png
+?? ../../final2/F01-b-after-continue.png
+?? ../../final2/F01-c-changed-uid-needs-api.png
+?? ../../final2/F01-d-success-valid.png
+?? ../../final2/F02-pick-reason.png
+?? ../../final2/F03-travel-1.png
+?? ../../final2/F03-travel-2.png
+?? ../../final2/F03-travel-3.png
+?? ../../final2/F03-travel-4.png
+?? ../../final2/R09-all-activity-d1.png
+?? ../../final2/S01-backtest-ready.png
+?? ../../final2/S02-early-processing.png
+?? ../../final2/S02a-preparing.png
+?? ../../final2/S02b-first-decision.png
+?? ../../final2/S03-mid-processing.png
+?? ../../final2/S03a-skip-signal.png
+?? ../../final2/S03b-skip-review.png
+?? ../../final2/S03c-between-events.png
+?? ../../final2/S04-final-processing.png
+?? ../../final2/S05-results-above-fold.png
+?? ../../final2/S05b-results-hover.png
+?? ../../final2/S06-results-evidence.png
+?? ../../final2/S07-decision-detail.png
+?? ../../final2/S08-trade-detail.png
+?? ../../final2/S08b-result-full-page.png
+?? ../../final2/S09-activation-choice.png
+?? ../../final2/S10-card-path.png
+?? ../../final2/S11-exchange-connection.png
+?? ../../final2/S11a-exchange-form.png
+?? ../../final2/S12-partner-exchange.png
+?? ../../final2/S12b-partner-new-account.png
+?? ../../final2/S13-uid-verification.png
+?? ../../final2/S14-api-connection.png
+?? ../../final2/S14a-api-form.png
+?? ../../final2/S15-success.png
+?? ../../final2/S15b-success-own-account.png
+?? ../../final2/X01-uid-not-found.png
+?? ../../final2/d1-w1440/S01-backtest-ready.png
+?? ../../final2/d1-w1440/S02-early-processing.png
+?? ../../final2/d1-w1440/S02a-preparing.png
+?? ../../final2/d1-w1440/S03-mid-processing.png
+?? ../../final2/d1-w1440/S04-final-processing.png
+?? ../../final2/d1-w1440/S05-results-above-fold.png
+?? ../../final2/d1-w1440/S06-results-evidence.png
+?? ../../final2/d1-w1440/S07-decision-detail.png
+?? ../../final2/d1-w1440/S08-trade-detail.png
+?? ../../final2/d1-w1440/S09-activation-choice.png
+?? ../../final2/d1-w1440/S10-card-path.png
+?? ../../final2/d1-w1440/S11-exchange-connection.png
+?? ../../final2/d1-w1440/S12-partner-exchange.png
+?? ../../final2/d1-w1440/S13-uid-verification.png
+?? ../../final2/d1-w1440/S14-api-connection.png
+?? ../../final2/d1-w1440/S15-success.png
+?? ../../final2/h1-w1440/S01-backtest-ready.png
+?? ../../final2/h1-w1440/S02-early-processing.png
+?? ../../final2/h1-w1440/S02a-preparing.png
+?? ../../final2/h1-w1440/S03-mid-processing.png
+?? ../../final2/h1-w1440/S04-final-processing.png
+?? ../../final2/h1-w1440/S05-results-above-fold.png
+?? ../../final2/h1-w1440/S06-results-evidence.png
+?? ../../final2/h1-w1440/S07-decision-detail.png
+?? ../../final2/h1-w1440/S08-trade-detail.png
+?? ../../final2/h1-w1440/S09-activation-choice.png
+?? ../../final2/h1-w1440/S10-card-path.png
+?? ../../final2/h1-w1440/S11-exchange-connection.png
+?? ../../final2/h1-w1440/S12-partner-exchange.png
+?? ../../final2/h1-w1440/S13-uid-verification.png
+?? ../../final2/h1-w1440/S14-api-connection.png
+?? ../../final2/h1-w1440/S15-success.png
+?? ../../final2/r1-w1440/S01-backtest-ready.png
+?? ../../final2/r1-w1440/S02a-preparing.png
+?? ../../final2/r1-w1440/S04-final-processing.png
+?? ../../final2/r1-w1440/S05-results-above-fold.png
+?? ../../final2/r1-w1440/S06-results-evidence.png
+?? ../../final2/r1-w1440/S07-decision-detail.png
+?? ../../final2/r1-w1440/S08-trade-detail.png
+?? ../../final2/r1-w1440/S09-activation-choice.png
+?? ../../final2/r1-w1440/S10-card-path.png
+?? ../../final2/r1-w1440/S11-exchange-connection.png
+?? ../../final2/r1-w1440/S12-partner-exchange.png
+?? ../../final2/r1-w1440/S13-uid-verification.png
+?? ../../final2/r1-w1440/S14-api-connection.png
+?? ../../final2/r1-w1440/S15-success.png
+?? ../../final2/seq/
+?? ../../final2/w1280/S01-backtest-ready.png
+?? ../../final2/w1280/S02-early-processing.png
+?? ../../final2/w1280/S02a-preparing.png
+?? ../../final2/w1280/S03-mid-processing.png
+?? ../../final2/w1280/S04-final-processing.png
+?? ../../final2/w1280/S05-results-above-fold.png
+?? ../../final2/w1280/S06-results-evidence.png
+?? ../../final2/w1280/S07-decision-detail.png
+?? ../../final2/w1280/S08-trade-detail.png
+?? ../../final2/w1280/S09-activation-choice.png
+?? ../../final2/w1280/S10-card-path.png
+?? ../../final2/w1280/S11-exchange-connection.png
+?? ../../final2/w1280/S12-partner-exchange.png
+?? ../../final2/w1280/S13-uid-verification.png
+?? ../../final2/w1280/S14-api-connection.png
+?? ../../final2/w1280/S15-success.png
+?? ../../final2/w390/S01-backtest-ready.png
+?? ../../final2/w390/S02-early-processing.png
+?? ../../final2/w390/S02a-preparing.png
+?? ../../final2/w390/S03-mid-processing.png
+?? ../../final2/w390/S04-final-processing.png
+?? ../../final2/w390/S05-results-above-fold.png
+?? ../../final2/w390/S06-results-evidence.png
+?? ../../final2/w390/S07-decision-detail.png
+?? ../../final2/w390/S08-trade-detail.png
+?? ../../final2/w390/S09-activation-choice.png
+?? ../../final2/w390/S10-card-path.png
+?? ../../final2/w390/S11-exchange-connection.png
+?? ../../final2/w390/S12-partner-exchange.png
+?? ../../final2/w390/S13-uid-verification.png
+?? ../../final2/w390/S14-api-connection.png
+?? ../../final2/w390/S15-success.png
+?? ../../final3/F01-a-uid-failed.png
+?? ../../final3/F01-b-after-continue.png
+?? ../../final3/F01-c-changed-uid-needs-api.png
+?? ../../final3/F01-d-success-valid.png
+?? ../../final3/F01R-reload-150ms.png
+?? ../../final3/F01R-reload-after-exchange-change.png
+?? ../../final3/F02-pick-reason.png
+?? ../../final3/F03-travel-1.png
+?? ../../final3/F03-travel-2.png
+?? ../../final3/F03-travel-3.png
+?? ../../final3/F03-travel-4.png
+?? ../../final3/R09-all-activity-d1.png
+?? ../../final3/S01-backtest-ready.png
+?? ../../final3/S02-early-processing.png
+?? ../../final3/S02a-preparing.png
+?? ../../final3/S02b-first-decision.png
+?? ../../final3/S03-mid-processing.png
+?? ../../final3/S03a-skip-signal.png
+?? ../../final3/S03b-skip-review.png
+?? ../../final3/S03c-between-events.png
+?? ../../final3/S04-final-processing.png
+?? ../../final3/S05-results-above-fold.png
+?? ../../final3/S05b-results-hover.png
+?? ../../final3/S06-results-evidence.png
+?? ../../final3/S07-decision-detail.png
+?? ../../final3/S08-trade-detail.png
+?? ../../final3/S08b-result-full-page.png
+?? ../../final3/S09-activation-choice.png
+?? ../../final3/S10-card-path.png
+?? ../../final3/S11-exchange-connection.png
+?? ../../final3/S11a-exchange-form.png
+?? ../../final3/S12-partner-exchange.png
+?? ../../final3/S12b-partner-new-account.png
+?? ../../final3/S13-uid-verification.png
+?? ../../final3/S14-api-connection.png
+?? ../../final3/S14a-api-form.png
+?? ../../final3/S15-success.png
+?? ../../final3/S15b-success-own-account.png
+?? ../../final3/X01-uid-not-found.png
+?? ../../final3/d1-w1440/S01-backtest-ready.png
+?? ../../final3/d1-w1440/S02-early-processing.png
+?? ../../final3/d1-w1440/S02a-preparing.png
+?? ../../final3/d1-w1440/S03-mid-processing.png
+?? ../../final3/d1-w1440/S04-final-processing.png
+?? ../../final3/d1-w1440/S05-results-above-fold.png
+?? ../../final3/d1-w1440/S06-results-evidence.png
+?? ../../final3/d1-w1440/S07-decision-detail.png
+?? ../../final3/d1-w1440/S08-trade-detail.png
+?? ../../final3/d1-w1440/S09-activation-choice.png
+?? ../../final3/d1-w1440/S10-card-path.png
+?? ../../final3/d1-w1440/S11-exchange-connection.png
+?? ../../final3/d1-w1440/S12-partner-exchange.png
+?? ../../final3/d1-w1440/S13-uid-verification.png
+?? ../../final3/d1-w1440/S14-api-connection.png
+?? ../../final3/d1-w1440/S15-success.png
+?? ../../final3/seq/
+?? ../../final3/w1280/P-help-button.png
+?? ../../final3/w1280/S01-backtest-ready.png
+?? ../../final3/w1280/S02-early-processing.png
+?? ../../final3/w1280/S02a-preparing.png
+?? ../../final3/w1280/S03-mid-processing.png
+?? ../../final3/w1280/S04-final-processing.png
+?? ../../final3/w1280/S05-results-above-fold.png
+?? ../../final3/w1280/S06-results-evidence.png
+?? ../../final3/w1280/S07-decision-detail.png
+?? ../../final3/w1280/S08-trade-detail.png
+?? ../../final3/w1280/S09-activation-choice.png
+?? ../../final3/w1280/S10-card-path.png
+?? ../../final3/w1280/S11-exchange-connection.png
+?? ../../final3/w1280/S12-partner-exchange.png
+?? ../../final3/w1280/S13-uid-verification.png
+?? ../../final3/w1280/S14-api-connection.png
+?? ../../final3/w1280/S15-success.png
+?? ../../final3/w390/S01-backtest-ready.png
+?? ../../final3/w390/S02-early-processing.png
+?? ../../final3/w390/S02a-preparing.png
+?? ../../final3/w390/S03-mid-processing.png
+?? ../../final3/w390/S04-final-processing.png
+?? ../../final3/w390/S05-results-above-fold.png
+?? ../../final3/w390/S06-results-evidence.png
+?? ../../final3/w390/S07-decision-detail.png
+?? ../../final3/w390/S08-trade-detail.png
+?? ../../final3/w390/S09-activation-choice.png
+?? ../../final3/w390/S10-card-path.png
+?? ../../final3/w390/S11-exchange-connection.png
+?? ../../final3/w390/S12-partner-exchange.png
+?? ../../final3/w390/S13-uid-verification.png
+?? ../../final3/w390/S14-api-connection.png
+?? ../../final3/w390/S15-success.png
+?? ../../fut/shots/U01-finder-top.png
+?? ../../fut/shots/U02-detail-f1.png
+?? ../../fut/shots/U02-detail-f5.png
+?? ../../fut/shots/U02-detail-f7.png
+?? ../../fut/shots/U03-replay-f1.png
+?? ../../fut/shots/U03-replay-f5.png
+?? ../../fut/shots/U03-replay-f7.png
+?? ../../fut/shots/U04-result-f1.png
+?? ../../fut/shots/U04-result-f5.png
+?? ../../fut/shots/U04-result-f7.png
+?? ../../fut/shots/U05-decision-f1.png
+?? ../../fut/shots/U05-decision-f5.png
+?? ../../fut/shots/U05-decision-f7.png
+?? ../../fut/shots/U06-trade-f1.png
+?? ../../fut/shots/U06-trade-f5.png
+?? ../../fut/shots/U06-trade-f7.png
+?? ../../fut/shots/U07-follow.png
+?? ../
+?? ../../mine-walk/
+?? ../../mine/M01-ready.png
+?? ../../mine/M02-replay.png
+?? ../../mine/M03-result.png
+?? ../../mine/M04-activation.png
+?? ../../mine/M05-connected.png
+?? ../../mine/M06-start.png
+?? ../../mine/verify-mine-log.txt
+?? ../../mine/w390/
+?? ../../mine2/
+?? ../../real/A01-chat-card.png
+?? ../../real/A02-ready.png
+?? ../../real/A03-result.png
+?? ../../round-1/S01-backtest-ready.png
+?? ../../round-1/S02-early-processing.png
+?? ../../round-1/S02a-preparing.png
+?? ../../round-1/S02b-first-decision.png
+?? ../../round-1/S03-mid-processing.png
+?? ../../round-1/S03b-between-events.png
+?? ../../round-1/S04-final-processing.png
+?? ../../round-1/S05-results-above-fold.png
+?? ../../round-1/S05b-results-hover.png
+?? ../../round-1/S06-results-evidence.png
+?? ../../round-1/S07-decision-detail.png
+?? ../../round-1/S08-trade-detail.png
+?? ../../round-1/S08b-result-full-page.png
+?? ../../round-1/S09-activation-choice.png
+?? ../../round-1/S10-card-path.png
+?? ../../round-1/S11-exchange-connection.png
+?? ../../round-1/S12-partner-exchange.png
+?? ../../round-1/S13-uid-verification.png
+?? ../../round-1/S14-api-connection.png
+?? ../../round-1/S14a-api-form.png
+?? ../../round-1/S15-success.png
+?? ../../round-1/S15b-success-own-exchange.png
+?? ../../round-1/S15c-success-full-page.png
+?? ../../round-1/X01-uid-not-found.png
+?? ../../round-1/d1-w1440/S01-backtest-ready.png
+?? ../../round-1/d1-w1440/S02-early-processing.png
+?? ../../round-1/d1-w1440/S02a-preparing.png
+?? ../../round-1/d1-w1440/S04-final-processing.png
+?? ../../round-1/d1-w1440/S05-results-above-fold.png
+?? ../../round-1/d1-w1440/S06-results-evidence.png
+?? ../../round-1/d1-w1440/S07-decision-detail.png
+?? ../../round-1/d1-w1440/S08-trade-detail.png
+?? ../../round-1/d1-w1440/S09-activation-choice.png
+?? ../../round-1/d1-w1440/S10-card-path.png
+?? ../../round-1/d1-w1440/S11-exchange-connection.png
+?? ../../round-1/d1-w1440/S12-partner-exchange.png
+?? ../../round-1/d1-w1440/S13-uid-verification.png
+?? ../../round-1/d1-w1440/S14-api-connection.png
+?? ../../round-1/d1-w1440/S15-success.png
+?? ../../round-1/r1-w1440/S01-backtest-ready.png
+?? ../../round-1/r1-w1440/S02-early-processing.png
+?? ../../round-1/r1-w1440/S02a-preparing.png
+?? ../../round-1/r1-w1440/S04-final-processing.png
+?? ../../round-1/r1-w1440/S05-results-above-fold.png
+?? ../../round-1/r1-w1440/S06-results-evidence.png
+?? ../../round-1/r1-w1440/S07-decision-detail.png
+?? ../../round-1/r1-w1440/S08-trade-detail.png
+?? ../../round-1/r1-w1440/S09-activation-choice.png
+?? ../../round-1/r1-w1440/S10-card-path.png
+?? ../../round-1/r1-w1440/S11-exchange-connection.png
+?? ../../round-1/r1-w1440/S12-partner-exchange.png
+?? ../../round-1/r1-w1440/S13-uid-verification.png
+?? ../../round-1/r1-w1440/S14-api-connection.png
+?? ../../round-1/r1-w1440/S15-success.png
+?? ../../round-1/seq/
+?? ../../round-1/w1280/S01-backtest-ready.png
+?? ../../round-1/w1280/S02-early-processing.png
+?? ../../round-1/w1280/S02a-preparing.png
+?? ../../round-1/w1280/S03-mid-processing.png
+?? ../../round-1/w1280/S04-final-processing.png
+?? ../../round-1/w1280/S05-results-above-fold.png
+?? ../../round-1/w1280/S06-results-evidence.png
+?? ../../round-1/w1280/S07-decision-detail.png
+?? ../../round-1/w1280/S08-trade-detail.png
+?? ../../round-1/w1280/S09-activation-choice.png
+?? ../../round-1/w1280/S10-card-path.png
+?? ../../round-1/w1280/S11-exchange-connection.png
+?? ../../round-1/w1280/S12-partner-exchange.png
+?? ../../round-1/w1280/S13-uid-verification.png
+?? ../../round-1/w1280/S14-api-connection.png
+?? ../../round-1/w1280/S15-success.png
+?? ../../round-1/w390/S01-backtest-ready.png
+?? ../../round-1/w390/S02-early-processing.png
+?? ../../round-1/w390/S02a-preparing.png
+?? ../../round-1/w390/S03-mid-processing.png
+?? ../../round-1/w390/S04-final-processing.png
+?? ../../round-1/w390/S05-results-above-fold.png
+?? ../../round-1/w390/S06-results-evidence.png
+?? ../../round-1/w390/S07-decision-detail.png
+?? ../../round-1/w390/S08-trade-detail.png
+?? ../../round-1/w390/S09-activation-choice.png
+?? ../../round-1/w390/S10-card-path.png
+?? ../../round-1/w390/S11-exchange-connection.png
+?? ../../round-1/w390/S12-partner-exchange.png
+?? ../../round-1/w390/S13-uid-verification.png
+?? ../../round-1/w390/S14-api-connection.png
+?? ../../round-1/w390/S15-success.png
+?? ../../round-2/S01-backtest-ready.png
+?? ../../round-2/S02-early-processing.png
+?? ../../round-2/S02a-preparing.png
+?? ../../round-2/S02b-first-decision.png
+?? ../../round-2/S03-mid-processing.png
+?? ../../round-2/S03a-skip-signal.png
+?? ../../round-2/S03b-skip-review.png
+?? ../../round-2/S03c-between-events.png
+?? ../../round-2/S04-final-processing.png
+?? ../../round-2/S05-results-above-fold.png
+?? ../../round-2/S05b-results-hover.png
+?? ../../round-2/S06-results-evidence.png
+?? ../../round-2/S07-decision-detail.png
+?? ../../round-2/S08-trade-detail.png
+?? ../../round-2/S08b-result-full-page.png
+?? ../../round-2/S09-activation-choice.png
+?? ../../round-2/S10-card-path.png
+?? ../../round-2/S11-exchange-connection.png
+?? ../../round-2/S11a-exchange-form.png
+?? ../../round-2/S12-partner-exchange.png
+?? ../../round-2/S12b-partner-new-account.png
+?? ../../round-2/S13-uid-verification.png
+?? ../../round-2/S14-api-connection.png
+?? ../../round-2/S14a-api-form.png
+?? ../../round-2/S15-success.png
+?? ../../round-2/S15b-success-own-account.png
+?? ../../round-2/X01-uid-not-found.png
+?? ../../round-2/d1-w1440/S01-backtest-ready.png
+?? ../../round-2/d1-w1440/S02-early-processing.png
+?? ../../round-2/d1-w1440/S02a-preparing.png
+?? ../../round-2/d1-w1440/S03-mid-processing.png
+?? ../../round-2/d1-w1440/S04-final-processing.png
+?? ../../round-2/d1-w1440/S05-results-above-fold.png
+?? ../../round-2/d1-w1440/S06-results-evidence.png
+?? ../../round-2/d1-w1440/S07-decision-detail.png
+?? ../../round-2/d1-w1440/S08-trade-detail.png
+?? ../../round-2/d1-w1440/S09-activation-choice.png
+?? ../../round-2/d1-w1440/S10-card-path.png
+?? ../../round-2/d1-w1440/S11-exchange-connection.png
+?? ../../round-2/d1-w1440/S12-partner-exchange.png
+?? ../../round-2/d1-w1440/S13-uid-verification.png
+?? ../../round-2/d1-w1440/S14-api-connection.png
+?? ../../round-2/d1-w1440/S15-success.png
+?? ../../round-2/h1-w1440/S01-backtest-ready.png
+?? ../../round-2/h1-w1440/S02-early-processing.png
+?? ../../round-2/h1-w1440/S02a-preparing.png
+?? ../../round-2/h1-w1440/S03-mid-processing.png
+?? ../../round-2/h1-w1440/S04-final-processing.png
+?? ../../round-2/h1-w1440/S05-results-above-fold.png
+?? ../../round-2/h1-w1440/S06-results-evidence.png
+?? ../../round-2/h1-w1440/S07-decision-detail.png
+?? ../../round-2/h1-w1440/S08-trade-detail.png
+?? ../../round-2/h1-w1440/S09-activation-choice.png
+?? ../../round-2/h1-w1440/S10-card-path.png
+?? ../../round-2/h1-w1440/S11-exchange-connection.png
+?? ../../round-2/h1-w1440/S12-partner-exchange.png
+?? ../../round-2/h1-w1440/S13-uid-verification.png
+?? ../../round-2/h1-w1440/S14-api-connection.png
+?? ../../round-2/h1-w1440/S15-success.png
+?? ../../round-2/r1-w1440/S01-backtest-ready.png
+?? ../../round-2/r1-w1440/S02a-preparing.png
+?? ../../round-2/r1-w1440/S04-final-processing.png
+?? ../../round-2/r1-w1440/S05-results-above-fold.png
+?? ../../round-2/r1-w1440/S06-results-evidence.png
+?? ../../round-2/r1-w1440/S07-decision-detail.png
+?? ../../round-2/r1-w1440/S08-trade-detail.png
+?? ../../round-2/r1-w1440/S09-activation-choice.png
+?? ../../round-2/r1-w1440/S10-card-path.png
+?? ../../round-2/r1-w1440/S11-exchange-connection.png
+?? ../../round-2/r1-w1440/S12-partner-exchange.png
+?? ../../round-2/r1-w1440/S13-uid-verification.png
+?? ../../round-2/r1-w1440/S14-api-connection.png
+?? ../../round-2/r1-w1440/S15-success.png
+?? ../../round-2/seq/
+?? ../../round-2/w1280/S01-backtest-ready.png
+?? ../../round-2/w1280/S02-early-processing.png
+?? ../../round-2/w1280/S02a-preparing.png
+?? ../../round-2/w1280/S03-mid-processing.png
+?? ../../round-2/w1280/S04-final-processing.png
+?? ../../round-2/w1280/S05-results-above-fold.png
+?? ../../round-2/w1280/S06-results-evidence.png
+?? ../../round-2/w1280/S07-decision-detail.png
+?? ../../round-2/w1280/S08-trade-detail.png
+?? ../../round-2/w1280/S09-activation-choice.png
+?? ../../round-2/w1280/S10-card-path.png
+?? ../../round-2/w1280/S11-exchange-connection.png
+?? ../../round-2/w1280/S12-partner-exchange.png
+?? ../../round-2/w1280/S13-uid-verification.png
+?? ../../round-2/w1280/S14-api-connection.png
+?? ../../round-2/w1280/S15-success.png
+?? ../../round-2/w390/S01-backtest-ready.png
+?? ../../round-2/w390/S02-early-processing.png
+?? ../../round-2/w390/S02a-preparing.png
+?? ../../round-2/w390/S03-mid-processing.png
+?? ../../round-2/w390/S04-final-processing.png
+?? ../../round-2/w390/S05-results-above-fold.png
+?? ../../round-2/w390/S06-results-evidence.png
+?? ../../round-2/w390/S07-decision-detail.png
+?? ../../round-2/w390/S08-trade-detail.png
+?? ../../round-2/w390/S09-activation-choice.png
+?? ../../round-2/w390/S10-card-path.png
+?? ../../round-2/w390/S11-exchange-connection.png
+?? ../../round-2/w390/S12-partner-exchange.png
+?? ../../round-2/w390/S13-uid-verification.png
+?? ../../round-2/w390/S14-api-connection.png
+?? ../../round-2/w390/S15-success.png
+?? ../../../ux-audit/card3/log-codex-card3.txt
+?? ../../../ux-audit/card3/log-codex-hero.txt
+?? ../../../ux-audit/detail/fx-mid-1440.png
+?? ../../../ux-audit/detail/log-codex-crit.txt
+?? ../../../ux-audit/detail/log-codex.txt
+?? ../../../ux-audit/footer2/black-spa-390.png
+?? ../../../ux-audit/footer2/live-trade-footer-1440.png
+?? ../../../ux-audit/footer2/log-codex-bar.txt
+?? ../../../ux-audit/footer2/log-codex-crit.txt
+?? ../../../ux-audit/footer2/log-codex.txt
+?? ../../../ux-audit/footer2/ours-bar-390.png
+?? ../../../ux-audit/footer2/r3-gap-1440.png
+?? ../../../ux-audit/footer2/r5-hero-next-390.png
+?? ../../../ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ../../../ux-audit/footer2/video-frame-3s.jpg
+?? ../../../ux-audit/footer2/video-frame-5s.jpg
+?? ../../../ux-audit/footer2/video-frame-6.2s.jpg
+?? ../../../ux-audit/hero/frame3-codex.png
+?? ../../../ux-audit/hero/frame3.png
+?? ../../../ux-audit/hero/log-agy.txt
+?? ../../../ux-audit/hero/log-codex-crit.txt
+?? ../../../ux-audit/hero/log-codex.txt
+?? ../../../ux-audit/hero/prompt-agy.md
+?? ../../../ux-audit/hero/prompt-codex-crit.md
+?? ../../../ux-audit/hero/prompt-codex.md
+?? ../../../ux-audit/logs/
+?? ../../../ux-audit/research/log-codex-verify.txt
+?? ../../../ux-audit/review/
+?? ../../../ux-audit/spark/log-codex.txt
+
+ succeeded in 103ms:
+s1\PROMPT.md
+
+ succeeded in 81ms:
+C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy .\\.mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n "st-page|st-card|st-row|st-section|st-title|결제 정보|로그인된 기기|다른 기기 모두|TETH 구독" index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 72ms:
+317:.st-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-1);padding:18px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:16px}
+318:.st-card .st-info{flex:1;min-width:200px}
+319:.st-card .st-name{font-size:15px;font-weight:700}
+320:.st-card .st-meta{font-size:12.5px;color:var(--text-3);margin-top:3px}
+1341:.g-hist-row{display:flex;align-items:center;gap:18px;min-height:58px;padding:0 14px;margin:0 -8px;cursor:pointer;border-radius:14px;transition:background .12s}
+1342:.g-hist-row:hover{background:rgba(255,255,255,.05)}
+1343:.g-hist-row .t{flex:1;min-width:0;font-size:16px;color:var(--gt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+1344:.g-hist-row .d{font-size:13.5px;color:var(--gt2);flex-shrink:0}
+1345:@media(max-width:860px){.g-hist{padding:18px 14px 40px}.g-hist-search{height:48px}.g-hist-row{min-height:52px}.g-hist-row .t{font-size:15px}}
+8045:  el.innerHTML='<div class="st-card">'+
+10529:    return '<div class="g-hist-row" onclick="gSelect(\''+r.sx.id+'\')"><span class="t">'+gEsc(r.sx.title)+'</span><span class="d num">'+gHistDate(r.ts)+'</span></div>';
+21652:  if(sv&&!a.newCard) return '<div class="acx-plan"><div><b>TETH 구독</b><span>거래소 계정은 지금 쓰는 것을 그대로 연결합니다.</span></div><strong class="num">'+acUsd(AC_CFG.price)+'<small> / 월</small></strong></div>'
+21656:  return '<div class="acx-plan"><div><b>TETH 구독</b><span>거래소 계정은 지금 쓰는 것을 그대로 연결합니다.</span></div><strong class="num">'+acUsd(AC_CFG.price)+'<small> / 월</small></strong></div>'
+21674:function acBillAdd(st,card,amt,label){ var a=acS(); a.bill.unshift({id:'T'+Date.now().toString(36).toUpperCase(),at:Date.now(),label:label||'TETH 구독',amt:amt,st:st,last4:card?card.last4:'',brand:card?card.brand:''}); }
+21920:  acConfirm({title:'계정을 삭제하시겠습니까?',body:'삭제하면 되돌릴 수 없습니다. 아래 내용이 모두 지워집니다.',list:['만든 전략과 백테스트 기록','복사해 실행 중인 전략'+(live+cps?' ('+(live+cps)+'개는 즉시 멈춥니다)':''),'거래소 연결과 결제 정보','대화 기록'].concat(acSubOn()?['구독은 즉시 해지되며 남은 기간은 환불되지 않습니다']:[]),type:'삭제',ok:'계정 삭제',danger:1,run:function(){
+21934:  var plan=on?stRow('TETH 구독','<span class="num">'+acUsd((sub&&sub.price)||AC_CFG.price)+' / 월</span>',(sub&&sub.st==='cancelled')?stBtn('구독 다시 시작','stSubResume()','p'):'',(sub&&sub.st==='cancelled')?'<span class="num">'+stDate(sub.until)+'</span> 까지 쓸 수 있습니다. 그 뒤에는 결제되지 않습니다':'다음 결제일 <span class="num">'+stDate((sub&&sub.next)||Date.now()+30*864e5)+'</span>')
+21946:    +(acc==='partner'&&!a.cards.length&&!a.bill.length?'':'<section class="stg-sec"><header><h2>결제 정보</h2>'+(ST.edit==='bill'?'':stBtn('편집','stEdit(\'bill\')'))+'</header>'+info+'</section>'
+21950:function stBillSave(){ var e=(document.getElementById('st-be').value||'').trim(), n=(document.getElementById('st-bn').value||'').trim(), ad=(document.getElementById('st-ba').value||'').trim(), er=document.getElementById('st-bi-e'); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ er.textContent='결제 이메일을 확인해 주십시오'; return; } if(!n){ er.textContent='이름을 입력해 주십시오'; return; } acS().billTo={email:e,name:n,addr:ad}; ST.edit=null; acSave(); stRe(); toast('결제 정보를 저장했습니다'); }
+21967:    +stSec('로그인된 기기',stRow(dev+', '+br,'<span class="stg-tag def">이 기기</span>','','지금 사용 중')+(s.devices||[]).map(function(d){ return stRow(d.n,'<span class="num">'+gEsc(d.at)+'</span>',stBtn('로그아웃','stOutOne(\''+d.id+'\')'),gEsc(d.where)); }).join('')+stRow('다른 기기 모두 로그아웃','',stBtn('로그아웃','stOutAll()'),'이 기기를 뺀 모든 곳에서 로그아웃합니다'))
+22495:  var paid='<article class="pl-card"><div class="pl-top"><span class="pl-lb">TETH 구독</span></div><h2 class="pl-h">지금 쓰는 계정 그대로</h2>'
+22541:    +'<div class="pl-cogrid"><section class="pl-left"><h3 class="pl-t3">TETH 구독</h3><p class="pl-d2">'+(fixed?'이 전략의 거래소가 정해져 있습니다.':'먼저 연결할 거래소를 고르십시오. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.')+'</p>'+exs
+22543:    +'<aside class="pl-right"><div class="pl-sumcard"><h2>TETH 구독</h2><p>선택한 거래소 계정으로 전략을 실행합니다.</p><ul class="pl-items sm">'
+22625:      {id:'13',key:'ac-paid',label:'⑬ 구독 회원, Bybit, 카드와 결제 내역',login:true,ac:function(a,t){ a.route='paid'; a.ex='bybit'; a.conn={bybit:mk('bybit','paid',Date.now()-40*864e5)}; t.api={ex:'bybit',last4:'4242',oauth:true}; t.conn=true; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true},{id:'cqa2',last4:'0005',brand:'Mastercard',exp:'03/28',name:'KIM DOHYUN',def:false}]; a.sub={st:'active',since:Date.now()-40*864e5,next:Date.now()+20*864e5,price:AC_CFG.price}; a.billTo={email:S.user.email,name:'KIM DOHYUN',addr:'서울특별시 강남구 테헤란로 152'}; a.bill=[{id:'TQA3',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-10*864e5,card:'Visa •••• 4242'},{id:'TQA2',st:'failed',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-11*864e5,card:'Mastercard •••• 0005'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'}]; }},
+22626:      {id:'14',key:'ac-two',label:'⑭ 두 곳 연결(Bitget 초대 + OKX 구독), 2단계 인증, 기기 2대',login:true,ac:function(a,t){ a.route='partner'; a.ex='bitget'; a.conn={bitget:mk('bitget','partner',Date.now()-60*864e5),okx:mk('okx','paid',Date.now()-5*864e5)}; t.api={ex:'bitget',last4:null,oauth:true}; t.conn=true; t.uidLinked=true; t.uid='38291042'; t.payDone=true; t.plan='paid'; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'active',since:Date.now()-5*864e5,next:Date.now()+25*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-5*864e5,card:'Visa •••• 4242'}]; var s=(t.st=t.st||{}); s.twofa=true; s.pwAt=Date.now()-20*864e5; s.devices=[{id:'d1',n:'iPhone, Safari',at:'오늘 08:12',where:'서울'}]; }},
+22627:      {id:'15',key:'ac-expired',label:'⑮ 구독 만료, 카드 있음',login:true,ac:function(a,t){ a.route='paid'; a.ex='bitget'; a.conn={bitget:mk('bitget','paid',Date.now()-70*864e5)}; t.api={ex:'bitget',last4:'4242',oauth:true}; t.conn=true; t.payDone=false; a.cards=[{id:'cqa1',last4:'4242',brand:'Visa',exp:'12/29',name:'KIM DOHYUN',def:true}]; a.sub={st:'cancelled',since:Date.now()-70*864e5,until:Date.now()-2*864e5,price:AC_CFG.price}; a.bill=[{id:'TQA2',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-40*864e5,card:'Visa •••• 4242'},{id:'TQA1',st:'paid',label:'TETH 구독',amt:AC_CFG.price,at:Date.now()-70*864e5,card:'Visa •••• 4242'}]; }}
+
+ exited 1 in 320ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -LiteralPath 'index.html' -Encoding UTF8 | Select-Object -Skip 21925 -First 65\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n \"\\.stg|function stBill|function stSecurity|function stRow|function stSec\" index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg --files .mailbox/inbox/codex' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 86ms:
+6790:.acx-cf input,.stg-in{height:42px;padding:0 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0e0f11;color:#f2f3f5;font:inherit;font-size:14.5px;outline:0;min-width:0}
+6791:.acx-cf input:focus,.stg-in:focus{border-color:rgba(255,255,255,.5)}
+6792:.acx-cf .er,.stg .er{display:block;min-height:18px;margin-top:6px;font-size:12.5px;color:#f58a98}
+6798:.stg-dlg .btg-form{margin-top:6px}
+6842:.stg{display:grid;grid-template-columns:232px minmax(0,1fr);gap:0;max-width:1080px;margin:0 auto;padding:24px 24px 96px;color:#e9ebee}
+6843:.stg-nav{position:sticky;top:16px;align-self:start;display:grid;gap:2px;padding-right:28px}
+6844:.stg-nav small{display:block;margin:18px 12px 6px;font-size:11.5px;color:#80858c}
+6845:.stg-back{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:0;background:none;color:#aeb3ba;font:inherit;font-size:13.5px;cursor:pointer;border-radius:10px;text-align:left}
+6846:.stg-back:hover{color:#fff;background:rgba(255,255,255,.05)}
+6847:.stg-ni{display:flex;align-items:center;gap:11px;height:38px;padding:0 12px;border:0;border-radius:10px;background:none;color:#cfd3d8;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+6848:.stg-ni svg{color:#8b9096;flex:none}
+6849:.stg-ni:hover{background:rgba(255,255,255,.05)}
+6850:.stg-ni.on{background:rgba(255,255,255,.09);color:#fff;font-weight:600}
+6851:.stg-ni.on svg{color:#fff}
+6852:.stg-main{min-width:0;max-width:720px;padding-top:6px}
+6853:.stg-main h1{margin:0 0 26px;font-size:26px;font-weight:700;letter-spacing:-.015em}
+6854:.stg-sec{margin:0 0 30px}
+6855:.stg-sec header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px;min-height:34px}
+6856:.stg-sec h2{margin:0;font-size:15px;font-weight:600;color:#e9ebee}
+6857:.stg-card{border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.015);overflow:hidden}
+6858:.stg-r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;min-height:60px;padding:12px 18px;border-top:1px solid rgba(255,255,255,.07)}
+6859:.stg-r:first-child{border-top:0}
+6860:.stg-r .k{min-width:0;display:grid;gap:3px}
+6861:.stg-r .k b{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:500;color:#f2f3f5}
+6862:.stg-r .k b img{border-radius:5px}
+6863:.stg-r .k span{font-size:12.5px;line-height:1.55;color:#8b9096}
+6864:.stg-r .v{font-size:14px;color:#cfd3d8;text-align:right;min-width:0}
+6865:.stg-r .a{display:flex;gap:6px;align-items:center}
+6866:.stg-r.ed{grid-template-columns:120px minmax(0,1fr) auto;align-items:start;padding-top:14px}
+6867:.stg-r.ed .v{text-align:left;display:flex;flex-wrap:wrap;align-items:center;gap:0 4px}
+6868:.stg-r.ed .v .stg-in{flex:1;min-width:120px}.stg-r.ed .v .er{flex:1 0 100%}
+6869:.stg-r.ed .k b{line-height:42px}
+6870:.stg-at{color:#8b9096;font-size:15px}
+6871:.stg-r.cd .k{grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:center}
+6872:.stg-r.cd .k svg{color:#aeb3ba}
+6873:.stg-r.cd .k div{display:grid;gap:2px}
+6874:.stg-r.cd .k div b{font-size:14.5px}
+6875:.stg-b{height:34px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#e9ebee;font:inherit;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+6876:.stg-b:hover{background:rgba(255,255,255,.1)}
+6877:.stg-b.p{background:#f2f3f5;border-color:#f2f3f5;color:#0e0f11;font-weight:600}
+6878:.stg-b.dg{color:#ff8b94;border-color:rgba(240,86,106,.4);background:rgba(240,86,106,.07)}
+6879:.stg-b.dg:hover{background:rgba(240,86,106,.16)}
+6880:.stg-sel{height:36px;padding:0 30px 0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aeb3ba' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center;color:#e9ebee;font:inherit;font-size:13px;appearance:none;-webkit-appearance:none;cursor:pointer}
+6881:.stg-sel option{background:#15171a}
+6882:.stg-seg{display:inline-flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.06);gap:2px}
+6883:.stg-seg button{height:30px;padding:0 13px;border-radius:999px;border:0;background:none;color:#aeb3ba;font:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+6884:.stg-seg button[aria-pressed=true]{background:#f2f3f5;color:#0e0f11;font-weight:600}
+6885:.stg-seg button:disabled{cursor:default}
+6886:.stg-sw{width:44px;height:26px;border-radius:999px;border:0;background:rgba(255,255,255,.16);position:relative;cursor:pointer;transition:background-color .15s ease}
+6887:.stg-sw i{position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .15s ease}
+6888:.stg-sw[aria-checked=true]{background:#3b82f6}.stg-sw[aria-checked=true] i{transform:translateX(18px)}
+6889:.stg-pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.07);font-size:12.5px;color:#aeb3ba}
+6890:.stg-pill.on{background:rgba(47,185,138,.13);color:#5fd6a9}
+6891:.stg-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:500;background:rgba(255,255,255,.09);color:#cfd3d8;white-space:nowrap}
+6892:.stg-tag.failed{background:rgba(240,86,106,.14);color:#ff9aa5}.stg-tag.refunded{background:rgba(240,184,64,.14);color:#f0c668}
+6893:.stg-tbl{border:1px solid rgba(255,255,255,.09);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.015)}
+6894:.stg-tr{display:grid;grid-template-columns:minmax(0,1.4fr) 110px 96px 96px 14px;gap:12px;align-items:center;width:100%;min-height:52px;padding:8px 18px;border:0;border-top:1px solid rgba(255,255,255,.07);background:none;color:#cfd3d8;font:inherit;font-size:13.5px;text-align:left;cursor:pointer}
+6895:.stg-tr:first-child{border-top:0}.stg-tr:hover{background:rgba(255,255,255,.03)}
+6896:.stg-tr b{font-weight:500;color:#f2f3f5}.stg-tr .am{text-align:right}.stg-tr svg{color:#8b9096}
+6897:.stg-empty{margin:0;padding:22px 18px;font-size:13.5px;color:#8b9096}
+6898:.stg-warn{margin:0 0 16px;padding:12px 14px;border-radius:10px;background:rgba(240,86,106,.09);border:1px solid rgba(240,86,106,.3);color:#f7b3bc;font-size:13.5px}
+6899:.stg-form{display:grid;gap:12px;padding:18px}
+6900:.stg-form label{display:grid;gap:6px;font-size:12.5px;color:#8b9096}
+6901:.stg-form .bts{display:flex;justify-content:flex-end;gap:6px}
+6902:.stg-rc{margin:6px 0 0;display:grid;gap:0;border:1px solid rgba(255,255,255,.09);border-radius:12px;overflow:hidden}
+6903:.stg-rc div{display:flex;justify-content:space-between;gap:16px;padding:11px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:13.5px}
+6904:.stg-rc div:first-child{border-top:0}.stg-rc dt{color:#8b9096}.stg-rc dd{margin:0;color:#f2f3f5;text-align:right}
+6905:body.light .stg,body.light .acx-page,body.light .acx-entry{color:#16181b}
+6907:  .stg{grid-template-columns:1fr;padding:12px 16px 80px}
+6908:  .stg-nav{position:static;display:flex;gap:4px;overflow-x:auto;padding:0 0 12px;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:18px}
+6909:  .stg-nav small{display:none}.stg-ni,.stg-back{flex:none}
+6910:  .stg-r{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
+6911:  .stg-r .v{grid-column:1;text-align:left}.stg-r .a{grid-column:2;grid-row:1}
+6912:  .stg-r .v:empty{display:none}
+6913:  .stg-r.ed{grid-template-columns:1fr}.stg-r.ed .a{grid-column:1;grid-row:auto;justify-content:flex-end}
+6914:  .stg-tr{grid-template-columns:minmax(0,1fr) auto 14px;gap:4px 10px}
+6915:  .stg-tr span.num:not(.am){grid-column:1;grid-row:2;font-size:12px;color:#8b9096}
+6916:  .stg-tr .stg-tag{grid-column:2;grid-row:2;justify-self:end}.stg-tr .am{grid-column:2;grid-row:1}.stg-tr svg{grid-column:3;grid-row:1/3}
+6943:@media (max-width:900px){ .stg{padding-bottom:120px} .acx-page,.acx-entry{padding-bottom:120px} }
+6946:@media (max-width:900px){ .acx-page{padding-top:76px} .stg{padding-top:20px} .stg-r .a,.acx-now .r button,.stg-tr{margin-right:0} .stg-main,.acx-pg{padding-right:0} .stg-sec:last-child,.acx-help{margin-bottom:72px} }
+6950:body.st-full .stg{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:none;margin:0;padding:0;min-height:100%}
+6951:body.st-full .stg-nav{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;width:280px;z-index:40;display:flex;flex-direction:column;gap:2px;padding:14px 10px 20px;background:var(--g1,#171717);overflow-y:auto;scrollbar-width:thin}
+6952:body.st-full .stg-nav small{margin:20px 12px 6px}
+6953:body.st-full .stg-back{height:40px;margin-bottom:4px;font-size:14px;color:#e9ebee}
+6954:body.st-full .stg-main{width:100%;max-width:820px;margin:0 auto;padding:48px 40px 120px}
+6955:body.st-full .stg-main h1{font-size:28px;margin-bottom:30px}
+6957:  body.st-full .stg{display:block}
+6958:  body.st-full .stg-nav{position:sticky;top:0;bottom:auto;width:auto;height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:4px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.08);background:var(--g0,#0e0f11)}
+6959:  body.st-full .stg-nav small{display:none}
+6960:  body.st-full .stg-back{position:sticky;left:-12px;z-index:2;flex:none;margin:0 4px 0 -12px;font-size:0;width:50px;padding:0 0 0 12px;justify-content:center;background:var(--g0,#0e0f11);border-radius:0;box-shadow:8px 0 10px -4px var(--g0,#0e0f11)}
+6961:  body.st-full .stg-back svg{width:18px;height:18px}
+6962:  body.st-full .stg-main{margin:0;padding:20px 16px 120px;max-width:none}
+6969:body.st-full .stg{transition:grid-template-columns .28s cubic-bezier(.2,.7,.2,1)}
+6970:body.st-full .stg.nav-hid{grid-template-columns:0 minmax(0,1fr)}
+6971:body.st-full .stg-nav{transition:transform .28s cubic-bezier(.2,.7,.2,1),opacity .2s ease;overflow-x:hidden;white-space:nowrap;padding-top:60px}
+6972:body.st-full .stg.nav-hid .stg-nav{transform:translateX(-100%);opacity:0;pointer-events:none}
+6973:body.st-full .stg-main{transition:padding .28s cubic-bezier(.2,.7,.2,1)}
+6974:body.st-full .stg.nav-hid .stg-main{padding-left:88px}
+6975:.stg-tg{position:fixed;left:14px;top:12px;z-index:45;width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:#aeb3ba;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+6976:.stg-tg:hover{background:rgba(255,255,255,.08);color:#fff}
+6977:body:not(.st-full) .stg-tg{display:none}
+6978:@media (max-width:900px){ .stg-tg{display:none!important} body.st-full .stg.nav-hid{grid-template-columns:none} body.st-full .stg.nav-hid .stg-nav{transform:none;opacity:1;pointer-events:auto} body.st-full .stg.nav-hid .stg-main{padding-left:16px} }
+6989:body.st-full .stg.nav-hid{grid-template-columns:64px minmax(0,1fr)}
+6990:body.st-full .stg.nav-hid .stg-main{padding-left:40px}
+6991:body.st-full .stg-rail{display:none;position:sticky;top:0;align-self:start;height:100vh;height:100dvh;width:64px;flex-direction:column;align-items:center;gap:6px;padding:10px 0;background:var(--g0,#0e0f11);border-right:1px solid rgba(255,255,255,.07);z-index:41}
+6992:body.st-full .stg.nav-hid .stg-rail{display:flex;animation:stRailIn .28s cubic-bezier(.2,.7,.2,1) both}
+6994:body.st-full .stg.nav-hid .stg-tg{display:none}
+6995:.stg-rl,.stg-ri{position:relative;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#cfd3d8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+6996:.stg-rl{margin-bottom:8px}
+6997:.stg-ri:hover{background:rgba(255,255,255,.08);color:#fff}
+6998:.stg-rl .logo{width:26px;height:26px}
+6999:.stg-rl .tg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s ease;color:#e9ebee}
+7000:.stg-rl:hover .logo{opacity:0}.stg-rl:hover .tg{opacity:1}.stg-rl:hover{background:rgba(255,255,255,.08)}
+7001:.stg-rl .tip,.stg-ri .tip,.stg-tg .tip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:7px 12px;border-radius:999px;background:#2a2d31;color:#f2f3f5;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .12s ease,transform .12s ease;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+7002:.stg-rl:hover .tip,.stg-ri:hover .tip,.stg-tg:hover .tip{opacity:1;transform:translateY(-50%)}
+7003:.stg-tg{overflow:visible}
+7004:@media (max-width:900px){ body.st-full .stg-rail{display:none!important} }
+7006:body.st-full .stg{grid-template-rows:auto;grid-template-areas:"nav main"}
+7007:body.st-full .stg-nav{grid-area:nav}
+7008:body.st-full .stg-rail{grid-area:nav}
+7009:body.st-full .stg-main{grid-area:main}
+7010:body.st-full .stg.nav-hid .stg-nav{position:absolute;left:0;top:0;height:100vh;height:100dvh;width:280px}
+7011:body.st-full .stg{position:relative}
+7012:.stg-rl .logo{width:28px;height:28px;background-size:contain;background-position:center;background-repeat:no-repeat;transition:opacity .15s ease}
+7013:.stg-rl .logo{background-image:var(--logo-uri)}
+7014:.stg-tg .tip{left:calc(100% + 12px)}
+21024:  BT.phase='run'; BT.ph=-1; BT.j=-2; BT.vj=-1; BT.fed=0; BT.seg=0; BT.stg=-1; BT.sel=null; BT.grp=null; BT.lastSt=null;
+21054:    if(j!==BT.j||stage!==BT.stg){
+21055:      BT.j=j; BT.stg=stage; var dec=stage<0||stage>=2, vj=dec?j:j-1; BT.vj=vj; /* 결정이 나기 전에는 잔고도 선도 표시도 전날에 머문다 */
+21069:  var R=BT.R, j=R.N-1; BT.j=j; BT.vj=j; BT.stg=-1; btPulse(null); btCursor(j); btMarks(j); btDD(j); btFeed(j,true); var c=btCount(j,true), v=R.eq[j].v;
+21108:  btStop(); BT.phase='result'; BT.j=BT.R.N-1; BT.vj=BT.j; BT.stg=-1; if(!BT.filt) BT.filt=btDefFilt(BT.s);
+21879:function stRow(k,v,act,sub){ return '<div class="stg-r"><div class="k"><b>'+k+'</b>'+(sub?'<span>'+sub+'</span>':'')+'</div><div class="v">'+(v||'')+'</div>'+(act?'<div class="a">'+act+'</div>':'')+'</div>'; }
+21881:function stSec(t,rows,act){ return '<section class="stg-sec">'+(t?'<header><h2>'+t+'</h2>'+(act||'')+'</header>':'')+'<div class="stg-card">'+rows+'</div></section>'; }
+21932:function stBilling(){
+21950:function stBillSave(){ var e=(document.getElementById('st-be').value||'').trim(), n=(document.getElementById('st-bn').value||'').trim(), ad=(document.getElementById('st-ba').value||'').trim(), er=document.getElementById('st-bi-e'); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ er.textContent='결제 이메일을 확인해 주십시오'; return; } if(!n){ er.textContent='이름을 입력해 주십시오'; return; } acS().billTo={email:e,name:n,addr:ad}; ST.edit=null; acSave(); stRe(); toast('결제 정보를 저장했습니다'); }
+21963:function stSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(ua)?'Windows':/Mac/.test(ua)?'Mac':/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':'이 기기', br=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Safari\//.test(ua)?'Safari':/Firefox\//.test(ua)?'Firefox':'브라우저';
+22654:  var sv0=stView; stView=function(){ var r=sv0.apply(this,arguments); try{ var n=document.querySelector('.stg-ni.on'), w=n&&n.parentNode; if(w&&w.scrollWidth>w.clientWidth) w.scrollLeft=Math.max(0,n.offsetLeft-w.clientWidth/2+n.offsetWidth/2); }catch(e){} return r; };
+
+ exited 1 in 90ms:
+ succeeded in 468ms:
+function stEmailSend(){ var v=(document.getElementById('st-em').value||'').trim().toLowerCase(), e=document.getElementById('st-em-e'); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ e.textContent='??? ??? ??? ????'; return; } if(v===(S.user.email||'').toLowerCase()){ e.textContent='?? ?? ??? ????'; return; } ST.em={step:1,v:v}; stEmailPaint(); }
+function stEmailDone(){ var c=(document.getElementById('st-ec').value||'').replace(/\D/g,''), e=document.getElementById('st-em-e'); if(c.length!==6){ e.textContent='6?? ??? ??? ????'; return; } if(c==='000000'){ e.textContent='??? ?? ????. ?? ??? ????'; return; } S.user.email=ST.em.v; acSave(); stDlgClose(); try{ authSyncUI(); }catch(x){} stRe(); toast('???? ?????'); }
+function stLogout(){ acConfirm({title:'???????????',body:'???? ??? ?? ?????. ? ????? ???????.',ok:'????',run:function(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gLogout(); }}); }
+function stDelete(){
+  var live=(tfS().strat||[]).filter(function(x){ return x.status==='live'; }).length, cps=((tfS().cp&&tfS().cp.copies)||[]).filter(function(c){ return c.status==='active'; }).length;
+  acConfirm({title:'??? ?????????',body:'???? ??? ? ????. ?? ??? ?? ?????.',list:['?? ??? ???? ??','??? ?? ?? ??'+(live+cps?' ('+(live+cps)+'?? ?? ????)':''),'??? ??? ?? ??','?? ??'].concat(acSubOn()?['??? ?? ???? ?? ??? ???? ????']:[]),type:'??',ok:'?? ??',danger:1,run:function(){
+    acConfirm({title:'??? ?????',body:(S.user.email||'')+' ??? ?? ?????. ???? ?? ??? ?? ???? ???? ??? ????.',ok:'?? ??',danger:1,run:function(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} try{ S.tf=null; localStorage.removeItem('teth.state'); }catch(e){} gLogout(); toast('??? ??????'); }}); }});
+}
+/* �� ?? �� */
+var ST_NF=[['fill','??','??? ????? ?',['push','email']],['state','?? ??','??? ???? ??? ?? ?',['push','email']],['risk','?? ??','?? ? ?? ??? ??? ?',['push','email']],['copy','??? ??','?? ??? ??? ???? ?',['push']],['bill','??? ??','??, ???, ?? ??',['email']],['news','??','? ??? ?? ??',[]]];
+function stNfOf(k){ var n=stS().notif[k]; if(n) return n; for(var i=0;i<ST_NF.length;i++) if(ST_NF[i][0]===k) return ST_NF[i][3].slice(); return []; }
+function stNotify(){
+  return '<h1>??</h1>'+stSec('TETH',ST_NF.map(function(x){ var v=stNfOf(x[0]), lock=x[0]==='bill';
+    return stRow(x[1],'','<div class="stg-seg multi" role="group" aria-label="'+x[1]+' ??">'+[['push','??'],['email','???']].map(function(o){ var on=v.indexOf(o[0])>=0, dis=lock&&o[0]==='email'; return '<button type="button" aria-pressed="'+on+'"'+(dis?' disabled title="??? ?? ??? ???? ?? ????"':'')+' onclick="stNf(\''+x[0]+'\',\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>',x[2]); }).join(''));
+}
+function stNf(k,ch){ var s=stS(), v=stNfOf(k).slice(), i=v.indexOf(ch); if(i>=0) v.splice(i,1); else v.push(ch); s.notif[k]=v; acSave(); stRe(); }
+/* �� ?? �� */
+function stBilling(){
+  var a=acS(), acc=acAccess(), sub=a.sub, on=acSubOn(), def=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0];
+  var plan=on?stRow('TETH ??','<span class="num">'+acUsd((sub&&sub.price)||AC_CFG.price)+' / ?</span>',(sub&&sub.st==='cancelled')?stBtn('?? ?? ??','stSubResume()','p'):'',(sub&&sub.st==='cancelled')?'<span class="num">'+stDate(sub.until)+'</span> ?? ? ? ????. ? ??? ???? ????':'?? ??? <span class="num">'+stDate((sub&&sub.next)||Date.now()+30*864e5)+'</span>')
+    :acc==='partner'?stRow('TETH ?? ??','??? ??','','? ??? ????. ?? ??? ?? ????')
+    :(sub&&sub.st==='cancelled')?stRow('??? ?????','',stBtn('?? ??','tfBrokersView()','p'),'<span class="num">'+stDate(sub.until)+'</span>? ?????. ??? ? ??? ?? ????')
+    :stRow('?? ?? ??? ????','',stBtn('?? ?? ??','tfBrokersView()','p'),'TETH ?? ??? ???? ??, ??? ? '+acUsd(AC_CFG.price)+'???');
+  var fail=a.pay&&a.pay.st==='fail'&&!on?'<p class="stg-warn" role="alert">??? ??? ???? ?????. ?? ??? ??? ????.</p>':'';
+  var hist=a.bill.length?'<div class="stg-tbl">'+a.bill.slice(0,ST.allBill?99:4).map(function(b){ return '<button type="button" class="stg-tr" onclick="stReceipt(\''+b.id+'\')"><b>'+gEsc(b.label)+'</b><span class="num">'+stDate(b.at)+'</span><span class="stg-tag '+b.st+'">'+({paid:'?? ??',failed:'?? ??',refunded:'?? ??'}[b.st]||b.st)+'</span><span class="num am">'+acUsd(b.amt)+'</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>'; }).join('')+'</div>':'<div class="stg-card"><p class="stg-empty">'+(acc==='partner'?'TETH ?? ??? ?? ??? ????':'?? ?? ??? ????')+'</p></div>';
+  var bt=a.billTo||{email:(S.user&&S.user.email)||'',name:(S.user&&S.user.name)||'',addr:''};
+  var info=ST.edit==='bill'?'<div class="stg-card"><div class="stg-form"><label><span>?? ???</span><input id="st-be" class="stg-in" value="'+gEsc(bt.email)+'"></label><label><span>??</span><input id="st-bn" class="stg-in" value="'+gEsc(bt.name)+'"></label><label><span>??? ??</span><input id="st-ba" class="stg-in" value="'+gEsc(bt.addr)+'" placeholder="??? ??, ??, ????, ??"></label><small class="er" id="st-bi-e"></small><div class="bts">'+stBtn('??','stEdit(null)')+stBtn('??','stBillSave()','p')+'</div></div></div>'
+    :'<div class="stg-card">'+stRow('?? ???','<span class="num">'+gEsc(bt.email||'-')+'</span>')+stRow('??',gEsc(bt.name||'-'))+stRow('??? ??',gEsc(bt.addr||'???? ??'))+'</div>';
+  var cards=a.cards.length?a.cards.map(function(c){ return '<div class="stg-r cd"><div class="k">'+stIc('<rect x="3" y="5.500" width="18" height="13" rx="2.500"/><path d="M3 10h18"/>')+'<div><b>'+gEsc(c.brand)+'</b><span class="num"> '+gEsc(c.last4)+', '+gEsc(c.exp)+'</span></div></div><div class="v">'+(c.def?'<span class="stg-tag def">??</span>':'')+'</div><div class="a">'+(c.def?'':stBtn('????','stCardDef(\''+c.id+'\')'))+stBtn('??','stCardDel(\''+c.id+'\')')+'</div></div>'; }).join(''):'<p class="stg-empty">??? ?? ??? ????</p>';
+  return '<h1>??</h1>'+fail+stSec('',plan)
+    +'<section class="stg-sec"><header><h2>?? ??</h2>'+(a.bill.length>4&&!ST.allBill?stBtn('?? ??','ST.allBill=1;stRe()'):'')+'</header>'+hist+'</section>'
+    +(acc==='partner'&&!a.cards.length&&!a.bill.length?'':'<section class="stg-sec"><header><h2>?? ??</h2>'+(ST.edit==='bill'?'':stBtn('??','stEdit(\'bill\')'))+'</header>'+info+'</section>'
+    +'<section class="stg-sec"><header><h2>?? ??</h2>'+stBtn('?? ??','stCardDlg()')+'</header><div class="stg-card">'+cards+'</div></section>')
+    +(on&&!(sub&&sub.st==='cancelled')?stSec('',stRow('?? ??','',stBtn('??','stSubCancel()','dg'),'???? ??? ??? ?? ???? ?? ??? ? ? ????')):'');
+}
+function stBillSave(){ var e=(document.getElementById('st-be').value||'').trim(), n=(document.getElementById('st-bn').value||'').trim(), ad=(document.getElementById('st-ba').value||'').trim(), er=document.getElementById('st-bi-e'); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ er.textContent='?? ???? ??? ????'; return; } if(!n){ er.textContent='??? ??? ????'; return; } acS().billTo={email:e,name:n,addr:ad}; ST.edit=null; acSave(); stRe(); toast('?? ??? ??????'); }
+function stReceipt(id){ var a=acS(), b=a.bill.filter(function(x){ return x.id===id; })[0]; if(!b) return; var bt=a.billTo||{};
+  stDlg('<h3>'+({paid:'???',failed:'?? ?? ??',refunded:'?? ??'}[b.st]||'??')+'</h3><dl class="stg-rc"><div><dt>??</dt><dd>'+gEsc(b.label)+'</dd></div><div><dt>??</dt><dd class="num">'+stDate(b.at)+'</dd></div><div><dt>??</dt><dd class="num">'+acUsd(b.amt)+' USD</dd></div><div><dt>?? ??</dt><dd class="num">'+gEsc(b.brand||'')+'  '+gEsc(b.last4||'')+'</dd></div><div><dt>??</dt><dd>'+({paid:'?? ??',failed:'???? ??',refunded:'?? ??'}[b.st])+'</dd></div><div><dt>??</dt><dd class="num">'+gEsc(b.id)+'</dd></div>'+(bt.name?'<div><dt>?? ??</dt><dd>'+gEsc(bt.name)+'</dd></div>':'')+'</dl><div class="bts"><button type="button" class="ok" onclick="stDlgClose()">??</button></div>','?? ??'); }
+function stCardDlg(){ stDlg('<h3>?? ?? ??</h3><div class="btg-form">'+acIn('sc-cn','?? ??','0000 0000 0000 0000','inputmode="numeric" maxlength="19" oninput="var v=this.value.replace(/\\D/g,\'\').slice(0,16); this.value=v.replace(/(.{4})/g,\'$1 \').trim()"')+'<div class="two">'+acIn('sc-ce','????','MM / YY','inputmode="numeric" maxlength="7" oninput="var v=this.value.replace(/\\D/g,\'\').slice(0,4); this.value=v.length>2?v.slice(0,2)+\' / \'+v.slice(2):v"')+acIn('sc-cc','?? ??','?? 3??','inputmode="numeric" maxlength="4" type="password"')+'</div>'+acIn('sc-ch','??? ?? ??','HONG GILDONG','')+'</div><div class="bts"><button type="button" class="no" onclick="stDlgClose()">??</button><button type="button" class="ok" onclick="stCardAdd()">??</button></div>','?? ?? ??'); }
+function stCardAdd(){ var c=acCardRead('sc-'); if(!c) return; if(!acCharge(c)){ acErr('sc-cn','? ??? ???? ?????. ?? ??? ? ????'); return; } var a=acS(); a.cards.push({id:'c'+Date.now().toString(36),last4:c.last4,brand:c.brand,exp:c.exp,name:c.name,def:!a.cards.length}); acSave(); stDlgClose(); stRe(); toast('?? ??? ??????'); }
+function stCardDef(id){ acS().cards.forEach(function(c){ c.def=c.id===id; }); acSave(); stRe(); }
+function stCardDel(id){ var a=acS(), c=a.cards.filter(function(x){ return x.id===id; })[0]; if(!c) return;
+  if(c.def&&acSubOn()&&a.cards.length<2&&!(a.sub&&a.sub.st==='cancelled')){ acConfirm({title:'? ??? ?? ??? ? ????',body:'?? ??? ?? ??? ?????. ?? ??? ?? ????? ??? ??? ????.',ok:'?? ??',run:function(){ stCardDlg(); }}); return; }
+  acConfirm({title:c.brand+'  '+c.last4+' ??? ?????????',body:'??? ???? ? ???? ????.',ok:'??',danger:1,run:function(){ a.cards=a.cards.filter(function(x){ return x.id!==id; }); if(a.cards.length&&!a.cards.some(function(x){ return x.def; })) a.cards[0].def=true; acSave(); stRe(); toast('??? ??????'); }}); }
+function stSubCancel(){ var a=acS(), until=(a.sub&&a.sub.next)||Date.now()+30*864e5, L=acConnList(), part=L.some(function(k){ return a.conn[k].via==='partner'; });
+  acConfirm({title:'??? ?????????',body:stDate(until)+' ??? ???? ? ? ????.',list:['? ??? ???? ????',part?'TETH ?? ??? ???? ?? ?? ??? ??? ?? ?? ? ? ????':'? ??? ???? ??? ? ??? ?? ????. ?? ???? ???? ??? ????'],ok:'?? ??',danger:1,run:function(){ a.sub={st:'cancelled',since:a.sub&&a.sub.since,until:until,price:(a.sub&&a.sub.price)||AC_CFG.price}; acSave(); stRe(); toast('??? ??????'); }}); }
+function stSubResume(){ var a=acS(); if(!a.cards.length){ acConfirm({title:'?? ??? ?????',body:'??? ?? ????? ??? ?? ??? ????.',ok:'?? ??',run:function(){ stCardDlg(); }}); return; } a.sub={st:'active',since:(a.sub&&a.sub.since)||Date.now(),next:(a.sub&&a.sub.until)||Date.now()+30*864e5,price:AC_CFG.price}; tfS().payDone=true; acSave(); stRe(); toast('??? ?? ??????'); }
+/* �� ?? �� */
+function stSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(ua)?'Windows':/Mac/.test(ua)?'Mac':/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':'? ??', br=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Safari\//.test(ua)?'Safari':/Firefox\//.test(ua)?'Firefox':'????';
+  return '<h1>??</h1>'+stSec('???',
+    stRow('????','',stBtn('??','stPwDlg()'),s.pwAt?'<span class="num">'+stDate(s.pwAt)+'</span> ? ?????':'12? ??, ??? ????? ?????')
+    +stRow('2?? ??','','<button type="button" class="stg-sw" role="switch" aria-checked="'+!!s.twofa+'" aria-label="2?? ??" onclick="stTwofa()"><i></i></button>','???? ? ???? ?? ??? ? ? ? ?????'))
+    +stSec('???? ??',stRow(dev+', '+br,'<span class="stg-tag def">? ??</span>','','?? ?? ?')+(s.devices||[]).map(function(d){ return stRow(d.n,'<span class="num">'+gEsc(d.at)+'</span>',stBtn('????','stOutOne(\''+d.id+'\')'),gEsc(d.where)); }).join('')+stRow('?? ?? ?? ????','',stBtn('????','stOutAll()'),'? ??? ? ?? ??? ???????'))
+    +stSec('??? ??',(function(){ var a=acS(), L=acConnList(); if(!L.length) return stRow('??? ???? ????','',stBtn('??? ??','tfBrokersView()'),'???? ????? TETH? ?? ??? ??? ????'); return L.map(function(k){ var c=a.conn[k]; return stRow('<img src="assets/logos/app-'+k+'.png" alt="" width="18" height="18" onerror="this.remove()">'+acName(k),'?? ??, ?? ??',stBtn('?? ??','acDisc(\''+k+'\')'),(c.via==='partner'?'TETH ?? ??':'???? ??')+', <span class="num">'+stDate(c.at)+'</span> ??. ?? ??? ????'); }).join(''); })());
+}
+function stOutOne(id){ var s=stS(); s.devices=(s.devices||[]).filter(function(d){ return d.id!==id; }); acSave(); stRe(); toast('? ???? ????????'); }
+function stTwofa(){ var s=stS(); if(s.twofa){ acConfirm({title:'2?? ??? ???????',body:'??????? ????? ???.',ok:'??',danger:1,run:function(){ s.twofa=false; acSave(); stRe(); }}); } else { s.twofa=true; acSave(); stRe(); toast('2?? ??? ????'); } }
+function stOutAll(){ acConfirm({title:'?? ??? ?? ???????????',body:'? ??? ??? ????? ????. ???? ???? ??? ????.',ok:'?? ????',run:function(){ toast('?? ??? ?? ????????'); }}); }
+function stPwDlg(){ stDlg('<h3>???? ??</h3><label class="ty"><span>?? ????</span><input id="st-p0" type="password" autocomplete="current-password"></label><label class="ty"><span>? ????</span><input id="st-p1" type="password" autocomplete="new-password"></label><label class="ty"><span>? ???? ??</span><input id="st-p2" type="password" autocomplete="new-password"></label><small class="er" id="st-pw-e"></small><div class="bts"><button type="button" class="no" onclick="stDlgClose()">??</button><button type="button" class="ok" onclick="stPwSave()">??</button></div>','???? ??'); }
+function stPwSave(){ var g=function(i){ return document.getElementById(i).value; }, e=document.getElementById('st-pw-e'), a=g('st-p0'), b=g('st-p1'), c=g('st-p2'); if(!a){ e.textContent='?? ????? ??? ????'; return; } if(b.length<12||!/\d/.test(b)||!/[^A-Za-z0-9]/.test(b)){ e.textContent='? ????? 12? ???? ??? ????? ??? ???'; return; } if(b!==c){ e.textContent='? ????? ?? ????'; return; } if(a===b){ e.textContent='?? ????? ?? ?? ? ????'; return; } stS().pwAt=Date.now(); acSave(); stDlgClose(); stRe(); toast('????? ?????'); }
+
+/* ��� ???? ?? (bt) v2: ?? AI ?? ??, ?? AI ??, 100?? ??? ??? ?? ?? ���
+   R02 ?? ??? ??? ?? ??? ?? ??? ??. R04 ?? ??? ???? ? ? ?? ?? ?? ??? ??.
+   ?? ??(??, ????, ?? ?)? ??? ??? ???. ??? ? ??? ??? ??? ????. ??? ???? ???? ???. */
+var BT_AI={J:{},R:{},n:0};
+
+codex
+코드에서는 구독 해지가 결제 수단 아래 별도 섹션에 있어 첫 화면에서 보이지 않습니다. 제목은 28px·700, 행 라벨은 14.5px·500으로 설정되어 있습니다. 색과 굵기뿐 아니라 결정에 필요한 항목의 순서와 모바일 탐색 방식도 조정할 필요가 있습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy python -c \"from PIL import Image; paths=['ref-general.png','ref-account.png','r/B1-billing-sub.png','r/S1-security.png']; pts=[(100,500),(700,850),(500,130),(1000,140)]; [(print(p,Image.open(p).size,[(q,Image.open(p).convert('RGB').getpixel(q)) for q in pts])) for p in paths]\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\settings
+ exited 1 in 213ms:
+rtk: Failed to execute command: python: The file cannot be accessed by the system. (os error 1920)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n -- "--g0:|--g1:|function acDisc|function stSubCancel" index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ succeeded in 64ms:
+498:  --g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;
+815:  --g0:#fff;          /* canvas */
+816:  --g1:#f7f8fa;       /* surface (사이드바, 패널) */
+21819:function acDisc(k){
+21959:function stSubCancel(){ var a=acS(), until=(a.sub&&a.sub.next)||Date.now()+30*864e5, L=acConnList(), part=L.some(function(k){ return a.conn[k].via==='partner'; });
+
+codex
+**판정:** 공통 셸의 색과 타이포그래피를 바꾸고, 결제와 보안의 정보 순서와 모바일 탐색을 조정해야 합니다. 단순한 색상 교체로는 부족합니다.
+
+**A. 다른 제품처럼 보이는 원인**
+
+참고 이미지는 캡처 배율이 다르므로 화면 픽셀을 같은 크기의 글자로 비교하지 않았습니다. TETH 수치는 [현재 스타일 코드](</C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/index.html:6842>) 기준입니다.
+
+| 구분 | 요소와 근거 | 차이의 원인 |
+|---|---|---|
+| 겉모습 | 참고 1~3은 검정 본문과 레일을 가는 세로선으로 구분합니다. TETH는 본문 `#0f1012`, 280px 레일 `#17181b`입니다. | 넓은 회색 레일이 독립된 관리 도구처럼 보입니다. |
+| 겉모습 | TETH 제목 28px/700, 섹션 제목 15px/600, 행 라벨 14.5px/500입니다. 참고의 제목과 라벨은 시각적으로 더 가볍습니다. | 작은 글씨까지 굵게 강조해 계층보다 밀도가 먼저 느껴집니다. |
+| 겉모습 | TETH 카드 반경 14px, 흰색 1.5% 배경, 1px 테두리입니다. 참고 카드는 검정 바탕에 윤곽만 보입니다. | 카드 배경이 레일과 함께 회색 면을 추가합니다. |
+| 겉모습 | TETH 단추는 높이 34px의 테두리 알약입니다. 참고의 ‘자동 감지’는 회색 면이 채워진 알약입니다. | 형태는 이미 유사하지만 테두리 강조와 작은 글씨가 다릅니다. |
+| 겉모습 | ‘결제 완료’, ‘기본’, ‘이 기기’에 반경 6px 배지가 반복됩니다. ‘결제 실패’는 붉은 배경입니다. | 상태가 행 내용보다 별도 표식으로 강조됩니다. 파란 토글은 이미 참고 어휘와 맞습니다. |
+| 구조 | 결제는 구독 → 내역 → 정보 → 수단 순서입니다. 코드상 해지는 그 아래입니다. | 유지와 해지, 카드 변경이라는 주요 결정이 흩어집니다. |
+| 구조 | 결제 내역 한 행에 상품명, 날짜, 상태, 금액, 화살표가 있습니다. 거래소 행에는 연결 경로, 승인일, 출금 설명, 권한 목록, 단추가 있습니다. | 읽기와 조작이 한 행에서 경쟁합니다. |
+| 구조 | 카드마다 ‘삭제’, 추가 카드에는 ‘기본으로’까지 붙습니다. 참고 계정 화면은 상태와 사용자명에 단추가 없습니다. | 표시만 필요한 정보와 관리 작업의 단계가 충분히 나뉘지 않았습니다. |
+| 구조 | 모바일은 가로 탭이 잘리고, 제목이 약 223px 아래에서 시작합니다. 보안의 하단 로그아웃 단추는 상담 버튼과 겹칩니다. | 현재 위치 탐색과 조작 공간이 부족합니다. |
+| 카피 | ‘이 기기’와 ‘지금 사용 중’이 중복됩니다. ‘TETH 초대 계정’, ‘구독으로 연결’은 권한보다 연결 경로를 설명합니다. | 결정에 필요하지 않은 설명이 핵심 정보와 같은 높이에 놓입니다. |
+
+**B. 제안하는 두 탭**
+
+공통 스타일은 검정 본문과 레일, 1px의 어두운 회색 테두리, 검정 카드, 반경 16px로 정합니다. 제목 28px/400, 섹션 제목 16px/400, 행 라벨 16px/400을 사용합니다. 조작은 오른쪽 회색 알약, 인증 상태는 파란 토글로 통일합니다. 상태 배지는 일반 텍스트로 바꿉니다.
+
+아래 ‘창’은 데스크톱 대화상자이며 모바일에서는 전체 화면으로 전환합니다. 별도 표시가 없는 행 본문은 클릭하지 않습니다.
+
+| 탭 / 섹션 | 행 라벨과 보조 줄 | 오른쪽 조작과 결과 |
+|---|---|---|
+| 결제 / 구독 | **TETH 구독** / 월 US$280, 다음 결제일 | ‘구독 관리’ → 창. 다음 결제와 이용 종료 조건, ‘구독 해지’를 함께 표시 |
+| 결제 / 구독 | 만료 시 **구독 종료** / 종료일과 해당 전략의 주문 중단 상태 | ‘다시 구독’ → 가격과 결제 수단을 확인하는 화면 |
+| 결제 / 결제 관리 | **결제 수단** / 기본 카드 브랜드와 끝 네 자리 | ‘관리’ → 카드 목록 창. 기본 카드 선택, 추가, 삭제 제공 |
+| 결제 / 결제 관리 | **결제 정보** / 결제 이메일 | ‘변경’ → 이메일, 이름, 청구지 주소 편집 창 |
+| 결제 / 결제 내역 | 최신 **3건**. 날짜를 주 라벨로, 상태를 보조 줄로 표시 | 금액과 화살표. 행 전체 → 완료 건은 영수증 창, 실패 건은 결제 시도 상세 창 |
+| 결제 / 결제 내역 | 4건 이상이면 섹션 오른쪽에 ‘전체 보기’ | 전체 내역 화면. 최신순 10건씩 페이지 이동 |
+| 보안 / 거래소 연결 | **Bitget**, **OKX** 각각 한 행 / 잔고 조회, 주문 실행 | ‘관리’ → 승인일과 권한 상세 창. ‘권한 끊기’ → 영향받는 전략과 처리 결과 확인 창 |
+| 보안 / 로그인 | **비밀번호** / 마지막 변경일 | ‘변경’ → 비밀번호 변경 창 |
+| 보안 / 로그인 | **2단계 인증** / 로그인 시 이메일 인증번호를 확인합니다. | 파란 토글. 켜기 → 인증 창, 끄기 → 확인 창 |
+| 보안 / 로그인한 기기 | **Windows, Chrome** / 현재 기기 | 조작 없음 |
+| 보안 / 로그인한 기기 | **iPhone, Safari** / 서울, 마지막 활동 오늘 08:12 | ‘로그아웃’ → 해당 기기 확인 창 |
+| 보안 / 로그인한 기기 | **다른 모든 기기** / 현재 기기는 로그인을 유지합니다. | ‘모두 로그아웃’ → 확인 창 |
+
+모바일은 **설정 목록 → 탭 상세 → 관리 상세**로 이동합니다. 레일과 가로 탭 줄을 없애고 상단에 ‘설정으로’와 현재 제목을 둡니다. 다운로드 배너는 상세에서 제외하고, 상담 진입점은 설정 목록에 둡니다.
+
+| 기본 화면에서 제거하거나 이동 | 반드시 유지 |
+|---|---|
+| 반복되는 ‘TETH 구독’ 내역명, 상태 배지 배경, ‘지금 사용 중’ 중복 설명 | 결제 금액과 통화, 날짜, 성공과 실패 |
+| 이름과 전체 주소, 추가 카드 목록은 관리 창으로 이동 | 카드 식별 정보와 기본 카드 상태 |
+| 연결 경로와 승인일은 권한 상세로 이동 | 실제 권한, 인증 방식, 기기 식별과 마지막 활동 |
+| 매 행의 출금 부정문 | 해지와 권한 해제의 실행 시점, 전략에 미치는 영향 |
+
+**C. 카피 교체안**
+
+| 현재 | 제안 |
+|---|---|
+| 다음 결제일 2026. 10. 21. | 2026. 10. 21.에 다음 결제가 진행됩니다. |
+| 구독이 끝났습니다 | 구독이 종료되었습니다 |
+| 전략은 새 주문을 내지 않습니다 | 해당 전략의 신규 주문이 중단되었습니다. |
+| 새로 추가 | 결제 수단 추가 |
+| 기본으로 | 기본 결제 수단으로 설정 |
+| 2026. 9. 11. 에 바꿨습니다 | 마지막 변경일: 2026. 9. 11. |
+| 로그인할 때 이메일로 받은 번호를 한 번 더 확인합니다 | 로그인 시 이메일 인증번호를 확인합니다. |
+| 이 기기를 뺀 모든 곳에서 로그아웃합니다 | 현재 기기는 로그인을 유지합니다. |
+| 출금 권한은 없습니다 | 기본 행에서 삭제. 상세에 ‘허용된 권한: 잔고 조회, 주문 실행’ 표시 |
+
+‘출금 권한은 없습니다’는 정확한 권한 목록을 제시한다면 반복할 필요가 없습니다. 반면 주문 중단은 실제 결과이므로 의미를 지우면 안 됩니다.
+
+**D. 적용 범위:** 셸 전체를 바꾸는 것을 권고합니다. 일반, 계정, 알림까지 색, 제목, 카드, 조작 형태와 모바일 탐색을 통일하고, 섹션 재배치는 결제와 보안에 적용합니다.
+
+**E. 통째로 다시 만들 필요는 없지만, 공통 스타일과 카피 수정에 더해 결제·보안의 정보 재배치와 모바일 목록→상세 전환은 필요합니다.**
+tokens used
+50,804
+**판정:** 공통 셸의 색과 타이포그래피를 바꾸고, 결제와 보안의 정보 순서와 모바일 탐색을 조정해야 합니다. 단순한 색상 교체로는 부족합니다.
+
+**A. 다른 제품처럼 보이는 원인**
+
+참고 이미지는 캡처 배율이 다르므로 화면 픽셀을 같은 크기의 글자로 비교하지 않았습니다. TETH 수치는 [현재 스타일 코드](</C:/Users/hyun1/OneDrive/바탕 화면/tesia-lab fork 1/index.html:6842>) 기준입니다.
+
+| 구분 | 요소와 근거 | 차이의 원인 |
+|---|---|---|
+| 겉모습 | 참고 1~3은 검정 본문과 레일을 가는 세로선으로 구분합니다. TETH는 본문 `#0f1012`, 280px 레일 `#17181b`입니다. | 넓은 회색 레일이 독립된 관리 도구처럼 보입니다. |
+| 겉모습 | TETH 제목 28px/700, 섹션 제목 15px/600, 행 라벨 14.5px/500입니다. 참고의 제목과 라벨은 시각적으로 더 가볍습니다. | 작은 글씨까지 굵게 강조해 계층보다 밀도가 먼저 느껴집니다. |
+| 겉모습 | TETH 카드 반경 14px, 흰색 1.5% 배경, 1px 테두리입니다. 참고 카드는 검정 바탕에 윤곽만 보입니다. | 카드 배경이 레일과 함께 회색 면을 추가합니다. |
+| 겉모습 | TETH 단추는 높이 34px의 테두리 알약입니다. 참고의 ‘자동 감지’는 회색 면이 채워진 알약입니다. | 형태는 이미 유사하지만 테두리 강조와 작은 글씨가 다릅니다. |
+| 겉모습 | ‘결제 완료’, ‘기본’, ‘이 기기’에 반경 6px 배지가 반복됩니다. ‘결제 실패’는 붉은 배경입니다. | 상태가 행 내용보다 별도 표식으로 강조됩니다. 파란 토글은 이미 참고 어휘와 맞습니다. |
+| 구조 | 결제는 구독 → 내역 → 정보 → 수단 순서입니다. 코드상 해지는 그 아래입니다. | 유지와 해지, 카드 변경이라는 주요 결정이 흩어집니다. |
+| 구조 | 결제 내역 한 행에 상품명, 날짜, 상태, 금액, 화살표가 있습니다. 거래소 행에는 연결 경로, 승인일, 출금 설명, 권한 목록, 단추가 있습니다. | 읽기와 조작이 한 행에서 경쟁합니다. |
+| 구조 | 카드마다 ‘삭제’, 추가 카드에는 ‘기본으로’까지 붙습니다. 참고 계정 화면은 상태와 사용자명에 단추가 없습니다. | 표시만 필요한 정보와 관리 작업의 단계가 충분히 나뉘지 않았습니다. |
+| 구조 | 모바일은 가로 탭이 잘리고, 제목이 약 223px 아래에서 시작합니다. 보안의 하단 로그아웃 단추는 상담 버튼과 겹칩니다. | 현재 위치 탐색과 조작 공간이 부족합니다. |
+| 카피 | ‘이 기기’와 ‘지금 사용 중’이 중복됩니다. ‘TETH 초대 계정’, ‘구독으로 연결’은 권한보다 연결 경로를 설명합니다. | 결정에 필요하지 않은 설명이 핵심 정보와 같은 높이에 놓입니다. |
+
+**B. 제안하는 두 탭**
+
+공통 스타일은 검정 본문과 레일, 1px의 어두운 회색 테두리, 검정 카드, 반경 16px로 정합니다. 제목 28px/400, 섹션 제목 16px/400, 행 라벨 16px/400을 사용합니다. 조작은 오른쪽 회색 알약, 인증 상태는 파란 토글로 통일합니다. 상태 배지는 일반 텍스트로 바꿉니다.
+
+아래 ‘창’은 데스크톱 대화상자이며 모바일에서는 전체 화면으로 전환합니다. 별도 표시가 없는 행 본문은 클릭하지 않습니다.
+
+| 탭 / 섹션 | 행 라벨과 보조 줄 | 오른쪽 조작과 결과 |
+|---|---|---|
+| 결제 / 구독 | **TETH 구독** / 월 US$280, 다음 결제일 | ‘구독 관리’ → 창. 다음 결제와 이용 종료 조건, ‘구독 해지’를 함께 표시 |
+| 결제 / 구독 | 만료 시 **구독 종료** / 종료일과 해당 전략의 주문 중단 상태 | ‘다시 구독’ → 가격과 결제 수단을 확인하는 화면 |
+| 결제 / 결제 관리 | **결제 수단** / 기본 카드 브랜드와 끝 네 자리 | ‘관리’ → 카드 목록 창. 기본 카드 선택, 추가, 삭제 제공 |
+| 결제 / 결제 관리 | **결제 정보** / 결제 이메일 | ‘변경’ → 이메일, 이름, 청구지 주소 편집 창 |
+| 결제 / 결제 내역 | 최신 **3건**. 날짜를 주 라벨로, 상태를 보조 줄로 표시 | 금액과 화살표. 행 전체 → 완료 건은 영수증 창, 실패 건은 결제 시도 상세 창 |
+| 결제 / 결제 내역 | 4건 이상이면 섹션 오른쪽에 ‘전체 보기’ | 전체 내역 화면. 최신순 10건씩 페이지 이동 |
+| 보안 / 거래소 연결 | **Bitget**, **OKX** 각각 한 행 / 잔고 조회, 주문 실행 | ‘관리’ → 승인일과 권한 상세 창. ‘권한 끊기’ → 영향받는 전략과 처리 결과 확인 창 |
+| 보안 / 로그인 | **비밀번호** / 마지막 변경일 | ‘변경’ → 비밀번호 변경 창 |
+| 보안 / 로그인 | **2단계 인증** / 로그인 시 이메일 인증번호를 확인합니다. | 파란 토글. 켜기 → 인증 창, 끄기 → 확인 창 |
+| 보안 / 로그인한 기기 | **Windows, Chrome** / 현재 기기 | 조작 없음 |
+| 보안 / 로그인한 기기 | **iPhone, Safari** / 서울, 마지막 활동 오늘 08:12 | ‘로그아웃’ → 해당 기기 확인 창 |
+| 보안 / 로그인한 기기 | **다른 모든 기기** / 현재 기기는 로그인을 유지합니다. | ‘모두 로그아웃’ → 확인 창 |
+
+모바일은 **설정 목록 → 탭 상세 → 관리 상세**로 이동합니다. 레일과 가로 탭 줄을 없애고 상단에 ‘설정으로’와 현재 제목을 둡니다. 다운로드 배너는 상세에서 제외하고, 상담 진입점은 설정 목록에 둡니다.
+
+| 기본 화면에서 제거하거나 이동 | 반드시 유지 |
+|---|---|
+| 반복되는 ‘TETH 구독’ 내역명, 상태 배지 배경, ‘지금 사용 중’ 중복 설명 | 결제 금액과 통화, 날짜, 성공과 실패 |
+| 이름과 전체 주소, 추가 카드 목록은 관리 창으로 이동 | 카드 식별 정보와 기본 카드 상태 |
+| 연결 경로와 승인일은 권한 상세로 이동 | 실제 권한, 인증 방식, 기기 식별과 마지막 활동 |
+| 매 행의 출금 부정문 | 해지와 권한 해제의 실행 시점, 전략에 미치는 영향 |
+
+**C. 카피 교체안**
+
+| 현재 | 제안 |
+|---|---|
+| 다음 결제일 2026. 10. 21. | 2026. 10. 21.에 다음 결제가 진행됩니다. |
+| 구독이 끝났습니다 | 구독이 종료되었습니다 |
+| 전략은 새 주문을 내지 않습니다 | 해당 전략의 신규 주문이 중단되었습니다. |
+| 새로 추가 | 결제 수단 추가 |
+| 기본으로 | 기본 결제 수단으로 설정 |
+| 2026. 9. 11. 에 바꿨습니다 | 마지막 변경일: 2026. 9. 11. |
+| 로그인할 때 이메일로 받은 번호를 한 번 더 확인합니다 | 로그인 시 이메일 인증번호를 확인합니다. |
+| 이 기기를 뺀 모든 곳에서 로그아웃합니다 | 현재 기기는 로그인을 유지합니다. |
+| 출금 권한은 없습니다 | 기본 행에서 삭제. 상세에 ‘허용된 권한: 잔고 조회, 주문 실행’ 표시 |
+
+‘출금 권한은 없습니다’는 정확한 권한 목록을 제시한다면 반복할 필요가 없습니다. 반면 주문 중단은 실제 결과이므로 의미를 지우면 안 됩니다.
+
+**D. 적용 범위:** 셸 전체를 바꾸는 것을 권고합니다. 일반, 계정, 알림까지 색, 제목, 카드, 조작 형태와 모바일 탐색을 통일하고, 섹션 재배치는 결제와 보안에 적용합니다.
+
+**E. 통째로 다시 만들 필요는 없지만, 공통 스타일과 카피 수정에 더해 결제·보안의 정보 재배치와 모바일 목록→상세 전환은 필요합니다.**
