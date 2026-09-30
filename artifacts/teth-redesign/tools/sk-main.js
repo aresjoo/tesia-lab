@@ -27,3 +27,35 @@ function skfCard(s){
     var q=d.querySelector('#ss3-q'); if(q) q.setAttribute('placeholder','전략 검색');
     return d.innerHTML; };
 })();
+/* 소개 페이지 아래 섹션 전체: 문구를 DESIGN_PROMPT.md 톤으로 (Codex s1 반영). 로고, 아바타, 영상, "영원히 무료" 줄은 그대로 */
+function skIntroCopy(){
+  var q=function(s){ return document.querySelector(s); }, qa=function(s){ return [].slice.call(document.querySelectorAll(s)); };
+  var set=function(el,t){ if(el) el.textContent=t; };
+  /* 첫 화면 설명: 강제 줄바꿈 없이 한 문장 */
+  set(q('.txh-hero .txh-sub'),'거래소 계정을 한 번 승인으로 연결하면 전략이 그 계정에서 직접 주문합니다.');
+  /* TETH가 쓰는 AI */
+  var ai=q('#txh-ai'); if(ai){ var k=ai.querySelector('.txh-kick'); if(k) k.remove(); set(q('#txh-ai-h'),'TETH가 쓰는 AI'); set(ai.querySelector('.txh-lead'),'뉴스 확인, 시장 분석, 판단 정리마다 맞는 AI를 씁니다.');
+    var H=['뉴스 확인','시장 분석','판단 정리']; qa('.txh-ai-col h3').forEach(function(h,i){ if(H[i]) h.textContent=H[i]; });
+    var R={'Gemini':'구글 검색으로 최신 정보를 확인합니다','Grok':'X에서 지금 여론을 확인합니다','Perplexity':'뉴스와 공시의 출처를 찾습니다','DeepSeek':'시장을 분석합니다','Qwen':'여러 종목을 한 번에 비교합니다','Kimi':'긴 보고서와 자료를 읽습니다','ChatGPT':'상황을 정리해 판단합니다','Claude':'판단한 이유를 문장으로 씁니다','Le Chat (Mistral)':'보조 판단을 냅니다'};
+    qa('.txh-ai-col li').forEach(function(li){ var b=li.querySelector('b'), s=li.querySelector('span'); if(b&&s&&R[b.textContent.trim()]) s.textContent=R[b.textContent.trim()]; }); }
+  /* 지금 TETH가 하는 일 */
+  set(q('#txh-now-h'),'지금 TETH가 하는 일'); var nw=q('#txh-now'); if(nw) set(nw.querySelector('.txh-lead'),'거래할 때도, 기다릴 때도 이유를 적어 둡니다.');
+  var C=[{n:'워렌 버핏 AI 버전 13',m:['$12,480','+8.2%','+$946'],b:'AI 관련 기업의 강세를 예상해 기존 롱 포지션을 유지합니다. 주말 유동성과 거시 경제 일정을 고려해 새 거래와 헤지는 더하지 않습니다. NVDA 지지선과 MSFT 상승 추세를 보다가, 추세가 꺾이면 조정합니다.'},
+         {n:'RSI 반등 규칙 버전 2',m:['$1,000','+3.1%','+$31'],b:'비트코인이 내려 RSI가 28입니다. 반등할 수 있지만, 규칙상 30을 다시 넘을 때만 삽니다. 그래서 지금은 기다립니다. 산 뒤 5% 내리면 팔고, 12% 오르면 절반을 정리합니다.'}];
+  qa('.txh-card').forEach(function(c,i){ var d=C[i]; if(!d) return; set(c.querySelector('.txh-name'),d.n);
+    var dt=c.querySelectorAll('dt'); if(dt[2]) dt[2].textContent='손익';
+    [].forEach.call(c.querySelectorAll('dd'),function(x,j){ if(d.m[j]){ x.removeAttribute('data-usd-unit'); x.removeAttribute('data-sign'); x.textContent=d.m[j]; } });
+    var bd=c.querySelector('.txh-body'); if(bd) bd.textContent=d.b; });
+  /* 시작 방법: 번호 없이 세 행 */
+  set(q('#txh-w-h'),'시작 방법'); var hw=q('#txh-how'); if(hw) set(hw.querySelector('.txh-lead'),'대화로 전략을 정하고, 과거 시장에서 확인한 뒤 거래를 시작합니다.');
+  var S=[['대화로 정하기','무엇을, 얼마로, 언제 멈출지 말로 정합니다.'],['과거 시장에서 확인','지난 시장에서 돌려 보고 결과와 기준을 확인합니다.'],['거래소 연결','거래소 계정을 연결하면 정한 예산으로 거래를 시작합니다.']];
+  qa('.txh-step').forEach(function(st,i){ var n=st.querySelector('.n'); if(n) n.remove(); if(S[i]){ set(st.querySelector('b'),S[i][0]); set(st.querySelector('p'),S[i][1]); } });
+  /* 마지막: 실행 설정 (묻지 않은 걱정 대신 무엇을 정하는지) */
+  set(q('#txh-g-h'),'실행 설정'); var sf=q('#txh-g-h'); var sec=sf&&sf.closest('.txh-sec'); if(sec) set(sec.querySelector('.txh-lead'),'전략마다 예산과 멈추는 조건을 정합니다.');
+  var F=[['연결 권한','잔고 조회와 주문만 승인합니다.'],['전략 예산','전략마다 쓸 금액을 따로 정합니다.'],['손실 한도','정한 손실에 닿으면 새 주문을 멈춥니다.'],['거래 중지','언제든 전략을 끄고 포지션을 정리합니다.']];
+  qa('.txh-safe li').forEach(function(li,i){ if(F[i]){ set(li.querySelector('b'),F[i][0]); set(li.querySelector('span'),F[i][1]); } });
+}
+(function(){ var iv1=tfIntroView; tfIntroView=function(){ var r=iv1.apply(this,arguments); try{ skIntroCopy(); }catch(e){} return r; };
+  /* 통화를 다시 칠하는 함수가 카드 금액을 되돌리지 않게 */
+  if(typeof applyCurrency==='function'){ var ac0=applyCurrency; applyCurrency=function(){ var r=ac0.apply(this,arguments); try{ if(document.querySelector('.txh-card')) skIntroCopy(); }catch(e){} return r; }; }
+})();

@@ -43,3 +43,45 @@ body.g-dark .g-side{background:#000;border-right:1px solid rgba(255,255,255,.1)}
 .skf-fw .mk3-fw{display:inline-flex!important;align-items:center;gap:8px!important;font-size:14px;color:#afafaf}
 .skf-fw .mk3-fw svg{margin:0!important;position:static!important;flex:none;width:16px;height:16px}
 .skf-fw .mk3-fw b{font-weight:500;color:#ececec}
+/* ── 소개 페이지 아래 섹션 전체: 명조 → 산세리프 400, 연두 → 흰 알약, 카드 #303030 반경 26 ── */
+#g-root .txh,#g-root .txh-wrap{background:#000}
+#g-root .txh h2,#g-root .txh-step .n{font-family:var(--font),system-ui,-apple-system,"Segoe UI",sans-serif}
+#g-root .txh h2{font-weight:400;font-size:28px;line-height:1.3;letter-spacing:-.01em;color:#fff}
+#g-root .txh-lead{margin-top:10px;font-size:18px;line-height:1.55;color:#cdcdcd;max-width:640px}
+#g-root .txh-sec{padding-top:96px}
+#g-root .txh-sec.first{padding-top:56px}
+#g-root .txh-ai-col{border-top-color:rgba(255,255,255,.1)}
+#g-root .txh-ai-col h3{font-size:16px;font-weight:400;color:#ececec}
+#g-root .txh-ai-col b{font-size:16px;font-weight:400;color:#fff}
+#g-root .txh-ai-col span{font-size:14px;color:#afafaf}
+#g-root .txh-card{background:#303030;border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:26px 28px 28px}
+#g-root .txh-name{font-weight:500;color:#fff}
+#g-root .txh-xch{color:#afafaf;font-size:14px}
+#g-root .txh-ex{background:#303030;box-shadow:0 0 0 2.5px #303030,0 0 0 3.5px rgba(255,255,255,.13)}
+#g-root .txh-stats{border-color:rgba(255,255,255,.1)}
+#g-root .txh-stat+.txh-stat::before{background:rgba(255,255,255,.1)}
+#g-root .txh-stat dt{font-size:13px;color:#afafaf}
+#g-root .txh-stat dd{font-weight:400;color:#fff}
+#g-root .txh-body{font-size:16px;line-height:1.65;color:#ececec}
+#g-root .txh-body b{font-weight:400}
+#g-root .txh-step{border-top-color:rgba(255,255,255,.1)}
+#g-root .txh-step b{font-size:18px;font-weight:400;color:#fff}
+#g-root .txh-step p{font-size:15px;color:#cdcdcd}
+#g-root .txh-safe ul{border-top-color:rgba(255,255,255,.1)}
+#g-root .txh-safe li{border-bottom-color:rgba(255,255,255,.1)}
+#g-root .txh-safe li b{font-size:16px;font-weight:400;color:#fff}
+#g-root .txh-safe li span{font-size:14px;color:#afafaf}
+#g-root .txh-safe li svg{color:#cdcdcd}
+#g-root .txh-cta{background:#fff;color:#000;font-weight:500;height:48px;padding:0 26px}
+#g-root .txh-cta:hover{filter:none;background:#e5e5e5}
+@media (max-width:760px){
+  #g-root .txh-wrap{padding-left:16px;padding-right:16px}
+  #g-root .txh h2{font-size:26px}
+  #g-root .txh-lead{font-size:16px}
+  #g-root .txh-card{border-radius:20px;padding:22px 18px 22px}
+  #g-root .txh-sec{padding-top:72px}
+}
+/* 바탕 변수도 검정으로: 입력창 받침, 흐림 띠처럼 바탕과 섞이는 요소가 띠를 만들지 않게 */
+body.g-dark{--g0:#000}
+body.g-dark .g-pillband{background-image:linear-gradient(to top,#000 56%,rgba(0,0,0,0))}
+body.g-dark #g-appbanner{background:#000}
