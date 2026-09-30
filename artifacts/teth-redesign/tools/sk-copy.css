@@ -1,0 +1,66 @@
+/* ── 전략 복사 창 (sk-copy): 설정 창과 같은 #303030, 반경 26, 흰 알약 ── */
+.skc-w{background:rgba(0,0,0,.7)}
+.mk-follow.skc{width:520px;background:#303030;border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:28px 28px 22px;color:#ececec;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.skc-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px}
+.skc-hd h2{margin:0;font-size:26px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.skc .mk-f-x{width:36px;height:36px;border-radius:50%;border:0;background:none;color:#cdcdcd;font-size:16px;cursor:pointer}
+.skc .mk-f-x:hover{background:rgba(255,255,255,.08);color:#fff}
+.skc-strat{padding:0 0 18px;margin:0 0 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.skc-strat .nm{display:flex;align-items:center;gap:12px}
+.skc-strat .nm>div{display:grid;gap:2px;min-width:0}
+.skc-strat b{font-size:16px;font-weight:600;color:#fff}
+.skc-strat span{font-size:14px;color:#cdcdcd}
+.skc-lev{margin:12px 0 0;font-size:14px;line-height:1.5;color:#dbe6ff}
+.skc-lev b{font-weight:600;color:#fff}
+.skc-fld{margin:0 0 18px}
+.skc-fld>label,.skc-fld>.lb{display:block;margin:0 0 8px;font-size:15px;color:#ececec}
+.skc-in{display:flex;align-items:center;gap:8px;height:60px;padding:0 10px 0 18px;border-radius:19px;background:#212121;border:1px solid transparent;transition:border-color .12s ease}
+.skc-in:focus-within{border-color:rgba(255,255,255,.35)}
+.skc-in i{font-style:normal;font-size:18px;color:#9a9a9a}
+.skc-in input{flex:1;min-width:0;border:0;background:transparent;color:#fff;font:inherit;font-size:20px;outline:0;-moz-appearance:textfield}
+.skc-in input::-webkit-outer-spin-button,.skc-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.skc-in input::placeholder{color:#6b6b6b}
+.skc-in .mx{height:36px;padding:0 14px;border:0;border-radius:999px;background:#3a3a3a;color:#ececec;font:inherit;font-size:14px;cursor:pointer}
+.skc-in .mx:hover{background:#454545}
+.skc-in.sm{width:120px;height:44px;padding:0 14px}
+.skc-in.sm input{font-size:16px;text-align:right}
+#cps-amt-fld.bad .skc-in{border-color:rgba(255,107,107,.6)}
+.skc-hint{margin:8px 2px 0;font-size:13.5px;color:#afafaf}
+.skc-hint b{font-weight:500;color:#ececec}
+.skc-hint .pl-link{font-size:13.5px;margin-left:6px}
+.skc-err{margin:6px 2px 0;font-size:13.5px;color:#ff8a8a}
+.skc-err:empty{display:none}
+.skc-pills{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.skc-pills.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.skc-pills button{height:48px;border-radius:16px;border:2px solid transparent;background:#212121;color:#cdcdcd;font:inherit;font-size:15px;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.skc-pills button:hover{background:#262626;color:#fff}
+.skc-pills button.on{border-color:#9a9a9a;background:#2a2a2a;color:#fff}
+.skc-sum{margin:4px 0 6px;padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.12)}
+.skc-sum .r{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.skc-sum .r:first-child{border-top:0}
+.skc-sum .r span{color:#cdcdcd}
+.skc-sum .r b{font-weight:400;color:#fff}
+.skc-sum .r em{font-style:normal;color:#8a8a8a}
+.skc-more{margin:10px 2px 16px}
+.skc-more .pl-link{font-size:14px}
+.skc-adv{margin:0 0 16px}
+.skc-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.skc-cap>label{margin:0}
+.skc-cta{height:52px;font-size:16px}
+.skc-cta:disabled{background:#4a4a4a;border-color:#4a4a4a;color:#9a9a9a;opacity:1}
+.skc-foot{margin:12px 0 0;text-align:center;font-size:13px;color:#9a9a9a}
+@media (max-width:760px){
+  .mk-follow.skc{width:100%;border-radius:26px 26px 0 0;padding:22px 16px calc(18px + env(safe-area-inset-bottom));border-bottom:0}
+  .skc-hd h2{font-size:24px}
+  .skc-pills{gap:6px}
+}
+/* 900px 높이에서 스크롤 없이 들어가게 */
+.mk-follow.skc{padding:24px 28px 20px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+.skc-hd{margin-bottom:14px}
+.skc-strat{padding-bottom:16px;margin-bottom:18px}
+.skc-fld{margin-bottom:16px}
+.skc-in{height:56px}
+.skc-pills button{height:44px}
+.skc-sum .r{min-height:40px}
+.skc-more{margin:8px 2px 14px}
+@media (max-width:760px){ .mk-follow.skc{padding:22px 16px calc(18px + env(safe-area-inset-bottom))} }

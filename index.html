@@ -7457,6 +7457,72 @@ body.st-full .stg-seg.multi button:disabled{opacity:.85}
 
 /* 최종 검수: 날짜 덩어리는 줄을 넘기지 않는다 */
 body.st-full .stg-r .k span .num{white-space:nowrap}
+/* ── 전략 복사 창 (sk-copy): 설정 창과 같은 #303030, 반경 26, 흰 알약 ── */
+.skc-w{background:rgba(0,0,0,.7)}
+.mk-follow.skc{width:520px;background:#303030;border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:28px 28px 22px;color:#ececec;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.skc-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px}
+.skc-hd h2{margin:0;font-size:26px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.skc .mk-f-x{width:36px;height:36px;border-radius:50%;border:0;background:none;color:#cdcdcd;font-size:16px;cursor:pointer}
+.skc .mk-f-x:hover{background:rgba(255,255,255,.08);color:#fff}
+.skc-strat{padding:0 0 18px;margin:0 0 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.skc-strat .nm{display:flex;align-items:center;gap:12px}
+.skc-strat .nm>div{display:grid;gap:2px;min-width:0}
+.skc-strat b{font-size:16px;font-weight:600;color:#fff}
+.skc-strat span{font-size:14px;color:#cdcdcd}
+.skc-lev{margin:12px 0 0;font-size:14px;line-height:1.5;color:#dbe6ff}
+.skc-lev b{font-weight:600;color:#fff}
+.skc-fld{margin:0 0 18px}
+.skc-fld>label,.skc-fld>.lb{display:block;margin:0 0 8px;font-size:15px;color:#ececec}
+.skc-in{display:flex;align-items:center;gap:8px;height:60px;padding:0 10px 0 18px;border-radius:19px;background:#212121;border:1px solid transparent;transition:border-color .12s ease}
+.skc-in:focus-within{border-color:rgba(255,255,255,.35)}
+.skc-in i{font-style:normal;font-size:18px;color:#9a9a9a}
+.skc-in input{flex:1;min-width:0;border:0;background:transparent;color:#fff;font:inherit;font-size:20px;outline:0;-moz-appearance:textfield}
+.skc-in input::-webkit-outer-spin-button,.skc-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.skc-in input::placeholder{color:#6b6b6b}
+.skc-in .mx{height:36px;padding:0 14px;border:0;border-radius:999px;background:#3a3a3a;color:#ececec;font:inherit;font-size:14px;cursor:pointer}
+.skc-in .mx:hover{background:#454545}
+.skc-in.sm{width:120px;height:44px;padding:0 14px}
+.skc-in.sm input{font-size:16px;text-align:right}
+#cps-amt-fld.bad .skc-in{border-color:rgba(255,107,107,.6)}
+.skc-hint{margin:8px 2px 0;font-size:13.5px;color:#afafaf}
+.skc-hint b{font-weight:500;color:#ececec}
+.skc-hint .pl-link{font-size:13.5px;margin-left:6px}
+.skc-err{margin:6px 2px 0;font-size:13.5px;color:#ff8a8a}
+.skc-err:empty{display:none}
+.skc-pills{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.skc-pills.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.skc-pills button{height:48px;border-radius:16px;border:2px solid transparent;background:#212121;color:#cdcdcd;font:inherit;font-size:15px;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.skc-pills button:hover{background:#262626;color:#fff}
+.skc-pills button.on{border-color:#9a9a9a;background:#2a2a2a;color:#fff}
+.skc-sum{margin:4px 0 6px;padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.12)}
+.skc-sum .r{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.skc-sum .r:first-child{border-top:0}
+.skc-sum .r span{color:#cdcdcd}
+.skc-sum .r b{font-weight:400;color:#fff}
+.skc-sum .r em{font-style:normal;color:#8a8a8a}
+.skc-more{margin:10px 2px 16px}
+.skc-more .pl-link{font-size:14px}
+.skc-adv{margin:0 0 16px}
+.skc-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.skc-cap>label{margin:0}
+.skc-cta{height:52px;font-size:16px}
+.skc-cta:disabled{background:#4a4a4a;border-color:#4a4a4a;color:#9a9a9a;opacity:1}
+.skc-foot{margin:12px 0 0;text-align:center;font-size:13px;color:#9a9a9a}
+@media (max-width:760px){
+  .mk-follow.skc{width:100%;border-radius:26px 26px 0 0;padding:22px 16px calc(18px + env(safe-area-inset-bottom));border-bottom:0}
+  .skc-hd h2{font-size:24px}
+  .skc-pills{gap:6px}
+}
+/* 900px 높이에서 스크롤 없이 들어가게 */
+.mk-follow.skc{padding:24px 28px 20px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+.skc-hd{margin-bottom:14px}
+.skc-strat{padding-bottom:16px;margin-bottom:18px}
+.skc-fld{margin-bottom:16px}
+.skc-in{height:56px}
+.skc-pills button{height:44px}
+.skc-sum .r{min-height:40px}
+.skc-more{margin:8px 2px 14px}
+@media (max-width:760px){ .mk-follow.skc{padding:22px 16px calc(18px + env(safe-area-inset-bottom))} }
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -23085,6 +23151,70 @@ function skSecurity(){ var s=stS(), ua=navigator.userAgent, dev=/Windows/.test(u
   var r0=stRoute; stRoute=function(h){ var m=h.match(/^#\/settings(?:\/([a-z]+))?$/); ST.mList=!!m&&!m[1]; return r0.apply(this,arguments); };
   var b0=stBody; stBody=function(){ return '<button type="button" class="stg-mback" onclick="stMList()">'+SK_CHEV+'설정</button>'+b0.apply(this,arguments); };
   var v0=stView; stView=function(){ var r=v0.apply(this,arguments); var el=document.getElementById('st-root'); if(el){ el.classList.toggle('m-list',!!ST.mList); el.classList.toggle('m-detail',!ST.mList); if(ST.mList){ var on=el.querySelector('.stg-ni.on'); if(on){ on.classList.remove('on'); on.removeAttribute('aria-current'); } } } return r; };
+})();
+
+/* ═══ 전략 복사 창을 ChatGPT 어휘로 (sk-copy) ═══
+   결정 두 개(얼마로, 얼마 잃으면 멈출지). 창은 유지하고 안을 다시 구성한다.
+   순서: 전략 이름과 레버리지 한 줄 → 복사 예산 → 손실 중단 기준(알약) → 확인 행 → 복사 설정(접힘) → 흰 알약 단추.
+   거래소가 연결되지 않은 회원은 이 창 대신 플랜 화면으로 간다. 입력 검증과 시작은 기존 cpFormSync, cpStart 그대로. */
+var SKC_LOSS=[-10,-20,-30,-50];
+function skcLev(s){ var c=s&&s.cfg; return c&&c.fut&&c.lev>1?c.lev:0; }
+function skcSub(s){ var by=s.by?'@'+s.by:''; var sc=mkScope(s)+(fuIs(s)?' 선물':''); return [by,sc].filter(Boolean).join(', '); }
+function skcRow(k,v,id){ return '<div class="r"><span>'+k+'</span><b'+(id?' id="'+id+'"':'')+' class="num">'+v+'</b></div>'; }
+function skcSheet(ne){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ nick=ne; }
+  var s2=tfSSFind(nick), pt=$('mk-follow')&&TF_MKF.trig&&document.body.contains(TF_MKF.trig)?TF_MKF.trig:null;
+  if(!s2||s2.me){ toast('지금은 복사할 수 없는 전략입니다'); return; }
+  nick=s2.nick; ne=tfSSNe(nick);
+  mkFollowClose(true); tfSS3DlgClose(true);
+  var d=tfDerive(), can=!!(d.entitlement&&d.entitlement.follow);
+  TF_MKF={loss:-20,existing:'skip',cap:95,ne:ne,nick:nick,trig:pt||document.activeElement};
+  if(!can){ tfMkActivate(); return; } /* 거래소 미연결: 플랜 화면으로 */
+  var cp=cpState(), min=mkMin(s2), lev=skcLev(s2); TF_MKF.min=min;
+  var w=document.createElement('div'); w.className='mk-follow-w skc-w'; w.id='mk-follow';
+  w.innerHTML='<div class="mk-follow skc" role="dialog" aria-modal="true" aria-labelledby="mk-f-t">'
+    +'<div class="skc-hd"><h2 id="mk-f-t">전략 복사</h2><button type="button" class="mk-f-x" aria-label="닫기" onclick="mkFollowClose()">✕</button></div>'
+    +'<div class="skc-strat"><div class="nm">'+mkGlyph(s2,32)+'<div><b>'+gEsc(mkTitle(s2))+'</b><span>'+gEsc(skcSub(s2))+'</span></div></div>'
+    +(lev?'<p class="skc-lev">레버리지 변경도 원본을 따릅니다. 현재 <b class="num">'+lev+'배</b>입니다.</p>':'')+'</div>'
+    +'<div class="skc-fld" id="cps-amt-fld"><label for="cps-amt">복사 예산</label>'
+    +'<div class="skc-in"><i>$</i><input id="cps-amt" type="number" inputmode="decimal" min="'+min+'" placeholder="'+min+'" oninput="cpFormSync()" aria-describedby="skc-amt-h cps-amt-err"><button type="button" class="mx" onclick="$(\'cps-amt\').value='+Math.floor(cp.spot)+';cpFormSync()">최대</button></div>'
+    +'<div class="skc-hint" id="skc-amt-h">사용 가능 <b class="num" id="cps-spot">'+cpUsd(cp.spot,0)+'</b>, 최소 <span class="num">'+cpUsd(min,0)+'</span>'+(cp.spot<min?' <button type="button" class="pl-link" onclick="cpTopup(\''+ne+'\')">체험 예산 추가</button>':'')+'</div>'
+    +'<div class="skc-err" id="cps-amt-err" role="alert"></div></div>'
+    +'<div class="skc-fld"><span class="lb" id="skc-loss-l">손실 중단 기준</span>'
+    +'<div class="skc-pills" role="radiogroup" aria-labelledby="skc-loss-l">'+SKC_LOSS.map(function(v){ return '<button type="button" role="radio" aria-checked="'+(v===-20)+'" class="'+(v===-20?'on':'')+'" onclick="skcLoss('+v+',this)">'+Math.abs(v)+'%</button>'; }).join('')+'</div>'
+    +'<div class="skc-hint" id="mk-f-lossh">예산의 20%를 잃으면 복사를 자동으로 멈춥니다.</div></div>'
+    +'<div class="skc-sum" id="mk-f-sum"></div>'
+    +'<p class="skc-more"><button type="button" class="pl-link" id="skc-more-b" aria-expanded="false" onclick="skcMore()">복사 설정</button></p>'
+    +'<div class="skc-adv" id="skc-adv" hidden>'
+    +'<div class="skc-fld"><span class="lb" id="skc-ex-l">복사 시작 시점</span><div class="skc-pills two" id="mk-f-ex" role="radiogroup" aria-labelledby="skc-ex-l"><button type="button" role="radio" aria-checked="true" class="on" onclick="skcEx(\'skip\',this)">다음 진입부터</button><button type="button" role="radio" aria-checked="false" onclick="skcEx(\'copy\',this)">현재 포지션부터</button></div></div>'
+    +'<div class="skc-fld skc-cap"><label for="mk-f-cap">주문당 예산 한도</label><div class="skc-in sm"><input id="mk-f-cap" type="number" inputmode="numeric" min="5" max="95" step="5" value="95" oninput="mkFollowCap(this.value);cpFormSync()"><i>%</i></div></div>'
+    +'<div class="skc-hint">한 번의 주문에 쓰는 예산 비율입니다.</div></div>'
+    +'<button type="button" class="pl-cta pl-cta-w skc-cta" id="cps-cta" disabled onclick="cpStart(\''+ne+'\')">전략 복사 시작</button>'
+    +'<p class="skc-foot">복사는 무료이며 언제든 멈출 수 있습니다.</p>'
+    +'<div id="mk-f-live" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>'
+    +'</div>';
+  w.addEventListener('click',function(e){ if(e.target===w) mkFollowClose(); });
+  document.body.appendChild(w);
+  mkFollowInert(true,w);
+  var gs=$('g-scroll'); if(gs) gs.style.overflow='hidden';
+  document.addEventListener('keydown',mkFollowEsc);
+  cpFormSync();
+  var inp=$('cps-amt'); if(inp&&innerWidth>760){ try{ inp.focus(); }catch(e){} }
+}
+function skcLoss(v,btn){ TF_MKF.loss=v; var g=btn&&btn.parentNode; if(g) [].forEach.call(g.children,function(b){ var on=b===btn; b.classList.toggle('on',on); b.setAttribute('aria-checked',String(on)); });
+  var h=$('mk-f-lossh'); if(h) h.textContent='예산의 '+Math.abs(v)+'%를 잃으면 복사를 자동으로 멈춥니다.'; cpFormSync(); }
+function skcEx(v,btn){ mkFollowExisting(v,btn); var g=btn&&btn.parentNode; if(g) [].forEach.call(g.children,function(b){ b.setAttribute('aria-checked',String(b===btn)); }); }
+function skcMore(){ var a=$('skc-adv'), b=$('skc-more-b'); if(!a) return; a.hidden=!a.hidden; if(b){ b.setAttribute('aria-expanded',String(!a.hidden)); b.textContent=a.hidden?'복사 설정':'복사 설정 접기'; } }
+/* 확인 행: 지금 고른 값을 항상 보인다 (바꾼 값도 그대로) */
+function skcSum(v){ var el=$('mk-f-sum'); if(!el) return; var L=Math.abs(TF_MKF.loss||20);
+  el.innerHTML=skcRow('복사 예산',v==null?'<em>미입력</em>':cpUsd(v,0))
+    +skcRow('손실 중단',v==null?L+'%':cpUsd(v*L/100,0)+' ('+L+'%)')
+    +skcRow('시작 시점',TF_MKF.existing==='copy'?'현재 포지션부터':'다음 진입부터')
+    +skcRow('주문당 예산 한도',(TF_MKF.cap||95)+'%');
+  var live=$('mk-f-live'); if(live&&v!=null) live.textContent='복사 예산 '+cpUsd(v,0)+', 손실 '+L+'%에서 멈춤'; }
+(function(){
+  mkFollowSheet=skcSheet;
+  mkFollowSum=skcSum;
 })();
 /*BT_CORE_END*/
 </script>
