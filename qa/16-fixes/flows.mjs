@@ -73,8 +73,10 @@ ok('E','만료 회원의 AI 트레이딩은 시작 화면',(await ev(`!!document
 
 // F 설정: 전용 화면, 통화 설정 없음, 계정 삭제 확인, 초대 회원 결제 화면
 await fresh(true);
-await ev(`gSetMenu({stopPropagation:function(){},currentTarget:document.body})`); await sleep(900);
-ok('F','설정 단추가 전용 화면을 연다',(await ev(`location.hash`))==='#/settings/general');
+await ev(`gSetMenu({stopPropagation:function(){},currentTarget:document.body})`); await sleep(500);
+ok('F','톱니를 누르면 예전 팝업 메뉴',(await ev(`!document.getElementById('g-setmenu').hidden`))===true);
+await ev(`document.getElementById('gm-set-item').click()`); await sleep(900);
+ok('F','팝업의 설정 항목이 설정 페이지를 연다',(await ev(`location.hash`))==='#/settings/general');
 s=await J(`{cur:!!document.querySelector('.stg-main select[onchange*=Cur], #glc-cur:not([style*=none])')&&getComputedStyle(document.getElementById('glc-cur')||document.body).display!=='none'&&!!document.getElementById('glc-cur'),lang:document.querySelectorAll('.stg-main select option').length,txt:document.querySelector('.stg-main').innerText}`);
 ok('F','언어만 고르고 통화 선택은 없다',s.lang>=5&&!/통화 선택|KRW|원화/.test(s.txt),{lang:s.lang});
 await ev(`location.hash='#/settings/account'`); await sleep(800);
