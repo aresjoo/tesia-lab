@@ -7649,6 +7649,42 @@ body.g-dark .g-side{background:#000;border-right:1px solid rgba(255,255,255,.1)}
 body.g-dark{--g0:#000}
 body.g-dark .g-pillband{background-image:linear-gradient(to top,#000 56%,rgba(0,0,0,0))}
 body.g-dark #g-appbanner{background:#000}
+/* ── AI 질문 패널 (입력창 바로 위, Genspark식) ── */
+#g-askdock{max-width:820px;margin:0 auto 10px;position:relative;z-index:3}
+.ska{background:#2f2f2f;border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden;animation:skaIn .18s ease both}
+@keyframes skaIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ska .hd{display:flex;align-items:center;gap:12px;padding:14px 16px 12px 20px;background:#333}
+.ska .hd b{flex:1;min-width:0;font-size:16px;font-weight:500;color:#fff}
+.ska .pg{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:#afafaf;white-space:nowrap}
+.ska .pg button,.ska .x{width:28px;height:28px;border:0;border-radius:8px;background:none;color:#cdcdcd;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.ska .pg button:hover,.ska .x:hover{background:rgba(255,255,255,.08);color:#fff}
+.ska .pg button:disabled{opacity:.35;cursor:default;background:none}
+.ska .ops{display:grid;gap:8px;padding:12px 16px 6px;max-height:46vh;overflow-y:auto}
+.ska .op{display:grid;gap:2px;width:100%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#262626;color:#ececec;font:inherit;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.ska .op:hover{background:#2c2c2c;border-color:rgba(255,255,255,.2)}
+.ska .op.on{border-color:#9a9a9a;background:#2c2c2c}
+.ska .op b{font-size:15px;font-weight:500;color:#fff}
+.ska .op span{font-size:13px;color:#afafaf}
+.ska .op.free{grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;cursor:default;padding:6px 6px 6px 14px}
+.ska .op.free input{border:0;background:transparent;color:#fff;font:inherit;font-size:15px;outline:0;min-width:0;height:36px}
+.ska .op.free .send{height:34px;padding:0 14px;border:0;border-radius:999px;background:#fff;color:#000;font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+.ska .ft{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 20px 14px}
+.ska .lk{border:0;background:none;color:#afafaf;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+.ska .lk:hover{color:#fff}
+.ska .go{height:34px;padding:0 16px;border:0;border-radius:999px;background:#fff;color:#000;font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+.ska-note{display:inline-flex;align-items:center;gap:6px;margin:4px 0 8px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#171717;font-size:14px;color:#ececec}
+.ska-note.done{color:#9a9a9a;background:transparent}
+@media (max-width:760px){ #g-askdock{margin:0 0 8px} .ska .ops{max-height:40vh} }
+/* 채팅의 전략 카드(tf-sum): #303030 카드, 16/14 글자, 흰 알약 단추 */
+.tf-sum{max-width:560px;background:#303030;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:20px 22px 20px}
+.tf-sum .h{font-size:16px;font-weight:500;color:#fff;margin-bottom:12px}
+.tf-sum .rows{gap:0;margin-bottom:12px;border-top:1px solid rgba(255,255,255,.1)}
+.tf-sum .r{align-items:center;min-height:42px;font-size:15px;border-bottom:1px solid rgba(255,255,255,.1)}
+.tf-sum .r .k{color:#afafaf;width:104px}
+.tf-sum .r .v{color:#fff;font-weight:400}
+.tf-sum .re{font-size:13px;color:#cdcdcd}
+.tf-sum .tf-btn.p,.tf-sum .tf-btn{width:100%;height:48px;border-radius:999px;background:#fff;border:0;color:#000;font-size:15px;font-weight:500}
+.tf-sum .tf-btn.p:hover{background:#e5e5e5}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -11221,6 +11257,8 @@ function taiMarketRules(){
    +'\n전략 설계서: 사용자가 사고파는 조건을 구체적으로 말하거나(예: "비트코인 크게 빠지면 사서 10% 오르면 팔아", "공포 지수 낮을 때만 사") 전략을 직접 설계해 달라고 하면, SETUP 대신 답변 마지막 줄에 정확히 이 형식의 태그를 붙여라: [STRATEGY {"asset":"비트코인","depth":"deep","tp":10,"sl":-5,"fng":25,"trend":false,"period":"1y","name":"공포에 사는 비트코인"}]. asset 은 비트코인, 이더리움, 솔라나, 리플, 도지코인, 에이다, 아발란체, 비앤비, 테슬라, 엔비디아, 애플, 마이크로소프트, 아마존, 메타, 알파벳, 에이엠디, 금, 나스닥, S&P 500 중 하나. depth 는 얼마나 밀렸을 때 살지로 shallow(조금), mid(보통), deep(크게). tp 는 익절 %(없으면 null), sl 은 손절 %(음수, -1에서 -15). fng 는 공포 탐욕 지수 상한(그 값 이하일 때만 산다, 코인에만, 없으면 null). trend 가 true 면 가격이 한쪽으로 뚜렷할 때만 산다. period 는 1y, 2y, all. name 은 14자 이내. 이 엔진이 계산할 수 있는 것은 "밀렸다가 하루 0.5% 넘게 반등한 날 산다"는 사는 방식 하나와 익절, 손절, 25일 보유 한도, 공포 탐욕 지수 상한뿐이다. 사용자의 조건이 이 틀과 다르면 가장 가까운 값으로 옮기고, 무엇이 달라졌는지 한 문장으로 솔직하게 말하라. 뉴스, 거래량, 다른 지표처럼 계산할 수 없는 조건은 빼고 뺐다고 말하라. 수익률을 예상하거나 숫자를 지어내지 마라. 결과는 화면의 백테스트가 실제 시세로 계산한다. 이 태그를 붙이면 NEXT, ACT, SETUP 은 붙이지 않는다.'
    +'\n사용자가 자동매매 전략 생성, 매매 위임, 조건부 실행을 원하거나 제안에 동의하면, 답변 마지막 줄에 반드시 정확히 이 형식의 태그를 붙여라: [SETUP {"entryMode":"dip|trend|null","pair":"BTC/USDT|ETH/USDT|null"}] — 대화에서 이미 파악된 값만 채우고 모르면 null. 자산이 BTC나 ETH가 아니면 pair는 null로 두고, 자동 실행은 코인 페어부터 지원되니 같은 구조를 BTC/ETH로 만들어 보자고 한 문장으로 안내하라. 태그를 붙이면 화면에 필수 설정 질문이 이어지니, 답변에는 몇 가지만 확인하고 바로 시작하겠다고 말하라. 태그 없이 "아래에서 설정하십시오" 같은 말은 절대 하지 마라, 태그가 있어야 화면에 설정이 뜬다.'
    +'\n요청이 광범위해서 분석 방향 확인이 필요하면(예: 막연한 "차트 분석해줘"), 한두 문장 안내 후 답변 마지막 줄에 [ASK {"steps":[{"title":"어떤 방식으로 분석해드리면 되겠습니까?","multi":true,"options":[{"t":"항목","d":"짧은 부연"}]},{"title":"어느 기간을 보겠습니까?","multi":false,"options":[{"t":"최근 3개월","d":"단기 흐름"},{"t":"최근 1년","d":"큰 흐름"}]}]}] 형식으로 선택지를 제시하라. 확인할 축이 하나면 steps에 1개만, 최대 2단계. 각 단계 선택지는 4~6개. 정말 필요할 때만, 연속 사용 금지.'
+   +'\n전략 정보 확인: 사용자가 전략을 만들거나 대신 사고팔아 달라고 했는데 자산, 사는 때, 파는 때(익절이나 손절), 검증 기간 가운데 대화에서 알 수 없는 것이 있으면 STRATEGY 대신 [ASK]로 빠진 것만 물어라. 대화에서 이미 나온 것은 다시 묻지 마라. 최대 4단계, 단계마다 multi 는 false, 선택지 3~4개(t 는 10자 이내, d 는 한 줄). 이때 답변 본문은 "몇 가지만 여쭙겠습니다." 한 문장만 쓴다. 사용자가 알아서 하라고 하거나 질문에 이미 답했으면 다시 묻지 말고 합리적으로 채워 STRATEGY 로 바로 만든다.'
+   +'\n면책 금지: "과거 성과일 뿐", "수익을 보장하지 않는다", "투자 권유가 아니다" 같은 면책이나 경고 문장, 경고 상자를 쓰지 마라. 사실과 조건만 말한다.'
    +'\n이 세션의 첫 번째 답변에서만, 마지막 줄에 대화 내용 기반의 짧은 세션 제목(2~6단어)을 [TITLE "제목"] 태그로 붙여라. 두 번째 답변부터는 절대 붙이지 않는다.'
    +'\n방향성 확률: 사용자가 특정 자산의 방향(오를까, 내릴까, 사도 될까, 팔아야 할까)을 물으면 답변 마지막 줄에 정확히 이 형식의 태그를 하나만 붙여라: [GAUGE {"symbol":"TSLA","label":"테슬라","up":63,"down":37,"position":"top"}] — up과 down은 합이 100인 정수 확률로, 방금 분석한 지표와 구조에 근거해 정한다. position은 스스로 판단한다: 결론부터 궁금한 직접 질문("테슬라 오를까?")이면 "top"(확률을 먼저 보여주고 설명), 맥락 설명이 먼저 필요한 흐름이면 "bottom". 방향 질문이 아니면(가격 확인, 용어 질문, 일반 시장 잡담) 절대 붙이지 않는다.'
    +'\n실행 버튼: 사용자가 실행으로 넘어갈 신호가 명확할 때만 답변 마지막 줄에 [ACT [{"type":"alert","label":"테슬라 300달러 오면 알려줘"}]] 형식의 태그를 붙여라. type은 4개뿐이다: alert(조건 알림 등록), backtest(전략 검증), delegate_trade(조건부 매매 위임, "direction":"buy" 또는 "sell" 필수), auto_trade(자동매매 전환). 기본값은 붙이지 않는 것이다. 붙일 때는 1개가 원칙이고, 매수와 매도로 방향이 갈리는 상황에서만 2개까지, 3개 이상은 절대 금지. label은 템플릿이 아니라 대화 속 종목명과 조건을 자연스럽게 녹여 직접 쓴다. 타입 선택 기준: 사용자가 매매 타이밍을 고민하면(언제 사야 할지, 언제 팔아야 할지, 지금 사도 되나, 탈출 언제, 포지션 정리 언제) alert가 아니라 반드시 delegate_trade를 쓰고, label은 나에게 맡기는 위임 화법으로 쓴다. 예: "언제 사야 할지 모르겠어" → "너가 대신 적정 가격에 사줘" / "롱 언제 정리해야 함?" → "너가 적절한 타이밍에 대신 정리해줘" / "평단 마이너스인데 언제 팔지?" → "너가 정한 손실 한도 안에서 대신 정리해줘". alert는 사용자가 알림만 원할 때(특정 가격 도달을 통지받고 싶다는 맥락)만 쓴다. 예: "테슬라 300달러 오면 알려줘". 붙여도 되는 신호(위에서부터 우선): ① 매매 타이밍 고민이 보이면 무조건 delegate_trade 1개를 붙인다, 절대 생략하지 마라 — "언제 사야 할지 모르겠어" → "너가 대신 적정 가격에 사줘", "롱 언제 정리해?" → "너가 적절한 타이밍에 대신 정리해줘", "평단 마이너스인데 언제 팔지?" → "너가 정한 손실 한도 안에서 대신 정리해줘", "지금 사도 되나?" → "너가 적절할 때 대신 사줘" ② 특정 종목에 매매 의사를 밝힘 ③ 사용자가 본인 전략이나 아이디어를 제시함 ④ 감정 실린 확신("이거 지릴 것 같은데") ⑤ 같은 종목을 반복해서 물어봄. 붙이면 안 되는 신호(신호 ①보다 약하다 — 매매 타이밍 고민이 보이면 첫 질문이어도 delegate_trade 를 붙인다): 단순 정보 탐색(가격 얼마야, 용어 질문), 불안이나 공포 맥락("떨어질 것 같아 무섭다") — 불안 맥락에선 위임을 권하지 말고 공감과 분석으로만 답한다 — 그리고 사용자가 초보자임을 밝힌 맥락, 실시간 시세 소스가 없는 비상장 자산, 사용자의 오류 지적을 정정하는 턴. 단 하나의 예외 없는 상위 규칙: 답변 본문에서 자동매매 전환, 매매 위임, 조건 알림, 전략 생성 같은 실행을 네가 먼저 제안하거나 언급했다면, 그 제안과 같은 내용의 [ACT] 태그를 반드시 붙인다 — 본문으로 제안만 하고 누를 버튼을 안 주는 것을 금지한다.'
@@ -23425,6 +23463,75 @@ function skIntroCopy(){
 (function(){ var iv1=tfIntroView; tfIntroView=function(){ var r=iv1.apply(this,arguments); try{ skIntroCopy(); }catch(e){} return r; };
   /* 통화를 다시 칠하는 함수가 카드 금액을 되돌리지 않게 */
   if(typeof applyCurrency==='function'){ var ac0=applyCurrency; applyCurrency=function(){ var r=ac0.apply(this,arguments); try{ if(document.querySelector('.txh-card')) skIntroCopy(); }catch(e){} return r; }; }
+})();
+
+/* ═══ AI가 빠진 정보만 묻는다 (sk-ask) ═══
+   AI 답변의 [ASK] 질문을 채팅 안이 아니라 입력창 바로 위 패널로 띄운다(Genspark식).
+   "N개 중 M", 이전/다음, 닫기, 선택지는 한 번 누르면 다음 질문, 마지막에 "직접 답변 작성", 작은 "AI가 알아서 판단".
+   "바로 실행" 단추는 고정 질문 다섯 개 대신 AI에게 보내고, AI가 대화에서 모르는 것만 묻는다. */
+var SKA_CHEV_L='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+var SKA_CHEV_R='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+function skaDock(){ var w=document.querySelector('.g-composer-wrap'); if(!w) return null; var d=document.getElementById('g-askdock'); if(!d){ d=document.createElement('div'); d.id='g-askdock'; w.insertBefore(d,w.firstChild); } return d; }
+function skaCard(cfg){
+  if(!cfg) return;
+  var steps=(cfg.steps&&cfg.steps.length)?cfg.steps:(cfg.options&&cfg.options.length?[cfg]:null);
+  if(!steps) return;
+  steps=steps.slice(0,4).filter(function(s){ return s&&s.options&&s.options.length; });
+  if(!steps.length) return;
+  var dock=skaDock(); if(!dock){ return; }
+  TAI.qn=(TAI.qn||0)+1; var id='gqc'+TAI.qn;
+  TAI.qcfg=TAI.qcfg||{}; TAI.qcfg[id]={steps:steps,idx:0,picks:steps.map(function(){ return []; }),free:steps.map(function(){ return ''; })};
+  /* 채팅 안에는 한 줄만 */
+  taiThreadAdd('<div class="ska-note" id="'+id+'-n">몇 가지만 여쭙겠습니다. 아래에서 '+steps.length+'개에 답해 주십시오 <span aria-hidden="true">↓</span></div>');
+  dock.innerHTML='<div class="ska" id="'+id+'" role="dialog" aria-label="TETH의 질문"></div>';
+  skaRender(id);
+}
+function skaRender(id){
+  var el=document.getElementById(id), st=(TAI.qcfg||{})[id]; if(!el||!st) return;
+  var s=st.steps[st.idx], n=st.steps.length, multi=!!s.multi, freeOn=st.freeOn===st.idx;
+  var pg=n>1?'<span class="pg"><button type="button" aria-label="이전 질문" onclick="skaNav(\''+id+'\',-1)"'+(st.idx===0?' disabled':'')+'>'+SKA_CHEV_L+'</button><span>'+n+'개 중 '+(st.idx+1)+'</span><button type="button" aria-label="다음 질문" onclick="skaNav(\''+id+'\',1)"'+(st.idx===n-1?' disabled':'')+'>'+SKA_CHEV_R+'</button></span>':'';
+  el.innerHTML='<div class="hd"><b>'+gEsc(s.title||'몇 가지만 확인하겠습니다')+'</b>'+pg+'<button type="button" class="x" aria-label="닫기" onclick="taiAskClose(\''+id+'\')">✕</button></div>'
+    +'<div class="ops">'+s.options.slice(0,6).map(function(o,i){ var on=st.picks[st.idx].indexOf(i)>=0; return '<button type="button" class="op'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="skaPick(\''+id+'\','+i+')"><b>'+gEsc(o.t)+'</b>'+(o.d?'<span>'+gEsc(o.d)+'</span>':'')+'</button>'; }).join('')
+    +(freeOn?'<div class="op free"><input id="'+id+'-f" type="text" placeholder="직접 답을 적어 주십시오" value="'+gEsc(st.free[st.idx]||'')+'" onkeydown="if(event.key===\'Enter\'){event.preventDefault();skaFree(\''+id+'\');}"><button type="button" class="send" onclick="skaFree(\''+id+'\')">확인</button></div>'
+      :'<button type="button" class="op" onclick="skaFreeOpen(\''+id+'\')"><b>직접 답변 작성</b></button>')+'</div>'
+    +'<div class="ft"><button type="button" class="lk" onclick="taiAskSkip(\''+id+'\')">AI가 알아서 판단</button>'+(multi?'<button type="button" class="go" onclick="skaNext(\''+id+'\')">'+(st.idx<n-1?'다음':'보내기')+'</button>':'')+'</div>';
+  if(freeOn){ var f=document.getElementById(id+'-f'); if(f) try{ f.focus(); }catch(e){} }
+}
+function skaNav(id,dir){ var st=(TAI.qcfg||{})[id]; if(!st) return; st.freeOn=null; st.idx=Math.max(0,Math.min(st.steps.length-1,st.idx+dir)); skaRender(id); }
+function skaPick(id,i){ var st=(TAI.qcfg||{})[id]; if(!st) return; var s=st.steps[st.idx], p=st.picks[st.idx];
+  if(s.multi){ var k=p.indexOf(i); if(k>=0) p.splice(k,1); else p.push(i); skaRender(id); return; }
+  st.picks[st.idx]=[i]; st.free[st.idx]=''; skaNext(id); }
+function skaFreeOpen(id){ var st=(TAI.qcfg||{})[id]; if(!st) return; st.freeOn=st.idx; skaRender(id); }
+function skaFree(id){ var st=(TAI.qcfg||{})[id]; if(!st) return; var f=document.getElementById(id+'-f'), v=(f&&f.value||'').trim(); if(!v){ toast('답을 적어 주십시오'); return; } st.free[st.idx]=v; st.picks[st.idx]=[]; st.freeOn=null; skaNext(id); }
+function skaNext(id){ var st=(TAI.qcfg||{})[id]; if(!st) return;
+  if(st.idx<st.steps.length-1){ st.idx++; skaRender(id); return; }
+  skaSend(id); }
+function skaSend(id){
+  var st=(TAI.qcfg||{})[id]; if(!st) return;
+  if(TAI.req||(TAI.busy&&Date.now()-(TAI.busyAt||0)<180000)){ toast('이전 답변을 마무리하는 중입니다, 끝나면 다시 눌러 주십시오'); return; }
+  var parts=[], rows='';
+  for(var k=0;k<st.steps.length;k++){
+    var ttl=(st.steps[k].title||'').replace(/[?？].*$/,'').trim();
+    var vals=st.free[k]||st.picks[k].map(function(i){ return st.steps[k].options[i].t; }).join(', ');
+    if(!vals) continue;
+    parts.push((ttl?ttl+': ':'')+vals); rows+='<div class="rw"><b>'+gEsc(ttl||'답')+'</b><span>'+gEsc(vals)+'</span></div>';
+  }
+  taiAskClose(id);
+  if(!parts.length){ taiAskSkipText(); return; }
+  taiNextClear(); taiActClear();
+  taiThreadAdd('<div class="g-usum">'+rows+'</div>'); gUserPin();
+  var fin=S.versions.length?S.versions[S.versions.length-1]:null;
+  taiMarket(parts.join(' / ')+' 기준으로 진행해줘',fin,function(){ gConvAI('네트워크 연결을 확인한 뒤 다시 시도해 주십시오.'); });
+}
+function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value='세부 조건은 알아서 합리적으로 판단해서 바로 진행해줘'; gSend(); } }
+(function(){
+  taiAskCard=skaCard; taiAskRender=skaRender;
+  taiAskClose=function(id){ var el=document.getElementById(id); if(el) el.remove(); var d=document.getElementById('g-askdock'); if(d&&!d.children.length) d.remove(); var n=document.getElementById(id+'-n'); if(n){ n.textContent='질문에 답했습니다'; n.classList.add('done'); } if(TAI.qcfg) delete TAI.qcfg[id]; };
+  taiAskSkip=function(id){ taiAskClose(id); taiAskSkipText(); };
+  /* "바로 실행" 류 단추: 고정 질문 다섯 개 대신 AI에게 보낸다. AI가 모르는 것만 [ASK]로 묻는다 */
+  var ts0=tfStart; tfStart=function(act){
+    if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); f.value=act.label; gSend(); return; }
+    return ts0.apply(this,arguments); };
 })();
 /*BT_CORE_END*/
 </script>
