@@ -70,7 +70,7 @@ await ev(`acSheetClose(true)`);
 s=await J(`(function(){ var a=acS(); a.sub={st:'cancelled',until:Date.now()-1000}; tfS().payDone=false; acSave(); acOpen({ex:'bybit'}); return {ready:acReady('bybit'),step:acStep(),acc:acAccess()}; })()`);
 ok('E','구독 만료: 준비 안 됨, 결제 단계로',s.ready===false&&s.step==='pay',s);
 await ev(`location.hash='#/settings/general'`); await sleep(500); await ev(`location.hash='#/trade'`); await sleep(1800);
-ok('E','만료 회원의 AI 트레이딩은 시작 화면',(await ev(`!!document.querySelector('.acx-entry:not(.rdy)')`))===true);
+ok('E','만료 회원의 AI 트레이딩은 소개 화면과 시작하기',(await ev(`G.mode==='tfintro'&&/시작하기/.test((document.querySelector('.txh-hero button')||{}).innerText||'')`))===true);
 
 // F 설정: 전용 화면, 통화 설정 없음, 계정 삭제 확인, 초대 회원 결제 화면
 await fresh(true);
