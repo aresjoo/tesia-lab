@@ -136,6 +136,7 @@ function tfIntentRun(){ var o=tfIntentPeek(); if(!o||!S.user) return false; tfIn
   if(o.kind==='bt'){ location.hash='#/share/bt/'+o.id; return true; }
   if(o.kind==='copy'){ if(location.hash.indexOf('#/share/s/')!==0) tfSS3Go(o.id,'all','ov'); setTimeout(function(){ cpSetupGo(o.id); },500); return true; }
   if(o.kind==='start'&&typeof acStart==='function'){ acStart(o); return true; }
+  if(o.kind==='settings'&&typeof stGo==='function'){ stGo('general'); return true; }
   return false; }
 function btOpen(ne){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:ne,from:location.hash}); try{ tfTrack('bt_guest_gate',{id:ne}); }catch(e){} return; } location.hash='#/share/bt/'+ne; }
 function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } if(BT.s&&BT.s.mine){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} TF_ONSTRAT=false; tfBackToChat(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }

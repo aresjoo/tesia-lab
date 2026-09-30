@@ -36,7 +36,6 @@ function acEntryView(){
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
-  if(!gSetMenu.p16){ var g0=gSetMenu; gSetMenu=function(e){ var r=g0.apply(this,arguments); try{ var ar=document.querySelector('#gm-set-item .arr'); if(ar) ar.style.display=S.user?'none':''; }catch(x){} return r; }; gSetMenu.p16=1; } /* 회원의 설정 항목은 페이지로 가니 화살표를 뺀다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
 }

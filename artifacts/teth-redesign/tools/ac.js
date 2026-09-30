@@ -146,7 +146,7 @@ function acCardRead(p){ var g=function(i){ return (document.getElementById(p+i)|
   if(c.length<3){ acErr(p+'cc','보안 코드 3자리를 입력해 주십시오'); return null; }
   if(!h){ acErr(p+'ch','카드에 적힌 이름을 입력해 주십시오'); return null; }
   return {n:n,last4:n.slice(-4),brand:n.charAt(0)==='4'?'Visa':n.charAt(0)==='5'?'Mastercard':n.charAt(0)==='3'?'Amex':'카드',exp:x.slice(0,2)+'/'+x.slice(2),name:h}; }
-function acBusy(id,label){ var b=document.getElementById(id); if(!b) return; b.disabled=true; b.setAttribute('data-l',b.textContent); b.innerHTML='<i class="sp"></i>'+label; }
+function acBusy(id,label){ var b=document.getElementById(id); if(!b) return; b.disabled=true; b.setAttribute('data-l',b.textContent); b.innerHTML='<i class="acx-sp"></i>'+label; }
 function acCharge(card){ return !(card.n.slice(0,4)==='0000'||(window.AC_QA&&AC_QA.pay==='fail')); }
 function acBillAdd(st,card,amt,label){ var a=acS(); a.bill.unshift({id:'T'+Date.now().toString(36).toUpperCase(),at:Date.now(),label:label||'TETH 구독',amt:amt,st:st,last4:card?card.last4:'',brand:card?card.brand:''}); }
 function acPaySaved(){ var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0]; if(!sv) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
@@ -184,7 +184,7 @@ function acAuthOpen(){
 function acAuthClose(){ var w=document.getElementById('ac-auth'); if(w) w.remove(); }
 function acAuthNo(){ var a=acS(); a.auth={st:'cancel',ex:a.ex}; acSave(); acAuthClose(); acRe(); }
 function acAuthYes(){
-  var a=acS(), my=++AC_RUN, ok=document.getElementById('ac-auth-ok'); if(ok){ ok.disabled=true; ok.innerHTML='<i class="sp"></i>승인 중'; }
+  var a=acS(), my=++AC_RUN, ok=document.getElementById('ac-auth-ok'); if(ok){ ok.disabled=true; ok.innerHTML='<i class="acx-sp"></i>승인 중'; }
   setTimeout(function(){ acAuthClose(); if(my!==AC_RUN) return; var bad=window.AC_QA&&AC_QA.auth==='fail';
     a.auth=bad?{st:'fail',ex:a.ex}:{st:'ok',ex:a.ex,at:Date.now(),uid:String(30000000+((mkHash((S.user&&S.user.email||'u')+a.ex))%60000000))};
     acSave(); acRe(); if(!bad&&acStep()==='uid') acUidRun(); },1300);

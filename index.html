@@ -5257,14 +5257,10 @@ body.tm-helpon #teth-help-pop.on{display:block!important}
   <div id="gm-scrim" onclick="gSetMenuClose();glcClose()"></div>
   <div id="g-setmenu" hidden>
     <div class="gm-grab" onclick="gSetMenuClose()"></div>
-    <div class="gm-item" id="gm-set-item" role="button" tabindex="0" onclick="gmSetClick(event)" onmouseenter="if(!S.user)gmFlip(this)">
+    <button class="gm-item" id="gm-set-item" onclick="gmSetClick(event)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3H9.8L9.4 5.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4.4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>
-      설정<span class="sp"></span><svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      <div class="gm-sub" id="gm-sub-set" onclick="event.stopPropagation()">
-        <div class="st" id="gm-set-st">설정</div>
-        <button onclick="glcOpen(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z"/></svg><span id="gm-glc-lbl">언어 및 통화</span><span class="gm-val" id="g-side-glc-label">한국어 / USD</span></button>
-      </div>
-    </div>
+      설정
+    </button>
     <button class="gm-item" onclick="gSetMenuClose();tfNav('#/insight')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       인사이트
@@ -6820,7 +6816,7 @@ a.btg-out{text-decoration:none}
 .acx-ac .bts .ok{background:#c8f43c;border-color:#c8f43c;color:#0e0f11}
 .acx-ac .bts button:disabled{opacity:.6;cursor:default}
 .acx-ac small{display:block;margin-top:14px;font-size:12px;color:#8b9096}
-.sp{display:inline-block;width:14px;height:14px;margin-right:8px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;vertical-align:-2px;animation:acSp .7s linear infinite}
+.acx-sp{display:inline-block;width:14px;height:14px;margin-right:8px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;vertical-align:-2px;animation:acSp .7s linear infinite}
 @keyframes acSp{to{transform:rotate(360deg)}}
 /* AI 트레이딩 시작 */
 .acx-entry{max-width:880px;margin:0 auto;padding:72px 24px 96px}
@@ -6926,7 +6922,7 @@ body.light .stg,body.light .acx-page,body.light .acx-entry{color:#16181b}
   .acx-entry .pts{grid-template-columns:1fr;gap:0;margin-top:40px}.acx-entry .pts li{padding:18px 0}
   .acx-entry .cta .bt-cta{width:100%}
 }
-@media (prefers-reduced-motion:reduce){ .acx-sheet,.acx-cf,.acx-auth{animation:none} .sp{animation-duration:1.6s} }
+@media (prefers-reduced-motion:reduce){ .acx-sheet,.acx-cf,.acx-auth{animation:none} .acx-sp{animation-duration:1.6s} }
 .acx-entry.rdy .cta .bt-sec{width:auto;height:54px;padding:0 26px;margin:0}
 .acx-entry.rdy .mine{margin-top:40px}
 .acx-mono{display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:8px;background:#17e6a1;color:#0b1a14;font-style:normal;font-weight:800;vertical-align:-4px}
@@ -20911,6 +20907,7 @@ function tfIntentRun(){ var o=tfIntentPeek(); if(!o||!S.user) return false; tfIn
   if(o.kind==='bt'){ location.hash='#/share/bt/'+o.id; return true; }
   if(o.kind==='copy'){ if(location.hash.indexOf('#/share/s/')!==0) tfSS3Go(o.id,'all','ov'); setTimeout(function(){ cpSetupGo(o.id); },500); return true; }
   if(o.kind==='start'&&typeof acStart==='function'){ acStart(o); return true; }
+  if(o.kind==='settings'&&typeof stGo==='function'){ stGo('general'); return true; }
   return false; }
 function btOpen(ne){ if(!S.user){ authOpen('signup'); tfIntentSet({kind:'bt',id:ne,from:location.hash}); try{ tfTrack('bt_guest_gate',{id:ne}); }catch(e){} return; } location.hash='#/share/bt/'+ne; }
 function btBack(){ if(BT.phase==='run'){ btStop(); btReady(); return; } if(BT.s&&BT.s.mine){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} TF_ONSTRAT=false; tfBackToChat(); return; } var ne=BT.s?tfSS3Rid(BT.s):''; if(history.length>1) history.back(); else tfSS3Go(ne,'all','ov'); }
@@ -21321,7 +21318,7 @@ function acCardRead(p){ var g=function(i){ return (document.getElementById(p+i)|
   if(c.length<3){ acErr(p+'cc','보안 코드 3자리를 입력해 주십시오'); return null; }
   if(!h){ acErr(p+'ch','카드에 적힌 이름을 입력해 주십시오'); return null; }
   return {n:n,last4:n.slice(-4),brand:n.charAt(0)==='4'?'Visa':n.charAt(0)==='5'?'Mastercard':n.charAt(0)==='3'?'Amex':'카드',exp:x.slice(0,2)+'/'+x.slice(2),name:h}; }
-function acBusy(id,label){ var b=document.getElementById(id); if(!b) return; b.disabled=true; b.setAttribute('data-l',b.textContent); b.innerHTML='<i class="sp"></i>'+label; }
+function acBusy(id,label){ var b=document.getElementById(id); if(!b) return; b.disabled=true; b.setAttribute('data-l',b.textContent); b.innerHTML='<i class="acx-sp"></i>'+label; }
 function acCharge(card){ return !(card.n.slice(0,4)==='0000'||(window.AC_QA&&AC_QA.pay==='fail')); }
 function acBillAdd(st,card,amt,label){ var a=acS(); a.bill.unshift({id:'T'+Date.now().toString(36).toUpperCase(),at:Date.now(),label:label||'TETH 구독',amt:amt,st:st,last4:card?card.last4:'',brand:card?card.brand:''}); }
 function acPaySaved(){ var a=acS(), sv=a.cards.filter(function(c){ return c.def; })[0]||a.cards[0]; if(!sv) return; var my=++AC_RUN; acBusy('ac-go','결제 승인 중');
@@ -21359,7 +21356,7 @@ function acAuthOpen(){
 function acAuthClose(){ var w=document.getElementById('ac-auth'); if(w) w.remove(); }
 function acAuthNo(){ var a=acS(); a.auth={st:'cancel',ex:a.ex}; acSave(); acAuthClose(); acRe(); }
 function acAuthYes(){
-  var a=acS(), my=++AC_RUN, ok=document.getElementById('ac-auth-ok'); if(ok){ ok.disabled=true; ok.innerHTML='<i class="sp"></i>승인 중'; }
+  var a=acS(), my=++AC_RUN, ok=document.getElementById('ac-auth-ok'); if(ok){ ok.disabled=true; ok.innerHTML='<i class="acx-sp"></i>승인 중'; }
   setTimeout(function(){ acAuthClose(); if(my!==AC_RUN) return; var bad=window.AC_QA&&AC_QA.auth==='fail';
     a.auth=bad?{st:'fail',ex:a.ex}:{st:'ok',ex:a.ex,at:Date.now(),uid:String(30000000+((mkHash((S.user&&S.user.email||'u')+a.ex))%60000000))};
     acSave(); acRe(); if(!bad&&acStep()==='uid') acUidRun(); },1300);
@@ -21890,7 +21887,6 @@ function acEntryView(){
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
-  if(!gSetMenu.p16){ var g0=gSetMenu; gSetMenu=function(e){ var r=g0.apply(this,arguments); try{ var ar=document.querySelector('#gm-set-item .arr'); if(ar) ar.style.display=S.user?'none':''; }catch(x){} return r; }; gSetMenu.p16=1; } /* 회원의 설정 항목은 페이지로 가니 화살표를 뺀다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
 }
@@ -22561,7 +22557,7 @@ function gSetMenuClose(){
   setTimeout(fin,260);
 }
 /* 설정 항목: 회원은 설정 페이지로, 손님은 예전 하위 메뉴(언어, 화면) */
-function gmSetClick(e){ if(S.user&&typeof stGo==='function'){ e.stopPropagation(); gSetMenuClose(); stGo('general'); return; } gmSub(e,'set'); }
+function gmSetClick(e){ e.stopPropagation(); gSetMenuClose(); if(!S.user){ authOpen('login'); if(typeof tfIntentSet==='function') tfIntentSet({kind:'settings'}); return; } stGo('general'); }
 function gmSub(e,which){
   e.stopPropagation();
   var target=$('gm-sub-'+which);

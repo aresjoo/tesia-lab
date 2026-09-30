@@ -18,7 +18,8 @@ const reset=async()=>{ await ev(`try{ gSetMenuClose(); }catch(e){} try{ closeMod
 
 // 손님: 팝업이 뜨고, 설정은 하위 메뉴(언어, 화면)
 await press(GEAR); let s=await J(st); ok('손님: 톱니 → 팝업 메뉴',s.menu&&s.items[0]==='설정',s.items);
-await press(ITEM); s=await J(st); ok('손님: 팝업의 설정 → 하위 메뉴(언어, 화면)',s.menu&&s.sub&&s.mode!=='tfset',{sub:s.sub,mode:s.mode});
+await ev(`(function(){ var i=document.getElementById('gm-set-item'); window.__hov=!!i&&getComputedStyle(i).cursor!==''; i.dispatchEvent(new MouseEvent('mouseenter',{bubbles:true})); })()`); await sleep(400); s=await J(st); ok('손님: 설정에 올려도 언어 하위 메뉴가 없다',!s.sub&&(await ev(`!!document.querySelector('#gm-sub-set')`))===false,{sub:s.sub});
+await press(ITEM); s=await J(st); ok('손님: 팝업의 설정 → 로그인 창',s.auth&&!s.menu,{auth:s.auth});
 await shot(p,DIR+'guest-menu.png',{full:false}); await reset();
 await press(PROF); s=await J(st); ok('손님: 프로필 → 로그인 창',s.auth); await reset();
 
@@ -29,7 +30,8 @@ for(const [name,go] of pages){
   await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(500); await ev(go); await sleep(2000);
   const from=(await J(st)).mode;
   await press(GEAR); s=await J(st); ok('회원 '+name+'('+from+'): 톱니 → 팝업 메뉴',s.menu&&s.items.length>=5,s.items);
-  const hadLogout=s.items.indexOf('로그아웃')>=0;
+  const c0=await pos(ITEM); await move(p,c0.x,c0.y); await sleep(450); s=await J(`{sub:!!document.querySelector('#gm-sub-set'),spin:!!document.querySelector('#g-setmenu .acx-sp, #g-setmenu [style*=acSp]'),spd:(function(){ var e=document.querySelector('#g-setmenu .sp'); return e?getComputedStyle(e).animationName:'none'; })()}`); ok('회원 '+name+': 설정에 올려도 하위 메뉴 없음, 도는 표시 없음',!s.sub&&!s.spin&&s.spd==='none',s);
+  const hadLogout=(await J(st)).items.indexOf('로그아웃')>=0;
   await press(ITEM,1100); s=await J(st); ok('회원 '+name+': 팝업의 설정 → 설정 페이지',s.mode==='tfset'&&s.hash==='#/settings/general'&&s.tab==='일반'&&!s.menu,{hash:s.hash,mode:s.mode,tab:s.tab,menu:s.menu,logout:hadLogout});
   await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(500); await ev(go); await sleep(2000);
   await press(PROF); s=await J(st); ok('회원 '+name+': 프로필 → 같은 팝업 메뉴',s.menu&&s.items.indexOf('로그아웃')>=0,s.items); await reset();
