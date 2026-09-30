@@ -35,6 +35,7 @@ function acEntryView(){
 /* 뒤쪽 스크립트에 선언된 함수는 문서가 다 읽힌 뒤에 바꾼다 */
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
+  if(typeof gProfileClick==='function'&&!gProfileClick.p16){ gProfileClick=function(ev){ if(!S.user){ authOpen('login'); return; } try{ gSetMenuClose(); }catch(x){} stGo('account'); }; gProfileClick.p16=1; }
   if(!gSetMenu.p16){ var g0=gSetMenu; gSetMenu=function(e){ if(S.user){ if(e&&e.stopPropagation) e.stopPropagation(); try{ gSetMenuClose(); }catch(x){} stGo('general'); return; } return g0.apply(this,arguments); }; gSetMenu.p16=1; }
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}

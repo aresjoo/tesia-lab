@@ -9,9 +9,13 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 TETH_AI_MODEL = "claude-opus-5-5"
 TETH_AI_EFFORT = "medium"
-TETH_AI_SPEED = "fast"
+TETH_AI_SPEED = "standard"
 
 # 일일 총량 상한용 KV (wrangler kv namespace create RL 후 id 기입)
 # [[kv_namespaces]]
 # binding = "RL"
 # id = ""
+
+# Anthropic이 일부 지역에서 내보낸 요청을 403으로 막는다. 워커를 미국 동부에서 돌린다
+[placement]
+region = "aws:us-east-1"

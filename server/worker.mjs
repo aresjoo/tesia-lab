@@ -260,6 +260,7 @@ export default {
         ];
         const convo = messages.map((m) => ({ role: m.role, content: m.content }));
         const mdCache = new Map();
+        let retry403 = 0; const colo = (req.cf && req.cf.colo) || "?";
         let modelCalls = 0, toolCalls = 0, totIn = 0, totOut = 0, tokBase = 0;
         let useFast = env.TETH_AI_SPEED === "fast" && Date.now() > FAST_OFF_UNTIL;
         const mkStream = () => client.beta.messages.stream({
@@ -397,8 +398,12 @@ export default {
           try { final = await stream.finalMessage(); }
           catch (e) {
             /* 빠름 권한이 없거나 한도를 넘으면 같은 요청을 표준 속도로 다시 보낸다 (아직 아무것도 흘려보내지 않은 경우만) */
-            if (useFast && e && (e.status === 429 || e.status === 400) && /fast/i.test(String(e.message || "")) && !Object.keys(blocks).length) {
+            if (useFast && e && (e.status === 429 || e.status === 400 || e.status === 403) && !Object.keys(blocks).length) { /* 빠름 거절은 429, 400, 403 어느 것으로도 온다 */
               console.error("fast mode unavailable, standard speed:", e.status); useFast = false; FAST_OFF_UNTIL = Date.now() + 600000; modelCalls--; continue;
+            }
+            /* 403 Request not allowed: 요청을 내보내는 지역에 따라 가끔 막힌다. 아직 아무것도 흘려보내지 않았으면 잠시 뒤 다시 보낸다 */
+            if (e && e.status === 403 && !Object.keys(blocks).length && retry403 < 2) {
+              retry403++; console.error("403 retry", retry403, colo); modelCalls--; await new Promise((r) => setTimeout(r, 400 * retry403)); continue;
             }
             throw e;
           }
@@ -428,7 +433,7 @@ export default {
         if (final.stop_reason === "refusal") await send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
         await send({ done: true, usage: { in: totIn, out: totOut } });
       } catch (e) {
-        console.error("chat error:", e && e.status, e && e.name, e && e.message, e && e.error ? JSON.stringify(e.error) : "(no error body)", e && e.headers ? (e.headers.get ? e.headers.get("request-id") : e.headers["request-id"]) : "");
+        console.error("chat error:", (req.cf && req.cf.colo) || "?", e && e.status, e && e.name, e && e.message, e && e.error ? JSON.stringify(e.error) : "(no error body)", e && e.headers ? (e.headers.get ? e.headers.get("request-id") : e.headers["request-id"]) : "");
         await send({ error: true });
       } finally {
         try { await w.close(); } catch (e) {}

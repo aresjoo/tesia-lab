@@ -11,7 +11,7 @@ function stS(){ var t=tfS(); if(!t.st) t.st={handle:null,notif:{},twofa:false,pw
 function stHandle(){ var s=stS(); if(s.handle) return s.handle; var e=(S.user&&S.user.email)||''; return (e.split('@')[0]||'teth_user').replace(/[^a-z0-9_]/gi,'').toLowerCase().slice(0,20)||'teth_user'; }
 function stIc(p){ return '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
 function stDate(ms){ var d=new Date(ms); return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.'; }
-function stGo(tab){ location.hash='#/settings/'+(tab||'general'); }
+function stGo(tab){ var h='#/settings/'+(tab||'general'); if(location.hash===h){ stRoute(h); return; } location.hash=h; } /* 같은 주소면 hashchange가 없다 */
 function stBack(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); }
 function stRoute(h){
   var m=h.match(/^#\/settings(?:\/([a-z]+))?$/); if(!m) return false;

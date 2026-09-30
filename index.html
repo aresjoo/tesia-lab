@@ -16719,6 +16719,9 @@ function tfRoute(){
   var h=location.hash;
   tfSS3DlgClose(true); /* 라우트 전환 시 공유 다이얼로그 잔존 방지 (codex F09) */
   try{ tfDrawerClose(); }catch(e){} try{ tfUpClose(); }catch(e){} try{ tfBk2WKill(); }catch(e){} try{ tfBkSheetClose(); }catch(e){} /* 정렬 시트도 라우트 이탈 시 정리 (codex P2-9) */ /* 리뷰 작성 모달도 라우트 이탈 시 정리 (bk2-codex2 P1) */ /* 드로어, 업그레이드 시트도 라우트 이탈 시 정리 (codex qa3 P2-3) */
+  /* 설정 전용 화면: nf 화면에서 들어와도 뒤로가기로 보지 않는다. #/plan 도 결제 설정으로 모은다 */
+  if(h==='#/plan'&&S.user&&typeof stRoute==='function'){ try{ history.replaceState(null,'','#/settings/billing'); }catch(e){} TF_ONNF=false; if(stRoute('#/settings/billing')) return; }
+  if(h.indexOf('#/settings')===0&&typeof stRoute==='function'){ TF_ONNF=false; if(stRoute(h)) return; }
   /* nf 라우트 (#/trade, #/plan, #/review, #/periodic) — share 패턴 준용 */
   if(/^#\/(trade|plan|review|periodic|insight)(\/|$)/.test(h)){ TF_ONNF=true; if(tfNFRoute(h)) return; }
   if(TF_ONNF&&h.indexOf('#/strategy/')!==0&&!/^#\/share\/(s|t|copy|c|bt)\//.test(h)){ TF_ONNF=false; tfBackToChat(); return; } /* nf 화면에서 뒤로가기 (cp 라우트 포함) */
@@ -16728,8 +16731,6 @@ function tfRoute(){
   if(h.indexOf('#/share/copy/')===0){ TF_ONNF=false; cpSetupRoute(h); return; } /* 카피 설정 (cp 3단계) */
   if(h.indexOf('#/share/c/')===0){ TF_ONNF=false; cpDetailRoute(h); return; } /* 카피 상세 (cp 5단계) */
   if(h.indexOf('#/share/bt/')===0){ TF_ONNF=false; btRoute(h); return; } /* 백테스트 여정 */
-  if(h==='#/plan'&&S.user&&typeof stRoute==='function'){ try{ history.replaceState(null,'','#/settings/billing'); }catch(e){} TF_ONNF=false; if(stRoute('#/settings/billing')) return; }
-  if(h.indexOf('#/settings')===0&&typeof stRoute==='function'){ TF_ONNF=false; if(stRoute(h)) return; } /* 설정 전용 화면 */
   if(h.indexOf('#/share/bt/')===0){ TF_ONNF=false; btRoute(h); return; } /* 백테스트 여정 */
   if(h.indexOf('#/share/s/')===0){ tfSS3Route(h); return; }
   if(TF_ONSHARE&&h.indexOf('#/strategy/')!==0){ TF_ONSHARE=false; tfShareHub(tfSSState().ss.tab||'find'); return; } /* 상세에서 뒤로가기 → 허브 */
@@ -21471,7 +21472,7 @@ function stS(){ var t=tfS(); if(!t.st) t.st={handle:null,notif:{},twofa:false,pw
 function stHandle(){ var s=stS(); if(s.handle) return s.handle; var e=(S.user&&S.user.email)||''; return (e.split('@')[0]||'teth_user').replace(/[^a-z0-9_]/gi,'').toLowerCase().slice(0,20)||'teth_user'; }
 function stIc(p){ return '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
 function stDate(ms){ var d=new Date(ms); return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.'; }
-function stGo(tab){ location.hash='#/settings/'+(tab||'general'); }
+function stGo(tab){ var h='#/settings/'+(tab||'general'); if(location.hash===h){ stRoute(h); return; } location.hash=h; } /* 같은 주소면 hashchange가 없다 */
 function stBack(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); }
 function stRoute(h){
   var m=h.match(/^#\/settings(?:\/([a-z]+))?$/); if(!m) return false;
@@ -21888,6 +21889,7 @@ function acEntryView(){
 /* 뒤쪽 스크립트에 선언된 함수는 문서가 다 읽힌 뒤에 바꾼다 */
 function p16Late(){
   if(typeof gSetMenu!=='function'||typeof GLC==='undefined') return;
+  if(typeof gProfileClick==='function'&&!gProfileClick.p16){ gProfileClick=function(ev){ if(!S.user){ authOpen('login'); return; } try{ gSetMenuClose(); }catch(x){} stGo('account'); }; gProfileClick.p16=1; }
   if(!gSetMenu.p16){ var g0=gSetMenu; gSetMenu=function(e){ if(S.user){ if(e&&e.stopPropagation) e.stopPropagation(); try{ gSetMenuClose(); }catch(x){} stGo('general'); return; } return g0.apply(this,arguments); }; gSetMenu.p16=1; }
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
