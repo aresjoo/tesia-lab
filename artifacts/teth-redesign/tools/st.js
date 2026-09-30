@@ -19,10 +19,14 @@ function stRoute(h){
   if(!S.user){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); authOpen('login'); return true; }
   ST.tab=ST_TABS.some(function(x){ return x[0]===m[1]; })?m[1]:'general'; ST.edit=null; stView(); return true;
 }
+var ST_TG='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>';
+/* 설정 메뉴 접기: 기억해 둔다 */
+try{ ST.navHid=localStorage.getItem('teth.stnav')==='0'; }catch(e){}
+function stNavToggle(){ ST.navHid=!ST.navHid; try{ localStorage.setItem('teth.stnav',ST.navHid?'0':'1'); }catch(e){} var r=document.getElementById('st-root'); if(r) r.classList.toggle('nav-hid',ST.navHid); var b=document.getElementById('st-tg'); if(b) b.setAttribute('aria-expanded',String(!ST.navHid)); }
 function stView(){
   tfPageMode('tfset','설정'); document.body.classList.remove('tf-route');
   TF_RENDERING=true;
-  gContent('<div class="stg" id="st-root"><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
+  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'</button><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
     +'<small>설정</small>'+ST_TABS.map(function(x){ return '<button type="button" class="stg-ni'+(ST.tab===x[0]?' on':'')+'"'+(ST.tab===x[0]?' aria-current="page"':'')+' onclick="stGo(\''+x[0]+'\')">'+stIc(x[2])+x[1]+'</button>'; }).join('')
     +'<small>바로 가기</small><button type="button" class="stg-ni" onclick="tfBrokersView()">'+stIc('<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')+'거래소 연결</button><button type="button" class="stg-ni" onclick="tfTxHelp()">'+stIc('<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 1-1 1.700M12 17h.010"/>')+'상담원에게 묻기</button></nav>'
     +'<main class="stg-main" id="st-main">'+stBody()+'</main></div>');
@@ -38,7 +42,6 @@ function stGeneral(){
   var cur=(GLC_LANGS.find(function(l){ return l.c===GLC.lang; })||GLC_LANGS[0]), th=document.body.classList.contains('light')?'light':'dark';
   return '<h1>일반</h1>'+stSec('',
     stRow('언어','','<select class="stg-sel" aria-label="언어" onchange="stLang(this.value)">'+GLC_LANGS.map(function(l){ return '<option value="'+l.c+'"'+(l.c===cur.c?' selected':'')+'>'+l.n+'</option>'; }).join('')+'</select>','화면과 알림에 쓰는 언어입니다')
-    +stRow('화면','','<div class="stg-seg" role="group" aria-label="화면">'+[['dark','어둡게'],['light','밝게']].map(function(o){ return '<button type="button" aria-pressed="'+(th===o[0])+'" onclick="stTheme(\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>')
     +stRow('금액 표시','<span class="num">USD</span>','','모든 금액은 미국 달러로 표시합니다. 자산 수량은 BTC, ETH, USDT처럼 자산 단위 그대로입니다'));
 }
 function stLang(c){ GLC.lang=c; try{ localStorage.setItem('tethLang',c); }catch(e){} try{ applyLang(); }catch(e){} stView(); }

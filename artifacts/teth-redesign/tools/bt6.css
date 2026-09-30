@@ -252,3 +252,23 @@ body.st-full .stg-main h1{font-size:28px;margin-bottom:30px}
 /* 로그인 + 접힌 사이드바: 톱니 없이 프로필 아이콘 하나. 프로필에 올려도 이름 말풍선을 띄우지 않는다 (톱니는 펼쳤을 때 프로필 행 안에만) */
 .g-side.authed.collapsed #g-gear-row{display:none!important}
 .g-side.authed #g-person-row .g-ico-pill{display:none!important}
+
+/* 설정 메뉴 접기 단추와 슬라이드 (GPT 왼쪽 위 단추) */
+body.st-full .stg{transition:grid-template-columns .28s cubic-bezier(.2,.7,.2,1)}
+body.st-full .stg.nav-hid{grid-template-columns:0 minmax(0,1fr)}
+body.st-full .stg-nav{transition:transform .28s cubic-bezier(.2,.7,.2,1),opacity .2s ease;overflow-x:hidden;white-space:nowrap;padding-top:60px}
+body.st-full .stg.nav-hid .stg-nav{transform:translateX(-100%);opacity:0;pointer-events:none}
+body.st-full .stg-main{transition:padding .28s cubic-bezier(.2,.7,.2,1)}
+body.st-full .stg.nav-hid .stg-main{padding-left:88px}
+.stg-tg{position:fixed;left:14px;top:12px;z-index:45;width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:#aeb3ba;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+.stg-tg:hover{background:rgba(255,255,255,.08);color:#fff}
+body:not(.st-full) .stg-tg{display:none}
+@media (max-width:900px){ .stg-tg{display:none!important} body.st-full .stg.nav-hid{grid-template-columns:none} body.st-full .stg.nav-hid .stg-nav{transform:none;opacity:1;pointer-events:auto} body.st-full .stg.nav-hid .stg-main{padding-left:16px} }
+/* TETH에게 분석시키기: 카드 말풍선과 화면 캡처 */
+.an-umsg{max-width:min(440px,92%);padding:8px;background:transparent}
+.an-card .mk-card{margin:0;pointer-events:none}
+.an-card .mk3-t{cursor:default}
+.an-line{margin:8px 0 0 auto;width:fit-content;background:var(--g2);border-radius:18px;padding:10px 16px;font-size:14px;color:var(--gt)}
+.an-shot{display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.12);margin:4px 0 2px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.an-frame{visibility:visible}
+html.an-inner #tf-devbtn,html.an-inner #tf-devpanel,html.an-inner .g-terms{display:none!important}

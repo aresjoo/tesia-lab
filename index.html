@@ -6964,6 +6964,26 @@ body.st-full .stg-main h1{font-size:28px;margin-bottom:30px}
 /* 로그인 + 접힌 사이드바: 톱니 없이 프로필 아이콘 하나. 프로필에 올려도 이름 말풍선을 띄우지 않는다 (톱니는 펼쳤을 때 프로필 행 안에만) */
 .g-side.authed.collapsed #g-gear-row{display:none!important}
 .g-side.authed #g-person-row .g-ico-pill{display:none!important}
+
+/* 설정 메뉴 접기 단추와 슬라이드 (GPT 왼쪽 위 단추) */
+body.st-full .stg{transition:grid-template-columns .28s cubic-bezier(.2,.7,.2,1)}
+body.st-full .stg.nav-hid{grid-template-columns:0 minmax(0,1fr)}
+body.st-full .stg-nav{transition:transform .28s cubic-bezier(.2,.7,.2,1),opacity .2s ease;overflow-x:hidden;white-space:nowrap;padding-top:60px}
+body.st-full .stg.nav-hid .stg-nav{transform:translateX(-100%);opacity:0;pointer-events:none}
+body.st-full .stg-main{transition:padding .28s cubic-bezier(.2,.7,.2,1)}
+body.st-full .stg.nav-hid .stg-main{padding-left:88px}
+.stg-tg{position:fixed;left:14px;top:12px;z-index:45;width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:#aeb3ba;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease}
+.stg-tg:hover{background:rgba(255,255,255,.08);color:#fff}
+body:not(.st-full) .stg-tg{display:none}
+@media (max-width:900px){ .stg-tg{display:none!important} body.st-full .stg.nav-hid{grid-template-columns:none} body.st-full .stg.nav-hid .stg-nav{transform:none;opacity:1;pointer-events:auto} body.st-full .stg.nav-hid .stg-main{padding-left:16px} }
+/* TETH에게 분석시키기: 카드 말풍선과 화면 캡처 */
+.an-umsg{max-width:min(440px,92%);padding:8px;background:transparent}
+.an-card .mk-card{margin:0;pointer-events:none}
+.an-card .mk3-t{cursor:default}
+.an-line{margin:8px 0 0 auto;width:fit-content;background:var(--g2);border-radius:18px;padding:10px 16px;font-size:14px;color:var(--gt)}
+.an-shot{display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.12);margin:4px 0 2px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.an-frame{visibility:visible}
+html.an-inner #tf-devbtn,html.an-inner #tf-devpanel,html.an-inner .g-terms{display:none!important}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -19524,11 +19544,11 @@ function mkWinTxt(r){
   var k=Math.round(w/10); if((k===0&&w>0)||(k===10&&w<100)) return w<1?'1% 미만':w>99?'99% 넘게':Math.round(w)+'%';
   return '10번 중 약 '+k+'번';
 }
-function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.round(n/1000)/10)+'만 명':n.toLocaleString()+'명')+'이 거래하고 있습니다'; }
+function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.round(n/1000)/10)+'만 명':n.toLocaleString()+'명')+'이 따라가는 중'; }
 function mkCard(s){
   if(!s.kind) s.kind='rule';
   var r=tfSS3PdCalc(s,'all'), m30=mk30(s), ne=tfSS3Rid(s), ex=mkEx(s), win=mkWinTxt(r), fw=mkFwTxt(s.fw);
-  var bF='<button type="button" class="mk3-b fill" onclick="cpSetupGo(\''+ne+'\')">전략 복사하기</button>', bD='<button type="button" class="mk3-b quiet" onclick="tfSS3Go(\''+ne+'\')">자세히</button>';
+  var bV='<button type="button" class="mk3-b fill" onclick="tfSS3Go(\''+ne+'\')">전략 보기</button>'; /* 카드 단추는 하나: 상세로 */
   return '<article class="mk-card mk3 mk3v2 k-'+s.kind+'">'
     +'<div class="mk3-head">'+mkGlyph(s,28)+'<h3><button type="button" class="mk-c-tb mk3-t" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3></div>'
     +'<div class="mk3-meta">'+(s.by?'<span class="mk3-by">@'+gEsc(s.by)+'</span>':'')+'<span class="mk3-ex"><img src="assets/logos/'+ex[0]+'.png" alt="" width="12" height="12" loading="lazy">'+ex[1]+'에서 실행</span></div>'
@@ -19537,7 +19557,7 @@ function mkCard(s){
     +'<div class="mk3-now"><small>지금</small><span>'+gEsc(mkNowLine(s)).replace(/ (\S+) 중$/,' $1&nbsp;중')+'</span></div>'
     +'<div class="mk3-perf"><div class="mk-c-ret mk3-ret"><small>30일 수익률</small><b class="num'+mkSign(m30.ret)+'">'+mkPct0(m30.ret)+'</b></div>'+mkSpark3(m30.eq)+'</div>'
     +'<div class="mk3-facts">'+(win?'<div><small>전체 기간 수익 낸 거래</small><b class="num">'+win+'</b></div>':'')+(fw?mkFwHtml(s.fw):'')+'</div>'
-    +'<div class="mk3-foot">'+(s.me?'':bF)+bD+'</div>'
+    +'<div class="mk3-foot">'+bV+'</div>'
     +'</article>';
 }
 var MK_WIN_MIN=20; /* 승률 정렬에서 앞에 설 수 있는 최소 거래 수 */
@@ -19942,7 +19962,7 @@ function mkCardsEnter(){
 function mkFwTier(n){ return n>=1000?'t3':n>=500?'t2':'t1'; }
 function mkFwHtml(n){ n=+n||0; if(n<=0) return '';
   var num=n>=10000?'약 '+(Math.round(n/1000)/10)+'만':n.toLocaleString();
-  return '<div class="mk3-fw num '+mkFwTier(n)+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span><b>'+num+'명</b>이 거래하고 있습니다</span></div>'; }
+  return '<div class="mk3-fw num '+mkFwTier(n)+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span><b>'+num+'명</b>이 따라가는 중</span></div>'; }
 
 /* ── 기간: 최근 7일, 최근 30일, 최근 1년, 전체 ──
    7일과 30일은 전체 기록에서 그 구간을 잘라 계산한다(그 시점에 들고 있던 종목을 그대로 둔 채). 1년은 그 구간으로 다시 계산한다 */
@@ -21497,10 +21517,14 @@ function stRoute(h){
   if(!S.user){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} gHome(); authOpen('login'); return true; }
   ST.tab=ST_TABS.some(function(x){ return x[0]===m[1]; })?m[1]:'general'; ST.edit=null; stView(); return true;
 }
+var ST_TG='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>';
+/* 설정 메뉴 접기: 기억해 둔다 */
+try{ ST.navHid=localStorage.getItem('teth.stnav')==='0'; }catch(e){}
+function stNavToggle(){ ST.navHid=!ST.navHid; try{ localStorage.setItem('teth.stnav',ST.navHid?'0':'1'); }catch(e){} var r=document.getElementById('st-root'); if(r) r.classList.toggle('nav-hid',ST.navHid); var b=document.getElementById('st-tg'); if(b) b.setAttribute('aria-expanded',String(!ST.navHid)); }
 function stView(){
   tfPageMode('tfset','설정'); document.body.classList.remove('tf-route');
   TF_RENDERING=true;
-  gContent('<div class="stg" id="st-root"><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
+  gContent('<div class="stg'+(ST.navHid?' nav-hid':'')+'" id="st-root"><button type="button" class="stg-tg" id="st-tg" aria-label="사이드바 표시하기/숨기기" aria-expanded="'+(!ST.navHid)+'" onclick="stNavToggle()">'+ST_TG+'</button><nav class="stg-nav" aria-label="설정"><button type="button" class="stg-back" onclick="stBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>앱으로 돌아가기</button>'
     +'<small>설정</small>'+ST_TABS.map(function(x){ return '<button type="button" class="stg-ni'+(ST.tab===x[0]?' on':'')+'"'+(ST.tab===x[0]?' aria-current="page"':'')+' onclick="stGo(\''+x[0]+'\')">'+stIc(x[2])+x[1]+'</button>'; }).join('')
     +'<small>바로 가기</small><button type="button" class="stg-ni" onclick="tfBrokersView()">'+stIc('<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>')+'거래소 연결</button><button type="button" class="stg-ni" onclick="tfTxHelp()">'+stIc('<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 1-1 1.700M12 17h.010"/>')+'상담원에게 묻기</button></nav>'
     +'<main class="stg-main" id="st-main">'+stBody()+'</main></div>');
@@ -21516,7 +21540,6 @@ function stGeneral(){
   var cur=(GLC_LANGS.find(function(l){ return l.c===GLC.lang; })||GLC_LANGS[0]), th=document.body.classList.contains('light')?'light':'dark';
   return '<h1>일반</h1>'+stSec('',
     stRow('언어','','<select class="stg-sel" aria-label="언어" onchange="stLang(this.value)">'+GLC_LANGS.map(function(l){ return '<option value="'+l.c+'"'+(l.c===cur.c?' selected':'')+'>'+l.n+'</option>'; }).join('')+'</select>','화면과 알림에 쓰는 언어입니다')
-    +stRow('화면','','<div class="stg-seg" role="group" aria-label="화면">'+[['dark','어둡게'],['light','밝게']].map(function(o){ return '<button type="button" aria-pressed="'+(th===o[0])+'" onclick="stTheme(\''+o[0]+'\')">'+o[1]+'</button>'; }).join('')+'</div>')
     +stRow('금액 표시','<span class="num">USD</span>','','모든 금액은 미국 달러로 표시합니다. 자산 수량은 BTC, ETH, USDT처럼 자산 단위 그대로입니다'));
 }
 function stLang(c){ GLC.lang=c; try{ localStorage.setItem('tethLang',c); }catch(e){} try{ applyLang(); }catch(e){} stView(); }
@@ -21867,6 +21890,109 @@ function fuSumCells(){ var R=BT.R, s=BT.s, w=R.wins.length, l=R.loss.length, nL=
   RET.forEach(function(n){ var f=window[n]; if(typeof f!=='function') return; window[n]=function(){ var r=f.apply(this,arguments); return on()?W(r):r; }; });
   ARG.forEach(function(n){ var f=window[n]; if(typeof f!=='function') return; window[n]=function(){ return f.apply(this,on()?W([].slice.call(arguments)):arguments); }; });
   var pf=window.btPanelFill; if(typeof pf==='function') window.btPanelFill=function(){ var r=pf.apply(this,arguments); if(on()){ var q=document.querySelectorAll('#bt-panel .cell b, #bt-panel .cell span'); for(var i=0;i<q.length;i++){ var t=W(q[i].textContent); if(t!==q[i].textContent) q[i].textContent=t; } } return r; };
+})();
+
+/* ═══ TETH에게 분석시키기 (an): 전략 카드가 내 말이 되고, TETH가 전략 화면을 직접 열어 보며 분석한다 ═══
+   1) 내 말풍선: 카드 + "이 전략 분석해줘"  2) 작업 타임라인: 전략 페이지 열기 → 개요, 판단 기록, 거래 내역 화면을 그 자리에서 찍어 붙임
+   3) 모델에는 전략 설정과 기록을 담은 긴 요청을 넘긴다(화면에는 안 보임)  4) 화면을 다 찍기 전에는 모델 호출을 시작하지 않는다 */
+var AN={gate:null,label:null,shots:{}};
+var AN_TABS=[['ov','개요'],['log','판단 기록'],['trades','거래 내역']];
+var AN_W=1180, AN_H=860, AN_OUT=760, AN_Q=0.55;
+/* 모델에 넘길 요청문: 예전 tfSS3Ask 가 화면에 보여 주던 문장 그대로 */
+function anPrompt(s,nick,pd){
+  var r=tfSS3PdCalc(s,pd||'all'), q;
+  if(s.cfg){ q='전략 분석 요청: "'+s.name+'" ('+MK_KIND[s.kind]+', '+mkScope(s)+'). 하는 일: '+mkDoes(s).map(function(d){ return d[0]+' '+d[1]; }).join('. ')+'. 움직이는 방식: '+mkHowRows(s).map(function(d){ return d[0]+' '+d[1]; }).join('. ')+'. 설정값: '+Object.keys(s.cfg).filter(function(k){ return ['id','name','one','ex','fw','mkt','kind'].indexOf(k)<0; }).map(function(k){ return k+'='+(typeof s.cfg[k]==='object'?JSON.stringify(s.cfg[k]):s.cfg[k]); }).join(', ')+'. 지금: '+mkNowLine(s)+'. 최근 판단: '+mkEvFold(mkEvents(s,s.r),3).map(function(e){ return mkMD(e.i)+' '+e.dec+' ('+e.obs+')'; }).join(' / ')+'. 기록(전체 기간): 수익률 '+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%, 최대 낙폭 '+r.mdd.toFixed(1)+'%, 승률 '+Math.round(r.win!=null?r.win:(r.winRate||0))+'%, 거래 '+r.n+'회. 이 전략의 강점과 약점, 그리고 전략 복사 전에 확인해야 할 점을 분석해줘.'; }
+  else q='공유 전략 분석 요청: "'+nick+'" ('+s.asset+'). 규칙: RSI '+(s.p&&s.p.rsiTh!=null?s.p.rsiTh:'?')+' 이하 눌림 후 반등 진입'+(s.p&&s.p.trendFilter?', 추세 필터 사용':'')+', 손절 '+(s.p?s.p.sl:'?')+'%'+(s.p&&s.p.tp!=null?', 익절 +'+s.p.tp+'%':'')+'. 검증 결과: 수익 '+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%, MDD '+r.mdd.toFixed(1)+'%, 승률 '+Math.round(r.win)+'%, 거래 '+r.n+'회. 이 전략의 강점과 약점, 복사 전에 확인할 점을 분석해줘.';
+  return q+' 답변은 화면에서 확인한 내용을 근거로 쓰되, 설정값 이름(fast, slow, trail 같은 키)은 그대로 쓰지 말고 쉬운 말로 풀어서 설명해.';
+}
+function tfSS3Ask(ne,pd){
+  var nick; try{ nick=decodeURIComponent(ne); }catch(e){ return; }
+  var s=tfSSFind(nick); if(!s) return;
+  if(!S.user){ authOpen('login'); return; }
+  pd=pd||'all';
+  var q=anPrompt(s,nick,pd);
+  var card=mkCard(s).replace(/<div class="mk3-foot">[\s\S]*?<\/div>/,'');
+  tfTrack('strategy_ai_analysis',{nick:nick});
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  window.TF_ONSHARE=false;
+  AN.label=mkHook(s)+' 전략 페이지를 열어 보는 중';
+  AN.pre=function(run){ return anShots(run,s,ne,pd); };
+  gNew({text:q,html:'<div class="an-card">'+card+'</div><div class="an-line">이 전략 분석해줘</div>'});
+}
+/* 작업 타임라인에 화면 확인 단계를 넣고, 다 찍힐 때까지 모델 호출을 막는다 */
+function anShots(run,s,ne,pd){
+  var done; AN.gate=new Promise(function(r){ done=r; });
+  var mine=function(st){ AN.own=1; try{ return actStep(run,st); } finally{ AN.own=0; } };
+  var open=mine({kind:'fetch',title:'전략 페이지 여는 중'});
+  var fin=function(){ AN.gate=null; done(); };
+  anFrame(ne,pd,function(fr){
+    open.done('전략 페이지 열기 완료','',(Date.now()-open.st.t0)+'ms');
+    var i=0;
+    var next=function(){
+      if(i>=AN_TABS.length){ AN.lastShotAt=Date.now(); setTimeout(function(){ try{ fr.remove(); }catch(e){} },200); anHead(run,mkHook(s)+' 전략을 분석하는 중'); fin(); return; }
+      var tb=AN_TABS[i++], st=mine({kind:'fetch',title:tb[1]+' 화면 확인 중'});
+      anCapture(fr,ne,pd,tb[0],function(url,w,h){
+        if(url){ st.st.open=true; st.done(tb[1]+' 화면 확인 완료','<img class="an-shot" src="'+url+'" alt="'+tb[1]+' 화면" width="'+w+'" height="'+h+'" loading="lazy">',w+'×'+h); }
+        else st.fail(tb[1]+' 화면 확인 실패','화면을 가져오지 못했습니다. 다른 화면으로 계속합니다.');
+        setTimeout(next,300);
+      });
+    };
+    next();
+  },function(){ open.fail('전략 페이지 열기 실패','페이지를 불러오지 못했습니다. 설정값만으로 분석합니다.'); fin(); });
+  return AN.gate;
+}
+function anHead(run,label){ try{ run.data.label=label; var h=run.el&&run.el.querySelector('.hlb'); if(h) h.textContent=label; }catch(e){} }
+/* 같은 앱을 보이지 않는 프레임에 띄워 실제 상세 화면을 그린다 */
+function anFrame(ne,pd,ok,fail){
+  var fr=document.createElement('iframe'); fr.className='an-frame'; fr.setAttribute('aria-hidden','true'); fr.tabIndex=-1;
+  fr.style.cssText='position:fixed;left:0;top:0;width:'+AN_W+'px;height:'+AN_H+'px;border:0;opacity:0;pointer-events:none;z-index:-1';
+  fr.src=location.pathname+location.search+(location.search?'&':'?')+'an=1#/share/s/'+ne+'/'+pd;
+  var t0=Date.now(), timer;
+  fr.onload=function(){
+    timer=setInterval(function(){
+      var w=fr.contentWindow, d=fr.contentDocument;
+      if(!w||!d){ return; }
+      var ready=w.G&&w.G.mode==='tfss3d'&&d.querySelector('.mk3-dh, .mk3-t, #g-content .mk3');
+      if(ready){ clearInterval(timer);
+        try{ var st=d.createElement('style'); st.textContent='#tf-devbtn,#tf-devpanel,#teth-help,.hw-fab,#hw-fab,[id^=hw-],.g-terms{display:none!important} #g-scroll{scrollbar-width:none} html,body{overflow:hidden}'; d.head.appendChild(st); }catch(e){}
+        anLib(d,function(){ setTimeout(function(){ ok(fr); },500); },function(){ fail(); fr.remove(); }); return; }
+      if(Date.now()-t0>20000){ clearInterval(timer); fail(); fr.remove(); }
+    },250);
+  };
+  fr.onerror=function(){ clearInterval(timer); fail(); fr.remove(); };
+  document.body.appendChild(fr);
+}
+function anLib(d,ok,fail){
+  if(d.defaultView.htmlToImage){ ok(); return; }
+  var sc=d.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.js'; sc.onload=ok; sc.onerror=fail; d.head.appendChild(sc);
+}
+/* 탭을 바꾸고 화면 전체를 찍는다. 저장 크기를 위해 줄인 JPEG */
+function anCapture(fr,ne,pd,tab,cb){
+  var w=fr.contentWindow, d=fr.contentDocument;
+  try{ if(tab!=='ov') w.tfSS3Go(ne,pd,tab); }catch(e){}
+  setTimeout(function(){
+    try{ var g=d.getElementById('g-scroll'); if(g) g.scrollTop=0; }catch(e){}
+    var lib=w.htmlToImage; if(!lib){ cb(null); return; }
+    /* 그려지는 중인 애니메이션은 끝 상태로 고정하고 찍는다 */
+    try{ d.querySelectorAll('clipPath rect').forEach(function(r){ var an=r.querySelector('animate'); if(an){ r.setAttribute('width',an.getAttribute('to')); an.remove(); } }); }catch(e){}
+    try{ if(!d.getElementById('an-still')){ var st=d.createElement('style'); st.id='an-still'; st.textContent='*{animation:none!important;transition:none!important}'; d.head.appendChild(st); } }catch(e){}
+    lib.toJpeg(d.getElementById('g-root')||d.body,{width:AN_W,height:AN_H,quality:AN_Q,pixelRatio:AN_OUT/AN_W,backgroundColor:'#0e0f11',skipFonts:true,filter:function(el){ if(el.tagName==='IMG') return !!(el.complete&&el.naturalWidth>0); return !(el.tagName==='IFRAME'||el.tagName==='VIDEO'); }})
+      .then(function(url){ cb(url,AN_OUT,Math.round(AN_H*AN_OUT/AN_W)); })
+      .catch(function(){ cb(null); });
+  },tab==='ov'?900:1400);
+}
+/* 프레임 안에서는 분석 요청 창을 다시 열지 않는다 */
+if(/[?&]an=1/.test(location.search)){ try{ document.documentElement.classList.add('an-inner'); }catch(e){} }
+(function(){
+  /* 내 말풍선에 HTML을 넣을 수 있게 */
+  var cu0=gConvUser; gConvUser=function(t){ if(t&&typeof t==='object'){ gThreadAdd('<div class="g-urow an-urow"><div class="g-umsg an-umsg">'+t.html+'</div></div>'); return; } return cu0.apply(this,arguments); };
+  var gn0=gNew; gNew=function(preset){ if(preset&&typeof preset==='object'){ var o=preset; var cu1=gConvUser; gConvUser=function(){ gConvUser=cu1; return cu1({html:o.html}); }; try{ return gn0(o.text); } finally{ gConvUser=cu1; } } return gn0.apply(this,arguments); };
+  /* 작업 타임라인이 열리면 화면 확인 단계부터 */
+  /* 화면을 찍는 동안 들어오는 다른 단계(매크로 확인 등)는 찍기가 끝난 뒤에 붙는다 */
+  var st0=actStep; actStep=function(run,st){ if(AN.gate&&!AN.own){ var q=[], h={st:st,done:function(){ q.push(['done',arguments]); },fail:function(){ q.push(['fail',arguments]); },set:function(){ q.push(['set',arguments]); }}; AN.gate.then(function(){ var real=st0(run,st); q.forEach(function(c){ real[c[0]].apply(real,c[1]); }); h.done=real.done; h.fail=real.fail; h.set=real.set; }); return h; } return st0(run,st); };
+  var as0=actStart; actStart=function(sess,label){ var run=as0(sess,AN.label||label); AN.label=null; if(AN.pre){ var f=AN.pre; AN.pre=null; try{ f(run); }catch(e){ AN.gate=null; } } return run; };
+  /* 화면을 다 찍기 전에는 모델 호출을 보내지 않는다 */
+  var f0=window.fetch; window.fetch=function(u,o){ var args=arguments, self=this; if(AN.gate&&window.TAI&&String(u)===TAI.url){ var g=AN.gate; return g.then(function(){ AN.sentAt=Date.now(); return f0.apply(self,args); }); } if(window.TAI&&String(u)===TAI.url) AN.sentAt=Date.now(); return f0.apply(self,args); };
 })();
 
 /* ═══ 16-fixes 연결: 예전 진입점을 새 상태 모델로 잇는다 ═══ */

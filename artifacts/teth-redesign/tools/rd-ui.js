@@ -182,11 +182,11 @@ function mkWinTxt(r){
   var k=Math.round(w/10); if((k===0&&w>0)||(k===10&&w<100)) return w<1?'1% 미만':w>99?'99% 넘게':Math.round(w)+'%';
   return '10번 중 약 '+k+'번';
 }
-function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.round(n/1000)/10)+'만 명':n.toLocaleString()+'명')+'이 거래하고 있습니다'; }
+function mkFwTxt(n){ n=+n||0; if(n<=0) return ''; return (n>=10000?'약 '+(Math.round(n/1000)/10)+'만 명':n.toLocaleString()+'명')+'이 따라가는 중'; }
 function mkCard(s){
   if(!s.kind) s.kind='rule';
   var r=tfSS3PdCalc(s,'all'), m30=mk30(s), ne=tfSS3Rid(s), ex=mkEx(s), win=mkWinTxt(r), fw=mkFwTxt(s.fw);
-  var bF='<button type="button" class="mk3-b fill" onclick="cpSetupGo(\''+ne+'\')">전략 복사하기</button>', bD='<button type="button" class="mk3-b quiet" onclick="tfSS3Go(\''+ne+'\')">자세히</button>';
+  var bV='<button type="button" class="mk3-b fill" onclick="tfSS3Go(\''+ne+'\')">전략 보기</button>'; /* 카드 단추는 하나: 상세로 */
   return '<article class="mk-card mk3 mk3v2 k-'+s.kind+'">'
     +'<div class="mk3-head">'+mkGlyph(s,28)+'<h3><button type="button" class="mk-c-tb mk3-t" onclick="tfSS3Go(\''+ne+'\')">'+gEsc(mkHook(s))+'</button></h3></div>'
     +'<div class="mk3-meta">'+(s.by?'<span class="mk3-by">@'+gEsc(s.by)+'</span>':'')+'<span class="mk3-ex"><img src="assets/logos/'+ex[0]+'.png" alt="" width="12" height="12" loading="lazy">'+ex[1]+'에서 실행</span></div>'
@@ -195,7 +195,7 @@ function mkCard(s){
     +'<div class="mk3-now"><small>지금</small><span>'+gEsc(mkNowLine(s)).replace(/ (\S+) 중$/,' $1&nbsp;중')+'</span></div>'
     +'<div class="mk3-perf"><div class="mk-c-ret mk3-ret"><small>30일 수익률</small><b class="num'+mkSign(m30.ret)+'">'+mkPct0(m30.ret)+'</b></div>'+mkSpark3(m30.eq)+'</div>'
     +'<div class="mk3-facts">'+(win?'<div><small>전체 기간 수익 낸 거래</small><b class="num">'+win+'</b></div>':'')+(fw?mkFwHtml(s.fw):'')+'</div>'
-    +'<div class="mk3-foot">'+(s.me?'':bF)+bD+'</div>'
+    +'<div class="mk3-foot">'+bV+'</div>'
     +'</article>';
 }
 var MK_WIN_MIN=20; /* 승률 정렬에서 앞에 설 수 있는 최소 거래 수 */
@@ -600,7 +600,7 @@ function mkCardsEnter(){
 function mkFwTier(n){ return n>=1000?'t3':n>=500?'t2':'t1'; }
 function mkFwHtml(n){ n=+n||0; if(n<=0) return '';
   var num=n>=10000?'약 '+(Math.round(n/1000)/10)+'만':n.toLocaleString();
-  return '<div class="mk3-fw num '+mkFwTier(n)+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span><b>'+num+'명</b>이 거래하고 있습니다</span></div>'; }
+  return '<div class="mk3-fw num '+mkFwTier(n)+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span><b>'+num+'명</b>이 따라가는 중</span></div>'; }
 
 /* ── 기간: 최근 7일, 최근 30일, 최근 1년, 전체 ──
    7일과 30일은 전체 기록에서 그 구간을 잘라 계산한다(그 시점에 들고 있던 종목을 그대로 둔 채). 1년은 그 구간으로 다시 계산한다 */
