@@ -23,23 +23,36 @@ await press(ITEM); s=await J(st); ok('손님: 팝업의 설정 → 로그인 창
 await shot(p,DIR+'guest-menu.png',{full:false}); await reset();
 await press(PROF); s=await J(st); ok('손님: 프로필 → 로그인 창',s.auth); await reset();
 
-// 회원: 팝업이 예전대로 뜨고, 설정 항목만 설정 페이지로
+
+// 회원
 await ev(`tfQaPreset('02')`); await sleep(1400);
+// 접힌 사이드바 + 로그인: 톱니 없음, 프로필에 올려도 이름 말풍선 없음
+s=await J(`{gear:(function(){ var r=document.getElementById('g-gear-btn').getBoundingClientRect(); return r.width>0&&getComputedStyle(document.getElementById('g-gear-row')).display!=='none'; })(),collapsed:document.getElementById('g-side').classList.contains('collapsed')}`);
+ok('회원, 접힌 사이드바: 톱니 아이콘이 없다',s.collapsed&&!s.gear,s);
+{ const c=await pos(PROF); await move(p,c.x,c.y); await sleep(500); }
+s=await J(`(function(){ var pl=document.querySelector('#g-person-row .g-ico-pill'); if(!pl) return {pill:false}; var cs=getComputedStyle(pl); return {pill:cs.display!=='none'&&cs.opacity!=='0'&&pl.getBoundingClientRect().width>0}; })()`);
+ok('회원: 프로필에 올려도 이름 말풍선이 없다',!s.pill,s);
+await shot(p,DIR+'user-collapsed-hover.png',{full:false});
 const pages=[['홈',`gHome()`],['전략 복사',`tfShareHub()`],['전략 상세',`tfSS3Go('f1','all','ov')`],['AI 트레이딩',`location.hash='#/trade'`],['인사이트',`location.hash='#/insight'`],['백테스트',`location.hash='#/share/bt/f1'`],['거래소 연결',`tfBrokersView()`]];
 for(const [name,go] of pages){
   await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(500); await ev(go); await sleep(2000);
   const from=(await J(st)).mode;
-  await press(GEAR); s=await J(st); ok('회원 '+name+'('+from+'): 톱니 → 팝업 메뉴',s.menu&&s.items.length>=5,s.items);
-  const c0=await pos(ITEM); await move(p,c0.x,c0.y); await sleep(450); s=await J(`{sub:!!document.querySelector('#gm-sub-set'),spin:!!document.querySelector('#g-setmenu .acx-sp, #g-setmenu [style*=acSp]'),spd:(function(){ var e=document.querySelector('#g-setmenu .sp'); return e?getComputedStyle(e).animationName:'none'; })()}`); ok('회원 '+name+': 설정에 올려도 하위 메뉴 없음, 도는 표시 없음',!s.sub&&!s.spin&&s.spd==='none',s);
-  const hadLogout=(await J(st)).items.indexOf('로그아웃')>=0;
-  await press(ITEM,1100); s=await J(st); ok('회원 '+name+': 팝업의 설정 → 설정 페이지',s.mode==='tfset'&&s.hash==='#/settings/general'&&s.tab==='일반'&&!s.menu,{hash:s.hash,mode:s.mode,tab:s.tab,menu:s.menu,logout:hadLogout});
-  await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(500); await ev(go); await sleep(2000);
-  await press(PROF); s=await J(st); ok('회원 '+name+': 프로필 → 같은 팝업 메뉴',s.menu&&s.items.indexOf('로그아웃')>=0,s.items); await reset();
+  await press(PROF); s=await J(st); ok('회원 '+name+'('+from+'): 프로필 → 팝업 메뉴',s.menu&&s.items.indexOf('로그아웃')>=0,s.items);
+  const c0=await pos(ITEM); await move(p,c0.x,c0.y); await sleep(450);
+  s=await J(`{sub:!!document.querySelector('#gm-sub-set'),spd:(function(){ var e=document.querySelector('#g-setmenu .sp'); return e?getComputedStyle(e).animationName:'none'; })()}`);
+  ok('회원 '+name+': 설정에 올려도 하위 메뉴와 도는 표시 없음',!s.sub&&s.spd==='none',s);
+  await press(ITEM,1100); s=await J(st); ok('회원 '+name+': 팝업의 설정 → 설정 페이지',s.mode==='tfset'&&s.hash==='#/settings/general'&&s.tab==='일반'&&!s.menu,{hash:s.hash,mode:s.mode,tab:s.tab});
+  await reset();
 }
-// 예전에 먹통이 되던 순서: 주소는 이미 설정인데 다른 화면이 그려진 상태
-await ev(`history.replaceState(null,'','#/settings/general'); gHome()`); await sleep(700);
-await press(GEAR); await press(ITEM,1100); s=await J(st); ok('주소가 이미 설정일 때도 설정 페이지가 그려진다',s.mode==='tfset'&&s.tab==='일반',s);
-s=await J(`{side:getComputedStyle(document.getElementById('g-side')).display}`); ok('설정 페이지에서는 앱 사이드바가 감춰진다(GPT 방식)',s.side==='none',s); await shot(p,DIR+'user-menu.png',{full:false}); await reset();
+s=await J(`{side:getComputedStyle(document.getElementById('g-side')).display}`); ok('설정 페이지에서는 앱 사이드바가 감춰진다',s.side==='none',s);
+// 펼친 사이드바 + 로그인: 아바타, 이름, 톱니 한 줄. 누르면 같은 팝업
+await ev(`history.replaceState(null,'',location.pathname); gHome()`); await sleep(700);
+await ev(`(function(){ var sd=document.getElementById('g-side'); if(sd.classList.contains('collapsed')) gSideToggle(); })()`); await sleep(800);
+s=await J(`{w:Math.round(document.getElementById('g-me-row').getBoundingClientRect().width),gearIn:!!document.querySelector('#g-me-row .gear'),name:document.getElementById('g-me-name').innerText}`);
+ok('회원, 펼친 사이드바: 아바타, 이름, 톱니 한 줄',s.w>100&&s.gearIn,s);
+await press('#g-me-row'); s=await J(st); ok('회원, 펼친 사이드바: 그 줄을 누르면 팝업 메뉴',s.menu,s.items);
+await shot(p,DIR+'user-expanded-menu.png',{full:false}); await reset();
+await ev(`(function(){ var sd=document.getElementById('g-side'); if(!sd.classList.contains('collapsed')) gSideToggle(); })()`); await sleep(500);
 s=await J(`window.__errs`); ok('콘솔 오류 없음',Array.isArray(s)&&s.length===0,s);
 const pass=out.filter(x=>x.startsWith('PASS')).length, all=out.length; out.push('','TOTAL '+pass+' / '+all); console.log(out[out.length-1]);
 fs.writeFileSync(DIR+'rail-check.txt',out.join('\n'));
