@@ -61,7 +61,7 @@ function skbApply(root){
   var busy=false, mo=null;
   function run(){ var r=document.getElementById('bt-root'); if(!r) return; busy=true; try{ skbApply(r); }finally{ busy=false; } }
   function watch(){ var c=document.getElementById('g-content'); if(!c||mo) return;
-    mo=new MutationObserver(function(){ if(busy) return; if(document.getElementById('bt-root')) run(); });
+    var tm=null; mo=new MutationObserver(function(){ if(busy||tm) return; tm=setTimeout(function(){ tm=null; if(document.getElementById('bt-root')) run(); },300); });
     mo.observe(c,{childList:true,subtree:true,characterData:true}); }
   /* 백테스트 화면은 여러 함수가 조각조각 그리므로 #g-content 를 처음부터 지켜본다 */
   function boot(){ if(document.getElementById('g-content')){ watch(); run(); } else setTimeout(boot,300); }

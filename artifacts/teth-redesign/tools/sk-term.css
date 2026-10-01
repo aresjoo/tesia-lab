@@ -1,0 +1,141 @@
+/* ═══ 터미널 (sk-term): DESIGN_PROMPT. 요소와 순서는 그대로, 글자 위계, 입력면, 알약, 색만 ═══ */
+.tft-page .tm-ctx .mut{font-size:14px;color:#9a9a9a}
+.tft-page .tm-mttl{font-size:16px;font-weight:400;color:#fff}
+/* 전략 레일 머리와 검색, 필터 */
+.tft-page .tft-rh b{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tft-rh .ct2{font-size:14px;color:#9a9a9a}
+.tft-page .tft-new{height:36px;padding:0 14px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;font-weight:400}
+.tft-page .tft-new:hover{background:#3a3a3a}
+.tft-page .tft-rf input{height:40px;padding:0 16px;border:0;border-radius:999px;background:#212121;color:#fff;font-size:16px}
+.tft-page .tft-rf input::placeholder{color:#9a9a9a}
+.tft-page .tft-rf select{height:36px;padding:0 12px;border:0;border-radius:18px;background:#212121;color:#ececec;font-size:14px}
+/* 전략 카드 */
+.tft-page .tft-card{margin:4px 8px;padding:12px 14px;border:0;border-radius:12px}
+.tft-page .tft-card:hover{background:#2a2a2a}
+.tft-page .tft-card.on{background:#2f2f2f;border-left:0}
+.tft-page .tft-card .nm{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tft-card .r2,.tft-page .tft-card .r2 *{font-size:14px;font-weight:400}
+/* 빈 상태: 제목 16/400, 설명 14, 단추는 밑줄 링크(주 단추는 오른쪽 "전략 찾기" 하나) */
+.tft-page .tft-empty{gap:10px;padding:40px 16px}
+.tft-page .tft-empty b{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tft-empty span{font-size:14px;color:#cdcdcd;line-height:1.6}
+.tft-page .tft-empty .nfx-btn.pri{flex:none;background:none;box-shadow:none;border:0;padding:0;color:#cdcdcd;font-size:14px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
+.tft-page .tft-empty .nfx-btn.pri:hover{color:#fff;transform:none}
+/* 오른쪽 안내 */
+.tft-page .px-tbrain{gap:12px;padding:28px 24px}
+.tft-page .px-tbrain b{font-size:18px;font-weight:400}
+.tft-page .px-tbrain span{font-size:16px;color:#cdcdcd}
+.tft-page .px-tbrain .pl-cta{height:48px;font-size:16px}
+.tft-page .px-tbrain .pl-link{font-size:14px}
+.tft-page .px-tcps .r b{font-size:16px;font-weight:400}
+.tft-page .px-tcps .r span{font-size:14px;color:#cdcdcd}
+/* 아래 탭과 표 */
+.tft-page .nfxh-tab{font-size:16px;font-weight:400;color:#cdcdcd}
+.tft-page .nfxh-tab.on{color:#fff}
+.tft-page .tft-scope select{height:36px;padding:0 14px;border:0;border-radius:18px;background:#212121;color:#ececec;font-size:14px}
+.tft-page .tft-tnote{font-size:14px;color:#9a9a9a;margin-bottom:12px}
+.tft-page .tft-tbl th{font-size:14px;font-weight:400;letter-spacing:0;color:#9a9a9a;padding:10px 12px;background:transparent;border-bottom-color:rgba(255,255,255,.1)}
+.tft-page .tft-tbl td{font-size:16px;color:#ececec;padding:12px;border-bottom-color:rgba(255,255,255,.1)}
+.tft-page .tft-tbl td b{font-weight:400}
+/* 알림 탭 */
+.tft-page .nfx-sectit{font-size:18px;font-weight:400;color:#fff}
+.tft-page .nfxu-later{font-size:14px;color:#cdcdcd}
+.tft-page .nfx-btn.out{height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:14px;font-weight:400;color:#ececec}
+.tft-page .nfxh-fchip{height:32px;padding:0 14px;font-size:14px;font-weight:400;color:#cdcdcd;background:transparent;border:1px solid rgba(255,255,255,.14)}
+.tft-page .nfxh-fchip.on{color:#fff;background:transparent;border:2px solid #9a9a9a}
+.tft-page .nfx-etit{font-size:16px;font-weight:400;color:#fff}
+.tft-page .nfx-edesc{font-size:14px;color:#cdcdcd}
+@media (max-width:768px){
+  .tft-page .nfxh-tab{font-size:16px}
+  .tft-page .tft-empty{padding:32px 16px}
+}
+/* 전략이 있을 때: 차트 머리, 카드, 판단 패널. 제목 16, 본문 14, 보조 12, 굵기 400, 색은 손익 숫자에만 */
+.tft-page .tm-preview span{font-size:14px;color:#cdcdcd}
+.tft-page .tm-preview button{height:36px;padding:0 14px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;font-weight:400}
+.tft-page .tm-mhead .tm-mttl{font-size:18px}
+.tft-page .st,.tft-page .tft-card .st{font-size:12px;font-weight:400;color:#cdcdcd}
+.tft-page .st.st-err{color:#e0604b}
+.tft-page .tm-halt,.tft-page .tft-halt{height:32px;padding:0 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;color:#ececec;font-size:13px;font-weight:400}
+.tft-page .tm-msummary,.tft-page .tm-msummary span{font-size:14px}
+.tft-page .tm-msummary b{font-weight:400}
+.tft-page .exb{font-size:10px;font-weight:600}
+.tft-page .tft-card .r3 .cap{font-size:14px;color:#cdcdcd}
+.tft-page .tft-card .r3 .pnl{font-size:14px;font-weight:400}
+.tft-page .tft-card .r3 .pnl small{font-size:12px;font-weight:400}
+.tft-page .tft-card .r4{font-size:12px;color:#cdcdcd}
+.tft-page .tft-card .r4 a{color:#ececec;text-decoration:underline;text-underline-offset:3px}
+.tft-page .tm-ctx .tm-ttl{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tm-ctx .tf-kind{font-size:12px;font-weight:400}
+.tft-page .tm-ctx .sy{font-size:14px;font-weight:400}
+.tft-page .tm-kv small{font-size:12px}
+.tft-page .tm-kv b,.tft-page .tm-kv b.up,.tft-page .tm-kv b.dn{font-size:14px;font-weight:400}
+.tft-page .tm-kv b em{font-size:12px;font-weight:400}
+.tft-page .tm-help{width:28px;height:28px;background:#2f2f2f;color:#ececec;font-weight:400;font-size:13px;border:0}
+.tft-page .tft-btabs button{font-size:14px;font-weight:400;color:#cdcdcd}
+.tft-page .tft-btabs button.on{color:#fff}
+.tft-page .tm-status .h b{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tm-status .r span{font-size:14px;color:#cdcdcd}
+.tft-page .tm-status .r small{font-size:12px;color:#9a9a9a}
+.tft-page .tft-fsec{font-size:14px;font-weight:400;color:#cdcdcd}
+.tft-page .tft-fsec small{font-size:12px;font-weight:400}
+.tft-page .ffc{height:28px;padding:0 12px;font-size:12px;font-weight:400;color:#cdcdcd;border:1px solid rgba(255,255,255,.14)}
+.tft-page .ffc.on{color:#fff;border:2px solid #9a9a9a;background:transparent}
+.tft-page .tm-fold span,.tft-page .tm-fold b,.tft-page .tm-fold i{font-size:14px;font-weight:400}
+.tft-page .tm-fold i{color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+.tft-page .tm-card{background:transparent;border:1px solid rgba(255,255,255,.14);border-radius:16px}
+.tft-page .tm-card .tm-t{font-size:12px}
+.tft-page .tm-card .tm-k{font-size:14px;font-weight:400;color:#cdcdcd}
+.tft-page .tm-card .tm-res{font-size:12px;font-weight:400;color:#ececec}
+.tft-page .tm-row span{font-size:14px;color:#cdcdcd}
+.tft-page .tm-row b.num{font-size:14px;font-weight:400}
+.tft-page .tm-row i.na{font-size:12px;color:#9a9a9a;font-weight:400}
+.tft-page .tm-row i.hit,.tft-page .tm-row i.ok{font-size:12px;font-weight:400;color:#ececec}
+.tft-page .tm-out{font-size:14px;color:#ececec}
+.tft-page .tm-out small{font-size:12px}
+.tft-page .tm-out b{font-weight:400}
+.tft-page .tft-more{height:auto;padding:0;border:0;background:none;font-size:14px;color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+.tft-page .tm-manage small{font-size:12px}
+.tft-page .tm-manage button{height:28px;padding:0 12px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:12px}
+.tft-page .tft-comp .chips button{height:30px;padding:0 12px;font-size:12px;color:#cdcdcd;border:1px solid rgba(255,255,255,.14)}
+.tft-page .tft-comp .row input{height:40px;padding:0 16px;border:0;border-radius:999px;background:#212121;color:#fff;font-size:14px}
+.tft-page .tft-comp .row input::placeholder{color:#9a9a9a}
+.tft-page .tft-comp .row .snd{width:36px;height:36px;border-radius:999px;background:#fff;color:#000;font-size:14px}
+.tft-page .nfxh-tab .ct{font-size:12px;font-weight:400;color:#cdcdcd;background:#2f2f2f}
+.tft-page .tft-tbl .sd{font-size:12px;font-weight:400;background:transparent;border:1px solid rgba(255,255,255,.14);color:#ececec;padding:1px 8px;border-radius:999px}
+.tft-page .tft-tbl .okst{font-size:14px;color:#cdcdcd}
+.tft-page .tft-assets .ah2 b{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tft-assets .ah2 .mut{font-size:14px}
+.tft-page .tft-assets .ag2 small{font-size:12px}
+.tft-page .tft-assets .ag2 b{font-size:16px;font-weight:400;color:#ececec}
+.tft-page .tft-assets .af2{font-size:12px}
+/* Codex term/s3: 위계 한 단계 위로(전략명 18, 본문 16, 보조 14), 기록 카드 반경 20, 파란 선택선 금지 */
+.tft-page .tft-rh b{font-size:18px}
+.tft-page .tm-ctx .tm-ttl{font-size:18px}
+.tft-page .tm-kv b,.tft-page .tm-kv b.up,.tft-page .tm-kv b.dn{font-size:16px}
+.tft-page .tm-kv small,.tft-page .tm-kv b em{font-size:14px}
+.tft-page .tft-card{border-radius:16px}
+.tft-page .tft-card.on{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.tft-page .tft-card .r3 .cap{font-size:16px;color:#ececec}
+.tft-page .tm-status .h b{font-size:18px}
+.tft-page .tm-status .r span{font-size:16px}
+.tft-page .tm-status .r small{font-size:14px}
+.tft-page .tm-card{border-radius:20px}
+.tft-page .tm-card .tm-t,.tft-page .tm-card .tm-res{font-size:14px}
+.tft-page .tm-row span,.tft-page .tm-row b.num{font-size:16px}
+.tft-page .tm-row i.na,.tft-page .tm-row i.hit,.tft-page .tm-row i.ok{font-size:14px}
+.tft-page .tm-out{font-size:16px}
+.tft-page .tm-out small{font-size:14px}
+.tft-page .tm-manage small,.tft-page .tft-fsec small{font-size:14px}
+.tft-page .tm-manage button,.tft-page .tft-comp .chips button{height:36px;padding:0 14px;font-size:14px}
+.tft-page .tft-comp .row input{height:44px;font-size:16px}
+.tft-page .tft-comp .row .snd{width:40px;height:40px}
+.tft-page .nfxh-tab.on{border-bottom-color:#9a9a9a}
+.tft-page .nfxh-tab.on::after,.tft-page .tft-btabs button.on::after{background:#9a9a9a}
+.tft-page .tft-btabs button.on{border-bottom-color:#9a9a9a}
+.tft-page .tm-status .h i,.tft-page .tm-status .h .dot,.tft-page .tm-status.st-live .h::before{background:#9a9a9a;box-shadow:none;animation:none}
+@media (max-width:768px){
+  .tft-page .tm-mhead,.tft-page .tm-msummary,.tft-page .nfxh-tabs.m-only,.tft-page .tm-preview{padding-left:16px;padding-right:16px}
+  .tft-page .tm-mhead .tm-mttl{font-size:18px}
+}
+/* 모바일 판단 탭: 고정 탭 아래로 본문이 들어가지 않게 (Codex term/s5) */
+@media (max-width:768px){ .tft-page.mt-brain .tft-brainin{padding-top:48px} }

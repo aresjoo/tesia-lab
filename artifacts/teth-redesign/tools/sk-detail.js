@@ -68,7 +68,7 @@ function skdDedupe(root){
   var busy=false, mo=null;
   function run(){ var r=document.querySelector('#g-content .mk-detail'); if(!r) return; busy=true; try{ skdApply(r); skdDedupe(r); }finally{ busy=false; } }
   function watch(){ var c=document.getElementById('g-content'); if(!c||mo) return;
-    mo=new MutationObserver(function(){ if(busy) return; if(document.querySelector('#g-content .mk-detail')) run(); });
+    var tm=null; mo=new MutationObserver(function(){ if(busy||tm) return; tm=setTimeout(function(){ tm=null; if(document.querySelector('#g-content .mk-detail')) run(); },300); });
     mo.observe(c,{childList:true,subtree:true,characterData:true}); }
   var r0=tfSS3DetailRender; tfSS3DetailRender=function(){ var r=r0.apply(this,arguments); try{ watch(); run(); }catch(e){} return r; };
 })();
