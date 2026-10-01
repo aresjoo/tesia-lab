@@ -1,0 +1,58 @@
+PASS | QA 단추가 보인다
+PASS | 패널: 페이지 묶음 7개 | ["홈과 채팅","전략 복사","백테스트","AI 트레이딩","거래소 연결과 플랜","설정","연구 기록"]
+PASS | 홈과 채팅 / 게스트 홈 | {"sel":"#g-home-in, .g-home","mode":"home","h1":"","errs":[]}
+PASS | 홈과 채팅 / 로그인 홈 | {"sel":"#g-home-in, .g-home","mode":"home","h1":"","errs":[]}
+PASS | 홈과 채팅 / 질문 시트(빠진 정보 묻기) | {"sel":"#g-askdock .ska","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 전략 카드 | {"sel":"#g-thread .tf-sum","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 전략 카드(검증에서 뺀 조건) | {"sel":"#g-thread .tf-sum","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 예약 카드(예약 전) | {"sel":".od-card.draft","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 예약 카드(조건 대기) | {"sel":".od-card.wait","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 예약 카드(롱 3배, 취소됨) | {"sel":".od-card.cancel","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 사용량 80% 배너(닫을 수 있음) | {"sel":"#g-usebar .use-bar:not(.full)","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 사용량 100%(초대 계정, 카드 등록) | {"sel":"#g-usebar .use-bar.full","mode":"conv","h1":"","errs":[]}
+PASS | 홈과 채팅 / 사용량 100%(구독만, 초대 계정 연결) | {"sel":"#g-usebar .use-bar.full","mode":"conv","h1":"","errs":[]}
+PASS | 전략 복사 / 목록 | {"sel":".skf-card, [class*=skf]","mode":"tfss3","h1":"","errs":[]}
+PASS | 전략 복사 / 상세 개요 | {"sel":".mk-detail","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 상세 전략 정보 탭 | {"sel":".mk-detail .mk-info-r","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 복사 창(연결됨) | {"sel":".mk-follow, .skc","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 복사 창 대신 플랜(미연결) | {"sel":"#pl-root, .pl","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
+PASS | 백테스트 / 돌리기 전 | {"sel":"#bt-root","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 백테스트 / 도는 중 | {"sel":"#bt-root","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 백테스트 / 결과(좋음) | {"sel":"#bt-root .bt-verdict","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 백테스트 / 결과(나쁨, 공개 전략) | {"sel":"#bt-root .bt-verdict","mode":"tfbt","h1":"BTC 큰 하락 뒤","errs":[]}
+PASS | 백테스트 / 결과(나쁨, 내 전략, 규칙 수정하기) | {"sel":"#bt-root .rv-links, #bt-root .bt-cta","mode":"tfbt","h1":"괜찮을때만 사는 BTC","errs":[]}
+PASS | AI 트레이딩 / 게스트 | {"sel":".tft-page, .tx-page, [class*=tx]","mode":"tfintro","h1":"AI가 스스로 판단해 거래합니다","errs":[]}
+PASS | AI 트레이딩 / 로그인, 거래소 미연결 | {"sel":".tft-page, [class*=tx], #pl-root","mode":"tfintro","h1":"AI가 스스로 판단해 거래합니다","errs":[]}
+PASS | AI 트레이딩 / 연결, 전략 없음 | {"sel":".tft-page","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 복사한 전략만 | {"sel":".tft-page","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 전략 있음, 포지션 있음 | {"sel":".tft-page .tft-card.on","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 전략 있음, 포지션 없음 | {"sel":".tft-page .tft-card.on","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 전략 오류 | {"sel":".tft-page .tft-card.on","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 예약 주문 대기(미체결 주문) | {"sel":".od-row","mode":"tfdash","h1":"알림","errs":[]}
+PASS | 거래소 연결과 플랜 / 플랜(무료 초대 계정 / 구독) | {"sel":"#pl-root, #ac-flow","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
+PASS | 거래소 연결과 플랜 / 거래소 선택 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"거래소 선택","errs":[]}
+PASS | 거래소 연결과 플랜 / 계정(가입 안내) | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 계정","errs":[]}
+PASS | 거래소 연결과 플랜 / 가입한 계정 연결 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 계정","errs":[]}
+PASS | 거래소 연결과 플랜 / 승인 화면 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 연결","errs":[]}
+PASS | 거래소 연결과 플랜 / 연결 확인 중 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 연결 확인 중","errs":[]}
+PASS | 거래소 연결과 플랜 / 구독 결제 | {"sel":"#pl-root, #ac-flow","mode":"tfbrokers","h1":"플랜 구성","errs":[]}
+PASS | 거래소 연결과 플랜 / 연결된 계정 목록 | {"sel":"#ac-flow, .px-list","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
+PASS | 설정 / 일반 | {"sel":"#st-main","mode":"tfset","h1":"일반","errs":[]}
+PASS | 설정 / 계정 | {"sel":"#st-main","mode":"tfset","h1":"계정","errs":[]}
+PASS | 설정 / 알림 | {"sel":"#st-main","mode":"tfset","h1":"알림","errs":[]}
+PASS | 설정 / 결제(이용 방식 없음) | {"sel":"#st-main","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 결제(초대 계정) | {"sel":"#st-main","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 결제(구독) | {"sel":"#st-main","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 결제(구독과 초대 계정, 크레딧 차감) | {"sel":"#st-main","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 결제(구독 해지됨) | {"sel":"#st-main","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 결제(결제 실패) | {"sel":"#st-main .stg-warn","mode":"tfset","h1":"결제","errs":[]}
+PASS | 설정 / 사용량 20% | {"sel":"#st-main .use-card","mode":"tfset","h1":"사용량","errs":[]}
+PASS | 설정 / 사용량 85% | {"sel":"#st-main .use-card","mode":"tfset","h1":"사용량","errs":[]}
+PASS | 설정 / 사용량 100% | {"sel":"#st-main .use-card","mode":"tfset","h1":"사용량","errs":[]}
+PASS | 설정 / 보안 | {"sel":"#st-main","mode":"tfset","h1":"보안","errs":[]}
+PASS | 연구 기록 / 비어 있음 | {"sel":".g-hist","mode":"history","h1":"","errs":[]}
+PASS | 연구 기록 / 기록 있음 | {"sel":".g-hist .g-hist-row","mode":"history","h1":"","errs":[]}
+PASS | 홈에서는 오른쪽 위 알림 단추가 없다 | {"home":"home","hidden":true}
+PASS | 다른 화면에서는 알림 단추가 그대로 | {"mode":"tfdash","shown":true}
+
+TOTAL 56 / 56

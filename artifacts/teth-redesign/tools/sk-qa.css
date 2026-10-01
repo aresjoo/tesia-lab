@@ -1,0 +1,18 @@
+/* ═══ QA 상태 패널 (sk-qa) ═══ */
+#qa2-panel{position:fixed;top:96px;right:16px;z-index:210;width:320px;max-height:calc(100vh - 120px);overflow-y:auto;padding:14px 12px 12px;border-radius:20px;background:#212121;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 48px rgba(0,0,0,.55);color:#ececec;scrollbar-width:thin}
+#qa2-panel .qa2-hd{display:flex;align-items:center;justify-content:space-between;padding:0 4px 4px}
+#qa2-panel .qa2-hd b{font-size:16px;font-weight:500;color:#fff}
+#qa2-panel .qa2-x{width:28px;height:28px;border:0;border-radius:999px;background:none;color:#cdcdcd;cursor:pointer}
+#qa2-panel .qa2-x:hover{background:#2f2f2f;color:#fff}
+#qa2-panel .qa2-note{margin:0 4px 8px;font-size:13px;color:#9a9a9a;line-height:1.5}
+#qa2-panel .qa2-cur{margin:0 4px 8px;font-size:13px;color:#ececec;min-height:0}
+#qa2-panel .qa2-cur:empty{display:none}
+#qa2-panel .qa2-sec{border-top:1px solid rgba(255,255,255,.08)}
+#qa2-panel .qa2-sec summary{display:flex;align-items:center;justify-content:space-between;list-style:none;cursor:pointer;padding:10px 4px;font-size:14px;color:#fff}
+#qa2-panel .qa2-sec summary::-webkit-details-marker{display:none}
+#qa2-panel .qa2-sec summary i{font-style:normal;font-size:12px;color:#9a9a9a}
+#qa2-panel .qa2-list{display:grid;gap:2px;padding:0 0 8px}
+#qa2-panel .qa2-it{text-align:left;border:0;border-radius:10px;background:none;color:#cdcdcd;font:inherit;font-size:13.5px;padding:8px 10px;cursor:pointer}
+#qa2-panel .qa2-it:hover{background:#2f2f2f;color:#fff}
+#qa2-panel .qa2-old{margin-top:8px;width:100%;border:0;background:none;color:#9a9a9a;font:inherit;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
+@media (max-width:860px){ #qa2-panel{top:auto;bottom:250px;right:12px;left:12px;width:auto;max-height:55vh} }
