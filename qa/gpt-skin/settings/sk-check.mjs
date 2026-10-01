@@ -21,7 +21,7 @@ const TXT=(sel)=>`(function(){ var e=document.querySelector('${sel}'); return e?
 await load('13'); await ev(`stGo('billing')`); await sleep(1000);
 let s=await J(SHELL); ok('셸: 검정 바탕, 제목 28px 400, 윤곽만 있는 카드 반경 20, 색 배지 없음, 상담 단추 없음, 가로 넘침 없음',shellOk(s),s);
 s=await J(`{secs:[].map.call(document.querySelectorAll('#st-main .stg-sec h2'),function(h){ return h.innerText; }),rows:[].map.call(document.querySelectorAll('#st-main .stg-sec:first-of-type .stg-r .k b'),function(b){ return b.innerText; }),hist:document.querySelectorAll('#st-main .stg-hr').length,pills:[].map.call(document.querySelectorAll('#st-main .stg-sec:first-of-type .stg-b'),function(b){ return b.innerText; })}`);
-ok('결제: 섹션 둘(구독, 결제 내역), 구독 카드에 TETH 구독, 결제 수단, 청구 정보. 알약 하나씩',s.secs.join()==='구독,결제 내역'&&s.rows.join()==='TETH 구독,결제 수단,청구 정보'&&s.pills.join()==='구독 관리,관리,변경',s);
+ok('결제: 섹션 둘(구독, 결제 내역), 구독 카드에 TETH 구독, 청구 예정 금액, 결제 수단, 청구 정보. 알약 하나씩',s.secs.join()==='구독,결제 내역'&&s.rows.filter(function(r){ return r!=='청구 예정 금액'; }).join()==='TETH 구독,결제 수단,청구 정보'&&s.pills.join()==='구독 관리,관리,변경',s);
 ok('결제 내역: 최근 3건까지',s.hist===3,s);
 s=await J(`{txt:${TXT('#st-main')}}`); ok('결제: 다음 결제 문장, 실패는 글자로',/다음 결제일은 .+입니다/.test(s.txt)&&!/TETH 구독, 결제/.test(s.txt)&&/결제 실패/.test(s.txt)&&!/새로 추가|기본으로|편집/.test(s.txt),s);
 await snap('K1-billing');

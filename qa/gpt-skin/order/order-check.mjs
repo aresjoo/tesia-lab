@@ -11,8 +11,8 @@ const J=async(x)=>{ try{ return JSON.parse(await ev(`JSON.stringify(${x})`)); }c
 const waitFor=async(x,ms)=>{ const t=Date.now(); while(Date.now()-t<ms){ if(await ev(x)===true) return true; await sleep(500); } return false; };
 await goto(p,B+'?v='+Date.now()); await sleep(600); await ev(`localStorage.clear(); sessionStorage.clear()`); await goto(p,B+'?v='+Date.now()); await sleep(3800);
 await ev(`window.__errs=[]; window.addEventListener('error',function(e){ __errs.push(String(e.message)+' @'+e.lineno); }); var s=document.createElement('style'); s.textContent='#tf-devbtn,#tf-devpanel{display:none!important}'; document.head.appendChild(s);`);
-await ev(`tfQaPreset('05')`); await sleep(1200);
-ok('프리셋 05: 거래소 연결됨',(await ev(`!!tfS().api`))===true);
+await ev(`tfQaPreset('10')`); await sleep(1200);
+ok('프리셋 10: 거래소 연결, 사용량 여유',(await ev(`!!tfS().api&&aiMeter().pct<80`))===true,await J('aiMeter()'));
 // 1) 빠진 것이 있는 요청 → 질문 시트
 await ev(`gNew('비트코인 오르면 나 대신 팔아줘')`); await sleep(1500);
 const asked=await waitFor(`!TAI.busy&&!TAI.req&&(!!document.querySelector('#g-askdock .ska .op')||!!document.querySelector('.od-card'))`,150000); await sleep(800);
@@ -24,13 +24,13 @@ await shot(p,DIR+'O1-ask.png',{full:false});
 await ev(`(function(){ var n=0, iv=setInterval(function(){ var b=document.querySelector('#g-askdock .ska .op'); if(!b||n++>8){ clearInterval(iv); return; } b.click(); },700); })()`); await sleep(7000);
 const got=await waitFor(`!!document.querySelector('.od-card')`,150000); await sleep(800);
 s=await J(`{card:(function(){ var c=document.querySelector('.od-card'); return c?c.innerText.replace(/\\s+/g,' '):''; })(),btn:(document.querySelector('.od-card .tf-btn.p')||{}).innerText,lk:(document.querySelector('.od-card .od-lk')||{}).innerText,tags:/\\[ORDER|\\[STRATEGY/.test((document.getElementById('g-thread')||{}).innerText||''),ans:(function(){ var a=[].slice.call(document.querySelectorAll('#g-thread .g-amsg')).pop(); return a?a.innerText.slice(0,200):''; })()}`);
-ok('예약 카드: 문장 하나, 흰 단추 "예약하기", 링크 "조건 바꾸기", 태그 노출 없음',got&&/닿으면|움직이면/.test(s.card)&&/팝니다|삽니다|들어갑니다/.test(s.card)&&s.btn==='예약하기'&&s.lk==='조건 바꾸기'&&!s.tags,s);
+ok('예약 카드: 문장 하나, 흰 단추 "예약하기", 링크 "조건 바꾸기", 태그 노출 없음',got&&/이상이 되면|이하가 되면|움직이면/.test(s.card)&&/한 번 (매도|매수)합니다|한 번 (롱|숏)으로 진입합니다/.test(s.card)&&s.btn==='예약하기'&&s.lk==='조건 바꾸기'&&!s.tags,s);
 ok('카드에 유효 기간과 거리',/유지/.test(s.card),s.card);
 await shot(p,DIR+'O2-card.png',{full:false});
 // 2) 예약 → 대기 중, 터미널에 조건 대기 행
 await ev(`odPlace(document.querySelector('.od-card').id)`); await sleep(800);
 s=await J(`{st:(document.querySelector('.od-card .od-st')||{}).innerText,wait:tfS().orders.filter(function(x){ return x.status==='wait'; }).length}`);
-ok('예약하기 → 카드가 대기 중, 저장됨',/대기 중/.test(s.st)&&s.wait===1,s);
+ok('예약하기 → 카드가 조건 대기, 저장됨',/조건 대기/.test(s.st)&&s.wait===1,s);
 await shot(p,DIR+'O3-wait.png',{full:false});
 await ev(`location.hash='#/trade'`); await sleep(3000);
 await ev(`(function(){ var b=[].filter.call(document.querySelectorAll('.tft-botbar .nfxh-tab'),function(x){ return /미체결/.test(x.innerText); })[0]; b&&b.click(); })()`); await sleep(800);
@@ -40,6 +40,9 @@ await ev(`[].forEach.call(document.querySelectorAll('iframe'),function(f){ f.rem
 await ev(`(function(){ var b=document.querySelector('.od-row .od-cancel'); b&&b.click(); })()`); await sleep(800);
 s=await J(`{row:!!document.querySelector('.od-row'),cancel:tfS().orders.filter(function(x){ return x.status==='cancel'; }).length}`);
 ok('취소 → 행이 사라지고 상태가 취소',!s.row&&s.cancel===1,s);
+await ev(`gSelect(tfS().orders[0].sess)`); await sleep(1500);
+s=await J(`{st:(document.querySelector('.od-card .od-st')||{}).innerText,btn:!!document.querySelector('.od-card .tf-btn.p')}`);
+ok('대화로 돌아가면 카드가 취소됨으로 보인다',/취소됨/.test(s.st||'')&&!s.btn,s);
 const errs1=await J('window.__errs');
 // 3) 미연결 사용자: 예약하기 → 플랜
 await ev(`localStorage.clear(); sessionStorage.clear()`); await goto(p,B+'?v='+Date.now()); await sleep(3500); await ev(`window.__errs=[]; window.addEventListener('error',function(e){ __errs.push(String(e.message)+' @'+e.lineno); });`); await ev(`tfQaPreset('02')`); await sleep(1000);

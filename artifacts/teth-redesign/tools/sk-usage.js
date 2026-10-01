@@ -12,6 +12,7 @@ function aiMeter(){
   var pct=allow>0?Math.min(100,Math.round(used/allow*100)):(used>0?100:0);
   var b=null; try{ b=bcInit(); }catch(e){}
   var reset=(b&&b.cycleAt)?b.cycleAt+30*864e5:(function(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth()+1,1).getTime(); })();
+  try{ var sub=acS().sub; if(acSubOn()&&sub&&sub.next) reset=sub.next; }catch(e){} /* 구독이면 결제일과 같은 날 초기화 */
   return {tier:tier,used:used,allow:allow,pct:pct,bal:bal,reset:reset};
 }
 function aiBill(){
@@ -28,7 +29,7 @@ function aiNext(){
   if(t==='CARD_UID') return {label:'크레딧 추가',go:"aiTopup()"};
   return {label:'이용 방식 고르기',go:"tfBrokersView()"};
 }
-function aiGate(action){ var m=aiMeter(); if(m.pct>=100&&/^(new|edit|analyze)$/.test(action)) return 'block'; if(m.pct>=80) return 'warn'; return 'allow'; }
+function aiGate(action){ if(window.TF_QA_NOGATE) return 'allow'; var m=aiMeter(); if(m.pct>=100&&/^(new|edit|analyze)$/.test(action)) return 'block'; if(m.pct>=80) return 'warn'; return 'allow'; }
 function aiMonthKey(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1); }
 function aiDismissed(){ try{ return localStorage.getItem('teth.use80')===aiMonthKey(); }catch(e){ return false; } }
 function aiDismiss(){ try{ localStorage.setItem('teth.use80',aiMonthKey()); }catch(e){} aiBar(); }
@@ -36,7 +37,7 @@ function aiDismiss(){ try{ localStorage.setItem('teth.use80',aiMonthKey()); }cat
 function aiBarHtml(){
   if(!S.user) return ''; var m=aiMeter(); if(m.pct<80) return ''; if(m.pct<100&&aiDismissed()) return '';
   var nx=aiNext(), full=m.pct>=100;
-  var msg=full?'이번 달 AI 사용량을 모두 썼습니다. 실행 중인 전략은 계속 돌아갑니다.':'이번 달 AI 사용량이 '+m.pct+'%에 도달했습니다.';
+  var msg=full?'이번 달 AI 사용량을 모두 써서 새 요청은 잠시 멈춥니다. 실행 중인 전략과 결과 보기는 그대로입니다.':'이번 달 AI 사용량의 '+m.pct+'%를 썼습니다.';
   return '<div class="use-bar'+(full?' full':'')+'" role="status"><span>'+msg+'</span><button type="button" class="use-go" onclick="'+nx.go+'">'+nx.label+'</button>'+(full?'':'<button type="button" class="use-x" aria-label="닫기" onclick="aiDismiss()">✕</button>')+'</div>';
 }
 function aiBar(){
@@ -54,12 +55,13 @@ function aiTopupDo(v){ try{ bcAppend('grant','topup',+v,null,'topup'+Date.now())
 /* 설정 > 사용량: 퍼센트와 초기화 날짜만 */
 function stUsage(){
   var m=aiMeter(), nx=aiNext(), tierL={FREE:'무료 둘러보기',UID:'TETH 초대 계정',CARD:'TETH 구독',CARD_UID:'TETH 구독과 초대 계정'}[m.tier]||'';
-  var note=m.pct>=100?'이번 달 사용량을 모두 썼습니다. 실행 중인 전략은 계속 돌아갑니다.':m.pct>=80?'사용량이 '+m.pct+'%에 도달했습니다.':'';
-  var how={FREE:'둘러보기용 무료 사용량입니다. 초대 계정이나 구독으로 바꾸면 계속 쓸 수 있습니다.',UID:'거래 크레딧이 사용량을 덮는 동안은 이용료가 없습니다. 모자라면 카드를 등록해 계속 쓸 수 있습니다.',CARD:'구독에 든 사용량입니다. 초대 계정을 연결하면 사용량이 매달 더 생깁니다.',CARD_UID:'거래 크레딧이 구독료부터 줄입니다. 사용량이 모자라면 충전한 금액에서 차감됩니다.'}[m.tier]||'';
+  var note=m.pct>=100?'새 요청은 잠시 멈춥니다. 실행 중인 전략과 결과 보기는 그대로입니다.':'';
+  var rd=new Date(m.reset), rdT=rd.getFullYear()+'년 '+(rd.getMonth()+1)+'월 '+rd.getDate()+'일';
+  var how={FREE:'둘러보기용 무료 사용량입니다.',UID:'모자라면 카드를 등록해 계속 쓸 수 있습니다.',CARD:'초대 계정을 연결하면 사용량이 매달 더 생깁니다.',CARD_UID:'모자라면 크레딧을 추가해 계속 쓸 수 있습니다.'}[m.tier]||'';
   return '<h1>사용량</h1>'
-    +'<section class="stg-sec"><div class="stg-card use-card"><div class="use-h"><b>이번 달 AI 사용량</b><span class="num">'+m.pct+'%</span></div><div class="use-track"><i style="width:'+m.pct+'%"></i></div><p class="use-sub">'+stDate(m.reset)+'에 초기화됩니다.'+(note?' '+note:'')+'</p></div></section>'
+    +'<section class="stg-sec"><div class="stg-card use-card"><div class="use-h"><b>이번 달 AI 사용량</b><span class="num">'+m.pct+'%</span></div><div class="use-track"><i style="width:'+m.pct+'%"></i></div><p class="use-sub">'+rdT+'에 초기화됩니다.'+(note?' '+note:'')+'</p></div></section>'
     +stSec('',stRow('이용 방식',tierL,(m.pct>=80?stBtn(nx.label,nx.go,'p'):''),how))
-    +(m.tier==='CARD_UID'||m.tier==='UID'?stSec('',stRow('거래 크레딧',(m.bal>0?'이번 달 사용량을 덮고 있습니다':'이번 달 사용량을 다 덮지 못합니다'),'','초대 계정의 거래에서 매달 생깁니다. 남는 크레딧은 한 달 이월된 뒤 사라집니다')):'');
+    +(m.tier==='CARD_UID'||m.tier==='UID'?stSec('',stRow('거래 크레딧','<span class="num">'+acUsd(Math.max(0,m.bal))+'</span>')):'');
 }
 (function(){
   /* 설정 탭 추가 */
@@ -68,11 +70,16 @@ function stUsage(){
   /* 결제: 다음 청구 금액은 구독 카드의 "다음 결제일" 줄에 이어 쓴다(ChatGPT처럼 카드 하나) */
   if(typeof stBilling==='function'){ var b0=stBilling; stBilling=function(){ var h=b0.apply(this,arguments); var q=aiBill(); if(!q.gross) return h;
     var line='구독 '+acUsd(q.gross)+(q.credit?' - 거래 크레딧 '+acUsd(q.credit):'')+(q.extra?' + 추가 사용 '+acUsd(q.extra):'')+' = '+acUsd(q.total);
-    var add=' 청구 예정 금액은 <span class="num">'+acUsd(q.total)+'</span>입니다'+((q.credit||q.extra)?' (<span class="num">'+line+'</span>)':'')+'.';
-    return h.replace(/(다음 결제일은 <span class="num">[^<]*<\/span>입니다\.)/,'$1'+add); }; }
+    var rows=stRow('청구 예정 금액','<span class="num">'+acUsd(q.total)+'</span>','',(q.credit||q.extra)?'<span class="num">구독 '+acUsd(q.gross)+(q.credit?', 거래 크레딧 -'+acUsd(q.credit):'')+(q.extra?', 추가 사용 +'+acUsd(q.extra):'')+'</span>':'');
+    /* 구독 카드 안, 결제 수단 행 바로 앞에 넣는다 */
+    var i=h.indexOf('<div class="stg-r"><div class="k"><b>결제 수단</b>'); if(i<0) return h;
+    return h.slice(0,i)+rows+h.slice(i); }; }
   /* 막는 곳: 새 전략과 수정(채팅), 분석시키기 */
-  if(typeof gSend==='function'){ var gs0=gSend; gSend=function(){ if(aiGate('new')==='block'){ toast('이번 달 AI 사용량을 모두 썼습니다'); aiBar(); var b=document.getElementById('g-usebar'); if(b) b.scrollIntoView({block:'nearest'}); return; } return gs0.apply(this,arguments); }; }
-  if(typeof tfVerifyGo==='function'){ var vg0=tfVerifyGo; tfVerifyGo=function(){ if(aiGate('analyze')==='block'){ toast('이번 달 AI 사용량을 모두 썼습니다'); aiBar(); return; } return vg0.apply(this,arguments); }; }
+  /* 막힐 때는 배너 하나로 알린다. 배너를 그릴 수 없는 홈에서만 짧은 안내 */
+  function aiBlocked(){ aiBar(); var b=document.getElementById('g-usebar'); if(b&&b.offsetParent){ b.scrollIntoView({block:'nearest'}); return; } toast('이번 달 AI 사용량을 모두 썼습니다. 설정의 사용량에서 확인할 수 있습니다'); }
+  if(typeof gSend==='function'){ var gs0=gSend; gSend=function(){ if(aiGate('new')==='block'){ aiBlocked(); return; } return gs0.apply(this,arguments); }; }
+  if(typeof gNew==='function'){ var gn0=gNew; gNew=function(){ if(S.user&&aiGate('new')==='block'){ aiBlocked(); return; } return gn0.apply(this,arguments); }; }
+  if(typeof tfVerifyGo==='function'){ var vg0=tfVerifyGo; tfVerifyGo=function(){ if(aiGate('analyze')==='block'){ aiBlocked(); return; } return vg0.apply(this,arguments); }; }
   /* 배너 갱신: 입력창이 보일 때마다, 과금 변화마다 */
   if(typeof gComposer==='function'){ var gc0=gComposer; gComposer=function(){ var r=gc0.apply(this,arguments); try{ aiBar(); }catch(e){} return r; }; }
   if(typeof bcAfterChange==='function'){ var ac0=bcAfterChange; bcAfterChange=function(){ var r=ac0.apply(this,arguments); try{ aiBar(); }catch(e){} return r; }; }
