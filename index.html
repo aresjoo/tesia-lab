@@ -7733,6 +7733,20 @@ body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 .acx-ac li::before{border-color:#00f0ff}
 .px-card.px-hi{animation-name:pxHiC}
 @keyframes pxHiC{from{border-color:rgba(255,255,255,.1);box-shadow:0 0 0 0 rgba(0,240,255,0)}50%{box-shadow:0 0 0 6px rgba(0,240,255,.16)}to{border-color:rgba(0,240,255,.55);box-shadow:0 0 0 0 rgba(0,240,255,0)}}
+/* 연구 기록: DESIGN_PROMPT. 검색 입력면 #212121 알약, 행 16px, 날짜 14px #9a9a9a, 호버 #2f2f2f */
+.g-hist{max-width:760px;padding:28px 24px 60px}
+.g-hist-search{height:52px;background:#212121;color:#9a9a9a;padding:0 20px;margin-bottom:24px}
+.g-hist-search:focus-within{outline:0;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.g-hist-search input{font-size:16px;color:#fff}
+.g-hist-search input::placeholder{color:#9a9a9a}
+.g-hist-sec{font-size:14px;color:#9a9a9a;padding:0 12px 10px}
+.g-hist-row{min-height:52px;padding:0 12px;margin:0;border-radius:12px}
+.g-hist-row:hover{background:#2f2f2f}
+.g-hist-row .t{font-size:16px;color:#ececec}
+.g-hist-row .d{font-size:14px;color:#9a9a9a}
+.g-hist .g-note{font-size:16px;color:#cdcdcd;line-height:1.6}
+@media(max-width:860px){ .g-hist{padding:16px 16px 40px} .g-hist-search{height:48px} .g-hist-row{min-height:48px} .g-hist-row .t{font-size:16px} }
+.g-hist-row .t{font-weight:400}
 /* ═══ 전략 복사 상세 (sk-detail): DESIGN_PROMPT.md 정본, Codex s1 표. 요소와 순서는 그대로, 글자 위계와 여백, 단추만 ═══ */
 .tf-page.mk-detail{color:#ececec}
 .mk-detail .tfbk-bc{font-size:14px;color:#9a9a9a;margin:4px 0 16px}
@@ -7847,6 +7861,141 @@ body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 .mk-detail .mk3-cal b{font-size:18px;font-weight:400}
 .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:20px}
 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:12px} .mk-detail .mk3-dh-t h2,.mk-detail .mk-tab,.mk-detail .mk3-dh-one{font-weight:400} }
+/* ═══ 백테스트 (sk-bt): DESIGN_PROMPT.md 정본, Codex bt/s1 표. 요소와 순서는 그대로, 글자 위계, 여백, 카드, 단추만 ═══ */
+#bt-root{color:#ececec}
+/* 머리 */
+#bt-root .bt-hd .ti{font-size:16px;font-weight:400;color:#fff}
+#bt-root .bt-hd .sb{font-size:14px;color:#9a9a9a}
+#bt-root .bt-id{margin-bottom:12px}
+#bt-root .bt-id-t h2{font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
+#bt-root .bt-id-t p{margin-top:10px;font-size:18px;line-height:1.55;color:#ececec}
+#bt-root .bt-id-m{margin-top:10px;gap:10px}
+#bt-root .bt-id-m b,#bt-root .bt-id-m span{font-size:14px;font-weight:400;color:#cdcdcd}
+/* 잔고와 범례 */
+#bt-root .bt-cap-l small{font-size:14px;color:#9a9a9a}
+#bt-root .bt-cap-l b.num{font-size:32px;font-weight:400;letter-spacing:-.01em}
+#bt-root .bt-cap-l i.num{font-size:18px;font-weight:400}
+#bt-root .bt-leg span{font-size:14px;color:#cdcdcd}
+#bt-root .bt-leg span i{font-weight:400}
+/* 다시 돌림 요약 상자: 반경 26, 번호 원 없음 */
+#bt-root .bt-panel{border-radius:26px;background:transparent;border-color:rgba(255,255,255,.14)}
+#bt-root .bt-panel .ph span{font-size:16px;color:#ececec}
+#bt-root .bt-panel .cell{padding-top:18px;padding-bottom:18px}
+#bt-root .bt-panel .cell small{font-size:14px;color:#cdcdcd}
+#bt-root .bt-panel .cell small i{display:none}
+#bt-root .bt-panel .cell b button{font-size:18px;font-weight:400}
+#bt-root .bt-panel .cell > span{font-size:14px;color:#cdcdcd}
+#bt-root .bt-panel .pj small{font-size:14px;font-weight:400;color:#cdcdcd}
+/* 오른쪽 카드: 투명 바탕, 윤곽선, 반경 26 */
+#bt-root .bt-box{border-radius:26px;background:transparent;border-color:rgba(255,255,255,.14)}
+#bt-root .bt-box h3,#bt-root .bt-box summary h3{font-size:18px;font-weight:400;color:#fff;letter-spacing:0}
+#bt-root .bt-f small{font-size:16px;color:#cdcdcd}
+#bt-root .bt-f em{display:none}
+#bt-root .bt-seg button{height:40px;border-radius:999px;font-size:16px;font-weight:400;color:#cdcdcd}
+#bt-root .bt-seg button.on,#bt-root .bt-seg button[aria-pressed="true"]{background:transparent;color:#fff;font-weight:400;box-shadow:inset 0 0 0 2px #9a9a9a}
+#bt-root .bt-note{font-size:14px;color:#9a9a9a;line-height:1.6}
+#bt-root .bt-dl dt{font-size:16px;color:#cdcdcd}
+#bt-root .bt-dl dd{font-size:16px;color:#ececec;line-height:1.6}
+#bt-root .bt-dl .mkg{font-weight:400}
+/* 결과 카드 */
+#bt-root .bt-verdict small{font-size:14px;color:#9a9a9a}
+#bt-root .bt-verdict .bt-v1b b.num{font-size:32px;font-weight:400;letter-spacing:-.01em}
+#bt-root .bt-verdict .bt-v2 span,#bt-root .bt-verdict .bt-v2 span i{font-size:14px;color:#cdcdcd}
+#bt-root .bt-verdict .bt-v2 b.num{font-size:14px;font-weight:400}
+#bt-root .bt-k3 small{font-size:16px;color:#cdcdcd}
+#bt-root .bt-k3 b.num{font-size:16px;font-weight:400}
+#bt-root .bt-k3 em{font-size:14px;color:#9a9a9a}
+#bt-root .bt-read h3{font-size:18px;font-weight:400;color:#fff}
+#bt-root .bt-read p{font-size:16px;line-height:1.65;color:#ececec}
+#bt-root .bt-read p b,#bt-root .bt-read p strong{font-weight:400;color:#fff}
+#bt-root .bt-read p.l{font-size:14px;color:#9a9a9a;font-weight:400}
+/* 단추: 흰 알약 하나, 나머지는 윤곽선 알약과 밑줄 링크 */
+#bt-root .bt-cta,.bt-mcta .bt-cta{height:48px;border-radius:999px;background:#fff;color:#000;border:0;font-size:16px;font-weight:500}
+#bt-root .bt-cta:hover,.bt-mcta .bt-cta:hover{background:#e5e5e5}
+#bt-root .bt-sec{height:48px;border-radius:999px;background:transparent;color:#ececec;border:1px solid rgba(255,255,255,.14);font-size:16px;font-weight:400}
+#bt-root .rv-links button{font-size:14px;color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+#bt-root .bt-rec,#bt-root .bt-rec span{font-size:14px;color:#9a9a9a}
+/* 판단 기록 */
+#bt-root .bt-sec-b h3{font-size:18px;font-weight:400;color:#fff;letter-spacing:0}
+#bt-root .bt-sort span,#bt-root .bt-sec-b > header > span{font-size:14px;color:#9a9a9a}
+#bt-root .bt-sort select{height:38px;padding:0 14px;border:0;border-radius:19px;background:#212121;color:#ececec;font-size:14px}
+#bt-root .bt-s4 button{border-radius:20px}
+#bt-root .bt-s4 small{font-size:14px;color:#cdcdcd}
+#bt-root .bt-s4 b.num{font-size:24px;font-weight:400}
+#bt-root .bt-s4 b.num i{font-size:14px;font-weight:400}
+#bt-root .bt-ym b{font-size:14px;font-weight:400;color:#cdcdcd}
+#bt-root .bt-ym span{font-size:14px}
+#bt-root .bt-row.v2 .bt-rb{padding-top:16px;padding-bottom:16px}
+#bt-root .bt-row .bt-rb time{font-size:14px;color:#9a9a9a}
+#bt-root .bt-row .bt-rb > b{font-size:16px;font-weight:400;color:#fff}
+#bt-root .bt-row .bt-rb .wy{font-size:16px;color:#cdcdcd;white-space:normal}
+#bt-root .bt-row .bt-rb .ot small{font-size:14px;color:#9a9a9a}
+#bt-root .bt-row .bt-rb .ot i{font-size:16px;font-weight:400}
+#bt-root .bt-more{height:44px;padding:0 20px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;font-size:16px;color:#ececec}
+#bt-root .bt-more i{font-size:14px;color:#9a9a9a}
+/* 거래 표 */
+#bt-root .bt-chips button{height:36px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:400}
+#bt-root .bt-chips button.on,#bt-root .bt-chips button[aria-pressed="true"]{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px #9a9a9a}
+#bt-root .bt-th span{font-size:14px;color:#9a9a9a}
+#bt-root .bt-tr .bt-rb > b{font-size:16px;font-weight:400}
+#bt-root .bt-sd,#bt-root .bt-sd.s{font-size:14px;font-weight:400;color:#cdcdcd}
+#bt-root .bt-tr .bt-rb time{font-size:14px;color:#cdcdcd}
+#bt-root .bt-tr .bt-rb span.r{font-size:16px}
+/* 월별 수익률: 여러 줄, 가로 스크롤 없음 */
+#bt-root .bt-mo b.num{font-size:14px;font-weight:400}
+#bt-root .bt-mo em{font-size:14px;color:#9a9a9a}
+#bt-root .bt-mo small{font-size:12px}
+/* 자세한 지표 */
+#bt-root .bt-tech{margin-top:32px}
+#bt-root .bt-tech summary{font-size:18px;font-weight:400;color:#fff}
+#bt-root .bt-tech .mkd-term{font-size:16px;color:#cdcdcd;border-bottom:0}
+#bt-root .bt-tech dd{font-size:16px}
+/* 모바일 */
+@media (max-width:768px){
+  #bt-root{padding-left:16px;padding-right:16px}
+  #bt-root .bt-id-t h2{font-size:28px}
+  #bt-root .bt-id-t p{font-size:16px}
+  #bt-root .bt-box{border-radius:20px}
+  #bt-root .bt-panel{border-radius:20px}
+  #bt-root .bt-cap-l b.num,#bt-root .bt-verdict .bt-v1b b.num{font-size:28px}
+}
+/* Codex bt/s1: 전략선은 회색 하나, 면적 채움 없음, 손실 숫자만 빨강 */
+#bt-root .bt-chart path[fill="url(#btgu)"],#bt-root .bt-chart path[fill="url(#btgd)"]{display:none}
+#bt-root .bt-chart path[stroke="#2fb98a"],#bt-root .bt-chart path[stroke="#f0566a"]{stroke:#ececec}
+/* 월별 막대: 가로 스크롤 없이 여러 줄, 막대는 회색, 숫자만 색 */
+#bt-root .bt-monw{overflow:visible}
+#bt-root .bt-mon{display:flex;flex-wrap:wrap;gap:12px 6px;min-width:0}
+#bt-root .bt-mo{flex:0 0 calc(100% / 12 - 6px)}
+#bt-root .bt-mo i{background:#cdcdcd}
+#bt-root .bt-mo b{display:block;font-size:12px}
+@media (max-width:768px){ #bt-root .bt-mo{flex:0 0 calc(100% / 6 - 6px)} }
+/* Codex bt/s3 필수 5건: 굵기 400, 상태 색은 숫자에만, 선택은 2px 회색 테두리, 더 보기는 밑줄 링크, 범례 색 */
+#bt-root b,#bt-root strong,#bt-root .bt-id-m b,#bt-root .bt-id-t p,#bt-root .bt-dl dd,#bt-root .wy,#bt-root .bt-tr .bt-rb span.r{font-weight:400}
+#bt-root .bt-dot,#bt-root .bt-dot.done{background:#9a9a9a;animation:none}
+#bt-root .bt-rec svg{color:#cdcdcd}
+#bt-root .bt-v2 b.num.mk-up,#bt-root .bt-v2 b.num.mk-dn{color:#cdcdcd}
+#bt-root .bt-panel .k-loss,#bt-root .bt-panel .k-win{color:#fff}
+#bt-root .bt-dt,#bt-root .bt-dt.k-buy,#bt-root .bt-dt.k-buy.s,#bt-root .bt-dt.k-hold,#bt-root .bt-dt.k-pick{background:#9a9a9a}
+#bt-root .bt-dt.k-sell{background:transparent;box-shadow:inset 0 0 0 1.6px #9a9a9a}
+#bt-root .bt-dt.k-skip{box-shadow:inset 0 0 0 1.6px #9a9a9a}
+#bt-root .bt-s4 button[aria-selected=true]{background:transparent;box-shadow:inset 0 0 0 2px #9a9a9a;border-radius:20px}
+#bt-root .bt-s4 button[aria-selected=true]::after{display:none}
+#bt-root .bt-terms{border-style:solid}
+#bt-root .bt-more{height:auto;padding:0;border:0;background:none;font-size:14px;color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+#bt-root .bt-more i{font-size:14px;color:#cdcdcd}
+#bt-root .bt-leg .a::before{background:#ececec;border-color:#ececec}
+#bt-root .bt-leg .b::before{border-top-color:#9a9a9a}
+#bt-root .bt-chart path[stroke="rgba(255,255,255,.3)"]{stroke:#9a9a9a}
+#bt-root .bt-chart text{font-size:13px}
+#bt-root .bt-chart text[fill="#f58a98"]{fill:#cdcdcd}
+#bt-root .bt-chart line[stroke="#f0566a"],#bt-root .bt-chart rect[fill="#f0566a"],#bt-root .bt-chart line[stroke="#f58a98"],#bt-root .bt-chart rect[fill="#f58a98"]{stroke:#9a9a9a;fill:#9a9a9a}
+@media (max-width:768px){ #bt-root{padding-bottom:120px} }
+#bt-root .bt-leg span::before{border-top-color:#ececec}
+#bt-root .bt-leg .m svg path{fill:#9a9a9a}
+/* 판단 기록 행: 날짜 한 줄, 차트 표식은 모양으로만 구분 */
+#bt-root .bt-row.v2 .bt-rb time{white-space:nowrap;font-size:13px;letter-spacing:-.01em}
+#bt-root .bt-chart path[fill="#2fb98a"],#bt-root .bt-chart path[fill="#b08cf5"],#bt-root .bt-chart path[fill="#f0566a"]{fill:#9a9a9a}
+#bt-root .bt-chart path[stroke="#b08cf5"]{stroke:#9a9a9a}
 /*BT_CSS_END*/
 </style>
 <script src="site-config.js?v=2"></script>
@@ -23646,6 +23795,9 @@ function skSym(t){ return String(t==null?'':t).replace(/비트코인|이더리�
   if(typeof MK_CAT!=='undefined') MK_CAT.forEach(function(s){ if(s&&s.name) s.name=skSym(s.name); });
   var mt=mkTitle; mkTitle=function(){ return skSym(mt.apply(this,arguments)); };
 })();
+/* 연구 기록 문구 */
+(function(){ var h0=gHistory; gHistory=function(){ var r=h0.apply(this,arguments); try{ var q=document.getElementById('g-hist-q'); if(q){ q.placeholder='연구 기록 검색'; q.setAttribute('aria-label','연구 기록 검색'); } }catch(e){} return r; };
+  var l0=gHistList; gHistList=function(){ var r=l0.apply(this,arguments); try{ var n=document.querySelector('#g-hist-list .g-note'); if(n&&/아직 연구 기록이 없습니다/.test(n.textContent)) n.textContent='아직 연구 기록이 없습니다. 새 전략을 만들면 여기에 쌓입니다.'; var m=document.getElementById('g-hist-more'); if(m) m.textContent='아래로 내리면 더 불러옵니다'; }catch(e){} return r; }; })();
 
 /* ═══ AI가 빠진 정보만 묻는다 (sk-ask) ═══
    AI 답변의 [ASK] 질문을 채팅 안이 아니라 입력창 바로 위 패널로 띄운다(Genspark식).
@@ -23809,6 +23961,77 @@ function skdDedupe(root){
     mo=new MutationObserver(function(){ if(busy) return; if(document.querySelector('#g-content .mk-detail')) run(); });
     mo.observe(c,{childList:true,subtree:true,characterData:true}); }
   var r0=tfSS3DetailRender; tfSS3DetailRender=function(){ var r=r0.apply(this,arguments); try{ watch(); run(); }catch(e){} return r; };
+})();
+
+/* ═══ 백테스트 카피 (sk-bt) ═══
+   Codex bt/s1 교체표. 요소는 그대로, 글자만. 결과가 그려질 때마다(#bt-root 변화) 적용하며 여러 번 적용해도 같다. */
+var SKB_EXACT={'현물로 그냥 들고 있었다면':'현물 보유','결정':'거래 결과','어떻게 판단했나':'판단 기록','거래 하나씩 보기':'거래 내역','달마다 어땠나':'월별 수익률',
+  '진입한 날':'진입일','청산한 날':'청산일','기간':'보유 기간','백테스트 조건':'계산 기준','결과를 읽고 있습니다':'결과를 해석하고 있습니다.',
+  '선물 롱/숏 2배':'선물 양방향 2배','조건을 바꿔 다시 돌리기':'조건을 바꿔 다시 돌리기','과거를 다시 돌려 보기':'과거를 다시 돌려 보기'};
+var SKB_DT={'진입':'진입 조건','청산':'청산 조건'};
+var SKB_RE=[
+  [/^(최근 \d+(?:개월|년)|전체 기간), (\$[0-9,]+)로 시작$/,'$1, 시작 금액 $2'],
+  [/^(최근 \d+(?:개월|년)|전체 기간) 동안, (\$[0-9,]+)로$/,'$1, 시작 금액 $2 기준 손익'],
+  [/^(\d{4})\.(\d{2})\.(\d{2}) 잔고$/,function(_,y,m,d){ return y+'. '+(+m)+'. '+(+d)+'. 잔고'; }],
+  [/^가장 나빴던 구간/,'최대 하락 구간'],
+  [/^다시 돌리는 동안 진입 조건이 맞을 때마다 여기에 보입니다$/,'진입 조건이 맞으면 여기에 표시합니다.'],
+  [/^([0-9,]+)일을 다시 돌렸습니다\. 숫자나 그래프의 표시를 누르면 근거가 열립니다\.$/,'$1일간의 결과입니다. 숫자나 차트 표시를 누르면 판단 근거가 열립니다.'],
+  [/^이긴 거래 (\d+)번$/,'수익 거래 $1건'],[/^진 거래 (\d+)번$/,'손실 거래 $1건'],
+  [/^이긴 거래 (\d+)$/,'수익 $1건'],[/^진 거래 (\d+)$/,'손실 $1건'],[/^전체 (\d+)$/,'전체 $1건'],
+  [/^이긴 거래$/,'수익 거래'],[/^(\d+)번 중 (\d+)번$/,'청산 $1건 중 $2건'],[/^평균 보유$/,'평균 보유 기간'],
+  [/^가장 크게 내려간 폭$/,'최대 하락률'],
+  [/^(?:현물로 )?그냥 들고 있었다면\s*([+-]?[0-9.,]+%)$/,'현물 보유 최대 하락률 $1'],
+  [/^(\d+) \/ (\d+)$/,'$2건 중 $1건 표시'],
+  [/^(\d{2})\.(\d{2})\.(\d{2})$/,function(_,y,m,d){ return '20'+y+'. '+(+m)+'. '+(+d)+'.'; }],
+  [/^(\d{4})\.(\d{2})\.(\d{2})$/,function(_,y,m,d){ return y+'. '+(+m)+'. '+(+d)+'.'; }],
+  [/^그보다 (\$[0-9,]+) (많음|적음)$/,function(_,v,k){ return '현물 보유 대비 '+(k==='많음'?'+':'-')+v; }],
+  [/^가격 ([0-9,]+)개, ([0-9,]+)일을 확인했습니다$/,'$2일의 가격 $1개를 확인했습니다.'],
+  [/^(\d{4})\.(\d{2})\.(\d{2})부터 (\d{4})\.(\d{2})\.(\d{2})까지, [0-9,]+일을 하루씩 다시 돌립니다\.$/,function(_,a,b,c,d,e,f){ return a+'년 '+(+b)+'월 '+(+c)+'일부터 '+d+'년 '+(+e)+'월 '+(+f)+'일까지 돌립니다.'; }],
+  [/^반대 방향 신호가 나왔습니다$/,'반대 방향 신호로 청산했습니다.'],
+  [/^([A-Z]{2,6}) 평균선 위로 교차\. (\d+일) 평균이 (\d+일) 평균을 넘었습니다$/,'$2 평균이 $3 평균을 넘어 롱에 진입했습니다.'],
+  [/^([A-Z]{2,6}) 평균선 아래로 교차\. (\d+일) 평균이 (\d+일) 평균을 밑돌았습니다$/,'$2 평균이 $3 평균을 밑돌아 숏에 진입했습니다.'],
+  [/^진입가에서 손절 기준만큼 불리하게 움직였습니다$/,'진입가에서 손절 기준만큼 불리하게 움직여 청산했습니다.'],
+  [/^가장 유리했던 가격에서 기준만큼 되돌렸습니다$/,'가격이 가장 유리했던 지점에서 청산 기준만큼 되돌아와 청산했습니다.'],
+  [/^이 거래$/,'거래 손익'],[/^(\d+)일 뒤 청산$/,'$1일 보유 후 청산'],
+  [/^이전 판단 더 보기$/,'이전 판단 더 보기'],
+  [/^온전한 (\d+)개월 중 (\d+)개월이 올랐습니다$/,'한 달 전체를 계산한 $1개월 중 $2개월에 수익이 났습니다.'],
+  [/반대 방향 신호가 나오면 닫고 방향을 바꿉니다/g,'반대 신호가 나오면 청산하고 방향을 바꿉니다'],
+  [/에서 25% 되돌리면 닫습니다/g,'에서 25% 되돌아오면 청산합니다'],
+  [/불리하게 움직이면 닫습니다/g,'불리하게 움직이면 청산합니다'],
+  [/^(\d+)배, 손실은 넣은 증거금까지$/,'$1배'],
+  [/선물의 (\d+일) 평균이 (\d+일) 평균을 넘으면 롱, 밑돌면 숏으로 (\d+배 )?바꿔 탑니다\./,'선물에서 $1 평균선이 $2 평균선보다 높으면 롱, 낮으면 숏으로 $3운용합니다.']
+];
+function skbText(t){
+  var k=t.trim(); if(SKB_EXACT[k]) return t.replace(k,SKB_EXACT[k]);
+  for(var i=0;i<SKB_RE.length;i++) t=t.replace(SKB_RE[i][0],SKB_RE[i][1]);
+  if(typeof skSym==='function') t=skSym(t);
+  return t;
+}
+function skbApply(root){
+  if(!root) return;
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), n, L=[];
+  while((n=w.nextNode())){ var pe=n.parentElement; if(!pe||/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(pe.tagName)) continue; L.push(n); }
+  L.forEach(function(x){ var v=x.nodeValue, nv=skbText(v); var k=v.trim();
+    /* 정확히 일치 교체는 라벨 자리에서만: 머리, 셀 라벨, 범례, 표 머리, 규칙 dt, 요약 제목, 읽는 중 */
+    if(SKB_EXACT[k]){ var pe=x.parentElement, ok=pe&&pe.closest('.bt-leg,.bt-panel .cell small,.bt-sec-b header h3,.bt-sec-b > header > h3,.bt-th,.bt-dl dt,.bt-box h3,.bt-box summary,.bt-read p.l,.bt-id-m,.bt-chips,.bt-verdict,.bt-k3,.bt-cta,.bt-sec,.bt-tech summary'); if(!ok) nv=v; }
+    if(nv!==v) x.nodeValue=nv; });
+  /* 결과 카드: 현물 보유 손익, 현물 보유 최대 하락률 값은 계산 결과에서 직접 */
+  var v2=root.querySelector('.bt-v2 > span'); if(v2&&v2.firstChild&&v2.firstChild.nodeType===3&&/^현물 보유 $/.test(v2.firstChild.nodeValue)) v2.firstChild.nodeValue='현물 보유 손익 ';
+  var em=root.querySelector('.bt-k3 em.num'); if(em&&window.BT&&BT.R&&isFinite(BT.R.benchMdd)&&!/[0-9]%/.test(em.textContent)) em.textContent='현물 보유 최대 하락률 '+BT.R.benchMdd.toFixed(1)+'%';
+  /* 금액 선택지 500 → $500 (em USD 는 CSS로 숨김) */
+  [].forEach.call(root.querySelectorAll('.bt-dl dt'),function(d){ var t=d.textContent.trim(); if(SKB_DT[t]) d.textContent=SKB_DT[t]; });
+  [].forEach.call(root.querySelectorAll('.bt-f button'),function(b){ var t=b.textContent.trim(); if(/^[0-9][0-9,]*$/.test(t)) b.textContent='$'+t; });
+}
+(function(){
+  var busy=false, mo=null;
+  function run(){ var r=document.getElementById('bt-root'); if(!r) return; busy=true; try{ skbApply(r); }finally{ busy=false; } }
+  function watch(){ var c=document.getElementById('g-content'); if(!c||mo) return;
+    mo=new MutationObserver(function(){ if(busy) return; if(document.getElementById('bt-root')) run(); });
+    mo.observe(c,{childList:true,subtree:true,characterData:true}); }
+  /* 백테스트 화면은 여러 함수가 조각조각 그리므로 #g-content 를 처음부터 지켜본다 */
+  function boot(){ if(document.getElementById('g-content')){ watch(); run(); } else setTimeout(boot,300); }
+  boot();
+  ['btReady','btFinish'].forEach(function(fn){ if(typeof window[fn]==='function'){ var f0=window[fn]; window[fn]=function(){ var r=f0.apply(this,arguments); try{ watch(); setTimeout(run,0); }catch(e){} return r; }; } });
 })();
 /*BT_CORE_END*/
 </script>

@@ -1,0 +1,1401 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f6f8-feec-7b42-aa2e-92341c35974c
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드입니다. TETH "백테스트" 화면을 당신의 3단계 검수(bt/s3/CODEX_RAW.md) 뒤에 다시 고친 결과를 최종 확인합니다. 한국어로만 답합니다. 파일은 읽기만 합니다.
+
+기준: DESIGN_PROMPT.md, bt/s3/CODEX_RAW.md
+지금 화면: 1440 s4/r/B1-before.png, B2-result.png, B3-result-full.png / 390 B1-before-m.png, B2-result-m.png, B3-result-full-m.png
+
+이번에 고친 것: 굵기 400(설명, 분류, 판단 문장, 결과 행, 보유 기간), 상태 색 제거(완료 점, 확인 아이콘, 비교 문구, 손실 라벨, 기록 색 점, 차트 표식과 낙폭 표시 회색), 판단 기록 선택 탭은 2px 회색 테두리, 계산 기준 실선, 더 보기는 밑줄 링크, 범례 견본과 비교선 회색, 카피 8건(결과 문장, 기준 손익, 현물 보유 손익, 현물 보유 최대 하락률 값, 27건 중 12건 표시, 월별 문장, 날짜 형식, 되돌아와 문장), 모바일 하단 여백.
+그대로 둔 것: 자세한 지표 접힘(요소 유지), 시작 금액 선택 테두리.
+
+1. s3 필수 5건과 카피 8건의 해결 여부 표.
+2. 남은 문제 가운데 배포를 막을 만한 것만(없으면 없다고).
+3. 한 문장 판정: 배포해도 되는지.
+400단어 이내.
+
+codex
+이전 검수와 디자인 기준을 읽고, 첨부된 데스크톱·모바일 화면에서 필수 수정과 카피 반영 여부를 확인하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 122ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy cmd /c .mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ exited 1 in 124ms:
+The system cannot find the path specified.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy powershell -NoProfile -Command "Get-Location; Get-ChildItem -Force -Name"' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 382ms:
+
+Path                                                         
+----                                                         
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\qa\gpt-skin\bt
+r
+s1
+s2
+s3
+s4
+s5
+
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -Encoding UTF8 -LiteralPath 's3/CODEX_RAW.md'; Get-Content -Encoding UTF8 -LiteralPath '../DESIGN_PROMPT.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g DESIGN_PROMPT.md -g AGENTS.md -g mail.cmd -g '*s4*' .. ..\\.. ..\\..\\.." in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ exited 1 in 126ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 115ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+ exited 1 in 453ms:
+? ??? ?????, ??? ?? ?, ?? ???? ?? ??? ??? ?? ????. ??? ??? ?? ????, ??? ???? ?????.
+
+| ?? | ?? ??? ?? ?? |
+|---|---|
+| ?? | **??? ??.** ??? ??? BNB ??, ??, ??? ??????. ??? ??? ??? ??? ????. |
+| ??? ?? | **?? ??.** ??? ???? ??? ?????. ???? ??? ??? ????? ????? ?? ????. |
+| ?? | **?? ??.** ???? ???? ? ??? ??????. ???? ??????. ??? ??? ??? ??? ????, ?? ??? ??? ?????. |
+| ?? ?? | **?? ??.** ?? ?? ??? `?? ??'? ??????. ?? ?? ?? ?? `?? ??' ??? ?????. |
+| ?? ?? | **?? ??.** ? ??, ?? ??, ?? ??? ??????. `?? 13? ? 8?', `79?'? ??, `?? ?? ??'?? ?????. |
+| ?? ?? | **??? ??.** ??? ??? ?? ??? ??????. ?? ??? ??? ?? ???? ????. |
+| ? ??? ?? ?? | **?? ??.** ? ?? ??? ??? ?? ??? ??????. `?? ?? ????'? ??? ??? ????. ?? ?? ??? ??? ????. |
+| ?? ?? | **?? ??.** ?? ???? ??? ?? ??????. ?? ???, ? ?, ?? ??, `12 / 27'? ?????. |
+| ?? ?? | **?? ??.** ??? ?? ?? ?? ??? ??????. ?? ?? ??? ?? ?? ??? ????. |
+| ?? ??? | **??? ??.** ?? ??? ?? ? ??? ????, ??? ?? ??? ????. |
+| ?? ? ??? ?? | **?? ??.** ?? ??? ?? ???, ?? ??? ??????. ??? `?? ??'? ???? ?? ??? ????. |
+| ?? ??? ?? ?? | **?? ??.** ?? ??? ?? ?? ?? ???? ?? ??? ??? ???? ?? ?? ?? ??? ??? ? ????. |
+
+?? ?? ??? ??? ??? ??? ? ???? ???. ?? ??? ?? ??? ??? ???? ???? ????, ???? ??? ??? ?? ?? ??????.
+
+| ?? | ??? | ?? ?? | ?? ? |
+|---|---|---|---|
+| 1 | ??, ?? | ??? ??, ?? ??, ?? ?, ?? ??? ?? ?? ??? ????. | ??? ? **16px/400**, ?? ?? **18px/400**, ?? **14px**, ?? **400**. |
+| 2 | ??, ?? | ?? ?? ?? ?? ???, ?? ?? ??, ?? ?? ??? ??? ??? ?????. | ?? **#ececec**, ?? **#cdcdcd**. ??? ??? ?? **????** ?????. ??? ??? ?????. |
+| 3 | ??, ?? | ?? ??? ?? ?? ??? ??? ?? ??? ????, `?? ??'? ?????. | ??? **2px #9a9a9a** ???. ?? ??? **?? ??? 1px ?? ???? .14~.15**, ?? **26px**, ??? **20~26px**. |
+| 4 | ??, ?? | `?? ?? ? ??'? `?? ?? 6? ? ??'? ??? ?? ???? ??? ????. | ?? ??? **14px #cdcdcd ?? ??**, ?? ?? ???? ?????. |
+| 5 | ??, ?? | ?? ???? ??? ?? ??? ?????. ???? ?? ???? ???? ?????. | ???? ?? **#ececec**, ???? ?? **#9a9a9a**? ????. ?? ?? ??? ?????. |
+
+??? ???? ?????. 1?? ?? ??? ?? ?? ???? ?? ???????.
+
+| ?? | ?? |
+|---|---|
+| 1,266?? ?????. ??? ?? ??? ??? ??? ?????. | 1,266??? ?????. ??? ?? ??? ??? ?? ??? ????. |
+| ?? ?? +$20,856 | ?? +$20,856 |
+| ?? ?? +$1,395 | ?? ?? ?? +$1,395 |
+| ?? ??? ?? ? ?? `?? ??' | ?? ?? ?? ???? ?? ???? ?? ?????. ? ??? ?????. |
+| ?? ?? ? ?? 12 / 27 | ?? ?? ? ??, 27? ? 12? ?? |
+| ?? ??? ??? 40?? ? 22??? ??? ????. | ? ? ??? ??? 40?? ? 22??? ??? ????. |
+| 26.08.10 / 2026.08.11 | 2026. 8. 10. / 2026. 8. 11. |
+| ?? ???? ???? ???? ???? ??????. | ??? ?? ???? ???? ?? ???? ???? ??????. |
+
+**??: ?? ?? ?? ??? ?? ?? ?? ??? ???? ?? ??? ???? ??? ??? ?????.**
+Get-Content : Cannot find path '../DESIGN_PROMPT.md' because it does not exist.
+At line:1 char:60
++ ... EX_RAW.md'; Get-Content -Encoding UTF8 -LiteralPath '../DESIGN_PROMPT ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (../DESIGN_PROMPT.md:String) [Get-Content], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy python -c \"import pathlib,sys; sys.stdout.reconfigure(encoding='utf-8'); print(pathlib.Path('s3/CODEX_RAW.md').read_text(encoding='utf-8')); print('PATHS'); [print(str(p),[str(f) for f in p.glob('DESIGN_PROMPT.md')],[str(f) for f in p.glob('.mailbox/mail.cmd')]) for p in pathlib.Path.cwd().parents]\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ exited 1 in 291ms:
+rtk: Failed to execute command: python: The file cannot be accessed by the system. (os error 1920)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 175ms:
+ M ../../../artifacts/teth-redesign/r2-follow-sheet.png
+ M ../../../index.html
+ M ../../16-fixes/FLOWS_RESULT.txt
+ M ../../16-fixes/R11-conversions.txt
+ M ../../16-fixes/rail/rail-check.txt
+ M ../../16-fixes/rail/st-full-check.txt
+ M ../../16-fixes/round-1/R01-auth-age-step.png
+ M ../../16-fixes/round-1/R01-guest-auth.png
+ M ../../16-fixes/round-1/R01-resumed-backtest.png
+ M ../../16-fixes/round-1/R02-reading-loading-h1.png
+ M ../../16-fixes/round-1/R02-result-h1.png
+ M ../../16-fixes/round-1/R03-decision-open-h1.png
+ M ../../16-fixes/round-1/R03-decisions-h1.png
+ M ../../16-fixes/round-1/R04-early-h1.png
+ M ../../16-fixes/round-1/R04-judgment-1-h1.png
+ M ../../16-fixes/round-1/R04-judgment-2-h1.png
+ M ../../16-fixes/round-1/R04-judgment-3-h1.png
+ M ../../16-fixes/round-1/R04-judgment-4-h1.png
+ M ../../16-fixes/round-1/bt-check-h1.txt
+ M ../../16-fixes/round-1/r01-check.txt
+ M ../../16-fixes/round-2/R01-auth-age-step.png
+ M ../../16-fixes/round-2/R01-guest-auth.png
+ M ../../16-fixes/round-2/R01-resumed-backtest.png
+ M ../../16-fixes/round-2/R02-reading-loading-h1.png
+ M ../../16-fixes/round-2/R02-result-h1.png
+ M ../../16-fixes/round-2/R03-decision-open-h1.png
+ M ../../16-fixes/round-2/R03-decisions-h1.png
+ M ../../16-fixes/round-2/R04-early-h1.png
+ M ../../16-fixes/round-2/R04-judgment-1-h1.png
+ M ../../16-fixes/round-2/R04-judgment-2-h1.png
+ M ../../16-fixes/round-2/R04-judgment-3-h1.png
+ M ../../16-fixes/round-2/R04-judgment-4-h1.png
+ M ../../16-fixes/round-2/R08-consent-gate.png
+ M ../../16-fixes/round-2/R08-consent.png
+ M ../../16-fixes/round-2/R08-page-bottom.png
+ M ../../16-fixes/round-2/R08-page-connected.png
+ M ../../16-fixes/round-2/R08-page.png
+ M ../../16-fixes/round-2/R09-A-route.png
+ M ../../16-fixes/round-2/R09-B-exchange.png
+ M ../../16-fixes/round-2/R09-C-account.png
+ M ../../16-fixes/round-2/R09-D-guide.png
+ M ../../16-fixes/round-2/R09-E-authorize.png
+ M ../../16-fixes/round-2/R09-F-auth-cancel.png
+ M ../../16-fixes/round-2/R09-G-uid-checking.png
+ M ../../16-fixes/round-2/R09-H-uid-fail.png
+ M ../../16-fixes/round-2/R09-I-done.png
+ M ../../16-fixes/round-2/R09-J-pay.png
+ M ../../16-fixes/round-2/R09-K-pay-fail.png
+ M ../../16-fixes/round-2/R09-L-pay-ok.png
+ M ../../16-fixes/round-2/R09-M-paid-done.png
+ M ../../16-fixes/round-2/R10-expired-subscription.png
+ M ../../16-fixes/round-2/R10-other-exchange.png
+ M ../../16-fixes/round-2/R12-delete-confirm.png
+ M ../../16-fixes/round-2/R12-settings-account-paid-bottom.png
+ M ../../16-fixes/round-2/R12-settings-account-paid.png
+ M ../../16-fixes/round-2/R12-settings-general-paid.png
+ M ../../16-fixes/round-2/R12-settings-notify-paid.png
+ M ../../16-fixes/round-2/R12-settings-security-paid.png
+ M ../../16-fixes/round-2/R13-cancel-confirm.png
+ M ../../16-fixes/round-2/R13-settings-billing-expired.png
+ M ../../16-fixes/round-2/R13-settings-billing-none.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid-bottom.png
+ M ../../16-fixes/round-2/R13-settings-billing-paid.png
+ M ../../16-fixes/round-2/R13-settings-billing-partner.png
+ M ../../16-fixes/round-2/R14-entry.png
+ M ../../16-fixes/round-2/R14-guest-auth.png
+ M ../../16-fixes/round-2/R14-guest-landing.png
+ M ../../16-fixes/round-2/R14-terminal-ready.png
+ M ../../16-fixes/round-2/ac-check.txt
+ M ../../16-fixes/round-2/bt-check-h1.txt
+ M ../../16-fixes/round-2/r01-check.txt
+ M ../../bt-next/r/R0-chat-strategy.png
+ M ../../bt-next/r/R1-result-good.png
+ M ../../bt-next/r/R2-result-bad-mine.png
+ M ../../bt-next/r/R3-result-bad-copy.png
+ M ../../bt-next/r/R3b-chat-ask.png
+ M ../../bt-next/r/R4-chat-proposal.png
+ M ../../bt-next/r/R5-rerun-running.png
+ M ../../bt-next/r/R6-result-compare.png
+ M ../../bt-next/r/rv-check.txt
+ M ../copy/s2/K1-empty.png
+ M ../copy/s2/K2-under-min.png
+ M ../copy/s2/K3-filled-adv.png
+ M ../../../ux-audit/card3/grid4-1440.png
+ M ../../../ux-audit/card3/grid4-pager-1440.png
+?? ../../../artifacts/teth-redesign/card2/c1-codex.log
+?? ../../../artifacts/teth-redesign/card2/c2-codex.log
+?? ../../../artifacts/teth-redesign/card2/c3-codex.log
+?? ../../../artifacts/teth-redesign/card2/c8-1024.png
+?? ../../../artifacts/teth-redesign/card2/c8-1100.png
+?? ../../../artifacts/teth-redesign/card2/c8-1101.png
+?? ../../../artifacts/teth-redesign/card2/c8-1280.png
+?? ../../../artifacts/teth-redesign/card2/c8-1440.png
+?? ../../../artifacts/teth-redesign/card2/c8-1920.png
+?? ../../../artifacts/teth-redesign/card2/c8-390.png
+?? ../../../artifacts/teth-redesign/card2/c8-768.png
+?? ../../../artifacts/teth-redesign/card2/r1-info-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-log-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-ov-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-perf-full.png
+?? ../../../artifacts/teth-redesign/card2/r1-trades-full.png
+?? ../../16-fixes/an/an-1-bubble.png
+?? ../../16-fixes/an/an-2-shots.png
+?? ../../16-fixes/an/an-3-shot-zoom.png
+?? ../../16-fixes/an/an-4-answer.png
+?? ../../16-fixes/an/probe-h2i.png
+?? ../../16-fixes/presets/p02-account.png
+?? ../../16-fixes/presets/p02-billing-2.png
+?? ../../16-fixes/presets/p02-billing.png
+?? ../../16-fixes/presets/p02-brokers.png
+?? ../../16-fixes/presets/p02-security-2.png
+?? ../../16-fixes/presets/p02-security.png
+?? ../../16-fixes/presets/p02-trade-start.png
+?? ../../16-fixes/presets/p02-trade.png
+?? ../../16-fixes/presets/p12-account.png
+?? ../../16-fixes/presets/p12-billing-2.png
+?? ../../16-fixes/presets/p12-billing.png
+?? ../../16-fixes/presets/p12-brokers.png
+?? ../../16-fixes/presets/p12-security-2.png
+?? ../../16-fixes/presets/p12-security.png
+?? ../../16-fixes/presets/p12-trade.png
+?? ../../16-fixes/presets/p13-account.png
+?? ../../16-fixes/presets/p13-billing-2.png
+?? ../../16-fixes/presets/p13-billing.png
+?? ../../16-fixes/presets/p13-brokers.png
+?? ../../16-fixes/presets/p13-security-2.png
+?? ../../16-fixes/presets/p13-security.png
+?? ../../16-fixes/presets/p13-trade.png
+?? ../../16-fixes/presets/p14-account.png
+?? ../../16-fixes/presets/p14-billing-2.png
+?? ../../16-fixes/presets/p14-billing.png
+?? ../../16-fixes/presets/p14-brokers.png
+?? ../../16-fixes/presets/p14-security-2.png
+?? ../../16-fixes/presets/p14-security.png
+?? ../../16-fixes/presets/p14-trade.png
+?? ../../16-fixes/presets/p15-account.png
+?? ../../16-fixes/presets/p15-billing-2.png
+?? ../../16-fixes/presets/p15-billing.png
+?? ../../16-fixes/presets/p15-brokers.png
+?? ../../16-fixes/presets/p15-security-2.png
+?? ../../16-fixes/presets/p15-security.png
+?? ../../16-fixes/presets/p15-trade.png
+?? ../../16-fixes/rail/card-fw.png
+?? ../../16-fixes/rail/chat-guest.png
+?? ../../16-fixes/rail/chat-user.png
+?? ../../16-fixes/rail/detail-cta.png
+?? "../../16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/guest-g-gear-btn.png
+?? ../../16-fixes/rail/guest-g-login-btn.png
+?? ../../16-fixes/rail/guest-menu.png
+?? "../../16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "../../16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/st-collapsed-hover.png
+?? ../../16-fixes/rail/st-collapsed.png
+?? ../../16-fixes/rail/st-full-1440.png
+?? ../../16-fixes/rail/st-full-2000.png
+?? ../../16-fixes/rail/st-full-390.png
+?? ../../16-fixes/rail/st-full-notify-1440.png
+?? ../../16-fixes/rail/st-full-notify-2000.png
+?? ../../16-fixes/rail/st-full-notify-390.png
+?? ../../16-fixes/rail/st-open-hover.png
+?? ../../16-fixes/rail/st-open.png
+?? ../../16-fixes/rail/tail.log
+?? ../../16-fixes/rail/tail.log.mark
+?? ../../16-fixes/rail/user-after.png
+?? ../../16-fixes/rail/user-collapsed-hover.png
+?? ../../16-fixes/rail/user-expanded-menu.png
+?? "../../16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-home-g-gear-btn.png
+?? ../../16-fixes/rail/user-home-g-me-row.png
+?? "../../16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../16-fixes/rail/user-menu.png
+?? ../../16-fixes/rail/user-settings-g-gear-btn.png
+?? ../../16-fixes/rail/user-settings-g-me-row.png
+?? "../../16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-strategies-g-gear-btn.png
+?? ../../16-fixes/rail/user-strategies-g-me-row.png
+?? "../../16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../16-fixes/rail/user-trade-g-gear-btn.png
+?? ../../16-fixes/rail/user-trade-g-me-row.png
+?? "../../16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "../../16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../ai/
+?? ../../baseline/
+?? ../../final/S01-backtest-ready.png
+?? ../../final/S02-early-processing.png
+?? ../../final/S02a-preparing.png
+?? ../../final/S02b-first-decision.png
+?? ../../final/S03-mid-processing.png
+?? ../../final/S03a-skip-signal.png
+?? ../../final/S03b-skip-review.png
+?? ../../final/S03c-between-events.png
+?? ../../final/S04-final-processing.png
+?? ../../final/S05-results-above-fold.png
+?? ../../final/S05b-results-hover.png
+?? ../../final/S06-results-evidence.png
+?? ../../final/S07-decision-detail.png
+?? ../../final/S08-trade-detail.png
+?? ../../final/S08b-result-full-page.png
+?? ../../final/S09-activation-choice.png
+?? ../../final/S10-card-path.png
+?? ../../final/S11-exchange-connection.png
+?? ../../final/S11a-exchange-form.png
+?? ../../final/S12-partner-exchange.png
+?? ../../final/S12b-partner-new-account.png
+?? ../../final/S13-uid-verification.png
+?? ../../final/S14-api-connection.png
+?? ../../final/S14a-api-form.png
+?? ../../final/S15-success.png
+?? ../../final/S15b-success-own-account.png
+?? ../../final/X01-uid-not-found.png
+?? ../../final/d1-w1440/S01-backtest-ready.png
+?? ../../final/d1-w1440/S02-early-processing.png
+?? ../../final/d1-w1440/S02a-preparing.png
+?? ../../final/d1-w1440/S03-mid-processing.png
+?? ../../final/d1-w1440/S04-final-processing.png
+?? ../../final/d1-w1440/S05-results-above-fold.png
+?? ../../final/d1-w1440/S06-results-evidence.png
+?? ../../final/d1-w1440/S07-decision-detail.png
+?? ../../final/d1-w1440/S08-trade-detail.png
+?? ../../final/d1-w1440/S09-activation-choice.png
+?? ../../final/d1-w1440/S10-card-path.png
+?? ../../final/d1-w1440/S11-exchange-connection.png
+?? ../../final/d1-w1440/S12-partner-exchange.png
+?? ../../final/d1-w1440/S13-uid-verification.png
+?? ../../final/d1-w1440/S14-api-connection.png
+?? ../../final/d1-w1440/S15-success.png
+?? ../../final/h1-w1440/S01-backtest-ready.png
+?? ../../final/h1-w1440/S02-early-processing.png
+?? ../../final/h1-w1440/S02a-preparing.png
+?? ../../final/h1-w1440/S03-mid-processing.png
+?? ../../final/h1-w1440/S04-final-processing.png
+?? ../../final/h1-w1440/S05-results-above-fold.png
+?? ../../final/h1-w1440/S06-results-evidence.png
+?? ../../final/h1-w1440/S07-decision-detail.png
+?? ../../final/h1-w1440/S08-trade-detail.png
+?? ../../final/h1-w1440/S09-activation-choice.png
+?? ../../final/h1-w1440/S10-card-path.png
+?? ../../final/h1-w1440/S11-exchange-connection.png
+?? ../../final/h1-w1440/S12-partner-exchange.png
+?? ../../final/h1-w1440/S13-uid-verification.png
+?? ../../final/h1-w1440/S14-api-connection.png
+?? ../../final/h1-w1440/S15-success.png
+?? ../../final/r1-w1440/S01-backtest-ready.png
+?? ../../final/r1-w1440/S02a-preparing.png
+?? ../../final/r1-w1440/S04-final-processing.png
+?? ../../final/r1-w1440/S05-results-above-fold.png
+?? ../../final/r1-w1440/S06-results-evidence.png
+?? ../../final/r1-w1440/S07-decision-detail.png
+?? ../../final/r1-w1440/S08-trade-detail.png
+?? ../../final/r1-w1440/S09-activation-choice.png
+?? ../../final/r1-w1440/S10-card-path.png
+?? ../../final/r1-w1440/S11-exchange-connection.png
+?? ../../final/r1-w1440/S12-partner-exchange.png
+?? ../../final/r1-w1440/S13-uid-verification.png
+?? ../../final/r1-w1440/S14-api-connection.png
+?? ../../final/r1-w1440/S15-success.png
+?? ../../final/seq/
+?? ../../final/w1280/S01-backtest-ready.png
+?? ../../final/w1280/S02-early-processing.png
+?? ../../final/w1280/S02a-preparing.png
+?? ../../final/w1280/S03-mid-processing.png
+?? ../../final/w1280/S04-final-processing.png
+?? ../../final/w1280/S05-results-above-fold.png
+?? ../../final/w1280/S06-results-evidence.png
+?? ../../final/w1280/S07-decision-detail.png
+?? ../../final/w1280/S08-trade-detail.png
+?? ../../final/w1280/S09-activation-choice.png
+?? ../../final/w1280/S10-card-path.png
+?? ../../final/w1280/S11-exchange-connection.png
+?? ../../final/w1280/S12-partner-exchange.png
+?? ../../final/w1280/S13-uid-verification.png
+?? ../../final/w1280/S14-api-connection.png
+?? ../../final/w1280/S15-success.png
+?? ../../final/w390/S01-backtest-ready.png
+?? ../../final/w390/S02-early-processing.png
+?? ../../final/w390/S02a-preparing.png
+?? ../../final/w390/S03-mid-processing.png
+?? ../../final/w390/S04-final-processing.png
+?? ../../final/w390/S05-results-above-fold.png
+?? ../../final/w390/S06-results-evidence.png
+?? ../../final/w390/S07-decision-detail.png
+?? ../../final/w390/S08-trade-detail.png
+?? ../../final/w390/S09-activation-choice.png
+?? ../../final/w390/S10-card-path.png
+?? ../../final/w390/S11-exchange-connection.png
+?? ../../final/w390/S12-partner-exchange.png
+?? ../../final/w390/S13-uid-verification.png
+?? ../../final/w390/S14-api-connection.png
+?? ../../final/w390/S15-success.png
+?? ../../final2/F01-a-uid-failed.png
+?? ../../final2/F01-b-after-continue.png
+?? ../../final2/F01-c-changed-uid-needs-api.png
+?? ../../final2/F01-d-success-valid.png
+?? ../../final2/F02-pick-reason.png
+?? ../../final2/F03-travel-1.png
+?? ../../final2/F03-travel-2.png
+?? ../../final2/F03-travel-3.png
+?? ../../final2/F03-travel-4.png
+?? ../../final2/R09-all-activity-d1.png
+?? ../../final2/S01-backtest-ready.png
+?? ../../final2/S02-early-processing.png
+?? ../../final2/S02a-preparing.png
+?? ../../final2/S02b-first-decision.png
+?? ../../final2/S03-mid-processing.png
+?? ../../final2/S03a-skip-signal.png
+?? ../../final2/S03b-skip-review.png
+?? ../../final2/S03c-between-events.png
+?? ../../final2/S04-final-processing.png
+?? ../../final2/S05-results-above-fold.png
+?? ../../final2/S05b-results-hover.png
+?? ../../final2/S06-results-evidence.png
+?? ../../final2/S07-decision-detail.png
+?? ../../final2/S08-trade-detail.png
+?? ../../final2/S08b-result-full-page.png
+?? ../../final2/S09-activation-choice.png
+?? ../../final2/S10-card-path.png
+?? ../../final2/S11-exchange-connection.png
+?? ../../final2/S11a-exchange-form.png
+?? ../../final2/S12-partner-exchange.png
+?? ../../final2/S12b-partner-new-account.png
+?? ../../final2/S13-uid-verification.png
+?? ../../final2/S14-api-connection.png
+?? ../../final2/S14a-api-form.png
+?? ../../final2/S15-success.png
+?? ../../final2/S15b-success-own-account.png
+?? ../../final2/X01-uid-not-found.png
+?? ../../final2/d1-w1440/S01-backtest-ready.png
+?? ../../final2/d1-w1440/S02-early-processing.png
+?? ../../final2/d1-w1440/S02a-preparing.png
+?? ../../final2/d1-w1440/S03-mid-processing.png
+?? ../../final2/d1-w1440/S04-final-processing.png
+?? ../../final2/d1-w1440/S05-results-above-fold.png
+?? ../../final2/d1-w1440/S06-results-evidence.png
+?? ../../final2/d1-w1440/S07-decision-detail.png
+?? ../../final2/d1-w1440/S08-trade-detail.png
+?? ../../final2/d1-w1440/S09-activation-choice.png
+?? ../../final2/d1-w1440/S10-card-path.png
+?? ../../final2/d1-w1440/S11-exchange-connection.png
+?? ../../final2/d1-w1440/S12-partner-exchange.png
+?? ../../final2/d1-w1440/S13-uid-verification.png
+?? ../../final2/d1-w1440/S14-api-connection.png
+?? ../../final2/d1-w1440/S15-success.png
+?? ../../final2/h1-w1440/S01-backtest-ready.png
+?? ../../final2/h1-w1440/S02-early-processing.png
+?? ../../final2/h1-w1440/S02a-preparing.png
+?? ../../final2/h1-w1440/S03-mid-processing.png
+?? ../../final2/h1-w1440/S04-final-processing.png
+?? ../../final2/h1-w1440/S05-results-above-fold.png
+?? ../../final2/h1-w1440/S06-results-evidence.png
+?? ../../final2/h1-w1440/S07-decision-detail.png
+?? ../../final2/h1-w1440/S08-trade-detail.png
+?? ../../final2/h1-w1440/S09-activation-choice.png
+?? ../../final2/h1-w1440/S10-card-path.png
+?? ../../final2/h1-w1440/S11-exchange-connection.png
+?? ../../final2/h1-w1440/S12-partner-exchange.png
+?? ../../final2/h1-w1440/S13-uid-verification.png
+?? ../../final2/h1-w1440/S14-api-connection.png
+?? ../../final2/h1-w1440/S15-success.png
+?? ../../final2/r1-w1440/S01-backtest-ready.png
+?? ../../final2/r1-w1440/S02a-preparing.png
+?? ../../final2/r1-w1440/S04-final-processing.png
+?? ../../final2/r1-w1440/S05-results-above-fold.png
+?? ../../final2/r1-w1440/S06-results-evidence.png
+?? ../../final2/r1-w1440/S07-decision-detail.png
+?? ../../final2/r1-w1440/S08-trade-detail.png
+?? ../../final2/r1-w1440/S09-activation-choice.png
+?? ../../final2/r1-w1440/S10-card-path.png
+?? ../../final2/r1-w1440/S11-exchange-connection.png
+?? ../../final2/r1-w1440/S12-partner-exchange.png
+?? ../../final2/r1-w1440/S13-uid-verification.png
+?? ../../final2/r1-w1440/S14-api-connection.png
+?? ../../final2/r1-w1440/S15-success.png
+?? ../../final2/seq/
+?? ../../final2/w1280/S01-backtest-ready.png
+?? ../../final2/w1280/S02-early-processing.png
+?? ../../final2/w1280/S02a-preparing.png
+?? ../../final2/w1280/S03-mid-processing.png
+?? ../../final2/w1280/S04-final-processing.png
+?? ../../final2/w1280/S05-results-above-fold.png
+?? ../../final2/w1280/S06-results-evidence.png
+?? ../../final2/w1280/S07-decision-detail.png
+?? ../../final2/w1280/S08-trade-detail.png
+?? ../../final2/w1280/S09-activation-choice.png
+?? ../../final2/w1280/S10-card-path.png
+?? ../../final2/w1280/S11-exchange-connection.png
+?? ../../final2/w1280/S12-partner-exchange.png
+?? ../../final2/w1280/S13-uid-verification.png
+?? ../../final2/w1280/S14-api-connection.png
+?? ../../final2/w1280/S15-success.png
+?? ../../final2/w390/S01-backtest-ready.png
+?? ../../final2/w390/S02-early-processing.png
+?? ../../final2/w390/S02a-preparing.png
+?? ../../final2/w390/S03-mid-processing.png
+?? ../../final2/w390/S04-final-processing.png
+?? ../../final2/w390/S05-results-above-fold.png
+?? ../../final2/w390/S06-results-evidence.png
+?? ../../final2/w390/S07-decision-detail.png
+?? ../../final2/w390/S08-trade-detail.png
+?? ../../final2/w390/S09-activation-choice.png
+?? ../../final2/w390/S10-card-path.png
+?? ../../final2/w390/S11-exchange-connection.png
+?? ../../final2/w390/S12-partner-exchange.png
+?? ../../final2/w390/S13-uid-verification.png
+?? ../../final2/w390/S14-api-connection.png
+?? ../../final2/w390/S15-success.png
+?? ../../final3/F01-a-uid-failed.png
+?? ../../final3/F01-b-after-continue.png
+?? ../../final3/F01-c-changed-uid-needs-api.png
+?? ../../final3/F01-d-success-valid.png
+?? ../../final3/F01R-reload-150ms.png
+?? ../../final3/F01R-reload-after-exchange-change.png
+?? ../../final3/F02-pick-reason.png
+?? ../../final3/F03-travel-1.png
+?? ../../final3/F03-travel-2.png
+?? ../../final3/F03-travel-3.png
+?? ../../final3/F03-travel-4.png
+?? ../../final3/R09-all-activity-d1.png
+?? ../../final3/S01-backtest-ready.png
+?? ../../final3/S02-early-processing.png
+?? ../../final3/S02a-preparing.png
+?? ../../final3/S02b-first-decision.png
+?? ../../final3/S03-mid-processing.png
+?? ../../final3/S03a-skip-signal.png
+?? ../../final3/S03b-skip-review.png
+?? ../../final3/S03c-between-events.png
+?? ../../final3/S04-final-processing.png
+?? ../../final3/S05-results-above-fold.png
+?? ../../final3/S05b-results-hover.png
+?? ../../final3/S06-results-evidence.png
+?? ../../final3/S07-decision-detail.png
+?? ../../final3/S08-trade-detail.png
+?? ../../final3/S08b-result-full-page.png
+?? ../../final3/S09-activation-choice.png
+?? ../../final3/S10-card-path.png
+?? ../../final3/S11-exchange-connection.png
+?? ../../final3/S11a-exchange-form.png
+?? ../../final3/S12-partner-exchange.png
+?? ../../final3/S12b-partner-new-account.png
+?? ../../final3/S13-uid-verification.png
+?? ../../final3/S14-api-connection.png
+?? ../../final3/S14a-api-form.png
+?? ../../final3/S15-success.png
+?? ../../final3/S15b-success-own-account.png
+?? ../../final3/X01-uid-not-found.png
+?? ../../final3/d1-w1440/S01-backtest-ready.png
+?? ../../final3/d1-w1440/S02-early-processing.png
+?? ../../final3/d1-w1440/S02a-preparing.png
+?? ../../final3/d1-w1440/S03-mid-processing.png
+?? ../../final3/d1-w1440/S04-final-processing.png
+?? ../../final3/d1-w1440/S05-results-above-fold.png
+?? ../../final3/d1-w1440/S06-results-evidence.png
+?? ../../final3/d1-w1440/S07-decision-detail.png
+?? ../../final3/d1-w1440/S08-trade-detail.png
+?? ../../final3/d1-w1440/S09-activation-choice.png
+?? ../../final3/d1-w1440/S10-card-path.png
+?? ../../final3/d1-w1440/S11-exchange-connection.png
+?? ../../final3/d1-w1440/S12-partner-exchange.png
+?? ../../final3/d1-w1440/S13-uid-verification.png
+?? ../../final3/d1-w1440/S14-api-connection.png
+?? ../../final3/d1-w1440/S15-success.png
+?? ../../final3/seq/
+?? ../../final3/w1280/P-help-button.png
+?? ../../final3/w1280/S01-backtest-ready.png
+?? ../../final3/w1280/S02-early-processing.png
+?? ../../final3/w1280/S02a-preparing.png
+?? ../../final3/w1280/S03-mid-processing.png
+?? ../../final3/w1280/S04-final-processing.png
+?? ../../final3/w1280/S05-results-above-fold.png
+?? ../../final3/w1280/S06-results-evidence.png
+?? ../../final3/w1280/S07-decision-detail.png
+?? ../../final3/w1280/S08-trade-detail.png
+?? ../../final3/w1280/S09-activation-choice.png
+?? ../../final3/w1280/S10-card-path.png
+?? ../../final3/w1280/S11-exchange-connection.png
+?? ../../final3/w1280/S12-partner-exchange.png
+?? ../../final3/w1280/S13-uid-verification.png
+?? ../../final3/w1280/S14-api-connection.png
+?? ../../final3/w1280/S15-success.png
+?? ../../final3/w390/S01-backtest-ready.png
+?? ../../final3/w390/S02-early-processing.png
+?? ../../final3/w390/S02a-preparing.png
+?? ../../final3/w390/S03-mid-processing.png
+?? ../../final3/w390/S04-final-processing.png
+?? ../../final3/w390/S05-results-above-fold.png
+?? ../../final3/w390/S06-results-evidence.png
+?? ../../final3/w390/S07-decision-detail.png
+?? ../../final3/w390/S08-trade-detail.png
+?? ../../final3/w390/S09-activation-choice.png
+?? ../../final3/w390/S10-card-path.png
+?? ../../final3/w390/S11-exchange-connection.png
+?? ../../final3/w390/S12-partner-exchange.png
+?? ../../final3/w390/S13-uid-verification.png
+?? ../../final3/w390/S14-api-connection.png
+?? ../../final3/w390/S15-success.png
+?? ../../fut/shots/U01-finder-top.png
+?? ../../fut/shots/U02-detail-f1.png
+?? ../../fut/shots/U02-detail-f5.png
+?? ../../fut/shots/U02-detail-f7.png
+?? ../../fut/shots/U03-replay-f1.png
+?? ../../fut/shots/U03-replay-f5.png
+?? ../../fut/shots/U03-replay-f7.png
+?? ../../fut/shots/U04-result-f1.png
+?? ../../fut/shots/U04-result-f5.png
+?? ../../fut/shots/U04-result-f7.png
+?? ../../fut/shots/U05-decision-f1.png
+?? ../../fut/shots/U05-decision-f5.png
+?? ../../fut/shots/U05-decision-f7.png
+?? ../../fut/shots/U06-trade-f1.png
+?? ../../fut/shots/U06-trade-f5.png
+?? ../../fut/shots/U06-trade-f7.png
+?? ../../fut/shots/U07-follow.png
+?? ../brand/r/LIVE-side.png
+?? s2/
+?? s3/
+?? s4/
+?? s5/
+?? ../cap-bt.mjs
+?? ../cap-detail-full.mjs
+?? ../cap-hist.mjs
+?? ../hist/
+?? ../intro/live/
+?? ../../mine-walk/
+?? ../../mine/M01-ready.png
+?? ../../mine/M02-replay.png
+?? ../../mine/M03-result.png
+?? ../../mine/M04-activation.png
+?? ../../mine/M05-connected.png
+?? ../../mine/M06-start.png
+?? ../../mine/verify-mine-log.txt
+?? ../../mine/w390/
+?? ../../mine2/
+?? ../../real/A01-chat-card.png
+?? ../../real/A02-ready.png
+?? ../../real/A03-result.png
+?? ../../round-1/S01-backtest-ready.png
+?? ../../round-1/S02-early-processing.png
+?? ../../round-1/S02a-preparing.png
+?? ../../round-1/S02b-first-decision.png
+?? ../../round-1/S03-mid-processing.png
+?? ../../round-1/S03b-between-events.png
+?? ../../round-1/S04-final-processing.png
+?? ../../round-1/S05-results-above-fold.png
+?? ../../round-1/S05b-results-hover.png
+?? ../../round-1/S06-results-evidence.png
+?? ../../round-1/S07-decision-detail.png
+?? ../../round-1/S08-trade-detail.png
+?? ../../round-1/S08b-result-full-page.png
+?? ../../round-1/S09-activation-choice.png
+?? ../../round-1/S10-card-path.png
+?? ../../round-1/S11-exchange-connection.png
+?? ../../round-1/S12-partner-exchange.png
+?? ../../round-1/S13-uid-verification.png
+?? ../../round-1/S14-api-connection.png
+?? ../../round-1/S14a-api-form.png
+?? ../../round-1/S15-success.png
+?? ../../round-1/S15b-success-own-exchange.png
+?? ../../round-1/S15c-success-full-page.png
+?? ../../round-1/X01-uid-not-found.png
+?? ../../round-1/d1-w1440/S01-backtest-ready.png
+?? ../../round-1/d1-w1440/S02-early-processing.png
+?? ../../round-1/d1-w1440/S02a-preparing.png
+?? ../../round-1/d1-w1440/S04-final-processing.png
+?? ../../round-1/d1-w1440/S05-results-above-fold.png
+?? ../../round-1/d1-w1440/S06-results-evidence.png
+?? ../../round-1/d1-w1440/S07-decision-detail.png
+?? ../../round-1/d1-w1440/S08-trade-detail.png
+?? ../../round-1/d1-w1440/S09-activation-choice.png
+?? ../../round-1/d1-w1440/S10-card-path.png
+?? ../../round-1/d1-w1440/S11-exchange-connection.png
+?? ../../round-1/d1-w1440/S12-partner-exchange.png
+?? ../../round-1/d1-w1440/S13-uid-verification.png
+?? ../../round-1/d1-w1440/S14-api-connection.png
+?? ../../round-1/d1-w1440/S15-success.png
+?? ../../round-1/r1-w1440/S01-backtest-ready.png
+?? ../../round-1/r1-w1440/S02-early-processing.png
+?? ../../round-1/r1-w1440/S02a-preparing.png
+?? ../../round-1/r1-w1440/S04-final-processing.png
+?? ../../round-1/r1-w1440/S05-results-above-fold.png
+?? ../../round-1/r1-w1440/S06-results-evidence.png
+?? ../../round-1/r1-w1440/S07-decision-detail.png
+?? ../../round-1/r1-w1440/S08-trade-detail.png
+?? ../../round-1/r1-w1440/S09-activation-choice.png
+?? ../../round-1/r1-w1440/S10-card-path.png
+?? ../../round-1/r1-w1440/S11-exchange-connection.png
+?? ../../round-1/r1-w1440/S12-partner-exchange.png
+?? ../../round-1/r1-w1440/S13-uid-verification.png
+?? ../../round-1/r1-w1440/S14-api-connection.png
+?? ../../round-1/r1-w1440/S15-success.png
+?? ../../round-1/seq/
+?? ../../round-1/w1280/S01-backtest-ready.png
+?? ../../round-1/w1280/S02-early-processing.png
+?? ../../round-1/w1280/S02a-preparing.png
+?? ../../round-1/w1280/S03-mid-processing.png
+?? ../../round-1/w1280/S04-final-processing.png
+?? ../../round-1/w1280/S05-results-above-fold.png
+?? ../../round-1/w1280/S06-results-evidence.png
+?? ../../round-1/w1280/S07-decision-detail.png
+?? ../../round-1/w1280/S08-trade-detail.png
+?? ../../round-1/w1280/S09-activation-choice.png
+?? ../../round-1/w1280/S10-card-path.png
+?? ../../round-1/w1280/S11-exchange-connection.png
+?? ../../round-1/w1280/S12-partner-exchange.png
+?? ../../round-1/w1280/S13-uid-verification.png
+?? ../../round-1/w1280/S14-api-connection.png
+?? ../../round-1/w1280/S15-success.png
+?? ../../round-1/w390/S01-backtest-ready.png
+?? ../../round-1/w390/S02-early-processing.png
+?? ../../round-1/w390/S02a-preparing.png
+?? ../../round-1/w390/S03-mid-processing.png
+?? ../../round-1/w390/S04-final-processing.png
+?? ../../round-1/w390/S05-results-above-fold.png
+?? ../../round-1/w390/S06-results-evidence.png
+?? ../../round-1/w390/S07-decision-detail.png
+?? ../../round-1/w390/S08-trade-detail.png
+?? ../../round-1/w390/S09-activation-choice.png
+?? ../../round-1/w390/S10-card-path.png
+?? ../../round-1/w390/S11-exchange-connection.png
+?? ../../round-1/w390/S12-partner-exchange.png
+?? ../../round-1/w390/S13-uid-verification.png
+?? ../../round-1/w390/S14-api-connection.png
+?? ../../round-1/w390/S15-success.png
+?? ../../round-2/S01-backtest-ready.png
+?? ../../round-2/S02-early-processing.png
+?? ../../round-2/S02a-preparing.png
+?? ../../round-2/S02b-first-decision.png
+?? ../../round-2/S03-mid-processing.png
+?? ../../round-2/S03a-skip-signal.png
+?? ../../round-2/S03b-skip-review.png
+?? ../../round-2/S03c-between-events.png
+?? ../../round-2/S04-final-processing.png
+?? ../../round-2/S05-results-above-fold.png
+?? ../../round-2/S05b-results-hover.png
+?? ../../round-2/S06-results-evidence.png
+?? ../../round-2/S07-decision-detail.png
+?? ../../round-2/S08-trade-detail.png
+?? ../../round-2/S08b-result-full-page.png
+?? ../../round-2/S09-activation-choice.png
+?? ../../round-2/S10-card-path.png
+?? ../../round-2/S11-exchange-connection.png
+?? ../../round-2/S11a-exchange-form.png
+?? ../../round-2/S12-partner-exchange.png
+?? ../../round-2/S12b-partner-new-account.png
+?? ../../round-2/S13-uid-verification.png
+?? ../../round-2/S14-api-connection.png
+?? ../../round-2/S14a-api-form.png
+?? ../../round-2/S15-success.png
+?? ../../round-2/S15b-success-own-account.png
+?? ../../round-2/X01-uid-not-found.png
+?? ../../round-2/d1-w1440/S01-backtest-ready.png
+?? ../../round-2/d1-w1440/S02-early-processing.png
+?? ../../round-2/d1-w1440/S02a-preparing.png
+?? ../../round-2/d1-w1440/S03-mid-processing.png
+?? ../../round-2/d1-w1440/S04-final-processing.png
+?? ../../round-2/d1-w1440/S05-results-above-fold.png
+?? ../../round-2/d1-w1440/S06-results-evidence.png
+?? ../../round-2/d1-w1440/S07-decision-detail.png
+?? ../../round-2/d1-w1440/S08-trade-detail.png
+?? ../../round-2/d1-w1440/S09-activation-choice.png
+?? ../../round-2/d1-w1440/S10-card-path.png
+?? ../../round-2/d1-w1440/S11-exchange-connection.png
+?? ../../round-2/d1-w1440/S12-partner-exchange.png
+?? ../../round-2/d1-w1440/S13-uid-verification.png
+?? ../../round-2/d1-w1440/S14-api-connection.png
+?? ../../round-2/d1-w1440/S15-success.png
+?? ../../round-2/h1-w1440/S01-backtest-ready.png
+?? ../../round-2/h1-w1440/S02-early-processing.png
+?? ../../round-2/h1-w1440/S02a-preparing.png
+?? ../../round-2/h1-w1440/S03-mid-processing.png
+?? ../../round-2/h1-w1440/S04-final-processing.png
+?? ../../round-2/h1-w1440/S05-results-above-fold.png
+?? ../../round-2/h1-w1440/S06-results-evidence.png
+?? ../../round-2/h1-w1440/S07-decision-detail.png
+?? ../../round-2/h1-w1440/S08-trade-detail.png
+?? ../../round-2/h1-w1440/S09-activation-choice.png
+?? ../../round-2/h1-w1440/S10-card-path.png
+?? ../../round-2/h1-w1440/S11-exchange-connection.png
+?? ../../round-2/h1-w1440/S12-partner-exchange.png
+?? ../../round-2/h1-w1440/S13-uid-verification.png
+?? ../../round-2/h1-w1440/S14-api-connection.png
+?? ../../round-2/h1-w1440/S15-success.png
+?? ../../round-2/r1-w1440/S01-backtest-ready.png
+?? ../../round-2/r1-w1440/S02a-preparing.png
+?? ../../round-2/r1-w1440/S04-final-processing.png
+?? ../../round-2/r1-w1440/S05-results-above-fold.png
+?? ../../round-2/r1-w1440/S06-results-evidence.png
+?? ../../round-2/r1-w1440/S07-decision-detail.png
+?? ../../round-2/r1-w1440/S08-trade-detail.png
+?? ../../round-2/r1-w1440/S09-activation-choice.png
+?? ../../round-2/r1-w1440/S10-card-path.png
+?? ../../round-2/r1-w1440/S11-exchange-connection.png
+?? ../../round-2/r1-w1440/S12-partner-exchange.png
+?? ../../round-2/r1-w1440/S13-uid-verification.png
+?? ../../round-2/r1-w1440/S14-api-connection.png
+?? ../../round-2/r1-w1440/S15-success.png
+?? ../../round-2/seq/
+?? ../../round-2/w1280/S01-backtest-ready.png
+?? ../../round-2/w1280/S02-early-processing.png
+?? ../../round-2/w1280/S02a-preparing.png
+?? ../../round-2/w1280/S03-mid-processing.png
+?? ../../round-2/w1280/S04-final-processing.png
+?? ../../round-2/w1280/S05-results-above-fold.png
+?? ../../round-2/w1280/S06-results-evidence.png
+?? ../../round-2/w1280/S07-decision-detail.png
+?? ../../round-2/w1280/S08-trade-detail.png
+?? ../../round-2/w1280/S09-activation-choice.png
+?? ../../round-2/w1280/S10-card-path.png
+?? ../../round-2/w1280/S11-exchange-connection.png
+?? ../../round-2/w1280/S12-partner-exchange.png
+?? ../../round-2/w1280/S13-uid-verification.png
+?? ../../round-2/w1280/S14-api-connection.png
+?? ../../round-2/w1280/S15-success.png
+?? ../../round-2/w390/S01-backtest-ready.png
+?? ../../round-2/w390/S02-early-processing.png
+?? ../../round-2/w390/S02a-preparing.png
+?? ../../round-2/w390/S03-mid-processing.png
+?? ../../round-2/w390/S04-final-processing.png
+?? ../../round-2/w390/S05-results-above-fold.png
+?? ../../round-2/w390/S06-results-evidence.png
+?? ../../round-2/w390/S07-decision-detail.png
+?? ../../round-2/w390/S08-trade-detail.png
+?? ../../round-2/w390/S09-activation-choice.png
+?? ../../round-2/w390/S10-card-path.png
+?? ../../round-2/w390/S11-exchange-connection.png
+?? ../../round-2/w390/S12-partner-exchange.png
+?? ../../round-2/w390/S13-uid-verification.png
+?? ../../round-2/w390/S14-api-connection.png
+?? ../../round-2/w390/S15-success.png
+?? ../../../ux-audit/card3/log-codex-card3.txt
+?? ../../../ux-audit/card3/log-codex-hero.txt
+?? ../../../ux-audit/detail/fx-mid-1440.png
+?? ../../../ux-audit/detail/log-codex-crit.txt
+?? ../../../ux-audit/detail/log-codex.txt
+?? ../../../ux-audit/footer2/black-spa-390.png
+?? ../../../ux-audit/footer2/live-trade-footer-1440.png
+?? ../../../ux-audit/footer2/log-codex-bar.txt
+?? ../../../ux-audit/footer2/log-codex-crit.txt
+?? ../../../ux-audit/footer2/log-codex.txt
+?? ../../../ux-audit/footer2/ours-bar-390.png
+?? ../../../ux-audit/footer2/r3-gap-1440.png
+?? ../../../ux-audit/footer2/r5-hero-next-390.png
+?? ../../../ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ../../../ux-audit/footer2/video-frame-3s.jpg
+?? ../../../ux-audit/footer2/video-frame-5s.jpg
+?? ../../../ux-audit/footer2/video-frame-6.2s.jpg
+?? ../../../ux-audit/hero/frame3-codex.png
+?? ../../../ux-audit/hero/frame3.png
+?? ../../../ux-audit/hero/log-agy.txt
+?? ../../../ux-audit/hero/log-codex-crit.txt
+?? ../../../ux-audit/hero/log-codex.txt
+?? ../../../ux-audit/hero/prompt-agy.md
+?? ../../../ux-audit/hero/prompt-codex-crit.md
+?? ../../../ux-audit/hero/prompt-codex.md
+?? ../../../ux-audit/logs/
+?? ../../../ux-audit/research/log-codex-verify.txt
+?? ../../../ux-audit/review/
+?? ../../../ux-audit/spark/log-codex.txt
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const f=require('fs');process.stdout.write(f.readFileSync('s3/CODEX_RAW.md','utf8')); for(const p of ['..','../..','../../..']) console.log(p, f.readdirSync(p).filter(n=>/DESIGN|AGENTS|mailbox/.test(n)));\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 158ms:
+큰 형태는 반영됐지만, 굵기와 상태 색, 선택 표시에는 이전 화면의 표현이 남아 있습니다. 판정은 제공된 화면 기준이며, 파일은 수정하지 않았습니다.
+
+| 영역 | 반영 여부와 화면 근거 |
+|---|---|
+| 머리 | **대체로 반영.** 제목이 커졌고 BNB 심볼, 설명, 분류가 정리됐습니다. 모바일 설명과 분류는 여전히 굵습니다. |
+| 잔고와 범례 | **부분 반영.** 잔고와 수익률의 크기가 구분됩니다. 모바일은 범례가 아래로 내려갔지만 데스크톱은 같은 줄입니다. |
+| 차트 | **부분 반영.** 전략선이 밝아졌고 면 채움이 사라졌습니다. 삼각형도 유지됐습니다. 범례의 전략선 견본은 여전히 초록이며, 낙폭 문구와 밑줄도 빨강입니다. |
+| 실행 요약 | **부분 반영.** 둥근 윤곽 상자와 ‘거래 결과’가 적용됐습니다. 초록 상태 점과 빨간 ‘손실 거래’ 글자는 남았습니다. |
+| 결과 카드 | **부분 반영.** 큰 손익, 둥근 윤곽, 좌우 정렬이 적용됐습니다. ‘청산 13건 중 8건’, ‘79일’은 굵고, ‘현물 보유 대비’까지 초록입니다. |
+| 해석 카드 | **대체로 반영.** 제목이 커졌고 로딩 문구가 바뀌었습니다. 완료 상태는 캡처에 없어 판정하지 않습니다. |
+| 주 단추와 보조 행동 | **부분 반영.** 흰 알약 하나와 모바일 고정 단추가 적용됐습니다. ‘다른 전략 둘러보기’는 파운더 결정에 맞습니다. 조건 변경 링크는 보이지 않습니다. |
+| 판단 기록 | **부분 반영.** 설명 줄바꿈과 넓어진 행은 반영됐습니다. 굵은 종목명, 색 점, 축약 날짜, ‘12 / 27’은 남았습니다. |
+| 거래 내역 | **부분 반영.** 모바일 세로 행과 필터 문구가 적용됐습니다. 보유 기간 숫자가 굵고 날짜 형식이 다릅니다. |
+| 월별 수익률 | **대체로 반영.** 회색 막대와 여러 줄 배치가 적용됐고, 캡처상 가로 잘림은 없습니다. |
+| 실행 전 조건과 규칙 | **부분 반영.** 금액 표기와 선택 테두리, 카드 반경이 개선됐습니다. 모바일 ‘계산 기준’은 점선이고 규칙 본문은 굵습니다. |
+| 상세 지표와 하단 여백 | **확인 불가.** 전체 캡처도 월별 차트 도중 끝나므로 상세 지표와 마지막 콘텐츠의 고정 단추 가림 여부는 판정할 수 없습니다. |
+
+아래 다섯 항목은 요소와 순서를 유지한 채 수정해야 합니다. 현재 굵기나 색의 정확한 수치는 이미지로 단정하지 않았으며, 수정값은 디자인 기준에 있는 값만 사용했습니다.
+
+| 순위 | 심각도 | 화면 근거 | 고칠 값 |
+|---|---|---|---|
+| 1 | 높음, 필수 | 모바일 설명, 판단 문장, 결과 행, 보유 기간이 함께 굵어 위계가 흐립니다. | 본문과 행 **16px/400**, 섹션 제목 **18px/400**, 보조 **14px**, 숫자 **400**. |
+| 2 | 높음, 필수 | 초록 완료 점과 확인 아이콘, 초록 비교 문구, 빨간 손실 라벨이 상태를 색으로 강조합니다. | 본문 **#ececec**, 보조 **#cdcdcd**. 초록과 빨강은 손익 **숫자에만** 적용합니다. 삼각형 도형은 유지합니다. |
+| 3 | 중간, 필수 | 판단 기록의 선택 탭은 어두운 채움과 아래 선으로 표시하고, ‘계산 기준’은 점선입니다. | 선택은 **2px #9a9a9a** 테두리. 윤곽 카드는 **투명 배경과 1px 흰색 불투명도 .14~.15**, 반경 **26px**, 모바일 **20~26px**. |
+| 4 | 중간, 필수 | ‘이전 판단 더 보기’와 ‘이전 거래 6건 더 보기’가 밑줄과 알약 테두리를 동시에 가집니다. | 보조 행동은 **14px #cdcdcd 밑줄 링크**, 바깥 알약 테두리를 제거합니다. |
+| 5 | 중간, 필수 | 실제 전략선은 밝은데 범례 견본은 초록입니다. 비교선은 검정 배경에서 지나치게 희미합니다. | 전략선과 견본 **#ececec**, 비교선과 견본 **#9a9a9a**로 맞춥니다. 기존 점선 구분은 유지합니다. |
+
+카피는 아래처럼 정리합니다. 1단계 제안 자체에 남아 있던 어색함도 함께 바로잡았습니다.
+
+| 현재 | 제안 |
+|---|---|
+| 1,266일을 돌렸습니다. 숫자나 차트 표시를 누르면 근거를 확인합니다. | 1,266일간의 결과입니다. 숫자나 차트 표시를 누르면 판단 근거가 열립니다. |
+| 라벨 없는 +$20,856 | 손익 +$20,856 |
+| 현물 보유 +$1,395 | 현물 보유 손익 +$1,395 |
+| 최대 하락률 아래 값 없이 ‘현물 보유’ | 현물 보유 최대 하락률과 실제 계산값을 함께 표시합니다. 값 확인이 필요합니다. |
+| 이전 판단 더 보기 12 / 27 | 이전 판단 더 보기, 27건 중 12건 표시 |
+| 전체 기간이 포함된 40개월 중 22개월에 수익이 났습니다. | 한 달 전체를 계산한 40개월 중 22개월에 수익이 났습니다. |
+| 26.08.10 / 2026.08.11 | 2026. 8. 10. / 2026. 8. 11. |
+| 가장 유리했던 가격에서 기준만큼 되돌아와 청산했습니다. | 가격이 가장 유리했던 지점에서 청산 기준만큼 되돌아와 청산했습니다. |
+
+**판정: 필수 수정 다섯 항목과 비어 있는 비교 수치를 해결하고 하단 가림을 확인하기 전에는 배포를 보류합니다.**.. []
+../.. []
+../../.. [ '.mailbox', 'AGENTS.md', 'DESIGN_PROMPT.md' ]
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy cmd /c .mailbox\\mail.cmd check codex" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1
+ exited 1 in 463ms:
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const f=require('fs');console.log(f.readFileSync('../../../DESIGN_PROMPT.md','utf8')); console.log('S4',f.readdirSync('s4')); console.log('INBOX',f.existsSync('../../../.mailbox/inbox/codex')?f.readdirSync('../../../.mailbox/inbox/codex'):[]);\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 168ms:
+# TETH 디자인 프롬프트 (정본, 2026-10-01 파운더 확정)
+
+파운더가 "잘된 디자인과 UI/UX 흐름, 카피"로 지정한 화면: 설정(일반, 결제, 보안), 거래소 연결 목록, 플랜 화면(무료, 구독 두 카드), 거래소 선택, 거래소 계정(가입 전, 가입 화면 열고 돌아온 뒤 파란 카드), 거래소 연결 승인.
+**새 화면이나 고치는 화면은 전부 이 문서대로 만든다. 사람에게든 Codex에게든 이 문서를 그대로 프롬프트로 준다.**
+
+## 1. 한 줄 원칙
+화면 하나에 결정 하나. 제목 하나, 한 줄 설명 하나, 주 단추 하나, 보조는 작은 밑줄 링크, 뒤로 가기 하나. ChatGPT 설정과 플랜 화면을 나란히 놓았을 때 같은 제품으로 보여야 한다.
+
+## 2. 색
+| 쓰임 | 값 |
+|---|---|
+| 바탕(메인, 설정, 연결, 결제) | #000 |
+| 플랜 화면 바탕 | #000 (2026-10-01 파운더: 전부 검정) |
+| 채운 카드, 창 | #303030 (창은 #2f2f2f 허용) |
+| 윤곽 카드 | 투명 + 1px rgba(255,255,255,.14~.15) |
+| 구분선 | 1px rgba(255,255,255,.1) |
+| 입력칸 | #212121 또는 #2f2f2f, 테두리 없음 또는 옅은 1px |
+| 본문 글자 | #ececec, 제목 #fff |
+| 보조 글자 | #cdcdcd, 옅은 글자 #9a9a9a~#afafaf |
+| 강조(무료 선택, 방금 한 일) | 파란 그라데이션 linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%) (검정 바탕 기준) + 테두리 #5a8dff, 단추 #2f6fed |
+| 수익 / 손실 | 초록 / 빨강 (숫자에만) |
+| **금지** | 연두 #c8f43c, 그림자 남발, 색 배지(상태는 글자로, 실패만 빨간 글자) |
+
+## 3. 글자
+| 요소 | 크기 / 굵기 |
+|---|---|
+| 화면 제목 | 32px 400 (설정 28px, 모바일도 28~32) |
+| 창 제목 | 20px 600 또는 24~26px 400 |
+| 섹션 제목 | 18px 400 |
+| 한 줄 설명 | 18px #cdcdcd (모바일 16) |
+| 행 라벨, 본문 | 16px 400 |
+| 보조 줄 | 14px |
+| 숫자 | 400 굵기, 크기로만 강조 |
+| 글꼴 | 시스템 산세리프. 명조 금지 |
+
+## 4. 형태
+- 카드 반경 26(모바일 20~26), 창 반경 24~26, 입력칸 반경 19, 타일 반경 26(모바일 20).
+- 주 단추: 흰 알약(배경 #fff, 글자 #000, 높이 48~52, 반경 999). 파란 알약은 "무료 선택"과 "방금 한 일 다음 단계"에만.
+- 보조 행동: 밑줄 링크 14px #cdcdcd, 같은 기준선에 나란히(margin 0).
+- 오른쪽 조작: 회색 알약 #2f2f2f 36px("변경", "관리", "로그아웃"). 위험한 조작만 빨간 글자 + 어두운 빨간 알약.
+- 선택지: 타일이나 알약을 누르면 곧 선택(따로 "계속" 단추 없음). 선택된 것은 2px #9a9a9a 테두리.
+- 목록: 행(라벨 왼쪽, 값이나 조작 오른쪽), 한 행에 조작 하나.
+- 스텝퍼, 번호 원, 진행률, "N단계 남았습니다" 금지.
+- 모바일 390: 좌우 16px, 가로 스크롤 없음, 긴 창은 본문만 스크롤하고 주 단추는 아래 고정.
+- 떠 있는 상담 단추는 이 화면들에서 숨기고, 화면 아래 한 줄 "막히면 상담원이 24시간 답합니다. 상담원에게 묻기".
+
+## 5. 흐름
+- 결정 순서대로 화면을 나눈다. 앞 화면에서 한 선택은 다시 묻지 않는다.
+- 돈이 먼저, 그다음 연결(구독). 연결 흐름은 무료와 구독이 같다.
+- 방금 한 일이 있으면(가입 화면을 열고 돌아옴 등) 그 카드가 파랗게 바뀌고 주 단추가 다음 행동으로 바뀐다.
+- 드문 갈래는 작은 링크 하나로(예: 구독 회원의 "TETH 초대 계정으로 연결").
+- 완료 화면: 제목 "연결되었습니다", 한 줄, 계정 한 줄 카드, 다음 행동 단추 하나, 작은 링크 하나.
+- 빈 상태는 빈 안내 화면 대신 실제 화면(예: 전략 없는 터미널도 차트)을 보이고 한쪽에 다음 행동.
+
+## 6. 카피
+- 합니다체. 단추는 서술어로 끝나지 않음("전략 시작하기", "OKX에서 승인하기", "구독 관리").
+- 한 화면에 한 줄 설명. 설명 단락 금지. 무엇을 하면 무엇이 되는지만("Gate 화면이 열리면 아래 두 권한을 허용합니다").
+- 묻지 않은 걱정을 먼저 꺼내지 않는다("자산은 계속 그 계정에 있습니다", "출금 권한은 없습니다" 금지).
+- 금지: "회원님", 면책과 규제 고지, "데모", "시뮬레이션", em dash, 가운뎃점, TETH 커미션 구조, 거래를 늘리라는 권유.
+- 파운더가 정한 말은 바꾸지 않는다: "N명이 따라가는 중", "영원히 무료, 카드 등록 필요없음", "거래하는 사람을 위해", "지금 쓰는 계정 그대로", "막히면 상담원이 24시간 답합니다".
+- 날짜 문장은 "2026년 10월 21일", 목록 날짜는 "2026. 9. 21.". 금액은 "$800".
+
+## 7. Codex와 같이 하는 진행법 (모든 화면 공통)
+| 단계 | 누가 | 산출물 |
+|---|---|---|
+| s1 원인 분석 | Codex(이 문서 + 기준 화면 캡처 + 지금 화면 캡처) 와 Claude 각자 | 다른 제품처럼 보이는 원인(겉모습, 구조, 카피), 재구성안 표, 카피 교체 표, "통째로 vs 스타일만" 한 문장 |
+| s2 재구성 | Claude | 상태 기계는 그대로, 그리는 것만 교체. 자동 검사(1440, 390) + 캡처 |
+| s3 픽셀 검수 1차 | Codex | MUST / NICE(픽셀 근거와 고칠 값), 카피 표, 처음 보는 사용자의 행동 |
+| s4 반영 | Claude | MUST 전부, NICE는 근거 있는 것만. 거절은 이유와 함께 기록 |
+| s5 최종 | Codex | "MUST 없음"이어야 끝 |
+
+- Codex는 실제 CLI로만 돌리고(`gpt-6-astra`, 추론 high, 읽기 전용), 원문은 수정 없이 `CODEX_RAW.md`로 저장한다. 검수 전후 index.html 해시가 같아야 한다.
+- 파운더 결정은 Codex 제안보다 우선한다. 결정 기록은 화면 폴더의 `DECISIONS.md`.
+- 기준 캡처: `qa/ex-plan/r/P1-plan-member.png`, `qa/ex-plan/s6/r/X1-ex.png`, `X2-acct.png`, `X2b-acct-joined.png`, `X3-auth.png`, `X5-done.png`, `qa/gpt-skin/settings/s4/K1-billing.png`, `K2-sub-dlg.png`.
+
+## 8. Codex 1단계 프롬프트 원문 (화면마다 < > 만 채운다)
+```
+당신은 ChatGPT 제품의 디자인 리드로 빙의합니다. TETH의 "<화면 이름>"을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+디자인 기준: DESIGN_PROMPT.md (색, 글자, 형태, 흐름, 카피 규칙과 파운더가 정한 말)
+첨부: 기준 화면 캡처, 지금 화면(1440, 390)
+이 화면에서 사용자가 내리는 결정: <결정>
+A. 기준과 다른 제품처럼 보이는 원인을 겉모습, 구조, 카피로 나눠 픽셀이나 문구 근거로. 추측 금지.
+B. ChatGPT라면: 화면 수, 제목, 한 줄, 입력, 주 단추, 보조 행동을 표로. 지워도 되는 정보와 지우면 안 되는 정보 구분.
+C. 카피 교체 표(현재 → 제안). DESIGN_PROMPT.md 6장 규칙.
+D. 한 문장: 통째로 재구성인지, 스타일과 카피만인지.
+표와 짧은 문단, 750단어 이내, 근거 없는 칭찬 금지.
+```
+
+S4 [ 'r' ]
+INBOX []
+
+codex
+카피 8건은 화면에서 반영을 확인했습니다. 필수 수정은 본문 굵기와 색상 지정, 모바일 마지막 콘텐츠의 고정 단추 가림 여부를 코드와 함께 확인하고 있습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy rg -n "s4|bt-.*font-weight|bt.*padding-bottom|1,266|한 달 전체|현물 보유 최대|판단 근거가|청산 기준만큼|9a9a9a|bt-detail" ../../../index.html' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 344ms:
+3:<style>:root{--logo-uri:url("data:image/png;base64,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qnbb9jptscFfwlP1tTdfQVtssqiOPnQZnX/Gurr15m3tCrO/XnzhKD320Hm6+/Yr9egD1+nJR67XE4/coGefuEnPP32T+a7Wu+9cas8UztSLzx2uKy/prxuv+ZMuOHtl7b/n4tppkyV1zgkrqc9iW9vic4INllt13CGv67pTh3XY+UysFeV2t8a5H3LIVzr9+Ke1506XaN2V99OyC68rDVped9yyuE48Ymm7c1hDN123uS46p79dCA7QE4/+RSNGHKthQ47X0CHH6cOPjtYD//o/XXPZASHmuqs205knraEjDlpSG62zmP6867JaesF1Q907bn6+9tjhUZ166tcc+teKX/cC4AMn7b0PHx8mbjPPtifRAw65TTttfon23vlkrbHc/9kDqV21xYaba4PV+2ndP/TVuiv/UWuuuJFWX24jrfuHTbXk/Nto5p57atVlj7bBcY523eZa/d8BD+kff39Td9/99S/p4U+akgleb++PYSy88BC7Q/hIxw540Z4d3K1t+12pffufY3eBJ1mfHqkZuh+qGSc/WDNNfogWnOlwbbjKUdp565NCzI6bXWUL9d069YSXwpi49dahE3wuOriBv+4FoL2BkyaShQKk3CR9UgYmggz8uheAce1AFgowrvGT4iZlYDwzMKGGT1oAJtSemdSuSRn4CTIwaQH4CZI86RCTMjChZmDSAjCh9sykdk3KwE+Qgf8HAAD//zSC5QkAAAAGSURBVAMApstucOjjYwMAAAAASUVORK5CYII=")}.brand-bg{background:var(--logo-uri) center/contain no-repeat;display:block}</style>
+214:.bt-header h2{font-size:20px;font-weight:700;letter-spacing:-.02em}
+1837:.nfx-stag.s1{animation-delay:40ms}.nfx-stag.s2{animation-delay:80ms}.nfx-stag.s3{animation-delay:120ms}.nfx-stag.s4{animation-delay:160ms}.nfx-stag.s5{animation-delay:200ms}.nfx-stag.s6{animation-delay:240ms}.nfx-stag.s7{animation-delay:280ms}.nfx-stag.s8{animation-delay:320ms}
+5201:          <button class="g-ico-btn" onclick="gProfileClick(event)" aria-label="프로필"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="9.6" r="3"/><path d="M6.4 18.4c1.2-2.6 3.2-3.9 5.6-3.9s4.4 1.3 5.6 3.9"/></svg></button>
+5760:.bt-id-t h2{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.25;margin:0}
+5763:.bt-id-m b{color:var(--gt);font-weight:600}
+5768:.bt-cap-l b{font-size:28px;font-weight:700;letter-spacing:-.02em;color:#fff}
+5769:.bt-cap-l i{font-style:normal;font-size:15px;font-weight:600;margin-left:9px;color:var(--gt2)}
+5771:.bt-leg{display:flex;gap:16px;font-size:12px;color:var(--gt3);padding-bottom:6px;white-space:nowrap}
+5789:.bt-tip b{display:block;color:var(--gt3);font-weight:500;font-size:11.5px}
+5791:.bt-tip i{font-style:normal;color:#fff;font-weight:600}
+5793:.bt-tip .g{color:var(--gt3)}.bt-tip .g i{color:var(--gt2);font-weight:500}
+5796:.bt-status b{color:#fff;font-weight:600;margin-right:2px}
+5805:.bt-live b{font-size:19px;font-weight:600;color:#fff}
+5806:.bt-live b i{font-style:normal;font-size:13px;font-weight:500;color:var(--gt3)}
+5811:.bt-box h3{font-size:12.5px;font-weight:600;color:var(--gt3);margin:0 0 12px;letter-spacing:0}
+5819:.bt-seg button[aria-pressed=true]{background:#f2f3f5;border-color:#f2f3f5;color:#111;font-weight:600}
+5824:.bt-cta{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:12px;border:0;background:#c8f43c;color:#10140a;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .12s ease,filter .12s ease}
+5850:.bt-fc b{font-weight:600;color:#fff}
+5851:.bt-fc header i{font-style:normal;margin-left:auto;font-weight:600;font-size:12.5px}
+5867:.bt-v1 b{font-size:27px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-right:3px}
+5870:.bt-v2 b{font-size:15px;font-weight:600}
+5875:.bt-k3>div:last-child{border-bottom:0;padding-bottom:0}
+5877:.bt-k3 b{font-size:16px;font-weight:600;color:#fff;text-align:right}
+5893:.bt-sec-b h3{font-size:16.5px;font-weight:700;margin:0;color:#fff}
+5903:.bt-mo b{font-size:10.5px;font-weight:500;color:var(--gt2);white-space:nowrap}
+5907:.bt-chips button[aria-pressed=true]{background:#f2f3f5;border-color:#f2f3f5;color:#111;font-weight:600}
+5916:.bt-rb b{font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+5917:.bt-rb b i{font-style:normal;font-weight:600;margin-left:4px}
+5933:.bt-after b{font-weight:600}.bt-after b.mk-up{color:#2fb98a}.bt-after b.mk-dn{color:#f0566a}
+5938:.bt-tech summary{display:flex;align-items:center;justify-content:space-between;list-style:none;cursor:pointer;padding:16px 4px;font-size:14.5px;font-weight:600;color:var(--gt)}
+5946:.bt-foot b{display:block;font-size:15px;font-weight:600;color:#fff}
+5948:.bt-foot span i{font-style:normal;font-weight:600}.bt-foot span i.mk-up{color:#2fb98a}.bt-foot span i.mk-dn{color:#f0566a}
+6046:.btg-card header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+6084:  .bt-leg{padding-bottom:0}
+6126:.bt-call .r b{font-size:12px;font-weight:600;color:var(--gt3)}
+6128:.bt-call.on .r0,.bt-call.s1 .r1,.bt-call.s2 .r1,.bt-call.s2 .r2{opacity:1;max-height:64px;padding-top:8px;padding-bottom:8px}
+6137:.bt-live.res>button b{font-size:19px;font-weight:600;color:#fff}
+6144:.bt-main>.bt-read h3{font-size:12.5px;font-weight:600;color:var(--gt3);margin:0 0 10px}
+6151:.bt-v1b b{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-right:4px}
+6243:.bt-verdict{padding-bottom:12px}
+6273:.bt-panel .ph b{color:#fff;font-weight:600}
+6281:.bt-panel .cell b{display:block;font-size:16px;font-weight:600;color:#fff;line-height:1.35;min-height:22px;letter-spacing:-.01em}
+6299:.bt[data-phase=ready] .bt-panel .cell{min-height:54px;padding-bottom:10px}
+6313:.bt-live>button b{font-size:19px;font-weight:600;color:#fff}
+6340:.bt-v2 b{font-size:13.5px;font-weight:600}
+6354:.bt-blk h4{font-size:12px;font-weight:600;color:var(--gt3);margin:0 0 9px}
+6356:.bt-dd-f .bt-dl dd i{font-style:normal;font-weight:600}
+6373:.bt-mo b{order:0;font-size:12px;font-weight:600;color:var(--gt2);margin-bottom:6px;display:block}
+6454:  .bt-mcta b{font-size:16px;font-weight:700}
+6458:  .bt[data-phase=result]{padding-bottom:150px}
+6540:.bt-fr b{font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+6542:.bt-fr .wy i{font-style:normal;font-weight:600}
+6557:.bt-rail .bt-read p:first-of-type{color:#fff;font-weight:500}
+6624:  .bt-sec-b header .bt-chips{margin-left:0;max-width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:2px}
+6634:.bt-sd{font-style:normal;font-size:11.5px;font-weight:700;color:#2fb98a;margin-left:4px}.bt-sd.s{color:#b08cf5}
+6638:.bt-panel .pj small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.02em;color:#c8f43c;margin:0 0 6px}
+6654:.bt-fr.v2 b{font-weight:600;color:#e9ebee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+6655:.bt-fr.v2 i{font-style:normal;font-weight:600}
+6660:.bt-s4{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:14px 0 6px;border:1px solid rgba(255,255,255,.09);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.015)}
+6661:.bt-s4.n4{grid-template-columns:repeat(4,minmax(0,1fr))}.bt-s4.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+6662:.bt-s4 button{display:flex;flex-direction:column;gap:5px;align-items:flex-start;padding:13px 16px 12px;border:0;border-left:1px solid rgba(255,255,255,.07);background:none;color:inherit;font:inherit;cursor:pointer;text-align:left;position:relative}
+6663:.bt-s4 button:first-child{border-left:0}
+6664:.bt-s4 small{font-size:12px;color:#8b9096}
+6665:.bt-s4 b{font-size:21px;font-weight:700;letter-spacing:-.01em;color:#cfd3d8;line-height:1.1}
+6666:.bt-s4 button:hover b{color:#fff}
+6667:.bt-s4 button[aria-selected=true]{background:rgba(255,255,255,.05)}
+6668:.bt-s4 button[aria-selected=true] b{color:#fff}
+6669:.bt-s4 button[aria-selected=true] small{color:#e9ebee}
+6670:.bt-s4 button[aria-selected=true]::after{content:'';position:absolute;left:16px;right:16px;bottom:0;height:2px;background:#f2f3f5;border-radius:2px}
+6671:.bt-s4 .k-skip[aria-selected=true]::after{background:#f0b840}.bt-s4 .k-buy[aria-selected=true]::after{background:#2fb98a}
+6673:.bt-ym b{font-weight:600;color:#aeb3ba}
+6676:.bt-row.v2 .bt-rb b{font-size:14px;font-weight:600;color:#f2f3f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+6681:.bt-row.v2 .ot i{font-style:normal;font-weight:600}
+6682:.bt-row.v2 .ot.m i{font-weight:500;opacity:.8}
+6687:.bt-jb h4{margin:0 0 6px;font-size:12px;font-weight:600;color:#c8f43c;letter-spacing:.02em}
+6697:.bt-read.v2 p.h{font-size:15px;font-weight:600;color:#fff}
+6701:  .bt-s4,.bt-s4.n4{grid-template-columns:repeat(2,minmax(0,1fr))}
+6702:  .bt-s4 button:nth-child(odd){border-left:0}.bt-s4 button:nth-child(n+3){border-top:1px solid rgba(255,255,255,.07)}
+6711:.bt-chain span{border:0!important;background:none!important;padding:0!important;font-size:12.5px;font-weight:600}
+6944:.bt-s4 button b i{font-style:normal;font-size:12px;font-weight:500;color:#8b9096;margin-left:2px}
+7119:.pl-exs button.on{border-color:#9a9a9a;background:#2c2c2c}
+7124:.pl-or{display:flex;align-items:center;gap:12px;margin:14px 0;color:#9a9a9a;font-size:12px}
+7142:.pl-saved .r{display:grid;grid-template-columns:20px minmax(0,1fr) 18px;gap:12px;align-items:center;padding:18px 20px;border-radius:19px;background:#2f2f2f;border:2px solid #9a9a9a}
+7212:.px-help{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:44px 2px 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px;color:#9a9a9a}
+7218:.px-exs button:hover{border-color:#9a9a9a;background:#2c2c2c}
+7220:.px-exs button small{font-size:12px;color:#9a9a9a}
+7241:.px-acct em{font-style:normal;font-size:13.5px;color:#9a9a9a;margin-left:auto}
+7251:.px-ch:hover{border-color:#9a9a9a;background:#2c2c2c}
+7338:.px-links.px-sm .pl-link{font-size:13px;color:#9a9a9a}
+7369:body.st-full .stg-nav small{margin:22px 12px 8px;font-size:14px;color:#9a9a9a;font-weight:400}
+7411:.stg-hr .a{color:#9a9a9a}
+7502:.skc-in i{font-style:normal;font-size:18px;color:#9a9a9a}
+7520:.skc-pills button.on{border-color:#9a9a9a;background:#2a2a2a;color:#fff}
+7533:.skc-cta:disabled{background:#4a4a4a;border-color:#4a4a4a;color:#9a9a9a;opacity:1}
+7534:.skc-foot{margin:12px 0 0;text-align:center;font-size:13px;color:#9a9a9a}
+7590:.skf-ret small{font-size:13px;color:#9a9a9a}
+7665:.ska .op.on{border-color:#9a9a9a;background:#2c2c2c}
+7676:.ska-note.done{color:#9a9a9a;background:transparent}
+7712:.ska .op span{font-size:14px;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+7736:/* 연구 기록: DESIGN_PROMPT. 검색 입력면 #212121 알약, 행 16px, 날짜 14px #9a9a9a, 호버 #2f2f2f */
+7738:.g-hist-search{height:52px;background:#212121;color:#9a9a9a;padding:0 20px;margin-bottom:24px}
+7741:.g-hist-search input::placeholder{color:#9a9a9a}
+7742:.g-hist-sec{font-size:14px;color:#9a9a9a;padding:0 12px 10px}
+7746:.g-hist-row .d{font-size:14px;color:#9a9a9a}
+7752:.mk-detail .tfbk-bc{font-size:14px;color:#9a9a9a;margin:4px 0 16px}
+7792:.mk-detail .mkd-pill[aria-pressed="true"],.mk-detail .mkd-pill.on{border:2px solid #9a9a9a;color:#fff;font-weight:400}
+7793:.mk-detail .mkd-pill i{font-style:normal;font-size:12px;color:#9a9a9a}
+7798:.mk-detail .mkd-hint{font-size:14px;color:#9a9a9a;margin-top:12px}
+7803:.mk-detail .cal-hd{font-size:14px;color:#9a9a9a;gap:6px;margin-bottom:8px}
+7815:.mk-detail .mkc-m.v2 .mkc-h time{font-size:14px;color:#9a9a9a}
+7825:.mk-detail .mko-n{font-size:14px;color:#9a9a9a;margin-top:6px}
+7826:.mk-detail .ss3-tbl th{font-size:14px;color:#9a9a9a;padding-bottom:14px;border-bottom-color:rgba(255,255,255,.1)}
+7829:.mk-detail .ss3-tbl td small{font-size:14px;color:#9a9a9a}
+7867:#bt-root .bt-hd .ti{font-size:16px;font-weight:400;color:#fff}
+7868:#bt-root .bt-hd .sb{font-size:14px;color:#9a9a9a}
+7870:#bt-root .bt-id-t h2{font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
+7873:#bt-root .bt-id-m b,#bt-root .bt-id-m span{font-size:14px;font-weight:400;color:#cdcdcd}
+7875:#bt-root .bt-cap-l small{font-size:14px;color:#9a9a9a}
+7876:#bt-root .bt-cap-l b.num{font-size:32px;font-weight:400;letter-spacing:-.01em}
+7877:#bt-root .bt-cap-l i.num{font-size:18px;font-weight:400}
+7879:#bt-root .bt-leg span i{font-weight:400}
+7883:#bt-root .bt-panel .cell{padding-top:18px;padding-bottom:18px}
+7886:#bt-root .bt-panel .cell b button{font-size:18px;font-weight:400}
+7888:#bt-root .bt-panel .pj small{font-size:14px;font-weight:400;color:#cdcdcd}
+7891:#bt-root .bt-box h3,#bt-root .bt-box summary h3{font-size:18px;font-weight:400;color:#fff;letter-spacing:0}
+7894:#bt-root .bt-seg button{height:40px;border-radius:999px;font-size:16px;font-weight:400;color:#cdcdcd}
+7895:#bt-root .bt-seg button.on,#bt-root .bt-seg button[aria-pressed="true"]{background:transparent;color:#fff;font-weight:400;box-shadow:inset 0 0 0 2px #9a9a9a}
+7896:#bt-root .bt-note{font-size:14px;color:#9a9a9a;line-height:1.6}
+7899:#bt-root .bt-dl .mkg{font-weight:400}
+7901:#bt-root .bt-verdict small{font-size:14px;color:#9a9a9a}
+7902:#bt-root .bt-verdict .bt-v1b b.num{font-size:32px;font-weight:400;letter-spacing:-.01em}
+7904:#bt-root .bt-verdict .bt-v2 b.num{font-size:14px;font-weight:400}
+7906:#bt-root .bt-k3 b.num{font-size:16px;font-weight:400}
+7907:#bt-root .bt-k3 em{font-size:14px;color:#9a9a9a}
+7908:#bt-root .bt-read h3{font-size:18px;font-weight:400;color:#fff}
+7910:#bt-root .bt-read p b,#bt-root .bt-read p strong{font-weight:400;color:#fff}
+7911:#bt-root .bt-read p.l{font-size:14px;color:#9a9a9a;font-weight:400}
+7913:#bt-root .bt-cta,.bt-mcta .bt-cta{height:48px;border-radius:999px;background:#fff;color:#000;border:0;font-size:16px;font-weight:500}
+7915:#bt-root .bt-sec{height:48px;border-radius:999px;background:transparent;color:#ececec;border:1px solid rgba(255,255,255,.14);font-size:16px;font-weight:400}
+7917:#bt-root .bt-rec,#bt-root .bt-rec span{font-size:14px;color:#9a9a9a}
+7919:#bt-root .bt-sec-b h3{font-size:18px;font-weight:400;color:#fff;letter-spacing:0}
+7920:#bt-root .bt-sort span,#bt-root .bt-sec-b > header > span{font-size:14px;color:#9a9a9a}
+7922:#bt-root .bt-s4 button{border-radius:20px}
+7923:#bt-root .bt-s4 small{font-size:14px;color:#cdcdcd}
+7924:#bt-root .bt-s4 b.num{font-size:24px;font-weight:400}
+7925:#bt-root .bt-s4 b.num i{font-size:14px;font-weight:400}
+7926:#bt-root .bt-ym b{font-size:14px;font-weight:400;color:#cdcdcd}
+7928:#bt-root .bt-row.v2 .bt-rb{padding-top:16px;padding-bottom:16px}
+7929:#bt-root .bt-row .bt-rb time{font-size:14px;color:#9a9a9a}
+7930:#bt-root .bt-row .bt-rb > b{font-size:16px;font-weight:400;color:#fff}
+7932:#bt-root .bt-row .bt-rb .ot small{font-size:14px;color:#9a9a9a}
+7933:#bt-root .bt-row .bt-rb .ot i{font-size:16px;font-weight:400}
+7935:#bt-root .bt-more i{font-size:14px;color:#9a9a9a}
+7937:#bt-root .bt-chips button{height:36px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:400}
+7938:#bt-root .bt-chips button.on,#bt-root .bt-chips button[aria-pressed="true"]{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px #9a9a9a}
+7939:#bt-root .bt-th span{font-size:14px;color:#9a9a9a}
+7940:#bt-root .bt-tr .bt-rb > b{font-size:16px;font-weight:400}
+7941:#bt-root .bt-sd,#bt-root .bt-sd.s{font-size:14px;font-weight:400;color:#cdcdcd}
+7945:#bt-root .bt-mo b.num{font-size:14px;font-weight:400}
+7946:#bt-root .bt-mo em{font-size:14px;color:#9a9a9a}
+7950:#bt-root .bt-tech summary{font-size:18px;font-weight:400;color:#fff}
+7973:#bt-root b,#bt-root strong,#bt-root .bt-id-m b,#bt-root .bt-id-t p,#bt-root .bt-dl dd,#bt-root .wy,#bt-root .bt-tr .bt-rb span.r{font-weight:400}
+7974:#bt-root .bt-dot,#bt-root .bt-dot.done{background:#9a9a9a;animation:none}
+7978:#bt-root .bt-dt,#bt-root .bt-dt.k-buy,#bt-root .bt-dt.k-buy.s,#bt-root .bt-dt.k-hold,#bt-root .bt-dt.k-pick{background:#9a9a9a}
+7979:#bt-root .bt-dt.k-sell{background:transparent;box-shadow:inset 0 0 0 1.6px #9a9a9a}
+7980:#bt-root .bt-dt.k-skip{box-shadow:inset 0 0 0 1.6px #9a9a9a}
+7981:#bt-root .bt-s4 button[aria-selected=true]{background:transparent;box-shadow:inset 0 0 0 2px #9a9a9a;border-radius:20px}
+7982:#bt-root .bt-s4 button[aria-selected=true]::after{display:none}
+7987:#bt-root .bt-leg .b::before{border-top-color:#9a9a9a}
+7988:#bt-root .bt-chart path[stroke="rgba(255,255,255,.3)"]{stroke:#9a9a9a}
+7991:#bt-root .bt-chart line[stroke="#f0566a"],#bt-root .bt-chart rect[fill="#f0566a"],#bt-root .bt-chart line[stroke="#f58a98"],#bt-root .bt-chart rect[fill="#f58a98"]{stroke:#9a9a9a;fill:#9a9a9a}
+7992:@media (max-width:768px){ #bt-root{padding-bottom:120px} }
+7994:#bt-root .bt-leg .m svg path{fill:#9a9a9a}
+7998:#bt-root .bt-chart path[fill="#2fb98a"],#bt-root .bt-chart path[fill="#b08cf5"],#bt-root .bt-chart path[fill="#f0566a"]{fill:#9a9a9a}
+7999:#bt-root .bt-chart path[stroke="#b08cf5"]{stroke:#9a9a9a}
+13658:    var rows4=[];
+13663:        rows4.push('<tr onclick="tfTmSelect(&quot;'+s.key+'&quot;);TF_TM.tab=&quot;done&quot;;tfTmBrain();tfTmTradeDlg(&quot;'+s.key+'&quot;,'+tr.entry+')" style="cursor:pointer"><td>'+tfTmCellEx(s)+'</td><td>'+tfTmCellSt(s)+'</td><td class="num">'+gEsc(s.sym)+'</td><td><span class="sd lg">LONG</span></td>'
+13669:    return wrap('<th>거래소</th><th>전략</th><th>심볼</th><th>방향</th><th class="r">진입</th><th class="r">청산</th><th class="r">보유</th><th class="r">수수료</th><th class="r">실현 손익</th>',rows4,empty('종료된 포지션이 없습니다','완결된 거래가 생기면 판단 기록과 연결됩니다.'));
+21551:    +'<text id="bt-ddt" x="0" y="'+(base-8)+'" text-anchor="middle" font-size="11.5" font-weight="600" fill="#f58a98"></text></g>'
+22816:    +'<div class="bt-s4 n'+(S4.length+1)+'" role="tablist" aria-label="판단 종류">'+S4.map(function(c){ return '<button type="button" role="tab" aria-selected="'+(f===c[0])+'" class="k-'+c[0]+'" onclick="btFilt(\''+c[0]+'\')"><small>'+c[1]+'</small><b class="num">'+c[2]+'<i>'+(c[0]==='opp'&&BT.s.kind==='agent'?'일':c[0]==='skip'&&BT.s.kind==='agent'?'일':c[0]==='opp'?'번':'건')+'</i></b></button>'; }).join('')
+23980:  [/^([0-9,]+)일을 다시 돌렸습니다\. 숫자나 그래프의 표시를 누르면 근거가 열립니다\.$/,'$1일간의 결과입니다. 숫자나 차트 표시를 누르면 판단 근거가 열립니다.'],
+23985:  [/^(?:현물로 )?그냥 들고 있었다면\s*([+-]?[0-9.,]+%)$/,'현물 보유 최대 하락률 $1'],
+23996:  [/^가장 유리했던 가격에서 기준만큼 되돌렸습니다$/,'가격이 가장 유리했던 지점에서 청산 기준만큼 되돌아와 청산했습니다.'],
+23999:  [/^온전한 (\d+)개월 중 (\d+)개월이 올랐습니다$/,'한 달 전체를 계산한 $1개월 중 $2개월에 수익이 났습니다.'],
+24020:  /* 결과 카드: 현물 보유 손익, 현물 보유 최대 하락률 값은 계산 결과에서 직접 */
+24022:  var em=root.querySelector('.bt-k3 em.num'); if(em&&window.BT&&BT.R&&isFinite(BT.R.benchMdd)&&!/[0-9]%/.test(em.textContent)) em.textContent='현물 보유 최대 하락률 '+BT.R.benchMdd.toFixed(1)+'%';
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const f=require('fs'); for(const p of ['DECISIONS.md','../DECISIONS.md'])if(f.existsSync(p))console.log(f.readFileSync(p,'utf8')); console.log(f.readdirSync('s4/r'));\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 182ms:
+[
+  'B1-before-m.png',
+  'B1-before.png',
+  'B2-result-m.png',
+  'B2-result.png',
+  'B3-result-full-m.png',
+  'B3-result-full.png'
+]
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const f=require('fs'); const a=f.readFileSync('../../../index.html','utf8').split('\\n'); for(const [s,e] of [[7970,8002],[24013,24032]])console.log(a.slice(s-1,e).map((t,i)=>(s+i)+':'+t).join('\\n'));for(const n of f.readdirSync('s4/r')){const b=f.readFileSync('s4/r/'+n);console.log(n,b.readUInt32BE(16),b.readUInt32BE(20))}\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\bt
+ succeeded in 234ms:
+7970:#bt-root .bt-mo b{display:block;font-size:12px}
+7971:@media (max-width:768px){ #bt-root .bt-mo{flex:0 0 calc(100% / 6 - 6px)} }
+7972:/* Codex bt/s3 필수 5건: 굵기 400, 상태 색은 숫자에만, 선택은 2px 회색 테두리, 더 보기는 밑줄 링크, 범례 색 */
+7973:#bt-root b,#bt-root strong,#bt-root .bt-id-m b,#bt-root .bt-id-t p,#bt-root .bt-dl dd,#bt-root .wy,#bt-root .bt-tr .bt-rb span.r{font-weight:400}
+7974:#bt-root .bt-dot,#bt-root .bt-dot.done{background:#9a9a9a;animation:none}
+7975:#bt-root .bt-rec svg{color:#cdcdcd}
+7976:#bt-root .bt-v2 b.num.mk-up,#bt-root .bt-v2 b.num.mk-dn{color:#cdcdcd}
+7977:#bt-root .bt-panel .k-loss,#bt-root .bt-panel .k-win{color:#fff}
+7978:#bt-root .bt-dt,#bt-root .bt-dt.k-buy,#bt-root .bt-dt.k-buy.s,#bt-root .bt-dt.k-hold,#bt-root .bt-dt.k-pick{background:#9a9a9a}
+7979:#bt-root .bt-dt.k-sell{background:transparent;box-shadow:inset 0 0 0 1.6px #9a9a9a}
+7980:#bt-root .bt-dt.k-skip{box-shadow:inset 0 0 0 1.6px #9a9a9a}
+7981:#bt-root .bt-s4 button[aria-selected=true]{background:transparent;box-shadow:inset 0 0 0 2px #9a9a9a;border-radius:20px}
+7982:#bt-root .bt-s4 button[aria-selected=true]::after{display:none}
+7983:#bt-root .bt-terms{border-style:solid}
+7984:#bt-root .bt-more{height:auto;padding:0;border:0;background:none;font-size:14px;color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+7985:#bt-root .bt-more i{font-size:14px;color:#cdcdcd}
+7986:#bt-root .bt-leg .a::before{background:#ececec;border-color:#ececec}
+7987:#bt-root .bt-leg .b::before{border-top-color:#9a9a9a}
+7988:#bt-root .bt-chart path[stroke="rgba(255,255,255,.3)"]{stroke:#9a9a9a}
+7989:#bt-root .bt-chart text{font-size:13px}
+7990:#bt-root .bt-chart text[fill="#f58a98"]{fill:#cdcdcd}
+7991:#bt-root .bt-chart line[stroke="#f0566a"],#bt-root .bt-chart rect[fill="#f0566a"],#bt-root .bt-chart line[stroke="#f58a98"],#bt-root .bt-chart rect[fill="#f58a98"]{stroke:#9a9a9a;fill:#9a9a9a}
+7992:@media (max-width:768px){ #bt-root{padding-bottom:120px} }
+7993:#bt-root .bt-leg span::before{border-top-color:#ececec}
+7994:#bt-root .bt-leg .m svg path{fill:#9a9a9a}
+7995:/* 판단 기록 행: 날짜 한 줄, 차트 표식은 모양으로만 구분 */
+7996:#bt-root .bt-row.v2 .bt-rb{grid-template-columns:112px 54px minmax(120px,190px) minmax(0,1fr) 18px}
+7997:#bt-root .bt-rb time{white-space:nowrap}
+7998:#bt-root .bt-chart path[fill="#2fb98a"],#bt-root .bt-chart path[fill="#b08cf5"],#bt-root .bt-chart path[fill="#f0566a"]{fill:#9a9a9a}
+7999:#bt-root .bt-chart path[stroke="#b08cf5"]{stroke:#9a9a9a}
+8000:@media (max-width:768px){ #bt-root .bt-row.v2 .bt-rb{grid-template-columns:auto auto minmax(0,1fr) 18px} }
+8001:/*BT_CSS_END*/
+8002:</style>
+24013:  if(!root) return;
+24014:  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), n, L=[];
+24015:  while((n=w.nextNode())){ var pe=n.parentElement; if(!pe||/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(pe.tagName)) continue; L.push(n); }
+24016:  L.forEach(function(x){ var v=x.nodeValue, nv=skbText(v); var k=v.trim();
+24017:    /* 정확히 일치 교체는 라벨 자리에서만: 머리, 셀 라벨, 범례, 표 머리, 규칙 dt, 요약 제목, 읽는 중 */
+24018:    if(SKB_EXACT[k]){ var pe=x.parentElement, ok=pe&&pe.closest('.bt-leg,.bt-panel .cell small,.bt-sec-b header h3,.bt-sec-b > header > h3,.bt-th,.bt-dl dt,.bt-box h3,.bt-box summary,.bt-read p.l,.bt-id-m,.bt-chips,.bt-verdict,.bt-k3,.bt-cta,.bt-sec,.bt-tech summary'); if(!ok) nv=v; }
+24019:    if(nv!==v) x.nodeValue=nv; });
+24020:  /* 결과 카드: 현물 보유 손익, 현물 보유 최대 하락률 값은 계산 결과에서 직접 */
+24021:  var v2=root.querySelector('.bt-v2 > span'); if(v2&&v2.firstChild&&v2.firstChild.nodeType===3&&/^현물 보유 $/.test(v2.firstChild.nodeValue)) v2.firstChild.nodeValue='현물 보유 손익 ';
+24022:  var em=root.querySelector('.bt-k3 em.num'); if(em&&window.BT&&BT.R&&isFinite(BT.R.benchMdd)&&!/[0-9]%/.test(em.textContent)) em.textContent='현물 보유 최대 하락률 '+BT.R.benchMdd.toFixed(1)+'%';
+24023:  /* 금액 선택지 500 → $500 (em USD 는 CSS로 숨김) */
+24024:  [].forEach.call(root.querySelectorAll('.bt-dl dt'),function(d){ var t=d.textContent.trim(); if(SKB_DT[t]) d.textContent=SKB_DT[t]; });
+24025:  [].forEach.call(root.querySelectorAll('.bt-f button'),function(b){ var t=b.textContent.trim(); if(/^[0-9][0-9,]*$/.test(t)) b.textContent='$'+t; });
+24026:}
+24027:(function(){
+24028:  var busy=false, mo=null;
+24029:  function run(){ var r=document.getElementById('bt-root'); if(!r) return; busy=true; try{ skbApply(r); }finally{ busy=false; } }
+24030:  function watch(){ var c=document.getElementById('g-content'); if(!c||mo) return;
+24031:    mo=new MutationObserver(function(){ if(busy) return; if(document.getElementById('bt-root')) run(); });
+24032:    mo.observe(c,{childList:true,subtree:true,characterData:true}); }
+B1-before-m.png 390 900
+B1-before.png 1440 900
+B2-result-m.png 390 900
+B2-result.png 1440 900
+B3-result-full-m.png 390 6000
+B3-result-full.png 1440 3600
+
+codex
+필수 수정 5건과 카피 8건은 반영됐습니다. 다만 이전 검수의 배포 조건이었던 **모바일 최하단 가림 확인은 아직 완료되지 않았습니다.** 파일은 수정하지 않았습니다.
+
+| s3 필수 항목 | 해결 여부 | 확인 근거 |
+|---|---|---|
+| 1. 본문·행·숫자 굵기 | 해결 | 설명, 판단 문장, 결과 행, 보유 기간의 400 지정 확인 |
+| 2. 상태 색 제거 | 해결 | 완료 점·확인 아이콘·비교 문구·손실 라벨·기록 점을 무채색으로 변경 |
+| 3. 선택 표시·카드 윤곽 | 해결 | 판단 기록 선택에 2px 회색 테두리, 계산 기준에 실선 적용 |
+| 4. 더 보기 | 해결 | 알약 테두리를 없애고 밑줄 링크로 정리 |
+| 5. 범례·비교선 | 해결 | 전략선 견본과 비교선의 무채색 처리, 점선 구분 유지 |
+
+| 카피 항목 | 해결 여부 | 현재 화면 |
+|---|---|---|
+| 결과 안내 | 해결 | “1,266일간의 결과입니다…판단 근거가 열립니다.” |
+| 큰 손익의 기준 | 해결 | “전체 기간, 시작 금액 $1,000 기준 손익” |
+| 현물 보유 손익 | 해결 | “현물 보유 손익 +$1,395” |
+| 현물 보유 최대 하락률 | 해결 | “현물 보유 최대 하락률 -58.4%”; 계산 결과 연결 확인 |
+| 판단 기록 표시 수 | 해결 | “27건 중 12건 표시” |
+| 월별 수익 설명 | 해결 | “한 달 전체를 계산한 40개월 중 22개월에 수익이 났습니다.” |
+| 목록 날짜 | 해결 | “2026. 8. 10.” 형식 |
+| 되돌림 청산 설명 | 해결 | “가격이 가장 유리했던 지점에서 청산 기준만큼 되돌아와 청산했습니다.” |
+
+배포를 막는 미확인 항목은 **모바일 최하단 검증 한 건**입니다. 하단 여백 120px은 코드에 반영됐지만, 모바일 전체 캡처는 높이 6,000px에서 월별 수익률 도중 끝납니다. 따라서 접힌 ‘자세한 지표’와 마지막 콘텐츠가 고정 실행 단추 위로 완전히 올라오는지는 확인할 수 없습니다. 실제 겹침이 발견됐다는 뜻은 아니며, 해당 위치의 화면 확인이 필요합니다.
+
+**판정: 수정 내용은 통과지만, 모바일 최하단 콘텐츠가 고정 단추에 가리지 않는 것을 확인할 때까지 배포는 보류합니다.**
+tokens used
+34,737
+필수 수정 5건과 카피 8건은 반영됐습니다. 다만 이전 검수의 배포 조건이었던 **모바일 최하단 가림 확인은 아직 완료되지 않았습니다.** 파일은 수정하지 않았습니다.
+
+| s3 필수 항목 | 해결 여부 | 확인 근거 |
+|---|---|---|
+| 1. 본문·행·숫자 굵기 | 해결 | 설명, 판단 문장, 결과 행, 보유 기간의 400 지정 확인 |
+| 2. 상태 색 제거 | 해결 | 완료 점·확인 아이콘·비교 문구·손실 라벨·기록 점을 무채색으로 변경 |
+| 3. 선택 표시·카드 윤곽 | 해결 | 판단 기록 선택에 2px 회색 테두리, 계산 기준에 실선 적용 |
+| 4. 더 보기 | 해결 | 알약 테두리를 없애고 밑줄 링크로 정리 |
+| 5. 범례·비교선 | 해결 | 전략선 견본과 비교선의 무채색 처리, 점선 구분 유지 |
+
+| 카피 항목 | 해결 여부 | 현재 화면 |
+|---|---|---|
+| 결과 안내 | 해결 | “1,266일간의 결과입니다…판단 근거가 열립니다.” |
+| 큰 손익의 기준 | 해결 | “전체 기간, 시작 금액 $1,000 기준 손익” |
+| 현물 보유 손익 | 해결 | “현물 보유 손익 +$1,395” |
+| 현물 보유 최대 하락률 | 해결 | “현물 보유 최대 하락률 -58.4%”; 계산 결과 연결 확인 |
+| 판단 기록 표시 수 | 해결 | “27건 중 12건 표시” |
+| 월별 수익 설명 | 해결 | “한 달 전체를 계산한 40개월 중 22개월에 수익이 났습니다.” |
+| 목록 날짜 | 해결 | “2026. 8. 10.” 형식 |
+| 되돌림 청산 설명 | 해결 | “가격이 가장 유리했던 지점에서 청산 기준만큼 되돌아와 청산했습니다.” |
+
+배포를 막는 미확인 항목은 **모바일 최하단 검증 한 건**입니다. 하단 여백 120px은 코드에 반영됐지만, 모바일 전체 캡처는 높이 6,000px에서 월별 수익률 도중 끝납니다. 따라서 접힌 ‘자세한 지표’와 마지막 콘텐츠가 고정 실행 단추 위로 완전히 올라오는지는 확인할 수 없습니다. 실제 겹침이 발견됐다는 뜻은 아니며, 해당 위치의 화면 확인이 필요합니다.
+
+**판정: 수정 내용은 통과지만, 모바일 최하단 콘텐츠가 고정 단추에 가리지 않는 것을 확인할 때까지 배포는 보류합니다.**
+exit=0
+unchanged

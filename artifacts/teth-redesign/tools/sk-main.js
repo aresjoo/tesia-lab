@@ -68,3 +68,6 @@ function skSym(t){ return String(t==null?'':t).replace(/비트코인|이더리�
   if(typeof MK_CAT!=='undefined') MK_CAT.forEach(function(s){ if(s&&s.name) s.name=skSym(s.name); });
   var mt=mkTitle; mkTitle=function(){ return skSym(mt.apply(this,arguments)); };
 })();
+/* 연구 기록 문구 */
+(function(){ var h0=gHistory; gHistory=function(){ var r=h0.apply(this,arguments); try{ var q=document.getElementById('g-hist-q'); if(q){ q.placeholder='연구 기록 검색'; q.setAttribute('aria-label','연구 기록 검색'); } }catch(e){} return r; };
+  var l0=gHistList; gHistList=function(){ var r=l0.apply(this,arguments); try{ var n=document.querySelector('#g-hist-list .g-note'); if(n&&/아직 연구 기록이 없습니다/.test(n.textContent)) n.textContent='아직 연구 기록이 없습니다. 새 전략을 만들면 여기에 쌓입니다.'; var m=document.getElementById('g-hist-more'); if(m) m.textContent='아래로 내리면 더 불러옵니다'; }catch(e){} return r; }; })();
