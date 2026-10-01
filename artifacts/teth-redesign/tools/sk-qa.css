@@ -16,3 +16,12 @@
 #qa2-panel .qa2-it:hover{background:#2f2f2f;color:#fff}
 #qa2-panel .qa2-old{margin-top:8px;width:100%;border:0;background:none;color:#9a9a9a;font:inherit;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
 @media (max-width:860px){ #qa2-panel{top:auto;bottom:250px;right:12px;left:12px;width:auto;max-height:55vh} }
+
+/* 알림 단추는 모든 화면에서 없앤다(파운더). 비운 오른쪽 위 자리에 QA 단추 */
+#nf-util{display:none!important}
+/* QA 단추: 잘 보이게 흰 알약, 상담 단추 바로 위(로그인 전 머리 단추와 겹치지 않게) */
+#tf-devbtn{top:auto!important;bottom:96px!important;right:22px!important;height:40px;padding:0 18px;border-radius:999px;border:0;background:#fff;color:#000;font-size:14px;font-weight:600;letter-spacing:0;box-shadow:0 4px 16px rgba(0,0,0,.5);backdrop-filter:none}
+#tf-devbtn:hover{background:#e6e6e6;color:#000}
+#tf-devbtn.on{background:#2f2f2f;color:#fff}
+#qa2-panel{top:auto!important;bottom:148px!important;max-height:calc(100vh - 200px)!important}
+@media (max-width:860px){ #tf-devbtn{bottom:212px!important;right:14px!important} #qa2-panel{bottom:262px!important;max-height:50vh!important} }

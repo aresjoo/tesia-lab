@@ -1,0 +1,173 @@
+/* 상세 머리글 아래: 대기 금액과, 내 수익률과 전략 수익률이 벌어진 이유 */
+function cpMixNote(c2,d){
+  var h='';
+  if(c2.status!=='active') return h; /* 끝낸 전략 복사에는 기다리는 돈이 없다 */
+  if(d.waiting>0.005) h+='<div class="cpx-sumline">투자 중 <b class="num">'+cpUsd(d.invested)+'</b>, 다음 진입 대기 <b class="num">'+cpUsd(d.waiting)+'</b>. 대기 중인 금액은 원본이 새로 진입할 때 함께 들어갑니다.</div>';
+  var gap=(d.myPct-d.pnlPct)*100;
+  if(d.grossIn>0&&Math.abs(gap)>=5) h+=cpAiHtml({w:0,t:'내 수익률('+mkPct0(d.myPct*100,1)+')과 같은 기간 전략 수익률('+mkPct0(d.pnlPct*100,1)+')이 다릅니다. '+(d.waiting>0.05*Math.max(1,d.value)?'넣은 돈 중 '+cpUsd(d.waiting,0)+'가 아직 다음 진입을 기다리고 있어서 전략과 다릅니다.':gap<0?'기준가가 높을 때 추가한 금액이 있어서 전략보다 낮습니다.':'기준가가 낮을 때 추가한 금액이 있어서 전략보다 높습니다.')+' 전략 수익률은 넣고 뺀 돈과 무관합니다.'});
+  return h;
+}
+function cpDetailView(cid,tab){
+  var c2=cpFind(cid);
+  if(!c2){ toast('전략 복사 기록을 찾을 수 없습니다'); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return; }
+  tfSS3DlgClose(true);
+  TF_ONSHARE=true; TF_ONSTRAT=false; window.TF_ONNF=false;
+  G.cur=null; G.mode='tfcpx'; G.tabs=[]; G.activeTab=null;
+  document.body.classList.remove('kb-open'); gComposer(false);
+  $('g-aux').style.display='none'; gSideRender(); gTabsRender();
+  gChead('전략 복사 상세','',null);
+  var d=cpCalc(c2), m=cpMeta(c2.nick), ne=tfSSNe(c2.nick), on=c2.status==='active';
+  var TABS=[['pos','포지션'],['hist','청산 이력']].concat(m.share>0?[['share','수익 분배']]:[]).concat([['bal','자금 이동'],['tx','거래 내역']]); if(tab==='share'&&!(m.share>0)) tab='pos';
+  var body= tab==='pos'?cpxPos(c2,d):tab==='hist'?cpxHist(c2,d):tab==='share'?cpxShare(c2,d,m):tab==='bal'?cpxBal(c2,d):cpxTx(c2,d);
+  var K=function(lb,v,clr,tip){ return '<div class="cpp-kpi"><small'+(tip?' title="'+tip+'"':'')+'>'+lb+'</small><b class="num'+(clr?(v>=0?' u':' d'):'')+'">'+cpUsd(v)+'</b></div>'; };
+  TF_RENDERING=true; document.body.classList.remove('tf-route');
+  gContent('<div class="tf-page tfbk ss3 cpp cpx">'
+    +'<button type="button" class="ss3-back" onclick="TF_ONSHARE=false;try{history.replaceState(null,\'\',location.pathname+location.search);}catch(e){}tfShareHub(\'follow\')">← 복사한 전략</button>'
+    +'<div class="cpp-head"><div class="cpp-ava" aria-hidden="true">'+gEsc(c2.nick.slice(0,1))+'</div>'
+    +'<div class="cpp-idm"><div class="cpp-nick"><button type="button" class="nm" style="font-size:19px" onclick="cpProfileGo(\''+ne+'\')">'+gEsc(c2.nick)+'</button></div>'
+    +'<div class="cpp-meta num"><span>비율대로 복사</span>'+(m.share>0?'<span title="Profit share ratio">수익 분배 '+Math.round(m.share*100)+'%</span>':'<span>이용료 없음</span>')
+    +'<span>'+mkDT(c2.at)+' 시작</span>'
+    +'<span class="'+(on?'':'')+'">'+(on?(c2.winding?'정리 대기':'복사한 전략'):'중단됨')+'</span></div></div>'
+    +'<div class="cpp-acts">'
+    +(on&&c2.winding?mkWindActs(cid):on?'<button type="button" class="obtn" onclick="cpAdjDlg(\''+cid+'\')">예산 조정</button>'
+      +'<button type="button" class="obtn" onclick="cpEditSheet(\''+cid+'\')">설정</button>'
+      +'<button type="button" class="ss3-dbtn" onclick="cpCloseDlg(\''+cid+'\')">중단</button>':'')
+    +'</div></div>'
+    +(d.missing?'<div class="warn3" style="margin:0 0 12px">이전 목록의 전략이라 지금은 기록을 불러올 수 없습니다. 넣은 금액은 그대로 보관됩니다.</div>':'')
+    +(d.missing?'<div class="warn3" style="margin:0 0 12px">이전 목록의 전략이라 지금은 기록을 불러올 수 없습니다. 넣은 금액은 그대로 보관됩니다.</div>':'')
+    +(d.missing?'<div class="warn3" style="margin:0 0 12px">이전 목록의 전략이라 지금은 기록을 불러올 수 없습니다. 넣은 금액은 그대로 보관됩니다.</div>':'')
+    +'<div class="mk-acct"><b>내 전략 복사 계정</b><span>내 예산 기준 손익입니다. 원본 전략의 검증 수치와는 다릅니다</span></div>'
+    +'<div class="cpd-sum num">'
+    +K('평가 금액',d.est)+'<div class="cpp-kpi"><small>내 수익률</small><b class="num'+(d.myPct>=0?' u':' d')+'">'+mkPct0(d.myPct*100,1)+'</b><small style="margin:4px 0 0">같은 기간 전략 '+mkPct0(d.pnlPct*100,1)+'</small></div>'
+    +K('가용',d.avail)+K(m.share>0?'순손익 (분배 차감 후)':'순손익',d.net,1)
+    +K('미실현 손익',d.unreal,1)+K('실현 손익',d.realized,1)+(m.share>0?K('수익 분배 지급',d.share,0,'Profit share amount'):'')
+    +'</div>'
+    +cpMixNote(c2,d)
+    +'<div class="tfbk-filters cpp-tabs">'+TABS.map(function(t2){ return '<button type="button" class="fp'+(tab===t2[0]?' on':'')+'" aria-pressed="'+(tab===t2[0])+'" onclick="cpDetailGo(\''+cid+'\',\''+t2[0]+'\')">'+t2[1]+'</button>'; }).join('')+'</div>'
+    +body
+    +'<div class="cpp-foot">모든 금액은 USD 기준입니다</div>'
+    +'</div>');
+  TF_RENDERING=false;
+  var sc=$('g-scroll'); if(sc) sc.scrollTop=0;
+}
+/* 설정 — 데모 범위: 페어 변경만 즉시, 모드/금액은 종료 후 재시작 안내 (상황 설명형) */
+function cpEditSheet(cid){
+  var c2=cpFind(cid); if(!c2) return;
+  tfSS3Dlg('전략 복사 설정, '+c2.nick,
+    '<div class="ntc">따라갈 페어: <b>'+c2.pairs.map(gEsc).join(', ')+'</b><br>최대 손실 '+((c2.adv&&c2.adv.maxLoss)||-20)+'%. 최대 손실 변경은 중단한 뒤 다시 시작할 때 고를 수 있습니다.<br>예산은 예산 조정에서 언제든 바꿀 수 있습니다.</div>'
+    +'<div class="acts3" style="margin-top:16px"><button type="button" class="obtn" onclick="tfSS3DlgClose()">닫기</button>'
+    +'<button type="button" class="wbtn" onclick="tfSS3DlgClose();cpAdjDlg(\''+cid+'\')">예산 조정 열기</button></div>');
+}
+/* 포지션 탭 — 오픈 포지션 파생 + 수동 정리 (성역: 크레딧과 무관하게 항상 가능) */
+/* 청산 이력 탭 */
+function cpxHist(c2,d){
+  var s2=tfSSFind(c2.nick);
+  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.endI!=null?c2.endI:(c2.status==='closed'&&c2.flatI!=null?c2.flatI:1e15);
+  var tr=(s2?s2.r.trades||[]:[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=endI; }).slice(-30).reverse();
+  if(!tr.length) return '<div class="cpp-empty"><b>아직 청산된 전략 복사 거래가 없습니다</b>첫 거래가 청산되면 진입가, 청산가, 손익이 여기에 쌓입니다.</div>';
+  var wins=tr.filter(function(x){return x.pnl>0;}).length;
+  var pu=function(x){ var a=d.at(x.entry); return x.pnl*a.invested*(x.w!=null?x.w:1); }; /* 그 거래에 들어간 내 금액 기준 */
+  var sum=tr.reduce(function(a,x){return a+pu(x);},0);
+  var KIND={sl:'손절 규칙',tp:'목표가 도달',time:'기간 청산'};
+  return '<div class="cpx-sumline">청산 '+tr.length+'회, 그중 '+wins+'회 수익. 합계 <b class="num" style="color:'+(sum>=0?'#56c486':'#ee766a')+'">'+cpUsd(sum)+'</b>.</div>'
+    +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
+    +'<th>페어</th><th>방향</th><th>진입가</th><th>청산가</th><th>손익</th><th>수익률</th><th>청산 사유</th><th>청산 시각</th>'
+    +'</tr></thead><tbody>'
+    +tr.map(function(x){
+      var pnlU=pu(x), up=x.pnl>=0;
+      var PXB=mkPx(s2&&s2.p&&s2.p.px), eP=x.ep!=null?x.ep:(PXB[x.entry]||0), xP=x.xp!=null?x.xp:(PXB[x.exit]||eP);
+      var dt=idxToDate(x.exit!=null?x.exit:x.entry);
+      return '<tr><td>'+gEsc(c2.pairs[0])+'</td><td class="u">롱</td>'
+        +'<td class="num">'+mkPxFmt(eP)+'</td><td class="num">'+mkPxFmt(xP)+'</td>'
+        +'<td class="num '+(up?'u':'d')+'">'+cpUsd(pnlU)+'</td>'
+        +'<td class="num '+(up?'u':'d')+'">'+(up?'+':'')+(x.pnl*100).toFixed(1)+'%</td>'
+        +'<td>'+(KIND[x.kind]||'규칙 청산')+'</td>'
+        +'<td class="num">'+(dt.getMonth()+1)+'. '+dt.getDate()+'.</td></tr>';
+    }).join('')
+    +'</tbody></table></div>';
+}
+/* 수익 분배 탭 */
+function cpxShare(c2,d,m){
+  if(d.realized<=0&&d.share<=0)
+    return '<div class="cpp-empty"><b>아직 지급된 수익 분배가 없습니다</b>'
+      +'실현 수익이 나면 그중 '+Math.round(m.share*100)+'%가 전략 이용료로 나가고 내역이 여기에 남습니다.'
+      +'<span class="nx">미실현 수익에는 분배가 붙지 않습니다. 손실에는 당연히 없습니다.</span></div>';
+  return cpAiHtml({w:0,t:'분배는 실현 수익에서만 차감됩니다. 지금까지 실현 수익 '+cpUsd(Math.max(0,d.realized))+' 중 '+Math.round(m.share*100)+'%가 분배됐습니다.'})
+    +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
+    +'<th>기간</th><th>실현 손익</th><th>정산 완료</th><th>정산 대기</th><th title="Profit share ratio">분배율</th><th>분배 금액</th>'
+    +'</tr></thead><tbody><tr>'
+    +'<td>'+new Date(c2.at).toLocaleDateString('ko-KR')+' ~ 현재</td>'
+    +'<td class="num '+(d.realized>=0?'u':'d')+'">'+cpUsd(d.realized)+'</td>'
+    +'<td class="num">'+cpUsd(d.share)+'</td><td class="num">$0.00</td>'
+    +'<td class="num">'+Math.round(m.share*100)+'%</td>'
+    +'<td class="num">'+cpUsd(d.share)+'</td>'
+    +'</tr></tbody></table></div>';
+}
+/* 자금 이동 탭 — 원장 그대로 + 반복 입금 감지 (핵심 원칙 1) */
+function cpxBal(c2,d){
+  var rows=c2.ledger.map(function(e,ix){ return {e:e,ix:ix}; }).reverse();
+  var adds=c2.ledger.filter(function(e){return e.type==='add';}).length;
+  var warn=(adds>=3&&d.myPct<0)?cpAiHtml({w:1,t:'손실 구간에서 입금이 '+adds+'회 반복됐습니다. 반복 충전은 수익률을 실제보다 부풀려 보이게 합니다. 금액을 늘리기 전에 전략 자체를 다시 점검해보십시오.'}):'';
+  /* 반영 시점: 그 입금이 좌수로 바뀐 봉. 아직이면 다음 진입 대기 (D34) */
+  var when=function(r){ var l=(d.lots||[])[r.ix]; if(r.e.type!=='add'||!l) return '-'; if(l.inv==null||(d.stopI!=null&&l.inv>d.stopI)) return c2.status==='active'&&d.stopI==null?'다음 진입 대기':'투입 전 회수'; if(l.inv===l.i) return '바로'; return mkMD(l.inv)+' 진입 때'; };
+  return warn
+    +'<div class="cpx-sumline">예산 추가와 회수 '+rows.length+'건 (최근 180일).'+(c2.status==='active'&&d.waiting>0.005?' 다음 진입을 기다리는 금액 <b class="num">'+cpUsd(d.waiting)+'</b>.':'')+'</div>'
+    +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
+    +'<th>시각</th><th>유형</th><th>금액</th><th>자산</th><th>방향</th><th>반영</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(r){
+      var e=r.e, add=e.type==='add';
+      return '<tr><td class="num">'+mkDT(e.at)+'</td>'
+        +'<td>'+(add?'추가':'회수')+'</td><td class="num '+(add?'u':'')+'">'+(add?'+':'-')+cpUsd(e.amt)+'</td>'
+        +'<td>USD</td><td>'+(add?'예산 → 전략 복사':'전략 복사 → 예산')+'</td><td>'+when(r)+'</td></tr>';
+    }).join('')
+    +'</tbody></table></div>';
+}
+/* 거래 내역 탭 — 자연어 요약 우선, 원본 테이블은 접이식 (핵심 원칙 1) */
+function cpxTx(c2,d){
+  var s2=tfSSFind(c2.nick);
+  var startI=c2.simStartI!=null?c2.simStartI:0, endI=c2.endI!=null?c2.endI:(c2.status==='closed'&&c2.flatI!=null?c2.flatI:1e15);
+  var tr=(s2?s2.r.trades||[]:[]).filter(function(x){ var e=(x.exit!=null?x.exit:x.entry); return e>=startI&&e<=endI; }).slice(-10);
+  var days=Math.max(1,Math.round((Date.now()-c2.at)/864e5))+30; /* 시뮬 30봉 포함 */
+  var base=Math.max(d.value,0), funding=-(base*0.0001*Math.min(days,45));
+  var fee=tr.length*base*0.002;
+  var rows=[];
+  tr.forEach(function(x){
+    var q=d.at(x.entry).invested*(x.w!=null?x.w:1); /* 그 거래에 들어간 내 금액 */
+    rows.push({at:idxToDate(x.entry),k:'진입',pair:c2.pairs[0],qty:cpUsd(q,0),fee:cpUsd(q*0.001),chg:'-'+cpUsd(q*0.001)});
+    rows.push({at:idxToDate(x.exit!=null?x.exit:x.entry),k:'청산',pair:c2.pairs[0],qty:cpUsd(q,0),fee:cpUsd(q*0.001),chg:(x.pnl>=0?'+':'')+cpUsd(x.pnl*q)});
+  });
+  c2.ledger.forEach(function(e){ rows.push({at:new Date(e.at),k:e.type==='add'?'예산 추가':'예산 회수',pair:'-',qty:cpUsd(e.amt,0),fee:'$0.00',chg:(e.type==='add'?'+':'-')+cpUsd(e.amt)}); });
+  rows.sort(function(a,b){ return b.at-a.at; });
+  return '<div class="cpx-sumline">이 전략 복사에서 지금까지 <b>체결 '+tr.length*2+'건</b>이 있었고, 수수료로 약 <b class="num">'+cpUsd(fee)+'</b>, 펀딩비로 약 <b class="num" style="color:#ee766a">'+cpUsd(funding)+'</b>를 지출했습니다.</div>'
+    +cpAiHtml({w:0,t:'펀딩비는 포지션을 들고 있는 동안 주기적으로 오가는 비용입니다. 원본 전략이 포지션을 오래 들수록 커집니다.'})
+    +'<details class="cpx-raw"><summary>원본 거래 내역 표 펼치기 ('+rows.length+'건)</summary>'
+    +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
+    +'<th>시각</th><th>구분</th><th>페어</th><th>수량</th><th>수수료</th><th>잔고 변화</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(r2){
+      return '<tr><td class="num">'+r2.at.toLocaleDateString('ko-KR')+'</td><td>'+r2.k+'</td><td>'+gEsc(r2.pair)+'</td>'
+        +'<td class="num">'+r2.qty+'</td><td class="num">'+r2.fee+'</td><td class="num">'+r2.chg+'</td></tr>';
+    }).join('')
+    +'</tbody></table></div></details>';
+function cpxPos(c2,d){
+  var s2=tfSSFind(c2.nick);
+  if(!s2||!d.posOpen||c2.status!=='active')
+    return '<div class="cpp-empty"><b>지금 열려 있는 전략 복사 포지션이 없습니다</b>'
+      +'원본 전략이 진입하면 자동으로 함께 진입하고, 여기에 실시간으로 표시됩니다.'
+      +'<span class="nx">'+(c2.status==='active'?'포지션이 없는 동안에도 전략 복사는 유지됩니다.':'중단된 전략 복사입니다. 청산 이력 탭에서 기록을 볼 수 있습니다.')+'</span></div>';
+  var c=s2.cfg||{}, st=(s2.r&&s2.r.state)||{}, o=st.open, list=!o?[]:o.length!=null?o:[o], up=d.unreal>=0;
+  if(d.stopI!=null) list=list.filter(function(x){ return x.entry==null||x.entry<=d.stopI; }); /* 새 진입을 멈춘 뒤에 원본이 산 종목은 내 포지션이 아니다 */
+  var wsum=list.reduce(function(a,x){ return a+(x.w!=null?x.w:1); },0)||1;
+  var rule=fuIs(s2)?(c.trail?'유리했던 가격에서 '+c.trail+'% 되돌리면':c.sl?'진입가에서 '+c.sl+'% 불리하면':c.exitN?c.exitN+'일 기준선 이탈':'방향이 바뀌면'):s2.kind==='agent'?'고점에서 '+c.trail+'% 밀리면':(c.sl!=null?c.sl+'% / +'+c.tp+'%':(s2.p?s2.p.sl+'% / +'+s2.p.tp+'%':'원본과 같음'));
+  var rows=list.map(function(x){ var w=(x.w!=null?x.w:1)/wsum;
+    return '<tr><td>'+gEsc(mkTk(x.k))+'</td><td class="'+(x.side<0?'d':'u')+'">'+(x.side<0?'숏':'롱')+(x.lev>1?' '+x.lev+'배':'')+'</td><td class="num">'+cpUsd(d.invested*w,0)+'</td>'
+      +'<td class="num">'+mkPxFmt(x.ep)+'</td><td class="num">'+mkPxFmt(x.px)+'</td>'
+      +'<td class="num">'+rule+'</td>'
+      +'<td class="num '+(x.chg>=0?'u':'d')+'">'+mkPct0(x.chg,1)+'</td></tr>'; }).join('');
+  if(!rows) rows='<tr><td>'+gEsc(c2.pairs&&c2.pairs[0]||mkScope(s2))+'</td><td class="u">롱</td><td class="num">'+cpUsd(d.invested,0)+'</td><td class="num">-</td><td class="num">-</td><td class="num">'+rule+'</td><td class="num">-</td></tr>';
+  return '<div class="cpx-sumline">포지션 '+(list.length||1)+'건이 열려 있습니다. 내 미실현 손익 <b class="num" style="color:'+(up?'#56c486':'#ee766a')+'">'+cpUsd(d.unreal)+'</b>. '+(c2.winding?'새 진입은 멈췄고, 남은 포지션만 정리를 기다립니다.':'원본 전략의 정리 기준까지 그대로 따라갑니다.')+'</div>'
+    +'<div class="cpx-tblw"><table class="cpx-tbl"><thead><tr>'
+    +'<th>종목</th><th>방향</th><th>규모</th><th>원본 진입가</th><th>현재가</th><th>정리 기준</th><th>원본 진입 뒤</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody></table></div>'
+    +'<div class="cpd-acts"><button type="button" class="ss3-dbtn" onclick="cpFlatDlg(\''+c2.id+'\')">'+(c2.winding?'포지션 정리하고 끝내기':'포지션 전체 정리')+'</button></div>';

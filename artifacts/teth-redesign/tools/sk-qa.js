@@ -1,7 +1,7 @@
 /* ═══ QA 상태 패널 (sk-qa) ═══
    페이지별로 화면 상태를 한 번에 띄운다. 단추 하나 = 계정 상태 맞추기 + 해당 화면으로 이동 + 그 화면 안의 상태 만들기.
    배포 사이트에서는 주소에 ?qa=1 을 붙이면 켜지고(이 브라우저에 기억), ?qa=0 이면 끈다. AI 호출 없이 띄운다. */
-(function(){ try{ var q=new URLSearchParams(location.search).get('qa'); if(q==='1') localStorage.setItem('tethDev','1'); if(q==='0') localStorage.removeItem('tethDev'); }catch(e){} })();
+(function(){ try{ var q=new URLSearchParams(location.search).get('qa'); if(q==='1'){ localStorage.setItem('tethDev','1'); localStorage.removeItem('tethQaOff'); } if(q==='0'){ localStorage.removeItem('tethDev'); localStorage.setItem('tethQaOff','1'); } }catch(e){} })();
 var QA_NICK=null;
 function qaNick(kind){ try{ var L=tfSSRows().filter(function(s){ return !s.me; }); var r=kind==='lev'?L.filter(function(s){ return /양방향 2배/.test(mkTitle(s)); })[0]:kind==='bad'?L.filter(function(s){ return s.id==='r1'||s.nick==='r1'; })[0]:null; return (r||L[0]).nick; }catch(e){ return 'f1'; } }
 function qaClean(){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} ['ac-cf','ac-auth','ac-sheet','st-dlg'].forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); }); try{ mkFollowClose(true); }catch(e){} try{ tfSS3DlgClose(true); }catch(e){} }
@@ -132,15 +132,16 @@ function qaPanelTgl(){ var p=document.getElementById('qa2-panel'), b=document.ge
   if(b) b.classList.add('on'); p=document.createElement('div'); p.id='qa2-panel'; p.innerHTML=qaPanelHtml(); document.body.appendChild(p); }
 (function(){
   if(typeof tfDevPanelTgl==='function'){ window.tfDevPanelTgl0=tfDevPanelTgl; tfDevPanelTgl=qaPanelTgl; }
-  var dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname); try{ if(localStorage.getItem('tethDev')==='1') dev=true; }catch(e){}
+  /* 파운더 결정(2026-10-01): 주소에 ?qa=1 없이도 항상 보인다. ?qa=0 으로 열면 이 브라우저에서 숨긴다 */
+  var dev=true; try{ if(localStorage.getItem('tethQaOff')==='1') dev=false; }catch(e){}
   if(!dev) return;
   var b=document.getElementById('tf-devbtn');
   if(!b){ b=document.createElement('button'); b.id='tf-devbtn'; b.type='button'; b.textContent='QA'; b.setAttribute('aria-label','화면 상태'); document.body.appendChild(b); }
   b.onclick=qaPanelTgl;
 })();
-/* 홈에서는 오른쪽 위 알림 단추를 숨긴다(파운더) */
+/* 오른쪽 위 알림 단추는 모든 화면에서 숨긴다(파운더 2026-10-01: 홈 → 전부) */
 (function(){
-  function sync(){ var el=document.getElementById('nf-util'); if(el&&S.user) el.hidden=(G.mode==='home'); }
+  function sync(){ var el=document.getElementById('nf-util'); if(el) el.hidden=true; }
   if(typeof tfNFBar==='function'){ var nb0=tfNFBar; tfNFBar=function(){ var r=nb0.apply(this,arguments); try{ sync(); }catch(e){} return r; }; }
   if(typeof gHome==='function'){ var h0=gHome; gHome=function(){ var r=h0.apply(this,arguments); try{ sync(); }catch(e){} return r; }; }
   var last=null; setInterval(function(){ if(typeof G!=='undefined'&&G.mode!==last){ last=G.mode; try{ sync(); }catch(e){} } },400);
