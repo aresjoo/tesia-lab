@@ -58,6 +58,8 @@ var QA_PAGES=[
  ]],
  ['전략 복사',[
   ['목록',function(){ qaAcct('free'); qaClean(); tfShareHub('find'); }],
+  ['목록(내 거래소 하나 연결)',function(){ qaAcct('uid'); qaClean(); tfShareHub('find'); }],
+  ['목록(내 거래소 둘 연결)',function(){ qaAcct('both'); try{ var a=acS(); a.conn.okx={via:'paid',at:Date.now(),uid:'77120011',kyc:'ok'}; acSave(); }catch(e){} qaClean(); tfShareHub('find'); }],
   ['상세 개요',function(){ qaAcct('free'); qaDetail(); }],
   ['상세 전략 정보 탭',function(){ qaAcct('free'); qaDetail('전략 정보'); }],
   ['복사 창(연결됨)',function(){ qaAcct('uid'); qaDetail(); setTimeout(function(){ mkFollowSheet(qaNick('lev')); },1600); }],
@@ -83,7 +85,10 @@ var QA_PAGES=[
   ['전략 있음, 포지션 없음',function(){ qaAcct('uid'); window.TF_PREVIEW=true; qaTerm(function(){ qaTermPick(function(s){ return s.status==='live'&&!tfTmCalc(s).pos; }); }); }],
   ['전략 오류',function(){ qaAcct('uid'); window.TF_PREVIEW=true; qaTerm(function(){ qaTermPick(function(s){ return s.status==='err'; }); }); }],
   ['예약 주문 대기(미체결 주문)',function(){ qaAcct('uid'); qaOrder('wait'); qaTerm(function(){ qaBotTab('미체결'); }); }],
-  ['복사한 전략, 포지션 있음',function(){ qaAcct('uid'); qaCopyLive(); qaTerm(); }]
+  ['복사한 전략, 포지션 있음',function(){ qaAcct('uid'); qaCopyLive(); qaTerm(); }],
+  ['복사한 AI 전략(여러 종목)',function(){ qaAcct('uid'); qaCopy({nick:'코인 셋 나눠 담기',back:60,amt:1200}); qaTerm(); }],
+  ['복사한 혼합 전략',function(){ qaAcct('uid'); qaCopy({nick:'대표 코인 돌파 따라가기',back:60,amt:900}); qaTerm(); }],
+  ['복사한 전략 둘(AI와 규칙)',function(){ qaAcct('uid'); qaCopy({nick:'코인 둘 롱숏 갈아타기',back:60,amt:1500}); qaCopyLive(); qaTerm(); }]
  ]],
  ['거래소 연결과 플랜',[
   ['플랜(무료 초대 계정 / 구독)',function(){ qaAcct('free'); qaClean(); tfBrokersView(); }],
@@ -146,3 +151,6 @@ function qaPanelTgl(){ var p=document.getElementById('qa2-panel'), b=document.ge
   if(typeof gHome==='function'){ var h0=gHome; gHome=function(){ var r=h0.apply(this,arguments); try{ sync(); }catch(e){} return r; }; }
   var last=null; setInterval(function(){ if(typeof G!=='undefined'&&G.mode!==last){ last=G.mode; try{ sync(); }catch(e){} } },400);
 })();
+
+/* 터미널 미리 보기는 QA 상태에서만 켠다(window.TF_PREVIEW=true 를 QA 단추가 직접 설정). 사용자 흐름의 진입점은 일반 터미널로 */
+tfPreviewOpen=function(){ window.TF_PREVIEW=false; try{ tfNav('#/trade'); }catch(e){} };

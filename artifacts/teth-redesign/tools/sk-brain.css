@@ -40,3 +40,50 @@
 .tft-page .tft-comp .chips::-webkit-scrollbar{display:none}
 .tft-page .tft-comp .chips button{flex:none}
 .tft-page .tb-ic{vertical-align:-3px}
+
+/* AI 판단형과 혼합형, TETH의 생각, 판단 기록(nof1 MODELCHAT 방식) */
+.tft-page .tb-copy{display:flex;flex-direction:column;min-height:0;overflow-y:auto;height:100%}
+.tft-page .tb-cps{display:flex;gap:6px;padding:14px 20px 0;overflow-x:auto;scrollbar-width:none}
+.tft-page .tb-cps button{flex:none;height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:none;color:#cdcdcd;font-size:13px}
+.tft-page .tb-cps button.on{border:2px solid #9a9a9a;color:#fff;padding:0 13px}
+.tft-page .tm-status.tb .tb-k{margin:0 0 6px;font-size:13px;color:#9a9a9a;display:flex;gap:8px;flex-wrap:wrap}
+.tft-page .tm-status.tb .tb-k span{color:#6f6f6f}
+.tft-page .tb-w2{color:#9a9a9a;margin-right:6px}
+.tft-page .tb-th{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.tft-page .tb-thl{margin:0 0 6px;font-size:13px;color:#9a9a9a}
+.tft-page .tb-tht{margin:0;font-size:14px;line-height:1.6;color:#ececec}
+.tft-page .tb-mb{font-size:13px;color:#cdcdcd;margin-left:2px}
+.tft-page .tb-feed{padding:12px 20px 4px}
+.tft-page .tb-fh{margin:0 0 6px;font-size:16px;color:#fff}
+.tft-page .tb-fc{border-top:1px solid rgba(255,255,255,.1)}
+.tft-page .tb-fc:first-of-type{border-top:0}
+.tft-page .tb-fc>summary{list-style:none;cursor:pointer;padding:10px 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline}
+.tft-page .tb-fc>summary::-webkit-details-marker{display:none}
+.tft-page .tb-ft{font-size:12px;color:#9a9a9a}
+.tft-page .tb-fc b{font-size:13px;font-weight:400;color:#ececec;justify-self:end}
+.tft-page .tb-fc b.tb-buy{color:#2ebd85}.tft-page .tb-fc b.tb-sell{color:#ececec}
+.tft-page .tb-fs{grid-column:1/-1;font-size:14px;line-height:1.55;color:#cdcdcd}
+.tft-page .tb-fr{margin:0 0 10px;font-size:14px;line-height:1.6;color:#9a9a9a}
+.tft-page .tb-foot{display:flex;align-items:center;gap:16px;padding:12px 20px 18px}
+.tft-page .tb-gray{height:36px;padding:0 16px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;cursor:pointer}
+
+/* 질문 단추 줄: 스크롤바 숨김(클래스가 chips 가 아닌 경우까지) */
+.tft-page .tft-comp>div{scrollbar-width:none}
+.tft-page .tft-comp>div::-webkit-scrollbar{display:none;height:0}
+/* Codex 판단 패널 s3: 꼬리표 중립색, 글자 16/14, 0% 중립, 판단 전문 표시, 입력칸 가림 방지, 고르는 알약 고정 */
+.tft-page .tb-fc b,.tft-page .tb-fc b.tb-buy,.tft-page .tb-fc b.tb-sell{color:#cdcdcd!important}
+.tft-page .tb-r{font-size:16px}
+.tft-page .tb-r>span{font-size:14px}
+.tft-page .tb-r i.z{color:#ececec}
+.tft-page .tb-tht,.tft-page .tb-fs{font-size:15px}
+.tft-page .tb-ft,.tft-page .tb-thl,.tft-page .tb-fc b{font-size:14px}
+.tft-page .tb-fh{font-size:18px}
+.tft-page .tb-fx{font-size:13px;color:#9a9a9a;text-underline-offset:3px;margin-left:4px;text-decoration:underline;font-style:normal}
+.tft-page details[open] .tb-fx{display:none}
+.tft-page .tb-rfeed{padding:4px 20px 8px}
+.tft-page .tb-rl .tb-fr .tm-rows{margin:0 0 10px}
+.tft-page .tb-rl .tb-fr .tm-row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:14px;color:#cdcdcd}
+.tft-page .tb-rl .tb-fr .tm-out{font-size:14px;color:#cdcdcd;margin:4px 0}
+.tft-page .tft-bbody{padding-bottom:24px}
+.tft-page .tb-cps{flex:none;position:sticky;top:0;z-index:2;background:#141414;padding-bottom:10px}
+@media (max-width:960px){ .tft-page .tm-status.tb{padding-top:16px} .tft-page .tm-status.tb,.tft-page .tb-th,.tft-page .tb-feed,.tft-page .tb-foot,.tft-page .tb-cps{padding-left:16px;padding-right:16px} }

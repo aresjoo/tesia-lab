@@ -80,3 +80,19 @@ function skSym(t){ return String(t==null?'':t).replace(/비트코인|이더리�
   var last=null; setInterval(function(){ var m=typeof G!=='undefined'?G.mode:null; if(m!==last){ last=m; sync(); } },300);
   sync();
 })();
+
+
+/* 왼쪽 위 페이지 제목 줄은 대화 화면에서만(대화 이름과 이름 바꾸기). 나머지 페이지는 지우고 내용을 위로 (파운더 2026-10-02) */
+(function(){
+  function sync(){ try{ document.body.classList.toggle('nochead',!(typeof G!=='undefined'&&G.cur&&G.mode!=='home')); }catch(e){} }
+  if(typeof gChead==='function'){ var c0=gChead; gChead=function(){ var r=c0.apply(this,arguments); sync(); return r; }; }
+  var last=null; setInterval(function(){ var k=(typeof G!=='undefined'?(G.mode+'|'+!!G.cur):''); if(k!==last){ last=k; sync(); } },300);
+  sync();
+})();
+/* 모바일: 아래로 스크롤하면 메뉴 단추를 숨기고, 위로 올리면 다시 보인다(내용 위에 겹치지 않게) */
+(function(){
+  var lastY=0, sc=null;
+  function on(){ var s=document.getElementById('g-scroll'); if(!s||s===sc) return; sc=s; lastY=s.scrollTop;
+    s.addEventListener('scroll',function(){ if(window.innerWidth>860) return; var y=s.scrollTop; if(y>60&&y>lastY+4) document.body.classList.add('ham-hide'); else if(y<lastY-4||y<=60) document.body.classList.remove('ham-hide'); lastY=y; },{passive:true}); }
+  setInterval(on,1000); on();
+})();

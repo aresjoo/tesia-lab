@@ -212,6 +212,7 @@ function tfSS3GridHtml(){
   if(t.ss.asset&&t.ss.asset!=='all') rows=rows.filter(function(s){ return s.mkt===t.ss.asset; });
   if(t.ss.kind&&t.ss.kind!=='all') rows=rows.filter(function(s){ return (s.kind||'rule')===t.ss.kind; });
   if(TF_SS_Q){ var q=TF_SS_Q.toLowerCase(); rows=rows.filter(function(s){ return [s.nick,s.asset,mkTitle(s),s.one||'',s.by?'@'+s.by:'',s.id||'',mkOldNames(s.id),MK_KIND[s.kind]||'',mkUni(s).list.join(' '),mkUni(s).list.map(mkTk).join(' '),mkTk(s.asset||'')].join(' ').toLowerCase().indexOf(q)>=0; }); }
+  if(typeof tfMyExFilter==='function') rows=tfMyExFilter(rows);
   var f={pick:function(a,b){return (a.ord||0)-(b.ord||0);},
     ret:function(a,b){return mk30(b).ret-mk30(a).ret;},
     fw:function(a,b){return (b.fw||0)-(a.fw||0);},
@@ -221,7 +222,7 @@ function tfSS3GridHtml(){
   if(!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없어요<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>';
   var PER=10, MAXP=10; /* 2열 5행 */
   /* 필터와 검색이 없을 때만 20종을 10페이지로 반복한다. 정렬은 반복 전에 끝낸다. 모든 페이지가 같은 전략 ID 를 가리킨다 */
-  var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&!TF_SS_Q;
+  var plain=(!t.ss.asset||t.ss.asset==='all')&&(!t.ss.kind||t.ss.kind==='all')&&!TF_SS_Q&&!(typeof tfMyExOn==='function'&&tfMyExOn());
   if(plain){ var base=rows.filter(function(s){ return !s.me; }), all=rows.slice(); for(var rp=1;rp<MAXP&&base.length;rp++) all=all.concat(base); rows=all; }
   rows=rows.slice(0,PER*MAXP);
   if(mkSortKey(t)==='win'){ var few=function(s){ return ((s.r&&s.r.n)||0)<MK_WIN_MIN; }; rows=rows.filter(function(s){ return !few(s); }).concat(rows.filter(few)); }

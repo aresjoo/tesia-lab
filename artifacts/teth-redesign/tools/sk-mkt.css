@@ -200,3 +200,10 @@
 .mkp-tabs{flex-wrap:nowrap;min-width:0}
 .mkp-s em{font-style:normal;font-size:13px;color:#9a9a9a;margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-ic img{border-radius:50%;object-fit:cover;background:#fff0}
+
+/* 터미널 스크롤바 숨김(전역 스크롤바 규칙보다 우선): 포지션 탭 줄, 정보와 데이터 칸, 질문 단추 줄 */
+.tft-page .nfxh-tabs,.tft-page .mkt-pane,.tft-page .tft-comp>div,.tft-page .nfxh-pane,.tft-page .tb-copy,.tft-page .tft-bbody{scrollbar-width:none!important;-ms-overflow-style:none}
+.tft-page .nfxh-tabs::-webkit-scrollbar,.tft-page .mkt-pane::-webkit-scrollbar,.tft-page .tft-comp>div::-webkit-scrollbar,.tft-page .nfxh-pane::-webkit-scrollbar,.tft-page .tb-copy::-webkit-scrollbar,.tft-page .tft-bbody::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+
+/* 종목 줄도 아래 차트 카드처럼 둥근 카드(PC). 모바일은 메뉴 단추 줄이라 그대로 */
+@media (min-width:961px){ .tft-page .mkh{margin:8px 8px 0;border-radius:16px;background:#141414;border:0} }
