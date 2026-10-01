@@ -118,3 +118,11 @@ function skbMonthTable(root){
   var k=h.indexOf('<g clip-path="url(#btrv)">'); if(k>0) h=h.slice(0,k)+g+h.slice(k); }catch(e){} return h; }; })();
 
 (function(){ if(typeof btLegend!=='function') return; var l0=btLegend; btLegend=function(){ var h=l0.apply(this,arguments); try{ if(h.indexOf('skb-lg-base')<0) h=h.replace('<span class="b">','<span class="skb-lg-base">시작 금액 $'+Math.round(BT.amt).toLocaleString()+'</span><span class="b">'); }catch(e){} return h; }; })();
+
+/* 모바일 백테스트: 돌려 보기를 누르면 검증 화면(맨 위)으로, 결과에서 뒤로 가기는 설정 화면으로 (PC 제외) */
+(function(){
+  var mob=function(){ return window.innerWidth<=768; };
+  var top=function(){ var sc=document.getElementById('g-scroll'); if(sc) sc.scrollTop=0; };
+  if(typeof btStart==='function'){ var s0=btStart; btStart=function(){ var r=s0.apply(this,arguments); if(mob()) top(); return r; }; }
+  if(typeof btBack==='function'){ var b0=btBack; btBack=function(){ if(mob()&&BT.phase==='result'){ try{ btReady(); }catch(e){} top(); return; } return b0.apply(this,arguments); }; }
+})();

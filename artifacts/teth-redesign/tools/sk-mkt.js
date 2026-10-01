@@ -132,7 +132,7 @@ function mktInfo(){
 }
 /* 데이터 탭: 작은 선, 막대 그래프 */
 var MKT_PER=[['5m','5분'],['15m','15분'],['30m','30분'],['1h','1시간'],['2h','2시간'],['4h','4시간'],['6h','6시간'],['12h','12시간'],['1d','1일']];
-function mktSvg(x,series,o){ o=o||{}; var W=520,H=190,L=8,R=8,T=12,B=26, iw=W-L-R, ih=H-T-B, n=x.length; if(!n) return '<p class="mkt-ld">자료가 없습니다.</p>';
+function mktSvg(x,series,o){ o=o||{}; var W=window.innerWidth<=768?Math.max(300,Math.min(520,window.innerWidth-56)):520,H=190,L=8,R=8,T=12,B=26, iw=W-L-R, ih=H-T-B, n=x.length; if(!n) return '<p class="mkt-ld">자료가 없습니다.</p>';
   var axes={}; series.forEach(function(s){ var a=s.axis||'l'; var v=s.v.filter(isFinite); if(!v.length) return; var mn=Math.min.apply(null,v), mx=Math.max.apply(null,v); if(s.kind==='bar'&&!s.base) mn=Math.min(0,mn); var A=axes[a]||{mn:mn,mx:mx}; A.mn=Math.min(A.mn,mn); A.mx=Math.max(A.mx,mx); axes[a]=A; });
   Object.keys(axes).forEach(function(a){ var A=axes[a]; if(A.mx===A.mn){ A.mx+=1; A.mn-=1; } var pad=(A.mx-A.mn)*0.08; if(A.mn!==0) A.mn-=pad; A.mx+=pad; });
   var X=function(i){ return L+(n===1?iw/2:i*iw/(n-1)); }, Y=function(v,a){ var A=axes[a||'l']; return T+ih-(v-A.mn)/(A.mx-A.mn)*ih; };
@@ -141,10 +141,10 @@ function mktSvg(x,series,o){ o=o||{}; var W=520,H=190,L=8,R=8,T=12,B=26, iw=W-L-
   bars.forEach(function(s,bi){ var a=s.axis||'l'; s.v.forEach(function(v,i){ if(!isFinite(v)) return; var y0=Y(Math.max(axes[a].mn,0),a), y=Y(v,a); var cx=X(i)-bw*bars.length/2+bw*bi; g+='<rect x="'+cx.toFixed(1)+'" y="'+Math.min(y,y0).toFixed(1)+'" width="'+(bw*0.9).toFixed(1)+'" height="'+Math.max(1,Math.abs(y0-y)).toFixed(1)+'" fill="'+s.color+'"/>'; }); });
   series.filter(function(s){ return s.kind!=='bar'; }).forEach(function(s){ var a=s.axis||'l'; var d=''; s.v.forEach(function(v,i){ if(!isFinite(v)) return; d+=(d?'L':'M')+X(i).toFixed(1)+' '+Y(v,a).toFixed(1); }); g+='<path d="'+d+'" fill="none" stroke="'+s.color+'" stroke-width="1.6"'+(s.dash?' stroke-dasharray="3 3"':'')+'/>'; });
   var fl=o.fl||function(v){ return mktBig(v); }, fr=o.fr||fl;
-  if(axes.l) g+='<text x="'+L+'" y="'+(T+9)+'" fill="#9a9a9a" font-size="11">'+fl(axes.l.mx)+'</text><text x="'+L+'" y="'+(T+ih-4)+'" fill="#9a9a9a" font-size="11">'+fl(axes.l.mn)+'</text>';
-  if(axes.r) g+='<text x="'+(W-R)+'" y="'+(T+9)+'" fill="#9a9a9a" font-size="11" text-anchor="end">'+fr(axes.r.mx)+'</text><text x="'+(W-R)+'" y="'+(T+ih-4)+'" fill="#9a9a9a" font-size="11" text-anchor="end">'+fr(axes.r.mn)+'</text>';
+  if(axes.l) g+='<text x="'+L+'" y="'+(T+9)+'" fill="#9a9a9a" font-size="12">'+fl(axes.l.mx)+'</text><text x="'+L+'" y="'+(T+ih-4)+'" fill="#9a9a9a" font-size="12">'+fl(axes.l.mn)+'</text>';
+  if(axes.r) g+='<text x="'+(W-R)+'" y="'+(T+9)+'" fill="#9a9a9a" font-size="12" text-anchor="end">'+fr(axes.r.mx)+'</text><text x="'+(W-R)+'" y="'+(T+ih-4)+'" fill="#9a9a9a" font-size="12" text-anchor="end">'+fr(axes.r.mn)+'</text>';
   var tf=o.day?function(t){ var d=new Date(+t); return (d.getMonth()+1)+'/'+d.getDate(); }:function(t){ var d=new Date(+t); var p=function(z){ return (z<10?'0':'')+z; }; return p(d.getHours())+':'+p(d.getMinutes()); };
-  [0,Math.floor((n-1)/2),n-1].forEach(function(i,k){ g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-6)+'" fill="#9a9a9a" font-size="11" text-anchor="'+(k===0?'start':k===2?'end':'middle')+'">'+tf(x[i])+'</text>'; });
+  [0,Math.floor((n-1)/2),n-1].forEach(function(i,k){ g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-6)+'" fill="#9a9a9a" font-size="12" text-anchor="'+(k===0?'start':k===2?'end':'middle')+'">'+tf(x[i])+'</text>'; });
   return '<svg viewBox="0 0 '+W+' '+H+'" class="mkx-svg" role="img">'+g+'</svg>'; }
 function mktLeg(items){ return '<div class="mkx-leg">'+items.map(function(x){ return '<span><i style="background:'+x[1]+'"></i>'+x[0]+'</span>'; }).join('')+'</div>'; }
 function mktData(){
@@ -183,3 +183,38 @@ function mktMount(){ var pg=document.querySelector('#g-content .tft-page'); if(!
     var r=s0.apply(this,arguments); try{ var pg=document.querySelector('#g-content .tft-page'); if(pg) pg.classList.toggle('no-sel',!TF_TM.sel); mktRailTgl(false); mktHead(); mktPoll(); mktChart(); var br=document.getElementById('tft-brainin'); var hd=br&&br.querySelector('.mks-hd'); if(hd) hd.remove(); mktRailMount(); }catch(e){} return r; }; }
   if(typeof pxTermEmpty==='function'){ var p0=pxTermEmpty; pxTermEmpty=function(){ var host=document.getElementById('nfxh-tv'); var had=host&&host.childNodes.length; var r=p0.apply(this,arguments); try{ mktChart(true); }catch(e){} return r; }; }
 })();
+
+/* 차트 종목은 운용 대상을 따른다(Codex 터미널 s3 MUST): 고른 전략 → 없으면 진행 중인 복사 전략 → 마지막에 본 종목 */
+(function(){
+  var s0=mktStratSym;
+  mktStratSym=function(){ var r=s0(); if(r) return r;
+    try{ if(TF_TM.sel) return null; var c=cpState().copies.filter(function(x){ return x.status==='active'; })[0]; if(!c) return null;
+      var m=String((c.pairs&&c.pairs[0])||'').replace(/[\/\-\s]/g,'').toUpperCase(); return /^[A-Z0-9]+USDT$/.test(m)?m:null; }catch(e){ return null; } };
+  function follow(){ var ss=mktStratSym(); if(!ss||ss===MKT.sym) return; MKT.sym=ss; MKT.picked=false; MKT.tick=null; MKT.prem=null; try{ mktHead(); mktPoll(); mktChart(true); if(MKT.tab==='info') mktInfo(); if(MKT.tab==='data') mktData(); }catch(e){} }
+  if(typeof tfTmSelect==='function'){ var t0=tfTmSelect; tfTmSelect=function(){ var r=t0.apply(this,arguments); MKT.picked=false; setTimeout(follow,60); return r; }; }
+  var m0=mktMount; mktMount=function(){ if(!MKT.picked){ var ss=mktStratSym(); if(ss) MKT.sym=ss; } return m0.apply(this,arguments); };
+})();
+
+/* 전략 없는 첫 화면: 예전 함수가 차트 라이브러리 로드 뒤 현물 차트를 따로 만들어 무기한 차트를 덮던 경쟁을 없앤다(Codex 터미널 s3 MUST) */
+pxTermEmpty=function(){
+  var br=document.getElementById('tft-brainin'); if(br&&typeof pxTermSide==='function') br.innerHTML=pxTermSide();
+  var note=document.querySelector('.tm-simnote'); if(note) note.remove();
+  try{ mktChart(true); }catch(e){}
+};
+
+
+/* s5: 포지션을 들고 있으면 판단 패널 문구를 보유 기준으로(진입 조건 → 청산 조건) */
+var MKT_HOLD=[['TETH가 진입 조건을 확인하고 있습니다','TETH가 청산 조건을 확인하고 있습니다'],['아직 진입하지 않은 이유','포지션 보유 이유'],['다음 진입 조건','청산 조건']];
+function mktHoldFix(){ try{ var s=TF_TM.sel?tfTmOf(TF_TM.sel):null; if(!s||s.status!=='live') return; var c=tfTmCalc(s); if(!c||!c.pos) return;
+  var b=document.querySelector('#g-content .tft-brain'); if(!b) return;
+  var w=document.createTreeWalker(b,NodeFilter.SHOW_TEXT,null), n;
+  while((n=w.nextNode())){ var t=n.nodeValue, u=t; MKT_HOLD.forEach(function(p){ if(u.indexOf(p[0])>=0) u=u.split(p[0]).join(p[1]); }); if(u!==t) n.nodeValue=u; } }catch(e){} }
+/* s5: 차트 시세 출처와 운용 거래소가 다르면 차트 탭 줄 오른쪽에 한 줄 */
+function mktRefNote(){ try{ var bar=document.querySelector('#g-content .tft-page .mkt-tabs'); if(!bar) return;
+  var ex=null, s=TF_TM.sel?tfTmOf(TF_TM.sel):null;
+  if(s) ex=s.exL||null; else { var c=cpState().copies.filter(function(x){ return x.status==='active'; })[0]; if(c){ var k=(acConnList&&acConnList()[0])||'bitget'; ex=acName?acName(k):k; } }
+  var el=bar.querySelector('.mkt-ref'); var txt=ex&&!/binance/i.test(ex)?'Binance 시세, '+ex+'에서 운용':'';
+  if(!txt){ if(el) el.remove(); return; }
+  if(!el){ el=document.createElement('span'); el.className='mkt-ref'; bar.appendChild(el); } if(el.textContent!==txt) el.textContent=txt; }catch(e){} }
+(function(){ var t=0; var go=function(){ clearTimeout(t); t=setTimeout(function(){ mktHoldFix(); mktRefNote(); },250); };
+  try{ new MutationObserver(go).observe(document.getElementById('g-content'),{childList:true,subtree:true,characterData:true}); }catch(e){} })();

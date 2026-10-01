@@ -142,3 +142,54 @@
 .mkp-rows::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 .mkp-empty,.mkp-rows>.mkt-ld{padding:40px 0;text-align:center;color:#9a9a9a}
 @media (max-width:768px){ .mkp{height:min(88vh,760px)} }
+
+/* ═══ 모바일 터미널: 탭 대신 한 줄로 쌓기 (파운더 2026-10-01, PC 제외) ═══
+   메뉴 단추와 같은 줄에 첫 줄(전략 머리 또는 종목 줄) → 차트 카드 → 포지션 탭 카드 → AI 판단 카드. 비어 있는 띠와 차트/판단/포지션 탭은 숨김 */
+@media (max-width:960px){
+  .nfxh-wrap.tft-page{display:flex!important;flex-direction:column}
+  .nfxh-wrap.tft-page .tft-grid{display:contents!important}
+  .nfxh-wrap.tft-page .nfxh-tabs.m-only.tm-seg{display:none!important}
+  .nfxh-wrap.tft-page .tm-mhead:not(:has(*)),.nfxh-wrap.tft-page .tm-msummary:not(:has(*)){display:none!important}
+  .nfxh-wrap.tft-page>.tm-preview{order:0}
+  .nfxh-wrap.tft-page>.tm-mhead{order:1}
+  .nfxh-wrap.tft-page>.tm-msummary{order:2}
+  .nfxh-wrap.tft-page>.mkh{order:3}
+  .nfxh-wrap.tft-page .tft-chart{order:4;display:flex!important;flex-direction:column;height:60vh;min-height:360px;margin:6px 8px 0;border-radius:16px;overflow:hidden;background:#141414}
+  .nfxh-wrap.tft-page>.tft-bottom{order:5;display:block!important;margin:6px 8px 0;border-radius:16px;overflow:hidden;background:#141414}
+  .nfxh-wrap.tft-page>.tft-bottom .nfxh-tabs.m2-only{display:flex!important;overflow-x:auto;scrollbar-width:none}
+  .nfxh-wrap.tft-page>.tft-bottom .nfxh-tabs.m2-only::-webkit-scrollbar{display:none}
+  .nfxh-wrap.tft-page>.tft-bottom .nfxh-pane.on{display:block!important;max-height:none}
+  .nfxh-wrap.tft-page .tft-brain{order:6;display:flex!important;min-height:0!important;margin:6px 8px 16px;border-radius:16px;background:#141414}
+  .nfxh-wrap.tft-page .tft-rail{order:7}
+  .nfxh-wrap.tft-page .tft-ctx{display:none!important}
+}
+/* 모바일 터미널 첫 줄: 페이지 제목 줄을 없애고 종목 줄을 메뉴 단추 오른쪽에(같은 60px 줄) */
+@media (max-width:960px){
+  body:has(.nfxh-wrap.tft-page) #g-chead{display:none!important}
+  .nfxh-wrap.tft-page{padding-top:0!important}
+  .nfxh-wrap.tft-page>.mkh{order:-1;min-height:60px;padding-left:58px!important;border-top:0}
+  body:not(.g-inchat) #g-hamburger:has(~ * .nfxh-wrap.tft-page)::before{display:none}
+}
+@media (max-width:960px){
+  body:has(.nfxh-wrap.tft-page) #g-hamburger{background:transparent!important}
+  body:has(.nfxh-wrap.tft-page) #g-hamburger::before{display:none!important}
+  .nfxh-wrap.tft-page>.mkh{display:flex;align-items:center;gap:10px;padding-right:16px!important;overflow:visible}
+  .nfxh-wrap.tft-page>.mkh .mkh-sym{min-width:0;flex:0 1 auto}
+  .nfxh-wrap.tft-page>.mkh .mkh-px{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none;white-space:nowrap}
+  .nfxh-wrap.tft-page>.mkh .mkh-px b{font-size:18px;line-height:1.1}
+  .nfxh-wrap.tft-page>.mkh .mkh-px span{font-size:12px;line-height:1.2}
+}
+/* Codex 터미널 s3: 즐겨찾기 별은 무채색, 고른 종목은 2px 회색 테두리, 목록 글자 15px(PC) */
+.mkp-st.on,.mkp-st.on:hover{color:#ececec!important}
+.mkp-r.on{background:#2a2a2a;box-shadow:inset 0 0 0 2px #9a9a9a}
+@media (min-width:961px){ .mkp-r{font-size:15px} .mkp-s b{font-size:15px} #mkt-info{font-size:15px} }
+
+/* s5: 정보 15px, 출처 13px, 선택 전략 2px 테두리, 모바일 기간 단추 한 줄, 검색칸 높이, 시세 출처 줄, 관리 회색 알약 */
+#mkt-info{font-size:15px}
+.mki-src{font-size:13px!important;color:#9a9a9a!important}
+.tft-page .tft-card.on{box-shadow:inset 0 0 0 2px #9a9a9a!important}
+@media (max-width:768px){ .mkx-per{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .mkx-per::-webkit-scrollbar{display:none} .mkx-per button{flex:none} }
+.mkp-q{flex:none;min-height:46px}
+.mkt-ref{margin-left:auto;font-size:12px;color:#9a9a9a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.px-tbrain .r .pl-link{height:36px;padding:0 16px;border-radius:999px;background:#2f2f2f;color:#ececec;text-decoration:none;font-size:14px;flex:none}
+.px-tbrain .r .pl-link:hover{background:#3a3a3a}

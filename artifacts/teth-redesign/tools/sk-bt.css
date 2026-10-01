@@ -266,3 +266,13 @@
 /* 범례: 시작 금액 기준선(차트 안 흰 1px 선) */
 #bt-root .bt-leg .skb-lg-base{display:inline-flex;align-items:center;gap:6px;color:#cdcdcd}
 #bt-root .bt-leg .skb-lg-base::before{content:"";width:18px;height:0;border-top:1px solid rgba(255,255,255,.6)}
+
+/* ═══ 모바일 백테스트: 설정 화면 → 돌려 보기 → 검증 화면 (파운더 2026-10-01, PC 제외) ═══ */
+@media (max-width:768px){
+  #bt-root[data-phase=ready] .bt-main{display:none!important}
+  #bt-root[data-phase=run] .bt-grid,#bt-root[data-phase=result] .bt-grid{display:flex!important;flex-direction:column}
+  #bt-root[data-phase=run] .bt-main,#bt-root[data-phase=result] .bt-main{order:1}
+  #bt-root[data-phase=run] .bt-rail,#bt-root[data-phase=result] .bt-rail{order:2}
+  #bt-root[data-phase=run] .bt-set,#bt-root[data-phase=result] .bt-set{display:none!important}
+  #bt-root[data-phase=run] .bt-fold,#bt-root[data-phase=result] .bt-fold{display:none!important}
+}
