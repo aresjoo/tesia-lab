@@ -1,0 +1,3 @@
+/* ══ 인사이트 스킨: 영어 태그를 한국어 이름으로 (주소는 영어 그대로) ══ */
+var INS_TAG_KO={bitcoin:'비트코인',ethereum:'이더리움',crypto:'암호화폐','on-chain':'온체인',liquidity:'유동성',macro:'매크로',fees:'수수료',earnings:'실적',nasdaq:'나스닥',derivatives:'파생',dollar:'달러',risk:'위험 관리',rates:'금리',bonds:'채권',bond:'채권',dominance:'도미넌스',jpy:'엔화',usdt:'USDT',usdc:'USDC',ai:'AI',semiconductor:'반도체',nvidia:'엔비디아',energy:'에너지',cloud:'클라우드','data-center':'데이터센터',infrastructure:'인프라',staking:'스테이킹','layer-2':'레이어2',mining:'채굴',options:'옵션',volatility:'변동성',gold:'금',oil:'원유',buyback:'자사주 매입',solana:'솔라나',stablecoin:'스테이블코인',etf:'ETF',fed:'연준'};
+function tfInsTagKo(t){ var k=String(t||'').toLowerCase(); return INS_TAG_KO[k]||t; }

@@ -12,10 +12,16 @@ PASS | 홈과 채팅 / 사용량 80% 배너(닫을 수 있음) | {"sel":"#g-useb
 PASS | 홈과 채팅 / 사용량 100%(초대 계정, 카드 등록) | {"sel":"#g-usebar .use-bar.full","mode":"conv","h1":"","errs":[]}
 PASS | 홈과 채팅 / 사용량 100%(구독만, 초대 계정 연결) | {"sel":"#g-usebar .use-bar.full","mode":"conv","h1":"","errs":[]}
 PASS | 전략 복사 / 목록 | {"sel":".skf-card, [class*=skf]","mode":"tfss3","h1":"","errs":[]}
-PASS | 전략 복사 / 상세 개요 | {"sel":".mk-detail","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
-PASS | 전략 복사 / 상세 전략 정보 탭 | {"sel":".mk-detail .mk-info-r","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
-PASS | 전략 복사 / 복사 창(연결됨) | {"sel":".mk-follow, .skc","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
-PASS | 전략 복사 / 복사 창 대신 플랜(미연결) | {"sel":"#pl-root, .pl","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
+FAIL | 전략 복사 / 목록(내 거래소 하나 연결) | {"sel":".mk-detail","mode":"tfss3","h1":"","errs":[]}
+FAIL | 전략 복사 / 목록(내 거래소 둘 연결) | {"sel":".mk-detail .mk-info-r","mode":"tfss3","h1":"","errs":[]}
+FAIL | 전략 복사 / 상세 개요 | {"sel":".mk-follow, .skc","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+FAIL | 전략 복사 / 상세 전략 정보 탭 | {"sel":"#pl-root, .pl","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 복사 창(연결됨) | {"sel":"#g-content > *","mode":"tfss3d","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 복사 창 대신 플랜(미연결) | {"sel":"#g-content > *","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
+PASS | 전략 복사 / 복사한 전략 상세(진입 대기) | {"sel":"#g-content > *","mode":"tfcpx","h1":"BNB 평균선 양방향 2배","errs":[]}
+PASS | 전략 복사 / 복사한 전략 상세(포지션 있음) | {"sel":"#g-content > *","mode":"tfcpx","h1":"ETH 빨리 접기","errs":[]}
+PASS | 전략 복사 / 복사한 전략 상세(청산 이력) | {"sel":"#g-content > *","mode":"tfcpx","h1":"ETH 빨리 접기","errs":[]}
+PASS | 전략 복사 / 복사한 전략 상세(자금 이동) | {"sel":"#g-content > *","mode":"tfcpx","h1":"ETH 빨리 접기","errs":[]}
 PASS | 백테스트 / 돌리기 전 | {"sel":"#bt-root","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
 PASS | 백테스트 / 도는 중 | {"sel":"#bt-root","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
 PASS | 백테스트 / 결과(좋음) | {"sel":"#bt-root .bt-verdict","mode":"tfbt","h1":"BNB 평균선 양방향 2배","errs":[]}
@@ -29,12 +35,16 @@ PASS | AI 트레이딩 / 전략 있음, 포지션 있음 | {"sel":".tft-page .tf
 PASS | AI 트레이딩 / 전략 있음, 포지션 없음 | {"sel":".tft-page .tft-card.on","mode":"tfdash","h1":"알림","errs":[]}
 PASS | AI 트레이딩 / 전략 오류 | {"sel":".tft-page .tft-card.on","mode":"tfdash","h1":"알림","errs":[]}
 PASS | AI 트레이딩 / 예약 주문 대기(미체결 주문) | {"sel":".od-row","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 복사한 전략, 포지션 있음 | {"sel":"#g-content > *","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 복사한 AI 전략(여러 종목) | {"sel":"#g-content > *","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 복사한 혼합 전략 | {"sel":"#g-content > *","mode":"tfdash","h1":"알림","errs":[]}
+PASS | AI 트레이딩 / 복사한 전략 둘(AI와 규칙) | {"sel":"#g-content > *","mode":"tfdash","h1":"알림","errs":[]}
 PASS | 거래소 연결과 플랜 / 플랜(무료 초대 계정 / 구독) | {"sel":"#pl-root, #ac-flow","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
 PASS | 거래소 연결과 플랜 / 거래소 선택 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"거래소 선택","errs":[]}
 PASS | 거래소 연결과 플랜 / 계정(가입 안내) | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 계정","errs":[]}
 PASS | 거래소 연결과 플랜 / 가입한 계정 연결 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 계정","errs":[]}
 PASS | 거래소 연결과 플랜 / 승인 화면 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 연결","errs":[]}
-PASS | 거래소 연결과 플랜 / 연결 확인 중 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 연결 확인 중","errs":[]}
+PASS | 거래소 연결과 플랜 / 연결 확인 중 | {"sel":"#ac-flow","mode":"tfbrokers","h1":"OKX 연결","errs":[]}
 PASS | 거래소 연결과 플랜 / 구독 결제 | {"sel":"#pl-root, #ac-flow","mode":"tfbrokers","h1":"플랜 구성","errs":[]}
 PASS | 거래소 연결과 플랜 / 연결된 계정 목록 | {"sel":"#ac-flow, .px-list","mode":"tfbrokers","h1":"거래소 연결","errs":[]}
 PASS | 설정 / 일반 | {"sel":"#st-main","mode":"tfset","h1":"일반","errs":[]}
@@ -53,6 +63,6 @@ PASS | 설정 / 보안 | {"sel":"#st-main","mode":"tfset","h1":"보안","errs":[
 PASS | 연구 기록 / 비어 있음 | {"sel":".g-hist","mode":"history","h1":"","errs":[]}
 PASS | 연구 기록 / 기록 있음 | {"sel":".g-hist .g-hist-row","mode":"history","h1":"","errs":[]}
 PASS | 홈에서는 오른쪽 위 알림 단추가 없다 | {"home":"home","hidden":true}
-PASS | 다른 화면에서는 알림 단추가 그대로 | {"mode":"tfdash","shown":true}
+PASS | 다른 화면에서도 알림 단추가 없다 | {"mode":"tfdash","hidden":true}
 
-TOTAL 56 / 56
+TOTAL 62 / 66

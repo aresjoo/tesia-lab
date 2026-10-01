@@ -25,33 +25,7 @@ window.TETH_CONFIG = {
 
   /* 요금제, /about Pricing 섹션이 이 데이터로 렌더링된다 */
   pricing: [
-    {
-      id: "direct",
-      name: "TETH Direct",
-      price: "월 $280",
-      tagline: "쓰던 거래소 그대로, 바로 시작",
-      features: [
-        "무제한 전략 연구, 백테스트",
-        "실전 실행, 모니터링",
-        "모든 검증 엔진(리스크, 비판, 홀드아웃)",
-        "우선 지원"
-      ],
-      cta: "Direct로 시작하기",
-      highlight: false
-    },
-    {
-      id: "partner",
-      name: "TETH Partner",
-      price: "0원",
-      tagline: "파트너 거래소로 시작하면 이용료 무료",
-      features: [
-        "Direct의 모든 기능 동일",
-        "파트너 거래소 가입 즉시 자동 연결",
-        "이용료 파트너 혜택으로 전액 무료",
-        "언제든 Direct로 전환 가능"
-      ],
-      cta: "Partner로 무료 시작",
-      highlight: true
-    }
+    { id: "partner", name: "TETH 초대 계정", price: "월 $0", tagline: "거래하는 사람을 위해", features: ["전략 자동 실행","연결 가능한 거래소 7곳","영원히 무료, 카드 등록 없음","24시간 고객 지원"], cta: "무료로 시작하기", highlight: true },
+    { id: "direct", name: "TETH 구독", price: "월 $280", tagline: "지금 쓰는 계정 그대로", features: ["전략 자동 실행","연결 가능한 거래소 7곳","초대 가입 없이 계정 연결","24시간 고객 지원"], cta: "구독으로 시작하기", highlight: false }
   ]
 };
