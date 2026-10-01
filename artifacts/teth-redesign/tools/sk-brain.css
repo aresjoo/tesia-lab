@@ -1,0 +1,42 @@
+/* ═══ 터미널 판단 패널 (sk-brain) — DESIGN_PROMPT 값 ═══ */
+.tft-page .tm-status.tb{display:block;padding:16px 20px 14px;background:transparent;border-bottom:1px solid rgba(255,255,255,.1)}
+.tft-page .tm-status.tb .tb-t{margin:0;font-size:20px;font-weight:400;line-height:1.35;color:#fff}
+.tft-page .tm-status.tb .tb-d{display:flex;align-items:flex-start;gap:8px;margin:8px 0 0;font-size:14px;line-height:1.5;color:#cdcdcd}
+.tft-page .tb-ic{width:16px;height:16px;border-radius:4px;flex:none;margin-top:2px;object-fit:cover}
+.tft-page .tm-status.tb .tb-list{margin:12px 0 0;border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:0 16px}
+.tft-page .tb-r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.1);font-size:14px}
+.tft-page .tb-r:first-child{border-top:0}
+.tft-page .tb-r>span{color:#9a9a9a;flex:none}
+.tft-page .tb-r>b{font-weight:400;color:#ececec;text-align:right}
+.tft-page .tb-r i{font-style:normal;margin-left:6px}
+.tft-page .tb-r i.u{color:#2ebd85}.tft-page .tb-r i.d{color:#f0566a}
+.tft-page .tm-status.tb .tb-w{margin:12px 0 0;font-size:14px;color:#cdcdcd}
+/* 판단, 대시보드, 완료된 거래: 밑줄 탭 */
+.tft-page .tft-btabs{gap:20px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.tft-page .tft-btabs button{padding:12px 0;border:0;border-bottom:2px solid transparent;border-radius:0;background:none;color:#9a9a9a;font-size:14px}
+.tft-page .tft-btabs button.on{color:#fff;border-bottom-color:#fff;background:none}
+/* 판단 기록: 카드 대신 구분선 행 */
+.tft-page .tft-fsec{padding:16px 20px 8px;align-items:center}
+.tft-page .tft-fsec>b,.tft-page .tft-fsec{font-size:16px;font-weight:400;color:#fff}
+.tft-page .tft-fsec .ffc{height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:none;color:#cdcdcd;font-size:13px}
+.tft-page .tft-fsec .ffc.on{border:2px solid #9a9a9a;color:#fff;padding:0 13px}
+.tft-page .tm-card{margin:0 20px;padding:12px 0;border:0;border-top:1px solid rgba(255,255,255,.1);border-radius:0;background:transparent}
+.tft-page .tm-card .tm-ch{padding:0 0 6px;gap:8px}
+.tft-page .tm-card .tm-t{font-size:13px;color:#9a9a9a}
+.tft-page .tm-card .tm-k{font-size:14px;color:#ececec}
+.tft-page .tm-card .tm-res{margin-left:auto;font-size:13px;color:#cdcdcd;background:none;padding:0}
+.tft-page .tm-card .tm-row{padding:4px 0;border:0;font-size:13px;color:#cdcdcd}
+.tft-page .tm-card .tm-row i{font-style:normal;color:#9a9a9a;background:none}
+/* 바꾸기(전략 관리)와 질문 단추: 회색 알약, 입력칸 #2f2f2f */
+.tft-page .tft-brain button.tm-qc,.tft-page .tft-brain .tm-chips button{height:32px;padding:0 14px;border-radius:999px;background:#2f2f2f;border:0;color:#ececec;font-size:13px}
+.tft-page .tft-brain textarea,.tft-page .tft-brain input[type=text]{background:#2f2f2f;border:0;border-radius:19px;color:#ececec}
+/* 차트 탭 줄의 시세 출처: 앱 아이콘 */
+.mkt-ref{display:inline-flex;align-items:center;gap:6px}
+.mkt-ref .tb-ic,.mkt-ref img{width:14px;height:14px;border-radius:3px;margin:0}
+.mkt-ref .sp{width:6px}
+.tft-page .tm-status.tb .tb-d b{font-weight:400;color:#ececec}
+/* 질문 단추는 한 줄 가로 스크롤(판단 기록 자리 확보) */
+.tft-page .tft-comp .chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none}
+.tft-page .tft-comp .chips::-webkit-scrollbar{display:none}
+.tft-page .tft-comp .chips button{flex:none}
+.tft-page .tb-ic{vertical-align:-3px}
