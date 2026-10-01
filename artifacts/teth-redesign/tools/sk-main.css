@@ -183,3 +183,13 @@ body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 .g-hist .g-note{font-size:16px;color:#cdcdcd;line-height:1.6}
 @media(max-width:860px){ .g-hist{padding:16px 16px 40px} .g-hist-search{height:48px} .g-hist-row{min-height:48px} .g-hist-row .t{font-size:16px} }
 .g-hist-row .t{font-weight:400}
+
+/* g-free-row 삭제: 로그인 전 "무료로 시작, 카드 등록 없음" 알약 (파운더 2026-10-01) */
+.g-free-row,.g-freecta{display:none!important}
+
+/* 앱 배너 다운로드: 파란 단추 대신 흰 알약(주 단추 규칙) */
+#g-appbanner .dl{background:#fff!important;color:#000!important}
+#g-appbanner .dl:hover{background:#e6e6e6!important}
+
+/* 모바일 대화 머리: 메뉴 단추 가운데를 제목, 대화 탭과 같은 22px 선에 맞추고 회색 상자 제거 */
+@media (max-width:860px){ body.g-inchat #g-hamburger{top:2px;left:6px;background:transparent} body.g-inchat #g-hamburger:active{background:rgba(255,255,255,.08)} }

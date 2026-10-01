@@ -94,12 +94,27 @@ function skbMonthTable(root){
     if(m1){ yr=2000+(+m1[1]); mo=+m1[2]; } else if(m2){ mo=+m2[1]; } else return;
     if(!Y[yr]){ Y[yr]={}; order.push(yr); } Y[yr][mo]={p:pct,part:part}; });
   if(!order.length) return;
+  /* 기록이 짧을 때(파운더 2026-10-01): 꽉 찬 달이 없으면 표 대신 한 줄, 3개월 미만이면 일부 기간 안내 */
+  var all=[], full=0; order.forEach(function(y){ Object.keys(Y[y]).forEach(function(m){ all.push(Y[y][m]); if(!Y[y][m].part) full++; }); });
+  var sec=w.closest('.bt-sec')||w.parentNode, say=[].filter.call(sec.querySelectorAll('p,span,small,div'),function(e){ return !e.children.length&&/한 달 전체를 계산한|온전한 \d+개월/.test(e.textContent); })[0];
+  if(!full){ var g0=all.reduce(function(a,c){ var v=parseFloat(c.p); return isFinite(v)?a*(1+v/100):a; },1), r0=(g0-1)*100;
+    if(say) say.textContent='';
+    w.classList.add('skb-hid'); w.insertAdjacentHTML('afterend','<p class="skb-mt-short">아직 한 달이 안 됐습니다. 지금까지 <b class="num '+(r0>0?'u':r0<0?'d':'')+'">'+(r0>0?'+':'')+r0.toFixed(1)+'%</b>입니다.</p>'); return; }
+  if(full<3&&say) say.textContent='시작한 달과 마지막 달은 일부 기간만 계산했습니다.';
   var cell=function(c){ if(!c) return '<td class="e">-</td>'; var v=parseFloat(c.p); var cls=v>0?'u':v<0?'d':''; return '<td class="'+cls+'">'+gEsc(c.p)+(c.part?'<small>일부</small>':'')+'</td>'; };
   var yrSum=function(y){ var k=Object.keys(Y[y]); if(!k.length) return ''; var g=k.reduce(function(a,m){ var v=parseFloat(Y[y][m].p); return isFinite(v)?a*(1+v/100):a; },1); var r=(g-1)*100; return (r>0?'+':'')+r.toFixed(1)+'%'; };
-  var h='<div class="skb-mtw"><table class="skb-mt"><thead><tr><th>연도</th>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){ return '<th>'+m+'월</th>'; }).join('')+'<th>연간</th></tr></thead><tbody>'
+  var h='<div class="skb-mtw"><table class="skb-mt"><thead><tr><th>연도</th>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){ return '<th>'+m+'월</th>'; }).join('')+'<th>누적</th></tr></thead><tbody>'
     +order.map(function(y){ var ys=yrSum(y), v=parseFloat(ys); return '<tr><td>'+y+'</td>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){ return cell(Y[y][m]); }).join('')+'<td class="yr '+(v>0?'u':v<0?'d':'')+'">'+ys+'</td></tr>'; }).join('')+'</tbody></table></div>';
-  w.classList.add('skb-hid'); w.insertAdjacentHTML('afterend',h);
+  var mh='<div class="skb-mtm">'+order.map(function(y){ var ys=yrSum(y), v=parseFloat(ys); return '<div class="y">'+y+'<span class="num '+(v>0?'u':v<0?'d':'')+'">누적 '+ys+'</span></div><div class="g">'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){ var c=Y[y][m]; if(!c) return '<div class="c e"><em>'+m+'월</em><b>-</b></div>'; var q=parseFloat(c.p); return '<div class="c"><em>'+m+'월</em><b class="num '+(q>0?'u':q<0?'d':'')+'">'+gEsc(c.p)+'</b>'+(c.part?'<small>일부</small>':'')+'</div>'; }).join('')+'</div>'; }).join('')+'</div>';
+  w.classList.add('skb-hid'); w.insertAdjacentHTML('afterend',h+mh);
 }
 (function(){ var a0=skbApply; skbApply=function(root){ a0(root); try{ skbGroupHolds(root); skbMonthTable(root); }catch(e){} }; })();
 /* "이전 판단 더 보기"는 글자만 밑줄, 건수는 회색 */
 (function(){ var a1=skbApply; skbApply=function(root){ a1(root); try{ [].forEach.call(root.querySelectorAll('.bt-more'),function(b){ var n=b.firstChild; if(n&&n.nodeType===3&&n.nodeValue.trim()){ var s=document.createElement('span'); s.className='u'; s.textContent=n.nodeValue.trim(); b.replaceChild(s,n); b.insertBefore(document.createTextNode(' '),s.nextSibling); } }); }catch(e){} }; })();
+
+/* 잔고 차트: 색이 바뀌는 기준(시작 금액)을 선과 이름으로 표시 (Codex 차트 s3) */
+(function(){ if(typeof btChartSvg!=='function') return; var c0=btChartSvg; btChartSvg=function(){ var h=c0.apply(this,arguments); try{ var G=btGeo(), y=G.Y(1); if(!isFinite(y)) return h;
+  var g='<g class="skb-base"><line x1="'+G.pl+'" x2="'+(G.W-G.pr)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="rgba(255,255,255,.45)" stroke-width="1"/></g>';
+  var k=h.indexOf('<g clip-path="url(#btrv)">'); if(k>0) h=h.slice(0,k)+g+h.slice(k); }catch(e){} return h; }; })();
+
+(function(){ if(typeof btLegend!=='function') return; var l0=btLegend; btLegend=function(){ var h=l0.apply(this,arguments); try{ if(h.indexOf('skb-lg-base')<0) h=h.replace('<span class="b">','<span class="skb-lg-base">시작 금액 $'+Math.round(BT.amt).toLocaleString()+'</span><span class="b">'); }catch(e){} return h; }; })();

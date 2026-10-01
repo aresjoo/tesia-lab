@@ -97,8 +97,6 @@
   #bt-root .bt-cap-l b.num,#bt-root .bt-verdict .bt-v1b b.num{font-size:28px}
 }
 /* Codex bt/s1: 전략선은 회색 하나, 면적 채움 없음, 손실 숫자만 빨강 */
-#bt-root .bt-chart path[fill="url(#btgu)"],#bt-root .bt-chart path[fill="url(#btgd)"]{display:none}
-#bt-root .bt-chart path[stroke="#2fb98a"],#bt-root .bt-chart path[stroke="#f0566a"]{stroke:#ececec}
 /* 월별 막대: 가로 스크롤 없이 여러 줄, 막대는 회색, 숫자만 색 */
 #bt-root .bt-monw{overflow:visible}
 #bt-root .bt-mon{display:flex;flex-wrap:wrap;gap:12px 6px;min-width:0}
@@ -235,3 +233,36 @@
   #bt-root .bt-row.v2 .bt-rb>.ot{grid-column:5!important}
   #bt-root .bt-row.v2 .bt-rb>.cv{grid-column:6!important}
 }
+
+/* 판단 기록: 월 묶음 머리 없음(파운더). 첫 행 위 선은 목록 위 선과 겹치지 않게 */
+#bt-root .bt-ym{display:none!important}
+
+/* 범례: 이 전략 선은 시작 금액 위 초록, 아래 빨강 */
+#bt-root .bt-leg .a::before{height:2px!important;border:0!important;background:linear-gradient(90deg,#2fb98a 50%,#f0566a 50%)!important}
+#bt-root .skb-mt-short{margin:8px 0 0;font-size:16px;color:#cdcdcd}
+#bt-root .skb-mt-short .u{color:#56c486}#bt-root .skb-mt-short .d{color:#ee766a}
+
+/* Codex 차트 s3: 초록 통일, 청산 표시는 범례처럼 회색, 모바일 월별 격자 */
+#bt-root .bt-chart path[stroke="#2fb98a"]{stroke:#2ebd85}
+#bt-root .bt-chart stop[stop-color="#2fb98a"]{stop-color:#2ebd85}
+#bt-root .bt-chart g.bt-m.k-sell path{stroke:#cdcdcd!important;fill:#000!important}
+#bt-root .bt-leg .a::before{background:linear-gradient(90deg,#2ebd85 50%,#f0566a 50%)!important}
+.skb-mtm{display:none}
+@media (max-width:768px){
+  #bt-root .skb-mtw{display:none}
+  .skb-mtm{display:block}
+  .skb-mtm .y{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 8px;font-size:16px;color:#fff}
+  .skb-mtm .y span{font-size:14px;color:#cdcdcd}
+  .skb-mtm .g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .skb-mtm .c{padding:8px 6px;border-radius:12px;background:#171717;text-align:center}
+  .skb-mtm .c em{display:block;font-style:normal;font-size:12px;color:#9a9a9a}
+  .skb-mtm .c b{display:block;margin-top:2px;font-size:14px;font-weight:400;color:#ececec}
+  .skb-mtm .c b.u,.skb-mtm .y span.u{color:#56c486}
+  .skb-mtm .c b.d,.skb-mtm .y span.d{color:#ee766a}
+  .skb-mtm .c small{display:block;font-size:11px;color:#9a9a9a}
+  .skb-mtm .c.e b{color:#5d5d5d}
+}
+
+/* 범례: 시작 금액 기준선(차트 안 흰 1px 선) */
+#bt-root .bt-leg .skb-lg-base{display:inline-flex;align-items:center;gap:6px;color:#cdcdcd}
+#bt-root .bt-leg .skb-lg-base::before{content:"";width:18px;height:0;border-top:1px solid rgba(255,255,255,.6)}

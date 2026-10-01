@@ -1,0 +1,1811 @@
+OpenAI Codex v0.153.4
+--------
+workdir: C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0f7fa-7762-76f3-b4f2-a1752ca01dd3
+--------
+user
+당신은 ChatGPT 제품의 디자인 리드이면서 트레이딩 앱(바이낸스, 하이퍼리퀴드) 차트를 잘 아는 사람으로 빙의합니다. TETH의 손익 차트와 달력의 색 통일 결과를 픽셀 단위로 검수합니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+
+디자인 기준: DESIGN_PROMPT.md (먼저 읽으십시오)
+파운더 결정(2026-10-01, 재론 금지):
+- 손익 선은 흰색이 아니라 기준선(수익률 0%, 또는 시작 금액) 위는 초록, 아래는 빨강. 아래로 옅어지는 같은 색 그라데이션 채움. 기준은 전략 목록 카드 REF-card.png(이미 초록과 빨강).
+- 손익 달력 칸은 배경을 손익 색으로 칠하고 크기에 비례한 진하기.
+- 판단 기록의 월 묶음 머리는 없앰.
+- 현물 보유 비교선(점선)은 그대로 회색.
+
+캡처(1440): C1-detail-chart.png(전략 상세 수익률 차트), C2-calendar.png(손익 달력), C3-bt-chart.png(백테스트 잔고 차트와 범례), C4-bt-log.png(판단 기록), C5-bt-month.png(월별 수익률 표)
+모바일(390): 같은 이름에 -m
+
+출력:
+1. MUST(배포 전에 꼭 고칠 것)와 NICE 표. 각 항목: 캡처 이름, 위치, 픽셀이나 문구 근거, 고칠 값. 특히 확인: 세 곳(카드, 상세 차트, 백테스트 차트)의 초록과 빨강이 같은 색으로 보이는지, 그라데이션 진하기, 달력 칸의 글자 대비(진한 칸과 옅은 칸에서 숫자를 읽을 수 있는지), 0% 근처 칸, 빈 칸, 범례 표시, 진입과 청산 표시 색이 선 색과 충돌하는지.
+2. 카피 교체 표(현재 → 제안). 합니다체, 가운뎃점과 em dash 금지.
+3. 한 문장: 배포해도 되는지.
+형식: 표와 짧은 문단. 700단어 이내. 근거 없는 칭찬 금지.
+
+codex
+먼저 디자인 기준을 읽고, 캡처와 차트 색상 코드를 대조하겠습니다. 파일은 수정하지 않겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\hyun1\\.codex\\RTK.md'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 63ms:
+# RTK - Rust Token Killer (Codex CLI)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk`.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
+```
+
+## Meta Commands
+
+```bash
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
+```
+
+## Verification
+
+```bash
+rtk --version
+rtk gain
+which rtk
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"if (Test-Path -LiteralPath '.mailbox\\mail.cmd') { & '.\\.mailbox\\mail.cmd' check codex }; Get-Content -LiteralPath 'DESIGN_PROMPT.md'\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 296ms:
+# TETH �""�z?�?, �",����",�S, (���3,, 2026-10-01 �OO�s'�?" �T��)
+
+�OO�s'�?"��? "�z~�?o �""�z?�?,�3� UI/UX �??��,, �1'�"�"��o �?���o �T"�c': �,��(�?���~, �����o, �3'�^), ����z~�+O �-���� ��c��?, �"O�zo �T"�c'(��'��O, �檉?. �`? �1'�"o), ����z~�+O �,���?, ����z~�+O �3,��(��?�z. ��,, ��?�z. �T"�c' �-'�3� �?O�,�~" �' �OO�z? �1'�"o), ����z~�+O �-���� �S1�?,.
+**��^ �T"�c'�?'�,~ �3��1~�S" �T"�c'�?? ��,�? �?' ��,�,o�O?��o �O�"��<. �,��zO�-?��O�"� Codex�-?��O�"� �?' ��,�,o��� ��,�O?��o �",����",�S,��o �?�<.**
+
+## 1. �o �, �>?�1T
+�T"�c' �~�,~�-? ����� �~�,~. ��o��c �~�,~, �o �, �,��. �~�,~, ��� �<"�" �~�,~, �3'����S" �z`�?? ��`�, �?�?�, �'��o ��?�,� �~�,~. ChatGPT �,���3� �"O�zo �T"�c'�?, �,~�z?�z^ �+"�~�?, �O ��T�?? ��o�'^�o���o �3'�-��� �o�<.
+
+## 2. ��%
+| �"��z, | ��' |
+|---|---|
+| ��"��(�c"�?,, �,��, �-����, �����o) | #000 |
+| �"O�zo �T"�c' ��"�� | #000 (2026-10-01 �OO�s'�?": ��,�? ��?��) |
+| ��,�s' �1'�"o, ��� | #303030 (����?? #2f2f2f �-^�sc) |
+| �o�3� �1'�"o | �^���. + 1px rgba(255,255,255,.14~.15) |
+| �檉,�,� | 1px rgba(255,255,255,.1) |
+| �z.����1, | #212121 �~?�S" #2f2f2f, �.O�`?�ݪ �-+�?O �~?�S" �~.�?? 1px |
+| �3,��, �,?�z? | #ececec, ��o��c #fff |
+| �3'��� �,?�z? | #cdcdcd, �~.�?? �,?�z? #9a9a9a~#afafaf |
+| �����(��'��O �,���?, ��c�,^ �o �?�) | �OO�z? ��,�?��?��?'�.~ linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%) (��?�� ��"�� �,��?) + �.O�`?�ݪ #5a8dff, �<"�" #2f6fed |
+| �^~�?� / �+?�< | �'^��? / �1"�� (�^��z?�-?�O) |
+| **�,^�?** | �-��`? #c8f43c, ��,�ݬ�z? �,"��o, ��% ����?(��?��o�S" �,?�z?��o, �<�O"�O �1"��, �,?�z?) |
+
+## 3. �,?�z?
+| �s"�+O | �?��,� / ���,� |
+|---|---|
+| �T"�c' ��o��c | 32px 400 (�,�� 28px, ��"��"�?��?, 28~32) |
+| ��� ��o��c | 20px 600 �~?�S" 24~26px 400 |
+| �,1�.~ ��o��c | 18px 400 |
+| �o �, �,��. | 18px #cdcdcd (��"��"�?� 16) |
+| �-% �?���", �3,��, | 16px 400 |
+| �3'��� �, | 14px |
+| �^��z? | 400 ���,�, �?��,���o�O ����� |
+| �,?��' | �<o�S�.o �,��,,�ݪ�",. ��.��� �,^�? |
+
+## 4. �~��o
+- �1'�"o ��~��� 26(��"��"�?� 20~26), ��� ��~��� 24~26, �z.����1, ��~��� 19, ��?�?� ��~��� 26(��"��"�?� 20).
+- ��� �<"�": �?� �O��(������ #fff, �,?�z? #000, �+'�?' 48~52, ��~��� 999). �OO�z? �O���?? "��'��O �,���?"�3� "��c�,^ �o �?� �<�?O �<"�3,"�-?�O.
+- �3'��� �-%�?T: ��`�, �?�?� 14px #cdcdcd, ��T�?? �,��?�,��-? �,~�z?�z^(margin 0).
+- �~��,��� ����z`: �sO��% �O�� #2f2f2f 36px("�3?���", "�'?�ݪ", "��o��,�,�>�"). �o,�-~�o ����z`�O �1"��, �,?�z? + �-'�`?�s' �1"��, �O��.
+- �,���?�?: ��?�?��?'�,~ �O���?, �^,��'�c' �3 �,���?(�"���o "�3,�+?" �<"�" �-+�?O). �,���?�?o ����?? 2px #9a9a9a �.O�`?�ݪ.
+- ��c��?: �-%(�?���" �T����, ��'�?'�,~ ����z` �~��,���), �o �-%�-? ����z` �~�,~.
+- �S�.?�?�, ��^�~, �>?, �,�-%���, "N�<"�3, �,"�~�S�<^�<" �,^�?.
+- ��"��"�?� 390: ��O�s� 16px, ��?��o �S�?��� �-+�?O, �,' ����?? �3,��,�O �S�?����~�3� ��� �<"�"�S" �,�z~ �3���.
+- �-� �z^�S" ��?�<' �<"�"�S" �?' �T"�c'�"�-?�,o �^"�,��3�, �T"�c' �,�z~ �o �, "�%�z^�c' ��?�<'�>?�?' 24�<o��, �<�c�<^�<. ��?�<'�>?�-?��O ����,�".
+
+## 5. �??��,
+- ����� �^o�,o�O?��o �T"�c'�?, �,~�^^�<. �z �T"�c'�-?�,o �o �,���?�?? �<�<o ����? �S�S"�<.
+- �?^�?' �"���?, ��,�<�?O �-����(�檉?.). �-���� �??��,�?? ��'��O�T? �檉?.�?' ��T�<.
+- ��c�,^ �o �?��?' �z^�o��c'(��?�z. �T"�c'�?, �-'�3� �?O�,�~' �"�) ��, �1'�"o��? �OO�z-��O ��"�?O�3� ��� �<"�"��? �<�?O �-%�?T�o���o ��"�??�<.
+- �"o��, ��^�z~�S" �z`�?? �?�?� �~�,~��o(�~^: �檉?. �sO�>?�?~ "TETH �'^�O? �3,���o���o �-����").
+- �T,��O �T"�c': ��o��c "�-�����?~�-^�S�<^�<", �o �,, �3,�� �o �, �1'�"o, �<�?O �-%�?T �<"�" �~�,~, �z`�?? �?�?� �~�,~.
+- �1^ ��?��o�S" �1^ �^�,' �T"�c' �O?�<� �<��o �T"�c'(�~^: ��,�z� �-+�S" �,��_,�,?�?, ��"�S,)�?, �3'�?'�3� �o����-? �<�?O �-%�?T.
+
+## 6. �1'�"�
+- �c�<^�<��'. �<"�"�S" �,o�^��-'��o �??�,~�? �S�?O("��,�z� �<o�z`�~�,�", "OKX�-?�,o �S1�?,�~�,�", "�檉?. �'?�ݪ").
+- �o �T"�c'�-? �o �, �,��.. �,��. �<"�?� �,^�?. ��'�-؍?, �~�c' ��'�-؍?' �?~�S"�?�O("Gate �T"�c'�?' �-'�ݪ�c' �,�z~ �`? �O�o�?, �-^�sc�c�<^�<").
+- ����? �S�?? �����?, �"���? ����,'�? �S�S"�<("�z?�,��?? �3,�+? ��, �3,���-? �z^�S�<^�<", "�o�,^ �O�o�?? �-+�S�<^�<" �,^�?).
+- �,^�?: "�sO�>?�<~", �c'��.�3� ��o��o �3��?, "�?���"", "�<o�r���^�?'�.~", em dash, ��?�s'�Z���?, TETH ���_,�.~ �檍��, ����z~��� �S~�ݪ�?��S" �O�o�.
+- �OO�s'�?"��? ���o �?�?? ��"�_,�? �S�S"�<: "N��.�?' �"��?���?�S" �`", "�~?�>?�z^ ��'��O, �1'�"o �"�? �,�s"�-+�?O", "����z~�~�S" �,��zO�?, �o,�'", "�?�,^ �"��S" �3,�� ��,�O?��o", "�%�z^�c' ��?�<'�>?�?' 24�<o��, �<�c�<^�<".
+- �,��o ��,�z��?? "2026�., 10�>" 21�?�", ��c��? �,��o�S" "2026. 9. 21.". �,^���?? "$800".
+
+## 7. Codex�T? ��T�?' �~�S" �,�-%�� (��"�"� �T"�c' �3�+�)
+| �<"�3, | �^,��? | �,��o��� |
+|---|---|---|
+| s1 �>?�?, �,�,? | Codex(�?' ��,�,o + �,��? �T"�c' �����~ + �?�,^ �T"�c' �����~) �T? Claude ��?�z? | �<��, ��o�'^��~�Y� �3'�?'�S" �>?�?,(��%��"�S�, �檍��, �1'�"�), �z��檍,�^ �`o, �1'�"� ��?��' �`o, "�+�,��o vs �S��?�?��O" �o ��,�z� |
+| s2 �z��檍,� | Claude | ��?��o �,��3,�S" ��,�O?��o, ��,�ݪ�S" ����O ��?��'. �z?�?T ��?�,�(1440, 390) + �����~ |
+| s3 �"��.? ��?�^~ 1��" | Codex | MUST / NICE(�"��.? �������T? �3��1� ��'), �1'�"� �`o, ��~�?O �3'�S" �,��sc�z?�?~ �-%�?T |
+| s4 ��~�~? | Claude | MUST ��,�?, NICE�S" ������ �z^�S" ����O. �����^�?? �?'�o��T? �"��~ �,���? |
+| s5 ��o��. | Codex | "MUST �-+�?O"�?'�-'�� �?? |
+
+- Codex�S" �<��o CLI��o�O �?O�ݪ�3�(`gpt-6-astra`, �"��� high, �?��,� ��,�sc), �>?��,�?? �^~�� �-+�?' `CODEX_RAW.md`��o ��?�z��o�<. ��?�^~ ��,�>, index.html �'�<o��? ��T�,�� �o�<.
+- �OO�s'�?" ������?? Codex ��o�^�3'�< �s��,��o�<. ����� �,���?�?? �T"�c' �?'�?"�?~ `DECISIONS.md`.
+- �,��? �����~: `qa/ex-plan/r/P1-plan-member.png`, `qa/ex-plan/s6/r/X1-ex.png`, `X2-acct.png`, `X2b-acct-joined.png`, `X3-auth.png`, `X5-done.png`, `qa/gpt-skin/settings/s4/K1-billing.png`, `K2-sub-dlg.png`.
+
+## 8. Codex 1�<"�3, �",����",�S, �>?��, (�T"�c'�^�< < > �O ��,�s'�<)
+```
+�<1�<��?? ChatGPT ��o�'^�?~ �""�z?�?, �ݪ�"o��o �1T�?~�c�<^�<. TETH�?~ "<�T"�c' �?'��,>"�?, �'.�<^�<. �o��-�-'��o�O �<�c�<^�<. �OO�?��?? �?��,��O �~�3� �3��1~�? �S�S�<^�<.
+�""�z?�?, �,��?: DESIGN_PROMPT.md (��%, �,?�z?, �~��o, �??��,, �1'�"� ��o�1T�3� �OO�s'�?"��? ���o �?)
+��"�?: �,��? �T"�c' �����~, �?�,^ �T"�c'(1440, 390)
+�?' �T"�c'�-?�,o �,��sc�z?��? �,'�ݪ�S" �����: <�����>
+A. �,��?�3� �<��, ��o�'^��~�Y� �3'�?'�S" �>?�?,�?, ��%��"�S�, �檍��, �1'�"���o �,~�^� �"��.?�?'�,~ ��,�� ��������o. �"�,� �,^�?.
+B. ChatGPT�?��c': �T"�c' �^~, ��o��c, �o �,, �z.���, ��� �<"�", �3'��� �-%�?T�?, �`o��o. �?�>O�?, �?~�S" ���3'�T? �?�s��c' �^ �?~�S" ���3' �檉,.
+C. �1'�"� ��?��' �`o(�~,�z� �+' ��o�^). DESIGN_PROMPT.md 6�z� ��o�1T.
+D. �o ��,�z�: �+�,��o �z��檍,�?,�?, �S��?�?��3� �1'�"��O�?,�?.
+�`o�T? ��?? ��,�<", 750�<"�-' �?'�,', ������ �-+�S" �1-��� �,^�?.
+```
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ exited 1 in 47ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk rg --files -g '*DESIGN*' -g '*.png' -g 'AGENTS.md' -g '*.html' -g '*.js' -g '*.mjs'" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ exited 1 in 43ms:
+rtk: Cannot determine Claude config directory. Set $CLAUDE_CONFIG_DIR or $HOME.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy python -c \"from pathlib import Path; p=Path.cwd(); print('DESIGN'); print((p/'DESIGN_PROMPT.md').read_text(encoding='utf-8')); print('FILES'); print('\\n'.join(x.name for x in p.iterdir())); print('ANCESTORS'); print('\\n'.join(str(x) for x in p.parents if (x/'.git').exists() or (x/'index.html').exists()))\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ exited 1 in 252ms:
+rtk: Failed to execute command: python: The file cannot be accessed by the system. (os error 1920)
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"Get-Content -Encoding UTF8 -LiteralPath 'DESIGN_PROMPT.md'; Get-ChildItem -Name; Get-Item '..\\..\\..\\..\\index.html' -ErrorAction SilentlyContinue\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 405ms:
+# TETH ??? ???? (??, 2026-10-01 ??? ??)
+
+???? "?? ???? UI/UX ??, ??"? ??? ??: ??(??, ??, ??), ??? ?? ??, ?? ??(??, ?? ? ??), ??? ??, ??? ??(?? ?, ?? ?? ?? ??? ? ?? ??), ??? ?? ??.
+**? ???? ??? ??? ?? ? ???? ???. ????? Codex??? ? ??? ??? ????? ??.**
+
+## 1. ? ? ??
+?? ??? ?? ??. ?? ??, ? ? ?? ??, ? ?? ??, ??? ?? ?? ??, ?? ?? ??. ChatGPT ??? ?? ??? ??? ??? ? ?? ???? ??? ??.
+
+## 2. ?
+| ?? | ? |
+|---|---|
+| ??(??, ??, ??, ??) | #000 |
+| ?? ?? ?? | #000 (2026-10-01 ???: ?? ??) |
+| ?? ??, ? | #303030 (?? #2f2f2f ??) |
+| ?? ?? | ?? + 1px rgba(255,255,255,.14~.15) |
+| ??? | 1px rgba(255,255,255,.1) |
+| ??? | #212121 ?? #2f2f2f, ??? ?? ?? ?? 1px |
+| ?? ?? | #ececec, ?? #fff |
+| ?? ?? | #cdcdcd, ?? ?? #9a9a9a~#afafaf |
+| ??(?? ??, ?? ? ?) | ?? ????? linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%) (?? ?? ??) + ??? #5a8dff, ?? #2f6fed |
+| ?? / ?? | ?? / ?? (????) |
+| **??** | ?? #c8f43c, ??? ??, ? ??(??? ???, ??? ?? ??) |
+
+## 3. ??
+| ?? | ?? / ?? |
+|---|---|
+| ?? ?? | 32px 400 (?? 28px, ???? 28~32) |
+| ? ?? | 20px 600 ?? 24~26px 400 |
+| ?? ?? | 18px 400 |
+| ? ? ?? | 18px #cdcdcd (??? 16) |
+| ? ??, ?? | 16px 400 |
+| ?? ? | 14px |
+| ?? | 400 ??, ???? ?? |
+| ?? | ??? ????. ?? ?? |
+
+## 4. ??
+- ?? ?? 26(??? 20~26), ? ?? 24~26, ??? ?? 19, ?? ?? 26(??? 20).
+- ? ??: ? ??(?? #fff, ?? #000, ?? 48~52, ?? 999). ?? ??? "?? ??"? "?? ? ? ?? ??"??.
+- ?? ??: ?? ?? 14px #cdcdcd, ?? ???? ???(margin 0).
+- ??? ??: ?? ?? #2f2f2f 36px("??", "??", "????"). ??? ??? ?? ?? + ??? ?? ??.
+- ???: ???? ??? ??? ? ??(?? "??" ?? ??). ??? ?? 2px #9a9a9a ???.
+- ??: ?(?? ??, ??? ?? ???), ? ?? ?? ??.
+- ???, ?? ?, ???, "N?? ?????" ??.
+- ??? 390: ?? 16px, ?? ??? ??, ? ?? ??? ????? ? ??? ?? ??.
+- ? ?? ?? ??? ? ????? ???, ?? ?? ? ? "??? ???? 24?? ????. ????? ??".
+
+## 5. ??
+- ?? ???? ??? ???. ? ???? ? ??? ?? ?? ???.
+- ?? ??, ??? ??(??). ?? ??? ??? ??? ??.
+- ?? ? ?? ???(?? ??? ?? ??? ?) ? ??? ??? ??? ? ??? ?? ???? ???.
+- ?? ??? ?? ?? ???(?: ?? ??? "TETH ?? ???? ??").
+- ?? ??: ?? "???????", ? ?, ?? ? ? ??, ?? ?? ?? ??, ?? ?? ??.
+- ? ??? ? ?? ?? ?? ?? ??(?: ?? ?? ???? ??)? ??? ??? ?? ??.
+
+## 6. ??
+- ????. ??? ???? ??? ??("?? ????", "OKX?? ????", "?? ??").
+- ? ??? ? ? ??. ?? ?? ??. ??? ?? ??? ????("Gate ??? ??? ?? ? ??? ?????").
+- ?? ?? ??? ?? ??? ???("??? ?? ? ??? ????", "?? ??? ????" ??).
+- ??: "???", ??? ?? ??, "??", "?????", em dash, ????, TETH ??? ??, ??? ???? ??.
+- ???? ?? ?? ??? ???: "N?? ???? ?", "??? ??, ?? ?? ????", "???? ??? ??", "?? ?? ?? ???", "??? ???? 24?? ????".
+- ?? ??? "2026? 10? 21?", ?? ??? "2026. 9. 21.". ??? "$800".
+
+## 7. Codex? ?? ?? ??? (?? ?? ??)
+| ?? | ?? | ??? |
+|---|---|---|
+| s1 ?? ?? | Codex(? ?? + ?? ?? ?? + ?? ?? ??) ? Claude ?? | ?? ???? ??? ??(???, ??, ??), ???? ?, ?? ?? ?, "??? vs ????" ? ?? |
+| s2 ??? | Claude | ?? ??? ???, ??? ?? ??. ?? ??(1440, 390) + ?? |
+| s3 ?? ?? 1? | Codex | MUST / NICE(?? ??? ?? ?), ?? ?, ?? ?? ???? ?? |
+| s4 ?? | Claude | MUST ??, NICE? ?? ?? ??. ??? ??? ?? ?? |
+| s5 ?? | Codex | "MUST ??"??? ? |
+
+- Codex? ?? CLI?? ???(`gpt-6-astra`, ?? high, ?? ??), ??? ?? ?? `CODEX_RAW.md`? ????. ?? ?? index.html ??? ??? ??.
+- ??? ??? Codex ???? ????. ?? ??? ?? ??? `DECISIONS.md`.
+- ?? ??: `qa/ex-plan/r/P1-plan-member.png`, `qa/ex-plan/s6/r/X1-ex.png`, `X2-acct.png`, `X2b-acct-joined.png`, `X3-auth.png`, `X5-done.png`, `qa/gpt-skin/settings/s4/K1-billing.png`, `K2-sub-dlg.png`.
+
+## 8. Codex 1?? ???? ?? (???? < > ? ???)
+```
+??? ChatGPT ??? ??? ??? ?????. TETH? "<?? ??>"? ???. ????? ????. ??? ??? ?? ??? ????.
+??? ??: DESIGN_PROMPT.md (?, ??, ??, ??, ?? ??? ???? ?? ?)
+??: ?? ?? ??, ?? ??(1440, 390)
+? ???? ???? ??? ??: <??>
+A. ??? ?? ???? ??? ??? ???, ??, ??? ?? ???? ?? ???. ?? ??.
+B. ChatGPT??: ?? ?, ??, ? ?, ??, ? ??, ?? ??? ??. ??? ?? ??? ??? ? ?? ?? ??.
+C. ?? ?? ?(??  ??). DESIGN_PROMPT.md 6? ??.
+D. ? ??: ??? ?????, ???? ?????.
+?? ?? ??, 750?? ??, ?? ?? ?? ??.
+```
+C1-detail-chart-m.png
+C1-detail-chart.png
+C2-calendar-m.png
+C2-calendar.png
+C3-bt-chart-m.png
+C3-bt-chart.png
+C4-bt-log-m.png
+C4-bt-log.png
+C5-bt-month-m.png
+C5-bt-month.png
+DESIGN_PROMPT.md
+log.txt
+PROMPT.md
+REF-card.png
+sha-before.txt
+
+
+    Directory: C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1
+
+
+Mode                 LastWriteTime         Length Name                                                                 
+----                 -------------         ------ ----                                                                 
+-a----         1/10/2026  10:58 pm        2529356 index.html                                                           
+
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rtk proxy git status --short' in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 94ms:
+ M ../../../../artifacts/teth-redesign/r2-follow-sheet.png
+ M ../../../../index.html
+ M ../../../16-fixes/FLOWS_RESULT.txt
+ M ../../../16-fixes/R11-conversions.txt
+ M ../../../16-fixes/rail/rail-check.txt
+ M ../../../16-fixes/rail/st-full-check.txt
+ M ../../../16-fixes/round-1/R02-reading-loading-h1.png
+ M ../../../16-fixes/round-1/R02-result-h1.png
+ M ../../../16-fixes/round-1/R03-decision-open-h1.png
+ M ../../../16-fixes/round-1/R03-decisions-h1.png
+ M ../../../16-fixes/round-1/R04-early-h1.png
+ M ../../../16-fixes/round-1/R04-judgment-1-h1.png
+ M ../../../16-fixes/round-1/R04-judgment-2-h1.png
+ M ../../../16-fixes/round-1/R04-judgment-3-h1.png
+ M ../../../16-fixes/round-1/R04-judgment-4-h1.png
+ M ../../../16-fixes/round-1/bt-check-h1.txt
+ M ../../../16-fixes/round-2/R01-auth-age-step.png
+ M ../../../16-fixes/round-2/R01-guest-auth.png
+ M ../../../16-fixes/round-2/R01-resumed-backtest.png
+ M ../../../16-fixes/round-2/R02-reading-loading-h1.png
+ M ../../../16-fixes/round-2/R02-result-h1.png
+ M ../../../16-fixes/round-2/R03-decision-open-h1.png
+ M ../../../16-fixes/round-2/R03-decisions-h1.png
+ M ../../../16-fixes/round-2/R04-early-h1.png
+ M ../../../16-fixes/round-2/R04-judgment-1-h1.png
+ M ../../../16-fixes/round-2/R04-judgment-2-h1.png
+ M ../../../16-fixes/round-2/R04-judgment-3-h1.png
+ M ../../../16-fixes/round-2/R04-judgment-4-h1.png
+ M ../../../16-fixes/round-2/R08-consent-gate.png
+ M ../../../16-fixes/round-2/R08-consent.png
+ M ../../../16-fixes/round-2/R08-page-bottom.png
+ M ../../../16-fixes/round-2/R08-page-connected.png
+ M ../../../16-fixes/round-2/R08-page.png
+ M ../../../16-fixes/round-2/R09-A-route.png
+ M ../../../16-fixes/round-2/R09-B-exchange.png
+ M ../../../16-fixes/round-2/R09-C-account.png
+ M ../../../16-fixes/round-2/R09-D-guide.png
+ M ../../../16-fixes/round-2/R09-E-authorize.png
+ M ../../../16-fixes/round-2/R09-F-auth-cancel.png
+ M ../../../16-fixes/round-2/R09-G-uid-checking.png
+ M ../../../16-fixes/round-2/R09-H-uid-fail.png
+ M ../../../16-fixes/round-2/R09-I-done.png
+ M ../../../16-fixes/round-2/R09-J-pay.png
+ M ../../../16-fixes/round-2/R09-K-pay-fail.png
+ M ../../../16-fixes/round-2/R09-L-pay-ok.png
+ M ../../../16-fixes/round-2/R09-M-paid-done.png
+ M ../../../16-fixes/round-2/R10-expired-subscription.png
+ M ../../../16-fixes/round-2/R10-other-exchange.png
+ M ../../../16-fixes/round-2/R12-delete-confirm.png
+ M ../../../16-fixes/round-2/R12-settings-account-paid-bottom.png
+ M ../../../16-fixes/round-2/R12-settings-account-paid.png
+ M ../../../16-fixes/round-2/R12-settings-general-paid.png
+ M ../../../16-fixes/round-2/R12-settings-notify-paid.png
+ M ../../../16-fixes/round-2/R12-settings-security-paid.png
+ M ../../../16-fixes/round-2/R13-cancel-confirm.png
+ M ../../../16-fixes/round-2/R13-settings-billing-expired.png
+ M ../../../16-fixes/round-2/R13-settings-billing-none.png
+ M ../../../16-fixes/round-2/R13-settings-billing-paid-bottom.png
+ M ../../../16-fixes/round-2/R13-settings-billing-paid.png
+ M ../../../16-fixes/round-2/R13-settings-billing-partner.png
+ M ../../../16-fixes/round-2/R14-entry.png
+ M ../../../16-fixes/round-2/R14-guest-auth.png
+ M ../../../16-fixes/round-2/R14-guest-landing.png
+ M ../../../16-fixes/round-2/R14-terminal-ready.png
+ M ../../../16-fixes/round-2/ac-check.txt
+ M ../../../16-fixes/round-2/bt-check-h1.txt
+ M ../../../16-fixes/round-2/r01-check.txt
+ M ../../../bt-next/r/R0-chat-strategy.png
+ M ../../../bt-next/r/R1-result-good.png
+ M ../../../bt-next/r/R2-result-bad-mine.png
+ M ../../../bt-next/r/R3-result-bad-copy.png
+ M ../../../bt-next/r/R3b-chat-ask.png
+ M ../../../bt-next/r/R4-chat-proposal.png
+ M ../../../bt-next/r/R5-rerun-running.png
+ M ../../../bt-next/r/R6-result-compare.png
+ M ../../../bt-next/r/rv-check.txt
+ M ../../../ex-plan/r/P1-plan-guest.png
+ M ../../../ex-plan/r/P1-plan-member.png
+ M ../../../ex-plan/r/P1-plan-with-backtest.png
+ M ../../../ex-plan/r/P2A-checkout-fail.png
+ M ../../../ex-plan/r/P2A-checkout.png
+ M ../../../ex-plan/r/P2B-free-guide.png
+ M ../../../ex-plan/r/P3-free-done.png
+ M ../../../ex-plan/r/P3-paid-auth.png
+ M ../../../ex-plan/r/P4-kyc-gate-fail.png
+ M ../../../ex-plan/r/P5-paid-limit.png
+ M ../../../ex-plan/r/pl-check.txt
+ M ../../../ex-plan/s6/r/X1-ex.png
+ M ../../../ex-plan/s6/r/X1b-ex-after-pay.png
+ M ../../../ex-plan/s6/r/X2-acct.png
+ M ../../../ex-plan/s6/r/X2b-acct-joined.png
+ M ../../../ex-plan/s6/r/X3-auth-paid.png
+ M ../../../ex-plan/s6/r/X3-auth.png
+ M ../../../ex-plan/s6/r/X4-uid.png
+ M ../../../ex-plan/s6/r/X5-done.png
+ M ../../../ex-plan/s6/r/X6-kyc.png
+ M ../../../ex-plan/s6/r/X7-list.png
+ M ../../../ex-plan/s6/r/X8-third.png
+ M ../../ask/r/I1-card.png
+ M ../../ask/r/I2-ask-sheet.png
+ M ../../ask/r/I3-after-answer.png
+ M ../../ask/r/intent-check.txt
+ M ../../bt/s6/A1-top.png
+ M ../../bt/s6/A2-log.png
+ M ../../bt/s6/A3-trades.png
+ M ../../bt/s6/A4-month.png
+ M ../../copy/s2/K1-empty.png
+ M ../../copy/s2/K2-under-min.png
+ M ../../copy/s2/K3-filled-adv.png
+ M ../../mkt/r/M1-empty-m.png
+ M ../../mkt/r/M1-empty.png
+ M ../../mkt/r/M2-picker-m.png
+ M ../../mkt/r/M2-picker.png
+ M ../../mkt/r/M3-info-m.png
+ M ../../mkt/r/M3-info.png
+ M ../../mkt/r/M4-data-m.png
+ M ../../mkt/r/M4-data.png
+ M ../../mkt/r/M5-strat-m.png
+ M ../../mkt/r/M5-strat.png
+ M ../../mkt/r/M6-rail-m.png
+ M ../../mkt/r/M6-rail.png
+ M ../../order/r/O1-ask.png
+ M ../../order/r/O2-card.png
+ M ../../order/r/O3-wait.png
+ M ../../order/r/O4-terminal.png
+ M ../../order/r/order-check.txt
+ M ../../qa-panel/r/P0-panel.png
+ M ../../qa-panel/r/S01.png
+ M ../../qa-panel/r/S02.png
+ M ../../qa-panel/r/S03.png
+ M ../../qa-panel/r/S04.png
+ M ../../qa-panel/r/S05.png
+ M ../../qa-panel/r/S06.png
+ M ../../qa-panel/r/S07.png
+ M ../../qa-panel/r/S08.png
+ M ../../qa-panel/r/S09.png
+ M ../../qa-panel/r/S10.png
+ M ../../qa-panel/r/S11.png
+ M ../../qa-panel/r/S12.png
+ M ../../qa-panel/r/S13.png
+ M ../../qa-panel/r/S14.png
+ M ../../qa-panel/r/S15.png
+ M ../../qa-panel/r/S16.png
+ M ../../qa-panel/r/S17.png
+ M ../../qa-panel/r/S18.png
+ M ../../qa-panel/r/S19.png
+ M ../../qa-panel/r/S20.png
+ M ../../qa-panel/r/S21.png
+ M ../../qa-panel/r/S22.png
+ M ../../qa-panel/r/S23.png
+ M ../../qa-panel/r/S24.png
+ M ../../qa-panel/r/S25.png
+ M ../../qa-panel/r/S26.png
+ M ../../qa-panel/r/S27.png
+ M ../../qa-panel/r/S28.png
+ M ../../qa-panel/r/S29.png
+ M ../../qa-panel/r/S30.png
+ M ../../qa-panel/r/S31.png
+ M ../../qa-panel/r/S32.png
+ M ../../qa-panel/r/S33.png
+ M ../../qa-panel/r/S34.png
+ M ../../qa-panel/r/S35.png
+ M ../../qa-panel/r/S36.png
+ M ../../qa-panel/r/S37.png
+ M ../../qa-panel/r/S38.png
+ M ../../qa-panel/r/S39.png
+ M ../../qa-panel/r/S40.png
+ M ../../qa-panel/r/S41.png
+ M ../../qa-panel/r/S42.png
+ M ../../qa-panel/r/S43.png
+ M ../../qa-panel/r/S44.png
+ M ../../qa-panel/r/S45.png
+ M ../../qa-panel/r/S46.png
+ M ../../qa-panel/r/S47.png
+ M ../../qa-panel/r/S48.png
+ M ../../qa-panel/r/S49.png
+ M ../../qa-panel/r/S50.png
+ M ../../qa-panel/r/S51.png
+ M ../../qa-panel/r/S52.png
+ M ../../qa-panel/r/qa-panel-check.txt
+ M ../../settings/s2/K1-billing.png
+ M ../../settings/s2/K2-sub-dlg.png
+ M ../../settings/s2/K3-cancel-confirm.png
+ M ../../settings/s2/K4-cards-dlg.png
+ M ../../settings/s2/K5-billing-expired.png
+ M ../../settings/s2/K6-security.png
+ M ../../settings/s2/K7-notify.png
+ M ../../settings/s2/sk-check.txt
+ M ../../../../ux-audit/card3/grid4-1440.png
+ M ../../../../ux-audit/card3/grid4-pager-1440.png
+ M ../../../../version.json
+?? ../../../../artifacts/teth-redesign/card2/c1-codex.log
+?? ../../../../artifacts/teth-redesign/card2/c2-codex.log
+?? ../../../../artifacts/teth-redesign/card2/c3-codex.log
+?? ../../../../artifacts/teth-redesign/card2/c8-1024.png
+?? ../../../../artifacts/teth-redesign/card2/c8-1100.png
+?? ../../../../artifacts/teth-redesign/card2/c8-1101.png
+?? ../../../../artifacts/teth-redesign/card2/c8-1280.png
+?? ../../../../artifacts/teth-redesign/card2/c8-1440.png
+?? ../../../../artifacts/teth-redesign/card2/c8-1920.png
+?? ../../../../artifacts/teth-redesign/card2/c8-390.png
+?? ../../../../artifacts/teth-redesign/card2/c8-768.png
+?? ../../../../artifacts/teth-redesign/card2/r1-info-full.png
+?? ../../../../artifacts/teth-redesign/card2/r1-log-full.png
+?? ../../../../artifacts/teth-redesign/card2/r1-ov-full.png
+?? ../../../../artifacts/teth-redesign/card2/r1-perf-full.png
+?? ../../../../artifacts/teth-redesign/card2/r1-trades-full.png
+?? ../../../16-fixes/an/an-1-bubble.png
+?? ../../../16-fixes/an/an-2-shots.png
+?? ../../../16-fixes/an/an-3-shot-zoom.png
+?? ../../../16-fixes/an/an-4-answer.png
+?? ../../../16-fixes/an/probe-h2i.png
+?? ../../../16-fixes/presets/p02-account.png
+?? ../../../16-fixes/presets/p02-billing-2.png
+?? ../../../16-fixes/presets/p02-billing.png
+?? ../../../16-fixes/presets/p02-brokers.png
+?? ../../../16-fixes/presets/p02-security-2.png
+?? ../../../16-fixes/presets/p02-security.png
+?? ../../../16-fixes/presets/p02-trade-start.png
+?? ../../../16-fixes/presets/p02-trade.png
+?? ../../../16-fixes/presets/p12-account.png
+?? ../../../16-fixes/presets/p12-billing-2.png
+?? ../../../16-fixes/presets/p12-billing.png
+?? ../../../16-fixes/presets/p12-brokers.png
+?? ../../../16-fixes/presets/p12-security-2.png
+?? ../../../16-fixes/presets/p12-security.png
+?? ../../../16-fixes/presets/p12-trade.png
+?? ../../../16-fixes/presets/p13-account.png
+?? ../../../16-fixes/presets/p13-billing-2.png
+?? ../../../16-fixes/presets/p13-billing.png
+?? ../../../16-fixes/presets/p13-brokers.png
+?? ../../../16-fixes/presets/p13-security-2.png
+?? ../../../16-fixes/presets/p13-security.png
+?? ../../../16-fixes/presets/p13-trade.png
+?? ../../../16-fixes/presets/p14-account.png
+?? ../../../16-fixes/presets/p14-billing-2.png
+?? ../../../16-fixes/presets/p14-billing.png
+?? ../../../16-fixes/presets/p14-brokers.png
+?? ../../../16-fixes/presets/p14-security-2.png
+?? ../../../16-fixes/presets/p14-security.png
+?? ../../../16-fixes/presets/p14-trade.png
+?? ../../../16-fixes/presets/p15-account.png
+?? ../../../16-fixes/presets/p15-billing-2.png
+?? ../../../16-fixes/presets/p15-billing.png
+?? ../../../16-fixes/presets/p15-brokers.png
+?? ../../../16-fixes/presets/p15-security-2.png
+?? ../../../16-fixes/presets/p15-security.png
+?? ../../../16-fixes/presets/p15-trade.png
+?? ../../../16-fixes/rail/card-fw.png
+?? ../../../16-fixes/rail/chat-guest.png
+?? ../../../16-fixes/rail/chat-user.png
+?? ../../../16-fixes/rail/detail-cta.png
+?? "../../../16-fixes/rail/guest-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../../16-fixes/rail/guest-g-gear-btn.png
+?? ../../../16-fixes/rail/guest-g-login-btn.png
+?? ../../../16-fixes/rail/guest-menu.png
+?? "../../../16-fixes/rail/guest-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../../16-fixes/rail/guest-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../../16-fixes/rail/guest-\353\241\234\352\267\270\354\235\270.png"
+?? "../../../16-fixes/rail/guest-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../../16-fixes/rail/guest-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../../16-fixes/rail/st-collapsed-hover.png
+?? ../../../16-fixes/rail/st-collapsed.png
+?? ../../../16-fixes/rail/st-full-1440.png
+?? ../../../16-fixes/rail/st-full-2000.png
+?? ../../../16-fixes/rail/st-full-390.png
+?? ../../../16-fixes/rail/st-full-notify-1440.png
+?? ../../../16-fixes/rail/st-full-notify-2000.png
+?? ../../../16-fixes/rail/st-full-notify-390.png
+?? ../../../16-fixes/rail/st-open-hover.png
+?? ../../../16-fixes/rail/st-open.png
+?? ../../../16-fixes/rail/tail.log
+?? ../../../16-fixes/rail/tail.log.mark
+?? ../../../16-fixes/rail/user-after.png
+?? ../../../16-fixes/rail/user-collapsed-hover.png
+?? ../../../16-fixes/rail/user-expanded-menu.png
+?? "../../../16-fixes/rail/user-home-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../../16-fixes/rail/user-home-g-gear-btn.png
+?? ../../../16-fixes/rail/user-home-g-me-row.png
+?? "../../../16-fixes/rail/user-home-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../../16-fixes/rail/user-home-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../../16-fixes/rail/user-home-\352\271\200\353\217\204\355\230\204.png"
+?? "../../../16-fixes/rail/user-home-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../../16-fixes/rail/user-home-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../../16-fixes/rail/user-menu.png
+?? ../../../16-fixes/rail/user-settings-g-gear-btn.png
+?? ../../../16-fixes/rail/user-settings-g-me-row.png
+?? "../../../16-fixes/rail/user-settings-\352\271\200\353\217\204\355\230\204.png"
+?? "../../../16-fixes/rail/user-strategies-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../../16-fixes/rail/user-strategies-g-gear-btn.png
+?? ../../../16-fixes/rail/user-strategies-g-me-row.png
+?? "../../../16-fixes/rail/user-strategies-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../../16-fixes/rail/user-strategies-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../../16-fixes/rail/user-strategies-\352\271\200\353\217\204\355\230\204.png"
+?? "../../../16-fixes/rail/user-strategies-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../../16-fixes/rail/user-strategies-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? "../../../16-fixes/rail/user-trade-AI\355\212\270\353\240\210\354\235\264\353\224\251.png"
+?? ../../../16-fixes/rail/user-trade-g-gear-btn.png
+?? ../../../16-fixes/rail/user-trade-g-me-row.png
+?? "../../../16-fixes/rail/user-trade-\352\261\260\353\236\230\354\206\214\354\227\260\352\262\260.png"
+?? "../../../16-fixes/rail/user-trade-\352\263\240\352\260\235\352\264\200\352\263\204\354\232\224\354\225\275.png"
+?? "../../../16-fixes/rail/user-trade-\352\271\200\353\217\204\355\230\204.png"
+?? "../../../16-fixes/rail/user-trade-\354\203\210\354\240\204\353\236\265\353\247\214\353\223\244\352\270\260.png"
+?? "../../../16-fixes/rail/user-trade-\354\240\204\353\236\265\353\224\260\353\235\274\355\225\230\352\270\260.png"
+?? ../../../ai/
+?? ../../../baseline/
+?? ../../../final/S01-backtest-ready.png
+?? ../../../final/S02-early-processing.png
+?? ../../../final/S02a-preparing.png
+?? ../../../final/S02b-first-decision.png
+?? ../../../final/S03-mid-processing.png
+?? ../../../final/S03a-skip-signal.png
+?? ../../../final/S03b-skip-review.png
+?? ../../../final/S03c-between-events.png
+?? ../../../final/S04-final-processing.png
+?? ../../../final/S05-results-above-fold.png
+?? ../../../final/S05b-results-hover.png
+?? ../../../final/S06-results-evidence.png
+?? ../../../final/S07-decision-detail.png
+?? ../../../final/S08-trade-detail.png
+?? ../../../final/S08b-result-full-page.png
+?? ../../../final/S09-activation-choice.png
+?? ../../../final/S10-card-path.png
+?? ../../../final/S11-exchange-connection.png
+?? ../../../final/S11a-exchange-form.png
+?? ../../../final/S12-partner-exchange.png
+?? ../../../final/S12b-partner-new-account.png
+?? ../../../final/S13-uid-verification.png
+?? ../../../final/S14-api-connection.png
+?? ../../../final/S14a-api-form.png
+?? ../../../final/S15-success.png
+?? ../../../final/S15b-success-own-account.png
+?? ../../../final/X01-uid-not-found.png
+?? ../../../final/d1-w1440/S01-backtest-ready.png
+?? ../../../final/d1-w1440/S02-early-processing.png
+?? ../../../final/d1-w1440/S02a-preparing.png
+?? ../../../final/d1-w1440/S03-mid-processing.png
+?? ../../../final/d1-w1440/S04-final-processing.png
+?? ../../../final/d1-w1440/S05-results-above-fold.png
+?? ../../../final/d1-w1440/S06-results-evidence.png
+?? ../../../final/d1-w1440/S07-decision-detail.png
+?? ../../../final/d1-w1440/S08-trade-detail.png
+?? ../../../final/d1-w1440/S09-activation-choice.png
+?? ../../../final/d1-w1440/S10-card-path.png
+?? ../../../final/d1-w1440/S11-exchange-connection.png
+?? ../../../final/d1-w1440/S12-partner-exchange.png
+?? ../../../final/d1-w1440/S13-uid-verification.png
+?? ../../../final/d1-w1440/S14-api-connection.png
+?? ../../../final/d1-w1440/S15-success.png
+?? ../../../final/h1-w1440/S01-backtest-ready.png
+?? ../../../final/h1-w1440/S02-early-processing.png
+?? ../../../final/h1-w1440/S02a-preparing.png
+?? ../../../final/h1-w1440/S03-mid-processing.png
+?? ../../../final/h1-w1440/S04-final-processing.png
+?? ../../../final/h1-w1440/S05-results-above-fold.png
+?? ../../../final/h1-w1440/S06-results-evidence.png
+?? ../../../final/h1-w1440/S07-decision-detail.png
+?? ../../../final/h1-w1440/S08-trade-detail.png
+?? ../../../final/h1-w1440/S09-activation-choice.png
+?? ../../../final/h1-w1440/S10-card-path.png
+?? ../../../final/h1-w1440/S11-exchange-connection.png
+?? ../../../final/h1-w1440/S12-partner-exchange.png
+?? ../../../final/h1-w1440/S13-uid-verification.png
+?? ../../../final/h1-w1440/S14-api-connection.png
+?? ../../../final/h1-w1440/S15-success.png
+?? ../../../final/r1-w1440/S01-backtest-ready.png
+?? ../../../final/r1-w1440/S02a-preparing.png
+?? ../../../final/r1-w1440/S04-final-processing.png
+?? ../../../final/r1-w1440/S05-results-above-fold.png
+?? ../../../final/r1-w1440/S06-results-evidence.png
+?? ../../../final/r1-w1440/S07-decision-detail.png
+?? ../../../final/r1-w1440/S08-trade-detail.png
+?? ../../../final/r1-w1440/S09-activation-choice.png
+?? ../../../final/r1-w1440/S10-card-path.png
+?? ../../../final/r1-w1440/S11-exchange-connection.png
+?? ../../../final/r1-w1440/S12-partner-exchange.png
+?? ../../../final/r1-w1440/S13-uid-verification.png
+?? ../../../final/r1-w1440/S14-api-connection.png
+?? ../../../final/r1-w1440/S15-success.png
+?? ../../../final/seq/
+?? ../../../final/w1280/S01-backtest-ready.png
+?? ../../../final/w1280/S02-early-processing.png
+?? ../../../final/w1280/S02a-preparing.png
+?? ../../../final/w1280/S03-mid-processing.png
+?? ../../../final/w1280/S04-final-processing.png
+?? ../../../final/w1280/S05-results-above-fold.png
+?? ../../../final/w1280/S06-results-evidence.png
+?? ../../../final/w1280/S07-decision-detail.png
+?? ../../../final/w1280/S08-trade-detail.png
+?? ../../../final/w1280/S09-activation-choice.png
+?? ../../../final/w1280/S10-card-path.png
+?? ../../../final/w1280/S11-exchange-connection.png
+?? ../../../final/w1280/S12-partner-exchange.png
+?? ../../../final/w1280/S13-uid-verification.png
+?? ../../../final/w1280/S14-api-connection.png
+?? ../../../final/w1280/S15-success.png
+?? ../../../final/w390/S01-backtest-ready.png
+?? ../../../final/w390/S02-early-processing.png
+?? ../../../final/w390/S02a-preparing.png
+?? ../../../final/w390/S03-mid-processing.png
+?? ../../../final/w390/S04-final-processing.png
+?? ../../../final/w390/S05-results-above-fold.png
+?? ../../../final/w390/S06-results-evidence.png
+?? ../../../final/w390/S07-decision-detail.png
+?? ../../../final/w390/S08-trade-detail.png
+?? ../../../final/w390/S09-activation-choice.png
+?? ../../../final/w390/S10-card-path.png
+?? ../../../final/w390/S11-exchange-connection.png
+?? ../../../final/w390/S12-partner-exchange.png
+?? ../../../final/w390/S13-uid-verification.png
+?? ../../../final/w390/S14-api-connection.png
+?? ../../../final/w390/S15-success.png
+?? ../../../final2/F01-a-uid-failed.png
+?? ../../../final2/F01-b-after-continue.png
+?? ../../../final2/F01-c-changed-uid-needs-api.png
+?? ../../../final2/F01-d-success-valid.png
+?? ../../../final2/F02-pick-reason.png
+?? ../../../final2/F03-travel-1.png
+?? ../../../final2/F03-travel-2.png
+?? ../../../final2/F03-travel-3.png
+?? ../../../final2/F03-travel-4.png
+?? ../../../final2/R09-all-activity-d1.png
+?? ../../../final2/S01-backtest-ready.png
+?? ../../../final2/S02-early-processing.png
+?? ../../../final2/S02a-preparing.png
+?? ../../../final2/S02b-first-decision.png
+?? ../../../final2/S03-mid-processing.png
+?? ../../../final2/S03a-skip-signal.png
+?? ../../../final2/S03b-skip-review.png
+?? ../../../final2/S03c-between-events.png
+?? ../../../final2/S04-final-processing.png
+?? ../../../final2/S05-results-above-fold.png
+?? ../../../final2/S05b-results-hover.png
+?? ../../../final2/S06-results-evidence.png
+?? ../../../final2/S07-decision-detail.png
+?? ../../../final2/S08-trade-detail.png
+?? ../../../final2/S08b-result-full-page.png
+?? ../../../final2/S09-activation-choice.png
+?? ../../../final2/S10-card-path.png
+?? ../../../final2/S11-exchange-connection.png
+?? ../../../final2/S11a-exchange-form.png
+?? ../../../final2/S12-partner-exchange.png
+?? ../../../final2/S12b-partner-new-account.png
+?? ../../../final2/S13-uid-verification.png
+?? ../../../final2/S14-api-connection.png
+?? ../../../final2/S14a-api-form.png
+?? ../../../final2/S15-success.png
+?? ../../../final2/S15b-success-own-account.png
+?? ../../../final2/X01-uid-not-found.png
+?? ../../../final2/d1-w1440/S01-backtest-ready.png
+?? ../../../final2/d1-w1440/S02-early-processing.png
+?? ../../../final2/d1-w1440/S02a-preparing.png
+?? ../../../final2/d1-w1440/S03-mid-processing.png
+?? ../../../final2/d1-w1440/S04-final-processing.png
+?? ../../../final2/d1-w1440/S05-results-above-fold.png
+?? ../../../final2/d1-w1440/S06-results-evidence.png
+?? ../../../final2/d1-w1440/S07-decision-detail.png
+?? ../../../final2/d1-w1440/S08-trade-detail.png
+?? ../../../final2/d1-w1440/S09-activation-choice.png
+?? ../../../final2/d1-w1440/S10-card-path.png
+?? ../../../final2/d1-w1440/S11-exchange-connection.png
+?? ../../../final2/d1-w1440/S12-partner-exchange.png
+?? ../../../final2/d1-w1440/S13-uid-verification.png
+?? ../../../final2/d1-w1440/S14-api-connection.png
+?? ../../../final2/d1-w1440/S15-success.png
+?? ../../../final2/h1-w1440/S01-backtest-ready.png
+?? ../../../final2/h1-w1440/S02-early-processing.png
+?? ../../../final2/h1-w1440/S02a-preparing.png
+?? ../../../final2/h1-w1440/S03-mid-processing.png
+?? ../../../final2/h1-w1440/S04-final-processing.png
+?? ../../../final2/h1-w1440/S05-results-above-fold.png
+?? ../../../final2/h1-w1440/S06-results-evidence.png
+?? ../../../final2/h1-w1440/S07-decision-detail.png
+?? ../../../final2/h1-w1440/S08-trade-detail.png
+?? ../../../final2/h1-w1440/S09-activation-choice.png
+?? ../../../final2/h1-w1440/S10-card-path.png
+?? ../../../final2/h1-w1440/S11-exchange-connection.png
+?? ../../../final2/h1-w1440/S12-partner-exchange.png
+?? ../../../final2/h1-w1440/S13-uid-verification.png
+?? ../../../final2/h1-w1440/S14-api-connection.png
+?? ../../../final2/h1-w1440/S15-success.png
+?? ../../../final2/r1-w1440/S01-backtest-ready.png
+?? ../../../final2/r1-w1440/S02a-preparing.png
+?? ../../../final2/r1-w1440/S04-final-processing.png
+?? ../../../final2/r1-w1440/S05-results-above-fold.png
+?? ../../../final2/r1-w1440/S06-results-evidence.png
+?? ../../../final2/r1-w1440/S07-decision-detail.png
+?? ../../../final2/r1-w1440/S08-trade-detail.png
+?? ../../../final2/r1-w1440/S09-activation-choice.png
+?? ../../../final2/r1-w1440/S10-card-path.png
+?? ../../../final2/r1-w1440/S11-exchange-connection.png
+?? ../../../final2/r1-w1440/S12-partner-exchange.png
+?? ../../../final2/r1-w1440/S13-uid-verification.png
+?? ../../../final2/r1-w1440/S14-api-connection.png
+?? ../../../final2/r1-w1440/S15-success.png
+?? ../../../final2/seq/
+?? ../../../final2/w1280/S01-backtest-ready.png
+?? ../../../final2/w1280/S02-early-processing.png
+?? ../../../final2/w1280/S02a-preparing.png
+?? ../../../final2/w1280/S03-mid-processing.png
+?? ../../../final2/w1280/S04-final-processing.png
+?? ../../../final2/w1280/S05-results-above-fold.png
+?? ../../../final2/w1280/S06-results-evidence.png
+?? ../../../final2/w1280/S07-decision-detail.png
+?? ../../../final2/w1280/S08-trade-detail.png
+?? ../../../final2/w1280/S09-activation-choice.png
+?? ../../../final2/w1280/S10-card-path.png
+?? ../../../final2/w1280/S11-exchange-connection.png
+?? ../../../final2/w1280/S12-partner-exchange.png
+?? ../../../final2/w1280/S13-uid-verification.png
+?? ../../../final2/w1280/S14-api-connection.png
+?? ../../../final2/w1280/S15-success.png
+?? ../../../final2/w390/S01-backtest-ready.png
+?? ../../../final2/w390/S02-early-processing.png
+?? ../../../final2/w390/S02a-preparing.png
+?? ../../../final2/w390/S03-mid-processing.png
+?? ../../../final2/w390/S04-final-processing.png
+?? ../../../final2/w390/S05-results-above-fold.png
+?? ../../../final2/w390/S06-results-evidence.png
+?? ../../../final2/w390/S07-decision-detail.png
+?? ../../../final2/w390/S08-trade-detail.png
+?? ../../../final2/w390/S09-activation-choice.png
+?? ../../../final2/w390/S10-card-path.png
+?? ../../../final2/w390/S11-exchange-connection.png
+?? ../../../final2/w390/S12-partner-exchange.png
+?? ../../../final2/w390/S13-uid-verification.png
+?? ../../../final2/w390/S14-api-connection.png
+?? ../../../final2/w390/S15-success.png
+?? ../../../final3/F01-a-uid-failed.png
+?? ../../../final3/F01-b-after-continue.png
+?? ../../../final3/F01-c-changed-uid-needs-api.png
+?? ../../../final3/F01-d-success-valid.png
+?? ../../../final3/F01R-reload-150ms.png
+?? ../../../final3/F01R-reload-after-exchange-change.png
+?? ../../../final3/F02-pick-reason.png
+?? ../../../final3/F03-travel-1.png
+?? ../../../final3/F03-travel-2.png
+?? ../../../final3/F03-travel-3.png
+?? ../../../final3/F03-travel-4.png
+?? ../../../final3/R09-all-activity-d1.png
+?? ../../../final3/S01-backtest-ready.png
+?? ../../../final3/S02-early-processing.png
+?? ../../../final3/S02a-preparing.png
+?? ../../../final3/S02b-first-decision.png
+?? ../../../final3/S03-mid-processing.png
+?? ../../../final3/S03a-skip-signal.png
+?? ../../../final3/S03b-skip-review.png
+?? ../../../final3/S03c-between-events.png
+?? ../../../final3/S04-final-processing.png
+?? ../../../final3/S05-results-above-fold.png
+?? ../../../final3/S05b-results-hover.png
+?? ../../../final3/S06-results-evidence.png
+?? ../../../final3/S07-decision-detail.png
+?? ../../../final3/S08-trade-detail.png
+?? ../../../final3/S08b-result-full-page.png
+?? ../../../final3/S09-activation-choice.png
+?? ../../../final3/S10-card-path.png
+?? ../../../final3/S11-exchange-connection.png
+?? ../../../final3/S11a-exchange-form.png
+?? ../../../final3/S12-partner-exchange.png
+?? ../../../final3/S12b-partner-new-account.png
+?? ../../../final3/S13-uid-verification.png
+?? ../../../final3/S14-api-connection.png
+?? ../../../final3/S14a-api-form.png
+?? ../../../final3/S15-success.png
+?? ../../../final3/S15b-success-own-account.png
+?? ../../../final3/X01-uid-not-found.png
+?? ../../../final3/d1-w1440/S01-backtest-ready.png
+?? ../../../final3/d1-w1440/S02-early-processing.png
+?? ../../../final3/d1-w1440/S02a-preparing.png
+?? ../../../final3/d1-w1440/S03-mid-processing.png
+?? ../../../final3/d1-w1440/S04-final-processing.png
+?? ../../../final3/d1-w1440/S05-results-above-fold.png
+?? ../../../final3/d1-w1440/S06-results-evidence.png
+?? ../../../final3/d1-w1440/S07-decision-detail.png
+?? ../../../final3/d1-w1440/S08-trade-detail.png
+?? ../../../final3/d1-w1440/S09-activation-choice.png
+?? ../../../final3/d1-w1440/S10-card-path.png
+?? ../../../final3/d1-w1440/S11-exchange-connection.png
+?? ../../../final3/d1-w1440/S12-partner-exchange.png
+?? ../../../final3/d1-w1440/S13-uid-verification.png
+?? ../../../final3/d1-w1440/S14-api-connection.png
+?? ../../../final3/d1-w1440/S15-success.png
+?? ../../../final3/seq/
+?? ../../../final3/w1280/P-help-button.png
+?? ../../../final3/w1280/S01-backtest-ready.png
+?? ../../../final3/w1280/S02-early-processing.png
+?? ../../../final3/w1280/S02a-preparing.png
+?? ../../../final3/w1280/S03-mid-processing.png
+?? ../../../final3/w1280/S04-final-processing.png
+?? ../../../final3/w1280/S05-results-above-fold.png
+?? ../../../final3/w1280/S06-results-evidence.png
+?? ../../../final3/w1280/S07-decision-detail.png
+?? ../../../final3/w1280/S08-trade-detail.png
+?? ../../../final3/w1280/S09-activation-choice.png
+?? ../../../final3/w1280/S10-card-path.png
+?? ../../../final3/w1280/S11-exchange-connection.png
+?? ../../../final3/w1280/S12-partner-exchange.png
+?? ../../../final3/w1280/S13-uid-verification.png
+?? ../../../final3/w1280/S14-api-connection.png
+?? ../../../final3/w1280/S15-success.png
+?? ../../../final3/w390/S01-backtest-ready.png
+?? ../../../final3/w390/S02-early-processing.png
+?? ../../../final3/w390/S02a-preparing.png
+?? ../../../final3/w390/S03-mid-processing.png
+?? ../../../final3/w390/S04-final-processing.png
+?? ../../../final3/w390/S05-results-above-fold.png
+?? ../../../final3/w390/S06-results-evidence.png
+?? ../../../final3/w390/S07-decision-detail.png
+?? ../../../final3/w390/S08-trade-detail.png
+?? ../../../final3/w390/S09-activation-choice.png
+?? ../../../final3/w390/S10-card-path.png
+?? ../../../final3/w390/S11-exchange-connection.png
+?? ../../../final3/w390/S12-partner-exchange.png
+?? ../../../final3/w390/S13-uid-verification.png
+?? ../../../final3/w390/S14-api-connection.png
+?? ../../../final3/w390/S15-success.png
+?? ../../../fut/shots/U01-finder-top.png
+?? ../../../fut/shots/U02-detail-f1.png
+?? ../../../fut/shots/U02-detail-f5.png
+?? ../../../fut/shots/U02-detail-f7.png
+?? ../../../fut/shots/U03-replay-f1.png
+?? ../../../fut/shots/U03-replay-f5.png
+?? ../../../fut/shots/U03-replay-f7.png
+?? ../../../fut/shots/U04-result-f1.png
+?? ../../../fut/shots/U04-result-f5.png
+?? ../../../fut/shots/U04-result-f7.png
+?? ../../../fut/shots/U05-decision-f1.png
+?? ../../../fut/shots/U05-decision-f5.png
+?? ../../../fut/shots/U05-decision-f7.png
+?? ../../../fut/shots/U06-trade-f1.png
+?? ../../../fut/shots/U06-trade-f5.png
+?? ../../../fut/shots/U06-trade-f7.png
+?? ../../../fut/shots/U07-follow.png
+?? ../../brand/r/LIVE-side.png
+?? ../../bt/s6/A5-ot.png
+?? ../../cap-bt.mjs
+?? ../../cap-chart.mjs
+?? ../../cap-detail-full.mjs
+?? ../
+?? ../../intro/live/
+?? ../../mkt/r/M7-copy-m.png
+?? ../../mkt/r/M7-copy.png
+?? ../../mkt/s3/DESIGN_PROMPT.md
+?? ../../mkt/s3/M1-empty-m.png
+?? ../../mkt/s3/M1-empty.png
+?? ../../mkt/s3/M2-picker-m.png
+?? ../../mkt/s3/M2-picker.png
+?? ../../mkt/s3/M3-info-m.png
+?? ../../mkt/s3/M3-info.png
+?? ../../mkt/s3/M4-data-m.png
+?? ../../mkt/s3/M4-data.png
+?? ../../mkt/s3/M5-strat-m.png
+?? ../../mkt/s3/M5-strat.png
+?? ../../mkt/s3/M6-rail-m.png
+?? ../../mkt/s3/M6-rail.png
+?? ../../mkt/s3/M7-copy-m.png
+?? ../../mkt/s3/M7-copy.png
+?? ../../mkt/s3/log.txt
+?? ../../qa-panel/r/S53.png
+?? ../../qa-panel/r/S54.png
+?? ../../qa-panel/r/S55.png
+?? ../../qa-panel/r/S56.png
+?? ../../qa-panel/r/S57.png
+?? ../../term/r/T-follow-bottom.png
+?? ../../../mine-walk/
+?? ../../../mine/M01-ready.png
+?? ../../../mine/M02-replay.png
+?? ../../../mine/M03-result.png
+?? ../../../mine/M04-activation.png
+?? ../../../mine/M05-connected.png
+?? ../../../mine/M06-start.png
+?? ../../../mine/verify-mine-log.txt
+?? ../../../mine/w390/
+?? ../../../mine2/
+?? ../../../real/A01-chat-card.png
+?? ../../../real/A02-ready.png
+?? ../../../real/A03-result.png
+?? ../../../round-1/S01-backtest-ready.png
+?? ../../../round-1/S02-early-processing.png
+?? ../../../round-1/S02a-preparing.png
+?? ../../../round-1/S02b-first-decision.png
+?? ../../../round-1/S03-mid-processing.png
+?? ../../../round-1/S03b-between-events.png
+?? ../../../round-1/S04-final-processing.png
+?? ../../../round-1/S05-results-above-fold.png
+?? ../../../round-1/S05b-results-hover.png
+?? ../../../round-1/S06-results-evidence.png
+?? ../../../round-1/S07-decision-detail.png
+?? ../../../round-1/S08-trade-detail.png
+?? ../../../round-1/S08b-result-full-page.png
+?? ../../../round-1/S09-activation-choice.png
+?? ../../../round-1/S10-card-path.png
+?? ../../../round-1/S11-exchange-connection.png
+?? ../../../round-1/S12-partner-exchange.png
+?? ../../../round-1/S13-uid-verification.png
+?? ../../../round-1/S14-api-connection.png
+?? ../../../round-1/S14a-api-form.png
+?? ../../../round-1/S15-success.png
+?? ../../../round-1/S15b-success-own-exchange.png
+?? ../../../round-1/S15c-success-full-page.png
+?? ../../../round-1/X01-uid-not-found.png
+?? ../../../round-1/d1-w1440/S01-backtest-ready.png
+?? ../../../round-1/d1-w1440/S02-early-processing.png
+?? ../../../round-1/d1-w1440/S02a-preparing.png
+?? ../../../round-1/d1-w1440/S04-final-processing.png
+?? ../../../round-1/d1-w1440/S05-results-above-fold.png
+?? ../../../round-1/d1-w1440/S06-results-evidence.png
+?? ../../../round-1/d1-w1440/S07-decision-detail.png
+?? ../../../round-1/d1-w1440/S08-trade-detail.png
+?? ../../../round-1/d1-w1440/S09-activation-choice.png
+?? ../../../round-1/d1-w1440/S10-card-path.png
+?? ../../../round-1/d1-w1440/S11-exchange-connection.png
+?? ../../../round-1/d1-w1440/S12-partner-exchange.png
+?? ../../../round-1/d1-w1440/S13-uid-verification.png
+?? ../../../round-1/d1-w1440/S14-api-connection.png
+?? ../../../round-1/d1-w1440/S15-success.png
+?? ../../../round-1/r1-w1440/S01-backtest-ready.png
+?? ../../../round-1/r1-w1440/S02-early-processing.png
+?? ../../../round-1/r1-w1440/S02a-preparing.png
+?? ../../../round-1/r1-w1440/S04-final-processing.png
+?? ../../../round-1/r1-w1440/S05-results-above-fold.png
+?? ../../../round-1/r1-w1440/S06-results-evidence.png
+?? ../../../round-1/r1-w1440/S07-decision-detail.png
+?? ../../../round-1/r1-w1440/S08-trade-detail.png
+?? ../../../round-1/r1-w1440/S09-activation-choice.png
+?? ../../../round-1/r1-w1440/S10-card-path.png
+?? ../../../round-1/r1-w1440/S11-exchange-connection.png
+?? ../../../round-1/r1-w1440/S12-partner-exchange.png
+?? ../../../round-1/r1-w1440/S13-uid-verification.png
+?? ../../../round-1/r1-w1440/S14-api-connection.png
+?? ../../../round-1/r1-w1440/S15-success.png
+?? ../../../round-1/seq/
+?? ../../../round-1/w1280/S01-backtest-ready.png
+?? ../../../round-1/w1280/S02-early-processing.png
+?? ../../../round-1/w1280/S02a-preparing.png
+?? ../../../round-1/w1280/S03-mid-processing.png
+?? ../../../round-1/w1280/S04-final-processing.png
+?? ../../../round-1/w1280/S05-results-above-fold.png
+?? ../../../round-1/w1280/S06-results-evidence.png
+?? ../../../round-1/w1280/S07-decision-detail.png
+?? ../../../round-1/w1280/S08-trade-detail.png
+?? ../../../round-1/w1280/S09-activation-choice.png
+?? ../../../round-1/w1280/S10-card-path.png
+?? ../../../round-1/w1280/S11-exchange-connection.png
+?? ../../../round-1/w1280/S12-partner-exchange.png
+?? ../../../round-1/w1280/S13-uid-verification.png
+?? ../../../round-1/w1280/S14-api-connection.png
+?? ../../../round-1/w1280/S15-success.png
+?? ../../../round-1/w390/S01-backtest-ready.png
+?? ../../../round-1/w390/S02-early-processing.png
+?? ../../../round-1/w390/S02a-preparing.png
+?? ../../../round-1/w390/S03-mid-processing.png
+?? ../../../round-1/w390/S04-final-processing.png
+?? ../../../round-1/w390/S05-results-above-fold.png
+?? ../../../round-1/w390/S06-results-evidence.png
+?? ../../../round-1/w390/S07-decision-detail.png
+?? ../../../round-1/w390/S08-trade-detail.png
+?? ../../../round-1/w390/S09-activation-choice.png
+?? ../../../round-1/w390/S10-card-path.png
+?? ../../../round-1/w390/S11-exchange-connection.png
+?? ../../../round-1/w390/S12-partner-exchange.png
+?? ../../../round-1/w390/S13-uid-verification.png
+?? ../../../round-1/w390/S14-api-connection.png
+?? ../../../round-1/w390/S15-success.png
+?? ../../../round-2/S01-backtest-ready.png
+?? ../../../round-2/S02-early-processing.png
+?? ../../../round-2/S02a-preparing.png
+?? ../../../round-2/S02b-first-decision.png
+?? ../../../round-2/S03-mid-processing.png
+?? ../../../round-2/S03a-skip-signal.png
+?? ../../../round-2/S03b-skip-review.png
+?? ../../../round-2/S03c-between-events.png
+?? ../../../round-2/S04-final-processing.png
+?? ../../../round-2/S05-results-above-fold.png
+?? ../../../round-2/S05b-results-hover.png
+?? ../../../round-2/S06-results-evidence.png
+?? ../../../round-2/S07-decision-detail.png
+?? ../../../round-2/S08-trade-detail.png
+?? ../../../round-2/S08b-result-full-page.png
+?? ../../../round-2/S09-activation-choice.png
+?? ../../../round-2/S10-card-path.png
+?? ../../../round-2/S11-exchange-connection.png
+?? ../../../round-2/S11a-exchange-form.png
+?? ../../../round-2/S12-partner-exchange.png
+?? ../../../round-2/S12b-partner-new-account.png
+?? ../../../round-2/S13-uid-verification.png
+?? ../../../round-2/S14-api-connection.png
+?? ../../../round-2/S14a-api-form.png
+?? ../../../round-2/S15-success.png
+?? ../../../round-2/S15b-success-own-account.png
+?? ../../../round-2/X01-uid-not-found.png
+?? ../../../round-2/d1-w1440/S01-backtest-ready.png
+?? ../../../round-2/d1-w1440/S02-early-processing.png
+?? ../../../round-2/d1-w1440/S02a-preparing.png
+?? ../../../round-2/d1-w1440/S03-mid-processing.png
+?? ../../../round-2/d1-w1440/S04-final-processing.png
+?? ../../../round-2/d1-w1440/S05-results-above-fold.png
+?? ../../../round-2/d1-w1440/S06-results-evidence.png
+?? ../../../round-2/d1-w1440/S07-decision-detail.png
+?? ../../../round-2/d1-w1440/S08-trade-detail.png
+?? ../../../round-2/d1-w1440/S09-activation-choice.png
+?? ../../../round-2/d1-w1440/S10-card-path.png
+?? ../../../round-2/d1-w1440/S11-exchange-connection.png
+?? ../../../round-2/d1-w1440/S12-partner-exchange.png
+?? ../../../round-2/d1-w1440/S13-uid-verification.png
+?? ../../../round-2/d1-w1440/S14-api-connection.png
+?? ../../../round-2/d1-w1440/S15-success.png
+?? ../../../round-2/h1-w1440/S01-backtest-ready.png
+?? ../../../round-2/h1-w1440/S02-early-processing.png
+?? ../../../round-2/h1-w1440/S02a-preparing.png
+?? ../../../round-2/h1-w1440/S03-mid-processing.png
+?? ../../../round-2/h1-w1440/S04-final-processing.png
+?? ../../../round-2/h1-w1440/S05-results-above-fold.png
+?? ../../../round-2/h1-w1440/S06-results-evidence.png
+?? ../../../round-2/h1-w1440/S07-decision-detail.png
+?? ../../../round-2/h1-w1440/S08-trade-detail.png
+?? ../../../round-2/h1-w1440/S09-activation-choice.png
+?? ../../../round-2/h1-w1440/S10-card-path.png
+?? ../../../round-2/h1-w1440/S11-exchange-connection.png
+?? ../../../round-2/h1-w1440/S12-partner-exchange.png
+?? ../../../round-2/h1-w1440/S13-uid-verification.png
+?? ../../../round-2/h1-w1440/S14-api-connection.png
+?? ../../../round-2/h1-w1440/S15-success.png
+?? ../../../round-2/r1-w1440/S01-backtest-ready.png
+?? ../../../round-2/r1-w1440/S02a-preparing.png
+?? ../../../round-2/r1-w1440/S04-final-processing.png
+?? ../../../round-2/r1-w1440/S05-results-above-fold.png
+?? ../../../round-2/r1-w1440/S06-results-evidence.png
+?? ../../../round-2/r1-w1440/S07-decision-detail.png
+?? ../../../round-2/r1-w1440/S08-trade-detail.png
+?? ../../../round-2/r1-w1440/S09-activation-choice.png
+?? ../../../round-2/r1-w1440/S10-card-path.png
+?? ../../../round-2/r1-w1440/S11-exchange-connection.png
+?? ../../../round-2/r1-w1440/S12-partner-exchange.png
+?? ../../../round-2/r1-w1440/S13-uid-verification.png
+?? ../../../round-2/r1-w1440/S14-api-connection.png
+?? ../../../round-2/r1-w1440/S15-success.png
+?? ../../../round-2/seq/
+?? ../../../round-2/w1280/S01-backtest-ready.png
+?? ../../../round-2/w1280/S02-early-processing.png
+?? ../../../round-2/w1280/S02a-preparing.png
+?? ../../../round-2/w1280/S03-mid-processing.png
+?? ../../../round-2/w1280/S04-final-processing.png
+?? ../../../round-2/w1280/S05-results-above-fold.png
+?? ../../../round-2/w1280/S06-results-evidence.png
+?? ../../../round-2/w1280/S07-decision-detail.png
+?? ../../../round-2/w1280/S08-trade-detail.png
+?? ../../../round-2/w1280/S09-activation-choice.png
+?? ../../../round-2/w1280/S10-card-path.png
+?? ../../../round-2/w1280/S11-exchange-connection.png
+?? ../../../round-2/w1280/S12-partner-exchange.png
+?? ../../../round-2/w1280/S13-uid-verification.png
+?? ../../../round-2/w1280/S14-api-connection.png
+?? ../../../round-2/w1280/S15-success.png
+?? ../../../round-2/w390/S01-backtest-ready.png
+?? ../../../round-2/w390/S02-early-processing.png
+?? ../../../round-2/w390/S02a-preparing.png
+?? ../../../round-2/w390/S03-mid-processing.png
+?? ../../../round-2/w390/S04-final-processing.png
+?? ../../../round-2/w390/S05-results-above-fold.png
+?? ../../../round-2/w390/S06-results-evidence.png
+?? ../../../round-2/w390/S07-decision-detail.png
+?? ../../../round-2/w390/S08-trade-detail.png
+?? ../../../round-2/w390/S09-activation-choice.png
+?? ../../../round-2/w390/S10-card-path.png
+?? ../../../round-2/w390/S11-exchange-connection.png
+?? ../../../round-2/w390/S12-partner-exchange.png
+?? ../../../round-2/w390/S13-uid-verification.png
+?? ../../../round-2/w390/S14-api-connection.png
+?? ../../../round-2/w390/S15-success.png
+?? ../../../../ux-audit/card3/log-codex-card3.txt
+?? ../../../../ux-audit/card3/log-codex-hero.txt
+?? ../../../../ux-audit/detail/fx-mid-1440.png
+?? ../../../../ux-audit/detail/log-codex-crit.txt
+?? ../../../../ux-audit/detail/log-codex.txt
+?? ../../../../ux-audit/footer2/black-spa-390.png
+?? ../../../../ux-audit/footer2/live-trade-footer-1440.png
+?? ../../../../ux-audit/footer2/log-codex-bar.txt
+?? ../../../../ux-audit/footer2/log-codex-crit.txt
+?? ../../../../ux-audit/footer2/log-codex.txt
+?? ../../../../ux-audit/footer2/ours-bar-390.png
+?? ../../../../ux-audit/footer2/r3-gap-1440.png
+?? ../../../../ux-audit/footer2/r5-hero-next-390.png
+?? ../../../../ux-audit/footer2/r6-trade-footer-pw-1440.png
+?? ../../../../ux-audit/footer2/video-frame-3s.jpg
+?? ../../../../ux-audit/footer2/video-frame-5s.jpg
+?? ../../../../ux-audit/footer2/video-frame-6.2s.jpg
+?? ../../../../ux-audit/hero/frame3-codex.png
+?? ../../../../ux-audit/hero/frame3.png
+?? ../../../../ux-audit/hero/log-agy.txt
+?? ../../../../ux-audit/hero/log-codex-crit.txt
+?? ../../../../ux-audit/hero/log-codex.txt
+?? ../../../../ux-audit/hero/prompt-agy.md
+?? ../../../../ux-audit/hero/prompt-codex-crit.md
+?? ../../../../ux-audit/hero/prompt-codex.md
+?? ../../../../ux-audit/logs/
+?? ../../../../ux-audit/research/log-codex-verify.txt
+?? ../../../../ux-audit/review/
+?? ../../../../ux-audit/spark/log-codex.txt
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy rg -n '26a69a|22c|34d|ef5350|ff4|createLinearGradient|rdCal|heatmap|rgba\\(.*(196|198|185)' ../../../../index.html" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy powershell -NoProfile -Command \"[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath 'DESIGN_PROMPT.md'; & '..\\..\\..\\..\\.mailbox\\mail.cmd' check codex\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ exited 1 in 37ms:
+'22c' is not recognized as an internal or external command,
+operable program or batch file.
+
+ exited 1 in 669ms:
+Cannot set property. Property setting is supported only on core types in this language mode.
+At line:1 char:1
++ [Console]::OutputEncoding=[System.Text.Encoding]::UTF8; Get-Content - ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertySetterNotSupportedInConstrainedLanguage
+ 
+# TETH ??? ???? (??, 2026-10-01 ??? ??)
+
+???? "?? ???? UI/UX ??, ??"? ??? ??: ??(??, ??, ??), ??? ?? ??, ?? ??(??, ?? ? ??), ??? ??, ??? ??(?? ?, ?? ?? ?? ??? ? ?? ??), ??? ?? ??.
+**? ???? ??? ??? ?? ? ???? ???. ????? Codex??? ? ??? ??? ????? ??.**
+
+## 1. ? ? ??
+?? ??? ?? ??. ?? ??, ? ? ?? ??, ? ?? ??, ??? ?? ?? ??, ?? ?? ??. ChatGPT ??? ?? ??? ??? ??? ? ?? ???? ??? ??.
+
+## 2. ?
+| ?? | ? |
+|---|---|
+| ??(??, ??, ??, ??) | #000 |
+| ?? ?? ?? | #000 (2026-10-01 ???: ?? ??) |
+| ?? ??, ? | #303030 (?? #2f2f2f ??) |
+| ?? ?? | ?? + 1px rgba(255,255,255,.14~.15) |
+| ??? | 1px rgba(255,255,255,.1) |
+| ??? | #212121 ?? #2f2f2f, ??? ?? ?? ?? 1px |
+| ?? ?? | #ececec, ?? #fff |
+| ?? ?? | #cdcdcd, ?? ?? #9a9a9a~#afafaf |
+| ??(?? ??, ?? ? ?) | ?? ????? linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%) (?? ?? ??) + ??? #5a8dff, ?? #2f6fed |
+| ?? / ?? | ?? / ?? (????) |
+| **??** | ?? #c8f43c, ??? ??, ? ??(??? ???, ??? ?? ??) |
+
+## 3. ??
+| ?? | ?? / ?? |
+|---|---|
+| ?? ?? | 32px 400 (?? 28px, ???? 28~32) |
+| ? ?? | 20px 600 ?? 24~26px 400 |
+| ?? ?? | 18px 400 |
+| ? ? ?? | 18px #cdcdcd (??? 16) |
+| ? ??, ?? | 16px 400 |
+| ?? ? | 14px |
+| ?? | 400 ??, ???? ?? |
+| ?? | ??? ????. ?? ?? |
+
+## 4. ??
+- ?? ?? 26(??? 20~26), ? ?? 24~26, ??? ?? 19, ?? ?? 26(??? 20).
+- ? ??: ? ??(?? #fff, ?? #000, ?? 48~52, ?? 999). ?? ??? "?? ??"? "?? ? ? ?? ??"??.
+- ?? ??: ?? ?? 14px #cdcdcd, ?? ???? ???(margin 0).
+- ??? ??: ?? ?? #2f2f2f 36px("??", "??", "????"). ??? ??? ?? ?? + ??? ?? ??.
+- ???: ???? ??? ??? ? ??(?? "??" ?? ??). ??? ?? 2px #9a9a9a ???.
+- ??: ?(?? ??, ??? ?? ???), ? ?? ?? ??.
+- ???, ?? ?, ???, "N?? ?????" ??.
+- ??? 390: ?? 16px, ?? ??? ??, ? ?? ??? ????? ? ??? ?? ??.
+- ? ?? ?? ??? ? ????? ???, ?? ?? ? ? "??? ???? 24?? ????. ????? ??".
+
+## 5. ??
+- ?? ???? ??? ???. ? ???? ? ??? ?? ?? ???.
+- ?? ??, ??? ??(??). ?? ??? ??? ??? ??.
+- ?? ? ?? ???(?? ??? ?? ??? ?) ? ??? ??? ??? ? ??? ?? ???? ???.
+- ?? ??? ?? ?? ???(?: ?? ??? "TETH ?? ???? ??").
+- ?? ??: ?? "???????", ? ?, ?? ? ? ??, ?? ?? ?? ??, ?? ?? ??.
+- ? ??? ? ?? ?? ?? ?? ??(?: ?? ?? ???? ??)? ??? ??? ?? ??.
+
+## 6. ??
+- ????. ??? ???? ??? ??("?? ????", "OKX?? ????", "?? ??").
+- ? ??? ? ? ??. ?? ?? ??. ??? ?? ??? ????("Gate ??? ??? ?? ? ??? ?????").
+- ?? ?? ??? ?? ??? ???("??? ?? ? ??? ????", "?? ??? ????" ??).
+- ??: "???", ??? ?? ??, "??", "?????", em dash, ????, TETH ??? ??, ??? ???? ??.
+- ???? ?? ?? ??? ???: "N?? ???? ?", "??? ??, ?? ?? ????", "???? ??? ??", "?? ?? ?? ???", "??? ???? 24?? ????".
+- ?? ??? "2026? 10? 21?", ?? ??? "2026. 9. 21.". ??? "$800".
+
+## 7. Codex? ?? ?? ??? (?? ?? ??)
+| ?? | ?? | ??? |
+|---|---|---|
+| s1 ?? ?? | Codex(? ?? + ?? ?? ?? + ?? ?? ??) ? Claude ?? | ?? ???? ??? ??(???, ??, ??), ???? ?, ?? ?? ?, "??? vs ????" ? ?? |
+| s2 ??? | Claude | ?? ??? ???, ??? ?? ??. ?? ??(1440, 390) + ?? |
+| s3 ?? ?? 1? | Codex | MUST / NICE(?? ??? ?? ?), ?? ?, ?? ?? ???? ?? |
+| s4 ?? | Claude | MUST ??, NICE? ?? ?? ??. ??? ??? ?? ?? |
+| s5 ?? | Codex | "MUST ??"??? ? |
+
+- Codex? ?? CLI?? ???(`gpt-6-astra`, ?? high, ?? ??), ??? ?? ?? `CODEX_RAW.md`? ????. ?? ?? index.html ??? ??? ??.
+- ??? ??? Codex ???? ????. ?? ??? ?? ??? `DECISIONS.md`.
+- ?? ??: `qa/ex-plan/r/P1-plan-member.png`, `qa/ex-plan/s6/r/X1-ex.png`, `X2-acct.png`, `X2b-acct-joined.png`, `X3-auth.png`, `X5-done.png`, `qa/gpt-skin/settings/s4/K1-billing.png`, `K2-sub-dlg.png`.
+
+## 8. Codex 1?? ???? ?? (???? < > ? ???)
+```
+??? ChatGPT ??? ??? ??? ?????. TETH? "<?? ??>"? ???. ????? ????. ??? ??? ?? ??? ????.
+??? ??: DESIGN_PROMPT.md (?, ??, ??, ??, ?? ??? ???? ?? ?)
+??: ?? ?? ??, ?? ??(1440, 390)
+? ???? ???? ??? ??: <??>
+A. ??? ?? ???? ??? ??? ???, ??, ??? ?? ???? ?? ???. ?? ??.
+B. ChatGPT??: ?? ?, ??, ? ?, ??, ? ??, ?? ??? ??. ??? ?? ??? ??? ? ?? ?? ??.
+C. ?? ?? ?(??  ??). DESIGN_PROMPT.md 6? ??.
+D. ? ??: ??? ?????, ???? ?????.
+?? ?? ??, 750?? ??, ?? ?? ?? ??.
+```
+C:\Users\hyun1\OneDrive\?? ??\tesia-lab fork 1\.mailbox\mail.ps1 : Cannot dot-source this command because it was 
+defined in a different language mode. To invoke this command without importing its contents, omit the '.' operator.
+    + CategoryInfo          : InvalidOperation: (:) [mail.ps1], NotSupportedException
+    + FullyQualifiedErrorId : DotSourceNotSupported,mail.ps1
+ 
+
+codex
+캡처에서는 카드의 초록이 상세와 백테스트 차트보다 밝게 보이고, 백테스트의 진입·청산 기호도 범례와 다르게 보입니다. 실제 색상값과 달력 숫자의 대비를 확인하고 있습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"console.log(require('fs').readFileSync('DESIGN_PROMPT.md','utf8'))\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 69ms:
+# TETH 디자인 프롬프트 (정본, 2026-10-01 파운더 확정)
+
+파운더가 "잘된 디자인과 UI/UX 흐름, 카피"로 지정한 화면: 설정(일반, 결제, 보안), 거래소 연결 목록, 플랜 화면(무료, 구독 두 카드), 거래소 선택, 거래소 계정(가입 전, 가입 화면 열고 돌아온 뒤 파란 카드), 거래소 연결 승인.
+**새 화면이나 고치는 화면은 전부 이 문서대로 만든다. 사람에게든 Codex에게든 이 문서를 그대로 프롬프트로 준다.**
+
+## 1. 한 줄 원칙
+화면 하나에 결정 하나. 제목 하나, 한 줄 설명 하나, 주 단추 하나, 보조는 작은 밑줄 링크, 뒤로 가기 하나. ChatGPT 설정과 플랜 화면을 나란히 놓았을 때 같은 제품으로 보여야 한다.
+
+## 2. 색
+| 쓰임 | 값 |
+|---|---|
+| 바탕(메인, 설정, 연결, 결제) | #000 |
+| 플랜 화면 바탕 | #000 (2026-10-01 파운더: 전부 검정) |
+| 채운 카드, 창 | #303030 (창은 #2f2f2f 허용) |
+| 윤곽 카드 | 투명 + 1px rgba(255,255,255,.14~.15) |
+| 구분선 | 1px rgba(255,255,255,.1) |
+| 입력칸 | #212121 또는 #2f2f2f, 테두리 없음 또는 옅은 1px |
+| 본문 글자 | #ececec, 제목 #fff |
+| 보조 글자 | #cdcdcd, 옅은 글자 #9a9a9a~#afafaf |
+| 강조(무료 선택, 방금 한 일) | 파란 그라데이션 linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%) (검정 바탕 기준) + 테두리 #5a8dff, 단추 #2f6fed |
+| 수익 / 손실 | 초록 / 빨강 (숫자에만) |
+| **금지** | 연두 #c8f43c, 그림자 남발, 색 배지(상태는 글자로, 실패만 빨간 글자) |
+
+## 3. 글자
+| 요소 | 크기 / 굵기 |
+|---|---|
+| 화면 제목 | 32px 400 (설정 28px, 모바일도 28~32) |
+| 창 제목 | 20px 600 또는 24~26px 400 |
+| 섹션 제목 | 18px 400 |
+| 한 줄 설명 | 18px #cdcdcd (모바일 16) |
+| 행 라벨, 본문 | 16px 400 |
+| 보조 줄 | 14px |
+| 숫자 | 400 굵기, 크기로만 강조 |
+| 글꼴 | 시스템 산세리프. 명조 금지 |
+
+## 4. 형태
+- 카드 반경 26(모바일 20~26), 창 반경 24~26, 입력칸 반경 19, 타일 반경 26(모바일 20).
+- 주 단추: 흰 알약(배경 #fff, 글자 #000, 높이 48~52, 반경 999). 파란 알약은 "무료 선택"과 "방금 한 일 다음 단계"에만.
+- 보조 행동: 밑줄 링크 14px #cdcdcd, 같은 기준선에 나란히(margin 0).
+- 오른쪽 조작: 회색 알약 #2f2f2f 36px("변경", "관리", "로그아웃"). 위험한 조작만 빨간 글자 + 어두운 빨간 알약.
+- 선택지: 타일이나 알약을 누르면 곧 선택(따로 "계속" 단추 없음). 선택된 것은 2px #9a9a9a 테두리.
+- 목록: 행(라벨 왼쪽, 값이나 조작 오른쪽), 한 행에 조작 하나.
+- 스텝퍼, 번호 원, 진행률, "N단계 남았습니다" 금지.
+- 모바일 390: 좌우 16px, 가로 스크롤 없음, 긴 창은 본문만 스크롤하고 주 단추는 아래 고정.
+- 떠 있는 상담 단추는 이 화면들에서 숨기고, 화면 아래 한 줄 "막히면 상담원이 24시간 답합니다. 상담원에게 묻기".
+
+## 5. 흐름
+- 결정 순서대로 화면을 나눈다. 앞 화면에서 한 선택은 다시 묻지 않는다.
+- 돈이 먼저, 그다음 연결(구독). 연결 흐름은 무료와 구독이 같다.
+- 방금 한 일이 있으면(가입 화면을 열고 돌아옴 등) 그 카드가 파랗게 바뀌고 주 단추가 다음 행동으로 바뀐다.
+- 드문 갈래는 작은 링크 하나로(예: 구독 회원의 "TETH 초대 계정으로 연결").
+- 완료 화면: 제목 "연결되었습니다", 한 줄, 계정 한 줄 카드, 다음 행동 단추 하나, 작은 링크 하나.
+- 빈 상태는 빈 안내 화면 대신 실제 화면(예: 전략 없는 터미널도 차트)을 보이고 한쪽에 다음 행동.
+
+## 6. 카피
+- 합니다체. 단추는 서술어로 끝나지 않음("전략 시작하기", "OKX에서 승인하기", "구독 관리").
+- 한 화면에 한 줄 설명. 설명 단락 금지. 무엇을 하면 무엇이 되는지만("Gate 화면이 열리면 아래 두 권한을 허용합니다").
+- 묻지 않은 걱정을 먼저 꺼내지 않는다("자산은 계속 그 계정에 있습니다", "출금 권한은 없습니다" 금지).
+- 금지: "회원님", 면책과 규제 고지, "데모", "시뮬레이션", em dash, 가운뎃점, TETH 커미션 구조, 거래를 늘리라는 권유.
+- 파운더가 정한 말은 바꾸지 않는다: "N명이 따라가는 중", "영원히 무료, 카드 등록 필요없음", "거래하는 사람을 위해", "지금 쓰는 계정 그대로", "막히면 상담원이 24시간 답합니다".
+- 날짜 문장은 "2026년 10월 21일", 목록 날짜는 "2026. 9. 21.". 금액은 "$800".
+
+## 7. Codex와 같이 하는 진행법 (모든 화면 공통)
+| 단계 | 누가 | 산출물 |
+|---|---|---|
+| s1 원인 분석 | Codex(이 문서 + 기준 화면 캡처 + 지금 화면 캡처) 와 Claude 각자 | 다른 제품처럼 보이는 원인(겉모습, 구조, 카피), 재구성안 표, 카피 교체 표, "통째로 vs 스타일만" 한 문장 |
+| s2 재구성 | Claude | 상태 기계는 그대로, 그리는 것만 교체. 자동 검사(1440, 390) + 캡처 |
+| s3 픽셀 검수 1차 | Codex | MUST / NICE(픽셀 근거와 고칠 값), 카피 표, 처음 보는 사용자의 행동 |
+| s4 반영 | Claude | MUST 전부, NICE는 근거 있는 것만. 거절은 이유와 함께 기록 |
+| s5 최종 | Codex | "MUST 없음"이어야 끝 |
+
+- Codex는 실제 CLI로만 돌리고(`gpt-6-astra`, 추론 high, 읽기 전용), 원문은 수정 없이 `CODEX_RAW.md`로 저장한다. 검수 전후 index.html 해시가 같아야 한다.
+- 파운더 결정은 Codex 제안보다 우선한다. 결정 기록은 화면 폴더의 `DECISIONS.md`.
+- 기준 캡처: `qa/ex-plan/r/P1-plan-member.png`, `qa/ex-plan/s6/r/X1-ex.png`, `X2-acct.png`, `X2b-acct-joined.png`, `X3-auth.png`, `X5-done.png`, `qa/gpt-skin/settings/s4/K1-billing.png`, `K2-sub-dlg.png`.
+
+## 8. Codex 1단계 프롬프트 원문 (화면마다 < > 만 채운다)
+```
+당신은 ChatGPT 제품의 디자인 리드로 빙의합니다. TETH의 "<화면 이름>"을 봅니다. 한국어로만 답합니다. 파일은 읽기만 하고 고치지 않습니다.
+디자인 기준: DESIGN_PROMPT.md (색, 글자, 형태, 흐름, 카피 규칙과 파운더가 정한 말)
+첨부: 기준 화면 캡처, 지금 화면(1440, 390)
+이 화면에서 사용자가 내리는 결정: <결정>
+A. 기준과 다른 제품처럼 보이는 원인을 겉모습, 구조, 카피로 나눠 픽셀이나 문구 근거로. 추측 금지.
+B. ChatGPT라면: 화면 수, 제목, 한 줄, 입력, 주 단추, 보조 행동을 표로. 지워도 되는 정보와 지우면 안 되는 정보 구분.
+C. 카피 교체 표(현재 → 제안). DESIGN_PROMPT.md 6장 규칙.
+D. 한 문장: 통째로 재구성인지, 스타일과 카피만인지.
+표와 짧은 문단, 750단어 이내, 근거 없는 칭찬 금지.
+```
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const fs=require('fs');const s=fs.readFileSync('../../../../index.html','utf8').split('\\n');s.forEach((l,i)=>{if(['createLinearGradient','rdCal','heatmap','#26a69a','#ff4','#19b','#1bb','#22c'].some(t=>l.includes(t)))console.log(i+1,l.slice(0,1800))});console.log('MAIL',fs.readdirSync('../../../../.mailbox/inbox/codex'))\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 126ms:
+1249 .g-gauge .bar .u{background:linear-gradient(90deg,#22c55e,#4ade80);transition:width .6s var(--ease)}
+10414     var eg=cx.createLinearGradient(0,0,0,H);
+20074     var cone=cx.createLinearGradient(x0,0,W,0);
+MAIL []
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const fs=require('fs'); console.log('DECODERS');for(const n of ['pngjs','sharp','canvas']){try{console.log(n,require.resolve(n))}catch(e){}};const s=fs.readFileSync('../../../../index.html','utf8').split('\\n');s.forEach((l,i)=>{if(['linearGradient','cal-cell','calCell','calDay','rgba(','--up:','--dn:'].some(t=>l.includes(t))&&(['linearGradient','--up:','--dn:'].some(t=>l.includes(t))||l.includes('cal')))console.log(i+1,l.slice(0,2600))})\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 139ms:
+DECODERS
+679   #glc-panel{top:auto;right:0;left:0;bottom:0;width:auto;height:78vh;height:78dvh;border-radius:24px 24px 0 0;border:0;grid-template-columns:1fr;gap:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));overflow:hidden;z-index:98;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+760   #g-setmenu{left:0!important;right:0!important;bottom:0!important;top:auto!important;border-radius:24px 24px 0 0;border:0;min-width:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -14px 50px rgba(0,0,0,.5);animation:gSheetUp .3s var(--ease)}
+763   .gm-sub,#gm-sub-theme,#gm-sub-help{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:24px 24px 0 0;border:0;min-width:0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -14px 50px rgba(0,0,0,.5);z-index:97;animation:gSheetUp .3s var(--ease)}
+1056 .fbt{background:rgba(128,128,128,.08);border:1px solid var(--gl);border-radius:10px;color:var(--gt);font-size:13px;font-family:inherit;padding:9px 12px;resize:vertical;outline:none;width:100%}
+1239 .g-chartcard.pip{position:fixed;right:22px;bottom:88px;width:min(430px,calc(100vw - 32px));z-index:70;margin:0;box-shadow:0 20px 60px rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.14);border-radius:14px;animation:gFadeUp .25s var(--ease) both}
+1572   .g-pillband{position:sticky;bottom:0;z-index:30;align-self:stretch;margin:auto calc(50% - 50vw) 0;display:flex;flex-direction:column;gap:8px;padding:14px 16px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#0f1012 76%,rgba(15,16,18,0));animation:gRiseIn .5s var(--ease) .1s both}
+2798 .tfbk-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:100%;background:#1a1a1a;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.4);padding:6px;z-index:80;text-align:left}
+3352 .cal-c{position:relative;min-height:46px;border-radius:8px;background:rgba(255,255,255,.03);font-size:11px;color:#848a94;padding:5px 6px;font-variant-numeric:tabular-nums;box-sizing:border-box}
+3354 .cal-c.u{background:rgba(86,196,134,.16);color:#c9ecd8}
+3355 .cal-c.d{background:rgba(238,118,106,.16);color:#f3cdc8}
+3356 .cal-c.z{background:rgba(255,255,255,.07);color:#dbdbdb}
+3359 .cal-nav{background:none;border:1px solid rgba(255,255,255,.16);border-radius:6px;color:#dbdbdb;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1;vertical-align:2px;padding:0}
+3645 .nfz-pcta-wrap{position:sticky;bottom:0;margin-top:30px;padding:0 0 calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--g0) 62%,rgba(15,16,18,0));pointer-events:none}
+3735 .tf-kind{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:var(--gt2);vertical-align:middle}
+3840 #g-root .txh-tip{position:absolute;z-index:5;left:0;top:0;width:max-content;max-width:min(272px,calc(100% - 24px));padding:11px 13px 12px;background:var(--g3);border:1px solid var(--gl2);border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.45);font-size:13.5px;font-weight:400;line-height:1.6;color:var(--gt);text-align:left;word-break:keep-all;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-3px);transition:opacity .12s,transform .12s,visibility 0s .12s}
+4211 .mkd-tip{position:absolute;left:0;bottom:calc(100% + 8px);width:max-content;max-width:280px;padding:10px 12px;border-radius:8px;background:#23262b;border:1px solid rgba(255,255,255,.12);color:var(--gt);font-size:12.5px;font-weight:400;line-height:1.6;text-align:left;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .12s;z-index:6}
+4262 .mk-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:200px;background:#1a1a1a;border:1px solid rgba(255,255,255,.1);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.5);padding:6px;z-index:90}
+5634 .mkg-pop{position:fixed;z-index:400;width:min(300px,calc(100vw - 24px));padding:12px 14px 13px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#1d2024;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+5859 .bt-chain span+span::before{content:"";display:inline-block;width:8px;height:1px;background:rgba(255,255,255,.3);margin:0 6px 3px -14px;vertical-align:middle}
+6123 .bt-call{position:absolute;z-index:2;padding:4px 0;border-radius:12px;background:rgba(24,27,31,.96);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;transform:translateY(6px);transition:opacity .16s ease,transform .2s cubic-bezier(.2,.8,.3,1);pointer-events:none}
+6126 .bt-call .r+.r{border-top:1px solid rgba(255,255,255,.08)}
+6453   .bt[data-phase=result] .bt-mcta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;align-items:center;gap:14px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(14,15,17,.94);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1)}
+7002 .stg-rl .tip,.stg-ri .tip,.stg-tg .tip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:7px 12px;border-radius:999px;background:#2a2d31;color:#f2f3f5;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .12s ease,transform .12s ease;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+7865 .mk-detail .cal-c.u{background:rgba(47,185,138,calc(.12 + var(--a,0) * .42))!important}
+7866 .mk-detail .cal-c.d{background:rgba(240,86,106,calc(.12 + var(--a,0) * .42))!important}
+7870 .mk-detail .cal-c.off{background:transparent!important;border:1px solid rgba(255,255,255,.08)}
+8317 .tft-page.rail-open .tft-rail{display:flex!important;position:absolute;top:58px;right:6px;width:min(380px,calc(100% - 12px));max-height:min(70vh,640px);z-index:30;border:1px solid rgba(255,255,255,.12)!important;border-radius:16px;background:#212121;box-shadow:0 18px 48px rgba(0,0,0,.6);overflow:hidden auto}
+8525 #qa2-panel{position:fixed;top:96px;right:16px;z-index:210;width:320px;max-height:calc(100vh - 120px);overflow-y:auto;padding:14px 12px 12px;border-radius:20px;background:#212121;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 48px rgba(0,0,0,.55);color:#ececec;scrollbar-width:thin}
+10523     +'<defs><linearGradient id="'+u+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1c21"/><stop offset="1" stop-color="#141519"/></linearGradient></defs>'
+11229       rightPriceScale:{borderColor:'rgba(255,255,255,.1)'},timeScale:{borderColor:'rgba(255,255,255,.1)'},
+14390     +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+(up?'#2fb98a':'#ee766a')+'" stop-opacity=".15"/><stop offset="1" stop-color="'+(up?'#2fb98a':'#ee766a')+'" stop-opacity="0"/></linearGradient></defs>'
+14421     +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".16"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient>'
+16496       +'<defs><linearGradient id="nfxbGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity=".32"/><stop offset="60%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity=".08"/><stop offset="100%" stop-color="'+(eqUp?'#4ec08d':'#e0604b')+'" stop-opacity="0"/></linearGradient></defs>'
+17100   if(sym==='SOL') return s+'<circle cx="20" cy="20" r="19" fill="#141722"/><defs><linearGradient id="solg'+(++TF_INS2_UID)+'" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#9945FF"/><stop offset="1" stop-color="#14F195"/></linearGradient></defs><g fill="url(#solg'+TF_INS2_UID+')"><path d="M13.2 24.6h14.9c.3 0 .5.1.3.4l-2.7 2.9a1 1 0 0 1-.7.3H10.2c-.3 0-.5-.2-.3-.4l2.6-2.9a1 1 0 0 1 .7-.3z"/><path d="M13.2 11.8h14.9c.3 0 .5.2.3.4l-2.7 2.9a1 1 0 0 1-.7.3H10.2c-.3 0-.5-.2-.3-.4l2.6-2.9a1 1 0 0 1 .7-.3z"/><path d="M25 18.2H10.2c-.3 0-.5.1-.3.4l2.6 2.8a1 1 0 0 0 .7.4h14.9c.3 0 .5-.2.3-.5l-2.7-2.8a1 1 0 0 0-.7-.3z"/></g>'+end;
+17272     +'<defs><linearGradient id="'+u+'n5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#627EEA" stop-opacity=".4"/><stop offset="100%" stop-color="#22304a" stop-opacity=".1"/></linearGradient></defs>'
+17405       +'<div class="mt"><span class="nfz-au"><svg class="av2" width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="fyav" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#5B8AF7"/></linearGradient></defs><circle cx="16" cy="16" r="16" fill="url(#fyav)"/><path d="M8 19.5l4-6 3 4 3.4-8 5.6 9.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nm3">맞춤 분석 • 방금 전</span></span></div>'
+19104     +'<linearGradient id="'+id+'u" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".03"/></linearGradient>'
+19105     +'<linearGradient id="'+id+'d" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+h+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".03"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
+19108     +'<line x1="0" y1="'+yb.toFixed(1)+'" x2="'+w+'" y2="'+yb.toFixed(1)+'" stroke="rgba(255,255,255,.22)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>'
+19109     +'<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.34)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'
+19266     +'<linearGradient id="mkdgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".02"/></linearGradient>'
+19267     +'<linearGradient id="mkdgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+(H-pb)+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
+21088   if(max-min<1e-9) return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="'+(H/2)+'" x2="'+W+'" y2="'+(H/2)+'" stroke="rgba(255,255,255,.34)" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
+21107     +'<line x1="0" y1="'+yb.toFixed(1)+'" x2="'+W+'" y2="'+yb.toFixed(1)+'" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>'
+22086   var grid=G.T.map(function(v){ var y=G.Y(v/BT.amt); return '<line x1="'+G.pl+'" x2="'+(W-G.pr)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="rgba(255,255,255,'+(Math.abs(v-BT.amt)<1e-6?'.26':'.07')+')"/><text x="'+(G.pl-10)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+Math.round(v).toLocaleString()+'</text>'; }).join('');
+22097     +'<linearGradient id="btgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+G.pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G1+'" stop-opacity=".26"/><stop offset="1" stop-color="'+G1+'" stop-opacity=".02"/></linearGradient>'
+22098     +'<linearGradient id="btgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+base+'"><stop offset="0" stop-color="'+R1+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R1+'" stop-opacity=".26"/></linearGradient>'
+22601   return '<svg class="btg-sp" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="백테스트 잔고 그래프"><defs><linearGradient id="btgsp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".22"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>'
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const s=require('fs').readFileSync('../../../../index.html','utf8').split('\\n');for(const [a,b] of [[7856,7875],[19254,19280],[21079,21115],[22064,22153]]){console.log('LINES',a,b);console.log(s.slice(a-1,b).map((l,i)=>(a+i)+' '+l).join('\\n'))}\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 115ms:
+LINES 7856 7875
+7856 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:48px;font-size:11px;padding:5px 4px} .mk-detail .cal-c i{font-size:10.5px;margin-top:2px;letter-spacing:-.02em} }
+7857 /* Codex s3: 차트는 회색 선 하나, 면적 채움 없음, 색은 숫자에만 */
+7858 .mk-detail .mkd-chart .mkd-mk text{font-weight:400}
+7859 /* 달력 제목 18, 셀 반경 */
+7860 .mk-detail .mk3-cal b{font-size:18px;font-weight:400}
+7861 .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:20px}
+7862 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:12px} .mk-detail .mk3-dh-t h2,.mk-detail .mk-tab,.mk-detail .mk3-dh-one{font-weight:400} }
+7863 
+7864 /* 손익 달력 색칠: 수익 초록, 손실 빨강, |손익| 8%에서 가장 진하게 */
+7865 .mk-detail .cal-c.u{background:rgba(47,185,138,calc(.12 + var(--a,0) * .42))!important}
+7866 .mk-detail .cal-c.d{background:rgba(240,86,106,calc(.12 + var(--a,0) * .42))!important}
+7867 .mk-detail .cal-c.z{background:#262626!important}
+7868 .mk-detail .cal-c.u,.mk-detail .cal-c.d{color:#fff}
+7869 .mk-detail .cal-c.u i,.mk-detail .cal-c.d i{color:#fff!important}
+7870 .mk-detail .cal-c.off{background:transparent!important;border:1px solid rgba(255,255,255,.08)}
+7871 .mk-detail .cal-g>.cal-c:empty{background:transparent!important;border:0!important}
+7872 /* ═══ 백테스트 (sk-bt): DESIGN_PROMPT.md 정본, Codex bt/s1 표. 요소와 순서는 그대로, 글자 위계, 여백, 카드, 단추만 ═══ */
+7873 #bt-root{color:#ececec}
+7874 /* 머리 */
+7875 #bt-root .bt-hd .ti{font-size:16px;font-weight:400;color:#fff}
+LINES 19254 19280
+19254   for(var i=0;i<A.length-1;i++){ var p0=A[Math.max(0,i-1)],p1=A[i],p2=A[i+1],p3=A[Math.min(A.length-1,i+2)]; d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+cl(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+cl(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1); }
+19255   var yb=Y(base), area=d+' L'+A[A.length-1][0].toFixed(1)+' '+yb.toFixed(1)+' L'+A[0][0].toFixed(1)+' '+yb.toFixed(1)+' Z', G=flatBase?'#8b9096':'#2fb98a', R=flatBase?'#8b9096':'#f0566a';
+19256   var dec=flat?0:Math.abs(mx-mn)<4?2:Math.abs(mx-mn)<20?1:0, fmt=function(v){ return MKD.tab==='ret'?(v>0?'+':'')+v.toFixed(dec)+'%':Math.round(v).toLocaleString(); };
+19257   var still=false; try{ still=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+19258   MKD.geo={A:A,P:P,W:W,H:H,pb:pb};
+19259   var g=T.map(function(v){ return '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="rgba(255,255,255,'+(v===base?'.24':'.08')+')"/><text x="'+(pl-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+fmt(v)+'</text>'; }).join('');
+19260   var nx=Math.min(mob?4:5,P.length), xl='', long=MKD.gran==='month'||!MKD.per||MKD.per>200;
+19261   for(var k=0;k<nx;k++){ var ix=Math.round(k*(P.length-1)/(nx-1||1)); xl+='<text x="'+X(ix).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(k===0?'start':k===nx-1?'end':'middle')+'" font-size="11" fill="#8b9096">'+(long?P[ix].d.slice(2,7).replace('-','.'):P[ix].d.slice(5).replace('-','.'))+'</text>'; }
+19262   var iMx=ys.indexOf(Math.max.apply(null,ys)), iMn=ys.indexOf(Math.min.apply(null,ys));
+19263   var mark=function(i,lb){ var x=A[i][0], y=A[i][1], up=(lb==='Max'), ty=up?y-11:y+19; if(ty<14) ty=y+19; if(ty>H-pb-4) ty=y-11; var tx=Math.max(pl+52,Math.min(W-pr-52,x));
+19264     return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.4" fill="#fff"/><text x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">'+lb+' '+(MKD.tab==='ret'?mkPct(P[i].y,2):'$'+Math.round(P[i].y).toLocaleString()+'')+'</text>'; };
+19265   return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+({ret:'수익률',pnl:'수익금',bal:'잔고'}[MKD.tab])+' 그래프"><defs>'
+19266     +'<linearGradient id="mkdgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G+'" stop-opacity=".30"/><stop offset="1" stop-color="'+G+'" stop-opacity=".02"/></linearGradient>'
+19267     +'<linearGradient id="mkdgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+(H-pb)+'"><stop offset="0" stop-color="'+R+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R+'" stop-opacity=".30"/></linearGradient>'
+19268     +'<clipPath id="mkdcu"><rect x="0" y="0" width="'+W+'" height="'+yb.toFixed(1)+'"/></clipPath><clipPath id="mkdcd"><rect x="0" y="'+yb.toFixed(1)+'" width="'+W+'" height="'+(H-yb).toFixed(1)+'"/></clipPath>'
+19269     +'<clipPath id="mkdrv"><rect x="0" y="0" height="'+H+'" width="'+(still?W:0)+'">'+(still?'':'<animate attributeName="width" from="'+pl+'" to="'+W+'" dur="0.9s" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .2 1" fill="freeze"/>')+'</rect></clipPath></defs>'+g+xl+'<g clip-path="url(#mkdrv)">'
+19270     +'<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.6"/>'
+19271     +'<g clip-path="url(#mkdcu)"><path d="'+area+'" fill="url(#mkdgu)"/><path d="'+d+'" fill="none" stroke="'+G+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></g>'
+19272     +'<g clip-path="url(#mkdcd)"><path d="'+area+'" fill="url(#mkdgd)"/><path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></g>'
+19273     +'</g><g class="mkd-mk">'+(iMx!==iMn?(iMx>0?mark(iMx,'Max'):'')+(iMn>0?mark(iMn,'Min'):''):'')+'</g>' /* 시작점(기준)과 겹치는 표시는 생략 */
+19274     +'<g class="mkd-cur"><line id="mkd-cl" x1="0" x2="0" y1="'+pt+'" y2="'+(H-pb)+'" stroke="rgba(255,255,255,.75)" stroke-dasharray="4 4"/><circle id="mkd-cc" r="5" fill="#17191c" stroke="#fff" stroke-width="2.2"/></g></svg>'
+19275     +'<div class="mkd-ht" id="mkd-ht" role="status"></div>'+(flat?'<div class="mkd-flat">이 기간에는 '+({ret:'수익률',pnl:'수익금',bal:'잔고'}[MKD.tab])+' 변화가 없습니다</div>':'');
+19276 }
+19277 /* 차트 호버: 가장 가까운 날짜의 값 표시 */
+19278 function mkdHover(ev){
+19279   var box=$('mkd-chart'), q=MKD.geo; if(!box||!q) return;
+19280   var svg=box.querySelector('svg'); if(!ev||!svg){ box.classList.remove('hov'); return; }
+LINES 21079 21115
+21079 /* 카드의 30일 그래프.
+21080    가로축: 30일의 하루하루를 같은 간격으로, 왼쪽 끝이 30일 전이고 오른쪽 끝이 오늘. 점을 다시 뽑거나 곡선으로 부풀리지 않는다.
+21081    세로축: 그 30일의 최저와 최고에 맞춰 높이를 다 쓴다. 시작값(0%)은 항상 범위에 넣는다.
+21082    0% 아래로 내려간 구간만 붉게, 그때만 0% 선을 옅게 그린다. 면은 채우지 않는다 */
+21083 function mkSpark3(eq){
+21084   var W=170, H=78, pad=5, n=eq?eq.length:0;
+21085   if(n<2) return '<span class="mk-spark"></span>';
+21086   var base=eq[0].v, min=base, max=base, i;
+21087   for(i=0;i<n;i++){ if(eq[i].v<min) min=eq[i].v; if(eq[i].v>max) max=eq[i].v; }
+21088   if(max-min<1e-9) return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="'+(H/2)+'" x2="'+W+'" y2="'+(H/2)+'" stroke="rgba(255,255,255,.34)" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
+21089   var X=function(j){ return 1+j/(n-1)*(W-2); }, Y=function(v){ return pad+(1-(v-min)/(max-min))*(H-pad*2); };
+21090   var P=eq.map(function(e,j){ return [X(j),Y(e.v)]; });
+21091   /* 꺾이는 곳만 살짝 둥글게(반지름 2.5). 평평한 구간은 평평하게 남는다 */
+21092   var d='M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1), R=2.5;
+21093   for(i=1;i<n-1;i++){
+21094     var a=P[i-1], b=P[i], c=P[i+1], l1=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1])), l2=Math.sqrt((c[0]-b[0])*(c[0]-b[0])+(c[1]-b[1])*(c[1]-b[1]));
+21095     var r1=Math.min(R,l1/2), r2=Math.min(R,l2/2);
+21096     if(l1<1e-6||l2<1e-6){ d+=' L'+b[0].toFixed(1)+' '+b[1].toFixed(1); continue; }
+21097     d+=' L'+(b[0]-(b[0]-a[0])/l1*r1).toFixed(1)+' '+(b[1]-(b[1]-a[1])/l1*r1).toFixed(1)
+21098       +' Q'+b[0].toFixed(1)+' '+b[1].toFixed(1)+' '+(b[0]+(c[0]-b[0])/l2*r2).toFixed(1)+' '+(b[1]+(c[1]-b[1])/l2*r2).toFixed(1);
+21099   }
+21100   d+=' L'+P[n-1][0].toFixed(1)+' '+P[n-1][1].toFixed(1);
+21101   var yb=Y(base), neg=min<base-1e-9, id='mk3s'+(++MK_SPARK_N), G='#2ebd85', Rd='#f0566a';
+21102   var ln=function(col){ return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'; };
+21103   if(!neg) return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true">'+ln(G)+'</svg>';
+21104   return '<svg class="mk-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><defs>'
+21105     +'<clipPath id="'+id+'u"><rect x="-2" y="-2" width="'+(W+4)+'" height="'+(yb+2).toFixed(1)+'"/></clipPath>'
+21106     +'<clipPath id="'+id+'d"><rect x="-2" y="'+yb.toFixed(1)+'" width="'+(W+4)+'" height="'+(H-yb+2).toFixed(1)+'"/></clipPath></defs>'
+21107     +'<line x1="0" y1="'+yb.toFixed(1)+'" x2="'+W+'" y2="'+yb.toFixed(1)+'" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>'
+21108     +'<g clip-path="url(#'+id+'u)">'+ln(G)+'</g><g clip-path="url(#'+id+'d)">'+ln(Rd)+'</g>'+mkFlatAtBase(eq,base,X,Y,G)+'</svg>';
+21109 }
+21110 /* ── 카드 ── */
+21111 /* 수익 낸 거래를 횟수로 말한다. 10번 미만은 실제 횟수 그대로, 그 이상은 10번 기준으로 환산 */
+21112 function mkWinTxt(r){
+21113   var n=r&&r.n||0, w=r&&r.winRate; if(!n||typeof w!=='number'||!isFinite(w)) return '';
+21114   if(n<10) return n+'번 중 '+Math.round(w*n/100)+'번';
+21115   if(w<=0) return n.toLocaleString()+'번 중 0번'; if(w>=100) return n.toLocaleString()+'번 모두';
+LINES 22064 22153
+22064 
+22065 /* ── 그래프 ── */
+22066 function btGeo(){
+22067   var R=BT.R, host=$('bt-chart'), W=Math.max(300,Math.round(host?host.clientWidth:900)), mob=W<560, H=mob?240:Math.max(300,Math.min(372,Math.round(innerHeight*0.41))), pl=mob?46:64, pr=mob?8:18, pt=26, pb=40;
+22068   var vs=R.eq.map(function(p){ return p.v; }).concat(R.bench), mn=Math.min.apply(null,vs.concat(1))*BT.amt, mx=Math.max.apply(null,vs.concat(1))*BT.amt;
+22069   var T=mkdTicks(mn,mx,5), lo=T[0], hi=T[T.length-1];
+22070   var X=function(j){ return pl+Math.max(0,j)/Math.max(1,R.N-1)*(W-pl-pr); }, Y=function(v){ return pt+(1-(v*BT.amt-lo)/(hi-lo))*(H-pt-pb); };
+22071   return (BT.G={W:W,H:H,pl:pl,pr:pr,pt:pt,pb:pb,T:T,X:X,Y:Y,mob:mob});
+22072 }
+22073 function btV(j){ return j<0?1:BT.R.eq[j].v; } /* j=-1 은 첫날의 거래가 반영되기 전 */
+22074 function btPath(arr,G){ var d=''; arr.forEach(function(v,j){ d+=(j?' L':'M')+G.X(j).toFixed(1)+' '+G.Y(v).toFixed(1); }); return d; }
+22075 /* 그래프 위의 표시. 돌리는 동안에는 판단 하나가 표시 하나(그 날짜에). 끝난 뒤에는 가까이 붙은 보류와 같은 날의 매수를 묶는다 */
+22076 function btMarkList(group){
+22077   var R=BT.R, G=BT.G, out=[], last=null, lastB=null;
+22078   R.D.forEach(function(d){ if(d.k==='pick'||d.k==='hold') return;
+22079     if(group&&d.k==='skip'&&last&&G.X(d.j)-G.X(last.j2)<12){ last.n++; last.j2=d.j; last.ix2=d.ix; return; }
+22080     if(d.k==='buy'&&lastB&&lastB.j===d.j){ lastB.n++; lastB.t+=', '+d.tk; return; }
+22081     var m={k:d.k,side:d.side,j:d.j,j2:d.j,ix:d.ix,ix2:d.ix,n:1,pnl:d.pnl,t:(d.tk?d.tk+' ':'')+d.tag}; out.push(m); if(d.k==='skip'){ last=m; } else if(d.k==='buy'){ last=null; lastB=m; } });
+22082   return out;
+22083 }
+22084 function btChartSvg(){
+22085   var R=BT.R, G=btGeo(), W=G.W, H=G.H, yb=G.Y(1), G1='#2fb98a', R1='#f0566a', res=BT.phase==='result', base=H-G.pb;
+22086   var grid=G.T.map(function(v){ var y=G.Y(v/BT.amt); return '<line x1="'+G.pl+'" x2="'+(W-G.pr)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="rgba(255,255,255,'+(Math.abs(v-BT.amt)<1e-6?'.26':'.07')+')"/><text x="'+(G.pl-10)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b9096">'+Math.round(v).toLocaleString()+'</text>'; }).join('');
+22087   var nx=G.mob?4:6, xl=''; for(var k=0;k<nx;k++){ var j=Math.round(k*(R.N-1)/(nx-1)), d=idxToDate(R.eq[j].i); xl+='<text x="'+G.X(j).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(k===0?'start':k===nx-1?'end':'middle')+'" font-size="11" fill="#8b9096">'+String(d.getFullYear()).slice(2)+'.'+String(d.getMonth()+1).padStart(2,'0')+'</text>'; }
+22088   var line=btPath(R.eq.map(function(p){ return p.v; }),G), area=line+' L'+G.X(R.N-1).toFixed(1)+' '+yb.toFixed(1)+' L'+G.X(0).toFixed(1)+' '+yb.toFixed(1)+' Z';
+22089   var ML=btMarkList(res), dense=ML.length>60, sz=dense?0.72:1;
+22090   var mk=ML.map(function(m){ var x=G.X(m.j), y=G.Y(R.eq[m.j].v), s, col=m.pnl>=0?G1:R1, a=5*sz, h=8*sz;
+22091     if(m.k==='buy'&&m.side<0) s='<path d="M'+x.toFixed(1)+' '+(y-7).toFixed(1)+' l'+a+' -'+h+' h-'+(2*a)+' z" fill="#b08cf5"/>';
+22092     else if(m.k==='buy') s='<path d="M'+x.toFixed(1)+' '+(y+7).toFixed(1)+' l'+a+' '+h+' h-'+(2*a)+' z" fill="'+G1+'"/>';
+22093     else if(m.k==='sell') s='<path d="M'+x.toFixed(1)+' '+(y-7).toFixed(1)+' l'+a+' -'+h+' h-'+(2*a)+' z" fill="#15171a" stroke="'+col+'" stroke-width="1.5" stroke-linejoin="round"/>';
+22094     else s='<rect x="'+(x-4.5).toFixed(1)+'" y="'+(y-24.5).toFixed(1)+'" width="9" height="9" transform="rotate(45 '+x.toFixed(1)+' '+(y-20).toFixed(1)+')" fill="#15171a" stroke="#f0b840" stroke-width="1.7"/>'+(m.n>1?'<text x="'+(x+9).toFixed(1)+'" y="'+(y-27).toFixed(1)+'" font-size="10.5" font-weight="700" fill="#f0b840">'+m.n+'번</text>':'');
+22095     return '<g class="bt-m k-'+m.k+'" data-j="'+m.j+'" data-ix="'+m.ix+'" tabindex="-1" role="button" aria-label="'+gEsc(btYMD(R.eq[m.j].i)+' '+m.t+(m.n>1&&m.k==='skip'?' 외 '+(m.n-1)+'번':''))+'" onclick="event.stopPropagation();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')}"><rect x="'+(x-11).toFixed(1)+'" y="'+(y-((m.k==='buy'&&!(m.side<0))?-2:34)).toFixed(1)+'" width="22" height="'+(m.k==='skip'?34:20)+'" fill="transparent"/>'+s+'</g>'; }).join('');
+22096   return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="잔고 그래프"><defs>'
+22097     +'<linearGradient id="btgu" gradientUnits="userSpaceOnUse" x1="0" y1="'+G.pt+'" x2="0" y2="'+yb.toFixed(1)+'"><stop offset="0" stop-color="'+G1+'" stop-opacity=".26"/><stop offset="1" stop-color="'+G1+'" stop-opacity=".02"/></linearGradient>'
+22098     +'<linearGradient id="btgd" gradientUnits="userSpaceOnUse" x1="0" y1="'+yb.toFixed(1)+'" x2="0" y2="'+base+'"><stop offset="0" stop-color="'+R1+'" stop-opacity=".02"/><stop offset="1" stop-color="'+R1+'" stop-opacity=".26"/></linearGradient>'
+22099     +'<clipPath id="btcu"><rect x="0" y="0" width="'+W+'" height="'+yb.toFixed(1)+'"/></clipPath><clipPath id="btcd"><rect x="0" y="'+yb.toFixed(1)+'" width="'+W+'" height="'+(H-yb).toFixed(1)+'"/></clipPath>'
+22100     +'<clipPath id="btrv"><rect id="bt-rv" x="0" y="0" height="'+H+'" width="'+(res?W:0)+'"/></clipPath></defs>'
+22101     +grid+xl
+22102     /* 가장 나빴던 구간: 시간 축을 따라 놓인 띠와 이름표. 그래프 전체를 칠하지 않는다 */
+22103     +'<g class="bt-dd" id="bt-dd"><rect id="bt-ddr" x="0" y="'+(base+3)+'" width="0" height="4" rx="2" fill="#f0566a"/><line id="bt-dda" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="rgba(240,86,106,.32)" stroke-dasharray="2 5"/><line id="bt-ddb" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="rgba(240,86,106,.32)" stroke-dasharray="2 5"/>'
+22104     +'<text id="bt-ddt" x="0" y="'+(base-8)+'" text-anchor="middle" font-size="11.5" font-weight="600" fill="#f58a98"></text></g>'
+22105     +'<g clip-path="url(#btrv)"><path class="bt-bench" d="'+btPath(R.bench,G)+'" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.3" stroke-dasharray="2 4"/></g>' /* 비교 선도 지나온 날까지만 */
+22106     +'<g clip-path="url(#btrv)">'
+22107     +'<g clip-path="url(#btcu)"><path d="'+area+'" fill="url(#btgu)"/><path d="'+line+'" fill="none" stroke="'+G1+'" stroke-width="1.9" stroke-linejoin="round"/></g>'
+22108     +'<g clip-path="url(#btcd)"><path d="'+area+'" fill="url(#btgd)"/><path d="'+line+'" fill="none" stroke="'+R1+'" stroke-width="1.9" stroke-linejoin="round"/></g>'
+22109     +'</g><g id="bt-mk">'+mk+'</g>'
+22110     +'<g class="bt-pu" id="bt-pu"><circle id="bt-pu1" r="7" fill="none" stroke="#c8f43c" stroke-width="1.6"/><circle id="bt-pu2" r="3.2" fill="#c8f43c"/></g>'
+22111     +'<g class="bt-cur" id="bt-cur"><line id="bt-cl" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="rgba(255,255,255,.7)" stroke-dasharray="4 4"/><circle id="bt-cc" r="4.5" fill="#15171a" stroke="#fff" stroke-width="2"/></g>'
+22112     +'<g class="bt-pin" id="bt-pin"><line id="bt-pl" x1="0" x2="0" y1="'+G.pt+'" y2="'+base+'" stroke="#f0b840" stroke-width="1.2"/><circle id="bt-pc" r="5" fill="#f0b840"/></g>'
+22113     +'</svg><div class="bt-tip" id="bt-tip" role="status"></div>';
+22114 }
+22115 function btChartDraw(){ var h=$('bt-chart'); if(!h) return; h.innerHTML=btChartSvg(); h.className='bt-chart ph-'+BT.phase; if(BT.phase==='result'){ btMarks(BT.R.N); btDD(BT.R.N-1); btPin(); var m=h.querySelectorAll('.bt-m'); for(var i=0;i<m.length;i++) m[i].setAttribute('tabindex','0'); } }
+22116 function btMarks(j){ var m=document.querySelectorAll('#bt-mk .bt-m'); for(var i=0;i<m.length;i++){ if(+m[i].getAttribute('data-j')<=j) m[i].classList.add('on'); else m[i].classList.remove('on'); } }
+22117 /* 그날까지 가장 나빴던 구간 */
+22118 function btDD(j){
+22119   var R=BT.R, G=BT.G, d=j>=0?R.dd[j]:null, g=$('bt-dd'); if(!g) return;
+22120   if(!d||d.v>-0.03){ g.classList.remove('on'); return; }
+22121   var x=G.X(d.a), w=Math.max(3,G.X(d.b)-x), lx=Math.max(G.pl+92,Math.min(G.W-G.pr-92,x+w/2));
+22122   $('bt-ddr').setAttribute('x',x); $('bt-ddr').setAttribute('width',w); $('bt-dda').setAttribute('x1',x); $('bt-dda').setAttribute('x2',x); $('bt-ddb').setAttribute('x1',x+w); $('bt-ddb').setAttribute('x2',x+w);
+22123   var t=$('bt-ddt'); t.setAttribute('x',lx); t.textContent=(BT.phase==='result'?'가장 나빴던 구간 ':'지금까지 가장 나빴던 구간 ')+(d.v*100).toFixed(1)+'%';
+22124   g.classList.add('on');
+22125 }
+22126 function btCursor(j){
+22127   var G=BT.G, x=G.X(j), y=G.Y(btV(j)), l=$('bt-cl'), c=$('bt-cc'), rv=$('bt-rv');
+22128   if(l){ l.setAttribute('x1',x); l.setAttribute('x2',x); } if(c){ c.setAttribute('cx',x); c.setAttribute('cy',y); } if(rv) rv.setAttribute('width',j<0?0:x+1);
+22129 }
+22130 /* 기회가 생긴 자리를 짚는다 */
+22131 function btPulse(j){ var g=$('bt-pu'); if(!g) return; if(j==null){ g.classList.remove('on'); return; } var x=BT.G.X(j), y=BT.G.Y(btV(j)); $('bt-pu1').setAttribute('cx',x); $('bt-pu1').setAttribute('cy',y); $('bt-pu2').setAttribute('cx',x); $('bt-pu2').setAttribute('cy',y); g.classList.add('on'); }
+22132 function btNear(j){ var R=BT.R, tol=Math.max(1,Math.round(R.N/140)), best=null; R.D.forEach(function(d){ if(d.k==='pick'||d.k==='hold') return; var q=Math.abs(d.j-j); if(q<=tol&&(!best||q<Math.abs(best.j-j))) best=d; }); return best; }
+22133 function btHoverJ(ev){ var h=$('bt-chart'), R=BT.R, G=BT.G, b=h.getBoundingClientRect(), x=(ev.clientX-b.left)/b.width*G.W; return Math.max(0,Math.min(R.N-1,Math.round((x-G.pl)/(G.W-G.pl-G.pr)*(R.N-1)))); }
+22134 function btHover(ev){
+22135   if(BT.phase!=='result') return; var h=$('bt-chart'), tip=$('bt-tip'), R=BT.R, G=BT.G; if(!h||!tip) return;
+22136   if(!ev){ h.classList.remove('hov'); return; }
+22137   var b=h.getBoundingClientRect(), j=btHoverJ(ev), px=G.X(j), py=G.Y(R.eq[j].v), l=$('bt-cl'), c=$('bt-cc'); l.setAttribute('x1',px); l.setAttribute('x2',px); c.setAttribute('cx',px); c.setAttribute('cy',py);
+22138   h.classList.add('hov'); var v=R.eq[j].v, near=btNear(j); h.classList.toggle('ev',!!near);
+22139   tip.innerHTML='<b class="num">'+btYMD(R.eq[j].i)+'</b><span>잔고 <i class="num">'+btUsd(BT.amt*v)+'</i> <i class="num'+mkSign((v-1)*100)+'">'+mkPct0((v-1)*100,1)+'</i></span><span class="g">그냥 들고 있었다면 <i class="num">'+btUsd(BT.amt*R.bench[j])+'</i></span>'
+22140     +(near?'<span class="e"><em class="num">'+btYMD(near.i)+'</em>'+gEsc((near.tk?near.tk+' ':'')+near.tag)+(near.pnl!=null?' <i class="num'+mkSign(near.pnl)+'">'+mkPct0(near.pnl,1)+'</i>':'')+'<em>누르면 이유가 열립니다</em></span>':'');
+22141   var tw=tip.offsetWidth||190, left=px/G.W*b.width+14; if(left+tw>b.width-6) left=px/G.W*b.width-tw-14; tip.style.left=Math.max(4,left)+'px'; tip.style.top=Math.max(6,Math.min(b.height-tip.offsetHeight-40,py/G.H*b.height-30))+'px';
+22142 }
+22143 function btChartClick(ev){ if(BT.phase!=='result') return; var d=btNear(btHoverJ(ev)); if(d) btMarkClick(d.ix,d.ix); }
+22144 /* 판단이나 거래를 고르면 그래프에 그 날을 표시한다 */
+22145 function btPin(){
+22146   var g=$('bt-pin'); if(!g) return; var j=BT.sel&&BT.sel.j; if(j==null){ g.classList.remove('on'); return; }
+22147   var x=BT.G.X(j), y=BT.G.Y(BT.R.eq[j].v); $('bt-pl').setAttribute('x1',x); $('bt-pl').setAttribute('x2',x); $('bt-pc').setAttribute('cx',x); $('bt-pc').setAttribute('cy',y); g.classList.add('on');
+22148 }
+22149 /* 근거 목록에 나올 줄. AI 판단 전략의 "재평가"는 하루가 한 줄 */
+22150 function btDecList(f){
+22151   var s=BT.s, R=BT.R;
+22152   if(f==='opp') return (s.kind==='agent'?R.EV.map(function(E){ return {ev:E}; }):R.D.filter(function(d){ return d.k==='buy'||d.k==='skip'; }).map(function(d){ return {d:d}; })).reverse();
+22153   return R.D.filter(function(d){ return f==='all'?(d.k!=='pick'||s.kind==='mix'):d.k===f; }).map(function(d){ return {d:d}; }).reverse();
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const fs=require('fs'),z=require('zlib');function read(f){const b=fs.readFileSync(f);let w,h,c,p=8,ds=[];while(p<b.length){let n=b.readUInt32BE(p),t=b.toString('ascii',p+4,p+8),d=b.subarray(p+8,p+8+n);if(t==='IHDR'){w=d.readUInt32BE(0);h=d.readUInt32BE(4);c=d[9]===2?3:4;console.log(f,w,h,'type',d[9])}if(t==='IDAT')ds.push(d);p+=n+12;}let q=z.inflateSync(Buffer.concat(ds)),out=Buffer.alloc(w*h*c),k=0;for(let y=0;y<h;y++){let f=q[k++];for(let x=0;x<w*c;x++){let i=y*w*c+x,a=x>=c?out[i-c]:0,b=y?out[i-w*c]:0,d=y&&x>=c?out[i-w*c-c]:0,v=q[k++],p=a+b-d,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-d);out[i]=(v+(f===1?a:f===2?b:f===3?Math.floor((a+b)/2):f===4?(pa<=pb&&pa<=pc?a:pb<=pc?b:d):0))%256}}return {w,h,c,out}}function hist(f,x0,y0,x1,y1){let a=read(f),m=new Map;for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){let i=(y*a.w+x)*a.c,r=a.out[i],g=a.out[i+1],b=a.out[i+2];if(Math.max(r,g,b)-Math.min(r,g,b)<18)continue;let t='#'+a.out.subarray(i,i+3).toString('hex');m.set(t,(m.get(t)||0)+1)}console.log([...m].sort((a,b)=>b[1]-a[1]).slice(0,10))}hist('REF-card.png',244,190,935,275);hist('C1-detail-chart.png',227,24,1326,250);hist('C3-bt-chart.png',240,185,934,490);hist('C2-calendar-m.png',16,183,374,448)\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 147ms:
+REF-card.png 1020 405 type 6
+[
+  [ '#2ebd85', 1011 ],
+  [ '#f0566a', 747 ],
+  [ '#175f43', 19 ],
+  [ '#c54d5b', 16 ],
+  [ '#0c2f21', 15 ],
+  [ '#238e64', 13 ],
+  [ '#782b35', 12 ],
+  [ '#1e7d58', 10 ],
+  [ '#2aad7a', 9 ],
+  [ '#114632', 9 ]
+]
+C1-detail-chart.png 1440 900 type 2
+[
+  [ '#061812', 1944 ],
+  [ '#071b14', 1859 ],
+  [ '#071c15', 1683 ],
+  [ '#082018', 1464 ],
+  [ '#081f17', 1344 ],
+  [ '#09231a', 1142 ],
+  [ '#2fb98a', 1011 ],
+  [ '#09241b', 941 ],
+  [ '#061913', 826 ],
+  [ '#081d16', 724 ]
+]
+C3-bt-chart.png 1440 900 type 2
+[
+  [ '#2fb98a', 3106 ],
+  [ '#061812', 1194 ],
+  [ '#071b14', 766 ],
+  [ '#071c15', 652 ],
+  [ '#061913', 513 ],
+  [ '#061912', 385 ],
+  [ '#071a13', 378 ],
+  [ '#071913', 330 ],
+  [ '#071a14', 301 ],
+  [ '#061a13', 276 ]
+]
+C2-calendar-m.png 390 844 type 2
+[
+  [ '#41171d', 3074 ],
+  [ '#082118', 2539 ],
+  [ '#381419', 1901 ],
+  [ '#09241b', 1897 ],
+  [ '#0c3124', 1882 ],
+  [ '#702831', 1869 ],
+  [ '#531e25', 1867 ],
+  [ '#19644b', 1865 ],
+  [ '#391519', 1864 ],
+  [ '#44181e', 1863 ]
+]
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"const s=require('fs').readFileSync('../../../../index.html','utf8').split('\\n');s.forEach((l,i)=>{if(['.cal-c.off','.cal-c.z','--a:', 'bt-legend','bt-m.k-buy','bt-m.k-sell'].some(t=>l.includes(t)))console.log(i+1,l.slice(0,2000))});console.log('HASH',require('crypto').createHash('sha256').update(require('fs').readFileSync('../../../../index.html')).digest('hex'));console.log('BEFORE',require('fs').readFileSync('sha-before.txt','utf8'))\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 142ms:
+3353 .cal-c.off{opacity:.45}
+3356 .cal-c.z{background:rgba(255,255,255,.07);color:#dbdbdb}
+3358 .cal-c.u i{color:#56c486}.cal-c.d i{color:#ee766a}.cal-c.z i{color:#848a94}
+7807 .mk-detail .cal-c.off{background:transparent;color:#5d5d5d}
+7867 .mk-detail .cal-c.z{background:#262626!important}
+7870 .mk-detail .cal-c.off{background:transparent!important;border:1px solid rgba(255,255,255,.08)}
+24525     h=h.replace(/class="cal-c (u|d|z)" title="(-?[\d.]+)%">(\d+)<i>([^<]*)<\/i>/g,function(m,k,v,dd,t){ var a=Math.min(1,Math.abs(+v)/8); return 'class="cal-c '+k+'" style="--a:'+a.toFixed(2)+'" title="'+v+'%">'+dd+'<i>'+t+'%</i>'; });
+HASH c0cd50ff7352035bab4d2388d3f43ec7aae79e57bdc08e0cc37a75e077301340
+BEFORE c0cd50ff7352035bab4d2388d3f43ec7aae79e57bdc08e0cc37a75e077301340 *index.html
+
+
+codex
+픽셀을 추출해 확인한 결과, 카드 선은 `#2EBD85`, 상세와 백테스트 선은 `#2FB98A`로 초록이 다릅니다. 코드에서는 손실 그라데이션이 아래로 갈수록 진해지며, 달력의 29일과 30일은 날짜 글자까지 흐려집니다. 판단 기록의 월 묶음 머리는 캡처에서 제거된 상태입니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rtk proxy node -e \"function lum(h){let c=h.match(/../g).map(x=>parseInt(x,16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));return c[0]*.2126+c[1]*.7152+c[2]*.0722}for(const [a,b] of [['ffffff','19644b'],['ffffff','702831'],['ffffff','051810'],['2a2a2a','000000'],['848a94','262626'],['9a9a9a','000000']])console.log(a,b,((Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05)).toFixed(2));const s=require('fs').readFileSync('../../../../index.html','utf8').split('\\n');s.forEach((l,i)=>{if(l.includes('bt-m ')||l.includes('bt-leg')||l.includes('.cal-c i'))console.log(i+1,l.slice(0,2000))})\"" in C:\Users\hyun1\OneDrive\바탕 화면\tesia-lab fork 1\qa\gpt-skin\chart\s3
+ succeeded in 130ms:
+ffffff 19644b 7.08
+ffffff 702831 10.31
+ffffff 051810 18.35
+2a2a2a 000000 1.46
+848a94 262626 4.36
+9a9a9a 000000 7.46
+3357 .cal-c i{position:absolute;left:6px;right:4px;bottom:4px;font-style:normal;font-size:10.5px;font-weight:600;white-space:nowrap;overflow:hidden}
+3362 @media (max-width:680px){ .cal-c{min-height:32px;padding:4px 5px} .cal-c i{display:none} }
+5772 .bt-leg{display:flex;gap:16px;font-size:12px;color:var(--gt3);padding-bottom:6px;white-space:nowrap}
+5773 .bt-leg span{display:inline-flex;align-items:center;gap:7px}
+5774 .bt-leg span::before{content:"";width:18px;height:0;border-top:2px solid #2fb98a}
+5775 .bt-leg .b::before{border-top:2px dotted rgba(255,255,255,.4)}
+5776 .bt[data-phase=ready] .bt-leg .a{opacity:.35}
+6085   .bt-leg{padding-bottom:0}
+6121 .bt-leg .c:empty{display:none}
+6122 .bt-leg .c::before{width:7px;height:7px;border:1.6px solid #f0b840;transform:rotate(45deg);margin-right:2px}
+6256 .bt-leg{gap:14px;flex-wrap:wrap;justify-content:flex-end}
+6257 .bt-leg .m{gap:5px;color:var(--gt2)}
+6258 .bt-leg .m::before{content:none}
+6259 .bt-leg .m svg{display:block}
+6260 .bt[data-phase=ready] .bt-leg .a,.bt[data-phase=ready] .bt-leg .m{opacity:.4}
+6469   .bt-leg{gap:10px;font-size:11.5px;justify-content:flex-start}
+6491 .bt-leg .b i{font-style:normal;color:var(--gt2);margin-left:2px}
+7808 .mk-detail .cal-c i{font-style:normal;font-size:14px}
+7846   .mk-detail .cal-c i{font-size:11px}
+7855 .mk-detail .cal-c i{display:block;position:static;margin-top:4px;font-weight:400;overflow:hidden;text-overflow:clip}
+7856 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:48px;font-size:11px;padding:5px 4px} .mk-detail .cal-c i{font-size:10.5px;margin-top:2px;letter-spacing:-.02em} }
+7886 #bt-root .bt-leg span{font-size:14px;color:#cdcdcd}
+7887 #bt-root .bt-leg span i{font-weight:400}
+7992 #bt-root .bt-leg .a::before{background:#ececec;border-color:#ececec}
+7993 #bt-root .bt-leg .b::before{border-top-color:#9a9a9a}
+7999 #bt-root .bt-leg span::before{border-top-color:#ececec}
+8000 #bt-root .bt-leg .m svg path{fill:#9a9a9a}
+8021 #g-content .bt-leg .c::before{border-top-color:#9a9a9a}
+8112 #bt-root .bt-leg .a::before{height:2px!important;border:0!important;background:linear-gradient(90deg,#2fb98a 50%,#f0566a 50%)!important}
+22095     return '<g class="bt-m k-'+m.k+'" data-j="'+m.j+'" data-ix="'+m.ix+'" tabindex="-1" role="button" aria-label="'+gEsc(btYMD(R.eq[m.j].i)+' '+m.t+(m.n>1&&m.k==='skip'?' 외 '+(m.n-1)+'번':''))+'" onclick="event.stopPropagation();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();btMarkClick('+m.ix+','+(m.k==='skip'?m.ix2:m.ix)+')}"><rect x="'+(x-11).toFixed(1)+'" y="'+(y-((m.k==='buy'&&!(m.side<0))?-2:34)).toFixed(1)+'" width="22" height="'+(m.k==='skip'?34:20)+'" fill="transparent"/>'+s+'</g>'; }).join('');
+22180   return '<div class="bt-leg"><span class="a">이 전략</span><span class="b">그냥 들고 있었다면 <i class="num">'+(BT.R&&BT.phase==='result'?mkPct0(BT.R.benchRet,1):'')+'</i></span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 1l4.5 8h-9z" fill="#2fb98a"/></svg>매수</span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 9l4.5 -8h-9z" fill="none" stroke="#cfd3d8" stroke-width="1.4" stroke-linejoin="round"/></svg>매도</span>'
+22252   btSub(); btChartDraw(); { var lg=document.querySelector('.bt-leg .b i'); if(lg) lg.textContent=''; } /* 비교 수익률은 결과에서만 */
+23425   var f0=btFinish; btFinish=function(){ BT.pause=0; btJStop(); var r=f0.apply(this,arguments); try{ var w=$('bt-pjw'); if(w) w.hidden=true; var lg=document.querySelector('.bt-leg .b i'); if(lg) lg.textContent=mkPct0(BT.R.benchRet,1); btReadLoad(); }catch(e){} return r; };
+23482   return '<div class="bt-leg"><span class="a">이 전략</span><span class="b">그냥 들고 있었다면 <i class="num">'+(BT.R&&BT.phase==='result'?mkPct0(BT.R.benchRet,1):'')+'</i></span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 1l4.5 8h-9z" fill="#2fb98a"/></svg>롱 진입</span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 9l4.5 -8h-9z" fill="#b08cf5"/></svg>숏 진입</span><span class="m"><svg width="11" height="10" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 9l4.5 -8h-9z" fill="none" stroke="#cfd3d8" stroke-width="1.4" stroke-linejoin="round"/></svg>청산</span>'
+24582     if(SKB_EXACT[k]){ var pe=x.parentElement, ok=pe&&pe.closest('.bt-leg,.bt-panel .cell small,.bt-sec-b header h3,.bt-sec-b > header > h3,.bt-th,.bt-dl dt,.bt-box h3,.bt-box summary,.bt-read p.l,.bt-id-m,.bt-chips,.bt-verdict,.bt-k3,.bt-cta,.bt-sec,.bt-tech summary'); if(!ok) nv=v; }
+
+codex
+**暂不建议部署。** 已读取设计基准并核对截图像素及代码；文件未修改，`index.html` 哈希与检前记录一致。以下坐标以截图左上角为原点。
+
+| 级别 | 截图、位置 | 像素或文案依据 | 建议修改值 |
+|---|---|---|---|
+| 必须修改 | `REF-card.png`、`C1-detail-chart.png`、`C3-bt-chart.png` 的收益线 | 卡片实色像素为 `#2EBD85`，详情及回测为 `#2FB98A`。后两者更偏青。损失红色代码均为 `#F0566A`。 | 三处绿色统一为参考卡片的 `#2EBD85`，红色保留 `#F0566A`。日历及图例同步使用。 |
+| 必须修改 | `C1-detail-chart.png` 的零线下方，`C3-bt-chart.png` 的本金线下方，含手机版 | 损失渐变代码由上方透明度 `.02` 增至下方 `.30`，回测增至 `.26`，与“向下变淡”相反。收益填充上限也分别为 `.30` 和 `.26`。 | 详情和回测均采用从上到下 `.26 → 0` 的同色渐变；正负区域分别裁切。 |
+| 必须修改 | `C3-bt-chart.png` 图表底部约 `y=477`，`C3-bt-chart-m.png` 约 `y=353` | 颜色分界是本金 `$1,000`，但纵轴只有 `0、5,000…`，本金线没有独立标识。用户容易把纵轴零点当成盈亏分界。 | 在 `$1,000` 处增加独立的 1px 灰色基准线及“시작 금액 $1,000”标签。 |
+| 必须修改 | `C3-bt-chart.png` 上方图例和交易标记，含手机版 | 图例里的清仓符号是灰色倒三角，图中却是红绿描边倒三角。绿色清仓标记还与收益线混在一起。 | 多头入场用灰色实心上三角，空头入场用灰色实心下三角，清仓用灰色空心圆。图例与图中统一，尺寸 10px，描边 1.5px。 |
+| 必须修改 | `C5-bt-month-m.png`，约 `y=486–709` | 月度收益表显示至7月，8月至12月及累计列被横向裁切，并出现横向滚动条。违反390px无横向滚动基准。 | 改为年份选择器，下方用“月份、收益率”两列及年度累计行；内容宽度358px。 |
+| 建议修改 | `C1-detail-chart-m.png`、`C2-calendar-m.png` 的日历数字 | 收益率仅10.5px，日期11px。底色对比足够，但阅读尺寸偏小。 | 收益率12px，日期12px，字重400，保留正负号。 |
+| 建议修改 | `C2-calendar.png`、`C2-calendar-m.png` 的29日和30日 | 日期与整个格子一起应用 `.45` 透明度，日期合成色约 `#2A2A2A`，与黑底对比约1.46:1。 | 去掉整格透明度，日期改为 `#9A9A9A`，保持透明背景，不填收益数字。月初占位格继续完全留空。 |
+| 建议修改 | `C1-detail-chart.png`、`C2-calendar.png` 的3日和5日 | `+9.4%` 与 `+10.6%` 均达到8%的填色上限，强度相同。 | 将强度计算改为固定 `min(绝对收益率/12,1)`，保留最低透明度 `.12`。 |
+
+日历的实测底色 `#19644B`、`#702831` 与白字的对比分别约为 **7.08:1、10.31:1**，深色格无需进一步压暗。接近零的 `+0.1%` 格子仍能通过白色数字和正号识别。截图没有正好 `0%` 的格子，无法确认其实际显示；代码为中性灰底 `#262626`。现货持有比较线保持灰色点线，判断记录的月份分组标题已移除。
+
+| 当前文案 | 建议替换 |
+|---|---|
+| 9월 수익률 +18.1%. 이번 달에 종료된 거래는 없습니다 | 9월 수익률은 +18.1%이며, 청산한 거래는 없습니다. |
+| 하루 단위 손익입니다. 색이 진할수록 크게 움직인 날입니다. | 일별 수익률이며, 색이 진할수록 수익이나 손실이 큽니다. |
+| 2023년 4월 12일부터 누적 수익률은 +2085.6%입니다. | 2023년 4월 12일 이후 누적 수익률은 +2,085.6%입니다. |
+| 한 달 전체를 계산한 40개월 중 22개월에 수익이 났습니다. | 온전히 집계한 40개월 중 22개월의 수익률이 플러스입니다. |
+| 1,266일간의 결과입니다. 숫자나 차트 표시를 누르면 판단 근거가 열립니다. | 숫자나 차트의 거래 표시를 누르면 판단 근거를 확인할 수 있습니다. |
+
+**색상 불일치, 손실 그라데이션 방향, 기준선, 거래 표식과 모바일 표를 수정하기 전에는 배포하면 안 됩니다.**
+tokens used
+59,595
+**暂不建议部署。** 已读取设计基准并核对截图像素及代码；文件未修改，`index.html` 哈希与检前记录一致。以下坐标以截图左上角为原点。
+
+| 级别 | 截图、位置 | 像素或文案依据 | 建议修改值 |
+|---|---|---|---|
+| 必须修改 | `REF-card.png`、`C1-detail-chart.png`、`C3-bt-chart.png` 的收益线 | 卡片实色像素为 `#2EBD85`，详情及回测为 `#2FB98A`。后两者更偏青。损失红色代码均为 `#F0566A`。 | 三处绿色统一为参考卡片的 `#2EBD85`，红色保留 `#F0566A`。日历及图例同步使用。 |
+| 必须修改 | `C1-detail-chart.png` 的零线下方，`C3-bt-chart.png` 的本金线下方，含手机版 | 损失渐变代码由上方透明度 `.02` 增至下方 `.30`，回测增至 `.26`，与“向下变淡”相反。收益填充上限也分别为 `.30` 和 `.26`。 | 详情和回测均采用从上到下 `.26 → 0` 的同色渐变；正负区域分别裁切。 |
+| 必须修改 | `C3-bt-chart.png` 图表底部约 `y=477`，`C3-bt-chart-m.png` 约 `y=353` | 颜色分界是本金 `$1,000`，但纵轴只有 `0、5,000…`，本金线没有独立标识。用户容易把纵轴零点当成盈亏分界。 | 在 `$1,000` 处增加独立的 1px 灰色基准线及“시작 금액 $1,000”标签。 |
+| 必须修改 | `C3-bt-chart.png` 上方图例和交易标记，含手机版 | 图例里的清仓符号是灰色倒三角，图中却是红绿描边倒三角。绿色清仓标记还与收益线混在一起。 | 多头入场用灰色实心上三角，空头入场用灰色实心下三角，清仓用灰色空心圆。图例与图中统一，尺寸 10px，描边 1.5px。 |
+| 必须修改 | `C5-bt-month-m.png`，约 `y=486–709` | 月度收益表显示至7月，8月至12月及累计列被横向裁切，并出现横向滚动条。违反390px无横向滚动基准。 | 改为年份选择器，下方用“月份、收益率”两列及年度累计行；内容宽度358px。 |
+| 建议修改 | `C1-detail-chart-m.png`、`C2-calendar-m.png` 的日历数字 | 收益率仅10.5px，日期11px。底色对比足够，但阅读尺寸偏小。 | 收益率12px，日期12px，字重400，保留正负号。 |
+| 建议修改 | `C2-calendar.png`、`C2-calendar-m.png` 的29日和30日 | 日期与整个格子一起应用 `.45` 透明度，日期合成色约 `#2A2A2A`，与黑底对比约1.46:1。 | 去掉整格透明度，日期改为 `#9A9A9A`，保持透明背景，不填收益数字。月初占位格继续完全留空。 |
+| 建议修改 | `C1-detail-chart.png`、`C2-calendar.png` 的3日和5日 | `+9.4%` 与 `+10.6%` 均达到8%的填色上限，强度相同。 | 将强度计算改为固定 `min(绝对收益率/12,1)`，保留最低透明度 `.12`。 |
+
+日历的实测底色 `#19644B`、`#702831` 与白字的对比分别约为 **7.08:1、10.31:1**，深色格无需进一步压暗。接近零的 `+0.1%` 格子仍能通过白色数字和正号识别。截图没有正好 `0%` 的格子，无法确认其实际显示；代码为中性灰底 `#262626`。现货持有比较线保持灰色点线，判断记录的月份分组标题已移除。
+
+| 当前文案 | 建议替换 |
+|---|---|
+| 9월 수익률 +18.1%. 이번 달에 종료된 거래는 없습니다 | 9월 수익률은 +18.1%이며, 청산한 거래는 없습니다. |
+| 하루 단위 손익입니다. 색이 진할수록 크게 움직인 날입니다. | 일별 수익률이며, 색이 진할수록 수익이나 손실이 큽니다. |
+| 2023년 4월 12일부터 누적 수익률은 +2085.6%입니다. | 2023년 4월 12일 이후 누적 수익률은 +2,085.6%입니다. |
+| 한 달 전체를 계산한 40개월 중 22개월에 수익이 났습니다. | 온전히 집계한 40개월 중 22개월의 수익률이 플러스입니다. |
+| 1,266일간의 결과입니다. 숫자나 차트 표시를 누르면 판단 근거가 열립니다. | 숫자나 차트의 거래 표시를 누르면 판단 근거를 확인할 수 있습니다. |
+
+**색상 불일치, 손실 그라데이션 방향, 기준선, 거래 표식과 모바일 표를 수정하기 전에는 배포하면 안 됩니다.**

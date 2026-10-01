@@ -71,3 +71,12 @@ function skSym(t){ return String(t==null?'':t).replace(/비트코인|이더리�
 /* 연구 기록 문구 */
 (function(){ var h0=gHistory; gHistory=function(){ var r=h0.apply(this,arguments); try{ var q=document.getElementById('g-hist-q'); if(q){ q.placeholder='연구 기록 검색'; q.setAttribute('aria-label','연구 기록 검색'); } }catch(e){} return r; };
   var l0=gHistList; gHistList=function(){ var r=l0.apply(this,arguments); try{ var n=document.querySelector('#g-hist-list .g-note'); if(n&&/아직 연구 기록이 없습니다/.test(n.textContent)) n.textContent='아직 연구 기록이 없습니다. 새 전략을 만들면 여기에 쌓입니다.'; var m=document.getElementById('g-hist-more'); if(m) m.textContent='아래로 내리면 더 불러옵니다'; }catch(e){} return r; }; })();
+
+/* 앱 배너는 메인(홈)에서만. 다른 화면은 배너와 그 자리(64px)를 함께 없애 페이지를 위로 올린다(파운더 2026-10-01) */
+(function(){
+  function want(){ var hide=false; try{ hide=!!sessionStorage.getItem('tethBannerHide'); }catch(e){} return !hide&&typeof G!=='undefined'&&G.mode==='home'; }
+  function sync(){ try{ document.body.classList.toggle('has-banner',want()); }catch(e){} }
+  if(typeof gHome==='function'){ var h0=gHome; gHome=function(){ var r=h0.apply(this,arguments); sync(); return r; }; }
+  var last=null; setInterval(function(){ var m=typeof G!=='undefined'?G.mode:null; if(m!==last){ last=m; sync(); } },300);
+  sync();
+})();

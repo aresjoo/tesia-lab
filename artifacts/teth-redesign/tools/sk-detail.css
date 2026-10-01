@@ -105,10 +105,23 @@
 .mk-detail .cal-c i{display:block;position:static;margin-top:4px;font-weight:400;overflow:hidden;text-overflow:clip}
 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{min-height:48px;font-size:11px;padding:5px 4px} .mk-detail .cal-c i{font-size:10.5px;margin-top:2px;letter-spacing:-.02em} }
 /* Codex s3: 차트는 회색 선 하나, 면적 채움 없음, 색은 숫자에만 */
-.mk-detail .mkd-chart path[fill^="url(#mkdg"]{display:none}
-.mk-detail .mkd-chart path[stroke="#2fb98a"],.mk-detail .mkd-chart path[stroke="#f0566a"]{stroke:#ececec}
 .mk-detail .mkd-chart .mkd-mk text{font-weight:400}
 /* 달력 제목 18, 셀 반경 */
 .mk-detail .mk3-cal b{font-size:18px;font-weight:400}
 .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:20px}
 @media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{border-radius:12px} .mk-detail .mk3-dh-t h2,.mk-detail .mk-tab,.mk-detail .mk3-dh-one{font-weight:400} }
+
+/* 손익 달력 색칠: 수익 초록, 손실 빨강, |손익| 8%에서 가장 진하게 */
+.mk-detail .cal-c.u{background:rgba(46,189,133,calc(.12 + var(--a,0) * .42))!important}
+.mk-detail .cal-c.d{background:rgba(240,86,106,calc(.12 + var(--a,0) * .42))!important}
+.mk-detail .cal-c.z{background:#262626!important}
+.mk-detail .cal-c.u,.mk-detail .cal-c.d{color:#fff}
+.mk-detail .cal-c.u i,.mk-detail .cal-c.d i{color:#fff!important}
+.mk-detail .cal-c.off{background:transparent!important;border:1px solid rgba(255,255,255,.08)}
+.mk-detail .cal-g>.cal-c:empty{background:transparent!important;border:0!important}
+
+/* Codex 차트 s3: 초록은 목록 카드와 같은 #2EBD85, 지난 달력 칸 글자 대비, 모바일 달력 글자 12px */
+.mk-detail .mkd-chart path[stroke="#2fb98a"]{stroke:#2ebd85}
+.mk-detail .mkd-chart stop[stop-color="#2fb98a"]{stop-color:#2ebd85}
+.mk-detail .cal-c.off{opacity:1!important;color:#6f6f6f!important}
+@media (max-width:768px){ .mk-detail .cal-c,.mk-detail .cal-c.u,.mk-detail .cal-c.d{font-size:12px} .mk-detail .cal-c i{font-size:12px!important;letter-spacing:-.02em} }

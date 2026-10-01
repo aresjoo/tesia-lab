@@ -158,3 +158,14 @@ body.px-go #teth-help{display:none!important}
 .acx-ac .bts .no{background:#3a3a3a;border-color:#3a3a3a;color:#ececec}
 .acx-ac ul{border-color:rgba(255,255,255,.14)}
 .acx-ac li::before{border-color:#8fb4ff}
+
+/* 거래소 타일: 연결된 거래소는 회색 2px 테두리와 오른쪽 위 체크(높이는 모든 타일 같음) */
+.px-exs button{position:relative}
+.px-exs button.cn{box-shadow:inset 0 0 0 2px #9a9a9a}
+.px-exs button .ck{position:absolute;top:10px;right:12px;color:#cdcdcd}
+@media (max-width:768px){
+  .px-exs button .ck{top:9px;right:10px}
+  /* 연결된 거래소 목록: 한 줄 카드에 위아래 여백이 겹치지 않게 */
+  .px-card.px-list{padding:0 18px}
+  .px-list .px-acct{padding:14px 0}
+}

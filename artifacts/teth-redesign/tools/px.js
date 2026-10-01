@@ -30,7 +30,7 @@ function pxHelp(){ return '<p class="px-help"><span>막히면 상담원이 24시
 function pxBEx(){
   var a=acS(), ctx=AC_CTX||{};
   return '<div class="pl-exs px-exs" role="group" aria-label="거래소">'+acExs().map(function(b){ var cn=!!a.conn[b.id];
-    return '<button type="button" onclick="pxPickEx(\''+b.id+'\')">'+acLogo(b.id,30)+'<b>'+b.name+'</b>'+(cn?'<small>연결됨</small>':'')+'</button>'; }).join('')+'</div>';
+    return '<button type="button"'+(cn?' class="cn" aria-label="'+b.name+', 연결됨"':'')+' onclick="pxPickEx(\''+b.id+'\')">'+(cn?'<svg class="ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':'')+acLogo(b.id,30)+'<b>'+b.name+'</b></button>'; }).join('')+'</div>';
 }
 function pxPickEx(id){ var a=acS(); a.exSel=id; acExGo(); }
 /* 계정: 초대 가입 안내 한 카드, 단추 하나, 작은 갈래 둘 */

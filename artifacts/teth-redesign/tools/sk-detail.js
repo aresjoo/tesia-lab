@@ -72,3 +72,14 @@ function skdDedupe(root){
     mo.observe(c,{childList:true,subtree:true,characterData:true}); }
   var r0=tfSS3DetailRender; tfSS3DetailRender=function(){ var r=r0.apply(this,arguments); try{ watch(); run(); }catch(e){} return r; };
 })();
+
+/* 손익 달력: 칸 배경을 손익 색으로, 크기에 비례한 진하기(파운더 2026-10-01). 숫자에는 % */
+(function(){
+  if(typeof tfSS3CalHtml!=='function') return;
+  var c0=tfSS3CalHtml; tfSS3CalHtml=function(r,mOff){ var h=c0.apply(this,arguments); try{
+    h=h.replace(/class="cal-c (u|d|z)" title="(-?[\d.]+)%">(\d+)<i>([^<]*)<\/i>/g,function(m,k,v,dd,t){ var a=Math.min(1,Math.abs(+v)/12); return 'class="cal-c '+k+'" style="--a:'+a.toFixed(2)+'" title="'+v+'%">'+dd+'<i>'+t+'%</i>'; });
+    h=h.replace(/(\d+월 수익률 [+-]?[\d.]+%), (?:끝난|종료) 거래 0회/,'$1이며, 청산한 거래는 없습니다');
+    h=h.replace(/(\d+월 수익률 [+-]?[\d.]+%), (?:끝난|종료) 거래 (\d+)회/,'$1, 종료 거래 $2회');
+    h=h.replace('평가 기록이 있는 봉만 색이 칠해집니다. 지난 봉 기준입니다.','일별 수익률이며, 색이 진할수록 수익이나 손실이 큽니다.');
+  }catch(e){} return h; };
+})();
