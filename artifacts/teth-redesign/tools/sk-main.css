@@ -217,3 +217,10 @@ body:has(#g-askdock .ska) #g-newmsg{display:none!important}
 .myex-empty{padding:40px 0;text-align:center;font-size:16px;color:#cdcdcd}
 .myex-empty p{margin:0 0 10px}
 .myex-empty .pl-link{font-size:14px}
+/* 전략 목록: 떠 있는 상담 단추 대신 목록 아래 한 줄. 내 거래소 목록의 현재 항목 체크 */
+body:has(.mk3-grid) #teth-help{display:none!important}
+.mk-help{margin:32px 0 0}
+.myex-m button .ck{margin-left:auto;color:#cdcdcd}
+.myex-m button:focus-visible{outline:2px solid #9a9a9a;outline-offset:-2px}
+/* 제목 줄을 없앤 페이지(터미널, 홈 제외)는 위쪽 여백을 따로 준다(거래소 연결, 전략 목록 등이 화면 위에 붙지 않게) */
+@media (min-width:861px){ body.nochead:not(:has(.tft-page)):not(:has(.g-home)) #g-content{padding-top:40px} }

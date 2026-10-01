@@ -87,3 +87,10 @@
 .tft-page .tft-bbody{padding-bottom:24px}
 .tft-page .tb-cps{flex:none;position:sticky;top:0;z-index:2;background:#141414;padding-bottom:10px}
 @media (max-width:960px){ .tft-page .tm-status.tb{padding-top:16px} .tft-page .tm-status.tb,.tft-page .tb-th,.tft-page .tb-feed,.tft-page .tb-foot,.tft-page .tb-cps{padding-left:16px;padding-right:16px} }
+/* Codex s5: 판단 전문과 접기, 글자 16/14, 모바일 위 여백 */
+.tft-page .tb-fx:empty::after{content:'판단 전문'}
+.tft-page details[open] .tb-fx{display:inline!important}
+.tft-page details[open] .tb-fx:empty::after{content:'접기'}
+.tft-page .tb-fx{font-size:14px}
+.tft-page .tb-r>span,.tft-page .tb-tht,.tft-page .tb-fs{font-size:16px}
+@media (max-width:960px){ .tft-page .tb-copy .tb-cps{padding-top:12px} .tft-page .tb-copy .tm-status.tb{padding-top:12px} }

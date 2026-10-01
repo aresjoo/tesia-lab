@@ -207,3 +207,7 @@
 
 /* 종목 줄도 아래 차트 카드처럼 둥근 카드(PC). 모바일은 메뉴 단추 줄이라 그대로 */
 @media (min-width:961px){ .tft-page .mkh{margin:8px 8px 0;border-radius:16px;background:#141414;border:0} }
+/* 종목 줄도 아래 카드들과 같은 카드(모서리 16px, 바깥 여백) */
+.nfxh-wrap.tft-page>.mkh{margin:8px 6px 0!important;border-radius:16px!important;background:#141414!important;border:0}
+/* 모바일: 시세 출처 줄은 운용 거래소만(잘림 방지) */
+@media (max-width:600px){ .mkt-ref>img:first-child,.mkt-ref>span:nth-of-type(1),.mkt-ref>.sp{display:none!important} .mkt-ref{max-width:46%} }
