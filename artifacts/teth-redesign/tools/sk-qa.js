@@ -28,7 +28,7 @@ function qaCopy(){ var nick=qaNick('lev'), s2=tfSSFind(nick); if(!s2) return; va
     adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5,maxLoss:-20,existing:'skip'},at:Date.now(),status:'active',ledger:[{at:Date.now(),type:'add',amt:560,i:eqA.length>31?eqA[eqA.length-31].i:null}]}); tfSaveNow(); }
 function qaOrder(st){ var o={asset:'비트코인',side:'sell',trigger:90000,qty:'all',ttl:'gtc'}; o=odNorm(o); o.id='odqa'+Date.now(); o.status=st||'wait'; o.at=Date.now(); o.ex='bitget'; o.sess=G.cur&&G.cur.id; odS().push(o); tfSave(); return o; }
 function qaTerm(after){ qaClean(); location.hash='#/trade'; if(typeof tfNFRoute==='function') setTimeout(function(){ try{ tfNFRoute('#/trade'); }catch(e){} },50); if(after) setTimeout(after,1600); }
-function qaTermPick(fn){ try{ var all=tfTmAll(); var s=all.filter(fn)[0]; if(s){ TF_TM.sel=s.key; tfTmSelect(s.key); } }catch(e){} }
+function qaTermPick(fn){ try{ var all=tfTmAll(); var s=all.filter(fn)[0]; if(s){ if(TF_TM.sel===s.key) TF_TM.sel=null; tfTmSelect(s.key); } }catch(e){} }
 function qaBotTab(name){ var b=[].filter.call(document.querySelectorAll('.tft-botbar .nfxh-tab, .nfxh-tabs .nfxh-tab'),function(x){ return x.textContent.indexOf(name)>=0; })[0]; if(b) b.click(); }
 function qaBt(nick,run,res){ qaClean(); location.hash='#/share/bt/'+encodeURIComponent(nick); if(run) setTimeout(function(){ try{ if(res){ BT.per=0; btReady(); btCompute(); btFinish(); } else btStart(); }catch(e){} },1800); }
 function qaDetail(tab){ qaClean(); location.hash='#/share/s/'+encodeURIComponent(qaNick('lev')); if(tab) setTimeout(function(){ var t=[].filter.call(document.querySelectorAll('.mk-dtabs .mk-tab'),function(b){ return b.textContent.indexOf(tab)>=0; })[0]; if(t) t.click(); },1500); }

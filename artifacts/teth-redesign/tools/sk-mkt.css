@@ -1,0 +1,133 @@
+/* ═══ 터미널 시장 (sk-mkt): 바이낸스처럼 칸마다 카드, 시장 줄, 종목 선택 창, 차트/정보/데이터 ═══ */
+.tft-page{--mkc:#141414;background:#000}
+.tft-page .tm-simnote{display:none!important}
+/* 카드 배치: 시장 줄 / (차트 카드 | 판단 카드) / 아래 카드 */
+.tft-page .mkh{margin:6px 6px 0;border-radius:16px;background:var(--mkc)}
+.tft-page .tft-grid{grid-template-columns:minmax(0,1fr) var(--tftr,392px)!important;grid-template-areas:"ctx brain" "chart brain"!important;column-gap:6px;padding:6px;border:0!important;position:relative}
+.tft-page .tft-rail{grid-area:auto}
+.tft-page .tft-ctx{background:var(--mkc);border:0!important;border-radius:16px 16px 0 0;border-bottom:1px solid rgba(255,255,255,.06)!important}
+.tft-page .tft-chart{background:var(--mkc);border-radius:0 0 16px 16px;overflow:hidden}
+.tft-page .tft-ctx:empty+.tft-chart,.tft-page .tft-ctx:empty{border-radius:16px}
+.tft-page .tft-brain{background:var(--mkc);border:0!important;border-radius:16px}
+.tft-page .tft-bottom{margin:0 6px 6px;border-radius:16px;background:var(--mkc);border:0!important;overflow:hidden}
+.tft-page .tft-botbar{border-bottom:1px solid rgba(255,255,255,.06)}
+/* 가운데 목록 칸 없앰 → 판단 카드 머리의 "전략 N개" 를 누르면 떠오름 */
+.tft-page .tft-rail{display:none!important}
+.tft-page.rail-open .tft-rail{display:flex!important;position:absolute;top:58px;right:6px;width:min(380px,calc(100% - 12px));max-height:min(70vh,640px);z-index:30;border:1px solid rgba(255,255,255,.12)!important;border-radius:16px;background:#212121;box-shadow:0 18px 48px rgba(0,0,0,.6);overflow:hidden auto}
+.tft-page .mks-hd{padding:10px 12px 6px}
+.tft-page .mks-btn{display:flex;align-items:center;gap:8px;width:100%;height:40px;padding:0 12px;border:0;border-radius:12px;background:#212121;color:#ececec;font:inherit;cursor:pointer;text-align:left}
+.tft-page .mks-btn:hover{background:#2a2a2a}
+.tft-page .mks-btn span{font-size:13px;color:#9a9a9a;flex:none}
+.tft-page .mks-btn b{flex:1;min-width:0;font-size:15px;font-weight:400;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tft-page .mks-btn svg{flex:none;color:#9a9a9a}
+/* 시장 줄 */
+.mkh{display:flex;align-items:center;gap:24px;min-height:64px;padding:8px 18px;overflow-x:auto;scrollbar-width:none}
+.mkh::-webkit-scrollbar{display:none}
+.mkh-sym{display:inline-flex;align-items:center;gap:8px;flex:none;height:44px;padding:0 10px 0 6px;border:0;border-radius:12px;background:none;color:#fff;font:inherit;cursor:pointer}
+.mkh-sym:hover{background:#212121}
+.mkh-sym b{font-size:20px;font-weight:500;letter-spacing:-.01em}
+.mkh-sym .tag{font-size:12px;color:#cdcdcd;background:#2f2f2f;border-radius:6px;padding:2px 6px}
+.mkh-sym svg{color:#9a9a9a}
+.mkh-px{display:flex;flex-direction:column;flex:none;line-height:1.2}
+.mkh-px b{font-size:22px;font-weight:500;color:#fff}
+.mkh-px span{font-size:13px}
+.mkh-px.up b,.mkh-px.up span,.mkh i.up{color:#2ebd85;font-style:normal}
+.mkh-px.dn b,.mkh-px.dn span,.mkh i.dn{color:#f0566a;font-style:normal}
+.mkh-kv{display:flex;gap:22px;margin:0;flex:none}
+.mkh-kv div{display:flex;flex-direction:column;gap:3px}
+.mkh-kv dt{font-size:12px;color:#9a9a9a;white-space:nowrap}
+.mkh-kv dd{margin:0;font-size:13px;color:#ececec;white-space:nowrap}
+.mk-ic{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:50%;background:#2f2f2f;overflow:hidden}
+.mk-ic img{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.mk-ic i{font-style:normal;font-size:11px;color:#ececec}
+/* 차트 카드 안 탭 */
+@media (min-width:961px){ .tft-page .tft-chart{display:flex;flex-direction:column} }
+.nfxh-wrap.mt-chart .tft-chart{flex-direction:column}
+.mkt-tabs{display:flex;gap:4px;height:44px;align-items:center;padding:0 12px;border-bottom:1px solid rgba(255,255,255,.06);flex:none;position:relative;z-index:2;background:var(--mkc)}
+.mkt-tabs button{height:32px;padding:0 12px;border:0;border-radius:999px;background:none;color:#9a9a9a;font:inherit;font-size:14px;cursor:pointer}
+.mkt-tabs button:hover{color:#fff}
+.mkt-tabs button.on{background:#2f2f2f;color:#fff}
+.tft-page #nfxh-tv{top:44px}
+.tft-page .tft-chart .ph{top:44px}
+.mkt-pane{position:absolute;top:44px;left:0;right:0;bottom:0;overflow:auto;padding:16px 18px 20px;background:var(--mkc);z-index:3}
+.mkt-pane[hidden]{display:none}
+.mkt-ld{margin:24px 0;text-align:center;font-size:14px;color:#9a9a9a}
+/* 정보 */
+.mki-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mki-hd b{font-size:18px;font-weight:500;color:#fff}
+.mki-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 40px}
+.mki-r{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px}
+.mki-r span{color:#9a9a9a}
+.mki-r b{font-weight:400;color:#fff;text-align:right}
+.mki h4{margin:10px 0 8px;font-size:14px;font-weight:400;color:#cdcdcd}
+.mki-lks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.mki-lk{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:13px;text-decoration:none}
+.mki-lk:hover{background:#3a3a3a}
+.mki-src{margin:16px 0 0;font-size:12px;color:#6f6f6f}
+/* 데이터 */
+.mkx-per{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.mkx-per button{height:30px;padding:0 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:none;color:#cdcdcd;font:inherit;font-size:13px;cursor:pointer}
+.mkx-per button.on{border:2px solid #9a9a9a;color:#fff}
+.mkx-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.mkx-card{padding:12px 14px 10px;border-radius:14px;background:#1b1b1b}
+.mkx-card h4{margin:0 0 6px;font-size:14px;font-weight:400;color:#fff}
+.mkx-svg{display:block;width:100%;height:auto}
+.mkx-leg{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:12px;color:#9a9a9a}
+.mkx-leg i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+/* 종목 선택 창 */
+.mkp-ov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:24px}
+.mkp{width:min(920px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;border-radius:24px;background:#212121;border:1px solid rgba(255,255,255,.1);box-shadow:0 24px 64px rgba(0,0,0,.6);padding:22px 22px 12px;color:#ececec}
+.mkp-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mkp-hd h3{margin:0;font-size:20px;font-weight:500;color:#fff}
+.mkp-hd p{margin:4px 0 0;font-size:14px;color:#9a9a9a}
+.mkp-x{width:32px;height:32px;border:0;border-radius:999px;background:none;color:#cdcdcd;cursor:pointer;font-size:15px}
+.mkp-x:hover{background:#2f2f2f;color:#fff}
+.mkp-q{display:flex;align-items:center;gap:10px;height:46px;margin:16px 0 12px;padding:0 16px;border-radius:999px;background:#2f2f2f;color:#9a9a9a}
+.mkp-q:focus-within{box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.mkp-q input{flex:1;min-width:0;border:0;outline:0;background:none;color:#fff;font:inherit;font-size:16px}
+.mkp-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.mkp-seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:#171717}
+.mkp-seg button{height:30px;padding:0 12px;border:0;border-radius:999px;background:none;color:#9a9a9a;font:inherit;font-size:13px;cursor:pointer}
+.mkp-seg button.on{background:#3a3a3a;color:#fff}
+.mkp-th,.mkp-r{display:grid;grid-template-columns:32px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px}
+.mkp-th{padding:0 8px 8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.mkp-th::before{content:""}
+.mkp-th button{border:0;background:none;color:#9a9a9a;font:inherit;font-size:13px;text-align:right;cursor:pointer;padding:0}
+.mkp-th button:first-child{text-align:left}
+.mkp-th button.on{color:#fff}
+.mkp-rows{overflow-y:auto;min-height:200px}
+.mkp-r{padding:10px 8px;border-radius:10px;cursor:pointer;font-size:14px}
+.mkp-r:hover,.mkp-r:focus{background:#2a2a2a;outline:0}
+.mkp-r.on{background:#2f2f2f}
+.mkp-r>span.num{text-align:right;color:#ececec}
+.mkp-r>span.up{color:#2ebd85}
+.mkp-r>span.dn{color:#f0566a}
+.mkp-s{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.mkp-s b{font-weight:400;color:#fff;overflow:hidden;text-overflow:ellipsis}
+.mkp-st{width:28px;height:28px;border:0;border-radius:999px;background:none;color:#6f6f6f;font-size:15px;cursor:pointer}
+.mkp-st.on{color:#f0b90b}
+.mkp-ld{margin:28px 0;text-align:center;font-size:14px;color:#9a9a9a}
+@media (max-width:960px){
+  .tft-page .mkh{margin:6px 6px 0}
+  .tft-page .tft-grid{display:block!important;padding:6px}
+  .tft-page .tft-ctx{border-radius:16px 16px 0 0}
+  .tft-page.rail-open .tft-rail{position:fixed;top:120px;left:12px;right:12px;width:auto;bottom:120px}
+  .mki-g,.mkx-grid{grid-template-columns:minmax(0,1fr)}
+  .mkp-ov{padding:12px;align-items:flex-end}
+  .mkp{border-radius:20px;max-height:88vh;padding:16px 14px 10px}
+  .mkp-th,.mkp-r{grid-template-columns:28px minmax(0,1.4fr) minmax(0,1fr) minmax(0,.9fr);font-size:13px}
+  .mkp-th button:last-child,.mkp-r>span:last-child{display:none}
+}
+
+/* 전략을 고르지 않았을 때는 전략 줄을 숨기고 차트 카드를 통째로 둥글게 */
+.tft-page.no-sel .tft-ctx{display:none!important}
+.tft-page.no-sel .tft-chart{border-radius:16px}
+@media (min-width:961px){ .tft-page.no-sel .tft-grid{grid-template-areas:"chart brain" "chart brain"!important} }
+@media (max-width:960px){ .nfxh-wrap.mt-chart .tft-chart{display:flex!important;height:60vh} .tft-page .mkh{min-height:56px;padding:6px 12px;gap:16px} .mkh-sym b{font-size:17px} .mkh-px b{font-size:18px} }
+@media (max-width:960px){
+  .tft-page .mkh{position:relative;z-index:3;overflow:hidden;min-height:56px;margin:8px 6px 6px}
+  .tft-page .mkh-kv{display:none}
+  .tft-page .mkh-px{flex-direction:row;align-items:baseline;gap:8px}
+}
+.mkp-seg button{white-space:nowrap}
+@media (max-width:960px){ #mkp-cat{max-width:100%;overflow-x:auto;scrollbar-width:none} #mkp-cat::-webkit-scrollbar{display:none} }
