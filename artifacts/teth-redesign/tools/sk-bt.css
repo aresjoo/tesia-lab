@@ -159,3 +159,63 @@
 #g-content .btg-opt.on .rd::after{background:#fff}
 #bt-root svg circle[fill="#f0b840"],#bt-root svg text[fill="#f0b840"],.bt-jb svg circle[fill="#f0b840"],.bt-jb svg text[fill="#f0b840"]{fill:#cdcdcd}
 #bt-root svg circle[fill="#2fb98a"],#bt-root svg text[fill="#2fb98a"]{fill:#cdcdcd}
+/* ═══ 파운더 지적(백테스트 아래쪽 난잡함) ═══ */
+/* 분류 메타: 작은 회색 알약 셋 */
+#bt-root .bt-id-m{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+#bt-root .bt-id-m b,#bt-root .bt-id-m span{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#212121;font-size:13px;font-weight:400;color:#cdcdcd}
+/* 판단 기록 숫자 칸 → 한 줄 필터 알약 */
+#bt-root .bt-s4{display:flex!important;flex-wrap:wrap;gap:8px;grid-template-columns:none!important;margin:12px 0 8px;overflow:visible}
+#bt-root .bt-s4 button{display:inline-flex;align-items:baseline;gap:6px;height:36px;padding:0 14px;border-radius:999px!important;border:1px solid rgba(255,255,255,.14)!important;background:transparent!important;box-shadow:none!important;min-width:0;flex:none;width:auto}
+#bt-root .bt-s4 button::after{display:none!important}
+#bt-root .bt-s4 button small{font-size:14px;color:#cdcdcd;margin:0}
+#bt-root .bt-s4 button b.num{font-size:14px!important;font-weight:400;color:#fff}
+#bt-root .bt-s4 button b.num i{font-size:13px;color:#9a9a9a}
+#bt-root .bt-s4 button[aria-selected=true]{border:2px solid #9a9a9a!important}
+/* 판단 행: 날짜 | 제목 | 사유 | 열기, 사유는 한 줄 */
+#bt-root .bt-row.v2 .bt-rb{grid-template-columns:120px 12px 150px minmax(0,1fr) 18px;padding-top:14px;padding-bottom:14px}
+#bt-root .bt-row.v2 .bt-rb .wy{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bt-root .bt-row.v2.skb-grp .bt-rb b{color:#cdcdcd}
+#bt-root .bt-ym{padding:20px 0 8px}
+#bt-root .bt-more{display:inline-flex;gap:8px;align-items:baseline;margin-top:16px}
+#bt-root .bt-more i{text-decoration:none;color:#9a9a9a;font-size:13px}
+/* 거래 내역: 종목 칸을 줄이고 행 높이를 낮춤 */
+#bt-root .bt-th,#bt-root .bt-tr .bt-rb{grid-template-columns:minmax(120px,1.2fr) 1fr 1fr 90px 90px 18px!important}
+#bt-root .bt-tr .bt-rb{padding-top:12px;padding-bottom:12px}
+#bt-root .bt-tr .bt-rb time i{display:none}
+/* 월별 수익률: 연도 x 월 표 */
+#bt-root .skb-mt{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;table-layout:fixed}
+#bt-root .skb-mt th{font-weight:400;color:#9a9a9a;text-align:right;padding:8px 6px;border-bottom:1px solid rgba(255,255,255,.1)}
+#bt-root .skb-mt th:first-child{text-align:left;width:64px}
+#bt-root .skb-mt td{text-align:right;padding:10px 6px;border-bottom:1px solid rgba(255,255,255,.06);color:#cdcdcd;font-variant-numeric:tabular-nums}
+#bt-root .skb-mt td:first-child{text-align:left;color:#fff}
+#bt-root .skb-mt td.u{color:#58b892}
+#bt-root .skb-mt td.d{color:#d97a72}
+#bt-root .skb-mt td.e{color:#3a3a3a}
+#bt-root .skb-mt td small{display:block;font-size:11px;color:#9a9a9a}
+#bt-root .skb-mt td.yr{color:#fff;border-left:1px solid rgba(255,255,255,.1)}
+#bt-root .bt-monw.skb-hid{display:none}
+@media (max-width:768px){
+  #bt-root .bt-row.v2 .bt-rb{grid-template-columns:auto auto minmax(0,1fr) 18px}
+  #bt-root .bt-row.v2 .bt-rb .wy{white-space:normal}
+  #bt-root .bt-th,#bt-root .bt-tr .bt-rb{grid-template-columns:none!important}
+  #bt-root .skb-mtw{overflow-x:auto}
+  #bt-root .skb-mt{min-width:640px}
+}
+#bt-root .bt-s4{border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+#bt-root .bt-s4 button{display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start;gap:6px;padding:0 14px!important}
+#bt-root .bt-s4 button small,#bt-root .bt-s4 button b.num{display:inline!important;position:static!important;line-height:1}
+#bt-root .bt-more{text-decoration:none!important}
+#bt-root .bt-more .u{text-decoration:underline;text-underline-offset:3px;color:#cdcdcd}
+#bt-root .skb-mt{font-size:13px}
+#bt-root .skb-mt th,#bt-root .skb-mt td{padding-left:3px;padding-right:3px;white-space:nowrap}
+#bt-root .skb-mt th:first-child{width:52px}
+#bt-root .skb-mt th:last-child,#bt-root .skb-mt td.yr{width:68px}
+@media (max-width:768px){
+  #bt-root .bt-row.v2 .bt-rb{grid-template-columns:minmax(0,1fr) 18px!important;row-gap:4px}
+  #bt-root .bt-row.v2 .bt-rb .bt-dt{display:none}
+  #bt-root .bt-row.v2 .bt-rb time{grid-column:1;grid-row:1;font-size:13px}
+  #bt-root .bt-row.v2 .bt-rb>b{grid-column:1;grid-row:2}
+  #bt-root .bt-row.v2 .bt-rb .wy{grid-column:1;grid-row:3;padding-left:0;margin:0;font-size:14px}
+  #bt-root .bt-row.v2 .bt-rb .ot{grid-column:1;grid-row:4;justify-self:start}
+  #bt-root .bt-row.v2 .bt-rb .cv{grid-column:2;grid-row:1/4;align-self:center}
+}
