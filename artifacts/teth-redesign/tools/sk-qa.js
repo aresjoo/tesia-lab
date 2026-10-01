@@ -23,9 +23,17 @@ function qaUsage(pct){ try{ var m=aiMeter();
   if(m.tier==='CARD'){ var want=AI_SUB_USD*pct/100-m.used; if(want>0) bcAppend('debit','qa',-want,null,'qa'+Date.now()); }
   else { var used=m.used; if(used<=0){ bcAppend('debit','qa',-100,null,'qa'+Date.now()); used=100; } var bal=bcBalance(); var target=pct>=100?0:used*(100/pct-1); var d=target-bal; if(Math.abs(d)>0.01) bcAppend(d>0?'charge':'debit','qa',d,null,'qa'+Date.now()+Math.random()); }
   bcAfterChange('qa'); }catch(e){} try{ localStorage.removeItem('teth.use80'); }catch(e){} }
-function qaCopy(){ var nick=qaNick('lev'), s2=tfSSFind(nick); if(!s2) return; var cp=cpState(); if(cp.copies.some(function(x){ return x.nick===s2.nick&&x.status==='active'; })) return;
-  var eqA=s2.r.eq||[]; cp.copies.push({id:'cp'+Date.now(),nick:s2.nick,mode:'ratio',amount:560,pairs:[CPP_PAIR[s2.asset]||s2.asset],gen:{asof:MK_ASOF.slice(),len:PRICE0.length},simStartI:eqA.length>31?eqA[eqA.length-31].i:null,
-    adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5,maxLoss:-20,existing:'skip'},at:Date.now(),status:'active',ledger:[{at:Date.now(),type:'add',amt:560,i:eqA.length>31?eqA[eqA.length-31].i:null}]}); tfSaveNow(); }
+function qaCopy(o){ o=o||{}; var nick=o.nick||qaNick('lev'), s2=tfSSFind(nick); if(!s2) return null; var cp=cpState(); var had=cp.copies.filter(function(x){ return x.nick===s2.nick&&x.status==='active'; })[0]; if(had) return had;
+  var back=(o.back||30)+1, eqA=s2.r.eq||[], si=eqA.length>back?eqA[eqA.length-back].i:null, amt=o.amt||560;
+  var c={id:'cp'+Date.now(),nick:s2.nick,mode:'ratio',amount:amt,pairs:[CPP_PAIR[s2.asset]||s2.asset],gen:{asof:MK_ASOF.slice(),len:PRICE0.length},simStartI:si,
+    adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:95,maxPosX:5,maxLoss:-20,existing:'skip'},at:Date.now()-(o.back?o.back*864e5:0),status:'active',ledger:[{at:Date.now()-(o.back?o.back*864e5:0),type:'add',amt:amt,i:si}]};
+  if(o.add&&eqA.length>back){ var j=eqA[eqA.length-Math.round(back/2)].i; c.ledger.push({at:Date.now()-Math.round(o.back/2)*864e5,type:'add',amt:o.add,i:j}); }
+  cp.copies.push(c); tfSaveNow(); return c; }
+/* 포지션과 청산 이력이 있는 복사: 지금 포지션이 열린 원본을 90일 전부터 */
+function qaCopyLive(){ var L=['ETH 빨리 접기','코인 둘 롱숏 갈아타기','DOGE 평균선 양방향 2배'], nick=null;
+  for(var i=0;i<L.length&&!nick;i++){ var s=tfSSFind(L[i]); if(s&&s.r&&s.r.state&&s.r.state.open) nick=s.nick; }
+  return qaCopy({nick:nick||qaNick('lev'),back:90,amt:800,add:200}); }
+function qaCpx(c,tab){ qaClean(); if(!c){ var cp=cpState(); c=cp.copies.filter(function(x){ return x.status==='active'; })[0]; } if(c) setTimeout(function(){ cpDetailGo(c.id,tab||'pos'); },300); }
 function qaOrder(st){ var o={asset:'비트코인',side:'sell',trigger:90000,qty:'all',ttl:'gtc'}; o=odNorm(o); o.id='odqa'+Date.now(); o.status=st||'wait'; o.at=Date.now(); o.ex='bitget'; o.sess=G.cur&&G.cur.id; odS().push(o); tfSave(); return o; }
 function qaTerm(after){ qaClean(); location.hash='#/trade'; if(typeof tfNFRoute==='function') setTimeout(function(){ try{ tfNFRoute('#/trade'); }catch(e){} },50); if(after) setTimeout(after,1600); }
 function qaTermPick(fn){ try{ var all=tfTmAll(); var s=all.filter(fn)[0]; if(s){ if(TF_TM.sel===s.key) TF_TM.sel=null; tfTmSelect(s.key); } }catch(e){} }
@@ -53,7 +61,11 @@ var QA_PAGES=[
   ['상세 개요',function(){ qaAcct('free'); qaDetail(); }],
   ['상세 전략 정보 탭',function(){ qaAcct('free'); qaDetail('전략 정보'); }],
   ['복사 창(연결됨)',function(){ qaAcct('uid'); qaDetail(); setTimeout(function(){ mkFollowSheet(qaNick('lev')); },1600); }],
-  ['복사 창 대신 플랜(미연결)',function(){ qaAcct('free'); qaDetail(); setTimeout(function(){ mkFollowSheet(qaNick('lev')); },1600); }]
+  ['복사 창 대신 플랜(미연결)',function(){ qaAcct('free'); qaDetail(); setTimeout(function(){ mkFollowSheet(qaNick('lev')); },1600); }],
+  ['복사한 전략 상세(진입 대기)',function(){ qaAcct('uid'); qaCpx(qaCopy()); }],
+  ['복사한 전략 상세(포지션 있음)',function(){ qaAcct('uid'); qaCpx(qaCopyLive()); }],
+  ['복사한 전략 상세(청산 이력)',function(){ qaAcct('uid'); qaCpx(qaCopyLive(),'hist'); }],
+  ['복사한 전략 상세(자금 이동)',function(){ qaAcct('uid'); qaCpx(qaCopyLive(),'bal'); }]
  ]],
  ['백테스트',[
   ['돌리기 전',function(){ qaAcct('free'); qaBt(qaNick('lev')); }],
@@ -70,7 +82,8 @@ var QA_PAGES=[
   ['전략 있음, 포지션 있음',function(){ qaAcct('uid'); window.TF_PREVIEW=true; qaTerm(function(){ qaTermPick(function(s){ return s.status==='live'&&!!tfTmCalc(s).pos; }); }); }],
   ['전략 있음, 포지션 없음',function(){ qaAcct('uid'); window.TF_PREVIEW=true; qaTerm(function(){ qaTermPick(function(s){ return s.status==='live'&&!tfTmCalc(s).pos; }); }); }],
   ['전략 오류',function(){ qaAcct('uid'); window.TF_PREVIEW=true; qaTerm(function(){ qaTermPick(function(s){ return s.status==='err'; }); }); }],
-  ['예약 주문 대기(미체결 주문)',function(){ qaAcct('uid'); qaOrder('wait'); qaTerm(function(){ qaBotTab('미체결'); }); }]
+  ['예약 주문 대기(미체결 주문)',function(){ qaAcct('uid'); qaOrder('wait'); qaTerm(function(){ qaBotTab('미체결'); }); }],
+  ['복사한 전략, 포지션 있음',function(){ qaAcct('uid'); qaCopyLive(); qaTerm(); }]
  ]],
  ['거래소 연결과 플랜',[
   ['플랜(무료 초대 계정 / 구독)',function(){ qaAcct('free'); qaClean(); tfBrokersView(); }],

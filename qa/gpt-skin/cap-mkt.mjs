@@ -25,5 +25,7 @@ for(const [W,M] of [[1440,false],[390,true]]){ const sx=M?'-m':'';
   console.log(W,'strat',await evala(p,`JSON.stringify({sel:!!document.querySelector('.mks-btn'),sym:(document.querySelector('.mkh-sym b')||{}).textContent,rail:getComputedStyle(document.querySelector('.tft-rail')).display})`));
   await evala(p,`mktRailTgl(true)`); await sleep(500); await shot(p,OUT+'M6-rail'+sx+'.png',{full:false});
   console.log(W,'rail',await evala(p,`getComputedStyle(document.querySelector('.tft-rail')).display`), JSON.stringify(await errs()));
+  await evala(p,`qaRun(3,8)`); await sleep(7000); await shot(p,OUT+'M7-copy'+sx+'.png',{full:false});
+  console.log(W,'copy',await evala(p,`JSON.stringify({mode:G.mode,txt:(document.querySelector('.tft-page')||{innerText:''}).innerText.replace(/\\s+/g,' ').slice(0,300)})`), JSON.stringify(await errs()));
 }
 await closePage(p);

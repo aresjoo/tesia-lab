@@ -131,7 +131,7 @@ function mktInfo(){
       +'</div></div><p class="mki-src">코인 정보 출처 CoinGecko, 거래 규칙 출처 Binance</p></div>'; });
 }
 /* 데이터 탭: 작은 선, 막대 그래프 */
-var MKT_PER=[['5m','5분'],['15m','15분'],['30m','30분'],['1h','1시간'],['4h','4시간'],['1d','1일']];
+var MKT_PER=[['5m','5분'],['15m','15분'],['30m','30분'],['1h','1시간'],['2h','2시간'],['4h','4시간'],['6h','6시간'],['12h','12시간'],['1d','1일']];
 function mktSvg(x,series,o){ o=o||{}; var W=520,H=190,L=8,R=8,T=12,B=26, iw=W-L-R, ih=H-T-B, n=x.length; if(!n) return '<p class="mkt-ld">자료가 없습니다.</p>';
   var axes={}; series.forEach(function(s){ var a=s.axis||'l'; var v=s.v.filter(isFinite); if(!v.length) return; var mn=Math.min.apply(null,v), mx=Math.max.apply(null,v); if(s.kind==='bar'&&!s.base) mn=Math.min(0,mn); var A=axes[a]||{mn:mn,mx:mx}; A.mn=Math.min(A.mn,mn); A.mx=Math.max(A.mx,mx); axes[a]=A; });
   Object.keys(axes).forEach(function(a){ var A=axes[a]; if(A.mx===A.mn){ A.mx+=1; A.mn-=1; } var pad=(A.mx-A.mn)*0.08; if(A.mn!==0) A.mn-=pad; A.mx+=pad; });
@@ -149,7 +149,7 @@ function mktSvg(x,series,o){ o=o||{}; var W=520,H=190,L=8,R=8,T=12,B=26, iw=W-L-
 function mktLeg(items){ return '<div class="mkx-leg">'+items.map(function(x){ return '<span><i style="background:'+x[1]+'"></i>'+x[0]+'</span>'; }).join('')+'</div>'; }
 function mktData(){
   var sym=mktSym(), base=mktBase(sym), per=MKT.per, box=document.getElementById('mkt-data'); if(!box) return;
-  var day=per==='1d';
+  var day=['4h','6h','12h','1d'].indexOf(per)>=0;
   var cards=[['oi','미결제약정'],['acct','상위 트레이더 롱숏 비율(계정)'],['pos','상위 트레이더 롱숏 비율(포지션)'],['glob','전체 롱숏 비율'],['taker','테이커 매수와 매도량'],['basis','베이시스'],['fund','펀딩비(최근 40회)'],['ratio','미결제약정 / 유통량 비율']];
   box.innerHTML='<div class="mkx-per">'+MKT_PER.map(function(p){ return '<button type="button" class="'+(p[0]===per?'on':'')+'" onclick="MKT.per=\''+p[0]+'\';mktData()">'+p[1]+'</button>'; }).join('')+'</div><div class="mkx-grid">'+cards.map(function(c){ return '<section class="mkx-card" id="mkx-'+c[0]+'"><h4>'+c[1]+'</h4><div class="mkx-body"><p class="mkt-ld">불러오는 중</p></div></section>'; }).join('')+'</div>';
   var put=function(id,html){ if(sym!==mktSym()||per!==MKT.per) return; var e=document.querySelector('#mkx-'+id+' .mkx-body'); if(e) e.innerHTML=html; };

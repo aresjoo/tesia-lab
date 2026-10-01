@@ -219,3 +219,19 @@
   #bt-root .bt-row.v2 .bt-rb .ot{grid-column:1;grid-row:4;justify-self:start}
   #bt-root .bt-row.v2 .bt-rb .cv{grid-column:2;grid-row:1/4;align-self:center}
 }
+/* 판단 행 6칸(날짜, 점, 제목, 사유, 결과, 열기): 결과 칸이 오른쪽 카드로 넘치지 않게 */
+@media (min-width:769px){
+  #bt-root .bt-row.v2 .bt-rb{grid-template-columns:112px 12px 140px minmax(0,1fr) auto 18px!important;overflow:hidden}
+  #bt-root .bt-row.v2 .bt-rb .ot{white-space:nowrap;justify-self:end;font-size:14px}
+  #bt-root .bt-list.v2,#bt-root .bt-sec-b{min-width:0;overflow:hidden}
+}
+@media (min-width:769px){ #bt-root .bt-row.v2 .bt-rb{padding-top:12px!important;padding-bottom:12px!important;align-items:center} #bt-root .bt-row.v2 .bt-rb .cv{grid-row:1} }
+@media (min-width:769px){
+  #bt-root .bt-row.v2 .bt-rb>*{grid-row:1!important}
+  #bt-root .bt-row.v2 .bt-rb>time{grid-column:1!important}
+  #bt-root .bt-row.v2 .bt-rb>.bt-dt{grid-column:2!important}
+  #bt-root .bt-row.v2 .bt-rb>b{grid-column:3!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #bt-root .bt-row.v2 .bt-rb>.wy{grid-column:4!important}
+  #bt-root .bt-row.v2 .bt-rb>.ot{grid-column:5!important}
+  #bt-root .bt-row.v2 .bt-rb>.cv{grid-column:6!important}
+}
