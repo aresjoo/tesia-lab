@@ -142,6 +142,9 @@ test('복구 저장소 쓰기 실패는 성공한 대화를 실패나 반복 요
 })
 
 test('최초 승인 키 저장 실패에서는 서버 변경과 입력 잠금 없이 멈춘다', async ({ page }) => {
+  // This case isolates storage/SDK admission. Use the supported CSS motion
+  // preference so deferred composer focus cannot scroll during a pointer click.
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/internal-poc-fixture.html')
   await completeShorthandConversation(page)
   await page.getByRole('button', { name: '계약 검증', exact: true }).click()

@@ -4,11 +4,17 @@ import { fixture } from '../src/dev/chart-workspace-fixture'
 // Canvas glyph bounds, not simulated DOM labels. Test-only display fixtures.
 async function mount(page: Page, width: number, grouped: boolean, markerOnly = false, nextWindow = false, retry = false) {
   await page.setViewportSize({ width, height: 1000 })
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
-    expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', 'api.current = chart; window.__markerChart = chart;') })
-  })
+  // Read one real compiled module before navigation. A late route callback
+  // must not fetch a response which can be disposed during context teardown.
+  const response = await page.request.get('/src/components/ClientProfessionalPriceChart.tsx', { maxRetries: 0 })
+  if (response.status() !== 200) throw new Error(`TEST_MARKER_CHART_HTTP_${response.status()}`)
+  if (!/^(?:application|text)\/(?:javascript|ecmascript)(?:\s*;|$)/i.test(response.headers()['content-type'] ?? '')) throw new Error('TEST_MARKER_CHART_JAVASCRIPT_REQUIRED')
+  const body = await response.text()
+  expect(body).toContain('api.current = chart;')
+  if (body.split('api.current = chart;').length !== 2) throw new Error('TEST_MARKER_CHART_SINGLE_SEAM_REQUIRED')
+  const compiledBody = body.replace('api.current = chart;', 'api.current = chart; window.__markerChart = chart;')
+  const headers = { ...response.headers(), 'content-length': String(Buffer.byteLength(compiledBody)) }
+  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', route => route.fulfill({ response, headers, body: compiledBody }))
   await page.addInitScript(() => {
     const labels = new Map<HTMLCanvasElement, Map<string, { left: number; right: number; top: number; bottom: number }>>()
     const original = CanvasRenderingContext2D.prototype.fillText
@@ -30,6 +36,9 @@ async function mount(page: Page, width: number, grouped: boolean, markerOnly = f
     }))
   })
   await page.goto('/')
+  // The public bootstrap imports mobile main padding asynchronously. Mounting
+  // before that stylesheet arrives fits a 320px plot which later becomes 288px.
+  await expect(page.locator('#tesia-main')).toBeVisible()
   const last = fixture.bars.at(-1)!
   const view = { ...fixture, fills: [
     { id: 'first-buy', tradeId: 'trade', time: fixture.bars[0].time, price: fixture.bars[0].close, side: 'BUY' as const },
@@ -38,6 +47,9 @@ async function mount(page: Page, width: number, grouped: boolean, markerOnly = f
   await page.evaluate(async view => {
     const path = '/tests/fixtures/price-chart-host.tsx'
     const { mount } = await import(/* @vite-ignore */ path)
+    // Resolve the font actually used for both marker measurement and paint.
+    await document.fonts.load('12px "Geist Variable"', 'BUY SELL ×1200')
+    await document.fonts.ready
     Reflect.set(window, '__markerHost', mount(view, 'marker-layout-test'))
   }, markerOnly || nextWindow ? { ...view, fills: [] } : view)
   await expect(page.locator('.cp-surface canvas').first()).toBeVisible()
@@ -81,19 +93,23 @@ for (const width of [320, 390, 768, 1440]) for (const mode of ['single', 'groupe
     await expect(page.locator('[data-study=vwap]')).not.toBeEmpty()
     await expect(page.locator('[data-study=bb]')).not.toBeEmpty()
     await info.attach('glyph-bounds', { body: JSON.stringify(await glyphs()), contentType: 'application/json' })
-    const surface = await page.locator('.cp-surface').boundingBox()
     if (!compact) await expect.poll(async () => {
       const rows = await glyphs(), sell = rows.find(row => row.text === sellText)!
       return Math.min(...rows.filter(row => /^(EMA|BB|VWAP)/.test(row.text)).map(row => row.left - sell.right))
     }, { message: 'SELL과 우측 지표명 사이에 8 CSS px의 읽기 간격' }).toBeGreaterThanOrEqual(8)
-    const buy = (await glyphs()).find(row => row.text === 'BUY')!
-    expect(buy.left).toBeGreaterThanOrEqual(surface!.x + 4)
-    const layout = await page.evaluate(count => {
+    // Capture actual paint bounds, DOM position and chart layout in one browser
+    // task; a previous surface/plot sample must not be paired with a later paint.
+    const observation = await page.evaluate(count => {
       const scale = Reflect.get(window, '__markerChart').timeScale()
-      return { plot: scale.width(), fraction: (scale.logicalToCoordinate(count - 1) - scale.logicalToCoordinate(0)) / scale.width() }
+      return { surface: document.querySelector('.cp-surface')!.getBoundingClientRect().toJSON(),
+        glyphs: Reflect.get(window, '__markerGlyphs')() as Glyph[],
+        layout: { plot: scale.width(), fraction: (scale.logicalToCoordinate(count - 1) - scale.logicalToCoordinate(0)) / scale.width() } }
     }, fixture.bars.length)
+    const { surface, layout } = observation
+    const buy = observation.glyphs.find(row => row.text === 'BUY')!
+    expect(buy.left).toBeGreaterThanOrEqual(surface!.x + 4)
     expect(layout.fraction, '실제 캔들이 plot의 절반 가까이를 사용해야 한다').toBeGreaterThanOrEqual(.48)
-    expect((await glyphs()).find(row => row.text === sellText)!.right).toBeLessThanOrEqual(surface!.x + layout.plot - 4)
+    expect(observation.glyphs.find(row => row.text === sellText)!.right).toBeLessThanOrEqual(surface!.x + layout.plot - 4)
     await page.screenshot({ path: info.outputPath('marker-clearance.png'), fullPage: true })
   })
 }

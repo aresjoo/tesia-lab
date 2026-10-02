@@ -129,7 +129,7 @@ test('명시 archive 터미널 소비자: 거래소 미연결이어도 벨·PLAN
   await expect(account.locator('.client-terminal-connection-empty')).toHaveCount(0)
   await route(page, '#/periodic/W:2000-01-01')
   await expect(account.getByText('보고서를 찾을 수 없어요', { exact: true })).toBeVisible()
-  await account.getByRole('button', { name: '내 트레이딩', exact: true }).click()
+  await account.getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
   expect(await page.evaluate(() => sessionStorage.getItem('teth-client-experience'))).toBe(before)
 })

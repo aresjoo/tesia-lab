@@ -79,7 +79,7 @@ test('10개 원본 전용 본문이 공급값·근거·실차트 동선을 그�
   await expect(page.locator('.g-qchip')).toHaveCount(3); await page.getByRole('button', { name: '근거', exact: true }).click(); await expect(page.getByRole('heading', { name: 'Backtest v17' })).toBeVisible()
   await select(page, 'connect'); await expect(page.locator('tbody tr')).toHaveCount(3); await expect(page.locator('tbody tr').last()).toContainText('요청 안 함')
   await select(page, 'run'); await expect(page.locator('.g-row')).toHaveCount(5); await expect(page.getByRole('button', { name: '실전 시작', exact: true })).toBeDisabled()
-  await select(page, 'live'); await expect(page.locator('tbody').first()).toContainText('0.003125 BTC'); await expect(page.locator('tbody').last()).toContainText('100ms → 123ms'); await page.getByRole('button', { name: '내 트레이딩에서 열기' }).click()
+  await select(page, 'live'); await expect(page.locator('tbody').first()).toContainText('0.003125 BTC'); await expect(page.locator('tbody').last()).toContainText('100ms → 123ms'); await page.getByRole('button', { name: 'AI 트레이딩에서 열기' }).click()
   expect(await page.evaluate(() => Reflect.get(window, 'researchCalls'))).toEqual(['analysis', 'open:bt2', 'trading']); expect(errors).toEqual([])
   await page.screenshot({ path: info.outputPath('live-supplied.png'), fullPage: true })
 })

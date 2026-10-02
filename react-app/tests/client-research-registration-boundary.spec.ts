@@ -91,7 +91,7 @@ async function openResearchA(page: Page) {
   }
   await row.click()
   await expect(page.getByLabel('실행 확인에 질문', { exact: true })).toHaveValue(runDraft)
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toBeVisible()
 }
 async function chooseB(page: Page) {
   // The current source keeps the strategy rail inside the judgment selector.
@@ -110,7 +110,7 @@ for (const signed of [true, false]) test(`${signed ? '로그인' : '게스트'}:
   const requests = await setup(page, { inline: true, signed })
   await expect(page.getByLabel('실행 확인에 질문', { exact: true })).toHaveValue(runDraft)
   await expect(page.locator('.rw-artifact').filter({ hasText: /^Live/ })).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toHaveCount(0)
   const url = page.url()
   const start = page.getByRole('button', { name: '가상 검증으로 시작', exact: true })
   await start.focus()
@@ -126,7 +126,7 @@ for (const signed of [true, false]) test(`${signed ? '로그인' : '게스트'}:
   await page.reload()
   await expect(page.getByLabel('실행 확인에 질문', { exact: true })).toHaveValue(runDraft)
   await expect(page.locator('.rw-artifact').filter({ hasText: /^Live/ })).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toHaveCount(0)
   await start.click()
   await expect(page.getByRole('status').filter({ hasText: '선택한 계획의 연구 결과가 아직 연결되지 않았어요.' })).toBeVisible()
   await expect(page.locator('.ca-auth')).toHaveCount(0)
@@ -139,7 +139,7 @@ test('최초 전략 읽기 실패 뒤 등록 시 복원된 다른 origin은 연�
   const requests = await setup(page, { inline: false, signed: true, deferredOtherOriginRestore: true })
   await expect(page.getByLabel('실행 확인에 질문', { exact: true })).toHaveValue(runDraft)
   await expect(page.getByRole('status').filter({ hasText: '전략 기록을 이 브라우저에 저장하거나 불러오지 못했어요.' })).toBeVisible()
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toHaveCount(0)
   const start = page.getByRole('button', { name: '가상 검증으로 시작', exact: true })
   await expect(start).toBeEnabled()
   const before = await page.evaluate(() => Reflect.get(window, '__researchRegistrationStorageAudit') as { reads: number; failures: number; writes: number })
@@ -150,7 +150,7 @@ test('최초 전략 읽기 실패 뒤 등록 시 복원된 다른 origin은 연�
   await expect(page.getByRole('status').filter({ hasText: '이 대화에는 다른 전략이 등록되어 있어요.' })).toBeVisible()
   await expect(page.locator('.client-account-terminal')).toHaveCount(0)
   await expect(page.locator('.ca-auth')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toHaveCount(0)
   expect(page.url()).toBe(url)
   const after = await page.evaluate(() => Reflect.get(window, '__researchRegistrationStorageAudit') as { reads: number; failures: number; writes: number })
   expect(after.reads).toBeGreaterThan(before.reads)
@@ -171,7 +171,7 @@ for (const width of [320, 1440]) test(`${width}px 기존 연구 A 다시 열기�
   await preservedRecords(page)
   for (let attempt = 0; attempt < 2; attempt++) {
     await openResearchA(page)
-    const open = page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })
+    const open = page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })
     await open.focus()
     await page.keyboard.press('Enter')
     await expect(page).toHaveURL(/#\/trade$/)
@@ -188,7 +188,7 @@ for (const width of [320, 1440]) test(`${width}px 기존 연구 A 다시 열기�
   // Parent selection requests are page-local; reload need not preserve terminal
   // selection. Explicitly reopening the old research must still select A.
   await openResearchA(page)
-  await page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true }).click()
+  await page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true }).click()
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', 'user:1000')
   await preservedRecords(page)
   expect(requests).toEqual([])

@@ -286,11 +286,22 @@ for (const width of [320, 939, 940, 1440]) test(`분석 분할 ${width}px: 7언�
   if (narrow) await analysisTab.click()
   const calls = await page.evaluate(() => Reflect.get(window, 'terminalCalls'))
   for (const item of analysisLocales) {
-    await page.evaluate(async language => {
+    // Keep the actual dynamic import and setter task in the page. Returning a
+    // pending promise through CDP can lose its protocol lifetime during GC.
+    await page.evaluate(language => {
       const path = '/src/client-preferences.ts'
-      const { setClientPreference } = await import(/* @vite-ignore */ path)
-      setClientPreference('language', language)
+      const state: { settled: boolean; error?: unknown } = { settled: false }
+      const task = import(/* @vite-ignore */ path).then(({ setClientPreference }) => {
+        setClientPreference('language', language)
+      }).catch(error => { state.error = error }).finally(() => { state.settled = true })
+      Reflect.set(window, 'nativeTerminalLocaleChange', { state, task })
     }, item.code)
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'nativeTerminalLocaleChange').state.settled)).toBe(true)
+    await page.evaluate(() => {
+      const { state } = Reflect.get(window, 'nativeTerminalLocaleChange')
+      Reflect.deleteProperty(window, 'nativeTerminalLocaleChange')
+      if ('error' in state) throw state.error
+    })
     if (narrow) {
       await expect(tabs).toHaveAccessibleName(item.view)
       await expect(analysisTab).toHaveAccessibleName(item.analysis)

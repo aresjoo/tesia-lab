@@ -132,7 +132,7 @@ for (const width of [320, 1440]) test(`${width}px 복사 관리·전체화면·�
 test('계정 터미널 언어 설정은 제목·분석·범위에 함께 반영된다', async ({ page }) => {
   await mount(page)
   await setLanguage(page, 'en')
-  await expect(page.locator('.cat-heading h1')).toHaveText('My trading')
+  await expect(page.locator('.cat-heading h1')).toHaveText('AI trading')
   await expect(page.locator('.cat-tabs')).not.toHaveAttribute('aria-label', /[가-힣]/)
   await expect(page.locator('.cat-scope select')).not.toHaveAttribute('aria-label', /[가-힣]/)
   await expect(page.locator('.cat-context .cat-status')).not.toContainText(/[가-힣]/)
@@ -377,7 +377,7 @@ test('전체화면 왕복·Agent 탭 변경에도 차트 canvas와 작성 중인
   await page.keyboard.press('Home')
   await expect(page.getByRole('textbox', { name: 'Agent 초안' })).toHaveValue('아직 전송하지 않은 조건')
   await page.getByRole('button', { name: '터미널 전체화면' }).click()
-  await expect(page.getByRole('dialog', { name: '내 트레이딩' })).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'AI 트레이딩' })).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await expect(page.getByRole('textbox', { name: 'Agent 초안' })).toHaveValue('아직 전송하지 않은 조건')

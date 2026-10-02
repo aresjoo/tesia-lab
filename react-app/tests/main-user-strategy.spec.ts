@@ -218,7 +218,7 @@ test('다른 계정·없는 전략은 기본 예시로 대체하지 않고 복�
   await setup(page); await page.goto('/#/trade/bot/1000')
   await expect(page.getByText('전략을 찾을 수 없어요', { exact: true })).toBeVisible()
   await expect(page.locator('.nfxb-bigval')).toHaveCount(0)
-  await page.locator('.client-user-strategy').getByRole('button', { name: '내 트레이딩', exact: true }).click()
+  await page.locator('.client-user-strategy').getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
 })
 

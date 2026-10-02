@@ -158,7 +158,7 @@ for (const fault of ['denied', 'drop', 'readback'] as const) test(`${fault}: 실
       // also receives debounced viewport saves of the old observation; failing
       // those creates a separate storageError gate before the explicit retry.
       const chart = this === sessionStorage && name === key
-        ? JSON.parse(value).sessions[0].turns[0].marketResponse.blocks[0].presentation : undefined
+        ? JSON.parse(value).sessions?.[0]?.turns?.[0]?.marketResponse?.blocks?.[0]?.presentation : undefined
       if (chart?.resolutionSeconds === 7200) {
         written = true
         chartCommitAttempts++
@@ -182,13 +182,60 @@ for (const fault of ['denied', 'drop', 'readback'] as const) test(`${fault}: 실
   await page.evaluate(() => Reflect.get(window, 'restoreSupplyStorage')())
   if (fault === 'readback') {
     await expect(page.locator('body')).toContainText('저장 여부를 확인할 수 없어요')
-    await card(page).locator('.market-chart-status button').click()
+    await expect(card(page).locator('.market-chart-blocked')).toContainText('저장 여부를 확인할 수 없어')
+    await expect(card(page).locator('.market-chart-status button')).toBeDisabled()
     await expect(card(page).locator('.bd')).toHaveAttribute('aria-busy', 'false')
     expect(await page.evaluate(() => Reflect.get(window, 'chartSupplyHost').requests.length)).toBe(1)
   } else {
     await card(page).locator('.market-chart-status button').click(); await deliver(page, presentation(3, 7200), 1)
     await expect(intervals(page).getByRole('button', { name: '2시간', exact: true })).toHaveAttribute('aria-pressed', 'true')
   }
+})
+
+test('전역 저장 거부·실제 viewport 실패는 재시도를 잠그고 실제 저장 복구 뒤 같은 실패 주기로 복구한다', async ({ page }) => {
+  const posts: string[] = []
+  page.on('request', req => { if (req.method() === 'POST') posts.push(req.url()) })
+  await mount(page); await remember(page); await request(page)
+  // Capture the durable snapshot and inject the denial in one browser task:
+  // a real viewport save may otherwise complete between the two evaluations.
+  const initial = await page.evaluate(key => {
+    const initial = JSON.parse(sessionStorage.getItem(key)!)
+    const set = Storage.prototype.setItem
+    Reflect.set(window, 'restoreGlobalChartStorage', () => { Storage.prototype.setItem = set })
+    Storage.prototype.setItem = function () { throw new Error('TEST_ONLY_GLOBAL_DENIAL') }
+    return initial
+  }, key)
+  try {
+    // Drive the real conversation viewport callback and its debounced write.
+    await page.locator('.g-scroll').dispatchEvent('scroll')
+    const notice = page.locator('.client-global-notice').filter({ hasText: '이 탭에 변경 내용을 저장하지 못했습니다.' })
+    await expect(notice).toBeVisible()
+    await expect(card(page).locator('.market-chart-blocked')).toHaveText('브라우저 저장을 복구한 뒤 가격을 다시 불러올 수 있어요. 새로고침 전에 작성한 내용을 복사해주세요.')
+    await deliver(page, presentation(2, 7200))
+    await expect(card(page).locator('.bd')).toHaveAttribute('aria-busy', 'false')
+    const retry = card(page).locator('.market-chart-status button')
+    await expect(retry).toBeDisabled()
+    for (const button of await intervals(page).locator('button').all()) await expect(button).toBeDisabled()
+    expect(await page.evaluate(() => Reflect.get(window, 'chartSupplyHost').requests.length)).toBe(1)
+    expect(await persisted(page)).toEqual(initial)
+    await retained(page)
+    await expect(intervals(page).getByRole('button', { name: '1시간', exact: true })).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('body')).not.toContainText('TEST_ONLY_GLOBAL_DENIAL')
+    await page.evaluate(() => Reflect.get(window, 'restoreGlobalChartStorage')())
+    await page.locator('.g-scroll').dispatchEvent('scroll')
+    await expect(notice).toHaveCount(0)
+    await expect(card(page).locator('.market-chart-blocked')).toHaveCount(0)
+    await expect(retry).toBeEnabled(); await retry.click()
+    expect(await page.evaluate(() => Reflect.get(window, 'chartSupplyHost').requests[1].request.resolutionSeconds)).toBe(7200)
+    await deliver(page, presentation(3, 7200), 1)
+    await expect(intervals(page).getByRole('button', { name: '2시간', exact: true })).toHaveAttribute('aria-pressed', 'true')
+    const saved = await persisted(page)
+    expect(saved.sessions[0].draft).toBe(initial.sessions[0].draft)
+    expect(saved.sessions[0].turns[0].marketResponse.blocks[1]).toEqual(initial.sessions[0].turns[0].marketResponse.blocks[1])
+    expect(saved.sessions[0].turns[0].marketResponse.blocks[0].presentation.view).toEqual(presentation(3, 7200).view)
+    expect(await page.evaluate(() => Reflect.get(window, 'chartSupplyHost').requests.length)).toBe(2)
+    expect(posts).toEqual([]); await retained(page)
+  } finally { await page.evaluate(() => Reflect.get(window, 'restoreGlobalChartStorage')()) }
 })
 
 test('새 대화로 떠난 뒤 도착한 봉은 이전 대화를 덮어쓰지 않는다', async ({ page }) => {

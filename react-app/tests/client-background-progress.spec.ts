@@ -5,8 +5,9 @@ async function menu(page: Page) {
   if ((page.viewportSize()?.width ?? 0) <= 860) await revealSourceNavigation(page)
   await page.locator((page.viewportSize()?.width ?? 0) <= 860 ? '.client-hamburger' : '.client-rail-logo-row button').click()
 }
-async function start(page: Page) {
+async function start(page: Page, pauseClock = false) {
   await page.clock.install()
+  if (pauseClock) await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.addInitScript(() => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '로컬 검수', email: 'review@example.test' })))
   await page.goto('/')
@@ -108,7 +109,9 @@ test('답변 생성 중 새 전략을 열어도 앞선 대화를 완료하고 �
 })
 
 test('답변 생성 중 새로고침·탭 복귀는 자동 진행하며 명시적인 중지는 유지한다', async ({ page }) => {
-  await start(page)
+  // This case controls elapsed time explicitly, including across reload.
+  // Dev boot time must not finish the answer before the in-flight assertion.
+  await start(page, true)
   await page.clock.fastForward(500)
   await page.reload()
   await expect(page.getByRole('button', { name: '응답 중지' })).toBeVisible()

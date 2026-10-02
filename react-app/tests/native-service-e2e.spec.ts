@@ -486,7 +486,12 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
       } }) })
     })
     await page.goto('/internal-poc.html#/native-client')
-    if (empty) await page.getByRole('button', { name: '로그인', exact: true }).click()
+    if (empty) {
+      // The supplied native SDK must finish session/CSRF recovery before
+      // opening its owner-bound auth flow; the public shell paints earlier.
+      await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
+      await page.getByRole('button', { name: '로그인', exact: true }).click()
+    }
     else {
       await page.getByRole('button', { name: '전략 검증', exact: true }).click()
       await page.getByRole('button', { name: '로그인 후 백테스트 계속', exact: true }).click()

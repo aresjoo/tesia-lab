@@ -1,5 +1,6 @@
-import { Component, useEffect, useId, useRef, type ReactNode } from 'react'
+import { Component, useEffect, useId, useRef, type ReactNode, type RefObject } from 'react'
 import { InternalLink } from './InternalLink'
+import { activeClientSurfaceSelector } from '../use-client-surface-presence'
 import '../client-load-recovery.css'
 
 // A failed optional chunk must never unmount the conversation or its store.
@@ -9,24 +10,35 @@ export class ClientLoadBoundary extends Component<{ children: ReactNode; fallbac
   render() { return this.state.failed ? this.props.fallback : this.props.children }
 }
 
-export function ClientLoadFallback({ loading = false, onClose, inline = false }: { loading?: boolean; onClose?: () => void; inline?: boolean }) {
+export function ClientLoadFallback({ loading = false, onClose, inline = false, returnFocus }: { loading?: boolean; onClose?: () => void; inline?: boolean; returnFocus?: RefObject<HTMLElement | null> }) {
   const ref = useRef<HTMLElement>(null)
   const id = useId()
   const isHelp = Boolean(onClose) && !inline
+  const focusLifetime = useRef({ generation: 0 })
   useEffect(() => {
+    const lifetime = focusLifetime.current
+    const generation = ++lifetime.generation
+    const logicalTarget = returnFocus?.current ?? null
+    const ownsReturnTarget = () => !returnFocus || returnFocus.current === logicalTarget
+    const surface = ref.current
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
     ref.current?.focus({ preventScroll: true })
     return () => {
       if (!isHelp) return
       queueMicrotask(() => {
-        if (document.getElementById('root')?.inert) return
+        // A retiring loader owns neither a new account nor the completed help.
+        if (document.getElementById('root')?.inert || lifetime.generation !== generation || !ownsReturnTarget()
+          || document.querySelector(`${activeClientSurfaceSelector},.client-load-layer,dialog:modal`)) return
         const visible = (el: HTMLElement | null) => el !== document.body && el !== document.documentElement && el?.isConnected && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden' && !el.closest('[hidden],[inert]')
+        const current = document.activeElement
+        if (current instanceof HTMLElement && current !== previous && !surface?.contains(current) && visible(current)) return
         const menu = [...document.querySelectorAll<HTMLElement>(matchMedia('(max-width:860px)').matches ? '.client-hamburger' : '.client-sidebar-bottom [data-sidebar-action="profile-settings"], .client-sidebar-bottom [data-sidebar-action="settings"], .client-rail-logo-row button')].find(visible) ?? null
-        if (visible(previous)) previous?.focus({ preventScroll: true })
+        if (visible(logicalTarget)) logicalTarget?.focus({ preventScroll: true })
+        else if (visible(previous)) previous?.focus({ preventScroll: true })
         else if (visible(menu)) menu?.focus({ preventScroll: true })
       })
     }
-  }, [isHelp])
+  }, [isHelp, returnFocus])
   return <div className={isHelp ? 'client-load-layer' : `client-load-page${inline ? ' is-inline' : ''}`} onPointerDown={event => { if (isHelp && onClose && event.target === event.currentTarget) { event.preventDefault(); onClose() } }}>
     <section ref={ref} className={loading ? 'site-page-loading client-load-panel' : 'site-page-recovery client-load-panel'} tabIndex={-1}
       role={isHelp ? 'dialog' : 'region'} aria-modal={isHelp ? true : undefined} aria-labelledby={`${id}-title`}

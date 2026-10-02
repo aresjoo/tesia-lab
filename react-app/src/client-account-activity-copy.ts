@@ -37,7 +37,7 @@ export const accountActivityCopy = {
   feeRebate: ["수수료 적립","Fee rebates","手数料還元","手续费返佣","手續費返佣","Reembolsos de comisiones","Remboursements de frais"],
   allHistory: ["전체 내역 보기","View all history","全履歴を表示","查看全部记录","查看全部記錄","Ver todo el historial","Voir tout l'historique"],
   location: ["현재 위치","Current location","現在位置","当前位置","目前位置","Ubicación actual","Emplacement actuel"],
-  myTrading: ["내 트레이딩","My Trading","マイトレード","我的交易","我的交易","Mi trading","Mon trading"],
+  myTrading: ["AI 트레이딩","AI trading","AIトレーディング","AI交易","AI交易","Trading con IA","Trading IA"],
   reviewMissing: ["복기 리포트를 찾을 수 없어요","Review report not found","振り返りレポートが見つかりません","未找到复盘报告","未找到複盤報告","No se puede encontrar el informe de revisión","Rapport de revue introuvable"],
   reportMissing: ["보고서를 찾을 수 없어요","Report not found","レポートが見つかりません","未找到报告","未找到報告","No se puede encontrar el informe","Rapport introuvable"],
   stopDescription: ["손절 규칙이 손실을 제한한 거래예요.","Trade where the stop-loss rule limited losses.","損切りルールにより損失が制限された取引です。","通过止损规则限制了损失的交易。","透過止損規則限制了損失的交易。","Operación en la que la regla de stop loss limitó las pérdidas.","Transaction où la règle de stop loss a limité les pertes."],

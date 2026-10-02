@@ -31,6 +31,8 @@ export type MarketChartRequest = {
   binding: MarketResponseBinding; seriesId: string; asset: string; resolutionSeconds: number
 }
 export type MarketChartActions = {
+  /** Read-only UI availability; never provider, storage or execution authority. */
+  readonly blockedReason?: 'storage-error' | 'commit-uncertain'
   request?: (request: MarketChartRequest, signal: AbortSignal) => boolean | Promise<boolean>
 }
 export type MarketChartBlock = { id: string; kind: 'market-chart'; presentation: MarketChartPresentation }

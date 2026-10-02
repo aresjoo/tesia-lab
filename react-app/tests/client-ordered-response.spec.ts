@@ -58,6 +58,15 @@ async function boot(page: Page, account = owner) {
   }, account)
   await expect(page.locator('.g-composer textarea')).toHaveValue(draft)
 }
+// Lazy StrictMode setup can attach a canvas before initial runtime cleanup.
+// The drawing cursor is enabled only after its real chart API is available.
+// Only continuity tests require this readiness; negative cases need none.
+async function expectDrawableMarketCanvas(page: Page) {
+  await expect(page.locator('.client-market-chart .cp-drawing-tools button').first()).toBeEnabled()
+  const canvas = page.locator('.client-market-chart .cp-surface canvas').first()
+  await expect(canvas).toHaveAttribute('width', /^[1-9]\d*$/)
+  await expect(canvas).toHaveAttribute('height', /^[1-9]\d*$/)
+}
 const saved = (page: Page): Promise<ClientSession> => page.evaluate(key => JSON.parse(sessionStorage.getItem(key)!).sessions[0], key)
 const deliver = (page: Page, value = sequence(2, true), expectedRevision = value.revision - 1, index?: number) => page.evaluate(({ value, expectedRevision, index }) =>
   Reflect.get(window, 'orderedHost').deliver({ sessionId: value.sessionId, turnId: value.turnId, expectedRevision, sequence: value }, index), { value, expectedRevision, index })
@@ -86,6 +95,7 @@ test('다음 관측은 기존 본문 DOM·작업 펼침·canvas·초안을 유�
   await mount(page)
   await page.locator('.g-act2 .hd').first().click()
   await page.locator('.g-amsg').first().evaluate(el => Reflect.set(window, 'firstObservedText', el))
+  await expectDrawableMarketCanvas(page)
   await page.locator('.client-market-chart canvas').first().evaluate(el => Reflect.set(window, 'observedCanvas', el))
   const beforeSubscriptions = await page.evaluate(() => Reflect.get(window, 'orderedHost').subscriptions.length)
   await page.evaluate(() => Reflect.get(window, 'orderedHost').render())
@@ -255,12 +265,7 @@ test('관측된 응답에 남은 preview 검증 입력은 가상 결과·영구 
 test('320px 언어 변경과 후속 관측은 선택한 본문·canvas·초안·공급 구독을 보존한다', async ({ page }, info) => {
   await page.setViewportSize({ width: 320, height: 740 })
   await mount(page)
-  // Lazy StrictMode setup can expose a transient, unsized canvas before
-  // its initial runtime cleanup. Capture only the drawable chart canvas;
-  // locale changes and subsequent observations must preserve that exact node.
-  const renderedCanvas = page.locator('.client-market-chart .cp-surface canvas').first()
-  await expect(renderedCanvas).toHaveAttribute('width', /^[1-9]\d*$/)
-  await expect(renderedCanvas).toHaveAttribute('height', /^[1-9]\d*$/)
+  await expectDrawableMarketCanvas(page)
   await page.locator('.g-amsg').first().evaluate(el => {
     const range = document.createRange(); range.selectNodeContents(el)
     const selection = window.getSelection()!; selection.removeAllRanges(); selection.addRange(range)

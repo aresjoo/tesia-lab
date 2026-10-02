@@ -50,6 +50,7 @@ const oldDelegation = {
 type Persisted = { currentId: string; homeDraft: string; sessions: (ClientSession & { inlineConnectionTurnId?: string })[]; sharedFollows: SharedFollowRecord[] }
 
 async function open(page: Page) {
+  await page.clock.install()
   const requests: string[] = []
   await page.route('**/api/**', route => { requests.push(route.request().url()); return route.abort('failed') })
   page.on('request', request => {
@@ -72,6 +73,12 @@ async function open(page: Page) {
 }
 
 const execute = (page: Page) => page.getByRole('button', { name: '이 전략 실행하기', exact: true })
+async function settleViewportBeforeTransaction(page: Page) {
+  await page.evaluate(() => document.fonts.ready)
+  // Finish the existing viewport debounce, then freeze elapsed time so
+  // the assertions measure the explicit transaction, including failed writes.
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
+}
 async function saved(page: Page): Promise<Persisted> {
   return page.evaluate(key => JSON.parse(sessionStorage.getItem(key)!), experienceKey)
 }
@@ -130,7 +137,7 @@ for (const width of [320, 1440]) test(`${width}px active 공유 대화의 새 ET
   await expect(execute(page)).toBeFocused()
   // Finish the pre-existing 250ms scroll-position persistence before measuring
   // the explicit handoff transaction; it is not an extra connection mutation.
-  await page.waitForTimeout(350)
+  await settleViewportBeforeTransaction(page)
   await observeWrites(page)
   await page.keyboard.press('Enter')
   await expectHandoff(page)
@@ -212,7 +219,7 @@ test('연결근거가손상된일반실행은같은대화로이어지며남은�
 test('저장 확인이 불가능하면 메뉴를 가리지 않는 안내를 유지하고 연구·삭제는 보존적으로 거절한다', async ({ page }, info) => {
   await open(page)
   await execute(page).focus()
-  await page.waitForTimeout(350) // Flush the existing debounced viewport save before fault injection.
+  await settleViewportBeforeTransaction(page)
   await page.evaluate(key => {
     const set = Storage.prototype.setItem, get = Storage.prototype.getItem
     let awaitingReadback = false
@@ -275,7 +282,7 @@ test('등록 기록을 읽지 못하면 미등록으로 오인해 팔로우를 �
   await page.addInitScript(key => sessionStorage.setItem(key, '{broken-registration'), registrationKey)
   const requests = await open(page)
   await execute(page).scrollIntoViewIfNeeded()
-  await page.waitForTimeout(350)
+  await settleViewportBeforeTransaction(page)
   const before = await saved(page)
   const cache = await page.evaluate(key => sessionStorage.getItem(key), delegationKey)
   await observeWrites(page)
@@ -293,7 +300,7 @@ test('등록 기록을 읽지 못하면 미등록으로 오인해 팔로우를 �
 test('experience 저장 실패는 active 팔로우·BTC 캐시·대화 원문을 보존하고 명시 CTA 재시도만 인계한다', async ({ page }) => {
   const requests = await open(page)
   await execute(page).scrollIntoViewIfNeeded()
-  await page.waitForTimeout(350)
+  await settleViewportBeforeTransaction(page)
   const before = await page.evaluate(({ experienceKey, delegationKey }) => ({ experience: sessionStorage.getItem(experienceKey), delegation: sessionStorage.getItem(delegationKey) }), { experienceKey, delegationKey })
   await observeWrites(page, experienceKey)
   await execute(page).click()

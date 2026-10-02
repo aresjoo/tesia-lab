@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { chartSma, movingAveragePeriods, studyLineData } from '../src/chart/price-chart-studies'
 import { fixture } from '../src/dev/chart-workspace-fixture'
@@ -26,15 +27,15 @@ for (const period of movingAveragePeriods) test(`MA${period}는 전체 준비기
 })
 
 async function mount(page: Page, variant: 'analysis' | 'market' = 'analysis') {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', `api.current = chart;
+    return body.replace('api.current = chart;', `api.current = chart;
       window.__maChart = chart;
       window.__maSeries = new Map();
       const maAdd = chart.addSeries.bind(chart);
-      chart.addSeries = (...args) => { const s = maAdd(...args); window.__maSeries.set(s.options().title, s); return s; };`) })
-  })
+      chart.addSeries = (...args) => { const s = maAdd(...args); window.__maSeries.set(s.options().title, s); return s; };`)
+    }, ["api.current = chart;"])
   await page.goto('/')
   await page.evaluate(async ({ view, variant }) => {
     const path = '/tests/fixtures/price-chart-host.tsx'

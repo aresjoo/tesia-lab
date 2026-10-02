@@ -45,6 +45,7 @@ import { ClientConnectionStatus, type ClientConnectionStatusProps } from '../com
 import { usageGate, usagePresentationBound, usageText } from '../client-usage-presentation'
 import { NativeSettingsPlan } from './NativeSettingsPlan'
 import { closeClientSettingsRoute, openClientSettings, useClientSettingsRoute } from '../use-client-settings-route'
+import { readClientSettingsLocation } from '../client-settings-navigation'
 import { ConversationCosmos } from '../components/ConversationCosmos'
 import { pushSiteLocation, useSiteHrefMapper } from '../site-navigation'
 import { getServiceSiteLocation } from './service-site-navigation'
@@ -735,7 +736,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       const nextSharing = readSharedLocation()
       const nextAccount = readClientAccountLocation()
       const nextTrading = window.location.hash === '#/trade'
-      if (!mapSiteHref && !nextInsight && !nextSharing && !nextAccount && !nextTrading) { setInsights(false); setAccountPlan(false); setTrading(false); setBrokers(false); setHistoryView(current => current.page === 'sharing' ? { ...current, open: false, focusSelection: false } : current); return }
+      if (!mapSiteHref && !nextInsight && !nextSharing && !nextAccount && !nextTrading && !readClientSettingsLocation()) { setInsights(false); setAccountPlan(false); setTrading(false); setBrokers(false); setHistoryView(current => current.page === 'sharing' ? { ...current, open: false, focusSelection: false } : current); return }
       resetPresentationIntent.current++
       setSurface(null); setConfirmReset(false); setNotice(null); setAccountPlan(Boolean(nextAccount)); setTrading(nextTrading); setInsights(Boolean(nextInsight)); setBrokers(false); setArrivalRect(undefined)
       if (nextAccount) setAccountLocation(nextAccount)
@@ -1082,7 +1083,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         profile={accountData?.profile ? { name: accountData.profile.name, email: accountData.profile.email ?? '' } : undefined}
         returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} onLogout={logoutFromProfile} logoutDisabled={logoutDisabled} />}
       <ClientFeedbackDialog key={`feedback:${helpIdentity}`} open={surface === 'feedback'} returnFocus={surfaceReturnFocus} submission="unavailable" submissionScope={feedbackData?.scope} onSubmit={feedbackData?.onSubmit} onClose={() => setSurface(null)} />
-      {helpOwner === helpIdentity && <ClientLoadBoundary key={`help:${helpIdentity}`} fallback={surface === 'help' ? <ClientLoadFallback onClose={() => setSurface(null)} /> : null}><Suspense fallback={surface === 'help' ? <ClientLoadFallback loading onClose={() => setSurface(null)} /> : null}><ClientHelp initialOpen open={surface === 'help'} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
+      {helpOwner === helpIdentity && <ClientLoadBoundary key={`help:${helpIdentity}`} fallback={surface === 'help' ? <ClientLoadFallback returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><Suspense fallback={surface === 'help' ? <ClientLoadFallback loading returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><ClientHelp initialOpen open={surface === 'help'} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
     </div>, document.body)}
   </div></ClientQuestionDockProvider>
 }

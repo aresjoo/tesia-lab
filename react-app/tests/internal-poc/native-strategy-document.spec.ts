@@ -541,12 +541,21 @@ test('원본 연구 계획의 서버 검증과 명시 승인 체크는 문서 �
 for (const width of [320, 390, 844, 1440]) test(`${width}px 번역 문서의 라벨과 값은 겹치지 않고 원문 폭을 넘지 않는다`, async ({ page }, testInfo) => {
   await page.setViewportSize({ width, height: 900 })
   const controls = await setup(page)
+  // Keep the actual Vite module and its exported setter reachable during all locale changes.
+  // Chromium can collect a pending dynamic-import promise between evaluate calls.
+  await page.evaluate(async () => {
+    const path = '/src/client-preferences.ts'
+    const modulePromise = import(/* @vite-ignore */ path)
+    Reflect.set(window, 'nativeDocumentPreferenceModule', modulePromise)
+    const module = await modulePromise
+    Reflect.set(window, 'nativeDocumentSetPreference', module.setClientPreference)
+  })
   await openDetailedDocument(page)
   const article = page.locator('.native-strategy-document')
   for (const detail of await article.locator('details').all()) await detail.locator('summary').click()
   const requests = [...controls.requests]
   for (const language of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko'] as const) {
-    await page.evaluate(async language => { const path = '/src/client-preferences.ts'; (await import(/* @vite-ignore */ path)).setClientPreference('language', language) }, language)
+    await page.evaluate(language => Reflect.get(window, 'nativeDocumentSetPreference')('language', language), language)
     await expect(article.locator('h2')).toHaveText(nativeShellText(language, 'strategyDraft'))
     await page.evaluate(() => document.fonts.ready)
     // Text assertions can pass before the inherited-language layout has painted.

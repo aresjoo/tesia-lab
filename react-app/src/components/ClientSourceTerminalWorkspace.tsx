@@ -11,6 +11,7 @@ import { sourceTerminalBottomTabs } from './ClientTerminalLedger'
 import { ClientAccountAlerts } from './ClientAccountActivity'
 import { ClientAccountBell } from './ClientAccountBell'
 import { ClientTerminalConnectionEmpty } from './ClientTerminalConnectionEmpty'
+import type { TerminalMarketSource } from '../client-terminal-market-source'
 import type { SourceAccountEventState } from '../client-account-event-state'
 import { CLIENT_BROKERS } from '../client-broker-fixtures'
 import { useClientPreferences } from '../client-preferences'
@@ -213,7 +214,9 @@ function SourceAgentComposer({ model: { seed }, onAsk, onApply, canResume, onRes
 }
 
 /** Client reference preview controller. Native service adapters never import this module. */
-export default function ClientSourceTerminalWorkspace({ menuHostRef, onNew, onAsk, accountState, onRead, onReadAll, onAccountNavigate, alertsRequest = 0, now, userStrategies = noUserStrategies, onUserStatus, accountDataMode = 'connection-required', onConnectExchange, previewBillingMode, onBeforeAi, selectionRequest, includeSamples = true, emptyDetail, emptyMarket, management, onSelectionChange, conditionalOrders }: {
+export default function ClientSourceTerminalWorkspace({ marketSource, marketScope, menuHostRef, onNew, onAsk, accountState, onRead, onReadAll, onAccountNavigate, alertsRequest = 0, now, userStrategies = noUserStrategies, onUserStatus, accountDataMode = 'connection-required', onConnectExchange, previewBillingMode, onBeforeAi, selectionRequest, includeSamples = true, emptyDetail, emptyMarket, management, onSelectionChange, conditionalOrders }: {
+  marketSource?: TerminalMarketSource
+  marketScope?: string | null
   conditionalOrders?: { orders: readonly ConditionalOrderPreviewOrder[]; binding: string; onCancel?: (id: string) => unknown }
   menuHostRef?: Ref<HTMLDivElement>
   onNew: () => void; onAsk: (text: string) => void
@@ -372,7 +375,7 @@ export default function ClientSourceTerminalWorkspace({ menuHostRef, onNew, onAs
   }, [requestedSelectionId, requestedSelectionSequence, requestedManagement])
   const menuEntry = entries.find(entry => entry.strategy.id === menu?.id)
   return <div className="client-restored-research client-source-terminal">
-    <ClientAccountTerminal menuHostRef={menuHostRef} entries={entries} emptyDetail={emptyDetail} emptyMarket={emptyMarket} management={management} onSelectionChange={onSelectionChange} initialSelectedId={users[0]?.id} controlRef={control} onNew={onNew} onMenu={(id, trigger) => setMenu({ id, trigger })} onReconnect={reconnect}
+    <ClientAccountTerminal marketSource={marketSource} marketScope={marketScope} menuHostRef={menuHostRef} entries={entries} emptyDetail={emptyDetail} emptyMarket={emptyMarket} management={management} onSelectionChange={onSelectionChange} initialSelectedId={users[0]?.id} controlRef={control} onNew={onNew} onMenu={(id, trigger) => setMenu({ id, trigger })} onReconnect={reconnect}
       headerTools={accountState && onAccountNavigate && <ClientAccountBell unread={accountState.notifs.filter(item => !item.read).length} onOpen={() => control.current?.showBottom('alerts')} />}
       notice={statusNotice ? <p className="cst-status-notice" role="alert"><span>{t(statusNotice.kind, statusNotice.kind === 'belowThreshold' ? { score: sharedNumber(statusNotice.score, language, 'auto') } : undefined)}</span><button type="button" aria-label={t('closeStatus')} onClick={event => {
         const root = event.currentTarget.closest('.ctt-terminal')

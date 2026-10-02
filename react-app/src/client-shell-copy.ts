@@ -22,7 +22,7 @@ const copy = {
   sidebarTrading: ['AI 트레이딩', 'AI trading', 'AIトレーディング', 'AI交易', 'AI交易', 'Trading con IA', 'Trading IA'],
   sidebarSharing: ['전략 복사', 'Copy strategies', '戦略コピー', '复制策略', '複製策略', 'Copiar estrategias', 'Copier des stratégies'],
   sidebarBrokers: ['거래소 연결', 'Connect an exchange', '取引所接続', '连接交易所', '連接交易所', 'Conectar un exchange', 'Connecter une plateforme'],
-  trading: ['내 트레이딩', 'My trading', 'マイトレード', '我的交易', '我的交易', 'Mis operaciones', 'Mes opérations'],
+  trading: ['AI 트레이딩', 'AI trading', 'AIトレーディング', 'AI交易', 'AI交易', 'Trading con IA', 'Trading IA'],
   strategies: ['전략들', 'Strategies', '戦略', '策略', '策略', 'Estrategias', 'Stratégies'],
   recent: ['최근', 'Recent', '最近', '最近', '最近', 'Recientes', 'Récents'],
   recentEmpty: ['아직 없음', 'Nothing yet', 'まだありません', '暂无', '尚無', 'Aún no hay nada', 'Rien pour le moment'],

@@ -35,7 +35,7 @@ const korean = {
   "feeRebate": "수수료 적립",
   "allHistory": "전체 내역 보기",
   "location": "현재 위치",
-  "myTrading": "내 트레이딩",
+  "myTrading": "AI 트레이딩",
   "reviewMissing": "복기 리포트를 찾을 수 없어요",
   "reportMissing": "보고서를 찾을 수 없어요",
   "stopDescription": "손절 규칙이 손실을 제한한 거래예요.",

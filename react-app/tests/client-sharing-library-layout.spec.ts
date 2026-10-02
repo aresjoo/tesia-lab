@@ -271,7 +271,7 @@ for (const width of [320, 1440]) test(`${width}px 관리 화면을 스크롤해�
   expect(h!.y).toBeLessThanOrEqual(1)
   expect(h!.height).toBeGreaterThanOrEqual(44)
   expect(await header.evaluate(e => getComputedStyle(e).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)')
-  const back = header.getByRole('button', { name: '내 트레이딩', exact: true })
+  const back = header.getByRole('button', { name: 'AI 트레이딩', exact: true })
   await expect(back).toBeInViewport()
   await page.screenshot({ path: info.outputPath(`library-sticky-${width}.png`) })
   await back.click()

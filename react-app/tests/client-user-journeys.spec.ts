@@ -107,7 +107,7 @@ test('빈 계정에서 두 대화·연구·공개 페이지·문서·랭킹을 �
   await openSourceMenu()
   await page.locator('.client-sidebar').getByRole('button', { name: '연구 기록', exact: true }).click()
   await page.locator('.g-hist-row').filter({ hasText: firstTitle }).click()
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toHaveCount(0)
   await expect(page.getByLabel('실행 확인에 질문')).toHaveValue('결과 연결 전에도 보존할 실행 질문')
   const resultNotice = page.locator('.client-global-notice').filter({ hasText: '선택한 계획의 연구 결과가 아직 연결되지 않았어요.' })
   for (const width of [320, 768, 1100, 1440]) {

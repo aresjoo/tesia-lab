@@ -118,7 +118,7 @@ test('PLAN 3탭과 보관되지 않은 기록은 320·390·1280px에서 읽고 �
   }
   await route(page, '#/review/missing')
   await expect(page.getByText('복기 리포트를 찾을 수 없어요', { exact: true })).toBeVisible()
-  await page.locator('.client-main-account').getByRole('button', { name: '내 트레이딩', exact: true }).click()
+  await page.locator('.client-main-account').getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
   await route(page, '#/periodic/W:2000-01-01')
   await expect(page.getByText('보고서를 찾을 수 없어요', { exact: true })).toBeVisible()

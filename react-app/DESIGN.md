@@ -1,6 +1,6 @@
 # TETH AI Design System
 
-이 문서의 코드 대조 기준은 후속 통합 `b134630836aae2566da2741bd978900c6e0004c8`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
+이 문서의 코드 대조 기준은 후속 통합 `3f8070ed5eedd67830acaafbbe54dcbb777ce388`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
 | 인수 항목 | 현재 상태 |
 |---|---|
@@ -8,6 +8,8 @@
 | 후속 구현 | 원본 offline 연구 진입·점수 미달 차단/합격 보고서→연구, 카탈로그 복사 설정·비회원 의도 복귀, 전용 직접검증 페이지·기간/금액 재실행 및 관련 회귀 교정 |
 | e325 전체 회귀·검수 | Node22 전체 13,102개: 12,486 PASS / 587 FAIL / 17 SKIP / 12 미실행, exit 1. 당시 personal(1) `claude-opus-5` C0/H3/M2/L6 NO-GO. 실패·원 SHA 보존 |
 | dc85100 전체 진단 이력 | 21.9분 뒤 중단: 5,208 PASS / 2 FAIL / 2 SKIP / 13 중단 / 7,917 미실행, exit 130. 전체 성공이 아님. 당시 Opus5.5 C0/H0/M2/L3 코드 조건부 GO는 전체/main GO가 아님 |
+| 141cc 검수·후속 교정 | 당시 personal(1) Opus5.5 C0/H0/M3/L3 조건부 code GO·whole/main GO 0. 실제 전체는 13,088 PASS / 45 FAIL / 기존 SKIP 17 / 미실행·중단 0, exit 1. 후속 후보에 메뉴 안내·차트 준비·저장차단·Help 취소/설정 이동 교정을 통합하며, 후속 새 동결의 단일 전수·정확 head CI·독립검수 전에는 인수하지 않음 |
+| 777e935 검수·후속 시험 교정 | personal(1) Opus5.5 C0/H0/M0/L3 CODE_GO. 실제 단일13,200 회귀는13,161PASS/19FAIL/기존17SKIP/3미실행/시험밖오류3·exit1(58.4분), WHOLE/main NO_GO다. 원2,121파일·당시정본7 hash차이0를 완료 후 확인했다. 원 후보·실패 로그를 보존하고 별도 작업본에서 경과시간·compiled module 공급·실제 초기 준비·원 스크롤 및 측정 순서를 교정한다. 후속 후보는 새 단일 전체와 같은 head의8CI 및 최종 독립 검수 전에는 인수하지 않는다 |
 | 전체 인수 Gate | 원본 동선·새 동결 전체 회귀·독립 검수 결속 후 ROOT가 판정. 현재 상태는 [활성 PM Ledger](https://github.com/beak1011/tesia-program/blob/main/WORK_LEDGER.md)와 [PM 정본](https://github.com/beak1011/tesia-program/blob/main/PM/README.md)만 따르며 이전 조건부 GO·별도 범위 PASS를 승계/합산하지 않음 |
 | 실제 공급·운영 | 공개 기본값 Mock. 외부 공급자·실주문/과금/사용량 producer·공개 서비스 Gate 미완료, 운영 변경 0 |
 
@@ -15,7 +17,7 @@
 
 ## 후속 통합의 표시·복귀 규칙
 
-`5b608826`은 고정9fb 회원 sidebar4개·guest2개 및 설정 인사이트 진입을 계승한다. sidebar 전용 라벨·순서만 교정하며 새 전략 차단·초안/기록·기존 typed service 공급 유무는 바꾸지 않는다. 원본 62preset 목록과 카탈로그31cfg의 분모는 서로 다르며 목록 존재를 전수 합격으로 세지 않는다.
+`5b608826`은 고정9fb 회원 sidebar4개·guest2개 및 설정 인사이트 진입을 계승한다. 공개/native의 본문 안내·제목·복귀 버튼도 7locale AI 트레이딩으로 맞춘다. 새 전략 차단·초안/기록·기존 typed service 공급 유무는 바꾸지 않는다. DEV archive 탭과 공급된 actionlabel은 원문을 보존한다. 원본 62preset 목록과 카탈로그31cfg의 분모는 서로 다르며 목록 존재를 전수 합격으로 세지 않는다.
 
 공통 `mine` 결과에서 새 전략/홈으로 복귀할 때 공통 hash도 해제한다. 비회원의 축소 레일·확장 메뉴 새 전략 버튼은 모두 disabled이며 메뉴 노출로 인증 권위를 만들지 않는다. native 설정 종료는 `/internal-poc.html#/native-client`로 돌아가 재로딩 때 같은 host를 유지한다. 로그아웃의 서버 수락·소유자 검증은 그대로이며 이 복귀 수정은 권한 완화가 아니다.
 
@@ -25,9 +27,15 @@ source ASK는 실제 질문 카드의 선택·직접 입력·닫기 동선으로
 
 동일 제품을 포함한 `63966d0`에서 native 결과 6spec **396 PASS / 0 FAIL / 0 SKIP, exit 0**를 확인했다. 원 footer 높이·재생 수명·소유자/API/bytes 반례를 유지한 범위 검증이며 e325 전체 실패를 소거하거나 `edde76a`의 전체 성공/최종 GO를 증명하지 않는다. [실패·최종 범위 증거](Bugfix_report.md#migration-source-closure)와 [활성 PM Ledger](https://github.com/beak1011/tesia-program/blob/main/WORK_LEDGER.md)를 따른다.
 
+공개 저장 차트의 optional readonly `blockedReason`은 저장 오류/commit 불확실성의 UI 표시다. 기간·재시도 버튼과 7locale 복구 안내를 연결하고 차트 canvas와 진행 중 요청 수명은 보존한다. 차단 사유를 request identity에 넣지 않으며 기존 store/owner/provider gate를 완화하지 않는다. 실제 viewport 저장 복구가 관측된 뒤 재시도가 가능하다. `#/client` compatibility host의 기존 미지원 Insight 메뉴 안내 제거는 수용하고 public/native 설정 Insight와 구분한다.
+
+도움말 lazy 로딩·실패에서 취소할 때 부모의 논리적 진입 버튼을 복원한다. generation/owner·교체 overlay·사용자가 옮긴 현재 초점을 검사해 늦은 완료가 초점을 빼앗지 못하게 한다. Native 설정 hash 이동은 기존 화면 폐쇄 경로에 포함해 pending loader와 inert를 해제한다. 도움말 외 callback/API/SDK와 저장·주문 권한은 변경하지 않는다.
+
+공개 Main의 선택적 `terminalMarketSource`는 Main 소유자에서 파생한 scope로 기존 SourceTerminalWorkspace/AccountTerminal에 전달한다. 명시 공급 시 종목 검색·선택 및 차트/정보/데이터 3탭을 소비하고 foreign/미공급·owner/source 교체·잘못된 종목·늦은 응답은 기존 guard로 거부한다. 기본 공급은 생성하지 않으며 `marketChartSource`의 대화 차트 경로와 구분한다. 검색 입력의 첫 Escape는 원본25315처럼 닫고 기존 IME 예외를 보존한다.
+
 ## 오늘의 화면별 재사용과 잔여
 
-기준은 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`다. 원본의 화면·동작을 React로 계승하고 필요한 Mock/실제 데이터 공급을 맞춘다. 기존 제품 UI 전체 통합을 완료 조건으로 삼지 않는다. 문서 코드 대조 기준은 후속 통합 `b134630`이며 원 동결·WIP는 별도 보존한다. 같은 파일의 writer는 한 명이다.
+기준은 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`다. 원본의 화면·동작을 React로 계승하고 필요한 Mock/실제 데이터 공급을 맞춘다. 기존 제품 UI 전체 통합을 완료 조건으로 삼지 않는다. 문서 코드 대조 기준은 후속 통합 `3f8070e`이며 원 동결·WIP는 별도 보존한다. 같은 파일의 writer는 한 명이다.
 
 아래 12그룹은 이번 이식 분모다. 1–11의 재사용 판정은 해당 React 렌더 진입과 코드 존재를 확인한 것이며 원본 모든 상태·모션·반응형의 합격 판정은 아니다. 과거 검사 수·원본 커밋 수·렌더 존재 비율을 완료 퍼센트로 환산하지 않는다. 구현과 원본 패리티, 실제 공급, 최종 Go를 나눠 인수한다.
 
@@ -427,7 +435,7 @@ Web50 동기화 단계에서 `7939d67d3637ef7145fa840ddb18fb78da95599f`의 nativ
 
 - 첫 진입에서는 사이드바를 접고 중앙 대화 영역을 넓게 쓴다.
 - 로그인 후에는 세션 목록을 제공하되, 대화가 없는 상태에서는 시각적 소음을 만들지 않는다.
-- 고정9fb의 회원 사이드바는 `새 전략 → 연구 기록 → AI 트레이딩 → 전략 복사 → 거래소 연결 → 최근 세션`이다. 새 전략 아래 navigation은4개이며 비회원은 `AI 트레이딩 → 전략 복사` 2개만 제공한다. 인사이트는 기존 설정 메뉴에서 열고 sidebar에는 표시하지 않는다. guest 새 전략은 접힘/펼침 모두 비활성이다. 원 source:1514의 새 전략 차단과1515–1516(+4526)의 guest2 노출 규칙, `ClientChrome/sourceSidebarNavigationLabel`을 따른다. sidebar 전용7언어 라벨은 본문 제목·archive 소비자 라벨과 구분하고 메뉴 노출을 인증·주문 권위로 사용하지 않는다.
+- 고정9fb의 회원 사이드바는 `새 전략 → 연구 기록 → AI 트레이딩 → 전략 복사 → 거래소 연결 → 최근 세션`이다. 새 전략 아래 navigation은4개이며 비회원은 `AI 트레이딩 → 전략 복사` 2개만 제공한다. 인사이트는 기존 설정 메뉴에서 열고 sidebar에는 표시하지 않는다. guest 새 전략은 접힘/펼침 모두 비활성이다. 원 source:1514의 새 전략 차단과1515–1516(+4526)의 guest2 노출 규칙, `ClientChrome/sourceSidebarNavigationLabel`을 따른다. 공개/native 7언어 메뉴·본문 제목·복귀 안내는 같은 AI 트레이딩 목적지를 가리킨다. DEV archive 및 공급된 actionlabel은 별도 원문으로 보존하고 메뉴 노출을 인증·주문 권위로 사용하지 않는다.
 - 메뉴 SVG는 원본 path/viewBox를 `ClientIcon`에서 공유한다. 기본 stroke 1.6, 패널 열기·닫기 1.7, 프로필 1.5와 각 원본 크기를 보존하며 장식 SVG는 접근성 트리에서 제외한다.
 - 아티팩트 패널은 차트나 문서가 생성되는 순간 자연스럽게 열린다.
 - 중앙은 flex 열, 우측 Artifacts 목록은 300px의 인플로우 패널이다. 1100px 이하에서는 우측 목록을 숨기고 헤더의 Research Plan 탭으로 동일 문서를 연다. 고정 오버레이 전략 카드를 사용하지 않는다.
@@ -582,7 +590,7 @@ native 채팅 내 전략 요약·검증/승인/실행 버튼을 원본 `gDocPlan
 
 - 이전6c9bf6d/501053b의 sidebar5개 순서는 고정9fb의 회원4개·guest2개 규칙으로 대체한다. 현재 회원은 연구 기록→AI 트레이딩→전략 복사→거래소 연결이며 인사이트는 설정 메뉴에서 진입한다. 원본 로켓 SVG·본문/legacy 소비자·서비스 콜백은 유지한다. 구형 예약/랭킹/공유 함수·화면 호환과 최신 메뉴 노출은 구분한다. 최근은 pinned/non-pinned 각 입력 순서를 유지하고 Live 그룹은 별도로 표시한다. 사용자 제목·원 기록은 변형하지 않으며 공개 preview만 Paper 배지, 그 외 caller는 공급 상태 문구·중립색을 사용한다. 낮은 높이에서는 메뉴+기록 단일 스크롤, 일반 높이에서는 기록만 스크롤하며 하단 서비스/계정 영역과 겹치지 않도록 한다. 모바일 프로필은 구형2열 grid의 전체 너비를 차지한다. 최초 실패·전체 검수 상태는 Bugfix_report `integration-sidebar-source`가 소유한다.
 - 프로모 배너는 흰색 ‘혜택 자세히’ 하나, 설명창 하단에는 현재 거래소의 계정 개설 버튼을 배치한다. 기존 서비스 콜백만 명시 클릭으로 호출하며 목록/상세 헤더 계정 버튼은 유지한다. 미공급 정책을 무료 자격·자동 연결 성공으로 바꾸지 않는다.
-- 내 트레이딩은 원본2436a1f대로 포지션·미체결·주문·체결·종료·자산 6탭만 노출한다. 알림은 벨로 여는 별도 region이며 정산은 PLAN, 보고서는 기존 독립 경로를 유지한다. 기본 공개 경로는 `connection-required`, 합성 거래 표는 격리된 `source-preview`에서만 요청한다. UID·미리보기 등록은 API 연결 권위가 아니다.
+- AI 트레이딩은 원본2436a1f대로 포지션·미체결·주문·체결·종료·자산 6탭만 노출한다. 알림은 벨로 여는 별도 region이며 정산은 PLAN, 보고서는 기존 독립 경로를 유지한다. 기본 공개 경로는 `connection-required`, 합성 거래 표는 격리된 `source-preview`에서만 요청한다. UID·미리보기 등록은 API 연결 권위가 아니다.
 - 연결 CTA는 마지막으로 직접 진입한 위임 세션의 저장된 완료 상태와 현재 계산을 확인해 같은 연결 화면으로 복귀한다. 홈/새로고침에서도 owner별 sessionId locator만 보관하며 점수·권한·credential을 추가 저장하지 않는다. 누락·삭제·불완전·다른 owner의 locator는 거래소 목록으로 이동한다. locator가 없는 과거 기록을 현재 대화나 다른 데모 전략으로 추측 복원하지 않는다. 등록된 기록의 연결 화면을 마치면 기존 봇 상세로 돌아가고 운용 상태·거래소·환경·버전을 덮어쓰지 않는다. 이는 공개 시각 미리보기의 동선이며 실제 거래소 인증·주문 실행은 아니다.
 - 공유 목록/상세는 `ClientStrategySharing`으로 계승했다. `#/share/s/<nick>[/1y|2y]`의 기간 변경은 replaceState이며 원본 파라미터로 각 구간을 재계산한다. 수익/낙폭 선의 원본 지연 재생·종점/최고점·크로스헤어·날짜/비율 툴팁은 `ClientSharedEquityChart`가 소유한다. 원본 전역 hover 대신 컴포넌트별 상태/고유 SVG ID, 전체 관측의 이진 탐색, ResizeObserver 정리, reduced-motion을 적용한다. 원본 엔진이 마지막 날짜에 두 관측을 내는 경우 순서를 보존한다. 기존 실제 native Lightweight Charts/체결 재생을 이 SVG 미리보기로 교체하지 않는다.
 - 공유 상세는 원본 월별 손익·보유 기간·연도별 성과·최근12거래와4축 점수/seed 중앙값 설명을 표시한다. 작은 화면은 지표2열·액션 줄바꿈·표 내부 가로 스크롤로 읽기 크기를 보존한다. 전체 페이지 가로 넘침과 상단 계정 벨/복귀 버튼 겹침을 별도로 검사한다. 관심 기록은 owner별 브라우저 세션에만 저장한다. 공유 분석은 원본 규칙/선택 기간 성과 질문으로 기존 대화를 이어가며 미전송 초안을 보존하고, 대화가 없으면 홈 초안 뒤에 질문만 준비한다. 게스트와 응답 진행 중에는 자동 전송하지 않는다.
@@ -1056,7 +1064,7 @@ backdrop-filter: blur(24px) saturate(125%);
 - `ClientMainExperience/client-experience-store`: 세션, 원본 fallback 대화, 완료 기록, 이름·삭제·초안·화면 연결.
 - `ClientAccountUI/ClientLocalePanel`: 설정 계층, 인증 단계, 공개 프로필, 피드백, 7언어 단일 선택. 최신 전용 설정 route는 이식 진행 대상이다.
 - `ClientResearchWorkspace/client-research-fixtures`: Plan·Hypothesis·버전·Backtest·Critic·Stress·Holdout·Report·Connect·Run·Live와 Activity.
-- `ClientDelegationWorkspace/client-delegation-fixtures`: 5문항·계약서·검증·수정·보고서·무료/유료 연결 UI·내 트레이딩.
+- `ClientDelegationWorkspace/client-delegation-fixtures`: 5문항·계약서·검증·수정·보고서·무료/유료 연결 UI·AI 트레이딩.
 - `ClientPublicPages/DownloadPreview/client-public-copy.json`: 정보·다운로드·정책, 원본 PI/PPL 번역·가격·기기 캡션·도움말.
 
 ### 데이터·기능·보안 경계
@@ -1087,7 +1095,7 @@ backdrop-filter: blur(24px) saturate(125%);
 | 설정·언어·통화·프로필 | 공용 설정/locale UI, native 프로필은 중립 표시 | `getMe`는 인증 여부/중립 표시만 제공. 실제 이름·이메일·서버 설정 동기화로 간주하지 않음 |
 | 예약 검증·랭킹·전략 공유·구독·피드백 | 공개 UI의 원본 기반 표면/로컬 동작과 native 미연결 상태 분리 | 현재 소비 SDK에 해당 서버 operation 미공급. PM 범위/계약/producer 인수 없이 가상 성공을 연결하지 않음 |
 | Paper·거래소 연결·실행 | 별도 recorded Paper 경계 | 실제 Demo/Live 주문·계정 운용은 별도 권한/Gate. FULL 경로로 실행기만 바꿔 shared Paper가 함께 작동한다고 가정하지 않음 |
-| 내 트레이딩 | native도 원본 React 터미널·6탭·전체화면·대화 복귀 연결 | 현재 계좌 조회 producer 미공급으로 null 표시. 연결/잔고/주문/체결/OHLC의 owner·환경·시각 계약은 별도 인수 필요. 기록 Paper나 source preview 수치로 대체하지 않음. BF608–611 |
+| AI 트레이딩 | native도 원본 React 터미널·6탭·전체화면·대화 복귀 연결 | 현재 계좌 조회 producer 미공급으로 null 표시. 연결/잔고/주문/체결/OHLC의 owner·환경·시각 계약은 별도 인수 필요. 기록 Paper나 source preview 수치로 대체하지 않음. BF608–611 |
 
 **당시 native FULL 준비 실패의 직접 원인:** Backend157 `6df63880618d89ca52b2b7c1f7ddd44c305133c1`의 `api/service.py:224–261`은 native readiness 미주입 시 항상 `NOT_READY`를 반환한다. 당시 검증 runtime은 `tesia-shared-auth-strategy --structural-smoke-backtest`이며 `operator/shared_auth_strategy_service.py:994–1013`은 native readiness/facade를 주입하지 않는다. 따라서 v7은 `profile()` 단계에서 끝나고 새 job/admission/결과가 생기지 않는다. Backend157의 Worker 시작 준비 완료는 이 FULL 준비 완료가 아니다.
 
@@ -1541,7 +1549,7 @@ backdrop-filter: blur(24px) saturate(125%);
 | 2026-09-06 | `tesia-lab`의 대화 중심 UI·UX를 TETH 웹의 경험 원형으로 사용 | superseded | 같은 날 시각 정본으로 채택한 결정이 대체한다. |
 | 2026-09-06 | 시장 질문과 전략 생성을 하나의 연속 대화로 통합 | accepted | 별도 탭과 페이지 전환에서 발생하던 맥락 손실을 제거한다. |
 | 2026-09-06 | 차트·전략·보고서를 대화의 아티팩트로 배치 | accepted | 대화를 명령 센터로 유지하면서 전문 분석 공간을 확보한다. |
-| 2026-09-06 | 랩의 합성 엔진, Mock 인증, 터널 프록시는 이식하지 않음 | accepted | 실제 계약과 보안 경계를 보존하고 UI 원형과 실행 의미론을 분리한다. |
+| 2026-09-06 | 당시 랩 합성 엔진·Mock 인증·터널 프록시의 일괄 미이식 | partially superseded | 합성 엔진의 포괄 제외만 위 2026-10-02 source closure 결정이 대체한다. 고정 원본·저장가격·설정에 결속된 공개 로컬 Mock 계산기는 허용하지만 실제 native 결과·승인·주문 권위를 대체하지 않는다. Mock 인증과 터널 프록시의 이식 제외 및 기존 계약·보안 경계는 유지한다. |
 ## f43 손익 표시 계승
 
 공통 백테스트는 시작금액을 기준으로 초록 #2ebd85/빨강 #f0566a 곡선과 얕은 면을 분리한다. 최초 관측값을 시작금액으로 간주하지 않는다. 흰 기준선·점선 비교선·회색 체결표식과 기존 점진 재생/Skip을 보존하며 별도 엔진 계산이나 가격 요청을 추가하지 않는다. 모바일 월별 결과는 연도 제목/연간 수익과 12개월 4열을 쓰고 확대하면 읽기폭에 따라 재배치한다. 데스크톱 표와 같은 원값·일부 기간·관측없음을 표시한다. 데스크톱 월별 표는 원본의 14px·#58b892/#d97a72, 모바일 카드는 #56c486/#ee766a를 유지한다. 공유 손익 달력은 원본의 abs(표시 수익률)/12 농도를 두 자리로 제한하고 % 단위를 표시하며 계산값을 바꾸지 않는다. 현재 검증 상태와 오류/잔여는 Bugfix_report의 해당 항목을 따른다.

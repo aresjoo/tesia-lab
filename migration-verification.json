@@ -1,17 +1,16 @@
 {
   "schema": 1,
   "purpose": "클라이언트 에이전트의 migration 브랜치 검토용 전달. 제품 완료/운영 승인 아님.",
-  "sourceCommit": "c04b5cd7ccd1db6f9555ff875073ef548f4d4536",
+  "sourceCommit": "62b5e6972cb48a3ac862fc41799061c0d0722525",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "99e06327749ce4ea1046906d46364253cb42c7c3b7a127eab2ec1e6cedb71d0a",
+  "snapshotDigest": "f857c2f7542cfd7ee12aaedde6e8f829fe981d5f9877958526b09cb8514ba9aa",
   "environment": {
     "node": "22.23.2",
-    "dependencyInstall": "npm ci --ignore-scripts --no-audit --no-fund",
-    "installedPackages": 165
+    "dependencyInstall": "Reused prior delivery npm ci installation; package.json and package-lock.json unchanged. No clean reinstall claimed this update."
   },
   "snapshot": {
-    "files": 2118,
-    "bytes": 24569265,
+    "files": 2122,
+    "bytes": 24642526,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS; all manifest paths present and bytes match",
     "clientOriginalFiles": "Preserved; only root AGENTS.md receives delivery-scope documentation"
@@ -38,38 +37,27 @@
       "exitCode": 0
     },
     {
-      "command": "TETH_E2E_PORT=4196 npx playwright test tests/client-source-parity-followups.spec.ts --workers=2",
+      "command": "TETH_E2E_PORT=4196 npx playwright test tests/client-source-parity-followups.spec.ts tests/client-main-terminal-market-source.spec.ts tests/client-stored-market-chart.spec.ts --workers=2",
       "status": "PASS",
       "exitCode": 0,
-      "passed": 10,
+      "passed": 64,
       "failed": 0,
       "skipped": 0,
-      "durationSeconds": 24.7,
-      "coverage": "Desktop and mobile Chromium. Main mobile menu thresholds/focus/route/viewport, portal and scroll isolation, copy detail localized stop/take labels and null take-profit presentation. Not full E2E or Safari."
+      "coverage": "Desktop/mobile Chromium, Main terminal market source owner/identity/late-response guards, first Escape, source menu/copy details, stored chart failure/recovery and mobile labels. Not full E2E or Safari.",
+      "reportedDuration": "1.1m"
     },
     {
       "command": "node tools/sync-migration.mjs --verify",
       "status": "PASS",
-      "files": 2118
+      "files": 2122
     },
     {
       "command": "node --check tools/sync-migration.mjs",
       "status": "PASS"
     },
     {
-      "command": "Referenced React paths in MIGRATION.md",
-      "status": "PASS",
-      "checked": 51,
-      "missing": 0
-    },
-    {
-      "command": "git diff --cached --check (new delivery docs/tool)",
+      "command": "git diff --cached --check (current delivery delta)",
       "status": "PASS"
-    },
-    {
-      "command": "git diff --cached --check (whole imported snapshot)",
-      "status": "EXISTING_WHITESPACE_WARNINGS",
-      "details": "10 whitespace/EOF findings in byte-preserved source files. Four SVG trailing lines plus six source/test EOF blank lines. Not silently fixed or reported as clean."
     }
   ],
   "security": {
@@ -85,19 +73,25 @@
       "unclassified": 0,
       "actualCredentialFindings": 0
     },
-    "interpretation": "Raw scanner did NOT return zero. Each flagged source line was classified; no detector rules disabled or broad hex/path allowlist added. Raw redacted output remains in sender-local QA, not in this public branch."
+    "interpretation": "Raw scanner exit 1 / 53 findings retained. All match the previous reviewed findings by rule, relative path, line and redacted match. No new findings; not a zero-findings raw scan. No detector disabled.",
+    "deltaReview": {
+      "sameRuleFileLineAndRedactedMatchAsPrevious": 53,
+      "newFindings": 0,
+      "removedFindings": 0
+    }
   },
   "warnings": [
     "Vite chunk-size warnings remain (>500 kB); public client bootstrap approximately 1.13 MB minified.",
     "ClientUpgradeSheet static/dynamic import overlap reported in public build.",
-    "Whole imported source whitespace warnings retained for byte fidelity."
+    "Whole imported source whitespace warnings retained for byte fidelity.",
+    "Internal/service builds warn that extensionless config imports are incompatible with a future Vite native config-loader default."
   ],
   "notVerified": [
-    "Full 13150-test regression of this delivery snapshot",
-    "All original screen/copy/SVG/motion/responsive parity",
-    "Unapplied catalogue marker/evidence proposals",
+    "Full 13200-test rerun on this copied snapshot (upstream acceptance recorded separately)",
+    "Every screen/copy/SVG/motion/responsive combination and all 62 presets",
+    "Unapplied catalogue marker/evidence proposals; ClientCatalogueBacktest.tsx unchanged from previous snapshot",
     "Actual OAuth/model/market/exchange/order/billing providers",
-    "Production deployment, main merge or final release approval",
+    "Production deployment or client main merge",
     "Another agent reading/accepting this handoff"
   ],
   "deployment": {
@@ -105,5 +99,33 @@
     "automaticDeploymentConfigured": false,
     "reactWorkflow": "react-app/.github/workflows/ci.yml is retained as source, not an active root Actions workflow",
     "existingWorkerWorkflow": "unchanged; main/server-only push trigger"
+  },
+  "sourceDelta": {
+    "previousDelivery": "be935c98f2a67f62287549736f173ccbe0600021",
+    "previousSource": "c04b5cd7ccd1db6f9555ff875073ef548f4d4536",
+    "changedFiles": 86,
+    "addedFiles": 4,
+    "deletedFiles": 0,
+    "packageAndLockfileChanged": false
+  },
+  "upstreamAcceptance": {
+    "source": "tesia-program canonical PM/README.md, Web52/Web55 and react-app/Bugfix_report.md",
+    "executedBy": "Upstream integration team, NOT this delivery run",
+    "testCommit": "b463a728a5c6dd34533769c1fa60e1706e07ab39",
+    "total": 13200,
+    "passed": 13183,
+    "failed": 0,
+    "skipped": 17,
+    "exitCode": 0,
+    "scope": "Web52 merged tree equals approved 1e994c7; Web55 changes only exact security fingerprints. Not all 62 presets or live-provider certification."
+  },
+  "excludedDraft": {
+    "repository": "beak1011/tesia-web",
+    "pr": 54,
+    "head": "75a5f5bbb820ad27f66304927ff4c70954fea318",
+    "state": "OPEN",
+    "isDraft": true,
+    "includedInSnapshot": false,
+    "meaning": "New exchange connection candidate remains separate; 178 fixture passes do not establish real login/provider success."
   }
 }

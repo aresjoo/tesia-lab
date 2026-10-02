@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { chartEma, containingBar, equalPriceViews, priceChartIssue, priceMarkerGroups, priceResolutionLabel, visiblePriceMarkers, type PriceChartView } from '../src/chart/price-chart-view'
 
@@ -105,13 +106,17 @@ test('빈 데이터와 손상된 가격은 합성 SVG/캔들로 대체하지 않
 
 test('키보드 봉 선택은 대기 중이거나 레이아웃에서 발생한 crosshair 이벤트에 덮이지 않는다', async ({ page }) => {
   await page.clock.install()
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('chart.subscribeCrosshairMove(move);')
-    await route.fulfill({ response, body: body.replace('chart.subscribeCrosshairMove(move);', 'chart.subscribeCrosshairMove(move); window.__queuedCrosshairTest = move;') })
-  })
+    return body.replace('chart.subscribeCrosshairMove(move);', 'chart.subscribeCrosshairMove(move); window.__queuedCrosshairTest = move;')
+    }, ["chart.subscribeCrosshairMove(move);"])
   await mount(page)
   await expect(page.locator('.cp-surface canvas').first()).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
+  // Keep protocol/assertion wall time out of the explicit queued-event frames.
+  // The existing runFor steps remain responsible for executing each RAF.
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1_000))
   await page.evaluate(time => {
     Reflect.get(window, '__queuedCrosshairTest')({ time })
     const surface = document.querySelector<HTMLElement>('.cp-surface')!
@@ -139,12 +144,11 @@ test('키보드 봉 선택은 대기 중이거나 레이아웃에서 발생한 c
 
 test('빈 시리즈 재생과 같은 identity의 확장 결과는 전체 논리 범위를 유지한다', async ({ page }) => {
   await page.clock.install()
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    const body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', 'api.current = chart; window.__testPriceChart = chart;') })
-  })
+    return body.replace('api.current = chart;', 'api.current = chart; window.__testPriceChart = chart;')
+    }, ["api.current = chart;"])
   await mount(page)
   const range = () => page.evaluate(() => (window as unknown as { __testPriceChart: { timeScale(): { getVisibleLogicalRange(): { from: number; to: number } } } }).__testPriceChart.timeScale().getVisibleLogicalRange())
   await page.getByRole('button', { name: '체결 순서 재생', exact: true }).click()

@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { createDrawingTimeProjection } from '../src/chart/drawing-time-projection'
 import { fixture } from '../src/dev/chart-workspace-fixture'
@@ -24,11 +25,11 @@ test('도형 시간축은 관측 사이 비율·양쪽 창밖·한 봉·잘못�
 })
 
 async function mount(page: Page) {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('candles.attachPrimitive(drawings);')
-    await route.fulfill({ response, body: body.replace('candles.attachPrimitive(drawings);', 'candles.attachPrimitive(drawings); window.__drawingProjectionProbe = { drawings, candles, chart };') })
-  })
+    return body.replace('candles.attachPrimitive(drawings);', 'candles.attachPrimitive(drawings); window.__drawingProjectionProbe = { drawings, candles, chart };')
+    }, ["candles.attachPrimitive(drawings);"])
   await page.goto('/')
   await page.evaluate(async view => {
     const path = '/tests/fixtures/price-chart-host.tsx'

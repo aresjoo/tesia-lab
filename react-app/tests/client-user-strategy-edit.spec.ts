@@ -76,7 +76,7 @@ test('열린 편집의 기준 전략이 교체되면 자동 적용하지 않으�
   expect(await page.evaluate(() => Reflect.get(window, 'userEditCalls'))).toEqual([])
   await page.evaluate(() => Reflect.get(window, 'replaceUserEditRecord')(null))
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '내 트레이딩', exact: true })).toBeFocused()
+  await expect(page.getByRole('button', { name: 'AI 트레이딩', exact: true })).toBeFocused()
   await page.evaluate(record => Reflect.get(window, 'replaceUserEditRecord')(record), record)
   await expect(page.getByRole('button', { name: '전략 수정', exact: true })).toBeVisible()
   await expect(page.getByRole('dialog')).toHaveCount(0)

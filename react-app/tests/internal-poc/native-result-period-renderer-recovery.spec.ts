@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from '../fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { resultHost } from './helpers/native-result-presentation-host'
 
@@ -31,15 +32,15 @@ async function ready(page: Page) {
     }
     Reflect.set(window, 'periodRendererProbe', probe)
   })
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
     expect(body).toContain('updateExternalReplay.current = () => {')
-    await route.fulfill({ response, body: body.replace('api.current = chart;',
+    return body.replace('api.current = chart;',
       'api.current = chart; window.periodRendererProbe.register(chart);')
       .replace('updateExternalReplay.current = () => {',
-        'updateExternalReplay.current = () => { window.periodRendererProbe.frame = runtimeInput.current.externalReplay?.frame ?? null;') })
-  })
+        'updateExternalReplay.current = () => { window.periodRendererProbe.frame = runtimeInput.current.externalReplay?.frame ?? null;')
+    }, ["updateExternalReplay.current = () => {","api.current = chart;"])
   const control = await resultHost(page, { replayReader: true, boundedReplayPrices: true })
   await expect(page.locator('.native-service-result').getByRole('button', { name: '차트로 결과 보기', exact: true, includeHidden: true })).toHaveAttribute('aria-disabled', 'false')
   const composer = await page.locator('.g-composer textarea').elementHandle()

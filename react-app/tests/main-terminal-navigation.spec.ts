@@ -24,7 +24,7 @@ async function navigate(page: Page, name: string) {
     await page.locator('.client-sidebar [data-sidebar-action="profile-settings"], .client-sidebar [data-sidebar-action="settings"]').filter({ visible: true }).first().click()
     await page.locator('.ca-settings [data-menu-action="insight"]').click()
   } else {
-    const label = name === '내 트레이딩' ? 'AI 트레이딩' : name
+    const label = name === 'AI 트레이딩' ? 'AI 트레이딩' : name
     await page.locator('.client-sidebar').getByRole('button', { name: label, exact: true }).click()
   }
 }
@@ -52,7 +52,7 @@ async function healthy(page: Page) {
   expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[hidden],[inert]')))).toBe(false)
 }
 
-test('게스트 내 트레이딩은 소개와 명시 시작을 거치고 홈 초안을 전송하지 않는다', async ({ page }) => {
+test('게스트 AI 트레이딩은 소개와 명시 시작을 거치고 홈 초안을 전송하지 않는다', async ({ page }) => {
   const requests: string[] = []
   page.on('request', request => requests.push(request.url()))
   await page.goto('/')
@@ -60,7 +60,7 @@ test('게스트 내 트레이딩은 소개와 명시 시작을 거치고 홈 초
   // The shared calculation engine now also serves delegation validation.
   // The terminal UI and chart library must still remain lazy before entry.
   expect(requests.some(url => /ClientSourceTerminalWorkspace|lightweight-charts/.test(url))).toBe(false)
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page).toHaveURL(/#\/trade$/)
   await expect(page.locator('.txh')).toBeVisible()
   await expect(page.locator('.ca-auth')).toHaveCount(0)
@@ -192,7 +192,7 @@ test('터미널 선택·필터·Agent 초안은 홈과 연구 기록 및 인사�
   await expect(page.locator('.client-main-terminal')).toBeHidden()
   await expect(page.getByRole('textbox', { name: '전략 Agent에게 질문' })).toHaveCount(0)
   await healthy(page)
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-mount-proof', 'retained')
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', selectedId!)
   await panel(page, 'Agent')
@@ -207,11 +207,11 @@ test('터미널 선택·필터·Agent 초안은 홈과 연구 기록 및 인사�
   await expect(page.locator('.client-account-terminal')).toBeVisible()
   await page.goForward()
   await expect(page.locator('.nfz-open')).toBeVisible()
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await sidebar(page)
   await page.locator('.client-new-strategy').click()
   await expect(page.locator('#strategy-idea')).toBeVisible()
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-mount-proof', 'retained')
   await healthy(page)
 })
@@ -223,7 +223,7 @@ test('기존 대화와 트레이딩은 단일 active를 유지하고 Agent 분�
   await page.getByRole('button', { name: '대화 시작', exact: true }).click()
   await expect(page.locator('.g-composer textarea')).toBeVisible()
   await page.locator('.g-composer textarea').fill('기존 대화 초안')
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.client-account-terminal')).toBeVisible()
   await sidebar(page)
   await expect(page.locator('.client-sidebar [aria-current]')).toHaveCount(1)
@@ -234,7 +234,7 @@ test('기존 대화와 트레이딩은 단일 active를 유지하고 Agent 분�
   await expect(page.locator('.client-main-terminal')).toBeHidden()
   await expect(page.getByRole('textbox', { name: '전략 Agent에게 질문' })).toHaveCount(0)
   await expect(page.getByRole('button', { name: '응답 중지', exact: true })).toHaveCount(0, { timeout: 20_000 })
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', 'user:1001')
   await panel(page, '전략')
   await page.locator('.tft-select').filter({ hasText: records[0].record.name }).click()
@@ -348,14 +348,14 @@ test('로그아웃은 터미널을 해제하고 다음 계정에 이전 선택·
   await page.locator('.ca-settings').getByRole('button', { name: '로그아웃', exact: true }).click()
   await expect(page.locator('.client-main-terminal')).toHaveCount(0)
   await expect(page.locator('#strategy-idea')).toBeVisible()
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.txh')).toBeVisible()
   await page.locator('.txh-hero .txh-cta').click()
   await page.getByTestId('connection-plan').getByRole('button', { name: '무료로 시작하기', exact: true }).click()
   await page.getByRole('button', { name: /Google/ }).click()
   await page.getByLabel('연령', { exact: true }).fill('28')
   await page.getByRole('button', { name: '시장에 입장하기', exact: true }).click()
-  await navigate(page, '내 트레이딩')
+  await navigate(page, 'AI 트레이딩')
   await expect(page.locator('.txh')).toBeVisible()
   await expect(page.locator('.client-main-terminal')).toHaveCount(0)
   await expect(page.locator('body')).not.toContainText('이전 계정의 비공개 초안')

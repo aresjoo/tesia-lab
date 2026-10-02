@@ -147,7 +147,15 @@ for (const motion of ['reduce', 'no-preference'] as const) test(`${motion} 화�
   await page.locator('#strategy-idea').fill('비트코인에 대해 알려주세요')
   await page.getByRole('button', { name: '대화 시작', exact: true }).click()
   const input = page.locator('.g-composer textarea'), pill = page.locator('.g-composer')
+  // 완료된 ASK는 입력창을 대신한다. 원본 닫기 동선으로 일반 입력을
+  // 복구한 뒤 폭·초안 높이를 검증해 응답 완료 시점과 경쟁하지 않는다.
+  const closeQuestion = page.getByRole('button', { name: '질문 카드 닫기', exact: true })
+  await expect(closeQuestion).toBeVisible()
+  await expect(input).toBeHidden()
+  await closeQuestion.click()
   await expect(input).toBeVisible()
+  await input.click()
+  await expect(input).toBeFocused()
   await page.setViewportSize({ width: 1440, height: 1000 })
   await expect(input).toHaveCSS('height', '21px')
   await expect(pill).not.toHaveClass(/multi/)

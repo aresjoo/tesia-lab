@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import type { MarketChartPresentation } from '../src/client-market-chart-presentation'
 
@@ -11,11 +12,11 @@ function presentation(revision = 1, resolutionSeconds = 3600): MarketChartPresen
   }
 }
 async function mount(page: Page, options: { native?: boolean; research?: boolean; connected?: boolean; failedRenderer?: boolean } = {}) {
-  if (options.failedRenderer) await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  if (options.failedRenderer) await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('chart = createChart(node, {')
-    await route.fulfill({ response, body: body.replace('chart = createChart(node, {', 'if (!window.__marketAllowRenderer) { throw new Error("TEST_ONLY_RENDERER"); } chart = createChart(node, {') })
-  })
+    return body.replace('chart = createChart(node, {', 'if (!window.__marketAllowRenderer) { throw new Error("TEST_ONLY_RENDERER"); } chart = createChart(node, {')
+    }, ["chart = createChart(node, {"])
   await page.route('**/market-chart-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div id="fixture" style="height:100dvh"></div><script type="module">import RefreshRuntime from "/@react-refresh"; RefreshRuntime.injectIntoGlobalHook(window); window.$RefreshReg$=()=>{}; window.$RefreshSig$=()=>(type)=>type; window.__vite_plugin_react_preamble_installed__=true;</script></body></html>' }))
   await page.goto('/market-chart-test.html')
   await page.evaluate(async ({ value, options }) => {
@@ -385,4 +386,47 @@ for (const duplicate of [false, true]) for (const research of [false, true]) tes
   await expect.poll(async () => (await paragraph.boundingBox())!.y).toBeCloseTo(before!.y, 0)
   await update(page, { ...good, scenario: undefined })
   await expect.poll(async () => (await paragraph.boundingBox())!.y).toBeCloseTo(before!.y, 0)
+})
+
+const storageBlockedOracle = {
+  ko: '브라우저 저장을 복구한 뒤 가격을 다시 불러올 수 있어요. 새로고침 전에 작성한 내용을 복사해주세요.',
+  en: 'Restore browser storage before reloading prices. Copy your draft before refreshing.',
+  ja: 'ブラウザーの保存機能を復旧してから価格を再読み込みできます。ページを更新する前に下書きをコピーしてください。',
+  'zh-CN': '恢复浏览器存储后才能重新加载价格。刷新前请复制草稿。',
+  'zh-TW': '恢復瀏覽器儲存後才能重新載入價格。重新整理前請複製草稿。',
+  es: 'Restablece el almacenamiento del navegador antes de recargar los precios. Copia tu borrador antes de actualizar.',
+  fr: 'Rétablissez le stockage du navigateur avant de recharger les cours. Copiez votre brouillon avant d’actualiser.',
+} as const
+const uncertainBlockedOracle = {
+  ko: '저장 여부를 확인할 수 없어 가격을 다시 불러올 수 없어요. 작성한 내용을 복사한 뒤 새로고침해 저장된 기록을 확인해주세요.',
+  en: 'Storage could not be verified, so prices cannot be reloaded. Copy your draft, then refresh to check the saved record.',
+  ja: '保存を確認できないため価格を再読み込みできません。下書きをコピーしてからページを更新し、保存された記録を確認してください。',
+  'zh-CN': '无法确认保存状态，因此不能重新加载价格。请复制草稿后刷新，确认已保存的记录。',
+  'zh-TW': '無法確認儲存狀態，因此不能重新載入價格。請複製草稿後重新整理，確認已儲存的記錄。',
+  es: 'No se pudo verificar el guardado y no se pueden recargar los precios. Copia tu borrador y actualiza para comprobar el registro guardado.',
+  fr: 'La sauvegarde n’a pas pu être vérifiée, les cours ne peuvent donc pas être rechargés. Copiez votre brouillon, puis actualisez pour vérifier les données enregistrées.',
+} as const
+for (const reason of ['storage-error', 'commit-uncertain'] as const) test(`${reason}: 표시용 차단 사유는 7언어로 안내하고 실패 주기·canvas·요청 수명을 유지한다`, async ({ page }) => {
+  await mount(page); await remember(page)
+  await intervals(page).getByRole('button', { name: '2시간', exact: true }).click()
+  await page.evaluate(() => Reflect.get(window, 'marketChartHost').requests[0].resolve(false))
+  await expect(card(page).locator('.bd')).toHaveAttribute('aria-busy', 'false')
+  const retry = card(page).locator('.market-chart-status button')
+  await expect(retry).toBeEnabled()
+  await page.evaluate(reason => Reflect.get(window, 'marketChartHost').block(reason), reason)
+  for (const [language, copy] of Object.entries(reason === 'storage-error' ? storageBlockedOracle : uncertainBlockedOracle)) {
+    await page.evaluate(language => Reflect.get(window, 'marketChartHost').language(language), language)
+    await expect(card(page).locator('.market-chart-blocked')).toHaveText(copy)
+    await expect(retry).toBeDisabled()
+    for (const button of await intervals(page).locator('button').all()) await expect(button).toBeDisabled()
+    expect(await page.evaluate(() => Reflect.get(window, 'marketChartHost').requests.length)).toBe(1)
+    await retained(page)
+  }
+  await page.evaluate(() => { Reflect.get(window, 'marketChartHost').block(); Reflect.get(window, 'marketChartHost').language('ko') })
+  await expect(card(page).locator('.market-chart-blocked')).toHaveCount(0)
+  await expect(retry).toBeEnabled(); await retry.click()
+  expect(await page.evaluate(() => Reflect.get(window, 'marketChartHost').requests[1].request.resolutionSeconds)).toBe(7200)
+  await page.evaluate(() => Reflect.get(window, 'marketChartHost').requests[1].resolve(true))
+  await expect(card(page).locator('.bd')).toHaveAttribute('aria-busy', 'false')
+  await retained(page)
 })

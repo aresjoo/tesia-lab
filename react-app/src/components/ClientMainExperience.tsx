@@ -12,6 +12,7 @@ import { ClientAccountBell } from './ClientAccountBell'
 import { createClientAccountEventStore } from '../client-account-event-store'
 import { useCopyPreviewAccount } from '../use-copy-preview-account'
 import { useCatalogueCopyAccount } from '../use-catalogue-copy-account'
+import type { TerminalMarketSource } from '../client-terminal-market-source'
 import type { CatalogueCopySetup } from '../client-catalogue-copy-setup'
 import { catalogueBacktestRunId, type CatalogueBacktestUseBinding } from '../client-catalogue-backtest'
 import { catalogueBacktestLocation, catalogueCopyLocation } from '../client-shared-navigation'
@@ -212,7 +213,7 @@ function refreshAccountClockAtEvent(setClock: (timestamp: number) => void) {
 /** Source-first entry point. The older funnel is NOT rendered in this shell.
  * UI preview adapters remain isolated from approved service/execution contracts.
  */
-export function ClientMainExperience({ marketChartSource, responseSource, connectionStatus, catalogueCopySetup }: { marketChartSource?: ClientMarketChartSource; responseSource?: ClientResponseSource; connectionStatus?: Omit<ClientConnectionStatusProps, 'scope' | 'source'>; catalogueCopySetup?: CatalogueCopySetup } = {}) {
+export function ClientMainExperience({ marketChartSource, terminalMarketSource, responseSource, connectionStatus, catalogueCopySetup }: { marketChartSource?: ClientMarketChartSource; terminalMarketSource?: TerminalMarketSource; responseSource?: ClientResponseSource; connectionStatus?: Omit<ClientConnectionStatusProps, 'scope' | 'source'>; catalogueCopySetup?: CatalogueCopySetup } = {}) {
   const [terminalMenuHost, setTerminalMenuHost] = useState<HTMLDivElement | null>(null)
   const { c, language } = useConversationCopy()
   const { currency } = useClientPreferences()
@@ -577,7 +578,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
   }, [setAccountNow, setAuthReturnToComposer, setArrivalRect, setPage, setTradeRequested])
   const openAccount = useCallback((hash: string) => {
     if (hash === '#/trade') { openTrading(); return }
-    if (!readClientAccountLocation(hash)) { setAccountNotice('연결된 화면을 아직 확인할 수 없어요. 내 트레이딩에서 전략을 확인해주세요.'); return }
+    if (!readClientAccountLocation(hash)) { setAccountNotice('연결된 화면을 아직 확인할 수 없어요. AI 트레이딩에서 전략을 확인해주세요.'); return }
     authDraft.current = null; setAuthReturnToComposer(false); setArrivalRect(undefined); setPage(null); setSurface(null)
     if (location.hash !== hash) { history.pushState(null, '', hash); window.dispatchEvent(new Event('teth:navigate')) }
   }, [openTrading, setAccountNotice, setAuthReturnToComposer, setArrivalRect, setPage, setSurface])
@@ -613,7 +614,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
         if (store.getSnapshot().currentId !== sessionId || expectedResearchScope === undefined) throw new Error('현재 대화의 연구 결과를 다시 확인해주세요.')
         requireCompletedResearchRegistration(target, expectedResearchScope)
         const existing = userStrategies.store.getSnapshot().entries.find(entry => entry.sessionId === sessionId)
-        if (existing && !registeredResearch(target, [existing])) throw new Error('이 대화에는 다른 전략이 등록되어 있어요. 내 트레이딩에서 확인해주세요.')
+        if (existing && !registeredResearch(target, [existing])) throw new Error('이 대화에는 다른 전략이 등록되어 있어요. AI 트레이딩에서 확인해주세요.')
       } catch (error) { setAccountNotice(error instanceof Error ? error.message : '연구 결과를 다시 확인해주세요.'); return false }
     }
     if (!profile) {
@@ -625,7 +626,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
       const record = userStrategies.store.register(sessionId, input, Date.now(), { preserveExisting: research })
       // A failed initial read may recover inside register(). Validate its actual
       // return value as well, not only the earlier, possibly empty snapshot.
-      if (research && record.origin !== 'research') throw new Error('이 대화에는 다른 전략이 등록되어 있어요. 내 트레이딩에서 확인해주세요.')
+      if (research && record.origin !== 'research') throw new Error('이 대화에는 다른 전략이 등록되어 있어요. AI 트레이딩에서 확인해주세요.')
       if (research) setTerminalSelection(previous => ({ owner: previewOwner(profile), id: `user:${record.id}`, sequence: (previous?.sequence ?? 0) + 1 }))
       if (!research) connectionLocator.store.remember(sessionId)
       store.tradingReady(sessionId)
@@ -762,7 +763,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
     if (!entry || entry.owner !== owner || entry.sessionId !== session?.id) return false
     const existing = userStrategies.store.getSnapshot().entries.find(item => item.sessionId === entry.sessionId)
     if (entry.registeredId && existing?.record.id !== entry.registeredId) {
-      setAccountNotice('전략 상태가 바뀌었어요. 내 트레이딩에서 다시 확인해주세요.'); return false
+      setAccountNotice('전략 상태가 바뀌었어요. AI 트레이딩에서 다시 확인해주세요.'); return false
     }
     if (existing) {
       // Returning from the preview connection flow does not re-register, resume,
@@ -896,7 +897,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
       setAccountNotice('기존 전략을 불러오지 못했어요. 저장 상태를 확인한 뒤 다시 시도해주세요.'); return
     }
     if (registeredState.entries.some(item => item.sessionId === current.id)) {
-      setAccountNotice('이미 연결된 전략이 있어요. 내 트레이딩에서 관리하거나 새 대화에서 별도 전략을 만들어주세요.'); return
+      setAccountNotice('이미 연결된 전략이 있어요. AI 트레이딩에서 관리하거나 새 대화에서 별도 전략을 만들어주세요.'); return
     }
     try { store.connectInlineResult(current.id, record.turnId, owner) }
     catch (error) {
@@ -1056,7 +1057,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
       {settingsTab && !connectionStatus && <ClientSettingsPage key={owner} tab={settingsTab} usage={{ presentation: usage.presentation, scope: owner, onNext: nextUsage, onTopup: usage.onTopup, onAutoTopup: usage.onAutoTopup }} profile={profile ?? undefined} onBack={() => closeClientSettingsRoute(true)} onNewStrategy={() => { closeClientSettingsRoute(true); home() }} onCopyStrategy={() => { closeClientSettingsRoute(); openSharing() }} onBrokers={() => openResearchPage('brokers')} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} onLogout={() => { changeProfile(null); home() }} />}
       <div className="client-main-existing" hidden={Boolean(settingsTab || connectionStatus)} inert={Boolean(settingsTab || connectionStatus)}>
       {profile && (trading || terminalVisited) && <div className="client-main-terminal" hidden={!trading} inert={!trading}>
-        <ClientLoadBoundary fallback={<ClientLoadFallback />}><Suspense fallback={<ClientLoadFallback loading />}><ClientCatalogueTerminalBinding key={owner} chartEnabled={registeredStrategies.length === 0} account={catalogueCopies} onManage={id => navigateShared(catalogueCopyLocation(id), false, true)} onFind={() => navigateShared({ period: 'all' })}>{({ judgment, emptyMarket }) => <ClientSourceTerminalWorkspace menuHostRef={setTerminalMenuHost} includeSamples={false} emptyMarket={emptyMarket} emptyDetail={terminalCopies(judgment)} management={{ ...terminalManagement, content: terminalCopies(judgment) }} onSelectionChange={id => { currentTerminalSelection.current = { owner, id } }} selectionRequest={terminalSelection?.owner === owner ? terminalSelection : undefined} onNew={home} onAsk={text => { void askInsight(text).catch(error => setAccountNotice(error instanceof Error ? error.message : c('busyError'))) }} conditionalOrders={{ orders: orders.allPendingOrders, binding: owner ?? 'guest', onCancel: orders.cancel }} accountDataMode="connection-required" onConnectExchange={openTerminalConnection} accountState={accountPresentation} previewBillingMode={billing.state?.mode} onBeforeAi={aiGate} now={accountNow} onRead={readAccountNotification} onReadAll={readAllAccountNotifications} onAccountNavigate={openAccount} alertsRequest={alertsRequest} userStrategies={registeredStrategies} onUserStatus={(id, status) => {
+        <ClientLoadBoundary fallback={<ClientLoadFallback />}><Suspense fallback={<ClientLoadFallback loading />}><ClientCatalogueTerminalBinding key={owner} chartEnabled={registeredStrategies.length === 0} account={catalogueCopies} onManage={id => navigateShared(catalogueCopyLocation(id), false, true)} onFind={() => navigateShared({ period: 'all' })}>{({ judgment, emptyMarket }) => <ClientSourceTerminalWorkspace marketSource={terminalMarketSource} marketScope={owner} menuHostRef={setTerminalMenuHost} includeSamples={false} emptyMarket={emptyMarket} emptyDetail={terminalCopies(judgment)} management={{ ...terminalManagement, content: terminalCopies(judgment) }} onSelectionChange={id => { currentTerminalSelection.current = { owner, id } }} selectionRequest={terminalSelection?.owner === owner ? terminalSelection : undefined} onNew={home} onAsk={text => { void askInsight(text).catch(error => setAccountNotice(error instanceof Error ? error.message : c('busyError'))) }} conditionalOrders={{ orders: orders.allPendingOrders, binding: owner ?? 'guest', onCancel: orders.cancel }} accountDataMode="connection-required" onConnectExchange={openTerminalConnection} accountState={accountPresentation} previewBillingMode={billing.state?.mode} onBeforeAi={aiGate} now={accountNow} onRead={readAccountNotification} onReadAll={readAllAccountNotifications} onAccountNavigate={openAccount} alertsRequest={alertsRequest} userStrategies={registeredStrategies} onUserStatus={(id, status) => {
           const entry = userStrategies.store.getSnapshot().entries.find(item => item.record.id === id)
           if (!entry) throw new Error('전략을 찾을 수 없어요')
           userStrategies.store.control(id, status === 'off' ? 'pause' : entry.record.status === 'ready' ? 'start' : 'resume')
@@ -1240,7 +1241,7 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
       <ClientSettingsMenu key={owner ?? 'anonymous'} open={surface === 'settings'} anchorTop={settingsAnchor} returnFocus={surfaceReturnFocus} signedIn={Boolean(profile)} onLogout={() => { changeProfile(null); setSurface(null); home() }} onPlan={() => openAccount('#/plan')} onClose={() => setSurface(null)} onSettings={() => { setSurface(null); openClientSettings() }} onInsight={() => { setSurface(null); openResearchPage('insight') }} onBrokers={() => { setSurface(null); openResearchPage('brokers') }} onFeedback={() => setSurface('feedback')} onHelp={() => setSurface('help')} onDownload={() => { setSurface(null); history.pushState({}, '', '/download/'); window.dispatchEvent(new Event('teth:navigate')) }} />
       <ClientFeedbackDialog key={`feedback:${helpIdentity}`} open={surface === 'feedback'} returnFocus={surfaceReturnFocus} submission="preview" onClose={() => setSurface(null)} />
       {surface === 'profile' && profile && <ClientProfileMenu profile={profile} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} onLogout={() => { changeProfile(null); setSurface(null); home() }} />}
-      {helpOwner === helpIdentity && <ClientLoadBoundary key={`help:${helpIdentity}`} fallback={surface === 'help' ? <ClientLoadFallback onClose={() => setSurface(null)} /> : null}><Suspense fallback={surface === 'help' ? <ClientLoadFallback loading onClose={() => setSurface(null)} /> : null}><ClientHelp initialOpen open={surface === 'help'} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
+      {helpOwner === helpIdentity && <ClientLoadBoundary key={`help:${helpIdentity}`} fallback={surface === 'help' ? <ClientLoadFallback returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><Suspense fallback={surface === 'help' ? <ClientLoadFallback loading returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><ClientHelp initialOpen open={surface === 'help'} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
     </div>, document.body)}
 {auth && createPortal(<div className="client-source-overlays"><ClientAuthDialog key={auth} mode={auth} returnFocus={authReturnToComposer ? input : undefined} onClose={() => { pendingWatchAuth.current = null; pendingCatalogueBacktestAuth.current = null; pendingCatalogueCopyAuth.current = null; pendingConnectionPlan.current=null; authDraft.current = null; pendingRegistration.current = null; setAuth(null); closeClientSettingsRoute(); if (readClientAccountLocation() && !profile) clearInsightRoute() }} onComplete={next => {
       const accepted = { ...next, ...(next.email ? {} : { previewId: crypto.randomUUID() }) }
@@ -1314,10 +1315,10 @@ export function ClientMainExperience({ marketChartSource, responseSource, connec
           // Authentication changes the owner scope. Recheck the restored store
           // before a guest's pending registration may write into it.
           const existing = nextStore.getSnapshot().entries.find(item => item.sessionId === registration.sessionId)
-          if (registration.research && existing && !registeredResearch(target, [existing])) throw new Error('이 대화에는 다른 전략이 등록되어 있어요. 내 트레이딩에서 확인해주세요.')
+          if (registration.research && existing && !registeredResearch(target, [existing])) throw new Error('이 대화에는 다른 전략이 등록되어 있어요. AI 트레이딩에서 확인해주세요.')
           const record = existing && !registration.research ? existing.record
             : nextStore.register(registration.sessionId, registration.input, Date.now(), { preserveExisting: registration.research === true })
-          if (registration.research && record.origin !== 'research') throw new Error('이 대화에는 다른 전략이 등록되어 있어요. 내 트레이딩에서 확인해주세요.')
+          if (registration.research && record.origin !== 'research') throw new Error('이 대화에는 다른 전략이 등록되어 있어요. AI 트레이딩에서 확인해주세요.')
           if (registration.research) setTerminalSelection(previous => ({ owner: nextOwner, id: `user:${record.id}`, sequence: (previous?.sequence ?? 0) + 1 }))
           setUserStrategies({ owner: nextOwner, store: nextStore })
           const nextLocator = createDelegationConnectionLocator(nextOwner)

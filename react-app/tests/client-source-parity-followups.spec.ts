@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { commonBacktestText } from '../src/client-common-backtest-copy'
 import { catalogueCopyStorageKey } from '../src/client-catalogue-copy-store'
@@ -157,11 +158,11 @@ test('actual Main copy detail restores stop/take labels for a source-calculated 
 test('same position presentation uses existing localized Not Set when take profit is null and retains supplied numeric inputs', async ({ page }) => {
   // Expose only the existing private display component in the test HTTP response;
   // product bytes and calculation/store APIs remain untouched.
-  await page.route('**/src/components/ClientCatalogueCopyManagement.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientCatalogueCopyManagement.tsx", original => {
+    const body = original;
     expect(body).toContain('function CopyPositions(')
-    await route.fulfill({ response, body: body.replace('function CopyPositions(', 'export function CopyPositions(') })
-  })
+    return body.replace('function CopyPositions(', 'export function CopyPositions(')
+    }, ["function CopyPositions("])
   await fixturePage(page, 'source-copy-rule-null-test')
   await page.evaluate(async () => {
     const path = '/src/components/ClientCatalogueCopyManagement.tsx', { CopyPositions } = await import(/* @vite-ignore */ path)

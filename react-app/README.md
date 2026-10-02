@@ -2,18 +2,25 @@
 
 ## 현재 원본 기반 마이그레이션 상태
 
-이 문서의 코드 대조 기준은 후속 통합 `b134630836aae2566da2741bd978900c6e0004c8`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
+이 문서의 코드·시험 대조 기준은 전수 검증 후보 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
-| 인수 항목 | 현재 상태 |
+| 인수 항목 | 검증 이력 및 현재 Gate |
 |---|---|
 | 최초 동결 검수 | `1971e2d956657fcdab7af633b9aceae475e1871d`의 personal(1) `claude-opus-5` C0/H0 조건부 GO. 아래 후속 closure 변경을 포함하지 않음 |
 | 후속 구현 | 원본 offline 연구 진입·점수 미달 차단/합격 보고서→연구, 카탈로그 복사 설정·비회원 의도 복귀, 전용 직접검증 페이지·기간/금액 재실행 및 관련 회귀 교정 |
 | e325 전체 회귀·검수 | Node22 전체 13,102개: 12,486 PASS / 587 FAIL / 17 SKIP / 12 미실행, exit 1. 당시 personal(1) `claude-opus-5` C0/H3/M2/L6 NO-GO. 실패·원 SHA 보존 |
 | dc85100 전체 진단 이력 | 21.9분 뒤 중단: 5,208 PASS / 2 FAIL / 2 SKIP / 13 중단 / 7,917 미실행, exit 130. 전체 성공이 아님. 당시 Opus5.5 C0/H0/M2/L3 코드 조건부 GO는 전체/main GO가 아님 |
+| 141cc 검수·후속 교정 | 당시 personal(1) Opus5.5 C0/H0/M3/L3 조건부 code GO·whole/main GO 0. 실제 전체는 13,088 PASS / 45 FAIL / 기존 SKIP 17 / 미실행·중단 0, exit 1. 후속 후보에 메뉴 안내·차트 준비·저장차단·Help 취소/설정 이동 교정을 통합하며, 후속 새 동결의 단일 전수·정확 head CI·독립검수 전에는 인수하지 않음 |
+| 777e935 검수·후속 시험 교정 | personal(1) Opus5.5 C0/H0/M0/L3 CODE_GO. 실제 단일13,200 회귀는13,161PASS/19FAIL/기존17SKIP/3미실행/시험밖오류3·exit1(58.4분), WHOLE/main NO_GO다. 원2,121파일·당시정본7 hash차이0를 완료 후 확인했다. 원 후보·실패 로그를 보존하고 별도 작업본에서 경과시간·compiled module 공급·실제 초기 준비·원 스크롤 및 측정 순서를 교정한다. 당시 후속 인수는 새 단일 전체·동일 후보 CI·최종 독립 검수를 요구했다. 실제 account billing 미실행에 대한 기존 local-equivalent 절차의 적용은 아래 현재 문단을 따른다 |
+| b463 단일 전체 회귀 | `b463a728a5c6dd34533769c1fa60e1706e07ab39`의 13,200개·469 spec: 13,183 PASS / 0 FAIL / 기존 조건부 SKIP 17 / 미실행·중단·시험 밖 오류 0, 실제 exit 0, 54.9분. retry 0·필터 0·새 skip 0·16 workers·production preview 4509. 완료 후 tracked 2,122개·정본 7개 hash 변경 0. 최종 문서 변경은 별도 작업본에서만 수행하며 전수 실행 코드·시험·설치·빌드 입력을 보존한다. |
 | 전체 인수 Gate | 원본 동선·새 동결 전체 회귀·독립 검수 결속 후 ROOT가 판정. 현재 상태는 [활성 PM Ledger](https://github.com/beak1011/tesia-program/blob/main/WORK_LEDGER.md)와 [PM 정본](https://github.com/beak1011/tesia-program/blob/main/PM/README.md)만 따르며 이전 조건부 GO·별도 범위 PASS를 승계/합산하지 않음 |
 | 실제 공급·운영 | 공개 기본값 Mock. 외부 공급자·실주문/과금/사용량 producer·공개 서비스 Gate 미완료, 운영 변경 0 |
 
-고정9fb의 회원 사이드바는 새 전략 아래 `연구 기록 → AI 트레이딩 → 전략 복사 → 거래소 연결` 4개이고 비회원은 `AI 트레이딩 → 전략 복사` 2개다. 인사이트는 사이드바에서 제거하고 기존 설정 메뉴 진입을 유지한다. `5b608826`의 sidebar 전용 7언어 라벨은 본문 제목·archive 소비자 라벨과 분리한다. 새 전략의 guest disabled·원 초안/기록·typed service 미공급 경계는 그대로다.
+후속 시험·fixture 검수 후보는 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 이 후보의 단일 13,200개·469 spec 전체 회귀는 실제 종료 코드 0으로 완료했다. 통과 13,183개·실패 0·기존 조건부 제외 17개이며 미실행·중단·시험 밖 오류는 없다. main 병합 판정은 PM 정본이 소유한다. personal(1) Opus5.5의 C0/H0/M0/L4 `CODE_GO`는 시험 교정 범위의 판정이다. 알려진 제품·시험 한계는 [검수 보고서](Bugfix_report.md#b463-코드-검수에서-남긴-한계)를 따른다.
+
+같은 후보의 [Web Actions 37030433732](https://github.com/beak1011/tesia-web/actions/runs/37030433732)와 Program `01e555af`의 [Actions 37030432384](https://github.com/beak1011/tesia-program/actions/runs/37030432384)는 모든 job이 `steps=[]`와 계정 billing 안내로 종료된 `NOT_STARTED_ACCOUNT_BILLING`이다. hosted PASS가 아니다. 기존 [Repository Governance의 local-equivalent CI 조건](https://github.com/beak1011/tesia-program/blob/01e555af2e4d8c203f1d84c1b499a9d55dc35555/runbooks/REPOSITORY_GOVERNANCE.md#github-actions-account-billing-중단-시-local-equivalent-ci)에 따른 동등 자동 검증·독립 검수를 정확한 후보에 결속한 뒤 ROOT가 판정한다. 이전 `777e935`·`9dd5513`의 실제 시험 실패에는 이 미실행 예외를 적용하지 않는다. 실제 공급자·주문·공개 운영 NO_GO는 유지한다.
+
+고정9fb의 회원 사이드바는 새 전략 아래 `연구 기록 → AI 트레이딩 → 전략 복사 → 거래소 연결` 4개이고 비회원은 `AI 트레이딩 → 전략 복사` 2개다. 인사이트는 사이드바에서 제거하고 기존 설정 메뉴 진입을 유지한다. 공개/native의 화면 제목·복귀 버튼·본문 안내도 같은 7언어 AI 트레이딩 명칭을 사용한다. DEV archive 탭과 공급자가 준 actionlabel은 권위·원문을 보존한다. 새 전략의 guest disabled·원 초안/기록·typed service 미공급 경계는 그대로다.
 
 공개 진입은 `client-entry.ts` → `client-bootstrap.tsx` → `SiteRouter/ClientMainExperience`다. 구 퍼널·구 Mock journey 전용 10파일/5,826줄을 제거했고 과거 query/hash도 현재 앱을 연다. 공유 스타일·현행 공개/native 모듈은 유지한다. 추가로 실제 진입/native/시험 incoming 0인 `ClientResearchPreviewTools.tsx` 21줄을 ROOT 검토와 PM Decision Log 승인 후 제거했다. 이 파일도 Git `1971e2d`에서 복구할 수 있다. 삭제 전 baseline, Git blob, private 복구 사본과 dashboard WIP patch를 확인했다. [제거·복구 근거](Bugfix_report.md#migration-source-first-delivery)를 따른다.
 
@@ -36,7 +43,13 @@
 
 ### 검증과 인수 경계
 
-e325 이후 제품 변경은 공통 `mine` 결과에서 홈 복귀 시 hash 해제, 비회원의 축소·확장 메뉴 새 전략 비활성, native 설정 종료 후 `#/native-client` 유지, 선택 전략 윤곽·프랑스어 거래소 필터명·결과 높이/모바일 그리기 도구 순서·오류 안내 폭의 7파일이다. source ASK 질문 카드의 실제 조작으로 소비 시험을 교정했고 관측 활동 fixture는 명시 공급 화면만 검증한다. offline 질문에 작업 시각·서비스 권위를 합성하지 않는다.
+dc85100까지의 제품 변경은 공통 `mine` 결과에서 홈 복귀 시 hash 해제, 비회원의 축소·확장 메뉴 새 전략 비활성, native 설정 종료 후 `#/native-client` 유지, 선택 전략 윤곽·프랑스어 거래소 필터명·결과 높이/모바일 그리기 도구 순서·오류 안내 폭의 7파일이다. source ASK 질문 카드의 실제 조작으로 소비 시험을 교정했고 관측 활동 fixture는 명시 공급 화면만 검증한다. offline 질문에 작업 시각·서비스 권위를 합성하지 않는다.
+
+추가 후속 교정은 원본 sidebar 회원4/guest2와 설정 Insight, 제품12파일의 AI 트레이딩 명칭, 가격 차트의 readonly 저장차단 사유다. 일반 저장 오류나 commit 불확실성이 있으면 기간/재시도 버튼을 비활성으로 표시하고 실제 저장 복구 후 기존 요청을 허용한다. 저장·owner·provider guard와 주문 권한은 바꾸지 않는다. 내부 compatibility `#/client`는 기존 미지원 Insight 안내 메뉴가 사라진 차이를 수용하며 public Main/native 설정 Insight와 구분한다. 사용 중인 compatibility host는 삭제하지 않는다.
+
+도움말 lazy 로딩·실패에서 취소할 때 부모의 논리적 진입 버튼을 복원한다. generation/owner·교체 overlay·사용자가 옮긴 현재 초점을 검사해 늦은 완료가 초점을 빼앗지 못하게 한다. Native 설정 hash 이동은 기존 화면 폐쇄 경로에 포함해 pending loader와 inert를 해제한다. 도움말 외 callback/API/SDK와 저장·주문 권한은 변경하지 않는다.
+
+공개 Main의 선택적 `terminalMarketSource`는 Main 소유자에서 파생한 scope로 기존 SourceTerminalWorkspace/AccountTerminal에 전달한다. 명시 공급 시 종목 검색·선택 및 차트/정보/데이터 3탭을 소비하고 foreign/미공급·owner/source 교체·잘못된 종목·늦은 응답은 기존 guard로 거부한다. 기본 공급은 생성하지 않으며 `marketChartSource`의 대화 차트 경로와 구분한다. 검색 입력의 첫 Escape는 원본25315처럼 닫고 기존 IME 예외를 보존한다.
 
 같은 제품 변경을 포함하는 `63966d0`의 native 결과 관련 6spec 단일 실행은 Node22에서 **396 PASS / 0 FAIL / 0 SKIP, 4.1분, exit 0**였다. 기존 footer 1080px 경계·캔버스·소유자/API 결속·재생 수명 검증을 유지했다. 이 수치는 당시 범위의 이력이며 후속 전체 인수 상태는 활성 PM Ledger를 따른다. 하니스 314개 등 별도 실행·반복 수를 합산하지 않는다. 상세 로그 SHA와 이전 실패는 [현재 closeout](Bugfix_report.md#migration-source-closure)을 따른다.
 

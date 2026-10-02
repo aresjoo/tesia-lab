@@ -1,11 +1,11 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { fixture } from '../src/dev/chart-workspace-fixture'
 import { professionalChartLocale } from '../src/client-professional-chart-locale'
 
 async function replayProbe(page: Page) {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    let body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    let body = original;
     for (const [needle, event] of [['if (initialReplay.current) {', 'initial-decision'], ['replayStart = start;', 'start'], ['disposed = true;', 'cleanup']]) {
       expect(body).toContain(needle)
       body = body.replace(needle, `window.__workspaceReplayAudit ??= []; window.__workspaceReplayAudit.push(${JSON.stringify(event)}); ${needle}`)
@@ -14,8 +14,8 @@ async function replayProbe(page: Page) {
     expect(body).toContain('clearInterval(replayTimer);')
     body = body.replace('replayTimer = window.setInterval(tick, 100);', 'replayTimer = window.setInterval(tick, 100); (window.__workspaceIntervals ??= new Set()).add(replayTimer);')
       .replaceAll('clearInterval(replayTimer);', 'window.__workspaceIntervals?.delete(replayTimer); clearInterval(replayTimer);')
-    await route.fulfill({ response, body })
-  })
+    return body
+    }, ["if (initialReplay.current) {","replayStart = start;","disposed = true;",{"text":"clearInterval(replayTimer);","all":true},"replayTimer = window.setInterval(tick, 100);"])
 }
 
 async function open(page: Page, reduced = true) {

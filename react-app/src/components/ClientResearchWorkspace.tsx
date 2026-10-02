@@ -433,19 +433,19 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, onBack, onDele
   else if (active === 'run') content = <>
     <h3>실행 확인</h3><div className="meta">연구 검증 → 백테스트 검증 → <b>가상 검증</b> → 실전</div>
     <div className="rw-spaced">{[['전략', '과매도 반등 전략'], ['조건', 'BTC/USDT, 1일봉'], ['손절 / 익절', '−3% / +8%'], ['투자금', `${sourceMoney(CLIENT_RESEARCH_CAPITAL_KRW, currency, language)} (고정 예시)`], ['검증', `${pct(FIXTURE.versions[1].ret)}, 낙폭 ${FIXTURE.versions[1].mdd.toFixed(1)}%, 봉인 구간 통과`]].map(([label, value]) => renderRow(label, value))}</div>
-    <div className="g-note rw-spaced">가상 검증은 실제 주문 없이 실시간으로 체결을 재현합니다. 시작하면 내 트레이딩에서 관리해요.</div>
+    <div className="g-note rw-spaced">가상 검증은 실제 주문 없이 실시간으로 체결을 재현합니다. 시작하면 AI 트레이딩에서 관리해요.</div>
     <div className="rw-actions"><button className="g-btn g-btn-p" onClick={() => {
       if (replay.status !== 'completed') { setNotice('연구 결과가 없어요, 연구를 먼저 완료해주세요.'); return }
       if (registered) onOpenTrading?.()
       else if (!onStartPaper) setNotice('전략을 등록할 화면을 불러오지 못했어요. 다시 열어주세요.')
       else onStartPaper()
-    }}>{registered ? '내 트레이딩에서 열기' : '가상 검증으로 시작'}</button>
+    }}>{registered ? 'AI 트레이딩에서 열기' : '가상 검증으로 시작'}</button>
       <button className="g-btn g-btn-s" onClick={() => setNotice('실제 자금 실행은 데모에서 잠겨 있어요. 가상 검증으로 먼저 확인해보세요.')}>실전 시작 (데모 잠금)</button></div>
   </>
   else content = <><h3>과매도 반등 전략</h3>
     <div className="meta"><span className="g-tag ok">가상 검증, 실제 주문 없음</span></div>
-    <div className="g-note rw-spaced">{registered ? '이 전략은 내 트레이딩에 추가됐어요. 실행 상태와 성과는 터미널에서 확인하세요.' : '연구 결과를 확인하고 내 트레이딩에서 가상 검증을 시작하세요.'}</div>
-    <div className="rw-actions"><button className="g-btn g-btn-p" onClick={() => registered ? onOpenTrading?.() : openDoc('run')}>{registered ? '내 트레이딩에서 열기' : '실행 확인'}</button></div>
+    <div className="g-note rw-spaced">{registered ? '이 전략은 AI 트레이딩에 추가됐어요. 실행 상태와 성과는 터미널에서 확인하세요.' : '연구 결과를 확인하고 AI 트레이딩에서 가상 검증을 시작하세요.'}</div>
+    <div className="rw-actions"><button className="g-btn g-btn-p" onClick={() => registered ? onOpenTrading?.() : openDoc('run')}>{registered ? 'AI 트레이딩에서 열기' : '실행 확인'}</button></div>
   </>
 
   return <div ref={root} className="client-restored-research" data-source="client-fixture">

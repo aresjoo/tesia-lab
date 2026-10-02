@@ -52,7 +52,7 @@ async function registrations(page: Page) {
     return key ? JSON.parse(sessionStorage.getItem(key)!) : []
   })
 }
-for (const signed of [true, false]) test(`연구 가상 시작→로그인 ${signed ? '유지' : '완료'}→내 트레이딩, 뒤로가기·새로고침·재진입`, async ({ page }) => {
+for (const signed of [true, false]) test(`연구 가상 시작→로그인 ${signed ? '유지' : '완료'}→AI 트레이딩, 뒤로가기·새로고침·재진입`, async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message))
   await setup(page, signed)
   await expect(page.locator('article')).toContainText('낙폭 -7.4%')
@@ -76,9 +76,9 @@ for (const signed of [true, false]) test(`연구 가상 시작→로그인 ${sig
   await expect(page.locator('.cat-context')).toContainText('BTC/USDT')
   await page.goBack()
   await expect(page.getByLabel('실행 확인에 질문')).toHaveValue('실행 전 확인하던 질문')
-  await expect(page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true })).toBeVisible()
   await page.reload()
-  await page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true }).click()
+  await page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', `user:${original[0].record.id}`)
   expect(await registrations(page)).toEqual(original)
@@ -140,7 +140,7 @@ test('사이드바 연구 재진입은 같은 문서와 질문으로 돌아오�
   await page.locator((page.viewportSize()?.width ?? 0) <= 860 ? '.client-hamburger' : '.client-rail-logo-row button').click()
   await page.locator('.client-session').filter({ hasText: '연구 전략' }).click()
   await expect(page.getByLabel('실행 확인에 질문')).toHaveValue('실행 전 확인하던 질문')
-  await page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true }).click()
+  await page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true }).click()
   await expect(page.getByRole('button', { name: '재개', exact: true })).toBeVisible()
   expect((await registrations(page))[0].record.status).toBe('off')
 })
@@ -158,7 +158,7 @@ test('재생 캐시 유실은 등록 상태를 초안으로 바꾸지 않고 Liv
   if (await trigger.isVisible()) await trigger.click()
   await page.locator('.rw-artifact').filter({ hasText: /^LivePaper$/ }).click()
   await expect(page.locator('article')).toContainText('실행 상태와 성과는 터미널에서 확인하세요')
-  await page.getByRole('button', { name: '내 트레이딩에서 열기', exact: true }).click()
+  await page.getByRole('button', { name: 'AI 트레이딩에서 열기', exact: true }).click()
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', `user:${record.id}`)
   const state = await page.evaluate(() => JSON.parse(sessionStorage.getItem('teth-client-experience')!).sessions[0])
   expect(state.researchStatus).toBe('검토 필요')

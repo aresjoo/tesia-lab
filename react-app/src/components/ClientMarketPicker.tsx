@@ -61,6 +61,9 @@ function PickerDialog({ presentation, trigger, onClose }: { presentation: Market
     onKeyDown={event => {
       event.stopPropagation()
       if ((event.key === 'Enter' || event.key === 'Escape') && (event.nativeEvent.isComposing || event.keyCode === 229)) event.preventDefault()
+      if (event.key === 'Escape' && !event.nativeEvent.isComposing && event.keyCode !== 229) {
+        event.preventDefault(); onClose(); return
+      }
       if (event.repeat && (event.key === 'Enter' || event.key === ' ') && event.target instanceof HTMLButtonElement) event.preventDefault()
       if (event.key === 'Tab') {
         // Only inspect the two boundary targets, not every cell in a large catalogue.

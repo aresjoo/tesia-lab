@@ -10,10 +10,17 @@ export async function installMainCatalogueSetup(page: Page, mode: 'persist' | 'd
       sessionStorage.setItem('test:main-catalogue-profile-initialized', 'true')
     }
   }, { owner: mainCatalogueSetupOwner, mode })
-  await page.route('**/src/client-bootstrap.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
-    const original = /(["'])\/src\/components\/ClientMainExperience\.tsx(?:\?[^"']*)?\1/g
-    if ([...body.matchAll(original)].length !== 1) throw Error('TEST_MAIN_CATALOGUE_SETUP_BOOTSTRAP_REQUIRED')
-    await route.fulfill({ response, body: body.replace(original, '"/tests/fixtures/client-main-catalogue-setup-host.tsx"') })
-  })
+  // Acquire the real compiled bootstrap once before Main can load or reload.
+  // Fail on transport/status/MIME/seam errors; never retry or invent a module.
+  const response = await page.request.get('/src/client-bootstrap.tsx', { maxRetries: 0 })
+  if (response.status() !== 200) throw Error('TEST_MAIN_CATALOGUE_SETUP_BOOTSTRAP_REQUIRED:HTTP_' + response.status())
+  if (!/^(?:application|text)\/(?:javascript|ecmascript)(?:\s*;|$)/i.test(response.headers()['content-type'] ?? '')) {
+    throw Error('TEST_MAIN_CATALOGUE_SETUP_BOOTSTRAP_REQUIRED:JAVASCRIPT_MIME')
+  }
+  const body = await response.text()
+  const original = /(["'])\/src\/components\/ClientMainExperience\.tsx(?:\?[^"']*)?\1/g
+  if ([...body.matchAll(original)].length !== 1) throw Error('TEST_MAIN_CATALOGUE_SETUP_BOOTSTRAP_REQUIRED')
+  const compiledBody = body.replace(original, '"/tests/fixtures/client-main-catalogue-setup-host.tsx"')
+  const headers = { ...response.headers(), 'content-length': String(Buffer.byteLength(compiledBody)) }
+  await page.route('**/src/client-bootstrap.tsx*', route => route.fulfill({ response, headers, body: compiledBody }))
 }

@@ -259,11 +259,19 @@ for (const failure of ['none', 'create', 'turn'] as const) test(`동일 로그�
 test('미확정 logout 뒤 열린 새 전략 확인 버튼으로 새 대화를 시작하지 않는다', async ({ page }) => {
   const controls = await setup(page)
   await openConfirmation(page)
+  const retiredConfirmation = await page.getByRole('button', { name: '새 전략 시작', exact: true }).elementHandle()
+  expect(retiredConfirmation).not.toBeNull()
   await page.route('**/api/v1/auth/logout', route => route.abort('failed'))
   await (await openNativeAccountMenu(page)).click()
   await expect(page.getByRole('heading', { name: '로그아웃 요청 확인', exact: true })).toBeVisible()
   const journal = await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-logout'))
-  await page.getByRole('button', { name: '새 전략 시작', exact: true }).click()
+  expect(journal).not.toBeNull()
+  // The actual settings route retires the prior confirmation. A late event
+  // on that exact captured control must not bypass the pending logout boundary.
+  await expect(page.getByRole('button', { name: '새 전략 시작', exact: true })).toHaveCount(0)
+  expect(await retiredConfirmation!.evaluate(element => element.isConnected)).toBe(false)
+  await retiredConfirmation!.evaluate(element => (element as HTMLButtonElement).click())
   expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-logout'))).toBe(journal)
   expect(controls.creates).toHaveLength(0)
+  await retiredConfirmation!.dispose()
 })

@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from '../fixtures/compiled-module-response'
 import { expect, test, type Page, type Route } from '@playwright/test'
 import fixtures from './fixtures/native-service-contracts.json' with { type: 'json' }
 import type { NativeChartManifest, NativeChartWindow, NativeFillMarkers, NativeJob, NativeReport, NativeTrades } from '../../src/internal-poc/native-service-api'
@@ -342,11 +343,11 @@ test('늦은 체결 권한 실패는 이후 다른 곳으로 옮긴 초점을 �
 
 
 test('renderer 실패 중 체결 이동만 잠그고 검증된 거래 상세와 조회 결과를 보존한다', async ({ page }) => {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', 'api.current = chart; window.__fillFailureChart = chart;') })
-  })
+    return body.replace('api.current = chart;', 'api.current = chart; window.__fillFailureChart = chart;')
+    }, ["api.current = chart;"])
   const controls = await setup(page, 'navigation')
   await load(page)
   const markerMoves = page.locator('.native-fill-inspector button')
@@ -988,6 +989,9 @@ for (const finish of ['skip', 'complete'] as const) test(`문서 명시 재생 $
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.clock.install()
   const controls = await setup(page, 'ok', false, true)
+  // Keep the 60-second replay under explicit virtual-time control; screenshots
+  // and protocol assertions must not advance its last readable SELL beat.
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
   await openReplayDocument(page); await rememberReplayDocument(page)
   const reads = controls.requests.map(url => url.href)
   await documentReplayAction(page).focus()

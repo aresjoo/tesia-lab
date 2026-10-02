@@ -8,12 +8,31 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web` 로컬 통합 작업본의 추적 파일 전체 |
+| React 출처 | `beak1011/tesia-web` 병합 main `62b5e6972cb48a3ac862fc41799061c0d0722525`의 추적 파일 전체 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
-| 현재 제품 상태 | 공개 기본 UI는 Mock. 내부 서비스용 consumer는 별도. 전체 원본 패리티·실제 공급자·운영 승격 미완료 |
+| 현재 제품 상태 | 고정 원본 React 이식은 Web52로 인수·병합됨. 공개 기본 UI는 Mock이며 실제 공급자·운영 승격은 미완료. 전수 시험의 범위와 아래 별도 잔여를 구분 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
+
+### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+
+이전 전달 `be935c9`의 출처 `c04b5cd`에서 병합 main `62b5e69`로 갱신했다. **86개 파일 변경(신규 4개 포함), 총 2,122개 파일**이며 출처의 미커밋 변경은 없다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+| 누적 변경 | 코드와 검토 위치 | 전달 의미 |
+| --- | --- | --- |
+| 원본 명칭 정렬 | `src/client-*-copy.ts`, 연구·전략·공유·터미널 컴포넌트, `tests/client-trading-label-source-parity.spec.ts` | 본문·버튼의 AI 트레이딩 표기를 7언어로 정렬. DEV 보관 화면과 공급자가 준 원문은 임의 변경하지 않음 |
+| Main 시장 공급 연결 | `ClientMainExperience.tsx`, `ClientSourceTerminalWorkspace.tsx`, `tests/client-main-terminal-market-source.spec.ts` | 선택적 `terminalMarketSource`를 소유자 scope와 함께 기존 터미널에 전달. 종목 검색·차트/정보/데이터를 소비하며 기본 공급자나 실제 가격을 새로 만들어내지 않음 |
+| 저장 거부·불확실성 안내 | `ClientStoredMarketResponse.tsx`, `ClientMarketChartCard.tsx`, `src/client-market-chart-*.ts` | 저장 오류 사유와 재시도 불가 상태 표시. 기존 store·요청 권한을 완화하지 않음 |
+| 도움말·설정·검색 복귀 | `ClientLoadBoundary.tsx`, `ClientServiceExperience.tsx`, `ClientMarketPicker.tsx` | 늦은 도움말 완료가 초점을 빼앗지 않게 하고 설정 이동 시 이전 표면을 정리. 검색 첫 Escape로 닫기·IME 예외 유지 |
+| 테스트 준비·운송 안정화 | `tests/fixtures/compiled-module-response.ts`, 차트·문서·레이아웃 관련 tests | compiled module HTTP/status/MIME 확인, 실제 CSS·폰트·화면 준비 후 기존 assertion 실행. 성공 수를 늘리기 위한 skip/retry 추가가 아님 |
+| 인수 기록·보안 CI | `README.md`, `DESIGN.md`, `Bugfix_report.md`, `.gitleaksignore` | 단일 전수 결과와 제한을 기록. 공개 해시·합성 시험값의 정확한 fingerprint만 보정한 Web55 포함 |
+
+출처 원본 이식은 [Web52](https://github.com/beak1011/tesia-web/pull/52)로 병합됐고 [Web55](https://github.com/beak1011/tesia-web/pull/55)는 CI fingerprint만 보정했다. 출처 팀의 `b463a728` 단일 전수는 **13,183 PASS / 0 FAIL / 기존 17 SKIP (총 13,200)**이며 최종 문서 후보 `1e994c7`와 Web52 병합 tree가 동일하다. Web55는 제품·시험 입력을 바꾸지 않았다. 이는 출처 인수 근거이며 **이번 전달 작업에서 13,200개를 재실행했다는 뜻은 아니다.** 이번 복사본에서 직접 실행한 결과는 검증 JSON을 따른다. 모든 62 preset·실제 공급자 성공 인증으로 확대하지 않는다.
+
+### 별도 검토 중이며 이번 코드에 포함하지 않은 변경
+
+[Web draft PR54](https://github.com/beak1011/tesia-web/pull/54), head `75a5f5bbb820ad27f66304927ff4c70954fea318`의 **신규 거래소 연결**은 아직 main에 병합되지 않았다. 관련 [클라이언트 PR4](https://github.com/aresjoo/tesia-lab/pull/4), [Backend158](https://github.com/beak1011/tesia-backend/pull/158), [Contracts40](https://github.com/beak1011/tesia-contracts/pull/40)는 이 전달과 구분한다. TETH 로그인→거래소 로그인·최초 동의→서버 연결 확인, 브라우저 API 키 입력·저장 없음이 후보 방향이다. 해당 후보의 178 PASS는 별도 fixture 범위이며 실계정/TLS/provider 성공이 아니다. **이번 `react-app/`에는 이 draft 코드를 합치지 않았다.** 병합 인수 후 같은 브랜치에 코드·설명·검증을 함께 갱신한다.
 
 ### 저장소 읽는 순서
 
@@ -31,7 +50,7 @@
 | --- | --- | --- |
 | 큰 `index.html` 안의 HTML/CSS/전역 함수·상태 | `react-app/index.html`은 bootstrap, `src/components/`·`src/client-*.ts`·CSS로 분리 | React lifecycle/state로 이식. 파일 분리가 화면 변경을 허용하는 것은 아님 |
 | 전역 함수와 inline onclick | React handler, 상태 전이, effect 정리 | 세션/계정 교체·늦은 응답·unmount를 구분. 표시만 바꾸고 거래 권한을 만들지 않음 |
-| HTML 문자열·전역 UI 갱신 | JSX와 표시 모델/locale 사전 | 원문·SVG·배치 계승이 목표. 기능별 전수 동등성은 아직 미완료 |
+| HTML 문자열·전역 UI 갱신 | JSX와 표시 모델/locale 사전 | 원문·SVG·배치 계승. 고정 원본 인수와 모든 화면/상태의 무결함 보장은 다름 |
 | 정적 HTTP 서버 | React 19 / TypeScript / Vite, lockfile 기반 설치·빌드 | 의존성의 정확한 버전은 `react-app/package-lock.json` |
 | 원본 안의 가격/전략 계산 코드 | 별도 저장자료·카탈로그·spot/futures 계산기·Worker | 원본 계산과 표시를 분리. 이 브라우저 계산을 서버 실거래 백테스트라고 부르지 않음 |
 | 원본의 화면용 계정·연결 성공 | 공개 Mock와 내부 SDK consumer 분리 | 서버가 확인하지 않은 연결·결제·로그인 성공을 실서비스 성공으로 만들지 않음 |
@@ -52,9 +71,9 @@
 | 입력한 전략의 inline/common 검증 | `ClientInlineBacktest.tsx`, `ClientCommonBacktest.tsx`, `ClientCommonBacktestChart.tsx` | 원본 첫 질문→조건 보완→검증→연구 분기를 유지하는 경로. 아래 catalogue 직접검증과 혼동하지 않음 |
 | 전략 목록, 필터, 카드, 상세, 직접 검증 | `ClientStrategySharing.tsx`, `ClientStrategyListCard.tsx`, `ClientStrategyFilters.tsx`, `ClientCatalogueBacktest.tsx`, `src/client-catalogue*.ts` | 31개 설정/저장가격을 소비. `#/share/bt/:id`에서 90/365/730/전체기간과 500/1000/3000/10000 USD 재실행. 원본 완전 판단 목록/마커 연결은 아래 잔여 참고 |
 | 카피 설정·추가·포지션·청산 목록 | `ClientCatalogueCopyManagement.tsx`, `ClientTerminalCopies.tsx`, `ClientTerminalLedger.tsx` | 동일 카탈로그 설정/원장 소비, 비회원 가입·취소·동일 owner 복귀. 실제 거래소 카피 실행은 별도 공급 필요 |
-| AI 트레이딩 터미널, 우측 대화·조건 수정 | `ClientSourceTerminalWorkspace.tsx`, `ClientAccountTerminal.tsx`, `ClientTradingTerminal.tsx`, `ClientStrategyProposal.tsx` | 원본 터미널 구성을 React로 조립. 전략 변경 제안과 검증/실행 권한을 분리. 본문·버튼의 AI 트레이딩 명칭 후속 정렬은 출처별 진행 중 |
+| AI 트레이딩 터미널, 우측 대화·조건 수정 | `ClientSourceTerminalWorkspace.tsx`, `ClientAccountTerminal.tsx`, `ClientTradingTerminal.tsx`, `ClientStrategyProposal.tsx` | 원본 터미널 구성을 React로 조립. 전략 변경 제안과 검증/실행 권한을 분리. 본문·버튼의 AI 트레이딩 명칭 후속 정렬과 선택적 Main 시장 공급 연결 반영 |
 | 전문 차트, 캔들, 지표·그리기·기간 | `ClientProfessionalPriceChart.tsx`, `ClientPriceDrawingTools.tsx`, `ClientMarketPicker.tsx`, `ClientTerminalMarket.tsx` | Lightweight Charts 5.2.1 기반 전문 차트가 별도로 존재. catalogue 차트와 동일 컴포넌트가 아님. 공급되지 않은 분봉/실시간 데이터를 임의 생성해 실제라고 표시하지 않음 |
-| 시장 질문 결과·저장 차트 | `ClientMarketResponse.tsx`, `ClientStoredMarketResponse.tsx`, `ClientMarketChartCard.tsx`, `src/client-market-chart-*.ts` | 저장 상태/자료 출처/거부·실패 경계. 전역 storage 거부 표시의 후속 교정 여부를 다음 전달 때 확인 |
+| 시장 질문 결과·저장 차트 | `ClientMarketResponse.tsx`, `ClientStoredMarketResponse.tsx`, `ClientMarketChartCard.tsx`, `src/client-market-chart-*.ts` | 저장 상태/자료 출처/거부·실패 경계. 전역 storage 거부·commit 불확실성 표시와 disabled 교정을 이번에 반영 |
 | 거래소 목록·연결플랜·연결 완료·만료/KYC | `ClientMyExchanges.tsx`, `ClientConnectionPlan.tsx`, `ClientTerminalConnectionEmpty.tsx`, `ClientTradingIntro.tsx` | UI 상태와 실제 계정 관측을 분리. callback만으로 연결·과금·주문 성공을 합성하지 않음 |
 | 설정, 언어·통화, 계정·보안·이메일·알림·결제 | `ClientSettingsPage.tsx`, `ClientSettingsSecurity.tsx`, `ClientSettingsBilling.tsx`, `ClientSettingsNotifications.tsx`, `src/client-*-copy.ts` | 7언어 표시와 상태 소비. 최신 원본의 일반 설정 USD 고정과 다른 화면 통화 표시를 구분. 서버 action이 없는 항목을 실제 변경 성공으로 처리하지 않음 |
 | 사용량·잔액·연결후 상태 | `ClientSettingsUsage.tsx`, `ClientUsageBanner.tsx`, `src/client-usage-presentation.ts` | Mock 표시와 owner/source-bound 관측. 원본 가격과 기존 Mock 가격 차이는 미해결이며 실제 요금 계약 확정 아님 |
@@ -99,11 +118,11 @@
 1. **Catalogue 백테스트의 완전한 판단 목록과 차트 연결은 미완료다.** 현재 `ClientCatalogueBacktest.tsx`는 제한된 `judgments`를 날짜로 찾아 표시한다. 같은 날 여러 종목/체결을 구분하는 event identity, 원본 daily group·정렬·필터·더 보기·상세 근거/mini-chart 복원 후보는 비공개 QA에서 검증했지만 이 스냅샷 제품에는 아직 반영되지 않았다.
 2. **마커의 실제 클릭 겹침 문제가 남아 있다.** 키보드 선택/상태 처리 테스트 성공만으로 mouse/touch 문제가 해결됐다고 판정하지 않는다. 같은 날의 여러 매수/매도·숏 체결을 보존하면서 원본 목록에서 전체 근거에 접근해야 한다.
 3. **전문 차트와 catalogue 결과 차트는 다른 경로다.** 전문 Lightweight Charts 코드가 있어도 모든 백테스트 경로가 그 차트/실데이터를 사용하는 것은 아니다.
-4. **전체 화면·반응형·문구·SVG·모션 패리티는 미완료다.** 파일 수/분리 작업/수많은 범위 테스트를 전체 이식 완료율로 바꾸지 않는다. 최종 원본과 어긋난 동선은 계속 확인해야 한다.
+4. **원본 이식 인수와 무결함/전 상태 인증은 다르다.** 출처의 단일 전체 회귀·Web52 인수는 완료됐지만 모든 62 preset 또는 모든 화면·반응형·SVG·모션 조합의 인증은 아니다. 최종 원본과 어긋난 동선은 계속 확인해야 한다.
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
-6. **현재 팀의 후속 교정은 이 캡처 시점 뒤에도 진행될 수 있다.** `sourceCommit` 이후의 변경이나 다른 팀의 미반환 작업을 이번 전달에 들어갔다고 주장하지 않는다.
+6. **신규 거래소 연결 draft 및 이후 변경은 미포함이다.** 위 PR54와 `sourceCommit` 이후 변경은 이번 전달에 들어갔다고 주장하지 않는다.
 
-위 미반영 후보는 진짜 제품 수정처럼 보이지 않도록 `react-app/src`에 섞어 넣지 않았다. 구현 담당이 인수할 때 변경·검증·상태 설명을 같은 후속 커밋으로 갱신한다.
+1·2번은 이전 전달의 개별 QA 잔여이며 해당 `ClientCatalogueBacktest.tsx`는 이전 출처와 byte 동일함을 이번에 확인했다. 이 잔여가 전체 인수 시험에 의해 해소됐다고 추정하지 않는다. 비공개 후보는 제품 수정처럼 보이지 않도록 `react-app/src`에 섞어 넣지 않았다. 구현 담당이 인수할 때 변경·검증·상태 설명을 같은 후속 커밋으로 갱신한다.
 
 ## 7. 실행·검증
 
@@ -124,7 +143,7 @@ TETH_E2E_PORT=4196 npx playwright test --workers=2
 
 Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 backend 연결은 기존 승인된 설정·계약을 따른다. 이번 전달을 위해 자동 로그인·API key 입력·운영 배포를 실행하지 않는다.
 
-이번 전달 자체의 검증 결과는 [migration-verification.json](migration-verification.json)에 기록한다. 원본/출처/전달 해시 검증과 lint·build·대표 브라우저 검증을 구분한다. 다른 팀에서 실행 중인 전체 회귀의 완료를 기다리지 않고 **검토용 후보**를 전달하는 것이며, 해당 회귀의 최종 합격은 별도 인수 사항이다.
+이번 전달 자체의 검증 결과는 [migration-verification.json](migration-verification.json)에 기록한다. 원본/출처/전달 해시 검증과 lint·build·대표 브라우저 검증을 구분한다. 출처의 전체 회귀·Web52 병합 인수는 완료됐으며, 이 브랜치는 그 병합본의 **클라이언트 검토용 전달**이다. 클라이언트 main 병합 또는 운영 배포 승인을 의미하지 않는다.
 
 ## 8. 다음 에이전트의 검토·수정 방법
 

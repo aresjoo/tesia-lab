@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import type { ClientTurn, createClientExperienceStore } from '../client-experience-store'
-import type { MarketChartBlock, MarketChartRequest } from '../client-market-chart-presentation'
+import type { MarketChartActions, MarketChartBlock, MarketChartRequest } from '../client-market-chart-presentation'
 import { marketBindingKey } from '../client-market-response-presentation'
 import type { MarketQuestionActions } from '../client-market-question-presentation'
 import { ClientResponseSequence, type ClientResponseBlock } from './ClientResponseSequence'
@@ -134,6 +134,9 @@ export function ClientStoredMarketResponse({ sessionId, turn, owner, store, ques
     const market = marketBlocks.find(item => item.id === block.blockId)
     return market ? [market] : []
   }) : marketBlocks
+  const snapshot = store.getSnapshot()
+  const blockedReason: MarketChartActions['blockedReason'] = store.commitUncertain() ? 'commit-uncertain'
+    : snapshot.storageError ? 'storage-error' : undefined
   return <ClientResponseSequence source="mock" blocks={blocks} questionActions={questionActions}
-    chartActions={provider && turn.status === 'done' ? { request } : undefined}/>
+    chartActions={provider && turn.status === 'done' ? { request, blockedReason } : undefined}/>
 }

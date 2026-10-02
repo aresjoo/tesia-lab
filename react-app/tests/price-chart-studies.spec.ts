@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { chartWindowVwap, priceChartStudies, studyLineData } from '../src/chart/price-chart-studies'
 import type { PriceBar, PriceChartView } from '../src/chart/price-chart-view'
@@ -71,10 +72,10 @@ test('빈 입력과 큰 가격도 비유한 지표 값을 renderer에 전달하�
 })
 
 async function mount(page: Page, view: PriceChartView = fixture) {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', `api.current = chart;
+    return body.replace('api.current = chart;', `api.current = chart;
       window.__studiesChart = chart;
       window.__studySeriesTitles = new WeakMap();
       const originalAddStudySeries = chart.addSeries.bind(chart);
@@ -82,8 +83,8 @@ async function mount(page: Page, view: PriceChartView = fixture) {
         const item = originalAddStudySeries(...args);
         window.__studySeriesTitles.set(item, item.options().title);
         return item;
-      };`) })
-  })
+      };`)
+    }, ["api.current = chart;"])
   await page.goto('/')
   await page.evaluate(async view => {
     const path = '/tests/fixtures/price-chart-host.tsx'
@@ -179,10 +180,13 @@ test('RSI·BB 토글은 같은 차트·줌을 유지하고 모든 순서에서 R
 })
 
 test('지표 재생은 공개된 봉까지만 진행하며 Skip 뒤 전체값과 pane을 복원한다', async ({ page }) => {
-  await page.clock.install(); await mount(page)
+  const installedAt = new Date('2026-09-19T00:00:00Z')
+  await page.clock.install({ time: installedAt })
+  await mount(page)
   await page.getByRole('button', { name: 'RSI 14', exact: true }).click()
   await page.getByRole('button', { name: 'BB 20·2', exact: true }).click()
-  await page.clock.pauseAt(Date.now() + 20)
+  // The fixed target exceeds the test deadline and precedes the replay start.
+  await page.clock.pauseAt(new Date(installedAt.getTime() + 300_000))
   await page.getByRole('button', { name: '체결 순서 재생', exact: true }).click()
   await expect(page.getByRole('button', { name: 'RSI 14', exact: true })).toBeDisabled()
   const data = () => page.evaluate(() => Reflect.get(window, '__studiesChart').panes().map((pane: { getSeries(): { data(): { time: number; value?: number }[] }[] }) => pane.getSeries().map(series => series.data())))

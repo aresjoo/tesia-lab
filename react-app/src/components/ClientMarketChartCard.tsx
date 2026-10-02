@@ -19,6 +19,9 @@ export function ClientMarketChartCard({ presentation: p, actions }: {
   const lifetime = marketChartLifetime(p)
   const identity = JSON.stringify([marketBindingKey(p.binding), p.seriesId, p.asset, p.resolutionSeconds])
   const available = typeof actions?.request === 'function'
+  const blocked = actions?.blockedReason !== undefined
+  const blockedText = actions?.blockedReason === 'storage-error' ? t('storageBlocked')
+    : actions?.blockedReason === 'commit-uncertain' ? t('commitUncertain') : t('unavailable')
   // Callback wrappers may change on ordinary composer renders. Only availability
   // and the observation identity define this request lifetime.
   const requestKey = JSON.stringify([identity, available])
@@ -39,7 +42,7 @@ export function ClientMarketChartCard({ presentation: p, actions }: {
   const matches = !p.view || p.view.market === p.asset && p.view.resolutionSeconds === p.resolutionSeconds
   const view = matches ? p.view : null
   const request = async (resolutionSeconds: number) => {
-    if (!available || flight.current || p.state === 'loading' || !lifetime || !resolutions.includes(resolutionSeconds)) return
+    if (!available || blocked || flight.current || p.state === 'loading' || !lifetime || !resolutions.includes(resolutionSeconds)) return
     const controller = new AbortController()
     flight.current = controller
     const setNotice = (notice: Notice | null) => setRequestState({ key: requestKey, notice })
@@ -58,13 +61,14 @@ export function ClientMarketChartCard({ presentation: p, actions }: {
   return <section className="g-chartcard client-market-chart" aria-label={`${p.assetLabel} ${t('chart')}`} data-observation={p.binding.observationId}>
     <header className="hd"><span>{p.assetLabel}</span><span className="tvtag">TradingView</span></header>
     <div className="market-chart-intervals" role="group" aria-label={t('interval')}>
-      {resolutions.map(resolution => <button key={resolution} type="button" aria-pressed={resolution === p.resolutionSeconds} disabled={!available || pending || p.state === 'loading'} onClick={() => { if (resolution !== p.resolutionSeconds) void request(resolution) }}>{format.resolution(resolution)}</button>)}
+      {resolutions.map(resolution => <button key={resolution} type="button" aria-pressed={resolution === p.resolutionSeconds} disabled={!available || blocked || pending || p.state === 'loading'} onClick={() => { if (resolution !== p.resolutionSeconds) void request(resolution) }}>{format.resolution(resolution)}</button>)}
     </div>
     <div className="bd" aria-busy={pending || p.state === 'loading'}>
       {view && p.state !== 'unavailable' ? <ClientProfessionalPriceChart view={view} continuityKey={lifetime} variant="market" showBarFills={false}/>
         : <div className="market-chart-empty" role="status">{statusLabel}</div>}
     </div>
-    {status && (view || status !== 'loading' && available) && <div className="market-chart-status" role={view ? 'status' : undefined}>{view && statusLabel}{status !== 'loading' && available && <button type="button" disabled={!resolutions.includes(retryResolution)} onClick={() => void request(retryResolution)}>{t('retry')}</button>}</div>}
+    {status && (view || status !== 'loading' && available) && <div className="market-chart-status" role={view ? 'status' : undefined}>{view && statusLabel}{status !== 'loading' && available && <button type="button" disabled={blocked || !resolutions.includes(retryResolution)} onClick={() => void request(retryResolution)}>{t('retry')}</button>}</div>}
+    {blocked && <p className="market-chart-blocked" role="status">{blockedText}</p>}
     <ClientMarketScenario presentation={p}/>
   </section>
 }

@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from '../fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import fixtures from './fixtures/native-service-contracts.json' with { type: 'json' }
 
@@ -5,11 +6,11 @@ import fixtures from './fixtures/native-service-contracts.json' with { type: 'js
 // Binding/authentication rejection remains covered by native-fill-markers.spec.ts.
 async function mount(page: Page, strict = false) {
   await page.route('**/marker-chart-state-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="fixture"></div></body></html>' }))
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
-    await route.fulfill({ response, body: body.replace('api.current = chart;', 'api.current = chart; window.__markerStateChart = chart;') })
-  })
+    return body.replace('api.current = chart;', 'api.current = chart; window.__markerStateChart = chart;')
+    }, ["api.current = chart;"])
   await page.goto('/marker-chart-state-test.html')
   await page.evaluate(async ({ data, strict }) => {
     const refresh = '/@react-refresh', runtime = (await import(/* @vite-ignore */ refresh)).default

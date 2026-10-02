@@ -20,15 +20,21 @@ const reply = (route: Route, body: unknown, status = 200) => route.fulfill({ sta
 type Controls = { requests: URL[]; failNext: boolean; hash: string; supported: NativeChartWindow['resolution'][]; end: string; partial: boolean; hold?: (url: URL) => Promise<void> }
 async function setup(page: Page, multipleSeries: boolean | 'mark-only' = false) {
   const controls: Controls = { requests: [], failNext: false, hash: fixture.manifest.manifestContentHash, supported: ['1m', '15m', '1h', '1d'], end, partial: false }
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    const body = await response.text()
-    expect(body).toContain('api.current = chart;')
-    expect(body).toContain('candles.attachPrimitive(drawings);')
-    await route.fulfill({ response, body: body
-      .replace('api.current = chart;', 'api.current = chart; window.__nativeNavigationChart = chart;')
-      .replace('candles.attachPrimitive(drawings);', 'candles.attachPrimitive(drawings); window.__nativeNavigationDrawings = drawings;') })
-  })
+  // Observe the real compiled module before lazy rendering can outlive this
+  // test. Do not fetch/dispose an APIResponse from a late route callback.
+  const response = await page.request.get('/src/components/ClientProfessionalPriceChart.tsx', { maxRetries: 0 })
+  expect(response.status()).toBe(200)
+  expect(response.headers()['content-type'] ?? '').toMatch(/^(?:application|text)\/(?:javascript|ecmascript)(?:\s*;|$)/i)
+  const body = await response.text()
+  expect(body).toContain('api.current = chart;')
+  expect(body).toContain('candles.attachPrimitive(drawings);')
+  expect(body.split('api.current = chart;')).toHaveLength(2)
+  expect(body.split('candles.attachPrimitive(drawings);')).toHaveLength(2)
+  const compiledBody = body
+    .replace('api.current = chart;', 'api.current = chart; window.__nativeNavigationChart = chart;')
+    .replace('candles.attachPrimitive(drawings);', 'candles.attachPrimitive(drawings); window.__nativeNavigationDrawings = drawings;')
+  const headers = { ...response.headers(), 'content-length': String(Buffer.byteLength(compiledBody)) }
+  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', route => route.fulfill({ response, headers, body: compiledBody }))
   await page.route('**/api/v{5,6}/**', async route => {
     const url = new URL(route.request().url()); controls.requests.push(url)
     if (url.pathname.endsWith('native-report')) return reply(route, reportEnvelope.response)

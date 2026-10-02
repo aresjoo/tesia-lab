@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from './fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import type { PriceChartView } from '../src/chart/price-chart-view'
 import type { ProfessionalExternalReplay } from '../src/chart/price-replay-frame'
@@ -21,17 +22,16 @@ function frame(data: PriceChartView, time: number, progress = .2, fillId: string
 }
 async function mount(page: Page, data = view(), externalReplay = frame(data, start - 1), autoReplay = true, strict = false) {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    let body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    let body = original;
     expect(body).toContain('api.current = chart;')
     body = body.replace('api.current = chart;', 'api.current = chart; window.__continuityProbe.register(chart);')
     expect(body).toContain('const markerPlugin = createSeriesMarkers(candles, markers, { zOrder: "top" });')
     body = body.replace('const markerPlugin = createSeriesMarkers(candles, markers, { zOrder: "top" });', 'const markerPlugin = createSeriesMarkers(candles, markers, { zOrder: "top" }); window.__continuityProbe.markers.push(markerPlugin);')
     body = body.replace('replayTimer = window.setInterval(tick, 100);', 'replayTimer = window.setInterval(tick, 100); window.__continuityProbe.activeTimers.add(replayTimer);')
       .replaceAll('clearInterval(replayTimer);', 'window.__continuityProbe.activeTimers.delete(replayTimer); clearInterval(replayTimer);')
-    await route.fulfill({ response, body })
-  })
+    return body
+    }, ["api.current = chart;","const markerPlugin = createSeriesMarkers(candles, markers, { zOrder: \"top\" });",{"text":"clearInterval(replayTimer);","all":true},"replayTimer = window.setInterval(tick, 100);"])
   await page.goto('/')
   await page.evaluate(async input => {
     const path = '/tests/fixtures/price-chart-continuity-host.tsx'

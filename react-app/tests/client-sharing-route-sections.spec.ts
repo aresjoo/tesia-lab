@@ -77,7 +77,7 @@ for (const width of [320, 1440]) test(`${width}px 터미널에서 보존 관리 
     await expect(page.locator(section === 'publishing' ? '.client-strategy-creator' : '.cpd')).toBeVisible()
     await expect(page.locator('#research-title')).toBeFocused()
     await page.screenshot({ path: info.outputPath(`${section}-${width}.png`) })
-    await page.locator('.hub-header').getByRole('button', { name: '내 트레이딩', exact: true }).click()
+    await page.locator('.hub-header').getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
     await terminal(page)
     await page.goBack()
     await expect(page.locator('#research-title')).toHaveText(title)

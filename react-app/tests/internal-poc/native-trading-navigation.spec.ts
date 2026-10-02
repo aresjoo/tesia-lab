@@ -63,7 +63,7 @@ for (const width of [320, 1440]) test(`${width}px 원본 거래 터미널 왕복
   await page.evaluate(() => Reflect.set(window, 'tradingComposer', document.querySelector('.g-composer textarea')))
   const initial = [...requests]
   await menu(page, sourceSidebarNavigationLabel('ko', 'trading'))
-  await expect(terminal(page).getByRole('heading', { name: '내 트레이딩', exact: true })).toBeVisible()
+  await expect(terminal(page).getByRole('heading', { name: 'AI 트레이딩', exact: true })).toBeVisible()
   await expect(terminal(page).getByRole('heading', { level: 1 })).toBeFocused()
   await expect(composer(page)).toBeHidden()
   await expect(page.locator('.client-sidebar button[aria-current="page"]')).toHaveAttribute('aria-label', sourceSidebarNavigationLabel('ko', 'trading'))
@@ -111,7 +111,7 @@ test('전체화면에서 직접 대화로 돌아와도 스크롤 잠금과 dialo
   const initial = [...requests]
   await menu(page, sourceSidebarNavigationLabel('ko', 'trading'))
   await terminal(page).getByRole('button', { name: '터미널 전체화면', exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: '내 트레이딩', exact: true })
+  const dialog = page.getByRole('dialog', { name: 'AI 트레이딩', exact: true })
   await expect(dialog).toBeVisible()
   await dialog.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
   await expect(dialog).toHaveCount(0)
@@ -134,7 +134,7 @@ test('전체화면 새 전략의 확인은 가려지지 않고 취소 시 초안
   const initial = [...requests]
   await menu(page, sourceSidebarNavigationLabel('ko', 'trading'))
   await terminal(page).getByRole('button', { name: '터미널 전체화면', exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: '내 트레이딩', exact: true })
+  const dialog = page.getByRole('dialog', { name: 'AI 트레이딩', exact: true })
   if (await dialog.locator('.ctt-main-tabs').isVisible()) await dialog.locator('.ctt-main-tabs').getByRole('tab').nth(1).click()
   const selector = dialog.locator('.ctt-selector-button')
   if (await selector.isVisible() && await selector.getAttribute('aria-expanded') !== 'true') await selector.click()

@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from '../fixtures/compiled-module-response'
 import { expect, test, type Page } from '@playwright/test'
 import { resultHost } from './helpers/native-result-presentation-host'
 
@@ -46,13 +47,12 @@ async function checkCopy(page: Page, count: number, chronological: boolean) {
 async function ready(page: Page, paginated: boolean) {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.clock.install({ time: new Date('2026-01-01T00:00:00Z') })
-  if (paginated) await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch(), body = await response.text()
+  if (paginated) await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('updateExternalReplay.current = () => {')
-    // 관찰만 추가한다. frame/view/렌더러 계산이나 ACK를 바꾸지 않는다.
-    await route.fulfill({ response, body: body.replace('updateExternalReplay.current = () => {',
-      'updateExternalReplay.current = () => { window.paginationPaint = { frame: runtimeInput.current.externalReplay?.frame ?? null, fillIds: runtimeInput.current.fills.map(fill => fill.id) };') })
-  })
+    return body.replace('updateExternalReplay.current = () => {',
+      'updateExternalReplay.current = () => { window.paginationPaint = { frame: runtimeInput.current.externalReplay?.frame ?? null, fillIds: runtimeInput.current.fills.map(fill => fill.id) };')
+    }, ["updateExternalReplay.current = () => {"])
   const control = await resultHost(page, { replayReader: paginated, boundedReplayPrices: paginated, paginatedReplayFills: paginated })
   await expect(page.locator('.native-service-result').getByRole('button', { name: '차트로 결과 보기', exact: true, includeHidden: true })).toHaveAttribute('aria-disabled', 'false')
   await expect(page.locator('.cp-surface canvas').first()).toBeAttached()

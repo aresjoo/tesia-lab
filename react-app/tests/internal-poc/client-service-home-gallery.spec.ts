@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { composeTemplatePrompt } from '../../src/client-home-gallery'
+import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
 
 // Synthetic HTTP boundary only. Never record real credentials or provider calls.
 test.use({ trace: 'off', video: 'off', screenshot: 'off' })
@@ -47,6 +48,7 @@ test('StrictMode 최초 홈 진입은 모션을 유지하고 명시적 새 전�
   await expect(page.locator('.client-gallery-home')).toHaveClass(/\bentr\b/)
   await page.getByRole('region', { name: '투자 템플릿' }).getByRole('button', { name: 'AI가 대신 거래', exact: true }).click()
   if ((page.viewportSize()?.width ?? 1280) <= 860) {
+    await revealSourceNavigation(page)
     await page.getByRole('button', { name: '메뉴', exact: true }).click()
     await page.locator('.client-new-strategy').click()
   } else await page.getByRole('button', { name: '새 전략', exact: true }).click()

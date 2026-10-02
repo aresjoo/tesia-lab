@@ -211,16 +211,20 @@ for (const mode of ['wait', 'manual'] as const) test(`${mode}는 즉시 정산�
   expect(state.copies[0].record.status).toBe('active')
   await expect(root.locator('.cpp-meta')).toContainText('종료 대기')
   await root.locator('.cq-acts').getByRole('button', { name: '포지션 정리 후 복사 종료', exact: true }).click()
-  // Wait for reconciliation/inspection readiness through two animation frames;
-  // enabled hit testing alone does not cover a concurrent busy transition.
+  // Keep the original busy/inspection guards and wait for the actual font layout
+  // and hit target to remain stable through the same two animation frames.
+  await page.evaluate(() => document.fonts.ready)
   await page.waitForFunction(() => {
     const button = document.querySelector<HTMLButtonElement>('dialog[open] .wbtn')
-    const scope = window as unknown as { __copyConfirmReady?: { node: HTMLButtonElement; frames: number } }
+    const scope = window as unknown as { __copyConfirmReady?: { node: HTMLButtonElement; frames: number; bounds: string } }
     if (!button || button.disabled || button.getAttribute('aria-busy') !== 'false'
       || document.querySelector('.catalogue-copy-management [role=status][aria-busy=true]')) {
       scope.__copyConfirmReady = undefined; return false
     }
-    if (scope.__copyConfirmReady?.node !== button) scope.__copyConfirmReady = { node: button, frames: 0 }
+    const rect = button.getBoundingClientRect(), hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)
+    if (!hit || !button.contains(hit)) { scope.__copyConfirmReady = undefined; return false }
+    const bounds = JSON.stringify([rect.x, rect.y, rect.width, rect.height])
+    if (scope.__copyConfirmReady?.node !== button || scope.__copyConfirmReady.bounds !== bounds) scope.__copyConfirmReady = { node: button, frames: 0, bounds }
     return ++scope.__copyConfirmReady.frames >= 2
   }, undefined, { polling: 'raf' })
   await page.getByRole('dialog').getByRole('button', { name: '확인', exact: true }).click()

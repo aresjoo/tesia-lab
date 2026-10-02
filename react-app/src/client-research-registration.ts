@@ -16,7 +16,7 @@ export function registeredResearch(session: ClientSession, entries: readonly { s
 
 export function requireCompletedResearchRegistration(session: ClientSession, expectedScope: string) {
   if (session.workspace !== 'research' || session.researchPlanRecovery || researchScope(session) !== expectedScope) throw new Error('현재 대화의 연구 결과를 다시 확인해주세요.')
-  if (session.researchPlanTurnId !== undefined) throw new Error('선택한 계획의 연구 결과가 아직 연결되지 않았어요. 기존 전략은 내 트레이딩에서 확인할 수 있어요.')
+  if (session.researchPlanTurnId !== undefined) throw new Error('선택한 계획의 연구 결과가 아직 연결되지 않았어요. 기존 전략은 AI 트레이딩에서 확인할 수 있어요.')
   const replay = getMockResearchPreview(`restored:${expectedScope}`)
   replay.tick()
   const state = replay.getSnapshot()

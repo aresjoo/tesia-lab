@@ -37,7 +37,7 @@ async function setup(page: Page) {
 async function enterTrading(page: Page) {
   if (page.viewportSize()!.width <= 860) { await page.locator('.client-hamburger').focus(); await page.keyboard.press('Enter') }
   await page.locator('.client-sidebar').getByRole('button', { name: sourceSidebarNavigationLabel('ko', 'trading'), exact: true }).click()
-  await expect(page.locator('.native-trading-workspace').getByRole('heading', { name: '내 트레이딩', exact: true })).toBeFocused()
+  await expect(page.locator('.native-trading-workspace').getByRole('heading', { name: 'AI 트레이딩', exact: true })).toBeFocused()
 }
 
 for (const width of [320, 1440]) for (const fullscreen of [false, true]) test(`${width}px fullscreen=${fullscreen}: 미연결 6탭은 실제 연결 대신 거래소 탐색으로 이어지고 대화를 보존한다`, async ({ page }, info) => {
@@ -71,7 +71,7 @@ for (const width of [320, 1440]) for (const fullscreen of [false, true]) test(`$
     expect(overlaps(entryGeometry.back!, entryGeometry.bell!)).toBe(false)
     if (width <= 860) expect(overlaps(entryGeometry.title!, entryGeometry.menu!)).toBe(false)
     await expect(terminal).toHaveCount(0)
-    await expect(page.getByRole('dialog', { name: '내 트레이딩', exact: true })).toHaveCount(0)
+    await expect(page.getByRole('dialog', { name: 'AI 트레이딩', exact: true })).toHaveCount(0)
     expect(await page.evaluate(() => document.body.style.overflow)).not.toBe('hidden')
     expect(state.requests).toEqual(state.baseline)
     expect(await page.evaluate(() => JSON.stringify({ ...sessionStorage }))).toBe(state.stored)

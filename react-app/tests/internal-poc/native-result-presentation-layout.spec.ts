@@ -11,10 +11,12 @@ for (const width of [320, 390, 768, 1440]) test(`${language}: presentation plot 
   const control = await resultHost(page)
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
   await expect(page.locator('.cp-chart canvas').first()).toBeAttached()
-  await page.evaluate(async language => {
-    const path = '/src/client-preferences.ts'
-    const { setClientPreference } = await import(/* @vite-ignore */ path)
-    setClientPreference('language', language)
+  // The host already loaded this real setter before the renderer clock paused.
+  // Reuse it instead of awaiting another paused import.
+  await page.evaluate(language => {
+    const setLanguage = Reflect.get(window, 'setAutomaticResultLanguage')
+    if (typeof setLanguage !== 'function') throw new Error('TEST_AUTOMATIC_RESULT_LANGUAGE_SETTER_REQUIRED')
+    setLanguage(language)
   }, language)
   const canvas = await page.locator('.cp-chart canvas').first().elementHandle()
   await page.evaluate(() => Reflect.get(window, 'deliverAutomaticResult')())

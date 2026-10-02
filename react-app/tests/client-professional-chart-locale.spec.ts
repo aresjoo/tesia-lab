@@ -8,16 +8,21 @@ import type { PriceChartView } from '../src/chart/price-chart-view'
 
 const languages: ClientLanguage[] = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr']
 async function mount(page: Page, view: PriceChartView | null = fixture, failLocaleInit = false) {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    let body = await response.text()
-    expect(body).toContain('api.current = chart;')
-    if (failLocaleInit) {
-      expect(body).toContain('updateLocale.current(formatRef.current);')
-      body = body.replace('updateLocale.current(formatRef.current);', 'if (!window.__localeInitFailure) { window.__localeInitFailure = true; updateLocale.current = () => { throw new Error("synthetic locale initialization failure"); }; throw new Error("synthetic locale initialization failure"); } updateLocale.current(formatRef.current);')
-    }
-    await route.fulfill({ response, body: body.replace('api.current = chart;', 'api.current = chart; window.__localeChart = chart;') })
-  })
+  // Acquire the actual compiled module before mounting; route callbacks only replay that response.
+  const response = await page.request.get('/src/components/ClientProfessionalPriceChart.tsx', { maxRetries: 0 })
+  if (response.status() !== 200) throw new Error(`TEST_LOCALE_CHART_HTTP_${response.status()}`)
+  if (!/^(?:application|text)\/(?:javascript|ecmascript)(?:\s*;|$)/i.test(response.headers()['content-type'] ?? '')) throw new Error('TEST_LOCALE_CHART_JAVASCRIPT_REQUIRED')
+  let body = await response.text()
+  expect(body).toContain('api.current = chart;')
+  if (body.split('api.current = chart;').length !== 2) throw new Error('TEST_LOCALE_CHART_SINGLE_SEAM_REQUIRED')
+  if (failLocaleInit) {
+    expect(body).toContain('updateLocale.current(formatRef.current);')
+    if (body.split('updateLocale.current(formatRef.current);').length !== 2) throw new Error('TEST_LOCALE_INIT_SINGLE_SEAM_REQUIRED')
+    body = body.replace('updateLocale.current(formatRef.current);', 'if (!window.__localeInitFailure) { window.__localeInitFailure = true; updateLocale.current = () => { throw new Error("synthetic locale initialization failure"); }; throw new Error("synthetic locale initialization failure"); } updateLocale.current(formatRef.current);')
+  }
+  const compiledBody = body.replace('api.current = chart;', 'api.current = chart; window.__localeChart = chart;')
+  const headers = { ...response.headers(), 'content-length': String(Buffer.byteLength(compiledBody)) }
+  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', route => route.fulfill({ response, headers, body: compiledBody }))
   await page.goto('/')
   await page.evaluate(async view => {
     const path = '/tests/fixtures/price-chart-host.tsx'

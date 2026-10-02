@@ -72,7 +72,7 @@ const labels = {
   paper: ['가상 검증으로 시작', 'Start paper validation', '仮想検証を開始', '开始模拟验证', '開始模擬驗證', 'Iniciar validación simulada', 'Démarrer la validation simulée'],
   liveStart: ['실전 시작', 'Start live', '実取引を開始', '开始实盘', '開始實盤', 'Iniciar en real', 'Démarrer en réel'],
   live: ['Live', 'Live', '運用', '运行', '運行', 'En curso', 'En cours'],
-  openTrading: ['내 트레이딩에서 열기', 'Open in My Trading', 'マイトレーディングで開く', '在我的交易中打开', '在我的交易中開啟', 'Abrir en Mi Trading', 'Ouvrir dans Mon Trading'],
+  openTrading: ['AI 트레이딩에서 열기', 'Open in AI trading', 'AIトレーディングで開く', '在AI交易中打开', '在AI交易中開啟', 'Abrir en Trading con IA', 'Ouvrir dans Trading IA'],
   recent: ['최근 활동', 'Recent activity', '最近のアクティビティ', '最近活动', '最近活動', 'Actividad reciente', 'Activité récente'],
   time: ['시각', 'Time', '時刻', '时间', '時間', 'Hora', 'Heure'],
   type: ['유형', 'Type', '種類', '类型', '類型', 'Tipo', 'Type'],

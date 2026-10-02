@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { flushSync } from 'react-dom'
 import { ClientResponseSequence } from '../../src/components/ClientResponseSequence'
 import { ClientServiceExperience } from '../../src/internal-poc/ClientServiceExperience'
-import type { MarketChartPresentation, MarketChartRequest } from '../../src/client-market-chart-presentation'
+import type { MarketChartActions, MarketChartPresentation, MarketChartRequest } from '../../src/client-market-chart-presentation'
 import { setClientPreference, type ClientLanguage } from '../../src/client-preferences'
 import '@fontsource-variable/geist'
 import '@fontsource-variable/noto-sans-kr'
@@ -14,6 +14,7 @@ export function mount(initial: MarketChartPresentation, options: { native?: bool
   const root = createRoot(document.getElementById('fixture')!)
   let presentation = initial, input = '계속 작성하던 질문', owner = 'owner-a', portOwner = 'owner-a'
   let duplicate = false, longAnswer = false
+  let blockedReason: MarketChartActions['blockedReason']
   const requests: { request: MarketChartRequest; signal: AbortSignal; resolve: (value: boolean) => void; reject: () => void }[] = []
   const actions = { request: (request: MarketChartRequest, signal: AbortSignal) => new Promise<boolean>((resolve, reject) => { requests.push({ request, signal, resolve, reject: () => reject(new Error('TEST_ONLY_SUPPLY_FAILURE')) }) }) }
   const render = () => {
@@ -29,12 +30,13 @@ export function mount(initial: MarketChartPresentation, options: { native?: bool
         messages: [{ id: 'user-1', role: 'user', text: '가격 흐름을 보여주세요.', ...(options.research ? { researchThread: { scopeId: 'research-a', documentId: 'plan' } } : {}) }, { id: presentation.binding.messageId, role: 'assistant', text: '관측된 가격입니다.', responseBlocks: [{ id: 'answer', kind: 'text', text: '관측된 가격입니다.', status: 'done' }, ...answerBlocks], ...(options.research ? { researchThread: { scopeId: 'research-a', documentId: 'plan' } } : {}) }],
         onInput: value => { input = value; render() }, onSend: async () => {}, onReset: () => false,
       }}/>
-      : <main className="client-lab-conversation" style={{ height: 'auto', minHeight: '100dvh', padding: 16, display: 'block' }}><p>검수용 합성 관측값</p><div style={{ maxWidth: 820, margin: 'auto' }}><ClientResponseSequence source="mock" blocks={blocks} chartActions={options.connected === false ? undefined : actions}/></div></main>}</StrictMode>))
+      : <main className="client-lab-conversation" style={{ height: 'auto', minHeight: '100dvh', padding: 16, display: 'block' }}><p>검수용 합성 관측값</p><div style={{ maxWidth: 820, margin: 'auto' }}><ClientResponseSequence source="mock" blocks={blocks} chartActions={options.connected === false ? undefined : { ...actions, blockedReason }}/></div></main>}</StrictMode>))
   }
   setClientPreference('language', 'ko')
   render()
   return {
     requests,
+    block(reason?: MarketChartActions['blockedReason']) { blockedReason = reason; render() },
     update(next: MarketChartPresentation) { presentation = next; render() },
     duplicate() { duplicate = true; render() },
     longAnswer() { longAnswer = true; render() },

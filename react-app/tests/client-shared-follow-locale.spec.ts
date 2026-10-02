@@ -119,7 +119,7 @@ for (const [index, locale] of languages.entries()) test(`${locale} 실제 목록
   await card.getByRole('button', { name: f('중지'), exact: true }).click()
   const dialog = page.getByRole('dialog', { name: f('따라가기 중지'), exact: true })
   await expect(dialog).toContainText(sharedFollowCopy(locale, '{nick} 전략 따라가기를 중지할까요?', { nick: seed.nick }))
-  await expect(dialog).toContainText(f('항목은 보관 처리되고, 이미 실행 중인 전략은 내 트레이딩에서 계속 관리할 수 있어요.'))
+  await expect(dialog).toContainText(f('항목은 보관 처리되고, 이미 실행 중인 전략은 AI 트레이딩에서 계속 관리할 수 있어요.'))
   await expect(dialog.getByRole('button', { name: f('중지하고 보관'), exact: true })).toBeVisible()
   await page.keyboard.press('Escape')
   expect(page.url()).toBe(href)

@@ -1,3 +1,4 @@
+import { installCompiledModuleResponse } from '../fixtures/compiled-module-response'
 import { expect, test, type Page, type Route } from '@playwright/test'
 import fixtures from './fixtures/native-service-contracts.json' with { type: 'json' }
 import type { NativeChartManifest, NativeChartWindow, NativeJob, NativeReport, NativeTrades } from '../../src/internal-poc/native-service-api'
@@ -109,15 +110,14 @@ for (const resource of ['report', 'trades', 'chart', 'chart-window'] as const) f
 }
 
 test('SDK UNAVAILABLE 빈 차트와 빈 거래는 UI에서 허구 봉·거래로 채우지 않는다', async ({ page }) => {
-  await page.route('**/src/components/ClientProfessionalPriceChart.tsx*', async route => {
-    const response = await route.fetch()
-    const body = await response.text()
+  await installCompiledModuleResponse(page, "/src/components/ClientProfessionalPriceChart.tsx", original => {
+    const body = original;
     expect(body).toContain('api.current = chart;')
     expect(body).toContain('const markerPlugin = createSeriesMarkers(')
-    await route.fulfill({ response, body: body
+    return body
       .replace('api.current = chart;', 'api.current = chart; window.__emptyResultChart = chart;')
-      .replace('const markerPlugin = createSeriesMarkers(', 'const markerPlugin = window.__emptyResultMarkers = createSeriesMarkers(') })
-  })
+      .replace('const markerPlugin = createSeriesMarkers(', 'const markerPlugin = window.__emptyResultMarkers = createSeriesMarkers(')
+    }, ["const markerPlugin = createSeriesMarkers(","api.current = chart;"])
   await page.route('**/api/v{5,6}/**', route => {
     const url = new URL(route.request().url())
     return reply(route, url.pathname.endsWith('native-report') ? reportEnvelope.response : url.pathname.endsWith('native-trades') ? tradesBody(url, true) : chartBody(url))

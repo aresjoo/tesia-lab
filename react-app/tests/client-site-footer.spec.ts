@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import copy from '../src/client-site-footer-copy.json' with { type: 'json' }
 
 test.setTimeout(60_000)
@@ -200,4 +200,93 @@ test('home footer does not cover input and is absent from chat and settings', as
   await page.locator('#strategy-idea').press('Enter')
   await expect(page.locator('.g-composer textarea')).toBeVisible()
   await expect(footer).toHaveCount(0)
+})
+
+
+/** Hold only the real optional chunk; exercise actual caller/loader callbacks. */
+async function holdHelpChunk(page: Page) {
+  let release!: () => void
+  const gate = new Promise<void>(resolve => { release = resolve })
+  await page.route('**/src/components/ClientHelp.tsx*', async route => {
+    await gate
+    await route.continue().catch(() => { /* Navigation may retire this request. */ })
+  })
+  return async () => {
+    release()
+    // Complete the same real module, then allow its React commit to paint.
+    await page.evaluate(async () => {
+      const path = '/src/components/ClientHelp.tsx'
+      await import(path)
+      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+    })
+  }
+}
+
+for (const host of ['public', 'native'] as const) {
+  for (const action of ['cancel', 'handoff'] as const) test(`${host} footer lazy help ${action} preserves its pointer origin`, async ({ page }) => {
+    const release = await holdHelpChunk(page)
+    await page.goto(host === 'native' ? '/tests/fixtures/client-settings-plan.html?host=service' : '/', { waitUntil: 'domcontentloaded' })
+    const input = page.locator('#strategy-idea')
+    if (host === 'public') await input.fill('로딩 중에도 원래 질문을 보존합니다')
+    const footer = page.locator('.client-site-footer')
+    const trigger = footer.getByRole('button', { name: '도움말', exact: true })
+    try {
+      await trigger.click()
+      await expect(page.locator('.client-load-panel[role=dialog]')).toBeFocused()
+      if (action === 'handoff') {
+        await release()
+        await expect(page.locator('.client-load-layer')).toHaveCount(0)
+        await expect(page.locator('.client-modal-help .help-close')).toBeFocused()
+      }
+      await page.keyboard.press('Escape')
+      await expect(trigger).toBeFocused()
+      await release()
+      await expect(page.locator('.client-load-layer')).toHaveCount(0)
+      await expect(page.getByRole('dialog')).toHaveCount(0)
+      await expect(trigger).toBeFocused()
+      await expect(page.locator('.client-source-app')).toHaveJSProperty('inert', false)
+      if (host === 'public') await expect(input).toHaveValue('로딩 중에도 원래 질문을 보존합니다')
+      else {
+        await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
+        await expect(footer.locator('.gft-copy')).not.toContainText('제품 디자인 미리보기')
+      }
+    } finally { await release() }
+  })
+}
+
+test('native lazy help owner replacement retires old focus and late completion', async ({ page }) => {
+  const release = await holdHelpChunk(page)
+  await page.goto('/tests/fixtures/client-settings-plan.html?host=service', { waitUntil: 'domcontentloaded' })
+  try {
+    await page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true }).click()
+    await expect(page.locator('.client-load-panel[role=dialog]')).toBeFocused()
+    await page.evaluate(() => Reflect.get(window, 'settingsPlanOwner')('owner-b'))
+    await expect(page.locator('.client-load-layer')).toHaveCount(0)
+    const newerTarget = page.locator('#strategy-idea')
+    await newerTarget.focus()
+    await expect(newerTarget).toBeFocused()
+    await release()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(newerTarget).toBeFocused()
+    await expect(page.locator('.client-source-app')).toHaveJSProperty('inert', false)
+  } finally { await release() }
+})
+
+test('native lazy help settings navigation preserves the newer page focus', async ({ page }) => {
+  const release = await holdHelpChunk(page)
+  await page.goto('/tests/fixtures/client-settings-plan.html?host=service', { waitUntil: 'domcontentloaded' })
+  try {
+    await page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true }).click()
+    await expect(page.locator('.client-load-panel[role=dialog]')).toBeFocused()
+    await page.evaluate(() => { location.hash = '#/settings/billing' })
+    await expect(page.locator('.client-settings-page h1')).toHaveText('결제')
+    await expect(page.locator('.client-load-layer')).toHaveCount(0)
+    const newerTarget = page.getByRole('button', { name: '공급된 요청', exact: true })
+    await newerTarget.focus()
+    await expect(newerTarget).toBeFocused()
+    await release()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(newerTarget).toBeFocused()
+    await expect(page.locator('.client-site-footer')).toHaveCount(0)
+  } finally { await release() }
 })

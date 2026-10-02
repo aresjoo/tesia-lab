@@ -1046,7 +1046,7 @@ test('전체화면 왕복 후 동일 차트 canvas와 미전송 Agent 입력을 
   await analysis(page, 'Agent')
   await page.getByRole('textbox', { name: '전략 Agent에게 질문', exact: true }).fill('아직 전송하지 않은 전략 질문')
   await page.getByRole('button', { name: '터미널 전체화면', exact: true }).click()
-  await expect(page.getByRole('dialog', { name: '내 트레이딩', exact: true })).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'AI 트레이딩', exact: true })).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await expect(page.getByRole('textbox', { name: '전략 Agent에게 질문', exact: true })).toHaveValue('아직 전송하지 않은 전략 질문')

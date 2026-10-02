@@ -112,11 +112,21 @@ for (const width of [320,480,861,1440]) test(`supplied long settings ${width}px 
   const toggle=page.getByRole('switch',{name:label,exact:true})
   await expect(toggle).toBeVisible()
   await expect(toggle).toHaveAccessibleDescription(description.trim())
+  await page.evaluate(() => document.fonts.ready)
   const rect=await toggle.boundingBox()
   expect(rect!.width).toBeGreaterThanOrEqual(44)
   expect(rect!.height).toBeGreaterThanOrEqual(44)
-  const icon=await page.locator('.stg-preference .stg-row-label > svg').boundingBox()
-  const title=await page.locator('.stg-preference .k b').boundingBox()
+  // Compare the same layout: font swaps or scrolling between two protocol
+  // round trips can move both correctly aligned elements together.
+  const {icon,title}=await page.evaluate(() => {
+    const read=(selector:string) => {
+      const nodes=document.querySelectorAll(selector)
+      if(nodes.length!==1)throw new Error(`Expected one geometry target: ${selector}`)
+      if(nodes[0].getClientRects().length===0)throw new Error(`Unrendered geometry target: ${selector}`)
+      return nodes[0].getBoundingClientRect().toJSON() as {y:number}
+    }
+    return {icon:read('.stg-preference .stg-row-label > svg'),title:read('.stg-preference .k b')}
+  })
   expect(Math.abs(icon!.y-title!.y)).toBeLessThanOrEqual(4)
   expect(await page.locator('.native-settings-plan').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true)
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)

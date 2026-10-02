@@ -27,11 +27,7 @@ const definitionKeys: SharingDetailCopyKey[] = [
 ]
 
 async function language(page: Page, value: string) {
-  await page.evaluate(async value => {
-    const path = '/src/client-preferences.ts'
-    const { setClientPreference } = await import(path)
-    setClientPreference('language', value)
-  }, value)
+  await page.evaluate(value => Reflect.get(window, 'sharingDetailSetPreference')('language', value), value)
   await expect(page.locator('html')).toHaveAttribute('lang', value)
 }
 
@@ -72,6 +68,14 @@ async function detail(page: Page, own = false, seedNick?: string) {
   await page.evaluate(hash => { history.pushState(null, '', hash); dispatchEvent(new Event('teth:navigate')) }, sharedHash({ nick, period: 'all' }))
   await expect(page.locator('.ss3-dtitle')).toContainText(nick)
   await expect(page.locator('.ss3-matrix button.mx')).toHaveCount(6)
+  // Retain the actual Vite module and its exported setter before repeated locale changes.
+  await page.evaluate(async () => {
+    const path = '/src/client-preferences.ts'
+    const modulePromise = import(/* @vite-ignore */ path)
+    Reflect.set(window, 'sharingDetailPreferenceModule', modulePromise)
+    const module = await modulePromise
+    Reflect.set(window, 'sharingDetailSetPreference', module.setClientPreference)
+  })
   return nick
 }
 

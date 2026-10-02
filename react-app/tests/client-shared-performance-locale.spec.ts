@@ -149,7 +149,14 @@ test('월이동후활성day·툴팁·표행·연도봉DOM·수치·route·세션
     return { scroll: document.scrollingElement?.scrollTop ?? 0, top: 0, bottom: innerHeight }
   })
   const scroll = (await scrollFrame()).scroll
-  const scrollSamples = [{ locale: 'before', scroll, day: await day.boundingBox(), grid: await view.locator('.cal-g').boundingBox() }]
+  // Compare positions in one layout observation: the scroll ancestor can move
+  // between separate protocol calls while the calendar rows stay unchanged.
+  const calendarGeometry = () => day.evaluate(el => {
+    const cell = el.getBoundingClientRect(), grid = el.closest('.cal-g')!.getBoundingClientRect()
+    const box = (rect: DOMRect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })
+    return { day: box(cell), grid: box(grid) }
+  })
+  const scrollSamples = [{ locale: 'before', scroll, ...await calendarGeometry() }]
   const dayOffset = scrollSamples[0].day!.y - scrollSamples[0].grid!.y
   for (const locale of languages) {
     await language(page, locale)
@@ -163,11 +170,12 @@ test('월이동후활성day·툴팁·표행·연도봉DOM·수치·route·세션
     expect(page.url()).toBe(href)
     expect(await page.evaluate(() => Object.fromEntries(Object.entries(sessionStorage)))).toEqual(saved)
     const frame = await scrollFrame(), currentScroll = frame.scroll
-    scrollSamples.push({ locale, scroll: currentScroll, day: await day.boundingBox(), grid: await view.locator('.cal-g').boundingBox() })
+    const currentGeometry = await calendarGeometry()
+    scrollSamples.push({ locale, scroll: currentScroll, ...currentGeometry })
     await info.attach(`scroll-${locale}`, { body: JSON.stringify(scrollSamples, null, 2), contentType: 'application/json' })
     // Translated content above the calendar can change its height. Native scroll
     // anchoring is allowed; the selected observation must stay visible, not reset.
-    const currentDay = (await day.boundingBox())!, grid = (await view.locator('.cal-g').boundingBox())!
+    const { day: currentDay, grid } = currentGeometry
     expect(currentScroll).toBeGreaterThan(0)
     expect(currentDay.y).toBeGreaterThanOrEqual(frame.top)
     expect(currentDay.y + currentDay.height).toBeLessThanOrEqual(frame.bottom)

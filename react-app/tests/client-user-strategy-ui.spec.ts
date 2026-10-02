@@ -60,7 +60,7 @@ test('없는 기록·없는 파라미터는 demo봇/곡선/로그로 대체하�
   await patch(page, { nullRecord: true })
   await expect(page.getByText('전략을 찾을 수 없어요')).toBeVisible()
   await expect(page.locator('.nfxb-hero')).toHaveCount(0)
-  await page.getByRole('button', { name: '내 트레이딩', exact: true }).click()
+  await page.getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   expect(await calls(page)).toEqual([['navigate', '#/trade']])
 })
 test('같은봇의 공급 체결·복기·적립만 사용하며 미공급/빈기록을 구분한다', async ({ page }) => {
