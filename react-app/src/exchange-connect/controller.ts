@@ -127,7 +127,8 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
       showConnected()
     } else if (['pending', 'processing'].includes(transaction.status)) showPending()
     else {
-      const cleanup = transaction.status === 'failed' && ['bybit', 'gate', 'mexc'].includes(transaction.exchangeId) ? t('cleanup') : ''
+      const cleanup = ['failed', 'expired', 'cancelled'].includes(transaction.status)
+        && ['bybit', 'bitget', 'gate', 'mexc'].includes(transaction.exchangeId) ? t('cleanup') : ''
       transaction = undefined; showExchanges('ready', [t('failed'), cleanup].filter(Boolean).join(' '))
     }
   }

@@ -75,6 +75,26 @@ test('거래소 복귀 뒤 서버 결과를 확인하며 로컬 해제와 재연
   expect(deletes).toBe(1)
 })
 
+for (const status of ['failed', 'expired'] as const) {
+  test(`Bitget ${status} 복귀는 성공하지 않고 거래소 키 정리를 안내`, async ({ page }) => {
+    await sessionRoutes(page)
+    await page.route('**/api/v1/exchange-connections/**', route => {
+      const path = new URL(route.request().url()).pathname
+      const body = path.endsWith('/catalog') ? catalog : envelope({ ...pending.data,
+        exchangeId: 'bitget', status, authorizationUrl: null,
+        failureCode: status === 'failed' ? 'PROVIDER_FAILED' : null })
+      return route.fulfill({ status: 200, headers, body: JSON.stringify(body) })
+    })
+    await page.route('**/auth/complete', async route => {
+      const response = await route.fetch({ url: new URL('/exchange-connect-fixture.html', route.request().url()).href })
+      await route.fulfill({ response })
+    })
+    await page.goto('/auth/complete#exchange-transaction=' + txid)
+    await expect(page.getByText('이번 연결 시도에서 TETH용 API 키가 생성되었다면 거래소에서 해당 키를 삭제해주세요.', { exact: false })).toBeVisible()
+    await expect(page.getByRole('heading', { name: '거래소 계정 연결 완료' })).toHaveCount(0)
+  })
+}
+
 test('알 수 없는 비밀 필드와 잘못된 외부 인증 주소는 성공 화면으로 표시하지 않음', async ({ page }) => {
   await sessionRoutes(page)
   await page.route('**/api/v1/exchange-connections/**', route => {
