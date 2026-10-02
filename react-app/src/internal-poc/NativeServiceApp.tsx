@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
 import { useClientPreferences } from '../client-preferences'
+import { useExchangeConnectionPresentation } from '../exchange-connect/use-exchange-connection'
+import { readExchangeTransactionLocator } from '../exchange-connect/controller'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
 import { nativeWorkflowText, nativeWorkflowLeverage, type NativeWorkflowTextKey } from './native-workflow-copy'
@@ -86,7 +88,7 @@ function WorkflowButton({ disabled, onClick, ...props }: ButtonHTMLAttributes<HT
 /** Native service-only entry. No fixture adapter fallback and no order authority. */
 export type NativeServicePresentations = Pick<ComponentProps<typeof ClientServiceExperience>,
   'conversationLibrary' | 'insightPresentation' | 'sharingPresentation' | 'researchPresentation' | 'accountPresentation' | 'feedbackPresentation' | 'brokerPresentation' | 'connectionPresentation'>
-export function NativeServiceApp({ presentations = {} }: { presentations?: NativeServicePresentations } = {}) {
+export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean } = {}) {
   const { language } = useClientPreferences()
   const jobText = (key: NativeJobTextKey, values?: Readonly<Record<string, string | number>>) => nativeJobText(language, key, values)
   const workflowText = (key: NativeWorkflowTextKey, values?: Readonly<Record<string, string | number>>) => nativeWorkflowText(language, key, values)
@@ -192,6 +194,8 @@ export function NativeServiceApp({ presentations = {} }: { presentations?: Nativ
   const pending = useRef<NativeMutationCommand | null>(null)
   const session = useRef<{ sessionId: string; sessionState: 'ANONYMOUS' | 'AUTHENTICATED' } | null>(null)
   const [accountScope, setAccountScope] = useState<string | null>(null)
+  const exchangeConnectionPresentation = useExchangeConnectionPresentation(accountScope,
+    sessionState === 'AUTHENTICATED', exchangeConnectionsEnabled && phase === 'ready')
   const bindSession = (value: typeof session.current) => {
     // Keep request authority in the existing ref. React state only scopes the
     // lifetime of unsent local UI; it cannot authorize a request.
@@ -242,7 +246,8 @@ export function NativeServiceApp({ presentations = {} }: { presentations?: Nativ
   if (!hasPending && pendingRecoveryVisible) setPendingRecoveryVisible(false)
   else if (hasPending && !busy && !pendingRecoveryVisible) setPendingRecoveryVisible(true)
   const [rejectedClaimKey, setRejectedClaimKey] = useState<string | null>(null)
-  const [loginOpen, setLoginOpen] = useState(() => window.location.pathname === '/auth/complete')
+  const [loginOpen, setLoginOpen] = useState(() => window.location.pathname === '/auth/complete'
+    && !(exchangeConnectionsEnabled && readExchangeTransactionLocator(window.location.href)))
   const [loginRetained, setLoginRetained] = useState(false)
   const [loginResume, setLoginResume] = useState(0)
   const loginGeneration = useRef(0)
@@ -1346,7 +1351,7 @@ export function NativeServiceApp({ presentations = {} }: { presentations?: Nativ
   }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={authSurface}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
     conversationLibrary={presentations.conversationLibrary} insightPresentation={presentations.insightPresentation}
-    sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} brokerPresentation={presentations.brokerPresentation} connectionPresentation={presentations.connectionPresentation}
+    sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} brokerPresentation={presentations.brokerPresentation} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation}
     researchPresentation={strategyDocument && presentations.researchPresentation?.scope === accountScope && presentations.researchPresentation.data.scopeId === strategyDocument.identity ? presentations.researchPresentation : strategyDocument && accountScope ? { scope: accountScope, data: {
       scopeId: strategyDocument.identity,
       entries: researchEntries,

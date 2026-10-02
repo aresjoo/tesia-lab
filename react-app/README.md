@@ -4,6 +4,16 @@
 
 이 문서의 코드·시험 대조 기준은 전수 검증 후보 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
+원본 이식은 [Web52](https://github.com/beak1011/tesia-web/pull/52)로 main `de71bbf6e1784f1093614211168a14da0bc903de`에 병합했다. 검증1e994와 동일 tree이며 b463 단일 전수·1e994 clean 설치/lint/build/scan·personal(1) Opus5.5 MAIN_MERGE_GO(C0/H0/M0/L6)를 결속했다. hosted Actions는 결제·한도로 step 시작 전 종료했고 기존 Governance local-equivalent 절차를 적용했다.
+
+### 거래소 로그인 연결 후속 후보
+
+[migration PR4](https://github.com/aresjoo/tesia-lab/pull/4), [Backend158](https://github.com/beak1011/tesia-backend/pull/158), [Contracts40](https://github.com/beak1011/tesia-contracts/pull/40)의 별도 비공개 후보를 React 서비스에 연결했다. 흐름은 TETH 로그인→거래소 로그인·최초 동의→서버 연결 확인이며 API 키 입력·브라우저 보관을 하지 않는다. service build의 `VITE_TETH_EXCHANGE_CONNECT=true`만 명시 opt-in이고 기본 false다. 공개 build에는 API0.12가 포함되지 않으며 시험 fixture HTML도 제품 build에서 제외한다. 생성 SDK6개는 private API0.12 검증 원문과 동일하고 기존 SDK/Runtime/aggregate pin은 유지한다.
+
+후속 범위의 브라우저170 PASS(기존 서비스144+exchange26), 서버 source/wheel/sdist 각각52 PASS 및 실제 service dist loopback 각각10 PASS/0 SKIP, 계약9 PASS·wire69·TS86 assertions·transport30 calls를 확인했다. 실제 Backend HTTP·service build 결합은 양 viewport UI2·SDK12 응답/반례·controller2 검증 actual0다. 로컬 bridge의 Fetch Metadata만 frame/target/Origin 검증 뒤 fixture-attested 복원했으며 실TLS·실TETH 로그인·거래소 인증 성공이 아니다. 원 Web52 전수 결과를 이 새 기능의 전수 성공으로 승계하지 않는다.
+
+private Opus5.5 CODE_GO C0/H0/M0/L7를 인수하고 취소/실패/만료의 거래소 키 정리 안내를 controller/spec2개로 보완했다. 새 단일 범위178 PASS/0 FAIL/0 SKIP/retry0/actual0(기존144+exchange34), 원26 assertion prefix 보존·추가8개를 검증했다. 초기 보완 실행176 PASS/2 FAIL은 신규 복귀 하니스의 same-document 문제로 보존하고 fresh-document 복귀로 재검증했다. 등록 앱이 없는 6개 provider는 fail-closed로 사용 불가다. 연결 해제는 local_only이며 거래소 원격 키 폐기와 구분한다. Backend/Contracts/원 migration PR의 병합·정식 API0.12 aggregate 발행/소비 pin 전환·실계정 인증·운영 활성화는 별도 미완료다. 실제 주문 권한은 만들지 않는다.
+
 | 인수 항목 | 검증 이력 및 현재 Gate |
 |---|---|
 | 최초 동결 검수 | `1971e2d956657fcdab7af633b9aceae475e1871d`의 personal(1) `claude-opus-5` C0/H0 조건부 GO. 아래 후속 closure 변경을 포함하지 않음 |
@@ -113,3 +123,5 @@ Contracts [browser bootstrap 정책](https://github.com/beak1011/tesia-contracts
 - 실제 API, OAuth, credential, 거래소 endpoint와 공개 배포를 연결하지 않는다.
 
 `tesia-contracts` v0.6가 병합되기 전까지 `src/reporting`의 타입은 web 전용 recorded fixture 경계다. `TODO(contract-pin)` 지점은 immutable generated package와 semantic verifier의 정확한 pin이 준비된 뒤에만 연결하며, verifier가 없으면 actual artifact를 fail-closed 한다.
+
+보안 스캔에서 API0.12 생성 manifest의 공개 artifact SHA256 4개를 API 키로 오탐했다. 독립적으로 normative 원본 및 실제 계약 파일 해시를 대조했고 값은 로그에 출력하지 않았다. 기존44개에 해당4개의 exact commit/file/rule/line fingerprint만 추가하며 범용 규칙·경로 예외는 변경하지 않는다. 원 scan exit2와 분류 원문을 보존한다.

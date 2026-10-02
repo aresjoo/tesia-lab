@@ -17,6 +17,16 @@
 | 전체 인수 Gate | 원본 동선·새 동결 전체 회귀·독립 검수 결속 후 ROOT가 판정. 현재 상태는 [활성 PM Ledger](https://github.com/beak1011/tesia-program/blob/main/WORK_LEDGER.md)와 [PM 정본](https://github.com/beak1011/tesia-program/blob/main/PM/README.md)만 따르며 이전 조건부 GO·별도 범위 PASS를 승계/합산하지 않음 |
 | 실제 공급·운영 | 공개 기본값 Mock. 외부 공급자·실주문/과금/사용량 producer·공개 서비스 Gate 미완료, 운영 변경 0 |
 
+### Web52 병합과 거래소 연결 후속 검수
+
+원본 React 이식은 Web52 main de71bbf6(검증1e994와 동일 tree)로 병합했고 final Opus5.5 MAIN_MERGE_GO C0/H0/M0/L6 및 b463 단일13,183 PASS/0 FAIL/기존17 SKIP·clean install/lint/build/scan actual0를 인수했다. 원 e325/141/777/9dd 실패 이력과 WIP·DB·730일은 보존한다. DESIGN opening의 stale3f807 기준을 b463으로 정정하며 Program의 역사8CI/clean미래형 문서 교정은 정본이 소유한다. npm high1은 ESLint→minimatch→brace-expansion5.0.9 전이 dev 의존성의 악성 glob DoS로 분류했다. omit-dev audit은 actual0/취약0이고 현재 lint glob은 고정이며 공개 입력의 취약 경로 도달을 관측하지 않았다. 취약 버전은 lock에 남으며5.0.12 이상 별도 정비 backlog로 추적한다.
+
+새 거래소 연결은 원 PR4의14제품/SDK/entry bytes를 수입하고 원20시험을 보존한6b510 후보에서 기존144+exchange26의 단일170 PASS/0 SKIP를 확인했다. 별도 후속 controller/spec delta가 취소·실패·만료 시 거래소 키 정리 안내를 통일한다. 이는 remote revoke 성공을 의미하지 않으며 생성SDK6개·기존copy7locale·세션/CSRF/owner 권위는 변경하지 않는다. 새 안내 보완의 단일178 PASS/0 FAIL/0 SKIP/0 retry·actual0(171.420s/2workers)를 확인했다. exchange34(원20+추가14)·기존서비스144이며 원26 prefix exact·다른13 product/SDK/entry bytes 불변이다. 최초176 PASS/2 FAIL·actual1은 신규 matrix의 same-document 복귀 하니스 문제로 보존했고 새 document 복귀만 추가해 재검증했다. lint·standalone strict actual0, 새 별도 outdir service(flag true) build actual0·fixture/sentinel0이며 원6b renderer1109파일/hash는 변경0이다.
+
+서버 source/wheel/sdist 각각52 PASS, 실제 service dist loopback 각각10 PASS/0 SKIP·actual0, 계약9 PASS/wire69/TS86/transport30, 실제 Backend HTTP+service build의 UI2/SDK12/controller2 검증 actual0는 서로 다른 범위다. bridge-restored Fetch Metadata·합성 TETH 세션이므로 실TLS/실OAuth 성공으로 승격하지 않는다. 실제 provider network0·transaction0·connection0 및 하니스 정상 종료를 확인했다. 원 9 PASS/1 SKIP loopback과 bridge 미복원403 실패는 보존한다.
+
+private Opus5.5는 CODE_GO C0/H0/M0/L7이다. frontend 취소/실패 정리 안내2건을 보완하며 Backend HKDF subkey 분리·PERMISSION_REJECTED status403 정렬·복호화 실패 로컬 삭제·100개 목록 상한·HTX auth/callback query 로그/UX는 활성화 전 backlog다. 앱 등록·Bitget 발신자·BingX/HTX UID결속 설정·정식 계약 발행/소비 pin·실계정·운영은 미완료다. 공개/서비스 flag 기본false·fixture build제외·SDK/주문 권위 불변을 유지한다.
+
 ### b463 코드 검수에서 남긴 한계
 
 personal(1) Opus5.5의 `b463a728` 시험·fixture 검수는 C0/H0/M0/L4 `CODE_GO`다. 제품·전체·main GO를 뜻하지 않는다. 같은 후보의 단일 13,200개·469 spec 전체 회귀는 13,183 PASS/0 FAIL/기존 17 SKIP/미실행·중단·시험 밖 오류 0, 실제 exit 0으로 완료했다. 원 timeout·retry 0·필터 0·기존 skip 조건을 유지했다. 아래 제품·시험 잔여 Low는 수정 완료로 쓰지 않으며 L3 명칭 문서는 이번에 교정했다.
@@ -8111,3 +8121,5 @@ agy의 추가 두 차례 코드 검수 중 스크롤 재마운트·제목 포커
 
 원본 코드 대조, 화면 캡처, 자동 테스트는 실제 백테스트 정확성·실시간 데이터·iOS/Safari 실기기·스크린리더·법률·공개 배포 Go/No-Go를 대체하지 않는다. 로컬만 변경하며 commit/push/운영 승격은 수행하지 않는다.
 <!-- QA_HISTORY_END -->
+
+보안 스캔에서 API0.12 생성 manifest의 공개 artifact SHA256 4개를 API 키로 오탐했다. 독립적으로 normative 원본 및 실제 계약 파일 해시를 대조했고 값은 로그에 출력하지 않았다. 기존44개에 해당4개의 exact commit/file/rule/line fingerprint만 추가하며 범용 규칙·경로 예외는 변경하지 않는다. 원 scan exit2와 분류 원문을 보존한다.

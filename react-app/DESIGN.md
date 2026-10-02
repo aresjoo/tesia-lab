@@ -1,6 +1,6 @@
 # TETH AI Design System
 
-이 문서의 코드 대조 기준은 후속 통합 `3f8070ed5eedd67830acaafbbe54dcbb777ce388`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
+이 문서의 코드 대조 기준은 전수 검증 코드 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
 | 인수 항목 | 현재 상태 |
 |---|---|

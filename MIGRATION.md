@@ -8,16 +8,18 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web` 병합 main `62b5e6972cb48a3ac862fc41799061c0d0722525`의 추적 파일 전체 |
+| React 출처 | `beak1011/tesia-web` 거래소 연결 통합 후보 `75a5f5bbb820ad27f66304927ff4c70954fea318`의 추적 파일 전체. 병합 main `62b5e69`를 포함한 Web draft PR54 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
-| 현재 제품 상태 | 고정 원본 React 이식은 Web52로 인수·병합됨. 공개 기본 UI는 Mock이며 실제 공급자·운영 승격은 미완료. 전수 시험의 범위와 아래 별도 잔여를 구분 |
+| 현재 제품 상태 | 원본 React 이식 병합본 + 미병합 거래소 연결 후보를 함께 전달. 코드 공개/검토와 main 인수·실제 공급자·운영 승격은 별개. 연결 기능은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `be935c9`의 출처 `c04b5cd`에서 병합 main `62b5e69`로 갱신했다. **86개 파일 변경(신규 4개 포함), 총 2,122개 파일**이며 출처의 미커밋 변경은 없다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `5a51901`(병합 main `62b5e69`)에서 거래소 연결 후보 `75a5f5b`로 갱신했다. **추가 19개 파일 변경(신규 13개 포함), 총 2,135개 파일**이며 출처의 미커밋 변경은 없다. 앞서 전달한 원본 이식·후속 86개 파일 변경도 모두 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+사용자가 현재까지의 프론트 변경을 한 브랜치에서 볼 수 있도록 요청했으므로 **미병합이라는 이유만으로 구현 코드를 빼지 않는다.** 후보 코드를 포함하되 출처 SHA, 검증 범위, feature flag, 미완료 계약·운영 항목을 구분해 전달한다. 독립 QA 실험·credential·DB와 다른 저장소 서버 구현 자체는 프론트 스냅샷에 혼합하지 않는다.
 
 | 누적 변경 | 코드와 검토 위치 | 전달 의미 |
 | --- | --- | --- |
@@ -30,9 +32,24 @@
 
 출처 원본 이식은 [Web52](https://github.com/beak1011/tesia-web/pull/52)로 병합됐고 [Web55](https://github.com/beak1011/tesia-web/pull/55)는 CI fingerprint만 보정했다. 출처 팀의 `b463a728` 단일 전수는 **13,183 PASS / 0 FAIL / 기존 17 SKIP (총 13,200)**이며 최종 문서 후보 `1e994c7`와 Web52 병합 tree가 동일하다. Web55는 제품·시험 입력을 바꾸지 않았다. 이는 출처 인수 근거이며 **이번 전달 작업에서 13,200개를 재실행했다는 뜻은 아니다.** 이번 복사본에서 직접 실행한 결과는 검증 JSON을 따른다. 모든 62 preset·실제 공급자 성공 인증으로 확대하지 않는다.
 
-### 별도 검토 중이며 이번 코드에 포함하지 않은 변경
+### 이번에 코드까지 포함한 거래소 연결 후보
 
-[Web draft PR54](https://github.com/beak1011/tesia-web/pull/54), head `75a5f5bbb820ad27f66304927ff4c70954fea318`의 **신규 거래소 연결**은 아직 main에 병합되지 않았다. 관련 [클라이언트 PR4](https://github.com/aresjoo/tesia-lab/pull/4), [Backend158](https://github.com/beak1011/tesia-backend/pull/158), [Contracts40](https://github.com/beak1011/tesia-contracts/pull/40)는 이 전달과 구분한다. TETH 로그인→거래소 로그인·최초 동의→서버 연결 확인, 브라우저 API 키 입력·저장 없음이 후보 방향이다. 해당 후보의 178 PASS는 별도 fixture 범위이며 실계정/TLS/provider 성공이 아니다. **이번 `react-app/`에는 이 draft 코드를 합치지 않았다.** 병합 인수 후 같은 브랜치에 코드·설명·검증을 함께 갱신한다.
+[Web draft PR54](https://github.com/beak1011/tesia-web/pull/54), head `75a5f5bbb820ad27f66304927ff4c70954fea318`의 **신규 거래소 연결 코드를 `react-app/`에 포함했다.** 앞선 커밋의 문서만 전달한 상태를 바로잡았다. 이 후보는 `tesia-web/main`에는 아직 미병합이다. TETH 로그인→거래소 로그인·최초 동의→서버 연결 확인 흐름이며 브라우저 API 키 입력·저장은 없다.
+
+| 추가·변경 위치 (`react-app/` 기준) | 역할·검토 포인트 |
+| --- | --- |
+| `src/exchange-connect/controller.ts` | 서버가 확인한 연결 상태·로그인 이동·취소/만료/실패·소유자 전환 처리. 거래소 원격 키 정리 안내와 로컬 연결 해제를 구분 |
+| `src/exchange-connect/transport.ts` | 같은 origin의 명시 endpoint만 소비하는 transport. 응답 크기/시간·redirect 제한 |
+| `src/exchange-connect/use-exchange-connection.ts` | React 수명과 계정별 controller 연결 |
+| `src/exchange-connect/copy.ts` | 7언어 연결 상태·오류·복구 안내 |
+| `src/internal-poc/NativeServiceApp.tsx`, `service-main.tsx` | 기존 서비스 화면에 연결 후보 공급. 기본 비활성화 유지 |
+| `src/internal-poc/contracts/generated/api-v0.12/` 6개 파일 | 생성 client/types/validator/index와 operation/generation manifest. 미발행 후보 SDK이며 기존 정식 소비 pin을 대체하지 않음 |
+| `exchange-connect-fixture.html`, `src/exchange-connect/fixture-main.tsx`, `tests/exchange-connect.spec.ts` | 로컬 시험 진입점·34개 desktop/mobile/controller 검증. 제품 build에는 fixture HTML을 포함하지 않음 |
+| `README.md`, `DESIGN.md`, `Bugfix_report.md`, `.gitleaksignore` | 인수 경계·시험 근거·정확한 공개값 fingerprint 추가 |
+
+관련 [클라이언트 PR4](https://github.com/aresjoo/tesia-lab/pull/4), [Backend158](https://github.com/beak1011/tesia-backend/pull/158), [Contracts40](https://github.com/beak1011/tesia-contracts/pull/40)의 계약을 소비한다. 프론트 소스·생성 SDK·시험은 이 브랜치에서 볼 수 있고 **서버 구현과 규범 계약은 해당 저장소가 정본**이다. 관련 PR 병합·정식 API0.12 패키지 발행 및 소비 pin 갱신·거래소 앱 등록·실계정 인증·TLS/운영 검증은 남아 있다. 등록 앱이 없는 provider는 사용 불가로 닫힌다. 연결 해제는 `local_only`이며 원격 키 폐기를 보장하지 않는다. 주문 권한도 생성하지 않는다.
+
+출처의 178 PASS는 별도 fixture 범위이며 실계정/TLS/provider 성공이 아니다. 현재 전달에서 직접 실행한 결과는 검증 JSON을 따른다. **service build의 `VITE_TETH_EXCHANGE_CONNECT=true`만 명시 opt-in이며 기본 false**다. 코드가 전달됐다는 이유로 운영 flag를 켜지 않는다.
 
 ### 저장소 읽는 순서
 
@@ -74,7 +91,7 @@
 | AI 트레이딩 터미널, 우측 대화·조건 수정 | `ClientSourceTerminalWorkspace.tsx`, `ClientAccountTerminal.tsx`, `ClientTradingTerminal.tsx`, `ClientStrategyProposal.tsx` | 원본 터미널 구성을 React로 조립. 전략 변경 제안과 검증/실행 권한을 분리. 본문·버튼의 AI 트레이딩 명칭 후속 정렬과 선택적 Main 시장 공급 연결 반영 |
 | 전문 차트, 캔들, 지표·그리기·기간 | `ClientProfessionalPriceChart.tsx`, `ClientPriceDrawingTools.tsx`, `ClientMarketPicker.tsx`, `ClientTerminalMarket.tsx` | Lightweight Charts 5.2.1 기반 전문 차트가 별도로 존재. catalogue 차트와 동일 컴포넌트가 아님. 공급되지 않은 분봉/실시간 데이터를 임의 생성해 실제라고 표시하지 않음 |
 | 시장 질문 결과·저장 차트 | `ClientMarketResponse.tsx`, `ClientStoredMarketResponse.tsx`, `ClientMarketChartCard.tsx`, `src/client-market-chart-*.ts` | 저장 상태/자료 출처/거부·실패 경계. 전역 storage 거부·commit 불확실성 표시와 disabled 교정을 이번에 반영 |
-| 거래소 목록·연결플랜·연결 완료·만료/KYC | `ClientMyExchanges.tsx`, `ClientConnectionPlan.tsx`, `ClientTerminalConnectionEmpty.tsx`, `ClientTradingIntro.tsx` | UI 상태와 실제 계정 관측을 분리. callback만으로 연결·과금·주문 성공을 합성하지 않음 |
+| 거래소 목록·연결플랜·연결 완료·만료/KYC | `ClientMyExchanges.tsx`, `ClientConnectionPlan.tsx`, `ClientTerminalConnectionEmpty.tsx`, `ClientTradingIntro.tsx`, `src/exchange-connect/` | 기존 UI와 신규 서비스 연결 controller/SDK 후보까지 포함. UI 상태와 실제 계정 관측을 분리하며 callback만으로 연결·과금·주문 성공을 합성하지 않음 |
 | 설정, 언어·통화, 계정·보안·이메일·알림·결제 | `ClientSettingsPage.tsx`, `ClientSettingsSecurity.tsx`, `ClientSettingsBilling.tsx`, `ClientSettingsNotifications.tsx`, `src/client-*-copy.ts` | 7언어 표시와 상태 소비. 최신 원본의 일반 설정 USD 고정과 다른 화면 통화 표시를 구분. 서버 action이 없는 항목을 실제 변경 성공으로 처리하지 않음 |
 | 사용량·잔액·연결후 상태 | `ClientSettingsUsage.tsx`, `ClientUsageBanner.tsx`, `src/client-usage-presentation.ts` | Mock 표시와 owner/source-bound 관측. 원본 가격과 기존 Mock 가격 차이는 미해결이며 실제 요금 계약 확정 아님 |
 | 대화에서 예약된 검증/조건부 주문 표시 | `ClientConditionalOrderCard.tsx`, `src/client-conditional-order-preview.ts` | 제한된 문법의 공개 Mock producer. service/foreign/stopped 응답을 예약 주문 권한으로 승격하지 않음 |
@@ -120,7 +137,7 @@
 3. **전문 차트와 catalogue 결과 차트는 다른 경로다.** 전문 Lightweight Charts 코드가 있어도 모든 백테스트 경로가 그 차트/실데이터를 사용하는 것은 아니다.
 4. **원본 이식 인수와 무결함/전 상태 인증은 다르다.** 출처의 단일 전체 회귀·Web52 인수는 완료됐지만 모든 62 preset 또는 모든 화면·반응형·SVG·모션 조합의 인증은 아니다. 최종 원본과 어긋난 동선은 계속 확인해야 한다.
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
-6. **신규 거래소 연결 draft 및 이후 변경은 미포함이다.** 위 PR54와 `sourceCommit` 이후 변경은 이번 전달에 들어갔다고 주장하지 않는다.
+6. **신규 거래소 연결 draft는 코드 포함, 정식 서비스 승격은 미완료다.** 위 PR54 head까지 전달했으며 그 이후 변경이나 실제 공급자 성공을 포함했다고 주장하지 않는다.
 
 1·2번은 이전 전달의 개별 QA 잔여이며 해당 `ClientCatalogueBacktest.tsx`는 이전 출처와 byte 동일함을 이번에 확인했다. 이 잔여가 전체 인수 시험에 의해 해소됐다고 추정하지 않는다. 비공개 후보는 제품 수정처럼 보이지 않도록 `react-app/src`에 섞어 넣지 않았다. 구현 담당이 인수할 때 변경·검증·상태 설명을 같은 후속 커밋으로 갱신한다.
 
@@ -143,7 +160,7 @@ TETH_E2E_PORT=4196 npx playwright test --workers=2
 
 Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 backend 연결은 기존 승인된 설정·계약을 따른다. 이번 전달을 위해 자동 로그인·API key 입력·운영 배포를 실행하지 않는다.
 
-이번 전달 자체의 검증 결과는 [migration-verification.json](migration-verification.json)에 기록한다. 원본/출처/전달 해시 검증과 lint·build·대표 브라우저 검증을 구분한다. 출처의 전체 회귀·Web52 병합 인수는 완료됐으며, 이 브랜치는 그 병합본의 **클라이언트 검토용 전달**이다. 클라이언트 main 병합 또는 운영 배포 승인을 의미하지 않는다.
+이번 전달 자체의 검증 결과는 [migration-verification.json](migration-verification.json)에 기록한다. 원본/출처/전달 해시 검증과 lint·build·대표 브라우저 검증을 구분한다. 출처의 전체 회귀·Web52 병합 인수는 완료됐으며, 이 브랜치는 **병합본과 신규 거래소 연결 후보를 함께 보여 주는 클라이언트 검토용 전달**이다. 기본 원본 이식의 전수 성공을 추가 연결 기능에 자동 승계하지 않는다. 클라이언트 main 병합 또는 운영 배포 승인을 의미하지 않는다.
 
 ## 8. 다음 에이전트의 검토·수정 방법
 
@@ -158,7 +175,7 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 이 브랜치가 지속 전달 창구다. 날짜별 복제 브랜치·`final/latest` 문서를 늘리지 않는다. 코드를 바꾼 커밋에는 이 설명서의 영향/잔여와 검증 JSON도 갱신한다.
 
 1. `git fetch origin main migration` 후 로컬 `migration`을 원격과 fast-forward 정렬한다. 최초 브랜치 생성 전에는 `main`만 fetch한다.
-2. PM의 현재 통합 작업본과 writer를 확인한다. 원본 고정 SHA를 임의로 새 main과 혼합하지 않는다.
+2. PM의 현재 통합 작업본과 writer를 확인한다. 현재 프론트 통합 후보까지 전달하되 미병합 후보라는 이유로 코드를 누락하지 말고 상태를 구분한다. 원본 고정 SHA를 임의로 새 main과 혼합하거나 관련 없는 독립 실험을 합치지는 않는다.
 3. 출처가 순간적으로 변경 중이면 캡처를 다시 수행한다. 다음 도구는 추적 파일 전체를 byte 그대로 복사하고 모든 파일의 SHA-256을 기록한다. 비추적 코드가 있거나 전달본에 별도 수정이 있으면 중단한다.
 
    ```bash
