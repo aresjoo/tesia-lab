@@ -85,6 +85,8 @@
 
 ## 5. 실제 연결 상태 — 서로 섞으면 안 되는 네 가지
 
+거래소 연결의 additive 후보는 `react-app/src/exchange-connect/`와 exact API0.12 생성 SDK다. 명시 `VITE_TETH_EXCHANGE_CONNECT=true`인 서비스 build만 공급하며 기본 공개 Mock은 보존한다. 현재 migration capture의 원본 provenance를 새 실제 공급자 성공으로 재해석하지 않는다. 이 delta의 lint/service build·전용 브라우저 시험과 실제 등록 앱의 인증 인수는 별개다. 기존 프론트팀 공용 진입점에 대한 변경은 독립 작업본의 diff로 전달하며 담당자 인수 전에 원 회귀 후보를 덮어쓰지 않는다.
+
 | 구분 | 의미 | 현재 전달에서 판단할 범위 |
 | --- | --- | --- |
 | 공개 Mock UI | 브라우저 preview·결정론적 시뮬레이션 | 기본 앱. 실제 로그인/거래/유료 결제 전체 제공이 아님 |

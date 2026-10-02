@@ -1,0 +1,60 @@
+{
+  "apiContractVersion": "0.12.0",
+  "maxRequestBytes": 8192,
+  "maxResponseBytes": 262144,
+  "operations": [
+    {
+      "method": "GET",
+      "name": "catalog",
+      "path": "/api/v1/exchange-connections/catalog",
+      "response": "CatalogResponse"
+    },
+    {
+      "method": "POST",
+      "name": "start",
+      "path": "/api/v1/exchange-connections/transactions",
+      "request": "StartRequest",
+      "response": "TransactionResponse"
+    },
+    {
+      "method": "GET",
+      "name": "transaction",
+      "path": "/api/v1/exchange-connections/transactions/{transactionId}",
+      "response": "TransactionResponse"
+    },
+    {
+      "method": "GET",
+      "name": "connections",
+      "path": "/api/v1/exchange-connections/",
+      "response": "ConnectionsResponse"
+    },
+    {
+      "method": "DELETE",
+      "name": "disconnect",
+      "path": "/api/v1/exchange-connections/{connectionId}",
+      "response": "DisconnectResponse"
+    },
+    {
+      "method": "DELETE",
+      "name": "cancel",
+      "path": "/api/v1/exchange-connections/transactions/{transactionId}",
+      "response": "TransactionResponse"
+    }
+  ],
+  "statusByCode": {
+    "ACCOUNT_CONFLICT": 409,
+    "AUTHENTICATION_REQUIRED": 401,
+    "BAD_REQUEST": 400,
+    "CSRF_INVALID": 403,
+    "FORBIDDEN": 403,
+    "INTERNAL_ERROR": 500,
+    "NOT_FOUND": 404,
+    "ORIGIN_INVALID": 403,
+    "PERMISSION_REJECTED": 403,
+    "PROVIDER_FAILED": 502,
+    "PROVIDER_UNAVAILABLE": 503,
+    "RATE_LIMITED": 429,
+    "TRANSACTION_EXPIRED": 410,
+    "TRANSACTION_REPLAYED": 409
+  }
+}

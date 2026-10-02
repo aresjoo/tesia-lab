@@ -12,4 +12,4 @@ if (root === null) throw new Error('SERVICE_ROOT_MISSING')
 // The existing server serves this HTML at / and /auth/complete. Start with the
 // SDK-owned conversation controller even without a presentation fragment.
 // Network/authentication failures stay failures, never local mock fallback.
-createRoot(root).render(<StrictMode><SiteRouter service><NativeServiceApp /></SiteRouter></StrictMode>)
+createRoot(root).render(<StrictMode><SiteRouter service><NativeServiceApp exchangeConnectionsEnabled={import.meta.env.VITE_TETH_EXCHANGE_CONNECT === 'true'} /></SiteRouter></StrictMode>)

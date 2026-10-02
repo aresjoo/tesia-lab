@@ -2,6 +2,7 @@
 
 - 현재 화면은 Mock이며 거래·백테스트 의미론의 정본이 아니다.
 - 제품 정본은 `beak1011/tesia-program`, API/schema는 `beak1011/tesia-contracts`의 생성 client로만 소비한다.
+- 거래소 연결은 사용자 직접 요청에 따른 독립 비공개 후보다. API0.12 후보 생성물을 정확한 source commit으로 소비하며 기존 브라우저 bootstrap 예외를 확대하지 않는다. 서비스 flag 기본 false·공개 Mock 경계와 실제 등록 앱 인수 조건을 보존한다. 현재 프론트 회귀 작업본은 직접 수정하지 않는다.
 - PO가 승인한 유일한 예외는 `browser-session.ts`의 named `ensureBrowserSession` 최초 생성 POST transport다. Contracts 정책 `ba11ef0a3b7d01a6c01706f9b80e8b748d0fb829`의 BRS-01~10에 따라 실제 SDK GET 전체 검증·POST/GET data와 strong ETag exact 대조로만 확인한다. 가짜 Set-Cookie, SDK validator skip, 로컬 schema 복제, 다른 operation의 raw 소비는 허용하지 않는다.
 - 프론트는 UI/UX 개선을 계속할 수 있으나 backend 계약을 추측해 로컬 type으로 확정하지 않는다.
 - 공개 사이트는 법률 Gate 전 Mock only다. 실제 연결, 거래소 추천·레퍼럴·KYC·입금·자동주문 카피를 임의로 공개하지 않는다.

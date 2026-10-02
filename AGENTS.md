@@ -10,6 +10,7 @@
 | --- | --- |
 | `README.md`, `MIGRATION.md` | 전달 진입점과 원본 대비 구조/동작 대응·잔여·누적 갱신 절차 |
 | `react-app/` | 실제 로컬 React 통합 작업본의 추적 코드·자산·테스트 스냅샷. Node 22, npm ci, Vite 개발/빌드·lint·Playwright 사용 |
+| `react-app/src/exchange-connect/` | 명시 비공개 서비스 공급용 거래소 연결 controller·transport·hook. 실제 키는 서버가 보관하며 원 회귀 후보와 별도 인수 |
 | `migration-manifest.json` | 출처 SHA, 캡처 시각, 미커밋 파일, 전체 파일 해시 |
 | `migration-verification.json` | 해당 전달본에서 실행한 검사와 미검증 범위 |
 | `tools/sync-migration.mjs` | 출처를 수정하지 않는 명시적 동기화·해시 확인. 자동 push/배포 없음 |

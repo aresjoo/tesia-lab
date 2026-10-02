@@ -46,6 +46,14 @@ e325 이후 제품 변경은 공통 `mine` 결과에서 홈 복귀 시 hash 해�
 
 ## 로컬 검증
 
+거래소 연결의 독립 후보는 `src/exchange-connect/`와 생성 API0.12 SDK다. 서비스 build에서만 `VITE_TETH_EXCHANGE_CONNECT=true npm run build:service`로 명시 공급할 수 있다. 기본값은 비활성화이며 공개 Mock 진입은 보존한다. 동일 origin 서버의 `/api/v1/exchange-connections/`와 실제 등록 앱 설정이 필요하다. 일반 사용자는 거래소 로그인·최초 동의만 진행하며 API key/secret을 브라우저에 입력·보관하지 않는다.
+
+복귀는 `/auth/complete#exchange-transaction={opaqueId}` locator를 읽고 기존 session SDK와 생성 API0.12 client로 서버 결과를 재확인한다. locator만으로 성공하지 않는다. 세션 변경·StrictMode 재설정·중복 클릭·늦은 응답을 처리하며 실패 시 재시도할 수 있다. 권한 표시는 실제 응답을 따르고 확인 전 출금 권한 부재를 단정하지 않는다. 해제의 `local_only`는 TETH 보관 삭제이며 화면에서 거래소 키 삭제도 안내한다. 발급 뒤 실패 가능성이 있는 거래소는 키 관리 확인 안내를 제공한다.
+
+계약 후보는 `dee3425fb01c3728ce77cf9be9a73cf061c3e632`이며 `src/internal-poc/contracts/generated/api-v0.12/`는 해당 생성물의 원 bytes다. `exchange-connect-fixture.html`과 `src/exchange-connect/fixture-main.tsx`는 시험 전용이며 product build 입력에 포함하지 않는다. 관련 시험은 `npx playwright test tests/exchange-connect.spec.ts`다.
+
+이 변경은 별도 작업본 후보다. 기존 프론트팀 작업본에 직접 적용하지 않았고 공용 진입점 diff를 담당자에게 전달했다. 등록값 미제공으로 실제 거래소 계정 인증·운영 배포는 검증하지 않았다.
+
 ```bash
 npm ci
 npm run lint
