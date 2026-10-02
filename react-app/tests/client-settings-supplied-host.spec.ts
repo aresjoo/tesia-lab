@@ -1,0 +1,66 @@
+import { expect, test, type Page } from '@playwright/test'
+
+async function open(page: Page, tab: 'security' | 'notify') {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.addInitScript(() => localStorage.setItem('tethLang', 'ko'))
+  await page.route('**/settings-supplied-host.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module">import RefreshRuntime from "/@react-refresh";RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>(type)=>type;window.__vite_plugin_react_preamble_installed__=true;const {mountSettingsSuppliedHost}=await import("/tests/fixtures/client-settings-supplied-host.tsx");mountSettingsSuppliedHost();</script></body></html>' }))
+  await page.goto(`/settings-supplied-host.html#/settings/${tab}`)
+  await expect(page.locator('.client-settings-page')).toBeVisible()
+}
+const fixture = (page: Page, method: string, value?: unknown) => page.evaluate(({ method, value }) => Reflect.get(window, 'settingsSuppliedHost')[method](value), { method, value })
+const notification = (page: Page, topic: string, channel: string) => page.locator(`[data-notification-topic="${topic}"] [data-notification-channel="${channel}"]`)
+
+for (const [kind, selector, id] of [['logoutDevice', '[data-security-row="device:remote/device"]', 'remote/device'], ['disconnectExchange', '[data-security-row="permission:permission"]', 'exchange/one']] as const) test(`actual service host: ${kind} exact ID and confirmation reach supplied callback without observed success`, async ({ page }) => {
+  const writes: string[] = []; page.on('request', r => { if (!['GET', 'HEAD'].includes(r.method())) writes.push(r.method()) })
+  await open(page, 'security')
+  const row = page.locator(selector), trigger = row.getByRole('button')
+  await trigger.click(); const dialog = page.getByRole('dialog')
+  await expect(dialog.getByRole('button', { name: '취소', exact: true })).toBeFocused()
+  expect(await fixture(page, 'calls')).toEqual([])
+  await dialog.locator('button[type=submit]').evaluate(n => { (n as HTMLButtonElement).click(); (n as HTMLButtonElement).click() })
+  expect(await fixture(page, 'calls')).toEqual([{ kind, id, aborted: false }])
+  await fixture(page, 'resolve'); await expect(dialog).toHaveCount(0)
+  await expect(row).toBeVisible(); await expect(trigger).toBeFocused()
+  await expect(page.getByRole('status')).toBeVisible()
+  expect(writes).toEqual([])
+})
+for (const boundary of ['owner', 'dataset', 'callback'] as const) test(`actual service host: security ${boundary} retires pending capability and ignores late acknowledgement`, async ({ page }) => {
+  await open(page, 'security'); await page.locator('[data-security-row="permission:permission"] button').click()
+  await page.getByRole('dialog').locator('button[type=submit]').click()
+  await fixture(page, boundary === 'owner' ? 'setOwner' : boundary === 'dataset' ? 'setIdentity' : 'replaceCallbacks', boundary === 'callback' ? undefined : 'next-boundary')
+  await expect.poll(() => fixture(page, 'calls')).toEqual([{ kind: 'disconnectExchange', id: 'exchange/one', aborted: true }])
+  await fixture(page, 'resolve'); await expect(page.getByRole('dialog')).toHaveCount(0)
+  await expect(page.locator('.stg-security [role=status]')).toHaveCount(0)
+})
+test('actual service host: six source topics and mandatory email remain observed while a request awaits fresh facts', async ({ page }) => {
+  await open(page, 'notify')
+  await expect(page.locator('[data-notification-topic]')).toHaveCount(6)
+  await expect(page.locator('[data-notification-channel]')).toHaveCount(12)
+  const button = notification(page, 'fill', 'push')
+  await expect(button).toHaveAttribute('aria-pressed', 'true')
+  await expect(notification(page, 'fill', 'email')).toHaveAttribute('aria-pressed', 'false')
+  await expect(notification(page, 'bill', 'email')).toBeDisabled()
+  await expect(notification(page, 'bill', 'email')).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.locator('.native-settings-plan')).toContainText('Legacy group remains separate')
+  await button.evaluate(n => { (n as HTMLButtonElement).click(); (n as HTMLButtonElement).click() })
+  expect(await fixture(page, 'calls')).toEqual([{ kind: 'preference', id: 'opaque/fill/push', checked: false, aborted: false }])
+  await expect(button).toBeDisabled(); await expect(button).toHaveAttribute('aria-pressed', 'true')
+  await fixture(page, 'resolve'); await expect(button).toBeEnabled(); await expect(button).toHaveAttribute('aria-pressed', 'true')
+})
+for (const boundary of ['owner', 'dataset', 'callback'] as const) test(`actual service host: marked notification ${boundary} aborts old request without new observed value`, async ({ page }) => {
+  await open(page, 'notify'); await notification(page, 'fill', 'email').click()
+  await fixture(page, boundary === 'owner' ? 'setOwner' : boundary === 'dataset' ? 'setIdentity' : 'replaceCallbacks', boundary === 'callback' ? undefined : 'next-boundary')
+  await expect.poll(() => fixture(page, 'calls')).toEqual([{ kind: 'preference', id: 'opaque/fill/email', checked: true, aborted: true }])
+  await fixture(page, 'resolve'); await expect(notification(page, 'fill', 'email')).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.locator('.client-settings-notifications [role=status]')).toHaveCount(0)
+})
+test('actual service host: foreign account presentation supplies neither observed settings nor capabilities', async ({ page }) => {
+  await open(page, 'security'); await fixture(page, 'setForeign', true)
+  await expect(page.locator('[data-security-row="device:remote/device"]')).toHaveCount(0)
+  await page.evaluate(() => { location.hash = '#/settings/notify' })
+  await expect(page.locator('[data-notification-topic]')).toHaveCount(6)
+  for (const button of await page.locator('[data-notification-channel]').all()) {
+    await expect(button).toBeDisabled(); await expect(button).not.toHaveAttribute('aria-pressed')
+  }
+  expect(await fixture(page, 'calls')).toEqual([])
+})

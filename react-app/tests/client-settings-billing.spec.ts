@@ -1,0 +1,260 @@
+import { expect, test, type Page } from '@playwright/test'
+import { billingText } from '../src/client-settings-billing-copy'
+import { securityText } from '../src/client-settings-security-copy'
+import copy from '../src/client-settings-copy.json' with { type: 'json' }
+const path = '/tests/fixtures/client-settings-billing.html'
+test.setTimeout(40_000)
+type Kind = 'information' | 'add' | 'default' | 'remove'
+async function open(page: Page, kind: Kind, query = '') {
+  await page.goto(`${path}${query}#/settings/billing`)
+  const pane = page.locator('.stg-billing')
+  if (kind === 'information') await pane.locator('[data-billing-information] button').click()
+  else {
+    await pane.locator('[data-billing-methods] button').click()
+    if (kind === 'add') await page.getByRole('dialog').getByRole('button', { name: '결제 수단 추가', exact: true }).click()
+    else await page.locator('[data-method=method-b]').getByRole('button', { name: kind === 'default' ? '기본으로 설정' : '삭제', exact: true }).click()
+  }
+  return kind === 'information' ? page.locator('.stg-billing-form') : page.getByRole('dialog')
+}
+async function submit(page: Page, kind: Kind) {
+  const form = await open(page, kind)
+  if (kind === 'information') await form.getByLabel('이름', { exact: true }).fill('NEW UNSAVED NAME')
+  const button = form.getByRole('button').last()
+  await button.evaluate(el => { (el as HTMLButtonElement).click(); (el as HTMLButtonElement).click() })
+  await expect(button).toBeDisabled()
+  expect(await page.evaluate(() => Reflect.get(window, 'billingCalls')())).toHaveLength(1)
+  return form
+}
+test('billing restores original history and receipt with historical facts and units intact', async ({ page }) => {
+  await page.goto(`${path}#/settings/billing`)
+  const pane = page.locator('.stg-billing')
+  await expect(pane).toContainText('SUPPLIED BILLING TEST')
+  await expect(pane.locator('.stg-invoice')).toHaveCount(3)
+  await pane.locator('.stg-invoice').first().click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toContainText('100 USDT')
+  await expect(dialog).toContainText('HISTORICAL RECIPIENT')
+  await expect(dialog).not.toContainText('CURRENT RECIPIENT')
+  await dialog.getByRole('button', { name: '닫기', exact: true }).click()
+  await expect(pane.locator('.stg-invoice').first()).toBeFocused()
+  await pane.getByRole('button', { name: '전체 보기', exact: true }).click()
+  await expect(pane.locator('.stg-invoice')).toHaveCount(6)
+  await expect(pane.getByRole('button', { name: '접기', exact: true })).toBeFocused()
+  await pane.locator('.stg-invoice').nth(1).click()
+  await expect(dialog.getByRole('heading')).toHaveText('결제 실패 내역')
+  await page.keyboard.press('Escape')
+  await pane.locator('.stg-invoice').nth(2).click()
+  await expect(dialog.getByRole('heading')).toHaveText('환불 내역')
+  await expect(dialog).toContainText('₩139,000')
+})
+
+test('unknown lists are not empty; unconnected forms never collect card data or save billing data', async ({ page }) => {
+  const form = await open(page, 'information', '?unknown&unavailable')
+  await expect(page.locator('.stg-billing')).not.toContainText(billingText('ko', 'noInvoices'))
+  await expect(page.locator('.stg-billing')).not.toContainText(billingText('ko', 'noMethods'))
+  for (const input of await form.locator('input').all()) await expect(input).toBeDisabled()
+  await expect(form.getByRole('button', { name: '저장', exact: true })).toBeDisabled()
+  await page.keyboard.press('Escape')
+  await page.locator('[data-billing-methods] button').click()
+  await page.getByRole('dialog').getByRole('button', { name: '결제 수단 추가', exact: true }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog.locator('input')).toHaveCount(0)
+  await expect(dialog).toContainText(copy.actionUnavailable.ko)
+  await expect(dialog.getByRole('button', { name: '새로 추가', exact: true })).toBeDisabled()
+  await page.keyboard.press('Escape')
+  await page.evaluate(() => Reflect.get(window, 'billingSetData')({ sourceLabel: 'EMPTY', invoices: [], methods: [], information: null }))
+  await expect(page.locator('.stg-billing')).toContainText(billingText('ko', 'noInvoices'))
+  await expect(page.locator('.stg-billing')).toContainText(billingText('ko', 'noMethods'))
+  expect(await page.evaluate(() => Reflect.get(window, 'billingCalls')())).toEqual([])
+})
+
+test('billing information validates, protects composition, retains failed draft and never invents saved data', async ({ page }) => {
+  const form = await open(page, 'information')
+  const email = form.getByLabel('결제 이메일', { exact: true }), name = form.getByLabel('이름', { exact: true })
+  await expect(email).toBeFocused()
+  await email.fill('bad')
+  await form.getByRole('button', { name: '저장', exact: true }).click()
+  await expect(form.getByRole('alert')).toHaveText(billingText('ko', 'emailInvalid'))
+  await email.fill('edited@example.invalid'); await name.fill('  ')
+  await name.press('Enter')
+  await expect(form.getByRole('alert')).toHaveText(billingText('ko', 'nameRequired'))
+  await name.fill('NEW UNSAVED NAME')
+  expect(await name.evaluate(el => !el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true, cancelable: true })))).toBe(true)
+  expect(await page.evaluate(() => Reflect.get(window, 'billingCalls')())).toEqual([])
+  await name.press('Enter')
+  await page.evaluate(() => Reflect.get(window, 'billingReject')())
+  await expect(form.getByRole('alert')).toHaveText(securityText('ko', 'failed'))
+  await expect(name).toHaveValue('NEW UNSAVED NAME')
+  await expect(page.locator('body')).not.toContainText('PRIVATE_ERROR_NOT_FOR_UI')
+  await name.press('Enter')
+  await page.evaluate(() => Reflect.get(window, 'billingResolve')(1))
+  await expect(form).toHaveCount(0)
+  await expect(page.locator('.stg-billing')).not.toContainText('NEW UNSAVED NAME')
+  await expect(page.locator('[data-billing-information] button')).toBeFocused()
+  await page.locator('[data-billing-information] button').click()
+  await expect(page.locator('.stg-billing-form').getByLabel('이름', { exact: true })).toHaveValue('CURRENT RECIPIENT')
+  await page.keyboard.press('Escape')
+  expect(await page.evaluate(() => JSON.stringify([Object.entries(localStorage), Object.entries(sessionStorage), location.href]))).not.toContain('edited@example.invalid')
+})
+
+test('billing editor is modal and card operations preserve facts without competing dialogs', async ({ page }) => {
+  const form = await open(page, 'information')
+  await form.getByLabel('이름', { exact: true }).fill('UNSAVED DRAFT')
+  await expect(page.getByRole('dialog')).toHaveCount(1)
+  await page.keyboard.press('Escape')
+  await expect(page.locator('[data-billing-information] button')).toBeFocused()
+  await page.locator('[data-billing-information] button').click()
+  await expect(form.getByLabel('이름', { exact: true })).toHaveValue('CURRENT RECIPIENT')
+  await page.keyboard.press('Escape')
+  await page.locator('[data-billing-methods] button').click()
+  const method = page.locator('[data-method=method-b]')
+  await expect(page.locator('[data-method=method-a]').getByRole('button', { name: '삭제', exact: true })).toBeDisabled()
+  await expect(page.locator('[data-method=method-a]').getByRole('button', { name: '삭제', exact: true })).toHaveAccessibleDescription('HOST BLOCKED REMOVAL')
+  await method.getByRole('button', { name: '기본으로 설정', exact: true }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog.getByRole('button', { name: '취소', exact: true })).toBeFocused()
+  expect(await page.evaluate(() => Reflect.get(window, 'billingCalls')())).toEqual([])
+  await dialog.getByRole('button', { name: '기본으로 설정', exact: true }).click()
+  await page.evaluate(() => Reflect.get(window, 'billingResolve')())
+  await expect(dialog.getByRole('heading')).toHaveText('결제 수단')
+  await expect(method.getByRole('button', { name: '기본으로 설정', exact: true })).toBeVisible()
+  await expect(form).toHaveCount(0)
+  await method.getByRole('button', { name: '삭제', exact: true }).click()
+  await dialog.getByRole('button', { name: '삭제', exact: true }).click()
+  await page.evaluate(() => Reflect.get(window, 'billingReject')(1))
+  await expect(dialog.getByRole('alert')).toHaveText(securityText('ko', 'failed'))
+  await expect(dialog).toContainText('TEST CARD B')
+  await dialog.getByRole('button', { name: '삭제', exact: true }).click()
+  await page.evaluate(() => Reflect.get(window, 'billingResolve')(2))
+  await expect(dialog).toHaveCount(0)
+  await page.locator('[data-billing-methods] button').click()
+  await expect(method).toContainText('TEST CARD B')
+})
+
+for (const kind of ['information', 'add', 'default', 'remove'] as const) for (const boundary of ['close', 'owner', 'dataset', 'snapshot', 'tab', 'port'] as const) for (const settle of ['resolve', 'reject'] as const) {
+  test(`${kind} ignores late ${settle} after ${boundary}`, async ({ page }) => {
+    const surface = await submit(page, kind)
+    if (boundary === 'close') await page.keyboard.press('Escape')
+    if (boundary === 'owner') await page.evaluate(() => Reflect.get(window, 'billingSetOwner')('owner-b'))
+    if (boundary === 'dataset') await page.evaluate(() => Reflect.get(window, 'billingSetDataset')('dataset-b'))
+    if (boundary === 'snapshot') await page.evaluate(() => Reflect.get(window, 'billingSetData')({ sourceLabel: 'NEW SNAPSHOT', invoices: [], methods: [], information: null }))
+    if (boundary === 'tab') await page.evaluate(() => { location.hash = '#/settings/general' })
+    if (boundary === 'port') await page.evaluate(() => Reflect.get(window, 'billingSetEnabled')(false))
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'billingCalls')()[0].aborted)).toBe(true)
+    await page.evaluate(settle => Reflect.get(window, settle === 'resolve' ? 'billingResolve' : 'billingReject')(), settle)
+    await expect(page.locator('.stg-main').getByRole('status')).toHaveCount(0)
+    await expect(page.locator('.stg-main').getByRole('alert')).toHaveCount(0)
+    if (boundary === 'port') { await expect(surface.getByRole('button').last()).toBeDisabled(); await surface.getByRole('button', { name: '취소', exact: true }).click() }
+    await expect(surface).toHaveCount(0)
+    expect(await page.evaluate(() => document.body.style.overflow)).not.toBe('hidden')
+  })
+}
+
+test('receipt modal wraps focus, honors backdrop selection and restores original overflow priority', async ({ page }) => {
+  await page.addInitScript(() => addEventListener('DOMContentLoaded', () => document.body.style.setProperty('overflow', 'auto', 'important')))
+  await page.goto(`${path}#/settings/billing`)
+  await page.locator('.stg-invoice').first().click()
+  const dialog = page.getByRole('dialog')
+  for (const key of ['Tab', 'Shift+Tab']) for (let i = 0; i < 5; i++) {
+    await page.keyboard.press(key)
+    expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true)
+  }
+  const rect = (await dialog.locator('dd').first().boundingBox())!
+  await page.mouse.move(rect.x + 4, rect.y + 4); await page.mouse.down(); await page.mouse.move(2, 2); await page.mouse.up()
+  await expect(dialog).toBeVisible()
+  await page.mouse.click(2, 2)
+  await expect(dialog).toHaveCount(0)
+  expect(await page.evaluate(() => [document.body.style.getPropertyValue('overflow'), document.body.style.getPropertyPriority('overflow')])).toEqual(['auto', 'important'])
+})
+
+test('mobile settings detail keeps actions hit-testable and returns through its separate list', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 500 })
+  await page.goto(`${path}#/settings/billing`)
+  await page.evaluate(() => Reflect.get(window, 'billingSetData')({ sourceLabel: 'SUPPLIED', invoices: [], information: { name: 'Test', email: 'a@example.invalid', address: 'Test' }, methods: Array.from({ length: 12 }, (_, i) => ({ id: `method-${i}`, brand: `TEST CARD ${i}`, last4: '4242', expiryLabel: '12/28', isDefault: i === 0, removable: true })) }))
+  const button = page.locator('[data-billing-information] button')
+  await button.evaluate(el => el.scrollIntoView({ block: 'start' }))
+  await expect.poll(() => button.evaluate(el => {
+    const rect = el.getBoundingClientRect(), hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)
+    return hit === el || el.contains(hit)
+  })).toBe(true)
+  const navigation = page.locator('.stg-navigation')
+  await expect(navigation).toBeHidden()
+  await navigation.locator('.stg-ni').evaluateAll(elements => { for (const el of elements) (el as HTMLElement).style.fontSize = '28px' })
+  await expect.poll(async () => {
+    await button.evaluate(el => el.scrollIntoView({ block: 'start' }))
+    return button.evaluate(el => {
+      const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)
+      return hit===el || el.contains(hit)
+    })
+  }).toBe(true)
+  await button.click()
+  await expect(page.locator('.stg-billing-form input').first()).toBeFocused()
+  await page.keyboard.press('Escape')
+  if((page.viewportSize()?.width??1440)<=900)await page.locator('.stg-mback').click()
+  await page.locator('a[href="#/settings/account"]').click()
+  const title = page.locator('.client-settings-page h1')
+  await expect(title).toBeFocused()
+  await expect(title).toBeInViewport({ ratio: 1 })
+  expect((await title.boundingBox())!.y).toBeGreaterThan((await page.locator('.stg-mback').boundingBox())!.y)
+  await expect(navigation).toHaveAttribute('inert','')
+})
+
+test('pending payment action keeps keyboard focus on a usable modal control', async ({ page }) => {
+  const dialog = await open(page, 'remove')
+  await dialog.getByRole('button', { name: '삭제', exact: true }).click()
+  await expect(dialog.getByRole('button', { name: '취소', exact: true })).toBeFocused()
+  await page.evaluate(() => Reflect.get(window, 'billingSetEnabled')(false))
+  await expect(dialog.getByRole('button', { name: '취소', exact: true })).toBeFocused()
+})
+
+test('receipt fits a short visual viewport and treats supplied labels as text', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 })
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.addInitScript(() => {
+    const viewport = new EventTarget()
+    Object.assign(viewport, { height: 290, offsetTop: 48 })
+    Object.defineProperty(window, 'visualViewport', { configurable: true, value: viewport })
+  })
+  await page.goto(`${path}#/settings/billing`)
+  await page.evaluate(() => Reflect.get(window, 'billingSetData')({ sourceLabel: 'SUPPLIED', invoices: [{ id: 'receipt-test', label: '<img src=x onerror=alert(1)>', kind: 'paid', statusLabel: 'SUPPLIED', dateLabel: 'SUPPLIED DATE', amountLabel: '100 USDT' }], methods: [], information: null }))
+  await page.locator('.stg-invoice').first().click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toContainText('<img src=x onerror=alert(1)>')
+  await expect(dialog.locator('img')).toHaveCount(0)
+  const rect = (await dialog.boundingBox())!
+  expect(rect.y).toBeGreaterThanOrEqual(63); expect(rect.y + rect.height).toBeLessThanOrEqual(323)
+  await dialog.getByRole('button', { name: '닫기', exact: true }).click()
+  await expect(dialog).toHaveCount(0)
+  expect(errors).toEqual([])
+})
+
+for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) for (const width of [320, 481, 861, 901, 1440]) {
+  test(`${language} billing ${width}px preserves columns, long text and receipt layout`, async ({ page }, info) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.addInitScript(language => localStorage.setItem('tethLang', language), language)
+    await page.goto(`${path}#/settings/billing`)
+    await page.evaluate(() => Reflect.get(window, 'billingSetData')({ sourceLabel: 'SUPPLIED BILLING',
+      invoices: [{ id: 'LongReceiptNumber'.repeat(6), label: 'LongDescription'.repeat(6), dateLabel: '2026. 09. 30.', amountLabel: '123,456,789.12345678 USDT', kind: 'refunded', statusLabel: 'ConfirmedRefundStatus'.repeat(4), recipient: 'HistoricalRecipient'.repeat(6) }],
+      information: { name: 'RecipientName'.repeat(6), email: 'longaddress'.repeat(8) + '@example.invalid', address: 'Address'.repeat(10) },
+      methods: [{ id: 'long', brand: 'LongCardBrand'.repeat(6), last4: '1234567890123456', expiryLabel: '12 / 28', isDefault: false, removable: true }],
+    }))
+    const pane = page.locator('.stg-billing')
+    await expect(pane).not.toContainText('1234567890123456')
+    for (const element of await pane.locator('.stg-invoice,.stg-r,.k,.v,button').all()) expect(await element.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
+    if (language === 'fr' && width !== 861) { await page.locator('[data-billing-methods] button').click(); await page.screenshot({ path: info.outputPath(`billing-fr-${width}.png`), fullPage: true }); await page.keyboard.press('Escape') }
+    await pane.locator('.stg-invoice').first().click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByRole('heading')).toHaveText(billingText(language, 'refundedReceipt'))
+    await expect(dialog).toContainText('123,456,789.12345678 USDT')
+    for (const element of await dialog.locator('h2,dt,dd,button').all()) expect(await element.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
+    expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
+    if (language === 'fr' && width !== 861) await page.screenshot({ path: info.outputPath(`receipt-fr-${width}.png`), fullPage: true })
+    await page.keyboard.press('Escape')
+    await pane.getByRole('button', { name: billingText(language, 'change'), exact: true }).click()
+    const form = page.locator('.stg-billing-form')
+    for (const element of await form.locator('label,button').all()) expect(await element.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
+    for (const button of await form.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(width <= 900 ? 44 : 34)
+    if (width <= 900) expect(await form.locator('input').first().evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16)
+  })
+}

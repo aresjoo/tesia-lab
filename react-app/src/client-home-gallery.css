@@ -1,0 +1,43 @@
+/* Source: tesia-lab 42a0d81 tfTplCards. Scoped to protect existing workspaces. */
+.client-home-gallery.g-tplwrap{--template-ease:cubic-bezier(.16,1,.3,1);width:min(880px,94%);margin:30px auto 8px;position:relative;z-index:1}
+.client-home-gallery .g-tpls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.client-home-gallery .g-tpl{position:relative;min-width:0;border:0;padding:0;border-radius:22px;overflow:hidden;cursor:pointer;background:var(--client-surface,#1e1f20);aspect-ratio:220/124;transition:transform .15s var(--template-ease),box-shadow .15s;font-family:inherit;text-align:left}
+.client-home-gallery .g-tpl>svg{position:absolute;inset:0;width:100%;height:100%}
+.client-home-gallery .g-tpl::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);pointer-events:none;z-index:2}
+.client-home-gallery .g-tpl::after{content:'';position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,0) 100%);pointer-events:none}
+.client-home-gallery .g-tpl:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.client-home-gallery .g-tpl:hover::before{box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.client-home-gallery .g-tpl .lb{position:absolute;left:14px;right:13px;bottom:12px;font-size:16px;font-weight:500;line-height:1.4;letter-spacing:0;color:#fff;z-index:1;word-break:keep-all;overflow-wrap:anywhere}
+.client-home-gallery .g-tpl.on{box-shadow:0 0 0 2.5px #a8c7fa}
+.client-home-gallery .g-tpl.on:hover{box-shadow:0 0 0 2.5px #a8c7fa,0 8px 24px rgba(0,0,0,.35)}
+.client-home-gallery .g-tpl:focus-visible{outline:2px solid #e3e3e3;outline-offset:5px}
+.client-home-gallery .g-tpl .timg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.client-home-gallery .g-tpl .timg img{max-width:56%;max-height:52%;object-fit:contain;display:block}
+.client-home-gallery .g-tpl .timg img.inv,.client-template-selection .th .timg img.inv{filter:brightness(0) invert(1)}
+.client-template-selection.g-tpl-sel{--template-ease:cubic-bezier(.16,1,.3,1);flex:0 0 100%;min-width:0;order:-2;display:flex;gap:8px;flex-wrap:wrap;padding:4px 2px 10px;animation:clientTemplateSelectionIn .2s var(--template-ease)}
+.client-template-selection .tchip{display:inline-flex;align-items:center;gap:8px;max-width:100%;background:rgba(255,255,255,.08);border:0;border-radius:999px;padding:5px 7px 5px 5px;font-size:13px;font-weight:500;color:var(--client-ink,#e3e3e3);animation:clientTemplateChipIn .18s var(--template-ease)}
+.client-template-selection .chip-label{min-width:0;overflow-wrap:anywhere}
+.client-template-selection .th{display:inline-flex;width:24px;height:24px;border-radius:50%;overflow:hidden;flex:none}
+.client-template-selection .th svg{width:100%;height:100%;display:block}
+.client-template-selection .th .timg{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.client-template-selection .th .timg img{max-width:72%;max-height:72%;object-fit:contain}
+.client-template-selection .tchip button{border:0;background:rgba(255,255,255,.14);border-radius:50%;width:24px;height:24px;min-width:24px;min-height:24px;flex:none;display:inline-flex;align-items:center;justify-content:center;color:inherit;font-size:14px;line-height:1;cursor:pointer;padding:0}
+.client-template-selection .tchip button:hover{background:rgba(255,255,255,.24)}
+.client-template-selection .tchip button:focus-visible{outline:2px solid #a8c7fa;outline-offset:2px}
+.client-template-notice{position:fixed;bottom:calc(var(--client-band-height,180px) + 12px);left:50%;transform:translateX(-50%);z-index:50;max-width:calc(100vw - 32px);pointer-events:none;text-align:center}
+.client-template-notice:not(:empty){padding:10px 16px;border-radius:12px;background:#303237;color:#e3e3e3;font-size:13px;box-shadow:0 8px 24px #0005}
+.client-home-gallery.entering .g-tpl{animation:clientTemplateCardIn .45s var(--template-ease) both;animation-delay:var(--tpl-delay,.3s)}
+@keyframes clientTemplateCardIn{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes clientTemplateChipIn{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes clientTemplateSelectionIn{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* Source column policy: 3 (>1100), 2 (601–1100), 1 (<=600), including short viewports. */
+@media(max-width:1100px){.client-home-gallery .g-tpls{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.client-home-gallery .g-tpl .lb{font-size:17px}}
+@media(max-width:600px){.client-home-gallery .g-tpls{grid-template-columns:minmax(0,1fr)}.client-home-gallery .g-tpl .lb{font-size:18px}}
+@media(max-width:860px){
+  .client-home-gallery.g-tplwrap{width:auto;align-self:stretch;margin:20px 16px 8px}
+  .client-home-gallery .g-tpl{border-radius:20px;aspect-ratio:220/142}
+  /* Ten selections must not consume the viewport above the fixed composer. */
+  .client-template-selection.g-tpl-sel{max-height:min(132px,22dvh);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:6px;scrollbar-width:thin}
+}
+@media(pointer:coarse){.client-template-selection .tchip{padding:0 0 0 7px}.client-template-selection .tchip button{width:44px;height:44px;background:transparent}.client-template-selection .tchip button:hover{background:rgba(255,255,255,.14)}}
+@media(prefers-reduced-motion:reduce){.client-home-gallery.entering .g-tpl,.client-template-selection.g-tpl-sel,.client-template-selection .tchip{animation:none}.client-home-gallery .g-tpl{transition:none}.client-home-gallery .g-tpl:hover{transform:none}}

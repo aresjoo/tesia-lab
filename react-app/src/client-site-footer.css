@@ -1,0 +1,96 @@
+/* Source: tesia-lab f260167 site-footer.js. Policy text is managed separately. */
+/* Keep source geometry and colors. Larger hit targets and wrapping harden it. */
+.client-site-footer { min-width:0; max-width:100%; text-align:left; }
+.client-site-footer .gft-col :is(a,button) { min-height:44px; margin-bottom:0; padding-block:6px; display:flex; align-items:center; max-width:100%; white-space:normal; }
+.client-site-footer .gft-col h3 { margin-bottom:10px; }
+.client-site-footer .gft-follow { flex-wrap:wrap; gap:0; min-width:0; }
+.client-site-footer .gft-follow .gft-fl { white-space:normal; margin-right:16px; }
+.client-site-footer .gft-follow button { flex:none; display:grid; place-items:center; width:44px; height:44px; padding:11px; border:0; background:none; color:inherit; opacity:.65; }
+.client-site-footer .gft-follow svg { width:22px; height:22px; }
+.client-site-footer .gft-crs { display:flex; align-items:center; min-height:44px; }
+.client-site-footer .gft-wm { margin-top:72px; max-width:100%; }
+.client-site-footer .gft-copy p { max-width:75ch; }
+/* Document pages use one scroll owner. Chat, research and terminal are excluded. */
+/* A finite scrollport is essential: an auto-height overflow ancestor prevents
+   the bottom-sticky composer from reaching the viewport on a long gallery. */
+.tesia-shell.client-source-app.conversation-surface.has-site-footer { height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-padding-block:64px 44px; }
+.client-footer-body { display:contents; }
+.client-source-app.has-site-footer .client-source-main { height:auto; min-height:calc(100svh - 28px); overflow:visible; }
+.client-source-app.has-site-footer :is(.client-main-existing,.native-service-route-content,.native-service-content:not([hidden]),.client-main-account) { height:auto; overflow:visible; }
+.client-source-app.has-site-footer .client-source-main .client-research-hub { height:auto; min-height:calc(100svh - 28px); overflow:visible; }
+.client-source-app.has-site-footer > .client-site-footer { margin-top:0; padding-bottom:28px; }
+.client-source-app.has-site-footer.footer-in-view > .site-help { bottom:42px; }
+@container(max-width:600px) {
+  .client-site-footer .gft-follow .gft-fl { flex-basis:100%; margin-bottom:8px; }
+  .client-site-footer .gft-follow { column-gap:8px; }
+}
+@media(min-width:861px) {
+  .tesia-shell.client-source-app.has-site-footer { padding-left:0!important; }
+  .client-source-app.has-site-footer > .client-footer-body { display:grid; grid-template-columns:64px minmax(0,1fr); }
+  .client-source-app.has-site-footer > .client-footer-body:has(.client-sidebar.mobile-open) { grid-template-columns:256px minmax(0,1fr); }
+  .client-source-app.has-site-footer > .client-footer-body > .client-sidebar { position:sticky; top:0; bottom:auto; grid-column:1; grid-row:1; height:calc(100dvh - 28px); align-self:start; }
+  .client-source-app.has-site-footer > .client-footer-body > .client-source-main { grid-column:2; grid-row:1; min-width:0; }
+}
+@media(max-width:860px) {
+  /* The page now scrolls behind fixed home controls. Paint and hit-test a
+     single quiet header surface, without moving controls or adding a layer
+     above the menu/auth buttons. Match the banner's existing 64px offset. */
+  .client-source-app.has-site-footer.view-landing::before { content:''; position:fixed; inset:0 0 auto; height:64px; z-index:69; background:var(--client-0); }
+  .client-source-app.has-site-footer.view-landing:has(.client-hamburger.with-banner)::before { top:64px; }
+  /* A fixed input used to cover the new footer. It now stops with its home. */
+  .client-source-app.has-site-footer .client-gallery-home .client-home-band { position:sticky; inset:auto; bottom:28px; margin:26px -24px 0; width:calc(100% + 48px); }
+  .client-source-app.has-site-footer .client-home-content.client-gallery-home { padding-bottom:24px; }
+  .client-site-footer .gft-wm { margin-top:44px; }
+}
+@media(max-width:860px) and (max-height:560px) {
+  /* Match the home keyboard/landscape fallback: the footer's sticky override
+     must not bring the composer back over the independently scrolling cards. */
+  .client-source-app.has-site-footer .client-gallery-home .client-home-band { position:static; }
+  /* With the composer in document flow, the nested 50vh gallery is unnecessary
+     and clips card labels in landscape. Let the page own scrolling here too. */
+  .client-source-app.has-site-footer .client-gallery-home .client-home-gallery { max-height:none; overflow:visible; }
+}
+.gft{--gft-fg:#fff;--gft-bg:#000;--gft-wm:#00f0ff;--gft-line:rgba(255,255,255,.3);--gft-ring:rgba(255,255,255,.25);container-type:inline-size;margin-top:48px;background:var(--gft-bg);color:var(--gft-fg);font-weight:500;word-break:keep-all;overflow-wrap:anywhere}
+.gft.gft-lime{--gft-fg:#0c0d0f;--gft-bg:#00f0ff;--gft-wm:#0c0d0f;--gft-line:#0c0d0f;--gft-ring:rgba(12,13,15,.55)} /* Source keeps the legacy class name; only home has a cyan background. */
+.gft-in{padding:0 40px 28px;border-top:2px solid var(--gft-line)}
+.gft-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 48px;align-items:center;min-height:86px;margin:0 -40px;padding:0 40px}
+.gft-rule{height:2px;background:var(--gft-line);margin:0 -40px 23px}
+.gft-crs{justify-self:start;width:fit-content;font-size:16px;line-height:1.3;font-weight:500;color:var(--gft-fg);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.gft-crs:hover{text-decoration-thickness:2px}
+.gft-follow{display:flex;align-items:center;gap:20px;justify-self:start}
+.gft-follow .gft-fl{margin-right:4px;font-size:16px;line-height:24px;font-weight:500;color:var(--gft-fg);white-space:nowrap}
+.gft-follow a{display:block;width:20px;height:20px;color:var(--gft-fg)}
+.gft-follow a[aria-label=X]{width:24px;height:24px}
+.gft-follow a:hover{opacity:.7}
+.gft-follow svg{display:block;width:100%;height:100%;fill:currentColor}
+.gft-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px 48px}
+.gft-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.gft-col h3{margin:0 0 16px;font-size:16px;font-weight:700;line-height:1.5;color:var(--gft-fg)}
+.gft-col a,.gft-col button{display:block;width:fit-content;margin:0 0 12px;padding:0;background:none;border:0;font:inherit;font-size:16px;font-weight:500;line-height:1.5;color:var(--gft-fg);text-decoration:none;text-align:left;cursor:pointer}
+.gft-col a:hover,.gft-col button:hover{text-decoration:underline;text-underline-offset:3px}
+.gft a:focus-visible,.gft button:focus-visible{outline:2px solid var(--gft-fg);outline-offset:3px;border-radius:2px}
+.gft-copy p{margin:0 0 16px;font-size:16px;font-weight:500;line-height:1.6;color:var(--gft-fg)}
+.gft-copy .dim{color:var(--gft-fg)}
+.gft-pw{display:flex;align-items:center;gap:8px;margin-top:72px;font-size:16px;font-weight:500;color:var(--gft-fg)} /* Powered by 는 본문 색(검정 푸터 흰색, 홈 검정). 라임은 워드마크만 */
+.gft-pw img{width:22px;height:22px;border-radius:6px;box-shadow:0 0 0 1px var(--gft-ring)}
+.gft-pw b{font-weight:700;color:var(--gft-fg)}
+.gft-wm{display:block;width:100%;height:auto;margin-top:14px;fill:var(--gft-wm)} /* Black footer: cyan wordmark. Cyan home footer: black wordmark. */
+@container (max-width:900px){
+  .gft-top{grid-template-columns:minmax(0,1fr)}
+  .gft-cols{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
+}
+@container (max-width:600px){
+  .gft-in{display:flex;flex-direction:column;padding:0 20px 20px}
+  .gft-bar,.gft-top{display:contents} /* 로빈후드 모바일 순서: 요약 링크, 선, 메뉴, 팔로우, 문단, Powered by, 워드마크 */
+  .gft-crs{order:1;margin:27px 0 27px} /* 로빈후드 모바일 실측 */
+  .gft-rule{order:2;margin:0 -20px 23px}
+  .gft-cols{order:3;grid-template-columns:minmax(0,1fr);row-gap:44px}
+  .gft-follow{order:4;gap:24px;margin:44px 0 0}
+  .gft-follow a{box-sizing:content-box;padding:12px;margin:-12px}
+  .gft-copy{order:5;margin-top:40px}
+  .gft-pw{order:6}
+  .gft-wm{order:7}
+  .gft-pw{margin-top:44px}
+  .gft-col h3{margin-bottom:25px}
+  .gft-col a,.gft-col button{line-height:25px;margin:0 0 8px}
+}

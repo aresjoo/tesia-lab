@@ -1,0 +1,102 @@
+{
+  "apiContractVersion": "0.9.0",
+  "emailTransactionCookie": {
+    "domainAllowed": false,
+    "encodedLength": 43,
+    "expiry": "ORIGINAL_CHALLENGE_ABSOLUTE_EXPIRES_FLOOR_SECOND",
+    "httpOnly": true,
+    "name": "__Host-tesia_email_tx",
+    "opaqueBits": 256,
+    "path": "/",
+    "positiveMaxAgeAllowed": false,
+    "sameSite": "Lax",
+    "secure": true,
+    "verificationSuccess": "DELETE_SAME_ATTRIBUTES_MAX_AGE_ZERO"
+  },
+  "operations": [
+    {
+      "browserCallable": true,
+      "errorStatusByCode": {
+        "AUTHENTICATION_REQUIRED": 401,
+        "AUTH_BINDING_CONFLICT": 409,
+        "AUTH_TRANSACTION_CONFLICT": 409,
+        "BAD_REQUEST": 400,
+        "CSRF_INVALID": 403,
+        "FORBIDDEN": 403,
+        "IDEMPOTENCY_IN_PROGRESS": 409,
+        "IDEMPOTENCY_KEY_INVALID": 400,
+        "IDEMPOTENCY_KEY_REUSED": 409,
+        "INTERNAL_ERROR": 500,
+        "MAIL_DISABLED": 503,
+        "ORIGIN_INVALID": 403,
+        "PRECONDITION_FAILED": 412,
+        "PRECONDITION_REQUIRED": 428,
+        "RATE_LIMITED": 429
+      },
+      "headers": [
+        "Origin",
+        "Host",
+        "Sec-Fetch-Site",
+        "Content-Type",
+        "X-CSRF-Token",
+        "Idempotency-Key",
+        "If-Match"
+      ],
+      "kind": "MUTATION",
+      "method": "POST",
+      "operationId": "createEmailChallengeV9",
+      "path": "/api/v9/auth/email/challenges",
+      "pathField": null,
+      "replayPolicy": "EXACT_BODY_COOKIE_BOUND_NO_NEW_SEND_OR_AUTH",
+      "requestPolicy": "EXACT_SAME_ORIGIN_COOKIE_CSRF_IDEMPOTENCY_ANONYMOUS_ETAG",
+      "requestSchema": "identity-session.schema.json#/$defs/EmailChallengeRequest",
+      "responseSchema": "identity-session.schema.json#/$defs/EmailChallengeEnvelope",
+      "successEtagRequired": true,
+      "successStatus": 201
+    },
+    {
+      "browserCallable": true,
+      "errorStatusByCode": {
+        "AUTHENTICATION_REQUIRED": 401,
+        "AUTH_BINDING_CONFLICT": 409,
+        "AUTH_TRANSACTION_CONFLICT": 409,
+        "BAD_REQUEST": 400,
+        "CHALLENGE_EXPIRED": 410,
+        "CODE_INVALID": 400,
+        "CSRF_INVALID": 403,
+        "FORBIDDEN": 403,
+        "IDEMPOTENCY_IN_PROGRESS": 409,
+        "IDEMPOTENCY_KEY_INVALID": 400,
+        "IDEMPOTENCY_KEY_REUSED": 409,
+        "INTERNAL_ERROR": 500,
+        "NOT_FOUND": 404,
+        "ORIGIN_INVALID": 403,
+        "PRECONDITION_FAILED": 412,
+        "PRECONDITION_REQUIRED": 428,
+        "RATE_LIMITED": 429
+      },
+      "headers": [
+        "Origin",
+        "Host",
+        "Sec-Fetch-Site",
+        "Content-Type",
+        "X-CSRF-Token",
+        "Idempotency-Key",
+        "If-Match"
+      ],
+      "kind": "MUTATION",
+      "method": "POST",
+      "operationId": "verifyEmailChallengeV9",
+      "path": "/api/v9/auth/email/challenges/{challengeId}/verifications",
+      "pathField": "challengeId",
+      "replayPolicy": "EXACT_BODY_COOKIE_BOUND_NO_NEW_SEND_OR_AUTH",
+      "requestPolicy": "EXACT_SAME_ORIGIN_COOKIE_CSRF_IDEMPOTENCY_ANONYMOUS_ETAG",
+      "requestSchema": "identity-session.schema.json#/$defs/EmailVerificationRequest",
+      "responseSchema": "identity-session.schema.json#/$defs/EmailVerificationEnvelope",
+      "successEtagRequired": true,
+      "successStatus": 200
+    }
+  ],
+  "sessionConfirmation": "SEPARATE_COOKIE_JAR_SESSION_ROUND_TRIP_REQUIRED",
+  "surface": "EMAIL_CODE_ONLY_COMPANION"
+}

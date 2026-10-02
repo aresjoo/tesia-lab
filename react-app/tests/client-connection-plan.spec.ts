@@ -1,0 +1,147 @@
+import {expect,test,type Page} from '@playwright/test'
+
+test('f5070e0 source cyan highlight is consistent through plan and authorization',async({page})=>{
+  await member(page)
+  await page.goto('/#/connect/plan')
+  const root=page.getByTestId('connection-plan')
+  await expect(root.locator('.cpl-cta-hi').first()).toHaveCSS('background-color','rgb(0, 240, 255)')
+  await expect(root.locator('.cpl-cta-hi').first()).toHaveCSS('color','rgb(0, 0, 0)')
+  await expect(root.locator('.cpl-card.cpl-hi')).toHaveCSS('border-top-color','rgba(0, 240, 255, 0.55)')
+  await expect(root.locator('.cpl-card.cpl-hi')).toHaveCSS('background-image','linear-gradient(rgb(14, 14, 14) 0%, rgb(10, 42, 46) 48%, rgb(11, 72, 81) 100%)')
+  await page.goto('/#/connect/authorize?exchange=bitget')
+  await expect(root.locator('.cpx-perm li').first()).toHaveCSS('color','rgb(0, 240, 255)')
+})
+async function member(page:Page){await page.addInitScript(()=>sessionStorage.setItem('teth-client-profile-preview',JSON.stringify({name:'플랜 검수',email:'plan@example.test'})))}
+async function signup(page:Page){await page.getByRole('button',{name:/Google/}).click();await page.getByLabel('연령',{exact:true}).fill('28');await page.getByRole('button',{name:'시장에 입장하기',exact:true}).click()}
+
+test('checkout keyboard chooses exactly one exchange and keeps selection focus',async({page})=>{
+  await member(page);await page.goto('/#/connect/checkout?exchange=okx')
+  const group=page.getByRole('radiogroup',{name:'거래소',exact:true})
+  await group.getByRole('radio',{name:'OKX',exact:true}).focus()
+  for(const [key,name] of [['ArrowRight','Bybit'],['ArrowUp','OKX'],['End','Gate'],['ArrowRight','Bitget'],['Home','Bitget']]){
+    await page.keyboard.press(key)
+    await expect(group.getByRole('radio',{name,exact:true})).toBeChecked()
+    await expect(group.getByRole('radio',{name,exact:true})).toBeFocused()
+    await expect(group.locator('[tabindex="0"]')).toHaveCount(1)
+    await expect(page.locator('.cpl-lines')).toContainText(`연결할 계정: ${name}`)
+  }
+  await page.reload();await expect(group.getByRole('radio',{name:'Bitget',exact:true})).toBeChecked()
+})
+
+test('high contrast retains the original gradient price as readable text',async({page})=>{
+  await page.emulateMedia({forcedColors:'active'});await page.goto('/#/connect/plan')
+  const price=page.locator('.cpl-grad');await expect(price).toBeVisible()
+  expect(await price.evaluate(el=>getComputedStyle(el).color)).not.toBe('rgba(0, 0, 0, 0)')
+})
+
+for(const width of [320,390,900,1440])for(const step of ['plan','checkout'] as const)test(`${step} ${width}px original hierarchy, grid and unavailable payment boundary`,async({page},info)=>{
+  const errors:string[]=[],posts:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST')posts.push(r.url())})
+  await member(page);await page.setViewportSize({width,height:900});await page.goto(`/#/connect/${step}?exchange=okx`)
+  const root=page.getByTestId('connection-plan')
+  await expect(root).toHaveAttribute('data-step',step)
+  await expect(root.getByRole('heading',{level:1})).toHaveText(step==='plan'?'거래소 연결':'플랜 구성')
+  await expect(page.locator('.client-site-footer')).toHaveCount(0)
+  await expect(page.locator('.site-help')).toHaveCount(0)
+  await expect.poll(()=>root.locator('img').evaluateAll(els=>els.every(el=>(el as HTMLImageElement).complete&&(el as HTMLImageElement).naturalWidth>0))).toBe(true)
+  await expect(root.locator('.cpl-logo-fallback')).toHaveCount(0)
+  await expect(root.locator('img[src="/client-broker-assets/app-gate.jpg"]').first()).toBeVisible()
+  if(step==='plan'){
+    await expect(root.locator('.cpl-card')).toHaveCount(2)
+    await expect(root.locator('.cpl-hi')).toContainText('거래하는 사람을 위해')
+    await expect(root.locator('.cpl-hi .cpl-items li')).toHaveCount(7)
+    await expect(root.locator('.cpl-card').last().locator('.cpl-items li')).toHaveCount(6)
+    await expect(root.locator('.cpl-card').last()).toContainText('거래소 7곳 모두 연결')
+    await expect(root).not.toContainText('최대 2곳')
+    const boxes=await root.locator('.cpl-card').evaluateAll(els=>els.map(el=>el.getBoundingClientRect().toJSON()))
+    if(width<=900)expect(boxes[1].top).toBeGreaterThanOrEqual(boxes[0].bottom)
+    else expect(boxes[1].top).toBe(boxes[0].top)
+  }else{
+    await expect(root.getByRole('radio',{name:'OKX',exact:true})).toBeChecked()
+    await expect(root.getByLabel('카드 번호',{exact:true})).toBeDisabled()
+    await expect(root.getByLabel('보안 코드',{exact:true})).toBeDisabled()
+    await expect(root.getByRole('button',{name:'$280 결제하고 시작하기',exact:true})).toBeDisabled()
+    await root.getByRole('radio',{name:'Binance',exact:true}).click()
+    await expect(root.locator('.cpl-lines')).toContainText('연결할 계정: Binance')
+    await page.reload();await expect(root.getByRole('radio',{name:'Binance',exact:true})).toBeChecked()
+    expect(await root.locator('.cpl-in').evaluateAll(els=>els.every(el=>el.getBoundingClientRect().right<=innerWidth+1))).toBe(true)
+  }
+  expect(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true)
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true)
+  await page.screenshot({path:info.outputPath(`${step}-${width}.png`)})
+  expect(errors).toEqual([]);expect(posts).toEqual([])
+})
+
+for(const width of [320,390,1440])test(`post-plan ${width}px one decision per screen, source SVG and navigation`,async({page},info)=>{
+  const errors:string[]=[],posts:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST')posts.push(r.url())})
+  await member(page);await page.setViewportSize({width,height:900});await page.goto('/#/connect/free?exchange=okx')
+  const root=page.getByTestId('connection-plan'),heading=root.getByRole('heading',{level:1})
+  await expect(heading).toHaveText('거래소 선택');await expect(root.locator('.cpx-exs button')).toHaveCount(7)
+  for(const name of ['Bitget','Binance','OKX','Bybit','MEXC','WOO X','Gate']){
+    await root.getByRole('button',{name,exact:true}).click()
+    await expect(heading).toHaveText(`${name} 계정`);await expect(heading).toBeFocused()
+    await expect(root.locator('.cpx-steps')).toContainText(`전략을 시작하기 전에 ${name}에서 마칩니다.`)
+    await expect(root.getByRole('button',{name:`${name} 가입 화면 열기`,exact:true})).toBeDisabled()
+    await expect(root.locator('.cpx-cta path')).toHaveAttribute('d','M7 17L17 7M9 7h8v8')
+    await page.reload();await expect(heading).toHaveText(`${name} 계정`)
+    await root.getByRole('button',{name:'기존 초대 계정 연결',exact:true}).click()
+    await expect(heading).toHaveText(`${name} 연결`);await expect(heading).toBeFocused()
+    await expect(root.locator('.cpx-lead')).toHaveText(`${name} 화면이 열리면 아래 두 권한을 허용합니다.`)
+    await expect(root.locator('.cpx-perm li')).toHaveCount(2)
+    await expect(root.locator('.cpx-perm path').first()).toHaveAttribute('d','M5 12.500l4.500 4.500L19 7.500')
+    await expect(root.getByRole('button',{name:`${name}에서 승인하기`,exact:true})).toBeDisabled()
+    await page.goBack();await expect(heading).toHaveText(`${name} 계정`)
+    await page.goForward();await expect(heading).toHaveText(`${name} 연결`)
+    await root.getByRole('button',{name:'뒤로',exact:true}).click();await expect(heading).toHaveText(`${name} 계정`)
+    await root.getByRole('button',{name:'뒤로',exact:true}).click();await expect(heading).toHaveText('거래소 선택')
+  }
+  await root.getByRole('button',{name:'WOO X',exact:true}).click()
+  await page.screenshot({path:info.outputPath(`account-${width}.png`)})
+  const help=root.getByRole('button',{name:'상담원에게 묻기',exact:true})
+  await help.focus();await page.keyboard.press('Enter')
+  await expect(page.getByRole('button',{name:'도움말 닫기',exact:true})).toBeFocused()
+  await page.keyboard.press('Escape');await expect(help).toBeFocused()
+  await expect(root).toHaveAttribute('data-step','account')
+  await expect(page.locator('.client-site-footer')).toHaveCount(0)
+  expect(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true)
+  expect(errors).toEqual([]);expect(posts).toEqual([])
+})
+
+for(const step of ['plan','checkout','free','account','authorize'] as const)test(`${step} 200% text zoom keeps heading, fields and actions readable`,async({page},info)=>{
+  await member(page);await page.setViewportSize({width:640,height:900});await page.goto(`/#/connect/${step}?exchange=woox`)
+  const root=page.getByTestId('connection-plan');await expect(root).toHaveAttribute('data-step',step)
+  await page.evaluate(()=>{document.documentElement.style.zoom='2'})
+  expect(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true)
+  if(step==='checkout'){
+    const clipped=await root.locator('.cpl-in input').evaluateAll(els=>els.filter(el=>{const input=el as HTMLInputElement,c=document.createElement('canvas').getContext('2d')!;c.font=getComputedStyle(input).font;return c.measureText(input.placeholder).width>input.clientWidth+1}).map(el=>(el as HTMLInputElement).placeholder))
+    expect(clipped).toEqual([])
+    const legend=await root.locator('legend').boundingBox();expect(legend!.width).toBeLessThanOrEqual(2)
+  }
+  const target=root.getByRole('heading',{level:1});await target.focus()
+  const box=await target.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual(641)
+  await page.screenshot({path:info.outputPath(`${step}-zoom.png`)})
+})
+
+for(const step of ['checkout','free'] as const)test(`guest ${step} intent survives only explicit signup; no account entitlement is created`,async({page})=>{
+  await page.goto('/#/connect/plan?exchange=okx')
+  const root=page.getByTestId('connection-plan'),choice=root.getByRole('button',{name:step==='checkout'?'구독으로 시작하기':'무료로 시작하기',exact:true})
+  await choice.click();await expect(page.locator('.ca-auth')).toBeVisible()
+  await page.keyboard.press('Escape');await expect(choice).toBeFocused()
+  await expect(root).toHaveAttribute('data-step','plan')
+  await choice.click();await signup(page)
+  await expect(root).toHaveAttribute('data-step',step)
+  await expect(page).toHaveURL(new RegExp(`connect/${step}\\?exchange=okx`))
+  const raw=await page.evaluate(()=>Object.keys(sessionStorage).map(k=>[k,sessionStorage.getItem(k)]))
+  expect(raw.some(([,v])=>v?.includes('"payDone":true')||v?.includes('"conn":true'))).toBe(false)
+})
+
+test('direct guest checkout stays on plan and cancelled intent never resumes through unrelated login',async({page})=>{
+  await page.goto('/#/connect/checkout?exchange=binance')
+  const root=page.getByTestId('connection-plan');await expect(root).toHaveAttribute('data-step','plan')
+  await root.getByRole('button',{name:'구독으로 시작하기',exact:true}).click()
+  await page.keyboard.press('Escape')
+  await root.getByRole('button',{name:'뒤로',exact:true}).click()
+  await expect(page.locator('#strategy-idea')).toBeVisible()
+  await page.getByRole('button',{name:'로그인',exact:true}).first().click()
+  await page.getByRole('button',{name:/Google/}).click()
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
+})

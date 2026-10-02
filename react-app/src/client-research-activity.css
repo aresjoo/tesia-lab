@@ -1,0 +1,62 @@
+/* tesia-lab acccc7f g-act2: same content hierarchy, shared by conversation and native history.
+   Task state comes from props; styling cannot synthesize progress or success. */
+:is(.client-lab-conversation, .native-history-scope) .g-act2 { max-width: 800px; min-width: 0; font-size: 13.5px; color: var(--client-text-2); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .hd { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 32px; text-align: left; padding: 4px 2px; color: var(--client-text-2); font-size: 13.5px; border-radius: 8px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .hd:hover { color: var(--client-text); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .activity-logo { width: 22px; height: 14px; object-fit: contain; flex: none; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .hlb { min-width: 0; font-weight: 500; word-break: keep-all; overflow-wrap: anywhere; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .els { flex-shrink: 0; font-size: 12px; color: var(--client-text-2); font-family: var(--font-number); font-variant-numeric: tabular-nums; white-space: nowrap; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .hd > .tic { margin-top: 0; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .chev { flex-shrink: 0; color: var(--client-text-3); transition:transform .2s cubic-bezier(.16,1,.3,1); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2.open .hd > .chev { transform: rotate(180deg); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .tl { margin: 2px 0 0 10px; display:grid;grid-template-rows:1fr;transition:grid-template-rows .24s cubic-bezier(.16,1,.3,1); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2:not(.open) .tl { grid-template-rows:0fr; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .tlin { list-style: none; padding: 0; margin: 0; overflow:hidden;min-height:0; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar { position: relative; display: flex; gap: 11px; padding: 7px 0 7px 2px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar::before { content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 1px; background: var(--client-line); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar:first-child::before { top: 12px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar:last-child::before { bottom: auto; height: 12px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .tic { z-index: 1; flex: none; width: 16px; height: 16px; margin-top: 6px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--client-0); color: var(--client-text-2); border: 1px solid var(--client-line); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .tic.running { border: 0; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .activity-spinner { width:9px;height:9px;border-radius:50%;border:1.5px solid var(--client-text-3);border-top-color:var(--client-text);animation:client-activity-spin .8s linear infinite; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ab { flex: 1; min-width: 0; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .arh { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 28px; text-align: left; padding: 1px 4px; border-radius: 7px; color: var(--client-text-2); font-size: 13.5px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 button.arh:hover { background: var(--client-2); color: var(--client-text); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .at { min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .running .at { color: var(--client-text); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .am { margin-left: auto; flex: none; font-size: 11.5px; color: var(--client-text-2); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 :is(.tic.failed,.am.failed) { color: #f87171; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .arh > svg { flex: none; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .arh[aria-expanded='true'] > svg { transform: rotate(90deg); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ad { display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s cubic-bezier(.16,1,.3,1);white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;font-size:12.8px;line-height:1.75;color:var(--client-text-2); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ab.open .ad { grid-template-rows:1fr; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .adin { overflow:hidden;min-height:0;padding:0 4px 0 8px;transition:padding .22s cubic-bezier(.16,1,.3,1); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ab.open .adin { padding:6px 4px 4px 8px; }
+/* Source cot2: bounded live summary, full record available after completion.
+   Keep the original connector and fade; no invented thought text or feed timer. */
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .cot2 { box-sizing:border-box;white-space:pre-wrap;padding:2px 4px 2px 12px;border-left:2px solid var(--client-line);font-size:12.8px;line-height:1.75;color:var(--client-text-2);max-height:260px;overflow-y:auto;overscroll-behavior:contain;overflow-anchor:none;scrollbar-width:thin; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar.running .cot2 { max-height:118px; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar.running .cot2.ovf { mask-image:linear-gradient(to bottom,transparent 0,#000 30px); }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .cot2:focus-visible { outline:2px solid var(--client-text-2);outline-offset:-2px;mask-image:none; }
+:is(.client-lab-conversation, .native-history-scope) .activity-announcer { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 640px) {
+  :is(.client-lab-conversation, .native-history-scope) .g-act2 :is(.hd,button.arh) { min-height: 44px; }
+  :is(.client-lab-conversation, .native-history-scope) .g-act2 .cot2 { max-height:min(260px,40dvh); }
+  :is(.client-lab-conversation, .native-history-scope) .g-act2 .ar.running .cot2 { max-height:min(118px,30dvh); }
+}
+
+/* Source d3d487d/dab5aa2 motion. State and timestamps remain caller-owned. */
+:is(.client-lab-conversation, .native-history-scope) .g-act2 { animation:client-activity-in .3s cubic-bezier(.16,1,.3,1) both; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar { animation:client-activity-in .24s cubic-bezier(.16,1,.3,1) both; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2:not(.fin) .hlb { background:linear-gradient(100deg,var(--client-text-3) 40%,var(--client-text) 50%,var(--client-text-3) 60%);background-size:200% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:client-activity-shimmer 1.8s linear infinite; }
+:is(.client-lab-conversation, .native-history-scope) .g-act2 .tic.done svg { animation:client-activity-check .2s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes client-activity-in { from { opacity:0;transform:translateY(8px); } to { opacity:1;transform:none; } }
+@keyframes client-activity-spin { to { transform:rotate(360deg); } }
+@keyframes client-activity-shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
+@keyframes client-activity-check { from { opacity:.35;transform:scale(.5); } to { opacity:1;transform:scale(1); } }
+@media(prefers-reduced-motion:reduce) {
+  :is(.client-lab-conversation, .native-history-scope) .g-act2,:is(.client-lab-conversation, .native-history-scope) .g-act2 .ar,:is(.client-lab-conversation, .native-history-scope) .g-act2 .tic.done svg { animation:none; }
+  :is(.client-lab-conversation, .native-history-scope) .g-act2 .tl,:is(.client-lab-conversation, .native-history-scope) .g-act2 .chev,:is(.client-lab-conversation, .native-history-scope) .g-act2 .ad,:is(.client-lab-conversation, .native-history-scope) .g-act2 .adin { transition:none; }
+  :is(.client-lab-conversation, .native-history-scope) .g-act2:not(.fin) .hlb { animation:none;background:none;color:var(--client-text-2); }
+  :is(.client-lab-conversation, .native-history-scope) .g-act2 .activity-spinner { animation-duration:1.4s; }
+}

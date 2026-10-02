@@ -1,0 +1,57 @@
+/* Source 6c9bf6d tfTmPane connection prompt and nfx-btn pri. */
+.client-terminal-connection-empty.tft-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  padding: 40px 16px;
+  text-align: center;
+  font-family: inherit;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.client-terminal-connection-empty.tft-empty > b { max-width: 100%; font-size: 16px; font-weight: 400; color: var(--client-text, #e3e3e3); }
+.client-terminal-connection-empty.tft-empty > span { max-width: 100%; font-size: 14px; line-height: 1.6; color: #cdcdcd; }
+.client-terminal-connection-empty .nfx-btn.pri {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  margin: 16px auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #cdcdcd;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .15s var(--ease, ease), background .2s var(--ease, ease), box-shadow .2s var(--ease, ease), border-color .2s var(--ease, ease);
+}
+.client-terminal-connection-empty .nfx-btn.pri:not([aria-disabled="true"]):hover { background: transparent; color: #fff; box-shadow: none; }
+.client-terminal-connection-empty .nfx-btn.pri:not([aria-disabled="true"]):active { color: #fff; }
+.client-terminal-connection-empty .nfx-btn.pri[aria-disabled="true"] { opacity: .45; cursor: default; }
+.client-terminal-connection-empty .nfx-btn.pri:focus-visible { outline: 2px solid #9a9a9a; outline-offset: 3px; }
+.client-terminal-connection-empty[hidden] { display: none; }
+@media (max-width: 860px), (pointer: coarse) {
+  .client-terminal-connection-empty .nfx-btn.pri { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .client-terminal-connection-empty .nfx-btn.pri { transition: none; }
+  .client-terminal-connection-empty .nfx-btn.pri:not([aria-disabled="true"]):is(:hover, :active) { transform: none; }
+}

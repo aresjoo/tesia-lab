@@ -1,0 +1,251 @@
+/* Faithful source 42a0d81 account surfaces, scoped to their React boundary. */
+.client-account-activity{--g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;--gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;--gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);--gb:#3d6ef0;--gb2:#5b8af7;--gg:#4ec08d;--gr:#e0604b;--ga:#d9a84e;--inv-bg:#eceef2;--inv-fg:#17181b;--pill:#1e2024;--pop:#26282d;--hoverline:rgba(255,255,255,.05);min-width:0;width:100%;color:var(--gt);font-family:inherit;--ease:cubic-bezier(.22,1,.36,1)}
+.client-account-activity *{box-sizing:border-box}
+.client-account-activity button{font-family:inherit;text-align:inherit}
+.client-account-activity button:disabled{cursor:not-allowed;opacity:.5;transform:none}
+.client-account-activity :is(button,input,[tabindex]):focus-visible{outline:2px solid var(--gb2);outline-offset:3px}
+.client-account-activity .account-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.client-account-activity .account-link,.client-account-activity .nfxu-later{border:0;padding:0;background:none;color:var(--gb2);cursor:pointer;font:inherit}
+.client-account-activity .nfxu-later{font-size:12px;color:var(--gt3)}
+.client-account-activity .account-alert-actions{display:flex;gap:10px;align-items:center}
+.client-account-activity .account-alert-actions .nfx-btn{padding:6px 12px;font-size:12px}
+.client-account-activity .account-alert-actions .nfxu-later{font-size:12.5px;text-decoration:underline;text-underline-offset:3px}
+.client-account-activity .account-alert-actions .nfxu-later:hover{color:var(--gt)}
+.client-account-activity .account-step-body{min-width:0}
+.client-account-activity .nfx-page{max-width:1040px;margin:0 auto;padding:26px 22px 80px;display:flex;flex-direction:column;gap:26px;position:relative}
+.client-account-activity .nfx-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1200px;height:420px;background:radial-gradient(ellipse 60% 50% at 50% -20%,rgba(61,110,240,.10),transparent 75%);pointer-events:none;z-index:0}
+.client-account-activity .nfx-page>*:not(.nfx-glow){position:relative;z-index:1}
+.client-account-activity .nfx-head{display:flex;flex-direction:column;gap:6px}
+.client-account-activity .nfx-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--gt);margin:0}
+.client-account-activity .nfx-sub{font-size:13.5px;color:var(--gt3)}
+.client-account-activity .nfx-bc{font-size:12.5px;color:var(--gt3);display:flex;gap:6px;align-items:center}
+.client-account-activity .nfx-bc .lk{cursor:pointer;color:var(--gt3);transition:color .15s}
+.client-account-activity .nfx-bc .lk:hover{color:var(--gt)}
+.client-account-activity .nfx-tabs{display:inline-flex;background:var(--g1);padding:4px;border-radius:12px;border:1px solid var(--gl);gap:2px;margin-top:8px;align-self:flex-start}
+.client-account-activity .nfx-tab{border:none;background:transparent;color:var(--gt3);font-size:13.5px;font-weight:500;padding:8px 18px;border-radius:9px;cursor:pointer;transition:color .2s var(--ease),transform .15s var(--ease);font-family:inherit}
+.client-account-activity .nfx-tab:hover{color:var(--gt)}
+.client-account-activity .nfx-tab:active{transform:scale(.97)}
+.client-account-activity .nfx-tab.on{background:var(--inv-bg);color:var(--inv-fg);font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.client-account-activity .nfx-grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+.client-account-activity .nfx-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.client-account-activity .nfx-card{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:22px 24px;position:relative;overflow:hidden;transition:border-color .2s var(--ease);animation:accountIn .35s var(--ease) both}
+.client-account-activity .nfx-card:hover{border-color:var(--gl2)}
+.client-account-activity .nfx-card-hero{padding:26px 28px;display:flex;flex-direction:column;gap:20px}
+.client-account-activity .nfx-chead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.client-account-activity .nfx-ctitle{font-size:14px;font-weight:600;color:var(--gt2);letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.client-account-activity .nfx-badge{display:inline-flex;align-items:center;gap:4.5px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;line-height:1.2;letter-spacing:.02em;background:var(--g3);color:var(--gt3);border:1px solid var(--gl)}
+.client-account-activity .nfx-badge.pro{background:rgba(78,192,141,.14);color:var(--gg);border-color:rgba(78,192,141,.3)}
+.client-account-activity .nfx-badge.blue{background:rgba(61,110,240,.15);color:var(--gb2);border-color:rgba(61,110,240,.3)}
+.client-account-activity .nfx-badge.warn{background:rgba(217,168,78,.15);color:var(--ga);border-color:rgba(217,168,78,.32)}
+.client-account-activity .nfx-badge.danger{background:rgba(224,96,75,.15);color:var(--gr);border-color:rgba(224,96,75,.3)}
+.client-account-activity .nfx-badge.sim{background:rgba(217,168,78,.12);color:var(--ga);border-color:rgba(217,168,78,.28)}
+.client-account-activity .nfx-dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;flex-shrink:0}
+@keyframes accountPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.client-account-activity .nfx-dot.pulse{animation:accountPulse 1.8s ease-in-out infinite}
+.client-account-activity .nfx-hero-label{font-size:12.5px;color:var(--gt3);font-weight:500}
+.client-account-activity .nfx-hero{font-size:38px;font-weight:700;color:var(--gt);letter-spacing:-.035em;line-height:1.1;display:flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.client-account-activity .nfx-hero.cg{color:var(--gg)}
+.client-account-activity .nfx-hero.cw{color:var(--ga)}
+.client-account-activity .nfx-hero.cx{color:var(--gt3)}
+.client-account-activity .nfx-hero.cb{color:var(--gb2)}
+.client-account-activity .nfx-hero.cr{color:var(--gr)}
+.client-account-activity .nfx-hero-sub{font-size:19px;font-weight:600;color:var(--gt2)}
+.client-account-activity .nfx-grid2:is(:lang(en),:lang(es),:lang(fr)) .nfx-hero-sub{letter-spacing:normal;line-height:1.35}
+.client-account-activity .nfx-hero-desc{font-size:13.5px;color:var(--gt2);line-height:1.55}
+.client-account-activity .nfx-gauge{display:flex;flex-direction:column;gap:8px}
+.client-account-activity .nfx-gtrack{width:100%;height:9px;background:var(--g3);border-radius:999px;position:relative;overflow:visible}
+.client-account-activity .nfx-gfill{height:100%;border-radius:999px;background:var(--gg);transition:width .7s var(--ease),background-color .4s var(--ease);min-width:0}
+.client-account-activity .nfx-gfill.warn{background:var(--ga)}
+/* Source bf4378e uses inline 100% for qualitative status; exhausted overrides it to zero. */
+.client-account-activity .nfx-gfill.empty{background:var(--gt3);width:0!important}
+.client-account-activity .nfx-gfill.inf{background:linear-gradient(90deg,var(--gg),var(--gb));width:100%!important;position:relative;overflow:hidden}
+.client-account-activity .nfx-gfill.inf::after{content:'';position:absolute;inset:0;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:accountShimmer 2s infinite linear}
+@keyframes accountShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.client-account-activity .nfx-glabels{display:flex;justify-content:space-between;gap:4px 8px;font-size:12px;color:var(--gt3);font-weight:500}
+.client-account-activity .nfx-glabels b{color:var(--gt);font-weight:600}
+.client-account-activity .nfx-cta{display:flex;gap:10px;flex-wrap:wrap}
+.client-account-activity .nfx-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 18px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:transform .15s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease);white-space:nowrap;color:var(--gt)}
+.client-account-activity .nfx-btn:hover{transform:translateY(-1px)}
+.client-account-activity .nfx-btn:active{transform:scale(.98)}
+.client-account-activity .nfx-btn.pri{background:var(--gb);color:#fff;box-shadow:0 4px 14px rgba(61,110,240,.35)}
+.client-account-activity .nfx-btn.pri:hover{background:var(--gb2);box-shadow:0 6px 20px rgba(61,110,240,.45)}
+.client-account-activity .nfx-btn.sec{background:var(--g3);color:var(--gt);border-color:var(--gl)}
+.client-account-activity .nfx-btn.sec:hover{background:var(--pop);border-color:var(--gl2)}
+.client-account-activity .nfx-btn.out{background:transparent;color:var(--gt2);border-color:var(--gl2)}
+.client-account-activity .nfx-btn.out:hover{background:var(--hoverline);color:var(--gt);border-color:var(--gt3)}
+.client-account-activity .nfx-btn.dng{background:transparent;color:var(--gr);border-color:rgba(224,96,75,.4)}
+.client-account-activity .nfx-btn.dng:hover{background:rgba(224,96,75,.08)}
+.client-account-activity .nfx-foot{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--gt3);line-height:1.5;padding-top:14px;border-top:1px solid var(--gl)}
+.client-account-activity .nfx-sechead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.client-account-activity .nfx-sectit{font-size:14px;font-weight:600;color:var(--gt2);letter-spacing:-.01em;margin:0}
+.client-account-activity .nfx-rows{display:flex;flex-direction:column;gap:8px}
+.client-account-activity .nfx-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;background:var(--g2);border:1px solid var(--gl);border-radius:12px;transition:transform .15s var(--ease),border-color .15s var(--ease),background-color .15s var(--ease)}
+.client-account-activity .nfx-row.lk:not(:disabled){cursor:pointer}
+.client-account-activity .nfx-row:not(:disabled):hover{background:var(--g3);border-color:var(--gl2)}
+.client-account-activity .nfx-row.lk:not(:disabled):hover{transform:translateY(-1px)}
+.client-account-activity .nfx-rl{display:flex;align-items:center;gap:12px;min-width:0}
+.client-account-activity .nfx-ric{width:36px;height:36px;border-radius:10px;background:var(--pill);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gt2)}
+.client-account-activity .nfx-ric.gg{color:var(--gg);background:rgba(78,192,141,.08);border-color:rgba(78,192,141,.2)}
+.client-account-activity .nfx-ric.gb{color:var(--gb2);background:rgba(61,110,240,.08);border-color:rgba(61,110,240,.2)}
+.client-account-activity .nfx-ric.ga{color:var(--ga);background:rgba(217,168,78,.08);border-color:rgba(217,168,78,.2)}
+.client-account-activity .nfx-ric.gr{color:var(--gr);background:rgba(224,96,75,.08);border-color:rgba(224,96,75,.2)}
+.client-account-activity .nfx-rtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.client-account-activity .nfx-rlb{font-size:13.5px;font-weight:600;color:var(--gt);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.client-account-activity .nfx-rds{font-size:12px;color:var(--gt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.client-account-activity .nfx-rr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.client-account-activity .nfx-rval{font-size:14px;font-weight:600;color:var(--gt);text-align:right;font-variant-numeric:tabular-nums}
+.client-account-activity .nfx-rval.gain{color:var(--gg)}
+.client-account-activity .nfx-rval.loss{color:var(--gr)}
+.client-account-activity .nfx-arrow{color:var(--gt3);opacity:.5;transition:opacity .15s,transform .15s;flex-shrink:0}
+.client-account-activity .nfx-row:hover .nfx-arrow{opacity:1;transform:translateX(2px)}
+.client-account-activity .nfx-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.client-account-activity .nfx-mbox{background:var(--g2);border:1px solid var(--gl);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:4px}
+.client-account-activity .nfx-mtit{font-size:12px;color:var(--gt3);font-weight:500}
+.client-account-activity .nfx-mval{font-size:16px;font-weight:600;color:var(--gt);font-variant-numeric:tabular-nums}
+.client-account-activity .nfx-sw{position:relative;display:inline-block;width:46px;height:28px;cursor:pointer;flex-shrink:0}
+.client-account-activity .nfx-sw input{opacity:0;width:0;height:0;position:absolute}
+.client-account-activity .nfx-slider{position:absolute;inset:0;background:var(--g3);border:1px solid var(--gl2);border-radius:999px;transition:background-color .25s var(--ease),border-color .25s var(--ease)}
+.client-account-activity .nfx-slider::before{position:absolute;content:'';height:22px;width:22px;left:2px;bottom:2px;background:var(--inv-bg);border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,.45);transition:transform .25s var(--ease),width .18s var(--ease)}
+.client-account-activity .nfx-sw input:checked+.nfx-slider{background:var(--gb);border-color:var(--gb)}
+.client-account-activity .nfx-sw input:checked+.nfx-slider.grn{background:var(--gg);border-color:var(--gg)}
+.client-account-activity .nfx-sw input:checked+.nfx-slider::before{transform:translateX(18px)}
+.client-account-activity .nfx-sw:active .nfx-slider::before{width:26px}
+.client-account-activity .nfx-sw input:disabled+.nfx-slider{opacity:.6;cursor:not-allowed}
+.client-account-activity .nfx-stag{opacity:0;transform:translateY(10px);animation:accountUp .35s var(--ease) forwards}
+.client-account-activity .nfx-stag.s1{animation-delay:40ms}.client-account-activity .nfx-stag.s2{animation-delay:80ms}.client-account-activity .nfx-stag.s3{animation-delay:120ms}.client-account-activity .nfx-stag.s4{animation-delay:160ms}.client-account-activity .nfx-stag.s5{animation-delay:200ms}.client-account-activity .nfx-stag.s6{animation-delay:240ms}.client-account-activity .nfx-stag.s7{animation-delay:280ms}.client-account-activity .nfx-stag.s8{animation-delay:320ms}
+@keyframes accountUp{to{opacity:1;transform:translateY(0)}}
+@keyframes accountIn{from{opacity:0}to{opacity:1}}
+.client-account-activity .nfx-glowonce{animation:accountGlow 1.2s var(--ease) 1}
+@keyframes accountGlow{0%{box-shadow:0 0 0 0 rgba(61,110,240,.4)}70%{box-shadow:0 0 0 12px rgba(61,110,240,0)}100%{box-shadow:0 0 0 0 rgba(61,110,240,0)}}
+.client-account-activity .nfx-empty{padding:44px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:var(--g2);border:1px dashed var(--gl2);border-radius:16px;gap:10px;animation:accountIn .4s var(--ease)}
+.client-account-activity .nfx-eicon{width:54px;height:54px;border-radius:50%;background:var(--pill);border:1px solid var(--gl);display:flex;align-items:center;justify-content:center;color:var(--gt3);margin-bottom:4px}
+.client-account-activity .nfx-etit{font-size:15px;font-weight:600;color:var(--gt)}
+.client-account-activity .nfx-edesc{font-size:13px;color:var(--gt3);max-width:320px;line-height:1.5}
+@media (max-width:640px){
+  .client-account-activity .nfx-page{padding:16px 12px 60px}
+  .client-account-activity .nfx-grid2,.client-account-activity .nfx-grid3{grid-template-columns:1fr;gap:14px}
+  .client-account-activity .nfx-title{font-size:22px}
+  .client-account-activity .nfx-card{padding:18px 16px;border-radius:16px}
+  .client-account-activity .nfx-card-hero{padding:20px 16px}
+  .client-account-activity .nfx-hero{font-size:32px}
+  .client-account-activity .nfx-metrics{grid-template-columns:1fr}
+  .client-account-activity .nfx-cta .nfx-btn{flex:1}
+  .client-account-activity .nfx-tabs{align-self:stretch;display:flex}
+  .client-account-activity .nfx-tab{flex:1}
+  .client-account-activity .nfx-tabs:is(:lang(en),:lang(es),:lang(fr)) .nfx-tab{flex:1 1 auto;word-break:normal;overflow-wrap:normal}
+}
+/* nfx — 인사이트 (뉴스레터 허브, TetherMax 구조 차용, TETH 다크 톤) */
+.client-account-activity .nfxh-fchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.client-account-activity .nfxh-fchip{border:1px solid var(--gl);background:var(--g2);color:var(--gt3);font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit;transition:color .12s,border-color .12s}
+.client-account-activity .nfxh-fchip:hover{color:var(--gt2)}
+.client-account-activity .nfxh-fchip.on{color:var(--gt);border-color:var(--gt3);background:var(--g3)}
+.client-account-activity .nfxh-fchip .c2{color:var(--gt3);margin-left:4px;font-variant-numeric:tabular-nums}
+.client-account-activity .nfxh-alerts-list .nf-item{border:1px solid var(--gl);border-radius:12px;background:var(--g2);margin-bottom:8px}
+.client-account-activity .nfxh-alerts-list .nf-item:hover{background:var(--g3)}
+.client-account-activity .nfxr-hero{position:relative;overflow:hidden}
+.client-account-activity .nfxr-hero.win::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 90% at 85% 15%,rgba(78,192,141,.13),transparent 70%);pointer-events:none}
+.client-account-activity .nfxr-hero.loss::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 90% at 85% 15%,rgba(224,96,75,.12),transparent 70%);pointer-events:none}
+.client-account-activity .nfxr-hero>*{position:relative}
+.client-account-activity .nfxr-hero .nfx-chead .nfx-btn{padding:7px 13px;font-size:12.5px}
+.client-account-activity .nfx-bc>span:last-child{color:var(--gt2)}
+.client-account-activity .nfxr-chiprow{display:flex;gap:8px;flex-wrap:wrap}
+.client-account-activity .nfxr-chip{display:inline-flex;align-items:center;gap:6px;background:var(--g2);border:1px solid var(--gl);border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--gt2)}
+.client-account-activity .nfxr-chip b{color:var(--gt);font-weight:600}
+.client-account-activity .nfxr-steps{display:flex;flex-direction:column;gap:10px}
+.client-account-activity .nfxr-step{display:flex;gap:14px;padding:16px 18px;background:var(--g2);border:1px solid var(--gl);border-radius:14px;transition:border-color .15s}
+.client-account-activity .nfxr-step:hover{border-color:var(--gl2)}
+.client-account-activity .nfxr-sic{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--gl);background:var(--pill);color:var(--gt2)}
+.client-account-activity .nfxr-sic.e{color:var(--gb2);border-color:rgba(61,110,240,.25)}
+.client-account-activity .nfxr-sic.x{color:var(--gg);border-color:rgba(78,192,141,.25)}
+.client-account-activity .nfxr-sic.g{color:var(--ga);border-color:rgba(217,168,78,.25)}
+.client-account-activity .nfxr-sic.r{color:var(--gr);border-color:rgba(224,96,75,.25)}
+.client-account-activity .nfxr-stag{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--gt3);border:1px solid var(--gl);border-radius:6px;padding:1px 7px;display:inline-block;margin-right:8px;vertical-align:1px}
+.client-account-activity .nfxr-stit{font-size:14px;font-weight:700;color:var(--gt)}
+.client-account-activity .nfxr-sbody{font-size:13px;color:var(--gt2);line-height:1.6;margin-top:5px}
+.client-account-activity .nfxr-stats{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.client-account-activity .nfxr-stats .nfx-mbox{min-width:120px}
+.client-account-activity .nfxr-stats .nfx-mbox:last-child{min-width:140px}
+.client-account-activity .nfxr-ring{position:relative;width:58px;height:58px;flex-shrink:0}
+.client-account-activity .nfxr-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.client-account-activity .nfxr-ring .bg{stroke:var(--gl2);fill:none;stroke-width:7}
+.client-account-activity .nfxr-ring .fg{stroke:var(--gg);fill:none;stroke-width:7;stroke-linecap:round;stroke-dasharray:163.4;stroke-dashoffset:163.4;transition:stroke-dashoffset 1.2s var(--ease)}
+.client-account-activity .nfxr-ring .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gt)}
+/* nfx — 봇 상세 전용 (mock-bot 포팅) */
+.client-account-activity .nfxb-hero{background:var(--g1);border:1px solid var(--gl);border-radius:20px;padding:22px 26px;display:flex;flex-direction:column;gap:16px;animation:accountIn .3s var(--ease) both}
+.client-account-activity .nf-item{display:flex;gap:11px;padding:12px 10px;border-radius:12px;cursor:pointer;transition:background .12s}
+.client-account-activity .nf-item:hover{background:rgba(255,255,255,.05)}
+.client-account-activity .nf-item .ic{width:8px;height:8px;border-radius:50%;background:#5b8af7;margin-top:6px;flex-shrink:0;transition:opacity .12s}
+.client-account-activity .nf-item.read .ic{opacity:0}
+.client-account-activity .nf-item .bx{flex:1;min-width:0}
+.client-account-activity .nf-item .tt{font-size:13px;color:var(--gt);font-weight:500;line-height:1.45}
+.client-account-activity .nf-item .bd2{font-size:12.5px;color:var(--gt2);line-height:1.55;margin-top:2px}
+.client-account-activity .nf-item .tm{font-size:11.5px;color:var(--gt3);margin-top:4px}
+.client-account-activity .nf-item .tg{display:inline-block;font-size:11px;color:var(--gt3);border:1px solid var(--gl);border-radius:999px;padding:1px 8px;margin-right:6px}
+.client-account-activity .nf-item{animation:accountUp .3s var(--ease) both}
+.client-account-activity .nf-item:nth-child(1){animation-delay:30ms}.client-account-activity .nf-item:nth-child(2){animation-delay:60ms}.client-account-activity .nf-item:nth-child(3){animation-delay:90ms}.client-account-activity .nf-item:nth-child(4){animation-delay:120ms}.client-account-activity .nf-item:nth-child(5){animation-delay:150ms}.client-account-activity .nf-item:nth-child(6){animation-delay:180ms}
+.client-account-activity .nf-item .tg{border:none;font-weight:600;padding:1px 8px}
+.client-account-activity .nf-item .tg.t-credit{background:rgba(61,110,240,.13);color:var(--gb2)}
+.client-account-activity .nf-item .tg.t-pos{background:rgba(78,192,141,.13);color:var(--gg)}
+.client-account-activity .nf-item .tg.t-bot{background:rgba(78,192,141,.13);color:var(--gg)}
+.client-account-activity .nf-item .tg.t-review{background:rgba(217,168,78,.13);color:var(--ga)}
+.client-account-activity .nf-item .tg.t-rebate{background:rgba(78,192,141,.13);color:var(--gg)}
+.client-account-activity .nf-item .tg.t-report{background:rgba(61,110,240,.13);color:var(--gb2)}
+.client-account-activity .nf-item .mv{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;margin-left:8px}
+.client-account-activity .nf-item .mv.up{color:var(--gg)}.client-account-activity .nf-item .mv.dn{color:var(--gr)}
+.client-account-activity .tft-tnote{font-size:10px;color:var(--gt3);margin-bottom:8px}
+.client-account-activity .tft-assets{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.client-account-activity .tft-asx{border:1px solid var(--gl);border-radius:6px;background:var(--g1);padding:10px 12px}
+.client-account-activity .tft-asx .ah2{display:flex;align-items:center;gap:8px}
+.client-account-activity .tft-asx .ah2 b{font-size:12.5px;color:var(--gt)}
+.client-account-activity .tft-asx .ah2 .mut{font-size:10.5px;color:var(--gt3);margin-left:auto}
+.client-account-activity .tft-asx .ag2{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}
+.client-account-activity .tft-asx .ag2 span{display:flex;flex-direction:column;gap:1px}
+.client-account-activity .tft-asx .ag2 small{font-size:9.5px;color:var(--gt3)}
+.client-account-activity .tft-asx .ag2 b{font-size:11px;color:var(--gt2);font-weight:650}
+.client-account-activity .tft-asx .af2{margin-top:8px;font-size:10px;color:var(--gt3)}
+
+/* Keep source density; allow text to fit the real pane width and long money to scroll intact. */
+.client-account-activity .nfx-grid2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.client-account-activity .nf-item{width:100%;text-align:left;font:inherit;color:inherit}
+.client-account-activity .nf-item .tt{display:flex;align-items:flex-start}
+.client-account-activity .account-alert-title{flex:1;min-width:0}
+.client-account-activity .nf-item :is(.bd2,.tm){display:block}
+.client-account-activity :is(.account-alert-title,.bd2,.nfx-hero-desc,.nfxr-sbody,.nfx-badge,.nfx-ctitle){overflow-wrap:anywhere}
+.client-account-activity .nfx-row{width:100%;text-align:left;font-family:inherit;min-width:0;flex-wrap:wrap}
+.client-account-activity .nfx-rl{flex:1 1 145px}
+.client-account-activity .nfx-rr{max-width:100%;margin-left:auto;flex-wrap:wrap}
+.client-account-activity :is(.nfx-rlb,.nfx-rds){white-space:normal;overflow-wrap:anywhere;word-break:keep-all}
+.client-account-activity :is(.nfx-chead,.nfx-sechead,.nfx-ctitle,.nfx-glabels){flex-wrap:wrap}
+.client-account-activity .nfx-hero-desc{margin-top:6px}
+.client-account-activity :is(.nfx-hero-desc,.nfx-foot span,.nfx-glabels){word-break:keep-all;overflow-wrap:anywhere}
+.client-account-activity .nfx-foot svg{flex-shrink:0;margin-top:2px}
+.client-account-activity .nfx-preferences .nfx-foot{margin-top:14px}
+.client-account-activity .nfx-empty>.nfx-btn{margin-top:6px}
+.client-account-activity .nfx-hero{flex-wrap:wrap}
+.client-account-activity :is(.account-money,.nfx-rval,.nfx-mval){display:block;max-width:100%;overflow-x:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+.client-account-activity :is(.nfx-rval,.nfx-mval).nfx-text-value{white-space:normal;overflow:visible;word-break:keep-all;overflow-wrap:anywhere}
+.client-account-activity .nfx-inline-status:empty{margin:0}
+.client-account-activity .gain,.client-account-activity .tft-asx .ag2 b.up{color:var(--gg)}
+.client-account-activity .nfx-btn{white-space:normal;word-break:keep-all;overflow-wrap:anywhere;text-align:center}
+.client-account-activity .nfx-cta .nfx-btn svg{flex-shrink:0}
+.client-account-activity .nfx-sw input{width:100%;height:100%;margin:0;inset:0;cursor:pointer}
+.client-account-activity .nfx-sw input:focus-visible+.nfx-slider{outline:2px solid var(--gb2);outline-offset:3px}
+.client-account-activity .nfx-sw input:disabled{cursor:not-allowed}
+.client-account-activity .tft-assets{grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))}
+.client-account-activity .tft-asx .ag2{grid-template-columns:repeat(2,minmax(max-content,1fr));max-width:100%;overflow-x:auto}
+.client-account-activity .tft-asx .ag2 b{white-space:nowrap}
+@media(max-width:640px){
+ .client-account-activity .nfx-grid2{grid-template-columns:minmax(0,1fr)}
+ .client-account-activity .nfx-cta:is(:lang(en),:lang(es),:lang(fr)) .nfx-btn{flex:1 1 100%;word-break:normal;overflow-wrap:normal}
+ .client-account-activity .nfx-tab{padding:8px 10px}
+ .client-account-activity .nfxr-step{padding:14px 12px;gap:10px}
+}
+@media(pointer:coarse){
+ .client-account-activity.client-account-activity :is(button,.nfx-sw){min-height:44px;min-width:44px}
+ .client-account-activity .nfx-sw .nfx-slider{top:8px;bottom:8px}
+ .client-account-activity .account-link{display:inline-flex;align-items:center}
+}
+@media(prefers-reduced-motion:reduce){
+ .client-account-activity *, .client-account-activity *::before,.client-account-activity *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ .client-account-activity .nfx-stag{opacity:1;transform:none}
+}

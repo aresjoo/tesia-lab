@@ -1,0 +1,15 @@
+{
+  "browserAuthContractVersion": "0.1.0",
+  "packageVersion": "0.1.0-rc.1",
+  "cookieObservation": "BROWSER_MANAGED_NOT_READABLE",
+  "sessionConfirmation": "SEPARATE_COOKIE_JAR_SESSION_ROUND_TRIP_REQUIRED",
+  "callbackBrowserCallable": false,
+  "operations": [
+    {"provider":"google","operationId":"createGoogleAuthTransactionV2","apiContractVersion":"0.2.0","method":"POST","path":"/api/v2/auth/google/transactions"},
+    {"provider":"google","operationId":"getGoogleAuthResultV2","apiContractVersion":"0.2.0","method":"GET","path":"/api/v2/auth/google/results/current"},
+    {"provider":"google","operationId":"acknowledgeGoogleAuthResultV2","apiContractVersion":"0.2.0","method":"POST","path":"/api/v2/auth/google/results/{resultId}/acknowledgements"},
+    {"provider":"apple","operationId":"createAppleAuthTransactionV4","apiContractVersion":"0.4.0","method":"POST","path":"/api/v4/auth/apple/transactions"},
+    {"provider":"apple","operationId":"getAppleAuthResultV4","apiContractVersion":"0.4.0","method":"GET","path":"/api/v4/auth/apple/results/current"},
+    {"provider":"apple","operationId":"acknowledgeAppleAuthResultV4","apiContractVersion":"0.4.0","method":"POST","path":"/api/v4/auth/apple/results/{resultId}/acknowledgements"}
+  ]
+}

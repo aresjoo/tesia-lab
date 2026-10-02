@@ -1,0 +1,28 @@
+{
+  "scope": "SYNTHETIC_CONTRACT_FIXTURE",
+  "base": "fixtures/api/v0_1/positive-vertical-trace.json:createConversationTurn.data.draftState",
+  "cases": [
+    {"id": "complete", "remove": [], "set": {}, "valid": true},
+    {"id": "initial", "remove": ["projection.market", "projection.clock", "projection.positionSizing", "projection.execution"], "set": {"projection.features": [], "projection.entryRules": [], "projection.exitRules": []}, "valid": true},
+    {"id": "missing-market", "remove": ["projection.market"], "set": {}, "valid": true},
+    {"id": "missing-clock", "remove": ["projection.clock"], "set": {}, "valid": true},
+    {"id": "missing-sizing", "remove": ["projection.positionSizing"], "set": {}, "valid": true},
+    {"id": "missing-execution", "remove": ["projection.execution"], "set": {}, "valid": true},
+    {"id": "missing-required-versions", "remove": ["projection.versions"], "set": {}, "valid": false},
+    {"id": "missing-required-features", "remove": ["projection.features"], "set": {}, "valid": false},
+    {"id": "missing-required-risk", "remove": ["projection.riskLimits"], "set": {}, "valid": false},
+    {"id": "unknown-projection-field", "remove": [], "set": {"projection.extra": true}, "valid": false},
+    {"id": "null-market", "remove": [], "set": {"projection.market": null}, "valid": false},
+    {"id": "invalid-clock-type", "remove": [], "set": {"projection.clock": "15m"}, "valid": false},
+    {"id": "invalid-features-type", "remove": [], "set": {"projection.features": {}}, "valid": false},
+    {"id": "negative-revision", "remove": [], "set": {"revision": -1}, "valid": false},
+    {"id": "string-revision", "remove": [], "set": {"revision": "1"}, "valid": false},
+    {"id": "bool-revision", "remove": [], "set": {"revision": true}, "valid": false},
+    {"id": "fractional-revision", "remove": [], "set": {"revision": 1.5}, "valid": false},
+    {"id": "wrong-version", "remove": [], "set": {"contractVersion": "0.1.0"}, "valid": false},
+    {"id": "wrong-defaults", "remove": [], "set": {"serverDefaultsVersion": "unrecognized"}, "valid": false},
+    {"id": "wrong-hash-format", "remove": [], "set": {"projectionHash": "bad"}, "valid": false},
+    {"id": "unknown-draft-field", "remove": [], "set": {"ready": true}, "valid": false},
+    {"id": "wrong-draft-id", "remove": [], "set": {"draftId": "invalid"}, "valid": false}
+  ]
+}

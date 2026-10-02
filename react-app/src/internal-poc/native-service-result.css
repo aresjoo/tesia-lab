@@ -1,0 +1,134 @@
+/* Native data projection, skinned with the client-owned 9bf4427 terminal tokens.
+   Styling never turns missing/provisional data into verified trading results. */
+.native-service-result {
+  --g0: var(--client-0, #0f1012); --g1: var(--client-1, #17181b);
+  --g2: var(--client-2, #1d1f23); --gl: var(--client-line, rgba(255,255,255,.07));
+  --gt: var(--client-text, #e3e3e3); --gt2: var(--client-text-2, #c4c7c5);
+  --gt3: var(--client-text-3, #9aa0a6); --gb: var(--client-blue, #3d6ef0); --gb2: #5b8af7;
+  min-width: 0; color: var(--gt2); font: 13px/1.65 "Noto Sans KR Variable", "Geist Variable", sans-serif;
+}
+.native-service-result :is(h2,h3,p,li,dt,dd,label,summary) { overflow-wrap: anywhere; word-break: keep-all; }
+.native-service-result :is(h2,h3) { color: var(--gt); }
+.native-service-result h2 { font-size: 18px; margin: 16px 0 12px; }
+.native-service-result h3 { font-size: 14px; margin: 12px 0 8px; }
+.native-service-result p { margin: 8px 0; }
+.native-service-result :is(button,select) { font: inherit; color: var(--gt2); }
+.native-service-result button:disabled,.native-service-result button[aria-disabled=true] { cursor: not-allowed; opacity: .45; }
+.native-service-result > button,
+.native-service-result .ctt-notice button,
+.native-service-result :is(.ctt-rail,.ctt-chart,.ctt-bottom-pane) > button,
+.native-service-result [data-native-controls="segments"] > button,
+.native-service-result :is([data-native-controls="chart-range"],[data-native-controls="trade-pages"],[data-native-controls="fill-markers"]) button {
+  min-height: 44px; padding: 7px 12px; border: 1px solid var(--gl); border-radius: 6px;
+  margin: 0 4px 6px 0; background: var(--g1); line-height: 1.5; white-space: normal;
+}
+.native-service-result button[aria-pressed=true] { color: var(--gt); background: var(--g2); border-color: var(--gb); }
+.native-service-result > button:focus-visible { outline: 2px solid var(--gb2); outline-offset: 2px; }
+.native-service-result > button:not(:disabled):not([aria-disabled=true]):hover { background: var(--g2); cursor: pointer; }
+.native-service-result select { min-height: 36px; padding: 4px 8px; margin: 0 6px 8px; background: var(--g1); border: 1px solid var(--gl); border-radius: 5px; }
+.native-service-result summary { cursor: pointer; padding: 8px 0; color: var(--gt2); }
+.native-metric-scroll:focus-visible { outline: 2px solid var(--gb2); outline-offset: -2px; }
+.native-service-result dd { margin: 2px 0 12px; color: var(--gt3); font-variant-numeric: tabular-nums; }
+.native-service-result .ctt-context { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.native-service-result .ctt-context span { color: var(--gt3); font-size: 12px; }
+.native-service-result .ctt-notice { font-size: 12px; color: var(--gt3); background: var(--g1); border-bottom: 1px solid var(--gl); }
+.native-service-result .ctt-notice h3 { font-size: 12px; margin: 6px 0; }
+.native-service-result .ctt-notice ul { padding-left: 18px; margin: 6px 0; }
+.native-service-result .ctt-terminal[data-active=true] .ctt-notice { max-height: 160px; overflow-y: auto; scrollbar-width: thin; }
+.native-service-result .ctt-notice:focus-visible { outline: 2px solid var(--gb2); outline-offset: -2px; }
+.native-service-result .ctt-terminal[data-active=true] :is(.ctt-rail,.ctt-detail-content) { padding: 12px 14px; }
+.native-service-result .ctt-chart > :is(h3,p,label,section,.native-chart-toolbar,[data-native-controls="chart-range"]) { margin-left: 14px; margin-right: 14px; }
+.native-chart-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; }
+.native-chart-toolbar > label { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px; min-width: 0; max-width: 100%; }
+.native-service-result .native-chart-toolbar select { min-width: 0; max-width: 100%; min-height: 44px; margin: 0; }
+.native-fill-inspector ul { max-height: 260px; overflow: auto; overscroll-behavior: contain; list-style: none; margin: 0; padding: 0; scrollbar-width: thin; }
+.native-service-result .native-fill-inspector button { display: grid; grid-template-columns: 48px minmax(0,1fr) minmax(60px,.5fr); gap: 4px 12px; width: 100%; margin: 0; border: 0; border-bottom: 1px solid var(--gl); border-radius: 0; background: transparent; text-align: left; font-variant-numeric: tabular-nums; }
+.native-fill-inspector b[data-side=BUY] { color: var(--gg, #4ec08d); }
+.native-fill-inspector b[data-side=SELL] { color: var(--gr, #e0604b); }
+.native-fill-inspector small { grid-column: 2 / -1; color: var(--gt3); overflow-wrap: anywhere; }
+.native-fill-inspector time, .native-fill-inspector span { overflow-wrap: anywhere; }
+.native-service-result .native-trade-times button { display: block; min-height: 44px; border: 1px solid var(--gl); border-radius: 6px; background: var(--g1); padding: 6px 10px; text-align: left; font-variant-numeric: tabular-nums; }
+.native-service-result :is(.native-fill-inspector,.native-trade-times) button[aria-pressed=true] { background: var(--g2); box-shadow: inset 3px 0 var(--gb2); color: var(--gt); }
+.native-service-result :is(.native-fill-inspector,.native-trade-times) button:focus-visible { outline: 2px solid var(--gb2); outline-offset: -2px; }
+.native-service-result :is(.native-fill-inspector,.native-trade-times) button:not(:disabled):hover { background: var(--g2); }
+.native-service-result .ctt-chart > p { font-size: 12px; color: var(--gt3); }
+.native-service-result .ctt-chart > .cp-chart { margin: 0; }
+.native-service-result table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.native-service-result caption { text-align: left; padding-bottom: 12px; font-size: 13px; color: var(--gt); }
+.native-service-result :is(th,td) { padding: 9px 8px; border-bottom: 1px solid var(--gl); text-align: right; line-height: 1.6; vertical-align: top; }
+.native-service-result th { color: var(--gt3); font-weight: 500; }
+.native-service-result :is(th,td):first-child { text-align: left; }
+.native-service-result .ctt-detail-content table { table-layout: fixed; }
+.native-service-result .ctt-detail-content :is(th,td) { overflow-wrap: anywhere; word-break: keep-all; }
+.native-service-result .ctt-detail-content p { font-size: 12px; color: var(--gt3); }
+.native-service-result .ctt-bottom-pane table { min-width: 760px; }
+.native-service-result .ctt-bottom-pane th,
+.native-service-result .ctt-bottom-pane td:not(:first-child):not(.native-trade-times) { white-space: nowrap; }
+.native-service-result .ctt-bottom-pane td:first-child { max-width: 260px; overflow-wrap: anywhere; }
+.native-service-result tr[aria-current=true] { background: var(--g2); color: var(--gt); }
+.native-service-result tr:focus, .native-trade-selection-notice:focus { outline: 2px solid var(--gb2); outline-offset: -2px; }
+.native-trade-selected-label { display: block; margin-bottom: 4px; color: var(--gb2); font-size: 11px; font-weight: 600; }
+.native-trade-selection-notice small { display: block; color: var(--gt3); overflow-wrap: anywhere; }
+/* One existing canvas moves with its terminal. The replay changes layout only
+   at entry/exit; the transition itself is a bounded transform, not a resize loop. */
+.native-service-result .ctt-header-tools { flex-wrap: wrap; justify-content: flex-end; }
+.native-service-result .ctt-header-tools span { color: var(--gt3); font-size: 12px; }
+.native-service-result .ctt-header-tools button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--gl); border-radius: 6px; background: var(--g1); }
+.native-service-result[data-presentation] .ctt-terminal[data-active=true] .ctt-grid { display: block; }
+.native-service-result .native-trade-detail-trigger { display: block; margin-top: 6px; min-width: 44px; min-height: 44px; white-space: normal; }
+.native-service-result[data-presentation] .ctt-header { position: sticky; top: 0; z-index: 5; background: var(--g0); }
+.native-service-result[data-presentation] .ctt-terminal[data-active=true] :is(.ctt-main-tabs,.ctt-rail,.ctt-detail,.ctt-bottom) { display: none; }
+.native-service-result[data-presentation] .ctt-terminal[data-active=true] .ctt-market { display: block; }
+/* Keep the plot in the first fold, but never hide the supplied range, gaps or
+   marker-page limitations. The original detail controls remain below it. */
+.native-service-result[data-presentation] .ctt-chart { display: flex; flex-direction: column; }
+.native-service-result[data-presentation] .ctt-chart > .cp-chart { order: -1; }
+.native-service-result[data-presentation] .cp-controls { order: 2; }
+.native-service-result[data-presentation] .cp-surface { height: max(320px,calc(100dvh - 380px - var(--cp-replay-reserve,0px))); }
+/* The document's heading/definition margins must not leak into chart chrome. */
+.native-service-result .ctt-header h2 { margin: 0; font-size: 14px; }
+.native-service-result :is(.cp-quote,.cp-studies) dd { margin: 0; }
+.native-service-result[data-presentation] .cp-chart { display: flex; flex-direction: column; }
+.native-service-result[data-presentation] .cp-toolbar { order: 2; border-top: 1px solid var(--gl); }
+.native-service-result[data-presentation] .cp-footer { order: 3; }
+.native-service-result[data-presentation] .cp-note { order: 4; }
+.native-service-result[data-presentation] .cp-fills { order: 5; }
+/* The actual execution stays immediately above the plot. Its explanatory note
+   follows the plot without a second card competing for the small viewport.
+   Reserve one execution line before the first fill; no canvas resize per tick. */
+.native-service-result[data-presentation] .cp-chart[data-replaying=true] .cp-canvas { display: grid; grid-template-rows: 3px minmax(44px,auto) auto auto; row-gap: 8px; }
+.native-service-result[data-presentation] .cp-replay { display: contents; }
+.native-service-result[data-presentation] .cp-replay progress { grid-row: 1; width: calc(100% - 24px); margin: 0 12px; align-self: start; }
+.native-service-result[data-presentation] .cp-execution { grid-row: 2; align-self: center; margin: 0; padding: 0 12px; }
+.native-service-result[data-presentation] .cp-replay > span { grid-row: 4; padding: 0 12px 8px; font-size: 12px; }
+.native-service-result[data-presentation] .cp-chart[data-replaying=true] .cp-surface { grid-row: 3; }
+@media(max-width:640px) {
+  /* Keep manual drawing tools reachable after the presentation plot. */
+  .native-service-result[data-presentation] .cp-canvas { grid-row: 1; }
+  .native-service-result[data-presentation] .cp-drawing-tools { grid-row: 2; }
+  /* Keep the passive replay's chart in the first fold. Source/limitations stay
+     visible above it; full technical provenance and manual tools remain below. */
+  .native-service-result[data-presentation] .ctt-header { display: grid; grid-template-columns: minmax(0,1fr) auto 44px; gap: 2px 8px; }
+  .native-service-result[data-presentation] .ctt-header h2 { grid-column: 1; grid-row: 1; align-self: end; }
+  .native-service-result[data-presentation] .ctt-header-tools { display: contents; }
+  .native-service-result[data-presentation] .ctt-header-tools span { grid-column: 1; grid-row: 2; align-self: start; overflow-wrap: anywhere; }
+  .native-service-result[data-presentation] .ctt-header-tools button { grid-column: 2; grid-row: 1 / 3; font-size: 12px; padding-inline: 8px; max-width: 132px; white-space: normal; }
+  .native-service-result[data-presentation] .ctt-header > button { grid-column: 3; grid-row: 1 / 3; }
+  .native-service-result[data-presentation] .ctt-context { gap: 4px 8px; padding-block: 6px; }
+  .native-service-result[data-presentation] .ctt-notice { padding-top: 6px; }
+  .native-service-result[data-presentation] .ctt-notice > p { margin-block: 4px; }
+  .native-service-result[data-presentation] .ctt-notice summary { padding-block: 6px; }
+}
+@media(max-width:360px) {
+  .native-service-result[data-presentation] .ctt-header h2 { grid-column: 1 / 3; }
+  .native-service-result[data-presentation] .ctt-header-tools button { grid-row: 2; }
+}
+@media(max-width:960px) {
+  .native-service-result .ctt-terminal[data-active=true] .ctt-notice { max-height: 136px; }
+  .native-service-result .ctt-detail-content table { min-width: 280px; }
+}
+@media(max-width:640px) {
+  .native-service-result .ctt-terminal[data-active=true] .cp-controls { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; }
+  .native-service-result .ctt-terminal[data-active=true] .cp-controls > button:last-child { grid-column: auto; }
+  .native-service-result .ctt-terminal[data-active=true] .cp-controls button { min-height: 44px; padding: 6px 4px; font-size: 11px; }
+}

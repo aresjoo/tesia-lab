@@ -1,0 +1,26 @@
+/* Client 621cbed taiActs / taiFeedback. Scoped, not a new card vocabulary. */
+.client-lab-conversation .client-answer-block { min-width:0; max-width:800px; }
+.client-lab-conversation .client-answer-block .client-answer-actions { gap:2px; margin-top:8px; flex-wrap:wrap; }
+.client-lab-conversation .client-answer-block .client-answer-actions button { border-radius:7px; }
+.client-lab-conversation .client-answer-block .client-answer-actions button[aria-pressed=true] { color:#8fb2ff; background:none; }
+.client-answer-block .answer-copy-status { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.client-answer-block .answer-copy-error { flex-basis:100%; font-size:12px; }
+.client-answer-block .answer-vote-status { margin:8px 0 0; font-size:12.5px; line-height:1.6; color:var(--client-text-3); word-break:keep-all; overflow-wrap:anywhere; }
+.client-lab-conversation .client-answer-feedback { max-width:700px; min-width:0; margin-top:14px; padding:16px; display:flex; flex-direction:column; gap:12px; border:1px solid var(--client-line); border-radius:16px; background:var(--client-1); }
+.client-answer-feedback .hd { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.client-answer-feedback .hd .t { font-size:14.5px; line-height:1.5; font-weight:600; color:var(--client-text); margin:0; }
+.client-answer-feedback .hd .x { display:grid; place-items:center; flex:none; padding:3px 7px; border-radius:6px; color:var(--client-text-3); }
+.client-answer-feedback .hd .x:hover { background:rgb(128 128 128 / 15%); color:var(--client-text); }
+.client-answer-feedback .answer-feedback-help,.client-answer-feedback .answer-feedback-notice { margin:0; font-size:12.5px; line-height:1.6; color:var(--client-text-3); word-break:keep-all; overflow-wrap:anywhere; }
+.client-answer-feedback .fbp { display:flex; flex-wrap:wrap; gap:9px; }
+.client-answer-feedback .fbp .pill { border:0; border-radius:999px; background:var(--client-3); color:var(--client-text); font-size:13px; line-height:1.5; padding:10px 16px; white-space:normal; text-align:left; word-break:keep-all; overflow-wrap:anywhere; transition:background .12s; }
+.client-answer-feedback .fbp .pill:is(:hover,[aria-pressed=true]) { background:rgb(143 178 255 / 18%); }
+.client-answer-feedback .fbp.other { flex-direction:column; align-items:stretch; }
+.client-answer-feedback .fbp.other .pill { align-self:flex-end; }
+.client-answer-feedback .fbt { background:rgb(128 128 128 / 8%); border:1px solid var(--client-line); border-radius:10px; color:var(--client-text); font-size:13px; font-family:inherit; padding:9px 12px; resize:vertical; width:100%; min-height:84px; max-height:40dvh; box-sizing:border-box; }
+.client-answer-feedback .fbt:focus { border-color:#8fb2ff; }
+@media(max-width:860px),(pointer:coarse) {
+  .client-lab-conversation .client-answer-block .client-answer-actions button,.client-answer-feedback .hd .x { min-width:44px; min-height:44px; }
+  .client-answer-feedback .fbp .pill { min-height:44px; }
+}
+@media(prefers-reduced-motion:reduce) { .client-answer-feedback .fbp .pill { transition:none; } }

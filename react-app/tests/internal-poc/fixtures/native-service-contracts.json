@@ -1,0 +1,896 @@
+{
+  "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+  "notice": "Test-only original contract examples; not a real server run, custody receipt, or new actual replay.",
+  "sourceCommit": "954f36744a7d2d496b25aeca5a85dc3d4b5e0f22",
+  "sources": [
+    {
+      "path": "fixtures/api/v0_5/positive-chart-window.json",
+      "sha256": "c8847014d3dc7f5e0117c860be0d800bb5d55f59f260a06ae0c2206a83a0962c",
+      "fixture": {
+        "fixturePolicy": "SYNTHETIC_COMPONENT_PARTS_NOT_BACKEND_CUSTODY_PROOF",
+        "binding": {
+          "conversationId": "conversation_chart_0001",
+          "sourceDraftId": "draft_chart_0001",
+          "strategyVersionId": "sv_chart_0001",
+          "semanticHash": "1111111111111111111111111111111111111111111111111111111111111111",
+          "backtestId": "backtest_chart_0001",
+          "splitGroupId": "split_chart_0001",
+          "segment": "IS",
+          "runId": "run_chart_0001",
+          "runManifestContentHash": "2222222222222222222222222222222222222222222222222222222222222222",
+          "resultContentHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "dataManifestContentHash": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "sourcePolicy": {
+          "sourceProvenance": {
+            "source": "SYNTHETIC_UI_FIXTURE",
+            "verification": "UNVERIFIED",
+            "rights": "PRIVATE_ONLY"
+          },
+          "limitations": {
+            "currentMmrVerified": false,
+            "liquidationCheckStatus": "UNAVAILABLE",
+            "publicRedistributionAllowed": false
+          }
+        },
+        "meta": {
+          "apiContractVersion": "0.5.0",
+          "requestId": "req_chart_test_0001",
+          "traceId": "trace_chart_test_0001",
+          "resourceRevision": "1"
+        },
+        "manifest": {
+          "symbol": "BTCUSDT",
+          "marketType": "usd_m_perpetual",
+          "segmentBounds": {
+            "fromInclusive": "2026-09-09T00:00:00Z",
+            "toExclusive": "2026-09-10T00:00:00Z"
+          },
+          "series": [
+            {
+              "seriesId": "contract-1m",
+              "priceKind": "contract",
+              "nativeResolution": "1m",
+              "supportedResolutions": [
+                "1m",
+                "15m",
+                "1h",
+                "1d"
+              ],
+              "availableRange": {
+                "fromInclusive": "2026-09-09T00:00:00Z",
+                "toExclusive": "2026-09-10T00:00:00Z"
+              }
+            }
+          ],
+          "manifestContentHash": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "request": {
+          "backtestId": "backtest_chart_0001",
+          "segment": "IS",
+          "manifestContentHash": "5555555555555555555555555555555555555555555555555555555555555555",
+          "seriesId": "contract-1m",
+          "resolution": "1m",
+          "fromInclusive": "2026-09-09T00:00:00Z",
+          "toExclusive": "2026-09-09T00:02:00Z",
+          "maxPoints": 1000
+        },
+        "window": {
+          "manifestContentHash": "5555555555555555555555555555555555555555555555555555555555555555",
+          "seriesId": "contract-1m",
+          "priceKind": "contract",
+          "nativeResolution": "1m",
+          "resolution": "1m",
+          "aggregationPolicy": "NATIVE_CONFIRMED",
+          "requestedRange": {
+            "fromInclusive": "2026-09-09T00:00:00Z",
+            "toExclusive": "2026-09-09T00:02:00Z"
+          },
+          "maxPoints": 1000,
+          "coverage": {
+            "status": "COMPLETE",
+            "coveredRanges": [
+              {
+                "fromInclusive": "2026-09-09T00:00:00Z",
+                "toExclusive": "2026-09-09T00:02:00Z"
+              }
+            ],
+            "missingRanges": []
+          },
+          "bars": [
+            {
+              "openTime": "2026-09-09T00:00:00Z",
+              "closeTime": "2026-09-09T00:01:00Z",
+              "availableAt": "2026-09-09T00:01:00Z",
+              "open": "100",
+              "high": "103",
+              "low": "99",
+              "close": "102",
+              "volume": "3",
+              "sourceEventCount": 1
+            },
+            {
+              "openTime": "2026-09-09T00:01:00Z",
+              "closeTime": "2026-09-09T00:02:00Z",
+              "availableAt": "2026-09-09T00:02:00Z",
+              "open": "102",
+              "high": "104",
+              "low": "101",
+              "close": "103",
+              "volume": "4",
+              "sourceEventCount": 1
+            }
+          ],
+          "windowContentHash": "6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      }
+    },
+    {
+      "path": "fixtures/api/v0_6/positive-native-report.json",
+      "sha256": "eb21e76e6d19c4f80735cbdde9aa99ba9164e9ea1b21d4a309352041b0b04726",
+      "fixture": {
+        "request": {
+          "backtestId": "backtest_native_synthetic_0001"
+        },
+        "response": {
+          "meta": {
+            "apiContractVersion": "0.6.0",
+            "requestId": "req_native_test_0001",
+            "traceId": "trace_native_test_0001",
+            "resourceRevision": "1"
+          },
+          "data": {
+            "binding": {
+              "jobId": "backtest_native_synthetic_0001",
+              "backtestId": "backtest_native_synthetic_0001",
+              "splitGroupId": "split_group_synthetic_0001",
+              "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+              "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+              "nativeEnvelopeContentHash": "af14d2c934abb6c2b4b2dd000b191cef71bdd2b9b2150be09bb9dab71d0cb247",
+              "terminalSealContentHash": "4444444444444444444444444444444444444444444444444444444444444444",
+              "terminalSealArtifactSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+              "terminalBindingContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "jobAuthorBindingContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+              "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+              "rights": "NO_PUBLIC_REDISTRIBUTION",
+              "publicRedistributionAllowed": false,
+              "currentMmrVerified": false,
+              "liquidationCheckStatus": "UNAVAILABLE"
+            },
+            "strategyAuthorityMapping": {
+              "mappingRole": "SERVER_INTERNAL_IDENTITY_MAPPING_NOT_APPROVAL_AUTHORITY",
+              "approvalStrategyVersionId": "sv_v03_11111111111111111111111111111111",
+              "approvalStrategyContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "runtimeStrategyContentHashVersion": "v04",
+              "runtimeStrategyContentHash": "1111111111111111111111111111111111111111111111111111111111111111",
+              "reportingStrategyVersionAlias": "sv_11111111111111111111111111111111"
+            },
+            "nativeEnvelope": {
+              "contentHash": "af14d2c934abb6c2b4b2dd000b191cef71bdd2b9b2150be09bb9dab71d0cb247",
+              "envelopeId": "private_actual_envelope_synthetic_0001",
+              "envelopeVersion": "private-actual-backtest-report-envelope-0.1.0",
+              "projection": {
+                "comparison": [
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "0.002",
+                    "metric": "NET_RETURN_RATE",
+                    "oosValue": "-0.001",
+                    "unit": "RATE"
+                  },
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "0.01",
+                    "metric": "BUY_AND_HOLD_RETURN_RATE",
+                    "oosValue": "0.02",
+                    "unit": "RATE"
+                  },
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "0.03",
+                    "metric": "MAX_DRAWDOWN_RATE",
+                    "oosValue": "0.02",
+                    "unit": "RATE"
+                  },
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "0.5",
+                    "metric": "WIN_RATE",
+                    "oosValue": "0",
+                    "unit": "RATE"
+                  },
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "1",
+                    "metric": "AVERAGE_PNL",
+                    "oosValue": "-1",
+                    "unit": "USDT"
+                  },
+                  {
+                    "comparisonPolicy": "VIEW_ONLY_SOURCE_VALUES_NO_DELTA",
+                    "isValue": "300",
+                    "metric": "AVERAGE_HOLDING_SECONDS",
+                    "oosValue": "600",
+                    "unit": "SECONDS"
+                  }
+                ],
+                "contentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+                "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+                "productDecisionRef": "tesia-program@d5ff8989fc17af3c075c2f2ccd0f18e26ad97009#decision-private-actual-reporting-v01",
+                "projectionId": "private_actual_projection_synthetic_0001",
+                "projectionProducerAuthority": {
+                  "producerArtifactSha256": "6666666666666666666666666666666666666666666666666666666666666666",
+                  "producerCommit": "6666666666666666666666666666666666666666",
+                  "producerId": "projection_producer_synthetic_0001",
+                  "producerVersion": "private-actual-reporting-producer-0.1.0"
+                },
+                "projectionVersion": "private-actual-backtest-projection-0.1.0",
+                "publicRedistributionAllowed": false,
+                "reportingContractVersion": "0.1.0",
+                "rights": "NO_PUBLIC_REDISTRIBUTION",
+                "segments": [
+                  {
+                    "actualReportContentHash": "9999999999999999999999999999999999999999999999999999999999999999",
+                    "actualReportId": "actual_report_synthetic_is_0001",
+                    "actualRunAuthorityContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "actualRunAuthorityId": "actual_run_authority_synthetic_is_0001",
+                    "backendVerificationRecordContentHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                    "backendVerificationRecordId": "backend_verification_synthetic_is_0001",
+                    "costs": {
+                      "feeCost": "0.1",
+                      "fundingCashflow": "-0.05",
+                      "slippageCost": "0.05",
+                      "slippagePolicy": "EMBEDDED_IN_GROSS_PNL_VIA_FILL_PRICE"
+                    },
+                    "evaluationEndExclusive": "2025-01-01T00:00:00Z",
+                    "evaluationStartInclusive": "2024-01-01T00:00:00Z",
+                    "initialStatePolicy": "FLAT_EMPTY_LEDGER_INDEPENDENT_CAPITAL",
+                    "limitations": {
+                      "currentMmrVerified": false,
+                      "executionPricePolicy": "RETROSPECTIVE_NEXT_CONTRACT_CANDLE_OPEN_NON_CAUSAL",
+                      "intraminuteDrawdownVerified": false,
+                      "liquidationCheckStatus": "UNAVAILABLE",
+                      "liquidationUnavailableReason": "CURRENT_MMR_NOT_VERIFIED",
+                      "maxDrawdownSampling": "ACTIVE_MARK_1M_POST_CANONICAL_EVENTS",
+                      "symbolRuleHistoricalAccuracy": "UNVERIFIED_CURRENT_RULE_PROXY"
+                    },
+                    "metrics": {
+                      "averageHoldingSeconds": "300",
+                      "averagePnl": "1",
+                      "buyAndHoldReturnRate": "0.01",
+                      "definitionVersion": "backtest-metrics-0.7.0",
+                      "derivedBy": "ENGINE",
+                      "equityCurveContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                      "equityCurvePointCount": 2,
+                      "finalEquity": "1002",
+                      "initialCapital": "1000",
+                      "maxDrawdownRate": "0.03",
+                      "metricsContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "metricsEvidenceId": "metrics_evidence_synthetic_is_0001",
+                      "metricsPolicyId": "metrics_policy_synthetic_0001",
+                      "netReturnRate": "0.002",
+                      "winRate": "0.5"
+                    },
+                    "resultContentHash": "7777777777777777777777777777777777777777777777777777777777777777",
+                    "resultId": "result_synthetic_is_0001",
+                    "segment": "IS",
+                    "summary": {
+                      "currency": "USDT",
+                      "fees": "0.1",
+                      "fillCount": 4,
+                      "funding": "-0.05",
+                      "grossPnl": "2.15",
+                      "netPnl": "2",
+                      "rejectionCount": 1,
+                      "tradeCount": 2
+                    },
+                    "tradeManifest": {
+                      "detailAvailability": "MANIFEST_ONLY",
+                      "tradeCount": 2,
+                      "tradeListContentHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                      "tradeListId": "trade_list_synthetic_is_0001"
+                    }
+                  },
+                  {
+                    "actualReportContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "actualReportId": "actual_report_synthetic_oos_0001",
+                    "actualRunAuthorityContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                    "actualRunAuthorityId": "actual_run_authority_synthetic_oos_0001",
+                    "backendVerificationRecordContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                    "backendVerificationRecordId": "backend_verification_synthetic_oos_0001",
+                    "costs": {
+                      "feeCost": "0.1",
+                      "fundingCashflow": "0",
+                      "slippageCost": "0.05",
+                      "slippagePolicy": "EMBEDDED_IN_GROSS_PNL_VIA_FILL_PRICE"
+                    },
+                    "evaluationEndExclusive": "2025-07-01T00:00:00Z",
+                    "evaluationStartInclusive": "2025-01-01T00:00:00Z",
+                    "initialStatePolicy": "FLAT_EMPTY_LEDGER_INDEPENDENT_CAPITAL",
+                    "limitations": {
+                      "currentMmrVerified": false,
+                      "executionPricePolicy": "RETROSPECTIVE_NEXT_CONTRACT_CANDLE_OPEN_NON_CAUSAL",
+                      "intraminuteDrawdownVerified": false,
+                      "liquidationCheckStatus": "UNAVAILABLE",
+                      "liquidationUnavailableReason": "CURRENT_MMR_NOT_VERIFIED",
+                      "maxDrawdownSampling": "ACTIVE_MARK_1M_POST_CANONICAL_EVENTS",
+                      "symbolRuleHistoricalAccuracy": "UNVERIFIED_CURRENT_RULE_PROXY"
+                    },
+                    "metrics": {
+                      "averageHoldingSeconds": "600",
+                      "averagePnl": "-1",
+                      "buyAndHoldReturnRate": "0.02",
+                      "definitionVersion": "backtest-metrics-0.7.0",
+                      "derivedBy": "ENGINE",
+                      "equityCurveContentHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                      "equityCurvePointCount": 2,
+                      "finalEquity": "999",
+                      "initialCapital": "1000",
+                      "maxDrawdownRate": "0.02",
+                      "metricsContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "metricsEvidenceId": "metrics_evidence_synthetic_oos_0001",
+                      "metricsPolicyId": "metrics_policy_synthetic_0001",
+                      "netReturnRate": "-0.001",
+                      "winRate": "0"
+                    },
+                    "resultContentHash": "8888888888888888888888888888888888888888888888888888888888888888",
+                    "resultId": "result_synthetic_oos_0001",
+                    "segment": "OOS",
+                    "summary": {
+                      "currency": "USDT",
+                      "fees": "0.1",
+                      "fillCount": 2,
+                      "funding": "0",
+                      "grossPnl": "-0.9",
+                      "netPnl": "-1",
+                      "rejectionCount": 0,
+                      "tradeCount": 1
+                    },
+                    "tradeManifest": {
+                      "detailAvailability": "MANIFEST_ONLY",
+                      "tradeCount": 1,
+                      "tradeListContentHash": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "tradeListId": "trade_list_synthetic_oos_0001"
+                    }
+                  }
+                ],
+                "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+                "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+                "sourceExecutionAuthority": {
+                  "authorityId": "source_execution_synthetic_0001",
+                  "authorityVersion": "source-execution-authority-runtime-v0.8.0",
+                  "backendArtifactSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+                  "backendCommit": "3333333333333333333333333333333333333333",
+                  "backendPackageVersion": "0.8.0rc1",
+                  "contractsArtifactSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                  "contractsCommit": "2222222222222222222222222222222222222222",
+                  "contractsPackageVersion": "0.11.0rc2",
+                  "splitGroupId": "split_group_synthetic_0001",
+                  "strategyVersionContentHash": "1111111111111111111111111111111111111111111111111111111111111111",
+                  "strategyVersionId": "sv_11111111111111111111111111111111",
+                  "terminalSealArtifactSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+                  "terminalSealContentHash": "4444444444444444444444444444444444444444444444444444444444444444"
+                },
+                "splitPolicy": "NO_CROSS_SEGMENT_CARRY",
+                "verification": "VERIFIED"
+              },
+              "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+              "publicRedistributionAllowed": false,
+              "reportingContractVersion": "0.1.0",
+              "rights": "NO_PUBLIC_REDISTRIBUTION",
+              "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+              "verification": "VERIFIED",
+              "verificationReceipt": {
+                "contentHash": "5d982c13dadfe66876d8addc05ace9775e67c84cb8de6faf8d4cff41da5f8289",
+                "productDecisionRef": "tesia-program@d5ff8989fc17af3c075c2f2ccd0f18e26ad97009#decision-private-actual-reporting-v01",
+                "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+                "projectionProducerAuthorityHash": "94b852b831a957d40b27960aa838dc898a824a348e39aac770119090c483f8ca",
+                "receiptId": "private_actual_receipt_synthetic_0001",
+                "receiptVersion": "private-actual-projection-verification-receipt-0.1.0",
+                "reportingContractVersion": "0.1.0",
+                "reportingVerifierAuthority": {
+                  "verifierArtifactSha256": "7777777777777777777777777777777777777777777777777777777777777777",
+                  "verifierCommit": "7777777777777777777777777777777777777777",
+                  "verifierId": "reporting_verifier_synthetic_0001",
+                  "verifierVersion": "private-actual-reporting-verifier-0.1.0"
+                },
+                "reportingVerifierAuthorityHash": "8d486c80e17588cfbed943f26091bb658cbad2e7c1b65388642a080bdb9dae1c",
+                "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+                "sourceExecutionAuthorityHash": "a2289055212e941d5c305534d4602b4d6bbee7e23038b9d788e4e7b71bf982ba",
+                "verification": "VERIFIED",
+                "verificationPolicy": "TRUSTED_CALLER_PINS_AND_SOURCE_BUNDLE_EXACT_V1"
+              },
+              "verificationReceiptContentHash": "5d982c13dadfe66876d8addc05ace9775e67c84cb8de6faf8d4cff41da5f8289"
+            }
+          }
+        }
+      }
+    },
+    {
+      "path": "fixtures/api/v0_6/positive-native-trades.json",
+      "sha256": "1fca9ab2e4dce5d930f7abcf30da36336abf16aea06a773edaf55379fc8e59a2",
+      "fixture": {
+        "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+        "notice": "Wire fixtures with opaque synthetic identities; no physical source/hash verification or actual issuer evidence.",
+        "pages": [
+          {
+            "name": "is-first",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001",
+              "segment": "IS",
+              "limit": 1
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.6.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "1"
+              },
+              "data": {
+                "binding": {
+                  "jobId": "backtest_native_synthetic_0001",
+                  "backtestId": "backtest_native_synthetic_0001",
+                  "splitGroupId": "split_group_synthetic_0001",
+                  "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+                  "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+                  "nativeEnvelopeContentHash": "af14d2c934abb6c2b4b2dd000b191cef71bdd2b9b2150be09bb9dab71d0cb247",
+                  "terminalSealContentHash": "4444444444444444444444444444444444444444444444444444444444444444",
+                  "terminalSealArtifactSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+                  "terminalBindingContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "jobAuthorBindingContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+                  "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+                  "rights": "NO_PUBLIC_REDISTRIBUTION",
+                  "publicRedistributionAllowed": false,
+                  "currentMmrVerified": false,
+                  "liquidationCheckStatus": "UNAVAILABLE",
+                  "segment": "IS",
+                  "resultContentHash": "7777777777777777777777777777777777777777777777777777777777777777",
+                  "tradeListId": "trade_list_synthetic_is_0001",
+                  "tradeListContentHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                },
+                "strategyAuthorityMapping": {
+                  "mappingRole": "SERVER_INTERNAL_IDENTITY_MAPPING_NOT_APPROVAL_AUTHORITY",
+                  "approvalStrategyVersionId": "sv_v03_11111111111111111111111111111111",
+                  "approvalStrategyContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "runtimeStrategyContentHashVersion": "v04",
+                  "runtimeStrategyContentHash": "1111111111111111111111111111111111111111111111111111111111111111",
+                  "reportingStrategyVersionAlias": "sv_11111111111111111111111111111111"
+                },
+                "tradeManifestContentHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "limit": 1,
+                "trades": [
+                  {
+                    "entryFillRef": "evt_native_entry_is_0001",
+                    "exitFillRef": "evt_native_exit_is_0001",
+                    "quantity": "1",
+                    "entryPrice": "100",
+                    "exitPrice": "101.075",
+                    "grossPnl": "1.075",
+                    "fees": "0.05",
+                    "funding": "-0.025",
+                    "netPnl": "1",
+                    "exitReason": "END_OF_DATA"
+                  }
+                ],
+                "nextCursor": "synthetic_native_cursor_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            }
+          },
+          {
+            "name": "is-last",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001",
+              "segment": "IS",
+              "limit": 1,
+              "cursor": "synthetic_native_cursor_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.6.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "1"
+              },
+              "data": {
+                "binding": {
+                  "jobId": "backtest_native_synthetic_0001",
+                  "backtestId": "backtest_native_synthetic_0001",
+                  "splitGroupId": "split_group_synthetic_0001",
+                  "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+                  "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+                  "nativeEnvelopeContentHash": "af14d2c934abb6c2b4b2dd000b191cef71bdd2b9b2150be09bb9dab71d0cb247",
+                  "terminalSealContentHash": "4444444444444444444444444444444444444444444444444444444444444444",
+                  "terminalSealArtifactSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+                  "terminalBindingContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "jobAuthorBindingContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+                  "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+                  "rights": "NO_PUBLIC_REDISTRIBUTION",
+                  "publicRedistributionAllowed": false,
+                  "currentMmrVerified": false,
+                  "liquidationCheckStatus": "UNAVAILABLE",
+                  "segment": "IS",
+                  "resultContentHash": "7777777777777777777777777777777777777777777777777777777777777777",
+                  "tradeListId": "trade_list_synthetic_is_0001",
+                  "tradeListContentHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                },
+                "strategyAuthorityMapping": {
+                  "mappingRole": "SERVER_INTERNAL_IDENTITY_MAPPING_NOT_APPROVAL_AUTHORITY",
+                  "approvalStrategyVersionId": "sv_v03_11111111111111111111111111111111",
+                  "approvalStrategyContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "runtimeStrategyContentHashVersion": "v04",
+                  "runtimeStrategyContentHash": "1111111111111111111111111111111111111111111111111111111111111111",
+                  "reportingStrategyVersionAlias": "sv_11111111111111111111111111111111"
+                },
+                "tradeManifestContentHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "limit": 1,
+                "trades": [
+                  {
+                    "entryFillRef": "evt_native_entry_is_0002",
+                    "exitFillRef": "evt_native_exit_is_0002",
+                    "quantity": "1",
+                    "entryPrice": "100",
+                    "exitPrice": "101.075",
+                    "grossPnl": "1.075",
+                    "fees": "0.05",
+                    "funding": "-0.025",
+                    "netPnl": "1",
+                    "exitReason": "END_OF_DATA"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "oos-default",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001",
+              "segment": "OOS"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.6.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "1"
+              },
+              "data": {
+                "binding": {
+                  "jobId": "backtest_native_synthetic_0001",
+                  "backtestId": "backtest_native_synthetic_0001",
+                  "splitGroupId": "split_group_synthetic_0001",
+                  "sourceBundleContentHash": "fcc76fa24965c4937b0f97303554c6c70622a0c9cee1a22700c2be78ffc68d24",
+                  "projectionContentHash": "37c9fd7ff7b32b13a85ff62aacf750982eecc6265206c4b3779097501b0dbea8",
+                  "nativeEnvelopeContentHash": "af14d2c934abb6c2b4b2dd000b191cef71bdd2b9b2150be09bb9dab71d0cb247",
+                  "terminalSealContentHash": "4444444444444444444444444444444444444444444444444444444444444444",
+                  "terminalSealArtifactSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+                  "terminalBindingContentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "jobAuthorBindingContentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+                  "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+                  "rights": "NO_PUBLIC_REDISTRIBUTION",
+                  "publicRedistributionAllowed": false,
+                  "currentMmrVerified": false,
+                  "liquidationCheckStatus": "UNAVAILABLE",
+                  "segment": "OOS",
+                  "resultContentHash": "8888888888888888888888888888888888888888888888888888888888888888",
+                  "tradeListId": "trade_list_synthetic_oos_0001",
+                  "tradeListContentHash": "0000000000000000000000000000000000000000000000000000000000000000"
+                },
+                "strategyAuthorityMapping": {
+                  "mappingRole": "SERVER_INTERNAL_IDENTITY_MAPPING_NOT_APPROVAL_AUTHORITY",
+                  "approvalStrategyVersionId": "sv_v03_11111111111111111111111111111111",
+                  "approvalStrategyContentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "runtimeStrategyContentHashVersion": "v04",
+                  "runtimeStrategyContentHash": "1111111111111111111111111111111111111111111111111111111111111111",
+                  "reportingStrategyVersionAlias": "sv_11111111111111111111111111111111"
+                },
+                "tradeManifestContentHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "limit": 50,
+                "trades": [
+                  {
+                    "entryFillRef": "evt_native_entry_oos_0001",
+                    "exitFillRef": "evt_native_exit_oos_0001",
+                    "quantity": "1",
+                    "entryPrice": "100",
+                    "exitPrice": "99",
+                    "grossPnl": "-1",
+                    "fees": "0",
+                    "funding": "0",
+                    "netPnl": "-1",
+                    "exitReason": "END_OF_DATA"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "fixtures/api/v0_7/positive-native-status.json",
+      "sha256": "3c406fccb5b6c72cf9bac00f264bc14191cd003ab7b18753c38b01866a3349f1",
+      "fixture": {
+        "evidenceClass": "SYNTHETIC_CONTRACT_FIXTURE",
+        "description": "SYNTHETIC SCHEMA EXAMPLES / NOT_ISSUED / NOT_EVIDENCE. Independent syntax examples, not an observed execution trace, verified native envelope, receipt, admission or actual SOURCE_BOUND evidence.",
+        "cases": [
+          {
+            "name": "QUEUED",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "1"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "QUEUED",
+                "revision": "1",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:00Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "PREPARING_DATA",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "2"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "PREPARING_DATA",
+                "revision": "2",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:01Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "VALIDATING",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "3"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "VALIDATING",
+                "revision": "3",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:02Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "REPLAYING",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "4"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "REPLAYING",
+                "revision": "4",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:03Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "VERIFYING",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "5"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "VERIFYING",
+                "revision": "5",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:04Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "TERMINAL_READY",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "6"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "TERMINAL_READY",
+                "revision": "6",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:05Z",
+                "resultAvailable": false
+              }
+            }
+          },
+          {
+            "name": "COMPLETED",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_unissued_schema_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "7"
+              },
+              "data": {
+                "backtestId": "backtest_unissued_schema_0001",
+                "splitGroupId": "split_unissued_schema_0001",
+                "strategyVersionId": "sv_v03_88888888888888888888888888888888",
+                "semanticHash": "000000000000000000000000000000000000000000000000000000000000000a",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "000000000000000000000000000000000000000000000000000000000000000b",
+                "state": "COMPLETED",
+                "revision": "7",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:06Z",
+                "resultAvailable": true,
+                "nativeReportBinding": {
+                  "jobId": "native_job_unissued_schema_0001",
+                  "backtestId": "backtest_unissued_schema_0001",
+                  "splitGroupId": "split_unissued_schema_0001",
+                  "sourceBundleContentHash": "0000000000000000000000000000000000000000000000000000000000000001",
+                  "projectionContentHash": "0000000000000000000000000000000000000000000000000000000000000002",
+                  "nativeEnvelopeContentHash": "0000000000000000000000000000000000000000000000000000000000000003",
+                  "terminalSealContentHash": "0000000000000000000000000000000000000000000000000000000000000004",
+                  "terminalSealArtifactSha256": "0000000000000000000000000000000000000000000000000000000000000005",
+                  "terminalBindingContentHash": "0000000000000000000000000000000000000000000000000000000000000006",
+                  "jobAuthorBindingContentHash": "0000000000000000000000000000000000000000000000000000000000000007",
+                  "sourceClass": "PRIVATE_ACTUAL_REPLAY",
+                  "evidenceClass": "SOURCE_BOUND_PROJECTION",
+                  "rights": "NO_PUBLIC_REDISTRIBUTION",
+                  "publicRedistributionAllowed": false,
+                  "currentMmrVerified": false,
+                  "liquidationCheckStatus": "UNAVAILABLE"
+                }
+              }
+            },
+            "exampleClassification": "SYNTHETIC_SCHEMA_EXAMPLE_NOT_ISSUED_NOT_EVIDENCE"
+          },
+          {
+            "name": "INVALID",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "8"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "INVALID",
+                "revision": "8",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:07Z",
+                "resultAvailable": false,
+                "invalidReason": "RUNTIME_RESULT_INVALID"
+              }
+            }
+          },
+          {
+            "name": "FAILED",
+            "operationId": "getNativeBacktestV7",
+            "request": {
+              "backtestId": "backtest_native_synthetic_0001"
+            },
+            "response": {
+              "meta": {
+                "apiContractVersion": "0.7.0",
+                "requestId": "req_native_test_0001",
+                "traceId": "trace_native_test_0001",
+                "resourceRevision": "9"
+              },
+              "data": {
+                "backtestId": "backtest_native_synthetic_0001",
+                "splitGroupId": "split_group_synthetic_0001",
+                "strategyVersionId": "sv_v03_11111111111111111111111111111111",
+                "semanticHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "profileId": "INTERNAL_POC_FULL",
+                "profileContentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "state": "FAILED",
+                "revision": "9",
+                "createdAt": "2026-09-10T00:00:00Z",
+                "updatedAt": "2026-09-10T00:00:08Z",
+                "resultAvailable": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

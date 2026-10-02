@@ -1,0 +1,41 @@
+import type { ClientLanguage } from '../client-preferences'
+
+type Translations = readonly [string, string, string, string, string, string, string]
+const column = { ko: 0, en: 1, ja: 2, 'zh-CN': 3, 'zh-TW': 4, es: 5, fr: 6 } as const satisfies Record<ClientLanguage, number>
+const copy = {
+  unavailable: ['아직 공급된 계정 데이터가 없습니다.', 'Account data has not been supplied yet.', '口座データはまだ提供されていません。', '尚未提供账户数据。', '尚未提供帳戶資料。', 'Aún no se han proporcionado datos de la cuenta.', 'Les données du compte n’ont pas encore été fournies.'],
+  empty: ['해당 기록이 없습니다.', 'There are no matching records.', '該当する記録はありません。', '没有相应记录。', '沒有相應紀錄。', 'No hay registros correspondientes.', 'Aucun enregistrement correspondant.'],
+  failed: ['요청을 완료하지 못했습니다. 다시 시도해주세요.', 'Could not complete the request. Please try again.', '処理を完了できませんでした。再試行してください。', '未能完成请求，请重试。', '無法完成要求，請重試。', 'No se pudo completar. Inténtalo de nuevo.', 'Impossible de terminer. Réessayez.'],
+  accepted: ['요청을 전달했습니다. 갱신된 계정 기록을 확인해주세요.', 'Request submitted. Check the updated account records.', '要求を送信しました。更新された口座記録を確認してください。', '请求已提交，请查看更新后的账户记录。', '要求已送出，請查看更新後的帳戶紀錄。', 'Solicitud enviada. Consulta los registros actualizados.', 'Demande transmise. Consultez les données actualisées du compte.'],
+  pending: ['처리 중', 'Pending', '処理中', '处理中', '處理中', 'En curso', 'En cours'],
+  stopNotice: ['전략 중지 요청이며 포지션 청산 요청이 아닙니다.', 'This is a request to stop the strategy, not to close positions.', '戦略の停止リクエストであり、ポジションの決済リクエストではありません。', '此为停止策略请求，并非平仓请求。', '此為停止策略請求，並非平倉請求。', 'Esta es una solicitud para detener la estrategia, no para cerrar posiciones.', 'Il s’agit d’une demande d’arrêt de la stratégie, et non d’une clôture de positions.'],
+  accounts: ['계정 상세', 'Account details', '口座詳細', '账户详情', '帳戶詳情', 'Detalles de la cuenta', 'Détails du compte'],
+  detail: ['상세 보기', 'View details', '詳細を見る', '查看详情', '查看詳情', 'Ver detalles', 'Voir les détails'],
+  publicEvidence: ['공급된 공개 관측 기록', 'Supplied public observations', '提供された公開観測記録', '提供的公开观测记录', '提供的公開觀測紀錄', 'Observaciones públicas proporcionadas', 'Observations publiques fournies'],
+  exchange: ['거래소', 'Exchange', '取引所', '交易所', '交易所', 'Exchange', 'Plateforme'],
+  strategy: ['전략', 'Strategy', '戦略', '策略', '策略', 'Estrategia', 'Stratégie'],
+  symbol: ['심볼', 'Symbol', '銘柄', '交易代码', '交易代碼', 'Símbolo', 'Symbole'],
+  side: ['방향', 'Side', '方向', '方向', '方向', 'Lado', 'Sens'],
+  quantity: ['수량', 'Quantity', '数量', '数量', '數量', 'Cantidad', 'Quantité'],
+  entry: ['진입가', 'Entry price', 'エントリー価格', '开仓价', '開倉價', 'Precio de entrada', 'Prix d’entrée'],
+  current: ['현재가', 'Current price', '現在値', '现价', '現價', 'Precio actual', 'Prix actuel'],
+  stop: ['손절가', 'Stop price', '損切り価格', '止损价', '停損價', 'Precio de stop', 'Prix stop'],
+  unrealized: ['미실현', 'Unrealized', '未実現', '未实现', '未實現', 'No realizado', 'Non réalisé'],
+  percent: ['%', '%', '%', '%', '%', '%', '%'],
+  type: ['유형', 'Type', '種類', '类型', '類型', 'Tipo', 'Type'],
+  price: ['가격', 'Price', '価格', '价格', '價格', 'Precio', 'Prix'],
+  status: ['상태', 'Status', '状態', '状态', '狀態', 'Estado', 'État'],
+  rule: ['규칙', 'Rule', 'ルール', '规则', '規則', 'Regla', 'Règle'],
+  date: ['일자', 'Date', '日付', '日期', '日期', 'Fecha', 'Date'],
+  fee: ['수수료', 'Fee', '手数料', '手续费', '手續費', 'Comisión', 'Frais'],
+  exit: ['청산가', 'Exit price', '決済価格', '平仓价', '平倉價', 'Precio de salida', 'Prix de sortie'],
+  holding: ['보유', 'Holding period', '保有期間', '持有时间', '持有時間', 'Periodo de tenencia', 'Durée de détention'],
+  realized: ['실현 손익', 'Realized P&L', '実現損益', '已实现盈亏', '已實現損益', 'Resultado realizado', 'Résultat réalisé'],
+  equity: ['Equity', 'Equity', '純資産', '净值', '淨值', 'Patrimonio', 'Fonds propres'],
+  available: ['Available', 'Available', '利用可能', '可用', '可用', 'Disponible', 'Disponible'],
+  used: ['Used', 'Used', '使用中', '已使用', '已使用', 'Utilizado', 'Utilisé'],
+  message: ['TETH에게 말해보세요… 예: 손절 기준 설명', 'Ask TETH… e.g. explain the stop rule', 'TETHに質問…例：損切りルールの説明', '询问TETH…例如解释止损规则', '詢問TETH…例如解釋停損規則', 'Pregunta a TETH… p. ej., explica la regla de stop', 'Demandez à TETH… ex. : expliquer la règle stop'],
+  send: ['보내기', 'Send', '送信', '发送', '傳送', 'Enviar', 'Envoyer'],
+  accountWide: ['계정 전체 범위', 'Account-wide scope', '口座全体', '整个账户', '整個帳戶', 'Toda la cuenta', 'Ensemble du compte'],
+} as const satisfies Record<string, Translations>
+export function nativeAccountText(language: ClientLanguage, key: keyof typeof copy) { return copy[key][column[language]] }

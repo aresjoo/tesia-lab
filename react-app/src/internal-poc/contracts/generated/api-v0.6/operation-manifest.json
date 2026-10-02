@@ -1,0 +1,36 @@
+{
+  "apiContractVersion": "0.6.0",
+  "operations": [
+    {
+      "method": "GET",
+      "operationId": "getNativeReportV6",
+      "path": "/api/v6/backtests/{backtestId}/native-report",
+      "pathField": "backtestId",
+      "requestSchema": "native-report.schema.json#/$defs/ReportRequest",
+      "responseSchema": "native-report.schema.json#/$defs/NativeReportEnvelope"
+    },
+    {
+      "defaultLimit": 50,
+      "maximumLimit": 100,
+      "method": "GET",
+      "operationId": "getNativeTradesV6",
+      "path": "/api/v6/backtests/{backtestId}/native-trades",
+      "pathField": "backtestId",
+      "requestSchema": "native-trades.schema.json#/$defs/TradesRequest",
+      "responseSchema": "native-trades.schema.json#/$defs/NativeTradesEnvelope"
+    }
+  ],
+  "security": {
+    "actualIssuerImplemented": false,
+    "cacheControl": "no-store",
+    "credentials": "include",
+    "ownerSource": "CURRENT_LIVE_SESSION_SERVER_CONTEXT",
+    "producerMissing": "NOT_READY",
+    "publicActualDataServing": false,
+    "redirect": "manual",
+    "retry": 0,
+    "sameOrigin": true,
+    "sessionCookie": "__Host-tesia_session"
+  },
+  "surface": "PRIVATE_NATIVE_RESULT_READ_ONLY"
+}

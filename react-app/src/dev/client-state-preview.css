@@ -1,0 +1,39 @@
+/* 8c5d8c8 tf-dev controls. DEV entry only, no public/service build import. */
+.source-qa-controls button { appearance: none; -webkit-appearance: none; }
+.source-qa-trigger { position: fixed; top: 64px; right: 16px; z-index: 200; height: 26px; padding: 0 10px; border-radius: 13px; border: 1px solid rgba(255,255,255,.16); background: rgba(20,22,27,.85); color: var(--client-text-2, #a5a8b0); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; cursor: pointer; font-family: inherit; backdrop-filter: blur(6px); }
+.source-qa-trigger:hover { color: #f2f2f2; border-color: rgba(255,255,255,.3); }
+.source-qa-trigger.on { color: #0f1012; background: #f2f2f2; border-color: #f2f2f2; }
+.source-qa-panel { position: fixed; top: 98px; right: 16px; z-index: 200; box-sizing: border-box; width: min(252px, calc(100vw - 24px)); max-height: calc(100dvh - 114px); overflow-y: auto; overscroll-behavior: contain; background: #16181d; border: 1px solid rgba(255,255,255,.13); border-radius: 16px; padding: 14px; box-shadow: 0 18px 48px rgba(0,0,0,.55); }
+.source-qa-panel h4 { margin: 0 0 4px; font-size: 12px; font-weight: 700; color: var(--client-text-2, #a5a8b0); letter-spacing: .03em; }
+.source-qa-panel .hint { font-size: 10.5px; color: var(--client-text-2, #a5a8b0); margin-bottom: 10px; line-height: 1.5; }
+.source-qa-panel .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; background: none; border: 0; padding: 8px 6px; border-radius: 9px; cursor: pointer; font-family: inherit; text-align: left; }
+.source-qa-panel .row:hover, .source-qa-panel .reset:hover { background: rgba(255,255,255,.06); }
+.source-qa-panel .row span { min-width: 0; font-size: 12.5px; color: var(--client-text, #e3e3e3); overflow-wrap: anywhere; }
+.source-qa-panel .row .st { flex: none; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,.07); color: var(--client-text-2, #a5a8b0); }
+.source-qa-panel .row .st.on { background: rgba(78,192,141,.15); color: #4ec08d; }
+.source-qa-panel .reset { width: 100%; margin-top: 8px; min-height: 32px; border-radius: 8px; border: 1px solid rgba(255,255,255,.14); background: transparent; color: var(--client-text-2, #a5a8b0); font-size: 11.5px; cursor: pointer; font-family: inherit; }
+.source-qa-controls button:focus-visible { outline: 2px solid var(--client-blue, #8fb2ff); outline-offset: 2px; }
+@media (pointer: coarse) { .source-qa-controls button { min-height: 44px; } }
+@media (max-width: 860px) {
+  .source-qa-trigger { top: auto; bottom: 212px; right: 14px; }
+  .source-qa-panel { top: auto; bottom: 246px; right: 12px; max-height: calc(100dvh - 258px); }
+}
+@media (pointer: coarse) and (min-width: 861px) { .source-qa-panel { top: 116px; max-height: calc(100dvh - 132px); } }
+@media (pointer: coarse) and (max-width: 860px) { .source-qa-panel { bottom: 264px; max-height: calc(100dvh - 276px); } }
+@media (max-width: 860px) and (max-height: 620px) {
+  .source-qa-trigger { top: 12px; bottom: auto; }
+  .source-qa-panel { top: 64px; bottom: auto; max-height: calc(100dvh - 76px); }
+}
+.source-state-preview { height: 100dvh; display: flex; flex-direction: column; background: var(--client-0, #0f1012); color: var(--client-text, #e3e3e3); }
+.source-state-preview > header { flex: none; padding: 12px 72px 12px 20px; border-bottom: 1px solid var(--client-line, #ffffff12); }
+.source-state-preview > main { flex: 1; min-height: 0; width: 100%; max-width: none; margin: 0; padding: 0; overflow-y: auto; overscroll-behavior: contain; }
+.source-state-preview > header > p { margin: 0 0 8px; color: var(--client-text-2); font-size: 12px; }
+.source-state-preview > header > nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.source-state-preview > header button { min-height: 44px; padding: 0 14px; border: 1px solid var(--client-line); border-radius: 999px; background: transparent; color: inherit; cursor: pointer; font: inherit; font-size: 13px; }
+.source-state-preview > header button[aria-current=page] { background: var(--client-3); }
+.source-state-preview > header button:focus-visible { outline: 2px solid var(--client-blue); outline-offset: 2px; }
+.source-state-preview .source-preview-terminal { height: 100%; min-height: 0; }
+.source-state-preview .source-preview-terminal > .client-source-terminal { height: 100%; }
+.source-state-preview .source-preview-result { padding: 24px; }
+.source-state-preview .source-preview-result > h1 { font-size: 24px; }
+.source-state-preview .source-preview-result > p { color: var(--client-text-2); }

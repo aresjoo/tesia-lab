@@ -1,0 +1,57 @@
+import type { ClientLanguage } from './client-preferences'
+
+// Presentation only. Status/strategy IDs and caller-owned values never come from translations.
+type Translations = readonly [string, string, string, string, string, string, string]
+const column = { ko: 0, en: 1, ja: 2, 'zh-CN': 3, 'zh-TW': 4, es: 5, fr: 6 } as const satisfies Record<ClientLanguage, number>
+export const accountTerminalCopy = {
+  judgment: ['판단', 'Analysis', '判断', '判断', '判斷', 'Análisis', 'Analyse'],
+  validation: ['검증', 'Backtest', '検証', '验证', '驗證', 'Validación', 'Validation'],
+  agent: ["Agent","Agent","Agent","Agent","Agent","Agent","Agent"],
+  dashboard: ["대시보드","Dashboard","ダッシュボード","仪表板","儀表板","Panel","Tableau de bord"],
+  completed: ["완료된 거래","Completed trades","完了した取引","已完成交易","已完成交易","Operaciones completadas","Opérations terminées"],
+  live: ["실행 중","Running","実行中","运行中","執行中","En ejecución","En cours d'exécution"],
+  off: ["중지","Stopped","停止","已停止","已停止","Detenido","Arrêté"],
+  ready: ["실행 전","Not started","実行前","未执行","未執行","Sin iniciar","Non démarré"],
+  err: ["오류","Error","エラー","错误","錯誤","Error","Erreur"],
+  expandTerminal: ["터미널 전체화면","Terminal fullscreen","ターミナルを全画面表示","终端全屏","終端機全螢幕","Terminal en pantalla completa","Terminal en plein écran"],
+  fullscreen: ["전체화면","Fullscreen","全画面","全屏","全螢幕","Pantalla completa","Plein écran"],
+  strategies: ["전략","Strategies","戦略","策略","策略","Estrategias","Stratégies"],
+  strategyCount: ['전략 {count}개', 'Strategies {count}', '戦略 {count}件', '策略 {count}个', '策略 {count}個', 'Estrategias {count}', 'Stratégies {count}'],
+  selectStrategy: ['전략 선택', 'Select a strategy', '戦略を選択', '选择策略', '選擇策略', 'Seleccionar estrategia', 'Choisir une stratégie'],
+  chart: ["차트","Chart","チャート","图表","圖表","Gráfico","Graphique"],
+  invalidIds: ["전략 식별자가 중복되거나 비어 있어 표시할 수 없습니다.","Strategy identifiers are duplicated or empty, so they cannot be displayed.","戦略識別子が重複しているか空のため表示できません。","策略标识符重复或为空，无法显示。","策略識別碼重複或為空，無法顯示。","Los identificadores de estrategia están duplicados o vacíos, por lo que no se pueden mostrar.","Les identifiants de stratégie sont en double ou vides : l'affichage est impossible."],
+  unavailable: ["전략 정보를 확인하지 못했습니다.","The strategy information could not be confirmed.","戦略情報を確認できませんでした。","未能确认策略信息。","未能確認策略資訊。","No se pudo confirmar la información de la estrategia.","Les informations de la stratégie n'ont pas pu être confirmées."],
+  selectContext: ["선택한 전략을 표시합니다.","Select a strategy and its market context will appear here","戦略を選択すると、市場コンテキストがここに表示されます","选择策略后，市场上下文会显示在这里","選擇策略後，市場上下文會顯示在這裡","Selecciona una estrategia y el contexto de mercado aparecerá aquí","Sélectionnez une stratégie pour afficher ici le contexte de marché"],
+  analysis: ["전략 분석","Strategy analysis","戦略分析","策略分析","策略分析","Análisis de la estrategia","Analyse de la stratégie"],
+  selectAnalysis: ["전략을 선택하면 분석 내용을 확인할 수 있어요.","Select a strategy to see its analysis.","戦略を選択すると分析内容を確認できます。","选择策略后即可查看分析内容。","選擇策略後即可查看分析內容。","Selecciona una estrategia para ver su análisis.","Sélectionnez une stratégie pour consulter son analyse."],
+  scope: ["데이터 범위","Data scope","データ範囲","数据范围","資料範圍","Ámbito de datos","Portée des données"],
+  current: ["현재 전략","Current strategy","現在の戦略","当前策略","目前策略","Estrategia actual","Stratégie actuelle"],
+  all: ["전체 전략","All strategies","すべての戦略","全部策略","全部策略","Todas las estrategias","Toutes les stratégies"],
+  newStrategy: ["새 전략","New strategy","新しい戦略","新策略","新策略","Nueva estrategia","Nouvelle stratégie"],
+  search: ["전략 검색","Search strategies","戦略を検索","搜索策略","搜尋策略","Buscar estrategias","Rechercher une stratégie"],
+  statusFilter: ["상태 필터","Status filter","ステータスフィルター","状态筛选","狀態篩選","Filtro de estado","Filtre d'état"],
+  allStatuses: ["전체 상태","All statuses","すべてのステータス","全部状态","全部狀態","Todos los estados","Tous les états"],
+  exchangeFilter: ["거래소 필터","Exchange filter","取引所フィルター","交易所筛选","交易所篩選","Filtro de exchange","Filtre de plateforme d'échange"],
+  allExchanges: ["전체 거래소","All exchanges","すべての取引所","全部交易所","全部交易所","Todos los exchanges","Toutes les plateformes"],
+  empty: ["아직 실행 중인 전략이 없습니다.","There are no running strategies yet.","まだ実行中の戦略はありません。","还没有运行中的策略。","還沒有執行中的策略。","Todavía no hay estrategias en ejecución.","Aucune stratégie en cours d'exécution pour le moment."],
+  emptyHint: ["채팅에서 만든 전략을 검증한 뒤 실행할 수 있습니다.","When you delegate a strategy in chat, it is registered here after validation.","チャットで戦略を任せると、検証を経てここに登録されます。","在聊天中委托策略后，会经过验证并登记在这里。","在聊天中委託策略後，會經過驗證並登錄在這裡。","Cuando delegas una estrategia en el chat, se registra aquí tras la validación.","Lorsque vous déléguez une stratégie dans le chat, elle est enregistrée ici après validation."],
+  create: ["새 전략 만들기","Create a new strategy","新しい戦略を作る","创建新策略","建立新策略","Crear una nueva estrategia","Créer une nouvelle stratégie"],
+  noMatch: ["조건에 맞는 전략이 없어요","No strategies match","条件に合う戦略がありません","没有符合条件的策略","沒有符合條件的策略","No hay estrategias que coincidan","Aucune stratégie ne correspond"],
+  noMatchHint: ["검색어나 필터를 바꿔 보십시오.","Try adjusting the search term or filters.","検索語やフィルターを調整してみてください。","试着调整搜索词或筛选条件。","試著調整搜尋字詞或篩選條件。","Prueba a ajustar el término de búsqueda o los filtros.","Essayez d'ajuster le terme de recherche ou les filtres."],
+  list: ["전략 목록","Strategy list","戦略リスト","策略列表","策略清單","Lista de estrategias","Liste des stratégies"],
+  exchangeValue: ["거래소 {value}","Exchange {value}","取引所 {value}","交易所 {value}","交易所 {value}","Exchange {value}","Plateforme d'échange {value}"],
+  statusValue: ["상태 {value}","Status {value}","ステータス {value}","状态 {value}","狀態 {value}","Estado {value}","État {value}"],
+  symbolValue: ["심볼 {value}","Symbol {value}","シンボル {value}","交易代码 {value}","交易代碼 {value}","Símbolo {value}","Symbole {value}"],
+  marketValue: ["시장 {value}","Market {value}","市場 {value}","市场 {value}","市場 {value}","Mercado {value}","Marché {value}"],
+  versionValue: ["버전 {value}","Version {value}","バージョン {value}","版本 {value}","版本 {value}","Versión {value}","Version {value}"],
+  capitalValue: ["운용 자금 {value}","Managed capital {value}","運用資金 {value}","管理资金 {value}","管理資金 {value}","Capital gestionado {value}","Capital géré {value}"],
+  sharedCapital: ["위임 예산 공용","Shared delegated budget","委任予算の共用","委托预算共用","委託預算共用","Presupuesto delegado compartido","Budget délégué partagé"],
+  pnlValue: ["손익 {value}","P&L {value}","損益 {value}","盈亏 {value}","損益 {value}","Resultado {value}","Résultat {value}"],
+  pnlPercentValue: ["손익률 {value}","P&L percentage {value}","損益率 {value}","盈亏率 {value}","損益率 {value}","Porcentaje de resultado {value}","Pourcentage de résultat {value}"],
+  selectName: ["{name} 선택","Select {name}","{name} を選択","选择 {name}","選擇 {name}","Seleccionar {name}","Sélectionner {name}"],
+  menuName: ["{name} 전략 메뉴","{name} strategy menu","{name} の戦略メニュー","{name} 策略菜单","{name} 策略選單","Menú de la estrategia {name}","Menu de la stratégie {name}"],
+  reconnect: ["다시 연결","Reconnect","再接続","重新连接","重新連接","Volver a conectar","Reconnecter"],
+} as const satisfies Record<string, Translations>
+export function accountTerminalText(language: ClientLanguage, key: keyof typeof accountTerminalCopy, values: Readonly<Record<string, string>> = {}): string {
+  return accountTerminalCopy[key][column[language]].replace(/\{([a-zA-Z]+)\}/g, (placeholder, name: string) => Object.hasOwn(values, name) ? values[name] : placeholder)
+}

@@ -1,0 +1,113 @@
+import { expect, test } from '@playwright/test'
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '검수자', email: 'review@example.test' })))
+})
+
+test('펼친 데스크톱 사이드바는 질문 모달의 Escape를 가로채지 않는다', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', '모바일 드로어는 본문을 inert 처리하므로 이 동시 동선이 없다')
+  await page.goto('/#/insight/bitcoin-miner-cashflow')
+  await page.locator('.client-rail-logo-row button').click()
+  const sidebar = page.locator('.client-sidebar')
+  const trigger = page.locator('.nfz-ast').first()
+  await trigger.click()
+  await expect(page.locator('.nfz-dialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.nfz-dialog')).toHaveCount(0)
+  await expect(sidebar).toHaveClass(/mobile-open/)
+  await expect(trigger).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(sidebar).not.toHaveClass(/mobile-open/)
+})
+
+test('펼친 데스크톱 사이드바는 입력 확대의 Escape와 조합 중 포커스를 지킨다', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', '모바일 드로어에서는 본문 입력에 접근하지 않는다')
+  await page.goto('/')
+  await page.locator('.client-rail-logo-row button').click()
+  const sidebar = page.locator('.client-sidebar')
+  const input = page.locator('#strategy-idea')
+  await input.fill('작성 중인 투자 아이디어\n두 번째 조건')
+  const cdp = await page.context().newCDPSession(page)
+  try {
+    await cdp.send('Input.imeSetComposition', { text: '가', selectionStart: 1, selectionEnd: 1 })
+    await page.keyboard.press('Escape')
+    await expect(sidebar).toHaveClass(/mobile-open/)
+    await expect(input).toBeFocused()
+    await cdp.send('Input.imeSetComposition', { text: '', selectionStart: 0, selectionEnd: 0 })
+  } finally { await cdp.detach() }
+  await page.getByRole('button', { name: '전체 화면', exact: true }).click()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.client-composer-dialog')).toHaveCount(0)
+  await expect(sidebar).toHaveClass(/mobile-open/)
+  await expect(input).toBeFocused()
+})
+
+test('질문 입력에서 시작한 드래그는 바깥에서 끝나도 초안을 버리지 않는다', async ({ page }) => {
+  await page.goto('/#/insight/bitcoin-miner-cashflow')
+  const trigger = page.locator('.nfz-ast').first()
+  await trigger.click()
+  const dialog = page.locator('.nfz-dialog')
+  const input = page.getByLabel('추가로 궁금한 점')
+  await input.fill('선택하고 있는 질문 내용을 보존해주세요')
+  const rect = await input.boundingBox()
+  await page.mouse.move(rect!.x + 20, rect!.y + 20)
+  await page.mouse.down()
+  await page.mouse.move(3, 3)
+  await page.mouse.up()
+  await expect(dialog).toBeVisible()
+  await expect(input).toHaveValue('선택하고 있는 질문 내용을 보존해주세요')
+  await page.mouse.click(3, 3)
+  await expect(dialog).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+})
+
+test('인사이트 평가 아이콘은 글꼴과 무관한 SVG이며 접근 가능한 이름은 원문을 유지한다', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '관측 사용자', email: 'insight-icons@example.test' })))
+  await page.goto('/#/insight/bitcoin-miner-cashflow')
+  for (const label of ['도움 안 됨', '조금 도움', '도움 됨']) {
+    const button = page.locator('.nfz-fb').getByRole('button', { name: label, exact: true })
+    await button.scrollIntoViewIfNeeded()
+    await expect(button).toHaveAccessibleName(label)
+    await expect(button.locator('svg')).toHaveAttribute('aria-hidden', 'true')
+    await expect(button.locator('svg')).toHaveAttribute('width', '16')
+    expect(await button.locator('svg path,svg circle').count()).toBeGreaterThan(0)
+  }
+})
+
+test('공유 Escape는 사이드바보다 먼저 처리하되 앞의 질문 모달에는 양보한다', async ({ page }, info) => {
+  await page.goto('/#/insight/bitcoin-miner-cashflow')
+  const desktop = info.project.name === 'desktop'
+  if (desktop) await page.locator('.client-rail-logo-row button').click()
+  const share = page.getByRole('button', { name: '공유', exact: true })
+  await share.click()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.nfz-shpop')).toHaveCount(0)
+  await expect(share).toBeFocused()
+  if (desktop) await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+  await share.click()
+  // Keyboard activation does not trigger the share popover's outside pointerdown.
+  await page.locator('.nfz-ast').first().focus()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.nfz-dialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.nfz-dialog')).toHaveCount(0)
+  await expect(page.locator('.nfz-shpop')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.nfz-shpop')).toHaveCount(0)
+  await expect(share).toBeFocused()
+  if (desktop) await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+  else {
+    await share.click()
+    const trigger = page.locator('.client-hamburger')
+    await trigger.focus()
+    await page.keyboard.press('Enter')
+    await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+    await page.keyboard.press('Escape')
+    await expect(page.locator('.client-sidebar')).not.toHaveClass(/mobile-open/)
+    await expect(trigger).toBeFocused()
+    await expect(page.locator('.nfz-shpop')).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.locator('.nfz-shpop')).toHaveCount(0)
+    await expect(share).toBeFocused()
+  }
+})

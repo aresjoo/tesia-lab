@@ -1,0 +1,64 @@
+/* 501053b: tfSS3CalHtml/HoldHtml/YearBars. Parent owns tfbk/ss3 layout. */
+.client-shared-performance { min-width: 0; }
+.client-shared-performance .ss3-ch.shared-calendar-heading { margin-bottom: 10px; }
+.client-shared-performance .ss3-ch.shared-calendar-heading h3 { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 0; color: #fff; }
+.client-shared-performance .cal-hd { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; font-size: 11px; color: #848a94; text-align: center; margin-bottom: 6px; }
+.client-shared-performance .cal-g { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
+.client-shared-performance .cal-c { position: relative; min-width: 0; min-height: 46px; border-radius: 8px; background: rgba(255,255,255,.03); font-size: 11px; color: #848a94; padding: 5px 6px; font-variant-numeric: tabular-nums; box-sizing: border-box; }
+.client-shared-performance .cal-c.off { opacity: .45; }
+.client-shared-performance .cal-c.u { background: rgba(86,196,134,.16); color: #c9ecd8; }
+.client-shared-performance .cal-c.d { background: rgba(238,118,106,.16); color: #f3cdc8; }
+.client-shared-performance .cal-c.z { background: rgba(255,255,255,.07); color: #dbdbdb; }
+.client-shared-performance .cal-c i { position: absolute; left: 6px; right: 4px; bottom: 4px; font-style: normal; font-size: 10.5px; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.client-shared-performance .cal-c.u i { color: #56c486; }
+.client-shared-performance .cal-c.d i { color: #ee766a; }
+.client-shared-performance .cal-c.z i { color: #848a94; }
+.client-shared-performance .cal-nav { background: none; border: 1px solid rgba(255,255,255,.16); border-radius: 6px; color: #dbdbdb; width: 24px; height: 24px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; flex: none; }
+.client-shared-performance .cal-nav:hover:not([aria-disabled=true]) { border-color: #787878; color: #fff; }
+.client-shared-performance .cal-nav[aria-disabled=true] { opacity: .3; cursor: default; }
+.client-shared-performance .cal-tooltip { display: none; position: absolute; bottom: calc(100% + 4px); left: 0; z-index: 2; padding: 4px 6px; border: 1px solid #787878; border-radius: 5px; background: #1c1e24; color: #fff; white-space: nowrap; pointer-events: none; }
+.client-shared-performance .cal-c:focus .cal-tooltip { display: block; }
+.client-shared-performance .cal-c:nth-child(7n) .cal-tooltip { left: auto; right: 0; }
+.client-shared-performance .shared-calendar-note { margin: 8px 0 0; }
+.client-shared-performance .shared-holding { margin-top: 22px; }
+.client-shared-performance .hold-r { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 12.5px; color: #dbdbdb; }
+.client-shared-performance .hold-r .lb { width: 64px; flex: none; color: #848a94; font-variant-numeric: tabular-nums; }
+.client-shared-performance .hold-r .bar { min-width: 0; flex: 1; display: flex; height: 14px; border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.05); }
+.client-shared-performance .hold-r .bar i { display: block; height: 100%; font-style: normal; }
+.client-shared-performance .hold-r .bar i.w { background: #56c486; }
+.client-shared-performance .hold-r .bar i.l { background: #ee766a; }
+.client-shared-performance .hold-r .ct { width: 110px; flex: none; text-align: right; color: #848a94; }
+@media (min-width: 681px) {
+  .client-shared-performance:not(:lang(ko)) .hold-r .lb { width: 8em; }
+}
+.client-shared-performance .shared-holding-legend { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 6px 0 0; }
+.client-shared-performance .shared-holding-key { display: inline-flex; align-items: baseline; gap: 4px; min-width: 0; }
+.client-shared-performance .shared-holding-key i { flex: none; font-style: normal; }
+.client-shared-performance .shared-holding-key .w { color: #56c486; }
+.client-shared-performance .shared-holding-key .l { color: #ee766a; }
+.client-shared-performance :is(.shared-year-scroll,.shared-trades-scroll) { min-width: 0; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+.client-shared-performance .shared-trades-scroll { margin-top: 24px; }
+.client-shared-performance .shared-year-bars { display: block; width: 100%; height: 200px; }
+.client-shared-performance .shared-year-bars line { stroke: rgba(255,255,255,.08); stroke-width: 1; }
+.client-shared-performance .shared-year-bars rect.up { fill: #2fb98a; }
+.client-shared-performance .shared-year-bars rect.dn { fill: #ee766a; }
+.client-shared-performance .shared-year-bars text { fill: #848a94; font-size: 13px; font-weight: 400; }
+.client-shared-performance .shared-year-bars text.up { fill: #2fb98a; font-weight: 600; }
+.client-shared-performance .shared-year-bars text.dn { fill: #ee766a; font-weight: 600; }
+.client-shared-performance .ss3-tbl .shared-number { text-align: right; }
+.client-shared-performance .ss3-tbl td.up { color: #56c486; }
+.client-shared-performance .ss3-tbl td.dn { color: #ee766a; }
+.client-shared-performance .ss3-tbl .shared-no-trades { text-align: center; height: 80px; }
+.client-shared-performance :is(.cal-nav,.cal-c,.shared-year-scroll,.shared-trades-scroll):focus-visible { outline: 2px solid #8fb2ff; outline-offset: 2px; }
+@media (max-width: 680px) {
+  .client-shared-performance .cal-c { min-height: 32px; padding: 4px 5px; }
+  .client-shared-performance .cal-c i { display: none; }
+}
+@media (max-width: 860px), (pointer: coarse) {
+  .client-shared-performance .cal-nav { width: 44px; height: 44px; }
+}
+@media (max-width: 420px) {
+  .client-shared-performance .hold-r { gap: 8px; }
+  .client-shared-performance .hold-r .lb { width: 52px; }
+  .client-shared-performance .hold-r .ct { width: 88px; }
+}

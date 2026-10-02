@@ -1,0 +1,53 @@
+/* Client tfLogCardRule/tfTmFoldChip with e08 sk-term hierarchy. No page-wide overrides. */
+.teth-agent-feed .tm-card{margin:0 12px 10px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:transparent;min-width:0;overflow-wrap:anywhere;container-type:inline-size}
+.teth-agent-feed .tm-ch{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--gl,#ffffff12);min-width:0}
+.teth-agent-feed .tm-t{font-size:14px;color:#9a9a9a;font-variant-numeric:tabular-nums}
+.teth-agent-feed .tm-k{font-size:14px;font-weight:400;color:#cdcdcd}
+.teth-agent-feed .tm-res{margin-left:auto;font-size:14px;font-weight:400;color:#ececec;text-align:right}
+.teth-agent-feed .tm-rows{padding:4px 12px}
+.teth-agent-feed .tm-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:16px;line-height:1.6}
+.teth-agent-feed .tm-row:last-child{border-bottom:0}
+.teth-agent-feed .tm-row span{flex:1 1 10em;min-width:min(100%,10em);color:#cdcdcd}
+.teth-agent-feed .tm-row b{font-weight:400;color:#ececec;min-width:0;font-variant-numeric:tabular-nums}
+.teth-agent-feed .tm-row i{font-style:normal;font-size:14px;font-weight:400;color:#ececec;text-align:right;min-width:0;margin-left:auto}
+.teth-agent-feed .tm-row :is(.na,.unknown){color:#9a9a9a}
+.teth-agent-feed .tm-out{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:10px 12px;border-top:1px solid var(--gl,#ffffff12);font-size:16px;line-height:1.6;color:#ececec}
+.teth-agent-feed .tm-out small{font-size:14px;color:#9a9a9a;min-width:64px}
+.teth-agent-feed .tm-out>span{flex:1 1 160px;min-width:0}
+.teth-agent-feed .tm-out .up{color:var(--gg,#56c486)}.teth-agent-feed .tm-out .dn{color:var(--gr,#ee766a)}.teth-agent-feed .tm-out .zz{color:#9a9a9a}
+.teth-agent-feed .tm-provenance{padding:6px 12px 10px;color:#9a9a9a;font-size:14px;line-height:1.6}
+.teth-agent-feed .tm-foldw{margin:0 12px 10px;min-width:0}
+.teth-agent-feed .tm-fold{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;width:100%;min-width:0;padding:10px 12px;border:1px dashed rgba(255,255,255,.14);border-radius:16px;background:none;color:#9a9a9a;text-align:left;cursor:pointer;overflow-wrap:anywhere;line-height:1.6}
+.teth-agent-feed .tm-fold>*{font-size:14px;font-weight:400;font-style:normal;min-width:0}
+.teth-agent-feed .tm-fold b{flex:1 1 120px;color:#cdcdcd}
+.teth-agent-feed .tm-fold i{color:#cdcdcd;text-decoration:underline;text-underline-offset:3px}
+.teth-agent-feed .tm-fold:hover{border-color:#9a9a9a}
+.teth-agent-feed .tm-foldx{margin-top:8px}
+.teth-agent-feed .tm-foldx .tm-card{margin:0 0 8px}
+@container(max-width:300px){.teth-agent-feed .tm-row>span{flex-basis:100%}}
+@media(pointer:coarse){.teth-agent-feed .tm-fold{min-height:44px}}
+
+/* 0eb338: date + neutral outcome + concise summary, evidence on demand. */
+.teth-agent-feed[data-rule-journal] .tft-feed-heading{padding:12px 20px 6px;font-size:18px;color:#fff}
+.teth-agent-feed[data-rule-journal] .tft-feed-heading>span{min-width:0}
+.teth-agent-feed[data-rule-journal] .tft-feed-heading small{display:block;margin:4px 0 0;color:#9a9a9a;line-height:1.5}
+.teth-agent-feed .tb-rl{margin:0 20px;min-width:0;border-top:1px solid #ffffff1a;overflow-wrap:anywhere}
+.teth-agent-feed .tb-rl:first-child{border-top:0}
+.teth-agent-feed .tb-rule-toggle{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;width:100%;padding:10px 0;min-height:44px;background:none;border:0;color:#cdcdcd;font:inherit;text-align:left;cursor:pointer;line-height:1.55}
+.teth-agent-feed .tb-rule-toggle>*{min-width:0;max-width:100%}
+.teth-agent-feed .tb-ft{font-size:14px;color:#9a9a9a;font-variant-numeric:tabular-nums}
+.teth-agent-feed .tb-rule-toggle>.tb-ft{flex:1 1 12em}
+.teth-agent-feed .tb-rule-toggle>b{font-size:14px;font-weight:400;flex:0 1 auto}
+.teth-agent-feed .tb-fs{flex:1 1 100%;font-size:16px}
+.teth-agent-feed .tb-fx{font-size:14px;color:#9a9a9a;text-decoration:underline;text-underline-offset:3px;margin-left:4px}
+.teth-agent-feed .tb-rule-toggle:hover .tb-fx{color:#ececec}
+.teth-agent-feed .tb-fr.tft-event-list{margin:0 0 10px;font-size:14px;line-height:1.6;color:#9a9a9a}
+.teth-agent-feed .tb-rule-evidence+.tb-rule-evidence{border-top:1px solid #ffffff1a;padding-top:10px;margin-top:10px}
+.teth-agent-feed .tb-rule-evidence>p{margin:0 0 4px}
+.teth-agent-feed .tb-rule-original{font-size:14px;line-height:1.6;color:#cdcdcd}
+.teth-agent-feed .tb-fr .tm-rows{padding:0;margin:0 0 10px}
+.teth-agent-feed .tb-fr .tm-row{padding:4px 0;font-size:14px}
+.teth-agent-feed .tb-fr :is(.tm-out,.tm-provenance){padding:4px 0;font-size:14px;border:0}
+.teth-agent-feed[data-rule-journal] .tm-foldw{margin:4px 20px 8px}
+.teth-agent-feed .tm-foldx .tb-rl{margin:0}
+@media(max-width:960px){.teth-agent-feed[data-rule-journal] .tft-feed-heading{padding-inline:16px}.teth-agent-feed .tb-rl,.teth-agent-feed[data-rule-journal] .tm-foldw{margin-inline:16px}.teth-agent-feed .tm-foldx .tb-rl{margin-inline:0}}

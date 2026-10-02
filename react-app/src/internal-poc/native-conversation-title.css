@@ -1,0 +1,18 @@
+/* Keep the original inline editor. A failed save needs its own readable row,
+   including the full-width conversation without the analysis split styles. */
+.client-lab-conversation .g-chead:has(.native-title-error) {
+  height: auto;
+  min-height: 44px;
+  flex-wrap: wrap;
+  padding-block: 6px;
+}
+.client-lab-conversation .native-title-error {
+  order: 1;
+  flex: 0 0 100%;
+  min-width: 0;
+  color: var(--client-red, #eb786e);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}

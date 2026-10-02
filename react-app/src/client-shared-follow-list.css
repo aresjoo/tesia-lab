@@ -1,0 +1,30 @@
+/* 501053b tfSS3FollowTab: reuse the sharing card shell without restyling it. */
+.client-shared-follow-list { min-width: 0; }
+.client-shared-follow-list .ss3-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 20px; margin: 0 0 34px; }
+.client-shared-follow-list .ss3-tiles .tl { min-width: 0; min-height: 92px; border-radius: 16px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); padding: 18px 24px; box-sizing: border-box; }
+.client-shared-follow-list .ss3-tiles dt { display: block; font-size: 14px; color: #848a94; }
+.client-shared-follow-list .ss3-tiles dd { display: block; margin: 6px 0 0; font-size: 28px; font-weight: 700; line-height: 36px; color: #fff; font-variant-numeric: tabular-nums; }
+.client-shared-follow-list .nmrow, .client-shared-follow-list .nm { min-width: 0; max-width: 100%; }
+.client-shared-follow-list .nm { overflow-wrap: anywhere; }
+.client-shared-follow-list .ss3-st { display: inline-flex; align-items: center; min-height: 24px; max-width: 100%; padding: 0 10px; border-radius: 6px; font-size: 13px; font-weight: 600; background: rgba(47,185,138,.14); color: #2fb98a; }
+.client-shared-follow-list .ss3-st.idle { background: rgba(255,255,255,.07); color: #848a94; }
+.client-shared-follow-list .ss3-follow-setting, .client-shared-follow-list .ss3-follow-date { display: inline-block; max-width: 100%; }
+.client-shared-follow-list .ss3-follow-date { color: #848a94; }
+.client-shared-follow-list .ctc b.up { color: #56c486; }
+.client-shared-follow-list .ctc b.dn { color: #ee766a; }
+.client-shared-follow-list .ss3-dbtn { min-height: 48px; padding: 10px 24px; border-radius: 8px; background: transparent; color: #ee766a; border: 1px solid rgba(238,118,106,.4); font: inherit; font-size: 16px; font-weight: 500; line-height: 1.5; cursor: pointer; transition: none; }
+.client-shared-follow-list .ss3-dbtn:hover { background: rgba(238,118,106,.08); }
+.client-shared-follow-list .bt > button { max-width: 100%; overflow-wrap: anywhere; }
+.client-shared-follow-list .is-source-missing .cin { grid-template-columns: minmax(0, 1fr); }
+.client-shared-follow-list .ss3-empty .wbtn { margin-top: 20px; }
+@media (max-width: 768px) {
+  .client-shared-follow-list .ss3-tiles { gap: 12px; margin-bottom: 24px; }
+  .client-shared-follow-list .ss3-tiles dd { font-size: 22px; line-height: 28px; }
+}
+@media (max-width: 480px) {
+  .client-shared-follow-list .bt { flex-direction: column; gap: 8px; }
+  .client-shared-follow-list .bt > button { width: 100%; padding-inline: 16px; }
+}
+@media (max-width: 860px), (pointer: coarse) {
+  .client-shared-follow-list button { min-height: 44px; }
+}

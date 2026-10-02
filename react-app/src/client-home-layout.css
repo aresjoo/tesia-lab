@@ -1,0 +1,45 @@
+/* Source: tesia-lab 9bf4427 gHome. The gallery is the source layout, not a new funnel. */
+.client-source-app.view-landing .landing-hero { justify-content: flex-start; overflow: visible; padding: 0; }
+.client-source-app .client-home-content.client-gallery-home { min-height: calc(100svh - 28px); justify-content: flex-start; padding: 7vh 24px 24px; }
+.client-gallery-home .client-hero-title { animation: none; }
+.client-gallery-home .client-hero-subtitle { max-width: none; line-height: 1.6; animation: none; }
+.client-gallery-home .sbr { display: none; }
+/* Source 4d37373: only mobile keeps the explicit terms sentence break. */
+.client-gallery-home .client-home-terms .tbr { display: none; }
+.client-gallery-home.entr .client-hero-title { animation: client-rise 500ms cubic-bezier(.2,0,0,1) both; }
+.client-gallery-home.entr .client-hero-subtitle { animation: client-rise 500ms cubic-bezier(.2,0,0,1) 80ms both; }
+.client-gallery-home .client-home-band { position: sticky; bottom: 28px; z-index: 30; align-self: stretch; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 26px; padding: 30px 0 10px; background: linear-gradient(to top,#0f1012 56%,rgba(15,16,18,0)); }
+.client-gallery-home .client-home-band .client-home-pill { position: relative; inset: auto; margin: 0; animation: none; }
+.client-gallery-home .client-home-band .client-free-row { margin: 0; opacity: 1; transform: none; pointer-events: auto; }
+.client-gallery-home:not(.has-input) .client-home-band .client-free-row { visibility: hidden; opacity: 0; pointer-events: none; }
+.client-source-app .client-gallery-home .client-home-band .client-home-terms { position: static; inset: auto; margin: 0; padding: 2px 16px 0; text-align: center; }
+.client-gallery-home .client-plus-popover { top: auto; bottom: calc(100% + 8px); }
+.client-gallery-home .g-tpl { scroll-margin-block: 12px calc(var(--client-band-height,200px) + 28px); }
+.client-home-pill.has-template { flex-wrap: wrap; border-radius: 28px; }
+.client-home-pill.has-template.is-fullscreen { display: flex; flex-direction: row; align-content: flex-start; }
+.client-home-pill.has-template.is-fullscreen textarea { flex: 1 1 100%; height: auto !important; min-height: 120px; max-height: 50dvh; }
+@media (max-width:860px) {
+  /* The source gallery owns its inset regardless of route CSS import order. */
+  .client-source-app.view-landing:has(.client-gallery-home) .landing-hero { padding-top: 64px; }
+  .client-source-app .client-home-content.client-gallery-home { padding: 9vh 24px calc(var(--client-band-height,200px) + 48px); }
+  .client-gallery-home .client-hero-title, .client-gallery-home .client-hero-subtitle { padding-inline: 0; }
+  .client-gallery-home .sbr { display: inline; }
+  .client-gallery-home .client-home-terms .tbr { display: inline; }
+  .client-gallery-home .client-home-band { position: fixed; left: 0; right: 0; bottom: 28px; gap: 8px; padding: 14px 16px calc(8px + env(safe-area-inset-bottom,0px)); margin: 0; background: linear-gradient(to top,#0f1012 76%,rgba(15,16,18,0)); }
+  .client-gallery-home .client-home-band .client-home-pill { width: 100%; }
+  .client-source-app .client-gallery-home .client-home-band .client-home-terms { padding: 0 4px; font-size: 10px; line-height: 1.35; }
+  .client-source-app.view-landing:has(.client-gallery-home) .site-help { bottom: calc(var(--client-band-height,200px) + 38px); }
+}
+/* Large type/short keyboards: use the document flow instead of covering the gallery. */
+@media (max-width:860px) and (max-height:560px) {
+  .client-source-app .client-home-content.client-gallery-home { padding-top: 120px; padding-bottom: 28px; }
+  .client-gallery-home .client-home-band { position: static; padding-inline: 16px; margin-top: 20px; }
+  .client-gallery-home .g-tpl { scroll-margin-bottom: 12px; }
+  .client-gallery-home .client-home-gallery { max-height: 50dvh; overflow-y: auto; overscroll-behavior: contain; padding: 6px; scrollbar-width: thin; }
+  /* Keep the source 42a0d81 width-based column policy in client-home-gallery.css. */
+  .client-gallery-home .client-hero-title { font-size: 24px; }
+  .client-gallery-home .client-hero-subtitle { font-size: 13px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .client-gallery-home.entr .client-hero-title,.client-gallery-home.entr .client-hero-subtitle { animation: none; }
+}

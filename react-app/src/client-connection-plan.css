@@ -1,0 +1,178 @@
+/* ── 거래소 연결 플랜 (참고: ChatGPT 플랜 업그레이드, 플랜 구성) ── */
+.cpl{max-width:1080px;margin:0 auto;padding:8px 24px 100px;color:#ececec;font-weight:400}
+.cpl-head{text-align:center;margin:0 0 26px}
+.cpl-head h1{margin:0;font-size:32px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.cpl-need{margin:10px 0 0;font-size:15px;color:#b4b4b4}
+.cpl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:27px;align-items:stretch}
+.cpl-grid.has-bt{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cpl-card{position:relative;display:flex;flex-direction:column;padding:26px;border-radius:26px;border:1px solid rgba(255,255,255,.16);background:transparent;min-width:0}
+.cpl-card.cpl-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#0e0e0e 0%,#0a2a2e 48%,#0b4851 100%)}
+.cpl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:28px}
+.cpl-lb{font-size:20px;font-weight:600;color:#fff}
+.cpl-h{margin:24px 0 0;font-size:32px;line-height:1.25;font-weight:400;letter-spacing:-.01em;color:#fff}
+.cpl-d{margin:14px 0 0;font-size:18px;line-height:1.55;color:#cdcdcd;min-height:84px}
+.cpl-price{display:flex;align-items:baseline;gap:4px;margin:34px 0 28px}
+.cpl-price>i{font-style:normal;font-size:20px;color:#fff;align-self:flex-start;margin-top:8px}
+.cpl-price>span{font-size:44px;font-weight:400;line-height:1;letter-spacing:-.01em;color:#fff}
+.cpl-price>small{font-size:16px;color:#cdcdcd;margin-left:4px}
+.cpl-grad{background:linear-gradient(120deg,#e0feff 0%,#00f0ff 55%,#7ff7ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.cpl-cta{width:100%;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:background-color .15s ease,border-color .15s ease}
+.cpl-cta:hover{background:rgba(255,255,255,.08)}
+.cpl-cta-hi{background:#00f0ff;border-color:#00f0ff;color:#000;font-weight:500}
+.cpl-cta-hi:hover{background:#5cf6ff;border-color:#5cf6ff}
+.cpl-cta-w{background:#fff;border-color:#fff;color:#000;font-weight:500}
+.cpl-cta-w:hover{background:#ececec}
+.cpl-cta:disabled{opacity:.6;cursor:default}
+.cpl-sub{margin:42px 0 16px;font-size:16px;color:#ececec}
+.cpl-items{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.cpl-items li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;align-items:center;font-size:16px;line-height:1.5;color:#ececec}
+.cpl-items li svg{color:#cdcdcd}
+.cpl-hi .cpl-items li svg{color:#00f0ff}
+.cpl-items.sm{gap:18px}.cpl-items.sm li{font-size:16px}
+.cpl-logos{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}
+.cpl-logos img,.cpl-logos .acx-mono{border-radius:4px;vertical-align:0}
+.cpl-foot{margin:auto 0 0;padding-top:34px;font-size:13px;line-height:1.6;color:#b4b4b4}
+.cpl-bt .cpl-price>span{font-size:40px}
+.cpl-spark{width:100%;height:72px;margin:0 0 20px}
+.cpl-more{display:none}
+/* 플랜 구성(결제) */
+.cpl-co{max-width:1120px;padding-top:0}
+.cpl-cohead{display:flex;align-items:center;gap:14px;margin:0 0 30px}
+.cpl-cohead h1{margin:0;font-size:32px;font-weight:400;color:#fff}
+.cpl-back{width:36px;height:36px;border:0;border-radius:10px;background:transparent;color:#ececec;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cpl-back:hover{background:rgba(255,255,255,.08)}
+.cpl-cogrid{display:grid;grid-template-columns:minmax(0,1fr) 437px;gap:79px;align-items:start}
+.cpl-t3{margin:0 0 6px;font-size:18px;font-weight:600;color:#fff}.cpl-t3.mt{margin-top:34px;margin-bottom:14px}
+.cpl-d2{margin:0 0 14px;font-size:14px;color:#b4b4b4}
+.cpl-exs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cpl-exs button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 14px;border-radius:20px;border:2px solid transparent;background:#3a3a3a;color:#fff;font:inherit;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.cpl-exs button img,.cpl-exs button .acx-mono{border-radius:7px}
+.cpl-exs button b{font-size:15px;font-weight:600}.cpl-exs button small{font-size:11.5px;color:#cdcdcd}
+.cpl-exs button.on{border-color:#9a9a9a;background:#2c2c2c}
+.cpl-exs button.off{opacity:.35;cursor:default}
+.cpl-apple{width:100%;height:47px;border-radius:18px;border:0;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:20px;font-weight:600;cursor:pointer;letter-spacing:-.01em}
+.cpl-apple span{font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+.cpl-apple:disabled{opacity:.7;cursor:default;font-size:14px}
+.cpl-or{display:flex;align-items:center;gap:12px;margin:14px 0;color:#9a9a9a;font-size:12px}
+.cpl-or::before,.cpl-or::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.18)}
+.cpl-form{display:grid;gap:10px}
+.cpl-form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cpl-in{position:relative;display:flex;align-items:center;height:77px;padding:0 20px;border-radius:19px;background:#2f2f2f}
+.cpl-in.big{height:78px}
+.cpl-in input{flex:1;min-width:0;border:0;background:transparent;color:#fff;font:inherit;font-size:18px;font-weight:500;outline:0}
+.cpl-in input::placeholder{color:#a5a5a5;font-weight:500}
+.cpl-in input.bad{color:#ff9aa5}
+.cpl-brands{display:flex;gap:4px}
+.cpl-brands i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:22px;border-radius:4px;font-size:9px;font-weight:800;font-style:normal;letter-spacing:.02em}
+.cpl-brands .visa{background:#1a1f71;color:#fff}.cpl-brands .amex{background:#2e77bb;color:#fff}
+.cpl-brands .mc{background:radial-gradient(circle at 35% 50%,#eb001b 0 45%,transparent 46%),radial-gradient(circle at 65% 50%,#f79e1b 0 45%,transparent 46%),#000}
+.cpl-cvc{width:26px;height:18px;border-radius:3px;border:1.5px solid #a5a5a5;font-size:8px;color:#a5a5a5;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 2px 1px}
+.cpl-form .er{display:none;font-size:12.5px;color:#f58a98}.cpl-form .er:not(:empty){display:block}
+.cpl-ck{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:15px;color:#ececec;cursor:pointer}
+.cpl-ck input{width:18px;height:18px;accent-color:#fff}
+.cpl-saved{display:grid;gap:10px}
+.cpl-saved .r{display:grid;grid-template-columns:20px minmax(0,1fr) 18px;gap:12px;align-items:center;padding:18px 20px;border-radius:19px;background:#2f2f2f;border:2px solid #9a9a9a}
+.cpl-saved .r b{display:block;font-size:16px;color:#fff}.cpl-saved .r small{display:block;font-size:12px;color:#cdcdcd}
+.cpl-saved .r i{color:#2fb98a}
+.cpl-link{border:0;background:none;color:#cdcdcd;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.cpl-sumcard{padding:34px;border-radius:36px;background:#303030;border:1px solid rgba(255,255,255,.1);color:#ececec}
+.cpl-sumcard h2{margin:0 0 8px;font-size:32px;font-weight:400;letter-spacing:-.01em;color:#fff}
+.cpl-sumcard>p{margin:0 0 24px;font-size:15px;color:#cdcdcd}
+.cpl-lines{margin:28px 0 24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);display:grid;gap:12px;font-size:15px;color:#cdcdcd}
+.cpl-lines div{display:flex;justify-content:space-between;gap:16px}
+.cpl-lines b{color:#fff;font-weight:400}
+.cpl-lines .tot{margin-top:4px;font-size:17px;color:#fff}.cpl-lines .tot b{font-weight:700}
+.cpl-sumcard .cpl-cta{height:65px;font-size:16px}
+.cpl-legal{margin:18px 8px 0;font-size:13.5px;line-height:1.6;color:#d0d0d0}
+@media (max-width:1100px){ .cpl-grid.has-bt{grid-template-columns:repeat(2,minmax(0,1fr))} .cpl-bt{grid-column:1/-1} .cpl-cogrid{grid-template-columns:minmax(0,1fr) 380px;gap:32px} }
+@media (max-width:900px){
+  .cpl{padding:4px 5px 110px}
+  .cpl-head{margin-bottom:16px}.cpl-head h1{font-size:26px}
+  .cpl-grid,.cpl-grid.has-bt{grid-template-columns:1fr;gap:14px}
+  .cpl-bt{grid-column:auto;order:0}.cpl-hi{order:1}.cpl-card:not(.cpl-hi):not(.cpl-bt){order:2}
+  .cpl-card{padding:22px 20px;border-radius:19px}
+  .cpl-lb{font-size:18px}.cpl-h{font-size:26px;margin-top:18px}.cpl-d{font-size:15px;min-height:0;margin-top:10px}
+  .cpl-price{margin:22px 0 18px}.cpl-price>span{font-size:36px}.cpl-price>i{font-size:16px;margin-top:6px}
+  .cpl-sub{margin:26px 0 12px}.cpl-items{gap:16px}.cpl-items li{font-size:15px}
+  .cpl-foot{padding-top:24px}
+  .cpl-cogrid{grid-template-columns:minmax(0,1fr);gap:24px}
+  .cpl-right{order:2}.cpl-left{order:1}
+  .cpl-sumcard{padding:24px;border-radius:24px}.cpl-sumcard h2{font-size:26px}
+  .cpl-exs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.cpl-exs button{padding:12px 6px 10px;border-radius:14px}
+  .cpl-in{height:64px;border-radius:14px}.cpl-in.big{height:68px}.cpl-in input{font-size:16px}
+}
+/* 두 번째 픽셀 검수 반영 */
+.cpl-price{margin:34px 0 44px}
+.cpl-sumcard .cpl-items li svg{color:#00f0ff}
+.cpl-sumcard .cpl-items{gap:20px}.cpl-lines{padding-top:24px}
+.cpl-co,.cpl-cogrid,.cpl-left,.cpl-form,.cpl-in{min-width:0;max-width:100%}
+.cpl-form .two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){
+  .cpl{padding-top:12px}
+  .cpl-items{gap:14px}
+  .cpl-in{padding:0 14px}.cpl-brands i{width:28px;height:18px;font-size:8px}
+}
+
+/* React host and accessibility corrections, without global source body flags. */
+.client-connection-plan{height:100%;overflow-y:auto;overscroll-behavior:contain;background:#000;color:#ececec;padding:56px 24px 0;word-break:keep-all;overflow-wrap:anywhere}
+.client-connection-plan.is-checkout{background:#000}
+.client-connection-plan button{font-family:inherit}
+.client-connection-plan :focus-visible{outline:2px solid #a8c7fa;outline-offset:3px}
+.client-connection-plan .cpl-head{position:relative;padding-inline:44px}
+.client-connection-plan .cpl-head .cpl-back{position:absolute;left:0;top:0}
+.client-connection-plan .cpl-back{min-width:44px;min-height:44px;flex:none}
+.client-connection-plan h1{line-height:1.25}
+.client-connection-plan .cpl-form{border:0;padding:0;margin:0;min-inline-size:0}
+.client-connection-plan .cpl-cta{height:auto;min-height:48px;padding:10px 16px;line-height:1.5}
+.client-connection-plan .cpl-logos{flex-wrap:wrap;max-width:100%}
+.client-connection-plan .cpl-logo-fallback{display:inline-grid;place-items:center;min-width:18px;height:18px;background:#3a3a3a;color:#ececec;font-size:9px;border-radius:4px}
+.client-connection-plan .cpl-unavailable{font-size:13px;line-height:1.7;color:#b4b4b4;margin:20px 0}
+.client-connection-plan .cpl-form legend{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.client-connection-plan .cpl-mono{display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:8px;background:#17e6a1;color:#0b1a14;font-style:normal;font-weight:800;vertical-align:-4px}
+.client-connection-plan .cpl-logos .cpl-mono{border-radius:4px;vertical-align:0}
+.client-connection-plan .cpl-lines b{white-space:nowrap}
+.client-connection-plan .cpl-bt .cpl-price>.up{color:#2fb98a}
+.client-connection-plan .cpl-bt .cpl-price{flex-wrap:wrap;row-gap:8px}
+.client-connection-plan .cpl-bt .num{white-space:nowrap;font-variant-numeric:tabular-nums}
+.client-connection-plan .cpl-bt .cpl-price>span{max-width:100%;font-size:clamp(28px,3vw,40px)}
+.client-connection-plan .cpl-bt .cpl-items b{font-weight:400}
+.client-source-app:has(.client-connection-plan) .client-account-utility{display:none}
+@media(max-width:860px){.client-connection-plan{padding:64px 14px 0}.client-connection-plan .cpl-head{padding-inline:44px}.client-connection-plan .cpl-cohead h1{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.client-connection-plan *{transition:none!important}}
+
+/* af7b8d1 px final overrides: one decision per screen, no stepper. */
+.client-connection-plan .cpx{max-width:640px;padding-top:0}
+.client-connection-plan .cpx-head{margin-bottom:10px}
+.cpx-lead{margin:0 0 26px;font-size:18px;line-height:1.5;color:#cdcdcd}
+.cpx-card{padding:24px 26px;border-radius:26px;background:#303030;border:1px solid rgba(255,255,255,.1);color:#ececec;margin:0 0 20px}
+.client-connection-plan .cpx-cta{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;font-size:16px}
+.cpx-cta img,.cpx-cta .cpl-mono{border-radius:6px}
+.cpx-cta svg{flex:none}
+.cpx-links{display:flex;gap:22px;flex-wrap:wrap;margin:16px 2px 0}
+.cpx-links .cpl-link{font-size:14px;color:#cdcdcd;min-height:44px}
+.cpx-help{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:44px 2px 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px;color:#9a9a9a}
+.cpx-help .cpl-link{font-size:13.5px;min-height:44px}
+.cpx-exs button{gap:10px;padding:20px 8px 18px;background:#303030;border-radius:26px;border-color:transparent}
+.cpx-exs button:hover{background:#3a3a3a;border-color:transparent}
+.cpx-exs button img,.cpx-exs button .cpl-mono{border-radius:8px}
+.cpx-exs button b{font-size:16px}
+.cpx-steps{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.cpx-steps li{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+.cpx-steps b{display:block;font-size:16px;font-weight:600;color:#fff;line-height:1.4;margin-bottom:4px}
+.cpx-steps span{display:block;font-size:14.5px;line-height:1.55;color:#cdcdcd}
+.cpx-perm{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.cpx-perm li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;align-items:start;color:#00f0ff}
+.cpx-perm li svg{margin-top:3px}
+.cpx-perm li>span{color:#cdcdcd;font-size:16px;line-height:1.55}
+.cpx-perm b{display:block;font-size:16px;font-weight:600;color:#fff;margin-bottom:2px}
+@media(max-width:900px){
+  .client-connection-plan:has(.cpx){padding-inline:0}
+  .client-connection-plan .cpx{padding-left:16px;padding-right:16px}
+  .client-connection-plan .cpx-head{align-items:flex-start;margin-bottom:6px}
+  .client-connection-plan .cpx-head .cpl-back{margin-top:2px}
+  .client-connection-plan .cpx-head h1{font-size:32px;line-height:1.3}
+  .cpx-lead{font-size:16px;margin-bottom:20px}
+  .cpx-card{padding:20px 18px}
+  .cpx-exs button{padding:14px 6px 12px;border-radius:20px}
+}
+@media(forced-colors:active){.client-connection-plan .cpl-grad{background:none;color:CanvasText!important}.client-connection-plan .cpl-exs button.on{border-color:Highlight}}

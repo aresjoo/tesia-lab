@@ -1,0 +1,22 @@
+/* Source 9bf4427 tft-menu and ss3-dlg, scoped to the supplied strategy actions. */
+.csa-menu,.csa-dialog{box-sizing:border-box;font-family:inherit;color:var(--gt,#e3e3e3)}
+.csa-menu{position:fixed;inset:auto;margin:0;z-index:340;background:var(--g2,#202124);border:1px solid var(--gl2,#ffffff20);border-radius:8px;padding:5px;min-width:min(168px,calc(100vw - 20px));width:max-content;overflow:auto;overscroll-behavior:contain;box-shadow:0 12px 34px #0008}
+.csa-menu button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:5px;color:inherit;font-size:12px;line-height:1.5;padding:7px 10px;cursor:pointer;font-family:inherit}
+.csa-menu button:hover:not(:disabled){background:#ffffff0f}.csa-menu .sep{height:1px;background:var(--gl,#ffffff12);margin:4px 2px}.csa-menu .del{color:var(--gr,#ee766a)}
+.csa-menu button:disabled,.csa-dialog button:disabled{opacity:.4;cursor:default}
+.csa-menu :focus-visible,.csa-dialog :focus-visible{outline:2px solid var(--gb2,#5b8af7);outline-offset:2px}
+.csa-menu [role=alert]{font-size:12px;line-height:1.6;max-width:230px;padding:0 10px;color:var(--gr,#ee766a);overflow-wrap:anywhere}
+.csa-dialog{width:560px;max-width:calc(100vw - 40px);max-height:85dvh;margin:auto;padding:1px;border:0;border-radius:24px;overflow:hidden;background:linear-gradient(308deg,#ffffff24,#0000 13.16%),linear-gradient(139deg,#ffffff24 1%,#0000 19.85%),#000}
+.csa-dialog::backdrop{background:#000b;backdrop-filter:blur(8px)}
+.csa-dialog .din{box-sizing:border-box;background:#000;border-radius:23px;padding:36px 40px;max-height:calc(85dvh - 2px);overflow:auto;overscroll-behavior:contain}
+.csa-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.csa-dialog h2{margin:0;color:#fff;font-size:24px;line-height:1.4;font-weight:600;overflow-wrap:anywhere;min-width:0}
+.csa-dialog .dx{background:none;border:0;color:#848a94;font-size:22px;cursor:pointer;padding:4px;flex:none}.csa-dialog .dx:hover{color:#fff}
+.csa-dialog .ntc{font-size:13px;line-height:20px;color:#848a94;margin:0 0 20px;overflow-wrap:anywhere}.csa-dialog .ntc b{color:#fff}.csa-dialog .fld3{margin-bottom:16px}.csa-dialog .fld3 label{display:block;font-size:13px;color:#848a94;margin-bottom:8px}
+.csa-dialog input[type=text]{box-sizing:border-box;width:100%;height:48px;border-radius:12px;background:#000;border:2px solid #4a4a4a;color:#fff;font-family:inherit;font-size:14px;padding:0 16px}.csa-dialog input:focus{border-color:#787878}
+.csa-dialog .acts3{display:flex;gap:12px;margin-top:28px}.csa-dialog .acts3 button{font-family:inherit;min-width:0;min-height:48px;height:auto;padding:10px 16px;border-radius:8px;font-size:16px;line-height:1.4;font-weight:500;overflow-wrap:anywhere;cursor:pointer}
+.csa-dialog .obtn{width:120px;background:transparent;color:#fff;border:1px solid #fff}.csa-dialog .wbtn{flex:1;background:#fff;color:#0f0f0f;border:1px solid #fff}.csa-dialog .ss3-dbtn{flex:1;background:transparent;color:#ee766a;border:1px solid #ee766a66}
+.csa-dialog .obtn:hover:not(:disabled){background:#ffffff14}.csa-dialog .wbtn:hover:not(:disabled){background:#f2f2f2}.csa-dialog .ss3-dbtn:hover:not(:disabled){background:#ee766a14}
+.csa-dialog .ss3-radio{box-sizing:border-box;display:block;width:100%;text-align:left;border:2px solid #4a4a4a;border-radius:12px;padding:16px 18px;background:none;color:#fff;cursor:pointer;margin-bottom:12px;font-family:inherit;overflow-wrap:anywhere}.csa-dialog .ss3-radio:hover:not(:disabled){border-color:#fff}.csa-dialog .rn{display:block;font-size:16px;font-weight:600}.csa-dialog .rs{display:block;font-size:13px;color:#848a94;margin-top:4px}
+.csa-dialog .sumr{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid #ffffff12;font-size:13.5px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.csa-dialog .sumr span{color:#848a94}.csa-dialog .sumr b{color:#fff;font-weight:600;text-align:right}.csa-dialog .sumr .diff{font-weight:400;font-size:12.5px;max-width:280px}.csa-dialog [role=alert]{color:#ee766a;font-size:13px;line-height:1.6}
+@media(max-width:600px){.csa-menu button{min-height:44px}.csa-dialog{max-width:calc(100vw - 24px)}.csa-dialog .din{padding:24px 20px}.csa-dialog h2{font-size:21px}.csa-dialog .dx{min-width:44px;min-height:44px}.csa-dialog .acts3 .obtn{width:auto;flex:1}}
+@media(pointer:coarse){.csa-menu button{min-height:44px}.csa-dialog .dx{min-width:44px;min-height:44px}}

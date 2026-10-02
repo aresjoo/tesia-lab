@@ -1,0 +1,26 @@
+/* Integration boundaries and audited responsive/accessibility corrections. */
+.client-public-page{min-height:100dvh;isolation:isolate;position:relative;overflow-wrap:break-word}
+.client-public-page main{width:100%;margin:0}
+.client-public-page :is(h1,h2,h3){font-family:inherit}
+.client-public-page :focus-visible{outline:2px solid #a8c7fa;outline-offset:4px}
+.client-public-page #site-main:focus{outline:none}
+.client-public-page button{font-family:inherit;cursor:pointer}
+.client-public-page img{max-width:100%}
+.client-public-page [id]{scroll-margin-top:128px}
+.client-public-page .site-skip{position:fixed;top:8px;left:16px;z-index:100;transform:translateY(-200%);transition:none;background:#c2e7ff;color:#001d35;padding:12px 20px;border-radius:8px}
+.client-public-page .site-skip:focus{transform:none}
+
+
+/* Reading rhythm shared by public routes; source copy and artwork stay intact. */
+.client-public-page :is(h1,h2,h3,p,li,dd,summary){word-break:keep-all;overflow-wrap:anywhere}
+.client-public-page :is(h1,h2,h3){text-wrap:balance}
+.client-public-page :is(p,.faq .a,.phone-caption){text-wrap:pretty}
+.client-public-page :is(.tx,.cell,.ico-row>div,.callout>div,.store,.txt){min-width:0}
+.client-public-page :is(.hd .brand,.hd .login,.hd .cta){flex-shrink:0;white-space:nowrap}
+.client-public-page .hd .brand{color:#00f0ff}
+.client-public-page :is(.hd a,.tx .lnk){min-height:44px;display:inline-flex;align-items:center}
+
+.client-public-page .public-language-trigger{position:fixed;left:20px;bottom:20px;z-index:45;display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(128,128,128,.25);border-radius:50%;background:#1d1f23;color:#e6e7ea;box-shadow:0 4px 18px #0002;cursor:pointer}
+.client-public-page .public-language-trigger:hover{background:#26282c}
+.client-public-page .public-language-trigger:focus-visible{outline:2px solid #5b8af7;outline-offset:3px}
+@media(max-width:640px){.client-public-page .public-language-trigger{left:14px;bottom:calc(14px + env(safe-area-inset-bottom))}}

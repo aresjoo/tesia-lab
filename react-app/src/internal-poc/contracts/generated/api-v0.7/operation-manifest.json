@@ -1,0 +1,53 @@
+{
+  "apiContractVersion": "0.7.0",
+  "excluded": [
+    "CANCEL_REQUESTED",
+    "CANCELLED",
+    "cancellation",
+    "SSE",
+    "events",
+    "percent",
+    "ETA"
+  ],
+  "operations": [
+    {
+      "headers": [
+        "X-CSRF-Token",
+        "Idempotency-Key"
+      ],
+      "method": "POST",
+      "operationId": "submitNativeBacktestV7",
+      "path": "/api/v7/backtests",
+      "requestSchema": "native-job.schema.json#/$defs/SubmitNativeBacktestRequest",
+      "responseSchema": "native-job.schema.json#/$defs/NativeAcceptedEnvelope",
+      "successEtagRequired": true,
+      "successStatus": 202
+    },
+    {
+      "headers": [],
+      "method": "GET",
+      "operationId": "getNativeBacktestV7",
+      "path": "/api/v7/backtests/{backtestId}",
+      "pathField": "backtestId",
+      "requestSchema": "native-job.schema.json#/$defs/NativeJobRequest",
+      "responseSchema": "native-job.schema.json#/$defs/NativeJobEnvelope",
+      "successEtagRequired": true,
+      "successStatus": 200
+    }
+  ],
+  "security": {
+    "actualIssuerImplemented": false,
+    "admission": "REUSE_ORIGINAL_V03_APPROVAL_AND_PROFILE_NO_REISSUE",
+    "cacheControl": "no-store",
+    "credentials": "include",
+    "idempotencyDomain": "CURRENT_OWNER_AND_ACTUAL_V7_METHOD_PATH_CANONICAL_REQUEST",
+    "ownerSource": "CURRENT_LIVE_SESSION_SERVER_CONTEXT",
+    "publicActualDataServing": false,
+    "redirect": "manual",
+    "retry": 0,
+    "sameOrigin": true,
+    "serverInputsRequiredBeforeAcceptance": true,
+    "sessionCookie": "__Host-tesia_session"
+  },
+  "surface": "PRIVATE_NATIVE_JOB_SUBMIT_AND_POLL"
+}

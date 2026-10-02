@@ -1,0 +1,34 @@
+/* 501053b ss3 chart motion and palette. Scoped to the public source view only. */
+.client-shared-equity-chart{min-width:0;font-variant-numeric:tabular-nums}
+.client-shared-equity-chart .ss3-bigwrap{position:relative;min-width:0}
+.client-shared-equity-chart .ss3-chart{display:block;width:100%;height:360px;overflow:hidden;outline-offset:-2px;touch-action:pan-y;font-family:inherit}
+.client-shared-equity-chart .ss3-chart:focus-visible{outline:2px solid var(--ga,#8ab4f8)}
+.client-shared-equity-chart .ss3-chart line{stroke:rgba(255,255,255,.08);stroke-width:1}
+.client-shared-equity-chart .ss3-chart text{fill:#848a94;font-size:12px}
+.client-shared-equity-chart .ss3-chart .ln{fill:none;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.client-shared-equity-chart .ss3-chart .equity-baseline{stroke:rgba(255,255,255,.24)}
+.client-shared-equity-chart .ss3-chart.anim .ln{stroke-dasharray:1;stroke-dashoffset:1;animation:teth-shared-draw 1.1s cubic-bezier(.3,0,.25,1) .05s forwards}
+.client-shared-equity-chart .anim .rvl{transform-origin:left center;transform:scaleX(0);animation:teth-shared-reveal 1.1s cubic-bezier(.3,0,.25,1) .05s forwards}
+.client-shared-equity-chart .ss3-dd.anim .rvl.dly{animation-delay:.2s}
+.client-shared-equity-chart .ss3-chart.anim .endc{opacity:0;animation:teth-shared-pop .3s var(--ease,cubic-bezier(.2,0,0,1)) 1.05s forwards}
+.client-shared-equity-chart .ss3-chart.anim .endp{opacity:0;animation:teth-shared-pulse .9s ease-out 1.15s forwards}
+.client-shared-equity-chart .ss3-chart.anim .mxlb{opacity:0;animation:teth-shared-pop .35s var(--ease,cubic-bezier(.2,0,0,1)) 1.2s forwards}
+.client-shared-equity-chart .ss3-chart .mxlb text{font-size:12px;font-weight:700}
+.client-shared-equity-chart .ss3-chart .xh .xline{stroke:rgba(255,255,255,.28);stroke-width:1;stroke-dasharray:3 4}
+.client-shared-equity-chart .ss3-chart .xh .xdot{fill:#fff;stroke:rgba(0,0,0,.6);stroke-width:1.5}
+.client-shared-equity-chart .ss3-xtip{position:absolute;z-index:3;pointer-events:none;background:#4b525d;color:#fff;border-radius:8px;padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:1px;max-width:calc(100% - 8px);box-sizing:border-box;overflow-wrap:anywhere;font-size:12.5px;line-height:1.5;text-align:center}
+.client-shared-equity-chart .ss3-xtip small{font-size:inherit;color:inherit}
+.client-shared-equity-chart .ss3-xtip b{font-size:inherit;font-weight:700;color:inherit;font-variant-numeric:tabular-nums}
+.client-shared-equity-chart .ss3-drawdown{margin-top:14px}
+.client-shared-equity-chart .ss3-ch{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+.client-shared-equity-chart .ss3-ch b{font-size:13px;font-weight:600;color:var(--gt,#e3e3e3)}
+.client-shared-equity-chart .ss3-ch .mt2{font-size:13px;color:#848a94}
+.client-shared-equity-chart .ss3-dd{width:100%;height:120px;display:block}
+.client-shared-equity-chart .ss3-empty{padding:36px 16px;text-align:center;color:var(--gt3,#848a94);font-size:13px}
+.client-shared-equity-chart .shared-chart-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@keyframes teth-shared-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes teth-shared-reveal{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes teth-shared-pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes teth-shared-pulse{0%{r:4;opacity:.9;stroke-width:2}100%{r:14;opacity:0;stroke-width:.5}}
+@media(max-width:768px){.client-shared-equity-chart .ss3-chart{height:200px}}
+@media(prefers-reduced-motion:reduce){.client-shared-equity-chart .ss3-chart.anim .ln,.client-shared-equity-chart .anim .rvl,.client-shared-equity-chart .ss3-chart.anim .endc,.client-shared-equity-chart .ss3-chart.anim .mxlb{animation:none;stroke-dashoffset:0;transform:none;opacity:1}.client-shared-equity-chart .ss3-chart.anim .endp{animation:none;opacity:0}}

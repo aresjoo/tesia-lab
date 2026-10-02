@@ -1,0 +1,23 @@
+/* Source sk-main/sk-myex: source pills and grey menu, larger touch targets. */
+.myex-w{position:relative;display:inline-flex;min-width:0;max-width:100%}
+.client-strategy-sharing .myex-w .tfbk-drop,.client-strategy-sharing .myex{min-height:44px;height:auto;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:none;color:#cdcdcd;font:inherit;font-size:14px;line-height:1.4;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;max-width:100%;min-width:0}
+.client-strategy-sharing .myex-w.on .tfbk-drop,.client-strategy-sharing .myex-w.on .myex{border:2px solid #9a9a9a;color:#fff;padding:8px 15px}
+.myex-content{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;min-width:0}
+.myex-content>span:last-child{flex:1 1 auto}
+.myex-content>span:last-child,.myex>span:last-child{min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+.myex-ic{display:inline-flex;flex-shrink:0}
+.myex-ic img{width:16px;height:16px;border-radius:4px;object-fit:cover}
+.myex-ic img+img{margin-left:-4px;box-shadow:0 0 0 2px #000}
+.client-strategy-sharing .myex-w .tfbk-menu{min-width:min(220px,calc(100vw - 16px));padding:6px;border-radius:16px;background:#2f2f2f;border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.client-strategy-sharing .myex-w .tfbk-menu .mi{min-height:44px;gap:8px;padding:8px 12px;border-radius:10px;color:#ececec}
+.client-strategy-sharing .myex-w .tfbk-menu .mi:hover,.client-strategy-sharing .myex-w .tfbk-menu .mi.on{background:#3a3a3a;color:#fff}
+.myex-note{margin:0 0 12px;font-size:14px;line-height:1.6;color:#cdcdcd;overflow-wrap:anywhere}
+.myex-empty{padding:40px 0;text-align:center;font-size:16px;line-height:1.6;color:#cdcdcd;overflow-wrap:anywhere}
+.myex-empty p{margin:0 0 10px}
+.client-strategy-sharing .myex-empty .pl-link{min-height:44px;padding:8px 12px;background:none;border:0;color:inherit;text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:14px;cursor:pointer}
+.client-strategy-sharing .myex:focus-visible,.client-strategy-sharing .myex-w .tfbk-drop:focus-visible,.myex-empty button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(max-width:640px){
+  .strategy-filter-row.has-my-exchanges{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
+  .strategy-filter-row.has-my-exchanges .ss3-search{grid-column:1/-1}
+  .strategy-filter-row .myex-w,.strategy-filter-row .myex{width:100%}
+}

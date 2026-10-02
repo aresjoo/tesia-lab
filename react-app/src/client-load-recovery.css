@@ -1,0 +1,19 @@
+/* Available before optional public/help chunks load. Normal source UI is unchanged. */
+.client-load-page, .client-load-layer {
+  color: var(--client-text);
+  background: var(--client-0);
+  font-family: "Noto Sans KR Variable", "Noto Sans SC Variable", "Geist Variable", sans-serif;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+}
+.client-load-page { min-height: 100dvh; }
+.client-load-layer { position: fixed; inset: 0; z-index: 160; overflow: auto; background: rgb(15 16 18 / 72%); }
+.client-load-panel { width: min(100%, 440px); padding: 24px; border-radius: 16px; background: var(--client-1); border: 1px solid var(--client-line-2); overflow-wrap: anywhere; }
+.client-load-panel h2 { margin: 0; font-size: 18px; line-height: 1.5; word-break: keep-all; }
+.client-load-panel p { margin: 12px 0 0; font-size: 14px; line-height: 1.7; color: var(--client-text-2); word-break: keep-all; }
+.client-load-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.client-load-actions a, .client-load-actions button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border: 1px solid var(--client-line-2); border-radius: 10px; background: var(--client-2); color: inherit; font: inherit; font-size: 14px; text-decoration: none; cursor: pointer; }
+.client-load-actions a:hover, .client-load-actions button:hover { background: var(--client-3); }
+.client-load-panel:focus-visible, .client-load-actions :focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+@media (max-width: 360px) { .client-load-page, .client-load-layer { padding: 16px; } .client-load-panel { padding: 20px; } .client-load-actions > * { flex: 1 1 100%; } }

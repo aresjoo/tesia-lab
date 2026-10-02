@@ -1,0 +1,30 @@
+{
+  "apiContractVersion": "0.8.0",
+  "operations": [
+    {
+      "headers": [],
+      "method": "GET",
+      "operationId": "listNativeConversationHistoryV8",
+      "path": "/api/v8/conversations/{conversationId}/native-history",
+      "pathField": "conversationId",
+      "requestSchema": "native-conversation-history.schema.json#/$defs/NativeConversationHistoryRequest",
+      "responseSchema": "native-conversation-history.schema.json#/$defs/NativeConversationHistoryEnvelope",
+      "successEtagRequired": true,
+      "successStatus": 200
+    }
+  ],
+  "security": {
+    "actualProducerImplemented": false,
+    "cacheControl": "no-store",
+    "credentials": "include",
+    "cursorAuthority": "SERVER_VERIFIED_SNAPSHOT_CURSOR",
+    "ownerSelectorInRequest": false,
+    "ownerSource": "CURRENT_LIVE_SESSION_SERVER_CONTEXT",
+    "publicActualDataServing": false,
+    "redirect": "manual",
+    "retry": 0,
+    "sameOrigin": true,
+    "sessionCookie": "__Host-tesia_session"
+  },
+  "surface": "PRIVATE_NATIVE_CONVERSATION_HISTORY"
+}

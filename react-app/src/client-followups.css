@@ -1,0 +1,21 @@
+/* tesia-lab 621cbed taiNext: primary actions precede one full-width list. */
+.client-followups.g-nextcol{display:flex;flex-direction:column;gap:10px;max-width:720px;min-width:0;margin-top:6px;box-sizing:border-box}
+.client-followups>button{box-sizing:border-box;min-width:0;min-height:44px;width:100%;font:inherit;font-size:14.5px;line-height:1.55;text-align:left;cursor:pointer;animation:client-followup-in .3s var(--ease,ease-out) both}
+.client-followups>button:nth-child(2){animation-delay:.04s}.client-followups>button:nth-child(3){animation-delay:.08s}.client-followups>button:nth-child(4){animation-delay:.12s}.client-followups>button:nth-child(5){animation-delay:.16s}
+.client-followups .g-acbtn{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(97deg,rgba(255,81,69,.16),rgba(255,182,10,.13) 34%,rgba(43,174,102,.13) 66%,rgba(59,130,246,.18));background-size:160% 100%;color:var(--gt,#eee);font-weight:600;transition:filter .12s,border-color .12s;animation:client-followup-sweep 7s ease-in-out infinite alternate}
+.client-followups .g-acbtn:hover:not(:disabled){filter:brightness(1.18);border-color:rgba(255,255,255,.2)}
+.client-followups .lf{display:inline-flex;align-items:center;gap:9px;min-width:0}.client-followups .lf svg{flex-shrink:0;opacity:.95}
+.client-followups .tx,.client-followups .g-nextq>span:first-child{min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+.client-followups .rt{display:inline-flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto;max-width:100%;min-width:0}.client-followups .ar{color:var(--gt3);flex-shrink:0}
+.client-followups .bdg{font-size:11px;font-weight:800;letter-spacing:.02em;color:var(--gt,#eee);padding:3.5px 9px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);min-width:0;white-space:normal;overflow-wrap:anywhere;text-align:center}
+.client-followups .g-nextq{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border:1px solid var(--gl);border-radius:12px;background:rgba(255,255,255,.02);color:var(--gt2);transition:background .12s,color .12s}
+.client-followups .g-nextq:hover:not(:disabled){background:rgba(255,255,255,.05);color:var(--gt)}
+.client-followups>button:active:not(:disabled){transform:scale(.985)}.client-followups>button:disabled{opacity:.7;cursor:default;filter:none;animation-play-state:paused}
+.client-followups>button:focus-visible{outline:2px solid var(--gt2);outline-offset:3px}
+.client-followups .g-actnote,.client-followups .followup-notice{font-size:11.5px;line-height:1.65;color:var(--gt3);margin:-2px 0 6px;padding-left:2px;word-break:keep-all;overflow-wrap:anywhere}
+.client-followups .followup-notice{margin:0;color:var(--gt2)}.client-followups .followup-notice:empty{display:none}
+.client-followups[data-restored]>button{animation:none}
+@keyframes client-followup-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes client-followup-sweep{from{background-position:0% 0}to{background-position:100% 0}}
+@media(max-width:380px){.client-followups .g-acbtn{flex-wrap:wrap}.client-followups .g-acbtn .rt{margin-left:auto}.client-followups>button{padding:12px 14px}}
+@media(prefers-reduced-motion:reduce){.client-followups>button,.client-followups .g-acbtn{animation:none;transition:none}.client-followups>button:active:not(:disabled){transform:none}}

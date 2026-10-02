@@ -1,0 +1,110 @@
+.client-source-terminal{display:block;overflow:auto;scrollbar-width:thin;padding-bottom:28px;word-break:keep-all}
+.client-source-terminal .cat-brain>section{padding:0}
+/* In single-column mode the page scrolls. An unbounded overflow:auto ancestor
+   would capture sticky positioning without keeping the composer on screen. */
+.client-source-terminal:has(.ctt-terminal[data-mobile=true]){overflow:visible}
+.client-main-terminal>.client-source-terminal:has(.ctt-terminal[data-mobile=true]){overflow:auto}
+.client-source-terminal .ctt-terminal[data-mobile=true] .ctt-detail-content{overflow:visible}
+.cst-context-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;color:#9a9a9a;font-size:14px;margin-top:5px}
+.cst-context-note{margin-top:5px;color:#9a9a9a;font-size:14px;overflow-wrap:anywhere}
+.cat-context-tools .cst-context-actions{margin-top:0}
+.cst-context-actions button:disabled{opacity:.45;cursor:not-allowed}
+.cst-context-actions button,.cst-close-chart header button{flex:none;background:#2f2f2f;color:#ececec;border:0;border-radius:999px;padding:6px 14px;min-height:36px;font:inherit;font-size:14px;line-height:1.5;max-width:100%;overflow-wrap:anywhere}
+.cst-status-notice{display:flex;align-items:flex-start;gap:12px;margin:0;padding:12px 14px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:transparent;color:#cdcdcd;font-size:16px;line-height:1.6}
+.cst-status-notice>span{flex:1;min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+.cst-status-notice>button{flex:none;min-width:44px;min-height:36px;padding:6px 14px;background:#2f2f2f;color:#ececec;border:0;border-radius:999px;font:inherit;font-size:14px;max-width:100%;overflow-wrap:anywhere}
+.cst-status-notice>button:hover{background:var(--g2)}
+@media(max-width:640px),(pointer:coarse){.cst-status-notice>button{min-height:44px}}
+.cst-close-chart header{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;font-size:16px;border-bottom:1px solid var(--gl)}
+.cst-close-chart header span,.cst-close-chart footer{color:#9a9a9a;font-size:14px}
+.cst-close-chart header button{margin-left:auto}
+.cst-close-chart>div{min-width:0;height:440px}
+.cst-close-chart footer{padding:8px 12px;border-top:1px solid var(--gl);line-height:1.5}
+.cst-dashboard,.cst-completed{padding:12px 14px}
+.cst-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--gl);border:1px solid var(--gl);margin:0;font-variant-numeric:tabular-nums}
+.cst-matrix>div{padding:10px;background:var(--g0);min-width:0;overflow-wrap:anywhere}
+.cst-matrix dt{font-size:14px;color:#9a9a9a;margin-bottom:5px}
+.cst-matrix dd{margin:0;font-size:16px;font-weight:400;color:#ececec}
+.cst-matrix.compact dd{font-size:16px}
+.cst-matrix [data-metric=feeCaption]{grid-column:1/-1}
+.cst-value-part{display:inline-block;max-width:100%}
+.cst-dashboard h3,.cst-completed h3,.client-source-terminal .ctt-bottom h3{font-size:18px;color:#ececec;font-weight:400;margin:14px 0 8px;line-height:1.6;overflow-wrap:anywhere}
+.cst-dashboard h3 small,.cst-completed h3 small{font-weight:400}
+.cst-nav{margin:14px 0;border-bottom:1px solid var(--gl)}
+.cst-nav-chart{position:relative;min-width:0;font-variant-numeric:tabular-nums}
+.cst-nav-chart svg{width:100%;height:150px;display:block;overflow:hidden}
+.cst-nav-chart .base{stroke:rgba(255,255,255,.1);stroke-dasharray:3 4;stroke-width:1}
+.cst-nav-chart .ln{fill:none;stroke-width:2.5}
+.cst-nav-chart .ln.up{stroke:#2fb98a;filter:drop-shadow(0 4px 12px rgba(47,185,138,.35))}
+.cst-nav-chart .ln.dn{stroke:#ee766a;filter:drop-shadow(0 4px 12px rgba(238,118,106,.3))}
+.cst-nav-dates{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;min-height:18px;color:#9a9a9a;font-size:14px;line-height:1.5}
+.cst-nav-dates span{white-space:nowrap}
+.cst-nav-empty{padding:30px 12px;text-align:center;color:#9a9a9a;font-size:14px}
+.cst-empty{text-align:center;padding:24px 12px;font-size:14px;color:#cdcdcd;line-height:1.65;overflow-wrap:anywhere}
+.cst-empty p{margin:6px 0}
+.cst-table{overflow:auto}
+.cst-table table{width:100%;border-collapse:collapse;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:left}
+.cst-table :is(th,td){padding:10px 12px;border-bottom:1px solid var(--gl)}
+.cst-table th{color:#9a9a9a;font-size:14px;font-weight:400}
+.cst-table td:first-child{padding-block:0}
+.cst-table .num{text-align:right}
+.cst-table tbody tr{cursor:pointer}
+.cst-table tbody tr:is(:hover,:focus-within){background:var(--g1)}
+.cst-trade-link{font:inherit;color:inherit;background:none;border:0;padding:4px 0;cursor:pointer}
+.cst-trade-link:hover{color:#fff}
+.cst-versions{display:block;margin-top:10px;padding:6px 0;border:0;background:none;color:#cdcdcd;font:inherit;font-size:14px;cursor:pointer;text-align:left;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:3px}
+.cst-trade-link:focus-visible,.cst-versions:focus-visible{outline:2px solid #9a9a9a;outline-offset:2px}
+.cst-position{border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:14px;background:transparent;font-variant-numeric:tabular-nums;container-type:inline-size}
+.cst-position-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:16px}
+.cst-position-head>*{min-width:0;overflow-wrap:anywhere}
+.cst-position-head>span:last-child{margin-left:auto;font-weight:400}
+.cst-long{background:transparent;color:#ececec;border:1px solid rgba(255,255,255,.14);font-size:14px;font-weight:400;padding:2px 8px;border-radius:999px;letter-spacing:0}
+.cst-position dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px 10px;margin:8px 0 0}
+.cst-position dl>div{min-width:0;overflow-wrap:anywhere}
+.cst-position dt{font-size:14px;color:#9a9a9a}
+.cst-position dd{margin:1px 0 0;font-size:16px;color:#ececec;font-weight:400}
+@container(max-width:300px){.cst-position dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(pointer:coarse){.cst-trade-link,.cst-versions{min-height:44px}}
+.client-source-terminal .up{color:var(--gg)}.client-source-terminal .dn{color:var(--gr)}.client-source-terminal .zz{color:var(--gt3)}
+.cst-completed-trade{padding:12px 0;border-bottom:1px solid var(--gl);font-size:16px}
+.cst-completed-trade header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-bottom:10px}
+.cst-completed-trade p{line-height:1.6;color:var(--gt2);margin:10px 0;overflow-wrap:anywhere}
+.cst-completed-trade header>*{min-width:0;overflow-wrap:anywhere}
+.cst-completed-trade p small{display:block;font-size:14px;letter-spacing:0;color:#9a9a9a}
+.cst-date{font-size:14px;color:#9a9a9a;font-variant-numeric:tabular-nums}
+.cst-trade-details{display:block;margin-top:8px;min-height:36px;border:0;background:none;padding:4px 0;color:#cdcdcd;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cst-trade-details:hover{color:var(--gt)}
+@media(pointer:coarse){.cst-trade-details{min-height:44px}}
+.cst-composer{position:sticky;bottom:0;background:var(--g0);border-top:1px solid var(--gl);padding:10px 12px;z-index:1}
+/* The source's stacked mobile panels scroll as a page, not a bounded chat.
+   A bottom-sticky composer here would move upward across the judgment text. */
+.client-source-terminal .ctt-terminal[data-strategy-selector=true][data-mobile=true] .cst-composer{position:static}
+.cst-composer .chips{display:flex;flex-wrap:nowrap;gap:8px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none;padding:4px}
+.cst-composer .chips::-webkit-scrollbar,.cst-manage::-webkit-scrollbar{display:none}
+.cst-composer .chips button{flex:none;max-width:100%;white-space:normal;background:#2f2f2f;color:#ececec;border:0;font-size:13px;min-height:32px}
+.cst-manage{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:6px;padding:4px}
+.cst-manage>small{flex:none;color:#9a9a9a;font-size:14px;margin-right:2px}
+.cst-composer .cst-manage>button{flex:none;white-space:normal;max-width:100%;border-radius:6px;font-size:14px;padding:3px 8px;min-height:32px;font-variant-numeric:tabular-nums}
+.cst-composer button{background:transparent;color:#cdcdcd;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 14px;min-height:36px;max-width:100%;font:inherit;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.cst-composer form{display:flex;align-items:center;gap:8px}
+.cst-composer input{flex:1;min-width:0;background:#2f2f2f;color:#fff;border:0;border-radius:19px;padding:10px 16px;min-height:44px;font:inherit;font-size:16px;line-height:1.5}
+.cst-composer input::placeholder{color:#9a9a9a}
+.cst-composer form button{width:40px;min-height:40px;aspect-ratio:1;flex:none;padding:0;border:0;color:#000;background:#fff;display:grid;place-items:center}
+.cst-composer button:disabled{opacity:.45;cursor:not-allowed}
+.cst-composer :is(input,button):focus-visible{outline:2px solid #9a9a9a;outline-offset:3px}
+.cst-answer{border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:14px;margin-bottom:10px;font-size:16px;line-height:1.6;overflow-wrap:anywhere}
+.cst-answer>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}.cst-answer p{margin:6px 0 10px}
+.cst-answer>div>button{flex:0 1 auto}
+.cst-proposal-scroll{max-height:var(--cst-proposal-max-height,min(50dvh,420px));overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;margin-bottom:8px}
+.cst-apply-notice{font-size:14px;color:#cdcdcd;line-height:1.6;margin:0 0 8px}
+.cst-applied{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:transparent;padding:12px 14px;font-size:16px}
+.cst-applied>span{flex:1 1 160px;min-width:0;overflow-wrap:anywhere}
+.cst-applied>button{border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font-family:inherit;font-size:14px;font-weight:400;line-height:1.5;padding:6px 14px;min-height:36px;max-width:100%;overflow-wrap:anywhere;cursor:pointer;white-space:normal}
+.cst-applied>button:disabled{opacity:.5;cursor:wait}
+.cst-applied>button:focus-visible{outline:2px solid #9a9a9a;outline-offset:3px}
+.cst-resume-error{font-size:14px;line-height:1.6;color:var(--gr);overflow-wrap:anywhere}
+@media(pointer:coarse){.cst-applied>button{min-height:44px}}
+.cst-answer p{white-space:pre-line}
+.cst-composer form :is(input,button){scroll-margin-block:12px}
+@media(max-width:640px),(pointer:coarse){.cst-context-actions button,.cst-close-chart header button{min-height:44px}}
+@media(max-width:640px),(pointer:coarse){.cst-composer :is(input,button),.cst-composer .chips button,.cst-composer .cst-manage>button{min-height:44px}.cst-composer input{font-size:16px}.cst-composer form button{width:44px}}

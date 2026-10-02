@@ -1,0 +1,49 @@
+/* Source gDocReport/gDocBacktest: an unboxed document, vstat, note, rows and
+   tables. The caller owns the g-doc width/padding and all navigation state. */
+.native-report-document-slot{container:native-report / inline-size;min-width:0}
+.native-report-document{box-sizing:border-box;min-width:0;max-width:100%;color:var(--client-text-2,#c4c7c5);font-family:inherit;font-size:13px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
+.native-report-document *{box-sizing:border-box;min-width:0}
+.native-report-document h3{margin:4px 0 8px;font-size:15px;font-weight:600;color:var(--client-text,#e3e3e3)}
+.native-report-document h4{margin:22px 0 8px;font-size:13px;font-weight:600;color:var(--client-text,#e3e3e3)}
+.native-report-document p{margin:8px 0;max-width:75ch}
+.native-report-document .nrd-note{font-size:12px;line-height:1.65;color:var(--client-text-3,#9aa0a6)}
+.native-report-document .nrd-evidence{margin-top:0}
+.native-report-document .nrd-actions button{scroll-margin-block:8px 64px}
+.native-report-document .nrd-period{margin:0 0 10px}
+.native-report-document .nrd-date{display:inline-block;max-width:100%;font-family:var(--font-number,inherit);font-variant-numeric:tabular-nums;word-break:normal}
+.native-report-document .nrd-previous{margin:8px 0 12px;font-weight:500;color:var(--client-text,#e3e3e3)}
+.native-report-document .nrd-previous code{font-size:12px;font-weight:400;white-space:normal;overflow-wrap:anywhere}
+.native-report-document .nrd-vstat{display:flex;flex-wrap:wrap;gap:12px 24px;margin:10px 0 4px}
+.native-report-document .nrd-vstat>div{max-width:100%}
+.native-report-document .nrd-vstat dt{font-size:12px;color:var(--client-text-3,#9aa0a6)}
+.native-report-document .nrd-vstat dd{margin:1px 0 0;font-family:var(--font-number,inherit);font-size:20px;line-height:1.5;font-weight:600;font-variant-numeric:tabular-nums;color:var(--client-text,#e3e3e3)}
+.native-report-document .nrd-rows{margin:10px 0 0}
+.native-report-document .nrd-rows>div{display:flex;justify-content:space-between;gap:16px;padding:8px 2px;border-bottom:1px solid var(--client-line,rgba(255,255,255,.07))}
+.native-report-document .nrd-rows dt{color:var(--client-text-3,#9aa0a6)}
+.native-report-document .nrd-rows dd{margin:0;text-align:right;font-weight:500;font-variant-numeric:tabular-nums;color:var(--client-text,#e3e3e3)}
+.native-report-document .nrd-actions{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 12px}
+.native-report-document .nrd-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 16px;border:1px solid var(--client-line-2,rgba(255,255,255,.13));border-radius:6px;background:var(--client-2,#1d1f23);color:var(--client-text,#e3e3e3);font:inherit;font-weight:600;white-space:normal;overflow-wrap:anywhere;cursor:pointer}
+.native-report-document .nrd-actions button:not(:disabled):not([aria-disabled="true"]):hover{background:var(--client-3,#26282c)}
+.native-report-document .nrd-actions .nrd-replay{gap:8px;background:transparent;border-color:transparent;font-weight:500}
+.native-report-document .nrd-actions .nrd-replay:not(:disabled):hover{background:var(--client-2,#1d1f23);border-color:var(--client-line-2,rgba(255,255,255,.13))}
+.native-report-document .nrd-replay svg{flex:none}
+.native-report-document .nrd-actions button:is(:disabled,[aria-disabled="true"]){opacity:.5;cursor:default}
+.native-report-document .nrd-replay-notice:empty{margin:0}
+.native-report-document .nrd-actions .nrd-primary{background:color-mix(in srgb,var(--client-blue,#3d6ef0) 95%,var(--client-0,#0f1012));border-color:transparent;color:#fafbff}
+.native-report-document .nrd-actions .nrd-primary:hover{background:color-mix(in srgb,var(--client-blue,#3d6ef0) 86%,var(--client-0,#0f1012))}
+.native-report-document .nrd-limitation{margin:16px 0;font-size:13px;font-weight:500;color:var(--client-text,#e3e3e3)}
+.native-report-document .nrd-status{font-size:13px;line-height:1.65}
+.native-report-document .nrd-details{margin:12px 0 0;border-top:1px solid var(--client-line,rgba(255,255,255,.07))}
+.native-report-document .nrd-details>summary{display:list-item;min-height:44px;padding:11px 2px;cursor:pointer;font-size:13px;font-weight:500;color:var(--client-text,#e3e3e3)}
+.native-report-document .nrd-table-scroll{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;margin:4px 0 12px}
+.native-report-document table{width:100%;min-width:440px;border-collapse:collapse;font-size:12.5px;line-height:1.65;text-align:left}
+.native-report-document caption{text-align:left;padding:0 8px 8px;font-size:12px;color:var(--client-text-3,#9aa0a6)}
+.native-report-document th{padding:6px 8px;font-size:12px;font-weight:500;color:var(--client-text-3,#9aa0a6);text-align:left;border-bottom:1px solid var(--client-line,rgba(255,255,255,.07))}
+.native-report-document td{padding:7px 8px;font-variant-numeric:tabular-nums;color:var(--client-text-2,#c4c7c5);border-bottom:1px solid var(--client-line,rgba(255,255,255,.07))}
+.native-report-document tbody tr:last-child :is(th,td){border-bottom:none}
+.native-report-document .nrd-prose p{margin:0 0 10px}
+.native-report-document .nrd-raw-text{font-size:12px;word-break:break-word;overflow-wrap:anywhere}
+.native-report-document .nrd-raw-rows>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);font-size:12px;word-break:break-word;overflow-wrap:anywhere}
+.native-report-document .nrd-raw-rows dd{text-align:left;font-weight:400}
+.native-report-document :is(button,summary,[tabindex]):focus-visible{outline:2px solid var(--client-blue,#8fb2ff);outline-offset:2px}
+@container native-report (max-width:560px){.native-report-document .nrd-vstat{gap:12px 20px}.native-report-document .nrd-raw-rows>div{grid-template-columns:minmax(0,1fr);gap:4px}.native-report-document .nrd-actions button{flex:1 1 auto}}

@@ -1,0 +1,48 @@
+@import '../client-account-ui.css';
+
+/* Original ca-auth typography/buttons, adapted only to this inline native form.
+   No veil, dialog, viewport lock or styles affecting the public auth surface. */
+.cs-native-login.ca-auth.native-provider-login {
+  box-sizing: border-box;
+  width: min(480px, 100%);
+  min-width: 0;
+  max-width: 100%;
+  max-height: none;
+  overflow: visible;
+  position: relative;
+  inset: auto;
+  margin: 24px auto;
+  font-family: 'Noto Sans KR Variable', 'Noto Sans SC Variable', 'Geist Variable', sans-serif;
+}
+.cs-native-login.ca-auth.native-provider-login[hidden] { display: none; }
+.native-provider-login.ca-auth :is(.au-title, .au-sub, .au-btn, .au-textbtn, .native-auth-status) { min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
+.native-provider-login.ca-auth .au-title { font-size: 24px; font-weight: 700; line-height: 1.4; margin: 0; }
+.native-provider-login.ca-auth .au-sub { font-size: 14px; line-height: 1.65; margin: 12px 0 0; }
+.native-provider-login.ca-auth .au-btns { margin-top: 26px; }
+.native-provider-login.ca-auth .au-btn { box-sizing: border-box; max-width: 100%; min-height: 52px; white-space: normal; text-align: center; }
+.native-provider-login.ca-auth .au-btn > svg { flex: none; }
+.native-provider-login.ca-auth .native-auth-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; min-width: 0; margin-top: 20px; }
+.native-provider-login.ca-auth .native-auth-actions > p { margin: 0; }
+.native-provider-login.ca-auth .native-auth-actions:empty { display: none; }
+.native-provider-login.ca-auth .native-auth-recovery { border-top: 1px solid #3c3f45; margin-top: 20px; text-align: left; }
+.native-provider-login.ca-auth .native-auth-recovery > summary { min-height: 44px; padding: 12px 0; font-size: 13px; line-height: 1.6; color: #b7bac1; cursor: pointer; word-break: keep-all; overflow-wrap: anywhere; }
+.native-provider-login.ca-auth .native-auth-recovery .au-sub { margin-top: 0; font-size: 13px; }
+.native-provider-login.ca-auth .au-textbtn { box-sizing: border-box; max-width: 100%; min-height: 44px; margin: 16px auto 0; padding: 10px 12px; white-space: normal; }
+.native-provider-login.ca-auth .native-auth-actions > button:not(.au-btn) { box-sizing: border-box; display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 44px; margin: 0; padding: 10px 12px; border: 0; background: none; color: #ececf1; font-family: inherit; font-size: 14px; line-height: 1.5; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; cursor: pointer; }
+.native-provider-login.ca-auth .native-auth-actions > button:not(.au-btn):hover { text-decoration: underline; }
+.native-provider-login.ca-auth .native-auth-actions > button:not(.au-btn):is(:disabled, [aria-disabled="true"]) { opacity: .5; cursor: default; text-decoration: none; }
+.native-provider-login.ca-auth :is(.au-btn, .au-textbtn)[aria-disabled="true"] { opacity: .5; cursor: default; }
+.native-provider-login.ca-auth .au-btn[aria-disabled="true"]:hover { background: #232529; }
+.native-provider-login.ca-auth .au-btn.ghost[aria-disabled="true"]:hover { background: transparent; }
+.native-provider-login.ca-auth .au-btn.primary[aria-disabled="true"]:hover { background: #fff; }
+.native-provider-login.ca-auth .au-textbtn[aria-disabled="true"]:hover { text-decoration: none; }
+.native-provider-login.ca-auth .native-auth-status { margin: 18px 0 0; padding: 0; font-size: 13px; line-height: 1.7; text-align: left; color: #b7bac1; white-space: pre-wrap; }
+.native-provider-login.ca-auth .native-auth-status.au-err { color: #f87171; }
+.native-provider-login.ca-auth .au-div { min-width: 0; }
+.native-provider-login.ca-auth .au-div::before, .native-provider-login.ca-auth .au-div::after { min-width: 0; }
+@media (max-width: 640px) {
+  .cs-native-login.ca-auth.native-provider-login { padding: 44px 24px 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .native-provider-login.ca-auth :is(.au-btn, .au-textbtn) { transition: none; }
+}

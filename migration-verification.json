@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "purpose": "클라이언트 에이전트의 migration 브랜치 검토용 전달. 제품 완료/운영 승인 아님.",
+  "sourceCommit": "c04b5cd7ccd1db6f9555ff875073ef548f4d4536",
+  "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
+  "snapshotDigest": "99e06327749ce4ea1046906d46364253cb42c7c3b7a127eab2ec1e6cedb71d0a",
+  "environment": {
+    "node": "22.23.2",
+    "dependencyInstall": "npm ci --ignore-scripts --no-audit --no-fund",
+    "installedPackages": 165
+  },
+  "snapshot": {
+    "files": 2118,
+    "bytes": 24569265,
+    "sourceDirtyFiles": [],
+    "hashVerification": "PASS; all manifest paths present and bytes match",
+    "clientOriginalFiles": "Preserved; only root AGENTS.md receives delivery-scope documentation"
+  },
+  "checks": [
+    {
+      "command": "npm run lint",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build:internal-poc",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build:service",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "command": "TETH_E2E_PORT=4196 npx playwright test tests/client-source-parity-followups.spec.ts --workers=2",
+      "status": "PASS",
+      "exitCode": 0,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 24.7,
+      "coverage": "Desktop and mobile Chromium. Main mobile menu thresholds/focus/route/viewport, portal and scroll isolation, copy detail localized stop/take labels and null take-profit presentation. Not full E2E or Safari."
+    },
+    {
+      "command": "node tools/sync-migration.mjs --verify",
+      "status": "PASS",
+      "files": 2118
+    },
+    {
+      "command": "node --check tools/sync-migration.mjs",
+      "status": "PASS"
+    },
+    {
+      "command": "Referenced React paths in MIGRATION.md",
+      "status": "PASS",
+      "checked": 51,
+      "missing": 0
+    },
+    {
+      "command": "git diff --cached --check (new delivery docs/tool)",
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --cached --check (whole imported snapshot)",
+      "status": "EXISTING_WHITESPACE_WARNINGS",
+      "details": "10 whitespace/EOF findings in byte-preserved source files. Four SVG trailing lines plus six source/test EOF blank lines. Not silently fixed or reported as clean."
+    }
+  ],
+  "security": {
+    "tool": "Gitleaks 8.30.1 dir --redact",
+    "rawExitCode": 1,
+    "rawFindings": 53,
+    "review": {
+      "manifestHashMetadata": 37,
+      "packageHashConstants": 2,
+      "logoHashFixture": 1,
+      "publicOperationIdComparison": 1,
+      "syntheticIdempotencyTestFixtures": 12,
+      "unclassified": 0,
+      "actualCredentialFindings": 0
+    },
+    "interpretation": "Raw scanner did NOT return zero. Each flagged source line was classified; no detector rules disabled or broad hex/path allowlist added. Raw redacted output remains in sender-local QA, not in this public branch."
+  },
+  "warnings": [
+    "Vite chunk-size warnings remain (>500 kB); public client bootstrap approximately 1.13 MB minified.",
+    "ClientUpgradeSheet static/dynamic import overlap reported in public build.",
+    "Whole imported source whitespace warnings retained for byte fidelity."
+  ],
+  "notVerified": [
+    "Full 13150-test regression of this delivery snapshot",
+    "All original screen/copy/SVG/motion/responsive parity",
+    "Unapplied catalogue marker/evidence proposals",
+    "Actual OAuth/model/market/exchange/order/billing providers",
+    "Production deployment, main merge or final release approval",
+    "Another agent reading/accepting this handoff"
+  ],
+  "deployment": {
+    "mainChanged": false,
+    "automaticDeploymentConfigured": false,
+    "reactWorkflow": "react-app/.github/workflows/ci.yml is retained as source, not an active root Actions workflow",
+    "existingWorkerWorkflow": "unchanged; main/server-only push trigger"
+  }
+}

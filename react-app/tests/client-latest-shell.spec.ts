@@ -1,0 +1,207 @@
+import { expect, test, type Page } from '@playwright/test'
+
+async function seed(page: Page) {
+  await page.addInitScript(() => {
+    const now = Date.now()
+    sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '연구자', email: 'review@example.test' }))
+    sessionStorage.setItem('teth-client-experience', JSON.stringify({ currentId: null, homeDraft: '', sessions: Array.from({ length: 45 }, (_, i) => ({
+      id: `test-${i}`, title: i === 0 ? '비트코인 장기 연구' : `연구 ${i}`, renamed: true, idea: i === 0 ? '거래량과 변동성을 같이 보고 싶어요' : '추세 전략', draft: '', pair: 'BTC/USDT', mode: 'trend', timeframe: '일봉', risk: '−3%', takeProfit: '+8%', phase: 'plan', workspace: 'conversation', tradingReady: false, researchStatus: '초안', updatedAt: now - i * 86400000,
+      turns: [{ id: `turn-${i}`, question: '추가 질문', answer: i === 0 ? '수수료를 반영해서 비교합니다' : '추세를 확인합니다', fullAnswer: '절대 검색되면 안 되는 비공개미출력', startedAt: now - 10000, finishedAt: now - 5000, status: 'done', suggestions: [], phase: 'plan' }],
+    })) }))
+  })
+  await page.goto('/')
+}
+async function openSidebar(page: Page) {
+  await page.locator((page.viewportSize()?.width ?? 0) <= 860 ? '.client-hamburger' : '.client-rail-logo-row button').click()
+}
+
+test('접힘 레일에서도 탐색 가능하고 본문 검색은 다중 단어 AND·공개 답변만 사용한다', async ({ page }, info) => {
+  await seed(page)
+  if (info.project.name === 'mobile') await openSidebar(page)
+  const history = page.getByRole('button', { name: '연구 기록', exact: true })
+  await expect(history).toBeVisible()
+  await history.click()
+  const search = page.getByRole('searchbox', { name: '연구 기록 검색' })
+  if (info.project.name === 'desktop') await expect(search).toBeFocused()
+  else { await expect(search).not.toBeFocused(); await expect(page.locator('#research-title')).toBeFocused() }
+  await search.fill('비트코인 수수료')
+  await expect(page.locator('.g-hist-row')).toHaveCount(1)
+  await expect(page.locator('.g-hist-row')).toContainText('비트코인 장기 연구')
+  await search.fill('비공개미출력')
+  await expect(page.getByText('검색 결과가 없어요', { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: '검색 지우기' }).click()
+  await expect(search).toBeFocused()
+  expect(await page.locator('.g-hist-row').count()).toBeLessThanOrEqual(40)
+  await page.screenshot({ path: info.outputPath('history.png') })
+  await page.locator('#research-main').evaluate(el => { el.scrollTop = el.scrollHeight })
+  await expect.poll(() => page.locator('.g-hist-row').count()).toBeGreaterThan(20)
+})
+
+test('행 고정·이름 변경·삭제 확인은 다른 대화를 변경하지 않는다', async ({ page }, info) => {
+  await seed(page)
+  await openSidebar(page)
+  const rows = page.locator('.client-session-row')
+  await rows.nth(1).hover()
+  await rows.nth(1).getByRole('button', { name: '연구 1 관리', exact: true }).click()
+  await page.getByRole('menuitem', { name: '고정', exact: true }).click()
+  await expect(rows.first()).toContainText('연구 1')
+  await rows.first().getByRole('button', { name: '연구 1 관리', exact: true }).click()
+  await page.getByRole('menuitem', { name: '이름 변경' }).click()
+  const dialog = page.getByRole('dialog', { name: '연구 이름 변경' })
+  await expect(dialog.getByRole('button', { name: '이름 변경' })).toBeDisabled()
+  await dialog.getByRole('textbox').fill('  ')
+  await expect(dialog.getByRole('button', { name: '이름 변경' })).toBeDisabled()
+  await dialog.getByRole('textbox').fill('긴 이름으로 수정한 변동성 연구')
+  await dialog.getByRole('button', { name: '이름 변경' }).click()
+  await expect(rows.first()).toContainText('긴 이름으로 수정한 변동성 연구')
+  await rows.first().getByRole('button', { name: /관리$/ }).click()
+  await page.getByRole('menuitem', { name: '삭제' }).click()
+  await expect(page.getByRole('dialog', { name: '연구를 삭제하시겠습니까?' }).getByRole('button', { name: '취소' })).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(rows).toHaveCount(45)
+  await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+  await rows.first().getByRole('button', { name: /관리$/ }).click()
+  await page.getByRole('menuitem', { name: '삭제' }).click()
+  await page.getByRole('dialog', { name: '연구를 삭제하시겠습니까?' }).getByRole('button', { name: '삭제', exact: true }).click()
+  await expect(rows).toHaveCount(44)
+  await expect(page.locator('.client-new-strategy')).toBeFocused()
+  await page.screenshot({ path: info.outputPath('sidebar.png') })
+  const stored = await page.evaluate(() => JSON.parse(sessionStorage.getItem('teth-client-experience')!).sessions)
+  expect(stored.some((s: { id: string }) => s.id === 'test-1')).toBe(false)
+  expect(stored.find((s: { id: string }) => s.id === 'test-0').title).toBe('비트코인 장기 연구')
+})
+
+test('행 메뉴의 키보드 이동·Escape 복귀와 resize 정리가 동작한다', async ({ page }) => {
+  await seed(page); await openSidebar(page)
+  const trigger = page.locator('.client-session-dots').first()
+  await trigger.focus(); await trigger.press('Enter')
+  await expect(page.getByRole('menuitem', { name: '고정', exact: true })).toBeFocused()
+  await page.keyboard.press('End')
+  await expect(page.getByRole('menuitem', { name: '삭제' })).toBeFocused()
+  await page.keyboard.press('Escape'); await expect(trigger).toBeFocused()
+  await trigger.click(); await page.keyboard.press('Tab'); await expect(trigger).toBeFocused()
+  await trigger.click(); await page.keyboard.press('Shift+Tab'); await expect(trigger).toBeFocused()
+  await trigger.click()
+  await page.setViewportSize({ width: 1000, height: 620 })
+  await expect(page.getByRole('menu')).toHaveCount(0)
+})
+
+test('연구 모달은 바깥 클릭만 닫히고 안에서 시작한 드래그는 보존한다', async ({ page }) => {
+  await seed(page); await openSidebar(page)
+  const trigger = page.locator('.client-session-dots').first()
+  await trigger.click(); await page.getByRole('menuitem', { name: '이름 변경' }).click()
+  const dialog = page.getByRole('dialog', { name: '연구 이름 변경' })
+  const field = dialog.getByRole('textbox')
+  await field.fill('저장하지 않은 이름')
+  const rect = await field.boundingBox()
+  await page.mouse.move(rect!.x + 20, rect!.y + 15); await page.mouse.down()
+  await page.mouse.move(3, 3); await page.mouse.up()
+  await expect(dialog).toBeVisible(); await expect(field).toHaveValue('저장하지 않은 이름')
+  await page.mouse.click(3, 3)
+  await expect(dialog).toHaveCount(0); await expect(trigger).toBeFocused()
+  await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+  await expect(page.locator('.client-session-row').first()).toContainText('비트코인 장기 연구')
+})
+
+test('모바일 긴 제목·날짜와 낮은 화면 검색 레이아웃이 겹치지 않는다', async ({ page }, info) => {
+  await seed(page); await openSidebar(page)
+  await page.getByRole('button', { name: '연구 기록', exact: true }).click()
+  await page.getByRole('searchbox').fill('비트코인')
+  for (const [width, height] of [[320, 568], [390, 664], [844, 390], [1280, 800]]) {
+    await page.setViewportSize({ width, height })
+    const result = await page.locator('.g-hist-row').evaluate(el => {
+      const title = el.querySelector('.t')!.getBoundingClientRect(), date = el.querySelector('.d')!.getBoundingClientRect()
+      return { separated: title.right <= date.left || title.bottom <= date.top, width: document.documentElement.scrollWidth }
+    })
+    expect(result.separated).toBe(true); expect(result.width).toBeLessThanOrEqual(width)
+    expect(await page.locator('.g-hist-announcement').evaluate(el => el.getBoundingClientRect().width)).toBe(1)
+    await page.screenshot({ path: info.outputPath(`history-${width}.png`) })
+  }
+})
+
+test('홈 입력창에서 대화 입력으로 이어지고 다중행·단일행 전환이 안정적이다', async ({ page }, info) => {
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.goto('/')
+  await page.getByRole('textbox', { name: '시장이나 전략에 대해 물어보세요' }).fill('비트코인이 떨어지면 어떻게 하나요')
+  await page.getByRole('button', { name: '대화 시작', exact: true }).click()
+  const input = page.getByRole('textbox', { name: 'TETH에게 물어보세요' })
+  if (info.project.name === 'desktop') await expect(input).toBeFocused()
+  await input.fill('첫째 조건\n둘째 조건\n셋째 조건')
+  await expect(page.locator('.g-composer')).toHaveClass(/multi/)
+  await page.waitForTimeout(200)
+  const height = await input.evaluate(el => el.getBoundingClientRect().height)
+  await page.waitForTimeout(200)
+  expect(await input.evaluate(el => el.getBoundingClientRect().height)).toBe(height)
+  await input.fill('짧은 질문')
+  await expect(page.locator('.g-composer')).not.toHaveClass(/multi/)
+  expect(await page.locator('.g-composer-wrap').evaluate(el => getComputedStyle(el, '::before').pointerEvents)).toBe('none')
+  await page.screenshot({ path: info.outputPath('composer.png') })
+  expect(errors).toEqual([])
+})
+
+for (const motion of ['reduce', 'no-preference'] as const) test(`${motion} 화면 폭 왕복 뒤 빈 입력과 긴 초안의 높이가 안정적이다`, async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: motion })
+  await page.setViewportSize({ width: 320, height: 900 })
+  await page.goto('/')
+  await page.locator('#strategy-idea').fill('비트코인에 대해 알려주세요')
+  await page.getByRole('button', { name: '대화 시작', exact: true }).click()
+  const input = page.locator('.g-composer textarea'), pill = page.locator('.g-composer')
+  await expect(input).toBeVisible()
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await expect(input).toHaveCSS('height', '21px')
+  await expect(pill).not.toHaveClass(/multi/)
+  await expect.poll(() => pill.evaluate(el => el.getBoundingClientRect().height)).toBe(58)
+  const draft = '첫 번째 조건을 확인하고\n두 번째 조건을 비교하고\n세 번째 조건을 검증해 주세요'
+  await input.fill(draft)
+  await expect(pill).toHaveClass(/multi/)
+  await expect.poll(() => input.evaluate(el => el.clientHeight)).toBeGreaterThanOrEqual(63)
+  for (const width of [860, 861, 320, 1440]) {
+    await page.setViewportSize({ width, height: 1000 })
+    await expect(input).toHaveValue(draft)
+    await expect.poll(() => input.evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  }
+  await input.fill('')
+  await expect(input).toHaveCSS('height', '21px')
+  await expect(pill).not.toHaveClass(/multi/)
+  await expect.poll(() => pill.evaluate(el => el.getBoundingClientRect().height)).toBe(58)
+})
+
+test('통합 프로필의 최신 설정·계정 정보와 로그아웃에 도달한다', async ({ page }) => {
+  await seed(page); await openSidebar(page)
+  await page.getByRole('button', { name: '연구자 설정', exact: true }).click()
+  expect(await page.locator('#root').evaluate(el => el.inert)).toBe(true)
+  await page.getByRole('dialog', { name: '설정', exact: true }).getByRole('button', { name: '설정', exact: true }).click()
+  await expect(page.locator('.stg-main h1')).toHaveText('일반')
+  const settingsBack = page.getByRole('link', { name: '설정', exact: true })
+  if (await settingsBack.isVisible()) await settingsBack.click()
+  await page.locator('[data-settings-tab="account"]').click()
+  await expect(page.locator('.stg-main')).toContainText('연구자')
+  if (await settingsBack.isVisible()) await settingsBack.click()
+  await page.getByRole('button', { name: '앱으로 돌아가기', exact: true }).click()
+  if (!await page.getByRole('button', { name: '연구자 설정', exact: true }).isVisible()) await openSidebar(page)
+  await page.getByRole('button', { name: '연구자 설정', exact: true }).click()
+  await page.getByRole('button', { name: '로그아웃', exact: true }).click()
+  await expect(page.locator('.client-hero-title')).toBeVisible()
+})
+
+test('원본 설정 최하단에서 공개 미리보기 계정을 직접 로그아웃한다', async ({ page }) => {
+  await seed(page); await openSidebar(page)
+  const writes: string[] = []
+  page.on('request', request => { if (request.method() !== 'GET') writes.push(request.url()) })
+  await page.getByRole('button', { name: '연구자 설정', exact: true }).click()
+  const menu = page.locator('.ca-settings')
+  const logout = menu.locator('[data-account-action="logout"]')
+  await expect(logout).toHaveAttribute('aria-disabled', 'false')
+  expect(await logout.evaluate(node => node === node.parentElement?.lastElementChild)).toBe(true)
+  await logout.click()
+  await expect(menu).toHaveCount(0)
+  await expect(page.locator('.ca-profile')).toHaveCount(0)
+  await expect(page.locator('.client-hero-title')).toBeVisible()
+  // seed() intentionally signs in on each navigation. Do not claim reload
+  // recovery from that fixture; inspect the actual logout-owned storage here.
+  expect(await page.evaluate(() => sessionStorage.getItem('teth-client-profile-preview'))).toBeNull()
+  expect(await page.locator('#root').evaluate(node => node.inert)).toBe(false)
+  expect(writes).toEqual([])
+})

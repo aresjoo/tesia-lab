@@ -1,0 +1,22 @@
+/* Scoped to the source-preview delegation chart; no native chart changes. */
+.client-delegation-source-chart.tf-chart {overflow:hidden;min-width:0;box-sizing:border-box;}
+.client-delegation-source-chart.tf-chart .tf-chart-toolbar {flex-shrink:0;word-break:keep-all;overflow-wrap:anywhere;}
+.client-delegation-source-chart .tf-chart-toolbar strong {min-width:0;}
+.client-delegation-source-chart.tf-chart .tf-chart-intervals button {min-width:36px;min-height:32px;}
+.client-delegation-source-chart .tf-source-readout {display:flex;flex-wrap:wrap;gap:4px 12px;padding:3px 14px 7px;min-height:32px;font-size:11px;line-height:1.6;font-variant-numeric:tabular-nums;color:var(--gt3,#9aa0a6);}
+.client-delegation-source-chart .tf-source-readout b {font-weight:500;color:var(--gt,#e3e3e3);}
+.client-delegation-source-chart .tf-source-tradeinfo {flex-basis:100%;min-height:18px;display:flex;gap:10px;flex-wrap:wrap;}
+.client-delegation-source-chart.tf-chart svg {display:block;width:100%;flex:1;min-height:150px;font-family:inherit;font-variant-numeric:tabular-nums;overflow:hidden;outline-offset:-2px;touch-action:pan-y;}
+.client-delegation-source-chart.tf-chart svg:focus-visible {outline:2px solid #8fb2ff;}
+.client-delegation-source-chart.tf-chart.compact svg {flex:none;}
+.client-delegation-source-chart.tf-chart .tf-chart-caption {box-sizing:border-box;margin:0;padding:6px 14px 10px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere;flex-shrink:0;}
+.client-delegation-source-chart .tf-chart-caption span {display:block;}
+.client-delegation-source-chart .tf-source-sr {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
+.client-delegation-source-chart .tf-source-empty {padding:24px 14px;font-size:13px;}
+.client-delegation-source-chart .tf-source-reveal {animation:teth-source-price 1.5s linear both;}
+.client-delegation-source-chart .tf-source-marker {animation:teth-source-marker .18s ease-out both;animation-delay:var(--marker-delay,0ms);}
+@keyframes teth-source-price {from{width:0}to{width:var(--reveal-width)}}
+@keyframes teth-source-marker {from{opacity:0}to{opacity:1}}
+@media(pointer:coarse) {.client-delegation-source-chart.tf-chart .tf-chart-intervals button {min-width:44px;min-height:44px;}}
+@media(max-width:600px) {.client-delegation .tfw-chart:has(> .client-delegation-source-chart) {height:340px;}}
+@media(prefers-reduced-motion:reduce) {.client-delegation-source-chart .tf-source-reveal,.client-delegation-source-chart .tf-source-marker {animation:none;}}

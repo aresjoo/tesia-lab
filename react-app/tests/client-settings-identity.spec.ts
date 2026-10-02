@@ -1,0 +1,248 @@
+import { expect, test } from '@playwright/test'
+import copy from '../src/client-settings-copy.json' with { type: 'json' }
+import { nativeAccountText } from '../src/internal-poc/native-account-presentation-copy'
+
+test.setTimeout(45_000)
+const path = '/tests/fixtures/client-settings-identity.html'
+
+test('sk-settings mobile list keeps the same unsaved editor without requesting a save',async({page})=>{
+  await page.setViewportSize({width:390,height:844})
+  await page.goto(`${path}#/settings/account`)
+  const root=page.locator('.client-settings-page'),row=page.locator('[data-identity-field="name"]')
+  await row.getByRole('button',{name:'변경',exact:true}).click()
+  const input=row.getByRole('textbox'),node=await input.elementHandle()
+  await input.fill('목록 왕복 중인 이름')
+  for(let i=0;i<2;i++) {
+    await root.locator('.stg-mback').click()
+    await expect(input).toBeHidden()
+    await expect(root.locator('[data-settings-tab="account"]')).toBeFocused()
+    await root.locator('[data-settings-tab="account"]').click()
+    await expect(input).toHaveValue('목록 왕복 중인 이름')
+    expect(await input.evaluate((el,old)=>el===old,node)).toBe(true)
+  }
+  await root.locator('.stg-mback').focus()
+  await page.setViewportSize({width:1440,height:900})
+  await expect(root.locator('h1')).toBeFocused()
+  await input.focus(); await page.setViewportSize({width:320,height:568})
+  await expect(input).toBeFocused(); await expect(input).toHaveValue('목록 왕복 중인 이름')
+  expect(await page.evaluate(()=>Reflect.get(window,'identityCalls')())).toEqual([])
+})
+
+test('source menu collapse preserves an unsaved identity editor and never submits it', async({page})=>{
+  await page.setViewportSize({width:1440,height:900}); await page.emulateMedia({reducedMotion:'reduce'})
+  await page.goto(`${path}#/settings/account`)
+  const row=page.locator('[data-identity-field="name"]')
+  await row.getByRole('button',{name:'변경',exact:true}).click()
+  const input=row.getByRole('textbox'),node=await input.elementHandle()
+  await input.fill('계속 편집할 이름')
+  const toggle=page.locator('.stg-tg')
+  for(let i=0;i<4;i++) {
+    await toggle.click()
+    await expect(input).toHaveValue('계속 편집할 이름')
+    expect(await input.evaluate((el,old)=>el===old,node)).toBe(true)
+  }
+  expect(await page.evaluate(()=>Reflect.get(window,'identityCalls')())).toEqual([])
+})
+
+test('primary save hover keeps readable light-button contrast', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  const save = row.getByRole('button', { name: '저장', exact: true })
+  await save.hover()
+  await expect(save).toBeEnabled()
+  const colors = await save.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color }))
+  expect(colors.background).toBe('rgb(222, 223, 227)')
+  expect(colors.color).toBe('rgb(14, 15, 17)')
+})
+
+test('source name edit opens inline and cancels without modifying supplied profile', async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  const change = row.getByRole('button', { name: '변경', exact: true })
+  await change.click()
+  const input = row.getByRole('textbox', { name: '이름', exact: true })
+  await expect(input).toBeFocused()
+  await expect(input).toHaveValue('김투자')
+  await input.fill('다른 이름')
+  await input.press('Escape')
+  await expect(change).toBeFocused()
+  await expect(row).toContainText('김투자')
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([])
+})
+
+test('unconnected profile exposes source editor but not fake saving', async ({ page }) => {
+  await page.goto(`${path}?unavailable#/settings/account`)
+  const row = page.locator('[data-identity-field="handle"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  await expect(row.getByRole('textbox')).toHaveValue('investor')
+  await expect(row).toContainText('이 기능은 아직 연결되지 않았습니다')
+  await expect(row.getByRole('button', { name: '저장', exact: true })).toBeDisabled()
+  await row.getByRole('textbox').fill('new_investor')
+  await row.getByRole('textbox').press('Enter')
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([])
+  await row.getByRole('button', { name: '취소', exact: true }).click()
+  await expect(row).toContainText('@investor')
+})
+
+test('name constraints, IME, duplicate submission and supplied-profile authority', async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  const input = row.getByRole('textbox'), save = row.getByRole('button', { name: '저장', exact: true })
+  await expect(input).toHaveAttribute('maxlength', '30')
+  await input.fill(' 김 ')
+  await save.click()
+  await expect(input).toHaveAttribute('aria-invalid', 'true')
+  await expect(input).toHaveAccessibleDescription(copy.nameInvalid.ko)
+  await expect(input).toBeFocused()
+  await input.fill('  김정교  ')
+  const prevented = await input.evaluate(el => !el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true, cancelable: true })))
+  expect(prevented).toBe(true)
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([])
+  await save.evaluate(el => { (el as HTMLButtonElement).click(); (el as HTMLButtonElement).click() })
+  await expect(save).toBeDisabled()
+  await expect(input).toHaveAttribute('readonly', '')
+  await expect(row.getByRole('button', { name: '취소', exact: true })).toBeDisabled()
+  await input.press('Escape')
+  await expect(input).toBeVisible()
+  await expect(page.locator('[data-identity-field="handle"] button')).toBeDisabled()
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([{ field: 'name', value: '김정교', aborted: false }])
+  await page.evaluate(() => Reflect.get(window, 'identityResolve')())
+  await expect(row.getByRole('textbox')).toHaveCount(0)
+  await expect(row).toContainText('김투자')
+  await expect(row.getByRole('button', { name: '변경', exact: true })).toBeFocused()
+  await expect(page.locator('.client-settings-page').getByRole('status')).toHaveText(nativeAccountText('ko', 'accepted'))
+  await page.evaluate(() => Reflect.get(window, 'identitySetProfile')({ name: '김정교', handle: 'investor', email: 'user@example.invalid' }))
+  await expect(row).toContainText('김정교')
+  await expect(row).not.toContainText('김투자')
+})
+
+test('source handle normalization, reserved names and failed-request draft recovery', async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="handle"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  const input = row.getByRole('textbox'), save = row.getByRole('button', { name: '저장', exact: true })
+  await expect(input).toHaveAttribute('maxlength', '20')
+  for (const value of ['ab', '한글이름', 'bad handle', '@someone']) {
+    await input.fill(value); await save.click()
+    await expect(row.getByRole('alert')).toHaveText(copy.handleInvalid.ko)
+  }
+  for (const value of [' TETH ', 'ADMIN', 'Support']) {
+    await input.fill(value); await input.press('Enter')
+    await expect(row.getByRole('alert')).toHaveText(copy.handleReserved.ko)
+  }
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([])
+  await input.fill('  Trader_29  ')
+  await input.press('Enter')
+  expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([{ field: 'handle', value: 'trader_29', aborted: false }])
+  await page.evaluate(() => Reflect.get(window, 'identityReject')())
+  await expect(row.getByRole('alert')).toHaveText(copy.saveFailed.ko)
+  await expect(page.locator('body')).not.toContainText('DO_NOT_EXPOSE_RAW_ERROR')
+  await expect(input).toHaveValue('  Trader_29  ')
+  await expect(input).not.toHaveAttribute('aria-invalid', 'true')
+  await expect(save).toBeEnabled()
+  await save.click()
+  await page.evaluate(() => Reflect.get(window, 'identityResolve')(1))
+  await expect(row).toContainText('@investor')
+  await expect(row.getByRole('textbox')).toHaveCount(0)
+})
+
+for (const replace of ['owner', 'dataset', 'tab', 'port'] as const) for (const settle of ['resolve', 'reject'] as const) test(`pending identity ${settle} cannot cross ${replace} boundary`, async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  await row.getByRole('textbox').fill('교체 이전 이름')
+  await row.getByRole('button', { name: '저장', exact: true }).click()
+  if (replace === 'owner') await page.evaluate(() => Reflect.get(window, 'identitySetOwner')('owner-b'))
+  if (replace === 'dataset') await page.evaluate(() => Reflect.get(window, 'identitySetDataset')('dataset-b'))
+  if (replace === 'tab') {
+    if((page.viewportSize()?.width??1440)<=900)await page.locator('.stg-mback').click()
+    await page.locator('a[href="#/settings/general"]').click()
+  }
+  if (replace === 'port') await page.evaluate(() => Reflect.get(window, 'identitySetEnabled')(false))
+  await expect.poll(() => page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([{ field: 'name', value: '교체 이전 이름', aborted: true }])
+  // Ignore both late success and rejection, without a transient notice in the new context.
+  await page.evaluate(settle => Reflect.get(window, settle === 'resolve' ? 'identityResolve' : 'identityReject')(), settle)
+  const surface = page.locator('.client-settings-page')
+  await expect(surface.getByRole('alert')).toHaveCount(0)
+  await expect(surface.getByRole('status')).toHaveCount(0)
+  if (replace === 'tab') {
+    if((page.viewportSize()?.width??1440)<=900)await page.locator('.stg-mback').click()
+    await page.locator('a[href="#/settings/account"]').click()
+  }
+  if (replace === 'port') {
+    await expect(row).toContainText(copy.actionUnavailable.ko)
+    await expect(row.getByRole('textbox')).toHaveValue('교체 이전 이름')
+    await expect(row.getByRole('button', { name: '저장', exact: true })).toBeDisabled()
+    await row.getByRole('button', { name: '취소', exact: true }).click()
+  }
+  await expect(row).toContainText('김투자')
+  await expect(row.getByRole('textbox')).toHaveCount(0)
+})
+
+test('same-context parent renders retain the draft and pending observation', async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  const input = row.getByRole('textbox'), old = await input.elementHandle()
+  await input.fill('유지할 이름')
+  await page.evaluate(() => Reflect.get(window, 'identitySetProfile')({ name: '공급된 이름', handle: 'updated', email: 'user@example.invalid' }))
+  await expect(input).toHaveValue('유지할 이름')
+  expect(await input.evaluate((el, old) => el === old, old)).toBe(true)
+  await input.press('Enter')
+  await page.evaluate(() => Reflect.get(window, 'identitySetProfile')({ name: '다시 공급된 이름', handle: 'updated', email: 'user@example.invalid' }))
+  await page.evaluate(() => Reflect.get(window, 'identityResolve')())
+  await expect(row).toContainText('다시 공급된 이름')
+  await expect(row.getByRole('button', { name: '변경', exact: true })).toBeFocused()
+  await expect(page.locator('.client-settings-page').getByRole('status')).toHaveText(nativeAccountText('ko', 'accepted'))
+})
+
+test('async completion does not pull keyboard focus away from settings navigation', async ({ page }) => {
+  await page.goto(`${path}#/settings/account`)
+  const row = page.locator('[data-identity-field="name"]')
+  await row.getByRole('button', { name: '변경', exact: true }).click()
+  await row.getByRole('textbox').fill('이름 변경')
+  await row.getByRole('textbox').press('Enter')
+  if((page.viewportSize()?.width??1440)<=900)await page.locator('.stg-mback').click()
+  const navigation = page.locator('a[href="#/settings/general"]')
+  await navigation.focus()
+  await page.evaluate(() => Reflect.get(window, 'identityResolve')())
+  await expect(row.locator('input')).toHaveCount(0)
+  await expect(navigation).toBeFocused()
+})
+
+for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) {
+  for (const width of [320, 861, 1440]) test(`${language} identity editor ${width}px preserves labels, controls and inline errors`, async ({ page }, info) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.addInitScript(language => localStorage.setItem('tethLang', language), language)
+    await page.goto(`${path}#/settings/account`)
+    const row = page.locator('[data-identity-field="handle"]')
+    await row.getByRole('button', { name: copy.change[language], exact: true }).click()
+    const input = row.getByRole('textbox', { name: copy.handle[language], exact: true })
+    await input.fill('!')
+    await input.press('Enter')
+    await expect(row.getByRole('alert')).toHaveText(copy.handleInvalid[language])
+    await expect(input).toHaveAccessibleDescription(`${copy.handleHint[language]} ${copy.handleInvalid[language]}`)
+    for (const node of await row.locator('input,button,.er,.stg-edit-hint').all()) {
+      expect(await node.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
+    }
+    const labelLineHeight = await row.locator('.k b').evaluate(el => parseFloat(getComputedStyle(el).lineHeight))
+    expect(labelLineHeight).toBeLessThanOrEqual(24)
+    const inputRect = await input.boundingBox()
+    expect(inputRect!.width).toBeGreaterThanOrEqual(120)
+    for (const button of await row.getByRole('button').all()) {
+      const rect = await button.boundingBox()
+      expect(rect!.x).toBeGreaterThanOrEqual(0)
+      expect(rect!.x + rect!.width).toBeLessThanOrEqual(width)
+      if (width <= 900) expect(rect!.height).toBeGreaterThanOrEqual(44)
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await row.scrollIntoViewIfNeeded()
+    if (language === 'fr' || language === 'ko') await page.screenshot({ path: info.outputPath(`identity-${language}-${width}.png`), fullPage: true })
+    await row.getByRole('button', { name: copy.cancel[language], exact: true }).click()
+    await expect(row.getByRole('button', { name: copy.change[language], exact: true })).toBeFocused()
+    expect(await page.evaluate(() => Reflect.get(window, 'identityCalls')())).toEqual([])
+  })
+}

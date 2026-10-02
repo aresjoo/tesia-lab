@@ -1,0 +1,5 @@
+{
+  "sha": "412fd6042e0b3935773831f43163a7da68191162",
+  "code": "function mkDaily(eq,endI){ if(!eq||!eq.length) return []; var o=[], k=0, e=Math.max(endI||0,eq[eq.length-1].i); for(var i=eq[0].i;i<=e;i++){ while(k+1<eq.length&&eq[k+1].i<=i) k++; o.push({i:i,v:eq[k].v}); } return o; }\r\n\nfunction mkSlice(s,days){\r\n  var r=s.r, end=PRICE0.length-1, d=mkDaily(r.eq||[],end), src=d.slice(-(days+1)); if(src.length<2) return r;\r\n  var b=src[0].v, eq=src.map(function(x){ return {i:x.i,v:x.v/b}; }), pk=eq[0].v, mdd=0;\r\n  eq.forEach(function(x){ if(x.v>pk) pk=x.v; var dd=(x.v/pk-1)*100; if(dd<mdd) mdd=dd; });\r\n  var from=src[0].i, tr=(r.trades||[]).filter(function(t){ return t.exit>from; }), win=tr.filter(function(t){ return t.pnl>0; }).length, o={};\r\n  for(var k in r) o[k]=r[k];\r\n  o.eq=eq; o.ret=(eq[eq.length-1].v-1)*100; o.mdd=mdd; o.trades=tr; o.n=tr.length; o.winRate=tr.length?win/tr.length*100:0; o.params={startI:from,endI:end}; o.mddStartI=null; o.byYear={};\r\n  return o;\r\n}\r\n",
+  "codeSha256": "7fea80ae2376a6655c02b52789d7a5af51d6ab9526bb0848025bb8e4e6a28d27"
+}

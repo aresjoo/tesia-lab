@@ -1,0 +1,156 @@
+/* Source 4d37373: g-adoc/g-row/g-note and g-btn-p/s/t (index 1372–1392).
+ * Only native workflow presentation; history rows and controller guards stay owned separately. */
+.client-service-app .native-strategy-workflow {
+  min-width: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--client-text-2);
+}
+.client-service-app .native-strategy-workflow > h2 {
+  margin: 4px 0 8px;
+  color: var(--client-text);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.client-service-app .native-strategy-workflow .native-workflow-rows {
+  min-width: 0;
+  margin: 12px 0 0;
+}
+.client-service-app .native-strategy-workflow .native-workflow-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  padding: 8px 2px;
+  border-bottom: 1px solid var(--client-line);
+}
+.client-service-app .native-strategy-workflow .native-workflow-row > dt {
+  min-width: 0;
+  color: var(--client-text-2);
+  font-weight: 400;
+}
+.client-service-app .native-strategy-workflow .native-workflow-row > dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--client-text);
+  text-align: right;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.client-service-app .native-strategy-workflow :is(.native-workflow-row > dt, .native-workflow-row > dd, .native-workflow-note, .native-workflow-binding, .native-workflow-notice, .native-workflow-consent > span) {
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+.client-service-app .native-strategy-workflow .native-workflow-source {
+  min-width: 0;
+  margin-top: 12px;
+}
+.client-service-app .native-strategy-workflow .native-workflow-source > summary {
+  min-height: 34px;
+  padding: 6px 0;
+  box-sizing: border-box;
+  align-content: center;
+  color: var(--client-text-2);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.client-service-app .native-strategy-workflow .native-workflow-source > pre {
+  min-width: 0;
+  max-width: 100%;
+  margin: 8px 0 0;
+  padding: 12px 0;
+  font-size: 12px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.client-service-app .native-strategy-workflow .native-workflow-stage { min-width: 0; margin-top: 18px; }
+.client-service-app .native-strategy-workflow .native-workflow-note {
+  margin: 8px 0;
+  color: var(--client-text-2);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.client-service-app .native-strategy-workflow .native-workflow-binding {
+  min-width: 0;
+  margin: 8px 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.client-service-app .native-strategy-workflow .native-workflow-binding code { font-size: inherit; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-workflow .native-workflow-notice { margin: 12px 0; white-space: pre-wrap; }
+.client-service-app .native-strategy-workflow .native-workflow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 18px;
+}
+.client-service-app .native-strategy-workflow .native-workflow-actions:empty { display: none; }
+.client-service-app .native-strategy-workflow .native-workflow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-sizing: border-box;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 34px;
+  height: auto;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--client-text-2);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-align: center;
+  cursor: pointer;
+  transition: background .12s;
+}
+.client-service-app .native-strategy-workflow .native-workflow-button.is-primary { background: var(--client-blue); color: #fff; }
+.client-service-app .native-strategy-workflow .native-workflow-button.is-primary:not(:disabled):not([aria-disabled="true"]):hover { background: #5b8af7; }
+.client-service-app .native-strategy-workflow .native-workflow-button.is-secondary { background: var(--client-2); border: 1px solid var(--client-line-2); }
+.client-service-app .native-strategy-workflow .native-workflow-button.is-secondary:not(:disabled):not([aria-disabled="true"]):hover { background: var(--client-3); }
+.client-service-app .native-strategy-workflow .native-workflow-button.is-text { padding-inline: 10px; font-weight: 400; }
+.client-service-app .native-strategy-workflow .native-workflow-button.is-text:not(:disabled):not([aria-disabled="true"]):hover { background: rgba(255, 255, 255, .05); }
+.client-service-app .native-strategy-workflow .native-workflow-button:is(:disabled, [aria-disabled="true"]) { opacity: .4; cursor: not-allowed; }
+.client-service-app .native-strategy-workflow .native-workflow-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.client-service-app .native-strategy-workflow .native-workflow-consent > input {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 3px 0 0;
+  accent-color: var(--client-blue);
+}
+.client-service-app .native-strategy-workflow .native-workflow-consent:has(input:disabled) { opacity: .4; cursor: not-allowed; }
+.client-service-app .native-strategy-workflow .native-workflow-utilities { min-width: 0; margin-top: 22px; }
+.client-service-app .native-strategy-workflow :is(.native-workflow-button, .native-workflow-source > summary, .native-workflow-source > pre, .native-workflow-consent > input):focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+.client-service-app .native-strategy-workflow [hidden] { display: none; }
+@media (max-width: 860px), (pointer: coarse) {
+  .client-service-app .native-strategy-workflow :is(.native-workflow-button, .native-workflow-source > summary) { min-height: 44px; }
+}
+@media (max-width: 480px) {
+  .client-service-app .native-strategy-workflow .native-workflow-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .client-service-app .native-strategy-workflow .native-workflow-row > dd { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .client-service-app .native-strategy-workflow .native-workflow-button { transition: none; }
+}

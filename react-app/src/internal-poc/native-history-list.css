@@ -1,0 +1,24 @@
+/* Reuse the source g-hist rows; only accommodate supplied approval/job metadata.
+   No cards, invented metrics, or separate native theme. */
+.native-history-list.g-hist-list { min-width: 0; }
+.native-history-list .native-history-item { min-width: 0; margin: 0; }
+.native-history-list .g-hist-row { box-sizing: border-box; align-items: flex-start; }
+.native-history-list .g-hist-row .t { display: flex; flex-direction: column; gap: 4px; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.native-history-list .native-history-title { font-weight: 500; }
+.native-history-list .native-history-state { color: var(--client-text-2); font-size: 13px; }
+.native-history-list .native-history-id { color: var(--client-text-3); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.native-history-list .native-history-meta { display: flex; flex: 0 1 auto; flex-direction: column; align-items: flex-end; gap: 4px; min-width: 0; max-width: 50%; }
+.native-history-list .native-history-time-label { color: var(--client-text-3); font-size: 12px; }
+.native-history-list .g-hist-row .d { max-width: 100%; font-size: 12px; overflow-wrap: anywhere; }
+.native-history-list .native-history-action { color: var(--client-text-2); font-size: 13px; }
+.native-history-list .native-history-selected { font-size: 12px; color: var(--client-text); }
+.native-history-list .g-hist-row[aria-current="true"] { background: var(--client-3); }
+.native-history-list .g-hist-row[aria-disabled="true"] { cursor: default; opacity: .65; }
+.native-history-list .g-hist-row[aria-disabled="true"]:hover { background: transparent; }
+.native-history-list .g-hist-row[aria-current="true"][aria-disabled="true"]:hover { background: var(--client-3); }
+.native-history-list .g-hist-row:focus-visible { outline: 2px solid var(--client-blue, #8fb2ff); outline-offset: -2px; }
+.native-history-list .native-history-notice { margin: 2px 14px 12px; color: var(--client-text-2); font-size: 12.5px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .native-history-list .g-hist-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .native-history-list .native-history-meta { max-width: 100%; align-items: flex-start; }
+}

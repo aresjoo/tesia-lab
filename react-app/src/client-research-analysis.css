@@ -1,0 +1,123 @@
+/* Expanded artifact, using the client research tokens and original app shell. */
+.client-restored-research > [hidden] { display: none !important; }
+.client-restored-research .ra-analysis { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; color: var(--gt2); background: var(--g0); outline: none; }
+.ra-analysis .ra-header { display: flex; align-items: center; gap: 20px; padding: 12px 20px; border-bottom: 1px solid var(--gl); flex: none; }
+.ra-analysis .ra-return { padding-left: 0; gap: 8px; }
+.ra-analysis .ra-identity { display: flex; gap: 12px; align-items: baseline; font-size: 13px; font-weight: 600; color: var(--gt); }
+.ra-analysis .ra-identity small { font-weight: 400; font-size: 12px; color: var(--gt2); }
+.ra-analysis .ra-header > button:last-child { margin-left: auto; flex: none; }
+.ra-analysis .ra-layout { display: grid; grid-template-columns: minmax(0,1fr) 320px; flex: 1; min-height: 0; }
+.ra-analysis .ra-market { min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--g3) transparent; }
+.ra-analysis .ra-toolbar { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 20px; }
+.ra-analysis .ra-toolbar > div { display: flex; flex: none; padding: 3px; border: 1px solid var(--gl); border-radius: 8px; background: var(--g1); }
+.ra-analysis .ra-toolbar button { min-height: 32px; padding: 5px 10px; border-radius: 5px; background: transparent; color: var(--gt2); font-size: 12px; }
+.ra-analysis .ra-toolbar button[aria-pressed=true] { background: var(--g3); color: var(--gt); }
+.ra-analysis .ra-toolbar > button { display: grid; place-items: center; margin-left: auto; }
+.ra-analysis .ra-quote { font: 11px var(--fnum); color: var(--gt2); min-width: 0; }
+.ra-analysis .ra-quote b { display: inline-block; margin-left: 8px; color: var(--gt); font-weight: 500; }
+.ra-analysis .ra-chart-shell { position: relative; margin: 0 12px; }
+.ra-analysis .ra-chart { height: clamp(300px,45vh,480px); min-width: 0; font-family: var(--fnum); }
+.ra-analysis .ra-pnl-label { position: absolute; bottom: 86px; left: 10px; z-index: 3; font-size: 10px; color: var(--gt2); pointer-events: none; padding: 2px 6px; background: var(--g0); }
+.ra-analysis .ra-caption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 14px; padding: 8px 20px 12px; font-size: 11px; color: var(--gt2); border-bottom: 1px solid var(--gl); }
+.ra-analysis .ra-caption i { display: inline-block; width: 5px; height: 5px; margin: 0 5px 1px 0; border-radius: 50%; background: var(--gg); }
+.ra-analysis .ra-caption i.sell { margin-left: 12px; background: var(--gr); }
+.ra-analysis .ra-results { padding: 0 20px 24px; }
+.ra-analysis .ra-metrics { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; margin: 0; border-bottom: 1px solid var(--gl); }
+.ra-analysis .ra-metrics dt { font-size: 11px; color: var(--gt2); }
+.ra-analysis .ra-metrics dd { margin: 4px 0 0; font: 500 20px var(--fnum); font-variant-numeric: tabular-nums; color: var(--gt); }
+.ra-analysis .ra-ledger-heading { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 8px; }
+.ra-analysis .ra-ledger-heading h3 { font-size: 13px; margin: 0; color: var(--gt); font-weight: 600; }
+.ra-analysis .ra-ledger-heading h3 span { font: 12px var(--fnum); color: var(--gt2); margin-left: 8px; }
+.ra-analysis .ra-ledger-heading > div { display: flex; gap: 4px; }
+.ra-analysis .ra-ledger-heading button { display: grid; place-items: center; min-width: 32px; min-height: 32px; border-radius: 6px; color: var(--gt2); background: var(--g1); }
+.ra-analysis .ra-ledger { max-height: 280px; overflow: auto; scrollbar-width: thin; }
+.ra-analysis .ra-ledger-labels, .ra-analysis .ra-ledger > button { display: grid; grid-template-columns: 34px minmax(80px,1fr) minmax(80px,1fr) minmax(94px,1fr) 66px; gap: 8px; align-items: center; width: 100%; text-align: left; }
+.ra-analysis .ra-ledger-labels { padding: 9px 8px; font-size: 10px; color: var(--gt2); background: var(--g0); position: sticky; top: 0; z-index: 1; border-bottom: 1px solid var(--gl); }
+.ra-analysis .ra-ledger > button { padding: 12px 8px; font-size: 12px; min-height: 44px; color: var(--gt2); background: transparent; border-bottom: 1px solid var(--gl); font-variant-numeric: tabular-nums; }
+.ra-analysis .ra-ledger > button:hover { background: var(--g1); }
+.ra-analysis .ra-ledger > button[aria-pressed=true] { background: color-mix(in srgb,var(--gb) 12%,var(--g0)); color: var(--gt); }
+.ra-analysis .ra-ledger > button:focus-visible { outline-offset: -2px; }
+.ra-analysis .ra-ledger :is(strong,span:last-child) { text-align: right; font-weight: 500; }
+.ra-analysis .ra-conversation { display: flex; flex-direction: column; border-left: 1px solid var(--gl); min-width: 0; min-height: 0; background: var(--g0); }
+.ra-analysis .ra-conversation-heading { display: flex; align-items: center; gap: 8px; padding: 18px 20px; flex: none; }
+.ra-analysis .ra-conversation-heading :is(svg,img) { width: 22px; height: 16px; object-fit: contain; flex: none; }
+.ra-analysis .ra-conversation-heading strong { color: var(--gt); font-size: 12px; }
+.ra-analysis .ra-conversation-heading > span { font-size: 11px; margin-left: auto; }
+.ra-analysis .ra-thread { flex: 1; min-height: 0; overflow-y: auto; padding: 0 20px 20px; scrollbar-width: thin; overflow-wrap: anywhere; word-break: keep-all; }
+.ra-analysis .ra-thread-intro { font-size: 12px; line-height: 1.8; margin: 4px 0 24px; }
+.ra-analysis .ra-thread .rw-user-message { max-width: 95%; font-size: 12px; }
+.ra-analysis .ra-thread .rw-answer { font-size: 12.5px; margin: 14px 0 24px; }
+.ra-analysis .ra-compose-area { padding: 12px; flex: none; border-top: 1px solid var(--gl); }
+.ra-analysis .ra-reference { display: flex; align-items: center; gap: 7px; font-size: 11px; margin-bottom: 10px; color: var(--gt2); }
+.ra-analysis .ra-reference > span { min-width: 0; flex: 1; }
+.ra-analysis .ra-reference button { background: transparent; color: var(--gt2); display: grid; place-items: center; min-width: 28px; min-height: 28px; }
+.ra-analysis .ra-composer { border: 1px solid var(--gl2); border-radius: 14px; background: var(--g2); display: flex; flex-direction: column; padding: 10px; }
+.ra-analysis .ra-composer:focus-within { border-color: var(--gb2); }
+.ra-analysis .ra-composer textarea { border: 0; outline: 0; width: 100%; min-height: 40px; max-height: 132px; resize: none; background: transparent; color: var(--gt); font-size: 13px; line-height: 1.7; padding: 2px; }
+.ra-analysis .ra-composer textarea::placeholder { color: var(--gt2); }
+.ra-analysis .ra-composer button { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--gb); color: var(--gt); margin-left: auto; }
+.ra-analysis .ra-discuss { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; width: 100%; padding: 8px 12px; margin: 0 0 8px; border: 1px solid var(--gl); border-radius: 8px; font-size: 12px; color: var(--gt); background: var(--g1); }
+.ra-analysis .ra-mobile-nav { display: none; }
+.ra-analysis .ra-replay-progress { height: 2px; background: var(--gl); flex: none; }
+.ra-analysis .ra-replay-progress i { display: block; width: 100%; height: 100%; background: var(--gb2); transform-origin: left; }
+.ra-analysis.is-replaying .ra-layout { grid-template-columns: minmax(0,1fr); }
+.ra-analysis.is-replaying :is(.ra-conversation,.ra-results,.ra-caption,.ra-mobile-nav) { display: none; }
+.ra-analysis.is-replaying .ra-chart { height: max(320px,calc(100dvh - 230px)); }
+.ra-analysis .ra-execution { position: absolute; top: 24px; right: 88px; pointer-events: none; display: flex; flex-direction: column; gap: 3px; min-width: 130px; padding: 14px 20px; border: 1px solid color-mix(in srgb,var(--gg) 25%,transparent); border-radius: 16px; background: color-mix(in srgb,var(--g1) 86%,transparent); backdrop-filter: blur(16px); box-shadow: inset 0 1px 0 rgba(255,255,255,.06),0 12px 40px rgba(0,0,0,.15); animation: ra-execution .65s cubic-bezier(.16,1,.3,1) both; }
+.ra-analysis .ra-execution span,.ra-analysis .ra-execution small { font-size: 10px; color: var(--gt2); }
+.ra-analysis .ra-execution strong { font: 500 28px var(--fnum); color: var(--gg); letter-spacing: -.025em; }
+.ra-analysis .ra-execution.loss { border-color: color-mix(in srgb,var(--gr) 25%,transparent); }
+.ra-analysis .ra-execution.loss strong { color: var(--gr); }
+.ra-analysis .ra-execution::after { content: ''; position: absolute; inset: -8px; border: 1px solid currentColor; color: var(--gg); opacity: 0; border-radius: 20px; animation: ra-ring .7s ease-out; }
+.ra-analysis .ra-execution.loss::after { color: var(--gr); }
+.ra-analysis .ra-chart-failure { position: absolute; inset: 0; z-index: 5; padding: 24px; display: grid; place-items: center; background: var(--g0); color: var(--gt2); }
+.ra-analysis .up { color: var(--gg); }
+.ra-analysis .down { color: var(--gr); }
+.ra-analysis .ra-metrics dd.up { color: var(--gg); }
+.ra-analysis .ra-metrics dd.down { color: var(--gr); }
+.ra-analysis .ra-execution { z-index: 4; }
+.ra-analysis:not(.is-replaying) :is(.ra-results,.ra-conversation) { animation: ra-settle .24s ease-out both; }
+.ra-analysis .ra-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@keyframes ra-settle { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes ra-execution { from { opacity: 0; transform: translateY(10px) scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes ra-ring { from { opacity: .4; transform: scale(.9); } to { opacity: 0; transform: scale(1.2); } }
+@media(max-width:1100px) {
+  .ra-analysis .ra-layout { grid-template-columns: minmax(0,1fr) 280px; }
+  .ra-analysis .ra-quote { display: none; }
+}
+@media(max-width:860px) {
+  .ra-analysis .ra-layout { display: flex; flex-direction: column; }
+  .ra-analysis .ra-header { gap: 4px 8px; padding: 8px 12px 8px 56px; flex-wrap: wrap; }
+  .ra-analysis .ra-return { font-size: 12px; min-height: 44px; }
+  .ra-analysis .ra-identity { font-size: 12px; margin-left: auto; }
+  .ra-analysis .ra-identity small { display: none; }
+  .ra-analysis .ra-identity { order: 3; flex-basis: 100%; padding: 0 0 6px; }
+  .ra-analysis .ra-header > button:last-child { font-size: 11px; padding: 6px; min-height: 44px; }
+  .ra-analysis .ra-mobile-nav { display: flex; gap: 4px; padding: 4px 12px; border-bottom: 1px solid var(--gl); flex: none; }
+  .ra-analysis .ra-mobile-nav button { flex: 1; min-height: 44px; padding: 6px 12px; border-radius: 6px; color: var(--gt2); background: transparent; font-size: 12px; }
+  .ra-analysis .ra-mobile-nav button[aria-pressed=true] { color: var(--gt); background: var(--g2); }
+  .ra-analysis[data-panel=chart] .ra-conversation { display: none; }
+  .ra-analysis[data-panel=chat] .ra-market { display: none; }
+  .ra-analysis .ra-market,.ra-analysis .ra-conversation { flex: 1; }
+  .ra-analysis .ra-conversation { border-left: 0; }
+  .ra-analysis .ra-composer textarea { font-size: 16px; }
+  .ra-analysis .ra-composer button { width: 40px; height: 40px; }
+  .ra-analysis .ra-toolbar { padding: 6px 12px; min-height: 48px; }
+  .ra-analysis .ra-toolbar button { min-height: 44px; min-width: 44px; }
+  .ra-analysis .ra-reference button { min-width: 44px; min-height: 44px; }
+  .ra-analysis .ra-chart-shell { margin: 0 4px; }
+  .ra-analysis .ra-chart { height: 340px; }
+  .ra-analysis .ra-caption { padding: 8px 12px; font-size: 10px; }
+  .ra-analysis .ra-results { padding: 0 12px 20px; }
+  .ra-analysis .ra-metrics { gap: 8px; flex-wrap: wrap; }
+  .ra-analysis .ra-metrics > div { flex: 1; min-width: 64px; }
+  .ra-analysis .ra-metrics dd { font-size: 18px; }
+  .ra-analysis .ra-ledger-labels,.ra-analysis .ra-ledger > button { grid-template-columns: 24px minmax(58px,1fr) minmax(58px,1fr) 62px; gap: 6px; padding-left: 4px; padding-right: 4px; font-size: 11px; }
+  .ra-analysis .ra-ledger :is(button,.ra-ledger-labels) > :nth-child(4) { display: none; }
+  .ra-analysis .ra-ledger-heading button { min-width: 44px; min-height: 44px; }
+  .ra-analysis .ra-execution { right: 74px; padding: 12px 16px; top: 12px; }
+  .ra-analysis .ra-execution strong { font-size: 24px; }
+  .ra-analysis.is-replaying .ra-market { display: block; }
+}
+@media(prefers-reduced-motion:reduce) { .ra-analysis .ra-execution,.ra-analysis .ra-execution::after,.ra-analysis:not(.is-replaying) :is(.ra-results,.ra-conversation) { animation: none; } }
+@media(prefers-reduced-transparency:reduce) { .ra-analysis .ra-execution { background: var(--g1); backdrop-filter: none; } }

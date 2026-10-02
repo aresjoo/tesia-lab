@@ -1,0 +1,5 @@
+{
+  "sha": "412fd6042e0b3935773831f43163a7da68191162",
+  "codeSha256": "83e4a1809bf1399a81593e2899e1ff2da8285f8372c84eeeb394235dcebd809b",
+  "code": "function mkdSeries(){\n  var eq=MKD.eq||[], src=MKD.per?eq.slice(-MKD.per-1):eq.slice(); if(src.length<2) return [];\n  var base=MKD.per?src[0].v:1, pts=src;\n  if(MKD.gran==='month'){ var seen={}, order=[]; src.forEach(function(p){ var k=mkdDate(p.i).slice(0,7); if(!seen[k]) order.push(k); seen[k]=p; }); pts=[src[0]].concat(order.map(function(k){ return seen[k]; }).filter(function(p){ return p!==src[0]; })); }\n  return pts.map(function(p){ return {d:mkdDate(p.i), y:MKD.tab==='ret'?(p.v/base-1)*100:MKD.tab==='pnl'?1000*(p.v/base-1):1000*p.v/base}; });\n}\nfunction mkdTicks(a,b,n){ if(!(b-a>1e-9*Math.max(1,Math.abs(a)))){ var pd=Math.abs(a)>=100?Math.max(10,Math.round(Math.abs(a)*0.01)):1; return [a-pd,a,a+pd]; } /* 최저와 최고가 같으면 위아래로 여유를 둔다 */ var span=(b-a)||1, st=Math.pow(10,Math.floor(Math.log10(span/n))), e=span/n/st; st*=e<1.5?1:e<3?2:e<7?5:10; var lo=Math.floor(a/st)*st, hi=Math.ceil(b/st)*st, t=[]; for(var v=lo;v<=hi+st/2;v+=st) t.push(+v.toFixed(6)); return t; }"
+}

@@ -1,0 +1,55 @@
+{
+  "apiContractVersion": "0.5.0",
+  "operations": [
+    {
+      "defaultLimit": 50,
+      "maximumLimit": 50,
+      "method": "GET",
+      "operationId": "listConversationResultsV5",
+      "path": "/api/v5/conversations/{conversationId}/results",
+      "pathField": "conversationId",
+      "requestSchema": "conversation-result-index.schema.json#/$defs/HistoryRequest",
+      "responseSchema": "conversation-result-index.schema.json#/$defs/ConversationResultIndexEnvelope"
+    },
+    {
+      "method": "GET",
+      "operationId": "getChartManifestV5",
+      "path": "/api/v5/backtests/{backtestId}/chart-manifest",
+      "pathField": "backtestId",
+      "requestSchema": "chart-manifest.schema.json#/$defs/ManifestRequest",
+      "responseSchema": "chart-manifest.schema.json#/$defs/ChartManifestEnvelope"
+    },
+    {
+      "defaultLimit": 1000,
+      "maximumLimit": 1000,
+      "method": "GET",
+      "operationId": "getChartWindowV5",
+      "path": "/api/v5/backtests/{backtestId}/chart-window",
+      "pathField": "backtestId",
+      "requestSchema": "chart-window.schema.json#/$defs/WindowRequest",
+      "responseSchema": "chart-window.schema.json#/$defs/ChartWindowEnvelope"
+    },
+    {
+      "defaultLimit": 50,
+      "maximumLimit": 100,
+      "method": "GET",
+      "operationId": "getFillMarkersV5",
+      "path": "/api/v5/backtests/{backtestId}/fill-markers",
+      "pathField": "backtestId",
+      "requestSchema": "fill-marker-page.schema.json#/$defs/MarkerRequest",
+      "responseSchema": "fill-marker-page.schema.json#/$defs/FillMarkerPageEnvelope"
+    }
+  ],
+  "security": {
+    "cacheControl": "no-store",
+    "credentials": "include",
+    "ownerSource": "CURRENT_LIVE_SESSION_SERVER_CONTEXT",
+    "producerMissing": "NOT_READY",
+    "publicActualDataServing": false,
+    "redirect": "manual",
+    "retry": 0,
+    "sameOrigin": true,
+    "sessionCookie": "__Host-tesia_session"
+  },
+  "surface": "PRIVATE_RESULT_CHART_READ_ONLY"
+}

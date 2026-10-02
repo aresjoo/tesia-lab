@@ -1,0 +1,50 @@
+/* Source 42a0d81 #tf-upsheet / nfxu (1902–1933), native modal lifecycle only. */
+.client-account-activity.client-upgrade-sheet{position:fixed;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,94vw);max-width:none;max-height:90dvh;overflow-y:auto;scrollbar-width:none;background:var(--g1);border:1px solid var(--gl2);border-radius:22px;box-shadow:var(--shadow-pop,0 16px 48px rgba(0,0,0,.45));padding:26px 26px 22px;margin:0;box-sizing:border-box;animation:client-upgrade-in .22s var(--ease);text-align:left}
+.client-upgrade-sheet::backdrop{background:rgba(8,9,11,.62);backdrop-filter:blur(3px)}
+.client-account-activity.client-upgrade-sheet{word-break:keep-all;overflow-wrap:anywhere}
+@keyframes client-upgrade-in{from{opacity:0;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes client-upgrade-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.client-upgrade-sheet .x{position:absolute;top:14px;right:14px;width:32px;height:32px;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gt3);background:transparent;transition:background .12s;cursor:pointer}
+.client-upgrade-sheet .x:hover{background:var(--hoverline);color:var(--gt)}
+.client-upgrade-sheet .nfxu-tags{display:flex;gap:6px;margin-bottom:10px;padding-right:32px;min-width:0;flex-wrap:wrap}
+.client-upgrade-sheet .nfxu-hd{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--gt);margin:0 0 6px;overflow-wrap:anywhere}
+.client-upgrade-sheet .nfxu-sub{font-size:13px;color:var(--gt3);line-height:1.55;margin-bottom:16px;overflow-wrap:anywhere}
+.client-upgrade-sheet .nfxu-quota{display:flex;flex-direction:column;gap:7px;background:var(--g2);border:1px solid rgba(224,96,75,.25);border-radius:12px;padding:12px 15px;margin-bottom:16px}
+.client-upgrade-sheet .nfxu-quota .r{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--gt2)}
+.client-upgrade-sheet .nfxu-quota .r b{color:var(--gr)}
+.client-upgrade-sheet .nfxu-quota .nfx-gtrack{height:7px}
+.client-upgrade-sheet .quota-unavailable{font-size:11.5px;color:var(--gt3)}
+.client-upgrade-sheet .nfxu-cards{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.client-upgrade-sheet .nfxu-card{background:var(--g2);border:1px solid var(--gl);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:transform .15s var(--ease),border-color .15s,box-shadow .2s}
+.client-upgrade-sheet .nfxu-card:hover{transform:translateY(-2px);border-color:var(--gl2)}
+.client-upgrade-sheet .nfxu-card.hot{border-color:rgba(78,192,141,.45);box-shadow:0 0 0 1px rgba(78,192,141,.2),0 8px 30px rgba(0,0,0,.3)}
+.client-upgrade-sheet .nfxu-card .bd1{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.client-upgrade-sheet .nfxu-card .t{font-size:15px;font-weight:700;color:var(--gt)}
+.client-upgrade-sheet .nfxu-card .big{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--gg);font-variant-numeric:tabular-nums}
+.client-upgrade-sheet .nfxu-card .big.pro{color:var(--gt)}
+.client-upgrade-sheet .nfxu-card .grant{font-size:13px;font-weight:600;color:var(--gt2)}
+.client-upgrade-sheet .nfxu-card .d{font-size:12px;color:var(--gt3);line-height:1.5}
+.client-upgrade-sheet .nfxu-card ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.client-upgrade-sheet .nfxu-card li{font-size:12px;color:var(--gt2);display:flex;gap:7px;line-height:1.45;overflow-wrap:anywhere}
+.client-upgrade-sheet .nfxu-card li::before{content:'✓';color:var(--gg);font-weight:700;flex-shrink:0}
+.client-upgrade-sheet .nfxu-card .sp{flex:1}
+.client-upgrade-sheet .nfx-btn svg{flex-shrink:0}
+.client-upgrade-sheet .nfxu-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--gl);font-size:11.5px;color:var(--gt3);overflow-wrap:anywhere}
+.client-account-activity.client-upgrade-sheet .nfxu-later{background:transparent;border:none;color:var(--gt3);font-size:12.5px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;flex:none}
+.client-upgrade-sheet .nfxu-later:hover{color:var(--gt)}
+.client-account-activity.client-upgrade-sheet .nfxu-later{min-height:32px;padding:4px 0}
+.client-upgrade-sheet .nfxu-state:empty{display:none}
+.client-upgrade-sheet .nfxu-state p{margin:0;font-size:11.5px;line-height:1.5;color:var(--gt3)}
+.client-upgrade-sheet .nfxu-state [role=alert]{color:var(--gr)}
+/* Share content rows across the source's two cards. A wrapped status message
+   must not lift one CTA above the other. No JS sizing or fixed text heights. */
+@supports(grid-template-rows:subgrid){
+  @media(width > 640px){
+    .client-upgrade-sheet .nfxu-cards{grid-template-rows:repeat(5,auto) minmax(0,1fr) auto auto;row-gap:10px}
+    .client-upgrade-sheet .nfxu-card{display:grid;grid-template-rows:subgrid;grid-row:span 8}
+  }
+}
+@media(pointer:coarse){.client-upgrade-sheet :is(.nfx-btn,.nfxu-later){min-height:44px}.client-upgrade-sheet .x{width:44px;height:44px}}
+@media(max-width:640px),(pointer:coarse){.client-account-activity.client-upgrade-sheet .nfxu-later{min-height:44px}}
+@media(max-width:640px){.client-account-activity.client-upgrade-sheet{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;max-height:88dvh;border-radius:24px 24px 0 0;animation:client-upgrade-up .22s var(--ease);padding:20px 16px 18px}.client-upgrade-sheet::before{content:'';display:block;width:44px;height:4px;border-radius:2px;background:var(--gl2);margin:0 auto 14px}.client-upgrade-sheet .nfxu-cards{grid-template-columns:minmax(0,1fr)}.client-upgrade-sheet .x{width:44px;height:44px}.client-upgrade-sheet :is(.nfx-btn,.nfxu-later){min-height:44px}.client-upgrade-sheet .nfxu-tags{padding-right:44px}}
+@media(prefers-reduced-motion:reduce){.client-account-activity.client-upgrade-sheet{animation:none;scroll-behavior:auto}.client-upgrade-sheet::backdrop{animation:none}}

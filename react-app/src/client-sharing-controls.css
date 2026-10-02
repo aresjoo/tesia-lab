@@ -1,0 +1,19 @@
+/* Source 501053b tfBkDrop, scoped to sharing; no broker/native overrides. */
+.client-strategy-sharing .tfbk-dropwrap{position:relative;display:inline-flex;max-width:100%;min-width:0}
+.client-strategy-sharing .tfbk-drop{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:166px;max-width:100%;box-sizing:border-box;min-height:48px;height:auto;border-radius:24px;padding:12px 26px;font-size:14px;line-height:20px;color:#dbdbdb;background:#000;border:2px solid #4a4a4a;cursor:pointer;transition:none}
+.client-strategy-sharing .tfbk-drop>span:first-child{min-width:0;overflow-wrap:anywhere;word-break:keep-all}
+.client-strategy-sharing .tfbk-drop:hover{background:#2e2e2e}
+.client-strategy-sharing .tfbk-drop:disabled{cursor:default;opacity:.5}
+.client-strategy-sharing .tfbk-drop .car{font-size:10px;opacity:.85;flex:none}
+.client-strategy-sharing .tfbk-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:100%;width:max-content;max-width:calc(100vw - 16px);box-sizing:border-box;background:#1a1a1a;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.4);padding:6px;z-index:80;text-align:left;overflow-y:auto;overscroll-behavior:contain;transition:none}
+.client-strategy-sharing .tfbk-menu .mi{display:flex;align-items:center;width:100%;min-height:32px;border-radius:6px;padding:2px 8px;font-size:14px;line-height:20px;color:#dbdbdb;cursor:pointer;white-space:normal;word-break:keep-all;overflow-wrap:anywhere;background:transparent;border:none;text-align:left;transition:none}
+.client-strategy-sharing .tfbk-menu .mi:hover{background:#2e2e2e}
+.client-strategy-sharing .tfbk-menu .mi.on{background:#f2f2f2;color:#0f0f0f}
+.client-strategy-sharing .tfbk-menu .mi:focus-visible{outline:2px solid #8fb2ff;outline-offset:-2px}
+@media(max-width:768px){
+  .client-strategy-sharing .tfbk-drop{min-height:34px;border-radius:17px;padding:6px 15px;border-width:1px;background:#000;min-width:min(132px,100%)}
+}
+@media(pointer:coarse){
+  .client-strategy-sharing .tfbk-drop{min-height:44px}
+  .client-strategy-sharing .tfbk-menu .mi{min-height:44px}
+}

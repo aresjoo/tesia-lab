@@ -1,0 +1,194 @@
+/* Internal-only: client tokens skin the existing, contract-owned decision UI. */
+.native-service-content { height: 100%; min-height: 0; min-width: 0; }
+.native-service-content[hidden] { display: none !important; }
+.native-service-content[data-has-action-notice=true] { display: flex; flex-direction: column; }
+.native-service-content[data-has-action-notice=true] > .native-analysis-layout { flex: 1; height: auto; min-height: 0; }
+.native-service-action-notice { flex: none; max-height: 25%; padding-right: 48px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.native-service-action-notice > .client-global-notice { position: static; width: auto; max-width: none; margin: 8px 12px; padding: 8px 12px; word-break: keep-all; overflow-wrap: anywhere; }
+.native-service-notice-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 12px; }
+.client-service-app .native-service-notice-actions button { margin: 0; min-width: 44px; min-height: 44px; padding: 6px 10px; cursor: pointer; }
+.client-service-app .native-service-notice-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.client-service-app .native-service-notice-actions button:focus-visible { outline: 2px solid var(--client-blue); outline-offset: -2px; border-radius: 6px; }
+@media(max-width:860px) {
+  /* A real utility row for hamburger and account bell, not an overlay on copy. */
+  .native-service-action-notice { margin-top: 48px; padding-right: 0; }
+}
+@media(min-width:600px) and (max-height:500px) {
+  .native-service-action-notice { margin-top: 0; padding-inline: 48px; }
+  .native-service-action-notice > .client-global-notice { display: flex; align-items: center; gap: 12px; margin: 6px 12px; padding: 6px 10px; }
+  .native-service-action-notice .native-service-notice-actions { flex: none; }
+}
+@media(max-height:650px) {
+  /* Preserve a readable document viewport when translated controls wrap. */
+  .native-service-action-notice { max-height: 20%; }
+  .native-service-content[data-has-action-notice=true] .rw-header { padding-top: 4px; padding-bottom: 4px; }
+  .native-service-content[data-has-action-notice=true] .rw-tabs { margin-top: 4px; }
+  .native-service-content[data-has-action-notice=true] .rw-composer-wrap { padding-top: 4px; padding-bottom: 8px; }
+}
+.native-plan-technical { margin-top: 20px; border-top: 1px solid var(--gl); }
+.native-plan-technical > summary { padding-block: 14px; color: var(--gt2); cursor: pointer; line-height: 1.6; overflow-wrap: anywhere; }
+.native-plan-technical > summary:focus-visible { outline: 2px solid var(--gb2); outline-offset: 2px; }
+.native-research-plan-actions > div { width: 100%; min-width: 0; }
+.client-session-loading { margin: 12px 0; color: var(--client-text-2); font-size: 13px; line-height: 1.7; text-align: center; overflow-wrap: anywhere; }
+.client-session-restoring { min-height: 55dvh; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+.client-service-app .native-trading-workspace { height: 100%; min-width: 0; overflow: auto; }
+.native-trading-return { appearance: none; min-width: 0; max-width: 100%; min-height: 44px; padding: 7px 12px; border: 1px solid var(--gl); border-radius: 6px; background: transparent; color: var(--gt2); font: inherit; font-size: 12px; line-height: 1.5; white-space: normal; overflow-wrap: anywhere; cursor: pointer; }
+.native-trading-return:hover { background: var(--g1); color: var(--gt); }
+.native-trading-return:focus-visible { outline: 2px solid var(--gb2); outline-offset: -2px; }
+.native-trading-workspace .ctt-header-tools { flex: 0 1 auto; }
+@media (max-width: 860px) {
+  .native-trading-workspace .cat-heading h1 { margin-left: 52px; }
+}
+.native-history-scope { min-width: 0; padding: 0 0 24px; margin: 0 0 24px; border-bottom: 1px solid var(--client-line); }
+.native-history-scope > h2 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--client-text); }
+.native-history-scope > p { margin: 0 0 16px; max-width: 72ch; font-size: 13px; line-height: 1.8; color: var(--client-text-2); word-break: keep-all; overflow-wrap: anywhere; }
+.native-history-scope > button { min-height: 44px; max-width: 100%; white-space: normal; text-align: start; line-height: 1.6; }
+.native-history-scope > button[aria-disabled="true"] { cursor: default; opacity: .5; }
+.native-history-scope + .g-hist-search { margin-top: 0; }
+/* Same source chips outside .client-lab-conversation. Without the scoped reset,
+   these controls fall back to the browser's grey native button appearance. */
+.client-service-app .native-history-scope .g-qchip { box-sizing: border-box; appearance: none; font: inherit; font-size: 12.5px; line-height: 1.6; padding: 7px 14px; border: 1px solid var(--client-line-2); border-radius: 999px; background: transparent; color: var(--client-text-2); cursor: pointer; min-width: 0; min-height: 44px; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; }
+.client-service-app .native-history-scope .g-qchip:hover:not([aria-disabled="true"]) { background: var(--client-2); color: var(--client-text); }
+.client-service-app .native-history-scope .g-qchip:active:not([aria-disabled="true"]) { transform: translateY(1px); }
+.client-service-app .native-history-scope .g-qchip[aria-disabled="true"] { cursor: default; }
+.client-service-app .native-history-scope .g-qchip:focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+.client-service-app .native-history-feedback { margin: 12px 0; font-size: 13px; line-height: 1.8; color: var(--client-text); white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+.native-history-scope .g-act2 { margin-top: 16px; }
+.native-history-scope .g-act2 button { appearance: none; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.native-history-scope .g-act2 button:focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+.native-plan-return { max-width: 1040px; box-sizing: border-box; margin: 0 auto; padding: 20px 22px 0; }
+.native-plan-return button { min-height: 44px; }
+@media (max-width: 640px) { .native-plan-return { padding: 16px 12px 0; } }
+.client-service-app .client-load-page.is-inline { min-height: 100%; padding: 24px 14px; }
+.native-history-unavailable { word-break: keep-all; overflow-wrap: anywhere; }
+.native-history-unavailable small { max-width: 65ch; line-height: 1.7; }
+body:has(.client-service-app) { background: var(--client-0, #0f1012); color: var(--client-text, #e6e7ea); }
+.client-service-app {
+  --poc-ink: var(--client-text); --poc-soft: var(--client-text-2); --poc-muted: var(--client-text-2);
+  --poc-paper: var(--client-1); --poc-ground: var(--client-0); --poc-cool: var(--client-2);
+  --poc-line: var(--client-line); --poc-line-strong: var(--client-line-2);
+}
+.client-service-app .client-service-document { margin-top: 24px; border-top: 1px solid var(--client-line-2); padding-top: 24px; }
+.client-service-app .strategy-summary .section-heading { flex-wrap: wrap; }
+.client-service-app .strategy-summary .section-heading > div { flex: 1 1 180px; min-width: 0; }
+.client-service-app .strategy-summary .status-pill { flex: none; white-space: nowrap; color: var(--client-text-2); background: var(--client-2); }
+.client-service-app .decision-rail { width: 100%; min-width: 0; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.client-service-app .decision-rail :is(h2,h3,p,code,label) { overflow-wrap: anywhere; word-break: keep-all; }
+.client-service-app .decision-rail .primary-button { background: var(--client-text); color: var(--client-0); border: 1px solid var(--client-text); min-height: 44px; }
+.client-service-app .decision-rail button:disabled { opacity: .45; cursor: not-allowed; }
+.client-service-app .approval-box { background: var(--client-1); border-color: var(--client-line-2); }
+.client-service-app .client-service-logout { padding: 8px 12px; margin-left: auto; font-size: 12px; white-space: nowrap; }
+.client-service-app.view-landing .landing-hero > .client-service-logout { position: absolute; z-index: 5; top: 18px; right: 24px; min-height: 40px; }
+@media (max-width: 860px) {
+  .client-service-app.view-landing .landing-hero > .client-service-logout { top: 8px; right: 16px; min-height: 44px; }
+  .client-service-app.view-landing:has(.client-app-banner) .landing-hero > .client-service-logout { top: 72px; }
+}
+.client-service-app .client-service-issue:empty, .client-service-app .client-service-outcome:empty { display: none; }
+.client-service-app .client-service-issue [role=alert] { padding: 16px; margin-top: 16px; border: 1px solid var(--client-line-2); border-radius: 10px; background: var(--client-1); color: var(--client-text); font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.client-service-app .client-service-issue button { min-height: 40px; padding: 8px 12px; }
+.client-service-app .client-home-input-issue { width: min(760px, 94%); box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px 16px; border: 1px solid var(--client-line-2); border-radius: 16px; background: var(--client-1); text-align: left; }
+.client-service-app .client-home-input-issue [role=alert] { padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; line-height: 1.65; word-break: keep-all; }
+.client-service-app .client-home-input-issue p { margin: 0; }
+.client-service-app .client-home-input-issue button { min-height: 44px; border: 1px solid var(--client-line-2); border-radius: 22px; background: var(--client-2); color: var(--client-text); font: inherit; font-size: 12px; cursor: pointer; }
+.client-service-app .client-home-input-issue button:hover:not(:disabled) { border-color: var(--client-text-3); }
+.client-service-app .client-home-input-issue button:focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+@media (max-width: 860px) { .client-service-app .client-home-input-issue { width: 100%; } }
+.client-service-app .g-composer textarea:disabled { opacity: .7; }
+.client-service-app .g-send:disabled { cursor: not-allowed; }
+.client-service-app .g-uacts button:disabled { opacity: .4; cursor: not-allowed; }
+.client-service-app .client-service-outcome { min-width: 0; }
+.client-service-app .client-service-delivery { margin: -8px 0 12px; text-align: right; color: var(--client-text-2); font-size: 12px; line-height: 1.7; }
+.client-service-app .client-service-outcome .table-wrap { max-width: 100%; overflow-x: auto; }
+/* Source g-plan typography/DL, confined to the native read-only document. */
+.client-service-app .native-strategy-document { min-width: 0; }
+.client-service-app .native-strategy-document h3 { font-size: 15px; font-weight: 600; margin: 24px 0 10px; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document .native-strategy-description { white-space: pre-wrap; }
+.client-service-app .native-strategy-document :is(dd, code, li) { min-width: 0; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document dd { font-variant-numeric: tabular-nums; }
+.client-service-app :is(.native-row-editable, .native-row-heading) { display: grid; grid-template-columns: minmax(0,1fr) 28px; gap: 8px; align-items: start; }
+.client-service-app .native-row-comment { display: contents; }
+.client-service-app .native-row-trigger { width: 28px; min-height: 28px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 6px; background: transparent; color: var(--client-text-2); }
+.client-service-app .native-row-trigger:hover:not(:disabled) { background: var(--client-3); color: var(--client-text); }
+.client-service-app .native-row-form { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-width: 0; margin: 0 0 8px; }
+.client-service-app .native-row-form input { flex: 1 1 180px; min-width: 0; width: 100%; min-height: 36px; border: 1px solid var(--client-line-2); border-radius: 6px; background: var(--client-2); color: var(--client-text); padding: 7px 11px; font: inherit; font-size: 13px; }
+.client-service-app :is(.native-row-apply,.native-row-cancel) { min-height: 36px; border-radius: 6px; padding: 6px 12px; font-size: 13px; }
+.client-service-app .native-row-apply { border: 1px solid var(--client-line-2); background: var(--client-2); color: var(--client-text); }
+.client-service-app .native-row-cancel { background: transparent; color: var(--client-text-2); }
+.client-service-app .native-row-status { flex: 1 0 100%; margin: 0; font-size: 13px; color: var(--client-text-2); word-break: keep-all; overflow-wrap: anywhere; }
+.client-service-app .native-row-status:empty { display: none; }
+.client-service-app .native-row-status span { display: block; white-space: pre-wrap; }
+.client-service-app :is(.native-row-trigger,.native-row-apply):disabled { opacity: .5; cursor: not-allowed; }
+.client-service-app .native-row-trigger[aria-disabled=true] { opacity: .5; cursor: not-allowed; }
+.client-service-app .native-row-previous { border-top: 1px solid var(--client-line); margin-top: 24px; font-size: 13px; color: var(--client-text-2); }
+.client-service-app .native-row-previous p { overflow-wrap: anywhere; }
+.client-service-app :is(.native-row-trigger,.native-row-form input,.native-row-apply,.native-row-cancel):focus-visible { outline: 2px solid var(--client-blue); outline-offset: 2px; }
+@media (max-width: 860px) {
+  .client-service-app :is(.native-row-editable,.native-row-heading) { grid-template-columns: minmax(0,1fr) 44px; }
+  .client-service-app .native-row-trigger { width: 44px; min-height: 44px; }
+  .client-service-app .native-row-form input { font-size: 16px; min-height: 44px; }
+  .client-service-app :is(.native-row-apply,.native-row-cancel) { min-height: 44px; }
+}
+/* Longer translated labels get a proportional column, without changing the
+   source Korean grid or the small-screen stacked reading order. */
+@media (min-width: 421px) {
+  .client-service-app .native-strategy-document:is(:lang(en), :lang(es), :lang(fr)) dl > div {
+    grid-template-columns: minmax(120px, 32%) minmax(0, 1fr);
+    column-gap: 16px;
+  }
+}
+.client-service-app .native-strategy-document ul { padding-left: 20px; font-size: 13px; line-height: 1.8; }
+.client-service-app .native-strategy-document details { border-top: 1px solid var(--client-line); margin-top: 16px; }
+.client-service-app .native-strategy-document summary { min-height: 44px; display: list-item; align-content: center; padding: 10px 0; cursor: pointer; font-size: 13px; color: var(--client-text-2); overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document pre { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal; }
+.client-service-app .native-strategy-document :is(summary, pre):focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+/* Readable conditions stay in the source document flow, not a second card UI. */
+.client-service-app .native-strategy-rules { margin-top: 28px; padding-top: 4px; border-top: 1px solid var(--client-line); }
+.client-service-app .native-strategy-document :is(.native-feature-list, .native-rule-list) { list-style: none; padding: 0; margin: 0; }
+.client-service-app .native-feature-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 8px 0; }
+.client-service-app .native-feature-list li > span { flex: 1 1 240px; min-width: 0; }
+.client-service-app .native-rule-id { color: var(--client-text-2); font-size: 12px; }
+.client-service-app .native-rule-list > li { padding: 16px 0; }
+.client-service-app .native-rule-list > li + li { border-top: 1px solid var(--client-line); }
+.client-service-app .native-rule-list h4 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--client-text); }
+.client-service-app .native-rule-number { color: var(--client-text-2); font-variant-numeric: tabular-nums; }
+.client-service-app .native-rule-value { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; min-width: 0; }
+.client-service-app .native-strategy-document .native-rule-condition { font-size: 15px; line-height: 1.8; margin: 0 0 8px; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document .native-rule-note { font-size: 13px; line-height: 1.8; color: var(--client-text-2); margin: 0 0 8px; word-break: keep-all; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document .native-rule-warning { font-size: 13px; line-height: 1.8; color: var(--client-text); margin: 8px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.client-service-app .native-strategy-document .native-rule-reference { border: 0; margin: 0; }
+.client-service-app .native-strategy-document .native-rule-reference summary { width: fit-content; max-width: 100%; }
+/* Current native job uses the source Activity; technical identifiers are secondary. */
+.client-service-app .native-job-section { margin-top: 24px; min-width: 0; }
+.client-service-app .native-job-activity .g-act2 { margin-bottom: 12px; }
+.client-service-app .native-job-updated { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 8px 0; font-size: 12px; line-height: 1.8; color: var(--client-text-2); }
+.client-service-app .native-job-updated time { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.client-service-app .native-job-problem { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; font-size: 14px; line-height: 1.8; color: var(--client-text); word-break: keep-all; overflow-wrap: anywhere; }
+.client-service-app .native-job-problem code { color: var(--client-text-2); font-size: 12px; }
+.client-service-app .native-job-metadata { min-width: 0; margin: 8px 0; }
+.client-service-app .native-job-metadata summary { min-height: 44px; width: fit-content; max-width: 100%; padding: 10px 0; align-content: center; cursor: pointer; font-size: 13px; color: var(--client-text-2); }
+.client-service-app .native-job-metadata :is(dl, p) { font-size: 12px; line-height: 1.8; color: var(--client-text-2); }
+.client-service-app .native-job-metadata dl { margin: 8px 0; }
+.client-service-app .native-job-metadata dl > div { display: grid; grid-template-columns: minmax(80px, 110px) minmax(0, 1fr); gap: 12px; padding: 6px 0; }
+.client-service-app .native-job-metadata :is(dt, dd) { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.client-service-app .native-job-refresh { min-height: 44px; margin: 0 0 16px; }
+.client-service-app .native-job-metadata summary:focus-visible { outline: 2px solid var(--client-blue); outline-offset: 3px; }
+.client-service-app .native-history-panel { margin: 24px 0; min-width: 0; }
+.client-service-app .native-history-panel h3 { margin: 0 0 12px; font-size: 16px; font-weight: 600; }
+.client-service-app .native-history-page { margin: 0 0 6px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.client-service-app .native-history-help { margin: 4px 0; color: var(--client-text-2); font-size: 12px; line-height: 1.8; }
+.client-service-app .native-history-navigation { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.client-service-app .native-history-navigation button { flex: 1 1 160px; max-width: 100%; min-height: 44px; padding: 10px 14px; white-space: normal; font-size: 13px; line-height: 1.5; }
+.client-service-app .native-history-navigation button[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+/* A single controlled composer is portalled between chat and research docs. */
+.native-research-composer-host.client-lab-conversation { display: block; height: auto; min-height: 0; }
+.native-research-composer-host .g-composer-wrap { padding: 0; }
+.native-research-composer-host .g-composer-wrap::before { display: none; }
+@container native-research (max-width: 720px) {
+  .native-research-workspace .rw-aux { display: none; }
+  .native-research-workspace .rw-mobile-artifacts { display: inline-flex; flex: none; min-height: 36px; font-size: 11px; }
+  .native-research-workspace .rw-aux.is-open { display: block; position: absolute; right: 0; top: 0; bottom: 0; z-index: 12; width: min(300px, 90%); box-shadow: -14px 0 36px rgb(0 0 0 / 28%); }
+}
+.native-research-workspace .native-research-thread { height: auto; min-height: 0; background: transparent; margin-top: 18px; gap: 10px; }
+.native-research-composer-host .native-research-context { flex: 0 0 100%; order: -2; min-width: 0; }
+.native-research-composer-host .native-research-context .g-ctx { max-width: 100%; overflow-wrap: anywhere; }
+.native-research-workspace .native-thread-unread { display: block; margin: 0 auto 8px; min-height: 36px; padding: 6px 14px; border: 1px solid var(--gl2); border-radius: 999px; background: var(--g2); }

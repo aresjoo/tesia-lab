@@ -1,0 +1,9 @@
+/* Source taiLogoDraw: 58% draw, hold through 84%, fade by 96%. */
+.client-animated-logo { display:block;flex:none;animation:client-logo-fade 2.1s cubic-bezier(.45,0,.25,1) infinite; }
+.client-animated-logo-path { stroke-dasharray:150;stroke-dashoffset:150;animation:client-logo-draw 2.1s cubic-bezier(.45,0,.25,1) infinite; }
+@keyframes client-logo-draw { 0% { stroke-dashoffset:150; } 58%,100% { stroke-dashoffset:0; } }
+@keyframes client-logo-fade { 0%,84% { opacity:1; } 96%,100% { opacity:0; } }
+@media(prefers-reduced-motion:reduce) {
+  .client-animated-logo { animation:none;opacity:1; }
+  .client-animated-logo-path { animation:none;stroke-dashoffset:0; }
+}
