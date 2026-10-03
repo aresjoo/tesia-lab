@@ -3,12 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node index.mjs"
+    "start": "node index.mjs",
+    "test": "node --import ./tests/fixtures/register.mjs --test tests/*.test.mjs",
+    "check": "node --check index.mjs && node --check worker.mjs && node --check investment-prompts.mjs && node --check investment-output-gate.mjs && node --check investment-intent-admission.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0"
   },
   "devDependencies": {
     "wrangler": "^4.130.0"
+  },
+  "engines": {
+    "node": ">=22.15.0"
   }
 }

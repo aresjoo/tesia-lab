@@ -7,6 +7,8 @@ on:
     branches: [main]
     paths: ["server/**", ".github/workflows/deploy-worker.yml"]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,7 +17,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci
+      - run: npm ci --ignore-scripts
+        working-directory: server
+      - run: npm run check
+        working-directory: server
+      - run: npm test
         working-directory: server
       - uses: cloudflare/wrangler-action@v3
         with:

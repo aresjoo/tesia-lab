@@ -6,6 +6,8 @@
  * /api/state 는 의도적으로 미구현(404) — 공개 환경에서 대화 저장은 기기 localStorage로 폴백된다.
  * 크레딧 보호: 허용 오리진 제한 + IP당 분당 버스트 제한 + KV 일일 총량 상한. */
 import Anthropic from "@anthropic-ai/sdk";
+import { buildInvestmentRequest } from "./investment-prompts.mjs";
+import { createInvestmentOutputGate } from "./investment-output-gate.mjs";
 
 const MODEL_DEFAULT = "claude-opus-5-5";
 const EFFORT_DEFAULT = "medium";
@@ -207,16 +209,17 @@ export default {
 
     let payload;
     try { payload = await req.json(); } catch (e) { return new Response(null, { status: 400, headers: c.h }); }
-    const messages = (Array.isArray(payload.messages) ? payload.messages : [])
-      .filter((m) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content)
-      .slice(-16);
-    if (!messages.length) return new Response(null, { status: 400, headers: c.h });
+    let investment;
+    try { investment = await buildInvestmentRequest(payload); }
+    catch (error) { return new Response(null, { status: error.status || 400, headers: c.h }); }
+    const messages = investment.messages;
     if (!env.ANTHROPIC_API_KEY) return new Response(null, { status: 503, headers: c.h });
 
     const { readable, writable } = new TransformStream();
     const w = writable.getWriter();
     const enc = new TextEncoder();
-    const send = (o) => w.write(enc.encode("data: " + JSON.stringify(o) + "\n\n")).catch(() => {});
+    const outputGate = createInvestmentOutputGate((o) => w.write(enc.encode("data: " + JSON.stringify(o) + "\n\n")).catch(() => {}), { settingsPreview: investment.settingsPreview });
+    const send = (o) => outputGate.send(o);
     /* Workers에서 api.anthropic.com 직접 호출은 엣지에서 빈 400으로 차단됨 (알려진 이슈).
      * Cloudflare AI Gateway를 경유해 우회한다 — 키는 그대로 Anthropic 키를 쓴다. */
     const AI_GATEWAY_BASE = env.TETH_AI_GATEWAY || "https://gateway.ai.cloudflare.com/v1/6c44d33270e146fd313f864ef2b07568/teth/anthropic";
@@ -224,29 +227,17 @@ export default {
     ctx.waitUntil((async () => {
       try {
         /* plain: 도구와 검색 없이 본 모델이 짧은 글만 쓴다(백테스트 판단 문장, 결과 해석). 입력은 클라이언트가 계산한 값뿐이다 */
-        if (payload.plain === true) {
+        if (investment.mode !== "dialogue") {
           const stream = client.beta.messages.stream({
             model: env.TETH_AI_MODEL || MODEL_DEFAULT,
             max_tokens: 900,
             output_config: { effort: "low" },
-            system: String(payload.system || "").slice(0, 6000),
+            system: investment.system,
             messages,
           });
-          stream.on("text", (delta) => send({ text: delta }));
+          stream.on("text", (delta) => { send({ text: delta }); if (outputGate.failed) stream.abort(); });
           const final = await stream.finalMessage();
-          await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
-          return;
-        }
-        const isThink = payload.think === true;
-        if (isThink) {
-          const stream = client.beta.messages.stream({
-            model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
-            max_tokens: 1024,
-            system: String(payload.system || "").slice(0, 4000),
-            messages,
-          });
-          stream.on("text", (delta) => send({ text: delta }));
-          const final = await stream.finalMessage();
+          if (final.stop_reason !== "end_turn") { await send({ error: true }); return; }
           await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
           return;
         }
@@ -254,8 +245,8 @@ export default {
          * assistant content 는 원본 그대로 보존(사고 서명 포함), tool_result 만 담은 user 턴으로 재개.
          * 브라우저에는 라운드 경계 없이 연속 SSE 로 중계된다. */
         const TOOLS = [
-          { type: "web_search_20260209", name: "web_search" },
-          { type: "web_fetch_20260209", name: "web_fetch" },
+          { type: "web_search_20260209", name: "web_search", max_uses: 3 },
+          { type: "web_fetch_20260209", name: "web_fetch", max_uses: 3 },
           MARKET_TOOL,
         ];
         const convo = messages.map((m) => ({ role: m.role, content: m.content }));
@@ -267,94 +258,17 @@ export default {
           ...(useFast ? { speed: "fast" } : {}),
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
           max_tokens: 16000,
-          thinking: { type: "adaptive", display: "summarized" }, // display 미지정 시 기본 omitted — thinking_delta 가 빈 값으로 온다
+          thinking: { type: "adaptive", display: "omitted" },
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
-          tools: TOOLS,
+          tools: payload.lite === true ? undefined : TOOLS,
           betas: useFast ? ["server-side-fallback-2026-07-01", "fast-mode-2026-02-01"] : ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
-          system: String(payload.system || "").slice(0, 12000), /* 고정 지침(~7.6k)+실시세 ctx 가 8k 를 넘으며 꼬리(스냅샷)가 잘리던 문제 — 상향 */
+          system: investment.system,
           messages: convo,
         });
-        /* 서버사이드 chips 검증 — 프롬프트를 신뢰하지 않는다. <chips> 이후 텍스트를 보류했다가
-         * 스트림 종료 시 스키마(허용 타입 4종, 액션 최대 2개)를 통과할 때만 원문 그대로 방류한다.
-         * 프로토콜은 그대로라 클라이언트는 이 검증의 존재를 몰라도 된다. */
-        const CHIP_OPEN = "<chips>";
-        const CHIP_ACTIONS = ["backtest", "alert", "delegate", "auto"];
-        let chipTail = "", chipHold = "", chipMode = false;
-        const emitText = (t) => { if (t) send({ text: t }); };
-        const chipsValid = (block) => {
-          const m = /^<chips>([\s\S]*)<\/chips>\s*$/.exec(block.trim());
-          if (!m) return false;
-          try {
-            const parsed = JSON.parse(m[1]);
-            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return false;
-            if (parsed.suggest !== undefined && !Array.isArray(parsed.suggest)) return false;
-            if (parsed.action !== undefined) {
-              if (!Array.isArray(parsed.action) || parsed.action.length > 2) return false;
-              for (const a of parsed.action) if (!a || typeof a !== "object" || !CHIP_ACTIONS.includes(a.type) || typeof a.label !== "string" || !a.label.trim()) return false;
-            }
-            return true;
-          } catch (e) { return false; }
-        };
-        /* work model 라벨 서버 검증 — 라우팅 표 밖 model 은 속성째 제거해 클라이언트
-         * 뱃지에 도달하지 못하게 한다. 표는 src/teth-model-routing.ts 와 동기 유지. */
-        const WORK_MODELS = ["claude-fable-5", "gemini-agy-flash", "gpt-sol", "claude-opus-5", "claude-fable-5-1"];
-        const WORK_HEAD = "<work";
-        const WORK_ATTR_MAX = 192;
-        let workTail = "";
-        const scrubWorkTag = (tag) => tag.replace(/\s*\bmodel\s*=\s*"([^"]*)"/, (m, v) => WORK_MODELS.includes(v) ? m : "");
-        const scrubWork = (delta) => {
-          let pending = workTail + delta;
-          workTail = "";
-          let out = "";
-          for (;;) {
-            const at = pending.indexOf(WORK_HEAD);
-            if (at === -1) {
-              let keep = 0; /* 청크 경계에서 잘린 '<work' 접두 꼬리 이월 */
-              for (let k = Math.min(WORK_HEAD.length - 1, pending.length); k > 0; k--) {
-                if (WORK_HEAD.startsWith(pending.slice(pending.length - k))) { keep = k; break; }
-              }
-              out += pending.slice(0, pending.length - keep);
-              workTail = keep ? pending.slice(pending.length - keep) : "";
-              return out;
-            }
-            out += pending.slice(0, at);
-            const rest = pending.slice(at);
-            const gt = rest.indexOf(">");
-            if (gt === -1) {
-              if (rest.length > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
-              workTail = rest;
-              return out;
-            }
-            if (gt > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
-            out += scrubWorkTag(rest.slice(0, gt + 1));
-            pending = rest.slice(gt + 1);
-          }
-        };
-        const flushWork = () => { const rest = workTail; workTail = ""; return rest; };
-        const onDelta = (delta) => {
-          if (chipMode) { chipHold += delta; return; }
-          const pending = chipTail + delta;
-          const at = pending.indexOf(CHIP_OPEN);
-          if (at !== -1) { emitText(pending.slice(0, at)); chipMode = true; chipHold = pending.slice(at); chipTail = ""; return; }
-          let keep = 0; /* 청크 경계에서 잘린 '<chips>' 접두 꼬리는 다음 델타로 이월 */
-          for (let k = Math.min(CHIP_OPEN.length - 1, pending.length); k > 0; k--) {
-            if (CHIP_OPEN.startsWith(pending.slice(pending.length - k))) { keep = k; break; }
-          }
-          emitText(pending.slice(0, pending.length - keep));
-          chipTail = keep ? pending.slice(pending.length - keep) : "";
-        };
-        const flushChips = () => {
-          if (chipMode) {
-            if (chipsValid(chipHold)) emitText(chipHold);
-            else console.error("chips drop: schema violation", chipHold.slice(0, 200));
-            chipMode = false; chipHold = "";
-          } else { emitText(chipTail); }
-          chipTail = "";
-        };
         /* 실작업 이벤트 중계 — 라운드마다 새 스트림에 부착. blocks 는 라운드 로컬 */
         const attach = (stream, blocks) => {
-          stream.on("text", (delta) => { const scrubbed = scrubWork(delta); if (scrubbed) onDelta(scrubbed); });
+          stream.on("text", (delta) => { send({ text: delta }); if (outputGate.failed) stream.abort(); });
           stream.on("streamEvent", (ev) => {
             try {
               if (ev.type === "content_block_start") {
@@ -373,8 +287,7 @@ export default {
                   send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
                 }
               } else if (ev.type === "content_block_delta" && ev.delta) {
-                if (ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
-                else if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
+                if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
               } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
                 const b = blocks[ev.index]; delete blocks[ev.index];
                 let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
@@ -428,12 +341,10 @@ export default {
           }
           break;
         }
-        { const rest = flushWork(); if (rest) onDelta(rest); }
-        flushChips();
-        if (final.stop_reason === "refusal") await send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
+        if (final.stop_reason !== "end_turn") { await send({ error: true }); return; }
         await send({ done: true, usage: { in: totIn, out: totOut } });
       } catch (e) {
-        console.error("chat error:", (req.cf && req.cf.colo) || "?", e && e.status, e && e.name, e && e.message, e && e.error ? JSON.stringify(e.error) : "(no error body)", e && e.headers ? (e.headers.get ? e.headers.get("request-id") : e.headers["request-id"]) : "");
+        console.error("chat provider failure", e && e.status || "unknown");
         await send({ error: true });
       } finally {
         try { await w.close(); } catch (e) {}
