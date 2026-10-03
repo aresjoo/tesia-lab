@@ -63,7 +63,7 @@
 
 ### 투자 AI 프롬프트 품질 후보
 
-이번 별도 후보는 React snapshot을 재동기화하지 않는다. `server/README.md`의 서버 소유 정책1.4.0과 SDK text delta 검증을 두 프록시에 적용한다. root index의 브라우저 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 추가했다. SETUP의 fixed/settingsPair 전달은 최종 wrapper의 자동 AI 재전송과 다른 차트 자산 치환을 막으며 요청 자산이라는 문구를 사용한다. 초기 단순 BTC/ETH 요청만 서버가 Mock 설정 화면으로 연결한다. rich 전략·예약의 typed 계약 연결은 남아 있고 원본 동선 전수 인수나 React 실행 연결 완료가 아니다. 서버 자동 회귀291개와 source VM 검증은 브라우저 전체 E2E/실제 provider 성공으로 승격하지 않는다. 실제 배포는0이고 서비스NO-GO다. main server 병합은 자동 Worker 배포를 유발하므로 후보는 migration 대상 draft로 검토한다.
+이번 별도 후보는 React snapshot을 재동기화하지 않는다. `server/README.md`의 서버 소유 정책1.4.0과 SDK text delta 검증을 두 프록시에 적용한다. root index의 브라우저 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 추가했다. SETUP의 fixed/settingsPair 전달은 최종 wrapper의 자동 AI 재전송과 다른 차트 자산 치환을 막으며 요청 자산이라는 문구를 사용한다. 초기 단순 BTC/ETH 요청만 서버가 Mock 설정 화면으로 연결한다. rich 전략·예약의 typed 계약 연결은 남아 있고 원본 동선 전수 인수나 React 실행 연결 완료가 아니다. 서버 자동 회귀351개와 source VM 검증은 브라우저 전체 E2E/실제 provider 성공으로 승격하지 않는다. 실제 배포는0이고 서비스NO-GO다. main server 병합은 자동 Worker 배포를 유발하므로 후보는 migration 대상 draft로 검토한다.
 
 ## 2. 가장 큰 구조 변경
 
@@ -193,4 +193,6 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 
 동기화 도구는 **자동 커밋·푸시·배포·상시 감시를 하지 않는다.** 이후 작업 묶음마다 변경을 검토해 이 브랜치에 누적 반영한다. 실패한 검사나 미반영 구현을 다음 전달에서 조용히 지우지 않는다.
 
-투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,122 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,135 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+
+최신 migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.

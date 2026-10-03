@@ -20561,7 +20561,7 @@ function taiMarket(t,fin,fallback){
       var mdHtml=taiMd(stripTags(segAcc));
       if(out&&out.innerHTML!==undefined&&(!out.isConnected||live)) out.innerHTML=mdHtml;
       /* 다음 턴이 근거 사슬을 잃지 않게 도구 사용 기록을 히스토리에만 덧붙인다 (화면 미표시) */
-      taiPushHist(sess,t,clean+(srchN?'\n\n[내부 도구 기록: 이 답변은 웹 검색 '+srchN+'회를 실제 수행했고 참조 도메인은 '+srcDom.join(', ')+'다. 사용자가 근거를 지적하면 검색 여부를 부정하지 말고 출처 연결 부족을 정정하라.]':''));
+      taiPushHist(sess,t,clean+(srchN?'\n\n'+JSON.stringify({kind:'unverified_client_tool_history',searchCalls:srchN,domains:srcDom}):''));
       var host=(out&&out.parentNode&&out.parentNode.classList&&out.parentNode.classList.contains('g-amsg'))?out.parentNode:null;
       var tHtml=tline?taiTline(tline):''; /* 사건 타임라인: 가격은 실측 일봉에서 클라이언트 조인 */
       var sHtml=srchN?('<div class="g-srcstrip">근거: 웹 검색 '+srchN+'회, 결과 '+srcAll+'개, 원문 '+fresOk+'개 확인. 상세와 링크는 위 작업 기록에서</div>'):'';
@@ -23938,9 +23938,8 @@ function rvPrevOpen(){ var V=(tfS().btVers||[]); if(!V.length) return;
   acConfirm({title:'이전 판',body:'',list:V.map(function(v){ return stDate(v.at)+' '+mkPct0(v.ret,1)+' (낙폭 '+v.mdd.toFixed(1)+'%, 거래 '+v.n+'번). '+v.rule; }),ok:'닫기',run:function(){}}); }
 /* 규칙 수정하기: 그 대화로 돌아가 TETH가 먼저 어느 쪽을 바꿀지 묻는다(선택지, 직접 입력, AI가 알아서 판단). 고르면 바뀔 조건 카드 */
 function rvHidden(){ var sp=rvSpecNow(), F=btReadFacts();
-  return '[규칙 수정 요청] 내가 만든 전략을 백테스트했더니 결과가 아쉽다. 규칙 하나만 고쳐 다시 검증하려고 한다.\n지금 규칙: '+rvRuleText(sp)+'\n설정값: '+JSON.stringify(sp)+'\n결과: '+JSON.stringify(F)
-    +'\n지시 1(지금): 아직 바꿀 조건을 정하지 마라. 합니다체 2문장으로 짧게 답하라. 첫 문장은 결과에서 가장 눈에 띄는 숫자 하나(예: 24번 중 14번이 손실로 끝났습니다), 둘째 문장은 "어느 쪽을 바꿔 보겠습니까? 아래에서 고르시거나 원하는 방향을 적어 주십시오."처럼 방향을 묻는 말. 그리고 [ASK] 태그로 질문 하나를 붙여라: title은 "어느 조건을 바꿔 보겠습니까?", multi는 false, options는 이 결과에 맞는 수정 방향 4개. 각 선택지 t는 10자 안팎의 짧은 이름(예: 파는 조건 넓히기, 사는 조건 까다롭게, 오르면 파는 조건 추가, 방향 확인 켜기), d는 무엇이 바뀌고 무엇을 기대하는지 한 문장(결과 숫자 근거). 결과 근거로 가장 먼저 비교해 볼 선택지를 첫째에 두고 d 끝에 "(추천)"을 붙여라. 이번 답에는 [STRATEGY] 태그를 붙이지 마라.'
-    +'\n지시 2(사용자가 고르거나, 직접 적거나, 알아서 판단해 달라고 한 다음 답): 그 방향에서 바꿔 볼 조건을 정확히 하나만 고르고, 그 대가(예: 더 오래 들면 수익과 손실 폭이 함께 커질 수 있음)를 함께 말하라. 원인을 단정하지 말고 "비교해 볼 값"으로 말하고, 더 좋은 결과를 뜻하지 않는다고 덧붙여라. 합니다체 3~4문장. 익절, 손절 같은 용어 대신 "산 가격보다 8% 오르면 파는 조건"처럼 풀어 써라. 검색과 도구는 쓰지 마라. 그 답에는 질문 카드(ASK), 선택 칩(NEXT), 실행(ACT) 태그를 붙이지 마라. 다음 답의 마지막 줄에 바뀐 설정 전체를 [STRATEGY {...}] 태그로 붙이되 "change" 키에 바꾼 항목 이름 하나(depth, tp, sl, fng, trend 중 하나)를 넣어라. asset, period, name은 그대로 두고 바꾼 값 하나만 다르게 하라.'; }
+  return '[규칙 수정 논의] 현재 규칙을 보존하면서 수정 방향 하나를 비교하고 싶습니다. 아직 변경이나 검증을 승인한 것은 아닙니다.\n현재 규칙: '+rvRuleText(sp)+'\n미확인 브라우저 초안: '+JSON.stringify(sp)+'\n제공된 Mock 결과: '+JSON.stringify(F);
+}
 function rvBubble(line){ return '<div class="an-card">'+rvSumCard()+'</div><div class="an-line">'+line+'</div>'; }
 function rvFix(){
   var t=tfS(); if(!BT.s||!BT.s.mine||!BT.R) return;
@@ -23956,11 +23955,11 @@ function rvFix(){
   taiEnsure(function(ok){ if(ok&&typeof taiMarket==='function'){ taiMarket(hidden,null,function(){ rvDraft(); }); } else rvDraft(); });
 }
 /* AI를 못 부르면 입력창에 초안을 넣어 사용자가 보내게 한다 */
-function rvDraft(){ RV.on=false; var f=$('g-in'); if(f){ f.value='지금 규칙: '+rvRuleText(rvSpecNow())+'. 결과가 그냥 보유보다 낮았습니다. 파는 조건 하나를 바꿔 다시 검증하고 싶습니다.'; f.focus(); } toast('제안을 받지 못했습니다. 바꾸고 싶은 조건을 적어 보내 주십시오'); }
+function rvDraft(){ RV.on=false; var f=$('g-in'); if(f){ f.value='지금 규칙: '+rvRuleText(rvSpecNow())+'. 제공된 Mock 결과를 기준으로 규칙을 어떻게 바꿔 비교할지 논의하고 싶습니다.'; f.focus(); } toast('제안을 받지 못했습니다. 바꾸고 싶은 조건을 적어 보내 주십시오'); }
 /* 다른 전략 만들기: 새 대화에 결과를 붙이고 다른 접근을 묻는다 */
 function rvNew(){
   var s=BT.s, R=BT.R; if(!s||!R) return; var F=btReadFacts();
-  var hidden='[새 전략 요청] "'+mkHook(s)+'" 전략을 백테스트했더니 결과가 아쉽다. 결과: '+JSON.stringify(F)+'\n지시: 이 결과를 근거로 같은 자산에서 접근이 다른 전략 방향 2가지를 짧게 제안하고, 어느 쪽으로 갈지 물어라. 각 방향은 사는 때와 파는 때를 한 문장씩. 합니다체. 더 좋은 결과를 보장하지 않는다고 덧붙여라. 검색과 도구는 쓰지 마라. 아직 [STRATEGY] 태그는 붙이지 말고, 사용자가 방향을 고르면 그때 붙여라.';
+  var hidden='[새 전략 논의] "'+mkHook(s)+'" 전략의 제공된 Mock 결과: '+JSON.stringify(F)+'\n현재 전략과 같은 자산에서 다른 접근을 비교하고 싶습니다. 아직 변경, 검증, 실행을 승인한 것은 아닙니다.';
   try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
   RV.on=false; gNew({text:hidden,html:rvBubble('이 결과를 보고 다른 방식의 전략을 만들고 싶습니다')});
 }

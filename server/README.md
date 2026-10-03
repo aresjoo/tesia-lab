@@ -21,7 +21,7 @@
 
 `plain:true`는 원본 `BT_SYS_J`/`BT_SYS_R`의 **정확한 digest** 두 개만 스타일 식별자로 받는다. 해당 원문은 모델 system으로 전달하지 않는다. 수정된 unknown plain 정책은422, `think:true` 내레이션도422다. Node가 기존 plain을 무시하고 도구를 켜던 차이를 해소했다. 요청 형식 오류400, 과도한 입력413, provider 부재503 및 SSE `{error:true}`는 성공이 아니다. 실제 생성이 `end_turn`으로 끝나고 안전한 본문이 있어야 `{done:true}`를 보낸다.
 
-모델의 ORDER/ACT/SETUP/STRATEGY/GAUGE/work/chips/think 제어문은 인용이나 코드 블록에서도 차단한다. 완료 응답에 붙는 SETUP은 모델 출력이 아니라 서버가 현재 사용자의 `비트코인 전략 만들어줘`, `이더리움으로 전략을 만들고 싶어요` 같은 좁은 요청을 확인해 만든 **Mock 설정 화면 이동**이다. 진입 방식은null로 남겨 사용자가 선택합니다. 서버가 별도 id/digest의 설정 안내 정책을 선택해 화면 이동과 본문을 맞춥니다. 이전 user가 현재와 동일한 단순 자산 요청 외의 발화였거나 이력이 assistant로 시작하거나 클라이언트가 잘림을 표시하면 이동을 허용하지 않습니다. 브라우저 잘림 표시는 이동 거부에만 사용하며 승인 권한을 주지 않습니다. 타이밍 질문·부정·숏/레버리지/숫자/지표 조건·assistant/browser 문장은 이 이동을 허용하지 않습니다. 실패·거절·잘림 응답에는 이동을 붙이지 않는다.
+모델의 ORDER/ACT/SETUP/STRATEGY/GAUGE/TLINE/work/chips/think 제어문은 인용이나 코드 블록에서도 차단한다. 완료 응답에 붙는 SETUP은 모델 출력이 아니라 서버가 현재 사용자의 `비트코인 전략 만들어줘`, `이더리움으로 전략을 만들고 싶어요` 같은 좁은 요청을 확인해 만든 **Mock 설정 화면 이동**이다. 진입 방식은null로 남겨 사용자가 선택합니다. 서버가 별도 id/digest의 설정 안내 정책을 선택해 화면 이동과 본문을 맞춥니다. 이전 user가 현재와 동일한 단순 자산 요청 외의 발화였거나 이력이 assistant로 시작하거나 클라이언트가 잘림을 표시하면 이동을 허용하지 않습니다. 브라우저 잘림 표시는 이동 거부에만 사용하며 승인 권한을 주지 않습니다. 타이밍 질문·부정·숏/레버리지/숫자/지표 조건·assistant/browser 문장은 이 이동을 허용하지 않습니다. 실패·거절·잘림 응답에는 이동을 붙이지 않는다.
 
 출력 필터는 금융 사실이나 자유 텍스트의 의미를 판정하지 않는다. `상승 확률97%`, `주문을 완료했습니다`라는 평문 허위 주장은 프롬프트와 별도 의미 평가의 문제다. 태그0건을 허위 사실0건으로 보고하지 않는다. CHART/ASK/NEXT/TITLE의 기존 표시 소비 검증도 주문 계약이나 실시간 데이터 검증이 아니다. SDK text delta 분할은 provider SSE UTF-8 바이트 분할 및 브라우저 복구의 검증과 다르다.
 
@@ -50,7 +50,7 @@ Opus5.5(personal1), Astra6, Gemini3.8 Flash High의 읽기 전용 source 검토�
 
 최종 코드 검수에서 Opus가 찾은 Unicode 대문자 확장의 스트림 위치 오류는 ASCII 정규화와4접두×모든 split 회귀로 교정했습니다. Astra가 찾은 source 최종 wrapper/다른 차트 자산 및 잘린 이력의 조건 유실은 actual source VM·history 회귀로 교정했습니다. 비텍스트 이벤트는 server-observed 키 allowlist를 적용하며 도구 목적/검색 제목의 내용은 금융 검증 완료로 해석하지 않습니다. Node의 기존 문자 깨짐 중 사용자 표시 두 문구를 교정했습니다.
 
-남은 출시 조건은 정식 표시용 전략 제안/DraftPatch와 frontend의 연결, 주문 비교 연산자·수량·유효기간·기준시각의 계약 및 승인, 실제 provider/보존/비용/독립 평가, 문장 사실 검증, 브라우저 여정/UTF-8 전송·중단 복구, 기존 프록시 인증/쿼터/KV 오류 정책 검토다. 기존 rich STRATEGY와 ORDER 카드의 모든 동선을 보존했다고 하지 않는다. 원격main 원본과 React2,122개 snapshot은 비교 기준으로 보존한다. 후보 source index는 기존 지침 제거/데이터 context 전환/잘림 표시와 함께 SETUP가 최종wrapper에서 AI질문으로 재전송되지 않도록 fixed를 전달하고 명시된 자산을 settingsPair로 전달한다. 기존 차트가 다른 자산이어도 요청 자산으로 설정하며 차트는 바꾸지 않는다. 이 경로는 실제 source 함수를 실행한 Node VM으로 검사하고 browser E2E로 승격하지 않는다. 실제 모델이나 주문 기능을 활성화하거나 배포하지 않는다.
+남은 출시 조건은 정식 표시용 전략 제안/DraftPatch와 frontend의 연결, 주문 비교 연산자·수량·유효기간·기준시각의 계약 및 승인, 실제 provider/보존/비용/독립 평가, 문장 사실 검증, 브라우저 여정/UTF-8 전송·중단 복구, 기존 프록시 인증/쿼터/KV 오류 정책 검토다. 기존 rich STRATEGY와 ORDER 카드의 모든 동선을 보존했다고 하지 않는다. 원격main 원본과 최신 migration의 React2,135개 snapshot은 비교 기준으로 보존한다. 후보 source index는 기존 지침 제거/데이터 context 전환/잘림 표시와 함께 SETUP가 최종wrapper에서 AI질문으로 재전송되지 않도록 fixed를 전달하고 명시된 자산을 settingsPair로 전달한다. 기존 차트가 다른 자산이어도 요청 자산으로 설정하며 차트는 바꾸지 않는다. 이 경로는 실제 source 함수를 실행한 Node VM으로 검사하고 browser E2E로 승격하지 않는다. 실제 모델이나 주문 기능을 활성화하거나 배포하지 않는다.
 
 기존 프록시의 구체적인 운영 잔여는 다음과 같습니다. `wrangler.toml`에 RL binding이 없어 일일 KV 상한은 비활성이고, KV 장애는 fail-open입니다. Worker는 요청 검증 전에 quota를 차감하며 Node와 다릅니다. Origin 확인은 인증을 대체하지 않습니다. Node는 `pause_turn`을 오류로 처리하고 Worker는 제한된 continuation을 수행합니다. 이 조건에서 본 후보의 자동 시험 통과를 공개 금융서비스 운영 승인으로 해석하지 않습니다.
 
@@ -60,11 +60,19 @@ Opus5.5(personal1), Astra6, Gemini3.8 Flash High의 읽기 전용 source 검토�
 
 | 검증 | 실제 결과와 범위 |
 |---|---|
-| Node24.14.0 / Node22.15.0 | 각각291 PASS / 0 FAIL / 0 SKIP. Node loopback·Worker fetch 실제 route와 합성 SDK, source VM, recorded 응답 회귀 |
+| Node24.14.0 / Node22.15.0 | 각각351 PASS / 0 FAIL / 0 SKIP. Node loopback·Worker fetch 실제 route와 합성 SDK, source VM, recorded 응답 회귀 |
 | clean npm ci / syntax / Worker dry-run | 각각exit0. Wrangler4.130.0으로 번들만 생성. 배포0 |
 | production npm audit | omit-dev 취약점0. 기존 개발 도구 advisory는 dependency pin 유지 상태로 별도 정비 |
-| React manifest | 2,122개 verified, 출처62b5e6972cb48a3ac862fc41799061c0d0722525, digest f857c2f7542cfd7ee12aaedde6e8f829fe981d5f9877958526b09cb8514ba9aa |
+| React manifest | 2,135개 verified, 출처75a5f5bbb820ad27f66304927ff4c70954fea318, digest da197956817507fa6483f53a3bad80c07c294a66a5dabe775ff80b88e77621c5 |
 | 실제 모델 개발 점검 | personal(1) claude-opus-5-5로24사례×5batch. 독립120 provider 호출이 아님. 마지막24응답만 현재1.4정책에 결속 |
 | Astra6 독립 검수 | 코드후속 C0/H0/M0/L2의 문서/안내 Low 수정 확인. 1.4 실제응답 C0/H0/M0/L1, DRAFT_REVIEW_GO / SERVICE_NO_GO |
 
 남은 문장 Low는 holdout 답변이 제공자료의 사전 평가 기준 미확인을 기준 부재로 표현한 부분입니다. 전체 결론은 미판정이며 기록에 남겼습니다. 이 검증 표의 개발 회귀 PASS는 모델의 모든 문장 합격이나 출시 합격이 아닙니다. 최초·중간·최종 테스트 수를 합산하지 않습니다.
+
+최종 Opus5.5 독립 source 검수는 C0/H0/M0/L6·DRAFT_REVIEW_GO·SERVICE_NO_GO입니다. 이후 좁은 Low delta로 rvHidden/rvNew의 숨은 STRATEGY 요구를 제거하고 Mock 데이터와 미승인 분석 요청을 유지했습니다. rvDraft의 근거 없는 보유 전략보다 낮다는 문장과 미선택 매도 조건도 제거했습니다. assistant 이력에 붙이던 정정 명령은 미확인 도구 기록 JSON으로 전환했습니다. TLINE은 서버 검증된 사건이 없는 모델 JSON이 실측 가격과 결합되지 않도록 차단하며 기존 사건 카드 기능의 실연결 완료로 보고하지 않습니다.
+
+후보를 최신 migration d53a80670cb7842f700b927db674435026d09ffd 위로 재정렬했고 거래소 연결 후보13개 추가 파일을 포함한2,135 snapshot은 그대로 보존했습니다. 이때20개 runtime/시험/CI 입력은 이전 검증과 동일했고, 마지막TLINE/숨은요청 delta는 새351개 전체검증으로 확인합니다. main은현재 branch protection이없으므로 draft라는 상태와main배포금지 기록만으로운영승인을대체하지않습니다. 출시 전 보호정책을확정해야합니다.
+
+마지막 personal(1) Opus5.5 delta 검수도 C0/H0/M0/L6·DRAFT_REVIEW_GO·SERVICE_NO_GO이며 Astra6는 새High/Medium0과현재14개검증입력hash결속을확인했습니다. 비차단 Low는 TLINE의 명시적 프롬프트 금지 목록 추가, 도구 기록 JSON 호출의 별도 회귀, rvFix의 typed 제안 대기, 칩 클릭을 user 발화로 처리하는 표시 의미, 기존 주석/띄어쓰기, recorded holdout 문장입니다. 이는 미완료를 숨기거나 실제 서비스 합격으로 바꾼 판정이 아닙니다.
+
+MMF의 원금 손실 가능성과 환매 조건을 예금과 구분하는 일반 투자상품 설명은 [SEC 투자자 안내](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/updated-12)로 확인했습니다. 국가별 보호 제도나 특정 상품의 약관을 확인한 결과로 확대하지 않습니다.

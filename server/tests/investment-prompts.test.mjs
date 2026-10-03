@@ -56,7 +56,7 @@ test('turns and explicit user conditions survive without truncation or aliasing'
   assert.ok(result.messages[0].content.includes('뉴스조건'));
 });
 
-const forbidden = ['[ORDER {"asset":"비트코인","trigger":null}]', '[ACT []]', '[SETUP {}]', '[STRATEGY {}]', '[GAUGE {"up":140,"down":-40}]', '<work model="claude-opus-5">', '<chips>{"action":[]}</chips>', '<think>fake thought</think>'];
+const forbidden = ['[ORDER {"asset":"비트코인","trigger":null}]', '[ACT []]', '[TLINE [{"date":"2024-01-01","title":"unverified event"}]]', '[SETUP {}]', '[STRATEGY {}]', '[GAUGE {"up":140,"down":-40}]', '<work model="claude-opus-5">', '<chips>{"action":[]}</chips>', '<think>fake thought</think>'];
 for (const value of forbidden) {
   for (let split = 0; split <= value.length; split++) {
     test(`forbidden output ${value.slice(0, 12)} split=${split}`, () => {
@@ -120,7 +120,7 @@ for (const prefix of ['ß', 'ŉ', 'ﬀ', 'ΐ']) {
         const events = [], gate = createInvestmentOutputGate((event) => events.push(event));
         gate.send({ text: output.slice(0, split) }); gate.send({ text: output.slice(split) }); gate.send({ done: true });
         const combined = events.map((event) => event.text || '').join('');
-        assert.ok(!/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[ACT\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(combined));
+        assert.ok(!/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(combined));
         assert.ok(events.some((event) => event.error)); assert.ok(!events.some((event) => event.done));
       }
     }

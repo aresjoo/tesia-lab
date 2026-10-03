@@ -45,3 +45,16 @@ test('actual source builder and 730-sample prefetch fit server context budget wi
   assert.ok(request.messages[0].content.includes('미확인 참고자료'));
   // This is a synthetic serializer budget check, not a live market receipt.
 });
+
+test('actual hidden revision requests carry Mock data without command tags or implicit approval',()=>{
+  const code=source.slice(source.indexOf('function rvHidden(){'),source.indexOf('function rvBubble('));
+  const context=createContext({rvSpecNow:()=>({asset:'이더리움',tp:7,sl:-2}),btReadFacts:()=>({returnPct:12,kind:'mock'}),rvRuleText:()=> '익절7% 손절2%'});
+  runInContext(code,context);
+  const request=runInContext('rvHidden()',context);
+  assert.match(request,/Mock 결과/);assert.match(request,/아직 변경이나 검증을 승인한 것은 아닙니다/);
+  assert.match(request,/익절7% 손절2%/);assert.ok(!/\[(?:STRATEGY|ASK|ACT|SETUP)/.test(request));
+  const newer=source.slice(source.indexOf('function rvNew(){'),source.indexOf('/* 제안 카드:',source.indexOf('function rvNew(){')));
+  assert.ok(!/\[(?:STRATEGY|ASK)/.test(newer));
+  const fallback=source.slice(source.indexOf('function rvDraft(){'),source.indexOf('/* 다른 전략 만들기:',source.indexOf('function rvDraft(){')));
+  assert.ok(!fallback.includes('그냥 보유보다 낮았습니다'));assert.ok(!fallback.includes('파는 조건 하나'));
+});

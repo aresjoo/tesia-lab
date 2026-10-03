@@ -215,4 +215,6 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 
 여기에 더해 자신의 인박스에 처리하지 않은 메시지가 없어야 하고, 선점한 `claim`은 `release`로 해제되어 있어야 하며, 다른 세션이 이어받아야 할 미검증 항목은 `handoff`로 전달되어 있어야 한다.
 
-투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,122 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,135 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+
+최신 migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.

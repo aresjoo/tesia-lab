@@ -1,6 +1,6 @@
 import { settingsPreviewTag } from './investment-intent-admission.mjs';
 /** Streaming protocol guard. It is not a semantic financial fact checker. */
-const BLOCKED = ['[ORDER', '[ACT', '[SETUP', '[STRATEGY', '[GAUGE', '<WORK', '<CHIPS', '<THINK'];
+const BLOCKED = ['[ORDER', '[ACT', '[TLINE', '[SETUP', '[STRATEGY', '[GAUGE', '<WORK', '<CHIPS', '<THINK'];
 const MAX_OUTPUT_CHARS = 64000;
 
 export function createInvestmentOutputGate(write, { settingsPreview = null } = {}) {
@@ -17,7 +17,7 @@ export function createInvestmentOutputGate(write, { settingsPreview = null } = {
     const pending = tail + value;
     // ASCII normalization keeps offsets stable for ß/ligatures/combining text.
     const upper = pending.replace(/[a-z]/g, (character) => character.toUpperCase());
-    if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[ACT\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
+    if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
     let keep = 0;
     for (const marker of BLOCKED) {
       for (let n = 1; n <= marker.length && n <= upper.length; n++) {
