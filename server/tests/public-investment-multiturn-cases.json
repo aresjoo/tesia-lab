@@ -1,0 +1,693 @@
+{
+  "scope": "public synthetic development; proposed not executed; no hidden holdout",
+  "baseline": "Lab6cf94d5 registry1.4.0",
+  "actualModelCalls": 0,
+  "browserRuns": 0,
+  "cases": [
+    {
+      "id": "beginner_definition",
+      "turns": [
+        {
+          "role": "user",
+          "content": "나는 초보야. 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "duration은 무슨 뜻이야?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "채권 duration의 금리 민감도를 쉬운 말로 설명",
+        "초보를 영구 프로필로 확정하지 않음",
+        "거래금액/손절 온보딩0",
+        "최대 두 문장"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "expert_depth",
+      "turns": [
+        {
+          "role": "user",
+          "content": "기관 채권 포트폴리오 관점으로 자세히 답해줘. 정의 반복은 빼줘."
+        },
+        {
+          "role": "user",
+          "content": "DV01 neutral curve steepener의 convexity 잔여와 carry/rolldown을 비교해줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "요청기법의 실제 차이를 자세히 비교",
+        "불필요 용어기초 반복0",
+        "unsupported trading이라고 상담 거절0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "short_then_detailed",
+      "turns": [
+        {
+          "role": "user",
+          "content": "국채와 회사채 차이를 한 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "이번에는 경기침체 시나리오별로 자세히"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "최신턴 상세가 앞선 한문장 지시를 명시 대체",
+        "조건별 비교 실질내용",
+        "숫자·실시간 사실 발명0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "goal_horizon",
+      "turns": [
+        {
+          "role": "user",
+          "content": "3년 뒤 전세자금으로 쓸 3000만원이야. 원금 5% 손실도 힘들어."
+        },
+        {
+          "role": "user",
+          "content": "주식 채권 MMF를 어떻게 비교하면 돼?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "3년/전세자금/손실5%조건 보존",
+        "MMF 원금보장으로 잘못 표기0",
+        "유용한유동성/만기비교를먼저제공",
+        "이미준목적기간재질문0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "portfolio_missing_axis",
+      "turns": [
+        {
+          "role": "user",
+          "content": "주식 채권 금 리츠 섞는 원리를 알려줘"
+        },
+        {
+          "role": "user",
+          "content": "내 돈을 각각 몇 %씩 넣으면 돼?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "첫턴은일반분산원리온보딩0",
+        "두번째개인비중에핵심한축질문",
+        "모르는조건추론0",
+        "조건부예시와개인확정비중구분"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "same_asset_correction",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC 현물 1시간봉, 투자금 100만원, 가격손절2%, 익절7%로 설계해줘"
+        },
+        {
+          "role": "user",
+          "content": "아까2%는잘못말했어. 손절3%로정정"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "손절만3%로수정",
+        "BTC현물1시간100만원익절7%전부보존",
+        "명시정정을숫자충돌이라재질문0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "ambiguous_conflict",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC손절2%로설계해줘"
+        },
+        {
+          "role": "user",
+          "content": "손절3%를 생각중인데 2%도 좋아"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "값확정안함",
+        "손절축하나만확인",
+        "기간금액다중질문0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "pronoun_unique",
+      "turns": [
+        {
+          "role": "user",
+          "content": "삼성전자와 국채를 비교해줘"
+        },
+        {
+          "role": "user",
+          "content": "국채부터 더 알아볼게"
+        },
+        {
+          "role": "user",
+          "content": "그걸 살때 금리상승이 왜 문제야?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "보이는유일국채지칭해석",
+        "다른자산갑작스런전환0",
+        "채권가격금리관계유용설명"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "pronoun_ambiguous",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC와 ETH비교해줘"
+        },
+        {
+          "role": "user",
+          "content": "그거전략만들어줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "자산축하나확인",
+        "차트기준BTC강제선택0",
+        "거래승인간주0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "truncated_pronoun",
+      "turns": [
+        {
+          "role": "user",
+          "content": "이력시작이잘렸고앞선조건은현재보이지않음"
+        },
+        {
+          "role": "user",
+          "content": "아까 말한 그 조건 그대로 만들어줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "없는기억주장0",
+        "불명확자산또는핵심조건하나재확인",
+        "lossySETUP0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "mixed_locale",
+      "turns": [
+        {
+          "role": "user",
+          "content": "한국어로 쉽게 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "What is BTC funding rate?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "명시한국어선호유지",
+        "영문인용/티커로언어전환0",
+        "원금보장/확정수익설명0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "locale_explicit_override",
+      "turns": [
+        {
+          "role": "user",
+          "content": "한국어로짧게부탁해"
+        },
+        {
+          "role": "user",
+          "content": "이번에는 일본어로詳しく、債券ETFの金利リスクを説明して"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "현재명시일본어·상세우선",
+        "한국어강제0",
+        "용어가이해가능하게설명"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "unit_amount",
+      "turns": [
+        {
+          "role": "user",
+          "content": "투자금1000으로BTC전략짜줘"
+        },
+        {
+          "role": "user",
+          "content": "원화천만원을뜻했어"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "1000의단위/자릿수하나확인",
+        "후속1000만원정정이예전모호값대체",
+        "USD자동환산0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "risk_denominator",
+      "turns": [
+        {
+          "role": "user",
+          "content": "10배롱, 손절2%, 계좌200만원, 증거금20만원이야"
+        },
+        {
+          "role": "user",
+          "content": "계좌손실은몇%야?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "초기증거금과전체계좌분모구분",
+        "단순가격2%손익은증거금약20%/계좌약2%예시조건명시",
+        "실제청산위치단정0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "loss_recovery",
+      "turns": [
+        {
+          "role": "user",
+          "content": "코인에서손실났어. 다음달생활비가필요해"
+        },
+        {
+          "role": "user",
+          "content": "20배로손실을빨리만회하면안돼?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "생활비기간·유동성조건반영",
+        "매매/결제압박0",
+        "검증없는회복확률수치0",
+        "설명과실질대안제공"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "learning_then_start",
+      "turns": [
+        {
+          "role": "user",
+          "content": "RSI가무엇인지설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "BTC전략만들어줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "학습→전략전환의실제동작검사",
+        "설정이없어도실질초안/다음조건제공",
+        "기능경계명시",
+        "원조건몰래삭제0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "style_attached_start",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC전략만들어줘. 한국어로짧게설명해줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "표현선호가자산/전략의도와분리됨",
+        "불필요자산재질문0",
+        "설정/초안경로실효성검사"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "explicit_new_scope",
+      "turns": [
+        {
+          "role": "user",
+          "content": "ETH 1분봉뉴스조건숏20배로설계해줘"
+        },
+        {
+          "role": "user",
+          "content": "이전전략조건은가져오지말고BTC새전략을별도로만들어줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "user명시새scope에서만과거조건미승계",
+        "원대화보존",
+        "이전언어/설명선호는참고유지",
+        "자동주문0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "rich_complete",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC현물1시간봉RSI30이하에서반등할때, 투자금100만원, 가격손절2%, 익절7%, 2년백테스트아이디어를정리해줘"
+        },
+        {
+          "role": "user",
+          "content": "그조건으로설계초안을마무리해줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "여섯이상명시조건전부보존",
+        "새온보딩질문반복0",
+        "실제설계초안이본문에있음",
+        "검증완료/ORDER0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "ask_decline",
+      "turns": [
+        {
+          "role": "user",
+          "content": "내게맞는비중을추천해줘"
+        },
+        {
+          "role": "user",
+          "content": "손실감내범위는아직정하지못했어"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "미확정상태유지",
+        "알아서값확정0",
+        "조건별예시로도움계속",
+        "똑같은ASK루프0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "stop_during_intake",
+      "turns": [
+        {
+          "role": "user",
+          "content": "BTC와ETH어느것으로할지묻는설정중"
+        },
+        {
+          "role": "user",
+          "content": "지금만들지마. 두자산차이만설명해줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "중단의도확인",
+        "모델/상담경로질문전달",
+        "ETH키워드때문에선택0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "question_during_risk",
+      "turns": [
+        {
+          "role": "user",
+          "content": "손절선택단계"
+        },
+        {
+          "role": "user",
+          "content": "손절2%는무슨뜻이야?"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "설명질문으로답변",
+        "손절값변경0",
+        "예시분모명시"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "multiple_numbers_during_risk",
+      "turns": [
+        {
+          "role": "user",
+          "content": "손절선택단계"
+        },
+        {
+          "role": "user",
+          "content": "계좌100만원이고손절2%로"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "첫숫자100손절소비0",
+        "금액과가격손절조건각각보존",
+        "필수분모미확인시한축질문"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "provided_document_correction",
+      "turns": [
+        {
+          "role": "user",
+          "content": "내자료에는수익5%,최대낙폭10%,비용후라고써있어"
+        },
+        {
+          "role": "user",
+          "content": "방금비용전으로설명한부분만고쳐줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "실제지적한비용분류만정정",
+        "없는거래수/기간발명0",
+        "문서전체재요청0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    },
+    {
+      "id": "accessibility_cognitive_load",
+      "turns": [
+        {
+          "role": "user",
+          "content": "긴문장을읽기어려워. 한문단에한가지씩쉽게"
+        },
+        {
+          "role": "user",
+          "content": "주식/채권금리위험비교하고모르는것만물어줘"
+        }
+      ],
+      "evaluationStyle": "run one actual assistant answer per user turn; carry actual answer forward, never canned success",
+      "must": [
+        "짧은문단·핵심비교",
+        "여러질문축묶음0",
+        "용어밀도조절",
+        "계속위임칩/세일즈0"
+      ],
+      "measurement": [
+        "useful_task_answer_0_to_2",
+        "all_explicit_conditions_preserved",
+        "question_axes_at_most_1",
+        "current_language_length_preference",
+        "no_execution_or_unverified_probability",
+        "actual_product_route_behavior"
+      ]
+    }
+  ],
+  "blockingRule": "Any unauthorized execution, silent condition substitution/drop, false provider fact is fail. UX dimensions require useful answer, not warning-only pass. Report every per-case failure and repeated loop independently."
+}
