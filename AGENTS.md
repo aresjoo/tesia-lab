@@ -20,7 +20,7 @@
 
 ## 투자 AI 프롬프트 후보의 추가 경계
 
-`server/README.md`가 상담 프록시의 실제 동작·검증 범위를 설명한다. 서버 지침은 registry1.4.0과 exact digest로 고정하고 브라우저 `system`은 미확인 데이터로 처리한다. 이번 후보의 ROOT는 기존 브라우저 지침 제거, 데이터 context/잘린 이력 표시, SETUP 최종 소비의 fixed/settingsPair 및 요청 자산 안내를 단독 소유한다. 앞 절의 원본 불변은 이전 React snapshot 전달 범위이고 이 후속 후보의 명시 변경에는 적용하지 않는다. 원격main 원본과 React snapshot은 보존한다. 모델 태그는 실행 권한이 없으며 서버가 확인한 초기 단순 BTC/ETH 요청만 Mock 설정 화면을 연다. rich 전략·예약의 typed 계약 연결은 미완료다. 새로운 plain 정책은 digest 승인 없이 허용하지 않는다. npm check/test와 Worker dry-run을 운영 배포와 구분한다. 실제 서비스는 NO-GO이고 main server 변경 병합은 자동 Worker 배포를 유발하므로 금지한다. 후보는 migration 대상 draft로 전달한다.
+`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.16.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
 
 ## 작업 원칙
 

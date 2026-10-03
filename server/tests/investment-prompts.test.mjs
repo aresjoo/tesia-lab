@@ -9,7 +9,7 @@ export const legacy = (name) => source.match(new RegExp("var " + name + "='([^']
 const request = (extra = {}) => ({ messages: [{ role: 'user', content: 'RSI가 무엇입니까?' }], ...extra });
 
 test('registry identities bind exact full text and cannot be overwritten', async () => {
-  assert.equal(PROMPT_REGISTRY_VERSION, 'teth-investment-prompts-1.4.0');
+  assert.equal(PROMPT_REGISTRY_VERSION, 'teth-investment-prompts-1.16.0');
   for (const policy of Object.values(PROMPTS)) {
     assert.equal(await digestText(policy.text), policy.sha256);
     assert.throws(() => { policy.text = 'override'; }, TypeError);
@@ -76,7 +76,7 @@ for (const value of forbidden) {
 }
 
 test('safe financial prose, citations and display-only tags preserve bytes in one-character streams', () => {
-  const text = '자료 기준 -2%입니다. [출처](https://example.com).\n[CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}]\n[ASK {"steps":[{"title":"기간은?","multi":false,"options":[{"t":"1년","d":"1년 비교"}]}]}]\n[TITLE "조건 비교"]';
+  const text = '자료 기준 -2%입니다. [출처](https://example.com).\n[CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}]\n[ASK {"steps":[{"title":"기간은?","multi":false,"options":[{"t":"1년","d":"1년 비교"},{"t":"2년","d":"2년 비교"}]}]}]\n[TITLE "조건 비교"]';
   const events = [], gate = createInvestmentOutputGate((e) => events.push(e));
   for (const ch of text) gate.send({ text: ch });
   gate.send({ think: '내부 사고 원문' });

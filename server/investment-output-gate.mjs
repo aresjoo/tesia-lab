@@ -1,10 +1,13 @@
+import { readInvestmentDisplay, validInvestmentDisplay } from './investment-display-contract.mjs';
 import { settingsPreviewTag } from './investment-intent-admission.mjs';
 /** Streaming protocol guard. It is not a semantic financial fact checker. */
 const BLOCKED = ['[ORDER', '[ACT', '[TLINE', '[SETUP', '[STRATEGY', '[GAUGE', '<WORK', '<CHIPS', '<THINK'];
+const DISPLAY = ['[CHART', '[ASK', '[NEXT', '[TITLE'];
 const MAX_OUTPUT_CHARS = 64000;
 
-export function createInvestmentOutputGate(write, { settingsPreview = null } = {}) {
+export function createInvestmentOutputGate(write, { settingsPreview = null, allowDisplay = true, allowTitle = true, allowQuestions = true } = {}) {
   const previewTag = settingsPreviewTag(settingsPreview);
+  const seen = new Set();
   let tail = '', emitted = false, failed = false, ended = false, total = 0;
   function fail() {
     if (ended) return;
@@ -14,12 +17,26 @@ export function createInvestmentOutputGate(write, { settingsPreview = null } = {
   function text(value) {
     total += value.length;
     if (total > MAX_OUTPUT_CHARS) return fail();
-    const pending = tail + value;
+    let pending = tail + value;
+    if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
+    tail = '';
+    for (;;) {
+      const tag = readInvestmentDisplay(pending);
+      if (!tag) break;
+      // Never emit any part of an incomplete structured tag.
+      if (tag.start) { emitted = true; write({ text: pending.slice(0, tag.start) }); pending = pending.slice(tag.start); continue; }
+      if (tag.invalid || pending.length > 4096 && tag.incomplete) return fail();
+      if (tag.incomplete) { tail = pending; return; }
+      if (!allowDisplay || previewTag || seen.has(tag.name) || (tag.name === 'ASK' && seen.has('NEXT')) || (tag.name === 'NEXT' && seen.has('ASK')) || !validInvestmentDisplay(tag.name, tag.value, { allowTitle })) return fail();
+      seen.add(tag.name);
+      if(allowQuestions || !['ASK','NEXT'].includes(tag.name)){ emitted = true; write({ text: pending.slice(0, tag.end) }); }
+      pending = pending.slice(tag.end);
+    }
     // ASCII normalization keeps offsets stable for ß/ligatures/combining text.
     const upper = pending.replace(/[a-z]/g, (character) => character.toUpperCase());
     if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
     let keep = 0;
-    for (const marker of BLOCKED) {
+    for (const marker of [...BLOCKED, ...DISPLAY]) {
       for (let n = 1; n <= marker.length && n <= upper.length; n++) {
         if (marker.startsWith(upper.slice(-n))) keep = Math.max(keep, n);
       }

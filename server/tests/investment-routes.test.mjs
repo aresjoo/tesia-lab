@@ -8,7 +8,9 @@ import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
 import worker from '../worker.mjs';
+import {createHash} from 'node:crypto';
 import { calls } from './fixtures/sdk.mjs';
+import { MARKET_TOOL_POLICY } from '../investment-tool-policy.mjs';
 import { PROMPTS } from '../investment-prompts.mjs';
 
 const origin = 'http://localhost:4500';
@@ -75,15 +77,33 @@ for (const target of ['local', 'worker']) {
       const rejected = await route({ messages: [{ role: 'user', content: '비트코인20배 숏 전략 만들어줘' }] });
       assert.ok(!rejected.events.some((event) => event.text?.includes('[SETUP')));
     });
+    await t.test('no silent model fallback; receipt uses actual response model', async () => {
+      const known = await route(payload({model:'fixture-actual-model'}));
+      assert.equal(known.params.fallbacks, undefined);
+      assert.ok(!known.params.betas?.some(x => x.includes('fallback')));
+      assert.equal(known.events.at(-1).usage.model, 'fixture-actual-model');
+      assert.equal(known.events.at(-1).usage.promptSha256, PROMPTS.dialogue.sha256);
+      assert.equal(known.events.at(-1).usage.toolsSha256,createHash('sha256').update(JSON.stringify(known.params.tools)).digest('hex'));
+      assert.equal(known.events.at(-1).usage.requestedSpeed,'standard');
+      if(target==='local') assert.equal(known.events.at(-1).usage.marketToolPolicySha256,null);
+      const unknown = await route(payload());
+      assert.equal(unknown.events.at(-1).usage.model, null);
+      if (target === 'worker') assert.equal(known.events.at(-1).usage.marketToolPolicySha256, MARKET_TOOL_POLICY.sha256);
+    });
     await t.test('lite has no tools in either runtime', async () => {
       const result = await route(payload({}, { lite: true }));
       assert.equal(result.params.tools, undefined);
+      assert.equal(result.events.at(-1).usage.toolsSha256,null);
+      assert.equal(result.events.at(-1).usage.marketToolPolicySha256,null);
+      assert.equal(result.events.at(-1).usage.requestedSpeed,'standard');
     });
     for (const [variable, mode] of [['BT_SYS_J', 'judgment'], ['BT_SYS_R', 'report']]) {
       await t.test(`${mode} exact legacy style uses trusted instructions without tools`, async () => {
         const result = await route(payload({}, { plain: true, system: legacy(variable) }));
         assert.equal(result.status, 200); assert.equal(result.params.system, PROMPTS[mode].text);
         assert.equal(result.params.tools, undefined); assert.equal(result.params.max_tokens, 900);
+        assert.equal(result.events.at(-1).usage.toolsSha256,null);
+        assert.equal(result.events.at(-1).usage.marketToolPolicySha256,null);
         assert.ok(result.events.some((e) => e.done));
       });
     }
@@ -110,3 +130,24 @@ for (const target of ['local', 'worker']) {
     }
   });
 }
+
+// Continuation uses actual Worker loop, with an unsupported tool and no outbound data lookup.
+test('Worker pause and tool-result continuation preserve policy and never expose model purpose', async () => {
+  const start = calls.length;
+  const result = await workerRoute()(payload({model:'fixture-actual-model',sequence:[{stop:'pause_turn',chunks:['途中の説明。']},{stop:'tool_use',chunks:[],toolUse:{name:'unapproved_order',id:'fixture-tool',input:{symbol:'BTCUSDT',purpose:'EXECUTION_SUCCESS_SENTINEL'}}},{stop:'end_turn',chunks:['未対応の道具なので実行していません。']}]}));
+  const actual = calls.slice(start);
+  assert.equal(actual.length,3);
+  for (const call of actual) {
+    assert.equal(call.system,PROMPTS.dialogue.text);
+    assert.deepEqual(call.tools.find(t=>t.name==='market_data'), MARKET_TOOL_POLICY.definition);
+    assert.equal(call.fallbacks,undefined);
+  }
+  const toolResult=actual[2].messages.at(-1).content[0];
+  assert.equal(toolResult.is_error,true);
+  assert.equal(JSON.parse(toolResult.content).code,'UNKNOWN_TOOL');
+  assert.equal(result.events.at(-1).usage.in,30);
+  assert.equal(result.events.at(-1).usage.out,60);
+  assert.ok(result.events.at(-1).done);
+  assert.ok(!JSON.stringify(result.events).includes('EXECUTION_SUCCESS_SENTINEL'));
+  assert.ok(result.events.some(e=>e.mres?.code==='UNKNOWN_TOOL'));
+});

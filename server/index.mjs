@@ -7,6 +7,7 @@ import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import Anthropic from "@anthropic-ai/sdk";
 import { buildInvestmentRequest } from "./investment-prompts.mjs";
+import { toolRequestReceipt } from "./investment-tool-policy.mjs";
 import { createInvestmentOutputGate } from "./investment-output-gate.mjs";
 
 const env = {};
@@ -163,7 +164,7 @@ createServer(async (req, res) => {
   if (!client) { res.writeHead(503, CORS); return res.end(); }
 
   res.writeHead(200, { ...CORS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" });
-  const outputGate = createInvestmentOutputGate((obj) => res.write("data: " + JSON.stringify(obj) + "\n\n"), { settingsPreview: investment.settingsPreview });
+  const outputGate = createInvestmentOutputGate((obj) => res.write("data: " + JSON.stringify(obj) + "\n\n"), { settingsPreview: investment.settingsPreview, allowDisplay: investment.mode === "dialogue", allowTitle: investment.allowTitle, allowQuestions: investment.responsePreferences.values.questionsStopped !== true });
   const send = (obj) => outputGate.send(obj);
 
   if (env.TETH_AI_MOCK) { /* í‚¤ ì—†ì´ UI ìŠ¤íŠ¸ë¦¬ë° ê²½ë¡œë¥¼ ì‹œí—˜í•˜ëŠ” ëª© ëª¨ë“œ */
@@ -173,18 +174,18 @@ createServer(async (req, res) => {
     return res.end();
   }
   try {
+    const requestTools = investment.mode !== "dialogue" || payload.lite === true ? undefined : [
+      { type:"web_search_20260209",name:"web_search",max_uses:3 },
+      { type:"web_fetch_20260209",name:"web_fetch",max_uses:3 },
+    ];
+    const toolReceipt=await toolRequestReceipt(requestTools);
     const stream = client.beta.messages.stream({
       model: MODEL,
       max_tokens: investment.mode === "dialogue" ? 16000 : 900, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
       ...(investment.mode === "dialogue" ? { thinking: { type: "adaptive", display: "omitted" } } : {}),
       output_config: { effort: investment.mode === "dialogue" ? EFFORT : "low" },
       /* ì‹¤ì œ ì›¹ ê²€ìƒ‰/íŽ˜ì´ì§€ ì—´ê¸° (Anthropic ì„œë²„ì‚¬ì´ë“œ íˆ´) â€” ì¿¼ë¦¬ ì„ íƒë¶€í„° ê²°ê³¼ê¹Œì§€ ì „ë¶€ ì‹¤ë™ìž‘, íƒ€ìž„ë¼ì¸ì— ì´ë²¤íŠ¸ë¡œ ì „ë‹¬ */
-      tools: investment.mode !== "dialogue" || payload.lite === true ? undefined : [ /* lite: 시세 확인형은 도구 없이 즉답 */
-        { type: "web_search_20260209", name: "web_search", max_uses: 3 },
-        { type: "web_fetch_20260209", name: "web_fetch", max_uses: 3 },
-      ], /* Bounded research tools; no order or account tool is exposed. */
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
+      tools: requestTools,
       system: investment.system,
       messages,
     });
@@ -215,13 +216,13 @@ createServer(async (req, res) => {
         } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
           const b = blocks[ev.index]; delete blocks[ev.index];
           let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
-          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
+          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : "") } });
         } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
       } catch (e) {}
     });
     const final = await stream.finalMessage();
     if (final.stop_reason !== "end_turn") { streamDone = true; send({ error: true }); return res.end(); }
-    streamDone = true; send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+    streamDone = true; send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens, model: final.model || null, ...toolReceipt, promptId: investment.promptId, promptSha256: investment.promptSha256, basePolicySha256: investment.basePolicySha256 } : undefined });
   } catch (e) {
     console.error("[teth-ai] provider failure", e?.status || "unknown");
     send({ error: true });

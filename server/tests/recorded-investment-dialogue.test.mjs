@@ -19,8 +19,8 @@ test('actual CLI batch receipts remain synthetic development evidence and exact 
     assert.equal(run.corpusSha256, createHash('sha256').update(corpusBytes).digest('hex'));
     assert.deepEqual(run.responses.map((row) => row.id), corpus.cases.map((row) => row.id));
   }
-  assert.equal(active.promptSha256, PROMPTS.dialogue.sha256);
-  assert.equal(active.promptSnapshot, PROMPTS.dialogue.text);
+  assert.equal(active.promptSha256, 'b8df9956442a352e86cd231fc7177278e65c55b9784167840b567d44007d96c3'); // Historical registry1.4, not current release quality.
+  assert.ok(active.promptSnapshot.includes('문안을 다듬는 요청에는 기간만 먼저 묻고'));
   assert.equal(evidence.runs[0].observedReviewIssues.length, 3);
 });
 
@@ -46,20 +46,20 @@ test('recorded corrections preserve leverage denominator and quote-unit conversi
   for (const token of ['채권', '리츠', '금']) assert.ok(byId.broad_finance.includes(token));
 });
 
-test('current recorded clarification asks margin type without asking exchange simultaneously',()=>{
+test('historical recorded clarification asks margin type without asking exchange simultaneously',()=>{
   const question=byId.leverage.split('먼저').at(-1);
   assert.match(question,/격리.*교차/);assert.ok(!question.includes('거래소'));
   assert.ok(!byId.correction.includes('알려주'));
 });
-test('current recorded holdout is undecided rather than a positive-return approval',()=>{
+test('historical recorded holdout is undecided rather than a positive-return approval',()=>{
   assert.match(byId.positive_holdout,/미판정/);assert.match(byId.positive_holdout,/자동.*통과/);
   assert.ok(!byId.positive_holdout.includes('실패가 아니라는 신호'));
   assert.equal(active.observedReviewIssues.length,1); // Preserve the known semantic shortcoming.
 });
-test('current recorded portfolio distinguishes MMF principal risk and redemption terms',()=>{
+test('historical recorded portfolio distinguishes MMF principal risk and redemption terms',()=>{
   assert.match(byId.portfolio,/MMF.*원금 손실.*환매/);
 });
-test('current recorded unsupported conditions avoid liquidation precedence without collateral',()=>{
+test('historical recorded unsupported conditions avoid liquidation precedence without collateral',()=>{
   assert.match(byId.unsupported_strategy,/손절과 청산.*단정할 수 없습니다/);
   assert.ok(!byId.unsupported_strategy.includes('청산이 먼저 발생'));
 });

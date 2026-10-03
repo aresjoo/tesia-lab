@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {Script,createContext,runInContext} from 'node:vm';
 import {MAX_CONTEXT_CHARS,buildInvestmentRequest} from '../investment-prompts.mjs';
 const source=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
-const builder=source.slice(source.indexOf('function taiBuildSystem(fin,conv){'),source.indexOf('/* 스레드 공용 append'));
+const builder=source.slice(source.indexOf('function taiEarlierUserStatements(ai){'),source.indexOf('/* 스레드 공용 append'));
 const prefetch=source.slice(source.indexOf('function taiOhlc(cb,sess,run,ast,plan){'),source.indexOf('/* 보조 타임프레임 실측정:'));
 
 test('actual source inline scripts compile after deleting conflicting browser policies',()=>{

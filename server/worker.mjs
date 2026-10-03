@@ -1,3 +1,4 @@
+import { MARKET_TOOL, MARKET_TOOL_POLICY, toolRequestReceipt } from './investment-tool-policy.mjs';
 /* TETH AI 프록시 — Cloudflare Workers 배포판.
  * 로컬 개발은 index.mjs(Node), 실배포는 이 파일. 프로토콜은 동일:
  *   POST /api/chat  → SSE data:{text}/{done}/{error}
@@ -125,21 +126,6 @@ function attachDaily(out, drows, isCoin) {
 /* ── 2단: AI 청구형 시장 데이터 툴 (market_data) ──
  * 모델이 스냅샷 밖 데이터(비교 자산·다른 인터벌·과거 구간)를 턴 중간에 스스로 청구한다.
  * 가격 계산은 전부 이쪽(결정론) — 모델은 요청만. 요약 JSON(~1.2KB)만 tool_result 로 반환. */
-const MARKET_TOOL = {
-  name: "market_data",
-  description: "시장 OHLCV 캔들 데이터를 실시간 조회한다. 시스템 컨텍스트에 이미 제공된 스냅샷 범위를 벗어난 데이터가 판단에 필요할 때만 사용: 비교 자산(예: ETHUSDT, ^IXIC), 다른 타임프레임, end_time 으로 지정한 특정 과거 구간. 이미 제공된 범위의 재청구는 낭비다. 반환된 수치만 근거로 쓰고 직접 계산해 채우지 마라.",
-  input_schema: {
-    type: "object",
-    properties: {
-      symbol: { type: "string", description: "바이낸스 표기 코인 페어(BTCUSDT, ETHUSDT 등) 또는 야후 티커(TSLA, ^IXIC, DX-Y.NYB 등)" },
-      interval: { type: "string", enum: ["1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w"] },
-      count: { type: "integer", minimum: 10, maximum: 300, description: "봉 개수, 기본 90" },
-      end_time: { type: "string", description: "선택. ISO 날짜(YYYY-MM-DD) — 이 시점까지의 과거 구간을 조회 (코인만 지원)" },
-      purpose: { type: "string", description: "필수. 이 조회의 분석 목적 한 문장(한국어) — 사용자 화면의 작업 표시에 그대로 노출된다" },
-    },
-    required: ["symbol", "interval", "purpose"],
-  },
-};
 async function runMarketData(input, cache) {
   const fail = (code, message) => ({ ok: false, code, message });
   const sym = String(input.symbol || "").toUpperCase().replace(/[^A-Z0-9^.\-=]/g, "").slice(0, 20);
@@ -218,7 +204,7 @@ export default {
     const { readable, writable } = new TransformStream();
     const w = writable.getWriter();
     const enc = new TextEncoder();
-    const outputGate = createInvestmentOutputGate((o) => w.write(enc.encode("data: " + JSON.stringify(o) + "\n\n")).catch(() => {}), { settingsPreview: investment.settingsPreview });
+    const outputGate = createInvestmentOutputGate((o) => w.write(enc.encode("data: " + JSON.stringify(o) + "\n\n")).catch(() => {}), { settingsPreview: investment.settingsPreview, allowDisplay: investment.mode === "dialogue", allowTitle: investment.allowTitle, allowQuestions: investment.responsePreferences.values.questionsStopped !== true });
     const send = (o) => outputGate.send(o);
     /* Workers에서 api.anthropic.com 직접 호출은 엣지에서 빈 400으로 차단됨 (알려진 이슈).
      * Cloudflare AI Gateway를 경유해 우회한다 — 키는 그대로 Anthropic 키를 쓴다. */
@@ -238,7 +224,7 @@ export default {
           stream.on("text", (delta) => { send({ text: delta }); if (outputGate.failed) stream.abort(); });
           const final = await stream.finalMessage();
           if (final.stop_reason !== "end_turn") { await send({ error: true }); return; }
-          await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+          await send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens, model: final.model || null, promptId: investment.promptId, promptSha256: investment.promptSha256, basePolicySha256: investment.basePolicySha256, ...(await toolRequestReceipt(undefined)) } : undefined });
           return;
         }
         /* ── 본 경로: 커스텀 툴(market_data) 루프 — 모델 호출 ≤6(초회+pause_turn 포함), 툴 ≤3회/턴.
@@ -249,6 +235,8 @@ export default {
           { type: "web_fetch_20260209", name: "web_fetch", max_uses: 3 },
           MARKET_TOOL,
         ];
+        const requestTools = payload.lite === true ? undefined : TOOLS;
+        const toolReceipt = await toolRequestReceipt(requestTools);
         const convo = messages.map((m) => ({ role: m.role, content: m.content }));
         const mdCache = new Map();
         let retry403 = 0; const colo = (req.cf && req.cf.colo) || "?";
@@ -260,9 +248,8 @@ export default {
           max_tokens: 16000,
           thinking: { type: "adaptive", display: "omitted" },
           output_config: { effort: env.TETH_AI_EFFORT || EFFORT_DEFAULT },
-          tools: payload.lite === true ? undefined : TOOLS,
-          betas: useFast ? ["server-side-fallback-2026-07-01", "fast-mode-2026-02-01"] : ["server-side-fallback-2026-07-01"],
-          fallbacks: "default",
+          tools: requestTools,
+          ...(useFast ? { betas: ["fast-mode-2026-02-01"] } : {}),
           system: investment.system,
           messages: convo,
         });
@@ -292,11 +279,11 @@ export default {
                 const b = blocks[ev.index]; delete blocks[ev.index];
                 let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
                 if (b.kind === "market_data") {
-                  /* purpose 를 화면 표시용 q 로 — 실행·결과는 finalMessage 후 검증된 입력으로 수행 */
-                  send({ tool: { id: b.id, name: "market_data", q: (typeof input.purpose === "string" && input.purpose.trim()) ? input.purpose.slice(0, 80) : ((input.symbol || "") + " " + (input.interval || "")).trim() } });
+                  /* 모델의 purpose는 노출하지 않고 요청 심볼/봉만 표시한다. 실행 결과는 별도 이벤트다. */
+                  send({ tool: { id: b.id, name: "market_data", q: ((input.symbol || "") + " " + (input.interval || "")).trim() } });
                 } else {
-                  /* p = 생성 시점 purpose 메타 (있을 때만) — 클라이언트 사고 패널 번역 레이어가 소비 */
-                  send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
+                  /* 실제 도구 요청 데이터만 표시한다. 조회 성공이나 검증 완료를 뜻하지 않는다. */
+                  send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : "") } });
                 }
               } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: tokBase + ev.usage.output_tokens });
             } catch (e) {}
@@ -342,7 +329,7 @@ export default {
           break;
         }
         if (final.stop_reason !== "end_turn") { await send({ error: true }); return; }
-        await send({ done: true, usage: { in: totIn, out: totOut } });
+        await send({ done: true, usage: { in: totIn, out: totOut, model: final.model || null, promptId: investment.promptId, promptSha256: investment.promptSha256, basePolicySha256: investment.basePolicySha256, ...toolReceipt, requestedSpeed: useFast ? "fast" : "standard" } });
       } catch (e) {
         console.error("chat provider failure", e && e.status || "unknown");
         await send({ error: true });

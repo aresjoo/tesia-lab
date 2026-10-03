@@ -63,7 +63,9 @@
 
 ### 투자 AI 프롬프트 품질 후보
 
-이번 별도 후보는 React snapshot을 재동기화하지 않는다. `server/README.md`의 서버 소유 정책1.4.0과 SDK text delta 검증을 두 프록시에 적용한다. root index의 브라우저 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 추가했다. SETUP의 fixed/settingsPair 전달은 최종 wrapper의 자동 AI 재전송과 다른 차트 자산 치환을 막으며 요청 자산이라는 문구를 사용한다. 초기 단순 BTC/ETH 요청만 서버가 Mock 설정 화면으로 연결한다. rich 전략·예약의 typed 계약 연결은 남아 있고 원본 동선 전수 인수나 React 실행 연결 완료가 아니다. 서버 자동 회귀351개와 source VM 검증은 브라우저 전체 E2E/실제 provider 성공으로 승격하지 않는다. 실제 배포는0이고 서비스NO-GO다. main server 병합은 자동 Worker 배포를 유발하므로 후보는 migration 대상 draft로 검토한다.
+별도 migration draft [Lab PR5](https://github.com/aresjoo/tesia-lab/pull/5)는 서버 registry1.16.0·출력 gate·shared 표시 schema와 root source의 투자 상담을 교정한다. React2135 snapshot·source75a5f5b는 재동기화하지 않는다. 따라서 source/서버 개선이 React의 local Mock producer나 AI compiler에 적용되었다고 보고하지 않는다.
+
+조건·선호·분모·시각·Mock 출처를 보존하고 exact 선택만 로컬 설정을 바꾼다. 자유 텍스트 수정/질문은 상담이며 자동 실행하지 않는다. 폐쇄형 BTC/ETH 초기/명시 새 scope만 서버가 Mock 설정 화면으로 연결한다. rich 전략·승인·예약·OrderIntent의 typed 계약 연결은 미완료다. 검증 방법·공개 실제 CLI 기록/의미 실패·두 viewport Mock 브라우저·자동 회귀는 `server/README.md`와 Program §16/Ledger를 따른다. 실제 앱 provider/전체서비스 E2E/배포 성공으로 승계하지 않는다. SERVICE_NO_GO이며 main server 병합은 자동 Worker 배포를 유발하므로 금지한다.
 
 ## 2. 가장 큰 구조 변경
 
