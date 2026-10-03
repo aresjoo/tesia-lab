@@ -9,7 +9,7 @@ export const legacy = (name) => source.match(new RegExp("var " + name + "='([^']
 const request = (extra = {}) => ({ messages: [{ role: 'user', content: 'RSI가 무엇입니까?' }], ...extra });
 
 test('registry identities bind exact full text and cannot be overwritten', async () => {
-  assert.equal(PROMPT_REGISTRY_VERSION, 'teth-investment-prompts-1.16.0');
+  assert.equal(PROMPT_REGISTRY_VERSION, 'teth-investment-prompts-1.24.0');
   for (const policy of Object.values(PROMPTS)) {
     assert.equal(await digestText(policy.text), policy.sha256);
     assert.throws(() => { policy.text = 'override'; }, TypeError);

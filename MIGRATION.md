@@ -63,7 +63,7 @@
 
 ### 투자 AI 프롬프트 품질 후보
 
-별도 migration draft [Lab PR5](https://github.com/aresjoo/tesia-lab/pull/5)는 서버 registry1.16.0·출력 gate·shared 표시 schema와 root source의 투자 상담을 교정한다. React2135 snapshot·source75a5f5b는 재동기화하지 않는다. 따라서 source/서버 개선이 React의 local Mock producer나 AI compiler에 적용되었다고 보고하지 않는다.
+별도 migration draft [Lab PR5](https://github.com/aresjoo/tesia-lab/pull/5)는 서버 registry1.24.0·출력 gate·shared 표시 schema와 root source의 투자 상담을 교정한다. React2135 snapshot·source75a5f5b는 재동기화하지 않는다. 따라서 source/서버 개선이 React의 local Mock producer나 AI compiler에 적용되었다고 보고하지 않는다.
 
 조건·선호·분모·시각·Mock 출처를 보존하고 exact 선택만 로컬 설정을 바꾼다. 자유 텍스트 수정/질문은 상담이며 자동 실행하지 않는다. 폐쇄형 BTC/ETH 초기/명시 새 scope만 서버가 Mock 설정 화면으로 연결한다. rich 전략·승인·예약·OrderIntent의 typed 계약 연결은 미완료다. 검증 방법·공개 실제 CLI 기록/의미 실패·두 viewport Mock 브라우저·자동 회귀는 `server/README.md`와 Program §16/Ledger를 따른다. 실제 앱 provider/전체서비스 E2E/배포 성공으로 승계하지 않는다. SERVICE_NO_GO이며 main server 병합은 자동 Worker 배포를 유발하므로 금지한다.
 

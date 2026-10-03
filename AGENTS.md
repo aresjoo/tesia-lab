@@ -20,7 +20,7 @@
 
 ## 투자 AI 프롬프트 후보의 추가 경계
 
-`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.16.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
+`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.24.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
 
 ## 작업 원칙
 

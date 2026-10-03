@@ -26,14 +26,33 @@ test('historical failures, actual calls and corpus/policy provenance remain sepa
 test('frozen release evidence binds actual runtime and unchanged case inputs, without promoting simulated calls to live app',()=>{
  assert.equal(active.runs.length,55);assert.equal(active.completedResponses,92);assert.equal(active.actualCliInvocations,92);assert.equal(active.inputsUnchangedAtFinish,true);
  assert.deepEqual(active.promptSnapshots,PROMPTS);
- for(const [f,h] of Object.entries(active.runtimeInputSha256))assert.equal(hash(readFileSync(new URL('../../'+f,import.meta.url))),f==='index.html'?evidence.postEvalSourceCorrection.afterSha256:h,f);
+ for(const [f,h] of Object.entries(active.runtimeInputSha256)){
+  const correction=evidence.postEvalRuntimeCorrection;
+  const expected=f==='index.html'?evidence.postEvalSourceCorrection.afterSha256:correction&&f===correction.file?correction.afterSha256:h;
+  assert.equal(hash(readFileSync(new URL('../../'+f,import.meta.url))),expected,f);
+ }
+ const correction=evidence.postEvalRuntimeCorrection;
+ if(correction){
+  assert.equal(correction.file,'server/investment-response-preferences.mjs');
+  assert.equal(correction.beforeSha256,active.runtimeInputSha256[correction.file]);
+  assert.equal(correction.basePolicyUnchanged,true);assert.equal(correction.responseFrameUnchanged,true);
+  assert.equal(hash(correction.afterSnapshot),correction.afterSha256);
+  assert.equal(correction.recordedRequestReplay.summary.turns,92);
+  for(const key of ['valuesUnchanged','evidenceUnchanged','builderPreferenceUnchanged','systemShaUnchanged'])assert.equal(correction.recordedRequestReplay.summary[key],92,key);
+  assert.deepEqual(correction.recordedRequestReplay.changed,[]);assert.equal(correction.recordedRequestReplay.actualExit,0);
+ }
  assert.equal(evidence.postEvalSourceCorrection.beforeSha256,active.runtimeInputSha256['index.html']);
  for(const [f,h] of Object.entries(active.corpusSha256))assert.equal(hash(readFileSync(new URL('./'+f,import.meta.url))),h,f);
  assert.match(active.scope,/not application SDK role wire/);
  const browser=evidence.reviewReceipts.sourceBrowser;for(const [f,h] of Object.entries(browser.inputSha256))assert.equal(hash(readFileSync(new URL('../../'+f,import.meta.url))),h,f);
- assert.equal(browser.aggregate.pass,42);assert.equal(browser.aggregate.fail,0);
+ assert.equal(browser.aggregate.passCount,42);assert.equal(browser.aggregate.failCount,0);
  const binding=evidence.reviewReceipts.opusDeliveryFinalBinding;assert.deepEqual(binding.before,binding.after);for(const [f,h] of Object.entries(binding.before))assert.equal(hash(readFileSync(new URL('../../'+f,import.meta.url))),h,f);
  assert.ok(evidence.reviewReceipts.opusDeliveryFinal.modelUsage['claude-opus-5-5']);
+ const policyBinding=evidence.reviewReceipts.opusStructuralClosureBinding;assert.deepEqual(policyBinding.before,policyBinding.after);for(const [f,h] of Object.entries(policyBinding.before))assert.equal(hash(readFileSync(new URL('../../'+f,import.meta.url))),h,f);
+ assert.ok(evidence.reviewReceipts.opusStructuralClosure.modelUsage['claude-opus-5-5']);
+ assert.equal(evidence.postEvalSourceCorrection.beforeSha256,evidence.postEvalSourceCorrection.afterSha256);
+ assert.equal(evidence.historicalPostEvalSourceCorrection.file,'index.html');
+ assert.notEqual(evidence.historicalPostEvalSourceCorrection.beforeSha256,evidence.historicalPostEvalSourceCorrection.afterSha256);
 });
 for(const run of active.runs)test('actual history, format frame and fragmented schema replay: '+run.id,async()=>{
  const history=[];
