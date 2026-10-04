@@ -10,6 +10,50 @@ const answer = '연구 문서 아래에 이어지는 원문 답변입니다.\n�
 const draft = '전환 전부터 작성하던 문서 초안'
 const publicRoot = '.client-restored-research[data-source="client-fixture"]'
 
+for (const { width, height } of [
+  { width: 320, height: 360 }, { width: 360, height: 360 },
+  { width: 361, height: 360 }, { width: 390, height: 360 },
+  { width: 844, height: 390 }, { width: 667, height: 375 },
+]) for (const playing of [false, true]) {
+  test(`로그인 연구 짧은 화면 ${width}×${height} playing=${playing}: 제목 편집과 계정 조작부를 보존한다`, async ({ page, baseURL }, info) => {
+    await page.addInitScript(() => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '검수 계정', email: 'review@example.test' })))
+    const audit = await openResearch(page, baseURL, width, 'plan', playing)
+    await page.setViewportSize({ width, height })
+    const root = page.locator(publicRoot)
+    const composer = root.locator('.rw-composer textarea')
+    const longDraft = Array.from({ length: 8 }, (_, i) => `${i + 1}. 로그인 연구 문서에서 보존할 긴 질문`).join('\n')
+    await composer.fill(longDraft)
+    await expect(composer).toHaveCSS('max-height', '40px')
+    const heading = root.locator('.rw-heading .g-title')
+    const menu = root.getByRole('button', { name: '대화 메뉴', exact: true })
+    const bell = page.locator('.client-account-utility button').first()
+    const documentButton = root.getByRole('button', { name: '연구 문서 열기', exact: true })
+    const selectedTab = root.getByRole('tab', { selected: true })
+    for (const target of [heading, menu, bell, documentButton, selectedTab]) await reachable(target)
+    expect((await rect(root.locator('.rw-heading'))).width).toBeGreaterThanOrEqual(60)
+    console.info('Signed short geometry', width, playing, JSON.stringify({ header: await rect(root.locator('.rw-header')), body: await rect(root.locator('.rw-scroll')) }))
+    expect.soft((await rect(root.locator('.rw-scroll'))).height, '로그인 상태에서도 본문 최소 100px을 유지한다').toBeGreaterThanOrEqual(100)
+    await artifacts(page, width)
+    await heading.click()
+    const editor = root.locator('.g-title-input')
+    await editor.fill('로그인 상태의 짧은 화면에서도 보존하는 연구 제목')
+    for (const target of [editor, menu, bell, documentButton, selectedTab]) await reachable(target)
+    console.info('Signed editing geometry', width, playing, JSON.stringify({ header: await rect(root.locator('.rw-header')), body: await rect(root.locator('.rw-scroll')) }))
+    expect.soft((await rect(root.locator('.rw-scroll'))).height, '로그인 제목 편집 중에도 본문 최소 100px을 유지한다').toBeGreaterThanOrEqual(100)
+    await page.screenshot({ path: info.outputPath(`signed-research-${width}-${playing}-editing.png`) })
+    await editor.press('Escape')
+    await expect(heading).toBeFocused()
+    await menu.click()
+    await reachable(root.locator('.client-session-pop').getByRole('button', { name: '이름 변경', exact: true }))
+    await page.keyboard.press('Escape')
+    await expect(menu).toBeFocused()
+    await expect(composer).toHaveValue(longDraft)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: info.outputPath(`signed-research-${width}-${playing}.png`) })
+    expect(audit).toEqual({ blocked: [], errors: [] })
+  })
+}
+
 async function openResearch(page: Page, baseURL: string | undefined, width: number, active: 'plan' | 'report', playing = false) {
   if (!baseURL) throw new Error('로컬 baseURL이 필요합니다.')
   const origin = new URL(baseURL).origin

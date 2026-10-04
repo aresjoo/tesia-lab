@@ -17,7 +17,16 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `93efc0c`의 React 출처 `358c53b` 이후, 연구 문서의 현재 세션 메뉴와 인사이트 최종 원문 누락을 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `07f20e1`의 React 출처 `adc5824` 이후, 로그인된 짧은 연구 화면과 인사이트 복사 안내 수명·도움말 원문을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+| 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
+| --- | --- | --- |
+| 로그인 연구의 짧은 높이 | `client-restored-research.css`, layout-fidelity/session-menu 시험 | 알림 공간은 첫행에 예약하고 상태·탭·메뉴는 두번째행. 320/360/361/390×360에서 제목 편집·8줄 초안과 본문100px 기준 유지 |
+| 인사이트 복사 결과 | `ClientInsights`, source-copy/insights 시험 | 원본 메뉴1400ms/하단1600ms/실패2000ms·메뉴유지. 늦은 결과/재열기/역순완료가 새 UI에 간섭하지 않음 |
+| 도움말 본문 | `client-reference-copy.json`, help-source-copy 시험 | 한국어 한 값만 최종 원문 복원. 다른6언어·준비중 상태·지원 연결 불변 |
+| 미사용 연구 코드 | `ClientResearchDocument`, 전용 CSS | caller0인 Plan/Run 두 export와 전용 규칙만 제거. 실제 Critic/Log·공유 스타일은 유지, 이전코드 Git복구 가능 |
+
+아래 연구 메뉴·캐시·최종 원문은 이전 adc5824에서 인수한 변경이다.
 
 | 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
 | --- | --- | --- |
@@ -172,6 +181,7 @@
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
 6. **신규 거래소 연결 draft는 코드 포함, 정식 서비스 승격은 미완료다.** 위 PR54 head까지 전달했으며 그 이후 변경이나 실제 공급자 성공을 포함했다고 주장하지 않는다.
 7. **연구·결과 뒤 대화·계정 원장 producer를 분리해 연결해야 한다.** 원본 g-doc/Critic/7역할 UI는 존재하지만 실제 service는 관측 TURN/VALIDATE만 공급한다. `NativeServiceApp`→`NativeServiceResult`의 report/trades V6 및 chart manifest/markers/window V5·replay 경로는 이미 있으며 새 차트를 중복 구현할 이유가 없다. 결과 이후 자유대화는 approval/job 입력 잠금과 `editFromResult`를 함께 설계해야 하므로 단순 disabled 제거를 하지 않는다. 실계정 account presentation은 단일 백테스트 거래로 대체하지 않는다.
+8. **원본 자체의 임시 가격·브라우저 복사 fallback은 별도 검토다.** 원본 `teth-copy.js`의 임시49와 `AC_CFG`의280이 공존하므로 React 금액을 임의 교체하지 않았다. 원본 `execCommand` fallback은 현재 미이식 호환성 잔여이며 이번 표시수명 교정이 그 영구 배제 정책은 아니다. Clipboard API 실패 안내는 유지한다.
 
 이전 navigation 동결 전체는13,802 PASS/1 FAIL/기존17 SKIP였고 공유 복귀 실패는 후속 반례로 교정했다. 이를 전체 PASS로 바꾸지 않는다. catalogue·공유12제품의 이전 영향62spec/1,996PASS와 이번 푸터/거래소/인증22spec은 별도다. 이번 첫664개는663PASS/1FAIL이며 언어 적용 후 CDP Promise 수거로 중단된 원실패를 보존했다. test-only 수명 보강과 빈 아이콘 교정 뒤의 최종 실행·정확한 입력/산출물 해시는 검증 JSON을 따른다. 원 실패·하니스 문제·수정 검증은 `react-app/Bugfix_report.md`에 구분한다. 전체 서비스나 모든 원본 상태의 무결함 보장이 아니다.
 

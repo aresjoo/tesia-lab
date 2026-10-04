@@ -1,26 +1,26 @@
 {
   "schema": 1,
-  "purpose": "연구 문서 세션 메뉴·삭제 캐시 수명·좁은 화면·인사이트 최종 원문 복원. 기존 로그인 선택지/인증/투자 프롬프트 경계 유지.",
-  "sourceCommit": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
+  "purpose": "로그인 연구 짧은 높이·복사 안내 위치/수명·도움말 원문 복원과 실제 미사용 연구 export 제거. 인증/프롬프트/권한 불변.",
+  "sourceCommit": "061987ee30ecd6ab681ea14c0e75f1a8804c22f6",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "6b4b5041d4c38d72496af41db32240eaba9ecab824aa1873133273bce7d248c8",
+  "snapshotDigest": "57fbce716fec26f2187e70a6239c2887f5320ded46892606e5bec9faff1b8c08",
   "environment": {
     "node": "v24.14.0",
     "dependencyInstall": "검증된 기존 설치 사용. package/lockfile 변경0; 이번 clean npm ci 주장 없음."
   },
   "snapshot": {
-    "files": 2184,
-    "bytes": 25426060,
+    "files": 2185,
+    "bytes": 25454815,
     "sourceDirtyFiles": [],
-    "hashVerification": "PASS: sync --verify·전체 byte/hash 일치",
+    "hashVerification": "PASS: sync --verify exact bytes/hash",
     "clientOriginalFiles": "원본 HTML/server/Worker/root workflows 변경0"
   },
   "checks": [
     {
-      "command": "Final frozen 22-spec impact run",
-      "startTime": "2026-10-04T18:22:47.012Z",
-      "duration": 299749.109,
-      "expected": 622,
+      "command": "Final frozen 27-spec impact run",
+      "startTime": "2026-10-04T19:04:15.918Z",
+      "duration": 369727.976,
+      "expected": 772,
       "skipped": 2,
       "unexpected": 0,
       "flaky": 0,
@@ -29,8 +29,8 @@
       "retries": 0,
       "errors": 0,
       "input": {
-        "files": 2177,
-        "sha256": "ad598eb1f0a9132720c1c3fa8860dd31303fe2b12f2efd88632c3ff8cc6f6dbc"
+        "files": 2178,
+        "sha256": "a2742f2d09b33c57eca392b6a5860bcbc9a78b4c4a825047a1c60bed3a9d7d2a"
       },
       "inputUnchanged": true,
       "existingSkippedCases": [
@@ -46,7 +46,7 @@
         }
       ],
       "skipFileUnchanged": true,
-      "scope": "새 단일 영향 범위. 기존 QA-015 두 project skip 보존/새skip0; 이전 전수와 합산하지 않음"
+      "scope": "새 단일 영향범위, 기존 전수/범위와 합산하지 않음"
     },
     {
       "command": "lint",
@@ -88,25 +88,203 @@
       "packagedFiles": 1113
     },
     {
-      "command": "Earlier 3 actual regression failures matched to final passing case keys",
+      "command": "28 original failures matched to final exact file/title/project PASS",
       "status": "PASS",
       "bindings": [
         {
           "file": "client-research-layout-fidelity.spec.ts",
-          "title": "공개 연구 plan 320px: 원본 한줄 헤더·문서 안 대화·컴포저와 실제 조작을 보존한다",
+          "title": "로그인 연구 짧은 화면 320×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
           "project": "desktop",
+          "origin": "/tmp/teth-signed-short-baseline.log",
           "pass": true
         },
         {
           "file": "client-research-layout-fidelity.spec.ts",
-          "title": "공개 연구 report 320px: 원본 한줄 헤더·문서 안 대화·컴포저와 실제 조작을 보존한다",
+          "title": "로그인 연구 짧은 화면 320×360 playing=true: 제목 편집과 계정 조작부를 보존한다",
           "project": "desktop",
+          "origin": "/tmp/teth-signed-short-baseline.log",
           "pass": true
         },
         {
           "file": "client-research-layout-fidelity.spec.ts",
-          "title": "짧은 연구 화면 320×360 진행=true: 긴 입력에도 본문·전송·문서가 함께 사용 가능하다",
+          "title": "로그인 연구 짧은 화면 360×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
           "project": "desktop",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 361×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 390×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 320×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 320×360 playing=true: 제목 편집과 계정 조작부를 보존한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 360×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 361×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "로그인 연구 짧은 화면 390×360 playing=false: 제목 편집과 계정 조작부를 보존한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-signed-short-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "공유 메뉴 성공는 원본 한 위치와 수명만 사용한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "공유 메뉴 실패는 원본 한 위치와 수명만 사용한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "닫은 공유 메뉴의 늦은 복사와 이전 타이머는 다시 연 메뉴를 변경하지 않는다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "하단 복사는 메뉴 결과를 재사용하지 않고 1600ms 뒤 표시만 지운다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "공유 메뉴 성공는 원본 한 위치와 수명만 사용한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "공유 메뉴 실패는 원본 한 위치와 수명만 사용한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "닫은 공유 메뉴의 늦은 복사와 이전 타이머는 다시 연 메뉴를 변경하지 않는다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "하단 복사는 메뉴 결과를 재사용하지 않고 1600ms 뒤 표시만 지운다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-share-lifecycle-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 늦은 복사 거절은 닫힌 메뉴와 무관하게 하단에만 2000ms 표시한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 늦은 복사 거절은 재열린 메뉴와 무관하게 하단에만 2000ms 표시한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 복사 결과 색상은 원본 성공 녹색과 실패 적색의 실제 계산값이다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 복사 성공 알림은 버튼 밖의 기존 sr-only 형제 live region 한 곳에만 둔다",
+          "project": "desktop",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 늦은 복사 거절은 닫힌 메뉴와 무관하게 하단에만 2000ms 표시한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 늦은 복사 거절은 재열린 메뉴와 무관하게 하단에만 2000ms 표시한다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 복사 결과 색상은 원본 성공 녹색과 실패 적색의 실제 계산값이다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-insight-source-copy.spec.ts",
+          "title": "후속 복사 성공 알림은 버튼 밖의 기존 sr-only 형제 live region 한 곳에만 둔다",
+          "project": "mobile",
+          "origin": "/tmp/teth-insight-opus-d1-baseline.log",
+          "pass": true
+        },
+        {
+          "file": "client-help-source-copy.spec.ts",
+          "title": "한국어 원문 도움말 320px 홈과 설정 조합을 보존한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-help-copy-baseline.json",
+          "pass": true
+        },
+        {
+          "file": "client-help-source-copy.spec.ts",
+          "title": "한국어 원문 도움말 1440px 홈과 설정 조합을 보존한다",
+          "project": "desktop",
+          "origin": "/tmp/teth-help-copy-baseline.json",
           "pass": true
         }
       ]
@@ -414,10 +592,75 @@
       "inputUnchanged": false,
       "exitCode": 1,
       "classification": "시험 screenshot 저장1줄 동시추가. 최종승인으로 사용0/제품입력불변"
+    },
+    {
+      "scope": "Signed short header baseline",
+      "passed": 6,
+      "failed": 10,
+      "exitCode": 1
+    },
+    {
+      "scope": "Signed first CSS correction",
+      "passed": 12,
+      "failed": 4,
+      "exitCode": 1,
+      "classification": "후로드 selector specificity 교정"
+    },
+    {
+      "scope": "Signed corrected and normal unmount fixture",
+      "passed": 16,
+      "failed": 2,
+      "exitCode": 1,
+      "classification": "신규 fixture에 plan turn없어 재입장 locator실패; 제품save assertion PASS, fixture 동선교정"
+    },
+    {
+      "scope": "Copy feedback original lifecycle baseline",
+      "passed": 0,
+      "failed": 8,
+      "exitCode": 1
+    },
+    {
+      "scope": "Copy initial corrected exact timer",
+      "passed": 98,
+      "failed": 6,
+      "exitCode": 1,
+      "classification": "자동 합성시계 경과를정확경계에가산한시험문제; 입력전pauseAt으로교정, 임계값불변"
+    },
+    {
+      "scope": "Help original Korean baseline",
+      "passed": 0,
+      "failed": 2,
+      "exitCode": 1
+    },
+    {
+      "scope": "Independent Opus first round",
+      "verdict": "STATIC_UI_CODE_HOLD",
+      "inputUnchanged": true,
+      "classification": "메뉴닫기후늦은복사실패안내누락D1. 색토큰/AT구조 후속확인"
+    },
+    {
+      "scope": "Copy D1/color/status structure baseline",
+      "passed": 2,
+      "failed": 8,
+      "exitCode": 1,
+      "classification": "닫기/재열기4,실패색2,버튼밖status구조2FAIL; 이후교정"
+    },
+    {
+      "scope": "Earlier frozen27 before independent corrections",
+      "passed": 754,
+      "failed": 0,
+      "skipped": 2,
+      "exitCode": 0,
+      "classification": "D1/H2교정전이라최종후보승인으로사용하지않음"
+    },
+    {
+      "scope": "Failure-binding log parser first run",
+      "unmatched": 4,
+      "classification": "terminal decorative ruler parsed as title; original FAIL receipt preserved, exact suffix-only normalization matched all28"
     }
   ],
   "security": {
-    "tool": "Gitleaks 8.30.1 --redact",
+    "tool": "Gitleaks8.30.1 --redact",
     "sourceStaged": {
       "exitCode": 0,
       "findings": 0
@@ -427,7 +670,6 @@
       "findings": 0
     },
     "migrationStaged": {
-      "status": "PASS",
       "exitCode": 0,
       "findings": 0
     },
@@ -436,14 +678,13 @@
   "independentReview": {
     "profile": "personal (1)",
     "model": "claude-opus-5-5",
-    "scope": "제공된 exact 코드·원본발췌의 정적 검수; 모델 브라우저실행0",
+    "scope": "exact 코드·원본발췌·diff 읽기전용. 모델 브라우저실행0",
     "inputUnchanged": true,
-    "verdict": "STATIC_UI_CODE_GO. ROOT 622PASS/기존skip2·lint/3build/scan/built-login·추가caller검색 결속. 배포직전CAS별도",
+    "verdict": "STATIC_UI_CODE_GO",
+    "notFullServiceApproval": true,
     "previousVerdicts": [
-      "HOLD",
-      "HOLD (test-only input changed)"
-    ],
-    "notFullServiceApproval": true
+      "STATIC_UI_CODE_HOLD: D1 delayed rejection, source unchanged"
+    ]
   },
   "warnings": [
     "기존 500kB 초과 bundle 경고",
@@ -451,80 +692,42 @@
     "기존 원본대비 복사 성공/실패 표시 위치·execCommand fallback 차이는 이번 문구 범위 밖"
   ],
   "notVerified": [
-    "현재 후보의 새 전체 단일재실행; 이전전수와이번22spec 영향범위를 구분",
+    "현재 후보의 새 전체 단일재실행; 이전전수와이번27spec 영향범위를 구분",
     "실사용자 Google callback/ACK 완료",
     "Apple 등록·이메일 SMTP 연결",
     "투자 프롬프트 실제 React producer 통합",
     "실연구 Critic/단계관측·실계정원장 producer 공급",
     "결과 뒤 자유대화의 승인/job 상태와 TURN 계약 통합",
     "실모델·실시간시장·거래소·주문·과금·전체서비스 운영 GO",
-    "signed-in 짧은 높이 제목 편집·삭제 없는 unmount 직전 스크롤의 새 명시 조합 시험"
+    "원본 execCommand 호환 fallback 미이식·Safari/AT",
+    "원본 임시가격49/AC_CFG280 결정 불일치; 이번 금액변경0"
   ],
   "deployment": {
-    "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
+    "status": "PENDING",
+    "candidateSource": "061987ee30ecd6ab681ea14c0e75f1a8804c22f6",
+    "candidateArchiveSha256": "29c3c55eb6ebc9efff232b62a81a2135d0ae974b680542739c3d3afeb8b1a725",
     "currentDeployedSource": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
     "currentDeployedArchiveSha256": "2f92c879fca2311664982713fa396106998dd85e2473c379d99fa9fd03410c30",
-    "rawHtmlSha256": "c7d6907088f2d7116de20c99ebc0cff83d5ed3b18e42495a82488d8ff8d6453b",
-    "activationExitCode": 0,
-    "postflightExitCode": 0,
-    "publicRootStatusesDuringRestart": [
-      200,
-      502,
-      503,
-      200
-    ],
-    "privateAuthorityPreserved": true,
-    "backupRetained": true,
-    "previousStaticSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
-    "backendCredentialDatabaseReplacementAuthorized": false,
-    "backendCredentialDatabaseReplaced": false,
-    "publicStatic": {
-      "status": "PASS",
-      "registeredAssets": 350,
-      "passed": 350,
-      "failed": 0,
-      "documentAliasesPassed": [
-        "/",
-        "/about/",
-        "/download/",
-        "/policies/"
-      ],
-      "authenticationOrMutationExecuted": false
-    },
-    "publicLoginPresentation": {
-      "status": "PASS",
-      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
-      "viewports": [
-        1440,
-        390,
-        320
-      ],
-      "googleAppleEmailVisible": true,
-      "unregisteredProviders": "Apple·이메일은 준비 중이며 요청하지 않음",
-      "errorsAndUnexpectedRequests": 0,
-      "draftAndFocusPreserved": true,
-      "actualLoginVerified": false,
-      "providerStartExecuted": false,
-      "serverMutationExecuted": false
-    }
+    "backendCredentialDatabaseReplacementAuthorized": false
   },
   "sourceDelta": {
-    "previousDelivery": "93efc0c4010f85c192688f70c56dd5b0452bcca5",
-    "previousSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
-    "changedFiles": 12,
+    "previousDelivery": "07f20e115966a11d9eba03f5f69cb7dfa77b99a9",
+    "previousSource": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
+    "changedFiles": 13,
     "files": [
       "M\tBugfix_report.md",
       "M\tDESIGN.md",
-      "M\tsrc/client-research-cache.ts",
+      "M\tsrc/client-insights.css",
+      "M\tsrc/client-reference-copy.json",
+      "M\tsrc/client-research-document.css",
       "M\tsrc/client-restored-research.css",
       "M\tsrc/components/ClientInsights.tsx",
-      "M\tsrc/components/ClientMainExperience.tsx",
-      "M\tsrc/components/ClientResearchWorkspace.tsx",
+      "M\tsrc/components/ClientResearchDocument.tsx",
+      "A\ttests/client-help-source-copy.spec.ts",
       "M\ttests/client-insight-source-copy.spec.ts",
       "M\ttests/client-insights.spec.ts",
       "M\ttests/client-research-layout-fidelity.spec.ts",
-      "A\ttests/client-research-session-menu.spec.ts",
-      "M\ttests/internal-poc/native-insight-presentation.spec.ts"
+      "M\ttests/client-research-session-menu.spec.ts"
     ],
     "packageAndLockfileChanged": false,
     "authAndApiChanged": false
@@ -536,33 +739,34 @@
     "includedInSnapshot": false,
     "meaning": "별도 draft 보존; 무충돌이 실제 producer 연결 성공은 아님",
     "mergeTree": {
-      "againstDeliveryCommit": "51ee7e43b8586499a0df83e70b9c92d4c768b250",
-      "exitCode": 0,
-      "conflictPaths": [],
-      "tree": "9a67374aa454a350bfde1689d6ac26424777ee9c",
-      "actualMergeExecuted": false
+      "status": "PENDING_EXACT_DELIVERY_COMMIT"
     }
   },
   "previousDeliveryEvidence": {
-    "commit": "93efc0c4010f85c192688f70c56dd5b0452bcca5",
-    "sourceCommit": "358c53bd013e054583626bd76255c2c8d2e138c3",
-    "receiptHistory": "이전668PASS/배포/공개확인 영수증은 Git 이력 보존. 새검사로 합산하지 않음"
+    "commit": "07f20e115966a11d9eba03f5f69cb7dfa77b99a9",
+    "sourceCommit": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
+    "receiptHistory": "직전622PASS/기존skip2·배포/전체영수증은 Git이력에 보존. 이번 772PASS와 합산0"
   },
   "evidenceHashes": {
-    "research-insight-release-build.json": "295eeb4c9f91e389783ac5778161191379436012bc754e3d6956bae22c62522b",
-    "research-insight-release-impact.log": "2da70d7d7daa6b57e318e9a327232cc8189fdd92d7afb4ff5271dae7da7afc82",
-    "research-insight-release-impact.json": "f3cbac86082b0088a200f0e2a902208f497703224898c4559c8c0b3d69318777",
-    "research-insight-failure-binding.json": "7ceef44408af95af8ead77c7fe8f532032219bf9ef4d18b56c3285f06802ae70",
-    "research-insight-opus-release.txt": "80dfcf5de2d4f379d2a4381f617a824599da485cbd17479e5037fe0cd62064f2",
-    "research-insight-opus-release.txt.inputs.json": "f950a920ae5e15525af3c1836ec214c84ca273959a54eb4bd926cdf4e2ed25f4",
-    "research-insight-source-final-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "research-insight-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "research-insight-migration-code-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "research-insight-built-auth/receipt.json": "4e54bc93e569ba5751fd6fb8d5297b051a25c95b8c54f2873f732b0158712cb5",
-    "research-insight-migration-final-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "research-insight-vm-activate.json": "2b4db06780aee50d36a5e35f9c3c80d0ec4107a1e489e5c6f05cf84c937957fc",
-    "research-insight-vm-postflight.json": "7449fd72551048d79305cb6d97e56f952ddfa0d6c2dd76b4a30d8b7e85a0d337",
-    "research-insight-public-static.json": "c9b3b6e15667f45e087429a78e1cea3149937d1d3b265119a1749996123a72db",
-    "research-insight-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42"
+    "research-feedback-build.json": "c1bbbfa166932783a35282e7e92974b0da7e1da7c610f31df4ecdb76fee44205",
+    "research-feedback-impact.log": "666ec34c797a6fe20bb0376853fc75657fe38509c60273a92d9cd611589db6a7",
+    "research-feedback-impact.json": "19f482a1940d9bf628ba67adcdf51a0eafb851698ffb5fa9f55429c7266483b6",
+    "research-feedback-opus.txt": "ce8674dae5d25a73867681809504d45ef5acd3f2a503674730d9b5f68048ae15",
+    "research-feedback-opus.txt.inputs.json": "765d6ec00b4171a27f6951e67b300b4e0c96b46d8806c245960ee3658e8fb789",
+    "research-feedback-final-build.json": "deb22699b02931e53dd9f8037f00a0495987a1d87e501c0063e60a0565728be0",
+    "research-feedback-final-impact.log": "07fb1ea936752aa8a58b3e50a99c9a40ea29c5b0ddd01cc4255efafd2009c7fa",
+    "research-feedback-final-impact.json": "c7c0a56e2f631bf441fb5f46164d61074a9925aba2b26460e912d7bf82b0e4c4",
+    "research-feedback-opus-closure.txt": "4077b2f6339a556382cb208e7840381008010c569c0aec6189998990720208cd",
+    "research-feedback-opus-closure.txt.inputs.json": "39500b13de1e683d2cf32d4e0061083988b7095560627994f52368875260e587",
+    "research-feedback-source-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "research-feedback-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "research-feedback-final-built-auth/receipt.json": "4e54bc93e569ba5751fd6fb8d5297b051a25c95b8c54f2873f732b0158712cb5",
+    "research-feedback-failure-binding.json": "673613cbee148e2ca281b92247430367df3861f7356281563ca0cd4b695fee1a",
+    "research-feedback-failure-binding-final.json": "9884e05e5b424cd1d36e8b557b519bb9d167428323388f716fa1ca8e84a9d6e6",
+    "/tmp/teth-insight-opus-d1-baseline.log": "e3c4f2a45269243889c163473dde8dd41bc5cad652f12e30a4884ebe41b34bed",
+    "/tmp/teth-insight-opus-d1-corrected.log": "9a79a9db74f642382af2671b164ab1d611b97c77a08be20a9f4762aa1e38816e",
+    "/tmp/teth-signed-landscape-final.log": "51c72992e0735aa78a6f2f1449d29706ee782de9fef5a7444a0b722bdafeea82",
+    "/tmp/teth-help-copy-baseline.json": "e0debd41f0a947d13dc557030448f7bc4f1b095802a97f5482ac954aeaf6d3e4",
+    "/tmp/teth-help-copy-final.json": "19eb9173cfa22c75a2522975200fb46f5dad8bd2cbde4673b9e59616650ed5f3"
   }
 }

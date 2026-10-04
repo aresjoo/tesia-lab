@@ -1240,6 +1240,8 @@ backdrop-filter: blur(24px) saturate(125%);
 
 ## 21. Decision Log
 
+- 2026-10-05 `accepted / short signed research and share feedback parity`: 짧은 높이의 로그인 연구 헤더는 알림 공간을 첫 행에만 예약하여 제목·문서·상태·탭·메뉴를 모두 보존한다. 복사 안내는 원본의 메뉴/하단 위치·1400/1600/2000ms 수명과 실패 시 메뉴유지를 복원한다. popover 성공만메뉴epoch에결속하고 늦은하단실패는기사generation/최신request로보존한다. 원본오류색과버튼밖형제status를복원하며실AT인증으로확대하지않는다. 도움말 한국어는 최종 원문을 계승하되 지원 가용성을 확대하지 않는다. caller0인 이전 Plan/Run 두 export와 전용 CSS만 제거하며 Critic/Log/공유 CSS는 보존한다. 동결27spec772PASS/0FAIL/기존skip2·28반례exact회수·lint/3build·Opus5.5 GO로정적코드를인수했다. 인증·프롬프트·금액·계약은 불변, 원실패/HOLD·미결정fallback·배포영수증은 Bugfix/MIGRATION이소유한다.
+
 - 2026-10-05 `accepted / research session controls and final insight copy parity`: 공개 Main의 기존 SessionMenu와 rename/delete 콜백을 선택적 headerActions로 연구 문서에도 유지하며 service에 없는 권한을 만들지 않는다. 삭제된 문서의 unmount 저장은 Map entry identity로 거부하되 정상 저장·동일 ID 재생성·다른 scope를 보존한다. 긴 제목·진행 표시·모바일 문서 버튼은 숨기지 않고,guest320 두 행/높이500 이하 편집 배치로 본문100px 이상을 유지한다. 인사이트는 최종 원문과 빈 자산 블록 생략을 계승하며 동적 공급/다른 오류 의미는 덮지 않는다. 동결22spec622PASS/0FAIL/기존 QA-015 SKIP2·lint/3build·secret0·personal(1) Opus5.5 STATIC_UI_CODE_GO를 결속했다. 원실패·중단/동결위반·미검증 조합은 Bugfix에 보존한다. 인증/가격/프롬프트 변경0이며 정적 배포 영수증과 실제 서비스 Gate는 별도다.
 
 - 2026-10-05 `accepted / footer scroll and venue identity parity`: desktop의 푸터 있는 셸만 원본처럼 로그인 메뉴/언어 버튼을 문서와 함께 스크롤한다. 모바일 고정과 조작요소 DOM·키보드 재진입을 유지하며 화면에서 제거하지 않는다. 거래소 식별은 표시명 추측 대신 exact 로컬22개 앱 아이콘과 woo 별칭만 사용한다. unknown/로드실패는 기존 fallback, ID 교체 시 오류 상태를 분리한다. 전략 레일·상단·원장의 크기/문구/데이터 계산과 필터의 원본 최대3개/선택표시·요청 identity·eligible 경계는 보존한다. NativeAccountPanels처럼 ID 없는 영역은 추측으로 복원하지 않는다. 실제 연결·원장 producer나 인증 가용성은 바꾸지 않는다. 실제 반례와 전체 전달 검증은 Bugfix_report와 migration 영수증이 소유한다.

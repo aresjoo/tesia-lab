@@ -1,4 +1,4 @@
-import { createContext, Fragment, useContext, useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, Fragment, useCallback, useContext, useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { clientResearchScrollport } from '../client-research-scrollport'
 import { ArrowLeft, ArrowUpRight, Check, ChevronRight, Meh, Share2, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import { CLIENT_INSIGHTS, CLIENT_INSIGHT_SOURCE, INSIGHT_ART, INSIGHT_ASSETS, INSIGHT_AUTHORS, INSIGHT_FIGURES, type InsightSection } from '../client-insight-fixtures'
@@ -210,7 +210,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
   const [notice, setNotice] = useState('')
   const [asset, setAsset] = useState<string[] | null>(null)
   const [shareOpen, setShareOpen] = useState(false)
-  const [copyStatus, setCopyStatus] = useState('')
+  const [copyResult, setCopyResult] = useState<{ surface: 'popover' | 'social'; outcome: 'success' | 'failure' } | null>(null)
   const [feedback, setFeedback] = useState<Record<string, 0 | 1 | 2>>({})
   const [feedbackBusy, setFeedbackBusy] = useState(false)
   const [personalBusy, setPersonalBusy] = useState(false)
@@ -218,6 +218,12 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
   const feedbackLock = useRef(false)
   const generation = useRef(0)
   const copyRequest = useRef(0)
+  const shareEpoch = useRef(0)
+  const changeShare = useCallback((open: boolean) => {
+    shareEpoch.current++
+    setShareOpen(open)
+    setCopyResult(result => result?.surface === 'popover' ? null : result)
+  }, [])
   const share = useRef<HTMLDivElement>(null)
   const shareButton = useRef<HTMLButtonElement>(null)
   const focus = useRef<HTMLHeadingElement>(null)
@@ -241,14 +247,14 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     // Parent history navigation must dismiss transient article UI while preserving
     // list focus/scroll and confirmed feedback. Equal routes deliberately do nothing.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAsset(null); setShareOpen(false); setCopyStatus(''); setNotice('')
+    setAsset(null); setShareOpen(false); setCopyResult(null); setNotice('')
     setLocation(controlledLocation)
   }, [controlledLocation, location.slug, location.tag])
   useEffect(() => { onTitleChange?.(article?.title ?? (signedIn ? personal?.article.title : undefined) ?? '인사이트') }, [article, personal, signedIn, onTitleChange])
   useEffect(() => () => { generation.current++; clearTimeout(copyTimer.current) }, [])
   useEffect(() => {
     if (!shareOpen) return
-    const off = (event: PointerEvent) => { if (!share.current?.contains(event.target as Node)) setShareOpen(false) }
+    const off = (event: PointerEvent) => { if (!share.current?.contains(event.target as Node)) changeShare(false) }
     const escape = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229) return
       const surface = share.current
@@ -256,11 +262,11 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
       // Capture before the sidebar listener, but defer to a foreground modal.
       if (document.querySelector('dialog:modal')) return
       event.preventDefault(); event.stopPropagation()
-      setShareOpen(false); shareButton.current?.focus()
+      changeShare(false); shareButton.current?.focus()
     }
     document.addEventListener('pointerdown', off); document.addEventListener('keydown', escape, true)
     return () => { document.removeEventListener('pointerdown', off); document.removeEventListener('keydown', escape, true) }
-  }, [shareOpen])
+  }, [shareOpen, changeShare])
   useLayoutEffect(() => {
     if (first.current) { first.current = false; if (shouldFocus?.()) focus.current?.focus({ preventScroll: true }); return }
     if (pendingRestore.current) {
@@ -282,7 +288,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
       if (snapshots.current.size > 32) snapshots.current.delete(snapshots.current.keys().next().value!)
       if (!location.slug) previous.current = saved
     }
-    generation.current++; clearTimeout(copyTimer.current); setAsset(null); setShareOpen(false); setCopyStatus(''); setNotice(''); setLocation(next); onNavigate?.(next)
+    generation.current++; clearTimeout(copyTimer.current); setAsset(null); setShareOpen(false); setCopyResult(null); setNotice(''); setLocation(next); onNavigate?.(next)
   }
   const back = () => { pendingRestore.current = previous.current; move(previous.current?.location ?? {}, false) }
   const login = (mode: 'login' | 'signup') => { if (onLogin) onLogin(mode); else setNotice('로그인 연결을 준비 중이에요. 읽고 있던 인사이트는 그대로 유지됩니다.') }
@@ -294,21 +300,32 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     catch (failure) { if (generation.current === current) setNotice(failure instanceof ClientInsightQuestionError ? failure.message : '질문을 전달하지 못했어요. 다시 시도해주세요.') }
     finally { personalLock.current = false; setPersonalBusy(false) }
   }
-  const copy = async () => {
+  const copy = async (surface: 'popover' | 'social') => {
     if (!shareUrl) return
     const current = generation.current
     const request = ++copyRequest.current
-    clearTimeout(copyTimer.current); setCopyStatus('')
+    const epoch = shareEpoch.current
+    clearTimeout(copyTimer.current); setCopyResult(null)
+    let outcome: 'success' | 'failure' = 'success'
     try {
       await navigator.clipboard.writeText(shareUrl)
+    } catch { outcome = 'failure' }
+    if (current !== generation.current || request !== copyRequest.current) return
+    // Source: successful menu copy replaces only its label; errors always use
+    // the social status and never dismiss the menu. Clipboard authority is unchanged.
+    const resultSurface = outcome === 'failure' ? 'social' : surface
+    if (resultSurface === 'popover' && epoch !== shareEpoch.current) return
+    setCopyResult({ surface: resultSurface, outcome })
+    copyTimer.current = setTimeout(() => {
       if (current !== generation.current || request !== copyRequest.current) return
-      setCopyStatus('복사했습니다!')
-    } catch { if (current === generation.current && request === copyRequest.current) setCopyStatus('복사에 실패했습니다') }
-    if (current === generation.current && request === copyRequest.current) copyTimer.current = setTimeout(() => {
-      const ownsFocus = share.current?.querySelector('.nfz-shpop')?.contains(document.activeElement)
-      setCopyStatus(''); setShareOpen(false)
-      if (ownsFocus) shareButton.current?.focus({ preventScroll: true })
-    }, 1600)
+      if (resultSurface === 'popover' && epoch !== shareEpoch.current) return
+      setCopyResult(null)
+      if (resultSurface === 'popover') {
+        const ownsFocus = share.current?.querySelector('.nfz-shpop')?.contains(document.activeElement)
+        changeShare(false)
+        if (ownsFocus) shareButton.current?.focus({ preventScroll: true })
+      }
+    }, outcome === 'failure' ? 2000 : resultSurface === 'popover' ? 1400 : 1600)
   }
   const vote = async (value: 0 | 1 | 2) => {
     if (!article || feedbackLock.current || feedback[article.slug] !== undefined) return
@@ -336,7 +353,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
   const rail = (withTopics = true) => <aside className="nfz-rail" aria-label="인사이트 탐색">{withTopics && <div className="nfz-topics"><div className="th5">{insightSourceCopy(language, 'topics')}</div><div className="tw">{topics.map(tag => <button key={tag} className={`tp${tag === location.tag ? ' on' : ''}`} aria-pressed={tag === location.tag} type="button" onClick={() => move({ tag })}><span>{insightTagLabel(language, tag)}</span></button>)}</div></div>}<h2 className="rh">{insightSourceCopy(language, 'popular')}</h2>{trends.filter(p => p.slug !== article?.slug).map(p => <div className="nfz-tr" key={p.slug}><div className="by"><Metadata article={p} /></div>{articleLink(p, p.title, 't')}</div>)}</aside>
   const shareLinks = (labels = false) => {
     const url = encodeURIComponent(shareUrl ?? '')
-    const copyButton = <button type="button" disabled={!shareUrl} title={!shareUrl ? stateLabels.shareUnavailable : undefined} onClick={() => void copy()} aria-label="링크 복사"><ShareIcon network="copy" />{labels && <span>{copyStatus || '링크 복사'}</span>}</button>
+    const copyButton = <button type="button" disabled={!shareUrl} title={!shareUrl ? stateLabels.shareUnavailable : undefined} onClick={() => void copy(labels ? 'popover' : 'social')} aria-label="링크 복사"><ShareIcon network="copy" />{labels && <span style={copyResult?.surface === 'popover' ? { color: 'var(--gg)' } : undefined}>{copyResult?.surface === 'popover' ? '복사했습니다!' : '링크 복사'}</span>}</button>
     return <>{labels && copyButton}{(['facebook', 'x', 'linkedin'] as const).map(net => !shareUrl ? <button key={net} type="button" disabled title={stateLabels.shareUnavailable} aria-label={`${net === 'facebook' ? '페이스북' : net === 'x' ? 'X' : 'LinkedIn'}에 공유`}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? '페이스북에 공유하기' : net === 'x' ? 'X에 공유하기' : 'LinkedIn에 공유하기'}</span>}</button> : <a key={net} aria-label={`${net === 'facebook' ? '페이스북' : net === 'x' ? 'X' : 'LinkedIn'}에 공유`} target="_blank" rel="noopener noreferrer" href={net === 'facebook' ? `https://www.facebook.com/sharer/sharer.php?u=${url}` : net === 'x' ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(article!.title)}&url=${url}` : `https://www.linkedin.com/sharing/share-offsite/?url=${url}`}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? '페이스북에 공유하기' : net === 'x' ? 'X에 공유하기' : 'LinkedIn에 공유하기'}</span>}</a>)}{!labels && copyButton}</>
   }
   const filtered = location.tag ? rows.filter(p => p.tags.includes(location.tag!)) : rows
@@ -358,11 +375,11 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
       </> : location.slug && !article ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>글을 찾을 수 없습니다</h1><button type="button" onClick={() => move({})}>인사이트 전체 보기</button></div> : article ? <>
         <button type="button" className="nfz-back" onClick={back}><ArrowLeft size={16} /> 인사이트</button>
         <div className="nfz-det"><article className="nfz-a"><h1 ref={focus} tabIndex={-1}>{article.title}</h1><div className="deck">{article.sub}</div>
-          <div className="nfz-meta"><Metadata article={article} avatar /><span className="sp" /><div className="nfz-shwrap" ref={share}><button className="ib" type="button" aria-label="공유" ref={shareButton} aria-expanded={shareOpen} onClick={() => setShareOpen(value => !value)}><Share2 size={15} /></button>{shareOpen && <div className="nfz-shpop" aria-label="공유 선택">{shareLinks(true)}</div>}</div></div>
+          <div className="nfz-meta"><Metadata article={article} avatar /><span className="sp" /><div className="nfz-shwrap" ref={share}><button className="ib" type="button" aria-label="공유" ref={shareButton} aria-expanded={shareOpen} onClick={() => changeShare(!shareOpen)}><Share2 size={15} /></button>{shareOpen && <div className="nfz-shpop" aria-label="공유 선택">{shareLinks(true)}<span className="insight-sr" role="status">{copyResult?.surface === 'popover' ? '복사했습니다!' : ''}</span></div>}</div></div>
           <div className="nfz-hero"><Art article={article} hero /></div><div className="nfz-body"><SectionBody sections={signedIn ? article.body : guestSections(article)} /></div>
           {!signedIn && <div className="nfz-gatewrap"><div className="nfz-fade" /><div className="nfz-gate"><span className="hl">TETH에서 계속 읽어보십시오</span><div className="s2">무료 계정을 만들면 모든 인사이트와<br />개인화된 시장 분석을 끝까지 읽을 수 있습니다.</div><button type="button" className="b1" onClick={() => login('signup')}>무료로 시작하기</button><div className="fr">영원히 무료, 카드 등록 필요없음</div><div className="lg">이미 계정이 있으십니까? <button type="button" onClick={() => login('login')}>로그인</button></div></div></div>}
           <div className="nfz-tags">{article.tags.map(tag => <button className="tg" key={tag} type="button" onClick={() => move({ tag })}>{insightTagLabel(language, tag)}</button>)}</div>
-          <div className="nfz-social">{shareLinks()}<span className="cplbl" role="status">{copyStatus}</span></div>
+          <div className="nfz-social">{shareLinks()}<span className="cplbl" role="status" style={copyResult?.outcome === 'failure' ? { color: 'var(--gr)' } : undefined}>{copyResult?.surface === 'social' ? copyResult.outcome === 'success' ? '복사했습니다!' : '복사에 실패했습니다' : ''}</span></div>
           {article.assets.length > 0 && <div className="nfz-assets"><h2 className="ah">이 인사이트에 나온 자산, 지금은 어떤 상황입니까?</h2><div className="as">누르면 TETH에게 물어볼 내용을 정리해드립니다.</div><div className="nfz-astrow">{article.assets.map(a => <button className="nfz-ast" key={a[0]} type="button" onClick={() => signedIn ? setAsset(a) : login('login')}><span className="ico">{media(data.assetUrls?.[a[0]]) ? <img alt="" src={media(data.assetUrls?.[a[0]])} width={34} height={34} /> : a[0].slice(0, 2)}</span><span><span className="nm">{a[1]}</span><span className="sy">{a[0]}</span></span><ChevronRight className="ar2" size={16} /></button>)}</div></div>}
           {signedIn && <div className="nfz-fb"><div className="q">이 인사이트가 도움이 되었습니까?</div><div className={`bs${feedback[article.slug] !== undefined ? ' locked' : ''}`} aria-busy={feedbackBusy}>{feedbackChoices.map(({ key, Icon }, i) => <button className={`nfz-fbb${feedback[article.slug] === i ? ' on' : ''}`} key={key} type="button" aria-pressed={feedback[article.slug] === i} disabled={feedbackBusy || feedback[article.slug] !== undefined} onClick={() => void vote(i as 0 | 1 | 2)}><Icon size={16} strokeWidth={1.6} aria-hidden="true" />{insightSourceCopy(language, key)}</button>)}</div>{feedback[article.slug] !== undefined && <p className="fbok" role="status"><Check size={14} /> 소중한 의견 감사합니다.</p>}</div>}
           <div className="nfz-next"><h2 className="nh">다음 인사이트도 읽어보십시오</h2><div className="nfz-nextg">{rows.filter(p => p.slug !== article.slug).slice(0, 4).map(p => <Fragment key={p.slug}>{articleLink(p, <><Art article={p} /><div className="mt"><Metadata article={p} /></div><div className="t">{p.title}</div></>, 'nfz-nc')}</Fragment>)}</div></div>

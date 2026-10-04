@@ -7,7 +7,7 @@ const id = 'research-session-menu'
 const title = '연구 계획의 긴 제목과 문서 초안을 유지하면서 현재 연구를 관리합니다 '.repeat(3)
 const draft = '문서에서 아직 보내지 않은 질문'
 
-async function mount(page: Page, baseURL: string | undefined, width: number, signedIn = true) {
+async function mount(page: Page, baseURL: string | undefined, width: number, signedIn = true, withPlanTurn = false) {
   if (!baseURL) throw new Error('Local baseURL required')
   const errors: string[] = [], writes: string[] = []
   page.on('pageerror', error => errors.push(error.message))
@@ -20,19 +20,20 @@ async function mount(page: Page, baseURL: string | undefined, width: number, sig
   await page.clock.install()
   await page.setViewportSize({ width, height: 900 })
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.addInitScript(({ id, title, draft, signedIn }) => {
+  await page.addInitScript(({ id, title, draft, signedIn, withPlanTurn }) => {
     if (sessionStorage.getItem('research-menu-seeded')) return
     sessionStorage.setItem('research-menu-seeded', '1')
     sessionStorage.setItem('teth-app-banner-dismissed', '1')
     if (signedIn) sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '검수', email: 'menu@example.test' }))
     localStorage.setItem('tethLang', 'ko')
     const session = { id, title, renamed: true, idea: '원래 연구 아이디어', draft: '대화 초안', pair: 'BTC/USDT', mode: 'dip',
-      phase: 'plan', timeframe: '일봉', risk: '−3%', takeProfit: '+8%', workspace: 'research', researchStatus: '초안', turns: [], updatedAt: 1 }
+      phase: 'plan', timeframe: '일봉', risk: '−3%', takeProfit: '+8%', workspace: 'research', researchStatus: '초안',
+      turns: withPlanTurn ? [{ id: 'plan-turn', question: '원래 연구 아이디어', answer: '계획', fullAnswer: '계획', startedAt: 1, status: 'done', suggestions: [], phase: 'plan' }] : [], updatedAt: 1 }
     sessionStorage.setItem('teth-client-experience', JSON.stringify({ currentId: id, homeDraft: '', sessions: [session, { ...session, id: 'other', title: '다른 연구', workspace: 'conversation' }] }))
     sessionStorage.setItem(`teth-research-preview:restored:${id}`, JSON.stringify({ seconds: 0, status: 'idle', view: 'activity', questions: [], clockVersion: 1 }))
     sessionStorage.setItem(`teth-client-research-documents:${id}`, JSON.stringify({ active: 'plan', tabs: ['plan'], drafts: { plan: draft }, replies: [], rowDrafts: {}, positions: {}, edits: {}, paper: false, paused: false }))
     for (const prefix of ['teth-client-research-documents:', 'teth-research-preview:restored:']) sessionStorage.setItem(prefix + 'other', sessionStorage.getItem(prefix + id)!)
-  }, { id, title, draft, signedIn })
+  }, { id, title, draft, signedIn, withPlanTurn })
   await page.goto('/')
   await expect(page.locator('.rw-header')).toBeVisible()
   await page.evaluate(() => document.fonts.ready)
@@ -215,5 +216,36 @@ test('진행 중 연구 삭제 후 unmount와 시간이 캐시를 부활시키�
   expect(await caches(page)).toEqual([null, null])
   expect(await caches(page, 'other')).toEqual(otherCache)
   expect((await stored(page)).map((s: { id: string }) => s.id)).toEqual(['other'])
+  expect(audit.errors).toEqual([]); expect(audit.writes).toEqual([])
+})
+
+test('스크롤 저장 지연 250ms 이전 정상 대화 왕복은 읽던 위치와 초안을 보존한다', async ({ page, baseURL }) => {
+  const audit = await mount(page, baseURL, 390, true, true)
+  await page.setViewportSize({ width: 390, height: 360 })
+  const otherCache = await caches(page, 'other')
+  const scroll = page.locator('.rw-scroll')
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000))
+  const before = JSON.parse((await caches(page))[0]!).positions.plan ?? 0
+  await scroll.hover()
+  await page.mouse.wheel(0, 300)
+  await page.clock.runFor(32)
+  await expect.poll(() => scroll.evaluate(node => node.scrollTop)).toBeGreaterThan(100)
+  const position = await scroll.evaluate(node => node.scrollTop)
+  expect(JSON.parse((await caches(page))[0]!).positions.plan ?? 0).toBe(before)
+  const back = page.getByRole('button', { name: '대화로 돌아가기', exact: true })
+  await back.focus()
+  await back.press('Enter')
+  await expect(page.locator('.g-composer textarea')).toHaveValue('대화 초안')
+  const saved = JSON.parse((await caches(page))[0]!)
+  expect(saved.positions.plan).toBeCloseTo(position, 0)
+  expect(saved.drafts.plan).toBe(draft)
+  const reopen = page.getByRole('button', { name: /연구 계획.*(?:확인|크게 보기)/ })
+  await reopen.focus()
+  await reopen.press('Enter')
+  await page.clock.runFor(32)
+  await expect(scroll).toBeVisible()
+  expect(await scroll.evaluate(node => node.scrollTop)).toBeCloseTo(position, 0)
+  await expect(page.locator('.rw-composer textarea')).toHaveValue(draft)
+  expect(await caches(page, 'other')).toEqual(otherCache)
   expect(audit.errors).toEqual([]); expect(audit.writes).toEqual([])
 })
