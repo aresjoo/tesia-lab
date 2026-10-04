@@ -66,6 +66,23 @@
       "command": "node tools/sync-migration.mjs --verify",
       "status": "PASS",
       "files": 2159
+    },
+    {
+      "command": "Public HTTPS registered assets and exact renderer document aliases",
+      "status": "PASS",
+      "passed": 350,
+      "aliases": 4,
+      "providerLoginExecuted": false
+    },
+    {
+      "command": "Public HTTPS UI at1440/390/320 with synthetic GET session",
+      "status": "PASS",
+      "actualLoginVerified": false
+    },
+    {
+      "command": "Actual public Google START201 + binding + pending result409 + pending session401",
+      "status": "PASS",
+      "actualGoogleLoginCompleted": false
     }
   ],
   "failureHistory": [
@@ -80,6 +97,19 @@
       "scope": "Initial built probe",
       "failed": 3,
       "reason": "Harness mistook native-dialog Tab to browser chrome for focus entering inert background. Isolated native reproduction; narrow exception then next Tab must return to dialog."
+    },
+    {
+      "scope": "First public static scan",
+      "registeredAssetsPassed": 350,
+      "failedDocumentExpectations": 4,
+      "reason": "Harness compared raw build HTML directly with server-rendered HTML. Existing _StaticBundle injects one server-owned profile meta. Corrected scan requires exact known insertion and identical four aliases; no product change."
+    },
+    {
+      "scope": "First real Google start probe",
+      "googleStart201": true,
+      "resultPending": true,
+      "failedExpectation": "finalAnonymous",
+      "reason": "Existing server intentionally changes initiating session to internal HANDOFF_BOUND, refused by service_session.resolve (401 AUTHENTICATION_REQUIRED) until callback/ACK. Initial harness wrongly required public ANONYMOUS. Corrected exact-boundary probe passed; no backend change."
     }
   ],
   "security": {
@@ -96,6 +126,14 @@
       "status": "PASS",
       "exitCode": 0,
       "findings": 0
+    },
+    "deploymentReceiptStaged": {
+      "rawExitCode": 1,
+      "rawFindings": 1,
+      "classified": "generic-api-key matched evidenceHashes.auth-ui-activation.log; exact SHA256 recomputed from the deployment log, not a credential",
+      "unclassified": 0,
+      "actualCredentialFindings": 0,
+      "detectorOrPathSuppressionAdded": false
     },
     "secretsOrDatabasesIncluded": false
   },
@@ -127,7 +165,7 @@
     "Client main merge or full service production GO"
   ],
   "deployment": {
-    "status": "PREPARED_NOT_ACTIVATED",
+    "status": "STATIC_UI_DEPLOYED_AND_PUBLICLY_VERIFIED",
     "mainChanged": false,
     "automaticDeploymentConfigured": false,
     "userExplicitStaticUpdateRequested": true,
@@ -139,10 +177,104 @@
       "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
       "VITE_TETH_EXCHANGE_CONNECT": "false"
     },
-    "backendCredentialDatabaseChanges": false,
     "actualGoogleLoginCompleted": false,
     "promptBranchMerged": false,
-    "workerDeployed": false
+    "workerDeployed": false,
+    "observedAt": "2026-10-04T09:57:12.792Z",
+    "url": "https://teth.ai/",
+    "privateAuthorityPreservedAtStaticSwap": true,
+    "backupRetained": true,
+    "publicRootStatusesDuringActivation": [
+      503,
+      200
+    ],
+    "backendCredentialDatabaseReplaced": false,
+    "edgeChanged": false,
+    "registeredStaticAssets": {
+      "status": "PASS",
+      "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
+      "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+      "archiveSha256": "43a63cef0f19ef93c326306d5c3d93eb9abd824f1e0b226458e72373d3cbeaeb",
+      "registeredAssets": 350,
+      "passed": 350,
+      "failed": 0,
+      "failedPaths": [],
+      "documentAliases": [
+        {
+          "path": "/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/about/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/download/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/policies/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        }
+      ],
+      "authenticationOrMutationExecuted": false
+    },
+    "publicBrowser": {
+      "status": "PASS",
+      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
+      "widths": [
+        1440,
+        390,
+        320
+      ],
+      "syntheticSession": true,
+      "serverMutationExecuted": false,
+      "pageErrors": 0,
+      "providerChoicesPreserved": true
+    },
+    "googleStartSmoke": {
+      "scope": "PUBLIC_CA_GOOGLE_START_ONLY",
+      "status": "PASS",
+      "stage": "COMPLETE",
+      "actualGoogleLoginCompleted": false,
+      "publicCaRequired": true,
+      "anonymousBootstrapPosts": 1,
+      "googleStartPosts": 1,
+      "blockedMutations": 0,
+      "blockedExternalRequests": 0,
+      "blockedApiReads": 0,
+      "pageErrors": 0,
+      "unexpectedConsoleErrors": 0,
+      "expectedHttpConsoleMessages": 3,
+      "consoleWarnings": 0,
+      "unexpectedHttpErrors": 0,
+      "failedRequests": 0,
+      "initialAnonymous": true,
+      "googleStart201": true,
+      "providerOriginValid": true,
+      "callbackValid": true,
+      "clientIdPresent": true,
+      "pkceS256": true,
+      "challengePresent": true,
+      "statePresent": true,
+      "noncePresent": true,
+      "resultPending": true,
+      "pendingSessionAccessDenied": true,
+      "providerNavigationExecuted": false,
+      "callbackExecuted": false,
+      "acknowledgementExecuted": false,
+      "emailExecuted": false,
+      "orderExecuted": false
+    },
+    "realSmokeRuns": 2,
+    "totalIsolatedAnonymousBootstrapPosts": 2,
+    "totalGoogleStartPosts": 2,
+    "smokeEffect": "Two isolated pending login attempts, no user authentication/ACK/order. Legitimate auth rows are created after the updater preservation snapshot.",
+    "operatorGate": "ROOT static-UI GO after exact1674/lint/build/preview/secret scans, immediate HTML/edge/control/release CAS, retained backup, public350 assets and corrected-contract auth smoke."
   },
   "sourceDelta": {
     "previousDelivery": "d53a80670cb7842f700b927db674435026d09ffd",
@@ -197,5 +329,14 @@
     "localPassed": 98,
     "security": "Raw scanner exit1/57 findings, not rawzero. Previous53 classifications preserved; four new findings are generated manifest SHA256 metadata. No actual credential finding identified. No detector disabled.",
     "receiptHistory": "Previous migration commit d53a806 preserves the complete prior receipt; not repeated as current checks."
+  },
+  "evidenceHashes": {
+    "auth-ui-integrated-final.log": "25a58d829722e70c80d480b1b6d03a353cd4a91345a5fdc5d952397147ec96c4",
+    "auth-ui-integrated-build.log": "0a1cb096bb620a5fe0d7a5632a46785b6336973a6ba67780124d3e3448d11b9c",
+    "auth-ui-opus-closure.json": "7c59ac0bc6a9baf510bba37a2e44c5210c85f50b60ce27154f4477fdeaad15c6",
+    "auth-ui-activation.log": "013e0cadf26936f1ea8608e9506e545930d2da23db021f4c985672fedb29ad55",
+    "auth-ui-vm-postflight.log": "50cc5faace8e9e28d4dc40dc6cf466f82432ca1375f3268254fbaf6d68154449",
+    "auth-ui-public-static-verified.json": "dc6a2217533cfe7e95041fa46bae726f5aef1799537f3d74ae23579a0d6ac441",
+    "auth-ui-google-start-verified.json": "3b38217da71ea33306711c48d8345c054d08218e2047718052376b627bffa597"
   }
 }
