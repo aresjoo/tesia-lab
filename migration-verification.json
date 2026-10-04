@@ -367,12 +367,49 @@
     "실모델·실시간시장·거래소·주문·과금·전체서비스 운영 GO"
   ],
   "deployment": {
-    "status": "PENDING",
-    "candidateSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
-    "candidateArchiveSha256": "c20c29d280eeb4c8e1dae4465cfdc9a2cc8549edadffa0d332408cb8f31fc37f",
-    "currentDeployedSource": "a6e737f05ae26d672e804765eeb2ee5ddd50e578",
-    "currentDeployedArchiveSha256": "d203ff622a329bd46020ddabb0c38fe38d507516f82986358fb92b6fa3f22dac",
-    "backendCredentialDatabaseReplacementAuthorized": false
+    "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
+    "currentDeployedSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
+    "currentDeployedArchiveSha256": "c20c29d280eeb4c8e1dae4465cfdc9a2cc8549edadffa0d332408cb8f31fc37f",
+    "rawHtmlSha256": "b5774e555520d69723c9739696b5078869e916eac80173a6fd98965d9d04b290",
+    "activationExitCode": 0,
+    "postflightExitCode": 0,
+    "publicRootStatusesDuringRestart": [
+      503,
+      200
+    ],
+    "privateAuthorityPreserved": true,
+    "backupRetained": true,
+    "backendCredentialDatabaseReplacementAuthorized": false,
+    "backendCredentialDatabaseReplaced": false,
+    "publicStatic": {
+      "status": "PASS",
+      "registeredAssets": 350,
+      "passed": 350,
+      "failed": 0,
+      "documentAliasesPassed": [
+        "/",
+        "/about/",
+        "/download/",
+        "/policies/"
+      ],
+      "authenticationOrMutationExecuted": false
+    },
+    "publicLoginPresentation": {
+      "status": "PASS",
+      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
+      "viewports": [
+        1440,
+        390,
+        320
+      ],
+      "googleAppleEmailVisible": true,
+      "unregisteredProviders": "Apple·이메일은 준비 중이며 키보드로도 요청하지 않음",
+      "errorsAndUnexpectedRequests": 0,
+      "draftAndFocusPreserved": true,
+      "actualLoginVerified": false,
+      "providerStartExecuted": false,
+      "serverMutationExecuted": false
+    }
   },
   "sourceDelta": {
     "previousDelivery": "9c01a8662f3e12b08dfd02f2348795e88038c3ad",
@@ -404,7 +441,14 @@
     "head": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
     "pr": 5,
     "includedInSnapshot": false,
-    "meaning": "별도 draft 보존; 무충돌이 실제 producer 연결 성공은 아님"
+    "meaning": "별도 draft 보존; 무충돌이 실제 producer 연결 성공은 아님",
+    "mergeTree": {
+      "againstDeliveryCommit": "328a4181a9a531e42881d951f3d31bfaf0b37af1",
+      "exitCode": 0,
+      "conflictPaths": [],
+      "tree": "e9b26374c4cb6b326745752a116573160db2dfbf",
+      "actualMergeExecuted": false
+    }
   },
   "previousDeliveryEvidence": {
     "commit": "9c01a8662f3e12b08dfd02f2348795e88038c3ad",
@@ -418,6 +462,10 @@
     "footer-venue-release-opus.json": "8fef4b8418ce7cbc606c27fc0f4383c6398c43ceaf4c79b5b40f7249c2dc7125",
     "footer-venue-closure-opus.json": "a8d9ed18794a8a03548493019c26516e06787b11bd92d7ddfba4846f851a4a26",
     "footer-containing-block.json": "d7821ab15b9b5ddb41a4211da1d01229d2f27fd885bf1b7c43e7d7b8f92c4f2e",
-    "footer-venue-failure-binding.json": "80a1929c4d7eb5b20d375afb2a6c1569c6cb77f5d78d5f5a298adeda4c2f02b8"
+    "footer-venue-failure-binding.json": "80a1929c4d7eb5b20d375afb2a6c1569c6cb77f5d78d5f5a298adeda4c2f02b8",
+    "footer-venue-vm-activate.json": "c60b884618244dda82ba669c80f03f4e4c8c133f55d5c823b0ecdcad0a9f7226",
+    "footer-venue-vm-postflight.json": "2699bece06d1fca549710fb5300a983ba1437061a2638d3bfa8eb5fff11a755f",
+    "footer-venue-public-static.json": "98b0f0bdf6dac4b80134096f74527ddaec0d898e0f8fac59c8b19259488f6816",
+    "footer-venue-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42"
   }
 }
