@@ -17,9 +17,11 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 전달은React7dd1365이후의검증된UI후속이다. 1868PASS/0FAIL/기존QA-015SKIP2의57spec단일·같은입력lint/3build·독립personal1Opus5.5·55원실패exactPASS결속을확인했다. 7언어lazy오류복구·정책footer/본문CSS격리·About태블릿원경계/확대가독성·nativeBackfocus·shareUrl공급실패를교정하고성공ko값만원본으로복원한다. 동적namespace계정export2삭제오판은원7dd전체파일exact복원했고원시험assertion은보존,실제로남은6deadfunction만정리했다. 첫중단/하니스/모델오판은검증JSON과source Bugfix에보존한다.
+현재 전달은 React4237d65 이후의 작은 사용성 교정이다. 원본9fbff의 연구 로그 읽기 위치/문서별 따라가기, 짧은 화면에서 전략 복사창의 한 scrollport fallback과 초기 초점, terminal 검색의 화면 안 도달, 공급 inbox의 빈 분류 안내를 보완한다. 정상 원본 SVG/문구/색상/동선과 Google·Apple·이메일을 보존하며 인증/프롬프트/API/package/가격/flag/실권한 변경0, 파일/storage 삭제0이다. 원본 HTML/server/Worker/root workflow와 main은 변경/병합하지 않는다.
 
-Google추가는Apple/이메일을대체하지않으며계약/프롬프트/providerflag/가격/package/실권한0변경이다. 원본HTML/server/Worker/rootworkflow와main은변경/병합하지않는다. 투자프롬프트draft8646은별도보존/React producer미통합이다. Apple등록/SMTP·실Googlecallback/ACK·실주문/서비스GO는남는다. 현재새정적UI는teth.ai활성화/CAS/공개TLS exactassets·4경로·로그인3폭검사완료다. 백엔드·키·DB권위는그대로고직전7dd정적bundle은복구용보관했다. 정확SHA/파일수/해시/판정은manifest와verification이소유한다.
+최종83spec 단일 2700PASS/0FAIL/기존QA-015SKIP2·입력불변·lint/3build·독립personal(1) Opus5.5·원실패 exactPASS 결속 및 built로그인1440/390/320를 확인했다. 전수469spec·과거partial과합산하지 않는다. 원제품실패와24RAF측정하니스·시각불편으로기각한106PASS 교정은 Bugfix/Git/비공개원로그에남긴다. 정적 bundle 전달 준비이며 아직 현재4237 운영 화면을 교체하지 않았다. 정확SHA/파일수/해시는manifest/verification이소유한다.
+
+프롬프트draft8646은 별도이며 실제 React producer 통합0이다. Google사용자callback/ACK, Apple등록/이메일SMTP, 실연구g-doc/Critic·계좌원장·거래소·주문·과금/전체서비스GO는 남는다. 파일 무충돌이나 정적 배포를 실제 서비스 성공으로 쓰지 않는다. 이전4237의7언어복구·정책CSS격리·nativeBack/shareUrl·계정동적export복원 및6deadfunction정리·1868PASS와55반례 결속은 Git에보존하며 현재결과와합산하지않는다.
 
 이전누적범위와앞실패는아래기록 및Git이력을따르며현재성공과합산하지않는다.
 

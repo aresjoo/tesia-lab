@@ -1,6 +1,6 @@
 // Presentation-only document state. Never pass credentials or execution data.
 // Memory lasts for this page lifetime, not a reload, new tab, or another device.
-type DocumentEntry = { raw?: string }
+type DocumentEntry = { raw?: string; following?: Record<string, boolean | undefined> }
 const documents = new Map<string, DocumentEntry>()
 const key = (id: string) => `teth-client-research-documents:${id}`
 
@@ -11,6 +11,15 @@ export function readResearchDocumentCache(id: string): unknown {
 
 export function writeResearchDocumentCache(id: string, value: unknown): boolean {
   return createResearchDocumentWriter(id)(value)
+}
+
+/** Original stick intention lasts across workspace remounts in this page only.
+ * Keep it in the existing session entry: deletion retires it with the writer,
+ * and no new storage key, tombstone, execution data or global side map is added. */
+export function researchDocumentFollowing(id: string): Record<string, boolean | undefined> {
+  const entry = documents.get(id) ?? {}
+  documents.set(id, entry)
+  return entry.following ??= {}
 }
 
 /** A mounted document may save on pagehide/unmount, but not after deletion.

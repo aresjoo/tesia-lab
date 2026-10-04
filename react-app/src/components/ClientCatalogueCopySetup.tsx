@@ -7,6 +7,15 @@ import { ClientStrategyGlyph } from './ClientStrategyGlyph'
 import copy from '../client-catalogue-copy-setup-copy.json'
 import '../client-catalogue-copy-setup.css'
 
+function revealControl(dialog: HTMLDialogElement, control: HTMLElement) {
+  const port = dialog.querySelector<HTMLElement>(dialog.classList.contains('is-content-scroll') ? 'form' : '.ccs-body')
+  if (!port || !port.contains(control)) return
+  const field = control.getBoundingClientRect(), bounds = port.getBoundingClientRect()
+  const bottom = Math.min(bounds.bottom, dialog.getBoundingClientRect().bottom)
+  if (field.bottom > bottom - 8) port.scrollTop += field.bottom - bottom + 8
+  else if (field.top < bounds.top + 8) port.scrollTop -= bounds.top - field.top + 8
+}
+
 /** skcSheet, original final 412fd60. Owner/revision keyed by the host.
  * The supplied callback owns persistence/approval. No synthetic connection,
  * order, budget transfer, elapsed-time success or local entitlement is created.
@@ -32,10 +41,28 @@ export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger }: 
     const scroll = document.querySelector<HTMLElement>('.client-source-app.has-site-footer') ?? document.getElementById('research-main')
     const old = scroll?.style.overflow
     el.showModal(); if (scroll) scroll.style.overflow = 'hidden'
-    if (window.innerWidth > 760) el.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true })
+    const footer = el.querySelector<HTMLElement>('footer')!
+    let frame = 0
+    const measure = () => {
+      const fallback = footer.scrollHeight + 96 > el.clientHeight
+      if (el.classList.contains('is-content-scroll') === fallback) return
+      el.classList.toggle('is-content-scroll', fallback)
+      if (document.activeElement instanceof HTMLElement && el.contains(document.activeElement)) revealControl(el, document.activeElement)
+    }
+    measure()
+    const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure) })
+    observer.observe(el); observer.observe(footer)
+    if (window.innerWidth > 760) {
+      const first = el.querySelector<HTMLInputElement>('input')
+      first?.focus({ preventScroll: true })
+      // Reveal the focused field inside this sheet only. The background page
+      // and its return target must not scroll when a short viewport opens it.
+      if (first) revealControl(el, first)
+    }
     else el.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true })
     return () => {
       live.current = false; request.current?.abort(); request.current = null; el.close()
+      observer.disconnect(); cancelAnimationFrame(frame)
       if (scroll) scroll.style.overflow = old ?? ''
       if (origin instanceof HTMLElement && origin.isConnected && !origin.closest('[hidden],[inert]')) origin.focus({ preventScroll: true })
     }
@@ -46,6 +73,7 @@ export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger }: 
     // Native disabled fields lose keyboard focus. Keep the pending action
     // focusable and move input-origin submissions there before freezing fields.
     submit.current?.focus({ preventScroll: true })
+    if (dialog.current && submit.current) revealControl(dialog.current, submit.current)
     const controller = new AbortController(); request.current = controller; setBusy(true); setFailed(false)
     try {
       await setup.onConfirm(Object.freeze({ ...valid }), controller.signal)

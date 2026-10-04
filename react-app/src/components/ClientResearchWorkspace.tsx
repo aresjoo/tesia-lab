@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { ClientIcon } from './ClientIcon'
 import { ClientResearchChart as ResearchChart } from './ClientResearchChart'
 import { ClientResearchLog } from './ClientResearchLog'
@@ -7,7 +7,7 @@ import { previewCritic, previewEntries, previewTeam, useMockResearchPreview } fr
 import { CLIENT_RESEARCH_FIXTURE as FIXTURE, RESEARCH_DOCUMENTS, researchDocumentTitle as rawTitleOf, researchPercent as pct, type ClientResearchDocumentId as DocId } from '../client-research-fixtures'
 import '../client-restored-research.css'
 import { parsePercentageEdit, readStoredPercentage } from '../client-percentage-input'
-import { createResearchDocumentWriter, readResearchDocumentCache } from '../client-research-cache'
+import { createResearchDocumentWriter, readResearchDocumentCache, researchDocumentFollowing } from '../client-research-cache'
 import { ClientLoadBoundary } from './ClientLoadBoundary'
 import { newAnalysisView, type ResearchAnalysisView, type ResearchVersion } from '../client-research-analysis'
 import { formatReferenceMoney, useClientPreferences } from '../client-preferences'
@@ -28,6 +28,7 @@ function readAnalysisLocation(owner: string, seconds: number): AnalysisLocation 
 }
 
 type Reply = { doc: DocId; question: string; answer: string }
+const captureResearchScroll = (element: HTMLElement) => ({ top: element.scrollTop, height: element.clientHeight, width: element.clientWidth, total: element.scrollHeight })
 function AnalysisFallback({ loading = false, onClose }: { loading?: boolean; onClose: () => void }) {
   const action = useRef<HTMLButtonElement>(null)
   useEffect(() => { action.current?.focus({ preventScroll: true }) }, [loading])
@@ -145,6 +146,20 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
   const auxPanel = useRef<HTMLElement>(null)
   const auxTrigger = useRef<HTMLButtonElement>(null)
   const follow = useRef(true)
+  const [followingStore] = useState(() => researchDocumentFollowing(sessionId))
+  const documentFollowing = useRef(followingStore)
+  const lastScroll = useRef<{ top: number; height: number; width: number; total: number } | null>(null)
+  const automaticScroll = useCallback((element: HTMLElement, top: number) => {
+    element.scrollTop = top
+    lastScroll.current = captureResearchScroll(element)
+  }, [])
+  useLayoutEffect(() => {
+    const element = scroll.current
+    if (!element) return
+    const observer = new ResizeObserver(() => { lastScroll.current = captureResearchScroll(element) })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
   const previousStatus = useRef(replay.status)
   const mounted = useRef(true)
   const active = state.active
@@ -322,8 +337,9 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     const target = positions.current[active] ?? 0
     let disposed = false, frame = 0
     restoringPosition.current = true
-    element.scrollTop = target
-    follow.current = element.scrollHeight - element.clientHeight - element.scrollTop < 140
+    automaticScroll(element, target)
+    follow.current = documentFollowing.current[active] ?? element.scrollHeight - element.clientHeight - element.scrollTop < 40
+    documentFollowing.current[active] = follow.current
     // A fallback font/short textarea can temporarily clamp scrollTop. Preserve
     // the requested position until fonts and the composer have their final size.
     const userTookOver = () => { restoringPosition.current = false }
@@ -333,16 +349,22 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
       if (disposed) return
       frame = requestAnimationFrame(() => {
         if (restoringPosition.current) {
-          element.scrollTop = active === 'activity' && follow.current ? element.scrollHeight : target
+          automaticScroll(element, active === 'activity' && follow.current ? element.scrollHeight : target)
           positions.current[active] = element.scrollTop
           restoringPosition.current = false
         }
       })
     })
     return () => { disposed = true; restoringPosition.current = false; cancelAnimationFrame(frame); events.forEach(event => element.removeEventListener(event, userTookOver)) }
-  }, [active, analysis]) // Restore the original document after closing its chart artifact.
+  }, [active, analysis, automaticScroll]) // Restore the original document after closing its chart artifact.
   const entryCount = previewEntries(elapsed).length
-  useEffect(() => { if (active === 'activity' && follow.current) scroll.current?.scrollTo({ top: scroll.current.scrollHeight, behavior: 'auto' }) }, [entryCount, active])
+  useLayoutEffect(() => {
+    if (scroll.current && !analysis) lastScroll.current = captureResearchScroll(scroll.current)
+  }, [entryCount, active, analysis])
+  useEffect(() => {
+    const element = scroll.current
+    if (active === 'activity' && follow.current && element) automaticScroll(element, element.scrollHeight)
+  }, [entryCount, active, automaticScroll])
   useEffect(() => {
     const justFinished = previousStatus.current !== 'completed' && replay.status === 'completed'
     previousStatus.current = replay.status
@@ -356,7 +378,10 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     const replies: Partial<Record<DocId, string>> = { plan: '조건과 검증 범위를 연구 계획에 정리했습니다. 행의 코멘트에서 변경할 조건을 남길 수 있어요.', hypo: `${hypothesis.plain} 이 패턴이 연구 구간과 봉인 구간 모두에서 확인되어야 가설이 유지됩니다.`, strat1: '초기 조건은 RSI(14) < 40과 직전 대비 +0.5% 반등입니다. 손절 −3%, 익절 +8%, 최대 보유 25일, 비용 왕복 0.2%를 적용합니다.', strat2: '저변동성 구간의 신규 진입을 제한하는 필터를 추가했습니다. 손절과 익절은 유지하고 같은 연구 구간에서 재검증합니다.', critic: '저변동성 구간에 손실 거래 71%가 집중되어 필터를 추가했습니다. 상위 3개 거래의 수익 집중도도 함께 확인해야 합니다.', holdout: '전략 제작에 사용되지 않은 2025.07 ~ 2026.08 데이터입니다. 연구와 분리된 구간에서도 성격이 유지되는지 확인합니다.', stress: '일부러 불리한 조건에서 재검증합니다. 횡보장과 회복장에서는 성과 약화가 남아 있습니다.', report: '수익성 판단은 일치하지만 위험 심사는 낙폭과 손실 지속 기간 측면에서 보류했습니다. 다수결로 덮지 않고 실제 체결 차이는 가상 검증에서 확인합니다.' }
     const reply = answer ?? replies[doc] ?? (doc === 'bt1' || doc === 'bt2' ? `수익률만이 아니라 최대 낙폭, 거래 수, 승률과 연도별 손익을 함께 확인하세요. ${doc === 'bt1' ? 'v1은' : 'v2는'} ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].n}회 거래, 최대 낙폭 ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].mdd.toFixed(1)}%입니다.` : '현재 문서와 연구 기록을 기준으로 확인할 내용을 남겼습니다.')
     setState(old => ({ ...old, drafts: clearComposer ? { ...old.drafts, [doc]: '' } : old.drafts, replies: [...old.replies, { doc, question: text, answer: reply }] }))
-    requestAnimationFrame(() => { if (mounted.current && !analysis) scroll.current?.scrollTo({ top: scroll.current.scrollHeight, behavior: 'auto' }) })
+    requestAnimationFrame(() => {
+      const element = scroll.current
+      if (mounted.current && !analysis && element) automaticScroll(element, element.scrollHeight)
+    })
   }
   function edit(label: string, value: string) {
     if (active === 'plan' && replay.status === 'idle' && (label === '손절' || label === '익절')) {
@@ -449,6 +474,24 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     <div className="rw-actions"><button className="g-btn g-btn-p" onClick={() => registered ? onOpenTrading?.() : openDoc('run')}>{registered ? 'AI 트레이딩에서 열기' : '실행 확인'}</button></div>
   </>
 
+  function observeScroll(element: HTMLElement) {
+    if (analysis || restoringPosition.current) return
+    const current = captureResearchScroll(element), previous = lastScroll.current
+    // Source10684~10709: an upward reading gesture releases following beyond
+    // 60px; only a downward return within 40px resumes it. Content/viewport
+    // changes and our own scrolls cannot manufacture either user intention.
+    if (previous && previous.height === current.height && previous.width === current.width && previous.total === current.total) {
+      const gap = current.total - current.height - current.top
+      if (current.top < previous.top - 2 && gap > 60) follow.current = false
+      else if (current.top > previous.top + 2 && gap < 40) follow.current = true
+    }
+    lastScroll.current = current
+    documentFollowing.current[active] = follow.current
+    positions.current[active] = current.top
+    clearTimeout(savePositionTimer.current)
+    savePositionTimer.current = setTimeout(() => saveView.current(), 250)
+  }
+
   return <div ref={root} className="client-restored-research" data-source="client-fixture">
     {analysis && <ClientLoadBoundary key={analysis.doc} fallback={<AnalysisFallback onClose={closeAnalysis} />}>
       <Suspense fallback={<AnalysisFallback loading onClose={closeAnalysis} />}>
@@ -458,5 +501,5 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
           onAsk={(question, reference) => ask(reference ? question + '\n\n참고: ' + reference : question, reference ? reference + '\n문서에 기록된 거래입니다. 조건 변경은 새 검증이 필요하며 기존 결과는 그대로 유지됩니다.' : undefined, true, analysis.doc)} />
       </Suspense>
     </ClientLoadBoundary>}
-    <div className="rw-workspace" hidden={Boolean(analysis)} style={analysis ? { display: 'none' } : undefined}><section className="rw-center"><header className="rw-header"><div className="rw-title"><button type="button" className="g-btn-t" aria-label="대화로 돌아가기" onClick={onBack}>←</button><div className="rw-heading">{titleEditor ?? <span title={idea}>{idea || '과매도 반등 전략'}</span>}</div>{replay.status === 'playing' && <span className="g-tag"><span className="g-dot run" />연구 진행 중</span>}<button ref={auxTrigger} className="rw-mobile-artifacts g-btn-t" aria-label={`${labelOf('Artifacts')} 열기`} aria-expanded={auxOpen} onClick={() => setAuxOpen(v => !v)}><ClientIcon name="document" /> {labelOf('Artifacts')}</button>{headerActions}</div><nav ref={tabNav} className="rw-tabs" role="tablist" aria-label="열린 연구 문서" onKeyDown={e => { if (e.defaultPrevented || e.nativeEvent.isComposing || e.nativeEvent.keyCode === 229 || e.altKey || e.ctrlKey || e.metaKey || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return; e.preventDefault(); const index = state.tabs.indexOf(active); const next = e.key === 'Home' ? 0 : e.key === 'End' ? state.tabs.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + state.tabs.length) % state.tabs.length; openDoc(state.tabs[next]); requestAnimationFrame(() => tabNav.current?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus()) }}>{state.tabs.map(doc => <button type="button" role="tab" tabIndex={active === doc ? 0 : -1} aria-selected={active === doc} className={active === doc ? 'on' : ''} key={doc} onClick={() => openDoc(doc)}>{titleOf(doc)}</button>)}</nav></header><div className="rw-scroll" ref={scroll} onScroll={e => { if (analysis || restoringPosition.current) return; const node = e.currentTarget; follow.current = node.scrollHeight - node.clientHeight - node.scrollTop < 140; positions.current[active] = node.scrollTop; clearTimeout(savePositionTimer.current); savePositionTimer.current = setTimeout(() => saveView.current(), 250) }}><article className="g-doc g-adoc" aria-label={`${titleOf(active)} 문서`} key={active}>{content}<div className="rw-thread">{state.replies.filter(reply => reply.doc === active).map((reply, index) => <div key={index}><div className="rw-user-message">{reply.question}</div><div className="rw-answer">{reply.answer}</div></div>)}</div></article></div>{!(active === 'activity' && replay.status === 'playing') && <div className="rw-composer-wrap"><form className="rw-composer" onSubmit={e => { e.preventDefault(); ask(activeDraft) }}><div className="rw-context">{nativeResearchText(language, 'composerContext', { label: titleOf(active) })}</div><textarea ref={composer} aria-label={`${titleOf(active)}에 질문`} placeholder={c('placeholder')} rows={1} value={activeDraft} onChange={e => setState(old => ({ ...old, drafts: { ...old.drafts, [active]: e.target.value } }))} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); ask(activeDraft) } }} /><button aria-label="문서 질문 보내기" type="submit" disabled={!activeDraft.trim()}><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg></button></form></div>}</section><aside ref={auxPanel} className={`rw-aux${auxOpen ? ' is-open' : ''}`} aria-label={labelOf('Artifacts')}><div className="rw-aux-heading">{labelOf('Artifacts')}<button className="rw-mobile-artifacts g-btn-t" aria-label={`${labelOf('Artifacts')} 닫기`} onClick={() => { setAuxOpen(false); auxTrigger.current?.focus({ preventScroll: true }) }}>×</button></div>{available.map(([id, title]) => <button className={`rw-artifact ${active === id ? 'on' : ''}`} key={id} onClick={() => openDoc(id)}><ClientIcon name="document" size={14} /><span>{labelOf(title)}</span>{id === 'report' && <small className="warn">검토 필요</small>}</button>)}{registered && <button className={`rw-artifact ${active === 'live' ? 'on' : ''}`} onClick={() => openDoc('live')}><ClientIcon name="document" size={14} /><span>Live</span><small>Paper</small></button>}<div className="rw-aux-heading rw-team-heading">{labelOf('Research Team')}</div>{previewTeam(elapsed).map(member => <div className="rw-team" key={member.name}><span>{labelOf(member.name)}</span><small>{member.status === '작업 중' && <i className="g-dot run" />}{member.status === '완료' && <i className="g-dot ok" />}{member.status}</small></div>)}</aside></div>{displayNotice && <div className="rw-notice" role="status"><span>{displayNotice}</span><button aria-label="안내 닫기" onClick={() => { setNotice(''); setStorageWarningDismissed(true) }}>×</button></div>}{import.meta.env.DEV && new URLSearchParams(window.location.search).get('ui-debug') === '1' && <details className="rw-preview-tools"><summary>개발 미리보기 · 샘플 데이터</summary><p>클라이언트 원본의 고정 예시로 화면을 검수합니다. 입력한 아이디어의 실제 검증 결과가 아니며 AI·백테스트·연결·주문을 실행하지 않습니다. 조건 편집은 메모에만 반영되며 예시 수치는 바뀌지 않습니다.</p><p>선택한 계획: {planPair} · {planTimeframe} · {isTrend ? '추세 추종' : '하락 후 반등'} · 손절 {planRisk} · 익절 {planTake}<br />고정 원본 재생 사례: BTC/USDT · 1일봉 · RSI 40 반등 · 손절 −3% · 익절 +8%. Activity·Strategy·Backtest 이후의 수치는 이 고정 사례입니다.</p>{replay.status !== 'idle' && <div><span>{Math.floor(elapsed)}초 / 95초</span>{replay.status === 'playing' ? <button onClick={store.pause}>일시 정지</button> : replay.status === 'paused' ? <button onClick={store.resume}>계속 재생</button> : null}{replay.status !== 'completed' && <button onClick={store.finish}>샘플 재생 완료</button>}</div>}</details>}</div>
+    <div className="rw-workspace" hidden={Boolean(analysis)} style={analysis ? { display: 'none' } : undefined}><section className="rw-center"><header className="rw-header"><div className="rw-title"><button type="button" className="g-btn-t" aria-label="대화로 돌아가기" onClick={onBack}>←</button><div className="rw-heading">{titleEditor ?? <span title={idea}>{idea || '과매도 반등 전략'}</span>}</div>{replay.status === 'playing' && <span className="g-tag"><span className="g-dot run" />연구 진행 중</span>}<button ref={auxTrigger} className="rw-mobile-artifacts g-btn-t" aria-label={`${labelOf('Artifacts')} 열기`} aria-expanded={auxOpen} onClick={() => setAuxOpen(v => !v)}><ClientIcon name="document" /> {labelOf('Artifacts')}</button>{headerActions}</div><nav ref={tabNav} className="rw-tabs" role="tablist" aria-label="열린 연구 문서" onKeyDown={e => { if (e.defaultPrevented || e.nativeEvent.isComposing || e.nativeEvent.keyCode === 229 || e.altKey || e.ctrlKey || e.metaKey || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return; e.preventDefault(); const index = state.tabs.indexOf(active); const next = e.key === 'Home' ? 0 : e.key === 'End' ? state.tabs.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + state.tabs.length) % state.tabs.length; openDoc(state.tabs[next]); requestAnimationFrame(() => tabNav.current?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus()) }}>{state.tabs.map(doc => <button type="button" role="tab" tabIndex={active === doc ? 0 : -1} aria-selected={active === doc} className={active === doc ? 'on' : ''} key={doc} onClick={() => openDoc(doc)}>{titleOf(doc)}</button>)}</nav></header><div className="rw-scroll" ref={scroll} onScroll={e => observeScroll(e.currentTarget)}><article className="g-doc g-adoc" aria-label={`${titleOf(active)} 문서`} key={active}>{content}<div className="rw-thread">{state.replies.filter(reply => reply.doc === active).map((reply, index) => <div key={index}><div className="rw-user-message">{reply.question}</div><div className="rw-answer">{reply.answer}</div></div>)}</div></article></div>{!(active === 'activity' && replay.status === 'playing') && <div className="rw-composer-wrap"><form className="rw-composer" onSubmit={e => { e.preventDefault(); ask(activeDraft) }}><div className="rw-context">{nativeResearchText(language, 'composerContext', { label: titleOf(active) })}</div><textarea ref={composer} aria-label={`${titleOf(active)}에 질문`} placeholder={c('placeholder')} rows={1} value={activeDraft} onChange={e => setState(old => ({ ...old, drafts: { ...old.drafts, [active]: e.target.value } }))} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); ask(activeDraft) } }} /><button aria-label="문서 질문 보내기" type="submit" disabled={!activeDraft.trim()}><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg></button></form></div>}</section><aside ref={auxPanel} className={`rw-aux${auxOpen ? ' is-open' : ''}`} aria-label={labelOf('Artifacts')}><div className="rw-aux-heading">{labelOf('Artifacts')}<button className="rw-mobile-artifacts g-btn-t" aria-label={`${labelOf('Artifacts')} 닫기`} onClick={() => { setAuxOpen(false); auxTrigger.current?.focus({ preventScroll: true }) }}>×</button></div>{available.map(([id, title]) => <button className={`rw-artifact ${active === id ? 'on' : ''}`} key={id} onClick={() => openDoc(id)}><ClientIcon name="document" size={14} /><span>{labelOf(title)}</span>{id === 'report' && <small className="warn">검토 필요</small>}</button>)}{registered && <button className={`rw-artifact ${active === 'live' ? 'on' : ''}`} onClick={() => openDoc('live')}><ClientIcon name="document" size={14} /><span>Live</span><small>Paper</small></button>}<div className="rw-aux-heading rw-team-heading">{labelOf('Research Team')}</div>{previewTeam(elapsed).map(member => <div className="rw-team" key={member.name}><span>{labelOf(member.name)}</span><small>{member.status === '작업 중' && <i className="g-dot run" />}{member.status === '완료' && <i className="g-dot ok" />}{member.status}</small></div>)}</aside></div>{displayNotice && <div className="rw-notice" role="status"><span>{displayNotice}</span><button aria-label="안내 닫기" onClick={() => { setNotice(''); setStorageWarningDismissed(true) }}>×</button></div>}{import.meta.env.DEV && new URLSearchParams(window.location.search).get('ui-debug') === '1' && <details className="rw-preview-tools"><summary>개발 미리보기 · 샘플 데이터</summary><p>클라이언트 원본의 고정 예시로 화면을 검수합니다. 입력한 아이디어의 실제 검증 결과가 아니며 AI·백테스트·연결·주문을 실행하지 않습니다. 조건 편집은 메모에만 반영되며 예시 수치는 바뀌지 않습니다.</p><p>선택한 계획: {planPair} · {planTimeframe} · {isTrend ? '추세 추종' : '하락 후 반등'} · 손절 {planRisk} · 익절 {planTake}<br />고정 원본 재생 사례: BTC/USDT · 1일봉 · RSI 40 반등 · 손절 −3% · 익절 +8%. Activity·Strategy·Backtest 이후의 수치는 이 고정 사례입니다.</p>{replay.status !== 'idle' && <div><span>{Math.floor(elapsed)}초 / 95초</span>{replay.status === 'playing' ? <button onClick={store.pause}>일시 정지</button> : replay.status === 'paused' ? <button onClick={store.resume}>계속 재생</button> : null}{replay.status !== 'completed' && <button onClick={store.finish}>샘플 재생 완료</button>}</div>}</details>}</div>
 }

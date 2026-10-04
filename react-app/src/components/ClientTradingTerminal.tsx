@@ -106,8 +106,16 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
     if (!pickerOpen || !useSelector) return
     const region = pickerRegion.current, trigger = pickerTrigger.current
     if (!region || !trigger) return
-    if (mobile) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
     const first = region.querySelector<HTMLElement>('input[type="search"]:not(:disabled)') ?? region.querySelector<HTMLElement>('button:not(:disabled)') ?? region
+    const revealSearch = () => {
+      const viewport = window.visualViewport
+      const top = viewport?.offsetTop ?? 0
+      const bottom = viewport ? top + viewport.height : window.innerHeight
+      const bounds = first.getBoundingClientRect()
+      if (bounds.top < top || bounds.bottom > bottom - 12) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
+    }
+    if (mobile) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
+    else revealSearch()
     first.focus({ preventScroll: true })
     const measure = () => {
       // Follow the actual trigger height, including enlarged/translatable text.
@@ -115,6 +123,12 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       const viewport = window.visualViewport
       const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight
       region.style.setProperty('--ctt-picker-height', `${Math.max(96, bottom - top - 12)}px`)
+    }
+    const resize = () => {
+      // Reposition only for a changed viewport/trigger while this rail owns
+      // focus. Ordinary scrolling and an owned child dialog keep their place.
+      if (region.contains(document.activeElement)) revealSearch()
+      measure()
     }
     const outside = (event: Event) => {
       if (!(event.target instanceof Node) || region.contains(event.target) || trigger.contains(event.target)) return
@@ -126,10 +140,10 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       if (event.type === 'pointerdown' && region.contains(document.activeElement)) trigger.focus({ preventScroll: true })
       setPickerOpen(false)
     }
-    const observer = new ResizeObserver(measure)
+    const observer = new ResizeObserver(resize)
     observer.observe(trigger)
-    window.addEventListener('resize', measure)
-    window.visualViewport?.addEventListener('resize', measure)
+    window.addEventListener('resize', resize)
+    window.visualViewport?.addEventListener('resize', resize)
     window.visualViewport?.addEventListener('scroll', measure)
     document.addEventListener('scroll', measure, true)
     document.addEventListener('pointerdown', outside, true)
@@ -137,8 +151,8 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
     measure()
     return () => {
       observer.disconnect()
-      window.removeEventListener('resize', measure)
-      window.visualViewport?.removeEventListener('resize', measure)
+      window.removeEventListener('resize', resize)
+      window.visualViewport?.removeEventListener('resize', resize)
       window.visualViewport?.removeEventListener('scroll', measure)
       document.removeEventListener('scroll', measure, true)
       document.removeEventListener('pointerdown', outside, true)
