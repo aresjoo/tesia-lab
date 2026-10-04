@@ -2154,7 +2154,11 @@
       "exitCode": 0,
       "findings": 0
     },
-    "nodeModulesCachesCredentialsDatabasesIncluded": false
+    "nodeModulesCachesCredentialsDatabasesIncluded": false,
+    "deliveryStaged": {
+      "exitCode": 0,
+      "findings": 0
+    }
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
@@ -2163,7 +2167,17 @@
     "actualMergeExecuted": false,
     "includedInSnapshot": false,
     "producerIntegrated": false,
-    "meaning": "별도 draft 보존. 파일 충돌0은 모델/서비스/React 통합 GO가 아님"
+    "meaning": "별도 draft 보존. 파일 충돌0은 모델/서비스/React 통합 GO가 아님",
+    "rehearsal": {
+      "status": "MERGE_REHEARSAL_PASS",
+      "codeCommit": "7bab460032a4f4400f15b91a380765cc90a3d22d",
+      "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+      "exitCode": 0,
+      "conflicts": 0,
+      "tree": "085f777e3bf5872a637623a79037bd67fbf26587",
+      "actualMergeExecuted": false,
+      "producerIntegrated": false
+    }
   },
   "remaining": [
     "실Google사용자 callback/ACK 완료 미검증",
@@ -2190,14 +2204,14 @@
   },
   "deployment": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
-    "currentDeployedSource": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
-    "currentDeployedArchiveSha256": "6c846ce246013c321fbbc0a3902b8fb015c32ffb1eadc68ddb25c26522fb8467",
-    "rawHtmlSha256": "f5a2202ccb9ab1a90c88a3b09566b307dd8ee9b32634cc0afe90d4b9ec4c2bfb",
+    "currentDeployedSource": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
+    "currentDeployedArchiveSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
+    "rawHtmlSha256": "c01d8b8f4072ef2fa7b795b4f4ad7b522d39bd45451135bdc173e485e68ae8ea",
     "activationExitCode": 0,
     "postflightExitCode": 0,
     "activationObservation": {
       "status": "STATIC_UI_DEPLOYED",
-      "webSha256": "6c846ce246013c321fbbc0a3902b8fb015c32ffb1eadc68ddb25c26522fb8467",
+      "webSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
       "privateAuthorityPreserved": true,
       "backupRetained": true,
       "publicRootStatuses": [
@@ -2207,13 +2221,13 @@
     },
     "privateAuthorityPreserved": true,
     "backupRetained": true,
-    "previousStaticSource": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+    "previousStaticSource": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
     "backendCredentialDatabaseReplaced": false,
     "publicStatic": {
       "status": "PASS",
       "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
-      "sourceCommit": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
-      "archiveSha256": "6c846ce246013c321fbbc0a3902b8fb015c32ffb1eadc68ddb25c26522fb8467",
+      "sourceCommit": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
+      "archiveSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
       "registeredAssets": 350,
       "passed": 350,
       "failed": 0,
@@ -2255,12 +2269,7 @@
       "serverMutationExecuted": false
     }
   },
-  "pendingDeployment": {
-    "status": "VERIFIED_STATIC_UI_READY_NOT_ACTIVATED",
-    "sourceCommit": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
-    "archiveSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
-    "htmlSha256": "c01d8b8f4072ef2fa7b795b4f4ad7b522d39bd45451135bdc173e485e68ae8ea"
-  },
+  "pendingDeployment": null,
   "evidenceHashes": {
     "continuation-opus-review.json": "e360c8479c802738abae6dee963f3bd98efc4c9283914a0010bf476552a14c1f",
     "continuation-opus-review.json.inputs.json": "ea32f4604a51853f194cc4bd855519c79cc9e2cc4138d97f3aa173151826b6e6",
@@ -2277,6 +2286,13 @@
     "continuation-verified-built-auth/receipt.json": "8af75760fa12059c9b9d88b83533eaa36fadbd3d7cf908dd098df15020cac574",
     "continuation-source-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "continuation-delivery-service-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "continuation-release/manifest.json": "7b7a912d426e392f29c59a228466052ee42ff6618c889b2f2cfd8f63b1973424"
+    "continuation-release/manifest.json": "7b7a912d426e392f29c59a228466052ee42ff6618c889b2f2cfd8f63b1973424",
+    "continuation-vm-preflight.json": "0a791fb98bf571343e969becccf1a6bc21ee30c56193b7c35d2f17a99c1a6b81",
+    "continuation-vm-activate.json": "cd10898e596df7a60ac8a21cc4bdd2fef1ae47ec8e5105bfe3d39445d7f2b8d9",
+    "continuation-vm-postflight.json": "00b0c9a323a33851176817d8983516ee6fa3c1a77baa94cd675bbd447840d222",
+    "continuation-public-static.json": "4b742d8b8e0f5fb947799371e9956794b7b323e80f4e44bf7d2646931cd5a0ce",
+    "continuation-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
+    "continuation-code-merge.json": "b32192949809ed9586c299be10ee325bfc115b142764cdc4111ffc688b59da41",
+    "continuation-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
   }
 }

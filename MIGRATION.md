@@ -19,7 +19,7 @@
 
 현재 전달은 React4237d65 이후의 작은 사용성 교정이다. 원본9fbff의 연구 로그 읽기 위치/문서별 따라가기, 짧은 화면에서 전략 복사창의 한 scrollport fallback과 초기 초점, terminal 검색의 화면 안 도달, 공급 inbox의 빈 분류 안내를 보완한다. 정상 원본 SVG/문구/색상/동선과 Google·Apple·이메일을 보존하며 인증/프롬프트/API/package/가격/flag/실권한 변경0, 파일/storage 삭제0이다. 원본 HTML/server/Worker/root workflow와 main은 변경/병합하지 않는다.
 
-최종83spec 단일 2700PASS/0FAIL/기존QA-015SKIP2·입력불변·lint/3build·독립personal(1) Opus5.5·원실패 exactPASS 결속 및 built로그인1440/390/320를 확인했다. 전수469spec·과거partial과합산하지 않는다. 원제품실패와24RAF측정하니스·시각불편으로기각한106PASS 교정은 Bugfix/Git/비공개원로그에남긴다. 정적 bundle 전달 준비이며 아직 현재4237 운영 화면을 교체하지 않았다. 정확SHA/파일수/해시는manifest/verification이소유한다.
+최종83spec 단일 2700PASS/0FAIL/기존QA-015SKIP2·입력불변·lint/3build·독립personal(1) Opus5.5·원실패 exactPASS 결속 및 built로그인1440/390/320를 확인했다. 전수469spec·과거partial과합산하지 않는다. 원제품실패와24RAF측정하니스·시각불편으로기각한106PASS 교정은 Bugfix/Git/비공개원로그에남긴다. teth.ai 정적 UI 활성화/CAS/권위보존·공개TLS exact자산350/4문서 경로·로그인3폭 검사를 완료했다. 직전4237 정적 bundle은 복구용으로 보관한다. 정확SHA/파일수/해시는manifest/verification이소유한다.
 
 프롬프트draft8646은 별도이며 실제 React producer 통합0이다. Google사용자callback/ACK, Apple등록/이메일SMTP, 실연구g-doc/Critic·계좌원장·거래소·주문·과금/전체서비스GO는 남는다. 파일 무충돌이나 정적 배포를 실제 서비스 성공으로 쓰지 않는다. 이전4237의7언어복구·정책CSS격리·nativeBack/shareUrl·계정동적export복원 및6deadfunction정리·1868PASS와55반례 결속은 Git에보존하며 현재결과와합산하지않는다.
 
