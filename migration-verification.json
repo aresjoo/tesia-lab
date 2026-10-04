@@ -729,7 +729,11 @@
       "exitCode": 0,
       "findings": 0
     },
-    "secretsOrDatabasesIncluded": false
+    "secretsOrDatabasesIncluded": false,
+    "deliveryStaged": {
+      "exitCode": 0,
+      "findings": 0
+    }
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
@@ -737,7 +741,17 @@
     "pr": 5,
     "includedInSnapshot": false,
     "meaning": "별도 draft 보존. 무충돌이 실제 React producer 통합/모델 운영GO는 아님",
-    "actualMergeExecuted": false
+    "actualMergeExecuted": false,
+    "rehearsal": {
+      "scope": "GIT_MERGE_REHEARSAL_ONLY",
+      "codeDeliveryCommit": "5695a2134427d8ed22f1d0ae07aa7bbab982aeba",
+      "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+      "exitCode": 0,
+      "conflicts": 0,
+      "tree": "6f1c219fcb71c738ae4c31fd1bc9f6843f820fff",
+      "actualMergeExecuted": false,
+      "producerIntegrationVerified": false
+    }
   },
   "remaining": [
     "실Google사용자 callback/ACK 완료 미검증",
@@ -761,54 +775,73 @@
   },
   "deployment": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
-    "currentDeployedSource": "061987ee30ecd6ab681ea14c0e75f1a8804c22f6",
-    "currentDeployedArchiveSha256": "29c3c55eb6ebc9efff232b62a81a2135d0ae974b680542739c3d3afeb8b1a725",
-    "rawHtmlSha256": "14a91b34c95971d6f81eec849e14d9efc4dec510492ff170d08c260fd1e2145e",
+    "currentDeployedSource": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+    "currentDeployedArchiveSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
+    "rawHtmlSha256": "37a8e8923ee4e3afc249e1d44cc28772150b4aecf64c6e0b4e2f3546f08979d2",
     "activationExitCode": 0,
     "postflightExitCode": 0,
-    "publicRootStatusesDuringRestart": [
-      503,
-      200
-    ],
     "privateAuthorityPreserved": true,
     "backupRetained": true,
-    "previousStaticSource": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
-    "backendCredentialDatabaseReplacementAuthorized": false,
+    "activationObservation": {
+      "status": "STATIC_UI_DEPLOYED",
+      "webSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
+      "privateAuthorityPreserved": true,
+      "backupRetained": true,
+      "publicRootStatuses": [
+        503,
+        200
+      ]
+    },
+    "previousStaticSource": "061987ee30ecd6ab681ea14c0e75f1a8804c22f6",
     "backendCredentialDatabaseReplaced": false,
     "publicStatic": {
       "status": "PASS",
+      "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
+      "sourceCommit": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+      "archiveSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
       "registeredAssets": 350,
       "passed": 350,
       "failed": 0,
-      "documentAliasesPassed": [
-        "/",
-        "/about/",
-        "/download/",
-        "/policies/"
+      "failedPaths": [],
+      "documentAliases": [
+        {
+          "path": "/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/about/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/download/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/policies/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        }
       ],
       "authenticationOrMutationExecuted": false
     },
     "publicLoginPresentation": {
       "status": "PASS",
-      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
       "viewports": [
         1440,
         390,
         320
       ],
       "googleAppleEmailVisible": true,
-      "unregisteredProviders": "Apple·이메일 준비중; 서버등록/실로그인미검증",
+      "unregisteredProviders": "Apple・이메일 준비중",
       "actualLoginVerified": false,
       "providerStartExecuted": false,
       "serverMutationExecuted": false
     }
   },
-  "pendingDeployment": {
-    "status": "VERIFIED_STATIC_UI_READY_NOT_ACTIVATED",
-    "sourceCommit": "7dd1365d59c75a778c0343d6d014c6af465cd389",
-    "archiveSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
-    "htmlSha256": "37a8e8923ee4e3afc249e1d44cc28772150b4aecf64c6e0b4e2f3546f08979d2"
-  },
+  "pendingDeployment": null,
   "evidenceHashes": {
     "ui-continuity-repeated-focus-build.json": "076e4fa28c8ced2a3eb2e0cf4de87c6d816f8f7e47ea1bc0692b1f383faeb0d0",
     "ui-continuity-repeated-focus-impact.log": "1ed1052139614988a0dbab25cf9b70f2957c1a2b44ab1583e60ae828779901c0",
@@ -834,6 +867,12 @@
     "ui-continuity-source-final-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "ui-continuity-repeated-focus-service-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "ui-continuity-release/manifest.json": "49c5b687f116827f08aa8c5d7f08195c6ed07d398c6d7b27c16cf0dd0d876672",
-    "ui-continuity-vm-preflight.json": "27b5ed5ed55079ef0f186792ae3503623324b16328a09355132c2c48d33b9e6f"
+    "ui-continuity-vm-preflight.json": "27b5ed5ed55079ef0f186792ae3503623324b16328a09355132c2c48d33b9e6f",
+    "ui-continuity-vm-activate.json": "3c322ca478dcd607738844466c0d1fa1fb447fd89732efdba4c2e78314c3f4b7",
+    "ui-continuity-vm-postflight.json": "c9e5ae533d4bbd4ecfa97fa4e6a1714e733bc974ef20aa30a4ea2781fa055b4f",
+    "ui-continuity-public-static.json": "b4685e130145eb83bbb46ad53da00c06b91bb7d23c79da4facf507c3f7f430f1",
+    "ui-continuity-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
+    "ui-continuity-code-merge.json": "fd9bcbb1affc4ded01e6666227720bf7fafe2723689ebc9f796e774be63411bd",
+    "ui-continuity-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
   }
 }
