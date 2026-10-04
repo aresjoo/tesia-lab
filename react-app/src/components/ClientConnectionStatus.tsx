@@ -1,5 +1,6 @@
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { planExchanges, type PlanExchange } from '../client-connection-plan'
+import { ClientTerminalVenueIcon } from './ClientTerminalVenueIcon'
 import { boundConnectionStatus, type ConnectionStatusAction, type ConnectionStatusPresentation, type ConnectionStatusRecord,
   type ConnectionStatusRequest, type ConnectionStatusSource } from '../client-connection-status-presentation'
 import '../client-connection-status.css'
@@ -81,6 +82,12 @@ export function ClientConnectionStatus({ presentation, scope, source, onClose }:
   const eligible = 'connections' in state ? state.connections.filter(item => item.eligibility === 'eligible') : []
   const selected = state.kind === 'eligible_my_exchange_filter' && (state.selected === 'all' || state.selected === 'off'
     || eligible.some(item => item.exchange === state.selected)) ? state.selected : 'all'
+  const filterActive = eligible.length > 0 && selected !== 'off'
+  const filterIcons = (selection: PlanExchange | 'all' | 'off', trigger = false) => {
+    const items = selection === 'all' || trigger && selection === 'off' ? eligible.slice(0, 3)
+      : selection === 'off' ? [] : eligible.filter(item => item.exchange === selection).slice(0, 1)
+    return items.map(item => <ClientTerminalVenueIcon key={item.id} id={item.exchange} size={16} className="tb-ic" />)
+  }
   return <section ref={root} className={`client-connection-status${state.kind === 'disconnect_confirmation' || state.kind === 'kyc_before_start' ? ' ccs-confirm' : ''}`}
     data-connection-state={state.kind} data-source={p.source} aria-labelledby={titleId} aria-busy={phase === 'pending'}
     onKeyDown={event => { if (event.key === 'Escape') { if (menu === key) setMenu(null); else if (onClose) close() } }}>
@@ -113,8 +120,8 @@ export function ClientConnectionStatus({ presentation, scope, source, onClose }:
         {(state.kyc === 'none' || state.kyc === 'failed') && button('openKyc', `${n}에서 본인 확인하기`, true)}<p className="px-links">{button('refresh', state.kyc === 'error' ? '다시 확인하기' : '확인 상태 다시 보기')}</p></>}
     </>}
     {state.kind === 'eligible_my_exchange_filter' && <div className="ccs-myex">
-      <button type="button" className="myex" disabled={!eligible.length || !!phase || eligible.length === 1 && typeof p.actions?.filter !== 'function'} aria-expanded={menu === key} onClick={() => eligible.length === 1 ? run('filter', { selection: selected === 'off' ? eligible[0].exchange : 'off', exchange: eligible[0].exchange }) : setMenu(menu === key ? null : key)}>내 거래소<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
-      {menu === key && <div className="myex-m" role="menu" aria-label="내 거래소">{(['all', ...eligible.map(item => item.exchange), 'off'] as const).map(selection => <button type="button" role="menuitemradio" aria-checked={selected === selection} key={selection} disabled={!!phase || typeof p.actions?.filter !== 'function'} onClick={() => run('filter', { selection, ...(selection !== 'all' && selection !== 'off' ? { exchange: selection } : {}) })}>{selection === 'all' ? '연결한 거래소 전체' : selection === 'off' ? '끄기, 전체 전략 보기' : `${name(selection)}만`}</button>)}</div>}
+      <button type="button" className={`myex${filterActive ? ' on' : ''}`} disabled={!eligible.length || !!phase || eligible.length === 1 && typeof p.actions?.filter !== 'function'} aria-pressed={filterActive} aria-expanded={menu === key} onClick={() => eligible.length === 1 ? run('filter', { selection: selected === 'off' ? eligible[0].exchange : 'off', exchange: eligible[0].exchange }) : setMenu(menu === key ? null : key)}><span className="myex-ic">{filterIcons(selected, true)}</span>{selected === 'all' || selected === 'off' ? '내 거래소' : `${name(selected)}만`}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+      {menu === key && <div className="myex-m" role="menu" aria-label="내 거래소">{(['all', ...eligible.map(item => item.exchange), 'off'] as const).map(selection => <button type="button" role="menuitemradio" aria-checked={selected === selection} key={selection} disabled={!!phase || typeof p.actions?.filter !== 'function'} onClick={() => run('filter', { selection, ...(selection !== 'all' && selection !== 'off' ? { exchange: selection } : {}) })}>{filterIcons(selection)}<span>{selection === 'all' ? '연결한 거래소 전체' : selection === 'off' ? '끄기, 전체 전략 보기' : `${name(selection)}만`}</span></button>)}</div>}
       {!eligible.length && <p role="status">이용 가능한 연결을 확인할 수 없습니다.</p>}
       {state.empty && eligible.length > 0 && <p className="myex-empty">{(selected === 'all' || selected === 'off' ? eligible : eligible.filter(item => item.exchange === selected)).map(item => name(item.exchange)).join(', ')}에서 실행할 수 있는 전략이 아직 없습니다.</p>}
     </div>}

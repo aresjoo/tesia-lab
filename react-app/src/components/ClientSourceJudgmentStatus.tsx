@@ -5,18 +5,8 @@ import { sharedNumber, sharedPercent } from '../client-shared-number-format'
 import type { SourceTerminalSeed, SourceTerminalEvaluation } from '../client-terminal-source-fixture'
 import { sourceDay } from '../client-terminal-source-view'
 import '../client-source-judgment.css'
-
-const icons: Readonly<Record<string, string>> = {
-  binance: '/client-broker-assets/app-binance.png', bitget: '/client-broker-assets/app-bitget.png',
-  okx: '/client-broker-assets/app-okx.png', woox: '/client-broker-assets/app-woox.png',
-  bybit: '/client-broker-assets/app-bybit.png', upbit: '/client-broker-assets/app-upbit.png',
-}
-
-/** Explicit exchange identity; unknown IDs never inherit another venue's mark. */
-export function ClientTerminalVenueIcon({ id }: { id: string }) {
-  const src = Object.hasOwn(icons, id) ? icons[id] : undefined
-  return src ? <img className="csj-icon" src={src} alt="" width={16} height={16} /> : null
-}
+import { ClientTerminalVenueIcon } from './ClientTerminalVenueIcon'
+export { ClientTerminalVenueIcon } from './ClientTerminalVenueIcon'
 
 /** 0eb338f7 tfTmStatusBlock. Accepts ONLY the historical synthetic producer.
  * No clock/polling or live account state is inferred from its final position. */

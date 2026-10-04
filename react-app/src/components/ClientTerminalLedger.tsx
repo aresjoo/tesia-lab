@@ -5,6 +5,7 @@ import { sourceTerminalPrices } from '../client-terminal-source-fixture'
 import { sourceDay, sourcePercent, sourceTone } from '../client-terminal-source-view'
 import { sourceTradeExitPrice, sourceTerminalOrderRows, sourceTerminalAssets, type SourceTerminalModel } from '../client-terminal-source-ledger'
 import '../client-terminal-ledger.css'
+import { ClientTerminalVenueIcon } from './ClientTerminalVenueIcon'
 
 export type SourceTerminalBottomTabsProps = {
   models: readonly SourceTerminalModel[]
@@ -24,7 +25,7 @@ function brokerFor(id: string) {
 }
 function Exchange({ id, compact = true }: { id: string; compact?: boolean }) {
   const broker = brokerFor(id)
-  return <><span aria-hidden="true" className={`exb${compact ? ' sm' : ''}`} style={{ background: broker.col, color: broker.fg }}>{broker.name.slice(0, 2).toUpperCase()}</span>{compact && <> {broker.name}</>}</>
+  return <><span aria-hidden="true" className={`exb${compact ? ' sm' : ''}`} style={{ background: broker.col, color: broker.fg }}><ClientTerminalVenueIcon id={id} size={compact ? 15 : 17} fallback={broker.name.slice(0, 2).toUpperCase()} /></span>{compact && <> {broker.name}</>}</>
 }
 function Frame({ scope, label, headers, rows, empty }: { scope: 'current' | 'all'; label: string; headers: readonly Header[]; rows: ReactNode[]; empty: readonly [string, string] }) {
   return <div className="client-terminal-ledger">

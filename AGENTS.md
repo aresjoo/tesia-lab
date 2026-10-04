@@ -10,6 +10,8 @@
 
 현재 snapshot에는 UI 탐색·접근성·로그인 선택지 보존에 이어 모바일 필터 시트·문서 복귀·catalogue 전체 D/EV 근거·마커·미니차트와 지연 장착 초점 교정도 포함한다. 관련 source engine·SDK·인증 권한은 바꾸지 않았으며 상세 원본 차이와 최소 보완은 MIGRATION 및 React DESIGN/Bugfix를 따른다. 전체 검사와 후속 영향 검사를 합산해 무결함으로 쓰지 않는다. 별도 승인된 teth.ai 정적 업데이트의 실행 여부는 `migration-verification.json`을 확인한다. 이를 클라이언트 main 병합·root server/Worker 배포·투자 프롬프트 draft 통합·실제 공급자 인증 완료로 해석하지 않는다. migration push 자체는 배포를 실행하지 않는다.
 
+후속 푸터7언어 본문·desktop authnav/globe 스크롤·원본22종 거래소 아이콘·내 거래소 필터 복원도 포함한다. unknown/로드실패 fallback과 요청 identity·eligible·권한 경계를 유지하며 ID 없는 NativeAccountPanels에는 추정 아이콘을 넣지 않았다. 최초 영향664개 중1건은 CDP Promise 수거 실패로 보존하고 test-only 수명을 교정했다. 최종 검증과 배포 기록은 같은 영수증에 누적한다. Google 추가를 이유로 Apple·이메일 UI를 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
+
 | 추가 경로 | 역할 |
 | --- | --- |
 | `README.md`, `MIGRATION.md` | 전달 진입점과 원본 대비 구조/동작 대응·잔여·누적 갱신 절차 |

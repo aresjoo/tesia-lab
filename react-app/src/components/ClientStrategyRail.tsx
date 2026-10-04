@@ -3,6 +3,7 @@ import type { ClientTerminalStrategy } from '../client-terminal-view'
 import '../client-strategy-rail.css'
 import { useClientPreferences } from '../client-preferences'
 import { accountTerminalText } from '../client-account-terminal-copy'
+import { ClientTerminalVenueIcon } from './ClientTerminalVenueIcon'
 
 export type ClientStrategyRailProps = {
   strategies: readonly ClientTerminalStrategy[] | null
@@ -53,7 +54,7 @@ export function ClientStrategyRail({ strategies, selectedId, onSelect, onNew, on
                 ...(item.pnlPercentLabel !== undefined ? [`${item.pnlKind === 'validation' && item.pnlLabel === undefined ? `${t('validation')} ` : ''}${t('pnlPercentValue', { value: item.pnlPercentLabel })}`] : []),
               ].join(', ')}</span>
               <button className="tft-select" type="button" aria-label={t('selectName', { name: item.name })} aria-describedby={`${heading}-strategy-${index}`} aria-pressed={selectedId === item.id} onClick={() => onSelect(item.id)}>
-                <span className="r1"><span className="exb" title={item.exchange.name} style={{ background: item.exchange.color, color: item.exchange.foreground ?? 'var(--gt, #e3e3e3)' }}>{item.exchange.name.slice(0, 2).toUpperCase()}</span><span className="nm" title={item.name}>{item.name}</span><span className={`st st-${item.status}`}>{`${statuses[item.status]} ${t(item.status)}`}</span></span>
+                <span className="r1"><span className="exb" title={item.exchange.name} style={{ background: item.exchange.color, color: item.exchange.foreground ?? 'var(--gt, #e3e3e3)' }}><ClientTerminalVenueIcon id={item.exchange.id} size={17} fallback={item.exchange.name.slice(0, 2).toUpperCase()} /></span><span className="nm" title={item.name}>{item.name}</span><span className={`st st-${item.status}`}>{`${statuses[item.status]} ${t(item.status)}`}</span></span>
                 <span className="r2"><span className="sy">{item.symbol}, {item.market}</span><span className="ver">{item.version}</span></span>
                 <span className="r3"><span className="cap">{item.capitalLabel}{item.sharedCapital && <i title={t('sharedCapital')}>*</i>}</span>{(item.pnlLabel !== undefined || item.pnlPercentLabel !== undefined) && <span className={`pnl ${item.pnlTone ?? 'zz'}`}>{item.pnlKind === 'validation' && <small className="vl">{t('validation')} </small>}{item.pnlLabel}{item.pnlPercentLabel !== undefined && <small> {item.pnlPercentLabel}</small>}</span>}</span>
               </button>

@@ -31,11 +31,19 @@ const rows: ClientTerminalStrategy[] = [
 type RailBridge = { railUpdate: (rows: ClientTerminalStrategy[] | null) => void; railEvents: string[]; railMenuConnected: boolean }
 
 async function setLanguage(page: Page, language: string) {
-  await page.evaluate(async code => {
-    const path = '/src/client-preferences.ts'
-    const { setClientPreference } = await import(/* @vite-ignore */ path)
-    setClientPreference('language', code)
-  }, language)
+  // Retain the exact Promise awaited by CDP until Node receives the result.
+  // Preserve the real preference setter and all existing UI assertions.
+  try {
+    await page.evaluate(code => {
+      const path = '/src/client-preferences.ts'
+      const pending = import(/* @vite-ignore */ path).then(({ setClientPreference }) => setClientPreference('language', code))
+      Reflect.set(window, '__tethRailLocaleSetupPromise', pending)
+      return pending
+    }, language)
+  } finally {
+    await page.evaluate(() => { Reflect.deleteProperty(window, '__tethRailLocaleSetupPromise') })
+  }
+  await expect(page.locator('html')).toHaveAttribute('lang', language)
 }
 
 test('전략 목록 언어 설정은 검색·필터·상태·메뉴에 반영된다', async ({ page }) => {

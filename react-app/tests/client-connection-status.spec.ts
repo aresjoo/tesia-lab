@@ -172,3 +172,95 @@ test('unknown source와 owner mismatch는 기존 성공 화면을 남기지 않�
   await page.evaluate(() => { const f = Reflect.get(window, 'connectionFixture'); f.p = { ...f.p, source: 'mock', scope: 'owner-b' }; f.render() })
   await expect(page.getByRole('status')).toHaveText('연결 상태를 확인할 수 없습니다.')
 })
+
+test('내 거래소 필터는 원본 최대 세 개·선택별 16px 앱 아이콘과 요청 identity를 보존한다', async ({ page }, info) => {
+  const connections: ConnectionStatusRecord[] = ['bitget', 'okx', 'gate', 'binance'].map(exchange => ({
+    ...connection, exchange: exchange as ConnectionStatusRecord['exchange'], id: `connection-${exchange}`,
+  }))
+  const requests: string[] = []
+  page.on('request', request => { if (/\/api\/|\/billing|\/orders(?:\?|$)/.test(request.url())) requests.push(request.method()) })
+  await mount(page, { kind: 'eligible_my_exchange_filter', connections, selected: 'all' }, true, 'service')
+  const trigger = page.getByRole('button', { name: '내 거래소', exact: true })
+  const expected = ['bitget.png', 'okx.png', 'gate.jpg'].map(file => `/client-broker-assets/app-${file}`)
+  await expect(trigger).toHaveAttribute('aria-pressed', 'true')
+  await expect(trigger.locator('img')).toHaveCount(3)
+  expect(await trigger.locator('img').evaluateAll(images => images.map(image => image.getAttribute('src')))).toEqual(expected)
+  for (const image of await trigger.locator('img').all()) {
+    await expect(image).toHaveAttribute('alt', '')
+    await expect.poll(() => image.evaluate(element => {
+      const image = element as HTMLImageElement, rect = image.getBoundingClientRect()
+      return { loaded: image.complete && image.naturalWidth > 0, width: rect.width, height: rect.height }
+    })).toEqual({ loaded: true, width: 16, height: 16 })
+  }
+  const positions = await trigger.locator('img').evaluateAll(images => images.map(image => image.getBoundingClientRect().left))
+  expect(positions[1] - positions[0]).toBe(12)
+  expect(positions[2] - positions[1]).toBe(12)
+  await trigger.click()
+  const all = page.getByRole('menuitemradio', { name: '연결한 거래소 전체', exact: true })
+  expect(await all.locator('img').evaluateAll(images => images.map(image => image.getAttribute('src')))).toEqual(expected)
+  for (const [label, path] of [['Bitget', 'bitget.png'], ['OKX', 'okx.png'], ['Gate', 'gate.jpg'], ['Binance', 'binance.png']]) {
+    const item = page.getByRole('menuitemradio', { name: `${label}만`, exact: true })
+    await expect(item.locator('img')).toHaveCount(1)
+    await expect(item.locator('img')).toHaveAttribute('src', `/client-broker-assets/app-${path}`)
+  }
+  await expect(page.getByRole('menuitemradio', { name: '끄기, 전체 전략 보기' }).locator('img')).toHaveCount(0)
+  await page.screenshot({ path: info.outputPath('connection-filter-icons.png') })
+  expect(await page.evaluate(() => Reflect.get(window, 'connectionFixture').calls)).toEqual([])
+  await page.getByRole('menuitemradio', { name: 'Gate만', exact: true }).click()
+  await expect(page.getByRole('menu')).toHaveCount(0)
+  // The callback requests a change; only a new observation may change the label/icons.
+  await expect(trigger).toHaveText('내 거래소')
+  await expect(trigger.locator('img')).toHaveCount(3)
+  expect(await page.evaluate(() => Reflect.get(window, 'connectionFixture').calls)).toEqual([
+    { scope: 'owner-a', identity: 'observation-a', source: 'service', action: 'filter', selection: 'gate', exchange: 'gate' },
+  ])
+  await replace(page, { kind: 'eligible_my_exchange_filter', connections, selected: 'gate' })
+  const gateTrigger = page.getByRole('button', { name: 'Gate만', exact: true })
+  await expect(gateTrigger).toHaveAttribute('aria-pressed', 'true')
+  await expect(gateTrigger.locator('img')).toHaveCount(1)
+  await expect(gateTrigger.locator('img')).toHaveAttribute('src', expected[2])
+  await replace(page, { kind: 'eligible_my_exchange_filter', connections, selected: 'off' })
+  await expect(trigger).toHaveAttribute('aria-pressed', 'false')
+  await expect(trigger.locator('img')).toHaveCount(3)
+  expect(await trigger.locator('img').evaluateAll(images => images.map(image => image.getAttribute('src')))).toEqual(expected)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  expect(requests).toEqual([])
+})
+
+test('내 거래소 아이콘은 만료·unknown 연결을 제외하며 필터 권한을 만들지 않는다', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 })
+  await mount(page, { kind: 'eligible_my_exchange_filter', selected: 'all', connections: [
+    connection, { ...connection, exchange: 'okx', id: 'connection-okx' },
+    { ...paid, exchange: 'gate', id: 'connection-gate' },
+    { ...connection, exchange: 'binance', id: 'connection-binance', eligibility: 'unknown' },
+  ] })
+  const trigger = page.getByRole('button', { name: '내 거래소', exact: true })
+  await expect(trigger.locator('img')).toHaveCount(2)
+  await trigger.click()
+  await expect(page.getByRole('menuitemradio', { name: 'Gate만' })).toHaveCount(0)
+  await expect(page.getByRole('menuitemradio', { name: 'Binance만' })).toHaveCount(0)
+  for (const item of await page.getByRole('menuitemradio').all()) await expect(item).toBeDisabled()
+  expect(await page.evaluate(() => Reflect.get(window, 'connectionFixture').calls)).toEqual([])
+  await replace(page, { kind: 'eligible_my_exchange_filter', connections: [connection], selected: 'bitget' })
+  const bitgetTrigger = page.getByRole('button', { name: 'Bitget만', exact: true })
+  await expect(bitgetTrigger).toBeDisabled()
+  await expect(bitgetTrigger.locator('img')).toHaveCount(1)
+  await replace(page, { kind: 'eligible_my_exchange_filter', connections: [paid], selected: 'all' })
+  await expect(trigger).toBeDisabled()
+  await expect(trigger.locator('img')).toHaveCount(0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+})
+
+for (const unavailable of ['expired', 'image-error'] as const) test(`내 거래소 ${unavailable} 빈 아이콘 영역은 여백을 남기지 않는다`, async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 })
+  if (unavailable === 'image-error') await page.route('**/client-broker-assets/app-bitget.png', route => route.fulfill({ status: 404, body: '' }))
+  await mount(page, { kind: 'eligible_my_exchange_filter', connections: [unavailable === 'expired' ? paid : connection], selected: 'all' })
+  const trigger = page.getByRole('button', { name: '내 거래소', exact: true })
+  await expect(trigger.locator('img')).toHaveCount(0)
+  await expect(trigger.locator('.myex-ic')).toBeHidden()
+  await expect(trigger.locator('.myex-ic')).toHaveCSS('display', 'none')
+  await expect(trigger).toBeDisabled()
+  await expect(trigger).toHaveAttribute('aria-pressed', String(unavailable !== 'expired'))
+  expect(await page.evaluate(() => Reflect.get(window, 'connectionFixture').calls)).toEqual([])
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+})

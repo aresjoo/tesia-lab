@@ -17,9 +17,19 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `4acb4ce`의 React 출처 `fa8601e` 이후, 모바일 시장 필터·공개 문서 복귀·키보드 초점과 catalogue 전체 판단 근거를 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 원본 이식·로그인 방식 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `9c01a86`의 React 출처 `a6e737f` 이후, 다국어 공통 푸터·desktop 로그인 메뉴 스크롤과 원본 거래소 아이콘/필터를 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 모바일 시장 필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
 
 | 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
+| --- | --- | --- |
+| 7언어 공통 푸터 본문 | `ClientSiteFooter`, `client-site-footer-copy.json`, footer-content-locale 시험 | 한국어만 보이던 소개/강조/승인 안내 3문단을 동일 의미로 제공. notice 우선순위·DOM/색상/간격 보존 |
+| Desktop 헤더 스크롤 | `client-site-footer.css`, footer-header-scroll 시험 | 밝은 푸터 위에 고정 메뉴가 겹치지 않도록 원본 absolute. 모바일 fixed·로그인 버튼 DOM·키보드 재진입 유지 |
+| 원본 거래소 앱 아이콘 | `ClientTerminalVenueIcon`, JudgmentStatus·StrategyRail·AccountTerminal·TerminalLedger | exact22개 로컬 자산+woo 별칭, unknown/실패 fallback·ID별 오류 분리. 거래/계정 상태 추정0 |
+| 내 거래소 필터 | `ClientConnectionStatus`, 해당 CSS/시험 | 최대3개·16px·선택 라벨·활성 표시, 빈 아이콘 여백 제거. eligible/권한/요청 identity·비동기 관측 불변 |
+| 시험 Promise 수명 | `client-strategy-rail.spec.ts` | CDP 반환 전 Promise 수거를 막는 test-only 참조 보존. 실제 언어 setter·기존 assertion·retry0 유지 |
+
+아래 항목은 이전 `a6e737f`에서 인수한 누적 복원이며 이번에 처음 구현한 것으로 세지 않는다.
+
+| 이전 누적 변경 | 구현·검증 위치 | 원본·계약 경계 |
 | --- | --- | --- |
 | 모바일 시장 필터 시트·긴 번역값 | `ClientSharingDropdown`, 전략 필터 CSS, market-sheet/sharing-locale 시험 | 원본 모바일 시트·native dialog 닫기·포커스/스크롤 복귀, 짧은 원본 배치 유지 |
 | 문서 Back·새로고침·늦은 폰트·초점 | `SiteRouter`, `ClientPublicPages`, document/history/intent 시험 | 오래된 좌표 재사용과 늦은 장착의 사용자 초점 탈취 방지, 대화 초안 유지 |
@@ -27,7 +37,7 @@
 | 차트 마커와 성능 | `ClientCatalogueBacktest`, `client-catalogue-backtest-marker-groups` | 날짜 대신 runId/eventIndex 구분, 같은 날 모든 근거 접근, 포인터/Enter·824개 목록을 보존한 재계산 캐시 |
 | 지연 로딩·경로 이동 초점 | `ClientStrategySharing`, `client-sharing-lazy-return-focus.spec.ts` | 최초 같은 화면에서 이미 선택한 조작요소를 보존하되 새 경로는 제목 초점으로 이동. 서비스의 명시 초점 정책 유지 |
 
-원본 자체의 불일치는 최소한만 보완했다: 선물 mini가 실제로 소비하는 현물 종가를 `현물 종가(참고)`로 표시하고, 이미 계산된 `d.out`으로 배지·상세 수치를 맞추며, nullable 값의 `null일`/`—일`과 잘못된 CSS scope/rgba 구문을 교정했다. 원본의 summary jump 선택핀 유지·hold 날짜 순서는 임의 변경하지 않았다. 미사용 preview 문구 모듈1개와 도달할 수 없는 CSS2줄은 제거했으며 이전 Git 이력으로 복구 가능하다.
+원본 자체의 불일치는 최소한만 보완했다: 선물 mini가 실제로 소비하는 현물 종가를 `현물 종가(참고)`로 표시하고, 이미 계산된 `d.out`으로 배지·상세 수치를 맞추며, nullable 값의 `null일`/`—일`과 잘못된 CSS scope/rgba 구문을 교정했다. 원본의 summary jump 선택핀 유지·hold 날짜 순서는 임의 변경하지 않았다. 이전 미사용 preview 문구 모듈1개와 도달할 수 없는 CSS2줄 제거는 Git으로 복구 가능하며 이번에는 추가 삭제0이다. 정확한 거래소 ID가 없는 `NativeAccountPanels`에는 이름으로 로고를 추측해 넣지 않았다.
 
 이번 추가 범위는 AI 트레이딩 소개·로그인 전 공개 목록·헤더/사이드바, 설정·도움말·문서 FAQ/Back/스크롤 복귀, 카탈로그 페이지·키보드 초점과 Google·Apple·이메일 선택지 공존이다. 기존 Google-only 배포에서 다른 방식을 없애던 조립을 수정해 **표시는 유지하고 가용성만 제어**한다. 현재 미등록 Apple·이메일은 ‘준비 중’이며 서버 등록이나 인증 성공을 만들어내지 않는다. 상세 재현·수정·실패 이력은 `react-app/Bugfix_report.md`의 최신 두 절을 따른다.
 
@@ -152,8 +162,9 @@
 4. **원본 이식 인수와 무결함/전 상태 인증은 다르다.** 출처의 단일 전체 회귀·Web52 인수는 완료됐지만 모든 62 preset 또는 모든 화면·반응형·SVG·모션 조합의 인증은 아니다. 최종 원본과 어긋난 동선은 계속 확인해야 한다.
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
 6. **신규 거래소 연결 draft는 코드 포함, 정식 서비스 승격은 미완료다.** 위 PR54 head까지 전달했으며 그 이후 변경이나 실제 공급자 성공을 포함했다고 주장하지 않는다.
+7. **연구·결과 뒤 대화·계정 원장 producer를 분리해 연결해야 한다.** 원본 g-doc/Critic/7역할 UI는 존재하지만 실제 service는 관측 TURN/VALIDATE만 공급한다. `NativeServiceApp`→`NativeServiceResult`의 report/trades V6 및 chart manifest/markers/window V5·replay 경로는 이미 있으며 새 차트를 중복 구현할 이유가 없다. 결과 이후 자유대화는 approval/job 입력 잠금과 `editFromResult`를 함께 설계해야 하므로 단순 disabled 제거를 하지 않는다. 실계정 account presentation은 단일 백테스트 거래로 대체하지 않는다.
 
-이전 navigation 동결 전체는13,802 PASS/1 FAIL/기존17 SKIP였고, 유일한 공유 복귀 실패는 후속 실제 반례로 수정했다. 이를 전체 PASS로 바꾸지 않는다. 새 catalogue·공유12제품 변경은 별도 최종 영향62spec/1,996개와 정확한 입력 해시로 인수하며, 최종 종료 결과는 검증 JSON을 따른다. 원 실패·하니스 기대 오류·수정 검증은 `react-app/Bugfix_report.md`에 구분했다. 전체 서비스나 모든 원본 상태의 무결함 보장이 아니다.
+이전 navigation 동결 전체는13,802 PASS/1 FAIL/기존17 SKIP였고 공유 복귀 실패는 후속 반례로 교정했다. 이를 전체 PASS로 바꾸지 않는다. catalogue·공유12제품의 이전 영향62spec/1,996PASS와 이번 푸터/거래소/인증22spec은 별도다. 이번 첫664개는663PASS/1FAIL이며 언어 적용 후 CDP Promise 수거로 중단된 원실패를 보존했다. test-only 수명 보강과 빈 아이콘 교정 뒤의 최종 실행·정확한 입력/산출물 해시는 검증 JSON을 따른다. 원 실패·하니스 문제·수정 검증은 `react-app/Bugfix_report.md`에 구분한다. 전체 서비스나 모든 원본 상태의 무결함 보장이 아니다.
 
 ## 7. 실행·검증
 

@@ -74,13 +74,13 @@ export function ClientSiteFooter({ lime = false, onNavigate, onHelp, notice }: P
             <InternalLink href="/policies/#privacy">{c.sections.terms.items[1]}</InternalLink>
           </div>
         </nav>
-        <div className="gft-copy">{notice ? <p>{notice}</p> : language === 'ko' && <>
-          <p>TETH는 고객이 말로 정한 투자 아이디어를 AI와 함께 전략으로 정리하고 연구·검증하는 서비스입니다.</p>
-          <p><b>말로 정한 투자 아이디어를 나만의 전략으로.</b></p>
-          <p className="dim">거래소 연결과 전략 실행은 고객이 직접 선택하고 승인합니다. 로그인만으로 거래소 연결이나 거래가 실행되지 않습니다.</p>
+        <div className="gft-copy">{notice ? <p>{notice}</p> : <>
+          <p>{c.body.intro}</p>
+          <p><b>{c.body.tagline}</b></p>
+          <p className="dim">{c.body.consent}</p>
         </>}<p className="dim">© 2026 TETH AI. {c.allRightsReserved}.</p></div>
       </div>
-      <div className="gft-pw">거래소 <img src="/assets/logos/bitget-512.png" alt="" width="22" height="22" loading="lazy" /><b>Bitget</b></div>
+      <div className="gft-pw">{c.body.exchange} <img src="/assets/logos/bitget-512.png" alt="" width="22" height="22" loading="lazy" /><b>Bitget</b></div>
       <svg className="gft-wm" viewBox="0 0 3970 1000" role="img" aria-label="TETH"><path d={footerWordmark} /></svg>
     </div>
   </footer>

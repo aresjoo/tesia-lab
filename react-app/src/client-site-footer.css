@@ -26,7 +26,10 @@
 }
 @media(min-width:861px) {
   .tesia-shell.client-source-app.has-site-footer { padding-left:0!important; }
-  .client-source-app.has-site-footer > .client-footer-body { display:grid; grid-template-columns:64px minmax(0,1fr); }
+  .client-source-app.has-site-footer > .client-footer-body { position:relative; display:grid; grid-template-columns:64px minmax(0,1fr); }
+  /* Source desktop auth controls belong to the page, not the bright footer.
+     Keep them mounted/reachable while letting the shell scroll them away. */
+  .tesia-shell.client-source-app.has-site-footer :is(.client-auth-nav,.client-globe) { position:absolute; }
   .client-source-app.has-site-footer > .client-footer-body:has(.client-sidebar.mobile-open) { grid-template-columns:256px minmax(0,1fr); }
   .client-source-app.has-site-footer > .client-footer-body > .client-sidebar { position:sticky; top:0; bottom:auto; grid-column:1; grid-row:1; height:100dvh; align-self:start; }
   .client-source-app.has-site-footer > .client-footer-body > .client-source-main { grid-column:2; grid-row:1; min-width:0; }

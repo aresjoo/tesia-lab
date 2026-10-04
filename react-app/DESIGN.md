@@ -1240,6 +1240,10 @@ backdrop-filter: blur(24px) saturate(125%);
 
 ## 21. Decision Log
 
+- 2026-10-05 `accepted / footer scroll and venue identity parity`: desktop의 푸터 있는 셸만 원본처럼 로그인 메뉴/언어 버튼을 문서와 함께 스크롤한다. 모바일 고정과 조작요소 DOM·키보드 재진입을 유지하며 화면에서 제거하지 않는다. 거래소 식별은 표시명 추측 대신 exact 로컬22개 앱 아이콘과 woo 별칭만 사용한다. unknown/로드실패는 기존 fallback, ID 교체 시 오류 상태를 분리한다. 전략 레일·상단·원장의 크기/문구/데이터 계산과 필터의 원본 최대3개/선택표시·요청 identity·eligible 경계는 보존한다. NativeAccountPanels처럼 ID 없는 영역은 추측으로 복원하지 않는다. 실제 연결·원장 producer나 인증 가용성은 바꾸지 않는다. 실제 반례와 전체 전달 검증은 Bugfix_report와 migration 영수증이 소유한다.
+
+후속 푸터 다국어 복원 결정(2026-10-05, accepted): 원래 한국어 소개/강조/승인 안내 3문단을 다른 언어에서도 같은 구조로 제공한다. `language === 'ko'`로 내용을 제거하던 조건만 폐기하고 한국어 문구·기존 notice 우선순위·4문단 위계·기존 레이아웃을 유지한다. 거래소 라벨도 같은 locale을 사용한다. Sonnet5.5 personal(1) 번역은 새 금융/정책/실제 서비스 주장을 추가하지 않는다. 신규반례6FAIL 뒤 관련단일48PASS이며 그 밖의 공급/운영 승인으로 확대하지 않는다. 자동 캐러셀은 기존 사용자 조작 뒤 영구정지 결정을 유지하고 모델의 임의 토글 변경 제안을 채택하지 않는다. 실제 번역 의미 또는 레이아웃 회귀가 확인되면 해당 언어/화면을 재검토한다.
+
 - 2026-10-05 `accepted / static UI correction closeout`: 아래 navigation·document intent·sheet keyboard·selected-label·full catalogue evidence의 in_progress 결정은 마지막62spec/1,996 PASS·실패4건의1:1 회수·동일입력lint/3build·비밀검사·독립Opus5.5 조건부검수 결속으로 정적 UI 코드 범위에서 인수했다. 이전 전수의13,802 PASS/1 FAIL/기존17 SKIP 및 모든 기준선 실패는 당시 기록으로 보존한다. 실제 provider·prompt·거래 권한 Gate는 바뀌지 않으며 배포 상태는 migration 영수증을 따른다.
 - 2026-10-05 `accepted / late public hub focus and source CSS correction`: 공유 화면의 lazy 장착 전에 사용자가 같은 hub의 조작요소를 선택했다면 그 초점을 보존한다. 정상 초기 제목초점과 명시 service shouldFocus 정책은 유지하며 단일18개 실제 키보드/복귀 검증으로 확인한다. 카탈로그 최종 원본 색상은 React root에 맞게 scope를 복구하고 원본에도 있던 오염된 rgba 토큰은 유효한 같은 의도색으로 교정한다. 원본 summary jump의 선택핀 유지·hold 날짜 순서는 임의 변경하지 않는다. nullable 수치의 단위는 값과 함께 분기하고 프레임 캐시는 표시 DOM·사건순서·계산값을 바꾸지 않는다.
 - 2026-10-05 `accepted / evidence source truthfulness`: 원본 fuTradeMini는 저장 현물 종가를 사용하면서 캡션을 선물 가격으로 표시했다. 시계열·엔진을 교체하지 않고 이 보조 차트에는 `현물 종가(참고)`를 명시해 출처를 정확히 알린다. 선물 보류 뒤 변화 설명은 이미 프로젝션된 `d.out`과 같은 관측값을 쓰고 존재하지 않는0일 뒤 수치를 만들지 않는다. 원본 외형·문구 계승의 예외는 이 사실성 교정과 null/유한0 구분으로 제한하며 실제 공급 또는 모델 해설로 승격하지 않는다. 원본 디자인을 이유로 데이터 오표기를 유지하지 않는다.
