@@ -17,7 +17,16 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `07f20e1`의 React 출처 `adc5824` 이후, 로그인된 짧은 연구 화면과 인사이트 복사 안내 수명·도움말 원문을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `498dff6`의 React 출처 `061987e` 이후, 복사 호환성·터미널에서 연결 화면 왕복·연구 제목저장 실패와 FAQ 도달을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·프롬프트·가격·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+| 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
+| --- | --- | --- |
+| 인사이트 명시 링크 복사 호환성 | `client-insight-clipboard`, `ClientInsights`, source-copy 시험 | 원본 현대 API 우선/미지원·거절 때 fallback. 임시 노드·선택·초점·스크롤·옛요청 격리, 실제 초점/선택 확인 전 복사 금지. 제품 permission/read/저장0 |
+| 터미널→연결플랜→뒤로 | `ClientMainExperience`, trading-plan-return 시험 | 현재 mount/owner/token의 navigation intent만 유지. 기존 catalogue/result 우선·같은 터미널 DOM/선택/기간, 직접URL/reload/로그아웃 stale 거절. 주문/인증 권한0 |
+| native 연구 제목저장 실패 | `client-restored-research.css`, `NativeConversationTitle`, native-library-presentation 시험 | 기존 native본문80px·모든 헤더 조작·persistent 입력 유지. 헤더 안으로만 순서 선택자 한정하고 짧은 가로 화면 wrap 보완. disabled=false commit 뒤 초점을 복귀하고 사용자의 더 최근 입력 초점은 보존. public signed100px와 구분 |
+| reduced-motion 도움말 FAQ | `client-public-pages.css`, public-faq-return 시험 | 공개 문서 subtree 전이만 제거. 라우터·타이머·카피·SVG/사용자 의도 guard 보존. 요소 존재 대신 실제 viewport128px·Back/Forward 도달 검증 |
+
+아래 짧은 로그인 연구 화면·복사 수명·도움말 원문은 이전061987e에서 인수한 변경이다.
 
 | 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
 | --- | --- | --- |
@@ -181,7 +190,7 @@
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
 6. **신규 거래소 연결 draft는 코드 포함, 정식 서비스 승격은 미완료다.** 위 PR54 head까지 전달했으며 그 이후 변경이나 실제 공급자 성공을 포함했다고 주장하지 않는다.
 7. **연구·결과 뒤 대화·계정 원장 producer를 분리해 연결해야 한다.** 원본 g-doc/Critic/7역할 UI는 존재하지만 실제 service는 관측 TURN/VALIDATE만 공급한다. `NativeServiceApp`→`NativeServiceResult`의 report/trades V6 및 chart manifest/markers/window V5·replay 경로는 이미 있으며 새 차트를 중복 구현할 이유가 없다. 결과 이후 자유대화는 approval/job 입력 잠금과 `editFromResult`를 함께 설계해야 하므로 단순 disabled 제거를 하지 않는다. 실계정 account presentation은 단일 백테스트 거래로 대체하지 않는다.
-8. **원본 자체의 임시 가격·브라우저 복사 fallback은 별도 검토다.** 원본 `teth-copy.js`의 임시49와 `AC_CFG`의280이 공존하므로 React 금액을 임의 교체하지 않았다. 원본 `execCommand` fallback은 현재 미이식 호환성 잔여이며 이번 표시수명 교정이 그 영구 배제 정책은 아니다. Clipboard API 실패 안내는 유지한다.
+8. **원본 임시 가격·복사 브라우저 경계를 구분한다.** 원본 `teth-copy.js`의 임시49와 `AC_CFG`의280이 공존하므로 React 금액을 임의 교체하지 않았다. 원본 `execCommand` fallback은 이번 명시 인사이트 링크에만 복원했다. 모든 다른 소비·Safari·긴 실제권한 대기의 인증을 뜻하지 않으며 복사 실패 안내는 유지한다.
 
 이전 navigation 동결 전체는13,802 PASS/1 FAIL/기존17 SKIP였고 공유 복귀 실패는 후속 반례로 교정했다. 이를 전체 PASS로 바꾸지 않는다. catalogue·공유12제품의 이전 영향62spec/1,996PASS와 이번 푸터/거래소/인증22spec은 별도다. 이번 첫664개는663PASS/1FAIL이며 언어 적용 후 CDP Promise 수거로 중단된 원실패를 보존했다. test-only 수명 보강과 빈 아이콘 교정 뒤의 최종 실행·정확한 입력/산출물 해시는 검증 JSON을 따른다. 원 실패·하니스 문제·수정 검증은 `react-app/Bugfix_report.md`에 구분한다. 전체 서비스나 모든 원본 상태의 무결함 보장이 아니다.
 

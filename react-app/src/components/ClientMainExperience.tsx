@@ -235,6 +235,15 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     } catch { return null }
   })
   const owner = previewOwner(profile)
+  // Navigation intent only, scoped to this mounted account lifetime. History
+  // from a previous login or document must not resurrect a terminal context.
+  const terminalPlanScope = useRef<{ owner: string; token: string } | null>(null)
+  const readTerminalPlanReturn = () => {
+    const intent: unknown = history.state?.tethPlanTerminal
+    const scope = terminalPlanScope.current
+    if (!scope || scope.owner !== owner || !intent || typeof intent !== 'object') return null
+    return 'owner' in intent && intent.owner === owner && 'token' in intent && intent.token === scope.token ? scope : null
+  }
   useLayoutEffect(() => {
     store.setLocalBacktestFlow(requestOwner => {
       const expectedOwner = requestOwner === undefined ? owner : requestOwner
@@ -679,16 +688,17 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
       document.getElementById('research-main')?.scrollTo({ top: 0 })
     })
   }
-  const navigateConnectionPlan=(view:ConnectionPlanLocation,result:CommonResultContext|null=connectionResult)=>{
+  const navigateConnectionPlan=(view:ConnectionPlanLocation,result:CommonResultContext|null=connectionResult,preserveTerminalReturn=true)=>{
     const hash=connectionPlanHash(view)
     const copyIntent = !result && readConnectionPlanLocation(location.hash) ? readCataloguePlanIntent(history.state?.tethPlanCatalogue, owner) : null
-    const entry=result?{tethPlanResult:result}:copyIntent?{tethPlanCatalogue:copyIntent}:null
+    const terminalIntent = preserveTerminalReturn && !result && !copyIntent && readConnectionPlanLocation(location.hash) ? readTerminalPlanReturn() : null
+    const entry=result?{tethPlanResult:result}:copyIntent?{tethPlanCatalogue:copyIntent}:terminalIntent?{tethPlanTerminal:terminalIntent}:null
     if(location.hash!==hash){history.pushState(entry,'',hash);window.dispatchEvent(new Event('teth:navigate'))}
     else history.replaceState(entry,'',hash)
     setSurface(null);setArrivalRect(undefined);setConnectionResultValue(result)
     setConnectionPlanView(view);setPage('brokers')
   }
-  const openConnectionPlan=()=>navigateConnectionPlan({step:'plan',exchange:'bitget'},null)
+  const openConnectionPlan=()=>navigateConnectionPlan({step:'plan',exchange:'bitget'},null,false)
   const openCatalogueConnection = (id: string) => {
     const strategy = findCatalogueStrategy(id)
     if (!owner || !profile || !strategy) return
@@ -755,7 +765,12 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
   }
   const openTerminalConnection = () => {
     // Source terminal and subscription intentionally have different fallbacks.
-    if (!profile || !resumeLastDelegationConnection()) openConnectionPlan()
+    if (profile && resumeLastDelegationConnection()) return
+    openConnectionPlan()
+    if (profile && owner && trading) {
+      if (terminalPlanScope.current?.owner !== owner) terminalPlanScope.current = { owner, token: crypto.randomUUID() }
+      history.replaceState({ ...history.state, tethPlanTerminal: terminalPlanScope.current }, '', location.hash)
+    }
   }
   const finishConnectionEntry = (input: ClientStrategyRegistration): boolean => {
     if (store.commitUncertain()) { setAccountNotice(uncertainCommitMessage); return false }
@@ -950,6 +965,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
       try{store.select(context.sourceSessionId);openRevisionRun()}catch{setAccountNotice(uncertainCommitMessage)}
       return
     }
+    if (readTerminalPlanReturn()) { openTrading(); return }
     clearInsightRoute();setPage(null)
   }
   const openRevisionRun=()=>{
@@ -1014,7 +1030,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
   const askShared = askInsight
   const changeProfile = (next: PreviewProfile | null) => {
     refreshAccountClockAtEvent(setAccountNow)
-    if (previewOwner(next) !== owner) { setTerminalSelection(null); surfaceReturnFocus.current = null; setSettingsAnchor(undefined); setSurface(null); setHelpOwner(null) }
+    if (previewOwner(next) !== owner) { terminalPlanScope.current = null; setTerminalSelection(null); surfaceReturnFocus.current = null; setSettingsAnchor(undefined); setSurface(null); setHelpOwner(null) }
     // Route changes retain the preview; signing out must discard account-local drafts.
     if (!next) { setTerminalVisited(false); setAlertsRequest(0); setAccountNotice(''); setUpgrade(null); pendingRegistration.current = null }
     if (!next && sharingCurrent() && !sharingPreferences.store.clear()) setAccountNotice({ kind: 'sharing-clear-failed' })

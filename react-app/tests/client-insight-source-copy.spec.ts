@@ -43,9 +43,14 @@ async function mountArticle(page: Page, signedIn = false, emptyAssets = false, i
     const article = { ...original, assets: options.emptyAssets ? [] : original.assets, shareUrl: options.shareUrl }
     const data = { identity: 'source-copy-boundary', heading: '시험 기사', subheading: '', articles: [article] }
     const calls = { login: [] as string[], asks: [] as string[], feedback: [] as unknown[] }
+    // Ordinary UI tests deny the legacy path too: a rejected modern API must
+    // remain a total-copy failure unless a case explicitly supplies another result.
+    Reflect.set(window, 'nativeInsightExecCommand', document.execCommand.bind(document))
+    document.execCommand = () => false
     Object.assign(window, { insightCopyCalls: calls, sourceAssets: CLIENT_INSIGHTS.map((row: { assets: string[][] }) => row.assets.length), articleAssets: article.assets, articleTitle: article.title })
     const h = react.createElement ?? react.default.createElement
     const root = (dom.createRoot ?? dom.default.createRoot)(document.getElementById('fixture'))
+    Reflect.set(window, 'unmountInsightCopyFixture', () => root.unmount())
     root.render(h(react.StrictMode ?? react.default.StrictMode, null, h(ClientInsights, {
       source: 'service', data, signedIn: options.signedIn, initialSlug: options.initialSlug ?? article.slug,
       onAsk: async (text: string) => { calls.asks.push(text) },
@@ -143,11 +148,14 @@ test('복사 성공은 최종 원본문구로 표시하고 공급된 링크만 �
   await page.evaluate(() => {
     const copied: string[] = []
     Object.assign(window, { insightCopied: copied })
+    Reflect.set(window, 'unusedLegacyCopyCalls', 0)
+    document.execCommand = () => { Reflect.set(window, 'unusedLegacyCopyCalls', Reflect.get(window, 'unusedLegacyCopyCalls') + 1); return false }
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (text: string) => { copied.push(text) } } })
   })
   await page.locator('.nfz-social button[aria-label="링크 복사"]').click()
   await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사했습니다!')
   expect(await page.evaluate(() => Reflect.get(window, 'insightCopied'))).toEqual([shareUrl])
+  expect(await page.evaluate(() => Reflect.get(window, 'unusedLegacyCopyCalls'))).toBe(0)
   expect(await page.evaluate(() => Reflect.get(window, 'insightCopyCalls'))).toEqual({ login: [], asks: [], feedback: [] })
 })
 
@@ -284,7 +292,7 @@ test('복사 요청의 역순 완료는 가장 최근 결과만 한 곳에 표�
   await expect(button).toBeFocused()
 })
 
-test('Clipboard API 미제공은 실패 안내만 표시하며 대체 쓰기 권한을 추가하지 않는다', async ({ page }) => {
+test('Clipboard API 미제공은 명시 클릭에서 원본 대체 복사를 한 번 사용한다', async ({ page }) => {
   await mountArticle(page, false, false, undefined, 'https://news.example.test/copy-unavailable')
   await page.evaluate(() => {
     Reflect.set(window, 'insightLegacyCopyCalls', 0)
@@ -292,10 +300,171 @@ test('Clipboard API 미제공은 실패 안내만 표시하며 대체 쓰기 권
     document.execCommand = () => { Reflect.set(window, 'insightLegacyCopyCalls', Reflect.get(window, 'insightLegacyCopyCalls') + 1); return true }
   })
   await page.locator('.nfz-social button[aria-label="링크 복사"]').click()
-  await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사에 실패했습니다')
-  expect(await page.evaluate(() => Reflect.get(window, 'insightLegacyCopyCalls'))).toBe(0)
+  await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사했습니다!')
+  expect(await page.evaluate(() => Reflect.get(window, 'insightLegacyCopyCalls'))).toBe(1)
   await expect(page.locator('textarea')).toHaveCount(0)
   expect(await page.evaluate(() => Reflect.get(window, 'insightCopyCalls'))).toEqual({ login: [], asks: [], feedback: [] })
+})
+
+test('호환 복사 API 거절 뒤 원본 대체 복사는 공급 링크만 선택하고 임시 노드를 정리한다', async ({ page }) => {
+  const link = 'https://news.example.test/fallback-source-only'
+  await mountArticle(page, false, false, undefined, link)
+  await page.evaluate(expected => {
+    const calls: { command: string; matches: boolean; focused: boolean }[] = []
+    Reflect.set(window, 'fallbackCalls', calls)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('TEST_DENIED') } } })
+    document.execCommand = command => {
+      const input = document.activeElement as HTMLTextAreaElement
+      calls.push({ command, matches: input.value === expected && input.selectionStart === 0 && input.selectionEnd === expected.length, focused: input.tagName === 'TEXTAREA' })
+      return true
+    }
+  }, link)
+  const copyButton = page.locator('.nfz-social button[aria-label="링크 복사"]')
+  await copyButton.click()
+  await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사했습니다!')
+  expect(await page.evaluate(() => Reflect.get(window, 'fallbackCalls'))).toEqual([{ command: 'copy', matches: true, focused: true }])
+  await expect(page.locator('textarea')).toHaveCount(0)
+  await expect(copyButton).toBeFocused()
+})
+
+test('호환 복사 Chromium 실제 copy는 API 미제공 및 거절 경로 모두 합성 링크를 복사한다', async ({ page, context }, info) => {
+  // Test-only read permission is for observing a synthetic clipboard value.
+  // The product never requests permissions or reads the clipboard.
+  await context.grantPermissions(['clipboard-read'])
+  const observed: { command: string; activeGesture: boolean; result: boolean }[] = []
+  for (const mode of ['missing', 'reject']) {
+    const link = `https://news.example.test/actual-native-copy-fixture/${info.project.name}/${mode}`
+    await mountArticle(page, false, false, undefined, link)
+    await page.evaluate(() => {
+      Reflect.set(window, 'readSyntheticClipboard', navigator.clipboard.readText.bind(navigator.clipboard))
+      const calls: { command: string; activeGesture: boolean; result: boolean }[] = []
+      Reflect.set(window, 'actualLegacyCalls', calls)
+      document.execCommand = command => {
+        const activeGesture = navigator.userActivation.isActive
+        const result = Reflect.get(window, 'nativeInsightExecCommand')(command)
+        calls.push({ command, activeGesture, result })
+        return result
+      }
+    })
+    // Different values per path prove the second readback is not leftover
+    // content from the first path. No extra clipboard-write permission.
+    expect(await page.evaluate(async expected => await Reflect.get(window, 'readSyntheticClipboard')() === expected, link)).toBe(false)
+    await page.evaluate(mode => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: mode === 'missing' ? undefined : { writeText: async () => { throw new Error('TEST_DENIED') } } }), mode)
+    await page.locator('.nfz-social button[aria-label="링크 복사"]').click()
+    await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사했습니다!')
+    expect(await page.evaluate(async expected => await Reflect.get(window, 'readSyntheticClipboard')() === expected, link)).toBe(true)
+    await expect(page.locator('textarea')).toHaveCount(0)
+    observed.push(...await page.evaluate(() => Reflect.get(window, 'actualLegacyCalls')))
+  }
+  expect(observed).toEqual([
+    { command: 'copy', activeGesture: true, result: true }, { command: 'copy', activeGesture: true, result: true },
+  ])
+})
+
+test('호환 복사 대기 중 모달이 열리면 초점 없는 대체 복사를 실행하거나 성공으로 표시하지 않는다', async ({ page }) => {
+  await mountArticle(page, false, false, undefined, 'https://news.example.test/modal-copy-request')
+  await page.clock.install({ time: new Date('2030-01-01T00:00:00Z') })
+  await page.clock.pauseAt(new Date('2030-01-01T00:00:01Z'))
+  await page.evaluate(() => {
+    Reflect.set(window, 'modalLegacyCalls', 0)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => new Promise<void>((_resolve, reject) => Reflect.set(window, 'rejectModalCopy', () => reject(new Error('TEST_DENIED')))) } })
+    document.execCommand = command => {
+      Reflect.set(window, 'modalLegacyCalls', Reflect.get(window, 'modalLegacyCalls') + 1)
+      return Reflect.get(window, 'nativeInsightExecCommand')(command)
+    }
+  })
+  await page.locator('.nfz-social button[aria-label="링크 복사"]').click()
+  await page.evaluate(() => {
+    const dialog = document.createElement('dialog'), field = document.createElement('textarea')
+    dialog.setAttribute('data-copy-modal', 'true')
+    field.value = 'synthetic modal draft only'
+    dialog.append(field); document.body.append(dialog); dialog.showModal()
+    field.focus(); field.setSelectionRange(0, field.value.length)
+    Reflect.get(window, 'rejectModalCopy')()
+  })
+  await expect(page.locator('.nfz-social .cplbl')).toHaveText('복사에 실패했습니다')
+  expect(await page.evaluate(() => Reflect.get(window, 'modalLegacyCalls'))).toBe(0)
+  const field = page.locator('dialog[data-copy-modal] textarea')
+  await expect(field).toBeFocused()
+  expect(await field.evaluate(node => ({ value: node.value, start: node.selectionStart, end: node.selectionEnd }))).toEqual({ value: 'synthetic modal draft only', start: 0, end: 'synthetic modal draft only'.length })
+  await expect(page.locator('textarea')).toHaveCount(1)
+})
+
+for (const outcome of ['true', 'false', 'throw']) test(`호환 복사 합성 helper ${outcome}는 입력·선택방향·스크롤을 보존하고 임시 노드를 정리한다`, async ({ page }) => {
+  await mountArticle(page)
+  const result = await page.evaluate(async outcome => {
+    const path = '/src/client-insight-clipboard.ts'
+    const { copyInsightLink } = await import(/* @vite-ignore */ path)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined })
+    const field = document.createElement('textarea')
+    field.value = Array.from({ length: 80 }, (_, i) => `synthetic draft line ${i}`).join('\n')
+    field.style.cssText = 'position:fixed;left:10px;top:10px;width:180px;height:50px'
+    document.body.append(field)
+    field.focus({ preventScroll: true }); field.setSelectionRange(8, 37, 'backward'); field.scrollTop = 230
+    window.scrollTo(0, 200)
+    const before = { start: field.selectionStart, end: field.selectionEnd, direction: field.selectionDirection, top: field.scrollTop, y: window.scrollY, value: field.value }
+    let commandCalls = 0, selectedOnlyLink = false
+    document.execCommand = command => {
+      commandCalls++
+      const temporary = document.activeElement as HTMLTextAreaElement
+      selectedOnlyLink = command === 'copy' && temporary !== field && temporary.value === 'https://news.example.test/preserve-input'
+      if (outcome === 'throw') throw new Error('TEST_LEGACY_DENIED')
+      return outcome === 'true'
+    }
+    const copied = await copyInsightLink('https://news.example.test/preserve-input', () => true)
+    const after = { start: field.selectionStart, end: field.selectionEnd, direction: field.selectionDirection, top: field.scrollTop, y: window.scrollY, value: field.value }
+    const changedFields = (Object.keys(before) as (keyof typeof before)[]).filter(key => before[key] !== after[key])
+    const state = { copied, commandCalls, selectedOnlyLink, changedFields, preserved: JSON.stringify(before) === JSON.stringify(after), focused: document.activeElement === field, textareas: document.querySelectorAll('textarea').length }
+    field.remove()
+    return state
+  }, outcome)
+  expect(result).toEqual({ copied: outcome === 'true', commandCalls: 1, selectedOnlyLink: true, changedFields: [], preserved: true, focused: true, textareas: 1 })
+})
+
+for (const kind of ['button', 'svg']) test(`호환 복사 합성 helper는 ${kind} 초점의 문서 역방향 선택을 보존하고 새 초점 선택은 덮지 않는다`, async ({ page }) => {
+  await mountArticle(page)
+  const result = await page.evaluate(async kind => {
+    const path = '/src/client-insight-clipboard.ts'
+    const { copyInsightLink } = await import(/* @vite-ignore */ path)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined })
+    const text = document.createElement('p'), first = kind === 'svg' ? document.createElementNS('http://www.w3.org/2000/svg', 'svg') : document.createElement('button'), next = document.createElement('input')
+    first.setAttribute('tabindex', '0')
+    text.textContent = 'synthetic document selection'
+    document.body.append(text, first, next)
+    first.focus({ preventScroll: true })
+    const selection = window.getSelection()!
+    selection.setBaseAndExtent(text.firstChild!, 20, text.firstChild!, 3)
+    document.execCommand = () => true
+    const copied = await copyInsightLink('https://news.example.test/document-selection', () => true)
+    const selected = selection.anchorNode === text.firstChild && selection.focusNode === text.firstChild && selection.anchorOffset === 20 && selection.focusOffset === 3
+    const focusRestored = document.activeElement === first
+    document.execCommand = () => { next.focus({ preventScroll: true }); return true }
+    await copyInsightLink('https://news.example.test/new-focus', () => true)
+    const newerFocus = document.activeElement === next
+    text.remove(); first.remove(); next.remove()
+    return { copied, selected, focusRestored, newerFocus, temporaryCount: document.querySelectorAll('textarea').length }
+  }, kind)
+  expect(result).toEqual({ copied: true, selected: true, focusRestored: true, newerFocus: true, temporaryCount: 0 })
+})
+
+for (const boundary of ['new-request', 'route', 'unmount']) test(`호환 복사 ${boundary} 뒤 늦은 거절은 대체 복사를 새로 실행하지 않는다`, async ({ page }) => {
+  await mountArticle(page, false, false, undefined, 'https://news.example.test/stale-fallback')
+  await page.evaluate(() => {
+    const queue: { resolve: () => void; reject: () => void }[] = []
+    Reflect.set(window, 'fallbackQueue', queue); Reflect.set(window, 'staleFallbackCalls', 0)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => new Promise<void>((resolve, reject) => queue.push({ resolve, reject: () => reject(new Error('TEST_DENIED')) })) } })
+    document.execCommand = () => { Reflect.set(window, 'staleFallbackCalls', Reflect.get(window, 'staleFallbackCalls') + 1); return true }
+  })
+  const copy = page.locator('.nfz-social button[aria-label="링크 복사"]')
+  await copy.click()
+  if (boundary === 'new-request') {
+    await copy.click()
+    await page.evaluate(() => Reflect.get(window, 'fallbackQueue')[1].resolve())
+  } else if (boundary === 'route') await page.locator('.nfz-back').click()
+  else await page.evaluate(() => Reflect.get(window, 'unmountInsightCopyFixture')())
+  await page.evaluate(() => Reflect.get(window, 'fallbackQueue')[0].reject())
+  expect(await page.evaluate(() => Reflect.get(window, 'staleFallbackCalls'))).toBe(0)
+  await expect(page.locator('textarea')).toHaveCount(0)
 })
 
 for (const reopen of [false, true]) test(`후속 늦은 복사 거절은 ${reopen ? '재열린' : '닫힌'} 메뉴와 무관하게 하단에만 2000ms 표시한다`, async ({ page }) => {
@@ -322,6 +491,8 @@ for (const reopen of [false, true]) test(`후속 늦은 복사 거절은 ${reope
 
 test('후속 복사 결과 색상은 원본 성공 녹색과 실패 적색의 실제 계산값이다', async ({ page }) => {
   await mountArticle(page, false, false, undefined, 'https://news.example.test/copy-colors')
+  await page.clock.install({ time: new Date('2030-01-01T00:00:00Z') })
+  await page.clock.pauseAt(new Date('2030-01-01T00:00:01Z'))
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } }))
   await page.getByRole('button', { name: '공유', exact: true }).click()
   await page.locator('.nfz-shpop').getByRole('button', { name: '링크 복사' }).click()
@@ -334,6 +505,8 @@ test('후속 복사 결과 색상은 원본 성공 녹색과 실패 적색의 �
 
 test('후속 복사 성공 알림은 버튼 밖의 기존 sr-only 형제 live region 한 곳에만 둔다', async ({ page }) => {
   await mountArticle(page, false, false, undefined, 'https://news.example.test/copy-live-region')
+  await page.clock.install({ time: new Date('2030-01-01T00:00:00Z') })
+  await page.clock.pauseAt(new Date('2030-01-01T00:00:01Z'))
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } }))
   await page.getByRole('button', { name: '공유', exact: true }).click()
   const popup = page.locator('.nfz-shpop')
@@ -348,6 +521,8 @@ test('후속 복사 성공 알림은 버튼 밖의 기존 sr-only 형제 live re
 
 test('후속 오래된 거절은 새 복사 요청이나 기사 세대를 넘어 표시되지 않는다', async ({ page }) => {
   await mountArticle(page, false, false, undefined, 'https://news.example.test/copy-stale-denial')
+  await page.clock.install({ time: new Date('2030-01-01T00:00:00Z') })
+  await page.clock.pauseAt(new Date('2030-01-01T00:00:01Z'))
   await page.evaluate(() => {
     const completions: { resolve: () => void; reject: () => void }[] = []
     Reflect.set(window, 'insightCopyCompletions', completions)

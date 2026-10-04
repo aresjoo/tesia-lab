@@ -1,5 +1,6 @@
 import { createContext, Fragment, useCallback, useContext, useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { clientResearchScrollport } from '../client-research-scrollport'
+import { copyInsightLink } from '../client-insight-clipboard'
 import { ArrowLeft, ArrowUpRight, Check, ChevronRight, Meh, Share2, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import { CLIENT_INSIGHTS, CLIENT_INSIGHT_SOURCE, INSIGHT_ART, INSIGHT_ASSETS, INSIGHT_AUTHORS, INSIGHT_FIGURES, type InsightSection } from '../client-insight-fixtures'
 import { getSitePage } from '../site-navigation'
@@ -306,10 +307,8 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     const request = ++copyRequest.current
     const epoch = shareEpoch.current
     clearTimeout(copyTimer.current); setCopyResult(null)
-    let outcome: 'success' | 'failure' = 'success'
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-    } catch { outcome = 'failure' }
+    const copied = await copyInsightLink(shareUrl, () => current === generation.current && request === copyRequest.current)
+    const outcome = copied ? 'success' : 'failure'
     if (current !== generation.current || request !== copyRequest.current) return
     // Source: successful menu copy replaces only its label; errors always use
     // the social status and never dismiss the menu. Clipboard authority is unchanged.

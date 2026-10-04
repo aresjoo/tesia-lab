@@ -24,3 +24,9 @@
 .client-public-page .public-language-trigger:hover{background:#26282c}
 .client-public-page .public-language-trigger:focus-visible{outline:2px solid #5b8af7;outline-offset:3px}
 @media(max-width:640px){.client-public-page .public-language-trigger{left:14px;bottom:calc(14px + env(safe-area-inset-bottom))}}
+
+/* A global short duration otherwise creates all-property transitions on reused
+   document nodes, moving hash destinations after the route has aligned them. */
+@media(prefers-reduced-motion:reduce){
+  .client-public-page,.client-public-page *,.client-public-page *::before,.client-public-page *::after{transition:none!important}
+}

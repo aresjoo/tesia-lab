@@ -11,6 +11,7 @@ export function NativeConversationTitle({ title, onSave }: { title: string; onSa
   const errorId = useId()
   const [editing, setEditing] = useState(false), [value, setValue] = useState(title)
   const [pending, setPending] = useState(false), [failed, setFailed] = useState(false)
+  const [failureSequence, setFailureSequence] = useState(0)
   const alive = useRef(false), locked = useRef(false), edited = useRef(false), returnFocus = useRef(false)
   const input = useRef<HTMLInputElement>(null), trigger = useRef<HTMLButtonElement>(null)
   useLayoutEffect(() => { alive.current = true; return () => { alive.current = false } }, [])
@@ -18,12 +19,19 @@ export function NativeConversationTitle({ title, onSave }: { title: string; onSa
     if (editing) { input.current?.focus(); input.current?.select() }
     else if (returnFocus.current) { trigger.current?.focus({ preventScroll: true }); returnFocus.current = false }
   }, [editing])
+  useLayoutEffect(() => {
+    if (!editing || pending || !failed || !returnFocus.current) return
+    // Restore only after React commits disabled=false, not in an animation
+    // frame that may run before that commit. Preserve a user's newer focus.
+    if (document.activeElement === document.body || document.activeElement === input.current) input.current?.focus({ preventScroll: true })
+    returnFocus.current = false
+  }, [editing, pending, failed, failureSequence])
   const save = async () => {
     if (locked.current) return
     const next = value.trim()
     if (!edited.current || !next || next === title) { setEditing(false); setFailed(false); return }
     // A temporarily withdrawn action must not discard an already typed name.
-    if (!onSave) { setFailed(true); return }
+    if (!onSave) { setFailed(true); setFailureSequence(sequence => sequence + 1); return }
     locked.current = true; setPending(true); setFailed(false)
     try {
       await onSave(next)
@@ -33,11 +41,7 @@ export function NativeConversationTitle({ title, onSave }: { title: string; onSa
     } catch {
       if (!alive.current) return
       setFailed(true)
-      if (returnFocus.current && (document.activeElement === document.body || document.activeElement === input.current)) {
-        // Re-enable before the browser focus operation; do not steal focus
-        // from navigation or another visible field after a delayed failure.
-        requestAnimationFrame(() => { if (alive.current && (document.activeElement === document.body || document.activeElement === input.current)) input.current?.focus({ preventScroll: true }) })
-      }
+      setFailureSequence(sequence => sequence + 1)
     } finally { locked.current = false; if (alive.current) setPending(false) }
   }
   return <>{editing ? <input ref={input} className="g-title-input" aria-label={c('editTitle')} maxLength={120}

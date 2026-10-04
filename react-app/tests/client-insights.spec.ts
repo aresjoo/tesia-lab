@@ -16,6 +16,7 @@ async function mount(page: Page, props: { signedIn?: boolean; initialSlug?: stri
     const react = await import(/* @vite-ignore */ rp), dom = await import(/* @vite-ignore */ dp)
     const { ClientInsights } = await import(/* @vite-ignore */ cp)
     const host = document.createElement('div'); document.body.append(host)
+    document.execCommand = () => false
     const asks: string[] = [], feedback: [string, number][] = [], login: string[] = []
     Object.assign(window, { insightAsks: asks, insightFeedback: feedback, insightLogin: login })
     const root = (dom.createRoot ?? dom.default.createRoot)(host)

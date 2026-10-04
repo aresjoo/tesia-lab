@@ -22,10 +22,10 @@ async function sourceInsightEntry(page: Page) {
   return entry
 }
 
-async function mount(page: Page, showAnalysis = true) {
+async function mount(page: Page, showAnalysis = true, includeBodyTag = false) {
   await page.route('**/library-port-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="test-root"></div></body></html>' }))
   await page.goto('/library-port-test.html')
-  await page.evaluate(async showAnalysis => {
+  await page.evaluate(async ({ showAnalysis, includeBodyTag }) => {
     const refresh = '/@react-refresh'
     const runtime = (await import(/* @vite-ignore */ refresh)).default
     runtime.injectIntoGlobalHook(window)
@@ -90,7 +90,7 @@ async function mount(page: Page, showAnalysis = true) {
           onLoadMore: async () => { controls.more++ },
         },
         researchPresentation: { scope: 'owner-a', data: { scopeId: 'research-one', status: 'running', entries: [{ id: 'observed', agent: 'Strategy Critic', state: 'warn', summary: '공급된 검토 결과' }], critic: react.createElement('p', null, '공급된 개선점 1개') } },
-        strategyDocument: { identity: documentIdentity, content: react.createElement('div', { 'data-supplied-plan': true }, '공급된 전략 문서') },
+        strategyDocument: { identity: documentIdentity, content: react.createElement('div', { 'data-supplied-plan': true }, '공급된 전략 문서', includeBodyTag ? react.createElement('div', { 'data-short-body-tags': true, style: { display: 'flex' } }, react.createElement('span', { className: 'g-tag' }, '공급된 본문 상태'), react.createElement('span', null, '다음 문서 내용')) : null) },
         conversationNotice: react.createElement('span', { 'data-confirmed-result-status': true }, '확인된 결과 준비 상태'),
         analysis: showAnalysis ? react.createElement('input', { 'aria-label': 'singleton chart state', defaultValue: '차트 위치' }) : undefined,
         state: { phase: 'ready', sessionState: 'AUTHENTICATED', messages: [{ id: 'user-one', role: 'user', text: '기존 대화' }], input, busy: false, inputDisabled: false,
@@ -102,11 +102,152 @@ async function mount(page: Page, showAnalysis = true) {
       })
     }
     ;(dom.createRoot ?? dom.default.createRoot)(document.getElementById('test-root')).render(react.createElement(Host))
-  }, showAnalysis)
+  }, { showAnalysis, includeBodyTag })
   await expect(page.locator('.g-thread')).toContainText('기존 대화')
 }
 
 async function openDrawer(page: Page) { await page.locator('.client-hamburger:visible, .client-rail-logo-row button:visible').first().click() }
+
+for (const [width, height] of [[320, 360], [390, 360], [844, 390], [667, 375]]) test(`native research title rejection ${width}x${height} retains readable document and persistent draft`, async ({ page }, info) => {
+  await page.setViewportSize({ width, height })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await mount(page, false, true)
+  await page.locator('.g-composer textarea').fill('저장 실패 뒤에도 남을 문서 질문')
+  await page.evaluate(() => Reflect.set(window, 'shortResearchComposer', document.querySelector('.g-composer textarea')))
+  await page.getByRole('button', { name: '대화 문서', exact: true }).click()
+  const workspace = page.locator('.native-research-workspace')
+  const field = workspace.locator('.g-title-input')
+  await workspace.locator('.g-title').click()
+  await field.fill('제목 저장이 실패해도 보존할 수정 내용')
+  await page.evaluate(() => { window.libraryControls.fail = true })
+  await field.press('Enter')
+  const error = workspace.locator('.native-title-error')
+  await expect(error).toBeVisible()
+  await expect(field).toBeEnabled()
+  await expect(field).toBeFocused()
+  await page.evaluate(async () => { const path = '/src/client-preferences.ts'; (await import(/* @vite-ignore */ path)).setClientPreference('language', 'fr') })
+  await expect(field).toHaveValue('제목 저장이 실패해도 보존할 수정 내용')
+  await expect(field).toBeFocused()
+  const header = (await workspace.locator('.rw-header').boundingBox())!
+  const body = (await workspace.locator('.rw-scroll').boundingBox())!
+  const alert = (await error.boundingBox())!
+  await info.attach('native-short-layout', { contentType: 'application/json', body: JSON.stringify(await page.evaluate(() =>
+    ['.client-source-app', '.client-service-content', '.native-service-content', '.native-research-workspace', '.rw-center', '.rw-header', '.rw-heading', '.rw-tabs', '.rw-scroll', '.rw-composer-wrap', '.g-composer', '.g-composer textarea'].map(selector => {
+      const node = document.querySelector(selector)
+      if (!node) return { selector, missing: true }
+      const rect = node.getBoundingClientRect(), style = getComputedStyle(node)
+      return { selector, x: rect.x, y: rect.y, width: rect.width, height: rect.height, minHeight: style.minHeight, maxHeight: style.maxHeight, padding: style.padding, overflow: style.overflow }
+    }))) })
+  await page.screenshot({ path: info.outputPath('native-research-rejection-short.png') })
+  expect(alert.y).toBeGreaterThanOrEqual(header.y - 1)
+  expect(alert.y + alert.height).toBeLessThanOrEqual(header.y + header.height + 1)
+  expect(body.height, 'A failed title edit must leave at least the existing 80px document reading budget').toBeGreaterThanOrEqual(80)
+  expect(await workspace.locator('.rw-header').evaluate(node => node.scrollWidth <= node.clientWidth + 1), 'The header must not rely on horizontal scrolling').toBe(true)
+  const status = (await workspace.locator('.rw-header .rw-title > .g-tag').boundingBox())!
+  expect(status.width, 'The status must remain readable, not shrink into a vertical letter column').toBeGreaterThanOrEqual(100)
+  expect(status.height).toBeLessThanOrEqual(32)
+  expect(await workspace.locator('[data-short-body-tags] .g-tag').evaluate(node => getComputedStyle(node).order), 'Header ordering must not reorder supplied body content').toBe('0')
+  const composer = workspace.locator('.g-composer textarea')
+  await expect(composer).toHaveValue('저장 실패 뒤에도 남을 문서 질문')
+  expect(await composer.evaluate(node => node === Reflect.get(window, 'shortResearchComposer'))).toBe(true)
+  expect(await composer.evaluate(node => {
+    const rect = node.getBoundingClientRect(), target = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)
+    return rect.x >= 0 && rect.y >= 0 && rect.right <= innerWidth + 1 && rect.bottom <= innerHeight + 1 && (target === node || target !== null && node.contains(target))
+  }), 'The persistent composer must remain inside the viewport and pointer reachable').toBe(true)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  for (const control of await workspace.locator('.rw-header button').all()) {
+    await control.focus()
+    await expect(control).toBeFocused()
+    await control.scrollIntoViewIfNeeded()
+    const box = (await control.boundingBox())!
+    const clip = (await workspace.locator('.rw-header').boundingBox())!
+    expect(box.y).toBeGreaterThanOrEqual(clip.y - 1)
+    expect(box.y + box.height).toBeLessThanOrEqual(clip.y + clip.height + 1)
+    expect(await control.evaluate(node => {
+      const box = node.getBoundingClientRect(), target = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)
+      return target === node || target !== null && node.contains(target)
+    })).toBe(true)
+  }
+  await field.focus()
+  await expect(field).toBeEnabled()
+  await page.evaluate(() => { window.libraryControls.fail = false })
+  await field.press('Enter')
+  await expect(workspace.locator('.g-title')).toHaveText('제목 저장이 실패해도 보존할 수정 내용')
+  await expect(error).toHaveCount(0)
+})
+
+for (const target of ['composer', 'outcome'] as const) test(`delayed native title rejection preserves newer ${target} focus and the editable title`, async ({ page }) => {
+  await mount(page)
+  const field = page.locator('.g-chead .g-title-input')
+  await page.locator('.g-chead .g-title').click()
+  await field.fill('늦은 저장 실패 후 재시도할 제목')
+  await page.evaluate(() => { window.libraryControls.hold = true; window.libraryControls.fail = true })
+  await field.press('Enter')
+  await expect(field).toBeDisabled()
+  const destination = target === 'composer' ? page.locator('.g-composer textarea') : page.getByLabel('진행 중 인증 입력')
+  await destination.fill('사용자가 선택한 새로운 입력')
+  await page.evaluate(() => window.libraryControls.finish())
+  await expect(page.locator('.g-chead .native-title-error')).toBeVisible()
+  await expect(field).toBeEnabled()
+  await expect(field).toHaveValue('늦은 저장 실패 후 재시도할 제목')
+  await expect(destination).toBeFocused()
+  await expect(destination).toHaveValue('사용자가 선택한 새로운 입력')
+  await page.evaluate(() => { window.libraryControls.hold = false; window.libraryControls.fail = false })
+  await field.press('Enter')
+  await expect(page.locator('.g-chead .g-title')).toHaveText('늦은 저장 실패 후 재시도할 제목')
+  await expect(page.locator('.g-chead .native-title-error')).toHaveCount(0)
+  await expect(page.locator('.g-chead .g-title')).toBeFocused()
+  expect(await page.evaluate(() => window.libraryControls.calls)).toEqual(['rename:one', 'rename:one'])
+})
+
+for (const mode of ['sync-throw', 'withdrawn'] as const) test(`native title ${mode} repeats restore focus after every failure without stealing a later input`, async ({ page }) => {
+  await page.route('**/title-contract-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><body><div id="test-root"></div></body></html>' }))
+  await page.goto('/title-contract-test.html')
+  await page.evaluate(async () => {
+    const refresh = '/@react-refresh'
+    const runtime = (await import(/* @vite-ignore */ refresh)).default
+    runtime.injectIntoGlobalHook(window)
+    Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
+    const cp = '/src/internal-poc/NativeConversationTitle.tsx', dp = '/@id/react-dom/client'
+    const source = await (await fetch(cp)).text(), rp = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
+    if (!rp) throw new Error('Missing React instance')
+    const rm = await import(/* @vite-ignore */ rp), react = rm.default ?? rm, dom = await import(/* @vite-ignore */ dp)
+    const { NativeConversationTitle } = await import(/* @vite-ignore */ cp)
+    const controls = { calls: 0, throws: true, allow: () => {}, withdraw: () => {} }
+    Reflect.set(window, 'titleContractControls', controls)
+    function Host() {
+      const [enabled, setEnabled] = react.useState(true)
+      controls.allow = () => { controls.throws = false; setEnabled(true) }
+      controls.withdraw = () => setEnabled(false)
+      return react.createElement('section', { 'data-native-title-contract': true },
+        react.createElement(NativeConversationTitle, { title: '공급된 제목 계약', onSave: enabled ? () => { controls.calls++; if (controls.throws) throw new Error('SYNTHETIC_TITLE_REJECTION') } : undefined }),
+        react.createElement('input', { 'aria-label': '더 최근에 선택한 입력' }))
+    }
+    ;(dom.createRoot ?? dom.default.createRoot)(document.getElementById('test-root')).render(react.createElement(Host))
+  })
+  const surface = page.locator('[data-native-title-contract]')
+  await surface.locator('.g-title').click()
+  const field = surface.locator('.g-title-input')
+  await field.fill('실패 이후에도 보존할 수정 제목')
+  if (mode === 'withdrawn') await page.evaluate(() => Reflect.get(window, 'titleContractControls').withdraw())
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await field.press('Enter')
+    await expect(surface.getByRole('alert')).toBeVisible()
+    await expect(field).toBeEnabled()
+    await expect(field).toBeFocused()
+    await expect(field).toHaveValue('실패 이후에도 보존할 수정 제목')
+  }
+  expect(await page.evaluate(() => Reflect.get(window, 'titleContractControls').calls)).toBe(mode === 'sync-throw' ? 3 : 0)
+  const other = surface.getByLabel('더 최근에 선택한 입력')
+  await other.fill('다른 입력 초안')
+  await expect(other).toBeFocused()
+  await expect(other).toHaveValue('다른 입력 초안')
+  await page.evaluate(() => Reflect.get(window, 'titleContractControls').allow())
+  await field.press('Enter')
+  await expect(surface.locator('.g-title-input')).toHaveCount(0)
+  await expect(surface.getByRole('alert')).toHaveCount(0)
+  await expect(surface.locator('.g-title')).toBeFocused()
+})
 
 test('실제 셸의 알림 설정 왕복은 필터를 보존하고 owner 교체는 폐기한다', async ({ page }) => {
   await mount(page, false)

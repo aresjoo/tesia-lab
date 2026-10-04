@@ -1,6 +1,8 @@
 # TETH Web
 
-현재 후속 UI·로그인 검증은 **62spec/1,674 PASS/0 FAIL/0 SKIP·exit0**, 전체 lint/service build exit0다. AI 트레이딩 소개·공개 탐색·문서/설정/도움말·키보드 복귀를 보완하고 Google·Apple·이메일 선택지와 기존 SDK 경로를 보존했다. 실제 build preview의320/390/1440px도 확인했다. 이는 아래 최초 배포와 원본 전체 인수 이력과 별도이며 실공급자 성공·모든 화면 무결함을 의미하지 않는다. 최신 실패·수정·검증 경계는 [Bugfix_report](Bugfix_report.md#로그인-방식-공존정적-배포-충돌-검수)를 따른다.
+최신 후속의 동결 영향 검사는37spec **1122PASS/0FAIL/기존QA-015SKIP2/retry0/flaky0/errors0·actual0**다. 같은입력 lint/공개·내부·service3build·built 로그인3폭·독립Opus5.5 정적검수가통과했으며49개실패발생을동일최종PASS에결속했다. 실제정적배포·잔여공급자·앞실패는아래현재보고서와migration영수증으로구분한다.
+
+현재 후속은 원본 인사이트 복사 호환성·터미널에서 연결 플랜 왕복·native 연구 제목 저장 오류와 reduced-motion FAQ 도달의 최소 교정이다. Google·Apple·이메일 선택지·기존 SDK와 인증 권한·프롬프트·가격·패키지는 유지한다. 최신 실패·수정·정확한 단일 검증은 [Bugfix_report](Bugfix_report.md#복사-호환성터미널-복귀연구-제목-오류faq-도달의-연속-사용-교정), 원본 대비 설명·snapshot·실제 정적 배포는 Lab migration의 `MIGRATION.md`와 `migration-verification.json`을 따른다. 아래 최초 배포·과거 범위·원본 전체 인수와 합산하거나 실공급자/전체서비스 성공으로 쓰지 않는다.
 
 사용자 정정으로 배포 화면과 공개 탐색 동선을 원본 `aresjoo/tesia-lab@9fbff821` 기준으로 복원했다. 로그인 전에도 전략 정의 목록·필터·상세와 AI 트레이딩 소개를 볼 수 있고, 복사 등 계정 동작에서 기존 실제 로그인 창을 연다. 홈 cyan·검정 배경·입력/사이드바/도움말 위치, 원본 로그인 X/문구, 정보/정책 URL(`/about/`, `/download/`, `/policies/`), 푸터 구조, 초안 카드와 연구 기록 검색 배치를 복원한다. 정보/정책/푸터의 내부 Mock 배너를 제거했으며 미공급 성과·인원·실행 결과를 합성하지 않는다. 미공급 성과/인원 정렬은 비활성화하고 가격/계정 데이터는 기존 검증된 producer만 소비한다. 정상 Google ACK는 오류/요청 복구로 표시하지 않고, 이전 전략 연결은 같은 owner·원 anonymous ETag가 있을 때만 명시 선택으로 제공한다. 새 대화가 확인되면 이전 연결 제안을 닫고, 미확정 인증·mutation의 같은 key/bytes 복구는 유지한다. 기존 FE 작업본은 수정하지 않았다.
 
