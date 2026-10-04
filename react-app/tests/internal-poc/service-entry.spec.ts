@@ -8,6 +8,7 @@ import { expect, test, type Page } from '@playwright/test'
 import conversationFixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 import { getServiceSiteLocation, toServiceSiteHref } from '../../src/internal-poc/service-site-navigation'
 import { CLIENT_DOWNLOAD_ASSETS, CLIENT_PUBLIC_ASSETS } from '../../src/client-public-assets'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 
 const exec = promisify(execFile)
 const ready = conversationFixture.snapshots.ready
@@ -60,7 +61,22 @@ test('service 빌드는 fixture·legacy 선택 entry 없이 독립 HTML과 완�
   const declarations = [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(match => match[1])
   const publicPageSource = await readFile('src/components/ClientAboutPage.tsx', 'utf8')
   const imageReferences = [...publicPageSource.matchAll(/src=["'](\/client-(?:shots|broker-assets)\/[^"']+)["']/g)].map(match => match[1])
-  expect([...new Set([...imageReferences, ...CLIENT_DOWNLOAD_ASSETS])].sort()).toEqual([...CLIENT_PUBLIC_ASSETS].sort())
+  // The public closure also serves the restored trading introduction and shared
+  // footer. Derive their references from consumers, not the manifest under test.
+  const introSource = await readFile('src/components/ClientTradingIntro.tsx', 'utf8')
+  const introBase = introSource.match(/const assets=['"]([^'"]+)['"]/)?.[1]
+  expect(introBase).toBe('/client-trading-intro')
+  const modelSource = introSource.match(/const models=\[([\s\S]*?)\] as const/)?.[1] ?? ''
+  const modelKeys = [...modelSource.matchAll(/\['([a-z]+)','[^']+','/g)].map(match => match[1])
+  expect(new Set(modelKeys).size).toBe(9)
+  const introReferences = [...introSource.matchAll(/\$\{assets\}\/([^$`]+)`/g)].map(match => `${introBase}/${match[1]}`)
+  // The tiles fallback is consumed both by the canvas and its poster image.
+  // The asset closure is a set; repeated real consumers must remain valid.
+  expect([...new Set(introReferences)].sort()).toEqual(['/client-trading-intro/buffett.jpg', '/client-trading-intro/halo.mp4', '/client-trading-intro/hero-tiles-end.jpg'])
+  const footerSource = await readFile('src/components/ClientSiteFooter.tsx', 'utf8')
+  const footerReferences = [...footerSource.matchAll(/src=["'](\/assets\/logos\/[^"']+)["']/g)].map(match => match[1])
+  expect(footerReferences).toEqual(['/assets/logos/bitget-512.png'])
+  expect([...new Set([...imageReferences, ...CLIENT_DOWNLOAD_ASSETS, ...introReferences, ...modelKeys.map(key => `${introBase}/ai/${key}.png`), ...footerReferences])].sort()).toEqual([...CLIENT_PUBLIC_ASSETS].sort())
   for (const asset of CLIENT_PUBLIC_ASSETS) expect(declarations).toContain(asset)
   for (const href of declarations) expect(assets.has(href), href).toBe(true)
   for (const file of files.filter(file => file.endsWith('.js'))) expect(declarations).toContain(`/${file}`)
@@ -123,7 +139,7 @@ async function serveBuilt(page: Page) {
     const request = route.request(), url = new URL(request.url()), path = url.pathname
     if (path.startsWith('/api/')) { traffic.unexpected.push(`${request.method()} ${path}`); return route.abort('blockedbyclient') }
     // Match the approved backend aliases, using byte-identical built HTML.
-    const key = path === '/' || path === '/auth/complete' ? '/internal-poc.html' : path
+    const key = ['/', '/auth/complete', '/about/', '/download/', '/policies/'].includes(path) ? '/internal-poc.html' : path
     const body = assets.get(key)
     if (!body || !allowed.has(key) || url.hostname !== '127.0.0.1') { traffic.unexpected.push(path); return route.abort('blockedbyclient') }
     traffic.paths.push(path)
@@ -160,14 +176,23 @@ const phase = (page: Page, value: string) => expect(page.locator('.client-servic
 async function openInfo(page: Page) {
   const about = page.getByRole('link', { name: 'TETH 정보', exact: true }).filter({ visible: true })
   if (await about.count() === 0) { if ((page.viewportSize()?.width ?? 0) <= 860) await revealSourceNavigation(page); await page.locator((page.viewportSize()?.width ?? 0) > 860 ? '.client-rail-logo-row button' : '.client-hamburger').click() }
-  await about.first().click()
+  if (await about.count() > 0) await about.first().click()
+  else {
+    // Authenticated desktop conversation hides the mobile-only drawer links.
+    // Its original profile → support → FAQ path still opens the same document
+    // without navigating through or replacing the running conversation.
+    await page.locator('[data-sidebar-action="account"],[data-sidebar-action="profile-settings"]').click()
+    await page.locator('.ca-settings').getByRole('button', { name: '고객지원', exact: true }).click()
+    await page.locator('.client-modal-help a[href="/about/#faq"]').click()
+  }
   await expect(page.locator('.client-info-about')).toBeVisible()
 }
 
-test('서비스 정보 fragment는 명시된 세 페이지·서버 alias·앵커만 해석한다', () => {
+test('서비스는 원본 문서 URL을 유지하고 기존 정보 fragment·서버 alias 북마크도 해석한다', () => {
   for (const name of ['about', 'download', 'policies']) {
-    expect(toServiceSiteHref(`/${name}/`)).toBe(`/#/site/${name}`)
-    expect(toServiceSiteHref(`/${name}/#faq`)).toBe(`/#/site/${name}/faq`)
+    expect(toServiceSiteHref(`/${name}/`)).toBe(`/${name}/`)
+    expect(toServiceSiteHref(`/${name}/#faq`)).toBe(`/${name}/#faq`)
+    expect(getServiceSiteLocation(`/${name}/#faq`)).toBe(`/${name}/#faq`)
     for (const base of ['/', '/internal-poc.html', '/auth/complete']) expect(getServiceSiteLocation(`${base}#/site/${name}/faq`)).toBe(`/${name}/#faq`)
   }
   for (const value of ['/#/site/unknown', '/unknown#/site/about', '/#/site/about/../policies', '/#/site/policies/%3Cscript%3E', '/#/fixture', '/auth/complete?campaign=fixture#/site/about']) expect(getServiceSiteLocation(value)).toBeNull()
@@ -181,11 +206,11 @@ test('정보 화면 왕복은 서비스 홈 입력과 SDK 세션을 보존한다
   await page.locator('#strategy-idea').fill('정보를 확인하고 이어서 질문')
   const reads = controls.sessionReads
   await openInfo(page)
-  await expect(page).toHaveURL(/\/#\/site\/about$/)
+  await expect(page).toHaveURL(/\/about\/$/)
   await expect(page.locator('.client-service-app')).toBeHidden()
   await expect(page.locator('#site-main')).toBeFocused()
   await page.screenshot({ path: info.outputPath('service-about.png') })
-  await page.locator('.client-info-about a[href="/#/site/download"]').filter({ visible: true }).first().click()
+  await page.locator('.client-info-about a[href="/download/"]').filter({ visible: true }).first().click()
   await expect(page.locator('.client-info-download')).toBeVisible()
   await page.getByRole('link', { name: '웹에서 바로 시작하기', exact: true }).click()
   await expect(page.locator('#strategy-idea')).toHaveValue('정보를 확인하고 이어서 질문')
@@ -210,7 +235,7 @@ test('정보 페이지 직접 진입·정책 앵커·reload는 서버 경로와 
   await expect(page.locator('#v-privacy .sum-row')).toHaveCount(4)
   await expect(page.locator('.pg-h1')).toHaveText('개인정보 보호와 약관')
   const terms = page.locator('.tabs a[data-v="terms"]')
-  await expect(terms).toHaveAttribute('href', '/#/site/policies/terms')
+  await expect(terms).toHaveAttribute('href', '/policies/#terms')
   await terms.click()
   await expect(page.locator('#v-terms .sum-row')).toHaveCount(3)
   await expect(page.locator('.view.on')).toHaveAttribute('id', 'v-terms')
@@ -241,9 +266,9 @@ test('새 소개의 요금 앵커·12개 자산·FAQ는 서비스 정적 허용�
   const traffic = await serveBuilt(page), controls = await recordedWire(page)
   await page.goto('/#/site/about')
   const pricing = page.locator('.ab-acts .ab-link')
-  await expect(pricing).toHaveAttribute('href', '/#/site/about/pricing')
+  await expect(pricing).toHaveAttribute('href', '/about/#pricing')
   await pricing.click()
-  await expect(page).toHaveURL(/#\/site\/about\/pricing$/)
+  await expect(page).toHaveURL(/\/about\/#pricing$/)
   await expect(page.locator('#pricing')).toBeInViewport()
   for (const img of await page.locator('.ab img').all()) {
     await img.scrollIntoViewIfNeeded()
@@ -251,7 +276,7 @@ test('새 소개의 요금 앵커·12개 자산·FAQ는 서비스 정적 허용�
   }
   await page.locator('#faq summary').last().click()
   await page.locator('#faq details[open] a').click()
-  await expect(page).toHaveURL(/#\/site\/download$/)
+  await expect(page).toHaveURL(/\/download\/$/)
   expect(controls.sessionReads).toBe(0)
   expect(controls.posts).toEqual([])
   expect(traffic.unexpected).toEqual([])
@@ -335,10 +360,10 @@ test('built 원본 도움말은 실제 서비스 정보 링크로 이동하고 �
   await trigger.focus(); await page.keyboard.press('Enter')
   const popup = page.locator('.client-service-app > .site-help .site-help-pop')
   await expect(popup.locator('.help-close')).toBeFocused()
-  await expect(popup.locator('a').first()).toHaveAttribute('href', '/#/site/about/faq')
-  await expect(popup.locator('a').last()).toHaveAttribute('href', '/#/site/policies/overview')
+  await expect(popup.locator('a').first()).toHaveAttribute('href', '/about/#faq')
+  await expect(popup.locator('a').last()).toHaveAttribute('href', '/policies/#overview')
   await popup.locator('a').first().click()
-  await expect(page).toHaveURL(/\/#\/site\/about\/faq$/)
+  await expect(page).toHaveURL(/\/about\/#faq$/)
   await expect(page.locator('.client-info-about')).toBeVisible()
   await expect(page.locator('.client-service-app')).toBeHidden()
   await expect(page.locator('#site-main')).toBeFocused()
@@ -367,9 +392,9 @@ test('built 고객지원→정책을 읽는 동안 요청은 계속 완료되고
     await page.locator('.ca-settings').getByRole('button', { name: '고객지원', exact: true }).click()
     const popup = page.locator('.client-modal-help .site-help-pop')
     await expect(popup.locator('.help-close')).toBeFocused()
-    await expect(popup.locator('a').last()).toHaveAttribute('href', '/#/site/policies/overview')
+    await expect(popup.locator('a').last()).toHaveAttribute('href', '/policies/#overview')
     await popup.locator('a').last().click()
-    await expect(page).toHaveURL(/\/#\/site\/policies\/overview$/)
+    await expect(page).toHaveURL(/\/policies\/#overview$/)
     await expect(page.locator('#site-main')).toBeVisible()
     await expect(page.locator('.client-modal-help, .ca-settings')).toHaveCount(0)
     expect(await page.evaluate(() => document.body.style.overflow)).not.toBe('hidden')
@@ -524,12 +549,17 @@ test('built 서비스는 JS 실행 전에도 원본의 어두운 첫 페인트�
   await page.route('**/assets/*.js', async route => { await gate; await route.abort('blockedbyclient') })
   try {
     await page.goto('/', { waitUntil: 'commit' })
-    await expect.poll(() => page.evaluate(() => document.styleSheets.length)).toBeGreaterThan(0)
+    await expect.poll(() => page.evaluate(() => {
+      const sheets = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')]
+      return sheets.length > 0 && sheets.every(link => link.sheet !== null)
+    })).toBe(true)
     await expect(page.locator('.client-service-app')).toHaveCount(0)
     const paint = await page.evaluate(() => ({ background: getComputedStyle(document.body).backgroundColor, image: getComputedStyle(document.body).backgroundImage }))
     await info.attach('pre-script-paint', { body: JSON.stringify(paint), contentType: 'application/json' })
     await page.screenshot({ path: info.outputPath('built-service-pre-script.png') })
-    expect(paint).toEqual({ background: 'rgb(15, 16, 18)', image: 'none' })
+    // Source 9fb index:7578,7661 explicitly changed the main surface to black.
+    // This checks loaded CSS before React, not the browser's pre-CSS canvas.
+    expect(paint).toEqual({ background: 'rgb(0, 0, 0)', image: 'none' })
   } finally { release() }
 })
 
@@ -548,7 +578,7 @@ test('built 서버 오류는 Mock으로 fallback하지 않고 동일 native 세�
   expect(traffic.unexpected).toEqual([])
 })
 
-test('built native owner 교체는 이전 대화와 미전송 문장을 새 계정에 복원하지 않는다', async ({ page }) => {
+test('built 전송 전 기록 실패 후 실제 복구는 다른 owner에게 이전 대화·미전송 문장을 복원하지 않는다', async ({ page }) => {
   const traffic = await serveBuilt(page), controls = await recordedWire(page)
   await page.addInitScript(({ id, owner }) => {
     sessionStorage.setItem('tesia.native.conversation', id)
@@ -560,7 +590,7 @@ test('built native owner 교체는 이전 대화와 미전송 문장을 새 계�
   await input.fill('원 계정 미전송 문장')
   controls.owner = 'session_service_entry_other_owner_0002'
   const before = controls.draftReads
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await phase(page, 'ready')
   await expect(input).toHaveValue('')
   await expect(page.getByRole('region', { name: '전략 요약', exact: true })).toHaveCount(0)

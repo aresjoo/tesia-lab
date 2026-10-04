@@ -44,7 +44,7 @@ for (const overlay of ['locale', 'help'] as const) {
     await page.goto('/about/')
     await page.locator('.client-site-footer').getByRole('link', { name: '앱 다운로드', exact: true }).click()
     const trigger = overlay === 'help' && (page.viewportSize()?.width ?? 0) <= 760
-      ? page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true })
+      ? page.locator('.client-site-footer').getByRole('button', { name: '24시간 상담', exact: true })
       : page.locator(overlay === 'locale' ? '.public-language-trigger' : '.site-help-trigger')
     const popup = page.locator(overlay === 'locale' ? '.client-locale-panel' : '.site-help-pop')
     await trigger.click()

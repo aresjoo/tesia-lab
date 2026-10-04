@@ -1,5 +1,6 @@
 import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
 import { expect, test, type Page } from '@playwright/test'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 import { openNativeAccountMenu as openObservedNativeAccountMenu } from './native-account-test-helpers'
 import conversationFixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 import nativeFixture from './fixtures/native-service-contracts.json' with { type: 'json' }
@@ -295,7 +296,7 @@ for (const action of ['new-conversation', 'new-owner', 'logout'] as const) test(
   await showPane(page, '대화')
   if (action === 'new-owner') {
     controls.sessionId = 'session_iteration_new_owner_0002'
-    await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+    await recoverNativeAfterJournalFailure(page)
     await expect(page.getByRole('alert')).toContainText('세션이 변경되어')
   } else if (action === 'logout') {
     await page.route('**/api/v1/auth/logout', route => route.abort('failed'))

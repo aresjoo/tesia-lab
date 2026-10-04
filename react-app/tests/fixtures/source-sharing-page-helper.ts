@@ -1,5 +1,17 @@
 import { expect, type Page } from '@playwright/test'
 
+/** Source catalogue retains a keyboard-only return action. Reveal it through
+ * focus instead of clicking a clipped control or altering its presentation. */
+export async function returnFromSourceSharing(page: Page) {
+  const grid = page.locator('.strategy-list-grid')
+  if (await grid.count()) await expect(grid).toHaveAttribute('aria-busy', 'false')
+  const back = page.getByRole('button', { name: '대화로 돌아가기', exact: true })
+  await back.focus()
+  await expect(back).toBeFocused()
+  await expect(back).toBeInViewport()
+  await back.press('Enter')
+}
+
 /** Actual source list navigation only. The source repeats stable strategy IDs
  * up to 100 slots; unique definitions and their order remain independently
  * testable across the real ten-card pages. This does not change provider data. */

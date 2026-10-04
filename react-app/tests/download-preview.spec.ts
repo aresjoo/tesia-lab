@@ -3,7 +3,9 @@ import { expect, test } from '@playwright/test'
 test('최신 원본 3개 캡처와 탭을 동일 기기 크기로 표시한다', async ({ page }, info) => {
   await page.goto('/download/')
   await expect(page.locator('.slide')).toHaveCount(3)
-  await expect(page.locator('.prototype-notice')).toBeVisible()
+  // The restored source has no added prototype disclaimer (also asserted by
+  // client-latest-public-source). Keep all image, sizing and interaction checks.
+  await expect(page.locator('.prototype-notice')).toHaveCount(0)
   let height = 0
   for (const [screen, name] of [['chat', '대화'], ['report', '검증'], ['live', '실행']]) {
     await page.getByRole('tab', { name, exact: true }).click()

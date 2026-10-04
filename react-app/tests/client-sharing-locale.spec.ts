@@ -36,11 +36,18 @@ test('확정사전33키7언어는한국어원문·0·사용자치환문자와기
 })
 
 async function language(page: Page, value: string) {
-  await page.evaluate(async value => {
-    const path = '/src/client-preferences.ts'
-    const { setClientPreference } = await import(path)
-    setClientPreference('language', value)
-  }, value)
+  // Keep the exact Promise awaited by CDP alive until Node receives its result.
+  // The real preference setter and every UI assertion remain unchanged.
+  try {
+    await page.evaluate(value => {
+      const path = '/src/client-preferences.ts'
+      const pending = import(path).then(({ setClientPreference }) => setClientPreference('language', value))
+      Reflect.set(window, '__tethSharingLocaleSetupPromise', pending)
+      return pending
+    }, value)
+  } finally {
+    await page.evaluate(() => { Reflect.deleteProperty(window, '__tethSharingLocaleSetupPromise') })
+  }
   await expect(page.locator('html')).toHaveAttribute('lang', value)
 }
 
@@ -286,24 +293,77 @@ test('native 정렬의 값과 초점은 언어 전환에도 같은 노드에 남
   }
 })
 
-for (const value of ['es', 'fr']) for (const width of [320, 1440]) test(value + ' ' + width + 'px 긴 정렬 라벨은 선택상자와 이웃 경계를 보존한다', async ({ page }, info) => {
+for (const value of languages) for (const width of [320, 375, 390, 480, 481, 1440, ...(value === 'en' ? [383, 384, 385] : []), ...(['es', 'fr'].includes(value) ? [520, 521] : [])]) test(value + ' ' + width + 'px 긴 정렬 라벨은 선택상자와 이웃 경계를 보존한다', async ({ page }, info) => {
   await page.setViewportSize({ width, height: 900 })
-  await open(page); await selectOption(page, 0, 1); await language(page, value)
+  await open(page); await language(page, value)
   await page.evaluate(() => document.fonts.ready)
   const select = page.locator('.strategy-list-sort select')
   await select.scrollIntoViewIfNeeded()
-  const geometry = await select.evaluate(el => {
-    const s = getComputedStyle(el), box = el.getBoundingClientRect()
-    const context = document.createElement('canvas').getContext('2d')!
-    context.font = s.font
-    return { needed: context.measureText((el as HTMLSelectElement).selectedOptions[0].text).width,
-      available: el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight),
-      hit: el.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) }
-  })
-  expect(geometry.needed).toBeLessThanOrEqual(geometry.available + 1)
-  expect(geometry.hit).toBe(true)
-  const a = (await select.boundingBox())!, b = (await page.locator('.tfbk-drop').boundingBox())!
-  expect(a.x + a.width <= b.x + 1 || a.y + a.height <= b.y + 1).toBe(true)
+  const original = await select.elementHandle()
+  // Measure each actual selection: the row may legitimately expand only for
+  // long selected values while retaining the source's short default layout.
+  for (const selected of ['pick', 'ret', 'fw', 'pick']) {
+    await select.selectOption(selected)
+    await select.focus()
+    await expect(select).toBeFocused(); await expect(select).toHaveValue(selected)
+    expect(await select.evaluate((node, before) => node === before, original)).toBe(true)
+    const geometry = await select.evaluate(el => {
+      const s = getComputedStyle(el), box = el.getBoundingClientRect()
+      const context = document.createElement('canvas').getContext('2d')!
+      // CSS font shorthand can be empty with variable-font longhands. An empty
+      // assignment silently leaves canvas at 10px and falsely passes clipping.
+      context.font = s.font || `${s.fontStyle} ${s.fontWeight} ${s.fontSize} ${s.fontFamily}`
+      return { needed: context.measureText((el as HTMLSelectElement).selectedOptions[0].text).width,
+        available: el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight),
+        fontSize: s.fontSize, measuredFont: context.font,
+        hit: el.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) }
+    })
+    expect.soft(geometry.needed, `${value}/${width}/${selected}: ${JSON.stringify(geometry)}`).toBeLessThanOrEqual(geometry.available + 1)
+    expect(Number(geometry.measuredFont.match(/(?:^|\s)([\d.]+)px(?:\s|\/)/)?.[1])).toBe(parseFloat(geometry.fontSize))
+    expect(geometry.hit).toBe(true)
+    // Check the actual select decoration without substituting a DOM text mock.
+    const options = await select.evaluate(el => {
+      const style = getComputedStyle(el), canvas = document.createElement('canvas').getContext('2d')!
+      canvas.font = style.font || `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+      return { appearance: style.appearance, arrow: style.backgroundImage, measuredFont: canvas.font, fontSize: style.fontSize,
+        available: el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+        width: canvas.measureText((el as HTMLSelectElement).selectedOptions[0].text).width }
+    })
+    expect(options.appearance).toBe('none')
+    expect(Number(options.measuredFont.match(/(?:^|\s)([\d.]+)px(?:\s|\/)/)?.[1])).toBe(parseFloat(options.fontSize))
+    expect(options.arrow).toContain('data:image/svg+xml')
+    expect.soft(options.width).toBeLessThanOrEqual(options.available + 1)
+    const market = page.locator('.tfbk-drop')
+    const marketText = await market.locator('span').first().evaluate(el => {
+      const range = document.createRange(); range.selectNodeContents(el)
+      const text = range.getBoundingClientRect(), box = el.getBoundingClientRect()
+      return { fits: text.left >= box.left - 1 && text.right <= box.right + 1,
+        unclipped: el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1 }
+    })
+    expect(marketText).toEqual({ fits: true, unclipped: true })
+    if (width === 375 || geometry.needed > geometry.available + 1) await page.screenshot({ path: info.outputPath(`sharing-${value}-${width}-${selected}.png`) })
+    const a = (await select.boundingBox())!, b = (await page.locator('.tfbk-drop').boundingBox())!
+    expect(a.x + a.width <= b.x + 1 || a.y + a.height <= b.y + 1).toBe(true)
+    const stacked = width <= 480 && (selected !== 'pick' || ['es', 'fr'].includes(value))
+      || width <= 384 && value === 'en'
+      || width <= 520 && selected === 'ret' && ['es', 'fr'].includes(value)
+    if (stacked) {
+      expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1)
+      expect(Math.abs(a.width - b.width)).toBeLessThanOrEqual(1)
+      expect(Math.abs(b.y - (a.y + a.height) - 8)).toBeLessThanOrEqual(1)
+    }
+    if (selected === 'pick' && ['ko', 'ja', 'zh-CN', 'zh-TW'].includes(value) && width <= 480) {
+      expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1)
+    }
+    if (selected === 'pick' && value === 'en' && width >= 385 && width <= 640) {
+      expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1)
+    }
+    if (width >= 481 && width <= 640 && !(selected === 'ret' && ['es', 'fr'].includes(value) && width <= 520)) {
+      expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1)
+    }
+    expect(await page.evaluate(() => document.documentElement.lang)).toBe(value)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+  }
   await select.focus(); await page.keyboard.press('End')
   await expect(select).toHaveValue('fw'); await expect(select).toBeFocused()
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)

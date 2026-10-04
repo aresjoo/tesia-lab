@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import fixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 import { nativeResearchPlanText } from '../../src/internal-poc/native-research-plan-copy'
 import { nativeRowText } from '../../src/internal-poc/native-row-copy'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 
 // Actual NativeServiceApp/row controller/installed SDK with explicit synthetic
 // wire data. No real server research, compiler, approval, market or order proof.
@@ -265,7 +266,7 @@ test('실제 앱 연구계획은 원본8행·서버조건·미공급4행·전체
   expect(state.requests).toEqual(before); expect(state.wire).toEqual([])
 })
 
-for (const mode of ['draft', 'uncertain'] as const) test(`계획 손절 조건 제거 후 ${mode} 메모는 이전 항목에서 복구할 수 있다`, async ({ page }) => {
+for (const mode of ['draft', 'uncertain'] as const) test(`기록 실패 또는 미확정 요청 재확인으로 계획 손절 조건 제거 후 ${mode} 메모는 이전 항목에서 복구할 수 있다`, async ({ page }) => {
   const uncertain = mode !== 'draft'
   const state = await setup(page)
   await openPlan(page)
@@ -281,7 +282,7 @@ for (const mode of ['draft', 'uncertain'] as const) test(`계획 손절 조건 �
   state.snapshot = { ...structuredClone(changed), draftState: { ...structuredClone(changed.draftState), projection: {
     ...structuredClone(changed.draftState.projection), exitRules: changed.draftState.projection.exitRules.filter(rule => rule.kind !== 'stop_loss'),
   } } }
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await openPlan(page)
   await expect(row(page, 'stopLoss').locator('.v')).toHaveText(nativeResearchPlanText('ko', 'unavailable'))
@@ -358,12 +359,12 @@ test('320px 7언어 계획은 행순서·값·단일editor DOM·선택·미전�
   await page.screenshot({ path: info.outputPath('research-plan-320-fr.png') })
 })
 
-test('미전송 계획행은 재조회한 새revision에 자동제출되지 않는다', async ({ page }) => {
+test('전송 전 기록 실패 뒤 미전송 계획행은 재조회한 새revision에 자동제출되지 않는다', async ({ page }) => {
   const state = await setup(page)
   await openPlan(page); await row(page, 'stopLoss').locator('.native-row-trigger').click()
   await comment(page).fill('4%로')
   await back(page); state.snapshot = structuredClone(changed)
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await openPlan(page); await comment(page).press('Enter')
   await expect(status(page)).toContainText(nativeRowText('ko', 'stale'))

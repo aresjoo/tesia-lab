@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 import fixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 import { nativeObservationCopy } from '../../src/internal-poc/native-observation-copy'
 import type { ClientLanguage } from '../../src/client-preferences'
@@ -255,7 +256,7 @@ test('실제 SDK 답변 복사와 원본 의견 카드는 전략 요청·승인�
   await expect(page.locator('.client-answer-feedback')).toContainText('서버로 보내거나 저장하지 않습니다')
   expect(state.posts).toHaveLength(posts)
   state.owner='session_observation_other_0001'
-  await page.getByRole('button',{name:'세션 다시 확인',exact:true}).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-answer-feedback')).toHaveCount(0)
   await expect(page.locator('.client-answer-actions')).toHaveCount(0)
 })
@@ -359,7 +360,7 @@ test('응답 유실 뒤 동일 요청 재개는 확인 전 완료 기록 0, 확�
   await expect(works(page)).toHaveCount(1)
   expect(state.posts).toHaveLength(2)
   expect(state.posts[1]).toEqual(first)
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await expect(works(page)).toHaveCount(0)
   expect(state.posts).toHaveLength(2)
@@ -410,7 +411,7 @@ for (const boundary of ['reload', 'new', 'owner'] as const) test(`${boundary} �
   const state = await setup(page)
   await send(page); await expect(works(page)).toHaveCount(1)
   if (boundary === 'reload') await page.reload()
-  else if (boundary === 'owner') { state.owner = 'session_observation_other_0001'; await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click() }
+  else if (boundary === 'owner') { state.owner = 'session_observation_other_0001'; await recoverNativeAfterJournalFailure(page) }
   else {
     if (await page.getByRole('button', { name: '새 전략', exact: true }).isVisible()) await page.getByRole('button', { name: '새 전략', exact: true }).click()
     else { await revealSourceNavigation(page); await page.getByRole('button', { name: '메뉴', exact: true }).click(); await page.getByRole('button', { name: '＋ 새 전략', exact: true }).click() }

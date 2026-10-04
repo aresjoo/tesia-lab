@@ -4,7 +4,8 @@ import preferenceCopy from '../src/client-sharing-preference-copy.json' with { t
 import { upgradeText } from '../src/client-upgrade-copy'
 import type { ClientLanguage } from '../src/client-preferences'
 import { catalogueStrategies } from '../src/client-catalogue'
-import { sourceSharingNames } from './fixtures/source-sharing-page-helper'
+import { sourceSharingNames, returnFromSourceSharing } from './fixtures/source-sharing-page-helper'
+import { revealSourceNavigation } from './fixtures/source-offline-research-entry'
 
 const owner = 'sharing-preferences@example.test'
 const otherOwner = 'sharing-preferences-other@example.test'
@@ -72,6 +73,7 @@ for (const dir of ['asc', 'desc'] as const) test(`원본 복사순 ${dir} 저장
 
 async function sidebar(page: Page, name: string) {
   if ((page.viewportSize()?.width ?? 0) <= 860) {
+    await revealSourceNavigation(page)
     await page.locator('.client-hamburger').click()
     const drawer = page.getByRole('complementary', { name: 'TETH 메뉴', exact: true })
     await expect(drawer).toBeVisible()
@@ -88,7 +90,7 @@ test('공유 정렬·시장·검색어는 대화 왕복 후 명시 공유 재진
   await pick(page, '정렬 기준', '복사한 사람순')
   await pick(page, '시장', '가상자산')
   await page.getByRole('searchbox', { name: '전략 검색', exact: true }).fill('그대로 둘 검색어')
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await expect(page.getByRole('textbox', { name: 'TETH에게 물어보세요', exact: true })).toHaveValue(original.draft)
   await sidebar(page, sourceSidebarNavigationLabel('ko', 'sharing'))
   await expect(trigger(page, '정렬 기준')).toHaveValue('fw')
@@ -113,7 +115,7 @@ test('내 전략 관리 주소는 새로고침에 복원되고 홈의 전략들 
   await page.reload()
   await expect(page.locator('#research-title')).toHaveText('내 전략')
   await page.getByRole('button', { name: '전략 찾기', exact: true }).click()
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await sidebar(page, '새 전략')
   await expect(page.locator('#strategy-idea')).toBeVisible()
   await sidebar(page, sourceSidebarNavigationLabel('ko', 'sharing'))
@@ -234,7 +236,7 @@ test('보존된위임결과의다른전략보기는저장된내전략탭과무�
   await setup(page)
   await publishing(page)
   await page.getByRole('button', { name: '전략 찾기', exact: true }).click()
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await page.getByRole('button', { name: '다른 전략 보기', exact: true }).click()
   await expect(page).toHaveURL(/#\/share$/)
   await expect(page.locator('.strategy-list-card').first()).toBeVisible()
@@ -249,12 +251,12 @@ test('목록과관리주소왕복은구선택원문을덮어쓰지않고목록�
   await page.getByRole('button', { name: '전략 찾기', exact: true }).click()
   await expect(page).toHaveURL(/#\/share$/)
   expect(await raw(page)).toBe(initial)
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await sidebar(page, sourceSidebarNavigationLabel('ko', 'sharing'))
   await expect(page.locator('.strategy-list-card').first()).toBeVisible()
   await publishing(page)
   await page.getByRole('button', { name: '전략 찾기', exact: true }).click()
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await sidebar(page, sourceSidebarNavigationLabel('ko', 'sharing'))
   await expect(page.locator('.strategy-list-card').first()).toBeVisible()
   await expect(page.locator('.ss3-tabs')).toHaveCount(0)

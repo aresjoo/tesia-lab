@@ -98,7 +98,15 @@ for (const width of [320, 1440]) {
       await expect(input).toBeHidden()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
       await page.screenshot({ path: info.outputPath(`${width}-${label}.png`) })
-      await panel.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+      const back = panel.getByRole('button', { name: '대화로 돌아가기', exact: true })
+      if (selector === '.native-strategies') {
+        // The source catalogue starts at filters; its retained return action
+        // is intentionally keyboard-revealed instead of a visible title bar.
+        await back.focus()
+        await expect(back).toBeFocused()
+        await expect(back).toBeInViewport()
+        await back.press('Enter')
+      } else await back.click()
       await expect(input).toBeVisible()
       await expect(input).toHaveValue('전체 화면을 확인하고 이어 쓸 질문')
       expect(await input.evaluate((node, previous) => node === previous, original)).toBe(true)

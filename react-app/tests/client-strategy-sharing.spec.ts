@@ -7,7 +7,7 @@ import { loadCatalogueMarketData } from '../src/client-catalogue-market-data'
 import { runCatalogueSpotPreview } from '../src/client-catalogue-spot-engine'
 import { runCatalogueFuturesPreview } from '../src/client-catalogue-futures-engine'
 import { catalogueListPerformance } from '../src/client-catalogue-presentation'
-import { sourceSharingNames, traverseSourceSharingPages } from './fixtures/source-sharing-page-helper'
+import { sourceSharingNames, traverseSourceSharingPages, returnFromSourceSharing } from './fixtures/source-sharing-page-helper'
 
 async function catalogueRows() {
   const data = await loadCatalogueMarketData()
@@ -372,7 +372,7 @@ test('점수 근거는 원본 4축 기여도와 현재 seed 중앙값을 표시�
 
 test('공유 분석은 홈 초안을 보존하고 새 대화에서 분석 질문을 전송한다', async ({ page }) => {
   await open(page)
-  await page.locator('.hub-header').getByRole('button').click()
+  await returnFromSourceSharing(page)
   const input = page.getByRole('textbox', { name: '시장이나 전략에 대해 물어보세요' })
   await input.fill('아직 보내지 않은 홈 초안')
   await navigation(page)
@@ -396,7 +396,7 @@ test('공유 분석은 홈 초안을 보존하고 새 대화에서 분석 질문
 test('공유 분석은 현재 초안을 보존한 새 대화를 만들고 응답 중에는 또 만들지 않는다', async ({ page }) => {
   await page.clock.install()
   await open(page)
-  await page.locator('.hub-header').getByRole('button').click()
+  await returnFromSourceSharing(page)
   await page.getByRole('textbox', { name: '시장이나 전략에 대해 물어보세요' }).fill('비트코인 하락 후 반등 전략')
   await page.getByRole('button', { name: '대화 시작', exact: true }).click()
   await page.clock.fastForward(8000)

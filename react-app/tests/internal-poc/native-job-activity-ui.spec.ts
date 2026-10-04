@@ -24,6 +24,18 @@ const documentTab = (page: Page) => page.locator('.g-tabs').getByRole('button', 
 const backToConversation = (page: Page) => page.locator('.native-research-workspace').getByRole('button', { name: '대화로 돌아가기', exact: true })
 const researchNotice = (page: Page) => page.locator('.native-research-workspace .client-service-result-notice[role="status"]')
 const ownerId = 'session_job_activity_fixture_0001'
+async function recoverChangedHistoryOwner(page: Page) {
+  // Healthy source UI has no always-on retry. The existing history action
+  // rechecks ownership through the real SDK before exposing error recovery.
+  const recover = page.getByRole('button', { name: '세션 다시 확인', exact: true })
+  await expect(recover).toHaveCount(0)
+  await page.getByRole('button', { name: '이 대화의 실행 이력', exact: true }).click()
+  await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'error')
+  await expect(activity(page)).toHaveCount(0)
+  await expect(recover).toBeVisible()
+  await recover.click()
+  await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
+}
 async function setLanguage(page: Page, language: string) {
   await page.evaluate(async value => {
     const path = '/src/client-preferences.ts'
@@ -256,7 +268,7 @@ test('소유자를 바꾼 후 탭을 복귀해도 이전 작업을 다시 조회
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 10))
   await visibility(page, true)
   state.owner = 'session_job_visibility_other_0001'
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverChangedHistoryOwner(page)
   await expect(activity(page)).toHaveCount(0)
   const reads = state.jobReads.length
   await visibility(page, false)
@@ -286,7 +298,7 @@ test('실제 controller의 완료 작업·보고서404는 같은 대화에 수�
   expect(state.otherResultReads).toBe(0)
   expect(state.posts).toEqual([])
   state.owner = 'session_job_activity_other_0001'
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverChangedHistoryOwner(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await expect(summary).toHaveCount(0)
   await expect(page.locator('.native-service-result')).toHaveCount(0)
@@ -488,7 +500,7 @@ for (const boundary of ['new-conversation', 'new-owner'] as const) test(`${bound
   await expect.poll(() => state.jobReads.length).toBeGreaterThan(0)
   if (boundary === 'new-owner') {
     state.owner = 'session_job_activity_other_0001'
-    await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+    await recoverChangedHistoryOwner(page)
     await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
     await expect(page.getByRole('alert')).toContainText('세션이 변경되어')
   } else {

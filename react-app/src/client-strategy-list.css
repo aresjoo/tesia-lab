@@ -13,10 +13,31 @@
   .client-strategy-sharing:has(>.strategy-filters[data-catalogue-list]){padding:72px 20px 56px}
   .client-source-app .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header:has(button:focus){left:56px;right:64px}
 }
+/* Match the hub's existing narrow-container fallback when its keyboard-only
+   return action is revealed: place it below, not between, the fixed controls. */
+@container client-hub (max-width:280px){
+  .client-source-app .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header:has(button:focus){top:60px;left:18px;right:18px;padding:8px 18px}
+}
 .strategy-list-container{container:strategy-list / inline-size}
 .strategy-list-sort{display:inline-flex;min-width:0;max-width:100%}
-.strategy-list-sort select{min-height:44px;max-width:100%;padding:0 34px 0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:#000;color:#ececec;font:inherit;font-size:14px;cursor:pointer}
+.strategy-list-sort select{min-height:44px;max-width:100%;padding:0 34px 0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:#000 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cdcdcd' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;color:#ececec;font:inherit;font-size:14px;appearance:none;-webkit-appearance:none;cursor:pointer}
 .strategy-list-sort select:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* Long translations need room for both the native select and the market label.
+   Keep the Korean source grid unchanged; do not shrink or clip translated text. */
+@media(max-width:480px){
+  .client-strategy-sharing:is(:lang(es),:lang(fr)) .strategy-filters[data-catalogue-list] .strategy-filter-row{grid-template-columns:minmax(0,1fr)}
+  .client-strategy-sharing .strategy-filters[data-catalogue-list] .strategy-filter-row:has(select option:is([value="ret"],[value="fw"]):checked){grid-template-columns:minmax(0,1fr)}
+}
+/* The actual 16px English default needs 115px of text space. Keep the
+   compact source row at 385px and above, where it fits without shrinking. */
+@media(max-width:384px){
+  .client-strategy-sharing:lang(en) .strategy-filters[data-catalogue-list] .strategy-filter-row{grid-template-columns:minmax(0,1fr)}
+}
+/* 481px is still too narrow for the 176–178px translated return selection.
+   Only that selected value expands; shorter defaults retain their two columns. */
+@media(max-width:520px){
+  .client-strategy-sharing:is(:lang(es),:lang(fr)) .strategy-filters[data-catalogue-list] .strategy-filter-row:has(select option[value="ret"]:checked){grid-template-columns:minmax(0,1fr)}
+}
 .client-strategy-sharing .strategy-list-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
 .client-strategy-sharing .tfbk-card.strategy-list-card{margin:0;padding:0;border:0;border-radius:24px;background:transparent;min-width:0;overflow:visible}
 .strategy-list-card .strategy-list-link{display:flex;flex-direction:column;gap:18px;height:100%;padding:22px 24px;border:1px solid rgba(255,255,255,.14);border-radius:24px;color:#fff;text-decoration:none;background:transparent;transition:background-color .15s,border-color .15s;overflow-wrap:anywhere}

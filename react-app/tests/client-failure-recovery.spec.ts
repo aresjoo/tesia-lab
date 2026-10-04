@@ -1,7 +1,18 @@
 import { expect, test, type Page, type Locator } from '@playwright/test'
+import { revealSourceNavigation } from './fixtures/source-offline-research-entry'
 
 async function menu(page: Page) {
+  if ((page.viewportSize()?.width ?? 0) <= 860) await revealSourceNavigation(page)
   await page.locator((page.viewportSize()?.width ?? 0) <= 860 ? '.client-hamburger' : '.client-rail-logo-row button').click()
+}
+
+async function openAbout(page: Page) {
+  // Source 9fb: desktop public links belong to the account nav, while the
+  // information links in the drawer are intentionally mobile-only.
+  const mobile = (page.viewportSize()?.width ?? 0) <= 860
+  if (mobile) await menu(page)
+  await page.locator(mobile ? '.client-sidebar .client-drawer-links' : '.client-auth-nav')
+    .getByRole('link', { name: 'TETH 정보', exact: true }).click()
 }
 
 async function seed(page: Page) {
@@ -24,8 +35,7 @@ test('공개 페이지 로드 실패는 대화를 언마운트하지 않고 저�
   await page.evaluate(() => { Storage.prototype.setItem = () => { throw new Error('test storage unavailable') } })
   await page.locator('.client-home-content textarea').fill('저장되지 않아도 돌아와야 할 초안')
   await page.route('**/src/components/ClientPublicPages.tsx*', route => route.abort('failed'))
-  await menu(page)
-  await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 정보', exact: true }).click()
+  await openAbout(page)
   await expect(page.locator('.site-page-recovery')).toBeVisible()
   await expect(page.locator('.client-home-content textarea')).toHaveCount(1)
   await page.getByRole('link', { name: '대화로 돌아가기', exact: true }).click()
@@ -52,8 +62,7 @@ test('느린 공개 페이지에서 대화로 복귀하면 늦은 로드가 화�
   await page.route('**/src/components/ClientPublicPages.tsx*', async route => { await gate; await route.continue() })
   await page.goto('/')
   await page.locator('.client-home-content textarea').fill('느린 로드 중에도 유지')
-  await menu(page)
-  await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 정보', exact: true }).click()
+  await openAbout(page)
   await expect(page.locator('.site-page-loading')).toBeVisible()
   await page.getByRole('link', { name: '대화로 돌아가기', exact: true }).click()
   const loaded = page.waitForResponse(response => response.url().includes('/src/components/ClientPublicPages.tsx'))

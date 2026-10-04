@@ -16,10 +16,18 @@ async function start(page: Page, url: string, idea = IDEA) {
 
 test('내부 fixture도 원본 대화와 문서 구조를 사용하고 출처를 숨기지 않는다', async ({ page }) => {
   const errors: string[] = []
+  const api: string[] = []
   page.on('pageerror', error => errors.push(error.message))
+  await page.route('**/api/**', route => {
+    api.push(`${route.request().method()} ${new URL(route.request().url()).pathname}`)
+    return route.abort('failed')
+  })
   await start(page, fixtureUrl)
   await expect(page.locator('.g-amsg')).toContainText('거래할 심볼')
-  await expect(page.locator('.client-development-boundary')).toContainText('Mock fixture 검수')
+  // Source-faithful service composition has no preview inspection bar. Prove
+  // the actual response provenance and isolated fixture transport instead.
+  await expect(page.locator('.g-amsg')).toHaveAttribute('data-source', 'mock')
+  await expect(page.locator('.client-development-boundary')).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'BTCUSDT', exact: true })).toBeVisible()
   await expect(page.locator('.client-service-document')).toBeVisible()
   await expect(page.locator('.strategy-summary .status-pill')).toHaveText('조건 확인 중')
@@ -28,6 +36,7 @@ test('내부 fixture도 원본 대화와 문서 구조를 사용하고 출처를
   await expect(page.getByRole('button', { name: '응답 중지', exact: true })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   expect(errors).toEqual([])
+  expect(api).toEqual([])
 })
 
 test('서버 fixture 초안의 연속 질문과 검증을 원본 대화 안에서 처리한다', async ({ page }) => {

@@ -2,7 +2,7 @@ import { useSiteHrefMapper } from '../site-navigation'
 import { servicePageCopy } from '../client-service-page-copy'
 // About/download/policies: tesia-lab 9fbff821.
 // Static content is compiled JSX, not injected HTML.
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SiteHelp } from './ClientHelp'
 import { ClientSiteFooter } from './ClientSiteFooter'
 import { DownloadPreview } from './DownloadPreview'
@@ -40,7 +40,10 @@ const tabForHash = (hash: string) => {
   if (hash.startsWith('x-')) return 'technologies'
   return ['privacy', 'terms', 'technologies', 'faq'].includes(hash) ? hash : 'overview'
 }
-export default function ClientPublicPages({ page, location }: { page: SitePage; location: string }) {
+export default function ClientPublicPages({ page, location, historyNavigation }: {
+  page: SitePage; location: string
+  historyNavigation?: { revision: number; href: string; history: boolean; position: { x: number; y: number } | null }
+}) {
   const service = useSiteHrefMapper() !== null
   const download = readDownloadConfig()
   const { language, t } = useClientPreferences()
@@ -51,11 +54,19 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
   const [localeOpen, setLocaleOpen] = useState(false)
   const [footerHelpOpen, setFooterHelpOpen] = useState(false)
   const footerHelpTrigger = useRef<HTMLElement | null>(null)
+  const localeReturnFocus = useRef<HTMLElement | null>(null)
   const restoreHistoryScroll = useRef(false)
+  const selectedFocus = useRef<{ location: string; target: HTMLElement } | null>(null)
+  const selectedIntent = useRef<string | null>(null)
   useEffect(() => {
     // Public routes reuse this component; dismiss its portal before the next
     // page takes focus, without resetting the underlying conversation.
     const dismiss = (event: Event) => {
+      selectedFocus.current = null
+      selectedIntent.current = null
+      // Old-route portal cleanup must not refocus a reused header or footer.
+      localeReturnFocus.current = null
+      footerHelpTrigger.current = null
       if (event.type === 'popstate') restoreHistoryScroll.current = true
       else if (event.type === 'teth:navigate') restoreHistoryScroll.current = false
       setLocaleOpen(false); setFooterHelpOpen(false)
@@ -73,19 +84,44 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
   useEffect(() => {
     document.title = page === 'about' || page === 'download' ? publicCopy[page].title[Math.max(0, publicLanguages.indexOf(language))] : `${policyTitle} | TETH`
   }, [page, language, policyTitle])
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0, cancelled = false, interacted = false, restoring = false
-    const relinquish = () => { interacted = true }
+    const relinquish = () => { interacted = true; selectedIntent.current = location }
+    if (selectedFocus.current?.location !== location) selectedFocus.current = null
+    if (selectedIntent.current !== location) selectedIntent.current = null
+    const selectable = (target: EventTarget | null): target is HTMLElement => {
+      if (!(target instanceof HTMLElement) || !root.current?.contains(target) || target.closest('[hidden],[inert],[aria-hidden="true"]') || target.matches(':disabled,[aria-disabled="true"]')) return false
+      return target.matches('a[href],button,input,select,textarea,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])') && target.getClientRects().length > 0 && getComputedStyle(target).visibility === 'visible'
+    }
+    const selectFocus = (event: FocusEvent) => {
+      // Observe new focus after this route's commit, not a reused header link
+      // which was already focused on the previous route. Layout timing also
+      // protects focus requested on freshly attached help/preview controls.
+      const target = event.target
+      if (!selectable(target)) return
+      interacted = true
+      // Effect replay must not forget focus actually selected after commit.
+      // Real navigation clears it; a reused old-route header is not new intent.
+      selectedFocus.current = { location, target }
+    }
     const events = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
     events.forEach(event => window.addEventListener(event, relinquish, { capture: true, passive: true }))
+    window.addEventListener('focusin', selectFocus, true)
     const align = (focus: boolean) => {
+      // Location and history intent are separate React subscriptions. A late
+      // callback may only apply coordinates to the exact URL that owns them.
+      if (historyNavigation && historyNavigation.href !== window.location.pathname + window.location.search + window.location.hash) return
+      const selection = selectedFocus.current
+      if (selection?.location === location && selection.target === document.activeElement && selectable(selection.target)) return
       // New user intent owns focus/scroll, including while fonts are loading.
-      if (cancelled || interacted || (root.current?.contains(document.activeElement) && document.activeElement?.closest('.phone-preview'))) return
+      if (cancelled || interacted || selectedIntent.current === location || (root.current?.contains(document.activeElement) && document.activeElement?.closest('.phone-preview'))) return
       const anchor = hash ? document.getElementById(hash) : null
       const offset = Math.max(128, (root.current?.querySelector('.hd')?.getBoundingClientRect().height ?? 0) + 24)
       // Preserve browser reading-position restoration except named policy
       // clauses: their source navigation promises the clause, not the tab bar.
-      if (!restoring) {
+      if (restoring && historyNavigation?.position) {
+        window.scrollTo({ left: historyNavigation.position.x, top: historyNavigation.position.y, behavior: 'instant' })
+      } else if (!restoring) {
         if (anchor && root.current?.contains(anchor)) window.scrollTo({ top: window.scrollY + anchor.getBoundingClientRect().top - offset, behavior: 'instant' })
         else window.scrollTo({ top: 0, behavior: 'instant' })
       }
@@ -97,21 +133,27 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
       // Choosing another policy tab first scrolls up to its control. History
       // then records that top position for the old clause URL. On Back the
       // clause hash must win; ordinary document history keeps its position.
-      restoring = restoreHistoryScroll.current && !(page === 'policies' && /^(p|t|x)-/.test(hash))
+      restoring = (historyNavigation?.history ?? restoreHistoryScroll.current) && !(page === 'policies' && /^(p|t|x)-/.test(hash))
       restoreHistoryScroll.current = false
       align(true)
+      const alignedPosition = { x: window.scrollX, y: window.scrollY }
       // Re-align a named destination once its actual font metrics settle.
       // No observer/polling loop, and never override Back or a user's scroll.
-      if (hash && !restoring) void document.fonts.ready.then(() => {
-        if (!cancelled && !interacted) frame = requestAnimationFrame(() => align(false))
+      if ((hash && !restoring) || (restoring && historyNavigation?.position)) void document.fonts.ready.then(() => {
+        if (!cancelled && !interacted) frame = requestAnimationFrame(() => {
+          // Browser/find/assistive movement need not dispatch wheel or keys.
+          // Late font metrics only own the position this route just aligned.
+          if (Math.abs(window.scrollX - alignedPosition.x) <= 1 && Math.abs(window.scrollY - alignedPosition.y) <= 1) align(false)
+        })
       })
     })
     return () => {
       cancelled = true
       cancelAnimationFrame(frame)
       events.forEach(event => window.removeEventListener(event, relinquish, true))
+      window.removeEventListener('focusin', selectFocus, true)
     }
-  }, [page, location, hash])
+  }, [page, location, hash, historyNavigation])
   useEffect(() => {
     let frame = 0
     const update = () => {
@@ -128,8 +170,8 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
     return () => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame) }
   }, [page, policyTab])
   return <div ref={root} className={'client-public-page client-info-' + page}>
-    <button className="public-language-trigger" type="button" onClick={() => setLocaleOpen(true)} aria-label={t('glc.lang')} aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z" /></svg></button>
-    {localeOpen && <ClientLocalePanel onClose={() => setLocaleOpen(false)} />}
+    <button className="public-language-trigger" type="button" onClick={event => { localeReturnFocus.current = event.currentTarget; setLocaleOpen(true) }} aria-label={t('glc.lang')} aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z" /></svg></button>
+    {localeOpen && <ClientLocalePanel returnFocus={localeReturnFocus} onClose={() => setLocaleOpen(false)} />}
     <a className="site-skip" href="#site-main" onClick={event => {
       event.preventDefault()
       root.current?.querySelector<HTMLElement>('#site-main')?.focus({ preventScroll: true })

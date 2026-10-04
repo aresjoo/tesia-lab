@@ -1,8 +1,9 @@
 /** Local source backtest display port. It grants no service/order/credential authority. */
-import { catalogueSourceSha, findCatalogueStrategy, freezeCatalogueValue, type CatalogueStrategy } from './client-catalogue'
+import { catalogueAssets, catalogueSourceSha, findCatalogueStrategy, freezeCatalogueValue, type CatalogueStrategy } from './client-catalogue'
 import type { CataloguePreviewResult } from './client-catalogue-preview'
 import type { CatalogueJudgment } from './client-catalogue-judgments'
 import type { CatalogueOrderRow } from './client-catalogue-presentation'
+import type { CatalogueBacktestEvidence, CatalogueEvidenceDecision } from './client-catalogue-backtest-evidence-types'
 
 export const catalogueBacktestPeriods = [90, 365, 730, 0] as const
 export const catalogueBacktestAmounts = [500, 1000, 3000, 10000] as const
@@ -16,6 +17,7 @@ export type CatalogueBacktestObservation = CatalogueBacktestSelection & {
   result: CataloguePreviewResult['result']; judgments: readonly CatalogueJudgment[]
   benchmark: readonly { i: number; v: number }[]; benchmarkReturn: number; benchmarkMdd: number
   orders: readonly CatalogueOrderRow[]
+  evidence: CatalogueBacktestEvidence
 }
 export type CatalogueBacktestUseBinding = {
   source: 'client-snapshot-preview'; sourceSha: string; owner: string; strategyId: string; runId: string
@@ -49,6 +51,97 @@ export function catalogueBacktestEffectiveStart(strategy: Readonly<CatalogueStra
   const requested=period?Math.max(strategy.startI,end-period):strategy.startI
   return strategy.fut ? Math.max(61,'n' in strategy?strategy.n:0,'look' in strategy?strategy.look+2:0,'reg' in strategy?(strategy.reg??0)+2:0,'slow' in strategy?strategy.slow+2:0,requested, 'n' in strategy?strategy.n+2:0) : Math.max(61,strategy.kind==='rule'?0:strategy.look+1,requested)
 }
+/** Bounded display-only validation. Raw events stay in result, not duplicated per row.
+ * Source prices are shared once per catalogue asset, up to 32 * 10,000 values.
+ * The existing result owner/source/configuration gate runs before this check.
+ */
+function validEvidence(v: CatalogueBacktestObservation, end: number): boolean {
+  const evidence = v.evidence, assets = catalogueAssets(v.strategy), events = v.result.events
+  const text = (x: unknown): x is string => typeof x === 'string' && x.length <= 8192
+  const number = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x) && Math.abs(x) <= 1e15
+  const positive = (x: unknown): x is number => number(x) && x > 0
+  const nullable = (x: unknown) => x === null || number(x)
+  const index = (x: unknown, max = end): x is number => Number.isSafeInteger(x) && Number(x) >= 0 && Number(x) <= max
+  const side = (x: unknown) => x === undefined || x === 1 || x === -1
+  const pair = (x: unknown) => Array.isArray(x) && x.length === 2 && x.every(text)
+  const ups = (x: unknown) => x == null || Array.isArray(x) && x.length <= assets.length && new Set(x).size === x.length && x.every(a => typeof a === 'string' && assets.includes(a))
+  if (!evidence || evidence.source !== v.source || evidence.sourceSha !== v.sourceSha || evidence.runId !== v.runId
+    || !Array.isArray(events) || events.length > 200000 || !Array.isArray(evidence.decisions) || evidence.decisions.length > events.length
+    || !Array.isArray(evidence.dailyGroups) || evidence.dailyGroups.length > end + 1
+    || !evidence.prices || evidence.prices.source !== 'client-snapshot-close' || evidence.prices.calendarStartIndex !== 0
+    || assets.length > 32 || !Array.isArray(evidence.prices.series) || evidence.prices.series.length !== assets.length) return false
+  for (const [i, series] of evidence.prices.series.entries()) {
+    if (!series || series.asset !== assets[i] || !Array.isArray(series.values) || series.values.length !== end + 1
+      || series.values.some((p: unknown) => !number(p) || p <= 0)) return false
+  }
+  // Display formatters call numeric methods directly. Preserve the source's nullable
+  // metrics, but reject malformed worker values before they reach those formatters.
+  if (![v.result.pf, v.result.cagr, v.result.exposure, v.result.costImpact, v.result.avgHold].every(nullable)
+    || !(v.result.underwaterDays === null || index(v.result.underwaterDays))) return false
+  if (!Array.isArray(v.result.trades) || v.result.trades.length > 200000 || v.result.trades.some(t =>
+    !index(t.id, 200000) || t.id === 0 || !assets.includes(t.asset) || !index(t.entry) || !index(t.exit)
+    || t.entry < v.result.eq[0].i || t.exit < t.entry || !side(t.side)
+    || !positive(t.ep) || !positive(t.xp) || !positive(t.cost) || !number(t.got) || t.got < 0 || !number(t.pnl)
+    || t.lev !== undefined && !positive(t.lev))) return false
+  const trades = new Map(v.result.trades.map(t => [t.id, { asset: t.asset, entry: t.entry, exit: t.exit, side: t.side }]))
+  if (trades.size !== v.result.trades.length) return false
+  const open = v.result.state.open
+  for (const p of Array.isArray(open) ? open : open ? [open] : []) {
+    if (!index(p.tid, 200000) || p.tid === 0 || trades.has(p.tid) || !assets.includes(p.k)
+      || !index(p.entry) || p.entry < v.result.eq[0].i || !side('side' in p ? p.side : undefined)
+      || !positive(p.ep) || !positive(p.px) || !positive(p.cost)
+      || (v.strategy.fut ? !('pnl' in p) || !number(p.pnl) : !number(p.chg))
+      || 'pnl' in p && !number(p.pnl) || 'lev' in p && !positive(p.lev)) return false
+    trades.set(p.tid, { asset: p.k, entry: p.entry, exit: -1, side: 'side' in p ? p.side : undefined })
+  }
+  const kinds = { enter: 'buy', exit: 'sell', veto: 'skip', skip: 'skip', hold: 'hold', pick: 'pick' } as const
+  const groups = new Map<number, CatalogueEvidenceDecision[]>()
+  let ix = 0
+  for (const [eventIndex, event] of events.entries()) {
+    if (!event || !index(event.i) || event.i < v.result.eq[0].i || event.a !== undefined && !assets.includes(event.a)) return false
+    if (event.t === 'unpick') continue
+    if (!Object.hasOwn(kinds, event.t)) return false
+    const d = evidence.decisions[ix]
+    if (!d || d.runId !== v.runId || d.ix !== ix || d.eventIndex !== eventIndex || d.i !== event.i
+      || d.j !== Math.max(0, Math.min(v.result.eq.length - 1, event.i - v.result.eq[0].i))
+      || d.k !== kinds[event.t] || d.a !== event.a || d.tid !== event.tid || d.side !== event.side || !side(d.side)
+      || d.pnl !== (event.t === 'exit' ? event.pnl : undefined) || d.pnl !== undefined && !number(d.pnl)
+      || ['tag', 'title', 'cmp', 'why', 'tk', 'act', 'say'].some(k => !text(d[k as keyof CatalogueEvidenceDecision]))
+      || !Array.isArray(d.facts) || d.facts.length > 32 || !d.facts.every(pair)
+      || [d.p0, d.p1, d.p2].some(p => p != null && !pair(p)) || !ups(d.ups)
+      || d.chain !== undefined && d.chain !== 0 && d.chain !== 1
+      || d.out !== null && (!d.out || !text(d.out.t) || !number(d.out.v) || d.out.mute !== undefined && d.out.mute !== 1)
+      || Object.hasOwn(d, 'e')) return false
+    // Source btCompute/fuBtDec always provide these fields for the daily
+    // decision chain. A non-gated strategy may intentionally have p1:null.
+    if (['buy', 'skip', 'hold'].includes(d.k) && (!pair(d.p0) || !pair(d.p2) || !Object.hasOwn(d, 'p1') || d.p1 === undefined)) return false
+    if (d.tid !== undefined) {
+      const t = trades.get(d.tid)
+      if (!index(d.tid, 200000) || !t || t.asset !== d.a || t.side !== d.side
+        || !index(event.xi) || event.xi < event.i || event.xi !== (event.t === 'exit' ? t.exit : t.entry)) return false
+    }
+    if (['enter', 'exit'].includes(event.t) && d.tid === undefined) return false
+    if (v.strategy.kind === 'agent' && ['buy', 'skip', 'hold'].includes(d.k)) {
+      const rows = groups.get(d.j)
+      if (rows) rows.push(d); else groups.set(d.j, [d])
+    }
+    ix++
+  }
+  if (ix !== evidence.decisions.length || groups.size !== evidence.dailyGroups.length) return false
+  let groupIndex = 0
+  for (const [j, rows] of groups) {
+    const g = evidence.dailyGroups[groupIndex], first = rows[0], buys = rows.filter(d => d.k === 'buy')
+    const kind = buys.length ? 'buy' : first.k
+    if (!g || g.runId !== v.runId || g.ix !== groupIndex || g.i !== first.i || g.j !== j || g.k !== kind || g.out !== kind
+      || !Array.isArray(g.decisionIndices) || g.decisionIndices.length !== rows.length || g.decisionIndices.some((id: number, i: number) => id !== rows[i].ix)
+      || ![g.tag, g.title, g.cmp, g.why].every(text)
+      || g.tag !== (buys.length ? '매수' : first.tag) || g.title !== (buys.length ? buys.map(d => d.tk).join(', ') : first.title)
+      || g.cmp !== (buys.length === 1 ? buys[0].cmp : buys.length ? buys.map(d => d.tk + ' ' + d.cmp).join(' / ') : first.cmp)
+      || g.why !== first.why || JSON.stringify(g.ups) !== JSON.stringify(first.ups)) return false
+    groupIndex++
+  }
+  return true
+}
 export function validCatalogueBacktestObservation(value: unknown, selection: CatalogueBacktestSelection): value is CatalogueBacktestObservation {
   try {
     if (!value || typeof value !== 'object' || !validCatalogueBacktestSelection(selection)) return false
@@ -68,7 +161,7 @@ export function validCatalogueBacktestObservation(value: unknown, selection: Cat
       || Math.abs(v.benchmarkReturn - (v.benchmark.at(-1)!.v - 1) * 100) > 1e-7
       || !Array.isArray(v.judgments) || v.judgments.some(j => !Number.isSafeInteger(j.i) || j.i<strategy.startI || j.i>end || !['intro','now','buy','sell','skip','wait','hold','pick'].includes(j.k) || typeof j.t!=='string' || typeof j.title!=='string')
       || !Array.isArray(v.orders) || v.orders.some(o => typeof o.id!=='string' || !Number.isSafeInteger(o.positionId) || !['entry','exit'].includes(o.action) || typeof o.asset!=='string' || !Number.isSafeInteger(o.date) || o.date<start || o.date>end || ![o.price,o.units,o.amount].every(n => Number.isFinite(n) && n>=0) || o.price<=0)) return false
-    return true
+    return validEvidence(v, end)
   } catch { return false }
 }
 export function catalogueBacktestUseBinding(value: CatalogueBacktestObservation): Readonly<CatalogueBacktestUseBinding> {

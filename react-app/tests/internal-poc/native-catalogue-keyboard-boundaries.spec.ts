@@ -42,20 +42,30 @@ for (const width of [320, 1440]) {
     await expect(trigger).toBeInViewport({ ratio: 1 })
     await trigger.click()
     const search = page.getByRole('searchbox', { name: '전략 검색', exact: true })
-    // At 320px the open menu correctly covers the input centre. Click the
-    // exposed input edge, an actual outside target, without force/DOM events.
-    await search.click({ position: { x: 8, y: 20 } })
+    // Source <=760 uses a modal bottom sheet. Its scrim, not an inert search
+    // field behind it, is the outside dismiss target. Desktop stays inline.
+    if (width <= 760) {
+      await expect(page.locator('.client-sharing-sheet')).toBeVisible()
+      await page.mouse.click(width - 10, 80)
+    } else await search.click({ position: { x: 8, y: 20 } })
     await expect(page.getByRole('listbox')).toHaveCount(0)
-    await expect(search).toBeFocused()
+    await expect(width <= 760 ? trigger : search).toBeFocused()
     await trigger.click()
+    const triggerBeforeWheel = await trigger.boundingBox()
     await page.mouse.move(width - 15, 620)
     await page.mouse.wheel(0, 700)
-    await expect.poll(async () => (await trigger.boundingBox())!.y).toBeLessThan(0)
+    if (width <= 760) {
+      // A sheet must not scroll the catalogue underneath it or let keyboard
+      // focus reach the inactive search field.
+      await page.keyboard.press('Tab')
+      await expect(search).not.toBeFocused()
+      expect(Math.abs((await trigger.boundingBox())!.y - triggerBeforeWheel!.y)).toBeLessThanOrEqual(2)
+    } else await expect.poll(async () => (await trigger.boundingBox())!.y).toBeLessThan(0)
     await page.keyboard.press('Escape')
     await expect(page.getByRole('listbox')).toHaveCount(0)
     await expect(trigger).toBeFocused()
-    // Source desktop close does not restore a visible focus target either.
-    // This is a narrow accessibility improvement, not a new mobile sheet.
+    // Restore a visible trigger in either presentation. Desktop may have
+    // scrolled it offscreen; the mobile sheet keeps its background locked.
     await expect.soft(trigger).toBeInViewport({ ratio: 1, timeout: 2000 })
     await page.screenshot({ path: info.outputPath('menu-scroll-escape.png') })
     await page.locator('.strategy-list-card').first().getByRole('link').click()

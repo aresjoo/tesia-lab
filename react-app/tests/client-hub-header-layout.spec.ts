@@ -12,6 +12,12 @@ for (const entry of ['연구 기록', '전략들']) test(`${entry} 헤더는 알
   await page.locator('.client-sidebar').getByRole('button', { name: sourceSidebarNavigationLabel('ko', entry === '연구 기록' ? 'history' : 'sharing'), exact: true }).click()
   const header = page.locator('#research-main > .hub-header')
   await expect(header).toBeVisible()
+  if (entry === '전략들') {
+    // The lazy catalogue has its own initial route-focus effect. Exercise the
+    // return control after that real arrival, not while the child is mounting.
+    await expect(page.locator('.strategy-list-grid')).toHaveAttribute('aria-busy', 'false')
+    await expect(header.locator('h1')).toBeFocused()
+  }
   const errors: string[] = []
   page.on('pageerror', error => errors.push(error.message))
   for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) {
@@ -25,6 +31,9 @@ for (const entry of ['연구 기록', '전략들']) test(`${entry} 헤더는 알
     for (const [width, height, zoom] of [[1440, 900, 1], [860, 600, 1], [390, 700, 1], [320, 568, 1], [1440, 900, 2], [390, 700, 2], [320, 568, 2]]) {
       await page.setViewportSize({ width, height })
       await page.evaluate(zoom => { document.body.style.zoom = String(zoom) }, zoom)
+      // Source catalogue starts at its filters. Its retained keyboard return
+      // action is revealed on focus, unlike the always-visible history header.
+      if (entry === '전략들') await back.focus()
       await expect.poll(() => header.evaluate(node => {
         const title = node.querySelector('h1')!, back = node.querySelector('button')!
         const rect = back.getBoundingClientRect(), titleRect = title.getBoundingClientRect()
@@ -35,6 +44,13 @@ for (const entry of ['연구 기록', '전략들']) test(`${entry} 헤더는 알
       }), { message: `${entry} ${language} ${width}px zoom ${zoom}` }).toEqual({ separate: true, clickable: true, fits: true, readable: true, target: true })
       await expect.poll(() => page.locator('.skip-link').evaluate(node => node.getBoundingClientRect().bottom), { message: '비활성 본문 바로가기의 일부가 노출되면 안 된다' }).toBeLessThanOrEqual(0)
       if (language === 'fr' && width === 320) await page.screenshot({ path: info.outputPath(`${entry}-fr-320-${zoom}.png`) })
+      if (entry === '전략들') {
+        await page.locator('.strategy-filters input[type="search"]').focus()
+        await expect.poll(() => header.evaluate(node => ({
+          clipped: getComputedStyle(node).clipPath,
+          width: getComputedStyle(node).width,
+        }))).toEqual({ clipped: 'inset(50%)', width: '1px' })
+      }
     }
   }
   const skip = page.locator('.skip-link')

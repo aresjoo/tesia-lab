@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import type { ClientSession, ClientTurn } from '../src/client-experience-store'
 import { shareBrowseLabel, shareBrowseTurnId } from '../src/client-share-browse'
 import { inlineInput } from '../src/client-inline-backtest'
+import { returnFromSourceSharing } from './fixtures/source-sharing-page-helper'
 
 const key = 'teth-client-experience', draft = '보내지 않은 나의 질문', owner = 'share-browse@example.test'
 function turn(id: string, question = '다른 사람 전략 추천해줘', status: ClientTurn['status'] = 'done'): ClientTurn {
@@ -61,7 +62,7 @@ test('질문 전송 없이 find로 이동하고 원문·초안·한 개의 진�
   await expect(page.locator('.strategy-list-card').first()).toBeVisible()
   await expect(page.locator('.client-sharing-hub')).toBeVisible()
   expect((await saved(page)).turns).toEqual(before.turns); expect((await saved(page)).draft).toBe(draft)
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await expect(page.locator('.g-composer textarea')).toHaveValue(draft)
   await expect(chip(page)).toHaveCount(1)
   await page.reload()
@@ -100,7 +101,7 @@ test('긴 대화에서 공유 탐색 후 돌아와도 읽던 위치와 초안을
   expect(before).toBeGreaterThan(100)
   await chip(page).getByRole('button').click()
   await expect(page.locator('.client-sharing-hub')).toBeVisible()
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  await returnFromSourceSharing(page)
   await expect(page.locator('.g-composer textarea')).toHaveValue(draft)
   await expect.poll(() => page.locator('.g-scroll').evaluate((el, before) => Math.abs(el.scrollTop - before), before)).toBeLessThanOrEqual(40)
   expect((await saved(page)).turns).toEqual(turns)

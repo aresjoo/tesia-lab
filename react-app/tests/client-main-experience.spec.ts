@@ -121,14 +121,27 @@ test('반응형 홈·대화의 버튼과 본문이 320~1440px에서 겹치지 �
     await page.setViewportSize({ width, height: 900 })
     await expect(page.locator('.client-hero-title')).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
-    const terms = await page.locator('.client-home-terms').boundingBox()
-    const boundary = await page.locator('.client-development-boundary').boundingBox()
     if (width <= 860) await expect.poll(async () => {
       const input = await page.locator('.client-home-pill').boundingBox()
       const legal = await page.locator('.client-home-terms').boundingBox()
       return Boolean(input && legal && input.y + input.height + 8 <= legal.y)
     }).toBe(true)
-    expect(terms!.y + terms!.height).toBeLessThanOrEqual(boundary!.y)
+    await expect.poll(() => page.evaluate(() => {
+      const terms = document.querySelector('.client-home-terms')!.getBoundingClientRect()
+      const boundary = document.querySelector('.client-development-boundary')!.getBoundingClientRect()
+      return terms.bottom <= boundary.top
+    })).toBe(true)
+    // A CSS-only absence counterexample, not a simulated service login: the
+    // extra inset must disappear when this preview-only element is absent.
+    expect(await page.evaluate(() => {
+      const band = document.querySelector('.client-home-band')!, boundary = document.querySelector('.client-development-boundary')!
+      const parent = boundary.parentNode!, next = boundary.nextSibling
+      const preview = getComputedStyle(band).bottom
+      boundary.remove()
+      const withoutPreviewBar = getComputedStyle(band).bottom
+      parent.insertBefore(boundary, next)
+      return { preview, withoutPreviewBar }
+    })).toEqual({ preview: '28px', withoutPreviewBar: '0px' })
   }
 })
 

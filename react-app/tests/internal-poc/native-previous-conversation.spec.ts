@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
 import { openNativeAccountMenu } from './native-account-test-helpers'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 import fixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 import { nativeObservationCopy, nativeObservationNavigationErrors, type ObservationNavigationError } from '../../src/internal-poc/native-observation-copy'
 import type { ClientLanguage } from '../../src/client-preferences'
@@ -208,7 +209,7 @@ for (const failure of [403, 404, 0]) test(`복귀 GET ${failure || 'network'} �
   expect(controls.writes).toHaveLength(0)
 })
 
-test('중복 복귀와 세션 재확인은 진행 중 GET과 직렬화되어 서로 다른 화면에 응답을 적용하지 않는다', async ({ page }) => {
+test('중복 복귀 UI는 진행 중 GET을 직렬화하고 정상 화면에 불필요한 세션 재확인을 노출하지 않는다', async ({ page }) => {
   const controls = await setup(page, { sessionId: ownerId, conversationId: nextId })
   let release: () => void = () => undefined
   controls.hold = () => new Promise<void>(resolve => { release = resolve })
@@ -218,14 +219,63 @@ test('중복 복귀와 세션 재확인은 진행 중 GET과 직렬화되어 서
   })
   await expect.poll(() => controls.reads.length).toBe(2)
   await expect(restore(page)).toBeDisabled()
-  // Refresh uses the same synchronous run guard, so this click is a no-op.
+  // Healthy UI deliberately does not expose recovery. The controller's
+  // concurrent recovery guard is covered separately below, not a ghost click.
+  await expect(page.getByRole('button', { name: '세션 다시 확인', exact: true })).toHaveCount(0)
   controls.hold = undefined
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
   release()
   await expect.poll(async () => (await locators(page))[1]).toBe(nextId)
-  // Refresh is serialized by run: it cannot race a navigation in progress.
   expect(controls.reads).toHaveLength(2)
   expect(controls.writes).toHaveLength(0)
+})
+
+test('controller 경계: 복귀 GET 중 기존 onRecover는 SDK 재조회 없이 같은 run guard로 직렬화된다', async ({ page }) => {
+  // Capture the existing callback while delegating all rendered UI to the real
+  // component. This is explicitly a controller seam, not a visible UI action.
+  let replacements = 0, sessionReads = 0
+  page.on('request', request => {
+    if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/v1/auth/session') sessionReads++
+  })
+  await page.route(/\/src\/internal-poc\/ClientServiceExperience\.tsx$/, async route => {
+    const source = await (await route.fetch()).text()
+    const reactPath = source.match(/from "([^"\n]*\/react\.js\?[^"\n]*)"/)?.[1]
+    if (!reactPath) throw new Error('CONTROLLER_TEST_REACT_IMPORT_MISSING')
+    replacements++
+    await route.fulfill({ contentType: 'application/javascript', body: `
+      import React from ${JSON.stringify(reactPath)};
+      import { ClientServiceExperience as Actual } from '/src/internal-poc/ClientServiceExperience.tsx?previous-controller-original';
+      export * from '/src/internal-poc/ClientServiceExperience.tsx?previous-controller-original';
+      export function ClientServiceExperience(props) {
+        window.__previousControllerRecover = props.state.onRecover;
+        return React.createElement(Actual, props);
+      }
+    ` })
+  })
+  const controls = await setup(page, { sessionId: ownerId, conversationId: nextId })
+  expect(replacements).toBe(1)
+  let release: () => void = () => undefined
+  controls.hold = () => new Promise<void>(resolve => { release = resolve })
+  await restore(page).click()
+  await expect.poll(() => controls.reads.length).toBe(2)
+  await expect(restore(page)).toBeDisabled()
+  await expect(page.getByRole('button', { name: '세션 다시 확인', exact: true })).toHaveCount(0)
+  const sessionBefore = sessionReads
+  const invoked = await page.evaluate(() => {
+    const recover = Reflect.get(window, '__previousControllerRecover')
+    if (typeof recover !== 'function') return false
+    recover()
+    return true
+  })
+  expect(invoked).toBe(true)
+  await page.waitForTimeout(100)
+  expect(sessionReads).toBe(sessionBefore)
+  expect(controls.reads).toHaveLength(2)
+  controls.hold = undefined
+  release()
+  await expect.poll(async () => (await locators(page))[1]).toBe(nextId)
+  expect(controls.reads).toHaveLength(2)
+  expect(controls.writes).toHaveLength(0)
+  expect(replacements).toBe(1)
 })
 
 test('미확정 TURN journal 중 이전 대화 버튼은 비활성이고 원 bytes를 보존한다', async ({ page }) => {
@@ -315,7 +365,7 @@ test('이전 위치 저장소 read 오류도 선택한 언어로 표시하고 �
       return get.call(this, name)
     }
   }, key)
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-recovery [role="alert"]')).toHaveText(nativeObservationNavigationErrors.ko.read)
   const reads = controls.reads.length
   await checkLocalizedError(page, 'read')

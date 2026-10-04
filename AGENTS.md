@@ -8,7 +8,7 @@
 
 현재 `react-app/`은 병합본뿐 아니라 사용자 요청에 따라 Web PR54의 미병합 거래소 연결 후보도 포함한다. 미병합 여부와 코드 포함 여부를 혼동하지 않는다. 후속 전달은 현재 통합 후보의 구현·시험·생성 SDK를 함께 싣고 정확한 출처·검증·잔여를 기록한다. 후보 포함은 main 병합/계약 승인/실계정 성공/운영 flag 활성화 권한이 아니다.
 
-현재 snapshot에는 UI 탐색·접근성·로그인 선택지 보존 후속 수정도 포함한다. 별도 승인된 teth.ai 정적 업데이트의 실행 여부는 `migration-verification.json`을 확인한다. 이를 클라이언트 main 병합·root server/Worker 배포·투자 프롬프트 draft 통합·실제 공급자 인증 완료로 해석하지 않는다. migration push 자체는 배포를 실행하지 않는다.
+현재 snapshot에는 UI 탐색·접근성·로그인 선택지 보존에 이어 모바일 필터 시트·문서 복귀·catalogue 전체 D/EV 근거·마커·미니차트와 지연 장착 초점 교정도 포함한다. 관련 source engine·SDK·인증 권한은 바꾸지 않았으며 상세 원본 차이와 최소 보완은 MIGRATION 및 React DESIGN/Bugfix를 따른다. 전체 검사와 후속 영향 검사를 합산해 무결함으로 쓰지 않는다. 별도 승인된 teth.ai 정적 업데이트의 실행 여부는 `migration-verification.json`을 확인한다. 이를 클라이언트 main 병합·root server/Worker 배포·투자 프롬프트 draft 통합·실제 공급자 인증 완료로 해석하지 않는다. migration push 자체는 배포를 실행하지 않는다.
 
 | 추가 경로 | 역할 |
 | --- | --- |

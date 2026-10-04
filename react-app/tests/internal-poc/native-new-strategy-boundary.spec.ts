@@ -123,6 +123,10 @@ test('미확정 실행 때문에 새 전략 전환이 거절되면 연구 기록
   const entry = page.locator('.client-sidebar').getByRole('button', { name: '연구 기록', exact: true })
   if (!await entry.isVisible()) await openSourceMenu(page)
   await entry.click()
+  // Source history remains list-first; the supplied execution history is an
+  // explicitly opened detail, not a reason to restore the old expanded page.
+  await page.locator('.native-history-details > summary').click()
+  await expect(page.locator('.native-history-details')).toHaveAttribute('open', '')
   const scope = page.locator('.native-history-scope')
   await expect(scope).toBeVisible()
   const pending = await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))
@@ -140,6 +144,8 @@ for (const failure of ['owner', 'storage'] as const) test(`새 전략 ${failure}
   const entry = page.locator('.client-sidebar').getByRole('button', { name: '연구 기록', exact: true })
   if (!await entry.isVisible()) await openSourceMenu(page)
   await entry.click()
+  await page.locator('.native-history-details > summary').click()
+  await expect(page.locator('.native-history-details')).toHaveAttribute('open', '')
   await expect(page.locator('.native-history-scope')).toBeVisible()
   if (failure === 'owner') await page.route('**/api/v1/auth/session', route => route.abort('failed'))
   else await page.evaluate(() => {

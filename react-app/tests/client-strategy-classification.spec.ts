@@ -60,7 +60,11 @@ test('원본 판단 방식과 시장을 조합하고 초기화해도 정렬을 �
   await expect(page.locator('.strategy-kind-help')).toHaveText('정해 둔 가격 조건이 맞을 때만 거래합니다.')
   const market = page.getByRole('button', { name: '시장: 시장 전체', exact: true })
   await market.click()
-  await expect(page.getByRole('listbox').getByRole('option')).toHaveText(['시장 전체', '가상자산', '미국 주식', '지수와 금', '여러 시장'])
+  const isSheet = (page.viewportSize()?.width ?? 1280) <= 760
+  // Original mobile sheet adds a decorative check to the selected option.
+  // Preserve exact labels and separately verify its accessible selection.
+  await expect(page.getByRole('listbox').getByRole('option')).toHaveText([isSheet ? '시장 전체✓' : '시장 전체', '가상자산', '미국 주식', '지수와 금', '여러 시장'])
+  await expect(page.getByRole('option', { name: '시장 전체', exact: true })).toHaveAttribute('aria-selected', 'true')
   await page.getByRole('option', { name: '지수와 금', exact: true }).click()
   const matching = catalogueStrategies.filter(s => s.kind === 'rule' && s.mkt === 'index')
   await expect(page.locator('.strategy-list-card')).toHaveCount(matching.length)
@@ -88,7 +92,7 @@ test('서비스 분류가 없으면 이름이나 parameters로 AI·규칙·시�
   }
   await root.getByRole('button', { name: '필터 초기화', exact: true }).click()
   await root.getByRole('button', { name: '시장: 시장 전체', exact: true }).click()
-  await root.getByRole('option', { name: '가상자산', exact: true }).click()
+  await page.getByRole('listbox', { name: '시장', exact: true }).getByRole('option', { name: '가상자산', exact: true }).click()
   await expect(root.locator('.strategy-list-card')).toHaveCount(0)
 })
 
@@ -117,9 +121,19 @@ for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
   const sortBounds = (await page.locator('.strategy-list-sort').boundingBox())!
   const marketBounds = (await page.locator('.tfbk-dropwrap').boundingBox())!
   const searchBounds = (await page.locator('.ss3-search').boundingBox())!
-  expect(Math.abs(sortBounds.width - (await group.boundingBox())!.width)).toBeLessThanOrEqual(1)
-  expect(Math.abs(marketBounds.y - searchBounds.y)).toBeLessThanOrEqual(1)
-  expect(marketBounds.x + marketBounds.width).toBeLessThanOrEqual(searchBounds.x)
+  // Preserve the source two-column row where it fits. Long translated labels
+  // use full-width rows at 320px rather than clipping a selected value. English
+  // Recommended is 115px at the real 16px font; the two-column text box is 84px.
+  if (language === 'en' || language === 'es' || language === 'fr') {
+    expect(Math.abs(sortBounds.x - marketBounds.x)).toBeLessThanOrEqual(1)
+    expect(Math.abs(sortBounds.width - marketBounds.width)).toBeLessThanOrEqual(1)
+    expect(Math.abs(marketBounds.y - (sortBounds.y + sortBounds.height) - 8)).toBeLessThanOrEqual(1)
+  } else {
+    expect(Math.abs(sortBounds.y - marketBounds.y)).toBeLessThanOrEqual(1)
+    expect(Math.abs(marketBounds.x - (sortBounds.x + sortBounds.width) - 8)).toBeLessThanOrEqual(1)
+  }
+  expect(Math.abs(searchBounds.width - (await group.boundingBox())!.width)).toBeLessThanOrEqual(1)
+  expect(searchBounds.y).toBeGreaterThanOrEqual(Math.max(sortBounds.y + sortBounds.height, marketBounds.y + marketBounds.height) + 7)
   for (const button of await group.getByRole('button').all()) {
     expect(await button.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)
     expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44)
@@ -141,13 +155,13 @@ test('공급된 분류는 공개와 같은 컨트롤에서 필터·검색·정�
   await expect(cards).toHaveCount(1)
   await expect(cards.getByRole('link')).toHaveAttribute('href', /AI%20/)
   await root.getByRole('button', { name: '시장: 시장 전체', exact: true }).click()
-  await root.getByRole('option', { name: '미국 주식', exact: true }).click()
+  await page.getByRole('listbox', { name: '시장', exact: true }).getByRole('option', { name: '미국 주식', exact: true }).click()
   await expect(cards).toHaveCount(1)
   await root.getByRole('searchbox').fill('AI 주식')
   await root.getByRole('combobox', { name: '정렬 기준' }).selectOption('fw')
   await expect(cards).toHaveCount(1)
   await root.getByRole('button', { name: '시장: 미국 주식', exact: true }).click()
-  await root.getByRole('option', { name: '가상자산', exact: true }).click()
+  await page.getByRole('listbox', { name: '시장', exact: true }).getByRole('option', { name: '가상자산', exact: true }).click()
   await expect(cards).toHaveCount(0)
   await root.getByRole('button', { name: '필터 초기화', exact: true }).click()
   await expect(cards).toHaveCount(4)

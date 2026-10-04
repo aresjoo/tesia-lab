@@ -79,6 +79,12 @@ test('외부 클릭·명시 관리 경로 변경·정렬 조작은 열린 시장
   // Source 9fbff821 index.html:24605 removes the public catalogue tabs/header.
   // Use an exposed outside target; the mobile menu covers the input centre.
   const search = page.getByRole('searchbox', { name: '전략 검색', exact: true })
+  if (page.viewportSize()!.width <= 760) {
+    // Source 9fb mobile market selection is modal: dismiss its scrim before
+    // interacting with the background search. Desktop outside-click stays unchanged.
+    await page.locator('.client-sharing-sheet').click({ position: { x: 8, y: 8 } })
+    await expect(asset(page)).toBeFocused()
+  }
   await search.click({ position: { x: 8, y: 20 } })
   await expect(page.getByRole('listbox')).toHaveCount(0)
   await expect(search).toBeFocused()
@@ -94,12 +100,24 @@ test('외부 클릭·명시 관리 경로 변경·정렬 조작은 열린 시장
   await expect(page).toHaveURL(/#\/share$/)
   await expect(page.locator('#research-title')).toHaveText('전략 복사')
   await asset(page).click()
+  if (page.viewportSize()!.width <= 760) await page.keyboard.press('Escape')
   await sort(page).selectOption('fw')
   await expect(page.getByRole('listbox')).toHaveCount(0)
 })
 
-test('Tab과 ShiftTab은 시장 메뉴를 닫고 검색과 native 정렬로 이동한다', async ({ page }) => {
+test('desktop Tab은 다음 필터로 이동하고 원본 모바일 시트는 닫을 때까지 초점을 유지한다', async ({ page }) => {
   await open(page)
+  if (page.viewportSize()!.width <= 760) {
+    await asset(page).click()
+    await page.keyboard.press('Tab')
+    await expect(page.locator('.client-sharing-sheet').getByRole('button', { name: '닫기', exact: true })).toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(page.getByRole('option', { name: '시장 전체', exact: true })).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('listbox')).toHaveCount(0)
+    await expect(asset(page)).toBeFocused()
+    return
+  }
   await asset(page).click(); await page.keyboard.press('Tab')
   await expect(page.getByRole('listbox')).toHaveCount(0)
   await expect(page.getByRole('searchbox')).toBeFocused()

@@ -1,0 +1,21 @@
+/* Source 9fbff821 index.html:2800-2812. Market-only mobile bottom sheet.
+   Native dialog supplies the scrim/top layer without changing other dropdowns. */
+.client-sharing-sheet{position:fixed;inset:0;z-index:300;box-sizing:border-box;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;background:transparent;color:var(--gt,#e3e5eb);font-family:inherit;overflow:hidden;overscroll-behavior:contain}
+.client-sharing-sheet::backdrop{background:rgba(0,0,0,.55);animation:client-sharing-scrim-in .18s ease}
+.client-sharing-sheet .sh{position:absolute;left:0;right:0;bottom:0;background:#181a1f;border-radius:18px 18px 0 0;padding:6px 14px calc(14px + env(safe-area-inset-bottom));max-height:calc(100% - 16px);box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;animation:client-sharing-sheet-in .2s var(--ease,ease)}
+.client-sharing-sheet .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px 8px}
+.client-sharing-sheet .hd b{font-size:14.5px;color:var(--gt,#e3e5eb);overflow-wrap:anywhere}
+.client-sharing-sheet .hd .x{border:0;background:none;color:var(--gt3,#9aa0a6);font-size:15px;cursor:pointer;padding:6px;min-width:44px;min-height:44px;flex:none}
+.client-sharing-sheet .it{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;border:0;background:none;color:var(--gt,#e3e5eb);font-size:14.5px;padding:14px 6px;border-radius:10px;cursor:pointer;font-family:inherit;text-align:left;overflow-wrap:anywhere}
+.client-sharing-sheet .it:active{background:rgba(255,255,255,.06)}
+.client-sharing-sheet .it.on{color:#a9c4ff;font-weight:600}
+.client-sharing-sheet .ck{color:#a9c4ff;flex:none}
+.client-sharing-sheet :focus-visible{outline:2px solid #a9c4ff;outline-offset:-2px}
+.client-sharing-sheet[data-surface-closing="true"]{display:block;pointer-events:none}
+.client-sharing-sheet[data-surface-closing="true"]::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55);animation:client-sharing-scrim-out .18s ease forwards}
+.client-sharing-sheet[data-surface-closing="true"] .sh{animation:client-sharing-sheet-out .18s var(--ease,ease) forwards}
+@keyframes client-sharing-sheet-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes client-sharing-scrim-in{from{opacity:0}to{opacity:1}}
+@keyframes client-sharing-sheet-out{from{transform:translateY(0)}to{transform:translateY(100%)}}
+@keyframes client-sharing-scrim-out{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:reduce){.client-sharing-sheet::backdrop,.client-sharing-sheet::before,.client-sharing-sheet .sh{animation:none!important}}

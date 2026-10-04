@@ -170,9 +170,20 @@ test('열린메뉴의7언어·인증props변경은단일입력DOM·선택·초�
 test('클릭닫기·외부클릭·확대·navigation·unmount는미처리hover를재실행하지않는다', async ({ page }) => {
   await mountHome(page)
   await input(page).fill('전체 화면에서 편집할 초안\n두 번째 조건')
-  await page.clock.install()
+  // install() alone keeps wall time advancing during Playwright actionability
+  // waits. Freeze it before distinguishing a pending hover from a fired hover.
+  await page.clock.install({ time: new Date('2026-10-02T00:00:00Z') })
+  await page.clock.pauseAt(new Date('2026-10-02T00:00:10Z'))
   await plus(page).dispatchEvent('pointerover', { pointerType: 'mouse' })
-  await page.clock.runFor(200); await plus(page).click(); await plus(page).click()
+  await page.clock.runFor(499); await expect(popover(page)).toHaveCount(0)
+  await page.clock.runFor(1); await expect(popover(page)).toBeVisible()
+  await plus(page).click(); await expect(popover(page)).toHaveCount(0)
+  await page.clock.runFor(800); await expect(popover(page)).toHaveCount(0)
+  await plus(page).dispatchEvent('pointerover', { pointerType: 'mouse' })
+  await page.clock.runFor(200)
+  await expect(popover(page)).toHaveCount(0)
+  await plus(page).click(); await expect(popover(page)).toBeVisible()
+  await plus(page).click(); await expect(popover(page)).toHaveCount(0)
   await page.clock.runFor(800); await expect(popover(page)).toHaveCount(0)
   await plus(page).click(); await page.locator('#outside').click()
   await page.clock.runFor(800); await expect(popover(page)).toHaveCount(0)

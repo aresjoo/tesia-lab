@@ -424,9 +424,22 @@ export function ClientStrategySharing({ location, onNavigate, onAsk, onReturn, s
   const metricScope = JSON.stringify([owner, routeKey, row?.score, resultRevision, metricPresentation])
   if (metric && service && metricSnapshot !== metricScope) setMetric(null)
   const openMetric = (key: keyof typeof definitions) => { setMetricSnapshot(metricScope); setMetric(key) }
+  const focusedRoute = useRef<string | null>(null)
   useEffect(() => {
+    const focusRoute = JSON.stringify([location.nick, location.view, location.copyId, location.section])
+    const sameFocusRoute = focusedRoute.current === null || focusedRoute.current === focusRoute
+    focusedRoute.current = focusRoute
     const target = !location.nick && !location.view ? routeTitleRef?.current : location.view ? routeTitleRef?.current ?? document.getElementById('research-title') : title.current
-    if (!shouldFocus || shouldFocus()) target?.focus({ preventScroll: true })
+    const active = document.activeElement, hub = target?.closest('.client-sharing-hub')
+    // The public hub header is usable while this lazy child is still loading.
+    // Do not take a user's current control selection when that child mounts.
+    // Service callers retain their explicit intent policy unchanged.
+    const preservePreviewFocus = sameFocusRoute && !serviceMode && !shouldFocus && active instanceof HTMLElement
+      && active.isConnected && hub?.contains(active)
+      && active.matches('button, a[href], input, select, textarea, [role="button"], [contenteditable="true"]')
+      && !active.closest('[hidden], [inert], [aria-hidden="true"]') && !active.matches(':disabled, [aria-disabled="true"]')
+      && active.getClientRects().length > 0 && getComputedStyle(active).visibility === 'visible'
+    if ((!shouldFocus || shouldFocus()) && !preservePreviewFocus) target?.focus({ preventScroll: true })
     const main = document.getElementById('research-main')
     main?.scrollTo({ top: 0, behavior: 'instant' })
     // Footer-bearing public pages scroll their shell, not research-main.

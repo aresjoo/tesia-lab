@@ -131,7 +131,11 @@ for (const width of [320, 481, 860, 1440]) test(`${width}px 7언어 전환은 �
       await expect(button).toBeEnabled()
       await expect(details).toHaveAttribute('open', '')
       await expect(raw).toHaveText(JSON.stringify(ready.draftState.projection, null, 2))
-      await expect(section.locator('.native-workflow-row').nth(1).locator('dd')).toHaveText(`${ready.draftState.projection.positionSizing.amount} USDT`)
+      // Entry/exit explanations precede sizing in the restored summary. Bind
+      // the amount check to its translated field name, not a historical index.
+      const amountRow = section.locator('.native-workflow-row').filter({ has: page.getByText(nativeWorkflowText(language, 'orderAmount'), { exact: true }) })
+      await expect(amountRow).toHaveCount(1)
+      await expect(amountRow.locator('dd')).toHaveText(`${ready.draftState.projection.positionSizing.amount} USDT`)
       if (stage !== 'VALIDATE' && stage !== 'SUBMIT') await expect(section.locator('.native-workflow-stage [data-workflow-focus]')).toHaveText(nativeWorkflowText(language, 'validated', { expiresAt: String(documentValue('validation-receipt').expiresAt) }))
       if (stage === 'SUBMIT') {
         for (const key of ['paper', 'smoke', 'edit'] as const) await expect(section.getByRole('button', { name: nativeWorkflowText(language, key), exact: true })).toBeVisible()

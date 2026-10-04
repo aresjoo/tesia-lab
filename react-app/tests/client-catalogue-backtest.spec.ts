@@ -81,7 +81,20 @@ test('실제worker 원본 기간·예산·원문·2선·결과·거래·판단·
  await expect(page.getByText('해석을 불러오지 못했습니다. 결과 숫자는 위에 그대로 있습니다.',{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'이 전략 실행하기',exact:true})).toBeDisabled()
  await expect(page.locator('path[data-series]')).toHaveCount(2);const chart=page.getByRole('region',{name:'백테스트 자산과 그냥 보유 비교 차트'});await chart.focus();await chart.press('End');await expect(chart.getByRole('status')).toContainText('2026-09-28')
  const marker=page.locator('[data-backtest-marker=enter]').first();if(await marker.count()){await marker.focus();await marker.press('Enter');await expect(page.getByTestId('backtest-selected-evidence')).not.toBeEmpty()}
- expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);await expect(page.locator('.catalogue-orders .ss3-ch')).toContainText('$3,000');expect(await page.locator('.bt-grid').evaluate(el=>getComputedStyle(el).display)).toBe(info.project.name==='desktop'?'grid':'flex');await page.evaluate(async()=>{await document.fonts.load('14px "Noto Sans KR Variable"','백테스트 검증 거래');await document.fonts.ready});await page.screenshot({path:info.outputPath('catalogue-bt-result.png'),fullPage:true})
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true)
+ // Source restoration replaces the old aggregate order-card heading with
+ // individual trade statements. Keep the selected-budget assertion and
+ // prove that the actual identified trade uses $3,000 × normalized cost.
+ await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-amount','3000')
+ const budgetObservation=await page.evaluate(async()=>Reflect.get(window,'btFixture').run({owner:'bt-owner-a',strategyId:'r1',period:90,amount:3000}))
+ const trade=budgetObservation.result.trades[0]
+ expect(trade).toBeTruthy()
+ const tradeRow=page.locator(`#bt-tl .bt-tr[data-trade-id="${trade.id}"]`)
+ await tradeRow.locator(':scope > .bt-rb').click()
+ await expect(tradeRow).toHaveClass(/\bon\b/)
+ await expect(tradeRow).toHaveAttribute('data-trade-id',String(trade.id))
+ await expect(tradeRow.locator('.bt-dl > div').filter({has:page.getByText('넣은 돈',{exact:true})}).locator('dd')).toHaveText(`$${Math.round(3000*trade.cost).toLocaleString('en-US')}`)
+ expect(await page.locator('.bt-grid').evaluate(el=>getComputedStyle(el).display)).toBe(info.project.name==='desktop'?'grid':'flex');await page.evaluate(async()=>{await document.fonts.load('14px "Noto Sans KR Variable"','백테스트 검증 거래');await document.fonts.ready});await page.screenshot({path:info.outputPath('catalogue-bt-result.png'),fullPage:true})
  await page.reload();await page.evaluate(async()=>{const refresh='/@react-refresh',r=(await import(/* @vite-ignore */refresh)).default;r.injectIntoGlobalHook(window);Object.assign(window,{$RefreshReg$:()=>{},$RefreshSig$:()=>(v:unknown)=>v,__vite_plugin_react_preamble_installed__:true});const path='/tests/fixtures/catalogue-backtest-host.tsx';Reflect.set(window,'btFixture',(await import(/* @vite-ignore */path)).mount())});await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','result');await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-amount','3000')
  await page.getByRole('button',{name:'조건을 바꿔 다시 돌리기',exact:true}).click();await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','ready');expect(errors).toEqual([]);expect(external).toEqual([])
 })

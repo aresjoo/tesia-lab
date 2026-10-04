@@ -1,11 +1,13 @@
 /** Frozen catalogue rules + frozen price series, same btCompute requested-start calculation. */
-import { catalogueAssets, catalogueSourceSha, findCatalogueStrategy, freezeCatalogueValue } from './client-catalogue'
+import { catalogueAssets, catalogueSourceSha, catalogueUniverses, findCatalogueStrategy, freezeCatalogueValue } from './client-catalogue'
 import type { CatalogueMarketData } from './client-catalogue-market-data'
 import { runCatalogueSpotPreview } from './client-catalogue-spot-engine'
 import { runCatalogueFuturesPreview } from './client-catalogue-futures-engine'
 import { catalogueJudgments } from './client-catalogue-judgments'
 import type { CatalogueOrderRow } from './client-catalogue-presentation'
 import { catalogueBacktestRunId, validCatalogueBacktestSelection, type CatalogueBacktestObservation, type CatalogueBacktestSelection } from './client-catalogue-backtest'
+import { projectSourceBacktestDecisions } from './client-catalogue-backtest-evidence-source.mjs'
+import type { CatalogueEvidenceDailyGroup, CatalogueEvidenceDecision } from './client-catalogue-backtest-evidence-types'
 
 export function computeCatalogueBacktest(selection: CatalogueBacktestSelection, data: CatalogueMarketData): CatalogueBacktestObservation {
   if (!validCatalogueBacktestSelection(selection)) throw Error('catalogue backtest selection unavailable')
@@ -31,10 +33,32 @@ export function computeCatalogueBacktest(selection: CatalogueBacktestSelection, 
     action: 'entry', side: 'side' in p ? p.side : undefined, open: true, date: p.entry, signal: signals.get(`${p.tid}:enter:${p.entry}`) ?? null,
     price: p.ep, units: Math.abs(p.units) * selection.amount, amount: p.cost * selection.amount })
   orders.sort((a, b) => b.date - a.date || (a.action === b.action ? b.positionId - a.positionId : a.action === 'exit' ? 1 : -1))
-  return freezeCatalogueValue({ ...selection, source: 'client-snapshot-preview', sourceSha: catalogueSourceSha,
+  const value: Omit<CatalogueBacktestObservation, 'evidence'> = { ...selection, source: 'client-snapshot-preview', sourceSha: catalogueSourceSha,
     runId: catalogueBacktestRunId(selection, calendar, dataVersion), calendar, dataVersion, strategy, calculation, result,
     judgments: catalogueJudgments({ strategy, calendar, result, calculation }, data), benchmark,
-    benchmarkReturn: (benchmark.at(-1)!.v - 1) * 100, benchmarkMdd, orders })
+    benchmarkReturn: (benchmark.at(-1)!.v - 1) * 100, benchmarkMdd, orders }
+  // Existing calculated result only. No second engine run, per-frame work or model request.
+  const decisions = projectSourceBacktestDecisions(value, { spot: data.spot, future: data.future, universes: catalogueUniverses })
+  const groups = new Map<number, CatalogueEvidenceDecision[]>()
+  if (strategy.kind === 'agent') for (const d of decisions) {
+    if (!['buy', 'skip', 'hold'].includes(d.k)) continue
+    const rows = groups.get(d.j)
+    if (rows) rows.push(d); else groups.set(d.j, [d])
+  }
+  const dailyGroups: CatalogueEvidenceDailyGroup[] = [...groups].map(([j, rows], ix) => {
+    const f = rows[0], b = rows.filter(d => d.k === 'buy'), k = b.length ? 'buy' : f.k
+    return { runId: value.runId, ix, i: f.i, j, decisionIndices: rows.map(d => d.ix), k, out: k,
+      tag: b.length ? '매수' : f.tag, title: b.length ? b.map(d => d.tk).join(', ') : f.title,
+      cmp: b.length === 1 ? b[0].cmp : b.length ? b.map(d => d.tk + ' ' + d.cmp).join(' / ') : f.cmp,
+      why: f.why, ups: f.ups }
+  })
+  return freezeCatalogueValue({ ...value, evidence: {
+    source: value.source, sourceSha: value.sourceSha, runId: value.runId, decisions, dailyGroups,
+    // Original 9fb btMini:22734 / fuTradeMini:23813 use mkPx, including futures.
+    // Keep that explicit spot-close provenance; never relabel it as live/futures OHLC.
+    prices: { source: 'client-snapshot-close', calendarStartIndex: 0,
+      series: assets.map(asset => ({ asset, values: data.prices(asset) })) },
+  } })
 }
 
 /** Source btPlan local visual replay pacing. Computation has already completed; not a service-job timer. */

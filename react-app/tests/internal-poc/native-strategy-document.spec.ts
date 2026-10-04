@@ -5,6 +5,7 @@ import fixture from '../fixtures/service-v03/recorded-conversation.json' with { 
 import { nativeStrategyText } from '../../src/internal-poc/native-strategy-copy'
 import { nativeShellText } from '../../src/internal-poc/native-shell-copy'
 import { nativeRowText } from '../../src/internal-poc/native-row-copy'
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 
 // Synthetic approved wire fixtures through the real native controller/SDK.
 // No external authentication, model, market feed or execution is exercised.
@@ -167,7 +168,7 @@ test('행 요청 응답 유실·세션 재확인·같은 키 재개는 원문과
   expect(controls.posts).toHaveLength(1)
 })
 
-test('서버 재조회로 초안이 바뀌면 오래된 행 요청을 자동 전송하지 않는다', async ({ page }) => {
+test('전송 전 기록 실패 뒤 서버 재조회로 초안이 바뀌면 오래된 행 요청을 자동 전송하지 않는다', async ({ page }) => {
   const controls = await setup(page)
   await openDetailedDocument(page)
   await doc(page).getByRole('button', { name: '레버리지 수정 요청', exact: true }).click()
@@ -175,7 +176,7 @@ test('서버 재조회로 초안이 바뀌면 오래된 행 요청을 자동 전
   await field.fill('2배로')
   await backToConversation(page)
   controls.snapshot = structuredClone(changed)
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await openDetailedDocument(page); await field.press('Enter')
   await expect(doc(page).getByRole('status')).toContainText(nativeRowText('ko', 'stale'))
@@ -492,12 +493,12 @@ test('영어 문서에서 보낸 한국어 수정은 원문 그대로 전송되�
   expect(controls.posts).toHaveLength(1)
 })
 
-test('서버에서 새 revision을 다시 읽어도 미전송 입력은 보존되고 문서는 최신 서버 값만 표시한다', async ({ page }) => {
+test('전송 전 기록 실패 뒤 새 revision을 다시 읽어도 미전송 입력은 보존되고 문서는 최신 서버 값만 표시한다', async ({ page }) => {
   const controls = await setup(page)
   await input(page).fill('보존할 미전송 질문')
   await openDetailedDocument(page); await backToConversation(page)
   controls.snapshot = structuredClone(changed)
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await openDetailedDocument(page)
   await expect(await field(page, '초안 revision')).toHaveText('3')

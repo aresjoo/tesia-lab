@@ -50,6 +50,32 @@ async function mount(page: Page, controlled = true, shell = false, withRows = tr
 }
 const surface = (page: Page) => page.locator('.native-strategies')
 const tabs = (page: Page) => surface(page).locator('.ss3-tabs button')
+async function assertPublicFallback(page: Page) {
+  // Source 9fbff821:index.html:24605 removes public catalogue tabs. The
+  // deployed fa8601e NativeStrategies also selects this renderer on supply loss.
+  await expect(surface(page).locator('[data-public-catalogue]')).toBeVisible()
+  await expect(tabs(page)).toHaveCount(0)
+  await expect(surface(page).locator('.strategy-list-link').first()).toBeVisible()
+  const sort = surface(page).getByRole('combobox', { name: '정렬 기준', exact: true })
+  await expect(sort).toHaveValue('pick')
+  // This Playwright version retargets an option inside a label to its select
+  // for toBeDisabled; inspect the real options and native keyboard behavior.
+  for (const value of ['ret', 'fw']) {
+    const option = sort.locator(`option[value="${value}"]`)
+    await expect(option).toHaveAttribute('disabled', '')
+    await expect(option).toHaveJSProperty('disabled', true)
+  }
+  await expect(sort).toBeEnabled()
+  await test.info().attach('unavailable-sort-options', { contentType: 'application/json', body: JSON.stringify(await sort.evaluate(element => ({
+    disabled: (element as HTMLSelectElement).disabled, ariaDisabled: element.getAttribute('aria-disabled'),
+    options: Array.from((element as HTMLSelectElement).options, option => ({ value: option.value, disabled: option.disabled, ariaDisabled: option.getAttribute('aria-disabled') })),
+  }))) })
+  await sort.focus(); await page.keyboard.press('ArrowDown')
+  await expect(sort).toHaveValue('pick')
+  await expect(surface(page).getByRole('link', { name: '공급된 전략', exact: true })).toHaveCount(0)
+  await expect(surface(page).locator('.cpx, .cps-wrap')).toHaveCount(0)
+  await expect.poll(() => page.evaluate(() => Reflect.get(window, 'strategyView'))).toBeNull()
+}
 async function openSharing(page: Page) {
   const menu = page.locator('.client-sidebar').getByRole('button', { name: sourceSidebarNavigationLabel('ko', 'sharing'), exact: true })
   if (!(await menu.isVisible())) await page.locator('.client-hamburger:visible, .client-rail-logo-row button:visible').first().click()
@@ -98,12 +124,16 @@ test('row 갱신은 유지하고 owner·dataset·공급 소멸 뒤에는 이전 
   for (const [action, value] of [['strategySetOwner', 'owner-b'], ['strategySetIdentity', 'dataset-b'], ['strategySupply', false]] as const) {
     await tabs(page).nth(1).click()
     await page.evaluate(({ action, value }) => Reflect.get(window, action)(value), { action, value })
-    await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
+    if (action === 'strategySupply') await assertPublicFallback(page)
+    else await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
     await expect(surface(page).getByRole('searchbox')).toHaveValue('')
     await expect(surface(page).getByRole('button', { name: /^시장:/ })).toContainText('시장 전체')
   }
   await page.evaluate(() => Reflect.get(window, 'strategySupply')(true)); await roundtrip(page)
   await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
+  await expect(surface(page).getByRole('searchbox')).toHaveValue('')
+  await expect(surface(page).getByRole('combobox', { name: '정렬 기준', exact: true })).toHaveValue('pick')
+  await expect(surface(page).getByRole('button', { name: /^시장:/ })).toContainText('시장 전체')
 })
 
 test('controlled 미사용도 dataset 교체는 초안을 폐기하고 기본 호환을 유지한다', async ({ page }) => {
@@ -153,14 +183,26 @@ test('실제 서비스 셸의 대화 왕복·행 갱신은 선택을 유지하�
     await tabs(page).nth(1).click()
     await page.evaluate(({ action, value }) => Reflect.get(window, action)(value), { action, value })
     if (!(await surface(page).isVisible())) await openSharing(page)
-    await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
+    if (action === 'strategySupply') await assertPublicFallback(page)
+    else await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
     await expect(surface(page).getByRole('searchbox')).toHaveValue('')
+    await expect(surface(page).getByRole('button', { name: /^시장:/ })).toContainText('시장 전체')
   }
-  // The shell rejects persistence without a producer, but local exploration remains usable.
-  await tabs(page).nth(1).click(); await expect(tabs(page).nth(1)).toHaveAttribute('aria-pressed', 'true')
-  await tabs(page).nth(2).click(); await expect(tabs(page).nth(2)).toHaveAttribute('aria-pressed', 'true')
+  // Public exploration remains usable without private tabs or fabricated data;
+  // these local choices must not revive the removed producer's view snapshot.
+  await surface(page).getByRole('searchbox').fill('존재하지 않는 공개 검색')
+  await expect(surface(page).locator('.strategy-list-link')).toHaveCount(0)
+  await surface(page).getByRole('searchbox').fill('')
+  await surface(page).getByRole('button', { name: /^시장:/ }).click()
+  await page.getByRole('option', { name: '가상자산', exact: true }).click()
+  await expect(surface(page).getByRole('button', { name: /^시장:/ })).toContainText('가상자산')
+  await expect(surface(page).locator('.strategy-list-link').first()).toBeVisible()
+  await expect.poll(() => page.evaluate(() => Reflect.get(window, 'strategyView'))).toBeNull()
   await page.evaluate(() => Reflect.get(window, 'strategySupply')(true))
   await expect(tabs(page).nth(0)).toHaveAttribute('aria-pressed', 'true')
+  await expect(surface(page).getByRole('searchbox')).toHaveValue('')
+  await expect(surface(page).getByRole('combobox', { name: '정렬 기준', exact: true })).toHaveValue('pick')
+  await expect(surface(page).getByRole('button', { name: /^시장:/ })).toContainText('시장 전체')
 })
 
 test('공급 전략 상세와 허브 왕복은 새 제목에 키보드 초점을 옮긴다', async ({ page }) => {

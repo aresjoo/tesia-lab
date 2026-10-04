@@ -4,6 +4,7 @@ import { finishSourceOfflineResearchPlan, revealSourceNavigation } from './fixtu
 import { expect, test, type Page } from '@playwright/test'
 
 async function menu(page: Page) {
+  if ((page.viewportSize()?.width ?? 0) <= 860) await revealSourceNavigation(page)
   await page.locator((page.viewportSize()?.width ?? 0) <= 860 ? '.client-hamburger' : '.client-rail-logo-row button').click()
 }
 async function healthy(page: Page) {
@@ -66,7 +67,13 @@ test('빈 계정에서 두 대화·연구·공개 페이지·문서·랭킹을 �
   await page.getByRole('button', { name: '연구 시작', exact: true }).click()
   await page.clock.fastForward(18_000)
   await openSourceMenu()
-  await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 앱 다운로드', exact: true }).click()
+  if ((page.viewportSize()?.width ?? 0) <= 860) {
+    await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 앱 다운로드', exact: true }).click()
+  } else {
+    // Signed-in desktop uses the source account menu, not mobile-only links.
+    await page.locator('[data-sidebar-action="account"],[data-sidebar-action="profile-settings"]').click()
+    await page.locator('.ca-settings').getByRole('button', { name: '다운로드', exact: true }).click()
+  }
   await expect(page.locator('.client-info-download')).toBeVisible()
   await page.clock.fastForward(90_000)
   await page.getByRole('link', { name: '웹에서 바로 시작하기', exact: true }).click()
@@ -173,8 +180,12 @@ test('공개 페이지 언어·정책·설정·피드백을 교차 사용해도 
   await page.goto('/')
   const draft = '줄바꿈 보존\n<script>테스트 문자열</script> 🔍'.repeat(5)
   await page.locator('.client-home-content textarea').fill(draft)
-  await menu(page)
-  await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 정보', exact: true }).click()
+  if ((page.viewportSize()?.width ?? 0) <= 860) {
+    await menu(page)
+    await page.locator('.client-sidebar .client-drawer-links').getByRole('link', { name: 'TETH 정보', exact: true }).click()
+  } else {
+    await page.locator('.client-auth-nav').getByRole('link', { name: 'TETH 정보', exact: true }).click()
+  }
   await page.locator('.public-language-trigger').click()
   await page.getByRole('button', { name: 'Français', exact: true }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
@@ -186,7 +197,7 @@ test('공개 페이지 언어·정책·설정·피드백을 교차 사용해도 
   await expect(page.locator('.download-tabs').getByRole('tab', { name: '검증', exact: true })).toHaveAttribute('aria-selected', 'true')
   await expect(page.locator('.phone-preview [data-screen=report]')).toBeVisible()
   await expect(page.locator('.phone-preview [data-screen=chat]')).toHaveAttribute('inert', '')
-  await page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true }).click()
+  await page.locator('.client-site-footer').getByRole('button', { name: '24시간 상담', exact: true }).click()
   await page.locator('.site-help-pop a[href="/policies/#overview"]').click()
   await page.locator('.tabs').getByRole('link', { name: '서비스 약관', exact: true }).click()
   await page.locator('#v-terms .lnk').filter({ hasText: '투자 위험 고지' }).click()

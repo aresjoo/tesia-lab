@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/trading-ui-restoration` 추적 파일 전체. 정확한 commit은 manifest에 기록. 병합 main `62b5e69`와 Web draft PR54 `75a5f5b`를 보존한 UI 복구 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/catalogue-evidence-restoration` 추적 파일 전체. 정확한 commit은 manifest에 기록. 병합 main `62b5e69`·Web draft PR54 `75a5f5b`·이전 UI 복구 `fa8601e`를 보존한 후속 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,7 +17,17 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `d53a806`의 React 출처 `75a5f5b`에서 UI 복구·인증 가용성 수정본 **`fa8601e`**로 갱신했다. 총 **2,159개 파일**, 직전 snapshot 대비 **80개 변경(신규24/수정56/삭제0)**이며 미커밋 출처는 없다. 정확한 SHA·전체 해시는 manifest와 검증 JSON에 결속한다. 이전의 원본 이식·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `4acb4ce`의 React 출처 `fa8601e` 이후, 모바일 시장 필터·공개 문서 복귀·키보드 초점과 catalogue 전체 판단 근거를 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 원본 이식·로그인 방식 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+| 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
+| --- | --- | --- |
+| 모바일 시장 필터 시트·긴 번역값 | `ClientSharingDropdown`, 전략 필터 CSS, market-sheet/sharing-locale 시험 | 원본 모바일 시트·native dialog 닫기·포커스/스크롤 복귀, 짧은 원본 배치 유지 |
+| 문서 Back·새로고침·늦은 폰트·초점 | `SiteRouter`, `ClientPublicPages`, document/history/intent 시험 | 오래된 좌표 재사용과 늦은 장착의 사용자 초점 탈취 방지, 대화 초안 유지 |
+| 전체 판단·거래 상세·mini-chart | `ClientCatalogueEvidence`, `client-catalogue-backtest-evidence-*`, 원본 oracle·evidence 시험 | 원본 D/EV·필터·정렬·12/+24·그룹·거래·지표 설명 복원. 기존 계산 결과를 표시하며 engine/외부 API 변경0 |
+| 차트 마커와 성능 | `ClientCatalogueBacktest`, `client-catalogue-backtest-marker-groups` | 날짜 대신 runId/eventIndex 구분, 같은 날 모든 근거 접근, 포인터/Enter·824개 목록을 보존한 재계산 캐시 |
+| 지연 로딩·경로 이동 초점 | `ClientStrategySharing`, `client-sharing-lazy-return-focus.spec.ts` | 최초 같은 화면에서 이미 선택한 조작요소를 보존하되 새 경로는 제목 초점으로 이동. 서비스의 명시 초점 정책 유지 |
+
+원본 자체의 불일치는 최소한만 보완했다: 선물 mini가 실제로 소비하는 현물 종가를 `현물 종가(참고)`로 표시하고, 이미 계산된 `d.out`으로 배지·상세 수치를 맞추며, nullable 값의 `null일`/`—일`과 잘못된 CSS scope/rgba 구문을 교정했다. 원본의 summary jump 선택핀 유지·hold 날짜 순서는 임의 변경하지 않았다. 미사용 preview 문구 모듈1개와 도달할 수 없는 CSS2줄은 제거했으며 이전 Git 이력으로 복구 가능하다.
 
 이번 추가 범위는 AI 트레이딩 소개·로그인 전 공개 목록·헤더/사이드바, 설정·도움말·문서 FAQ/Back/스크롤 복귀, 카탈로그 페이지·키보드 초점과 Google·Apple·이메일 선택지 공존이다. 기존 Google-only 배포에서 다른 방식을 없애던 조립을 수정해 **표시는 유지하고 가용성만 제어**한다. 현재 미등록 Apple·이메일은 ‘준비 중’이며 서버 등록이나 인증 성공을 만들어내지 않는다. 상세 재현·수정·실패 이력은 `react-app/Bugfix_report.md`의 최신 두 절을 따른다.
 
@@ -136,18 +146,18 @@
 
 ## 6. 이번 전달에서 반드시 알아야 할 미완료 사항
 
-1. **Catalogue 백테스트의 완전한 판단 목록과 차트 연결은 미완료다.** 현재 `ClientCatalogueBacktest.tsx`는 제한된 `judgments`를 날짜로 찾아 표시한다. 같은 날 여러 종목/체결을 구분하는 event identity, 원본 daily group·정렬·필터·더 보기·상세 근거/mini-chart 복원 후보는 비공개 QA에서 검증했지만 이 스냅샷 제품에는 아직 반영되지 않았다.
-2. **마커의 실제 클릭 겹침 문제가 남아 있다.** 키보드 선택/상태 처리 테스트 성공만으로 mouse/touch 문제가 해결됐다고 판정하지 않는다. 같은 날의 여러 매수/매도·숏 체결을 보존하면서 원본 목록에서 전체 근거에 접근해야 한다.
+1. **이전 catalogue 전체 근거·마커 잔여는 이번 제품에 반영했다.** 제한된 요약을 전체 판단 목록 대신 쓰지 않으며, 같은 날 서로 다른 사건을 고유 식별자로 연결한다. 그룹·정렬·필터·추가 목록·상세 근거·mini-chart와 실제 포인터/키보드 경로를 검증한다. 이는 고정 저장자료 기반 preview이며 실제 서버 백테스트/모델의 근거가 자동 연결됐다는 뜻은 아니다.
+2. **현재 검증 범위와 남은 접근성 경계를 구분한다.** 모든 마커 근거에 목록으로 접근할 수 있고 원본 그룹을 숨기지 않는다. Chromium의 desktop/mobile 에뮬레이션과 실제 포인터 시험은 실기기 Safari·모든 보조기술 인증이 아니다.
 3. **전문 차트와 catalogue 결과 차트는 다른 경로다.** 전문 Lightweight Charts 코드가 있어도 모든 백테스트 경로가 그 차트/실데이터를 사용하는 것은 아니다.
 4. **원본 이식 인수와 무결함/전 상태 인증은 다르다.** 출처의 단일 전체 회귀·Web52 인수는 완료됐지만 모든 62 preset 또는 모든 화면·반응형·SVG·모션 조합의 인증은 아니다. 최종 원본과 어긋난 동선은 계속 확인해야 한다.
 5. **실제 모델·시장·거래소/카피·예약·과금/사용량 producer 및 운영 Gate가 남아 있다.** 프론트에서 확정할 수 없는 계약은 PM/backend와 합의한다.
 6. **신규 거래소 연결 draft는 코드 포함, 정식 서비스 승격은 미완료다.** 위 PR54 head까지 전달했으며 그 이후 변경이나 실제 공급자 성공을 포함했다고 주장하지 않는다.
 
-1·2번은 이전 전달의 개별 QA 잔여이며 해당 `ClientCatalogueBacktest.tsx`는 이전 출처와 byte 동일함을 이번에 확인했다. 이 잔여가 전체 인수 시험에 의해 해소됐다고 추정하지 않는다. 비공개 후보는 제품 수정처럼 보이지 않도록 `react-app/src`에 섞어 넣지 않았다. 구현 담당이 인수할 때 변경·검증·상태 설명을 같은 후속 커밋으로 갱신한다.
+이전 navigation 동결 전체는13,802 PASS/1 FAIL/기존17 SKIP였고, 유일한 공유 복귀 실패는 후속 실제 반례로 수정했다. 이를 전체 PASS로 바꾸지 않는다. 새 catalogue·공유12제품 변경은 별도 최종 영향62spec/1,996개와 정확한 입력 해시로 인수하며, 최종 종료 결과는 검증 JSON을 따른다. 원 실패·하니스 기대 오류·수정 검증은 `react-app/Bugfix_report.md`에 구분했다. 전체 서비스나 모든 원본 상태의 무결함 보장이 아니다.
 
 ## 7. 실행·검증
 
-Node 22.23.2를 검증 기준으로 권장한다. 저장소 루트 원본 HTML 서버와 React 개발 서버는 다른 앱이므로 포트를 나눠 실행한다.
+이번 후속 검증은 Node 24.14.0에서 실행했다. 저장소 루트 원본 HTML 서버와 React 개발 서버는 다른 앱이므로 포트를 나눠 실행한다.
 
 ```bash
 cd react-app
@@ -184,6 +194,8 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 
    ```bash
    node tools/sync-migration.mjs /absolute/path/to/current/tesia-web-worktree
+   # 출처에서 제거한 경로를 Git index에서도 반영한 뒤 검사
+   git add -u -- react-app
    node tools/sync-migration.mjs --verify
    ```
 

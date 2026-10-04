@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import copy from '../src/client-settings-copy.json' with { type: 'json' }
 import fixture from './fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
+import { revealSourceNavigation } from './fixtures/source-offline-research-entry'
 
 test('settings dictionaries retain flat seven-language entries and distinct storage/email meanings',()=>{
   const languages=['ko','en','ja','zh-CN','zh-TW','es','fr'].sort()
@@ -389,7 +390,7 @@ test('native guest menu opens real login without creating account data and cance
   await page.clock.setFixedTime(new Date('2030-01-01T00:00:30Z'))
   const calls = await native(page, false)
   let entry = page.locator('[data-sidebar-action="settings"]')
-  if (!await entry.isVisible()) { await page.locator('.client-hamburger').click(); entry = page.locator('[data-sidebar-action="settings"]') }
+  if (!await entry.isVisible()) { await revealSourceNavigation(page); await page.locator('.client-hamburger').click(); entry = page.locator('[data-sidebar-action="settings"]') }
   await entry.click()
   await page.locator('.ca-settings [data-menu-action="settings"]').click()
   await expect(page.locator('[data-native-auth-close]')).toBeVisible()
@@ -421,6 +422,7 @@ async function openSettings(page: Page) {
   await expect(page.locator('.client-source-app')).toBeVisible()
   let trigger = page.locator('[data-sidebar-action="account"],[data-sidebar-action="profile-settings"]')
   if (!await trigger.isVisible()) {
+    await revealSourceNavigation(page)
     await page.locator('.client-hamburger').click()
     trigger = page.locator('[data-sidebar-action="account"],[data-sidebar-action="profile-settings"]')
   }

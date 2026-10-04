@@ -1,115 +1,146 @@
 {
   "schema": 1,
-  "purpose": "원본과 React 변경을 대조하는 migration 전달. 정적 배포, 실제 인증, 전체 서비스 승인을 구분한다.",
-  "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+  "purpose": "원본 UI 복원·카탈로그 전체 근거·탐색/초점 개선의 누적 React 전달. 실제 로그인·프롬프트·거래 서비스 승인은 별도다.",
+  "sourceCommit": "a6e737f05ae26d672e804765eeb2ee5ddd50e578",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "c4d6cf89df7c64a5da1ac7047cf836f795b4aabd25daf3c31c54f6ebc510b5c8",
+  "snapshotDigest": "dd8b02ba3481a912e1e595f35de8a42066af013c20e56f0b778cf8bb89d9b438",
   "environment": {
-    "node": "22.23.2",
-    "dependencyInstall": "기존 검증 설치 재사용. package.json/lockfile 동일, 이번 clean npm ci 실행 주장 없음."
+    "node": "v24.14.0",
+    "dependencyInstall": "검증된 설치 재사용. package/lockfile 변경0; 이번 clean npm ci 주장 없음."
   },
   "snapshot": {
-    "files": 2159,
-    "bytes": 25007896,
+    "files": 2179,
+    "bytes": 25348892,
     "sourceDirtyFiles": [],
-    "hashVerification": "PASS; source tracked bytes and complete delivered manifest match",
-    "clientOriginalFiles": "Preserved; root index/about/download/policies/server and active root workflows unchanged"
+    "hashVerification": "PASS: sync --verify와 출처 전체파일 해시 비교",
+    "clientOriginalFiles": "원본 HTML/server/Worker/root workflows 변경0"
   },
   "checks": [
     {
-      "command": "62 specs: prior source-UI51 plus authentication11 Playwright",
-      "executedOn": "Exact source worktree; delivered snapshot byte verified, not a second run in react-app",
+      "command": "Final frozen 62-spec impact run",
+      "startTime": "2026-10-04T16:36:20.399Z",
+      "duration": 608247.449,
+      "expected": 1996,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0,
       "status": "PASS",
       "exitCode": 0,
-      "specs": 62,
-      "passed": 1674,
-      "failed": 0,
-      "skipped": 0,
       "retries": 0,
-      "interrupted": 0,
-      "notRun": 0,
-      "reportedDuration": "11.7m",
-      "inputFiles": 2133,
-      "inputSha256": "bd2c87f52f74bd10ba76fd78f535c6f863e345ea2ce1297898ad8da81483dc2f",
+      "input": {
+        "files": 2172,
+        "sha256": "4b21fc0cede67cef23c8a7c0aa865a21506f2e9a0ade5ec063330bd908d96905"
+      },
       "inputUnchanged": true,
-      "logSha256": "25a58d829722e70c80d480b1b6d03a353cd4a91345a5fdc5d952397147ec96c4"
+      "scope": "1996 단일 범위; 이전 navigation 전수의 성공으로 합산하지 않음"
     },
     {
-      "command": "npm run lint",
+      "command": "lint",
+      "flags": {},
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "build",
+      "flags": {},
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "build:internal-poc",
+      "flags": {},
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "build:service",
+      "flags": {
+        "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
+        "VITE_TETH_EXCHANGE_CONNECT": "false"
+      },
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "Built service login presentation at1440/390/320",
       "status": "PASS",
-      "exitCode": 0
+      "actualLoginVerified": false,
+      "serverMutationExecuted": false
     },
     {
-      "command": "VITE_TETH_AUTH_GOOGLE_ONLY=true VITE_TETH_EXCHANGE_CONNECT=false npm run build:service",
-      "status": "PASS",
-      "exitCode": 0
-    },
-    {
-      "command": "Actual built preview auth/keyboard/cancel/title bounds",
-      "status": "PASS",
-      "widths": [
-        1440,
-        390,
-        320
-      ],
-      "syntheticSession": true,
-      "serverMutationExecuted": false,
-      "actualLoginVerified": false
-    },
-    {
-      "command": "Installed deployment backend _StaticBundle and tar per-file hash verification",
+      "command": "Installed backend StaticBundle + archive member/hash verification",
       "status": "PASS",
       "registeredAssets": 350,
       "packagedFiles": 1113
-    },
-    {
-      "command": "node tools/sync-migration.mjs --verify",
-      "status": "PASS",
-      "files": 2159
-    },
-    {
-      "command": "Public HTTPS registered assets and exact renderer document aliases",
-      "status": "PASS",
-      "passed": 350,
-      "aliases": 4,
-      "providerLoginExecuted": false
-    },
-    {
-      "command": "Public HTTPS UI at1440/390/320 with synthetic GET session",
-      "status": "PASS",
-      "actualLoginVerified": false
-    },
-    {
-      "command": "Actual public Google START201 + binding + pending result409 + pending session401",
-      "status": "PASS",
-      "actualGoogleLoginCompleted": false
     }
   ],
   "failureHistory": [
     {
-      "scope": "Initial authentication regression",
-      "passed": 398,
-      "failed": 10,
+      "scope": "Previous navigation frozen whole",
+      "startTime": "2026-10-04T15:02:08.408Z",
+      "duration": 4852095.833000001,
+      "expected": 13802,
+      "skipped": 17,
+      "unexpected": 1,
+      "flaky": 0,
       "exitCode": 1,
-      "reason": "Mobile setup attempted the original scroll-hidden menu. Existing revealSourceNavigation restores the normal user path; assertions/timeout/skip/retry unchanged."
+      "inputUnchanged": true,
+      "classification": "단1건 실제lazy복귀초점 실패를 새후보에서 반례로 교정; 원FAIL 유지"
     },
     {
-      "scope": "Initial built probe",
-      "failed": 3,
-      "reason": "Harness mistook native-dialog Tab to browser chrome for focus entering inert background. Isolated native reproduction; narrow exception then next Tab must return to dialog."
+      "scope": "Catalogue followup102",
+      "passed": 100,
+      "failed": 2,
+      "exitCode": 1,
+      "classification": "원본 border:0!important를 놓친 신규 시험 기대오류; 원본computed대조로시험만교정"
     },
     {
-      "scope": "First public static scan",
-      "registeredAssetsPassed": 350,
-      "failedDocumentExpectations": 4,
-      "reason": "Harness compared raw build HTML directly with server-rendered HTML. Existing _StaticBundle injects one server-owned profile meta. Corrected scan requires exact known insertion and identical four aliases; no product change."
+      "scope": "First impact1996",
+      "startTime": "2026-10-04T16:22:53.157Z",
+      "duration": 690702.672,
+      "expected": 1995,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0,
+      "exitCode": 1,
+      "inputUnchanged": true,
+      "classification": "fr480 CDP async-evaluate Promise 수거, geometry assertion 전 중단. 원시험진단3PASS/후속test-only참조보존3PASS는별도"
     },
     {
-      "scope": "First real Google start probe",
-      "googleStart201": true,
-      "resultPending": true,
-      "failedExpectation": "finalAnonymous",
-      "reason": "Existing server intentionally changes initiating session to internal HANDOFF_BOUND, refused by service_session.resolve (401 AUTHENTICATION_REQUIRED) until callback/ACK. Initial harness wrongly required public ANONYMOUS. Corrected exact-boundary probe passed; no backend change."
+      "previousReport": "navigation-corrected-whole-guarded.json",
+      "case": {
+        "file": "client-share-browse.spec.ts",
+        "title": "긴 대화에서 공유 탐색 후 돌아와도 읽던 위치와 초안을 보존한다",
+        "project": "mobile"
+      },
+      "finalStatus": "expected"
+    },
+    {
+      "previousReport": "teth-catalogue-evidence-followup.json",
+      "case": {
+        "file": "client-catalogue-evidence-ui.spec.ts",
+        "title": "판단 근거와 조건 연결의 색상은 최종 원본 scope 및 승인된 CSS 구문 복원을 따른다",
+        "project": "desktop"
+      },
+      "finalStatus": "expected"
+    },
+    {
+      "previousReport": "teth-catalogue-evidence-followup.json",
+      "case": {
+        "file": "client-catalogue-evidence-ui.spec.ts",
+        "title": "판단 근거와 조건 연결의 색상은 최종 원본 scope 및 승인된 CSS 구문 복원을 따른다",
+        "project": "mobile"
+      },
+      "finalStatus": "expected"
+    },
+    {
+      "previousReport": "catalogue-final-impact-guarded.json",
+      "case": {
+        "file": "client-sharing-locale.spec.ts",
+        "title": "fr 480px 긴 정렬 라벨은 선택상자와 이웃 경계를 보존한다",
+        "project": "desktop"
+      },
+      "finalStatus": "expected"
     }
   ],
   "security": {
@@ -127,216 +158,113 @@
       "exitCode": 0,
       "findings": 0
     },
-    "deploymentReceiptStaged": {
-      "rawExitCode": 1,
-      "rawFindings": 1,
-      "classified": "generic-api-key matched evidenceHashes.auth-ui-activation.log; exact SHA256 recomputed from the deployment log, not a credential",
-      "unclassified": 0,
-      "actualCredentialFindings": 0,
-      "detectorOrPathSuppressionAdded": false
-    },
     "secretsOrDatabasesIncluded": false
   },
   "independentReview": {
     "profile": "personal (1)",
     "model": "claude-opus-5-5",
-    "runs": 2,
-    "scope": "Provided code only; no model-executed browser tests",
-    "verdict": "Conditional STATIC_UI_CODE_GO; ROOT binds actual tests/build/probes and immediate remote HTML/edge/control/release CAS",
-    "critical": 0,
-    "high": 0,
-    "notes": [
-      "Existing disabled CSS and final screenshots checked",
-      "Current edge hash must equal immutable supplied edge before updater invocation",
-      "Not all-service or real-user-authentication GO"
-    ]
+    "scope": "제공된 코드 및 좁은 closure; 모델 브라우저 실행0",
+    "inputUnchanged": true,
+    "verdict": "조건부 STATIC_UI_CODE_GO; ROOT가 실제범위PASS·빌드·보안·패키지·로그인표시·배포전CAS를 결속",
+    "sourceProductFiles": [
+      {
+        "path": "src/client-catalogue-backtest-evidence-source.d.mts",
+        "sha256": "bde70e5e776d2ef3f3a380fda72480481f40b31334d1d5d6837c950a0c22be0a"
+      },
+      {
+        "path": "src/client-catalogue-backtest-evidence-source.mjs",
+        "sha256": "b9fb6b1ef5614580c67da986929507ed370cab6e9c00e21f1fd931cbe2e27487"
+      },
+      {
+        "path": "src/client-catalogue-backtest-evidence-types.ts",
+        "sha256": "6510c4aa95e0c53e21e240db79e78c7abdf707d0588adc00964da3af78853330"
+      },
+      {
+        "path": "src/client-catalogue-backtest-marker-groups.ts",
+        "sha256": "abd8add1bc0040ec90777054c7d55f631a0336562bc5d14cab1382a767915088"
+      },
+      {
+        "path": "src/client-catalogue-backtest-result.ts",
+        "sha256": "d90b3b6d613bf10ae04f16a8c44f13625bffb110e25d1b888cb581c3c5bce67e"
+      },
+      {
+        "path": "src/client-catalogue-backtest.css",
+        "sha256": "e21afd8b11508063ec54e1bf82cc993231cb20e48bdf7b715077ac78c6fac6bc"
+      },
+      {
+        "path": "src/client-catalogue-backtest.ts",
+        "sha256": "a210a701692a0aa749c4c46cc3e9b8af673e9b2cace21617b93b1bd0295a55aa"
+      },
+      {
+        "path": "src/client-catalogue-evidence-state.ts",
+        "sha256": "ecc321e6edaf476d8cad4b96f80f9af6f1afa0801d63bf1f455939b99e3d1b14"
+      },
+      {
+        "path": "src/client-catalogue-evidence.css",
+        "sha256": "7dd3e5af074acb1dc80a9127bfacf65691419515e667629299b80d47ca0a2b74"
+      },
+      {
+        "path": "src/components/ClientCatalogueBacktest.tsx",
+        "sha256": "d5556719737566d25b058c48eb08569d3bdde7c5c0adeb7597133f11b6909bde"
+      },
+      {
+        "path": "src/components/ClientCatalogueEvidence.tsx",
+        "sha256": "f311736ee257ef40b933f0064c37ae04ed3a82ccbf8e0c6bc3884e8bb9b71dc2"
+      },
+      {
+        "path": "src/components/ClientStrategySharing.tsx",
+        "sha256": "8136b829cd7f764847b04dfa24143fe08fe457879ce02a617ec7b7b586ef965e"
+      }
+    ],
+    "notFullServiceApproval": true
   },
   "warnings": [
-    "Existing >500kB bundle warning; main service bundle about1.53MB minified",
-    "Chromium desktop/mobile emulation; no real Safari/AT device certification"
+    "기존 500kB 초과 bundle 및 Vite config/dynamic import 경고",
+    "Chromium desktop/mobile 에뮬레이션; 실기기 Safari·AT 인증 아님",
+    "pointer p95 관측은 개발환경 진단이며 실기기 성능 보장 아님"
   ],
   "notVerified": [
-    "Whole original469-spec rerun and all62 presets",
-    "All source UX differences; mobile market filter remains inline rather than original bottom sheet",
-    "Actual user Google callback/ACK completion",
-    "Apple/email server registration and real authentication",
-    "Investment prompt draft8646b65 integration into React or Worker deployment",
-    "Actual model/market/exchange/order/billing/usage providers",
-    "Client main merge or full service production GO"
+    "현재 후보의 새 전체13,820개 단일재실행: 이전전수와새영향1996을구분",
+    "실사용자 Google callback/ACK 완료",
+    "Apple 등록·이메일 SMTP 연결",
+    "투자 프롬프트 실제 React producer 통합",
+    "실모델·실시간시장·거래소·주문·과금·전체서비스 운영 GO"
   ],
   "deployment": {
-    "status": "STATIC_UI_DEPLOYED_AND_PUBLICLY_VERIFIED",
-    "mainChanged": false,
-    "automaticDeploymentConfigured": false,
-    "userExplicitStaticUpdateRequested": true,
-    "scope": "Existing teth.ai static UI only",
-    "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
-    "archiveSha256": "43a63cef0f19ef93c326306d5c3d93eb9abd824f1e0b226458e72373d3cbeaeb",
-    "htmlSha256": "89a415d3d770e8ac1c2847a0bdc1967eb3b8e986937fdbe8b92e3efe536e7c79",
-    "buildFlags": {
-      "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
-      "VITE_TETH_EXCHANGE_CONNECT": "false"
-    },
-    "actualGoogleLoginCompleted": false,
-    "promptBranchMerged": false,
-    "workerDeployed": false,
-    "observedAt": "2026-10-04T09:57:12.792Z",
-    "url": "https://teth.ai/",
-    "privateAuthorityPreservedAtStaticSwap": true,
-    "backupRetained": true,
-    "publicRootStatusesDuringActivation": [
-      503,
-      200
-    ],
-    "backendCredentialDatabaseReplaced": false,
-    "edgeChanged": false,
-    "registeredStaticAssets": {
-      "status": "PASS",
-      "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
-      "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
-      "archiveSha256": "43a63cef0f19ef93c326306d5c3d93eb9abd824f1e0b226458e72373d3cbeaeb",
-      "registeredAssets": 350,
-      "passed": 350,
-      "failed": 0,
-      "failedPaths": [],
-      "documentAliases": [
-        {
-          "path": "/",
-          "pass": true,
-          "exactServerProfileInsertion": true
-        },
-        {
-          "path": "/about/",
-          "pass": true,
-          "exactServerProfileInsertion": true
-        },
-        {
-          "path": "/download/",
-          "pass": true,
-          "exactServerProfileInsertion": true
-        },
-        {
-          "path": "/policies/",
-          "pass": true,
-          "exactServerProfileInsertion": true
-        }
-      ],
-      "authenticationOrMutationExecuted": false
-    },
-    "publicBrowser": {
-      "status": "PASS",
-      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
-      "widths": [
-        1440,
-        390,
-        320
-      ],
-      "syntheticSession": true,
-      "serverMutationExecuted": false,
-      "pageErrors": 0,
-      "providerChoicesPreserved": true
-    },
-    "googleStartSmoke": {
-      "scope": "PUBLIC_CA_GOOGLE_START_ONLY",
-      "status": "PASS",
-      "stage": "COMPLETE",
-      "actualGoogleLoginCompleted": false,
-      "publicCaRequired": true,
-      "anonymousBootstrapPosts": 1,
-      "googleStartPosts": 1,
-      "blockedMutations": 0,
-      "blockedExternalRequests": 0,
-      "blockedApiReads": 0,
-      "pageErrors": 0,
-      "unexpectedConsoleErrors": 0,
-      "expectedHttpConsoleMessages": 3,
-      "consoleWarnings": 0,
-      "unexpectedHttpErrors": 0,
-      "failedRequests": 0,
-      "initialAnonymous": true,
-      "googleStart201": true,
-      "providerOriginValid": true,
-      "callbackValid": true,
-      "clientIdPresent": true,
-      "pkceS256": true,
-      "challengePresent": true,
-      "statePresent": true,
-      "noncePresent": true,
-      "resultPending": true,
-      "pendingSessionAccessDenied": true,
-      "providerNavigationExecuted": false,
-      "callbackExecuted": false,
-      "acknowledgementExecuted": false,
-      "emailExecuted": false,
-      "orderExecuted": false
-    },
-    "realSmokeRuns": 2,
-    "totalIsolatedAnonymousBootstrapPosts": 2,
-    "totalGoogleStartPosts": 2,
-    "smokeEffect": "Two isolated pending login attempts, no user authentication/ACK/order. Legitimate auth rows are created after the updater preservation snapshot.",
-    "operatorGate": "ROOT static-UI GO after exact1674/lint/build/preview/secret scans, immediate HTML/edge/control/release CAS, retained backup, public350 assets and corrected-contract auth smoke."
+    "status": "PENDING",
+    "candidateSource": "a6e737f05ae26d672e804765eeb2ee5ddd50e578",
+    "candidateArchiveSha256": "d203ff622a329bd46020ddabb0c38fe38d507516f82986358fb92b6fa3f22dac",
+    "currentDeployedSource": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+    "currentDeployedArchiveSha256": "43a63cef0f19ef93c326306d5c3d93eb9abd824f1e0b226458e72373d3cbeaeb",
+    "backendCredentialDatabaseReplacementAuthorized": false
   },
   "sourceDelta": {
-    "previousDelivery": "d53a80670cb7842f700b927db674435026d09ffd",
-    "previousSource": "75a5f5bbb820ad27f66304927ff4c70954fea318",
-    "changedFiles": 80,
-    "addedFiles": 24,
-    "modifiedFiles": 56,
-    "deletedFiles": 0,
+    "previousDelivery": "4acb4cefed47e5d8d988e7f839baf1a34d23be80",
+    "previousSource": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+    "changedFiles": 68,
+    "added": 21,
+    "modified": 46,
+    "deleted": 1,
     "packageAndLockfileChanged": false
-  },
-  "upstreamAcceptance": {
-    "source": "tesia-program canonical PM/README.md, Web52/Web55 and react-app/Bugfix_report.md",
-    "executedBy": "Upstream integration team, NOT this delivery run",
-    "testCommit": "b463a728a5c6dd34533769c1fa60e1706e07ab39",
-    "total": 13200,
-    "passed": 13183,
-    "failed": 0,
-    "skipped": 17,
-    "exitCode": 0,
-    "scope": "Web52 merged tree equals approved 1e994c7; Web55 changes only exact security fingerprints. Not all 62 presets or live-provider certification."
-  },
-  "includedDraft": {
-    "repository": "beak1011/tesia-web",
-    "pr": 54,
-    "head": "75a5f5bbb820ad27f66304927ff4c70954fea318",
-    "state": "OPEN",
-    "isDraft": true,
-    "includedInSnapshot": true,
-    "meaning": "User explicitly requested all current frontend changes, including this draft. Candidate code/SDK/tests included; upstream remains OPEN/DRAFT, default flag false, actual providers/production not enabled.",
-    "upstreamFixtureTests": {
-      "passed": 178,
-      "failed": 0,
-      "skipped": 0,
-      "executedBy": "Upstream integration team; distinct from this delivery's98"
-    }
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
     "head": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
     "pr": 5,
     "includedInSnapshot": false,
-    "productPathIntersection": 0,
-    "sharedDocumentation": [
-      "MIGRATION.md"
-    ],
-    "meaning": "Separate unmerged candidate. File non-overlap is not runtime prompt compatibility proof."
+    "meaning": "별도 draft 보존. 코드파일 비중첩은 실제 React prompt 연결 성공이 아님."
   },
   "previousDeliveryEvidence": {
-    "sourceCommit": "75a5f5bbb820ad27f66304927ff4c70954fea318",
-    "snapshotDigest": "da197956817507fa6483f53a3bad80c07c294a66a5dabe775ff80b88e77621c5",
-    "files": 2135,
-    "localPassed": 98,
-    "security": "Raw scanner exit1/57 findings, not rawzero. Previous53 classifications preserved; four new findings are generated manifest SHA256 metadata. No actual credential finding identified. No detector disabled.",
-    "receiptHistory": "Previous migration commit d53a806 preserves the complete prior receipt; not repeated as current checks."
+    "commit": "4acb4cefed47e5d8d988e7f839baf1a34d23be80",
+    "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+    "receiptHistory": "전체 이전영수증은 Git 이력에보존, 이전1674 및 실제GoogleSTART검증을이번새실행으로쓰지않음"
   },
   "evidenceHashes": {
-    "auth-ui-integrated-final.log": "25a58d829722e70c80d480b1b6d03a353cd4a91345a5fdc5d952397147ec96c4",
-    "auth-ui-integrated-build.log": "0a1cb096bb620a5fe0d7a5632a46785b6336973a6ba67780124d3e3448d11b9c",
-    "auth-ui-opus-closure.json": "7c59ac0bc6a9baf510bba37a2e44c5210c85f50b60ce27154f4477fdeaad15c6",
-    "auth-ui-activation.log": "013e0cadf26936f1ea8608e9506e545930d2da23db021f4c985672fedb29ad55",
-    "auth-ui-vm-postflight.log": "50cc5faace8e9e28d4dc40dc6cf466f82432ca1375f3268254fbaf6d68154449",
-    "auth-ui-public-static-verified.json": "dc6a2217533cfe7e95041fa46bae726f5aef1799537f3d74ae23579a0d6ac441",
-    "auth-ui-google-start-verified.json": "3b38217da71ea33306711c48d8345c054d08218e2047718052376b627bffa597"
+    "catalogue-final-closure-binding.json": "1a3ad16746fdf853ae2dcbce600ef5b6afc546a8eb29bde37eece5ba645b4056",
+    "catalogue-release-build.json": "8b77745cc257db9565187e80d25836b967a5a65a48d98f06672c2319e0e41c30",
+    "catalogue-release-impact-guarded.log": "aef96d9403d3c51f0a888005cd8b9468320459ef38f19e831690f9381e473020",
+    "ui-release-closure-opus.json": "e886b8d7db4f1bcb321d48c68fca0bf599ea629ad20482daeca4dd31194d505e",
+    "catalogue-final-impact-guarded.json": "7761988f8e94f21a85cee03cca49c48b6b04460faa5449187e0e0c747f947ca0",
+    "navigation-corrected-whole-guarded.json": "d5ec76e8fb43700f767a91d4ea1f1eb79721c0a4e7da5e6e2f5ebb963551cd12"
   }
 }

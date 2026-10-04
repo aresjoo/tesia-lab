@@ -5,6 +5,13 @@
 .client-sharing-preference-notice > button { flex:0 1 auto; min-height:44px; min-width:44px; padding:8px 16px; border:1px solid var(--client-line-2); border-radius:999px; background:transparent; color:var(--client-text); font:inherit; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
 .client-sharing-preference-notice > button:hover { background:var(--client-3); }
 @media (max-width:768px) { .client-sharing-preference-notice { width:calc(100% - 36px); } }
+/* The source catalogue has no visible header. A storage failure must take its
+   own place below the fixed controls, aligned with the existing filter inset. */
+.client-sharing-hub:has(.strategy-filters[data-catalogue-list]) > .client-sharing-preference-notice { max-width:1160px; width:calc(100% - 80px); margin-top:40px; }
+.client-sharing-hub > .client-sharing-preference-notice ~ .client-strategy-sharing:has(>.strategy-filters[data-catalogue-list]) { padding-top:0; }
+@media (max-width:860px) {
+  .client-sharing-hub:has(.strategy-filters[data-catalogue-list]) > .client-sharing-preference-notice { width:calc(100% - 40px); margin-top:72px; }
+}
 .client-sidebar.mobile-open { overflow-y: auto; overflow-x: hidden; }
 .client-sidebar.mobile-open .client-research-navigation { display: block; }
 .client-util, .client-session { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 38px; padding: 9px 13px; border: 0; border-radius: 6px; background: transparent; color: var(--client-text-2); text-align: left; font: inherit; font-size: 13.5px; cursor: pointer; }

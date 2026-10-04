@@ -47,7 +47,7 @@ export function ClientStrategyFilters({ tab, showTabs = true, activeFollowCount 
         <label className="strategy-list-sort"><select aria-label={s('정렬 기준')} value={sort} onChange={event => chooseSort(event.target.value)}>
           {sharingSortOptions.map(option => <option key={option.value} value={option.value} disabled={unavailableSorts.includes(option.value)}>{listCopy[language][option.label]}</option>)}
         </select></label>
-        <ClientSharingDropdown label={copy.marketLabel} value={market}
+        <ClientSharingDropdown mobileSheet label={copy.marketLabel} value={market}
           options={sharingMarketOptions.map(value => ({ value, label: copy[value === 'all' ? 'allMarkets' : value] }))}
           open={openDropdown === 'market'} onOpenChange={open => setOpenDropdown(open ? 'market' : null)} onSelect={chooseMarket} />
         {exchangeFilter}

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import fixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
+import { recoverNativeAfterJournalFailure } from './native-session-recovery-test-helpers'
 
 test.use({ trace: 'off', video: 'off' })
 test.setTimeout(30_000)
@@ -105,7 +106,7 @@ test('native 현재 서버 초안의 RSI·진입·손절·익절 설명은 원�
   expect(state.requests).toEqual(before); expect(state.posts).toBe(0)
 })
 
-test('native 새 서버 revision은 조건 설명·거리 퍼센트·원문을 함께 갱신한다', async ({ page }) => {
+test('native 전송 전 기록 실패 후 재확인한 새 서버 revision은 조건 설명·거리 퍼센트·원문을 함께 갱신한다', async ({ page }) => {
   const state = await native(page)
   await openResearchDetails(page); await expect(section(page, '진입 조건')).toContainText('28')
   await backToConversation(page)
@@ -113,7 +114,7 @@ test('native 새 서버 revision은 조건 설명·거리 퍼센트·원문을 �
     draftState: { ...ready.draftState, revision: 3, projectionHash: 'b'.repeat(64), projection: { ...sourceProjection,
       entryRules: [{ ...sourceProjection.entryRules[0], condition: { ...sourceProjection.entryRules[0].condition, right: { kind: 'number', value: '31', unit: 'index' } } }],
       exitRules: sourceProjection.exitRules.map(rule => ({ ...rule, distanceFraction: rule.kind === 'stop_loss' ? '0.03' : '0.075' })) } } }
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+  await recoverNativeAfterJournalFailure(page)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await openResearchDetails(page)
   await expect(doc(page)).toHaveAttribute('data-draft-revision', '3')

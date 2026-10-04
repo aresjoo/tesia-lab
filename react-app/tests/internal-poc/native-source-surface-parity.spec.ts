@@ -59,6 +59,15 @@ async function menu(page: Page, name: string | RegExp) {
   if (!await button.isVisible()) { await revealSourceNavigation(page); await page.locator('.client-hamburger').click() }
   await button.click()
 }
+async function marketOptions(page: Page, label: '시장' | 'Market') {
+  // Source mobile markets use a body-level modal sheet, not a hub descendant.
+  // Keep the desktop inline boundary and require the actual named listbox.
+  const narrow = await page.evaluate(() => matchMedia('(max-width: 760px)').matches)
+  const surface = narrow ? page.getByRole('dialog') : page.locator('.native-strategies')
+  const options = surface.getByRole('listbox', { name: label, exact: true })
+  await expect(options).toBeVisible()
+  return options
+}
 
 test('거래소 목록·상세·리뷰는 원본 구조와 초안을 보존하고 가상 실적을 표시하지 않는다', async ({ page }, info) => {
   const requests = await setup(page), initial = [...requests]
@@ -97,7 +106,7 @@ test('전략 시장·판단 방식의 표시 언어만 바뀌고 검색과 선�
   const hub = page.locator('.native-strategies')
   await hub.getByRole('searchbox').fill('ETH')
   await hub.getByRole('button', { name: /^시장:/ }).click()
-  await hub.getByRole('option', { name: '가상자산', exact: true }).click()
+  await (await marketOptions(page, '시장')).getByRole('option', { name: '가상자산', exact: true }).click()
   await hub.getByRole('group', { name: '판단 방식', exact: true }).getByRole('button', { name: 'AI 판단', exact: true }).click()
   await page.evaluate(async () => {
     const path = '/src/client-preferences.ts'
@@ -108,7 +117,7 @@ test('전략 시장·판단 방식의 표시 언어만 바뀌고 검색과 선�
   await expect(hub.getByRole('group', { name: 'Decision method', exact: true }).getByRole('button', { name: 'AI decision', exact: true })).toHaveAttribute('aria-pressed', 'true')
   await expect(hub.getByRole('searchbox')).toHaveValue('ETH')
   await hub.getByRole('button', { name: /^Market:/ }).click()
-  await expect(hub.getByRole('option', { name: 'Crypto', exact: true })).toHaveAttribute('aria-selected', 'true')
+  await expect((await marketOptions(page, 'Market')).getByRole('option', { name: 'Crypto', exact: true })).toHaveAttribute('aria-selected', 'true')
   expect(requests).toEqual(initial)
 })
 
@@ -215,7 +224,7 @@ test('전략들 검색·정렬·시장 필터는 원본과 같은 조작을 유�
   await hub.getByRole('searchbox',{name:'전략 검색'}).fill('ETH')
   await expect(hub.getByRole('combobox',{name:'정렬 기준',exact:true}).locator('option[value=ret]')).toHaveAttribute('disabled', '')
   await hub.getByRole('button',{name:/^시장:/}).click()
-  await hub.getByRole('option',{name:'가상자산',exact:true}).click()
+  await (await marketOptions(page, '시장')).getByRole('option',{name:'가상자산',exact:true}).click()
   await expect(hub.locator('[data-public-catalogue]')).toBeVisible()
   await expect(hub.locator('.tfbk-card').first()).toBeVisible()
   await expect(hub.locator('canvas')).toHaveCount(0)
