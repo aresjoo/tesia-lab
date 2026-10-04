@@ -19,7 +19,7 @@
 
 현재 전달은React7dd1365이후의검증된UI후속이다. 1868PASS/0FAIL/기존QA-015SKIP2의57spec단일·같은입력lint/3build·독립personal1Opus5.5·55원실패exactPASS결속을확인했다. 7언어lazy오류복구·정책footer/본문CSS격리·About태블릿원경계/확대가독성·nativeBackfocus·shareUrl공급실패를교정하고성공ko값만원본으로복원한다. 동적namespace계정export2삭제오판은원7dd전체파일exact복원했고원시험assertion은보존,실제로남은6deadfunction만정리했다. 첫중단/하니스/모델오판은검증JSON과source Bugfix에보존한다.
 
-Google추가는Apple/이메일을대체하지않으며계약/프롬프트/providerflag/가격/package/실권한0변경이다. 원본HTML/server/Worker/rootworkflow와main은변경/병합하지않는다. 투자프롬프트draft8646은별도보존/React producer미통합이다. Apple등록/SMTP·실Googlecallback/ACK·실주문/서비스GO는남는다. 현재새정적bundle은검증·전달준비이며활성화전이다. 정확SHA/파일수/해시/판정은manifest와verification이소유한다.
+Google추가는Apple/이메일을대체하지않으며계약/프롬프트/providerflag/가격/package/실권한0변경이다. 원본HTML/server/Worker/rootworkflow와main은변경/병합하지않는다. 투자프롬프트draft8646은별도보존/React producer미통합이다. Apple등록/SMTP·실Googlecallback/ACK·실주문/서비스GO는남는다. 현재새정적UI는teth.ai활성화/CAS/공개TLS exactassets·4경로·로그인3폭검사완료다. 백엔드·키·DB권위는그대로고직전7dd정적bundle은복구용보관했다. 정확SHA/파일수/해시/판정은manifest와verification이소유한다.
 
 이전누적범위와앞실패는아래기록 및Git이력을따르며현재성공과합산하지않는다.
 
