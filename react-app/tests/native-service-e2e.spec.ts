@@ -142,7 +142,9 @@ for (const mode of ['normal', 'two-cycles', 'double-click', 'lost-before', 'lost
     }
     if (mode === 'two-cycles') {
       current = 'original' // Synthetic independent re-authentication, not an OAuth proof.
-      await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+      // A fresh page observes the externally changed session; the healthy UI
+      // no longer presents an unsolicited recovery button.
+      await page.reload()
       await closeConfirmedAuthSurface(page)
       await (await openNativeAccountMenu(page)).click()
       await expect(newSession).toBeEnabled()
@@ -315,7 +317,9 @@ for (const stage of ['VALIDATE', 'CHALLENGE', 'APPROVE', 'SUBMIT'] as const) {
       await expect(resume).toBeVisible()
       if (failure === '401') {
         await expect(resume).toBeDisabled()
-        await page.getByRole('button', { name: '세션 다시 확인', exact: true }).click()
+        // A fresh page observes the externally changed session; the healthy UI
+      // no longer presents an unsolicited recovery button.
+      await page.reload()
         await expect(resume).toBeEnabled()
       }
       const safeStored = await page.evaluate(() => {
@@ -421,9 +425,10 @@ test('create 응답 유실 후 reload도 처음 할당한 create와 turn 키를 
   expect(turns).toEqual([allocatedTurn])
 })
 
-for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-precondition', 'tampered-etag', 'ack-body-loss', 'empty-claim-400', 'empty-claim-network', 'empty-claim-malformed', 'empty-claim-session-changed'] as const) {
+for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-precondition', 'tampered-etag', 'ack-body-loss', 'empty-claim-400', 'empty-claim-network', 'empty-claim-malformed', 'empty-claim-session-changed', 'strategy-claim-400', 'strategy-claim-malformed', 'strategy-claim-session-changed', 'strategy-claim-network'] as const) {
   test(`실제 OAuth 패널 소비 ${resultMode}: 로그인과 claim은 별도 명시 동의이며 승인 권한을 복원하지 않는다`, async ({ page }) => {
     const empty = resultMode.startsWith('empty-claim')
+    const rejectedStrategy = resultMode.startsWith('strategy-claim')
     await syntheticSession(page, !empty)
     const anonymous = { sessionId: 'session_anonymous_000001', state: 'ANONYMOUS', revision: '7', issuedAt: '2030-01-01T00:00:00Z', expiresAt: '2030-01-02T00:00:00Z' }
     const authenticated = { sessionId: 'session_authenticated_0001', state: 'AUTHENTICATED', revision: '1', issuedAt: '2030-01-01T00:01:10Z', expiresAt: '2030-01-01T12:01:10Z' }
@@ -431,7 +436,11 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
       sessionStorage.setItem('tesia.native.auth-claim-precondition', JSON.stringify({ provider: 'GOOGLE', sessionId: id, revision: '7', etag: '"native_tampered_claim_etag_0007"' }))
     }, anonymous.sessionId)
     let acknowledged = false, claims = 0, conversationReads = 0, newCreates = 0
-    const keys: string[] = [], bodies: string[] = []
+    const keys: string[] = [], bodies: string[] = [], businessPosts: string[] = []
+    page.on('request', request => {
+      const path = new URL(request.url()).pathname
+      if (request.method() === 'POST' && (path.startsWith('/api/v3/') || /\/claim$|approve|backtests|orders|exchange-connections/.test(path))) businessPosts.push(path)
+    })
     const meta = (version: string, revision: string | null = '1') => ({ apiContractVersion: version, requestId: 'req_native_auth_ui_000001', traceId: 'trace_native_auth_ui_0001', resourceRevision: revision })
     const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ETag: '"native_claim_session_etag_0001"' }
     const anonymousEtag = '"native_claim_anonymous_etag_0007"'
@@ -466,9 +475,9 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
     })
     await page.route('**/api/v1/anonymous-sessions/*/claim', async route => {
       claims++; keys.push(route.request().headers()['idempotency-key']); bodies.push(route.request().postData()!)
-      if (empty) {
-        if (resultMode === 'empty-claim-network') await route.abort()
-        else await route.fulfill({ status: 400, headers, body: resultMode === 'empty-claim-malformed' ? '{"error":' : JSON.stringify({ meta: meta('0.1.0', null), error: { code: 'BAD_REQUEST', message: 'Synthetic rejected empty claim' } }) })
+      if (empty || rejectedStrategy) {
+        if (resultMode.endsWith('-network')) await route.abort()
+        else await route.fulfill({ status: 400, headers, body: resultMode.endsWith('-malformed') ? '{"error":' : JSON.stringify({ meta: meta('0.1.0', null), error: { code: 'BAD_REQUEST', message: 'Synthetic rejected claim' } }) })
         return
       }
       if (resultMode === 'tampered-etag') {
@@ -486,6 +495,10 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
       } }) })
     })
     await page.goto('/internal-poc.html#/native-client')
+    if (resultMode === 'missing-precondition' || resultMode === 'tampered-etag') {
+      // Provider return is the original callback entry, not initial login UI.
+      await page.evaluate(() => history.replaceState(null, '', '/auth/complete'))
+    }
     if (empty) {
       // The supplied native SDK must finish session/CSRF recovery before
       // opening its owner-bound auth flow; the public shell paints earlier.
@@ -501,7 +514,8 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
       await panel.getByRole('button', { name: 'Google로 계속하기', exact: true }).click()
       await panel.getByRole('button', { name: '돌아온 뒤 인증 결과 확인', exact: true }).click()
     } else {
-      await panel.locator('summary', { hasText: '인증을 마치고 돌아오셨나요?' }).click()
+      const recovery = panel.locator('details.native-auth-recovery')
+      if (await recovery.getAttribute('open') === null) await recovery.locator('summary').click()
       await panel.getByRole('button', { name: 'Google 인증 결과 확인', exact: true }).click()
     }
     await panel.getByRole('button', { name: '로그인 확정 및 세션 확인', exact: true }).click()
@@ -511,14 +525,28 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
       await panel.locator('summary', { hasText: '인증을 마치고 돌아오셨나요?' }).click()
       await panel.getByRole('button', { name: 'Google 로그인 세션만 다시 확인', exact: true }).click()
       await expect(panel.getByRole('status')).toContainText('현재 브라우저의 인증 세션만 확인')
-      await expect(page.getByRole('alert')).toContainText('전략 인계는 미확인')
+      await expect(page.locator('[data-native-auth-notice][role="status"]').filter({ hasText: '전략 인계는 미확인' })).toBeVisible()
       await closeConfirmedAuthSurface(page)
     }
     const claim = page.getByRole('button', { name: '로그인 전 전략 연결', exact: true })
     if (resultMode === 'missing-precondition') {
-      await expect(page.getByRole('alert')).toContainText('사전조건을 복구하지 못해 전략 연결을 차단')
+      await expect(page.locator('[data-native-auth-notice][role="status"]').filter({ hasText: '사전조건을 복구하지 못해 전략 연결을 차단' })).toBeVisible()
       await expect(claim).toHaveCount(0)
       expect(acknowledged).toBe(true); expect(claims).toBe(0)
+      return
+    }
+    if (empty) {
+      // Login is complete even when this tab has no earlier strategy. Never
+      // create a claim merely to discover the server's hypothetical rejection.
+      await expect(page.locator('[data-native-auth-notice][role="status"]').filter({ hasText: '로그인을 확인했습니다.' })).toBeVisible()
+      await expect(claim).toHaveCount(0)
+      await expect(page.getByRole('alert')).toHaveCount(0)
+      await expect(page.getByRole('button', { name: '세션 다시 확인', exact: true })).toHaveCount(0)
+      await expect(page.getByRole('button', { name: '같은 요청으로 재개', exact: true })).toHaveCount(0)
+      expect(acknowledged).toBe(true); expect(businessPosts).toEqual([])
+      expect(claims).toBe(0); expect(conversationReads).toBe(0); expect(newCreates).toBe(0)
+      expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))).toBeNull()
+      await expect(page.getByRole('button', { name: '승인 내용 확인', exact: true })).toHaveCount(0)
       return
     }
     await expect(claim).toBeEnabled()
@@ -526,10 +554,10 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
     await expect(page.getByRole('button', { name: '승인 내용 확인', exact: true })).toHaveCount(0)
     await claim.click()
     const resume = page.getByRole('button', { name: '같은 요청으로 재개', exact: true })
-    if (empty) {
+    if (rejectedStrategy) {
       const discard = page.getByRole('button', { name: '연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작', exact: true })
-      expect(conversationReads).toBe(0); expect(newCreates).toBe(0)
-      if (resultMode === 'empty-claim-400' || resultMode === 'empty-claim-session-changed') {
+      expect(conversationReads).toBe(1); expect(newCreates).toBe(0)
+      if (resultMode === 'strategy-claim-400' || resultMode === 'strategy-claim-session-changed') {
         await expect(discard).toBeEnabled()
         await expect(resume).toBeDisabled()
         const rejected = await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))
@@ -538,10 +566,13 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
         await expect(resume).toBeEnabled()
         expect(claims).toBe(1)
         expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))).toBe(rejected)
+        // A real old-owner locator opens the authenticated recovery modal on
+        // reload. Close it without changing the retained claim request bytes.
+        await closeConfirmedAuthSurface(page)
         await resume.click()
         await expect(discard).toBeEnabled()
         expect(claims).toBe(2); expect(keys[1]).toBe(keys[0]); expect(bodies[1]).toBe(bodies[0])
-        if (resultMode === 'empty-claim-session-changed') {
+        if (resultMode === 'strategy-claim-session-changed') {
           await page.route('**/api/v1/auth/session', route => route.fulfill({ status: 200, headers, body: JSON.stringify({ meta: meta('0.1.0'), data: { ...authenticated, sessionId: 'session_other_account_0001' } }) }))
           await discard.click()
           await expect(discard).toBeDisabled()
@@ -566,12 +597,30 @@ for (const resultMode of ['same-key-reload', 'wrong-owner', 'missing-preconditio
         await expect(resume).toBeEnabled()
         expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))).toBe(saved)
         expect(claims).toBe(1); expect(newCreates).toBe(0)
+        if (resultMode === 'strategy-claim-network') {
+          // A transport abort proves no definitive rejection. Keep the exact
+          // journal and explicitly replay only its existing key/request bytes.
+          await closeConfirmedAuthSurface(page)
+          await resume.click()
+          await expect(resume).toBeEnabled()
+          await expect(discard).toHaveCount(0)
+          expect(claims).toBe(2); expect(keys[1]).toBe(keys[0]); expect(bodies[1]).toBe(bodies[0])
+          expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.pending-command'))).toBe(saved)
+          expect(newCreates).toBe(0); expect(conversationReads).toBe(1)
+          expect(businessPosts).toEqual([
+            `/api/v3/strategy-drafts/${ready.draftId}/validate`,
+            `/api/v1/anonymous-sessions/${anonymous.sessionId}/claim`,
+            `/api/v1/anonymous-sessions/${anonymous.sessionId}/claim`,
+          ])
+          await expect(page.getByRole('button', { name: '승인 내용 확인', exact: true })).toHaveCount(0)
+          await expect(page.getByRole('button', { name: '이 전략 버전 승인', exact: true })).toHaveCount(0)
+        }
       }
       return
     }
     if (resultMode === 'ack-body-loss') {
       await expect(page.getByRole('button', { name: '전략 검증', exact: true })).toBeEnabled()
-      await expect(page.getByRole('alert')).toContainText('로그인 전 전략의 서버 연결을 확인')
+      await expect(page.locator('[data-native-auth-notice][role="status"]').filter({ hasText: '로그인 전 전략의 서버 연결을 확인' })).toHaveCount(1)
       expect(claims).toBe(1); expect(conversationReads).toBe(2)
       await expect(page.getByRole('button', { name: '이 전략 버전 승인', exact: true })).toHaveCount(0)
       return

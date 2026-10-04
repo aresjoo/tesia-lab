@@ -73,15 +73,26 @@ test('시장 메뉴 Home·End·Enter·Escape는 선택과 초점을 보존한다
   expect(await names(page)).toEqual(before)
 })
 
-test('외부 클릭·탭 변경·정렬 조작은 열린 시장 메뉴를 정리한다', async ({ page }) => {
+test('외부 클릭·명시 관리 경로 변경·정렬 조작은 열린 시장 메뉴를 정리한다', async ({ page }) => {
   await open(page)
   await asset(page).click()
-  await page.locator('.hub-header h1').click()
+  // Source 9fbff821 index.html:24605 removes the public catalogue tabs/header.
+  // Use an exposed outside target; the mobile menu covers the input centre.
+  const search = page.getByRole('searchbox', { name: '전략 검색', exact: true })
+  await search.click({ position: { x: 8, y: 20 } })
   await expect(page.getByRole('listbox')).toHaveCount(0)
+  await expect(search).toBeFocused()
   await asset(page).click()
-  await page.evaluate(() => { location.hash = '#/share/library' }); await expect(page.locator('#research-title')).toHaveText('따라가는 중')
+  // The removed tab is not restored. This explicit management route remains
+  // supported by ClientMainExperience terminal history and ClientResearchHub.
+  await page.evaluate(() => { location.hash = '#/share/library' })
+  await expect(page).toHaveURL(/#\/share\/library$/)
+  await expect(page.locator('#research-title')).toHaveText('따라가는 중')
+  await expect(page.locator('.client-strategy-sharing.is-library')).toBeVisible()
   await expect(page.getByRole('listbox')).toHaveCount(0)
   await page.getByRole('button', { name: '전략 찾기', exact: true }).click()
+  await expect(page).toHaveURL(/#\/share$/)
+  await expect(page.locator('#research-title')).toHaveText('전략 복사')
   await asset(page).click()
   await sort(page).selectOption('fw')
   await expect(page.getByRole('listbox')).toHaveCount(0)

@@ -1,3 +1,5 @@
+import { useSiteHrefMapper } from '../site-navigation'
+import { servicePageCopy } from '../client-service-page-copy'
 // About/download/policies: tesia-lab 9fbff821.
 // Static content is compiled JSX, not injected HTML.
 import { useEffect, useRef, useState } from 'react'
@@ -17,7 +19,6 @@ import { useClientPreferences } from '../client-preferences'
 import { getConversationCopy } from '../client-conversation-copy'
 import { ClientLocalePanel } from './ClientLocalePanel'
 import publicCopy from '../client-public-copy.json'
-import { publicPreviewText } from '../client-public-preview-copy'
 import '../client-public-pages.css'
 import '../client-download-page.css'
 import '../client-policy-page.css'
@@ -32,10 +33,6 @@ function PublicCopy({ page, copyKey }: { page: 'about' | 'download'; copyKey: st
   return <>{text}</>
 }
 
-function PrototypeNotice({ policy = false }: { policy?: boolean }) {
-  const { language } = useClientPreferences()
-  return <p className="prototype-notice">{publicPreviewText(language, policy ? 'policy' : 'preview')}</p>
-}
 export { SiteHelp } from './ClientHelp'
 const tabForHash = (hash: string) => {
   if (hash.startsWith('p-')) return 'privacy'
@@ -44,6 +41,7 @@ const tabForHash = (hash: string) => {
   return ['privacy', 'terms', 'technologies', 'faq'].includes(hash) ? hash : 'overview'
 }
 export default function ClientPublicPages({ page, location }: { page: SitePage; location: string }) {
+  const service = useSiteHrefMapper() !== null
   const download = readDownloadConfig()
   const { language, t } = useClientPreferences()
   // The original policy page is Korean-only. Localize its navigation, not its
@@ -53,12 +51,19 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
   const [localeOpen, setLocaleOpen] = useState(false)
   const [footerHelpOpen, setFooterHelpOpen] = useState(false)
   const footerHelpTrigger = useRef<HTMLElement | null>(null)
+  const restoreHistoryScroll = useRef(false)
   useEffect(() => {
     // Public routes reuse this component; dismiss its portal before the next
     // page takes focus, without resetting the underlying conversation.
-    const dismiss = () => { setLocaleOpen(false); setFooterHelpOpen(false) }
-    window.addEventListener('popstate', dismiss); window.addEventListener('teth:navigate', dismiss); window.addEventListener('hashchange', dismiss)
-    return () => { window.removeEventListener('popstate', dismiss); window.removeEventListener('teth:navigate', dismiss); window.removeEventListener('hashchange', dismiss) }
+    const dismiss = (event: Event) => {
+      if (event.type === 'popstate') restoreHistoryScroll.current = true
+      else if (event.type === 'teth:navigate') restoreHistoryScroll.current = false
+      setLocaleOpen(false); setFooterHelpOpen(false)
+    }
+    // Record history intent separately from push-based links. The next frame
+    // consumes it after all route subscribers finish dispatching.
+    window.addEventListener('popstate', dismiss, true); window.addEventListener('teth:navigate', dismiss); window.addEventListener('hashchange', dismiss)
+    return () => { window.removeEventListener('popstate', dismiss, true); window.removeEventListener('teth:navigate', dismiss); window.removeEventListener('hashchange', dismiss) }
   }, [])
   const hash = location.split('#')[1] ?? ''
   const policyTab = tabForHash(hash)
@@ -69,17 +74,43 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
     document.title = page === 'about' || page === 'download' ? publicCopy[page].title[Math.max(0, publicLanguages.indexOf(language))] : `${policyTitle} | TETH`
   }, [page, language, policyTitle])
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      // A quick interaction with the newly mounted preview owns focus and scroll.
-      if (root.current?.contains(document.activeElement) && document.activeElement?.closest('.phone-preview')) return
+    let frame = 0, cancelled = false, interacted = false, restoring = false
+    const relinquish = () => { interacted = true }
+    const events = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
+    events.forEach(event => window.addEventListener(event, relinquish, { capture: true, passive: true }))
+    const align = (focus: boolean) => {
+      // New user intent owns focus/scroll, including while fonts are loading.
+      if (cancelled || interacted || (root.current?.contains(document.activeElement) && document.activeElement?.closest('.phone-preview'))) return
       const anchor = hash ? document.getElementById(hash) : null
       const offset = Math.max(128, (root.current?.querySelector('.hd')?.getBoundingClientRect().height ?? 0) + 24)
-      if (anchor && root.current?.contains(anchor)) window.scrollTo({ top: window.scrollY + anchor.getBoundingClientRect().top - offset, behavior: 'instant' })
-      else window.scrollTo({ top: 0, behavior: 'instant' })
-      const main = root.current?.querySelector<HTMLElement>('#site-main')
-      main?.focus({ preventScroll: true })
+      // Preserve browser reading-position restoration except named policy
+      // clauses: their source navigation promises the clause, not the tab bar.
+      if (!restoring) {
+        if (anchor && root.current?.contains(anchor)) window.scrollTo({ top: window.scrollY + anchor.getBoundingClientRect().top - offset, behavior: 'instant' })
+        else window.scrollTo({ top: 0, behavior: 'instant' })
+      }
+      if (focus) root.current?.querySelector<HTMLElement>('#site-main')?.focus({ preventScroll: true })
+    }
+    frame = requestAnimationFrame(() => {
+      // The external-store subscription may flush this effect before the
+      // document's popstate listener. Consume intent after event dispatch ends.
+      // Choosing another policy tab first scrolls up to its control. History
+      // then records that top position for the old clause URL. On Back the
+      // clause hash must win; ordinary document history keeps its position.
+      restoring = restoreHistoryScroll.current && !(page === 'policies' && /^(p|t|x)-/.test(hash))
+      restoreHistoryScroll.current = false
+      align(true)
+      // Re-align a named destination once its actual font metrics settle.
+      // No observer/polling loop, and never override Back or a user's scroll.
+      if (hash && !restoring) void document.fonts.ready.then(() => {
+        if (!cancelled && !interacted) frame = requestAnimationFrame(() => align(false))
+      })
     })
-    return () => cancelAnimationFrame(frame)
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(frame)
+      events.forEach(event => window.removeEventListener(event, relinquish, true))
+    }
   }, [page, location, hash])
   useEffect(() => {
     let frame = 0
@@ -116,7 +147,7 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
 </span>
 <InternalLink className="cta" href="/"><PublicCopy page="about" copyKey="cta" /></InternalLink>
 </header>
-<ClientAboutPage copy={text => aboutText(language, text)} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} previewNotice={<PrototypeNotice />} pricingNotice={<p className="pricing-preview">{publicPreviewText(language, 'pricing')}</p>} faqNotice={<p className="faq-preview">{publicPreviewText(language, 'faq')}</p>} />
+<ClientAboutPage previewNotice={null} pricingNotice={null} faqNotice={null} copy={text => service ? servicePageCopy(language, text, aboutText(language, text)) : aboutText(language, text)} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} />
 
 
 
@@ -157,13 +188,13 @@ export default function ClientPublicPages({ page, location }: { page: SitePage; 
 </svg>} />
 </div>
 <div className="dl-acts"><InternalLink className="dl-cta" href="/">{downloadText(language, 'web')}</InternalLink><span className="dl-free">{downloadText(language, 'free')}</span></div>
-<PrototypeNotice />
+
 </div>
 <DownloadPreview />
 </main>
 <p className="sub-help">{downloadText(language, 'help')} <button type="button" onClick={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }}>{downloadText(language, 'ask')}</button></p>
 </>}
-    {page === 'policies' && <ClientPolicyPage policyTab={policyTab} activeSection={activeSection} labels={policyCopy} previewNotice={<PrototypeNotice policy />} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} />}
+    {page === 'policies' && <ClientPolicyPage previewNotice={null} policyTab={policyTab} activeSection={activeSection} labels={policyCopy} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} />}
 
     <ClientSiteFooter onHelp={trigger => { footerHelpTrigger.current = trigger; setFooterHelpOpen(true) }} />
     {!footerHelpOpen && <SiteHelp key={page} />}

@@ -5,6 +5,8 @@ import { readExchangeTransactionLocator } from '../exchange-connect/controller'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
 import { nativeWorkflowText, nativeWorkflowLeverage, type NativeWorkflowTextKey } from './native-workflow-copy'
+import { describeCondition, formatFractionPercent } from './native-strategy-readable'
+import { nativeStrategyText } from './native-strategy-copy'
 import { ClientServiceExperience, type ClientServiceMessage } from './ClientServiceExperience'
 import { captureTurnObservation, captureValidationObservation } from './native-research-observations'
 import { observedResearchEntries } from './native-research-projection'
@@ -255,6 +257,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const authReceipt = useRef<{ result: SessionOffer; conversationId?: string } | null>(null)
   const acceptedAuth = useRef('')
   const [claimAvailable, setClaimAvailable] = useState(false)
+  const [authNotice, setAuthNotice] = useState<{ sessionId: string; text: string } | null>(null)
   const logoutIntent = useRef<NativeLogoutCommand | null>(null)
   const [hasLogout, setHasLogout] = useState(false)
   const [logoutBoundary, setLogoutBoundary] = useState<'absent' | 'changed' | null>(null)
@@ -276,6 +279,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     } catch { /* memory-only remains usable */ }
   }
   const clearViews = (preserveComposer = false, preserveRows = false) => {
+    setAuthNotice(null)
     clients.replayReaders.invalidate()
     presentationIntent.invalidate(); setAutomaticPresentation(undefined)
     if (!preserveComposer && !preserveRows) rowEdits.clear()
@@ -530,6 +534,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // fails, replay the original create key, never allocate a replacement.
       writeNativeJournal(next); pending.current = next; command = next
       remember(created.body.data, created.etag)
+      // A confirmed new conversation follows the user's new question choice.
+      // Retire only the old optional offer; never claim or delete its strategy.
+      authReceipt.current = null; setClaimAvailable(false)
     }
     const context = contextFor(command)
     const complete = () => { assertCurrent(); clearNativeJournal(); pending.current = null; setHasPending(false) }
@@ -567,8 +574,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         if (restored) remember(restored.body.data, restored.etag)
         forgetNativeEmailLocator(command.initiatingSessionId)
         authReceipt.current = null; setClaimAvailable(false); setLoginOpen(false)
-        setError(restored ? '로그인 전 전략의 서버 연결을 확인했습니다. 검증과 승인은 다시 확인해주세요.'
-          : '서버 인계 응답과 현재 인증 세션을 확인했습니다. 이 브라우저에는 복구할 대화 식별자가 없어 전략 내용은 확인하지 못했습니다.')
+        setAuthNotice({ sessionId: command.sessionId, text: restored ? '로그인 전 전략의 서버 연결을 확인했습니다. 검증과 승인은 다시 확인해주세요.'
+          : '서버 인계 응답과 현재 인증 세션을 확인했습니다. 이 브라우저에는 복구할 대화 식별자가 없어 전략 내용은 확인하지 못했습니다.' })
+        setError('')
         return
       }
       case 'TURN': {
@@ -688,6 +696,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         return
       }
       pending.current = command; setHasPending(true)
+      setAuthNotice(null)
       // Only a fresh request in this component lifetime earns a visual stamp.
       // A same-key uncertain retry may retain it; a restored journal has none.
       if (command.kind === 'SUBMIT') {
@@ -764,8 +773,14 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     try {
       const sameAuthenticatedOwner = confirmation === 'HANDOFF_UNVERIFIED' && session.current?.sessionId === result.sessionId && session.current.sessionState === 'AUTHENTICATED'
       const savedOwner = sessionStorage.getItem(CONVERSATION_OWNER_KEY)
-      const saved = result.claimIntent && (savedOwner === result.claimIntent.initiatingSessionId || session.current?.sessionId === result.claimIntent.initiatingSessionId)
-        ? conversation?.conversationId ?? sessionStorage.getItem(STORAGE_KEY) ?? undefined : undefined
+      // A locator only offers a choice. Its pre-login owner must match; an
+      // unrelated stored draft never inherits the current anonymous session.
+      const initiatingOwner = result.claimIntent?.initiatingSessionId
+      const observed = conversation && documentOwner && documentOwner.sessionId === initiatingOwner
+        && documentOwner.conversationId === conversation.conversationId ? conversation.conversationId : undefined
+      const stored = savedOwner === initiatingOwner ? sessionStorage.getItem(STORAGE_KEY) : null
+      const candidate = observed ?? stored
+      const saved = initiatingOwner && candidate && /^[A-Za-z0-9_-]{1,160}$/.test(candidate) ? candidate : undefined
       epoch.current++; clients.transport.abort(); clients.conversationTransport.abortInFlight()
       clients.setCsrf(null); bindSession(null); clearViews()
       clearNativeJournal(); pending.current = null; setHasPending(false)
@@ -776,10 +791,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       bindSession(current); clients.setCsrf(result.csrfToken); setSessionState('AUTHENTICATED'); setPhase('ready')
       if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current })
       else { setLoginBinding(null); setLoginOpen(false); setLoginRetained(false) }
-      authReceipt.current = { result, ...(saved ? { conversationId: saved } : {}) }; acceptedAuth.current = identity; setClaimAvailable(Boolean(result.claimIntent?.initiatingSessionEtag))
-      setError(result.claimIntent?.initiatingSessionEtag ? confirmation !== 'HANDOFF_UNVERIFIED' ? '로그인을 확인했습니다. 로그인 전 전략은 아직 연결하거나 승인하지 않았습니다.'
-        : '현재 인증 세션만 확인했습니다. 공급자 인증·로그인 확정 응답·전략 인계는 미확인입니다. 별도 연결 요청은 서버가 최종 확인합니다.'
-        : '현재 인증 세션은 확인했지만 로그인 전 세션의 사전조건을 복구하지 못해 전략 연결을 차단했습니다. 인증 세션 ETag로 대체하지 않습니다.')
+      authReceipt.current = { result, ...(saved ? { conversationId: saved } : {}) }; acceptedAuth.current = identity; setClaimAvailable(Boolean(saved && result.claimIntent?.initiatingSessionEtag))
+      setAuthNotice({ sessionId: result.sessionId, text: confirmation === 'HANDOFF_UNVERIFIED'
+        ? '현재 인증 세션만 확인했습니다. 공급자 인증·로그인 확정 응답·전략 인계는 미확인입니다. 별도 연결 요청은 서버가 최종 확인합니다.'
+        : !saved ? '로그인을 확인했습니다.'
+          : result.claimIntent?.initiatingSessionEtag ? '로그인을 확인했습니다. 로그인 전 전략은 아직 연결하거나 승인하지 않았습니다.'
+            : '현재 인증 세션은 확인했지만 로그인 전 세션의 사전조건을 복구하지 못해 전략 연결을 차단했습니다. 인증 세션 ETag로 대체하지 않습니다.' })
+      setError('')
     } catch {
       clients.setCsrf(null); setPhase('error'); setSessionState(null)
       setError('로그인 후 복구 저장소를 확인하지 못했습니다. 전략 연결과 승인은 실행하지 않았습니다.')
@@ -799,13 +817,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   }
   const claim = async () => {
     const offered = authReceipt.current
-    if (!offered?.result.claimIntent?.initiatingSessionEtag || session.current?.sessionId !== offered.result.sessionId || phase !== 'ready') return
+    if (!offered?.conversationId || !offered.result.claimIntent?.initiatingSessionEtag || session.current?.sessionId !== offered.result.sessionId || phase !== 'ready') return
     const generation = epoch.current
     await start({ ...base(), kind: 'CLAIM', initiatingSessionId: offered.result.claimIntent.initiatingSessionId,
       // Claim's If-Match belongs to the pre-login ANONYMOUS resource, not the
       // current authenticated session. Consume only its observed server ETag.
       expectedSessionRevision: offered.result.claimIntent.expectedSessionRevision, ifMatch: offered.result.claimIntent.initiatingSessionEtag,
-      ...(offered.conversationId ? { conversationId: offered.conversationId } : {}) }, async () => {
+      conversationId: offered.conversationId }, async () => {
       // Only a new explicit claim gets this preflight. Pending same-key replay
       // continues through execute with its existing in-memory CSRF context.
       const assertOffer = () => { if (generation !== epoch.current || authReceipt.current !== offered || logoutIntent.current) throw new Error('SESSION_CHANGED') }
@@ -1223,7 +1241,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   // and pending commands retain their existing recovery workflow.
   const initialHomeFailure = initialConnectionFailed && initialHome && !conversation && !hasPending && !hasLogout
     && !loginOpen && !loginRetained && !claimAvailable
-  const showRecoveryWorkflow = Boolean((error && !inlineHomeFailure && !initialHomeFailure) || claimAvailable)
+  const showRecoveryWorkflow = Boolean((error && !inlineHomeFailure && !initialHomeFailure)
+    || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout)
+  const healthyAuthNotice = authNotice && authNotice.sessionId === accountScope && phase === 'ready'
+    && sessionState === 'AUTHENTICATED' && !error && !hasPending && !hasLogout ? authNotice : null
   const workflow = conversation ? <section className="native-strategy-workflow" aria-label={workflowText('summary')} ref={workflowElement}
     onClickCapture={event => {
       const target = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-workflow-action]')
@@ -1233,6 +1254,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     <h2>{workflowText('draft')}</h2>
     <dl className="native-workflow-rows">
       <div className="native-workflow-row"><dt>{workflowText('target')}</dt><dd>{snapshot?.market?.symbol ?? workflowText('pairUnset')} · {snapshot?.clock?.timeframe ?? workflowText('timeframeUnset')} · {nativeWorkflowLeverage(language, snapshot?.execution?.leverage)}</dd></div>
+      <div className="native-workflow-row"><dt>{nativeStrategyText(language, 'entries')}</dt><dd>{snapshot?.entryRules.map(rule => {
+        const description = describeCondition(rule.condition, snapshot.features, language)
+        return [description.text, ...description.warnings].join('\n')
+      }).join('\n') || nativeStrategyText(language, 'unknown')}</dd></div>
+      <div className="native-workflow-row"><dt>{nativeStrategyText(language, 'exits')}</dt><dd>{snapshot?.exitRules.map(rule => `${nativeStrategyText(language, rule.kind === 'stop_loss' ? 'stopLoss' : 'takeProfit')} ${formatFractionPercent(rule.distanceFraction, language)}`).join(' · ') || nativeStrategyText(language, 'unknown')}</dd></div>
       <div className="native-workflow-row"><dt>{workflowText('orderAmount')}</dt><dd>{snapshot?.positionSizing?.amount ?? workflowText('unset')} USDT</dd></div>
     </dl>
     <p className="native-workflow-note">{workflowText('changes', { changes: diff.length ? diff.join(', ') : workflowText('noChanges') })}</p>
@@ -1263,7 +1289,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       {selectedHistoryOwner && approval && <p className="native-workflow-note" data-native-history-selection tabIndex={-1} role="status">{jobText('historySelectedApprovalNotice', { approved: approval.sourceDraftRevision, current: conversation.draftRevision })}</p>}
       <div className="native-workflow-actions"><button className="native-workflow-button is-text" disabled={busy || hasLogout} onClick={() => void loadHistory()}>{jobText('historyOpen')}</button></div>
     </div>
-  </section> : showRecoveryWorkflow ? <section aria-label={workflowText('recoveryLabel')}><h2>{workflowText('recoveryTitle')}</h2><p>{workflowText('recoveryNotice')}</p></section> : null
+  </section> : showRecoveryWorkflow ? <section aria-label={workflowText('recoveryLabel')}><h2>{workflowText('recoveryTitle')}</h2><p>{workflowText('recoveryNotice')}</p></section>
+    : claimAvailable ? <section aria-label="로그인 전 전략 연결"><p>원하면 로그인 전 전략을 이어서 연구할 수 있습니다. 연결은 선택사항이며 승인이나 실행에 동의하는 것이 아닙니다.</p>
+      <button disabled={busy || hasPending || phase !== 'ready'} onClick={() => void claim()}>로그인 전 전략 연결</button></section> : null
   const panelCurrent = () => loginBinding !== null && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current
     && loginBinding.sessionId === session.current?.sessionId && !logoutIntent.current
   const researchEntries = useMemo(() => observedResearchEntries(messages.flatMap(message => message.observation ? [message.observation] : []), language), [messages, language])
@@ -1301,14 +1329,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const authSurface = (loginOpen || loginRetained) && loginBinding !== null && sessionState !== null && phase !== 'error' && !hasLogout && <NativeAuthSurface open={loginOpen}><NativeLoginPanel
     key={`${loginBinding.sessionId}:${sessionState}:${loginBinding.generation}`} hidden={!loginOpen} resumeToken={loginResume}
     onAuthenticated={value => { if (panelCurrent()) authenticated(value) }} onSessionRecovered={value => { if (panelCurrent()) sessionRecovered(value) }}
-    expectedSessionId={loginBinding.sessionId} isCurrent={panelCurrent} onEmailAuthenticated={value => { if (panelCurrent()) emailAuthenticated(value) }}
+    enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
+    emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
+    sourceLayout returning={sessionState === 'AUTHENTICATED'} expectedSessionId={loginBinding.sessionId} isCurrent={panelCurrent}
+    onEmailAuthenticated={value => { if (panelCurrent()) emailAuthenticated(value) }}
     canEmailDispatch={!busy && !hasPending && !hasLogout && phase === 'ready'} acquireEmailDispatch={() => {
       if (working.current || emailDispatch.current || pending.current || logoutIntent.current || phase !== 'ready' || !panelCurrent()) return null
       const owner = {}; emailDispatch.current = owner; setEmailBusy(true)
       return () => { if (emailDispatch.current === owner) { emailDispatch.current = null; setEmailBusy(false) } }
     }}
     onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
-  return <ClientServiceExperience loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
+  return <ClientServiceExperience sessionRecoveryNeeded={loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
     inputDisabled: busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || Boolean(approval || job), quickReplies: conversation?.nextQuestion?.options ?? [],
     workflow: hasLogout ? <section aria-label="로그아웃 요청"><h2>로그아웃 요청 확인</h2><p>이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.</p></section> : workflow,
     outcome: <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
@@ -1326,8 +1357,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       {pollIssue?.job === job && <p className="native-job-problem" role={pollIssue.retrying ? 'status' : 'alert'} data-native-polling={pollIssue.retrying ? 'retrying' : 'stopped'}>{jobText(pollIssue.retrying ? 'pollingRetryNotice' : 'pollingStoppedNotice')}</p>}
       <button className="g-qchip native-job-refresh" disabled={busy || refreshingJob === job} onClick={() => void refreshJob()}>{jobText('jobRefresh')}</button>
     </section>}
-      {claimAvailable && <section aria-label="로그인 전 전략 연결"><p>로그인은 전략 연결·승인·실행에 대한 동의가 아닙니다.</p>
-        <button disabled={busy || hasPending || phase !== 'ready'} onClick={() => void claim()}>로그인 전 전략 연결</button></section>}</>,
+      </>,
     // The journal exists during every normal request. Its presence alone is
     // not an error: show recovery after dispatch settles, or immediately when
     // an explicit error/logout boundary requires attention.
@@ -1346,7 +1376,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // composer, not a locator transition or implicit conversation creation.
       if (!conversation) return true
       return navigateConversation(false)
-    }, onRecover: () => { if (phase === 'logged-out' && logoutBoundary) void newSessionAfterLogout(); else void run(recoverSession) },
+    }, onRecover: healthyAuthNotice ? undefined
+      : () => { if (phase === 'logged-out' && logoutBoundary) void newSessionAfterLogout(); else void run(recoverSession) },
     onLogout: sessionState === 'AUTHENTICATED' && !hasLogout ? logout : undefined,
   }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={authSurface}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
@@ -1376,12 +1407,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         editDisabled={busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || resultStatus?.backtestId !== analysisJob.backtestId || !resultStatus.reportReady} />
     </>}
     onLogin={() => { void openLogin() }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => send(value, 'quick-reply', undefined, researchThread)}
-    conversationNavigation={!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
+    conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{healthyAuthNotice.text}</p>}
+      {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>
         <button className="g-qchip" type="button" disabled={busy || hasPending} onClick={() => void navigateConversation(true)}>{nativeObservationCopy[language].previousAction}</button>
         <p>{nativeObservationCopy[language].previousNote}</p>
       </>}
       {navigationError && <p role="alert">{nativeObservationNavigationErrors[language][navigationError]}</p>}
-    </section>}
-    serviceNotice="내부 native API 연결입니다. 대화 v0.3·작업 v0.7·이력 v0.8·결과 v0.6·차트 v0.5를 사용합니다. 준비되지 않은 데이터는 오류로 표시하며 Mock으로 대체하지 않습니다. 외부 AI 모델·실제 로그인·거래·공개 배포 완료가 아닙니다." />
+    </section>}</>}
+    />
 }

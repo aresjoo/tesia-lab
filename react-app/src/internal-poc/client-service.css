@@ -59,6 +59,15 @@
 .native-plan-return { max-width: 1040px; box-sizing: border-box; margin: 0 auto; padding: 20px 22px 0; }
 .native-plan-return button { min-height: 44px; }
 @media (max-width: 640px) { .native-plan-return { padding: 16px 12px 0; } }
+@media (max-width: 860px) {
+  /* Account documents retain their source home chrome. Reserve its banner
+     plus utility row instead of placing the return action behind that row. */
+  .client-service-app.view-landing:has(.native-service-plan):has(.client-app-banner) { scroll-padding-top: 128px; }
+  .client-service-app.view-landing:has(.client-app-banner) .native-plan-return { padding-top: 80px; }
+  .client-service-app.view-landing:has(.native-service-plan):has(.client-app-banner) .client-account-utility { top: 74px; }
+  /* The retained, hidden home must not lift support over account tabs. */
+  .tesia-shell.client-service-app.view-landing:has(.native-service-plan) > .site-help { bottom: calc(22px + env(safe-area-inset-bottom)); }
+}
 .client-service-app .client-load-page.is-inline { min-height: 100%; padding: 24px 14px; }
 .native-history-unavailable { word-break: keep-all; overflow-wrap: anywhere; }
 .native-history-unavailable small { max-width: 65ch; line-height: 1.7; }

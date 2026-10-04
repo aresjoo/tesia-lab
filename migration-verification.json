@@ -1,115 +1,157 @@
 {
   "schema": 1,
-  "purpose": "클라이언트 에이전트의 migration 브랜치 검토용 전달. 제품 완료/운영 승인 아님.",
-  "sourceCommit": "75a5f5bbb820ad27f66304927ff4c70954fea318",
+  "purpose": "원본과 React 변경을 대조하는 migration 전달. 정적 배포, 실제 인증, 전체 서비스 승인을 구분한다.",
+  "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "da197956817507fa6483f53a3bad80c07c294a66a5dabe775ff80b88e77621c5",
+  "snapshotDigest": "c4d6cf89df7c64a5da1ac7047cf836f795b4aabd25daf3c31c54f6ebc510b5c8",
   "environment": {
     "node": "22.23.2",
-    "dependencyInstall": "Reused prior delivery npm ci installation; package.json and package-lock.json unchanged. No clean reinstall claimed this update."
+    "dependencyInstall": "기존 검증 설치 재사용. package.json/lockfile 동일, 이번 clean npm ci 실행 주장 없음."
   },
   "snapshot": {
-    "files": 2135,
-    "bytes": 24722063,
+    "files": 2159,
+    "bytes": 25007896,
     "sourceDirtyFiles": [],
-    "hashVerification": "PASS; all manifest paths present and bytes match",
-    "clientOriginalFiles": "Preserved; only root AGENTS.md receives delivery-scope documentation"
+    "hashVerification": "PASS; source tracked bytes and complete delivered manifest match",
+    "clientOriginalFiles": "Preserved; root index/about/download/policies/server and active root workflows unchanged"
   },
   "checks": [
+    {
+      "command": "62 specs: prior source-UI51 plus authentication11 Playwright",
+      "executedOn": "Exact source worktree; delivered snapshot byte verified, not a second run in react-app",
+      "status": "PASS",
+      "exitCode": 0,
+      "specs": 62,
+      "passed": 1674,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "interrupted": 0,
+      "notRun": 0,
+      "reportedDuration": "11.7m",
+      "inputFiles": 2133,
+      "inputSha256": "bd2c87f52f74bd10ba76fd78f535c6f863e345ea2ce1297898ad8da81483dc2f",
+      "inputUnchanged": true,
+      "logSha256": "25a58d829722e70c80d480b1b6d03a353cd4a91345a5fdc5d952397147ec96c4"
+    },
     {
       "command": "npm run lint",
       "status": "PASS",
       "exitCode": 0
     },
     {
-      "command": "npm run build",
+      "command": "VITE_TETH_AUTH_GOOGLE_ONLY=true VITE_TETH_EXCHANGE_CONNECT=false npm run build:service",
       "status": "PASS",
       "exitCode": 0
     },
     {
-      "command": "npm run build:internal-poc",
+      "command": "Actual built preview auth/keyboard/cancel/title bounds",
       "status": "PASS",
-      "exitCode": 0
+      "widths": [
+        1440,
+        390,
+        320
+      ],
+      "syntheticSession": true,
+      "serverMutationExecuted": false,
+      "actualLoginVerified": false
     },
     {
-      "command": "npm run build:service",
+      "command": "Installed deployment backend _StaticBundle and tar per-file hash verification",
       "status": "PASS",
-      "exitCode": 0
-    },
-    {
-      "command": "TETH_E2E_PORT=4196 npx playwright test tests/exchange-connect.spec.ts tests/client-source-parity-followups.spec.ts tests/client-main-terminal-market-source.spec.ts tests/client-stored-market-chart.spec.ts --workers=2",
-      "status": "PASS",
-      "exitCode": 0,
-      "passed": 98,
-      "failed": 0,
-      "skipped": 0,
-      "coverage": "Desktop/mobile Chromium and controller tests: exchange34 plus Main/source/stored-market64. Includes login/redirect refusal, default disabled, owner change, late response, cancellation and key cleanup notices. Mock/fixture tests, not real provider authentication.",
-      "reportedDuration": "1.4m"
+      "registeredAssets": 350,
+      "packagedFiles": 1113
     },
     {
       "command": "node tools/sync-migration.mjs --verify",
       "status": "PASS",
-      "files": 2135
+      "files": 2159
+    }
+  ],
+  "failureHistory": [
+    {
+      "scope": "Initial authentication regression",
+      "passed": 398,
+      "failed": 10,
+      "exitCode": 1,
+      "reason": "Mobile setup attempted the original scroll-hidden menu. Existing revealSourceNavigation restores the normal user path; assertions/timeout/skip/retry unchanged."
     },
     {
-      "command": "node --check tools/sync-migration.mjs",
-      "status": "PASS"
-    },
-    {
-      "command": "git diff --cached --check (current delivery delta)",
-      "status": "PASS"
+      "scope": "Initial built probe",
+      "failed": 3,
+      "reason": "Harness mistook native-dialog Tab to browser chrome for focus entering inert background. Isolated native reproduction; narrow exception then next Tab must return to dialog."
     }
   ],
   "security": {
-    "tool": "Gitleaks 8.30.1 dir --redact",
-    "rawExitCode": 1,
-    "rawFindings": 57,
-    "review": {
-      "manifestHashMetadata": 41,
-      "packageHashConstants": 2,
-      "logoHashFixture": 1,
-      "publicOperationIdComparison": 1,
-      "syntheticIdempotencyTestFixtures": 12,
-      "unclassified": 0,
-      "actualCredentialFindings": 0
+    "tool": "Gitleaks 8.30.1 --redact",
+    "sourceStaged": {
+      "exitCode": 0,
+      "findings": 0
     },
-    "interpretation": "Raw scanner exit1/57 findings, not rawzero. Previous53 classifications preserved; four new findings are generated manifest SHA256 metadata. No actual credential finding identified. No detector disabled.",
-    "deltaReview": {
-      "sameAsPrevious": 53,
-      "newFindings": 4,
-      "newFindingsClassification": "Four SHA256 metadata values in generated API v0.12 generation-manifest.json at lines 14/23/25/26; inspected as OpenAPI/schema/generator hashes, not credentials",
-      "unclassified": 0
-    }
+    "staticBundle": {
+      "exitCode": 0,
+      "findings": 0
+    },
+    "migrationStaged": {
+      "status": "PASS",
+      "exitCode": 0,
+      "findings": 0
+    },
+    "secretsOrDatabasesIncluded": false
+  },
+  "independentReview": {
+    "profile": "personal (1)",
+    "model": "claude-opus-5-5",
+    "runs": 2,
+    "scope": "Provided code only; no model-executed browser tests",
+    "verdict": "Conditional STATIC_UI_CODE_GO; ROOT binds actual tests/build/probes and immediate remote HTML/edge/control/release CAS",
+    "critical": 0,
+    "high": 0,
+    "notes": [
+      "Existing disabled CSS and final screenshots checked",
+      "Current edge hash must equal immutable supplied edge before updater invocation",
+      "Not all-service or real-user-authentication GO"
+    ]
   },
   "warnings": [
-    "Vite chunk-size warnings remain (>500 kB); public client bootstrap approximately 1.13 MB minified.",
-    "ClientUpgradeSheet static/dynamic import overlap reported in public build.",
-    "Whole imported source whitespace warnings retained for byte fidelity.",
-    "Internal/service builds warn that extensionless config imports are incompatible with a future Vite native config-loader default."
+    "Existing >500kB bundle warning; main service bundle about1.53MB minified",
+    "Chromium desktop/mobile emulation; no real Safari/AT device certification"
   ],
   "notVerified": [
-    "Full 13200-test rerun including exchange candidate (original upstream acceptance and candidate178 are separate evidence)",
-    "Every screen/copy/SVG/motion/responsive combination and all 62 presets",
-    "Unapplied catalogue marker/evidence proposals; ClientCatalogueBacktest.tsx unchanged from previous snapshot",
-    "Actual OAuth/model/market/exchange/order/billing providers",
-    "Production deployment or client main merge",
-    "Another agent reading/accepting this handoff",
-    "Backend158/Contracts40/server deployment and actual exchange app registration; server implementation remains in authoritative repositories"
+    "Whole original469-spec rerun and all62 presets",
+    "All source UX differences; mobile market filter remains inline rather than original bottom sheet",
+    "Actual user Google callback/ACK completion",
+    "Apple/email server registration and real authentication",
+    "Investment prompt draft8646b65 integration into React or Worker deployment",
+    "Actual model/market/exchange/order/billing/usage providers",
+    "Client main merge or full service production GO"
   ],
   "deployment": {
+    "status": "PREPARED_NOT_ACTIVATED",
     "mainChanged": false,
     "automaticDeploymentConfigured": false,
-    "reactWorkflow": "react-app/.github/workflows/ci.yml is retained as source, not an active root Actions workflow",
-    "existingWorkerWorkflow": "unchanged; main/server-only push trigger"
+    "userExplicitStaticUpdateRequested": true,
+    "scope": "Existing teth.ai static UI only",
+    "sourceCommit": "fa8601e2a9dfd287fc42f7f8f126e986940c96d1",
+    "archiveSha256": "43a63cef0f19ef93c326306d5c3d93eb9abd824f1e0b226458e72373d3cbeaeb",
+    "htmlSha256": "89a415d3d770e8ac1c2847a0bdc1967eb3b8e986937fdbe8b92e3efe536e7c79",
+    "buildFlags": {
+      "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
+      "VITE_TETH_EXCHANGE_CONNECT": "false"
+    },
+    "backendCredentialDatabaseChanges": false,
+    "actualGoogleLoginCompleted": false,
+    "promptBranchMerged": false,
+    "workerDeployed": false
   },
   "sourceDelta": {
-    "previousDelivery": "5a519016dd4368cb80ea5b1abf8612592b43df6b",
-    "previousSource": "62b5e6972cb48a3ac862fc41799061c0d0722525",
-    "changedFiles": 19,
-    "addedFiles": 13,
+    "previousDelivery": "d53a80670cb7842f700b927db674435026d09ffd",
+    "previousSource": "75a5f5bbb820ad27f66304927ff4c70954fea318",
+    "changedFiles": 80,
+    "addedFiles": 24,
+    "modifiedFiles": 56,
     "deletedFiles": 0,
-    "packageAndLockfileChanged": false,
-    "previousMainIsAncestor": true
+    "packageAndLockfileChanged": false
   },
   "upstreamAcceptance": {
     "source": "tesia-program canonical PM/README.md, Web52/Web55 and react-app/Bugfix_report.md",
@@ -136,5 +178,24 @@
       "skipped": 0,
       "executedBy": "Upstream integration team; distinct from this delivery's98"
     }
+  },
+  "concurrentPrompt": {
+    "branch": "agent/lab/investment-prompt-quality",
+    "head": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+    "pr": 5,
+    "includedInSnapshot": false,
+    "productPathIntersection": 0,
+    "sharedDocumentation": [
+      "MIGRATION.md"
+    ],
+    "meaning": "Separate unmerged candidate. File non-overlap is not runtime prompt compatibility proof."
+  },
+  "previousDeliveryEvidence": {
+    "sourceCommit": "75a5f5bbb820ad27f66304927ff4c70954fea318",
+    "snapshotDigest": "da197956817507fa6483f53a3bad80c07c294a66a5dabe775ff80b88e77621c5",
+    "files": 2135,
+    "localPassed": 98,
+    "security": "Raw scanner exit1/57 findings, not rawzero. Previous53 classifications preserved; four new findings are generated manifest SHA256 metadata. No actual credential finding identified. No detector disabled.",
+    "receiptHistory": "Previous migration commit d53a806 preserves the complete prior receipt; not repeated as current checks."
   }
 }

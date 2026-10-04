@@ -103,6 +103,13 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1440, 900]])
       const hub = page.locator('.native-service-route-content > .client-research-hub')
       const back = hub.locator('.hub-header').getByRole('button', { name: researchCopy(language, 'return'), exact: true })
       await expect(back).toBeVisible()
+      // Source 9fb has no extra visual toolbar on the public catalogue.
+      // Its retained accessibility return control is revealed on keyboard focus.
+      const keyboardCatalogue = surface === 'sharing'
+      if (keyboardCatalogue) {
+        await expect(hub.locator('.strategy-filters[data-catalogue-list]')).toBeVisible()
+        await back.focus()
+      }
       for (const scrolled of [false, true]) {
         if (scrolled) await hub.evaluate(node => { node.scrollTop = 120 })
         const geometry = await hub.evaluate(node => {
@@ -123,10 +130,16 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1440, 900]])
         expect(geometry.hub.bottom, label).toBeLessThanOrEqual(geometry.main.bottom + 1)
         expect(geometry.titleScrollWidth, label).toBeLessThanOrEqual(geometry.titleClientWidth + 1)
         expect(geometry.buttonScrollWidth, label).toBeLessThanOrEqual(geometry.buttonClientWidth + 1)
-        expect(geometry.headerPosition, label).toBe('sticky')
+        expect(geometry.headerPosition, label).toBe(keyboardCatalogue ? 'fixed' : 'sticky')
+        await expect(back).toBeInViewport()
+        expect(await back.evaluate(element => {
+          const r = element.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)
+          return Boolean(hit && (hit === element || element.contains(hit)))
+        }), `${label}: return center is not obscured`).toBe(true)
       }
       if (language === 'fr') await page.screenshot({ path: info.outputPath(`hub-${surface}-${width}-fr.png`) })
-      await back.click()
+      if (keyboardCatalogue) await back.press('Enter')
+      else await back.click()
       await expect(page.locator('.g-composer textarea')).toHaveValue('거래소 탐색 후에도 남아야 할 조건')
       expect(await page.locator('.g-composer textarea').evaluate(node => node === Reflect.get(window, 'connectOriginalComposer'))).toBe(true)
     }

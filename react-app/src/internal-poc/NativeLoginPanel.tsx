@@ -9,7 +9,8 @@ import { NativeEmailLoginPanel } from './NativeEmailLoginPanel'
 import type { NativeEmailAuthenticated } from './native-email-auth'
 
 const labels = { GOOGLE: 'Google', APPLE: 'Apple' } as const
-export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSessionRecovered, onClose, hidden = false, resumeToken = 0, isCurrent = () => true, expectedSessionId, canEmailDispatch = true, acquireEmailDispatch }: {
+const defaultProviders: readonly NativeAuthProvider[] = ['GOOGLE', 'APPLE']
+export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSessionRecovered, onClose, hidden = false, resumeToken = 0, isCurrent = () => true, expectedSessionId, canEmailDispatch = true, acquireEmailDispatch, providers = defaultProviders, enabledProviders = providers, emailAvailable = true, sourceLayout = false, returning = false }: {
   onAuthenticated: (result: NativeAuthenticated) => void | Promise<void>
   onSessionRecovered?: (result: NativeSessionRecovery) => void | Promise<void>
   onClose?: (retain?: boolean) => void
@@ -20,6 +21,11 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
   expectedSessionId?: string
   canEmailDispatch?: boolean
   acquireEmailDispatch?: () => (() => void) | null
+  providers?: readonly NativeAuthProvider[]
+  enabledProviders?: readonly NativeAuthProvider[]
+  emailAvailable?: boolean
+  sourceLayout?: boolean
+  returning?: boolean
 }) {
   const { t, language } = useClientPreferences()
   const text = (key: NativeAuthUiCopyKey, params?: Readonly<Record<string, string>>) => nativeAuthUiText(language, key, params)
@@ -41,7 +47,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
   const [message, setMessage] = useState<NativeAuthUiCopyKey>('providerInitial')
   const [error, setError] = useState(false)
   const run = async (operation: () => Promise<void>, nextProvider = provider) => {
-    if (working.current || hidden || !active.current || (providerLock.current !== null && providerLock.current !== nextProvider)) return
+    if (!enabledProviders.includes(nextProvider) || working.current || hidden || !active.current || (providerLock.current !== null && providerLock.current !== nextProvider)) return
     // The SDK binds its provider before the first session/CSRF read. Retain that
     // choice even if no transaction context was received. Do not change choice
     // for a second same-tick click rejected by the working guard above.
@@ -74,10 +80,11 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
     await onSessionRecovered(result)
     setMessage('providerSessionOnly')
   }, nextProvider)
-  if (emailOpen && onEmailAuthenticated) return <NativeEmailLoginPanel hidden={hidden} resumeToken={resumeToken}
+  if (emailOpen && onEmailAuthenticated && emailAvailable) return <NativeEmailLoginPanel hidden={hidden} resumeToken={resumeToken}
     expectedSessionId={expectedSessionId} isCurrent={isCurrent} onAuthenticated={onEmailAuthenticated} onSessionRecovered={onSessionRecovered} onClose={onClose}
     canDispatch={canEmailDispatch} acquireDispatch={acquireEmailDispatch} />
   if (needsResume) return <section hidden={hidden} inert={hidden} aria-label={text('authSection')} aria-busy={busy} className="cs-native-login ca-auth native-provider-login">
+    {sourceLayout && onClose && <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>✕</button>}
     <h2 className="au-title">{text('resumeTitle')}</h2>
     <p className="au-sub">{text('resumeDescription')}</p>
     <p className={`native-auth-status${error ? ' au-err' : ''}`} role={error ? 'alert' : 'status'} aria-live="polite">{text(busy ? 'providerBusy' : error ? 'resumeFailure' : 'resumePrompt')}</p>
@@ -112,14 +119,16 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
       await onSessionRecovered(result)
     })}>{text('sessionOnly')}</button>}
     </div>
-    {onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
+    {!sourceLayout && onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
   </section>
   return <section hidden={hidden} inert={hidden} aria-label={text('authSection')} aria-busy={busy} className="cs-native-login ca-auth native-provider-login">
+    {sourceLayout && onClose && <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>✕</button>}
     <h2 className="au-title">{t('auth.title')}</h2>
     <p className="au-sub">{t('auth.sub').split(/<br\s*\/?\s*>/i).map((line, index) => <Fragment key={index}>{index > 0 && <br />}{line}</Fragment>)}</p>
     <div className="au-btns" aria-label={text('providers')}>
-      {(['GOOGLE', 'APPLE'] as const).map(nextProvider => {
-        const disabled = busy || redirect !== null || ready || confirmed || restartable || (providerLocked && provider !== nextProvider)
+      {providers.map(nextProvider => {
+        const available = enabledProviders.includes(nextProvider)
+        const disabled = !available || busy || redirect !== null || ready || confirmed || restartable || (providerLocked && provider !== nextProvider)
         return <button className="au-btn" type="button" key={nextProvider} aria-disabled={disabled}
           onClick={() => { if (!disabled) void run(async () => {
             const result = await auth.start(nextProvider)
@@ -129,11 +138,12 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
           }, nextProvider) }}>
           <ClientProviderMark provider={labels[nextProvider]} />
           {t(nextProvider === 'GOOGLE' ? 'auth.google' : 'auth.apple')}
+          {!available && <small className="native-provider-availability">{text('providerComingSoon')}</small>}
         </button>
       })}
     </div>
-    {onEmailAuthenticated && <><div className="au-div">{t('auth.or')}</div><button className="au-btn ghost au-gap" disabled={busy || auth.hasMemoryIntent()} onClick={() => { if (!working.current && !hidden && active.current && !auth.hasMemoryIntent()) setEmailOpen(true) }}>{text('emailLogin')}</button></>}
-    <p className={`native-auth-status${error ? ' au-err' : ''}`} role={error ? 'alert' : 'status'} aria-live="polite">{text(message)}</p>
+    {onEmailAuthenticated && <><div className="au-div">{t('auth.or')}</div><button className="au-btn ghost au-gap" disabled={!emailAvailable || busy || auth.hasMemoryIntent()} onClick={() => { if (emailAvailable && !working.current && !hidden && active.current && !auth.hasMemoryIntent()) setEmailOpen(true) }}>{text('emailLogin')}{!emailAvailable && <small className="native-provider-availability">{text('providerComingSoon')}</small>}</button></>}
+    {(!sourceLayout || busy || providerLocked || error) && <p className={`native-auth-status${error ? ' au-err' : ''}`} role={error ? 'alert' : 'status'} aria-live="polite">{text(message)}</p>}
     <div className="native-auth-actions">
     {!confirmed && <>
       {restartable && <button disabled={busy} onClick={() => void run(async () => {
@@ -151,16 +161,17 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
     </>}
     {providerLocked && onSessionRecovered && <button disabled={busy} onClick={() => recoverSession(provider)}>{text('sessionOnly')}</button>}
     </div>
-    {!providerLocked && <details className="native-auth-recovery" open={typeof window !== 'undefined' && window.location.pathname === '/auth/complete'}>
+    {!providerLocked && (!sourceLayout || returning || window.location.pathname === '/auth/complete') && <details className="native-auth-recovery" open={typeof window !== 'undefined' && window.location.pathname === '/auth/complete'}>
       <summary>{text('recoveryTitle')}</summary>
       <p className="au-sub">{text('recoveryDescription')}</p>
       <div className="native-auth-actions">
-        {(['GOOGLE', 'APPLE'] as const).map(nextProvider => <Fragment key={nextProvider}>
-          <button type="button" disabled={busy} onClick={() => readResult(nextProvider)}>{text('providerResult', { provider: labels[nextProvider] })}</button>
-          {onSessionRecovered && <button type="button" disabled={busy} onClick={() => recoverSession(nextProvider)}>{text('providerSession', { provider: labels[nextProvider] })}</button>}
+        {providers.map(nextProvider => <Fragment key={nextProvider}>
+          <button type="button" disabled={busy || !enabledProviders.includes(nextProvider)} onClick={() => readResult(nextProvider)}>{text('providerResult', { provider: labels[nextProvider] })}</button>
+          {onSessionRecovered && <button type="button" disabled={busy || !enabledProviders.includes(nextProvider)} onClick={() => recoverSession(nextProvider)}>{text('providerSession', { provider: labels[nextProvider] })}</button>}
         </Fragment>)}
       </div>
     </details>}
-    {onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
+    {sourceLayout && <div className="au-free">{t('auth.free')}</div>}
+    {!sourceLayout && onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
   </section>
 }

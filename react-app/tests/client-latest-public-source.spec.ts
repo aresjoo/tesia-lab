@@ -1,8 +1,22 @@
 import { expect, test } from '@playwright/test'
 import { CLIENT_HOME_ACTIONS, CLIENT_HOME_HEADLINES, getTemplateText } from '../src/client-home-gallery'
-import { publicPreviewText } from '../src/client-public-preview-copy'
 import { aboutText } from '../src/client-about-copy'
+import { policyLabels } from '../src/client-policy-copy'
 test.setTimeout(40_000)
+
+// Authored source: tesia-lab 9fbff821 about/index.html:313-317,346-352;
+// policies/index.html:131-139,259+. The source has no added preview banners.
+// c99c938 restored that structure; these public-page tests verify its copy and
+// layout, not actual billing/provider availability or translated legal approval.
+const removedNotices = '.prototype-notice,.pricing-preview,.faq-preview'
+const heroTitle = '거래하는 사람을 위한 AI 트레이딩'
+const heroDescription = '말로 전략을 만들고, 실제 시장 데이터로 검증하고, 지금 쓰는 거래소 계정에서 실행합니다.'
+const heroFree = '영원히 무료, 카드 등록 없음'
+const faqQuestions = [
+  'TETH는 어떤 서비스입니까?', '전략은 어떻게 실행합니까?', '어떤 거래소를 연결합니까?',
+  '백테스트 결과는 어디서 확인합니까?', '연결 권한은 무엇입니까?', '무료로 쓸 수 있습니까?', '모바일 앱이 있습니까?',
+]
+const faqFirstAnswer = '말로 투자 전략을 만들고, 실제 시장 데이터로 검증하고, 연결한 거래소에서 실행하는 AI 트레이딩 서비스입니다.'
 
 test('all five latest source action prompts and composed questions retain the original wording', () => {
   expect(CLIENT_HOME_HEADLINES.ko).toContain('차트 대신\n말로 하십시오')
@@ -24,19 +38,25 @@ test('latest home removes retired promotional badges and retains formal source p
   await expect(page.locator('.client-home-band textarea')).toHaveAttribute('placeholder', 'AI가 어떤 종목을 대신 거래해 드리면 되겠습니까?')
 })
 
-test('about pricing follows the latest common source preview value', async ({ page }) => {
+test('about pricing follows the latest common source value without added notices', async ({ page }) => {
   await page.goto('/about/')
   await expect(page.locator('#plans .pl-price > span')).toHaveText(['0', '280'])
   await expect(page.locator('#plans .pl-hi .pl-lb')).toHaveText('TETH 초대 계정')
-  await expect(page.locator('.pricing-preview')).toContainText('디자인 예시')
+  await expect(page.locator(removedNotices)).toHaveCount(0)
+  await expect(page.locator('#pricing > .ab-sh')).toHaveText('이용 방법을 선택합니다')
 })
 
-test('public preview notices follow the selected language', async ({ page }) => {
+test('authored public hero, plans and FAQ follow the selected language', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('tethLang', 'en'))
   await page.goto('/about/')
-  for (const selector of ['.prototype-notice', '.pricing-preview', '.faq-preview']) {
+  await expect(page.locator(removedNotices)).toHaveCount(0)
+  for (const [selector, source] of [
+    ['.ab-hero .ab-h1', heroTitle], ['.ab-hero .ab-d', heroDescription],
+    ['.ab-hero .ab-free', heroFree], ['#pricing > .ab-sh', '이용 방법을 선택합니다'],
+    ['#plans .pl-hi .pl-lb', 'TETH 초대 계정'], ['#faq details:first-child summary', faqQuestions[0]],
+  ]) {
+    await expect(page.locator(selector)).toHaveText(aboutText('en', source))
     await expect(page.locator(selector)).not.toContainText(/[가-힣]/)
-    await expect(page.locator(selector)).toContainText(/preview|Mock|copy/i)
   }
 })
 
@@ -53,7 +73,7 @@ test('source plan label cannot overlap its heading on a narrow screen', async ({
   expect(overlap).toBe(false)
 })
 
-for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) for (const width of [320, 768, 1440]) test(`${language} public source ${width}px preserves preview facts, source plans and readable notices`, async ({ page }, info) => {
+for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) for (const width of [320, 768, 1440]) test(`${language} public source ${width}px preserves authored copy, source plans and readable layout`, async ({ page }, info) => {
   await page.setViewportSize({ width, height: width === 320 ? 568 : 900 })
   await page.addInitScript(language => localStorage.setItem('tethLang', language), language)
   const errors: string[] = [], writes: string[] = []
@@ -61,11 +81,22 @@ for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
   page.on('request', request => { if (!['GET', 'HEAD'].includes(request.method())) writes.push(request.method()) })
   await page.goto('/about/')
   await page.evaluate(() => document.fonts.ready)
-  await expect(page.locator('.prototype-notice')).toHaveText(publicPreviewText(language, 'preview'))
-  await expect(page.locator('.pricing-preview')).toHaveText(publicPreviewText(language, 'pricing'))
-  await expect(page.locator('.faq-preview')).toHaveText(publicPreviewText(language, 'faq'))
-  const hero = page.locator('.ab-hero'), cta = (await hero.locator('.ab-cta').boundingBox())!, notes = (await hero.locator('.prototype-notice').boundingBox())!
-  expect(notes.y).toBeGreaterThanOrEqual(cta.y + cta.height + 16)
+  await expect(page.locator(removedNotices)).toHaveCount(0)
+  const hero = page.locator('.ab-hero')
+  await expect(hero.locator('.ab-h1')).toHaveText(aboutText(language, heroTitle))
+  await expect(hero.locator('.ab-d')).toHaveText(aboutText(language, heroDescription))
+  await expect(hero.locator('.ab-free')).toHaveText(aboutText(language, heroFree))
+  await expect(hero.locator('.ab-cta')).toHaveText(aboutText(language, '무료로 시작하기'))
+  await expect(hero.locator('.ab-cta')).toHaveAttribute('href', '/')
+  await expect(hero.locator('.ab-link')).toHaveAttribute('href', '/about/#pricing')
+  await expect(hero.locator('.ab-heroshot img')).toHaveAttribute('alt', aboutText(language, 'TETH 터미널, 차트와 판단 패널'))
+  await expect(hero.locator('.ab-heroshot img')).toHaveAttribute('src', '/client-shots/about/about-live.webp')
+  const acts = (await hero.locator('.ab-acts').boundingBox())!, free = (await hero.locator('.ab-free').boundingBox())!, shot = (await hero.locator('.ab-heroshot').boundingBox())!
+  // Exact authored margins: source about/index.html:226-227. The former
+  // added-notice gap is replaced with the actual CTA/free-copy/image sequence.
+  expect(free.y - (acts.y + acts.height)).toBeCloseTo(14, 1)
+  expect(shot.y - (free.y + free.height)).toBeCloseTo(48, 1)
+  await expect(page.locator('#pricing > .ab-sh')).toHaveText(aboutText(language, '이용 방법을 선택합니다'))
   const plans = page.locator('.plans')
   await expect(plans.locator('.pl-price > span')).toHaveText(['0', '280'])
   await expect(plans.locator('.pl-price').first()).toContainText(aboutText(language, '/ 월'))
@@ -91,8 +122,20 @@ for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
     await page.screenshot({ path: info.outputPath(`pricing-viewport-${language}-${width}.png`) })
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  const faq = page.locator('#faq')
+  await expect(faq.locator('details')).toHaveCount(7)
+  await expect(faq.locator('summary')).toHaveText(faqQuestions.map(text => aboutText(language, text)))
+  await faq.locator('summary').first().click()
+  await expect(faq.locator('details').first()).toHaveAttribute('open', '')
+  await expect(faq.locator('details').first().locator('p')).toBeVisible()
+  await expect(faq.locator('details').first().locator('p')).toHaveText(aboutText(language, faqFirstAnswer))
   await page.goto('/policies/#terms')
-  await expect(page.locator('.prototype-notice')).toHaveText(publicPreviewText(language, 'policy'))
+  await expect(page.locator(removedNotices)).toHaveCount(0)
+  await expect(page.locator('.pg-h1')).toHaveText(policyLabels(language).title)
+  await expect(page.locator('#tabs [data-v=terms]')).toHaveText(policyLabels(language).terms)
+  await expect(page.locator('#tabs [data-v=terms]')).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('#v-terms')).toBeVisible()
+  await expect(page.locator('#v-terms')).toHaveAttribute('lang', 'ko')
   await expect(page.locator('#v-terms')).toContainText('TETH')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   expect(writes).toEqual([]); expect(errors).toEqual([])

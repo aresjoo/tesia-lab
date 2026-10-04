@@ -58,7 +58,8 @@ button, a { touch-action: manipulation; }
   .client-sidebar.mobile-open .client-new-strategy { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: transparent; font-size: 13px; }
   .client-new-strategy:disabled { opacity: .45; }
   .client-sidebar.mobile-open .client-guest-note { display: block; margin: 0; padding: 16px 12px; font-size: 13px; line-height: 1.65; color: var(--client-text-2); }
-  .client-sidebar.mobile-open .client-drawer-links { display: grid; margin-top: auto; }
+  /* Source #g-side-links belongs to the mobile drawer, not desktop rail. */
+  .tesia-shell .client-sidebar.mobile-open .client-drawer-links { display: none; }
   .client-sidebar.mobile-open .client-sidebar-bottom { margin-top: 8px; }
   .client-sidebar.mobile-open .client-sidebar-bottom > button { width: 100%; justify-content: flex-start; gap: 12px; padding: 0 12px; border-radius: 8px; }
   .client-sidebar.mobile-open .client-sidebar-bottom > button > span { position: static; padding: 0; background: none; color: inherit; box-shadow: none; opacity: 1; transform: none; font-size: 13px; font-weight: 400; }
@@ -198,7 +199,9 @@ button, a { touch-action: manipulation; }
   .client-sidebar { z-index: 110; }
   .client-drawer-scrim { z-index: 105; }
   .client-auth-nav .client-auth-link { display: none; }
-  .client-download { min-height: 44px; padding-inline: 12px; }
+  /* Preserve the source 32px pill while retaining a full 44px hit target. */
+  .client-app-banner .client-download { height: 44px; min-height: 44px; padding: 0; background: transparent; flex-shrink: 0; }
+  .client-download-pill { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 15px; border-radius: 999px; background: #fff; color: #000; white-space: nowrap; }
   .client-banner-close { margin-right: -6px; }
   .client-app-banner { gap: 8px; }
   .client-home-pill textarea { font-size: 16px; }

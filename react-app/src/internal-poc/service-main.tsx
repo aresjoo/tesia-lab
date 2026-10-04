@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/geist/wght.css'
 import '@fontsource-variable/noto-sans-kr'
-import './internal-poc.css'
+import '@fontsource-variable/noto-sans-sc'
 import { NativeServiceApp } from './NativeServiceApp'
 import { SiteRouter } from '../components/SiteRouter'
 

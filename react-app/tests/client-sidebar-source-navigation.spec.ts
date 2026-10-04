@@ -55,7 +55,17 @@ for (const width of [320, 1440]) test(`${width}px최근·Live그룹은고정순�
   await expect(recent.locator('.client-session[aria-current="true"]')).toContainText('원문 recent')
   await page.getByRole('button', { name: '전략 복사', exact: true }).click()
   await expect(page.locator('.client-strategy-sharing')).toBeVisible()
-  await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
+  // The source catalogue has no extra visual route toolbar. The retained
+  // accessible return action is exposed on focus, like a skip link.
+  const back = page.getByRole('button', { name: '대화로 돌아가기', exact: true })
+  await back.focus()
+  await expect(back).toBeInViewport()
+  expect(await back.evaluate(element => {
+    const box = element.getBoundingClientRect()
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)
+    return hit === element || element.contains(hit)
+  })).toBe(true)
+  await back.press('Enter')
   await expect(page.getByRole('textbox', { name: 'TETH에게 물어보세요', exact: true })).toHaveValue('recent 미전송 초안')
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
 })

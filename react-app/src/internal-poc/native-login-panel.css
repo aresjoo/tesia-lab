@@ -15,12 +15,14 @@
   font-family: 'Noto Sans KR Variable', 'Noto Sans SC Variable', 'Geist Variable', sans-serif;
 }
 .cs-native-login.ca-auth.native-provider-login[hidden] { display: none; }
+.cs-native-login.ca-auth.native-provider-login:has(> .au-x) { padding-top: 58px; }
 .native-provider-login.ca-auth :is(.au-title, .au-sub, .au-btn, .au-textbtn, .native-auth-status) { min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
-.native-provider-login.ca-auth .au-title { font-size: 24px; font-weight: 700; line-height: 1.4; margin: 0; }
+.native-provider-login.ca-auth .au-title { font-size: 24px; font-weight: 700; line-height: 1.6; margin: 0; }
 .native-provider-login.ca-auth .au-sub { font-size: 14px; line-height: 1.65; margin: 12px 0 0; }
 .native-provider-login.ca-auth .au-btns { margin-top: 26px; }
 .native-provider-login.ca-auth .au-btn { box-sizing: border-box; max-width: 100%; min-height: 52px; white-space: normal; text-align: center; }
 .native-provider-login.ca-auth .au-btn > svg { flex: none; }
+.native-provider-login.ca-auth .native-provider-availability { font-size: 11px; font-weight: 400; line-height: 1.4; }
 .native-provider-login.ca-auth .native-auth-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; min-width: 0; margin-top: 20px; }
 .native-provider-login.ca-auth .native-auth-actions > p { margin: 0; }
 .native-provider-login.ca-auth .native-auth-actions:empty { display: none; }
@@ -40,8 +42,8 @@
 .native-provider-login.ca-auth .native-auth-status.au-err { color: #f87171; }
 .native-provider-login.ca-auth .au-div { min-width: 0; }
 .native-provider-login.ca-auth .au-div::before, .native-provider-login.ca-auth .au-div::after { min-width: 0; }
-@media (max-width: 640px) {
-  .cs-native-login.ca-auth.native-provider-login { padding: 44px 24px 28px; }
+@media (max-width: 520px) {
+  .cs-native-login.ca-auth.native-provider-login { padding: 36px 22px 28px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .native-provider-login.ca-auth :is(.au-btn, .au-textbtn) { transition: none; }

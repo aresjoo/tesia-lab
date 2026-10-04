@@ -92,9 +92,11 @@ test('긴 번역의 고정 헤더와 요금 링크는 화면 안에 남고 FAQ �
   }
   await page.setViewportSize({ width: 320, height: 900 })
   await page.locator('.ab-acts .ab-link').click()
-  const notice = (await page.locator('.pricing-preview').boundingBox())!
+  await expect(page.locator('.pricing-preview')).toHaveCount(0)
+  await expect(page).toHaveURL(/#pricing$/)
+  const plans = (await page.locator('#plans .pl-card').first().boundingBox())!
   const header = (await page.locator('.hd').boundingBox())!
-  expect(notice.y).toBeGreaterThanOrEqual(header.y + header.height)
+  expect(plans.y).toBeGreaterThanOrEqual(header.y + header.height)
   const summary = page.locator('#faq summary').first()
   await summary.focus()
   await page.keyboard.press('Tab')

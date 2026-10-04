@@ -9,6 +9,7 @@ export const nativeAuthUiCopy = {
   providers: ['로그인 공급자', 'Sign-in provider', 'ログインプロバイダー', '登录提供方', '登入提供者', 'Proveedor de acceso', 'Fournisseur de connexion'],
   close: ['닫기', 'Close', '閉じる', '关闭', '關閉', 'Cerrar', 'Fermer'],
   emailLogin: ['이메일로 로그인', 'Sign in with email', 'メールでログイン', '使用邮箱登录', '使用電子郵件登入', 'Acceder con correo', 'Connexion par e-mail'],
+  providerComingSoon: ['준비 중', 'Coming soon', '準備中', '即将推出', '即將推出', 'Próximamente', 'Bientôt disponible'],
   providerInitial: ['계정을 연결해도 전략 승인이나 주문은 실행되지 않습니다.', 'Connecting an account does not approve strategies or place orders.', 'アカウントを接続しても戦略承認や注文は実行されません。', '关联账户不会批准策略或执行订单。', '連結帳戶不會核准策略或執行訂單。', 'Conectar una cuenta no aprueba estrategias ni envía órdenes.', 'Connecter un compte ne valide aucune stratégie et ne passe aucun ordre.'],
   providerBusy: ['인증 서버 응답을 확인하고 있습니다.', 'Checking the authentication server response.', '認証サーバーの応答を確認しています。', '正在确认认证服务器响应。', '正在確認驗證伺服器回應。', 'Comprobando la respuesta del servidor de autenticación.', 'Vérification de la réponse du serveur d’authentification.'],
   providerNotReady: ['아직 인증 결과가 준비되지 않았습니다. 공급자 인증을 마친 후 다시 확인해주세요.', 'The authentication result is not ready. Complete provider authentication, then check again.', '認証結果はまだ準備できていません。プロバイダー認証を完了してから再確認してください。', '认证结果尚未就绪。请完成提供方认证后再次确认。', '驗證結果尚未就緒。請完成提供者驗證後再次確認。', 'El resultado aún no está listo. Completa la autenticación del proveedor y vuelve a comprobarlo.', 'Le résultat n’est pas encore prêt. Terminez l’authentification du fournisseur, puis vérifiez à nouveau.'],

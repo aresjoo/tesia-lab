@@ -19,7 +19,7 @@ async function sourceInsightEntry(page: Page) {
   return entry
 }
 
-async function mount(page: Page, mode: 'throw' | 'reject' | 'held') {
+async function mount(page: Page, mode: 'throw' | 'reject' | 'held' | 'disabled-home') {
   await page.route('**/reset-presentation-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="reset-test-root"></div></body></html>' }))
   await page.goto('/reset-presentation-test.html')
   await page.evaluate(async mode => {
@@ -33,6 +33,7 @@ async function mount(page: Page, mode: 'throw' | 'reject' | 'held') {
     const rm = await import(/* @vite-ignore */ rp), react = rm.default ?? rm, dom = await import(/* @vite-ignore */ dp)
     const { ClientServiceExperience } = await import(/* @vite-ignore */ cp)
     const onReset = () => {
+      if (mode === 'disabled-home') return Promise.resolve(true)
       if (mode === 'throw') throw new Error('SYNTHETIC_RESET_FAILURE')
       if (mode === 'reject') return Promise.reject(new Error('SYNTHETIC_RESET_FAILURE'))
       return new Promise<boolean>((resolve, reject) => Object.assign(window, { settleReset: resolve, rejectReset: () => reject(new Error('SYNTHETIC_LATE_RESET_FAILURE')) }))
@@ -40,7 +41,7 @@ async function mount(page: Page, mode: 'throw' | 'reject' | 'held') {
     function Host() {
       const [input, setInput] = react.useState('')
       return react.createElement(ClientServiceExperience, { nativeAccounts: true, accountScope: 'reset-fixture-owner', state: {
-        phase: 'ready', sessionState: 'AUTHENTICATED', messages: [], input, busy: false, inputDisabled: false,
+        phase: 'ready', sessionState: mode === 'disabled-home' ? 'ANONYMOUS' : 'AUTHENTICATED', messages: [], input, busy: false, inputDisabled: mode === 'disabled-home',
         source: 'service', recovery: null, quickReplies: [], workflow: null, outcome: null, issue: null,
         onInput: setInput, onSend: async () => {}, onReset, onRecover: undefined, onLogout: undefined,
       } })
@@ -49,6 +50,23 @@ async function mount(page: Page, mode: 'throw' | 'reject' | 'held') {
   }, mode)
   await expect(page.locator('#strategy-idea')).toBeVisible()
 }
+
+for (const width of [390, 1440]) test(`${width}px 소개에서 홈으로 돌아올 때 입력 불가 상태도 제목을 가리지 않는다`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await mount(page, 'disabled-home')
+  const footer = page.locator('.client-site-footer')
+  await footer.getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
+  await expect(page.locator('.txh')).toBeVisible()
+  const back = footer.getByRole('button', { name: '새 전략 만들기', exact: true })
+  await back.scrollIntoViewIfNeeded()
+  await expect.poll(() => page.locator('.client-service-app').evaluate(node => node.scrollTop)).toBeGreaterThan(100)
+  await back.click()
+  await expect(page.locator('.txh')).toHaveCount(0)
+  await expect(page.locator('#strategy-idea')).toBeDisabled()
+  await expect(page.locator('.landing-hero h1')).toBeInViewport()
+  await expect.poll(() => page.locator('.client-service-app').evaluate(node => node.scrollTop)).toBeLessThanOrEqual(1)
+})
 
 async function reset(page: Page) {
   const compact = page.locator('.client-rail-new-row button')

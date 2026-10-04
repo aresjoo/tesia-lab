@@ -121,11 +121,19 @@ test('전체화면에서 직접 대화로 돌아와도 스크롤 잠금과 dialo
   expect(requests).toEqual(initial)
 })
 
-test('익명 사용자의 거래 메뉴는 기존 로그인 진입을 유지한다', async ({ page }) => {
-  await setup(page, false)
+test('익명 사용자는 원본 소개를 먼저 읽고 명시적으로 시작할 때 로그인한다', async ({ page }) => {
+  const requests = await setup(page, false)
   await menu(page, sourceSidebarNavigationLabel('ko', 'trading'))
   await expect(terminal(page)).toHaveCount(0)
-  await expect(page.getByRole('region', { name: '실제 계정 로그인', exact: true })).toBeVisible()
+  await expect(page.locator('.txh-hero')).toBeVisible()
+  await expect(page.locator('.native-auth-surface')).toHaveCount(0)
+  await page.locator('.txh-hero .txh-cta').click()
+  await expect(page.locator('.native-auth-surface')).toBeVisible()
+  await page.locator('.native-auth-surface .au-x').click()
+  await expect(page.locator('.native-auth-surface')).toHaveCount(0)
+  await expect(page.locator('.txh-hero')).toBeVisible()
+  await expect(terminal(page)).toHaveCount(0)
+  expect(requests.filter(request => request.startsWith('POST '))).toEqual([])
 })
 
 test('전체화면 새 전략의 확인은 가려지지 않고 취소 시 초안을 지키며 요청하지 않는다', async ({ page }) => {

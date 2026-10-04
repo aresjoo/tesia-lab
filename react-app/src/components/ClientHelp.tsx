@@ -110,7 +110,17 @@ export function SiteHelp({ initialOpen = false, open: suppliedOpen, returnFocus,
   }, [open, onClose, initialOpen])
   if (initialOpen && !presence.present) return null
   return <div className={`site-help${initialOpen ? ' client-modal-help' : ''}`} ref={ref} data-surface-active={initialOpen ? open : undefined} inert={initialOpen && !open} aria-hidden={initialOpen && !open || undefined}>
-    {presence.present && <section className="site-help-pop" id={popupId} data-surface-active={open} data-surface-closing={presence.closing} inert={!open} aria-hidden={!open || undefined} onClickCapture={event => { if (!open) { event.preventDefault(); event.stopPropagation() } }} onAnimationEnd={presence.onAnimationEnd} role={initialOpen ? 'dialog' : undefined} aria-modal={initialOpen && open || undefined} aria-label={t('help.title')}>
+    {presence.present && <section className="site-help-pop" id={popupId} data-surface-active={open} data-surface-closing={presence.closing} inert={!open} aria-hidden={!open || undefined} onClickCapture={event => { if (!open) { event.preventDefault(); event.stopPropagation() } }}
+      onKeyDown={event => {
+        // The viewport-anchored source popup may cover the lifted home FAB.
+        // Leaving either keyboard boundary dismisses it before restoring the
+        // FAB. The next Tab leaves normally; this is not a nonmodal focus trap.
+        // Pointer-open behavior and modal focus trapping are unchanged.
+        if (!open || initialOpen || event.key !== 'Tab' || event.defaultPrevented || event.nativeEvent.isComposing || event.keyCode === 229) return
+        const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button,a[href]')]
+        const boundary = event.shiftKey ? controls[0] : controls.at(-1)
+        if (document.activeElement === boundary) { event.preventDefault(); close(true) }
+      }} onAnimationEnd={presence.onAnimationEnd} role={initialOpen ? 'dialog' : undefined} aria-modal={initialOpen && open || undefined} aria-label={t('help.title')}>
       <button type="button" className="help-close" aria-label={language === 'ko' ? '도움말 닫기' : t('common.close')} onClick={() => close(true)}>
 <X size={18} />
 </button>

@@ -1,5 +1,12 @@
 # TETH Web
 
+현재 후속 UI·로그인 검증은 **62spec/1,674 PASS/0 FAIL/0 SKIP·exit0**, 전체 lint/service build exit0다. AI 트레이딩 소개·공개 탐색·문서/설정/도움말·키보드 복귀를 보완하고 Google·Apple·이메일 선택지와 기존 SDK 경로를 보존했다. 실제 build preview의320/390/1440px도 확인했다. 이는 아래 최초 배포와 원본 전체 인수 이력과 별도이며 실공급자 성공·모든 화면 무결함을 의미하지 않는다. 최신 실패·수정·검증 경계는 [Bugfix_report](Bugfix_report.md#로그인-방식-공존정적-배포-충돌-검수)를 따른다.
+
+사용자 정정으로 배포 화면과 공개 탐색 동선을 원본 `aresjoo/tesia-lab@9fbff821` 기준으로 복원했다. 로그인 전에도 전략 정의 목록·필터·상세와 AI 트레이딩 소개를 볼 수 있고, 복사 등 계정 동작에서 기존 실제 로그인 창을 연다. 홈 cyan·검정 배경·입력/사이드바/도움말 위치, 원본 로그인 X/문구, 정보/정책 URL(`/about/`, `/download/`, `/policies/`), 푸터 구조, 초안 카드와 연구 기록 검색 배치를 복원한다. 정보/정책/푸터의 내부 Mock 배너를 제거했으며 미공급 성과·인원·실행 결과를 합성하지 않는다. 미공급 성과/인원 정렬은 비활성화하고 가격/계정 데이터는 기존 검증된 producer만 소비한다. 정상 Google ACK는 오류/요청 복구로 표시하지 않고, 이전 전략 연결은 같은 owner·원 anonymous ETag가 있을 때만 명시 선택으로 제공한다. 새 대화가 확인되면 이전 연결 제안을 닫고, 미확정 인증·mutation의 같은 key/bytes 복구는 유지한다. 기존 FE 작업본은 수정하지 않았다.
+
+검증: 영향 범위 PC·모바일 434 PASS/0 SKIP/0 RETRY. 하단 위치의 최종 CSS는 별도 관련 64 PASS/0 SKIP/0 RETRY로 재확인했다. 공개 정보/소개와 현재 service 문구의 최종 관련 94 PASS/0 SKIP/0 RETRY도 확인했다. 원본의 위치·구조를 유지하되 service에 한해 미연결 거래소·주문·환급·자동 결제는 준비 중으로, 예시 수치는 가상으로 표시한다. 원본 preview renderer는 보존한다. lint 및 공개/내부/service 빌드 exit0, installed backend StaticBundle의 등록 자산349개 전체 closure도 통과했다. 원본 제공 Bitget 로고의 누락을 closure 검증에서 발견해 원본 bytes로 복원했다. 이는 실거래소 인증·주문 완료나 새 Windows 실로그인 증거가 아니다. 실제 배포 SHA와 공인 HTTPS 관측은 Program Ledger에 결속한다.
+Google만 등록한 테스트 배포는 service build에 `VITE_TETH_AUTH_GOOGLE_ONLY=true`를 명시한다. Google·Apple·이메일 선택지는 모두 유지하되 미등록 Apple·이메일에는 ‘준비 중’을 표시하고 시작·복구 요청을 차단한다. 이메일 callback과 기본 Google/Apple/email 경로는 삭제하지 않는다. 기본값은 기존 가용성을 유지한다. 이 build 설정은 가용성 제어이며 서버 권한이나 provider 등록을 생성하지 않는다. `VITE_TETH_EXCHANGE_CONNECT=false`는 유지하고 실제 사용자 로그인 완료와 거래소 활성화는 별도로 검증한다.
+
 ## 현재 원본 기반 마이그레이션 상태
 
 이 문서의 코드·시험 대조 기준은 전수 검증 후보 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.

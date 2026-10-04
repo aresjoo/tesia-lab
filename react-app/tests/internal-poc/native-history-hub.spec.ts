@@ -38,6 +38,11 @@ async function openHub(page: Page) {
   const entry = page.locator('.client-sidebar').getByRole('button', { name: '연구 기록', exact: true })
   if (!await entry.isVisible()) await page.locator('.client-hamburger').click()
   await entry.click()
+  // The native history integration keeps this conversation's execution history
+  // in a collapsed disclosure. Open it explicitly; retain the product default.
+  const disclosure = hub(page).locator('details.native-history-details')
+  await expect(disclosure).toBeVisible()
+  if (!await disclosure.evaluate(element => (element as HTMLDetailsElement).open)) await disclosure.locator('summary').click()
   await expect(scope(page).getByRole('heading', { name: '현재 대화의 실행 이력', exact: true })).toBeVisible()
 }
 
@@ -59,12 +64,14 @@ test('연구 기록 lazy 로딩 중 후속 키보드 이동의 초점을 빼앗�
     const target = page.locator('.client-sidebar').getByRole('button', { name: sourceSidebarNavigationLabel('ko', 'brokers'), exact: true })
     await target.focus()
     release()
-    await expect(scope(page)).toBeVisible()
+    await expect(hub(page).locator('details.native-history-details')).toBeVisible()
     await expect(target).toBeFocused()
+    await hub(page).locator('details.native-history-details > summary').click()
+    await expect(scope(page)).toBeVisible()
   } finally { release() }
 })
 
-for (const width of [320, 1440]) test(`전략들 ${width}px: 원본 세 탭과 실제 현재 대화 이력 조회·선택을 연결한다`, async ({ page }, info) => {
+for (const width of [320, 1440]) test(`전략들 ${width}px: 명시 공급 세 탭과 실제 현재 대화 이력 조회·선택을 연결한다`, async ({ page }, info) => {
   await page.setViewportSize({ width, height: 900 })
   const state = await setup(page)
   await composer(page).fill('전략 목록 왕복에 유지할 초안')
@@ -302,7 +309,31 @@ async function setup(page: Page, authenticated = true) {
       headers: { ETag: '"history_hub_snapshot_etag_0004"', 'cache-control': 'no-store' },
       body: JSON.stringify({ meta: meta('0.8.0', '4'), data }) })
   })
+  // Source9fb index:24605 removes public catalogue tabs. This suite exercises
+  // the separate explicitly supplied service presentation and its v8 history
+  // controls, not the no-producer catalogue fallback. Keep the real app, SDK,
+  // StrictMode and owner/authentication guards, supplying display input only.
+  await page.route('**/internal-poc.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="tesia-owner-local-service-url" content=""></head><body><div id="internal-poc-root"></div></body></html>' }))
   await page.goto('/internal-poc.html#/native-client')
+  await page.evaluate(async owner => {
+    const refreshPath = '/@react-refresh'
+    const refresh = (await import(/* @vite-ignore */ refreshPath)).default
+    refresh.injectIntoGlobalHook(window)
+    Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
+    for (const path of ['/node_modules/@fontsource-variable/geist/wght.css', '/node_modules/@fontsource-variable/noto-sans-kr/index.css', '/src/internal-poc/internal-poc.css']) await import(/* @vite-ignore */ path)
+    const appPath = '/src/internal-poc/NativeServiceApp.tsx'
+    const source = await (await fetch(appPath)).text()
+    const reactPath = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
+    if (!reactPath) throw new Error('Native service React instance unavailable')
+    const reactModule = await import(/* @vite-ignore */ reactPath), react = reactModule.default ?? reactModule
+    const domPath = '/@id/react-dom/client', presentationPath = '/src/client-sharing-presentation.ts'
+    const dom = await import(/* @vite-ignore */ domPath)
+    const { NativeServiceApp } = await import(/* @vite-ignore */ appPath)
+    const { unavailableSharingPresentation } = await import(/* @vite-ignore */ presentationPath)
+    const root = document.getElementById('internal-poc-root')!
+    ;(dom.createRoot ?? dom.default.createRoot)(root).render(react.createElement(react.StrictMode, null,
+      react.createElement(NativeServiceApp, { presentations: { sharingPresentation: { scope: owner, identity: 'explicit-history-test', data: unavailableSharingPresentation } } })))
+  }, owner)
   await expect(page.getByRole('region', { name: '전략 요약', exact: true })).toBeVisible()
   return state
 }

@@ -3,6 +3,7 @@ import conversationFixture from '../fixtures/service-v03/recorded-conversation.j
 import sourceCopy from '../../src/client-reference-copy.json' with { type: 'json' }
 import { TEST_ORIGIN } from '../test-origin'
 import { nativeAuthUiText } from '../../src/internal-poc/native-auth-ui-copy'
+import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
 
 // Actual native UI/controller/SDK with explicit synthetic protocol responses.
 // No external provider navigation, real callback, credential or issued session.
@@ -76,7 +77,12 @@ async function setup(page: Page, returned = false) {
   if (await login.isVisible()) await login.click()
   else {
     const sidebar = page.getByRole('button', { name: '사이드바 로그인', exact: true })
-    if (!await sidebar.isVisible()) await page.getByRole('button', { name: '메뉴', exact: true }).click()
+    if (!await sidebar.isVisible()) {
+      // The restored source hides mobile navigation after the draft auto-scroll.
+      // Reveal it through the existing scroll-up/focus path before a real click.
+      await revealSourceNavigation(page)
+      await page.getByRole('button', { name: '메뉴', exact: true }).click()
+    }
     await sidebar.click()
   }
   await expect(panel(page)).toBeVisible()

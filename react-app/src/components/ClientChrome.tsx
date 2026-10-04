@@ -202,7 +202,7 @@ export function ClientChrome({ mobileMenuHost, signedIn, showLocaleShortcut = tr
         <div className="client-app-banner">
           <span className="client-app-icon"><ClientLogo /></span>
           <span className="client-app-copy"><strong>TETH AI</strong><small>{t('banner.sub')}</small></span>
-          <InternalLink className="client-download" href="/download/">{t('banner.dl')}</InternalLink>
+          <InternalLink className="client-download" href="/download/"><span className="client-download-pill">{t('banner.dl')}</span></InternalLink>
           <button className="client-banner-close" type="button" aria-label={s('closeBanner')} onClick={() => { setBannerOpen(false); try { sessionStorage.setItem('teth-app-banner-dismissed', '1') } catch { /* Session memory remains usable. */ } }}><X size={14} /></button>
         </div>
       )}

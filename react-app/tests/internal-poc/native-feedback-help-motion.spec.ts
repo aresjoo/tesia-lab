@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import footerCopy from '../../src/client-site-footer-copy.json' with { type: 'json' }
 
 test.use({ trace: 'retain-on-failure', video: 'off' })
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jG1sAAAAASUVORK5CYII=', 'base64')
@@ -234,7 +235,7 @@ for (const shell of ['public', 'service'] as const) test(`${shell} member footer
     await page.addInitScript(() => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '도움말 검수', email: 'help-motion@example.test' })))
     await page.goto('/')
   }
-  const entry = page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true })
+  const entry = page.locator('.client-site-footer').getByRole('button', { name: footerCopy.ko.sections.help.items[0], exact: true })
   await expect(entry).toBeVisible(); await entry.click()
   await expect(page.locator('.client-modal-help .help-close')).toBeFocused()
   await expect(page.locator('.site-help-trigger:visible')).toHaveCount(1)
@@ -268,7 +269,7 @@ for (const shell of ['public', 'service'] as const) for (const kind of ['feedbac
     await page.setViewportSize({ width, height: 900 })
     if (shell === 'service') await mountService(page, false); else await page.goto('/')
     const settings = page.locator('[data-sidebar-action="settings"], [data-sidebar-action="profile-settings"]')
-    const footerHelp = page.locator('.client-site-footer').getByRole('button', { name: '도움말', exact: true })
+    const footerHelp = page.locator('.client-site-footer').getByRole('button', { name: footerCopy.ko.sections.help.items[0], exact: true })
     const enter = async () => {
       if (kind === 'help') { await footerHelp.click(); return }
       if (width <= 860) await page.locator('.client-hamburger').click()

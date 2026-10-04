@@ -1,4 +1,5 @@
 import { createContext, Fragment, useContext, useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { clientResearchScrollport } from '../client-research-scrollport'
 import { ArrowLeft, ArrowUpRight, Check, ChevronRight, Meh, Share2, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import { CLIENT_INSIGHTS, CLIENT_INSIGHT_SOURCE, INSIGHT_ART, INSIGHT_ASSETS, INSIGHT_AUTHORS, INSIGHT_FIGURES, type InsightSection } from '../client-insight-fixtures'
 import { getSitePage } from '../site-navigation'
@@ -267,7 +268,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
       pendingRestore.current = null
       const target = saved.selector ? shell.current?.querySelector<HTMLElement>(saved.selector) : null
       target?.focus({ preventScroll: true })
-      const container = shell.current?.closest('#research-main')
+      const container = clientResearchScrollport(shell.current?.closest<HTMLElement>('#research-main,.client-source-app.has-site-footer') ?? null)
       if (container) container.scrollTop = saved.scroll
       else window.scrollTo({ top: saved.scroll, behavior: 'instant' })
     } else { focus.current?.focus({ preventScroll: true }); shell.current?.scrollIntoView({ block: 'start', behavior: 'instant' }) }
@@ -276,7 +277,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     if (remember && next.slug) {
       const origin = trigger ?? document.activeElement as HTMLElement
       const kind = ['nfz-card', 'nfz-nc', 't'].find(name => origin.classList.contains(name))
-      const saved: InsightSnapshot = { location, scroll: shell.current?.closest('#research-main')?.scrollTop ?? window.scrollY, selector: kind && origin.dataset.article ? `.${kind}[data-article="${CSS.escape(origin.dataset.article)}"]` : undefined }
+      const saved: InsightSnapshot = { location, scroll: clientResearchScrollport(shell.current?.closest<HTMLElement>('#research-main,.client-source-app.has-site-footer') ?? null)?.scrollTop ?? window.scrollY, selector: kind && origin.dataset.article ? `.${kind}[data-article="${CSS.escape(origin.dataset.article)}"]` : undefined }
       snapshots.current.set(locationKey(location), saved)
       if (snapshots.current.size > 32) snapshots.current.delete(snapshots.current.keys().next().value!)
       if (!location.slug) previous.current = saved

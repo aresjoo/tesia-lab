@@ -17,7 +17,7 @@ test.use({ trace: 'off', video: 'off' })
 test.setTimeout(25_000)
 const ready = fixture.snapshots.ready, owner = 'session_account_menu_fixture_0001'
 const meta = (version: string, revision: string | null) => ({ apiContractVersion: version, resourceRevision: revision, requestId: 'req_account_menu_fixture_0001', traceId: 'trace_account_menu_fixture_0001' })
-async function setup(page: Page, authenticated = true) {
+async function setup(page: Page, authenticated = true, suppliedSharing = false) {
   const state = { posts: [] as string[], calls: [] as string[], revoked: false, owner, failTurn: false, holdTurn: undefined as (() => Promise<void>) | undefined }
   await page.clock.setFixedTime(new Date('2030-01-01T00:00:30Z'))
   await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -48,7 +48,26 @@ async function setup(page: Page, authenticated = true) {
     } else return route.abort('failed')
     return route.fulfill({ status: 200, contentType: 'application/json', headers: revision === null ? {} : { ETag: etag }, body: JSON.stringify({ meta: meta(version, revision), data }) })
   })
+  if (suppliedSharing) await page.route('**/internal-poc.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><body><div id="root"></div></body></html>' }))
   await page.goto('/internal-poc.html#/native-client')
+  if (suppliedSharing) await page.evaluate(async owner => {
+    // Source 9fbff821 public fallback is a catalogue, not the old unavailable
+    // tabbed surface. Explicitly supply this producer to test that branch.
+    const refresh = '/@react-refresh', runtime = (await import(/* @vite-ignore */ refresh)).default
+    runtime.injectIntoGlobalHook(window)
+    Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
+    for (const path of ['/node_modules/@fontsource-variable/geist/wght.css', '/node_modules/@fontsource-variable/noto-sans-kr/index.css', '/src/internal-poc/internal-poc.css']) await import(/* @vite-ignore */ path)
+    const path = '/src/internal-poc/NativeServiceApp.tsx', source = await (await fetch(path)).text()
+    const reactPath = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
+    if (!reactPath) throw new Error('Missing service React import')
+    const module = await import(/* @vite-ignore */ reactPath), react = module.default ?? module
+    const domPath = '/@id/react-dom/client', dom = await import(/* @vite-ignore */ domPath)
+    const sharingPath = '/src/client-sharing-presentation.ts'
+    const { unavailableSharingPresentation } = await import(/* @vite-ignore */ sharingPath)
+    const { NativeServiceApp } = await import(/* @vite-ignore */ path)
+    ;(dom.createRoot ?? dom.default.createRoot)(document.getElementById('root')).render(react.createElement(react.StrictMode, null,
+      react.createElement(NativeServiceApp, { presentations: { sharingPresentation: { scope: owner, identity: 'account-locale-fixture', data: unavailableSharingPresentation } } })))
+  }, owner)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await expect(page.getByRole('region', { name: '전략 요약', exact: true })).toBeVisible()
   return state
@@ -566,7 +585,7 @@ test('native 기본 제목만 현지화하며 사용자 제목·편집 커서와
 })
 test('native 대기 중 전략 허브의 언어 변경은 펼친 작업 설명·동일 요청을 보존하고 응답 도착 후 원문을 표시한다', async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  const state = await setup(page)
+  const state = await setup(page, true, true)
   let release!: () => void
   state.holdTurn = () => new Promise<void>(resolve => { release = resolve })
   const input = page.locator('.g-composer textarea')
@@ -1125,11 +1144,27 @@ test('동일 계정의 대화 응답은 열린 피드백 초안을 지우지 않
   await expect.poll(() => page.locator('[data-delivery="pending"]').count()).toBe(0)
   await expect(text).toHaveValue('같은 계정에서 작성 중인 의견')
   expect(await panel.evaluate((node, previous) => node === previous, original)).toBe(true)
+  // A healthy response intentionally has no recovery control. Establish a
+  // real failed request before testing the owner's SDK recovery boundary;
+  // do not restore a hidden production button or remount the service app.
+  await page.keyboard.press('Escape')
+  await expect(panel).toHaveCount(0)
+  if (await page.locator('.client-market-question.gcl').isVisible()) await dismissObservedClarification(page)
+  state.holdTurn = undefined; state.failTurn = true
+  await composer.fill('세션 복구 경계 확인'); await composer.press('Enter')
+  await expect.poll(() => state.posts.length).toBe(2)
+  const recovery = page.getByRole('button', { name: '세션 다시 확인', exact: true, includeHidden: true })
+  await expect(recovery).toBeVisible()
+  await (await settings(page)).getByRole('button', { name: '의견 보내기', exact: true }).click()
+  await text.fill('소유자 변경 시 폐기할 의견')
+  const beforeRecovery = state.calls.filter(call => call === 'GET /api/v1/auth/session').length
   state.owner = 'session_feedback_changed_0002'
   // Simulate the controller observing a changed session while an overlay is
   // open; this is not a pointer click through the intentionally inert app.
-  await page.getByRole('button', { name: '세션 다시 확인', exact: true, includeHidden: true }).evaluate(node => (node as HTMLButtonElement).click())
+  await recovery.evaluate(node => (node as HTMLButtonElement).click())
   await expect(panel).toHaveCount(0)
+  await expect.poll(() => state.calls.filter(call => call === 'GET /api/v1/auth/session').length).toBeGreaterThan(beforeRecovery)
+  expect(state.posts.filter(path => path.endsWith('/messages'))).toHaveLength(2)
   expect(state.posts.filter(path => !path.endsWith('/messages'))).toEqual([])
   await original?.dispose()
 })

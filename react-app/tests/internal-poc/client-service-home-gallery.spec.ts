@@ -128,7 +128,7 @@ test('고정 fixture가 지원하지 않는 합성문은 오류를 보존하고 
   await expect(page.getByRole('alert')).toContainText('FIXTURE_UNRECOGNIZED_STRATEGY_REPLY')
   await expect(page.locator('.g-amsg')).toHaveCount(0)
   await expect(page.locator('.client-service-document')).toHaveCount(0)
-  await expect(page.locator('.client-development-boundary')).toContainText('Mock fixture 검수')
+  await expect(page.locator('.client-development-boundary')).toHaveCount(0)
   await expect(page.getByRole('button', { name: '응답 중지', exact: true })).toHaveCount(0)
 })
 

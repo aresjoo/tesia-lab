@@ -8,6 +8,7 @@ import type { BrokerServicePresentation } from '../client-broker-presentation'
 import type { SharedLocation } from '../client-shared-strategies'
 import type { SharingPreferences, SharingPreferenceSnapshot } from '../client-sharing-preferences'
 import '../client-research-hub.css'
+import { NativePublicStrategyCatalogue } from './NativePublicStrategyCatalogue'
 
 /** Memory-only source UI choices, not account or execution authority. */
 export type NativeStrategyViewState = {
@@ -31,6 +32,8 @@ type NativeStrategiesProps = {
 }
 /** Owner/dataset replacement and data removal discard local routes and drafts. */
 export function NativeStrategies(props: NativeStrategiesProps) {
+  if (!props.presentation) return <NativePublicStrategyCatalogue key={props.owner ?? 'public'} onReturn={props.onReturn}
+    location={props.location} onNavigate={props.onNavigate} shouldFocus={props.shouldFocus} signedIn={props.signedIn ?? false} onLogin={props.onLogin ?? props.onReturn} />
   return <NativeStrategySurface key={JSON.stringify([props.owner ?? null, props.datasetIdentity ?? 'default', props.presentation !== undefined])} {...props} />
 }
 /** Same source sharing renderer, with explicit service-only inputs. */

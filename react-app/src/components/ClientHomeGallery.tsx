@@ -9,7 +9,7 @@ type SelectionProps = { selection: HomeTemplateSelection; onChange: (selection: 
 // SVG geometry is preserved from tfTplArt, not replaced by generic icon art.
 function TemplateArt({ id }: { id: string }) {
   const uid = useId()
-  const accent = '#5b8af7', line = 'rgba(255,255,255,.72)', muted = 'rgba(255,255,255,.28)', sub = 'rgba(255,255,255,.14)'
+  const accent = '#00f0ff', line = 'rgba(255,255,255,.72)', muted = 'rgba(255,255,255,.28)', sub = 'rgba(255,255,255,.14)'
   return <svg viewBox="0 0 220 124" width="220" height="124" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     <defs><linearGradient id={uid} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#1a1c21" /><stop offset="1" stopColor="#141519" /></linearGradient></defs>
     <rect width="220" height="124" fill={`url(#${uid})`} /><path d="M18 84H202" stroke={sub} strokeWidth="1" />

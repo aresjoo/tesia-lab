@@ -121,7 +121,18 @@ function DropdownOptions({ id, label, value, options, initialIndex, trigger, wra
       trigger.current?.focus({ preventScroll: true }); onClose(); return
     }
     if (event.key === 'Escape') {
-      event.preventDefault(); event.stopPropagation(); trigger.current?.focus({ preventScroll: true }); onClose(); return
+      event.preventDefault(); event.stopPropagation()
+      const anchor = trigger.current
+      anchor?.focus({ preventScroll: true })
+      if (anchor) {
+        const rect = anchor.getBoundingClientRect(), view = window.visualViewport
+        const top = view?.offsetTop ?? 0, left = view?.offsetLeft ?? 0
+        if (rect.top < top || rect.bottom > top + (view?.height ?? innerHeight)
+          || rect.left < left || rect.right > left + (view?.width ?? innerWidth)) {
+          anchor.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' })
+        }
+      }
+      onClose(); return
     }
     if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
       event.preventDefault(); event.stopPropagation()

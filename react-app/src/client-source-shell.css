@@ -14,7 +14,8 @@
   .tesia-shell .client-sidebar:not(.mobile-open) .client-research-navigation { flex: none; }
   .tesia-shell .client-sidebar:not(.mobile-open) .client-sidebar-bottom { flex-shrink: 0; }
 }
-.tesia-shell .client-sidebar.mobile-open { background: var(--client-1); }
+/* Source 9fb's final skin is black in both renderers; never retint all panels. */
+.tesia-shell .client-sidebar.mobile-open { background: var(--client-0); }
 .tesia-shell .client-sidebar.mobile-open .client-drawer-brand { padding: 0; }
 .tesia-shell .client-sidebar .client-drawer-brand strong{color:#00f0ff}
 .tesia-shell .client-sidebar .client-research-navigation { display: flex; flex-direction: column; flex: 1; min-height: 0; }
@@ -102,3 +103,11 @@
 @media (max-width: 380px) { .g-hist-row { flex-direction: column; align-items: stretch; gap: 4px; } .g-hist-row .t { white-space: normal; overflow-wrap: anywhere; } .g-hist-row .d { font-size: 14px; } }
 @media (max-height: 600px) { .hub-content.g-hist { padding-top: 16px; } .g-hist-search { margin-bottom: 16px; } }
 .g-hist .hub-empty p{font-size:16px;color:#cdcdcd;line-height:1.6}
+
+/* Frozen source9fb: collapsed bottom rows occupy 100px above the 8px inset. */
+.tesia-shell .client-sidebar:not(.mobile-open) .client-sidebar-bottom { position:relative; flex:none; height:100px; padding:0; display:block; }
+.tesia-shell .client-sidebar:not(.mobile-open) .client-sidebar-bottom > [data-sidebar-action="settings"] { position:absolute; left:0; bottom:52px; }
+.tesia-shell .client-sidebar:not(.mobile-open) .client-sidebar-bottom > [data-sidebar-action="account"] { position:absolute; left:0; bottom:6px; }
+
+/* Source9fb hamburger has no filled gray box. */
+.client-source-app .client-hamburger { background:transparent; }

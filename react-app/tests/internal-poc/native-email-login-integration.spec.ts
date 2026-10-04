@@ -353,7 +353,7 @@ test('같은 페이지 AUTH header 수신·body 유실은 verify 재POST 없이 
   await form(page).getByRole('button', { name: '같은 로그인 요청 확인', exact: true }).click()
   await expect(claimButton(page)).toBeEnabled()
   expect(evidence.posts.length).toBe(2)
-  await expect(page.getByRole('alert')).toContainText('현재 인증 세션만 확인')
+  await expect(page.locator('[data-native-auth-notice][role="status"]').filter({ hasText: '현재 인증 세션만 확인' })).toHaveCount(1)
 })
 
 test('create 유실 뒤 패널 닫기·재열기는 원 요청을 보존하고 명시 같은 key로만 재생한다', async ({ page }) => {

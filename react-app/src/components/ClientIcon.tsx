@@ -4,8 +4,9 @@ import type { ReactNode } from 'react'
 const icons = {
   document: <><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" /><path d="M14 3v5h5" /></>,
   new: <><path d="M12 3a9 9 0 1 0 9 9" /><path d="M17.8 2.8l3.4 3.4L13 14.4l-4 .6.6-4z" /></>,
-  history: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></>,
-  brokers: <><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6M9 11h.01M15 11h.01" /></>,
+  // Frozen source 9fbff821, sidebar history/connection navigation.
+  history: <><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></>,
+  brokers: <><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" /><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></>,
   insight: <><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></>,
   schedule: <><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 9.5h16M8 3v4M16 3v4" /></>,
   trading: <><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M7 15l3-4 2.5 2.5L17 9" /></>,
@@ -23,5 +24,5 @@ const icons = {
 } satisfies Record<string, ReactNode>
 
 export function ClientIcon({ name, size = 16, className }: { name: keyof typeof icons; size?: number; className?: string }) {
-  return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={name === 'profile' ? 1.5 : name === 'open' || name === 'close' ? 1.7 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{icons[name]}</svg>
+  return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={name === 'profile' ? 1.5 : name === 'open' || name === 'close' || name === 'history' ? 1.7 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{icons[name]}</svg>
 }

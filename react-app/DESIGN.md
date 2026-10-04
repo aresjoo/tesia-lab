@@ -1240,6 +1240,8 @@ backdrop-filter: blur(24px) saturate(125%);
 
 ## 21. Decision Log
 
+- 2026-10-04 `accepted / preserve login choices and gate availability` — 사용자 요청에 따라 native 서비스에서도 기존 Google·Apple·이메일 선택지를 유지한다. Google만 등록한 배포의 `VITE_TETH_AUTH_GOOGLE_ONLY=true`는 비등록 방식의 숨김이 아닌 ‘준비 중’ 가용성 제어이며 요청/복구를 차단한다. 기본 방식·SDK·owner/세션·명시 승인 계약은 유지한다. 닫기 버튼이 있는 로그인 패널의 제목 비중첩만 보완하고 임의 재디자인하지 않는다. 별도 투자 프롬프트 draft·서버/DB/credential·실거래 Gate는 이번 정적 UI 업데이트에 포함하지 않는다. 실행/실패·배포 상태는 Bugfix_report의 로그인 방식 공존 절과 migration 검증 영수증을 따른다.
+
 - 2026-10-02 `accepted / frozen9fb sidebar and canonical verdict` — 회원 sidebar의 연구 기록/AI 트레이딩/전략 복사/거래소 연결4개와 guest2개를 최신 원본대로 계승하고 인사이트는 기존 설정 메뉴에서 제공한다. guest 새 전략 차단의 정확 인용은 source1514다. 지연 공유 기하 시험은 같은 실제 폰트 준비 후 엄격 bbox/hit-test를 유지하며 archive 소비자 제목을 구분한다. e325/dc85100 실패·중단은 역사 근거로 보존한다. 현재 전체 회귀·모델 검수·main 판정은 PM 정본만 소유하며 코드 조건부 GO나 별도 범위 시험을 전체 GO로 승격하지 않는다.
 
 - 2026-10-02 `accepted / integration return and retained Mock boundary` — e325 이후 공통 mine 복귀·비회원 새 전략 차단·native 설정 host 복귀와 표시 CSS/프랑스어 필터명을 교정한다. source ASK 실제 조작으로 소비 시험을 맞추며 없는 관측 시각·상담 전송·서비스 권위를 합성하지 않는다. 원 source9fb/immutable412cfg·실패·QA SHA는 보존한다. native 결과 396개 단일 범위 합격을 후속 전체 성공으로 합산하지 않으며 전체 회귀·최종 Opus5.5 검수·main 병합은 PM 인수 전 미완료다. API/주문/운영 Gate 변경0.

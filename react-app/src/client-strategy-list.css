@@ -1,4 +1,18 @@
 /* 4d043c6 skf card. Scoped away from detail, creator and account cards. */
+/* 9fbff821 source: catalogue starts with filters, not a second route bar.
+   Keep the heading accessible and the keyboard return action discoverable.
+   Management/detail screens retain their existing header and width. */
+.client-source-app .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header{position:absolute;width:1px;height:1px;min-height:0;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.client-source-app .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header:has(button:focus){position:fixed;top:8px;left:72px;width:auto;height:auto;min-height:44px;padding:8px 16px;margin:0;clip-path:none;white-space:normal;z-index:10}
+.client-strategy-sharing:has(>.strategy-filters[data-catalogue-list]){max-width:1240px;padding:40px 40px 80px}
+.client-strategy-sharing:has(>.strategy-filters[data-catalogue-list])>.strategy-list-container>.strategy-list-grid{margin-top:0}
+@media(min-width:861px){
+  .client-source-app:has(.client-sidebar.mobile-open) .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header:has(button:focus){left:264px}
+}
+@media(max-width:860px){
+  .client-strategy-sharing:has(>.strategy-filters[data-catalogue-list]){padding:72px 20px 56px}
+  .client-source-app .client-source-main .client-sharing-hub:has(.strategy-filters[data-catalogue-list])>.hub-header:has(button:focus){left:56px;right:64px}
+}
 .strategy-list-container{container:strategy-list / inline-size}
 .strategy-list-sort{display:inline-flex;min-width:0;max-width:100%}
 .strategy-list-sort select{min-height:44px;max-width:100%;padding:0 34px 0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:#000;color:#ececec;font:inherit;font-size:14px;cursor:pointer}

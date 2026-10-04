@@ -8,18 +8,18 @@
 .client-site-footer .gft-follow button { flex:none; display:grid; place-items:center; width:44px; height:44px; padding:11px; border:0; background:none; color:inherit; opacity:.65; }
 .client-site-footer .gft-follow svg { width:22px; height:22px; }
 .client-site-footer .gft-crs { display:flex; align-items:center; min-height:44px; }
-.client-site-footer .gft-wm { margin-top:72px; max-width:100%; }
+.client-site-footer .gft-wm { margin-top:14px; max-width:100%; }
 .client-site-footer .gft-copy p { max-width:75ch; }
 /* Document pages use one scroll owner. Chat, research and terminal are excluded. */
 /* A finite scrollport is essential: an auto-height overflow ancestor prevents
    the bottom-sticky composer from reaching the viewport on a long gallery. */
 .tesia-shell.client-source-app.conversation-surface.has-site-footer { height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-padding-block:64px 44px; }
 .client-footer-body { display:contents; }
-.client-source-app.has-site-footer .client-source-main { height:auto; min-height:calc(100svh - 28px); overflow:visible; }
+.client-source-app.has-site-footer .client-source-main { height:auto; min-height:100svh; overflow:visible; }
 .client-source-app.has-site-footer :is(.client-main-existing,.native-service-route-content,.native-service-content:not([hidden]),.client-main-account) { height:auto; overflow:visible; }
-.client-source-app.has-site-footer .client-source-main .client-research-hub { height:auto; min-height:calc(100svh - 28px); overflow:visible; }
-.client-source-app.has-site-footer > .client-site-footer { margin-top:0; padding-bottom:28px; }
-.client-source-app.has-site-footer.footer-in-view > .site-help { bottom:42px; }
+.client-source-app.has-site-footer .client-source-main .client-research-hub { height:auto; min-height:100svh; overflow:visible; }
+.client-source-app.has-site-footer > .client-site-footer { margin-top:0; padding-bottom:0; }
+.client-source-app.has-site-footer.footer-in-view > .site-help { bottom:22px; }
 @container(max-width:600px) {
   .client-site-footer .gft-follow .gft-fl { flex-basis:100%; margin-bottom:8px; }
   .client-site-footer .gft-follow { column-gap:8px; }
@@ -28,7 +28,7 @@
   .tesia-shell.client-source-app.has-site-footer { padding-left:0!important; }
   .client-source-app.has-site-footer > .client-footer-body { display:grid; grid-template-columns:64px minmax(0,1fr); }
   .client-source-app.has-site-footer > .client-footer-body:has(.client-sidebar.mobile-open) { grid-template-columns:256px minmax(0,1fr); }
-  .client-source-app.has-site-footer > .client-footer-body > .client-sidebar { position:sticky; top:0; bottom:auto; grid-column:1; grid-row:1; height:calc(100dvh - 28px); align-self:start; }
+  .client-source-app.has-site-footer > .client-footer-body > .client-sidebar { position:sticky; top:0; bottom:auto; grid-column:1; grid-row:1; height:100dvh; align-self:start; }
   .client-source-app.has-site-footer > .client-footer-body > .client-source-main { grid-column:2; grid-row:1; min-width:0; }
 }
 @media(max-width:860px) {
@@ -38,9 +38,9 @@
   .client-source-app.has-site-footer.view-landing::before { content:''; position:fixed; inset:0 0 auto; height:64px; z-index:69; background:var(--client-0); }
   .client-source-app.has-site-footer.view-landing:has(.client-hamburger.with-banner)::before { top:64px; }
   /* A fixed input used to cover the new footer. It now stops with its home. */
-  .client-source-app.has-site-footer .client-gallery-home .client-home-band { position:sticky; inset:auto; bottom:28px; margin:26px -24px 0; width:calc(100% + 48px); }
+  .client-source-app.has-site-footer .client-gallery-home .client-home-band { position:sticky; inset:auto; bottom:0; margin:26px -24px 0; width:calc(100% + 48px); }
   .client-source-app.has-site-footer .client-home-content.client-gallery-home { padding-bottom:24px; }
-  .client-site-footer .gft-wm { margin-top:44px; }
+  .client-site-footer .gft-wm { margin-top:14px; }
 }
 @media(max-width:860px) and (max-height:560px) {
   /* Match the home keyboard/landscape fallback: the footer's sticky override

@@ -6,6 +6,24 @@
   line-height: 1.65;
   color: var(--client-text-2);
 }
+/* Source tf-sum card in the conversation; server conditions/consent/actions
+ * are retained inside that card, rather than introducing a second layout. */
+.client-service-app .client-lab-conversation .native-strategy-workflow {
+  max-width: 560px; border: 1px solid rgba(255,255,255,.1); border-radius: 20px;
+  background: #303030; padding: 20px 22px; margin: 16px 0; color: #fff;
+}
+.client-service-app .client-lab-conversation .native-strategy-workflow .native-workflow-row {
+  grid-template-columns: 104px minmax(0,1fr); gap: 8px; font-size: 15px; min-height: 42px;
+}
+.client-service-app .client-lab-conversation .native-strategy-workflow .native-workflow-row > dd { text-align: start; font-weight: 400; }
+.client-service-app .client-lab-conversation .native-strategy-workflow .native-workflow-actions > .is-primary {
+  width: 100%; border-radius: 999px; min-height: 48px; background: #fff; color: #000;
+}
+.native-history-details { margin-top: 24px; color: var(--client-text-2); }
+.native-history-details > summary { cursor: pointer; min-height: 44px; align-content: center; font-size: 13px; }
+@media (max-width:480px) {
+  .client-service-app .client-lab-conversation .native-strategy-workflow .native-workflow-row { grid-template-columns: minmax(0,1fr); gap: 2px; }
+}
 .client-service-app .native-strategy-workflow > h2 {
   margin: 4px 0 8px;
   color: var(--client-text);

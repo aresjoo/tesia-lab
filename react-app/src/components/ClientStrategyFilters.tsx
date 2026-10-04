@@ -12,8 +12,9 @@ import filterCopy from '../client-strategy-filter-copy.json'
 import '../client-strategy-filters.css'
 
 /** Source 412fd60 final mk3Controls/sk-main, shared by preview and service. */
-export function ClientStrategyFilters({ tab, showTabs = true, activeFollowCount = 0, sort, kind, market, query, openDropdown, setOpenDropdown, chooseTab, chooseSort, chooseKind, chooseMarket, setQuery, exchangeFilter }: {
+export function ClientStrategyFilters({ tab, showTabs = true, activeFollowCount = 0, sort, unavailableSorts = [], kind, market, query, openDropdown, setOpenDropdown, chooseTab, chooseSort, chooseKind, chooseMarket, setQuery, exchangeFilter }: {
   showTabs?: boolean
+  unavailableSorts?: readonly string[]
   exchangeFilter?: ReactNode
   tab: SharingPreferences['tab']; activeFollowCount?: number; sort: string
   kind: StrategyKindFilter; market: StrategyMarketFilter; query: string
@@ -24,7 +25,7 @@ export function ClientStrategyFilters({ tab, showTabs = true, activeFollowCount 
   const { language } = useClientPreferences(), helpId = useId()
   const s = (key: SharingCopyKey) => sharingCopy(language, key)
   const copy = filterCopy[language]
-  return <div className="tfbk-filters strategy-filters">
+  return <div className="tfbk-filters strategy-filters" data-catalogue-list={!showTabs && tab === 'find' || undefined}>
     {/* Internal service consumers retain their management tabs until relocated. */}
     {showTabs && <div className="ss3-tabs" role="group" aria-label={sharedFollowCopy(language, '전략 공유 영역')}>
       {([['find', '전략 찾기'], ['follow', '따라가는 중'], ['mine', '내 전략']] as const).map(([id, label]) =>
@@ -44,7 +45,7 @@ export function ClientStrategyFilters({ tab, showTabs = true, activeFollowCount 
       </div>
       <div className={`strategy-filter-row${exchangeFilter ? ' has-my-exchanges' : ''}`}>
         <label className="strategy-list-sort"><select aria-label={s('정렬 기준')} value={sort} onChange={event => chooseSort(event.target.value)}>
-          {sharingSortOptions.map(option => <option key={option.value} value={option.value}>{listCopy[language][option.label]}</option>)}
+          {sharingSortOptions.map(option => <option key={option.value} value={option.value} disabled={unavailableSorts.includes(option.value)}>{listCopy[language][option.label]}</option>)}
         </select></label>
         <ClientSharingDropdown label={copy.marketLabel} value={market}
           options={sharingMarketOptions.map(value => ({ value, label: copy[value === 'all' ? 'allMarkets' : value] }))}

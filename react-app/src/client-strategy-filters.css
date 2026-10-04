@@ -1,5 +1,6 @@
 /* Source 412fd60 mk3 segment/toolbar. No hidden search or decorative controls. */
 .client-strategy-sharing .tfbk-filters.strategy-filters{display:block;margin:24px 0}
+.client-strategy-sharing .tfbk-filters.strategy-filters[data-catalogue-list]{margin:0 0 18px}
 .strategy-filters>.ss3-tabs{margin-bottom:24px;justify-content:flex-start}
 .strategy-kind-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:14px;min-width:0}
 .strategy-kind-group{display:flex;max-width:100%;min-width:0;flex-wrap:wrap;gap:0;padding:3px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:#131517}
@@ -10,8 +11,10 @@
 .strategy-kind-help{margin:0;flex:1 1 260px;min-width:0;font-size:13px;line-height:1.5;color:#9aa0a6}
 .strategy-filter-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px;min-width:0}
 .strategy-filter-row .strategy-list-sort{margin-right:auto}
+.strategy-filters[data-catalogue-list] .strategy-list-sort{flex:0 1 auto;margin-right:0}
 .client-strategy-sharing .strategy-filter-row .tfbk-drop{min-height:44px;min-width:0;padding:9px 16px;border:1px solid rgba(255,255,255,.16);border-radius:999px}
 .client-strategy-sharing .strategy-filter-row .ss3-search{min-height:44px;min-width:min(180px,100%);border:1px solid rgba(255,255,255,.16);padding:0 16px}
+.client-strategy-sharing .strategy-filters[data-catalogue-list] .ss3-search{flex:1;max-width:none}
 .client-strategy-sharing .strategy-filter-row .ss3-search input{min-height:42px}
 @media(max-width:640px){
   .strategy-kind-row{gap:10px;margin-bottom:12px}
@@ -19,9 +22,11 @@
   .client-strategy-sharing .strategy-kind-group button{flex:1 1 auto;padding:8px;font-size:13.5px}
   .strategy-filter-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}
   .strategy-filter-row .strategy-list-sort{grid-column:1/-1;width:100%;margin:0}
+  .strategy-filters[data-catalogue-list] .strategy-list-sort{grid-column:auto}
   .strategy-filter-row .strategy-list-sort select{width:100%}
   .strategy-filter-row .tfbk-dropwrap,.strategy-filter-row .tfbk-drop{width:100%}
   .client-strategy-sharing .strategy-filter-row .ss3-search{min-width:0;max-width:none;padding:0 12px}
+  .client-strategy-sharing .strategy-filters[data-catalogue-list] .ss3-search{grid-column:1/-1}
 }
 
 .client-strategy-sharing .mk-pager{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin:22px 0 4px;flex-wrap:wrap}

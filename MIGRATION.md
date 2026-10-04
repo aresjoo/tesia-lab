@@ -8,16 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web` 거래소 연결 통합 후보 `75a5f5bbb820ad27f66304927ff4c70954fea318`의 추적 파일 전체. 병합 main `62b5e69`를 포함한 Web draft PR54 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/trading-ui-restoration` 추적 파일 전체. 정확한 commit은 manifest에 기록. 병합 main `62b5e69`와 Web draft PR54 `75a5f5b`를 보존한 UI 복구 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
-| 현재 제품 상태 | 원본 React 이식 병합본 + 미병합 거래소 연결 후보를 함께 전달. 코드 공개/검토와 main 인수·실제 공급자·운영 승격은 별개. 연결 기능은 기본 비활성화 |
+| 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `5a51901`(병합 main `62b5e69`)에서 거래소 연결 후보 `75a5f5b`로 갱신했다. **추가 19개 파일 변경(신규 13개 포함), 총 2,135개 파일**이며 출처의 미커밋 변경은 없다. 앞서 전달한 원본 이식·후속 86개 파일 변경도 모두 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `d53a806`의 React 출처 `75a5f5b`에서 UI 복구·인증 가용성 수정본 **`fa8601e`**로 갱신했다. 총 **2,159개 파일**, 직전 snapshot 대비 **80개 변경(신규24/수정56/삭제0)**이며 미커밋 출처는 없다. 정확한 SHA·전체 해시는 manifest와 검증 JSON에 결속한다. 이전의 원본 이식·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+
+이번 추가 범위는 AI 트레이딩 소개·로그인 전 공개 목록·헤더/사이드바, 설정·도움말·문서 FAQ/Back/스크롤 복귀, 카탈로그 페이지·키보드 초점과 Google·Apple·이메일 선택지 공존이다. 기존 Google-only 배포에서 다른 방식을 없애던 조립을 수정해 **표시는 유지하고 가용성만 제어**한다. 현재 미등록 Apple·이메일은 ‘준비 중’이며 서버 등록이나 인증 성공을 만들어내지 않는다. 상세 재현·수정·실패 이력은 `react-app/Bugfix_report.md`의 최신 두 절을 따른다.
+
+투자 프롬프트 [draft PR5](https://github.com/aresjoo/tesia-lab/pull/5)의 `8646b65`는 별도 검증 중인 후보로 보존하며 이번에 병합하지 않았다. 해당 root `index.html`·`server/` 변경과 React snapshot의 제품 파일은 겹치지 않지만, 공용 `MIGRATION.md` 설명은 향후 병합 시 통합해야 한다. **파일 충돌 없음은 프롬프트 개선이 현재 React 대화에 연결됐다는 뜻이 아니다.** 이번 작업은 루트 원본/server를 변경하지 않는다.
 
 사용자가 현재까지의 프론트 변경을 한 브랜치에서 볼 수 있도록 요청했으므로 **미병합이라는 이유만으로 구현 코드를 빼지 않는다.** 후보 코드를 포함하되 출처 SHA, 검증 범위, feature flag, 미완료 계약·운영 항목을 구분해 전달한다. 독립 QA 실험·credential·DB와 다른 저장소 서버 구현 자체는 프론트 스냅샷에 혼합하지 않는다.
 
@@ -74,7 +78,7 @@
 | 원본 정적 정보 페이지 | React 내부 페이지 라우팅 | 정보 페이지 왕복 중 이미 열린 대화 초안을 유지 |
 | 수동 화면 확인 중심 | 타입 검사·lint·공개/내부 빌드·Playwright | 테스트 파일이 있다는 것과 해당 전달 SHA 전체가 통과했다는 것은 다름 |
 
-공개 실행 경로는 `src/client-entry.ts` → `src/client-bootstrap.tsx` → `SiteRouter` / `ClientMainExperience`다. 과거 query/hash도 원본 기반 셸로 들어간다. 별도 DEV 검증 화면은 production 앱과 구분한다.
+공개 원본 검토 앱의 실행 경로는 `src/client-entry.ts` → `src/client-bootstrap.tsx` → `SiteRouter` / `ClientMainExperience`다. 서비스용 정적 번들은 `src/internal-poc/service-main.tsx` → `SiteRouter(service)` → `NativeServiceApp`으로 조립한다. 과거 query/hash도 원본 기반 셸로 들어간다. 정적 번들의 배포는 backend·실제 인증 공급자·모델의 전체 동작 승인을 뜻하지 않는다. 별도 DEV 검증 화면은 배포 앱과 구분한다.
 
 ## 3. 화면·기능별 원본 대응표
 
@@ -158,7 +162,7 @@ npm run build:service
 TETH_E2E_PORT=4196 npx playwright test --workers=2
 ```
 
-Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 backend 연결은 기존 승인된 설정·계약을 따른다. 이번 전달을 위해 자동 로그인·API key 입력·운영 배포를 실행하지 않는다.
+Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 backend 연결은 기존 승인된 설정·계약을 따른다. snapshot 전달 도구는 자동 로그인·API key 입력·배포를 실행하지 않는다. 별도 승인된 teth.ai 정적 업데이트는 기존 인증 authority·credential·DB·backend·feature flag를 보존하는 업데이트 절차로 검증하고 기록한다.
 
 이번 전달 자체의 검증 결과는 [migration-verification.json](migration-verification.json)에 기록한다. 원본/출처/전달 해시 검증과 lint·build·대표 브라우저 검증을 구분한다. 출처의 전체 회귀·Web52 병합 인수는 완료됐으며, 이 브랜치는 **병합본과 신규 거래소 연결 후보를 함께 보여 주는 클라이언트 검토용 전달**이다. 기본 원본 이식의 전수 성공을 추가 연결 기능에 자동 승계하지 않는다. 클라이언트 main 병합 또는 운영 배포 승인을 의미하지 않는다.
 
@@ -174,7 +178,7 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 
 이 브랜치가 지속 전달 창구다. 날짜별 복제 브랜치·`final/latest` 문서를 늘리지 않는다. 코드를 바꾼 커밋에는 이 설명서의 영향/잔여와 검증 JSON도 갱신한다.
 
-1. `git fetch origin main migration` 후 로컬 `migration`을 원격과 fast-forward 정렬한다. 최초 브랜치 생성 전에는 `main`만 fetch한다.
+1. `git fetch origin refs/heads/main:refs/remotes/origin/main refs/heads/migration:refs/remotes/origin/migration` 후 실제 원격 SHA와 비교하고 로컬 `migration`을 fast-forward 정렬한다. 이 clone의 기본 fetch refspec은 main만 포함하므로 `git fetch origin migration`만으로 origin/migration이 갱신됐다고 추정하지 않는다. 최초 브랜치 생성 전에는 `main`만 fetch한다.
 2. PM의 현재 통합 작업본과 writer를 확인한다. 현재 프론트 통합 후보까지 전달하되 미병합 후보라는 이유로 코드를 누락하지 말고 상태를 구분한다. 원본 고정 SHA를 임의로 새 main과 혼합하거나 관련 없는 독립 실험을 합치지는 않는다.
 3. 출처가 순간적으로 변경 중이면 캡처를 다시 수행한다. 다음 도구는 추적 파일 전체를 byte 그대로 복사하고 모든 파일의 SHA-256을 기록한다. 비추적 코드가 있거나 전달본에 별도 수정이 있으면 중단한다.
 
@@ -185,6 +189,6 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 
 4. 변경 목록을 보고 의존성/공용 계약/화면 영향과 미완료 목록을 갱신한다. 비밀 탐지·관련 검증을 수행한다. 고객의 새 main 커밋이 있으면 별도 차이로 먼저 검토한다.
 5. `git add react-app migration-manifest.json migration-verification.json MIGRATION.md README.md AGENTS.md tools/sync-migration.mjs` 후 `git diff --cached --check`와 범위를 확인한다.
-6. 의미 있는 작업 묶음으로 `git commit`하고 `git push origin migration`한다. force push/main 병합/운영 배포는 하지 않는다.
+6. 의미 있는 작업 묶음으로 `git commit`하고 `git push origin migration`한다. force push/main 병합은 하지 않는다. 별도로 사용자가 승인한 정적 배포가 있으면 정확한 산출물·rollback·공개 확인을 독립 기록하고, migration push 자체를 배포 증거로 쓰지 않는다.
 
 동기화 도구는 **자동 커밋·푸시·배포·상시 감시를 하지 않는다.** 이후 작업 묶음마다 변경을 검토해 이 브랜치에 누적 반영한다. 실패한 검사나 미반영 구현을 다음 전달에서 조용히 지우지 않는다.

@@ -9,7 +9,7 @@ const ClientPublicPages = lazy(() => import('./ClientPublicPages'))
 export function SiteRouter({ children, service = false }: { children: ReactNode; service?: boolean }) {
   const browserLocation = useSiteLocation(service)
   const location = service ? getServiceSiteLocation(browserLocation) ?? '/' : browserLocation
-  const page = getSitePage(location.split('#')[0])
+  const page = getSitePage(location.split(/[?#]/)[0])
   const [appOpened, setAppOpened] = useState(!page)
   const previousPage = useRef(page)
   // Keep an opened app alive: information pages must not discard a chat draft.

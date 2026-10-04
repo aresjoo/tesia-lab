@@ -76,6 +76,7 @@ import './client-service.css'
 
 const ClientHelp = lazy(() => import('../components/ClientHelp').then(module => ({ default: module.SiteHelp })))
 const ClientResearchHistory = lazy(() => import('../components/ClientResearchHistory').then(module => ({ default: module.ClientResearchHistory })))
+const ClientTradingIntro = lazy(() => import('../components/ClientTradingIntro'))
 const NativeAccountPlan = lazy(() => import('./NativeAccountPlan').then(module => ({ default: module.NativeAccountPlan })))
 const NativeTradingWorkspace = lazy(() => import('./NativeTradingWorkspace').then(module => ({ default: module.NativeTradingWorkspace })))
 const NativeBrokers = lazy(() => import('./NativeBrokers').then(module => ({ default: module.NativeBrokers })))
@@ -132,8 +133,8 @@ export type ClientServiceHistory = {
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, serviceNotice, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
-  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void> }; onLogin?: () => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; conversationNavigation?: ReactNode
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
+  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void> }; onLogin?: () => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
   /** Observed result identity/status, only for the conversation's unread UI. */
@@ -191,6 +192,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   const root = useRef<HTMLDivElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const resetHomeFocus = useRef(false)
+  const resetHomeAtTop = useRef(false)
   const questionOwnerRef = useRef(accountScope)
   useLayoutEffect(() => { questionOwnerRef.current = accountScope; return () => { questionOwnerRef.current = undefined } }, [accountScope, state.sessionState])
   const [questionWriteHint, setQuestionWriteHint] = useState<{ scope: typeof accountScope; sessionState: typeof state.sessionState; messageId: string; bindingKey: string; tailId: string | undefined; title: string } | null>(null)
@@ -705,6 +707,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     // A later user action owns presentation, even if this request succeeds.
     if (intent !== resetPresentationIntent.current) return
     resetHomeFocus.current = true
+    resetHomeAtTop.current = trading && state.sessionState !== 'AUTHENTICATED'
     setArrivalRect(undefined)
     setResearchHistory(false)
     setAccountPlan(false)
@@ -820,16 +823,33 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       <button type="button" aria-label={c('closeNotice')} onClick={() => { setNotice(null); setConfirmReset(false); setRecoveryDismissed(true) }}>{t('common.close')}</button>
     </div>
   </div> : null
-  const footerHome = isHome && !historyView.open && !accountPlan && !insights && !brokers && !strategies
+  // The guest introduction is a document, not the authenticated trading
+  // workspace. Reuse the source document chrome without changing auth gates.
+  const guestTradingIntro = trading && state.sessionState !== 'AUTHENTICATED'
+  const footerHome = isHome && !historyView.open && !accountPlan && !trading && !insights && !brokers && !strategies
+  // History is a bounded workspace even when the underlying conversation is
+  // empty. Leave the separate account document layout unchanged by this fix.
+  const landingLayout = isHome && !settingsTab && !historyView.open && !trading && !insights && !brokers
+  useLayoutEffect(() => {
+    // Source gContent starts a newly selected document at its heading. Only
+    // the document shell moves: retained chat/chart scroll and background
+    // responses are untouched, as are locale/data updates on the same page.
+    root.current?.scrollTo({ top: 0, behavior: 'instant' })
+  }, [accountPlan, insights, brokers, trading, strategies])
   useLayoutEffect(() => {
     if (!resetHomeFocus.current) return
     resetHomeFocus.current = false
+    const restoreHomeTop = resetHomeAtTop.current
+    resetHomeAtTop.current = false
     const target = input.current
     if (!footerHome || settingsTab || connectionOpen || trading || surface || !target || target.disabled || !target.getClientRects().length) return
     target.focus({ preventScroll: true })
-    target.scrollIntoView({ block: 'center', behavior: 'instant' })
+    // Returning from the long introduction is a new home arrival. Centering
+    // its composer would scroll the shared document past the home headline.
+    if (restoreHomeTop) root.current?.scrollTo({ top: 0, behavior: 'instant' })
+    else target.scrollIntoView({ block: 'center', behavior: 'instant' })
   })
-  const hasSiteFooter = nativeAccounts && !settingsTab && !connectionOpen && !trading && (footerHome || accountPlan || insights || brokers || strategies)
+  const hasSiteFooter = nativeAccounts && !settingsTab && !connectionOpen && (!trading || guestTradingIntro) && (footerHome || accountPlan || insights || brokers || strategies || guestTradingIntro)
   const lastQuestionMessage = state.messages.at(-1)
   const questionBelongsHere = lastQuestionMessage?.role === 'assistant' && (!lastQuestionMessage.researchThread
     ? !researchWorkspaceOpen : researchWorkspaceOpen && lastQuestionMessage.researchThread.scopeId === researchData?.scopeId && lastQuestionMessage.researchThread.documentId === currentResearchId)
@@ -842,7 +862,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     ? researchWorkspaceOpen && lastQuestionMessage.researchThread.scopeId === researchData.scopeId && lastQuestionMessage.researchThread.documentId === currentResearchId
     : !researchWorkspaceOpen
   const activeQuestionKey = clarificationKey ? clarificationBelongsHere ? clarificationKey : null : activeQuestion?.kind === 'market-question' && !activeQuestion.presentation.state?.closed && !activeQuestion.presentation.state?.accepted ? marketBindingKey(activeQuestion.presentation.binding) : null
-  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={root} className={`tesia-shell conversation-surface client-source-app client-service-app ${isHome && !settingsTab && !trading && !insights && !brokers && !strategies ? 'view-landing' : 'view-briefing'}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties} data-service-phase={state.phase}
+  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={root} className={`tesia-shell conversation-surface client-source-app client-service-app ${landingLayout ? 'view-landing' : 'view-briefing'}${guestTradingIntro && !settingsTab && !connectionOpen ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties} data-service-phase={state.phase}
     onKeyDownCapture={() => { resetPresentationIntent.current++; if (researchHistory) historyFocusIntent.current = false; if (insights) insightFocusIntent.current = false; if (brokers) brokerFocusIntent.current = false; if (strategies) strategiesFocusIntent.current = false }}
     onPointerDownCapture={() => { resetPresentationIntent.current++; if (researchHistory) historyFocusIntent.current = false; if (insights) insightFocusIntent.current = false; if (brokers) brokerFocusIntent.current = false; if (strategies) strategiesFocusIntent.current = false }}
     onClickCapture={event => {
@@ -863,7 +883,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     }}>
     <a className="skip-link" href="#tesia-main" onClick={event => { event.preventDefault(); document.getElementById('tesia-main')?.focus() }}>{c('skipContent')}</a>
     <div className="client-footer-body">
-    <ClientChrome showLocaleShortcut={isHome && !settingsTab && !connectionOpen && !historyView.open && !accountPlan && !trading && !insights && !brokers} researchPage={historyView.open ? historyView.page : insights ? 'insight' : brokers ? 'brokers' : null} tradingActive={trading} signedIn={state.sessionState === 'AUTHENTICATED'} onHome={() => { closeClientSettingsRoute(); if (connectionOpen) closeConnection(); newConversation() }}
+    <ClientChrome showLocaleShortcut={!settingsTab && !connectionOpen && (guestTradingIntro || isHome && !historyView.open && !accountPlan && !trading && !insights && !brokers)} researchPage={historyView.open ? historyView.page : insights ? 'insight' : brokers ? 'brokers' : null} tradingActive={trading} signedIn={state.sessionState === 'AUTHENTICATED'} onHome={() => { closeClientSettingsRoute(); if (connectionOpen) closeConnection(); newConversation() }}
       profileName={accountData?.profile?.name}
       recordsScope={accountScope ?? ''} records={library?.records ?? []} activeResearchId={library?.activeId}
       recordsPresentation={{ unavailable: libraryUnavailable ? <p className="client-sidebar-record-empty" role="status">{library?.status === 'loading' ? c('waiting') : library?.status === 'error' ? c('retry') : nativeHistoryCopy[language].title}</p> : undefined, footer: libraryFooter, archiveLabel: c('archive'), archiveDetail: c('archiveDetail'), errorLabel: c('retry') }}
@@ -871,7 +891,6 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       onLogin={login} onSignup={login} onProfile={nativeAccounts ? anchor => openAccountSurface('settings', anchor) : unavailable}
       onSettings={anchor => openAccountSurface(nativeAccounts ? 'settings' : 'locale', anchor)} onLocale={anchor => openAccountSurface('locale', anchor)}
       onTrading={() => {
-        if (state.sessionState !== 'AUTHENTICATED') { login(); return }
         if (!nativeAccounts) { setNotice({ key: 'featureUnavailable', feature: 'trading' }); return }
         setNotice(null); setHomeEntrance(false); setResearchHistory(false); setAccountPlan(false); setInsights(false); setBrokers(false); setTrading(true)
         pushSiteLocation(`${window.location.pathname}${window.location.search}#/trade`)
@@ -881,7 +900,6 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         if (connectionOpen) closeConnection()
         if (page === 'history') { history(); return }
         if (page === 'sharing' && nativeAccounts) {
-          if (state.sessionState !== 'AUTHENTICATED') { login(); return }
           strategiesFocusIntent.current = !strategies
           setSurface(null); setNotice(null); setConfirmReset(false); setHomeEntrance(false)
           setAccountPlan(false); setTrading(false); setInsights(false); setBrokers(false)
@@ -941,18 +959,17 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         <NativeInsights key={accountScope} onReturn={closeInsights} shouldFocus={shouldFocusInsights} data={insightData?.data} onFeedback={insightData?.onFeedback} controlledLocation={insightLocation} onNavigate={navigateInsight} locationHref={insightHref} onAsk={prepareQuestion} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={login} />
       </Suspense></ClientLoadBoundary>}
       {trading && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setTrading(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setTrading(false)} />}>
-        <NativeTradingWorkspace accountScope={accountScope} presentation={accountData} alertsRequest={alertsRequest} onBrowseExchanges={browseExchanges}
+        {state.sessionState !== 'AUTHENTICATED' ? <ClientTradingIntro researchOnly onStart={login} /> : <NativeTradingWorkspace accountScope={accountScope} presentation={accountData} alertsRequest={alertsRequest} onBrowseExchanges={browseExchanges}
           alertsView={alertsView ?? undefined} onAlertsViewChange={next => {
             if (accountData && ownerRef.current === accountData.scope && next.scope === accountData.scope && next.identity === accountData.identity) setAlertsView(next)
-          }} onNavigate={navigateAccount} onReturn={closeAccount} onNew={() => { closeAccount(); newConversation() }} />
+          }} onNavigate={navigateAccount} onReturn={closeAccount} onNew={() => { closeAccount(); newConversation() }} />}
       </Suspense></ClientLoadBoundary>}
       {accountPlan && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setAccountPlan(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setAccountPlan(false)} />}>
         <NativeAccountPlan accountScope={accountScope} presentation={accountData} location={accountLocation} onNavigate={navigateAccount} onTrading={() => pushSiteLocation(`${window.location.pathname}${window.location.search}#/trade`)} onReturn={closeAccount} />
       </Suspense></ClientLoadBoundary>}
       {researchHistory && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setResearchHistory(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setResearchHistory(false)} />}>
         <ClientResearchHistory key={accountScope} records={library?.records ?? []} externalBoundary shouldFocus={shouldFocusHistory} onSelect={selectConversation} pending={libraryPending || library?.pending || state.busy} onNew={newConversation} onReturn={() => setResearchHistory(false)}
-          footer={libraryFooter}
-          scopedContent={historyContent}
+          footer={<>{libraryFooter}{historyContent && <details className="native-history-details"><summary>{nativeHistoryCopy[language].title}</summary>{historyContent}</details>}</>}
           notice={<>{state.issue && <div className="client-service-issue">{state.issue}</div>}{navigationFeedback}{!executionHistory && historyFeedback}{state.recovery && <p className="client-service-recovery" role="status">{recoveryCopy}</p>}</>}
           unavailable={libraryUnavailable} />
       </Suspense></ClientLoadBoundary>}
@@ -964,9 +981,9 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         <ClientHomeSurface value={state.input} inputRef={input} onChange={editInput} onSend={() => send()}
           onLogin={login} onSignup={login} signedIn={state.sessionState === 'AUTHENTICATED'}
           selection={templates} onSelectionChange={setTemplates} disabled={!available} maxLength={1000}
-          composerNotice={state.phase === 'loading' ? <SessionLoading /> : state.issue && <div className="client-service-issue client-home-input-issue">{state.issue}
+          composerNotice={<>{state.phase === 'loading' ? <SessionLoading /> : state.issue && <div className="client-service-issue client-home-input-issue">{state.issue}
             {recover && <button type="button" className="g-qchip" disabled={state.busy} onClick={recover}>{n('checkSession')}</button>}
-          </div>}
+          </div>}{!state.issue && sessionRecoveryNeeded && recover && <button type="button" className="g-qchip" onClick={recover}>{n('checkSession')}</button>}</>}
           animate={homeEntrance} onBandHeight={setBandHeight}>
           {!historyView.open && conversationNavigation}
         </ClientHomeSurface>
@@ -1014,7 +1031,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           <NativeAnalysisSummarySlot />
         </>}
         {!researchHistory && !strategyDocument && !(researchData && researchWorkspaceOpen) && <div className="client-service-issue">{state.issue}</div>}
-        {recover && <button type="button" className="g-qchip" onClick={recover}>{n(state.phase === 'logged-out' ? 'newSession' : 'checkSession')}</button>}
+        {recover && (state.issue || state.phase === 'logged-out' || sessionRecoveryNeeded) && <button type="button" className="g-qchip" onClick={recover}>{n(state.phase === 'logged-out' ? 'newSession' : 'checkSession')}</button>}
       </ClientConversation></div>{researchData && <div hidden={!researchWorkspaceOpen} style={{ height: '100%', minHeight: 0 }}><NativeResearchWorkspace {...researchData} visible={researchWorkspaceOpen} view={researchView} onViewChange={changeResearchView} composerHasContext
         threadActivity={state.messages.at(-1)?.researchThread?.scopeId === researchData.scopeId ? {
           documentId: state.messages.at(-1)!.researchThread!.documentId, messageId: state.messages.at(-1)!.id,
@@ -1046,18 +1063,15 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       </div>
     </main>
     </div>
-    {hasSiteFooter && <ClientSiteFooter lime={footerHome} notice={serviceNotice ?? n(state.source === 'mock' ? 'mockDetail' : 'serviceSummary')} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} onNavigate={action => {
+    {hasSiteFooter && <ClientSiteFooter lime={footerHome} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} onNavigate={action => {
       if (action === 'new') { newConversation(); return }
       if (action === 'brokers') { browseExchanges(); return }
       if (action === 'insights') { insightFocusIntent.current = !insights; navigateInsight({}); return }
-      if (state.sessionState !== 'AUTHENTICATED') { login(); return }
       if (action === 'strategies') { strategiesFocusIntent.current = !strategies; navigateSharing({ period: 'all' }); return }
+      if (action === 'trade') { pushSiteLocation(`${window.location.pathname}${window.location.search}#/trade`); return }
+      if (state.sessionState !== 'AUTHENTICATED') { login(); return }
       pushSiteLocation(`${window.location.pathname}${window.location.search}${action === 'usage' ? '#/plan' : '#/trade'}`)
     }} />}
-    <aside className="client-development-boundary" aria-label={n('environment')}><details><summary>{n(state.source === 'mock' ? 'mockSummary' : 'serviceSummary')}</summary>
-      <p>{serviceNotice ?? (state.source === 'mock' ? n('mockDetail') : 'v0.1 서버 세션·전략 대화·검증을 연결합니다. 현재 설치된 compiler는 offline이며 외부 AI 모델·Google 로그인·실거래는 연결되지 않았습니다. 이 실행기의 신규 백테스트는 합성 데이터이며 봉인된 실제 730일 결과와 다릅니다. 언어 설정은 화면 표시용이며 서버 응답은 한국어입니다.')}</p>
-      {isHome && recover && <button type="button" className="g-qchip" onClick={recover}>{n('checkSession')}</button>}
-    </details></aside>
     {nativeAccounts && !settingsTab && !connectionOpen && !surface && (isHome || historyView.open || accountPlan || trading || insights || brokers) && <ClientLoadBoundary fallback={null}><Suspense fallback={null}><ClientHelp /></Suspense></ClientLoadBoundary>}
     {!inlineNotice && shellNotice && <div className="client-notice-stack">{shellNotice}</div>}
     {authSurface}

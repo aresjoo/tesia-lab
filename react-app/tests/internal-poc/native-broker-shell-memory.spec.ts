@@ -1,4 +1,5 @@
 import { sourceSidebarNavigationLabel } from '../../src/client-shell-copy'
+import { revealSourceNavigation } from '../fixtures/source-offline-research-entry'
 import { expect, test, type Page } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import fixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
@@ -50,7 +51,10 @@ for (const width of [320, 1440]) test(`${width}px: SDK 서비스에서 거래소
       setClientPreference('language', value)
     }, language)
     for (let visit = 0; visit < 2; visit++) {
-      if (width <= 860) await page.locator('.client-hamburger').click()
+      if (width <= 860) {
+        await revealSourceNavigation(page)
+        await page.locator('.client-hamburger').click()
+      }
       await page.locator('.client-sidebar').getByRole('button', { name: sourceSidebarNavigationLabel(language, 'brokers'), exact: true }).click()
       const brokers = page.locator('.native-brokers')
       await expect(brokers).toBeVisible()
