@@ -22,10 +22,10 @@ async function sourceInsightEntry(page: Page) {
   return entry
 }
 
-async function mount(page: Page, showAnalysis = true, includeBodyTag = false) {
+async function mount(page: Page, showAnalysis = true, includeBodyTag = false, nativeAccounts = true) {
   await page.route('**/library-port-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="test-root"></div></body></html>' }))
   await page.goto('/library-port-test.html')
-  await page.evaluate(async ({ showAnalysis, includeBodyTag }) => {
+  await page.evaluate(async ({ showAnalysis, includeBodyTag, nativeAccounts }) => {
     const refresh = '/@react-refresh'
     const runtime = (await import(/* @vite-ignore */ refresh)).default
     runtime.injectIntoGlobalHook(window)
@@ -67,7 +67,7 @@ async function mount(page: Page, showAnalysis = true, includeBodyTag = false) {
         if (controls.fail) throw new Error('PRIVATE_ERROR_NOT_FOR_UI')
         change()
       }
-      return react.createElement(ClientServiceExperience, { nativeAccounts: true, accountScope: owner, composerRequest,
+      return react.createElement(ClientServiceExperience, { nativeAccounts, accountScope: owner, composerRequest,
         connectionPresentation: connectionRequestId ? { scope: 'owner-a', identity: 'connection-one', requestId: connectionRequestId, status: 'ready', state: connectionStage === 'method'
           ? { id: 'method-one', kind: 'method', choices: [{ id: 'linked', title: '공급된 연결 방식', actionLabel: '이 방식으로 계속' }], onChoose: async (id: string) => { controls.calls.push(`connection:${id}`) } }
           : { id: 'api-one', kind: 'api', exchangeId: 'explicit-exchange', exchangeName: '공급 거래소', permissions: [], onConnect: async () => { controls.calls.push('connection:connect') } } } : undefined,
@@ -102,11 +102,82 @@ async function mount(page: Page, showAnalysis = true, includeBodyTag = false) {
       })
     }
     ;(dom.createRoot ?? dom.default.createRoot)(document.getElementById('test-root')).render(react.createElement(Host))
-  }, { showAnalysis, includeBodyTag })
+  }, { showAnalysis, includeBodyTag, nativeAccounts })
   await expect(page.locator('.g-thread')).toContainText('기존 대화')
 }
 
 async function openDrawer(page: Page) { await page.locator('.client-hamburger:visible, .client-rail-logo-row button:visible').first().click() }
+
+// Utility-free is the explicit legacy nativeAccounts=false presentation, not an
+// unauthenticated production state. Both variants retain the same supplied owner.
+for (const nativeAccounts of [true, false]) for (const [width, height] of [[932, 430], [1024, 480], [1440, 480]]) test(`expanded native research Back focus ring ${width}x${height} utility=${nativeAccounts}`, async ({ page }, info) => {
+  await page.setViewportSize({ width, height })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await mount(page, false, true, nativeAccounts)
+  const draft = '문서 저장 실패 뒤에도 유지할 질문\n두 번째 줄\n세 번째 줄'
+  const longTitle = '가'.repeat(120)
+  await page.locator('.g-composer textarea').fill(draft)
+  await page.evaluate(() => Reflect.set(window, 'expandedNativeComposer', document.querySelector('.g-composer textarea')))
+  await page.getByRole('button', { name: '대화 문서', exact: true }).click()
+  const workspace = page.locator('.native-research-workspace')
+  await workspace.locator('.g-title').click()
+  const field = workspace.locator('.g-title-input')
+  await field.fill(longTitle)
+  await page.evaluate(() => { window.libraryControls.fail = true })
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await field.press('Enter')
+    await expect.poll(() => page.evaluate(() => window.libraryControls.calls.length)).toBe(attempt + 1)
+    await expect(workspace.locator('.native-title-error')).toBeVisible()
+    await expect(field).toBeEnabled()
+    await expect(field).toBeFocused()
+    await expect(field).toHaveValue(longTitle)
+  }
+  expect((await workspace.locator('.rw-scroll').boundingBox())!.height).toBeGreaterThanOrEqual(80)
+  expect(await workspace.locator('.rw-header').evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true)
+  const composer = page.locator('.g-composer textarea')
+  await expect(composer).toHaveValue(draft)
+  expect(await composer.evaluate(node => node === Reflect.get(window, 'expandedNativeComposer'))).toBe(true)
+  expect(await composer.evaluate(node => {
+    const r = node.getBoundingClientRect(), target = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)
+    return r.top >= 0 && r.bottom <= innerHeight + 1 && (target === node || target !== null && node.contains(target))
+  })).toBe(true)
+  await field.press('Escape')
+  await expect(workspace.locator('.g-title')).toBeFocused()
+  await page.keyboard.press('Shift+Tab')
+  const back = workspace.locator('.rw-title>button:first-child')
+  await expect(back).toHaveAccessibleName('대화로 돌아가기')
+  await expect(back).toBeFocused()
+  expect(await back.evaluate(node => node.matches(':focus-visible'))).toBe(true)
+  await back.evaluate(async node => { await Promise.all(node.getAnimations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity).map(a => a.finished.catch(() => {}))) })
+  const ring = await back.evaluate(node => {
+    const r = node.getBoundingClientRect(), s = getComputedStyle(node)
+    const spread = Math.max(0, parseFloat(s.outlineWidth) + parseFloat(s.outlineOffset))
+    const clip = { top: 0, left: 0, right: innerWidth, bottom: innerHeight }
+    for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+      const style = getComputedStyle(parent), box = parent.getBoundingClientRect()
+      if (/hidden|clip|auto|scroll/.test(style.overflowY)) { clip.top = Math.max(clip.top, box.top); clip.bottom = Math.min(clip.bottom, box.bottom) }
+      if (/hidden|clip|auto|scroll/.test(style.overflowX)) { clip.left = Math.max(clip.left, box.left); clip.right = Math.min(clip.right, box.right) }
+    }
+    return { top: r.top - spread, bottom: r.bottom + spread, left: r.left - spread, right: r.right + spread, clip, width: s.outlineWidth, color: s.outlineColor, offset: s.outlineOffset }
+  })
+  await info.attach('expanded-native-focus-geometry', { contentType: 'application/json', body: JSON.stringify(ring) })
+  await page.screenshot({ path: info.outputPath('expanded-native-back-focus.png') })
+  expect(ring.width).toBe('2px')
+  expect(ring.color).toBe('rgb(91, 138, 247)')
+  expect(ring.top, 'The complete keyboard focus ring must remain inside the viewport and clipping ancestors').toBeGreaterThanOrEqual(ring.clip.top - 0.5)
+  expect(ring.bottom).toBeLessThanOrEqual(ring.clip.bottom + 0.5)
+  expect(ring.left).toBeGreaterThanOrEqual(ring.clip.left - 0.5)
+  expect(ring.right).toBeLessThanOrEqual(ring.clip.right + 0.5)
+  await page.keyboard.press('Enter')
+  // The workspace remains mounted while hidden so document state survives.
+  await expect(workspace).toBeHidden()
+  await expect(page.locator('.g-chead')).toBeVisible()
+  await expect(page.locator('.g-thread')).toContainText('기존 대화')
+  await expect(composer).toHaveValue(draft)
+  expect(await composer.evaluate(node => node === Reflect.get(window, 'expandedNativeComposer'))).toBe(true)
+  expect(await page.evaluate(() => window.libraryControls.calls)).toEqual(['rename:one', 'rename:one', 'rename:one'])
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+})
 
 for (const [width, height] of [[320, 360], [390, 360], [844, 390], [667, 375]]) test(`native research title rejection ${width}x${height} retains readable document and persistent draft`, async ({ page }, info) => {
   await page.setViewportSize({ width, height })

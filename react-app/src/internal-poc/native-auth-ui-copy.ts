@@ -78,8 +78,6 @@ export const nativeAuthUiCopy = {
 } as const satisfies Record<string, Translations>
 
 export type NativeAuthUiCopyKey = keyof typeof nativeAuthUiCopy
-export type NativeAuthUiMessage = { key: NativeAuthUiCopyKey; params?: Readonly<Record<string, string>> }
 export function nativeAuthUiText(language: ClientLanguage, key: NativeAuthUiCopyKey, params: Readonly<Record<string, string>> = {}): string {
   return nativeAuthUiCopy[key][column[language]].replace(/\{(\w+)\}/g, (slot, name: string) => Object.hasOwn(params, name) ? params[name] : slot)
 }
-export function nativeAuthUiMessage(language: ClientLanguage, message: NativeAuthUiMessage): string { return nativeAuthUiText(language, message.key, message.params) }

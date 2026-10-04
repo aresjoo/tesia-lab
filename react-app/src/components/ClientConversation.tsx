@@ -3,7 +3,6 @@ import { ClientPersistentRegion } from './ClientPersistentRegion'
 import { ClientQuestionDockTarget } from './ClientQuestionDock'
 import { ArrowDown, ArrowLeft, ArrowUp, Check, Copy, FileText, Pencil, Square } from 'lucide-react'
 import '../client-conversation.css'
-import { ClientResearchActivity } from './ClientResearchActivity'
 import type { ResearchDocumentView } from '../mock-research-preview'
 import { clientResearchLabel } from '../client-research-label'
 import { ClientIcon } from './ClientIcon'
@@ -100,15 +99,6 @@ export function ClientUserMessage({ children, onEdit, editDisabled = false, resu
     </div>
     <div className={`g-umsg${resultCard?' an-umsg':''}`}>{resultCard?<><div className="an-card">{resultCard}</div><div className="an-line">{children.split('\n')[0]}</div></>:children}</div>
     {copyState === 'error' && <span className="g-copy-error" role="status">{c('copyError')}</span>}
-  </div>
-}
-
-export function ClientThinking() {
-  const { c } = useConversationCopy()
-  const [startedAt] = useState(() => Date.now())
-  return <div aria-label={c('tethThinking')} role="status" aria-live="off">
-    <ClientResearchActivity label={c('thinkingSummary')} status="running" startedAt={startedAt} source="mock"
-      steps={[{ id: 'prepare', title: c('thinking'), status: 'running' }]} />
   </div>
 }
 

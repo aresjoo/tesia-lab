@@ -1,8 +1,8 @@
 # TETH Web
 
-최신 후속의 동결 영향 검사는37spec **1122PASS/0FAIL/기존QA-015SKIP2/retry0/flaky0/errors0·actual0**다. 같은입력 lint/공개·내부·service3build·built 로그인3폭·독립Opus5.5 정적검수가통과했으며49개실패발생을동일최종PASS에결속했다. 실제정적배포·잔여공급자·앞실패는아래현재보고서와migration영수증으로구분한다.
+최종 같은입력 57spec/1870개 단일은 **1868PASS/0FAIL/기존QA-015SKIP2/flaky0/retry0/시험밖오류0·actual0(686.841초)**다. 입력2184파일 SHA `f16293b745d99e521b59bea08efd24d5a3eaa2984727e739f66fc5a6bafa5216`와 공개1132파일 SHA `4006e4f39500d85d747839fb893ef2581a61b117b1cb1639e0bb05f89fac4992` 시작/끝동일이다. 같은입력 lint/공개·내부·service3build actual0, built Google·Apple·이메일1440/390/320PASS, 개인1 실제Opus5.5 STATIC_UI_CODE_GO/입력불변/actual0이다. 55개 원실패발생·50개 고유case-key를 동일 file/title/project·retry0의 최종PASS에 결속했다. 이전 partial·중단·전수와합산0, 실제 배포는 migration 영수증을 따른다.
 
-현재 후속은 원본 인사이트 복사 호환성·터미널에서 연결 플랜 왕복·native 연구 제목 저장 오류와 reduced-motion FAQ 도달의 최소 교정이다. Google·Apple·이메일 선택지·기존 SDK와 인증 권한·프롬프트·가격·패키지는 유지한다. 최신 실패·수정·정확한 단일 검증은 [Bugfix_report](Bugfix_report.md#복사-호환성터미널-복귀연구-제목-오류faq-도달의-연속-사용-교정), 원본 대비 설명·snapshot·실제 정적 배포는 Lab migration의 `MIGRATION.md`와 `migration-verification.json`을 따른다. 아래 최초 배포·과거 범위·원본 전체 인수와 합산하거나 실공급자/전체서비스 성공으로 쓰지 않는다.
+현재 후속은 복구표시7언어·정책푸터/원본문여백·About태블릿경계/텍스트확대·nativeBack초점·공유URL오류의최소교정이다. 원본성공카피만복원하며로그인세수단·기존실연결코드·인증/프롬프트/API/가격/package는보존한다. 동적소비를놓친계정export2개는원본바이트exact복원했고나머지6deadfunction만정리했다. 원실패/한계는 [Bugfix_report](Bugfix_report.md#복구-화면-지역화공개-그리드공유-오류동적-계정-소비-후속-검수), 전달·정적배포는Lab migration의manifest/verification을따른다. 전체서비스/실로그인GO는아니다.
 
 사용자 정정으로 배포 화면과 공개 탐색 동선을 원본 `aresjoo/tesia-lab@9fbff821` 기준으로 복원했다. 로그인 전에도 전략 정의 목록·필터·상세와 AI 트레이딩 소개를 볼 수 있고, 복사 등 계정 동작에서 기존 실제 로그인 창을 연다. 홈 cyan·검정 배경·입력/사이드바/도움말 위치, 원본 로그인 X/문구, 정보/정책 URL(`/about/`, `/download/`, `/policies/`), 푸터 구조, 초안 카드와 연구 기록 검색 배치를 복원한다. 정보/정책/푸터의 내부 Mock 배너를 제거했으며 미공급 성과·인원·실행 결과를 합성하지 않는다. 미공급 성과/인원 정렬은 비활성화하고 가격/계정 데이터는 기존 검증된 producer만 소비한다. 정상 Google ACK는 오류/요청 복구로 표시하지 않고, 이전 전략 연결은 같은 owner·원 anonymous ETag가 있을 때만 명시 선택으로 제공한다. 새 대화가 확인되면 이전 연결 제안을 닫고, 미확정 인증·mutation의 같은 key/bytes 복구는 유지한다. 기존 FE 작업본은 수정하지 않았다.
 

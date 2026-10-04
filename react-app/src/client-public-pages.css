@@ -17,6 +17,14 @@
 .client-public-page :is(p,.faq .a,.phone-caption){text-wrap:pretty}
 .client-public-page :is(.tx,.cell,.ico-row>div,.callout>div,.store,.txt){min-width:0}
 .client-public-page :is(.hd .brand,.hd .login,.hd .cta){flex-shrink:0;white-space:nowrap}
+.client-public-page .hd .cta{flex-shrink:1;min-width:0;white-space:normal;overflow-wrap:anywhere;text-align:center;justify-content:center}
+.client-public-page.client-info-about .hd{height:auto;min-height:74px;padding-block:10px}
+/* Preserve normal source spacing; text-only enlargement needs space for the
+   wrapped fixed header without covering the first authored content. */
+.client-public-page.client-info-about .ab-hero{padding-top:max(112px,calc(6em + 16px))}
+.client-public-page.client-info-download main.dl{padding-top:max(128px,6em)}
+@media(max-width:900px){.client-public-page.client-info-download main.dl{padding-top:max(96px,6em)}}
+@media(max-width:1100px){.client-info-about .hd nav{display:none}}
 .client-public-page .hd .brand{color:#00f0ff}
 .client-public-page :is(.hd a,.tx .lnk){min-height:44px;display:inline-flex;align-items:center}
 

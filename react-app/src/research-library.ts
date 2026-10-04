@@ -35,37 +35,6 @@ export const RESEARCH_PAGES: { id: ResearchPage; label: string }[] = [
   { id: 'ranking', label: '랭킹' }, { id: 'sharing', label: '전략 공유' },
   { id: 'insight', label: '인사이트' }, { id: 'brokers', label: '지원 거래소' },
 ]
-const STORAGE_KEY = 'teth-research-library'
-
-export function readResearchRecords<T>(validate: (value: unknown) => value is T): ResearchRecord<T>[] {
-  try {
-    const raw: unknown = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? '[]')
-    if (!Array.isArray(raw)) return []
-    return raw.filter((entry): entry is ResearchRecord<T> => entry && typeof entry.id === 'string' && entry.id.length <= 80
-      && typeof entry.title === 'string' && entry.title.length <= 500 && typeof entry.market === 'string'
-      && ['초안', '검토 필요', '완료'].includes(entry.status) && Number.isFinite(entry.updatedAt) && validate(entry.snapshot))
-  } catch { return [] }
-}
-
-export function writeResearchRecords(records: ResearchRecord[]) {
-  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(records)); return true }
-  catch { return false }
-}
-
-/** One tab-local store. React subscribes to it instead of mirroring effect state. */
-export function createResearchStore<T>(validate: (value: unknown) => value is T) {
-  let state = { records: readResearchRecords(validate), persistenceError: false }
-  const listeners = new Set<() => void>()
-  return {
-    getSnapshot: () => state,
-    subscribe: (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener) } },
-    upsert: (record: ResearchRecord<T>) => {
-      const records = [record, ...state.records.filter(item => item.id !== record.id)]
-      state = { records, persistenceError: !writeResearchRecords(records) }
-      listeners.forEach(listener => listener())
-    },
-  }
-}
 
 // Read-only values captured from the original tfRankSeeds() implementation.
 // These are client demo fixtures, not real trader returns or our rating engine.

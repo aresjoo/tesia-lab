@@ -1,5 +1,7 @@
 # TETH AI Design System
 
+최신정적후속은7dd1365이후오류복구/공개여백/공유경계교정이다. 최종 같은입력 57spec/1870개 단일은 **1868PASS/0FAIL/기존QA-015SKIP2/flaky0/retry0/시험밖오류0·actual0(686.841초)**다. 입력2184파일 SHA `f16293b745d99e521b59bea08efd24d5a3eaa2984727e739f66fc5a6bafa5216`와 공개1132파일 SHA `4006e4f39500d85d747839fb893ef2581a61b117b1cb1639e0bb05f89fac4992` 시작/끝동일이다. 같은입력 lint/공개·내부·service3build actual0, built Google·Apple·이메일1440/390/320PASS, 개인1 실제Opus5.5 STATIC_UI_CODE_GO/입력불변/actual0이다. 55개 원실패발생·50개 고유case-key를 동일 file/title/project·retry0의 최종PASS에 결속했다. 이전 partial·중단·전수와합산0, 실제 배포는 migration 영수증을 따른다. 원본9fbff821과디자인/권한을유지한다. 상세오판복원·실제실패·잔여는Bugfix_report최상단과Lab migration영수증을따른다.
+
 이 문서의 코드 대조 기준은 전수 검증 코드 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
 | 인수 항목 | 현재 상태 |
@@ -1520,6 +1522,7 @@ backdrop-filter: blur(24px) saturate(125%);
 
 | 날짜 | 결정 | 상태 | 근거와 영향 |
 |---|---|---|---|
+| 2026-10-05 | lazy 복구 지역화·공개 reset 격리·공유 실패·native 초점의 원본 보존 교정 | accepted_static_ui | 57spec 동결/3build/독립Opus5.5의 제한된 UI 인수. 동적 계정export2 삭제 오판은 원본 exact복원, 기존 assertion 보존; 사용처 확인된 폐쇄군집만 정리. 원문 성공카피1개 외 구조·SVG·권한·가격·프롬프트/API0변경. 실제공급/서비스 Gate 불변, 정적배포는 migration 영수증. |
 | 2026-09-14 | 원본 CTA·게스트 footer 복원 및 언어/통화 소비·누락 분류 | local_candidate | 한국어 원본/사용자 원문·실제 차트·SDK 권위를 보존하고7언어 UI 제어부 및 명시 예시 금액의 소비를 연결. AGY 긍정 판정이 놓친 모바일 footer grid를 root 실측으로 재현·교정. §7에 계정/Agent/공유9항목과PLAN/알림/정산6항목의 최신 함수·React 상태·서비스 요구를 분리. 화면 누락을 계약 부재로 합치지 않음. 검증/원실패/잔여는 Bugfix_report의 원본·언어 검수 절이 소유하며 전체 이식·과금/공개 정책·운영 Go는 변경하지 않음. |
 | 2026-09-14 | 원본 디자인 유지·다운로드 검증 범위 정밀화·로컬 주소 일원화 | local_candidate | 새 제품 결함은 재현되지 않아 코드/카피/SVG/모션 변경0. AGY 포커스 후보는 실제 Chromium 터치4개 조합으로 기각하고 시험 제목·재진입 스크롤 단언만 보완. 전체2168PASS/42SKIP/실패0 이후 보완 시험 포함22PASS를 별도 확인.4190의 PC/모바일8개 화면 조합·SDK42개 불변 확인, 과거 포트/운영 기록과 현재 확인 경로를 README에서 구분. QA015·미이식/실연결 범위는 유지하며 증거 순서는 Bugfix_report의 로컬 확인 인계 절이 소유한다. PM exact3·운영 Gate 변경0. |
 | 2026-09-14 | 도움말의 키보드 진입과 비활성 입력 경계 일치 | local_candidate | BF178/179: Enter·Space 열기만 내용으로 초점을 넘기고 포인터·기존 모달은 유지. 뒤의 숨김/inert 도움말은 Escape·배경 pointerdown을 처리하지 않도록 동일 판정 적용. 원문·CSS·SVG·모션·API 불변. AGY 홈 제안은 원본과 대조해 임의 재설계 기각, personal1 Opus5 독립 검토와 실제 재현 후 교정. 관련92PASS·앞선 조합 포함24회 반복·최종 전체2168PASS/42SKIP/실패0 및 lint/TypeScript/빌드 경계 통과. 남은 QA015/실연결 범위와 원실패는 Bugfix_report의 도움말 검수 절이 소유한다. PM exact3·운영 Gate 변경0. |

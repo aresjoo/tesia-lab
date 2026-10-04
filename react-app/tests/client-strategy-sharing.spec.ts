@@ -313,7 +313,7 @@ test('링크 복사 실패는 현재 URL을 보이고 늦은 이전 요청·기�
   await expect(page.locator('.ss3-notice')).toHaveText(page.url())
   await copy.click()
   await finish(3, 'resolve')
-  await expect(page.locator('.ss3-notice')).toHaveText('전략 링크를 복사했어요')
+  await expect(page.locator('.ss3-notice')).toHaveText('전략 링크를 복사했습니다')
   await copy.click()
   await page.locator('.hub-header').getByRole('button').click()
   await finish(4, 'reject')

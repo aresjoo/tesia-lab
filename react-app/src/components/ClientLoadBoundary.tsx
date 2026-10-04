@@ -1,6 +1,8 @@
 import { Component, useEffect, useId, useRef, type ReactNode, type RefObject } from 'react'
 import { InternalLink } from './InternalLink'
 import { activeClientSurfaceSelector } from '../use-client-surface-presence'
+import { useClientPreferences } from '../client-preferences'
+import { clientLoadRecoveryCopy } from '../client-load-recovery-copy'
 import '../client-load-recovery.css'
 
 // A failed optional chunk must never unmount the conversation or its store.
@@ -11,6 +13,8 @@ export class ClientLoadBoundary extends Component<{ children: ReactNode; fallbac
 }
 
 export function ClientLoadFallback({ loading = false, onClose, inline = false, returnFocus }: { loading?: boolean; onClose?: () => void; inline?: boolean; returnFocus?: RefObject<HTMLElement | null> }) {
+  const { language } = useClientPreferences()
+  const text = clientLoadRecoveryCopy[language]
   const ref = useRef<HTMLElement>(null)
   const id = useId()
   const isHelp = Boolean(onClose) && !inline
@@ -51,11 +55,11 @@ export function ClientLoadFallback({ loading = false, onClose, inline = false, r
         if (event.shiftKey && (document.activeElement === first || document.activeElement === ref.current)) { event.preventDefault(); last?.focus() }
         else if (!event.shiftKey && (document.activeElement === last || document.activeElement === ref.current)) { event.preventDefault(); first?.focus() }
       }}>
-      <div role="status"><h2 id={`${id}-title`}>{loading ? '페이지를 불러오는 중입니다' : '페이지를 불러오지 못했습니다'}</h2></div>
-      {!loading && <p>연결 상태를 확인하거나 대화로 돌아가세요.</p>}
+      <div role="status"><h2 id={`${id}-title`}>{loading ? text.loading : text.failed}</h2></div>
+      {!loading && <p>{text.description}</p>}
       <div className="client-load-actions">
-        {onClose ? <button type="button" onClick={onClose}>대화로 돌아가기</button> : <InternalLink href="/">대화로 돌아가기</InternalLink>}
-        {!loading && <button type="button" onClick={() => window.location.reload()}>페이지 새로고침</button>}
+        {onClose ? <button type="button" onClick={onClose}>{text.back}</button> : <InternalLink href="/">{text.back}</InternalLink>}
+        {!loading && <button type="button" onClick={() => window.location.reload()}>{text.reload}</button>}
       </div>
     </section>
   </div>

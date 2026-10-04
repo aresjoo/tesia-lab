@@ -46,7 +46,7 @@ const ko = {
   "변경하지 못했어요. 다시 시도해주세요.": "변경하지 못했어요. 다시 시도해주세요.",
   "목록에서 삭제했어요. 대화와 검증 결과, 실행 중인 전략은 유지됩니다.": "목록에서 삭제했어요. 대화와 검증 결과, 실행 중인 전략은 유지됩니다.",
   "관심 전략을 이 브라우저에 저장하지 못했어요. 현재 화면에서는 유지됩니다.": "관심 전략을 이 브라우저에 저장하지 못했어요. 현재 화면에서는 유지됩니다.",
-  "전략 링크를 복사했어요": "전략 링크를 복사했어요",
+  "전략 링크를 복사했어요": "전략 링크를 복사했습니다",
   "안내 상태를 저장하지 못했어요. 다시 시도해주세요.": "안내 상태를 저장하지 못했어요. 다시 시도해주세요.",
   "전략 기록이 바뀌었어요. 다시 선택해주세요.": "전략 기록이 바뀌었어요. 다시 선택해주세요.",
   "구독 안내를 열지 못했어요. 다시 시도해주세요.": "구독 안내를 열지 못했어요. 다시 시도해주세요.",
@@ -414,11 +414,7 @@ export const CLIENT_SHARED_FOLLOW_COPY: Record<ClientLanguage, Record<SharedFoll
 },
 }
 
-export function isSharedFollowCopyKey(value: string): value is SharedFollowCopyKey {
-  return Object.hasOwn(ko, value)
-}
 
 export function sharedFollowCopy(language: ClientLanguage, key: SharedFollowCopyKey, values: Record<string, string | number> = {}) {
   return CLIENT_SHARED_FOLLOW_COPY[language][key].replace(/\{(\w+)\}/g, (token, name: string) => String(values[name] ?? token))
 }
-

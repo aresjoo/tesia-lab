@@ -17,7 +17,11 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-사용자 요청의 로그인·프롬프트 동시 변경을 재확인했다. Google 계속하기는 기존 Apple·이메일 선택지를 대체하지 않으며 원본 문구/로고/로그인·무료로 시작 진입점을 그대로 유지한다. 새 로그인 기능이나 화면 변경0이다. 추가 8spec·294PASS/0FAIL/0SKIP·입력불변 검증, 공개 3폭 공존/취소·초안·초점 검증, 공개 자산350개/문서4경로 exact bytes, VM 기존 권위 확인을 완료했다. 실Google START201·callback/PKCE/state/nonce 결속도 재확인했지만 사용자 callback/ACK 완료를 증명하지 않는다. Apple 운영 등록·이메일 SMTP는 아직 미완료라 선택지는 준비 중으로 보존한다. 프롬프트 draft8646과 병합 예행의 파일 충돌0은 React producer 통합/서비스 GO가 아니다. 현재 teth.ai는 React7dd1365의 검증본과 이미 일치하므로 이번에는 재배포/재시작0이며, 정확한 증거는 `migration-verification.json`의 `loginPromptCoexistenceRecheck`를 따른다.
+현재 전달은React7dd1365이후의검증된UI후속이다. 1868PASS/0FAIL/기존QA-015SKIP2의57spec단일·같은입력lint/3build·독립personal1Opus5.5·55원실패exactPASS결속을확인했다. 7언어lazy오류복구·정책footer/본문CSS격리·About태블릿원경계/확대가독성·nativeBackfocus·shareUrl공급실패를교정하고성공ko값만원본으로복원한다. 동적namespace계정export2삭제오판은원7dd전체파일exact복원했고원시험assertion은보존,실제로남은6deadfunction만정리했다. 첫중단/하니스/모델오판은검증JSON과source Bugfix에보존한다.
+
+Google추가는Apple/이메일을대체하지않으며계약/프롬프트/providerflag/가격/package/실권한0변경이다. 원본HTML/server/Worker/rootworkflow와main은변경/병합하지않는다. 투자프롬프트draft8646은별도보존/React producer미통합이다. Apple등록/SMTP·실Googlecallback/ACK·실주문/서비스GO는남는다. 현재새정적bundle은검증·전달준비이며활성화전이다. 정확SHA/파일수/해시/판정은manifest와verification이소유한다.
+
+이전누적범위와앞실패는아래기록 및Git이력을따르며현재성공과합산하지않는다.
 
 이전 전달 `498dff6`의 React 출처 `061987e` 이후, 복사 호환성·터미널에서 연결 화면 왕복·연구 제목저장 실패와 FAQ 도달을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·프롬프트·가격·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
 
