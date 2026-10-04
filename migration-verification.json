@@ -873,6 +873,155 @@
     "ui-continuity-public-static.json": "b4685e130145eb83bbb46ad53da00c06b91bb7d23c79da4facf507c3f7f430f1",
     "ui-continuity-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
     "ui-continuity-code-merge.json": "fd9bcbb1affc4ded01e6666227720bf7fafe2723689ebc9f796e774be63411bd",
-    "ui-continuity-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    "ui-continuity-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "login-prompt-recheck.json": "7b6e05f2220979a4ec251815e075c9e800b6339cf7af71e18602ae29ecf077e3",
+    "login-prompt-recheck.log": "9d762a3f3d7fef1edefc5699175b8b434ed36464cd03d59c221ea53d018bde0c",
+    "login-prompt-recheck-vm.json": "8a38fc9b6432b5a1b7312a07bf956ebf92804bc488247c0116c8a9ad278618be",
+    "login-prompt-recheck-start.json": "96c8f7e2c3e8244ef77197a1d5afdc052458ec8cd932e8f85b69d1cb774d6f1e",
+    "login-prompt-recheck-public/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
+    "login-prompt-recheck-static.json": "b4685e130145eb83bbb46ad53da00c06b91bb7d23c79da4facf507c3f7f430f1"
+  },
+  "loginPromptCoexistenceRecheck": {
+    "checkedAt": "2026-10-04T21:04:25.041Z",
+    "request": "프롬프트/Google 변경 충돌 점검, 기존 로그인 공존과 단순한 UX 보존, 검증 기록 migration 전달",
+    "productFilesChanged": 0,
+    "sourceCommit": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+    "testedDeliveryCommit": "57fe58cf8f64292e370341df5db210d6c5bb0b8a",
+    "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+    "originalHead": "9fbff821df62cad11d026022fc7628c7fcebc431",
+    "mergeRehearsal": {
+      "exitCode": 0,
+      "conflicts": 0,
+      "tree": "5225caa1cafdc461c2a35b4faa225ab6b30f4925",
+      "actualMergeExecuted": false,
+      "producerIntegrationVerified": false
+    },
+    "loginRegression": {
+      "specs": [
+        "tests/internal-poc/native-service-auth-availability.spec.ts",
+        "tests/internal-poc/native-google-only-deployment.spec.ts",
+        "tests/internal-poc/native-provider-login-ui.spec.ts",
+        "tests/internal-poc/native-email-login-integration.spec.ts",
+        "tests/internal-poc/native-login-panel-resume.spec.ts",
+        "tests/internal-poc/native-login-restart.spec.ts",
+        "tests/internal-poc/native-login-success-notice.spec.ts",
+        "tests/internal-poc/native-email-login-form.spec.ts"
+      ],
+      "planned": 294,
+      "passed": 294,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "errors": 0,
+      "exitCode": 0,
+      "durationMs": 77504.82400000001,
+      "before": {
+        "files": 2181,
+        "sha256": "12f8c9abe1c9c85fac54dc86dc1654dd0424dbf80a0ed3eae65ecca9bd5e3a21"
+      },
+      "after": {
+        "files": 2181,
+        "sha256": "12f8c9abe1c9c85fac54dc86dc1654dd0424dbf80a0ed3eae65ecca9bd5e3a21"
+      },
+      "inputUnchanged": true,
+      "scope": "실제 React/SDK의 합성 응답 시험. 실Google/Apple 인증·SMTP 발송 증명 아님; 이전 전수와 합산0"
+    },
+    "publicStatic": {
+      "status": "PASS",
+      "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
+      "sourceCommit": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+      "archiveSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
+      "registeredAssets": 350,
+      "passed": 350,
+      "failed": 0,
+      "failedPaths": [],
+      "documentAliases": [
+        {
+          "path": "/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/about/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/download/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        },
+        {
+          "path": "/policies/",
+          "pass": true,
+          "exactServerProfileInsertion": true
+        }
+      ],
+      "authenticationOrMutationExecuted": false
+    },
+    "publicLoginPresentation": {
+      "status": "PASS",
+      "cases": 3,
+      "viewports": [
+        1440,
+        390,
+        320
+      ],
+      "googleAppleEmailVisible": true,
+      "sessionAndCsrf": "INTERCEPTED_SYNTHETIC_GET_ONLY",
+      "actualLoginVerified": false,
+      "providerStartExecuted": false
+    },
+    "vmAuthorityCheck": {
+      "exitCode": 0,
+      "backendCredentialDatabaseChanged": false
+    },
+    "googleStartOnly": {
+      "scope": "PUBLIC_CA_GOOGLE_START_ONLY",
+      "status": "PASS",
+      "stage": "COMPLETE",
+      "actualGoogleLoginCompleted": false,
+      "publicCaRequired": true,
+      "anonymousBootstrapPosts": 1,
+      "googleStartPosts": 1,
+      "blockedMutations": 0,
+      "blockedExternalRequests": 0,
+      "blockedApiReads": 0,
+      "pageErrors": 0,
+      "unexpectedConsoleErrors": 0,
+      "expectedHttpConsoleMessages": 3,
+      "consoleWarnings": 0,
+      "unexpectedHttpErrors": 0,
+      "failedRequests": 0,
+      "initialAnonymous": true,
+      "googleStart201": true,
+      "providerOriginValid": true,
+      "callbackValid": true,
+      "clientIdPresent": true,
+      "pkceS256": true,
+      "challengePresent": true,
+      "statePresent": true,
+      "noncePresent": true,
+      "resultPending": true,
+      "pendingSessionAccessDenied": true,
+      "providerNavigationExecuted": false,
+      "callbackExecuted": false,
+      "acknowledgementExecuted": false,
+      "emailExecuted": false,
+      "orderExecuted": false
+    },
+    "deployment": {
+      "status": "ALREADY_CURRENT_BYTES_VERIFIED_NO_REDEPLOY",
+      "sourceCommit": "7dd1365d59c75a778c0343d6d014c6af465cd389",
+      "archiveSha256": "832e61fdfbd9ec9300960440b1775db8ec5d204998cffd79d26472996b98f51e",
+      "activationExecutedThisCheck": false,
+      "restartExecutedThisCheck": false
+    },
+    "providerState": {
+      "google": "실제 START201과 고정 callback/PKCE 확인; 사용자 callback/ACK 완료 미검증",
+      "apple": "원본 선택지/기존 controller 보존. 운영 등록 미완료로 준비 중",
+      "email": "원본 선택지/기존 controller 보존. 운영 SMTP 연결 미완료로 준비 중"
+    },
+    "promptState": "8646 draft 보존. 문장수/사용성 FAIL과 React producer 미통합 때문에 이번 운영에 병합하지 않음"
   }
 }
