@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "purpose": "공통 푸터 다국어·desktop 헤더 스크롤·원본 거래소 아이콘/필터 누락 복원. 기존 로그인 선택지와 실제 계약 경계 보존.",
-  "sourceCommit": "358c53bd013e054583626bd76255c2c8d2e138c3",
+  "purpose": "연구 문서 세션 메뉴·삭제 캐시 수명·좁은 화면·인사이트 최종 원문 복원. 기존 로그인 선택지/인증/투자 프롬프트 경계 유지.",
+  "sourceCommit": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "81e57a424033a6d7c21878e54931821f84038124249a923811fcc76e31b4bee9",
+  "snapshotDigest": "6b4b5041d4c38d72496af41db32240eaba9ecab824aa1873133273bce7d248c8",
   "environment": {
     "node": "v24.14.0",
     "dependencyInstall": "검증된 기존 설치 사용. package/lockfile 변경0; 이번 clean npm ci 주장 없음."
   },
   "snapshot": {
-    "files": 2183,
-    "bytes": 25384827,
+    "files": 2184,
+    "bytes": 25426060,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS: sync --verify·전체 byte/hash 일치",
     "clientOriginalFiles": "원본 HTML/server/Worker/root workflows 변경0"
@@ -18,21 +18,35 @@
   "checks": [
     {
       "command": "Final frozen 22-spec impact run",
-      "startTime": "2026-10-04T17:30:48.901Z",
-      "duration": 378057.09,
-      "expected": 668,
-      "skipped": 0,
+      "startTime": "2026-10-04T18:22:47.012Z",
+      "duration": 299749.109,
+      "expected": 622,
+      "skipped": 2,
       "unexpected": 0,
       "flaky": 0,
-      "status": "PASS",
+      "status": "PASS_WITH_2_PREEXISTING_QA015_SKIPS",
       "exitCode": 0,
       "retries": 0,
+      "errors": 0,
       "input": {
-        "files": 2176,
-        "sha256": "280e8d85a2da60fd3f982238493dac45f733cdd19695b00c0ba36e7a475291b2"
+        "files": 2177,
+        "sha256": "ad598eb1f0a9132720c1c3fa8860dd31303fe2b12f2efd88632c3ff8cc6f6dbc"
       },
       "inputUnchanged": true,
-      "scope": "새 단일 영향 범위. 이전 전수/영향 검사와 합산하지 않음"
+      "existingSkippedCases": [
+        {
+          "file": "client-insight-native-link.spec.ts",
+          "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
+          "project": "desktop"
+        },
+        {
+          "file": "client-insight-native-link.spec.ts",
+          "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
+          "project": "mobile"
+        }
+      ],
+      "skipFileUnchanged": true,
+      "scope": "새 단일 영향 범위. 기존 QA-015 두 project skip 보존/새skip0; 이전 전수와 합산하지 않음"
     },
     {
       "command": "lint",
@@ -72,6 +86,30 @@
       "status": "PASS",
       "registeredAssets": 350,
       "packagedFiles": 1113
+    },
+    {
+      "command": "Earlier 3 actual regression failures matched to final passing case keys",
+      "status": "PASS",
+      "bindings": [
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "공개 연구 plan 320px: 원본 한줄 헤더·문서 안 대화·컴포저와 실제 조작을 보존한다",
+          "project": "desktop",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "공개 연구 report 320px: 원본 한줄 헤더·문서 안 대화·컴포저와 실제 조작을 보존한다",
+          "project": "desktop",
+          "pass": true
+        },
+        {
+          "file": "client-research-layout-fidelity.spec.ts",
+          "title": "짧은 연구 화면 320×360 진행=true: 긴 입력에도 본문·전송·문서가 함께 사용 가능하다",
+          "project": "desktop",
+          "pass": true
+        }
+      ]
     }
   ],
   "failureHistory": [
@@ -326,6 +364,56 @@
         "project": "mobile"
       },
       "finalStatus": "expected"
+    },
+    {
+      "scope": "Research session menu baseline",
+      "failed": 3
+    },
+    {
+      "scope": "First menu layout correction",
+      "passed": 10,
+      "failed": 8
+    },
+    {
+      "scope": "Cache/title extra baseline",
+      "passed": 16,
+      "failed": 10
+    },
+    {
+      "scope": "First locked 604 impact intentionally interrupted",
+      "passedBeforeInterruption": 151,
+      "actualFailedBeforeInterruption": 3,
+      "childExitCode": 130,
+      "complete": false,
+      "classification": "문구추가교정으로중단; 320×360본문67.86px실제회귀/헤더두행기대2, 원FAIL보존"
+    },
+    {
+      "scope": "Short-height inline title-edit baseline",
+      "passed": 70,
+      "failed": 12,
+      "classification": "본문100px기준 유지,높이500이하 편집헤더 최소교정"
+    },
+    {
+      "scope": "Insight F1/F2 final-copy baseline",
+      "failed": 4
+    },
+    {
+      "scope": "Insight all-copy first regression",
+      "passed": 94,
+      "failed": 2,
+      "classification": "기존 큐레이터 exact문구 기대 잔재;제품원문확인뒤시험기대만교정"
+    },
+    {
+      "scope": "Earlier final build and second Opus input guard",
+      "buildStepsExitCodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "inputUnchanged": false,
+      "exitCode": 1,
+      "classification": "시험 screenshot 저장1줄 동시추가. 최종승인으로 사용0/제품입력불변"
     }
   ],
   "security": {
@@ -348,93 +436,61 @@
   "independentReview": {
     "profile": "personal (1)",
     "model": "claude-opus-5-5",
-    "scope": "제공된 exact 코드와 좁은 closure; 모델 브라우저실행0",
+    "scope": "제공된 exact 코드·원본발췌의 정적 검수; 모델 브라우저실행0",
     "inputUnchanged": true,
-    "verdict": "조건부 STATIC_UI_CODE_GO. ROOT가668PASS/lint/3build/scan/built-login/H1실측과 최초 en setter 적용증거를 결속. 배포직전 CAS 별도",
+    "verdict": "STATIC_UI_CODE_GO. ROOT 622PASS/기존skip2·lint/3build/scan/built-login·추가caller검색 결속. 배포직전CAS별도",
+    "previousVerdicts": [
+      "HOLD",
+      "HOLD (test-only input changed)"
+    ],
     "notFullServiceApproval": true
   },
   "warnings": [
     "기존 500kB 초과 bundle 경고",
-    "Chromium desktop/mobile 에뮬레이션이며 실기기 Safari/AT 인증 아님"
+    "Chromium desktop/mobile 에뮬레이션이며 실기기 Safari/AT 인증 아님",
+    "기존 원본대비 복사 성공/실패 표시 위치·execCommand fallback 차이는 이번 문구 범위 밖"
   ],
   "notVerified": [
-    "현재 후보의 새 전체13,820개 단일재실행; 이전전수와새영향범위 구분",
+    "현재 후보의 새 전체 단일재실행; 이전전수와이번22spec 영향범위를 구분",
     "실사용자 Google callback/ACK 완료",
     "Apple 등록·이메일 SMTP 연결",
     "투자 프롬프트 실제 React producer 통합",
     "실연구 Critic/단계관측·실계정원장 producer 공급",
     "결과 뒤 자유대화의 승인/job 상태와 TURN 계약 통합",
-    "실모델·실시간시장·거래소·주문·과금·전체서비스 운영 GO"
+    "실모델·실시간시장·거래소·주문·과금·전체서비스 운영 GO",
+    "signed-in 짧은 높이 제목 편집·삭제 없는 unmount 직전 스크롤의 새 명시 조합 시험"
   ],
   "deployment": {
-    "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
+    "status": "CANDIDATE_PACKAGED_NOT_YET_DEPLOYED",
+    "candidateSource": "adc58240d9b5a335e6400c136dffcbf8891e49f8",
+    "candidateArchiveSha256": "2f92c879fca2311664982713fa396106998dd85e2473c379d99fa9fd03410c30",
+    "candidateRawHtmlSha256": "c7d6907088f2d7116de20c99ebc0cff83d5ed3b18e42495a82488d8ff8d6453b",
     "currentDeployedSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
     "currentDeployedArchiveSha256": "c20c29d280eeb4c8e1dae4465cfdc9a2cc8549edadffa0d332408cb8f31fc37f",
-    "rawHtmlSha256": "b5774e555520d69723c9739696b5078869e916eac80173a6fd98965d9d04b290",
-    "activationExitCode": 0,
-    "postflightExitCode": 0,
-    "publicRootStatusesDuringRestart": [
-      503,
-      200
-    ],
-    "privateAuthorityPreserved": true,
-    "backupRetained": true,
+    "currentRawHtmlSha256": "b5774e555520d69723c9739696b5078869e916eac80173a6fd98965d9d04b290",
     "backendCredentialDatabaseReplacementAuthorized": false,
-    "backendCredentialDatabaseReplaced": false,
-    "publicStatic": {
-      "status": "PASS",
-      "registeredAssets": 350,
-      "passed": 350,
-      "failed": 0,
-      "documentAliasesPassed": [
-        "/",
-        "/about/",
-        "/download/",
-        "/policies/"
-      ],
-      "authenticationOrMutationExecuted": false
-    },
-    "publicLoginPresentation": {
-      "status": "PASS",
-      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
-      "viewports": [
-        1440,
-        390,
-        320
-      ],
-      "googleAppleEmailVisible": true,
-      "unregisteredProviders": "Apple·이메일은 준비 중이며 키보드로도 요청하지 않음",
-      "errorsAndUnexpectedRequests": 0,
-      "draftAndFocusPreserved": true,
-      "actualLoginVerified": false,
-      "providerStartExecuted": false,
-      "serverMutationExecuted": false
-    }
+    "backendCredentialDatabaseReplaced": false
   },
   "sourceDelta": {
-    "previousDelivery": "9c01a8662f3e12b08dfd02f2348795e88038c3ad",
-    "previousSource": "a6e737f05ae26d672e804765eeb2ee5ddd50e578",
-    "changedFiles": 17,
+    "previousDelivery": "93efc0c4010f85c192688f70c56dd5b0452bcca5",
+    "previousSource": "358c53bd013e054583626bd76255c2c8d2e138c3",
+    "changedFiles": 12,
     "files": [
       "M\tBugfix_report.md",
       "M\tDESIGN.md",
-      "M\tsrc/client-connection-status.css",
-      "M\tsrc/client-site-footer-copy.json",
-      "M\tsrc/client-site-footer.css",
-      "M\tsrc/components/ClientAccountTerminal.tsx",
-      "M\tsrc/components/ClientConnectionStatus.tsx",
-      "M\tsrc/components/ClientSiteFooter.tsx",
-      "M\tsrc/components/ClientSourceJudgmentStatus.tsx",
-      "M\tsrc/components/ClientStrategyRail.tsx",
-      "M\tsrc/components/ClientTerminalLedger.tsx",
-      "A\tsrc/components/ClientTerminalVenueIcon.tsx",
-      "M\ttests/client-connection-status.spec.ts",
-      "A\ttests/client-footer-content-locale.spec.ts",
-      "A\ttests/client-footer-header-scroll.spec.ts",
-      "M\ttests/client-strategy-rail.spec.ts",
-      "A\ttests/client-terminal-venue-icon.spec.ts"
+      "M\tsrc/client-research-cache.ts",
+      "M\tsrc/client-restored-research.css",
+      "M\tsrc/components/ClientInsights.tsx",
+      "M\tsrc/components/ClientMainExperience.tsx",
+      "M\tsrc/components/ClientResearchWorkspace.tsx",
+      "M\ttests/client-insight-source-copy.spec.ts",
+      "M\ttests/client-insights.spec.ts",
+      "M\ttests/client-research-layout-fidelity.spec.ts",
+      "A\ttests/client-research-session-menu.spec.ts",
+      "M\ttests/internal-poc/native-insight-presentation.spec.ts"
     ],
-    "packageAndLockfileChanged": false
+    "packageAndLockfileChanged": false,
+    "authAndApiChanged": false
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
@@ -443,29 +499,29 @@
     "includedInSnapshot": false,
     "meaning": "별도 draft 보존; 무충돌이 실제 producer 연결 성공은 아님",
     "mergeTree": {
-      "againstDeliveryCommit": "328a4181a9a531e42881d951f3d31bfaf0b37af1",
+      "againstDeliveryCommit": "93efc0c4010f85c192688f70c56dd5b0452bcca5",
       "exitCode": 0,
       "conflictPaths": [],
-      "tree": "e9b26374c4cb6b326745752a116573160db2dfbf",
-      "actualMergeExecuted": false
+      "tree": "5633e0803e2be106ecafd96c80aeed7aecd0e5c7",
+      "actualMergeExecuted": false,
+      "note": "새 전달 커밋 뒤 다시 예행하여 갱신"
     }
   },
   "previousDeliveryEvidence": {
-    "commit": "9c01a8662f3e12b08dfd02f2348795e88038c3ad",
-    "sourceCommit": "a6e737f05ae26d672e804765eeb2ee5ddd50e578",
-    "receiptHistory": "전체 이전영수증은 Git 이력 보존. 이전1996PASS/배포/로그인표시를 이번 신규 실행으로 쓰지 않음"
+    "commit": "93efc0c4010f85c192688f70c56dd5b0452bcca5",
+    "sourceCommit": "358c53bd013e054583626bd76255c2c8d2e138c3",
+    "receiptHistory": "이전668PASS/배포/공개확인 영수증은 Git 이력 보존. 새검사로 합산하지 않음"
   },
   "evidenceHashes": {
-    "footer-venue-final-build.json": "640d5d05a7cfdcc9514621831baa584087ea7612049512d9b02ab962df944c6c",
-    "footer-venue-final-impact.log": "d9991f0f871cdd70eed08b5b53f6d4764ebe0200e3b877741d69556bdace0cfd",
-    "footer-venue-final-impact.json": "628c80f05c40cbd1182ffbe1ebd23ed311f6e924680d7ba0793842d9c81de1ba",
-    "footer-venue-release-opus.json": "8fef4b8418ce7cbc606c27fc0f4383c6398c43ceaf4c79b5b40f7249c2dc7125",
-    "footer-venue-closure-opus.json": "a8d9ed18794a8a03548493019c26516e06787b11bd92d7ddfba4846f851a4a26",
-    "footer-containing-block.json": "d7821ab15b9b5ddb41a4211da1d01229d2f27fd885bf1b7c43e7d7b8f92c4f2e",
-    "footer-venue-failure-binding.json": "80a1929c4d7eb5b20d375afb2a6c1569c6cb77f5d78d5f5a298adeda4c2f02b8",
-    "footer-venue-vm-activate.json": "c60b884618244dda82ba669c80f03f4e4c8c133f55d5c823b0ecdcad0a9f7226",
-    "footer-venue-vm-postflight.json": "2699bece06d1fca549710fb5300a983ba1437061a2638d3bfa8eb5fff11a755f",
-    "footer-venue-public-static.json": "98b0f0bdf6dac4b80134096f74527ddaec0d898e0f8fac59c8b19259488f6816",
-    "footer-venue-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42"
+    "research-insight-release-build.json": "295eeb4c9f91e389783ac5778161191379436012bc754e3d6956bae22c62522b",
+    "research-insight-release-impact.log": "2da70d7d7daa6b57e318e9a327232cc8189fdd92d7afb4ff5271dae7da7afc82",
+    "research-insight-release-impact.json": "f3cbac86082b0088a200f0e2a902208f497703224898c4559c8c0b3d69318777",
+    "research-insight-failure-binding.json": "7ceef44408af95af8ead77c7fe8f532032219bf9ef4d18b56c3285f06802ae70",
+    "research-insight-opus-release.txt": "80dfcf5de2d4f379d2a4381f617a824599da485cbd17479e5037fe0cd62064f2",
+    "research-insight-opus-release.txt.inputs.json": "f950a920ae5e15525af3c1836ec214c84ca273959a54eb4bd926cdf4e2ed25f4",
+    "research-insight-source-final-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "research-insight-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "research-insight-migration-code-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "research-insight-built-auth/receipt.json": "4e54bc93e569ba5751fd6fb8d5297b051a25c95b8c54f2873f732b0158712cb5"
   }
 }

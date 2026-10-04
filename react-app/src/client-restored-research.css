@@ -199,6 +199,14 @@
 .client-restored-research[data-source="client-fixture"] .rw-tabs button{min-height:44px;padding:5px 11px}
 .client-restored-research[data-source="client-fixture"] .rw-title>.rw-mobile-artifacts{order:4;flex:none;width:44px;height:44px;padding:0;font-size:0;gap:0}
 .client-restored-research[data-source="client-fixture"] .rw-title>.rw-mobile-artifacts svg{width:18px;height:18px}
+/* The public research header retains the same current-session menu as chat.
+   Keep this explicit slot scoped; native service authority is not supplied here. */
+.client-restored-research[data-source="client-fixture"] .client-session-options{order:7}
+.client-restored-research[data-source="client-fixture"] .client-session-options button{background:transparent;color:var(--client-text-2)}
+.client-restored-research[data-source="client-fixture"] .client-session-options>button{display:grid;place-items:center;width:36px;height:40px;border-radius:6px}
+.client-restored-research[data-source="client-fixture"] .client-session-pop button{display:block;width:100%;min-height:40px;padding:10px 12px;border-radius:6px;text-align:left;font-size:13px;white-space:normal}
+.client-restored-research[data-source="client-fixture"] .client-session-pop button:hover{background:var(--client-3)}
+.client-restored-research[data-source="client-fixture"] .client-session-pop button.danger{color:#f08080}
 .client-restored-research[data-source="client-fixture"] .rw-answer{font-size:15.5px;line-height:1.8;color:var(--gt);max-width:720px;margin-top:10px}
 .client-restored-research[data-source="client-fixture"] .rw-user-message{font-size:14px;border-radius:18px;padding:10px 16px}
 .client-restored-research[data-source="client-fixture"] .rw-composer-wrap{max-width:876px;padding:10px 18px 14px}
@@ -228,6 +236,13 @@
   .client-restored-research[data-source="client-fixture"] .rw-header:has(.g-title-input) .rw-tabs{order:6;flex:1 1 80px;min-height:44px}
   .client-restored-research .rw-heading .g-title-input{font-size:16px}
   .client-restored-research[data-source="client-fixture"] .rw-composer-wrap{padding:8px 12px max(12px,env(safe-area-inset-bottom))}
+}
+
+/* Without the signed-in utility's existing wrapping, 320px leaves only 20px
+   for the title. Reuse the document header's second-row tabs at this boundary. */
+@media(max-width:360px){
+  .client-source-app:not(:has(.client-account-utility)) .client-restored-research[data-source="client-fixture"] .rw-header:has(.client-session-options){height:auto;flex-wrap:wrap}
+  .client-source-app:not(:has(.client-account-utility)) .client-restored-research[data-source="client-fixture"] .rw-header:has(.client-session-options) .rw-tabs{order:6;flex:1 1 90px;min-height:44px}
 }
 
 /* Native keeps its supplied status and the original persistent input node.
@@ -278,6 +293,9 @@
   .client-restored-research .rw-composer textarea,.client-restored-research .g-inline-input input{font-size:16px}
 }
 @media(max-height:500px){
+  /* Editing an idle title must not add a third header row above a short
+     document. Keep the editable field alongside the existing header controls. */
+  .client-source-app:not(:has(.client-account-utility)) .client-restored-research[data-source="client-fixture"] .rw-header:has(.g-title-input) .rw-title>.rw-heading{order:0;flex:1 1 100px;min-width:60px;max-width:none}
   /* Source-shaped public composer must retain the existing short-screen
      spacing; its more specific defaults must not crowd out the document. */
   .client-restored-research[data-source="client-fixture"] .rw-composer-wrap{padding-top:4px;padding-bottom:max(4px,env(safe-area-inset-bottom))}

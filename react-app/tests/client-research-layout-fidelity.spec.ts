@@ -105,7 +105,9 @@ for (const width of widths) for (const active of ['plan', 'report'] as const) {
   test(`공개 연구 ${active} ${width}px: 원본 한줄 헤더·문서 안 대화·컴포저와 실제 조작을 보존한다`, async ({ page, baseURL }, info) => {
     const audit = await openResearch(page, baseURL, width, active)
     const root = page.locator(publicRoot), header = root.locator('.rw-header')
-    expect((await rect(header)).height).toBeCloseTo(44, 1)
+    // At 320px the restored session menu shares a second row with the tabs,
+    // preserving the title instead of reducing its readable width to 20px.
+    expect((await rect(header)).height).toBeCloseTo(width <= 360 ? 92 : 44, 1)
     await expect(root.locator('.rw-heading [title]').first()).toHaveAttribute('title', idea)
     const selected = root.getByRole('tab', { selected: true })
     await expect(selected).toHaveText(active === 'plan' ? '연구 계획' : '검증 결과')
@@ -232,7 +234,7 @@ test('선택한 연구 탭은 화면 회전 뒤에도 보이고 입력 초점·�
   expect(audit).toEqual({ blocked: [], errors: [] })
 })
 
-for (const viewport of [{ width: 844, height: 390 }, { width: 390, height: 400 }, { width: 320, height: 360 }]) {
+for (const viewport of [{ width: 844, height: 390 }, { width: 390, height: 400 }, { width: 320, height: 360 }, { width: 360, height: 360 }, { width: 361, height: 360 }, { width: 375, height: 360 }, { width: 390, height: 360 }]) {
   for (const playing of [false, true]) {
     test(`짧은 연구 화면 ${viewport.width}×${viewport.height} 진행=${playing}: 긴 입력에도 본문·전송·문서가 함께 사용 가능하다`, async ({ page, baseURL }, info) => {
       const audit = await openResearch(page, baseURL, viewport.width, 'plan', playing)
@@ -246,6 +248,7 @@ for (const viewport of [{ width: 844, height: 390 }, { width: 390, height: 400 }
       expect((await rect(input)).height).toBeLessThanOrEqual(40)
       const body = await rect(root.locator('.rw-scroll'))
       expect(body.height, '짧은 화면에서도 연구 본문을 읽고 스크롤할 공간을 남긴다').toBeGreaterThanOrEqual(100)
+      console.info('Short research geometry', viewport.width, viewport.height, playing, JSON.stringify({ header: await rect(root.locator('.rw-header')), body }))
       const send = root.getByRole('button', { name: '문서 질문 보내기', exact: true })
       await reachable(send)
       const sendBox = await rect(send)
@@ -253,6 +256,19 @@ for (const viewport of [{ width: 844, height: 390 }, { width: 390, height: 400 }
       if (playing) await expect(root.locator('.rw-header .g-tag')).toHaveText('연구 진행 중')
       await artifacts(page, viewport.width)
       await expect(input).toHaveValue(longDraft)
+      await root.locator('.rw-heading .g-title').click()
+      const titleInput = root.locator('.g-title-input')
+      await titleInput.fill('짧은 화면에서도 문서 맥락을 유지하는 제목')
+      await reachable(titleInput)
+      expect((await rect(root.locator('.rw-scroll'))).height, '제목 편집 중에도 본문 최소 공간은 유지한다').toBeGreaterThanOrEqual(100)
+      await titleInput.press('Escape')
+      await expect(root.locator('.rw-heading .g-title')).toBeFocused()
+      const sessionMenu = root.getByRole('button', { name: '대화 메뉴', exact: true })
+      await reachable(sessionMenu)
+      await sessionMenu.click()
+      await reachable(root.locator('.client-session-pop').getByRole('button', { name: '이름 변경', exact: true }))
+      await page.keyboard.press('Escape')
+      await expect(sessionMenu).toBeFocused()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
       await page.screenshot({ path: info.outputPath(`research-short-${viewport.width}-${viewport.height}-${playing}.png`) })
       expect(audit).toEqual({ blocked: [], errors: [] })

@@ -12,6 +12,8 @@
 
 후속 푸터7언어 본문·desktop authnav/globe 스크롤·원본22종 거래소 아이콘·내 거래소 필터 복원도 포함한다. unknown/로드실패 fallback과 요청 identity·eligible·권한 경계를 유지하며 ID 없는 NativeAccountPanels에는 추정 아이콘을 넣지 않았다. 최초 영향664개 중1건은 CDP Promise 수거 실패로 보존하고 test-only 수명을 교정했다. 최종 검증과 배포 기록은 같은 영수증에 누적한다. Google 추가를 이유로 Apple·이메일 UI를 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
 
+최신 후속은 연구 문서의 세션 메뉴와 인사이트 최종 원문 복원이다. 삭제 후 문서 캐시가 unmount에서 재생성되는 결함은 entry identity로 차단하며 영구 삭제-ID 목록은 만들지 않는다. guest320 제목 공간과 짧은 화면 본문은 조작부를 숨기지 않고 보완한다. 중간 통합의 실제 short-height 실패와 test-only 동결 위반을 보존하고 새 동결 검증만 최종 근거로 쓴다. API·실제 인증·투자 프롬프트·주문 권한 변경0이며 별도 공급자 상태를 원본 fixture 값으로 덮지 않는다.
+
 | 추가 경로 | 역할 |
 | --- | --- |
 | `README.md`, `MIGRATION.md` | 전달 진입점과 원본 대비 구조/동작 대응·잔여·누적 갱신 절차 |

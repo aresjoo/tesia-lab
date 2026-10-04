@@ -17,9 +17,18 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-이전 전달 `9c01a86`의 React 출처 `a6e737f` 이후, 다국어 공통 푸터·desktop 로그인 메뉴 스크롤과 원본 거래소 아이콘/필터를 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 모바일 시장 필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
+이전 전달 `93efc0c`의 React 출처 `358c53b` 이후, 연구 문서의 현재 세션 메뉴와 인사이트 최종 원문 누락을 복원한 후속 변경을 전달한다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
 
 | 이번 후속 변경 | 구현·검증 위치 | 원본·계약 경계 |
+| --- | --- | --- |
+| 연구 문서 현재 세션 메뉴 | `ClientMainExperience`, `ClientResearchWorkspace`, session-menu 시험 | 대화와 같은 메뉴·rename/delete 콜백을 선택적 슬롯으로 유지. 실제 service에 없는 권한을 만들지 않음 |
+| 삭제 문서 캐시 수명 | `client-research-cache`, Workspace 및 lifecycle 시험 | 삭제 후 unmount 저장이 문서를 되살리던 결함을 entry identity로 차단. 정상 저장·동일 ID 재생성·타 세션 보존 |
+| 작은 연구 화면 | `client-restored-research.css`, layout-fidelity/menu 시험 | guest320 제목·메뉴를 두 행 배치, 짧은 높이의 진행·제목 편집에서 본문100px 이상. 상태/탭/조작부 숨김0 |
+| 인사이트 최종 원문 | `ClientInsights`, source-copy/insights/native-insight-presentation 시험 | 최종 원문·빈 자산 조건 복원. 동적 공급 내용·미공급/불투명 토큰 오류 의미·API·번역을 임의 변경하지 않음 |
+
+이전 `358c53b`에서 인수한 복원도 그대로 포함한다.
+
+| 이전 누적 변경 | 구현·검증 위치 | 원본·계약 경계 |
 | --- | --- | --- |
 | 7언어 공통 푸터 본문 | `ClientSiteFooter`, `client-site-footer-copy.json`, footer-content-locale 시험 | 한국어만 보이던 소개/강조/승인 안내 3문단을 동일 의미로 제공. notice 우선순위·DOM/색상/간격 보존 |
 | Desktop 헤더 스크롤 | `client-site-footer.css`, footer-header-scroll 시험 | 밝은 푸터 위에 고정 메뉴가 겹치지 않도록 원본 absolute. 모바일 fixed·로그인 버튼 DOM·키보드 재진입 유지 |
