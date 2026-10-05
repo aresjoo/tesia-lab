@@ -19,7 +19,7 @@
 
 현재 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
 
-새114spec 단일 3404PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험밖오류0·actual0·동결입력불변, lint/3build·built로그인3폭·fresh독립4·personal(1) Opus5.5 STATIC_UI_CODE_GO를 결속한다. baseline523/14622의14595P10F17skip/actual1과 중간112의3351P1GC하니스FAIL2skip/actual1, globe초기20P20F·원HOLD/PNG/trace는 보존하고 합산하지 않는다. auth28·negative의도tripwireFAIL4는 Chromium HTTP guard 범위이며 실제OAuth/OS-egress 승인이 아니다. 이번 후보는 검증된 정적 전달 준비 상태이며 직전 운영UI를 교체했다고 주장하지 않는다. 정확한 SHA·bytes·분모·서비스 경계는 migration-verification.json 단일정본을 따른다.
+새114spec 단일 3404PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험밖오류0·actual0·동결입력불변, lint/3build·built로그인3폭·fresh독립4·personal(1) Opus5.5 STATIC_UI_CODE_GO를 결속한다. baseline523/14622의14595P10F17skip/actual1과 중간112의3351P1GC하니스FAIL2skip/actual1, globe초기20P20F·원HOLD/PNG/trace는 보존하고 합산하지 않는다. auth28·negative의도tripwireFAIL4는 Chromium HTTP guard 범위이며 실제OAuth/OS-egress 승인이 아니다. 실제 활성화/CAS·권위보존·backup·public exactbytes/로그인presentation 영수증을 확인한 정적UI 반영 상태다. 정확한 SHA·bytes·분모·서비스 경계는 migration-verification.json 단일정본을 따른다.
 
 prompt8646 별도draft·actualmerge/Reactproducer통합0·사용성4FAIL/MODEL_QUALITY_NO_GO/SERVICE_NO_GO를 유지한다. 실제Google callback/ACK·Apple운영등록·SMTP·실연구/계정/거래소/주문/과금·실기기/부하·전체서비스GO는 미완료다. H-b 즉시focus 원인은 미확정이며 추측 교정0이다. 이전 인수/실패는 아래와 Git이력에 보존한다.
 

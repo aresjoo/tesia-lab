@@ -237,6 +237,10 @@
       "findings": 0
     },
     "nodeModulesCachesCredentialsDatabasesIncluded": false,
+    "deliveryStaged": {
+      "exitCode": 0,
+      "findings": 0
+    },
     "deliveryInitialScan": {
       "status": "VERIFIED_PUBLIC_ARTIFACT_HASHES_ONLY",
       "rawReport": "catalogue-parity-followup-closure-delivery-staged-scan.json",
@@ -285,7 +289,17 @@
     "actualMergeExecuted": false,
     "includedInSnapshot": false,
     "producerIntegrated": false,
-    "meaning": "별도 draft·실제사용성4FAIL/MODEL_QUALITY_NO_GO/SERVICE_NO_GO 보존"
+    "meaning": "별도 draft·실제사용성4FAIL/MODEL_QUALITY_NO_GO/SERVICE_NO_GO 보존",
+    "rehearsal": {
+      "exitCode": 0,
+      "conflicts": 0,
+      "tree": "409e948bfeef3af6e827920634373ef0d44dbd27",
+      "deliveryHead": "5a3557b9c92e5b6c7bb9b95fe79796c8e5cca12d",
+      "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+      "actualMergeExecuted": false,
+      "worktreeWritten": false,
+      "outputSha256": "61ba4403478da43266777e2c0f60cae432ac5b184c581a21d259be62672f6dec"
+    }
   },
   "remaining": [
     "실Google사용자 callback/ACK 완료 미검증",
@@ -317,14 +331,14 @@
   },
   "deployment": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
-    "currentDeployedSource": "bca5a694d9f77d8afa0e703e364620e89ff5db05",
-    "currentDeployedArchiveSha256": "f061f7fb3e094bd5f9cf34033d69ef30ea0cf8c6e77bd69e84cfa53178da6d68",
-    "rawHtmlSha256": "c8d9a5b4a5cf1ccab406e6dca12c28d2c593ca762a8af386bea101d09f5c24e7",
+    "currentDeployedSource": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
+    "currentDeployedArchiveSha256": "a261da9bc5a8780c71b5ab9cac8f6a2db3aa91ac158a9d8ec24bb597ce7222b9",
+    "rawHtmlSha256": "663cba458b531a2023196d429666e90f51cf7544312b6bf27528e9fdefb71220",
     "activationExitCode": 0,
     "postflightExitCode": 0,
     "activationObservation": {
       "status": "STATIC_UI_DEPLOYED",
-      "webSha256": "f061f7fb3e094bd5f9cf34033d69ef30ea0cf8c6e77bd69e84cfa53178da6d68",
+      "webSha256": "a261da9bc5a8780c71b5ab9cac8f6a2db3aa91ac158a9d8ec24bb597ce7222b9",
       "privateAuthorityPreserved": true,
       "backupRetained": true,
       "publicRootStatuses": [
@@ -334,13 +348,13 @@
     },
     "privateAuthorityPreserved": true,
     "backupRetained": true,
-    "previousStaticSource": "8fe33d9a1da3883ce7df89291bb680534a21c569",
+    "previousStaticSource": "bca5a694d9f77d8afa0e703e364620e89ff5db05",
     "backendCredentialDatabaseReplaced": false,
     "publicStatic": {
       "status": "PASS",
       "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
-      "sourceCommit": "bca5a694d9f77d8afa0e703e364620e89ff5db05",
-      "archiveSha256": "f061f7fb3e094bd5f9cf34033d69ef30ea0cf8c6e77bd69e84cfa53178da6d68",
+      "sourceCommit": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
+      "archiveSha256": "a261da9bc5a8780c71b5ab9cac8f6a2db3aa91ac158a9d8ec24bb597ce7222b9",
       "registeredAssets": 350,
       "passed": 350,
       "failed": 0,
@@ -370,24 +384,88 @@
       "authenticationOrMutationExecuted": false
     },
     "publicLoginPresentation": {
-      "status": "PASS",
-      "viewports": [
-        1440,
-        390,
-        320
-      ],
-      "googleAppleEmailVisible": true,
+      "scope": "STATIC_AUTH_PRESENTATION_WITH_SYNTHETIC_GET_SESSION",
+      "origin": "https://teth.ai",
+      "mode": "PUBLIC_HTTPS_STATIC_BYTES",
+      "sessionAndCsrf": "INTERCEPTED_SYNTHETIC_GET_ONLY",
       "actualLoginVerified": false,
       "providerStartExecuted": false,
-      "serverMutationExecuted": false
+      "serverMutationExecuted": false,
+      "cases": [
+        {
+          "name": "desktop",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "status": "PASS",
+          "stage": "FINAL_GUARDS",
+          "syntheticGetResponses": 4,
+          "blockedMutationAttempts": 0,
+          "blockedApiGets": 0,
+          "blockedExternalRequests": 0,
+          "pageErrors": 0,
+          "consoleErrors": 0,
+          "consoleWarnings": 0,
+          "staticHttpErrors": 0,
+          "failedRequests": 0,
+          "ignoredViteDebugMessages": 0,
+          "providerDisplay": true,
+          "disabledProviderKeyboardGuard": true,
+          "escapeAndClosePreserveDraft": true,
+          "focusRestored": true
+        },
+        {
+          "name": "mobile",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "status": "PASS",
+          "stage": "FINAL_GUARDS",
+          "syntheticGetResponses": 4,
+          "blockedMutationAttempts": 0,
+          "blockedApiGets": 0,
+          "blockedExternalRequests": 0,
+          "pageErrors": 0,
+          "consoleErrors": 0,
+          "consoleWarnings": 0,
+          "staticHttpErrors": 0,
+          "failedRequests": 0,
+          "ignoredViteDebugMessages": 0,
+          "providerDisplay": true,
+          "disabledProviderKeyboardGuard": true,
+          "escapeAndClosePreserveDraft": true,
+          "focusRestored": true
+        },
+        {
+          "name": "narrow",
+          "viewport": {
+            "width": 320,
+            "height": 480
+          },
+          "status": "PASS",
+          "stage": "FINAL_GUARDS",
+          "syntheticGetResponses": 4,
+          "blockedMutationAttempts": 0,
+          "blockedApiGets": 0,
+          "blockedExternalRequests": 0,
+          "pageErrors": 0,
+          "consoleErrors": 0,
+          "consoleWarnings": 0,
+          "staticHttpErrors": 0,
+          "failedRequests": 0,
+          "ignoredViteDebugMessages": 0,
+          "providerDisplay": true,
+          "disabledProviderKeyboardGuard": true,
+          "escapeAndClosePreserveDraft": true,
+          "focusRestored": true
+        }
+      ],
+      "status": "PASS"
     }
   },
-  "pendingDeployment": {
-    "status": "VERIFIED_STATIC_UI_READY_NOT_ACTIVATED",
-    "sourceCommit": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
-    "archiveSha256": "a261da9bc5a8780c71b5ab9cac8f6a2db3aa91ac158a9d8ec24bb597ce7222b9",
-    "htmlSha256": "663cba458b531a2023196d429666e90f51cf7544312b6bf27528e9fdefb71220"
-  },
+  "pendingDeployment": null,
   "evidenceHashes": [
     {
       "evidenceFile": "catalogue-parity-followup-closure-build.json",
@@ -592,6 +670,38 @@
     {
       "evidenceFile": "catalogue-parity-followup-release/manifest.json",
       "sha256": "83bf7cb91182e7b6affe5aa13e9fc9b19f78044ca6e39ccc142f84dfa0c23a9e"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-vm-archive-upload.json",
+      "sha256": "b82913ade816bb7e293419cd6dd40cc3277394cb5c39515c9c269d7039217aea"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-vm-preflight.json",
+      "sha256": "f35d7e4b07e3a5698423d47c28817c581eb10a7f9630ceed9afea2afbe993e23"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-vm-activate.json",
+      "sha256": "729f905c0b1164b12e1f90a7fed9bce653b87bfb4f9e6194dc501a14be4ce8d9"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-vm-postflight.json",
+      "sha256": "e60df09e63834d05c8519ded3c4e12b9f179ae905255d06bd4fe7679500d9d98"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-public-static.json",
+      "sha256": "d971e9b73026686c3b6ad8d4f2a2f9ed53779f15c750705db6d0c410787c9b71"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-public-auth/receipt.json",
+      "sha256": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-code-merge.json",
+      "sha256": "9829f5ff898e15a550f3e6ffc964f3ecc445cc0a0c78c6e3fad38a10276bdf49"
+    },
+    {
+      "evidenceFile": "catalogue-parity-followup-closure-delivery-final-staged-scan.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
     },
     {
       "evidenceFile": "catalogue-parity-followup-delivery-public-hash-classification.json",
