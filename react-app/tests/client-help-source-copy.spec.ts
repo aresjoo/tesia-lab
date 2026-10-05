@@ -14,7 +14,7 @@ const sourceBody = {
   fr: 'Posez-nous vos questions. Notre équipe est disponible 24h/24, 7j/7.',
 } as const
 const supportStatus = {
-  ko: '실시간 채팅은 곧 제공돼요. support@teth.ai',
+  ko: '실시간 채팅은 곧 제공됩니다. support@teth.ai',
   en: 'Live chat coming soon. support@teth.ai',
   ja: 'ライブチャットは近日提供予定です。support@teth.ai',
   'zh-CN': '在线聊天即将上线。support@teth.ai',

@@ -81,7 +81,7 @@ test('도움말은 내부 FAQ로 이동하며 Escape로 닫고 포커스를 복�
   await page.goto('/download/')
   const help = page.getByRole('button', { name: '상담원에게 묻기', exact: true })
   await help.click()
-  await expect(page.locator('.site-help-pop')).toContainText('실시간 채팅은 곧 제공돼요')
+  await expect(page.locator('.site-help-pop')).toContainText('실시간 채팅은 곧 제공됩니다')
   await page.keyboard.press('Escape')
   await expect(page.locator('.site-help-pop')).toHaveCount(0)
   await expect(help).toBeFocused()

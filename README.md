@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷의 출처는 **`agent/web/guest-broker-continuity@9d919d87be23744fe13484d23d3e88d246e452ad`**입니다. 전체2,219파일을 전달한 **운영 미배포 초안**입니다. 이전 인증 소비·게스트 문서 표시 복원 위에 장문 인증 버튼과 복귀 버튼의 겹침을 최소 교정했습니다. Google·Apple·이메일과 원본 UI·문구·SVG·SDK·provider flags를 모두 보존하며, 실제 등록되지 않은 방식은 기존대로 준비 중입니다. 요청하지 않은 로그인 제거·활성화·프롬프트 producer 통합·서버/DB 변경은 하지 않았습니다. 거래소 연결은 기본 비활성화입니다.
+현재 React 스냅샷의 출처는 **`agent/web/approved-copy-restoration@775d849c9279ec4250b925faab5f3716fcac742a`**입니다. 전체2,223파일을 전달한 **운영 미배포 초안**입니다. 이전 인증 소비·게스트 문서·장문 헤더 교정 위에서 원본과 달라진 카피46값만 복원했습니다. 디자인·배치·SVG·Google·Apple·이메일·SDK·provider flags는 변경하지 않았고, 실제 등록되지 않은 방식은 기존대로 준비 중입니다. 요청하지 않은 로그인 제거·활성화·프롬프트 producer 통합·서버/DB 변경은 하지 않았습니다. 거래소 연결은 기본 비활성화입니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.
@@ -11,7 +11,9 @@
 
 이 브랜치 push는 `main` 병합이나 자동 배포를 실행하지 않습니다. 사용자가 별도로 요청한 `teth.ai` 정적 프론트 업데이트는 [검증 기록](migration-verification.json)의 배포 상태로 구분합니다. 루트 원본·server/Worker 및 투자 프롬프트 draft `8646b65`는 이번에 병합·배포하지 않습니다. Apple·이메일 선택지는 유지하되 현재 서버에서 미연결인 방식은 ‘준비 중’으로 표시합니다.
 
-현재 입력2212/4f0에서 신규48+기존20의 단일68PASS, 시장26PASS, 기존10spec390PASS를 각각 실제exit0로 확인했습니다. lint·공개/내부/service3build 및 새service1113/f2a263cf의 정적 GET exactbytes·로그인1440/390/320 합성 표시 검증도 actual0입니다. readonly 독립 검수와 personal(1) 실제 Opus5.5 ACCOUNT_LOCALE_CODE_GO는 새 확정C/H/M0·Low7을 보존합니다. 새 단일 전체539spec/15,026개는 진행 중이며 종료 전 PASS로 표시하지 않습니다. 이전 source2ac의14940PASS/1GC FAIL/기존17SKIP/actual1과 미확정 원인은 보존하고 68/26/390을 합산하거나 원FAIL을 면제하지 않습니다. 정적 프론트 승격은 전체 종료와 배포 검증 전 HOLD입니다. 실제 로그인·React 프롬프트·전체 서비스 승인은 별도이며 실 OAuth 미검증만으로 모든 정적 UI 승격을 금지하는 정책은 아닙니다.
+최신2216/314304 입력의 단일24spec/878개는 878PASS/0FAIL/0SKIP/retry·flaky·미실행·시험밖오류0/actual0입니다. lint·공개/내부/service3build·새service1113/6f83의1113 GET exactbytes·로그인1440/390/320 합성 표시·strict Golden 타입검사·source/service 보안검사도 actual0입니다. 실제personal(1) Opus5.5의46카피 CODE_GO와 마지막 가상시험식별자2값에 대한Sonnet5.5 CODE_GO를 분리하여 기록했습니다. 원문Golden114개는 정적 Node 검사이지114브라우저가 아닙니다. 최신 범위는 `candidate.currentApprovedCopyRestoration`이 소유합니다.
+
+부모 source9d/2212/4f0의 단일539spec/15,026개는 15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0로 종료했습니다. 이 전수를 최신 카피 입력의 전체PASS로 승계하거나878과 합산하지 않습니다. 이전68/26/390과 모든 원FAIL/Low·미확정 GC인과는 별도 이력으로 보존합니다. 정적 프론트 승격은 최종정적 release 검수·정확한 archive/권위CAS·공개smoke·원자적전환/롤백 확인 전 HOLD입니다. 실제 로그인·React 프롬프트·전체 서비스 승인은 별도이며 실 OAuth 미검증만으로 모든 정적 UI 승격을 금지하는 정책은 아닙니다.
 
 **현재 teth.ai는 이전 출처 `7dd066f`의 정적 UI입니다.** 이번 초안으로 교체하지 않았습니다. [검증 기록](migration-verification.json)의 현재 후보와 이전 운영 배포 증거를 구분해 확인하세요. 실제 사용자 Google callback/ACK 완료, Apple·이메일 운영 연결, React 프롬프트·거래소·주문 활성화 및 전체 서비스 완료는 미검증/미완료입니다.
 

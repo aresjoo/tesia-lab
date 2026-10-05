@@ -28,7 +28,7 @@ test('접힘 레일에서도 탐색 가능하고 본문 검색은 다중 단어 
   await expect(page.locator('.g-hist-row')).toHaveCount(1)
   await expect(page.locator('.g-hist-row')).toContainText('비트코인 장기 연구')
   await search.fill('비공개미출력')
-  await expect(page.getByText('검색 결과가 없어요', { exact: true })).toBeVisible()
+  await expect(page.getByText('검색 결과가 없습니다', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: '검색 지우기' }).click()
   await expect(search).toBeFocused()
   expect(await page.locator('.g-hist-row').count()).toBeLessThanOrEqual(40)

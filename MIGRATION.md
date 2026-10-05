@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/guest-broker-continuity@9d919d87be23744fe13484d23d3e88d246e452ad` 추적 파일 전체. 인증 소비·게스트 문서 표시 복원 위의 장문 계정 헤더 교정이며 기존 로그인 선택지·SDK·원본 디자인을 보존한 운영 미배포 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/approved-copy-restoration@775d849c9279ec4250b925faab5f3716fcac742a` 추적 파일 전체. 인증 소비·장문 헤더 교정 위에서 원문카피46값을 복원한 운영 미배포 후보. 기존 로그인 선택지·SDK·디자인·가격/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,9 +17,15 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 source9d919d8의 **2,219파일/26,016,699bytes**, sourceDirtyFiles0·snapshot SHA `43dd7cadc6c862b13aefece4b39b60018ddf8df7f93f10a05ef9af1d4d2b9037` 전체를 전달한다. 이전 migrationbb158/source8197 이후6파일만 바뀌었다. 제품은 `src/client-conversation.css`의 auth 한 행 nowrap·Native desktop return utility60 두 항목이다. 시장 검사의 실제 동기 setter 위임은 fixture/spec 두 파일이며 원7언어·요청2·canvas identity·wrongScope·기존 단언을 보존하고 boolean/HTML lang 검사만 추가했다. 신규 계정 locale 영구48시험·README/Bugfix 두 문서도 전달한다. 원본 root HTML/server/Worker/workflow/main·provider/SDK/flags·문구/SVG/색상 변경0, 기존 snapshot 삭제0이다.
+현재 source775d849의 **2,223파일/26,066,926bytes**, sourceDirtyFiles0·snapshot SHA `6b7248c250ffa0735e9197ca9ed23be1e5b743365ae819fc30794bc5412759a0` 전체를 전달한다. 이전 migration05f/source9d 이후14파일만 바뀌었다. 제품3파일의 공통24·연구예약1·연구검색빈1·한국어결제20, 총46literal을 원9fb 원문으로 복원했다. 기존5spec의26문구기대만 교정하며 나머지시나리오/단언/timeout/skip/retry는 유지한다. 신규원문Golden2spec/2fixture와 README/Bugfix 두 문서를 포함한다. 마지막신규시험의 가상알림key2값만 보안오탐을 없애는 짧은식별자로 변경했으며 실제secret·제품·원기대 변경0이다. root HTML/server/Worker/workflow/main·provider/SDK/flags·SVG/색상/배치/가격/권한 변경0, 기존 snapshot 삭제0이다.
 
-입력2212/4f0에서 신규48+기존20 단일68PASS·시장26PASS·기존10spec390PASS가 각각 actual0이며 합산 전수PASS가 아니다. 새 lint/3build actual0와 service1113/f2a263cf GET exact·로그인1440/390/320 표시/취소/초안/focus/키보드 검증 actual0를 결속했다. 합성 session/CSRF GET만 사용했고 실제 OAuth·Apple·SMTP·프롬프트 연결을 증명하지 않는다. readonly 독립 인수와 실제personal1 Opus5.5 ACCOUNT_LOCALE_CODE_GO는 확정C0H0M0/Low7이다. 원RED48의32FAIL·원전수GC1FAIL/인과 미확정은 보존한다. 새539spec/15026개 단일 전수는 종료 전 PASS가 아니며 현재 정적 배포HOLD다. 정확한 증거는 `candidate.currentAccountLocaleClosure`를 따른다.
+최신2216/314304의 단일24spec **878PASS/0FAIL/0SKIP/retry·flaky·미실행·중단·시험밖오류0/actual0**와 lint3build·strictGolden타입검사·1113정적GET exactbytes·로그인1440/390/320 표시/취소/초안/focus/키보드/3선택지·보안검사0을 결속한다. 원문카피Golden114개는 정적Node이며 전체878을 브라우저라고 표시하지 않는다. 실제personal1 Opus5.5 APPROVED_COPY_CODE_GO는46제품/원문Golden89b 입력이며 이후가상key2값은 독립역치환+Sonnet5.5 CODE_GO와새314304/878으로 별도검증했다. 합성session/CSRF GET만 사용했고 실제 OAuth·Apple·SMTP·프롬프트 연결을 증명하지 않는다. 정확한 증거는 `candidate.currentApprovedCopyRestoration`을 따른다.
+
+부모 source9d의539spec/15026 단일 전수는 **15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0**로 종료했다. source4f0/public10c9 시작·끝 불변이고 기존17키 exact·재시작0이다. 이 결과는 `candidate.currentAccountLocaleClosure.freshWhole`이 소유하며 최신314304 전체합격으로 승계하거나878과 합산하지 않는다. 원RED32·원wholeGC1FAIL과 인과 미확정·Low를 보존한다. 현재 정적배포는 최종 release검수·archive/권위CAS·공개검증 전 HOLD다.
+
+### 이전 source9d 계정 헤더 인수 이력
+
+source9d의2,219파일/26,016,699bytes 전달에는 CSS auth 한 행 nowrap·Native desktop return utility60과 실제동기language setter의시험위임·신규locale48·문서가 포함됐다. 원7언어/요청2/canvas identity/wrongScope·원단언을보존했고68/26/390·lint3build·service1113/f2a263cf compiled표시·실제Opus5.5 ACCOUNT_LOCALE_CODE_GO는 각각 당시인수범위다. 새카피입력과합산하지않는다.
 
 ### 이전8197 게스트 문서 복원 인수 이력
 

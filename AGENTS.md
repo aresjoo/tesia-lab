@@ -4,7 +4,9 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 source와 검증은 manifest와 `migration-verification.json`의 `candidate.currentAccountLocaleClosure`를 따른다. 현재9d919/2212/4f0의 신규48+기존20 단일68PASS·시장26PASS·기존10spec390PASS와 lint/3build·새compiled 로그인3폭 표시 인수는 각각 actual0이다. small/장문 auth 충돌은 원RED32를보존해 동일48키GREEN으로 교정했다. 실제personal1 Opus5.5 ACCOUNT_LOCALE_CODE_GO/확정C0H0M0·Low7은 전체/배포승인이아니다. source2ac의 전수14940PASS/1GCFAIL/기존17SKIP/actual1·인과 미확정은 보존한다. 새539spec/15026 단일 전수는 종료 전 PASS로 표시하지 않고 원17skip/전체키/실제exit를 검사한다. 이전 범위와 합산·승계0이며 provider/Reactprompt/운영GO는 아니다. Google 추가를 이유로 Apple·이메일을 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
+최신 source775d849와 전체2,223파일 검증은 manifest와 `migration-verification.json`의 `candidate.currentApprovedCopyRestoration`을 따른다. 기존 원문카피46값만 복원했으며 디자인/SVG/배치/로그인3·SDK/API/가격/권한/flags 변경0이다. 최신2216/314304의 단일24spec878PASS/0FAIL/0SKIP·lint3build·strictGolden타입·service1113exact GET/로그인3폭 합성표시·보안검사 actual0를 각각 결속한다. 실제personal1 Opus5.5의46원문CODE_GO와 마지막 신규시험 가상key2값의Sonnet5.5 CODE_GO는 별도이며 Low/첫스캔2오탐·원FAIL을 보존한다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
+
+부모source9d/2212/4f0의 단일539spec/15026은15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0로 종료했다. 원17키exact·source/public불변·재시작0이며 최신314304 전체PASS로 승계하지 않는다. 기존68/26/390과 모든 원wholeFAIL·미확정GC인과를 합산/면제하지 않는다. 최종정적release검수·archive/권위CAS·공개smoke·원자적전환/롤백 전 배포HOLD이고 provider/Reactprompt/서비스GO는 별도다. Google추가를 이유로 Apple·이메일을 제거하거나 미등록방식을 실제성공으로 표시하지 않는다.
 
 현재 React 출처·전체 파일 해시·미커밋 포함 여부는 `migration-manifest.json`을, 최신 검사·실패 보존·배포 여부는 `MIGRATION.md`와 `migration-verification.json`의 candidate 상태를 따른다. 기존 운영7dd066f의 deployment 이력을 새 후보의 PASS로 승계하지 않는다. 이전 전체 FAIL·새 인증 소비 영향 PASS와 코드 검수를 구분하고 배포 HOLD를 유지한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다. 부분PASS·모델 CODE_GO는 실공급자·전체서비스 승인이 아니다. 합성 fixture의 과거 secret scan 한정분류는 shared ignore/rule 변경이나 raw findings0가 아니다.
 
