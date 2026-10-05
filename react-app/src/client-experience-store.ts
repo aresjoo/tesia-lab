@@ -345,7 +345,7 @@ function sourceReply(s: ClientSession, question: string): { answer: string; sugg
   if (s.phase === 'plan') {
     const prior = { risk: s.risk, takeProfit: s.takeProfit, mode: s.mode }
     const before = beforeInput
-    if (question === '조건을 직접 수정할게요') return { answer: '바꾸고 싶은 조건을 적어주세요. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증할게요.', suggestions: [], phase: 'plan' }
+    if (question === '조건을 직접 수정할게요') return { answer: '바꾸고 싶은 조건을 적어주십시오. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증하겠습니다.', suggestions: [], phase: 'plan' }
     const recommend = question === '추천 설정으로 다시 검증'
     const edits = namedIntakePercentages(question)
     if (edits.risk !== undefined) s.risk = `−${edits.risk}%`
@@ -362,7 +362,7 @@ function sourceReply(s: ClientSession, question: string): { answer: string; sugg
       suggestions: [], phase: 'plan', inlineRequest: request,
     }
     if (!request) Object.assign(s, prior)
-    return { answer: '바꾸고 싶은 조건을 적어주세요. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증할게요.', suggestions: [], phase: 'plan' }
+    return { answer: '바꾸고 싶은 조건을 적어주십시오. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증하겠습니다.', suggestions: [], phase: 'plan' }
   }
   const before = [s.mode, s.pair, s.timeframe, s.risk, s.takeProfit].join('|')
   if (/이더|eth/i.test(question)) s.pair = 'ETH/USDT'
@@ -390,7 +390,7 @@ function sourceReply(s: ClientSession, question: string): { answer: string; sugg
     s.timeframe = '1시간봉'
     lead = '반등형 조건에는 1시간봉이 균형점입니다.\n\n'
   } else if (s.turns.length && before === [s.mode, s.pair, s.timeframe, s.risk, s.takeProfit].join('|')) {
-    lead = '아래에서 골라주세요. 원하는 답이 없으면 비슷하게 적어주셔도 돼요.\n\n'
+    lead = '아래에서 골라주십시오. 원하는 답이 없으면 비슷하게 적어주셔도 됩니다.\n\n'
   }
   if (/차이 설명/.test(question)) lead = '반등 매수는 과매도 후 회복을 노립니다, 거래가 적고 느립니다. 추세 진입은 상승 확인 후 따라갑니다, 거래가 잦고 빠릅니다.\n\n'
   // The source now asks inside the card. Do not repeat the old chip prompt

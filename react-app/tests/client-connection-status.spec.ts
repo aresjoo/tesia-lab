@@ -36,6 +36,8 @@ test('표시 binding은 source·owner·identity를 확인하고 unknown/역관�
 
 async function mount(page: Page, state: ConnectionStatusState, callbacks = false, source: 'mock' | 'service' = 'mock') {
   await page.goto('/')
+  // The dynamic bootstrap owns inherited styles; load alone can leave this fixture in a fallback font.
+  await expect(page.locator('.client-source-app')).toBeVisible()
   await page.evaluate(async ({ state, callbacks, source }) => {
     const domPath = '/@id/react-dom/client'
     const modulePath = '/src/components/ClientConnectionStatus.tsx'
@@ -64,6 +66,7 @@ async function mount(page: Page, state: ConnectionStatusState, callbacks = false
     Reflect.set(window, 'connectionFixture', fixture); fixture.render()
   }, { state, callbacks, source })
   await expect(page.locator('[data-connection-state]')).toBeVisible()
+  await page.evaluate(() => document.fonts.ready.then(() => undefined))
 }
 async function replace(page: Page, state: ConnectionStatusState, owner = 'owner-a') {
   await page.evaluate(({ state, owner }) => {

@@ -172,6 +172,7 @@ test('직접 수정은 초안을 유지하며 명명 수치·정확한 진입 �
   await expect(composer(page)).toBeFocused()
   await expect(composer(page)).toHaveValue('손절 4.5%, 익절 9%')
   await settle(page)
+  await expect(page.locator('.g-amsg').last()).toContainText('바꾸고 싶은 조건을 적어주십시오. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증하겠습니다.')
   expect((await read(page)).inlineResults).toEqual([first])
   await composer(page).press('Enter'); await settle(page)
   expect((await read(page)).turns.at(-1)).toMatchObject({ inlineRequest: { pair: 'ETH/USDT', parameters: { sl: -4.5, tp: 9, trendFilter: false } } })

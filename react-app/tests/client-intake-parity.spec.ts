@@ -126,7 +126,7 @@ test('모호한 수치·부정문은 원 수치와 단계를 유지하며 선택
   for (const text of ['손절 12%로 하지 마세요', '2..5%', '3%에서 2%로 변경해주세요', '손절 1e-999%']) {
     await ask(page, text)
     expect(await read(page)).toMatchObject({ risk: '', takeProfit: '', phase: 'risk' })
-    await expect(page.locator('.g-amsg').last()).toContainText('아래에서 골라주세요.')
+    await expect(page.locator('.g-amsg').last()).toContainText('아래에서 골라주십시오. 원하는 답이 없으면 비슷하게 적어주셔도 됩니다.')
   }
   await ask(page, '익절 8%')
   expect(await read(page)).toMatchObject({ risk: '', takeProfit: '+8%', phase: 'risk' })

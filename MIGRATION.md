@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/research-copy-restoration@b236dd11221d5e7882b38f40986e2edd6efae8a1` 추적 파일 전체. 코드2d2 이후 Bugfix 보고서만 갱신. 원문46·preview 안내/초점·언어시험 위임을 계승하고 연구 원문5곳을 추가 복원한 미배포 후보. 기존 로그인3옵션·SDK·가격/권한/flags 보존 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/research-copy-restoration@7233c1c4423b5266851b8b5e5a87731d999e1244` 추적 파일 전체. 원문46·연구5문구·preview 안내/초점·언어시험 위임을 계승하고 대화/가설/출처5곳을 추가 복원한 미배포 후보. Critic 답변은 기존 문서 상태를 공유. 기존 로그인3옵션·SDK·가격/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — sourceb236의 문서 후속
+### 최신 전달 — source7233 카피·Critic 후속
+
+현재2,229파일/26,129,096bytes/snapshot `9db4c398d99a20d690712df86a65f1ba05c27d6a37fd44eaa1501ec08b737929`다. 직전b236 대비9파일만 수정/추가했고 삭제0이다. 제품은 store의 직접수정2/선택안내1과 ResearchWorkspace의 Hypothesis1/Backtest출처1을 원9fb로 복원하며 Critic 답변을 기존 `criticParagraphs(review).critic`에 연결한다. 숫자·필터 적용시점·산식·원문 markup/색상/SVG·로그인3·SDK/flags/권한은 유지한다. 기존5시험의 단언 보강 및 준비3행을 포함하고 새3case×2=6키를 추가했다. 원188키를 유지한 관련194는 actual0/194PASS·lint3build/관련5시험타입actual0·실제personal1 Sonnet5.5 CODE_GO C0H0M0이며 Low7/가설4·원RED6를 보존한다. 검증 당시HEADb236 위bd2 미커밋 입력과 동일nonMD를7233으로 커밋했다.
+
+새 단일545spec/15,230개는 현재7233/2222bd2·3출력 동결로 실제 진행 중이다(전용4629/4630). 실행 시작 직후 관측 seal은 전구간 연속감시나 PASS 증명이 아니다. 부모notice actual1/1FAIL과 이전GC 인과미확정·푸터4/최초help2/aria1·다른 g-doc 질문별 응답 매핑은 남는다. 전페이지원문100%동일·새전수/실서비스/운영승격GO를 주장하지 않는다. 최신 상태는 `candidate.currentCopyFollowup`이 소유하며 아래 a242/100검증은 과거 입력 인수다. 운영teth.ai7dd와 원본root·deployment8객체는 유지한다.
+
+### 이전 sourceb236 문서 후속 이력
 
 현재2,229파일/26,121,127bytes/snapshot `fc97b716c547c9d6f1eeab6051519ab89a312ddf099257ec7f0c806a79344948`다. 직전2d2 대비 Bugfix 보고서1파일만 바뀌었고 아래 코드·시험·빌드 입력a242는 그대로다. 보고서에 푸터 사업 소개/선정/권한/Powered by4차이·도움말 최초ko/en2차이와 별도 실패 조사 한계를 기록했다. 부모notice 전수15,218개는15,200PASS/1FAIL/원17SKIP/actual1로 종료했고입력/3출력은전후불변이다(raw393eb996/receiptc1b4639b). 일반 카피를 임의 창작하지 않되 사업상 사실·권한 약속의 미확정 차이를 자동 복원 완료로 표시하지 않는다. 전페이지100%원문동일/전체PASS/운영승격 주장0이다.
 

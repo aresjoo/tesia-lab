@@ -18,6 +18,28 @@ async function artifact(page: Page, title: string) {
   await page.locator('.rw-artifact').filter({ hasText: new RegExp(`^${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(검토 필요)?$`) }).click()
 }
 
+test('Critic 질문은 필터 미적용·적용 상태에 맞는 원문을 표시한다', async ({ page }) => {
+  await openPlan(page)
+  await page.getByRole('button', { name: '연구 시작', exact: true }).click()
+  await page.clock.fastForward(39_000)
+  await artifact(page, '가설')
+  await expect(page.locator('.g-adoc')).toContainText('이 패턴이 Research 구간과 Holdout 구간 모두에서 확인되어야 가설이 유지됩니다. 결과는 Backtest, Holdout artifact에서 확인하십시오.')
+  await artifact(page, '비판 검토 기록')
+  await expect(page.locator('.research-critic-document')).toHaveAttribute('data-version', '1')
+  await page.getByLabel('비판 검토 기록에 질문').fill('필터는 적용됐나요?')
+  await page.getByRole('button', { name: '문서 질문 보내기', exact: true }).click()
+  await expect(page.locator('.rw-answer').last()).toHaveText('저변동성 구간에 손실 71% 집중 (v1 기준). 상위 3개 거래가 수익의 42%.')
+  await expect(page.locator('.rw-answer').last()).not.toContainText('필터로 수정됨')
+  await page.clock.fastForward(15_000)
+  await expect(page.locator('.research-critic-document')).toHaveAttribute('data-version', '2')
+  await page.getByLabel('비판 검토 기록에 질문').fill('지금 필터 상태는 어떤가요?')
+  await page.getByRole('button', { name: '문서 질문 보내기', exact: true }).click()
+  await expect(page.locator('.rw-answer')).toHaveText([
+    '저변동성 구간에 손실 71% 집중 (v1 기준). 상위 3개 거래가 수익의 42%.',
+    '저변동성 구간에 손실 71% 집중 (v1 기준), 필터로 수정됨. 상위 3개 거래가 수익의 72%, 소수 거래 의존.',
+  ])
+})
+
 test('95초 연구에서 문서가 순차 생성되고 완료 후 최종 보고서로 이어진다', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', error => errors.push(error.message))

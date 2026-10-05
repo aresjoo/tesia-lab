@@ -33,3 +33,16 @@ test('원문 복원은 미수정 필터·건수 비율·공급 Verdict를 바꾸
   expect(previewCritic(53)!.lowVolFilterApplied).toBe(true)
   expect(criticParagraphs({ ...initial, verdict: '공급된 고유 판정' }).verdict).toBe('공급된 고유 판정')
 })
+
+test('원9fb 대화 안내는 직접 수정 두 경로와 선택지의 원문을 보존한다', () => {
+  const source = readFileSync(new URL('../src/client-experience-store.ts', import.meta.url), 'utf8')
+  const edit = '바꾸고 싶은 조건을 적어주십시오. 예를 들어 "손절 -5%로", "익절 없이", "추세 진입으로"처럼요. 적용 후 다시 검증하겠습니다.'
+  expect(source.split(edit)).toHaveLength(3)
+  expect(source).toContain('아래에서 골라주십시오. 원하는 답이 없으면 비슷하게 적어주셔도 됩니다.')
+})
+
+test('원9fb 가설 검증 기준과 백테스트 출처 문구를 보존한다', () => {
+  const source = readFileSync(new URL('../src/components/ClientResearchWorkspace.tsx', import.meta.url), 'utf8')
+  expect(source).toContain('이 패턴이 Research 구간과 Holdout 구간 모두에서 확인되어야 가설이 유지됩니다. 결과는 Backtest, Holdout artifact에서 확인하십시오.')
+  expect(source).toContain('Research 2023.01 ~ 2025.06, 비용 반영, MOCK')
+})

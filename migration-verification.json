@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 UI·카피 계승 전달본. 최신 candidate.currentOriginalResearchCopy는 a242/원문5추가복원·최종100영향/빌드·타입·Sonnet 코드 검수 범위다. 원문46의 currentApprovedCopyRestoration과 다른 입력의 과거 whole는 인수 이력으로 보존하며 최신 전체 PASS로 승계하지 않는다. 부모notice 단일whole는15200PASS/1FAIL/원17SKIP/actual1 종료·인과미확정이다. historicalProduction*와deployment는 운영7dd 그대로이며 이 draft 공유는 운영승격이 아니다.",
-  "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
+  "purpose": "원본 UI·카피 계승 전달본. 최신 candidate.currentCopyFollowup은 bd2/추가원문5곳·Critic 상태별 응답·관련194/빌드·타입·Sonnet 코드 검수와 실제 진행 중인545spec/15230 전수를 분리한다. currentOriginalResearchCopy와 currentApprovedCopyRestoration은 과거 입력의 인수 이력이며 최신 전체 PASS로 승계하지 않는다. 부모notice actual1/원1FAIL·인과미확정 보존. historicalProduction*와deployment는 운영7dd 그대로이며 이 draft 공유는 운영승격이 아니다.",
+  "sourceCommit": "7233c1c4423b5266851b8b5e5a87731d999e1244",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "fc97b716c547c9d6f1eeab6051519ab89a312ddf099257ec7f0c806a79344948",
+  "snapshotDigest": "9db4c398d99a20d690712df86a65f1ba05c27d6a37fd44eaa1501ec08b737929",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -67,7 +67,7 @@
   },
   "snapshot": {
     "files": 2229,
-    "bytes": 26121127,
+    "bytes": 26129096,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -467,8 +467,8 @@
   },
   "pendingDeployment": {
     "status": "HOLD_CURRENT_WHOLE_FAILURE_INVESTIGATION_AND_STATIC_RELEASE_VERIFICATION",
-    "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
-    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY. Final a242 research-copy100 PASS is a bounded input. Parent notice309 whole74329 ended actual1:15200 PASS/1FAIL/17 original SKIP; preserve failure and resolve its cause before promotion. Final whole/static review/archive/authority CAS/public smoke/atomic rollback pending. Actual OAuth is a separate service gate under §0.4.",
+    "sourceCommit": "7233c1c4423b5266851b8b5e5a87731d999e1244",
+    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY. bd2 related194 PASS is bounded; fresh545spec/15230 whole is RUNNING, not passed. Parent notice309 whole actual1/1FAIL/17 original SKIP and uncertain cause preserved. Final whole/static review/archive/authority CAS/public smoke/atomic rollback pending. Actual OAuth is a separate service gate under §0.4.",
     "actualAuthentication": "UNVERIFIED_SEPARATE_SERVICE_GATE",
     "activationExecuted": false
   },
@@ -731,21 +731,172 @@
     }
   ],
   "candidate": {
-    "status": "ORIGINAL_RESEARCH_COPY_CODE_GO_DRAFT_DELIVERY_DEPLOYMENT_HOLD",
+    "status": "COPY_FOLLOWUP_CODE_GO_FRESH_WHOLE_RUNNING_DEPLOYMENT_HOLD",
     "sourceBranch": "agent/web/research-copy-restoration",
-    "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
+    "sourceCommit": "7233c1c4423b5266851b8b5e5a87731d999e1244",
     "captureTimeAuthority": "migration-manifest.json capturedAt",
     "frozenInput": {
       "files": 2222,
-      "sha256": "a242bdcb34833ef77376c68bfc8186de3ea74982095a5952dcd641e0b4efe353"
+      "sha256": "bd2b2b98ae170ad55d4fec2cda502cac2d266124123747b3c507feed276c877d"
     },
     "publicBuild": {
       "files": 1132,
-      "sha256": "c830faac038c5630236972d6e0f21aebbb2cef9b23970fba65326683fe66becc"
+      "sha256": "dd79341b192c1e4b35f07f07944bc7815fbc2884459494aeba082ebb541a7ff0"
     },
     "serviceBuild": {
       "files": 1113,
       "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"
+    },
+    "currentCopyFollowup": {
+      "status": "SCOPED_COPY_AND_CRITIC_CODE_GO_FRESH_WHOLE_RUNNING_NOT_RELEASE_GO",
+      "sourceCommit": "7233c1c4423b5266851b8b5e5a87731d999e1244",
+      "testedSourceHead": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
+      "headMeaning": "관련194 및 lint3build는 HEADb236의 미커밋bd2에서 실행.7233은 동일nonMD의 커밋. 새전체는7233에서 실제 진행 중.",
+      "originalReference": "9fbff821df62cad11d026022fc7628c7fcebc431",
+      "originalIndexSha256": "f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321",
+      "restoredOccurrences": 5,
+      "productFiles": [
+        "src/client-experience-store.ts",
+        "src/components/ClientResearchWorkspace.tsx"
+      ],
+      "changes": [
+        "직접수정 안내2·선택 안내1·Hypothesis1·Backtest 출처1의 원9fb 문구 복원",
+        "Critic 답변은 기존 criticParagraphs(review).critic 공유, 미적용 필터 완료 주장 제거",
+        "연결 시험 준비 Main visible/fixture visible/fonts.ready 3행 추가만"
+      ],
+      "preserved": "원필터 시점·71/42/72 숫자·산식/상태·기존 단언·클릭·timeout/retry/skip 및 SVG/CSS/색상·로그인3·SDK/flags/권한·서버DB/730일 불변",
+      "frozenInput": {
+        "files": 2222,
+        "sha256": "bd2b2b98ae170ad55d4fec2cda502cac2d266124123747b3c507feed276c877d"
+      },
+      "impact": {
+        "specs": 11,
+        "cases": 194,
+        "pass": 194,
+        "fail": 0,
+        "skip": 0,
+        "retry": 0,
+        "flaky": 0,
+        "unexecuted": 0,
+        "outsideErrors": 0,
+        "actualExit": 0,
+        "inherited188Exact": true,
+        "new6Exact": true,
+        "rawSha256": "21572a4b501e34089100ba7d28b92f87eb99196b79276e7b24884c3a05f8975e",
+        "receiptSha256": "fbbc908828cd2c1afbb202c1b6ca45629047ca6352db5347483f89886cf3a9c2"
+      },
+      "red": {
+        "actualExit": 1,
+        "pass": 0,
+        "fail": 6,
+        "rawSha256": "7f1c9fde9f1ac8bd1c9db2aea84692355e72723274a7a653b9c85eedc20ec187",
+        "preserved": true,
+        "limits": "RED 후 Critic case의 Hypothesis 동선을 추가한 superset이며 동일키가 동일시험바이트 증명이 아님"
+      },
+      "build": {
+        "commands": [
+          "lint",
+          "build",
+          "build:internal-poc",
+          "build:service"
+        ],
+        "actualExitEach": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "outputs": {
+          "dist": {
+            "files": 1132,
+            "sha256": "dd79341b192c1e4b35f07f07944bc7815fbc2884459494aeba082ebb541a7ff0"
+          },
+          "dist-internal-poc": {
+            "files": 1123,
+            "sha256": "daf0839a6c4bbd2cfdeaa9afeb3981b318f5ee3cc087aad29c7146e1d880da3c"
+          },
+          "dist-service": {
+            "files": 1113,
+            "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"
+          }
+        },
+        "inputAndOriginalProofsUnchanged": true,
+        "receiptSha256": "fbbc908828cd2c1afbb202c1b6ca45629047ca6352db5347483f89886cf3a9c2",
+        "cleanInstallExecuted": false
+      },
+      "strictTyping": {
+        "relatedSpecs": 5,
+        "actualExit": 0,
+        "noEmit": true,
+        "incremental": false,
+        "allSpecsClaimed": false,
+        "preparationFailuresPreserved": "첫 TS5112 actual1 및 jsx/types 누락 actual2. 제품 변경 없이 명시 ignoreConfig/jsx/types로 교정"
+      },
+      "independent": {
+        "deltaSha256": "2dc4d6a618b7c96cc03c9ec1fb6615deb2fc1e06e978c180cd0f46cb963ed2f6",
+        "validationAudit": "copy-followup-validation-audit.json",
+        "wholeGo": false
+      },
+      "model": {
+        "profile": "personal (1)",
+        "requestedAndResolvedModel": "claude-sonnet-5-5",
+        "tools": 0,
+        "actualExit": 0,
+        "inputUnchanged": true,
+        "verdict": "COPY_FOLLOWUP_CODE_GO",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "low": 7,
+        "hypotheses": 4,
+        "receiptSha256": "133b1b66bb544a38ea7db1e0f1189a23c0c5044a1bf37d98ed0943d3fc0a7011",
+        "finalReleaseApproval": false
+      },
+      "freshWhole": {
+        "status": "RUNNING_NOT_PASS",
+        "sourceCommit": "7233c1c4423b5266851b8b5e5a87731d999e1244",
+        "specs": 545,
+        "discovered": 15230,
+        "workers": 8,
+        "filter": false,
+        "retry": 0,
+        "ports": [
+          4629,
+          4630
+        ],
+        "startedAt": "2026-10-05T20:58:00.887Z",
+        "privateSession": 77548,
+        "earlySealSha256": "8de9bf3aac529fd67ca66c595653edc9a66a2437ea8692a4e41114c56d16ca73",
+        "limits": "실제 시작 직후 한차례 PID/cwd/startTicks/input 관측. 연속감시/종료/PASS 증명이 아니며 원17skip/원FAIL 보존"
+      },
+      "parentWholeFailurePreserved": true,
+      "fontCauseClosed": false,
+      "copyParityRemainder": "원footer4/최초help2/aria1·다른 g-doc의 질문별/완료결과별 고정 응답 매핑은 남음. 카피 계승만으로 자동거래·제휴·24/7 상담 약속을 활성화하지 않음.",
+      "actualProviderGo": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false,
+      "historicalCandidateFieldsMeaning": "다른 candidate.whole/impact/review/currentOriginalResearchCopy/currentApprovedCopyRestoration 등은 해당 source/input의 역사 인수이며 이 최신 후보 전수 합격으로 승계하지 않음",
+      "deliveryVerification": {
+        "independentSha256": "443b2a455fccd0459eac2e372323baa7d646b752b59d8ed51eb57f1629a0c83e",
+        "snapshotFiles": 2229,
+        "snapshotBytes": 26129096,
+        "snapshotDigest": "9db4c398d99a20d690712df86a65f1ba05c27d6a37fd44eaa1501ec08b737929",
+        "allSourceAndDeliveryBytesExact": true,
+        "originalRootFilesPreserved": 3759,
+        "historicalObjectsExact": 9,
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "scope": "staged14 독립 인수. ROOT 후속은 README의 최신a242→현재bd2 한 표현과 이 검수 metadata만이며 source/react snapshot·기존FAIL·운영권위불변. 원Low 보존. 실제 전수/서비스/승격GO 아님."
+      },
+      "sourceSecurity": {
+        "version": "8.30.1",
+        "stagedPaths": 9,
+        "actualExit": 0,
+        "findings": 0,
+        "ignoreRulesChanged": false
+      }
     },
     "currentOriginalResearchCopy": {
       "status": "SCOPED_CODE_TEST_BUILD_GO_NOT_WHOLE_OR_DEPLOYMENT_GO",
