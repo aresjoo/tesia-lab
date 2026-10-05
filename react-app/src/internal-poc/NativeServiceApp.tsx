@@ -254,6 +254,27 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [loginResume, setLoginResume] = useState(0)
   const loginGeneration = useRef(0)
   const [loginBinding, setLoginBinding] = useState<{ sessionId: string; epoch: number; generation: number } | null>(null)
+  // A validated missing session on the fixed OAuth return route admits only
+  // result/ACK recovery presentation. This is not a session or owner binding.
+  const [returnBinding, setReturnBinding] = useState<{ epoch: number; generation: number } | null>(null)
+  const returnBindingRef = useRef<typeof returnBinding>(null)
+  const exchangeOwnsReturn = () => exchangeConnectionsEnabled && Boolean(readExchangeTransactionLocator(window.location.href))
+  const plainAuthReturn = () => window.location.pathname === '/auth/complete'
+    && window.location.search === '' && window.location.hash === '' && !exchangeOwnsReturn()
+  useEffect(() => {
+    const invalidateReturnDispatch = () => {
+      const binding = returnBindingRef.current
+      if (!binding) return
+      // Keep the same controller/key, including uncertain ACK context, while
+      // retiring predicates captured before this navigation. No API is called.
+      const next = { ...binding }
+      returnBindingRef.current = next; setReturnBinding(next)
+      setLoginOpen(false); setLoginRetained(true)
+    }
+    const events = ['popstate', 'hashchange', 'teth:navigate']
+    events.forEach(event => window.addEventListener(event, invalidateReturnDispatch))
+    return () => events.forEach(event => window.removeEventListener(event, invalidateReturnDispatch))
+  }, [])
   const authReceipt = useRef<{ result: SessionOffer; conversationId?: string } | null>(null)
   const acceptedAuth = useRef('')
   const [claimAvailable, setClaimAvailable] = useState(false)
@@ -261,6 +282,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const logoutIntent = useRef<NativeLogoutCommand | null>(null)
   const [hasLogout, setHasLogout] = useState(false)
   const [logoutBoundary, setLogoutBoundary] = useState<'absent' | 'changed' | null>(null)
+  const returnPresentationCurrent = () => returnBinding !== null && returnBindingRef.current === returnBinding
+    && returnBinding.epoch === epoch.current && returnBinding.generation === loginGeneration.current
+    && session.current === null && plainAuthReturn() && !logoutIntent.current
+  const returnPanelCurrent = () => {
+    if (!returnPresentationCurrent() || working.current || phase === 'loading' || pending.current || emailDispatch.current) return false
+    try { return !hasStoredNativeEmailIntent() } catch { return false }
+  }
   const paperGeneration = useRef(0)
   const [paperBinding, setPaperBinding] = useState<{ owner: HistoryOwner; scope: NativePaperStorageScope; epoch: number; generation: number } | null>(null)
   const closePaper = () => { paperGeneration.current++; setPaperBinding(null) }
@@ -331,7 +359,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     clients.setCsrf(token.body.data.csrfToken); setSessionState(command.sessionState); setPhase('ready')
     return true
   }
-  const recoverSession = async () => {
+  const recoverSession = async (retainedReturn: typeof returnBinding = null) => {
+    if (retainedReturn && (returnBindingRef.current !== retainedReturn || !returnPresentationCurrent())) throw new Error('SESSION_CHANGED')
     // Keep unsent text in memory only, never in the mutation journal/storage.
     // A failed read retains this buffer without exposing it under a new owner.
     if (input && session.current && !pending.current && !logoutIntent.current) {
@@ -339,34 +368,67 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       setHasComposerRecovery(true)
     }
     const generation = ++epoch.current
+    let recoveringReturn = retainedReturn ? { ...retainedReturn, epoch: generation } : null
     // Recovery unmounts the old auth flow. Its presentation-only retention
     // marker must not strand the next owner in a shell with no memory context.
-    setLoginRetained(false)
+    // The return-only recheck instead retains its controller/key until a fresh
+    // session/CSRF and the existing owner/storage guards can be accepted.
+    if (recoveringReturn) {
+      returnBindingRef.current = recoveringReturn; setReturnBinding(recoveringReturn)
+      setLoginRetained(true); setLoginOpen(false)
+    } else {
+      setLoginRetained(false)
+      returnBindingRef.current = null; setReturnBinding(null)
+    }
     clients.setCsrf(null); setPhase('loading')
     bindSession(null); setSessionState(null); clearViews(true)
     clients.transport.abort(); clients.conversationTransport.abortInFlight()
     const savedLogout = readNativeLogout()
     if (savedLogout) {
+      if (recoveringReturn) {
+        returnBindingRef.current = null; setReturnBinding(null); setLoginRetained(false)
+        recoveringReturn = null
+      }
       logoutIntent.current = savedLogout; setHasLogout(true)
       pending.current = readNativeJournal(); setHasPending(Boolean(pending.current))
       await observeLogoutSession(savedLogout)
       return // Never bootstrap or clear an uncertain logout on reload/recovery.
     }
     const emailRecovery = hasStoredNativeEmailIntent()
-    const existing = emailRecovery ? await clients.session.current().catch(failure => {
+    if (emailRecovery && recoveringReturn) {
+      returnBindingRef.current = null; setReturnBinding(null); setLoginRetained(false)
+      recoveringReturn = null
+    }
+    const authReturn = !emailRecovery && window.location.pathname === '/auth/complete' && !exchangeOwnsReturn()
+    // Query/hash values are not callback authority. Malformed return URLs do
+    // not fall through to anonymous creation; protected recovery stays first.
+    if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
+    const existing = emailRecovery || authReturn ? await clients.session.current().catch(failure => {
       if (!(failure instanceof ApiResponseError) || failure.status !== 401 || failure.envelope.error.code !== 'AUTHENTICATION_REQUIRED') throw failure
-      if (generation !== epoch.current) return null
-      setPhase('error'); setError('이전 이메일 요청의 세션을 확인할 수 없습니다. 새 익명 세션을 자동 발급하지 않았습니다. 새로고침으로 사라진 인증번호·CSRF는 복구할 수 없으며 기존 전략과 요청 기록은 보존했습니다.')
+      if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return null
+      if (emailRecovery) {
+        setPhase('error'); setError('이전 이메일 요청의 세션을 확인할 수 없습니다. 새 익명 세션을 자동 발급하지 않았습니다. 새로고침으로 사라진 인증번호·CSRF는 복구할 수 없으며 기존 전략과 요청 기록은 보존했습니다.')
+      } else {
+        if (!plainAuthReturn()) throw new Error('SESSION_CHANGED')
+        pending.current = readNativeJournal(); setHasPending(Boolean(pending.current))
+        const binding = recoveringReturn ?? { epoch: generation, generation: ++loginGeneration.current }
+        returnBindingRef.current = binding; setReturnBinding(binding)
+        setLoginBinding(null); setLoginRetained(true); setLoginOpen(true)
+        setPhase('error'); setError(pending.current
+          ? '미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.' : '')
+      }
       return null
     }) : null
-    if (generation !== epoch.current) return
-    if (emailRecovery && !existing) return
+    if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return
+    if ((emailRecovery || authReturn) && !existing) return
+    if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
     if (existing && !['ANONYMOUS', 'AUTHENTICATED'].includes(existing.body.data.state)) throw new Error('SESSION_CHANGED')
     // An untrusted email locator suppresses creation only. The existing session
     // still comes from the real SDK GET, not a stored authentication receipt.
     const result = existing ? { kind: 'EXISTING_SESSION' as const, current: { response: existing } } : await clients.bootstrap()
     const token = await clients.session.csrf()
-    if (generation !== epoch.current) return
+    if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return
+    if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
     const observed = result.current.response.body.data
     const current = { sessionId: observed.sessionId, sessionState: observed.state as 'ANONYMOUS' | 'AUTHENTICATED' }
     const binding = JSON.stringify(current)
@@ -387,12 +449,20 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       setPhase('error'); setError('이메일 복구 중 세션이 달라 이전 미확정 전략 요청을 보존했습니다. 이 요청을 새 세션에 자동 연결하거나 폐기하지 않았습니다.')
       return
     }
+    if (authReturn && changed && savedCommand) {
+      // A valid session read does not resolve or discard a different owner's
+      // pending mutation. Keep its durable journal and all business gates closed.
+      pending.current = savedCommand; setHasPending(true)
+      setPhase('error'); setError('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.')
+      return
+    }
     if (changed) {
       clearNativeJournal(); savedCommand = null
       authReceipt.current = null; setClaimAvailable(false)
     }
     sessionStorage.setItem(SESSION_KEY, binding)
     if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+    if (recoveringReturn) { returnBindingRef.current = null; setReturnBinding(null) }
     bindSession(current)
     setLoginBinding({ sessionId: current.sessionId, epoch: generation, generation: loginGeneration.current })
     try { setPreviousConversation(readPreviousConversation(current.sessionId)); setNavigationError('') }
@@ -491,6 +561,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     finally { setHistoryPending(false) }
   })
   const openLogin = () => run(async () => {
+    if (returnBindingRef.current) {
+      if (!returnPresentationCurrent()) return
+      setLoginOpen(true); setLoginRetained(true); return
+    }
     if (logoutIntent.current || !session.current || phase !== 'ready') return
     const owner = session.current, generation = epoch.current
     if (loginRetained) {
@@ -515,6 +589,25 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       throw failure
     }
   })
+  const recheckReturnSession = async () => {
+    if (!returnPresentationCurrent() || emailDispatch.current || hasStoredNativeEmailIntent()) throw new Error('SESSION_CHANGED')
+    const binding = returnBindingRef.current
+    const current = await clients.session.current().catch(failure => {
+      if (!(failure instanceof ApiResponseError) || failure.status !== 401 || failure.envelope.error.code !== 'AUTHENTICATION_REQUIRED') throw failure
+      return null
+    })
+    if (returnBindingRef.current !== binding || !returnPresentationCurrent()) return
+    if (!current) {
+      // A missing session is not a reason to restart the controller or create
+      // an anonymous owner, including after an uncertain ACK. Reopen only.
+      setLoginRetained(true); setLoginOpen(true)
+      if (pending.current) setError('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.')
+      return
+    }
+    // Re-observe through the existing plain-return GET/CSRF path. It does not
+    // infer provider/ACK success or claim, and cannot bootstrap on this route.
+    await recoverSession(binding)
+  }
   const contextFor = (command: NativeMutationCommand) => {
     const csrfToken = clients.getCsrf()
     if (!csrfToken || !session.current || command.sessionId !== session.current.sessionId || command.sessionState !== session.current.sessionState) throw new Error('SESSION_REQUIRED')
@@ -1304,6 +1397,18 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       <button disabled={busy || hasPending || phase !== 'ready'} onClick={() => void claim()}>로그인 전 전략 연결</button></section> : null
   const panelCurrent = () => loginBinding !== null && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current
     && loginBinding.sessionId === session.current?.sessionId && !logoutIntent.current
+  const acceptReturnSession = (value: NativeAuthenticated | NativeSessionRecovery, recovered: boolean) => {
+    // The unchanged host guard returns void on refusal. Make refusal observable
+    // to the panel instead of letting a refused callback mark login confirmed.
+    if (!returnPanelCurrent()) throw new Error('SESSION_CHANGED')
+    const confirmation = recovered ? 'HANDOFF_UNVERIFIED' : 'ACK_CONFIRMED'
+    if (recovered) sessionRecovered(value as NativeSessionRecovery)
+    else authenticated(value as NativeAuthenticated)
+    const identity = `${confirmation}:${value.sessionId}:${value.claimIntent?.initiatingSessionId}:${value.claimIntent?.expectedSessionRevision}`
+    if (acceptedAuth.current !== identity || session.current?.sessionId !== value.sessionId
+      || session.current.sessionState !== 'AUTHENTICATED' || clients.getCsrf() !== value.csrfToken) throw new Error('SESSION_CHANGED')
+    returnBindingRef.current = null; setReturnBinding(null)
+  }
   const researchEntries = useMemo(() => observedResearchEntries(messages.flatMap(message => message.observation ? [message.observation] : []), language), [messages, language])
   const strategyEditor = documentOwner && conversation ? {
         rows: rowEdits.store[rowEditScope(documentOwner)] ?? {},
@@ -1349,7 +1454,15 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       return () => { if (emailDispatch.current === owner) { emailDispatch.current = null; setEmailBusy(false) } }
     }}
     onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
-  return <ClientServiceExperience sessionRecoveryNeeded={loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
+  const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen && plainAuthReturn()}><NativeLoginPanel
+    key={`return:${returnBinding.generation}`} hidden={!loginOpen || !plainAuthReturn()} returnOnly
+    onAuthenticated={value => acceptReturnSession(value, false)} onSessionRecovered={value => acceptReturnSession(value, true)}
+    enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
+    emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
+    sourceLayout isCurrent={returnPanelCurrent} canEmailDispatch={false} acquireEmailDispatch={() => null}
+    onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
+    onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
+  return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
     inputDisabled: busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || Boolean(approval || job), quickReplies: conversation?.nextQuestion?.options ?? [],
     workflow: hasLogout ? <section aria-label="로그아웃 요청"><h2>로그아웃 요청 확인</h2><p>이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.</p></section> : workflow,
     outcome: <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
@@ -1387,9 +1500,15 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (!conversation) return true
       return navigateConversation(false)
     }, onRecover: healthyAuthNotice ? undefined
-      : () => { if (phase === 'logged-out' && logoutBoundary) void newSessionAfterLogout(); else void run(recoverSession) },
+      : () => {
+        if (phase === 'logged-out' && logoutBoundary) void newSessionAfterLogout()
+        else void run(async () => {
+          if (logoutIntent.current || hasStoredNativeEmailIntent() || !returnBindingRef.current) await recoverSession()
+          else await recheckReturnSession()
+        })
+      },
     onLogout: sessionState === 'AUTHENTICATED' && !hasLogout ? logout : undefined,
-  }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={authSurface}
+  }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={returnAuthSurface || authSurface}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
     conversationLibrary={presentations.conversationLibrary} insightPresentation={presentations.insightPresentation}
     sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} brokerPresentation={presentations.brokerPresentation} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation}

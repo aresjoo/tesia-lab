@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 계승 후속 auth-entry-continuity 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다.",
-  "sourceCommit": "56bfde2ba9a930e49068e57ac19a585b0752b3c6",
+  "purpose": "원본 계승 및 OAuth 복귀 소비 교정 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다. 원FAIL·합성시험·실공급자/배포GO를 구분한다.",
+  "sourceCommit": "079373784ef80c4a434f8b34f42b4194ff8b27a2",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "9322333c57a1c63e3517d2dfe614e6207a8846366040db01f6ddc4cda9124eb2",
+  "snapshotDigest": "4e36bf5a0f22fd8e829f72ca80c73e779feb7b081c88c7aaf7d2c31c228a0a88",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2211,
-    "bytes": 25862500,
+    "files": 2213,
+    "bytes": 25921574,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS exact bytes/hash",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -709,25 +709,43 @@
     }
   ],
   "candidate": {
-    "status": "DRAFT_UNDEPLOYED_TESTS_NOT_PASSED",
-    "sourceBranch": "agent/web/auth-entry-continuity",
-    "sourceCommit": "56bfde2ba9a930e49068e57ac19a585b0752b3c6",
-    "captureTime": "2026-10-05T07:02:05.324Z",
-    "frozenInput": {"files":2204,"sha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad"},
+    "status": "DRAFT_AUTH_CONSUMER_CODE_GO_DEPLOYMENT_HOLD",
+    "sourceBranch": "agent/web/oauth-return-continuity",
+    "sourceCommit": "079373784ef80c4a434f8b34f42b4194ff8b27a2",
+    "captureTime": "2026-10-05T08:52:28.636Z",
+    "frozenInput": {"files":2206,"sha256":"59de0e40c8925c5e41ea64887c9de695037d778e60aa23a0d9421adb064f7756"},
     "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
-    "serviceBuild": {"files":1113,"sha256":"d161a3765c5d5911741c05475daf67d2830f45a6cda7e591146ae7fda23f9f0e"},
+    "serviceBuild": {"files":1113,"sha256":"1ffc4571dd57537be986e93d2ed902fed464cef468d45a16c53780f9e5ad3b61"},
+    "currentOAuthConsumer": {
+      "baseCommit":"56bfde2ba9a930e49068e57ac19a585b0752b3c6",
+      "changedProductFiles":["src/internal-poc/NativeServiceApp.tsx","src/internal-poc/NativeLoginPanel.tsx"],
+      "newSpecs":["tests/internal-poc/native-oauth-return-entry.spec.ts","tests/internal-poc/native-login-return-only.spec.ts"],
+      "policy":"SDK verified result→explicit ACK→AUTH cookie session GET+CSRF→separate explicit claim unchanged. plain return401 suppresses ANON creation; retained controller/ACK journal; logout/email priority.",
+      "fixtureTests":{"passed":26,"failed":0,"skipped":0,"retries":0,"flaky":0,"outsideErrors":0,"actualExitCode":0,"reportSha256":"d4629d4370ad2998022fd7e5c931c9cdf09b445653efcff7f8780caedcd4b652","receiptSha256":"c8c7b7c53168c7b614acd568e599782ffbfe08bc8711adffd2a8a29af19fd2ad","projects":["desktop"],"widthsInScenarios":[1440,390],"fullMobileProjectExecuted":false},
+      "existingLoginCompatibility":{"specs":10,"passed":482,"failed":0,"skipped":0,"retries":0,"flaky":0,"outsideErrors":0,"actualExitCode":0,"reportSha256":"c22aec1383bc884169d23bb4601f104625088a4a8a3b145bf4bcce26e1d65e66","receiptSha256":"496491f54ff2f1f856a1651b7dccbdf883649410ceb2734d047c85f968063a98"},
+      "build":{"lint":0,"public":0,"internal":0,"service":0,"inputUnchanged":true,"googleOnlyFlag":true,"exchangeFlag":false,"receiptSha256":"5994ac3aba33b47280cd353b5bfbf4660122791388c68449fb98e731ea1d2749"},
+      "evidenceSha256":"499cd7b2d8be0b37d381461129591c558f8e3bb2e7148400cca002220d8905be",
+      "independentReview":{"account":"personal (1)","actualModel":"claude-opus-5-5","actualModelExitCode":0,"verdict":"AUTH_CONSUMER_CODE_GO","critical":0,"high":0,"medium":0,"low":5,"hypotheses":5,"inputUnchanged":true,"tools":0,"modelRerun":false,"originalParserExit1Preserved":true,"attestationSha256":"b0828f2c33a1721fa031cf74a8a36cb1b385b760a7a2b90a0b8f5e475c381acb"},
+      "security":{"version":"8.30.1","rawStagedActualExitCode":1,"rawFindings":1,"classification":"고정 합성 미확정journal 재전송 식별자; 실제credential/외부값아님","classifiedActualExitCode":0,"additionalFindings":0,"exactFindingBaselineOnly":true,"sharedIgnoreRulesChanged":false,"hostedCiPassClaim":false},
+      "deliverySecurity":{"version":"8.30.1","stagedFiles":11,"rawActualExitCode":1,"rawFindings":1,"finding":"react-app/tests/internal-poc/native-oauth-return-entry.spec.ts:generic-api-key:56","classification":"source와 byte-identical인 합성 재전송 식별자 fixture","classifiedActualExitCode":0,"additionalFindings":0,"sharedIgnoreRulesChanged":false,"hostedCiPassClaim":false},
+      "preservedM1":{"redActualExitCode":1,"greenActualExitCode":0,"exactCaseKeyPreserved":true,"redToGreenChangedProductFiles":1,"redReportSha256":"a02e1f3666852d30fe2544976f55619756632a3ad829c15ae92b19039d121a5a","handoffSha256":"fa46e5db48092fd41d6f24b6e917e893a9f84b6f17e8733502f08607d43d8d49"},
+      "preservedSetupFailures":["initial actual130","corrected14PASS9harnessFAIL","final15PASS10harnessFAIL","versioned22PASS3harnessFAIL"],
+      "newWholeExecuted":false,"actualProviderLoginVerified":false,"deploymentGo":false,"activationExecuted":false,
+      "remaining":["새 frozen whole 및 원 copy-management FAIL 원인 확인","모바일 project·service-built return·Apple return ACK","storage readback 복구와 stale/pending 안내 Low","성공후URL·logout 재진입·trailing slash·200 recheck/uncertain ACK 가설","OpusH3: direct SDK GET과BRS assertUsable의 meta/data revision equality 차이; 정적차이관찰·malformed-response browser재현미실행","실 Google callback/ACK·Apple 등록·SMTP","React prompt producer 통합"]
+    },
     "sourceChanges": {
       "products": [
         "src/client-research-hub.css",
         "src/client-conversation.css",
         "src/components/ClientMainExperience.tsx",
         "src/internal-poc/ClientServiceExperience.tsx",
-        "src/internal-poc/NativeServiceApp.tsx"
+        "src/internal-poc/NativeServiceApp.tsx",
+        "src/internal-poc/NativeLoginPanel.tsx"
       ],
       "existingTestsChanged": 8,
-      "newTests": 4,
+      "newTests": 6,
       "documents": ["README.md","DESIGN.md","Bugfix_report.md"],
-      "scope": "게스트 원본 표시 복원·클릭 영역·검증된 동일 소유자의 미전송 입력 보존. 인증SDK/API/provider/권한/prompt/package/DB/색상/SVG 변경0"
+      "scope": "게스트 원본 표시·클릭 영역·동일 소유자 미전송 입력 보존과 이번 OAuth 복귀 소비 교정. 인증SDK/API/provider/권한/prompt/package/DB/색상/SVG 변경0"
     },
     "impact": {
       "status": "FAILED",
@@ -747,7 +765,7 @@
     },
     "whole": {"status":"FAILED_PRESERVED","specs":531,"discovered":14862,"passed":14842,"failed":3,"skipped":17,"workers":8,"actualExitCode":1,"flaky":0,"retries":0,"errors":0,"durationMs":4854349.297,"retryOrRestart":false,"inputAndPublicBuildUnchanged":true,"frozenInputSha256":"a40d14a8e8ce77862c30db0a0133515dba56ae10815b9f2dc0e1e1a2881a111f","reportSha256":"90ad98531c1ac9a0c7aab8062798154a6f5e994c6d25f0f5afc805cae6338636","logSha256":"b9f28dae5787893c7673980a3e9d0899d0cdff2a6d3b433a07618ef02db1a69e"},
     "correctedTargeted": {"status":"PASS_SCOPED_NOT_WHOLE","specs":3,"total":60,"passed":60,"failed":0,"skipped":0,"flaky":0,"retries":0,"errors":0,"actualExitCode":0,"durationMs":166075.204,"inputAndPublicBuildUnchanged":true,"frozenInputSha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad","reportSha256":"5edf24129fb14ef4b9e38c32bd14941c13e073d8277664fe8d69ca0050dfee40","logSha256":"77ab11e08337c1202e4415eebbd74ac2e6bb31b312a4d2e3cbfdd126549f7faf","acceptanceSha256":"befc4c48eb26e4ecb1284d8d774ee7c96d11db564cef9c43199d1985da65b55c","originalFailuresWaived":false},
-    "correctedWhole": {"status":"RUNNING_NOT_ACCEPTED","prefix":"auth-entry-continuity-readiness-corrected-whole","expectedSpecs":531,"expectedCases":14862,"workers":8,"devPort":4547,"previewPort":4548,"actualExitCode":null,"restartOrRetry":false,"frozenInputSha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad"},
+    "correctedWhole": {"status":"FAILED_PRESERVED_PRIOR_INPUT","prefix":"auth-entry-continuity-readiness-corrected-whole","specs":531,"total":14862,"passed":14844,"failed":1,"skipped":17,"workers":8,"devPort":4547,"previewPort":4548,"actualExitCode":1,"restartOrRetry":false,"flaky":0,"retries":0,"outsideErrors":0,"durationMs":5455141.823,"inputAndPublicUnchanged":true,"frozenInputSha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad","reportSha256":"21550b1dc29b6aae0142ca69bf9a18fa9b0a49968ee694316be39b4cab19780e","logSha256":"6bd5943ddbf938ca8667758823e094873e043b70bd6af105bc699fa6bd416e68","acceptanceSha256":"53cd254fd755f240b905bfb52bfe1206e3646d4d8d5807dfb1e29ee3c2968325","failure":"mobile copy-management stop confirmation remained waiting; cause unconfirmed; not waived","newOAuthConsumerIncluded":false},
     "harnessDeltaReview": {"account":"personal (1)","actualModel":"claude-sonnet-5-5","actualExitCode":0,"verdict":"HARNESS_DELTA_CODE_GO","inputUnchanged":true,"receiptSha256":"f2f228a418a4aba471d0c4032b18dd55e05fa4865da18b3149129b63ad40683e","scope":"원본 globe DOM/반응형 기대와 fonts.ready 1줄의 작은 정적 검수만. 모든 다른 bytes·assertion·strict gap<2·clock80/80/7000·retry/skip/timeout 유지","wholeGo":false,"deploymentGo":false,"serviceGo":false},
     "buildChecks": {
       "lint":0,"publicBuild":0,"internalBuild":0,"serviceBuild":0,
@@ -756,6 +774,7 @@
       "scope":"이전a40 입력 build proof; 새 후보는 하니스2곳/문서만 추가 변경·제품/package/lock/build source는 동일. 새build실행으로 승계하지 않음. 새 lint actual0"
     },
     "independentCodeReview": {
+      "scope":"이전a40 인증 표시/미전송 입력의 정적 검수. 현재OAuth 소비 최종 검수는 currentOAuthConsumer.independentReview다.",
       "account":"personal (1)","actualModel":"claude-opus-5-5","actualExitCode":0,
       "verdict":"STATIC_UI_CODE_GO","critical":0,"high":0,"medium":0,"low":9,
       "hypotheses":9,"inputUnchanged":true,"automaticTestsGo":false,"actualServiceGo":false,
@@ -771,7 +790,7 @@
     "readinessDeliveryReview":{"status":"DRAFT_DELIVERY_NO_BLOCKING_DEFECT","actualExitCode":0,"codeCommit":"b2fcbd07ff659bca3fc64a8182c542675bf3d4f0","stagedFiles":8,"snapshotFilesExact":2211,"snapshotBytes":25862500,"historicalObjectsExact":8,"thenProtectedFilesExact":3761,"sha256":"90888965221f200431037c19c3c2617fe465650d523b343414b14cfa7b8e7b41","scope":"b2fcbd0 전달 인수만. 이후 AGENTS/MIGRATION/검증3문서의 후속delta는 별도 검수·제품/서비스GO아님"},
     "readinessPromptMergeRehearsal":{"migrationCommit":"b2fcbd07ff659bca3fc64a8182c542675bf3d4f0","promptHead":"8646b6525631d5e1f71e38a8e2e515f23571b5b5","actualExitCode":0,"conflicts":0,"tree":"de6f875728413ce52209183958be7d711c7300a8","actualMergeExecuted":false,"reactPromptProducerIntegrated":false},
     "servicePresentation": {
-      "scope":"동일1113 build exact bytes 및 loopback1440/390/320 로그인 UI; 합성GET/외부·mutation차단",
+      "scope":"이전56bfde2의 d161a376 1113 build exact bytes 및 loopback1440/390/320 로그인 UI; 합성GET/외부·mutation차단. 새1ffc457 service return의 인수로 승계0",
       "status":"PASS_SCOPED","actualLoginVerified":false,"providerStartExecuted":false,"mutationExecuted":false,
       "receiptSha256":"97ca7af61bc2435c5a2817319855274b4a99ad4acfd3dfaf50f0e9f3995a561c"
     },
@@ -801,6 +820,7 @@
       "reactPromptProducerIntegrated":false,"actualServiceGo":false
     },
     "readOnlyContinuation": {
+      "scope":"이전56bfde2에 대한 readonly 관측 기록. currentOAuthConsumer의 코드 교정과 구분하며 원 결과를 보존한다.",
       "status":"AUDIT_CONTINUES_DEPLOYMENT_HOLD",
       "wholeRun":"최초a40 단일531spec/14862 actual1/14842P3F17기존skip 보존. 하니스2곳만 교정한357 입력의 관련60PASS와 새전체1회 실행은 별도범위이며 합산0",
       "observedFailures":[

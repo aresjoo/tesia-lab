@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-entry-continuity@56bfde2ba9a930e49068e57ac19a585b0752b3c6` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54 코드를 보존한 운영 미배포 초안 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/oauth-return-continuity@079373784ef80c4a434f8b34f42b4194ff8b27a2` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54·56bfde2 초안을 보존한 운영 미배포 인증 소비 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -16,6 +16,12 @@
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+
+현재0793737의 전체2,213파일/25,921,574bytes, sourceDirtyFiles0·snapshot4e36bf5를 전달한다. 직전56bfde2 이후 제품은 `NativeServiceApp.tsx`/`NativeLoginPanel.tsx`의 인증 복귀·보존 controller 교정만 바뀌었고 신규 예방시험2개 및 README/Bugfix를 포함한다. Google·Apple·이메일 UI·원문·SVG·색상·가용성 flag·SDK·공용 계약·프롬프트·서버·DB는 유지한다. 일반 방문은 그대로이며 plain `/auth/complete`의 검증401만 새 익명 세션을 만들지 않고 무권한 복구 표시를 연다. 자동 START/ACK/claim/전략 승인/주문은 없다. 미확정 journal·logout/email 우선과 동일 controller의 ACK 유실/화면 왕복 복구를 보존한다.
+
+최종2206/59de 입력의 신규26개와 기존 로그인482개는 각각 actual0/전부PASS/skip·retry·flaky·시험밖오류0이며 같은입력 lint/공개·내부/service3build actual0다. 화면 왕복의 busy 잠금은 원동일키 RED1→GREEN1로 검증했다. personal(1) 실제 Opus5.5는 인증 소비 CODE_GO/C·H·M0, Low5·가설5 및 후속시험을 남겼다. CLI 응답의 계정 상태 prefix로 생긴 최초 parser 실패를 보존하고 모델 재호출 없이 실제 result/modelUsage/입력불변을 별도 확인했다. secret scan의 합성 journal 재전송 식별자1건은 원raw actual1을 보존하고 정확한 finding만 한정분류했다. shared ignore/rule 변경0이며 raw findings0/hostedCI PASS로 쓰지 않는다.
+
+**배포는 HOLD다.** 이전 corrected whole531/14862는14844PASS/1FAIL/기존17SKIP/actual1, 모바일 copy-management 종료 확인 원인은 미확정이다. 이전3FAIL의 동일키PASS로 새1FAIL을 면제하지 않는다. 이번 코드의 신규 whole/모바일 project·service-built return/실Google 계정·Apple 등록/SMTP·React prompt producer 통합은 아직 미검증 또는 미완료다. migration push는 원본 main 병합이나 teth.ai 활성화를 실행하지 않는다. 현재 운영은7dd066f이며 historicalProduction*·deployment 객체는 그대로 보존한다. 정확한 범위는 `migration-verification.json`의 현재 candidate와 `react-app/Bugfix_report.md`를 따른다. 아래56bfde2와 다른 입력의 수치는 이전 이력이다.
 
 현재 후보56bfde2의 전체2,211파일/25,862,500bytes를 exact byte/hash로 전달한다. sourceDirtyFiles0·snapshot9322333이며 node_modules·빌드·비공개 QA·DB·credential은 제외한다. 이전9579 이후에는 검사2곳과 문서3개만 바뀌었고 제품·디자인·인증 SDK·provider·권한은 추가 변경하지 않았다. 운영 출처7dd066f와 후보를 혼동하지 않는다.
 
