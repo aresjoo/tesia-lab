@@ -101,7 +101,10 @@ test('틀린 binding과 실패는 재시도하고 locale·일반 렌더·같은 
   await resolve(page, 1); await expect(inspection(page).locator('canvas').first()).toBeVisible()
   const canvas = await inspection(page).locator('canvas').first().elementHandle()
   await update(page, {})
-  for (const language of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko']) await page.evaluate(async language => { const p = '/src/client-preferences.ts'; const { setClientPreference } = await import(/* @vite-ignore */ p); setClientPreference('language', language) }, language)
+  for (const language of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko']) {
+    expect(await page.evaluate(language => Reflect.get(window, 'inspectionHarness').setLanguage(language), language)).toBe(true)
+    await expect(page.locator('html')).toHaveAttribute('lang', language)
+  }
   expect(await requestCount(page)).toBe(2)
   expect(await inspection(page).locator('canvas').first().evaluate((node, old) => node === old, canvas)).toBe(true)
   await update(page, { wrongScope: true })

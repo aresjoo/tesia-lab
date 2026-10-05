@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 source와 검증은 manifest와 `migration-verification.json`의 `candidate.currentGuestDocumentClosure`를 따른다. 최종 게스트 문서 복원20개·기존390개는 각각PASS이고 같은입력 lint3build·Opus5.5/독립범위 인수다. source2ac의 전수14958은14940PASS/1GC FAIL/기존17SKIP/actual1로 종료했고 원인은 미확정이다. 신규 경계 관측의 작은 화면·장문 locale 버튼 충돌도 knownIssue로 남긴다. 이전 하니스10/40·controller578·host72/482/30과 합산·승계하지 않으며 실제provider/Reactprompt/운영GO는 아니다. Google 추가를 이유로 Apple·이메일을 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
+최신 source와 검증은 manifest와 `migration-verification.json`의 `candidate.currentAccountLocaleClosure`를 따른다. 현재9d919/2212/4f0의 신규48+기존20 단일68PASS·시장26PASS·기존10spec390PASS와 lint/3build·새compiled 로그인3폭 표시 인수는 각각 actual0이다. small/장문 auth 충돌은 원RED32를보존해 동일48키GREEN으로 교정했다. 실제personal1 Opus5.5 ACCOUNT_LOCALE_CODE_GO/확정C0H0M0·Low7은 전체/배포승인이아니다. source2ac의 전수14940PASS/1GCFAIL/기존17SKIP/actual1·인과 미확정은 보존한다. 새539spec/15026 단일 전수는 종료 전 PASS로 표시하지 않고 원17skip/전체키/실제exit를 검사한다. 이전 범위와 합산·승계0이며 provider/Reactprompt/운영GO는 아니다. Google 추가를 이유로 Apple·이메일을 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
 
 현재 React 출처·전체 파일 해시·미커밋 포함 여부는 `migration-manifest.json`을, 최신 검사·실패 보존·배포 여부는 `MIGRATION.md`와 `migration-verification.json`의 candidate 상태를 따른다. 기존 운영7dd066f의 deployment 이력을 새 후보의 PASS로 승계하지 않는다. 이전 전체 FAIL·새 인증 소비 영향 PASS와 코드 검수를 구분하고 배포 HOLD를 유지한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다. 부분PASS·모델 CODE_GO는 실공급자·전체서비스 승인이 아니다. 합성 fixture의 과거 secret scan 한정분류는 shared ignore/rule 변경이나 raw findings0가 아니다.
 

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { ClientAccountTerminal, type ClientAccountTerminalControl, type ClientAccountTerminalEntry } from '../../src/components/ClientAccountTerminal'
 import { NativeTradingWorkspace } from '../../src/internal-poc/NativeTradingWorkspace'
 import { createMarketSelectionStore } from '../../src/client-market-selection-store'
+import { setClientPreference } from '../../src/client-preferences'
 import type { TerminalMarketInstrument, TerminalMarketObservation, TerminalMarketSource } from '../../src/client-terminal-market-source'
 import { fixture as chart } from '../../src/dev/chart-workspace-fixture'
 
@@ -36,7 +37,7 @@ export function mountMarketInspection(initial: InspectionFixture = {}) {
   }
   const render = (fixture: InspectionFixture) => root.render(<Harness fixture={fixture} />)
   render(initial)
-  return { update: render, selectStrategy: (id: string) => selectStrategy(id),
+  return { update: render, selectStrategy: (id: string) => selectStrategy(id), setLanguage: (language: string) => setClientPreference('language', language),
     requests: () => pending.map(item => ({ id: item.id, aborted: item.signal.aborted, scope: item.scope })),
     resolve(index: number, wrong = false) { const p = pending[index]; p.resolve({ scope: p.scope, identity: p.identity, instrumentId: wrong ? 'wrong' : p.id, chart: { ...chart, identity: `TEST-${p.id}-${index}`, market: `${p.id}/USDT`, sourceLabel: `TEST ONLY ${p.id} #${index}`, fills: [] } }) },
     reject: (index: number) => pending[index].reject(),

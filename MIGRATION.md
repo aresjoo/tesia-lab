@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/guest-broker-continuity@8197c71efd58223df6f162ef7b0c043e16431149` 추적 파일 전체. 기존 인증 소비·하니스 교정 위의 게스트 문서 표시 최소 복원이며 기존 로그인 선택지·SDK·원본 디자인을 보존한 운영 미배포 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/guest-broker-continuity@9d919d87be23744fe13484d23d3e88d246e452ad` 추적 파일 전체. 인증 소비·게스트 문서 표시 복원 위의 장문 계정 헤더 교정이며 기존 로그인 선택지·SDK·원본 디자인을 보존한 운영 미배포 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,7 +17,13 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 source8197c71의 **2,218파일/25,996,285bytes**, sourceDirtyFiles0·snapshot SHA `77f0636fdbf06131fb51c32c8a33dc9ca4dd8fd75f700bf305cb6fc1f7be55ca` 전체를 전달한다. 이전 migratione010/source2ac 이후 제품3파일·신규시험3파일·문서2파일만 바뀌었다. 원본 root HTML/server/Worker/workflow/main은 수정하지 않았고 기존 snapshot 삭제0이다.
+현재 source9d919d8의 **2,219파일/26,016,699bytes**, sourceDirtyFiles0·snapshot SHA `43dd7cadc6c862b13aefece4b39b60018ddf8df7f93f10a05ef9af1d4d2b9037` 전체를 전달한다. 이전 migrationbb158/source8197 이후6파일만 바뀌었다. 제품은 `src/client-conversation.css`의 auth 한 행 nowrap·Native desktop return utility60 두 항목이다. 시장 검사의 실제 동기 setter 위임은 fixture/spec 두 파일이며 원7언어·요청2·canvas identity·wrongScope·기존 단언을 보존하고 boolean/HTML lang 검사만 추가했다. 신규 계정 locale 영구48시험·README/Bugfix 두 문서도 전달한다. 원본 root HTML/server/Worker/workflow/main·provider/SDK/flags·문구/SVG/색상 변경0, 기존 snapshot 삭제0이다.
+
+입력2212/4f0에서 신규48+기존20 단일68PASS·시장26PASS·기존10spec390PASS가 각각 actual0이며 합산 전수PASS가 아니다. 새 lint/3build actual0와 service1113/f2a263cf GET exact·로그인1440/390/320 표시/취소/초안/focus/키보드 검증 actual0를 결속했다. 합성 session/CSRF GET만 사용했고 실제 OAuth·Apple·SMTP·프롬프트 연결을 증명하지 않는다. readonly 독립 인수와 실제personal1 Opus5.5 ACCOUNT_LOCALE_CODE_GO는 확정C0H0M0/Low7이다. 원RED48의32FAIL·원전수GC1FAIL/인과 미확정은 보존한다. 새539spec/15026개 단일 전수는 종료 전 PASS가 아니며 현재 정적 배포HOLD다. 정확한 증거는 `candidate.currentAccountLocaleClosure`를 따른다.
+
+### 이전8197 게스트 문서 복원 인수 이력
+
+아래는 당시 source8197/전체2,218/77f063 전달·검수 이력이다. French320/861 knownIssue는 위9d919d8 후속으로 교정됐으며 당시 실패·검수 범위를 삭제하거나 새 전체PASS로 승계하지 않는다.
 
 | 이번 최소 복원 | 파일 | 보존한 내용 |
 | --- | --- | --- |
@@ -32,7 +38,7 @@
 
 ### 이전 source2ac 하니스 전달 이력
 
-후속 readonly24표면의 raw SHA `97e2009730d681de78e02c387ad093117bfb0b744e824a103dcab1338bff9e76`에서 French320의 계정4종·첫 화면/대화 이후8표면은 두 행 auth 배치가 복귀 버튼을 가려 centerHitfalse였다. 기준source2ac의 동일조건12표면과 비교한 receipt SHA `a300b236e0b85945a8e3a8fece32a81cd4f973fc50c53e1608ee687087c64163`에서 같은320의8표면은 기준에서 정상 클릭되어 이번delta 회귀로 확인했다. auth 자체 hit·mobile globe 숨김·overflow/브라우저 오류/미선언 HTTP 요청은 정상이다. 861의 return는 기준에도 About 헤더링크가 가리는 기존 문제이며1440은 정상이다. 이는 앞20/390·static CODE_GO의 무결함 보증이 아니고 현재 knownIssue다. 최소교정·동일키 검증 전 운영 승격하지 않는다. 실제 대화는 명시된 합성 CREATE/TURN 응답을 사용했으며 actual model/provider 호출0이다.
+이전 readonly24표면의 raw SHA `97e2009730d681de78e02c387ad093117bfb0b744e824a103dcab1338bff9e76`에서 French320의 계정4종·첫 화면/대화 이후8표면은 두 행 auth 배치가 복귀 버튼을 가려 centerHitfalse였다. 기준source2ac의 동일조건12표면과 비교한 receipt SHA `a300b236e0b85945a8e3a8fece32a81cd4f973fc50c53e1608ee687087c64163`에서 같은320의8표면은 기준에서 정상 클릭되어 당시delta 회귀로 확인했다. auth 자체 hit·mobile globe 숨김·overflow/브라우저 오류/미선언 HTTP 요청은 정상이다. 861 home의 return는 기준에도 About 헤더링크가 가리는 기존 문제이며1440은 정상이었다. 현재9d919의32FAIL→same-key GREEN68과 인과 범위를 분리한다. 실제 대화는 명시된 합성 CREATE/TURN 응답을 사용했으며 actual model/provider 호출0이다.
 
 아래 RUNNING 표시는 당시 실행 시작 기록이다. 그 전수의 실제 종료는 위14940PASS/1GC FAIL/기존17SKIP이며 검증 JSON의 `candidate.currentAuthHarnessClosure.whole`에 결속했다. 과거 실패와 서로 다른 입력의 범위 결과는 그대로 보존한다.
 
