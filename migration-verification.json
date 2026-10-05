@@ -774,6 +774,23 @@
     "deploymentEvidenceScope":"root deployment와 historicalProduction*는 이전7dd066f에만 적용; candidate를 운영PASS로 해석하지 않음",
     "activationExecuted":false,"fullServiceGo":false,
     "preservedPreviousWhole": {"total":14748,"passed":14726,"failed":5,"skipped":17,"actualExitCode":1,"reportSha256":"1093567cf5ff6a100ea4d605504514a4146f26966204974587ee21091cde3307"},
-    "syncVerification": {"finalActualExitCode":0,"earlyVerifyBeforeSyncFinished":1,"meaning":"최초 verify는 sync 진행 중 실행돼 실패; 완료 후 exact 재검증PASS. 제품시험 FAIL과 구분"}
+    "syncVerification": {"finalActualExitCode":0,"earlyVerifyBeforeSyncFinished":1,"laterWrongArgumentsActualExitCode":1,"meaning":"sync 진행 중 최초verify의 불완전snapshot 실패와 나중에 path+--verify를 함께 준 usage 실패는 별개 하니스 실행이다. 완료 후 올바른 sole --verify로 exact 검증PASS; 제품시험 FAIL과 구분"},
+    "migrationSecurity": {"gitleaksVersion":"8.30.1","actualExitCode":0,"findings":0,"scope":"fdb1e45 코드 전달23 staged; 뒤에 추가되는 증거 변경은 별도 재검사","ignoreRulesChanged":false},
+    "independentDeliveryReview": {
+      "status":"DRAFT_DELIVERY_NO_BLOCKING_DEFECT","actualExitCode":0,
+      "sourceSnapshotAndStagedFilesExact":2211,"sourceFrozenInputUnchanged":true,
+      "historicalProductionAndDeploymentObjectsExact":true,"protectedRuntimeChanged":false,
+      "reviewSha256":"d51f229199cbe994a9183c0d764a3f940dafb7e28baa63867d46db1b0784c59e",
+      "scope":"전달 누락/출처/문서 상태만; 전체 product/service 검수 및 운영GO 아님"
+    },
+    "promptMergeRehearsal": {
+      "deliveryCodeCommit":"fdb1e45cdf9f3c8de9ffc144fc48714a91ec63ef",
+      "promptHead":"8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+      "actualExitCode":0,"conflicts":0,"tree":"c720d31354940d4096045311681ef51e29bdf915",
+      "observedAt":"2026-10-05T05:53:06.756Z",
+      "receiptSha256":"23cd107326071b82672d90359370365f7a058921efacf453817a0cf424f9109d",
+      "worktreeAndRefsUnchanged":true,"actualMergeExecuted":false,
+      "reactPromptProducerIntegrated":false,"actualServiceGo":false
+    }
   }
 }

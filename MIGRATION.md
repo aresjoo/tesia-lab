@@ -87,7 +87,7 @@ prompt8646 별도draft·actualmerge/Reactproducer통합0·사용성4FAIL/MODEL_Q
 
 이번 추가 범위는 AI 트레이딩 소개·로그인 전 공개 목록·헤더/사이드바, 설정·도움말·문서 FAQ/Back/스크롤 복귀, 카탈로그 페이지·키보드 초점과 Google·Apple·이메일 선택지 공존이다. 기존 Google-only 배포에서 다른 방식을 없애던 조립을 수정해 **표시는 유지하고 가용성만 제어**한다. 현재 미등록 Apple·이메일은 ‘준비 중’이며 서버 등록이나 인증 성공을 만들어내지 않는다. 상세 재현·수정·실패 이력은 `react-app/Bugfix_report.md`의 최신 두 절을 따른다.
 
-투자 프롬프트 [draft PR5](https://github.com/aresjoo/tesia-lab/pull/5)의 `8646b65`는 별도 검증 중인 후보로 보존하며 이번에 병합하지 않았다. 해당 root `index.html`·`server/` 변경과 React snapshot의 제품 파일은 겹치지 않지만, 공용 `MIGRATION.md` 설명은 향후 병합 시 통합해야 한다. **파일 충돌 없음은 프롬프트 개선이 현재 React 대화에 연결됐다는 뜻이 아니다.** 이번 작업은 루트 원본/server를 변경하지 않는다.
+투자 프롬프트 [draft PR5](https://github.com/aresjoo/tesia-lab/pull/5)의 `8646b65`는 별도 검증 중인 후보로 보존하며 이번에 병합하지 않았다. 새 전달 코드 `fdb1e45`와의 private merge-tree는 actual0/충돌0이며 원본 runtime·작업 tree·refs 변경0이다. 공용 설명은 실제 통합 때 의미를 다시 대조해야 한다. **파일 충돌 없음은 프롬프트 개선이 현재 React 대화에 연결됐다는 뜻이 아니다.** 이번 작업은 루트 원본/server를 변경하지 않는다.
 
 사용자가 현재까지의 프론트 변경을 한 브랜치에서 볼 수 있도록 요청했으므로 **미병합이라는 이유만으로 구현 코드를 빼지 않는다.** 후보 코드를 포함하되 출처 SHA, 검증 범위, feature flag, 미완료 계약·운영 항목을 구분해 전달한다. 독립 QA 실험·credential·DB와 다른 저장소 서버 구현 자체는 프론트 스냅샷에 혼합하지 않는다.
 
