@@ -34,6 +34,8 @@
 
 teth.ai는 공개 HTTPS 자산350개/문서4개를 새로 검사해 이전 운영7dd066f와 exact 일치했다. 아카이브의 raw HTML과 HTTP 응답은 서버 소유 profile meta 삽입 때문에 해시가 다르며, 승인된 정확한 삽입까지 포함해 동일함을 검증했다. 다른 팀의 배포 변경으로 오인하지 않는다. 새 후보 활성화0이며 최신 범위·증거는 검증 JSON의 `readOnlyContinuation`을 따른다.
 
+**전달·충돌·독립 검수:** source56bfde2와 migration b2fcbd0의 실제 push·원격 일치를 확인했다. 독립 staged8 검수는2211파일/25,862,500bytes/snapshot9322333·historical8객체·당시 보호3761파일 exact를 확인했으며 전달 범위의 blocking결함0이다. prompt8646과 migration b2fcbd0의 private merge-tree actual0/충돌0/tree de6f875지만 실제 merge·React prompt producer 연결은0이다. personal(1) 실제 Opus5.5는 기존 OAuth 연속성 M1과 소비코드 후속 방향을 검토하고 AUTH_HOLD로 판정했다. 이는 구현 승인이나 운영 로그인 실패 확정이 아니다. 운영 VM readonly에서는 core3파일이Backend157과 exact이고 HTTP 조립 파일은 다르므로 전체 Backend pin 동등성·실Google 성공으로 승계하지 않는다. 새 프로바이더/API/권한·서버파일/설정·DB·credential 교체0, 운영 배포 HOLD다.
+
 아래7dd066f의 검증·배포는 **이전 운영 출처의 이력**이며 현재 후보의 PASS/배포 증거가 아니다.
 
 이전 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
