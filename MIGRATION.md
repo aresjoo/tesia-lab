@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/catalogue-evidence-restoration` 추적 파일 전체. 정확한 commit은 manifest에 기록. 병합 main `62b5e69`·Web draft PR54 `75a5f5b`·이전 UI 복구 `fa8601e`를 보존한 후속 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-entry-continuity@9579b6c362704f4bec85617be05225a5962d9705` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54 코드를 보존한 운영 미배포 초안 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,7 +17,20 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
+현재 후보9579b6c의 전체2,211파일/25,857,315bytes를 exact byte/hash로 전달한다. sourceDirtyFiles0이며 node_modules·빌드·비공개 QA·DB·credential은 제외한다. 운영 출처7dd066f와 후보를 혼동하지 않는다.
+
+| 이번 변경 | 구현 위치 | 보존하는 경계 |
+| --- | --- | --- |
+| 게스트 인증·언어 진입점과 헤더 공간 | `ClientMainExperience.tsx`, `ClientServiceExperience.tsx`, `client-conversation.css` | 원본 일반 대화/인사이트의 desktop·mobile 표시 정책, 로그인 후 숨김, 기존 SVG·색상·문구 유지 |
+| 로그인 후 미전송 초안 | `NativeServiceApp.tsx` | 동일 익명 소유자·버전·검증된 ACK/EMAIL offer에만 memory-only 복원. 저장·자동전송·자동claim·새 권한0 |
+| 모바일 메뉴 클릭 영역 | `client-research-hub.css` | 실제6px 겹침만 CSS3줄 보완. 메뉴·경로·원본 디자인 보존 |
+| 회귀 관측·신규4spec | `react-app/tests/` | 기존 assertion·timeout·retry·skip을 완화하지 않음. 실제 실패와 신규 검증을 분리 |
+
+후보 단일155spec은4543PASS/1FAIL/기존4SKIP·actual1이다. 초기 연구 scroll gap2px 실패의 원인은 미확정이며 분리 동일키5PASS로 면제하지 않는다. 전체531spec/14862개는 진행 중이다. lint·공개/내부/service build actual0와 독립 정적 코드GO는 전체 인수·운영 승인이 아니다. 이전 전체14748의5FAIL 및 원 raw 증거도 보존한다. 이번 후보 배포는 HOLD이며 기존 운영 bundle을 유지한다. Google·Apple·이메일은 공존하고 실제 provider 성공을 합성 시험으로 대체하지 않는다.
+
+아래7dd066f의 검증·배포는 **이전 운영 출처의 이력**이며 현재 후보의 PASS/배포 증거가 아니다.
+
+이전 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
 
 새114spec 단일 3404PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험밖오류0·actual0·동결입력불변, lint/3build·built로그인3폭·fresh독립4·personal(1) Opus5.5 STATIC_UI_CODE_GO를 결속한다. baseline523/14622의14595P10F17skip/actual1과 중간112의3351P1GC하니스FAIL2skip/actual1, globe초기20P20F·원HOLD/PNG/trace는 보존하고 합산하지 않는다. auth28·negative의도tripwireFAIL4는 Chromium HTTP guard 범위이며 실제OAuth/OS-egress 승인이 아니다. 실제 활성화/CAS·권위보존·backup·public exactbytes/로그인presentation 영수증을 확인한 정적UI 반영 상태다. 정확한 SHA·bytes·분모·서비스 경계는 migration-verification.json 단일정본을 따른다.
 

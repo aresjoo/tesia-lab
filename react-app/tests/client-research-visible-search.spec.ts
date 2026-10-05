@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+test.use({ serviceWorkers: 'block' })
+
 async function setup(page: Page, baseURL: string | undefined) {
   if (!baseURL) throw new Error('로컬 Mock 검수 주소가 필요합니다.')
   const origin = new URL(baseURL).origin, errors: string[] = [], blocked: string[] = []
@@ -48,6 +50,7 @@ test('CAT-RESEARCH-HIDDEN-SEARCH-01: 템플릿 해석에만 있는 문구는 가
   await page.screenshot({ path: info.outputPath('visible-conversation.png') })
   const search = await openHistory(page)
   await search.fill('시장 전반')
+  await expect(page.locator('.g-hist-row'), '원본 final gHistText/gHistRows는 제목과 가시 convo만 검색합니다.').toHaveCount(0)
   const rows = await page.locator('.g-hist-row').count()
   await info.attach('visible-search-boundary.json', { body: JSON.stringify({ key: 'CAT-RESEARCH-HIDDEN-SEARCH-01', needle: '시장 전반', visible: false, expectedOriginal: 0, actual: rows, audit }), contentType: 'application/json' })
   await page.screenshot({ path: info.outputPath('hidden-command-search.png') })
@@ -88,12 +91,15 @@ test('제목·가시 원문·이미 표시된 답변은 AND 검색하며 미출�
   await expect(page.locator('.g-umsg')).toHaveText('표시된 사용자 질문')
   await expect(page.locator('.client-source-main')).toContainText('표시된 수수료 설명')
   await expect(page.locator('.client-source-main')).not.toContainText('미출력 합성 검수값')
+  await expect(page.locator('.client-source-main')).not.toContainText('내부 해석 메모')
   const search = await openHistory(page)
   for (const query of ['검수 수수료', '사용자 수수료', '표시된 질문']) {
     await search.fill(query)
     await expect(page.locator('.g-hist-row')).toHaveCount(1)
   }
   await search.fill('미출력 합성 검수값')
+  await expect(page.locator('.g-hist-row')).toHaveCount(0)
+  await search.fill('내부 해석 메모')
   await expect(page.locator('.g-hist-row')).toHaveCount(0)
   expect(audit).toEqual({ errors: [], blocked: [] })
 })

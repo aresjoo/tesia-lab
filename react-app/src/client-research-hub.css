@@ -74,6 +74,9 @@
   .tesia-shell.client-source-app.has-site-footer:has(.client-sharing-hub :is(.strategy-filters[data-catalogue-list],.catalogue-source-header,[data-public-catalogue])) .client-auth-nav { top:8px; }
   .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.catalogue-source-header) > .hub-header:has(button:focus) { left:18px; right:18px; }
   .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.strategy-filters[data-catalogue-list]) > .hub-header:has(button:focus) { top:60px; }
+  /* Keep the retained 44px breadcrumb clear of the mobile menu's 44px hitbox.
+     Only the source detail needs this 6px reserve, not Native generic flow. */
+  .tesia-shell.client-source-app.has-site-footer .client-sharing-hub:has(.catalogue-source-header) .client-shared-detail > .tfbk-bc { margin-top:10px; }
 }
 @media (min-width:861px) {
   /* Desktop auth scrolls with the page; the existing Native header then pins

@@ -43,8 +43,10 @@ async function language(page: Page, value: string) {
     await page.evaluate(value => {
       const path = '/src/client-preferences.ts'
       Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'pending' })
-      const pending = import(path).then(({ setClientPreference }) => {
-        setClientPreference('language', value)
+      const pending = import(path).then(async ({ setClientPreference }) => {
+        // Await both today's synchronous result and a future Promise. A rejected
+        // setter must reach the error state, never a prematurely recorded done.
+        await setClientPreference('language', value)
         Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'done' })
       }).catch(error => {
         Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'error', message: String(error) })

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+test.use({ serviceWorkers: 'block' })
+
 async function frameBarrier(page: Page) {
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))))
 }
@@ -22,29 +24,41 @@ async function geometry(page: Page) {
 }
 
 for (const width of [320, 844, 861, 1440]) test(`native guest ${width}px: normal wheel preserves catalogue header and auth flow`, async ({ page }, info) => {
-  const errors: string[] = [], external: string[] = [], mutations: string[] = []
+  const errors: string[] = [], external: string[] = [], mutations: string[] = [], unexpectedApi: string[] = [], blocked: string[] = [], fixtures: string[] = []
   page.on('pageerror', error => errors.push(error.message))
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.setViewportSize({ width, height: 900 })
   const origin = `http://127.0.0.1:${process.env.TETH_E2E_PORT ?? 4175}`
   // Actual service renderer, anonymous protocol fixtures only. No external
   // provider request, authentication completion, market/result producer or mutation.
-  await page.route('**/*', async route => {
+  await page.context().route('**/*', async route => {
     const request = route.request(), url = new URL(request.url())
-    if (url.origin !== origin) { external.push(`${request.method()} ${url.pathname}`); return route.abort('blockedbyclient') }
-    if (!['GET', 'HEAD'].includes(request.method())) { mutations.push(`${request.method()} ${url.pathname}`); return route.abort('blockedbyclient') }
-    if (request.isNavigationRequest() && url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body><div id="internal-poc-root"></div><script type="module">
-      import RefreshRuntime from '/@react-refresh'; RefreshRuntime.injectIntoGlobalHook(window);
-      window.$RefreshReg$=()=>{}; window.$RefreshSig$=()=>type=>type; window.__vite_plugin_react_preamble_installed__=true;
-      await import('/src/internal-poc/service-main.tsx');</script></body></html>` })
-    if (!url.pathname.startsWith('/api/')) return route.continue()
-    if (!['/api/v1/auth/session', '/api/v1/auth/csrf'].includes(url.pathname)) return route.abort('blockedbyclient')
+    const label = `${request.method()} ${url.origin}${url.pathname}`
+    const foreign = url.origin !== origin, mutation = !['GET', 'HEAD'].includes(request.method())
+    if (foreign) external.push(label)
+    if (mutation) mutations.push(label)
+    if (foreign || mutation) { blocked.push(label); return route.abort('blockedbyclient') }
+    if (url.pathname !== '/api' && !url.pathname.startsWith('/api/')) return route.fallback()
+    if (request.method() !== 'GET' || url.search || !['/api/v1/auth/session', '/api/v1/auth/csrf'].includes(url.pathname)) {
+      unexpectedApi.push(label); blocked.push(label); return route.abort('blockedbyclient')
+    }
+    fixtures.push(`${request.method()} ${url.pathname}`)
     const session = url.pathname.endsWith('/session')
     return route.fulfill({ contentType: 'application/json', headers: session ? { ETag: '"catalogue_scroll_001"' } : {}, body: JSON.stringify({
       meta: { apiContractVersion: '0.1.0', resourceRevision: session ? '1' : null, requestId: 'req_catalogue_scroll_0001', traceId: 'trace_catalogue_scroll_0001' },
       data: session ? { sessionId: 'session_catalogue_scroll_0001', state: 'ANONYMOUS', revision: '1', issuedAt: '2030-01-01T00:00:00Z', expiresAt: '2030-01-02T00:00:00Z' }
         : { csrfToken: 'csrf_catalogue_scroll_0001', expiresAt: '2030-01-02T00:00:00Z' },
     }) })
+  })
+  // LIFO root override supplies only GET navigation; every other method falls
+  // through to the context-wide guard. No provider/auth transaction is supplied.
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url())
+    if (url.origin !== origin || request.method() !== 'GET' || !request.isNavigationRequest() || url.pathname !== '/') return route.fallback()
+    return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body><div id="internal-poc-root"></div><script type="module">
+      import RefreshRuntime from '/@react-refresh'; RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$=()=>{}; window.$RefreshSig$=()=>type=>type; window.__vite_plugin_react_preamble_installed__=true;
+      await import('/src/internal-poc/service-main.tsx');</script></body></html>` })
   })
   await page.goto('/#/share')
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
@@ -99,6 +113,7 @@ for (const width of [320, 844, 861, 1440]) test(`native guest ${width}px: normal
   await expect(page.locator('.landing-hero h1')).toBeVisible()
   await expect(page.locator('.client-auth-nav .client-login')).toBeVisible()
   await expect(page.locator('.client-auth-nav .client-signup')).toBeVisible()
-  await info.attach('network-and-window-errors', { body: JSON.stringify({ external, mutations, errors }), contentType: 'application/json' })
+  await info.attach('network-and-window-errors', { body: JSON.stringify({ external, mutations, unexpectedApi, blocked, fixtures, errors }), contentType: 'application/json' })
   expect(external).toEqual([]); expect(mutations).toEqual([]); expect(errors).toEqual([])
+  expect(unexpectedApi).toEqual([]); expect(blocked).toEqual([])
 })

@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+현재 React 출처는 `agent/web/auth-entry-continuity@9579b6c362704f4bec85617be05225a5962d9705`의 운영 미배포 초안이다. 전체2,211파일 exact snapshot을 전달하되 단일155 검사1FAIL·전체531 검사 진행 중으로 배포 HOLD를 유지한다. `migration-verification.json`의 candidate 상태와 기존 운영7dd066f의 deployment 이력을 구분한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다.
+
 이 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하는 전달 브랜치다. 먼저 [MIGRATION.md](MIGRATION.md)를 읽는다. 아래의 바닐라 구조·실행·검증 설명은 루트 원본 앱에 적용되며, React 앱은 `react-app/`의 별도 package.json과 AGENTS.md를 따른다. 이 브랜치 자체는 원본 main을 교체하거나 자동 배포하지 않는다. 별도 승인된 정적 배포와 전체 서비스 Gate는 아래 검증 기록으로 구분한다.
 
 현재 `react-app/`은 병합본뿐 아니라 사용자 요청에 따라 Web PR54의 미병합 거래소 연결 후보도 포함한다. 미병합 여부와 코드 포함 여부를 혼동하지 않는다. 후속 전달은 현재 통합 후보의 구현·시험·생성 SDK를 함께 싣고 정확한 출처·검증·잔여를 기록한다. 후보 포함은 main 병합/계약 승인/실계정 성공/운영 flag 활성화 권한이 아니다.

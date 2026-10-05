@@ -1,15 +1,86 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type BrowserContext } from '@playwright/test'
 import { boundTerminalMarket, marketPeriods, validMarketMetric } from '../src/client-terminal-market'
 import { terminalMarketCopy, terminalMarketText } from '../src/client-terminal-market-copy'
 import { terminalMarketFixture } from '../src/dev/terminal-market-fixture'
 
-const isExternalMarketRequest = (address: string) => /binance|coingecko|tradingview\.com/.test(new URL(address).hostname)
+// Preserve the existing hostname heuristic, including testnet/binancefuture.
+// This is an observation guard, not proof of supplier ownership or completeness.
+const supplierHostname = (hostname: string) => /binance|coingecko|tradingview\.com/.test(hostname)
+const isExternalMarketRequest = (address: string, localOrigin?: string) => {
+  const url = new URL(address)
+  if (supplierHostname(url.hostname)) return true
+  // Only an explicitly marked same-origin proxy with an absolute upstream URL
+  // is observable here. Opaque aliases, POST bodies and server-side resolution
+  // cannot establish a supplier and are not claimed covered by this detector.
+  if (!localOrigin || url.origin !== localOrigin || !(/(?:^|\/)proxy(?:\/|$)/.test(url.pathname) || url.searchParams.get('purpose') === 'proxy')) return false
+  for (const key of ['url', 'target', 'upstream']) {
+    let candidate = url.searchParams.get(key)
+    if (!candidate || candidate.length > 2048) continue
+    // URLSearchParams has decoded once; accept at most one further layer.
+    for (let depth = 0; depth < 2; depth++) {
+      if (/^https?:\/\//i.test(candidate)) {
+        try { if (supplierHostname(new URL(candidate).hostname)) return true } catch { /* Invalid explicit URL is not a hostname. */ }
+        break
+      }
+      if (depth === 1) break
+      try { candidate = decodeURIComponent(candidate) } catch { break }
+    }
+  }
+  return false
+}
+
+test.use({ serviceWorkers: 'block' })
+const audits = new WeakMap<BrowserContext, { external: string[]; mutations: string[]; unexpectedApi: string[]; blocked: string[]; supplierProxy: string[] }>()
+test.beforeEach(async ({ context, baseURL }) => {
+  if (!baseURL) throw new Error('Local baseURL required')
+  const origin = new URL(baseURL).origin, audit = { external: [] as string[], mutations: [] as string[], unexpectedApi: [] as string[], blocked: [] as string[], supplierProxy: [] as string[] }
+  audits.set(context, audit)
+  await context.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), label = `${request.method()} ${url.origin}${url.pathname}`
+    const foreign = url.origin !== origin, mutation = !['GET', 'HEAD'].includes(request.method())
+    if (foreign) audit.external.push(label)
+    if (mutation) audit.mutations.push(label)
+    if (foreign || mutation) { audit.blocked.push(label); return route.abort('blockedbyclient') }
+    if (isExternalMarketRequest(request.url(), origin)) { audit.supplierProxy.push(label); audit.blocked.push(label); return route.abort('blockedbyclient') }
+    if (url.pathname === '/api' || url.pathname.startsWith('/api/')) { audit.unexpectedApi.push(label); audit.blocked.push(label); return route.abort('blockedbyclient') }
+    return route.fallback()
+  })
+})
+test.afterEach(async ({ context }, info) => {
+  const audit = audits.get(context)!
+  await info.attach('market-http-guard', { body: JSON.stringify(audit), contentType: 'application/json' })
+  expect(audit.external).toEqual([]); expect(audit.mutations).toEqual([]); expect(audit.unexpectedApi).toEqual([]); expect(audit.blocked).toEqual([]); expect(audit.supplierProxy).toEqual([])
+})
 
 test('외부 시장 요청 검사는 로컬 거래소 아이콘 경로를 외부 공급자로 오인하지 않는다', () => {
   expect(isExternalMarketRequest('http://127.0.0.1:4490/client-broker-assets/app-binance.png')).toBe(false)
   for (const address of ['https://api.binance.com/api/v3/klines', 'https://api.coingecko.com/api/v3/coins', 'https://www.tradingview.com/chart']) {
     expect(isExternalMarketRequest(address)).toBe(true)
   }
+})
+
+test('명시 same-origin proxy의 절대 공급 URL만 bounded decoding으로 탐지한다', () => {
+  const origin = 'http://127.0.0.1:4523'
+  for (const upstream of ['https://api.binance.com/api/v3/klines', 'https://api.coingecko.com/api/v3/coins', 'https://www.tradingview.com/chart']) {
+    for (const value of [encodeURIComponent(upstream), encodeURIComponent(encodeURIComponent(upstream))]) expect(isExternalMarketRequest(`${origin}/api/market/proxy?url=${value}`, origin)).toBe(true)
+    expect(isExternalMarketRequest(`${origin}/market?purpose=proxy&target=${encodeURIComponent(upstream)}`, origin)).toBe(true)
+  }
+  expect(isExternalMarketRequest('https://testnet.binancefuture.com/fapi/v1/klines')).toBe(true)
+  expect(isExternalMarketRequest(`${origin}/proxy?upstream=${encodeURIComponent('https://testnet.binancefuture.com/fapi/v1/klines')}`, origin)).toBe(true)
+  for (const address of [
+    `${origin}/client-broker-assets/app-binance.png`,
+    `${origin}/client-broker-assets/app-binance.png?alt=binance`,
+    `${origin}/search?url=${encodeURIComponent('https://api.binance.com')}`,
+    `${origin}/proxy?note=binance&url=app-binance.png`,
+    `${origin}/proxy?url=api.binance.com`,
+    `${origin}/proxy?url=${encodeURIComponent(origin + '/app-binance.png')}`,
+    `${origin}/proxy?url=${encodeURIComponent(origin + '/#https://api.binance.com')}`,
+    `${origin}/proxy#https://api.binance.com`,
+    `${origin}/proxy?url=%E0%A4%A`,
+    `${origin}/proxy?url=${encodeURIComponent(encodeURIComponent(encodeURIComponent('https://api.binance.com')))}`,
+    `${origin}/proxy?url=${encodeURIComponent('https://market-fixture.invalid')}`,
+    'https://not-a-supplier.invalid/proxy?url=https%3A%2F%2Fapi.binance.com',
+  ]) expect(isExternalMarketRequest(address, origin)).toBe(false)
 })
 
 test('시장 자료는 전략·종목·시장·거래소가 모두 일치할 때만 표시한다', () => {
@@ -29,11 +100,11 @@ test('시장 자료는 전략·종목·시장·거래소가 모두 일치할 때
   for (const values of Object.values(terminalMarketCopy)) expect(values.every(value => value.trim().length > 0)).toBe(true)
 })
 
-for (const width of [320, 844, 1440]) test(`${width}px 원본 시장3탭·9기간·정보표·8지표와 차트 수명을 유지한다`, async ({ page }, info) => {
+for (const width of [320, 844, 1440]) test(`${width}px 원본 시장3탭·9기간·정보표·8지표와 차트 수명을 유지한다`, async ({ page, baseURL }, info) => {
   await page.setViewportSize({ width, height: 1000 })
   const errors: string[] = [], requests: string[] = []
   page.on('pageerror', error => errors.push(error.message))
-  page.on('request', request => { if (isExternalMarketRequest(request.url())) requests.push(request.url()) })
+  page.on('request', request => { if (isExternalMarketRequest(request.url(), new URL(baseURL!).origin)) requests.push(`${request.method()} ${new URL(request.url()).origin}${new URL(request.url()).pathname}`) })
   await page.goto('/account-terminal-preview.html?market=1')
   const canvas = page.locator('canvas').first()
   await expect(canvas).toBeVisible()

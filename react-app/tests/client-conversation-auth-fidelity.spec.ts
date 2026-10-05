@@ -194,7 +194,7 @@ test('공통 백테스트 복귀 후 새 대화 헤더도 비로그인 인증 �
   await expect.poll(()=>header.evaluate(el=>parseFloat(getComputedStyle(el).marginTop))).toBeGreaterThan(0)
 })
 
-test('실제 Native 셸은 공개 대화 인증표시와 공간예약을 소비하지 않는다', async ({ page, baseURL }) => {
+test('Native 게스트도 원본 대화 인증표시와 공간예약을 소비한다', async ({ page, baseURL }) => {
   const audit = await mount(page, baseURL, 1100, 'fr')
   await page.route('**/native-conversation-auth.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div id="fixture"></div></body></html>' }))
   await page.goto('/native-conversation-auth.html')
@@ -220,9 +220,9 @@ test('실제 Native 셸은 공개 대화 인증표시와 공간예약을 소비�
     ;(dom.createRoot ?? dom.default.createRoot)(document.getElementById('fixture')).render(h(Host))
   })
   await expect(page.locator('.client-service-app')).toBeVisible()
-  await expect(page.locator('.client-service-app')).not.toHaveClass(/has-public-conversation/)
-  await expect(page.locator('.client-service-app .client-auth-nav')).toBeHidden()
+  await expect(page.locator('.client-service-app')).toHaveClass(/has-public-conversation/)
+  await expect(page.locator('.client-service-app .client-auth-nav')).toBeVisible()
   await expect(page.locator('.g-composer textarea')).toHaveValue('Native 원문 초안')
-  expect(await page.locator('.client-service-app').evaluate(element => getComputedStyle(element).getPropertyValue('--client-conversation-auth-space'))).toBe('')
+  expect(await page.locator('.client-service-app').evaluate(element => getComputedStyle(element).getPropertyValue('--client-conversation-auth-space'))).not.toBe('')
   expect(audit).toEqual({ blocked: [], errors: [] })
 })

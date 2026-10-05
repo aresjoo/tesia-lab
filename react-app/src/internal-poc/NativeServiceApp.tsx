@@ -776,6 +776,15 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // A locator only offers a choice. Its pre-login owner must match; an
       // unrelated stored draft never inherits the current anonymous session.
       const initiatingOwner = result.claimIntent?.initiatingSessionId
+      // Preserve only this tab's unsent wording across a verified login offer.
+      // It is neither a conversation claim nor permission to send under AUTH.
+      // Session-only recovery, foreign locators and stale panels keep clearing.
+      const unsentInput = confirmation !== 'HANDOFF_UNVERIFIED' && phase === 'ready'
+        && session.current?.sessionState === 'ANONYMOUS' && session.current.sessionId === initiatingOwner
+        && result.claimIntent?.initiatingSessionEtag && loginBinding?.sessionId === initiatingOwner
+        && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current
+        && (!savedOwner || savedOwner === initiatingOwner) && (!conversation || documentOwner?.sessionId === initiatingOwner)
+        ? input : ''
       const observed = conversation && documentOwner && documentOwner.sessionId === initiatingOwner
         && documentOwner.conversationId === conversation.conversationId ? conversation.conversationId : undefined
       const stored = savedOwner === initiatingOwner ? sessionStorage.getItem(STORAGE_KEY) : null
@@ -789,6 +798,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       sessionStorage.setItem(SESSION_KEY, binding)
       if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
       bindSession(current); clients.setCsrf(result.csrfToken); setSessionState('AUTHENTICATED'); setPhase('ready')
+      if (unsentInput) setInput(unsentInput)
       if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current })
       else { setLoginBinding(null); setLoginOpen(false); setLoginRetained(false) }
       authReceipt.current = { result, ...(saved ? { conversationId: saved } : {}) }; acceptedAuth.current = identity; setClaimAvailable(Boolean(saved && result.claimIntent?.initiatingSessionEtag))

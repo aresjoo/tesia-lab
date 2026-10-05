@@ -830,6 +830,44 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   // History is a bounded workspace even when the underlying conversation is
   // empty. Leave the separate account document layout unchanged by this fix.
   const landingLayout = isHome && !settingsTab && !historyView.open && !trading && !insights && !brokers
+  const guestConversationVisible = state.sessionState === 'ANONYMOUS' && !isHome && !neutralLoading && !settingsTab && !connectionOpen && !connectionStatus && !historyView.open && !accountPlan && !trading && !insights && !brokers && !strategies && !researchWorkspaceOpen && !strategyDocument
+  const guestInsightVisible = state.sessionState === 'ANONYMOUS' && insights && !settingsTab && !connectionOpen && !connectionStatus
+  useLayoutEffect(() => {
+    const shell = root.current
+    if (!shell || !guestConversationVisible) return
+    const nav = shell.querySelector<HTMLElement>('.client-auth-nav')
+    const header = shell.querySelector<HTMLElement>('.client-lab-conversation .g-chead')
+    if (!nav || !header) return
+    let disposed = false, frame = 0
+    const clear = () => {
+      for (const key of ['space', 'offset', 'tail']) shell.style.removeProperty(`--client-conversation-auth-${key}`)
+    }
+    const measure = () => {
+      if (disposed || !shell.isConnected || !nav.isConnected || !header.isConnected) return
+      if (!matchMedia('(min-width:861px)').matches || !nav.getClientRects().length) { clear(); return }
+      const authRect = nav.getBoundingClientRect(), headerRect = header.getBoundingClientRect(), css = getComputedStyle(header)
+      const scale = header.offsetWidth > 0 ? headerRect.width / header.offsetWidth : 1
+      const space = Math.max(18, (headerRect.right - authRect.left) / scale + 8)
+      const children = Array.from(header.children).filter((node): node is HTMLElement => node instanceof HTMLElement && node.getClientRects().length > 0)
+      const minimum = children.reduce((sum, node) => {
+        const style = getComputedStyle(node), left = node.matches('.client-session-options,.g-demo') ? 0 : parseFloat(style.marginLeft) || 0
+        return sum + (node.matches('h1,.g-title-input') ? 96 : node.offsetWidth) + left + (parseFloat(style.marginRight) || 0)
+      }, 0) + Math.max(0, children.length - 1) * (parseFloat(css.columnGap) || 0)
+      const stacked = header.clientWidth - (parseFloat(css.paddingLeft) || 0) - space < minimum
+      const baseTop = headerRect.top - (parseFloat(css.marginTop) || 0) * scale
+      shell.style.setProperty('--client-conversation-auth-space', `${stacked ? 18 : space}px`)
+      shell.style.setProperty('--client-conversation-auth-offset', `${stacked ? Math.max(0, (authRect.bottom - baseTop) / scale + 8) : 0}px`)
+      shell.style.setProperty('--client-conversation-auth-tail', `${stacked ? 0 : Math.max(0, (authRect.bottom - headerRect.bottom) / scale)}px`)
+    }
+    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure) }
+    measure()
+    const observer = new ResizeObserver(schedule); observer.observe(nav); observer.observe(header)
+    window.addEventListener('resize', schedule); void document.fonts.ready.then(measure); document.fonts.addEventListener('loadingdone', schedule)
+    return () => {
+      disposed = true; observer.disconnect(); cancelAnimationFrame(frame); clear()
+      window.removeEventListener('resize', schedule); document.fonts.removeEventListener('loadingdone', schedule)
+    }
+  }, [guestConversationVisible, language])
   useLayoutEffect(() => {
     // Source gContent starts a newly selected document at its heading. Only
     // the document shell moves: retained chat/chart scroll and background
@@ -862,7 +900,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     ? researchWorkspaceOpen && lastQuestionMessage.researchThread.scopeId === researchData.scopeId && lastQuestionMessage.researchThread.documentId === currentResearchId
     : !researchWorkspaceOpen
   const activeQuestionKey = clarificationKey ? clarificationBelongsHere ? clarificationKey : null : activeQuestion?.kind === 'market-question' && !activeQuestion.presentation.state?.closed && !activeQuestion.presentation.state?.accepted ? marketBindingKey(activeQuestion.presentation.binding) : null
-  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={root} className={`tesia-shell conversation-surface client-source-app client-service-app ${landingLayout ? 'view-landing' : 'view-briefing'}${guestTradingIntro && !settingsTab && !connectionOpen ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties} data-service-phase={state.phase}
+  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={root} className={`tesia-shell conversation-surface client-source-app client-service-app ${landingLayout ? 'view-landing' : 'view-briefing'}${guestConversationVisible ? ' has-public-conversation' : ''}${guestInsightVisible ? ' has-guest-insight-entry' : ''}${guestTradingIntro && !settingsTab && !connectionOpen ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties} data-service-phase={state.phase}
     onKeyDownCapture={() => { resetPresentationIntent.current++; if (researchHistory) historyFocusIntent.current = false; if (insights) insightFocusIntent.current = false; if (brokers) brokerFocusIntent.current = false; if (strategies) strategiesFocusIntent.current = false }}
     onPointerDownCapture={() => { resetPresentationIntent.current++; if (researchHistory) historyFocusIntent.current = false; if (insights) insightFocusIntent.current = false; if (brokers) brokerFocusIntent.current = false; if (strategies) strategiesFocusIntent.current = false }}
     onClickCapture={event => {
@@ -883,7 +921,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     }}>
     <a className="skip-link" href="#tesia-main" onClick={event => { event.preventDefault(); document.getElementById('tesia-main')?.focus() }}>{c('skipContent')}</a>
     <div className="client-footer-body">
-    <ClientChrome showLocaleShortcut={!settingsTab && !connectionOpen && (guestTradingIntro || isHome && !historyView.open && !accountPlan && !trading && !insights && !brokers || hasSiteFooter && !connectionStatus && strategies && !sharingLocation.section && !sharingLocation.view)} researchPage={historyView.open ? historyView.page : insights ? 'insight' : brokers ? 'brokers' : null} tradingActive={trading} signedIn={state.sessionState === 'AUTHENTICATED'} onHome={() => { closeClientSettingsRoute(); if (connectionOpen) closeConnection(); newConversation() }}
+    <ClientChrome showLocaleShortcut={!settingsTab && !connectionOpen && (guestConversationVisible || guestInsightVisible || guestTradingIntro || isHome && !historyView.open && !accountPlan && !trading && !insights && !brokers || hasSiteFooter && !connectionStatus && strategies && !sharingLocation.section && !sharingLocation.view)} researchPage={historyView.open ? historyView.page : insights ? 'insight' : brokers ? 'brokers' : null} tradingActive={trading} signedIn={state.sessionState === 'AUTHENTICATED'} onHome={() => { closeClientSettingsRoute(); if (connectionOpen) closeConnection(); newConversation() }}
       profileName={accountData?.profile?.name}
       recordsScope={accountScope ?? ''} records={library?.records ?? []} activeResearchId={library?.activeId}
       recordsPresentation={{ unavailable: libraryUnavailable ? <p className="client-sidebar-record-empty" role="status">{library?.status === 'loading' ? c('waiting') : library?.status === 'error' ? c('retry') : nativeHistoryCopy[language].title}</p> : undefined, footer: libraryFooter, archiveLabel: c('archive'), archiveDetail: c('archiveDetail'), errorLabel: c('retry') }}

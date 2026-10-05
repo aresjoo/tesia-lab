@@ -16,10 +16,13 @@
 .tesia-shell.conversation-surface:is(.view-briefing, .view-build) { display: block; height: 100dvh; min-height: 0; overflow: hidden; }
 .tesia-shell:is(.view-briefing, .view-build) .agent-chat-stage { height: 100dvh; min-height: 0; padding: 0; background: var(--client-0); }
 .tesia-shell:is(.view-briefing, .view-build) :is(.client-auth-nav, .client-globe, .client-app-banner) { display: none; }
-/* Source621cbed hides guest auth only in mobile chat. Public conversation is
-   explicit: research/account routes and native service chrome stay unchanged. */
+/* Original9fb guest document auth remains visible, while chat auth and every
+   globe remain hidden on mobile. Route markers exclude research and settings. */
+.tesia-shell.client-source-app.has-guest-insight-entry .client-auth-nav { display:flex; flex-wrap:wrap; justify-content:flex-end; }
+.tesia-shell.client-source-app.has-guest-insight-entry .client-insights { padding-top:44px; }
 @media (min-width: 861px) {
-  .tesia-shell.client-source-app.has-public-conversation:not(.client-service-app) .client-auth-nav { display: flex; max-width: calc(100% - 128px); flex-wrap: wrap; justify-content: flex-end; }
+  .tesia-shell.client-source-app.has-public-conversation .client-auth-nav { display: flex; max-width: calc(100% - 128px); flex-wrap: wrap; justify-content: flex-end; }
+  .tesia-shell.client-source-app:is(.has-public-conversation,.has-guest-insight-entry) .client-globe { display:flex; }
   .tesia-shell.has-public-conversation .client-auth-nav > :is(a,button) { flex: 0 0 auto; white-space: nowrap; }
   .tesia-shell.has-public-conversation:has(.client-auth-nav) .g-chead { padding-right: var(--client-conversation-auth-space, 18px); margin-top: var(--client-conversation-auth-offset, 0px); margin-bottom:var(--client-conversation-auth-tail,0px); }
   .tesia-shell.has-public-conversation:has(.client-auth-nav) .g-chead h1 { flex: 0 1 220px; min-width: 96px; }

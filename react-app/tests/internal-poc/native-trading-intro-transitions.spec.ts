@@ -3,20 +3,25 @@ import { expect, test, type Locator, type Page } from '@playwright/test'
 // Service renderer only. Session/CSRF are explicit fixtures; all business
 // mutations and external requests are blocked. This does not test real OAuth.
 test.setTimeout(60_000)
+test.use({ serviceWorkers: 'block' })
 async function mount(page: Page, baseURL: string | undefined, path: string) {
   if (!baseURL) throw new Error('Local baseURL required')
-  const origin = new URL(baseURL).origin, mutations: string[] = [], errors: string[] = []
+  const origin = new URL(baseURL).origin, mutations: string[] = [], errors: string[] = [], external: string[] = [], unexpectedApi: string[] = [], blocked: string[] = [], fixtures: string[] = []
   page.on('pageerror', error => errors.push(error.message))
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.addInitScript(() => { localStorage.setItem('tethLang', 'ko'); localStorage.setItem('tethCurrency', 'USD') })
-  await page.route('**/*', async route => {
+  await page.context().route('**/*', async route => {
     const request = route.request(), url = new URL(request.url())
-    if (!['GET', 'HEAD'].includes(request.method())) {
-      mutations.push(`${request.method()} ${url.pathname}`); return route.abort('blockedbyclient')
-    }
-    if (url.origin !== origin) return route.abort('blockedbyclient')
-    if (url.pathname.startsWith('/api/')) {
-      if (!['/api/v1/auth/session', '/api/v1/auth/csrf'].includes(url.pathname)) return route.abort('blockedbyclient')
+    const label = `${request.method()} ${url.origin}${url.pathname}`
+    const foreign = url.origin !== origin, mutation = !['GET', 'HEAD'].includes(request.method())
+    if (foreign) external.push(label)
+    if (mutation) mutations.push(label)
+    if (foreign || mutation) { blocked.push(label); return route.abort('blockedbyclient') }
+    if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
+      if (request.method() !== 'GET' || url.search || !['/api/v1/auth/session', '/api/v1/auth/csrf'].includes(url.pathname)) {
+        unexpectedApi.push(label); blocked.push(label); return route.abort('blockedbyclient')
+      }
+      fixtures.push(`${request.method()} ${url.pathname}`)
       const session = url.pathname.endsWith('/session')
       return route.fulfill({ contentType: 'application/json', headers: session ? { ETag: '"source_parity_anonymous_001"' } : {}, body: JSON.stringify({
         meta: { apiContractVersion: '0.1.0', resourceRevision: session ? '1' : null, requestId: 'req_source_parity_0001', traceId: 'trace_source_parity_0001' },
@@ -24,17 +29,21 @@ async function mount(page: Page, baseURL: string | undefined, path: string) {
           : { csrfToken: 'csrf_source_parity_0001', expiresAt: '2030-01-02T00:00:00Z' },
       }) })
     }
-    if (request.isNavigationRequest() && url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="internal-poc-root"></div><script type="module">
+    return route.fallback()
+  })
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url())
+    if (url.origin !== origin || request.method() !== 'GET' || !request.isNavigationRequest() || url.pathname !== '/') return route.fallback()
+    return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="internal-poc-root"></div><script type="module">
       import RefreshRuntime from '/@react-refresh'; RefreshRuntime.injectIntoGlobalHook(window);
       window.$RefreshReg$ = () => {}; window.$RefreshSig$ = () => type => type;
       window.__vite_plugin_react_preamble_installed__ = true;
       await import('/src/internal-poc/service-main.tsx');</script></body></html>` })
-    return route.continue()
   })
   await page.goto(path)
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   await page.evaluate(() => document.fonts.ready)
-  return { mutations, errors }
+  return { mutations, errors, external, unexpectedApi, blocked, fixtures }
 }
 
 async function wheelTo(page: Page, target: Locator) {
@@ -89,9 +98,13 @@ for (const width of [390, 860, 861, 1440]) {
     await expect.poll(() => shell.evaluate(element => element.scrollTop)).toBeLessThanOrEqual(1)
     await page.screenshot({ path: info.outputPath(`footer-round-trip-${width}.png`) })
     expect(evidence.mutations).toEqual([]); expect(evidence.errors).toEqual([])
+    await info.attach('http-guard', { body: JSON.stringify(evidence), contentType: 'application/json' })
+    expect(evidence.external).toEqual([]); expect(evidence.unexpectedApi).toEqual([]); expect(evidence.blocked).toEqual([])
   })
 
   test(`${width}px lower signup cancellation restores trigger focus and mid-scroll header controls stay usable`, async ({ page, baseURL }, info) => {
+    // Historical title/key retained for failure binding. Desktop auth is
+    // page-owned: original mid-scroll absence and natural hero return stay exact.
     await page.setViewportSize({ width, height: 900 })
     const evidence = await mount(page, baseURL, '/#/trade')
     const shell = page.locator('.client-service-app')
@@ -133,5 +146,7 @@ for (const width of [390, 860, 861, 1440]) {
       await expect(page).toHaveURL(/#\/trade$/)
     }
     expect(evidence.mutations).toEqual([]); expect(evidence.errors).toEqual([])
+    await info.attach('http-guard', { body: JSON.stringify(evidence), contentType: 'application/json' })
+    expect(evidence.external).toEqual([]); expect(evidence.unexpectedApi).toEqual([]); expect(evidence.blocked).toEqual([])
   })
 }
