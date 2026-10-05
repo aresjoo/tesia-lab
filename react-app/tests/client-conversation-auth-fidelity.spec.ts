@@ -133,10 +133,13 @@ test('실제폭 부족시에만 줄을 분리하고 언어·폭·확대 왕복�
     expect(await composer.evaluate((node, original) => node === original, original)).toBe(true)
     expect(await composer.evaluate(node => [(node as HTMLTextAreaElement).selectionStart, (node as HTMLTextAreaElement).selectionEnd])).toEqual([3, 12])
   }
-  const changeLanguage = (language: Language) => page.evaluate(async language => {
-    const path = '/src/client-preferences.ts', { setClientPreference } = await import(/* @vite-ignore */ path)
-    setClientPreference('language', language)
-  }, language)
+  const changeLanguage = async (language: Language) => {
+    const ready = () => page.evaluate(() => typeof Reflect.get(window, 'conversationLocaleHarness')?.setLanguage === 'function')
+    if (!await ready()) await page.addScriptTag({ type: 'module', url: '/tests/fixtures/conversation-locale-harness.ts' })
+    await expect.poll(ready).toBe(true)
+    expect(await page.evaluate(language => Reflect.get(window, 'conversationLocaleHarness').setLanguage(language), language)).toBe(true)
+    await expect(page.locator('html')).toHaveAttribute('lang', language)
+  }
   await expect.poll(offset).toBeGreaterThan(0)
   const navBox = await nav.boundingBox(), headerBox = await header.boundingBox()
   expect(navBox).not.toBeNull(); expect(headerBox).not.toBeNull()

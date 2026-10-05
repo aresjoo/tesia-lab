@@ -17,7 +17,7 @@ export const MOCK_RESEARCH_ENTRIES: readonly ResearchLogEntry[] = [
   { id: 'critic', elapsedSeconds: 37.5, agent: 'Strategy Critic', summary: '개선점 1개 발견', state: 'warn', finding: {
     title: '저변동성 구간 과잉 거래',
     professional: 'Excessive trade frequency in low-volatility regimes, 10/14 losing trades.',
-    plain: '시장이 거의 움직이지 않을 때도 거래해 손실 거래의 71%가 그 구간에서 발생했습니다.',
+    plain: '시장이 거의 움직이지 않을 때도 거래해 손실의 71%가 그 구간에서 발생했습니다.',
     meaning: '횡보가 길어질수록 잔손실이 누적됩니다.',
     nextAction: '저변동성 신규 진입을 제한하고 재검증합니다.',
   } },
@@ -48,7 +48,7 @@ export function previewCritic(seconds: number): ResearchCriticReview | undefined
     initialLowVolLossShare: 71.42857142857143,
     topThreeProfitShare: revised ? 71.93506974060078 : 42.45491372558449,
     lowVolFilterApplied: revised,
-    verdict: revised ? '수익성 확인. 일관성은 봉인 구간, 가상 검증에서 계속 확인 필요.' : '수익성 확인. 집중도 문제 없음.',
+    verdict: revised ? '수익성 확인. 일관성은 Holdout, Forward에서 계속 확인 필요.' : '수익성 확인. 집중도 문제 없음.',
   }
 }
 export const RESEARCH_TEAM = ['Strategy Architect', 'Quant Validator', 'Sanity Check', 'Strategy Critic', 'Risk Reviewer', 'Market Context', 'Explanation']

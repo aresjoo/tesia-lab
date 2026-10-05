@@ -1,5 +1,7 @@
 # TETH Web
 
+> 현재 로컬 후보는 연구 원문 추가 복원용 `agent/web/research-copy-restoration`이다. 기존 notice/GC 후보의 단일 전수는 별도 동결 작업본에서 계속 실행한다. 이 후보는 연구 문구만 원문으로 복원하며 실제 공급자·계약·산식·권한을 바꾸지 않는다. 정확한 수정·시험·미배포 상태는 `Bugfix_report.md` 최상단을 따른다. 아래 검증 수치는 부모775d 이력이며 현재 후보의 전수/운영 합격을 뜻하지 않는다.
+
 현재 `agent/web/approved-copy-restoration`은 source9d에서 분리하여 제품3파일의46literal을 고정 클라이언트9fb 원문으로 되돌린 후보다. 최신2216/314304 입력에서 lint·공개/내부/service3build·실제discovery와 단일24spec/878개 모두PASS·실패/skip/retry/flaky/시험밖오류0·actual0다(receipt5ade4e64). 입력/3출력/원증거 시작·끝이 같고 service1113개 GET exactbytes·로그인3폭 합성 표시 검사도 actual0다(receipt5a808b76). 새Golden strict 타입검사 actual0/12파일 결속55161ceb과 보안 오탐을 해소한 source staged scan0을 확인했다. readonly독립인수와실제personal(1) Opus5.5 APPROVED_COPY_CODE_GO/확정C0H0M0는 제품·시험89b 범위이며 이후 신규시험의 가상알림 식별자2값만 바꾼314304는 독립7095a59a·실제Sonnet5.5 TEST_FIXTURE_METADATA_CODE_GO/확정C0H0M0와 새878에 따로 결속한다. Low와미검증후속·첫스캔2오탐/원실패를보존한다. 먼저25값의504·부모source9d의전수와합산하지않으며실제로그인·결제·전체서비스합격이아니다. 운영 반영은 아직 미완료이며 정확한Git전달출처는migration manifest/verification을따른다. 최신 상태는 [카피 복원 보고서](Bugfix_report.md#현재-승인된-클라이언트-원문-카피-복원)를 따른다.
 
 신규 창작 카피·기능·색상·SVG·배치·로그인3옵션·SDK/API/서버/가격/권한/flags 변경은 없다. 기존 다섯 spec의26문구 oracle만 원문에 맞추며 다른 조건은 보존한다. 연구search/noHistory/more는 원본 후반의 최종override와 이미 같으므로 유지한다. 추가5언어와 Native가 공급하는 실제 결제 금액·상태·알림은 변경하지 않는다. 별도source9d의 원전수15009PASS/원17SKIP와 입력4f0/public10c9는 수정하지 않았다. 원문 보존은 새 사업 약속·법률/실서비스 승인이 아니며 실제 Native 준비/서버오류/ACK 안내·계정 권위를 바꾸지 않는다. 아래 후속 후보와 ‘현재’ 표현은 각 당시의 검수 이력이며 최상단 상태를 대체하지 않는다.

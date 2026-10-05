@@ -167,6 +167,7 @@ test('재생 캐시 유실은 등록 상태를 초안으로 바꾸지 않고 Liv
 
 test('연구 실행 확인과 자산 곡선은 좁은 화면에도 넘치거나 잘리지 않는다', async ({ page }) => {
   await setup(page)
+  await expect(page.locator('.g-row').filter({ has: page.locator('.k', { hasText: /^검증$/ }) })).toContainText('Holdout 통과')
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)

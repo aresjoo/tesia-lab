@@ -7,6 +7,7 @@ import settingsCopy from '../client-settings-copy.json'
 import { InternalLink } from './InternalLink'
 import { ClientProviderMark as ProviderMark } from './ClientProviderMark'
 import { activeClientSurfaceSelector, useClientSurfacePresence } from '../use-client-surface-presence'
+import { useClientPreviewToast } from '../use-client-preview-toast'
 import '../client-account-ui.css'
 
 export type ClientProfile = { name: string; email: string }
@@ -72,7 +73,10 @@ function useAccountSurface(onClose: () => void, step?: string, returnFocus?: Ref
   }, [returnFocus, active])
   useEffect(() => {
     if (!active) return
-    Array.from(ref.current?.querySelectorAll<HTMLElement>('[data-autofocus], input:not(:disabled), textarea') ?? []).find(visibleControl)?.focus()
+    // An explicit field wins over earlier inputs (9fb authAgeShow selects age).
+    const target = Array.from(ref.current?.querySelectorAll<HTMLElement>('[data-autofocus]') ?? []).find(visibleControl)
+      ?? Array.from(ref.current?.querySelectorAll<HTMLElement>('input:not(:disabled), textarea') ?? []).find(visibleControl)
+    target?.focus()
   }, [step, active])
   return ref
 }
@@ -210,8 +214,9 @@ function PolicyCopy({ text }: { text: string }) {
 // Called by the send event, never used to derive a deadline during render.
 const codeResendDeadline = () => Date.now() + 30_000
 
-export function ClientAuthDialog({ mode, onClose, onComplete, returnFocus }: { mode: 'login' | 'signup'; onClose: () => void; onComplete: (profile: ClientProfile) => void; returnFocus?: RefObject<HTMLElement | null> }) {
+export function ClientAuthDialog({ mode, onClose, onComplete, onProviderNotice, returnFocus }: { mode: 'login' | 'signup'; onClose: () => void; onComplete: (profile: ClientProfile) => void; onProviderNotice?: (provider: 'Google' | 'Apple') => void; returnFocus?: RefObject<HTMLElement | null> }) {
   const { t } = useClientPreferences()
+  const { toast, showToast } = useClientPreviewToast()
   const [step, setStep] = useState<'start' | 'code' | 'password-new' | 'password' | 'age'>('start')
   const [email, setEmail] = useState(''), [password, setPassword] = useState(''), [code, setCode] = useState('')
   const [name, setName] = useState(''), [age, setAge] = useState(''), [error, setError] = useState('')
@@ -240,12 +245,23 @@ export function ClientAuthDialog({ mode, onClose, onComplete, returnFocus }: { m
     return () => { clearInterval(timer); document.removeEventListener('visibilitychange', sync); window.removeEventListener('pageshow', sync) }
   }, [step, resendAt])
   function go(next: typeof step) { setError(''); setShowPassword(false); setStep(next) }
-  function sendCode() { setPassword(''); setCode(''); setCooldown(30); setResendAt(codeResendDeadline()); go('code') }
+  function sendCode() {
+    if (step === 'code' && cooldown > 0) return
+    showToast(t(step === 'code' ? 'code.resent' : 'code.sent'))
+    setPassword(''); setCode(''); setCooldown(30); setResendAt(codeResendDeadline()); go('code')
+  }
   function finish() {
     setPassword(''); setCode('')
     const displayName = email.split('@')[0]
     if (mode === 'signup') { setName(displayName); go('age') }
     else onComplete({ name: displayName, email })
+  }
+  // Source 9fb authOauth: this is preview feedback, never a provider ACK.
+  function chooseProvider(provider: 'Google' | 'Apple') {
+    if (onProviderNotice) onProviderNotice(provider)
+    else showToast(provider + ' 인증 완료')
+    if (mode === 'signup') { setName('김도현'); go('age') }
+    else onComplete({ name: '김도현', email: '' })
   }
   function fail(message: string) { setError(message); ref.current?.querySelector<HTMLInputElement>('input[data-autofocus]')?.focus() }
   function submit() {
@@ -274,11 +290,11 @@ export function ClientAuthDialog({ mode, onClose, onComplete, returnFocus }: { m
   const continueButton = <button className="au-btn primary au-gap" type="submit" disabled={loading} aria-busy={loading}>{loading ? <span className="au-spin" aria-label="처리 중" /> : step === 'age' ? '시장에 입장하기' : t('auth.continue')}</button>
   const passwordField = <div className="au-field"><label className="au-label" htmlFor={`${id}-password`}>{t('pw.label')}</label><input id={`${id}-password`} data-autofocus className={`au-input has-side${error ? ' bad' : ''}`} type={showPassword ? 'text' : 'password'} value={password} onChange={event => { setPassword(event.target.value); setError('') }} autoComplete={step === 'password-new' ? 'new-password' : 'current-password'} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} /><button className="au-side" type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'} aria-pressed={showPassword}>{showPassword ? '🙈' : '👁'}</button></div>
   return <div className="ca-auth-veil" onMouseDown={event => { if (event.target === event.currentTarget) { event.preventDefault(); onClose() } }}><div className="ca-auth" ref={ref} role="dialog" aria-modal="true" aria-labelledby={`${id}-title`}><button className="au-x" onClick={onClose} aria-label={t('common.close')}>✕</button><form noValidate onSubmit={event => { event.preventDefault(); submit() }}>
-    {step === 'start' && <><h2 className="au-title" id={`${id}-title`}>{t('auth.title')}</h2><p className="au-sub"><CopyLines text={t('auth.sub')} /></p><div className="au-btns">{(['Google', 'Apple'] as const).map(provider => <button className="au-btn" type="button" key={provider} onClick={() => { if (mode === 'signup') { setName('김도현'); go('age') } else onComplete({ name: '김도현', email: '' }) }}><ProviderMark provider={provider} />{t(provider === 'Google' ? 'auth.google' : 'auth.apple')}</button>)}</div><div className="au-div">{t('auth.or')}</div><div className="au-input-wrap"><input data-autofocus className={`au-input${error ? ' bad' : ''}`} type="email" aria-label={t('auth.email')} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} placeholder={t('auth.email')} autoComplete="email" value={email} onChange={event => { setEmail(event.target.value); setError('') }} /></div>{errorNode}{continueButton}<div className="au-free">{t('auth.free')}</div></>}
+    {step === 'start' && <><h2 className="au-title" id={`${id}-title`}>{t('auth.title')}</h2><p className="au-sub"><CopyLines text={t('auth.sub')} /></p><div className="au-btns">{(['Google', 'Apple'] as const).map(provider => <button className="au-btn" type="button" key={provider} onClick={() => chooseProvider(provider)}><ProviderMark provider={provider} />{t(provider === 'Google' ? 'auth.google' : 'auth.apple')}</button>)}</div><div className="au-div">{t('auth.or')}</div><div className="au-input-wrap"><input data-autofocus className={`au-input${error ? ' bad' : ''}`} type="email" aria-label={t('auth.email')} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} placeholder={t('auth.email')} autoComplete="email" value={email} onChange={event => { setEmail(event.target.value); setError('') }} /></div>{errorNode}{continueButton}<div className="au-free">{t('auth.free')}</div></>}
     {step === 'code' && <><h2 className="au-title" id={`${id}-title`}>{t('code.title')}</h2><p className="au-sub"><CopyLines text={t(mode === 'signup' ? 'code.sub.signup' : 'code.sub.login')} email={email} /></p><div className="au-input-wrap"><input data-autofocus className={`au-input${error ? ' bad' : ''}`} inputMode="numeric" maxLength={6} aria-label={t('code.ph')} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} placeholder={t('code.ph')} autoComplete="one-time-code" value={code} onChange={event => { setCode(event.target.value.replace(/\D/g, '')); setError('') }} /></div>{errorNode}{continueButton}<button className="au-textbtn" type="button" disabled={cooldown > 0} onClick={sendCode}>{cooldown > 0 ? t('code.wait').replace('{s}', String(cooldown)) : t('code.resend')}</button>{mode === 'login' && <><div className="au-div">{t('auth.or')}</div><button className="au-btn ghost au-gap" type="button" onClick={() => go('password')}>{t('code.pwbtn')}</button></>}{foot}</>}
     {(step === 'password-new' || step === 'password') && <><h2 className="au-title" id={`${id}-title`}>{t(step === 'password-new' ? 'pwnew.title' : 'pw.title')}</h2><p className="au-sub"><CopyLines text={t(step === 'password-new' ? 'pwnew.sub' : 'pw.sub')} email={email} /></p>{step === 'password-new' && <div className="au-field"><label className="au-label" htmlFor={`${id}-email-fixed`}>{t('auth.email')}</label><input className="au-input has-side" id={`${id}-email-fixed`} type="email" disabled value={email} /><button className="au-side" type="button" onClick={() => { setPassword(''); go('start') }}>{t('pwnew.edit')}</button></div>}{passwordField}{step === 'password-new' && <div className="au-req"><div>{t('req.head')}</div>{passwordRules.map(rule => <div className={`rq${rule.ok ? ' ok' : ''}`} key={rule.label}><span className="m" aria-hidden="true">{rule.ok ? '✓' : '•'}</span><span>{rule.label}</span><span className="ca-sr-only">{rule.ok ? ' 충족' : ' 미충족'}</span></div>)}</div>}{errorNode}{continueButton}<div className="au-div">{t('auth.or')}</div><button className="au-btn ghost au-gap" type="button" onClick={sendCode}>{t(step === 'password-new' ? 'pwnew.codebtn' : 'pw.codebtn')}</button>{foot}</>}
     {step === 'age' && <><h2 className="au-title" id={`${id}-title`}>연령을 알려주세요</h2><p className="au-sub">연령을 제공하면 당사 <InternalLink href="/policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</InternalLink>을 준수하면서 사용자님의 경험을 개인 맞춤화하고 올바른 설정을 제공하는 데 도움이 됩니다</p><div className="au-field"><label className="au-label" htmlFor={`${id}-name`}>성명</label><input className="au-input" id={`${id}-name`} value={name} autoComplete="name" maxLength={80} onChange={event => setName(event.target.value)} /></div><div className="au-field"><label className="au-label" htmlFor={`${id}-age`}>연령</label><input data-autofocus className={`au-input${error ? ' bad' : ''}`} id={`${id}-age`} type="text" inputMode="numeric" maxLength={3} value={age} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} onChange={event => { setAge(event.target.value); setError('') }} /></div>{errorNode}<p className="au-agree">“시장에 입장하기”를 클릭하면 당사 <InternalLink href="/policies/#terms" target="_blank" rel="noopener noreferrer">이용약관</InternalLink>에 동의하고<br /><InternalLink href="/policies/#privacy" target="_blank" rel="noopener noreferrer">개인정보 보호 정책</InternalLink>을 읽은 것으로 간주합니다.</p>{continueButton}</>}
-  </form></div></div>
+  </form><div className={`ca-code-toast${toast.visible ? ' show' : ''}`} role="status" aria-live="polite" aria-atomic="true">{toast.text}</div></div></div>
 }
 
 /** Display input only, not an upload/API contract. The host must resolve only

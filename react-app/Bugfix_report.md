@@ -1,5 +1,23 @@
 # TETH 버그 수정·검수 보고서
 
+## 연구 원문 추가 복원 후보
+
+- **빌드·타입·작은 독립모델 완료:** 같은a242 입력의 lint/공개·내부/service3build4명령은 각actual0·입력/부모3출력불변이다(build receipt `626e3fce`). 공개1132 `c830faac`만 새 카피를 반영했고 내부1123 `daf0839a`/service1113 `87303056`은 부모와 exact다. 신규원문spec·기존연구/terminal 3시험의 strict noEmit/noIncremental 타입검사 actual0(chunk867b74)이며 전체545spec 타입검사로 확대하지 않는다. personal(1) 실제 `claude-sonnet-5-5` high/tools0/strictMCP/no-session의 `RESEARCH_COPY_CODE_GO`는확정C0/H0/M0, Low5·가설6이며 modelUsage일치·actual0·입력전후불변이다(receipt `513750c3`, response `28f5261e`). 모형은 새빌드 결과를 입력받지 않았으므로 빌드 승인으로 승계하지 않는다. 고정양수Holdout 문구와 동적판정 미연결·범위밖용어 혼용/canned reply·정적단언한계/원전수FAIL은 그대로 남긴다. 원문복원은 실제 연구결과 공급자·계약·권한·운영 승인이 아니다.
+
+- **최종5문구 검증 종료:** 입력2222 SHA `a242bdcb34833ef77376c68bfc8186de3ea74982095a5952dcd641e0b4efe353`의8spec100개는100 PASS/0 FAIL/0 SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0(127.869초)로 끝났다. raw `a2a47683`, 영수증 `15660efa`, 실제 종료 chunk `f992f2`다. 실행 중 독립 snapshot과 종료 후 동일 hash를 확인했지만 시작 전 자동 snapshot wrapper를 사용하지 않았다는 한계를 명시한다. 최종 readonly `d85e0e30`은5치환 역복원 exact·기존 단언 추가만·Native/fixture 불변을 확인했다. 부모 notice 전체74329는 진행 중이며 연결 상태 mobile case의 `pending[0].reject` undefined 실패1건을 관측했다. 원 trace/PNG를 보존하고 인과 조사 중이다. 이100 PASS·모델 코드 의견을 전체/배포 승인으로 대체하지 않는다. 린트는actual0/입력불변, 새3build/작은모델 검수를 진행한다.
+
+- **최신 후속:** 네 문구 입력의8spec100개는100 PASS/0 FAIL/0 SKIP/actual0로 종료했다(session2313). 종료 후 실행 확인 요약의 다섯째 문구도 `Holdout 통과`로 최소 복원하고 원문정적1/기존실행확인DOM1단언을 추가했다. 최종 다섯 문구 입력의 동일8spec100개는 별도 session33305에서 검증 중이다. 앞100 PASS를 변경된 최종 입력으로 자동 승계하지 않는다. 기존4문구 독립검수70d11f28은 그 입력의 이력으로 보존하며 최종5문구를 다시 검수한다. 원74329 전수 입력/3출력/HEAD는 계속 불변이다.
+
+- 원본 기준: `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`, 원 `index.html` SHA `f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321`.
+- 사용자 요청대로 새 카피를 창작하지 않고 연구 finding의 `손실의`, Critic의 `손실`, Verdict의 `Holdout, Forward`, 완료 요약의 `Holdout 통과`를 복원했다. 산식·건수·필터 적용 조건·상태·공급 Verdict pass-through는 보존한다.
+- 이 후보는 `web-original-code-notice`의 동결 입력/실행 중 전수와 분리했다. 부모775d에서 기존 notice/GC 변경9파일을 그대로 복사했으며, 새 제품 변경은 연구 표시3파일의4문구다. 기존 전수 입력·빌드·HEAD는 바꾸지 않았다.
+- 새 원문 검증의 수정 전 실행은3개 중1 PASS/2 FAIL/actual1이며 원 JSON과 trace를 보존한다(`research-copy-original-red.json`). 실패2개는 실제 finding/완료 요약의 원문 차이를 검출했다. 기존 회귀의 모든 단언을 유지하고 실제 DOM의 원문·v1/v2·완료 요약 단언을 추가했다. 새 영향8spec·100개는 별도로 실행 중이며 아직 PASS/전체검증/배포로 주장하지 않는다.
+- 병렬 대조에서 실행 확인 요약의 `Holdout 통과`도 원문 대응을 추가 확인했다. 진행 중 시험 입력은 유지하며 종료 후 별도 최소 복원·재검증한다. 문서별 질문에 대한 canned reply는 원문 직접 대응이 없어 이 복원으로 전체 대화가 원문과 동일하다고 주장하지 않는다.
+- 공통90키×7언어의 KO/EN180개 및 추가5언어450개는 별도 readonly 비교에서 일치했다. 입력 예시84값·언어7종·통화37종의 데이터/순서도 일치한다. 원통화 탭 숨김/USD 정책·실제 공급자 미완료 안내는 이번에 바꾸지 않는다.
+- AGY 기본 프로필 `gemini-3.8-flash-high`는 제공된 네 문구 비교를 좁게 검수했고 actual0였다. resolved model usage가 제공되지 않았으므로 요청 모델만 기록하며, 의견은 자동시험·최종 승인·실서비스 검증을 대체하지 않는다. 실제 운영 teth.ai는 기존7dd 그대로이며 이 후보 commit/push/운영 활성화는 아직 없다.
+
+아래의 ‘현재’ 항목은 부모775d 전달 당시의 검증 이력이다. 이 후보의 새 검증·배포 완료 증거로 자동 승계하지 않는다.
+
 ## 현재 승인된 클라이언트 원문 카피 복원
 
 - **기준·범위:** 사용자 요청에 따라 클라이언트 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431` 원문을 임의 재작성하지 않는다. 원격 main도 같은 SHA다. 원HTML SHA `f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321`의 literal·강조/HTML/보간 표지를 기준으로 하며 과거 TESIA 문구로 덮지 않는다. 실제 Native 준비·오류·ACK/session 안내와 host 공급 상태는 원Mock 완료 문구로 치환하지 않는다.

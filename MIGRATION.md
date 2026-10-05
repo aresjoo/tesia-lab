@@ -8,14 +8,31 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/approved-copy-restoration@775d849c9279ec4250b925faab5f3716fcac742a` 추적 파일 전체. 인증 소비·장문 헤더 교정 위에서 원문카피46값을 복원한 운영 미배포 후보. 기존 로그인 선택지·SDK·디자인·가격/권한/flags 보존 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/research-copy-restoration@2d2aa033e8984a917197f48293d545bf05ca6b84` 추적 파일 전체. 원문46·preview 안내/초점·언어시험 위임을 계승하고 연구 원문5곳을 추가 복원한 미배포 후보. 기존 로그인3옵션·SDK·가격/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+### 최신 누적 반영 — source2d2
+
+원9fb/index 기준을 유지하며 source2d2의2,229파일/26,117,656bytes를 전달한다. sourceDirtyFiles0·snapshot SHA `30ad2a882294a07a421b4783efa2e79278644f43370dffbb01c3001b410d04eb`다. 원본 root HTML/server/Worker/workflow/main과 이전 운영deployment8객체는 변경하지 않는다. 이전source775d 이후17파일을 추가/수정했고 삭제0이다.
+
+| 변화 | 파일·보존 경계 |
+| --- | --- |
+| 기존 원문 안내 소비 복원 | AccountUI/Main·toast hook/CSS: 이메일 전송·재전송, 로그인·가입 완료, provider 선택 피드백. Main Mock만의 안내이며 Native 실제SMTP/OAuth 성공을 합성하지 않음 |
+| 명시 입력 초점 복원 | 공용 AccountUI의 visible data-autofocus 우선·기존 일반입력 fallback. 연령 진입의 원 초점을 보존하고 키보드/설정/피드백 계약은 유지 |
+| 연구 원문5곳 복원 | mock-research-preview/research-view-model/ResearchWorkspace: 손실의·손실·Holdout/Forward·완료 요약·실행 확인. 수치/필터false·true/fixture11회/공급판정·완료/등록조건 불변 |
+| 테스트·보고서 | 기존대화시험 실제setter 동기위임, notice3spec·bridge, 원문3test 및 기존DOM6단언 추가, README/Bugfix. 원 assertion·timeout·retry·skip·실패 이력 보존 |
+
+최종a242 연구 영향8spec100PASS/actual0와 같은입력lint/3build·strict3spec타입actual0, 실제personal1 Sonnet5.5 `RESEARCH_COPY_CODE_GO`/C0H0M0/Low5·가설6을 인수했다. 새공개c830만문구변경을포함하며내부daf0/service8730은부모notice와byte exact다. notice152PASS·Compiled1113 GET/로그인3폭 검증은 부모309 당시별도범위로만 유지하고 최신5문구전수로합산하지않는다. 시작전자동snapshot wrapper없는100시험의한계·정적단언/고정양수Holdout·범위밖 canned reply도보고서에남긴다.
+
+부모309 단일544spec/15,218 전수는계속진행중이며mobile connection-status:141 callback pending[0]undefined FAIL1을관측했다. 원 trace/PNG를보존하고 클릭근처레이아웃변화와실콜백준비/guard원인을조사한다. 원전수FAIL이나 GC인과미확정·새실패를partialPASS/모형의견으로면제하지않는다. 최종전체·release모델·archive/권위CAS·공개smoke/원자적전환·rollback전HOLD이며teth.ai7dd변경0이다. 실제provider/Reactprompt/backend/거래소·주문활성화는별도계약/서비스승인영역이다.
+
+이하 ‘현재’라는 표현·검증 수치는 각 이전 전달 당시의 인수 이력이다. 최신 출처·snapshot·후속 판정은 위표/manifest/verification의 `candidate.currentOriginalResearchCopy`가 소유한다.
+
+### 부모 source775d 승인 카피 전달 이력
 
 현재 source775d849의 **2,223파일/26,066,926bytes**, sourceDirtyFiles0·snapshot SHA `6b7248c250ffa0735e9197ca9ed23be1e5b743365ae819fc30794bc5412759a0` 전체를 전달한다. 이전 migration05f/source9d 이후14파일만 바뀌었다. 제품3파일의 공통24·연구예약1·연구검색빈1·한국어결제20, 총46literal을 원9fb 원문으로 복원했다. 기존5spec의26문구기대만 교정하며 나머지시나리오/단언/timeout/skip/retry는 유지한다. 신규원문Golden2spec/2fixture와 README/Bugfix 두 문서를 포함한다. 마지막신규시험의 가상알림key2값만 보안오탐을 없애는 짧은식별자로 변경했으며 실제secret·제품·원기대 변경0이다. root HTML/server/Worker/workflow/main·provider/SDK/flags·SVG/색상/배치/가격/권한 변경0, 기존 snapshot 삭제0이다.
 

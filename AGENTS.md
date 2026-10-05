@@ -4,7 +4,9 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 source775d849와 전체2,223파일 검증은 manifest와 `migration-verification.json`의 `candidate.currentApprovedCopyRestoration`을 따른다. 기존 원문카피46값만 복원했으며 디자인/SVG/배치/로그인3·SDK/API/가격/권한/flags 변경0이다. 최신2216/314304의 단일24spec878PASS/0FAIL/0SKIP·lint3build·strictGolden타입·service1113exact GET/로그인3폭 합성표시·보안검사 actual0를 각각 결속한다. 실제personal1 Opus5.5의46원문CODE_GO와 마지막 신규시험 가상key2값의Sonnet5.5 CODE_GO는 별도이며 Low/첫스캔2오탐·원FAIL을 보존한다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
+최신 React 출처는 source `2d2aa033e8984a917197f48293d545bf05ca6b84`와 전체2,229파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentOriginalResearchCopy`를 따른다. 부모46원문 위에 인증 원문 안내·명시 초점과 연구5문구를 추가 복원했다. 최신2222/a242의 연구 영향8spec100PASS/0FAIL/0SKIP·lint3build·관련3spec strict타입 actual0, personal1 실제Sonnet5.5 `RESEARCH_COPY_CODE_GO` C0H0M0/Low5·가설6은 좁은 범위다. 부모notice309 전수15,218개는 진행 중이며 mobile connection-status 실패1건을 관측했다. 부분PASS로 원FAIL을 면제하거나 운영승격으로 표시하지 않는다. Google/Apple/email·SDK/API/가격/권한/flags·서버/DB/730일은 유지한다.
+
+이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
 
 부모source9d/2212/4f0의 단일539spec/15026은15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0로 종료했다. 원17키exact·source/public불변·재시작0이며 최신314304 전체PASS로 승계하지 않는다. 기존68/26/390과 모든 원wholeFAIL·미확정GC인과를 합산/면제하지 않는다. 최종정적release검수·archive/권위CAS·공개smoke·원자적전환/롤백 전 배포HOLD이고 provider/Reactprompt/서비스GO는 별도다. Google추가를 이유로 Apple·이메일을 제거하거나 미등록방식을 실제성공으로 표시하지 않는다.
 

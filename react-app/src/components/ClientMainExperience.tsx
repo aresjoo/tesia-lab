@@ -58,6 +58,7 @@ import { sourceIntakeText } from '../client-source-intake-copy'
 import { describeSharedFollow } from '../client-shared-follow'
 import { isClientAccountEntry, readClientAccountLocation, type ClientAccountLocation } from '../client-account-navigation'
 import { useClientPreferences } from '../client-preferences'
+import { useClientPreviewToast } from '../use-client-preview-toast'
 import { upgradeText } from '../client-upgrade-copy'
 import { sourceMoney } from '../client-preview-money'
 import { ClientHomeSurface } from './ClientHomeSurface'
@@ -217,6 +218,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
   const [terminalMenuHost, setTerminalMenuHost] = useState<HTMLDivElement | null>(null)
   const { c, language } = useConversationCopy()
   const { currency } = useClientPreferences()
+  const { toast: authToast, showToast: showAuthToast } = useClientPreviewToast()
   const unavailableResponseSource = useRef<ClientResponseSource | undefined>(undefined)
   const responseBridgeSource = useMemo(() => responseSource && ({ ...responseSource,
     subscribe: ((receive, signal) => {
@@ -1258,12 +1260,13 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     {upgrade && <ClientLoadBoundary fallback={<ClientLoadFallback onClose={() => setUpgrade(null)} />}><Suspense fallback={null}><ClientUpgradeSheet context="plan" trigger={upgrade.trigger} freeUsed={account.state.freeUsed} onClose={() => setUpgrade(null)} onSubscribe={subscribeFromPlan} /></Suspense></ClientLoadBoundary>}
     <ClientLocalePanel open={surface === 'locale'} returnFocus={surfaceReturnFocus} manageBackground={false} onClose={() => setSurface(null)} />
     {createPortal(<div className="client-source-overlays">
+      <div data-preview-auth-notice className={`ca-code-toast${authToast.visible ? ' show' : ''}`} role={authToast.visible ? 'status' : undefined} aria-live="polite" aria-atomic="true">{authToast.text}</div>
       <ClientSettingsMenu key={owner ?? 'anonymous'} open={surface === 'settings'} anchorTop={settingsAnchor} returnFocus={surfaceReturnFocus} signedIn={Boolean(profile)} onLogout={() => { changeProfile(null); setSurface(null); home() }} onPlan={() => openAccount('#/plan')} onClose={() => setSurface(null)} onSettings={() => { setSurface(null); openClientSettings() }} onInsight={() => { setSurface(null); openResearchPage('insight') }} onBrokers={() => { setSurface(null); openResearchPage('brokers') }} onFeedback={() => setSurface('feedback')} onHelp={() => setSurface('help')} onDownload={() => { setSurface(null); history.pushState({}, '', '/download/'); window.dispatchEvent(new Event('teth:navigate')) }} />
       <ClientFeedbackDialog key={`feedback:${helpIdentity}`} open={surface === 'feedback'} returnFocus={surfaceReturnFocus} submission="preview" onClose={() => setSurface(null)} />
       {surface === 'profile' && profile && <ClientProfileMenu profile={profile} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} onLogout={() => { changeProfile(null); setSurface(null); home() }} />}
       {helpOwner === helpIdentity && <ClientLoadBoundary key={`help:${helpIdentity}`} fallback={surface === 'help' ? <ClientLoadFallback returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><Suspense fallback={surface === 'help' ? <ClientLoadFallback loading returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /> : null}><ClientHelp initialOpen open={surface === 'help'} returnFocus={surfaceReturnFocus} onClose={() => setSurface(null)} /></Suspense></ClientLoadBoundary>}
     </div>, document.body)}
-{auth && createPortal(<div className="client-source-overlays"><ClientAuthDialog key={auth} mode={auth} returnFocus={authReturnToComposer ? input : undefined} onClose={() => { pendingWatchAuth.current = null; pendingCatalogueBacktestAuth.current = null; pendingCatalogueCopyAuth.current = null; pendingConnectionPlan.current=null; authDraft.current = null; pendingRegistration.current = null; setAuth(null); closeClientSettingsRoute(); if (readClientAccountLocation() && !profile) clearInsightRoute() }} onComplete={next => {
+{auth && createPortal(<div className="client-source-overlays"><ClientAuthDialog key={auth} mode={auth} returnFocus={authReturnToComposer ? input : undefined} onProviderNotice={provider => showAuthToast(provider + ' 인증 완료')} onClose={() => { pendingWatchAuth.current = null; pendingCatalogueBacktestAuth.current = null; pendingCatalogueCopyAuth.current = null; pendingConnectionPlan.current=null; authDraft.current = null; pendingRegistration.current = null; setAuth(null); closeClientSettingsRoute(); if (readClientAccountLocation() && !profile) clearInsightRoute() }} onComplete={next => {
       const accepted = { ...next, ...(next.email ? {} : { previewId: crypto.randomUUID() }) }
       const copyIntent = pendingCatalogueCopyAuth.current
       const backtestIntent = pendingCatalogueBacktestAuth.current
@@ -1288,6 +1291,8 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
         } catch { setAccountNotice('관심 전략을 저장하지 못했어요. 로그인한 계정에서 다시 선택해주세요.') }
       }
       changeProfile(accepted); setAuth(null)
+      // Source 9fb final signupDone: local preview feedback only.
+      showAuthToast(auth === 'login' ? '다시 만나서 반갑습니다' : '계정 준비 완료, 시장은 기다려주지 않습니다')
       if (copyIntent && owner === null && !profile && nextWatchOwner && copyIntent.href === location.href
         && copyIntent.sourceSha === catalogueSourceSha && findCatalogueStrategy(copyIntent.id)?.id === copyIntent.id
         && findCatalogueStrategy(readSharedLocation()?.nick ?? '')?.id === copyIntent.id) {
