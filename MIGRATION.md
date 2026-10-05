@@ -19,7 +19,7 @@
 
 현재 source는 bca5a694d9f77d8afa0e703e364620e89ff5db05이며 React8fe33d9 이후 작은 원본 계승 교정이다. 긴 연구 문서 첫 질문의 nonforce 의도와 원문 새 응답250ms 모션, 같은 활성행의 글자축소 후 선택기 배치·사용자wheel을 보존하고 ResizeObserver 다음frame으로 숨은오류9를 교정했다. caller0 RESEARCH_PAGES export6줄만 제거했으며 실제메뉴/type/date/search/ranking/lazyAnalysis/CSS/storage·원본SVG/색상·Google/Apple/이메일·auth/API/프롬프트/가격/package/flags/DB는 그대로다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
 
-최종94spec 단일 3028PASS/0FAIL/기존QA-015SKIP2·actual0/입력불변·lint/공개/내부/service3build·personal(1) Opus5.5 STATIC_UI_CODE_GO·built로그인3폭을 확인했다. 확정제품26+clip6/harness20·이전82키+trace4를 새단일에 exact결속했으며 원FAIL/HOLD/observer9/하니스/부분실행은 보존하고 합산하지 않는다. 기존8fe33d9 운영 화면은 그대로인 검증된 정적 배포 준비 상태다. 정확SHA/파일수/bytes는 manifest/verification을 따른다.
+최종94spec 단일 3028PASS/0FAIL/기존QA-015SKIP2·actual0/입력불변·lint/공개/내부/service3build·personal(1) Opus5.5 STATIC_UI_CODE_GO·built로그인3폭을 확인했다. 확정제품26+clip6/harness20·이전82키+trace4를 새단일에 exact결속했으며 원FAIL/HOLD/observer9/하니스/부분실행은 보존하고 합산하지 않는다. teth.ai 정적 UI를 기존rawHTML CAS·updater/nginx/backend권위 확인 뒤 활성화하고 공개350자산/4문서 exact bytes·로그인3폭을 확인했다. 직전8fe 정적 bundle은 복구용으로 보관한다. 정확SHA/파일수/bytes는 manifest/verification을 따른다.
 
 프롬프트draft8646은 별도·실제merge/Reactproducer통합0이며 사용성4FAIL은 그대로다. 실Googlecallback/ACK·Apple등록/SMTP·실연구/계정원장/거래소/주문/과금/모델·전체서비스GO는 남는다. 로그인 presentation 합성GET 검사와 파일 무충돌을 실제 로그인 완료로 쓰지 않는다. 원본/실험/실기기 및 Low 경계는 source Bugfix와PM정본을 따른다. 이전 인수/실패는 Git 이력과 아래에 보존한다.
 
