@@ -11,8 +11,8 @@
 
 이 브랜치 push는 `main` 병합이나 자동 배포를 실행하지 않습니다. 사용자가 별도로 요청한 `teth.ai` 정적 프론트 업데이트는 [검증 기록](migration-verification.json)의 배포 상태로 구분합니다. 루트 원본·server/Worker 및 투자 프롬프트 draft `8646b65`는 이번에 병합·배포하지 않습니다. Apple·이메일 선택지는 유지하되 현재 서버에서 미연결인 방식은 ‘준비 중’으로 표시합니다.
 
-현재 테스트 교정은 availability10개·service-entry40개를 각각 모두PASS/actual0로 확인했고, lint·공개/내부/service3build도 통과했습니다. 작은 personal(1) Sonnet5.5와 별도 독립 검수는 이 하니스 범위의 CODE_GO입니다. 이전 인증578PASS/Opus5.5는 이전입력의 영향범위로 보존합니다. 원전체14934는14879PASS/12FAIL/기존17SKIP/후속26미실행/actual1로 끝났으며 새14958 전수는 RUNNING입니다. 원FAIL·Low·copy 원인 미확정 이력을 지우거나 부분PASS를 합산하지 않습니다. 실Google callback/Apple등록/SMTP·React prompt producer·전체서비스/운영 승인은 미완료이므로 teth.ai는 기존 운영본을 유지합니다.
+현재 테스트 교정은 availability10개·service-entry40개를 각각 모두PASS/actual0로 확인했고, lint·공개/내부/service3build도 통과했습니다. 작은 personal(1) Sonnet5.5와 별도 독립 검수는 이 하니스 범위의 CODE_GO입니다. 이전 인증578PASS/Opus5.5는 이전입력의 영향범위로 보존합니다. 원전체14934는14879PASS/12FAIL/기존17SKIP/후속26미실행/actual1로 끝났으며 새14958 전수는 RUNNING입니다. 원FAIL·Low·copy 원인 미확정 이력을 지우거나 부분PASS를 합산하지 않습니다. 새 전수·최종 검수·배포 산출물 검증이 끝나지 않아 정적 프론트 승격은 HOLD입니다. 실제 로그인·React 프롬프트·전체 서비스 승인은 별도이며, 실 OAuth 미검증만으로 모든 정적 UI 승격을 금지하는 정책은 아닙니다.
 
 **현재 teth.ai는 이전 출처 `7dd066f`의 정적 UI입니다.** 이번 초안으로 교체하지 않았습니다. [검증 기록](migration-verification.json)의 현재 후보와 이전 운영 배포 증거를 구분해 확인하세요. 실제 사용자 Google callback/ACK 완료, Apple·이메일 운영 연결, React 프롬프트·거래소·주문 활성화 및 전체 서비스 완료는 미검증/미완료입니다.
 
-추가 Node 반례에서 로그인 패널 컨트롤러의 Google/Apple 세션 확인은 같은 revision 불일치를 수용했습니다(4controlsPASS/2FAIL/actual1). host 장착·ACK·claim·실공급자는 실행하지 않아 인증 우회로 확대하지 않으며, 이 미수정 경로도 운영 HOLD의 잔여로 기록했습니다.
+이전 Node 반례에서는 로그인 패널 컨트롤러의 Google/Apple 세션 확인이 revision 불일치를 수용했습니다(4controlsPASS/2FAIL/actual1). 현재 스냅샷에는 해당 소비 guard 교정과 이전입력 단일578PASS가 포함되어 있습니다. 원FAIL은 이력으로 보존하며, 현재도 미수정인 경로라고 표시하지 않습니다. 이 교정이 실제 공급자 로그인 성공을 증명하지는 않습니다.

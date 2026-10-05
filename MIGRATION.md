@@ -21,6 +21,8 @@
 
 새 availability10키와 service-entry전체40키는 각각 actual0/모두PASS이며 원alias2FAIL와그뒤26serial미실행도같은키로실행했다. 원full14934의14879PASS/12FAIL/원17SKIP/26미실행은보존하고부분PASS합산0이다. 최종2208/5cf9844 입력의lint/3buildactual0·public/internal/service모두이전빌드exact다. 작은personal(1) Sonnet5.5 HARNESS_DELTA_CODE_GO/확정C0H0M0/Low5와 독립검수C0H0M0를 인수했다. 새14958 단일전수는원config/8workers/4574·4575에서RUNNING이며실provider·Reactprompt연결·전체/운영GO가아니다. 상세는 `candidate.currentAuthHarnessClosure`가소유한다. 원source875/controller578과이전whole의기록은아래이력으로보존한다. teth.ai upload/activate/서버DB교체0·운영HOLD다.
 
+정적 UI와 실제 서비스 승인을 구분한다. 정본 §0.4에 따라 사용자 승인·lint/build/E2E·공개 smoke·원자적 전환과 롤백을 갖춘 정적 Mock UI는 별도 승격할 수 있다. 지금의 정적 HOLD는 새14958 전수·최종 독립 인수·archive/기존 권위 CAS·공개 검증이 미완료이기 때문이며, 실 OAuth 미검증을 모든 정적 UI 릴리스의 보편 차단조건으로 추가하지 않는다. 실제 Google/Apple/SMTP·React prompt producer·전체서비스 GO는 계속 미완료다. 현재 공개350자산/4문서의 readonly 재확인은 운영7dd exact이며 새후보 배포 증거가 아니다.
+
 ### 이전 controller revision 전달 이력
 
 현재 전달은 source875f1e8의 **2,215파일/25,952,769bytes**, sourceDirtyFiles0·snapshot SHA `e570b92b06bfabf99d976c6c8c58c336446c6a650388706560badf4b3f8b6c0e`다. 코드e737eb8 뒤 보고서 anchor53bytes 복원과 이전전체 종료1098bytes 기록만 추가했다. 제품·시험·빌드는 그대로다. 직전ef6e1d0 이후 제품은 `native-browser-auth.ts`의 recoverSession·acknowledge session GET 직후 기존 BRS revision equality guard2와 주석1뿐이다. 새 `native-browser-auth-revision.spec.ts`와 README/Bugfix를 함께 전달한다. Google·Apple·이메일 선택지·정상 순서·ACK/ready/transaction/key·SDK·원본문구/색상/SVG·provider flags는 유지하고 요청하지 않은 로그인 방식 제거/활성화·프롬프트 통합은 하지 않는다.
