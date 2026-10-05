@@ -1,26 +1,82 @@
 {
   "schema": 1,
-  "purpose": "원본9fbff React 사용성: 연구 로그 읽기 의도·짧은 복사창/검색 초점·공급 알림 빈 분류의 최소 교정. 기존 인증 수단/원본 정상 디자인/API/프롬프트/가격/package/권한/키/DB 유지.",
-  "sourceCommit": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
+  "purpose": "원본9fbff: 연구 첫 활동/nonforce 읽기·새 응답 pill, 선택기 리사이즈/소유 초점, 한국어 원문12키의 최소 복원. 기존 Google·Apple·이메일·API·프롬프트·가격·package·flag·키·DB 유지.",
+  "sourceCommit": "8fe33d9a1da3883ce7df89291bb680534a21c569",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "d8754216123a45cbd1476ed4c55f91185db07ed25815cd911d9b2819cf6b2bed",
+  "snapshotDigest": "5564cd012c79f3de4e88baea23ebd567c40c8e5d0b8051c57c03f2574aae9332",
+  "dependencyAudit": {
+    "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
+    "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
+    "productionAudit": {
+      "actualExitCode": 0,
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "dependencies": {
+          "prod": 27,
+          "dev": 136,
+          "optional": 28,
+          "peer": 0,
+          "peerOptional": 0,
+          "total": 189
+        }
+      }
+    },
+    "defaultBranchAlerts": [
+      {
+        "affected": ">= 4.0.0, < 5.0.12",
+        "manifest": "package-lock.json",
+        "number": 3,
+        "package": "brace-expansion",
+        "patched": "5.0.12",
+        "scope": "development",
+        "severity": "medium"
+      },
+      {
+        "affected": ">= 4.0.0, < 5.0.11",
+        "manifest": "package-lock.json",
+        "number": 2,
+        "package": "brace-expansion",
+        "patched": "5.0.11",
+        "scope": "development",
+        "severity": "high"
+      },
+      {
+        "affected": ">= 4.0.0, < 5.0.10",
+        "manifest": "package-lock.json",
+        "number": 1,
+        "package": "brace-expansion",
+        "patched": "5.0.10",
+        "scope": "development",
+        "severity": "high"
+      }
+    ],
+    "packageLockOrInstallationChanged": false,
+    "classification": "기존 default main의 development brace-expansion DoS 경고. 정적 배포에 의존성 실행을 추가하지 않는다. package/lock 변경0, 별도 정비 대상이며 전체서비스 security GO가 아니다."
+  },
   "environment": {
     "node": "v24.14.0",
-    "dependencyInstall": "기존 검증 설치 사용; package/lockfile 변경0, 이번 clean npm ci 주장0"
+    "dependencyInstall": "기존 검증 설치 재사용, package/lock 변경0; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2195,
-    "bytes": 25611464,
+    "files": 2200,
+    "bytes": 25682448,
     "sourceDirtyFiles": [],
-    "hashVerification": "PASS: sync --verify exact bytes/hash",
-    "clientOriginalFiles": "원본 HTML/server/Worker/root workflow 변경0"
+    "hashVerification": "PASS exact bytes/hash",
+    "clientOriginalFiles": "원본 HTML/server/Worker/root workflow/main 변경·병합0"
   },
   "checks": [
     {
-      "command": "Final frozen 83-spec impact",
-      "startTime": "2026-10-04T22:45:19.781Z",
-      "duration": 842660.5090000001,
-      "expected": 2700,
+      "command": "Frozen 90-spec impact",
+      "startTime": "2026-10-04T23:39:26.625Z",
+      "duration": 936516.143,
+      "expected": 2976,
       "skipped": 2,
       "unexpected": 0,
       "flaky": 0,
@@ -28,38 +84,32 @@
       "retries": 0,
       "errors": 0,
       "input": {
-        "files": 2188,
-        "sha256": "fd5489c3f5df60575efadbb24f01626bddfa29d5973defed72d8a04802d001bf"
+        "files": 2193,
+        "sha256": "a331a151bfd5795a3052db9682c8a31509e10acaf55398c73eb38ae5e43680af"
       },
       "inputUnchanged": true,
       "publicBuild": {
         "files": 1132,
-        "sha256": "634630487593ffb2690599e052ee47ed3e91dd1760318cc4a2eaf3e00a671104"
+        "sha256": "9feb3d77f40589c13fb1060bc69762df7d8a7a358cea01db1c893534813174f9"
       },
       "publicBuildAfter": {
         "files": 1132,
-        "sha256": "634630487593ffb2690599e052ee47ed3e91dd1760318cc4a2eaf3e00a671104"
+        "sha256": "9feb3d77f40589c13fb1060bc69762df7d8a7a358cea01db1c893534813174f9"
       },
       "existingSkippedCases": [
         {
           "file": "client-insight-native-link.spec.ts",
           "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
-          "titlePath": [
-            "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다"
-          ],
           "project": "desktop"
         },
         {
           "file": "client-insight-native-link.spec.ts",
           "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
-          "titlePath": [
-            "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다"
-          ],
           "project": "mobile"
         }
       ],
       "newSkip": 0,
-      "scope": "이번 단일 범위만; 과거 전수/partial/실패와 합산0"
+      "scope": "이 단일 범위만; 과거 전수/partial/실패와 합산0"
     },
     {
       "command": "lint",
@@ -85,2025 +135,1334 @@
       "exitCode": 0
     },
     {
-      "command": "Built service auth coexistence1440/390/320",
+      "command": "Built Google·Apple·이메일 coexistence1440/390/320",
       "status": "PASS",
       "actualLoginVerified": false,
       "serverMutationExecuted": false
     },
     {
-      "command": "Original product failure / scheduler harness exact final PASS binding",
+      "command": "Original RED exact-key final PASS binding",
       "status": "PASS",
-      "finalRun": {
-        "report": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-final-impact.json",
-        "log": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-final-impact.log",
-        "stats": {
-          "startTime": "2026-10-04T22:45:19.781Z",
-          "duration": 842660.5090000001,
-          "expected": 2700,
-          "skipped": 2,
-          "unexpected": 0,
-          "flaky": 0
-        },
-        "specs": 83,
-        "exitCode": 0,
-        "retries": 0,
-        "errors": 0,
-        "inputUnchanged": true,
-        "before": {
-          "files": 2188,
-          "sha256": "fd5489c3f5df60575efadbb24f01626bddfa29d5973defed72d8a04802d001bf"
-        },
-        "after": {
-          "files": 2188,
-          "sha256": "fd5489c3f5df60575efadbb24f01626bddfa29d5973defed72d8a04802d001bf"
-        },
-        "buildBefore": {
-          "files": 1132,
-          "sha256": "634630487593ffb2690599e052ee47ed3e91dd1760318cc4a2eaf3e00a671104"
-        },
-        "buildAfter": {
-          "files": 1132,
-          "sha256": "634630487593ffb2690599e052ee47ed3e91dd1760318cc4a2eaf3e00a671104"
-        },
-        "skipped": [
-          {
-            "file": "client-insight-native-link.spec.ts",
-            "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
-            "titlePath": [
-              "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다"
-            ],
-            "project": "desktop"
-          },
-          {
-            "file": "client-insight-native-link.spec.ts",
-            "title": "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다",
-            "titlePath": [
-              "인사이트 제목 Ctrl·⌘ 클릭은 현재 목록을 바꾸지 않고 새 탭에서 기사를 연다"
-            ],
-            "project": "mobile"
-          }
-        ],
-        "startedAt": "2026-10-04T22:45:19.090Z",
-        "endedAt": "2026-10-04T22:59:22.623Z"
+      "product": {
+        "occurrences": 64,
+        "uniqueCases": 54
       },
-      "productBaseline": {
-        "failureOccurrences": 21,
-        "uniqueCaseKeys": 19,
-        "boundPassOccurrences": 21
+      "harness": {
+        "occurrences": 18
       },
-      "schedulerHarness": {
-        "failureOccurrences": 24,
-        "uniqueCaseKeys": 24,
-        "boundPassOccurrences": 24,
-        "originalImmediateClientHeight84Verified": true,
-        "finalExpectPollSame84Verified": true,
-        "classificationReason": "Text sizes were written immediately before measuring; ResizeObserver schedules the layout in the next animation frame.",
-        "assertionFile": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/tests/client-catalogue-copy-short-layout.spec.ts",
-        "assertionFileSha256": "3e936fd2a4ab99dee49c89b01704a52f0a213810b32e4ecc8ed7d5b414a381bf"
-      },
-      "footerEdgeSignHarness": {
-        "failureOccurrences": 2,
-        "uniqueCaseKeys": 2,
-        "boundPassOccurrences": 2,
-        "disposition": "New source-border assertion incorrectly required +1 only; observed -1. Final assertion verifies the originally intended ±1 CSS-pixel bound, with existing fixed-footer/overflow/hit/focus assertions preserved."
-      },
-      "bindingTotals": {
-        "failureOccurrences": 47,
-        "uniqueCaseKeys": 37
-      },
-      "bindings": [
+      "baselineReports": [
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-red.json",
+          "sha256": "0b7cee6a91768aa6f7c2343940b7455da08a787a0dce4aab56e1d7e3da87bfd4",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "sha256": "1ebb8c0d682f52c95856ab88cc672603f0b749aa33db2b0d241a40c5b8226d47",
+          "classification": "product",
+          "failures": 6
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "sha256": "23a84fce5c2ebe81b1f2ed2dad8ba4bcc7516f38601c8131a3fe20202be73c30",
+          "classification": "product",
+          "failures": 36
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-child-red.json",
+          "sha256": "011a75e647fa38ff3896ee9ee1586872d0db88c24e17da14fc26f7722af9a6e6",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-return-red.json",
+          "sha256": "140157dddb07e82620f8cae912801d81b158a7828e8536bc58134487fa7b0b27",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "sha256": "f0fa8643c2e183b54e8ba450338c2d1b1dda014a0b3d3df6cbded7ccdf8ae288",
+          "classification": "product",
+          "failures": 6
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/tmp/teth-settings-locale-independent-red2-report.json",
+          "sha256": "b663f55090c899ad2715f55bfd58eef7067b09ca6c10e2509103da92eac94be6",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-short-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/intent-activity-source-literal-red.json",
+          "sha256": "c4f76ff52b80a537549e288b8294cf1c6b08ac2f0b5aa6a6f1317729badd7105",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-focus-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다",
-            "titlePath": [
-              "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다",
-              "titlePath": [
-                "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-nonforce-red-confirmed-report.json",
+          "sha256": "ad1da91c5480c9cb7bd2b967fd6721cf08507741ad697bd32801e19cb1b6b7c2",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-focus-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다",
-            "titlePath": [
-              "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다",
-              "titlePath": [
-                "844×320 복사창 진입 시 초점 입력이 화면 안에 보인다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-red-report.json",
+          "sha256": "50f3abaa263eb02ca908fa0afe4f245f8d620f740031503548991706d55b9715",
+          "classification": "product",
+          "failures": 2
         },
         {
-          "origin": "/tmp/terminal-continuation-baseline-actual.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-terminal-continuation-regression.spec.ts",
-            "title": "짧은 desktop에서 확대된 전략 검색은 실제 viewport 안에 초점을 표시한다",
-            "titlePath": [
-              "짧은 desktop에서 확대된 전략 검색은 실제 viewport 안에 초점을 표시한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-terminal-continuation-regression.spec.ts",
-              "title": "짧은 desktop에서 확대된 전략 검색은 실제 viewport 안에 초점을 표시한다",
-              "titlePath": [
-                "짧은 desktop에서 확대된 전략 검색은 실제 viewport 안에 초점을 표시한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/tmp/teth-settings-locale-independent-final-report.json",
+          "sha256": "85803156eca5c40116fc7a96c6cbdb8fe54837cda8eaebf8d69deeb1ae791fa7",
+          "classification": "literal-and-ledger-harness",
+          "failures": 18
         },
         {
-          "origin": "/tmp/teth-continuation-reading.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다",
-            "titlePath": [
-              "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다",
-              "titlePath": [
-                "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/tmp/teth-continuation-reading.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다",
-            "titlePath": [
-              "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다",
-              "titlePath": [
-                "연구 기록을 90px 위로 읽는 사용자의 위치는 새 기록 도착 후에도 유지된다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/tmp/teth-settings-continuation-red.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-settings-continuation-regression.spec.ts",
-            "title": "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads",
-            "titlePath": [
-              "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-settings-continuation-regression.spec.ts",
-              "title": "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads",
-              "titlePath": [
-                "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/tmp/teth-settings-continuation-red.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-settings-continuation-regression.spec.ts",
-            "title": "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads",
-            "titlePath": [
-              "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-settings-continuation-regression.spec.ts",
-              "title": "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads",
-              "titlePath": [
-                "supplied inbox: empty category, rejected read, pending read-all and settings reentry preserve filter without fabricating reads"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "zh-TW 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "zh-TW 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "zh-TW 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "zh-TW 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "es 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "es 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "es 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "es 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "es 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "es 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "es 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "es 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "en 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 320×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "en 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ja 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ja 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ja 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ja 320×480 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ko 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "en 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "en 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "en 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "en 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "ja 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "zh-CN 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "zh-CN 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "zh-CN 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "zh-CN 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "zh-TW 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "zh-TW 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "zh-TW 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "zh-TW 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "es 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-copy-single-scroll.json",
-          "classification": "schedulerHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-            "titlePath": [
-              "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다",
-              "titlePath": [
-                "fr 844×320 확대·실패 후 복사 본문과 하단 동작을 모두 읽고 조작한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-settled-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-settled-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-settled-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-settled-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 session 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-closure-small.json",
-          "classification": "footerEdgeSignHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다",
-            "titlePath": [
-              "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다",
-              "titlePath": [
-                "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-closure-small.json",
-          "classification": "footerEdgeSignHarness",
-          "case": {
-            "file": "client-catalogue-copy-short-layout.spec.ts",
-            "title": "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다",
-            "titlePath": [
-              "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-catalogue-copy-short-layout.spec.ts",
-              "title": "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다",
-              "titlePath": [
-                "844×900 복사창 진입 시 초점 입력이 화면 안에 보인다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "desktop"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "desktop"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
-        },
-        {
-          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-follow-return-baseline.json",
-          "classification": "productBaseline",
-          "case": {
-            "file": "client-conversation-continuation-regression.spec.ts",
-            "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-            "titlePath": [
-              "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-            ],
-            "project": "mobile"
-          },
-          "baseline": {
-            "status": "unexpected",
-            "results": [
-              {
-                "status": "failed",
-                "retry": 0
-              }
-            ]
-          },
-          "pass": true,
-          "reason": "EXACT_FILE_TITLE_PROJECT_PASS_RETRY_0",
-          "final": {
-            "case": {
-              "file": "client-conversation-continuation-regression.spec.ts",
-              "title": "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다",
-              "titlePath": [
-                "바닥을 따라가던 연구의 conversation 왕복은 부재 중 새 기록과 다음 기록도 계속 추적한다"
-              ],
-              "project": "mobile"
-            },
-            "status": "expected",
-            "results": [
-              {
-                "status": "passed",
-                "retry": 0
-              }
-            ]
-          }
+          "path": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-overlap-red-report.json",
+          "sha256": "bbfbafdcab6d4b44e8161804330be70498cf55aaad52d0e796507ef3236c5176",
+          "classification": "product-geometry",
+          "failures": 2
         }
       ],
-      "preservedInterrupted": {
-        "stats": {
-          "startTime": "2026-10-04T22:30:26.226Z",
-          "duration": 381287.516,
-          "expected": 1181,
-          "skipped": 1515,
-          "unexpected": 0,
-          "flaky": 0
-        },
-        "outcomes": {
-          "passed": 1181,
-          "declaredSkipped": 1,
-          "unexecuted": 1506,
-          "interrupted": 8,
-          "executionErrorCases": 8,
-          "unexplainedSkipped": 0,
-          "actualFailureCases": []
-        },
-        "runner": {
-          "log": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-closed-impact.log",
-          "path": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/continuation-closed-impact.log",
-          "bytes": 250024,
-          "sha256": "3f77213f474793d1e62bf8022530635cadbcd1c6056254838cf0a26b63461cf9",
-          "source": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
-          "specs": 83,
-          "startAt": "2026-10-04T22:30:25.623Z",
-          "endAt": "2026-10-04T22:36:47.683Z",
-          "exitCode": null,
-          "inputUnchanged": false,
-          "before": {
-            "files": 2188,
-            "sha256": "6771d9af42c819bcb52de6c0453d630f62d3630d8bf26c6b930998d780569f1f"
+      "bindings": [
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다",
+            "titlePath": [
+              "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다"
+            ],
+            "project": "desktop"
           },
-          "after": {
-            "files": 2188,
-            "sha256": "a9e91c5ac7d587fd815d4a4c5be60b49041ce7a1491c9bee038863927024a2f1"
-          },
-          "buildBefore": {
-            "files": 1132,
-            "sha256": "d0321fd4acf17298f0ea83922347c47e2bd8f905445b96d43a11c9ae7c500e51"
-          },
-          "buildAfter": {
-            "files": 1132,
-            "sha256": "d0321fd4acf17298f0ea83922347c47e2bd8f905445b96d43a11c9ae7c500e51"
-          }
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
         },
-        "disposition": "HOLD_INTERRUPTED_INPUT_CHANGED_NOT_FINAL_EVIDENCE"
-      }
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다",
+            "titlePath": [
+              "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다",
+            "titlePath": [
+              "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다",
+            "titlePath": [
+              "활성 전략 행은 낮아진 viewport에서도 전체 영역과 실제 hit를 유지한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-baseline-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "en 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "en 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ja 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ja 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-CN 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-CN 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-TW 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-TW 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "es 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "es 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "fr 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "fr 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-TW 844px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-TW 844px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "es 844px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "es 844px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "en 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "en 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ja 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ja 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-CN 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-CN 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-TW 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-TW 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "es 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "es 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "fr 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "fr 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "320px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "320px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "844px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "844px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "1440px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "1440px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "en 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "en 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ja 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ja 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-CN 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-CN 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-TW 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-TW 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "es 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "es 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "fr 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "fr 320px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ko 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "en 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "en 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "ja 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "ja 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-CN 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-CN 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "zh-TW 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "zh-TW 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "es 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "es 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "fr 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다",
+            "titlePath": [
+              "fr 1440px 두배 글자 전략 목록은 Tab·축소·폭 전환 후 같은 활성 행에 도달한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "320px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "320px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "844px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "844px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-matrix.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "1440px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다",
+            "titlePath": [
+              "1440px 실제 종목 목록은 방향키·Home·End·PageDown·Tab 및 낮아진 화면에서 초점을 표시한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-child-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다",
+            "titlePath": [
+              "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-child-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다",
+            "titlePath": [
+              "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-return-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다",
+            "titlePath": [
+              "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/focus-edges-owned-return-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-terminal-focus-edges.spec.ts",
+            "title": "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다",
+            "titlePath": [
+              "실제 전략 자식 dialog는 폭 전환과 축소에도 초점·페이지 위치·원 trigger를 보존한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "320px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "320px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "844px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "844px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "1440px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "1440px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "320px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "320px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "844px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "844px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/.cache/frontend-parity-audit/market-picker-resize-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-market-picker-resize-focus.spec.ts",
+            "title": "1440px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다",
+            "titlePath": [
+              "1440px 실제740종목 End 뒤 900→480 높이 변경은 같은 활성 행을 노출한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-red2-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-red2-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/intent-activity-source-literal-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-account-activity-copy.spec.ts",
+            "title": "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다",
+            "titlePath": [
+              "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/intent-activity-source-literal-red.json",
+          "classification": "product",
+          "case": {
+            "file": "client-account-activity-copy.spec.ts",
+            "title": "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다",
+            "titlePath": [
+              "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-nonforce-red-confirmed-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 nonforce 질문: 실제 상향 읽기 뒤 paused activity에 질문해도 읽던 위치를 빼앗지 않는다",
+            "titlePath": [
+              "원본 nonforce 질문: 실제 상향 읽기 뒤 paused activity에 질문해도 읽던 위치를 빼앗지 않는다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-nonforce-red-confirmed-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 nonforce 질문: 실제 상향 읽기 뒤 paused activity에 질문해도 읽던 위치를 빼앗지 않는다",
+            "titlePath": [
+              "원본 nonforce 질문: 실제 상향 읽기 뒤 paused activity에 질문해도 읽던 위치를 빼앗지 않는다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-red-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다",
+            "titlePath": [
+              "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-red-report.json",
+          "classification": "product",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다",
+            "titlePath": [
+              "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-account-activity-copy.spec.ts",
+            "title": "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다",
+            "titlePath": [
+              "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-account-activity-copy.spec.ts",
+            "title": "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다",
+            "titlePath": [
+              "계정 활동 UI 문구는 한국어 원본·7언어·동일 슬롯을 보존한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-account-activity.spec.ts",
+            "title": "알림 원문은 텍스트이며 상대시간과 실패 없는 빈 분류를 표시한다",
+            "titlePath": [
+              "알림 원문은 텍스트이며 상대시간과 실패 없는 빈 분류를 표시한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-account-activity.spec.ts",
+            "title": "알림 원문은 텍스트이며 상대시간과 실패 없는 빈 분류를 표시한다",
+            "titlePath": [
+              "알림 원문은 텍스트이며 상대시간과 실패 없는 빈 분류를 표시한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "en: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "en: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ja: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ja: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "zh-CN: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "zh-CN: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "zh-TW: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "zh-TW: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "es: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "es: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "fr: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "fr: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ko: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "en: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "en: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "ja: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "ja: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "zh-CN: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "zh-CN: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "zh-TW: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "zh-TW: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "es: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "es: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/tmp/teth-settings-locale-independent-final-report.json",
+          "classification": "literal-and-ledger-harness",
+          "case": {
+            "file": "client-settings-locale-independent.spec.ts",
+            "title": "fr: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages",
+            "titlePath": [
+              "fr: inbox null, confirmed zero, one and multiple preserve source rows and independently expected empty messages"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-overlap-red-report.json",
+          "classification": "product-geometry",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다",
+            "titlePath": [
+              "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다"
+            ],
+            "project": "desktop"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        },
+        {
+          "origin": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration/test-results/research-chip-overlap-red-report.json",
+          "classification": "product-geometry",
+          "case": {
+            "file": "client-research-follow-intent.spec.ts",
+            "title": "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다",
+            "titlePath": [
+              "원본 새 응답 버튼은 composer가 보일 때만 노출되고 명시 클릭만 follow를 재장착한다"
+            ],
+            "project": "mobile"
+          },
+          "originalStatus": "failed",
+          "finalStatus": "passed",
+          "retry": 0
+        }
+      ],
+      "limitations": [
+        "L4 initial four failures retained as actual trace/stdout, not invented JSON; report-based occurrence totals exclude these separately bound four",
+        "Setup failures/interrupted runs remain in private handoffs; not added to PASS totals"
+      ]
     },
     {
-      "command": "Installed StaticBundle + archive exact members/bytes",
+      "command": "Installed StaticBundle + exact archive",
       "status": "PASS",
       "registeredAssets": 350,
       "packagedFiles": 1113
@@ -2112,37 +1471,42 @@
   "independentReview": {
     "profile": "personal (1)",
     "model": "claude-opus-5-5",
-    "scope": "최초HOLD·전체신규제품교정GO·test1곳최종delta GO, 제품byte불변결속; 모델브라우저0",
     "verdict": "STATIC_UI_CODE_GO",
     "inputUnchanged": true,
     "exitCode": 0,
+    "browserExecuted": false,
     "notFullServiceApproval": true
   },
   "sourceDelta": {
-    "previousSource": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
+    "previousSource": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
     "files": [
+      "M\t.gitignore",
       "M\tBugfix_report.md",
       "M\tDESIGN.md",
       "M\tREADME.md",
-      "M\tsrc/client-catalogue-copy-setup.css",
-      "M\tsrc/client-research-cache.ts",
-      "M\tsrc/components/ClientAccountPresentation.tsx",
-      "M\tsrc/components/ClientCatalogueCopySetup.tsx",
+      "M\tsrc/client-account-activity-copy.ts",
+      "M\tsrc/client-trading-terminal.css",
+      "M\tsrc/components/ClientMarketPicker.tsx",
       "M\tsrc/components/ClientResearchWorkspace.tsx",
       "M\tsrc/components/ClientTradingTerminal.tsx",
-      "A\ttests/client-catalogue-copy-short-layout.spec.ts",
-      "A\ttests/client-conversation-continuation-regression.spec.ts",
-      "A\ttests/client-settings-continuation-regression.spec.ts",
-      "A\ttests/client-terminal-continuation-regression.spec.ts"
+      "M\ttests/client-account-activity-copy.spec.ts",
+      "M\ttests/client-account-activity.spec.ts",
+      "A\ttests/client-copy-fixed-footer-continuity.spec.ts",
+      "A\ttests/client-market-picker-resize-focus.spec.ts",
+      "A\ttests/client-research-follow-intent.spec.ts",
+      "A\ttests/client-settings-locale-independent.spec.ts",
+      "A\ttests/client-terminal-focus-edges.spec.ts",
+      "M\ttests/main-account-activity.spec.ts",
+      "M\ttests/main-terminal-connection.spec.ts"
     ],
     "removedFiles": 0,
-    "authApiPackageAndFlagsChanged": false,
-    "originalNormalSvgCopyColors": "preserved"
+    "authApiPackageFlagsChanged": false,
+    "originalNormalSvgColors": "preserved",
+    "copy": "한국어12키 exact original; 원본 미공급/시뮬레이션 경계 유지"
   },
   "preservedFailures": {
-    "bindingEvidence": "continuation-failure-binding.json: exact SHA in evidenceHashes, full failed/interrupted/intermediate receipts preserved privately; compact bindings in checks above",
-    "copyIntermediate": "two-scrollport106PASS visually rejected for clipped enlarged CTA; next82PASS24FAIL immediate pre-RAF measurement preserved and same84threshold expect.poll/fullrect assertions verified",
-    "otherHarness": "trigger-click background origin / reading keyboard stability / port collision preserved separately in private JSON; not product success"
+    "evidence": "모든 실제 RED/harness/setup/중단은 비공개 원JSON/log/PNG/trace에 보존. 동일 file/title/project·retry0 종결은 위 binding과 SHA를 따른다. L4 최초 trace 증거를 JSON 실행으로 합성하지 않는다.",
+    "overlap": "터미널124PASS/86PASS의56개중복, 설정194PASS/종목98PASS/연구66PASS/복사46PASS와 최종 단일을 합산하지 않음"
   },
   "security": {
     "tool": "Gitleaks8.30.1 --redact",
@@ -2154,11 +1518,7 @@
       "exitCode": 0,
       "findings": 0
     },
-    "nodeModulesCachesCredentialsDatabasesIncluded": false,
-    "deliveryStaged": {
-      "exitCode": 0,
-      "findings": 0
-    }
+    "nodeModulesCachesCredentialsDatabasesIncluded": false
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
@@ -2167,17 +1527,7 @@
     "actualMergeExecuted": false,
     "includedInSnapshot": false,
     "producerIntegrated": false,
-    "meaning": "별도 draft 보존. 파일 충돌0은 모델/서비스/React 통합 GO가 아님",
-    "rehearsal": {
-      "status": "MERGE_REHEARSAL_PASS",
-      "codeCommit": "7bab460032a4f4400f15b91a380765cc90a3d22d",
-      "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
-      "exitCode": 0,
-      "conflicts": 0,
-      "tree": "085f777e3bf5872a637623a79037bd67fbf26587",
-      "actualMergeExecuted": false,
-      "producerIntegrated": false
-    }
+    "meaning": "별도 draft 보존; 파일 무충돌은 모델/전체서비스 GO가 아님"
   },
   "remaining": [
     "실Google사용자 callback/ACK 완료 미검증",
@@ -2188,9 +1538,10 @@
     "원본가격49/280 정책·mobilefooter200%고정행간",
     "실Safari/AT·긴Clipboard권한대기·viewport/상태전수 재검증",
     "bare공유component owner-only교체 늦은notice 가설은실Main/Service keyedremount에서미도달",
-    "본 후보 전체469spec 전수미실행; 이번83spec을과거전수와합산하지않음",
     "실기기 keyboard/visualViewport/Safari/AT 및 text-only가아닌실제zoom 검증",
-    "동일 service build 첫 로그인 presentation 검사의 desktop network 실패1건 원인 미확정; 별도 재검사3폭 PASS로 최초 실패를 소거하지 않음"
+    "동일 service build 첫 로그인 presentation 검사의 desktop network 실패1건 원인 미확정; 별도 재검사3폭 PASS로 최초 실패를 소거하지 않음",
+    "실기기/Safari/AT/OS keyboard 및 실제 OS/browser zoom 미검증",
+    "이 후보 전체469spec 전수미실행; 이번90spec과 과거 전수를 합산하지 않음"
   ],
   "warnings": [
     "기존500kB 초과 JS chunk 경고",
@@ -2198,9 +1549,9 @@
     "부모owner-keyedremount와moduledead군집정적검수는런타임전체보증아님"
   ],
   "previousDeliveryEvidence": {
-    "commit": "c37d819a9d9fcb56030c904ab6ec694abde25d81",
-    "sourceCommit": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
-    "meaning": "57spec1868PASS/기존skip2·배포 원증거 Git 이력 보존, 이번 결과 합산0"
+    "commit": "0a1f48b32c1c18bc5796201b42e1b95940d96256",
+    "sourceCommit": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
+    "meaning": "앞83spec2700PASS/skip2·실패/HOLD·정적 배포는 Git 이력에 보존, 새 승인으로 승계0"
   },
   "deployment": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
@@ -2269,30 +1620,27 @@
       "serverMutationExecuted": false
     }
   },
-  "pendingDeployment": null,
+  "pendingDeployment": {
+    "status": "VERIFIED_STATIC_UI_READY_NOT_ACTIVATED",
+    "sourceCommit": "8fe33d9a1da3883ce7df89291bb680534a21c569",
+    "archiveSha256": "62529f9a6af8ccae969ef92938e7611dea621e278b0e7c239ce51aa5fec02936",
+    "htmlSha256": "bb3548c957dad65bee8dca4f4c064d185b8cd2ad442fcdecc7209b8a6ccb824c"
+  },
   "evidenceHashes": {
-    "continuation-opus-review.json": "e360c8479c802738abae6dee963f3bd98efc4c9283914a0010bf476552a14c1f",
-    "continuation-opus-review.json.inputs.json": "ea32f4604a51853f194cc4bd855519c79cc9e2cc4138d97f3aa173151826b6e6",
-    "continuation-opus-closure.json": "bc1708b3b20a1fadc75f2787b5ce15cca7f08c20f6d1802e9f341b78d07c2503",
-    "continuation-opus-closure.json.inputs.json": "725bcb7257e684a4702142e221f6f651d6c8d86da619899ed7a41bba1f23cf6d",
-    "continuation-delivery-built-auth/receipt.json": "dff8650167a0bc6f65d1d9978fbbcdcf34a764bcec4f27d101a433afbae1e111",
-    "continuation-closure-small.json": "5eee9a42934f8fb7509e31663e479535a858915a2ee94823354a589e7fbbbd2d",
-    "continuation-delivery-build.json": "6166e8404283e46a0b6542d5af03897ec5e59dd19a7b5f8459a23e7d83a93a66",
-    "continuation-final-impact.json": "7cab357a15bebb6d7d99ab61e2018ec4e6632ba33fb9fb6a9c4bf17dca5b7f90",
-    "continuation-final-impact.log": "0871b73553bb95d5c63ea10969019a37b4267aba9415028baf3595610a4e45c4",
-    "continuation-failure-binding.json": "3931ad514bcfe4d4b78fb69133f598235a68175ab3f82d6f032be956e1a466a5",
-    "continuation-opus-final.json": "4b72f38c35e063c82a032f9803e89f1a2bc16aba65fe114c28158e05ecc203d0",
-    "continuation-opus-final.json.inputs.json": "ab48ddfde6872db8bda35510b62d524f2c263b1536f8ccb2d54ef261c614a9d6",
-    "continuation-verified-built-auth/receipt.json": "8af75760fa12059c9b9d88b83533eaa36fadbd3d7cf908dd098df15020cac574",
-    "continuation-source-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "continuation-delivery-service-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "continuation-release/manifest.json": "7b7a912d426e392f29c59a228466052ee42ff6618c889b2f2cfd8f63b1973424",
-    "continuation-vm-preflight.json": "0a791fb98bf571343e969becccf1a6bc21ee30c56193b7c35d2f17a99c1a6b81",
-    "continuation-vm-activate.json": "cd10898e596df7a60ac8a21cc4bdd2fef1ae47ec8e5105bfe3d39445d7f2b8d9",
-    "continuation-vm-postflight.json": "00b0c9a323a33851176817d8983516ee6fa3c1a77baa94cd675bbd447840d222",
-    "continuation-public-static.json": "4b742d8b8e0f5fb947799371e9956794b7b323e80f4e44bf7d2646931cd5a0ce",
-    "continuation-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
-    "continuation-code-merge.json": "b32192949809ed9586c299be10ee325bfc115b142764cdc4111ffc688b59da41",
-    "continuation-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    "intent-final-build.json": "7f8e5be09d09e82fcedb8b49f3df3f060aa16341c89b35c54013dcd7976de49c",
+    "intent-final-impact.json": "462a84f101c95f36ea68c19ca8fcde06fa93d8e8780756afa39d35713bfd72c0",
+    "intent-final-impact.log": "f82e6d2195f599c926e8862945b53d2eeb23a2a85a8b0d27ce95ac7c396b6992",
+    "intent-failure-binding.json": "8ab54689a45cbb00f22873766e7b4e736e6da108719ae1d4e53ec267523626d1",
+    "intent-opus-review.json": "9d7ab09df856db8d167414a628e424a2589cf951866b5844f13dc8676c1238cc",
+    "intent-opus-review.json.inputs.json": "291ab7cbae2bd60b3888acff0ebfbf8db892e766f5c270c99147abd70f168321",
+    "intent-opus-closure.json": "5cafccc7c19e7c0c659df245962cf4553edc4f1af2fd3a52b0e2e57c90f50867",
+    "intent-opus-closure.json.inputs.json": "c9893e04418984a1012c6d8be7a58f2f409d283141ca739a6aa802993e08e5ef",
+    "intent-source-chip-probe.json": "315b67e7d6595ba8d7ebcfdb722d19fa3d9078ae49c9c66604b9cd9f4e1f306e",
+    "intent-picker-background-probe.json": "7629743b7ff19fddc8daa72c0b5053037d5bc7dc8038a56f4e09164911241e2c",
+    "intent-built-auth/receipt.json": "dca8344315adfb4b870973b01c15a243b5eaba76a30eb6f1d33b8a77ba653076",
+    "intent-release/manifest.json": "1f846cb44f1e62a759177cc953e95ab88bbc756e3a24e755fee494262478e30f",
+    "intent-source-staged-final-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "intent-service-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "intent-dependency-audit.json": "09245fa731b85673ca2542f5cfb0240fbd820c0fba7daa53c23c983a5b0db9cf"
   }
 }

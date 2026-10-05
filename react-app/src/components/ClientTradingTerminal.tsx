@@ -114,21 +114,48 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       const bounds = first.getBoundingClientRect()
       if (bounds.top < top || bounds.bottom > bottom - 12) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
     }
-    if (mobile) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
-    else revealSearch()
-    first.focus({ preventScroll: true })
+    const focused = document.activeElement instanceof HTMLElement && region.contains(document.activeElement) ? document.activeElement : first
+    if (focused === first) {
+      if (mobileRef.current) trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
+      else revealSearch()
+      first.focus({ preventScroll: true })
+    }
     const measure = () => {
       // Follow the actual trigger height, including enlarged/translatable text.
-      const top = region.getBoundingClientRect().top
       const viewport = window.visualViewport
-      const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight
-      region.style.setProperty('--ctt-picker-height', `${Math.max(96, bottom - top - 12)}px`)
+      const top = viewport?.offsetTop ?? 0
+      const bottom = viewport ? top + viewport.height : window.innerHeight
+      const fallback = region.dataset.viewportFallback === 'true'
+      region.style.setProperty('--ctt-picker-top', `${top + 12}px`)
+      region.style.setProperty('--ctt-picker-height', `${Math.max(96, bottom - (fallback ? top + 12 : region.getBoundingClientRect().top) - 12)}px`)
     }
+    let measuredControl: HTMLElement | null = null, controlHeight = 0
     const resize = () => {
-      // Reposition only for a changed viewport/trigger while this rail owns
-      // focus. Ordinary scrolling and an owned child dialog keep their place.
-      if (region.contains(document.activeElement)) revealSearch()
+      // Only viewport/trigger changes may reposition this disclosure. Its
+      // ordinary scroll listener only measures; owned layers retain focus.
       measure()
+      const target = document.activeElement
+      if (!(target instanceof HTMLElement) || !region.contains(target)) return
+      const viewport = window.visualViewport
+      const top = viewport?.offsetTop ?? 0
+      const bottom = viewport ? top + viewport.height : window.innerHeight
+      const rail = region.getBoundingClientRect(), bounds = target.getBoundingClientRect()
+      if (region.dataset.viewportFallback !== 'true' && (rail.top < top || rail.top + bounds.height > bottom - 12)) {
+        trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
+        measure()
+      }
+      // An anchored rail near the end of a page can remain shorter than one
+      // enlarged control even at maximum page scroll. The source mobile rail
+      // also floats in the viewport; use that placement only for this case.
+      if (measuredControl !== target) { measuredControl = target; controlHeight = target.getBoundingClientRect().height }
+      else controlHeight = Math.max(controlHeight, target.getBoundingClientRect().height)
+      const anchorBottom = trigger.parentElement!.getBoundingClientRect().bottom
+      const normalHeight = Math.min((bottom - top) * .7, 640, bottom - anchorBottom - 12)
+      region.dataset.viewportFallback = String(controlHeight + 2 > normalHeight)
+      measure()
+      const visible = region.getBoundingClientRect(), control = target.getBoundingClientRect()
+      if (control.top < visible.top + region.clientTop) region.scrollTop += control.top - visible.top - region.clientTop
+      else if (control.bottom > visible.top + region.clientTop + region.clientHeight) region.scrollTop += control.bottom - visible.top - region.clientTop - region.clientHeight
     }
     const outside = (event: Event) => {
       if (!(event.target instanceof Node) || region.contains(event.target) || trigger.contains(event.target)) return
@@ -140,6 +167,15 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       if (event.type === 'pointerdown' && region.contains(document.activeElement)) trigger.focus({ preventScroll: true })
       setPickerOpen(false)
     }
+    const focus = (event: Event) => {
+      if (!(event.target instanceof HTMLElement) || !region.contains(event.target)) { outside(event); return }
+      // A child dialog returns focus with preventScroll. Reveal that real
+      // control only when it is clipped, including after a mobile transition.
+      const bounds = event.target.getBoundingClientRect(), rail = region.getBoundingClientRect()
+      const viewport = window.visualViewport, top = viewport?.offsetTop ?? 0
+      const bottom = viewport ? top + viewport.height : window.innerHeight
+      if (bounds.top < Math.max(top, rail.top + region.clientTop) || bounds.bottom > Math.min(bottom, rail.top + region.clientTop + region.clientHeight)) resize()
+    }
     const observer = new ResizeObserver(resize)
     observer.observe(trigger)
     window.addEventListener('resize', resize)
@@ -147,18 +183,19 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
     window.visualViewport?.addEventListener('scroll', measure)
     document.addEventListener('scroll', measure, true)
     document.addEventListener('pointerdown', outside, true)
-    document.addEventListener('focusin', outside)
-    measure()
+    document.addEventListener('focusin', focus)
+    resize()
     return () => {
       observer.disconnect()
+      delete region.dataset.viewportFallback
       window.removeEventListener('resize', resize)
       window.visualViewport?.removeEventListener('resize', resize)
       window.visualViewport?.removeEventListener('scroll', measure)
       document.removeEventListener('scroll', measure, true)
       document.removeEventListener('pointerdown', outside, true)
-      document.removeEventListener('focusin', outside)
+      document.removeEventListener('focusin', focus)
     }
-  }, [pickerOpen, useSelector, mobile])
+  }, [pickerOpen, useSelector])
 
   useLayoutEffect(() => {
     const next = pickerDestination.current

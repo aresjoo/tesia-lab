@@ -43,7 +43,7 @@ test('현재 owned Mock 터미널에서 알림→수신 설정→뒤로가기까
   await expect(page.locator('.client-account-terminal')).toHaveAttribute('data-selected-strategy', 'user:1000')
   await page.locator('.cat-heading-tools').getByRole('button', { name: '알림', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
-  await expect(page.getByText('아직 알림이 없어요', { exact: true })).toBeVisible()
+  await expect(page.getByText('아직 알림이 없습니다', { exact: true })).toBeVisible()
   await expect(page.getByRole('button', { name: '알림', exact: true })).toHaveCount(1)
   const chart = page.locator('.client-account-terminal canvas').first()
   const canvas = await chart.count() ? await chart.elementHandle() : null
@@ -54,7 +54,7 @@ test('현재 owned Mock 터미널에서 알림→수신 설정→뒤로가기까
   const position = page.getByRole('switch', { name: '포지션 진입/청산', exact: true })
   await position.focus(); await page.keyboard.press('Space'); await expect(position).not.toBeChecked()
   await page.goBack()
-  await expect(page.getByText('아직 알림이 없어요', { exact: true })).toBeVisible()
+  await expect(page.getByText('아직 알림이 없습니다', { exact: true })).toBeVisible()
   if (canvas) expect(await canvas.evaluate(node => node.isConnected)).toBe(true)
   expect(await terminal!.evaluate(node => node.isConnected)).toBe(true)
   if (info.project.name === 'mobile') await expect(page.locator('.ctt-terminal')).toHaveAttribute('data-panel', 'bottom')
@@ -117,11 +117,11 @@ test('PLAN 3탭과 보관되지 않은 기록은 320·390·1280px에서 읽고 �
     }
   }
   await route(page, '#/review/missing')
-  await expect(page.getByText('복기 리포트를 찾을 수 없어요', { exact: true })).toBeVisible()
+  await expect(page.getByText('복기 리포트를 찾을 수 없습니다', { exact: true })).toBeVisible()
   await page.locator('.client-main-account').getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
   await route(page, '#/periodic/W:2000-01-01')
-  await expect(page.getByText('보고서를 찾을 수 없어요', { exact: true })).toBeVisible()
+  await expect(page.getByText('보고서를 찾을 수 없습니다', { exact: true })).toBeVisible()
 })
 
 test('현재 홈 푸터 이용 현황은 원본 PLAN alias 결제 설정으로 열고 모달 잠금을 남기지 않는다', async ({ page }) => {

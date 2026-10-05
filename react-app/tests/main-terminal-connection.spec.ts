@@ -128,7 +128,7 @@ test('명시 archive 터미널 소비자: 거래소 미연결이어도 벨·PLAN
   await expect(account.getByText('아직 적립된 내역이 없어요', { exact: true })).toBeVisible()
   await expect(account.locator('.client-terminal-connection-empty')).toHaveCount(0)
   await route(page, '#/periodic/W:2000-01-01')
-  await expect(account.getByText('보고서를 찾을 수 없어요', { exact: true })).toBeVisible()
+  await expect(account.getByText('보고서를 찾을 수 없습니다', { exact: true })).toBeVisible()
   await account.getByRole('button', { name: 'AI 트레이딩', exact: true }).click()
   await expect(page).toHaveURL(/#\/trade$/)
   expect(await page.evaluate(() => sessionStorage.getItem('teth-client-experience'))).toBe(before)
@@ -140,7 +140,7 @@ test('명시 archive 터미널 소비자: 원본 모바일 6탭 정책을 유지
   await page.locator('.cat-heading').getByRole('button', { name: '알림', exact: true }).click()
   const pane = page.locator('.ctt-bottom-pane[data-selected="true"]')
   await expect(pane).toHaveAttribute('data-tab-id', 'alerts')
-  await expect(pane.getByText('아직 알림이 없어요', { exact: true })).toBeVisible()
+  await expect(pane.getByText('아직 알림이 없습니다', { exact: true })).toBeVisible()
   await expect(pane.locator('.client-terminal-connection-empty')).toHaveCount(0)
 })
 

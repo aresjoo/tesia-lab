@@ -1,6 +1,8 @@
 # TETH AI Design System
 
-최신 정적 후속은4237d65 이후 연구 기록의 읽기·세션 왕복 따라가기, 짧은 복사창/터미널 검색 초점, 공급 알림의 빈 분류 안내를 최소 교정한다. 원본9fbff821의 정상 디자인·문구·SVG·Google/Apple/이메일과 API/프롬프트/가격/package/권한을 유지한다. 같은 입력83spec/2702개 단일은2700PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험 밖 오류0·actual0(842.661초)이며 lint/공개·내부·service3build 및 personal(1) Opus5.5 STATIC_UI_CODE_GO를 인수했다. 원제품21실패발생/19고유·RAF측정24·footer부호하니스2를 동일 case-key의 최종PASS에 결속했다. 이전 실패·HOLD·중단·partial·469spec 전수와 합산하지 않는다. 정확한 입력/전달/정적 배포와 실제 서비스 미검증 경계는 Bugfix_report 최상단과 Lab migration 영수증을 따른다.
+이번 교정은69a1e97의 정상 디자인을 유지하면서 초기 연구 따라가기·읽기 중 질문의 nonforce 동선·짧은 선택기 활성 초점·한국어 원문12키를 복원한다. 원본 `↓ 새 응답 보기`는 읽기 위치를 지키고 클릭으로만 하단 따라가기를 재개하는 조건부 동작이다. 인증/API/프롬프트/가격/색상/SVG 변경0이다. 같은 입력90spec의2976PASS/0FAIL/기존skip2·lint/3build·개인1 Opus5.5 STATIC_UI_CODE_GO로 정적 코드를 인수했다. 아래83spec은 이전 이력이며 실제 전달/배포·미검증 조합은 Bugfix 최상단과migration 영수증을 따른다.
+
+이전69a1e97 정적 인수 이력은4237d65 이후 연구 기록의 읽기·세션 왕복 따라가기, 짧은 복사창/터미널 검색 초점, 공급 알림의 빈 분류 안내를 최소 교정한다. 원본9fbff821의 정상 디자인·문구·SVG·Google/Apple/이메일과 API/프롬프트/가격/package/권한을 유지한다. 같은 입력83spec/2702개 단일은2700PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험 밖 오류0·actual0(842.661초)이며 lint/공개·내부·service3build 및 personal(1) Opus5.5 STATIC_UI_CODE_GO를 인수했다. 원제품21실패발생/19고유·RAF측정24·footer부호하니스2를 동일 case-key의 최종PASS에 결속했다. 이전 실패·HOLD·중단·partial·469spec 전수와 합산하지 않는다. 정확한 입력/전달/정적 배포와 실제 서비스 미검증 경계는 Bugfix_report 최상단과 Lab migration 영수증을 따른다.
 
 이 문서의 코드 대조 기준은 전수 검증 코드 `b463a728a5c6dd34533769c1fa60e1706e07ab39`다. 현재 전체 인수·검수·main 병합 판정은 PM 정본이 단독으로 소유한다. 이전 동결 `e325b2b`와 원 closure 작업본은 실패·복구 근거로 보존한다. 원본 UI는 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`로 고정한다. 카탈로그 31개 설정·저장시장자료의 immutable 원산지 `412fd604`는 유지하며, 최신 고정 UI 원본과 같은 설정·자료인지 별도 Golden으로 대조했다. 원 WIP 1,302파일·DB·원 730일 결과·실패 artifact는 보존한다. spot/futures 원함수 15+9개 최상위 선언은 고정 `9fbff821`의 exact 원문 대조 대상이며 설정 31개는 두 source pin에서 동일함을 확인했다.
 
@@ -1241,6 +1243,8 @@ backdrop-filter: blur(24px) saturate(125%);
 - 백테스트 결과만으로 실거래를 바로 활성화하는 버튼
 
 ## 21. Decision Log
+
+- 2026-10-05 `accepted / original reading and resized selection intent`: 첫 활동 문서의 미저장 따라가기와 읽기 중 질문의 원본 nonforce 동선을 복원한다. 새 응답 버튼은 원본 조건에서만 표시하고 사용자 클릭으로 강제 재개하며 현재 composer 위8px에 배치한다. 터미널/종목 선택기의 화면 크기 변경은 기존 활성 컨트롤만 최소 노출하며 일반 스크롤·하위 dialog·새 초점은 보존한다. 한국어12키는 원문으로 되돌리고 값/다른 언어/권한은 그대로다. private 검수 artifact만 Git에서 제외하고 원증거를 보존한다. 새90spec2976PASS/기존skip2·lint/3build·원보고서64발생/54고유 및하니스18의 exactPASS와L4원trace4 별도결속·독립Opus5.5 GO를 인수했다. 첫HOLD의 M1은 원본 entry/왕복 실제1440/390과 함수 호출로 반증했고 제품을 임의 grew-only로 바꾸지 않았다. 이전83spec·partial·중단과 합산하지 않으며 전달/정적 배포는migration 영수증, 실제서비스 GO는 PM 정본을 따른다.
 
 - 2026-10-05 `accepted / reading and short-viewport continuity`: 원본 연구 로그의 위60px 해제/아래40px 재개를 문서별 사용자 의도로 유지하고 내용/geometry 변화로 따라가기를 재개하지 않는다. 복사창은 자연 footer가96px 본문을 남기지 못할 때만 한 scrollport로 전환하며 정상 fixed footer와 원본 디자인을 유지한다. 초기/pending 초점은 sheet 내부만 reveal한다. terminal 검색이 화면 밖일 때만 rail 초점의 viewport/trigger resize를 보정하고 일반 스크롤·소유 child dialog는 유지한다. 공급 inbox의 빈 분류는 기존7언어/알림 수/Intl plural로 구분하며 null 미공급을0으로 만들지 않는다. UI 구조를 임의 재설계하거나 dead tfNotifOpen 가설로 사라진 팝업을 만들지 않는다. 인증·프롬프트·권한·가격·package·flag 변경0, 파일/storage 삭제0다. 기존문서entry의비직렬화following을samepage remount에서유지하고삭제시함께폐기하며writer/저장JSON/키는불변이다. 2700PASS/기존skip2의83spec·lint/3build·원제품21발생/19고유 및RAF24exact결속·Opus5.5입력불변을인수했다. 원HOLD/실패·기각된two-scrollport·하니스는Bugfix/Git에보존하며정적배포영수증/실제서비스GO는별도다.
 

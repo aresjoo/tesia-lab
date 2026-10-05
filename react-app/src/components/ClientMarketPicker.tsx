@@ -24,15 +24,33 @@ function PickerDialog({ presentation, trigger, onClose }: { presentation: Market
     const overflow = document.body.style.getPropertyValue('overflow'), priority = document.body.style.getPropertyPriority('overflow')
     element.showModal(); document.body.style.overflow = 'hidden'
     const viewport = window.visualViewport
-    const resize = () => {
+    let revealFrame = 0
+    const cancelReveal = () => { cancelAnimationFrame(revealFrame); revealFrame = 0 }
+    const place = () => {
       element.style.setProperty('--picker-height', `${viewport?.height ?? innerHeight}px`)
       element.style.setProperty('--picker-top', `${viewport?.offsetTop ?? 0}px`)
     }
-    resize(); window.addEventListener('resize', resize); viewport?.addEventListener('resize', resize); viewport?.addEventListener('scroll', resize)
+    const resize = () => {
+      place(); cancelReveal()
+      const active = document.activeElement
+      if (!(active instanceof HTMLElement) || active.closest('dialog') !== element) return
+      // A short viewport moves scrolling from the list to the sheet. Reveal the
+      // same focused control after layout, without taking a newer user's focus.
+      revealFrame = requestAnimationFrame(() => {
+        revealFrame = 0
+        if (element.isConnected && element.open && element.matches(':modal') && document.activeElement === active && active.closest('dialog') === element && active.getClientRects().length) {
+          active.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' })
+        }
+      })
+    }
+    place(); window.addEventListener('resize', resize); viewport?.addEventListener('resize', resize); viewport?.addEventListener('scroll', place)
+    element.addEventListener('pointerdown', cancelReveal); element.addEventListener('wheel', cancelReveal, { passive: true })
     // Keep the mobile sheet readable before the user deliberately opens the keyboard.
     if (matchMedia('(min-width:961px)').matches) search.current?.focus()
     return () => {
-      window.removeEventListener('resize', resize); viewport?.removeEventListener('resize', resize); viewport?.removeEventListener('scroll', resize)
+      cancelReveal()
+      window.removeEventListener('resize', resize); viewport?.removeEventListener('resize', resize); viewport?.removeEventListener('scroll', place)
+      element.removeEventListener('pointerdown', cancelReveal); element.removeEventListener('wheel', cancelReveal)
       element.close()
       if (document.body.style.overflow === 'hidden') {
         if (overflow) document.body.style.setProperty('overflow', overflow, priority)

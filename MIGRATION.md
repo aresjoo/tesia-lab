@@ -17,13 +17,11 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 전달은 React4237d65 이후의 작은 사용성 교정이다. 원본9fbff의 연구 로그 읽기 위치/문서별 따라가기, 짧은 화면에서 전략 복사창의 한 scrollport fallback과 초기 초점, terminal 검색의 화면 안 도달, 공급 inbox의 빈 분류 안내를 보완한다. 정상 원본 SVG/문구/색상/동선과 Google·Apple·이메일을 보존하며 인증/프롬프트/API/package/가격/flag/실권한 변경0, 파일/storage 삭제0이다. 원본 HTML/server/Worker/root workflow와 main은 변경/병합하지 않는다.
+현재 source는 8fe33d9a1da3883ce7df89291bb680534a21c569이며 React69a1e97 이후의 작은 원본 계승 교정이다. 연구 첫 활동/nonforce 읽기와 원문 새 응답 pill, 터미널·종목 선택기 크기 변경의 실제 소유 초점, 한국어 알림·보고서·복기12키를 복원했다. 복사창 정상 fixed footer는 실제46개 반례 검사로 유지한다. 정상 원본 SVG/색상/Google·Apple·이메일·API/프롬프트/가격/package/flag/credential/DB는 변경0이고 파일/storage삭제0이다. 원본 root HTML/server/Worker/workflow/main 변경·병합0이다.
 
-최종83spec 단일 2700PASS/0FAIL/기존QA-015SKIP2·입력불변·lint/3build·독립personal(1) Opus5.5·원실패 exactPASS 결속 및 built로그인1440/390/320를 확인했다. 전수469spec·과거partial과합산하지 않는다. 원제품실패와24RAF측정하니스·시각불편으로기각한106PASS 교정은 Bugfix/Git/비공개원로그에남긴다. teth.ai 정적 UI 활성화/CAS/권위보존·공개TLS exact자산350/4문서 경로·로그인3폭 검사를 완료했다. 직전4237 정적 bundle은 복구용으로 보관한다. 정확SHA/파일수/해시는manifest/verification이소유한다.
+최종90spec 단일 2976PASS/0FAIL/기존QA-015SKIP2·실제exit0/입력불변·lint/공개/내부/service3build·개인1 Opus5.5 STATIC_UI_CODE_GO·원FAIL exact키 결속과built 로그인3폭을 확인했다. 원FAIL/harness/중단·앞2700PASS·전수469spec·병렬partial은 합산하지 않는다. private 원증거는 보존하고 공개 전달에는 해시/분류만 기록한다. 아직 직전69a1e97 운영 정적 화면을 바꾸지 않은 배포 준비 상태다. 정확한SHA/파일수/bytes는 manifest/verification이소유한다.
 
-프롬프트draft8646은 별도이며 실제 React producer 통합0이다. Google사용자callback/ACK, Apple등록/이메일SMTP, 실연구g-doc/Critic·계좌원장·거래소·주문·과금/전체서비스GO는 남는다. 파일 무충돌이나 정적 배포를 실제 서비스 성공으로 쓰지 않는다. 이전4237의7언어복구·정책CSS격리·nativeBack/shareUrl·계정동적export복원 및6deadfunction정리·1868PASS와55반례 결속은 Git에보존하며 현재결과와합산하지않는다.
-
-이전누적범위와앞실패는아래기록 및Git이력을따르며현재성공과합산하지않는다.
+프롬프트draft8646은 별도이며 actualmerge/Reactproducer통합0이다. Google사용자callback/ACK, Apple운영등록/이메일SMTP, 실연구g-doc/Critic/계정원장/거래소/주문/과금 및 모델·전체서비스GO는 남는다. 정적 배포·파일 무충돌을 실제 서비스 인증 성공으로 쓰지 않는다. 이전 누적 범위와 실패는 아래 및 Git 이력에 보존한다.
 
 이전 전달 `498dff6`의 React 출처 `061987e` 이후, 복사 호환성·터미널에서 연결 화면 왕복·연구 제목저장 실패와 FAQ 도달을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·프롬프트·가격·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
 
