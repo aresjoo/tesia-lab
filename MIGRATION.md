@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/release-closure@ef6e1d0364b34972ae399b462b8bd538cb8f5e4a` 추적 파일 전체. 코드d9e5609·남은 반례의 문서후속이며 기존 누적 UI 이식·거래소 draft PR54·OAuth0793737 초안을 보존한 운영 미배포 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-revision-closure@875f1e8daca1e5f33cac588d001078091e6a5d96` 추적 파일 전체. 코드e737eb8·문서 anchor 복원/기존전체 종료 기록 후속이며 기존 누적 UI 이식·거래소 draft PR54·OAuth0793737·직접 GET ef6e1d0 위에 controller session revision 소비 교정을 추가한 운영 미배포 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -16,6 +16,16 @@
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+
+현재 전달은 source875f1e8의 **2,215파일/25,952,769bytes**, sourceDirtyFiles0·snapshot SHA `e570b92b06bfabf99d976c6c8c58c336446c6a650388706560badf4b3f8b6c0e`다. 코드e737eb8 뒤 보고서 anchor53bytes 복원과 이전전체 종료1098bytes 기록만 추가했다. 제품·시험·빌드는 그대로다. 직전ef6e1d0 이후 제품은 `native-browser-auth.ts`의 recoverSession·acknowledge session GET 직후 기존 BRS revision equality guard2와 주석1뿐이다. 새 `native-browser-auth-revision.spec.ts`와 README/Bugfix를 함께 전달한다. Google·Apple·이메일 선택지·정상 순서·ACK/ready/transaction/key·SDK·원본문구/색상/SVG·provider flags는 유지하고 요청하지 않은 로그인 방식 제거/활성화·프롬프트 통합은 하지 않는다.
+
+원 Node6키 RED4P2F→GREEN6P, protocol-valid desktop12키 RED6P6F→GREEN12P 후, 최종2208/a4966 입력의 원로그인482+복귀72+신규 양project24를 **단일578PASS/0FAIL/0SKIP/retry0/flaky0/errors0/actual0**로 확인했다. 같은 입력 lint·공개/내부/service3build actual0·personal(1) 실제Opus5.5/독립delta 신규C0H0M0·CODE_GO다. 불일치시 CSRF/offer를 막고 명시적 matching 재확인은 기존 ACK 맥락에서 가능하다. 원554 case키는 그대로이며 상세 raw/receipt/해시는 `candidate.controllerRevisionClosure`가 소유한다. 원FAIL과 모델Low6/독립Low2·미검증 범위는 남는다.
+
+현재service1113/c2b7 compiled bundle도 별도7관측/actual0로 확인했다. 정상root Google·Apple·email 선택지를1440/390/320에 보존하고 normal/mismatch plain-return을1440/390에서 확인했다. source/public/service rows 전후 동일·외부/API mutation/브라우저오류0·전용4571종료다. 이는 합성GET UI검증이며 실제Google/Apple/SMTP 또는controllerACK/claim 성공이 아니다. 최초staged8 독립전달 검수의C/H/M0·Low링크1을 보존하고 이번doc-only후속으로 해당anchor를복원했다.
+
+**운영 HOLD 유지:** 이전0a217의534spec/14934 단일전체는14879PASS/12FAIL/기존17SKIP/serial후속26미실행/actual1로 종료했다. source/public은동일하고retry·flaky·시험밖오류0다. env seam2기대4관측의 availability10건과 query-bearing auth alias의ready기대error2건은원인/하니스·제품분류를다음조사에서판정한다. 원raw/acceptance와copy원FAIL이력을보존하며 현재578의GO로 이전체를면제하지않는다. 실Google callback/Apple등록/SMTP·React prompt producer·모델/전체서비스GO도 미완료다. teth.ai의 운영7dd·historicalProduction/deployment8객체와 서버/DB/credential/730일은 그대로다. migration commit/push는 검수 가능한 draft 공유이지 배포가 아니다. 아래ef6e1d0 문단은 이전 전달 이력이며 그 RUNNING은당시기록이다.
+
+### 이전 ef6e1d0 전달 이력
 
 현재ef6e1d0의 전체2,214파일/25,937,205bytes, sourceDirtyFiles0·snapshotd4bfa71을 전달한다. 코드d9e5609에서 남은 controller 반례를 Bugfix 보고서에 추가했으며 제품·시험·빌드는 더 바꾸지 않았다. 직전0793737 이후 제품은 `NativeServiceApp.tsx`의 직접 복귀 GET 두 곳에 기존 meta/data revision 일치 검사만 추가했다. `native-oauth-return-revision.spec.ts`와 현재 README/Bugfix를 함께 전달하며 기존26예방시험·로그인패널·generated SDK·Google/Apple/email·flags·원본문구/색상/SVG는 그대로다. 신규10키의 RED6FAIL/4controlsPASS→GREEN10PASS를 실제 장착 반례로 확인했으며 가짜 인증이나 자동 claim을 추가하지 않는다.
 

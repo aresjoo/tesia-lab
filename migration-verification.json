@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 계승·OAuth 복귀 소비와 직접 GET revision 교정 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다. 새 전체 진행중·원FAIL·합성시험·실공급자/배포GO를 구분한다.",
-  "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+  "purpose": "원본 계승·OAuth 복귀/직접 GET/인증 controller revision 교정 전체 코드 전달 초안. candidate.controllerRevisionClosure가 최신578 영향검증을 소유한다. 이전 whole와 proof는 해당 입력 범위이며 historicalProduction*와 deployment는 이전7dd066f 그대로다. 실제공급자/프롬프트/운영GO와 구분한다.",
+  "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "d4bfa7140048f87857245b30e824e4272f533b91b35222e6a0f678d25e3f4654",
+  "snapshotDigest": "e570b92b06bfabf99d976c6c8c58c336446c6a650388706560badf4b3f8b6c0e",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2214,
-    "bytes": 25937205,
+    "files": 2215,
+    "bytes": 25952769,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS exact bytes/hash",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -315,7 +315,7 @@
     "실기기/Safari/AT/OS keyboard 및 실제 OS/browser zoom 미검증",
     "실제 OAuth 외부왕복/성공 후 미전송 입력 보존·window외 scrollowner/실Safari/AT/OSzoom·원본왕복quirk·reload 기억과 시험강도 Low는 별도 검증",
     "이전469/94/523/114 후보 검증은 historicalProduction 범위이며 현재 후보의 전체PASS로 승계하지 않음",
-    "현재 후보534spec/14934 단일전체 진행 중; 이전 corrected531/14862의 copy1FAIL은 원인미확정·분리PASS로 자동면제하지 않음",
+    "이전0a217 후보534spec/14934 단일전체14879P12F/원17SKIP/serial26미실행/actual1. copy원FAIL은이번동일키PASS지만원인이력과전체FAIL을면제하지않음",
     "실Google callback/ACK·Apple운영등록·SMTP·실연구 g-doc/Critic/역할 producer·계정원장/거래소/주문/과금·3k부하/Safari/AT/OSzoom 미완료",
     "H-b 즉시focus y0출처 미확정·signed-in 합성GET은 실제외부로그인 완료아님"
   ],
@@ -466,8 +466,8 @@
     }
   },
   "pendingDeployment": {
-    "status": "HOLD_PRESERVED_FAILURES_REVISION_CODE_GO_NEW_WHOLE_RUNNING",
-    "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+    "status": "HOLD_CONTROLLER_IMPACT_GO_PRIOR_WHOLE_FAILED_ACTUAL_AUTH_UNVERIFIED",
+    "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
     "activationExecuted": false
   },
   "historicalProductionEvidenceHashes": [
@@ -713,21 +713,49 @@
     }
   ],
   "candidate": {
-    "status": "DRAFT_REVISION_CONSUMER_CODE_GO_DEPLOYMENT_HOLD_WHOLE_RUNNING",
-    "sourceBranch": "agent/web/release-closure",
-    "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
-    "captureTime": "2026-10-05T10:07:54.874Z",
+    "status": "DRAFT_AUTH_REVISION_CONSUMER_CODE_GO_DEPLOYMENT_HOLD_PRIOR_WHOLE_FAILED",
+    "sourceBranch": "agent/web/auth-revision-closure",
+    "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
+    "captureTime": "2026-10-05T11:02:23.151Z",
     "frozenInput": {
-      "files": 2207,
-      "sha256": "0a217b2d95eacd8e380459b09a6acb5a06bf2fd773ded9e563f05dcdae291d19"
+      "files": 2208,
+      "sha256": "a4966ad5d4ff0e6900025b7e74613ff3e4128e7833085ec334f8de0aee1fea3c"
     },
     "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
     "serviceBuild": {
       "files": 1113,
-      "sha256": "2aaba12d10bd62ed14b5d4f8b14ec4a1e428c546009a02b71e6e1f739bdebf9a"
+      "sha256": "c2b7f27dcd022858ed59a7750b8884e32a3e03ad4ee4fcd3dd678f845212f9b8"
+    },
+    "controllerRevisionClosure": {
+      "status": "SCOPED_CONSUMER_CODE_GO_DEPLOYMENT_HOLD",
+      "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
+      "codeCommit": "e737eb83af2cd58a12e5e6e437898f88b40ae7fc",
+      "documentationFollowup": {"changedFiles":["Bugfix_report.md"],"addedBytes":1151,"purpose":"기존README anchor53bytes복원+이전전체종료1098bytes기록", "productTestBuildInputChanged":false,"sourceStagedSecretScanActualExit":0,"findings":0},
+      "baseCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+      "productDelta": "native-browser-auth.ts recoverSession/acknowledge SDK session GET 뒤 기존 BRS revision equality guard2·주석1. SDK/순서/memory/UI/SVG/flags 변경0.",
+      "productSha256": "0b08ba0152a483357cca49207c86139a022c166c6b273997851e9fd4449c601b",
+      "newSpecSha256": "951135de28720850b2fdba2c5f547c94a7cf07f63afa66385ee6566feaf63d72",
+      "input": {"files":2208,"sha256":"a4966ad5d4ff0e6900025b7e74613ff3e4128e7833085ec334f8de0aee1fea3c"},
+      "actualNode": {"same6Keys":true,"redPass":4,"redFail":2,"redExit":1,"greenPass":6,"greenFail":0,"greenExit":0},
+      "actualDesktopRedGreen": {"same12KeysAndSpecSha":true,"redPass":6,"redFail":6,"redExit":1,"greenPass":12,"greenFail":0,"greenExit":0,"mixedFixtureFailureRunsPreserved":2},
+      "impact": {"cases":578,"specFiles":14,"passed":578,"failed":0,"skipped":0,"retry":0,"flaky":0,"outsideErrors":0,"actualExitCode":0,"durationMs":263220.365,"original554KeysExact":true,"new24BothProjects":true,"inputUnchanged":true,"acceptanceSha256":"a27d82470df678ef88c237f80aa3cf096bcef0ff2b9a4636df501df9ec6817c9"},
+      "builds": {"lint":0,"public":0,"internal":0,"service":0,"inputUnchanged":true,"publicUnchanged":true,"serviceSha256":"c2b7f27dcd022858ed59a7750b8884e32a3e03ad4ee4fcd3dd678f845212f9b8"},
+      "independentModel": {"account":"personal (1)","actualModel":"claude-opus-5-5","modelUsageMatched":true,"actualExitCode":0,"inputUnchanged":true,"verdict":"AUTH_REVISION_CONSUMER_CODE_GO","critical":0,"high":0,"medium":0,"low":6,"rawSha256":"7a65998fab16b9dc45abc4fae15ed6d9073bb54b464a4dfacec493f75b071dae"},
+      "independentDelta": {"status":"SCOPED_INDEPENDENT_DELTA_REVIEW_ACCEPTABLE","critical":0,"high":0,"medium":0,"low":2,"inputUnchanged":true,"receiptSha256":"fa73bb41ed84dea8712c6684709575807aab6ecdcd9a9104a9e6534739c02155"},
+      "sourceSecurity": {"gitleaksVersion":"8.30.1","scope":"final4 staged","actualExitCode":0,"findings":0,"ignoreRulesChanged":false},
+      "builtPresentation": {"status":"PASS_SCOPED_COMPILED_UI","actualExitCode":0,"observations":7,"failed":0,"skipped":0,"retried":0,"sourcePublicServiceRowsUnchanged":true,"port4571Closed":true,"outsideApiMutationAttempts":0,"pageErrors":0,"handoffSha256":"9ae13e72bc0eef9a43a760638e5754a6bc09cc2fcf4c45e23f6c0ce9bebc015b","rawSha256":"c2b444b5248a80d87c50fb116329ae382c4c89a6a78be596115460aabba1e3ec","actualProviderGo":false,"controllerAckGo":false,"claimGo":false,"deploymentGo":false},
+      "serviceSecurity": {"gitleaksVersion":"8.30.1","scope":"dist-service c2b7","actualExitCode":0,"findings":0},
+      "deliveryReview": {"status":"SCOPED_STAGED_DELIVERY_REVIEW_ACCEPTABLE_WITH_LOW_DOC_LINK","reviewedSourceCommit":"e737eb83af2cd58a12e5e6e437898f88b40ae7fc","reviewedSnapshot":"c118dd2f1facafce692e24447261f74ccab654f45a009ea250cc59754c58ff90","stagedFiles":8,"critical":0,"high":0,"medium":0,"low":1,"historical8Exact":true,"receiptSha256":"bab43a4f28656034ff7786025ab03fcd2a93a4d0d6d7c3daf942958b46dc2d85","lowDocAnchorFixedInSource":"aa0954f75e8a85a1a394227ef1c1ae9210127de3","scope":"최초8파일 전달과 원Low를보존. 이후53byte MD/source metadata 후속은제품/test/build 인수와별개."},
+      "handoffSha256": "e75837e93aa674ef23f27dcdbd6f207ec810250fff52adf3f5b14bf80dc15ecd",
+      "remaining": ["start/restart/email equality 범위밖", "신규 mismatch matrix의 ACK fullheader/claimIntent·null/역방향meta 추가시험 Low", "fixture2030만료/route assertion/오류코드 정밀도 Low", "mounted host 채택·실Google/Apple/SMTP 미검증", "Reactprompt producer 미통합", "이전14934 whole12FAIL/serial26미실행·새input전체PASS로승계0·원copy이력보존"],
+      "existingHistoricalProofScope": "currentRevisionConsumer는 sourceef6/0a217 host 직접GET 이력이고 remainingAuthScopeProbe의원FAIL은보존. 해당복구/ACK 소비경로만 이번a4966 delta로교정했으며 전체auth 완료아님.",
+      "actualProviderGo": false,
+      "deploymentGo": false,
+      "serviceGo": false,
+      "activationExecuted": false
     },
     "currentRevisionConsumer": {
-      "status": "SCOPED_CODE_GO_WHOLE_RUNNING_DEPLOYMENT_HOLD",
+      "status": "SCOPED_CODE_GO_WHOLE_FAILED_DEPLOYMENT_HOLD",
       "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
       "codeCommit": "d9e56099ee537f7f5174089bbcfd82ebaa461a48",
       "documentationOnlyFollowup": {
@@ -1014,7 +1042,7 @@
         "failedWholeAutomaticallyWaived": false
       },
       "whole": {
-        "status": "RUNNING_NOT_PASSED",
+        "status": "FAILED_WITH_UNEXECUTED_SERIAL_CASES",
         "specs": 534,
         "discoveredCases": 14934,
         "expectedInheritedCaseKeys": 14862,
@@ -1028,7 +1056,21 @@
         "originalConfigTimeoutRetrySkipUnchanged": true,
         "singleInvocation": true,
         "helperSha256": "297b446620bb96ffb88ad8aa395c500bddf0562a475e6a681f6eb7cb05fab636",
-        "actualExitCode": null,
+        "actualExitCode": 1,
+        "actualPassed": 14879,
+        "actualFailed": 12,
+        "actualOriginalSkipped": 17,
+        "actualUnexecutedSerial": 26,
+        "rawStatsSkipped": 43,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "inputPublicUnchanged": true,
+        "durationMs": 4913330.872,
+        "rawSha256": "f9aae664aaf3cb5b06ef79c45c26505634d3daf0793b93e560e4e0dfe179d189",
+        "receiptSha256": "b7d196a6eab7ed0819635dfff33a97dd8beafc72b0aa322e0b897e5eba1f6d43",
+        "acceptanceSha256": "c4487bca3410e0a39967d60eddce0807c3f4d4584b5e0d1c3e4a3cb39db8b8e4",
+        "failureScope": "availability env seam reads2기대4관측10건·service-entry query-bearing auth alias READY기대ERROR2건. 원인/제품·하니스분류다음조사, 원FAIL보존. copy원FAIL이번동일키PASS는전체GO아님.",
         "originalFailurePreserved": true,
         "deploymentGo": false
       },
@@ -1166,16 +1208,17 @@
         "src/components/ClientMainExperience.tsx",
         "src/internal-poc/ClientServiceExperience.tsx",
         "src/internal-poc/NativeServiceApp.tsx",
-        "src/internal-poc/NativeLoginPanel.tsx"
+        "src/internal-poc/NativeLoginPanel.tsx",
+        "src/internal-poc/native-browser-auth.ts"
       ],
       "existingTestsChanged": 8,
-      "newTests": 7,
+      "newTests": 8,
       "documents": [
         "README.md",
         "DESIGN.md",
         "Bugfix_report.md"
       ],
-      "scope": "원본 표시·클릭·미전송 입력·OAuth 복귀 소비 교정 보존. 직전0793737 이후 제품은 host 직접 복귀 GET 두 곳의 기존 meta/data revision invariant만 추가, 기존26/패널/SDK/API/provider/flags/프롬프트/DB/색상/SVG 변경0."
+      "scope": "원본 표시·클릭·미전송 입력·OAuth 복귀 소비 교정 보존. 0793737 이후 host 직접 복귀 GET 두 곳과 controller recoverSession/acknowledge 두 곳에 기존 meta/data revision invariant 추가. 기존시험/패널/SDK/API/provider/flags/프롬프트/DB/색상/SVG 불변, source875f1e8는 과거README anchor53bytes+이전전체종료1098bytes 기록만."
     },
     "impact": {
       "status": "FAILED",

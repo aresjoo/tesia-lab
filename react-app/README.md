@@ -1,5 +1,7 @@
 # TETH Web
 
+현재 후보는 `agent/web/auth-revision-closure`다. sourceef6e1d0 위에서 인증 controller의 복구·ACK 후 session GET 두 곳에 기존 revision 일치 검사만 추가했다. Google·Apple·이메일과 원본 화면·문구·SVG·SDK·flags를 유지한다. 동일 Node6키·desktop12키 RED→GREEN 뒤, 최종2208/a4966 입력의 양project578 단일 영향 회귀·lint/3build actual0를 인수했다. personal(1) 실제Opus5.5와 별도 readonly delta는 이번 최소 수정의 확정C0H0M0·CODE_GO이며 Low와 원FAIL을 보존한다. 실제 공급자 로그인·프롬프트 React 연동·전체서비스·운영 승인은 미완료이며 teth.ai 운영7dd는 교체하지 않았다. [현재 보고서](Bugfix_report.md#현재-인증-controller-revision-교정)가 새 후보를 소유한다. 아래 수치는 이전 입력의 인수 이력이다.
+
 현재 후속은 `agent/web/release-closure`의 **운영 미배포 인증 소비 후보**다. 전달된 `0793737`의 OAuth 복귀·입력 보존 교정 위에, 복귀 화면의 직접 세션 GET 두 곳에서 기존 meta/data revision 일치 검사를 추가했다. Google·Apple·이메일 선택지와 원본 UI·SDK·가용성 flag는 유지한다. 일반 방문 bootstrap은 기존대로 동작하며, 정확한 일반 `/auth/complete`에서 검증된401을 받으면 새 익명 세션을 만들지 않고 result/명시ACK/인증 세션·CSRF 확인만 가능한 복구 표시를 연다. 미확정 기록·logout/email 복구 우선순위를 보존하며 claim/전략 승인/주문을 자동 실행하지 않는다.
 
 최종 동결2207파일/0a217 입력에서 신규 revision 반례는 동일10키 RED6FAIL/4controlsPASS→GREEN10PASS다. 양project 복귀72개·기존 로그인482개·원 copy-management30개는 각각 actual0/전부PASS/skip·retry·flaky·시험밖오류0이며 lint·공개/내부/service3build actual0다. personal(1) 실제 Opus5.5와 별도 readonly delta 검수는 이 소비 교정 범위에서 신규 확정C/H/M0·CODE_GO이며 전체 승인과 다르다. 같은 입력의 전체534spec/14934개는 진행 중이다. 이전 corrected 전체14844PASS/1FAIL/기존17SKIP/actual1 및 모바일 복사전략 종료 확인의 미확정 원인을 보존한다. 새 전체·실Google 계정/Apple 등록/SMTP·React prompt producer·운영/서비스GO를 주장하지 않는다. 상세 원FAIL·결속·잔여·전달/배포 상태는 [현재 보고서](Bugfix_report.md#현재-운영-전-잔여-결함-교정)와 migration 영수증을 따른다. 아래 OAuth/auth-entry 및 배포 수치는 이전 입력의 이력이다.

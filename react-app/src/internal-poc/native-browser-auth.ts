@@ -176,6 +176,8 @@ export function createNativeBrowserAuth() {
       // body was lost. This proves only the present session, never provider or
       // handoff success. The existing claim endpoint remains the authority.
       const current = await session.current()
+      // Apply the existing BRS invariant before consuming a session as proof.
+      if (current.body.meta.resourceRevision !== current.body.data.revision) fail()
       if (current.body.data.state !== 'AUTHENTICATED') fail('AUTHENTICATION_REQUIRED')
       const csrf = await session.csrf()
       const saved = initiatingPrecondition ?? readClaimPrecondition()
@@ -226,6 +228,7 @@ export function createNativeBrowserAuth() {
         || initiatingSessionId !== null && data.handoffReservation.initiatingSessionId !== initiatingSessionId) fail('AUTH_BINDING_CONFLICT')
       // Ack is not session proof. Never bootstrap/create another anonymous session here.
       const current = await session.current()
+      if (current.body.meta.resourceRevision !== current.body.data.revision) fail()
       if (current.body.data.state !== 'AUTHENTICATED' || current.body.data.sessionId !== data.session.sessionId || typeof current.etag !== 'string') fail('AUTH_BINDING_CONFLICT')
       const csrf = await session.csrf()
       const saved = initiatingPrecondition ?? readClaimPrecondition()

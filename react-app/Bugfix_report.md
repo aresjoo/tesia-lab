@@ -1,6 +1,19 @@
 # TETH 버그 수정·검수 보고서
 
-## 현재 운영 전 잔여 결함 교정
+## 현재 인증 controller revision 교정
+
+- **이전 동결 전체의 최신 종료:** sourceef6/0a217의534spec·14934개는 **14879PASS/12FAIL/기존17SKIP/serial 후속26미실행/actual1**(4913330.872ms)로 종료했다. raw stats.skipped43은 원skip17+미실행26이며 새 의도skip를 추가한 것이 아니다. retry·flaky·시험밖오류0, source/public 전후 동일이다. native-service-auth-availability10건은 module seam의 env read2기대/실제4에서 실패했고 service-entry의 query-bearing auth alias2건은 ready기대/error관측으로 실패했다. 원JSON SHA `f9aae664aaf3cb5b06ef79c45c26505634d3daf0793b93e560e4e0dfe179d189`, acceptance SHA `c4487bca3410e0a39967d60eddce0807c3f4d4584b5e0d1c3e4a3cb39db8b8e4`를 보존하고 원인·하니스/제품 분류는 다음 별도 조사에서 판정한다. 이전 모바일copy 원FAIL은 이번 동일키에서 actualPASS/retry0지만 인과 미확정 이력과 전체FAIL을 면제하지 않는다. 이번controller578 영향GO를 이 전체의PASS나실제서비스/배포GO로 확대하지 않는다. 아래 이력의 RUNNING은 실행 당시 기록이다.
+
+- **후보·범위:** `agent/web/auth-revision-closure`는 전달된 source `ef6e1d0364b34972ae399b462b8bd538cb8f5e4a`에서 분리했다. `native-browser-auth.ts`의 `recoverSession`과 `acknowledge`가 SDK session GET 후 기존 BRS의 meta/data revision 일치 검사를 적용하지 않던 반례만 교정했다. 두 guard와 주석1 외 제품 변경은 없다. 원본 UI·문구·SVG·Google/Apple/이메일·SDK·flags·프롬프트·서버·DB·730일은 그대로다.
+- **실제 반례와 교정:** 동일 Node6키 RED4PASS/2FAIL→GREEN6PASS다. protocol-valid 브라우저 desktop 동일12키 RED6PASS/6FAIL→GREEN12PASS이며 새 spec SHA `951135de28720850b2fdba2c5f547c94a7cf07f63afa66385ee6566feaf63d72`는 동일하다. 불일치 응답에서는 CSRF 조회와 offer를 차단하고, 뒤 명시적인 matching 재확인은 같은 controller에서 가능하다. 정상 ACK는 추가 POST하지 않고, ACK 응답 유실은 같은 key로만 재시도한다. 자동 START·claim은 없다.
+- **최종 영향 인수:** 신규12개는 provider10+BRS2다. ROOT는 기존 로그인482+복귀72+신규 양project24를 **단일578PASS/0FAIL/0SKIP/retry0/flaky0/시험밖오류0/actual0(263220.365ms)**로 실행했다. 원554개의 file/title/project 키는 그대로다. 최종 nonMD2208 SHA `a4966ad5d4ff0e6900025b7e74613ff3e4128e7833085ec334f8de0aee1fea3c`, 제품 SHA `0b08ba0152a483357cca49207c86139a022c166c6b273997851e9fd4449c601b`는 전후 동일하며 full lint·공개/내부/service3build도 actual0다. 공개1132/a8a9는 이전과 같고 service1113 SHA `c2b7f27dcd022858ed59a7750b8884e32a3e03ad4ee4fcd3dd678f845212f9b8`다. 결속 acceptance SHA `a27d82470df678ef88c237f80aa3cf096bcef0ff2b9a4636df501df9ec6817c9`는 이 영향 범위에 한정한다.
+- **독립 검수:** personal(1) 실제 `claude-opus-5-5` high/tools0/modelUsage 일치·actual0·입력불변의 **AUTH_REVISION_CONSUMER_CODE_GO/확정C0H0M0**다. raw SHA `7a65998fab16b9dc45abc4fae15ed6d9073bb54b464a4dfacec493f75b071dae`를 보존한다. 별도 readonly delta도 신규C0H0M0이며 receipt SHA `fa73bb41ed84dea8712c6684709575807aab6ecdcd9a9104a9e6534739c02155`다. model Low6와 독립 Low2는 분류를 합산하지 않고 유지한다. null/역방향 meta 반례·신규 matrix의 ACK 전체header/claimIntent assertion·fixture2030 만료·route assertion/오류코드 정밀도·mounted host 채택 범위는 잔여다. 기존 operation/state/정상로그인 회귀가 확인된 이번 최소 consumer 수정만 인수하며 모델 판단이 실제 공급자나 운영 승인을 대체하지 않는다.
+- **실패 보존·권한:** 초기 browser2PASS/10FAIL과 fixture교정4PASS/8FAIL은 CSRF ETag·request ID·result TTL 하니스 오류가 섞여 있어 제품 RED로 합산하지 않는다. protocol-valid 원FAIL·이전 copy-management 전체1FAIL 및 모든 Low·가설은 보존한다. ACK 시험은 guarded 합성 HTTP이며 실제 provider/cookie 로그인 증명이 아니다. 인계 SHA `e75837e93aa674ef23f27dcdbd6f207ec810250fff52adf3f5b14bf80dc15ecd`다.
+- **현재 잔여:** start/restart/email 경로의 revision 비교, 실제 Google callback/Apple 등록/SMTP, React prompt producer 연결은 이번 변경으로 완료되지 않았다. 이전source0a217의 단일전체14934는 별도 동결 실행이며 새 source의 전체PASS로 승계하지 않는다. teth.ai는 운영7dd를 유지하고 새 후보의 upload/activate·운영 GO는 없다. 제품 writer 두 파일은 반환했고 ROOT가 문서·최종 인수·draft 전달을 소유한다.
+
+<a id="현재-운영-전-잔여-결함-교정"></a>
+
+## 이전 운영 전 잔여 결함 교정 — source ef6e1d0 인수 이력
 
 - **후보:** `agent/web/release-closure`는 전달된 source `079373784ef80c4a434f8b34f42b4194ff8b27a2`에서 분리했다. 이전 source와 migration `d8af6365f4ca1850f3cb4d3cf5ad700867374983`의 입력·검수·전달은 보존한다. teth.ai는 운영7dd를 유지하며 새 후보의 완료/배포를 주장하지 않는다.
 - **조사 중:** 이전 단일 전체의 모바일 copy-management 종료 확인 1FAIL을 같은 원spec/조건으로 재현한다. 인증 복귀의 직접 SDK 세션 조회와 BRS의 meta/data revision 일치 검사를 실제 장착 반례로 비교한다. 원본의 홈·채팅·연구·로그인·설정·AI 트레이딩에서 숨김/누락을 별도 읽기 전용으로 점검한다.
