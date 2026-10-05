@@ -26,6 +26,9 @@ test('원본P0: 템플릿은 해석에만 쓰고 입력 원문을 말풍선·편
   const templateWords = session.turns[0].requestText.replace('. ' + raw, '')
   expect(raw).not.toContain(templateWords)
   await page.getByRole('searchbox', { name: '연구 기록 검색', exact: true }).fill(templateWords)
+  // 원본 final gHistText는 해석 명령이 아닌 제목·가시 대화만 검색합니다.
+  await expect(page.locator('.g-hist-row')).toHaveCount(0)
+  await page.getByRole('searchbox', { name: '연구 기록 검색', exact: true }).fill('하락 반등')
   await expect(page.locator('.g-hist-row')).toHaveCount(1)
   await page.evaluate(() => {
     const value = JSON.parse(sessionStorage.getItem('teth-client-experience')!)

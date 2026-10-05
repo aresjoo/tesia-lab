@@ -1,6 +1,6 @@
 # TETH AI Design System
 
-이번 후속은8fe33d9에서 긴 연구 문서의 첫 질문 따라가기·새 응답 원본 진입 모션·동일 활성행의 글자 확대/축소 후 선택기 배치를 최소 교정한다. 같은 입력94spec/3030개 단일 **3028PASS/0FAIL/기존QA-015SKIP2/flaky0/retry0/시험밖오류0·actual0(954.822초)**다. 같은 입력 lint/공개·내부·service3build와 built Google·Apple·이메일1440/390/320, personal(1) 실제 Opus5.5 STATIC_UI_CODE_GO/입력불변을 확인했다. 인증/API/프롬프트/가격/패키지/flags/색상/SVG는 변경0이다. 실제 공급 인증/전체서비스 GO가 아니며 전달·정적 배포는 migration 영수증을 따른다. [이번 실제 반례](Bugfix_report.md#연구-첫-질문원본-모션글자-축소-후-선택기-복원)를 따른다. 아래90spec은 이전8fe33d9 인수 이력이며 새 결과와 합산하지 않는다.
+이번 후속은 bca5a694의 원본9fbff821 정상 계승을 유지하면서 가시 연구 기록 검색·guest 로그인/무료 시작·Native desktop sticky top0·desktop globe(prop2/CSS1)만 최소 복원했다. 같은 입력 114spec/3406개 단일 **3404 PASS / 0 FAIL / 기존 QA-015 SKIP2 / flaky·retry·시험 밖 오류0 / actual0 (1314.087초)**다. 같은 입력 lint·공개/내부/service3build, built Google·Apple·이메일3폭, fresh readonly독립4, personal(1) 실제 Opus5.5 STATIC_UI_CODE_GO/입력불변을 확인했다. 원본 mobile globe 숨김·Native natural60px flow/header64/mobiletop60·기존 source focused return·modal/auth 정책을 유지한다. 별도 baseline523spec/14622개의14595P10F17skip/actual1과 중간112의3351P1GC하니스FAIL2skip/actual1은 보존하고 새 후보의 전수PASS로 승계하거나 합산하지 않는다. auth/API/prompt/flags/가격/package/lock/색상/SVG/DB 변경0, 실제 외부 로그인·모델·전체서비스GO 미완료다. [이번 반례·범위](Bugfix_report.md#카탈로그-가시-검색게스트-인증데스크톱-헤더언어-선택-복원)와 migration 단일 영수증이 전달 준비/실제 정적 배포 상태를 구분한다. 아래3028PASS는 직전 bca 이력이며 새 결과와 합산하지 않는다.
 
 이번 교정은69a1e97의 정상 디자인을 유지하면서 초기 연구 따라가기·읽기 중 질문의 nonforce 동선·짧은 선택기 활성 초점·한국어 원문12키를 복원한다. 원본 `↓ 새 응답 보기`는 읽기 위치를 지키고 클릭으로만 하단 따라가기를 재개하는 조건부 동작이다. 인증/API/프롬프트/가격/색상/SVG 변경0이다. 같은 입력90spec의2976PASS/0FAIL/기존skip2·lint/3build·개인1 Opus5.5 STATIC_UI_CODE_GO로 정적 코드를 인수했다. 아래83spec은 이전 이력이며 실제 전달/배포·미검증 조합은 Bugfix 최상단과migration 영수증을 따른다.
 
@@ -1245,6 +1245,9 @@ backdrop-filter: blur(24px) saturate(125%);
 - 백테스트 결과만으로 실거래를 바로 활성화하는 버튼
 
 ## 21. Decision Log
+
+- 2026-10-05 `accepted / catalogue visible search and guest parity`: 원본9fbff 정상 가시 질문/답변 검색·guest 로그인/무료 시작·Native desktop>=861 sticky0·desktop globe(prop2/CSS1)을 실제 반례로 최소 복원한다. Native naturalbefore60/header64/mobiletop60·source focused utility·original mobileglobe hidden·7언어·auth/owner/modal정책·API/prompt/flags/가격/package/권한·색상/SVG는 보존한다. original/Home pointer→BODY6 및 guest없는 history메뉴하니스로 신규시험 기대만 교정하고 modal정책0. 새114 단일3404PASS/skip2·동일입력lint/3build·built로그인3폭·fresh독립4·Opus5.5 STATIC_UI_CODE_GO만 승인한다. baseline523의10FAIL17skip·중간112의GCFAIL·globe초기20FAIL·negative의도FAIL4·원HOLD/PNG/trace는 보존하고 합산0. H-b oldfocus원인미확정·Low6·실로그인/provider/모델/전체서비스NO_GO 유지. 정확전달/활성화는 migration-verification.json 단일정본을 따른다.
+
 
 - 2026-10-05 `accepted / original reading and resized selection intent`: 첫 활동 문서의 미저장 따라가기와 읽기 중 질문의 원본 nonforce 동선을 복원한다. 새 응답 버튼은 원본 조건에서만 표시하고 사용자 클릭으로 강제 재개하며 현재 composer 위8px에 배치한다. 터미널/종목 선택기의 화면 크기 변경은 기존 활성 컨트롤만 최소 노출하며 일반 스크롤·하위 dialog·새 초점은 보존한다. 한국어12키는 원문으로 되돌리고 값/다른 언어/권한은 그대로다. private 검수 artifact만 Git에서 제외하고 원증거를 보존한다. 새90spec2976PASS/기존skip2·lint/3build·원보고서64발생/54고유 및하니스18의 exactPASS와L4원trace4 별도결속·독립Opus5.5 GO를 인수했다. 첫HOLD의 M1은 원본 entry/왕복 실제1440/390과 함수 호출로 반증했고 제품을 임의 grew-only로 바꾸지 않았다. 이전83spec·partial·중단과 합산하지 않으며 전달/정적 배포는migration 영수증, 실제서비스 GO는 PM 정본을 따른다.
 

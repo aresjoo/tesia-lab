@@ -17,11 +17,11 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 source는 bca5a694d9f77d8afa0e703e364620e89ff5db05이며 React8fe33d9 이후 작은 원본 계승 교정이다. 긴 연구 문서 첫 질문의 nonforce 의도와 원문 새 응답250ms 모션, 같은 활성행의 글자축소 후 선택기 배치·사용자wheel을 보존하고 ResizeObserver 다음frame으로 숨은오류9를 교정했다. caller0 RESEARCH_PAGES export6줄만 제거했으며 실제메뉴/type/date/search/ranking/lazyAnalysis/CSS/storage·원본SVG/색상·Google/Apple/이메일·auth/API/프롬프트/가격/package/flags/DB는 그대로다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
+현재 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
 
-최종94spec 단일 3028PASS/0FAIL/기존QA-015SKIP2·actual0/입력불변·lint/공개/내부/service3build·personal(1) Opus5.5 STATIC_UI_CODE_GO·built로그인3폭을 확인했다. 확정제품26+clip6/harness20·이전82키+trace4를 새단일에 exact결속했으며 원FAIL/HOLD/observer9/하니스/부분실행은 보존하고 합산하지 않는다. teth.ai 정적 UI를 기존rawHTML CAS·updater/nginx/backend권위 확인 뒤 활성화하고 공개350자산/4문서 exact bytes·로그인3폭을 확인했다. 직전8fe 정적 bundle은 복구용으로 보관한다. 정확SHA/파일수/bytes는 manifest/verification을 따른다.
+새114spec 단일 3404PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험밖오류0·actual0·동결입력불변, lint/3build·built로그인3폭·fresh독립4·personal(1) Opus5.5 STATIC_UI_CODE_GO를 결속한다. baseline523/14622의14595P10F17skip/actual1과 중간112의3351P1GC하니스FAIL2skip/actual1, globe초기20P20F·원HOLD/PNG/trace는 보존하고 합산하지 않는다. auth28·negative의도tripwireFAIL4는 Chromium HTTP guard 범위이며 실제OAuth/OS-egress 승인이 아니다. 이번 후보는 검증된 정적 전달 준비 상태이며 직전 운영UI를 교체했다고 주장하지 않는다. 정확한 SHA·bytes·분모·서비스 경계는 migration-verification.json 단일정본을 따른다.
 
-프롬프트draft8646은 별도·실제merge/Reactproducer통합0이며 사용성4FAIL은 그대로다. 실Googlecallback/ACK·Apple등록/SMTP·실연구/계정원장/거래소/주문/과금/모델·전체서비스GO는 남는다. 로그인 presentation 합성GET 검사와 파일 무충돌을 실제 로그인 완료로 쓰지 않는다. 원본/실험/실기기 및 Low 경계는 source Bugfix와PM정본을 따른다. 이전 인수/실패는 Git 이력과 아래에 보존한다.
+prompt8646 별도draft·actualmerge/Reactproducer통합0·사용성4FAIL/MODEL_QUALITY_NO_GO/SERVICE_NO_GO를 유지한다. 실제Google callback/ACK·Apple운영등록·SMTP·실연구/계정/거래소/주문/과금·실기기/부하·전체서비스GO는 미완료다. H-b 즉시focus 원인은 미확정이며 추측 교정0이다. 이전 인수/실패는 아래와 Git이력에 보존한다.
 
 이전 전달 `498dff6`의 React 출처 `061987e` 이후, 복사 호환성·터미널에서 연결 화면 왕복·연구 제목저장 실패와 FAQ 도달을 교정한 후속 변경이다. 정확한 출처 SHA·파일 수·전체 해시는 manifest와 검증 JSON이 소유한다. 이전 연구 메뉴/삭제 캐시·푸터·거래소 아이콘·필터·문서 복귀·catalogue 전체 근거와 Google·Apple·이메일 공존·거래소 연결 코드/SDK/시험은 유지한다. 패키지·lockfile·인증 권한·프롬프트·가격·기존 클라이언트 HTML·루트 배포 workflow는 변경하지 않았다. 자동 상시 동기화가 아니라 이번 요청에 따른 명시적 후속 전달이다.
 

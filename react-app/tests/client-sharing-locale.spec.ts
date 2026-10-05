@@ -36,17 +36,31 @@ test('확정사전33키7언어는한국어원문·0·사용자치환문자와기
 })
 
 async function language(page: Page, value: string) {
-  // Keep the exact Promise awaited by CDP alive until Node receives its result.
-  // The real preference setter and every UI assertion remain unchanged.
+  // Do not return the dynamically imported Promise through CDP: its remote
+  // serialization can fail with "Resulting promise was garbage collected".
+  // Observe completion (or rejection) separately; still call the real setter.
   try {
     await page.evaluate(value => {
       const path = '/src/client-preferences.ts'
-      const pending = import(path).then(({ setClientPreference }) => setClientPreference('language', value))
+      Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'pending' })
+      const pending = import(path).then(({ setClientPreference }) => {
+        setClientPreference('language', value)
+        Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'done' })
+      }).catch(error => {
+        Reflect.set(window, '__tethSharingLocaleSetupState', { status: 'error', message: String(error) })
+      })
       Reflect.set(window, '__tethSharingLocaleSetupPromise', pending)
-      return pending
     }, value)
+    await page.waitForFunction(() => {
+      const state = Reflect.get(window, '__tethSharingLocaleSetupState')
+      return state?.status === 'done' || state?.status === 'error'
+    })
+    expect(await page.evaluate(() => Reflect.get(window, '__tethSharingLocaleSetupState'))).toEqual({ status: 'done' })
   } finally {
-    await page.evaluate(() => { Reflect.deleteProperty(window, '__tethSharingLocaleSetupPromise') })
+    await page.evaluate(() => {
+      Reflect.deleteProperty(window, '__tethSharingLocaleSetupPromise')
+      Reflect.deleteProperty(window, '__tethSharingLocaleSetupState')
+    })
   }
   await expect(page.locator('html')).toHaveAttribute('lang', value)
 }

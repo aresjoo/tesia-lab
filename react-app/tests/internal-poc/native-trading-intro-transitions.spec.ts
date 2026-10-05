@@ -96,6 +96,17 @@ for (const width of [390, 860, 861, 1440]) {
     const evidence = await mount(page, baseURL, '/#/trade')
     const shell = page.locator('.client-service-app')
     await wheelTo(page, page.locator('.txh-ai-col h3').first())
+    if (width >= 861) {
+      // 원본 9fbff821의 desktop 인증 행은 page-owned absolute입니다.
+      // 실제 wheel 원본/서비스 대조에서도 본문과 함께 화면 밖으로 이동합니다.
+      await expect(page.locator('.client-auth-nav .client-login')).not.toBeInViewport()
+      await expect(page.locator('.client-auth-nav .client-signup')).not.toBeInViewport()
+      await info.attach('source-page-owned-auth', { contentType: 'application/json', body: JSON.stringify({
+        source: 'synthetic-session-real-service-renderer', shellScroll: await shell.evaluate(element => element.scrollTop),
+        login: await page.locator('.client-login').boundingBox(), signup: await page.locator('.client-signup').boundingBox(),
+      }) })
+      await wheelTo(page, page.locator('.txh-hero h1'))
+    }
     await hit(page.locator('.client-auth-nav .client-login'))
     await hit(page.locator('.client-auth-nav .client-signup'))
     const login = await page.locator('.client-login').boundingBox(), signup = await page.locator('.client-signup').boundingBox()

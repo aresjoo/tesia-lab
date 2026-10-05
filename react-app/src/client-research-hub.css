@@ -57,6 +57,30 @@
 .client-research-hub { height: 100dvh; min-width: 0; overflow-y: auto; background: var(--client-0); color: var(--client-text); }
 .research-storage-error { max-width: min(820px, calc(100% - 32px)); margin: 12px auto; padding: 12px 16px; border: 1px solid var(--client-line-2); border-radius: 10px; background: var(--client-2); color: var(--client-text); font-size: 13px; line-height: 1.6; word-break: keep-all; overflow-wrap: anywhere; }
 .has-research-hub :is(.client-auth-nav,.client-globe,.client-app-banner) { display: none; }
+/* Final 9fb guest catalogue keeps its existing top auth controls. Restore only
+   the source catalogue list/detail (including the real service public host),
+   not other research/account routes or the hidden app banner. */
+.tesia-shell.client-source-app.has-site-footer:has(.client-sharing-hub :is(.strategy-filters[data-catalogue-list],.catalogue-source-header,[data-public-catalogue])) .client-auth-nav { display:flex; }
+/* Original detail has no second route bar in the auth row. Keep the existing
+   keyboard return utility, as the catalogue list already does. */
+.tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.catalogue-source-header) > .hub-header { position:absolute; width:1px; height:1px; min-height:0; padding:0; margin:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.catalogue-source-header) > .hub-header:has(button:focus) { position:fixed; top:60px; left:72px; right:64px; width:auto; height:auto; min-height:44px; padding:8px 16px; clip-path:none; white-space:normal; z-index:10; }
+/* Unsupplied Native detail intentionally keeps its visible generic header
+   and 64px flow. Reserve only the restored guest auth row above that header. */
+.tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has([data-public-catalogue] > .client-shared-detail)::before { content:''; display:block; height:60px; }
+.tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has([data-public-catalogue] > .client-shared-detail) > .hub-header { top:60px; }
+@media (max-width:860px) {
+  /* bannerOpen belongs to the home; that banner stays hidden in the catalogue. */
+  .tesia-shell.client-source-app.has-site-footer:has(.client-sharing-hub :is(.strategy-filters[data-catalogue-list],.catalogue-source-header,[data-public-catalogue])) .client-auth-nav { top:8px; }
+  .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.catalogue-source-header) > .hub-header:has(button:focus) { left:18px; right:18px; }
+  .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has(.strategy-filters[data-catalogue-list]) > .hub-header:has(button:focus) { top:60px; }
+}
+@media (min-width:861px) {
+  /* Desktop auth scrolls with the page; the existing Native header then pins
+     at zero. Its initial 60px auth reserve and 64px natural flow stay intact. */
+  .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav) .client-sharing-hub:has([data-public-catalogue] > .client-shared-detail) > .hub-header { top:0; }
+  .tesia-shell.client-source-app.has-site-footer:has(.client-auth-nav):has(.client-sharing-hub :is(.strategy-filters[data-catalogue-list],.catalogue-source-header,[data-public-catalogue])) .client-globe { display:flex; }
+}
 .hub-header { display: flex; align-items: center; gap: 16px; min-height: 44px; padding: 0 18px; }
 .hub-header h1 { font-size: 14px; font-weight: 500; line-height: 1.5; margin: 0; }
 .hub-header > button { margin-left: auto; font-size: 12px; color: var(--client-text-2); padding: 8px; border: 0; border-radius: 6px; background: transparent; cursor: pointer; }

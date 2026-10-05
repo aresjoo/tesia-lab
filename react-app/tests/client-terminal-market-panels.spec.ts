@@ -3,6 +3,15 @@ import { boundTerminalMarket, marketPeriods, validMarketMetric } from '../src/cl
 import { terminalMarketCopy, terminalMarketText } from '../src/client-terminal-market-copy'
 import { terminalMarketFixture } from '../src/dev/terminal-market-fixture'
 
+const isExternalMarketRequest = (address: string) => /binance|coingecko|tradingview\.com/.test(new URL(address).hostname)
+
+test('외부 시장 요청 검사는 로컬 거래소 아이콘 경로를 외부 공급자로 오인하지 않는다', () => {
+  expect(isExternalMarketRequest('http://127.0.0.1:4490/client-broker-assets/app-binance.png')).toBe(false)
+  for (const address of ['https://api.binance.com/api/v3/klines', 'https://api.coingecko.com/api/v3/coins', 'https://www.tradingview.com/chart']) {
+    expect(isExternalMarketRequest(address)).toBe(true)
+  }
+})
+
 test('시장 자료는 전략·종목·시장·거래소가 모두 일치할 때만 표시한다', () => {
   const binding = terminalMarketFixture.binding
   const strategy = { ...binding, name: 'test', version: 'v1', status: 'ready' as const, exchange: { id: binding.exchangeId, name: 'test', color: '#333' }, capitalLabel: '—' }
@@ -24,7 +33,7 @@ for (const width of [320, 844, 1440]) test(`${width}px 원본 시장3탭·9기�
   await page.setViewportSize({ width, height: 1000 })
   const errors: string[] = [], requests: string[] = []
   page.on('pageerror', error => errors.push(error.message))
-  page.on('request', request => { if (/binance|coingecko|tradingview\.com/.test(request.url())) requests.push(request.url()) })
+  page.on('request', request => { if (isExternalMarketRequest(request.url())) requests.push(request.url()) })
   await page.goto('/account-terminal-preview.html?market=1')
   const canvas = page.locator('canvas').first()
   await expect(canvas).toBeVisible()

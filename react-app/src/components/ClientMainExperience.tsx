@@ -510,7 +510,9 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
   }, [publicConversationVisible, profile, language])
   const records: ResearchRecord[] = state.sessions.map(s => {
     const running = registrations.entries.find(item => item.sessionId === s.id && item.record.status === 'live')?.record
-    return { id: s.id, title: s.title, market: s.pair, pinned: s.pinned === true, searchText: [s.idea, ...s.turns.flatMap(turn => [turn.question, turn.requestText ?? '', turn.answer])].join(' '), status: running?.environment === 'paper' ? 'Paper 실행 중' : s.researchStatus, live: Boolean(running), updatedAt: s.updatedAt, snapshot: s }
+    // 홈 템플릿의 해석 전용 idea/requestText 대신 표시된 질문·답변만 검색합니다.
+    // 위임 intake는 idea를 사용자 문구로 실제 표시하므로 그대로 유지합니다.
+    return { id: s.id, title: s.title, market: s.pair, pinned: s.pinned === true, searchText: [s.workspace === 'delegation' ? s.idea : '', ...s.turns.flatMap(turn => [turn.question, turn.answer])].join(' '), status: running?.environment === 'paper' ? 'Paper 실행 중' : s.researchStatus, live: Boolean(running), updatedAt: s.updatedAt, snapshot: s }
   })
   useEffect(() => {
     if (!profile || !trading && !accountPage) return
@@ -1062,7 +1064,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     }}/>
     <a className="skip-link" href="#tesia-main" onClick={event => { event.preventDefault(); document.getElementById('tesia-main')?.focus() }}>{c('skipContent')}</a>
     <div className="client-footer-body">
-    <ClientChrome contentScope={JSON.stringify([session?.id, session?.workspace, settingsTab, commonRoute])} mobileMenuHost={trading && !settingsTab && !connectionStatus ? terminalMenuHost : null} showLocaleShortcut={(isHome || tradingIntro) && !settingsTab} signedIn={Boolean(profile)} previewRecords profileName={profile?.name} onHome={home} onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')}
+    <ClientChrome contentScope={JSON.stringify([session?.id, session?.workspace, settingsTab, commonRoute])} mobileMenuHost={trading && !settingsTab && !connectionStatus ? terminalMenuHost : null} showLocaleShortcut={(isHome || tradingIntro || hasSiteFooter && !connectionStatus && page === 'sharing' && !sharedLocation.section && !sharedLocation.view) && !settingsTab} signedIn={Boolean(profile)} previewRecords profileName={profile?.name} onHome={home} onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')}
       onSettings={anchor => openAccountSurface('settings', anchor)} onLocale={anchor => openAccountSurface('locale', anchor)} onDashboard={() => openResearchPage('history')} onProfile={anchor => openAccountSurface('settings', anchor)}
       researchPage={page} records={records} activeResearchId={session?.id} onResearchPage={openResearchPage} onSelectResearch={id => { const registered = registrations.entries.find(item => item.sessionId === id); store.select(id); if (registered && registered.record.origin !== 'research') { openAccount(`#/trade/bot/${registered.record.id}`); return } clearInsightRoute(); setArrivalRect(undefined); setPage(null) }}
       onPinResearch={store.pin} onRenameResearch={store.rename} onDeleteResearch={deleteConversation}
