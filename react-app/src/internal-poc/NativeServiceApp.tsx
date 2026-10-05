@@ -422,6 +422,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return
     if ((emailRecovery || authReturn) && !existing) return
     if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
+    // Direct return GETs must retain the existing browser-session invariant
+    // before any CSRF read or session/owner adoption; the SDK stays unchanged.
+    if (authReturn && existing && existing.body.meta.resourceRevision !== existing.body.data.revision) throw new Error('SESSION_CHANGED')
     if (existing && !['ANONYMOUS', 'AUTHENTICATED'].includes(existing.body.data.state)) throw new Error('SESSION_CHANGED')
     // An untrusted email locator suppresses creation only. The existing session
     // still comes from the real SDK GET, not a stored authentication receipt.
@@ -604,6 +607,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (pending.current) setError('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.')
       return
     }
+    if (current.body.meta.resourceRevision !== current.body.data.revision) throw new Error('SESSION_CHANGED')
     // Re-observe through the existing plain-return GET/CSRF path. It does not
     // infer provider/ACK success or claim, and cannot bootstrap on this route.
     await recoverSession(binding)

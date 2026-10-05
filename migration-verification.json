@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 계승 및 OAuth 복귀 소비 교정 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다. 원FAIL·합성시험·실공급자/배포GO를 구분한다.",
-  "sourceCommit": "079373784ef80c4a434f8b34f42b4194ff8b27a2",
+  "purpose": "원본 계승·OAuth 복귀 소비와 직접 GET revision 교정 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다. 새 전체 진행중·원FAIL·합성시험·실공급자/배포GO를 구분한다.",
+  "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "4e36bf5a0f22fd8e829f72ca80c73e779feb7b081c88c7aaf7d2c31c228a0a88",
+  "snapshotDigest": "d4bfa7140048f87857245b30e824e4272f533b91b35222e6a0f678d25e3f4654",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2213,
-    "bytes": 25921574,
+    "files": 2214,
+    "bytes": 25937205,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS exact bytes/hash",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -315,7 +315,7 @@
     "실기기/Safari/AT/OS keyboard 및 실제 OS/browser zoom 미검증",
     "실제 OAuth 외부왕복/성공 후 미전송 입력 보존·window외 scrollowner/실Safari/AT/OSzoom·원본왕복quirk·reload 기억과 시험강도 Low는 별도 검증",
     "이전469/94/523/114 후보 검증은 historicalProduction 범위이며 현재 후보의 전체PASS로 승계하지 않음",
-    "현재 후보531spec/14862 단일전체 진행 중; 최초155의1FAIL을 분리5PASS 또는 후속전체로 면제하지 않음",
+    "현재 후보534spec/14934 단일전체 진행 중; 이전 corrected531/14862의 copy1FAIL은 원인미확정·분리PASS로 자동면제하지 않음",
     "실Google callback/ACK·Apple운영등록·SMTP·실연구 g-doc/Critic/역할 producer·계정원장/거래소/주문/과금·3k부하/Safari/AT/OSzoom 미완료",
     "H-b 즉시focus y0출처 미확정·signed-in 합성GET은 실제외부로그인 완료아님"
   ],
@@ -465,7 +465,11 @@
       "status": "PASS"
     }
   },
-  "pendingDeployment": {"status":"HOLD_PRESERVED_FAILURES_AND_OAUTH_RETURN_REVIEW_NEW_WHOLE_RUNNING","sourceCommit":"56bfde2ba9a930e49068e57ac19a585b0752b3c6","activationExecuted":false},
+  "pendingDeployment": {
+    "status": "HOLD_PRESERVED_FAILURES_REVISION_CODE_GO_NEW_WHOLE_RUNNING",
+    "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+    "activationExecuted": false
+  },
   "historicalProductionEvidenceHashes": [
     {
       "evidenceFile": "catalogue-parity-followup-closure-build.json",
@@ -709,13 +713,408 @@
     }
   ],
   "candidate": {
-    "status": "DRAFT_AUTH_CONSUMER_CODE_GO_DEPLOYMENT_HOLD",
-    "sourceBranch": "agent/web/oauth-return-continuity",
-    "sourceCommit": "079373784ef80c4a434f8b34f42b4194ff8b27a2",
-    "captureTime": "2026-10-05T08:52:28.636Z",
-    "frozenInput": {"files":2206,"sha256":"59de0e40c8925c5e41ea64887c9de695037d778e60aa23a0d9421adb064f7756"},
+    "status": "DRAFT_REVISION_CONSUMER_CODE_GO_DEPLOYMENT_HOLD_WHOLE_RUNNING",
+    "sourceBranch": "agent/web/release-closure",
+    "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+    "captureTime": "2026-10-05T10:07:54.874Z",
+    "frozenInput": {
+      "files": 2207,
+      "sha256": "0a217b2d95eacd8e380459b09a6acb5a06bf2fd773ded9e563f05dcdae291d19"
+    },
     "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
-    "serviceBuild": {"files":1113,"sha256":"1ffc4571dd57537be986e93d2ed902fed464cef468d45a16c53780f9e5ad3b61"},
+    "serviceBuild": {
+      "files": 1113,
+      "sha256": "2aaba12d10bd62ed14b5d4f8b14ec4a1e428c546009a02b71e6e1f739bdebf9a"
+    },
+    "currentRevisionConsumer": {
+      "status": "SCOPED_CODE_GO_WHOLE_RUNNING_DEPLOYMENT_HOLD",
+      "sourceCommit": "ef6e1d0364b34972ae399b462b8bd538cb8f5e4a",
+      "codeCommit": "d9e56099ee537f7f5174089bbcfd82ebaa461a48",
+      "documentationOnlyFollowup": {
+        "changedFiles": ["Bugfix_report.md"],
+        "codeTestBuildInputChanged": false,
+        "actualStagedSecretScanExitCode": 0,
+        "findings": 0
+      },
+      "frozenInput": {
+        "files": 2207,
+        "sha256": "0a217b2d95eacd8e380459b09a6acb5a06bf2fd773ded9e563f05dcdae291d19"
+      },
+      "previousSourceCommit": "079373784ef80c4a434f8b34f42b4194ff8b27a2",
+      "productDelta": [
+        "src/internal-poc/NativeServiceApp.tsx: host direct return GET and recheck-first GET enforce existing meta/data revision equality before CSRF/adoption"
+      ],
+      "newTest": "tests/internal-poc/native-oauth-return-revision.spec.ts",
+      "originalTestsChanged": 0,
+      "schemaSdkProviderFlagsStylesSvgCopyChanged": false,
+      "redGreen": {
+        "identicalCaseKeys": 10,
+        "redPassed": 4,
+        "redFailed": 6,
+        "redActualExitCode": 1,
+        "greenPassed": 10,
+        "greenFailed": 0,
+        "greenActualExitCode": 0,
+        "handoffSha256": "a43faf2abe42b9c7a2e9f2f6d41504f67b660dca6965df856761ef5808965cba"
+      },
+      "impact": {
+        "return": {
+          "cases": 72,
+          "expected": 72,
+          "skipped": 0,
+          "projects": [
+            "desktop",
+            "mobile"
+          ],
+          "retry": 0,
+          "flaky": 0,
+          "outsideErrors": 0,
+          "actualExitCode": 0,
+          "raw": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-return-frozen.json",
+            "sha256": "e8c4837cd3d983597b8b26d8c3f36b9c66262a4e5293b637049e7ee5eff2ec2d"
+          },
+          "receipt": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-return-frozen.receipt.json",
+            "sha256": "cc07cc8328bef1a725c19c5ec48df610fe10da8acb6813de6c3f1078226433bc"
+          }
+        },
+        "compat": {
+          "cases": 482,
+          "expected": 482,
+          "skipped": 0,
+          "projects": [
+            "desktop",
+            "mobile"
+          ],
+          "retry": 0,
+          "flaky": 0,
+          "outsideErrors": 0,
+          "actualExitCode": 0,
+          "raw": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-compat-frozen.json",
+            "sha256": "38f5fdd4391dbed7259692dce9a29830d7b5a6be05b62063f87486e54e6e68b0"
+          },
+          "receipt": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-compat-frozen.receipt.json",
+            "sha256": "93df48742f6ca46cd6cd6e2bc6dd48313773b7b61edb3c7a21c2545bed549957"
+          }
+        },
+        "copy": {
+          "cases": 30,
+          "expected": 30,
+          "skipped": 0,
+          "projects": [
+            "desktop",
+            "mobile"
+          ],
+          "retry": 0,
+          "flaky": 0,
+          "outsideErrors": 0,
+          "actualExitCode": 0,
+          "raw": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-copy-frozen.json",
+            "sha256": "b2afd02c3f23fffcae46ca77d73b5793668a52dc46fad696e7b3a1c1934d9452"
+          },
+          "receipt": {
+            "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-copy-frozen.receipt.json",
+            "sha256": "a6ec550dbcb1ccf1bf245febd2a993a82ec7f2d4d0a83a033ee82b9cdb1acb06"
+          }
+        }
+      },
+      "build": {
+        "receipt": {
+          "file": "/home/beak1/workspaces/active/TETH/.cache/frontend-parity-audit/release-closure-build-frozen.receipt.json",
+          "sha256": "7bdd98d6b58bc324774babf083b5320788c0c7b610997a918bda30d6556f67e4"
+        },
+        "results": [
+          {
+            "command": "npm",
+            "args": [
+              "run",
+              "lint"
+            ],
+            "exitCode": 0,
+            "endedAt": "2026-10-05T09:28:53.179Z"
+          },
+          {
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "exitCode": 0,
+            "endedAt": "2026-10-05T09:29:15.740Z"
+          },
+          {
+            "command": "npm",
+            "args": [
+              "run",
+              "build:internal-poc"
+            ],
+            "exitCode": 0,
+            "endedAt": "2026-10-05T09:29:38.403Z"
+          },
+          {
+            "command": "npm",
+            "args": [
+              "run",
+              "build:service"
+            ],
+            "exitCode": 0,
+            "endedAt": "2026-10-05T09:30:09.659Z"
+          }
+        ],
+        "builds": {
+          "dist": {
+            "files": 1132,
+            "sha256": "a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"
+          },
+          "dist-internal-poc": {
+            "files": 1123,
+            "sha256": "676e4d70861c3e218c3f45a975737928646815779ca8219d1f741eebf6517f46"
+          },
+          "dist-service": {
+            "files": 1113,
+            "sha256": "2aaba12d10bd62ed14b5d4f8b14ec4a1e428c546009a02b71e6e1f739bdebf9a"
+          }
+        }
+      },
+      "rootEvidenceSha256": "487d9c34a4092341b9a1117bbc554863d6cb8201a33a0b7aee111e76d2fff352",
+      "independentReview": {
+        "account": "personal (1)",
+        "actualModel": "claude-opus-5-5",
+        "modelUsageMatched": true,
+        "actualExitCode": 0,
+        "inputUnchanged": true,
+        "verdict": "REVISION_CONSUMER_CODE_GO",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "newLow": 2,
+        "preservedPreviousLow": 5,
+        "receiptSha256": "9c51931e2e71d98651c22c7fde7a2d813b0b5bfb1463583cd7eacafb6d90da2a",
+        "rawSha256": "7cc450b41cada2c8827f5da4b2e868cf52c88d9b7b74f9a154f34e81464ba0fa",
+        "newHypotheses": [
+          {
+            "id": "H-SCOPE-1",
+            "classification": "기존·범위외 (신규 delta 결함 아님)",
+            "function": "createNativeBrowserAuth().recoverSession / acknowledge → acceptReturnSession → recordSessionOffer"
+          },
+          {
+            "id": "H-SCOPE-2",
+            "classification": "기존·범위외",
+            "function": "recoverSession (emailRecovery existing GET, composer 2차 confirmed GET)"
+          },
+          {
+            "id": "H-L3-TRIGGER",
+            "classification": "기존 L3의 새 trigger (L3 해결 아님)",
+            "function": "recheckReturnSession → run() catch"
+          }
+        ],
+        "followup": [
+          "최종 동일 input(sha256 0a217b2d…)에서 새 whole 전체 실행. 이전 whole 14844PASS/1FAIL/17SKIP은 여전히 FAIL이며 copy 실패는 면제되지 않음",
+          "새 spec 10건의 GREEN 단독 실행은 desktop에서만 이루어졌음. mobile 커버리지는 return 72(원26+신규10 × 2 project) 첨부 evidence로만 확인되므로, final 실행에서 동일 key 10건이 mobile project에 포함되었는지 receipt로 재확인",
+          "NEW-L2 보강: '불일치 → error → 일치 recheck → ready' 및 return panel 동일 controller 유지 회귀 테스트 추가 권고 (ANONYMOUS/AUTHENTICATED, initial/recheck 각각)",
+          "NEW-L1 보강: 음성 케이스별로 기대 오류 경로(mount catch vs run catch)를 구분하는 assertion 권고",
+          "H-SCOPE-1/2를 별도 backlog로 등록하고, 이번 변경의 동등성 주장 범위를 'host direct GET + recheck-first GET'으로 문서화",
+          "실제 provider 로그인 및 배포 gate는 별도로 필요하며, 기존 L1/L2/L3·성공URL/logout 재진입/trailing slash 가설·E1·E2는 open 상태 유지"
+        ],
+        "actualProviderGo": false,
+        "deploymentGo": false
+      },
+      "independentDelta": {
+        "status": "SCOPED_DELTA_REVIEW_ACCEPTABLE",
+        "actualAnalysisExit": 0,
+        "receiptSha256": "a5f2d04e6e67ee0c2250289344ca0edb6a7a3bff25e8c89e55131833e7655ac5",
+        "inputUnchanged": true,
+        "newConfirmedCritical": 0,
+        "newConfirmedHigh": 0,
+        "newConfirmedMedium": 0,
+        "wholeGo": false
+      },
+      "visibleUi": {
+        "scope": "READONLY engineering UI preservation: 1440/390; public Mock presentation only",
+        "sourceOriginal": "aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431",
+        "observed": {
+          "homeAuth": "actual2PASS: original login/free CTA separation, Google/Apple SVG+labels, email input, Escape focus return",
+          "basicChat": "actual2PASS: first question in same route, real shared composer and response DOM; mobile hides auth/globe as source policy",
+          "tradingBottom": "actual2PASS: original four headings, model columns, start steps/safety settings/footer and guest auth DOM preserved",
+          "memberSettings": "follow-up actual2PASS: sidebar profile/settings normal member preview navigation, seven language options/en screen and html.lang update/USD retained",
+          "memberResearch": "follow-up desktop actual1PASS plus mobile separate actual1PASS: start→Activity/team/doc tabs; mobile document drawer explicit non-force open"
+        },
+        "runHistory": [
+          {
+            "report": "release-closure-ui-preservation.report.json",
+            "actualExit": 1,
+            "pass": 6,
+            "fail": 4
+          },
+          {
+            "report": "release-closure-ui-preservation-source-conditions.report.json",
+            "actualExit": 1,
+            "pass": 3,
+            "fail": 1
+          },
+          {
+            "report": "release-closure-ui-preservation-mobile-artifact.report.json",
+            "actualExit": 0,
+            "pass": 1,
+            "fail": 0
+          }
+        ],
+        "failureDispositions": [
+          {
+            "keys": [
+              "sidebar-settings-1440",
+              "sidebar-settings-390"
+            ],
+            "classification": "harness precondition mismatch",
+            "evidence": "original index23460 stRoute requires S.user; candidate Main363 consumes signedIn route/onLogin; original guest test actually opened normal login",
+            "correction": "new explicit member-preview fixture; original FAIL preserved, no same-key result inheritance"
+          },
+          {
+            "keys": [
+              "research-start-1440",
+              "research-start-390"
+            ],
+            "classification": "harness invalid composer expectation",
+            "evidence": "original index11646 gComposer(G.cur.status!==run); candidate workspace529 condition excludes composer during playing Activity",
+            "correction": "new member-preview state, expect no composer during playing Activity; original FAIL preserved"
+          },
+          {
+            "keys": [
+              "source-conditions/research-start-390"
+            ],
+            "classification": "harness mobile hidden-drawer expectation",
+            "evidence": "candidate workspace529 exposes rw-mobile-artifacts aria-label 연구 문서 열기; actual mobile drawer hidden until explicit click",
+            "correction": "separate mobile-artifact run normal non-force click→visible SVG, original FAIL preserved"
+          }
+        ],
+        "receiptSha256": "0617ec71402e3d471c0219b41a65213cbcbfb97274194ffba119e54c34cfffbd",
+        "inputBindingSha256": "c7115a8b695c6dfb1242b882bab0b51f5f7ad3b7f3860d4a7e10b8ae2d12a41b",
+        "allManifestRowsExact": true,
+        "noNewConfirmedOmissionInObservedConditions": true,
+        "originalPairedBrowserRun": false,
+        "wholeUiGo": false,
+        "actualProviderGo": false,
+        "designChanges": 0,
+        "designContextPreflightGo": false,
+        "contextCaveat": "DESIGN loader truncation 미해소; engineering-only inventory, no redesign or visual approval"
+      },
+      "copyFailureDiagnosis": {
+        "status": "OLD_WHOLE_FAIL_CAUSE_UNCONFIRMED",
+        "originalFailurePreserved": true,
+        "unchangedOriginalWholeSpecPassedSeparately": 30,
+        "originalSelectedKeysPassedSeparately": 2,
+        "privatePassiveObservationsPassedSeparately": 8,
+        "inputOfInitialSelectedRunChangedByParallelWriter": true,
+        "copyFilesUnchanged": true,
+        "handoffSha256": "733480c24d62358aa209484e6b1f4f6e3a06918e7cd1b0ede319de3eed67d71d",
+        "failedWholeAutomaticallyWaived": false
+      },
+      "whole": {
+        "status": "RUNNING_NOT_PASSED",
+        "specs": 534,
+        "discoveredCases": 14934,
+        "expectedInheritedCaseKeys": 14862,
+        "newCaseKeys": 72,
+        "originalSkipKeys": 17,
+        "ownPorts": [
+          4568,
+          4569
+        ],
+        "workers": 8,
+        "originalConfigTimeoutRetrySkipUnchanged": true,
+        "singleInvocation": true,
+        "helperSha256": "297b446620bb96ffb88ad8aa395c500bddf0562a475e6a681f6eb7cb05fab636",
+        "actualExitCode": null,
+        "originalFailurePreserved": true,
+        "deploymentGo": false
+      },
+      "sourceSecurity": {
+        "gitleaksVersion": "8.30.1",
+        "scope": "source final staged4",
+        "actualExitCode": 0,
+        "findings": 0,
+        "reportSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "ignoreRulesChanged": false,
+        "previousSyntheticFindingClassificationPreserved": true
+      },
+      "historicalOAuthConsumerScope": "candidate.currentOAuthConsumer is previous0793737 scoped26/482 evidence; no inheritance to new whole/service GO",
+      "migrationSecurity": {
+        "status": "PASS_SCOPED_STAGED_DELTA",
+        "gitleaksVersion": "8.30.1",
+        "stagedFiles": 9,
+        "actualExitCode": 0,
+        "findings": 0,
+        "reportSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "ignoreRulesChanged": false,
+        "scope": "이번 코드d9e5609·문서후속ef6e1d0 전체 전달 staged9. 이전 합성 fixture raw1finding 한정분류 이력과 별개; 메타데이터 추가 뒤 commit 전에 동일9파일 재검사"
+      },
+      "remainingAuthScopeProbe": {
+        "scope": "H-SCOPE-1 controller recoverSession only; real unchanged controller/generated SDK in-memory compilation and synthetic session/CSRF GET",
+        "actualExitCode": 1,
+        "passedControls": 4,
+        "failedCases": 2,
+        "confirmed": "GOOGLE and APPLE recoverSession accept mismatched meta2/data1, read CSRF and return SESSION_CONFIRMED_HANDOFF_UNVERIFIED; BRS rejects before CSRF",
+        "inputUnchanged": true,
+        "rawSha256": "4ad7289df812be6a2f2e7ae323e0ea2db02ad0b885d5391d92c43334903aa69d",
+        "receiptSha256": "af0e28ade0f702277bfff4b13e93744876da12f1d39dd4ed1754c65125a47498",
+        "assessmentSha256": "6f83b1d43cfe9d1e432fac2b8edf2b5a5b18b5defcf2267b5081ce8829f0f801",
+        "preparationFailuresPreservedSeparately": 2,
+        "ackExecuted": false,
+        "hostMounted": false,
+        "claimExecuted": false,
+        "realProviderOrCredentialAccess": false,
+        "actualAuthenticationBypassConfirmed": false,
+        "productFixImplemented": false,
+        "deploymentGo": false
+      },
+      "builtReturnPresentation": {
+        "scope": "Existing frozen dist-service bundle on owned loopback4564; synthetic GET session/CSRF only, no rebuild/provider/ACK/claim",
+        "serviceFiles": 1113,
+        "serviceSha256": "2aaba12d10bd62ed14b5d4f8b14ec4a1e428c546009a02b71e6e1f739bdebf9a",
+        "initialExecution": {
+          "cases": 7,
+          "passed": 4,
+          "failedHarnessAssertions": 3,
+          "actualExitCode": 1,
+          "rawSha256": "d5bb11d941ce6c46a29a66096ff2370fedd864b4551930befb00deb31f790ba1"
+        },
+        "correctedOptionsExecution": {
+          "cases": 3,
+          "passed": 3,
+          "failed": 0,
+          "actualExitCode": 0,
+          "rawSha256": "80f00e9b51fdc198d5bf3493a092fef3f7edcba54a2174851c40bb3c4bcd2cd1",
+          "delta": "private harness email native disabled expectation replaces incorrect aria-disabled-only assumption; product and original failures preserved",
+          "sameAssertionInheritance": false
+        },
+        "matchingAuthReturnWidths": [1440, 390],
+        "mismatchedReturnRejectedWidths": [1440, 390],
+        "googleAppleEmailPreservedWidths": [1440, 390, 320],
+        "googleEnabledAppleEmailPreparationUnchanged": true,
+        "sourcePublicServiceHashesUnchanged": true,
+        "handoffSha256": "c0d2f9f6e046a42f0457d9949703c54bc38909cd4cefbc82d4deb853dc09e143",
+        "outsideOrMutationRequests": 0,
+        "pageErrors": 0,
+        "ownedServerClosed": true,
+        "providerGo": false,
+        "wholeGo": false,
+        "deploymentGo": false
+      },
+      "loginChoices": [
+        "Google",
+        "Apple",
+        "email"
+      ],
+      "promptProducerIntegrated": false,
+      "actualProviderGo": false,
+      "deploymentGo": false,
+      "activationExecuted": false,
+      "fullServiceGo": false
+    },
     "currentOAuthConsumer": {
       "baseCommit":"56bfde2ba9a930e49068e57ac19a585b0752b3c6",
       "changedProductFiles":["src/internal-poc/NativeServiceApp.tsx","src/internal-poc/NativeLoginPanel.tsx"],
@@ -743,9 +1142,13 @@
         "src/internal-poc/NativeLoginPanel.tsx"
       ],
       "existingTestsChanged": 8,
-      "newTests": 6,
-      "documents": ["README.md","DESIGN.md","Bugfix_report.md"],
-      "scope": "게스트 원본 표시·클릭 영역·동일 소유자 미전송 입력 보존과 이번 OAuth 복귀 소비 교정. 인증SDK/API/provider/권한/prompt/package/DB/색상/SVG 변경0"
+      "newTests": 7,
+      "documents": [
+        "README.md",
+        "DESIGN.md",
+        "Bugfix_report.md"
+      ],
+      "scope": "원본 표시·클릭·미전송 입력·OAuth 복귀 소비 교정 보존. 직전0793737 이후 제품은 host 직접 복귀 GET 두 곳의 기존 meta/data revision invariant만 추가, 기존26/패널/SDK/API/provider/flags/프롬프트/DB/색상/SVG 변경0."
     },
     "impact": {
       "status": "FAILED",

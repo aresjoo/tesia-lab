@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/oauth-return-continuity@079373784ef80c4a434f8b34f42b4194ff8b27a2` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54·56bfde2 초안을 보존한 운영 미배포 인증 소비 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/release-closure@ef6e1d0364b34972ae399b462b8bd538cb8f5e4a` 추적 파일 전체. 코드d9e5609·남은 반례의 문서후속이며 기존 누적 UI 이식·거래소 draft PR54·OAuth0793737 초안을 보존한 운영 미배포 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,7 +17,17 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재0793737의 전체2,213파일/25,921,574bytes, sourceDirtyFiles0·snapshot4e36bf5를 전달한다. 직전56bfde2 이후 제품은 `NativeServiceApp.tsx`/`NativeLoginPanel.tsx`의 인증 복귀·보존 controller 교정만 바뀌었고 신규 예방시험2개 및 README/Bugfix를 포함한다. Google·Apple·이메일 UI·원문·SVG·색상·가용성 flag·SDK·공용 계약·프롬프트·서버·DB는 유지한다. 일반 방문은 그대로이며 plain `/auth/complete`의 검증401만 새 익명 세션을 만들지 않고 무권한 복구 표시를 연다. 자동 START/ACK/claim/전략 승인/주문은 없다. 미확정 journal·logout/email 우선과 동일 controller의 ACK 유실/화면 왕복 복구를 보존한다.
+현재ef6e1d0의 전체2,214파일/25,937,205bytes, sourceDirtyFiles0·snapshotd4bfa71을 전달한다. 코드d9e5609에서 남은 controller 반례를 Bugfix 보고서에 추가했으며 제품·시험·빌드는 더 바꾸지 않았다. 직전0793737 이후 제품은 `NativeServiceApp.tsx`의 직접 복귀 GET 두 곳에 기존 meta/data revision 일치 검사만 추가했다. `native-oauth-return-revision.spec.ts`와 현재 README/Bugfix를 함께 전달하며 기존26예방시험·로그인패널·generated SDK·Google/Apple/email·flags·원본문구/색상/SVG는 그대로다. 신규10키의 RED6FAIL/4controlsPASS→GREEN10PASS를 실제 장착 반례로 확인했으며 가짜 인증이나 자동 claim을 추가하지 않는다.
+
+최종nonMD2207/0a217 입력에서 양project 복귀72개·기존 로그인482개·원copy-management30개가 각각 PASS/actual0이고, 같은입력 lint·공개/내부/service3build actual0다. 실제personal(1) Opus5.5 REVISION_CONSUMER_CODE_GO/신규C0H0M0과 readonly 독립 delta를 인수했다. Low2·기존잔여 및 명시 ACK/세션 확인의 범위외 revision 가설은 남는다. 이 변경을 전체 로그인 경로의 완료로 쓰지 않는다. 홈·대화·설정·연구·AI 트레이딩 하단의 좁은1440/390 가시 관측은 새누락미확정이며 원본 조건을 잘못 가정한 하니스 FAIL과 정상 조건의 후속 관측을 분리했다. 전체UI/실provider 성공이 아니다.
+
+**배포는 HOLD다.** 같은입력의 새 단일전체534spec/14934개가 원config/timeout/retry/skip 그대로 한 번 진행 중이다. 이전 corrected 전체의 copy-management1FAIL은 분리30PASS·동일키2PASS·passive8PASS로 재현되지 않았으나 인과미확정이며 자동면제하지 않는다. 현재teth.ai는7dd066f를 유지한다. 원본 main·프롬프트 draft8646b65·실공급자/서버/DB·provider flags 교체0이며 migration push는 배포가 아니다. 아래0793737/56bfde2의 수치는 이전 이력이다.
+
+추가 H-SCOPE-1 private Node 실행은4controlsPASS/2FAIL/actual1이다. 실제 unchanged controller/generated SDK의 Google·Apple recoverSession이 meta2/data1을 받아 CSRF 조회 후 무검증 handoff offer를 반환했고 BRS는 거절했다. 실제 host mount/ACK/claim/실공급자 권한은 검증하지 않아 인증 우회나 서비스 실패로 확대하지 않는다. 이 소비 경로는 아직 제품 수정 전이며 currentRevisionConsumer.remainingAuthScopeProbe와 source 보고서에 원FAIL·준비실패2·same0a217 증거를 함께 남겼다.
+
+기존service2aaba bundle를 재빌드 없이 loopback에서 실제 브라우저로 확인했다. 정상AUTH 복귀1440/390의 ready·session/CSRF와 불일치 거부2폭의 CSRF0/바인딩없음은 원7실행 중4PASS다. 정상root 옵션3은 이메일 native disabled를 ARIA속성만으로 잘못 검사해 원3하니스FAIL/actual1을 보존했고, 그 private 기대만 바꾼 별도3PASS/actual0에서 Google·Apple·email/SVG/준비중 상태를1440/390/320에 확인했다. 두 run의source/public/service hashes는같고 외부/mutation0·자체4564종료다. 서로 다른 기대의 결과를7PASS로 합산하지 않으며 실cookie/provider/전체·운영GO로 확대하지 않는다.
+
+이전0793737의 전체2,213파일/25,921,574bytes, sourceDirtyFiles0·snapshot4e36bf5 전달을 보존한다. 당시56bfde2 이후 제품은 `NativeServiceApp.tsx`/`NativeLoginPanel.tsx`의 인증 복귀·보존 controller 교정만 바뀌었고 신규 예방시험2개 및 README/Bugfix를 포함했다. Google·Apple·이메일 UI·원문·SVG·색상·가용성 flag·SDK·공용 계약·프롬프트·서버·DB는 유지한다. 일반 방문은 그대로이며 plain `/auth/complete`의 검증401만 새 익명 세션을 만들지 않고 무권한 복구 표시를 연다. 자동 START/ACK/claim/전략 승인/주문은 없다. 미확정 journal·logout/email 우선과 동일 controller의 ACK 유실/화면 왕복 복구를 보존한다.
 
 최종2206/59de 입력의 신규26개와 기존 로그인482개는 각각 actual0/전부PASS/skip·retry·flaky·시험밖오류0이며 같은입력 lint/공개·내부/service3build actual0다. 화면 왕복의 busy 잠금은 원동일키 RED1→GREEN1로 검증했다. personal(1) 실제 Opus5.5는 인증 소비 CODE_GO/C·H·M0, Low5·가설5 및 후속시험을 남겼다. CLI 응답의 계정 상태 prefix로 생긴 최초 parser 실패를 보존하고 모델 재호출 없이 실제 result/modelUsage/입력불변을 별도 확인했다. secret scan의 합성 journal 재전송 식별자1건은 원raw actual1을 보존하고 정확한 finding만 한정분류했다. shared ignore/rule 변경0이며 raw findings0/hostedCI PASS로 쓰지 않는다.
 
