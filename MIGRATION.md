@@ -28,6 +28,12 @@
 
 후보 단일155spec은4543PASS/1FAIL/기존4SKIP·actual1이다. 초기 연구 scroll gap2px 실패의 원인은 미확정이며 분리 동일키5PASS로 면제하지 않는다. 전체531spec/14862개는 진행 중이다. lint·공개/내부/service build actual0와 독립 정적 코드GO는 전체 인수·운영 승인이 아니다. 이전 전체14748의5FAIL 및 원 raw 증거도 보존한다. 이번 후보 배포는 HOLD이며 기존 운영 bundle을 유지한다. Google·Apple·이메일은 공존하고 실제 provider 성공을 합성 시험으로 대체하지 않는다.
 
+**추가 읽기 전용 검수:** 현재 전체 실행에서는 구 `client-source-parity.spec.ts:17`의 globe DOM 0개 단언이 desktop/mobile에서 실패했다. 원본은 게스트 대화에서도 DOM을 유지하고 데스크톱에서 표시·860px 이하에서 CSS로 숨기므로 제품을 다시 숨기는 교정을 하지 않는다. 전문 차트의 별도 실패는 mount 전 compiled-module GET의 `ECONNRESET`이며 키보드/crosshair 검증은 미실행이다. 연결 종료 원인은 아직 미확정이고 두 종류의 원FAIL을 그대로 보존한다. 초기 연구 gap2px는 탭 전환 후 새 글꼴 로딩과 측정 준비의 불일치 가능성이 있으나 인과와 교정은 아직 미검증이다. 실행 중인 입력·timeout·retry·skip·release gate 변경0이다.
+
+**실제 로그인 인계:** Google·Apple·이메일 선택지/SDK는 모두 유지한다. 실 Google callback/ACK는 미검증이고 Apple 등록·SMTP도 완료하지 않았다. 별도 Backend157 정적 비교에서 기존 OAuth 반환의 `HANDOFF_BOUND → 공개 session 401 → 새 익명 세션 bootstrap` 경로를 확인했다. 거래별 cookie가 별도로 있어 result/ACK가 성공할 가능성도 있으므로 운영 로그인 실패·보안 결함으로 단정하지 않는다. 해당 Backend SHA가 현재 운영 코드인지도 미검증이다. 정상 반환의 불필요한 소유자 교체·복구 데이터 정리 여부를 먼저 재현하고 Backend 담당과 정확한 반환 계약을 확인해야 한다. 준비한 합성 반례는 실행 전이며 새 SDK/공용 계약·provider flag·자동 ACK/claim·인증 권한 변경0이다.
+
+teth.ai는 공개 HTTPS 자산350개/문서4개를 새로 검사해 이전 운영7dd066f와 exact 일치했다. 아카이브의 raw HTML과 HTTP 응답은 서버 소유 profile meta 삽입 때문에 해시가 다르며, 승인된 정확한 삽입까지 포함해 동일함을 검증했다. 다른 팀의 배포 변경으로 오인하지 않는다. 새 후보 활성화0이며 최신 범위·증거는 검증 JSON의 `readOnlyContinuation`을 따른다.
+
 아래7dd066f의 검증·배포는 **이전 운영 출처의 이력**이며 현재 후보의 PASS/배포 증거가 아니다.
 
 이전 source 7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d는 직전 bca5a694/563b940 이후 원본9fbff 정상 가시 검색·guest 로그인/무료 시작·Native desktop sticky0·desktop globe(prop2/CSS1)만 최소 복원했다. source 중복 header/focused return, Native 자연60px flow/header64/mobiletop60, 원본 mobile globe hidden과 기존 인증·modal·색상·SVG·API·prompt·flags·가격·package·DB는 보존한다. 원본root HTML/server/Worker/workflow/main 변경·병합0이다.
