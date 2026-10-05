@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-regression-closure@2acaa3858e55970f77f232f02e73776cafb5dcdd` 추적 파일 전체. 기존 controller 교정/source875 위의 테스트2파일 최소 후속이며 제품·SDK·UI·로그인 선택지 변경0인 운영 미배포 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/guest-broker-continuity@8197c71efd58223df6f162ef7b0c043e16431149` 추적 파일 전체. 기존 인증 소비·하니스 교정 위의 게스트 문서 표시 최소 복원이며 기존 로그인 선택지·SDK·원본 디자인을 보존한 운영 미배포 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -16,6 +16,25 @@
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+
+현재 source8197c71의 **2,218파일/25,996,285bytes**, sourceDirtyFiles0·snapshot SHA `77f0636fdbf06131fb51c32c8a33dc9ca4dd8fd75f700bf305cb6fc1f7be55ca` 전체를 전달한다. 이전 migratione010/source2ac 이후 제품3파일·신규시험3파일·문서2파일만 바뀌었다. 원본 root HTML/server/Worker/workflow/main은 수정하지 않았고 기존 snapshot 삭제0이다.
+
+| 이번 최소 복원 | 파일 | 보존한 내용 |
+| --- | --- | --- |
+| 게스트 문서 로그인·언어 표시 | `ClientMainExperience.tsx`, `ClientServiceExperience.tsx` | 기존 로그인/무료 시작과 desktop globe를 동일 guest marker로 표시. Google·Apple·이메일·원문/SVG/색상·SDK·기능 flag·거래소 본문/라우트 정책 유지 |
+| 배너와 버튼의 자리 분리 | `client-conversation.css` | 배너 숨김 문서는 top8, 표시 중인 계정 배너는 기존 top72. Native broker header60 예약. 홈/global 배너/mobile globe 숨김 정책 변경0 |
+| 회귀 방지 | 신규 `client-guest-broker-auth-parity`, `client-guest-broker-banner-parity`, `client-guest-account-banner-parity` 시험 | 원RED4·2·4의 동일키 GREEN과 기존390키/시험bytes 보존. assertion/timeout/retry/skip 완화0 |
+| 출처·잔여 설명 | `react-app/README.md`, `react-app/Bugfix_report.md`, 전달 문서/JSON | 입력별 PASS·FAIL·미검증 구분. 구판 리뷰와 현 입력의 검수 분리 |
+
+최종2211/b392f02에서 신규20개·주변390개는 각각 PASS/actual0이며 lint/공개·내부/service3build actual0이다. 같은 service1113/bc1def의1113파일 정적 GET exactbytes와 로그인1440/390/320 UI를 합성 session/CSRF GET에 한해 확인했다. 실제 provider·mutation0이며 실제 로그인 성공을 뜻하지 않는다. personal(1) 실제 Opus5.5와 최종 독립 대조는 신규 확정C/H/M0이다. 구판cc1 리뷰는 현재CSS의 증거가 아니다. 계정 딥링크의 원본 정책 동등성·대화 이후 view-briefing·중간폭/장문 locale·compiled account geometry 등 Low/가설은 남는다.
+
+**정적 승격은 HOLD다.** 이전 source2ac의 단일535spec/14958 전수는14940PASS/1FAIL/기존17SKIP/미실행·retry·flaky·시험밖오류0/actual1로 종료했다. mobile 첫 영어 locale 평가에서 `Resulting promise was garbage collected`가 발생했고 뒤 요청 수·canvas identity 단언은 미실행이다. 동일2키 격리PASS는 환경이 달라 원인을 폐쇄하거나 원FAIL을 면제하지 않는다. 새20/390과 이전10/40/578도 합산하지 않는다. 실제 Google callback/ACK·Apple 등록/SMTP·React prompt producer·전체서비스GO는 별도 미완료다. teth.ai는 운영7dd를 유지하며 새 archive/권위CAS·공개검증/활성화0이다.
+
+### 이전 source2ac 하니스 전달 이력
+
+후속 readonly24표면의 raw SHA `97e2009730d681de78e02c387ad093117bfb0b744e824a103dcab1338bff9e76`에서 French320의 계정4종·첫 화면/대화 이후8표면은 두 행 auth 배치가 복귀 버튼을 가려 centerHitfalse였다. 기준source2ac의 동일조건12표면과 비교한 receipt SHA `a300b236e0b85945a8e3a8fece32a81cd4f973fc50c53e1608ee687087c64163`에서 같은320의8표면은 기준에서 정상 클릭되어 이번delta 회귀로 확인했다. auth 자체 hit·mobile globe 숨김·overflow/브라우저 오류/미선언 HTTP 요청은 정상이다. 861의 return는 기준에도 About 헤더링크가 가리는 기존 문제이며1440은 정상이다. 이는 앞20/390·static CODE_GO의 무결함 보증이 아니고 현재 knownIssue다. 최소교정·동일키 검증 전 운영 승격하지 않는다. 실제 대화는 명시된 합성 CREATE/TURN 응답을 사용했으며 actual model/provider 호출0이다.
+
+아래 RUNNING 표시는 당시 실행 시작 기록이다. 그 전수의 실제 종료는 위14940PASS/1GC FAIL/기존17SKIP이며 검증 JSON의 `candidate.currentAuthHarnessClosure.whole`에 결속했다. 과거 실패와 서로 다른 입력의 범위 결과는 그대로 보존한다.
 
 현재 전달은 source2acaa38의 **2,215파일/25,957,255bytes**, sourceDirtyFiles0·snapshot SHA `75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff`다. 원 availability seam의env-read2기대를normal/returnOnly각2개총4개로 맞추고, 고정queryless callback 정책과충돌한query-bearing alias의ready기대를error/API0로교정했다. 원case/fixture/나머지assertion/timeout/retry/skip와 제품·SDK·UI·문구·SVG·flags는 그대로다. Google·Apple·이메일 모두보존·미등록방식임의활성화0이다.
 

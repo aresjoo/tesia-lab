@@ -440,6 +440,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     && !uncertainStrategyWorkspace && !foreignStrategyWorkspace && !invalidResearchPlan && !invalidInlineConnection
   const publicConversationVisible = !commonRoute && !settingsTab && !tradeRequested && !accountPage && !page && session?.workspace === 'conversation'
   const guestInsightVisible = !profile && !commonRoute && !settingsTab && !connectionStatus && page === 'insight'
+  const guestBrokerDocumentVisible = !profile && !commonRoute && !settingsTab && !connectionStatus && !tradeRequested && page === 'brokers'
   const publicShell = useRef<HTMLDivElement>(null)
   useLayoutEffect(()=>{
     const shell=publicShell.current
@@ -1058,14 +1059,14 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     }
     openTrading()
   }
-  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={publicShell} className={`tesia-shell conversation-surface client-source-app ${isHome && !settingsTab ? 'view-landing' : 'view-briefing'}${publicConversationVisible ? ' has-public-conversation' : ''}${guestInsightVisible ? ' has-guest-insight-entry' : ''}${tradingIntro && !settingsTab ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties}>
+  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={publicShell} className={`tesia-shell conversation-surface client-source-app ${isHome && !settingsTab ? 'view-landing' : 'view-briefing'}${publicConversationVisible ? ' has-public-conversation' : ''}${guestInsightVisible ? ' has-guest-insight-entry' : ''}${guestBrokerDocumentVisible ? ' has-guest-broker-document' : ''}${tradingIntro && !settingsTab ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties}>
     <ClientResponseSourceBridge source={responseBridgeSource} owner={owner} store={store} onFailure={error => {
       if (store.commitUncertain()) setAccountNotice(uncertainCommitMessage)
       else if (error instanceof InlineConnectionError) setAccountNotice(error.message)
     }}/>
     <a className="skip-link" href="#tesia-main" onClick={event => { event.preventDefault(); document.getElementById('tesia-main')?.focus() }}>{c('skipContent')}</a>
     <div className="client-footer-body">
-    <ClientChrome contentScope={JSON.stringify([session?.id, session?.workspace, settingsTab, commonRoute])} mobileMenuHost={trading && !settingsTab && !connectionStatus ? terminalMenuHost : null} showLocaleShortcut={(isHome || tradingIntro || publicConversationVisible || guestInsightVisible || hasSiteFooter && !connectionStatus && page === 'sharing' && !sharedLocation.section && !sharedLocation.view) && !settingsTab} signedIn={Boolean(profile)} previewRecords profileName={profile?.name} onHome={home} onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')}
+    <ClientChrome contentScope={JSON.stringify([session?.id, session?.workspace, settingsTab, commonRoute])} mobileMenuHost={trading && !settingsTab && !connectionStatus ? terminalMenuHost : null} showLocaleShortcut={(isHome || tradingIntro || publicConversationVisible || guestInsightVisible || guestBrokerDocumentVisible || hasSiteFooter && !connectionStatus && page === 'sharing' && !sharedLocation.section && !sharedLocation.view) && !settingsTab} signedIn={Boolean(profile)} previewRecords profileName={profile?.name} onHome={home} onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')}
       onSettings={anchor => openAccountSurface('settings', anchor)} onLocale={anchor => openAccountSurface('locale', anchor)} onDashboard={() => openResearchPage('history')} onProfile={anchor => openAccountSurface('settings', anchor)}
       researchPage={page} records={records} activeResearchId={session?.id} onResearchPage={openResearchPage} onSelectResearch={id => { const registered = registrations.entries.find(item => item.sessionId === id); store.select(id); if (registered && registered.record.origin !== 'research') { openAccount(`#/trade/bot/${registered.record.id}`); return } clearInsightRoute(); setArrivalRect(undefined); setPage(null) }}
       onPinResearch={store.pin} onRenameResearch={store.rename} onDeleteResearch={deleteConversation}

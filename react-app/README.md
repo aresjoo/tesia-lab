@@ -1,5 +1,9 @@
 # TETH Web
 
+현재 후속 후보는 `agent/web/guest-broker-continuity`다. source2ac에서 분리하여 원본의 게스트 거래소·플랜 상단 로그인/무료 시작과 desktop 언어 진입 누락을 최소 복원했다. 최종 입력2211/b392f02에서 신규20개·주변390개는 각각 PASS/actual0이며 lint·공개/내부/service3build도 통과했다. 같은 service1113/bc1def bundle의 정적 GET exactbytes와 로그인3폭의 합성 GET UI 검증을 결속했다. personal(1) 실제 Opus5.5 및 최종 독립 대조는 신규 확정C/H/M0지만 원본 계정 딥링크 정책·경로 상호배타성·장문/중간폭 등 미검증 가설은 남는다. 기존 로그인3옵션·문구/SVG/색상·SDK/권한·기능 flag·거래소 본문은 바꾸지 않는다. [현재 보고서](Bugfix_report.md#현재-게스트-문서-진입점-복원)가 정확한 범위·잔여를 소유하며 운영 미배포 초안이다.
+
+source2ac의 별도14958 전수는14940PASS/1FAIL/기존17SKIP/actual1로 종료했다. 실패는 첫 영어 locale 변경 시 평가 Promise GC이며 후속 요청 수·canvas identity 단언은 미실행이다. 동일키 격리2PASS는 원인 폐쇄나 실패 면제가 아니다. migratione010747에는 이전 source2ac 전체가 전달되어 있고 새 전달은 migration manifest의 정확한 sourceCommit을 따른다. teth.ai는 운영7dd를 유지하며 정적 승격 HOLD다. 실제 Google/Apple/SMTP·React prompt producer·전체 서비스 승인은 별도 미완료이다. 아래 ‘현재/진행 중’은 각 후보의 이전 전달 이력이며 새UI 결과로 합산·승계하지 않는다.
+
 현재 후보는 `agent/web/auth-regression-closure`다. source875f1e8의 제품·Google/Apple/이메일·원본 화면/문구/SVG·SDK·flags는 그대로 두고 테스트 두 파일의 오래된 기대만 교정했다. 정상/복귀 패널의 가용성 읽기는 정확히4개이며 잘못된 query-bearing 인증 복귀는 API 호출 없이 error여야 한다. 원10FAIL과 alias2FAIL/후속26미실행을 보존하고 같은 availability10키·service-entry전체40키를 각각 actual0/모두PASS로 재검증했다. 이전 whole 실패를 합산·면제하지 않으며 새 전체·실공급자·React prompt 연결·운영 승인은 별도다. [현재 보고서](Bugfix_report.md#현재-서비스-검증-하니스-교정)가 최신 상태를 소유한다. teth.ai 운영7dd는 교체하지 않았다.
 
 이전 인증 controller 후보 `agent/web/auth-revision-closure`는 sourceef6e1d0 위에서 복구·ACK 후 session GET 두 곳에 기존 revision 일치 검사만 추가했다. 동일 Node6키·desktop12키 RED→GREEN 뒤, 2208/a4966 입력의 양project578 단일 영향 회귀·lint/3build actual0를 인수했다. personal(1) 실제Opus5.5와 별도 readonly delta는 최소 수정의 확정C0H0M0·CODE_GO이며 Low와 원FAIL을 보존한다. 이 결과를 다른 입력의 전체PASS나 실제 로그인 완료로 승계하지 않는다. 아래 문단의 현재·진행 중은 당시의 인수 이력이며 최신 상태는 위 보고서를 따른다.

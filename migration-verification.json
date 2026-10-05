@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 계승·인증 소비 교정 위의 테스트2파일 하니스 후속 전체 코드 전달 초안. candidate.currentAuthHarnessClosure가 최신10/40·빌드·새전수RUNNING을 소유하고 controllerRevisionClosure578은 이전입력의영향범위다. historicalProduction*와 deployment는 운영7dd 그대로. 실제공급자/프롬프트/운영GO와 구분한다.",
-  "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
+  "purpose": "원본 계승·인증 소비 교정 위의 게스트 거래소·플랜 로그인 진입점 최소 복원 초안. currentGuestDocumentClosure가 최종20/390·빌드·compiled presentation을 소유한다. source2ac의 원전수14940PASS/1GC FAIL/기존17SKIP/actual1과 미확정 원인을 보존한다. historicalProduction*와 deployment는 운영7dd 그대로이며 실제 로그인·프롬프트·운영GO와 구분한다.",
+  "sourceCommit": "8197c71efd58223df6f162ef7b0c043e16431149",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff",
+  "snapshotDigest": "77f0636fdbf06131fb51c32c8a33dc9ca4dd8fd75f700bf305cb6fc1f7be55ca",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2215,
-    "bytes": 25952769,
+    "files": 2218,
+    "bytes": 25996285,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS exact bytes/hash",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -466,9 +466,9 @@
     }
   },
   "pendingDeployment": {
-    "status": "HOLD_NEW_WHOLE_RUNNING",
-    "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
-    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY; 새14958 전수·최종 독립 인수·archive/권위CAS·공개 검증 미완료. 정본 §0.4에 따라 실제 OAuth 미검증은 보편 정적 UI 차단조건이 아니다.",
+    "status": "HOLD_UNRESOLVED_BASELINE_GC_FAILURE_AND_RELEASE_VERIFICATION",
+    "sourceCommit": "8197c71efd58223df6f162ef7b0c043e16431149",
+    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY; 기존14958 전수actual1의GC1FAIL은미해결이며새UI20/390이나격리2PASS로면제하지않음. 최종archive/권위CAS·공개검증미완료. 정본 §0.4에 따라 실제 OAuth 미검증은 보편 정적 UI 차단조건이 아니다.",
     "actualAuthentication": "UNVERIFIED_SEPARATE_SERVICE_GATE",
     "activationExecuted": false
   },
@@ -726,21 +726,49 @@
     }
   ],
   "candidate": {
-    "status": "DRAFT_TEST_HARNESS_CODE_GO_NEW_WHOLE_RUNNING_DEPLOYMENT_HOLD",
-    "sourceBranch": "agent/web/auth-regression-closure",
-    "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
-    "captureTime": "2026-10-05T11:22:39.554Z",
+    "status": "SCOPED_GUEST_UI_CODE_GO_DRAFT_DELIVERY_DEPLOYMENT_HOLD",
+    "sourceBranch": "agent/web/guest-broker-continuity",
+    "sourceCommit": "8197c71efd58223df6f162ef7b0c043e16431149",
+    "captureTime": "2026-10-05T13:14:43.072Z",
     "frozenInput": {
-      "files": 2208,
-      "sha256": "5cf9844382451c9e5e231b3e5b1c366e77014f6d567a39223c03d8174063c3d7"
+      "files": 2211,
+      "sha256": "b392f02ec6fc4849bb60d2e44013c6bc50981f61fd3dbbc0b34532c7ee87500a"
     },
-    "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
+    "publicBuild": {"files":1132,"sha256":"d474551e32be087b0e01512e4f757a7fae5111ab6bb9cdd87e382334198ca7d9"},
     "serviceBuild": {
       "files": 1113,
-      "sha256": "c2b7f27dcd022858ed59a7750b8884e32a3e03ad4ee4fcd3dd678f845212f9b8"
+      "sha256": "bc1defdcc8783948e2312f4cc4e619c02696cc94562277560ae049bacd7213dc"
+    },
+    "currentGuestDocumentClosure": {
+      "status": "SCOPED_UI_CODE_GO_DRAFT_SHARED_RELEASE_HOLD",
+      "sourceCommit": "8197c71efd58223df6f162ef7b0c043e16431149",
+      "baseCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
+      "products": ["src/client-conversation.css","src/components/ClientMainExperience.tsx","src/internal-poc/ClientServiceExperience.tsx"],
+      "newTests": ["tests/client-guest-broker-auth-parity.spec.ts","tests/client-guest-broker-banner-parity.spec.ts","tests/client-guest-account-banner-parity.spec.ts"],
+      "delta": "기존 게스트 문서의 상단 로그인/무료 시작과 desktop 언어 진입점 표시만 복원. 배너 숨김 문서 view-briefing은 auth top8, 배너 표시 계정 view-landing은 기존 top72. Native broker는 기존 header 공간60 확보. 원본문/라우트 정책/문구/SVG/색상/3login/SDK/flags/API/권한/prompt/credential/server/DB/730 유지.",
+      "frozenInput": {"files":2211,"sha256":"b392f02ec6fc4849bb60d2e44013c6bc50981f61fd3dbbc0b34532c7ee87500a"},
+      "primary": {"passed":20,"failed":0,"skipped":0,"retry":0,"flaky":0,"outsideErrors":0,"actualExitCode":0,"durationMs":28532.114,"originalRed10KeysExact":true,"rawSha256":"7bbb2220a31f56f84ad89d874b49d0210d6301899c3290e7ddf9dc67d701438b","executionSha256":"5448f941fd739bae19789ab13eab800c5768382e69d10184a3169430e5f105b0"},
+      "impact": {"passed":390,"failed":0,"skipped":0,"retry":0,"flaky":0,"outsideErrors":0,"actualExitCode":0,"durationMs":288589.283,"original390KeysExact":true,"originalTenSpecsBytesExact":true,"rawSha256":"2388bd05073777119cab5e8fd91e1309549fc3a33cc85faeb7c8fc396b66dbd9","executionSha256":"8e5417357266fafd1971d51e8dacf19f5a2152d949b57bad16328c2a88fd0248"},
+      "testsNotAggregatedAsWhole": true,
+      "builds": {"lint":0,"public":0,"internal":0,"service":0,"inputUnchanged":true,"receiptSha256":"2de1c06c3e5cf5d59cd54940e7ec9cbf6462f06243328c4b8b13204692334456","googleOnlyFlag":true,"exchangeConnectFlag":false,"flagsChanged":false},
+      "compiledService": {"files":1113,"sha256":"bc1defdcc8783948e2312f4cc4e619c02696cc94562277560ae049bacd7213dc","actualStaticGetBytesExact":1113,"loginPresentationWidths":[1440,390,320],"actualExitCode":0,"byteBindingReceiptSha256":"15a66aaa4c2e270fdc75bbaaf5099ea9255bee32f6024645e637cc318e1ab195","syntheticSessionCsrfGetOnly":true,"providerStartExecuted":false,"serverMutationExecuted":false,"actualLoginVerified":false},
+      "independentSource": {"critical":0,"high":0,"medium":0,"receiptSha256":"4e6adce342477665674cab22ffcd4c7e54208a609091d5485303c190527ca897","scope":"final2211/b392 source/spec3 and exact20/390 parsed; replaces oldercc1 review only for currentdelta; no service/releaseGO"},
+      "independentModel": {"account":"personal (1)","actualModel":"claude-opus-5-5","modelUsageMatched":true,"actualExitCode":0,"verdict":"GUEST_UI_CODE_GO","critical":0,"high":0,"medium":0,"low":6,"hypotheses":7,"inputUnchanged":true,"responseSha256":"49d9155a2e0f82ad45ad9ff4a4879fdc76f5d45bd999a3f667e57619653776bb","actualProviderGo":false,"deploymentGo":false},
+      "hypothesisDisposition": {"receiptSha256":"09da216c8e5797c42c3612a0b75dd51edef4b775a1c4092ac399c468b7ba1e44","H3":"account RED4는 line68 centerHitfalse만 실패. globe count 가설 반증.","H4":"profile 필수 accountPage와 !profile guest marker는 상호 배타적.","H5":"열거한 정상 handler는 형제 state를 정리. 모든 비동기 교차는 미검증.","remaining":["Native accountPlan view-briefing/ANON/AUTH·원 guest route 정책 동등성","861과 장문 locale·compiled account geometry","원 GC 인과·실제 provider 성공"]},
+      "sourceSecurity": {"gitleaksVersion":"8.30.1","stagedFiles":8,"sourceActualExitCode":0,"serviceActualExitCode":0,"findings":0,"ignoreRulesChanged":false},
+      "deliveryReview": {"status":"SCOPED_DRAFT_DELIVERY_ACCEPTABLE_WITH_KNOWN_UI_REGRESSION","stagedFiles":13,"snapshotFilesExact":2218,"snapshotBytes":25996285,"snapshotDigest":"77f0636fdbf06131fb51c32c8a33dc9ca4dd8fd75f700bf305cb6fc1f7be55ca","sourceCommit":"8197c71efd58223df6f162ef7b0c043e16431149","critical":0,"high":0,"medium":0,"scope":"전달 정합성만. 원제품 회귀/wholeFAIL/HOLD를 유지. ROOT 후속은 이 검수·scan 메타데이터 두 항목뿐이며 검토snapshot/knownIssue/운영권위 불변.","receiptSha256":"137a0610dfb7ac4ecbac5d43281fa514e1edea113114e29ff0aeb7ff25b37cad","historicalProductionAndDeploymentObjectsExact":true,"untrackedFollowupSpecIncluded":false,"deploymentGo":false},
+      "deliverySecurity": {"gitleaksVersion":"8.30.1","stagedFiles":13,"actualExitCode":0,"findings":0,"ignoreRulesChanged":false,"scope":"ROOT 최종13 staged 검사. 초기 공개 byte receiptSHA의 key이름 오탐actual1을 별도로 보존하고 설명키만 byteBindingReceiptSha256으로 변경한 후 actual0. source/receipt bytes 및 ignore/rule 변경0.","initialScanExitCode":1,"initialFindingCount":1,"initialFindingDisposition":"migration-verification.json:754 generic-api-key는15a66 receiptSHA와exact일치하는 공개 증거digest. 실제credential이아니며 raw검사 보존."},
+      "knownIssue": {"status":"CONFIRMED_GUEST_ACCOUNT_WRAP_REGRESSION_FIX_PENDING","observations":24,"baselineObservations":12,"receiptSha256":"a300b236e0b85945a8e3a8fece32a81cd4f973fc50c53e1608ee687087c64163","rawSha256":"97e2009730d681de78e02c387ad093117bfb0b744e824a103dcab1338bff9e76","confirmed":"French320 account4kind × home/conversation 8표면은 새 auth flex-wrap2행이 return버튼을 가려 centerHitfalse. 기준2ac의 같은8표면은 클릭 정상. auth 자체hit·mobileglobehidden·overflow 정상.","preexisting":"French861 home4의 return가림은 기준2ac에도 동일한 About 헤더링크 겹침. 새 회귀로 주장하지 않음.","guards":"local source renderer·declared synthetic ANON GET/CSRF and CREATE/TURN only; external/undeclared mutation/API/pageerrors0","inputAndServiceUnchanged":true,"productFixApplied":false,"failureWaived":false,"deploymentGo":false},
+      "googleAppleEmailPreserved": true,
+      "promptProducerIntegrated": false,
+      "baselineWholeFailureWaived": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false,
+      "activationExecuted": false
     },
     "currentAuthHarnessClosure": {
-      "status": "SCOPED_TEST_HARNESS_CODE_GO_WHOLE_RUNNING_DEPLOYMENT_HOLD",
+      "status": "SCOPED_TEST_HARNESS_CODE_GO_WHOLE_FAILED_PRESERVED_DEPLOYMENT_HOLD",
       "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
       "baseCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
       "changedTests": ["tests/internal-poc/native-service-auth-availability.spec.ts","tests/internal-poc/service-entry.spec.ts"],
@@ -755,7 +783,7 @@
       "independentDelta": {"verdict":"SCOPED_TEST_HARNESS_DELTA_REVIEW_ACCEPTABLE","critical":0,"high":0,"medium":0,"low":0,"originalCasesExact":true,"inputUnchanged":true,"receiptSha256":"d55e97708ade5458eafabd8fef38108da6b325e03507350a9832621acc213979"},
       "sourceSecurity": {"gitleaksVersion":"8.30.1","scope":"staged tests2/docs2","actualExitCode":0,"findings":0,"ignoreRulesChanged":false},
       "deliveryReview": {"status":"SCOPED_STAGED_DRAFT_DELIVERY_ACCEPTABLE","reviewedSourceCommit":"2acaa3858e55970f77f232f02e73776cafb5dcdd","reviewedSnapshotDigest":"75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff","stagedFiles":9,"critical":0,"high":0,"medium":0,"low":0,"sourceSnapshot2215Exact":true,"historical8Exact":true,"receiptSha256":"fa120c8c3657d1585889d3957b0ac2b1106d8b496fa2528e2137eb19167500fc","scope":"최초staged9 인수. ROOT 마지막후속은 이receipt metadata 한 항목 추가뿐이며 제품/시험/snapshot/whole/운영권위불변."},
-      "whole": {"status":"RUNNING","discovered":14958,"workers":8,"devPort":4574,"previewPort":4575,"prefix":"auth-regression-whole-frozen","session":23581,"inputFrozen":true,"publicBuildFrozen":true,"retryOrRestart":false,"finalExitCode":null,"wholePassClaim":false},
+      "whole": {"status":"FAILED_PRESERVED_CAUSE_UNRESOLVED","specs":535,"discovered":14958,"passed":14940,"failed":1,"skipped":17,"unexecuted":0,"retry":0,"flaky":0,"outsideErrors":0,"workers":8,"devPort":4574,"previewPort":4575,"prefix":"auth-regression-whole-frozen","session":23581,"inputFrozen":true,"publicBuildFrozen":true,"retryOrRestart":false,"finalExitCode":1,"durationMs":5217001.758,"rawSha256":"4718144e88f47f9f3e8335138701cfdff692ca68e637ca373988c686c9696bee","receiptSha256":"b3f484d08b4fd0df9501e1cec0db3910900cc85b670f779ac68848a3ec2949a0","wholePassClaim":false,"failure":"mobile client-market-inspection.spec.ts:104 first English locale page.evaluate Resulting promise was garbage collected; subsequent request/canvas identity assertions unexecuted; runtimecauseunconfirmed","isolatedSameKeys":{"passed":2,"actualExitCode":0,"guardedEnvironmentDifferent":true,"failureWaived":false,"handoffSha256":"764b6c122621015d83b101d991df57cd8026aac16fe477d4ab97dfdf858f32d5"}},
       "generatedCacheException": "원 npm/config 유지; alias writer만 tsbuildinfo2/Vite임시/전용4573캐시 사용. install/package/symlink/privatewrapper/shareddist변경0. blanketshareddepswrite0주장하지않음.",
       "historicalFailuresPreserved": "원14934 actual1/14879PASS/12FAIL/원17SKIP/serial26미실행와원copy이력보존. 별도10/40/578을합산하지않음.",
       "actualProviderGo": false,

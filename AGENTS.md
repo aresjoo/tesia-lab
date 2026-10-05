@@ -4,9 +4,9 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 source와 검증은 manifest와 `migration-verification.json`의 `candidate.currentAuthHarnessClosure`를 따른다. 최신 시험2파일의10/40 PASS·lint3build·작은Sonnet5.5/독립검수와 새14958 RUNNING을 구분한다. controllerRevisionClosure578/Opus·host72/482/30·원14934 FAIL은 이전입력의범위로보존하며 합산·승계0다. 실제provider/Reactprompt/운영GO아니다. Google추가를이유로Apple·이메일을제거하거나미등록방식을실제성공으로표시하지않는다.
+최신 source와 검증은 manifest와 `migration-verification.json`의 `candidate.currentGuestDocumentClosure`를 따른다. 최종 게스트 문서 복원20개·기존390개는 각각PASS이고 같은입력 lint3build·Opus5.5/독립범위 인수다. source2ac의 전수14958은14940PASS/1GC FAIL/기존17SKIP/actual1로 종료했고 원인은 미확정이다. 신규 경계 관측의 작은 화면·장문 locale 버튼 충돌도 knownIssue로 남긴다. 이전 하니스10/40·controller578·host72/482/30과 합산·승계하지 않으며 실제provider/Reactprompt/운영GO는 아니다. Google 추가를 이유로 Apple·이메일을 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
 
-현재 React 출처·전체 파일 해시·미커밋 포함 여부는 `migration-manifest.json`을, 최신 검사·실패 보존·배포 여부는 `MIGRATION.md`와 `migration-verification.json`의 candidate 상태를 따른다. 기존 운영7dd066f의 deployment 이력을 새 후보의 PASS로 승계하지 않는다. 이전 전체 FAIL·새 인증 소비 영향 PASS와 코드 검수를 구분하고 배포 HOLD를 유지한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다. 부분PASS·새전체RUNNING은 실공급자·전체서비스 승인이 아니다. 합성 fixture의 과거 secret scan 한정분류는 shared ignore/rule 변경이나 raw findings0가 아니다.
+현재 React 출처·전체 파일 해시·미커밋 포함 여부는 `migration-manifest.json`을, 최신 검사·실패 보존·배포 여부는 `MIGRATION.md`와 `migration-verification.json`의 candidate 상태를 따른다. 기존 운영7dd066f의 deployment 이력을 새 후보의 PASS로 승계하지 않는다. 이전 전체 FAIL·새 인증 소비 영향 PASS와 코드 검수를 구분하고 배포 HOLD를 유지한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다. 부분PASS·모델 CODE_GO는 실공급자·전체서비스 승인이 아니다. 합성 fixture의 과거 secret scan 한정분류는 shared ignore/rule 변경이나 raw findings0가 아니다.
 
 이 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하는 전달 브랜치다. 먼저 [MIGRATION.md](MIGRATION.md)를 읽는다. 아래의 바닐라 구조·실행·검증 설명은 루트 원본 앱에 적용되며, React 앱은 `react-app/`의 별도 package.json과 AGENTS.md를 따른다. 이 브랜치 자체는 원본 main을 교체하거나 자동 배포하지 않는다. 별도 승인된 정적 배포와 전체 서비스 Gate는 아래 검증 기록으로 구분한다.
 
