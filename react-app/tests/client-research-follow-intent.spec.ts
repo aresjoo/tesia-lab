@@ -56,6 +56,7 @@ for (const entry of ['mount', 'plan-button'] as const) test(`진행 중 첫 acti
   const audit = await mount(page, baseURL, entry === 'mount' ? 'activity' : 'plan', 'playing')
   if (entry === 'plan-button') await page.getByRole('button', { name: '연구 과정 보기', exact: true }).click()
   await expect(page.getByRole('tab', { name: '연구 과정', exact: true })).toHaveAttribute('aria-selected', 'true')
+  await page.evaluate(() => document.fonts.ready)
   await page.clock.runFor(80)
   const initial = await geometry(page)
   console.info('FIRST_ACTIVITY', entry, JSON.stringify(initial))

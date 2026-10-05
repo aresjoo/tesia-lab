@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-entry-continuity@9579b6c362704f4bec85617be05225a5962d9705` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54 코드를 보존한 운영 미배포 초안 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-entry-continuity@56bfde2ba9a930e49068e57ac19a585b0752b3c6` 추적 파일 전체. 기존 누적 UI 이식·Web draft PR54 코드를 보존한 운영 미배포 초안 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -17,7 +17,7 @@
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
 
-현재 후보9579b6c의 전체2,211파일/25,857,315bytes를 exact byte/hash로 전달한다. sourceDirtyFiles0이며 node_modules·빌드·비공개 QA·DB·credential은 제외한다. 운영 출처7dd066f와 후보를 혼동하지 않는다.
+현재 후보56bfde2의 전체2,211파일/25,862,500bytes를 exact byte/hash로 전달한다. sourceDirtyFiles0·snapshot9322333이며 node_modules·빌드·비공개 QA·DB·credential은 제외한다. 이전9579 이후에는 검사2곳과 문서3개만 바뀌었고 제품·디자인·인증 SDK·provider·권한은 추가 변경하지 않았다. 운영 출처7dd066f와 후보를 혼동하지 않는다.
 
 | 이번 변경 | 구현 위치 | 보존하는 경계 |
 | --- | --- | --- |
@@ -26,11 +26,11 @@
 | 모바일 메뉴 클릭 영역 | `client-research-hub.css` | 실제6px 겹침만 CSS3줄 보완. 메뉴·경로·원본 디자인 보존 |
 | 회귀 관측·신규4spec | `react-app/tests/` | 기존 assertion·timeout·retry·skip을 완화하지 않음. 실제 실패와 신규 검증을 분리 |
 
-후보 단일155spec은4543PASS/1FAIL/기존4SKIP·actual1이다. 초기 연구 scroll gap2px 실패의 원인은 미확정이며 분리 동일키5PASS로 면제하지 않는다. 전체531spec/14862개는 진행 중이다. lint·공개/내부/service build actual0와 독립 정적 코드GO는 전체 인수·운영 승인이 아니다. 이전 전체14748의5FAIL 및 원 raw 증거도 보존한다. 이번 후보 배포는 HOLD이며 기존 운영 bundle을 유지한다. Google·Apple·이메일은 공존하고 실제 provider 성공을 합성 시험으로 대체하지 않는다.
+이전 입력a40의 단일155spec은4543PASS/1FAIL/기존4SKIP·actual1, 최초 전체531spec/14862개는14842PASS/3FAIL/기존17SKIP·actual1로 종료했다. 초기 연구 gap2px의 원인·scroll 작성 주체 및 차트 mount 전 GET reset 원인은 미확정이며 원FAIL을 보존한다. 하니스2곳만 교정한 새입력357의 관련3spec/60개는60PASS/0FAIL/0SKIP·actual0다. 새 전체를 딱1회 새prefix에 시작했고 완료 전 전체GO를 선언하지 않는다. lint actual0·기존 제품 입력의 build proof·Sonnet5.5 작은 하니스 정적GO는 전체 인수·운영 승인이 아니다. 이전 전체14748의5FAIL 및 원 raw 증거도 보존한다. 이번 후보 배포는 HOLD이며 기존 운영 bundle을 유지한다. Google·Apple·이메일은 공존하고 실제 provider 성공을 합성 시험으로 대체하지 않는다.
 
-**추가 읽기 전용 검수:** 현재 전체 실행에서는 구 `client-source-parity.spec.ts:17`의 globe DOM 0개 단언이 desktop/mobile에서 실패했다. 원본은 게스트 대화에서도 DOM을 유지하고 데스크톱에서 표시·860px 이하에서 CSS로 숨기므로 제품을 다시 숨기는 교정을 하지 않는다. 전문 차트의 별도 실패는 mount 전 compiled-module GET의 `ECONNRESET`이며 키보드/crosshair 검증은 미실행이다. 연결 종료 원인은 아직 미확정이고 두 종류의 원FAIL을 그대로 보존한다. 초기 연구 gap2px는 탭 전환 후 새 글꼴 로딩과 측정 준비의 불일치 가능성이 있으나 인과와 교정은 아직 미검증이다. 실행 중인 입력·timeout·retry·skip·release gate 변경0이다.
+**추가 검수와 최소 교정:** 구 `client-source-parity.spec.ts:17`의 globe DOM0 단언 desktop/mobile2FAIL을 원본의 DOM1·desktop표시·860px 이하 CSS숨김으로 교정했다. 제품을 다시 숨기지 않는다. 연구 gap2px는 별도 passive17관측에서 글꼴 완료와 시간상관만 확인했으므로 geometry 측정 전 `document.fonts.ready` 1줄을 추가했다. 두 변경을 역변환하면 원HEAD의 두 파일 전체 bytes와 일치한다. strictgap<2·clock80/80/7000·다른 assertion/timeout/retry/skip은 보존한다. 차트 GET reset 원인은 미확정이며 compiled helper 수정·retry 추가0다. 새60PASS로 구FAIL을 동일계약 성공으로 승계하거나 합산하지 않는다.
 
-**실제 로그인 인계:** Google·Apple·이메일 선택지/SDK는 모두 유지한다. 실 Google callback/ACK는 미검증이고 Apple 등록·SMTP도 완료하지 않았다. 별도 Backend157 정적 비교에서 기존 OAuth 반환의 `HANDOFF_BOUND → 공개 session 401 → 새 익명 세션 bootstrap` 경로를 확인했다. 거래별 cookie가 별도로 있어 result/ACK가 성공할 가능성도 있으므로 운영 로그인 실패·보안 결함으로 단정하지 않는다. 해당 Backend SHA가 현재 운영 코드인지도 미검증이다. 정상 반환의 불필요한 소유자 교체·복구 데이터 정리 여부를 먼저 재현하고 Backend 담당과 정확한 반환 계약을 확인해야 한다. 준비한 합성 반례는 실행 전이며 새 SDK/공용 계약·provider flag·자동 ACK/claim·인증 권한 변경0이다.
+**실제 로그인 인계:** Google·Apple·이메일 선택지/SDK는 모두 유지한다. 실 Google callback/ACK는 미검증이고 Apple 등록·SMTP도 완료하지 않았다. Backend157 정적 비교의 `HANDOFF_BOUND → 공개 session 401 → 새 익명 세션 bootstrap`을 모사한 private1440/390 두case는 마지막 추가 익명 생성0 기대에서 실제1로 실패했다. 그 전의 거래별cookie·result·명시ACK·AUTH세션·CSRF 왕복은 모두 통과했다. 초기 중복Playwright loader 실패0test는 별도 보존한다. 기존7dd에도 같은 경로가 있고 실제 공개 Backend pin·초안 손실·실Google는 미검증이므로 운영 로그인 실패·보안 결함으로 단정하지 않는다. 불필요한 소유자 교체 가능성은 독립 Opus 검토 및 Backend 반환 계약 확인이 필요하다. 새 SDK/공용 계약·provider flag·자동 ACK/claim·인증 권한 변경0이다.
 
 teth.ai는 공개 HTTPS 자산350개/문서4개를 새로 검사해 이전 운영7dd066f와 exact 일치했다. 아카이브의 raw HTML과 HTTP 응답은 서버 소유 profile meta 삽입 때문에 해시가 다르며, 승인된 정확한 삽입까지 포함해 동일함을 검증했다. 다른 팀의 배포 변경으로 오인하지 않는다. 새 후보 활성화0이며 최신 범위·증거는 검증 JSON의 `readOnlyContinuation`을 따른다.
 

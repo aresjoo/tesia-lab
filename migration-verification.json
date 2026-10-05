@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "purpose": "원본 계승 후속 auth-entry-continuity 전체 코드 전달 초안. candidate는 운영 미배포이며 historicalProduction*와 deployment는 이전7dd066f의 범위다.",
-  "sourceCommit": "9579b6c362704f4bec85617be05225a5962d9705",
+  "sourceCommit": "56bfde2ba9a930e49068e57ac19a585b0752b3c6",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "9d1e0389bef2e5905d5c8a4b022acbcba538d371e9cf4a4a821e9ebc15e16ca6",
+  "snapshotDigest": "9322333c57a1c63e3517d2dfe614e6207a8846366040db01f6ddc4cda9124eb2",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -67,7 +67,7 @@
   },
   "snapshot": {
     "files": 2211,
-    "bytes": 25857315,
+    "bytes": 25862500,
     "sourceDirtyFiles": [],
     "hashVerification": "PASS exact bytes/hash",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -465,7 +465,7 @@
       "status": "PASS"
     }
   },
-  "pendingDeployment": {"status":"HOLD_FAILED_IMPACT_AND_RUNNING_WHOLE","sourceCommit":"9579b6c362704f4bec85617be05225a5962d9705","activationExecuted":false},
+  "pendingDeployment": {"status":"HOLD_PRESERVED_FAILURES_AND_OAUTH_RETURN_REVIEW_NEW_WHOLE_RUNNING","sourceCommit":"56bfde2ba9a930e49068e57ac19a585b0752b3c6","activationExecuted":false},
   "historicalProductionEvidenceHashes": [
     {
       "evidenceFile": "catalogue-parity-followup-closure-build.json",
@@ -711,9 +711,9 @@
   "candidate": {
     "status": "DRAFT_UNDEPLOYED_TESTS_NOT_PASSED",
     "sourceBranch": "agent/web/auth-entry-continuity",
-    "sourceCommit": "9579b6c362704f4bec85617be05225a5962d9705",
-    "captureTime": "2026-10-05T05:36:52.967Z",
-    "frozenInput": {"files":2204,"sha256":"a40d14a8e8ce77862c30db0a0133515dba56ae10815b9f2dc0e1e1a2881a111f"},
+    "sourceCommit": "56bfde2ba9a930e49068e57ac19a585b0752b3c6",
+    "captureTime": "2026-10-05T07:02:05.324Z",
+    "frozenInput": {"files":2204,"sha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad"},
     "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
     "serviceBuild": {"files":1113,"sha256":"d161a3765c5d5911741c05475daf67d2830f45a6cda7e591146ae7fda23f9f0e"},
     "sourceChanges": {
@@ -724,13 +724,14 @@
         "src/internal-poc/ClientServiceExperience.tsx",
         "src/internal-poc/NativeServiceApp.tsx"
       ],
-      "existingTestsChanged": 6,
+      "existingTestsChanged": 8,
       "newTests": 4,
       "documents": ["README.md","DESIGN.md","Bugfix_report.md"],
       "scope": "게스트 원본 표시 복원·클릭 영역·검증된 동일 소유자의 미전송 입력 보존. 인증SDK/API/provider/권한/prompt/package/DB/색상/SVG 변경0"
     },
     "impact": {
       "status": "FAILED",
+      "frozenInputSha256":"a40d14a8e8ce77862c30db0a0133515dba56ae10815b9f2dc0e1e1a2881a111f",
       "specs":155,"total":4548,"passed":4543,"failed":1,"skipped":4,
       "flaky":0,"retries":0,"errors":0,"actualExitCode":1,
       "inputAndPublicBuildUnchanged":true,
@@ -744,11 +745,15 @@
       "scope":"분리 관측만; 최초 실패 소거/전체PASS/운영GO0",
       "reportSha256":"d1d4f293819e4b93a328540a162679850c45c45e7748cc812f35d1a87f851eb3"
     },
-    "whole": {"status":"RUNNING","specs":531,"discovered":14862,"workers":8,"actualExitCode":null,"retryOrRestart":false},
+    "whole": {"status":"FAILED_PRESERVED","specs":531,"discovered":14862,"passed":14842,"failed":3,"skipped":17,"workers":8,"actualExitCode":1,"flaky":0,"retries":0,"errors":0,"durationMs":4854349.297,"retryOrRestart":false,"inputAndPublicBuildUnchanged":true,"frozenInputSha256":"a40d14a8e8ce77862c30db0a0133515dba56ae10815b9f2dc0e1e1a2881a111f","reportSha256":"90ad98531c1ac9a0c7aab8062798154a6f5e994c6d25f0f5afc805cae6338636","logSha256":"b9f28dae5787893c7673980a3e9d0899d0cdff2a6d3b433a07618ef02db1a69e"},
+    "correctedTargeted": {"status":"PASS_SCOPED_NOT_WHOLE","specs":3,"total":60,"passed":60,"failed":0,"skipped":0,"flaky":0,"retries":0,"errors":0,"actualExitCode":0,"durationMs":166075.204,"inputAndPublicBuildUnchanged":true,"frozenInputSha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad","reportSha256":"5edf24129fb14ef4b9e38c32bd14941c13e073d8277664fe8d69ca0050dfee40","logSha256":"77ab11e08337c1202e4415eebbd74ac2e6bb31b312a4d2e3cbfdd126549f7faf","acceptanceSha256":"befc4c48eb26e4ecb1284d8d774ee7c96d11db564cef9c43199d1985da65b55c","originalFailuresWaived":false},
+    "correctedWhole": {"status":"RUNNING_NOT_ACCEPTED","prefix":"auth-entry-continuity-readiness-corrected-whole","expectedSpecs":531,"expectedCases":14862,"workers":8,"devPort":4547,"previewPort":4548,"actualExitCode":null,"restartOrRetry":false,"frozenInputSha256":"3572747b0d3b81022281080e6288001bef75fb405d04ec0e2c5450c195622fad"},
+    "harnessDeltaReview": {"account":"personal (1)","actualModel":"claude-sonnet-5-5","actualExitCode":0,"verdict":"HARNESS_DELTA_CODE_GO","inputUnchanged":true,"receiptSha256":"f2f228a418a4aba471d0c4032b18dd55e05fa4865da18b3149129b63ad40683e","scope":"원본 globe DOM/반응형 기대와 fonts.ready 1줄의 작은 정적 검수만. 모든 다른 bytes·assertion·strict gap<2·clock80/80/7000·retry/skip/timeout 유지","wholeGo":false,"deploymentGo":false,"serviceGo":false},
     "buildChecks": {
       "lint":0,"publicBuild":0,"internalBuild":0,"serviceBuild":0,
       "googleFlag":true,"exchangeFlag":false,"inputUnchanged":true,
-      "receiptSha256":"e023cf8ddeda436b378336584e54d824108d53a1837481527256bfefc862753d"
+      "receiptSha256":"e023cf8ddeda436b378336584e54d824108d53a1837481527256bfefc862753d",
+      "scope":"이전a40 입력 build proof; 새 후보는 하니스2곳/문서만 추가 변경·제품/package/lock/build source는 동일. 새build실행으로 승계하지 않음. 새 lint actual0"
     },
     "independentCodeReview": {
       "account":"personal (1)","actualModel":"claude-opus-5-5","actualExitCode":0,
@@ -762,6 +767,7 @@
       "reportSha256":"05c65bc51caf578cc5404cd963a5d237ce67eb11644507744431c37344fd8f6e"
     },
     "sourceSecurity": {"gitleaksVersion":"8.30.1","actualExitCode":0,"findings":0,"scope":"source 최종18 staged; migration 최종검사와 별개"},
+    "readinessSourceSecurity":{"gitleaksVersion":"8.30.1","actualExitCode":0,"findings":0,"stagedFiles":5,"ignoreRulesChanged":false,"scope":"56bfde2 tests2/documents3 staged delta; 기존 제품·SDK 변경0"},
     "servicePresentation": {
       "scope":"동일1113 build exact bytes 및 loopback1440/390/320 로그인 UI; 합성GET/외부·mutation차단",
       "status":"PASS_SCOPED","actualLoginVerified":false,"providerStartExecuted":false,"mutationExecuted":false,
@@ -781,7 +787,7 @@
       "sourceSnapshotAndStagedFilesExact":2211,"sourceFrozenInputUnchanged":true,
       "historicalProductionAndDeploymentObjectsExact":true,"protectedRuntimeChanged":false,
       "reviewSha256":"d51f229199cbe994a9183c0d764a3f940dafb7e28baa63867d46db1b0784c59e",
-      "scope":"전달 누락/출처/문서 상태만; 전체 product/service 검수 및 운영GO 아님"
+      "scope":"이전9579/fdb1e45 전달 누락/출처/문서 상태만. 새56bfde2 전달 독립검수는 별도이며 전체 product/service 검수 및 운영GO 아님"
     },
     "promptMergeRehearsal": {
       "deliveryCodeCommit":"fdb1e45cdf9f3c8de9ffc144fc48714a91ec63ef",
@@ -794,12 +800,12 @@
     },
     "readOnlyContinuation": {
       "status":"AUDIT_CONTINUES_DEPLOYMENT_HOLD",
-      "wholeRun":"기존 최초531spec/14862 단일실행 유지; 종료 전 최종 통계/actual exit는 확정하지 않음",
+      "wholeRun":"최초a40 단일531spec/14862 actual1/14842P3F17기존skip 보존. 하니스2곳만 교정한357 입력의 관련60PASS와 새전체1회 실행은 별도범위이며 합산0",
       "observedFailures":[
         {"file":"tests/client-source-parity.spec.ts","projects":["desktop","mobile"],"classification":"OLD_ASSERTION_CONFLICTS_WITH_ORIGINAL_GUEST_GLOBE_DOM_AND_RESPONSIVE_VISIBILITY","productRegressionConfirmed":false,"rawFailurePreserved":true},
         {"file":"tests/price-chart.spec.ts:107","project":"desktop","classification":"LOCAL_COMPILED_MODULE_GET_ECONNRESET_BEFORE_MOUNT","chartAssertionsExecuted":false,"resetCauseConfirmed":false,"rawFailurePreserved":true}
       ],
-      "followDiagnosis":{"lateFontWaveObserved":true,"causeConfirmed":false,"passiveHarnessExecuted":false,"initialFailureWaived":false,"productResizeBehaviorChanged":false},
+      "followDiagnosis":{"lateFontWaveObserved":true,"causeConfirmed":false,"passiveHarnessExecuted":true,"passiveActualExitCode":0,"passivePassed":1,"events":17,"observationCapHit":false,"guards":[],"meaning":"gap0→4font완료 gap2→scroll gap0 시간상관만; 원155인과/scroll작성주체 미확정","initialFailureWaived":false,"productResizeBehaviorChanged":false},
       "authReadiness": {
         "choices":["Google","Apple","email"],
         "actualProviderLoginVerified":false,
@@ -809,8 +815,9 @@
         "canonicalBackendCompared":"6df63880618d89ca52b2b7c1f7ddd44c305133c1",
         "backendComparisonIsCurrentPublicRuntime":false,
         "existingReturnPath":"HANDOFF_BOUND public-session401 can trigger replacement anonymous bootstrap before explicit result/ACK; same frontend path at7dd/9579",
-        "transactionCookieLookup":"별도 transaction cookie로 result/ACK가 계속 성공할 가능성도 있음; 현재 공개 로그인 실패·보안 결함으로 확정하지 않음",
-        "syntheticReturnCounterexample":"PREPARED_NOT_EXECUTED",
+        "transactionCookieLookup":"합성2case의 별도 transaction cookie/result/명시ACK/AUTH세션·CSRF 왕복은 통과. 현재 공개 로그인 실패·보안 결함으로 확정하지 않음",
+        "syntheticReturnCounterexample":"EXECUTED_2_FAILED_LAST_ADDITIONAL_ANON_CREATE_ASSERTION",
+        "syntheticReturnScope":{"widths":[1440,390],"actualExitCode":1,"failed":2,"additionalAnonymousCreatesEach":1,"expected":0,"explicitAcksEach":1,"blockedRequests":[],"actualProviderExecuted":false,"oldDraftLossMeasured":false,"sourceAndPublicBeforeAfterIndependentlyAttested":false,"earlierSetup":{"actualExitCode":1,"testsExecuted":0,"classification":"PRIVATE_PLAYWRIGHT_DUPLICATE_ESM_LOADER"},"reportSha256":"704ea21877003fd5e689f7a2040f29bb13ef60f7a086152355b680e02b6c93fc"},
         "requiredFollowup":"재현 후 현재 Backend의 반환 pin과 소유자 연속성을 확인. 공용 schema/SDK·session 공개 범위·provider flag를 추측으로 변경하지 않음",
         "sdkApiFlagsAuthorityChanged":false
       },
@@ -828,7 +835,9 @@
         "auth-entry-continuity-auth-readiness.oauth-return.json",
         "auth-entry-continuity-follow-cause-readonly.json",
         "auth-entry-continuity-follow-source-policy.json",
-        "auth-entry-continuity-follow-passive.readonly-review.json"
+        "auth-entry-continuity-follow-passive.readonly-review.json",
+        "auth-entry-continuity-readiness-corrected-acceptance.json",
+        "auth-entry-continuity-harness-sonnet-review.receipt.json"
       ],
       "runtimeSourceOrBuildChanged":false,"restartRetrySkipOrTimeoutChanged":false,
       "activationExecuted":false,"wholePassClaim":false,"actualServiceGo":false
