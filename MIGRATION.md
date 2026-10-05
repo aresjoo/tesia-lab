@@ -27,6 +27,8 @@
 
 기존service2aaba bundle를 재빌드 없이 loopback에서 실제 브라우저로 확인했다. 정상AUTH 복귀1440/390의 ready·session/CSRF와 불일치 거부2폭의 CSRF0/바인딩없음은 원7실행 중4PASS다. 정상root 옵션3은 이메일 native disabled를 ARIA속성만으로 잘못 검사해 원3하니스FAIL/actual1을 보존했고, 그 private 기대만 바꾼 별도3PASS/actual0에서 Google·Apple·email/SVG/준비중 상태를1440/390/320에 확인했다. 두 run의source/public/service hashes는같고 외부/mutation0·자체4564종료다. 서로 다른 기대의 결과를7PASS로 합산하지 않으며 실cookie/provider/전체·운영GO로 확대하지 않는다.
 
+전체 전달은 migration `f387e6e32735ebb334b546e56613b8fb7fb07bac`로 실제commit/push했다. 독립 staged9와 문서후속 delta 검수가 snapshot/source/원실패·HOLD/역사8객체 보존을 확인했다. f387e6e와 별도 prompt8646의 readonly merge-tree도 actual0/충돌0/tree2510b1c이며 worktree/refs 변경·실제merge·React prompt producer 통합0다. 이 영수증 추가 문서는 코드 전달 뒤의 metadata이며 source ef6e1d0·snapshotd4bfa71은 바꾸지 않는다.
+
 이전0793737의 전체2,213파일/25,921,574bytes, sourceDirtyFiles0·snapshot4e36bf5 전달을 보존한다. 당시56bfde2 이후 제품은 `NativeServiceApp.tsx`/`NativeLoginPanel.tsx`의 인증 복귀·보존 controller 교정만 바뀌었고 신규 예방시험2개 및 README/Bugfix를 포함했다. Google·Apple·이메일 UI·원문·SVG·색상·가용성 flag·SDK·공용 계약·프롬프트·서버·DB는 유지한다. 일반 방문은 그대로이며 plain `/auth/complete`의 검증401만 새 익명 세션을 만들지 않고 무권한 복구 표시를 연다. 자동 START/ACK/claim/전략 승인/주문은 없다. 미확정 journal·logout/email 우선과 동일 controller의 ACK 유실/화면 왕복 복구를 보존한다.
 
 최종2206/59de 입력의 신규26개와 기존 로그인482개는 각각 actual0/전부PASS/skip·retry·flaky·시험밖오류0이며 같은입력 lint/공개·내부/service3build actual0다. 화면 왕복의 busy 잠금은 원동일키 RED1→GREEN1로 검증했다. personal(1) 실제 Opus5.5는 인증 소비 CODE_GO/C·H·M0, Low5·가설5 및 후속시험을 남겼다. CLI 응답의 계정 상태 prefix로 생긴 최초 parser 실패를 보존하고 모델 재호출 없이 실제 result/modelUsage/입력불변을 별도 확인했다. secret scan의 합성 journal 재전송 식별자1건은 원raw actual1을 보존하고 정확한 finding만 한정분류했다. shared ignore/rule 변경0이며 raw findings0/hostedCI PASS로 쓰지 않는다.
