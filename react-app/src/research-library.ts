@@ -30,12 +30,6 @@ export function searchResearch(records: ResearchRecord[], query: string) {
   }).sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
-export const RESEARCH_PAGES: { id: ResearchPage; label: string }[] = [
-  { id: 'history', label: '연구 기록' }, { id: 'schedule', label: '예약된 검증' },
-  { id: 'ranking', label: '랭킹' }, { id: 'sharing', label: '전략 공유' },
-  { id: 'insight', label: '인사이트' }, { id: 'brokers', label: '지원 거래소' },
-]
-
 // Read-only values captured from the original tfRankSeeds() implementation.
 // These are client demo fixtures, not real trader returns or our rating engine.
 export const CLIENT_RANKING = [

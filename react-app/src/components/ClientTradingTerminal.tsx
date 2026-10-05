@@ -129,25 +129,47 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       region.style.setProperty('--ctt-picker-top', `${top + 12}px`)
       region.style.setProperty('--ctt-picker-height', `${Math.max(96, bottom - (fallback ? top + 12 : region.getBoundingClientRect().top) - 12)}px`)
     }
-    let measuredControl: HTMLElement | null = null, controlHeight = 0
-    const resize = () => {
+    let measuredControl: HTMLElement | null = null, controlHeight = 0, controlTypography = ''
+    let observedControl: HTMLElement | null = null, revealScroll = window.scrollY, fontReflowFrame = 0, observerFrame = 0
+    const observeControl = (target: HTMLElement) => {
+      if (observedControl === target) return
+      if (observedControl) observer.unobserve(observedControl)
+      observedControl = target; observer.observe(target)
+    }
+    const resize = (allowReveal = true) => {
       // Only viewport/trigger changes may reposition this disclosure. Its
       // ordinary scroll listener only measures; owned layers retain focus.
       measure()
       const target = document.activeElement
       if (!(target instanceof HTMLElement) || !region.contains(target)) return
+      observeControl(target)
       const viewport = window.visualViewport
       const top = viewport?.offsetTop ?? 0
       const bottom = viewport ? top + viewport.height : window.innerHeight
       const rail = region.getBoundingClientRect(), bounds = target.getBoundingClientRect()
-      if (region.dataset.viewportFallback !== 'true' && (rail.top < top || rail.top + bounds.height > bottom - 12)) {
+      if (allowReveal && region.dataset.viewportFallback !== 'true' && (rail.top < top || rail.top + bounds.height > bottom - 12)) {
         trigger.scrollIntoView({ block: 'start', inline: 'nearest' })
         measure()
       }
       // An anchored rail near the end of a page can remain shorter than one
       // enlarged control even at maximum page scroll. The source mobile rail
       // also floats in the viewport; use that placement only for this case.
-      if (measuredControl !== target) { measuredControl = target; controlHeight = target.getBoundingClientRect().height }
+      // Retain the tallest measurement across placement-induced wrapping,
+      // but not across an actual font change on this same focused control.
+      const typography = [target, ...target.querySelectorAll('*')].map(element => {
+        const style = getComputedStyle(element)
+        return [style.fontSize, style.lineHeight, style.fontFamily, style.fontWeight, style.letterSpacing].join('|')
+      }).join(';')
+      if (measuredControl !== target || controlTypography !== typography) {
+        if (measuredControl === target) {
+          // Font reduction can also clamp the document's scroll position.
+          // Recheck the local rail after that layout settles, without moving
+          // the page or changing the user's focused DOM node.
+          cancelAnimationFrame(fontReflowFrame)
+          fontReflowFrame = requestAnimationFrame(() => resize(false))
+        }
+        measuredControl = target; controlTypography = typography; controlHeight = target.getBoundingClientRect().height
+      }
       else controlHeight = Math.max(controlHeight, target.getBoundingClientRect().height)
       const anchorBottom = trigger.parentElement!.getBoundingClientRect().bottom
       const normalHeight = Math.min((bottom - top) * .7, 640, bottom - anchorBottom - 12)
@@ -156,6 +178,7 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       const visible = region.getBoundingClientRect(), control = target.getBoundingClientRect()
       if (control.top < visible.top + region.clientTop) region.scrollTop += control.top - visible.top - region.clientTop
       else if (control.bottom > visible.top + region.clientTop + region.clientHeight) region.scrollTop += control.bottom - visible.top - region.clientTop - region.clientHeight
+      if (allowReveal) revealScroll = window.scrollY
     }
     const outside = (event: Event) => {
       if (!(event.target instanceof Node) || region.contains(event.target) || trigger.contains(event.target)) return
@@ -169,6 +192,7 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
     }
     const focus = (event: Event) => {
       if (!(event.target instanceof HTMLElement) || !region.contains(event.target)) { outside(event); return }
+      observeControl(event.target)
       // A child dialog returns focus with preventScroll. Reveal that real
       // control only when it is clipped, including after a mobile transition.
       const bounds = event.target.getBoundingClientRect(), rail = region.getBoundingClientRect()
@@ -176,20 +200,30 @@ export function ClientTradingTerminal({ active = false, embedded = false, contro
       const bottom = viewport ? top + viewport.height : window.innerHeight
       if (bounds.top < Math.max(top, rail.top + region.clientTop) || bounds.bottom > Math.min(bottom, rail.top + region.clientTop + region.clientHeight)) resize()
     }
-    const observer = new ResizeObserver(resize)
+    // A trigger/control reflow does not revoke an ordinary page scroll.
+    // Explicit viewport changes and newly clipped focus can still reveal it.
+    const observer = new ResizeObserver(() => {
+      // Placement can resize the observed row. Perform writes outside the
+      // observer delivery cycle rather than issuing undelivered notifications.
+      cancelAnimationFrame(observerFrame)
+      observerFrame = requestAnimationFrame(() => resize(window.scrollY === revealScroll))
+    })
+    const viewportResize = () => resize()
     observer.observe(trigger)
-    window.addEventListener('resize', resize)
-    window.visualViewport?.addEventListener('resize', resize)
+    window.addEventListener('resize', viewportResize)
+    window.visualViewport?.addEventListener('resize', viewportResize)
     window.visualViewport?.addEventListener('scroll', measure)
     document.addEventListener('scroll', measure, true)
     document.addEventListener('pointerdown', outside, true)
     document.addEventListener('focusin', focus)
     resize()
     return () => {
+      cancelAnimationFrame(fontReflowFrame)
+      cancelAnimationFrame(observerFrame)
       observer.disconnect()
       delete region.dataset.viewportFallback
-      window.removeEventListener('resize', resize)
-      window.visualViewport?.removeEventListener('resize', resize)
+      window.removeEventListener('resize', viewportResize)
+      window.visualViewport?.removeEventListener('resize', viewportResize)
       window.visualViewport?.removeEventListener('scroll', measure)
       document.removeEventListener('scroll', measure, true)
       document.removeEventListener('pointerdown', outside, true)

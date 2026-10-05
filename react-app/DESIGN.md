@@ -1,5 +1,7 @@
 # TETH AI Design System
 
+이번 후속은8fe33d9에서 긴 연구 문서의 첫 질문 따라가기·새 응답 원본 진입 모션·동일 활성행의 글자 확대/축소 후 선택기 배치를 최소 교정한다. 같은 입력94spec/3030개 단일 **3028PASS/0FAIL/기존QA-015SKIP2/flaky0/retry0/시험밖오류0·actual0(954.822초)**다. 같은 입력 lint/공개·내부·service3build와 built Google·Apple·이메일1440/390/320, personal(1) 실제 Opus5.5 STATIC_UI_CODE_GO/입력불변을 확인했다. 인증/API/프롬프트/가격/패키지/flags/색상/SVG는 변경0이다. 실제 공급 인증/전체서비스 GO가 아니며 전달·정적 배포는 migration 영수증을 따른다. [이번 실제 반례](Bugfix_report.md#연구-첫-질문원본-모션글자-축소-후-선택기-복원)를 따른다. 아래90spec은 이전8fe33d9 인수 이력이며 새 결과와 합산하지 않는다.
+
 이번 교정은69a1e97의 정상 디자인을 유지하면서 초기 연구 따라가기·읽기 중 질문의 nonforce 동선·짧은 선택기 활성 초점·한국어 원문12키를 복원한다. 원본 `↓ 새 응답 보기`는 읽기 위치를 지키고 클릭으로만 하단 따라가기를 재개하는 조건부 동작이다. 인증/API/프롬프트/가격/색상/SVG 변경0이다. 같은 입력90spec의2976PASS/0FAIL/기존skip2·lint/3build·개인1 Opus5.5 STATIC_UI_CODE_GO로 정적 코드를 인수했다. 아래83spec은 이전 이력이며 실제 전달/배포·미검증 조합은 Bugfix 최상단과migration 영수증을 따른다.
 
 이전69a1e97 정적 인수 이력은4237d65 이후 연구 기록의 읽기·세션 왕복 따라가기, 짧은 복사창/터미널 검색 초점, 공급 알림의 빈 분류 안내를 최소 교정한다. 원본9fbff821의 정상 디자인·문구·SVG·Google/Apple/이메일과 API/프롬프트/가격/package/권한을 유지한다. 같은 입력83spec/2702개 단일은2700PASS/0FAIL/기존QA-015SKIP2·flaky/retry/시험 밖 오류0·actual0(842.661초)이며 lint/공개·내부·service3build 및 personal(1) Opus5.5 STATIC_UI_CODE_GO를 인수했다. 원제품21실패발생/19고유·RAF측정24·footer부호하니스2를 동일 case-key의 최종PASS에 결속했다. 이전 실패·HOLD·중단·partial·469spec 전수와 합산하지 않는다. 정확한 입력/전달/정적 배포와 실제 서비스 미검증 경계는 Bugfix_report 최상단과 Lab migration 영수증을 따른다.

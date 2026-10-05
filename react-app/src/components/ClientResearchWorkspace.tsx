@@ -339,9 +339,12 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     let disposed = false, frame = 0
     restoringPosition.current = true
     automaticScroll(element, target)
-    // Source G.stick starts unset: a first activity visit follows even when
-    // accumulated records already overflow. A saved reading position still wins.
-    follow.current = documentFollowing.current[active] ?? ((active === 'activity' && positions.current.activity === undefined) || element.scrollHeight - element.clientHeight - element.scrollTop < 40)
+    // Source gOpen resets position, not G.stick: a new document inherits the
+    // current intention. A saved document's explicit reading state still wins.
+    // Preserve the first activity entry's existing following default as well.
+    follow.current = documentFollowing.current[active] ?? (positions.current[active] === undefined
+      ? active === 'activity' || follow.current
+      : element.scrollHeight - element.clientHeight - element.scrollTop < 40)
     documentFollowing.current[active] = follow.current
     setNewResponse(false)
     // A fallback font/short textarea can temporarily clamp scrollTop. Preserve
@@ -503,7 +506,7 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
   }
 
   const responseChip = newResponse && !analysis && !(active === 'activity' && replay.status === 'playing') ? <>
-    <style>{`.client-restored-research .rw-composer-wrap > .g-newmsg{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 8px);z-index:12;background:var(--pop,var(--g2));color:var(--gt);border:1px solid var(--gl2,rgba(255,255,255,.16));border-radius:999px;padding:7px 15px;font-size:12.5px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:gFadeUpC .25s var(--ease) both}.client-restored-research .rw-composer-wrap > .g-newmsg:hover{background:var(--g3)}@keyframes gFadeUpC{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%)}}`}</style>
+    <style>{`.client-restored-research .rw-composer-wrap > .g-newmsg{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 8px);z-index:12;background:var(--pop,var(--g2));color:var(--gt);border:1px solid var(--gl2,rgba(255,255,255,.16));border-radius:999px;padding:7px 15px;font-size:12.5px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:gFadeUpC .25s var(--ease,cubic-bezier(.16,1,.3,1)) both}.client-restored-research .rw-composer-wrap > .g-newmsg:hover{background:var(--g3)}@keyframes gFadeUpC{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%)}}`}</style>
     <button className="g-newmsg" type="button" onClick={() => {
       const element = scroll.current
       if (!element) return
