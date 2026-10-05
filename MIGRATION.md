@@ -8,7 +8,7 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-revision-closure@875f1e8daca1e5f33cac588d001078091e6a5d96` 추적 파일 전체. 코드e737eb8·문서 anchor 복원/기존전체 종료 기록 후속이며 기존 누적 UI 이식·거래소 draft PR54·OAuth0793737·직접 GET ef6e1d0 위에 controller session revision 소비 교정을 추가한 운영 미배포 후보 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/auth-regression-closure@2acaa3858e55970f77f232f02e73776cafb5dcdd` 추적 파일 전체. 기존 controller 교정/source875 위의 테스트2파일 최소 후속이며 제품·SDK·UI·로그인 선택지 변경0인 운영 미배포 후보 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
@@ -16,6 +16,12 @@
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
 ### 이번 누적 반영 — 이전 전달과 무엇이 달라졌는가
+
+현재 전달은 source2acaa38의 **2,215파일/25,957,255bytes**, sourceDirtyFiles0·snapshot SHA `75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff`다. 원 availability seam의env-read2기대를normal/returnOnly각2개총4개로 맞추고, 고정queryless callback 정책과충돌한query-bearing alias의ready기대를error/API0로교정했다. 원case/fixture/나머지assertion/timeout/retry/skip와 제품·SDK·UI·문구·SVG·flags는 그대로다. Google·Apple·이메일 모두보존·미등록방식임의활성화0이다.
+
+새 availability10키와 service-entry전체40키는 각각 actual0/모두PASS이며 원alias2FAIL와그뒤26serial미실행도같은키로실행했다. 원full14934의14879PASS/12FAIL/원17SKIP/26미실행은보존하고부분PASS합산0이다. 최종2208/5cf9844 입력의lint/3buildactual0·public/internal/service모두이전빌드exact다. 작은personal(1) Sonnet5.5 HARNESS_DELTA_CODE_GO/확정C0H0M0/Low5와 독립검수C0H0M0를 인수했다. 새14958 단일전수는원config/8workers/4574·4575에서RUNNING이며실provider·Reactprompt연결·전체/운영GO가아니다. 상세는 `candidate.currentAuthHarnessClosure`가소유한다. 원source875/controller578과이전whole의기록은아래이력으로보존한다. teth.ai upload/activate/서버DB교체0·운영HOLD다.
+
+### 이전 controller revision 전달 이력
 
 현재 전달은 source875f1e8의 **2,215파일/25,952,769bytes**, sourceDirtyFiles0·snapshot SHA `e570b92b06bfabf99d976c6c8c58c336446c6a650388706560badf4b3f8b6c0e`다. 코드e737eb8 뒤 보고서 anchor53bytes 복원과 이전전체 종료1098bytes 기록만 추가했다. 제품·시험·빌드는 그대로다. 직전ef6e1d0 이후 제품은 `native-browser-auth.ts`의 recoverSession·acknowledge session GET 직후 기존 BRS revision equality guard2와 주석1뿐이다. 새 `native-browser-auth-revision.spec.ts`와 README/Bugfix를 함께 전달한다. Google·Apple·이메일 선택지·정상 순서·ACK/ready/transaction/key·SDK·원본문구/색상/SVG·provider flags는 유지하고 요청하지 않은 로그인 방식 제거/활성화·프롬프트 통합은 하지 않는다.
 

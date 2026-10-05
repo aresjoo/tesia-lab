@@ -284,6 +284,11 @@ test('새 소개의 요금 앵커·12개 자산·FAQ는 서비스 정적 허용�
 
 test('서버 HTML alias의 정보 경로는 열리지만 쿼리 있는 인증 경로를 가리지 않는다', async ({ page }) => {
   const traffic = await serveBuilt(page), controls = await recordedWire(page)
+  const apiRequests: string[] = []
+  page.on('request', request => {
+    const path = new URL(request.url()).pathname
+    if (path === '/api' || path.startsWith('/api/')) apiRequests.push(`${request.method()} ${path}`)
+  })
   for (const alias of ['/internal-poc.html', '/auth/complete']) {
     await page.goto(`${alias}#/site/about`)
     await expect(page.locator('.client-info-about')).toBeVisible()
@@ -291,11 +296,12 @@ test('서버 HTML alias의 정보 경로는 열리지만 쿼리 있는 인증 �
     expect(controls.sessionReads).toBe(0)
   }
   await page.goto('/auth/complete?campaign=fixture#/site/about')
-  await phase(page, 'ready')
+  await phase(page, 'error')
   await expect(page.locator('.client-info-about')).toHaveCount(0)
-  expect(controls.sessionReads).toBeGreaterThan(0)
+  expect(controls.sessionReads).toBe(0)
   expect(controls.posts).toEqual([])
   expect(traffic.unexpected).toEqual([])
+  expect(apiRequests).toEqual([])
 })
 
 test('정보 화면을 보는 동안 대화 응답은 계속 처리되고 복귀 때 같은 대화가 남는다', async ({ page }) => {

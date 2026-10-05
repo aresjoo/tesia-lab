@@ -1,5 +1,16 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 서비스 검증 하니스 교정
+
+- **변경 범위:** source875f1e8에서 분리한 `agent/web/auth-regression-closure`. 테스트2파일만 변경하며 제품/SDK/공용 config/패키지/flags/문구/SVG/프롬프트/서버/DB/730일 변경0이다. Google는 추가 선택지이며 Apple·이메일을 제거하거나 미등록 방식을 활성화하지 않는다.
+- **원 실패 분류:** 원534spec/14934의 availability10FAIL은 normal/returnOnly 각2개인 실제4binding을 구형 seam이2개로 기대했다. alias2FAIL은 고정 queryless callback 정책과 달리 query-bearing return을 ready로 기대했다. 제품의 fail-closed 정책을 완화하지 않고 기대만 error/sessionReads0로 맞추며 passive API요청0 단언을 추가했다. 두 파일의 제목/fixture/나머지 assertion/timeout/retry/skip은 그대로다.
+- **실제 재검증:** 원 availability10키는 새 양project **10PASS/actual0**, service-entry전체20×2키는 **40PASS/actual0**다. 이전 serial후속26키도 이번에는 실제 실행했다. 원 RED는 이전 whole의 실제 결과에서 원입력·동일제품/기존시험 byte에 결속해 추출했고 새 RED 실행으로 주장하지 않는다. 원whole의14879PASS/12FAIL/원17SKIP/26미실행 및 rawf9aae664/acceptancec4487bca는 그대로 보존하며 별도 PASS를 합산해 전체PASS로 만들지 않는다.
+- **작은 독립 모델 검수:** personal(1) 실제 `claude-sonnet-5-5` high/tools0/modelUsage 일치·actual0·입력불변, **HARNESS_DELTA_CODE_GO/확정C0H0M0/Low5**다. raw SHA `8be113da808e17a4197363cf50d01a4b19088f541f5f11cc6694fc3ead36b7e4`다. 총env읽기 대분포·긴주석·query/hash분리커버리지·뒤늦은요청·error패널 추가단언 Low를 남긴다. 모델은 service-entry 최종PASS 전에 실행했으며 실행 결과를 추정하지 않았다. 프롬프트의 URL유지 단언 설명은 과다 설명이며 실제 이번 delta의 추가 단언은 API요청0뿐이다.
+- **생성 캐시 예외:** 원 npm script/config를 유지하며 service-entry writer만 지정 tsbuildinfo2개·Vite임시/전용4573캐시를 사용했다. mkdtemp 빌드는 기존 시험 절차이며 install/패키지/symlink/공유dist변경0다. 생성 캐시 쓰기를 shareddeps0으로 포장하지 않는다.
+- **최종 동결·빌드:** nonMD2208 SHA `5cf9844382451c9e5e231b3e5b1c366e77014f6d567a39223c03d8174063c3d7`에서 full lint·공개/내부/service3build 각각actual0, 입력 전후 동일이다. 공개1132/a8a9·내부1123/e4fa·서비스1113/c2b7은 이전 인증578 입력의 빌드와 exact동일하다. source 제품 bytes는 동일하지만 시험2파일이 바뀌었으므로 이전578을 새 단일 실행으로 표현하지 않는다.
+- **새 단일 전수:** 같은5cf9844/publica8a9를 전용4574/4575·원config/8workers/필터0에서 한 번 실행하기 시작했다. private `auth-regression-whole-frozen`은 종료 전 RUNNING이며 결과/실패/미실행/외부오류를 최종 JSON에서 판정한다. 실행 중 제품·시험·public 빌드는 동결하고 문서만 갱신한다. 부분10/40과 이전578·whole14879를 합산하지 않는다.
+- **미완료/운영:** 새 frozen 입력의 최종 lint/build·전수 인수와 전달 상태는 migration-verification.json을 따른다. 실Google callback/ACK·Apple등록/SMTP·React prompt producer·모델/전체서비스GO는 미완료다. 원copy실패 원인과 모든Low를 보존하며 teth.ai 운영7dd·서버/credential/DB는 교체하지 않는다. 아래 기록은 이전 후보의 인수 이력이다.
+
 ## 현재 인증 controller revision 교정
 
 - **이전 동결 전체의 최신 종료:** sourceef6/0a217의534spec·14934개는 **14879PASS/12FAIL/기존17SKIP/serial 후속26미실행/actual1**(4913330.872ms)로 종료했다. raw stats.skipped43은 원skip17+미실행26이며 새 의도skip를 추가한 것이 아니다. retry·flaky·시험밖오류0, source/public 전후 동일이다. native-service-auth-availability10건은 module seam의 env read2기대/실제4에서 실패했고 service-entry의 query-bearing auth alias2건은 ready기대/error관측으로 실패했다. 원JSON SHA `f9aae664aaf3cb5b06ef79c45c26505634d3daf0793b93e560e4e0dfe179d189`, acceptance SHA `c4487bca3410e0a39967d60eddce0807c3f4d4584b5e0d1c3e4a3cb39db8b8e4`를 보존하고 원인·하니스/제품 분류는 다음 별도 조사에서 판정한다. 이전 모바일copy 원FAIL은 이번 동일키에서 actualPASS/retry0지만 인과 미확정 이력과 전체FAIL을 면제하지 않는다. 이번controller578 영향GO를 이 전체의PASS나실제서비스/배포GO로 확대하지 않는다. 아래 이력의 RUNNING은 실행 당시 기록이다.

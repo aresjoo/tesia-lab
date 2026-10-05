@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 계승·OAuth 복귀/직접 GET/인증 controller revision 교정 전체 코드 전달 초안. candidate.controllerRevisionClosure가 최신578 영향검증을 소유한다. 이전 whole와 proof는 해당 입력 범위이며 historicalProduction*와 deployment는 이전7dd066f 그대로다. 실제공급자/프롬프트/운영GO와 구분한다.",
-  "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
+  "purpose": "원본 계승·인증 소비 교정 위의 테스트2파일 하니스 후속 전체 코드 전달 초안. candidate.currentAuthHarnessClosure가 최신10/40·빌드·새전수RUNNING을 소유하고 controllerRevisionClosure578은 이전입력의영향범위다. historicalProduction*와 deployment는 운영7dd 그대로. 실제공급자/프롬프트/운영GO와 구분한다.",
+  "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "e570b92b06bfabf99d976c6c8c58c336446c6a650388706560badf4b3f8b6c0e",
+  "snapshotDigest": "75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -466,8 +466,8 @@
     }
   },
   "pendingDeployment": {
-    "status": "HOLD_CONTROLLER_IMPACT_GO_PRIOR_WHOLE_FAILED_ACTUAL_AUTH_UNVERIFIED",
-    "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
+    "status": "HOLD_NEW_WHOLE_RUNNING_ACTUAL_AUTH_UNVERIFIED",
+    "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
     "activationExecuted": false
   },
   "historicalProductionEvidenceHashes": [
@@ -713,18 +713,44 @@
     }
   ],
   "candidate": {
-    "status": "DRAFT_AUTH_REVISION_CONSUMER_CODE_GO_DEPLOYMENT_HOLD_PRIOR_WHOLE_FAILED",
-    "sourceBranch": "agent/web/auth-revision-closure",
-    "sourceCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
-    "captureTime": "2026-10-05T11:02:23.151Z",
+    "status": "DRAFT_TEST_HARNESS_CODE_GO_NEW_WHOLE_RUNNING_DEPLOYMENT_HOLD",
+    "sourceBranch": "agent/web/auth-regression-closure",
+    "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
+    "captureTime": "2026-10-05T11:22:39.554Z",
     "frozenInput": {
       "files": 2208,
-      "sha256": "a4966ad5d4ff0e6900025b7e74613ff3e4128e7833085ec334f8de0aee1fea3c"
+      "sha256": "5cf9844382451c9e5e231b3e5b1c366e77014f6d567a39223c03d8174063c3d7"
     },
     "publicBuild": {"files":1132,"sha256":"a8a9f1758001269d882851838fc5034f223a95157fc90f1da102693ac11c182d"},
     "serviceBuild": {
       "files": 1113,
       "sha256": "c2b7f27dcd022858ed59a7750b8884e32a3e03ad4ee4fcd3dd678f845212f9b8"
+    },
+    "currentAuthHarnessClosure": {
+      "status": "SCOPED_TEST_HARNESS_CODE_GO_WHOLE_RUNNING_DEPLOYMENT_HOLD",
+      "sourceCommit": "2acaa3858e55970f77f232f02e73776cafb5dcdd",
+      "baseCommit": "875f1e8daca1e5f33cac588d001078091e6a5d96",
+      "changedTests": ["tests/internal-poc/native-service-auth-availability.spec.ts","tests/internal-poc/service-entry.spec.ts"],
+      "delta": "정상/복귀 각2개 총4availability binding의exactcount; query-bearing authreturn 기존fail-closed의error/session0; passive API요청0 추가단언. 나머지case/fixture/assertion/timeout/retry/skip 보존.",
+      "productSdkConfigFlagsUiChanged": false,
+      "googleAppleEmailPreserved": true,
+      "protectedProduct": {"files":1584,"sha256":"fd38c409731f2d1db9b75b3eaa00122bab399116dc4bc398cf36df572a93c8b5","rowsExact":true,"scope":"tracked nonMD excluding tests"},
+      "availability": {"actualExitCode":0,"passed":10,"failed":0,"skipped":0,"retry":0,"flaky":0,"outsideErrors":0,"original10KeysExact":true,"historicalRedNotFreshRun":true,"handoffSha256":"a57bfedeaf8aec76e0a07925c48daaffcf17885a8aca7b1f51636c814aff2819"},
+      "serviceEntry": {"actualExitCode":0,"passed":40,"failed":0,"skipped":0,"retry":0,"flaky":0,"outsideErrors":0,"original40KeysExact":true,"historicalAlias2FailAndSerial26NowExecuted":true,"historicalRedNotFreshRun":true,"rawSha256":"5ffb3da2571b546afd1563e2f7d4c2bb60d0a82924052b14d200a0804a80fd24","handoffSha256":"2f595791ecdd5340576f0105815cee64e291a2fc8225fd3fd329a2d5e63c8eed"},
+      "builds": {"lint":0,"public":0,"internal":0,"service":0,"inputUnchanged":true,"allThreeBuildsExactPriorAuthCandidate":true,"receiptSha256":"e3112b99494960d5e09812a24856e538e66b73bc43fb5f9c31801300dd7045fc"},
+      "independentModel": {"account":"personal (1)","actualModel":"claude-sonnet-5-5","modelUsageMatched":true,"actualExitCode":0,"inputUnchanged":true,"verdict":"HARNESS_DELTA_CODE_GO","critical":0,"high":0,"medium":0,"low":5,"receiptSha256":"38ad9996e41801cadf5a823eb5b09d9c20f9c18ecb358a57ee4318536af16986","scope":"small test-only delta; no service-entry final result prediction"},
+      "independentDelta": {"verdict":"SCOPED_TEST_HARNESS_DELTA_REVIEW_ACCEPTABLE","critical":0,"high":0,"medium":0,"low":0,"originalCasesExact":true,"inputUnchanged":true,"receiptSha256":"d55e97708ade5458eafabd8fef38108da6b325e03507350a9832621acc213979"},
+      "sourceSecurity": {"gitleaksVersion":"8.30.1","scope":"staged tests2/docs2","actualExitCode":0,"findings":0,"ignoreRulesChanged":false},
+      "deliveryReview": {"status":"SCOPED_STAGED_DRAFT_DELIVERY_ACCEPTABLE","reviewedSourceCommit":"2acaa3858e55970f77f232f02e73776cafb5dcdd","reviewedSnapshotDigest":"75ac8b51efdf1fc6f4274b4f528a4d0028bf86beb711effad69b124206fc05ff","stagedFiles":9,"critical":0,"high":0,"medium":0,"low":0,"sourceSnapshot2215Exact":true,"historical8Exact":true,"receiptSha256":"fa120c8c3657d1585889d3957b0ac2b1106d8b496fa2528e2137eb19167500fc","scope":"최초staged9 인수. ROOT 마지막후속은 이receipt metadata 한 항목 추가뿐이며 제품/시험/snapshot/whole/운영권위불변."},
+      "whole": {"status":"RUNNING","discovered":14958,"workers":8,"devPort":4574,"previewPort":4575,"prefix":"auth-regression-whole-frozen","session":23581,"inputFrozen":true,"publicBuildFrozen":true,"retryOrRestart":false,"finalExitCode":null,"wholePassClaim":false},
+      "generatedCacheException": "원 npm/config 유지; alias writer만 tsbuildinfo2/Vite임시/전용4573캐시 사용. install/package/symlink/privatewrapper/shareddist변경0. blanketshareddepswrite0주장하지않음.",
+      "historicalFailuresPreserved": "원14934 actual1/14879PASS/12FAIL/원17SKIP/serial26미실행와원copy이력보존. 별도10/40/578을합산하지않음.",
+      "actualProviderGo": false,
+      "reactPromptProducerIntegrated": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false,
+      "activationExecuted": false
     },
     "controllerRevisionClosure": {
       "status": "SCOPED_CONSUMER_CODE_GO_DEPLOYMENT_HOLD",

@@ -2,7 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test'
 import { TEST_ORIGIN } from '../test-origin'
 
 // Actual service entry -> NativeServiceApp -> panel -> generated SDK. The only
-// module seam sets the two compiled build-env reads, not props/controllers/SDK.
+// module seam sets both availability reads in each normal/return-only panel (four), not props/controllers/SDK.
 // All API responses are synthetic; no provider, email or issued login is tested.
 test.use({ trace: 'off', video: 'off' })
 test.setTimeout(30_000)
@@ -32,7 +32,7 @@ async function mount(page: Page, googleOnly: boolean, returned = false) {
     if (path === '/src/internal-poc/NativeServiceApp.tsx') {
       const response = await route.fetch(), source = await response.text()
       const reads = source.match(/import\.meta\.env\.VITE_TETH_AUTH_GOOGLE_ONLY/g) ?? []
-      expect(reads, 'Both service availability bindings consume the build configuration').toHaveLength(2)
+      expect(reads, 'Normal and return-only panels each consume both service availability bindings').toHaveLength(4)
       state.envReads += reads.length
       return route.fulfill({ response, contentType: 'application/javascript',
         body: source.replaceAll('import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY', JSON.stringify(String(googleOnly))) })
@@ -69,7 +69,7 @@ async function mount(page: Page, googleOnly: boolean, returned = false) {
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   if (!returned) await page.getByRole('button', { name: '로그인', exact: true }).first().click()
   await expect(panel(page)).toBeVisible()
-  expect(state.envReads).toBe(2)
+  expect(state.envReads).toBe(4)
   await expect(google(page)).toBeVisible(); await expect(apple(page)).toBeVisible(); await expect(email(page)).toBeVisible()
   await expect(google(page).locator('svg')).toHaveAttribute('viewBox', '0 0 48 48')
   await expect(apple(page).locator('svg')).toHaveAttribute('viewBox', '0 0 24 24')

@@ -1,6 +1,8 @@
 # TETH Web
 
-현재 후보는 `agent/web/auth-revision-closure`다. sourceef6e1d0 위에서 인증 controller의 복구·ACK 후 session GET 두 곳에 기존 revision 일치 검사만 추가했다. Google·Apple·이메일과 원본 화면·문구·SVG·SDK·flags를 유지한다. 동일 Node6키·desktop12키 RED→GREEN 뒤, 최종2208/a4966 입력의 양project578 단일 영향 회귀·lint/3build actual0를 인수했다. personal(1) 실제Opus5.5와 별도 readonly delta는 이번 최소 수정의 확정C0H0M0·CODE_GO이며 Low와 원FAIL을 보존한다. 실제 공급자 로그인·프롬프트 React 연동·전체서비스·운영 승인은 미완료이며 teth.ai 운영7dd는 교체하지 않았다. [현재 보고서](Bugfix_report.md#현재-인증-controller-revision-교정)가 새 후보를 소유한다. 아래 수치는 이전 입력의 인수 이력이다.
+현재 후보는 `agent/web/auth-regression-closure`다. source875f1e8의 제품·Google/Apple/이메일·원본 화면/문구/SVG·SDK·flags는 그대로 두고 테스트 두 파일의 오래된 기대만 교정했다. 정상/복귀 패널의 가용성 읽기는 정확히4개이며 잘못된 query-bearing 인증 복귀는 API 호출 없이 error여야 한다. 원10FAIL과 alias2FAIL/후속26미실행을 보존하고 같은 availability10키·service-entry전체40키를 각각 actual0/모두PASS로 재검증했다. 이전 whole 실패를 합산·면제하지 않으며 새 전체·실공급자·React prompt 연결·운영 승인은 별도다. [현재 보고서](Bugfix_report.md#현재-서비스-검증-하니스-교정)가 최신 상태를 소유한다. teth.ai 운영7dd는 교체하지 않았다.
+
+이전 인증 controller 후보 `agent/web/auth-revision-closure`는 sourceef6e1d0 위에서 복구·ACK 후 session GET 두 곳에 기존 revision 일치 검사만 추가했다. 동일 Node6키·desktop12키 RED→GREEN 뒤, 2208/a4966 입력의 양project578 단일 영향 회귀·lint/3build actual0를 인수했다. personal(1) 실제Opus5.5와 별도 readonly delta는 최소 수정의 확정C0H0M0·CODE_GO이며 Low와 원FAIL을 보존한다. 이 결과를 다른 입력의 전체PASS나 실제 로그인 완료로 승계하지 않는다. 아래 문단의 현재·진행 중은 당시의 인수 이력이며 최신 상태는 위 보고서를 따른다.
 
 현재 후속은 `agent/web/release-closure`의 **운영 미배포 인증 소비 후보**다. 전달된 `0793737`의 OAuth 복귀·입력 보존 교정 위에, 복귀 화면의 직접 세션 GET 두 곳에서 기존 meta/data revision 일치 검사를 추가했다. Google·Apple·이메일 선택지와 원본 UI·SDK·가용성 flag는 유지한다. 일반 방문 bootstrap은 기존대로 동작하며, 정확한 일반 `/auth/complete`에서 검증된401을 받으면 새 익명 세션을 만들지 않고 result/명시ACK/인증 세션·CSRF 확인만 가능한 복구 표시를 연다. 미확정 기록·logout/email 복구 우선순위를 보존하며 claim/전략 승인/주문을 자동 실행하지 않는다.
 
