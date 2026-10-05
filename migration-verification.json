@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "원본 UI·카피 계승 전달본. 최신 candidate.currentOriginalResearchCopy는 a242/원문5추가복원·최종100영향/빌드·타입·Sonnet 코드 검수 범위다. 원문46의 currentApprovedCopyRestoration과 다른 입력의 과거 whole는 인수 이력으로 보존하며 최신 전체 PASS로 승계하지 않는다. 부모notice 단일whole는 진행 중 connection mobile FAIL1 관측·인과미확정이다. historicalProduction*와deployment는 운영7dd 그대로이며 이 draft 공유는 운영승격이 아니다.",
-  "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
+  "purpose": "원본 UI·카피 계승 전달본. 최신 candidate.currentOriginalResearchCopy는 a242/원문5추가복원·최종100영향/빌드·타입·Sonnet 코드 검수 범위다. 원문46의 currentApprovedCopyRestoration과 다른 입력의 과거 whole는 인수 이력으로 보존하며 최신 전체 PASS로 승계하지 않는다. 부모notice 단일whole는15200PASS/1FAIL/원17SKIP/actual1 종료·인과미확정이다. historicalProduction*와deployment는 운영7dd 그대로이며 이 draft 공유는 운영승격이 아니다.",
+  "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "30ad2a882294a07a421b4783efa2e79278644f43370dffbb01c3001b410d04eb",
+  "snapshotDigest": "fc97b716c547c9d6f1eeab6051519ab89a312ddf099257ec7f0c806a79344948",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -67,7 +67,7 @@
   },
   "snapshot": {
     "files": 2229,
-    "bytes": 26117656,
+    "bytes": 26121127,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -467,8 +467,8 @@
   },
   "pendingDeployment": {
     "status": "HOLD_CURRENT_WHOLE_FAILURE_INVESTIGATION_AND_STATIC_RELEASE_VERIFICATION",
-    "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
-    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY. Final a242 research-copy100 PASS is a bounded input. Parent notice309 whole74329 is still running with a connection mobile FAIL observed; preserve original failure and resolve its cause before promotion. Final whole/static review/archive/authority CAS/public smoke/atomic rollback pending. Actual OAuth is a separate service gate under §0.4.",
+    "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
+    "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY. Final a242 research-copy100 PASS is a bounded input. Parent notice309 whole74329 ended actual1:15200 PASS/1FAIL/17 original SKIP; preserve failure and resolve its cause before promotion. Final whole/static review/archive/authority CAS/public smoke/atomic rollback pending. Actual OAuth is a separate service gate under §0.4.",
     "actualAuthentication": "UNVERIFIED_SEPARATE_SERVICE_GATE",
     "activationExecuted": false
   },
@@ -733,7 +733,7 @@
   "candidate": {
     "status": "ORIGINAL_RESEARCH_COPY_CODE_GO_DRAFT_DELIVERY_DEPLOYMENT_HOLD",
     "sourceBranch": "agent/web/research-copy-restoration",
-    "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
+    "sourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
     "captureTimeAuthority": "migration-manifest.json capturedAt",
     "frozenInput": {
       "files": 2222,
@@ -750,6 +750,8 @@
     "currentOriginalResearchCopy": {
       "status": "SCOPED_CODE_TEST_BUILD_GO_NOT_WHOLE_OR_DEPLOYMENT_GO",
       "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
+      "documentationSourceCommit": "b236dd11221d5e7882b38f40986e2edd6efae8a1",
+      "documentationOnlyFollowup": "Bugfix_report.md 1파일만 후속 갱신. 제품·시험·빌드 입력은 같은a242이며 새 제품 검증으로 계수하지 않는다.",
       "testedSourceHead": "775d849c9279ec4250b925faab5f3716fcac742a",
       "headMeaning": "시험 때 HEAD775d 위 미커밋 입력a242를 검증했다. 후속 source2d2는 동일 nonMD 입력의 커밋이며 그 커밋이 시험 당시 HEAD였다고 주장하지 않는다.",
       "originalReference": "9fbff821df62cad11d026022fc7628c7fcebc431",
@@ -786,10 +788,34 @@
       },
       "parentNoticeWhole": {
         "inputSha256": "30938c92a556352225390bc0ecc8d0ea818fd8937e9177800544b56e485fa7eb",
-        "status": "RUNNING_WITH_OBSERVED_FAILURE_NOT_CURRENT_A242_WHOLE", "cases": 15218, "specs": 544,
+        "status": "COMPLETED_FAIL_NOT_CURRENT_A242_WHOLE", "cases": 15218, "specs": 544,
+        "pass": 15200, "fail": 1, "skip": 17, "actualExit": 1,
+        "unexecuted": 0, "interrupted": 0, "retry": 0, "flaky": 0, "outsideErrors": 0,
+        "inputThreeOutputsUnchanged": true, "sameAllKeysAndOriginal17Skip": true,
+        "rawSha256": "393eb9968b28fbe031852c34d171234b130ccb71613aba7df596635e83f0f55b",
+        "receiptSha256": "c1b4639b9699ef7729562d7b39bc5a1ada7df8dae871b3c0d1f57b29f343283a",
         "observedFailure": "mobile client-connection-status.spec.ts:141 pending[0].reject undefined; 후단언 미실행",
         "causeConfirmed": false, "failurePreserved": true,
         "failureAuditSha256": "94904d4cf63373eb962d5d481ca1779579597dedd81be261a84b47b2a0df97be"
+      },
+      "copyParityRemainder": {
+        "auditSha256": "40ca9fc32a93f1b72e7c9a33c453aed7f9ac73ef65125cbaedf53577494eb795",
+        "footerLiteralDifferences": 4,
+        "footerScope": "소개·Bitget 선정·권한/중지/거래기록 약속·Powered by→거래소. 사업/가용성/권한 근거와 구분하고 자동 복원 완료로 표시하지 않는다.",
+        "initialHelpLiteralDifferences": 2,
+        "helpScope": "원 최초ko/en sub와 후반언어변경 sub가 다름. 현재후반21값 exact는 최초경로동일 증명이 아니다.",
+        "accessibleNameDifferenceKo": 1,
+        "allPagesExactClaimed": false,
+        "productChangesFromThisAudit": 0
+      },
+      "deliveryCodeSnapshot": {
+        "migrationCommit": "878fbb30acb87f8d542f2ad69b770956aa2ae27a",
+        "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
+        "snapshotSha256": "30ad2a882294a07a421b4783efa2e79278644f43370dffbb01c3001b410d04eb",
+        "independentSha256": "6b9d5d49fc60f642bf6c98439b12d0bfaf8c803e3d0bb8f5a5e766485ba36a0d",
+        "stagedScan": {"version": "8.30.1", "paths": 22, "actualExit": 0, "findings": 0, "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"},
+        "actualPushAndRemoteMatch": true,
+        "scope": "직전코드 전달2229/26117656bytes·원root3759/역사8객체보존. 후속209 문서 스냅샷의 새독립검수와 구분한다."
       },
       "scopeLimits": ["고정양수 Holdout 통과이며 임의결과 dynamic parity 미검증", "다른 문서/로그의 봉인 구간 표기는 이번5원문 범위 밖", "문서별 canned reply는 원질문기반fallback과 직접대응없음", "기존모든원FAIL/Low/GC 인과미확정 보존, 부분PASS 합산0"],
       "actualProviderGo": false, "wholeGo": false, "serviceGo": false, "deploymentGo": false

@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 source `2d2aa033e8984a917197f48293d545bf05ca6b84`와 전체2,229파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentOriginalResearchCopy`를 따른다. 부모46원문 위에 인증 원문 안내·명시 초점과 연구5문구를 추가 복원했다. 최신2222/a242의 연구 영향8spec100PASS/0FAIL/0SKIP·lint3build·관련3spec strict타입 actual0, personal1 실제Sonnet5.5 `RESEARCH_COPY_CODE_GO` C0H0M0/Low5·가설6은 좁은 범위다. 부모notice309 전수15,218개는 진행 중이며 mobile connection-status 실패1건을 관측했다. 부분PASS로 원FAIL을 면제하거나 운영승격으로 표시하지 않는다. Google/Apple/email·SDK/API/가격/권한/flags·서버/DB/730일은 유지한다.
+최신 React 출처는 source `b236dd11221d5e7882b38f40986e2edd6efae8a1`와 전체2,229파일이다. 코드2d2 이후 Bugfix 보고서만 갱신했고 제품·시험 입력은 같다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentOriginalResearchCopy`를 따른다. 부모46원문 위에 인증 원문 안내·명시 초점과 연구5문구를 추가 복원했다. 최신2222/a242의 연구 영향8spec100PASS/0FAIL/0SKIP·lint3build·관련3spec strict타입 actual0, personal1 실제Sonnet5.5 `RESEARCH_COPY_CODE_GO` C0H0M0/Low5·가설6은 좁은 범위다. 부모notice309 전수15,218개는15,200PASS/1FAIL/원17SKIP/actual1로 종료했으며 mobile connection-status 원인은 미확정이다. 부분PASS로 원FAIL을 면제하거나 운영승격으로 표시하지 않는다. Google/Apple/email·SDK/API/가격/권한/flags·서버/DB/730일은 유지한다.
 
 이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
 

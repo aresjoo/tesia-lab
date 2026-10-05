@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷의 출처는 **`agent/web/research-copy-restoration@2d2aa033e8984a917197f48293d545bf05ca6b84`**입니다. 추적파일 전체 **2,229개/26,117,656bytes**의 운영 미배포 초안입니다. 기존46원문 위에 이메일 전송/재전송·로그인/가입/provider 선택 안내와 명시 연령 초점을 복원했고, 연구 문구5곳을 원9fb 그대로 추가 복원했습니다. Google·Apple·이메일 선택지·SDK/provider flags·가격/권한·서버/DB/730일은 유지합니다. 실제 미등록 방식은 준비 중이며 거래소 연결은 기본 비활성화입니다.
+현재 React 스냅샷의 출처는 **`agent/web/research-copy-restoration@b236dd11221d5e7882b38f40986e2edd6efae8a1`**입니다. 추적파일 전체 **2,229개/26,121,127bytes**의 운영 미배포 초안입니다. 코드2d2 이후 Bugfix 보고서만 갱신했으며 제품·시험 입력은 같습니다. 기존46원문 위에 이메일 전송/재전송·로그인/가입/provider 선택 안내와 명시 연령 초점을 복원했고, 연구 문구5곳을 원9fb 그대로 추가 복원했습니다. Google·Apple·이메일 선택지·SDK/provider flags·가격/권한·서버/DB/730일은 유지합니다. 실제 미등록 방식은 준비 중이며 거래소 연결은 기본 비활성화입니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.
@@ -11,7 +11,7 @@
 
 이 브랜치 push는 `main` 병합이나 자동 배포를 실행하지 않습니다. 사용자가 별도로 요청한 `teth.ai` 정적 프론트 업데이트는 [검증 기록](migration-verification.json)의 배포 상태로 구분합니다. 루트 원본·server/Worker 및 투자 프롬프트 draft `8646b65`는 이번에 병합·배포하지 않습니다. Apple·이메일 선택지는 유지하되 현재 서버에서 미연결인 방식은 ‘준비 중’으로 표시합니다.
 
-최신2222/a242의5문구 복원은8spec100 PASS/0 FAIL/0 SKIP/actual0, lint·공개/내부/service3build·관련시험3spec strict타입actual0, personal1 실제Sonnet5.5 코드GO/확정C0H0M0입니다. Low5·가설6/원FAIL은 보존합니다. 테스트 당시 HEAD는775d 위 미커밋a242였으며, 출처2d2는 같은nonMD입력을 커밋한 것입니다. 부모notice309의 단일15,218개 전수는 아직 진행 중이고 연결 해제 mobile 실패1건을 관측했습니다. 이100 PASS를 전체PASS/운영승격으로 바꾸지 않습니다. 최신 기록은 `candidate.currentOriginalResearchCopy`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다.
+최신2222/a242의5문구 복원은8spec100 PASS/0 FAIL/0 SKIP/actual0, lint·공개/내부/service3build·관련시험3spec strict타입actual0, personal1 실제Sonnet5.5 코드GO/확정C0H0M0입니다. Low5·가설6/원FAIL은 보존합니다. 테스트 당시 HEAD는775d 위 미커밋a242였으며, 코드2d2는 같은nonMD입력을 커밋한 것입니다. 부모notice309의 단일15,218개 전수는15,200PASS/1FAIL/기존17SKIP/actual1로 종료했습니다. 연결 해제 mobile 실패1건의 원인은 아직 미확정입니다. 이100 PASS를 전체PASS/운영승격으로 바꾸지 않습니다. 최신 기록은 `candidate.currentOriginalResearchCopy`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다.
 
 이하 시험 수치와 ‘현재’ 표현은 이전 입력의 누적 인수 이력입니다. 부모314304의46카피·878검증은 `candidate.currentApprovedCopyRestoration`에 보존하며 최신a242 전체검증으로 승계하지 않습니다.
 
