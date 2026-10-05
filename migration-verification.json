@@ -1518,7 +1518,11 @@
       "exitCode": 0,
       "findings": 0
     },
-    "nodeModulesCachesCredentialsDatabasesIncluded": false
+    "nodeModulesCachesCredentialsDatabasesIncluded": false,
+    "deliveryStaged": {
+      "exitCode": 0,
+      "findings": 0
+    }
   },
   "concurrentPrompt": {
     "branch": "agent/lab/investment-prompt-quality",
@@ -1527,7 +1531,16 @@
     "actualMergeExecuted": false,
     "includedInSnapshot": false,
     "producerIntegrated": false,
-    "meaning": "별도 draft 보존; 파일 무충돌은 모델/전체서비스 GO가 아님"
+    "meaning": "별도 draft 보존; 파일 무충돌은 모델/전체서비스 GO가 아님",
+    "rehearsal": {
+      "codeCommit": "9c4b451c95d9bc57d572f17015b92e8dc9109d7c",
+      "promptHead": "8646b6525631d5e1f71e38a8e2e515f23571b5b5",
+      "exitCode": 0,
+      "conflicts": 0,
+      "tree": "aa03a0d2018d4108e4ed06d3ba8914629b65d7d1",
+      "actualMergeExecuted": false,
+      "producerIntegrated": false
+    }
   },
   "remaining": [
     "실Google사용자 callback/ACK 완료 미검증",
@@ -1555,14 +1568,14 @@
   },
   "deployment": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
-    "currentDeployedSource": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
-    "currentDeployedArchiveSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
-    "rawHtmlSha256": "c01d8b8f4072ef2fa7b795b4f4ad7b522d39bd45451135bdc173e485e68ae8ea",
+    "currentDeployedSource": "8fe33d9a1da3883ce7df89291bb680534a21c569",
+    "currentDeployedArchiveSha256": "62529f9a6af8ccae969ef92938e7611dea621e278b0e7c239ce51aa5fec02936",
+    "rawHtmlSha256": "bb3548c957dad65bee8dca4f4c064d185b8cd2ad442fcdecc7209b8a6ccb824c",
     "activationExitCode": 0,
     "postflightExitCode": 0,
     "activationObservation": {
       "status": "STATIC_UI_DEPLOYED",
-      "webSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
+      "webSha256": "62529f9a6af8ccae969ef92938e7611dea621e278b0e7c239ce51aa5fec02936",
       "privateAuthorityPreserved": true,
       "backupRetained": true,
       "publicRootStatuses": [
@@ -1572,13 +1585,13 @@
     },
     "privateAuthorityPreserved": true,
     "backupRetained": true,
-    "previousStaticSource": "4237d65b424fc5b117e8ef6067789f05e84a0f73",
+    "previousStaticSource": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
     "backendCredentialDatabaseReplaced": false,
     "publicStatic": {
       "status": "PASS",
       "scope": "PUBLIC_CA_HTTPS_STATIC_BYTES",
-      "sourceCommit": "69a1e97a8ac5ed014095ae12d439f3ee918482c8",
-      "archiveSha256": "d5de6304aef7125ca13e980b3a681b63aec8a4cd48e66a7ebb56b81ec01a5072",
+      "sourceCommit": "8fe33d9a1da3883ce7df89291bb680534a21c569",
+      "archiveSha256": "62529f9a6af8ccae969ef92938e7611dea621e278b0e7c239ce51aa5fec02936",
       "registeredAssets": 350,
       "passed": 350,
       "failed": 0,
@@ -1620,12 +1633,7 @@
       "serverMutationExecuted": false
     }
   },
-  "pendingDeployment": {
-    "status": "VERIFIED_STATIC_UI_READY_NOT_ACTIVATED",
-    "sourceCommit": "8fe33d9a1da3883ce7df89291bb680534a21c569",
-    "archiveSha256": "62529f9a6af8ccae969ef92938e7611dea621e278b0e7c239ce51aa5fec02936",
-    "htmlSha256": "bb3548c957dad65bee8dca4f4c064d185b8cd2ad442fcdecc7209b8a6ccb824c"
-  },
+  "pendingDeployment": null,
   "evidenceHashes": {
     "intent-final-build.json": "7f8e5be09d09e82fcedb8b49f3df3f060aa16341c89b35c54013dcd7976de49c",
     "intent-final-impact.json": "462a84f101c95f36ea68c19ca8fcde06fa93d8e8780756afa39d35713bfd72c0",
@@ -1641,6 +1649,13 @@
     "intent-release/manifest.json": "1f846cb44f1e62a759177cc953e95ab88bbc756e3a24e755fee494262478e30f",
     "intent-source-staged-final-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "intent-service-dist-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "intent-vm-preflight.json": "105c56a1a047a5ed44f04088cae05bc0a94753b108125cb0916c9125e2af398e",
+    "intent-vm-activate.json": "d2cadebffa5414b299a1b68434fe96b6bb73eab90877193057d91c46851bf896",
+    "intent-vm-postflight.json": "f51dac11e36dfddb0dd6223203f213c0b7968d392d1b2a93dc608859ca5fd708",
+    "intent-public-static.json": "14b8839777a0f428ef9a52a60469fcbf67562cf213e5cae9027013428e87aea4",
+    "intent-public-auth/receipt.json": "8cda027a7d1ba0d871783d7e398b8d1a08b334c448bba4e407c5f3f7b2508a42",
+    "intent-code-merge.json": "7b70f68f376472b1deebf100b5d6e527d3fb3f4423cc365f914f1f2f6044d8d2",
+    "intent-delivery-staged-scan.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "intent-dependency-audit.json": "09245fa731b85673ca2542f5cfb0240fbd820c0fba7daa53c23c983a5b0db9cf"
   }
 }

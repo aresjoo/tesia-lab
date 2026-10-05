@@ -19,7 +19,7 @@
 
 현재 source는 8fe33d9a1da3883ce7df89291bb680534a21c569이며 React69a1e97 이후의 작은 원본 계승 교정이다. 연구 첫 활동/nonforce 읽기와 원문 새 응답 pill, 터미널·종목 선택기 크기 변경의 실제 소유 초점, 한국어 알림·보고서·복기12키를 복원했다. 복사창 정상 fixed footer는 실제46개 반례 검사로 유지한다. 정상 원본 SVG/색상/Google·Apple·이메일·API/프롬프트/가격/package/flag/credential/DB는 변경0이고 파일/storage삭제0이다. 원본 root HTML/server/Worker/workflow/main 변경·병합0이다.
 
-최종90spec 단일 2976PASS/0FAIL/기존QA-015SKIP2·실제exit0/입력불변·lint/공개/내부/service3build·개인1 Opus5.5 STATIC_UI_CODE_GO·원FAIL exact키 결속과built 로그인3폭을 확인했다. 원FAIL/harness/중단·앞2700PASS·전수469spec·병렬partial은 합산하지 않는다. private 원증거는 보존하고 공개 전달에는 해시/분류만 기록한다. 아직 직전69a1e97 운영 정적 화면을 바꾸지 않은 배포 준비 상태다. 정확한SHA/파일수/bytes는 manifest/verification이소유한다.
+최종90spec 단일 2976PASS/0FAIL/기존QA-015SKIP2·실제exit0/입력불변·lint/공개/내부/service3build·개인1 Opus5.5 STATIC_UI_CODE_GO·원FAIL exact키 결속과built 로그인3폭을 확인했다. 원FAIL/harness/중단·앞2700PASS·전수469spec·병렬partial은 합산하지 않는다. private 원증거는 보존하고 공개 전달에는 해시/분류만 기록한다. teth.ai 정적 UI를 CAS/백엔드·updater·nginx 권위 확인 뒤 활성화했고 공개 CA/TLS exact350자산/4문서·로그인3폭 검사까지 완료했다. 직전69a1e97 정적 bundle은 복구용으로 보관한다. 정확한SHA/파일수/bytes는 manifest/verification이소유한다.
 
 프롬프트draft8646은 별도이며 actualmerge/Reactproducer통합0이다. Google사용자callback/ACK, Apple운영등록/이메일SMTP, 실연구g-doc/Critic/계정원장/거래소/주문/과금 및 모델·전체서비스GO는 남는다. 정적 배포·파일 무충돌을 실제 서비스 인증 성공으로 쓰지 않는다. 이전 누적 범위와 실패는 아래 및 Git 이력에 보존한다.
 
