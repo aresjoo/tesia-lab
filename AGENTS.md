@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 source `7233c1c4423b5266851b8b5e5a87731d999e1244`와 전체2,229파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentCopyFollowup`을 따른다. 부모46원문·연구5문구 위에 대화/가설/출처5곳을 추가로 복원하고 Critic 답변을 기존 필터 상태와 연결했다. 최신2222/bd2의 관련194PASS/0FAIL/0SKIP·lint3build·관련5spec strict타입 actual0, personal1 실제Sonnet5.5 CODE_GO C0H0M0/Low7·가설4는 좁은 범위다. 현재545spec/15,230 전수는 진행 중이며 부모notice의 원1FAIL/17SKIP·인과미확정은 보존한다. 다른 g-doc 응답매핑·푸터/도움말 잔여를 전부 동일하다고 표시하지 않는다. 부분PASS로 원FAIL을 면제하거나 운영승격으로 표시하지 않는다. Google/Apple/email·SVG/CSS/색상·SDK/API/가격/권한/flags·서버/DB/730일은 유지한다.
+최신 React 출처는 source `d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d`와 전체2,230파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentDocumentReplyClosure`를 따른다. 기존 원문 복원에 연구 일반 질문 원문2·Main의 기존 inline 결과 boolean 전달을 추가했으며 Native supplied 응답은 바꾸지 않는다. 관련16spec/398 단일PASS는 이전783bc 입력이고, 시험의 static2키 CI 절대경로만 제거한 최종2223/b6c 입력에서 원문42·lint3build actual0를 따로 확인했다. 실제 personal1 Sonnet5.5 DOCUMENT_REPLY_CODE_GO C0H0M0/Low5·가설7은 코드범위다. 원7233의545spec/15,230 전수15211PASS/2FAIL/원17SKIP/actual1을 보존하고 부분PASS로 면제하지 않는다. 다른 g-doc 응답매핑·푸터/도움말 최초/후속·Native producer 잔여를 전부 동일하다고 표시하지 않는다. 원문 markup/SVG/CSS/색상·Google/Apple/email·SDK/API/가격/권한/flags·서버/DB/730일은 유지하며 새 전체·운영 승격은 미완료다.
 
 이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
 

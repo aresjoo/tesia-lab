@@ -100,11 +100,11 @@ function Stats({ values }: { values: [string, string, ('up' | 'down')?][] }) {
 }
 
 export type ClientResearchPlanContext = ResearchPlanContext
-type ResearchWorkspaceProps = { sessionId: string; idea: string; titleEditor?: ReactNode; headerActions?: ReactNode; onBack: () => void; onDelegate?: () => void; planContext?: ClientResearchPlanContext; onStatusChange?: (status: '초안' | '진행 중' | '검토 필요') => void; registered?: boolean; onStartPaper?: () => boolean; onOpenTrading?: () => void; onBeforeAi?: () => boolean; onStartResearch?: () => boolean; focusOnMount?: boolean }
+type ResearchWorkspaceProps = { sessionId: string; idea: string; titleEditor?: ReactNode; headerActions?: ReactNode; onBack: () => void; onDelegate?: () => void; planContext?: ClientResearchPlanContext; onStatusChange?: (status: '초안' | '진행 중' | '검토 필요') => void; registered?: boolean; hasBacktestResult?: boolean; onStartPaper?: () => boolean; onOpenTrading?: () => void; onBeforeAi?: () => boolean; onStartResearch?: () => boolean; focusOnMount?: boolean }
 export function ClientResearchWorkspace(props: ResearchWorkspaceProps) {
   return <ResearchWorkspaceSession key={props.sessionId} {...props} />
 }
-function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions, onBack, onDelegate, planContext, onStatusChange, registered = false, onStartPaper, onOpenTrading, onBeforeAi, onStartResearch, focusOnMount = false }: ResearchWorkspaceProps) {
+function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions, onBack, onDelegate, planContext, onStatusChange, registered = false, hasBacktestResult = false, onStartPaper, onOpenTrading, onBeforeAi, onStartResearch, focusOnMount = false }: ResearchWorkspaceProps) {
   const { currency, language } = useClientPreferences()
   const { c } = useConversationCopy()
   const labelOf = (value: string) => clientResearchLabel(value, language)
@@ -386,7 +386,17 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     const text = question.trim(); if (!text) return
     if (onBeforeAi && !onBeforeAi()) return false
     const replies: Partial<Record<DocId, string>> = { plan: '조건과 검증 범위를 연구 계획에 정리했습니다. 행의 코멘트에서 변경할 조건을 남길 수 있어요.', hypo: `${hypothesis.plain} 이 패턴이 연구 구간과 봉인 구간 모두에서 확인되어야 가설이 유지됩니다.`, strat1: '초기 조건은 RSI(14) < 40과 직전 대비 +0.5% 반등입니다. 손절 −3%, 익절 +8%, 최대 보유 25일, 비용 왕복 0.2%를 적용합니다.', strat2: '저변동성 구간의 신규 진입을 제한하는 필터를 추가했습니다. 손절과 익절은 유지하고 같은 연구 구간에서 재검증합니다.', critic: review ? criticParagraphs(review).critic : undefined, holdout: '전략 제작에 사용되지 않은 2025.07 ~ 2026.08 데이터입니다. 연구와 분리된 구간에서도 성격이 유지되는지 확인합니다.', stress: '일부러 불리한 조건에서 재검증합니다. 횡보장과 회복장에서는 성과 약화가 남아 있습니다.', report: '수익성 판단은 일치하지만 위험 심사는 낙폭과 손실 지속 기간 측면에서 보류했습니다. 다수결로 덮지 않고 실제 체결 차이는 가상 검증에서 확인합니다.' }
-    const reply = answer ?? replies[doc] ?? (doc === 'bt1' || doc === 'bt2' ? `수익률만이 아니라 최대 낙폭, 거래 수, 승률과 연도별 손익을 함께 확인하세요. ${doc === 'bt1' ? 'v1은' : 'v2는'} ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].n}회 거래, 최대 낙폭 ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].mdd.toFixed(1)}%입니다.` : '현재 문서와 연구 기록을 기준으로 확인할 내용을 남겼습니다.')
+    // 원9fb gSend의 무결과 안내와 완료 문서 요약만 계승한다. 이미 있는 결과나
+    // 미발행 문서를 덮지 않고 명시 답변·수정/원인/위험 질문의 기존 경계를 유지한다.
+    const resultDocs: DocId[] = ['bt1', 'bt2', 'report']
+    const freshPlan = doc === 'plan' && replay.status === 'idle' && elapsed === 0
+      && !registered && !hasBacktestResult && !replay.recoveryRequired && !planContext?.parameters
+      && !state.tabs.some(id => resultDocs.includes(id)) && !state.replies.some(row => resultDocs.includes(row.doc))
+    const completedReport = doc === 'report' && replay.status === 'completed' && elapsed >= 95
+      && !replay.recoveryRequired && !/줄여|늘려|바꿔|수정|해줘|재검증|다시|왜|약했|손실|가정|위험/.test(text)
+    const originalReply = freshPlan ? '아직 검증 결과가 없습니다. 연구를 먼저 시작하십시오.'
+      : completedReport ? `현재 ${doc} 기준, 수익 ${pct(FIXTURE.versions[1].ret)}, 낙폭 ${FIXTURE.versions[1].mdd.toFixed(1)}%, Holdout ${FIXTURE.holdout.ret > 0 ? '통과' : '경고'}. 구체적으로 물어보면 근거와 함께 답합니다.` : undefined
+    const reply = answer ?? originalReply ?? replies[doc] ?? (doc === 'bt1' || doc === 'bt2' ? `수익률만이 아니라 최대 낙폭, 거래 수, 승률과 연도별 손익을 함께 확인하세요. ${doc === 'bt1' ? 'v1은' : 'v2는'} ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].n}회 거래, 최대 낙폭 ${FIXTURE.versions[doc === 'bt1' ? 0 : 1].mdd.toFixed(1)}%입니다.` : '현재 문서와 연구 기록을 기준으로 확인할 내용을 남겼습니다.')
     const requestedDocument = scroll.current?.firstElementChild
     setState(old => ({ ...old, drafts: clearComposer ? { ...old.drafts, [doc]: '' } : old.drafts, replies: [...old.replies, { doc, question: text, answer: reply }] }))
     requestAnimationFrame(() => {

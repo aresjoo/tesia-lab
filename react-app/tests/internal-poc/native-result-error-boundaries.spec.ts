@@ -44,6 +44,8 @@ async function mount(page: Page) {
     const react = await import(/* @vite-ignore */ reactPath), dom = await import(/* @vite-ignore */ domPath)
     const { createNativeServiceApi } = await import(/* @vite-ignore */ apiPath)
     const { NativeServiceResult } = await import(/* @vite-ignore */ panelPath)
+    const localeHarnessPath = '/tests/fixtures/conversation-locale-harness.ts'
+    await import(/* @vite-ignore */ localeHarnessPath)
     const api = createNativeServiceApi(), audit: string[] = []
     Object.assign(window, { resultBoundaryAudit: audit })
     for (const method of ['report', 'trades', 'chart']) {
@@ -91,11 +93,7 @@ for (const resource of ['report', 'trades', 'chart', 'chart-window'] as const) f
     const originalRequests = [...requests]
     const root = page.locator('.native-service-result'), originalRoot = await root.elementHandle()
     for (const language of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko']) {
-      await page.evaluate(async language => {
-        const path = '/src/client-preferences.ts'
-        const { setClientPreference } = await import(/* @vite-ignore */ path)
-        setClientPreference('language', language)
-      }, language)
+      expect(await page.evaluate(language => Reflect.get(window, 'conversationLocaleHarness').setLanguage(language), language)).toBe(true)
       await expect(page.locator('html')).toHaveAttribute('lang', language)
       if (language !== 'ko') {
         await expect(root.locator(':scope > h2')).not.toContainText(/[가-힣]/)

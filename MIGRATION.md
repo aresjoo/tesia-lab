@@ -8,18 +8,33 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/research-copy-restoration@7233c1c4423b5266851b8b5e5a87731d999e1244` 추적 파일 전체. 원문46·연구5문구·preview 안내/초점·언어시험 위임을 계승하고 대화/가설/출처5곳을 추가 복원한 미배포 후보. Critic 답변은 기존 문서 상태를 공유. 기존 로그인3옵션·SDK·가격/권한/flags 보존 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/research-copy-runtime-closure@d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d` 추적 파일 전체. 기존 원문 복원을 계승하고 연구 질문 원문2/Main 기존 결과 유무 전달·하니스 clock/언어 setter·정적시험 CI 이식성을 최소 교정한 미배포 후보. 기존 디자인·초안·명시 답변·로그인3옵션·SDK·가격/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — source7233 카피·Critic 후속
+### 최신 전달 — 연구 질문 원문·시험 경계 교정
+
+source `d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d`의 전체2,230파일/26,157,052bytes/snapshot `9b34da1ae92cead7559babf18ac9239fd72f7c72a3d52edb6db4047a32354470`다. sourceDirtyFiles0·삭제0이며 이전7233 대비7경로만 달라졌다. 새 디자인이나 카피를 창작한 변경이 아니다.
+
+| 변화 | 실제 적용·보존 경계 |
+| --- | --- |
+| 원 질문 답변2 | 고정9fb index20884의 미검증 안내·20891의 완료 report 일반 요약. 기존 발행 v2/holdout fixture와95초 완료 조건을 사용하며 미완료 문서·수정/왜/위험·supplied 답변은 기존대로 유지 |
+| 기존 결과 유무 | Main이 선택되지 않은 기존 inline 결과도 boolean으로 전달. 기존 결과를 결과 없음으로 안내하지 않도록 제한; 실제 Native 데이터·주문 권한 변경0 |
+| 하니스 두 경계 | clock 공용 API 준비+10과 조회 baseline 보강, 실제 preference setter의 기존 static bridge 동기 호출. 원시간/제목/모든 단언/SDK401·403/7언어/DOM identity·요청불변 유지 |
+| 신규 회귀·CI 이식성 |21case×2project=42키. 고정 원문 기대값·독립 provenance와 상대 소스 URL; 로컬 원본 checkout 절대경로 제거. 정적2키와 브라우저40키를 구분 |
+
+783bc 입력의16spec 단일398은398PASS/0FAIL/0SKIP/retry·flaky·시험밖오류·미실행0/actual0다. 원 전수 실패 두 키도 동일키 한 번 PASS 및 후단실행을 확인했다. 이후 정적2키만 교정한 최종2223/b6c 입력의 새42와 lint/공개·내부/service3build는 각actual0다. 제품·하니스·나머지40 browser본문의 byte불변을 역치환/전체역해시로 직접 확인했다. 실제personal1 Sonnet5.5 DOCUMENT_REPLY_CODE_GO/C0H0M0는 코드범위이며 Low5/가설7을 유지한다. 새공개80ea만 바뀌고 내부daf0/service8730은 그대로이므로 Native 공급응답 복원이나 운영 적용을 주장하지 않는다.
+
+원7233의545spec/15,230 전수는 **15,211PASS/2FAIL/원17SKIP/actual1**로 종료했고 raw91b95e8f/receipt16462cf2를 보존한다. 이398/42로 전체 실패를 면제하지 않는다. 원 RED40=2P38F는8카피 mismatch와30HMR-only 집계 실패로 구분하며 전체38을 카피 결함으로 세지 않는다. 원본문·730일·SDK·가격·권한·로그인3·provider flags·서버DB·운영7dd 및9객체의 배포근거는 유지한다. 원footer 사업 약속/최초help2·aria1·다른 g-doc/실제 producer·실인증·새전수/정적승격은 별도 잔여다. 도움말은 원 최초24/7와 언어변경 후 준비안내 자체가 다른 순서이므로 전역치환하지 않는다. `candidate.currentDocumentReplyClosure`가 최신 후보를 소유한다.
+
+### 이전 source7233 카피·Critic 인수 이력
 
 현재2,229파일/26,129,096bytes/snapshot `9db4c398d99a20d690712df86a65f1ba05c27d6a37fd44eaa1501ec08b737929`다. 직전b236 대비9파일만 수정/추가했고 삭제0이다. 제품은 store의 직접수정2/선택안내1과 ResearchWorkspace의 Hypothesis1/Backtest출처1을 원9fb로 복원하며 Critic 답변을 기존 `criticParagraphs(review).critic`에 연결한다. 숫자·필터 적용시점·산식·원문 markup/색상/SVG·로그인3·SDK/flags/권한은 유지한다. 기존5시험의 단언 보강 및 준비3행을 포함하고 새3case×2=6키를 추가했다. 원188키를 유지한 관련194는 actual0/194PASS·lint3build/관련5시험타입actual0·실제personal1 Sonnet5.5 CODE_GO C0H0M0이며 Low7/가설4·원RED6를 보존한다. 검증 당시HEADb236 위bd2 미커밋 입력과 동일nonMD를7233으로 커밋했다.
 
-새 단일545spec/15,230개는 현재7233/2222bd2·3출력 동결로 실제 진행 중이다(전용4629/4630). 실행 시작 직후 관측 seal은 전구간 연속감시나 PASS 증명이 아니다. 부모notice actual1/1FAIL과 이전GC 인과미확정·푸터4/최초help2/aria1·다른 g-doc 질문별 응답 매핑은 남는다. 전페이지원문100%동일·새전수/실서비스/운영승격GO를 주장하지 않는다. 최신 상태는 `candidate.currentCopyFollowup`이 소유하며 아래 a242/100검증은 과거 입력 인수다. 운영teth.ai7dd와 원본root·deployment8객체는 유지한다.
+이7233/2222bd2·3출력 동결의 단일545spec/15,230개는15211PASS/2FAIL/원17SKIP/actual1로 종료했다. 실행 시작 직후 관측 seal과 실제 종료 영수증을 구분한다. 부모notice actual1/1FAIL과 이전GC 인과미확정·푸터4/최초help2/aria1·다른 g-doc 질문별 응답 매핑은 남는다. 전페이지원문100%동일·새전수/실서비스/운영승격GO를 주장하지 않는다. 해당7233 인수 이력은 `candidate.currentCopyFollowup`, 최신 후속은 `candidate.currentDocumentReplyClosure`가 소유하며 아래 a242/100검증은 과거 입력 인수다. 운영teth.ai7dd와 원본root·배포증거9객체는 유지한다.
 
 ### 이전 sourceb236 문서 후속 이력
 

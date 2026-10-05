@@ -224,10 +224,22 @@ async function visibility(page: Page, hidden: boolean) {
   }, hidden)
 }
 
+// 시각을 읽고 정지하는 두 RPC 사이에 목표가 과거가 되지 않도록 준비 구간만 고정한다.
+// 정지 뒤 보통 Date 진행을 복원하며, 기존 +10 이동과 조회 기준선을 검증한다.
+async function pauseClockWithoutJobRead(page: Page, jobReads: readonly string[]) {
+  const readsBefore = [...jobReads]
+  const pauseOrigin = await page.evaluate(() => Date.now())
+  await page.clock.setFixedTime(pauseOrigin)
+  await page.clock.pauseAt(pauseOrigin + 10)
+  await page.clock.setSystemTime(pauseOrigin + 10)
+  expect(await page.evaluate(() => Date.now())).toBe(pauseOrigin + 10)
+  expect(jobReads).toEqual(readsBefore)
+}
+
 test('숨겨진 브라우저 탭도 실제 상태를 계속 관측하며 복귀하면 즉시 따라잡고 종단에서 멈춘다', async ({ page }) => {
   await page.clock.install()
   const state = await native(page, 'REPLAYING', '다른 탭에 있어도 보존할 초안')
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 10))
+  await pauseClockWithoutJobRead(page, state.jobReads)
   await visibility(page, true)
   const initial = state.jobReads.length
   await page.clock.runFor(29_000)
@@ -250,7 +262,7 @@ test('숨겨진 브라우저 탭도 실제 상태를 계속 관측하며 복귀�
 for (const pollError of ['FORBIDDEN', 'AUTHENTICATION_REQUIRED', 'BAD_HEADERS'] as const) test(`${pollError} 이후 브라우저 탭 왕복이 자동 조회를 되살리지 않는다`, async ({ page }) => {
   await page.clock.install()
   const state = await native(page, 'REPLAYING')
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 10))
+  await pauseClockWithoutJobRead(page, state.jobReads)
   state.pollError = pollError
   await page.clock.runFor(1500)
   await expect(page.locator('[data-native-polling="stopped"]')).toBeVisible()
@@ -265,7 +277,7 @@ for (const pollError of ['FORBIDDEN', 'AUTHENTICATION_REQUIRED', 'BAD_HEADERS'] 
 test('소유자를 바꾼 후 탭을 복귀해도 이전 작업을 다시 조회하지 않는다', async ({ page }) => {
   await page.clock.install()
   const state = await native(page, 'REPLAYING')
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 10))
+  await pauseClockWithoutJobRead(page, state.jobReads)
   await visibility(page, true)
   state.owner = 'session_job_visibility_other_0001'
   await recoverChangedHistoryOwner(page)
