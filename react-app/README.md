@@ -1,5 +1,13 @@
 # TETH Web
 
+## 최신 추가 결함 수정 — 운영 미배포 후보
+
+원본 최종 DOM 기준으로 AI 소개 CTA의 외국어6개 값을 `시작하기`로 복원하고 KO 버튼의 언어 표기를 바로잡았습니다. 초기 `tfIntroView` 뒤의 제목·`skIntroCopy` 후처리를 누락해 긴 본문·강조·용어 버튼을 미이식으로 보고했던 판단은 정정합니다. 이 요소들은 원본에서도 최종 제거·교체되므로 옛 형태로 되돌리지 않습니다. 기존 Bitget 푸터와 CSS/SVG는 유지합니다.
+
+인증 복귀의 보존 상태/버튼 표시, 재확인 뒤 남는 보존 chip, 같은 문서에서 인증 경로를 벗어난 뒤 명시 복귀를 수정했습니다. 자동 ACK·claim·bootstrap, 소유권 채택이나 API/flags 변경은 하지 않습니다. 동결 배치의 인증 관련100 PASS와 소개 화면13 PASS, 관련 lint·타입/service build actual0, personal(1) 실제 Opus5.5 `SCOPED_FIX_REVIEW_GO`/차단0을 확인했습니다. 새 전체 회귀는 실행하지 않았습니다. 이 검토 이후의 좁은 버튼/포커스 후속은 [누적 보고서](Bugfix_report.md)의 해당 실행으로 구분합니다.
+
+운영 source는 여전히 `b7a7c58`입니다. 통합 수정의 전달이나 모델 검토를 운영 배포·실로그인·서비스 GO로 표시하지 않습니다. 실제 대화 stream·연구/Critic·라이브러리 producer 연결은 별도 잔여입니다. 인증 guard는 `agent/web/auth-response-revision-guard`에 별도로 전달하며 UI-only static branch와 섞지 않습니다.
+
 ## 최신 사용자 승인 푸터 원문 배포·공개 확인 완료
 
 사용자가 협의됐다고 설명한 `Bitget이 선정한 최고의 AI입니다.` 등 원본9fb 푸터 한국어3값을 별도 static source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`에서 teth.ai에 실제 반영했다. 푸터 JSON SHA `d3cf9acf23ee771126fa0713666b22312f407f50847092baa5f0c49b56d52da6`는 통합과 exact이고 다른6언어는 불변이다. 통합 전체나 별도 인증3파일 수정이 운영에 배포된 것은 아니다. 관련12PASS/12.9초(actual0, Exec29200), service build(actual0, Exec90766), lint(actual0, Exec28104), compiled3PASS는 static 입력의 별도 증거이며 통합의 새 시험·빌드 PASS가 아니다.

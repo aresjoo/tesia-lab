@@ -1,5 +1,30 @@
 # TETH 버그 수정·검수 보고서
 
+## 추가 결함 배치 — 최종 원문 oracle와 OAuth 복귀 UX
+
+### Opus 의견의 후속 두 UX 경계 교정
+
+최종 전달 결속: 후속 panel/spec을 동결해 return revision/recovery2spec의 desktop/mobile **28 PASS/0 FAIL/SKIP/flaky/error0, actual0/16.882초**를 확인했습니다. 관련2파일 lint·최종 타입/service build도 actual0입니다. host4파일 before/after SHA exact이며 private `final-return-ux-receipt.json`이 실제 Exec15098/77699/82194를 결속합니다. raw SHA `1c8e9ef4264aef608b42a450bcff653f32e719dca641d7a69d4da322b5e1ad41`, build log `3623d47164b6e395a908d081905e08570f2c0f93a3b7efa6a5189b693ca929f8`입니다. 기존100/소개13 및 대표4와 중복되는 별도 실행이므로 총145/전수PASS로 합산하지 않습니다. 후속은 ROOT 코드·단언 검수이며 Opus의 이전 freeze 밖입니다. 기존500kB chunk 경고는 별도 성능 잔여입니다.
+
+host session GET를 지연시켜 결과·ACK·세션 버튼의 enabled/무반응 불일치를 재현했고, 복귀 버튼 제거 직후 activeElement가 BODY로 빠지는 것도 관측했습니다. 원 대표 desktop/mobile4 FAIL/actual1(28.234초)은 `native-return-two-ui-red-1.json` SHA `0a6b2841ebfea137509fa2dd04346e2aeede361dd4dab2b302a8848aec19c2c9`로 보존합니다. `NativeLoginPanel`의 기존 busy/recheckDisabled/blocked를 결합해 표시만 맞추고 hidden→visible return 패널 밖에 초점이 있을 때만 기존 활성 컨트롤로 복구합니다. run/SDK/dispatch/key/epoch/journal·새 문자열은 변경0입니다.
+
+같은 대표4 PASS/actual0(8.041초), raw `native-return-two-ui-green-1.json` SHA `056784837d5504e783dd110aa16313aa33ee5363e67a9e322f866c06c71dcab9`를 확인했습니다. 복귀 BUTTON/inPanel=true, GET 중3컨트롤 disabled·ACK0·GET 이후 명시 ACK 정상 성공입니다. ROOT가 diff·실단언을 대조했습니다. 이것은 앞선 Opus freeze 이후의 좁은 후속이며 기존100시험·모델 판정에 포함됐다고 쓰지 않습니다. 추가 최종 host 구간 실행과 빌드 결과는 아래 전달 결속을 따릅니다.
+
+| 항목 | 원인과 수정 | 검증 경계 |
+|---|---|---|
+| foreign pending 결과·ACK 버튼 무반응 | dispatch는 차단했지만 enabled로 보였습니다. 보존 안내·disabled를 일치시키고 명시적인 session GET 재확인만 제공합니다. 다른 owner의 pending/key/journal을 채택·삭제하지 않습니다. | Google 합성 host·desktop/mobile; 실제 provider 아님 |
+| 인증 재확인 뒤 보존 chip 잔류 | 성공 분기에서 `loginRetained`를 정리하지 않았습니다. 정상 복구 성공에서만 해제합니다. | 기존 assertion 보존 및 chip0 추가 |
+| 같은 문서 내 경로 이탈 후 복구 단절 | 기존 return binding/key/panel DOM을 유지하고 `/auth/complete`로 명시 복귀하게 합니다. 소개 CTA의 실제 dialog에서도 복귀·닫기·Escape가 동작합니다. | 자동 result/ACK/claim/GET0, 명시 ACK1·단일key |
+| AI 소개 foreign CTA 차이 | 원본 최종 `applyLang`은 CTA를 번역하지 않습니다. foreign6 `start`를 원문 `시작하기`로 맞추고 해당 버튼 `lang=ko`를 지정합니다. | Main/Native3폭·7언어, 고지 번역 유지 |
+| 원문 초기 발췌 false positive | 제목 wrapper와 `skIntroCopy`의 최종 덮어쓰기를 놓쳤습니다. 긴 본문·kicker·bold·용어 버튼을 복원하지 않고 원9fb의 실제 최종 DOM과 대조합니다. | 원index SHA `f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321`, portable fixture5구간 SHA 검증 |
+
+- 동결 검증: `.cache/frontend-parity-audit/post-footer-fixes-validation.json`, actualexit0·입력불변. 인증4spec desktop/mobile100 PASS/0 FAIL/SKIP/flaky/error0(29.23초), 소개13 PASS/0 FAIL/SKIP/flaky/error0(28.99초), 관련6TS lint0, `build:service` 타입/Vite actual0(33.81초). 전체 회귀·provider·운영0이며 다른 실행을 합산해 전수 PASS로 쓰지 않습니다.
+- 원자료: auth raw SHA `bfdd644a8f79953307d60b206d1243dffa1e6b39169224a87d4cc23002ec8f01`, intro raw SHA `40fa8928e9484ceaf75494f74d31ba30b07c1ff3f254e47f8a119c772479d3c3`, build log SHA `2caa64ad1ac67068ae05b6ae313b61ee0588f6ee137ab74434152aa3272c6e27`입니다. 최초 실제 disabled RED와 fixture/selector 준비 실패는 private raw 그대로 보존합니다.
+- 독립 검토: personal(1) 실제 `claude-opus-5-5/high/tools0` actual0·모델일치·입력불변·`SCOPED_FIX_REVIEW_GO`/차단0. receipt SHA `b1dca0b56dc9fc1da53bd2a976fa06fee79c29fcc89beb2a1c39bb62d2cd16f7`입니다. AGY `gemini-3.8-flash-high`는 최종 copy 목록 대조만 수행했으며 최종 승인으로 사용하지 않습니다. 소개 `KO editorial`/USD 원문 정책은 임의로 바꾸지 않습니다.
+- 잔여: Opus의 버튼 busy 표시·복귀 직후 포커스 가설은 후속 좁은 시험으로 구분합니다. 실제 내부 탐색은 `site-navigation.ts`의 `pushSiteLocation`이 `teth:navigate`를 발행하므로 이벤트 연결 부재로 단정하지 않습니다. 실제 OAuth·Apple host·ACK 응답 유실 전체여정/실Safari/AT/3천 사용자 부하는 미검증입니다. 기존 일반 route의 stale journal clear 정책은 바꾸지 않습니다.
+- 연결 조사: 원본 `/api/chat`·Anthropic/SSE/tool 구현은 있습니다. Native v3 TURN은 자유 assistant 답변/stream sequence/완료 필드를 아직 공급하지 않으며 research role/stage/Critic과 durable library HTTP producer도 별도 미완료입니다. 확인된 단순 wire 누락0, 기존 report/chart reader는 보존합니다. 새 임의 adapter·schema·허구 진행/결과로 채우지 않습니다.
+- 전달/배포: 통합 후보와 static UI-only/독립 auth guard를 분리합니다. 운영은 `b7a7c58`이며 이번 인증·UI 후보의 배포는 미실행입니다. 아래 이전 운영·whole FAIL/HOLD·730일 이력을 새 검증으로 덮지 않습니다.
+
 ## 사용자 승인 푸터 원문 운영 배포·공개 확인 완료
 
 - **범위/상태:** 사용자 설명과 명시 복원 요청을 Program §0.4에 결속하고 별도 static source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`을 teth.ai에 실제 배포했다. 원9fb `site-footer.js:29–31`의 한국어3문구를 복원했고 JSON SHA `d3cf9acf23ee771126fa0713666b22312f407f50847092baa5f0c49b56d52da6`는 통합과 exact다. 다른6언어 불변·통합 제품 변경0이며 통합 전체/별도 인증3파일 수정의 운영 승격이 아니다. 협의/선정 사실의 독립 검증이나 실provider·주문 승인이 아니다.

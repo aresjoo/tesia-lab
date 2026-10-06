@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+최신 후보 상태는 `migration-verification.json`의 `candidate.currentPostFooterFixes`, 파일 출처는 `migration-manifest.json`을 따른다. 원9fb는 초기 renderer가 아니라 마지막 title/`skIntroCopy`/`applyLang`까지 포함한 최종 DOM이 UI oracle다. 긴 본문/kicker/bold/용어 UI는 원본 최종 제거 항목이므로 다시 넣지 않는다. 통합 a542712의 return 복구/CTA와 static d89b193·auth guard add4d0f를 분리하며 실제 운영b7은 미변경이다. 이전 candidate/pending/GO/HOLD·whole 수치는 각 당시 증거이고 새 후보/실서비스 승인으로 쓰지 않는다. 새 API/권한/flags/schema·실provider 활성화는0이며 자유 대화/연구/Critic/library producer 잔여는 별도 PM 승인이 필요하다.
+
 현재 운영 정적 출처는 `candidate.currentUserApprovedFooterTest`의 b7a7c58입니다. 협의된 한국어 푸터3값·Bitget 문구를 원9fb로 복원하고 실제 원격/public3폭을 확인했습니다. 다른6언어·인증/API/SDK/flags 변경0, 실제 provider/주문·법률·전체서비스 GO는 아닙니다. 아래5f/8a/7dd의 pending/HOLD는 이전 입력 이력입니다. 원본 ares UI·문구·SVG·대화/연구 UX가 기본이며 필요한 backend producer를 이에 맞춥니다. 실제 데이터·거래 의미론·승인/주문 권위는 공용 계약과 Program 정본을 따릅니다. 원문을 임의로 준비중 카피로 바꿔 연결 누락을 숨기지 않습니다.
 
 최신 React 전체 출처는 `migration-manifest.json`, 현재 검증·운영 상태는 `MIGRATION.md`와 `migration-verification.json`의 `candidate.currentStaticUiPromotion`을 따른다. 통합 인증 교정·원문 푸터는 스냅샷에 보존한다. 별도 UI26 정적 출처8a757a5를 운영에 실제 배포했으며 공개3폭/4문서/350자산을 확인했다. 기존 운영인증·푸터·API·flags는 유지한다. 고정 실디렉터리의 RENAME_EXCHANGE와 점검503/재시작을 사용하고 backup을 보존한다. 물리symlink/무중단/실provider/법률/전체서비스 승인으로 확대하지 않는다. 아래 pending/HOLD·운영7dd 표현은 이전 입력의 이력이다.

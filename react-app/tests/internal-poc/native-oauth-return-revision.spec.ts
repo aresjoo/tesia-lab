@@ -103,6 +103,7 @@ test('plain return authenticated matching recheck retains original successful re
   await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   expect(state.sessionReads).toBe(3); expect(state.csrfReads).toBe(1)
   expect(state.calls.every(call => call.startsWith('GET '))).toBe(true)
+  await expect(page.getByRole('button', { name: '세션 다시 확인', exact: true })).toHaveCount(0)
 })
 
 test('normal route browser-session already refuses mismatched revision without bootstrap', async ({ page, baseURL }) => {

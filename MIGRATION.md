@@ -15,7 +15,17 @@
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 협의된 Bitget 원문 푸터 운영 반영
+### 최신 전달 — 최종 원문 oracle와 추가 결함 후보
+
+통합 source `a542712c65e4a7a5362879a404e4ddd8ad5885b7`, 전체2249파일/26486373bytes/snapshot `3de3118cdfc6a71d6c386f0c78f6e5da354ef5d752e974286d53370209f01e98`를 전달합니다. source dirty/deleted·이전 경로 삭제0, sync/verify actual0입니다. 원root/main/server/Worker/workflow는 변경하지 않습니다.
+
+실제 변경은 소개 foreign6 CTA·KO 버튼 언어 표시, OAuth return pending 표시/disabled·재확인 chip·명시 경로 복귀·host busy와 focus입니다. 새 source oracle는 portable fixture로 마지막5처리 구간을 실행해 React 최종 DOM과 직접 비교합니다. 초기 renderer의 긴 본문/강조/용어 UI는 마지막 원문 후처리에서 제거되므로 누락 보고 N4를 정정했습니다. CSS/SVG·Bitget 푸터·API/SDK/flags/승인·주문 의미론은 유지합니다.
+
+동결 통합 인증100/소개13 PASS·lint/type/servicebuild0·actual personal1 Opus5.5 SCOPED_FIX_REVIEW_GO는 첫 배치의 증거입니다. Opus의2UX 가설을 재현해 후속 대표4 PASS 및 최종 return2spec desktop/mobile28 PASS/16.882초·관련lint/최종타입servicebuild0로 별도 닫았습니다. 후속은 모델freeze 밖이며 ROOT 코드검수로 구분합니다. static UI-only13 PASS·isolated guard12 PASS도 각각의 별도 실행입니다. 중복 수치를 전수 합격으로 합산하지 않습니다.
+
+통합/UI-only/guard·Program 문서는 각 branch에 실제push합니다. snapshot은 통합 후보이며 운영b7은 그대로입니다. 실제 OAuth, Apple host·ACK 응답 유실 여정, 실제 chat/SSE·research/Critic/library producer·3천 사용자 부하는 아직 완료가 아닙니다. 정확한 raw hash·기존 실패/범위는 `candidate.currentPostFooterFixes` 및 React Bugfix를 따릅니다.
+
+### 직전 전달 — 협의된 Bitget 원문 푸터 운영 반영
 
 운영 source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`의 한국어3값을 원9fb와 동일하게 복원했습니다. `Bitget이 선정한 최고의 AI입니다.` 및 앞뒤 소개·조회/주문/출금/한도/중지 설명과 copyright4문단을 실제 teth.ai에서 확인했습니다. 다른6언어·CSS·SVG·인증/API/SDK/flags 변경0이며 통합 후보의 인증 교정도 별도 보존합니다. 독립 actual personal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M1(기존 소유 위험)·25inputs/freeze exact·gate0와 package/prepare/upload/install/preflight/activate/postflight actual0입니다. archive9fce5fd5/rawHTML8ca2669b·단일 원자 교환/private authority/이전5f backup을 확인했습니다. 공개1440/390/320 단일3PASS/actual0·정적GET각48 exact·원문4문단/overflow/오류/외부/mutation/WS0와 ROOT PNG 검수까지 완료했습니다. 상세 수치와 원자료 hash는 `candidate.currentUserApprovedFooterTest`가 소유합니다.
 

@@ -456,6 +456,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // A valid session read does not resolve or discard a different owner's
       // pending mutation. Keep its durable journal and all business gates closed.
       pending.current = savedCommand; setHasPending(true)
+      const returnScope = recoveringReturn ?? { epoch: generation, generation: ++loginGeneration.current }
+      returnBindingRef.current = returnScope; setReturnBinding(returnScope)
+      setLoginBinding(null); setLoginRetained(true); setLoginOpen(true)
       setPhase('error'); setError('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.')
       return
     }
@@ -465,7 +468,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }
     sessionStorage.setItem(SESSION_KEY, binding)
     if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
-    if (recoveringReturn) { returnBindingRef.current = null; setReturnBinding(null) }
+    if (recoveringReturn) { returnBindingRef.current = null; setReturnBinding(null); setLoginRetained(false) }
     bindSession(current)
     setLoginBinding({ sessionId: current.sessionId, epoch: generation, generation: loginGeneration.current })
     try { setPreviousConversation(readPreviousConversation(current.sessionId)); setNavigationError('') }
@@ -565,6 +568,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   })
   const openLogin = () => run(async () => {
     if (returnBindingRef.current) {
+      if (!plainAuthReturn()) {
+        setError('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.')
+        setLoginRetained(true); setLoginOpen(true)
+        return
+      }
       if (!returnPresentationCurrent()) return
       setLoginOpen(true); setLoginRetained(true); return
     }
@@ -592,6 +600,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       throw failure
     }
   })
+  const reopenReturnRoute = () => {
+    const binding = returnBindingRef.current
+    if (!binding || binding.epoch !== epoch.current || binding.generation !== loginGeneration.current
+      || session.current || logoutIntent.current || working.current || emailDispatch.current) return
+    // Explicit local navigation only. Retain the same controller and uncertain
+    // ACK key; this neither creates an owner nor dispatches result/ACK/claim.
+    window.history.pushState(window.history.state, '', '/auth/complete')
+    window.dispatchEvent(new Event('teth:navigate'))
+    setLoginRetained(true); setLoginOpen(true)
+    setError(pending.current ? '미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.' : '')
+  }
   const recheckReturnSession = async () => {
     if (!returnPresentationCurrent() || emailDispatch.current || hasStoredNativeEmailIntent()) throw new Error('SESSION_CHANGED')
     const binding = returnBindingRef.current
@@ -1458,14 +1477,23 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       return () => { if (emailDispatch.current === owner) { emailDispatch.current = null; setEmailBusy(false) } }
     }}
     onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
-  const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen && plainAuthReturn()}><NativeLoginPanel
+  const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen}>
+    {!plainAuthReturn() && <section className="cs-native-login ca-auth native-provider-login" aria-label="로그인 반환 복구">
+      <button type="button" data-native-auth-close className="au-x" aria-label="닫기" onClick={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }}>✕</button>
+      <p className="native-auth-status au-err" role="alert">로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.</p>
+      <button type="button" className="au-btn primary" disabled={busy || emailBusy} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>
+    </section>}
+    <NativeLoginPanel
     key={`return:${returnBinding.generation}`} hidden={!loginOpen || !plainAuthReturn()} returnOnly
     onAuthenticated={value => acceptReturnSession(value, false)} onSessionRecovered={value => acceptReturnSession(value, true)}
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
     emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
     sourceLayout isCurrent={returnPanelCurrent} canEmailDispatch={false} acquireEmailDispatch={() => null}
+    recoveryBlocked={hasPending ? '미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.' : undefined}
+    onRecheckSession={() => { void run(recheckReturnSession) }} recheckDisabled={busy || emailBusy}
     onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
-    onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
+    onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} />
+  </NativeAuthSurface>
   return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
     inputDisabled: busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || Boolean(approval || job), quickReplies: conversation?.nextQuestion?.options ?? [],
     workflow: hasLogout ? <section aria-label="로그아웃 요청"><h2>로그아웃 요청 확인</h2><p>이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.</p></section> : workflow,
@@ -1488,7 +1516,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // The journal exists during every normal request. Its presence alone is
     // not an error: show recovery after dispatch settles, or immediately when
     // an explicit error/logout boundary requires attention.
-    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? '서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.' : error || '서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'}</p>
+    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? '서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.' : error || (returnBinding !== null && !plainAuthReturn() ? '로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.' : '서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.')}</p>
+      {returnBinding !== null && !plainAuthReturn() && <button disabled={busy || emailBusy || hasLogout} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>}
       {hasComposerRecovery && <p>전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.</p>}
       {hasLogout && <><p>로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.</p>
         <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>같은 로그아웃 요청으로 재개</button>
@@ -1507,6 +1536,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       : () => {
         if (phase === 'logged-out' && logoutBoundary) void newSessionAfterLogout()
         else void run(async () => {
+          if (returnBindingRef.current && !plainAuthReturn()) {
+            setError('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.')
+            return
+          }
           if (logoutIntent.current || hasStoredNativeEmailIntent() || !returnBindingRef.current) await recoverSession()
           else await recheckReturnSession()
         })

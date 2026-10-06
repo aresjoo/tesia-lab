@@ -90,7 +90,7 @@ export default function ClientTradingIntro({onStart,researchOnly=false}:{onStart
   const id=useId()
   useLayoutEffect(()=>{const current=document.activeElement;if(current instanceof HTMLElement&&current.closest('.client-source-overlays,[data-sidebar-action]'))return;title.current?.focus({preventScroll:true})},[])
   const text=(original:string, prepared:string)=>researchOnly?prepared:original
-  const cta=<button type="button" className="txh-cta" lang={language} onClick={onStart}>{copy.start[language]}</button>
+  const cta=<button type="button" className="txh-cta" lang="ko" onClick={onStart}>{copy.start[language]}</button>
   const note=<div className="txh-more-row"><span className="txh-note">영원히 무료, 카드 등록 필요없음</span></div>
   return <><div className="txh-route-heading" lang="ko"><span>AI 트레이딩</span></div><div className="txh tx-guest" lang="ko">
     <section className="txh-hero" aria-labelledby={`${id}-title`}><div className="txh-copy"><p className="txh-eyebrow">AI 트레이딩</p><h1 ref={title} id={`${id}-title`} tabIndex={-1}>{text('AI가 스스로', '말로 정한 전략을')}<br className="txh-m"/>{text(' 판단해 거래합니다', ' AI와 함께 연구합니다')}</h1><p className="txh-sub">{text('거래소 계정을 한 번 승인으로 연결하면 전략이 그 계정에서 직접 주문합니다.', '전략 조건을 정리하고 연구·검증합니다. 거래소 연결과 자동 실행은 준비 중입니다.')}</p>{cta}{note}</div><TileFloor/></section>
