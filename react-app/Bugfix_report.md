@@ -1,12 +1,21 @@
 # TETH 버그 수정·검수 보고서
 
-## 판단 차트 문장·모바일 손익 줄바꿈 후속 — 로컬 검증 완료
+## 통합 전용 인증 복귀 안내 7언어 보완 — 검증 완료, 운영 미배포
+
+- 고정3문구를 표시5곳/foreign6 사전18값만으로 연결했다. actual personal1 Sonnet5.5/tools0 COPY_GO(actual0/11.642초, receipt `2ac4aa9bd75523a8647d38b95dbf4f937f7f51dcf75a8cdadb361dfa858916d3`)다. 저장된 setError 원문·조건·콜백/API는 불변이며5표시 역복원시 baseline1accbbd 전체source/NodeAST exact, adapter/LoginPanel/AuthSurface/browser-auth 보호4파일 bytes exact다.
+- 신규4PASS/actual0·10.247초(session42078/raw SHA `ff8393a50e8bbc32d2206d91286373736b68ad7ea406e2eee0464c2b31bef04d`), 기존auth2spec14+notice사전2의 관련16PASS/actual0·32.762초(session16362/raw SHA `a2ac2746b830826c9c65bfe5795020b423bbd47be8d69bdf076ecc02517ecf87`)는 별도 실행이다. 관련lint84163/diffcheck0·소유4741 listener0다. 7언어 banner/aria/button·unknown provider/API prose exact·Escape/초점·320 비공백glyph 경계와 ROOT FR320 PNG를 확인했다. 실제세션은401fixture이며 실로그인 성공은 아니다.
+- 최초 import 준비오류/RED2·줄말공백 Range4px 오탐·loopback ViteHMR 집계FAIL 원raw를 보존한다. 모든WS는 계속 차단하며 token은 기록하지 않고 local dev HMR 시도만 별도 분류했다. 제품CSS/auth제어/API/flags/빌드/운영/whole 변경0. 통합authFIX와 이 표시후속은 static f2 배포에 포함하지 않았다.
+
+## 판단 차트 문장·모바일 손익 줄바꿈 후속 — 운영 반영·공개 확인 완료
 
 - 운영46a의 새 Opus5.5 검수에서 DecisionDetail 차트 제목의 조각 어순을 추가 확인했다. 기존 whole template2개를 재사용하고 그 무렵2행만 actual personal1 Sonnet5.5/tools0로 번역했다. 기존666행/KO/DOM/USD·수치/opaque prose/저장/API/권한은 유지한다.
 - ES320 선물 손익 라벨은 이전 aa55c와 수정본의 같은 fixture에서 모두 scrollWidth328이었다(actual1개 비교PASS/session61894). 원인은 .ot nowrap의307.875px 라벨+숫자이며 새 제목 회귀나 body기본여백으로 단정하지 않는다. max768px에서 이 손익 행만 bounded wrap하고 숫자는 nowrap으로 보존했다. 원CSS 이외 디자인·SVG·데스크톱 배치는 변경하지 않는다.
 - 신규6PASS/9.182초(session77951), 합친 현재입력은 기존26+추가4의 단일 **30PASS/0FAIL/SKIP/flaky/errors/actual0·32.306초(session54178)**다. scopedlint24966/정확flags 타입servicebuild26550 actual0. source2·CSS1·기존spec1의 추가4파일만 변경했고 전체회귀0이다. 최초RED2/5PASS1FAIL/사설alias준비오류와 ROOT numbered-hunk patch 준비실패(제품변경0)는 보존했다.
 - 이 마지막후속은 아직 운영밖이며 새compiled/Opus/배포를 결속한다. 직전46a는 실제 운영7단계0/공개105routes·42CTA·GET830 exact·alt48×3폭/새HTTPS48 exact를 완료했다. 검수60입력/새OpusGO C0/H0/M1/Low12, manifest7e4415/archivea50061/rawHTMLfe73e6/freeze9ca99f, private73입력 보존7c01f8다. 판단header 잔여 M1을 이 후속으로 닫으며 old GO는 새GO로 승계하지 않는다. 전체원어민감수/통합authFIX·실provider/실서비스NO_GO/원FAIL/730일은 별도다.
-
+- 실제 최신 운영 source `f2bd10777159e430bfc2121dd653cb70253f47cd`로 승격했다. 새 compiled3폭105routes/42CTA/GET813 exact(raw SHA `ffad6e2b46b36d187a4d1e5f48bb8519a3deda2e6b9f5a0b6b9bbec061bbed34`)와 actual personal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M1/Low10·67입력불변을 결속했다. product 제목 M1은 닫았고 이번 모델 M1은 사설 adapter-proof의 역사 builder/reviewer SHA 표기다. 별도 `decision-header-tool-provenance-amendment.json`에 현재3syntax0/ROOT builder0/reviewer0 exact SHA를 연결했다.
+- package/prepare/upload/atomic-install/preflight/activate/postflight 각각actual0(session6988/86729/47355/74777/18433/94879/93773), 직전46a CAS/단일원자교환/backup/private authority 유지다. 점검503/재시작 배포이며 무중단이 아니다. manifest `aee72c8c7b2a498f0b6dc7e359c55e1d95eebf24bf4edc11a660375004407d89`, archive `bbe572d6c122deefb8eec9b84657c3092c39e43985567a8330af1c045169b3fc`, raw HTML `300e8d2d465e06f1473756093fd13b4885733f6dd32de7c4e60a8254f2bee51d`, freeze `15596cc93418fd3523a17f73cac7b09c278adc0cc4ad6f380a431f05deb1f85f`다.
+- 공개 actual0/session4287·UTC2026-10-06T19:56:56.576Z: 7언어×3폭105routes/42CTA/GET272+261+260=793 exact·오류/넘침/외부/mutation/WS/blockedAPI/byteMismatch0·alt48×3폭 loaded. raw SHA `e14f2fdd89919e7411637018e64578d3cd4cfb2ad5c80a170b9708ae1f661e9c`, 별도새실HTTPS48 WebP200/bytes/SHA exact receipt `be54df5162c0fa5d3330dc26e44505170850f8af31f1061f48c3a03b4783c793`다. ROOT1440/320 KO푸터 PNG를 봤다. 익명 GET fixture의 UI검사이며 실로그인 성공은 아니다.
+- 문서 갱신 전 81입력 content-addressed 보존을 완료했다(receipt `23dedf5a5abbe9c3e17d7cdd9aa2bc05ab52a152c454a7a2742215d4c9ff0c9b`). 직전46a의60GO/GET830/73입력과 초기eeb352GO/805GET/362입력·모든FAIL은 별도 이력이다. ROOT receipt 요약의 괄호오타/잘못된 auth raw 경로 ENOENT/MD patch context 실패는 제품변경0의 준비 오류다. 원어민 전 문장감수·FR 관사/inline 용어 개행 Low·통합authFIX·실provider/실서비스NO_GO/730일은 별도다.
 ## 외국어 문장·강조·이미지alt 후속 이관 — 아직 운영 밖
 
 - source-only whole문장11행·CJK무공백 firstsentence·foreign48 imagealt의거짓Korean수식어만8src/3신규spec로보완했다. 한국어/숫자/계산/저장/미등록 prose·SVG/geometry/이미지bytes·API/인증제어는유지한다. aa55c5f의11파일을통합2c99583으로충돌없이이관했다.

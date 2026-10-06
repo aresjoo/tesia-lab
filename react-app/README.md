@@ -1,6 +1,8 @@
 # TETH Web
 
-현재 운영은 static `46a62b610bd398801b62bcf1964ed449293de216`입니다. 새 actual Opus5.5 정적GO/60입력·배포7단계0·공개7언어×3폭105routes/42CTA/GET830 exact·외국어alt48×3폭 및새48HTTPS이미지 exact를 완료했습니다. 마지막 판단차트 제목 어순·ES320 손익 nowrap 넘침은 별도 source2/CSS1/spec1로 보완해 static단일관련30PASS/32.306초·scopedlint/정확flags 타입servicebuild actual0입니다. 이 마지막수정의 compiled/새검수·승격은 진행중이며 통합authFIX/실서비스GO는 포함하지 않습니다. 원KO/SVG/수치·저장/API/권한/원FAIL/730일보존, 정확한 상태는 누적보고서를 따릅니다. 아래 eeb/미배포 표기는 이전 실행 이력입니다.
+현재 운영 source는 static `f2bd10777159e430bfc2121dd653cb70253f47cd`입니다. 승인 푸터 의미·고정 Powered by와 지원7언어 표시, 문장 어순/CJK 강조/foreign48 이미지alt 및 모바일 손익 줄바꿈을 반영했습니다. 새 actual personal1 Opus5.5 정적GO C0/H0/M1/Low10·67입력/배포7단계0, 공개7언어×1440/390/320px105routes/42CTA/정적GET272+261+260=793 exact·alt48×3폭·새HTTPS48 exact·오류/overflow/mutation/WS0입니다. 관련30PASS/32.306초·scopedlint/타입servicebuild0이며 새전체회귀0입니다. 모델 M1은 사설 도구 역사 SHA 표기이며 원증거를 바꾸지 않은 현재 실행/코드 SHA의 provenance amendment로 보완했습니다. 81입력 보존 후 옛freeze 재사용0, 원KO/SVG/숫자/저장/API/권한·원FAIL/730일 보존입니다. 통합인증FIX는 운영에 포함하지 않았으며 실provider/전체서비스 GO가 아닙니다. 아래46a/eeb/미배포 표기는 각 실행 당시 이력이고 정확 SHA/검증 한계는 누적보고서를 따릅니다.
+
+통합 인증 복귀3문구의7언어 표시후속은 별도4신규/16관련PASS·AST/state/보호파일 exact를 확인했습니다. 운영 미배포이며 실인증/서비스 GO가 아닙니다. 아래 통합의 오래된 번역잔여 표기는 당시 이력이고 최상단 Bugfix 보고서가 최신 상태를 소유합니다.
 
 ## 정적 운영 7언어 반영 — 통합 인증 후보와 구분
 

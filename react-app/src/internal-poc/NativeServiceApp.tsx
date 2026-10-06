@@ -1483,10 +1483,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }}
     onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
   const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen}>
-    {!plainAuthReturn() && <section className="cs-native-login ca-auth native-provider-login" aria-label="로그인 반환 복구">
+    {!plainAuthReturn() && <section className="cs-native-login ca-auth native-provider-login" aria-label={ui('로그인 반환 복구')}>
       <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} onClick={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }}>✕</button>
-      <p className="native-auth-status au-err" role="alert">로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.</p>
-      <button type="button" className="au-btn primary" disabled={busy || emailBusy} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>
+      <p className="native-auth-status au-err" role="alert">{ui('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.')}</p>
+      <button type="button" className="au-btn primary" disabled={busy || emailBusy} onClick={reopenReturnRoute}>{ui('로그인 반환 화면으로 돌아가기')}</button>
     </section>}
     <NativeLoginPanel
     key={`return:${returnBinding.generation}`} hidden={!loginOpen || !plainAuthReturn()} returnOnly
@@ -1521,8 +1521,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // The journal exists during every normal request. Its presence alone is
     // not an error: show recovery after dispatch settles, or immediately when
     // an explicit error/logout boundary requires attention.
-    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? ui('서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.') : error ? nativeAppNotice(language, error) : (returnBinding !== null && !plainAuthReturn() ? '로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.' : ui('서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'))}</p>
-      {returnBinding !== null && !plainAuthReturn() && <button disabled={busy || emailBusy || hasLogout} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>}
+    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? ui('서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.') : error ? nativeAppNotice(language, error) : (returnBinding !== null && !plainAuthReturn() ? ui('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.') : ui('서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'))}</p>
+      {returnBinding !== null && !plainAuthReturn() && <button disabled={busy || emailBusy || hasLogout} onClick={reopenReturnRoute}>{ui('로그인 반환 화면으로 돌아가기')}</button>}
       {hasComposerRecovery && <p>{ui('전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.')}</p>}
       {hasLogout && <><p>{ui('로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.')}</p>
         <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>{ui('같은 로그아웃 요청으로 재개')}</button>

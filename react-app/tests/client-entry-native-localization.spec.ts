@@ -58,7 +58,7 @@ test('notice translations preserve Korean, request codes and unrecognized provid
       coded: locales.map(locale => nativeAppNotice(locale, 'NOT_READY · 서버가 아직 실행 준비를 마치지 못해 백테스트를 시작하지 못했습니다. 요청은 그대로 보관되어 있으며 자동으로 다시 시도하지 않으니, 준비가 끝난 뒤 같은 요청으로 재개해 주세요.')),
       validation: locales.map(locale => nativeAppNotice(locale, '전략 검증 실패: LIMIT_EXCEEDED, $&, UNKNOWN_FUTURE_CODE')) }
   })
-  expect(result.entries).toHaveLength(43)
+  expect(result.entries).toHaveLength(46)
   for (const { original, values } of result.entries) {
     expect(values[0]).toBe(original)
     for (const value of values.slice(1)) { expect(value.length).toBeGreaterThan(0); expect(value).not.toMatch(/[가-힣]/) }
