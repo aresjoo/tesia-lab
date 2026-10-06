@@ -8,14 +8,24 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@2b4bdeaf9711651dc19a685dbbe38c3e06c03770` 전체. 부모81957 위 원본 정책 새 탭/메뉴 유지·KO 전략 팔로워 문구/SVG만 복원. 인증/API/flags 변경0·구간검증·타입1회/3build actual0, 새whole/운영0 |
+| React 출처 | `agent/web/help-policy-link-parity@12375479d2ebcc0a9d545c0181ce870567f15ee9` 전체. 제품/시험은2b4bdea와동일, 문서2개만별도정적후보와API0.10실제상태로최신화. 통합인증fix 보존·정적후보별도·운영미반영 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 정책 링크와 전략 팔로워
+### 최신 전달 — 복원 배치의 인증 분리 준비
+
+통합 React 전체2245파일/26386220bytes/snapshot `9c3c99d3e5ef11b96d641be2d2f96966fef371d264c583b71c265942949da098`를 전달한다. source1237547의 제품/시험은2b4와 같고 README/Bugfix만 최신화했다. 원본 root/main·이전current22/역사객체 보존, source dirty/deleted/이전경로삭제0·sync/verify actual0다. 통합 snapshot의 인증fix를 없애거나 이전운영코드로 덮어쓰지 않는다.
+
+별도 공개 UI 준비 코드는 [Web static-ui-restoration-batch](https://github.com/beak1011/tesia-web/tree/agent/web/static-ui-restoration-batch) `e755d5bb24fc0a3670304d2048e97373165398d1`의 전체 branch에 있다. c090 위 추가20파일을 인수해 원문/UI27파일을 통합2b4와 byte exact로 묶었다. 기존 c090에 빠졌던 rename/download/guest 배치/IME/clipboard/정책링크/팔로워/Native 폼 문구도 포함한다. NativeServiceApp/NativeLoginPanel/native-browser-auth 3파일과SDK/서비스bootstrap/package/flags는 운영7dd byte exact다. Main mock인증feedback·기존Nativecallback Promise완료전파는UI동작으로명시하며 literal-only나실인증완료로보고하지않는다.
+
+새준비후보 정책/팔로워16PASS/24.272초와 이름변경/download32PASS/36.933초는 별도 단일부분실행(actual0)이다. 타입1회/servicebuild1회·관련lint·source26 stagedsecret scanactual0/findings0·독립readonly selected27/baseline/SDK정합반례0, 소유4694/4695 종료다. 새단일48/wholePASS·실provider/모델/운영GO가아니다. 푸터 사실/법률·명시승격방향·최종release인수/package/CAS/publicsmoke/원자전환·rollback이남는다. 사용자WIP·원FAIL·730일 자료 삭제0다.
+
+대화 library는 계약 자체가 없는 것이 아니라 미발행API0.10후보5operation/producer acceptance8이 있다. Backend는validator facade뿐이며store/HTTPproducer미구현·현Web미소비다. 기존후보발행pin/owner승인→producer/acceptance→frontend연결순서로정정했고새중복adapter·공용계약변경0이다. 연구role/stage·대화streamproducer미완료와이미있는전문chart/report/replay/skip을구분한다. 상세는 `react-app/Bugfix_report.md` 및 `candidate.currentStaticUiRestorationCandidate`다.
+
+### 이전 전달 — 정책 링크와 전략 팔로워
 
 전체2245파일/26383213bytes/snapshot `10722c201a6d9ede47f77598f0c7d4acdd8c10c1a887cdbc8567a781373e1091`다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 원본 root/main·이전current21·운영역사객체를 보존한다. 약관/개인정보는 원본처럼 새 탭으로 열고 메뉴/초안·About 동작을 유지한다. KO 전략 행은 `N명이 따라가는 중`·만 단위·원SVG를 복원하고 known0의 AT·미제공·다른6언어·원16px를 보존한다. Main followers는 snapshot이며 Native 미공급 숫자를 만들지 않는다.
 

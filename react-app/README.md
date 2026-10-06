@@ -1,5 +1,7 @@
 # TETH Web
 
+운영 전달을 위한 별도 준비 후보는 `agent/web/static-ui-restoration-batch@e755d5bb24fc0a3670304d2048e97373165398d1`이다. 최신 UI27파일만 통합2b4bdea와 맞추고 실제 인증·SDK·bootstrap·flags는 운영7dd를 유지한다. 이 통합 작업본의 인증 교정을 삭제하거나 migration snapshot을 옛 인증으로 덮어쓰지 않는다. 새후보 16PASS/32PASS·타입/servicebuild/lint/scan 통과와 운영 미배포·footer 사실/승격 HOLD는 별도로 기록한다. [별도 후보 전달](Bugfix_report.md#최신-복원-배치의-별도-정적-후보-전달)을 따른다.
+
 현재 후보는 `agent/web/help-policy-link-parity`다. 원본의 약관·개인정보 링크를 새 탭으로 열고 기존 대화·메뉴를 유지하는 동작을 복원했다. 한국어 공유 전략의 `N명이 따라가는 중`, 만 단위 표기와 원본 사람 SVG도 복원했으며 미공급 수치·다른 언어·인증/API/flags는 유지한다. 정책 링크 신규8키는 대표1PASS와 나머지7PASS, 전략 행 신규8키는 최초4PASS와 하니스 교정후4PASS로 각각 증거를 보존한다. 인접320px 기존2키도 PASS다. 전체 회귀를 다시 실행하지 않는다. 운영 승격은 여전히 별도이며 계정 전체 대화 목록·연구 역할/단계·대화 스트리밍의 실제 producer 계약은 PM·백엔드 선행 확정이 필요하다. [복원과 연결 공백](Bugfix_report.md#정책-링크와-전략-팔로워-원본-복원)을 따른다.
 
 당시 후보는 `agent/web/copy-feedback-detail-parity`다. 사용자 메시지의 실제 복사 성공에 원문 `복사 완료`, 전략 상세의 `전략 복사`·`전략 복사하기`, 한국어 알림 그룹의 `알림` 접미사를 복원했다. 원문 없는 catalogue 오류 화면의 복귀 라벨은 같은 목록명으로 일관성만 맞췄다. 다른6언어·콜백·권한·인증/controller/API/SDK/flags는 유지한다. 구간별 시험과 신규 하니스 실패·교정은 [최신 기록](Bugfix_report.md#복사-안내와-전략-상세알림-원문-복원)에 분리했다. 기존9spec의21 selector만 원문 CTA 이름에 맞추고 직접 영향24키를24PASS/32.29초로 검증했다. 합쳐진 후보의 타입검사1회·공개/내부/service3build actual0이며 새 전체회귀·실provider·운영 배포는 없다. 원문에 없는 새 디자인·카피를 만들지 않았으며 기존 푸터 사실 확인·정적 승격 HOLD는 유지한다.

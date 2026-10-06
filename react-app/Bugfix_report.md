@@ -1,5 +1,11 @@
 # TETH 버그 수정·검수 보고서
 
+## 최신 복원 배치의 별도 정적 후보 전달
+
+- 별도 `agent/web/static-ui-restoration-batch@e755d5bb24fc0a3670304d2048e97373165398d1`을 실제 commit/push·원격exact 확인했다. 이 통합 작업본의 인증 교정을 삭제하지 않고 c090 위 최신 UI를 선택인수했다. 전체제품27파일은 이 작업본2b4bdea와 byte exact, 실제 NativeServiceApp/NativeLoginPanel/native-browser-auth와 SDK/서비스 bootstrap/package/flags는 운영7dd 그대로다. 따라서 최근 복원이 c090에 빠져 있던 전달 범위를 정리했지만 인증 미해결을 해결했다고 쓰지 않는다.
+- 새후보 정책·팔로워16PASS/24.272초와 이름변경·download32PASS/36.933초는 각각 단일 구간 실행(actual0)이며 새전체48PASS로합산0다. 제품16파일/시험4파일 relatedlint·타입1회/servicebuild1회actual0, secret scan staged26actual0/findings0. 독립readonly selected27·baseline714/newhelper1·SDK74/auth3 exact 검산 확정반례0. 운영/source권위가아닌 UI동작/표시 증거이며 Mainmock인증feedback·기존Nativecallback Promise완료전파도 명시범위다. 공개package/최종releaseGO/publicsmoke/활성화0·푸터사실/법률·명시승격방향HOLD유지.
+- 새 별도후보의 전체 코드는 위 Web branch에 보관하고 migration의 통합 React snapshot을 이전 운영인증으로 되돌려 덮어쓰지 않는다. migration 안내/검증의 별도candidate 객체에 출처·범위·검증·잔여를 기록한다. 원본/main·기존작업본·실패증거·730일·사용자WIP 삭제0이다. 아래 원문복원 기록은 통합후보의 당시 입력이며 별도정적후보와 혼동하지 않는다.
+
 ## 정책 링크와 전략 팔로워 원본 복원
 
 - **범위:** 부모81957 위 제품2파일·신규시험2파일만 수정했다. 원본9fb와 정책 링크 동작·전략 행 문구/SVG를 대조했다. 인증/controller/API/SDK/flags/CSS/가격/730일 자료는 이번 변경0이며 원실패·이전 인수 증거를 보존한다. 두 파일은 각각 단독 writer가 병렬 처리했다.
@@ -17,11 +23,11 @@
 
 | 기능 | 현재 재사용 가능 경로 | 선행 확정 요청 |
 | --- | --- | --- |
-| 계정 전체 대화 목록·복원 | generated API0.8 listNativeConversationHistoryV8는 특정 conversationId의 approval/job 이력이다. API0.3 getConversationV3·navigateConversation는 같은 세션 locator1개를 서버 재확인한다. ConversationLibraryPresentation은 UI 입력일 뿐 producer가 아니다. | PM 승인 범위, owner/claim 가시성, 목록·페이지·transcript 복원 계약 및 acceptance |
+| 계정 전체 대화 목록·복원 | 현재 소비 API0.8 listNativeConversationHistoryV8는 특정 conversationId의 approval/job 이력이다. API0.3는 locator1개를 재확인한다. 새 API0.10 private 후보에는 목록/metadata/transcript/PATCH/archive 5개 operation과 producer acceptance8개가 이미 있다. 그러나 미발행·현Web미소비이고 Backend v10은 validator facade뿐이며 store/HTTP producer 미구현이다. | 기존 API0.10 후보의 정확한 발행 pin·PM 단독 writer 승인, owner/claim·durable transcript·pagination/CAS/replay producer 및 기존 acceptance 인수 후 frontend 연결. 새 중복 계약/adapter를 만들지 않음 |
 | 연구 역할·단계·완료 | captureTurnObservation/captureValidationObservation→observedResearchEntries는 실제 TURN/VALIDATE 결과 표시다. Native 연구 status unavailable은 실제 producer 미공급을 나타낸다. | 연구 run↔대화/문서 결속, role/stage 근거, 실패/완료·서버 경과시간 producer와 계약. TURN/VALIDATE 성공을 연구 완료로 승격하지 않음 |
 | 대화 스트리밍 | createConversationTurnV3는 JSON 완료 응답이다. 기존 streamBacktestEvents/openEventStream은 백테스트 상태 전용이며 현재 Native는 v7 polling을 소비한다. | turn/message 결속, delta 순서·재연결·취소·최종 snapshot 권위의 대화 스트림 계약. 백테스트 SSE를 대화 SSE/v7 상태의 대체로 연결하지 않음 |
 
-정본 경로: `repos/tesia-program/worktrees/investment-prompt-quality/PM/README.md`·`PM/TESIA_AI_POC_Product_Implementation_Plan.md`·`WORK_LEDGER.md`. 공용 schema/보안/제품 범위 변경0. API operation이 없는 세 항목을 프론트 복원 완료·실서비스 완성으로 보고하지 않는다.
+정본 경로: `repos/tesia-program/worktrees/investment-prompt-quality/PM/README.md`·`PM/TESIA_AI_POC_Product_Implementation_Plan.md`·`WORK_LEDGER.md`. 공용 schema/보안/제품 범위 변경0. 현재 Native가 소비할 실제 producer가 미완료인 세 항목을 프론트 복원 완료·실서비스 완성으로 보고하지 않는다. API0.10 후보 존재는 `worktrees/contracts-exchange-connect/README.md:24–28`·`docs/service-conversation-library.md:29`, producer 미구현은 `worktrees/backend-conversation-library/AGENTS.md:14–15`·`src/tesia_backend/contracts/api_v10.py:1–5`로 직접 확인했다. 해당 작업본 HEAD43f81c/6df638의 clean 동일성은 주장하지 않으며 타팀 WIP를 변경하지 않았다.
 
 ## 복사 안내와 전략 상세·알림 원문 복원
 
