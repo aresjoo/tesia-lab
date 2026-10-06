@@ -8,14 +8,24 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@bbcff1cc6ece74eb9d3947b3dbf122c846d9fb89` 전체2245파일. 제품3de의 AI 트레이딩 원문·우측 스크롤바 제품2/spec2 복원과 공개 HOLD 기록. 통합인증fix·원문푸터 보존 |
+| React 출처 | `agent/web/help-policy-link-parity`의 정확한 HEAD/전체 파일은 migration-manifest.json 참조. 제품3de의 AI 트레이딩 원문·우측 스크롤바 제품2/spec2 복원 및 실제 정적 테스트 배포·이전 HOLD 기록. 통합인증fix·원문푸터 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — AI 트레이딩 카피·스크롤바 복원
+### 최신 전달 — 사용자 승인 원본 AI 소개 테스트 화면 운영 반영
+
+운영 source5f13ad3(검증제품801과nonMD/service exact)의 원문 AI 소개와 scrollbar 표시 제거를 실제 배포했습니다. 사용자 `운영에 바로 반영 ... 아직 테스트중` 지시와 Program §0.4에 표현 복원 범위만 명시했으며 원문을 준비중/연구 카피로 재작성하지 않았습니다. 실제 provider/주문·법률·인물 추천·예시 수익은 확인한 것이 아닙니다. 새 actual personal1 Opus5.5 GO C0/H0/M2(소유 위험)·wrapper 포함30 proof/freeze exact·gate actual0와 package/prepare/upload/install/preflight/activate/postflight0를 결속했습니다. archive a7382369/rawHTML491b8816·private authority 불변·이전8a backup 보존·원자 교환/점검 restart를 확인했습니다.
+
+공개1440/390/320 단일3PASS/actual0·정적GET각47 exact·overflow/오류/외부/mutation/WS0, 원문·고지·실휠/키보드·CTA/로그인 닫기/route복귀를 확인했습니다. 첫1440 CtrlHome scrollTop2878 FAIL/다른2폭미실행은 원자료로 보존합니다. 같은 제품에서 heading focus를 실제 pointer click으로 바꾼 후속3PASS이며 원인 폐쇄를 주장하지 않습니다. h1은tabindex=-1로focus가능하므로 사설주석의not-focusable은errata입니다. ROOT가공개PNG/raw를직접검수했습니다. 기존9/2/compiled3 관련증거는동일source/dist에한정재사용했고새whole/build/provider0입니다.
+
+원본9fb에는 실제 AI 구현이 있습니다. `taiStream→/api/chat`, Node Anthropic messages.stream, Worker AI Gateway/market_data 도구 루프를 확인했습니다. 현재 React Native의 v3 conversation SDK와 Main local fixture는 다른 소비 경로입니다. 원본 모델 호출 부재가 아니라 연결 차이로 정정하며 원server/Worker는보존됐지만이번에활성화하지않았습니다. 실제providercredential/설치/응답검증은별도입니다.
+
+새배포의정확증거는 `candidate.currentUserApprovedTradingIntroTest`를따릅니다. 아래currentTradingIntroCopyScroll HOLD·currentStaticUiPromotion8a·top-leveldeployment7dd는이전이력이며현재출처를잘못가리키지않도록구분합니다. 통합snapshot의authfix/원문footer는별도보존했고옛운영코드로덮어쓰지않았습니다.
+
+### 직전 전달 — AI 트레이딩 카피·스크롤바 복원 HOLD
 
 현재 **로컬 원문·스크롤 검증 완료 / 운영 공개 HOLD**다. personal(1) 실제 Opus5.5는 execution0·입력불변·C0/H2/M2로 현재 비활성 거래 기능에 대한 `직접 주문합니다` 등 공개 카피와 §0.4/About 금지 기준의 권위 충돌을 확인했다. 원문은 다시 임의 변경하지 않고 후보에 보존한다. gate actual1은 `NEW_INDEPENDENT_POLICY_RELEASE_GO`에서 dispatch를 차단했으며 새 package/upload/activate0·기존 운영8a 유지다. UTC09:28:13.529Z의 teth.ai GET200/10625bytes/SHAf1798fbc는 기존 운영과 같다. review→gate wrapper frozen proof와 실존 인물/수익 예시 정책 확인이 잔여다.
 
