@@ -21,9 +21,9 @@ source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,12
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 
-ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE의 장시간 검증 증거 결합 경계에 따라 역사 전수와 exact 영향40을 별도 결속한다. 이는 공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 최고급 독립 모델·최종 gate·archive/권위CAS·공개smoke·원자적전환/롤백은 pending/HOLD다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 운영teth.ai7dd·원root·운영9객체·DB/730일은 유지한다. 실provider/Reactprompt/서비스GO0이다.
+ROOT PM의 이번 배치 한정 Decision에 따라 역사 전수와 exact 영향40을 별도 결속했다. 이는 Governance 문언의 직접 적용·일반 선례·공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 개인1 실제 Opus5.5/high의 단일 최종 검수는 actual0·입력불변·모델일치이나 **STATIC_UI_RELEASE_HOLD/C0/H0/M1**이다(receipt `1811cf868a14da790e5ee931f5fe8c2ddf8139a97fcc6be54e69b3c86686e741`). M1은 복원 오동작 확정이 아니라 정적 시각·카피 예외에 OAuth 복귀/session/revision fence 변경까지 누적 포함한 권위 범위 불일치다. 인증 변경을 별도 배치로 분리하거나 별도 권위 및 실제 provider 복귀 검증이 필요하다. 이에 따라 최종 gate/archive/CAS/공개smoke/활성화0이며 운영7dd를 유지한다. 이 문제 때문에 whole나 빌드를 다시 돌리지 않았다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 원root·운영9객체·DB/730일과 실제 서비스NO_GO를 유지한다.
 
-검증 원본은 `candidate.currentRestorationBatchEvidence`의 역사 전수(raw e867abaa/receipt7b480876/log9fef2cc4)와 후속40(raw efbc0a89/receiptab8276b4)에 각각 결속한다. 이전 `currentCompletedBacktestReply`와 다른 `current*` 인수 객체는 당시 입력 그대로 보존한다.
+검증 원본은 `candidate.currentRestorationBatchEvidence`의 역사 전수(raw e867abaa/receipt7b480876/log9fef2cc4)와 후속40(raw efbc0a89/receiptab8276b4)에 각각 결속한다. 그 객체의 PENDING은 최종 검수 전 캡처 상태이며 최신 판정은 `candidate.currentRestorationReleaseReview`가 명시한다. 이전 `currentCompletedBacktestReply`와 다른 `current*` 인수 객체는 당시 입력 그대로 보존한다.
 
 ### 이전 전달 — 가설 질문 답변 원문 복원
 
