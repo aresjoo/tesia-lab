@@ -1,5 +1,7 @@
 # TETH Web
 
+현재 후속 후보는 `agent/web/menu-download-parity`다. 원문 대화방 이름변경 안내를 저장성공시에만 복원하고 원본 다운로드 header6언어·로고22px·Apple색·모바일SVG28px를 맞췄다. 관련10PASS/약13초와28PASS/약33초는 각각 별도 부분검증이다. 기존 store/Native/API/flags는 유지하고 새로운 전체회귀/설치/build/운영0이다. 부모a8의3build는 새입력의 빌드PASS로 승계하지 않는다. [현재 검수 기록](Bugfix_report.md#대화방-이름-변경과-다운로드-원본-세부-복원)을 따른다. 운영진입의 카피와 Main전용카피를 구분하는 별도 정적release후보는 기존운영7dd의 인증을 그대로 유지하며 통합본의 인증fix를 삭제하지 않는다.
+
 현재 후속 후보는 `agent/web/sidebar-selection-copy-parity`다. 사용자가 지정한 한국어 푸터 세 문단을 원9fb `site-footer.js:29–32`와 그대로 맞췄다. 네 문단 구조·두 번째 강조·저작권·색상·SVG·레이아웃은 보존하며 Main/Native/About/Download/Policies의320/1440px·양project20키가20PASS/actual0다. 다른6언어 문단은 이번 변경하지 않았으므로 전체 번역 원문 복원을 완료했다고 주장하지 않는다.
 
 독립 구간의 Native sidebar Promise 반환 누락(4PASS), 원7언어 globe `menu.glc` 원문(14PASS), Conversation IME229/입력 속성(기존8+신규4=12PASS)도 교정했다. 세 담당자는 독립 시험 파일만 썼고 제품은 ROOT 단독 writer다. 관련 lint·공개/내부/service3build actual0, Google-only true/exchange false 설정을 유지했다. 작은 수정마다 전체 회귀를 돌리지 않았으며 기존 auth scope HOLD·원FAIL·730일을 보존한다. 푸터 카피 복원은 Bitget 선정·실제 주문 가용성을 검증한 것이 아니며 운영 활성화·실서비스 승인은 아직 아니다. 최신 근거는 [누적 보고서](Bugfix_report.md#푸터-원문과-사이드바입력-구간-교정)다. 아래 도움말·전수 기록은 각 부모 입력의 이력이다.

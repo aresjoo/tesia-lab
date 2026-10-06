@@ -1,5 +1,14 @@
 # TETH 버그 수정·검수 보고서
 
+## 대화방 이름 변경과 다운로드 원본 세부 복원
+
+- 병렬 writer 경계는 Main+메뉴시험, PublicPages+download CSS+신규독립시험으로 나눴다. 기존 store/Native 인증/API/계약/flags/원본 root/730일 변경0이다. 관련 lint/diffcheck actual0, 작은 수정의 새whole/설치/build/운영0. 아래 부모 a8의3build를 이번 입력의 새빌드로 승계하지 않는다.
+- 메뉴 두 소비자에 원문 `이름을 바꿨습니다` 성공 안내를 복원했다(원9fb index12197–12207). 동기 로컬 저장실패/commitUncertain이면 안내하지 않는다. 같은trim이름은 실제 변경이 아니므로 store/toast를 호출하지 않는 최소 가드이며 원본동작 그대로라는 주장과 구분한다. inline 제목/Chrome/store 계약은 유지한다.
+- 대표 RED1FAIL/actual1/13.91초의 원문누락, 첫GREEN8PASS/2FAIL/actual1(기존 viewport250ms 저장 전 신규 기대값을 잡은 준비오류), 준비교정10PASS, 최종guard 입력의 같은10키10PASS/actual0/13.47초를 각각 보존한다. 기존6+새4이며 원시험 단언/timeout/fixture/skip/retry 변경0. 빈이름/취소/성공/동일이름/저장실패·초점/초안/기존DOM/다른방기록·캐시를 확인했다. 최종 raw SHA `2c57bb211556ef59e1f0ef4982426ad443d799f9241ec3a3a19ecaaccf1ea2bc`다. 실제 서버 rename 성공으로 확대하지 않는다.
+- 다운로드는 원22px 로고/Apple `#ececec`/모바일28px 스토어 SVG를 복원했다. 한국어 시작하기는 그대로이며 다른6언어 header는 원PI.login으로 연결했다. 원문의 KO/nonKO 비대칭은 임의정규화하지 않는다. 신규시험 초기 모바일24 기대는 독립원본 CSS35 및59–69를 읽어28로 바로잡았으며 제품사전을 기대값으로 쓰지 않았다.
+- 대표 English1440 RED1FAIL/actual1/3.86초와 수정전320 두SVG24×24 실제계측을 보존한다. 같은 신규spec 최종7언어×320/1440×양project28PASS/actual0/33.37초, 실제geometry/overflow0/텍스트 fit/겹침0/hit/키보드CTA→Main/locale 유지/pageerror0/API·mutation0이다. GREEN SHA `16db5a812a320489d17e140404c43dc170ff6041c70d5caad36a633d7113a77d`다. Native 실제로그인/스토어앱등록을 검증한 것이 아니다. 두소유포트4678/4679는 종료했다.
+- ROOT가 제품diff/신규시험/최종raw를 직접확인했고 독립검수의 same-name false-success 및 실제모바일 SVG 차이를 수용했다. 다음인수는 원문카피후보의 운영Native 실제소비와 인증분리이며 추가기능/카피창작을 붙이지 않는다.
+
 ## 푸터 원문과 사이드바·입력 구간 교정
 
 - **한국어 푸터 원문:** 사용자 제공 네 문단과 원9fb `site-footer.js:29–32`를 기준으로 `client-site-footer-copy.json`의 ko intro/tagline/consent 세 값만 복원했다. 임의 연구·검증 소개/수정 슬로건/승인 안내로 대체되어 있던 실제 차이였다. 저작권은 이미 exact이므로 변경0. 기존 네 p·두 번째 b·마지막 두 dim·CSS/SVG/색상/기능/API/권한은 유지한다. 다른6언어의 변경된 문단은 이번 복원 범위 밖이며 원문 전체 복원 완료로 보고하지 않는다.

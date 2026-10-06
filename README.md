@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷은 **`agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad`**입니다. 전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0, sync/verify actual0입니다. 한국어 푸터 원문20PASS·Native sidebar Promise4PASS·globe 원문14PASS·IME12PASS는 각각 별도 부분검증입니다. 모인 입력의 lint·공개/내부/service3build actual0, 작은 Sonnet5.5 검수는 SCOPED_CODE_GO입니다. 새전체회귀/운영반영0·인증권위HOLD이며 다른6언어 푸터는 이번에 복원하지 않았습니다. 최신 근거는 `candidate.currentSidebarFooterParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)입니다.
+최신 React 스냅샷은 **`agent/web/menu-download-parity@0f639149e0e3f77f09e931785317de8b34cb6a62`**입니다. 전체2237파일/26280108bytes/snapshot `33b3b9dd16ba15b426f7b33c12a5e7522a051f97fe2ca00887f7faf04d84e100`, syncverify0·dirty/deleted/이전경로삭제0입니다. 이름변경 안내10PASS·다운로드원문과로고/SVG28PASS·해당lint0이며 새build/whole/운영0입니다. 부모a8의3build는 이전 입력 근거로 보존합니다. 통합인증fix는유지하며 7dd기반copy-only release는별도후보입니다. 최신 `candidate.currentMenuDownloadParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)를 따릅니다.
 
 아래 전수·빌드·모델 수치는 부모 입력의 이력입니다. 새부분 검증을 이전 전체 PASS로 합산하지 않습니다. 기존 인증 교정을 제거해 합격 후보를 만들지 않으며 부모의 권위 범위 HOLD도 유지합니다. 푸터 카피는 Bitget 선정·실주문 가용성을 증명하지 않습니다.
 

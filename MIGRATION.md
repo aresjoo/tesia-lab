@@ -8,14 +8,18 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad` 전체. 부모7684 위 푸터·sidebar·globe·IME 제품5/시험4/MD2. 부분20/4/14/12PASS·lint/3build, 부모전수와 별도 결속 |
+| React 출처 | `agent/web/menu-download-parity@0f639149e0e3f77f09e931785317de8b34cb6a62` 전체. 부모a8 위 Main·Download 원문/세부3제품·시험2·MD2. 관련10/28PASS·lint0, 새build/whole/운영0 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 푸터 원문과 선택·입력 교정
+### 최신 전달 — 이름변경과 다운로드
+
+전체2237파일/26280108bytes/snapshot `33b3b9dd16ba15b426f7b33c12a5e7522a051f97fe2ca00887f7faf04d84e100`, syncverify0·dirty/deleted/이전경로삭제0다. Main SessionMenu 원문 성공안내를 저장성공시에만복원하고 Download의22px로고/Apple색/28px모바일SVG·6언어header CTA를원본과맞췄다. 기존6+신규4의10PASS 및7언어×2폭×2project28PASS·lint actual0, 원RED와준비오류보존이다. 새build/whole/운영0, 부모a8빌드는이전입력의근거다. Native/store/API변경0·인증분리/정적승격은별도검증이며최신증거는 `candidate.currentMenuDownloadParity`다.
+
+### 이전 전달 — 푸터 원문과 선택·입력 교정
 
 전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0, sync/verify actual0다. 사용자 지정 한국어 푸터3literal(저작권 unchanged), Native sidebar Promise 반환, globe 최종원문키, Conversation IME229/속성만 복원했다. 원문 구조·SVG·CSS/API/권한/flags/730일 변경0다. 다른6언어 푸터 복원은 아직 아니다.
 

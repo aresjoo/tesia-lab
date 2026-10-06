@@ -650,6 +650,20 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
       return true
     } catch (error) { setAccountNotice(error instanceof Error ? error.message : '전략을 등록하지 못했어요.'); return false }
   }, [profile, userStrategies.store, store, connectionLocator.store, openAccount, setAuthReturnToComposer, setAuth, setAccountNotice, setTerminalSelection])
+  const renameFromMenu = (id: string, title: string) => {
+    const nextTitle = title.trim().slice(0, 120)
+    const current = store.getSnapshot().sessions.find(session => session.id === id)
+    // Report an actual change, not an unchanged-name save.
+    if (!current || !nextTitle || current.title === nextTitle) return
+    store.rename(id, title)
+    const saved = store.getSnapshot()
+    // Original gSessRenameGo feedback follows successful local persistence.
+    // The existing store reports synchronous write failures in its snapshot.
+    if (!store.commitUncertain() && !saved.storageError
+      && saved.sessions.some(session => session.id === id && session.title === nextTitle)) {
+      showAuthToast('이름을 바꿨습니다')
+    }
+  }
   const deleteConversation = (id: string) => {
     if (store.commitUncertain()) { setNotice(''); setAccountNotice(uncertainCommitMessage); return }
     const removed = store.remove(id)
@@ -1106,7 +1120,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
         <ConversationCosmos />
         <ClientHomeSurface value={value} inputRef={input} onChange={store.draft} onSend={() => send()} onLogin={() => openAuth('login', true)} onSignup={() => openAuth('signup')}
           signedIn={Boolean(profile)} selection={templates} onSelectionChange={setTemplates} animate={homeEntrance} onBandHeight={setBandHeight} />
-      </section></div> : uncertainStrategyWorkspace ? <section className="client-inline-recovery" role="alert"><h2>저장된 기록을 먼저 확인해주세요</h2><p>{uncertainCommitMessage}</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : foreignStrategyWorkspace ? <section className="client-inline-recovery" role="alert"><h2>{ownerRecoveryMessage}</h2><p>다른 계정의 전략을 연결하거나 등록할 수 없어요. 기존 기록은 보존되어 있어요.</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : (invalidInlineConnection || invalidResearchPlan) && session ? <section className="client-inline-recovery" role="alert"><h2>검증 결과와 연결 조건을 다시 확인해주세요</h2><p>대화에 저장된 결과와 연결 화면의 조건이 일치하지 않아요. 기존 기록은 보존되어 있어요.</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : session?.workspace === 'research' ? <ClientResearchWorkspace focusOnMount key={researchScope(session)} sessionId={researchScope(session)} idea={session.idea} titleEditor={<NativeConversationTitle key={session.id} title={session.title.trim() ? session.title : c('newStrategy')} onSave={title => store.rename(session.id, title)} />} headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => deleteConversation(session.id)} />} planContext={researchPlanContext(session)} hasBacktestResult={Boolean(session.inlineResults?.length)} onBeforeAi={aiGate} onStartResearch={() => store.startResearch(session.id, researchScope(session), owner)} onStatusChange={() => store.syncResearchStatus(session.id)} registered={Boolean(researchRecord)} onStartPaper={() => {
+      </section></div> : uncertainStrategyWorkspace ? <section className="client-inline-recovery" role="alert"><h2>저장된 기록을 먼저 확인해주세요</h2><p>{uncertainCommitMessage}</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : foreignStrategyWorkspace ? <section className="client-inline-recovery" role="alert"><h2>{ownerRecoveryMessage}</h2><p>다른 계정의 전략을 연결하거나 등록할 수 없어요. 기존 기록은 보존되어 있어요.</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : (invalidInlineConnection || invalidResearchPlan) && session ? <section className="client-inline-recovery" role="alert"><h2>검증 결과와 연결 조건을 다시 확인해주세요</h2><p>대화에 저장된 결과와 연결 화면의 조건이 일치하지 않아요. 기존 기록은 보존되어 있어요.</p><button type="button" onClick={backToChat}>대화로 돌아가기</button></section> : session?.workspace === 'research' ? <ClientResearchWorkspace focusOnMount key={researchScope(session)} sessionId={researchScope(session)} idea={session.idea} titleEditor={<NativeConversationTitle key={session.id} title={session.title.trim() ? session.title : c('newStrategy')} onSave={title => store.rename(session.id, title)} />} headerActions={<SessionMenu title={session.title} onRename={title => renameFromMenu(session.id, title)} onDelete={() => deleteConversation(session.id)} />} planContext={researchPlanContext(session)} hasBacktestResult={Boolean(session.inlineResults?.length)} onBeforeAi={aiGate} onStartResearch={() => store.startResearch(session.id, researchScope(session), owner)} onStatusChange={() => store.syncResearchStatus(session.id)} registered={Boolean(researchRecord)} onStartPaper={() => {
         try { return registerStrategy(session.id, clientResearchRegistration(), true, researchScope(session)) }
         catch (error) { setAccountNotice(error instanceof Error ? error.message : '전략을 등록하지 못했어요.'); return false }
       }} onOpenTrading={openResearchTrading} onBack={backToChat} onDelegate={inlineJourney ? undefined : () => workspace('delegation')} />
@@ -1119,7 +1133,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
         initialViewport={store.conversationViewport(session.id)} onViewportChange={view => store.saveConversationViewport(session.id, view)}
         inputLabel={c('askTeth')} sendLabel={c('send')} titleLabel={c('title')} initialTitle={session.title} onTitleChange={title => store.rename(session.id, title)}
         activityKey={`${session.turns.length}:${latest?.answer.length}:${latest?.status}:${session.inlineResults?.length}:${latestIntake?.sourceIntake?.answers.length}`} previewTools={<></>}
-        headerActions={<SessionMenu title={session.title} onRename={title => store.rename(session.id, title)} onDelete={() => deleteConversation(session.id)} />}>
+        headerActions={<SessionMenu title={session.title} onRename={title => renameFromMenu(session.id, title)} onDelete={() => deleteConversation(session.id)} />}>
         {session.turns.map(turn => !resultContextVisible(turn,owner)?null:<Fragment key={turn.id}><ConversationTurn owner={owner} turn={orderTurnViews.get(turn.id)?.answer !== turn.answer ? { ...turn, answer: orderTurnViews.get(turn.id)?.answer ?? turn.answer } : turn} summarized={Boolean(turn.marketQuestionOf && questionSummaries.has(JSON.stringify([turn.marketQuestionOf, turn.question])))}
           marketResponse={<ClientStoredMarketResponse sessionId={session.id} turn={turn} owner={owner} store={store}
             questionActions={marketQuestionActions(turn)} source={marketChartSource} onFailure={error => {

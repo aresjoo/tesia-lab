@@ -197,13 +197,13 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
     {page === 'download' && <>
 <header className="hd">
 <InternalLink className="brand" href="/">
-<img src="/teth-logo-f260167.png" alt="" style={{"width":"21px","height":"auto","display":"block"}} />{"\n    TETH\n  "}</InternalLink>
+<img src="/teth-logo-f260167.png" alt="" style={{"width":"22px","height":"auto","display":"block"}} />{"\n    TETH\n  "}</InternalLink>
 <nav>
 <InternalLink href="/about/"><PublicCopy page="download" copyKey="navAbout" /></InternalLink>
 <InternalLink href="/download/" aria-current="page">{language === 'ko' ? '앱 다운로드' : <PublicCopy page="download" copyKey="navDl" />}</InternalLink>
 </nav>
 <span className="sp" />
-<InternalLink className="cta" href="/">{downloadText(language, 'start')}</InternalLink>
+<InternalLink className="cta" href="/">{language === 'ko' ? downloadText(language, 'start') : <PublicCopy page="download" copyKey="login" />}</InternalLink>
 </header>
 
 <main className="dl" id="site-main" tabIndex={-1}>
@@ -224,7 +224,7 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
 </path>
 </svg>} />
 <ClientDownloadStore store="ios" url={download.iosStoreUrl} icon={
-<svg viewBox="0 0 24 24" fill="#e3e3e3" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="#ececec" aria-hidden="true">
 <path d="M17.05 12.54c-.03-2.72 2.22-4.02 2.32-4.09-1.27-1.85-3.24-2.1-3.93-2.13-1.67-.17-3.26.98-4.1.98-.85 0-2.16-.96-3.55-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.16 1.36 10.83.9 1.3 1.98 2.77 3.39 2.72 1.36-.05 1.87-.88 3.52-.88 1.64 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.52 1.47-2.99 1.49-3.06-.03-.02-2.86-1.1-2.9-4.34zM14.34 4.56c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.15 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.43-.61 3.18-1.52z">
 </path>
 </svg>} />

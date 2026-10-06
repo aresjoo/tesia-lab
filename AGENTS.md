@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 `agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad`다. 전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0/sync verify actual0이다. `candidate.currentSidebarFooterParity`가 한국어푸터20/Native sidebar4/globe14/IME12 부분PASS·동일입력lint/3build·작은Sonnet5.5 SCOPED_CODE_GO를 소유한다. 서로다른 구간 결과를 단일전체로 합산하지 않는다. 다른6언어 푸터 복원·실OS키보드/실provider는 미검증이고 누적 인증의 권위HOLD·전체서비스NO_GO를 유지한다. 새whole/운영0·기존인증교정/원FAIL 보존. 아래 currentHelp와 전수/빌드/모델은 각 이전입력의 이력이다.
+최신 React 출처는 `agent/web/menu-download-parity@0f639149e0e3f77f09e931785317de8b34cb6a62`다. 전체2237파일/26280108bytes/snapshot `33b3b9dd16ba15b426f7b33c12a5e7522a051f97fe2ca00887f7faf04d84e100`, syncverify0·dirty/deleted/이전경로삭제0다. 최신 `candidate.currentMenuDownloadParity`가 이름변경10/다운로드28 부분PASS·해당lint0를 소유한다. 새build/whole/운영0이며 부모a8의3build는이전입력으로보존한다. 통합인증교정을제거하지않고 기존7dd기반copy-only release를별도로분리검증한다. 실제provider/법률·카피/서비스권위는여전히HOLD이며 원문복원을사실성증명으로승격0.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 
