@@ -21,6 +21,8 @@ export function ClientStrategyListCard({ title, asset, kind, glyph, venue, follo
   const spark = strategyListSpark(performance?.values ?? [])
   const curve = (color: string) => spark && <path d={spark.path} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>
   const count = typeof followers === 'number' && Number.isSafeInteger(followers) && followers >= 0 ? followers.toLocaleString(language) : '—'
+  const hiddenZero = language === 'ko' && followers === 0
+  const originalCount = language === 'ko' && count !== '—' && followers! > 0 ? followers! >= 10000 ? `약 ${Math.round(followers! / 1000) / 10}만` : count : null
   const unavailable = <><span aria-hidden="true">—</span><span className="sr-only">{text.unavailable}</span></>
   return <article className="tfbk-card strategy-list-card" data-creator-card={own || undefined}>
     <a className="strategy-list-link" href={sharedHash(location)} aria-label={title} aria-describedby={`${id}-asset ${id}-performance ${id}-followers`} onKeyDown={event => {
@@ -39,7 +41,7 @@ export function ClientStrategyListCard({ title, asset, kind, glyph, venue, follo
           {spark.flatAtBase && <path d={spark.flatAtBase} fill="none" stroke="#2ebd85" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke"/>}
         </>}</svg>}
       </div>
-      <div className="skf-fw" id={`${id}-followers`}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v2"/></svg><span>{text.followers} <b>{count === '—' ? unavailable : count}</b></span></div>
+      <div className="skf-fw" id={`${id}-followers`}>{hiddenZero ? <span className="sr-only">{text.followers} 0</span> : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span>{originalCount ? <><b>{originalCount}명</b>이 따라가는 중</> : <>{text.followers} <b>{count === '—' ? unavailable : count}</b></>}</span></>}</div>
     </a>
   </article>
 }

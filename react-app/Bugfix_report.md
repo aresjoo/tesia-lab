@@ -1,5 +1,28 @@
 # TETH 버그 수정·검수 보고서
 
+## 정책 링크와 전략 팔로워 원본 복원
+
+- **범위:** 부모81957 위 제품2파일·신규시험2파일만 수정했다. 원본9fb와 정책 링크 동작·전략 행 문구/SVG를 대조했다. 인증/controller/API/SDK/flags/CSS/가격/730일 자료는 이번 변경0이며 원실패·이전 인수 증거를 보존한다. 두 파일은 각각 단독 writer가 병렬 처리했다.
+- **정책 링크:** 원 index5288–5291·26721–26723의 약관/개인정보 링크 `target=_blank`·`rel=noopener noreferrer` 및 하위메뉴 click 전파 차단을 계승했다. 링크 클릭에 메뉴 닫기를 연결하지 않고 About 동작은 그대로다. 같은 SPA에서 문서를 열던 차이는 확인했으나 기존 router가 앱을 보존하므로 초안 소실로 과장하지 않는다. 수정 전 대표1키 RED actual1/13.742초, 최종 대표1PASS/5.261초와 나머지7PASS/18.035초(actual0)는 별도 실행이다. Main/실제 Native service-main 진입점 각4키·1440/320px에서 popup·opener null·원 URL/초안/DOM/storage·메뉴/초점·두 단계 Escape·About 불변을 확인했다. Native는 합성 익명 session/CSRF GET이며 실로그인/실provider 검증이 아니다. 두 링크 역치환 시 부모와 byte exact다.
+- **전략 행:** 원 index21876–21878의 mkFwHtml과 최종24637/24641/24645 소비를 확인했다. 한국어 양수는 `N명이 따라가는 중`·1만 이상 `약 x만명`, 원 SVG path/stroke1.9/round를 복원했다. 최종 원CSS와 같은16px를 유지한다. KO known0은 가시 empty·기존 AT 설명을 보존하고 undefined/invalid는 미제공 안내, 다른6언어는 기존 문구/숫자를 유지한다. Main snapshot followers를 실시간 실계정 수치로 승격하지 않고 Native 미공급도 숫자로 만들지 않는다. 대표 RED actual1/12.210초, 신규 최초4PASS/하니스4FAIL(21.880초), 교정 실패4키만4PASS/4.670초(actual0)로 신규8고유키를 결속한다. 이미 PASS4키는 재실행하지 않았다. 기존320px 카드2키는2PASS/5.390초다. 제품 역치환 byte exact·CSS/라우트/콜백 불변을 확인했다.
+- **준비 오류 분류:** 정책 spec의 0키 grep, 정상 draft debounce 이전 storage baseline, opaque popup storage 접근, 메뉴가 열린 상태의 inert 기대 오류는 새 시험 준비 오류로 별도 보존했다. 전략 spec의 clipped sr-only innerText 판정·인접 DOM 공백 기대·compat grep0키도 보존했다. 기존 제품 단언이나 timeout을 완화해 PASS로 만들지 않았고 부분 회차를 새 단일8/whole PASS로 합산하지 않는다. 소유4692/4693 listener0·관련 파일 lint actual0다.
+- **원자료:** root cache `.cache/frontend-parity-audit/help-policy-link-4692/receipt.json` SHA `c7333ae747f6749fea4dd4ebe1b1c27558b99c20f5366974b62d6a0b1380724f`; 전략 자료 `.cache/frontend-parity-audit/strategy-followers-original.jCnzaJ/`에 RED/초회/교정/compat/PNG를 보존한다. 모델 의견·부분시험을 실제 서비스/법률/운영 GO로 쓰지 않는다.
+- **운영 상태:** UTC2026-10-06T05:58:42.995Z teth.ai GET HTTP200/10625bytes/SHA `e9a594adbd4708fc12d52461446b3d318950e97c5afe68140b8097ac6760ba41`로 이전 운영 관찰과 같았다. 운영7dd·별도staticc090·푸터 실거래/선정 주장 사실 확인 및 정적승격 HOLD는 유지한다. 이번 package/upload/restart/운영 승격0이다.
+
+### PM·백엔드 선행 확정이 필요한 실제 연결 공백
+
+- **동결 후보 검수:** 별도 readonly 담당자가 제품2파일/신규spec2파일 전체를 대조했고 확정 결함·필수 단언 누락0이다. Native 정책 시험은 실제 진입점+합성 GET, 전략 Native는 컴포넌트 fixture임을 구분한다. ROOT는 두 제품 diff·두 spec 전체·실제 raw/receipt·모바일320px PNG를 확인했다. 타입 검사1회와 공개/내부/service Vite build 각1회 actual0다(각1.61/1.58/1.77초; 실행 종료71671/90795/61726/46912). service Google-only=true/exchange=false 유지. 기존 큰 chunk·향후 native config import 경고는 남겨두고 카피 복원에 추가 리팩터링을 붙이지 않았다. 새 npm ci/whole/model/실provider/운영0이다.
+
+다음은 카피 누락과 다르며 고정 타이머/가짜 결과/다른 종류의 이력으로 대체하지 않는다. 정본 Product Plan §0.4·§16의 단일 locator/closed SSE·contract-first 정책을 유지하며 아래는 승인 요청 목록이지 계약 변경이 아니다.
+
+| 기능 | 현재 재사용 가능 경로 | 선행 확정 요청 |
+| --- | --- | --- |
+| 계정 전체 대화 목록·복원 | generated API0.8 listNativeConversationHistoryV8는 특정 conversationId의 approval/job 이력이다. API0.3 getConversationV3·navigateConversation는 같은 세션 locator1개를 서버 재확인한다. ConversationLibraryPresentation은 UI 입력일 뿐 producer가 아니다. | PM 승인 범위, owner/claim 가시성, 목록·페이지·transcript 복원 계약 및 acceptance |
+| 연구 역할·단계·완료 | captureTurnObservation/captureValidationObservation→observedResearchEntries는 실제 TURN/VALIDATE 결과 표시다. Native 연구 status unavailable은 실제 producer 미공급을 나타낸다. | 연구 run↔대화/문서 결속, role/stage 근거, 실패/완료·서버 경과시간 producer와 계약. TURN/VALIDATE 성공을 연구 완료로 승격하지 않음 |
+| 대화 스트리밍 | createConversationTurnV3는 JSON 완료 응답이다. 기존 streamBacktestEvents/openEventStream은 백테스트 상태 전용이며 현재 Native는 v7 polling을 소비한다. | turn/message 결속, delta 순서·재연결·취소·최종 snapshot 권위의 대화 스트림 계약. 백테스트 SSE를 대화 SSE/v7 상태의 대체로 연결하지 않음 |
+
+정본 경로: `repos/tesia-program/worktrees/investment-prompt-quality/PM/README.md`·`PM/TESIA_AI_POC_Product_Implementation_Plan.md`·`WORK_LEDGER.md`. 공용 schema/보안/제품 범위 변경0. API operation이 없는 세 항목을 프론트 복원 완료·실서비스 완성으로 보고하지 않는다.
+
 ## 복사 안내와 전략 상세·알림 원문 복원
 
 - **확인된 차이와 범위:** 원9fb index11248의 사용자 메시지 `복사 완료`가 누락됐다. 공유 상세 index15510/21659의 `전략 복사`·`전략 복사하기`와 알림 index23528/23532의 한국어 그룹명 접미사도 달랐다. 제품4파일만 변경하고 CSS/SVG/숫자/기존6언어/인증/controller/API/SDK/flags/730일은 보존한다. shared own nullparameters 복귀도 같은 원문 목록명으로 복원한다. 원본에 없는 catalogue loading/error 화면은 원문 복원 완료가 아니라 동일 목록명 일관성 교정이다.

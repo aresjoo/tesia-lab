@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/copy-feedback-detail-parity@81957ad7a7f3c52bc24e03c7d5787dc0f0d9b6cd` 전체. 부모e448 위 실제 복사 성공안내·공유상세 KO버튼/복귀·알림그룹명만 복원. 인증/API/flags 변경0·구간검증·타입1회/3build actual0, 새whole/운영0 |
+| React 출처 | `agent/web/help-policy-link-parity@2b4bdeaf9711651dc19a685dbbe38c3e06c03770` 전체. 부모81957 위 원본 정책 새 탭/메뉴 유지·KO 전략 팔로워 문구/SVG만 복원. 인증/API/flags 변경0·구간검증·타입1회/3build actual0, 새whole/운영0 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 복사 안내와 전략 상세·알림
+### 최신 전달 — 정책 링크와 전략 팔로워
+
+전체2245파일/26383213bytes/snapshot `10722c201a6d9ede47f77598f0c7d4acdd8c10c1a887cdbc8567a781373e1091`다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 원본 root/main·이전current21·운영역사객체를 보존한다. 약관/개인정보는 원본처럼 새 탭으로 열고 메뉴/초안·About 동작을 유지한다. KO 전략 행은 `N명이 따라가는 중`·만 단위·원SVG를 복원하고 known0의 AT·미제공·다른6언어·원16px를 보존한다. Main followers는 snapshot이며 Native 미공급 숫자를 만들지 않는다.
+
+정책 최종 대표1PASS/5.261초와 나머지7PASS/18.035초, 전략 최초4PASS/하니스4FAIL 뒤 교정 실패4키만4PASS/4.671초, 인접320px2PASS/5.393초는 별도 실행이다. 이미 PASS인 키는 반복하지 않았고 새 단일8/whole PASS로 쓰지 않는다. 원RED/준비오류/raw/PNG는 보존한다. 타입1회·관련lint·공개/내부/service build 각1회 actual0·source6 stagedsecret scan0다. 독립 readonly 제품2/새spec2 검수 확정blocker0이며 실provider/법률/서비스GO가 아니다. 정책 Native는 실제 service-main+합성 GET, 전략 Native는 컴포넌트 fixture로 구분한다.
+
+원문 복원과 달리 계정 전체 대화 목록·연구 역할/단계/완료·대화 스트리밍은 실제 producer 계약이 필요하다. 기존 승인/job 이력·TURN/VALIDATE·백테스트 SSE로 대체하지 않고 PM·Backend 선행 요청을 `react-app/Bugfix_report.md`에 구체적으로 기록했다. 인증/controller/API/SDK/flags 변경0·새whole/model/실provider/운영0, staticc090·푸터 사실확인·승격HOLD 유지다. 정확한 이번 근거는 `candidate.currentPolicyLinksFollowersParity`를 따른다.
+
+### 이전 전달 — 복사 안내와 전략 상세·알림
 
 전체2243파일/26355478bytes/snapshot `53bc39ee4859c7b2909c6b6164b8bc797beb131b9c49dd98d9f53e3d7a9f824f`를 전달한다. source dirty/deleted/이전경로삭제0·sync/verify actual0, 원본 root/main과 이전current20·운영역사객체를 보존한다. 제품4파일만 바꾸고 인증/controller/API/SDK/flags/CSS/SVG/730일은 유지한다. 사용자 메시지 실제 최신복사 성공의 `복사 완료`, 상세 `전략 복사`·`전략 복사하기`, KO알림그룹 접미사를 원문으로 맞췄다. 원문 없는 catalogue 오류 복귀는 동일 목록명 일관성만 교정한다. 다른6언어는 기존값을 그대로 유지한다.
 
