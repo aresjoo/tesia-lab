@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/research-validation-copy@5510b8fe729439979e3438ecea7f0d1253678740` 추적 파일 전체. 기존 원문 복원 위에 Hypothesis 검증 조건·artifact 확인 위치1literal만 원9fb11884로 복원. 기존 디자인·초안·명시 답변·중단·Native 정책·로그인3옵션·SDK·가격/권한/flags 보존 |
+| React 출처 | `agent/web/research-validation-copy@84e82a939d8873c0b8bbd7b7f3e03a6f386e768e` 전체. 완료bt2 원문 요약조건1·기존레일시험bridge 최소교정. 디자인·카피·숫자·Native·로그인3·SDK/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 가설 질문 답변 원문 복원
+### 최신 전달 — 완료 백테스트 답변·부분 검증 배치
+
+source `84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`의 전체2,233파일/26,213,605bytes/snapshot `929f851ac0b0d3c5429463c01619da7d61155a868ad0b57c69ab4b42190c9abf`다. 부모5510 대비 제품1·시험2·MD2의5경로만 바뀌었다. 완료 bt2의 일반 질문에도 원9fb20891 요약을 연결하며95초/완료·복구·v1·제외질문·supplied 우선권을 유지한다. 기존 레일 언어 시험은 실제 동기 setter bridge를 재사용한다. 새 카피/디자인/숫자/기능/권한/Native 응답/flags 변경0이다.
+
+신규12(약19초)·포함94(약63초) 및lint3build actual0, 별도legacy환경auth98/116·help/service124·레일34 모두 실제PASS다. 서로 다른 입력과범위를 전체로합산하지 않는다. 시험파일만교정된레일은 해당34/ESLint만검사하고94/제품빌드를반복하지 않았다. 원전수의Google-only주입/시험GC/후단미실행6/수집오류를보존한다. 최종배치필요전체1회·정적승격은미완료이며teth.ai7dd·원root/운영9객체·DB/730일을보존한다.
+
+### 이전 전달 — 가설 질문 답변 원문 복원
 
 source `5510b8fe729439979e3438ecea7f0d1253678740`의 전체2,232파일/26,194,513bytes/snapshot `cd1e933b2a420f693bd2b83e841ee3036c98c217265b9d2afe49365cd22fed28`다. 미커밋·삭제0, 직전c080 대비 제품1/신규시험1/README·Bugfix2의4경로만 바뀌었다. 원9fb11884의 `Research 구간과 Holdout 구간` 및 `결과는 Backtest, Holdout artifact에서 확인하십시오.`를 Hypothesis 답변에 그대로 계승한다. 기존 본문과 같은 문구이며 전체gSend 이식을 완료했다는 의미는 아니다.
 

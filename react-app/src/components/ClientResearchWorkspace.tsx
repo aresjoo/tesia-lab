@@ -392,7 +392,7 @@ function ResearchWorkspaceSession({ sessionId, idea, titleEditor, headerActions,
     const freshPlan = doc === 'plan' && replay.status === 'idle' && elapsed === 0
       && !registered && !hasBacktestResult && !replay.recoveryRequired && !planContext?.parameters
       && !state.tabs.some(id => resultDocs.includes(id)) && !state.replies.some(row => resultDocs.includes(row.doc))
-    const completedReport = doc === 'report' && replay.status === 'completed' && elapsed >= 95
+    const completedReport = (doc === 'report' || doc === 'bt2') && replay.status === 'completed' && elapsed >= 95
       && !replay.recoveryRequired && !/줄여|늘려|바꿔|수정|해줘|재검증|다시|왜|약했|손실|가정|위험/.test(text)
     const originalReply = freshPlan ? '아직 검증 결과가 없습니다. 연구를 먼저 시작하십시오.'
       : completedReport ? `현재 ${doc} 기준, 수익 ${pct(FIXTURE.versions[1].ret)}, 낙폭 ${FIXTURE.versions[1].mdd.toFixed(1)}%, Holdout ${FIXTURE.holdout.ret > 0 ? '통과' : '경고'}. 구체적으로 물어보면 근거와 함께 답합니다.` : undefined

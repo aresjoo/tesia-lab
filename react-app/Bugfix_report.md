@@ -1,5 +1,16 @@
 # TETH 버그 수정·검수 보고서
 
+## 완료 백테스트 일반 답변 복원
+
+- 원9fb `index.html:20891`의 일반 문서 요약을 완료된 `bt2`에도 연결했다. 제품 변경은 `completedReport`의 문서 조건을 `report || bt2`로 넓히는 한 곳뿐이다. 수익·낙폭·Holdout 수치, 95초/완료 상태, 복구·제외 질문·supplied 답변 우선권·초안·admission·v1은 유지한다. 실제 Native 데이터나 주문 권한에는 적용하지 않는다.
+- 최초 신규12개는 6PASS/6FAIL(actual1, `ad3d3f2a`)이다. 실패4개는 원문 요약 누락, 2개는 신규 시험의 다중 locator strict-mode 오류다. 모든 실패를 제품 결함으로 세지 않는다. 기존 RED를 보존한 채 단일 thread locator로 교정하고 실제 seed seconds 단언을 추가했다. 원시험 SHA `9b3d789b`로 역치환 exact이며 제목·다른 단언·timeout/retry/skip은 유지한다. 실패 재현 전체를 다시 실행하지 않았다.
+- 수정 후 동일12키 **12PASS/actual0**(약19초, `581b1350`), 이를 포함한5spec 단일 **94PASS/actual0**(약63초, `0fc6eebd`)다. skip/retry/flaky/시험밖오류/미실행0. 입력2226 SHA `2cfdfd3e75ebe30cac48ddc9b97bc82704e2f14d4fd653a0b0a07cf5b2ee2fa4` 전후 동일이다. 독립 코드리뷰는 한 조건·기존 안전 경계·시험 역치환을 확인했고 확정 문제를 발견하지 않았다. 새로운 모델/전수 승인은 주장하지 않는다.
+- 같은 입력의 lint·공개/내부/service3build **actual0**(`6afd2c76`, 합계약111초)다. 공개1132 SHA `3e06ade79baafb7294d509472d6c9ef753c131ce1ae772977d4e6284ae89d689`만 바뀌고 내부/service는 부모와 동일하다. 테스트만 추가 교정하면 해당 시험·파일 lint만 실행하며 제품 빌드와94개를 다시 돌리지 않는다.
+- 원 전수의 Google-only 전역 주입과 기존 auth fixture 기대 충돌을 분리했다. 전역 feature flag를 추측 변경하지 않고 기존 fixture 시험은 flag 없는 legacy 환경, 운영 build는 Googletrue/exchangefalse로 분리한다. 실제 provider52/email46 **98PASS/시험exit0**를 확인했다. 원 wrapper guard 수집 오류(exit1)와 준비 실패(시험0)는 보존하고 readonly 검산 `af9d0cef`로 실제98개·guard98·키·입력/출력 불변을 결속했다. 실로그인 성공이나 원152실패 전체 면제는 아니다.
+- **병렬 부분 검증 완료:** auth3spec **116PASS/actual0**(약113초, `132599e5`), help/service2spec **124PASS/actual0**(약200초, `2edb676d`)다. 원 c080 시험·제품을 바꾸지 않고 전역Google-only 주입 없는 legacy fixture 환경으로 검사했다. 두 범위의 원키·1attempt·원입력/3출력은 동일하며 skip/retry/flaky/시험밖오류/미실행0이다. 원 전수의 후단 미실행6개도 service-entry40 범위에서 실행됐다. 원 전체 실패를 삭제하거나 전체 PASS로 합산하지 않는다.
+- **레일 시험 하니스 최소교정:** 제품 변경 없이 `tests/client-strategy-rail.spec.ts`의 반복 dynamic import를 초기 mount의 기존 `conversation-locale-harness.ts` import와 실제 동기 setter 호출로 교정했다. 기존7언어/DOM/선택/필터/IME/값/메뉴/콜백/치수 단언을 유지하고 boolean 반환도 확인한다. 해당파일 ESLint actual0·같은 **34키 모두PASS/actual0**(약29초, raw `f8d59215`)다. 입력2226/`d70b1636c33c256b9f44841ed690799038f9dde99cd26a64719827f853c0539a` 전후 동일·제품/3출력 불변이며, 원32PASS/2GC FAIL을 보존한다. 94/build의 당시 입력은 rail만 역치환하면 정확히 복원된다. 따라서 테스트 파일 교정 때문에94와제품3build를 재실행하지 않았다. GC 근본 원인 폐쇄를 주장하지 않는다.
+- 사용자 요청에 따라 제품/시험 소유와 구간을 나눠 병렬 검사하고 ROOT가 실제 raw/list/exit를 인수했다. 작은 복원마다 전체 회귀 실행0이다. 최종 묶인 후보에서 필요한 전체1회·정적 승격은 별도다. 운영7dd·원 실패·730일·기존 사업/권한 정책을 보존한다. 복원 외 새 카피·UI·기능을 붙이지 않았다.
+
 ## 가설 질문 답변 원문 복원
 
 - **복원 범위:** 고정 원본 `aresjoo/tesia-lab@9fbff821`의 `index.html:11884`를 기준으로 `ClientResearchWorkspace.replies.hypo` 한 리터럴을 복원했다. `Research 구간과 Holdout 구간`을 임의 번역한 부분을 되돌리고, 누락한 `결과는 Backtest, Holdout artifact에서 확인하십시오.`를 그대로 계승한다. 기존 Hypothesis 본문과 질문 답변이 같은 원문을 표시하며 전체 원본 gSend 동선을 복원했다는 의미는 아니다.

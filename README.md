@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷의 출처는 **`agent/web/research-validation-copy@5510b8fe729439979e3438ecea7f0d1253678740`**입니다. 추적파일 전체 **2,232개/26,194,513bytes**이며 미커밋 변경·삭제 없이 전달한 운영 미배포 후보입니다. 이전 원문 복원을 계승하고 Hypothesis 답변의 검증 조건·artifact 확인 위치 한 항목을 원문 그대로 되돌렸습니다. 디자인·초안·명시 답변·중단·Native·Google/Apple/이메일·SDK/flags·가격/권한·서버/DB/730일은 유지합니다.
+현재 React 스냅샷은 **`agent/web/research-validation-copy@84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`**입니다. source `84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`의 전체2,233파일/26,213,605bytes/snapshot `929f851ac0b0d3c5429463c01619da7d61155a868ad0b57c69ab4b42190c9abf`다. 부모5510 대비 제품1·시험2·MD2의5경로만 바뀌었다. 완료 bt2의 일반 질문에도 원9fb20891 요약을 연결하며95초/완료·복구·v1·제외질문·supplied 우선권을 유지한다. 기존 레일 언어 시험은 실제 동기 setter bridge를 재사용한다. 새 카피/디자인/숫자/기능/권한/Native 응답/flags 변경0이다. 최신 검사·잔여는 `candidate.currentCompletedBacktestReply`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다. 아래 가설 복원 수치는 이전 입력의 기록입니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.

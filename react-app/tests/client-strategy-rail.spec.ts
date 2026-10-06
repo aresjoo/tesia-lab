@@ -31,18 +31,7 @@ const rows: ClientTerminalStrategy[] = [
 type RailBridge = { railUpdate: (rows: ClientTerminalStrategy[] | null) => void; railEvents: string[]; railMenuConnected: boolean }
 
 async function setLanguage(page: Page, language: string) {
-  // Retain the exact Promise awaited by CDP until Node receives the result.
-  // Preserve the real preference setter and all existing UI assertions.
-  try {
-    await page.evaluate(code => {
-      const path = '/src/client-preferences.ts'
-      const pending = import(/* @vite-ignore */ path).then(({ setClientPreference }) => setClientPreference('language', code))
-      Reflect.set(window, '__tethRailLocaleSetupPromise', pending)
-      return pending
-    }, language)
-  } finally {
-    await page.evaluate(() => { Reflect.deleteProperty(window, '__tethRailLocaleSetupPromise') })
-  }
+  expect(await page.evaluate(code => Reflect.get(window, 'conversationLocaleHarness').setLanguage(code), language)).toBe(true)
   await expect(page.locator('html')).toHaveAttribute('lang', language)
 }
 
@@ -206,6 +195,8 @@ async function mount(page: Page, data: ClientTerminalStrategy[] | null = rows, c
     const rp = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
     if (!rp) throw new Error('Vite React module missing')
     const reactModule = await import(/* @vite-ignore */ rp), dom = await import(/* @vite-ignore */ dp), { ClientStrategyRail } = await import(/* @vite-ignore */ cp)
+    const localeHarnessPath = '/tests/fixtures/conversation-locale-harness.ts'
+    await import(/* @vite-ignore */ localeHarnessPath)
     const react = reactModule.default ?? reactModule, h = react.createElement
     const events: string[] = []
     Object.assign(window, { railEvents: events })

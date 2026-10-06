@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 source `5510b8fe729439979e3438ecea7f0d1253678740`와 전체2,232파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentHypothesisOriginalReply`를 따른다. 원9fb11884의Hypothesis 답변1literal만 복원했고2225/9b2 동일10PASS·이를포함한82PASS/lint3build actual0·독립원문시험검산·personal1 실제Sonnet5.5 COPY_CODE_GO/C0H0M0/Low8·가설5는 국소 범위다. Native 추가는이번복원에서제외·부모bytes로원복했다. 파일별단독writer/독립경계병렬복원·구간시험을우선하며작은수정마다whole하지않고최종배치필요전체1회를수행한다. 부모d11d whole69219의15097PASS/152FAIL/원17SKIP/후단미실행6/actual1은다른입력의실패로보존·원인미확정이며면제0이다. 기존디자인/markup/SVG/CSS/색상·초안/명시답변/중단·로그인3·Native/SDK/API/가격/권한/flags/서버DB/730일은유지한다. 다른g-doc/fallback/손실설명/민감도수치/새version producer와전체·서비스·운영승격은남는다.
+최신 React 출처·전체파일해시는 manifest,검사·잔여는 `candidate.currentCompletedBacktestReply`가 소유한다. source `84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`의 전체2,233파일/26,213,605bytes/snapshot `929f851ac0b0d3c5429463c01619da7d61155a868ad0b57c69ab4b42190c9abf`다. 부모5510 대비 제품1·시험2·MD2의5경로만 바뀌었다. 완료 bt2의 일반 질문에도 원9fb20891 요약을 연결하며95초/완료·복구·v1·제외질문·supplied 우선권을 유지한다. 기존 레일 언어 시험은 실제 동기 setter bridge를 재사용한다. 새 카피/디자인/숫자/기능/권한/Native 응답/flags 변경0이다. 신규12(약19초)·포함94(약63초) 및lint3build actual0, 별도legacy환경auth98/116·help/service124·레일34 모두 실제PASS다. 서로 다른 입력과범위를 전체로합산하지 않는다. 시험파일만교정된레일은 해당34/ESLint만검사하고94/제품빌드를반복하지 않았다. 원전수의Google-only주입/시험GC/후단미실행6/수집오류를보존한다. 최종배치필요전체1회·정적승격은미완료이며teth.ai7dd·원root/운영9객체·DB/730일을보존한다.
 
 이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
 
