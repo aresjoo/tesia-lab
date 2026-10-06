@@ -1,5 +1,38 @@
 # TETH 버그 수정·검수 보고서
 
+## 화면 전환 교차 동선의 근본 원인 교정
+
+### 확인된 문제와 좁은 수정
+
+| 문제 | 근본 원인 | 수정 |
+|---|---|---|
+| 비회원 AI 트레이딩 시작이 가입 대신 플랜 페이지로 이동 | 마지막 원본 DOM의 실제 `onclick` 대신 사용되지 않는 후속 helper와 현재 구현을 기준으로 삼았음 | 비회원은 원문 `authOpen('signup')` 동선으로 제자리 가입, 회원의 연결 플랜 경로 유지 |
+| 인증 결과 대기 중 이탈·명시 복귀 후 초점이 BODY에 남음 | hidden 변경 때는 모든 버튼이 busy로 비활성화됐고, busy 해제 때 초점 복구 효과가 재실행되지 않음 | busy/recheckDisabled 변경에도 기존 패널 밖의 유실 초점만 복구; 인증 실행 없음 |
+| 응답 종료 후에도 인증 서버 확인 중 문구가 남음 | stale 응답을 버리며 busy만 해제하고 남은 표시를 정리하지 않았음 | 기존 resumePrompt로 명시 재확인을 안내; 이전 READY 표시를 반복하지 않고 ready/confirmed/SDK 컨텍스트·세션 권위 채택 없음 |
+| 세션 재확인의 두 번째 GET 중 이탈하면 loading 잔류·enabled 결과 버튼 무반응 | retired binding의 응답은 올바르게 버렸지만 host loading을 정리하지 않아 dispatch guard와 화면이 불일치 | returnBinding의 navigation retirement에서 loading만 error 복구 경계로 정리; 자동 ACK/claim/bootstrap 없음 |
+| 반환 화면 재확인·off-route 닫기 번역 누락 | 새 UI가 기존 공용 사전 대신 한국어 literal을 사용 | 기존 checkSession/common.close 재사용; 한국어 원문·새 번역/카피 변경0 |
+
+React 사용 자체나 useState 개수가 확정 원인이 아니다. 비동기 응답의 **권위 폐기**와 남아 있는 화면의 **상태 정리**를 별개로 다뤄야 하는데 후자가 빠졌다. 기존 시험은 각 동작을 따로 확인했으나 GET 대기×이탈×명시 복귀×완료의 교차 순서와 원본 CTA의 실제 행동을 누락했다. 일부 시험은 잘못된 플랜 이동을 기대값으로 고정했다. 최종 원본의 문구뿐 아니라 handler를 독립 oracle에서 실제 실행하도록 보강했다.
+
+### 실제 검증과 원 실패 보존
+
+- 원 transition4 실행 actual1: focus2는 제품 RED, session2는 CTA를 열지 않은 신규 하니스 오류. 이를 제품4결함으로 세지 않는다. 하니스만 교정한 session2 actual1에서 실제 loading 잔류·result GET0를 확정했다. 별도 status2 actual1에서도 busy 문구·초점 오류가 재현됐다. 원 raw 세 개는 보존한다.
+- 수정 후 인증 관련5spec desktop/mobile **78 PASS/0 FAIL/SKIP/flaky/시험 밖 오류0, actual0/36.922초**. 새6키는 lostfocus·busy 문구·loading·명시 result GET·영어 UI를 포함한다. 합성 GET만 사용하며 새 session-binding/CSRF/POST/외부/오류0의 경계를 확인했다. 실제 OAuth 성공은 아니다.
+- 비회원 행동은 별도 원2 RED→최종 관련2spec **56 PASS/actual0/32.252초**. 원문7locale×상·하단 CTA14실클릭 signup, Main/Native3폭, 가입 취소 초점·완료 후 소개 유지·회원 다음 CTA·뒤앞 이동/초안 보존을 검증했다. 중간56 PASS는 최종56과 중복 합산하지 않는다.
+- 최초 독립 personal1 실제 Opus5.5는 `SCOPED_CODE_HOLD`다. confirmed stale-status 및 focus/동시성 가설을 구분해 수용했다. 후속 actual0/입력5SHA불변(206.648초)의 판정은 `SCOPED_CODE_GO`이며 코드 판독 범위만이다. 모델 입력에는 당시 GREEN raw를 넣지 않았으므로 시험 PASS 인수는 ROOT의 원자료 검산으로 별도 결속한다. AGY3.8은 문구 사전 일관성만 조사했으며 최종 승인이 아니다.
+
+후속 모델의 비차단 의견을 ROOT가 별도 작은 delta로 수용했습니다. 초점은 busy가 모두 끝난 경우에만 복구하고, 상태는 이전 READY 대신 기존 resumePrompt를 정확히 단언합니다. 닫기만 초점을 받는 불변식·aria-busy=false도 추가했고, off-route KO 영역명은 다국어 완료 단언에서 제거했습니다. 단독 시험 port4722 하드코딩은 설정된 loopback origin을 사용하도록 고쳐 기본 port4175의 정규 suite에서도 작동하게 했습니다. 외부/POST 차단은 유지합니다. 이 후속은 Opus 입력 freeze 밖이며 최종 관련시험·ROOT 검수로 구분합니다.
+
+최종 후속 결속: 기본4175의 동일 인증5spec **78 PASS/0 FAIL/SKIP/flaky/시험 밖 오류0, actual0/27.155초**(Exec66156). raw SHA `e9d8551bc4d7fe6973efb3877d3f10b0f775d6864123b56b1f9a8ff132dac552`이며 원78과 중복 합산하지 않습니다. 최종 관련6파일 ESLint actual0(Exec18995), 타입/service build actual0(Exec69613), build log SHA `c74769dfc5a2725f4a59fee7e9e5352a6614ac8f42ea19108560f3c6ccc68c30`입니다. SOURCE3파일과 기존2spec의 ROOT diff/단언 검수·agent readonly 검수에서 새 권위 결함 확정0이며 final ROOT는 기존 resumePrompt/settled-only focus/기본 suite 호환의 좁은 후속만 수용했습니다. 새 whole/실provider/운영0, 소유4175/4722/4723/4724 listener0입니다. Git push가 보고한 default Web 의존성 경고 High2/Moderate1과 기존500kB chunk는 이번에 해결했다고 쓰지 않습니다.
+
+원 자료: `/tmp/teth-return-transition-races-red.json` SHA `d0e4fa16…`, `/tmp/teth-return-transition-session-red.json` `9275551c…`, `/tmp/teth-return-transition-status-red.json` `ff1f5ad6…`, 인증78 raw `38368804…`, guest 원RED `75e480c5…`·최종56 raw `ef3aac5e…`. 부분 검증을 전체 무결점·실provider·서비스 GO로 표시하지 않는다.
+
+### 남은 경계
+
+Native 인증 회원의 소개/준비 완료 진입은 원본 `acReady`의 연결·구독 권위 상태가 필요한데 현재 표시용 `accounts: []`가 그 증거는 아니다. 임의로 추정하지 않고 필요한 producer 상태를 PM/계약 선행 항목으로 남긴다. parent/child busy의 추가 권한 경합은 현재 미확정 가설이며 근거 없이 공용 락/계약을 바꾸지 않는다. 반환 off-route 안내 두 문장의 다른 언어 카피는 기존 승인 키가 없어 이번에 새 번역하지 않았다. ACK 전체 응답 유실·실기기·실로그인·3천 사용자 부하 및 실제 chat/research/library 연결도 미완료다.
+
+운영 source `b7a7c58`과 로컬 통합/정적 후보를 구분한다. 인증3파일은 UI-only static에 이식하지 않는다. 원 카피/CSS/SVG/SDK/API/flags·§0.4/§0.5·이전 FAIL/HOLD/WIP/730일은 보존한다.
+
 ## 추가 결함 배치 — 최종 원문 oracle와 OAuth 복귀 UX
 
 ### Opus 의견의 후속 두 UX 경계 교정

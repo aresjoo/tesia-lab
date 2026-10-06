@@ -1,4 +1,5 @@
 import { nativeAuthUiText, type NativeAuthUiCopyKey } from './native-auth-ui-copy'
+import { nativeShellText } from './native-shell-copy'
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { ClientProviderMark } from '../components/ClientProviderMark'
@@ -55,10 +56,10 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
     const panel = panelElement.current
     // Returning from the off-route recovery removes its focused button while
     // keeping the dialog open. Restore only a lost focus, never an auth action.
-    if (returnOnly && !hidden && panel && !panel.contains(document.activeElement)) {
+    if (returnOnly && !hidden && !busy && !recheckDisabled && panel && !panel.contains(document.activeElement)) {
       panel.querySelector<HTMLButtonElement>('button:not(:disabled):not([aria-disabled="true"])')?.focus({ preventScroll: true })
     }
-  }, [hidden, returnOnly])
+  }, [hidden, returnOnly, busy, recheckDisabled])
   const working = useRef(false)
   const [message, setMessage] = useState<NativeAuthUiCopyKey>('providerInitial')
   const [error, setError] = useState(false)
@@ -98,7 +99,11 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
         // Stale responses cannot update result state or adopt a session. A
         // still-mounted retained panel must nevertheless release bookkeeping
         // so a later current scope can explicitly recover on the same controller.
-        if (active.current) setBusy(false)
+        if (active.current) {
+          // Do not repeat a previously READY status after the SDK may have
+          // observed a retired result. Explicit recheck remains necessary.
+          setBusy(false); setMessage('resumePrompt'); setError(false)
+        }
       }
     }
   }
@@ -157,7 +162,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
     })}>{text('sessionOnly')}</button>}
     </div>
     {recoveryBlocked && <p className="native-auth-status au-err" role="alert">{recoveryBlocked}</p>}
-    {returnOnly && onRecheckSession && <button className="au-textbtn" disabled={busy || recheckDisabled} onClick={onRecheckSession}>세션 다시 확인</button>}
+    {returnOnly && onRecheckSession && <button className="au-textbtn" disabled={busy || recheckDisabled} onClick={onRecheckSession}>{nativeShellText(language, 'checkSession')}</button>}
     {!sourceLayout && onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
   </section>
   return <section ref={panelElement} hidden={hidden} inert={hidden} aria-label={text('authSection')} aria-busy={busy || recheckDisabled} className="cs-native-login ca-auth native-provider-login">
@@ -213,7 +218,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
       </div>
     </details>}
     {recoveryBlocked && <p className="native-auth-status au-err" role="alert">{recoveryBlocked}</p>}
-    {returnOnly && onRecheckSession && <button className="au-textbtn" disabled={busy || recheckDisabled} onClick={onRecheckSession}>세션 다시 확인</button>}
+    {returnOnly && onRecheckSession && <button className="au-textbtn" disabled={busy || recheckDisabled} onClick={onRecheckSession}>{nativeShellText(language, 'checkSession')}</button>}
     {sourceLayout && <div className="au-free">{t('auth.free')}</div>}
     {!sourceLayout && onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
   </section>

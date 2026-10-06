@@ -45,6 +45,9 @@ async function originalOracle(page: Page) {
   await page.evaluate(code => {
     // Only source presentation functions execute. No original bootstrap,
     // provider, auth request, timers, storage or decorative media producer.
+    Object.assign(window, { sourceIntroActions: [] as string[], authOpen: (mode: string) => {
+      (window as unknown as { sourceIntroActions: string[] }).sourceIntroActions.push(`authOpen:${mode}`)
+    }, acStart: () => { throw new Error('UNEXPECTED_SOURCE_PLAN_ACTION') }, tfNav: () => { throw new Error('UNEXPECTED_SOURCE_NAVIGATION') } })
     new Function(`var S={user:null},G={},GLC={lang:'ko'};var TF_RENDERING=false,TF_ONNF=false;
       function $(id){return document.getElementById(id)}
       function gComposer(){} function gSideRender(){} function gTabsRender(){} function gChead(){} function tfIntroFx(){}
@@ -59,7 +62,14 @@ async function originalOracle(page: Page) {
     await page.evaluate(value => (window as unknown as { sourceIntroSetLanguage: (lang: string) => void }).sourceIntroSetLanguage(value), language)
     expect(await presentation(page)).toEqual(baseline)
     await expect(page.locator('html')).toHaveAttribute('lang', language)
+    // Inspect and execute the FINAL DOM handlers, not the unused late
+    // tfIntroStart helper. Both source CTAs open signup before any plan page.
+    for (const cta of await page.locator('.txh-cta').all()) {
+      await expect(cta).toHaveAttribute('onclick', "authOpen('signup')")
+      await cta.click()
+    }
   }
+  expect(await page.evaluate(() => (window as unknown as { sourceIntroActions: string[] }).sourceIntroActions)).toEqual(Array(14).fill('authOpen:signup'))
   // Late skIntroCopy intentionally removes the early kicker, bold prose and
   // term buttons. Do not turn an excerpt-only review into a product change.
   expect(baseline.removedControls).toBe(0)
@@ -123,19 +133,14 @@ for (const host of ['Main', 'Native service entry'] as const) for (const width o
     await expect(bottom).toBeInViewport()
     expect(await bottom.evaluate(node => { const r = node.getBoundingClientRect(); return r.height >= 44 && r.left >= 0 && r.right <= innerWidth })).toBe(true)
     await bottom.click()
-    const dialog = native ? page.locator('.ca-auth') : page.getByTestId('connection-plan')
+    const dialog = page.locator('.ca-auth')
     await expect(dialog).toBeVisible()
-    if (native) {
-      await page.keyboard.press('Escape')
-      await expect(dialog).toBeHidden()
-      await expect(bottom).toBeFocused()
-      await expect(page).toHaveURL(/#\/trade$/)
-    } else {
-      // Main's existing start callback navigates to a page, not an Escape
-      // dialog. This source-copy change does not replace callback authority.
-      await expect(dialog.locator('h1')).toBeFocused()
-      await expect(page).toHaveURL(/#\/connect\/plan\?exchange=bitget$/)
-    }
+    await expect(page.getByTestId('connection-plan')).toHaveCount(0)
+    await expect(page).toHaveURL(/#\/trade$/)
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(bottom).toBeFocused()
+    await expect(page).toHaveURL(/#\/trade$/)
     expect(audit).toEqual({ external: 0, mutations: 0, blockedApi: 0, errors: [] })
     await info.attach('source-overlay-boundary.json', { body: JSON.stringify({ originalSha, fixtureSha, host, width, locales: languages, originalFinalOverlay: true, syntheticAnonymousGets: native, actualProviderVerified: false }), contentType: 'application/json' })
   })

@@ -2,9 +2,9 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-최신 추가 수정은 통합 source `a542712c65e4a7a5362879a404e4ddd8ad5885b7`의 전체2249파일입니다. 원문 최종 title/`skIntroCopy`/`applyLang` 기준을 적용해 소개 CTA를 복원하고 OAuth return의 보존 안내·버튼·복귀·초점을 교정했습니다. 초기 HTML만 보고 긴 본문/용어 UI를 누락으로 판단한 보고는 정정하며 옛 형태로 되돌리지 않습니다. 정확한 원인·직접 영향 시험·원FAIL/잔여는 [누적 보고서](react-app/Bugfix_report.md)와 `candidate.currentPostFooterFixes`를 따릅니다. 이전 candidate의 whole/build/모델/배포 수치를 이번 입력으로 승계하지 않습니다.
+최신 추가 수정은 통합 source `2cb3e9d203b7bec08a1bc1de87392324cb623033`의 전체2250파일입니다. 최종 원문 버튼의 실제 행동을 oracle로 삼아 비회원 제자리 signup을 복원했고, 인증 응답 대기 중 이탈·명시 복귀 후 busy/loading/초점 잔류를 교정했습니다. 인증 최종78 PASS와 소개56 PASS는 별도 부분 검증입니다. 최초 Opus HOLD·후속 코드 GO·모델freeze밖 ROOT 후속과 원RED/하니스 오류는 [누적 보고서](react-app/Bugfix_report.md) 및 `candidate.currentRootCauseTransitionFixes`에서 구분합니다. 이전 whole/build/배포 수치를 이번 입력으로 승계하지 않습니다.
 
-이 snapshot은 **통합 후보 코드**이며 teth.ai 운영은 source `b7a7c58` 그대로입니다. UI-only static `d89b193`과 auth guard `add4d0f`는 별도 branch로 실제push했고 통합은 둘의 경계를 문서화합니다. auth guard 코드는 통합 controller에 이미 있어 snapshot에 포함되며 별도 branch의 미배포 상태와 혼동하지 않습니다. 새로운 auth/provider·실주문 활성화, 원본 main/Node/Worker 병합·배포는 없습니다.
+이 snapshot은 **통합 후보 코드**이며 teth.ai 운영은 source `b7a7c58` 그대로입니다. UI-only static `c34a210`과 auth guard `add4d0f`는 별도 branch로 실제push했고 static에는 인증3파일 변경이 없습니다. Native 회원 진입의 연결/구독 producer는 표시 accounts 배열로 추정하지 않습니다. 새로운 auth/provider·실주문 활성화, 원본 main/Node/Worker 병합·배포는 없습니다.
 
 최신 React 출처와 전체 파일 해시는 [migration-manifest.json](migration-manifest.json)을 따릅니다. 통합 `agent/web/help-policy-link-parity`의 코드·시험·문서를 전달하며 통합 인증 교정과 원문 푸터를 보존합니다. 별도 승인된 정적 UI26(source `8a757a5`)은 **teth.ai에 배포하고 공개 확인까지 완료**했습니다. 현재 운영은 기존 인증·운영 푸터·API·flags를 유지합니다. 정확한 범위와 증거는 `candidate.currentStaticUiPromotion` 및 [Bugfix 보고서](react-app/Bugfix_report.md)를 따릅니다.
 

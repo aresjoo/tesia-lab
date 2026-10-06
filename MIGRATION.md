@@ -15,7 +15,13 @@
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 최종 원문 oracle와 추가 결함 후보
+### 최신 전달 — 원본 행동 oracle와 인증 교차 동선 상태
+
+통합 `2cb3e9d203b7bec08a1bc1de87392324cb623033`의2250파일/26506275bytes/snapshot `c42f766ef78c6f54480e565bf34d74a210e263b84220e093ebf189a2db340c02`를 전달합니다. sync/verify actual0·dirty/deleted/이전경로삭제0입니다. 비회원 CTA는 최종 원문 버튼대로 signup을 열고 회원 플랜은 유지합니다. 인증 GET 대기×이탈×명시 복귀×완료의 busy/loading/초점 잔류를 수정하되 SDK/owner/key/journal/권한과 원문 카피/SVG/CSS는 유지합니다.
+
+원RED/하니스 오류·최초 Opus HOLD를 보존하며 후속 Opus 코드GO와 모델freeze밖 ROOT의 작은 후속을 구분합니다. 최종 관련78 PASS·소개56 PASS·별도static56 PASS 및각lint/type/servicebuild0는각부분증거입니다. newwhole/실provider/운영0, 원root/server/Worker/main불변·운영b7입니다. 정확한 실행은 `candidate.currentRootCauseTransitionFixes`와 React Bugfix를 따릅니다. Native회원 acReady·실chat/research/library producer는계약선행잔여이며 []로성공/미연결을 추정하지 않습니다.
+
+### 직전 전달 — 최종 원문 oracle와 추가 결함 후보
 
 통합 source `a542712c65e4a7a5362879a404e4ddd8ad5885b7`, 전체2249파일/26486373bytes/snapshot `3de3118cdfc6a71d6c386f0c78f6e5da354ef5d752e974286d53370209f01e98`를 전달합니다. source dirty/deleted·이전 경로 삭제0, sync/verify actual0입니다. 원root/main/server/Worker/workflow는 변경하지 않습니다.
 

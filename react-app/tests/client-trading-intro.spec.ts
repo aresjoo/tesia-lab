@@ -27,23 +27,25 @@ test('guest trading route is a complete source introduction, not an implicit log
   expect(errors).toEqual([]);expect(mutations).toEqual([])
 })
 
-test('explicit guest start opens the source plan; signup cancellation stays there and completion preserves the chosen route',async({page})=>{
+test('explicit guest start opens source signup in place; cancellation and completion preserve the introduction',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/#/trade')
   const start=page.locator('.txh-hero .txh-cta')
-  await start.click();await expect(page.getByTestId('connection-plan')).toBeVisible()
-  await expect(page.locator('.ca-auth')).toHaveCount(0)
-  const choice=page.getByTestId('connection-plan').getByRole('button',{name:'무료로 시작하기',exact:true})
-  await choice.click();await expect(page.locator('.ca-auth')).toBeVisible()
+  await start.click();await expect(page.locator('.ca-auth')).toBeVisible()
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
+  await expect(page).toHaveURL(/#\/trade$/)
   await page.keyboard.press('Escape');await expect(page.locator('.ca-auth')).toHaveCount(0)
-  await expect(page).toHaveURL(/#\/connect\/plan/);await expect(choice).toBeFocused()
-  await choice.click();await page.getByRole('button',{name:/Google/}).click()
+  await expect(page).toHaveURL(/#\/trade$/);await expect(start).toBeFocused()
+  await start.click();await page.getByRole('button',{name:/Google/}).click()
   await expect(page.getByRole('heading',{name:'연령을 알려주세요'})).toBeVisible()
   await page.getByLabel('연령',{exact:true}).fill('28')
   await page.getByRole('button',{name:'시장에 입장하기',exact:true}).click()
   await expect(page.locator('.ca-auth')).toHaveCount(0)
-  await expect(page.getByTestId('connection-plan')).toHaveAttribute('data-step','free')
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
   await expect(page.locator('.client-account-terminal')).toHaveCount(0)
-  await expect(page.locator('.txh')).toHaveCount(0)
+  await expect(page.locator('.txh')).toBeVisible()
+  await expect(page).toHaveURL(/#\/trade$/)
+  // The next explicit action belongs to the now signed-in member.
+  await start.click();await expect(page.getByTestId('connection-plan')).toHaveAttribute('data-step','plan')
 })
 
 test('member without owned strategies gets intro and source connection plan without losing draft',async({page})=>{
@@ -54,6 +56,8 @@ test('member without owned strategies gets intro and source connection plan with
   await expect(page.locator('.client-account-terminal')).toHaveCount(0)
   await page.locator('.txh-hero .txh-cta').click()
   await expect(page.getByTestId('connection-plan')).toBeVisible()
+  // Keep the original plan styling check on the member path that owns it.
+  await expect(page.getByTestId('connection-plan')).toHaveCSS('background-color','rgb(0, 0, 0)')
   await page.getByTestId('connection-plan').getByRole('button',{name:'뒤로',exact:true}).click()
   await expect(page.locator('#strategy-idea')).toHaveValue('소개를 보고 와도 남아야 하는 질문')
 })
@@ -81,7 +85,9 @@ for(const width of [320,390,760,761,1440])test(`${width}px latest source introdu
   await page.screenshot({path:info.outputPath('source-intro-cards.png')})
   const cta=root.locator('.txh-safe .txh-cta')
   await cta.scrollIntoViewIfNeeded();await expect(cta).toHaveCSS('background-color','rgb(255, 255, 255)')
-  await cta.click();await expect(page.getByTestId('connection-plan')).toHaveCSS('background-color','rgb(0, 0, 0)')
+  await cta.click();await expect(page.locator('.ca-auth')).toBeVisible()
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
+  await expect(page).toHaveURL(/#\/trade$/)
 })
 
 for(const language of ['ko','en','ja','zh-CN','zh-TW','es','fr'] as const)test(`${language} entry controls localize while client-authored editorial content keeps Korean`,async({page})=>{
@@ -150,22 +156,25 @@ for(const width of [320,1440])test(`${width}px enlarged introduction has readabl
   await expect(page.locator('.txh-safe .txh-cta')).toBeInViewport()
 })
 
-test('leaving guest signup discards its navigation intent and history restores the introduction',async({page})=>{
+test('leaving guest signup closes its overlay and history restores the introduction without a plan entry',async({page})=>{
   await page.goto('/')
   await page.locator('#strategy-idea').fill('가입 경로 왕복에도 보존')
   await page.locator('.client-site-footer').getByRole('button',{name:'AI 트레이딩',exact:true}).click()
   await page.locator('.txh-hero .txh-cta').click()
-  await page.getByTestId('connection-plan').getByRole('button',{name:'무료로 시작하기',exact:true}).click()
   await expect(page.locator('.ca-auth')).toBeVisible()
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
+  await expect(page).toHaveURL(/#\/trade$/)
   await page.goBack()
   await expect(page.locator('.ca-auth')).toHaveCount(0)
   await expect(page.locator('#root')).not.toHaveAttribute('inert')
-  await expect(page.locator('.txh')).toBeVisible()
+  await expect(page.locator('#strategy-idea')).toHaveValue('가입 경로 왕복에도 보존')
   await page.goForward()
-  await expect(page.getByTestId('connection-plan')).toBeVisible()
+  await expect(page.locator('.txh')).toBeVisible()
+  await expect(page).toHaveURL(/#\/trade$/)
+  await expect(page.getByTestId('connection-plan')).toHaveCount(0)
   await expect(page.locator('.ca-auth')).toHaveCount(0)
   await expect(page.locator('.client-account-terminal')).toHaveCount(0)
-  await page.getByTestId('connection-plan').getByRole('button',{name:'뒤로',exact:true}).click()
+  await page.goBack()
   await expect(page.locator('#strategy-idea')).toHaveValue('가입 경로 왕복에도 보존')
 })
 

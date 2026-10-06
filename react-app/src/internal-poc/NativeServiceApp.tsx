@@ -91,7 +91,7 @@ function WorkflowButton({ disabled, onClick, ...props }: ButtonHTMLAttributes<HT
 export type NativeServicePresentations = Pick<ComponentProps<typeof ClientServiceExperience>,
   'conversationLibrary' | 'insightPresentation' | 'sharingPresentation' | 'researchPresentation' | 'accountPresentation' | 'feedbackPresentation' | 'brokerPresentation' | 'connectionPresentation'>
 export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean } = {}) {
-  const { language } = useClientPreferences()
+  const { language, t } = useClientPreferences()
   const jobText = (key: NativeJobTextKey, values?: Readonly<Record<string, string | number>>) => nativeJobText(language, key, values)
   const workflowText = (key: NativeWorkflowTextKey, values?: Readonly<Record<string, string | number>>) => nativeWorkflowText(language, key, values)
   const [clients] = useState(() => {
@@ -270,6 +270,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       const next = { ...binding }
       returnBindingRef.current = next; setReturnBinding(next)
       setLoginOpen(false); setLoginRetained(true)
+      // The retired observation cannot settle a loading view. Keep the
+      // recovery boundary explicit without adopting its stale session result.
+      setPhase(current => current === 'loading' ? 'error' : current)
     }
     const events = ['popstate', 'hashchange', 'teth:navigate']
     events.forEach(event => window.addEventListener(event, invalidateReturnDispatch))
@@ -1479,7 +1482,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
   const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen}>
     {!plainAuthReturn() && <section className="cs-native-login ca-auth native-provider-login" aria-label="로그인 반환 복구">
-      <button type="button" data-native-auth-close className="au-x" aria-label="닫기" onClick={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }}>✕</button>
+      <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} onClick={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }}>✕</button>
       <p className="native-auth-status au-err" role="alert">로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.</p>
       <button type="button" className="au-btn primary" disabled={busy || emailBusy} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>
     </section>}
