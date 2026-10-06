@@ -1,5 +1,34 @@
 # TETH 버그 수정·검수 보고서
 
+## 검증 방식과 운영 노출 범위 교정
+
+- **정적 배치 증거 인수 결정:** ROOT는 정본 §0.4 및 Repository Governance의 장시간 회귀 증거 결합 절차를 이번 test-only 동기 setter 교정에 한정 적용하기로 결정했다. 원whole actual1과 동일40키40PASS는 별도 실행이며 새 whole PASS가 아니다. private verifier는 정확한 역복원·현재 제품/의존성/계약/3출력 불변·원제목/단언·실제setter·원실패키 후단·17skip·모든 원키/실제 종료/cleanup을 결속하는 `STATIC_UI_BATCH_EVIDENCE_CLOSED`를 준비한다. 제품 위험이 미확인되거나 독립 personal1 Opus5.5·secret scan·CAS·공개smoke·rollback 요건이 미충족이면 HOLD다. GC 내부 원인 폐쇄·공용 service acceptance 변경·실서비스 GO·운영승격을 뜻하지 않는다.
+- **다음 작은 원본 차이:** 원 `help-widget.js:29–30,69`/최종 index26680의 도움말 제목 앞 장식 점이 공유 `ClientHelp.tsx:127`에서 누락됐다. 헤드셋·스파크 SVG는 유지됐다. 다음 복원은 해당 컴포넌트/CSS의 장식만 대상으로 하며 초기 상담 가용성 문구·API·현재 동결 배포 후보에는 섞지 않는다. 현재 좁은 코드 대조 결과이지 전체 화면 무결함 판정은 아니다.
+
+- **단일 통합 회귀 실제 종료:** 동결84e/2226·`d70b1636`의549spec/15,302키 실행59036은 UTC2026-10-06T03:23:03.195Z에 **15,284PASS/1FAIL/기존17SKIP/actual1**로 종료했다. 키 누락·미실행·중단·retry·flaky·시험밖오류0, 입력3출력/원자료 전후 동일, 소유4644/4645 종료다. 원receipt `7b480876`/raw `e867abaa`/log `9fef2cc4`는 불변 보존한다. 유일한 실패는 카피 대시보드390px의 첫 언어 loop에서 반복 async import의 `page.evaluate`가 Promise GC 오류로 끝난 것이다. snapshot에는 영어 대시보드가 표시됐지만 해당 언어 단언과 이후 상세/포지션/pageerror 검증은 미실행이다. UI 결함/GC 근본 원인 확정이나 후속 PASS를 통한 원FAIL 면제는 하지 않는다. 단독 writer가 해당 시험 파일만 초기 실제 setter 확보·동기 반복 호출로 교정하고 파일 범위만 재검증한다. 전체 재시작·제품 재빌드·운영승격0, 기존 release gate는 HOLD다. 아래 RUNNING 표현은 종료 전 이력이다.
+- **하니스 교정의 경계:** 해당 파일의 실제 preference setter를 일반 mount와 열린 포지션 fixture에서 한 번 확보하고 반복 언어 변경은 동기로 호출한다. 원14개 선언 제목·기존147단언·7언어 순서·금액/색/USDT·fixture·timeout/retry/skip을 유지하며 setter 성공 단언 하나만 추가했다. 일반 loop의 KRW 설정과 상세 탭 loop의 통화 미변경을 각각 보존한다. 원SHA `9a8fda06`로 역복원 exact, 수정SHA `f41ec37a`, diff-check/reverse-check actual0이며 별도 readonly 검수 확정C/H/M0다. 제품 src/package/config 변경0. 초기 import와 fonts.ready는 여전히 비동기이므로 근본 원인 폐쇄를 주장하지 않는다. 실제 검증은 이 파일 양 project만 한 번 수행하며, 결과는 원whole FAIL과 분리한다.
+- **부분 검증 완료:** 해당 파일만 Legacy 환경에서 양 project/2workers/retry0으로 한 번 실행해 원40키 **40PASS/0FAIL/0SKIP/actual0, 67.9초**를 확인했다. 미실행·중단·retry·flaky·시험밖오류0, 이전 모바일390 실패키도 기존 후단 단언까지 실행됐다. 파일 ESLint actual0이며 src715·시험·3출력·원whole raw/receipt/log/list 전후 불변, 소유4644 서버 종료다. 영수증 `copy-trading-locale-bridge-execution.json` SHA `ab8276b41c16296f9dcfa007d6d66b75d97dcaff422cd3d224e37f868ad50e4b`, raw SHA `efbc0a89f3bc69fc96de42c23b42bc1307abb24a62f9c39b3d3d6fe40b799240`를 보존한다. ROOT가 raw40개/실제exit/receipt/SHA/원증거 불변을 직접 대조했다. 새 전체 회귀·제품 빌드·설치·모델·배포0이다. 미사용 private preload는 실행하지 않았으며 새 전역 guard나 fixture 변경도 없다. 원whole actual1은 그대로 유지하고 부분PASS를 새 whole PASS로 쓰지 않는다.
+
+- **최종 gate의 작은 준비 교정:** 초기126행 gate의 metadata 파일별 호출을 기존 검증된 directory scan으로 묶었다. 현재128행/SHA `e5f902b6dfb83831ec96ce143c4574b1aa81759f6a64f7281c13f43bc52efdb8`이며 README·AGENTS·MIGRATION·manifest·verification의 다섯 exact bytes, 기존 ignore와 실패 시 HOLD·전후 drift 검사 모두 유지한다. 구간 단독 readonly 교차검수의 확정 C/H/M0, 쓰기·scan·모델 호출0이다. 이번 준비 교정으로 제품 빌드·구간 시험·전수를 다시 실행하지 않았고 기존 단일59036은 계속 진행한다.
+- **최종 배포 준비 재사용:** 기존 package/prepare/upload/VM 본문은 변경하지 않고 source·prefix·비MD입력·service의 네 치환과 inverse byte-exact adapter만 준비했다. 새 gate126행과 개인1 Opus5.5 입력 helper137행을 분리 인수했으며 모델·scan·package·upload·VM 실행0이다. ROOT의 최초 default gate는 미종료 whole 때문에 actual1/HOLD·scanRuns0으로 차단됐다. 준비 인자 `skipPolicy(raw)`는 원 static14/runtime3 정책의 목록 인자로 교정했고, 최종 문서-only HEAD를 허용하지 않던 model 준비 조건도 같은84e 비MD·3출력/ancestor/MD-only 경계로 교정했다. 이는 제품 결함이나 합격 기준 면제가 아니며 동결 whole 재시작0이다. 공개 사후 probe는 기존 compiled 검사의 네 치환과 strict 서버 HTML 비교를 재사용해 순수 syntax/inverse 검사 actual0·브라우저/네트워크0, 독립 읽기 검수 확정문제0이다. 실제 공개 URL 검사는 운영 반영 뒤에만 진행한다.
+- **현재 compiled 표시 인수:** 동결84e/입력d70b와 service1113/`21a98031`에서 정적1113파일 GET exact 및 로그인1440/390/320의 표시·키보드·초안·focus·닫기·원무료카피·overflow 검사를 완료했다. 영수증 `restoration-batch-service-binding/auth-byte-receipt.json` SHA `c4d175ac0600beac19fb1c4ffa2e478b198d8e0fd4e2901aa71d5681ba7e60c9`, 내부 `auth/receipt.json` SHA `54dc4e25ca22b16d1b6eeb0421a9fd5237538bfe078bb6ac388077a0dd9c9439`는 actual0/PASS다. 실제 오류·외부 요청·mutation0, 입력3출력/보호자료 불변·소유4646 서버와 자식 프로세스 종료를 확인했다. session/CSRF GET은 합성이며 실제 로그인·서비스·배포 성공이 아니다. 제품/설치/빌드 재실행0이고 현재 전체59036을 재시작하지 않았다.
+- **공개 HTML 검증의 구분:** UTC2026-10-06T01:59의 GET은200/10625bytes/`e9a594ad`로, 운영 정적 raw10494bytes/`663cba45`와 달랐다. 반복 응답은 동일했고 차이는 기존 Backend `render_html`이 넣는 `tesia-structural-smoke-profile-hash` 메타태그131자 한 곳뿐이다. 해당 태그만 원래 위치에서 빼면 정적 원문 bytes와 exact다. 이를 UI 교체/제품 결함으로 분류하지 않는다. 읽기 전용 비교 도구의 순수8단언 및 UTC02:05 실제 GET 검증 actual0으로 기존 서버 변환 exact를 확인했다. 메타값은 기록하지 않았고 중복·추가 script/verifier·다른 body를 폭넓게 지우지 않는다. 이 검사는 정적 파일 CAS·프로필 권위·실로그인·배포 승인이 아니므로 원7dd/663c/a261의 CAS와 Backend/nginx/updater 권위 확인을 별도로 유지한다.
+- AGY 기본 profile에 `gemini-3.8-flash-high`를 명시한 작은 제공정보 점검은 CLIactual0·응답4항목이었다. 실제 modelUsage/브라우저/최종승인은 미검증이다. 준비중 Apple·이메일의 DOM 유지/비활성을 접근성 확정 문제로 본 의견은 검증 근거가 없고 기존 선택지를 유지하라는 요청 및 native disabled 정책과 달라 제품 결함으로 채택하지 않았다. 사이드바 줄바꿈·로그인 간격·언어 노출 조건은 확인 항목으로만 보존한다. 원본 카피·버튼·색상·SVG·flags 변경0이다.
+
+- 작은 변경은 구간별 단독 writer가 해당 영향 테스트만 실행하고, 원본 복원이 모인 최종 동결 후보에 필요한 전체 회귀 한 번을 결속한다. 문서 변경이나 테스트만의 교정에 제품 빌드/다른 구간 테스트를 반복하지 않는다. 실패는 제품/환경/하니스/미확정으로 분리하며 새로운 기능과 임의 카피를 복원 범위에 붙이지 않는다.
+- 세 팀의 읽기 전용 대조로 최근 `hypo` 답변과 완료 `bt2` 답변의 복원은 **Main 미리보기 경로**라는 점을 확인했다. 운영은 `dist-service/internal-poc.html` → `service-main.tsx` → `NativeServiceApp`이며 Main을 mount하지 않는다. 같은 source를 배포해도 두 답변이 운영에 나타난다는 뜻은 아니다. 공유 사이드바/무료 안내/피드백/도움말의 소비와 Native 초안·완료 보고서는 별도 경로다. 이 확인에서 코드/새 테스트/운영은 변경하지 않았다.
+- 즉시 추가 가능한 순수 문구 누락은 이번 좁은 대조에서 발견하지 않았다. 남은 손실 원인·위험 답변은 원문 금융 주장과 supplied facts가 일치하지 않으며, 수정/재검증 완료 안내는 실제 version producer가 필요하다. 원문을 붙여 허구 실행이나 원인으로 설명하지 않는다. 기존 typed facts로 연결 가능한 부분과 producer 미공급 부분은 병렬로 분리해 다음 구현 범위를 정한다. 전체 원본 일치나 실서비스 완료를 주장하지 않는다.
+
+| 변경 묶음 | 운영 Native에서의 소비 | 다음 검증 경계 |
+|---|---|---|
+| OAuth 복귀·로그인·미전송 입력 | 실제 Native controller/로그인 패널 경로 | 이미 실행한 해당 auth/복귀 시험과 최종 생산 설정 표시 검증. Apple/이메일 임의 활성화 없음 |
+| 게스트 로그인/무료 시작·desktop 언어 진입 | `ClientServiceExperience`의 guest marker/≥861px 조건 | Native 실제 화면에서 조건별 확인. 모바일 언어 버튼 숨김 유지 |
+| 사이드바/무료 안내/피드백/도움말 | 공유 copy의 해당 Native 소비자 | 해당 dialog/locale 범위만 검증. 실전송·실상담 성공으로 승계하지 않음 |
+| 연구 기록 검색 결과 없음 | Native `ClientResearchHistory`에서 query+0matches+가용 조건 | Native library/search producer와 Main 검색 인덱스는 별개 |
+| 예약 없음·Hypothesis/완료 bt2 답변·busy toast | 이번 변경은 Main 미리보기 전용 | 운영 복원 완료로 계산하지 않음. Native에 임의 고정 내용 주입하지 않음 |
+
+Native의 실제 Draft 계획·검증 보고서·차트/거래/재생은 기존 연결을 유지한다. Hypothesis/Critic/팀/연구 완료의 운영 producer는 미공급이다. 후속 연결 후보는 `NativeServiceResult`의 기존 검증 보고서 read-only 전달, `NativeServiceApp`의 owner/job/scope 결속, 순수 presentation adapter의 세 파일 경계로 제한한다. 신규 GET/가짜 값/`bt1=IS, bt2=OOS` 추정 없이 원 decimal·기간·요청 수·차트 DOM을 보존하고 stale/owner 교체 때 철회하는 것이 합격 기준이다. 이 제안은 이번 작은 카피 복원에 신규 기능으로 덧붙이지 않았다.
+
 ## 완료 백테스트 일반 답변 복원
 
 - 원9fb `index.html:20891`의 일반 문서 요약을 완료된 `bt2`에도 연결했다. 제품 변경은 `completedReport`의 문서 조건을 `report || bt2`로 넓히는 한 곳뿐이다. 수익·낙폭·Holdout 수치, 95초/완료 상태, 복구·제외 질문·supplied 답변 우선권·초안·admission·v1은 유지한다. 실제 Native 데이터나 주문 권한에는 적용하지 않는다.

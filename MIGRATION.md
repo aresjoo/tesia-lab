@@ -8,18 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/research-validation-copy@84e82a939d8873c0b8bbd7b7f3e03a6f386e768e` 전체. 완료bt2 원문 요약조건1·기존레일시험bridge 최소교정. 디자인·카피·숫자·Native·로그인3·SDK/권한/flags 보존 |
+| React 출처 | `agent/web/research-validation-copy@4b77b8702e2419bd174bc2133d31df8ed5ea425f` 전체. 원84e 제품/3출력 보존·copy-trading 시험1과MD2만 변경. 역사 전수FAIL·동일 영향40PASS는 별도 결속 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 완료 백테스트 답변·부분 검증 배치
+### 최신 전달 — 원문 복원 배치 종료·영향 시험 증거 결합
 
-source `84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`의 전체2,233파일/26,213,605bytes/snapshot `929f851ac0b0d3c5429463c01619da7d61155a868ad0b57c69ab4b42190c9abf`다. 부모5510 대비 제품1·시험2·MD2의5경로만 바뀌었다. 완료 bt2의 일반 질문에도 원9fb20891 요약을 연결하며95초/완료·복구·v1·제외질문·supplied 우선권을 유지한다. 기존 레일 언어 시험은 실제 동기 setter bridge를 재사용한다. 새 카피/디자인/숫자/기능/권한/Native 응답/flags 변경0이다.
+source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,125bytes/snapshot `2c2a0ac952e1420340c3515b3532da00fd3873f1a3814391d3e5de1ba66c3fba`를 전달한다. 미커밋·삭제0이며 직전84e 대비 시험1·MD2만 바뀌었다. 제품 src·의존성·공개/내부/service3출력은 원84e와 byte exact다.
 
-신규12(약19초)·포함94(약63초) 및lint3build actual0, 별도legacy환경auth98/116·help/service124·레일34 모두 실제PASS다. 서로 다른 입력과범위를 전체로합산하지 않는다. 시험파일만교정된레일은 해당34/ESLint만검사하고94/제품빌드를반복하지 않았다. 원전수의Google-only주입/시험GC/후단미실행6/수집오류를보존한다. 최종배치필요전체1회·정적승격은미완료이며teth.ai7dd·원root/운영9객체·DB/730일을보존한다.
+최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
+
+ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE의 장시간 검증 증거 결합 경계에 따라 역사 전수와 exact 영향40을 별도 결속한다. 이는 공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 최고급 독립 모델·최종 gate·archive/권위CAS·공개smoke·원자적전환/롤백은 pending/HOLD다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 운영teth.ai7dd·원root·운영9객체·DB/730일은 유지한다. 실provider/Reactprompt/서비스GO0이다.
+
+검증 원본은 `candidate.currentRestorationBatchEvidence`의 역사 전수(raw e867abaa/receipt7b480876/log9fef2cc4)와 후속40(raw efbc0a89/receiptab8276b4)에 각각 결속한다. 이전 `currentCompletedBacktestReply`와 다른 `current*` 인수 객체는 당시 입력 그대로 보존한다.
 
 ### 이전 전달 — 가설 질문 답변 원문 복원
 

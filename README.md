@@ -2,7 +2,11 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷은 **`agent/web/research-validation-copy@84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`**입니다. source `84e82a939d8873c0b8bbd7b7f3e03a6f386e768e`의 전체2,233파일/26,213,605bytes/snapshot `929f851ac0b0d3c5429463c01619da7d61155a868ad0b57c69ab4b42190c9abf`다. 부모5510 대비 제품1·시험2·MD2의5경로만 바뀌었다. 완료 bt2의 일반 질문에도 원9fb20891 요약을 연결하며95초/완료·복구·v1·제외질문·supplied 우선권을 유지한다. 기존 레일 언어 시험은 실제 동기 setter bridge를 재사용한다. 새 카피/디자인/숫자/기능/권한/Native 응답/flags 변경0이다. 최신 검사·잔여는 `candidate.currentCompletedBacktestReply`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다. 아래 가설 복원 수치는 이전 입력의 기록입니다.
+현재 React 스냅샷은 **`agent/web/research-validation-copy@4b77b8702e2419bd174bc2133d31df8ed5ea425f`**입니다. source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,125bytes/snapshot `2c2a0ac952e1420340c3515b3532da00fd3873f1a3814391d3e5de1ba66c3fba`를 전달한다. 미커밋·삭제0이며 직전84e 대비 시험1·MD2만 바뀌었다. 제품 src·의존성·공개/내부/service3출력은 원84e와 byte exact다. 최신 검사·잔여는 `candidate.currentRestorationBatchEvidence`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다.
+
+최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
+
+ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE의 장시간 검증 증거 결합 경계에 따라 역사 전수와 exact 영향40을 별도 결속한다. 이는 공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 최고급 독립 모델·최종 gate·archive/권위CAS·공개smoke·원자적전환/롤백은 pending/HOLD다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 운영teth.ai7dd·원root·운영9객체·DB/730일은 유지한다. 실provider/Reactprompt/서비스GO0이다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.

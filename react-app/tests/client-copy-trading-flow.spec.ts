@@ -14,7 +14,12 @@ async function open(page: Page, hash = '#/share', signedIn = true) {
   if (signedIn) await page.addInitScript(owner => sessionStorage.setItem('teth-client-profile-preview', JSON.stringify({ name: '카피 검수자', email: owner })), owner)
   await page.goto(`/${hash}`)
   await expect(page.locator('.client-strategy-sharing')).toBeVisible()
-  await page.evaluate(() => document.fonts.ready)
+  await page.evaluate(async () => {
+    const path = '/src/client-preferences.ts'
+    const { setClientPreference } = await import(/* @vite-ignore */ path)
+    Reflect.set(window, 'setCopyTradingPreference', setClientPreference)
+    await document.fonts.ready
+  })
 }
 async function start(page: Page) {
   await open(page, setupHash)
@@ -24,8 +29,15 @@ async function start(page: Page) {
 }
 const stored = (page: Page) => page.evaluate(key => JSON.parse(sessionStorage.getItem(key) ?? 'null'), storageKey)
 
-async function language(page: Page, value: ClientLanguage) {
-  await page.evaluate(async value => { const path = '/src/client-preferences.ts'; const { setClientPreference } = await import(/* @vite-ignore */ path); setClientPreference('language', value); setClientPreference('currency', 'KRW') }, value)
+async function language(page: Page, value: ClientLanguage, resetCurrency = true) {
+  // 반복 변경은 초기 mount에서 확보한 같은 모듈의 실제 setter를 동기로 호출한다.
+  expect(await page.evaluate(({ value, resetCurrency }) => {
+    const setter = Reflect.get(window, 'setCopyTradingPreference') as typeof import('../src/client-preferences').setClientPreference | undefined
+    if (typeof setter !== 'function') return false
+    const accepted = setter('language', value)
+    if (resetCurrency) setter('currency', 'KRW')
+    return accepted
+  }, { value, resetCurrency })).toBe(true)
 }
 const locales: ClientLanguage[] = ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko']
 for (const width of [320, 1440]) test(`카피 시작설정 7언어 ${width}px: 입력·페어 초안·고급설정·원장 보존`, async ({ page }) => {
@@ -208,6 +220,9 @@ test('명시 열린 포지션 fixture: 7언어·3화면에서 원값·헤더·�
   await page.route('**/copy-open-position-fixture.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body class="client-strategy-sharing" style="margin:0;background:#101216;color:#e3e3e3;font-family:system-ui"><main id="fixture" style="padding:12px"></main></body></html>' }))
   await page.goto('/copy-open-position-fixture.html')
   await page.evaluate(async () => {
+    const preferencesPath = '/src/client-preferences.ts'
+    const { setClientPreference } = await import(/* @vite-ignore */ preferencesPath)
+    Reflect.set(window, 'setCopyTradingPreference', setClientPreference)
     const refresh = '/@react-refresh', runtime = (await import(/* @vite-ignore */ refresh)).default
     runtime.injectIntoGlobalHook(window)
     Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
@@ -254,12 +269,12 @@ test('실제 상세 탭 언어 변경은 선택·주소·원장을 유지하고 
   await page.getByRole('group', { name: '카피 상세 정보' }).getByRole('button', { name: '자금 이동', exact: true }).click()
   const address = page.url(), before = await stored(page)
   const selected = await page.locator('.cpx .cpp-tabs button[aria-pressed=true]').elementHandle()
-  for (const language of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko'] as ClientLanguage[]) {
-    await page.evaluate(async language => { const path = '/src/client-preferences.ts'; const { setClientPreference } = await import(/* @vite-ignore */ path); setClientPreference('language', language) }, language)
-    const tabs = page.getByRole('group', { name: copyHistoryText(language, 'tabs'), exact: true })
-    await expect(tabs.getByRole('button')).toHaveText((['pos', 'hist', 'share', 'bal', 'tx'] as const).map(key => copyHistoryText(language, key)))
-    await expect(tabs.getByRole('button', { name: copyHistoryText(language, 'bal'), exact: true })).toHaveAttribute('aria-pressed', 'true')
-    await expect(page.getByRole('table', { name: copyHistoryText(language, 'bal'), exact: true })).toBeVisible()
+  for (const lang of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'ko'] as ClientLanguage[]) {
+    await language(page, lang, false)
+    const tabs = page.getByRole('group', { name: copyHistoryText(lang, 'tabs'), exact: true })
+    await expect(tabs.getByRole('button')).toHaveText((['pos', 'hist', 'share', 'bal', 'tx'] as const).map(key => copyHistoryText(lang, key)))
+    await expect(tabs.getByRole('button', { name: copyHistoryText(lang, 'bal'), exact: true })).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByRole('table', { name: copyHistoryText(lang, 'bal'), exact: true })).toBeVisible()
     expect(await selected!.evaluate(node => node.isConnected)).toBe(true)
     expect(page.url()).toBe(address); expect(await stored(page)).toEqual(before)
     await noOverflow(page)
