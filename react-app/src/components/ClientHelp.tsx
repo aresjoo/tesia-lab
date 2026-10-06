@@ -124,7 +124,7 @@ export function SiteHelp({ initialOpen = false, open: suppliedOpen, returnFocus,
       <button type="button" className="help-close" aria-label={language === 'ko' ? '도움말 닫기' : t('common.close')} onClick={() => close(true)}>
 <X size={18} />
 </button>
-      <h2>{t('help.title')}</h2>
+      <h2><i aria-hidden="true" />{t('help.title')}</h2>
 <p>{t('help.body')}</p><p>{t('help.sub')}</p>
       <InternalLink href="/about/#faq" onClick={() => close()}><PublicCopy page="about" copyKey="fh2" /> →</InternalLink>
       <InternalLink href="/policies/#overview" onClick={() => close()}><PublicCopy page="download" copyKey="pol" /> →</InternalLink>

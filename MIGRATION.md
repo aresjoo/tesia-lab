@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/research-validation-copy@4b77b8702e2419bd174bc2133d31df8ed5ea425f` 전체. 원84e 제품/3출력 보존·copy-trading 시험1과MD2만 변경. 역사 전수FAIL·동일 영향40PASS는 별도 결속 |
+| React 출처 | `agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255` 전체. 부모4b77 위 원본 도움말 제품2·시험1·MD2만 변경. 관련12PASS·부모 전수와 별도 결속 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 원문 복원 배치 종료·영향 시험 증거 결합
+### 최신 전달 — 원본 도움말 제목 장식 복원
+
+전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`이며 dirty/deleted/이전경로삭제0, 제공 sync/verify actual0이다. 공유 도움말 제목에 원9fb의 빈 장식 i(aria-hidden)·8px 원형·gap7만 복원한다. 원문·SVG·색상 의미·44px 닫기·인증/API/SDK/flags/730일 변경0이다.
+
+Main/Native×320/390/1440px의 같은12키는 RED12FAIL→GREEN12PASS/actual0/15.87초다. ROOT가 diff/시험/raw/모바일PNG를 확인했고 해당 lint 및 staged5 secret scan actual0/findings0이다. 자세한 검증은 `candidate.currentHelpDecorationParity`와 React Bugfix 보고서 최상단을 따른다. 새build/whole/모델GO/운영변경0이며 최종 배치 빌드가 남는다. 이전 빌드 해시는 historical parent로만 표시한다. 부모 인증 교정과 원FAIL/HOLD·이전검수 객체를 보존하며 작은 복원마다 전체 회귀를 다시 돌리지 않는다.
+
+### 이전 전달 — 원문 복원 배치 종료·영향 시험 증거 결합
 
 source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,125bytes/snapshot `2c2a0ac952e1420340c3515b3532da00fd3873f1a3814391d3e5de1ba66c3fba`를 전달한다. 미커밋·삭제0이며 직전84e 대비 시험1·MD2만 바뀌었다. 제품 src·의존성·공개/내부/service3출력은 원84e와 byte exact다.
 

@@ -2,7 +2,9 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷은 **`agent/web/research-validation-copy@4b77b8702e2419bd174bc2133d31df8ed5ea425f`**입니다. source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,125bytes/snapshot `2c2a0ac952e1420340c3515b3532da00fd3873f1a3814391d3e5de1ba66c3fba`를 전달한다. 미커밋·삭제0이며 직전84e 대비 시험1·MD2만 바뀌었다. 제품 src·의존성·공개/내부/service3출력은 원84e와 byte exact다. 최신 검사·잔여는 `candidate.currentRestorationBatchEvidence`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다.
+현재 React 스냅샷은 **`agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255`**입니다. 전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`이며 미커밋·이전경로삭제0, sync/verify actual0입니다. 부모4b77 대비 도움말 제품2·신규시험1·문서2만 변경했습니다. 원본8px 장식과7px 간격 복원의 관련12키는12PASS/actual0/15.87초입니다. 새build/전체회귀/운영반영은 하지 않았고 최종 배치 빌드·인증 승격 범위 확인은 남아 있습니다. 최신 근거는 `candidate.currentHelpDecorationParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)입니다.
+
+아래 전수·빌드·모델 수치는 부모 입력의 이력입니다. 도움말 변경을 이전 전체 PASS나 빌드 출력에 승계하지 않습니다. 기존 인증 교정을 제거해 합격 후보를 만들지 않으며 부모의 권위 범위 HOLD도 유지합니다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 

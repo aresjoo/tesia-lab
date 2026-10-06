@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처·전체파일해시는 manifest, 검사·잔여는 `candidate.currentRestorationBatchEvidence`가 소유한다. source `4b77b8702e2419bd174bc2133d31df8ed5ea425f`의 전체2,233파일/26,226,125bytes/snapshot `2c2a0ac952e1420340c3515b3532da00fd3873f1a3814391d3e5de1ba66c3fba`를 전달한다. 미커밋·삭제0이며 직전84e 대비 시험1·MD2만 바뀌었다. 제품 src·의존성·공개/내부/service3출력은 원84e와 byte exact다.
+최신 React 출처는 `agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255`다. 전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`, 미커밋·이전경로삭제0/sync verify actual0이다. 최신 부분 검증은 `candidate.currentHelpDecorationParity`가 소유한다. 원본 도움말8px 장식·gap7만 복원했고 관련12PASS/15.87초다. 새build/whole/운영0이며 최종 배치 빌드와 누적 인증 변경의 별도 권위 확인이 남는다. 인증 교정을 통째 되돌리거나 시험 기대를 완화하지 않는다. 아래 전수/빌드/모델은 부모 입력의 인수 이력이며 현재 도움말 입력의 전수/빌드 PASS로 승계하지 않는다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 
