@@ -1,5 +1,7 @@
 # TETH Web
 
+후속 동일8src/3spec(문장 어순·CJK 강조·번역이미지 alt)을 `2c99583`에 이관했습니다. static별도입력의 신규/관련26PASS·전체lint/정확flags 타입servicebuild actual0와 구분하며 통합에서 새전체시험을 실행했다고 쓰지 않습니다. 실제운영은아직eeb61이고후속은새compiled/독립release검수중입니다. 기존authFIX/API/권한은유지합니다.
+
 ## 정적 운영 7언어 반영 — 통합 인증 후보와 구분
 
 별도 static source `eeb61d82f319a84dec671151c73374b971df2cc1`을 teth.ai에 반영했습니다. actual personal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M2/Low8·352입력, 배포7단계0·8d36 CAS/backup·공개7언어×3폭105routes/42CTA/GET805 exact·오류/overflow/mutationWS0·별도48HTTPS이미지bytes/SHA exact입니다. 아래 통합 authFIX는 여전히 미배포이며 이 통합 전체를 운영source라고 쓰지 않습니다. 좁은 외국어 문장/강조/alt 후속은 별도 worktree에서 진행 중입니다. 원어민 전 문장 감수·실provider/전체서비스 NO_GO 및 원FAIL을 유지합니다. 아래 미배포/8d36표기는 당시 이력이며 정확 증거는 [누적 보고서](Bugfix_report.md)를 따릅니다.

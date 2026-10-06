@@ -1,5 +1,10 @@
 # TETH 버그 수정·검수 보고서
 
+## 외국어 문장·강조·이미지alt 후속 이관 — 아직 운영 밖
+
+- source-only whole문장11행·CJK무공백 firstsentence·foreign48 imagealt의거짓Korean수식어만8src/3신규spec로보완했다. 한국어/숫자/계산/저장/미등록 prose·SVG/geometry/이미지bytes·API/인증제어는유지한다. aa55c5f의11파일을통합2c99583으로충돌없이이관했다.
+- static944제품의Root단일관련26PASS/32.0초actual0(session41669)/rawSHA86cc60d1·전체lint80379/타입servicebuild32223 actual0는별도static입력이다. 원M1代表RED1/M2RED4/M3RED2 및하니스오류를보존한다. 새compiled/독립검수/운영승격진행중·새whole0이며현재운영eeb61/통합authFIX별도상태다.
+
 ## 7언어 표시 운영 반영 확인 — 통합 인증 승격 아님
 
 - static eeb61d82는 실제 teth.ai 배포/공개7언어×3폭105routes/42CTA/정적GET805 exact·외부/mutation/WS/overflow/런타임0 및 번역이미지별HTTPS48bytes/SHA exact를 완료했다. actual personal1 Opus5.5 정적releaseGO C0/H0/M2/Low8·352입력 exact·배포7단계0·8d36 CAS/backup다. 공개raw bb88bc7e/이미지receipt c1da39cc/362입력 보존c1180ef8은 static 보고서가정확SHA를소유한다.

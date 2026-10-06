@@ -2,6 +2,8 @@
 
 ## 최신 전달·정적 운영 확인
 
+후속 현재snapshot은통합 `753e61a5035b33e66f6e010ec411d125b5afc89b`의2356파일/33,504,255bytes/SHA `dc719ce12a05a1314785c0a9db15b74271cd6845387e3c814ea0b3fd0f323874`입니다. 원KO/SVG/흐름/수치/저장/opaqueprose/계산/인증/API/artworkbytes그대로문장어순/CJK강조/foreign48alt를8src/3신규spec로보완했습니다. static46a62의related26PASS/32초·lint/typebuild0·compiled3폭105routes/42CTA/GET813 exact는별도입력근거이며새release검수/운영승격전입니다. 실제운영은eeb61,통합authFIX미배포/실서비스NO_GO/원FAIL/730일보존입니다. 정확상태는 `candidate.currentLocalizationSentencePolish`; 아래3c88은직전전달이력입니다.
+
 전체 React 스냅샷은 통합 `3c88b77e359cbdbeef5e7d257fbdcd62b160b629`의2352파일/33,468,492bytes/snapshot `c0c36d0113784e40cfe093634c94f135c9b8920e64fb42ec45c6b9a1dcef98d4`입니다. 원한국어/디자인·SVG·흐름·원본root/Node·Worker를 보존하면서 원본에도 남아 있던 외국어 누락을 표시 사전/React 어댑터로 보완했습니다. 범위는 승인푸터/Powered by, 공개본문·정책·설정·연구·연결·터미널/차트·31고정전략의 판단/용어·회사명과48foreign 파생 이미지입니다. 실제API/사용자 prose·canonical 저장·숫자/수익 계산·SDK/API/flags/주문권위는 바꾸지 않습니다.
 
 통합의 기존 인증복구FIX는 보존하지만 별도static `eeb61d82`에 승격하지 않습니다. 통합Native hook83/dispatch339/handler43/권한속성27 AST/보호103 exact·scopedlint/type0와 static 최종30·홈6·상세14/lint/typebuild0·Native80/292/35/21·compiled3폭GET790은 다른입력근거입니다. static은 actualpersonal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M2/Low8·352입력·배포7단계0·8d36 CAS/backup로 teth.ai에반영했습니다. 공개7언어×3폭105routes/42CTA/GET805 exact·오류/overflow/mutationWS0, 별도48이미지실HTTPS/SHA exact입니다. 이전182/원FAIL/HOLD·362검수입력을보존하고새whole0·실서비스NO_GO입니다. 문장/CJK강조/이미지alt 후속과 FR inline관사·전체원어민감수·통합auth3문구·실provider는별도잔여입니다. 최신상태는 `candidate.currentCompleteStaticLocalization`이며 아래는직전이력입니다. 전달도구 첫 --verify 인자오류 actual1/변경0 뒤 정확단독 --verify actual0를보존합니다.

@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+후속 최신 React 출처는manifest의통합753e61a/2356파일입니다. 문장/CJK강조/이미지alt 후속 static46a62의related26/compiled3폭/lint/typebuild는별도검증이며새운영GO가아닙니다. 실제운영eeb61과새후속상태 `candidate.currentLocalizationSentencePolish`를구분하고원KO/SVG/흐름/수치/인증/계산/opaqueprose/artworkbytes·통합authFIX·원FAIL/730일을보존합니다. Root-owned snapshot은직접수정하지않고sync/verify만사용합니다. 아래3c88은직전전달입니다.
+
 최신 전체React는manifest의통합3c88b77/2352파일이며7언어 표시보완의상태는 `candidate.currentCompleteStaticLocalization`을 따릅니다. static eeb61d82는 실제teth.ai반영/public7언어×3폭검증완료이며통합authFIX는별도미배포입니다. 원KO/SVG/흐름/숫자/저장/API/userprose/주문권위는유지하고source-owned고정예시만현지화합니다. 문장/CJK강조/alt후속·원어민전문장감수/실서비스는남으므로무누락완료로확대하지않습니다. 원FAIL/이전candidate/root9fb/Node·Worker/730일·362검수입력을보존하고옛freeze재사용금지·snapshot직접수정금지/syncverify단일전달을유지합니다. 아래8d36/efe7는직전이력입니다.
 
 현재 전체스냅샷은manifest의통합efe7b23/2250파일이고 최신정적운영권위는 `candidate.currentHomeScrollbarRestoration`의별도static8d36이다. 공용문서scrollbar 숨김/소개fallback만복원했고public3폭3PASS·wheel/실키보드·정적bytes를확인했다. 인증/API/flags/카피/geometry는기존운영그대로이며통합authFIX는미배포다. Low6·실provider/서비스NO_GO·원FAIL/730일은보존하며아래1023/c34는직전인수기록이다. 스냅샷직접수정금지와sync/verify단일전달원칙을유지한다.

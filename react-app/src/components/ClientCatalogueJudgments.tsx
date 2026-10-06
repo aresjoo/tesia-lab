@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import type { CatalogueJudgment } from '../client-catalogue-judgments'
 import type { CataloguePreviewResult } from '../client-catalogue-preview'
 import { catalogueDetailGlossary, catalogueDetailLocale } from '../client-catalogue-detail-locale'
+import { catalogueFirstSentence } from '../client-catalogue-first-sentence'
 import { catalogueDateReader } from '../client-catalogue-presentation'
 import { useClientPreferences, type ClientLanguage } from '../client-preferences'
 import { sharedPercent } from '../client-shared-number-format'
@@ -58,7 +59,7 @@ function Meaning({ term, anchor, close, words, definition, language }: { term: s
 }
 
 function Narrative({ text, source, language, definitions, onTerm, selected }: { text: string; source: string; language: ClientLanguage; definitions: ReturnType<typeof catalogueDetailGlossary>; onTerm: (term: string, button: HTMLButtonElement) => void; selected: HTMLButtonElement | undefined }) {
-  const used = new Set<string>(), cut = text.search(/[.!?。！？]\s/), head = cut > 0 ? text.slice(0, cut + 1) : text, rest = cut > 0 ? text.slice(cut + 1) : ''
+  const used = new Set<string>(), { head, rest } = catalogueFirstSentence(text)
   // A translated label only links back to a term present in this original
   // sentence. Canonical keys continue to own selection, focus and definitions.
   const displayedTerms = language === 'ko' ? terms.map(term => ({ term, label: term })) : definitions.filter(row => terms.includes(row.term) && source.includes(row.term))

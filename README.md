@@ -2,6 +2,8 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
+후속 최신 snapshot은 통합 `753e61a`의2356파일/33,504,255bytes/SHA `dc719ce1`이며 sync/verify0·dirty/삭제0입니다. 문장 어순/CJK강조/foreign 이미지alt의작은8src/3spec를원문/수치/인증권위변경없이추가했습니다. static후속46a62는 관련26PASS·lint/typebuild0·compiled3폭105routes/42CTA/GET813 exact까지검증했으며현재운영eeb61과구분합니다. 새release검수/승격중상태는 `candidate.currentLocalizationSentencePolish`를따릅니다. 아래3c88/2352는직전초기7언어운영전달기록입니다.
+
 이번 전체 전달은 통합 `3c88b77e359cbdbeef5e7d257fbdcd62b160b629`의2352파일/33,468,492bytes/snapshot `c0c36d01`입니다. sync/verify actual0·원root9fb/Node·Worker·main/이전candidate/실패 이력·삭제경로0입니다. 별도 static `eeb61d82`의7언어 푸터/Powered by·공개/정책/설정/연구/차트/source예시/용어/48이미지는 **teth.ai 반영·공개 확인 완료**입니다. actual personal1 Opus5.5 정적releaseGO C0/H0/M2/Low8·352입력·배포7단계0·8d36 CAS/backup·공개7언어×3폭105routes/42CTA/GET805 exact·오류/overflow/mutationWS0 및 별도이미지HTTPS48 exact를 결속했습니다. 원KO/SVG/흐름/숫자/저장/인증/API/flags는 유지하며 통합 authFIX는 운영밖입니다. 문장어순/CJK강조/이미지alt 후속·전 문장 원어민 의미감수/실서비스는 별도 잔여입니다. 최신상태는 `candidate.currentCompleteStaticLocalization`; 아래는각직전이력입니다.
 
 현재 전달은 통합efe7b23 전체2250파일/26515603bytes/snapshotea764ae7 sync/verify0·dirty/삭제경로0이며 별도static8d36의 메인 우측 scrollbar 숨김을 teth.ai에 반영했습니다. 실제운영source8d36과static문서8abe6b6/Program63f6408를 구분합니다. public1440/390/320 3PASS/actual0·소개/메인wheel/실키보드End/Home/정적bytes일치, personal1 actual Opus5.5 C0/H0/M0/32입력·CAS/원자교환/backup·배포7단계0입니다. 카피/SVG/geometry/overflow/auth/API/flags 불변, 통합인증FIX·실provider/서비스GO는미완료다. 정확출처/원FAIL/Low6는 `candidate.currentHomeScrollbarRestoration`와누적보고서가소유하며아래c34/1023은직전전달이력입니다.

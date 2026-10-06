@@ -2,13 +2,13 @@ import source from './client-about-source.json' with { type: 'json' }
 import type { ClientLanguage } from './client-preferences'
 
 // Row order is the deduplicated, exact Korean source inventory. Tests require
-// every locale to cover every row. Screenshots keep the authored Korean UI.
+// every locale to cover every row. Artwork follows the selected locale; Korean originals remain unchanged.
 const en = `AI trading for people who trade
 Describe your strategy, validate it on real market data, and run it in your existing exchange account.
 Start for free
 View pricing
 Free forever, no card required
-TETH terminal with chart and decision panel (Korean preview)
+TETH terminal with chart and decision panel
 How it works
 From conversation to execution, all in one place.
 Conversation
@@ -18,7 +18,7 @@ TETH asks about missing conditions first
 Organized into entry, exit and stop-loss rules
 Chart rules, AI decisions and hybrid strategies
 Build a strategy
-TETH strategy card with assets and trading conditions (Korean preview)
+TETH strategy card with assets and trading conditions
 Validation
 Validate with real data
 Run your strategy on historical market data and see returns and risk in numbers.
@@ -26,7 +26,7 @@ From the latest three months to the full period
 Returns and maximum drawdown
 A record of every decision
 View results
-TETH backtest results with balance chart and decision history (Korean preview)
+TETH backtest results with balance chart and decision history
 Connection
 Keep your existing account
 Choose an exchange and authorize the connection once; the strategy places orders in that account.
@@ -34,7 +34,7 @@ Seven exchanges available to connect
 Connect with one authorization
 Connection permissions: balance access and orders
 Connect an exchange
-TETH exchange selection screen (Korean preview)
+TETH exchange selection screen
 Execution
 Record the reasons behind decisions
 The strategy watches the market around the clock and records why it bought or sold.
@@ -42,7 +42,7 @@ Round-the-clock automated execution
 TETH’s view and decision history
 Pause or emergency stop at any time
 Open terminal
-TETH terminal decision panel (Korean preview)
+TETH terminal decision panel
 Choose how to use TETH
 Choose the option that fits your exchange account.
 TETH invited account
@@ -97,7 +97,7 @@ const ja = `トレードする人のためのAIトレーディング
 無料で始める
 料金を見る
 ずっと無料、カード登録不要
-TETHターミナルのチャートと判断パネル（韓国語プレビュー）
+TETHターミナルのチャートと判断パネル
 使い方
 会話から実行まで、一か所でつながります。
 会話
@@ -107,7 +107,7 @@ TETHターミナルのチャートと判断パネル（韓国語プレビュー�
 エントリー・決済・損切り条件に整理
 チャートルール、AI判断、混合戦略
 戦略を作る
-資産と売買条件を示すTETH戦略カード（韓国語プレビュー）
+資産と売買条件を示すTETH戦略カード
 検証
 実際のデータで検証
 過去の市場データで戦略を実行し、収益とリスクを数字で確認します。
@@ -115,7 +115,7 @@ TETHターミナルのチャートと判断パネル（韓国語プレビュー�
 収益率と最大下落幅
 一回ごとの判断記録
 結果を見る
-残高チャートと判断記録を示すTETHバックテスト結果（韓国語プレビュー）
+残高チャートと判断記録を示すTETHバックテスト結果
 接続
 今お使いの口座のまま
 取引所を選んで一度承認すると、その口座で戦略が直接注文します。
@@ -123,7 +123,7 @@ TETHターミナルのチャートと判断パネル（韓国語プレビュー�
 一度の承認で接続
 接続権限：残高照会と注文
 取引所を接続
-TETH取引所選択画面（韓国語プレビュー）
+TETH取引所選択画面
 実行
 判断の根拠も記録
 戦略が24時間市場を見て、売買の理由を文章で残します。
@@ -131,7 +131,7 @@ TETH取引所選択画面（韓国語プレビュー）
 TETHの見解と判断記録
 いつでも一時停止・緊急停止
 ターミナルを開く
-TETHターミナルの判断パネル（韓国語プレビュー）
+TETHターミナルの判断パネル
 利用方法を選びます
 取引所口座に合った方法を選びます。
 TETH招待口座
@@ -186,7 +186,7 @@ const zhCN = `为交易者打造的 AI 交易
 免费开始
 查看价格
 永久免费，无需绑卡
-TETH 终端、图表和判断面板（韩语预览）
+TETH 终端、图表和判断面板
 使用方式
 从对话到执行，在同一处完成。
 对话
@@ -196,7 +196,7 @@ TETH 终端、图表和判断面板（韩语预览）
 整理为入场、平仓和止损条件
 图表规则、AI 判断和混合策略
 创建策略
-TETH 策略卡、资产和买卖条件（韩语预览）
+TETH 策略卡、资产和买卖条件
 验证
 使用真实数据验证
 用历史市场数据运行策略，以数字查看收益和风险。
@@ -204,7 +204,7 @@ TETH 策略卡、资产和买卖条件（韩语预览）
 收益率和最大回撤
 每次判断的记录
 查看结果
-TETH 回测结果、余额图表和判断记录（韩语预览）
+TETH 回测结果、余额图表和判断记录
 连接
 保留现有账户
 选择交易所并授权一次，策略即可在该账户中直接下单。
@@ -212,7 +212,7 @@ TETH 回测结果、余额图表和判断记录（韩语预览）
 一次授权即可连接
 连接权限：余额查询和下单
 连接交易所
-TETH 交易所选择界面（韩语预览）
+TETH 交易所选择界面
 执行
 记录判断依据
 策略全天关注市场，并用文字记录买卖原因。
@@ -220,7 +220,7 @@ TETH 交易所选择界面（韩语预览）
 TETH 的观点和判断记录
 随时暂停或紧急停止
 打开终端
-TETH 终端判断面板（韩语预览）
+TETH 终端判断面板
 选择使用方式
 选择适合交易所账户的方式。
 TETH 邀请账户
@@ -275,7 +275,7 @@ const zhTW = `為交易者打造的 AI 交易
 免費開始
 查看價格
 永久免費，無需綁卡
-TETH 終端、圖表和判斷面板（韓語預覽）
+TETH 終端、圖表和判斷面板
 使用方式
 從對話到執行，在同一處完成。
 對話
@@ -285,7 +285,7 @@ TETH 終端、圖表和判斷面板（韓語預覽）
 整理為進場、平倉和停損條件
 圖表規則、AI 判斷和混合策略
 建立策略
-TETH 策略卡、資產和買賣條件（韓語預覽）
+TETH 策略卡、資產和買賣條件
 驗證
 使用真實資料驗證
 用歷史市場資料執行策略，以數字查看報酬和風險。
@@ -293,7 +293,7 @@ TETH 策略卡、資產和買賣條件（韓語預覽）
 報酬率和最大回撤
 每次判斷的紀錄
 查看結果
-TETH 回測結果、餘額圖表和判斷紀錄（韓語預覽）
+TETH 回測結果、餘額圖表和判斷紀錄
 連接
 保留現有帳戶
 選擇交易所並授權一次，策略即可在該帳戶中直接下單。
@@ -301,7 +301,7 @@ TETH 回測結果、餘額圖表和判斷紀錄（韓語預覽）
 一次授權即可連接
 連接權限：餘額查詢和下單
 連接交易所
-TETH 交易所選擇畫面（韓語預覽）
+TETH 交易所選擇畫面
 執行
 記錄判斷依據
 策略全天關注市場，並用文字記錄買賣原因。
@@ -309,7 +309,7 @@ TETH 交易所選擇畫面（韓語預覽）
 TETH 的觀點和判斷紀錄
 隨時暫停或緊急停止
 開啟終端
-TETH 終端判斷面板（韓語預覽）
+TETH 終端判斷面板
 選擇使用方式
 選擇適合交易所帳戶的方式。
 TETH 邀請帳戶
@@ -364,7 +364,7 @@ Describe tu estrategia, valídala con datos reales del mercado y ejecútala en t
 Empezar gratis
 Ver precios
 Gratis para siempre, sin tarjeta
-Terminal TETH con gráfico y panel de decisiones (vista previa en coreano)
+Terminal TETH con gráfico y panel de decisiones
 Cómo se usa
 De la conversación a la ejecución, todo en un mismo lugar.
 Conversación
@@ -374,7 +374,7 @@ TETH pregunta primero por las condiciones que faltan
 Condiciones de entrada, salida y stop-loss
 Reglas de gráficos, decisiones de IA y estrategias híbridas
 Crear una estrategia
-Tarjeta de estrategia TETH con activos y condiciones de compraventa (vista previa en coreano)
+Tarjeta de estrategia TETH con activos y condiciones de compraventa
 Validación
 Valida con datos reales
 Ejecuta la estrategia con datos históricos del mercado y consulta el rendimiento y el riesgo en cifras.
@@ -382,7 +382,7 @@ Desde los últimos tres meses hasta el período completo
 Rentabilidad y caída máxima
 Registro de cada decisión
 Ver resultados
-Resultados del backtest TETH con saldo y decisiones (vista previa en coreano)
+Resultados del backtest TETH con saldo y decisiones
 Conexión
 Conserva tu cuenta actual
 Elige un exchange y autoriza la conexión una vez; la estrategia enviará órdenes directamente en esa cuenta.
@@ -390,7 +390,7 @@ Siete exchanges disponibles para conectar
 Conecta con una sola autorización
 Permisos de conexión: consulta de saldo y órdenes
 Conectar un exchange
-Pantalla de selección de exchange TETH (vista previa en coreano)
+Pantalla de selección de exchange TETH
 Ejecución
 Registra los motivos de cada decisión
 La estrategia observa el mercado las 24 horas y deja por escrito por qué compra o vende.
@@ -398,7 +398,7 @@ Ejecución automática las 24 horas
 La perspectiva de TETH y el registro de decisiones
 Pausa o parada de emergencia en cualquier momento
 Abrir terminal
-Panel de decisiones del terminal TETH (vista previa en coreano)
+Panel de decisiones del terminal TETH
 Elige cómo usar TETH
 Elige la opción adecuada para tu cuenta de exchange.
 Cuenta invitada de TETH
@@ -453,7 +453,7 @@ Décrivez votre stratégie, validez-la sur des données de marché réelles et e
 Commencer gratuitement
 Voir les tarifs
 Gratuit pour toujours, sans carte
-Terminal TETH avec graphique et panneau de décisions (aperçu en coréen)
+Terminal TETH avec graphique et panneau de décisions
 Comment l’utiliser
 De la conversation à l’exécution, au même endroit.
 Conversation
@@ -463,7 +463,7 @@ TETH vous demande les conditions manquantes
 Conditions d’entrée, de sortie et de stop-loss
 Règles graphiques, décisions IA et stratégies hybrides
 Créer une stratégie
-Fiche de stratégie TETH avec actifs et conditions d’achat et de vente (aperçu en coréen)
+Fiche de stratégie TETH avec actifs et conditions d’achat et de vente
 Validation
 Validez avec des données réelles
 Exécutez votre stratégie sur les données historiques du marché et mesurez les rendements et les risques.
@@ -471,7 +471,7 @@ Des trois derniers mois à toute la période
 Rendement et baisse maximale
 Un historique de chaque décision
 Voir les résultats
-Résultats du backtest TETH avec solde et décisions (aperçu en coréen)
+Résultats du backtest TETH avec solde et décisions
 Connexion
 Gardez votre compte actuel
 Choisissez un exchange et autorisez la connexion une fois ; la stratégie passe ses ordres directement sur ce compte.
@@ -479,7 +479,7 @@ Sept exchanges disponibles à la connexion
 Une seule autorisation pour se connecter
 Autorisations : consultation du solde et ordres
 Connecter un exchange
-Écran de sélection d’exchange TETH (aperçu en coréen)
+Écran de sélection d’exchange TETH
 Exécution
 Conservez les raisons de chaque décision
 La stratégie observe le marché 24 h/24 et consigne par écrit les raisons de ses achats et ventes.
@@ -487,7 +487,7 @@ Exécution automatique 24 h/24
 Le point de vue de TETH et l’historique des décisions
 Pause ou arrêt d’urgence à tout moment
 Ouvrir le terminal
-Panneau de décisions du terminal TETH (aperçu en coréen)
+Panneau de décisions du terminal TETH
 Choisissez votre mode d’utilisation
 Choisissez l’option adaptée à votre compte d’exchange.
 Compte invité TETH
