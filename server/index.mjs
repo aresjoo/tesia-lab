@@ -6,6 +6,9 @@
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import Anthropic from "@anthropic-ai/sdk";
+import { buildInvestmentRequest } from "./investment-prompts.mjs";
+import { toolRequestReceipt } from "./investment-tool-policy.mjs";
+import { createInvestmentOutputGate } from "./investment-output-gate.mjs";
 
 const env = {};
 try {
@@ -23,7 +26,7 @@ let client = null, clientErr = "";
 try {
   client = env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }) : new Anthropic();
 } catch (e) {
-  clientErr = "API í‚¤ê°€ ì—†ìŠµë‹ˆë‹¤. server/.env.exampleì„ server/.envë¡œ ë³µì‚¬í•´ ANTHROPIC_API_KEYë¥¼ ì±„ì›Œì£¼ì„¸ìš”.";
+  clientErr = "투자 AI 공급자 설정을 확인하지 못했습니다. 서버 운영자가 설정을 확인해야 합니다.";
   console.error(clientErr);
 }
 
@@ -153,82 +156,42 @@ createServer(async (req, res) => {
   let payload;
   try { payload = JSON.parse(body); } catch { res.writeHead(400, CORS); return res.end(); }
 
-  const messages = (Array.isArray(payload.messages) ? payload.messages : [])
-    .filter((m) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content)
-    .slice(-16);
-  if (!messages.length) { res.writeHead(400, CORS); return res.end(); }
+  let investment;
+  try { investment = await buildInvestmentRequest(payload); }
+  catch (error) { res.writeHead(error.status || 400, CORS); return res.end(); }
+  const messages = investment.messages;
   rl.n++; /* 유효 요청만 일일 쿼터 차감 (codex QA-12) */
   if (!client) { res.writeHead(503, CORS); return res.end(); }
 
   res.writeHead(200, { ...CORS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" });
-  const send = (obj) => res.write("data: " + JSON.stringify(obj) + "\n\n");
+  const outputGate = createInvestmentOutputGate((obj) => res.write("data: " + JSON.stringify(obj) + "\n\n"), { settingsPreview: investment.settingsPreview, allowDisplay: investment.mode === "dialogue", allowTitle: investment.allowTitle, allowQuestions: investment.responsePreferences.values.questionsStopped !== true });
+  const send = (obj) => outputGate.send(obj);
 
   if (env.TETH_AI_MOCK) { /* í‚¤ ì—†ì´ UI ìŠ¤íŠ¸ë¦¬ë° ê²½ë¡œë¥¼ ì‹œí—˜í•˜ëŠ” ëª© ëª¨ë“œ */
-    const demo = "ëª© ëª¨ë“œ ì‘ë‹µìž…ë‹ˆë‹¤. server/.envì— ANTHROPIC_API_KEYë¥¼ ë„£ìœ¼ë©´ ì‹¤ì œ Claudeê°€ ë‹µí•©ë‹ˆë‹¤.";
+    const demo = "Mock 스트리밍 응답입니다. 실제 투자 분석이나 검증 결과가 아닙니다.";
     for (const ch of demo.match(/.{1,6}/g)) { send({ text: ch }); await new Promise((r) => setTimeout(r, 40)); }
     send({ done: true });
     return res.end();
   }
   try {
-    /* think 모드: 경량 모델이 사고 내레이션만 스트리밍 (본답변과 병렬, 도구/사고 없음) */
-    const isThink = payload.think === true;
-    const stream = isThink ? client.beta.messages.stream({
-      model: env.TETH_THINK_MODEL || "claude-haiku-4-5-20251001",
-      max_tokens: 1024,
-      system: String(payload.system || "").slice(0, 4000),
-      messages,
-    }) : client.beta.messages.stream({
+    const requestTools = investment.mode !== "dialogue" || payload.lite === true ? undefined : [
+      { type:"web_search_20260209",name:"web_search",max_uses:3 },
+      { type:"web_fetch_20260209",name:"web_fetch",max_uses:3 },
+    ];
+    const toolReceipt=await toolRequestReceipt(requestTools);
+    const stream = client.beta.messages.stream({
       model: MODEL,
-      max_tokens: 16000, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
-      thinking: { type: "adaptive", display: "summarized" }, // ì‚¬ê³  ë¸”ë¡ í™œì„±í™” â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì˜ ì‹¤ì œ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼ ì†ŒìŠ¤
-      output_config: { effort: EFFORT },
+      max_tokens: investment.mode === "dialogue" ? 16000 : 900, // ì”½í‚¹ í† í° í¬í•¨ ì—¬ìœ  ìƒí•œ, ë‹µë³€ ê¸¸ì´ëŠ” í”„ë¡¬í”„íŠ¸ë¡œ ì œì–´
+      ...(investment.mode === "dialogue" ? { thinking: { type: "adaptive", display: "omitted" } } : {}),
+      output_config: { effort: investment.mode === "dialogue" ? EFFORT : "low" },
       /* ì‹¤ì œ ì›¹ ê²€ìƒ‰/íŽ˜ì´ì§€ ì—´ê¸° (Anthropic ì„œë²„ì‚¬ì´ë“œ íˆ´) â€” ì¿¼ë¦¬ ì„ íƒë¶€í„° ê²°ê³¼ê¹Œì§€ ì „ë¶€ ì‹¤ë™ìž‘, íƒ€ìž„ë¼ì¸ì— ì´ë²¤íŠ¸ë¡œ ì „ë‹¬ */
-      tools: payload.lite === true ? undefined : [ /* lite: 시세 확인형은 도구 없이 즉답 */
-        { type: "web_search_20260209", name: "web_search" },
-        { type: "web_fetch_20260209", name: "web_fetch" },
-      ], /* ì‚¬ìš© íšŸìˆ˜ ìƒí•œ ì—†ìŒ â€” í•„ìš”í•œ ë§Œí¼ ëª¨ë¸ì´ íŒë‹¨ */
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      system: String(payload.system || "").slice(0, 12000), /* 고정 지침+실시세 ctx 절단 방지 (worker 동기) */
+      tools: requestTools,
+      system: investment.system,
       messages,
     });
     let streamDone = false; res.on("close", () => { if (streamDone) return; try { stream.abort(); } catch (e) {} }); /* 탭 닫힘/중지 시 모델 생성도 중단 (codex QA-13) */
-    /* work model server scrub - keep in sync with src/teth-model-routing.ts */
-    const WORK_MODELS = ["claude-fable-5", "gemini-agy-flash", "gpt-sol", "claude-opus-5", "claude-fable-5-1"];
-    const WORK_HEAD = "<work";
-    const WORK_ATTR_MAX = 192;
-    let workTail = "";
-    const scrubWorkTag = (tag) => tag.replace(/\s*\bmodel\s*=\s*"([^"]*)"/, (m, v) => WORK_MODELS.includes(v) ? m : "");
-    const scrubWork = (delta) => {
-      let pending = workTail + delta;
-      workTail = "";
-      let out = "";
-      for (;;) {
-        const at = pending.indexOf(WORK_HEAD);
-        if (at === -1) {
-          let keep = 0;
-          for (let k = Math.min(WORK_HEAD.length - 1, pending.length); k > 0; k--) {
-            if (WORK_HEAD.startsWith(pending.slice(pending.length - k))) { keep = k; break; }
-          }
-          out += pending.slice(0, pending.length - keep);
-          workTail = keep ? pending.slice(pending.length - keep) : "";
-          return out;
-        }
-        out += pending.slice(0, at);
-        const rest = pending.slice(at);
-        const gt = rest.indexOf(">");
-        if (gt === -1) {
-          if (rest.length > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
-          workTail = rest;
-          return out;
-        }
-        if (gt > WORK_ATTR_MAX) { out += WORK_HEAD; pending = rest.slice(WORK_HEAD.length); continue; }
-        out += scrubWorkTag(rest.slice(0, gt + 1));
-        pending = rest.slice(gt + 1);
-      }
-    };
-    stream.on("text", (delta) => { const scrubbed = scrubWork(delta); if (scrubbed) send({ text: scrubbed }); });
-    /* ì‹¤ìž‘ì—… ì´ë²¤íŠ¸: ëª¨ë¸ì˜ ì‚¬ê³  ìŠ¤íŠ¸ë¦¼(think) + ëˆ„ì  ì¶œë ¥ í† í°(tok)ì„ ê·¸ëŒ€ë¡œ ì „ë‹¬ â€” í”„ë¡ íŠ¸ ìž‘ì—… íƒ€ìž„ë¼ì¸ì´ ì‹¤ë°ì´í„°ë¡œ êµ¬ë™ëœë‹¤ */
+    stream.on("text", (delta) => { send({ text: delta }); if (outputGate.failed) stream.abort(); });
+    /* Progress comes from observed tools and token usage, not raw internal thinking. */
     const blocks = {}; /* indexë³„ server_tool_use ìž…ë ¥ JSON ëˆ„ì  */
     stream.on("streamEvent", (ev) => {
       try {
@@ -249,20 +212,19 @@ createServer(async (req, res) => {
             send({ tres: { kind: cb.type, error: cb.content && cb.content.type && /error/.test(cb.content.type) ? true : undefined } });
           }
         } else if (ev.type === "content_block_delta" && ev.delta) {
-          if (ev.delta.type === "thinking_delta" && ev.delta.thinking) send({ think: ev.delta.thinking });
-          else if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
+          if (ev.delta.type === "input_json_delta" && blocks[ev.index] != null) blocks[ev.index].json += ev.delta.partial_json || "";
         } else if (ev.type === "content_block_stop" && blocks[ev.index] != null) {
           const b = blocks[ev.index]; delete blocks[ev.index];
           let input = b.seed || {}; try { const p = JSON.parse(b.json || "{}"); if (Object.keys(p).length) input = p; } catch (e) {}
-          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : ""), ...(typeof input.purpose === "string" ? { p: input.purpose.slice(0, 80) } : {}) } });
+          send({ tool: { name: b.kind, q: input.query || input.url || (typeof input.code === "string" ? input.code.slice(0, 120) : "") } });
         } else if (ev.type === "message_delta" && ev.usage && ev.usage.output_tokens) send({ tok: ev.usage.output_tokens });
       } catch (e) {}
     });
     const final = await stream.finalMessage();
-    if (workTail) { send({ text: workTail }); workTail = ""; }    if (final.stop_reason === "refusal") send({ text: "이 질문에는 답변드리기 어렵습니다. 전략이나 검증 결과에 대해 물어봐 주세요." });
-    streamDone = true; send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens } : undefined });
+    if (final.stop_reason !== "end_turn") { streamDone = true; send({ error: true }); return res.end(); }
+    streamDone = true; send({ done: true, usage: final.usage ? { in: final.usage.input_tokens, out: final.usage.output_tokens, model: final.model || null, ...toolReceipt, promptId: investment.promptId, promptSha256: investment.promptSha256, basePolicySha256: investment.basePolicySha256 } : undefined });
   } catch (e) {
-    console.error("[teth-ai]", e?.status || "", e?.message || e);
+    console.error("[teth-ai] provider failure", e?.status || "unknown");
     send({ error: true });
   }
   res.end();

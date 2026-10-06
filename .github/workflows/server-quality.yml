@@ -1,0 +1,24 @@
+name: server-quality
+on:
+  pull_request:
+    paths: ["server/**", "index.html", "investment-ui-contract.mjs", ".github/workflows/server-quality.yml"]
+  push:
+    branches: [migration]
+    paths: ["server/**", "index.html", "investment-ui-contract.mjs", ".github/workflows/server-quality.yml"]
+permissions:
+  contents: read
+jobs:
+  investment-policies:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: npx --no-install wrangler deploy --dry-run --outdir /tmp/worker-quality

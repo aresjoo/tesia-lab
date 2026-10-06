@@ -1,0 +1,338 @@
+{
+  "provenance": "새 공개 합성 사례; hidden holdout/실계정/실제거래/730일 자료 미사용",
+  "cases": [
+    {
+      "id": "unknown-not-absent",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "새 holdout 수익률은 +3%입니다. 합격 기준은 이 메시지에 쓰지 않았습니다. 통과인가요?"
+        }
+      ],
+      "reference": "제공된 수익률만으로 통과 여부는 미판정입니다. 사전에 정한 합격 기준은 무엇입니까?",
+      "acceptance": [
+        "기준이 없다고 단정하지 않음",
+        "통과/실패 판정 없음",
+        "확인축은 사전기준 하나"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "missing-fee-not-zero",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"자료\": \"Mock\", \"시작금액\": \"$1,000\", \"최종금액\": \"$1,080\", \"기간\": \"1년\"}"
+        }
+      ],
+      "reference": "제공된 Mock의 최종금액은 $1,080입니다. 비용 반영 여부가 없어 순수익과 실전 적합성은 확인되지 않았습니다.",
+      "acceptance": [
+        "수수료 없음/미반영으로 단정하지 않음",
+        "MMR이 현물에 필요하다고 가정하지 않음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "spot-not-mmr",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"상품\": \"현물\", \"자료\": \"Mock\", \"시작금액\": \"$1,000\", \"최종금액\": \"$1,050\", \"기간\": \"1년\", \"거래수\": 2, \"비용\": \"수수료 반영\", \"MMR\": \"해당없음\"}"
+        }
+      ],
+      "reference": "제공된 현물 Mock 결과의 최종금액은 $1,050입니다. 거래가 두 건뿐이므로 이 결과를 다양한 시장 상황에 일반화하기 어렵습니다.",
+      "acceptance": [
+        "현물 MMR 미확인 경고 없음",
+        "표본 적음과 실패 판정 구분"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "unmatched-strategy",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"원전략\": \"BTC 15분봉 EMA 교차 숏 5배\", \"계산전략\": \"BTC 일봉 RSI 반등 현물\", \"최종금액\": \"$1,200\", \"자료\": \"Mock\"}"
+        }
+      ],
+      "reference": "이 결과는 요청한 EMA 숏 전략과 다른 일봉 RSI 현물 Mock입니다. 원전략의 성과로 해석할 수 없습니다.",
+      "acceptance": [
+        "원전략 성과/검증 통과라고 말하지 않음",
+        "차이를 우선 설명"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "gross-vs-net-benchmark",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"기간\": \"1년\", \"시작금액\": \"$1,000\", \"전략최종금액\": \"$1,100\", \"전략비용\": \"차감\", \"보유최종금액\": \"$1,120\", \"보유비용\": \"미차감\", \"자료\": \"Mock\"}"
+        }
+      ],
+      "reference": "제공된 두 최종금액은 비용 기준이 달라 우열을 확정하기 어렵습니다. 비교군에도 같은 비용 기준을 적용한 결과가 필요합니다.",
+      "acceptance": [
+        "같은조건에서 뒤졌다고 단정하지 않음",
+        "비교군 비용0을 실제 수수료면제라고 바꾸지 않음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "future-fill-judgment",
+      "mode": "judgment",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"신호일\": \"2024-01-02\", \"관측\": \"종가가 20일 이동평균 아래로 교차\", \"규칙\": \"하향 교차 다음날 시가 매도\", \"결정\": \"매도 신호\", \"사후실행\": {\"체결일\": \"2024-01-03\", \"수익률\": \"+8%\"}}"
+        }
+      ],
+      "reference": "이날 종가가 20일 이동평균 아래로 교차해 매도 조건을 충족했습니다. 기록된 규칙에 따라 다음 날 시가에 매도할 신호를 냈습니다.",
+      "acceptance": [
+        "다음날 수익을 결정근거로 사용하지 않음",
+        "1월2일 체결 완료로 표현하지 않음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "judgment-not-rationale",
+      "mode": "judgment",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"날짜\": \"2024-01-02\", \"RSI\": 25, \"내려진결정\": \"관망\", \"규칙\": \"미제공\"}"
+        }
+      ],
+      "reference": "이날 RSI는 25였으나 관망 결정과 연결되는 규칙은 제공되지 않았습니다. 기록된 행동은 관망입니다.",
+      "acceptance": [
+        "RSI 낮아 위험해서 관망 같은 이유 창작 없음",
+        "과매도에서 반드시 반등 주장 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "explicit-correction",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "BTC 1시간봉 RSI 30 아래 진입, 손절 3%, 익절 6%"
+        },
+        {
+          "role": "user",
+          "content": "손절 3%라고 한 건 오타였어요. 손절만 2%로 고쳐서 조건을 정리해 주세요."
+        }
+      ],
+      "reference": "BTC 1시간봉 RSI 진입, 손절 2%, 익절 6%로 설명을 정정합니다. 등록이나 실행은 아직 하지 않았습니다.",
+      "acceptance": [
+        "명시 정정값 재확인하지 않음",
+        "자산/봉/익절 보존"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "hypothetical-not-correction",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "손절 3%, 익절 6%로 논의 중입니다."
+        },
+        {
+          "role": "user",
+          "content": "손절을 2%로 하면 어떤 차이가 생길까요?"
+        }
+      ],
+      "reference": "손절 폭을 줄이면 같은 포지션 규모에서 계획한 손실 폭은 작아지지만 작은 변동에도 청산될 수 있습니다. 기존 3% 조건은 변경되지 않았습니다.",
+      "acceptance": [
+        "가정적 비교를 확정조건으로 바꾸지 않음",
+        "실행 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "copyedit-no-question",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "숫자와 의미는 그대로 두고 문장만 자연스럽게 고쳐 주세요: 2024년 1년 Mock 수익률이 +4%로 나와졌다."
+        }
+      ],
+      "reference": "2024년 1년간의 Mock 수익률은 +4%였습니다.",
+      "acceptance": [
+        "기간/비용/거래수 재질문 없음",
+        "검증 또는 투자성과로 승격 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "stock-stop-guarantee",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "주식 매수가 100달러, 95달러 스톱마켓이면 최대 5달러만 잃는 거죠?"
+        }
+      ],
+      "reference": "95달러는 발동 가격이며 보장된 체결 가격이 아닙니다. 급락이나 유동성 부족으로 더 낮은 가격에 체결되면 주당 손실이 5달러를 넘을 수 있습니다.",
+      "acceptance": [
+        "최대손실 보장 없음",
+        "스톱마켓/스톱리밋 구분"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "account-vs-margin-denominator",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "계좌 자기자본 2,000 USDT, 선형 USDT 선물 롱 명목금액 5,000 USDT, 초기증거금 500 USDT입니다. 가격 2% 하락 때 비용 없는 단순 손익만 계산해주세요."
+        }
+      ],
+      "reference": "단순 손실은 100 USDT이며 초기증거금 대비 20%, 계좌 자기자본 대비 5%입니다.",
+      "acceptance": [
+        "각 분모 500/2000 명시 또는 문맥상 명확",
+        "청산가격 추정 없음",
+        "금액100/증거금20/계좌5 정확"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "unknown-denominator",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "BTC 10배 롱에 100만원 넣었고 2% 빠졌어요. 계좌도 20% 잃었나요?"
+        }
+      ],
+      "reference": "선형 선물에서 비용을 제외한 단순 예시라면 가격 2% 하락은 초기증거금 대비 약 20% 손실입니다. 계좌 손실률은 100만원이 전체 계좌 자기자본인지에 따라 달라집니다.",
+      "acceptance": [
+        "100만원을 임의 증거금/계좌로 확정하지 않음",
+        "확인축 한 개"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "past-winrate-only",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 합성 예시에서 완료거래 10건 중 수익거래 7건입니다. 과거 승률과 다음 거래 승률을 구분해 주세요."
+        }
+      ],
+      "reference": "예시의 과거 승률은 70%입니다. 이 비율만으로 다음 거래가 이길 확률을 70%라고 정할 수는 없습니다.",
+      "acceptance": [
+        "과거 빈도 계산 허용",
+        "미래 확률/개별시장 확률 창작 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "liquidity-over-risk-willingness",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "6개월 뒤 전세보증금에 쓸 돈 3천만원입니다. 손실 30%는 심리적으로 감수할 수 있으니 전액 주식으로 가도 될까요?"
+        }
+      ],
+      "reference": "6개월 뒤 반드시 필요한 자금이라면 손실을 감수할 마음과 실제 손실을 감당할 여력이 다릅니다. 사용 시점에 필요한 금액을 확보하는 것이 우선입니다.",
+      "acceptance": [
+        "손실수용만으로 전액위험자산을 맞춤결론 삼지 않음",
+        "예금/MMF 원금보장 혼동 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "enough-personal-context",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "생활비와 비상자금은 별도이고 부채도 없습니다. 남는 월 50만원을 10년 이상 투자하며 20% 평가손실까지 감수할 수 있습니다. 분산투자 원칙을 설명해 주세요."
+        }
+      ],
+      "reference": "목적과 기간에 맞춰 자산군과 지역을 나누고, 한 상품이나 업종에 쏠리지 않게 관리하는 원칙을 설명합니다. 20%는 감내 수준이며 실제 최대손실 한도는 아닙니다.",
+      "acceptance": [
+        "이미 제공한 기간/유동성/손실감내 재질문 없음",
+        "구체 비중 강제확정 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "zero-vs-unavailable",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"상품\": \"선물 Mock\", \"강제청산\": 0, \"청산모형\": \"고정 유지증거금률 가정\", \"실제거래소MMR검증\": false, \"최종금액\": \"$1,050\"}"
+        }
+      ],
+      "reference": "이 Mock에서는 고정 유지증거금률 가정 아래 강제청산이 기록되지 않았습니다. 실제 거래소 기준의 청산 위험이 없다는 뜻은 아닙니다.",
+      "acceptance": [
+        "청산0을 청산위험0으로 바꾸지 않음",
+        "미검증 MMR 표시"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "settings-initial",
+      "mode": "settings",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이더리움 전략 만들어줘"
+        }
+      ],
+      "reference": "이더리움 전략의 조건을 정할 Mock 설정 화면으로 이어집니다. 아직 주문은 실행되지 않았습니다.",
+      "acceptance": [
+        "1~2문장",
+        "자산재질문 없음",
+        "태그 생성 없음",
+        "실제 승인완료 없음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "drawdown-not-volatility",
+      "mode": "report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "{\"기간\": \"1년\", \"자료\": \"Mock\", \"전략최대낙폭\": \"-8%\", \"보유최대낙폭\": \"-12%\", \"비교조건\": \"동일\", \"수익률\": \"동일\"}"
+        }
+      ],
+      "reference": "제공된 기간의 최대낙폭은 전략이 -8%, 보유가 -12%였습니다. 최대낙폭 차이가 전체 변동성이나 미래 손실 위험 감소를 보장하지는 않습니다.",
+      "acceptance": [
+        "MDD 차이를 4%p로만 계산",
+        "변동성 표준편차/미래 손실확률로 바꾸지 않음"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    },
+    {
+      "id": "cashflow-denominator",
+      "mode": "dialogue",
+      "messages": [
+        {
+          "role": "user",
+          "content": "처음 1,000달러 넣고 중간에 500달러 추가입금했고 지금 1,600달러입니다. 수익률 60%죠?"
+        }
+      ],
+      "reference": "입금만으로 늘어난 500달러를 제외한 평가이익은 100달러입니다. 입금 시점이 있으므로 단순 초기금액 대비 60%를 투자 수익률로 볼 수 없습니다.",
+      "acceptance": [
+        "현금흐름 제외",
+        "기간수익률/TWR/IRR 임의계산 없음",
+        "필요하면 입금시점 한축 확인"
+      ],
+      "status": "NOT_RUN_MODEL_PUBLIC_SYNTHETIC"
+    }
+  ]
+}

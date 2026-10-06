@@ -1,0 +1,6986 @@
+{
+  "scope": "Public explicit scoped examples; expectations declared before prototype run. Not hidden holdout.",
+  "cases": [
+    {
+      "id": "adjective-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "간단한 문장으로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "adjective-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "정확한 문장으로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "adjective-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "정중한 문장으로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "local-language-current-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘: 위험은 남습니다"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "local-language-expiry-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘: 위험은 남습니다"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "local-language-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 바꿔줘: 위험은 남습니다"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "local-language-expiry-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 바꿔줘: 위험은 남습니다"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "local-language-current-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Write this in English: risk remains"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "local-language-expiry-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "Write this in English: risk remains"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "local-language-current-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Translate this in English: risk remains"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "local-language-expiry-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "Translate this in English: risk remains"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "reference-abstain-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "영어로 발표된 연준 보고서를 요약해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "reference-abstain-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "항상 영어로 번역해주는 도구를 비교해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "reference-abstain-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "영어로 설명해주는 서비스의 장단점을 알려줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "reference-abstain-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the report published in English"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "mixed-language",
+      "messages": [
+        {
+          "role": "user",
+          "content": "영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘, 설명은 한국어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      }
+    },
+    {
+      "id": "mixed-language-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘, 설명은 한국어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "local-summary-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      }
+    },
+    {
+      "id": "local-summary-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2,
+        "language": "ko"
+      }
+    },
+    {
+      "id": "local-source-selection-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 단락에서 한 문장만 번역해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "persistent-correction",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "손절3%로 정정하고 나머지는 유지"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "explicit-persistent-after-transform",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘. 앞으로 일본어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja"
+      }
+    },
+    {
+      "id": "repeated-transform-not-reply-language",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 이 문장을 영어로 번역해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "local-stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 질문은 그만하고 다른 얘기해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "global-stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 여기서 그만하고 기준을 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      }
+    },
+    {
+      "id": "permission-question",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "물어봐도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      }
+    },
+    {
+      "id": "permission-question-subject",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "제가 물어봐도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      }
+    },
+    {
+      "id": "explicit-resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해도 됩니다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      }
+    },
+    {
+      "id": "explicit-target-resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "나한테 다시 질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      }
+    },
+    {
+      "id": "comma-negative-other-axis",
+      "messages": [
+        {
+          "role": "user",
+          "content": "두 문장으로 답해줘, 표는 쓰지 마"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "quoted-copy",
+      "messages": [
+        {
+          "role": "user",
+          "content": "🙂 “일본어 두 문장으로”를 영어로 번역해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "shorthand-latest",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 말고 영어로 두 문장 말고 세 문장으로"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 3
+      }
+    },
+    {
+      "id": "local-revert-count-only",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 1
+      }
+    },
+    {
+      "id": "local-last-turn-count",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      }
+    },
+    {
+      "id": "question-subject-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "물어봐도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      }
+    },
+    {
+      "id": "question-subject-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "네가 질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      }
+    },
+    {
+      "id": "question-subject-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "너는 다시 물어봐도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      }
+    },
+    {
+      "id": "question-subject-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "제가 너에게 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      }
+    },
+    {
+      "id": "source-sentence-selection-is-not-response-length",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 단락에서 한 문장만 번역해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "boundary-global-stop-많이",
+      "messages": [
+        {
+          "role": "user",
+          "content": "많이 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "부사는 특정 질문을 가리키는 이가 아니다"
+    },
+    {
+      "id": "boundary-global-stop-일일이",
+      "messages": [
+        {
+          "role": "user",
+          "content": "일일이 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "부사는 특정 질문을 가리키는 이가 아니다"
+    },
+    {
+      "id": "boundary-global-stop-굳이",
+      "messages": [
+        {
+          "role": "user",
+          "content": "굳이 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "부사는 특정 질문을 가리키는 이가 아니다"
+    },
+    {
+      "id": "boundary-global-stop-malgo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "굳이 질문하지 말고 바로 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "말고 연결형은 마와 별개 문자열이며 명시 질문 중단이다"
+    },
+    {
+      "id": "boundary-local-stop-reference",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 질문은 그만하고 다른 얘기해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "특정 질문에만 국소 종료"
+    },
+    {
+      "id": "boundary-copy-second-sentence",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 이메일을 한국어로 번역해줘: Thanks for the report. Please reply in English by Friday."
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "reason": "미인용 콜론 후 전체 문안은 데이터"
+    },
+    {
+      "id": "boundary-copy-second-sentence-count",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 이메일을 한국어로 번역해줘: Thanks. Please answer in four sentences."
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "reason": "문안 둘째 문장의 형식 명령도 데이터"
+    },
+    {
+      "id": "boundary-copy-adjective-edit",
+      "messages": [
+        {
+          "role": "user",
+          "content": "간단한 문장으로 바꿔줘: 앞으로 영어로 답해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "한정사 없는 교정의 제공 문안도 데이터"
+    },
+    {
+      "id": "boundary-quoted-copy-separate",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 번역해줘: “market risk”. 결과는 일본어 두 문장으로 답해줘."
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 2
+      },
+      "reason": "인용문 밖 별도 지시는 유지"
+    },
+    {
+      "id": "boundary-attached-numeric",
+      "messages": [
+        {
+          "role": "user",
+          "content": "세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이번엔BTC를2문장으로"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "숫자 앞 조사 붙임은 최신 명시 길이"
+    },
+    {
+      "id": "boundary-adjective-not-number",
+      "messages": [
+        {
+          "role": "user",
+          "content": "간단한문장으로 바꿔줘"
+        }
+      ],
+      "expected": {},
+      "reason": "형용사의 한은 수사 아님"
+    },
+    {
+      "id": "boundary-reference-modifier-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "영어 두 문장으로 된 보고서를 요약해줘."
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "자료 언어/길이 수식은 지속 출력 형식 아님"
+    },
+    {
+      "id": "boundary-reference-modifier-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "영어 네 문장으로 작성된 보고서를 요약해줘."
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "자료 언어/길이 수식은 지속 출력 형식 아님"
+    },
+    {
+      "id": "boundary-reference-modifier-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "영어네문장으로작성된보고서를요약해줘."
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "자료 언어/길이 수식은 지속 출력 형식 아님"
+    },
+    {
+      "id": "boundary-reference-modifier-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "영어로 작성된 보고서를 요약해줘."
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "자료 언어/길이 수식은 지속 출력 형식 아님"
+    },
+    {
+      "id": "boundary-reference-plus-directive",
+      "messages": [
+        {
+          "role": "user",
+          "content": "영어 네 문장으로 작성된 보고서를 일본어 한 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "reason": "자료 수식 제외 후 실제 출력 목표 유지"
+    },
+    {
+      "id": "boundary-implicit-current-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "방금 답을 일본어 한 문장으로 바꿔줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "reason": "지칭된 결과물 변환 형식은 현재 턴에 적용"
+    },
+    {
+      "id": "boundary-implicit-expiry-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "방금 답을 일본어 한 문장으로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "MMF가 무엇인지 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "결과물 변환 형식은 후속 일반 응답에 영속하지 않음"
+    },
+    {
+      "id": "boundary-implicit-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "그 결과를 일본어 한 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "reason": "지칭된 결과물 변환 형식은 현재 턴에 적용"
+    },
+    {
+      "id": "boundary-implicit-expiry-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "그 결과를 일본어 한 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "MMF가 무엇인지 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "결과물 변환 형식은 후속 일반 응답에 영속하지 않음"
+    },
+    {
+      "id": "boundary-implicit-current-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "고객에게 보낼 일본어 한 문장으로 바꿔줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "reason": "지칭된 결과물 변환 형식은 현재 턴에 적용"
+    },
+    {
+      "id": "boundary-implicit-expiry-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "고객에게 보낼 일본어 한 문장으로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "MMF가 무엇인지 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "결과물 변환 형식은 후속 일반 응답에 영속하지 않음"
+    },
+    {
+      "id": "quoted-copy-followed-by-explicit-explanation-language",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘: “risk remains” 설명은 한국어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      }
+    },
+    {
+      "id": "quoted-copy-followed-by-explicit-persistent-language",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해줘: “risk remains” 앞으로 일본어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja"
+      }
+    },
+    {
+      "id": "format-then-risk-correction",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘. 손절은 3%로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "format-then-risk-conjunction",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해주고 손절은 3%로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "format-and-high-rate",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 고금리의 영향을 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "report-reference-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "영어 네 문장으로 작성된 보고서를 일본어 한 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "MMF가 무엇인지 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "named-report-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "연준 보고서를 세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      }
+    },
+    {
+      "id": "named-report-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "연준 보고서를 세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "english-report-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the report in two sentences"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "english-report-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the report in two sentences"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "continue-current-task-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약하고 계속 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "global-ja-local-en-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 일본어로 답해주고 이 문장은 영어로 번역해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "global-ja-local-en-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 일본어로 답해주고 이 문장은 영어로 번역해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja"
+      }
+    },
+    {
+      "id": "answer-hago-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 일본어로 답하고 이 문장은 영어로 번역해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja"
+      }
+    },
+    {
+      "id": "and-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 일본어로 답해줘 그리고 이 문장을 영어로 번역해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja"
+      }
+    },
+    {
+      "id": "continue-explicit-response",
+      "messages": [
+        {
+          "role": "user",
+          "content": "계속 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "task-then-explicit-response",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 기사를 세 문장으로 요약하고 계속 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      }
+    },
+    {
+      "id": "object-result-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "그 결과를 일본어 한 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      }
+    },
+    {
+      "id": "object-result-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "그 결과를 일본어 한 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      }
+    },
+    {
+      "id": "no-object-analysis-summary",
+      "messages": [
+        {
+          "role": "user",
+          "content": "제공 자료는 연간수익률8%뿐이야. 한국어 한 문장으로 성과를 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "최대낙폭은9%였어"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 1
+      }
+    },
+    {
+      "id": "dependent-result-format",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장을 번역해줘: “market risk”. 결과는 일본어 두 문장으로 답해줘."
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {}
+    },
+    {
+      "id": "news-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "news-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "pronoun-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이걸 영어로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "pronoun-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이걸 영어로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "topic-particle-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장은 영어로 바꿔줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "topic-particle-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 문장은 영어로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "english-news-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news in two sentences"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "english-news-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news in two sentences"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "disclosure-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "공시를 일본어 한 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "disclosure-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "공시를 일본어 한 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "research-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "리포트는 세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "research-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "리포트는 세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "data-no-particle-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "자료 영어로 요약해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "data-no-particle-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "자료 영어로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "unknown-object-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 브리핑을 두 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "unknown-object-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 브리핑을 두 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "english-unlisted-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the earnings release in two sentences"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "english-unlisted-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the earnings release in two sentences"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "goal-format-adjacent-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "세 문장으로 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "변환 동사와 인접한 목표 형식은 현재 변환에 적용"
+    },
+    {
+      "id": "goal-format-adjacent-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "세 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "변환 목표 형식은 후속 일반 질문으로 영속하지 않음"
+    },
+    {
+      "id": "reference-restore",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "공시를 일본어 한 문장으로 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "원래 명시 응답 선호 복원"
+    },
+    {
+      "id": "financial-analysis-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "제공 자료는 연간수익률8%뿐이야. 한국어 한 문장으로 성과를 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "최대낙폭은9%였어"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "reason": "기존 일반 분석 형식 골든 보존"
+    },
+    {
+      "id": "financial-correction-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘. 손절은3%로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "금융 값 변경과 독립 형식 지시를 합치지 않음"
+    },
+    {
+      "id": "explicit-global-after-transform",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 공시를 세 문장으로 요약하고 앞으로 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "별도 명시 지속 응답 언어는 보존"
+    },
+    {
+      "id": "self-intent-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "그럼 다시 질문해볼게요."
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "사용자가 스스로 질문하겠다는 의도는 중단 해제 허락 아님"
+    },
+    {
+      "id": "self-intent-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해 볼게"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "사용자가 스스로 질문하겠다는 의도는 중단 해제 허락 아님"
+    },
+    {
+      "id": "self-intent-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해줄게요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "사용자가 스스로 질문하겠다는 의도는 중단 해제 허락 아님"
+    },
+    {
+      "id": "self-intent-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "그럼 제가 다시 질문해볼게요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "사용자가 스스로 질문하겠다는 의도는 중단 해제 허락 아님"
+    },
+    {
+      "id": "assistant-permission-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "기존 명시 assistant 질문 재개는 유지"
+    },
+    {
+      "id": "assistant-permission-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해도 됩니다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "기존 명시 assistant 질문 재개는 유지"
+    },
+    {
+      "id": "assistant-permission-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "나한테 다시 질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "기존 명시 assistant 질문 재개는 유지"
+    },
+    {
+      "id": "user-permission-question",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "주체 불분명 허락 질문은 기권"
+    },
+    {
+      "id": "continuity/post-comma-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "post-comma-current"
+    },
+    {
+      "id": "continuity/post-comma-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "post-comma-expiry"
+    },
+    {
+      "id": "continuity/post-inline-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘 세 문장으로"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "post-inline-current"
+    },
+    {
+      "id": "continuity/post-inline-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘 세 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "post-inline-expiry"
+    },
+    {
+      "id": "continuity/english-post-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news. Keep it to two sentences."
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "english-post-current"
+    },
+    {
+      "id": "continuity/english-post-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news. Keep it to two sentences."
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "english-post-expiry"
+    },
+    {
+      "id": "continuity/english-pre-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "In two sentences, summarize the news."
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "english-pre-current"
+    },
+    {
+      "id": "continuity/english-pre-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "In two sentences, summarize the news."
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "english-pre-expiry"
+    },
+    {
+      "id": "continuity/organize-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "공시 내용을 세 문장으로 정리해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "organize-current"
+    },
+    {
+      "id": "continuity/organize-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "공시 내용을 세 문장으로 정리해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "organize-expiry"
+    },
+    {
+      "id": "continuity/korean-pre-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "세 문장으로, 이 뉴스를 요약해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 3
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "korean-pre-current"
+    },
+    {
+      "id": "continuity/korean-pre-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "세 문장으로, 이 뉴스를 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "korean-pre-expiry"
+    },
+    {
+      "id": "continuity/post-language-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 영어로"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "post-language-current"
+    },
+    {
+      "id": "continuity/post-language-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 영어로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "post-language-expiry"
+    },
+    {
+      "id": "continuity/linked-two-format-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로, 영어로"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 3
+      },
+      "reason": "같은 메시지 변환과 연결된 형식절은 현재턴에 적용",
+      "sourceCaseId": "linked-two-format-current"
+    },
+    {
+      "id": "continuity/linked-two-format-expiry",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로, 영어로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "reason": "연결된 변환 목표 형식은 후속 일반 질문에 영속하지 않음",
+      "sourceCaseId": "linked-two-format-expiry"
+    },
+    {
+      "id": "continuity/restore-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "현재 변환 뒤 기존 지속 형식 복원",
+      "sourceCaseId": "restore-global"
+    },
+    {
+      "id": "continuity/global-before-task",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘. 이 뉴스를 요약해줘, 세 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "독립 응답형식 지시는 국소변환으로 소급하지 않음",
+      "sourceCaseId": "global-before-task"
+    },
+    {
+      "id": "continuity/global-after-task",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로. 앞으로 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "명시 지속 응답은 국소 형식과 분리",
+      "sourceCaseId": "global-after-task"
+    },
+    {
+      "id": "continuity/continue-response",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘, 세 문장으로. 계속 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "계속 + 응답명령은 독립 지속 요청",
+      "sourceCaseId": "continue-response"
+    },
+    {
+      "id": "continuity/independent-topic-break",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 채권 듀레이션을 설명해줘, 두 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "별도 설명주제 절을 넘어 이전 변환에 연결하지 않음",
+      "sourceCaseId": "independent-topic-break"
+    },
+    {
+      "id": "continuity/financial-analysis-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "제공 자료는 연간수익률8%뿐이야. 한국어 한 문장으로 성과를 요약해줘"
+        },
+        {
+          "role": "user",
+          "content": "최대낙폭은9%였어"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "reason": "기존 금융 분석 응답 형식 지속 골든 보존",
+      "sourceCaseId": "financial-analysis-global"
+    },
+    {
+      "id": "continuity/financial-correction-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어 두 문장으로 답해줘. 손절은3%로 바꿔줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "reason": "형식 지시와 금융 조건변경은 분리",
+      "sourceCaseId": "financial-correction-global"
+    },
+    {
+      "id": "continuity/format-only-global",
+      "messages": [
+        {
+          "role": "user",
+          "content": "두 문장으로"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "reason": "같은 메시지의 변환 근거 없는 형식은 기존 명시 지속 의미 유지",
+      "sourceCaseId": "format-only-global"
+    },
+    {
+      "id": "continuity/non-permission-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "그럼 다시 질문해야겠어요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-0"
+    },
+    {
+      "id": "continuity/non-permission-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해보려 합니다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-1"
+    },
+    {
+      "id": "continuity/non-permission-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해 보자"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-2"
+    },
+    {
+      "id": "continuity/non-permission-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해볼게요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-3"
+    },
+    {
+      "id": "continuity/non-permission-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-4"
+    },
+    {
+      "id": "continuity/non-permission-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "나한테 다시 질문해볼게요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "닫힌 명시 허락/명령이 아니면 질문중단 유지",
+      "sourceCaseId": "non-permission-5"
+    },
+    {
+      "id": "continuity/permission-0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-0"
+    },
+    {
+      "id": "continuity/permission-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해 주세요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-1"
+    },
+    {
+      "id": "continuity/permission-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-2"
+    },
+    {
+      "id": "continuity/permission-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해도 됩니다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-3"
+    },
+    {
+      "id": "continuity/permission-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "물어봐도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-4"
+    },
+    {
+      "id": "continuity/permission-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "나한테 다시 질문해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-5"
+    },
+    {
+      "id": "continuity/permission-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "네가 다시 질문해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-6"
+    },
+    {
+      "id": "continuity/permission-7",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "You can ask me questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "닫힌 허락 또는 명시 assistant 대상 명령은 중단 해제",
+      "sourceCaseId": "permission-7"
+    },
+    {
+      "id": "continuity/permission-question-ambiguous",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "주체 불명확 허락질문 기존 기권",
+      "sourceCaseId": "permission-question-ambiguous"
+    },
+    {
+      "id": "continuity/permission-question-targeted",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "나한테 다시 질문해도 돼?"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "명시 assistant 질문 허락은 유지",
+      "sourceCaseId": "permission-question-targeted"
+    },
+    {
+      "id": "reported/reported_ko_permission",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가질문해도돼 라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported_ko_permission"
+    },
+    {
+      "id": "reported/reported_en_permission",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "They said you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported_en_permission"
+    },
+    {
+      "id": "reported/reported-command",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 다시 질문해줘 라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "허용 명령 끝형태 뒤의 보고 귀속도 데이터",
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported-command"
+    },
+    {
+      "id": "reported/reported-polite-permission",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼요 라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "허용 존댓말 끝형태 뒤의 보고 귀속도 데이터",
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported-polite-permission"
+    },
+    {
+      "id": "reported/reported-english-that",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "They said that you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "said that 보고된 허락의 귀속",
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported-english-that"
+    },
+    {
+      "id": "reported/permission-with-target",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "사용자의 독립 명시 assistant 질문 허락",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 7,
+        "end": 13,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "permission-with-target"
+    },
+    {
+      "id": "reported/report-then-permission-period",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가질문해도돼 라고했어. 너도나한테질문해도돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "별도 문장의 최신 명시 허락을 보존",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 20,
+        "end": 25,
+        "text": "질문해도돼"
+      },
+      "sourceCaseId": "report-then-permission-period"
+    },
+    {
+      "id": "reported/report-then-permission-inline",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가질문해도돼 라고했어 그럼 너도나한테질문해도돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "첫 보고귀속만 기권하고 후행 독립 허락은 보존",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 22,
+        "end": 27,
+        "text": "질문해도돼"
+      },
+      "sourceCaseId": "report-then-permission-inline"
+    },
+    {
+      "id": "reported/permission-then-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "너도나한테질문해도돼. 친구가질문해도돼 라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "뒤 보고내용은 먼저 준 실제 허락을 바꾸지 않음",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 5,
+        "end": 10,
+        "text": "질문해도돼"
+      },
+      "sourceCaseId": "permission-then-report"
+    },
+    {
+      "id": "reported/report-en-then-permission",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "They said you can ask questions. You can ask me questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "영문 별도 최신 허락 보존",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 33,
+        "end": 57,
+        "text": "You can ask me questions"
+      },
+      "sourceCaseId": "report-en-then-permission"
+    },
+    {
+      "id": "reported/report-en-then-permission-inline",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "They said you can ask questions but you can ask me questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "said 바로 뒤 보고허락과 but 뒤 독립 명시 허락 분리",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 36,
+        "end": 60,
+        "text": "you can ask me questions"
+      },
+      "sourceCaseId": "report-en-then-permission-inline"
+    },
+    {
+      "id": "reported/direct-command",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "다시 질문해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "reason": "직접 명령은 기존 해제 유지",
+      "expectedEvidenceMessageIndex": 1,
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 0,
+        "end": 6,
+        "text": "다시 질문해"
+      },
+      "sourceCaseId": "direct-command"
+    },
+    {
+      "id": "reported/quoted-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 “질문해도 돼”라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "기존 인용 mask 유지",
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "quoted-report"
+    },
+    {
+      "id": "reported/reported-negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문하지마 라고했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "reason": "기존 negative stop 보고 귀속 처리 보존",
+      "expectedEvidenceMessageIndex": 0,
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 5,
+        "text": "질문하지마"
+      },
+      "sourceCaseId": "reported-negative"
+    },
+    {
+      "id": "persistent/ko-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로 영어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "명시 지속 언어는 현재 응답과 다음 일반 질문에 유지",
+      "sourceCaseId": "ko-current"
+    },
+    {
+      "id": "persistent/ko-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로 영어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "명시 지속 언어는 현재 응답과 다음 일반 질문에 유지",
+      "sourceCaseId": "ko-next"
+    },
+    {
+      "id": "persistent/en-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news. Always reply in English."
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "명시 지속 언어는 현재 응답과 다음 일반 질문에 유지",
+      "sourceCaseId": "en-current"
+    },
+    {
+      "id": "persistent/en-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Summarize the news. Always reply in English."
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "reason": "명시 지속 언어는 현재 응답과 다음 일반 질문에 유지",
+      "sourceCaseId": "en-next"
+    },
+    {
+      "id": "attribution/reported-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 하더라"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-1"
+    },
+    {
+      "id": "attribution/independent-after-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 하더라. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 29,
+        "end": 35,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-1"
+    },
+    {
+      "id": "attribution/reported-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 그러던데"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-2"
+    },
+    {
+      "id": "attribution/independent-after-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 그러던데. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 30,
+        "end": 36,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-2"
+    },
+    {
+      "id": "attribution/reported-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라는 말을 했어"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-3"
+    },
+    {
+      "id": "attribution/independent-after-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라는 말을 했어. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 31,
+        "end": 37,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-3"
+    },
+    {
+      "id": "attribution/reported-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They said, you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-4"
+    },
+    {
+      "id": "attribution/independent-after-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They said, you can ask questions. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 44,
+        "end": 50,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-4"
+    },
+    {
+      "id": "attribution/reported-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They said: you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-5"
+    },
+    {
+      "id": "attribution/independent-after-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They said: you can ask questions. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 44,
+        "end": 50,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-5"
+    },
+    {
+      "id": "attribution/reported-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They told me you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-6"
+    },
+    {
+      "id": "attribution/independent-after-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They told me you can ask questions. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 46,
+        "end": 52,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-6"
+    },
+    {
+      "id": "attribution/reported-7",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "He says you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-7"
+    },
+    {
+      "id": "attribution/independent-after-7",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "He says you can ask questions. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 41,
+        "end": 47,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-7"
+    },
+    {
+      "id": "attribution/reported-8",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "You can ask questions, they said"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-8"
+    },
+    {
+      "id": "attribution/independent-after-8",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "You can ask questions, they said. 이제 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 44,
+        "end": 50,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-8"
+    },
+    {
+      "id": "attribution/independent-before-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "너도 나한테 질문해도 돼. 친구가 질문해도 돼 라고 하더라"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 7,
+        "end": 13,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-before-1"
+    },
+    {
+      "id": "attribution/independent-before-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "너도 나한테 질문해도 돼. You can ask questions, they said"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 7,
+        "end": 13,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-before-2"
+    },
+    {
+      "id": "attribution/persistent-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-1"
+    },
+    {
+      "id": "attribution/persistent-next-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-1"
+    },
+    {
+      "id": "attribution/persistent-current-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로도 영어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-2"
+    },
+    {
+      "id": "attribution/persistent-next-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로도 영어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-2"
+    },
+    {
+      "id": "attribution/persistent-current-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 이후 대화에서는 영어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-3"
+    },
+    {
+      "id": "attribution/persistent-next-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 이후 대화에서는 영어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-3"
+    },
+    {
+      "id": "attribution/marker-word-boundary-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "marker-word-boundary-current-1"
+    },
+    {
+      "id": "attribution/marker-word-boundary-next-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "marker-word-boundary-next-1"
+    },
+    {
+      "id": "structure/reported-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-1"
+    },
+    {
+      "id": "structure/independent-after-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 해. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 27,
+        "end": 33,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-1"
+    },
+    {
+      "id": "structure/reported-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 한다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-2"
+    },
+    {
+      "id": "structure/independent-after-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 한다. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 28,
+        "end": 34,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-2"
+    },
+    {
+      "id": "structure/reported-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 합니다"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-3"
+    },
+    {
+      "id": "structure/independent-after-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라고 합니다. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 29,
+        "end": 35,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-3"
+    },
+    {
+      "id": "structure/reported-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라더라"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-4"
+    },
+    {
+      "id": "structure/independent-after-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라더라. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 26,
+        "end": 32,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-4"
+    },
+    {
+      "id": "structure/reported-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라던데"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-5"
+    },
+    {
+      "id": "structure/independent-after-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼 라던데. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 26,
+        "end": 32,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-5"
+    },
+    {
+      "id": "structure/reported-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼, 라고 해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-6"
+    },
+    {
+      "id": "structure/independent-after-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문해도 돼, 라고 해. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 28,
+        "end": 34,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-6"
+    },
+    {
+      "id": "structure/reported-7",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "I was told you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-7"
+    },
+    {
+      "id": "structure/independent-after-7",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "I was told you can ask questions. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 44,
+        "end": 50,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-7"
+    },
+    {
+      "id": "structure/reported-8",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They tell me you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-8"
+    },
+    {
+      "id": "structure/independent-after-8",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They tell me you can ask questions. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 46,
+        "end": 52,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-8"
+    },
+    {
+      "id": "structure/reported-9",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "She tells me you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-9"
+    },
+    {
+      "id": "structure/independent-after-9",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "She tells me you can ask questions. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 46,
+        "end": 52,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-9"
+    },
+    {
+      "id": "structure/reported-10",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They are telling me you can ask questions"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-10"
+    },
+    {
+      "id": "structure/independent-after-10",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They are telling me you can ask questions. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 53,
+        "end": 59,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-10"
+    },
+    {
+      "id": "structure/reported-11",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "You can ask questions, they tell me"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-11"
+    },
+    {
+      "id": "structure/independent-after-11",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "You can ask questions, they tell me. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 47,
+        "end": 53,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-11"
+    },
+    {
+      "id": "structure/reported-12",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가질문해도돼라고해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 0,
+        "end": 6,
+        "text": "질문하지 마"
+      },
+      "sourceCaseId": "reported-12"
+    },
+    {
+      "id": "structure/independent-after-12",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가질문해도돼라고해. 그럼 너도 나한테 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 23,
+        "end": 29,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-after-12"
+    },
+    {
+      "id": "structure/marker-noun-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "marker-noun-current-1"
+    },
+    {
+      "id": "structure/marker-noun-next-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "marker-noun-next-1"
+    },
+    {
+      "id": "structure/marker-noun-current-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어로 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "marker-noun-current-2"
+    },
+    {
+      "id": "structure/marker-noun-next-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어로 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "marker-noun-next-2"
+    },
+    {
+      "id": "structure/marker-noun-current-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은항상성에관해영어로답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "marker-noun-current-3"
+    },
+    {
+      "id": "structure/marker-noun-next-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은항상성에관해영어로답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "marker-noun-next-3"
+    },
+    {
+      "id": "structure/marker-noun-current-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은앞으로의금리전망을영어로설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "marker-noun-current-4"
+    },
+    {
+      "id": "structure/marker-noun-next-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은앞으로의금리전망을영어로설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "marker-noun-next-4"
+    },
+    {
+      "id": "structure/persistent-current-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-1"
+    },
+    {
+      "id": "structure/persistent-next-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-1"
+    },
+    {
+      "id": "structure/persistent-current-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-2"
+    },
+    {
+      "id": "structure/persistent-next-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-2"
+    },
+    {
+      "id": "structure/persistent-current-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 이후 대화에서는 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-current-3"
+    },
+    {
+      "id": "structure/persistent-next-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 이후 대화에서는 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "persistent-next-3"
+    },
+    {
+      "id": "structure/reported-stop-1-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문하지 마 라더라"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-1-current"
+    },
+    {
+      "id": "structure/reported-stop-1-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문하지 마 라더라"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-1-next"
+    },
+    {
+      "id": "structure/independent-stop-after-1-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문하지 마 라더라. 이제 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 16,
+        "end": 25,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-1-current"
+    },
+    {
+      "id": "structure/independent-stop-after-1-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문하지 마 라더라. 이제 질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 16,
+        "end": 25,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-1-next"
+    },
+    {
+      "id": "structure/independent-resume-after-negative-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문하지 마 라더라. 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 16,
+        "end": 22,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-resume-after-negative-1"
+    },
+    {
+      "id": "structure/reported-stop-2-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They told me stop asking questions"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-2-current"
+    },
+    {
+      "id": "structure/reported-stop-2-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They told me stop asking questions"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-2-next"
+    },
+    {
+      "id": "structure/independent-stop-after-2-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They told me stop asking questions. 이제 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 36,
+        "end": 45,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-2-current"
+    },
+    {
+      "id": "structure/independent-stop-after-2-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They told me stop asking questions. 이제 질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 36,
+        "end": 45,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-2-next"
+    },
+    {
+      "id": "structure/independent-resume-after-negative-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "They told me stop asking questions. 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 36,
+        "end": 42,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-resume-after-negative-2"
+    },
+    {
+      "id": "structure/reported-stop-3-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Stop asking questions, they said"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-3-current"
+    },
+    {
+      "id": "structure/reported-stop-3-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Stop asking questions, they said"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-stop-3-next"
+    },
+    {
+      "id": "structure/independent-stop-after-3-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Stop asking questions, they said. 이제 질문하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 34,
+        "end": 43,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-3-current"
+    },
+    {
+      "id": "structure/independent-stop-after-3-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Stop asking questions, they said. 이제 질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 34,
+        "end": 43,
+        "text": "이제 질문하지 마"
+      },
+      "sourceCaseId": "independent-stop-after-3-next"
+    },
+    {
+      "id": "structure/independent-resume-after-negative-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지 마"
+        },
+        {
+          "role": "user",
+          "content": "Stop asking questions, they said. 질문해도 돼"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 34,
+        "end": 40,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "independent-resume-after-negative-3"
+    },
+    {
+      "id": "structure/quote-marker-latin-topic",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문하지마"
+        },
+        {
+          "role": "user",
+          "content": "질문해도 돼, 라틴아메리카 국채 위험을 설명해줘."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 1,
+        "start": 0,
+        "end": 6,
+        "text": "질문해도 돼"
+      },
+      "sourceCaseId": "quote-marker-latin-topic"
+    },
+    {
+      "id": "structure/reported-reversal-1-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만하지 마 라더라"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-reversal-1-current"
+    },
+    {
+      "id": "structure/reported-reversal-1-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만하지 마 라더라"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-reversal-1-next"
+    },
+    {
+      "id": "structure/independent-reversal-after-1-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만하지 마 라더라. 질문은 그만하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 20,
+        "end": 26,
+        "text": "질문은 그만"
+      },
+      "sourceCaseId": "independent-reversal-after-1-current"
+    },
+    {
+      "id": "structure/independent-reversal-after-1-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만하지 마 라더라. 질문은 그만하지 마"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 20,
+        "end": 26,
+        "text": "질문은 그만"
+      },
+      "sourceCaseId": "independent-reversal-after-1-next"
+    },
+    {
+      "id": "structure/reported-reversal-2-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said do not stop asking questions"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-reversal-2-current"
+    },
+    {
+      "id": "structure/reported-reversal-2-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said do not stop asking questions"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {},
+      "sourceCaseId": "reported-reversal-2-next"
+    },
+    {
+      "id": "structure/independent-reversal-after-2-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said do not stop asking questions. 질문은 그만하지 마"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 40,
+        "end": 46,
+        "text": "질문은 그만"
+      },
+      "sourceCaseId": "independent-reversal-after-2-current"
+    },
+    {
+      "id": "structure/independent-reversal-after-2-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said do not stop asking questions. 질문은 그만하지 마"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedEvidence": {
+        "messageIndex": 0,
+        "start": 40,
+        "end": 46,
+        "text": "질문은 그만"
+      },
+      "sourceCaseId": "independent-reversal-after-2-next"
+    },
+    {
+      "id": "persistent-adjacency/attached-format-spaced-label-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "attached-format-spaced-label-current"
+    },
+    {
+      "id": "persistent-adjacency/attached-format-spaced-label-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "attached-format-spaced-label-next"
+    },
+    {
+      "id": "persistent-adjacency/attached-format-and-label-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은항상영어로답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "attached-format-and-label-current"
+    },
+    {
+      "id": "persistent-adjacency/attached-format-and-label-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은항상영어로답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "attached-format-and-label-next"
+    },
+    {
+      "id": "persistent-adjacency/prior-spaced-marker-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "prior-spaced-marker-current"
+    },
+    {
+      "id": "persistent-adjacency/prior-spaced-marker-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "prior-spaced-marker-next"
+    },
+    {
+      "id": "persistent-adjacency/prior-particle-marker-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "prior-particle-marker-current"
+    },
+    {
+      "id": "persistent-adjacency/prior-particle-marker-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로는 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "prior-particle-marker-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-homeostasis-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "noun-homeostasis-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-homeostasis-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "noun-homeostasis-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-outlook-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어로 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "noun-outlook-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-outlook-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어로 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "noun-outlook-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-homeostasis-attached-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은항상성에관해영어로답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "noun-homeostasis-attached-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-homeostasis-attached-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은항상성에관해영어로답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "noun-homeostasis-attached-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-outlook-attached-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은앞으로의금리전망을영어로설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en"
+      },
+      "sourceCaseId": "noun-outlook-attached-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-outlook-attached-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이뉴스를요약해줘. 답변은앞으로의금리전망을영어로설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "sourceCaseId": "noun-outlook-attached-next"
+    },
+    {
+      "id": "persistent-adjacency/count-numeric2-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상2문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "count-numeric2-current"
+    },
+    {
+      "id": "persistent-adjacency/count-numeric2-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상2문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "count-numeric2-next"
+    },
+    {
+      "id": "persistent-adjacency/count-release21-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상21문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "count-release21-current"
+    },
+    {
+      "id": "persistent-adjacency/count-release21-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상21문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "count-release21-next"
+    },
+    {
+      "id": "persistent-adjacency/detail-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상자세히 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "detail-current"
+    },
+    {
+      "id": "persistent-adjacency/detail-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상자세히 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "detail-next"
+    },
+    {
+      "id": "persistent-adjacency/detail-alt-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세히 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "detail-alt-current"
+    },
+    {
+      "id": "persistent-adjacency/detail-alt-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세히 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "detail-alt-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-detail-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 자세히 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "noun-detail-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-detail-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 자세히 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "noun-detail-next"
+    },
+    {
+      "id": "persistent-adjacency/noun-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 전망을 2문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "noun-count-current"
+    },
+    {
+      "id": "persistent-adjacency/noun-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 전망을 2문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "noun-count-next"
+    },
+    {
+      "id": "reported-stop/reported_ko_stop_polite_tail",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만해 라더라"
+        }
+      ],
+      "expected": {},
+      "acceptance": "보고된 발화는 선호 이벤트0; 직접 do-not-stop은 질문재개false; rawspan/offset원문보존",
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_ko_stop_polite_tail"
+    },
+    {
+      "id": "reported-stop/reported_ko_stop_quoted_command",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문 그만하라더라"
+        }
+      ],
+      "expected": {},
+      "acceptance": "보고된 발화는 선호 이벤트0; 직접 do-not-stop은 질문재개false; rawspan/offset원문보존",
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_ko_stop_quoted_command"
+    },
+    {
+      "id": "reported-stop/reported_ko_negated_stop_polite_tail",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마요 라더라"
+        }
+      ],
+      "expected": {},
+      "acceptance": "보고된 발화는 선호 이벤트0; 직접 do-not-stop은 질문재개false; rawspan/offset원문보존",
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_ko_negated_stop_polite_tail"
+    },
+    {
+      "id": "reported-stop/reported_en_curly_negated_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said don’t stop asking questions"
+        }
+      ],
+      "expected": {},
+      "acceptance": "보고된 발화는 선호 이벤트0; 직접 do-not-stop은 질문재개false; rawspan/offset원문보존",
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_en_curly_negated_stop"
+    },
+    {
+      "id": "reported-stop/direct_en_curly_negated_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don’t stop asking questions."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "acceptance": "보고된 발화는 선호 이벤트0; 직접 do-not-stop은 질문재개false; rawspan/offset원문보존",
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 6,
+          "end": 27,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "direct_en_curly_negated_stop"
+    },
+    {
+      "id": "reported-stop/direct_ko_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만해"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 6,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "direct_ko_stop"
+    },
+    {
+      "id": "reported-stop/direct_ko_negated_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 6,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "direct_ko_negated_stop"
+    },
+    {
+      "id": "reported-stop/direct_en_ascii_negated_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don't stop asking questions."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 6,
+          "end": 27,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "direct_en_ascii_negated_stop"
+    },
+    {
+      "id": "reported-stop/reported_en_ascii_negated_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said don't stop asking questions"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_en_ascii_negated_stop"
+    },
+    {
+      "id": "reported-stop/prior_stop_reported_negated_no_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마요 라더라"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 6,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "prior_stop_reported_negated_no_resume"
+    },
+    {
+      "id": "reported-stop/reported_stop_then_independent_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "친구가 질문은 그만해 라더라. 다시 질문해줘."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "다시 질문해"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_stop_then_independent_resume"
+    },
+    {
+      "id": "reported-stop/reported_negated_then_independent_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마요 라더라. 질문은 그만해."
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_negated_then_independent_stop"
+    },
+    {
+      "id": "reported-stop/reported_curly_then_independent_permission",
+      "messages": [
+        {
+          "role": "user",
+          "content": "They said don’t stop asking questions. You can ask questions."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 39,
+          "end": 60,
+          "text": "You can ask questions"
+        }
+      },
+      "sourceGolden": "reported-stop-closure-golden.json",
+      "sourceCaseId": "reported_curly_then_independent_permission"
+    },
+    {
+      "id": "reported-stop/language_ascii_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don't answer in English."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "language_ascii_negative"
+    },
+    {
+      "id": "reported-stop/language_curly_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don’t answer in English."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "language_curly_negative"
+    },
+    {
+      "id": "reported-stop/language_do_not_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Do not answer in English."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "language_do_not_negative"
+    },
+    {
+      "id": "reported-stop/sentenceCount_ascii_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don't answer in three sentences."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "sentenceCount_ascii_negative"
+    },
+    {
+      "id": "reported-stop/sentenceCount_curly_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don’t answer in three sentences."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "sentenceCount_curly_negative"
+    },
+    {
+      "id": "reported-stop/sentenceCount_do_not_negative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Do not answer in three sentences."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "sentenceCount_do_not_negative"
+    },
+    {
+      "id": "reported-stop/language_curly_preserves_prior",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Answer in Korean."
+        },
+        {
+          "role": "user",
+          "content": "Don’t answer in English."
+        }
+      ],
+      "expected": {
+        "language": "ko"
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 16,
+          "text": "Answer in Korean"
+        }
+      },
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "language_curly_preserves_prior"
+    },
+    {
+      "id": "reported-stop/sentenceCount_curly_preserves_prior",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Answer in two sentences."
+        },
+        {
+          "role": "user",
+          "content": "Don’t answer in three sentences."
+        }
+      ],
+      "expected": {
+        "sentenceCount": 2
+      },
+      "expectedAllEvidence": {
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 10,
+          "end": 23,
+          "text": "two sentences"
+        }
+      },
+      "sourceGolden": "reported-format-negation-boundary-golden.json",
+      "sourceCaseId": "sentenceCount_curly_preserves_prior"
+    },
+    {
+      "id": "reported-stop/reported_ko_negated_stop_maseyo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마세요 라더라"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceGolden": "reported-stop-polite-boundary-golden.json",
+      "sourceCaseId": "reported_ko_negated_stop_maseyo"
+    },
+    {
+      "id": "reported-stop/direct_ko_negated_stop_maseyo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마세요"
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 6,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-polite-boundary-golden.json",
+      "sourceCaseId": "direct_ko_negated_stop_maseyo"
+    },
+    {
+      "id": "reported-stop/prior_stop_reported_maseyo_no_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "질문은 그만하지 마세요 라더라"
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 6,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceGolden": "reported-stop-polite-boundary-golden.json",
+      "sourceCaseId": "prior_stop_reported_maseyo_no_resume"
+    },
+    {
+      "id": "shared-target/attached-language-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상영어 두 문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-language-count-current"
+    },
+    {
+      "id": "shared-target/attached-language-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상영어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-language-count-next"
+    },
+    {
+      "id": "shared-target/attached-detail-unrestricted-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세히 말해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-unrestricted-current"
+    },
+    {
+      "id": "shared-target/attached-detail-unrestricted-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세히 말해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-unrestricted-next"
+    },
+    {
+      "id": "shared-target/spaced-language-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어 두 문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "spaced-language-count-current"
+    },
+    {
+      "id": "shared-target/spaced-language-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 영어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "spaced-language-count-next"
+    },
+    {
+      "id": "shared-target/spaced-detail-unrestricted-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 상세히 말해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "spaced-detail-unrestricted-current"
+    },
+    {
+      "id": "shared-target/spaced-detail-unrestricted-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상 상세히 말해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "spaced-detail-unrestricted-next"
+    },
+    {
+      "id": "shared-target/attached-label-language-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은항상영어 두 문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-label-language-count-current"
+    },
+    {
+      "id": "shared-target/attached-label-language-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은항상영어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-label-language-count-next"
+    },
+    {
+      "id": "shared-target/attached-detail-report-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세한 보고서로 작성해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-report-current"
+    },
+    {
+      "id": "shared-target/attached-detail-report-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상상세한 보고서로 작성해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-report-next"
+    },
+    {
+      "id": "shared-target/attached-detail-paragraph-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상두 문단으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-paragraph-current"
+    },
+    {
+      "id": "shared-target/attached-detail-paragraph-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상두 문단으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-detail-paragraph-next"
+    },
+    {
+      "id": "shared-target/attached-number-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상2문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-number-count-current"
+    },
+    {
+      "id": "shared-target/attached-number-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상2문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "attached-number-count-next"
+    },
+    {
+      "id": "shared-target/attached-existing-detail-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상자세히 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-existing-detail-current"
+    },
+    {
+      "id": "shared-target/attached-existing-detail-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상자세히 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "attached-existing-detail-next"
+    },
+    {
+      "id": "shared-target/noun-homeostasis-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어 두 문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "noun-homeostasis-current"
+    },
+    {
+      "id": "shared-target/noun-homeostasis-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 영어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "noun-homeostasis-next"
+    },
+    {
+      "id": "shared-target/noun-outlook-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어 두 문장으로 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "noun-outlook-current"
+    },
+    {
+      "id": "shared-target/noun-outlook-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 앞으로의 금리 전망을 영어 두 문장으로 설명해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "noun-outlook-next"
+    },
+    {
+      "id": "shared-target/noun-detail-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 상세히 말해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "sourceCaseId": "noun-detail-current"
+    },
+    {
+      "id": "shared-target/noun-detail-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상성에 관해 상세히 말해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "noun-detail-next"
+    },
+    {
+      "id": "shared-target/existing-unsupported-attached-word-count-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상두문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "existing-unsupported-attached-word-count-current"
+    },
+    {
+      "id": "shared-target/existing-unsupported-attached-word-count-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 항상두문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "existing-unsupported-attached-word-count-next"
+    },
+    {
+      "id": "shared-target/english-word-boundary-current",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 always-on 영어 두 문장으로 답해줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "english-word-boundary-current"
+    },
+    {
+      "id": "shared-target/english-word-boundary-next",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "이 뉴스를 요약해줘. 답변은 always-on 영어 두 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "채권 듀레이션을 설명해줘"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3
+      },
+      "sourceCaseId": "english-word-boundary-next"
+    },
+    {
+      "id": "quote-mask/ascii_ascii_quote_only",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said 'don't stop asking questions'"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_ascii_quote_only"
+    },
+    {
+      "id": "quote-mask/ascii_ascii_prior_preservation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘. 질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "I said 'don't stop asking questions. Answer in English in three sentences.'"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3,
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 4,
+          "text": "한국어로"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 5,
+          "end": 11,
+          "text": "세 문장으로"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "ascii_ascii_prior_preservation"
+    },
+    {
+      "id": "quote-mask/ascii_ascii_independent_after_quote",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said 'don't stop asking questions. Answer in English in three sentences.'. Don’t stop asking questions. Answer in Japanese in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 2,
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 106,
+          "end": 124,
+          "text": "Answer in Japanese"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 128,
+          "end": 141,
+          "text": "two sentences"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 83,
+          "end": 104,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "ascii_ascii_independent_after_quote"
+    },
+    {
+      "id": "quote-mask/ascii_curly_quote_only",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said 'don’t stop asking questions'"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_curly_quote_only"
+    },
+    {
+      "id": "quote-mask/ascii_curly_prior_preservation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘. 질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "I said 'don’t stop asking questions. Answer in English in three sentences.'"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3,
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 4,
+          "text": "한국어로"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 5,
+          "end": 11,
+          "text": "세 문장으로"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "ascii_curly_prior_preservation"
+    },
+    {
+      "id": "quote-mask/ascii_curly_independent_after_quote",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said 'don’t stop asking questions. Answer in English in three sentences.'. Don’t stop asking questions. Answer in Japanese in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 2,
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 106,
+          "end": 124,
+          "text": "Answer in Japanese"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 128,
+          "end": 141,
+          "text": "two sentences"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 83,
+          "end": 104,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "ascii_curly_independent_after_quote"
+    },
+    {
+      "id": "quote-mask/curly_ascii_quote_only",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘don't stop asking questions’"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_ascii_quote_only"
+    },
+    {
+      "id": "quote-mask/curly_ascii_prior_preservation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘. 질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "I said ‘don't stop asking questions. Answer in English in three sentences.’"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3,
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 4,
+          "text": "한국어로"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 5,
+          "end": 11,
+          "text": "세 문장으로"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "curly_ascii_prior_preservation"
+    },
+    {
+      "id": "quote-mask/curly_ascii_independent_after_quote",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘don't stop asking questions. Answer in English in three sentences.’. Don’t stop asking questions. Answer in Japanese in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 2,
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 106,
+          "end": 124,
+          "text": "Answer in Japanese"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 128,
+          "end": 141,
+          "text": "two sentences"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 83,
+          "end": 104,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "curly_ascii_independent_after_quote"
+    },
+    {
+      "id": "quote-mask/curly_curly_quote_only",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘don’t stop asking questions’"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_curly_quote_only"
+    },
+    {
+      "id": "quote-mask/curly_curly_prior_preservation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘. 질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "I said ‘don’t stop asking questions. Answer in English in three sentences.’"
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3,
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 4,
+          "text": "한국어로"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 5,
+          "end": 11,
+          "text": "세 문장으로"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "curly_curly_prior_preservation"
+    },
+    {
+      "id": "quote-mask/curly_curly_independent_after_quote",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘don’t stop asking questions. Answer in English in three sentences.’. Don’t stop asking questions. Answer in Japanese in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "ja",
+        "sentenceCount": 2,
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 106,
+          "end": 124,
+          "text": "Answer in Japanese"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 128,
+          "end": 141,
+          "text": "two sentences"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 83,
+          "end": 104,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "curly_curly_independent_after_quote"
+    },
+    {
+      "id": "quote-mask/curly_quote_newline",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘don’t stop\nasking questions’."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_quote_newline"
+    },
+    {
+      "id": "quote-mask/utf16_prefix_independent_stop",
+      "messages": [
+        {
+          "role": "user",
+          "content": "🙂 I said ‘don’t stop asking questions’. 질문은 그만해."
+        }
+      ],
+      "expected": {
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 41,
+          "end": 47,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "utf16_prefix_independent_stop"
+    },
+    {
+      "id": "quote-mask/unquoted_contraction_control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don’t stop asking questions. Answer in English in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2,
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 29,
+          "end": 46,
+          "text": "Answer in English"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 50,
+          "end": 63,
+          "text": "two sentences"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 6,
+          "end": 27,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "unquoted_contraction_control"
+    },
+    {
+      "id": "quote-mask/existing_double_quote_control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said \"don’t stop asking questions\"."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "existing_double_quote_control"
+    },
+    {
+      "id": "latin-quote/curly_ascii_contraction_korean_suffix",
+      "messages": [
+        {
+          "role": "user",
+          "content": "‘don't stop asking questions’라는 표현을 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_ascii_contraction_korean_suffix"
+    },
+    {
+      "id": "latin-quote/curly_curly_contraction_korean_suffix",
+      "messages": [
+        {
+          "role": "user",
+          "content": "‘don’t stop asking questions’라는 표현을 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_curly_contraction_korean_suffix"
+    },
+    {
+      "id": "latin-quote/korean_quote_이라고",
+      "messages": [
+        {
+          "role": "user",
+          "content": "이 자료에는 ‘영어로 두 문장으로’이라고 적혀 있어."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "korean_quote_이라고"
+    },
+    {
+      "id": "latin-quote/english_quote_라는",
+      "messages": [
+        {
+          "role": "user",
+          "content": "‘Answer in English in two sentences’라는 문구를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "english_quote_라는"
+    },
+    {
+      "id": "latin-quote/curly_latin_accent_contraction",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said ‘l’année stop asking questions’."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "curly_latin_accent_contraction"
+    },
+    {
+      "id": "latin-quote/ascii_latin_accent_contraction",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I said 'l'année stop asking questions'."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_latin_accent_contraction"
+    },
+    {
+      "id": "latin-quote/unquoted_curly_direct_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don’t stop asking questions."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 6,
+          "end": 27,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "unquoted_curly_direct_resume"
+    },
+    {
+      "id": "latin-quote/korean_suffix_then_independent_language_count",
+      "messages": [
+        {
+          "role": "user",
+          "content": "‘일본어로 두 문장으로’라는 표현입니다. Answer in English in one sentence."
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 23,
+          "end": 40,
+          "text": "Answer in English"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 44,
+          "end": 56,
+          "text": "one sentence"
+        }
+      },
+      "sourceCaseId": "korean_suffix_then_independent_language_count"
+    },
+    {
+      "id": "latin-quote/prior_all_preferences_quote_라는",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘. 질문은 그만해"
+        },
+        {
+          "role": "user",
+          "content": "‘don’t stop asking questions. Answer in English in two sentences’라는 문구야."
+        }
+      ],
+      "expected": {
+        "language": "ko",
+        "sentenceCount": 3,
+        "questionsStopped": true
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 0,
+          "end": 4,
+          "text": "한국어로"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 5,
+          "end": 11,
+          "text": "세 문장으로"
+        },
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 17,
+          "end": 23,
+          "text": "질문은 그만"
+        }
+      },
+      "sourceCaseId": "prior_all_preferences_quote_라는"
+    },
+    {
+      "id": "latin-quote/korean_suffix_then_independent_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "‘질문은 그만’이라는 문구입니다. 다시 질문해줘."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 19,
+          "end": 25,
+          "text": "다시 질문해"
+        }
+      },
+      "sourceCaseId": "korean_suffix_then_independent_resume"
+    },
+    {
+      "id": "quote-swallow/curly_korean_quote_instruction_between_quotes",
+      "messages": [
+        {
+          "role": "user",
+          "content": "한국어로 세 문장으로 답해줘"
+        },
+        {
+          "role": "user",
+          "content": "‘듀레이션’은 영어로 두 문장으로 답해줘. 비교 대상은 ‘볼록성’."
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "curly_korean_quote_instruction_between_quotes"
+    },
+    {
+      "id": "quote-swallow/ascii_korean_quote_possessive_later",
+      "messages": [
+        {
+          "role": "user",
+          "content": "'듀레이션'을 영어로 두 문장으로 설명하고 investors' 관점도 알려줘"
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "sourceCaseId": "ascii_korean_quote_possessive_later"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_quote_라는",
+      "messages": [
+        {
+          "role": "user",
+          "content": "'영어로 두 문장으로'라는 문구를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_ko_quote_라는"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_quote_을",
+      "messages": [
+        {
+          "role": "user",
+          "content": "'일본어로 한 문장으로'를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_ko_quote_을"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_noun_before",
+      "messages": [
+        {
+          "role": "user",
+          "content": "문구'영어로 두 문장으로'를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_ko_noun_before"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_noun_before_and_suffix",
+      "messages": [
+        {
+          "role": "user",
+          "content": "예시'질문은 그만'이라는 표현을 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_ko_noun_before_and_suffix"
+    },
+    {
+      "id": "ascii-quote/ascii_latin_contraction_with_ko_suffix",
+      "messages": [
+        {
+          "role": "user",
+          "content": "'don't stop asking questions'라는 문구를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_latin_contraction_with_ko_suffix"
+    },
+    {
+      "id": "ascii-quote/ascii_latin_name_with_ko_before",
+      "messages": [
+        {
+          "role": "user",
+          "content": "자료'O'Connor says stop asking questions'라는 문구를 설명해줘."
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "ascii_latin_name_with_ko_before"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_suffix_independent_format",
+      "messages": [
+        {
+          "role": "user",
+          "content": "'일본어로 세 문장으로'라는 문구입니다. Answer in English in two sentences."
+        }
+      ],
+      "expected": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "expectedAllEvidence": {
+        "language": {
+          "messageIndex": 0,
+          "start": 23,
+          "end": 40,
+          "text": "Answer in English"
+        },
+        "sentenceCount": {
+          "messageIndex": 0,
+          "start": 44,
+          "end": 57,
+          "text": "two sentences"
+        }
+      },
+      "sourceCaseId": "ascii_ko_suffix_independent_format"
+    },
+    {
+      "id": "ascii-quote/ascii_ko_before_independent_resume",
+      "messages": [
+        {
+          "role": "user",
+          "content": "문구'질문은 그만'을 설명한 뒤 다시 질문해줘."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 18,
+          "end": 24,
+          "text": "다시 질문해"
+        }
+      },
+      "sourceCaseId": "ascii_ko_before_independent_resume"
+    },
+    {
+      "id": "ascii-quote/unquoted_dont_control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Don't stop asking questions."
+        }
+      ],
+      "expected": {
+        "questionsStopped": false
+      },
+      "expectedAllEvidence": {
+        "questionsStopped": {
+          "messageIndex": 0,
+          "start": 6,
+          "end": 27,
+          "text": "stop asking questions"
+        }
+      },
+      "sourceCaseId": "unquoted_dont_control"
+    },
+    {
+      "id": "ascii-quote/unquoted_latin_name_control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "O'Connor says stop asking questions"
+        }
+      ],
+      "expected": {},
+      "expectedAllEvidence": {},
+      "sourceCaseId": "unquoted_latin_name_control"
+    }
+  ]
+}

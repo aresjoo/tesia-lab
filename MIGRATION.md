@@ -294,6 +294,12 @@ prompt8646 별도draft·actualmerge/Reactproducer통합0·사용성4FAIL/MODEL_Q
 
 원본 폴더는 비교할 현행 클라이언트 기준이지 폐기 파일의 별도 백업이 아니다. 기존 HTML을 React 파일로 덮어쓰지 않아 원본 변경과 이식 변경을 따로 검토할 수 있다. React 쪽에도 기존 README·DESIGN·Bugfix 기록을 byte 그대로 전달하므로 일부 문서의 작업공간 상대 링크는 이 저장소에서 열리지 않을 수 있다. 제품·계약 정본은 [tesia-program](https://github.com/beak1011/tesia-program), [tesia-contracts](https://github.com/beak1011/tesia-contracts)이며 접근 권한이 필요할 수 있다. 이 문서는 새 제품·API 정본이 아니라 전달 범위 안내다.
 
+### 투자 AI 프롬프트 품질 후보
+
+별도 migration draft [Lab PR5](https://github.com/aresjoo/tesia-lab/pull/5)는 서버 registry1.24.0·출력 gate·shared 표시 schema와 root source의 투자 상담을 교정한다. React2135 snapshot·source75a5f5b는 재동기화하지 않는다. 따라서 source/서버 개선이 React의 local Mock producer나 AI compiler에 적용되었다고 보고하지 않는다.
+
+조건·선호·분모·시각·Mock 출처를 보존하고 exact 선택만 로컬 설정을 바꾼다. 자유 텍스트 수정/질문은 상담이며 자동 실행하지 않는다. 폐쇄형 BTC/ETH 초기/명시 새 scope만 서버가 Mock 설정 화면으로 연결한다. rich 전략·승인·예약·OrderIntent의 typed 계약 연결은 미완료다. 검증 방법·공개 실제 CLI 기록/의미 실패·두 viewport Mock 브라우저·자동 회귀는 `server/README.md`와 Program §16/Ledger를 따른다. 실제 앱 provider/전체서비스 E2E/배포 성공으로 승계하지 않는다. SERVICE_NO_GO이며 main server 병합은 자동 Worker 배포를 유발하므로 금지한다.
+
 ## 2. 가장 큰 구조 변경
 
 | 원본 main | React 이식본 | 바뀐 이유·주의점 |
@@ -425,3 +431,7 @@ Chromium이 없으면 `npx playwright install chromium`이 필요하다. 실제 
 6. 의미 있는 작업 묶음으로 `git commit`하고 `git push origin migration`한다. force push/main 병합은 하지 않는다. 별도로 사용자가 승인한 정적 배포가 있으면 정확한 산출물·rollback·공개 확인을 독립 기록하고, migration push 자체를 배포 증거로 쓰지 않는다.
 
 동기화 도구는 **자동 커밋·푸시·배포·상시 감시를 하지 않는다.** 이후 작업 묶음마다 변경을 검토해 이 브랜치에 누적 반영한다. 실패한 검사나 미반영 구현을 다음 전달에서 조용히 지우지 않는다.
+
+투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,135 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+
+최신 migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.

@@ -40,6 +40,10 @@ ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOV
 
 원본 `index.html`·`site-config.js`와 루트 정적 페이지는 이번 전달에서 변경하지 않는다. React의 원본 계승이 완벽하다는 가정으로 검토하지 말고, MIGRATION.md의 미완료 목록을 먼저 확인한다. React 파일을 직접 수정한 뒤 다시 동기화할 때는 먼저 출처 담당과 변경을 합의한다. 다른 팀 작업을 덮어쓰지 않는다. `.mailbox`는 이 원격 clone에 제공되지 않아 클라이언트 세션의 메시지 수신 여부를 확인할 수 없으며, 전달 문서가 상대의 실제 확인을 증명하지 않는다.
 
+## 투자 AI 프롬프트 후보의 추가 경계
+
+`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.24.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
+
 ## 작업 원칙
 
 1. 현재 코드와 실제 브라우저 동작을 최우선 사실로 삼는다. 문서가 코드와 다르면 코드를 확인한 뒤 문서를 즉시 바로잡는다.
@@ -112,7 +116,7 @@ ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOV
 
 TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 웹 프로토타입이다. 사용자가 자연어로 전략 아이디어를 입력하고, 전략을 구조화하며, 브라우저에서 생성한 데모 데이터로 리서치와 백테스트 결과를 확인하고, 거래소 연결 및 라이브 운용 화면까지 체험하는 흐름을 제공한다.
 
-현재 구현은 바닐라 HTML, CSS, JavaScript로만 구성된 클라이언트 측 데모다. 별도의 백엔드, 데이터베이스, 실제 AI 모델 호출, 실거래 API, 사용자 계정 서버, 빌드 파이프라인은 이 저장소에 없다. 백테스트·인증·거래소 연결·라이브 거래·에이전트 협업 화면은 브라우저 안에서 시뮬레이션된다. 정책 페이지에 적힌 보안 또는 데이터 처리 설명도 이 저장소에서 구현 여부를 증명하는 것은 아니다.
+루트 화면은 바닐라 HTML, CSS, JavaScript로 구성된 클라이언트 측 프로토타입이다. `server/`에는 투자 상담용 Node/Worker AI 프록시와 공개 시세 조회 코드가 있고, 실제 credential 없이는 provider 성공을 증명하지 않는다. 이 프록시는 전략 승인·실거래 API·계정 서버가 아니며, `react-app/`에는 별도 React/Vite 빌드·테스트가 있다. 백테스트·인증·거래소 연결·라이브 거래·에이전트 협업 화면은 브라우저 안에서 시뮬레이션된다. 정책 페이지에 적힌 보안 또는 데이터 처리 설명도 이 저장소에서 구현 여부를 증명하는 것은 아니다.
 
 주요 사용자 경험은 다음과 같다.
 
@@ -129,6 +133,8 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 
 | 경로 | 현재 역할 |
 | --- | --- |
+| `server/README.md`, `server/investment-*.mjs`, `server/tests/` | 투자 상담 정책 registry·요청/출력 검증·단순 Mock 설정 진입·공개 개발 반례·실제 route SDK fixture. 주문 계약과 provider/공개 배포 완료가 아님. |
+| `.github/workflows/server-quality.yml` | credential 없이 상담 프록시의 check/test를 PR에서 실행. main 배포에는 동일 검증을 선행. |
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
 | `artifacts/teth-redesign/` | 전략 목록과 상세 개편(2026-09-29)의 기록. 라운드별 Claude, Codex 비평(`r0` ~ `r8`), 기준과 최종 스크린샷, `tools/` 에 `index.html` 의 `MK_CAT`, `RD_CORE`, `RD_CSS` 블록을 만드는 소스와 적용 스크립트가 있다. 세 판단 방식(직접 탐색, 조건 실행, 혼합)은 하나의 원장 엔진으로 계산한다. |
 | `ux/spec/` | 병합된 제품 UX의 정본. `UX_DECISION_LOG.md`의 R1 갱신과 `ux/review/CLAUDE_ADJUDICATION.md` 판정을 이전 화면 예시보다 우선한다. |
@@ -230,3 +236,7 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 작업은 코드만 동작한다고 끝난 것이 아니다. 구현, 사용자 문구, 공용 설정, 정책 문구, 링크, 이 기준 문서가 서로 일치하고, 대체된 레거시 문서와 그 참조가 제거되며, 수행한 검증과 수행하지 못한 검증이 최종 보고에 명확히 기록되어야 완료다.
 
 여기에 더해 자신의 인박스에 처리하지 않은 메시지가 없어야 하고, 선점한 `claim`은 `release`로 해제되어 있어야 하며, 다른 세션이 이어받아야 할 미검증 항목은 `handoff`로 전달되어 있어야 한다.
+
+투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,135 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
+
+최신 migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.
