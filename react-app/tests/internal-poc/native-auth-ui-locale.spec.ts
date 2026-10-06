@@ -156,7 +156,7 @@ for (const delivery of ['ACCEPTED', 'UNKNOWN', 'FAILED']) test(`email ${delivery
   await page.locator('input').fill('Test+Locale@example.invalid')
   let release = () => {}
   state.hold = () => new Promise<void>(resolve => { release = resolve })
-  await page.getByRole('button', { name: '인증번호 요청', exact: true }).click()
+  await page.getByRole('button', { name: '계속', exact: true }).click()
   await expect.poll(() => state.calls.filter(call => call.endsWith('/challenges')).length).toBe(1)
   await language(page, 'en')
   await expect(page.locator('input')).toHaveValue('Test+Locale@example.invalid')
@@ -192,7 +192,7 @@ for (const [error, key] of [['MAIL_DISABLED', 'emailDisabled'], ['RATE_LIMITED',
   const state = await routes(page); state.error = error
   await mount(page, 'email')
   await page.locator('input').fill('retained@example.invalid')
-  await page.getByRole('button', { name: '인증번호 요청', exact: true }).click()
+  await page.getByRole('button', { name: '계속', exact: true }).click()
   await expect(page.getByRole('alert')).toHaveText(nativeAuthUiText('ko', key))
   for (const code of languages) {
     await language(page, code)

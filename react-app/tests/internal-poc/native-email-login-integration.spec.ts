@@ -120,11 +120,11 @@ async function openEmail(page: Page) {
 }
 async function requestCode(page: Page) {
   await form(page).getByLabel('이메일 주소', { exact: true }).fill('Test+tag@example.invalid')
-  await form(page).getByRole('button', { name: '인증번호 요청', exact: true }).click()
+  await form(page).getByRole('button', { name: '계속', exact: true }).click()
 }
 async function verifyCode(page: Page) {
   await form(page).getByLabel('6자리 인증번호', { exact: true }).fill('000123')
-  await form(page).getByRole('button', { name: '인증번호 확인', exact: true }).click()
+  await form(page).getByRole('button', { name: '계속', exact: true }).click()
 }
 async function noRawStorage(page: Page) {
   expect(await page.evaluate(() => /Test\+tag|example\.invalid|000123|csrf_email_ui|COOKIE_BOUND_SESSION_ROUND_TRIP/.test(JSON.stringify({ ...sessionStorage, ...localStorage })))).toBe(false)

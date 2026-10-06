@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/menu-download-parity@0f639149e0e3f77f09e931785317de8b34cb6a62` 전체. 부모a8 위 Main·Download 원문/세부3제품·시험2·MD2. 관련10/28PASS·lint0, 새build/whole/운영0 |
+| React 출처 | `agent/web/native-copy-help-parity@4af904665000a9a40730820cf8e542e65129a9d6` 전체. 부모0f 위 Native 원문4키·23literal만 변경. 원문4/locale16/기존consumer100PASS, lint/service build0·whole/운영0 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 이름변경과 다운로드
+### 최신 전달 — Native 이메일 폼 원문
+
+전체2238파일/26289697bytes/snapshot `31aa395f5a48ca8dda4b354da9e7e4db5d9ac50da85e7ae82b39585788350d8c`다. source dirty/deleted/이전경로삭제0, sync/verify actual0다. 인증 동작을 바꾸지 않고 원본 `계속`·`이메일 다시 보내기` 7언어 및 중국어/스페인어 이메일 라벨23literal만 맞췄다. 기존4spec의14 selector 이름만 보정하고 부모공급 재전송 안내·기존 단언은 보존했다. 원문전용4PASS/2.82초, locale16PASS/9.16초, 기존consumer100PASS/42.53초·관련lint/service build actual0다. 최초 환경 변수명 불일치는 로그를 남기고 실제소비 이름으로 Vite 패키징만 교정했다. 새whole/실provider/운영0이다.
+
+운영Google-only에서는 이메일 경로가 비활성화이므로 공개에23문구가이미나타났다는 뜻은 아니다. 인증3선택지·초안/서버오류·배송상태·계약·flags는 유지했다. `code.sent/resent`는 Main 동적 참조가 있으므로 미사용 삭제근거가 아니며 Native는 별도 서버상태를 사용한다. 별도 정적copy7dd 후보의 footer사실확인/가시Mock 카피권위HOLD는 그대로다. 이전current18 객체와 운영이력은 바꾸지 않았고 최신부분근거는 `candidate.currentNativeActionCopy`다.
+
+### 이전 전달 — 이름변경과 다운로드
 
 정적승격의 별도카피후보는 [Web static-copy-release](https://github.com/beak1011/tesia-web/tree/agent/web/static-copy-release) `c0907e0f3af7c3aef7b32323c2b4c7f573c09460`다. 운영7dd에서 제품7파일만 분리하여 인증/API/SDK/flags를그대로유지했고 최신통합0f의인증fix를삭제하지않았다. 관련160PASS/33.86초·lint/servicebuild0·compiledNative3폭3PASS/183GETexact를 확인했다. 49원문 전부가Native소비인것은아니다(공용14+연구1+KOfooter3 조건부소비). 원문footer의실거래/선정주장과 가시Mock안내 부재의카피권위HOLD를유지하고 선반영방향을사용자에게확인중이다. `react-app/` 전체스냅샷은0f 그대로이며 후보검증과권위는 `candidate.currentStaticOnlyCopyCandidate`가구분한다.
 

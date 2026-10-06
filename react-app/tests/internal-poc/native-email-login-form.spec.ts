@@ -47,7 +47,7 @@ test('표시 전용 이메일 입력은 명시 요청만 전달하고 인증하�
   await input.fill('Sample+tag@example.invalid')
   await expect(input).toHaveValue('Sample+tag@example.invalid')
   expect((await counts(page)).Request ?? 0).toBe(0)
-  await page.getByRole('button', { name: '인증번호 요청', exact: true }).click()
+  await page.getByRole('button', { name: '계속', exact: true }).click()
   expect((await counts(page)).Request).toBe(1)
   expect((await counts(page)).Complete ?? 0).toBe(0)
   expect(requests).toEqual([])
@@ -58,7 +58,7 @@ test('표시 전용 이메일 입력은 명시 요청만 전달하고 인증하�
 
 test('허용되지 않은 요청은 클릭과 form submit 모두 전달하지 않는다', async ({ page }) => {
   await mount(page, { canRequest: false })
-  await expect(page.getByRole('button', { name: '인증번호 요청', exact: true })).toBeDisabled()
+  await expect(page.getByRole('button', { name: '계속', exact: true })).toBeDisabled()
   await page.getByRole('form').dispatchEvent('submit')
   expect((await counts(page)).Request ?? 0).toBe(0)
 })
@@ -72,7 +72,7 @@ test('6자리 입력은 ASCII 숫자와 선행0을 보존하며 자동 검증·�
   await code.fill('000123')
   await expect(code).toHaveValue('000123')
   expect((await counts(page)).Verify ?? 0).toBe(0)
-  await page.getByRole('button', { name: '인증번호 확인', exact: true }).click()
+  await page.getByRole('button', { name: '계속', exact: true }).click()
   expect((await counts(page)).Verify).toBe(1)
   expect((await counts(page)).Complete ?? 0).toBe(0)
   await expect(page.getByRole('heading', { name: '인증번호 입력', exact: true })).toBeVisible()
@@ -109,7 +109,7 @@ test('응답 불명 복구는 원값을 노출하지 않고 명시 recovery 액�
   await mount(page, { phase: 'recovery', email: 'hidden@example.invalid', code: '123456', canRequest: true, canVerify: true, canResend: true, canRecover: true, canEditEmail: false, error: '요청 결과를 확인할 수 없습니다.', statusText: '같은 요청을 확인해 주세요.' })
   await expect(page.locator('input')).toHaveCount(0)
   await expect(page.getByText('hidden@example.invalid')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '인증번호 다시 요청', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: '이메일 다시 보내기', exact: true })).toHaveCount(0)
   await page.getByRole('button', { name: '같은 로그인 요청 확인', exact: true }).click()
   expect(await counts(page)).toEqual({ Recover: 1 })
 })
@@ -125,7 +125,7 @@ test('확인 화면은 부모 상태만 표시하며 권위 callback이나 새 �
 
 test('오류는 입력을 보존하고 연결된 alert·focus로 표시하며 HTML로 실행하지 않는다', async ({ page }) => {
   await mount(page, { phase: 'code', code: '123456', canVerify: true })
-  await page.getByRole('button', { name: '인증번호 확인', exact: true }).focus()
+  await page.getByRole('button', { name: '계속', exact: true }).focus()
   await update(page, { error: '<img src=x onerror=alert(1)> 인증번호를 확인해 주세요.' })
   const input = page.getByRole('textbox', { name: '6자리 인증번호', exact: true })
   await expect(input).toBeFocused()
@@ -170,6 +170,6 @@ test('320px에서도 기존 폼 스타일과 긴 서버 안내를 읽을 수 있
   expect(await form.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await expect(page.getByRole('textbox')).toHaveCSS('font-size', '16px')
-  await expect(page.getByRole('button', { name: '인증번호 확인', exact: true })).toHaveCSS('min-height', '52px')
+  await expect(page.getByRole('button', { name: '계속', exact: true })).toHaveCSS('min-height', '52px')
   if (process.env.TETH_EMAIL_FORM_PROOF_ROOT) await page.screenshot({ path: join(process.env.TETH_EMAIL_FORM_PROOF_ROOT, `code-320-${testInfo.project.name}.png`), fullPage: true })
 })

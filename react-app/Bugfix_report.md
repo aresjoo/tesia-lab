@@ -1,5 +1,15 @@
 # TETH 버그 수정·검수 보고서
 
+## Native 이메일 폼 원문 복원
+
+- 감사팀 지적대로 카피 복원에 인증 기능 변경을 추가하지 않았다. 제품 diff는 `native-auth-ui-copy.ts`의 4행·23literal뿐이다. `auth.email` 원문26433의 zh-CN/es 2값, `auth.continue`26434의 요청·확인 각7값, `code.resend`26441의7값을 복원했다. 나머지 사전은 역치환 byte-exact이고 컴포넌트/controller/API/권한/오류/서버시각/flags는 변경0이다.
+- 신규 독립 원문 spec은 제품 사전을 기대값으로 import하지 않는다. 동일4키 RED4FAIL/actual1/22.88초 → GREEN4PASS/actual0/2.82초, raw SHA `161b050475c4a6cb5c3fb29496b5629f6ffa55c64eec213f34ff2ce4e47d80f1` / `6ac9f96aaff4d3f3ff5596f4f6b4f5ce12e73fcd0f4527f8c490ea901c00505f`다. 7언어 이름·동일 input DOM/값/focus·명시 callback·API요청0을 확인했다.
+- 기존 locale8case×양project16PASS/actual0/9.16초(raw `d83e0944a0a35205bbb18a3cab75770f80a764fc6c276fd736bbf3787c378c92`), 기존 form/integration/unsent3spec100PASS/actual0/42.53초(raw `5774a8566af883e1e791f09233c36f26f14c1b26a67bc6b7ada223291eb4a96c`)다. skip/retry/flaky/시험밖오류0. 4개 기존spec의14 selector 값만 맞추고 기존 단언·제목·timeout/fixture는 유지했다. 부모가 공급하는 `resendText: 인증번호 다시 요청`은 그대로다. 이 부분들을 새 단일 전체회귀로 합산하지 않는다.
+- ROOT가 diff/독립 오라클 전체/raw를 읽었고 별도 reviewer가 원9fb 28값 exact·실제 변경23값·14 selector의 name-only 치환을 검산했다. `code.sent/resent`는 Main의 동적 삼항 참조가 있어 dead key로 삭제하지 않는다. Native는 별도 사전을 사용한다.
+- 관련 ESLint/diffcheck actual0. 서비스 타입검사와 build actual0 뒤 첫 빌드의 환경 변수 이름이 소비 이름과 달랐음을 확인해 `VITE_TETH_AUTH_GOOGLE_ONLY=true`, `VITE_TETH_EXCHANGE_CONNECT=false`로 Vite 패키징만 교정했다(actual0/873ms). 타입검사·제품·회귀를 다시 실행하지 않았고 최초 로그도 보존한다. 기존 큰 chunk 경고는 미해결이다.
+- 병렬 가독성 대조: 도움말7언어×3폭에서 닫기 아이콘과 글자 겹침0/21, public header42·명시 Main 일반설정21 관찰에서 가시 clipping/문서 overflow0. KO 글자 advance bbox와44px닫기 하단0.61px 교차는 PNG의 실제 글자 가림이 아니었다. hidden tooltip의 scrollWidth를 가시 clipping으로 세지 않는다. async pin 포커스 가설도 desktop의 단일 private probe에서 반증됐다. 다른 설정탭·실OS·전체a11y의 PASS는 아니다. 제품 변경0으로 유지했다.
+- Google-only에서 이메일은 비활성화이며 이23문구는 경로가 열릴 때 실제 Native 폼에서 소비된다. 실SMTP/실인증/운영 공개 성공0. 별도 정적copy 후보·푸터 사실 확인·서비스NO_GO는 유지한다. 새 whole/install/운영0이며 임시4684/4685 서버는 종료했다. Git 전달은 별도 최신 migration manifest를 따른다.
+
 ## 대화방 이름 변경과 다운로드 원본 세부 복원
 
 - 병렬 writer 경계는 Main+메뉴시험, PublicPages+download CSS+신규독립시험으로 나눴다. 기존 store/Native 인증/API/계약/flags/원본 root/730일 변경0이다. 관련 lint/diffcheck actual0, 작은 수정의 새whole/설치/build/운영0. 아래 부모 a8의3build를 이번 입력의 새빌드로 승계하지 않는다.
