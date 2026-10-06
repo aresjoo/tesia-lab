@@ -14,6 +14,12 @@
 /* A finite scrollport is essential: an auto-height overflow ancestor prevents
    the bottom-sticky composer from reaching the viewport on a long gallery. */
 .tesia-shell.client-source-app.conversation-surface.has-site-footer { height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-padding-block:64px 44px; }
+/* Match the source document: hide the page scrollbar, not its scrollport.
+   Wheel, touch and keyboard scrolling and nested controls remain native. */
+.tesia-shell.client-source-app.conversation-surface.has-site-footer,
+.tesia-shell.client-source-app.has-trading-intro { scrollbar-width:none; }
+.tesia-shell.client-source-app.conversation-surface.has-site-footer::-webkit-scrollbar,
+.tesia-shell.client-source-app.has-trading-intro::-webkit-scrollbar { display:none; }
 .client-footer-body { display:contents; }
 .client-source-app.has-site-footer .client-source-main { height:auto; min-height:100svh; overflow:visible; }
 .client-source-app.has-site-footer :is(.client-main-existing,.native-service-route-content,.native-service-content:not([hidden]),.client-main-account) { height:auto; overflow:visible; }

@@ -73,6 +73,15 @@ for (const surface of surfaces) test(`operating footer ${surface.host}: approved
   await page.goto(surface.path)
   if (native) await expect(page.locator('.client-service-app')).toHaveAttribute('data-service-phase', 'ready')
   if (surface.host === 'Main') await expect(page.locator('.client-source-app:not(.client-service-app)')).toBeVisible()
+  if (surface.host === 'Main' || native) {
+    const scrollport = page.locator('.client-source-app.has-site-footer')
+    await expect(scrollport).toHaveCSS('overflow-y', 'auto')
+    await expect(scrollport).toHaveCSS('scrollbar-width', 'none')
+    expect(await scrollport.evaluate(node => getComputedStyle(node, '::-webkit-scrollbar').display)).toBe('none')
+    await page.locator('.client-home-content h1').hover()
+    await page.mouse.wheel(0, 420)
+    await expect.poll(() => scrollport.evaluate(node => node.scrollTop)).toBeGreaterThan(0)
+  }
   if (surface.host === 'Terms' || surface.host === 'Privacy') await expect(page.locator('.view.on')).toHaveAttribute('id', surface.host === 'Terms' ? 'v-terms' : 'v-privacy')
   const footer = page.locator('.client-site-footer')
   await expect(footer).toHaveCount(1)

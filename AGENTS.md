@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+현재 전체스냅샷은manifest의통합39ba416/2250파일이고 최신정적운영권위는 `candidate.currentHomeScrollbarRestoration`의별도static8d36이다. 공용문서scrollbar 숨김/소개fallback만복원했고public3폭3PASS·wheel/실키보드·정적bytes를확인했다. 인증/API/flags/카피/geometry는기존운영그대로이며통합authFIX는미배포다. Low6·실provider/서비스NO_GO·원FAIL/730일은보존하며아래1023/c34는직전인수기록이다. 스냅샷직접수정금지와sync/verify단일전달원칙을유지한다.
+
 현재 전달 출처는 manifest의 통합1023bce/전체2250파일이고 최신배포·검수권위는 `candidate.currentUserApprovedSourceUxTest`다. 실제운영sourcec34의UI-only 승격/public3폭확인을완료했으며static문서HEADac4f776과구분한다. 인증3파일/SDK/API/flags는운영b7그대로,통합authFIX는미배포다. 원본최종푸터의7localeKO/Powered by와Reactforeign6연구본문/KO거래소의차이는추가확정후속항목이다. 원56raw결속한계/준비FAIL/실서비스NO_GO·원자료는보존하고새whole·실providerGO로확대하지않는다. 아래currentRootCause/운영b7·미배포문구는각직전입력의역사다.
 
 최신 후보 상태는 `migration-verification.json`의 `candidate.currentRootCauseTransitionFixes`, 파일 출처는 `migration-manifest.json`을 따른다. 원9fb 최종 title/`skIntroCopy`/`applyLang` DOM과 실제 onclick/click 행동을 oracle로 삼는다. 긴 본문/kicker/bold/용어 UI는 원본 최종 제거 항목이므로 다시 넣지 않는다. 통합2cb3e9d의 상태교정과 staticc34a210/auth guardadd4d0f를 분리하며 운영b7은 미변경이다. retained 화면 상태 정리를 세션 채택·자동ACK로 승격하지 않고 accounts []를acReady로추정하지 않는다. 이전candidate/GO/HOLD·whole수치는 각당시범위며 새서비스승인이아니다. API/flags/권한변경0·실producer는별도선행이다.

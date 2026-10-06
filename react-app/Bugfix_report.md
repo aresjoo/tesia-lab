@@ -1,5 +1,11 @@
 # TETH 버그 수정·검수 보고서
 
+## 메인 우측 scrollbar 숨김 복원 — 별도 static 검증 이관
+
+실제 운영은 별도 static8d36으로 승격/공개3폭3PASS를 완료했다. 소개/메인 scrollbar 숨김과 wheel/실키보드End/Home·정적bytes를 검증했으며 원문/인증/API/flags는 유지한다. personal1 실제 Opus5.5 releaseGO C0/H0/M0/32입력·최종배포7단계actual0, archive8aefc9e3/rawHTML8644e7f4다. 통합authFIX와실provider는미배포/미검증이며 이 통합본전체를운영에올렸다는뜻이아니다. 원RED/초기build0뒤최종CSS refinement재build0·integration최초remote unpack실패후동일commit재push0는누적이력으로보존한다. 정확증거는static보고서와migration currentHomeScrollbarRestoration를따른다.
+
+소개에만 있던 scrollbar 숨김을 실제 공용 .conversation-surface.has-site-footer scroll owner로 옮기며 기존 소개 fallback도 유지한다. CSS2/operating-footer spec1을 static과 exact 이관했고 카피/geometry/overflow/인증/API/flags 변경0이다. static 직접4 RED→최종4 GREEN/actual0·6.524초/관련lint0는 별도 입력이며 통합에서 새 실행한 PASS로 주장하지 않는다. 현재 운영c34, 새 정적 후보 배포는 검수/공개 smoke 후 기록한다. 통합 인증 교정은 별도이며 이 CSS복원 배포에 포함하지 않는다. 새 whole0/실provider/서비스GO0.
+
 ## 소개 CTA 정적 UI 운영 승격과 공개 확인
 
 - **배포 범위:** 사용자 승인과 활성 Program §0.4/§0.5에 따라 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`를 teth.ai에 반영했다. 원9fb 최종 CTA의 비회원 제자리 signup·`시작하기`·`lang="ko"` 및7locale 예시 고지를 유지한다. 운영 인증3파일·SDK/API·Google-only=true/exchange=false는 b7과 exact이며 아래 통합 인증 busy/loading/초점 교정은 미배포다. 원본 표현의 정적 테스트 승인이지 실제 로그인·AI·주문·법률/전체서비스 GO가 아니다.
