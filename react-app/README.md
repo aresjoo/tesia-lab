@@ -1,6 +1,6 @@
 # TETH Web
 
-후속 동일8src/3spec(문장 어순·CJK 강조·번역이미지 alt)을 `2c99583`에 이관했습니다. static별도입력의 신규/관련26PASS·전체lint/정확flags 타입servicebuild actual0와 구분하며 통합에서 새전체시험을 실행했다고 쓰지 않습니다. 실제운영은아직eeb61이고후속은새compiled/독립release검수중입니다. 기존authFIX/API/권한은유지합니다.
+현재 운영은 static `46a62b610bd398801b62bcf1964ed449293de216`입니다. 새 actual Opus5.5 정적GO/60입력·배포7단계0·공개7언어×3폭105routes/42CTA/GET830 exact·외국어alt48×3폭 및새48HTTPS이미지 exact를 완료했습니다. 마지막 판단차트 제목 어순·ES320 손익 nowrap 넘침은 별도 source2/CSS1/spec1로 보완해 static단일관련30PASS/32.306초·scopedlint/정확flags 타입servicebuild actual0입니다. 이 마지막수정의 compiled/새검수·승격은 진행중이며 통합authFIX/실서비스GO는 포함하지 않습니다. 원KO/SVG/수치·저장/API/권한/원FAIL/730일보존, 정확한 상태는 누적보고서를 따릅니다. 아래 eeb/미배포 표기는 이전 실행 이력입니다.
 
 ## 정적 운영 7언어 반영 — 통합 인증 후보와 구분
 

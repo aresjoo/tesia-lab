@@ -2,6 +2,8 @@
 
 ## 최신 전달·정적 운영 확인
 
+최신snapshot은 통합 `1accbbd0603e0c04573bb6595c2ffe87897a2dcb`의2356파일/33,513,368bytes/SHA `bfdc298d34681ee1f73f7c832deaef8059c0308106f3ac7e22fc330179b11d81`입니다. 실제운영46a는 새60입력 Opus5.5 정적GO·배포7단계0·공개7언어×3폭105routes/42CTA/GET830 exact·alt48×3폭/새HTTPS48 exact를 완료했습니다. 마지막 DecisionDetail제목·ES320손익nowrap는 source2/CSS1/spec1로 보완해 staticf2bd의단일관련30PASS·scopedlint/정확flags 타입servicebuild0이며 새compiled/독립검수/승격전입니다. 원KO/SVG/수치/저장/API/권한·원root/Node/Worker/FAIL/730일은보존하며 통합authFIX/실서비스NO_GO입니다. 최신후속은 `candidate.currentLocalizationDecisionHeader`, 직전완료는 `candidate.currentLocalizationSentencePolish`를따릅니다. 아래753/eeb/미배포는직전실행이력이고snapshot직접수정금지·sync/verify 단일전달입니다.
+
 후속 현재snapshot은통합 `753e61a5035b33e66f6e010ec411d125b5afc89b`의2356파일/33,504,255bytes/SHA `dc719ce12a05a1314785c0a9db15b74271cd6845387e3c814ea0b3fd0f323874`입니다. 원KO/SVG/흐름/수치/저장/opaqueprose/계산/인증/API/artworkbytes그대로문장어순/CJK강조/foreign48alt를8src/3신규spec로보완했습니다. static46a62의related26PASS/32초·lint/typebuild0·compiled3폭105routes/42CTA/GET813 exact는별도입력근거이며새release검수/운영승격전입니다. 실제운영은eeb61,통합authFIX미배포/실서비스NO_GO/원FAIL/730일보존입니다. 정확상태는 `candidate.currentLocalizationSentencePolish`; 아래3c88은직전전달이력입니다.
 
 전체 React 스냅샷은 통합 `3c88b77e359cbdbeef5e7d257fbdcd62b160b629`의2352파일/33,468,492bytes/snapshot `c0c36d0113784e40cfe093634c94f135c9b8920e64fb42ec45c6b9a1dcef98d4`입니다. 원한국어/디자인·SVG·흐름·원본root/Node·Worker를 보존하면서 원본에도 남아 있던 외국어 누락을 표시 사전/React 어댑터로 보완했습니다. 범위는 승인푸터/Powered by, 공개본문·정책·설정·연구·연결·터미널/차트·31고정전략의 판단/용어·회사명과48foreign 파생 이미지입니다. 실제API/사용자 prose·canonical 저장·숫자/수익 계산·SDK/API/flags/주문권위는 바꾸지 않습니다.

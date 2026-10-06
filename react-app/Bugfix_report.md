@@ -1,5 +1,12 @@
 # TETH 버그 수정·검수 보고서
 
+## 판단 차트 문장·모바일 손익 줄바꿈 후속 — 로컬 검증 완료
+
+- 운영46a의 새 Opus5.5 검수에서 DecisionDetail 차트 제목의 조각 어순을 추가 확인했다. 기존 whole template2개를 재사용하고 그 무렵2행만 actual personal1 Sonnet5.5/tools0로 번역했다. 기존666행/KO/DOM/USD·수치/opaque prose/저장/API/권한은 유지한다.
+- ES320 선물 손익 라벨은 이전 aa55c와 수정본의 같은 fixture에서 모두 scrollWidth328이었다(actual1개 비교PASS/session61894). 원인은 .ot nowrap의307.875px 라벨+숫자이며 새 제목 회귀나 body기본여백으로 단정하지 않는다. max768px에서 이 손익 행만 bounded wrap하고 숫자는 nowrap으로 보존했다. 원CSS 이외 디자인·SVG·데스크톱 배치는 변경하지 않는다.
+- 신규6PASS/9.182초(session77951), 합친 현재입력은 기존26+추가4의 단일 **30PASS/0FAIL/SKIP/flaky/errors/actual0·32.306초(session54178)**다. scopedlint24966/정확flags 타입servicebuild26550 actual0. source2·CSS1·기존spec1의 추가4파일만 변경했고 전체회귀0이다. 최초RED2/5PASS1FAIL/사설alias준비오류와 ROOT numbered-hunk patch 준비실패(제품변경0)는 보존했다.
+- 이 마지막후속은 아직 운영밖이며 새compiled/Opus/배포를 결속한다. 직전46a는 실제 운영7단계0/공개105routes·42CTA·GET830 exact·alt48×3폭/새HTTPS48 exact를 완료했다. 검수60입력/새OpusGO C0/H0/M1/Low12, manifest7e4415/archivea50061/rawHTMLfe73e6/freeze9ca99f, private73입력 보존7c01f8다. 판단header 잔여 M1을 이 후속으로 닫으며 old GO는 새GO로 승계하지 않는다. 전체원어민감수/통합authFIX·실provider/실서비스NO_GO/원FAIL/730일은 별도다.
+
 ## 외국어 문장·강조·이미지alt 후속 이관 — 아직 운영 밖
 
 - source-only whole문장11행·CJK무공백 firstsentence·foreign48 imagealt의거짓Korean수식어만8src/3신규spec로보완했다. 한국어/숫자/계산/저장/미등록 prose·SVG/geometry/이미지bytes·API/인증제어는유지한다. aa55c5f의11파일을통합2c99583으로충돌없이이관했다.

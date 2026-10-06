@@ -101,6 +101,24 @@ const oracle = {
     "{bars}根K線",
     "{bars} velas",
     "{bars} bougies"
+  ],
+  "{asset} 가격, 그 무렵 ": [
+    "{asset} 가격, 그 무렵 ",
+    "{asset} price, around that time ",
+    "{asset}の価格、その頃 ",
+    "{asset} 价格，那时前后 ",
+    "{asset} 價格，那時前後 ",
+    "Precio de {asset}, hacia esa fecha ",
+    "Prix de {asset}, vers cette date "
+  ],
+  "{asset} 현물 종가(참고), 그 무렵 ": [
+    "{asset} 현물 종가(참고), 그 무렵 ",
+    "{asset} spot close (reference), around that time ",
+    "{asset}の現物終値（参考）、その頃 ",
+    "{asset} 现货收盘价（参考），那时前后 ",
+    "{asset} 現貨收盤價（參考），那時前後 ",
+    "Cierre al contado de {asset} (referencia), hacia esa fecha ",
+    "Clôture au comptant de {asset} (référence), vers cette date "
   ]
 } as const
 const locales = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
@@ -167,6 +185,55 @@ window.sentenceTrade=id=>{value=structuredClone(computeCatalogueBacktest({owner:
   }
   expect(guard.errors).toEqual([]); expect(guard.forbidden).toEqual([])
 })
+
+for (const [strategyId, futures] of [['h2', false], ['f5', true]] as const) {
+  test(`decision header whole sentences: ${futures ? 'futures' : 'spot'} BUY SELL neutral seven locales`, async ({ page, baseURL }, info) => {
+    const guard = await localShell(page, baseURL!)
+    await page.addScriptTag({ type: 'module', content: `const {ClientCatalogueEvidence}=await import('/src/components/ClientCatalogueEvidence.tsx');const rm=await import('/@id/react'),React=rm.default??rm,dm=await import('/@id/react-dom/client'),createRoot=dm.createRoot??dm.default.createRoot;
+const {loadCatalogueMarketData}=await import('/src/client-catalogue-market-data.ts');const {computeCatalogueBacktest}=await import('/src/client-catalogue-backtest-result.ts');const {initialEvidenceState}=await import('/src/client-catalogue-evidence-state.ts');await import('/src/client-catalogue-backtest.css');document.getElementById('fixture').className='client-catalogue-bt bt';const market=await loadCatalogueMarketData(),root=createRoot(document.getElementById('fixture'));let value,state,before;
+const render=()=>root.render(React.createElement(ClientCatalogueEvidence,{value,state,onChange:next=>{state=next;render()}}));
+window.sentenceDecision=(id,kind)=>{value=structuredClone(computeCatalogueBacktest({owner:'sentence-decision-preview',strategyId:id,period:365,amount:1000},market));const d=value.evidence.decisions.find(d=>d.k===kind&&d.a&&(kind==='skip'?d.tid==null:d.tid!=null));if(!d)throw Error('Actual source decision branch missing: '+id+' '+kind);d.why="사용자/API 원문 $& <이유> 12.34%";d.say=d.why;state={...initialEvidenceState(value.strategy),filter:'all',count:value.evidence.decisions.length,selection:{runId:value.runId,type:'decision',index:d.ix,j:d.j}};before=JSON.stringify(value);render();return {index:d.ix,kind:d.k,tid:d.tid??null}};window.sentenceDecisionUnchanged=()=>before===JSON.stringify(value);` })
+    await page.waitForFunction(() => typeof Reflect.get(window, 'sentenceDecision') === 'function')
+    for (const kind of ['buy', 'sell', 'skip']) {
+      await language(page, 'ko')
+      const branch = await page.evaluate(({ id, kind }) => Reflect.get(window, 'sentenceDecision')(id, kind), { id: strategyId, kind })
+      expect(branch.kind).toBe(kind)
+      if (kind === 'skip') expect(branch.tid).toBeNull(); else expect(branch.tid).not.toBeNull()
+      const row = page.locator(`.bt-row.on[data-decision-index="${branch.index}"]`), detail = row.locator('[data-testid="backtest-selected-evidence"]'), header = detail.locator('.bt-dd-c small')
+      await expect(header).toBeVisible()
+      const asset = (await header.textContent())!.split(futures ? ' 현물 종가(참고)' : ' 가격')[0]
+      const key = kind === 'skip' ? futures ? '{asset} 현물 종가(참고), 그 무렵 ' : '{asset} 가격, 그 무렵 ' : futures ? '{asset} 현물 종가(참고), 진입 전후 ' : '{asset} 가격, 매수 전후 '
+      const geometry = () => detail.locator('.bt-mini path, .bt-mini line, .bt-mini circle, .bt-mini rect').evaluateAll(nodes => nodes.map(node => [...node.attributes].map(attr => [attr.name, attr.value])))
+      const beforeGeometry = await geometry(), originalHeader = await header.elementHandle()
+      const sellPercentages = await page.locator('.bt-row.k-sell > .bt-rb > .ot > .num').allTextContents()
+      for (const [index, locale] of locales.entries()) {
+        await language(page, locale)
+        await expect(header).toHaveText(literal(key, index, { asset }) + 'USD')
+        await expect(header.locator('i')).toHaveText('USD')
+        await expect(row.locator('> .bt-rb > .wy')).toHaveText(opaqueReason)
+        expect(await header.evaluate((node, original) => node === original, originalHeader)).toBe(true)
+        expect(await geometry()).toEqual(beforeGeometry)
+        expect(await page.evaluate(() => Reflect.get(window, 'sentenceDecisionUnchanged')())).toBe(true)
+        if (futures && locale === 'es') {
+          const outcomes = page.locator('.bt-row.k-sell > .bt-rb > .ot')
+          expect(await outcomes.count()).toBeGreaterThan(0)
+          expect(await outcomes.locator('> .num').allTextContents()).toEqual(sellPercentages)
+          const layout = await outcomes.evaluateAll(nodes => nodes.map(node => ({ right: node.getBoundingClientRect().right, width: node.getBoundingClientRect().width, parentWidth: node.parentElement!.clientWidth, numberWhiteSpace: getComputedStyle(node.querySelector('.num')!).whiteSpace, numberRight: node.querySelector('.num')!.getBoundingClientRect().right, labelText: node.querySelector('small')!.textContent })))
+          for (const observed of layout) {
+            expect(observed.right).toBeLessThanOrEqual(320)
+            expect(observed.width).toBeLessThanOrEqual(observed.parentWidth)
+            expect(observed.numberRight).toBeLessThanOrEqual(320)
+            expect(observed.numberWhiteSpace).toBe('nowrap')
+            expect(observed.labelText).toBe('Ganancia/pérdida de la operación')
+          }
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+      }
+      await detail.screenshot({ path: info.outputPath(strategyId + '-' + kind + '-decision-header.png') })
+    }
+    expect(guard.errors).toEqual([]); expect(guard.forbidden).toEqual([])
+  })
+}
 
 test('sentence fragments: actual backtest run uses full branch pipelines with saved state unchanged', async ({ page, baseURL }) => {
   await page.clock.setFixedTime(new Date('2026-10-07T00:00:00Z'))

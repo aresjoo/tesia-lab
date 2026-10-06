@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+최신snapshot은 통합 `1accbbd0603e0c04573bb6595c2ffe87897a2dcb`의2356파일/33,513,368bytes/SHA `bfdc298d34681ee1f73f7c832deaef8059c0308106f3ac7e22fc330179b11d81`입니다. 실제운영46a는 새60입력 Opus5.5 정적GO·배포7단계0·공개7언어×3폭105routes/42CTA/GET830 exact·alt48×3폭/새HTTPS48 exact를 완료했습니다. 마지막 DecisionDetail제목·ES320손익nowrap는 source2/CSS1/spec1로 보완해 staticf2bd의단일관련30PASS·scopedlint/정확flags 타입servicebuild0이며 새compiled/독립검수/승격전입니다. 원KO/SVG/수치/저장/API/권한·원root/Node/Worker/FAIL/730일은보존하며 통합authFIX/실서비스NO_GO입니다. 최신후속은 `candidate.currentLocalizationDecisionHeader`, 직전완료는 `candidate.currentLocalizationSentencePolish`를따릅니다. 아래753/eeb/미배포는직전실행이력이고snapshot직접수정금지·sync/verify 단일전달입니다.
+
 후속 최신 React 출처는manifest의통합753e61a/2356파일입니다. 문장/CJK강조/이미지alt 후속 static46a62의related26/compiled3폭/lint/typebuild는별도검증이며새운영GO가아닙니다. 실제운영eeb61과새후속상태 `candidate.currentLocalizationSentencePolish`를구분하고원KO/SVG/흐름/수치/인증/계산/opaqueprose/artworkbytes·통합authFIX·원FAIL/730일을보존합니다. Root-owned snapshot은직접수정하지않고sync/verify만사용합니다. 아래3c88은직전전달입니다.
 
 최신 전체React는manifest의통합3c88b77/2352파일이며7언어 표시보완의상태는 `candidate.currentCompleteStaticLocalization`을 따릅니다. static eeb61d82는 실제teth.ai반영/public7언어×3폭검증완료이며통합authFIX는별도미배포입니다. 원KO/SVG/흐름/숫자/저장/API/userprose/주문권위는유지하고source-owned고정예시만현지화합니다. 문장/CJK강조/alt후속·원어민전문장감수/실서비스는남으므로무누락완료로확대하지않습니다. 원FAIL/이전candidate/root9fb/Node·Worker/730일·362검수입력을보존하고옛freeze재사용금지·snapshot직접수정금지/syncverify단일전달을유지합니다. 아래8d36/efe7는직전이력입니다.

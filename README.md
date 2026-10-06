@@ -2,6 +2,8 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
+최신snapshot은 통합 `1accbbd0603e0c04573bb6595c2ffe87897a2dcb`의2356파일/33,513,368bytes/SHA `bfdc298d34681ee1f73f7c832deaef8059c0308106f3ac7e22fc330179b11d81`입니다. 실제운영46a는 새60입력 Opus5.5 정적GO·배포7단계0·공개7언어×3폭105routes/42CTA/GET830 exact·alt48×3폭/새HTTPS48 exact를 완료했습니다. 마지막 DecisionDetail제목·ES320손익nowrap는 source2/CSS1/spec1로 보완해 staticf2bd의단일관련30PASS·scopedlint/정확flags 타입servicebuild0이며 새compiled/독립검수/승격전입니다. 원KO/SVG/수치/저장/API/권한·원root/Node/Worker/FAIL/730일은보존하며 통합authFIX/실서비스NO_GO입니다. 최신후속은 `candidate.currentLocalizationDecisionHeader`, 직전완료는 `candidate.currentLocalizationSentencePolish`를따릅니다. 아래753/eeb/미배포는직전실행이력이고snapshot직접수정금지·sync/verify 단일전달입니다.
+
 후속 최신 snapshot은 통합 `753e61a`의2356파일/33,504,255bytes/SHA `dc719ce1`이며 sync/verify0·dirty/삭제0입니다. 문장 어순/CJK강조/foreign 이미지alt의작은8src/3spec를원문/수치/인증권위변경없이추가했습니다. static후속46a62는 관련26PASS·lint/typebuild0·compiled3폭105routes/42CTA/GET813 exact까지검증했으며현재운영eeb61과구분합니다. 새release검수/승격중상태는 `candidate.currentLocalizationSentencePolish`를따릅니다. 아래3c88/2352는직전초기7언어운영전달기록입니다.
 
 이번 전체 전달은 통합 `3c88b77e359cbdbeef5e7d257fbdcd62b160b629`의2352파일/33,468,492bytes/snapshot `c0c36d01`입니다. sync/verify actual0·원root9fb/Node·Worker·main/이전candidate/실패 이력·삭제경로0입니다. 별도 static `eeb61d82`의7언어 푸터/Powered by·공개/정책/설정/연구/차트/source예시/용어/48이미지는 **teth.ai 반영·공개 확인 완료**입니다. actual personal1 Opus5.5 정적releaseGO C0/H0/M2/Low8·352입력·배포7단계0·8d36 CAS/backup·공개7언어×3폭105routes/42CTA/GET805 exact·오류/overflow/mutationWS0 및 별도이미지HTTPS48 exact를 결속했습니다. 원KO/SVG/흐름/숫자/저장/인증/API/flags는 유지하며 통합 authFIX는 운영밖입니다. 문장어순/CJK강조/이미지alt 후속·전 문장 원어민 의미감수/실서비스는 별도 잔여입니다. 최신상태는 `candidate.currentCompleteStaticLocalization`; 아래는각직전이력입니다.
