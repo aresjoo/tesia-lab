@@ -1,5 +1,7 @@
 # TETH Web
 
+현재 후보는 `agent/web/shared-menu-ime-parity`다. 공유 계정 메뉴의 한국어 `고객센터`·`앱 다운로드`를 원9fb대로 복원하고 다른6언어의 기존 번역·조건·콜백을 유지했다. Main 연구문서 입력에는 원20945의 IME229 Enter 방어 조건 하나만 복원했다. 메뉴 desktop14PASS와 준비 교정 후 mobile14PASS는 별도 실행이다. 연구 신규8PASS/8.82초와 인접 기존20PASS도 별도 범위이며 새 단일 전체PASS가 아니다. 타입 검사·관련 lint·공개/내부/service3build actual0, 인증/API/계약/flags 변경0·실provider/운영 배포0다. [최신 검수와 남은 경계](Bugfix_report.md#공유-메뉴-원문과-연구-입력-ime-교정)를 따른다. Native 완료 보고서는 이미 단일 SDK reader→Portal→Document로 연결돼 있으며 Hypothesis/Critic/연구팀의 실제 producer 미공급과 구분한다. 아래 후보의 현재 표현은 당시 전달 이력이다.
+
 현재 추가 후보는 `agent/web/native-copy-help-parity`다. 실제 Native 이메일 폼이 소비하는 4키·23문구를 고정 클라이언트9fb 원문으로 복원했다. `계속`·`이메일 다시 보내기` 7언어와 중국어/스페인어 이메일 라벨만 변경하며 인증 controller/API/권한/서버 상태는 그대로다. Google-only 운영 설정에서 이메일 경로는 여전히 비활성화되므로 공개 사용자에게 이 23문구가 이미 노출됐다고 보고하지 않는다. 독립 원문4PASS(약3초), locale16PASS(약9초), 기존 폼·연결·미전송 입력100PASS(약43초), 관련 lint 및 service build actual0다. 새 전체회귀/실provider/운영 배포는 없다. [Native 원문 복원 기록](Bugfix_report.md#native-이메일-폼-원문-복원)을 따른다. 아래 후보와 빌드는 각각 과거 입력의 이력이다.
 
 현재 후속 후보는 `agent/web/menu-download-parity`다. 원문 대화방 이름변경 안내를 저장성공시에만 복원하고 원본 다운로드 header6언어·로고22px·Apple색·모바일SVG28px를 맞췄다. 관련10PASS/약13초와28PASS/약33초는 각각 별도 부분검증이다. 기존 store/Native/API/flags는 유지하고 새로운 전체회귀/설치/build/운영0이다. 부모a8의3build는 새입력의 빌드PASS로 승계하지 않는다. [현재 검수 기록](Bugfix_report.md#대화방-이름-변경과-다운로드-원본-세부-복원)을 따른다. 운영진입의 카피와 Main전용카피를 구분하는 별도 정적release후보는 기존운영7dd의 인증을 그대로 유지하며 통합본의 인증fix를 삭제하지 않는다.

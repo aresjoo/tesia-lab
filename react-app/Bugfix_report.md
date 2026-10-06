@@ -1,5 +1,26 @@
 # TETH 버그 수정·검수 보고서
 
+## 공유 메뉴 원문과 연구 입력 IME 교정
+
+- **영향 경계:** ROOT와 세 병렬 담당자가 Public/Settings/Research 소비를 분리했다. 제품은 `ClientAccountUI.tsx`의 KO 두 분기와 `ClientResearchWorkspace.tsx`의 `keyCode !== 229` 조건 하나만 변경했다. 두 역치환은 각각 부모4af 파일과 byte-exact다. 인증 controller/API/권한/조건·SDK/가격/서버/flags/원본 root/730일 변경0·삭제0다. 원문을 임의 재작성하지 않고 `고객센터`·`앱 다운로드`만 원9fb index5279/5283대로 복원했다. 원본은 다른 언어에도 KO 고정이었으나 현재6언어 번역은 유지하며 그12값을 원문복원으로 보고하지 않는다.
+- **메뉴 실제 검증:** KO RED1FAIL/actual1/15.25초 뒤 첫28회차는 desktop14PASS/mobile 준비오류14FAIL/actual1/110.23초였다. 모바일 초기 닫힌 drawer를 visible로 요구하던 신규 fixture를 바로잡았다. 첫 Native mobile 대표는 이미 사라진 profile 행에 초점을 요구해 FAIL했고 기존 visible hamburger fallback을 기대하도록 새 시험만 교정했다. 정상 대표1PASS/4.74초 뒤 동일 실패14키만 mobile14PASS/actual0/28.54초로 확인했다. desktop을 반복하거나 새 단일28PASS로 합산하지 않았다. 원 실패/ESRCH 신호 시도 로그도 보존한다. receipt SHA `9647350efeab09088aa59927fb51d9d3100060397cfd26b1b472a12ffab561eb`, 최종mobile raw `1bdacfe7f949c02564f24b68e362fe95620b2f909bc1ea4af4df1ff81132ed31`다.
+- **메뉴 관찰 한계:** Main 실제 진입과 실제 `ClientServiceExperience` controlled 표시에서7언어·1440/320px를 검사했다. 각44/58px행, text fit/viewport/겹침/overflow0·hit·guest/member 조건·도움말/Escape 초점·동일 초안 DOM/언어·Native 기존 미공급 callback/download unavailable 동선을 유지했다. 외부/API/mutation/pageerror0이며 NativeServiceApp/SDK/실인증 성공이 아니다. 새spec의 viewport 준비/초점 교정 외 기존시험/timeout/retry/skip 변경0이다.
+- **연구 입력 실제 버그:** Main 연구문서에서 isComposing=false인229 Enter가 초안을 지우고 답변을 추가했다. RED1FAIL/actual1/13.24초(raw `86703246a8af0d67d22f4f397f400c292eb8f21cfdbd92e5da095554c20222db`)을 보존하고 원본 guard만 복원했다. 첫8신규+20인접 회차는26PASS/2신규하니스FAIL/actual1/27.85초(raw `2e6733511f16179adb3a627a4f2f69e6aaaee002cd6f705f95c9d6e16e33ee73`)였다. Playwright press의 char event를 실제 조합 중 rawKeyDown/keyUp으로 바꿔 관측 isComposing=true를 확인했고 신규8키만8PASS/actual0/8.82초(raw `a6d50377dee80dcda1769999b9579e8aa93f85ae3756754e08e4b90cbc83e133`)다. 기존20PASS는 첫 회차 증거로 유지하고 재실행하지 않았다. 합성229/실Chromium 조합 플래그/ShiftEnter/일반Enter의 초안·기존reply·다른방·DOM·실제저장 reply0/1을 확인했다. OS IME·callback 호출 횟수·실AI 응답은 검증하지 않았다.
+- **통합 배치 검증:** ROOT가 diff/독립 fixture/원raw·모바일 PNG를 확인했다. 관련 ESLint/diffcheck·한 번의 `tsc -b` 및 그 뒤 공개/내부/service Vite패키징 각각actual0다. 실제 소비 환경 변수 Google-only=true/exchange=false를 유지했다. 새 install/whole/model/provider/운영0이며 기존 큰 chunk 경고는 남는다. 4686/4687 소유 listener0다. 시험 준비오류는 제품 결함/실인증 성공으로 바꾸지 않는다.
+- **추가 감사의 정확한 범위:** Public About88unique 원문/102참조·Policy140원문·public11키의 정적 소비와 About5/download3/거래소7 asset byte-exact를 확인했다. 전체 render/모든 기기 PASS로 확대하지 않는다. 현재256×155 로고는 원520×314 같은 glyph의 리사이즈 자산으로 직접 확인했으며 근거 없이 교체·삭제하지 않았다. 현재9fb에서는 USD고정/통화 picker 비노출이 원본과 같아 과거 요구만으로 새 누락으로 판정하지 않았다.
+
+### 실제 소비와 남은 완료 경계
+
+| 항목 | 확인된 현재 상태 | 남은 경계 |
+| --- | --- | --- |
+| 공유 메뉴 KO 원문 | Main/Native 계정 메뉴 소비, 원문2개 복원 | controlled 표시를 운영 실인증으로 승격하지 않음 |
+| 연구 IME229 | Main 연구문서 guard 복원, Native Conversation 기존 guard 유지 | 실제 OS IME/실AI 검증은 별도 |
+| Native 완료 보고서 | NativeServiceApp→NativeServiceResult 단일 `api.report(job)`→NativeResultReportPortal→NativeReportDocument→실제 report slot 이미 연결 | 중복 reader/고정수치 adapter 추가하지 않음; 실제 job/provider 증거는 기존 범위대로 유지 |
+| Hypothesis/Critic/Research Team | typed renderer가 있으나 실제 설명 producer 미공급 | 계약 선행, 모델 내부 사고·가짜 수정/성공·bt1/bt2=IS/OOS 자동 매핑 금지 |
+| 카피 운영 전달 | 통합 source와 별도 staticc090 후보를 구분 | 인증 승격 권위·실provider 검증, 푸터 실거래/Bitget 선정 사실 확인·§0.4가 남아 운영 HOLD |
+
+아래 기록의 현재 표현은 각 과거 입력 이력이다. 이번 부분PASS를 이전 whole FAIL의 면제나 전체 UI 완료·서비스GO로 쓰지 않는다. Git 전달의 정확한 source/migration SHA는 최신 manifest/verification을 따른다.
+
 ## Native 이메일 폼 원문 복원
 
 - 감사팀 지적대로 카피 복원에 인증 기능 변경을 추가하지 않았다. 제품 diff는 `native-auth-ui-copy.ts`의 4행·23literal뿐이다. `auth.email` 원문26433의 zh-CN/es 2값, `auth.continue`26434의 요청·확인 각7값, `code.resend`26441의7값을 복원했다. 나머지 사전은 역치환 byte-exact이고 컴포넌트/controller/API/권한/오류/서버시각/flags는 변경0이다.

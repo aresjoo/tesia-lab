@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/native-copy-help-parity@4af904665000a9a40730820cf8e542e65129a9d6` 전체. 부모0f 위 Native 원문4키·23literal만 변경. 원문4/locale16/기존consumer100PASS, lint/service build0·whole/운영0 |
+| React 출처 | `agent/web/shared-menu-ime-parity@e44867b6bfdd76f1aed4753951461236ea31767e` 전체. 부모4af 위 공유 메뉴 KO원문2개·Main 연구IME229 guard만 변경. 구간검증·타입/lint/3build actual0, 새whole/운영0 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — Native 이메일 폼 원문
+### 최신 전달 — 공유 메뉴와 연구 입력
+
+전체2240파일/26314982bytes/snapshot `026c1ca08906fb226edbd02ad7279104c40b26d138b52c2800fc5f3f08a5bf35`다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 원본 root/main은 보존한다. 메뉴 `고객센터`·`앱 다운로드`만 원문으로 맞추고 다른6언어의 기존 번역·콜백/계정조건은 유지했다. 연구문서 입력의 원IME229 조건 누락도 복원했다. 두 제품파일의 역치환은 부모4af와 byte-exact이며 인증 controller/API/SDK/flags 변경0이다.
+
+메뉴 첫 회차 desktop14PASS/mobile 준비오류14FAIL은 보존했다. 신규시험의 초기drawer/초점 준비만 바로잡아 mobile14키만14PASS/28.54초로 확인했으며 새 단일28PASS가 아니다. 연구 첫 신규8+인접20은26PASS/2신규조합하니스FAIL이었다. char event 준비를 교정한 신규8만8PASS/8.82초이고 인접20은 기존 회차 PASS를 유지한다. 관련lint·한 번의 타입검사·공개/내부/service3build actual0, 새whole/model/실provider/운영0이다. Native 메뉴는 controlled 실제셸 표시이며 실인증 증거가 아니다.
+
+Native 완료보고서의 단일 SDK reader→Portal→Document→report slot은 이미 연결돼 있으므로 중복adapter를 만들지 않았다. Hypothesis/Critic/연구팀의 실제 producer 미공급과 원문복원/완료보고서를 구분한다. 원FAIL·이전current19객체·역사와 별도staticc090/푸터 사실확인/정적승격HOLD를 유지한다. 정확한 이번부분 근거는 `candidate.currentSharedMenuResearchIme`와 `react-app/Bugfix_report.md`다.
+
+### 이전 전달 — Native 이메일 폼 원문
 
 전체2238파일/26289697bytes/snapshot `31aa395f5a48ca8dda4b354da9e7e4db5d9ac50da85e7ae82b39585788350d8c`다. source dirty/deleted/이전경로삭제0, sync/verify actual0다. 인증 동작을 바꾸지 않고 원본 `계속`·`이메일 다시 보내기` 7언어 및 중국어/스페인어 이메일 라벨23literal만 맞췄다. 기존4spec의14 selector 이름만 보정하고 부모공급 재전송 안내·기존 단언은 보존했다. 원문전용4PASS/2.82초, locale16PASS/9.16초, 기존consumer100PASS/42.53초·관련lint/service build actual0다. 최초 환경 변수명 불일치는 로그를 남기고 실제소비 이름으로 Vite 패키징만 교정했다. 새whole/실provider/운영0이다.
 
