@@ -27,7 +27,8 @@ const publicLanguages = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr']
 function PublicCopy({ page, copyKey }: { page: 'about' | 'download'; copyKey: string }) {
   const { language } = useClientPreferences()
   const dictionary = publicCopy[page] as Record<string, string[]>
-  const text = dictionary[copyKey]?.[Math.max(0, publicLanguages.indexOf(language))] ?? ''
+  const text = dictionary[copyKey]?.[publicLanguages.indexOf(language)]
+  if (!text) throw new Error('INCOMPLETE_PUBLIC_LOCALE')
   // Remaining chrome labels are plain authored strings. The retired rich
   // About body no longer needs a browser-only HTML parser.
   return <>{text}</>
@@ -47,8 +48,8 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
   const service = useSiteHrefMapper() !== null
   const download = readDownloadConfig()
   const { language, t } = useClientPreferences()
-  // The original policy page is Korean-only. Localize its navigation, not its
-  // legal body, using the client's existing public-page dictionary.
+  // Keep the original Korean meaning and localize the full public document,
+  // including the previously Korean-only policy body.
   const policyCopy = policyLabels(language)
   const policyTitle = policyCopy.title
   const [localeOpen, setLocaleOpen] = useState(false)
@@ -169,7 +170,7 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
     window.addEventListener('scroll', scroll, { passive: true }); scroll()
     return () => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame) }
   }, [page, policyTab])
-  return <div ref={root} className={'client-public-page client-info-' + page}>
+  return <div ref={root} lang={language} className={'client-public-page client-info-' + page}>
     <button className="public-language-trigger" type="button" onClick={event => { localeReturnFocus.current = event.currentTarget; setLocaleOpen(true) }} aria-label={t('glc.lang')} aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z" /></svg></button>
     {localeOpen && <ClientLocalePanel returnFocus={localeReturnFocus} onClose={() => setLocaleOpen(false)} />}
     <a className="site-skip" href="#site-main" onClick={event => {
@@ -203,7 +204,7 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
 <InternalLink href="/download/" aria-current="page">{language === 'ko' ? '앱 다운로드' : <PublicCopy page="download" copyKey="navDl" />}</InternalLink>
 </nav>
 <span className="sp" />
-<InternalLink className="cta" href="/">{language === 'ko' ? downloadText(language, 'start') : <PublicCopy page="download" copyKey="login" />}</InternalLink>
+<InternalLink className="cta" href="/">{downloadText(language, 'start')}</InternalLink>
 </header>
 
 <main className="dl" id="site-main" tabIndex={-1}>

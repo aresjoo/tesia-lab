@@ -220,7 +220,7 @@ export function ClientChrome({ mobileMenuHost, signedIn, showLocaleShortcut = tr
         <nav className={`client-auth-nav ${bannerOpen ? 'with-banner' : ''}`} aria-label={s('accountMenu')}>
           <InternalLink className="client-auth-link" href="/about/">{t('nav.about')}</InternalLink>
           <InternalLink className="client-auth-link" href="/download/">{t('nav.download')}</InternalLink>
-          <button className="client-login" type="button" aria-label={onProfile ? t('nav.login') : language === 'ko' ? 'Mock 계정으로 로그인' : `Mock ${t('nav.login')}`} onClick={onLogin}><span className="client-auth-pill">{t('nav.login')}</span></button>
+          <button className="client-login" type="button" aria-label={onProfile ? t('nav.login') : s('mockLogin')} onClick={onLogin}><span className="client-auth-pill">{t('nav.login')}</span></button>
           <button className="client-signup" type="button" onClick={onSignup}><span className="client-auth-pill">{t('nav.signup')}</span></button>
         </nav>
       )}

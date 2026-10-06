@@ -1,6 +1,20 @@
 # TETH Web
 
-## 현재 정적 운영 — 메인 우측 scrollbar 복원
+## 정적 운영 7언어 반영 — 통합 인증 후보와 구분
+
+별도 static source `eeb61d82f319a84dec671151c73374b971df2cc1`을 teth.ai에 반영했습니다. actual personal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M2/Low8·352입력, 배포7단계0·8d36 CAS/backup·공개7언어×3폭105routes/42CTA/GET805 exact·오류/overflow/mutationWS0·별도48HTTPS이미지bytes/SHA exact입니다. 아래 통합 authFIX는 여전히 미배포이며 이 통합 전체를 운영source라고 쓰지 않습니다. 좁은 외국어 문장/강조/alt 후속은 별도 worktree에서 진행 중입니다. 원어민 전 문장 감수·실provider/전체서비스 NO_GO 및 원FAIL을 유지합니다. 아래 미배포/8d36표기는 당시 이력이며 정확 증거는 [누적 보고서](Bugfix_report.md)를 따릅니다.
+
+## 통합 후보 — 7언어 표시 이식, 기존 인증 교정 유지
+
+정적 UI source `eeb61d82f319a84dec671151c73374b971df2cc1`의 단일 183파일 패치를 통합 기준 `efe7b2319a885a00474fb5369bdaf5e5ae3905ee`에 이식했습니다. 기존 인증 return·세션 재확인·미전송 입력 보존 로직은 유지하고 NativeServiceApp에는 표시 번역만 병합합니다. NativeLoginPanel·native-browser-auth의 기존 교정도 유지합니다. 아래 로컬라이징 시험·빌드 수치는 별도 static 입력의 실행 이력이며 통합본에서 새로 실행한 결과가 아닙니다.
+
+통합 전용 인증 반환 복구 안내의 foreign6 번역과 후속 실제 API 연결은 별도 잔여입니다. 통합본·7언어 후보 모두 운영 승격 완료로 표시하지 않으며, 현재 확인된 운영 source는 `8d36d3109731e699486690fa65759417d40c060c`입니다. 정확한 통합 검증은 [누적 보고서](Bugfix_report.md)를 따릅니다. 새 전체 회귀·실로그인·provider·전체서비스 GO는 아닙니다.
+
+## 지원 7언어 보완 — 운영 반영 전
+
+승인된 한국어 카피·SVG·사용자 흐름을 유지하며 외국어 푸터/Powered by, 소개·정책·연구·설정·연결·차트·고정 예시와 이미지 내부 문구를 현지화했습니다. 사용자 입력과 실제 API 자유 문장은 자동 번역하지 않습니다. 단일 영향182PASS 이후 숫자 단위28+2, 홈 자산 이름6, 전략 상세·판단·용어·복사 설정14를 각각 검증했습니다. 최종 전체lint·정확flags 타입/servicebuild actual0입니다. 운영 source8d36과 새 작업본을 구분하고 최종 독립 release 검수·공개 확인 전 배포 완료로 표시하지 않습니다. 정확 원 FAIL/HOLD와 실행 근거는 [누적 보고서](Bugfix_report.md)를 따릅니다.
+
+## 메인 우측 scrollbar — 운영 복원 완료
 
 별도 static source `8d36d3109731e699486690fa65759417d40c060c`의 CSS2/시험1을 teth.ai에 반영하고 public1440/390/320 3PASS/actual0로 소개/메인의 숨김·휠·실키보드End/Home를 확인했습니다. 카피/geometry/overflow/auth/API/flags는 유지하며 통합인증FIX는 운영에 포함하지 않습니다. actualpersonal1 Opus5.5 C0/H0/M0/32입력·배포7단계0·원자CAS/backup과 원RED/Low6는 [누적 보고서](Bugfix_report.md)를 따릅니다. 아래c34의 최신운영 표기는 직전 이력입니다.
 

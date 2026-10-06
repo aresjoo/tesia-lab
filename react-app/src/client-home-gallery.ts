@@ -1,6 +1,7 @@
 // Client visual/copy source: aresjoo/tesia-lab 02cebe3. No trading or entitlement authority.
 import type { ClientLanguage } from './client-preferences'
 import { localizedTemplateText } from './client-template-copy'
+import { homeTemplateLabel } from './client-shell-copy'
 export interface HomeTemplateSelection { acts: string[]; assets: string[] }
 export interface HomeTemplateAction {
   id: string; lb: string; brand?: number
@@ -477,7 +478,7 @@ export function getTemplateText(selection: HomeTemplateSelection, language: Clie
   const assets = normalized.assets.map(id => CLIENT_HOME_ASSETS.find(item => item.id === id)!)
   if (!acts.length && !assets.length) return null
   const labels = assets.map(item => item.lb)
-  if (language !== 'ko') return localizedTemplateText(language, acts.map(item => item.id), labels)
+  if (language !== 'ko') return localizedTemplateText(language, acts.map(item => item.id), assets.map(item => homeTemplateLabel(language, item.id, item.lb)))
   const asset = labels.length > 1 ? labels.slice(0, -1).join(', ') + (hasFinalConsonant(labels[labels.length - 2]) ? '과' : '와') + ' ' + labels[labels.length - 1] : (labels[0] ?? '')
   const fill = (text: string) => text.replace('{A}{obj}', asset ? asset + (hasFinalConsonant(asset) ? '을' : '를') : '').replace('{A}', asset)
   const end = (stem: string) => stem.endsWith('주') ? stem.slice(0, -1) + '줘' : stem + '어줘'

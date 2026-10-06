@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
 import { clientResearchScrollport } from '../client-research-scrollport'
 import { CLIENT_RANKING, type ResearchPage, type ResearchRecord } from '../research-library'
@@ -42,6 +43,7 @@ type Props = {
 }
 
 export function ClientResearchHub({ page, records, onSelect, onNew, onFollow, onReturn, shareable, notice, externalBoundary = false, previewMoney = false, brokerServices, brokerListRequest = 0, insightServices, insightLocation, onInsightNavigate, onInsightAsk, sharingPreview }: Props) {
+  const localeUi = useStaticUiCopy()
   const { language, currency } = useClientPreferences()
   const copy = (key: ResearchCopyKey, values?: Record<string, string | number>) => researchCopy(language, key, values)
   const number = (value: number) => value.toLocaleString(language)
@@ -65,7 +67,7 @@ export function ClientResearchHub({ page, records, onSelect, onNew, onFollow, on
   if (page === 'history') return <ClientResearchHistory records={records} onSelect={onSelect} onNew={onNew} onReturn={onReturn} notice={notice} externalBoundary={externalBoundary} />
   if ((page === 'sharing' || page === 'ranking') && sharingPreview) return <Container id="research-main" className="client-research-hub client-sharing-hub" aria-label={copy('sharing')}>
     <header className="hub-header"><h1 id="research-title" ref={titleRef} tabIndex={-1}>{sharingTitle}</h1><button type="button" onClick={sectionReturn?.onReturn ?? onReturn}>{sectionReturn?.label ?? copy('return')}</button></header>{notice}
-    <ClientLoadBoundary fallback={<div role="alert"><p>전략 공유 화면을 불러오지 못했어요.</p><button type="button" onClick={onReturn}>{copy('return')}</button></div>}><Suspense fallback={<p role="status">전략 공유 화면을 불러오는 중이에요.</p>}><ClientStrategySharing routeTitleRef={titleRef} {...sharingPreview} key={sharingPreview.owner} owner={sharingPreview.owner} location={sharingPreview.location} onNavigate={sharingPreview.onNavigate} signedIn={sharingPreview.signedIn} onLogin={sharingPreview.onLogin} onAsk={sharingPreview.onAsk} onCopy={sharingPreview.onCopy} onReturn={onReturn} /></Suspense></ClientLoadBoundary>
+    <ClientLoadBoundary fallback={<div role="alert"><p>{localeUi("전략 공유 화면을 불러오지 못했어요.")}</p><button type="button" onClick={onReturn}>{copy('return')}</button></div>}><Suspense fallback={<p role="status">{localeUi("전략 공유 화면을 불러오는 중이에요.")}</p>}><ClientStrategySharing routeTitleRef={titleRef} {...sharingPreview} key={sharingPreview.owner} owner={sharingPreview.owner} location={sharingPreview.location} onNavigate={sharingPreview.onNavigate} signedIn={sharingPreview.signedIn} onLogin={sharingPreview.onLogin} onAsk={sharingPreview.onAsk} onCopy={sharingPreview.onCopy} onReturn={onReturn} /></Suspense></ClientLoadBoundary>
   </Container>
   if (page === 'insight') return <Container id="research-main" className="client-research-hub client-insight-hub" aria-label={copy('insight')}>
     <ClientLoadBoundary fallback={<div role="alert"><p>{copy('insightError')}</p><button type="button" onClick={onReturn}>{copy('return')}</button></div>}>

@@ -24,6 +24,7 @@ for (const part of fixture.sections) {
 if (sectionEnd !== originalCode.length || fixture.sections.length !== 5) throw new Error('ORIGINAL_SECTION_COVERAGE_CHANGED')
 const languages = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
 const examples = ['화면 예시 · 실제 거래 기록이 아닙니다', 'Illustrative example · Not actual trading records', '画面例 · 実際の取引記録ではありません', '界面示例 · 非真实交易记录', '介面範例 · 非真實交易記錄', 'Ejemplo ilustrativo · No son registros de trading reales', 'Exemple illustratif · Données de trading non réelles']
+const starts = ['시작하기', 'Get started', '始める', '开始使用', '開始使用', 'Comenzar', 'Commencer']
 
 async function presentation(page: Page) {
   return page.locator('.txh').evaluate(root => {
@@ -82,6 +83,7 @@ const serviceHtml = '<!doctype html><html lang="ko"><head><meta charset="utf-8">
 
 for (const host of ['Main', 'Native service entry'] as const) for (const width of [1440, 390, 320]) {
   test(`final 9fb intro ${host} ${width}px: overlay and locale parity`, async ({ page, context, baseURL }, info) => {
+    info.annotations.push({type:'localization-supplement',description:'Korean final-source copy and 14 original signup clicks preserved; foreign copy translated under the new user policy, not claimed byte-identical to 9fb.'})
     if (!baseURL) throw new Error('LOCAL_ORIGIN_REQUIRED')
     const oraclePage = await context.newPage()
     const oracle = await originalOracle(oraclePage)
@@ -120,11 +122,26 @@ for (const host of ['Main', 'Native service entry'] as const) for (const width o
         preferences.setClientPreference('language', value)
       }, language)
       await expect(page.locator('html')).toHaveAttribute('lang', language)
-      expect(await presentation(page)).toEqual(oracle)
+      const localized = await presentation(page)
+      if (language === 'ko') expect(localized).toEqual(oracle)
+      else {
+        // Keep all original content slots and numeric/model evidence. Only
+        // foreign editorial strings supplement the source's Korean fallback.
+        for (const key of Object.keys(oracle) as (keyof typeof oracle)[]) {
+          if (Array.isArray(oracle[key])) expect((localized[key] as string[]).length, key).toBe((oracle[key] as string[]).length)
+        }
+        for (const key of ['models','venues','values','removedControls','emphasis'] as const) expect(localized[key], key).toEqual(oracle[key])
+        expect(localized.ctas).toEqual([starts[index], starts[index]])
+        expect(JSON.stringify(localized)).not.toMatch(/[가-힣]/)
+        expect(localized.bodies[1]).toContain('28')
+        expect(localized.bodies[1]).toContain('30')
+        expect(localized.bodies[1]).toMatch(/\b5\s*%/)
+        expect(localized.bodies[1]).toMatch(/\b12\s*%/)
+      }
       await expect(page.locator('.txh .txh-cta')).toHaveCount(2)
-      for (const cta of await page.locator('.txh .txh-cta').all()) await expect(cta).toHaveAttribute('lang', 'ko')
+      for (const cta of await page.locator('.txh .txh-cta').all()) await expect(cta).toHaveAttribute('lang', language)
       await expect(page.locator('.txh-example-note')).toHaveText(examples[index])
-      await expect(page.locator('.txh')).toHaveAttribute('lang', 'ko')
+      await expect(page.locator('.txh')).toHaveAttribute('lang', language)
       await expect(page.locator('.txh video')).toHaveCount(0)
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
     }

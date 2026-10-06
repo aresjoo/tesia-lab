@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import { getSitePage, SiteHrefContext, useSiteLocation } from '../site-navigation'
 import { getServiceSiteLocation, toServiceSiteHref } from '../internal-poc/service-site-navigation'
 import { ClientLoadBoundary, ClientLoadFallback } from './ClientLoadBoundary'
+import { useClientPreferences } from '../client-preferences'
+import { clientEntryCopy } from '../client-entry-copy'
 
 const ClientPublicPages = lazy(() => import('./ClientPublicPages'))
 const documentEntryKey = 'tethPublicDocumentEntry'
@@ -150,6 +152,7 @@ function useDocumentHistory(service: boolean) {
 }
 
 export function SiteRouter({ children, service = false }: { children: ReactNode; service?: boolean }) {
+  const { language } = useClientPreferences()
   const documentNavigation = useDocumentHistory(service)
   const browserLocation = useSiteLocation(service)
   const location = service ? getServiceSiteLocation(browserLocation) ?? '/' : browserLocation
@@ -161,11 +164,11 @@ export function SiteRouter({ children, service = false }: { children: ReactNode;
   if (!page && !appOpened) setAppOpened(true)
   useEffect(() => {
     if (!page) {
-      document.title = 'TETH AI — 거래를 위한 AI'
+      document.title = clientEntryCopy[language].title
       if (previousPage.current) document.querySelector<HTMLElement>('.client-source-main')?.focus({ preventScroll: true })
     }
     previousPage.current = page
-  }, [page])
+  }, [page, language])
   return <SiteHrefContext.Provider value={service ? toServiceSiteHref : null}>
     {appOpened && <div hidden={Boolean(page)} inert={Boolean(page)}>{children}</div>}
     {page && <ClientLoadBoundary fallback={<ClientLoadFallback />}><Suspense fallback={<ClientLoadFallback loading />}><ClientPublicPages page={page} location={location} historyNavigation={documentNavigation} /></Suspense></ClientLoadBoundary>}

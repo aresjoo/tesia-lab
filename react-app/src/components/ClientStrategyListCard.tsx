@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useId } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { sharedPercent } from '../client-shared-number-format'
@@ -17,6 +18,7 @@ export function ClientStrategyListCard({ title, asset, kind, glyph, venue, follo
   title: string; asset: string; followers?: number; performance: ListPerformance | null
   location: SharedLocation; onNavigate: (location: SharedLocation) => void; own?: boolean
 }) {
+  const localeUi = useStaticUiCopy()
   const { language } = useClientPreferences(), text = copy[language], id = useId()
   const spark = strategyListSpark(performance?.values ?? [])
   const curve = (color: string) => spark && <path d={spark.path} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>
@@ -41,7 +43,7 @@ export function ClientStrategyListCard({ title, asset, kind, glyph, venue, follo
           {spark.flatAtBase && <path d={spark.flatAtBase} fill="none" stroke="#2ebd85" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke"/>}
         </>}</svg>}
       </div>
-      <div className="skf-fw" id={`${id}-followers`}>{hiddenZero ? <span className="sr-only">{text.followers} 0</span> : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span>{originalCount ? <><b>{originalCount}명</b>이 따라가는 중</> : <>{text.followers} <b>{count === '—' ? unavailable : count}</b></>}</span></>}</div>
+      <div className="skf-fw" id={`${id}-followers`}>{hiddenZero ? <span className="sr-only">{text.followers} 0</span> : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.5-3.3 3-5.4 6.2-5.4s5.7 2.1 6.2 5.4"/><path d="M15.2 4.9a3.4 3.4 0 0 1 0 6.3"/><path d="M17.6 14.4c2.1.6 3.4 2.4 3.7 5.1"/></svg><span>{originalCount ? <><b>{originalCount}{localeUi("명")}</b>{localeUi("이 따라가는 중")}</> : <>{text.followers} <b>{count === '—' ? unavailable : count}</b></>}</span></>}</div>
     </a>
   </article>
 }

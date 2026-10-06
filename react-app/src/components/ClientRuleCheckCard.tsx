@@ -7,6 +7,7 @@ import '../client-rule-check.css'
 
 const eventLabel = { entry: 'eventEntry', watch: 'eventWatch', risk: 'eventRisk', 'exit-sl': 'eventSl', 'exit-tp': 'eventTp', 'exit-time': 'eventTime', scan: 'scanEvent' } as const
 const summaryLabel = { entry: 'entrySummary', watch: 'watchSummary', risk: 'holdingSummary', 'exit-sl': 'slSummary', 'exit-tp': 'tpSummary', 'exit-time': 'timeSummary' } as const
+const identityText = (text: string) => text
 
 function RuleEvidence({ event }: { event: ClientAgentEvent }) {
   const { language } = useClientPreferences()
@@ -20,14 +21,14 @@ function RuleEvidence({ event }: { event: ClientAgentEvent }) {
 }
 
 /** Latest source journal presentation, scoped to the source rule producer. */
-export function ClientRuleJournal({ events, index, expanded, onToggle, nested = false }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; nested?: boolean }) {
+export function ClientRuleJournal({ events, index, expanded, onToggle, nested = false, displayText = identityText }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; nested?: boolean; displayText?: (text: string) => string }) {
   const { language } = useClientPreferences()
   const id = useId()
   const first = events[0], last = events.at(-1)!
   const key = first.type === 'scan' ? undefined : summaryLabel[first.type]
   // Missing checks cannot support a categorical rule explanation.
   const hasEvidence = events.every(event => event.ruleCheck && event.ruleCheck.rows.length > 0 && event.ruleCheck.rows.every(row => row.state !== 'unknown'))
-  const summary = first.summary ?? (key && hasEvidence ? ruleCheckText(language, key) : first.text)
+  const summary = first.summary !== undefined ? displayText(first.summary) : key && hasEvidence ? ruleCheckText(language, key) : displayText(first.text)
   return <li className="tb-rl" tabIndex={-1} data-agent-event={nested ? undefined : first.id} data-agent-index={nested ? undefined : index} data-agent-end-index={nested ? undefined : index + events.length - 1}>
     <button type="button" className="tb-rule-toggle" aria-expanded={expanded} aria-controls={id} onClick={onToggle}>
       <span className="tb-ft num">{events.length > 1 ? `${last.timeLabel} ~ ${first.timeLabel}` : first.timeLabel}</span>
@@ -36,7 +37,7 @@ export function ClientRuleJournal({ events, index, expanded, onToggle, nested = 
     </button>
     <ul className="tb-fr tft-event-list" id={id} hidden={!expanded}>{expanded && events.map(event => <li key={event.id} className="tb-rule-evidence" data-rule-event={event.id}>
       {events.length > 1 && <p className="tb-ft num">{event.timeLabel}</p>}
-      <p className="tb-rule-original">{event.summary ?? event.text}</p>
+      <p className="tb-rule-original">{displayText(event.summary ?? event.text)}</p>
       <RuleEvidence event={event} />
     </li>)}</ul>
   </li>
@@ -53,7 +54,7 @@ export function ClientRuleCheckCard({ event, index, nested = false }: { event: C
   </li>
 }
 
-export function ClientRuleWatchGroup({ events, index, expanded, onToggle, range, count, days, journalDetail }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; range: string; count: number; days: number; journalDetail?: { expanded: boolean; onToggle: () => void } }) {
+export function ClientRuleWatchGroup({ events, index, expanded, onToggle, range, count, days, journalDetail, displayText }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; range: string; count: number; days: number; journalDetail?: { expanded: boolean; onToggle: () => void }; displayText?: (text: string) => string }) {
   const { language } = useClientPreferences()
   const id = useId()
   const title = ruleCheckText(language, 'watch', { count: String(count), days: String(days) })
@@ -61,6 +62,6 @@ export function ClientRuleWatchGroup({ events, index, expanded, onToggle, range,
     <button className="tm-fold" type="button" aria-expanded={expanded} aria-controls={id} onClick={onToggle}>
       <span className="num">{range}</span><b>{title}</b><i>{ruleCheckText(language, expanded ? 'collapse' : 'expand')}</i>
     </button>
-    <ul className="tm-foldx tft-event-list" id={id} hidden={!expanded}>{expanded && (journalDetail ? <ClientRuleJournal events={events} index={index} {...journalDetail} nested /> : events.map((event, i) => <ClientRuleCheckCard key={event.id} event={event} index={index + i} nested />))}</ul>
+    <ul className="tm-foldx tft-event-list" id={id} hidden={!expanded}>{expanded && (journalDetail ? <ClientRuleJournal events={events} index={index} {...journalDetail} nested displayText={displayText} /> : events.map((event, i) => <ClientRuleCheckCard key={event.id} event={event} index={index + i} nested />))}</ul>
   </li>
 }

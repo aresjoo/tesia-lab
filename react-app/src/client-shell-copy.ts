@@ -5,6 +5,7 @@ import { researchNavigationLabel } from './client-research-copy'
 type Translations = readonly [string, string, string, string, string, string, string]
 const languages: readonly ClientLanguage[] = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr']
 const copy = {
+  mockLogin: ['Mock 계정으로 로그인', 'Log in with a mock account', 'モックアカウントでログイン', '使用模拟账户登录', '使用模擬帳戶登入', 'Iniciar sesión con una cuenta simulada', 'Se connecter avec un compte fictif'],
   menuBack: ['메뉴로 돌아가기', 'Back to menu', 'メニューに戻る', '返回菜单', '返回選單', 'Volver al menú', 'Retour au menu'],
   usage: ['이용 현황', 'Usage', '利用状況', '使用情况', '使用情況', 'Uso', 'Utilisation'],
   account: ['내 계정', 'My account', 'マイアカウント', '我的账户', '我的帳戶', 'Mi cuenta', 'Mon compte'],
@@ -47,8 +48,24 @@ export type ShellCopyKey = keyof typeof copy
 export function shellText(language: ClientLanguage, key: ShellCopyKey, values: Record<string, string | number> = {}) {
   return copy[key][languages.indexOf(language)].replace(/\{(\w+)\}/g, (match, name: string) => String(values[name] ?? match))
 }
+// Fixed source asset labels only; an ID alone never authorizes rewriting customer text.
+const assetLabels = {
+  sec: ['삼성전자', 'Samsung Electronics', 'サムスン電子', '三星电子', '三星電子', 'Samsung Electronics', 'Samsung Electronics'],
+  hyx: ['SK하이닉스', 'SK hynix', 'SKハイニックス', 'SK海力士', 'SK海力士', 'SK hynix', 'SK hynix'],
+  ma: ['마스터카드', 'Mastercard', 'マスターカード', '万事达卡', '萬事達卡', 'Mastercard', 'Mastercard'],
+  aramco: ['아람코', 'Aramco', 'アラムコ', '阿美石油公司', '沙烏地阿美', 'Aramco', 'Aramco'],
+  hd: ['홈디포', 'The Home Depot', 'ホーム・デポ', '家得宝', '家得寶', 'The Home Depot', 'The Home Depot'],
+  cola: ['코카콜라', 'The Coca-Cola Company', 'コカ・コーラ', '可口可乐', '可口可樂', 'Coca-Cola', 'Coca-Cola'],
+  tm: ['토요타', 'Toyota Motor', 'トヨタ自動車', '丰田汽车', '豐田汽車', 'Toyota Motor', 'Toyota Motor'],
+  tcehy: ['텐센트', 'Tencent', 'テンセント', '腾讯', '騰訊', 'Tencent', 'Tencent'],
+  baba: ['알리바바', 'Alibaba Group', 'アリババ・グループ', '阿里巴巴', '阿里巴巴', 'Alibaba Group', 'Alibaba Group'],
+  hmc: ['현대차', 'Hyundai Motor Company', '現代自動車', '现代汽车', '現代汽車', 'Hyundai Motor Company', 'Hyundai Motor Company'],
+  kko: ['카카오', 'Kakao', 'カカオ', 'Kakao', 'Kakao', 'Kakao', 'Kakao'],
+} as const satisfies Record<string, Translations>
 export function homeTemplateLabel(language: ClientLanguage, id: string, original: string) {
-  return ['auto', 'ind', 'rank', 'anal', 'port'].includes(id) ? shellText(language, id as ShellCopyKey) : original
+  if (['auto', 'ind', 'rank', 'anal', 'port'].includes(id)) return shellText(language, id as ShellCopyKey)
+  const labels = Object.hasOwn(assetLabels, id) ? assetLabels[id as keyof typeof assetLabels] : undefined
+  return labels?.[0] === original ? labels[languages.indexOf(language)] : original
 }
 
 /** Frozen9fb sidebar-only labels; headings and legacy consumers stay separate. */

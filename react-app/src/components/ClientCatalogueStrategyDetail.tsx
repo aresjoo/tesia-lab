@@ -1,7 +1,8 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import type { CataloguePreviewResult } from '../client-catalogue-preview'
 import { catalogueAssets, catalogueTitle, catalogueUniverses } from '../client-catalogue'
-import { catalogueDateReader, catalogueEquityWindow, catalogueIdentity, catalogueOrders } from '../client-catalogue-presentation'
+import { catalogueDateReader, catalogueEquityWindow, catalogueOrders } from '../client-catalogue-presentation'
+import { catalogueDetailLocale } from '../client-catalogue-detail-locale'
 import type { SharedLocation } from '../client-shared-strategies'
 import { useClientPreferences } from '../client-preferences'
 import { sharedPercent } from '../client-shared-number-format'
@@ -62,7 +63,7 @@ function CatalogueHeaderContent({ value, title, onCopy, onAnalyze, onWatch, onCo
     finally { if (request.current === controller) { request.current = null; setPending(false) } }
   }
   if (!metadata) return <p role="status">{settingsCopy.actionUnavailable[language]}</p>
-  const row = catalogueIdentity(metadata.strategy)
+  const row = catalogueDetailLocale(value, language).identity
   const actions = [
     { label: sharingCopy(language, 'TETH에게 분석시키기'), run: onAnalyze, disabled: analyzing },
     { label: h(watched ? 'unwatch' : 'watch'), run: onWatch, pressed: watched },
@@ -103,7 +104,8 @@ export function ClientCatalogueStrategyDetail({ value, location, title, onNaviga
 }) {
   const { language } = useClientPreferences(), text = copy[language]
   const { strategy, result } = value
-  const row = catalogueIdentity(strategy), indexToDate = useMemo(() => catalogueDateReader(value.calendar), [value.calendar])
+  const display = useMemo(() => catalogueDetailLocale(value, language), [value, language])
+  const row = display.identity, indexToDate = useMemo(() => catalogueDateReader(value.calendar), [value.calendar])
   const [days, setDays] = useState(30)
   const navigation = useCatalogueOrdersNavigation(location, onNavigate)
   const [mode, setMode] = useState<CatalogueChartMode>('ret'), [interval, setInterval] = useState<CatalogueChartInterval>('day')
@@ -115,7 +117,7 @@ export function ClientCatalogueStrategyDetail({ value, location, title, onNaviga
   const instruments = [...new Set(catalogueAssets(strategy).map(asset => catalogueUniverses.coin8.list.includes(asset) ? text.spot : asset === '나스닥' || asset === 'S&P 500' ? text.tokenIndex : asset === '금' ? text.tokenGold : text.tokenStock))]
   const info = [
     [kindCopy[language].kindLabel, kindCopy[language][strategy.kind]],
-    [text.target, catalogueAssets(strategy).map(catalogueTitle).join(', ')],
+    [text.target, catalogueAssets(strategy).map(asset => display.literal(catalogueTitle(asset)).text).join(', ')],
     [text.instrument, strategy.fut ? `${text.futures} · ${text.long} / ${text.short} · ${strategy.lev}×` : instruments.join(', ')],
     [identityCopy[language].venueLabel, row.venue.name],
     [text.record, `${date(result.params.startI)} ~ ${date(result.params.endI)}`],
@@ -138,7 +140,7 @@ export function ClientCatalogueStrategyDetail({ value, location, title, onNaviga
       <p className="mt2">{text.calendarScope}</p>
       <ClientSharedPerformance catalogue={value}/>
     </section>
-    {value.judgments && <ClientCatalogueJudgments messages={value.judgments} calendar={value.calendar} active={!navigation.full && location.detailTab !== 'info'}/>}
+    {value.judgments && <ClientCatalogueJudgments messages={value.judgments} calendar={value.calendar} sourcePreview={value} active={!navigation.full && location.detailTab !== 'info'}/>}
     <ClientCatalogueOrders rows={orders} date={date} onOpen={navigation.open} onBack={navigation.back} openRef={navigation.openRef}/>
     </div>
     {navigation.full && <ClientCatalogueOrders rows={orders} date={date} full onOpen={navigation.open} onBack={navigation.back} headingRef={navigation.headingRef}/>}

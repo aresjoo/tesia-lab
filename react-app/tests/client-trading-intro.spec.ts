@@ -90,13 +90,17 @@ for(const width of [320,390,760,761,1440])test(`${width}px latest source introdu
   await expect(page).toHaveURL(/#\/trade$/)
 })
 
-for(const language of ['ko','en','ja','zh-CN','zh-TW','es','fr'] as const)test(`${language} entry controls localize while client-authored editorial content keeps Korean`,async({page})=>{
+// User-approved localization supplements the source's missing foreign copy;
+// the Korean source and all existing signup/member behavior remain unchanged.
+const localizedHeadlines={ko:'AI가 스스로 판단해 거래합니다',en:'AI makes its own trading decisions',ja:'AIが自ら判断して取引します','zh-CN':'AI 自主判断并交易','zh-TW':'AI 自主判斷並交易',es:'La IA decide y opera por sí misma',fr:'L’IA décide et négocie de façon autonome'}
+for(const language of ['ko','en','ja','zh-CN','zh-TW','es','fr'] as const)test(`${language} entry controls and editorial meaning localize with Korean source preserved`,async({page},info)=>{
+  info.annotations.push({type:'localization-supplement',description:'Korean final-source parity; six foreign translations approved by the full-localization request.'})
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/#/trade')
   await page.evaluate(async language=>{const path='/src/client-preferences.ts';const {setClientPreference}=await import(path);setClientPreference('language',language)},language)
   await expect(page.locator('.txh-hero .txh-cta')).toHaveText(copy.start[language])
   await expect(page.locator('.txh-example-note')).toHaveText(copy.example[language])
-  await expect(page.locator('.txh')).toHaveAttribute('lang','ko')
-  await expect(page.locator('.txh h1')).toContainText('AI가 스스로')
+  await expect(page.locator('.txh')).toHaveAttribute('lang',language)
+  await expect(page.locator('.txh h1')).toHaveText(localizedHeadlines[language])
 })
 
 test('video ending restores the poster while the video fades and never loops',async({page})=>{

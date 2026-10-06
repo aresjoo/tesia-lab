@@ -88,12 +88,16 @@ test('7언어 조작부·날짜를 바꿔도 원문·숫자·신호/체결 기�
   for (const language of Object.keys(copy) as (keyof typeof copy)[]) {
     await page.evaluate(async language => { const path = '/src/client-preferences.ts'; (await import(path)).setClientPreference('language', language) }, language)
     await expect(section.getByRole('heading', { level: 3 })).toHaveText(copy[language].heading)
-    expect(await section.locator('.catalogue-judgment-body > p[lang="ko"]').allTextContents()).toEqual(original)
+    const paragraphs = section.locator(`.catalogue-judgment-body > p[lang="${language}"]`)
+    if (language === 'ko') expect(await paragraphs.allTextContents()).toEqual(original)
+    else { await expect(paragraphs).toHaveCount(original.length); expect((await paragraphs.allTextContents()).join(' ')).not.toMatch(/[가-힣]/) }
     await section.getByRole('button').first().click(); const dialog = page.getByRole('dialog')
     await expect(dialog.getByRole('button', { name: copy[language].close, exact: true })).toBeVisible()
     await page.keyboard.press('Escape'); await expect(dialog).toHaveCount(0)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   }
+  await page.evaluate(async () => { const path = '/src/client-preferences.ts'; (await import(path)).setClientPreference('language', 'ko') })
+  expect(await section.locator('.catalogue-judgment-body > p[lang="ko"]').allTextContents()).toEqual(original)
 })
 
 test('320px 두 배 글자에서 용어+조사는 넘치지 않고 외부 정보탭 탐색은 초점을 인계한다', async ({ page }) => {

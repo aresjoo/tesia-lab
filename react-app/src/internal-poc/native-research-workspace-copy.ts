@@ -1,5 +1,5 @@
 import type { ClientLanguage } from '../client-preferences'
-import { conversationCopy } from '../client-conversation-copy'
+import { conversationCopy } from '../client-conversation-copy-data'
 
 // UI chrome only. Supplied titles, observations and document prose stay verbatim.
 type Translations = readonly [string, string, string, string, string, string, string]

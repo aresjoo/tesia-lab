@@ -2,6 +2,8 @@ import { useEffect, useMemo, useSyncExternalStore } from 'react'
 import type { ResearchLogEntry } from './components/ClientResearchLog'
 import { criticParagraphs, type ResearchCriticReview } from './research-view-model'
 import { CLIENT_RESEARCH_FIXTURE as FIXTURE, researchPercent as pct } from './client-research-fixtures'
+import type { ClientLanguage } from './client-preferences'
+import { researchStaticFormat, researchStaticText } from './client-research-static-content-copy'
 
 // Captured from the same client snapshot as the documents and charts.
 // Mark-to-market drawdown must not retain the older exit-only value.
@@ -65,9 +67,27 @@ export function previewTeam(seconds: number) {
   })
 }
 
-export function previewEntries(seconds: number) {
+export function previewEntries(seconds: number, language: ClientLanguage = 'ko') {
   const rows = MOCK_RESEARCH_ENTRIES.filter(row => row.elapsedSeconds <= seconds)
-  return rows.map((row, index) => row.state === 'work' && index < rows.length - 1 ? { ...row, state: 'done' as const } : row)
+  const percent = (value: number, digits = 1) => pct(value, digits, language)
+  const keys = { hypothesis: 'logHypothesis', structure: 'logStructure', market: 'logMarket', 'backtest-start': 'logBacktestStart', backtest: 'logBacktest', sanity: 'logSanity', 'critic-start': 'logCriticStart', critic: 'logCritic', revision: 'logRevision', 'retest-start': 'logRetestStart', retest: 'logRetest', stability: 'logStability', risk: 'logRisk', concentration: 'logConcentration', 'holdout-start': 'logHoldoutStart', holdout: 'logHoldout', verdict: FIXTURE.report.opinions.some(row => row.v !== 'Pass') ? 'logVerdict' : 'logAgreement', 'report-start': 'logReportStart', report: 'logReport' } as const
+  const t = (value: string) => researchStaticText(value, language)
+  const number = (value: number) => new Intl.NumberFormat(language).format(value)
+  const values: Record<string, Record<string, string | number>> = {
+    backtest: { return: percent(FIXTURE.versions[0].ret), drawdown: percent(FIXTURE.versions[0].mdd), count: number(FIXTURE.versions[0].n) },
+    sanity: { passed: number(FIXTURE.report.initialSanity.filter(check => check.p).length), total: number(FIXTURE.report.initialSanity.length) },
+    retest: { before: percent(FIXTURE.versions[0].mdd), after: percent(FIXTURE.versions[1].mdd) },
+    stability: { returns: FIXTURE.report.sensitivity.map(row => percent(row.ret, 0)).join(', '), status: t(FIXTURE.report.cliff ? '불안정' : '안정 구간') },
+    risk: { total: number(FIXTURE.stress.length), passed: number(FIXTURE.stress.filter(row => row.grade === 'Pass').length) },
+    holdout: { return: percent(FIXTURE.holdout.ret), drawdown: percent(FIXTURE.holdout.mdd) },
+    verdict: { opinions: FIXTURE.report.opinions.filter(row => row.v !== 'Pass').map(row => `${t(row.who)} ${t(row.v)}`).join(', ') },
+  }
+  return rows.map((row, index) => ({ ...row,
+    state: row.state === 'work' && index < rows.length - 1 ? 'done' as const : row.state,
+    // Only this immutable client fixture is localized, never service observations.
+    summary: language === 'ko' ? row.summary : researchStaticFormat(keys[row.id as keyof typeof keys], language, values[row.id] ?? {}),
+    finding: row.finding ? Object.fromEntries(Object.entries(row.finding).map(([key, value]) => [key, t(value)])) as ResearchLogEntry['finding'] : undefined,
+  }))
 }
 
 type PreviewQuestion = { view: ResearchDocumentView; question: string; answer: string }

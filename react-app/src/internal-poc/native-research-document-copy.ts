@@ -11,7 +11,7 @@ const labels = {
   criteria: ['검증 기준', 'Validation criteria', '検証基準', '验证标准', '驗證標準', 'Criterios de validación', 'Critères de validation'],
   strategy: ['Strategy', 'Strategy', '戦略', '策略', '策略', 'Estrategia', 'Stratégie'],
   entry: ['진입', 'Entry', 'エントリー', '入场', '進場', 'Entrada', 'Entrée'],
-  stopLoss: ['손절', 'Stop loss', '損切り', '止损', '停損', 'Stop loss', 'Stop loss'],
+  stopLoss: ['손절', 'Stop loss', '損切り', '止损', '停損', 'Límite de pérdidas', 'Seuil de perte'],
   takeProfit: ['익절', 'Take profit', '利確', '止盈', '停利', 'Toma de ganancias', 'Prise de bénéfices'],
   holding: ['최대 보유', 'Maximum holding', '最大保有期間', '最长持有', '最長持有', 'Tenencia máxima', 'Durée maximale'],
   costs: ['비용', 'Costs', 'コスト', '费用', '費用', 'Costes', 'Coûts'],
@@ -33,12 +33,15 @@ const labels = {
   year: ['연도', 'Year', '年', '年份', '年份', 'Año', 'Année'],
   pnl: ['손익', 'Profit / loss', '損益', '盈亏', '損益', 'Ganancia / pérdida', 'Gain / perte'],
   critic: ['Critic Review', 'Critic Review', '批判的レビュー', '批判性审查', '批判性審查', 'Revisión crítica', 'Revue critique'],
-  criticFlow: ['Builder 주장 → Critic 반박 → 데이터', 'Builder claim → Critic challenge → Data', 'Builderの主張 → Criticの反論 → データ', 'Builder 主张 → Critic 质疑 → 数据', 'Builder 主張 → Critic 質疑 → 資料', 'Propuesta Builder → Objeción Critic → Datos', 'Proposition Builder → Objection Critic → Données'],
+  criticFlow: ['Builder 주장 → Critic 반박 → 데이터', 'Builder claim → Critic challenge → Data', '構築担当の主張 → 批評担当の反論 → データ', '构建者主张 → 审查者质疑 → 数据', '建構者主張 → 審查者質疑 → 資料', 'Propuesta del constructor → Objeción del revisor → Datos', 'Proposition du concepteur → Objection critique → Données'],
   stress: ['Stress Test', 'Stress Test', 'ストレステスト', '压力测试', '壓力測試', 'Prueba de estrés', 'Test de résistance'],
   stressHint: ['일부러 불리한 조건에서 재검증', 'Revalidation under deliberately adverse conditions', '意図的に不利な条件で再検証', '在刻意不利的条件下重新验证', '在刻意不利的條件下重新驗證', 'Revalidación en condiciones adversas', 'Nouvelle validation en conditions défavorables'],
   scenario: ['시나리오', 'Scenario', 'シナリオ', '场景', '情境', 'Escenario', 'Scénario'],
   result: ['결과', 'Result', '結果', '结果', '結果', 'Resultado', 'Résultat'],
   verdict: ['판정', 'Verdict', '判定', '判定', '判定', 'Dictamen', 'Verdict'],
+  builderRole: ['Builder', 'Builder', '構築担当', '构建者', '建構者', 'Constructor', 'Concepteur'],
+  criticRole: ['Critic', 'Critic', '批評担当', '审查者', '審查者', 'Revisor crítico', 'Examinateur critique'],
+  verdictRole: ['Verdict', 'Verdict', '判定', '结论', '結論', 'Dictamen', 'Conclusion'],
   holdout: ['Holdout Test', 'Holdout Test', 'ホールドアウトテスト', '留出测试', '保留資料測試', 'Prueba holdout', 'Test sur réserve'],
   annualized: ['수익 (연환산)', 'Return (annualized)', 'リターン（年率換算）', '收益（年化）', '報酬（年化）', 'Rentabilidad (anualizada)', 'Rendement (annualisé)'],
   decline: ['낙폭', 'Drawdown', 'ドローダウン', '回撤', '回撤', 'Caída', 'Repli'],
@@ -54,8 +57,8 @@ const labels = {
   whatIf: ['만약에', 'What if', 'もしも', '如果', '如果', '¿Y si…?', 'Et si…'],
   fee2: ['수수료 2배', 'Double fees', '手数料2倍', '手续费翻倍', '手續費加倍', 'Comisiones dobles', 'Frais doublés'],
   delay: ['진입 1캔들 지연', 'Entry delayed by one candle', 'エントリーを1本遅延', '入场延迟一根K线', '進場延遲一根K線', 'Entrada retrasada una vela', 'Entrée retardée d’une bougie'],
-  sl2: ['손절 -2%', 'Stop loss −2%', '損切り −2%', '止损 −2%', '停損 −2%', 'Stop loss −2%', 'Stop loss −2 %'],
-  connect: ['거래소 연결', 'Connect exchange', '取引所接続', '连接交易所', '連接交易所', 'Conectar exchange', 'Connecter une plateforme'],
+  sl2: ['손절 -2%', 'Stop loss −2%', '損切り −2%', '止损 −2%', '停損 −2%', 'Límite de pérdidas −2%', 'Seuil de perte −2 %'],
+  connect: ['거래소 연결', 'Connect exchange', '取引所接続', '连接交易所', '連接交易所', 'Conectar plataforma de intercambio', 'Connecter une plateforme'],
   activity: ['연구 과정 보기', 'View research activity', '研究過程を見る', '查看研究过程', '查看研究過程', 'Ver actividad de investigación', 'Voir l’activité de recherche'],
   primaryConnect: ['거래소로 간편 연결', 'Connect through exchange', '取引所から簡単接続', '通过交易所快速连接', '透過交易所快速連接', 'Conectar mediante exchange', 'Connexion via la plateforme'],
   partner: ['파트너 거래소로 시작', 'Start with partner exchange', '提携取引所で始める', '从合作交易所开始', '從合作交易所開始', 'Empezar con un exchange asociado', 'Commencer avec une plateforme partenaire'],
@@ -86,6 +89,7 @@ const labels = {
   confirmStop: ['정말 종료할까요?', 'Confirm stop?', '本当に終了しますか？', '确定结束？', '確定結束？', '¿Confirmar detención?', 'Confirmer l’arrêt ?'],
 } as const
 export type ResearchDocumentCopyKey = keyof typeof labels
+export const researchDocumentCopyRows = labels
 const languages: readonly ClientLanguage[] = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr']
 export function researchDocumentCopy(key: ResearchDocumentCopyKey, language: ClientLanguage): string {
   const index = languages.indexOf(language)

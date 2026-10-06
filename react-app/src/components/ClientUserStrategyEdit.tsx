@@ -1,3 +1,7 @@
+import { delegationLocaleText } from '../client-delegation-locale-copy'
+import { useClientPreferences } from '../client-preferences'
+import { useUserStrategyLocaleText } from '../client-user-strategy-locale-copy'
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { evaluateSourceTerminal, type SourceTerminalParameters } from '../client-terminal-source-fixture'
@@ -21,6 +25,7 @@ const entries = [38, 40, 42, 44, 46]
 
 /** Client 8c5d8c8 tfBotEdit/Run/Dirty/Apply. Source-preview calculation only. */
 export function ClientUserStrategyEdit({ record, current, onClose, onApply }: Props) {
+  const localeUi = useStaticUiCopy(), u = useUserStrategyLocaleText(), { language } = useClientPreferences()
   const [parameters, setParameters] = useState(() => ({ ...record.parameters! }))
   const [candidate, setCandidate] = useState<Candidate | null>(null)
   const [dirty, setDirty] = useState(false), [error, setError] = useState<'conflict' | 'request' | null>(null), [pending, setPending] = useState(false)
@@ -82,25 +87,25 @@ export function ClientUserStrategyEdit({ record, current, onClose, onApply }: Pr
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose()
     }}
     onKeyDown={event => { if (event.key === 'Escape' && (event.nativeEvent.isComposing || event.keyCode === 229)) { event.preventDefault(); event.stopPropagation() } }}>
-    <header><h2 id={`${id}-title`} tabIndex={-1}>전략 수정: {record.name}</h2><button type="button" aria-label="닫기" disabled={pending} onClick={onClose}><X size={20} /></button></header>
-    <div className="ss3-dialog-body"><p className="ss3-notice">설정을 바꾸면 같은 검증 구간에서 다시 검증해요. 재검증을 통과해야 이 전략에 적용됩니다.{record.status === 'live' && ' 적용 시 실행이 일시정지돼요.'}</p>
+    <header><h2 id={`${id}-title`} tabIndex={-1}>{localeUi("전략 수정: ")}{record.name}</h2><button type="button" aria-label={localeUi("닫기")} disabled={pending} onClick={onClose}><X size={20} /></button></header>
+    <div className="ss3-dialog-body"><p className="ss3-notice">{localeUi("설정을 바꾸면 같은 검증 구간에서 다시 검증해요. 재검증을 통과해야 이 전략에 적용됩니다.")}{record.status === 'live' && localeUi(' 적용 시 실행이 일시정지돼요.')}</p>
       <fieldset disabled={pending || stale || error === 'conflict'}>
-        <label><span id={`${id}-sl`}>손절선</span><select aria-labelledby={`${id}-sl`} value={parameters.sl} onChange={event => change({ sl: Number(event.target.value) })}>
+        <label><span id={`${id}-sl`}>{localeUi("손절선")}</span><select aria-labelledby={`${id}-sl`} value={parameters.sl} onChange={event => change({ sl: Number(event.target.value) })}>
           {!stops.includes(parameters.sl) && <option value={parameters.sl}>{parameters.sl}%</option>}
-          {stops.map((value, i) => <option value={value} key={value}>{delegationQuestions.find(item => item.key === 'stop')!.options[i].join(' (') + ')'}</option>)}
+          {stops.map((value, i) => <option value={value} key={value}>{delegationQuestions.find(item => item.key === 'stop')!.options[i].map(text => delegationLocaleText(language,text)).join(' (') + ')'}</option>)}
         </select></label>
-        <label><span id={`${id}-tp`}>익절 목표</span><select aria-labelledby={`${id}-tp`} value={parameters.tp ?? 'none'} onChange={event => change({ tp: event.target.value === 'none' ? null : Number(event.target.value) })}>
-          {(parameters.tp === null || !profits.includes(parameters.tp)) && <option value={parameters.tp ?? 'none'}>{parameters.tp === null ? '기간 청산' : `+${parameters.tp}%`}</option>}
+        <label><span id={`${id}-tp`}>{localeUi("익절 목표")}</span><select aria-labelledby={`${id}-tp`} value={parameters.tp ?? 'none'} onChange={event => change({ tp: event.target.value === 'none' ? null : Number(event.target.value) })}>
+          {(parameters.tp === null || !profits.includes(parameters.tp)) && <option value={parameters.tp ?? 'none'}>{parameters.tp === null ? localeUi("기간 청산") : `+${parameters.tp}%`}</option>}
           {profits.map(value => <option value={value} key={value}>+{value}%</option>)}
         </select></label>
-        <label><span id={`${id}-rsi`}>진입 RSI 임계</span><select aria-labelledby={`${id}-rsi`} value={parameters.rsiTh} onChange={event => change({ rsiTh: Number(event.target.value) })}>
-          {!entries.includes(parameters.rsiTh) && <option value={parameters.rsiTh}>RSI {parameters.rsiTh} 이하</option>}
-          {entries.map(value => <option value={value} key={value}>RSI {value} 이하</option>)}
+        <label><span id={`${id}-rsi`}>{localeUi("진입 RSI 임계")}</span><select aria-labelledby={`${id}-rsi`} value={parameters.rsiTh} onChange={event => change({ rsiTh: Number(event.target.value) })}>
+          {!entries.includes(parameters.rsiTh) && <option value={parameters.rsiTh}>{localeUi('RSI {value} 이하', { value: parameters.rsiTh })}</option>}
+          {entries.map(value => <option value={value} key={value}>{localeUi('RSI {value} 이하', { value })}</option>)}
         </select></label>
-        <label><span id={`${id}-trend`}>추세 필터</span><select aria-labelledby={`${id}-trend`} value={parameters.trendFilter ? '1' : '0'} onChange={event => change({ trendFilter: event.target.value === '1' })}><option value="1">사용 (20/60일 이평)</option><option value="0">사용 안 함</option></select></label>
+        <label><span id={`${id}-trend`}>{localeUi("추세 필터")}</span><select aria-labelledby={`${id}-trend`} value={parameters.trendFilter ? '1' : '0'} onChange={event => change({ trendFilter: event.target.value === '1' })}><option value="1">{localeUi("사용 (20/60일 이평)")}</option><option value="0">{localeUi("사용 안 함")}</option></select></label>
       </fieldset>
-      {stale || error === 'conflict' ? <p ref={errorNode} tabIndex={-1} role="alert">전략 상태가 바뀌었어요. 현재 상태를 확인해주세요.</p> : error ? <p ref={errorNode} tabIndex={-1} role="alert">요청을 완료하지 못했어요. 다시 시도해 주세요.</p> : candidate ? <div ref={resultNode} tabIndex={-1} role="status" className="user-edit-result">재검증 결과: TETH <b>{candidate.score}점</b> ({pass ? '통과' : `기준 ${SOURCE_USER_STRATEGY_PASS_SCORE}점 미달`}), 검증 수익 <b className={candidate.result.ret >= 0 ? 'up' : 'dn'}>{candidate.result.ret >= 0 ? '+' : ''}{candidate.result.ret.toFixed(1)}%</b>, 최대 낙폭 {candidate.result.mdd.toFixed(1)}%, 체결 {candidate.result.n}회 <span>(시뮬레이션)</span>{!pass && <p>설정을 조정해 다시 검증해보세요. 통과 전에는 적용되지 않아요.</p>}</div> : dirty && <p role="status">설정이 바뀌었어요. <b>재검증</b>을 다시 통과해야 적용할 수 있어요.</p>}
-      <div className="ss3-dacts" aria-busy={pending}><button type="button" className="obtn" disabled={pending} onClick={onClose}>취소</button><button type="button" className="wbtn" disabled={pending || stale || error === 'conflict'} onClick={validate}>재검증</button>{pass && <button type="button" className="wbtn" disabled={pending || stale || error === 'conflict'} onClick={() => void apply()}>이 전략에 적용</button>}</div>
+      {stale || error === 'conflict' ? <p ref={errorNode} tabIndex={-1} role="alert">{localeUi("전략 상태가 바뀌었어요. 현재 상태를 확인해주세요.")}</p> : error ? <p ref={errorNode} tabIndex={-1} role="alert">{localeUi("요청을 완료하지 못했어요. 다시 시도해 주세요.")}</p> : candidate ? <div ref={resultNode} tabIndex={-1} role="status" className="user-edit-result">{u.rich('재검증 결과: TETH {score} ({verdict}), 검증 수익 {return}, 최대 낙폭 {drawdown}%, 체결 {count}회 {simulation}', { score: <b>{localeUi('{score}점', { score: candidate.score })}</b>, verdict: pass ? localeUi('통과') : localeUi('기준 {score}점 미달', { score: SOURCE_USER_STRATEGY_PASS_SCORE }), return: <b className={candidate.result.ret >= 0 ? 'up' : 'dn'}>{candidate.result.ret >= 0 ? '+' : ''}{candidate.result.ret.toFixed(1)}%</b>, drawdown: candidate.result.mdd.toFixed(1), count: candidate.result.n, simulation: <span>{localeUi('(시뮬레이션)')}</span> })}{!pass && <p>{localeUi("설정을 조정해 다시 검증해보세요. 통과 전에는 적용되지 않아요.")}</p>}</div> : dirty && <p role="status">{localeUi.rich('설정이 바뀌었어요. {validation}을 다시 통과해야 적용할 수 있어요.', { validation: <b>{localeUi('재검증')}</b> })}</p>}
+      <div className="ss3-dacts" aria-busy={pending}><button type="button" className="obtn" disabled={pending} onClick={onClose}>{localeUi("취소")}</button><button type="button" className="wbtn" disabled={pending || stale || error === 'conflict'} onClick={validate}>{localeUi("재검증")}</button>{pass && <button type="button" className="wbtn" disabled={pending || stale || error === 'conflict'} onClick={() => void apply()}>{localeUi("이 전략에 적용")}</button>}</div>
     </div>
   </dialog></div>
 }

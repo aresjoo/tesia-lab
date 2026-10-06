@@ -18,7 +18,11 @@ export type ClientAgentFeedProps = {
   onReconnect?: () => void
   /** Latest client layout only for source-rule events, not a service contract. */
   ruleJournal?: boolean
+  /** Explicit source-preview display adapter; absent for live/user prose. */
+  displayText?: (text: string) => string
 }
+
+const identityText = (text: string) => text
 
 const eventLabels = {
   entry: ['eventEntry', 'en'], 'exit-tp': ['eventTp', 'tp'], 'exit-sl': ['eventSl', 'sl'],
@@ -41,14 +45,14 @@ function AgentHeader({ event, timeLabel = event.timeLabel }: { event: ClientAgen
   return <div className="agh"><span className="sp2" aria-hidden="true">✦</span><b>{terminalReadText(language, 'agentName')}</b><span className="dv2" aria-hidden="true" /><span className={`evb ${tone}`}>{terminalReadText(language, label)}</span><span className="tm">{timeLabel}</span></div>
 }
 
-function EventRow({ event, index, expanded, onToggle }: { event: ClientAgentEvent; index: number; expanded: ReadonlySet<string>; onToggle: (id: string) => void }) {
+function EventRow({ event, index, expanded, onToggle, displayText }: { event: ClientAgentEvent; index: number; expanded: ReadonlySet<string>; onToggle: (id: string) => void; displayText: (text: string) => string }) {
   const { language } = useClientPreferences()
   const t = (key: Parameters<typeof terminalReadText>[1]) => terminalReadText(language, key)
   const detail = event.detail, ticket = detail?.ticket
   const props = (part: Part) => ({ part, expanded: expanded.has(sectionKey(event.id, part)), onToggle: () => onToggle(sectionKey(event.id, part)) })
   return <li className={`tft-agc ${eventLabels[event.type][1]}`} data-agent-event={event.id} data-agent-index={index} data-agent-end-index={index} tabIndex={-1}>
     <AgentHeader event={event} />
-    <div className="agb">{event.summary ?? event.text}</div>
+    <div className="agb">{displayText(event.summary ?? event.text)}</div>
     {detail && (detail.settings.length > 0 || detail.rawSettings !== undefined) && <Disclosure title={t('promptSection')} {...props('prompt')}>
       {detail.settings.map((field, i) => <div className="kv" key={i}><span>{field.label}</span><b>{field.value}</b></div>)}
       {detail.rawSettings !== undefined && <details className="tft-raw"><summary>{t('rawSettings')}</summary><pre tabIndex={0}>{detail.rawSettings}</pre></details>}
@@ -66,19 +70,19 @@ function EventRow({ event, index, expanded, onToggle }: { event: ClientAgentEven
   </li>
 }
 
-function WatchRow({ events, index, expanded, onToggle, summary, range }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; summary?: string; range: string }) {
+function WatchRow({ events, index, expanded, onToggle, summary, range, displayText }: { events: readonly ClientAgentEvent[]; index: number; expanded: boolean; onToggle: () => void; summary?: string; range: string; displayText: (text: string) => string }) {
   const { language } = useClientPreferences()
   const title = terminalReadText(language, 'watchDetails', { count: String(events.length) })
   return <li className="tft-agc wfold" data-agent-event={events[0].id} data-agent-index={index} data-agent-end-index={index + events.length - 1} tabIndex={-1} aria-label={title}>
     <AgentHeader event={events[0]} timeLabel={range} />
-    <div className="agb">{summary ?? events[0].summary ?? events[0].text}</div>
+    <div className="agb">{displayText(summary ?? events[0].summary ?? events[0].text)}</div>
     <Disclosure part="watch" title={title} expanded={expanded} onToggle={onToggle}>
-      {events.map(event => <div className="an" key={event.id} data-watch-event={event.id}><b className="num">{event.timeLabel}</b><p>{event.text}</p></div>)}
+      {events.map(event => <div className="an" key={event.id} data-watch-event={event.id}><b className="num">{event.timeLabel}</b><p>{displayText(event.text)}</p></div>)}
     </Disclosure>
   </li>
 }
 
-function StrategyFeed({ strategyId, events, operations = [], sourceLabel, statusSummary, watchSummary, error, onReconnect, ruleJournal = false }: ClientAgentFeedProps) {
+function StrategyFeed({ strategyId, events, operations = [], sourceLabel, statusSummary, watchSummary, error, onReconnect, ruleJournal = false, displayText = identityText }: ClientAgentFeedProps) {
   const { language } = useClientPreferences()
   const t = (key: Parameters<typeof terminalReadText>[1], values?: Readonly<Record<string, string>>) => terminalReadText(language, key, values)
   const [filter, setFilter] = useState<'all' | 'fills'>('all')
@@ -124,15 +128,15 @@ function StrategyFeed({ strategyId, events, operations = [], sourceLabel, status
       : visibleCount === 0 ? <div className="tft-empty" role="status"><b>{t(events.length === 0 ? 'empty' : 'emptyFills')}</b>{events.length === 0 && <span>{t('firstEvaluation')}</span>}</div>
         : <ul className="tft-event-list" aria-label={t('historyList')}>{shownGroups.map(group => {
           const last = group.events.at(-1)!
-          if (ruleJournal && group.events.every(event => event.ruleCheck) && (group.events.length === 1 || group.events[0].type !== 'watch')) return <ClientRuleJournal key={last.id} events={group.events} index={group.index} expanded={expanded.has(sectionKey(last.id, 'decision'))} onToggle={() => toggle(sectionKey(last.id, 'decision'))} />
+          if (ruleJournal && group.events.every(event => event.ruleCheck) && (group.events.length === 1 || group.events[0].type !== 'watch')) return <ClientRuleJournal key={last.id} events={group.events} index={group.index} expanded={expanded.has(sectionKey(last.id, 'decision'))} onToggle={() => toggle(sectionKey(last.id, 'decision'))} displayText={displayText} />
           if (group.events.length > 1) {
             const props = { events: ruleJournal ? group.events : group.events.slice(0, limit - group.index), index: group.index, expanded: expanded.has(sectionKey(last.id, 'watch')), onToggle: () => toggle(sectionKey(last.id, 'watch')), range: `${last.timeLabel} ~ ${group.events[0].timeLabel}` }
-            if (group.events.every(event => event.ruleCheck)) return <ClientRuleWatchGroup key={last.id} {...props} journalDetail={ruleJournal ? { expanded: expanded.has(sectionKey(last.id, 'decision')), onToggle: () => toggle(sectionKey(last.id, 'decision')) } : undefined} count={group.events.length} days={Math.abs(group.events[0].ruleCheck!.barIndex - last.ruleCheck!.barIndex) + 1} />
-            return <WatchRow key={last.id} {...props} summary={watchSummary?.(group.events.length)} />
+            if (group.events.every(event => event.ruleCheck)) return <ClientRuleWatchGroup key={last.id} {...props} displayText={displayText} journalDetail={ruleJournal ? { expanded: expanded.has(sectionKey(last.id, 'decision')), onToggle: () => toggle(sectionKey(last.id, 'decision')) } : undefined} count={group.events.length} days={Math.abs(group.events[0].ruleCheck!.barIndex - last.ruleCheck!.barIndex) + 1} />
+            return <WatchRow key={last.id} {...props} displayText={displayText} summary={watchSummary?.(group.events.length)} />
           }
           return group.events[0].ruleCheck
             ? <ClientRuleCheckCard key={group.events[0].id} event={group.events[0]} index={group.index} />
-            : <EventRow key={group.events[0].id} event={group.events[0]} index={group.index} expanded={expanded} onToggle={toggle} />
+            : <EventRow key={group.events[0].id} event={group.events[0]} index={group.index} expanded={expanded} onToggle={toggle} displayText={displayText} />
         })}</ul>}
     {total > limit && <button className="tft-more" type="button" onClick={() => { revealIndex.current = ruleJournal ? packed[limit].index : limit; setLimit(value => value + 20) }}>{t('moreHistory', { count: String(rows.length - visibleCount) })}</button>}
   </section>

@@ -18,6 +18,8 @@ import {
   LOCAL_MARKET_ARTIFACT_CATALOG_MARKER,
 } from './paper-market-artifact'
 import { describePaperCatalogIssue, type PaperUiIssue } from './paper-service-status'
+import { useClientPreferences } from '../client-preferences'
+import { nativeExecutionUiText } from './native-execution-ui-copy'
 
 const shortHash = (value: string): string => `${value.slice(0, 10)}…${value.slice(-8)}`
 
@@ -71,6 +73,8 @@ export function PaperMarketArtifactPicker({
   authoritativeBinding?: PaperSessionMarketArtifactBinding
   lockedArtifactId?: string | null
 }) {
+  const { language } = useClientPreferences()
+  const ui = (text: string, values?: Record<string, string | number>) => nativeExecutionUiText(language, text, values)
   const [adapter, setAdapter] = useState<PaperMarketArtifactCatalogAdapter | null>(null)
   const [items, setItems] = useState<readonly PaperMarketArtifact[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(initialSelectedArtifactId)
@@ -178,56 +182,65 @@ export function PaperMarketArtifactPicker({
           <p className="eyebrow">{fixtureOnly
             ? 'MARKET_ARTIFACT_CATALOG · UI_FIXTURE_ONLY'
             : 'OWNER_LOCAL_MARKET_ARTIFACT_CATALOG · PRIVATE_LOOPBACK_ONLY'}</p>
-          <h3 id="paper-artifact-title">Paper 입력 artifact 선택</h3>
-          <p>서버가 제공한 목록에서만 선택합니다. 파일 경로 입력, 업로드, 외부 조회는 지원하지 않습니다.</p>
+          <h3 id="paper-artifact-title">{ui("Paper 입력 artifact 선택")}</h3>
+          <p>{ui("서버가 제공한 목록에서만 선택합니다. 파일 경로 입력, 업로드, 외부 조회는 지원하지 않습니다.")}</p>
         </div>
         {adapter !== null && (
           <button type="button" className="paper-artifact-reload" onClick={() => void readCatalog(adapter)} disabled={loading}>
-            <RefreshCw size={15} aria-hidden="true" /> 목록 다시 불러오기
+            <RefreshCw size={15} aria-hidden="true" /> {ui("목록 다시 불러오기")}
           </button>
         )}
       </div>
 
       <div className="paper-artifact-boundary" role="note">
         <ShieldAlert size={18} aria-hidden="true" />
-        <p><strong>모든 항목은 PRIVATE_ONLY · UNVERIFIED입니다.</strong> UNVERIFIED는 성과·실거래 검증 전을 뜻하며 content/provenance hash 무결성 표시와는 별개입니다. 선택만으로 Paper 완료 증거가 되지 않습니다.</p>
+        <p><strong>{ui("모든 항목은 PRIVATE_ONLY · UNVERIFIED입니다.")}</strong> {ui("UNVERIFIED는 성과·실거래 검증 전을 뜻하며 content/provenance hash 무결성 표시와는 별개입니다. 선택만으로 Paper 완료 증거가 되지 않습니다.")}</p>
       </div>
 
       {loading && (
         <div className="paper-artifact-state" aria-busy="true" aria-live="polite">
           <LoaderCircle className="spin" size={20} aria-hidden="true" />
-          <div><strong>서버 artifact 목록을 확인하고 있습니다.</strong><span>브라우저가 항목을 생성하거나 경로를 추측하지 않습니다.</span></div>
+          <div><strong>{ui("서버 artifact 목록을 확인하고 있습니다.")}</strong><span>{ui("브라우저가 항목을 생성하거나 경로를 추측하지 않습니다.")}</span></div>
         </div>
       )}
 
       {!loading && error !== null && (
         <div className="paper-artifact-state error" role="alert">
           <AlertTriangle size={20} aria-hidden="true" />
-          <div><strong>{error.title}</strong><span>{error.description}</span><code>{error.diagnosticCode}</code></div>
-          {adapter !== null && <button type="button" className="secondary-button" onClick={() => void readCatalog(adapter)}>다시 시도</button>}
+          <div><strong>{ui(error.title)}</strong><span>{ui(error.description)}</span><code>{error.diagnosticCode}</code></div>
+          {adapter !== null && <button type="button" className="secondary-button" onClick={() => void readCatalog(adapter)}>{ui("다시 시도")}</button>}
         </div>
       )}
 
       {!loading && error === null && adapter === null && (
         <div className="paper-artifact-state empty">
           <Database size={20} aria-hidden="true" />
-          <div><strong>서버 catalog adapter가 연결되지 않았습니다.</strong><span>Backend 계약이 연결되기 전에는 항목을 임의로 만들지 않습니다.</span></div>
+          <div><strong>{ui("서버 catalog adapter가 연결되지 않았습니다.")}</strong><span>{ui("Backend 계약이 연결되기 전에는 항목을 임의로 만들지 않습니다.")}</span></div>
         </div>
       )}
 
       {!loading && error === null && adapter !== null && items.length === 0 && (
         <div className="paper-artifact-state empty">
           <Boxes size={20} aria-hidden="true" />
-          <div><strong>사용 가능한 owner-local artifact가 없습니다.</strong><span>로컬 서버가 목록을 제공한 뒤 다시 불러오세요.</span></div>
+          <div><strong>{ui("사용 가능한 owner-local artifact가 없습니다.")}</strong><span>{ui("로컬 서버가 목록을 제공한 뒤 다시 불러오세요.")}</span></div>
         </div>
       )}
 
       {!loading && error === null && items.length > 0 && (
         <fieldset className="paper-artifact-list">
-          <legend>사용할 기록 시장 입력</legend>
+          <legend>{ui("사용할 기록 시장 입력")}</legend>
           {items.map((artifact) => {
             const copy = sourceCopy(artifact)
             const selected = selectedId === artifact.artifactId
+            // Only the adapter's exact system-generated name is UI copy.
+            // Supplied/user-authored display names remain untouched.
+            const generatedName = artifact.source === 'PACKAGED_SYNTHETIC'
+              ? '{symbol} {interval} 패키지 합성 기록'
+              : '{symbol} {interval} 소유자 로컬 기록'
+            const displayedName = adapter?.kind === 'owner-local-api'
+              && artifact.displayName === generatedName.replace('{symbol}', artifact.symbol).replace('{interval}', artifact.interval)
+              ? ui(generatedName, { symbol: artifact.symbol, interval: artifact.interval })
+              : artifact.displayName
             return (
               <label key={artifact.artifactId} className={`paper-artifact-card ${selected ? 'selected' : ''}`}>
                 <input
@@ -241,19 +254,19 @@ export function PaperMarketArtifactPicker({
                   {copy.badge}
                 </span>
                 <span className="paper-artifact-main">
-                  <strong>{artifact.displayName}</strong>
-                  <small>{copy.title} · {artifact.symbol} · source {artifact.sourceInterval} → evaluation {artifact.interval}</small>
-                  <span>{copy.detail}</span>
+                  <strong>{displayedName}</strong>
+                  <small>{ui('{title} · {symbol} · 원본 {source} → 평가 {evaluation}', { title: ui(copy.title), symbol: artifact.symbol, source: artifact.sourceInterval, evaluation: artifact.interval })}</small>
+                  <span>{ui(copy.detail)}</span>
                 </span>
                 <dl>
-                  <div><dt>MarketEvent</dt><dd>{artifact.eventCount.toLocaleString('ko-KR')}건</dd></div>
-                  <div><dt>기록 범위</dt><dd>{artifact.firstEventTime} → {artifact.lastEventTime}</dd></div>
-                  <div><dt>File SHA-256</dt><dd><code>{shortHash(artifact.fileSha256)}</code></dd></div>
-                  <div><dt>Content hash</dt><dd><code>{shortHash(artifact.contentHash)}</code></dd></div>
-                  <div><dt>Provenance hash</dt><dd><code>{shortHash(artifact.provenanceHash)}</code></dd></div>
-                  <div><dt>Policy hash</dt><dd><code>{shortHash(artifact.policyHash)}</code></dd></div>
-                  <div><dt>Manifest SHA-256</dt><dd>{artifact.manifestSha256 === null ? '해당 없음' : <code>{shortHash(artifact.manifestSha256)}</code>}</dd></div>
-                  <div><dt>Provenance</dt><dd>{artifact.provenance.dataClass} · {artifact.provenance.verificationStatus}</dd></div>
+                  <div><dt>MarketEvent</dt><dd>{ui('{count}건', { count: artifact.eventCount.toLocaleString(language), cardinality: artifact.eventCount })}</dd></div>
+                  <div><dt>{ui("기록 범위")}</dt><dd>{artifact.firstEventTime} → {artifact.lastEventTime}</dd></div>
+                  <div><dt>{ui("File SHA-256")}</dt><dd><code>{shortHash(artifact.fileSha256)}</code></dd></div>
+                  <div><dt>{ui("Content hash")}</dt><dd><code>{shortHash(artifact.contentHash)}</code></dd></div>
+                  <div><dt>{ui("Provenance hash")}</dt><dd><code>{shortHash(artifact.provenanceHash)}</code></dd></div>
+                  <div><dt>{ui("Policy hash")}</dt><dd><code>{shortHash(artifact.policyHash)}</code></dd></div>
+                  <div><dt>{ui("Manifest SHA-256")}</dt><dd>{artifact.manifestSha256 === null ? ui("해당 없음") : <code>{shortHash(artifact.manifestSha256)}</code>}</dd></div>
+                  <div><dt>{ui("Provenance")}</dt><dd>{artifact.provenance.dataClass} · {artifact.provenance.verificationStatus}</dd></div>
                 </dl>
               </label>
             )
@@ -264,7 +277,7 @@ export function PaperMarketArtifactPicker({
       {selectedId !== null && (
         <div className="paper-artifact-selected" role="status">
           <FileClock size={17} aria-hidden="true" />
-          <p><strong>입력 선택만 준비되었습니다.</strong> 실제 Paper 시작 시 서버가 선택 ID·content hash·StrategyVersion 결속을 검증하기 전에는 완료 상태로 승격하지 않습니다.</p>
+          <p><strong>{ui("입력 선택만 준비되었습니다.")}</strong> {ui("실제 Paper 시작 시 서버가 선택 ID·content hash·StrategyVersion 결속을 검증하기 전에는 완료 상태로 승격하지 않습니다.")}</p>
         </div>
       )}
     </section>

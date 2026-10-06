@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { createNativeStructuralSmoke, type StructuralSmokeBinding } from './native-structural-smoke'
 import { formatResultRatePercent } from './native-result-number-format'
+import { useClientPreferences } from '../client-preferences'
+import { nativeExecutionUiText } from './native-execution-ui-copy'
 
 type Smoke = ReturnType<typeof createNativeStructuralSmoke>
 type Job = Awaited<ReturnType<Smoke['submit']>>
@@ -28,6 +30,8 @@ export function NativeStructuralSmokePanel({ binding, isCurrent, canDispatch = (
   verifyOwner: () => Promise<void>
   onClose: () => void
 }) {
+  const { language } = useClientPreferences()
+  const ui = (text: string, values?: Record<string, string | number>) => nativeExecutionUiText(language, text, values)
   const active = useRef(true), working = useRef(false)
   const api = useRef<Smoke | null>(null)
   const [job, setJob] = useState<Job | null>(null)
@@ -144,62 +148,62 @@ export function NativeStructuralSmokePanel({ binding, isCurrent, canDispatch = (
       if (active.current) setBusy(false)
     }
   }
-  return <section className="run-progress" aria-label="승인 전략의 합성 구조 시험">
-    <h2>합성 구조 시험</h2>
+  return <section className="run-progress" aria-label={ui('승인 전략의 합성 구조 시험')}>
+    <h2>{ui('합성 구조 시험')}</h2>
     <p>STRUCTURAL_SMOKE · SYNTHETIC_UI_FIXTURE / UNVERIFIED / PRIVATE_ONLY</p>
-    <p>서비스 연결과 엔진 흐름을 확인하는 합성 입력 시험입니다. 실제 730일 결과가 아닙니다. 시장 성과·실거래·FULL 백테스트·기록 Paper를 대체하지 않습니다.</p>
-    <p>승인 버전 {binding.strategyVersionId}</p>
-    <button className="quiet-button" type="button" onClick={onClose}>구조 시험 화면 닫기</button>
-    <p>화면을 닫거나 로그아웃해도 서버 작업을 취소하지 않습니다. 요청 기록은 같은 세션·승인·프로필에 묶여 보존하며 다른 계정에서 자동 재전송하지 않습니다.</p>
-    <p>이 탭을 종료하거나 저장소를 직접 지우면 요청 키 보존을 보장하지 않습니다. 이후 실행은 새 의도가 될 수 있으며 서버 작업이 중복되지 않는다는 보장이 아닙니다.</p>
-    {!blocked && <button className="primary-button" type="button" disabled={busy} onClick={() => void run('submit')}>같은 승인으로 합성 구조 시험 실행</button>}
-    {(busy || autoState === 'running') && <p role="status">서버에서 작업 상태와 결과를 확인하고 있습니다.</p>}
-    {autoState === 'running' && <><p>같은 작업만 5초 간격으로 확인합니다. 최대 2분·24회 상태 조회 후에는 수동으로 이어갈 수 있습니다.</p>
-      <button className="secondary-button" type="button" onClick={() => stopAuto('paused')}>진행 자동 확인 중지</button></>}
-    {['hidden', 'paused', 'limit'].includes(autoState) && <p role="status">{autoState === 'hidden' ? '탭을 숨겨 자동 확인을 멈췄습니다.' : autoState === 'limit' ? '자동 확인 한도에 도달했습니다.' : '자동 확인을 멈췄습니다.'} 서버 작업을 취소한 것이 아닙니다. 직접 다시 조회하거나 자동 확인을 재개하세요.</p>}
-    {autoState === 'waiting' && <p role="status">다른 화면의 작업 중에는 구조 시험 조회를 잠시 멈춥니다. {job ? '작업을 마친 뒤 직접 다시 조회하거나 자동 확인을 재개하세요.' : '작업을 마친 뒤 같은 승인 실행 버튼으로 보존된 요청을 다시 확인하세요.'} 서버 작업을 취소한 것이 아닙니다.</p>}
-    {error && <p role="alert">{error}</p>}
-    {job && !blocked && <><p role="status">마지막으로 확인한 서버 상태: {job.state} · revision {job.revision}</p><p>{job.backtestId}</p>
-      <button className="secondary-button" type="button" disabled={busy} onClick={() => void run('status')}>구조 시험 상태 다시 조회</button>
-      {job.state === 'COMPLETED' && job.resultAvailable && <button className="secondary-button" type="button" disabled={busy} onClick={() => void run('results')}>구조 시험 결과 다시 조회</button>}
-      {autoState !== 'running' && !bundle && (!terminal(job) || job.state === 'COMPLETED') && <button className="secondary-button" type="button" disabled={busy} onClick={() => beginAuto(job)}>진행 자동 확인 재개</button>}
-      {terminal(job) && job.state !== 'COMPLETED' && <p>서버가 반환한 종료 상태입니다. 결과나 성공을 대신 생성하지 않습니다.</p>}
+    <p>{ui('서비스 연결과 엔진 흐름을 확인하는 합성 입력 시험입니다. 실제 730일 결과가 아닙니다. 시장 성과·실거래·FULL 백테스트·기록 Paper를 대체하지 않습니다.')}</p>
+    <p>{ui('승인 버전 {version}', { version: binding.strategyVersionId })}</p>
+    <button className="quiet-button" type="button" onClick={onClose}>{ui('구조 시험 화면 닫기')}</button>
+    <p>{ui('화면을 닫거나 로그아웃해도 서버 작업을 취소하지 않습니다. 요청 기록은 같은 세션·승인·프로필에 묶여 보존하며 다른 계정에서 자동 재전송하지 않습니다.')}</p>
+    <p>{ui('이 탭을 종료하거나 저장소를 직접 지우면 요청 키 보존을 보장하지 않습니다. 이후 실행은 새 의도가 될 수 있으며 서버 작업이 중복되지 않는다는 보장이 아닙니다.')}</p>
+    {!blocked && <button className="primary-button" type="button" disabled={busy} onClick={() => void run('submit')}>{ui('같은 승인으로 합성 구조 시험 실행')}</button>}
+    {(busy || autoState === 'running') && <p role="status">{ui('서버에서 작업 상태와 결과를 확인하고 있습니다.')}</p>}
+    {autoState === 'running' && <><p>{ui('같은 작업만 5초 간격으로 확인합니다. 최대 2분·24회 상태 조회 후에는 수동으로 이어갈 수 있습니다.')}</p>
+      <button className="secondary-button" type="button" onClick={() => stopAuto('paused')}>{ui('진행 자동 확인 중지')}</button></>}
+    {['hidden', 'paused', 'limit'].includes(autoState) && <p role="status">{ui(autoState === 'hidden' ? '탭을 숨겨 자동 확인을 멈췄습니다. 서버 작업을 취소한 것이 아닙니다. 직접 다시 조회하거나 자동 확인을 재개하세요.' : autoState === 'limit' ? '자동 확인 한도에 도달했습니다. 서버 작업을 취소한 것이 아닙니다. 직접 다시 조회하거나 자동 확인을 재개하세요.' : '자동 확인을 멈췄습니다. 서버 작업을 취소한 것이 아닙니다. 직접 다시 조회하거나 자동 확인을 재개하세요.')}</p>}
+    {autoState === 'waiting' && <p role="status">{ui(job ? '다른 화면의 작업 중에는 구조 시험 조회를 잠시 멈춥니다. 작업을 마친 뒤 직접 다시 조회하거나 자동 확인을 재개하세요. 서버 작업을 취소한 것이 아닙니다.' : '다른 화면의 작업 중에는 구조 시험 조회를 잠시 멈춥니다. 작업을 마친 뒤 같은 승인 실행 버튼으로 보존된 요청을 다시 확인하세요. 서버 작업을 취소한 것이 아닙니다.')}</p>}
+    {error && <p role="alert">{ui(error)}</p>}
+    {job && !blocked && <><p role="status">{ui('마지막으로 확인한 서버 상태: {state} · revision {revision}', { state: job.state, revision: job.revision })}</p><p>{job.backtestId}</p>
+      <button className="secondary-button" type="button" disabled={busy} onClick={() => void run('status')}>{ui('구조 시험 상태 다시 조회')}</button>
+      {job.state === 'COMPLETED' && job.resultAvailable && <button className="secondary-button" type="button" disabled={busy} onClick={() => void run('results')}>{ui('구조 시험 결과 다시 조회')}</button>}
+      {autoState !== 'running' && !bundle && (!terminal(job) || job.state === 'COMPLETED') && <button className="secondary-button" type="button" disabled={busy} onClick={() => beginAuto(job)}>{ui('진행 자동 확인 재개')}</button>}
+      {terminal(job) && job.state !== 'COMPLETED' && <p>{ui('서버가 반환한 종료 상태입니다. 결과나 성공을 대신 생성하지 않습니다.')}</p>}
     </>}
     {bundle && !blocked && <>
-      <p>서버 보고서의 원값을 표시합니다. 각 구간 첫 50개 거래까지 조회하며 전체 거래 목록이나 가격 차트가 아닙니다.</p>
-      <p>MMR·청산 검증과 실제 시장 체결의 증거가 아닙니다. 누락된 지표를 브라우저에서 계산하지 않습니다.</p>
-      <section aria-label="보고서 수준 서버 집계">
-        <h3>보고서 수준 서버 집계</h3>
-        <p>서버가 제공한 보고서 집계이며 구간별 지표가 아닙니다. MDD는 IS·OOS 중 큰 값, 승률은 두 구간 거래를 합친 서버 집계입니다.</p>
+      <p>{ui('서버 보고서의 원값을 표시합니다. 각 구간 첫 50개 거래까지 조회하며 전체 거래 목록이나 가격 차트가 아닙니다.')}</p>
+      <p>{ui('MMR·청산 검증과 실제 시장 체결의 증거가 아닙니다. 누락된 지표를 브라우저에서 계산하지 않습니다.')}</p>
+      <section aria-label={ui('보고서 수준 서버 집계')}>
+        <h3>{ui('보고서 수준 서버 집계')}</h3>
+        <p>{ui('서버가 제공한 보고서 집계이며 구간별 지표가 아닙니다. MDD는 IS·OOS 중 큰 값, 승률은 두 구간 거래를 합친 서버 집계입니다.')}</p>
         <dl>
-          <dt>MDD (비율 원문)</dt><dd>{displayMetric(bundle.report.derivedMetrics, 'MAX_DRAWDOWN_RATE') ?? 'MDD 미제공 또는 표시 불가'}</dd>
-          <dt>승률 (비율 원문)</dt><dd>{displayMetric(bundle.report.derivedMetrics, 'WIN_RATE') ?? '승률 미제공 또는 표시 불가'}</dd>
+          <dt>{ui('MDD (비율 원문)')}</dt><dd>{displayMetric(bundle.report.derivedMetrics, 'MAX_DRAWDOWN_RATE') ?? ui('MDD 미제공 또는 표시 불가')}</dd>
+          <dt>{ui('승률 (비율 원문)')}</dt><dd>{displayMetric(bundle.report.derivedMetrics, 'WIN_RATE') ?? ui('승률 미제공 또는 표시 불가')}</dd>
         </dl>
-        <p>수익률 미제공 · 자산·낙폭 시계열 미제공. IS·OOS의 독립 초기 자본을 합쳐 수익률이나 차트를 만들지 않습니다.</p>
+        <p>{ui('수익률 미제공 · 자산·낙폭 시계열 미제공. IS·OOS의 독립 초기 자본을 합쳐 수익률이나 차트를 만들지 않습니다.')}</p>
       </section>
-      <section aria-label="백분율 보조 표시">
-        <h3>백분율 보조 (소수 2자리 반올림)</h3>
-        <p>위 서버 비율을 소수 둘째 자리까지 표시합니다(셋째 자리에서 반올림). 원문은 그대로 보존하며, 반올림하면 0이 되는 작은 양수는 &lt;0.01%로 구분합니다.</p>
+      <section aria-label={ui('백분율 보조 표시')}>
+        <h3>{ui('백분율 보조 (소수 2자리 반올림)')}</h3>
+        <p>{ui('위 서버 비율을 소수 둘째 자리까지 표시합니다(셋째 자리에서 반올림). 원문은 그대로 보존하며, 반올림하면 0이 되는 작은 양수는 <0.01%로 구분합니다.')}</p>
         <dl>
-          <dt>MDD (백분율 보조)</dt><dd>{formatResultRatePercent(displayMetric(bundle.report.derivedMetrics, 'MAX_DRAWDOWN_RATE')) ?? '백분율 보조 표시 불가'}</dd>
-          <dt>승률 (백분율 보조)</dt><dd>{formatResultRatePercent(displayMetric(bundle.report.derivedMetrics, 'WIN_RATE')) ?? '백분율 보조 표시 불가'}</dd>
+          <dt>{ui('MDD (백분율 보조)')}</dt><dd>{formatResultRatePercent(displayMetric(bundle.report.derivedMetrics, 'MAX_DRAWDOWN_RATE')) ?? ui('백분율 보조 표시 불가')}</dd>
+          <dt>{ui('승률 (백분율 보조)')}</dt><dd>{formatResultRatePercent(displayMetric(bundle.report.derivedMetrics, 'WIN_RATE')) ?? ui('백분율 보조 표시 불가')}</dd>
         </dl>
       </section>
-      <div className="segment-table-wrap"><table aria-label="합성 구조 시험 구간별 서버 결과">
-        <caption>합성 입력 · 서버가 반환한 소수 원문</caption>
-        <thead><tr><th>구간</th><th>순손익</th><th>수수료</th><th>펀딩 현금흐름</th><th>거래 수</th><th>거절 수</th></tr></thead>
+      <div className="segment-table-wrap"><table aria-label={ui('합성 구조 시험 구간별 서버 결과')}>
+        <caption>{ui('합성 입력 · 서버가 반환한 소수 원문')}</caption>
+        <thead><tr>{['구간', '순손익', '수수료', '펀딩 현금흐름', '거래 수', '거절 수'].map(label => <th key={label}>{ui(label)}</th>)}</tr></thead>
         <tbody>{bundle.report.segments.map(({ segment, runtimeResult: result }) => <tr key={segment}>
-          <th>{segment} ({segment === 'IS' ? '인샘플' : '아웃오브샘플'})</th><td>{result.netPnl ?? '미제공'} {result.currency}</td><td>{result.fees ?? '미제공'} {result.currency}</td><td>{result.funding ?? '미제공'} {result.currency}</td><td>{result.tradeCount ?? '미제공'}</td><td>{result.rejectionCount ?? '미제공'}</td>
+          <th>{segment} ({ui(segment === 'IS' ? '인샘플' : '아웃오브샘플')})</th><td>{result.netPnl ?? ui('미제공')} {result.currency}</td><td>{result.fees ?? ui('미제공')} {result.currency}</td><td>{result.funding ?? ui('미제공')} {result.currency}</td><td>{result.tradeCount ?? ui('미제공')}</td><td>{result.rejectionCount ?? ui('미제공')}</td>
         </tr>)}</tbody>
       </table></div>
-      <p>IS는 인샘플, OOS는 아웃오브샘플 구간입니다. 각 구간의 초기 자본은 독립적이며 손익을 합쳐 수익률을 만들지 않습니다.</p>
-      <p>펀딩은 양수 수취·음수 지급인 현금흐름입니다.</p>
-      <p>거래 수는 구간 전체 서버 집계이며, 아래 첫 페이지에 표시한 거래 수와 다를 수 있습니다.</p>
-      {(['IS', 'OOS'] as const).map(segment => <section key={segment} aria-label={`${segment} 합성 거래 첫 페이지`}>
-        <h3>{segment} 거래</h3>
-        <p>{bundle.trades[segment].trades.length}개 표시 · {bundle.trades[segment].nextCursor ? '다음 서버 페이지 있음 · 부분 조회' : '이 응답에 다음 페이지 정보 없음 · 전체 조회를 보장하지 않음'}</p>
-        {bundle.trades[segment].trades.length === 0 ? <p>이 페이지에 반환된 거래가 없습니다.</p> : <ul>{bundle.trades[segment].trades.map(trade => <li key={`${trade.entryFillRef}:${trade.exitFillRef}`}>
-          {trade.exitReason} · 진입 가격 {trade.entryPrice} → 종료 가격 {trade.exitPrice} · 수량 {trade.quantity} · 순손익 {trade.netPnl}
+      <p>{ui('IS는 인샘플, OOS는 아웃오브샘플 구간입니다. 각 구간의 초기 자본은 독립적이며 손익을 합쳐 수익률을 만들지 않습니다.')}</p>
+      <p>{ui('펀딩은 양수 수취·음수 지급인 현금흐름입니다.')}</p>
+      <p>{ui('거래 수는 구간 전체 서버 집계이며, 아래 첫 페이지에 표시한 거래 수와 다를 수 있습니다.')}</p>
+      {(['IS', 'OOS'] as const).map(segment => <section key={segment} aria-label={ui('{segment} 합성 거래 첫 페이지', { segment })}>
+        <h3>{ui('{segment} 거래', { segment })}</h3>
+        <p>{ui(bundle.trades[segment].nextCursor ? '{count}개 표시 · 다음 서버 페이지 있음 · 부분 조회' : '{count}개 표시 · 이 응답에 다음 페이지 정보 없음 · 전체 조회를 보장하지 않음', { count: bundle.trades[segment].trades.length })}</p>
+        {bundle.trades[segment].trades.length === 0 ? <p>{ui('이 페이지에 반환된 거래가 없습니다.')}</p> : <ul>{bundle.trades[segment].trades.map(trade => <li key={`${trade.entryFillRef}:${trade.exitFillRef}`}>
+          {ui('{reason} · 진입 가격 {entry} → 종료 가격 {exit} · 수량 {quantity} · 순손익 {pnl}', { reason: trade.exitReason, entry: trade.entryPrice, exit: trade.exitPrice, quantity: trade.quantity, pnl: trade.netPnl })}
         </li>)}</ul>}
       </section>)}
     </>}

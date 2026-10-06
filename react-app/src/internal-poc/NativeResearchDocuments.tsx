@@ -119,7 +119,7 @@ function DocumentBody({ scopeId, document: doc, onOpenDocument, onOpenAnalysis, 
     case 'critic': {
       const d = doc.data
       body = <>{heading('critic')}<div className="meta">{t('criticFlow')}</div><div className="research-critic-blocks" style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
-        <div><span className="g-tag">Builder</span><p>{d?.builder ?? '—'}</p></div><div><span className="g-tag warn">Critic</span><p>{d?.critic ?? '—'}</p></div><div><span className={`g-tag ${tagClass(d?.verdictTone)}`}>Verdict</span><p>{d?.verdict ?? '—'}</p></div></div>{d?.finding && <Finding finding={d.finding} />}</>
+        <div><span className="g-tag">{t('builderRole')}</span><p>{d?.builder ?? '—'}</p></div><div><span className="g-tag warn">{t('criticRole')}</span><p>{d?.critic ?? '—'}</p></div><div><span className={`g-tag ${tagClass(d?.verdictTone)}`}>{t('verdictRole')}</span><p>{d?.verdict ?? '—'}</p></div></div>{d?.finding && <Finding finding={d.finding} />}</>
       break
     }
     case 'stress': {

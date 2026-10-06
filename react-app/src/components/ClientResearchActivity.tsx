@@ -81,7 +81,7 @@ function ActivitySummary({ text, running, visible }: { text: string; running: bo
 }
 
 function ElapsedTime({ startedAt, finishedAt, running }: { startedAt: number; finishedAt?: number; running: boolean }) {
-  const { c } = useConversationCopy()
+  const { c, language } = useConversationCopy()
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     if (!running) return
@@ -102,7 +102,7 @@ function ElapsedTime({ startedAt, finishedAt, running }: { startedAt: number; fi
   const end = running ? now : finishedAt
   if (end === undefined) return null
   const seconds = Math.max(0, Math.floor((end - startedAt) / 1000))
-  const duration = c('elapsedSeconds').replace('{seconds}', String(seconds))
+  const duration = c('elapsedSeconds').replace('{seconds}', new Intl.NumberFormat(language).format(seconds))
   return seconds >= 2 ? <span className="els" aria-label={c('elapsedTime').replace('{duration}', duration)}>{duration}</span> : null
 }
 

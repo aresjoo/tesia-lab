@@ -37,7 +37,7 @@ export function ClientSiteFooter({ lime = false, onNavigate, onHelp, notice }: P
       shell?.scrollTo({ top: 0, behavior: 'instant' })
     }}>{label}</button>
     : <InternalLink key={action} href={href}>{label}</InternalLink>
-  return <footer ref={root} className={`gft client-site-footer${lime ? ' gft-lime' : ''}`} aria-label={c.siteInfo}>
+  return <footer ref={root} lang={language} className={`gft client-site-footer${lime ? ' gft-lime' : ''}`} aria-label={c.siteInfo}>
     <div className="gft-in">
       <div className="gft-bar">
         <InternalLink className="gft-crs" href="/policies/">{c.top.customerRelationshipSummary}</InternalLink>
@@ -80,7 +80,7 @@ export function ClientSiteFooter({ lime = false, onNavigate, onHelp, notice }: P
           <p className="dim">{c.body.consent}</p>
         </>}<p className="dim">© 2026 TETH AI. {c.allRightsReserved}.</p></div>
       </div>
-      <div className="gft-pw">{c.body.exchange} <img src="/assets/logos/bitget-512.png" alt="" width="22" height="22" loading="lazy" /><b>Bitget</b></div>
+      <div className="gft-pw"><span lang="en">{c.body.exchange}</span> <img src="/assets/logos/bitget-512.png" alt="" width="22" height="22" loading="lazy" /><b>Bitget</b></div>
       <svg className="gft-wm" viewBox="0 0 3970 1000" role="img" aria-label="TETH"><path d={footerWordmark} /></svg>
     </div>
   </footer>

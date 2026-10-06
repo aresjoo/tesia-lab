@@ -1,0 +1,346 @@
+{
+  "서버가 아직 실행 준비를 마치지 못해 백테스트를 시작하지 못했습니다. 요청은 그대로 보관되어 있으며 자동으로 다시 시도하지 않으니, 준비가 끝난 뒤 같은 요청으로 재개해 주세요.": {
+    "en": "The server has not finished preparing to run, so the backtest could not be started. Your request is kept as is and will not be retried automatically; once the server is ready, please resume with the same request.",
+    "ja": "サーバーの実行準備がまだ完了していないため、バックテストを開始できませんでした。リクエストはそのまま保持されており、自動的に再試行されません。準備が完了したら、同じリクエストで再開してください。",
+    "zh-CN": "服务器尚未完成运行准备，因此未能启动回测。请求已原样保留，不会自动重试，请在准备完成后使用同一请求继续。",
+    "zh-TW": "伺服器尚未完成執行準備，因此未能啟動回測。請求已原樣保留，不會自動重試，請在準備完成後以相同請求繼續。",
+    "es": "El servidor aún no ha terminado de prepararse para ejecutar, por lo que no se pudo iniciar el backtest. La solicitud se conserva tal cual y no se reintentará automáticamente; cuando el servidor esté listo, reanúdala con la misma solicitud.",
+    "fr": "Le serveur n'a pas encore terminé sa préparation à l'exécution ; le backtest n'a donc pas pu démarrer. La requête est conservée telle quelle et ne sera pas relancée automatiquement ; une fois le serveur prêt, reprenez avec la même requête."
+  },
+  "로그아웃 응답과 현재 브라우저 세션 부재를 확인했습니다. 서버 전략을 삭제하거나 백테스트를 취소하지 않습니다.": {
+    "en": "The logout response and the absence of a current browser session were confirmed. Server strategies are not deleted and backtests are not canceled.",
+    "ja": "ログアウトの応答と、現在のブラウザーセッションが存在しないことを確認しました。サーバー上の戦略は削除されず、バックテストもキャンセルされません。",
+    "zh-CN": "已确认登出响应以及当前浏览器会话不存在。不会删除服务器策略，也不会取消回测。",
+    "zh-TW": "已確認登出回應以及目前瀏覽器工作階段不存在。不會刪除伺服器策略，也不會取消回測。",
+    "es": "Se confirmaron la respuesta de cierre de sesión y la ausencia de una sesión actual del navegador. No se eliminan estrategias del servidor ni se cancelan backtests.",
+    "fr": "La réponse de déconnexion et l'absence de session de navigateur actuelle ont été confirmées. Aucune stratégie du serveur n'est supprimée et aucun backtest n'est annulé."
+  },
+  "현재 브라우저 세션이 없습니다. 로그아웃 응답과 서버의 세션 종료 여부는 확인하지 못했습니다. 기존 요청 기록은 보존했습니다.": {
+    "en": "There is no current browser session. The logout response and whether the server ended the session were not confirmed. Existing request records were preserved.",
+    "ja": "現在のブラウザーセッションがありません。ログアウトの応答と、サーバー側でセッションが終了したかどうかは確認できませんでした。既存のリクエスト記録は保持しました。",
+    "zh-CN": "当前没有浏览器会话。未能确认登出响应以及服务器是否已结束会话。已保留现有请求记录。",
+    "zh-TW": "目前沒有瀏覽器工作階段。未能確認登出回應以及伺服器是否已結束工作階段。已保留現有請求紀錄。",
+    "es": "No hay una sesión actual del navegador. No se confirmaron la respuesta de cierre de sesión ni si el servidor finalizó la sesión. Se conservaron los registros de solicitudes existentes.",
+    "fr": "Il n'y a aucune session de navigateur actuelle. La réponse de déconnexion et la fin éventuelle de la session côté serveur n'ont pas été confirmées. Les enregistrements de requêtes existants ont été conservés."
+  },
+  "현재 세션이 로그아웃 요청의 세션과 달라 재전송하지 않았습니다. 다른 세션의 로그아웃이나 전체 계정 종료를 확인한 것이 아닙니다. 기존 요청 기록은 보존했습니다.": {
+    "en": "The current session differs from the session of the logout request, so it was not resent. This does not confirm a logout of another session or termination of the whole account. Existing request records were preserved.",
+    "ja": "現在のセッションがログアウトリクエストのセッションと異なるため、再送信しませんでした。別のセッションのログアウトやアカウント全体の終了を確認したわけではありません。既存のリクエスト記録は保持しました。",
+    "zh-CN": "当前会话与登出请求的会话不同，因此未重新发送。这并不表示已确认其他会话的登出或整个账户的终止。已保留现有请求记录。",
+    "zh-TW": "目前工作階段與登出請求的工作階段不同，因此未重新傳送。這並不表示已確認其他工作階段的登出或整個帳戶的終止。已保留現有請求紀錄。",
+    "es": "La sesión actual es distinta de la sesión de la solicitud de cierre de sesión, por lo que no se reenvió. Esto no confirma el cierre de sesión de otra sesión ni la finalización de toda la cuenta. Se conservaron los registros de solicitudes existentes.",
+    "fr": "La session actuelle diffère de celle de la demande de déconnexion ; elle n'a donc pas été renvoyée. Cela ne confirme ni la déconnexion d'une autre session ni la fermeture de l'ensemble du compte. Les enregistrements de requêtes existants ont été conservés."
+  },
+  "이전 이메일 요청의 세션을 확인할 수 없습니다. 새 익명 세션을 자동 발급하지 않았습니다. 새로고침으로 사라진 인증번호·CSRF는 복구할 수 없으며 기존 전략과 요청 기록은 보존했습니다.": {
+    "en": "The session of the previous email request cannot be verified. A new anonymous session was not issued automatically. The verification code and CSRF token lost on refresh cannot be recovered; existing strategies and request records were preserved.",
+    "ja": "以前のメールリクエストのセッションを確認できません。新しい匿名セッションは自動発行していません。更新で失われた認証番号とCSRFは復元できません。既存の戦略とリクエスト記録は保持しました。",
+    "zh-CN": "无法确认之前邮件请求的会话。未自动签发新的匿名会话。因刷新而丢失的验证码和 CSRF 无法恢复，现有策略和请求记录已保留。",
+    "zh-TW": "無法確認先前電子郵件請求的工作階段。未自動核發新的匿名工作階段。因重新整理而遺失的驗證碼與 CSRF 無法復原，現有策略與請求紀錄已保留。",
+    "es": "No se puede verificar la sesión de la solicitud de correo anterior. No se emitió automáticamente una nueva sesión anónima. El código de verificación y el CSRF perdidos al recargar no se pueden recuperar; se conservaron las estrategias y los registros de solicitudes existentes.",
+    "fr": "La session de la requête e-mail précédente est introuvable. Aucune nouvelle session anonyme n'a été émise automatiquement. Le code de vérification et le CSRF perdus lors de l'actualisation ne peuvent pas être récupérés ; les stratégies et enregistrements de requêtes existants ont été conservés."
+  },
+  "이메일 복구 중 세션이 달라 이전 미확정 전략 요청을 보존했습니다. 이 요청을 새 세션에 자동 연결하거나 폐기하지 않았습니다.": {
+    "en": "Because the session differed during email recovery, the previous unconfirmed strategy request was preserved. This request was not automatically linked to the new session or discarded.",
+    "ja": "メールの復旧中にセッションが異なっていたため、以前の未確定の戦略リクエストを保持しました。このリクエストを新しいセッションに自動的に連携したり、破棄したりはしていません。",
+    "zh-CN": "邮件恢复期间会话不一致，因此保留了之前未确认的策略请求。该请求未被自动关联到新会话，也未被丢弃。",
+    "zh-TW": "電子郵件復原期間工作階段不一致，因此保留了先前未確認的策略請求。該請求未被自動連結到新工作階段，也未被捨棄。",
+    "es": "Como la sesión era distinta durante la recuperación del correo, se conservó la solicitud de estrategia anterior sin confirmar. Esta solicitud no se vinculó automáticamente a la nueva sesión ni se descartó.",
+    "fr": "La session étant différente lors de la récupération par e-mail, la requête de stratégie précédente non confirmée a été conservée. Cette requête n'a été ni liée automatiquement à la nouvelle session ni abandonnée."
+  },
+  "확인하지 못한 요청이 있습니다. 저장 기록은 승인 증거가 아닙니다. 같은 요청으로 명시적으로 재개해주세요.": {
+    "en": "There is a request that was not confirmed. A saved record is not evidence of approval. Please explicitly resume with the same request.",
+    "ja": "確認できていないリクエストがあります。保存された記録は承認の証拠ではありません。同じリクエストで明示的に再開してください。",
+    "zh-CN": "有尚未确认的请求。已保存的记录不是批准的证据。请使用同一请求明确地继续。",
+    "zh-TW": "有尚未確認的請求。已儲存的紀錄不是核准的證據。請以相同請求明確地繼續。",
+    "es": "Hay una solicitud que no se pudo confirmar. Un registro guardado no es prueba de aprobación. Reanúdala explícitamente con la misma solicitud.",
+    "fr": "Une requête n'a pas pu être confirmée. Un enregistrement sauvegardé n'est pas une preuve d'approbation. Reprenez explicitement avec la même requête."
+  },
+  "세션이 변경되어 이전 요청과 승인 표시를 무효화했습니다. 서버 이력에서 상태를 확인해주세요.": {
+    "en": "The session changed, so the previous request and approval indications were invalidated. Please check the status in the server history.",
+    "ja": "セッションが変更されたため、以前のリクエストと承認表示を無効にしました。サーバーの履歴で状態を確認してください。",
+    "zh-CN": "会话已变更，因此之前的请求和批准标记已失效。请在服务器历史记录中确认状态。",
+    "zh-TW": "工作階段已變更，因此先前的請求與核准標示已失效。請在伺服器歷程中確認狀態。",
+    "es": "La sesión cambió, por lo que se invalidaron la solicitud anterior y las indicaciones de aprobación. Comprueba el estado en el historial del servidor.",
+    "fr": "La session a changé ; la requête précédente et les indications d'approbation ont donc été invalidées. Vérifiez l'état dans l'historique du serveur."
+  },
+  "세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.": {
+    "en": "The session or the recovery storage could not be verified. Server state was not deleted.",
+    "ja": "セッションまたは復旧用ストレージを確認できませんでした。サーバーの状態は削除していません。",
+    "zh-CN": "未能确认会话或恢复存储。未删除服务器状态。",
+    "zh-TW": "未能確認工作階段或復原儲存空間。未刪除伺服器狀態。",
+    "es": "No se pudo verificar la sesión ni el almacenamiento de recuperación. No se eliminó el estado del servidor.",
+    "fr": "La session ou le stockage de récupération n'a pas pu être vérifié. L'état du serveur n'a pas été supprimé."
+  },
+  "로그인 전 전략의 서버 연결을 확인했습니다. 검증과 승인은 다시 확인해주세요.": {
+    "en": "The server link of the pre-login strategy was confirmed. Please check validation and approval again.",
+    "ja": "ログイン前の戦略のサーバー連携を確認しました。検証と承認は改めて確認してください。",
+    "zh-CN": "已确认登录前策略的服务器关联。请重新确认验证和批准。",
+    "zh-TW": "已確認登入前策略的伺服器連結。請重新確認驗證與核准。",
+    "es": "Se confirmó la vinculación con el servidor de la estrategia previa al inicio de sesión. Vuelve a comprobar la validación y la aprobación.",
+    "fr": "La liaison au serveur de la stratégie antérieure à la connexion a été confirmée. Veuillez revérifier la validation et l'approbation."
+  },
+  "서버 인계 응답과 현재 인증 세션을 확인했습니다. 이 브라우저에는 복구할 대화 식별자가 없어 전략 내용은 확인하지 못했습니다.": {
+    "en": "The server handoff response and the current authenticated session were confirmed. This browser has no conversation identifier to recover, so the strategy content could not be verified.",
+    "ja": "サーバーの引き継ぎ応答と現在の認証済みセッションを確認しました。このブラウザーには復元できる会話識別子がないため、戦略の内容は確認できませんでした。",
+    "zh-CN": "已确认服务器交接响应和当前已认证会话。此浏览器中没有可恢复的对话标识符，因此未能确认策略内容。",
+    "zh-TW": "已確認伺服器交接回應與目前已驗證的工作階段。此瀏覽器中沒有可復原的對話識別碼，因此未能確認策略內容。",
+    "es": "Se confirmaron la respuesta de traspaso del servidor y la sesión autenticada actual. Este navegador no tiene un identificador de conversación que recuperar, por lo que no se pudo verificar el contenido de la estrategia.",
+    "fr": "La réponse de transfert du serveur et la session authentifiée actuelle ont été confirmées. Ce navigateur ne dispose d'aucun identifiant de conversation à récupérer ; le contenu de la stratégie n'a donc pas pu être vérifié."
+  },
+  "요청 기록을 저장·확인하지 못해 이번 요청을 서버로 전송하지 않았습니다. 저장소를 확인한 뒤 다시 시도해주세요.": {
+    "en": "Because the request record could not be saved or verified, this request was not sent to the server. Please check the storage and try again.",
+    "ja": "リクエスト記録を保存・確認できなかったため、今回のリクエストはサーバーに送信しませんでした。ストレージを確認してから、もう一度お試しください。",
+    "zh-CN": "未能保存或确认请求记录，因此本次请求未发送到服务器。请检查存储后重试。",
+    "zh-TW": "未能儲存或確認請求紀錄，因此本次請求未傳送到伺服器。請檢查儲存空間後再試一次。",
+    "es": "Como no se pudo guardar ni verificar el registro de la solicitud, esta solicitud no se envió al servidor. Comprueba el almacenamiento e inténtalo de nuevo.",
+    "fr": "L'enregistrement de la requête n'ayant pas pu être sauvegardé ni vérifié, cette requête n'a pas été envoyée au serveur. Vérifiez le stockage, puis réessayez."
+  },
+  "로그아웃 요청을 확인하는 동안 로그인 인계와 전략 연결을 진행하지 않습니다. 현재 세션을 다시 확인해주세요.": {
+    "en": "While the logout request is being verified, login handoff and strategy linking are not proceeding. Please check the current session again.",
+    "ja": "ログアウトリクエストを確認している間は、ログインの引き継ぎと戦略の連携を進めません。現在のセッションを改めて確認してください。",
+    "zh-CN": "在确认登出请求期间，不会进行登录交接和策略关联。请重新确认当前会话。",
+    "zh-TW": "在確認登出請求期間，不會進行登入交接與策略連結。請重新確認目前的工作階段。",
+    "es": "Mientras se verifica la solicitud de cierre de sesión, no se avanza con el traspaso de inicio de sesión ni con la vinculación de la estrategia. Vuelve a comprobar la sesión actual.",
+    "fr": "Pendant la vérification de la demande de déconnexion, le transfert de connexion et la liaison de la stratégie ne sont pas poursuivis. Veuillez revérifier la session actuelle."
+  },
+  "미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.": {
+    "en": "The unconfirmed strategy request record was preserved. This record is not cleared and is not automatically linked to a new login session.",
+    "ja": "未確定の戦略リクエスト記録を保持しました。この記録を消去したり、新しいログインセッションに自動的に連携したりはしません。",
+    "zh-CN": "已保留未确认的策略请求记录。该记录不会被清除，也不会自动关联到新的登录会话。",
+    "zh-TW": "已保留未確認的策略請求紀錄。該紀錄不會被清除，也不會自動連結到新的登入工作階段。",
+    "es": "Se conservó el registro de la solicitud de estrategia sin confirmar. Este registro no se borra ni se vincula automáticamente a una nueva sesión de inicio de sesión.",
+    "fr": "L'enregistrement de la requête de stratégie non confirmée a été conservé. Il n'est ni effacé ni lié automatiquement à une nouvelle session de connexion."
+  },
+  "현재 인증 세션만 확인했습니다. 공급자 인증·로그인 확정 응답·전략 인계는 미확인입니다. 별도 연결 요청은 서버가 최종 확인합니다.": {
+    "en": "Only the current authenticated session was confirmed. Provider authentication, the login confirmation response, and strategy handoff are unconfirmed. A separate link request is finally verified by the server.",
+    "ja": "現在の認証済みセッションのみ確認しました。プロバイダー認証、ログイン確定の応答、戦略の引き継ぎは未確認です。別途の連携リクエストは、サーバーが最終的に確認します。",
+    "zh-CN": "仅确认了当前已认证会话。提供方认证、登录确认响应和策略交接均未确认。单独的关联请求由服务器最终确认。",
+    "zh-TW": "僅確認了目前已驗證的工作階段。提供者驗證、登入確認回應與策略交接皆未確認。另行的連結請求由伺服器最終確認。",
+    "es": "Solo se confirmó la sesión autenticada actual. La autenticación del proveedor, la respuesta de confirmación de inicio de sesión y el traspaso de la estrategia no están confirmados. Una solicitud de vinculación aparte la verifica finalmente el servidor.",
+    "fr": "Seule la session authentifiée actuelle a été confirmée. L'authentification du fournisseur, la réponse de confirmation de connexion et le transfert de la stratégie ne sont pas confirmés. Une demande de liaison distincte est vérifiée en dernier ressort par le serveur."
+  },
+  "로그인을 확인했습니다.": {
+    "en": "Login confirmed.",
+    "ja": "ログインを確認しました。",
+    "zh-CN": "已确认登录。",
+    "zh-TW": "已確認登入。",
+    "es": "Inicio de sesión confirmado.",
+    "fr": "Connexion confirmée."
+  },
+  "로그인을 확인했습니다. 로그인 전 전략은 아직 연결하거나 승인하지 않았습니다.": {
+    "en": "Login confirmed. The pre-login strategy has not yet been linked or approved.",
+    "ja": "ログインを確認しました。ログイン前の戦略は、まだ連携も承認もされていません。",
+    "zh-CN": "已确认登录。登录前的策略尚未被关联或批准。",
+    "zh-TW": "已確認登入。登入前的策略尚未被連結或核准。",
+    "es": "Inicio de sesión confirmado. La estrategia previa al inicio de sesión aún no se ha vinculado ni aprobado.",
+    "fr": "Connexion confirmée. La stratégie antérieure à la connexion n'a pas encore été liée ni approuvée."
+  },
+  "현재 인증 세션은 확인했지만 로그인 전 세션의 사전조건을 복구하지 못해 전략 연결을 차단했습니다. 인증 세션 ETag로 대체하지 않습니다.": {
+    "en": "The current authenticated session was confirmed, but the preconditions of the pre-login session could not be recovered, so strategy linking was blocked. It is not substituted with the authenticated session ETag.",
+    "ja": "現在の認証済みセッションは確認しましたが、ログイン前セッションの事前条件を復元できなかったため、戦略の連携をブロックしました。認証済みセッションのETagで代用することはしません。",
+    "zh-CN": "已确认当前已认证会话，但未能恢复登录前会话的前置条件，因此已阻止策略关联。不会用已认证会话的 ETag 代替。",
+    "zh-TW": "已確認目前已驗證的工作階段，但未能復原登入前工作階段的前置條件，因此已阻擋策略連結。不會以已驗證工作階段的 ETag 代替。",
+    "es": "Se confirmó la sesión autenticada actual, pero no se pudieron recuperar las condiciones previas de la sesión anterior al inicio de sesión, por lo que se bloqueó la vinculación de la estrategia. No se sustituye por el ETag de la sesión autenticada.",
+    "fr": "La session authentifiée actuelle a été confirmée, mais les préconditions de la session antérieure à la connexion n'ont pas pu être récupérées ; la liaison de la stratégie a donc été bloquée. Elle n'est pas remplacée par l'ETag de la session authentifiée."
+  },
+  "로그인 후 복구 저장소를 확인하지 못했습니다. 전략 연결과 승인은 실행하지 않았습니다.": {
+    "en": "The recovery storage could not be verified after login. Strategy linking and approval were not executed.",
+    "ja": "ログイン後に復旧用ストレージを確認できませんでした。戦略の連携と承認は実行していません。",
+    "zh-CN": "登录后未能确认恢复存储。未执行策略关联和批准。",
+    "zh-TW": "登入後未能確認復原儲存空間。未執行策略連結與核准。",
+    "es": "No se pudo verificar el almacenamiento de recuperación tras el inicio de sesión. No se ejecutaron la vinculación ni la aprobación de la estrategia.",
+    "fr": "Le stockage de récupération n'a pas pu être vérifié après la connexion. La liaison et l'approbation de la stratégie n'ont pas été exécutées."
+  },
+  "로그인 확인 근거가 일치하지 않아 전략 연결을 차단했습니다.": {
+    "en": "The login confirmation evidence did not match, so strategy linking was blocked.",
+    "ja": "ログイン確認の根拠が一致しないため、戦略の連携をブロックしました。",
+    "zh-CN": "登录确认依据不一致，因此已阻止策略关联。",
+    "zh-TW": "登入確認依據不一致，因此已阻擋策略連結。",
+    "es": "Las pruebas de confirmación de inicio de sesión no coincidían, por lo que se bloqueó la vinculación de la estrategia.",
+    "fr": "Les éléments de confirmation de connexion ne correspondaient pas ; la liaison de la stratégie a donc été bloquée."
+  },
+  "세션 복구 근거가 일치하지 않아 전략 연결을 차단했습니다.": {
+    "en": "The session recovery evidence did not match, so strategy linking was blocked.",
+    "ja": "セッション復旧の根拠が一致しないため、戦略の連携をブロックしました。",
+    "zh-CN": "会话恢复依据不一致，因此已阻止策略关联。",
+    "zh-TW": "工作階段復原依據不一致，因此已阻擋策略連結。",
+    "es": "Las pruebas de recuperación de sesión no coincidían, por lo que se bloqueó la vinculación de la estrategia.",
+    "fr": "Les éléments de récupération de session ne correspondaient pas ; la liaison de la stratégie a donc été bloquée."
+  },
+  "이메일 로그인 확인 근거가 일치하지 않아 전략 연결을 차단했습니다.": {
+    "en": "The email login confirmation evidence did not match, so strategy linking was blocked.",
+    "ja": "メールログイン確認の根拠が一致しないため、戦略の連携をブロックしました。",
+    "zh-CN": "邮件登录确认依据不一致，因此已阻止策略关联。",
+    "zh-TW": "電子郵件登入確認依據不一致，因此已阻擋策略連結。",
+    "es": "Las pruebas de confirmación de inicio de sesión por correo no coincidían, por lo que se bloqueó la vinculación de la estrategia.",
+    "fr": "Les éléments de confirmation de connexion par e-mail ne correspondaient pas ; la liaison de la stratégie a donc été bloquée."
+  },
+  "로그인 후 실행 이력을 확인할 수 있습니다. 현재 전략 초안과 검증 상태는 유지합니다.": {
+    "en": "After login, you can view the execution history. The current strategy draft and validation state are kept.",
+    "ja": "ログイン後に実行履歴を確認できます。現在の戦略の下書きと検証状態は維持されます。",
+    "zh-CN": "登录后可以查看执行历史。当前的策略草稿和验证状态将保持不变。",
+    "zh-TW": "登入後可以查看執行歷程。目前的策略草稿與驗證狀態將維持不變。",
+    "es": "Tras iniciar sesión, podrás consultar el historial de ejecución. El borrador de estrategia actual y el estado de validación se mantienen.",
+    "fr": "Après la connexion, vous pourrez consulter l'historique d'exécution. Le brouillon de stratégie actuel et l'état de validation sont conservés."
+  },
+  "현재 로그인이 변경되어 Paper 내용을 숨겼습니다. 이전 요청 기록과 서버 실행을 삭제하거나 취소하지 않았습니다.": {
+    "en": "Because the current login changed, the Paper content was hidden. Previous request records and server executions were not deleted or canceled.",
+    "ja": "現在のログインが変更されたため、Paperの内容を非表示にしました。以前のリクエスト記録とサーバー上の実行は削除もキャンセルもしていません。",
+    "zh-CN": "当前登录已变更，因此隐藏了 Paper 内容。之前的请求记录和服务器执行未被删除或取消。",
+    "zh-TW": "目前的登入已變更，因此隱藏了 Paper 內容。先前的請求紀錄與伺服器執行未被刪除或取消。",
+    "es": "Como el inicio de sesión actual cambió, se ocultó el contenido de Paper. No se eliminaron ni cancelaron los registros de solicitudes anteriores ni las ejecuciones del servidor.",
+    "fr": "La connexion actuelle ayant changé, le contenu de Paper a été masqué. Les enregistrements de requêtes précédents et les exécutions du serveur n'ont été ni supprimés ni annulés."
+  },
+  "현재 로그인이 변경되어 구조 시험 내용을 숨겼습니다. 이전 요청 기록과 서버 작업을 삭제하거나 취소하지 않았습니다.": {
+    "en": "Because the current login changed, the structure-test content was hidden. Previous request records and server jobs were not deleted or canceled.",
+    "ja": "現在のログインが変更されたため、構造テストの内容を非表示にしました。以前のリクエスト記録とサーバー上のジョブは削除もキャンセルもしていません。",
+    "zh-CN": "当前登录已变更，因此隐藏了结构测试内容。之前的请求记录和服务器任务未被删除或取消。",
+    "zh-TW": "目前的登入已變更，因此隱藏了結構測試內容。先前的請求紀錄與伺服器工作未被刪除或取消。",
+    "es": "Como el inicio de sesión actual cambió, se ocultó el contenido de la prueba de estructura. No se eliminaron ni cancelaron los registros de solicitudes anteriores ni las tareas del servidor.",
+    "fr": "La connexion actuelle ayant changé, le contenu du test de structure a été masqué. Les enregistrements de requêtes précédents et les tâches du serveur n'ont été ni supprimés ni annulés."
+  },
+  "로그인 전 전략 연결": {
+    "en": "Link pre-login strategy",
+    "ja": "ログイン前の戦略を連携",
+    "zh-CN": "关联登录前策略",
+    "zh-TW": "連結登入前策略",
+    "es": "Vincular estrategia previa al inicio de sesión",
+    "fr": "Lier la stratégie antérieure à la connexion"
+  },
+  "원하면 로그인 전 전략을 이어서 연구할 수 있습니다. 연결은 선택사항이며 승인이나 실행에 동의하는 것이 아닙니다.": {
+    "en": "If you wish, you can continue researching the pre-login strategy. Linking is optional and is not consent to approval or execution.",
+    "ja": "ご希望であれば、ログイン前の戦略の検討を続けられます。連携は任意であり、承認や実行への同意ではありません。",
+    "zh-CN": "如果需要，可以继续研究登录前的策略。关联是可选的，并不表示同意批准或执行。",
+    "zh-TW": "如有需要，可以繼續研究登入前的策略。連結為選用，並不表示同意核准或執行。",
+    "es": "Si lo deseas, puedes seguir investigando la estrategia previa al inicio de sesión. La vinculación es opcional y no supone consentimiento para la aprobación ni la ejecución.",
+    "fr": "Si vous le souhaitez, vous pouvez poursuivre l'étude de la stratégie antérieure à la connexion. La liaison est facultative et ne vaut pas consentement à l'approbation ni à l'exécution."
+  },
+  "로그아웃 요청": {
+    "en": "Logout request",
+    "ja": "ログアウトリクエスト",
+    "zh-CN": "登出请求",
+    "zh-TW": "登出請求",
+    "es": "Solicitud de cierre de sesión",
+    "fr": "Demande de déconnexion"
+  },
+  "로그아웃 요청 확인": {
+    "en": "Confirm logout request",
+    "ja": "ログアウトリクエストの確認",
+    "zh-CN": "确认登出请求",
+    "zh-TW": "確認登出請求",
+    "es": "Confirmar solicitud de cierre de sesión",
+    "fr": "Confirmer la demande de déconnexion"
+  },
+  "이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.": {
+    "en": "Request records from a previous session are not login authority or a server processing result.",
+    "ja": "以前のセッションのリクエスト記録は、ログインの権限でもサーバーの処理結果でもありません。",
+    "zh-CN": "之前会话的请求记录不是登录权限，也不是服务器的处理结果。",
+    "zh-TW": "先前工作階段的請求紀錄不是登入權限，也不是伺服器的處理結果。",
+    "es": "Los registros de solicitudes de una sesión anterior no son autoridad de inicio de sesión ni un resultado de procesamiento del servidor.",
+    "fr": "Les enregistrements de requêtes d'une session précédente ne constituent ni une autorisation de connexion ni un résultat de traitement du serveur."
+  },
+  "서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.": {
+    "en": "The server rejected the strategy link request (BAD_REQUEST). You can discard only this request record and start a new conversation with the current login. Existing server strategies are not deleted.",
+    "ja": "サーバーが戦略の連携リクエストを拒否しました（BAD_REQUEST）。このリクエスト記録のみを破棄し、現在のログインで新しい会話を始めることができます。サーバー上の既存の戦略は削除されません。",
+    "zh-CN": "服务器拒绝了策略关联请求（BAD_REQUEST）。可以仅丢弃该请求记录，并使用当前登录开始新对话。不会删除服务器上现有的策略。",
+    "zh-TW": "伺服器拒絕了策略連結請求（BAD_REQUEST）。可以僅捨棄該請求紀錄，並以目前的登入開始新對話。不會刪除伺服器上現有的策略。",
+    "es": "El servidor rechazó la solicitud de vinculación de la estrategia (BAD_REQUEST). Puedes descartar solo este registro de solicitud y empezar una nueva conversación con el inicio de sesión actual. Las estrategias existentes del servidor no se eliminan.",
+    "fr": "Le serveur a rejeté la demande de liaison de la stratégie (BAD_REQUEST). Vous pouvez abandonner uniquement cet enregistrement de requête et démarrer une nouvelle conversation avec la connexion actuelle. Les stratégies existantes du serveur ne sont pas supprimées."
+  },
+  "서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.": {
+    "en": "Checking the server response. No new request is created.",
+    "ja": "サーバーの応答を確認しています。新しいリクエストは作成しません。",
+    "zh-CN": "正在确认服务器响应。不会创建新请求。",
+    "zh-TW": "正在確認伺服器回應。不會建立新請求。",
+    "es": "Se está comprobando la respuesta del servidor. No se crea ninguna solicitud nueva.",
+    "fr": "Vérification de la réponse du serveur en cours. Aucune nouvelle requête n'est créée."
+  },
+  "전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.": {
+    "en": "Input that was not sent is temporarily held in this screen's memory. When the same session and conversation are confirmed again, it is restored in the composer and not sent automatically. It is not preserved after the page is refreshed or closed.",
+    "ja": "送信されなかった入力は、この画面のメモリに一時的に保管されています。同じセッションと会話が再び確認されると入力欄に復元されますが、自動送信はされません。ページの更新や閉じた後は保持されません。",
+    "zh-CN": "未发送的输入已临时保存在此界面的内存中。再次确认同一会话和对话后，会恢复到输入框，且不会自动发送。刷新或关闭页面后不会保留。",
+    "zh-TW": "未傳送的輸入已暫時保存在此畫面的記憶體中。再次確認相同的工作階段與對話後，會還原到輸入欄，且不會自動傳送。重新整理或關閉頁面後不會保留。",
+    "es": "La entrada no enviada se guarda temporalmente en la memoria de esta pantalla. Cuando se vuelvan a confirmar la misma sesión y conversación, se restaura en el cuadro de redacción y no se envía automáticamente. No se conserva tras recargar o cerrar la página.",
+    "fr": "La saisie non envoyée est conservée temporairement dans la mémoire de cet écran. Lorsque la même session et la même conversation sont de nouveau confirmées, elle est restaurée dans la zone de saisie et n'est pas envoyée automatiquement. Elle n'est pas conservée après l'actualisation ou la fermeture de la page."
+  },
+  "로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.": {
+    "en": "Logout does not delete server strategies or cancel in-progress backtests. Existing requests that were not confirmed may continue on the server, and the records are preserved.",
+    "ja": "ログアウトは、サーバー上の戦略の削除や進行中のバックテストのキャンセルではありません。確認できていない既存のリクエストはサーバーで続行される可能性があり、記録は保持されます。",
+    "zh-CN": "登出不会删除服务器策略，也不会取消进行中的回测。尚未确认的现有请求可能仍在服务器上继续，相关记录会被保留。",
+    "zh-TW": "登出不會刪除伺服器策略，也不會取消進行中的回測。尚未確認的現有請求可能仍在伺服器上繼續，相關紀錄會被保留。",
+    "es": "Cerrar sesión no elimina estrategias del servidor ni cancela backtests en curso. Las solicitudes existentes que no se hayan confirmado pueden continuar en el servidor, y los registros se conservan.",
+    "fr": "La déconnexion ne supprime pas les stratégies du serveur et n'annule pas les backtests en cours. Les requêtes existantes non confirmées peuvent se poursuivre sur le serveur, et les enregistrements sont conservés."
+  },
+  "같은 로그아웃 요청으로 재개": {
+    "en": "Resume with the same logout request",
+    "ja": "同じログアウトリクエストで再開",
+    "zh-CN": "使用同一登出请求继续",
+    "zh-TW": "以相同登出請求繼續",
+    "es": "Reanudar con la misma solicitud de cierre de sesión",
+    "fr": "Reprendre avec la même demande de déconnexion"
+  },
+  "이전 요청 기록을 보존하고 현재 브라우저에서 새 대화 시작": {
+    "en": "Preserve previous request records and start a new conversation in the current browser",
+    "ja": "以前のリクエスト記録を保持し、現在のブラウザーで新しい会話を開始",
+    "zh-CN": "保留之前的请求记录，并在当前浏览器中开始新对话",
+    "zh-TW": "保留先前的請求紀錄，並在目前的瀏覽器中開始新對話",
+    "es": "Conservar los registros de solicitudes anteriores y empezar una nueva conversación en el navegador actual",
+    "fr": "Conserver les enregistrements de requêtes précédents et démarrer une nouvelle conversation dans le navigateur actuel"
+  },
+  "같은 요청으로 재개": {
+    "en": "Resume with the same request",
+    "ja": "同じリクエストで再開",
+    "zh-CN": "使用同一请求继续",
+    "zh-TW": "以相同請求繼續",
+    "es": "Reanudar con la misma solicitud",
+    "fr": "Reprendre avec la même requête"
+  },
+  "연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작": {
+    "en": "Discard the link request record and start a new conversation with the current login",
+    "ja": "連携リクエスト記録を破棄し、現在のログインで新しい会話を開始",
+    "zh-CN": "丢弃关联请求记录，并使用当前登录开始新对话",
+    "zh-TW": "捨棄連結請求紀錄，並以目前的登入開始新對話",
+    "es": "Descartar el registro de la solicitud de vinculación y empezar una nueva conversación con el inicio de sesión actual",
+    "fr": "Abandonner l'enregistrement de la demande de liaison et démarrer une nouvelle conversation avec la connexion actuelle"
+  },
+  "확인하지 못한 요청을 먼저 재개하거나 이력에서 확인해주세요.": {
+    "en": "Please first resume the unconfirmed request or check it in the history.",
+    "ja": "確認できていないリクエストを先に再開するか、履歴で確認してください。",
+    "zh-CN": "请先继续尚未确认的请求，或在历史记录中确认。",
+    "zh-TW": "請先繼續尚未確認的請求，或在歷程中確認。",
+    "es": "Primero reanuda la solicitud sin confirmar o comprúebala en el historial.",
+    "fr": "Veuillez d'abord reprendre la requête non confirmée ou la vérifier dans l'historique."
+  },
+  "응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.": {
+    "en": "The response could not be confirmed. Resume with the same request, or check the session and server history.",
+    "ja": "応答を確認できませんでした。同じリクエストで再開するか、セッションとサーバーの履歴を確認してください。",
+    "zh-CN": "未能确认响应。请使用同一请求继续，或确认会话和服务器历史记录。",
+    "zh-TW": "未能確認回應。請以相同請求繼續，或確認工作階段與伺服器歷程。",
+    "es": "No se pudo confirmar la respuesta. Reanuda con la misma solicitud o comprueba la sesión y el historial del servidor.",
+    "fr": "La réponse n'a pas pu être confirmée. Reprenez avec la même requête ou vérifiez la session et l'historique du serveur."
+  },
+  "전략 검증 실패: {codes}": {
+    "en": "Strategy validation failed: {codes}",
+    "ja": "戦略の検証に失敗しました: {codes}",
+    "zh-CN": "策略验证失败：{codes}",
+    "zh-TW": "策略驗證失敗：{codes}",
+    "es": "Falló la validación de la estrategia: {codes}",
+    "fr": "Échec de la validation de la stratégie : {codes}"
+  },
+  "요청 기록을 저장·확인하지 못해 이번 질문을 서버로 전송하지 않았습니다. 선택한 템플릿과 작성 내용은 유지했습니다. 저장소에 이번 요청이 남아 있을 수 있으니 세션을 다시 확인해주세요.": {
+    "en": "Because the request record could not be saved or verified, this question was not sent to the server. The selected template and your draft were kept. This request may remain in storage, so please check the session again.",
+    "ja": "リクエスト記録を保存・確認できなかったため、今回の質問はサーバーに送信しませんでした。選択したテンプレートと入力内容は保持されています。ストレージに今回のリクエストが残っている可能性があるため、セッションを改めて確認してください。",
+    "zh-CN": "未能保存或确认请求记录，因此本次提问未发送到服务器。所选模板和已填写的内容已保留。存储中可能仍留有本次请求，请重新确认会话。",
+    "zh-TW": "未能儲存或確認請求紀錄，因此本次提問未傳送到伺服器。所選範本與已填寫的內容已保留。儲存空間中可能仍留有本次請求，請重新確認工作階段。",
+    "es": "Como no se pudo guardar ni verificar el registro de la solicitud, esta pregunta no se envió al servidor. Se conservaron la plantilla seleccionada y lo que habías escrito. Es posible que esta solicitud siga en el almacenamiento, así que vuelve a comprobar la sesión.",
+    "fr": "L'enregistrement de la requête n'ayant pas pu être sauvegardé ni vérifié, cette question n'a pas été envoyée au serveur. Le modèle sélectionné et votre saisie ont été conservés. Cette requête peut subsister dans le stockage ; veuillez donc revérifier la session."
+  },
+  "요청 기록을 저장·확인하지 못해 이번 질문을 서버로 전송하지 않았습니다. 작성한 내용은 유지했습니다. 저장소에 이번 요청이 남아 있을 수 있으니 세션을 다시 확인해주세요.": {
+    "en": "Because the request record could not be saved or verified, this question was not sent to the server. Your draft was kept. This request may remain in storage, so please check the session again.",
+    "ja": "リクエスト記録を保存・確認できなかったため、今回の質問はサーバーに送信しませんでした。入力内容は保持されています。ストレージに今回のリクエストが残っている可能性があるため、セッションを改めて確認してください。",
+    "zh-CN": "未能保存或确认请求记录，因此本次提问未发送到服务器。已填写的内容已保留。存储中可能仍留有本次请求，请重新确认会话。",
+    "zh-TW": "未能儲存或確認請求紀錄，因此本次提問未傳送到伺服器。已填寫的內容已保留。儲存空間中可能仍留有本次請求，請重新確認工作階段。",
+    "es": "Como no se pudo guardar ni verificar el registro de la solicitud, esta pregunta no se envió al servidor. Se conservó lo que habías escrito. Es posible que esta solicitud siga en el almacenamiento, así que vuelve a comprobar la sesión.",
+    "fr": "L'enregistrement de la requête n'ayant pas pu être sauvegardé ni vérifié, cette question n'a pas été envoyée au serveur. Votre saisie a été conservée. Cette requête peut subsister dans le stockage ; veuillez donc revérifier la session."
+  }
+}

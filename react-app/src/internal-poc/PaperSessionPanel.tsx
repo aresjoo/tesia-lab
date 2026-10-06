@@ -30,6 +30,8 @@ import {
   describePaperSessionIssue,
   type PaperUiIssue,
 } from './paper-service-status'
+import { useClientPreferences } from '../client-preferences'
+import { nativeExecutionUiText } from './native-execution-ui-copy'
 
 const stages: readonly PaperSessionStage[] = [
   'CHECKPOINT_RECORDED',
@@ -68,34 +70,40 @@ const artifactMatchesSnapshot = (artifact: PaperMarketArtifact, snapshot: PaperS
 }
 
 function PaperBoundary({ fallback, owner }: { fallback: boolean; owner: boolean }) {
+  const { language } = useClientPreferences()
+  const ui = (text: string) => nativeExecutionUiText(language, text)
   return (
-    <div className="paper-boundary" aria-label="Paper 데이터 출처와 사용 제한">
+    <div className="paper-boundary" aria-label={ui("Paper 데이터 출처와 사용 제한")}>
       <ShieldAlert size={18} aria-hidden="true" />
       <div>
-        <strong>{owner ? OWNER_RECORDED_PAPER_PROVENANCE.label : RECORDED_PAPER_PROVENANCE.label}</strong>
+        <strong>{ui(owner ? OWNER_RECORDED_PAPER_PROVENANCE.label : RECORDED_PAPER_PROVENANCE.label)}</strong>
         <span>
           {owner ? 'OWNER_LOCAL_RECORDED_MARKET_ARTIFACT · UNVERIFIED_FOR_TRADING · PRIVATE_ONLY' : `${RECORDED_PAPER_PROVENANCE.dataClass} · ${RECORDED_PAPER_PROVENANCE.verification} · ${RECORDED_PAPER_PROVENANCE.rights}`}
         </span>
       </div>
       <p>{fallback
-        ? '원본 artifact와 결속되지 않은 UI 상태 시연입니다. 현재 시장, Demo, 주문 또는 실행 증거가 아닙니다.'
+        ? ui("원본 artifact와 결속되지 않은 UI 상태 시연입니다. 현재 시장, Demo, 주문 또는 실행 증거가 아닙니다.")
         : owner
-          ? '사용자 소유 로컬 기록이며 출처·실시간·성과·거래 검증 전입니다. 현재 시장, Demo, 주문 또는 수익성 증거가 아닙니다.'
-          : '합성 기록 입력의 owner-local 실행 경계입니다. 현재 시장, Demo, 주문 또는 수익성 증거가 아닙니다.'}</p>
+          ? ui("사용자 소유 로컬 기록이며 출처·실시간·성과·거래 검증 전입니다. 현재 시장, Demo, 주문 또는 수익성 증거가 아닙니다.")
+          : ui("합성 기록 입력의 owner-local 실행 경계입니다. 현재 시장, Demo, 주문 또는 수익성 증거가 아닙니다.")}</p>
     </div>
   )
 }
 
 function PaperLoading() {
+  const { language } = useClientPreferences()
+  const ui = (text: string) => nativeExecutionUiText(language, text)
   return (
     <div className="paper-loading" aria-busy="true" aria-live="polite">
       <LoaderCircle className="spin" size={20} aria-hidden="true" />
-      <div><strong>기록 상태를 확인하고 있습니다.</strong><span>브라우저에서 결과를 계산하지 않습니다.</span></div>
+      <div><strong>{ui("기록 상태를 확인하고 있습니다.")}</strong><span>{ui("브라우저에서 결과를 계산하지 않습니다.")}</span></div>
     </div>
   )
 }
 
 function PaperResult({ snapshot }: { snapshot: PaperSessionSnapshot }) {
+  const { language } = useClientPreferences()
+  const ui = (text: string, values?: Record<string, string | number>) => nativeExecutionUiText(language, text, values)
   if (
     snapshot.execution === undefined
     || snapshot.restart === undefined
@@ -105,49 +113,49 @@ function PaperResult({ snapshot }: { snapshot: PaperSessionSnapshot }) {
   const ledger = execution.ledger
   return (
     <div className="paper-result">
-      <div className="paper-metric-grid" aria-label="Paper ledger 요약">
-        <div><span>Wallet</span><strong>{paperMoney(ledger.wallet)}</strong><small>초기 {paperMoney(ledger.initialWallet)}</small></div>
-        <div><span>Equity</span><strong>{paperMoney(ledger.equity)}</strong><small>미실현 {paperMoney(ledger.unrealizedPnl)}</small></div>
-        <div><span>Position</span><strong>{ledger.quantity} BTC</strong><small>평균 진입 {ledger.averageEntry}</small></div>
-        <div><span>Cost</span><strong>{paperMoney(ledger.fees)}</strong><small>funding {paperMoney(ledger.funding)}</small></div>
+      <div className="paper-metric-grid" aria-label={ui("Paper ledger 요약")}>
+        <div><span>{ui('Wallet')}</span><strong>{paperMoney(ledger.wallet)}</strong><small>{ui('초기 {value}', { value: paperMoney(ledger.initialWallet) })}</small></div>
+        <div><span>{ui('Equity')}</span><strong>{paperMoney(ledger.equity)}</strong><small>{ui('미실현 {value}', { value: paperMoney(ledger.unrealizedPnl) })}</small></div>
+        <div><span>{ui('Position')}</span><strong>{ledger.quantity} BTC</strong><small>{ui('평균 진입 {value}', { value: ledger.averageEntry })}</small></div>
+        <div><span>{ui('Cost')}</span><strong>{paperMoney(ledger.fees)}</strong><small>{ui('펀딩 {value}', { value: paperMoney(ledger.funding) })}</small></div>
       </div>
 
       <div className="paper-evidence-grid">
         <section aria-labelledby="paper-count-title">
-          <div className="paper-subheading"><Database size={17} /><h3 id="paper-count-title">처리 건수</h3></div>
+          <div className="paper-subheading"><Database size={17} /><h3 id="paper-count-title">{ui("처리 건수")}</h3></div>
           <dl>
-            <div><dt>평가 candle</dt><dd>{execution.evaluationCandleCount}</dd></div>
-            <div><dt>기록 MarketEvent</dt><dd>{execution.recordedMarketEventCount}</dd></div>
+            <div><dt>{ui("평가 candle")}</dt><dd>{execution.evaluationCandleCount}</dd></div>
+            <div><dt>{ui("기록 MarketEvent")}</dt><dd>{execution.recordedMarketEventCount}</dd></div>
             <div><dt>Signal / Intent / Fill</dt><dd>{execution.signalCount} / {execution.intentCount} / {execution.fillCount}</dd></div>
           </dl>
         </section>
         <section aria-labelledby="paper-restart-title">
-          <div className="paper-subheading"><FileClock size={17} /><h3 id="paper-restart-title">복구·중복 방어</h3></div>
+          <div className="paper-subheading"><FileClock size={17} /><h3 id="paper-restart-title">{ui("복구·중복 방어")}</h3></div>
           <dl>
-            <div><dt>Checkpoint</dt><dd>{restart.firstCheckpointRevision} → {restart.terminalCheckpointRevision}</dd></div>
-            <div><dt>Fencing token</dt><dd>{restart.fencingToken}</dd></div>
-            <div><dt>중복 Intent / Event</dt><dd>{restart.duplicateIntentCount} / {restart.duplicateEventCount}</dd></div>
-            <div><dt>중복 후 새 fill</dt><dd>{restart.newFillCountAfterDuplicateReplay}</dd></div>
+            <div><dt>{ui("Checkpoint")}</dt><dd>{restart.firstCheckpointRevision} → {restart.terminalCheckpointRevision}</dd></div>
+            <div><dt>{ui("Fencing token")}</dt><dd>{restart.fencingToken}</dd></div>
+            <div><dt>{ui("중복 Intent / Event")}</dt><dd>{restart.duplicateIntentCount} / {restart.duplicateEventCount}</dd></div>
+            <div><dt>{ui("중복 후 새 fill")}</dt><dd>{restart.newFillCountAfterDuplicateReplay}</dd></div>
           </dl>
         </section>
       </div>
 
       <details className="paper-hashes">
-        <summary>결정·replay 무결성 값</summary>
+        <summary>{ui("결정·replay 무결성 값")}</summary>
         <dl>
           <div><dt>Signal</dt><dd><code>{execution.signalHash}</code></dd></div>
           <div><dt>OrderIntent</dt><dd><code>{execution.orderIntentHash}</code></dd></div>
           <div><dt>Fill</dt><dd><code>{execution.fillHashes.join(', ')}</code></dd></div>
-          <div><dt>Fixture file</dt><dd><code>{snapshot.fixtureFileSha256}</code></dd></div>
+          <div><dt>{ui("Fixture file")}</dt><dd><code>{snapshot.fixtureFileSha256}</code></dd></div>
           {snapshot.marketArtifact !== undefined && <>
-            <div><dt>Artifact content</dt><dd><code>{snapshot.marketArtifact.contentHash}</code></dd></div>
-            <div><dt>Provenance</dt><dd><code>{snapshot.marketArtifact.provenanceHash}</code></dd></div>
-            <div><dt>Policy</dt><dd><code>{snapshot.marketArtifact.policyHash}</code></dd></div>
-            <div><dt>Manifest</dt><dd><code>{snapshot.marketArtifact.manifestSha256 ?? '해당 없음'}</code></dd></div>
+            <div><dt>{ui("Artifact content")}</dt><dd><code>{snapshot.marketArtifact.contentHash}</code></dd></div>
+            <div><dt>{ui("Provenance")}</dt><dd><code>{snapshot.marketArtifact.provenanceHash}</code></dd></div>
+            <div><dt>{ui("Policy")}</dt><dd><code>{snapshot.marketArtifact.policyHash}</code></dd></div>
+            <div><dt>{ui("Manifest")}</dt><dd><code>{snapshot.marketArtifact.manifestSha256 ?? ui("해당 없음")}</code></dd></div>
           </>}
-          <div><dt>Ledger</dt><dd><code>{snapshot.ledgerHash}</code></dd></div>
-          <div><dt>Replay</dt><dd><code>{snapshot.replayHash}</code></dd></div>
-          <div><dt>Report</dt><dd><code>{snapshot.reportHash}</code></dd></div>
+          <div><dt>{ui("Ledger")}</dt><dd><code>{snapshot.ledgerHash}</code></dd></div>
+          <div><dt>{ui("Replay")}</dt><dd><code>{snapshot.replayHash}</code></dd></div>
+          <div><dt>{ui("Report")}</dt><dd><code>{snapshot.reportHash}</code></dd></div>
         </dl>
       </details>
     </div>
@@ -165,6 +173,8 @@ export function PaperSessionPanel({
   requestedStrategy: PaperStrategyBinding
   csrfToken: string
 }) {
+  const { language } = useClientPreferences()
+  const ui = (text: string, values?: Record<string, string | number>) => nativeExecutionUiText(language, text, values)
   const [adapter, setAdapter] = useState<PaperSessionAdapter | null>(null)
   const [snapshot, setSnapshot] = useState<PaperSessionSnapshot | null>(null)
   const [loading, setLoading] = useState(adapterPromise !== undefined)
@@ -304,9 +314,9 @@ export function PaperSessionPanel({
       <div className="section-heading paper-title-row">
         <div>
           <p className="eyebrow">{eyebrow}</p>
-          <h2 id="paper-session-title">재시작 뒤에도 같은 기록 상태를 읽습니다.</h2>
+          <h2 id="paper-session-title">{ui("재시작 뒤에도 같은 기록 상태를 읽습니다.")}</h2>
         </div>
-        <span className="status-pill warning"><AlertTriangle size={15} /> 내부 기록 전용</span>
+        <span className="status-pill warning"><AlertTriangle size={15} /> {ui("내부 기록 전용")}</span>
       </div>
 
       <PaperBoundary fallback={fallback} owner={ownerArtifact} />
@@ -324,8 +334,8 @@ export function PaperSessionPanel({
       <div className="paper-coverage warning-surface paper-coverage-always" role="note">
         <AlertTriangle size={19} aria-hidden="true" />
         <div>
-          <strong>이 fixture는 exit rule을 평가하지 않습니다.</strong>
-          <p>exitRulesEvaluated=false · 미평가: {unevaluatedExitRuleIds.join(', ')}. Stop loss와 take profit 결과로 해석할 수 없습니다.</p>
+          <strong>{ui("이 fixture는 exit rule을 평가하지 않습니다.")}</strong>
+          <p>{ui('exitRulesEvaluated=false · 미평가: {ids}. Stop loss와 take profit 결과로 해석할 수 없습니다.', { ids: unevaluatedExitRuleIds.join(', ') })}</p>
         </div>
       </div>
 
@@ -335,14 +345,14 @@ export function PaperSessionPanel({
         <div className="paper-error" role="alert">
           <AlertTriangle size={20} aria-hidden="true" />
           <div>
-            <strong>{error.title}</strong>
-            <span>{error.description}</span>
+            <strong>{ui(error.title)}</strong>
+            <span>{ui(error.description)}</span>
             <code>{error.diagnosticCode}</code>
           </div>
           {pendingRetryAvailable && selectedMarketArtifact !== null && (
-            <button type="button" className="secondary-button" onClick={() => void start()}><RotateCcw size={16} /> 동일 요청 재전송</button>
+            <button type="button" className="secondary-button" onClick={() => void start()}><RotateCcw size={16} /> {ui("동일 요청 재전송")}</button>
           )}
-          <button type="button" className="secondary-button" onClick={discardLocalRequest}><RotateCcw size={16} /> {fallback ? '초기화 후 재시도' : '요청 명시적 폐기'}</button>
+          <button type="button" className="secondary-button" onClick={discardLocalRequest}><RotateCcw size={16} /> {fallback ? ui("초기화 후 재시도") : ui("요청 명시적 폐기")}</button>
         </div>
       )}
 
@@ -350,8 +360,8 @@ export function PaperSessionPanel({
         <div className="paper-empty">
           <ShieldAlert size={22} aria-hidden="true" />
           <div>
-            <strong>Owner-local Paper adapter가 아직 연결되지 않았습니다.</strong>
-            <p>Backend endpoint와 active-paper 복구 결속이 확정되기 전에는 브라우저가 API shape를 추측하거나 실행하지 않습니다.</p>
+            <strong>{ui("Owner-local Paper adapter가 아직 연결되지 않았습니다.")}</strong>
+            <p>{ui("Backend endpoint와 active-paper 복구 결속이 확정되기 전에는 브라우저가 API shape를 추측하거나 실행하지 않습니다.")}</p>
           </div>
         </div>
       )}
@@ -360,10 +370,10 @@ export function PaperSessionPanel({
         <div className="paper-empty paper-ready">
           <Play size={22} aria-hidden="true" />
           <div>
-            <strong>{fallback ? '출처 미결속 UI 기록을 확인할 수 있습니다.' : '승인된 현재 전략으로 owner-local Paper를 시작합니다.'}</strong>
+            <strong>{fallback ? ui("출처 미결속 UI 기록을 확인할 수 있습니다.") : ui("승인된 현재 전략으로 owner-local Paper를 시작합니다.")}</strong>
             <p>{fallback
-              ? '이 경로는 레이아웃과 상태 UI만 확인하며 terminal 결과 권위가 없습니다.'
-              : '고정 fixture와 전략 semantic hash가 다르면 서버가 409로 거절하며 대체 전략을 만들지 않습니다.'}</p>
+              ? ui("이 경로는 레이아웃과 상태 UI만 확인하며 terminal 결과 권위가 없습니다.")
+              : ui("고정 fixture와 전략 semantic hash가 다르면 서버가 409로 거절하며 대체 전략을 만들지 않습니다.")}</p>
             <button
               type="button"
               className="primary-button"
@@ -371,15 +381,15 @@ export function PaperSessionPanel({
               disabled={marketArtifactAdapterPromise !== undefined
                 && (selectedMarketArtifact === null || adapter.startSessionForArtifact === undefined)}
             >
-              <Play size={16} /> {fallback ? '기록 보기' : 'Paper 실행'}
+              <Play size={16} /> {fallback ? ui("기록 보기") : ui("Paper 실행")}
             </button>
             {marketArtifactAdapterPromise !== undefined && selectedMarketArtifact === null && (
-              <span className="paper-start-hint">서버 catalog에서 입력 artifact를 먼저 선택하세요.</span>
+              <span className="paper-start-hint">{ui("서버 catalog에서 입력 artifact를 먼저 선택하세요.")}</span>
             )}
             {marketArtifactAdapterPromise !== undefined
               && selectedMarketArtifact !== null
               && adapter.startSessionForArtifact === undefined && (
-                <span className="paper-start-hint">선택 UI만 준비됐습니다. 서버 start 결속이 연결되기 전에는 실행할 수 없습니다.</span>
+                <span className="paper-start-hint">{ui("선택 UI만 준비됐습니다. 서버 start 결속이 연결되기 전에는 실행할 수 없습니다.")}</span>
               )}
           </div>
         </div>
@@ -391,9 +401,9 @@ export function PaperSessionPanel({
             <div className="paper-restored" role="status">
               <FileClock size={18} aria-hidden="true" />
               {recoverySource === 'ACTIVE_PAPER' ? (
-                <div><strong>서버 active Paper session을 복원했습니다.</strong><span>브라우저 pointer와 서버의 session·StrategyVersion·semantic·fixture 결속을 다시 확인했습니다.</span></div>
+                <div><strong>{ui("서버 active Paper session을 복원했습니다.")}</strong><span>{ui("브라우저 pointer와 서버의 session·StrategyVersion·semantic·fixture 결속을 다시 확인했습니다.")}</span></div>
               ) : (
-                <div><strong>UI fallback 진행 위치를 복원했습니다.</strong><span>sessionStorage는 권위 증거가 아니며, 실제 연결 시 서버 active-paper 결속으로 대체됩니다.</span></div>
+                <div><strong>{ui("UI fallback 진행 위치를 복원했습니다.")}</strong><span>{ui("sessionStorage는 권위 증거가 아니며, 실제 연결 시 서버 active-paper 결속으로 대체됩니다.")}</span></div>
               )}
             </div>
           )}
@@ -402,20 +412,19 @@ export function PaperSessionPanel({
             <div className="paper-binding-warning" role="note">
               <AlertTriangle size={18} aria-hidden="true" />
               <div>
-                <strong>현재 UI 전략을 실행한 결과가 아닙니다.</strong>
+                <strong>{ui("현재 UI 전략을 실행한 결과가 아닙니다.")}</strong>
                 <span>
-                  화면 요청 {shortHash(snapshot.requestedStrategy.semanticHash)} · 기록 전략 {shortHash(snapshot.recordedStrategy.semanticHash)}.
-                  결속 불일치 상태에서 성과 비교나 실행 주장을 하지 않습니다.
+                  {ui('화면 요청 {requested} · 기록 전략 {recorded}. 결속 불일치 상태에서 성과 비교나 실행 주장을 하지 않습니다.', { requested: shortHash(snapshot.requestedStrategy.semanticHash), recorded: shortHash(snapshot.recordedStrategy.semanticHash) })}
                 </span>
               </div>
             </div>
           )}
 
-          <ol className="paper-stage-track" aria-label="Paper 상태" aria-live="polite">
+          <ol className="paper-stage-track" aria-label={ui("Paper 상태")} aria-live="polite">
             {visibleStages.map((stage, index) => (
               <li key={stage} className={index < currentStageIndex ? 'done' : index === currentStageIndex ? 'current' : ''}>
                 <span>{index < currentStageIndex ? <Check size={13} /> : index + 1}</span>
-                <small>{stageLabel[stage]}</small>
+                <small>{ui(stageLabel[stage])}</small>
               </li>
             ))}
           </ol>
@@ -423,13 +432,13 @@ export function PaperSessionPanel({
           {snapshot.stage !== 'COMPLETED_LOCAL_FIXTURE_ONLY' && snapshot.stage !== 'COMPLETED_OWNER_LOCAL_MARKET_ARTIFACT_ONLY' && snapshot.stage !== 'FAILED' && (
             <div className="paper-next">
               <div>
-                <strong>{stageLabel[snapshot.stage]}</strong>
+                <strong>{ui(stageLabel[snapshot.stage])}</strong>
                 <span>{fallback
-                  ? '가짜 timer 없이 다음 UI 기록을 명시적으로 엽니다.'
-                  : `서버 상태 revision ${snapshot.revision ?? '미제공'} · attempt ${snapshot.attempt ?? '미제공'}를 그대로 표시합니다.`}</span>
+                  ? ui("가짜 timer 없이 다음 UI 기록을 명시적으로 엽니다.")
+                  : ui('서버 상태 revision {revision} · attempt {attempt}를 그대로 표시합니다.', { revision: snapshot.revision ?? ui('미제공'), attempt: snapshot.attempt ?? ui('미제공') })}</span>
               </div>
               <button type="button" className="secondary-button" onClick={() => void readNext()}>
-                <RotateCcw size={16} /> {fallback ? '다음 기록 보기' : '새로고침'}
+                <RotateCcw size={16} /> {fallback ? ui("다음 기록 보기") : ui("새로고침")}
               </button>
             </div>
           )}
@@ -438,8 +447,8 @@ export function PaperSessionPanel({
             <div className="paper-error" role="alert">
               <AlertTriangle size={20} aria-hidden="true" />
               <div>
-                <strong>{executionFailure.title}</strong>
-                <span>{executionFailure.description}</span>
+                <strong>{ui(executionFailure.title)}</strong>
+                <span>{ui(executionFailure.description)}</span>
                 <code>{executionFailure.diagnosticCode}</code>
               </div>
             </div>
@@ -448,14 +457,14 @@ export function PaperSessionPanel({
           {snapshot.stage === 'COMPLETED_LOCAL_FIXTURE_ONLY' && (
             <div className="paper-complete-heading" role="status">
               <CheckCircle2 size={21} aria-hidden="true" />
-              <div><strong>COMPLETED_LOCAL_FIXTURE_ONLY</strong><span>서버 result와 status의 독립 hash 결속 및 ledger/report digest 재검증을 통과했습니다.</span></div>
+              <div><strong>COMPLETED_LOCAL_FIXTURE_ONLY</strong><span>{ui("서버 result와 status의 독립 hash 결속 및 ledger/report digest 재검증을 통과했습니다.")}</span></div>
             </div>
           )}
 
           {snapshot.stage === 'COMPLETED_OWNER_LOCAL_MARKET_ARTIFACT_ONLY' && (
             <div className="paper-complete-heading" role="status">
               <CheckCircle2 size={21} aria-hidden="true" />
-              <div><strong>COMPLETED_OWNER_LOCAL_MARKET_ARTIFACT_ONLY</strong><span>PRIVATE_ONLY · UNVERIFIED_FOR_TRADING · 사용자 소유 로컬 기록·출처/실시간/성과/거래 검증 전</span></div>
+              <div><strong>COMPLETED_OWNER_LOCAL_MARKET_ARTIFACT_ONLY</strong><span>{ui("PRIVATE_ONLY · UNVERIFIED_FOR_TRADING · 사용자 소유 로컬 기록·출처/실시간/성과/거래 검증 전")}</span></div>
             </div>
           )}
 
@@ -463,8 +472,8 @@ export function PaperSessionPanel({
 
           {adapter?.kind === 'owner-local-api' && (
             <div className="paper-next paper-discard-active">
-              <div><strong>새 Paper session은 현재 로컬 재개 연결을 해제한 후 시작할 수 있습니다.</strong><span>서버의 기존 run은 취소·삭제되지 않으며, 선택만으로 active pointer를 덮어쓰지 않습니다.</span></div>
-              <button type="button" className="secondary-button" onClick={discardLocalRequest}>로컬 재개 연결 해제</button>
+              <div><strong>{ui("새 Paper session은 현재 로컬 재개 연결을 해제한 후 시작할 수 있습니다.")}</strong><span>{ui("서버의 기존 run은 취소·삭제되지 않으며, 선택만으로 active pointer를 덮어쓰지 않습니다.")}</span></div>
+              <button type="button" className="secondary-button" onClick={discardLocalRequest}>{ui("로컬 재개 연결 해제")}</button>
             </div>
           )}
         </>

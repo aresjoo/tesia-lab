@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { ClientReportUpgradeConfig } from '../client-report-upgrade'
 import { getSitePage } from '../site-navigation'
@@ -16,6 +17,7 @@ export function ClientReportUpgrade(props: ClientReportUpgradeProps) {
 }
 
 function ReportUpgradeView({ config, sessionId, fingerprint, onSubscribe }: ClientReportUpgradeProps) {
+  const localeUi = useStaticUiCopy()
   const host = useRef<HTMLDivElement>(null)
   const latest = useRef({ config, sessionId, fingerprint, onSubscribe })
   const reservation = useRef<{
@@ -71,7 +73,7 @@ function ReportUpgradeView({ config, sessionId, fingerprint, onSubscribe }: Clie
     now.onSubscribe()
   }
   return <div ref={host} data-report-upgrade={fingerprint}>
-    {storageError && <p className="tf-assumptions" role="status">안내 표시 기록을 저장하지 못했어요. 새로고침하면 이 안내가 다시 나올 수 있어요.</p>}
+    {storageError && <p className="tf-assumptions" role="status">{localeUi("안내 표시 기록을 저장하지 못했어요. 새로고침하면 이 안내가 다시 나올 수 있어요.")}</p>}
     {open && <ClientUpgradeSheet context="backtest" onClose={() => setOpen(false)} onLater={() => setOpen(false)} onSubscribe={subscribe} />}
   </div>
 }

@@ -1,8 +1,10 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ArrowDown } from 'lucide-react'
 
 /** Follows actual DOM updates, never manufactures messages or thinking states. */
 export function ClientChartThread({ title, children }: { title: string; children: ReactNode }) {
+  const localeUi = useStaticUiCopy()
   const viewport = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const following = useRef(true)
@@ -53,14 +55,14 @@ export function ClientChartThread({ title, children }: { title: string; children
     return () => { cancelAnimationFrame(frame); mutations.disconnect(); sizes.disconnect() }
   }, [])
   return <div className="bw-thread-shell">
-    <div ref={viewport} className="bw-thread" tabIndex={0} role="region" aria-label={`${title} 대화 기록`} onWheel={event => { if (event.deltaY < 0) manualScroll.current = true }} onTouchMove={() => { manualScroll.current = true }} onKeyDown={event => { if (['Home', 'PageUp', 'ArrowUp'].includes(event.key)) manualScroll.current = true }} onScroll={event => {
+    <div ref={viewport} className="bw-thread" tabIndex={0} role="region" aria-label={localeUi('{title} 대화 기록', { title })} onWheel={event => { if (event.deltaY < 0) manualScroll.current = true }} onTouchMove={() => { manualScroll.current = true }} onKeyDown={event => { if (['Home', 'PageUp', 'ArrowUp'].includes(event.key)) manualScroll.current = true }} onScroll={event => {
       const node = event.currentTarget
       if (!node.clientHeight || (!manualScroll.current && (hidden.current || node.clientWidth !== size.current.width || node.clientHeight !== size.current.height))) return
       position.current = node.scrollTop
       manualScroll.current = false
       following.current = node.scrollHeight - node.clientHeight - node.scrollTop < 40
       if (following.current) setUnread(false)
-    }}><div ref={content}><p className="bw-thread-intro">문서를 읽으며 나누던 대화가 이어집니다. 거래를 선택해 함께 확인하세요.</p>{children}</div></div>
-    {unread && <button type="button" className="bw-latest" onClick={latest}><ArrowDown size={15} />새 메시지 보기</button>}
+    }}><div ref={content}><p className="bw-thread-intro">{localeUi("문서를 읽으며 나누던 대화가 이어집니다. 거래를 선택해 함께 확인하세요.")}</p>{children}</div></div>
+    {unread && <button type="button" className="bw-latest" onClick={latest}><ArrowDown size={15} />{localeUi("새 메시지 보기")}</button>}
   </div>
 }

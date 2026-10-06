@@ -2,9 +2,12 @@
 // Source copy is supplied separately; no runtime HTML, source scripts or network.
 import type { MouseEventHandler, ReactNode } from 'react'
 import { InternalLink } from './InternalLink'
+import { useClientPreferences } from '../client-preferences'
+import { clientPublicScreenshot } from '../client-public-assets'
 import '../client-about-page.css'
 
 export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, faqNotice }: { copy: (text: string) => string; onHelp: MouseEventHandler<HTMLButtonElement>; previewNotice: ReactNode; pricingNotice: ReactNode; faqNotice: ReactNode }) {
+  const { language } = useClientPreferences()
   return <main className="ab" id="site-main" tabIndex={-1}>
     <section className="ab-hero">
       <span className="pl-lb">
@@ -29,7 +32,7 @@ export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, fa
       </p>
       {previewNotice}
       <div className="ab-heroshot">
-        <img src="/client-shots/about/about-live.webp" width="1376" height="900" alt={copy("TETH 터미널, 차트와 판단 패널")} />
+        <img src={clientPublicScreenshot("/client-shots/about/about-live.webp", language)} width="1376" height="900" alt={copy("TETH 터미널, 차트와 판단 패널")} />
       </div>
     </section>
     <section className="ab-sec">
@@ -91,7 +94,7 @@ export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, fa
             </InternalLink>
           </div>
           <div className="ab-shot">
-            <img src="/client-shots/about/about-plan2.webp" width="844" height="517" loading="lazy" alt={copy("TETH 전략 카드, 자산과 사고파는 조건")} />
+            <img src={clientPublicScreenshot("/client-shots/about/about-plan2.webp", language)} width="844" height="517" loading="lazy" alt={copy("TETH 전략 카드, 자산과 사고파는 조건")} />
           </div>
         </article>
         <article className="ab-card rv">
@@ -148,7 +151,7 @@ export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, fa
             </InternalLink>
           </div>
           <div className="ab-shot">
-            <img src="/client-shots/about/about-backtest2.webp" width="1216" height="700" loading="lazy" alt={copy("TETH 백테스트 결과, 잔고 차트와 판단 기록")} />
+            <img src={clientPublicScreenshot("/client-shots/about/about-backtest2.webp", language)} width="1216" height="700" loading="lazy" alt={copy("TETH 백테스트 결과, 잔고 차트와 판단 기록")} />
           </div>
         </article>
         <article className="ab-card rv">
@@ -220,7 +223,7 @@ export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, fa
             </InternalLink>
           </div>
           <div className="ab-shot">
-            <img src="/client-shots/about/about-connect.webp" width="900" height="640" loading="lazy" alt={copy("TETH 거래소 선택 화면")} />
+            <img src={clientPublicScreenshot("/client-shots/about/about-connect.webp", language)} width="900" height="640" loading="lazy" alt={copy("TETH 거래소 선택 화면")} />
           </div>
         </article>
         <article className="ab-card rv">
@@ -277,7 +280,7 @@ export function ClientAboutPage({ copy, onHelp, previewNotice, pricingNotice, fa
             </InternalLink>
           </div>
           <div className="ab-shot ab-tall">
-            <img src="/client-shots/about/about-brain.webp" width="392" height="560" loading="lazy" alt={copy("TETH 터미널 판단 패널")} />
+            <img src={clientPublicScreenshot("/client-shots/about/about-brain.webp", language)} width="392" height="560" loading="lazy" alt={copy("TETH 터미널 판단 패널")} />
           </div>
         </article>
       </div>

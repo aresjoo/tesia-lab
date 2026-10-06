@@ -15,8 +15,16 @@ test('원본 한국어 표시는 버전·내부 키·모르는 서버 표현을 
   const pairs = { 'Strategy Architect': '전략 설계', 'Quant Validator': '백테스트 검증', 'Sanity Check': '무결성 점검', 'Strategy Critic': '비판 검토', 'Risk Reviewer': '위험 심사', 'Market Context': '시장 데이터', Explanation: '쉬운 설명', 'Sealed Holdout': '봉인 구간', 'Research Verdict': '종합 판정', 'Research Plan': '연구 계획', 'Final Report': '검증 결과', Activity: '연구 과정', Hypothesis: '가설', 'Critic Review': '비판 검토 기록', 'Stress Test': '스트레스 테스트', 'Holdout Test': '봉인 구간 검증', 'Backtest v12': '백테스트 v12', 'Strategy v2': '전략 v2' }
   for (const [key, value] of Object.entries(pairs)) {
     expect(clientResearchLabel(key)).toBe(value)
-    for (const locale of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) expect(clientResearchLabel(key, locale)).toBe(key)
   }
+  const foreign = {
+    en: ['Strategy Architect', 'Quant Validator', 'Sanity Check', 'Strategy Critic', 'Risk Reviewer', 'Market Context', 'Explanation', 'Sealed Holdout', 'Research Verdict', 'Research Plan', 'Final Report', 'Activity', 'Hypothesis', 'Critic Review', 'Stress Test', 'Holdout Test', 'Backtest v12', 'Strategy v2'],
+    ja: ['戦略設計', 'バックテスト検証', '整合性チェック', '批判的検討', 'リスク審査', '市場データ', 'わかりやすい説明', '封印された検証区間', '総合判定', '研究計画', '最終レポート', '研究過程', '仮説', '批判的レビュー', 'ストレステスト', 'ホールドアウト検証', 'バックテスト v12', '戦略 v2'],
+    'zh-CN': ['策略设计', '回测验证', '完整性检查', '策略审查', '风险审核', '市场数据', '通俗说明', '封存留出区间', '综合判定', '研究计划', '最终报告', '研究过程', '假设', '批判性审查', '压力测试', '留出验证', '回测 v12', '策略 v2'],
+    'zh-TW': ['策略設計', '回測驗證', '完整性檢查', '策略審查', '風險審核', '市場資料', '淺白說明', '封存保留區間', '綜合判定', '研究計畫', '最終報告', '研究過程', '假設', '批判性審查', '壓力測試', '保留區間驗證', '回測 v12', '策略 v2'],
+    es: ['Diseño de estrategias', 'Validación de backtests', 'Comprobación de integridad', 'Revisión crítica', 'Revisión de riesgos', 'Datos del mercado', 'Explicación sencilla', 'Periodo de reserva sellado', 'Dictamen general', 'Plan de investigación', 'Informe final', 'Actividad de investigación', 'Hipótesis', 'Revisión crítica', 'Prueba de estrés', 'Prueba sobre reserva', 'Backtest v12', 'Estrategia v2'],
+    fr: ['Conception de stratégies', 'Validation des backtests', 'Contrôle d’intégrité', 'Examen critique', 'Examen des risques', 'Données de marché', 'Explication simple', 'Période de réserve scellée', 'Verdict global', 'Plan de recherche', 'Rapport final', 'Activité de recherche', 'Hypothèse', 'Revue critique', 'Test de résistance', 'Test sur réserve', 'Backtest v12', 'Stratégie v2'],
+  }
+  for (const locale of ['en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) expect(Object.keys(pairs).map(key => clientResearchLabel(key, locale))).toEqual(foreign[locale])
   for (const raw of ['__proto__', 'constructor', '알 수 없는 서버 역할', 'plan', 'bt2', '사용자가 쓴 Backtest v2 설명']) expect(clientResearchLabel(raw)).toBe(raw)
 })
 
@@ -71,7 +79,7 @@ test('저장된 문서 ID·질문 원문은 언어 전환·키보드 탐색·새
   await expect(page.locator('.rw-user-message')).toHaveText('Strategy Critic 원문 질문')
   await page.evaluate(async () => { const path = '/src/client-preferences.ts'; (await import(path)).setClientPreference('language', 'en') })
   await expect(page.getByRole('tab', { name: 'Critic Review', exact: true })).toHaveAttribute('aria-selected', 'true')
-  await expect(page.getByLabel('Critic Review에 질문')).toHaveValue('Research Plan이라는 원문은 번역하지 마세요')
+  await expect(page.getByLabel('Ask about Critic Review')).toHaveValue('Research Plan이라는 원문은 번역하지 마세요')
   await page.evaluate(async () => { const path = '/src/client-preferences.ts'; (await import(path)).setClientPreference('language', 'ko') })
   const tab = page.getByRole('tab', { name: '비판 검토 기록', exact: true })
   await tab.focus()

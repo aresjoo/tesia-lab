@@ -1,3 +1,6 @@
+import type { ClientLanguage } from './client-preferences'
+import { researchStaticFormat, researchStaticText } from './client-research-static-content-copy'
+
 /** Presentation models, not a backend contract. Evidence is supplied by adapters. */
 export type ResearchCriticReview = {
   version: number
@@ -11,10 +14,12 @@ export type ResearchCriticReview = {
 }
 
 /** Original gDocCritic copy, shared by the document and its fixture summary. */
-export function criticParagraphs(review: ResearchCriticReview) {
+export function criticParagraphs(review: ResearchCriticReview, language: ClientLanguage = 'ko', source: 'service' | 'mock' = 'service') {
+  const number = (value: number, digits: number) => new Intl.NumberFormat(language, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(Number(value.toFixed(digits)))
+  const t = (value: string) => researchStaticText(value, language)
   return {
-    builder: `${review.bestYear}년 추세 구간에서 반복적 우위, 수익 ${review.bestYearReturn >= 0 ? '+' : ''}${review.bestYearReturn.toFixed(1)}%, 수익 팩터 ${review.profitFactor.toFixed(2)}.`,
-    critic: `${review.initialLowVolLossShare > 40 ? `저변동성 구간에 손실 ${review.initialLowVolLossShare.toFixed(0)}% 집중 (v1 기준)${review.lowVolFilterApplied ? ', 필터로 수정됨.' : '.'} ` : ''}상위 3개 거래가 수익의 ${review.topThreeProfitShare.toFixed(0)}%${review.topThreeProfitShare > 50 ? ', 소수 거래 의존.' : '.'}`,
-    verdict: review.verdict,
+    builder: researchStaticFormat('criticBuilder', language, { year: review.bestYear, return: `${review.bestYearReturn >= 0 ? '+' : ''}${number(review.bestYearReturn, 1)}`, factor: number(review.profitFactor, 2) }),
+    critic: (review.initialLowVolLossShare > 40 ? researchStaticFormat('criticLowVol', language, { share: number(review.initialLowVolLossShare, 0), revision: review.lowVolFilterApplied ? t(', 필터로 수정됨.') : '.' }) : '') + researchStaticFormat('criticConcentration', language, { share: number(review.topThreeProfitShare, 0), dependence: review.topThreeProfitShare > 50 ? t(', 소수 거래 의존.') : '.' }),
+    verdict: source === 'mock' ? t(review.verdict) : review.verdict,
   }
 }

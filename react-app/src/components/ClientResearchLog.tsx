@@ -39,10 +39,12 @@ export function ClientResearchLog({ entries, source, status }: {
   status: 'unavailable' | 'running' | 'paused' | 'completed' | 'failed' | 'stopped'
 }) {
   const { language } = useClientPreferences()
+  const seconds = (value: number) => new Intl.NumberFormat(language, { maximumFractionDigits: 20 }).format(value)
+  const timePart = (value: number) => new Intl.NumberFormat(language, { minimumIntegerDigits: 2, useGrouping: false }).format(value)
   return <section className="g-research-log" aria-label={text(language, 'log')} data-source={source}>
     <ol className="g-act">{entries.map(row => <li key={row.id} className={`g-act-row ${row.state}`}>
       {row.elapsedSeconds !== undefined && Number.isFinite(row.elapsedSeconds) && row.elapsedSeconds >= 0
-        ? <time className="ts" aria-label={text(language, 'elapsed', { seconds: row.elapsedSeconds })}>{String(Math.floor(row.elapsedSeconds / 60)).padStart(2, '0')}:{String(Math.floor(row.elapsedSeconds % 60)).padStart(2, '0')}</time>
+        ? <time className="ts" aria-label={text(language, 'elapsed', { seconds: seconds(row.elapsedSeconds) })}>{timePart(Math.floor(row.elapsedSeconds / 60))}:{timePart(Math.floor(row.elapsedSeconds % 60))}</time>
         : <span className="ts" aria-label={text(language, 'missingElapsed')}>—</span>}
       <span className="ic" aria-hidden="true">{row.state === 'work' ? '→' : row.state === 'warn' || row.state === 'failed' ? '!' : '✓'}</span>
       <div className="bd"><span className="ag" data-agent={row.agent}>{clientResearchLabel(row.agent, language)}</span><span className="research-row-state">{row.state === 'warn' ? text(language, 'warning') : row.state === 'failed' ? text(language, 'failure') : ''}</span>{row.summary}

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
-import { catalogueTitle, type CatalogueStrategy } from '../client-catalogue'
-import { catalogueIdentity } from '../client-catalogue-presentation'
+import { type CatalogueStrategy } from '../client-catalogue'
+import { sourceCatalogueIdentity } from '../client-catalogue-detail-locale'
 import { catalogueCopyDecimal, catalogueCopyLosses, catalogueCopyMinimum, catalogueCopySettings, type CatalogueCopySetup } from '../client-catalogue-copy-setup'
 import { useClientPreferences } from '../client-preferences'
 import { ClientStrategyGlyph } from './ClientStrategyGlyph'
@@ -20,8 +20,8 @@ function revealControl(dialog: HTMLDialogElement, control: HTMLElement) {
  * The supplied callback owns persistence/approval. No synthetic connection,
  * order, budget transfer, elapsed-time success or local entitlement is created.
  */
-export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger }: {
-  strategy: Readonly<CatalogueStrategy>; setup: CatalogueCopySetup; onClose: () => void; trigger?: HTMLElement
+export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger, sourcePreview = false }: {
+  strategy: Readonly<CatalogueStrategy>; setup: CatalogueCopySetup; onClose: () => void; trigger?: HTMLElement; sourcePreview?: boolean
 }) {
   const { language } = useClientPreferences(), text = copy[language], id = useId(), dialog = useRef<HTMLDialogElement>(null)
   const [amount, setAmount] = useState(''), [loss, setLoss] = useState<number>(-20), [existing, setExisting] = useState('skip'), [cap, setCap] = useState('95')
@@ -34,7 +34,7 @@ export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger }: 
   const format = (template: string, values: Record<string, string | number>) => template.replace(/\{(\w+)\}/g, (original, key: string) => String(values[key] ?? original))
   const budgetError = !amount ? '' : !Number.isFinite(raw) || raw < minimum ? format(text.minimum, { amount: money(minimum) }) : raw > setup.available ? text.exceeds : ''
   const capError = !Number.isInteger(rawCap) || rawCap < 5 || rawCap > 95
-  const identity = catalogueIdentity(strategy)
+  const identity = sourceCatalogueIdentity(strategy, language, sourcePreview)
   useEffect(() => {
     live.current = true
     const el = dialog.current!, origin = trigger ?? document.activeElement
@@ -99,7 +99,7 @@ export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger }: 
     <form onSubmit={event => { event.preventDefault(); void confirm() }}>
       <div className="ccs-body">
         <header><h2 id={`${id}-title`} tabIndex={-1}>{text.title}</h2><button type="button" aria-label={text.close} className="ccs-close" onClick={dismiss}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.7"/></svg></button></header>
-        <div className="ccs-strategy"><div className="ccs-identity"><ClientStrategyGlyph kind={identity.kind} evidence={identity.glyph} size={32}/><div><b lang="ko">{catalogueTitle(strategy.name)}</b><span>@{strategy.by}, {identity.asset}{strategy.fut ? ' ' + text.futures : ''}</span></div></div>
+        <div className="ccs-strategy"><div className="ccs-identity"><ClientStrategyGlyph kind={identity.kind} evidence={identity.glyph} size={32}/><div><b lang={/[가-힣]/.test(identity.title) ? 'ko' : language}>{identity.title}</b><span>@{strategy.by}, {identity.asset}{strategy.fut ? ' ' + text.futures : ''}</span></div></div>
           {strategy.fut && strategy.lev > 1 && <p>{format(text.leverage, { leverage: strategy.lev })}</p>}
         </div>
         <fieldset disabled={busy} className="ccs-fields">

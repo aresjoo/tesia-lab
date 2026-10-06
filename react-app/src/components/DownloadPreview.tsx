@@ -1,11 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { downloadText } from '../client-download-copy'
-import { CLIENT_DOWNLOAD_ASSETS } from '../client-public-assets'
+import { CLIENT_DOWNLOAD_ASSETS, clientPublicScreenshot } from '../client-public-assets'
 
 const screens = ['chat', 'report', 'live'] as const
 
-/** 9fbff821 source artwork and tabs. No simulated phone UI or external app. */
+/** Original KO artwork; foreign source-artwork illustrations, not a live app. */
 export function DownloadPreview() {
   const { language } = useClientPreferences()
   const id = useId(), root = useRef<HTMLElement>(null)
@@ -60,7 +60,7 @@ export function DownloadPreview() {
     }}>
       {screens.map((screen, i) => <div key={screen} className={`slide${index === i ? ' on' : ''}`} data-screen={screen} role="tabpanel"
         id={`${id}-panel-${screen}`} aria-labelledby={`${id}-tab-${screen}`} aria-hidden={index !== i} inert={index !== i}>
-        <div className="dev"><div className="scr"><img src={CLIENT_DOWNLOAD_ASSETS[i]} width="780" height="1688" loading={i === 0 ? 'eager' : 'lazy'} alt={downloadText(language, `${screen}Alt`)} /></div></div>
+        <div className="dev"><div className="scr"><img src={clientPublicScreenshot(CLIENT_DOWNLOAD_ASSETS[i], language)} width="780" height="1688" loading={i === 0 ? 'eager' : 'lazy'} alt={downloadText(language, `${screen}Alt`)} /></div></div>
         <p>{downloadText(language, `${screen}Caption`)}</p>
       </div>)}
     </div>

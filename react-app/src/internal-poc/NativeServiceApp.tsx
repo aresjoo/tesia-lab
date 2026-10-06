@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
 import { useClientPreferences } from '../client-preferences'
+import { nativeAppNotice, nativeAppUiText } from './native-app-ui-copy'
 import { useExchangeConnectionPresentation } from '../exchange-connect/use-exchange-connection'
 import { readExchangeTransactionLocator } from '../exchange-connect/controller'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
@@ -92,6 +93,7 @@ export type NativeServicePresentations = Pick<ComponentProps<typeof ClientServic
   'conversationLibrary' | 'insightPresentation' | 'sharingPresentation' | 'researchPresentation' | 'accountPresentation' | 'feedbackPresentation' | 'brokerPresentation' | 'connectionPresentation'>
 export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean } = {}) {
   const { language, t } = useClientPreferences()
+  const ui = (original: Parameters<typeof nativeAppUiText>[1]) => nativeAppUiText(language, original)
   const jobText = (key: NativeJobTextKey, values?: Readonly<Record<string, string | number>>) => nativeJobText(language, key, values)
   const workflowText = (key: NativeWorkflowTextKey, values?: Readonly<Record<string, string | number>>) => nativeWorkflowText(language, key, values)
   const [clients] = useState(() => {
@@ -1419,8 +1421,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       <div className="native-workflow-actions"><button className="native-workflow-button is-text" disabled={busy || hasLogout} onClick={() => void loadHistory()}>{jobText('historyOpen')}</button></div>
     </div>
   </section> : showRecoveryWorkflow ? <section aria-label={workflowText('recoveryLabel')}><h2>{workflowText('recoveryTitle')}</h2><p>{workflowText('recoveryNotice')}</p></section>
-    : claimAvailable ? <section aria-label="로그인 전 전략 연결"><p>원하면 로그인 전 전략을 이어서 연구할 수 있습니다. 연결은 선택사항이며 승인이나 실행에 동의하는 것이 아닙니다.</p>
-      <button disabled={busy || hasPending || phase !== 'ready'} onClick={() => void claim()}>로그인 전 전략 연결</button></section> : null
+    : claimAvailable ? <section aria-label={ui('로그인 전 전략 연결')}><p>{ui('원하면 로그인 전 전략을 이어서 연구할 수 있습니다. 연결은 선택사항이며 승인이나 실행에 동의하는 것이 아닙니다.')}</p>
+      <button disabled={busy || hasPending || phase !== 'ready'} onClick={() => void claim()}>{ui('로그인 전 전략 연결')}</button></section> : null
   const panelCurrent = () => loginBinding !== null && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current
     && loginBinding.sessionId === session.current?.sessionId && !logoutIntent.current
   const acceptReturnSession = (value: NativeAuthenticated | NativeSessionRecovery, recovered: boolean) => {
@@ -1499,7 +1501,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   </NativeAuthSurface>
   return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
     inputDisabled: busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || Boolean(approval || job), quickReplies: conversation?.nextQuestion?.options ?? [],
-    workflow: hasLogout ? <section aria-label="로그아웃 요청"><h2>로그아웃 요청 확인</h2><p>이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.</p></section> : workflow,
+    workflow: hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
     outcome: <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
       && smokeBinding.binding.semanticHash === approval.semanticHash && smokeBinding.contentHash === approval.strategyVersionContentHash
       && sessionState === 'AUTHENTICATED' && phase === 'ready' && !hasLogout && !hasPending && <NativeStructuralSmokePanel
@@ -1519,14 +1521,14 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // The journal exists during every normal request. Its presence alone is
     // not an error: show recovery after dispatch settles, or immediately when
     // an explicit error/logout boundary requires attention.
-    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? '서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.' : error || (returnBinding !== null && !plainAuthReturn() ? '로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.' : '서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.')}</p>
+    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? ui('서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.') : error ? nativeAppNotice(language, error) : (returnBinding !== null && !plainAuthReturn() ? '로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.' : ui('서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'))}</p>
       {returnBinding !== null && !plainAuthReturn() && <button disabled={busy || emailBusy || hasLogout} onClick={reopenReturnRoute}>로그인 반환 화면으로 돌아가기</button>}
-      {hasComposerRecovery && <p>전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.</p>}
-      {hasLogout && <><p>로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.</p>
-        <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>같은 로그아웃 요청으로 재개</button>
-        {logoutBoundary && <button disabled={busy} onClick={() => void newSessionAfterLogout()}>이전 요청 기록을 보존하고 현재 브라우저에서 새 대화 시작</button>}</>}
-      {hasPending && !hasLogout && <button disabled={busy || phase !== 'ready' || rejectedClaim} onClick={() => { if (pending.current) void run(() => execute(pending.current!)) }}>같은 요청으로 재개</button>}
-      {rejectedClaim && <button disabled={busy || phase !== 'ready'} onClick={() => void discardRejectedClaim()}>연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작</button>}</div>,
+      {hasComposerRecovery && <p>{ui('전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.')}</p>}
+      {hasLogout && <><p>{ui('로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.')}</p>
+        <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>{ui('같은 로그아웃 요청으로 재개')}</button>
+        {logoutBoundary && <button disabled={busy} onClick={() => void newSessionAfterLogout()}>{ui('이전 요청 기록을 보존하고 현재 브라우저에서 새 대화 시작')}</button>}</>}
+      {hasPending && !hasLogout && <button disabled={busy || phase !== 'ready' || rejectedClaim} onClick={() => { if (pending.current) void run(() => execute(pending.current!)) }}>{ui('같은 요청으로 재개')}</button>}
+      {rejectedClaim && <button disabled={busy || phase !== 'ready'} onClick={() => void discardRejectedClaim()}>{ui('연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작')}</button>}</div>,
     onInput: value => { composerRecovery.current = null; setHasComposerRecovery(false); setInput(value) }, onSend: (value, displayText, researchThread) => send(value, 'composer', displayText, researchThread), onReset: () => {
       if (working.current || pending.current || logoutIntent.current || busy || hasPending || hasLogout || phase !== 'ready') {
         setError('확인하지 못한 요청을 먼저 재개하거나 이력에서 확인해주세요.'); return false
@@ -1576,7 +1578,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         editDisabled={busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || resultStatus?.backtestId !== analysisJob.backtestId || !resultStatus.reportReady} />
     </>}
     onLogin={() => { void openLogin() }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => send(value, 'quick-reply', undefined, researchThread)}
-    conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{healthyAuthNotice.text}</p>}
+    conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{nativeAppNotice(language, healthyAuthNotice.text)}</p>}
       {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>
         <button className="g-qchip" type="button" disabled={busy || hasPending} onClick={() => void navigateConversation(true)}>{nativeObservationCopy[language].previousAction}</button>

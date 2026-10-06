@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 
 // The user explicitly approved the source 9fb footer for the deployed test UI.
-// Keep the oracle independent of the edited file and preserve all other locales.
+// Keep the Korean oracle independent of the edited file. The user subsequently
+// requested complete foreign translations and the fixed source Powered by.
 const operatingBytes = execFileSync('git', ['show', '845e58fed9f0acacf2b76d8538a99d7e0c456485:src/client-site-footer-copy.json'], { encoding: 'utf8' })
 const operating = JSON.parse(operatingBytes).ko
 const paragraphs = [operating.body.intro, operating.body.tagline, operating.body.consent, `© 2026 TETH AI. ${operating.allRightsReserved}.`]
@@ -19,8 +20,13 @@ const surfaces = [
 
 for (const surface of surfaces) test(`operating footer ${surface.host}: approved original release copy`, async ({ page, context, baseURL }, info) => {
   if (!baseURL) throw new Error('Local origin required')
-  // Whole-file equality also protects the other six languages and every menu.
-  expect(readFileSync(new URL('../src/client-site-footer-copy.json', import.meta.url), 'utf8')).toBe(operatingBytes)
+  const current = JSON.parse(readFileSync(new URL('../src/client-site-footer-copy.json', import.meta.url), 'utf8'))
+  const prior = JSON.parse(operatingBytes)
+  expect({ ...current.ko, body: { ...current.ko.body, exchange: operating.body.exchange } }).toEqual(operating)
+  for (const language of Object.keys(prior)) {
+    for (const key of ['sections', 'top', 'siteInfo', 'footerMenu', 'preview', 'comingSoon']) expect(current[language][key]).toEqual(prior[language][key])
+    expect(current[language].body.exchange).toBe('Powered by')
+  }
   const origin = new URL(baseURL).origin
   const native = surface.host === 'Native service entry'
   const width = info.project.name === 'desktop' ? 1440 : 320
@@ -89,6 +95,8 @@ for (const surface of surfaces) test(`operating footer ${surface.host}: approved
   await expect(footer.locator('.gft-copy > p').nth(1).locator('b')).toHaveText(operating.body.tagline)
   await expect(footer.locator('.gft-copy > p.dim')).toHaveCount(2)
   await expect(footer).toHaveAttribute('aria-label', operating.siteInfo)
+  await expect(footer).toHaveAttribute('lang', 'ko')
+  await expect(footer.locator('.gft-pw')).toHaveText('Powered by Bitget')
   await footer.locator('.gft-copy').scrollIntoViewIfNeeded()
   await expect(footer.locator('.gft-copy > p').last()).toBeInViewport()
   expect(await footer.locator('.gft-copy').evaluate(node => {
@@ -102,5 +110,5 @@ for (const surface of surfaces) test(`operating footer ${surface.host}: approved
   if (native) { expect(audit.sessionGets).toBeGreaterThan(0); expect(audit.csrfGets).toBeGreaterThan(0) }
   else expect({ sessionGets: audit.sessionGets, csrfGets: audit.csrfGets }).toEqual({ sessionGets: 0, csrfGets: 0 })
   if (native && width === 320) await page.screenshot({ path: info.outputPath('operating-footer-native-320.png') })
-  await info.attach('operating-footer-boundary.json', { body: JSON.stringify({ host: surface.host, width, approvedCopyReference: '845e58f', originalClientSource: '9fbff821', wholeFooterFileExact: true, actualProviderVerified: false, audit }), contentType: 'application/json' })
+  await info.attach('operating-footer-boundary.json', { body: JSON.stringify({ host: surface.host, width, approvedCopyReference: '845e58f', originalClientSource: '9fbff821', koreanCopyAndMenusExact: true, fixedSourcePoweredBy: true, foreignTranslationIsSeparateScope: true, actualProviderVerified: false, audit }), contentType: 'application/json' })
 })

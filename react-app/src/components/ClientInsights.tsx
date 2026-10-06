@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { createContext, Fragment, useCallback, useContext, useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { clientResearchScrollport } from '../client-research-scrollport'
 import { copyInsightLink } from '../client-insight-clipboard'
@@ -13,6 +14,7 @@ import { useClientPreferences, type ClientLanguage } from '../client-preferences
 import { researchCopy, researchNavigationLabel } from '../client-research-copy'
 import { insightPresentationCopy } from '../client-insight-presentation-copy'
 import { insightSourceCopy, insightTagLabel } from '../client-insight-source-copy'
+import { insightPreviewText, insightUiNotice, localizeInsightPreview, type InsightUiNotice } from '../client-insights-preview-locale-copy'
 
 export type InsightLocation = { slug?: string; tag?: string }
 type InsightSnapshot = { location: InsightLocation; scroll: number; selector?: string }
@@ -52,8 +54,15 @@ const svgSource = (value: string) => {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(/<svg\b[^>]*\bxmlns=/.test(normalized) ? normalized : normalized.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"'))}`
 }
 let previewData: InsightPresentationData | undefined
-function sourcePreviewData(): InsightPresentationData {
-  if (previewData) return previewData
+const previewLocales = new Map<ClientLanguage, InsightPresentationData>()
+function sourcePreviewData(language: ClientLanguage): InsightPresentationData {
+  const cached = previewLocales.get(language)
+  if (cached) return cached
+  if (previewData) {
+    const localized = localizeInsightPreview(previewData, language)
+    previewLocales.set(language, localized)
+    return localized
+  }
   // Service entry never converts the source fixture's illustration catalog.
   const artUrls = Object.fromEntries(Object.entries(INSIGHT_ART).map(([key, value]) => [key, { hero: svgSource(value.hero), wide: svgSource(value.wide) }]))
   const figureUrls = Object.fromEntries(Object.entries(INSIGHT_FIGURES).map(([key, value]) => [key, svgSource(value)]))
@@ -77,9 +86,11 @@ function sourcePreviewData(): InsightPresentationData {
     trendingRank: article.trend,
   })),
   }
-  return previewData
+  const localized = localizeInsightPreview(previewData, language)
+  previewLocales.set(language, localized)
+  return localized
 }
-const InsightDataContext = createContext<{ data: InsightPresentationData; preview: boolean }>({ data: { identity: 'UNAVAILABLE', heading: '', subheading: '', articles: [] }, preview: false })
+const InsightDataContext = createContext<{ data: InsightPresentationData; preview: boolean; editorial: boolean }>({ data: { identity: 'UNAVAILABLE', heading: '', subheading: '', articles: [] }, preview: false, editorial: false })
 const date = (article: InsightPresentationArticle) => {
   const value = article.publishedAt && Date.parse(article.publishedAt)
   return typeof value === 'number' && Number.isFinite(value) ? new Date(value).toISOString() : undefined
@@ -102,9 +113,10 @@ function Avatar({ url, size = 16 }: { url?: string; size?: number }) {
   return safe ? <img className="av2" src={safe} alt="" width={size} height={size} /> : null
 }
 function Metadata({ article, avatar = false }: { article: InsightPresentationArticle; avatar?: boolean }) {
+  const localeUi = useStaticUiCopy()
   const { preview } = useContext(InsightDataContext)
   const published = date(article)
-  return <span className="nfz-au">{avatar && <Avatar url={article.authorAvatarUrl} />}<span className="nm3">{article.authorName ?? '—'}, {published ? <time title={preview ? '클라이언트 원본 예시의 고정 기준시각' : undefined} dateTime={published}>{published.slice(0, 10).replaceAll('-', '.')}</time> : '—'}</span></span>
+  return <span className="nfz-au">{avatar && <Avatar url={article.authorAvatarUrl} />}<span className="nm3">{article.authorName ?? '—'}, {published ? <time title={preview ? localeUi("클라이언트 원본 예시의 고정 기준시각") : undefined} dateTime={published}>{published.slice(0, 10).replaceAll('-', '.')}</time> : '—'}</span></span>
 }
 function SectionBody({ sections }: { sections: InsightSection[] }) {
   const { data, preview } = useContext(InsightDataContext)
@@ -135,6 +147,9 @@ function ShareIcon({ network }: { network: 'facebook' | 'x' | 'linkedin' | 'copy
 }
 
 function AssetQuestion({ asset, article, onAsk, onClose }: { asset: string[]; article: InsightPresentationArticle; onAsk: ClientInsightsProps['onAsk']; onClose: () => void }) {
+  const { editorial } = useContext(InsightDataContext)
+  const localeUi = useStaticUiCopy()
+  const { language } = useClientPreferences()
   const ref = useRef<HTMLDialogElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const backdropDown = useRef(false)
@@ -142,7 +157,7 @@ function AssetQuestion({ asset, article, onAsk, onClose }: { asset: string[]; ar
   const alive = useRef(true)
   const [extra, setExtra] = useState('')
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState<InsightUiNotice>('')
   const id = useId()
   const openedAt = useRef(window.location.href)
   const closeOnNavigation = useEffectEvent(() => {
@@ -170,9 +185,14 @@ function AssetQuestion({ asset, article, onAsk, onClose }: { asset: string[]; ar
   const submit = async () => {
     if (busyRef.current) return
     busyRef.current = true; setBusy(true); setError('')
-    const text = `${asset[1]}(${asset[0]})의 현재 시장 상태를 분석해줘. 최근 가격 흐름, 주요 뉴스, 변동성, 핵심 기술적 구간과, 방금 읽은 인사이트 "${article.title}" 내용과의 관련성을 함께 설명해줘.${extra.trim() ? ` 추가로 궁금한 점: ${extra.trim()}` : ''}`
+    const sourceArticle = editorial ? CLIENT_INSIGHTS.find(source => source.slug === article.slug) : undefined
+    const sourceAsset = sourceArticle?.assets.find(source => source[0] === asset[0])
+    // Locale is display-only: the generated request keeps its original grammar
+    // and source article identity; caller/user prose is never rewritten.
+    const text = `${sourceAsset?.[1] ?? asset[1]}(${asset[0]})의 현재 시장 상태를 분석해줘. 최근 가격 흐름, 주요 뉴스, 변동성, 핵심 기술적 구간과, 방금 읽은 인사이트 "${sourceArticle?.title ?? article.title}" 내용과의 관련성을 함께 설명해줘.`
+      + (extra.trim() ? ` 추가로 궁금한 점: ${extra.trim()}` : '')
     try { await onAsk(text); if (alive.current) onClose() }
-    catch (failure) { if (alive.current) setError(failure instanceof ClientInsightQuestionError ? failure.message : '질문을 전달하지 못했어요. 작성한 내용은 유지됩니다. 다시 시도해주세요.') }
+    catch (failure) { if (alive.current) setError(failure instanceof ClientInsightQuestionError ? (failure.message ? { literal: failure.message } : '') : '질문을 전달하지 못했어요. 작성한 내용은 유지됩니다. 다시 시도해주세요.') }
     finally { busyRef.current = false; if (alive.current) setBusy(false) }
   }
   return <dialog ref={ref} className="nfz-dialog" aria-labelledby={id} onPointerDown={event => {
@@ -188,17 +208,18 @@ function AssetQuestion({ asset, article, onAsk, onClose }: { asset: string[]; ar
     // Prevent native cancel before it loses the IME composition metadata.
     if (event.key === 'Escape' && (event.nativeEvent.isComposing || event.keyCode === 229)) { event.preventDefault(); event.stopPropagation() }
   }}>
-    <header><h2 id={id}>{asset[1]} 더 알아보기</h2><button type="button" onClick={onClose} disabled={busy} aria-label="닫기"><X size={20} /></button></header>
+    <header><h2 id={id}>{asset[1]}{localeUi(" 더 알아보기")}</h2><button type="button" onClick={onClose} disabled={busy} aria-label={localeUi("닫기")}><X size={20} /></button></header>
     <form className="nfz-astdlg" onSubmit={event => { event.preventDefault(); void submit() }} aria-busy={busy}>
-      <p>TETH에게 추가적으로 궁금한 점이 있습니까?<br /><small>비워두고 진행해도 됩니다. 기본 분석 질문과 함께 전달됩니다.</small></p>
-      <label className="insight-sr" htmlFor={`${id}-question`}>추가로 궁금한 점</label><textarea id={`${id}-question`} ref={input} maxLength={2000} value={extra} readOnly={busy} onChange={event => setExtra(event.target.value)} placeholder="예: 최근 급등 구간의 지지선도 같이 봐줘 (선택)" />
-      {error && <p role="alert">{error}</p>}<div className="insight-actions"><button type="button" disabled={busy} onClick={onClose}>취소</button><button className="primary" type="submit" disabled={busy}>{busy ? '질문 전달 중…' : 'TETH에게 물어보기'}</button></div>
+      <p>{localeUi("TETH에게 추가적으로 궁금한 점이 있습니까?")}<br /><small>{localeUi("비워두고 진행해도 됩니다. 기본 분석 질문과 함께 전달됩니다.")}</small></p>
+      <label className="insight-sr" htmlFor={`${id}-question`}>{localeUi("추가로 궁금한 점")}</label><textarea id={`${id}-question`} ref={input} maxLength={2000} value={extra} readOnly={busy} onChange={event => setExtra(event.target.value)} placeholder={localeUi("예: 최근 급등 구간의 지지선도 같이 봐줘 (선택)")} />
+      {error && <p role="alert">{insightUiNotice(language, error)}</p>}<div className="insight-actions"><button type="button" disabled={busy} onClick={onClose}>{localeUi("취소")}</button><button className="primary" type="submit" disabled={busy}>{busy ? localeUi("질문 전달 중…") : localeUi("TETH에게 물어보기")}</button></div>
     </form>
   </dialog>
 }
 
 function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag, controlledLocation, onNavigate, signedIn = false, onLogin, onFeedback, shouldFocus, locationHref }: ClientInsightsProps) {
-  const { data, preview } = useContext(InsightDataContext)
+  const localeUi = useStaticUiCopy()
+  const { data, preview, editorial } = useContext(InsightDataContext)
   const { language } = useClientPreferences()
   const stateLabels = insightPresentationCopy[language]
   const rows = data.articles
@@ -208,7 +229,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
   const topics = [...topicCounts.keys()].sort((a, b) => topicCounts.get(b)! - topicCounts.get(a)!).slice(0, 12)
   const media = (url: string | undefined) => preview ? url : insightMediaUrl(url)
   const [location, setLocation] = useState<InsightLocation>(controlledLocation ?? { slug: initialSlug, tag: initialTag })
-  const [notice, setNotice] = useState('')
+  const [notice, setNotice] = useState<InsightUiNotice>('')
   const [asset, setAsset] = useState<string[] | null>(null)
   const [shareOpen, setShareOpen] = useState(false)
   const [copyResult, setCopyResult] = useState<{ surface: 'popover' | 'social'; outcome: 'success' | 'failure' } | null>(null)
@@ -251,7 +272,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     setAsset(null); setShareOpen(false); setCopyResult(null); setNotice('')
     setLocation(controlledLocation)
   }, [controlledLocation, location.slug, location.tag])
-  useEffect(() => { onTitleChange?.(article?.title ?? (signedIn ? personal?.article.title : undefined) ?? '인사이트') }, [article, personal, signedIn, onTitleChange])
+  useEffect(() => { onTitleChange?.(article?.title ?? (signedIn ? personal?.article.title : undefined) ?? researchNavigationLabel(language, 'insight')) }, [article, personal, signedIn, onTitleChange, language])
   useEffect(() => () => { generation.current++; clearTimeout(copyTimer.current) }, [])
   useEffect(() => {
     if (!shareOpen) return
@@ -298,7 +319,7 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     personalLock.current = true; setPersonalBusy(true); setNotice('')
     const current = generation.current
     try { await onAsk(personal.question) }
-    catch (failure) { if (generation.current === current) setNotice(failure instanceof ClientInsightQuestionError ? failure.message : '질문을 전달하지 못했어요. 다시 시도해주세요.') }
+    catch (failure) { if (generation.current === current) setNotice(failure instanceof ClientInsightQuestionError ? (failure.message ? { literal: failure.message } : '') : '질문을 전달하지 못했어요. 다시 시도해주세요.') }
     finally { personalLock.current = false; setPersonalBusy(false) }
   }
   const copy = async (surface: 'popover' | 'social') => {
@@ -349,52 +370,52 @@ function InsightContent({ onAsk, onClose, onTitleChange, initialSlug, initialTag
     }}>{content}</a>
   }
   const card = (p: InsightPresentationArticle, big = false) => articleLink(p, <><Art article={p} hero={big} /><div className="mt"><Metadata article={p} avatar /></div><h4>{p.title}</h4><div className="sm">{p.sub}</div></>, `nfz-card${big ? ' nfz-bigc' : ''}`)
-  const rail = (withTopics = true) => <aside className="nfz-rail" aria-label="인사이트 탐색">{withTopics && <div className="nfz-topics"><div className="th5">{insightSourceCopy(language, 'topics')}</div><div className="tw">{topics.map(tag => <button key={tag} className={`tp${tag === location.tag ? ' on' : ''}`} aria-pressed={tag === location.tag} type="button" onClick={() => move({ tag })}><span>{insightTagLabel(language, tag)}</span></button>)}</div></div>}<h2 className="rh">{insightSourceCopy(language, 'popular')}</h2>{trends.filter(p => p.slug !== article?.slug).map(p => <div className="nfz-tr" key={p.slug}><div className="by"><Metadata article={p} /></div>{articleLink(p, p.title, 't')}</div>)}</aside>
+  const rail = (withTopics = true) => <aside className="nfz-rail" aria-label={localeUi("인사이트 탐색")}>{withTopics && <div className="nfz-topics"><div className="th5">{insightSourceCopy(language, 'topics')}</div><div className="tw">{topics.map(tag => <button key={tag} className={`tp${tag === location.tag ? ' on' : ''}`} aria-pressed={tag === location.tag} type="button" onClick={() => move({ tag })}><span>{insightTagLabel(language, tag)}</span></button>)}</div></div>}<h2 className="rh">{insightSourceCopy(language, 'popular')}</h2>{trends.filter(p => p.slug !== article?.slug).map(p => <div className="nfz-tr" key={p.slug}><div className="by"><Metadata article={p} /></div>{articleLink(p, p.title, 't')}</div>)}</aside>
   const shareLinks = (labels = false) => {
     const url = encodeURIComponent(shareUrl ?? '')
-    const copyButton = <button type="button" disabled={!shareUrl} title={!shareUrl ? stateLabels.shareUnavailable : undefined} onClick={() => void copy(labels ? 'popover' : 'social')} aria-label="링크 복사"><ShareIcon network="copy" />{labels && <span style={copyResult?.surface === 'popover' ? { color: 'var(--gg)' } : undefined}>{copyResult?.surface === 'popover' ? '복사했습니다!' : '링크 복사'}</span>}</button>
-    return <>{labels && copyButton}{(['facebook', 'x', 'linkedin'] as const).map(net => !shareUrl ? <button key={net} type="button" disabled title={stateLabels.shareUnavailable} aria-label={`${net === 'facebook' ? '페이스북' : net === 'x' ? 'X' : 'LinkedIn'}에 공유`}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? '페이스북에 공유하기' : net === 'x' ? 'X에 공유하기' : 'LinkedIn에 공유하기'}</span>}</button> : <a key={net} aria-label={`${net === 'facebook' ? '페이스북' : net === 'x' ? 'X' : 'LinkedIn'}에 공유`} target="_blank" rel="noopener noreferrer" href={net === 'facebook' ? `https://www.facebook.com/sharer/sharer.php?u=${url}` : net === 'x' ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(article!.title)}&url=${url}` : `https://www.linkedin.com/sharing/share-offsite/?url=${url}`}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? '페이스북에 공유하기' : net === 'x' ? 'X에 공유하기' : 'LinkedIn에 공유하기'}</span>}</a>)}{!labels && copyButton}</>
+    const copyButton = <button type="button" disabled={!shareUrl} title={!shareUrl ? stateLabels.shareUnavailable : undefined} onClick={() => void copy(labels ? 'popover' : 'social')} aria-label={localeUi("링크 복사")}><ShareIcon network="copy" />{labels && <span style={copyResult?.surface === 'popover' ? { color: 'var(--gg)' } : undefined}>{copyResult?.surface === 'popover' ? localeUi("복사했습니다!") : localeUi("링크 복사")}</span>}</button>
+    return <>{labels && copyButton}{(['facebook', 'x', 'linkedin'] as const).map(net => !shareUrl ? <button key={net} type="button" disabled title={stateLabels.shareUnavailable} aria-label={insightPreviewText(language, '{network}에 공유', { network: net === 'facebook' ? localeUi("페이스북") : net === 'x' ? 'X' : 'LinkedIn' })}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? localeUi("페이스북에 공유하기") : net === 'x' ? localeUi("X에 공유하기") : localeUi("LinkedIn에 공유하기")}</span>}</button> : <a key={net} aria-label={insightPreviewText(language, '{network}에 공유', { network: net === 'facebook' ? localeUi("페이스북") : net === 'x' ? 'X' : 'LinkedIn' })} target="_blank" rel="noopener noreferrer" href={net === 'facebook' ? `https://www.facebook.com/sharer/sharer.php?u=${url}` : net === 'x' ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(article!.title)}&url=${url}` : `https://www.linkedin.com/sharing/share-offsite/?url=${url}`}><ShareIcon network={net} />{labels && <span>{net === 'facebook' ? localeUi("페이스북에 공유하기") : net === 'x' ? localeUi("X에 공유하기") : localeUi("LinkedIn에 공유하기")}</span>}</a>)}{!labels && copyButton}</>
   }
   const filtered = location.tag ? rows.filter(p => p.tags.includes(location.tag!)) : rows
   const head = rows.find(p => p.placement === 'featured')
   const top = rows.filter(p => p.placement === 'secondary').slice(0, 2)
   const rest = rows.filter(p => p !== head && !top.includes(p))
   const personalCard = signedIn && currentPersonal?.state === 'available' ? { ...currentPersonal.article, slug: `p/${currentPersonal.token}` } : null
-  return <section ref={shell} className="client-insights" aria-label="인사이트" data-source={preview ? CLIENT_INSIGHT_SOURCE.kind : 'SUPPLIED'}>
+  return <section ref={shell} className="client-insights" lang={editorial ? language : ''} aria-label={localeUi("인사이트")} data-source={preview ? CLIENT_INSIGHT_SOURCE.kind : 'SUPPLIED'}>
     <div className="nfz-page">
-      {notice && <p className="insight-notice" role="status">{notice}<button type="button" aria-label="안내 닫기" onClick={() => setNotice('')}><X size={16} /></button></p>}
+      {notice && <p className="insight-notice" role="status">{insightUiNotice(language, notice)}<button type="button" aria-label={localeUi("안내 닫기")} onClick={() => setNotice('')}><X size={16} /></button></p>}
       {personalRoute ? <>
-        <button type="button" className="nfz-back" onClick={back}><ArrowLeft size={16} /> 인사이트</button>
-        {!signedIn ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{emailView ? '이메일 미리보기는 로그인 후 볼 수 있습니다' : '개인화 인사이트는 로그인 후 볼 수 있습니다'}</h1><button type="button" onClick={() => login('login')}>로그인</button></div>
-          : !personal || !personalArticle ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{emailView ? '생성된 맞춤 인사이트가 없습니다' : '글을 찾을 수 없어요'}</h1><button type="button" onClick={() => move({})}>인사이트 홈으로</button></div>
-          : personal.state !== 'available' ? <div className="nfz-det"><article className="nfz-a"><h1 ref={focus} tabIndex={-1}>{personal.state === 'expired' ? '이 인사이트는 만료됐습니다' : '이 인사이트는 새 버전으로 갱신됐습니다'}</h1>{personal.availabilityMessage && <div className="deck">{personal.availabilityMessage}</div>}<button type="button" className="nfz-pcta" onClick={() => move(personal.latestToken && data.personalized?.some(item => item.token === personal.latestToken && item.state === 'available') ? { slug: `p/${personal.latestToken}` } : {})}>{personal.latestToken && data.personalized?.some(item => item.token === personal.latestToken && item.state === 'available') ? (preview ? '최신 인사이트 다시 생성' : stateLabels.latestInsight) : '인사이트 홈으로'}</button></article></div>
-          : emailView ? personal.email ? <div className="nfz-mail"><div className="mh">보낸사람 <b>{personal.email.senderLabel}</b><br />제목 <b>{personalArticle.title}</b></div><div className="mb2"><span style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '.09em', color: '#c7d2fe' }}>FOR YOU</span><h1 ref={focus} tabIndex={-1} style={{ fontSize: 22, lineHeight: '30px' }}>{personalArticle.title}</h1><div style={{ fontSize: 14, lineHeight: '22px', color: 'var(--gt2)', marginBottom: 16 }}>{personalArticle.sub}</div><Art article={personalArticle} showCategory={false} aspectRatio="2.1" /><div className="nfz-body"><SectionBody sections={personal.email.sections} /></div></div><div className="nfz-mailgate"><div className="fd" /><button type="button" className="nfz-pcta" style={{ width: 280, maxWidth: '100%', height: 44, borderRadius: 22, padding: 0, marginTop: 0, position: 'relative', bottom: 'auto', display: 'inline-block' }} onClick={() => move({ slug: `p/${personal.token}` })}>TETH에서 계속 읽기</button><p style={{ fontSize: '11.5px', color: 'var(--gt3)', marginTop: 12 }}>버튼을 누르면 웹 인사이트로 이동합니다.</p></div></div>
-            : <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{stateLabels.emailUnavailable}</h1><button type="button" onClick={() => move({ slug: `p/${personal.token}` })}>TETH에서 계속 읽기</button></div>
-          : <div className="nfz-det"><article className="nfz-a"><div style={{ margin: '2px 0 10px' }}><span style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '.09em', color: '#c7d2fe', background: 'rgba(99,102,241,.2)', border: '1px solid rgba(129,140,248,.35)', borderRadius: 6, padding: '5px 9px' }}>FOR YOU</span></div><h1 ref={focus} tabIndex={-1}>{personalArticle.title}</h1><div className="deck">{personalArticle.sub}</div><div className="nfz-meta"><span>{personal.chips.join(', ')}</span><span className="sp" />{personal.expiryLabel && <span>{personal.expiryLabel}</span>}</div><div className="nfz-hero"><Art article={personalArticle} hero showCategory={false} /></div><div className="nfz-body"><SectionBody sections={personalArticle.body} /></div><div className="nfz-pcta-wrap"><button type="button" className="nfz-pcta" disabled={personalBusy} aria-busy={personalBusy} onClick={() => void askPersonal()}>{personalBusy ? '질문 전달 중…' : <span>{personal.ctaLabel} →</span>}</button></div></article>{rail(false)}</div>}
-      </> : location.slug && !article ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>글을 찾을 수 없습니다</h1><button type="button" onClick={() => move({})}>인사이트 전체 보기</button></div> : article ? <>
-        <button type="button" className="nfz-back" onClick={back}><ArrowLeft size={16} /> 인사이트</button>
+        <button type="button" className="nfz-back" onClick={back}><ArrowLeft size={16} />{localeUi(" 인사이트")}</button>
+        {!signedIn ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{emailView ? localeUi("이메일 미리보기는 로그인 후 볼 수 있습니다") : localeUi("개인화 인사이트는 로그인 후 볼 수 있습니다")}</h1><button type="button" onClick={() => login('login')}>{localeUi("로그인")}</button></div>
+          : !personal || !personalArticle ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{emailView ? localeUi("생성된 맞춤 인사이트가 없습니다") : localeUi("글을 찾을 수 없어요")}</h1><button type="button" onClick={() => move({})}>{localeUi("인사이트 홈으로")}</button></div>
+          : personal.state !== 'available' ? <div className="nfz-det"><article className="nfz-a"><h1 ref={focus} tabIndex={-1}>{personal.state === 'expired' ? localeUi("이 인사이트는 만료됐습니다") : localeUi("이 인사이트는 새 버전으로 갱신됐습니다")}</h1>{personal.availabilityMessage && <div className="deck">{personal.availabilityMessage}</div>}<button type="button" className="nfz-pcta" onClick={() => move(personal.latestToken && data.personalized?.some(item => item.token === personal.latestToken && item.state === 'available') ? { slug: `p/${personal.latestToken}` } : {})}>{personal.latestToken && data.personalized?.some(item => item.token === personal.latestToken && item.state === 'available') ? (preview ? localeUi("최신 인사이트 다시 생성") : stateLabels.latestInsight) : localeUi("인사이트 홈으로")}</button></article></div>
+          : emailView ? personal.email ? <div className="nfz-mail"><div className="mh">{localeUi("보낸사람 ")}<b>{personal.email.senderLabel}</b><br />{localeUi("제목 ")}<b>{personalArticle.title}</b></div><div className="mb2"><span style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '.09em', color: '#c7d2fe' }}>FOR YOU</span><h1 ref={focus} tabIndex={-1} style={{ fontSize: 22, lineHeight: '30px' }}>{personalArticle.title}</h1><div style={{ fontSize: 14, lineHeight: '22px', color: 'var(--gt2)', marginBottom: 16 }}>{personalArticle.sub}</div><Art article={personalArticle} showCategory={false} aspectRatio="2.1" /><div className="nfz-body"><SectionBody sections={personal.email.sections} /></div></div><div className="nfz-mailgate"><div className="fd" /><button type="button" className="nfz-pcta" style={{ width: 280, maxWidth: '100%', height: 44, borderRadius: 22, padding: 0, marginTop: 0, position: 'relative', bottom: 'auto', display: 'inline-block' }} onClick={() => move({ slug: `p/${personal.token}` })}>{localeUi("TETH에서 계속 읽기")}</button><p style={{ fontSize: '11.5px', color: 'var(--gt3)', marginTop: 12 }}>{localeUi("버튼을 누르면 웹 인사이트로 이동합니다.")}</p></div></div>
+            : <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{stateLabels.emailUnavailable}</h1><button type="button" onClick={() => move({ slug: `p/${personal.token}` })}>{localeUi("TETH에서 계속 읽기")}</button></div>
+          : <div className="nfz-det"><article className="nfz-a"><div style={{ margin: '2px 0 10px' }}><span style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '.09em', color: '#c7d2fe', background: 'rgba(99,102,241,.2)', border: '1px solid rgba(129,140,248,.35)', borderRadius: 6, padding: '5px 9px' }}>FOR YOU</span></div><h1 ref={focus} tabIndex={-1}>{personalArticle.title}</h1><div className="deck">{personalArticle.sub}</div><div className="nfz-meta"><span>{personal.chips.join(', ')}</span><span className="sp" />{personal.expiryLabel && <span>{personal.expiryLabel}</span>}</div><div className="nfz-hero"><Art article={personalArticle} hero showCategory={false} /></div><div className="nfz-body"><SectionBody sections={personalArticle.body} /></div><div className="nfz-pcta-wrap"><button type="button" className="nfz-pcta" disabled={personalBusy} aria-busy={personalBusy} onClick={() => void askPersonal()}>{personalBusy ? localeUi("질문 전달 중…") : <span>{personal.ctaLabel} →</span>}</button></div></article>{rail(false)}</div>}
+      </> : location.slug && !article ? <div className="insight-empty"><h1 ref={focus} tabIndex={-1}>{localeUi("글을 찾을 수 없습니다")}</h1><button type="button" onClick={() => move({})}>{localeUi("인사이트 전체 보기")}</button></div> : article ? <>
+        <button type="button" className="nfz-back" onClick={back}><ArrowLeft size={16} />{localeUi(" 인사이트")}</button>
         <div className="nfz-det"><article className="nfz-a"><h1 ref={focus} tabIndex={-1}>{article.title}</h1><div className="deck">{article.sub}</div>
-          <div className="nfz-meta"><Metadata article={article} avatar /><span className="sp" /><div className="nfz-shwrap" ref={share}><button className="ib" type="button" aria-label="공유" ref={shareButton} aria-expanded={shareOpen} onClick={() => changeShare(!shareOpen)}><Share2 size={15} /></button>{shareOpen && <div className="nfz-shpop" aria-label="공유 선택">{shareLinks(true)}<span className="insight-sr" role="status">{copyResult?.surface === 'popover' ? '복사했습니다!' : ''}</span></div>}</div></div>
+          <div className="nfz-meta"><Metadata article={article} avatar /><span className="sp" /><div className="nfz-shwrap" ref={share}><button className="ib" type="button" aria-label={localeUi("공유")} ref={shareButton} aria-expanded={shareOpen} onClick={() => changeShare(!shareOpen)}><Share2 size={15} /></button>{shareOpen && <div className="nfz-shpop" aria-label={localeUi("공유 선택")}>{shareLinks(true)}<span className="insight-sr" role="status">{copyResult?.surface === 'popover' ? localeUi("복사했습니다!") : ''}</span></div>}</div></div>
           <div className="nfz-hero"><Art article={article} hero /></div><div className="nfz-body"><SectionBody sections={signedIn ? article.body : guestSections(article)} /></div>
-          {!signedIn && <div className="nfz-gatewrap"><div className="nfz-fade" /><div className="nfz-gate"><span className="hl">TETH에서 계속 읽어보십시오</span><div className="s2">무료 계정을 만들면 모든 인사이트와<br />개인화된 시장 분석을 끝까지 읽을 수 있습니다.</div><button type="button" className="b1" onClick={() => login('signup')}>무료로 시작하기</button><div className="fr">영원히 무료, 카드 등록 필요없음</div><div className="lg">이미 계정이 있으십니까? <button type="button" onClick={() => login('login')}>로그인</button></div></div></div>}
+          {!signedIn && <div className="nfz-gatewrap"><div className="nfz-fade" /><div className="nfz-gate"><span className="hl">{localeUi("TETH에서 계속 읽어보십시오")}</span><div className="s2">{localeUi("무료 계정을 만들면 모든 인사이트와")}<br />{localeUi("개인화된 시장 분석을 끝까지 읽을 수 있습니다.")}</div><button type="button" className="b1" onClick={() => login('signup')}>{localeUi("무료로 시작하기")}</button><div className="fr">{localeUi("영원히 무료, 카드 등록 필요없음")}</div><div className="lg">{localeUi("이미 계정이 있으십니까? ")}<button type="button" onClick={() => login('login')}>{localeUi("로그인")}</button></div></div></div>}
           <div className="nfz-tags">{article.tags.map(tag => <button className="tg" key={tag} type="button" onClick={() => move({ tag })}>{insightTagLabel(language, tag)}</button>)}</div>
-          <div className="nfz-social">{shareLinks()}<span className="cplbl" role="status" style={copyResult?.outcome === 'failure' ? { color: 'var(--gr)' } : undefined}>{copyResult?.surface === 'social' ? copyResult.outcome === 'success' ? '복사했습니다!' : '복사에 실패했습니다' : ''}</span></div>
-          {article.assets.length > 0 && <div className="nfz-assets"><h2 className="ah">이 인사이트에 나온 자산, 지금은 어떤 상황입니까?</h2><div className="as">누르면 TETH에게 물어볼 내용을 정리해드립니다.</div><div className="nfz-astrow">{article.assets.map(a => <button className="nfz-ast" key={a[0]} type="button" onClick={() => signedIn ? setAsset(a) : login('login')}><span className="ico">{media(data.assetUrls?.[a[0]]) ? <img alt="" src={media(data.assetUrls?.[a[0]])} width={34} height={34} /> : a[0].slice(0, 2)}</span><span><span className="nm">{a[1]}</span><span className="sy">{a[0]}</span></span><ChevronRight className="ar2" size={16} /></button>)}</div></div>}
-          {signedIn && <div className="nfz-fb"><div className="q">이 인사이트가 도움이 되었습니까?</div><div className={`bs${feedback[article.slug] !== undefined ? ' locked' : ''}`} aria-busy={feedbackBusy}>{feedbackChoices.map(({ key, Icon }, i) => <button className={`nfz-fbb${feedback[article.slug] === i ? ' on' : ''}`} key={key} type="button" aria-pressed={feedback[article.slug] === i} disabled={feedbackBusy || feedback[article.slug] !== undefined} onClick={() => void vote(i as 0 | 1 | 2)}><Icon size={16} strokeWidth={1.6} aria-hidden="true" />{insightSourceCopy(language, key)}</button>)}</div>{feedback[article.slug] !== undefined && <p className="fbok" role="status"><Check size={14} /> 소중한 의견 감사합니다.</p>}</div>}
-          <div className="nfz-next"><h2 className="nh">다음 인사이트도 읽어보십시오</h2><div className="nfz-nextg">{rows.filter(p => p.slug !== article.slug).slice(0, 4).map(p => <Fragment key={p.slug}>{articleLink(p, <><Art article={p} /><div className="mt"><Metadata article={p} /></div><div className="t">{p.title}</div></>, 'nfz-nc')}</Fragment>)}</div></div>
-          <p className="insight-disclaimer">투자 판단의 최종 책임은 이용자에게 있습니다.</p>
+          <div className="nfz-social">{shareLinks()}<span className="cplbl" role="status" style={copyResult?.outcome === 'failure' ? { color: 'var(--gr)' } : undefined}>{copyResult?.surface === 'social' ? copyResult.outcome === 'success' ? localeUi("복사했습니다!") : localeUi("복사에 실패했습니다") : ''}</span></div>
+          {article.assets.length > 0 && <div className="nfz-assets"><h2 className="ah">{localeUi("이 인사이트에 나온 자산, 지금은 어떤 상황입니까?")}</h2><div className="as">{localeUi("누르면 TETH에게 물어볼 내용을 정리해드립니다.")}</div><div className="nfz-astrow">{article.assets.map(a => <button className="nfz-ast" key={a[0]} type="button" onClick={() => signedIn ? setAsset(a) : login('login')}><span className="ico">{media(data.assetUrls?.[a[0]]) ? <img alt="" src={media(data.assetUrls?.[a[0]])} width={34} height={34} /> : a[0].slice(0, 2)}</span><span><span className="nm">{a[1]}</span><span className="sy">{a[0]}</span></span><ChevronRight className="ar2" size={16} /></button>)}</div></div>}
+          {signedIn && <div className="nfz-fb"><div className="q">{localeUi("이 인사이트가 도움이 되었습니까?")}</div><div className={`bs${feedback[article.slug] !== undefined ? ' locked' : ''}`} aria-busy={feedbackBusy}>{feedbackChoices.map(({ key, Icon }, i) => <button className={`nfz-fbb${feedback[article.slug] === i ? ' on' : ''}`} key={key} type="button" aria-pressed={feedback[article.slug] === i} disabled={feedbackBusy || feedback[article.slug] !== undefined} onClick={() => void vote(i as 0 | 1 | 2)}><Icon size={16} strokeWidth={1.6} aria-hidden="true" />{insightSourceCopy(language, key)}</button>)}</div>{feedback[article.slug] !== undefined && <p className="fbok" role="status"><Check size={14} />{localeUi(" 소중한 의견 감사합니다.")}</p>}</div>}
+          <div className="nfz-next"><h2 className="nh">{localeUi("다음 인사이트도 읽어보십시오")}</h2><div className="nfz-nextg">{rows.filter(p => p.slug !== article.slug).slice(0, 4).map(p => <Fragment key={p.slug}>{articleLink(p, <><Art article={p} /><div className="mt"><Metadata article={p} /></div><div className="t">{p.title}</div></>, 'nfz-nc')}</Fragment>)}</div></div>
+          <p className="insight-disclaimer">{localeUi("투자 판단의 최종 책임은 이용자에게 있습니다.")}</p>
         </article>{rail(false)}</div>
-      </> : <><div className="nfz-open"><h1 ref={focus} tabIndex={-1}>{preview && data === previewData ? `${new Intl.DateTimeFormat(language, { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(sourceTime)}, ${insightSourceCopy(language, 'heading')}` : data.heading}<br /><em>{preview && data === previewData ? insightSourceCopy(language, 'subheading') : data.subheading}</em></h1></div>
-        {location.tag ? <div className="nfz-cols"><div><div className="nfz-sh"><h2>태그: {insightTagLabel(language, location.tag)}</h2><div className="s">{filtered.length}개의 인사이트 • <button type="button" onClick={() => move({})}>전체 보기</button></div></div>{filtered.length ? <div className="nfz-t1">{filtered.map(p => <Fragment key={p.slug}>{card(p)}</Fragment>)}</div> : <div className="insight-empty"><h2>이 태그의 인사이트가 아직 없습니다</h2><p>다른 태그를 눌러보거나 전체 목록으로 돌아가십시오.</p></div>}</div>{rail()}</div> : <>
+      </> : <><div className="nfz-open"><h1 ref={focus} tabIndex={-1}>{editorial ? `${new Intl.DateTimeFormat(language, { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(sourceTime)}, ${insightSourceCopy(language, 'heading')}` : data.heading}<br /><em>{editorial ? insightSourceCopy(language, 'subheading') : data.subheading}</em></h1></div>
+        {location.tag ? <div className="nfz-cols"><div><div className="nfz-sh"><h2>{localeUi("태그: ")}{insightTagLabel(language, location.tag)}</h2><div className="s">{language === 'ko' ? <>{filtered.length}{localeUi("개의 인사이트 • ")}</> : <>{localeUi('{count}건의 인사이트', { count: filtered.length })} • </>}<button type="button" onClick={() => move({})}>{localeUi("전체 보기")}</button></div></div>{filtered.length ? <div className="nfz-t1">{filtered.map(p => <Fragment key={p.slug}>{card(p)}</Fragment>)}</div> : <div className="insight-empty"><h2>{localeUi("이 태그의 인사이트가 아직 없습니다")}</h2><p>{localeUi("다른 태그를 눌러보거나 전체 목록으로 돌아가십시오.")}</p></div>}</div>{rail()}</div> : <>
           <ClientInsightGallery secondary={top.map(p => <Fragment key={p.slug}>{card(p)}</Fragment>)} featured={head && card(head, true)} rail={rail()}
-            curator={data.curators?.length ? <div className="nfz-cur"><span className="avs">{data.curators.map((curator, index) => <Avatar key={index} url={curator.avatarUrl} size={28} />)}</span><span className="tx">{preview && data === previewData ? <>오늘의 인사이트는 <b>Sarah Bennett</b>과 <b>James Carter</b>가 큐레이션했습니다.</> : <>{data.curatorLabel}{data.curatorLabel && ' '}{data.curators.map((curator, index) => <Fragment key={index}>{index > 0 && ', '}<b>{curator.name}</b></Fragment>)}</>}</span></div> : null}
-            heading={<div className="nfz-sh"><h2>새로운 인사이트</h2>{data.periodLabel && <div className="s">{data.periodLabel}</div>}</div>}>
-            {personalCard && articleLink(personalCard, <><span className="fyl">FOR YOU</span><Art article={personalCard} showCategory={false} /><div className="mt"><span className="nfz-au"><PersonalAvatar /><span className="nm3">맞춤 분석{currentPersonal?.publicationLabel && ` • ${currentPersonal.publicationLabel}`}</span></span></div><h4>{personalCard.title}</h4><div className="sm">{personalCard.sub}</div></>, 'nfz-card nfz-fycard')}
+            curator={data.curators?.length ? <div className="nfz-cur"><span className="avs">{data.curators.map((curator, index) => <Avatar key={index} url={curator.avatarUrl} size={28} />)}</span><span className="tx">{editorial ? <>{localeUi.rich('오늘의 인사이트는 {first}과 {second}가 큐레이션했습니다.', { first: <b>Sarah Bennett</b>, second: <b>James Carter</b> })}</> : <>{data.curatorLabel}{data.curatorLabel && ' '}{data.curators.map((curator, index) => <Fragment key={index}>{index > 0 && ', '}<b>{curator.name}</b></Fragment>)}</>}</span></div> : null}
+            heading={<div className="nfz-sh"><h2>{localeUi("새로운 인사이트")}</h2>{data.periodLabel && <div className="s">{data.periodLabel}</div>}</div>}>
+            {personalCard && articleLink(personalCard, <><span className="fyl">FOR YOU</span><Art article={personalCard} showCategory={false} /><div className="mt"><span className="nfz-au"><PersonalAvatar /><span className="nm3">{localeUi("맞춤 분석")}{currentPersonal?.publicationLabel && ` • ${currentPersonal.publicationLabel}`}</span></span></div><h4>{personalCard.title}</h4><div className="sm">{personalCard.sub}</div></>, 'nfz-card nfz-fycard')}
             {rest.map(p => <Fragment key={p.slug}>{card(p)}</Fragment>)}
             {!rows.length && !personalCard && <div className="insight-empty"><h2>{stateLabels.emptyArticles}</h2></div>}
           </ClientInsightGallery>
-        </>}{onClose && <button type="button" className="nfz-back insight-return" onClick={onClose}>대화로 돌아가기 <ArrowUpRight size={15} /></button>}</>}
-    </div>{article && asset && <AssetQuestion key={`${article.slug}:${asset[0]}`} article={article} asset={asset} onAsk={onAsk} onClose={() => setAsset(null)} />}
+        </>}{onClose && <button type="button" className="nfz-back insight-return" onClick={onClose}>{localeUi("대화로 돌아가기 ")}<ArrowUpRight size={15} /></button>}</>}
+    </div>{article && asset && <AssetQuestion key={`${article.slug}:${asset[0]}`} article={article} asset={article.assets.find(current => current[0] === asset[0]) ?? asset} onAsk={onAsk} onClose={() => setAsset(null)} />}
   </section>
 }
 
@@ -412,7 +433,8 @@ const nativeInsightCopy = {
 export function ClientInsights(props: ClientInsightsProps) {
   const { language } = useClientPreferences()
   const preview = props.source !== 'service'
-  const data = preview ? (props.data ?? sourcePreviewData()) : props.data
+  const editorial = preview && props.data == null
+  const data = preview ? (props.data ?? sourcePreviewData(language)) : props.data
   if (!data) return <ClientInsightUnavailable view={{ ...nativeInsightCopy[language], heading: insightSourceCopy(language, 'heading'), subheading: insightSourceCopy(language, 'subheading'), label: researchNavigationLabel(language, 'insight'), returnLabel: researchCopy(language, 'return') }} onClose={props.onClose ?? (() => {})} shouldFocus={props.shouldFocus ?? (() => false)} />
-  return <InsightDataContext.Provider value={{ data, preview }}><InsightContent key={`${preview ? 'preview' : 'service'}:${data.identity}`} {...props} /></InsightDataContext.Provider>
+  return <InsightDataContext.Provider value={{ data, preview, editorial }}><InsightContent key={`${preview ? 'preview' : 'service'}:${data.identity}`} {...props} /></InsightDataContext.Provider>
 }

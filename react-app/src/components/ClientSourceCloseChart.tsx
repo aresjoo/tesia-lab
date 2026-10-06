@@ -1,15 +1,19 @@
 import { useEffect, useRef } from 'react'
 import { ColorType, CrosshairMode, LineSeries, createChart, createSeriesMarkers, type UTCTimestamp } from 'lightweight-charts'
+import { useClientPreferences } from '../client-preferences'
+import { terminalChartLocaleText } from '../client-terminal-chart-locale-copy'
 
 type Point = { time: number; value?: number }
 type Mark = { id: string; time: number; side: 'BUY' | 'SELL' }
 /** Source preview has closes only. Never invent candle wicks, opens or volume. */
-export function ClientSourceCloseChart({ points, markers, label = '공통 합성 시계열', presentation }: { points: readonly Point[]; markers: readonly Mark[]; label?: string; presentation?: { ariaLabel: string; interval: string; fit: string; note: string; locale: string } }) {
+export function ClientSourceCloseChart({ points, markers, label, presentation }: { points: readonly Point[]; markers: readonly Mark[]; label?: string; presentation?: { ariaLabel: string; interval: string; fit: string; note: string; locale: string } }) {
+  const { language } = useClientPreferences()
+  const t = (source: string) => terminalChartLocaleText(language, source)
   const host = useRef<HTMLDivElement>(null)
   const update = useRef<((items: readonly Mark[]) => void) | null>(null)
   const fit = useRef<(() => void) | null>(null)
   const localize = useRef<((locale: string) => void) | null>(null)
-  const locale = presentation?.locale ?? 'ko-KR'
+  const locale = presentation?.locale ?? (language === 'ko' ? 'ko-KR' : language)
   useEffect(() => {
     const el = host.current
     if (!el || !points.length) return
@@ -48,5 +52,5 @@ export function ClientSourceCloseChart({ points, markers, label = '공통 합성
   }, [points])
   useEffect(() => { update.current?.(markers) }, [markers, points])
   useEffect(() => { localize.current?.(locale) }, [locale, points])
-  return <section className="cst-close-chart" aria-label={presentation?.ariaLabel ?? '원본 합성 종가 차트'} data-first-time={points[0]?.time} data-last-time={points.at(-1)?.time} data-marker-count={markers.length}><header><b>{label}</b><span>{presentation?.interval ?? '1D · 원본 종가'}</span><button type="button" onClick={() => fit.current?.()}>{presentation?.fit ?? '전체 구간'}</button></header><div ref={host} /><footer>{presentation?.note ?? '원본 공통 합성 가격 · 실제 시세 아님 · OHLC·거래량 미제공'}</footer></section>
+  return <section className="cst-close-chart" aria-label={presentation?.ariaLabel ?? t('원본 합성 종가 차트')} data-first-time={points[0]?.time} data-last-time={points.at(-1)?.time} data-marker-count={markers.length}><header><b>{label ?? t('공통 합성 시계열')}</b><span>{presentation?.interval ?? t('1D · 원본 종가')}</span><button type="button" onClick={() => fit.current?.()}>{presentation?.fit ?? t('전체 구간')}</button></header><div ref={host} /><footer>{presentation?.note ?? t('원본 공통 합성 가격 · 실제 시세 아님 · OHLC·거래량 미제공')}</footer></section>
 }

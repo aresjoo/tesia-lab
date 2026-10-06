@@ -1,3 +1,5 @@
+import { useDelegationLocaleText } from '../client-delegation-locale-copy'
+import { useClientPreferences } from '../client-preferences'
 import { useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { sourceTerminalDate, sourceTerminalPrices, type SourceTerminalEvaluation } from '../client-terminal-source-fixture'
 import '../client-delegation-chart.css'
@@ -9,7 +11,7 @@ export type ClientDelegationChartProps = {
   interval?: string
   onIntervalChange?: (interval: string) => void
 }
-const dateLabel = (index: number) => {
+const originalDateLabel = (index: number) => {
   const d = sourceTerminalDate(index)
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
 }
@@ -21,6 +23,10 @@ const priceLabel = (value: number) => value.toLocaleString('en-US', { maximumFra
  * The faint daily trace retains the exact price location of intermediate trades.
  */
 export function ClientDelegationChart({ asset, evaluation, compact = false, interval, onIntervalChange }: ClientDelegationChartProps) {
+  const d = useDelegationLocaleText()
+  const { language } = useClientPreferences()
+  // Preserve the source local calendar day; locale changes presentation only.
+  const dateLabel = (index: number) => language === 'ko' ? originalDateLabel(index) : sourceTerminalDate(index).toLocaleDateString(language)
   const host = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const [width, setWidth] = useState(760)
@@ -84,10 +90,10 @@ export function ClientDelegationChart({ asset, evaluation, compact = false, inte
     else setLocalInterval(next)
   }
   return <div ref={host} className={`tf-chart client-delegation-source-chart${compact ? ' compact' : ''}`} data-source="client-synthetic-daily" data-start-index={valid ? start : undefined} data-end-index={valid ? end : undefined}>
-    <div className="tf-chart-toolbar"><strong>{asset}</strong><span>{resolution === '1W' ? '주간 종가' : resolution === '1M' ? '월간 종가' : '일별 종가'} · 원본 합성 일봉</span>{!compact && <div className="tf-chart-intervals" aria-label="가격 표시 간격">{['1D', '1W', '1M'].map(value => <button key={value} type="button" aria-pressed={resolution === value} onClick={() => changeInterval(value)}>{value}</button>)}</div>}</div>
-    {!graph || selected === null ? <p className="tf-source-empty">검증 구간을 표시할 수 없어요.</p> : <>
-      <div className="tf-source-readout" id={`${id}-readout`}><time>{dateLabel(selected)}</time><span>종가 <b>{priceLabel(sourceTerminalPrices[selected])}</b></span><span className="tf-source-tradeinfo">{selectedTrades.map((trade, i) => <span key={i} className={trade.entry === selected ? 'u' : 'd'}>{trade.entry === selected ? '▲ 매수' : '▼ 매도'}{trade.exit === selected && ` · 거래 손익 ${trade.pnl >= 0 ? '+' : ''}${(trade.pnl * 100).toFixed(2)}%`}</span>)}</span></div>
-      <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} style={compact ? { height: 240 } : undefined} role="img" tabIndex={0} aria-label={`${asset} 과거 검증 구간 가격, 매수와 매도 지점`} aria-describedby={`${id}-summary ${id}-help ${id}-readout`} onPointerMove={event => {
+    <div className="tf-chart-toolbar"><strong>{asset}</strong><span>{resolution === '1W' ? d("주간 종가") : resolution === '1M' ? d("월간 종가") : d("일별 종가")} {d("· 원본 합성 일봉")}</span>{!compact && <div className="tf-chart-intervals" aria-label={d("가격 표시 간격")}>{['1D', '1W', '1M'].map(value => <button key={value} type="button" aria-pressed={resolution === value} onClick={() => changeInterval(value)}>{value}</button>)}</div>}</div>
+    {!graph || selected === null ? <p className="tf-source-empty">{d("검증 구간을 표시할 수 없어요.")}</p> : <>
+      <div className="tf-source-readout" id={`${id}-readout`}><time>{dateLabel(selected)}</time><span>{d("종가")} <b>{priceLabel(sourceTerminalPrices[selected])}</b></span><span className="tf-source-tradeinfo">{selectedTrades.map((trade, i) => <span key={i} className={trade.entry === selected ? 'u' : 'd'}>{trade.entry === selected ? d("▲ 매수") : d("▼ 매도")}{trade.exit === selected && d(" · 거래 손익 {0}{1}%",trade.pnl >= 0 ? '+' : '',(trade.pnl * 100).toFixed(2))}</span>)}</span></div>
+      <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} style={compact ? { height: 240 } : undefined} role="img" tabIndex={0} aria-label={d("{0} 과거 검증 구간 가격, 매수와 매도 지점",asset)} aria-describedby={`${id}-summary ${id}-help ${id}-readout`} onPointerMove={event => {
         const rect = event.currentTarget.getBoundingClientRect()
         const localX = (event.clientX - rect.left) / rect.width * width
         const index = start + Math.round(Math.max(0, Math.min(1, (localX - 14) / (graph.right - 14))) * (end - start))
@@ -99,7 +105,7 @@ export function ClientDelegationChart({ asset, evaluation, compact = false, inte
         event.preventDefault()
         setSelection({ result: evaluation, index: event.key === 'Home' ? start : event.key === 'End' ? end : Math.max(start, Math.min(end, selected + steps[event.key])) })
       }}>
-        <title>{asset} · 원본 합성 일봉 · 완료 거래 {trades.length}회</title>
+        <title>{d('{0} · 원본 합성 일봉 · 완료 거래 {1}회',asset,trades.length)}</title>
         {[0, 1, 2, 3, 4].map(tick => {
           const value = graph.hi - (graph.hi - graph.lo) * tick / 4, y = graph.y(value)
           return <g key={tick} aria-hidden="true"><line x1="14" x2={graph.right} y1={y} y2={y} stroke="rgba(255,255,255,.065)" /><text x={width - 7} y={y + 4} textAnchor="end" fill="#9aa0a6" fontSize="11">{Math.round(value).toLocaleString('en-US')}</text></g>
@@ -113,14 +119,14 @@ export function ClientDelegationChart({ asset, evaluation, compact = false, inte
         {trades.flatMap((trade, ordinal) => (['entry', 'exit'] as const).map(side => {
           const index = trade[side], x = graph.x(index), y = graph.y(sourceTerminalPrices[index]), buy = side === 'entry'
           const delay = Math.max((index - start) / Math.max(1, end - start) * 1500, (ordinal + 1) / Math.max(1, trades.length) / 1.15 * 1800)
-          return <path key={`${trade.entry}-${trade.exit}-${side}`} className="tf-source-marker" data-side={buy ? 'BUY' : 'SELL'} data-index={index} data-price={sourceTerminalPrices[index]} style={{ '--marker-delay': `${delay}ms` } as CSSProperties} d={buy ? `M${x},${y + 5}l-4.5,6h9Z` : `M${x},${y - 5}l-4.5,-6h9Z`} fill={buy ? '#56c486' : '#ee766a'}><title>{buy ? '매수' : '매도'} {dateLabel(index)} · 표시 종가 {priceLabel(sourceTerminalPrices[index])}{!buy && ` · ${trade.kind === 'sl' ? '손절' : trade.kind === 'tp' ? '익절' : '기간 청산'} · 거래 손익 ${(trade.pnl * 100).toFixed(2)}%`}</title></path>
+          return <path key={`${trade.entry}-${trade.exit}-${side}`} className="tf-source-marker" data-side={buy ? 'BUY' : 'SELL'} data-index={index} data-price={sourceTerminalPrices[index]} style={{ '--marker-delay': `${delay}ms` } as CSSProperties} d={buy ? `M${x},${y + 5}l-4.5,6h9Z` : `M${x},${y - 5}l-4.5,-6h9Z`} fill={buy ? '#56c486' : '#ee766a'}><title>{d('{0} {1} · 표시 종가 {2}',d(buy ? '매수' : '매도'),dateLabel(index),priceLabel(sourceTerminalPrices[index]))}{!buy && d(' · {0} · 거래 손익 {1}%',d(trade.kind === 'sl' ? '손절' : trade.kind === 'tp' ? '익절' : '기간 청산'),(trade.pnl * 100).toFixed(2))}</title></path>
         }))}
         {selection?.result === evaluation && <g className="tf-source-crosshair" aria-hidden="true"><line x1={graph.x(selected)} x2={graph.x(selected)} y1="14" y2={graph.bottom} stroke="rgba(196,199,197,.4)" strokeDasharray="3 4" /><circle cx={graph.x(selected)} cy={graph.y(sourceTerminalPrices[selected])} r="3" fill="#8fb2ff" stroke="#11151c" strokeWidth="1.5" /></g>}
         {graph.ticks.map((index, position) => <text className="tf-source-date" key={index} x={graph.x(index)} y={height - 10} textAnchor={position === 0 ? 'start' : position === graph.ticks.length - 1 ? 'end' : 'middle'} fill="#9aa0a6" fontSize="11">{dateLabel(index)}</text>)}
       </svg>
-      <p className="tf-chart-caption">과거 검증 구간의 매수(▲)와 매도(▼) 지점{compact && evaluation.r.trades.length > 40 && <span>최근 40회 거래 표시</span>}{resolution !== '1D' && <span>옅은 선은 일별 종가</span>}</p>
-      <p className="tf-source-sr" id={`${id}-summary`}>{dateLabel(start)}부터 {dateLabel(end)}까지 {end - start + 1}개 합성 일봉. 수익률 {evaluation.r.ret.toFixed(2)}%, 최대 낙폭 {evaluation.r.mdd.toFixed(2)}%, 완료 거래 {evaluation.r.n}회. 마커는 진입·청산일의 종가 위치이며 규칙상 체결 가격과 다를 수 있습니다. 실제 시장 데이터가 아닙니다.</p>
-      <p className="tf-source-sr" id={`${id}-help`}>방향키로 하루씩, PageUp과 PageDown으로 30일씩, Home과 End로 구간 처음과 끝을 확인하세요.</p>
+      <p className="tf-chart-caption">{d("과거 검증 구간의 매수(▲)와 매도(▼) 지점")}{compact && evaluation.r.trades.length > 40 && <span>{d("최근 40회 거래 표시")}</span>}{resolution !== '1D' && <span>{d("옅은 선은 일별 종가")}</span>}</p>
+      <p className="tf-source-sr" id={`${id}-summary`}>{d('{0}부터 {1}까지 {2}개 합성 일봉. 수익률 {3}%, 최대 낙폭 {4}%, 완료 거래 {5}회. 마커는 진입·청산일의 종가 위치이며 규칙상 체결 가격과 다를 수 있습니다. 실제 시장 데이터가 아닙니다.',dateLabel(start),dateLabel(end),end-start+1,evaluation.r.ret.toFixed(2),evaluation.r.mdd.toFixed(2),evaluation.r.n)}</p>
+      <p className="tf-source-sr" id={`${id}-help`}>{d("방향키로 하루씩, PageUp과 PageDown으로 30일씩, Home과 End로 구간 처음과 끝을 확인하세요.")}</p>
     </>}
   </div>
 }

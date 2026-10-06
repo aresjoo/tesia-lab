@@ -3,7 +3,7 @@ import { useClientPreferences } from '../client-preferences'
 import copy from '../client-settings-copy.json'
 import { nativeAccountText } from '../internal-poc/native-account-presentation-copy'
 import { securityText } from '../client-settings-security-copy'
-import { notificationMandatoryText } from '../client-settings-notifications-copy'
+import { notificationGroupText, notificationMandatoryText } from '../client-settings-notifications-copy'
 import { readClientNotificationPreferences, type ClientNotificationGroups, type ClientNotificationRequest, type ClientNotificationRow } from '../client-settings-notifications-presentation'
 type Props = { groups?: ClientNotificationGroups; scopeId?: string | null; onRequest?: ClientNotificationRequest }
 export function ClientSettingsNotifications(props: Props) {
@@ -37,7 +37,7 @@ function NotificationContent({ groups, onRequest }: Props) {
   return <section className="stg-sec client-settings-notifications" aria-busy={pending} data-source-notification-valid={!presentation.invalid}>
     <div className="stg-card">{presentation.topics.map(({ topic, push, email }) => {
       const [label, description] = labels[topic], hintId = `${hint}-${topic}`
-      return <div key={topic} className="stg-r" data-notification-topic={topic}><div className="k"><b>{s(label)}</b><span id={hintId}>{s(description)}</span></div><div className="a"><div className="stg-seg multi" role="group" aria-label={language === 'ko' ? s(label) + ' 알림' : s(label)}>
+      return <div key={topic} className="stg-r" data-notification-topic={topic}><div className="k"><b>{s(label)}</b><span id={hintId}>{s(description)}</span></div><div className="a"><div className="stg-seg multi" role="group" aria-label={notificationGroupText(language, s(label))}>
         {(['push','email'] as const).map(channel => {
           const row = channel === 'push' ? push : email, known = row?.checked === true || row?.checked === false
           const locked = topic === 'bill' && channel === 'email' && row !== null

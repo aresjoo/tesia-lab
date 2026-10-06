@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { ClientAccountTerminal, type ClientAccountTerminalControl, type ClientAccountTerminalEntry, type ClientEmptyTerminalMarket } from './ClientAccountTerminal'
 import { ClientAgentFeed } from './ClientAgentFeed'
@@ -35,6 +36,7 @@ import type { ClientAgentOperation } from '../client-agent-view'
 import type { SourceUserStrategyRecord } from '../client-user-strategy'
 import { projectUserTerminal } from '../client-user-terminal'
 import { ClientConditionalOrderPendingRows } from './ClientConditionalOrderCard'
+import { sourceActionLogLocaleText } from '../client-user-strategy-locale-copy'
 import type { ConditionalOrderPreviewOrder } from '../client-conditional-order-preview'
 import '../client-restored-research.css'
 import '../client-source-terminal.css'
@@ -105,7 +107,7 @@ function SourceCompleted({ model: { seed, result }, money, onTrade }: { model: M
   return <div className="cst-completed"><h3>{t('completed')} <small>{t('completedRange', { total: String(result.trades.length), recent: String(Math.min(12, result.trades.length)) })}</small></h3>{result.trades.slice(-12).reverse().map(tr => {
     const entered = result.L.evs.find(ev => ev.i === tr.entry), exited = result.L.evs.find(ev => ev.i === tr.exit)
     const exit = sourceTradeExitPrice({ seed, result }, tr)
-    return <article className="cst-completed-trade" key={tr.entry}><header><b>LONG · {seed.asset}</b><span className={sourceTone(tr.krw)}><SourceValuePair first={money(tr.krw, true)} second={`(${sharedPercent(tr.pnl * 100, language)})`} /></span></header><dl className="cst-matrix compact">{([['entry', money(sourceTerminalPrices[tr.entry])], ['exit', money(exit)], ['holding', terminalBarsText(language, tr.exit - tr.entry)], ['fee', money(tr.capB * .002)]] as const).map(([key, value]) => <div key={key} data-metric={key}><dt>{t(key)}</dt><dd>{value}</dd></div>)}</dl><p><small>{t('whyEntered')}</small>{entered?.txt}</p><p><small>{t('whyExited')}</small>{exited?.txt}</p><span className="cst-date">{sourceDay(tr.entry)} → {sourceDay(tr.exit)}</span><button type="button" className="cst-trade-details" onClick={event => onTrade(seed.id, tr.entry, event.currentTarget)}>{t('fullDecision')}</button></article>
+    return <article className="cst-completed-trade" key={tr.entry}><header><b>LONG · {seed.asset}</b><span className={sourceTone(tr.krw)}><SourceValuePair first={money(tr.krw, true)} second={`(${sharedPercent(tr.pnl * 100, language)})`} /></span></header><dl className="cst-matrix compact">{([['entry', money(sourceTerminalPrices[tr.entry])], ['exit', money(exit)], ['holding', terminalBarsText(language, tr.exit - tr.entry)], ['fee', money(tr.capB * .002)]] as const).map(([key, value]) => <div key={key} data-metric={key}><dt>{t(key)}</dt><dd>{value}</dd></div>)}</dl><p><small>{t('whyEntered')}</small>{entered && sourceActionLogLocaleText(language, entered.txt)}</p><p><small>{t('whyExited')}</small>{exited && sourceActionLogLocaleText(language, exited.txt)}</p><span className="cst-date">{sourceDay(tr.entry)} → {sourceDay(tr.exit)}</span><button type="button" className="cst-trade-details" onClick={event => onTrade(seed.id, tr.entry, event.currentTarget)}>{t('fullDecision')}</button></article>
   })}{!result.trades.length && <div className="cst-empty"><b>{t('noCompleted')}</b><p>{t('noCompletedHint')}</p></div>}</div>
 }
 function SourceAgentComposer({ model: { seed }, onAsk, onApply, canResume, onResume, onBeforeAi }: { model: Model; onAsk: (text: string) => void; onApply?: (proposal: SourceTerminalProposal) => Promise<SourceAppliedReceipt>; canResume?: (receipt: SourceAppliedReceipt) => boolean; onResume?: (receipt: SourceAppliedReceipt) => Promise<void>; onBeforeAi?: () => boolean }) {
@@ -239,6 +241,7 @@ export default function ClientSourceTerminalWorkspace({ marketSource, marketScop
   emptyMarket?: ClientEmptyTerminalMarket
   management?: { label: string; backLabel: string; content: ReactNode }
 }) {
+  const localeUi = useStaticUiCopy()
   const [mountedAt] = useState(Date.now)
   const accountNow = now ?? mountedAt
   const [state, setState] = useState(initialSourceTerminalState)
@@ -342,6 +345,7 @@ export default function ClientSourceTerminalWorkspace({ marketSource, marketScop
       contextTools: <SourceContextActions key={seed.id} seed={seed} disabled={pendingStatuses.has(seed.id) || user !== undefined && onUserStatus === undefined} onStatus={requestStatus} onReconnect={reconnect} />,
       statusHeader: <ClientSourceJudgmentStatus seed={seed} result={result} exchangeName={exchange.name} preview={accountDataMode === 'source-preview' && !user} watch={previewBillingMode === 'watch'} />,
       agent: <><ClientAgentFeed ruleJournal strategyId={seed.id} events={events[index]} operations={operations[seed.id]} error={seed.error} onReconnect={() => reconnect(seed.id)} sourceLabel={t('sourceLabel')}
+        displayText={text => sourceActionLogLocaleText(language, text)}
         statusSummary={previewBillingMode === 'watch' ? billingText(language, 'standbyDescription') : undefined}
         />{user && <div className="cst-context-actions"><button type="button" disabled={!onAccountNavigate} onClick={() => onAccountNavigate?.(`#/trade/bot/${user.record.id}`)}>{strategyActionsText(language, 'detail')}</button></div>}<SourceAgentComposer key={seed.id} model={model} onAsk={onAsk} onApply={user ? undefined : apply} canResume={user ? undefined : receipt => canResumeSourceApplied(state, receipt)} onResume={user ? undefined : resumeApplied} onBeforeAi={onBeforeAi ?? (() => previewBillingMode !== 'watch')} /></>,
       dashboard: <SourceDashboard model={model} money={money} onTrade={(id, index, trigger) => openTrade(id, index, trigger, true)} onVersions={(id, trigger) => setMenu({ id, trigger, view: 'versions' })} />, completed: <SourceCompleted model={model} money={money} onTrade={openTrade} />,
@@ -349,12 +353,12 @@ export default function ClientSourceTerminalWorkspace({ marketSource, marketScop
   })
   const missingEntries: ClientAccountTerminalEntry[] = users.filter(user => !user.model).map(user => {
     const r = user.record, broker = CLIENT_BROKERS.find(item => item.id === r.exchangeId)
-    return { strategy: { id: user.id, name: r.name, symbol: r.asset ? `${r.asset}/KRW` : '자산 미확인', market: r.environment === 'paper' ? '위임 실행 · 가상' : '위임 실행 · 시뮬레이션', version: r.version ?? '—', status: r.status,
-      exchange: { id: r.exchangeId ?? 'unlinked', name: r.exchangeName ?? broker?.name ?? t('unknownExchange'), color: broker?.col ?? 'var(--gp)', foreground: broker?.fg ?? 'var(--gt)' }, capitalLabel: r.capital === undefined ? '투자금 미확인' : money(r.capital) }, chart: null,
-      context: <div className="cst-context-actions"><span>저장된 검증 결과 · 계산 설정 미공급</span><button type="button" disabled={!onAccountNavigate} onClick={() => onAccountNavigate?.(`#/trade/bot/${r.id}`)}>{strategyActionsText(language, 'detail')}</button></div>,
-      agent: <ClientAgentFeed strategyId={user.id} events={null} sourceLabel="저장된 전략 설정 확인 필요" />,
-      dashboard: <div className="cst-dashboard"><h3>저장된 검증 결과</h3><dl className="cst-matrix">{[['TETH Score', `${r.score}`], ['검증 수익률', sourcePercent(r.ret)], ['최대 낙폭', `${r.mdd}%`], ['거래 수', `${r.n}회`], ['승률', `${r.winRate}%`]].map(([k,v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>,
-      completed: <p className="cst-empty">체결 기록을 확인하지 못했습니다.</p>,
+    return { strategy: { id: user.id, name: r.name, symbol: r.asset ? `${r.asset}/KRW` : localeUi.fixed('자산 미확인'), market: localeUi.fixed(r.environment === 'paper' ? '위임 실행 · 가상' : '위임 실행 · 시뮬레이션'), version: r.version ?? '—', status: r.status,
+      exchange: { id: r.exchangeId ?? 'unlinked', name: r.exchangeName ?? broker?.name ?? t('unknownExchange'), color: broker?.col ?? 'var(--gp)', foreground: broker?.fg ?? 'var(--gt)' }, capitalLabel: r.capital === undefined ? localeUi.fixed('투자금 미확인') : money(r.capital) }, chart: null,
+      context: <div className="cst-context-actions"><span>{localeUi("저장된 검증 결과 · 계산 설정 미공급")}</span><button type="button" disabled={!onAccountNavigate} onClick={() => onAccountNavigate?.(`#/trade/bot/${r.id}`)}>{strategyActionsText(language, 'detail')}</button></div>,
+      agent: <ClientAgentFeed strategyId={user.id} events={null} sourceLabel={localeUi("저장된 전략 설정 확인 필요")} />,
+      dashboard: <div className="cst-dashboard"><h3>{localeUi("저장된 검증 결과")}</h3><dl className="cst-matrix">{[['TETH Score', `${r.score}`], ['검증 수익률', sourcePercent(r.ret)], ['최대 낙폭', `${r.mdd}%`], ['거래 수', localeUi('{count}회', { count: r.n })], ['승률', `${r.winRate}%`]].map(([k,v]) => <div key={k}><dt>{localeUi.fixed(k)}</dt><dd>{v}</dd></div>)}</dl></div>,
+      completed: <p className="cst-empty">{localeUi("체결 기록을 확인하지 못했습니다.")}</p>,
     }
   })
   const entries = [...users.flatMap(user => {
@@ -388,11 +392,11 @@ export default function ClientSourceTerminalWorkspace({ marketSource, marketScop
       railFooter={t('railFooter')}
       renderBottom={(selectedId, scope) => [
         ...(accountDataMode === 'source-preview'
-          ? sourceTerminalBottomTabs({ models, selectedId, scope, money, onSelect: id => control.current?.select(id), onPause: id => requestStatus(id, 'off'), pauseDisabled: id => pendingStatuses.has(id) || id.startsWith('user:') && !onUserStatus, onTrade: (id, index, trigger) => openTrade(id, index, trigger, true) })
-          : (['pos', 'open', 'orders', 'fills', 'closed', 'assets'] as const).map(id => ({ id, label: clientTerminalText(language, id), content: <>{id === 'open' && conditionalOrders?.orders.length ? <div className="co-pending-preview client-terminal-ledger" data-order-source="mock"><div className="tft-tblw"><table className="tft-tbl"><thead><tr>{['거래소', '전략', '심볼', '방향', '유형', '가격', '수량', '상태', ''].map((label, index) => <th scope="col" key={index}>{label}</th>)}</tr></thead><tbody><ClientConditionalOrderPendingRows source="mock" {...conditionalOrders} /></tbody></table></div></div> : null}<ClientTerminalConnectionEmpty onConnect={onConnectExchange} /></> }))),
+          ? sourceTerminalBottomTabs({ language, models, selectedId, scope, money, onSelect: id => control.current?.select(id), onPause: id => requestStatus(id, 'off'), pauseDisabled: id => pendingStatuses.has(id) || id.startsWith('user:') && !onUserStatus, onTrade: (id, index, trigger) => openTrade(id, index, trigger, true) })
+          : (['pos', 'open', 'orders', 'fills', 'closed', 'assets'] as const).map(id => ({ id, label: clientTerminalText(language, id), content: <>{id === 'open' && conditionalOrders?.orders.length ? <div className="co-pending-preview client-terminal-ledger" data-order-source="mock"><div className="tft-tblw"><table className="tft-tbl"><thead><tr>{['거래소', '전략', '심볼', '방향', '유형', '가격', '수량', '상태', ''].map((label, index) => <th scope="col" key={index}>{localeUi.fixed(label)}</th>)}</tr></thead><tbody><ClientConditionalOrderPendingRows source="mock" {...conditionalOrders} /></tbody></table></div></div> : null}<ClientTerminalConnectionEmpty onConnect={onConnectExchange} /></> }))),
         ...(accountState && onAccountNavigate ? [
           // Source 2436a1f: six trading tabs; notifications remain accessible through the bell.
-          { id: 'alerts', label: '알림', hiddenFromTabs: true, count: accountState.notifs.filter(item => !item.read).length, content: <ClientAccountAlerts state={accountState} now={accountNow} money={money} onRead={onRead} onReadAll={onReadAll} onNavigate={onAccountNavigate} /> },
+          { id: 'alerts', label: localeUi.fixed('알림'), hiddenFromTabs: true, count: accountState.notifs.filter(item => !item.read).length, content: <ClientAccountAlerts state={accountState} now={accountNow} money={money} onRead={onRead} onReadAll={onReadAll} onNavigate={onAccountNavigate} /> },
         ] : []),
       ]} />
     {trade && tradeModel && tradeSteps && <ClientTradeLifecycle title={lifecycleText(language, 'title', { asset: tradeModel.seed.asset })} steps={tradeSteps} trigger={trade.trigger} onClose={() => setTrade(null)} />}

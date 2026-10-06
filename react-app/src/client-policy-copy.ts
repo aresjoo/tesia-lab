@@ -9,8 +9,8 @@ const rows = {
   technologies: ['기술', 'Technologies', '技術', '技术', '技術', 'Tecnologías', 'Technologies'],
   faq: ['자주 묻는 질문', 'Frequently asked questions', 'よくある質問', '常见问题', '常見問題', 'Preguntas frecuentes', 'Questions fréquentes'],
 } as const
-// Only chrome is translated. Authored legal content remains Korean, explicitly
-// marked lang=ko, under the existing publication/review gate.
+// Navigation and body now use the selected language. Korean legal meaning and
+// the existing publication/review gate remain unchanged by localization.
 export function policyLabels(language: ClientLanguage) {
   const index = languages.indexOf(language)
   return {

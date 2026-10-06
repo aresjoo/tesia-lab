@@ -1,3 +1,4 @@
+import { useStaticUiCopy } from '../client-static-ui-copy'
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowUp, Maximize2, Minimize2, Plus } from 'lucide-react'
@@ -38,6 +39,7 @@ function focusEditor(input: HTMLTextAreaElement, selection: EditorSelection | nu
 
 /** Owns input sizing and transient UI; conversation state stays with the app. */
 export function ClientComposer({ value, disabled, maxLength, inputRef, onChange, onSend, onLogin, onHeightChange, contextChips, contextPrompt, canSend = Boolean(value.trim()), signedIn = false }: Props) {
+  const localeUi = useStaticUiCopy()
   const mapSiteHref = useSiteHrefMapper()
   const [multiline, setMultiline] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
@@ -196,14 +198,14 @@ export function ClientComposer({ value, disabled, maxLength, inputRef, onChange,
     action()
   }
   const composer = (
-    <section ref={pillRef} className={`client-home-pill ${multiline ? 'is-multiline' : ''} ${fullscreen ? 'is-fullscreen' : ''} ${contextPrompt ? 'has-template' : ''}`} aria-label="TETH AI에게 아이디어 말하기">
+    <section ref={pillRef} className={`client-home-pill ${multiline ? 'is-multiline' : ''} ${fullscreen ? 'is-fullscreen' : ''} ${contextPrompt ? 'has-template' : ''}`} aria-label={localeUi("TETH AI에게 아이디어 말하기")}>
       {contextChips}
       <button ref={plusRef} className="client-home-plus" type="button" aria-label={t('plus.t')} aria-expanded={plusOpen} aria-controls={plusOpen ? plusId : undefined}
         onPointerEnter={event => { if (event.pointerType === 'mouse') hoverPlus() }}
         onPointerLeave={event => { if (event.pointerType === 'mouse') leavePlus() }}
         onClick={() => { clearPlusTimers(); setPlusOpen((open) => !open) }}><Plus size={20} strokeWidth={1.5} /></button>
       <textarea
-        id="strategy-idea" ref={inputRef} aria-label={language === 'ko' ? '시장이나 전략에 대해 물어보세요' : t('home.idea')}
+        id="strategy-idea" ref={inputRef} aria-label={language === 'ko' ? localeUi("시장이나 전략에 대해 물어보세요") : t('home.idea')}
         value={value} disabled={disabled} maxLength={maxLength} onChange={(event) => onChange(event.target.value)}
         onKeyDown={(event) => {
           // Native dialog cancel follows keydown and carries no IME metadata.
@@ -213,11 +215,11 @@ export function ClientComposer({ value, disabled, maxLength, inputRef, onChange,
         }}
         rows={1}
       />
-      <button ref={expandRef} className="client-expand" type="button" aria-label={fullscreen ? (language === 'ko' ? '입력창 축소' : t('comp.exit')) : t('comp.full')} onClick={() => { closePlus(); if (fullscreen) collapse(); else { rememberSelection(); setFullscreen(true) } }}>
+      <button ref={expandRef} className="client-expand" type="button" aria-label={fullscreen ? (language === 'ko' ? localeUi("입력창 축소") : t('comp.exit')) : t('comp.full')} onClick={() => { closePlus(); if (fullscreen) collapse(); else { rememberSelection(); setFullscreen(true) } }}>
         {fullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
       </button>
       <span className="client-pill-spacer" />
-      {canSend && <button className="client-home-send" type="button" disabled={disabled} aria-label={language === 'ko' ? '대화 시작' : t('home.send')} onClick={() => handOff(onSend)}><ArrowUp size={20} /></button>}
+      {canSend && <button className="client-home-send" type="button" disabled={disabled} aria-label={language === 'ko' ? localeUi("대화 시작") : t('home.send')} onClick={() => handOff(onSend)}><ArrowUp size={20} /></button>}
       {plusOpen && <div ref={popoverRef} id={plusId} className="client-plus-popover" role="region" aria-labelledby={`${plusId}-title`}
         onPointerEnter={event => { if (event.pointerType === 'mouse') clearPlusTimers() }}
         onPointerLeave={event => { if (event.pointerType === 'mouse') leavePlus() }}
@@ -230,7 +232,7 @@ export function ClientComposer({ value, disabled, maxLength, inputRef, onChange,
     </section>
   )
   return fullscreen ? createPortal(
-    <dialog ref={dialogRef} className="client-composer-dialog" aria-label="전체 화면 입력" onCancel={(event) => { event.preventDefault(); collapse() }}>
+    <dialog ref={dialogRef} className="client-composer-dialog" aria-label={localeUi("전체 화면 입력")} onCancel={(event) => { event.preventDefault(); collapse() }}>
       {composer}
     </dialog>, document.body,
   ) : composer

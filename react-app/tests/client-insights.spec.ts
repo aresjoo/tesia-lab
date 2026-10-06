@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { CLIENT_INSIGHTS, CLIENT_INSIGHT_SOURCE } from '../src/client-insight-fixtures'
 import { insightSourceCopy, insightTagLabel } from '../src/client-insight-source-copy'
+import previewLocaleCopy from '../src/client-insights-preview-locale-copy.json' with { type: 'json' }
 
 async function mount(page: Page, props: { signedIn?: boolean; initialSlug?: string; initialTag?: string; failAsk?: boolean; failFeedback?: boolean; feedbackReady?: boolean; controlled?: boolean } = {}) {
   await page.route('**/insight-test.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body style="margin:0;background:#0f1012"></body></html>' }))
@@ -65,14 +66,18 @@ test('7언어 변경에도 태그 필터·기사·평가를 보존하고 확대�
   await page.setViewportSize({ width: 320, height: 920 })
   await mount(page, { signedIn: true, feedbackReady: true, controlled: true, initialTag: 'bitcoin' })
   const count = await page.locator('.nfz-t1 .nfz-card').count()
+  // Static UI now follows the selected language; article identity/feedback and
+  // supplied article content are still preserved by the assertions below.
+  const prefixes = { ko: '태그: ', en: 'Tag: ', ja: 'タグ: ', 'zh-CN': '标签: ', 'zh-TW': '標籤: ', es: 'Etiqueta: ', fr: 'Étiquette : ' }
   for (const language of ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const) {
     await page.evaluate(async language => { const path = '/src/client-preferences.ts'; (await import(/* @vite-ignore */ path)).setClientPreference('language', language) }, language)
-    await expect(page.locator('.nfz-sh h2').first()).toHaveText(`태그: ${insightTagLabel(language, 'bitcoin')}`)
+    await expect(page.locator('.nfz-sh h2').first()).toHaveText(`${prefixes[language]}${insightTagLabel(language, 'bitcoin')}`)
     await expect(page.locator('.nfz-t1 .nfz-card')).toHaveCount(count)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   }
+  const selectedSlug = await page.locator('.nfz-t1 .nfz-card').first().getAttribute('data-article')
+  const selectedOriginal = CLIENT_INSIGHTS.find(article => article.slug === selectedSlug)!
   await page.locator('.nfz-t1 .nfz-card').first().click()
-  const title = await page.locator('.nfz-a h1').textContent()
   await page.getByRole('button', { name: insightSourceCopy('fr', 'positive'), exact: true }).click()
   // Double actual text, including pixel-sized source typography.
   await page.evaluate(() => {
@@ -82,7 +87,9 @@ test('7언어 변경에도 태그 필터·기사·평가를 보존하고 확대�
   })
   for (const language of ['en', 'ko', 'fr'] as const) {
     await page.evaluate(async language => { const path = '/src/client-preferences.ts'; (await import(/* @vite-ignore */ path)).setClientPreference('language', language) }, language)
-    await expect(page.locator('.nfz-a h1')).toHaveText(title!)
+    // New localization policy translates owned preview copy while preserving
+    // the selected article identity and confirmed feedback across languages.
+    await expect(page.locator('.nfz-a h1')).toHaveText(language === 'ko' ? selectedOriginal.title : previewLocaleCopy[selectedOriginal.title as keyof typeof previewLocaleCopy][language])
     await expect(page.locator('.nfz-fbb.on')).toHaveText(insightSourceCopy(language, 'positive'))
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     expect(await page.locator('.nfz-fbb').evaluateAll(nodes => nodes.every(el => el.scrollWidth <= el.clientWidth + 2))).toBe(true)

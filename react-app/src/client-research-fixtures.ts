@@ -12,4 +12,5 @@ export const RESEARCH_DOCUMENTS = [
 ] as const
 export type ClientResearchDocumentId = typeof RESEARCH_DOCUMENTS[number][0] | 'activity'
 export const researchDocumentTitle = (id: ClientResearchDocumentId) => id === 'activity' ? 'Activity' : RESEARCH_DOCUMENTS.find(row => row[0] === id)?.[1] ?? id
-export const researchPercent = (value: number, digits = 1) => `${value >= 0 ? '+' : ''}${value.toFixed(digits)}%`
+/** Locale-aware display only; fixture values and default source formatting are unchanged. */
+export const researchPercent = (value: number, digits = 1, language?: import('./client-preferences').ClientLanguage) => `${value >= 0 ? '+' : ''}${language ? new Intl.NumberFormat(language, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(Number(value.toFixed(digits))) : value.toFixed(digits)}%`
