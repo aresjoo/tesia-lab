@@ -2,13 +2,13 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-최신 React 스냅샷은 **`agent/web/menu-download-parity@0f639149e0e3f77f09e931785317de8b34cb6a62`**입니다. 전체2237파일/26280108bytes/snapshot `33b3b9dd16ba15b426f7b33c12a5e7522a051f97fe2ca00887f7faf04d84e100`, syncverify0·dirty/deleted/이전경로삭제0입니다. 이름변경 안내10PASS·다운로드원문과로고/SVG28PASS·해당lint0이며 새build/whole/운영0입니다. 부모a8의3build는 이전 입력 근거로 보존합니다. 통합인증fix는유지하며 7dd기반copy-only release는별도후보입니다. 최신 `candidate.currentMenuDownloadParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)를 따릅니다.
+최신 React 출처와 전체 파일 해시는 [migration-manifest.json](migration-manifest.json)을 따릅니다. 통합 `agent/web/help-policy-link-parity`의 코드·시험·문서를 전달하며 통합 인증 교정과 원문 푸터를 보존합니다. 별도 승인된 정적 UI26(source `8a757a5`)은 **teth.ai에 배포하고 공개 확인까지 완료**했습니다. 현재 운영은 기존 인증·운영 푸터·API·flags를 유지합니다. 정확한 범위와 증거는 `candidate.currentStaticUiPromotion` 및 [Bugfix 보고서](react-app/Bugfix_report.md)를 따릅니다.
 
 아래 전수·빌드·모델 수치는 부모 입력의 이력입니다. 새부분 검증을 이전 전체 PASS로 합산하지 않습니다. 기존 인증 교정을 제거해 합격 후보를 만들지 않으며 부모의 권위 범위 HOLD도 유지합니다. 푸터 카피는 Bitget 선정·실주문 가용성을 증명하지 않습니다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 
-ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE의 장시간 검증 증거 결합 경계에 따라 역사 전수와 exact 영향40을 별도 결속한다. 이는 공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 최고급 독립 모델·최종 gate·archive/권위CAS·공개smoke·원자적전환/롤백은 pending/HOLD다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 운영teth.ai7dd·원root·운영9객체·DB/730일은 유지한다. 실provider/Reactprompt/서비스GO0이다.
+ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE 경계에 따라 역사 전수와 exact 영향40을 별도 결속합니다. 전체PASS나 실제 서비스 승인이 아닙니다. 이번 UI26 정적배포는 개인1 실제 Opus5.5 GO·원자적 고정 디렉터리 교환·backup·공개3폭/4문서/350자산 확인을 마쳤습니다. 점검503/재시작을 사용하므로 무중단 배포는 아닙니다. 실제provider·Reactprompt·거래소/주문·전체서비스 GO는 여전히 별도입니다. 원root·원FAIL·WIP·DB/730일 자료는 유지합니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.
@@ -23,7 +23,7 @@ ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOV
 
 부모 source9d/2212/4f0의 단일539spec/15,026개는 15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0로 종료했습니다. 이 전수를 최신 카피 입력의 전체PASS로 승계하거나878과 합산하지 않습니다. 이전68/26/390과 모든 원FAIL/Low·미확정 GC인과는 별도 이력으로 보존합니다. 정적 프론트 승격은 최종정적 release 검수·정확한 archive/권위CAS·공개smoke·원자적전환/롤백 확인 전 HOLD입니다. 실제 로그인·React 프롬프트·전체 서비스 승인은 별도이며 실 OAuth 미검증만으로 모든 정적 UI 승격을 금지하는 정책은 아닙니다.
 
-**현재 teth.ai는 이전 출처 `7dd066f`의 정적 UI입니다.** 이번 초안으로 교체하지 않았습니다. [검증 기록](migration-verification.json)의 현재 후보와 이전 운영 배포 증거를 구분해 확인하세요. 실제 사용자 Google callback/ACK 완료, Apple·이메일 운영 연결, React 프롬프트·거래소·주문 활성화 및 전체 서비스 완료는 미검증/미완료입니다.
+**직전 운영 이력:** teth.ai의 이전 정적 출처는 `7dd066f`였습니다. 현재는 위 UI26(source8a757a5) 선배포 상태를 따릅니다. [검증 기록](migration-verification.json)의 통합 스냅샷과 실제 운영 출처를 구분하세요. 실제 공급자 인증 완료·프롬프트·거래소/주문 활성화·전체서비스 완료로 확대하지 않습니다.
 
 이전8197에서 발견한 French320의 두 행 인증 배치 회귀와861의 복귀 버튼 가림은 현재 CSS 두 항목으로 교정했습니다. 원 신규48의16PASS/32FAIL을 보존하고 같은48키와 기존20키의 단일68PASS에 결속했습니다. 실제 hero 질문 한 번·선언 합성 CREATE/TURN으로 대화 뒤에도 계정 문서 진입과 강제클릭 없는 복귀를 검증했습니다. 다른 장문 번역·glyph 잘림·실Safari 및 원 계정 정책 동등성은 Low/미검증으로 남습니다.
 

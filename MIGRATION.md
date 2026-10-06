@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@9ef08290c159e156b6b681d773f974fac2a38f3d` 전체. 제품/시험2b4불변·MD2만운영도구보완명시승인추가. 통합인증fix·원문푸터 보존·정적후보별도·실배포미실행 |
+| React 출처 | `agent/web/help-policy-link-parity@ed22148eea95f370d818933df540969d56ad0c4b` 전체2245파일. 제품/시험2b4불변·MD2만 실제 정적배포 기록 갱신. 통합인증fix·원문푸터 보존·운영은 별도 static8a757a5 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 명시 승인된 원자적 배포 도구 보완 준비
+### 최신 전달 — 승인된 정적 UI26 운영 배포 완료
+
+통합 전체 React 출처·파일 수·해시는 migration-manifest.json의 실제 동기화 결과를 따른다. 통합 제품/시험2b4·인증 교정·원문 푸터는 변경하지 않는다. 별도 source8a757a5의 승인된 UI26만 teth.ai에 반영했고 기존 운영7dd 인증·푸터·API/flags는 유지했다. 실제 archive84331e4e·rawHTMLcb722047·updaterc1f0d37a 및 전체 해시는 `candidate.currentStaticUiPromotion.operatingDelivery`에 결속한다.
+
+atomic15PASS/actual0·personal(1) 실제 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M3(nonblocking), ROOT reviewed32inputs/freeze exact 검산을 마쳤다. package/upload/install·preflight/activate/postflight actual0이며 고정 실디렉터리 RENAME_EXCHANGE/배타잠금·기존 backup·private authority 불변을 확인했다. 물리symlink/무중단이 아니며 점검503/재시작을 사용한다. 공개3폭3PASS(actual0)·정적GET73/48/58·오류/불일치/외부/mutation/WS0, 별도 HTTPS4문서/350등록자산 exact GET actual0다. 공개HTML10625bytes/SHAf1798fbc·UTC08:30:28.354 확인이다. 실로그인은 수행하지 않았으며 합성 익명 GET 표시와 실제provider를 구분한다.
+
+Decision(accepted / bounded operating delivery): 원본 모델 CLI JSON 뒤 guard footer의 첫collector parseexit1과 공개probe320의 cleanup 후5counter가 PASS에 누락된 원자료는 보존했다. 모델 실제응답0을 새호출 없이 회수하고 사설 공개하니스의 pending route drain/최종counter 검사만 교정해 확인했다. 제품/시험/build/새whole 변경0·원FAIL/WIP/730일 보존이다. M1 자동 gate 결속 강화는 다음 검수된 도구 변경의 잔여, M2 성공후 rollback runbook은 activation 전 고정, M3 운영7dd 가시Mock고지 부재는 기존 위험으로 유지한다. 실제 서비스/법률/provider GO가 아니다. 이전57 candidate/운영역사·클라이언트 원본 root/main은 보존한다.
+
+### 직전 전달 — 명시 승인된 원자적 배포 도구 보완 준비
 
 통합 전체2245파일/26394280bytes/snapshot `3f7351a869e9f1bf78439ceefcf0c034891d307856ab19daca0ec96ad9a61d56`를 전달한다. source9ef0829는b6297be 위 README/Bugfix2파일만 갱신했고 제품/시험·통합 인증 교정·원문 푸터는 그대로다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 기존57 candidate항목과 다른 top-level 역사·원본root/main을 보존한다. 기존 `candidate.currentStaticUiPromotion`의 승인 상태만 갱신한다.
 
