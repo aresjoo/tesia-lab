@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "최신 currentHelpDecorationParity는 공유 도움말 원본 장식 복원과 관련12PASS만 증명한다. 이전 currentRestorationBatchEvidence/ReleaseReview 및 모든 역사 증거는 그대로 보존한다. 인증 권위 범위 HOLD·새build/whole/package/VM0·운영7dd/DB/730일 불변이며 전체·실service GO가 아니다.",
-  "sourceCommit": "7684e674f8f05f94678f36c98c832e8beb728255",
+  "purpose": "최신 currentSidebarFooterParity는 한국어 푸터 원문·sidebar Promise·globe 원문·IME 입력의 부분검증과 모인 입력의3build만 증명한다. 이전current와 역사 증거는 불변 보존한다. 인증 권위 범위 HOLD·새whole/package/VM0·운영7dd/DB/730일 불변이며 전체·실service GO가 아니다.",
+  "sourceCommit": "a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98",
+  "snapshotDigest": "56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -731,27 +731,53 @@
     }
   ],
   "candidate": {
-    "status": "HELP_DECORATION_SCOPED_PASS_FINAL_BUILD_AND_AUTHORITY_PENDING",
-    "sourceBranch": "agent/web/help-decoration-parity",
-    "sourceCommit": "7684e674f8f05f94678f36c98c832e8beb728255",
+    "status": "SIDEBAR_FOOTER_SCOPED_PASS_THREE_BUILDS_AUTHORITY_HOLD",
+    "sourceBranch": "agent/web/sidebar-selection-copy-parity",
+    "sourceCommit": "a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
     "captureTimeAuthority": "migration-manifest.json capturedAt",
     "frozenInput": {
-      "status": "HISTORICAL_PARENT_NOT_CURRENT_HELP_INPUT",
+      "status": "HISTORICAL_PARENT_NOT_CURRENT_INPUT",
       "sourceCommit": "4b77b8702e2419bd174bc2133d31df8ed5ea425f",
       "files": 2226,
       "sha256": "0364ca93cb2b617067e615ec7dd151333a01e0b5f499a89d60a20747c0d4fbd7"
     },
     "publicBuild": {
-      "status": "HISTORICAL_PARENT_CURRENT_HELP_BUILD_PENDING",
+      "status": "HISTORICAL_PARENT_OUTPUT_CURRENT_BUILDS_IN_CURRENT_SIDEBAR_FOOTER_PARITY",
       "sourceCommit": "84e82a939d8873c0b8bbd7b7f3e03a6f386e768e",
       "files": 1132,
       "sha256": "3e06ade79baafb7294d509472d6c9ef753c131ce1ae772977d4e6284ae89d689"
     },
     "serviceBuild": {
-      "status": "HISTORICAL_PARENT_CURRENT_HELP_BUILD_PENDING",
+      "status": "HISTORICAL_PARENT_OUTPUT_CURRENT_BUILDS_IN_CURRENT_SIDEBAR_FOOTER_PARITY",
       "sourceCommit": "84e82a939d8873c0b8bbd7b7f3e03a6f386e768e",
       "files": 1113,
       "sha256": "21a980314f20c0b93bf991e025764d2da7882e9a72eded8ff28b260072170c0e"
+    },
+    "currentSidebarFooterParity": {
+      "sourceCommit": "a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
+      "baseCommit": "7684e674f8f05f94678f36c98c832e8beb728255",
+      "status": "SCOPED_PASS_NOT_WHOLE_OR_RELEASE_GO",
+      "changes": ["ko footer intro/tagline/consent exact original; copyright unchanged, other6languages not restored", "Native sidebar returns actual selectConversation Promise", "globe menu.glc original two consumers", "Conversation IME229 guard and original spellCheck/autocomplete"],
+      "tests": {
+        "footer": {"redFailed":1,"redExit":1,"greenPassed":20,"greenExit":0,"greenDurationMs":19490.472,"greenRawSha256":"0b58a2898ffa08eb9941215bdfbc38ecf78875a0811dade439b89d0e95c4fa28","scope":"Main/Native/About/Download/Policies 320/1440 both projects; Native fixture; ROOT viewed desktop/mobile PNG"},
+        "sidebar": {"redFailed":1,"redExit":1,"redRawSha256":"12a59c041fdd07df899615002dec9ccdbb33675f17aab03b1763b0ec2fc6b385","greenPassed":4,"greenExit":0,"greenDurationMs":5948.345,"greenRawSha256":"a36bea4a0308307670d46ef888fd9b1ab0bdc4d7a4720380cbde08bec3e9a2f3"},
+        "globe": {"redFailed":1,"redExit":1,"redRawSha256":"3be9ff0bb0482130b92c026cda72c2172e358da5e6679a6067413910831a4ba4","greenPassed":14,"greenExit":0,"greenDurationMs":19267.634,"greenRawSha256":"f52f7073a7d96543f84a8ceebe5b3335c8f5e6d9b01e4aefcc779d1b4214999e","scope":"7languages, both projects explicitly1440 Main guest; not Native/mobile narrow proof"},
+        "ime": {"redFailed":1,"redExit":1,"redRawSha256":"fdab43535584c17e1edfff803e4b4b7312abc06dee784ee46784b8124f89b9e0","redLaterAssertionsNotExecuted":true,"greenPassed":12,"greenExit":0,"greenDurationMs":14667.772,"greenRawSha256":"652a18294db0a990d8bf685cb2955048bc46452c8ef2ee46d7ec0afdf1937197","scope":"existing8 and added4; synthetic229 not real OS keyboard"}
+      },
+      "scopedLintActualExit":0,
+      "builds": {
+        "actualExit":0,"aggregateSequenceExecutedOnce":true,"flags":{"VITE_TETH_AUTH_GOOGLE_ONLY":"true","VITE_TETH_EXCHANGE_CONNECT":"false"},
+        "digestMethod":"sha256(JSON.stringify(recursive regular files sorted by path, records {path,bytes,sha256})); not compared to prior different digest method",
+        "public":{"files":1132,"bytes":20753461,"sha256":"21c4b9e66678430d8db0136fe3d670a2bdbf32f8dde4b7cdef79621ebd9dad52"},
+        "internal":{"files":1123,"bytes":21153173,"sha256":"f64674a01ff2b822c11d06494405c7d77689bea2ef94e515a6d98d73f2095192"},
+        "service":{"files":1113,"bytes":21086632,"sha256":"f7a403c637a3ece87272eca4a19c92e9387994b2cbc0e76d0375db82e79666c8"},
+        "newCleanInstallExecuted":false,"compiledProductionHttpVerified":false
+      },
+      "independentSmallReview":{"profile":"personal (1)","model":"claude-sonnet-5-5","actualExit":0,"modelUsageMatched":true,"verdict":"SCOPED_CODE_GO","confirmed":[],"low":6,"hypotheses":5,"strictInnerJsonVerifierPassed":false,"rawSha256":"43ce0e2cc68e43479b31f04cc2e1d2346deeb87038233cd870da3542f312f98e"},
+      "sourceStagedSecurity":{"actualExit":0,"findings":0,"files":11,"gitleaksVersion":"8.30.1","ignoreRulesChanged":false},
+      "snapshot":{"files":2236,"bytes":26262053,"dirty":[],"deleted":[],"removedPriorPaths":[],"syncActualExit":0,"verifyActualExit":0},
+      "newWholeRuns":0,"wholePassClaim":false,"authScopeApprovalPending":true,"actualProviderVerified":false,"serviceGo":false,"deploymentGo":false,"deploymentExecuted":false,
+      "boundary":"원문 복원은 Bitget 선정/실주문 가용성의 증명이 아니다. 기존 Opus auth scope HOLD와 원FAIL/운영7dd/730일 보존. 각부분PASS를 단일전체로 합산0"
     },
     "currentHelpDecorationParity": {
       "sourceCommit": "7684e674f8f05f94678f36c98c832e8beb728255",

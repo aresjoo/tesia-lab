@@ -225,9 +225,9 @@ export function ClientChrome({ mobileMenuHost, signedIn, showLocaleShortcut = tr
         </nav>
       )}
 
-      {!signedIn && showLocaleShortcut && <button className="client-globe" type="button" aria-label={t('glc.lang')} aria-haspopup="dialog" onClick={event => openFrom(event.currentTarget, onLocale)}>
+      {!signedIn && showLocaleShortcut && <button className="client-globe" type="button" aria-label={t('menu.glc')} aria-haspopup="dialog" onClick={event => openFrom(event.currentTarget, onLocale)}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3z" /></svg>
-        <span>{t('glc.lang')}</span>
+        <span>{t('menu.glc')}</span>
       </button>}
 
       <aside ref={sidebarRef} className={`client-sidebar ${drawerOpen ? 'mobile-open' : ''}`} aria-label={s('menu')}

@@ -442,10 +442,10 @@ export function ClientConversation({ children, artifact, artifactLabel: supplied
         <div className="g-composer">
           {composerContext ? <div className="native-research-context"><span className="g-ctx">{composerContext}</span></div>
             : activeTab !== 'chat' && <span className="g-ctx"><FileText size={12} />{activeTab === 'report' ? reportArtifact?.label : activeTab === 'plan' ? artifactLabel : labelOf(activeTab === 'activity' ? 'Activity' : 'Critic Review')}</span>}
-          <textarea ref={inputRef} value={value} aria-label={inputLabel} placeholder={placeholder} rows={1} disabled={inputDisabled} maxLength={maxLength}
+          <textarea ref={inputRef} value={value} aria-label={inputLabel} placeholder={placeholder} rows={1} disabled={inputDisabled} maxLength={maxLength} spellCheck={false} autoComplete="off"
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+              if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing && event.keyCode !== 229) {
                 event.preventDefault()
                 // A held key from an action that returned focus here is not a
                 // new send gesture. The next distinct Enter still sends.

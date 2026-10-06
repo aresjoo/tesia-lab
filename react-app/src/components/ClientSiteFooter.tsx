@@ -13,7 +13,7 @@ type Props = {
   notice?: ReactNode
 }
 
-/** The source's shared footer, without inline HTML handlers or unapproved service claims. */
+/** Client-owned presentation copy is not evidence of runtime trading capabilities. */
 export function ClientSiteFooter({ lime = false, onNavigate, onHelp, notice }: Props) {
   const { language } = useClientPreferences()
   const root = useRef<HTMLElement>(null)

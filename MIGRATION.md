@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255` 전체. 부모4b77 위 원본 도움말 제품2·시험1·MD2만 변경. 관련12PASS·부모 전수와 별도 결속 |
+| React 출처 | `agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad` 전체. 부모7684 위 푸터·sidebar·globe·IME 제품5/시험4/MD2. 부분20/4/14/12PASS·lint/3build, 부모전수와 별도 결속 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 원본 도움말 제목 장식 복원
+### 최신 전달 — 푸터 원문과 선택·입력 교정
+
+전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0, sync/verify actual0다. 사용자 지정 한국어 푸터3literal(저작권 unchanged), Native sidebar Promise 반환, globe 최종원문키, Conversation IME229/속성만 복원했다. 원문 구조·SVG·CSS/API/권한/flags/730일 변경0다. 다른6언어 푸터 복원은 아직 아니다.
+
+각 대표RED1을 보존하고 관련GREEN20/4/14/12 actual0를 각각 인수했다. 모인 입력의 lint/공개·내부·service3build actual0, 작은 personal(1) Sonnet5.5 SCOPED_CODE_GO/confirmed[]·Low6/가설5다. 새whole/운영0 및 기존auth권위HOLD를 유지한다. 출처11staged secret scan actual0/findings0, 부분시험과 출력 digest 방식은 `candidate.currentSidebarFooterParity` 및 React Bugfix 보고서에 기록했다. 원문 카피는 Bitget 선정·실주문/전체서비스가용성의 증명이 아니다.
+
+### 이전 전달 — 원본 도움말 제목 장식 복원
 
 전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`이며 dirty/deleted/이전경로삭제0, 제공 sync/verify actual0이다. 공유 도움말 제목에 원9fb의 빈 장식 i(aria-hidden)·8px 원형·gap7만 복원한다. 원문·SVG·색상 의미·44px 닫기·인증/API/SDK/flags/730일 변경0이다.
 

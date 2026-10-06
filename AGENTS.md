@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 `agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255`다. 전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`, 미커밋·이전경로삭제0/sync verify actual0이다. 최신 부분 검증은 `candidate.currentHelpDecorationParity`가 소유한다. 원본 도움말8px 장식·gap7만 복원했고 관련12PASS/15.87초다. 새build/whole/운영0이며 최종 배치 빌드와 누적 인증 변경의 별도 권위 확인이 남는다. 인증 교정을 통째 되돌리거나 시험 기대를 완화하지 않는다. 아래 전수/빌드/모델은 부모 입력의 인수 이력이며 현재 도움말 입력의 전수/빌드 PASS로 승계하지 않는다.
+최신 React 출처는 `agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad`다. 전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0/sync verify actual0이다. `candidate.currentSidebarFooterParity`가 한국어푸터20/Native sidebar4/globe14/IME12 부분PASS·동일입력lint/3build·작은Sonnet5.5 SCOPED_CODE_GO를 소유한다. 서로다른 구간 결과를 단일전체로 합산하지 않는다. 다른6언어 푸터 복원·실OS키보드/실provider는 미검증이고 누적 인증의 권위HOLD·전체서비스NO_GO를 유지한다. 새whole/운영0·기존인증교정/원FAIL 보존. 아래 currentHelp와 전수/빌드/모델은 각 이전입력의 이력이다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 

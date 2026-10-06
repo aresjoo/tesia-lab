@@ -590,6 +590,58 @@ test('느린 기록 선택은 중복을 막고 단순 키 입력에도 확인된
   expect(await page.evaluate(() => window.libraryControls.calls.filter(value => value.startsWith('select:')).length)).toBe(1)
 })
 
+test('sidebar selection promise: pending success keeps the drawer until selection completes', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message))
+  await mount(page); await openDrawer(page)
+  await page.evaluate(() => { window.libraryControls.hold = true })
+  const row = page.locator('.client-session-row').filter({ hasText: '두 번째 공급 대화' })
+  await row.locator('.client-session').click()
+  await expect.poll(() => page.evaluate(() => window.libraryControls.calls)).toEqual(['select:two'])
+  const pending = {
+    drawerOpen: await page.locator('.client-sidebar').evaluate(node => node.classList.contains('mobile-open')),
+    rowBusy: await row.evaluateAll(nodes => nodes.length === 1 && nodes[0].getAttribute('aria-busy') === 'true'),
+    buttonDisabled: await row.locator('.client-session').evaluateAll(nodes => nodes.length === 1 && (nodes[0] as HTMLButtonElement).disabled),
+  }
+  await page.evaluate(() => window.libraryControls.finish())
+  await expect(page.locator('.client-sidebar')).not.toHaveClass(/mobile-open/)
+  await openDrawer(page)
+  await expect(row.locator('.client-session')).toHaveAttribute('aria-current', 'true')
+  await info.attach('sidebar-selection-observation.json', { contentType: 'application/json', body: JSON.stringify({ pending, errors, calls: await page.evaluate(() => window.libraryControls.calls) }) })
+  expect(pending).toEqual({ drawerOpen: true, rowBusy: true, buttonDisabled: true })
+  expect(errors).toEqual([])
+  expect(await page.evaluate(() => window.libraryControls.calls)).toEqual(['select:two'])
+})
+
+test('sidebar selection promise: rejection stays in the drawer and supports retry without page errors', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message))
+  await mount(page); await openDrawer(page)
+  await page.evaluate(() => { window.libraryControls.hold = true; window.libraryControls.fail = true })
+  const row = page.locator('.client-session-row').filter({ hasText: '두 번째 공급 대화' })
+  await row.locator('.client-session').click()
+  await expect.poll(() => page.evaluate(() => window.libraryControls.calls)).toEqual(['select:two'])
+  const pending = {
+    drawerOpen: await page.locator('.client-sidebar').evaluate(node => node.classList.contains('mobile-open')),
+    rowBusy: await row.evaluateAll(nodes => nodes.length === 1 && nodes[0].getAttribute('aria-busy') === 'true'),
+    buttonDisabled: await row.locator('.client-session').evaluateAll(nodes => nodes.length === 1 && (nodes[0] as HTMLButtonElement).disabled),
+  }
+  await page.evaluate(() => window.libraryControls.finish())
+  await expect(page.locator('.client-sidebar-record-group > p[role="alert"]')).toContainText('다시 시도')
+  await info.attach('sidebar-selection-observation.json', { contentType: 'application/json', body: JSON.stringify({ pending, errors, calls: await page.evaluate(() => window.libraryControls.calls) }) })
+  expect(pending).toEqual({ drawerOpen: true, rowBusy: true, buttonDisabled: true })
+  await expect(page.locator('.client-sidebar')).toHaveClass(/mobile-open/)
+  await expect(row.getByRole('alert')).toContainText('다시 시도')
+  await expect(row.locator('.client-session')).toBeEnabled()
+  await expect(page.getByText('PRIVATE_ERROR_NOT_FOR_UI')).toHaveCount(0)
+  expect(errors).toEqual([])
+  await page.evaluate(() => { window.libraryControls.fail = false; window.libraryControls.hold = false })
+  await row.locator('.client-session').click()
+  await expect(page.locator('.client-sidebar')).not.toHaveClass(/mobile-open/)
+  await openDrawer(page)
+  await expect(row.locator('.client-session')).toHaveAttribute('aria-current', 'true')
+  expect(await page.evaluate(() => window.libraryControls.calls)).toEqual(['select:two', 'select:two'])
+  expect(errors).toEqual([])
+})
+
 test('다른 계정으로 넘어가면 이전 새 전략 확인 버튼과 인사이트 주소가 남지 않는다', async ({ page }) => {
   await mount(page)
   await (await sourceInsightEntry(page)).click()

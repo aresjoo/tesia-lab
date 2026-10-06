@@ -2,9 +2,9 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷은 **`agent/web/help-decoration-parity@7684e674f8f05f94678f36c98c832e8beb728255`**입니다. 전체2,234파일/26,238,523bytes/snapshot `ea0ae13e751248b110890f6625429ea11e8b8001b269ace34be315103cb28b98`이며 미커밋·이전경로삭제0, sync/verify actual0입니다. 부모4b77 대비 도움말 제품2·신규시험1·문서2만 변경했습니다. 원본8px 장식과7px 간격 복원의 관련12키는12PASS/actual0/15.87초입니다. 새build/전체회귀/운영반영은 하지 않았고 최종 배치 빌드·인증 승격 범위 확인은 남아 있습니다. 최신 근거는 `candidate.currentHelpDecorationParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)입니다.
+현재 React 스냅샷은 **`agent/web/sidebar-selection-copy-parity@a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad`**입니다. 전체2,236파일/26,262,053bytes/snapshot `56f1a38f9319b1fae3160ab7525db0ec4483336fdee2edeeee733ae21b63266b`, dirty/deleted/이전경로삭제0, sync/verify actual0입니다. 한국어 푸터 원문20PASS·Native sidebar Promise4PASS·globe 원문14PASS·IME12PASS는 각각 별도 부분검증입니다. 모인 입력의 lint·공개/내부/service3build actual0, 작은 Sonnet5.5 검수는 SCOPED_CODE_GO입니다. 새전체회귀/운영반영0·인증권위HOLD이며 다른6언어 푸터는 이번에 복원하지 않았습니다. 최신 근거는 `candidate.currentSidebarFooterParity`와 [Bugfix 보고서](react-app/Bugfix_report.md)입니다.
 
-아래 전수·빌드·모델 수치는 부모 입력의 이력입니다. 도움말 변경을 이전 전체 PASS나 빌드 출력에 승계하지 않습니다. 기존 인증 교정을 제거해 합격 후보를 만들지 않으며 부모의 권위 범위 HOLD도 유지합니다.
+아래 전수·빌드·모델 수치는 부모 입력의 이력입니다. 새부분 검증을 이전 전체 PASS로 합산하지 않습니다. 기존 인증 교정을 제거해 합격 후보를 만들지 않으며 부모의 권위 범위 HOLD도 유지합니다. 푸터 카피는 Bitget 선정·실주문 가용성을 증명하지 않습니다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
 

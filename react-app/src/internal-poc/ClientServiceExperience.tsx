@@ -926,7 +926,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       profileName={accountData?.profile?.name}
       recordsScope={accountScope ?? ''} records={library?.records ?? []} activeResearchId={library?.activeId}
       recordsPresentation={{ unavailable: libraryUnavailable ? <p className="client-sidebar-record-empty" role="status">{library?.status === 'loading' ? c('waiting') : library?.status === 'error' ? c('retry') : nativeHistoryCopy[language].title}</p> : undefined, footer: libraryFooter, archiveLabel: c('archive'), archiveDetail: c('archiveDetail'), errorLabel: c('retry') }}
-      onSelectResearch={id => { closeClientSettingsRoute(); selectConversation(id) }} onPinResearch={library?.onPin} onRenameResearch={library?.onRename ? renameConversation : undefined} onDeleteResearch={library?.onArchive}
+      onSelectResearch={id => { closeClientSettingsRoute(); return selectConversation(id) }} onPinResearch={library?.onPin} onRenameResearch={library?.onRename ? renameConversation : undefined} onDeleteResearch={library?.onArchive}
       onLogin={login} onSignup={login} onProfile={nativeAccounts ? anchor => openAccountSurface('settings', anchor) : unavailable}
       onSettings={anchor => openAccountSurface(nativeAccounts ? 'settings' : 'locale', anchor)} onLocale={anchor => openAccountSurface('locale', anchor)}
       onTrading={() => {

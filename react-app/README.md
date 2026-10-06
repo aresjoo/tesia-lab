@@ -1,5 +1,9 @@
 # TETH Web
 
+현재 후속 후보는 `agent/web/sidebar-selection-copy-parity`다. 사용자가 지정한 한국어 푸터 세 문단을 원9fb `site-footer.js:29–32`와 그대로 맞췄다. 네 문단 구조·두 번째 강조·저작권·색상·SVG·레이아웃은 보존하며 Main/Native/About/Download/Policies의320/1440px·양project20키가20PASS/actual0다. 다른6언어 문단은 이번 변경하지 않았으므로 전체 번역 원문 복원을 완료했다고 주장하지 않는다.
+
+독립 구간의 Native sidebar Promise 반환 누락(4PASS), 원7언어 globe `menu.glc` 원문(14PASS), Conversation IME229/입력 속성(기존8+신규4=12PASS)도 교정했다. 세 담당자는 독립 시험 파일만 썼고 제품은 ROOT 단독 writer다. 관련 lint·공개/내부/service3build actual0, Google-only true/exchange false 설정을 유지했다. 작은 수정마다 전체 회귀를 돌리지 않았으며 기존 auth scope HOLD·원FAIL·730일을 보존한다. 푸터 카피 복원은 Bitget 선정·실제 주문 가용성을 검증한 것이 아니며 운영 활성화·실서비스 승인은 아직 아니다. 최신 근거는 [누적 보고서](Bugfix_report.md#푸터-원문과-사이드바입력-구간-교정)다. 아래 도움말·전수 기록은 각 부모 입력의 이력이다.
+
 현재 후속 후보는 `agent/web/help-decoration-parity`다. 부모 `4b77b870`의 통합 코드와 인증 교정을 보존하고, 공유 도움말 제목의 누락된 원본 8px 장식 점과 7px 간격만 복원했다. 원본 문구·SVG·상담 가용성·인증/API·flag 변경은 없다. Main/Native ×320/390/1440px의 동일12키 RED→GREEN을 확인했고, GREEN은12PASS/actual0/15.87초다. 해당 ESLint·diffcheck와 ROOT의 원자료/키·스크린샷 대조를 완료했다. 새 빌드·전체회귀·운영승격은 실행하지 않았으며 최종 배치에서 빌드 결속을 추가해야 한다. [도움말 복원 기록](Bugfix_report.md#도움말-제목-원본-장식-복원)을 따른다.
 
 부모 후보의 최종 Opus5.5 검수는 인증 변경과 정적 시각·카피 예외의 권위 범위 불일치로 HOLD다. 인증 3파일을 단순 회귀하면 확인된 revision 소비 결함과 미전송 초안 소실을 다시 열므로 그 방식으로 합격 후보를 만들지 않는다. 기존 통합 후보·원실패·730일 자료를 보존하고 운영teth.ai7dd는 그대로 유지한다. 아래 수치는 각 이전 입력의 인수 이력이며 새 도움말12개를 이전 전수PASS로 합산하지 않는다.
