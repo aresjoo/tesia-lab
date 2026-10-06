@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@12375479d2ebcc0a9d545c0181ce870567f15ee9` 전체. 제품/시험은2b4bdea와동일, 문서2개만별도정적후보와API0.10실제상태로최신화. 통합인증fix 보존·정적후보별도·운영미반영 |
+| React 출처 | `agent/web/help-policy-link-parity@9ac907be25dbe9ba2803c80e4886bbf82ead09f2` 전체. 제품/시험은2b4bdea와동일, 문서2개에별도정적후보compiled검수결과추가. 통합인증fix 보존·정적후보별도·운영미반영 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 복원 배치의 인증 분리 준비
+### 최신 전달 — compiled 표시 검수와 전달 경계
+
+통합 React 전체2245파일/26388027bytes/snapshot `3911f2740a4b0f6da717c163b96614087db5cbb092b604b22657d917b4754b2d`를 전달한다. source9ac907b는1237547 위 README/Bugfix2파일만 변경했고 제품/시험2b4는 그대로다. 별도 정적 branch383e83a도 e755 위 MD2파일만 변경했다. 통합 snapshot을 이전 운영인증으로 덮어쓰지 않았다. source dirty/deleted/이전경로삭제0·sync/verify actual0, 기존56 candidate객체와 다른 top-level 역사·원본root/main을 보존한다.
+
+제품e755의 기존 service 산출물·실진입점에서 단일1440×900/390×844/320×480 3case모두PASS/actual0다. 원3로그인옵션/미등록수단keyboardguard·초안/닫기초점·무료문구·KOfooter4p/help8pxdot/gap7·overflow0, staticGET75/49/59 exact 및외부/mutation/WS/예상밖API/오류0을확인했다. src715/service1113 SHA전후불변·auth7운영7dd exact·소유4696종료, ROOT raw/320PNG직접확인이다. 익명 session/CSRF GET만합성이므로실인증검증이아니다. 새build/whole/model/실provider/운영0이며16/32구간·통합인증검증과합산/승계하지않는다. exact원자료결속은 `candidate.currentStaticUiCompiledPresentation`이다.
+
+원문footer에가시Mock고지가없어사실/법률·명시승격방향·최종releaseHOLD다. 기존 `pendingDeployment`는4b77 미실행이력이며e755/383e83a의승인이아니다. package/CAS/publicsmoke/원자전환/rollback미실행, 실서비스NO_GO유지다. 선택27은 import/export/lazy실소비를확인해안전삭제확정0/실삭제0이며모든내부deadexpression전수증명은아니다. toast/Main연구자료/동적사전/공개자산closure·사용자WIP·원FAIL·730일은보존한다. UTC06:35:36 두main은client9fb/Web62b unchanged·새upstreamdelta0이다. 원카피·UI새변경0으로검수기록만누적했다.
+
+### 이전 전달 — 복원 배치의 인증 분리 준비
 
 통합 React 전체2245파일/26386220bytes/snapshot `9c3c99d3e5ef11b96d641be2d2f96966fef371d264c583b71c265942949da098`를 전달한다. source1237547의 제품/시험은2b4와 같고 README/Bugfix만 최신화했다. 원본 root/main·이전current22/역사객체 보존, source dirty/deleted/이전경로삭제0·sync/verify actual0다. 통합 snapshot의 인증fix를 없애거나 이전운영코드로 덮어쓰지 않는다.
 

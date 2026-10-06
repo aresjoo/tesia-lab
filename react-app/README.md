@@ -1,6 +1,6 @@
 # TETH Web
 
-운영 전달을 위한 별도 준비 후보는 `agent/web/static-ui-restoration-batch@e755d5bb24fc0a3670304d2048e97373165398d1`이다. 최신 UI27파일만 통합2b4bdea와 맞추고 실제 인증·SDK·bootstrap·flags는 운영7dd를 유지한다. 이 통합 작업본의 인증 교정을 삭제하거나 migration snapshot을 옛 인증으로 덮어쓰지 않는다. 새후보 16PASS/32PASS·타입/servicebuild/lint/scan 통과와 운영 미배포·footer 사실/승격 HOLD는 별도로 기록한다. [별도 후보 전달](Bugfix_report.md#최신-복원-배치의-별도-정적-후보-전달)을 따른다.
+운영 전달을 위한 별도 준비 후보는 `agent/web/static-ui-restoration-batch@383e83afe861b5914d275062a89746d6ef14f7d5`다(제품·시험 입력e755와동일, 후속MD2파일만변경). 최신 UI27파일만 통합2b4bdea와 맞추고 실제 인증·SDK·bootstrap·flags는 운영7dd를 유지한다. 이 통합 작업본의 인증 교정을 삭제하거나 migration snapshot을 옛 인증으로 덮어쓰지 않는다. 새후보16PASS/32PASS와 compiled Native3폭3PASS는 별도구간이며 타입/servicebuild/lint/scan 통과와 운영 미배포·footer 사실/승격 HOLD는 별도로 기록한다. 최근검수에는새build/전체회귀/실provider/운영0, 선택27실소비·실삭제0다. [별도 후보 전달](Bugfix_report.md#최신-복원-배치의-별도-정적-후보-전달)을 따른다.
 
 현재 후보는 `agent/web/help-policy-link-parity`다. 원본의 약관·개인정보 링크를 새 탭으로 열고 기존 대화·메뉴를 유지하는 동작을 복원했다. 한국어 공유 전략의 `N명이 따라가는 중`, 만 단위 표기와 원본 사람 SVG도 복원했으며 미공급 수치·다른 언어·인증/API/flags는 유지한다. 정책 링크 신규8키는 대표1PASS와 나머지7PASS, 전략 행 신규8키는 최초4PASS와 하니스 교정후4PASS로 각각 증거를 보존한다. 인접320px 기존2키도 PASS다. 전체 회귀를 다시 실행하지 않는다. 운영 승격은 여전히 별도이며 계정 전체 대화 목록·연구 역할/단계·대화 스트리밍의 실제 producer 계약은 PM·백엔드 선행 확정이 필요하다. [복원과 연결 공백](Bugfix_report.md#정책-링크와-전략-팔로워-원본-복원)을 따른다.
 
