@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@ed22148eea95f370d818933df540969d56ad0c4b` 전체2245파일. 제품/시험2b4불변·MD2만 실제 정적배포 기록 갱신. 통합인증fix·원문푸터 보존·운영은 별도 static8a757a5 |
+| React 출처 | `agent/web/help-policy-link-parity@bbcff1cc6ece74eb9d3947b3dbf122c846d9fb89` 전체2245파일. 제품3de의 AI 트레이딩 원문·우측 스크롤바 제품2/spec2 복원과 공개 HOLD 기록. 통합인증fix·원문푸터 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 승인된 정적 UI26 운영 배포 완료
+### 최신 전달 — AI 트레이딩 카피·스크롤바 복원
+
+현재 **로컬 원문·스크롤 검증 완료 / 운영 공개 HOLD**다. personal(1) 실제 Opus5.5는 execution0·입력불변·C0/H2/M2로 현재 비활성 거래 기능에 대한 `직접 주문합니다` 등 공개 카피와 §0.4/About 금지 기준의 권위 충돌을 확인했다. 원문은 다시 임의 변경하지 않고 후보에 보존한다. gate actual1은 `NEW_INDEPENDENT_POLICY_RELEASE_GO`에서 dispatch를 차단했으며 새 package/upload/activate0·기존 운영8a 유지다. UTC09:28:13.529Z의 teth.ai GET200/10625bytes/SHAf1798fbc는 기존 운영과 같다. review→gate wrapper frozen proof와 실존 인물/수익 예시 정책 확인이 잔여다.
+
+실제 서비스 소개에 남은 `researchOnly` 소비를 제거해 원9fb의 최종 카피와 기본 소개 카드를 표시한다. 우측 scrollbar는 AI 트레이딩 문서에서만 숨기며 overflow와 휠·터치·키보드 스크롤은 유지한다. 기본 Main과 Native가 같은 원문 분기를 쓰고 인증 callback/API/SDK/flags·운영 푸터를 바꾸지 않는다. 기존 예시 안내는 유지한다.
+
+정적801의 직접 소개9PASS/18.8초와 direct source-flow desktop/mobile2PASS/3.1초는 별도 시험이다. 새 service1113의 compiled1440/390/320 단일3PASS/actual0·정적GET 각46 exact·오류/외부/mutation/WS/overflow0, 관련lint·타입/service build actual0다. 전체 회귀는 재실행하지 않았다. 통합3de는 제품2/spec2가 동일하지만 기존 통합 인증 교정을 보존하며 static 시험을 통합 전수 PASS로 쓰지 않는다. 현재 실제 배포 완료와 신규 후보 승격 여부는 `migration-verification.json`의 `candidate.currentTradingIntroCopyScroll`을 따른다.
+
+### 직전 전달 — 승인된 정적 UI26 운영 배포 완료
 
 통합 전체 React 출처·파일 수·해시는 migration-manifest.json의 실제 동기화 결과를 따른다. 통합 제품/시험2b4·인증 교정·원문 푸터는 변경하지 않는다. 별도 source8a757a5의 승인된 UI26만 teth.ai에 반영했고 기존 운영7dd 인증·푸터·API/flags는 유지했다. 실제 archive84331e4e·rawHTMLcb722047·updaterc1f0d37a 및 전체 해시는 `candidate.currentStaticUiPromotion.operatingDelivery`에 결속한다.
 

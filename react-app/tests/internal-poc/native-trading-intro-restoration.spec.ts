@@ -5,8 +5,8 @@ import { revealSourceNavigation } from '../fixtures/source-offline-research-entr
 // Source 9fbff821: AI 9 / examples 2 / steps 3 / safety 4 and shared footer.
 // Mount the service entry, not Main's preview renderer. Only session/CSRF GET
 // responses are synthetic; no OAuth, provider, strategy execution or order runs.
-// Service researchOnly disclosures are intentionally not replaced by the
-// source preview's claims about available automated trading or actual returns.
+// Assert the actual service renderer retains client-authored editorial copy.
+// The visible example disclosure remains; no provider or order runs here.
 test.setTimeout(60_000)
 
 async function mount(page: Page, baseURL: string | undefined, path: string) {
@@ -98,9 +98,16 @@ for (const width of [390, 768, 1440]) {
     await expect(intro.locator('.txh-step b')).toHaveText(['대화로 정하기', '과거 시장에서 확인', '거래소 연결'])
     await expect(intro.locator('.txh-safe li')).toHaveCount(4)
     await expect(intro.locator('.txh-safe li b')).toHaveText(['연결 권한', '전략 예산', '손실 한도', '거래 중지'])
-    await expect(intro.locator('.txh-sub')).toContainText('자동 실행은 준비 중')
-    await expect(intro.locator('.txh-example-note')).toContainText('실제 자산, 수익률, 거래 기록이 아닙니다')
-    await expect(intro.locator('.txh-now')).toContainText('가정 수익률')
+    await expect(intro.locator('h1')).toHaveText('AI가 스스로 판단해 거래합니다')
+    await expect(intro.locator('.txh-sub')).toHaveText('거래소 계정을 한 번 승인으로 연결하면 전략이 그 계정에서 직접 주문합니다.')
+    await expect(intro.locator('.txh-sec > h2')).toHaveText(['TETH가 쓰는 AI', '지금 TETH가 하는 일', '시작 방법'])
+    await expect(intro.locator('.txh-name')).toHaveText(['워렌 버핏 AI 버전 13', 'RSI 반등 규칙 버전 2'])
+    await expect(intro.locator('.txh-stat dt')).toHaveText(['현재 잔고', '수익률', '손익', '현재 잔고', '수익률', '손익'])
+    await expect(intro.locator('.txh-step p')).toHaveText(['무엇을, 얼마로, 언제 멈출지 말로 정합니다.', '지난 시장에서 돌려 보고 결과와 기준을 확인합니다.', '거래소 계정을 연결하면 정한 예산으로 거래를 시작합니다.'])
+    await expect(intro.locator('.txh-safe li span')).toHaveText(['잔고 조회와 주문만 승인합니다.', '전략마다 쓸 금액을 따로 정합니다.', '정한 손실에 닿으면 새 주문을 멈춥니다.', '언제든 전략을 끄고 포지션을 정리합니다.'])
+    await expect(intro.locator('.txh-example-note')).toHaveText('화면 예시 · 실제 거래 기록이 아닙니다')
+    await expect(page.locator('.has-trading-intro')).toHaveCSS('scrollbar-width', 'none')
+    expect(await page.locator('.has-trading-intro').evaluate(element => getComputedStyle(element, '::-webkit-scrollbar').display)).toBe('none')
     await expect(intro.locator('video')).toHaveCount(0)
     await hittable(page.locator('.client-auth-nav .client-login'))
     await hittable(page.locator('.client-auth-nav .client-signup'))

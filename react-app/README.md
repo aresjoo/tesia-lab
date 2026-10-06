@@ -1,5 +1,7 @@
 # TETH Web
 
+최신 통합 제품 `3de733361e3cc4ac2827fb0a9495719b1bd2a6f2`는 AI 트레이딩의 실제 Native 원문 카피와 문서 우측 scrollbar 숨김을 복원했다. 통합 인증 교정·원문 푸터·API/SDK/flags는 보존한다. static801의 구간9PASS/2PASS와 compiled3폭3PASS·lint/service build0는 별도 입력 증거이며 통합 전수 PASS로 쓰지 않는다. 현재 새 정적 후보는 **운영 공개 HOLD**다. 실제 Opus5.5의 §0.4 카피 권위 검수에서 현재 비활성 기능의 `직접 주문합니다` 등 공개 주장 확인이 필요하다고 판정했다. 기존 운영8a는 유지하며 새 package/upload/activate0다. 원문은 후보에 보존하고 임의 재작성하지 않는다. 아래 배포 기록은 직전8a의 실제 완료 이력이다. 상세는 [누적 보고서](Bugfix_report.md#ai-트레이딩-원문스크롤바-복원의-통합-선택인수)를 따른다.
+
 현재 상태는 `STATIC_UI26_DEPLOYED_AND_SCOPED_PUBLIC_SMOKE_PASS`다. 사용자 승인에 따라 별도 정적 source `8a757a523a1f40da366b16584561c5635b9296a1`(검증 제품 `78507d63fe9d3c6ae2249f00adecc5ad220021d5`와 non-MD 입력·service bytes exact)를 운영에 전달했다. archive SHA `84331e4e443eaff2700026351941e2c5487a4848e2d649b8dd4e44a2332b35aa`, HTML SHA `cb72204702d10d27fea8181546c1daab27c8ba4f9985c599dcc5e954a78d6f20`다. 운영7dd 푸터 JSON을 유지한 UI26이며 이 통합 작업본의2b4 제품·시험, 원문 푸터·인증 교정은 변경하지 않았다. 기존 backend/unit/credential/DB/API·flags도 불변이다.
 
 고정 경로의 실디렉터리 `RENAME_EXCHANGE`와 `flock`으로 원자 전환하고 503 maintenance 창에서 재시작했다. symlink·무중단 배포가 아니며 backup의 구 tree를 보존했다. atomic acceptance15PASS/actual0, personal(1) 실제 Opus5.5 `STATIC_UI_RELEASE_GO`/C0/H0/M3(nonblocking)와 검수32입력·최종 freeze exact의 ROOT 검산 뒤 preflight/activate/postflight 각 actual0를 확인했다. CLI JSON 뒤 guardfooter의 기존 collector 오류와 원 실패는 보존하고, 실제 모델 exit0 결과를 새 모델 호출0의 recover로 인수했다.

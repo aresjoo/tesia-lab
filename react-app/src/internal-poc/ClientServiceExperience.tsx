@@ -998,7 +998,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         <NativeInsights key={accountScope} onReturn={closeInsights} shouldFocus={shouldFocusInsights} data={insightData?.data} onFeedback={insightData?.onFeedback} controlledLocation={insightLocation} onNavigate={navigateInsight} locationHref={insightHref} onAsk={prepareQuestion} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={login} />
       </Suspense></ClientLoadBoundary>}
       {trading && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setTrading(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setTrading(false)} />}>
-        {state.sessionState !== 'AUTHENTICATED' ? <ClientTradingIntro researchOnly onStart={login} /> : <NativeTradingWorkspace accountScope={accountScope} presentation={accountData} alertsRequest={alertsRequest} onBrowseExchanges={browseExchanges}
+        {state.sessionState !== 'AUTHENTICATED' ? <ClientTradingIntro onStart={login} /> : <NativeTradingWorkspace accountScope={accountScope} presentation={accountData} alertsRequest={alertsRequest} onBrowseExchanges={browseExchanges}
           alertsView={alertsView ?? undefined} onAlertsViewChange={next => {
             if (accountData && ownerRef.current === accountData.scope && next.scope === accountData.scope && next.identity === accountData.identity) setAlertsView(next)
           }} onNavigate={navigateAccount} onReturn={closeAccount} onNew={() => { closeAccount(); newConversation() }} />}

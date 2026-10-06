@@ -1,5 +1,12 @@
 # TETH 버그 수정·검수 보고서
 
+## AI 트레이딩 원문·스크롤바 복원의 통합 선택인수
+
+- **최종 전달과 공개 경계:** 통합 제품 `3de733361e3cc4ac2827fb0a9495719b1bd2a6f2`와 별도 static801을 실제 commit/push했다. static의 personal(1) 실제 Opus5.5 최종 판정은 execution0·입력불변·`STATIC_UI_RELEASE_HOLD` C0/H2/M2이며, 비활성 기능의 직접 주문/권한/포지션 정리 카피와 §0.4 및 About unsupported 기준의 공개 권위 충돌이다. 원문을 임의로 다시 변경하지 않는다. 실제 gate는 해당 판정에서 종료1로 차단했고 새 package/upload/activate0·운영8a 보존이다. 새 atomic acceptance15PASS는 별도 파일시스템 시험이며 이 공개 HOLD를 면제하지 않는다. review→gate wrapper frozen proof와 실존 인물/수익 예시 정책 확인도 잔여다.
+- **원인·영향:** Main은 원문을 소비했지만 Native 소개의 `researchOnly`가 제목·설명·카드·시작 방법·실행 설정을 연구/준비 카피로 바꿨다. static `801537754ca678d60327d64edc0b232ba63f47bd`의 해당 prop 제거와 소개 문서 scroll owner 한정 scrollbar 숨김을 동일 이식했다. overflow·로그인 callback·기존 예시 안내는 유지하며 전역 스크롤바를 제거하지 않는다.
+- **별도 정적 근거:** static의 소개 화면9PASS/18.8초와 direct source-flow2PASS/3.1초는 각각 별도 실행이다. ROOT의 compiled Native1440/390/320px 단일3PASS/actual0는 원문·휠/Ctrl+End/Home·로그인 닫기/route 복귀·숨긴 scrollbar/overflow0 및 정적GET46씩 exact·외부/mutation/WS0를 확인했다(`trading-intro-copy-scroll-local/receipt.json`). 합성 익명 session/CSRF GET의 표시 검수이며 이 통합 입력의 새 시험이나 단일 전체 PASS로 승계하지 않는다.
+- **통합 경계:** 부모 `ed22148eea95f370d818933df540969d56ad0c4b`의 인증 교정·원문 푸터·API/SDK/flags 및 원FAIL/WIP/730일은 보존한다. 제품2·관련spec2와 이 상단 기록만 선택인수했고 통합 새 시험/빌드/배포0다. 정적 카피 복원이지 실제 AI/provider·주문·법률/전체서비스 GO가 아니다.
+
 ## 운영 푸터 유지와 UI26 정적 선반영 승인
 
 - **최신 운영 전달 완료:** 상태는 `STATIC_UI26_DEPLOYED_AND_SCOPED_PUBLIC_SMOKE_PASS`다. 별도 static source `8a757a523a1f40da366b16584561c5635b9296a1`은 검증 제품 `78507d63fe9d3c6ae2249f00adecc5ad220021d5`와 non-MD/service 입력 exact다. 운영7dd 푸터 JSON을 유지한 UI26만 전달했고 통합2b4 제품·시험·원문 푸터·authfix는 변경0이다. archive SHA `84331e4e443eaff2700026351941e2c5487a4848e2d649b8dd4e44a2332b35aa`, HTML SHA `cb72204702d10d27fea8181546c1daab27c8ba4f9985c599dcc5e954a78d6f20`를 실제 release manifest에 결속했다.
