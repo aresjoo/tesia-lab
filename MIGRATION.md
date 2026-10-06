@@ -17,6 +17,8 @@
 
 ### 최신 전달 — 이름변경과 다운로드
 
+정적승격의 별도카피후보는 [Web static-copy-release](https://github.com/beak1011/tesia-web/tree/agent/web/static-copy-release) `c0907e0f3af7c3aef7b32323c2b4c7f573c09460`다. 운영7dd에서 제품7파일만 분리하여 인증/API/SDK/flags를그대로유지했고 최신통합0f의인증fix를삭제하지않았다. 관련160PASS/33.86초·lint/servicebuild0·compiledNative3폭3PASS/183GETexact를 확인했다. 49원문 전부가Native소비인것은아니다(공용14+연구1+KOfooter3 조건부소비). 원문footer의실거래/선정주장과 가시Mock안내 부재의카피권위HOLD를유지하고 선반영방향을사용자에게확인중이다. `react-app/` 전체스냅샷은0f 그대로이며 후보검증과권위는 `candidate.currentStaticOnlyCopyCandidate`가구분한다.
+
 전체2237파일/26280108bytes/snapshot `33b3b9dd16ba15b426f7b33c12a5e7522a051f97fe2ca00887f7faf04d84e100`, syncverify0·dirty/deleted/이전경로삭제0다. Main SessionMenu 원문 성공안내를 저장성공시에만복원하고 Download의22px로고/Apple색/28px모바일SVG·6언어header CTA를원본과맞췄다. 기존6+신규4의10PASS 및7언어×2폭×2project28PASS·lint actual0, 원RED와준비오류보존이다. 새build/whole/운영0, 부모a8빌드는이전입력의근거다. Native/store/API변경0·인증분리/정적승격은별도검증이며최신증거는 `candidate.currentMenuDownloadParity`다.
 
 ### 이전 전달 — 푸터 원문과 선택·입력 교정
