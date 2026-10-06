@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "통합 React snapshot은b6297be이며제품/시험2b4불변·MD2만사용자정적UI선반영승인과배포도구HOLD를전달한다. 별도정적2c65b13은검증제품785와동일하며운영7dd푸터를유지하고UI26만선반영한다. currentStaticUiPromotion에승인/12PASS/compiled3PASS와atomic전환미충족을분리하며기존57candidate항목/다른top/history/원pendingDeployment를보존한다. 이문서전달의새시험/build/whole/provider/운영0·서비스NO_GO 유지.",
-  "sourceCommit": "b6297be2888151bcecdb22b178f79799185d8301",
+  "purpose": "통합 React snapshot은9ef0829이며제품/시험2b4불변·MD2만사용자즉시배포재개와운영도구보완범위승인을전달한다. 별도정적8a757a5는검증제품785와동일하며운영7dd푸터·UI26을유지한다. currentStaticUiPromotion은APPROVED_STATIC_UI_ATOMIC_DEPLOYMENT_PREPARATION이며직전HOLD근거/12PASS/compiled3PASS와실제updater구현·최종Go·배포미실행을구분한다. 기존57candidate항목/다른top/history/원pendingDeployment를보존하고새시험/build/whole/model/CI/provider/운영0·서비스NO_GO를유지한다.",
+  "sourceCommit": "9ef08290c159e156b6b681d773f974fac2a38f3d",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "57ea052b9cd2ce73a241f30ef0dbe8ff3f9e6251adb82966d50f0dbc16ada88a",
+  "snapshotDigest": "3f7351a869e9f1bf78439ceefcf0c034891d307856ab19daca0ec96ad9a61d56",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -67,7 +67,7 @@
   },
   "snapshot": {
     "files": 2245,
-    "bytes": 26392350,
+    "bytes": 26394280,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -731,11 +731,11 @@
     }
   ],
   "candidate": {
-    "status": "INTEGRATED_RESTORATION_DELIVERED_APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD",
+    "status": "INTEGRATED_RESTORATION_DELIVERED_APPROVED_STATIC_UI_ATOMIC_DEPLOYMENT_PREPARATION",
     "sourceBranch": "agent/web/help-policy-link-parity",
-    "sourceCommit": "b6297be2888151bcecdb22b178f79799185d8301",
+    "sourceCommit": "9ef08290c159e156b6b681d773f974fac2a38f3d",
     "currentStaticUiPromotion": {
-      "sourceCommit": "2c65b13f8696b0044804dc36ea4770cc2fd834b7",
+      "sourceCommit": "8a757a523a1f40da366b16584561c5635b9296a1",
       "validatedProductCommit": "78507d63fe9d3c6ae2249f00adecc5ad220021d5",
       "sourceBranch": "agent/web/static-ui-restoration-batch",
       "scope": "User-approved static UI26 restoration only, retaining the whole operating7dd footer and protected operating auth/SDK/bootstrap/flags; integrated auth fixes and original footer remain in the separate integrated snapshot.",
@@ -749,14 +749,16 @@
       "serviceGo": false,
       "releaseGo": false,
       "activationExecuted": false,
-      "status": "APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD",
+      "status": "APPROVED_STATIC_UI_ATOMIC_DEPLOYMENT_PREPARATION",
       "blocker": {
         "code": "DEPLOYMENT_TOOL_ATOMIC_SWITCH_REQUIREMENT_UNMET",
         "evidence": "Readonly exact updater e89a uses 503/nginx reload/backend stop followed by oldWEB.rename(backup) then staging.rename(WEB); rejects symlinks and has no atomic link/lock.",
         "authority": "Canonical product plan §0.4 atomic switch requirement",
-        "operatingToolChangeApproved": false,
+        "operatingToolChangeApproved": true,
+        "previousStatus": "APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD",
+        "operatingToolApprovalEvidence": "User explicitly instructed immediate deployment resumption; ROOT confirmed approval of atomic operating-tool supplementation scope. This does not certify implementation, final release Go, provider/service Go or completed deployment.",
         "deploymentExecuted": false,
-        "next": "Obtain explicit user approval for operating-tool changes; complete atomic release/rollback acceptance before package/CAS/public smoke/activation. UI approval does not authorize auth/provider/service changes."
+        "next": "Implement the explicitly approved atomic operating-tool changes and complete atomic release/rollback acceptance, final release/package/CAS/public smoke/activation. No new updater implementation, final Go or deployment execution is attested by this metadata; auth/provider/service boundaries remain unchanged."
       },
       "footerUiTest": {"casesPassed":12,"casesFailed":0,"casesSkipped":0,"actualExit":0,"durationMs":14160.487,"rawSha256":"e4a3bc0934fd76d3d089a52d257e6653fbe01064d10608ca7848ecc59eb9ee0d","originalTwelveHarnessFailuresPreserved":true,"blockedLocalViteHmrClassifiedSeparately":true,"externalMutationNonHmrWebSocketUnexpectedApi":0,"ownedPort4697Stopped":true},
       "lintActualExit": 0,

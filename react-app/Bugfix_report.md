@@ -2,6 +2,11 @@
 
 ## 운영 푸터 유지와 UI26 정적 선반영 승인
 
+- **최신 운영 도구 보완 승인:** 현재 상태는 `APPROVED_STATIC_UI_ATOMIC_DEPLOYMENT_PREPARATION`이다. 사용자의 최신 즉시 배포 재개 지시와 ROOT의 범위 공지로 원자적 전환·잠금 등 운영 도구 보완 승인을 확보했다. 기존 검증 제품78507d6·푸터12PASS·compiled3PASS는 그대로이며 제품/시험/빌드·인증/API/flags 변경0이다. 새 updater 구현·최종 release Go·package/upload/활성화·공개 smoke는 아직 미실행이다. 실제 provider·전체서비스 Go도 아니다.
+- **Decision(accepted / approval without completion inflation):** 직전 `APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD` 및 아래 e89a 코드·원자전환 미충족 근거는 당시 이력으로 보존한다. `operatingToolChangeApproved=true`는 보완 범위 승인이지 실제 구현/최종 Go/운영 교체 성공이 아니다. 기존 producer·권한 NO_GO는 유지하며 새 전체회귀·모델·CI 실행0이다.
+
+이하 직전 HOLD 당시 기록이며 위 최신 운영 도구 보완 승인과 구분한다.
+
 - **사용자 승인과 후보:** 현재 운영 푸터는 그대로 두고 나머지 UI부터 배포한다는 명시 요청을 인수했다. 별도 정적 branch `agent/web/static-ui-restoration-batch@78507d63fe9d3c6ae2249f00adecc5ad220021d5`는 실제 commit/push 완료이며 푸터 JSON 전체가 운영 `7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d`와 byte exact다. 원문 푸터 복원을 제외한 UI26 및 운영 인증/SDK/bootstrap/flags를 유지한다. 이 통합 후보의 인증 교정·원문 푸터·기존 Golden은 변경하지 않고 전체 통합 snapshot으로 전달한다.
 - **푸터 구간 증거:** Main/실제 service-main Native/About/Download/약관/개인정보의 desktop1440/mobile320 동일12키가 단일 12PASS/0FAIL/0SKIP/actual0/14.160초다(Exec16346). retry/flaky/시험 밖 오류0·stderr0, 소유4697 종료다. 독립 git show 7dd 기대값으로 전체 JSON exact·실 DOM4문단/강조·geometry·overflow를 확인했다. Native는 합성 익명 session/CSRF GET만 사용했고 외부/mutation/비HMR WS/예상밖 API0이다. raw SHA `e4a3bc0934fd76d3d089a52d257e6653fbe01064d10608ca7848ecc59eb9ee0d`, 푸터 SHA `67ca7b8f8186a3950f2fd3dbeaabac8325b432a31406db71bd40ae5e9c10a818`다.
 - **실패 보존:** 최초12FAIL/actual1/18.760초는 DOM·문단·geometry 단언 이후 로컬 Vite HMR2건까지 서비스 WS로 세어0을 기대한 신규 하니스 오류다. 설치 Vite client:872/882와 실제 own-origin root socket을 대조해 HMR은 계속 차단·별도 관측하고 외부/비HMR WS0은 유지했다. 원 raw SHA `36ae58f22243d47b5967b7565b204d374a7347b56d0027c3252951778fe7e3dd`와 대표1PASS/4.090초를 별도로 보존하며 새 단일13/whole PASS로 합산하지 않는다. 원자료는 `.cache/frontend-parity-audit/static-operating-footer-4697.SG6QYk/`에 있다. 제품 기대값·기존 원문 Golden 완화0이다.

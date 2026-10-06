@@ -8,22 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/help-policy-link-parity@b6297be2888151bcecdb22b178f79799185d8301` 전체. 제품/시험은2b4bdea와동일, 문서2개에운영푸터유지/UI26승인과배포도구HOLD추가. 통합인증fix·원문푸터 보존·정적후보별도·운영미반영 |
+| React 출처 | `agent/web/help-policy-link-parity@9ef08290c159e156b6b681d773f974fac2a38f3d` 전체. 제품/시험2b4불변·MD2만운영도구보완명시승인추가. 통합인증fix·원문푸터 보존·정적후보별도·실배포미실행 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 운영 푸터 유지/UI26 승인과 배포 도구 HOLD
+### 최신 전달 — 명시 승인된 원자적 배포 도구 보완 준비
 
-통합 전체2245파일/26392350bytes/snapshot `57ea052b9cd2ce73a241f30ef0dbe8ff3f9e6251adb82966d50f0dbc16ada88a`를 전달한다. source b6297be는9ac907b 위 README/Bugfix2파일만 갱신했고 제품/시험·통합 인증 교정·원문 푸터는 그대로다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 기존57 candidate항목과 다른 top-level 역사·원본root/main을 보존한다. 새 `candidate.currentStaticUiPromotion`만 승인 범위를 기록한다.
+통합 전체2245파일/26394280bytes/snapshot `3f7351a869e9f1bf78439ceefcf0c034891d307856ab19daca0ec96ad9a61d56`를 전달한다. source9ef0829는b6297be 위 README/Bugfix2파일만 갱신했고 제품/시험·통합 인증 교정·원문 푸터는 그대로다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 기존57 candidate항목과 다른 top-level 역사·원본root/main을 보존한다. 기존 `candidate.currentStaticUiPromotion`의 승인 상태만 갱신한다.
 
-사용자는 현재 운영 푸터를 그대로 두고 나머지 UI부터 정적 배포하도록 명시 승인했다. 별도 정적 출처 `2c65b13f8696b0044804dc36ea4770cc2fd834b7`의 검증 제품 입력은 `78507d63fe9d3c6ae2249f00adecc5ad220021d5`이며 후속 변경은 MD2뿐이다. 푸터 JSON 전체가 운영7dd byte exact이고 원문 푸터 복원을 제외한 UI26·운영 인증/SDK/bootstrap/flags를 유지한다. 이 통합 React snapshot을 옛 운영인증으로 덮어쓰지 않는다.
+사용자는 운영 푸터 유지/UI26 선배포에 이어 즉시 배포 재개를 명시 지시했고 ROOT가 원자적 전환·잠금 등 운영 도구 보완 범위 승인을 확인했다. 별도 정적 출처 `8a757a523a1f40da366b16584561c5635b9296a1`의 검증 제품 입력은 `78507d63fe9d3c6ae2249f00adecc5ad220021d5`이며 후속 변경은 MD2뿐이다. 푸터 전체 운영7dd exact·운영 인증/SDK/bootstrap/flags·UI26은 불변이고 통합 snapshot을 옛 운영인증으로 덮어쓰지 않는다.
 
 신규 푸터 동일12키 단일12PASS/actual0/14.160초·관련/전체 lint 및 service build actual0, ROOT 실제 compiled Native1440/390/320의 단일3PASS/actual0는 별도 구간이다. 최신 compiled에서는 운영7dd 푸터·로그인3옵션/초안/닫기초점·도움말·overflow0·static GET74/48/58 exact·외부/mutation/WS/오류0을 확인했고 익명 session/CSRF GET만 합성했다. 최초12FAIL의 로컬 Vite HMR 오분류와 대표1PASS는 별도 보존하며 새whole PASS로 합산하지 않는다. 기존 원문 Golden 불변·소유4697 종료다.
 
-그러나 readonly exact updater e89a는 503/nginx reload/backend stop 뒤 oldWEB→backup, staging→WEB의 두 단계 rename이며 symlink를 거부하고 atomic link/lock이 없어 정본§0.4의 원자적 전환 요건을 충족하지 못한다. 상태는 **APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD**이며 운영 실행0이다. 사용자 UI 선배포 승인은 도구 변경·원문 푸터 사실/법률·실provider·전체서비스 GO가 아니다. 도구 수정 범위의 사용자 승인·최종 release/package/CAS/public smoke/원자 전환/rollback이 남는다. 기존 library/연구role·stage/대화stream producer NO_GO와 이전 pendingDeployment4b77는 불변이며 이번 전달에서 새시험/build/whole/모델/CI/provider/운영0이다.
+Decision(accepted / approved atomic deployment preparation): 직전 `APPROVED_UI_VALIDATED_DEPLOYMENT_TOOL_HOLD`와 readonly exact updater e89a의 503/nginx reload/backend stop·두 rename·symlink 거부·atomic link/lock 부재 근거를 보존한다. 최신 상태는 **APPROVED_STATIC_UI_ATOMIC_DEPLOYMENT_PREPARATION**, `operatingToolChangeApproved=true`다. 이는 §0.4 면제나 구현/최종Go/배포 완료가 아니다. 새 updater 구현·최종 release/package/CAS/public smoke/활성화·rollback 증거는 후속이며 이 시점 배포0이다. 실제 provider/서비스 Go false·원문 푸터 사실/법률 및 기존 producer NO_GO·원pendingDeployment 이력은 불변이다. 이번 문서 전달의 새시험/build/whole/모델/CI/provider/운영0이다.
 
 ### 이전 전달 — compiled 표시 검수와 전달 경계
 
