@@ -1,5 +1,9 @@
 # TETH Web
 
+## 현재 정적 운영 — 메인 우측 scrollbar 복원
+
+별도 static source `8d36d3109731e699486690fa65759417d40c060c`의 CSS2/시험1을 teth.ai에 반영하고 public1440/390/320 3PASS/actual0로 소개/메인의 숨김·휠·실키보드End/Home를 확인했습니다. 카피/geometry/overflow/auth/API/flags는 유지하며 통합인증FIX는 운영에 포함하지 않습니다. actualpersonal1 Opus5.5 C0/H0/M0/32입력·배포7단계0·원자CAS/backup과 원RED/Low6는 [누적 보고서](Bugfix_report.md)를 따릅니다. 아래c34의 최신운영 표기는 직전 이력입니다.
+
 ## 최신 운영 — 소개 CTA 정적 UI 승격·공개 확인 완료
 
 2026-10-06 사용자 승인 범위의 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`를 teth.ai에 반영했습니다. 소개 상·하단의 `시작하기`·한국어 언어 표기와 비회원 제자리 가입 동선을 복원했습니다. 운영 인증3파일·SDK/API·Google-only=true/exchange=false는 이전 b7과 exact이며, 아래 통합 인증 전환 교정은 **미배포**입니다.

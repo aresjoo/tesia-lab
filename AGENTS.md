@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-현재 전체스냅샷은manifest의통합39ba416/2250파일이고 최신정적운영권위는 `candidate.currentHomeScrollbarRestoration`의별도static8d36이다. 공용문서scrollbar 숨김/소개fallback만복원했고public3폭3PASS·wheel/실키보드·정적bytes를확인했다. 인증/API/flags/카피/geometry는기존운영그대로이며통합authFIX는미배포다. Low6·실provider/서비스NO_GO·원FAIL/730일은보존하며아래1023/c34는직전인수기록이다. 스냅샷직접수정금지와sync/verify단일전달원칙을유지한다.
+현재 전체스냅샷은manifest의통합efe7b23/2250파일이고 최신정적운영권위는 `candidate.currentHomeScrollbarRestoration`의별도static8d36이다. 공용문서scrollbar 숨김/소개fallback만복원했고public3폭3PASS·wheel/실키보드·정적bytes를확인했다. 인증/API/flags/카피/geometry는기존운영그대로이며통합authFIX는미배포다. Low6·실provider/서비스NO_GO·원FAIL/730일은보존하며아래1023/c34는직전인수기록이다. 스냅샷직접수정금지와sync/verify단일전달원칙을유지한다.
 
 현재 전달 출처는 manifest의 통합1023bce/전체2250파일이고 최신배포·검수권위는 `candidate.currentUserApprovedSourceUxTest`다. 실제운영sourcec34의UI-only 승격/public3폭확인을완료했으며static문서HEADac4f776과구분한다. 인증3파일/SDK/API/flags는운영b7그대로,통합authFIX는미배포다. 원본최종푸터의7localeKO/Powered by와Reactforeign6연구본문/KO거래소의차이는추가확정후속항목이다. 원56raw결속한계/준비FAIL/실서비스NO_GO·원자료는보존하고새whole·실providerGO로확대하지않는다. 아래currentRootCause/운영b7·미배포문구는각직전입력의역사다.
 

@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 전달은 통합39ba416 전체2250파일/26515005bytes/snapshot8debc897 sync/verify0·dirty/삭제경로0이며 별도static8d36의 메인 우측 scrollbar 숨김을 teth.ai에 반영했습니다. 실제운영source8d36과static문서8abe6b6/Program63f6408를 구분합니다. public1440/390/320 3PASS/actual0·소개/메인wheel/실키보드End/Home/정적bytes일치, personal1 actual Opus5.5 C0/H0/M0/32입력·CAS/원자교환/backup·배포7단계0입니다. 카피/SVG/geometry/overflow/auth/API/flags 불변, 통합인증FIX·실provider/서비스GO는미완료다. 정확출처/원FAIL/Low6는 `candidate.currentHomeScrollbarRestoration`와누적보고서가소유하며아래c34/1023은직전전달이력입니다.
+현재 전달은 통합efe7b23 전체2250파일/26515603bytes/snapshotea764ae7 sync/verify0·dirty/삭제경로0이며 별도static8d36의 메인 우측 scrollbar 숨김을 teth.ai에 반영했습니다. 실제운영source8d36과static문서8abe6b6/Program63f6408를 구분합니다. public1440/390/320 3PASS/actual0·소개/메인wheel/실키보드End/Home/정적bytes일치, personal1 actual Opus5.5 C0/H0/M0/32입력·CAS/원자교환/backup·배포7단계0입니다. 카피/SVG/geometry/overflow/auth/API/flags 불변, 통합인증FIX·실provider/서비스GO는미완료다. 정확출처/원FAIL/Low6는 `candidate.currentHomeScrollbarRestoration`와누적보고서가소유하며아래c34/1023은직전전달이력입니다.
 
 최신 전달은 통합 `1023bceec392e7c75afd56fb1f4dad63f4c86cd6` 전체2250파일/26512904bytes/snapshot0405c24b이며 sync/verify actual0·dirty/삭제경로0입니다. 승인된 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`는 **teth.ai 운영 반영·공개 확인 완료**입니다. 문서HEAD staticac4f776/Program5c91a11과 실제운영source를구분합니다. 공개3폭3PASS·7언어CTA42동선/5페이지15관측·overflow/오류/외부/mutation/WS0, personal1실제Opus5.5 정적releaseGO/34입력과CAS/원자교환/backup을결속했습니다. 운영인증3파일/SDK/API/flags는b7불변이며통합인증수정은미배포입니다. 정확한원FAIL·56raw결속한계·실서비스NO_GO·추가확정비KO푸터/Powered by 차이는 `candidate.currentUserApprovedSourceUxTest`와 [누적보고서](react-app/Bugfix_report.md)를따릅니다. 아래미배포·운영b7표현은직전이력입니다.
 

@@ -2,7 +2,7 @@
 
 ## 최신 전달·정적 운영 확인
 
-현재 통합39ba416/전체2250파일/26515005bytes/snapshot8debc897를sync/verify0로전달한다. 별도static8d36의공용문서scrollbar 숨김은원9fb 계승으로teth.ai 반영/공개3폭3PASS·소개/메인wheel/실키보드End/Home/정적GET각160 exact를완료했다. 카피/SVG/geometry/overflow/auth/API/flags 불변·기존소개fallback유지·정보/정책/nested제외다. actualpersonal1 Opus5.5 C0/H0/M0/32입력·새freeze·배포7단계0·c34 CAS/backup를결속한다. 통합인증FIX와실provider/전체서비스는미완료이며touch/Safari/음성단언·푸터원문차이 등Low6는남긴다. 정확출처/원RED/하니스·Git원실패는 currentHomeScrollbarRestoration 및React누적보고서를따른다. 아래1023/c34의최신표현은직전이력이다.
+현재 통합efe7b23/전체2250파일/26515603bytes/snapshotea764ae7를sync/verify0로전달한다. 별도static8d36의공용문서scrollbar 숨김은원9fb 계승으로teth.ai 반영/공개3폭3PASS·소개/메인wheel/실키보드End/Home/정적GET각160 exact를완료했다. 카피/SVG/geometry/overflow/auth/API/flags 불변·기존소개fallback유지·정보/정책/nested제외다. actualpersonal1 Opus5.5 C0/H0/M0/32입력·새freeze·배포7단계0·c34 CAS/backup를결속한다. 통합인증FIX와실provider/전체서비스는미완료이며touch/Safari/음성단언·푸터원문차이 등Low6는남긴다. 정확출처/원RED/하니스·Git원실패는 currentHomeScrollbarRestoration 및React누적보고서를따른다. 아래1023/c34의최신표현은직전이력이다.
 
 통합source1023bce/전체2250파일/26512904bytes/snapshot0405c24b를전달하며sync/verifyactual0·원root9fb/Node/Worker/main불변·dirty/삭제경로0이다. 별도UI-only 운영sourcec34는소개CTA7locale원문·비회원제자리signup복원을실제승격/public3폭3PASS·CTA42동선/5페이지15관측으로확인했다. Opus5.5personal1정적releaseGO C0/H0/M2·34입력불변·CAS/원자교환/rollback보존을결속했고auth3/SDK/API/flags는b7그대로다. 통합인증FIX·실chat/research/library와전체서비스NO_GO는별도잔여다. 원본최종푸터의KO고정본문/Powered by와React6외국어연구형본문/KO거래소의차이를추가확정했으며미수정으로남겼다. 이전56raw의독립head/specSHA결속한계·하니스FAIL·최초preflightlocal실패를보존한다. 정확한출처/최신상태는manifest와verification의 `candidate.currentUserApprovedSourceUxTest`, 실행·잔여는React누적보고서를따른다. 아래단계별완료/미배포표현은각입력당시이력이다.
 
