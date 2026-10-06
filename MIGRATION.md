@@ -8,14 +8,20 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `agent/web/shared-menu-ime-parity@e44867b6bfdd76f1aed4753951461236ea31767e` 전체. 부모4af 위 공유 메뉴 KO원문2개·Main 연구IME229 guard만 변경. 구간검증·타입/lint/3build actual0, 새whole/운영0 |
+| React 출처 | `agent/web/copy-feedback-detail-parity@81957ad7a7f3c52bc24e03c7d5787dc0f0d9b6cd` 전체. 부모e448 위 실제 복사 성공안내·공유상세 KO버튼/복귀·알림그룹명만 복원. 인증/API/flags 변경0·구간검증·타입1회/3build actual0, 새whole/운영0 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 공유 메뉴와 연구 입력
+### 최신 전달 — 복사 안내와 전략 상세·알림
+
+전체2243파일/26355478bytes/snapshot `53bc39ee4859c7b2909c6b6164b8bc797beb131b9c49dd98d9f53e3d7a9f824f`를 전달한다. source dirty/deleted/이전경로삭제0·sync/verify actual0, 원본 root/main과 이전current20·운영역사객체를 보존한다. 제품4파일만 바꾸고 인증/controller/API/SDK/flags/CSS/SVG/730일은 유지한다. 사용자 메시지 실제 최신복사 성공의 `복사 완료`, 상세 `전략 복사`·`전략 복사하기`, KO알림그룹 접미사를 원문으로 맞췄다. 원문 없는 catalogue 오류 복귀는 동일 목록명 일관성만 교정한다. 다른6언어는 기존값을 그대로 유지한다.
+
+알림4PASS/14.20초·상세8PASS/14.40초·추가복귀4PASS/7.68초는 각각 별도 검증이다. clipboard 신규14키는12PASS/신규props하니스2FAIL 회차와 준비 교정 후 해당2PASS를 별도로 보존하며 새 단일14PASS로 쓰지 않는다. 기존question2PASS도 별도다. 기존9시험의21 CTA selector만 이름 교정했고 전체252 대신 직접 영향24키만24PASS/32.29초로 검증했다. 관련lint/타입1회/공개·내부·service3build actual0·source18 stagedsecret scan0다. 독립 readonly는 product4/새spec3/기존21치환 범위를 확인했으며 확정blocker0이다. 새모델/whole/실provider/운영0, 푸터 사실 확인·정적승격 HOLD를 유지한다. controlled Native는 실제계정 가용성 증거가 아니다. 세부 실패·하니스교정·raw위치는 `react-app/Bugfix_report.md`와 `candidate.currentCopyFeedbackDetailParity`를 따른다.
+
+### 이전 전달 — 공유 메뉴와 연구 입력
 
 전체2240파일/26314982bytes/snapshot `026c1ca08906fb226edbd02ad7279104c40b26d138b52c2800fc5f3f08a5bf35`다. source dirty/deleted/이전경로삭제0·sync/verify actual0이며 원본 root/main은 보존한다. 메뉴 `고객센터`·`앱 다운로드`만 원문으로 맞추고 다른6언어의 기존 번역·콜백/계정조건은 유지했다. 연구문서 입력의 원IME229 조건 누락도 복원했다. 두 제품파일의 역치환은 부모4af와 byte-exact이며 인증 controller/API/SDK/flags 변경0이다.
 

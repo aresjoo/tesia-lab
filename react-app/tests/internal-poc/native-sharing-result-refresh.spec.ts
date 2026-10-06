@@ -100,12 +100,12 @@ test('차트 키보드 선택은 새 관측으로 섞이지 않고 같은 SVG는
 
 test('복제 검증 중 원본 결과가 교체되면 모달을 폐기하고 늦은 검증으로 다시 열지 않는다', async ({ page }) => {
   await mount(page)
-  await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   await page.getByRole('dialog').getByRole('button', { name: '다음: 예상 결과 보기', exact: true }).click()
   await expect(page.getByRole('dialog').getByRole('button', { name: '확정하고 검증 시작', exact: true })).toBeDisabled()
   await page.evaluate(() => Reflect.get(window, 'resultRefresh')())
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: '따라하기', exact: true })).toBeFocused()
+  await expect(page.getByRole('button', { name: '전략 복사하기', exact: true })).toBeFocused()
   await page.evaluate(() => Reflect.get(window, 'settleRefreshCopy')())
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await expect(page.locator('[data-metric="ret"] b')).toHaveText('+27.4%')

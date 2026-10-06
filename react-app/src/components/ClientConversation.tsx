@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { ClientPersistentRegion } from './ClientPersistentRegion'
 import { ClientQuestionDockTarget } from './ClientQuestionDock'
 import { ArrowDown, ArrowLeft, ArrowUp, Check, Copy, FileText, Pencil, Square } from 'lucide-react'
@@ -8,6 +9,7 @@ import { clientResearchLabel } from '../client-research-label'
 import { ClientIcon } from './ClientIcon'
 import type { ConversationViewport } from '../client-experience-store'
 import { useConversationCopy } from '../client-conversation-copy'
+import { useClientPreviewToast } from '../use-client-preview-toast'
 
 // DOM rectangles include CSS zoom; scrollTop/clientHeight and CSS heights do
 // not. Keep following, spacer persistence and restore in layout coordinates.
@@ -87,21 +89,27 @@ type ConversationProps = {
 )
 
 export function ClientUserMessage({ children, onEdit, editDisabled = false, resultCard }: { children: string; onEdit: (text: string) => void; editDisabled?: boolean; resultCard?: ReactNode }) {
-  const { c } = useConversationCopy()
+  const { c, language } = useConversationCopy()
   const [copyState, setCopyState] = useState('')
   const copyAttempt = useRef(0)
-  return <div className="g-urow">
+  const copyNotice = useRef('')
+  const { toast, showToast } = useClientPreviewToast()
+  useLayoutEffect(() => { copyNotice.current = language === 'ko' ? '복사 완료' : c('copiedMessage') }, [c, language])
+  useLayoutEffect(() => () => { copyAttempt.current += 1 }, [children])
+  return <><div className="g-urow">
     <div className="g-uacts">
       <button type="button" aria-label={c('editMessage')} disabled={editDisabled} onClick={() => { if (!editDisabled) onEdit(children) }}><Pencil size={13} /></button>
       <button type="button" aria-label={c(copyState === 'copied' ? 'copiedMessage' : 'copyMessage')} onClick={async () => {
         const attempt = ++copyAttempt.current
-        try { await navigator.clipboard.writeText(children); if (attempt === copyAttempt.current) setCopyState('copied') }
+        try { await navigator.clipboard.writeText(children); if (attempt === copyAttempt.current) { setCopyState('copied'); showToast(copyNotice.current) } }
         catch { if (attempt === copyAttempt.current) setCopyState('error') }
       }}>{copyState === 'copied' ? <Check size={13} /> : <Copy size={13} />}</button>
     </div>
     <div className={`g-umsg${resultCard?' an-umsg':''}`}>{resultCard?<><div className="an-card">{resultCard}</div><div className="an-line">{children.split('\n')[0]}</div></>:children}</div>
     {copyState === 'error' && <span className="g-copy-error" role="status">{c('copyError')}</span>}
-  </div>
+  </div>{toast.text && createPortal(<div className="client-source-overlays">
+    <div data-user-message-copy-notice className={`ca-code-toast${toast.visible ? ' show' : ''}`} role={toast.visible ? 'status' : undefined} aria-live="polite" aria-atomic="true">{toast.text}</div>
+  </div>, document.body)}</>
 }
 
 /** React rendering of tesia-lab acccc7f's g-center/g-doc/g-composer/g-aux.

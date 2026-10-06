@@ -1,5 +1,18 @@
 # TETH 버그 수정·검수 보고서
 
+## 복사 안내와 전략 상세·알림 원문 복원
+
+- **확인된 차이와 범위:** 원9fb index11248의 사용자 메시지 `복사 완료`가 누락됐다. 공유 상세 index15510/21659의 `전략 복사`·`전략 복사하기`와 알림 index23528/23532의 한국어 그룹명 접미사도 달랐다. 제품4파일만 변경하고 CSS/SVG/숫자/기존6언어/인증/controller/API/SDK/flags/730일은 보존한다. shared own nullparameters 복귀도 같은 원문 목록명으로 복원한다. 원본에 없는 catalogue loading/error 화면은 원문 복원 완료가 아니라 동일 목록명 일관성 교정이다.
+- **복사 피드백:** 실제 최신 clipboard 성공만 안내하고 실패·이전 시도·unmount·메시지 교체 뒤 늦은 응답은 성공으로 표시하지 않는다. 기존 toast 훅/2200ms·오류·초안/선택/DOM/초점은 유지한다. 신규14키 첫 회차6PASS/신규하니스8FAIL, 교정 회차12PASS/props하니스2FAIL(27.92초)을 보존했다. React 모듈 경로 준비만 교정한 실패2키는2PASS/3.68초다. 새 단일14PASS로 합산하지 않는다. 기존 question 복사2PASS/3.13초는 별도다. 최초 grep 선택 오류0시험도 보존한다. 합성 clipboard이며 OS 권한·Native 실인증 성공이 아니다.
+- **전략 상세·복귀:** Main retained URL/Native supplied 상세·6외국어·복사 검증 callback·복귀/초안의 신규8키는 준비 교정 후8PASS/14.40초다. 최초3PASS/신규하니스7FAIL은 기존locale2를 포함한 회차로 별도 보존한다. 추가 own/error2case×양project4PASS/7.68초이고 앞8키/locale2를 다시 실행하지 않았다. 추가 준비 callback 기대 누락 FAIL와 실제 원문 RED를 분리 보존했다. 모바일 오류 복귀 버튼은 기존행의 두 줄 배치이며 overflow0·동작PASS만 주장한다. CSS 배치 개선·전체 화면 품질 완료로 확대하지 않는다.
+- **알림:** Main과 Native supplied×1440/320의4키가4PASS/14.20초다. 한국어6그룹 접근성 이름·원문 최종 설명·12제어와 다른6언어·DOM·잠김·pending·명시 callback을 확인했다. RED desktop2FAIL을 보존한다. 실제 NativeServiceApp/provider 연결 검증이 아니다.
+- **기존 시험과 배치:** 기존9spec의21 CTA selector 이름만 교정했다. 역치환은 부모e448과 byte-exact이며 기존 단언·fixture·timeout·retry·skip은 불변이다. 전체252 대신 직접 영향24키만24PASS/actual0/32.29초, 실패/skip/retry/flaky/시험밖오류0다. 관련 lint/diffcheck·타입검사1회·그 뒤 공개/내부/service Vite3build actual0. Google-only=true/exchange=false 유지, 기존 chunk/native-config 경고는 남는다. 새 install/whole/model/provider/운영0이며 이전 전수 FAIL·정적후보c090·푸터 사실 확인/HOLD를 유지한다.
+- **증거 위치:** private `.cache/frontend-parity-audit/`의 `user-message-copy.noC8p7/`, `shared-detail-original.14A0hH/`, `notification-group-original-4688/`, `copy-cta-selector-subset-4691/`에 각 원회차 raw·trace·PNG를 보존했다. ROOT가 제품 diff/신규 시험/실제 raw와 Native320 PNG를 대조했다. 처음 새시험의 잘못된 literal/DOM/모듈 경로 가정은 제품 버그가 아닌 준비 오류이며 기존시험을 느슨하게 바꾸지 않았다. 이후 좁은 시험은 기존 fixture·실제 import 경로를 먼저 검산한다. 소유4688–4691 listener는 모두 종료됐다.
+
+### 실제 소비와 배포 잔여
+
+공유 컴포넌트는 Main/Native 소비를 가지지만 controlled fixture를 현재 운영 가용성으로 보고하지 않는다. 기존 운영7dd는 이번 후보로 교체하지 않았다. 본 배치는 인증 변경을 추가하지 않으며 통합 부모의 인증 교정과 별도 정적copy-only 후보를 혼동하지 않는다. 원문 푸터의 실거래·Bitget 선정 주장 확인과 사용자 승격 방향, §0.4의 독립 release 검수·원자적 전환·공개 smoke는 별도 잔여다. README의 과거 후보 열한 곳은 `당시`로 구분하고 수치·원실패는 보존했다. 정확한 Git 전달은 migration manifest/verification 최신 객체를 따른다.
+
 ## 공유 메뉴 원문과 연구 입력 IME 교정
 
 - **영향 경계:** ROOT와 세 병렬 담당자가 Public/Settings/Research 소비를 분리했다. 제품은 `ClientAccountUI.tsx`의 KO 두 분기와 `ClientResearchWorkspace.tsx`의 `keyCode !== 229` 조건 하나만 변경했다. 두 역치환은 각각 부모4af 파일과 byte-exact다. 인증 controller/API/권한/조건·SDK/가격/서버/flags/원본 root/730일 변경0·삭제0다. 원문을 임의 재작성하지 않고 `고객센터`·`앱 다운로드`만 원9fb index5279/5283대로 복원했다. 원본은 다른 언어에도 KO 고정이었으나 현재6언어 번역은 유지하며 그12값을 원문복원으로 보고하지 않는다.

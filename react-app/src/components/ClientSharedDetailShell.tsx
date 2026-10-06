@@ -30,7 +30,7 @@ export function ClientSharedDetailShell({ row, info, children, location, title, 
   }
   const author = row.author ?? row.nick
   return <div className="client-shared-detail">
-    <nav className="tfbk-bc" aria-label={s('현재 위치')}><button type="button" onClick={() => onNavigate({ period: 'all' })}>{breadcrumbLabel ?? researchCopy(language, 'sharing')}</button><span> / {row.title ?? row.nick}</span></nav>
+    <nav className="tfbk-bc" aria-label={s('현재 위치')}><button type="button" onClick={() => onNavigate({ period: 'all' })}>{breadcrumbLabel ?? (language === 'ko' ? '전략 복사' : researchCopy(language, 'sharing'))}</button><span> / {row.title ?? row.nick}</span></nav>
     {header ?? <header className="shared-detail-head">
       <div className="shared-detail-title-row"><div className="shared-detail-identity">
         <ClientStrategyGlyph kind={row.kind} evidence={row.glyph} size={44}/>
@@ -42,7 +42,7 @@ export function ClientSharedDetailShell({ row, info, children, location, title, 
         {!row.me && <button type="button" className="shared-detail-watch" disabled={watchDisabled} aria-pressed={watched} onClick={onWatch}>{s(watched ? '관심 전략 해제' : '관심 전략')}</button>}
       </div></div>
       {row.description && <p className="ss3-ddescription">{row.description}</p>}
-      <div className="ss3-dacts shared-detail-actions">{row.me ? <span className="ss3-own-badge">{s('내가 공유한 전략')}</span> : <button type="button" className="wbtn" onClick={onCopy}>{researchCopy(language, 'follow')}</button>}
+      <div className="ss3-dacts shared-detail-actions">{row.me ? <span className="ss3-own-badge">{s('내가 공유한 전략')}</span> : <button type="button" className="wbtn" onClick={onCopy}>{language === 'ko' ? '전략 복사하기' : researchCopy(language, 'follow')}</button>}
         <button type="button" className="shared-detail-analysis" disabled={analyzing || analyzeDisabled} aria-busy={analyzing} onClick={onAnalyze}>{s('TETH에게 분석시키기')}</button>
       </div>
     </header>}

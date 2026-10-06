@@ -38,7 +38,7 @@ async function setup(page: Page, signed = true) {
 }
 async function openCopy(page: Page, request: Request) {
   await page.goto(`/${sharedHash({ nick: request.nick, period: 'all' })}`)
-  await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   await continueCopyAfterIntro(page)
   await expect(page.getByRole('dialog', { name: '전략 따라하기', exact: true })).toBeVisible()
   await page.getByRole('combobox', { name: '시작 예산', exact: true }).selectOption(String(request.budgetIndex))
@@ -218,7 +218,7 @@ test('320px 모달은 키보드 취소·닫기와 최초 포커스 복귀를 지
   await page.setViewportSize({ width: 320, height: 740 })
   await setup(page)
   await page.goto(`/${sharedHash({ nick: nasdaq.nick, period: 'all' })}`)
-  const trigger = page.getByRole('button', { name: '따라하기', exact: true })
+  const trigger = page.getByRole('button', { name: '전략 복사하기', exact: true })
   await trigger.focus()
   await page.keyboard.press('Enter')
   await continueCopyAfterIntro(page)
@@ -248,7 +248,7 @@ test('320px 모달은 키보드 취소·닫기와 최초 포커스 복귀를 지
 test('게스트의 따라하기는 로그인만 열고 복제 세션이나 검증 스냅샷을 만들지 않는다', async ({ page }) => {
   await setup(page, false)
   await page.goto(`/${sharedHash({ nick: eth.nick, period: 'all' })}`)
-  await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   await expect(page.locator('.ca-auth')).toBeVisible()
   await expect(page.getByRole('button', { name: '확정하고 검증 시작', exact: true })).toHaveCount(0)
   expect((await saved(page)).experience.sessions).toHaveLength(1)

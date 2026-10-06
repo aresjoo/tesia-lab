@@ -74,14 +74,14 @@ test('실제 Main의 A 설정 변경과 동일 조건 재검증은 제자리이�
   // Re-enter through the public source, without followId: equal complete
   // settings must deduplicate A rather than append a new follow record.
   await page.goto(`/${sharedHash({ nick: sources[0].nick, period: 'all' })}`)
-  await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   await confirmCopy(page, true)
   saved = await snapshot(page)
   expect(saved.sharedFollows.find((row: { id: string }) => row.id === 'record-A').sessionId).not.toBe(firstJob)
   await openFollowing(page)
   expect(await order(page)).toEqual(['record-C', 'record-B', 'record-A'])
   await page.goto(`/${sharedHash({ nick: sources[3].nick, period: 'all' })}`)
-  await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   await confirmCopy(page)
   saved = await snapshot(page)
   const newest = saved.sharedFollows.find((row: { owner: string; nick: string }) => row.owner === owner && row.nick === sources[3].nick)

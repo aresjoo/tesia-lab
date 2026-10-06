@@ -147,7 +147,7 @@ test('조건 설정·예상 결과는 원본 엔진으로 계산하고 명시 �
   const row = byReturn[0]
   await open(page, sharedHash({ nick: row.nick, period: 'all' }))
   const initial = await page.evaluate(() => ({ local: { ...localStorage }, session: { ...sessionStorage } }))
-  const trigger = page.getByRole('button', { name: '따라하기', exact: true })
+  const trigger = page.getByRole('button', { name: '전략 복사하기', exact: true })
   await trigger.click()
   const intro = page.getByRole('dialog', { name: '이 전략을 따라하려면 연결이 필요해요', exact: true })
   await expect(intro).toBeVisible()

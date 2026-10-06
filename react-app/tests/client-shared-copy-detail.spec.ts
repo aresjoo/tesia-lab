@@ -33,7 +33,7 @@ async function openCopy(page: Page, saved?: SharedFollowRecord) {
   if (saved) {
     await page.evaluate(() => { location.hash = '#/share/library' }); await expect(page.locator('#research-title')).toHaveText('따라가는 중')
     await page.locator(`[data-follow-id="${saved.id}"]`).getByRole('button', { name: '다시 검증', exact: true }).click()
-  } else await page.getByRole('button', { name: '따라하기', exact: true }).click()
+  } else await page.getByRole('button', { name: '전략 복사하기', exact: true }).click()
   const intro = page.getByRole('dialog', { name: '이 전략을 따라하려면 연결이 필요해요', exact: true })
   await expect(intro).toBeVisible()
   await intro.getByRole('button', { name: '나중에 하기', exact: true }).click()

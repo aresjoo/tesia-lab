@@ -211,7 +211,7 @@ test('크리에이터 원본3단계는 비동기 공개·공개전환 확인 뒤
 test('원본 복제 조건·예상 결과 모달은 공급 검증 완료 전 수치·성공을 만들지 않는다',async({page})=>{
   await mount(page)
   await hub(page).locator('.strategy-list-link').first().click()
-  await hub(page).getByRole('button',{name:'따라하기',exact:true}).click()
+  await hub(page).getByRole('button',{name:'전략 복사하기',exact:true}).click()
   const dialog=page.getByRole('dialog')
   await expect(dialog.getByRole('combobox')).toHaveCount(3)
   await dialog.getByRole('button',{name:'다음: 예상 결과 보기',exact:true}).click()

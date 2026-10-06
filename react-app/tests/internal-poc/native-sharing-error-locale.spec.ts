@@ -100,7 +100,7 @@ test('trader analysis error follows all locales without leaking exception or res
 
 for (const kind of ['validate-copy', 'validate-confirm'] as const) test(`${kind} failure retains copy conditions and translates inside its modal`, async ({ page }) => {
   await detail(page)
-  await hub(page).getByRole('button', { name: '따라하기', exact: true }).click()
+  await hub(page).getByRole('button', { name: '전략 복사하기', exact: true }).click()
   const dialog = page.getByRole('dialog')
   await dialog.getByRole('button', { name: '다음: 예상 결과 보기', exact: true }).click()
   if (kind === 'validate-confirm') {
@@ -115,7 +115,7 @@ for (const kind of ['validate-copy', 'validate-confirm'] as const) test(`${kind}
 
 for (const action of ['retry', 'back'] as const) test(`copy confirmation ${action} clears the prior failure without losing conditions`, async ({ page }) => {
   await detail(page)
-  await hub(page).getByRole('button', { name: '따라하기', exact: true }).click()
+  await hub(page).getByRole('button', { name: '전략 복사하기', exact: true }).click()
   const dialog = page.getByRole('dialog')
   const conditions = await dialog.locator('select').evaluateAll(elements => elements.map(element => (element as HTMLSelectElement).value))
   await dialog.getByRole('button', { name: '다음: 예상 결과 보기', exact: true }).click()
