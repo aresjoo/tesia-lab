@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷의 출처는 **`agent/web/conversation-busy-feedback@c0805540d0ff13daf7a57be535ec0bb072e0ef7a`**입니다. 추적파일 전체 **2,231개/26,176,802bytes**이며 미커밋 변경·삭제 없이 전달한 운영 미배포 후보입니다. 기존 원문 복원을 계승하고 응답 중 Enter의 클라이언트 원문 안내를 기존 토스트로 복원했습니다. 초안·선택 범위·중단·중복 전송 차단은 유지하며 새 카피·CSS·SVG·버튼 배치를 만들지 않았습니다. Google·Apple·이메일·SDK/provider flags·가격/권한·서버/DB/730일은 그대로입니다.
+현재 React 스냅샷의 출처는 **`agent/web/research-validation-copy@5510b8fe729439979e3438ecea7f0d1253678740`**입니다. 추적파일 전체 **2,232개/26,194,513bytes**이며 미커밋 변경·삭제 없이 전달한 운영 미배포 후보입니다. 이전 원문 복원을 계승하고 Hypothesis 답변의 검증 조건·artifact 확인 위치 한 항목을 원문 그대로 되돌렸습니다. 디자인·초안·명시 답변·중단·Native·Google/Apple/이메일·SDK/flags·가격/권한·서버/DB/730일은 유지합니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.
@@ -11,7 +11,7 @@
 
 이 브랜치 push는 `main` 병합이나 자동 배포를 실행하지 않습니다. 사용자가 별도로 요청한 `teth.ai` 정적 프론트 업데이트는 [검증 기록](migration-verification.json)의 배포 상태로 구분합니다. 루트 원본·server/Worker 및 투자 프롬프트 draft `8646b65`는 이번에 병합·배포하지 않습니다. Apple·이메일 선택지는 유지하되 현재 서버에서 미연결인 방식은 ‘준비 중’으로 표시합니다.
 
-최종2224/cc0772c1 입력의 단일6spec114개는114 PASS/0 FAIL/0 SKIP/actual0이며 신규8키를 포함합니다. 같은 입력의 lint·공개/내부/service3build actual0와 actual personal(1) Sonnet5.5 `BUSY_SEND_FEEDBACK_CODE_GO`/C0H0M0·Low7/가설5를 구분합니다. Native 응답 중 입력 정책은 바꾸지 않았습니다. 부모d11d/2223-b6c 단일546spec/15,272 전수는 별도 입력에서 계속 진행 중이며 이번 후보의 전체 PASS로 승계하지 않습니다. 이전 원FAIL과 fixture·패치 배치 실패도 보존합니다. 최신 기록은 `candidate.currentBusySendFeedback`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다. 다른 g-doc·푸터·도움말 최초/후속 차이와 실제 producer는 남으며 전페이지 동일·전체·운영GO는 아닙니다.
+최종2225/9b2 입력의 원문10키는6PASS/4FAIL에서10PASS로 복원됐고 이를 포함한 관련4spec82개도82PASS/actual0입니다. 같은 입력의 lint·공개/내부/service3build actual0, 원문·시험 독립 대조 및 실제 personal(1) Sonnet5.5 `COPY_CODE_GO`/C0H0M0/Low8·가설5를 확인했습니다. 추가 Native 기능은 복원 배치에서 제외·원복했습니다. 작은 수정마다 전체 회귀를 반복하지 않고 구간별 병렬 복원·관련 시험 후 최종 배치에서 필요한 전체1회를 수행합니다. 부모d11d 전수69219는 다른 입력의15,097PASS/152FAIL/기존17SKIP/후단미실행6/actual1로 종료했고 실패 원인은 미확정으로 보존합니다. 최신 기록은 `candidate.currentHypothesisOriginalReply`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단입니다. 전체·서비스·운영GO나 전페이지 동일성을 주장하지 않습니다.
 
 이하 시험 수치와 ‘현재’ 표현은 이전 입력의 누적 인수 이력입니다. 부모314304의46카피·878검증은 `candidate.currentApprovedCopyRestoration`에 보존하며 현재bd2 전체검증으로 승계하지 않습니다.
 

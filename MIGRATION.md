@@ -8,14 +8,22 @@
 | --- | --- |
 | 대상 저장소·브랜치 | `aresjoo/tesia-lab`의 `migration` — 원격 `main`에서 분기 |
 | 클라이언트 원본 | `9fbff821df62cad11d026022fc7628c7fcebc431` — 최초 전달 시 원격 main과 같음 |
-| React 출처 | `beak1011/tesia-web`의 `agent/web/conversation-busy-feedback@c0805540d0ff13daf7a57be535ec0bb072e0ef7a` 추적 파일 전체. 기존 원문 복원을 계승하고 응답 중 Enter 안내만 원9fb 문구·기존 토스트로 복원한 미배포 후보. 기존 디자인·초안·명시 답변·중단·Native 정책·로그인3옵션·SDK·가격/권한/flags 보존 |
+| React 출처 | `beak1011/tesia-web`의 `agent/web/research-validation-copy@5510b8fe729439979e3438ecea7f0d1253678740` 추적 파일 전체. 기존 원문 복원 위에 Hypothesis 검증 조건·artifact 확인 위치1literal만 원9fb11884로 복원. 기존 디자인·초안·명시 답변·중단·Native 정책·로그인3옵션·SDK·가격/권한/flags 보존 |
 | 정확한 스냅샷 | [migration-manifest.json](migration-manifest.json)의 `sourceCommit`, `capturedAt`, `sourceDirtyFiles`, `snapshotDigest` |
 | 현재 제품 상태 | 원본 이식·미병합 거래소 연결 후보 위에 UI·탐색·접근성·인증 가용성 교정 추가. 코드 전달, 클라이언트 main 병합, 정적 화면 배포와 실제 서비스 승인은 별개. 거래소 연결은 기본 비활성화 |
 | 코드 외 로컬 자료 | `node_modules`, 캐시, 빌드 결과, 실행 로그, DB, credential, 다른 작업본, 적용 전 비공개 QA 후보는 포함하지 않음 |
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 응답 중 전송 원문 안내 복원
+### 최신 전달 — 가설 질문 답변 원문 복원
+
+source `5510b8fe729439979e3438ecea7f0d1253678740`의 전체2,232파일/26,194,513bytes/snapshot `cd1e933b2a420f693bd2b83e841ee3036c98c217265b9d2afe49365cd22fed28`다. 미커밋·삭제0, 직전c080 대비 제품1/신규시험1/README·Bugfix2의4경로만 바뀌었다. 원9fb11884의 `Research 구간과 Holdout 구간` 및 `결과는 Backtest, Holdout artifact에서 확인하십시오.`를 Hypothesis 답변에 그대로 계승한다. 기존 본문과 같은 문구이며 전체gSend 이식을 완료했다는 의미는 아니다.
+
+신규5제목×양project10키의 원RED6PASS/4FAIL을 보존하고 같은시험10PASS/actual0, 포함4spec82PASS/actual0, lint·공개/내부/service3buildactual0를 확인했다. 신규10을82에 중복 합산하지 않는다. 공개bundle만바뀌고내부/service는부모c080 exact다. 독립원문·리터럴역치환·raw/list 검산747d82bc, personal1 실제Sonnet5.5 COPY_CODE_GO/C0H0M0/Low8·가설5는 국소범위다. 추가Native검증행은privatepatch/spec 복구보존·제품원복하여이번전달에포함하지않았다.
+
+사용자 지적에 따라 남은원본차이고정목록/파일별단독writer/독립구간병렬복원/각영향시험/최종복원배치필요전체1회의순서를따른다. 작은복원에whole·추가기능을계속붙이지않는다. 별도부모d11d 전수69219는15,097PASS/152FAIL/기존17SKIP/후단미실행6/actual1로끝났다. 실패8파일의제품/환경/하니스 인과는미확정이고미실행6을정상SKIP/PASS로세지않는다. 원receipt41be761d/raw8927f84f/독립bbffcf15를보존하고이번후보전체PASS로승계0이다. 최신 `candidate.currentHypothesisOriginalReply`가 정확한범위·잔여를소유한다. 원root3759·운영9객체·서버DB/730일·teth.ai7dd를보존하며정적활성화0/HOLD다. 아래는이전입력의인수이력이다.
+
+### 이전 응답 중 전송 원문 안내 복원
 
 source `c0805540d0ff13daf7a57be535ec0bb072e0ef7a`의 전체2,231파일/26,176,802bytes/snapshot `44315913c7af053db2b9dd99f1aa97dd0c8a23c7cfbfe0e932427dfeb9294c37`다. sourceDirtyFiles0·삭제0이며 직전d11d 대비 제품2·신규시험1·README/Bugfix2의5경로만 달라졌다.
 
@@ -29,7 +37,7 @@ source `c0805540d0ff13daf7a57be535ec0bb072e0ef7a`의 전체2,231파일/26,176,80
 
 첫fixture의 prefix 교체로 생긴2PASS/6FAIL과 ROOT의 guard 잘못 배치0PASS/8FAIL은 원자료로 보존한다. 제품 검증/기존 단언을 완화하지 않고 각각 fixture 한 리터럴 및 정확한 함수 context만 교정했다. 새 카피·색상·SVG·CSS·버튼 배치·로그인 옵션·SDK/API·가격·flags·권한·provider·서버DB·730일 변경0이다. 소스5 staged secret scan8.30.1 actual0/findings0·예외추가0이며 전체 서비스 승인으로 확대하지 않는다.
 
-부모d11d/2223-b6c의 단일546spec/15,272 전수69219는 그대로 진행 중이며 새2224 입력과 다르다. 이번114는 전체 검수로 승계하지 않고 원 전수 FAIL/Low/GC 인과를 면제하지 않는다. Native pending 초안·7언어 literal·실AT/Safari·빈초안/queue/unmount와 실provider/React producer 등은 별도 잔여다. 운영teth.ai7dd·원root3759/배포9객체는 유지하고 정적 패키징/활성화0·HOLD다. 최신 증거는 `candidate.currentBusySendFeedback`이며 아래는 각 이전 입력의 인수 이력이다.
+당시 부모d11d/2223-b6c의 단일546spec/15,272 전수69219는 진행 중이었다. 이후 actual1 종료 수치와후단미실행은위최신절을따른다. 이114는새후보전체검수로승계하지않고 원 전수 FAIL/Low/GC 인과를면제하지않는다. Native pending 초안·7언어 literal·실AT/Safari·빈초안/queue/unmount와실provider/React producer 등은별도잔여다. 운영teth.ai7dd·원root3759/배포9객체는유지하고정적패키징/활성화0·HOLD다. `candidate.currentBusySendFeedback`는당시인수이력으로그대로보존한다.
 
 ### 이전 d11d 연구 질문 원문·시험 경계 교정
 

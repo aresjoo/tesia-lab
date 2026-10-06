@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 React 출처는 source `c0805540d0ff13daf7a57be535ec0bb072e0ef7a`와 전체2,231파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentBusySendFeedback`를 따른다. 원9fb gSend의 응답 중 전송 안내만 기존 토스트로 복원하며 초안·중단·권한·Native 입력 정책·CSS/로그인3을 유지한다. 최종2224/cc0의 신규8키와 이를 포함한 단일114PASS·lint3build actual0 및 personal1 Sonnet5.5 BUSY_SEND_FEEDBACK_CODE_GO C0H0M0/Low7·가설5는 국소 범위다. 부모d11d의 단일15272 전수는 다른 입력에서 계속 진행하므로 이번 후보의 whole PASS로 승계하지 않는다. 원FAIL·fixture교체/패치배치 실패도 보존한다. 다른 g-doc 응답매핑·푸터/도움말 최초/후속·Native producer 잔여를 전부 동일하다고 표시하지 않는다. 원문 markup/SVG/CSS/색상·Google/Apple/email·SDK/API/가격/권한/flags·서버/DB/730일은 유지하며 새 전체·운영 승격은 미완료다.
+최신 React 출처는 source `5510b8fe729439979e3438ecea7f0d1253678740`와 전체2,232파일이다. 정확한 입력은 manifest와 `migration-verification.json`의 `candidate.currentHypothesisOriginalReply`를 따른다. 원9fb11884의Hypothesis 답변1literal만 복원했고2225/9b2 동일10PASS·이를포함한82PASS/lint3build actual0·독립원문시험검산·personal1 실제Sonnet5.5 COPY_CODE_GO/C0H0M0/Low8·가설5는 국소 범위다. Native 추가는이번복원에서제외·부모bytes로원복했다. 파일별단독writer/독립경계병렬복원·구간시험을우선하며작은수정마다whole하지않고최종배치필요전체1회를수행한다. 부모d11d whole69219의15097PASS/152FAIL/원17SKIP/후단미실행6/actual1은다른입력의실패로보존·원인미확정이며면제0이다. 기존디자인/markup/SVG/CSS/색상·초안/명시답변/중단·로그인3·Native/SDK/API/가격/권한/flags/서버DB/730일은유지한다. 다른g-doc/fallback/손실설명/민감도수치/새version producer와전체·서비스·운영승격은남는다.
 
 이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
 

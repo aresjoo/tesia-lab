@@ -1,5 +1,19 @@
 # TETH 버그 수정·검수 보고서
 
+## 가설 질문 답변 원문 복원
+
+- **복원 범위:** 고정 원본 `aresjoo/tesia-lab@9fbff821`의 `index.html:11884`를 기준으로 `ClientResearchWorkspace.replies.hypo` 한 리터럴을 복원했다. `Research 구간과 Holdout 구간`을 임의 번역한 부분을 되돌리고, 누락한 `결과는 Backtest, Holdout artifact에서 확인하십시오.`를 그대로 계승한다. 기존 Hypothesis 본문과 질문 답변이 같은 원문을 표시하며 전체 원본 gSend 동선을 복원했다는 의미는 아니다.
+- **보존:** explicit supplied 답변·AI admission·행 코멘트·질문 초안·읽기 상태·focus를 유지한다. 제품 한 리터럴 외 디자인/CSS/SVG/색상/숫자/버튼/로그인3/SDK/권한/flags/credential/DB/730일 변경0이다. 리터럴 역치환 시 부모 Workspace SHA `855b01e4c37643f09b4d3948c86f58326016c899196397c9cccc46b7187ca809`와 exact다.
+- **실제 RED→GREEN:** 최초28키 실행의 원본 영수증 `550b59d9`/raw `c1b7d867`을 보존한다. 그중 같은 Hypothesis spec10키는6PASS/4FAIL/actual1이며 실패4개는 두 문장 원문의 누락이다. 같은 시험 SHA `a866f056`·동일10키를 수정 후 실행하여 **10PASS/0FAIL/0SKIP/미실행·retry·flaky·시험밖오류0/actual0**(영수증 `45825e49`)를 확인했다. 320/1440의 실제 Main 진입·본문/답변·이전 대화/초안·선택적 admission 거절·명시 답변 우선권을 검사한다. loopback 외부·mutation 차단 검증이며 실제 AI 공급 성공이 아니다.
+- **관련 영향 검증:** 같은 입력2225/`9b2cd794fc91b0221dbdf8a4db92bfd64be40318d02739f88a1b98c5ce1c5ab2`의 연구 답변·첫 질문·원문4spec 단일 **82PASS/0FAIL/0SKIP/미실행·retry·flaky·시험밖오류0/actual0**(영수증 `f8665e02`)다. 신규10은82에 포함된다. 소단위 전체 회귀는 새로 시작하지 않았다. 기존 전체 입력과 부모3출력은 전후 불변이다.
+- **범위 축소:** 사용자 검증·전달 지연 지적에 따라 신규 Native 검증행 구현을 이번 복원 배치에서 분리했다. private patch SHA `8c9e511a`와 신규 시험 SHA `9c0fe24b`를 복구 가능하게 보존하고 제품 `NativeServiceApp`/`NativeStrategyDocument`는 c080 부모 bytes와 동일하게 되돌렸다. 최초28키 중 Native18의10PASS/8FAIL은 그대로 남으며 완료나 GREEN을 주장하지 않는다.
+- **검증·전달 순서 결정:** 고정된 원본 차이 목록 → 독립 파일 경계의 병렬 복원 → 각 구간 관련 시험 → 묶인 최종 후보의 필요한 전체 회귀1회 → 전달/정적 승격 순서다. 작은 수정에 전체 회귀나 신규 기능을 반복 부착하지 않는다. ROOT는 제품1/시험1/README/본 보고서 및 Git의 writer이고 병렬 팀은 원문/시험 증거·실패 분류·전달 준비를 각각 readonly 검수한다.
+- **남은 원본 차이의 처리:** 완료 Backtest 일반 질문의 원문 fallback은 발행 상태·v1/v2 경계 검증이 남아 있다. 손실 원인의 고정 설명은 실제 producer 근거가 필요하다. 원본 민감도 ±1%p 설명과 실제 RSI ±2 fixture 불일치는 원본 수치 오류로 분류해 허위 복원하지 않는다. 수정/재검증 새 version·producer는 계약 경계를 유지한다. Hypothesis 한 항목의 복원으로 전체 원문 차이나 실제 연결이 끝났다고 표시하지 않는다.
+- **부모 전체 실제 종료:** 별도 d11d/2223-b6c 단일546spec/15,272키 실행69219는 UTC2026-10-06T00:49:45.574Z actual1로 끝났다. 종료 도구는15,097PASS/152FAIL/23skipped rows를 집계했고 독립 검산 `bbffcf15`는 기존17SKIP와6 did-not-run을 분리했다. 후단 미실행6은 expectedStatus=passed/status=skipped이며 정상 SKIP/PASS로 승계하지 않는다. 실패 파일별로 email46/provider50/resume30/help14/unsent4/oauth-return4/service-entry2/strategy-rail2다. 메시지상 이메일 버튼 없음46/timeout42/enabled 대상 없음32/viewport0 14/attribute10/count4/GC2/Apple disabled2를 관측했지만 제품·환경·하니스 인과는 미확정이다. 입력3출력·원증거 불변, retry/flaky/시험밖오류0·소유 프로세스 퇴역은 확인했다. 원receipt `41be761d`/raw `8927f84f`를 보존하고 이번 카피 결함으로 단정하거나 새 전체/실서비스/정적 승격 GO로 쓰지 않는다.
+- **빌드·독립 검수:** 동일2225/9b2 입력의 lint·공개/내부/service3build 모두actual0(영수증 `c2509fe5`). 공개1132/`7383ab9e`만 달라지고 내부1123/`19b13987`, service1113/`21a98031`은 부모c080 출력과 동일하다. Native 서비스 카피까지 복원됐다고 확대하지 않는다. 독립 검수 `747d82bc`는 원9fb11884 exact·리터럴1 역치환 부모exact·시험10⊂82 단일PASS/list/raw exact·보호입력3출력 직접재해시를 확인했다. 새로운 전체나 실브라우저 서비스 검증은 수행하지 않았다. 실제 소요는 신규10약14초·관련82약77초, lint/3build 합계약112초다. 소단위 전수78분 반복을 이 배치에서 제거했다.
+- **모델 검수:** personal(1) 실제 `claude-sonnet-5-5` high/tools0/strictMCP/empty settings/no-session 호출 actual0·modelUsage exact·입력/3출력 불변이며 `COPY_CODE_GO`/C0H0M0/원문보존true다(영수증 `980839ae`). Low8·가설5를 보존한다. 원문/초안/explicit-answer·admission 단언은 범위 안이고 provenance 자기참조·부분문자열·Vite 내부 테스트 경로·현재 결과 미발행/원문 안내와의 관계는 검수 한계다. 모델은 raw 시험 내용을 직접 실행·재계산하지 않았고 실제 10/82와 보호bytes는 자동/독립 증거가 소유한다. 모델 의견으로 전체/서비스/배포 GO를 만들지 않는다.
+- **전달 단계:** 제품1/신규시험1/README/본 보고서4경로만 source commit과 migration 전체 snapshot 전달 대상이다. 이 문서 캡처 뒤 commit/push 여부와 정확한 SHA는 migration manifest/verification 및 PM 진입점이 소유한다. 별도 부모 전수 실패가 남아 운영 배포는 수행하지 않았다. teth.ai 운영7dd와 기존 모든 실패·Low·미확정 가설·실공급자/3천명 부하/730일 권리 경계를 보존한다. 아래 기록은 이전 인수 이력이다.
+
 ## 응답 중 전송 원문 안내 복원
 
 - **원본과 누락:** 고정9fb `index.html:20795`의 `이전 답변을 마무리하는 중입니다, 끝나면 바로 보내주십시오`를 원문 그대로 복원했다. 이전 Main은 진행 중 Enter를 조용히 차단했다. 원문 toast 함수8905–8916의2200ms 표시·동일 문구 중복 무시·240ms 큐 간격을 기존 hook에서 재사용한다. 새로운 홍보 카피·색상·SVG·CSS·버튼 배치는 만들지 않는다.

@@ -1,8 +1,14 @@
 # TETH Web
 
-현재 로컬 후보는 `agent/web/conversation-busy-feedback`다. 응답 중 Enter를 눌렀을 때 사라졌던 클라이언트 원문 안내만 복원한다. 새 카피·스타일을 만들지 않고 기존 토스트와 표시 수명을 재사용하며, 작성 중인 질문·선택 범위·중복 전송 차단·응답 중지를 유지한다. 같은 최종 입력2224/`cc0772c1`에서 신규8개와 이를 포함한6spec 단일114개가 각각 PASS/actual0이며 lint·공개/내부/service3build도 actual0다. 실제 personal(1) Sonnet5.5는 제한된 `BUSY_SEND_FEEDBACK_CODE_GO`/확정C0H0M0를 판정했고 Low7·가설5를 보존한다. [누적 보고서](Bugfix_report.md#응답-중-전송-원문-안내-복원)가 원실패·검수 한계·전달 상태를 소유한다.
+현재 로컬 후보는 `agent/web/research-validation-copy`다. 클라이언트 원본의 Hypothesis 질문 답변 한 항목만 되돌린다. 원문은 Research/Holdout 양쪽 검증 조건과 Backtest/Holdout artifact 확인 위치를 모두 포함한다. 디자인·숫자·권한·로그인 선택지·실제 Native 응답은 변경하지 않는다. 수정 전 같은 신규10키 중6PASS/4FAIL을 재현했고 수정 후10PASS, 이를 포함한 관련4spec 단일82PASS/actual0를 확인했다. 동일 입력의 린트·공개/내부/service3build actual0, 독립 원문/시험 대조와 personal(1) Sonnet5.5의 제한된 `COPY_CODE_GO`/C0H0M0를 확인했다. Low8·가설5는 남는다. 정확한 검증·Git 전달 상태는 [누적 보고서](Bugfix_report.md#가설-질문-답변-원문-복원)를 따른다.
 
-Native의 응답 중 입력 제한·실제 공급자·전체서비스 승인은 별도 잔여다. 현재 d11d 부모의 단일 전수69219는 이 후속 입력과 분리되어 진행 중이며, 그 결과를 이번 후보의 전체 PASS로 승계하지 않는다. teth.ai는 운영7dd를 유지한다. 아래 기존 후보의 ‘현재’와 수치는 당시 인수 이력이며 위 최신 범위를 대체하지 않는다.
+사용자 지시에 따라 구간별 병렬 작업과 영향 테스트를 우선한다. 작은 수정마다 전체 회귀를 시작하지 않으며, 남은 복원을 모은 최종 후보에 필요한 전체 검증을 한 번 수행한다. 복원 외 Native 검증행 추가는 복구 가능한 private patch와 시험으로 보관했고 제품 파일은 부모와 동일하게 되돌렸다. 원본 차이 목록과 실제 데이터/계약이 필요한 잔여를 분리하며, 새로운 카피나 기능을 복원 배치에 덧붙이지 않는다.
+
+### 직전 응답 중 안내 복원 인수 이력
+
+`agent/web/conversation-busy-feedback`의 응답 중 Enter 원문 안내 복원을 그대로 계승한다. 기존 토스트·초안·선택 범위·중복 전송 차단·응답 중지는 유지한다. 입력2224/`cc0772c1`의 신규8개와 이를 포함한6spec114개 PASS/actual0 및 lint·공개/내부/service3build actual0, personal(1) Sonnet5.5의 `BUSY_SEND_FEEDBACK_CODE_GO`/C0H0M0/Low7·가설5는 당시 범위의 증거다.
+
+Native의 응답 중 입력 제한·실제 공급자·전체서비스 승인은 별도 잔여다. d11d 부모의 단일 전수69219는 actual1로 종료했으며 이번 후보의 전체 PASS로 승계하지 않는다. 정확한 실패·미실행 분류는 누적 보고서와 PM 진입점에 보존한다. teth.ai는 운영7dd를 유지한다. 아래 기존 후보의 ‘현재’와 수치는 당시 인수 이력이며 위 최신 범위를 대체하지 않는다.
 
 ### 직전 연구 질문 원문 후보 인수 이력
 
