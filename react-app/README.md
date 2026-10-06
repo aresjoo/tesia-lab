@@ -1,5 +1,11 @@
 # TETH Web
 
+현재 로컬 후보는 `agent/web/conversation-busy-feedback`다. 응답 중 Enter를 눌렀을 때 사라졌던 클라이언트 원문 안내만 복원한다. 새 카피·스타일을 만들지 않고 기존 토스트와 표시 수명을 재사용하며, 작성 중인 질문·선택 범위·중복 전송 차단·응답 중지를 유지한다. 같은 최종 입력2224/`cc0772c1`에서 신규8개와 이를 포함한6spec 단일114개가 각각 PASS/actual0이며 lint·공개/내부/service3build도 actual0다. 실제 personal(1) Sonnet5.5는 제한된 `BUSY_SEND_FEEDBACK_CODE_GO`/확정C0H0M0를 판정했고 Low7·가설5를 보존한다. [누적 보고서](Bugfix_report.md#응답-중-전송-원문-안내-복원)가 원실패·검수 한계·전달 상태를 소유한다.
+
+Native의 응답 중 입력 제한·실제 공급자·전체서비스 승인은 별도 잔여다. 현재 d11d 부모의 단일 전수69219는 이 후속 입력과 분리되어 진행 중이며, 그 결과를 이번 후보의 전체 PASS로 승계하지 않는다. teth.ai는 운영7dd를 유지한다. 아래 기존 후보의 ‘현재’와 수치는 당시 인수 이력이며 위 최신 범위를 대체하지 않는다.
+
+### 직전 연구 질문 원문 후보 인수 이력
+
 > 현재 로컬 후보는 `agent/web/research-copy-runtime-closure`다. 고정 클라이언트9fb의 연구 질문 답변 두 곳을 복원하고, 기존 inline 결과가 있으면 결과 없음 안내를 하지 않는다. 기존 결과·초안·supplied 답변·권한·수치·디자인은 유지한다. 하니스 두 파일의 clock 준비/실제 언어 setter만 최소 교정했다. 입력783bc의 관련16spec/398개는 실제398 PASS/actual0이며 원 전수 실패 두 키의 후단도 실행했다. 이후 신규시험의 절대경로 의존만 제거한 최종2223/b6c 입력에서 원문42개와 lint/세 build는 각각actual0다. 실제 personal(1) Sonnet5.5는 제한된 `DOCUMENT_REPLY_CODE_GO`/C0H0M0이며 Low5/가설7·원실패를 보존한다. Git 전달·전체·운영 승격은 보고서에서 구분한다. 원 전수15,211 PASS/2 FAIL/17 SKIP은 보존하며 현재 teth.ai는7dd 그대로다. 아래 다른 입력의 기록을 최종 전체·실서비스 합격으로 승계하지 않는다.
 
 현재 `agent/web/approved-copy-restoration`은 source9d에서 분리하여 제품3파일의46literal을 고정 클라이언트9fb 원문으로 되돌린 후보다. 최신2216/314304 입력에서 lint·공개/내부/service3build·실제discovery와 단일24spec/878개 모두PASS·실패/skip/retry/flaky/시험밖오류0·actual0다(receipt5ade4e64). 입력/3출력/원증거 시작·끝이 같고 service1113개 GET exactbytes·로그인3폭 합성 표시 검사도 actual0다(receipt5a808b76). 새Golden strict 타입검사 actual0/12파일 결속55161ceb과 보안 오탐을 해소한 source staged scan0을 확인했다. readonly독립인수와실제personal(1) Opus5.5 APPROVED_COPY_CODE_GO/확정C0H0M0는 제품·시험89b 범위이며 이후 신규시험의 가상알림 식별자2값만 바꾼314304는 독립7095a59a·실제Sonnet5.5 TEST_FIXTURE_METADATA_CODE_GO/확정C0H0M0와 새878에 따로 결속한다. Low와미검증후속·첫스캔2오탐/원실패를보존한다. 먼저25값의504·부모source9d의전수와합산하지않으며실제로그인·결제·전체서비스합격이아니다. 운영 반영은 아직 미완료이며 정확한Git전달출처는migration manifest/verification을따른다. 최신 상태는 [카피 복원 보고서](Bugfix_report.md#현재-승인된-클라이언트-원문-카피-복원)를 따른다.

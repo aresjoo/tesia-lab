@@ -849,6 +849,8 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
   }
   const send = (text = isHome ? composeTemplatePrompt(templates, value, language) : value, source: 'composer' | 'suggestion' = 'composer', label?: string) => {
     if (store.commitUncertain()) { setAccountNotice(uncertainCommitMessage); return }
+    // Source 9fb gSend: preserve the draft and explain a blocked send.
+    if (busy) { showAuthToast('이전 답변을 마무리하는 중입니다, 끝나면 바로 보내주십시오'); return }
     if (!text.trim()) return
     if (!aiGate()) return
     if (latest?.commonRevisionDirection || latest?.commonRevisionDirectionInvalid) {
@@ -1109,7 +1111,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
         catch (error) { setAccountNotice(error instanceof Error ? error.message : '전략을 등록하지 못했어요.'); return false }
       }} onOpenTrading={openResearchTrading} onBack={backToChat} onDelegate={inlineJourney ? undefined : () => workspace('delegation')} />
       : session?.workspace === 'delegation' && (connectionEntry?.sessionId === session.id || !registrations.entries.some(item => item.sessionId === session.id)) ? <ClientDelegationWorkspace key={`${session.id}:${session.inlineConnectionTurnId ?? 'legacy'}:${connectionEntry?.sessionId === session.id ? 'connection' : 'delegation'}`} sessionId={session.id} idea={session.idea} initialUi={connectionUi} onBeforeAi={aiGate} reportUpgrade={{ ...reportUpgrade, enabled: !account.state.payDone && (!session.sharedCopy || session.sharedCopy.owner === owner) }} subscriptionPreference={{ cycle: subscriptionIntent.store.read(session.id), onChange: cycle => changeSubscriptionPreference(session.id, cycle) }} sourceCopy={session.sharedCopy?.owner === owner && session.sharedCopy?.active === true} onSourceReset={() => store.detachSharedCopy(session.id)} onBack={backToChat} onStrategyRegistered={connectionEntry?.sessionId === session.id ? finishConnectionEntry : input => registerStrategy(session.id, input)} onShowRanking={() => openSharing(true)} initialPage={connectionEntry?.sessionId === session.id || session.tradingReady ? 'connect' : undefined} />
-      : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onStop={() => store.stop(session.id)} busy={busy}
+      : session ? <ClientConversation key={session.id} value={value} onChange={store.draft} onSend={() => send()} onBusySend={() => send()} onStop={() => store.stop(session.id)} busy={busy}
         composerPlaceholder={directQuestion ? marketQuestionText(language, 'writePlaceholder', { title: directQuestion }) : undefined}
         persistentNotice={uncertainConversation ? uncertainCommitGuidance : undefined}
         composerNotice={<ClientUsageBanner presentation={usage.presentation} scope={owner} onNext={nextUsage} dismissed={usage.dismissed} onDismiss={usage.onDismiss} />}

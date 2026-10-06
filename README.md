@@ -2,7 +2,7 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
-현재 React 스냅샷의 출처는 **`agent/web/research-copy-runtime-closure@d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d`**입니다. 추적파일 전체 **2,230개/26,157,052bytes**이며 미커밋 변경·삭제 없이 전달한 운영 미배포 후보입니다. 기존 원문 복원을 계승하고 연구 문서의 최초 결과 없음·완료 보고서 일반 질문 답변 두 곳을 원9fb 문구로 복원했습니다. Main의 기존 결과 유무를 전달하며 이미 있는 결과·명시 답변·초안·숫자·권한·디자인은 유지합니다. 시험 두 파일의 clock 준비/실제 언어 setter와 신규시험의 CI 경로 의존만 교정했습니다. Google·Apple·이메일·SDK/provider flags·가격/권한·서버/DB/730일은 그대로입니다.
+현재 React 스냅샷의 출처는 **`agent/web/conversation-busy-feedback@c0805540d0ff13daf7a57be535ec0bb072e0ef7a`**입니다. 추적파일 전체 **2,231개/26,176,802bytes**이며 미커밋 변경·삭제 없이 전달한 운영 미배포 후보입니다. 기존 원문 복원을 계승하고 응답 중 Enter의 클라이언트 원문 안내를 기존 토스트로 복원했습니다. 초안·선택 범위·중단·중복 전송 차단은 유지하며 새 카피·CSS·SVG·버튼 배치를 만들지 않았습니다. Google·Apple·이메일·SDK/provider flags·가격/권한·서버/DB/730일은 그대로입니다.
 
 - 먼저 [MIGRATION.md](MIGRATION.md): 원본 대비 변경, 파일 대응, 실제 연결 범위, 미완료 사항, 검증·누적 갱신 방법.
 - [react-app/](react-app/): 로컬 통합 작업본의 프론트 코드·자산·계약 소비 코드·테스트 전체 스냅샷.
@@ -11,7 +11,7 @@
 
 이 브랜치 push는 `main` 병합이나 자동 배포를 실행하지 않습니다. 사용자가 별도로 요청한 `teth.ai` 정적 프론트 업데이트는 [검증 기록](migration-verification.json)의 배포 상태로 구분합니다. 루트 원본·server/Worker 및 투자 프롬프트 draft `8646b65`는 이번에 병합·배포하지 않습니다. Apple·이메일 선택지는 유지하되 현재 서버에서 미연결인 방식은 ‘준비 중’으로 표시합니다.
 
-입력783bc의 관련16spec 단일398개는398 PASS/0 FAIL/0 SKIP/actual0이며 원 전수의 두 실패키도 후단까지 실행했습니다. 이후 정적2키의 절대경로 의존만 제거한 최종2223/b6c 입력에서 원문42와 lint/공개·내부/service3build는 각각actual0입니다. 실제 personal(1) Sonnet5.5의 `DOCUMENT_REPLY_CODE_GO`/C0H0M0는 코드 범위이며 Low5/가설7을 보존합니다. 원7233의 단일545spec/15,230개 전수는15,211 PASS/2 FAIL/원17 SKIP/actual1로 종료했고 이398과 합산·면제하지 않습니다. 최신 기록은 `candidate.currentDocumentReplyClosure`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다. 다른 g-doc·푸터·도움말 최초/후속 차이와 Native 실제 producer는 남으며 전페이지 동일·전체·운영GO는 아닙니다.
+최종2224/cc0772c1 입력의 단일6spec114개는114 PASS/0 FAIL/0 SKIP/actual0이며 신규8키를 포함합니다. 같은 입력의 lint·공개/내부/service3build actual0와 actual personal(1) Sonnet5.5 `BUSY_SEND_FEEDBACK_CODE_GO`/C0H0M0·Low7/가설5를 구분합니다. Native 응답 중 입력 정책은 바꾸지 않았습니다. 부모d11d/2223-b6c 단일546spec/15,272 전수는 별도 입력에서 계속 진행 중이며 이번 후보의 전체 PASS로 승계하지 않습니다. 이전 원FAIL과 fixture·패치 배치 실패도 보존합니다. 최신 기록은 `candidate.currentBusySendFeedback`와 [Bugfix 보고서](react-app/Bugfix_report.md) 최상단을 따릅니다. 다른 g-doc·푸터·도움말 최초/후속 차이와 실제 producer는 남으며 전페이지 동일·전체·운영GO는 아닙니다.
 
 이하 시험 수치와 ‘현재’ 표현은 이전 입력의 누적 인수 이력입니다. 부모314304의46카피·878검증은 `candidate.currentApprovedCopyRestoration`에 보존하며 현재bd2 전체검증으로 승계하지 않습니다.
 

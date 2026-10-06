@@ -40,6 +40,8 @@ type ConversationProps = {
   value: string
   onChange: (value: string) => void
   onSend: () => void
+  /** Caller-owned feedback only; never submits or cancels a pending request. */
+  onBusySend?: () => void
   onStop: () => void
   busy: boolean
   /** A service request has no cancellation authority unless explicitly supplied. */
@@ -105,7 +107,7 @@ export function ClientUserMessage({ children, onEdit, editDisabled = false, resu
 /** React rendering of tesia-lab acccc7f's g-center/g-doc/g-composer/g-aux.
  * Domain data and actions stay in the caller; no client demo proxy or auth is imported.
  */
-export function ClientConversation({ children, artifact, artifactLabel: suppliedArtifactLabel, artifactOpenLabel, onOpenArtifact, onOpenReport, reportArtifact, showResearchTeam = true, conversationNotice, persistentNotice, composerNotice, notice, previewTools, value, onChange, onSend, onStop, busy, canStop = true, inputDisabled = false, maxLength, inputLabel, sendLabel, titleLabel, context, activityKey, initialTitle = '새 전략', titleEditor, onTitleChange, onTitleReset, headerActions, workspace, initialViewport, onViewportChange, arrivalRect, composerRequest, composerTarget, composerContext, composerPlaceholder }: ConversationProps) {
+export function ClientConversation({ children, artifact, artifactLabel: suppliedArtifactLabel, artifactOpenLabel, onOpenArtifact, onOpenReport, reportArtifact, showResearchTeam = true, conversationNotice, persistentNotice, composerNotice, notice, previewTools, value, onChange, onSend, onBusySend, onStop, busy, canStop = true, inputDisabled = false, maxLength, inputLabel, sendLabel, titleLabel, context, activityKey, initialTitle = '새 전략', titleEditor, onTitleChange, onTitleReset, headerActions, workspace, initialViewport, onViewportChange, arrivalRect, composerRequest, composerTarget, composerContext, composerPlaceholder }: ConversationProps) {
   const { c, statusLabel, language } = useConversationCopy()
   const labelOf = (value: string) => clientResearchLabel(value, language)
   const artifactLabel = suppliedArtifactLabel ?? labelOf('Research Plan')
@@ -448,6 +450,7 @@ export function ClientConversation({ children, artifact, artifactLabel: supplied
                 // A held key from an action that returned focus here is not a
                 // new send gesture. The next distinct Enter still sends.
                 if (event.repeat) return
+                if (busy && !inputDisabled) { onBusySend?.(); return }
                 if (!busy && !inputDisabled && value.trim()) {
                   if (workspace && activeTab !== 'chat') workspace.onAsk(value)
                   else { changeTab('chat'); onSend() }
