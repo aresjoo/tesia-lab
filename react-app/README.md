@@ -1,5 +1,15 @@
 # TETH Web
 
+## 최신 운영 — 소개 CTA 정적 UI 승격·공개 확인 완료
+
+2026-10-06 사용자 승인 범위의 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`를 teth.ai에 반영했습니다. 소개 상·하단의 `시작하기`·한국어 언어 표기와 비회원 제자리 가입 동선을 복원했습니다. 운영 인증3파일·SDK/API·Google-only=true/exchange=false는 이전 b7과 exact이며, 아래 통합 인증 전환 교정은 **미배포**입니다.
+
+직접 personal(1) Opus5.5 `STATIC_UI_RELEASE_GO` C0/H0/M2, 검수34입력 불변 및 새 freeze 뒤 최종 package/prepare/upload/install/preflight/activate/postflight actual0를 확인했습니다. 공개 receipt UTC `2026-10-06T14:52:46.729Z`는 1440/390/320px PASS/actual0이며, 폭별 7언어×CTA2=14개씩 총42 동선·폭별5페이지 총15 route·staticGET160/141/151 exact를 확인했습니다. overflow/런타임·console 오류/mutation/external/WS/blockedAPI는0입니다. 익명 GET fixture를 사용한 정적 UI 확인이며 실로그인false·provider0·실서비스 NO_GO입니다.
+
+이번 주증거는 exact compiled 산출물입니다. 이전56 PASS raw의 head/spec SHA 독립 결속 부족(Opus M2), 최초 atomic-upload 완료 전 local preflight ENOENT와 모바일 숨김 언어 버튼 probe FAIL은 보존하며 최종 성공으로 지우지 않습니다. 새 whole0이며 상세 SHA·단계별 증거·ROOT 보완은 [누적 보고서](Bugfix_report.md#소개-cta-정적-ui-운영-승격과-공개-확인)에 기록했습니다. 외국어6개 푸터의 연구형 문구와 원본 한국어 고정 카피의 차이는 후속 미완료이며, 실제 chat/research/library·Native 회원 readiness producer·실OAuth/Safari/3천 사용자·chunk/의존성 잔여도 유지합니다.
+
+이하의 `현재/최신/운영 미변경`은 각 후보·배포 당시 이력입니다. 현재 정적 운영 출처는 위 c34이며, 미배포 통합 인증 교정과 구분합니다.
+
 ## 현재 후속 — 화면 전환 상태와 원본 행동 기준 교정
 
 비회원 AI 트레이딩 시작은 원본 최종 버튼대로 제자리 가입을 열고, 회원의 플랜 진입은 유지합니다. 인증 결과/세션 재확인 대기 중 화면 이탈·복귀 후 초점 유실, busy 안내 잔류, loading 잔류를 교정하고 재확인/닫기는 기존 언어 사전을 재사용합니다. 카피·CSS·SVG·SDK/API·승인/주문 권한은 바꾸지 않았습니다.

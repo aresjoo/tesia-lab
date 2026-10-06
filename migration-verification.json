@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "purpose": "통합2cb3e9d 전체 React snapshot과 교차 동선 상태/비회원 signup 복원 후보를 전달한다. 최신 상태는 candidate.currentRootCauseTransitionFixes이고 실제 운영b7은 currentUserApprovedFooterTest를 따른다. 최종 원문 DOM뿐 아니라 실제 handler를 oracle로 사용한다. UI-only와 인증 후보를 분리하며 실제 producer/provider/주문은 미완료다. 원본root/main·이전candidate/배포/원FAIL/730일은 보존하고 새 whole·운영 실행은 없다.",
-  "sourceCommit": "2cb3e9d203b7bec08a1bc1de87392324cb623033",
+  "sourceCommit": "1023bceec392e7c75afd56fb1f4dad63f4c86cd6",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "c42f766ef78c6f54480e565bf34d74a210e263b84220e093ebf189a2db340c02",
+  "snapshotDigest": "0405c24b55414f65b3e9c77f394bd3226694b90b8fb7d26753c6dcca4989a10e",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -67,7 +67,7 @@
   },
   "snapshot": {
     "files": 2250,
-    "bytes": 26506275,
+    "bytes": 26512904,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -734,21 +734,142 @@
     "currentRootCauseTransitionFixes": {
       "status": "SCOPED_ROOT_CAUSE_FIXES_DELIVERED_NOT_DEPLOYED",
       "sourceCommit": "2cb3e9d203b7bec08a1bc1de87392324cb623033",
-      "snapshot": {"files": 2250, "bytes": 26506275, "digest": "c42f766ef78c6f54480e565bf34d74a210e263b84220e093ebf189a2db340c02", "dirty": [], "deleted": [], "removedPriorPaths": [], "syncActualExit": 0, "verifyActualExit": 0},
-      "productFiles": ["src/components/ClientMainExperience.tsx", "src/internal-poc/NativeLoginPanel.tsx", "src/internal-poc/NativeServiceApp.tsx"],
-      "testFiles": ["tests/client-trading-intro.spec.ts", "tests/client-trading-intro-source-parity.spec.ts", "tests/internal-poc/native-oauth-return-transition-races.spec.ts"],
-      "rootCauses": ["Final source CTA handler was not tested; existing implementation became an incorrect oracle", "Retiring async authority did not settle retained busy/loading/focus presentation", "New controls bypassed existing locale dictionary"],
-      "sourceBehavior": {"originalCommit": "9fbff821df62cad11d026022fc7628c7fcebc431", "finalCta": "authOpen('signup')", "sourceClicksPerOracle": 14, "locales": 7, "signedInPlanPreserved": true},
-      "originalRed": {"transitionFirst": {"actualExit": 1, "failed": 4, "confirmedProductFocus": 2, "harnessMissingCta": 2, "reportSha256": "d0e4fa163e0fd8a80435d226d62906a172a8ed12e39fdd809bd3c2ecfca615bb"}, "sessionCorrectedHarness": {"actualExit": 1, "failed": 2, "reportSha256": "9275551ca15c6b12de5b847b3efff79070a92df0d6b6a6545dcfdf447734ff81"}, "status": {"actualExit": 1, "failed": 2, "reportSha256": "ff1f5ad6c492ec7f8efb44d8fcb657dccf59f2d60367ede3cb5b9a8192b05e8c"}, "guest": {"actualExit": 1, "failed": 2, "reportSha256": "75e480c53c4719453e35fe077ad9ff86f7a5093cf922024bc74b5f5136b8cc0e"}},
-      "finalRelatedAuth": {"actualExit": 0, "passed": 78, "failed": 0, "skipped": 0, "flaky": 0, "outsideErrors": 0, "durationMs": 27154.811, "port": 4175, "controllerReportSha256": "e9d8551bc4d7fe6973efb3877d3f10b0f775d6864123b56b1f9a8ff132dac552", "syntheticGetsOnlyInNewSpec": true, "automaticAckClaimBootstrap": false},
-      "finalGuest": {"actualExit": 0, "passed": 56, "durationMs": 32252, "reportSha256": "ef3aac5ebc64013929e1600fc9137912eb4d991dacee9689dc69f267afd1360c"},
-      "staticUiOnly": {"branch": "agent/web/static-ui-restoration-batch", "sourceCommit": "c34a210", "sameThreeFiles": true, "operatingAuthThreeFilesExact": true, "actualExit": 0, "passed": 56, "durationMs": 32674, "reportSha256": "140485ff3794411cec5844956687a6ef977247df742cfa0cfaf01e8fc41d5004", "lint": 0, "typeServiceBuild": 0, "deployed": false},
-      "independentReview": {"account": "personal (1)", "actualModel": "claude-opus-5-5", "originalVerdict": "SCOPED_CODE_HOLD", "followupVerdict": "SCOPED_CODE_GO", "followupActualExit": 0, "modelUsageMatched": true, "inputFiveHashesUnchangedAtCompletion": true, "durationSeconds": 206.648, "followupStdoutSha256": "4491de191a7282858bc74110139b2ff0a4c652758a3ab1268abd52ed0ffe1426", "greenRawIncludedInModelInput": false, "finalRootDeltaOutsideModelFreeze": ["settled-only focus", "existing resumePrompt instead of previous READY", "positive non-mutating close focus and busy assertions", "normal suite loopback port", "locale scope accuracy"], "finalRootDeltaEvidence": "final related 78 plus ROOT code and assertion review"},
-      "agy": {"model": "gemini-3.8-flash-high", "actualExit": 0, "scope": "existing recheck/close locale inventory only", "filesChanged": 0, "finalApproval": false, "originalCollectorStepCount": "WRONG_EVENT_SHAPE; final native result parsed without rerun", "originalCollectorPromptHash": "EMPTY_STDIN_NOT_ARG_PROMPT; do not use as prompt attestation"},
+      "snapshot": {
+        "files": 2250,
+        "bytes": 26506275,
+        "digest": "c42f766ef78c6f54480e565bf34d74a210e263b84220e093ebf189a2db340c02",
+        "dirty": [],
+        "deleted": [],
+        "removedPriorPaths": [],
+        "syncActualExit": 0,
+        "verifyActualExit": 0
+      },
+      "productFiles": [
+        "src/components/ClientMainExperience.tsx",
+        "src/internal-poc/NativeLoginPanel.tsx",
+        "src/internal-poc/NativeServiceApp.tsx"
+      ],
+      "testFiles": [
+        "tests/client-trading-intro.spec.ts",
+        "tests/client-trading-intro-source-parity.spec.ts",
+        "tests/internal-poc/native-oauth-return-transition-races.spec.ts"
+      ],
+      "rootCauses": [
+        "Final source CTA handler was not tested; existing implementation became an incorrect oracle",
+        "Retiring async authority did not settle retained busy/loading/focus presentation",
+        "New controls bypassed existing locale dictionary"
+      ],
+      "sourceBehavior": {
+        "originalCommit": "9fbff821df62cad11d026022fc7628c7fcebc431",
+        "finalCta": "authOpen('signup')",
+        "sourceClicksPerOracle": 14,
+        "locales": 7,
+        "signedInPlanPreserved": true
+      },
+      "originalRed": {
+        "transitionFirst": {
+          "actualExit": 1,
+          "failed": 4,
+          "confirmedProductFocus": 2,
+          "harnessMissingCta": 2,
+          "reportSha256": "d0e4fa163e0fd8a80435d226d62906a172a8ed12e39fdd809bd3c2ecfca615bb"
+        },
+        "sessionCorrectedHarness": {
+          "actualExit": 1,
+          "failed": 2,
+          "reportSha256": "9275551ca15c6b12de5b847b3efff79070a92df0d6b6a6545dcfdf447734ff81"
+        },
+        "status": {
+          "actualExit": 1,
+          "failed": 2,
+          "reportSha256": "ff1f5ad6c492ec7f8efb44d8fcb657dccf59f2d60367ede3cb5b9a8192b05e8c"
+        },
+        "guest": {
+          "actualExit": 1,
+          "failed": 2,
+          "reportSha256": "75e480c53c4719453e35fe077ad9ff86f7a5093cf922024bc74b5f5136b8cc0e"
+        }
+      },
+      "finalRelatedAuth": {
+        "actualExit": 0,
+        "passed": 78,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "durationMs": 27154.811,
+        "port": 4175,
+        "controllerReportSha256": "e9d8551bc4d7fe6973efb3877d3f10b0f775d6864123b56b1f9a8ff132dac552",
+        "syntheticGetsOnlyInNewSpec": true,
+        "automaticAckClaimBootstrap": false
+      },
+      "finalGuest": {
+        "actualExit": 0,
+        "passed": 56,
+        "durationMs": 32252,
+        "reportSha256": "ef3aac5ebc64013929e1600fc9137912eb4d991dacee9689dc69f267afd1360c"
+      },
+      "staticUiOnly": {
+        "branch": "agent/web/static-ui-restoration-batch",
+        "sourceCommit": "c34a210",
+        "sameThreeFiles": true,
+        "operatingAuthThreeFilesExact": true,
+        "actualExit": 0,
+        "passed": 56,
+        "durationMs": 32674,
+        "reportSha256": "140485ff3794411cec5844956687a6ef977247df742cfa0cfaf01e8fc41d5004",
+        "lint": 0,
+        "typeServiceBuild": 0,
+        "deployed": false
+      },
+      "independentReview": {
+        "account": "personal (1)",
+        "actualModel": "claude-opus-5-5",
+        "originalVerdict": "SCOPED_CODE_HOLD",
+        "followupVerdict": "SCOPED_CODE_GO",
+        "followupActualExit": 0,
+        "modelUsageMatched": true,
+        "inputFiveHashesUnchangedAtCompletion": true,
+        "durationSeconds": 206.648,
+        "followupStdoutSha256": "4491de191a7282858bc74110139b2ff0a4c652758a3ab1268abd52ed0ffe1426",
+        "greenRawIncludedInModelInput": false,
+        "finalRootDeltaOutsideModelFreeze": [
+          "settled-only focus",
+          "existing resumePrompt instead of previous READY",
+          "positive non-mutating close focus and busy assertions",
+          "normal suite loopback port",
+          "locale scope accuracy"
+        ],
+        "finalRootDeltaEvidence": "final related 78 plus ROOT code and assertion review"
+      },
+      "agy": {
+        "model": "gemini-3.8-flash-high",
+        "actualExit": 0,
+        "scope": "existing recheck/close locale inventory only",
+        "filesChanged": 0,
+        "finalApproval": false,
+        "originalCollectorStepCount": "WRONG_EVENT_SHAPE; final native result parsed without rerun",
+        "originalCollectorPromptHash": "EMPTY_STDIN_NOT_ARG_PROMPT; do not use as prompt attestation"
+      },
       "finalLint": 0,
-      "finalTypeServiceBuild": {"actualExit": 0, "logSha256": "c74769dfc5a2725f4a59fee7e9e5352a6614ac8f42ea19108560f3c6ccc68c30", "existingChunkWarning": true},
-      "remaining": ["Native member acReady needs authoritative producer; accounts [] is not connection readiness", "Untranslated off-route explanatory copy awaits approved keys", "Parent-child busy authority race unconfirmed", "ACK response-loss full journey, actual provider, Safari, 3000 users not verified", "Actual chat/research/library producer incomplete", "Default Web dependency High2/Moderate1 unresolved"],
-      "sourceStaticProgramStagedScan": {"actualExitEach": 0, "findingsEach": 0, "newExceptions": 0},
+      "finalTypeServiceBuild": {
+        "actualExit": 0,
+        "logSha256": "c74769dfc5a2725f4a59fee7e9e5352a6614ac8f42ea19108560f3c6ccc68c30",
+        "existingChunkWarning": true
+      },
+      "remaining": [
+        "Native member acReady needs authoritative producer; accounts [] is not connection readiness",
+        "Untranslated off-route explanatory copy awaits approved keys",
+        "Parent-child busy authority race unconfirmed",
+        "ACK response-loss full journey, actual provider, Safari, 3000 users not verified",
+        "Actual chat/research/library producer incomplete",
+        "Default Web dependency High2/Moderate1 unresolved"
+      ],
+      "sourceStaticProgramStagedScan": {
+        "actualExitEach": 0,
+        "findingsEach": 0,
+        "newExceptions": 0
+      },
       "ports4175_4722_4723_4724Closed": true,
       "operatingSourceUnchanged": "b7a7c58ebed68cc6938e35dc8e12472c45fe90ac",
       "newWholeExecuted": false,
@@ -759,16 +880,137 @@
     "currentPostFooterFixes": {
       "status": "SCOPED_FIX_CANDIDATE_DELIVERED_NOT_DEPLOYED",
       "sourceCommit": "a542712c65e4a7a5362879a404e4ddd8ad5885b7",
-      "previousCandidateMetadata": {"status": "INTEGRATED_SNAPSHOT_DELIVERED_STATIC_ORIGINAL_INTRO_TEST_DEPLOYED", "sourceCommit": "845e58fed9f0acacf2b76d8538a99d7e0c456485"},
-      "snapshot": {"files": 2249, "bytes": 26486373, "digest": "3de3118cdfc6a71d6c386f0c78f6e5da354ef5d752e974286d53370209f01e98", "sourceDirtyFiles": [], "sourceDeletedFiles": [], "removedPriorPaths": [], "syncActualExit": 0, "verifyActualExit": 0},
-      "sourceAuthority": {"commit": "9fbff821df62cad11d026022fc7628c7fcebc431", "indexSha256": "f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321", "oracle": "final title + skIntroCopy + applyLang DOM, portable fixture with five section hashes", "previousN4MissingLongBodyKickerBoldTerms": "FALSE_POSITIVE_INITIAL_RENDERER_EXCERPT; DO_NOT_RESTORE"},
-      "delta": {"products": ["src/client-trading-intro-copy.json", "src/components/ClientTradingIntro.tsx", "src/internal-poc/NativeServiceApp.tsx", "src/internal-poc/NativeLoginPanel.tsx"], "newTests": ["tests/client-trading-intro-source-parity.spec.ts", "tests/fixtures/client-trading-intro-9fb.json", "tests/internal-poc/native-oauth-return-recovery.spec.ts"], "existingTest": "tests/internal-poc/native-oauth-return-revision.spec.ts adds retained-chip assertion, removes no original assertions", "copy": "foreign six start CTA values match final original 시작하기; KO CTA lang=ko", "auth": "pending visible/disabled, successful recovery chip clear, explicit same-document fixed-return route, host busy display and lost focus correction", "cssSvgFooterSdkApiFlagsChanged": false, "authorityAutoAckClaimBootstrapAdded": false},
-      "frozenBatch": {"authPassed": 100, "introPassed": 13, "failures": 0, "skipped": 0, "flaky": 0, "runnerErrors": 0, "actualExit": 0, "lintActualExit": 0, "typeServiceBuildActualExit": 0, "inputsUnchanged": true, "receipt": "post-footer-fixes-validation.json", "controllerReportSha256": "bfdd644a8f79953307d60b206d1243dffa1e6b39169224a87d4cc23002ec8f01", "introRawSha256": "40fa8928e9484ceaf75494f74d31ba30b07c1ff3f254e47f8a119c772479d3c3"},
-      "independentReview": {"model": "claude-opus-5-5", "effort": "high", "profile": "personal (1)", "verdict": "SCOPED_FIX_REVIEW_GO", "blockers": 0, "actualExit": 0, "modelMatched": true, "inputsUnchanged": true, "receiptSha256": "b1dca0b56dc9fc1da53bd2a976fa06fee79c29fcc89beb2a1c39bb62d2cd16f7", "coversPostReviewUxDelta": false, "finalServiceGo": false},
-      "postReviewUx": {"scope": "panel busy/disabled and lost focus only, same SDK/run/dispatch/key/journal, no new strings", "representativeRed": {"failed": 4, "actualExit": 1, "rawSha256": "0a6b2841ebfea137509fa2dd04346e2aeede361dd4dab2b302a8848aec19c2c9"}, "representativeGreen": {"passed": 4, "actualExit": 0, "durationSeconds": 8.041, "rawSha256": "056784837d5504e783dd110aa16313aa33ee5363e67a9e322f866c06c71dcab9"}, "finalHost": {"passed": 28, "failed": 0, "skipped": 0, "flaky": 0, "runnerErrors": 0, "actualExit": 0, "durationSeconds": 16.882, "rawSha256": "1c8e9ef4264aef608b42a450bcff653f32e719dca641d7a69d4da322b5e1ad41"}, "lintActualExit": 0, "typeServiceBuildActualExit": 0, "buildLogSha256": "3623d47164b6e395a908d081905e08570f2c0f93a3b7efa6a5189b693ca929f8", "fourHostFilesShaUnchangedAcrossFinalExecution": true, "receipt": "final-return-ux-receipt.json", "review": "ROOT code/assertion review; outside prior model freeze"},
-      "separateCandidates": {"staticUi": {"branch": "agent/web/static-ui-restoration-batch", "commitPrefix": "d89b193", "newIntroTestPassed": 13, "actualExit": 0, "durationSeconds": 19.134, "rawSha256": "1cd54cf58076514970e7c395ce133051e0bc6949aef9ccb663b6e3d9fe9e1895", "authThreeFilesBaselineExact": true, "newBuildOrDeployment": false}, "authGuard": {"branch": "agent/web/auth-response-revision-guard", "commitPrefix": "add4d0f", "revisionSpecPassed": 12, "actualExit": 0, "durationSeconds": 2.081, "rawSha256": "a9a62cd8fc4101bdf31ecb84655b88673e211ce1161122489a6266d8be47f6d2", "scope": "two session/ACK envelope-body revision guards; integrated controller already has same guard logic", "deploymentExecuted": false}},
-      "agy": {"model": "gemini-3.8-flash-high", "scope": "bounded final-copy inventory only", "toolCalls": 0, "finalApproval": false},
-      "remaining": ["actual OAuth/login and Apple host or ACK-loss complete journey", "Native free assistant reply/SSE, research roles/stages/Critic and durable library producer", "real Safari/AT and 3000-user load", "existing general-route stale-journal policy and Korean recovery strings", "existing 500kB chunk and default Web dependency advisories"],
+      "previousCandidateMetadata": {
+        "status": "INTEGRATED_SNAPSHOT_DELIVERED_STATIC_ORIGINAL_INTRO_TEST_DEPLOYED",
+        "sourceCommit": "845e58fed9f0acacf2b76d8538a99d7e0c456485"
+      },
+      "snapshot": {
+        "files": 2249,
+        "bytes": 26486373,
+        "digest": "3de3118cdfc6a71d6c386f0c78f6e5da354ef5d752e974286d53370209f01e98",
+        "sourceDirtyFiles": [],
+        "sourceDeletedFiles": [],
+        "removedPriorPaths": [],
+        "syncActualExit": 0,
+        "verifyActualExit": 0
+      },
+      "sourceAuthority": {
+        "commit": "9fbff821df62cad11d026022fc7628c7fcebc431",
+        "indexSha256": "f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321",
+        "oracle": "final title + skIntroCopy + applyLang DOM, portable fixture with five section hashes",
+        "previousN4MissingLongBodyKickerBoldTerms": "FALSE_POSITIVE_INITIAL_RENDERER_EXCERPT; DO_NOT_RESTORE"
+      },
+      "delta": {
+        "products": [
+          "src/client-trading-intro-copy.json",
+          "src/components/ClientTradingIntro.tsx",
+          "src/internal-poc/NativeServiceApp.tsx",
+          "src/internal-poc/NativeLoginPanel.tsx"
+        ],
+        "newTests": [
+          "tests/client-trading-intro-source-parity.spec.ts",
+          "tests/fixtures/client-trading-intro-9fb.json",
+          "tests/internal-poc/native-oauth-return-recovery.spec.ts"
+        ],
+        "existingTest": "tests/internal-poc/native-oauth-return-revision.spec.ts adds retained-chip assertion, removes no original assertions",
+        "copy": "foreign six start CTA values match final original 시작하기; KO CTA lang=ko",
+        "auth": "pending visible/disabled, successful recovery chip clear, explicit same-document fixed-return route, host busy display and lost focus correction",
+        "cssSvgFooterSdkApiFlagsChanged": false,
+        "authorityAutoAckClaimBootstrapAdded": false
+      },
+      "frozenBatch": {
+        "authPassed": 100,
+        "introPassed": 13,
+        "failures": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "runnerErrors": 0,
+        "actualExit": 0,
+        "lintActualExit": 0,
+        "typeServiceBuildActualExit": 0,
+        "inputsUnchanged": true,
+        "receipt": "post-footer-fixes-validation.json",
+        "controllerReportSha256": "bfdd644a8f79953307d60b206d1243dffa1e6b39169224a87d4cc23002ec8f01",
+        "introRawSha256": "40fa8928e9484ceaf75494f74d31ba30b07c1ff3f254e47f8a119c772479d3c3"
+      },
+      "independentReview": {
+        "model": "claude-opus-5-5",
+        "effort": "high",
+        "profile": "personal (1)",
+        "verdict": "SCOPED_FIX_REVIEW_GO",
+        "blockers": 0,
+        "actualExit": 0,
+        "modelMatched": true,
+        "inputsUnchanged": true,
+        "receiptSha256": "b1dca0b56dc9fc1da53bd2a976fa06fee79c29fcc89beb2a1c39bb62d2cd16f7",
+        "coversPostReviewUxDelta": false,
+        "finalServiceGo": false
+      },
+      "postReviewUx": {
+        "scope": "panel busy/disabled and lost focus only, same SDK/run/dispatch/key/journal, no new strings",
+        "representativeRed": {
+          "failed": 4,
+          "actualExit": 1,
+          "rawSha256": "0a6b2841ebfea137509fa2dd04346e2aeede361dd4dab2b302a8848aec19c2c9"
+        },
+        "representativeGreen": {
+          "passed": 4,
+          "actualExit": 0,
+          "durationSeconds": 8.041,
+          "rawSha256": "056784837d5504e783dd110aa16313aa33ee5363e67a9e322f866c06c71dcab9"
+        },
+        "finalHost": {
+          "passed": 28,
+          "failed": 0,
+          "skipped": 0,
+          "flaky": 0,
+          "runnerErrors": 0,
+          "actualExit": 0,
+          "durationSeconds": 16.882,
+          "rawSha256": "1c8e9ef4264aef608b42a450bcff653f32e719dca641d7a69d4da322b5e1ad41"
+        },
+        "lintActualExit": 0,
+        "typeServiceBuildActualExit": 0,
+        "buildLogSha256": "3623d47164b6e395a908d081905e08570f2c0f93a3b7efa6a5189b693ca929f8",
+        "fourHostFilesShaUnchangedAcrossFinalExecution": true,
+        "receipt": "final-return-ux-receipt.json",
+        "review": "ROOT code/assertion review; outside prior model freeze"
+      },
+      "separateCandidates": {
+        "staticUi": {
+          "branch": "agent/web/static-ui-restoration-batch",
+          "commitPrefix": "d89b193",
+          "newIntroTestPassed": 13,
+          "actualExit": 0,
+          "durationSeconds": 19.134,
+          "rawSha256": "1cd54cf58076514970e7c395ce133051e0bc6949aef9ccb663b6e3d9fe9e1895",
+          "authThreeFilesBaselineExact": true,
+          "newBuildOrDeployment": false
+        },
+        "authGuard": {
+          "branch": "agent/web/auth-response-revision-guard",
+          "commitPrefix": "add4d0f",
+          "revisionSpecPassed": 12,
+          "actualExit": 0,
+          "durationSeconds": 2.081,
+          "rawSha256": "a9a62cd8fc4101bdf31ecb84655b88673e211ce1161122489a6266d8be47f6d2",
+          "scope": "two session/ACK envelope-body revision guards; integrated controller already has same guard logic",
+          "deploymentExecuted": false
+        }
+      },
+      "agy": {
+        "model": "gemini-3.8-flash-high",
+        "scope": "bounded final-copy inventory only",
+        "toolCalls": 0,
+        "finalApproval": false
+      },
+      "remaining": [
+        "actual OAuth/login and Apple host or ACK-loss complete journey",
+        "Native free assistant reply/SSE, research roles/stages/Critic and durable library producer",
+        "real Safari/AT and 3000-user load",
+        "existing general-route stale-journal policy and Korean recovery strings",
+        "existing 500kB chunk and default Web dependency advisories"
+      ],
       "activeOperatingSource": "b7a7c58ebed68cc6938e35dc8e12472c45fe90ac",
       "previousFailuresPreserved": true,
       "gitDeliveryPreparation": "First commit exit128 due to missing local author configuration; subsequent up-to-date push did not deliver this candidate. Retry uses command-local author identity from the repository previous commit, without changing global configuration. Product/test inputs unchanged.",
@@ -792,10 +1034,77 @@
       "staticDocumentationHead": "cc488306bb4aa5184353909a9a34f2c58c66594a",
       "integratedDocumentationHead": "6f98daa7f8c5de48eb0403960a4b99d8425efbf1",
       "programDocumentationHead": "1ca48a3a58aa705723cb8169091bce40a0db3437",
-      "deliveryPreparationIssues": ["Program 초기 일반push는 main upstream과 로컬draft 이름 불일치로 actual128; main을 변경하지 않고 명시 draft ref push actual0로 교정했다.", "ROOT 문서 multi-patch의 첫 PM context 불일치는 변경0로 종료 후 분리 적용했다.", "ROOT read-only 원본index byte검산 첫 실행은 기본 execFileSync buffer 한도 ENOBUFS/actual1; 제품 변경0, maxBuffer32MiB의 후속 동일5파일 대조 actual0와 구분한다.", "migration 초기commit은 저장소 author identity 미설정으로 actual128/새commit0; 기존 전달 identity의 명령별 git -c 사용으로 재시도하며 global git 설정은 변경하지 않는다."],
-      "independentReview": {"model": "claude-opus-5-5", "accountProfile": "personal(1)", "actualExit": 0, "unchanged": true, "verdict": "STATIC_UI_RELEASE_GO", "critical": 0, "high": 0, "medium": 1, "policyGo": true, "releaseGo": true, "reviewedInputs": 25, "reviewWrapperIncluded": true, "ownerAcceptedTestCopyRisks": true, "receiptSha256": "31a23efb281b6652ac285a8129b856ba49e5888879183b7bada8010873b83f0e"},
-      "release": {"archiveSha256": "9fce5fd5e70b203d4eac278f9bf8b21d4a8c8eab1be9e7cd028f08e3283828a6", "rawHtmlSha256": "8ca2669b9a996b3c8f4ba8e036cc48237cdd4a620d53eae4f109d6093fa76f16", "manifestSha256": "0abd731436723dfd62a515e3b3319ffd2c514a1792a1286736e5823a08cd5d82", "previousSource": "5f13ad342f88d421fd1c3c314abeab2e2fcb2a68", "gateExit": 0, "packageExit": 0, "prepareExit": 0, "archiveUploadExit": 0, "atomicInstallExit": 0, "preflightExit": 0, "activationExit": 0, "postflightExit": 0, "atomicRootExchange": true, "maintenanceRestart": true, "privateAuthorityPreserved": true, "backupRetained": true},
-      "publicSmoke": {"status": "PASS", "actualExit": 0, "widths": [1440, 390, 320], "staticGets": [48, 48, 48], "approvedFooterParagraphs": 4, "overflow": 0, "runtimeErrors": 0, "byteMismatch": 0, "blockedApi": 0, "external": 0, "mutations": 0, "webSockets": 0, "authGetSynthetic": true, "actualLoginVerified": false, "evidenceFile": "footer-source-copy-approved-public/receipt.json", "sha256": "35419ba8bdb9f6ab27b54ac2c07620ec05dc26e357d4a2e0f2d5a23cb923f7ed", "endedAt": "2026-10-06T11:57:55.340Z", "rootViewedPngWidths": [1440, 320]},
+      "deliveryPreparationIssues": [
+        "Program 초기 일반push는 main upstream과 로컬draft 이름 불일치로 actual128; main을 변경하지 않고 명시 draft ref push actual0로 교정했다.",
+        "ROOT 문서 multi-patch의 첫 PM context 불일치는 변경0로 종료 후 분리 적용했다.",
+        "ROOT read-only 원본index byte검산 첫 실행은 기본 execFileSync buffer 한도 ENOBUFS/actual1; 제품 변경0, maxBuffer32MiB의 후속 동일5파일 대조 actual0와 구분한다.",
+        "migration 초기commit은 저장소 author identity 미설정으로 actual128/새commit0; 기존 전달 identity의 명령별 git -c 사용으로 재시도하며 global git 설정은 변경하지 않는다."
+      ],
+      "independentReview": {
+        "model": "claude-opus-5-5",
+        "accountProfile": "personal(1)",
+        "actualExit": 0,
+        "unchanged": true,
+        "verdict": "STATIC_UI_RELEASE_GO",
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "policyGo": true,
+        "releaseGo": true,
+        "reviewedInputs": 25,
+        "reviewWrapperIncluded": true,
+        "ownerAcceptedTestCopyRisks": true,
+        "receiptSha256": "31a23efb281b6652ac285a8129b856ba49e5888879183b7bada8010873b83f0e"
+      },
+      "release": {
+        "archiveSha256": "9fce5fd5e70b203d4eac278f9bf8b21d4a8c8eab1be9e7cd028f08e3283828a6",
+        "rawHtmlSha256": "8ca2669b9a996b3c8f4ba8e036cc48237cdd4a620d53eae4f109d6093fa76f16",
+        "manifestSha256": "0abd731436723dfd62a515e3b3319ffd2c514a1792a1286736e5823a08cd5d82",
+        "previousSource": "5f13ad342f88d421fd1c3c314abeab2e2fcb2a68",
+        "gateExit": 0,
+        "packageExit": 0,
+        "prepareExit": 0,
+        "archiveUploadExit": 0,
+        "atomicInstallExit": 0,
+        "preflightExit": 0,
+        "activationExit": 0,
+        "postflightExit": 0,
+        "atomicRootExchange": true,
+        "maintenanceRestart": true,
+        "privateAuthorityPreserved": true,
+        "backupRetained": true
+      },
+      "publicSmoke": {
+        "status": "PASS",
+        "actualExit": 0,
+        "widths": [
+          1440,
+          390,
+          320
+        ],
+        "staticGets": [
+          48,
+          48,
+          48
+        ],
+        "approvedFooterParagraphs": 4,
+        "overflow": 0,
+        "runtimeErrors": 0,
+        "byteMismatch": 0,
+        "blockedApi": 0,
+        "external": 0,
+        "mutations": 0,
+        "webSockets": 0,
+        "authGetSynthetic": true,
+        "actualLoginVerified": false,
+        "evidenceFile": "footer-source-copy-approved-public/receipt.json",
+        "sha256": "35419ba8bdb9f6ab27b54ac2c07620ec05dc26e357d4a2e0f2d5a23cb923f7ed",
+        "endedAt": "2026-10-06T11:57:55.340Z",
+        "rootViewedPngWidths": [
+          1440,
+          320
+        ]
+      },
       "remaining": "여섯locale 변경0; 실제 AI/연구/backend producer 연결 미완료. 승인 정적 테스트 표현 복원이지 선정 사실/법률/실provider/주문/전체서비스 GO가 아니다. 이전 HOLD/FAIL/WIP/730일 증거는 보존한다.",
       "actualProviderGo": false,
       "wholeRegressionGo": false,
@@ -810,12 +1119,88 @@
       "originalAiImplementationExists": true,
       "staticDocumentationHead": "bee8155ba320ef2d3f8d20c2e1f872cd455fc8c5",
       "integratedDocumentationHead": "845e58fed9f0acacf2b76d8538a99d7e0c456485",
-      "independentReview": {"model": "claude-opus-5-5", "accountProfile": "personal(1)", "actualExit": 0, "unchanged": true, "verdict": "STATIC_UI_RELEASE_GO", "critical": 0, "high": 0, "medium": 2, "policyGo": true, "releaseGo": true, "reviewedInputs": 30, "reviewWrapperIncluded": true, "ownerAcceptedTestCopyRisks": true},
-      "release": {"archiveSha256": "a7382369cbf13a4e6b6193ff1938e3e87a633087c2d96749d1ab49e3ee116756", "rawHtmlSha256": "491b8816f5bb627803728d966b63259d3f3d549b4e614c5eea565ce9f60aea4d", "previousSource": "8a757a523a1f40da366b16584561c5635b9296a1", "gateExit": 0, "packageExit": 0, "prepareExit": 0, "archiveUploadExit": 0, "atomicInstallExit": 0, "preflightExit": 0, "activationExit": 0, "postflightExit": 0, "atomicRootExchange": true, "maintenanceRestart": true, "privateAuthorityPreserved": true, "backupRetained": true},
-      "publicSmoke": {"status": "PASS", "actualExit": 0, "widths": [1440, 390, 320], "staticGets": [47, 47, 47], "overflow": 0, "runtimeErrors": 0, "byteMismatch": 0, "external": 0, "mutations": 0, "webSockets": 0, "authGetSynthetic": true, "actualLoginVerified": false, "evidenceFile": "trading-intro-user-approved-test-public-focus/receipt.json", "sha256": "e173478e18119bb469220230a8215e65c78380ca4b5c56a42a85ff753c65fa61"},
-      "preservedInitialPublicFailure": {"width": 1440, "status": "FAIL", "actualExit": 1, "assertion": "Ctrl+Home shell.scrollTop", "observedScrollTop": 2878, "otherWidthsNotRun": true, "evidenceFile": "trading-intro-user-approved-test-public/receipt.json", "causeUnresolved": true, "productChanged": false, "followupChange": "h1 focus call replaced by actual pointer click plus readonly beforeHome observation", "commentErrata": "h1 has tabindex=-1 and is programmatically focusable; no-op root cause was not established"},
-      "publicHtml": {"status": 200, "bytes": 10625, "sha256": "e9b5403b19c3db2faad8edfaa4ddae34123f0e419d32907de612a7bbbb2f2a22", "checkedAt": "2026-10-06T09:47:06.130Z"},
-      "validationReuse": {"sameNonMdSource": true, "sameServiceBytes": true, "newBuilds": 0, "newWholeRegressionRuns": 0, "newProviderCalls": 0},
+      "independentReview": {
+        "model": "claude-opus-5-5",
+        "accountProfile": "personal(1)",
+        "actualExit": 0,
+        "unchanged": true,
+        "verdict": "STATIC_UI_RELEASE_GO",
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "policyGo": true,
+        "releaseGo": true,
+        "reviewedInputs": 30,
+        "reviewWrapperIncluded": true,
+        "ownerAcceptedTestCopyRisks": true
+      },
+      "release": {
+        "archiveSha256": "a7382369cbf13a4e6b6193ff1938e3e87a633087c2d96749d1ab49e3ee116756",
+        "rawHtmlSha256": "491b8816f5bb627803728d966b63259d3f3d549b4e614c5eea565ce9f60aea4d",
+        "previousSource": "8a757a523a1f40da366b16584561c5635b9296a1",
+        "gateExit": 0,
+        "packageExit": 0,
+        "prepareExit": 0,
+        "archiveUploadExit": 0,
+        "atomicInstallExit": 0,
+        "preflightExit": 0,
+        "activationExit": 0,
+        "postflightExit": 0,
+        "atomicRootExchange": true,
+        "maintenanceRestart": true,
+        "privateAuthorityPreserved": true,
+        "backupRetained": true
+      },
+      "publicSmoke": {
+        "status": "PASS",
+        "actualExit": 0,
+        "widths": [
+          1440,
+          390,
+          320
+        ],
+        "staticGets": [
+          47,
+          47,
+          47
+        ],
+        "overflow": 0,
+        "runtimeErrors": 0,
+        "byteMismatch": 0,
+        "external": 0,
+        "mutations": 0,
+        "webSockets": 0,
+        "authGetSynthetic": true,
+        "actualLoginVerified": false,
+        "evidenceFile": "trading-intro-user-approved-test-public-focus/receipt.json",
+        "sha256": "e173478e18119bb469220230a8215e65c78380ca4b5c56a42a85ff753c65fa61"
+      },
+      "preservedInitialPublicFailure": {
+        "width": 1440,
+        "status": "FAIL",
+        "actualExit": 1,
+        "assertion": "Ctrl+Home shell.scrollTop",
+        "observedScrollTop": 2878,
+        "otherWidthsNotRun": true,
+        "evidenceFile": "trading-intro-user-approved-test-public/receipt.json",
+        "causeUnresolved": true,
+        "productChanged": false,
+        "followupChange": "h1 focus call replaced by actual pointer click plus readonly beforeHome observation",
+        "commentErrata": "h1 has tabindex=-1 and is programmatically focusable; no-op root cause was not established"
+      },
+      "publicHtml": {
+        "status": 200,
+        "bytes": 10625,
+        "sha256": "e9b5403b19c3db2faad8edfaa4ddae34123f0e419d32907de612a7bbbb2f2a22",
+        "checkedAt": "2026-10-06T09:47:06.130Z"
+      },
+      "validationReuse": {
+        "sameNonMdSource": true,
+        "sameServiceBytes": true,
+        "newBuilds": 0,
+        "newWholeRegressionRuns": 0,
+        "newProviderCalls": 0
+      },
       "releaseGo": true,
       "actualProviderGo": false,
       "serviceGo": false,
@@ -828,13 +1213,63 @@
       "sourceCommit": "801537754ca678d60327d64edc0b232ba63f47bd",
       "integratedSourceCommit": "3de733361e3cc4ac2827fb0a9495719b1bd2a6f2",
       "scope": "Native 원문 소개 분기 복원과 AI 트레이딩 문서 우측 scrollbar 표시 제거. 인증/API/SDK/flags/운영 푸터 불변.",
-      "serviceFrozen": {"files": 1113, "sha256": "70a9e3381005d8604041f7d7db8583dc131bf0a7caf71cfad91e6f21a2cfd392"},
-      "validation": {"introPassed": 9, "directIntroPassed": 2, "compiledPassed": 3, "compiledWidths": [1440, 390, 320], "relatedLintExit": 0, "typecheckAndServiceBuildExit": 0, "wholeRegressionRuns": 0, "actualProviderCalls": 0},
+      "serviceFrozen": {
+        "files": 1113,
+        "sha256": "70a9e3381005d8604041f7d7db8583dc131bf0a7caf71cfad91e6f21a2cfd392"
+      },
+      "validation": {
+        "introPassed": 9,
+        "directIntroPassed": 2,
+        "compiledPassed": 3,
+        "compiledWidths": [
+          1440,
+          390,
+          320
+        ],
+        "relatedLintExit": 0,
+        "typecheckAndServiceBuildExit": 0,
+        "wholeRegressionRuns": 0,
+        "actualProviderCalls": 0
+      },
       "evidence": "ROOT private trading-intro-copy-scroll-proof.json과 원 compiled receipt. 최초 raw HEAD818의 dirty 제품을 SHA로 현재801에 결속하며 raw를 수정하지 않음.",
-      "independentReview": {"model": "claude-opus-5-5", "accountProfile": "personal(1)", "actualExit": 0, "unchanged": true, "verdict": "STATIC_UI_RELEASE_HOLD", "critical": 0, "high": 2, "medium": 2, "policyGo": false, "releaseGo": false, "actualProviderGo": false, "serviceGo": false, "evidence": "ROOT private trading-intro-copy-scroll-opus.receipt.json. 원 response/입력 보존, wrapper frozen proof는 별도 미해결.", "blockers": ["현재 비활성 기능의 직접 주문·권한·포지션 정리 카피와 §0.4 공개 권위", "About unsupported 금지 기준과 trade 원문 필수 단언의 권위 모순"]},
-      "gate": {"actualExit": 1, "reason": "NEW_INDEPENDENT_POLICY_RELEASE_GO", "activationExecuted": false},
-      "atomicValidation": {"actualExit": 0, "passed": 15, "helperSyntaxModules": 6, "updaterChanges": 1, "remoteCalls": 0},
-      "publicObservation": {"status": 200, "bytes": 10625, "sha256": "f1798fbced3bd4957372cfbe0c66f10d875a107e4d6960913f68e4d753d92f62", "checkedAt": "2026-10-06T09:28:13.529Z", "existingOperatingReleasePreserved": true},
+      "independentReview": {
+        "model": "claude-opus-5-5",
+        "accountProfile": "personal(1)",
+        "actualExit": 0,
+        "unchanged": true,
+        "verdict": "STATIC_UI_RELEASE_HOLD",
+        "critical": 0,
+        "high": 2,
+        "medium": 2,
+        "policyGo": false,
+        "releaseGo": false,
+        "actualProviderGo": false,
+        "serviceGo": false,
+        "evidence": "ROOT private trading-intro-copy-scroll-opus.receipt.json. 원 response/입력 보존, wrapper frozen proof는 별도 미해결.",
+        "blockers": [
+          "현재 비활성 기능의 직접 주문·권한·포지션 정리 카피와 §0.4 공개 권위",
+          "About unsupported 금지 기준과 trade 원문 필수 단언의 권위 모순"
+        ]
+      },
+      "gate": {
+        "actualExit": 1,
+        "reason": "NEW_INDEPENDENT_POLICY_RELEASE_GO",
+        "activationExecuted": false
+      },
+      "atomicValidation": {
+        "actualExit": 0,
+        "passed": 15,
+        "helperSyntaxModules": 6,
+        "updaterChanges": 1,
+        "remoteCalls": 0
+      },
+      "publicObservation": {
+        "status": 200,
+        "bytes": 10625,
+        "sha256": "f1798fbced3bd4957372cfbe0c66f10d875a107e4d6960913f68e4d753d92f62",
+        "checkedAt": "2026-10-06T09:28:13.529Z",
+        "existingOperatingReleasePreserved": true
+      },
       "releaseGo": false,
       "actualProviderGo": false,
       "serviceGo": false,
@@ -869,12 +1304,57 @@
         "deploymentExecuted": false,
         "next": "Implement the explicitly approved atomic operating-tool changes and complete atomic release/rollback acceptance, final release/package/CAS/public smoke/activation. No new updater implementation, final Go or deployment execution is attested by this metadata; auth/provider/service boundaries remain unchanged."
       },
-      "footerUiTest": {"casesPassed":12,"casesFailed":0,"casesSkipped":0,"actualExit":0,"durationMs":14160.487,"rawSha256":"e4a3bc0934fd76d3d089a52d257e6653fbe01064d10608ca7848ecc59eb9ee0d","originalTwelveHarnessFailuresPreserved":true,"blockedLocalViteHmrClassifiedSeparately":true,"externalMutationNonHmrWebSocketUnexpectedApi":0,"ownedPort4697Stopped":true},
+      "footerUiTest": {
+        "casesPassed": 12,
+        "casesFailed": 0,
+        "casesSkipped": 0,
+        "actualExit": 0,
+        "durationMs": 14160.487,
+        "rawSha256": "e4a3bc0934fd76d3d089a52d257e6653fbe01064d10608ca7848ecc59eb9ee0d",
+        "originalTwelveHarnessFailuresPreserved": true,
+        "blockedLocalViteHmrClassifiedSeparately": true,
+        "externalMutationNonHmrWebSocketUnexpectedApi": 0,
+        "ownedPort4697Stopped": true
+      },
       "lintActualExit": 0,
       "serviceBuildActualExit": 0,
-      "compiledPresentation": {"casesPassed":3,"casesFailed":0,"actualExit":0,"viewports":[[1440,900],[390,844],[320,480]],"staticGetByteVerifiedByViewport":[74,48,58],"externalMutationWebSocketErrors":0,"onlySyntheticAnonymousSessionCsrfGets":true,"actualLoginVerified":false,"runSha256":"38eb1146b2e181e56aa73b124e3c15d32d179c446eba013da180fda46f7a53f6","receiptSha256":"55c6f540b073a0202c5c71efa822f62e60dc26e7e3b65ec24551b672c45688e9"},
-      "nonMarkdownInput": {"files":2212,"sha256":"a26673826b3ed507b5147641a1abda18be04ebd2d3ca0bed6b62f56ee25bad37"},
-      "serviceInput": {"files":1113,"sha256":"508c412ebc7a6ac900f3641758c79be5058bab8dbf0046b848790e899459b636"},
+      "compiledPresentation": {
+        "casesPassed": 3,
+        "casesFailed": 0,
+        "actualExit": 0,
+        "viewports": [
+          [
+            1440,
+            900
+          ],
+          [
+            390,
+            844
+          ],
+          [
+            320,
+            480
+          ]
+        ],
+        "staticGetByteVerifiedByViewport": [
+          74,
+          48,
+          58
+        ],
+        "externalMutationWebSocketErrors": 0,
+        "onlySyntheticAnonymousSessionCsrfGets": true,
+        "actualLoginVerified": false,
+        "runSha256": "38eb1146b2e181e56aa73b124e3c15d32d179c446eba013da180fda46f7a53f6",
+        "receiptSha256": "55c6f540b073a0202c5c71efa822f62e60dc26e7e3b65ec24551b672c45688e9"
+      },
+      "nonMarkdownInput": {
+        "files": 2212,
+        "sha256": "a26673826b3ed507b5147641a1abda18be04ebd2d3ca0bed6b62f56ee25bad37"
+      },
+      "serviceInput": {
+        "files": 1113,
+        "sha256": "508c412ebc7a6ac900f3641758c79be5058bab8dbf0046b848790e899459b636"
+      },
       "legacyPendingDeploymentAppliesToThisCandidate": false,
       "existingLibraryResearchConversationProducerNoGoChanged": false,
       "preparationDeliveryNewWholeCiModelProviderOperatingRun": false,
@@ -895,7 +1375,11 @@
         "backupRetained": true,
         "privateAuthorityPreserved": true,
         "postSuccessRollbackRunbookFixed": true,
-        "preflightActivatePostflightActualExits": [0, 0, 0],
+        "preflightActivatePostflightActualExits": [
+          0,
+          0,
+          0
+        ],
         "review": {
           "profile": "personal (1)",
           "actualModel": "claude-opus-5-5",
@@ -911,8 +1395,25 @@
         "publicBrowser": {
           "passed": 3,
           "actualExit": 0,
-          "viewports": [[1440,900],[390,844],[320,480]],
-          "staticBytesVerified": [73,48,58],
+          "viewports": [
+            [
+              1440,
+              900
+            ],
+            [
+              390,
+              844
+            ],
+            [
+              320,
+              480
+            ]
+          ],
+          "staticBytesVerified": [
+            73,
+            48,
+            58
+          ],
           "byteMismatchRuntimeExternalMutationWebSocketErrors": 0,
           "syntheticAnonymousSessionCsrfGetsOnly": true,
           "firstProbeLateCleanupFiveFailuresPreserved": true,
@@ -939,22 +1440,57 @@
       "validatedProductHead": "e755d5bb24fc0a3670304d2048e97373165398d1",
       "staticDocumentationHead": "383e83afe861b5914d275062a89746d6ef14f7d5",
       "integratedDocumentationHead": "9ac907be25dbe9ba2803c80e4886bbf82ead09f2",
-      "staticDocumentationDeltaFiles": ["README.md", "Bugfix_report.md"],
-      "integratedDocumentationDeltaFiles": ["README.md", "Bugfix_report.md"],
+      "staticDocumentationDeltaFiles": [
+        "README.md",
+        "Bugfix_report.md"
+      ],
+      "integratedDocumentationDeltaFiles": [
+        "README.md",
+        "Bugfix_report.md"
+      ],
       "nonMarkdownDeltaAfterValidatedHeads": false,
       "actualExitCode": 0,
       "singleRun": true,
       "casesPassed": 3,
       "casesFailed": 0,
-      "viewports": [[1440,900],[390,844],[320,480]],
-      "source": {"files":715,"beforeAfterDigest":"65b5d7786e7a92fe66945e052a058d2029130de914fbf58384cafdc57654c680","unchanged":true},
-      "service": {"files":1113,"bytes":21084241,"beforeAfterDigest":"d4e054e18cf6cdc2308239a321ef4b05143b243633a392562702de7da61d927f","unchanged":true,"entry":"assets/internalPoc-mFyWis19.js","entryDigest":"b3c0ef811c4275b80485974f66fc35b436909526a976a3003315a09c036865bd","realServiceEntryObserved":true},
+      "viewports": [
+        [
+          1440,
+          900
+        ],
+        [
+          390,
+          844
+        ],
+        [
+          320,
+          480
+        ]
+      ],
+      "source": {
+        "files": 715,
+        "beforeAfterDigest": "65b5d7786e7a92fe66945e052a058d2029130de914fbf58384cafdc57654c680",
+        "unchanged": true
+      },
+      "service": {
+        "files": 1113,
+        "bytes": 21084241,
+        "beforeAfterDigest": "d4e054e18cf6cdc2308239a321ef4b05143b243633a392562702de7da61d927f",
+        "unchanged": true,
+        "entry": "assets/internalPoc-mFyWis19.js",
+        "entryDigest": "b3c0ef811c4275b80485974f66fc35b436909526a976a3003315a09c036865bd",
+        "realServiceEntryObserved": true
+      },
       "authSevenFilesExactOperating7dd": true,
       "originalThreeProvidersPreserved": true,
       "disabledProviderKeyboardGuard": true,
       "draftAndEscapeCloseFocusPreserved": true,
       "originalFreeCopyFooterFourParagraphsHelpDotAndGapVerified": true,
-      "staticGetByteVerifiedByViewport": [75,49,59],
+      "staticGetByteVerifiedByViewport": [
+        75,
+        49,
+        59
+      ],
       "externalMutationWebSocketUnexpectedApiRuntimeNetworkErrors": 0,
       "overflowAllViewports": 0,
       "onlySyntheticAnonymousSessionCsrfGets": true,
@@ -969,12 +1505,27 @@
       "releaseRisk": "STATIC_UI_RELEASE_HOLD_MOCK_NOTICE_ABSENT",
       "oldPendingDeploymentAppliesToThisCandidate": false,
       "oldPendingDeploymentMeaning": "4b77 unexecuted deployment history, not approval for e755/383e83a; preserved without modification",
-      "legacyAudit": {"scope":"selected27 import/export/lazy consumption; not all internal dead expressions","confirmedSafeDeletionCandidates":0,"actuallyDeleted":0,"toastResearchDynamicDictionaryAndPublicAssetClosurePreserved":true},
+      "legacyAudit": {
+        "scope": "selected27 import/export/lazy consumption; not all internal dead expressions",
+        "confirmedSafeDeletionCandidates": 0,
+        "actuallyDeleted": 0,
+        "toastResearchDynamicDictionaryAndPublicAssetClosurePreserved": true
+      },
       "latestOriginalMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
       "latestWebMain": "62b5e6972cb48a3ac862fc41799061c0d0722525",
       "upstreamMainCheckedAtUtc": "2026-10-06T06:35:36Z",
       "upstreamNewMainDelta": false,
-      "sourceDocumentationSecretScans": {"scanner":"gitleaks8.30.1","staticStagedFiles":2,"integratedStagedFiles":2,"actualExitCodes":[0,0],"findings":0,"newExceptions":false},
+      "sourceDocumentationSecretScans": {
+        "scanner": "gitleaks8.30.1",
+        "staticStagedFiles": 2,
+        "integratedStagedFiles": 2,
+        "actualExitCodes": [
+          0,
+          0
+        ],
+        "findings": 0,
+        "newExceptions": false
+      },
       "newBuildWholeModelProviderExecuted": false,
       "packageUploadActivateExecuted": false,
       "releaseGo": false,
@@ -982,72 +1533,122 @@
       "remaining": "Footer factual/legal authority and explicit promotion direction; exact final independent release acceptance/package/CAS/public smoke/atomic switch/rollback. Existing actual producer and baseline auth gaps remain; display PASS is not integrated auth or whole-service approval."
     },
     "currentStaticUiRestorationCandidate": {
-      "sourceRepository":"https://github.com/beak1011/tesia-web",
-      "sourceBranch":"agent/web/static-ui-restoration-batch",
-      "sourceCommit":"e755d5bb24fc0a3670304d2048e97373165398d1",
-      "baseCommit":"c0907e0f3af7c3aef7b32323c2b4c7f573c09460",
-      "operatingAuthBaseline":"7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
-      "integratedUiOracle":"2b4bdeaf9711651dc19a685dbbe38c3e06c03770",
-      "status":"SCOPED_UI_PREPARATION_PASS_FOOTER_AUTHORITY_AND_RELEASE_HOLD",
-      "selectedUiFiles":27,
-      "additionalToC090UiFiles":20,
-      "selectedUiExactIntegratedSource":true,
-      "nonselectedBaselineMismatch":0,
-      "actualAuthFilesPreserved":["src/internal-poc/NativeServiceApp.tsx","src/internal-poc/NativeLoginPanel.tsx","src/internal-poc/native-browser-auth.ts"],
-      "actualAuthFilesExactOperating":true,
-      "sdkContractFilesExactOperating":74,
-      "rootProtectedAuthSdkBootstrapPackageConfigExactFiles":83,
-      "mainMockSignupProviderFeedbackNotActualAuth":true,
-      "nativeLibraryCallbackPromiseIsUiCompletionNotNewProducer":true,
-      "notLiteralOnly":true,
-      "newToastHelperDependencyIncluded":true,
-      "srcBeforeAfterFiles":715,
-      "srcBeforeAfterDigest":"65b5d7786e7a92fe66945e052a058d2029130de914fbf58384cafdc57654c680",
-      "policyFollowers":{"actualExitCode":0,"passed":16,"durationMs":24271.710,"retries":0,"skips":0,"flaky":0,"outsideErrors":0,"receiptSha256":"00d65b9754bab62d35aa7f325dddbe688c3ff31f2f8ba47fd07ccfe9d58b580e","rawSha256":"c247fb60f5fd58672bf3b5e16e7e0a7f3c3bdc985c6b76acd6f6827351fc87cd"},
-      "renameDownload":{"actualExitCode":0,"passed":32,"durationMs":36933.252,"retries":0,"skips":0,"flaky":0,"outsideErrors":0,"scope":"only download14x2 and original rename2x2; other session-menu cases excluded"},
-      "single48OrWholePassClaimed":false,
-      "nativePolicyRealEntrySyntheticGetFollowersComponentFixture":true,
-      "nativeActualProviderVerified":false,
-      "typescriptRuns":1,
-      "typescriptActualExitCode":0,
-      "serviceBuildRuns":1,
-      "serviceBuildActualExitCode":0,
-      "serviceBuildDurationMs":997,
-      "relatedProductLintFiles":16,
-      "relatedLintActualExitCode":0,
-      "googleOnly":true,
-      "exchangeConnect":false,
-      "independentReadonlyConfirmedCounterexamples":0,
-      "sourceSecretScan":{"scanner":"gitleaks8.30.1","stagedFiles":26,"actualExitCode":0,"findings":0,"exceptionsAdded":false},
-      "sourcePushRemoteExact":true,
-      "ownedPorts4694And4695Stopped":true,
-      "integratedReactSnapshotNotOverwrittenWithOperatingAuth":true,
-      "backendGapCorrection":"API0.10 private library 5operation/acceptance8 exists; unpublished/current Web unused and Backend facade has no store/HTTP producer. Do not create duplicate adapter or claim operation itself absent.",
-      "legacyOrUserEvidenceDeleted":false,
-      "wholeExecuted":false,
-      "modelReviewExecuted":false,
-      "packageUploadActivateExecuted":false,
-      "releaseGo":false,
-      "serviceGo":false,
-      "remaining":"Original footer factual/legal authority and explicit promotion direction; exact final independent release acceptance/package/CAS/public smoke/atomic switch/rollback. Actual research/library/stream producer and baseline auth risks remain separate."
+      "sourceRepository": "https://github.com/beak1011/tesia-web",
+      "sourceBranch": "agent/web/static-ui-restoration-batch",
+      "sourceCommit": "e755d5bb24fc0a3670304d2048e97373165398d1",
+      "baseCommit": "c0907e0f3af7c3aef7b32323c2b4c7f573c09460",
+      "operatingAuthBaseline": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
+      "integratedUiOracle": "2b4bdeaf9711651dc19a685dbbe38c3e06c03770",
+      "status": "SCOPED_UI_PREPARATION_PASS_FOOTER_AUTHORITY_AND_RELEASE_HOLD",
+      "selectedUiFiles": 27,
+      "additionalToC090UiFiles": 20,
+      "selectedUiExactIntegratedSource": true,
+      "nonselectedBaselineMismatch": 0,
+      "actualAuthFilesPreserved": [
+        "src/internal-poc/NativeServiceApp.tsx",
+        "src/internal-poc/NativeLoginPanel.tsx",
+        "src/internal-poc/native-browser-auth.ts"
+      ],
+      "actualAuthFilesExactOperating": true,
+      "sdkContractFilesExactOperating": 74,
+      "rootProtectedAuthSdkBootstrapPackageConfigExactFiles": 83,
+      "mainMockSignupProviderFeedbackNotActualAuth": true,
+      "nativeLibraryCallbackPromiseIsUiCompletionNotNewProducer": true,
+      "notLiteralOnly": true,
+      "newToastHelperDependencyIncluded": true,
+      "srcBeforeAfterFiles": 715,
+      "srcBeforeAfterDigest": "65b5d7786e7a92fe66945e052a058d2029130de914fbf58384cafdc57654c680",
+      "policyFollowers": {
+        "actualExitCode": 0,
+        "passed": 16,
+        "durationMs": 24271.71,
+        "retries": 0,
+        "skips": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "receiptSha256": "00d65b9754bab62d35aa7f325dddbe688c3ff31f2f8ba47fd07ccfe9d58b580e",
+        "rawSha256": "c247fb60f5fd58672bf3b5e16e7e0a7f3c3bdc985c6b76acd6f6827351fc87cd"
+      },
+      "renameDownload": {
+        "actualExitCode": 0,
+        "passed": 32,
+        "durationMs": 36933.252,
+        "retries": 0,
+        "skips": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "scope": "only download14x2 and original rename2x2; other session-menu cases excluded"
+      },
+      "single48OrWholePassClaimed": false,
+      "nativePolicyRealEntrySyntheticGetFollowersComponentFixture": true,
+      "nativeActualProviderVerified": false,
+      "typescriptRuns": 1,
+      "typescriptActualExitCode": 0,
+      "serviceBuildRuns": 1,
+      "serviceBuildActualExitCode": 0,
+      "serviceBuildDurationMs": 997,
+      "relatedProductLintFiles": 16,
+      "relatedLintActualExitCode": 0,
+      "googleOnly": true,
+      "exchangeConnect": false,
+      "independentReadonlyConfirmedCounterexamples": 0,
+      "sourceSecretScan": {
+        "scanner": "gitleaks8.30.1",
+        "stagedFiles": 26,
+        "actualExitCode": 0,
+        "findings": 0,
+        "exceptionsAdded": false
+      },
+      "sourcePushRemoteExact": true,
+      "ownedPorts4694And4695Stopped": true,
+      "integratedReactSnapshotNotOverwrittenWithOperatingAuth": true,
+      "backendGapCorrection": "API0.10 private library 5operation/acceptance8 exists; unpublished/current Web unused and Backend facade has no store/HTTP producer. Do not create duplicate adapter or claim operation itself absent.",
+      "legacyOrUserEvidenceDeleted": false,
+      "wholeExecuted": false,
+      "modelReviewExecuted": false,
+      "packageUploadActivateExecuted": false,
+      "releaseGo": false,
+      "serviceGo": false,
+      "remaining": "Original footer factual/legal authority and explicit promotion direction; exact final independent release acceptance/package/CAS/public smoke/atomic switch/rollback. Actual research/library/stream producer and baseline auth risks remain separate."
     },
     "currentPolicyLinksFollowersParity": {
       "sourceCommit": "2b4bdeaf9711651dc19a685dbbe38c3e06c03770",
       "baseCommit": "81957ad7a7f3c52bc24e03c7d5787dc0f0d9b6cd",
       "status": "SCOPED_ORIGINAL_PARITY_RESTORED_NOT_RELEASE_OR_SERVICE_GO",
-      "productFiles": ["src/components/ClientAccountUI.tsx", "src/components/ClientStrategyListCard.tsx"],
-      "newTests": ["tests/client-help-policy-link-parity.spec.ts", "tests/client-strategy-followers-original.spec.ts"],
+      "productFiles": [
+        "src/components/ClientAccountUI.tsx",
+        "src/components/ClientStrategyListCard.tsx"
+      ],
+      "newTests": [
+        "tests/client-help-policy-link-parity.spec.ts",
+        "tests/client-strategy-followers-original.spec.ts"
+      ],
       "policyLinks": {
         "sourceOracle": "fixed9fb:index5288-5291,26653-26655,26721-26723",
         "restored": "terms/privacy target=_blank rel=noopener noreferrer and retained menu; About unchanged",
         "inverseByteExactBase": true,
-        "representativeRed": {"actualExitCode": 1, "failed": 1, "durationMs": 13741.887},
-        "finalRepresentative": {"actualExitCode": 0, "passed": 1, "durationMs": 5261.219},
-        "remainingOnly": {"actualExitCode": 0, "passed": 7, "durationMs": 18035.487},
+        "representativeRed": {
+          "actualExitCode": 1,
+          "failed": 1,
+          "durationMs": 13741.887
+        },
+        "finalRepresentative": {
+          "actualExitCode": 0,
+          "passed": 1,
+          "durationMs": 5261.219
+        },
+        "remainingOnly": {
+          "actualExitCode": 0,
+          "passed": 7,
+          "durationMs": 18035.487
+        },
         "singleEightGreenClaimed": false,
         "actualMainFourAndRealNativeServiceEntryFour": true,
         "nativeSyntheticAnonymousSessionCsrfGetNotRealProvider": true,
-        "widths": [1440,320],
+        "widths": [
+          1440,
+          320
+        ],
         "receiptSha256": "c7333ae747f6749fea4dd4ebe1b1c27558b99c20f5366974b62d6a0b1380724f",
         "preparationFailuresPreserved": true
       },
@@ -1058,24 +1659,61 @@
         "unknownInvalidAndForeignSixPreserved": true,
         "mainSnapshotNotLiveProviderAndNativeUndefinedNotFabricated": true,
         "inverseByteExactBase": true,
-        "representativeRed": {"actualExitCode": 1, "failed": 1},
-        "firstRun": {"actualExitCode": 1, "passed": 4, "newHarnessFailed": 4, "durationMs": 21884.562},
-        "failedFourOnlyCorrected": {"actualExitCode": 0, "passed": 4, "durationMs": 4670.929},
-        "existing320pxOnly": {"actualExitCode": 0, "passed": 2, "durationMs": 5393.106},
+        "representativeRed": {
+          "actualExitCode": 1,
+          "failed": 1
+        },
+        "firstRun": {
+          "actualExitCode": 1,
+          "passed": 4,
+          "newHarnessFailed": 4,
+          "durationMs": 21884.562
+        },
+        "failedFourOnlyCorrected": {
+          "actualExitCode": 0,
+          "passed": 4,
+          "durationMs": 4670.929
+        },
+        "existing320pxOnly": {
+          "actualExitCode": 0,
+          "passed": 2,
+          "durationMs": 5393.106
+        },
         "singleEightGreenClaimed": false,
         "alreadyPassedForeignMainNotRerun": true,
         "nativeComponentFixtureNotActualBackendProducer": true,
         "preparationFailuresPreserved": true
       },
-      "build": {"typescriptRuns":1,"typescriptActualExitCode":0,"publicActualExitCode":0,"internalActualExitCode":0,"serviceActualExitCode":0,"relatedLintActualExitCode":0,"googleOnly":true,"exchangeConnect":false,"existingWarningsUnresolved":true},
-      "independentReadonly": {"productTwoNewSpecTwoFullyRead":true,"confirmedBlockers":0,"modelReviewExecuted":false,"notFinalGo":true},
-      "sourceSecretScan": {"scanner":"gitleaks8.30.1","stagedFiles":6,"actualExitCode":0,"findings":0,"exceptionsAdded":false},
-      "authControllerApiSdkFlagsChanged":false,
-      "wholeExecuted":false,
-      "providerExecuted":false,
-      "operatingChanged":false,
-      "releaseGo":false,
-      "serviceGo":false,
+      "build": {
+        "typescriptRuns": 1,
+        "typescriptActualExitCode": 0,
+        "publicActualExitCode": 0,
+        "internalActualExitCode": 0,
+        "serviceActualExitCode": 0,
+        "relatedLintActualExitCode": 0,
+        "googleOnly": true,
+        "exchangeConnect": false,
+        "existingWarningsUnresolved": true
+      },
+      "independentReadonly": {
+        "productTwoNewSpecTwoFullyRead": true,
+        "confirmedBlockers": 0,
+        "modelReviewExecuted": false,
+        "notFinalGo": true
+      },
+      "sourceSecretScan": {
+        "scanner": "gitleaks8.30.1",
+        "stagedFiles": 6,
+        "actualExitCode": 0,
+        "findings": 0,
+        "exceptionsAdded": false
+      },
+      "authControllerApiSdkFlagsChanged": false,
+      "wholeExecuted": false,
+      "providerExecuted": false,
+      "operatingChanged": false,
+      "releaseGo": false,
+      "serviceGo": false,
       "backendHandoff": "Existing Bugfix_report lists account-wide conversations, multi-role research stage/status and conversation streaming missing producers and required PM/contracts/acceptance decisions; no shared contract changed or mock success introduced.",
       "remaining": "Existing staticc090 and integrated auth authority stay separate. Footer factual/legal authority and promotion direction unresolved. Public GET unchanged; no public deployment proof added."
     },
@@ -1083,31 +1721,106 @@
       "sourceCommit": "81957ad7a7f3c52bc24e03c7d5787dc0f0d9b6cd",
       "baseCommit": "e44867b6bfdd76f1aed4753951461236ea31767e",
       "status": "SCOPED_PARITY_RESTORED_NOT_RELEASE_OR_SERVICE_GO",
-      "productFiles": ["src/components/ClientConversation.tsx", "src/components/ClientSharedDetailShell.tsx", "src/components/ClientStrategySharing.tsx", "src/components/ClientSettingsNotifications.tsx"],
+      "productFiles": [
+        "src/components/ClientConversation.tsx",
+        "src/components/ClientSharedDetailShell.tsx",
+        "src/components/ClientStrategySharing.tsx",
+        "src/components/ClientSettingsNotifications.tsx"
+      ],
       "sourceOracle": "fixed9fb/index11248,15510,21659,23528,23532; original-nullparameters own fallback shares the copy-list breadcrumb",
       "scope": "KO original copy-complete/detail labels/notification group suffix; catalogue loading/error has no original loading oracle and is only copy-list destination-label consistency. Six other locales preserved, not all original translations claimed.",
       "copyFeedback": {
-        "firstRun": {"actualExitCode": 1, "passed": 6, "newHarnessFailed": 8, "durationMs": 47617},
-        "correctedRun": {"actualExitCode": 1, "passed": 12, "newPropsHarnessFailed": 2, "durationMs": 27922.742, "rawSha256": "2cc260831ce2d69d0cfee5e4e26591f9c1a88f2e93a4dd7c88de1fc6156cd4fb"},
-        "failedPropsOnly": {"actualExitCode": 0, "passed": 2, "durationMs": 3679.674, "rawSha256": "51d3e391a0d94b086cbb53500ebf5dfffeac1a05d7d8c37063e591b44d4889c7"},
-        "existingQuestionOnly": {"actualExitCode": 0, "passed": 2, "durationMs": 3125.61},
+        "firstRun": {
+          "actualExitCode": 1,
+          "passed": 6,
+          "newHarnessFailed": 8,
+          "durationMs": 47617
+        },
+        "correctedRun": {
+          "actualExitCode": 1,
+          "passed": 12,
+          "newPropsHarnessFailed": 2,
+          "durationMs": 27922.742,
+          "rawSha256": "2cc260831ce2d69d0cfee5e4e26591f9c1a88f2e93a4dd7c88de1fc6156cd4fb"
+        },
+        "failedPropsOnly": {
+          "actualExitCode": 0,
+          "passed": 2,
+          "durationMs": 3679.674,
+          "rawSha256": "51d3e391a0d94b086cbb53500ebf5dfffeac1a05d7d8c37063e591b44d4889c7"
+        },
+        "existingQuestionOnly": {
+          "actualExitCode": 0,
+          "passed": 2,
+          "durationMs": 3125.61
+        },
         "single14GreenClaimed": false,
         "latestActualClipboardSuccessOnly": true,
         "staleAttemptTextReplacementUnmountAndCurrentLocaleCovered": true,
         "syntheticClipboardNotOsPermissionOrNativeAuthentication": true
       },
       "detail": {
-        "correctedShell": {"actualExitCode": 0, "passed": 8, "durationMs": 14404.69, "rawSha256": "8a681c836680065fee35d1fdf4c79db1bb69b4061cf946e55db89ffa6e931ff5"},
-        "additionalBackLabels": {"actualExitCode": 0, "passed": 4, "durationMs": 7683.746, "rawSha256": "97fb5c54a39ad5b930612281799082d79a3ba0eac64313ae972e36fcc2427070"},
+        "correctedShell": {
+          "actualExitCode": 0,
+          "passed": 8,
+          "durationMs": 14404.69,
+          "rawSha256": "8a681c836680065fee35d1fdf4c79db1bb69b4061cf946e55db89ffa6e931ff5"
+        },
+        "additionalBackLabels": {
+          "actualExitCode": 0,
+          "passed": 4,
+          "durationMs": 7683.746,
+          "rawSha256": "97fb5c54a39ad5b930612281799082d79a3ba0eac64313ae972e36fcc2427070"
+        },
         "initialHarnessAndOriginalRedPreserved": true,
         "mainRetainedAndNativeSuppliedNotActualProducer": true,
         "mobileErrorExistingTwoLineButtonLayoutUnchanged": true
       },
-      "notification": {"actualExitCode": 0, "passed": 4, "durationMs": 14198.658, "rawSha256": "ad0d7b038d0d4684a15f005c405717d7c66b8fb26455d2fccd3a1311d8c717f4", "mainAndNativeSupplied": true, "redPreserved": true},
-      "existingSelectors": {"files": 9, "exactNameOnlyChanges": 21, "inverseByteExactBase": true, "assertionsTimeoutFixtureRetrySkipUnchanged": true, "full252Executed": false, "selectedKeys": 24, "passed": 24, "actualExitCode": 0, "durationMs": 32293.95, "rawSha256": "226059f2d66782492b3dd298879baba6bb1f16ea61a168a4fc1dd4246ef28e66"},
-      "build": {"typescriptRuns": 1, "typescriptActualExitCode": 0, "publicActualExitCode": 0, "internalActualExitCode": 0, "serviceActualExitCode": 0, "relatedLintActualExitCode": 0, "googleOnly": true, "exchangeConnect": false, "existingWarningsUnresolved": true},
-      "independentReadonly": {"confirmedBlockers": 0, "productScopeMatched": true, "newThreeSpecsFullyRead": true, "modelReviewExecuted": false, "notOperatingOrFinalGo": true},
-      "sourceSecretScan": {"scanner": "gitleaks8.30.1", "stagedFiles": 18, "actualExitCode": 0, "findings": 0, "exceptionsAdded": false},
+      "notification": {
+        "actualExitCode": 0,
+        "passed": 4,
+        "durationMs": 14198.658,
+        "rawSha256": "ad0d7b038d0d4684a15f005c405717d7c66b8fb26455d2fccd3a1311d8c717f4",
+        "mainAndNativeSupplied": true,
+        "redPreserved": true
+      },
+      "existingSelectors": {
+        "files": 9,
+        "exactNameOnlyChanges": 21,
+        "inverseByteExactBase": true,
+        "assertionsTimeoutFixtureRetrySkipUnchanged": true,
+        "full252Executed": false,
+        "selectedKeys": 24,
+        "passed": 24,
+        "actualExitCode": 0,
+        "durationMs": 32293.95,
+        "rawSha256": "226059f2d66782492b3dd298879baba6bb1f16ea61a168a4fc1dd4246ef28e66"
+      },
+      "build": {
+        "typescriptRuns": 1,
+        "typescriptActualExitCode": 0,
+        "publicActualExitCode": 0,
+        "internalActualExitCode": 0,
+        "serviceActualExitCode": 0,
+        "relatedLintActualExitCode": 0,
+        "googleOnly": true,
+        "exchangeConnect": false,
+        "existingWarningsUnresolved": true
+      },
+      "independentReadonly": {
+        "confirmedBlockers": 0,
+        "productScopeMatched": true,
+        "newThreeSpecsFullyRead": true,
+        "modelReviewExecuted": false,
+        "notOperatingOrFinalGo": true
+      },
+      "sourceSecretScan": {
+        "scanner": "gitleaks8.30.1",
+        "stagedFiles": 18,
+        "actualExitCode": 0,
+        "findings": 0,
+        "exceptionsAdded": false
+      },
       "authControllerApiSdkFlagsChanged": false,
       "wholeExecuted": false,
       "providerExecuted": false,
@@ -1120,27 +1833,83 @@
       "sourceCommit": "e44867b6bfdd76f1aed4753951461236ea31767e",
       "baseCommit": "4af904665000a9a40730820cf8e542e65129a9d6",
       "status": "SCOPED_PARITY_FIXED_NOT_OPERATING_OR_SERVICE_GO",
-      "productFiles": ["src/components/ClientAccountUI.tsx", "src/components/ClientResearchWorkspace.tsx"],
-      "copy": {"koOriginal": ["고객센터", "앱 다운로드"], "existingOtherSixLanguagesPreserved": true, "foreignOriginalParityClaimed": false},
-      "ime": {"mainResearchNativeEvent229GuardRestored": true, "nativeConversationGuardAlreadyPresent": true},
+      "productFiles": [
+        "src/components/ClientAccountUI.tsx",
+        "src/components/ClientResearchWorkspace.tsx"
+      ],
+      "copy": {
+        "koOriginal": [
+          "고객센터",
+          "앱 다운로드"
+        ],
+        "existingOtherSixLanguagesPreserved": true,
+        "foreignOriginalParityClaimed": false
+      },
+      "ime": {
+        "mainResearchNativeEvent229GuardRestored": true,
+        "nativeConversationGuardAlreadyPresent": true
+      },
       "menu": {
-        "firstRun": {"actualExitCode": 1, "desktopPassed": 14, "mobileHarnessFailed": 14, "durationMs": 110229.613},
-        "finalMobile": {"actualExitCode": 0, "passed": 14, "durationMs": 28543.628, "rawSha256": "1bdacfe7f949c02564f24b68e362fe95620b2f909bc1ea4af4df1ff81132ed31"},
+        "firstRun": {
+          "actualExitCode": 1,
+          "desktopPassed": 14,
+          "mobileHarnessFailed": 14,
+          "durationMs": 110229.613
+        },
+        "finalMobile": {
+          "actualExitCode": 0,
+          "passed": 14,
+          "durationMs": 28543.628,
+          "rawSha256": "1bdacfe7f949c02564f24b68e362fe95620b2f909bc1ea4af4df1ff81132ed31"
+        },
         "receiptSha256": "9647350efeab09088aa59927fb51d9d3100060397cfd26b1b472a12ffab561eb",
         "sameFailedMobileKeysRechecked": true,
         "single28PassClaimed": false,
         "nativeControlledShellNotSdkAuthentication": true
       },
       "research": {
-        "red": {"actualExitCode": 1, "failed": 1, "rawSha256": "86703246a8af0d67d22f4f397f400c292eb8f21cfdbd92e5da095554c20222db"},
-        "firstRun": {"actualExitCode": 1, "passed": 26, "newHarnessFailed": 2, "existingNeighborPassed": 20, "rawSha256": "2e6733511f16179adb3a627a4f2f69e6aaaee002cd6f705f95c9d6e16e33ee73"},
-        "correctedNewSpec": {"actualExitCode": 0, "passed": 8, "durationMs": 8821.767, "rawSha256": "a6d50377dee80dcda1769999b9579e8aa93f85ae3756754e08e4b90cbc83e133"},
+        "red": {
+          "actualExitCode": 1,
+          "failed": 1,
+          "rawSha256": "86703246a8af0d67d22f4f397f400c292eb8f21cfdbd92e5da095554c20222db"
+        },
+        "firstRun": {
+          "actualExitCode": 1,
+          "passed": 26,
+          "newHarnessFailed": 2,
+          "existingNeighborPassed": 20,
+          "rawSha256": "2e6733511f16179adb3a627a4f2f69e6aaaee002cd6f705f95c9d6e16e33ee73"
+        },
+        "correctedNewSpec": {
+          "actualExitCode": 0,
+          "passed": 8,
+          "durationMs": 8821.767,
+          "rawSha256": "a6d50377dee80dcda1769999b9579e8aa93f85ae3756754e08e4b90cbc83e133"
+        },
         "existingNeighborRerun": false,
         "osImeOrActualAiProven": false
       },
-      "input": {"typescriptActualExitCode": 0, "scopedLintActualExitCode": 0, "publicViteActualExitCode": 0, "internalViteActualExitCode": 0, "serviceViteActualExitCode": 0, "googleOnly": true, "exchangeConnect": false, "existingChunkWarningUnresolved": true},
-      "sourceStagedSecretScan": {"scanner": "gitleaks8.30.1", "files": 6, "actualExitCode": 0, "findings": 0},
-      "independentDelta": {"inverseBothProductFilesByteExactBase": true, "confirmedIssues": 0, "authControllerApiFlagsChanged": false},
+      "input": {
+        "typescriptActualExitCode": 0,
+        "scopedLintActualExitCode": 0,
+        "publicViteActualExitCode": 0,
+        "internalViteActualExitCode": 0,
+        "serviceViteActualExitCode": 0,
+        "googleOnly": true,
+        "exchangeConnect": false,
+        "existingChunkWarningUnresolved": true
+      },
+      "sourceStagedSecretScan": {
+        "scanner": "gitleaks8.30.1",
+        "files": 6,
+        "actualExitCode": 0,
+        "findings": 0
+      },
+      "independentDelta": {
+        "inverseBothProductFilesByteExactBase": true,
+        "confirmedIssues": 0,
+        "authControllerApiFlagsChanged": false
+      },
       "reportBoundary": "Existing single SDK report reader/Portal/Document/slot already connected; real Hypothesis/Critic/team producers still unavailable. No duplicate mock adapter added.",
       "wholeExecuted": false,
       "modelExecuted": false,
@@ -1153,22 +1922,79 @@
       "sourceCommit": "4af904665000a9a40730820cf8e542e65129a9d6",
       "baseCommit": "0f639149e0e3f77f09e931785317de8b34cb6a62",
       "status": "SCOPED_COPY_RESTORED_NOT_OPERATING_OR_PROVIDER_GO",
-      "productFiles": ["src/internal-poc/native-auth-ui-copy.ts"],
-      "keys": ["emailAddress", "requestCode", "verifyCode", "resendCode"],
+      "productFiles": [
+        "src/internal-poc/native-auth-ui-copy.ts"
+      ],
+      "keys": [
+        "emailAddress",
+        "requestCode",
+        "verifyCode",
+        "resendCode"
+      ],
       "changedLiterals": 23,
       "sourceOracle": "fixed9fb/index.html:26433,26434,26441",
-      "red": {"tests": 4, "failed": 4, "actualExitCode": 1, "durationMs": 22881.556, "rawSha256": "161b050475c4a6cb5c3fb29496b5629f6ffa55c64eec213f34ff2ce4e47d80f1"},
-      "green": {"tests": 4, "passed": 4, "actualExitCode": 0, "durationMs": 2815.47, "rawSha256": "6ac9f96aaff4d3f3ff5596f4f6b4f5ce12e73fcd0f4527f8c490ea901c00505f"},
-      "locale": {"tests": 16, "passed": 16, "actualExitCode": 0, "durationMs": 9161.296, "rawSha256": "d83e0944a0a35205bbb18a3cab75770f80a764fc6c276fd736bbf3787c378c92"},
-      "existingConsumers": {"specs": 3, "tests": 100, "passed": 100, "actualExitCode": 0, "durationMs": 42533.413, "rawSha256": "5774a8566af883e1e791f09233c36f26f14c1b26a67bc6b7ada223291eb4a96c"},
-      "testSelectorUpdates": {"files": 4, "nameOnlyOccurrences": 14, "fixtureOverridesPreserved": true},
+      "red": {
+        "tests": 4,
+        "failed": 4,
+        "actualExitCode": 1,
+        "durationMs": 22881.556,
+        "rawSha256": "161b050475c4a6cb5c3fb29496b5629f6ffa55c64eec213f34ff2ce4e47d80f1"
+      },
+      "green": {
+        "tests": 4,
+        "passed": 4,
+        "actualExitCode": 0,
+        "durationMs": 2815.47,
+        "rawSha256": "6ac9f96aaff4d3f3ff5596f4f6b4f5ce12e73fcd0f4527f8c490ea901c00505f"
+      },
+      "locale": {
+        "tests": 16,
+        "passed": 16,
+        "actualExitCode": 0,
+        "durationMs": 9161.296,
+        "rawSha256": "d83e0944a0a35205bbb18a3cab75770f80a764fc6c276fd736bbf3787c378c92"
+      },
+      "existingConsumers": {
+        "specs": 3,
+        "tests": 100,
+        "passed": 100,
+        "actualExitCode": 0,
+        "durationMs": 42533.413,
+        "rawSha256": "5774a8566af883e1e791f09233c36f26f14c1b26a67bc6b7ada223291eb4a96c"
+      },
+      "testSelectorUpdates": {
+        "files": 4,
+        "nameOnlyOccurrences": 14,
+        "fixtureOverridesPreserved": true
+      },
       "lintActualExitCode": 0,
-      "serviceBuild": {"typecheckActualExitCode": 0, "finalViteActualExitCode": 0, "googleOnly": true, "exchangeConnect": false, "initialEnvNameMismatchPreservedAndViteOnlyCorrected": true, "existingChunkWarningUnresolved": true},
-      "sourceStagedSecretScan": {"scanner": "gitleaks8.30.1", "files": 8, "actualExitCode": 0, "findings": 0},
+      "serviceBuild": {
+        "typecheckActualExitCode": 0,
+        "finalViteActualExitCode": 0,
+        "googleOnly": true,
+        "exchangeConnect": false,
+        "initialEnvNameMismatchPreservedAndViteOnlyCorrected": true,
+        "existingChunkWarningUnresolved": true
+      },
+      "sourceStagedSecretScan": {
+        "scanner": "gitleaks8.30.1",
+        "files": 8,
+        "actualExitCode": 0,
+        "findings": 0
+      },
       "authControllerApiFlagsChanged": false,
       "nativeOperatingConsumer": "Conditional real Native email form; email disabled under operating Google-only flag. Not 23 publicly visible restorations.",
       "codeSentResentErrata": "Both are consumed by Main ClientAccountUI:250 dynamic ternary; not dead keys, not Native delivery success labels.",
-      "boundedVisualAudit": {"helpLanguagesAndWidths": 21, "iconGlyphOverlap": 0, "publicHeaderObservations": 42, "mainGeneralSettingsObservations": 21, "visibleClipping": 0, "koAdvanceBoxBoundaryNotInkOverlap": true, "hiddenTooltipScrollWidthNotVisibleClipping": true, "otherSettingsTabsNotTested": true},
+      "boundedVisualAudit": {
+        "helpLanguagesAndWidths": 21,
+        "iconGlyphOverlap": 0,
+        "publicHeaderObservations": 42,
+        "mainGeneralSettingsObservations": 21,
+        "visibleClipping": 0,
+        "koAdvanceBoxBoundaryNotInkOverlap": true,
+        "hiddenTooltipScrollWidthNotVisibleClipping": true,
+        "otherSettingsTabsNotTested": true
+      },
       "newWholeExecuted": false,
       "providerExecuted": false,
       "runtimeDeploymentExecuted": false,
@@ -1195,68 +2021,283 @@
       "sha256": "21a980314f20c0b93bf991e025764d2da7882e9a72eded8ff28b260072170c0e"
     },
     "currentStaticOnlyCopyCandidate": {
-      "sourceRepository":"https://github.com/beak1011/tesia-web","sourceBranch":"agent/web/static-copy-release","sourceCommit":"c0907e0f3af7c3aef7b32323c2b4c7f573c09460","baseCommit":"7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
-      "status":"COPY_ONLY_DISPLAY_PASS_COPY_AUTHORITY_HOLD_NOT_OPERATING",
-      "scope":"Separate 7dd branch product7files; auth/API/bootstrap/SDK/flags/package unchanged. Integrated0f fixes preserved. Existing react-app source snapshot remains0f, not replaced by this narrow release branch.",
-      "relatedTests":{"files":5,"passed":160,"failed":0,"skipped":0,"actualExit":0,"durationMs":33864.417,"rawSha256":"3d4322d912bb13e84854e501f2283dd8f3ea05dcfd17a09ced67012ef69e64f4","wholePassClaim":false},
-      "scopedLintActualExit":0,"serviceBuildActualExit":0,"googleOnly":true,"exchangeConnect":false,
-      "compiledNative":{"widths":[1440,390,320],"passed":3,"actualExit":0,"staticGetBytesExact":183,"syntheticSessionCsrfGets":12,"actualProviderCalls":0,"mutations":0,"externalRequests":0,"webSockets":0,"rawSha256":"3543c41d9f8d6b78b579da0525598312b6a35fdfc67eaa12e6ae8ededcbda49e","actualExitReceiptSha256":"5cb038b021cd2b0486f5f46071761801bdda3df3a7fa141baca40d56d63705b6","serviceFiles":1113,"serviceBytes":21078289,"serviceDigest":"2be8a67ba540f5655bea1f2a5adbf5a54c40627d29c5802ee160acd9136ac252","inputUnchanged":true,"authSource7ExactOperatingBaseline":true,"owned4681Retired":true,"originalFooter4pExact":true,"rootViewed320Png":true},
-      "consumerBoundary":{"originalLiterals":49,"nativeConditionalReferenceValues":14,"nativeResearchValues":1,"nativeFooterValues":3,"auth10NotNativeReferenceConsumer":true,"billing20MainOnly":true,"schedule1MainOnly":true,"all49VisibleInNativeClaim":false},
-      "copyAuthorityRisk":"Original footer asserts actual AI execution/Bitget selection/order permission while visible Mock notice absent in observed nodes; original exactness is not factual/legal authority. No fabricated notice or claim approval.",
-      "foreignFooter18":"Original9fb has KO only and no final translation override; no invented foreign original literals or translation restoration claim.",
-      "sourceStagedSecurity":{"files":16,"actualExit":0,"findings":0,"ignoreRulesChanged":false},
-      "userDirectionRequested":"Publish other original-copy restorations first while keeping footer local, or await footer factual/copy verification; preselected option not approval.",
-      "newWholeRuns":0,"fullServiceGo":false,"deploymentGo":false,"activationExecuted":false
+      "sourceRepository": "https://github.com/beak1011/tesia-web",
+      "sourceBranch": "agent/web/static-copy-release",
+      "sourceCommit": "c0907e0f3af7c3aef7b32323c2b4c7f573c09460",
+      "baseCommit": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
+      "status": "COPY_ONLY_DISPLAY_PASS_COPY_AUTHORITY_HOLD_NOT_OPERATING",
+      "scope": "Separate 7dd branch product7files; auth/API/bootstrap/SDK/flags/package unchanged. Integrated0f fixes preserved. Existing react-app source snapshot remains0f, not replaced by this narrow release branch.",
+      "relatedTests": {
+        "files": 5,
+        "passed": 160,
+        "failed": 0,
+        "skipped": 0,
+        "actualExit": 0,
+        "durationMs": 33864.417,
+        "rawSha256": "3d4322d912bb13e84854e501f2283dd8f3ea05dcfd17a09ced67012ef69e64f4",
+        "wholePassClaim": false
+      },
+      "scopedLintActualExit": 0,
+      "serviceBuildActualExit": 0,
+      "googleOnly": true,
+      "exchangeConnect": false,
+      "compiledNative": {
+        "widths": [
+          1440,
+          390,
+          320
+        ],
+        "passed": 3,
+        "actualExit": 0,
+        "staticGetBytesExact": 183,
+        "syntheticSessionCsrfGets": 12,
+        "actualProviderCalls": 0,
+        "mutations": 0,
+        "externalRequests": 0,
+        "webSockets": 0,
+        "rawSha256": "3543c41d9f8d6b78b579da0525598312b6a35fdfc67eaa12e6ae8ededcbda49e",
+        "actualExitReceiptSha256": "5cb038b021cd2b0486f5f46071761801bdda3df3a7fa141baca40d56d63705b6",
+        "serviceFiles": 1113,
+        "serviceBytes": 21078289,
+        "serviceDigest": "2be8a67ba540f5655bea1f2a5adbf5a54c40627d29c5802ee160acd9136ac252",
+        "inputUnchanged": true,
+        "authSource7ExactOperatingBaseline": true,
+        "owned4681Retired": true,
+        "originalFooter4pExact": true,
+        "rootViewed320Png": true
+      },
+      "consumerBoundary": {
+        "originalLiterals": 49,
+        "nativeConditionalReferenceValues": 14,
+        "nativeResearchValues": 1,
+        "nativeFooterValues": 3,
+        "auth10NotNativeReferenceConsumer": true,
+        "billing20MainOnly": true,
+        "schedule1MainOnly": true,
+        "all49VisibleInNativeClaim": false
+      },
+      "copyAuthorityRisk": "Original footer asserts actual AI execution/Bitget selection/order permission while visible Mock notice absent in observed nodes; original exactness is not factual/legal authority. No fabricated notice or claim approval.",
+      "foreignFooter18": "Original9fb has KO only and no final translation override; no invented foreign original literals or translation restoration claim.",
+      "sourceStagedSecurity": {
+        "files": 16,
+        "actualExit": 0,
+        "findings": 0,
+        "ignoreRulesChanged": false
+      },
+      "userDirectionRequested": "Publish other original-copy restorations first while keeping footer local, or await footer factual/copy verification; preselected option not approval.",
+      "newWholeRuns": 0,
+      "fullServiceGo": false,
+      "deploymentGo": false,
+      "activationExecuted": false
     },
     "currentMenuDownloadParity": {
-      "sourceCommit":"0f639149e0e3f77f09e931785317de8b34cb6a62","baseCommit":"a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
-      "changes":["Main SessionMenu two callbacks: exact original rename feedback only after actual local persistence; no-op/uncertain/failure guarded; store/inline/Native unchanged","Download original logo22px/Apple#ececec/mobileSVG28px and nonKO6 PI.login CTA; KO start unchanged"],
-      "rename":{"passed":10,"failed":0,"skipped":0,"actualExit":0,"durationMs":13471.496,"rawSha256":"2c57bb211556ef59e1f0ef4982426ad443d799f9241ec3a3a19ecaaccf1ea2bc","originalAssertionsPreserved":true,"originalRedFailed":1,"originalRedExit":1,"harnessPreparationFailurePreserved":"8PASS/2FAIL; viewport250ms persistence before new expected snapshot; same assertions retained","scope":"existing6+new4; cancel/empty/success/no-op/writefailure/focus/draft/DOM/cache; not server rename"},
-      "download":{"passed":28,"failed":0,"skipped":0,"actualExit":0,"durationMs":33374.095,"rawSha256":"16db5a812a320489d17e140404c43dc170ff6041c70d5caad36a633d7113a77d","originalRedFailed":1,"originalRedExit":1,"redRawSha256":"4844f2ea7672356c84a333cd03856f0f512f2f862e66b7074c21ee161ebd395e","scope":"7languages×320/1440×2projects; realgeometry/hit/keyboardCTAtoMain; not Native auth","initialMobileOracleCorrection":"24draft→28 from original CSS35/59–69; product dictionary not oracle"},
-      "scopedLintActualExit":0,"sourceStagedSecurity":{"files":7,"actualExit":0,"findings":0,"ignoreRulesChanged":false},
-      "snapshot":{"files":2237,"bytes":26280108,"dirty":[],"deleted":[],"removedPriorPaths":[],"verifyActualExit":0},
-      "newWholeRuns":0,"newBuildRuns":0,"currentInputBuildPending":true,"wholePassClaim":false,"deploymentExecuted":false,"serviceGo":false,"deploymentGo":false,
-      "boundary":"Previous a8 threebuilds not latest input proof. Current authfix preserved separately from 7dd-based copy-only release candidate. Footer actual service/selection claims and original absent foreign18 literals not fabricated."
+      "sourceCommit": "0f639149e0e3f77f09e931785317de8b34cb6a62",
+      "baseCommit": "a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
+      "changes": [
+        "Main SessionMenu two callbacks: exact original rename feedback only after actual local persistence; no-op/uncertain/failure guarded; store/inline/Native unchanged",
+        "Download original logo22px/Apple#ececec/mobileSVG28px and nonKO6 PI.login CTA; KO start unchanged"
+      ],
+      "rename": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0,
+        "actualExit": 0,
+        "durationMs": 13471.496,
+        "rawSha256": "2c57bb211556ef59e1f0ef4982426ad443d799f9241ec3a3a19ecaaccf1ea2bc",
+        "originalAssertionsPreserved": true,
+        "originalRedFailed": 1,
+        "originalRedExit": 1,
+        "harnessPreparationFailurePreserved": "8PASS/2FAIL; viewport250ms persistence before new expected snapshot; same assertions retained",
+        "scope": "existing6+new4; cancel/empty/success/no-op/writefailure/focus/draft/DOM/cache; not server rename"
+      },
+      "download": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0,
+        "actualExit": 0,
+        "durationMs": 33374.095,
+        "rawSha256": "16db5a812a320489d17e140404c43dc170ff6041c70d5caad36a633d7113a77d",
+        "originalRedFailed": 1,
+        "originalRedExit": 1,
+        "redRawSha256": "4844f2ea7672356c84a333cd03856f0f512f2f862e66b7074c21ee161ebd395e",
+        "scope": "7languages×320/1440×2projects; realgeometry/hit/keyboardCTAtoMain; not Native auth",
+        "initialMobileOracleCorrection": "24draft→28 from original CSS35/59–69; product dictionary not oracle"
+      },
+      "scopedLintActualExit": 0,
+      "sourceStagedSecurity": {
+        "files": 7,
+        "actualExit": 0,
+        "findings": 0,
+        "ignoreRulesChanged": false
+      },
+      "snapshot": {
+        "files": 2237,
+        "bytes": 26280108,
+        "dirty": [],
+        "deleted": [],
+        "removedPriorPaths": [],
+        "verifyActualExit": 0
+      },
+      "newWholeRuns": 0,
+      "newBuildRuns": 0,
+      "currentInputBuildPending": true,
+      "wholePassClaim": false,
+      "deploymentExecuted": false,
+      "serviceGo": false,
+      "deploymentGo": false,
+      "boundary": "Previous a8 threebuilds not latest input proof. Current authfix preserved separately from 7dd-based copy-only release candidate. Footer actual service/selection claims and original absent foreign18 literals not fabricated."
     },
     "currentSidebarFooterParity": {
       "sourceCommit": "a8ba839c41e898e9a2c06882a4ca6c4d2ac367ad",
       "baseCommit": "7684e674f8f05f94678f36c98c832e8beb728255",
       "status": "SCOPED_PASS_NOT_WHOLE_OR_RELEASE_GO",
-      "changes": ["ko footer intro/tagline/consent exact original; copyright unchanged, other6languages not restored", "Native sidebar returns actual selectConversation Promise", "globe menu.glc original two consumers", "Conversation IME229 guard and original spellCheck/autocomplete"],
+      "changes": [
+        "ko footer intro/tagline/consent exact original; copyright unchanged, other6languages not restored",
+        "Native sidebar returns actual selectConversation Promise",
+        "globe menu.glc original two consumers",
+        "Conversation IME229 guard and original spellCheck/autocomplete"
+      ],
       "tests": {
-        "footer": {"redFailed":1,"redExit":1,"greenPassed":20,"greenExit":0,"greenDurationMs":19490.472,"greenRawSha256":"0b58a2898ffa08eb9941215bdfbc38ecf78875a0811dade439b89d0e95c4fa28","scope":"Main/Native/About/Download/Policies 320/1440 both projects; Native fixture; ROOT viewed desktop/mobile PNG"},
-        "sidebar": {"redFailed":1,"redExit":1,"redRawSha256":"12a59c041fdd07df899615002dec9ccdbb33675f17aab03b1763b0ec2fc6b385","greenPassed":4,"greenExit":0,"greenDurationMs":5948.345,"greenRawSha256":"a36bea4a0308307670d46ef888fd9b1ab0bdc4d7a4720380cbde08bec3e9a2f3"},
-        "globe": {"redFailed":1,"redExit":1,"redRawSha256":"3be9ff0bb0482130b92c026cda72c2172e358da5e6679a6067413910831a4ba4","greenPassed":14,"greenExit":0,"greenDurationMs":19267.634,"greenRawSha256":"f52f7073a7d96543f84a8ceebe5b3335c8f5e6d9b01e4aefcc779d1b4214999e","scope":"7languages, both projects explicitly1440 Main guest; not Native/mobile narrow proof"},
-        "ime": {"redFailed":1,"redExit":1,"redRawSha256":"fdab43535584c17e1edfff803e4b4b7312abc06dee784ee46784b8124f89b9e0","redLaterAssertionsNotExecuted":true,"greenPassed":12,"greenExit":0,"greenDurationMs":14667.772,"greenRawSha256":"652a18294db0a990d8bf685cb2955048bc46452c8ef2ee46d7ec0afdf1937197","scope":"existing8 and added4; synthetic229 not real OS keyboard"}
+        "footer": {
+          "redFailed": 1,
+          "redExit": 1,
+          "greenPassed": 20,
+          "greenExit": 0,
+          "greenDurationMs": 19490.472,
+          "greenRawSha256": "0b58a2898ffa08eb9941215bdfbc38ecf78875a0811dade439b89d0e95c4fa28",
+          "scope": "Main/Native/About/Download/Policies 320/1440 both projects; Native fixture; ROOT viewed desktop/mobile PNG"
+        },
+        "sidebar": {
+          "redFailed": 1,
+          "redExit": 1,
+          "redRawSha256": "12a59c041fdd07df899615002dec9ccdbb33675f17aab03b1763b0ec2fc6b385",
+          "greenPassed": 4,
+          "greenExit": 0,
+          "greenDurationMs": 5948.345,
+          "greenRawSha256": "a36bea4a0308307670d46ef888fd9b1ab0bdc4d7a4720380cbde08bec3e9a2f3"
+        },
+        "globe": {
+          "redFailed": 1,
+          "redExit": 1,
+          "redRawSha256": "3be9ff0bb0482130b92c026cda72c2172e358da5e6679a6067413910831a4ba4",
+          "greenPassed": 14,
+          "greenExit": 0,
+          "greenDurationMs": 19267.634,
+          "greenRawSha256": "f52f7073a7d96543f84a8ceebe5b3335c8f5e6d9b01e4aefcc779d1b4214999e",
+          "scope": "7languages, both projects explicitly1440 Main guest; not Native/mobile narrow proof"
+        },
+        "ime": {
+          "redFailed": 1,
+          "redExit": 1,
+          "redRawSha256": "fdab43535584c17e1edfff803e4b4b7312abc06dee784ee46784b8124f89b9e0",
+          "redLaterAssertionsNotExecuted": true,
+          "greenPassed": 12,
+          "greenExit": 0,
+          "greenDurationMs": 14667.772,
+          "greenRawSha256": "652a18294db0a990d8bf685cb2955048bc46452c8ef2ee46d7ec0afdf1937197",
+          "scope": "existing8 and added4; synthetic229 not real OS keyboard"
+        }
       },
-      "scopedLintActualExit":0,
+      "scopedLintActualExit": 0,
       "builds": {
-        "actualExit":0,"aggregateSequenceExecutedOnce":true,"flags":{"VITE_TETH_AUTH_GOOGLE_ONLY":"true","VITE_TETH_EXCHANGE_CONNECT":"false"},
-        "digestMethod":"sha256(JSON.stringify(recursive regular files sorted by path, records {path,bytes,sha256})); not compared to prior different digest method",
-        "public":{"files":1132,"bytes":20753461,"sha256":"21c4b9e66678430d8db0136fe3d670a2bdbf32f8dde4b7cdef79621ebd9dad52"},
-        "internal":{"files":1123,"bytes":21153173,"sha256":"f64674a01ff2b822c11d06494405c7d77689bea2ef94e515a6d98d73f2095192"},
-        "service":{"files":1113,"bytes":21086632,"sha256":"f7a403c637a3ece87272eca4a19c92e9387994b2cbc0e76d0375db82e79666c8"},
-        "newCleanInstallExecuted":false,"compiledProductionHttpVerified":false
+        "actualExit": 0,
+        "aggregateSequenceExecutedOnce": true,
+        "flags": {
+          "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
+          "VITE_TETH_EXCHANGE_CONNECT": "false"
+        },
+        "digestMethod": "sha256(JSON.stringify(recursive regular files sorted by path, records {path,bytes,sha256})); not compared to prior different digest method",
+        "public": {
+          "files": 1132,
+          "bytes": 20753461,
+          "sha256": "21c4b9e66678430d8db0136fe3d670a2bdbf32f8dde4b7cdef79621ebd9dad52"
+        },
+        "internal": {
+          "files": 1123,
+          "bytes": 21153173,
+          "sha256": "f64674a01ff2b822c11d06494405c7d77689bea2ef94e515a6d98d73f2095192"
+        },
+        "service": {
+          "files": 1113,
+          "bytes": 21086632,
+          "sha256": "f7a403c637a3ece87272eca4a19c92e9387994b2cbc0e76d0375db82e79666c8"
+        },
+        "newCleanInstallExecuted": false,
+        "compiledProductionHttpVerified": false
       },
-      "independentSmallReview":{"profile":"personal (1)","model":"claude-sonnet-5-5","actualExit":0,"modelUsageMatched":true,"verdict":"SCOPED_CODE_GO","confirmed":[],"low":6,"hypotheses":5,"strictInnerJsonVerifierPassed":false,"rawSha256":"43ce0e2cc68e43479b31f04cc2e1d2346deeb87038233cd870da3542f312f98e"},
-      "sourceStagedSecurity":{"actualExit":0,"findings":0,"files":11,"gitleaksVersion":"8.30.1","ignoreRulesChanged":false},
-      "snapshot":{"files":2236,"bytes":26262053,"dirty":[],"deleted":[],"removedPriorPaths":[],"syncActualExit":0,"verifyActualExit":0},
-      "newWholeRuns":0,"wholePassClaim":false,"authScopeApprovalPending":true,"actualProviderVerified":false,"serviceGo":false,"deploymentGo":false,"deploymentExecuted":false,
-      "boundary":"원문 복원은 Bitget 선정/실주문 가용성의 증명이 아니다. 기존 Opus auth scope HOLD와 원FAIL/운영7dd/730일 보존. 각부분PASS를 단일전체로 합산0"
+      "independentSmallReview": {
+        "profile": "personal (1)",
+        "model": "claude-sonnet-5-5",
+        "actualExit": 0,
+        "modelUsageMatched": true,
+        "verdict": "SCOPED_CODE_GO",
+        "confirmed": [],
+        "low": 6,
+        "hypotheses": 5,
+        "strictInnerJsonVerifierPassed": false,
+        "rawSha256": "43ce0e2cc68e43479b31f04cc2e1d2346deeb87038233cd870da3542f312f98e"
+      },
+      "sourceStagedSecurity": {
+        "actualExit": 0,
+        "findings": 0,
+        "files": 11,
+        "gitleaksVersion": "8.30.1",
+        "ignoreRulesChanged": false
+      },
+      "snapshot": {
+        "files": 2236,
+        "bytes": 26262053,
+        "dirty": [],
+        "deleted": [],
+        "removedPriorPaths": [],
+        "syncActualExit": 0,
+        "verifyActualExit": 0
+      },
+      "newWholeRuns": 0,
+      "wholePassClaim": false,
+      "authScopeApprovalPending": true,
+      "actualProviderVerified": false,
+      "serviceGo": false,
+      "deploymentGo": false,
+      "deploymentExecuted": false,
+      "boundary": "원문 복원은 Bitget 선정/실주문 가용성의 증명이 아니다. 기존 Opus auth scope HOLD와 원FAIL/운영7dd/730일 보존. 각부분PASS를 단일전체로 합산0"
     },
     "currentHelpDecorationParity": {
       "sourceCommit": "7684e674f8f05f94678f36c98c832e8beb728255",
       "baseCommit": "4b77b8702e2419bd174bc2133d31df8ed5ea425f",
       "status": "SCOPED_UI_RESTORATION_PASS_NOT_RELEASE_GO",
-      "productFiles": ["src/components/ClientHelp.tsx", "src/client-help.css"],
+      "productFiles": [
+        "src/components/ClientHelp.tsx",
+        "src/client-help.css"
+      ],
       "testFile": "tests/client-help-decoration-parity.spec.ts",
       "change": "原9fb 도움말 제목의 빈 aria-hidden i·8px 원형·gap7·기존색만 복원. 문구/SVG/API/인증/flags 변경0",
-      "red": {"passed": 0, "failed": 12, "skipped": 0, "actualExit": 1, "durationMs": 78209.848, "rawSha256": "20b5ec7904a2a00e3417e9140347f40729321f3cc8efe1d066e9313362b6f680"},
-      "green": {"passed": 12, "failed": 0, "skipped": 0, "actualExit": 0, "durationMs": 15868.43, "rawSha256": "b762844f91adee49c0a58441f1d29f630a0e8fc38fc5157d66aa67abcc18a632", "sameOriginalKeys": true, "singleAttempt": true},
+      "red": {
+        "passed": 0,
+        "failed": 12,
+        "skipped": 0,
+        "actualExit": 1,
+        "durationMs": 78209.848,
+        "rawSha256": "20b5ec7904a2a00e3417e9140347f40729321f3cc8efe1d066e9313362b6f680"
+      },
+      "green": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "actualExit": 0,
+        "durationMs": 15868.43,
+        "rawSha256": "b762844f91adee49c0a58441f1d29f630a0e8fc38fc5157d66aa67abcc18a632",
+        "sameOriginalKeys": true,
+        "singleAttempt": true
+      },
       "scope": "Main/Native×320/390/1440px·제목/닫기 간섭0·overflow0·접근성 이름·키보드 복귀·pageerror0/mutation0. Native GET은 명시 fixture",
       "rootReviewedProductDiffTestRawAndMobileScreenshot": true,
       "scopedLintActualExit": 0,
-      "sourceStagedSecretScan": {"actualExit": 0, "findings": 0, "files": 5},
+      "sourceStagedSecretScan": {
+        "actualExit": 0,
+        "findings": 0,
+        "files": 5
+      },
       "snapshotVerified": true,
       "removedPriorPaths": [],
       "newWholeRuns": 0,
@@ -1281,7 +2322,11 @@
       "modelUsageMatched": true,
       "inputUnchangedDuringReview": true,
       "receiptSha256": "1811cf868a14da790e5ee931f5fe8c2ddf8139a97fcc6be54e69b3c86686e741",
-      "confirmedCounts": { "critical": 0, "high": 0, "medium": 1 },
+      "confirmedCounts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1
+      },
       "finding": "NATIVE_AUTH_FLOW_OUTSIDE_STATIC_VISUAL_COPY_EXCEPTION",
       "findingMeaning": "정적 시각·카피 예외에 OAuth 복귀/session/revision fence 제어 변경이 함께 포함된 권위 범위 불일치. 구현 오동작 확정은 아니다.",
       "requiredResolution": "인증 제어 변경을 별도 배치로 분리하거나 별도 ROOT/PO 권위 및 실제 provider START·복귀·result·ACK 검증. 합성 GET 표시 검사로 대체하지 않는다.",
@@ -1611,31 +2656,180 @@
       "originalIndexSha256": "f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321",
       "copy": "이전 답변을 마무리하는 중입니다, 끝나면 바로 보내주십시오",
       "originalLocation": "index.html:20795 gSend; toast8905-8916",
-      "changes": ["Main send의 기존 commitUncertain 뒤 busy 안내 guard", "공유 Conversation의 optional onBusySend callback; IME/repeat/Shift/inputDisabled 조건 유지", "신규8키 및 누적 README/Bugfix; 새 카피/CSS/SVG/버튼 배치0"],
-      "frozenInput": {"files": 2224, "sha256": "cc0772c1f680df62b48aa5e3bc62a060860d4a2195b75140b74da082db4e37b3"},
-      "red": {"total": 8, "pass": 0, "fail": 8, "actualExit": 1, "preserved": true, "sameFinalSpecAndKeys": true, "receiptSha256": "522b1a228b24cfbb8665b54f02a1be619e8772a73888bae8c39407a27deb5b56"},
-      "green": {"total": 8, "pass": 8, "fail": 0, "skip": 0, "retry": 0, "flaky": 0, "outsideErrors": 0, "unexecuted": 0, "actualExit": 0, "singleAttempt": true, "receiptSha256": "418a1346bf81e5ff9762fe67d5a83b59123026da8ea7bc275dc5b7cd271f16b0"},
-      "impact": {"specs": 6, "total": 114, "pass": 114, "fail": 0, "skip": 0, "retry": 0, "flaky": 0, "outsideErrors": 0, "unexecuted": 0, "actualExit": 0, "singleAttempt": true, "original106KeysExact": true, "new8IncludedNotAddedAgain": true, "receiptSha256": "143d7d008ffeef616bee279af06154f2309b792901ea52c200de40e11738111f", "rawSha256": "18f90d5abeffd6dbd2d16bf334fedd8af3a11823140f8c6122728c10dc57dcd8"},
-      "build": {
-        "commands": ["lint", "build", "build:internal-poc", "build:service"], "actualExitEach": [0, 0, 0, 0],
-        "receiptSha256": "b999c1eae15b52f52400193a0453dc8db7c23383265943d05d134d4b17cfe4ac",
-        "outputs": {"dist": {"files": 1132, "sha256": "5268ce613a5bd7d8ed6d2a57c2f06991697dd771f02b5d629a1ba4c112ca334e"}, "dist-internal-poc": {"files": 1123, "sha256": "19b13987f4936f53c28f0c45e7434af9439b8e5d27f71c760703e8ec65891836"}, "dist-service": {"files": 1113, "sha256": "21a980314f20c0b93bf991e025764d2da7882e9a72eded8ff28b260072170c0e"}},
-        "allThreeOutputsChanged": true, "inputUnchanged": true, "cleanInstallExecuted": false, "compiledUiObservedInThisScope": false
-      },
-      "model": {"profile": "personal (1)", "requestedAndResolvedModel": "claude-sonnet-5-5", "actualExit": 0, "modelUsageMatched": true, "inputUnchanged": true, "toolsDisabled": true, "verdict": "BUSY_SEND_FEEDBACK_CODE_GO", "confirmedCritical": 0, "confirmedHigh": 0, "confirmedMedium": 0, "low": 7, "hypotheses": 5, "receiptSha256": "de05019ba61ca3331ab48f085bf000e98d1f3823489ac9854f81f28b9b2d3102", "finalReleaseApproval": false},
-      "independent": {"product8ReportSha256": "d92ecb5d25c8a8b335db2d9548910de932d725c7a563ac2f612910b06c6c1d8d", "impactBuildReportSha256": "dd43da309b9171d7d00efbf90b7f8f01b40f655162055f8f1d3b87c2a815bd39", "deliveryReportSha256": "d370d8c2e795d884b54f3f6cfb34957b1bfef86f3d6602fa321b73792895cbf7", "reviewedVerificationSha256": "cba1d46d6b7af382b9d23de03f92cab9e6361f7dfd37338ca4c85087824c5da9", "wholeGo": false},
-      "historicalFailures": [
-        {"scope": "original red", "pass": 0, "fail": 8, "actualExit": 1, "receiptSha256": "aa60b558cfb5704e9a86fd838147eff3295bf70acd73ac5171251d076279ba67"},
-        {"scope": "first green, non-append fixture violated existing startsWith guard", "pass": 2, "fail": 6, "actualExit": 1, "receiptSha256": "3cfa5489f95748c92add71dc1e6f514d299b903d0404068350ad057a81fa8309"},
-        {"scope": "ROOT guard wrongly placed before context correction", "pass": 0, "fail": 8, "actualExit": 1, "receiptSha256": "a08bdcfd1b424206085a8d150469a09fbb4f1800f12aab0e9b093cfb14ec0f24"}
+      "changes": [
+        "Main send의 기존 commitUncertain 뒤 busy 안내 guard",
+        "공유 Conversation의 optional onBusySend callback; IME/repeat/Shift/inputDisabled 조건 유지",
+        "신규8키 및 누적 README/Bugfix; 새 카피/CSS/SVG/버튼 배치0"
       ],
-      "parentWhole": {"status": "RUNNING_SEPARATE_INPUT_NO_PASS_INHERITANCE", "session": 69219, "sourceCommit": "d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d", "input": {"files": 2223, "sha256": "b6c18d00e7a25f1abd9279bd2f1af221f1a8cf5214542064d798c7614ef4e7f0"}, "specs": 546, "cases": 15272, "terminalReceiptAvailableAtCapture": false, "restartExecuted": false},
-      "sourceScan": {"version": "8.30.1", "scope": "5 staged changed files", "actualExit": 0, "findings": 0, "newExceptions": 0},
-      "deliveryScan": {"version": "8.30.1", "scope": "10 staged changed files", "actualExit": 0, "findings": 0, "newExceptions": 0, "reportSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570", "limit": "직전 독립 검수 완료 시점의 staged10 검사. 이 보고서·scan 메타데이터만 추가한 최종stage는 commit 전에 별도 재검사한다."},
-      "delivery": {"files": 2231, "bytes": 26176802, "snapshotDigest": "44315913c7af053db2b9dd99f1aa97dd0c8a23c7cfbfe0e932427dfeb9294c37", "dirtyFiles": [], "removedPaths": [], "changedSourcePaths": 5, "manifestAuthority": "migration-manifest.json", "exactVerifyActualExit": 0, "sourcePushRemoteExact": true, "migrationPushPendingAtCapture": true},
+      "frozenInput": {
+        "files": 2224,
+        "sha256": "cc0772c1f680df62b48aa5e3bc62a060860d4a2195b75140b74da082db4e37b3"
+      },
+      "red": {
+        "total": 8,
+        "pass": 0,
+        "fail": 8,
+        "actualExit": 1,
+        "preserved": true,
+        "sameFinalSpecAndKeys": true,
+        "receiptSha256": "522b1a228b24cfbb8665b54f02a1be619e8772a73888bae8c39407a27deb5b56"
+      },
+      "green": {
+        "total": 8,
+        "pass": 8,
+        "fail": 0,
+        "skip": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "unexecuted": 0,
+        "actualExit": 0,
+        "singleAttempt": true,
+        "receiptSha256": "418a1346bf81e5ff9762fe67d5a83b59123026da8ea7bc275dc5b7cd271f16b0"
+      },
+      "impact": {
+        "specs": 6,
+        "total": 114,
+        "pass": 114,
+        "fail": 0,
+        "skip": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "unexecuted": 0,
+        "actualExit": 0,
+        "singleAttempt": true,
+        "original106KeysExact": true,
+        "new8IncludedNotAddedAgain": true,
+        "receiptSha256": "143d7d008ffeef616bee279af06154f2309b792901ea52c200de40e11738111f",
+        "rawSha256": "18f90d5abeffd6dbd2d16bf334fedd8af3a11823140f8c6122728c10dc57dcd8"
+      },
+      "build": {
+        "commands": [
+          "lint",
+          "build",
+          "build:internal-poc",
+          "build:service"
+        ],
+        "actualExitEach": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "receiptSha256": "b999c1eae15b52f52400193a0453dc8db7c23383265943d05d134d4b17cfe4ac",
+        "outputs": {
+          "dist": {
+            "files": 1132,
+            "sha256": "5268ce613a5bd7d8ed6d2a57c2f06991697dd771f02b5d629a1ba4c112ca334e"
+          },
+          "dist-internal-poc": {
+            "files": 1123,
+            "sha256": "19b13987f4936f53c28f0c45e7434af9439b8e5d27f71c760703e8ec65891836"
+          },
+          "dist-service": {
+            "files": 1113,
+            "sha256": "21a980314f20c0b93bf991e025764d2da7882e9a72eded8ff28b260072170c0e"
+          }
+        },
+        "allThreeOutputsChanged": true,
+        "inputUnchanged": true,
+        "cleanInstallExecuted": false,
+        "compiledUiObservedInThisScope": false
+      },
+      "model": {
+        "profile": "personal (1)",
+        "requestedAndResolvedModel": "claude-sonnet-5-5",
+        "actualExit": 0,
+        "modelUsageMatched": true,
+        "inputUnchanged": true,
+        "toolsDisabled": true,
+        "verdict": "BUSY_SEND_FEEDBACK_CODE_GO",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "low": 7,
+        "hypotheses": 5,
+        "receiptSha256": "de05019ba61ca3331ab48f085bf000e98d1f3823489ac9854f81f28b9b2d3102",
+        "finalReleaseApproval": false
+      },
+      "independent": {
+        "product8ReportSha256": "d92ecb5d25c8a8b335db2d9548910de932d725c7a563ac2f612910b06c6c1d8d",
+        "impactBuildReportSha256": "dd43da309b9171d7d00efbf90b7f8f01b40f655162055f8f1d3b87c2a815bd39",
+        "deliveryReportSha256": "d370d8c2e795d884b54f3f6cfb34957b1bfef86f3d6602fa321b73792895cbf7",
+        "reviewedVerificationSha256": "cba1d46d6b7af382b9d23de03f92cab9e6361f7dfd37338ca4c85087824c5da9",
+        "wholeGo": false
+      },
+      "historicalFailures": [
+        {
+          "scope": "original red",
+          "pass": 0,
+          "fail": 8,
+          "actualExit": 1,
+          "receiptSha256": "aa60b558cfb5704e9a86fd838147eff3295bf70acd73ac5171251d076279ba67"
+        },
+        {
+          "scope": "first green, non-append fixture violated existing startsWith guard",
+          "pass": 2,
+          "fail": 6,
+          "actualExit": 1,
+          "receiptSha256": "3cfa5489f95748c92add71dc1e6f514d299b903d0404068350ad057a81fa8309"
+        },
+        {
+          "scope": "ROOT guard wrongly placed before context correction",
+          "pass": 0,
+          "fail": 8,
+          "actualExit": 1,
+          "receiptSha256": "a08bdcfd1b424206085a8d150469a09fbb4f1800f12aab0e9b093cfb14ec0f24"
+        }
+      ],
+      "parentWhole": {
+        "status": "RUNNING_SEPARATE_INPUT_NO_PASS_INHERITANCE",
+        "session": 69219,
+        "sourceCommit": "d11d3c178eeca77d9e0f3b61897bf0ab8a33a07d",
+        "input": {
+          "files": 2223,
+          "sha256": "b6c18d00e7a25f1abd9279bd2f1af221f1a8cf5214542064d798c7614ef4e7f0"
+        },
+        "specs": 546,
+        "cases": 15272,
+        "terminalReceiptAvailableAtCapture": false,
+        "restartExecuted": false
+      },
+      "sourceScan": {
+        "version": "8.30.1",
+        "scope": "5 staged changed files",
+        "actualExit": 0,
+        "findings": 0,
+        "newExceptions": 0
+      },
+      "deliveryScan": {
+        "version": "8.30.1",
+        "scope": "10 staged changed files",
+        "actualExit": 0,
+        "findings": 0,
+        "newExceptions": 0,
+        "reportSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "limit": "직전 독립 검수 완료 시점의 staged10 검사. 이 보고서·scan 메타데이터만 추가한 최종stage는 commit 전에 별도 재검사한다."
+      },
+      "delivery": {
+        "files": 2231,
+        "bytes": 26176802,
+        "snapshotDigest": "44315913c7af053db2b9dd99f1aa97dd0c8a23c7cfbfe0e932427dfeb9294c37",
+        "dirtyFiles": [],
+        "removedPaths": [],
+        "changedSourcePaths": 5,
+        "manifestAuthority": "migration-manifest.json",
+        "exactVerifyActualExit": 0,
+        "sourcePushRemoteExact": true,
+        "migrationPushPendingAtCapture": true
+      },
       "preserved": "원카피·색상/SVG/CSS/버튼 배치·초안/선택/중단·로그인3·SDK/계약/수치/flags/가격/권한·Native 입력 정책·원FAIL/서버DB/730일/운영7dd 불변",
       "remaining": "Native pending 초안 제한, 원한국어 literal/7언어, 실AT/Safari/OSkeyboard, 빈초안/queue3/재표시/unmount/비Enter, 원180초 예외 차이, 다른 g-doc/footer/help·실producer/provider/React prompt, 새전체 및 정적승격",
-      "actualProviderGo": false, "wholeGo": false, "serviceGo": false, "deploymentGo": false
+      "actualProviderGo": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false
     },
     "currentDocumentReplyClosure": {
       "status": "SCOPED_CODE_GO_NOT_WHOLE_OR_RELEASE_GO",
@@ -1650,42 +2844,93 @@
         "clock 준비+10 공용API와 실제 preference setter bridge의 하니스 최소교정",
         "신규21case/42키 Golden·입력·초안·override·미완료 경계 검증 및 static2키 CI 절대경로 제거"
       ],
-      "frozenInput": {"files": 2223, "sha256": "b6c18d00e7a25f1abd9279bd2f1af221f1a8cf5214542064d798c7614ef4e7f0"},
+      "frozenInput": {
+        "files": 2223,
+        "sha256": "b6c18d00e7a25f1abd9279bd2f1af221f1a8cf5214542064d798c7614ef4e7f0"
+      },
       "finalCopy": {
-        "cases": 42, "staticCases": 2, "browserCases": 40,
-        "pass": 42, "fail": 0, "skip": 0, "retry": 0,
-        "flaky": 0, "outsideErrors": 0, "unexecuted": 0,
-        "actualExit": 0, "singleAttempt": true,
+        "cases": 42,
+        "staticCases": 2,
+        "browserCases": 40,
+        "pass": 42,
+        "fail": 0,
+        "skip": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "unexecuted": 0,
+        "actualExit": 0,
+        "singleAttempt": true,
         "receiptSha256": "1e7209e102f257cad64b12ffe136bc762a55cfce4a5872d8a7f2eb10f4dd04e0"
       },
       "historicalImpact": {
-        "input": {"files": 2223, "sha256": "783bc0882d945900491656e553fa91b8a1923e8fa936b8010a2fd4e61100afd8"},
-        "specs": 16, "cases": 398, "pass": 398, "fail": 0, "skip": 0,
-        "retry": 0, "flaky": 0, "outsideErrors": 0, "unexecuted": 0,
-        "actualExit": 0, "singleAttempt": true, "durationMs": 414100.717,
-        "original356AndNew42Exact": true, "originalTwoFailureKeysAndLaterAssertionsExecuted": true,
+        "input": {
+          "files": 2223,
+          "sha256": "783bc0882d945900491656e553fa91b8a1923e8fa936b8010a2fd4e61100afd8"
+        },
+        "specs": 16,
+        "cases": 398,
+        "pass": 398,
+        "fail": 0,
+        "skip": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "unexecuted": 0,
+        "actualExit": 0,
+        "singleAttempt": true,
+        "durationMs": 414100.717,
+        "original356AndNew42Exact": true,
+        "originalTwoFailureKeysAndLaterAssertionsExecuted": true,
         "receiptSha256": "3dc8dc722a5de4735dab289a420a590871ba9a659cb13082b1d3966808e8f28f",
         "rawSha256": "6bbcb724d8eb1dbd128604be53ad1f306b4332d93ae3e818d5fa53ac33929691",
         "limits": "이후static2키의CI 경로만 교정했다. 제품/하니스/40 browser본문을 역해시로 보존했지만398을 새 입력의 단일전체 PASS로 승계하지 않는다. 원whole FAIL 및 GC 근본 인과 미폐쇄 유지."
       },
       "finalBuild": {
-        "commands": ["lint", "build", "build:internal-poc", "build:service"],
-        "actualExitEach": [0, 0, 0, 0],
+        "commands": [
+          "lint",
+          "build",
+          "build:internal-poc",
+          "build:service"
+        ],
+        "actualExitEach": [
+          0,
+          0,
+          0,
+          0
+        ],
         "receiptSha256": "e380d29f0ba28309f875adec9daee1f33aff9b8b7fb756f1f4f01cc6f6a13bb7",
         "outputs": {
-          "dist": {"files": 1132, "sha256": "80ea0ad30a98192e922d266405ee260a7f6faf98d5c69908a725e5e3e5e5c2d2"},
-          "dist-internal-poc": {"files": 1123, "sha256": "daf0839a6c4bbd2cfdeaa9afeb3981b318f5ee3cc087aad29c7146e1d880da3c"},
-          "dist-service": {"files": 1113, "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"}
+          "dist": {
+            "files": 1132,
+            "sha256": "80ea0ad30a98192e922d266405ee260a7f6faf98d5c69908a725e5e3e5e5c2d2"
+          },
+          "dist-internal-poc": {
+            "files": 1123,
+            "sha256": "daf0839a6c4bbd2cfdeaa9afeb3981b318f5ee3cc087aad29c7146e1d880da3c"
+          },
+          "dist-service": {
+            "files": 1113,
+            "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"
+          }
         },
-        "inputAndOriginalProofsUnchanged": true, "cleanInstallExecuted": false,
+        "inputAndOriginalProofsUnchanged": true,
+        "cleanInstallExecuted": false,
         "nativeInternalAndServiceBytesUnchanged": true
       },
       "model": {
-        "profile": "personal (1)", "requestedAndResolvedModel": "claude-sonnet-5-5",
-        "toolsDisabled": true, "actualExit": 0, "modelUsageMatched": true,
-        "inputUnchanged": true, "verdict": "DOCUMENT_REPLY_CODE_GO",
-        "confirmedCritical": 0, "confirmedHigh": 0, "confirmedMedium": 0,
-        "low": 5, "hypotheses": 7,
+        "profile": "personal (1)",
+        "requestedAndResolvedModel": "claude-sonnet-5-5",
+        "toolsDisabled": true,
+        "actualExit": 0,
+        "modelUsageMatched": true,
+        "inputUnchanged": true,
+        "verdict": "DOCUMENT_REPLY_CODE_GO",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "low": 5,
+        "hypotheses": 7,
         "receiptSha256": "c0d3266aa7ccc79bf1fc92da299a10cf0a7b83b1eb7e91b63a1f38c69c435ebd",
         "finalReleaseApproval": false
       },
@@ -1697,21 +2942,44 @@
         "wholeGo": false
       },
       "red": {
-        "actualExit": 1, "pass": 2, "fail": 38, "total": 40,
-        "literalMismatchKeys": 8, "hmrOnlyKeys": 30, "preserved": true,
+        "actualExit": 1,
+        "pass": 2,
+        "fail": 38,
+        "total": 40,
+        "literalMismatchKeys": 8,
+        "hmrOnlyKeys": 30,
+        "preserved": true,
         "receiptSha256": "cdd1b1f327989cc332f41388c4f37da5d135c05a72720169e6eeca39adcce0f3"
       },
-      "sourceScan": {"version": "8.30.1", "scope": "7 staged changed files", "actualExit": 0, "findings": 0},
-      "runtimeDependencyAudit": {"command": "npm audit --omit=dev --json", "actualExit": 0, "totalVulnerabilities": 0, "devExcluded": true, "serviceSecurityGo": false},
+      "sourceScan": {
+        "version": "8.30.1",
+        "scope": "7 staged changed files",
+        "actualExit": 0,
+        "findings": 0
+      },
+      "runtimeDependencyAudit": {
+        "command": "npm audit --omit=dev --json",
+        "actualExit": 0,
+        "totalVulnerabilities": 0,
+        "devExcluded": true,
+        "serviceSecurityGo": false
+      },
       "delivery": {
-        "files": 2230, "bytes": 26157052,
+        "files": 2230,
+        "bytes": 26157052,
         "snapshotDigest": "9b34da1ae92cead7559babf18ac9239fd72f7c72a3d52edb6db4047a32354470",
-        "dirtyFiles": [], "removedPaths": [], "manifestAuthority": "migration-manifest.json",
-        "sourcePushRemoteExact": true, "migrationPushPendingAtCapture": true
+        "dirtyFiles": [],
+        "removedPaths": [],
+        "manifestAuthority": "migration-manifest.json",
+        "sourcePushRemoteExact": true,
+        "migrationPushPendingAtCapture": true
       },
       "preserved": "원markup/SVG/CSS/색상·로그인3·SDK/권한/수치/flags·Native 공급응답·원FAIL·서버DB·730일·운영7dd는 변경하지 않는다.",
       "remaining": "Main 기존inline결과 배선의 정상Main 브라우저 음성 미검증, 최초help2/aria1/원footer 사업약속·다른g-doc/Native producer·실인증/프롬프트/주문 및 새전체·정적승격은 별도 잔여다.",
-      "actualProviderGo": false, "wholeGo": false, "serviceGo": false, "deploymentGo": false
+      "actualProviderGo": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false
     },
     "currentCopyFollowup": {
       "status": "HISTORICAL_SCOPED_CODE_GO_WHOLE_FAILED_NOT_RELEASE_GO",
@@ -1834,9 +3102,15 @@
         "privateSession": 77548,
         "earlySealSha256": "8de9bf3aac529fd67ca66c595653edc9a66a2437ea8692a4e41114c56d16ca73",
         "endedAt": "2026-10-05T22:15:02.923Z",
-        "pass": 15211, "fail": 2, "skip": 17,
-        "unexecuted": 0, "interrupted": 0, "outsideErrors": 0, "flaky": 0,
-        "actualExit": 1, "inputAndThreeOutputsUnchanged": true,
+        "pass": 15211,
+        "fail": 2,
+        "skip": 17,
+        "unexecuted": 0,
+        "interrupted": 0,
+        "outsideErrors": 0,
+        "flaky": 0,
+        "actualExit": 1,
+        "inputAndThreeOutputsUnchanged": true,
         "rawSha256": "91b95e8f6001960300ec5fa8997075ee293c2aee08c6a4db1ab6cb944f9fca0c",
         "receiptSha256": "16462cf290ea200ce3b40a91db5084dd59d67764adb9f27c05ff5c8931751d76",
         "limits": "조기seal은시작관측뿐이며 실제종료raw/receipt로현재실패를결속했다. mobile clock.pauseAt past/desktop chart-window403 async setter PromiseGC 및그후미실행단언은원자료로보존. 좁은후속PASS로면제하지않는다."
@@ -1880,45 +3154,117 @@
       "originalReference": "9fbff821df62cad11d026022fc7628c7fcebc431",
       "originalIndexSha256": "f2475453a03b2646361546ac32002b00e4ce26ee014abf79d3be6262b318e321",
       "restoredLiterals": 5,
-      "productFiles": ["src/mock-research-preview.ts", "src/research-view-model.ts", "src/components/ClientResearchWorkspace.tsx"],
+      "productFiles": [
+        "src/mock-research-preview.ts",
+        "src/research-view-model.ts",
+        "src/components/ClientResearchWorkspace.tsx"
+      ],
       "preserved": "기존46원문/9notice·locale시험 변경을 계승. 추가5문구만 역치환하면 부모309 제품3파일 byte exact. 조건·산식·필터false/true·11회·고정표본·Native 공급Verdict/실인증/SDK/flags/권한/DB/730일 불변.",
-      "frozenInput": {"files": 2222, "sha256": "a242bdcb34833ef77376c68bfc8186de3ea74982095a5952dcd641e0b4efe353"},
+      "frozenInput": {
+        "files": 2222,
+        "sha256": "a242bdcb34833ef77376c68bfc8186de3ea74982095a5952dcd641e0b4efe353"
+      },
       "impact": {
-        "specs": 8, "cases": 100, "pass": 100, "fail": 0, "skip": 0,
-        "unexecuted": 0, "interrupted": 0, "retry": 0, "flaky": 0, "outsideErrors": 0, "actualExit": 0,
+        "specs": 8,
+        "cases": 100,
+        "pass": 100,
+        "fail": 0,
+        "skip": 0,
+        "unexecuted": 0,
+        "interrupted": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "actualExit": 0,
         "rawSha256": "a2a4768391c9f551c027dcf29c7f7761e433baf5d5a55ceb360ef8973ff54327",
         "receiptSha256": "15660efab14a1bb901651e3614637101991efc3c10adcc7439d23c92cdd02986",
         "inputObservationLimit": "시작 전 자동 snapshot wrapper 부재. 실행 중 독립 입력과 종료 후 동일 hash를 확인한 범위이며 전구간 자동감시 증거는 아니다."
       },
       "build": {
-        "commands": ["lint", "build", "build:internal-poc", "build:service"],
-        "actualExitEach": [0, 0, 0, 0], "inputParentThreeOutputsUnchanged": true,
+        "commands": [
+          "lint",
+          "build",
+          "build:internal-poc",
+          "build:service"
+        ],
+        "actualExitEach": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "inputParentThreeOutputsUnchanged": true,
         "receiptSha256": "626e3fce1e7844db814161e0b3ece75be5f1f10df772f84bdd5272d4d9741e58",
-        "public": {"files": 1132, "sha256": "c830faac038c5630236972d6e0f21aebbb2cef9b23970fba65326683fe66becc"},
-        "internal": {"files": 1123, "sha256": "daf0839a6c4bbd2cfdeaa9afeb3981b318f5ee3cc087aad29c7146e1d880da3c"},
-        "service": {"files": 1113, "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"},
+        "public": {
+          "files": 1132,
+          "sha256": "c830faac038c5630236972d6e0f21aebbb2cef9b23970fba65326683fe66becc"
+        },
+        "internal": {
+          "files": 1123,
+          "sha256": "daf0839a6c4bbd2cfdeaa9afeb3981b318f5ee3cc087aad29c7146e1d880da3c"
+        },
+        "service": {
+          "files": 1113,
+          "sha256": "87303056216c76d64bd041ca1889321741296391684f2752a74d1132928446f4"
+        },
         "cleanInstallExecuted": false
       },
-      "strictTyping": {"files": ["tests/client-research-original-copy.spec.ts", "tests/client-restored-research.spec.ts", "tests/client-research-terminal.spec.ts"], "actualExit": 0, "noEmit": true, "incremental": false, "allSpecsTypingClaimed": false},
-      "independent": {"sha256": "d85e0e3062b5e85e9954b47c483f5fa08455a63f38f71ce83c6e6945a7cf8710", "confirmedCritical": 0, "confirmedHigh": 0, "confirmedMedium": 0, "assertionsWeakened": 0},
+      "strictTyping": {
+        "files": [
+          "tests/client-research-original-copy.spec.ts",
+          "tests/client-restored-research.spec.ts",
+          "tests/client-research-terminal.spec.ts"
+        ],
+        "actualExit": 0,
+        "noEmit": true,
+        "incremental": false,
+        "allSpecsTypingClaimed": false
+      },
+      "independent": {
+        "sha256": "d85e0e3062b5e85e9954b47c483f5fa08455a63f38f71ce83c6e6945a7cf8710",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "assertionsWeakened": 0
+      },
       "model": {
-        "profile": "personal (1)", "requestedAndResolvedModel": "claude-sonnet-5-5", "tools": 0,
-        "actualExit": 0, "inputUnchanged": true, "verdict": "RESEARCH_COPY_CODE_GO",
-        "confirmedCritical": 0, "confirmedHigh": 0, "confirmedMedium": 0, "low": 5, "hypotheses": 6,
+        "profile": "personal (1)",
+        "requestedAndResolvedModel": "claude-sonnet-5-5",
+        "tools": 0,
+        "actualExit": 0,
+        "inputUnchanged": true,
+        "verdict": "RESEARCH_COPY_CODE_GO",
+        "confirmedCritical": 0,
+        "confirmedHigh": 0,
+        "confirmedMedium": 0,
+        "low": 5,
+        "hypotheses": 6,
         "receiptSha256": "513750c37b819992e18175c708649208dee2718b1e4fb085946694455253d318",
         "responseSha256": "28f5261e6ef19266c8afa4b9650078a9e15695c362fc46c0f798f88867aabf0f",
-        "newBuildEvidenceIncluded": false, "finalReleaseApproval": false
+        "newBuildEvidenceIncluded": false,
+        "finalReleaseApproval": false
       },
       "parentNoticeWhole": {
         "inputSha256": "30938c92a556352225390bc0ecc8d0ea818fd8937e9177800544b56e485fa7eb",
-        "status": "COMPLETED_FAIL_NOT_CURRENT_A242_WHOLE", "cases": 15218, "specs": 544,
-        "pass": 15200, "fail": 1, "skip": 17, "actualExit": 1,
-        "unexecuted": 0, "interrupted": 0, "retry": 0, "flaky": 0, "outsideErrors": 0,
-        "inputThreeOutputsUnchanged": true, "sameAllKeysAndOriginal17Skip": true,
+        "status": "COMPLETED_FAIL_NOT_CURRENT_A242_WHOLE",
+        "cases": 15218,
+        "specs": 544,
+        "pass": 15200,
+        "fail": 1,
+        "skip": 17,
+        "actualExit": 1,
+        "unexecuted": 0,
+        "interrupted": 0,
+        "retry": 0,
+        "flaky": 0,
+        "outsideErrors": 0,
+        "inputThreeOutputsUnchanged": true,
+        "sameAllKeysAndOriginal17Skip": true,
         "rawSha256": "393eb9968b28fbe031852c34d171234b130ccb71613aba7df596635e83f0f55b",
         "receiptSha256": "c1b4639b9699ef7729562d7b39bc5a1ada7df8dae871b3c0d1f57b29f343283a",
         "observedFailure": "mobile client-connection-status.spec.ts:141 pending[0].reject undefined; 후단언 미실행",
-        "causeConfirmed": false, "failurePreserved": true,
+        "causeConfirmed": false,
+        "failurePreserved": true,
         "failureAuditSha256": "94904d4cf63373eb962d5d481ca1779579597dedd81be261a84b47b2a0df97be"
       },
       "copyParityRemainder": {
@@ -1936,12 +3282,26 @@
         "sourceCommit": "2d2aa033e8984a917197f48293d545bf05ca6b84",
         "snapshotSha256": "30ad2a882294a07a421b4783efa2e79278644f43370dffbb01c3001b410d04eb",
         "independentSha256": "6b9d5d49fc60f642bf6c98439b12d0bfaf8c803e3d0bb8f5a5e766485ba36a0d",
-        "stagedScan": {"version": "8.30.1", "paths": 22, "actualExit": 0, "findings": 0, "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"},
+        "stagedScan": {
+          "version": "8.30.1",
+          "paths": 22,
+          "actualExit": 0,
+          "findings": 0,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
         "actualPushAndRemoteMatch": true,
         "scope": "직전코드 전달2229/26117656bytes·원root3759/역사8객체보존. 후속209 문서 스냅샷의 새독립검수와 구분한다."
       },
-      "scopeLimits": ["고정양수 Holdout 통과이며 임의결과 dynamic parity 미검증", "다른 문서/로그의 봉인 구간 표기는 이번5원문 범위 밖", "문서별 canned reply는 원질문기반fallback과 직접대응없음", "기존모든원FAIL/Low/GC 인과미확정 보존, 부분PASS 합산0"],
-      "actualProviderGo": false, "wholeGo": false, "serviceGo": false, "deploymentGo": false
+      "scopeLimits": [
+        "고정양수 Holdout 통과이며 임의결과 dynamic parity 미검증",
+        "다른 문서/로그의 봉인 구간 표기는 이번5원문 범위 밖",
+        "문서별 canned reply는 원질문기반fallback과 직접대응없음",
+        "기존모든원FAIL/Low/GC 인과미확정 보존, 부분PASS 합산0"
+      ],
+      "actualProviderGo": false,
+      "wholeGo": false,
+      "serviceGo": false,
+      "deploymentGo": false
     },
     "currentAccountLocaleClosure": {
       "status": "BASE9D_ACCOUNT_LOCALE_WHOLE_COMPLETED_NOT_LATEST_COPY_WHOLE",
@@ -3787,6 +5147,194 @@
       "serviceGo": false,
       "deploymentGo": false,
       "activationExecuted": false
+    },
+    "currentUserApprovedSourceUxTest": {
+      "status": "STATIC_UI_DEPLOYED_PUBLIC_SMOKE_VERIFIED",
+      "sourceCommit": "c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9",
+      "scope": "STATIC_UI_ONLY_EXISTING_AUTHORITY",
+      "previousOperatingSource": "b7a7c58ebed68cc6938e35dc8e12472c45fe90ac",
+      "approvedChanges": [
+        "Original KO 시작하기 CTA in seven locales with lang=ko",
+        "Guest CTA opens in-place signup; existing signed-in plan preserved"
+      ],
+      "operatingAuthThreeFilesExact": true,
+      "related": {
+        "passed": 56,
+        "actualExit": 0,
+        "reportSha256": "140485ff3794411cec5844956687a6ef977247df742cfa0cfaf01e8fc41d5004",
+        "bindingLimitation": "Agent actual56 raw validated, standalone sourceCommit/specSHA absent; not a new exact whole regression"
+      },
+      "actualProviderGo": false,
+      "serviceGo": false,
+      "wholeRegressionGo": false,
+      "deployed": true,
+      "productSourceCommit": "c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9",
+      "docDeliveryHeads": {
+        "static": "ac4f7764daf44beced8692b7b30d8515fff844ab",
+        "integrated": "1023bceec392e7c75afd56fb1f4dad63f4c86cd6",
+        "program": "5c91a11287ce8fc1396992bb3d02ebd8cf45cd0c"
+      },
+      "snapshot": {
+        "sourceCommit": "1023bceec392e7c75afd56fb1f4dad63f4c86cd6",
+        "files": 2250,
+        "bytes": 26512904,
+        "digest": "0405c24b55414f65b3e9c77f394bd3226694b90b8fb7d26753c6dcca4989a10e",
+        "dirty": [],
+        "deleted": [],
+        "syncActualExit": 0,
+        "verifyActualExit": 0,
+        "removedPriorPaths": []
+      },
+      "release": {
+        "archiveSha256": "2f07e54bb6c6365618c6d553c38ec63b2a15d28a9fc1af362b576d682d4cd955",
+        "rawHtmlSha256": "48bbc2b553e817232d336a0235d0e396d16957b5a76863b64bf502ca4b8666b6",
+        "sourceFrozen": {
+          "files": 2214,
+          "sha256": "9a6dfe6fbb433a4b3ca6aa62f4aeed64b8922f4c9a242d74c819055a8dce4337"
+        },
+        "serviceFrozen": {
+          "files": 1113,
+          "sha256": "2805bd8518d74977b3415d3fae3fe9f9cbea0415941224ef89489e6927f5ca98"
+        },
+        "flags": {
+          "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
+          "VITE_TETH_EXCHANGE_CONNECT": "false"
+        },
+        "previousB7CasVerified": true,
+        "atomicRootExchange": true,
+        "maintenanceRestart": true,
+        "privateAuthorityPreserved": true,
+        "backupRetained": true,
+        "stageActualExit": {
+          "package": 0,
+          "prepare": 0,
+          "upload": 0,
+          "atomicUpload": 0,
+          "finalPreflight": 0,
+          "activate": 0,
+          "postflight": 0
+        }
+      },
+      "originalFailure": {
+        "localMobileProbe": {
+          "actualExit": 1,
+          "classification": "HARNESS_HIDDEN_DESKTOP_LANGUAGE_SHORTCUT",
+          "originalReceipt": "source-ux-approved-local/receipt.json",
+          "productChanges": 0
+        },
+        "earlyPreflight": {
+          "actualExit": 1,
+          "classification": "ROOT_STARTED_BEFORE_ATOMIC_INSTALL_COMPLETED_LOCAL_ENOENT",
+          "remoteCommandsExecuted": 0,
+          "preservedDispatchReceipt": true,
+          "finalPinnedHelperPreflightActualExit": 0
+        }
+      },
+      "compiled": {
+        "local": {
+          "actualExit": 0,
+          "receiptSha256": "2619d8bf399bd6cc90cdda4bdba43636aa9d2aedcde5c58f143a3e0338948d7a"
+        },
+        "public": {
+          "actualExit": 0,
+          "receiptSha256": "8b695b44b169b9399f0af852492189cfa89ce7a1ceeebddba2fa5e6524b762e1",
+          "endedAt": "2026-10-06T14:52:46.729Z",
+          "widths": [
+            1440,
+            390,
+            320
+          ],
+          "ctaLocaleChecks": 42,
+          "routeObservations": 15,
+          "staticGets": [
+            160,
+            141,
+            151
+          ],
+          "overflow": 0,
+          "runtimeConsoleErrors": 0,
+          "externalMutationWebSockets": 0,
+          "byteMismatch": 0,
+          "anonymousApiFixture": true,
+          "actualLoginVerified": false,
+          "rootScreenshotsInspected": true
+        }
+      },
+      "independentReview": {
+        "model": "claude-opus-5-5",
+        "accountProfile": "personal(1)",
+        "actualExit": 0,
+        "verdict": "STATIC_UI_RELEASE_GO",
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "reviewedFiles": 34,
+        "unchangedAtCompletion": true,
+        "freezeSha256": "295b326cf263131741a967988966ceca9b4ee8c9e28b80e3074873d1663691e8",
+        "originalReceiptSha256": "c0a1731c38c1604176ad9b79e44d509b0d9aa42fa9533546cb97dba307782c76",
+        "mediumOwnedRisks": [
+          "Existing non-KO footer and Powered by source-copy divergence confirmed after final source processing review",
+          "Related56 raw lacks standalone commit/specSHA binding; exact compiled evidence is release-primary"
+        ],
+        "lowRemarksPreservedInPrivateOriginalReceipt": true
+      },
+      "executionObservations": {
+        "authority": "ROOT_ACTUAL_TOOL_EXECUTION_NOT_NEW_WHOLE_REGRESSION",
+        "lint": {
+          "actualExit": 0,
+          "sessionId": 99758
+        },
+        "correctFlagsTypeServiceBuild": {
+          "actualExit": 0,
+          "sessionId": 77165
+        },
+        "stagedScans": {
+          "static": 0,
+          "integrated": 0,
+          "program": 0,
+          "findingsEach": 0,
+          "newExceptions": 0
+        }
+      },
+      "publicHtmlHelperRootSupplement": {
+        "sha256": "4564a6bfdb3288a2999001bd528cfb20e75e3b0222f02d284e04ba0b8bf2138b",
+        "beforeAfterUnchanged": true,
+        "pureAssertions": 8,
+        "actualExit": 0,
+        "outsideModelFreeze": true
+      },
+      "agy": {
+        "requestedModel": "gemini-3.8-flash-high",
+        "actualExit": 0,
+        "scope": "Tiny source string inventory only",
+        "inputFourHashesUnchanged": true,
+        "nativeActualModelAttested": false,
+        "toolExecutionIndependentlyVerified": false,
+        "releaseApproval": false
+      },
+      "newConfirmedSourceDifference": {
+        "status": "OPEN_NOT_FIXED",
+        "sourceOriginal": "9fbff821df62cad11d026022fc7628c7fcebc431",
+        "finalFooterAllSevenLanguages": "Korean body plus Powered by",
+        "reactFooter": "KO exchange label 거래소; foreign6 research/validation-oriented body",
+        "finalSourceProcessingChecked": true,
+        "approvedKoreanThreeParagraphsMatch": true,
+        "files": [
+          "site-footer.js:22–35",
+          "index.html:26583–26687",
+          "src/components/ClientSiteFooter.tsx",
+          "src/client-site-footer-copy.json"
+        ],
+        "requiresSeparateCopyRelease": true
+      },
+      "currentClientMainChecked": "9fbff821df62cad11d026022fc7628c7fcebc431",
+      "remaining": [
+        "Integrated auth fixes not deployed",
+        "Native member readiness needs authoritative producer",
+        "Actual chat/research/library producers incomplete",
+        "Actual OAuth/ACK response-loss full journey/Safari/3000 users unverified",
+        "Existing 500kB chunk warning and default Web dependency High2/Moderate1 unresolved"
+      ]
     }
   }
 }

@@ -1,5 +1,17 @@
 # TETH 버그 수정·검수 보고서
 
+## 소개 CTA 정적 UI 운영 승격과 공개 확인
+
+- **배포 범위:** 사용자 승인과 활성 Program §0.4/§0.5에 따라 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`를 teth.ai에 반영했다. 원9fb 최종 CTA의 비회원 제자리 signup·`시작하기`·`lang="ko"` 및7locale 예시 고지를 유지한다. 운영 인증3파일·SDK/API·Google-only=true/exchange=false는 b7과 exact이며 아래 통합 인증 busy/loading/초점 교정은 미배포다. 원본 표현의 정적 테스트 승인이지 실제 로그인·AI·주문·법률/전체서비스 GO가 아니다.
+- **정확한 배포 입력:** archive SHA `2f07e54bb6c6365618c6d553c38ec63b2a15d28a9fc1af362b576d682d4cd955`, raw HTML SHA `48bbc2b553e817232d336a0235d0e396d16957b5a76863b64bf502ca4b8666b6`, service1113파일 digest `2805bd8518d74977b3415d3fae3fe9f9cbea0415941224ef89489e6927f5ca98`, compiled source2214파일 SHA `9a6dfe6fbb433a4b3ca6aa62f4aeed64b8922f4c9a242d74c819055a8dce4337`다. 올바른 flags의 service build actual0(Exec77165)·lint actual0(Exec99758)를 결속한다.
+- **독립 검수와 전환:** 직접 personal(1) Opus5.5 actual0 `STATIC_UI_RELEASE_GO` C0/H0/M2, 검수34입력 불변 및 freeze SHA `295b326cf263131741a967988966ceca9b4ee8c9e28b80e3074873d1663691e8`를 확인했다. 최종 package/prepare/upload/atomic-upload/preflight/activate/postflight 각각actual0다. 기존 authority pin·flock·단일 `RENAME_EXCHANGE`·maintenance/rollback과 이전 b7 backup을 보존하며 무중단 배포로 부르지 않는다. 최초 preflight는 ROOT가 atomic-upload 완료 전에 dispatch하여 local ENOENT actual1/원격 실행0이었다. 원 dispatch 결과를 보존하고 완료 후 pinned helper의 직접 preflight actual0를 별도 기록했다.
+- **공개 확인:** `.cache/frontend-parity-audit/source-ux-approved-public/receipt.json`은 UTC `2026-10-06T14:52:46.729Z`, PASS/actual0다. 1440/390/320px에서 폭별7locale×CTA2=14개씩 총42 동선, 폭별5페이지 총15 route를 관측했다. staticGET160/141/151의 bytes exact·overflow/런타임·console 오류/mutation/external/WS/blockedAPI0다. 익명 GET fixture이며 실제 로그인false·provider0·서비스 NO_GO다. ROOT는 공개320-top/1440-about과 local320-download/1440-footer PNG를 직접 확인했다. 전 화면·전 기기·실인증 완료로 확대하지 않는다.
+- **시험 이력의 한계:** 이전56 raw는 actual0이나 원 보고서 자체에 head/spec SHA의 독립 결속이 없다는 Opus M2를 보존한다. 이번 릴리스의 주증거는 exact compiled 산출물·local/public receipt이며 새 whole0다. 최초 모바일 probe는 숨겨진 desktop language shortcut을 클릭해 FAIL1이었다. 실제 desktop chooser를 사용하고 원 폭을 복원하도록 하니스만 고친 뒤 검증했으며 원 FAIL을 보존한다. 모바일 language shortcut 숨김은 원본과 같고 제품 결함으로 세지 않는다.
+- **freeze 밖 후속·AGY 한계:** rendered HTML helper SHA `4564a6bfdb3288a2999001bd528cfb20e75e3b0222f02d284e04ba0b8bf2138b` before/after exact 및 순수8assert PASS는 모델 freeze 밖 ROOT 보완이다. `source-ux-approved-agy-workspace/`의 작은 문자열 목록화는 명시 argv `gemini-3.8-flash-high`·actual0·입력4SHA 불변이다. native 응답에 실제 model/event 정보가 없어 실제 모델·도구0의 독립 확인이나 release GO로 쓰지 않는다.
+- **확정 후속 잔여:** 원본 `site-footer.js:22–35`는7locale에 한국어 카피와 Powered by를 사용하며, 마지막 `index.html:26583–26687` applyLang은 footer를 갱신하지 않는다. About/download의 data-i 번역도 이 푸터에 영향을 주지 않는다. React는 KO 거래소 카피와 다른6언어 연구형 카피가 달라 후속 별도 수정이 필요하며 이번 미완료다. 실제 chat/research/library 연결, Native 회원 readiness producer, 실OAuth/Safari/3천 사용자 검증, 기존500kB chunk와 default Web 의존성 High2/Moderate1도 미완료다.
+
+증거는 workspace root의 `.cache/frontend-parity-audit/` 아래 `source-ux-approved-release/manifest.json`, `source-ux-approved-release-tools/freeze.json`, `source-ux-approved-vm-{preparation,preflight,activate,postflight}.json`, `source-ux-approved-local-corrected/receipt.json`, `source-ux-approved-public/receipt.json`, `source-ux-approved-agy-workspace/{invocation,receipt,assessment}.json`에서 구분한다. 기존 실패·WIP·730일 및 과거 모델 HOLD는 보존한다. 아래의 `현재/최신/운영 미변경` 표현은 각 실행 당시의 역사이며 현재 정적 운영 출처는 위 c34다.
+
 ## 화면 전환 교차 동선의 근본 원인 교정
 
 ### 확인된 문제와 좁은 수정

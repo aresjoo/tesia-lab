@@ -2,6 +2,8 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
+최신 전달은 통합 `1023bceec392e7c75afd56fb1f4dad63f4c86cd6` 전체2250파일/26512904bytes/snapshot0405c24b이며 sync/verify actual0·dirty/삭제경로0입니다. 승인된 UI-only source `c34a21066ce2aed4f26e6eab4a02ff7adce8c7f9`는 **teth.ai 운영 반영·공개 확인 완료**입니다. 문서HEAD staticac4f776/Program5c91a11과 실제운영source를구분합니다. 공개3폭3PASS·7언어CTA42동선/5페이지15관측·overflow/오류/외부/mutation/WS0, personal1실제Opus5.5 정적releaseGO/34입력과CAS/원자교환/backup을결속했습니다. 운영인증3파일/SDK/API/flags는b7불변이며통합인증수정은미배포입니다. 정확한원FAIL·56raw결속한계·실서비스NO_GO·추가확정비KO푸터/Powered by 차이는 `candidate.currentUserApprovedSourceUxTest`와 [누적보고서](react-app/Bugfix_report.md)를따릅니다. 아래미배포·운영b7표현은직전이력입니다.
+
 최신 추가 수정은 통합 source `2cb3e9d203b7bec08a1bc1de87392324cb623033`의 전체2250파일입니다. 최종 원문 버튼의 실제 행동을 oracle로 삼아 비회원 제자리 signup을 복원했고, 인증 응답 대기 중 이탈·명시 복귀 후 busy/loading/초점 잔류를 교정했습니다. 인증 최종78 PASS와 소개56 PASS는 별도 부분 검증입니다. 최초 Opus HOLD·후속 코드 GO·모델freeze밖 ROOT 후속과 원RED/하니스 오류는 [누적 보고서](react-app/Bugfix_report.md) 및 `candidate.currentRootCauseTransitionFixes`에서 구분합니다. 이전 whole/build/배포 수치를 이번 입력으로 승계하지 않습니다.
 
 이 snapshot은 **통합 후보 코드**이며 teth.ai 운영은 source `b7a7c58` 그대로입니다. UI-only static `c34a210`과 auth guard `add4d0f`는 별도 branch로 실제push했고 static에는 인증3파일 변경이 없습니다. Native 회원 진입의 연결/구독 producer는 표시 accounts 배열로 추정하지 않습니다. 새로운 auth/provider·실주문 활성화, 원본 main/Node/Worker 병합·배포는 없습니다.

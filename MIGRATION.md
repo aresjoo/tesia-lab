@@ -1,5 +1,9 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 전달·정적 운영 확인
+
+통합source1023bce/전체2250파일/26512904bytes/snapshot0405c24b를전달하며sync/verifyactual0·원root9fb/Node/Worker/main불변·dirty/삭제경로0이다. 별도UI-only 운영sourcec34는소개CTA7locale원문·비회원제자리signup복원을실제승격/public3폭3PASS·CTA42동선/5페이지15관측으로확인했다. Opus5.5personal1정적releaseGO C0/H0/M2·34입력불변·CAS/원자교환/rollback보존을결속했고auth3/SDK/API/flags는b7그대로다. 통합인증FIX·실chat/research/library와전체서비스NO_GO는별도잔여다. 원본최종푸터의KO고정본문/Powered by와React6외국어연구형본문/KO거래소의차이를추가확정했으며미수정으로남겼다. 이전56raw의독립head/specSHA결속한계·하니스FAIL·최초preflightlocal실패를보존한다. 정확한출처/최신상태는manifest와verification의 `candidate.currentUserApprovedSourceUxTest`, 실행·잔여는React누적보고서를따른다. 아래단계별완료/미배포표현은각입력당시이력이다.
+
 ## 1. 이 브랜치가 전달하는 것
 
 클라이언트 에이전트가 원본의 디자인·문구·동작을 기준으로 React 구현을 판단할 수 있게 **원본과 현재 코드, 차이 및 잔여를 함께 전달**한다. 프론트를 새로 디자인하자는 제안이 아니다. 원본 동작과 다르면 계약상 필요한 차이인지, 미이식·회귀인지 먼저 구분한다.
