@@ -15,7 +15,13 @@
 
 `sourceDirtyFiles`가 비어 있으면 캡처 당시 추적 파일은 출처 커밋과 같다. 값이 있으면 해당 파일의 미커밋 변경까지 포함한 스냅샷이며, 그 변경의 완료·검수 통과를 의미하지 않는다. 진행 중인 다른 작업본을 임의로 섞지 않는다.
 
-### 최신 전달 — 사용자 승인 원본 AI 소개 테스트 화면 운영 반영
+### 최신 전달 — 협의된 Bitget 원문 푸터 운영 반영
+
+운영 source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`의 한국어3값을 원9fb와 동일하게 복원했습니다. `Bitget이 선정한 최고의 AI입니다.` 및 앞뒤 소개·조회/주문/출금/한도/중지 설명과 copyright4문단을 실제 teth.ai에서 확인했습니다. 다른6언어·CSS·SVG·인증/API/SDK/flags 변경0이며 통합 후보의 인증 교정도 별도 보존합니다. 독립 actual personal1 Opus5.5 STATIC_UI_RELEASE_GO C0/H0/M1(기존 소유 위험)·25inputs/freeze exact·gate0와 package/prepare/upload/install/preflight/activate/postflight actual0입니다. archive9fce5fd5/rawHTML8ca2669b·단일 원자 교환/private authority/이전5f backup을 확인했습니다. 공개1440/390/320 단일3PASS/actual0·정적GET각48 exact·원문4문단/overflow/오류/외부/mutation/WS0와 ROOT PNG 검수까지 완료했습니다. 상세 수치와 원자료 hash는 `candidate.currentUserApprovedFooterTest`가 소유합니다.
+
+Program §0.5에 따라 ares UI·문구·SVG·대화·연구 UX를 기본으로 backend의 필요한 producer를 연결합니다. 원문을 기존 backend 응답 제약에 맞춰 축소하거나 준비중 카피로 재작성하지 않습니다. 실제 백데이터/report/fills의 단위·완료 상태·권위와 Strategy Version→Validator/Risk/Order Intent는 보존합니다. 현재 실제 대화/연구/backend 연결은 아직 미완료이며 이번 승인 정적 테스트 카피의 배포를 실provider·주문·법률/전체서비스 GO로 확대하지 않습니다. 운영 source b7과 통합 snapshot HEAD를 혼동하지 않습니다.
+
+### 직전 전달 — 사용자 승인 원본 AI 소개 테스트 화면 운영 반영
 
 운영 source5f13ad3(검증제품801과nonMD/service exact)의 원문 AI 소개와 scrollbar 표시 제거를 실제 배포했습니다. 사용자 `운영에 바로 반영 ... 아직 테스트중` 지시와 Program §0.4에 표현 복원 범위만 명시했으며 원문을 준비중/연구 카피로 재작성하지 않았습니다. 실제 provider/주문·법률·인물 추천·예시 수익은 확인한 것이 아닙니다. 새 actual personal1 Opus5.5 GO C0/H0/M2(소유 위험)·wrapper 포함30 proof/freeze exact·gate actual0와 package/prepare/upload/install/preflight/activate/postflight0를 결속했습니다. archive a7382369/rawHTML491b8816·private authority 불변·이전8a backup 보존·원자 교환/점검 restart를 확인했습니다.
 

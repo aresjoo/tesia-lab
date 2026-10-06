@@ -4,7 +4,7 @@
 
 최신 React 출처와 전체 파일 해시는 [migration-manifest.json](migration-manifest.json)을 따릅니다. 통합 `agent/web/help-policy-link-parity`의 코드·시험·문서를 전달하며 통합 인증 교정과 원문 푸터를 보존합니다. 별도 승인된 정적 UI26(source `8a757a5`)은 **teth.ai에 배포하고 공개 확인까지 완료**했습니다. 현재 운영은 기존 인증·운영 푸터·API·flags를 유지합니다. 정확한 범위와 증거는 `candidate.currentStaticUiPromotion` 및 [Bugfix 보고서](react-app/Bugfix_report.md)를 따릅니다.
 
-**현재 운영은 사용자 승인 원본 AI 소개 테스트 화면 source5f13ad3**입니다. Native 원문 카피·카드·단계/설정 복원과 해당 문서 scrollbar 표시 제거를 실제 배포했고 공개1440/390/320 단일3PASS/actual0를 확인했습니다. 정확한 새 배포는 `candidate.currentUserApprovedTradingIntroTest`가 소유합니다. `currentTradingIntroCopyScroll`의 HOLD, `currentStaticUiPromotion`의8a, top-level `deployment/currentReadonlyPublicRecheck`의7dd는 원자료를 보존하는 이전 이력이며 현재 운영 출처로 해석하지 않습니다. 새 독립 Opus5.5 GO와 실제 원격 실행을 결속했지만 실제 provider·주문 성공은 아닙니다.
+**현재 운영은 협의된 원본 푸터를 복원한 테스트 화면 sourceb7a7c58**입니다. `Bitget이 선정한 최고의 AI입니다.`와 한국어 소개·권한/중지 설명3값을 원문대로 반영했습니다. 다른6언어·디자인·인증/API/SDK/flags는 변경하지 않았습니다. 관련12PASS/12.9초·lint/type/servicebuild0, actual personal1 Opus5.5 GO C0/H0/M1(기존 소유 위험), 25inputs/freeze exact와 실제 원격 실행0·공개1440/390/320 단일3PASS/actual0·각GET48 exact를 확인했습니다. 정확한 배포는 `candidate.currentUserApprovedFooterTest`가 소유하며 기존5f 소개·8a·7dd·HOLD는 이전 이력입니다. 원본 ares UX를 기본으로 필요한 backend 연결을 맞추되 실제 데이터·승인·주문 의미론은 유지합니다. 실제 provider·주문·전체 연결 완료는 아닙니다.
 
 원본에 실제 AI가 없다는 설명은 교정했습니다. 원본 `server/index.mjs`·`server/worker.mjs`의 Anthropic/SSE/tool과 브라우저 `/api/chat` 경로는 보존돼 있습니다. 현재 React Native의 v3 API와 Main fixture는 다른 소비 경로이므로 이식 연결 차이를 별도 추적하며 원문의 디자인·카피를 바꿔 숨기지 않습니다.
 

@@ -1,5 +1,14 @@
 # TETH 버그 수정·검수 보고서
 
+## 사용자 승인 푸터 원문 운영 배포·공개 확인 완료
+
+- **범위/상태:** 사용자 설명과 명시 복원 요청을 Program §0.4에 결속하고 별도 static source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`을 teth.ai에 실제 배포했다. 원9fb `site-footer.js:29–31`의 한국어3문구를 복원했고 JSON SHA `d3cf9acf23ee771126fa0713666b22312f407f50847092baa5f0c49b56d52da6`는 통합과 exact다. 다른6언어 불변·통합 제품 변경0이며 통합 전체/별도 인증3파일 수정의 운영 승격이 아니다. 협의/선정 사실의 독립 검증이나 실provider·주문 승인이 아니다.
+- **독립 검수/실행:** personal(1) 실제 Opus5.5 `STATIC_UI_RELEASE_GO` C0/H0/M1(기존 capability/copy 소유 위험),25개 reviewed 입력/freeze exact를 결속했다. package/prepare/upload/atomic-upload/preflight/activate/postflight 각각actual0다. archive SHA `9fce5fd5e70b203d4eac278f9bf8b21d4a8c8eab1be9e7cd028f08e3283828a6`, rawHTML SHA `8ca2669b9a996b3c8f4ba8e036cc48237cdd4a620d53eae4f109d6093fa76f16`이며 단일 원자 교환·privateAuthorityPreserved·이전5f backup 보존을 확인했다.
+- **공개 검증:** ROOT private `.cache/frontend-parity-audit/footer-source-copy-approved-public/receipt.json`의 단일1440/390/320px는3PASS/actual0, UTC2026-10-06T11:57:55.340Z다. staticGET 각48 exact·원문4문단·overflow/errors/external/mutation/WS/blockedAPI/byteMismatch0이며 ROOT가320/1440 PNG를 직접 검수했다. 실제 로그인/provider/주문·전체회귀·전체서비스 GO는0이며 Google-only=true/exchange=false 불변이다.
+- **인수/근거:** static의 승인 원문845e58f git-show 독립 oracle 시험과 AGENTS의 원본 UX 기준만 동일 이식했다. static 관련12PASS/12.9초(actual0, Exec29200), service build(actual0, Exec90766), lint(actual0, Exec28104), compiled3PASS는 각각 static 입력의 실제 결과다. 통합에서 새 시험·빌드·전체회귀·모델·운영 실행0이며 통합 PASS로 승계하지 않는다.
+- **연결 잔여:** Program §0.5에 따라 기존 backend의 제한을 이유로 원본 대화·연구 UX를 축소하지 않는다. 원본 Node/Worker의 AI/SSE 구현은 존재하지만 Native의 v3 구조화 대화와 Main 로컬 fixture는 다른 소비 경로다. 실제 자유 답변 stream·연구 역할/진행·Critic producer 연결을 별도로 구현·검증해야 하며 가짜 진행으로 채우지 않는다.
+- **보존:** 통합 인증3파일·제품 JSON·API/SDK·SVG·flags·다른 카피·기존 원문 시험과 원FAIL/HOLD/WIP/730일은 불변이다. 아래5f 배포 및 운영7dd 푸터 유지 기록은 당시 이력이며 최신 푸터 배포는 위 b7 실행 증거를 따른다. 이번 후속 변경은 README/Bugfix MD2뿐이며 제품/시험/AGENTS·모델·운영 실행0이다.
+
 ## AI 트레이딩 원문·스크롤바 복원의 통합 선택인수
 
 - **최신 운영 배포와 입력 경계:** 사용자 승인된 원문 정적 테스트 화면을 teth.ai에 실제 반영했다. 운영 source는 `5f13ad342f88d421fd1c3c314abeab2e2fcb2a68`, 원검증 제품은 `801537754ca678d60327d64edc0b232ba63f47bd`, 별도 통합 제품은 `3de733361e3cc4ac2827fb0a9495719b1bd2a6f2`다. 5f/801의 non-MD2212/SHA `dfc30be5e8a4c1a2f94b5ff99de2ea6ffc68627754a8447fe504df90b7d93db8`·service1113/SHA `70a9e3381005d8604041f7d7db8583dc131bf0a7caf71cfad91e6f21a2cfd392`는 exact다. local compiled 원raw의 parent818/dirty 기록은 동일 product inputs/service bytes로 결속하고 새 HEAD 시험으로 다시 stamp하지 않았다. 통합 제품·시험·원문footer/authfix 변경0이며 이 통합 branch를 운영에 배포한 것이 아니다.

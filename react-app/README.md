@@ -1,5 +1,15 @@
 # TETH Web
 
+## 최신 사용자 승인 푸터 원문 배포·공개 확인 완료
+
+사용자가 협의됐다고 설명한 `Bitget이 선정한 최고의 AI입니다.` 등 원본9fb 푸터 한국어3값을 별도 static source `b7a7c58ebed68cc6938e35dc8e12472c45fe90ac`에서 teth.ai에 실제 반영했다. 푸터 JSON SHA `d3cf9acf23ee771126fa0713666b22312f407f50847092baa5f0c49b56d52da6`는 통합과 exact이고 다른6언어는 불변이다. 통합 전체나 별도 인증3파일 수정이 운영에 배포된 것은 아니다. 관련12PASS/12.9초(actual0, Exec29200), service build(actual0, Exec90766), lint(actual0, Exec28104), compiled3PASS는 static 입력의 별도 증거이며 통합의 새 시험·빌드 PASS가 아니다.
+
+personal(1) 실제 Opus5.5 `STATIC_UI_RELEASE_GO` C0/H0/M1(기존 capability/copy 소유 위험) 및25개 검수 입력/freeze exact 뒤 package/prepare/upload/atomic-upload/preflight/activate/postflight 각각actual0를 확인했다. 단일 원자 교환·private authority·이전5f backup을 보존했다. 공개1440/390/320px 단일3PASS/actual0(UTC2026-10-06T11:57:55.340Z), staticGET 각48 exact·원문4문단·overflow/오류/외부/mutation/WS/blockedAPI/byteMismatch0이며 ROOT가320/1440 PNG를 확인했다. 상세 공개 receipt와 archive/rawHTML SHA는 누적 보고서를 따른다. 협의·선정 사실의 독립 검증, 실제 로그인/provider/주문·전체회귀·전체서비스 GO는0이며 Google-only=true/exchange=false를 유지한다.
+
+원본 UI·문구·SVG·대화·연구 UX를 기존 backend 제약에 맞춰 축소하지 않는 기준은 Program §0.5를 따른다. 실제 AI 대화 stream·연구 역할/진행·Critic producer의 Native 미공급과 Main fixture 경계를 별도로 추적한다. 새 운영 푸터 시험과 AGENTS 기준만 동일 이식했으며 통합 인증3파일·API/SDK·flags·다른 카피는 불변이다. 원FAIL·WIP·730일·실서비스 NO_GO를 보존한다.
+
+아래5f 소개 배포는 직전 완료 이력이며 최신 푸터 배포는 위 b7 실행 증거를 따른다.
+
 최신 운영 상태는 **사용자 승인 AI 트레이딩 원문·스크롤바 정적 테스트 화면 배포 및 공개 확인 완료**다. 별도 static source `5f13ad342f88d421fd1c3c314abeab2e2fcb2a68`을 teth.ai에 반영했다. 원검증 제품 `801537754ca678d60327d64edc0b232ba63f47bd`와 non-MD/service bytes는 동일하며, 이 통합 branch의 제품 `3de733361e3cc4ac2827fb0a9495719b1bd2a6f2`를 운영 승격한 것이 아니다. 통합 인증 교정·원문 푸터는 변경0이며 운영 인증·푸터·SDK/API·Google-only=true/exchange=false 설정도 유지한다. static801의9PASS/2PASS·local compiled3PASS·lint/service build0를 통합 입력의 새 시험이나 전수 PASS로 표시하지 않는다.
 
 사용자의 `운영에 바로 반영 ... 아직 테스트중` 지시와 정본 §0.4의 테스트 화면 승인 범위에 대해 personal(1) 실제 Opus5.5 `STATIC_UI_RELEASE_GO` C0/H0/M2(nonblocking)를 새로 인수했다. review→gate wrapper를 포함한 reviewed30입력·freeze proofs exact이며 package/prepare/atomic-install/upload/preflight/activate/postflight는 각각 actual0다. 8a의 이전 manifest tree를 CAS로 확인하고 fixed real-directory `RENAME_EXCHANGE`·flock·503 maintenance restart로 전환했으며 old tree backup을 보존했다. 새 공개 focus probe의 단일1440/390/320px는3PASS/actual0·staticGET 각47 exact·overflow/오류/bytes mismatch/외부/mutation/WS0다. 원 최초1440px Ctrl+Home FAIL(actual1)은 raw 보존·원인 미확정으로 남기며, 초점 경로를 명시한 별도 private probe의 PASS와 구분한다. 상세 증거는 [누적 보고서](Bugfix_report.md#ai-트레이딩-원문스크롤바-복원의-통합-선택인수)를 따른다.

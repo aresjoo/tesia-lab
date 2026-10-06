@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+현재 운영 정적 출처는 `candidate.currentUserApprovedFooterTest`의 b7a7c58입니다. 협의된 한국어 푸터3값·Bitget 문구를 원9fb로 복원하고 실제 원격/public3폭을 확인했습니다. 다른6언어·인증/API/SDK/flags 변경0, 실제 provider/주문·법률·전체서비스 GO는 아닙니다. 아래5f/8a/7dd의 pending/HOLD는 이전 입력 이력입니다. 원본 ares UI·문구·SVG·대화/연구 UX가 기본이며 필요한 backend producer를 이에 맞춥니다. 실제 데이터·거래 의미론·승인/주문 권위는 공용 계약과 Program 정본을 따릅니다. 원문을 임의로 준비중 카피로 바꿔 연결 누락을 숨기지 않습니다.
+
 최신 React 전체 출처는 `migration-manifest.json`, 현재 검증·운영 상태는 `MIGRATION.md`와 `migration-verification.json`의 `candidate.currentStaticUiPromotion`을 따른다. 통합 인증 교정·원문 푸터는 스냅샷에 보존한다. 별도 UI26 정적 출처8a757a5를 운영에 실제 배포했으며 공개3폭/4문서/350자산을 확인했다. 기존 운영인증·푸터·API·flags는 유지한다. 고정 실디렉터리의 RENAME_EXCHANGE와 점검503/재시작을 사용하고 backup을 보존한다. 물리symlink/무중단/실provider/법률/전체서비스 승인으로 확대하지 않는다. 아래 pending/HOLD·운영7dd 표현은 이전 입력의 이력이다.
 
 최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
