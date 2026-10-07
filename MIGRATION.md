@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 실제 AI·실거래 개발 착수 — 원본 화면 유지
+
+제품 목표는 고객이 연결한 거래소 계정 안의 실제 자동매매이며 Demo는 내부 시험 환경이다. 이번 작업은 ares 원본 화면·카피·SVG·대화/연구 UX를 변경하지 않는다. 기존 React 전체 snapshot과 root Node/Worker도 불변이다. 고객 AI는 개발 구독 CLI가 아니라 서버 Anthropic API로 연결하는 방향이며 모델·일일/사용자 비용 상한과 credential 주입은 아직 확정·활성화하지 않았다.
+
+- Backend [agent/backend/bitget-credential-verifier](https://github.com/beak1011/tesia-backend/tree/agent/backend/bitget-credential-verifier) `b5b2ea30218f43941e8ee2aa05b7f18c62963143`: OAuth/broker callback과 직접 key 경로가 공유할 Bitget fresh signed 계정 검증 내부 port, copy-trading 권한의 일반 선물 주문 과대추론 차단, credential 문자·transport 예외 비노출 교정. 관련63PASS·독립 Opus5.5 후속 C0/H0/M0는 verifier 한정이다. HTTP 직접 key 입력·vault 활성화·실주문 adapter 완성을 뜻하지 않는다.
+- Contracts [agent/contracts/consultation-live-intake](https://github.com/beak1011/tesia-contracts/tree/agent/contracts/consultation-live-intake) `37e03816f115237f6a90c9d2280d627228239071`: additive api-v0.13 상담 계약은 `CANDIDATE_NOT_PUBLISHED`다. 초기 HOLD H1/M3 뒤 href/문자·NFC·날짜의 Python/TypeScript 불일치를 교정했다. ROOT의 관련15PASS/0FAIL/0SKIP·122wire fixture·TS6.0.3 strictcompile·재생성0와 새 Opus5.5 C0/H0/M0/Low8는 source-only wire 인수 증거다. 서버 session/저장/이벤트/비용/취소 HOST12는 NOT_RUN이며 Backend/React·provider 소비는 아직 연결하지 않았다. 원FAIL과 Low의 진단코드 parity·GET Origin·취소 출처·host URL/발행 경계는 [후보 보고서](https://github.com/beak1011/tesia-contracts/blob/37e03816f115237f6a90c9d2280d627228239071/Bugfix_report.md)에 남겼다.
+- 사용자 준비물은 Program 활성 정본의 [§17.1](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/TESIA_AI_POC_Product_Implementation_Plan.md#171-준비물)에만 모은다. 기존 도메인/등록을 우선 재사용하며 거래권한 OAuth·broker credential delivery·login-only·direct-key-only를 확인한 뒤 실제로 부족한 등록만 요청한다. URL/key 없이 가능한 개발은 계속한다.
+
+거래소 연결 성공과 거래 실행 활성화는 별개다. 승인된 StrategyVersion과 owner·connection·시장/계정 모드·위험 한도를 durable activation에 결속하고 Validator→RiskEngine→OrderIntent→outbox→거래소 submit/query→체결 대조를 연결해야 한다. 이 Production 파이프라인은 미구현이며 실제 고객 API·거래소 인증·주문·운영 flag·배포는 이번 전달에서 활성화하지 않았다. 후보 브랜치 전달을 고객 실서비스 성공이나 React의 실제 AI 연결로 해석하지 않는다. 과거 실패와 730일 seal은 보존한다.
+
 ### Anthropic 대화 활성화 준비 — 별도 코드 후보 인계
 
 원본main의 Anthropic API/SSE, 로컬1.24 개선본, 현재운영 React v3 JSON/offlinecompiler, 개발 구독CLI는 서로 다른 경로다. 모델/일일비용/credential 준비는 사용자 조사 보고 후 결정하며 이번 provider·운영AI·주문 활성화0다. 별도 [agent/lab/anthropic-activation-guards](https://github.com/aresjoo/tesia-lab/tree/agent/lab/anthropic-activation-guards)의 Node/Worker retry0·같은turn 오류 재dispatch 제거·번역target 경계와 신규fixture·provenance시험을 인계한다. [server/Bugfix_report.md](https://github.com/aresjoo/tesia-lab/blob/agent/lab/anthropic-activation-guards/server/Bugfix_report.md)에 코드/원RED/관련470·후속15/57·잔여가 있다. 새Opus5.5 SCOPED_GO는 배포/모델품질/전체서비스GO가 아니다. 과거92답변/QAFAIL/원본root와 기존 React 내용은 보존했고 FR 국소교정만 추가했으며, 이 migration에 provider후보 코드를 섞지 않았다. 정확ref와최신활성화계약준비는 Program§16/Ledger를 따른다. 고객대화/연구실제producer 연결과금액/동시성제한은 아직필요하다.
