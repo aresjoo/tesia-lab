@@ -2,7 +2,17 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 실제 AI·실거래 개발 착수 — 원본 화면 유지
+### 상담 연결 후속 — 원본 React 불변, 서버 후보 검수 중
+
+원본 화면·카피·SVG·대화/연구 UX와 React2362/snapshot04f0b06c는 이번 후속에서 변경하지 않았다. 운영 source13a/edge7e도 불변이다. Backend 구현을 이 저장소의 Node/Worker나 React snapshot에 복사하지 않고 owning branch로 전달한다.
+
+- [Contracts PR41](https://github.com/beak1011/tesia-contracts/pull/41)의 후보 `c4cfe71cdc376a72a1cc46b465685a517fc408c8`는 API12/13 aggregate0.24rc1 설치 통합이다. source27PASS·설치 Python `-O` 실제0·AST298 조건 보존과 Opus5.5 C0/H0/M0는 후보 증거다. 실제 immutable 발행·main 병합·Backend/React 소비는 아직 아니다. 최종 clean CI에서 원 full 실패와 환경 보완·영향 범위 재검증을 구분하며, 진행 중 CI를 성공으로 표시하지 않는다.
+- [Backend stream Low 폐쇄](https://github.com/beak1011/tesia-backend/tree/agent/backend/stream-runtime-low-closure) `7711ce092a17390139e53903e066238dff5f2171`은 C-level SSE delimiter scan·EOF/clock/오류 privacy·부분 frame 처리의 후속이다. author41와 ROOT 별도41PASS·Opus5.5 C0/H0/M0/Low1·실제 commit/push를 확인했다. 현재 shared session/HTTP/runner/React 연결 성공은 아니다.
+- 상담 host-state는 별도 미커밋 후보다. 원문/model/prompt/가격 revision·UTC 비용 예약·재시도/정산을 구현하고 단일32PASS와 private2반례green을 확인했지만, 새 Opus 검수의 입력/cache 상한·부분 사용량 초과·자정/queued 안전 차단 M3건을 보완 중이다. GO label이 있더라도 이 잔여를 닫기 전 실제 host에 소비하지 않는다.
+
+실제 고객 API 호출·거래소 인증·주문·공개 flag·운영 배포0이다. 다음 순서는 승인·발행된 exact 계약 artifact → 기존 shared session/CSRF·durable wire projection/background runner → 원본 React 스트리밍이다. 연구/Critic는 실제 관측 producer를 붙이며 허구 진행·모델 내부 사고를 만들지 않는다. 사용자 준비물은 기존 Program §17.1의 단일 요청 양식을 사용한다. 아래 owning source refs의 시험은 직전 전달 당시 범위이며 새 후속 시험과 합산하지 않는다.
+
+### 직전 전달 — 실제 AI·실거래 개발 착수, 원본 화면 유지
 
 제품 목표는 고객이 연결한 거래소 계정 안의 실제 자동매매이며 Demo는 내부 시험 환경이다. 이번 작업은 ares 원본 화면·카피·SVG·대화/연구 UX를 변경하지 않는다. 기존 React 전체 snapshot과 root Node/Worker도 불변이다. 고객 AI는 개발 구독 CLI가 아니라 서버 Anthropic API로 연결하는 방향이며 모델·일일/사용자 비용 상한과 credential 주입은 아직 확정·활성화하지 않았다.
 
