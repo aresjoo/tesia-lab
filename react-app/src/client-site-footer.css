@@ -13,7 +13,7 @@
 /* Document pages use one scroll owner. Chat, research and terminal are excluded. */
 /* A finite scrollport is essential: an auto-height overflow ancestor prevents
    the bottom-sticky composer from reaching the viewport on a long gallery. */
-.tesia-shell.client-source-app.conversation-surface.has-site-footer { height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-padding-block:64px 44px; }
+.tesia-shell.client-source-app.conversation-surface.has-site-footer { position:relative; height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-padding-block:64px 44px; }
 /* Match the source document: hide the page scrollbar, not its scrollport.
    Wheel, touch and keyboard scrolling and nested controls remain native. */
 .tesia-shell.client-source-app.conversation-surface.has-site-footer,
@@ -21,6 +21,10 @@
 .tesia-shell.client-source-app.conversation-surface.has-site-footer::-webkit-scrollbar,
 .tesia-shell.client-source-app.has-trading-intro::-webkit-scrollbar { display:none; }
 .client-footer-body { display:contents; }
+/* Finite pages own their account controls. Keep the same mounted controls,
+   initial geometry and focus behavior, but let them leave with the page on
+   every viewport. The source's mobile fixed band also obscured footer links. */
+.tesia-shell.client-source-app.has-site-footer :is(.client-auth-nav,.client-globe,.client-app-banner) { position:absolute; }
 .client-source-app.has-site-footer .client-source-main { height:auto; min-height:100svh; overflow:visible; }
 .client-source-app.has-site-footer :is(.client-main-existing,.native-service-route-content,.native-service-content:not([hidden]),.client-main-account) { height:auto; overflow:visible; }
 .client-source-app.has-site-footer .client-source-main .client-research-hub { height:auto; min-height:100svh; overflow:visible; }
@@ -33,18 +37,14 @@
 @media(min-width:861px) {
   .tesia-shell.client-source-app.has-site-footer { padding-left:0!important; }
   .client-source-app.has-site-footer > .client-footer-body { position:relative; display:grid; grid-template-columns:64px minmax(0,1fr); }
-  /* Source desktop auth controls belong to the page, not the bright footer.
-     Keep them mounted/reachable while letting the shell scroll them away. */
-  .tesia-shell.client-source-app.has-site-footer :is(.client-auth-nav,.client-globe) { position:absolute; }
   .client-source-app.has-site-footer > .client-footer-body:has(.client-sidebar.mobile-open) { grid-template-columns:256px minmax(0,1fr); }
   .client-source-app.has-site-footer > .client-footer-body > .client-sidebar { position:sticky; top:0; bottom:auto; grid-column:1; grid-row:1; height:100dvh; align-self:start; }
   .client-source-app.has-site-footer > .client-footer-body > .client-source-main { grid-column:2; grid-row:1; min-width:0; }
 }
 @media(max-width:860px) {
-  /* The page now scrolls behind fixed home controls. Paint and hit-test a
-     single quiet header surface, without moving controls or adding a layer
-     above the menu/auth buttons. Match the banner's existing 64px offset. */
-  .client-source-app.has-site-footer.view-landing::before { content:''; position:fixed; inset:0 0 auto; height:64px; z-index:69; background:var(--client-0); }
+  /* The quiet header follows the same page-owned controls. Leaving a fixed
+     backplate here would still mask footer links after the buttons scrolled. */
+  .client-source-app.has-site-footer.view-landing::before { content:''; position:absolute; inset:0 0 auto; height:64px; z-index:69; background:var(--client-0); }
   .client-source-app.has-site-footer.view-landing:has(.client-hamburger.with-banner)::before { top:64px; }
   /* A fixed input used to cover the new footer. It now stops with its home. */
   .client-source-app.has-site-footer .client-gallery-home .client-home-band { position:sticky; inset:auto; bottom:0; margin:26px -24px 0; width:calc(100% + 48px); }

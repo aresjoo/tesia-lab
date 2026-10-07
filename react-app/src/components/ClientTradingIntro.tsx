@@ -88,7 +88,18 @@ export default function ClientTradingIntro({onStart,researchOnly=false}:{onStart
   const {language}=useClientPreferences()
   const title=useRef<HTMLHeadingElement>(null)
   const id=useId()
-  useLayoutEffect(()=>{const current=document.activeElement;if(current instanceof HTMLElement&&current.closest('.client-source-overlays,[data-sidebar-action]'))return;title.current?.focus({preventScroll:true})},[])
+  useLayoutEffect(()=>{
+    // Preserve auth/input ownership during late chunk arrival. Ordinary route
+    // buttons and links still yield focus to the destination heading.
+    if(document.querySelector('dialog[open]'))return
+    const current=document.activeElement
+    if(current instanceof HTMLElement){
+      if(current.closest('.client-source-overlays,[data-sidebar-action]'))return
+      const chosenControl=Boolean(current.closest('.client-auth-nav'))||current.matches('input,textarea,select')||current.isContentEditable
+      if(chosenControl&&current.isConnected&&!current.matches(':disabled')&&current.getClientRects().length&&!current.closest('[hidden],[inert]')&&getComputedStyle(current).visibility!=='hidden')return
+    }
+    title.current?.focus({preventScroll:true})
+  },[])
   const t=(original:string):string=>{
     if(language==='ko')return original
     const value=(copy.editorial as Record<string,Record<string,string>>)[original]?.[language]

@@ -1,10 +1,44 @@
 # TETH 버그 수정·검수 보고서
 
-## 통합 전용 인증 복귀 안내 7언어 보완 — 검증 완료, 운영 미배포
+## 소개 초기 초점 경합 — 통합 후보 교정·독립 코드 검수 완료, 운영 미배포
 
-- 고정3문구를 표시5곳/foreign6 사전18값만으로 연결했다. actual personal1 Sonnet5.5/tools0 COPY_GO(actual0/11.642초, receipt `2ac4aa9bd75523a8647d38b95dbf4f937f7f51dcf75a8cdadb361dfa858916d3`)다. 저장된 setError 원문·조건·콜백/API는 불변이며5표시 역복원시 baseline1accbbd 전체source/NodeAST exact, adapter/LoginPanel/AuthSurface/browser-auth 보호4파일 bytes exact다.
-- 신규4PASS/actual0·10.247초(session42078/raw SHA `ff8393a50e8bbc32d2206d91286373736b68ad7ea406e2eee0464c2b31bef04d`), 기존auth2spec14+notice사전2의 관련16PASS/actual0·32.762초(session16362/raw SHA `a2ac2746b830826c9c65bfe5795020b423bbd47be8d69bdf076ecc02517ecf87`)는 별도 실행이다. 관련lint84163/diffcheck0·소유4741 listener0다. 7언어 banner/aria/button·unknown provider/API prose exact·Escape/초점·320 비공백glyph 경계와 ROOT FR320 PNG를 확인했다. 실제세션은401fixture이며 실로그인 성공은 아니다.
-- 최초 import 준비오류/RED2·줄말공백 Range4px 오탐·loopback ViteHMR 집계FAIL 원raw를 보존한다. 모든WS는 계속 차단하며 token은 기록하지 않고 local dev HMR 시도만 별도 분류했다. 제품CSS/auth제어/API/flags/빌드/운영/whole 변경0. 통합authFIX와 이 표시후속은 static f2 배포에 포함하지 않았다.
+- 공개 후속 signup Escape FAIL에서 발견한 늦은 소개 mount의 H1 초점 탈취는 이전 f2에서도 재현됐다. 통합 `9f5bab9`의 `ClientTradingIntro` 최초 focus 블록만 교정하며 인증3파일+번역사전1은 이 baseline과 bytes exact다. 원카피/SVG/스타일/API/권한/flags 변경0이다. 실제 운영은 아래6ced이고 이 교정이나 기존 인증FIX를 배포했다고 쓰지 않는다.
+- 최초 broad guard는 5PASS였으나 actual personal1 Opus5.5 `SCOPED_CODE_HOLD` C0/H0/M1을 받았다. 따뜻한 모듈 재방문에서 푸터 Enter/click이 화면 밖 버튼에 초점을 남기는 새 국소 회귀를 독립 브라우저로 재현했다. 첫5GREEN·원제품RED·원publicFAIL·준비오류/timeout·HOLD와12검수입력을 보존했다(receipt `9dd1385430b4e5ee773479e1e9bcf961c48898740b33e10bbcc6a2d4966ebcd3`). 그 첫안은 운영에 배포하지 않았다.
+- authnav 선택·폼/editable·기존overlay/sidebar·열린dialog만 보존하도록 좁혔다. 일반 경로 버튼/link는 원래 H1로 이동하며 새 `:modal` JS요구도 `dialog[open]`으로 피했다. 새7범위 broad RED5PASS/2FAIL·actual1·31.569초→narrow GREEN **7PASS/actual0·11.099초**다. 최종spec `633c780ecd222629149d1503bd2c3f6310011331b88d590f4f05a3cf2db1121d`/source `c6a6a92c951841b1405b2f1eb2915a697e34b89f3dbe6e5c065ef8ff59566fa1`, GREEN raw `1097f509a5962dcf4b8076574d319c6441460aa3bbc992847c7df1ea26746e0c`. 실제 held GET 중signup focus→모달/Escape/같은trigger·일반nav·warm footer Enter/click을 검증했다. dev HMR 각2시도는 차단한 로컬 개발 연결로 별도 기록하고 application/provider WS0와 혼동하지 않는다.
+- ROOT scopedeslint actual0(chunkf1a70a), 올바른 flags 타입/servicebuild actual0(session32865), 서비스빌드 실제 4case **4PASS/actual0**(session92262)다. signup-lazy/150ms/Escape·첫 H1·warm Enter/click H1, 259 정적GET exact·source/auth4/service1161 전후SHA exact·외부/API변이/WS/errors0를 확인했다. compiled raw `8d21e64a3c36736f7e3a7718de4b2b56c6489c655ced997b6a00a0f477d07c29`, localeCompare(en) 정렬serviceSHA `7ff9402eb467393fa2c4cbd6413bc9df26bf99207f851c079bfbb3286e1a9240`다. 먼저 broad 입력에 했던 build40009는 이 결과로 승계하지 않는다. 새whole0이다.
+- 최종 actual personal1 Opus5.5/tools0 새11입력 exact는 `SCOPED_CODE_GO` C0/H0/M0/Low9이고 이전 M1은 닫았다(receipt `4247296890968be40dd5600eff4d6a428d12bc44bbb3ad3213385f57ffdbe6c4`). 이것은 코드GO이며 **release/auth/provider/service GO는 모두false**다. Low9에는 scope 설명도 포함되므로 9개 확정버그라고 환산하지 않는다. 합성GET/1440px/en/Chromium 한 회 범위이며 mobile/Safari·Back/Forward+authfocus·기존overlay/sidebar 독립회귀·input버튼형·modelessdialog 정책은 미완료다. compiled150ms는 정확한 mount/응답순서를 단언하지 않아 authnav분기의 결정적 pending 증거는 Vite의 실제 hold 시험에 있다. 원본 최종spec RED의 대상SHA 결속·repeat-each도 별도 후속이며 새 전체PASS로 포장하지 않는다.
+
+## 모바일 푸터의 계정 버튼 가림 — 운영 반영·좁은 공개 검증 완료
+
+현재 운영 source는 `6cedc106a2ecc5f07c66a7e078506fdb1a0df956`이다. 문서 후속 HEAD/통합 snapshot과 구분한다. 전체 UI 복구·실제 로그인·서비스 완료 판정은 하지 않는다. 아래 다른 source/미배포 표기는 각 실행 당시 이력이다.
+
+- 외부10:54 KST 검수의 320px 가림을 원9fb/React·7언어×홈/소개28조합으로 직접 대조했다. FR/ES 제품 링크 중심을 로그인 버튼이 가로채고 실제 Tab에도 가림이 남는 문제는 원본에도 존재한다. 새 React 회귀/원본 픽셀 복원으로 단정하지 않는다. 원본 폰트 외부차단으로 픽셀·폰트정확 parity는 검증하지 않았다.
+- finite page의 CSS 한 파일만 수정한다. 문서 scroll owner에 position:relative를 지정하고 auth/globe/banner와 모바일 home backplate를 absolute로 상단과 함께 스크롤시킨다. 카피/SVG/처음72·8px 위치/44px 버튼·36px pill·배너64px/동일 DOM·handler·키보드 접근은 보존한다. 채팅·연구·터미널·인증/API/flags 변경0, 소셜4개 비활성은 유지하며 목적지 클릭 성공으로 보고하지 않는다.
+- 직접 FR320/home·trade **2RED/actual1·25.010초** 후 첫 수정은 containing block이 없어 FAIL8/중단2/미실행8·actual130으로 보존했다. 최종 containing block 추가 후 **18PASS/0FAIL/SKIP/flaky/errors·actual0·15.689초**, raw `.cache/frontend-parity-audit/footer-hit-audit/mobile-green-relative.json`, SHA `496fbd65724f4e5531bdf590035518fd9a6557595e5ee38deb538f7b156a71ec`다. 신규spec SHA `8e08f1f0e402c71202df59ac5622f2e2fce9557fe1219db0e7e2a1cb69eade87`, tested CSS `db0a628d645cfa527a76455c930eea65680732c361926ac213ffe8d84adca036`로 ROOT가 검산했다. 처음 grep의 No tests found 준비오류는 제품 RED로 합산하지 않는다.
+- 기존 desktop 헤더/목록·상세 휠 관련 **4PASS/actual0·5.174초**(session69648, footer-occlusion-related-final.json), 신규spec 관련 eslint actual0(session85823), Google-only=true/exchange=false의 타입/service build actual0(session14677)다. 상대위치 추가 전 별도4PASS(session71487)는 최종 입력 결과로 승계하지 않는다. 새 전체회귀0이다.
+- 새 locale 좁은 감사는 service 구문 closure501의 직접KO JSXText/문자열속성0, 사전빈값/7열/slot이상0·새확정누락0이다. 동적template/실제 전DOM·FR관사/inline개행 Low·원어민전문장/전체원본배치 완료는 아니다. 인증 차이는 운영f2→통합573 제어3+번역 JSON1 정확4파일이며 이번 정적배포에 혼합하지 않는다. 과거78/100/16/4와 실제provider/새승격권위는 구분하고 전체서비스NO_GO/원FAIL/730일을 보존한다.
+
+- 로컬 최종 compiled 3폭·105routes/42CTA/803 정적GET exact 및 별도 푸터 실제 hit/Tab/초점 84조합·5260 정적GET exact가 actual0다. 실제 personal(1) Opus5.5/tools0의 새 52입력 검수는 `STATIC_UI_RELEASE_GO` C0/H0/M0/Low10이며 AGY3.8의 CSS3파일 읽기 의견은 최종 승인 대신 사용하지 않았다. 소스2321/SHA `9ff07e153ed63c1316ba8f19e774fec2cc4a5089a8a3aa8882c8a011b2d8c4dc`, service1161/SHA `7a37f8b1ca974f88f936bbd6b5227f73cd4a9ab7d4d2cba4d2a79997094d7270` 불변을 확인했다.
+- package/prepare/upload/atomic-upload/preflight/activate/postflight 각각 actual0(session35038/14199/86607/80619/4251/55634/7955)다. f2 기준 CAS/단일 원자 교환/backup/private authority를 유지했다. 점검503·재시작이며 무중단 배포가 아니다. manifest `ad16c42e0346c0c5e7adcb8cda98c85b40cb2a415a4b873f35fde4e22bff77a0`, archive `151a8ee2ca2819beaca4ab1ca259cc7519d1f93bd9a8364e250628a48a5a84da`, raw HTML `69d17dc0e04c99ac51c8b1a79ee6d08fe09c1d137bdf7194488290f2e00940df`, freeze `e111d652be3945aa374bed6b7a0bbe9340979757431fb6f5b4893d33c1a3da1a`다.
+- 공개 core actual0(session81878): 7언어×1440/390/320px·105routes/42CTA·841 정적GET exact·48alt×3폭 loaded, 오류/넘침/외부/API변이/WS0다(raw SHA `712367e059d45350b4c7881d03aae4aaebb5c521d7d93f4e8b5a91324d2a785e`). **별도 320px 푸터만 28조합**의 링크 실제 hit·Tab·헤더 동일DOM/초점 복귀·1630 정적GET exact actual0(session50927/raw `5fde93ae04de8270aebe8dccffbc36ff718732f0e48e06b0596bd9f14c0fcfed`)를 확인했고 ROOT가 KO/FR PNG를 봤다. 이 후자는 인증창을 열지 않는 좁은 검사로, 다음 실제 실패를 면제하거나 84 공개 PASS로 바꾸지 않는다.
+- **공개 후속 실패는 보존·미해결로 분류했다.** 첫 84검사 시도는 9PASS 뒤 일본어 홈의 avgo.svg/msft.svg 504 2건으로 FAIL(actual1/session3346)이다. 바로 뒤 6회 순차 HTTPS GET은 모두200/bytes/SHA exact였으나 원504를 삭제하지 않고 용량/원인 해결로 주장하지 않는다. 한 차례 독립 순차 재검사는 6PASS 뒤 소개 가입창 Escape 후 시작 버튼 초점 복귀 FAIL(actual1/session74481/raw `368d971620ecf9bf7c3aa9daa421c13ae3c190daa174d3f46ef59d94a0b8c19c`)이었다. 최대 부하/3000명 검증이 아니며 추가 whole/성공까지 재시도0이다.
+- 초점 반례는 1440px/en/소개/배너열림에서 lazy 소개 도착과 익명 session GET 150ms 지연을 조합한 **현재/이전f2 각1 실제 FAIL**로 별도 재현했다. 가입 버튼→늦게 mount된 소개 H1→showModal→Escape 후H1의 순서이며 같은 가입 DOM은 유지됐다. `ClientTradingIntro`의 최초 제목 focus가 기존 사용자의 선택을 덮어쓰는 기존 제품 경합이다. 원 공개FAIL에는 이벤트계측이 없어 동일 원인이라고 단정하지 않는다. 좁은 UI guard 교정은 통합에서 별도 진행하며 운영6ced에는 아직 없다. 인증 제어3파일과 혼합 승격하지 않는다. raw는 `.cache/frontend-parity-audit/footer-occlusion-extra-surfaces/signup-lazy-race-{current,f2-baseline}-receipt.json`이다.
+- 상세/인사이트 첫4FAIL은 아래로350px 이동할 때 의도된 햄버거 opacity0/pointer-events:none인데 `isVisible()`만 true였던 시험 전제 오류다. 실제 wheel -100과 명시focus로 회복·열기/Escape를 현재/이전f2 4경로·8회 실제 조작에서 확인했다. 원FAIL 보존, 390px 후속 미포함이며 전 화면 정상으로 확대하지 않는다.
+- 실제 전달 전 75입력을 content-addressed 보존했다(receipt SHA `47aec870385f30c110afd08d5f3685aeb23a4aa586551b16cf1a1ac6718fde45`). 원래 모델52/배포·공개 PASS/공개 FAIL/추가 반례를 함께 보존하며 문서 갱신 뒤 옛freeze를 재사용하지 않는다. Gitleaks8.30.1은 현 사용자 실행 권한이 없어 사용하지 못했고 기존 CI의8.24.3으로 staged·built actual0/findings0·새예외0를 확인했다. Native chunk500kB·Web 기본 Dependabot High2/Moderate1은 별도 잔여다.
+
+### 서비스 완료와 구분한 잔여 점검표
+
+| 영역 | 확인한 범위 | 아직 닫지 않은 경계 |
+|---|---|---|
+| 메인·푸터·소개·정보·다운로드·정책 | 현재 7언어·3폭 공개 화면/42 가입동선, 승인 카피·48 번역 이미지 표시 | 모든 상태의 원본 배치/모션·전 문장 의미·원어민 감수·실법률 승인 |
+| 대화·연구·Critic·g-doc | React 표시·사전·관련 fixture 시험과 원본 기준 | 실제 provider/SSE→연구 이벤트→재검증의 연속 실여정 |
+| 기록·예약검증·랭킹·공유 | UI·catalogue/계산·범위 fixture | 실제 계정 durable 저장·공개랭킹·예약 producer |
+| 설정·언어·통화 | 로컬 선택·표시·7열/빈값/slot 정적 검사 | 계정 API·다른 기기·알림/보안/결제 전체 상태·동적 전DOM 의미 |
+| 인증 | 익명 UI fixture, 통합의 별도 복귀/대기·3안내문 시험 | 통합4파일·초점 경합 후속 미배포, 새 독립 인증GO·실OAuth/TLS/ACK 여정 |
+| 거래소·전문차트·백테스트 | SDK/실Backend HTTP fixture·표시, 기존 sealed730일 별도 증거 보존 | 현재 공개 화면에서 새 승인전략→실job→report/fills 연속 연결·실provider/실주문 |
+| 운영·성능·접근성 | 좁은 실제 배포·정적GET·Chromium/키보드 | 504 원인/용량, Safari/실보조기술·3000명 부하·복구/운영 전체 GO |
+
+사전 키 완전성·모델GO·합성 로그인 시험을 실제 서비스 완성도로 환산하지 않는다. 다음 작업은 확정한 소개 초점 교정의 좁은 검증, 별도 인증 후보의 현재SHA/권위 재검수, 실제 producer별 연결 순서이며 UI 원문을 다시 축소하지 않는다.
 
 ## 판단 차트 문장·모바일 손익 줄바꿈 후속 — 운영 반영·공개 확인 완료
 
