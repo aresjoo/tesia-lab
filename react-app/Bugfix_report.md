@@ -1,5 +1,23 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 인증 잔여3건 운영 배포·공개 검증 완료
+
+운영source `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`는 통합ac337의 App1/시험2와bytes exact다. 저장 실패 명시재시도·미전송 입력/닫기재열기·EMAIL 기존null, 후속GET/revision/CSRF 실패의 복구창/초점과7언어 차단 안내를 교정했다. 원8spec/다른auth3/카피/SVG/CSS/SDK/API/flags/주문권위는 불변이다. 단일158PASS/actual0(27920), lint47108/build7670/scan0, compiled16(46916)+ACK2(54992)+core105routes42CTA(61147)를 각범위로 결속했다.
+
+새 personal1 실제 Opus5.5 AUTH_RECOVERY_RELEASE_GO C0H0M0L12·213입력(27874/receipt90d4bc24), package48262/prepare35153/upload94133/atomic41767/preflight55825/activate68970/postflight20029 모두actual0다. CAS0da/backup/flock/단일원자교환/privateauthority·flags Google=true/exchange=false 유지, 점검/restart이지 무중단이 아니다. manifest81254ec7/archivea8cdbdca/HTMLf31af1c7/freeze32c40ee2를 결속했다.
+
+공개91정적파일 exact(d40d9b), 7언어3폭105routes/42CTA/805GET exact(98974/receiptb4e785b9), 공개합성ACK2/154GET(29858/234f0b56), 성공재확인 정상returning모달잔존/명시닫기2PASS(10793/1d28edb7) actual0다. 마지막320 PNG를 ROOT가 직접 확인했다. 합성401·첫ACK abort의 console는 정확URL분류로 보존하며 실APIforward/provider로그인0다. 공개core 첫준비11bde8의nested output guard실패는 browser0/제품변경0이고 원파일보존후exactparent만 교정했다. 처음모델길이실패·compiled CJS·lint·원156P2F/19P1F도 보존하며 final158에합산하지 않는다.
+
+문서 변경전 `.cache/frontend-parity-audit/auth-low-three-deployed-evidence/receipt.json`의256입력 SHA `1f2e5edeb708cf4a7081cc2607f1f393a446115761e350924cd3214f3982e814`를content-addressed보존했다. 새로운whole0/실서비스GO0이며 SVG504원인·전원본배치/모션/전문장·실OAuth/Safari/3000명/실producer연속여정과 EMAIL/HANDOFF/stale/normal초점/부분journal내구/CSRF회전 후속은 남는다. 아래미배포/Low3는 직전상태다.
+
+## 현재 후보 — 13:15 인증 잔여 3건 후속
+
+static `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`의 제품 App1/시험2를 정확 이관했다. 저장 write/readback 성공 전 owner/epoch/controller를 폐기하지 않고 실패 시 CSRF·승인·연결을 차단한 채 같은 요청으로 명시 재시도한다. 일반 로그인의 미전송 입력과 닫기→재열기를 유지하고 EMAIL 실패 상태는 기존 null이다. 후속GET/revision/CSRF 실패의 복구창/초점 및 기존7언어 차단 안내를 수정한다. 다른auth3·원카피/SVG/CSS·원8spec·SDK/API/flags/credential/주문권위는 불변이다.
+
+최종 단일 관련10spec158PASS/actual0(session27920, raw `auth-low-three-final-tests.json`)와 scopedlint47108/build7670 actual0, stagedscan1f0524/서비스scan513a69 findings0를 확인했다. whole regression은 아니다. 신규spec `1080397d`는 storage/미전송/닫기재열기/후속요청실패/7언어8개유형×2프로젝트=16개다. copy-only spec은 원3키/5표시식 역복원/AST를 고정0da에 보존하며 현재App `aa803632` 전체SHA와현재5표시식 수를 따로 검증한다. 원156P2F·최초focused20의19P/모바일동선1FAIL·동선만교정한1PASS와 첫CODE GO는 별도보존이며 최종158과 합산하지 않는다.
+
+compiled·독립 release 검수·운영 승격·공개 확인은 진행 중이고 현재 운영은0da다. SVG504원인·전원본배치/모션·전문장원어민·실provider/Safari/3000명/producer별실서비스는 미완료다. 아래0da 완료와Low3잔여는 직전 배포 이력이다.
+
 ## 현재 — 소개 초점·인증 복귀 운영 반영 및 공개 재검증 완료
 
 운영 제품 source는 static `0da0a6d7ba559beabd9783859321b0270af43e2e`다. 소개 focus05df를 먼저 반영하고, 통합의 기존 인증제어3+번역1 정확4파일 및9spec만 별도 인증 후보에 이관했다. 전체src745 SHA `afb3e2b5282ce17634ff993c1a5f8e57d9dcfbbb1bc7ecfa332de1dcc921f285`와9spec은 이 통합과exact이며 운영source·통합문서HEAD를 구별한다. 원문/카피/SVG/CSS/SDK/API/credential/provider/주문권위와 Google-only=true/exchange=false는 유지했다.

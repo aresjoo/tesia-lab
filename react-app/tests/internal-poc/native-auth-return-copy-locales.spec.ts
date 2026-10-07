@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import ts from 'typescript'
 const dictionary = JSON.parse(fs.readFileSync('src/internal-poc/native-app-ui-copy.json', 'utf8')) as Record<string, Record<string, string>>
 
@@ -37,23 +38,32 @@ const expected = {
 const keys = Object.keys(expected) as (keyof typeof expected)[]
 const locales = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr'] as const
 const baseline = '1accbbd0603e0c04573bb6595c2ffe87897a2dcb'
+const deployedCopyBaseline = '0da0a6d7ba559beabd9783859321b0270af43e2e'
+// Exact reviewed functional candidate; the historical copy-only invariant below
+// remains intact instead of incorrectly forbidding every subsequent auth repair.
+const recoveryCandidateSha = 'aa8036323a32ea8a02b4603d3cbc1d112ee821d2d9ecff3123c1f144a2126c16'
 const appPath = 'src/internal-poc/NativeServiceApp.tsx'
 test.use({ serviceWorkers: 'block', trace: 'off', video: 'off', screenshot: 'off' })
 
-test('three exact UI keys are complete and only five display expressions differ from the auth baseline', () => {
+test('three exact UI keys retain their copy-only baseline and the current recovery candidate is explicitly pinned', () => {
   const oldDictionary = JSON.parse(execFileSync('git', ['show', baseline + ':src/internal-poc/native-app-ui-copy.json'], { encoding: 'utf8' }))
   expect(Object.keys(dictionary).filter(key => !Object.hasOwn(oldDictionary, key)).sort()).toEqual([...keys].sort())
   for (const [key, value] of Object.entries(oldDictionary)) expect(dictionary[key as keyof typeof dictionary]).toEqual(value)
   for (const key of keys) expect(dictionary[key as keyof typeof dictionary]).toEqual(Object.fromEntries(locales.filter(locale => locale !== 'ko').map(locale => [locale, expected[key][locale]])))
   const original = execFileSync('git', ['show', baseline + ':' + appPath], { encoding: 'utf8' })
-  let current = fs.readFileSync(appPath, 'utf8')
+  const product = fs.readFileSync(appPath, 'utf8')
+  expect(createHash('sha256').update(product).digest('hex')).toBe(recoveryCandidateSha)
+  let current = execFileSync('git', ['show', deployedCopyBaseline + ':' + appPath], { encoding: 'utf8' })
   const inverse = [
     [`aria-label={ui('${keys[0]}')}`, `aria-label="${keys[0]}"`, 1],
     [`>{ui('${keys[1]}')}</p>`, `>${keys[1]}</p>`, 1],
     [`>{ui('${keys[2]}')}</button>`, `>${keys[2]}</button>`, 2],
     [`!plainAuthReturn() ? ui('${keys[1]}') : ui(`, `!plainAuthReturn() ? '${keys[1]}' : ui(`, 1],
   ] as const
-  for (const [after, before, count] of inverse) { expect(current.split(after).length - 1).toBe(count); current = current.split(after).join(before) }
+  for (const [after, before, count] of inverse) {
+    expect(product.split(after).length - 1).toBe(count)
+    expect(current.split(after).length - 1).toBe(count); current = current.split(after).join(before)
+  }
   expect(current).toBe(original)
   const ast = (text: string) => {
     const file = ts.createSourceFile(appPath, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)

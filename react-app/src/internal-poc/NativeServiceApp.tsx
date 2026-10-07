@@ -253,6 +253,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [loginOpen, setLoginOpen] = useState(() => window.location.pathname === '/auth/complete'
     && !(exchangeConnectionsEnabled && readExchangeTransactionLocator(window.location.href)))
   const [loginRetained, setLoginRetained] = useState(false)
+  // Presentation recovery only: a failed durable write must not discard the
+  // provider controller, or let its callback imply that the host accepted it.
+  const [authStorageRecovery, setAuthStorageRecovery] = useState(false)
   const [loginResume, setLoginResume] = useState(0)
   const loginGeneration = useRef(0)
   const [loginBinding, setLoginBinding] = useState<{ sessionId: string; epoch: number; generation: number } | null>(null)
@@ -365,6 +368,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     return true
   }
   const recoverSession = async (retainedReturn: typeof returnBinding = null) => {
+    setAuthStorageRecovery(false)
     if (retainedReturn && (returnBindingRef.current !== retainedReturn || !returnPresentationCurrent())) throw new Error('SESSION_CHANGED')
     // Keep unsent text in memory only, never in the mutation journal/storage.
     // A failed read retains this buffer without exposing it under a new owner.
@@ -380,7 +384,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // session/CSRF and the existing owner/storage guards can be accepted.
     if (recoveringReturn) {
       returnBindingRef.current = recoveringReturn; setReturnBinding(recoveringReturn)
-      setLoginRetained(true); setLoginOpen(false)
+      setLoginRetained(true)
     } else {
       setLoginRetained(false)
       returnBindingRef.current = null; setReturnBinding(null)
@@ -580,6 +584,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       }
       if (!returnPresentationCurrent()) return
       setLoginOpen(true); setLoginRetained(true); return
+    }
+    if (authStorageRecovery && phase === 'error' && loginRetained && loginBinding
+      && !logoutIntent.current && !pending.current && loginBinding.sessionId === session.current?.sessionId
+      && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current) {
+      // Reopen only the retained controller's redacted recovery shell. This
+      // local transition grants neither a session nor a new provider request.
+      setLoginResume(value => value + 1); setLoginOpen(true); return
     }
     if (logoutIntent.current || !session.current || phase !== 'ready') return
     const owner = session.current, generation = epoch.current
@@ -889,6 +900,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (pending.current) { setError('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.'); return }
     const identity = `${confirmation}:${result.sessionId}:${result.claimIntent?.initiatingSessionId}:${result.claimIntent?.expectedSessionRevision}`
     if (acceptedAuth.current === identity) return
+    const offerEpoch = epoch.current
     // The login panel has verified the cookie round trip. This callback only
     // records an offer; ownership transfer still needs a separate explicit click.
     try {
@@ -900,7 +912,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // Preserve only this tab's unsent wording across a verified login offer.
       // It is neither a conversation claim nor permission to send under AUTH.
       // Session-only recovery, foreign locators and stale panels keep clearing.
-      const unsentInput = confirmation !== 'HANDOFF_UNVERIFIED' && phase === 'ready'
+      const unsentInput = confirmation !== 'HANDOFF_UNVERIFIED' && (phase === 'ready' || (phase === 'error' && authStorageRecovery))
         && session.current?.sessionState === 'ANONYMOUS' && session.current.sessionId === initiatingOwner
         && result.claimIntent?.initiatingSessionEtag && loginBinding?.sessionId === initiatingOwner
         && loginBinding.epoch === epoch.current && loginBinding.generation === loginGeneration.current
@@ -911,13 +923,16 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       const stored = savedOwner === initiatingOwner ? sessionStorage.getItem(STORAGE_KEY) : null
       const candidate = observed ?? stored
       const saved = initiatingOwner && candidate && /^[A-Za-z0-9_-]{1,160}$/.test(candidate) ? candidate : undefined
-      epoch.current++; clients.transport.abort(); clients.conversationTransport.abortInFlight()
-      clients.setCsrf(null); bindSession(null); clearViews()
-      clearNativeJournal(); pending.current = null; setHasPending(false)
       const current = { sessionId: result.sessionId, sessionState: 'AUTHENTICATED' as const }
       const binding = JSON.stringify(current)
+      // No owner/epoch/controller teardown until the locator is durable.
+      // A partial write remains an untrusted locator, never login authority.
       sessionStorage.setItem(SESSION_KEY, binding)
       if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      clearNativeJournal()
+      epoch.current++; clients.transport.abort(); clients.conversationTransport.abortInFlight()
+      clients.setCsrf(null); bindSession(null); clearViews()
+      pending.current = null; setHasPending(false); setAuthStorageRecovery(false)
       bindSession(current); clients.setCsrf(result.csrfToken); setSessionState('AUTHENTICATED'); setPhase('ready')
       if (unsentInput) setInput(unsentInput)
       if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current })
@@ -930,21 +945,34 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
             : '현재 인증 세션은 확인했지만 로그인 전 세션의 사전조건을 복구하지 못해 전략 연결을 차단했습니다. 인증 세션 ETag로 대체하지 않습니다.' })
       setError('')
     } catch {
-      clients.setCsrf(null); setPhase('error'); setSessionState(null)
+      // Preserve a still-current provider controller for an explicit retry.
+      // Email keeps its existing error/recheck presentation, not provider ACK UI.
+      const recoverable = epoch.current === offerEpoch
+      setAuthStorageRecovery(recoverable && confirmation !== 'EMAIL_CONFIRMED')
+      clients.setCsrf(null); setPhase('error')
+      setSessionState(recoverable && confirmation !== 'EMAIL_CONFIRMED' ? session.current?.sessionState ?? null : null)
       setError('로그인 후 복구 저장소를 확인하지 못했습니다. 전략 연결과 승인은 실행하지 않았습니다.')
     }
+  }
+  const assertRecordedSessionOffer = (result: SessionOffer, confirmation: 'ACK_CONFIRMED' | 'EMAIL_CONFIRMED' | 'HANDOFF_UNVERIFIED') => {
+    const identity = `${confirmation}:${result.sessionId}:${result.claimIntent?.initiatingSessionId}:${result.claimIntent?.expectedSessionRevision}`
+    if (acceptedAuth.current !== identity || session.current?.sessionId !== result.sessionId
+      || session.current.sessionState !== 'AUTHENTICATED' || clients.getCsrf() !== result.csrfToken) throw new Error('SESSION_CHANGED')
   }
   const authenticated = (result: NativeAuthenticated): void => {
     if (result.verification !== 'COOKIE_BOUND_SESSION_ROUND_TRIP') { setError('로그인 확인 근거가 일치하지 않아 전략 연결을 차단했습니다.'); return }
     recordSessionOffer(result, 'ACK_CONFIRMED')
+    assertRecordedSessionOffer(result, 'ACK_CONFIRMED')
   }
   const sessionRecovered = (result: NativeSessionRecovery): void => {
     if (result.verification !== 'SESSION_CONFIRMED_HANDOFF_UNVERIFIED') { setError('세션 복구 근거가 일치하지 않아 전략 연결을 차단했습니다.'); return }
     recordSessionOffer(result, 'HANDOFF_UNVERIFIED')
+    assertRecordedSessionOffer(result, 'HANDOFF_UNVERIFIED')
   }
   const emailAuthenticated = (result: NativeEmailAuthenticated): void => {
     if (result.verification !== 'EMAIL_CODE_COOKIE_BOUND_SESSION_ROUND_TRIP') { setError('이메일 로그인 확인 근거가 일치하지 않아 전략 연결을 차단했습니다.'); return }
     recordSessionOffer(result, 'EMAIL_CONFIRMED')
+    assertRecordedSessionOffer(result, 'EMAIL_CONFIRMED')
   }
   const claim = async () => {
     const offered = authReceipt.current
@@ -1469,13 +1497,15 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     && retainedResult.draftId === conversation.draftId
   const analysisJob = phase === 'ready' && !hasLogout && conversation && documentOwner
     ? job?.state === 'COMPLETED' ? job : retainedMatches ? retainedResult.job : null : null
-  const authSurface = (loginOpen || loginRetained) && loginBinding !== null && sessionState !== null && phase !== 'error' && !hasLogout && <NativeAuthSurface open={loginOpen}><NativeLoginPanel
+  const authSurface = (loginOpen || loginRetained) && loginBinding !== null && sessionState !== null
+    && (phase !== 'error' || (authStorageRecovery && loginBinding.sessionId === accountScope)) && !hasLogout && <NativeAuthSurface open={loginOpen}><NativeLoginPanel
     key={`${loginBinding.sessionId}:${sessionState}:${loginBinding.generation}`} hidden={!loginOpen} resumeToken={loginResume}
-    onAuthenticated={value => { if (panelCurrent()) authenticated(value) }} onSessionRecovered={value => { if (panelCurrent()) sessionRecovered(value) }}
+    onAuthenticated={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); authenticated(value) }}
+    onSessionRecovered={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); sessionRecovered(value) }}
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
     emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
     sourceLayout returning={sessionState === 'AUTHENTICATED'} expectedSessionId={loginBinding.sessionId} isCurrent={panelCurrent}
-    onEmailAuthenticated={value => { if (panelCurrent()) emailAuthenticated(value) }}
+    onEmailAuthenticated={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); emailAuthenticated(value) }}
     canEmailDispatch={!busy && !hasPending && !hasLogout && phase === 'ready'} acquireEmailDispatch={() => {
       if (working.current || emailDispatch.current || pending.current || logoutIntent.current || phase !== 'ready' || !panelCurrent()) return null
       const owner = {}; emailDispatch.current = owner; setEmailBusy(true)
@@ -1494,7 +1524,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
     emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
     sourceLayout isCurrent={returnPanelCurrent} canEmailDispatch={false} acquireEmailDispatch={() => null}
-    recoveryBlocked={hasPending ? '미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.' : undefined}
+    recoveryBlocked={hasPending ? ui('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.') : undefined}
     onRecheckSession={() => { void run(recheckReturnSession) }} recheckDisabled={busy || emailBusy}
     onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
     onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} />

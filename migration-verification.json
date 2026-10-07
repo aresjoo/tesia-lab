@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "통합 d21a350 전체 React snapshot과 운영 0da0a6d의 소개 초점 및 기존 인증 복귀·대기 수정을 전달한다. 새 AUTH_RECOVERY_RELEASE_GO·배포·공개 검증은 완료했으며 실제 OAuth·전체 화면 일치·전체 서비스 승인은 아니다. 원본 root/main/Node/Worker와 이전 candidate/FAIL/HOLD/730일은 보존한다.",
-  "sourceCommit": "d21a350ce762d3ab9a9983cdccc50f6051767f21",
+  "purpose": "통합 a691e44 전체 React snapshot과 운영13a 인증복구후속3건의 한정배포/공개검증을 전달한다. 관련158PASS는 전체회귀/실OAuth/전체서비스GO가 아니다. 원root/main/Node/Worker와 이전candidate/FAIL/HOLD/730일은 보존한다.",
+  "sourceCommit": "a691e4473d8c5a92d9b8b3ca25023d1c37cf1d45",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "63aec482e617c75317f7b18d4306f165a9daf6b871ca829558138d432f717a32",
+  "snapshotDigest": "849b3c23a71a8d5e381c76caa14927c124ef3208dde919d78c2f9d7f98eecd92",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -731,6 +731,30 @@
     }
   ],
   "candidate": {
+    "currentAuthRecoveryLowThreeCandidate": {
+      "sourceCommit": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
+      "integrationSourceCommit": "ac337f7190871cebc082e644a08176d2dd498d80",
+      "deploymentBaseline": "0da0a6d7ba559beabd9783859321b0270af43e2e",
+      "status": "AUTH_LOW_THREE_DEPLOYED_PUBLIC_SCOPED_VERIFIED",
+      "scope": "NativeServiceApp.tsx only; new storage/panel regression and precise historical-copy/current-candidate pin. Other auth3, old8 specs, copy/SVG/CSS/API/SDK/flags/order authority unchanged.",
+      "appSha256": "aa8036323a32ea8a02b4603d3cbc1d112ee821d2d9ecff3123c1f144a2126c16",
+      "newSpecSha256": "1080397d5db952cd7ff05ac1d1524aae7bbcfbeea77c98060f416644b4c0d630",
+      "relatedSingleBatch": { "passed": 158, "actualExit": 0, "sessionId": 27920, "receiptSha256": "d9c194ff18984d5418c27b9d5bd4a9602bd947cdc57cfdd18b5ef843b86c440a" },
+      "lint": { "actualExit": 0, "sessionId": 47108 },
+      "typecheckAndServiceBuild": { "actualExit": 0, "sessionId": 7670, "files": 1161, "defaultSortSha256": "caa31ce72a17188d9b5d84314c40ae35af4937e301932b0b2739735788fe36c4", "localeEnSha256": "d767966f9c66750fb41c47bc3e927a3056913d845b55148467aed1ccf74df6f5" },
+      "buildFlags": { "VITE_TETH_AUTH_GOOGLE_ONLY": "true", "VITE_TETH_EXCHANGE_CONNECT": "false" },
+      "historicalFailuresPreserved": true,
+      "compiled": { "storagePanelPassed": 16, "ackPassed": 2, "corePublicRoutes": 105, "introCtaActions": 42, "actualExit": 0 },
+      "independentReleaseReview": { "model": "claude-opus-5-5", "account": "personal(1)", "verdict": "AUTH_RECOVERY_RELEASE_GO", "critical": 0, "high": 0, "medium": 0, "low": 12, "actualExit": 0, "sessionId": 27874, "inputs": 213, "receiptSha256": "90d4bc246d8cf22f25308f40a285ffbb536842f9135e75f6a57e659a8cccea0c" },
+      "deployment": { "stages": ["package", "prepare", "upload", "atomic-upload", "preflight", "activate", "postflight"], "actualExits": [0, 0, 0, 0, 0, 0, 0], "manifestSha256": "81254ec76217aba3b6da1210708993ab75c09b96303c6484a2ae4aaf30815fa1", "archiveSha256": "a8cdbdcaf23e8c40132dd0be33265ac433db8fd839032a9f16ed9bd1664bc898", "htmlSha256": "f31af1c774d263760b5747c2c59f877d8d777d923607df43fbabbc261f2f2f3c", "maintenanceRestartNotZeroDowntime": true },
+      "public": { "artifactFilesExact": 91, "languages": 7, "widths": [1440, 390, 320], "routes": 105, "introCtaActions": 42, "coreStaticGets": 805, "ackPassed": 2, "ackStaticGets": 154, "returnRecheckSuccessPassed": 2, "actualExits": [0, 0, 0, 0], "apiForwarded": 0, "actualProvider": false },
+      "preservedEvidence": { "inputs": 256, "receiptSha256": "1f2e5edeb708cf4a7081cc2607f1f393a446115761e350924cd3214f3982e814", "oldFreezeNotReusableAfterChanges": true },
+      "remaining": ["SVG504 root cause", "all original layout/motion", "all foreign sentence semantic review", "actual OAuth/provider login", "Safari/accessibility", "3000-user load", "actual AI/research/storage/trade producer journeys", "EMAIL/HANDOFF/stale/focus/journal durability and real CSRF rotation follow-up"],
+      "actualProviderGo": false,
+      "wholeRegressionGo": false,
+      "serviceGo": false,
+      "releaseGo": true
+    },
     "currentAuthRecoveryOperatingCandidate": {
       "sourceCommit": "0da0a6d7ba559beabd9783859321b0270af43e2e",
       "deploymentBaseline": "05dfaffa77cef3b07077c782e1fb8c2099541dd4",

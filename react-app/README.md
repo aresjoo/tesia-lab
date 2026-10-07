@@ -1,5 +1,9 @@
 # TETH Web
 
+현재 운영 source는 `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`이며 통합ac337과 App1/시험2가exact다. 인증 잔여3건의 새관련158·lint/flagsbuild/scan0·compiled16+ACK2·독립Opus5.5 AUTHreleaseGO C0H0M0L12/213입력·배포7단계0·공개91파일/105routes42CTA/805GET/ACK2/154GET/성공재확인2를 확인했다. 증거256입력보존 뒤 문서만 갱신하고 옛freeze는 재사용하지 않는다. 기존디자인/카피/auth3/API/SDK/flags/원8spec는 불변이며 전체서비스·SVG504원인·실provider/Safari/3000명·전문장/전체모션은 미완료다. 아래 pending/운영0da는 준비당시이력이며 [누적보고서](Bugfix_report.md)가 현재 상태를 소유한다.
+
+현재 후속 후보는 static `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`와 제품 App/시험2가 정확히 같은 인증 잔여3건 교정이다. 최종 관련158PASS/actual0·lint/flags build/secret scan0을 확인했고 compiled·독립 release 검수·운영은 아직 진행 중이다. 원카피/SVG/CSS·다른auth3·원8spec·SDK/API/flags/주문권위는 유지한다. 운영은 아직0da이며 아래 운영 기록은 직전 이력이다. 자세한 범위와 실패 보존은 [누적보고서](Bugfix_report.md)를 따른다.
+
 현재 운영 제품 source는 `0da0a6d7ba559beabd9783859321b0270af43e2e`입니다. 소개 초점05df에 이어 인증4파일/9spec의 기존 복귀·대기 교정을 별도 독립 인증 릴리즈 검수 후 반영했습니다. 새 단일142PASS·flags build/compiled2·personal1 Opus5.5 AUTH_RECOVERY_RELEASE_GO C0H0M0L11/77입력·7단계배포0, 공개7언어×3폭105routes/42CTA/805GET exact와 합성ACK복구2PASS/154GET 및 JS/CSS41·번역이미지48·SVG2의91GET exact를 확인했습니다. 통합src745/9spec과운영후보는exact지만문서HEAD는운영source와별도입니다. 원FAIL/코드35·릴리즈98입력보존뒤문서갱신/옛freeze재사용0이며새전체회귀는없습니다. 낮은우선순위복구/번역잔여·SVG504원인·전원본배치/전문장감수·실provider/3000명/전체서비스는완료가아닙니다. 아래6ced와미배포문구는당시이력이고최신증거·한계는[누적보고서](Bugfix_report.md)첫절을따릅니다.
 
 현재 운영 source는 `6cedc106a2ecc5f07c66a7e078506fdb1a0df956`입니다. 원본에도 있던 모바일 푸터 가림을 finite page CSS만으로 개선했고 원문/버튼 처음 배치·동일 DOM/handler·채팅/연구/터미널·인증/API/flags를 유지했습니다. 신규18·관련4 PASS, lint/타입servicebuild0·새 personal1 Opus5.5 정적GO(C0/H0/M0), 배포7단계0와 공개 core7언어×3폭105routes/42CTA·841정적GET exact 및 별도320px 푸터28조합/1630GET exact를 결속했습니다. 전체회귀를 추가하지 않았습니다.
