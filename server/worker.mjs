@@ -12,8 +12,6 @@ import { createInvestmentOutputGate } from "./investment-output-gate.mjs";
 
 const MODEL_DEFAULT = "claude-opus-5-5";
 const EFFORT_DEFAULT = "medium";
-/* 빠름(fast) 모드: TETH_AI_SPEED="fast" 이면 켠다. 계정에 권한이 없어 거절되면 10분 동안 표준으로 돌린다 */
-let FAST_OFF_UNTIL = 0;
 const DAILY_CAP = 400; /* KV 바인딩(RL) 있을 때 하루 chat 요청 총량 상한 */
 const BURST_MAX = 8;   /* IP당 60초 내 chat 요청 상한 (아이솔레이트 단위 근사) */
 const ORIGIN_OK = [/^https:\/\/aresjoo\.github\.io$/, /^https?:\/\/localhost(?::\d+)?$/, /^https?:\/\/127\.0\.0\.1(?::\d+)?$/];
@@ -209,7 +207,7 @@ export default {
     /* Workers에서 api.anthropic.com 직접 호출은 엣지에서 빈 400으로 차단됨 (알려진 이슈).
      * Cloudflare AI Gateway를 경유해 우회한다 — 키는 그대로 Anthropic 키를 쓴다. */
     const AI_GATEWAY_BASE = env.TETH_AI_GATEWAY || "https://gateway.ai.cloudflare.com/v1/6c44d33270e146fd313f864ef2b07568/teth/anthropic";
-    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, baseURL: AI_GATEWAY_BASE });
+    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, baseURL: AI_GATEWAY_BASE, maxRetries: 0 });
     ctx.waitUntil((async () => {
       try {
         /* plain: 도구와 검색 없이 본 모델이 짧은 글만 쓴다(백테스트 판단 문장, 결과 해석). 입력은 클라이언트가 계산한 값뿐이다 */
@@ -239,9 +237,8 @@ export default {
         const toolReceipt = await toolRequestReceipt(requestTools);
         const convo = messages.map((m) => ({ role: m.role, content: m.content }));
         const mdCache = new Map();
-        let retry403 = 0; const colo = (req.cf && req.cf.colo) || "?";
         let modelCalls = 0, toolCalls = 0, totIn = 0, totOut = 0, tokBase = 0;
-        let useFast = env.TETH_AI_SPEED === "fast" && Date.now() > FAST_OFF_UNTIL;
+        const useFast = env.TETH_AI_SPEED === "fast";
         const mkStream = () => client.beta.messages.stream({
           ...(useFast ? { speed: "fast" } : {}),
           model: env.TETH_AI_MODEL || MODEL_DEFAULT,
@@ -295,18 +292,7 @@ export default {
           const blocks = {};
           const stream = mkStream();
           attach(stream, blocks);
-          try { final = await stream.finalMessage(); }
-          catch (e) {
-            /* 빠름 권한이 없거나 한도를 넘으면 같은 요청을 표준 속도로 다시 보낸다 (아직 아무것도 흘려보내지 않은 경우만) */
-            if (useFast && e && (e.status === 429 || e.status === 400 || e.status === 403) && !Object.keys(blocks).length) { /* 빠름 거절은 429, 400, 403 어느 것으로도 온다 */
-              console.error("fast mode unavailable, standard speed:", e.status); useFast = false; FAST_OFF_UNTIL = Date.now() + 600000; modelCalls--; continue;
-            }
-            /* 403 Request not allowed: 요청을 내보내는 지역에 따라 가끔 막힌다. 아직 아무것도 흘려보내지 않았으면 잠시 뒤 다시 보낸다 */
-            if (e && e.status === 403 && !Object.keys(blocks).length && retry403 < 2) {
-              retry403++; console.error("403 retry", retry403, colo); modelCalls--; await new Promise((r) => setTimeout(r, 400 * retry403)); continue;
-            }
-            throw e;
-          }
+          final = await stream.finalMessage();
           if (final.usage) { totIn += final.usage.input_tokens || 0; totOut += final.usage.output_tokens || 0; tokBase = totOut; }
           /* 사고 서명·툴 상태 보존을 위해 assistant content 원본 그대로 이어붙인다 (재구성 금지) */
           convo.push({ role: "assistant", content: final.content });

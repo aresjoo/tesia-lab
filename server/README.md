@@ -2,6 +2,14 @@
 
 서버 소유 정책 `teth-investment-prompts-1.24.0`을 Node loopback와 Worker가 소비합니다. 금융·경제·기업·포트폴리오·전략을 넓게 상담하며, 자유 텍스트에는 주문·예약·DraftPatch 반영 권한이 없습니다. **migration 대상 draft, SERVICE_NO_GO**입니다. React의 local Mock producer와 AI40의 offline compiler에는 이 정책이 적용되지 않습니다. 승인 Strategy Version→결정론적 Validator/Risk Engine→OrderIntent는 별도 서버 경로입니다.
 
+## Anthropic 활성화 준비의 국소 후속
+
+별도 `agent/lab/anthropic-activation-guards` 후보는 기존1.24 source를 바탕으로 동일 턴 자동 재dispatch와 번역 대상의 선호 오탐만 교정합니다. Node/Worker SDK의 `maxRetries:0`을 명시하고 Worker의403 재송신·fast→standard 자동 전환과 실패 호출 차감을 제거했습니다. 빠름 권한/한도 실패는 그대로 incomplete error로 종료합니다. 정상 pause_turn/tool_result continuation과 최대6회 실제 SDK dispatch는 유지합니다. 오류 뒤 과금·usage를 정확히 확정하는 영속 비용 원장이나 SSE resume를 구현한 것이 아닙니다.
+
+`번역만 해줘:` 뒤 제공된 문안의 문장 수 지시를 응답 선호로 승격하지 않도록 유한 action 문법을 보완했습니다. 변환 목표 언어는 그 턴에만 적용하고 다음 일반 턴에 이전 지속 선호를 복구합니다. 원문span·registry1.24·기존 route/format fixture·원QA JSON·React snapshot·공용 API·운영 source는 보존합니다. 과거92의 frozen-runtime 시험은 immutable base와 현재 후보를 분리 검증하는 것으로 한정 교정했으며 기존 기대·루프·실패를 유지합니다. 새 실패/검증과 잔여는 [누적 버그 보고서](Bugfix_report.md)를 따릅니다. 실제 모델의 짧게/번역만 준수 실패가 해결됐다고 주장하지 않습니다.
+
+사용자는 고객 대화·연구를 Anthropic API로 먼저 연결하기로 했고 모델·비용 상한·credential 준비는 조사 보고 뒤 결정합니다. 내부 personal(1) CLI 평가/검수는 고객 구독 라우터가 아닙니다. 현재 운영 OAuth host는 gateway 없는 compiler를 조립하며 이 proxy와 React 소비가 연결되지 않았습니다. 인증/CSRF·owner-bound turn/event 저장·재접속·중복 비용 방지 계약과 실제 SDK 의미 평가를 먼저 준비해야 합니다. 현재 provider 활성화·main 병합·배포·주문0이며 MODEL_QUALITY_NO_GO / SERVICE_NO_GO입니다.
+
 ## 파일과 신뢰 경계
 
 | 파일 | 역할 |
@@ -16,6 +24,9 @@
 | `tests/public-investment-*-cases.json` | 공개 합성 개별 턴·다중 턴·처음 사용 후 교정에 활용한 공개 일반화 개발 사례. hidden holdout 아님 |
 | `tools/run-public-investment-eval.py` | personal(1) Opus5.5 CLI, 도구0, 개별 실제 assistant 답변을 다음 턴에 보존. 실제 request builder와 assistant 이력, 전체 runtime 입력 동결·변경 검출, 실제 호출 수와 실패·비용·지연 기록 |
 | `tests/*.test.mjs`, `tests/fixtures/` | 실제 route/Worker continuation·source VM·분할 스트림·표시 schema·공개 기록 회귀. SDK 합성 fixture, 외부 fetch 금지 |
+| `tests/investment-provider-retry-guard.test.mjs`, `tests/fixtures/retry-guard-*.mjs` | 격리된 합성 SDK로400/403/429 전후 출력·표준403·SDK retry0·정상 continuation/6dispatch 한도 검사. 실제 provider 증거 아님 |
+| `tests/investment-translation-preference-boundary.test.mjs` | 번역만 문형·번역 대상 명령 마스킹·원문span·quote동치·지속선호/일회변환 경계 |
+| `tests/recorded-investment-candidate-provenance.json` | 과거QA의 immutable base8646 bytes와 현재3-runtime 해시를 분리한 시험 fixture. 과거92/model/브라우저 기록을 새후보 합격으로 승격하지 않음 |
 
 브라우저 system은 JSON으로 감싼 user 참고자료이며 지침 권위가 없습니다. assistant 이력은 사용자 승인·사실 근거가 아닙니다. 현재 사용자 발화는 마지막에 보존합니다. 최대16개·개별16,000자·전체64,000자, context16,000자이며 과도한 입력은 거절합니다. source는 최근 짝 맞춘14개 이력과 길이가 제한된 완전한 이전 사용자 문장을 제공합니다. 기억 누락을 표시하고, wizard 선택은 현재 대화에 결속된 경우에만 미확인 Mock 정보로 제공합니다. 이 기억은 영구 프로필이나 서버 검증값이 아닙니다.
 

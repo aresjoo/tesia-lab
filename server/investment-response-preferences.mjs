@@ -24,7 +24,7 @@ function maskQuoted(text){
 function isTransformRequest(text){
  const count='(?:한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[0-9]+)\\s*문장(?:으로|만)?';
  const format='(?:\\s*(?:(?:한국어|영어|일본어)(?:로)?|'+count+'|짧게|간단히|자세히|정중하게|다시))*\\s*';
- const action='(?:번역(?:해|하)|요약(?:해|하)|정리(?:해|하)|교정(?:해|하)|바꿔|고쳐|다듬)';
+ const action='(?:번역(?:만\\s*)?(?:해|하)|요약(?:해|하)|정리(?:해|하)|교정(?:해|하)|바꿔|고쳐|다듬)';
  const target='(?:(?:한국어|영어|일본어)로|'+count+')';
  // A trailing format qualifies the same conversion, including omitted objects.
  if(new RegExp(action+'(?:줘|주세요)?\\s*'+target+format,'i').test(text))return true;
@@ -41,7 +41,7 @@ function isTransformRequest(text){
  if(/\bsummarize\b[^.!?。！？;,，:\n]*\b(?:in\s+(?:Korean|English|Japanese)|(?:one|two|three|four|[0-9]+)\s+sentences?)\b/i.test(text))return true;
  if(new RegExp('(?:답변|답|응답|결과|출력형식|출력|문장|문단|문안|기사|단락|글|문서|보고서|텍스트|내용)(?:을|를)'+format+action,'i').test(text))return true;
  if(new RegExp('(?:고객에게\\s*보낼|(?:간단한|정확한|정중한)\\s*문장(?:으로)?)'+format+'(?:바꿔|고쳐|교정|다듬)','i').test(text))return true;
- return /(?:번역(?:해|하)|옮겨(?:줘|주세요)|翻訳(?:して|してください))|\b(?:translate|rewrite)\b|\b(?:write|summarize|render|convert|put)\s+(?:this|that|(?:the|a|provided|following)\s+(?:report|article|paragraph|text|sentence))\b/i.test(text);
+ return /(?:번역(?:만\s*)?(?:해|하)|옮겨(?:줘|주세요)|翻訳(?:して|してください))|\b(?:translate|rewrite)\b|\b(?:write|summarize|render|convert|put)\s+(?:this|that|(?:the|a|provided|following)\s+(?:report|article|paragraph|text|sentence))\b/i.test(text);
 }
 function directiveBoundaries(text){
  // Replace only conjunctions of known directive verbs; preserve UTF-16 offsets.

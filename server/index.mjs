@@ -24,7 +24,7 @@ const EFFORT = env.TETH_AI_EFFORT || "medium";
 const PORT = Number(env.TETH_AI_PORT || 8799);
 let client = null, clientErr = "";
 try {
-  client = env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }) : new Anthropic();
+  client = env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 0 }) : new Anthropic({ maxRetries: 0 });
 } catch (e) {
   clientErr = "투자 AI 공급자 설정을 확인하지 못했습니다. 서버 운영자가 설정을 확인해야 합니다.";
   console.error(clientErr);
