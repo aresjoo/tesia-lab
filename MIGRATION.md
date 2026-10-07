@@ -2,15 +2,15 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 상담 연결 후속 — 원본 React 불변, 서버 후보 검수 중
+### 상담 연결 후속 — 계약 개발 패키지 발행, 원본 React 불변
 
 원본 화면·카피·SVG·대화/연구 UX와 React2362/snapshot04f0b06c는 이번 후속에서 변경하지 않았다. 운영 source13a/edge7e도 불변이다. Backend 구현을 이 저장소의 Node/Worker나 React snapshot에 복사하지 않고 owning branch로 전달한다.
 
-- [Contracts PR41](https://github.com/beak1011/tesia-contracts/pull/41)의 후보 `c4cfe71cdc376a72a1cc46b465685a517fc408c8`는 API12/13 aggregate0.24rc1 설치 통합이다. source27PASS·설치 Python `-O` 실제0·AST298 조건 보존과 Opus5.5 C0/H0/M0는 후보 증거다. 실제 immutable 발행·main 병합·Backend/React 소비는 아직 아니다. 최종 clean CI에서 원 full 실패와 환경 보완·영향 범위 재검증을 구분하며, 진행 중 CI를 성공으로 표시하지 않는다.
+- [Contracts PR41](https://github.com/beak1011/tesia-contracts/pull/41)은 최종 source `c247cef557ff6bfb7f2406f5bbfc5973bdf315b1`을 main `94575ac8a5b8fbab042bc564a7bd7d574d2acab6`에 동일 tree로 병합했다. [private immutable 개발 릴리스](https://github.com/beak1011/tesia-contracts/releases/tag/v0.24.0rc1)를 실제 발행하고 tag·8asset의 발행 전/후 실제 download bytes를 대조했다. Python0.24rc1/API12TS0.23/API13TS0.24, 기존 normative499·AST298 보존·최종683 source의 최적화 설치 package actual0·새 Opus5.5 C0/H0/M0다. 원 전체 actual1·db9 영향107PASS/1ERROR·최종 오류1+반례3 actual0은 별도 합성 증거이고 새 단일 whole659PASS가 아니다. 실제 Git-range scan0이며 추가 directory scan1/230은 exact FP 분류로 raw를 보존했다. GitHub billing steps=[]는 NOT_STARTED다. release note/evidence가 원 기록·Low5를 결속한다. npm registry·Backend/React 소비 완료·서비스 GO는 아니다.
 - [Backend stream Low 폐쇄](https://github.com/beak1011/tesia-backend/tree/agent/backend/stream-runtime-low-closure) `7711ce092a17390139e53903e066238dff5f2171`은 C-level SSE delimiter scan·EOF/clock/오류 privacy·부분 frame 처리의 후속이다. author41와 ROOT 별도41PASS·Opus5.5 C0/H0/M0/Low1·실제 commit/push를 확인했다. 현재 shared session/HTTP/runner/React 연결 성공은 아니다.
-- 상담 host-state는 별도 미커밋 후보다. 원문/model/prompt/가격 revision·UTC 비용 예약·재시도/정산을 구현하고 단일32PASS와 private2반례green을 확인했지만, 새 Opus 검수의 입력/cache 상한·부분 사용량 초과·자정/queued 안전 차단 M3건을 보완 중이다. GO label이 있더라도 이 잔여를 닫기 전 실제 host에 소비하지 않는다.
+- [상담 host-state](https://github.com/beak1011/tesia-backend/tree/agent/backend/consultation-host-state) `38a04c910f70ce6cbe60b946e05faa16db6f4eb8`은 원문/model/prompt/가격 revision·UTC 비용 예약·멱등 재시도·HELD/초과 brake를 교정했다. author37와ROOT 별도54PASS·새 Opus5.5 C0/H0/M0/Low4·실제 commit/push다. [통합 Backend](https://github.com/beak1011/tesia-backend/tree/agent/backend/live-consultation-runtime) `436a79e0398cef41cfe35abf6de85ab3becd20bb`은 stream/host/journal source3·시험3·전용문서2 bytes를 그대로 모아 별도 한 process의92PASS/0FAIL/ERROR/SKIP·실제 origin/SHA를 확인했다. 실제 HTTP·background·React 연결 성공은 아니다.
 
-실제 고객 API 호출·거래소 인증·주문·공개 flag·운영 배포0이다. 다음 순서는 승인·발행된 exact 계약 artifact → 기존 shared session/CSRF·durable wire projection/background runner → 원본 React 스트리밍이다. 연구/Critic는 실제 관측 producer를 붙이며 허구 진행·모델 내부 사고를 만들지 않는다. 사용자 준비물은 기존 Program §17.1의 단일 요청 양식을 사용한다. 아래 owning source refs의 시험은 직전 전달 당시 범위이며 새 후속 시험과 합산하지 않는다.
+실제 고객 API 호출·거래소 인증·주문·공개 flag·운영 배포0이다. 다음 순서는 발행 artifact의 정확 installed pin → 기존 shared session/CSRF·durable wire projection/background runner → 원본 React 스트리밍이다. native Codex5.6SolHigh 둘이 설치 pin과 내부 runner를 독립 worktree에서 병렬 구현하며, 비회원→로그인 상담 이관은 계약/정책 설계 HOLD다. 원본 UX를 인증전용·대기 화면으로 바꾸거나 가짜 draft/Critic를 만들지 않는다. 사용자 준비물은 기존 Program §17.1의 단일 요청 양식을 사용한다. 아래 owning source refs의 시험은 직전 전달 당시 범위이며 새 후속 시험과 합산하지 않는다.
 
 ### 직전 전달 — 실제 AI·실거래 개발 착수, 원본 화면 유지
 
