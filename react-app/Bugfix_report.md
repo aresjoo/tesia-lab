@@ -1,5 +1,19 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 소개 초점·인증 복귀 운영 반영 및 공개 재검증 완료
+
+운영 제품 source는 static `0da0a6d7ba559beabd9783859321b0270af43e2e`다. 소개 focus05df를 먼저 반영하고, 통합의 기존 인증제어3+번역1 정확4파일 및9spec만 별도 인증 후보에 이관했다. 전체src745 SHA `afb3e2b5282ce17634ff993c1a5f8e57d9dcfbbb1bc7ecfa332de1dcc921f285`와9spec은 이 통합과exact이며 운영source·통합문서HEAD를 구별한다. 원문/카피/SVG/CSS/SDK/API/credential/provider/주문권위와 Google-only=true/exchange=false는 유지했다.
+
+새 단일9spec/desktop+mobile **142PASS/0FAIL·SKIP·retry·flaky·globalErrors/actual0**(session33752, reporter99.865초, raw `807fe1a32ac6e9f6e5f88159a6941a4b24cab84844bb0671757b32f7d358c51e`)를 완료했다. source745/spec9/service1161 전후불변·원140P2F 및 교정새2PASS 원자료불변·소유4765포트 종료다. 이전2FAIL은 새ACKselector 준비 오류로 보존하며 새단일142와 과거 결과를 합산하지 않는다. dev fixtureflags는 원시험대로unset, 출시flags는 별도 실제build71656/compiledACK2에 결속했다. 새 scopedlint41713/build0·service gitleaks8.24.3 actual0도 별도다.
+
+독립 personal1 actual Opus5.5 코드GO C0H0M0L4(72859) 뒤 별도 **AUTH_RECOVERY_RELEASE_GO C0H0M0L11**(25798,77입력)을 받았다. codeGO/소개 정적GO/과거 예외는 승계하지 않았다. freeze `f000fb4cf6a6e59c5a029d53ceecf9eacaa585fd23ff52903f2688891d4ce755`·실제보호101(103중승인교집합2)·기존core109+auth4 union110을 결속했다. 배포7단계는 모두actual0(package29158/prepare1b9d61·stdout즉시저장/upload86723/atomic60545/preflight17091/activate12594/postflight16770), CAS05df·backup/privateauthority·단일원자교환을 유지했고 점검503/restart이지 무중단이 아니다. manifest `53ba6e27a234c04f5d11f6026d91ca3a03286f0a5f2374ffafc52080623cb2d9`, archive `21f73289387fb0e4bd9ad3e1fb1ea9523b46f5ff8307248dbeca2b134f337bbb`, rawHTML `10547509f1f6ec78fd64745ef5ac0942811604fa015ab47213067ac3317d2448`다.
+
+공개 HTTPS core7언어×1440/390/320·105routes/42CTA·805정적GET exact/110입력·overflow/오류/외부/mutationWS0(actual0/60450)와 별도 320/1440 Native ACK유실→이탈→명시복귀→동일키재시도→heldsessionGET→검증후adoption2PASS·154GET exact(actual0/38028)를 확인했다. ACK의 의도된401/첫abort 콘솔2개는 정확합성API URL·발생경로로 분류했고 unexpected/routeErrors/drainpending0이다. API는합성응답/쿠키로격리했으며 실제 로그인·실provider 성공증거가 아니다. 공개 JS/CSS41+번역이미지48+SVG2의91GET 및 기존backendHTML변환도각bytes/SHA/MIME exact(actual0/e1d372)다. ROOT가mobileACK PNG를 직접 확인했다.
+
+코드검수35입력·릴리즈/배포/공개98입력을 content-addressed 보존한 뒤에만 문서를갱신한다(release보존receipt `402d3298c2827e0fef520489269727e281329ed0062dd0107127fc95b46bf2b1`). 옛freeze/GO는이후변경에재사용하지않는다. 준비도구extraTSX를JSON으로파싱하는 문제는 실행전 SHA검사로교정했고, 원proofgate actual1/af4e67의콘솔0 요구는합성401/abort와충돌해 정확2메시지+원단언 조건으로한정했다. 원raw/분류를보존하며 runtime오류를면제하지않는다. stagedscanactual1/finding1은 기존통합 return-entry spec56의 loopback idempotency synthetic fixture로ROOT확인했고 raw28306·ignore추가0/규칙disable0다. clean scan으로쓰지않는다.
+
+**남은 문제는닫지않는다.** Low1 storage쓰기실패후복구dead-end, Low2 recoveryBlocked 기존사전의표시adapter bypass, Low3 두번째sessionGET 실패후패널가시성은후속이필요하다. Low4 지정router경로이벤트누락가설은현재코드근거없음이며 전체history-writer 감사완료가아니다. 수기config notes6/extras7과gate-body template차이는검수에드러내고 다음도구정비로남긴다. 현재updater는 oldSTATIC/newAUTH전용이므로 다음AUTH운영본CAS에그대로재사용할수없다. SVG504는accesslogoff/errorcrit의증거공백까지확인했지만 성공GET으로rootcause해결을판정하지않는다. 전원본배치·모션/전문장원어민/실콜백·provider/Safari·보조기술/3000명/AI·거래producer 및전체서비스GO는미완료다. 아래초점·인증미배포/6ced 기록은당시이력이다.
+
 ## 소개 초기 초점 경합 — 통합 후보 교정·독립 코드 검수 완료, 운영 미배포
 
 - 공개 후속 signup Escape FAIL에서 발견한 늦은 소개 mount의 H1 초점 탈취는 이전 f2에서도 재현됐다. 통합 `9f5bab9`의 `ClientTradingIntro` 최초 focus 블록만 교정하며 인증3파일+번역사전1은 이 baseline과 bytes exact다. 원카피/SVG/스타일/API/권한/flags 변경0이다. 실제 운영은 아래6ced이고 이 교정이나 기존 인증FIX를 배포했다고 쓰지 않는다.

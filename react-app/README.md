@@ -1,5 +1,7 @@
 # TETH Web
 
+현재 운영 제품 source는 `0da0a6d7ba559beabd9783859321b0270af43e2e`입니다. 소개 초점05df에 이어 인증4파일/9spec의 기존 복귀·대기 교정을 별도 독립 인증 릴리즈 검수 후 반영했습니다. 새 단일142PASS·flags build/compiled2·personal1 Opus5.5 AUTH_RECOVERY_RELEASE_GO C0H0M0L11/77입력·7단계배포0, 공개7언어×3폭105routes/42CTA/805GET exact와 합성ACK복구2PASS/154GET 및 JS/CSS41·번역이미지48·SVG2의91GET exact를 확인했습니다. 통합src745/9spec과운영후보는exact지만문서HEAD는운영source와별도입니다. 원FAIL/코드35·릴리즈98입력보존뒤문서갱신/옛freeze재사용0이며새전체회귀는없습니다. 낮은우선순위복구/번역잔여·SVG504원인·전원본배치/전문장감수·실provider/3000명/전체서비스는완료가아닙니다. 아래6ced와미배포문구는당시이력이고최신증거·한계는[누적보고서](Bugfix_report.md)첫절을따릅니다.
+
 현재 운영 source는 `6cedc106a2ecc5f07c66a7e078506fdb1a0df956`입니다. 원본에도 있던 모바일 푸터 가림을 finite page CSS만으로 개선했고 원문/버튼 처음 배치·동일 DOM/handler·채팅/연구/터미널·인증/API/flags를 유지했습니다. 신규18·관련4 PASS, lint/타입servicebuild0·새 personal1 Opus5.5 정적GO(C0/H0/M0), 배포7단계0와 공개 core7언어×3폭105routes/42CTA·841정적GET exact 및 별도320px 푸터28조합/1630GET exact를 결속했습니다. 전체회귀를 추가하지 않았습니다.
 
 공개 후속의 SVG504와 가입창 종료 초점 FAIL은 보존한 미완료 항목입니다. 후자는 lazy 소개 제목이 사용자의 초점을 덮어쓰는 경합을 이전f2에서도 재현했고 통합에서 좁은 교정·7시험·서비스빌드4사례·독립코드 검수를 완료했으나 운영 미배포입니다. 기존 인증4파일/전체원본배치·전문장 의미·실로그인/provider·3000명/전체서비스는 완료가 아닙니다. 자세한 증거·한계·서비스 잔여표는 [누적 보고서](Bugfix_report.md)를 따릅니다. 아래 f2 이하 기록은 직전 배포 이력이며 현재 상태로 읽지 않습니다.
