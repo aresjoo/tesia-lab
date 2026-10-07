@@ -2,6 +2,16 @@
 
 이 후보의 기준은 Lab `8646b6525631d5e1f71e38a8e2e515f23571b5b5`/prompt registry1.24.0이다. 제품·권위·활성화 정본은 Program §16과 WORK_LEDGER다. 기존 공개 QA 실패는 `qa/README.md`와 원문 `qa/investment-usability.json`에 보존한다. 본 보고서의 국소 교정을 모델 품질·React 실제 연결·운영 성공으로 승계하지 않는다.
 
+## 동일 조건 비교 — 개선점 관측, 모델 품질 NO_GO 유지
+
+[원문과 독립 검수](qa/prompt-comparison.json)는 원9fb와 retry/번역 교정 후보417767c의 7사례·2arm·18실제 응답이다. personal(1) Opus5.5/high/tools0·동일 JSON 이력 scaffold·고정 시각·각 arm 실제 assistant 이력으로 비교했으며 actual0/18완료/실제모델명 전부일치·제품6SHA 불변이다. 독립 Opus5.5는 버전명을 숨긴 X/Y 검수에서 개선본6선호/1동률이었지만 1회 소규모 공개 비교이므로 전체 우월성·성공률·실SDK/API 가용성·서비스GO 근거가 아니다.
+
+개선본도 P01 정확2문장 요청에3문장, P05의 자기정책 '짧게2~4'에5문장과 외부검증 이력을 비용설정으로 판단하는 혼동, P06 장문·내부 엔진명 노출이 남았다. P05 자기정책 점검을 뒤늦게 공통 A/B 기준에 추가하지 않는다. 처음 Opus의 P05 PASS+minor를 보존하고 실제 소비 코드를 추가한 독립 후속에서 길이FAIL/의미WARN으로 재판정했다. ROOT는 의미 혼동도 미해결로 남기며 기존4FAIL을 새18응답으로 지우지 않는다.
+
+원본 TITLE은 실제 stripTags 정의20523/20525에서 본문에서 제거되고 세션 제목으로 소비된다. ORDER는 tfOrderCard25108→draft 저장, 별도 odPlace의 연결확인으로 이어진다. 태그 출력만으로 실제 주문권한/등록을 증명하거나 원본 UI 삭제를 승인하지 않는다. 원문을 유지한 안전한 초안/승인 producer는 별도 계약으로 연결해야 한다. 최초 blind review와 후속 consumer amendment를 덮어쓰지 않고 함께 보존했다.
+
+AGY default에 gemini-3.8-flash-high를 지정한 좁은 일관성 검토는 성공했다. 전체18응답 형식 목록은5분 timeout/빈응답/검증exit1이었고, 같은 profile/model의 P01·P05·P07 좁힌 후속은 actual0으로3문장/5문장/영어→일본어→영어를 확인했다. 모델명을 attestation하지 않는 CLI 응답이므로 requested model만 기록한다. 하향대체0·고객API/운영/주문/새whole0이다. 첫 QA 포장 출력한도와 문서 patch context 준비오류는 제품·모델실패가 아니며 원자료를 보존했다. runtime/prompt/UI 변경0이고 MODEL_QUALITY_NO_GO / SERVICE_NO_GO다.
+
 ## 1. 동일 턴 provider 오류 뒤 자동 재dispatch
 
 - 원인: Worker의 `blocks`는 tool block만 추적한다. 텍스트 출력·token관측·완료 tool 이후 맵이 비어도 output0이 아니다. fast400/403/429와 standard403 재시도는 실패 시도를 modelCalls에서 차감해 부분 답변 뒤 대체 답변/완료와 비용 추적 불일치를 만들 수 있었다. SDK 자체 retry도 명시 차단되지 않았다.

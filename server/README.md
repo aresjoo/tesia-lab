@@ -1,5 +1,7 @@
 # 투자 상담 프록시와 공개 개발 검증
 
+원본9fb↔교정417767c의 최신 한정 비교는 [실제18응답·블라인드검수·소비코드재검토](qa/prompt-comparison.json)를 따른다. 동일 personal(1) Opus5.5/high/tools0 조건의 개선본6선호/1동률은 광범위 우월성이나 고객API 합격이 아니다. 정확문장수·짧게·외부검증 개념혼동·장문이 남아 기존 QA4FAIL과 MODEL_QUALITY_NO_GO를 유지한다. 원본 TITLE 세션명/ORDER 초안카드는 실주문 권한과 구분하며 이 비교를 원문 UI 삭제 승인으로 사용하지 않는다. 운영 source13a/edge7e·React snapshot·실provider는 불변이다.
+
 서버 소유 정책 `teth-investment-prompts-1.24.0`을 Node loopback와 Worker가 소비합니다. 금융·경제·기업·포트폴리오·전략을 넓게 상담하며, 자유 텍스트에는 주문·예약·DraftPatch 반영 권한이 없습니다. **migration 대상 draft, SERVICE_NO_GO**입니다. React의 local Mock producer와 AI40의 offline compiler에는 이 정책이 적용되지 않습니다. 승인 Strategy Version→결정론적 Validator/Risk Engine→OrderIntent는 별도 서버 경로입니다.
 
 ## Anthropic 활성화 준비의 국소 후속

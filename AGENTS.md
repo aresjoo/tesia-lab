@@ -114,6 +114,7 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | 경로 | 현재 역할 |
 | --- | --- |
 | `server/README.md`, `server/investment-*.mjs`, `server/tests/` | 투자 상담 정책 registry·요청/출력 검증·단순 Mock 설정 진입·공개 개발 반례·실제 route SDK fixture. 주문 계약과 provider/공개 배포 완료가 아님. |
+| `server/qa/prompt-comparison.json` | 원본9fb와 교정417767c의 동일 개발CLI18응답·블라인드 Opus검수·소비코드 amendment·AGY 국소형식목록. 기존 QA FAIL을 보존하며 고객API/모델품질/서비스GO가 아님. |
 | `.github/workflows/server-quality.yml` | credential 없이 상담 프록시의 check/test를 PR에서 실행. main 배포에는 동일 검증을 선행. |
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
 | `artifacts/teth-redesign/` | 전략 목록과 상세 개편(2026-09-29)의 기록. 라운드별 Claude, Codex 비평(`r0` ~ `r8`), 기준과 최종 스크린샷, `tools/` 에 `index.html` 의 `MK_CAT`, `RD_CORE`, `RD_CSS` 블록을 만드는 소스와 적용 스크립트가 있다. 세 판단 방식(직접 탐색, 조건 실행, 혼합)은 하나의 원장 엔진으로 계산한다. |
