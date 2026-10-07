@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "통합 a691e44 전체 React snapshot과 운영13a 인증복구후속3건의 한정배포/공개검증을 전달한다. 관련158PASS는 전체회귀/실OAuth/전체서비스GO가 아니다. 원root/main/Node/Worker와 이전candidate/FAIL/HOLD/730일은 보존한다.",
-  "sourceCommit": "a691e4473d8c5a92d9b8b3ca25023d1c37cf1d45",
+  "purpose": "통합06488ea 전체 React snapshot, 별도 Infra SVG edge 실제 배포, 인증 예외 부분검증과 실제 AI 호출경로 감사를 전달한다. 운영 제품 source13a는 불변이며 전체회귀/실OAuth/전체서비스GO가 아니다. 원root/main/Node/Worker와 이전candidate/FAIL/HOLD/730일은 보존한다.",
+  "sourceCommit": "06488ea288a7f693ebf3696820303cb26f58ad11",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "849b3c23a71a8d5e381c76caa14927c124ef3208dde919d78c2f9d7f98eecd92",
+  "snapshotDigest": "8debab80d22b95c5a0f934ef44b0cdb14eaf7719e89736e360b1862f976a3802",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2360,
-    "bytes": 33583371,
+    "files": 2361,
+    "bytes": 33617677,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -731,6 +731,25 @@
     }
   ],
   "candidate": {
+    "currentPublicSvgEdgeIsolation": {
+      "status": "OPERATING_EDGE_APPLIED_PUBLIC_VERIFIED_SCOPED",
+      "frontendOperatingSource": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
+      "infraBranch": "agent/infra/static-svg-isolation",
+      "infraCommit": "909ec251ebc3bbc23bd84e3aacd27f7bf704bc2b",
+      "infraRepository": "https://github.com/beak1011/tesia-infra",
+      "oldEdgeSha256": "b050515476057fa9b504024a8133b3e6497659f29b7c1d1f49cfd8e2a8042dd0",
+      "operatingEdgeSha256": "7e9341b05aa8cc4d1cfb5d44e934bf339ffc95f675c0d8d6c3e024ac3fc0aec5",
+      "scope": "avgo.svg/msft.svg exact GET/HEAD static routes only; existing no-store/CSP, API/HTML/auth/provider/flags unchanged; no app restart",
+      "tests": {"realNginxTlsPassed": 7, "operatorPassed": 9, "publicSvgGets": 16, "maximumProbeConcurrency": 4, "wholeRegressionRuns": 0},
+      "independentReview": "personal(1) direct claude-opus-5-5 high; initial HOLD preserved; final STATIC_SVG_RELEASE_GO C0/H0/M0/Low10",
+      "authExceptionChecks": {"passed": 20, "originalCases": 16, "newCases": 4, "environment": "synthetic loopback only; no product edit/provider forwarding"},
+      "aiRuntimeAudit": {"originalLab": "Anthropic SDK API/SSE; Worker optional Cloudflare AI Gateway", "currentOperatingBackend": "TesiaAiCompilerAdapter without gateway; offline/recorded compiler", "subscriptionCli": "development/eval/review only, not customer routing", "openAiPreparation": "opt-in HTTPS Responses adapter exists; not injected into operating compiler"},
+      "evidenceWorkspaceRelative": [".cache/frontend-parity-audit/static-svg-final-validation.receipt.json", ".cache/frontend-parity-audit/static-svg-review-followup.receipt.json", ".cache/frontend-parity-audit/static-svg-activation.receipt.json", ".cache/frontend-parity-audit/static-svg-postflight-vm.receipt.json", ".cache/frontend-parity-audit/static-svg-public-check.receipt.json", ".cache/frontend-parity-audit/auth-exception-followup/run/receipt.json"],
+      "remaining": ["historical 504 root cause/general capacity", "EMAIL/HANDOFF storage and token policy checks", "whole original layout/motion and localization review", "actual login/Safari/accessibility/3000-user load", "actual AI/research/storage/trading end-to-end", "next frontend deploy must use reviewed new edge pin"],
+      "serviceGo": false,
+      "providerActivated": false,
+      "historicalFailuresAnd730DayEvidencePreserved": true
+    },
     "currentAuthRecoveryLowThreeCandidate": {
       "sourceCommit": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
       "integrationSourceCommit": "ac337f7190871cebc082e644a08176d2dd498d80",

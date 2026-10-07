@@ -1,5 +1,13 @@
 # TETH 버그 수정·검수 보고서
 
+## 후속 점검 — 인증 추가 예외와 실제 AI 호출 경로
+
+프론트 제품 운영source13a/Appaa803632·카피/CSS/SVG/API/flags는 불변이다. 이전28개 이탈/지연/세션 시험은 새 단일28PASS/29.5s이며, 추가 private 하니스는 원 storage16/90expect를 그대로 보존하고 journal 부분 저장 성공→삭제 실패·CSRF회전 명시재시도4를 추가해 **20PASS/20.3s/actual0**을 확인했다. 원spec/src745/config/package/harness의 전후SHA를 결속했고 API/provider forward0다. `.cache/frontend-parity-audit/auth-exception-followup/run/receipt.json`가 원자료다. EMAIL/HANDOFF 저장실패·동일identity회전·후속mutation토큰 전달은 이 실행의 범위 밖이다. 시험준비/제품변경/전체회귀/실로그인 성공으로 포장하지 않는다.
+
+현재 VM installed deployment가 `TesiaAiCompilerAdapter()`를 gateway 없이 조립하는 것과 Google-only/거래소 비활성 runtime을 읽기 확인했다. 원본 Lab Node/Worker의 Anthropic SDK API/SSE는 별도 경로이며 현재 NativeServiceApp v3 conversation의 offline/recorded 전략 compiler와 연결 완료가 아니다. OpenAI opt-in Responses leaf도 준비 코드이고 기본 adapter에 주입되지 않는다. personal(1) CLI·AGY는 개발/검수 도구이며 고객 구독형 CLI 라우터가 아니다. 역사 model-routing 작업명은 역할 분배 설계·검수 정책이다. keys/secrets/env 값은 출력하지 않았다.
+
+SVG upstream 분리는 별도 Infra branch `agent/infra/static-svg-isolation`의 정확2파일 경로만 운영반영했다. 국소 Nginx7·제어9 actual0, 최초 독립HOLD를 보존하고 구분ETag/복원 공백 교정 뒤 새 personal1 Opus5.5 STATIC_SVG_RELEASE_GO C0H0M0/Low10을 확인했다. 활성화actual0·공개 max동시4의16SVG GET exact/staticETag·root HTML 기존transform/source13a exact·익명session401/Apple404·앱 MainPID/기동timestamp 불변·안전로그2행을 확인했다. 현재edge7e9341이며 이전frozen UI updater b050 pin은fail-closed하므로후속UI배포는새pin소비도구검수필수다. 정확근거는 `.cache/frontend-parity-audit/static-svg-{activation,postflight-vm,public-check}.receipt.json`와Infra Bugfix를따른다. 두SVG upstream의존은제거했지만history504원인확정/전체원본배치·모션·전문장·실AI/연구/저장/거래·Safari/3천명은잔여다. 이전전체회귀/158/배포91을이번추가검증의전체완료로합산하지않는다.
+
 ## 현재 — 인증 잔여3건 운영 배포·공개 검증 완료
 
 운영source `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`는 통합ac337의 App1/시험2와bytes exact다. 저장 실패 명시재시도·미전송 입력/닫기재열기·EMAIL 기존null, 후속GET/revision/CSRF 실패의 복구창/초점과7언어 차단 안내를 교정했다. 원8spec/다른auth3/카피/SVG/CSS/SDK/API/flags/주문권위는 불변이다. 단일158PASS/actual0(27920), lint47108/build7670/scan0, compiled16(46916)+ACK2(54992)+core105routes42CTA(61147)를 각범위로 결속했다.
