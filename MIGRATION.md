@@ -2,6 +2,12 @@
 
 ## 최신 전달·정적 운영 확인
 
+### Anthropic 대화 활성화 준비 — 별도 코드 후보 인계
+
+원본main의 Anthropic API/SSE, 로컬1.24 개선본, 현재운영 React v3 JSON/offlinecompiler, 개발 구독CLI는 서로 다른 경로다. 모델/일일비용/credential 준비는 사용자 조사 보고 후 결정하며 이번 provider·운영AI·주문 활성화0다. 별도 [agent/lab/anthropic-activation-guards](https://github.com/aresjoo/tesia-lab/tree/agent/lab/anthropic-activation-guards)의 Node/Worker retry0·같은turn 오류 재dispatch 제거·번역target 경계와 신규fixture·provenance시험을 인계한다. [server/Bugfix_report.md](https://github.com/aresjoo/tesia-lab/blob/agent/lab/anthropic-activation-guards/server/Bugfix_report.md)에 코드/원RED/관련470·후속15/57·잔여가 있다. 새Opus5.5 SCOPED_GO는 배포/모델품질/전체서비스GO가 아니다. 과거92답변/QAFAIL/원본root/현재React snapshot은 그대로 보존했고, 이 migration에 provider후보 코드를 섞지 않았다. 정확ref와최신활성화계약준비는 Program§16/Ledger를 따른다. 고객대화/연구실제producer 연결과금액/동시성제한은 아직필요하다.
+
+### 기존 정적 프론트 운영·스냅샷
+
 최신 전체 React snapshot은 통합 `06488ea288a7f693ebf3696820303cb26f58ad11`의 2361파일/33,617,677bytes/SHA `8debab80d22b95c5a0f934ef44b0cdb14eaf7719e89736e360b1862f976a3802`이며 공식 sync/verify로 확인했다. 이번 React 변경은 Bugfix 문서뿐이며 실제 운영 제품 source `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`와 원root/Node/Worker는 불변이다. 두 기업 SVG의 백엔드 의존을 제거한 Infra `909ec251ebc3bbc23bd84e3aacd27f7bf704bc2b`/edge `7e9341b05aa8cc4d1cfb5d44e934bf339ffc95f675c0d8d6c3e024ac3fc0aec5`는 운영에 반영했다. 실제 Nginx 7·제어 9 PASS, 새 personal(1) Opus5.5 GO C0/H0/M0, 원자 CAS·백업·graceful reload와 공개 SVG 16 GET exact/정적 ETag·HTML/익명 API 유지·앱 무재시작을 확인했다. 과거 504의 근본 원인·전체 용량 문제 해결은 주장하지 않는다. 후속 UI 배포는 새 edge pin을 사용하는 별도 검수 도구가 필요하다.
 
 인증 journal 정리 실패/CSRF 회전의 private 합성 후속은 원16+신규4=단일20 PASS이며 EMAIL/HANDOFF·실OAuth·Safari·전체 원본 배치/모션·전 문장·3,000명/전체서비스 검증은 남는다. 실제 운영 AI는 gateway 없는 offline compiler이고, 원Lab Anthropic API/SSE·개발 구독 CLI는 다른 경로다. OpenAI HTTP API 준비 코드도 운영 adapter에 연결된 상태가 아니다. 현재 상세 권위는 `candidate.currentPublicSvgEdgeIsolation` 및 [누적보고서](react-app/Bugfix_report.md), 이전 인증 배포는 `candidate.currentAuthRecoveryLowThreeCandidate`를 따른다. 기존 candidate/FAIL/HOLD/730일과 원본 source는 보존하고 부분 PASS를 전수·실서비스 완료로 합산하지 않는다. 아래 다른 source·최신·미배포 표현은 당시 이력이다.
