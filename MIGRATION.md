@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 상담 application 후보 — 정상 흐름 확인, HTTP·실서비스 보류
+
+[Backend 구현9a2a9b5](https://github.com/beak1011/tesia-backend/tree/9a2a9b5628dfad77e5608c60caf225b280133423)와 [문서 전달6f3afb6](https://github.com/beak1011/tesia-backend/tree/6f3afb6540ebddd356ded2fad8310d1e320f2710)에 새 application/store/projection3개와 관련 시험3개를 전달했다. 기존 shared session/CSRF·같은 물리 transaction·durable runner를 재사용하며 요청 멱등 replay, 연속 API13 event, owner-bound history cursor, 취소·재시작 복구를 연결하는 서버 소스 후보다. 기존212개 Python bytes는 보존했고 현재 source215개다. 이전 manifest212/package237 설치 승인을 새 source의 설치 승인으로 승계하지 않는다.
+
+검수 중 취소 승인과 실행 권한의 경합, 정산된 usage의 UNKNOWN 표시, 같은 시각에 저장된 메시지의 순서 오류를 수정했다. 마지막 관련7PASS와 이전 실행의 최신45개 시험 키 합집합은 **최종 source의 단일45PASS가 아니다**. ROOT의 별도 정상 흐름4개는 actual0으로 완료했다. 독립 personal(1) Opus5.5의 C0/H0/M3/Low7 코드한정 GO와 별도로 HTTP/서비스는 HOLD다. 남은 확정 문제는 invalid-output이 동일 대화·취소를 막는 경로, reserve Decision의 예산/token/input 오류 매핑, 무제한 history snapshot과 긴 쓰기 transaction이다. 각 원실패·최소교정안·추가 합격 조건은 [후보 Bugfix 보고서](https://github.com/beak1011/tesia-backend/blob/6f3afb6540ebddd356ded2fad8310d1e320f2710/Bugfix_report.md)와 [현재 Program 정본5d7c320](https://github.com/beak1011/tesia-program/tree/5d7c32022a0067fcd2e8a22273860350fb5b356d)이 소유한다. 최소안은 읽기전용 조사이며 공용 오류/복구 의미를 임의 변경하지 않는다. 교정 뒤 같은 최종 source의 관련45를 한 번 검증하고 전체/730일 회귀를 반복하지 않는다.
+
+AI 새 개발 패키지의 owning 저장소 Immutable releases 설정은 꺼져 있다. 저장소 전체 정책 변경 여부를 사용자에게 확인 중이며 설정·tag·release를 임의 변경하지 않았다. Backend 새AI pin/envelope/worker 재결속도 아직 미완료다. 거래소 읽기전용 조사에서는 encrypted vault·권한 verifier의 존재와 함께 실제 composition 주입, Bitget callback 발신자 신뢰 구현, 직접 key ingress, 실주문·체결 복구 연결의 누락을 확인했다. local-only 연결 해제를 원격 key 폐기나 주문 중지로 표시하지 않는다. 사용자 준비물은 Program §17.1의 기존 **한 양식**에 모았다.
+
+이번 전달은 source-only다. 고객 provider·실주문·운영 배포0이며 React2362/sourcebe0/snapshot04f0b06c·원본 root Node/Worker·카피/SVG·운영 source13a/edge7e는 변경하지 않았다. 아래 설치·leaf 검증 수치는 당시 별도 범위이고 새 application/실서비스 전체 승인과 합산하지 않는다.
+
 ### 상담 연결 후속 — 계약 개발 패키지 발행, 원본 React 불변
 
 원본 화면·카피·SVG·대화/연구 UX와 React2362/snapshot04f0b06c는 이번 후속에서 변경하지 않았다. 운영 source13a/edge7e도 불변이다. Backend 구현을 이 저장소의 Node/Worker나 React snapshot에 복사하지 않고 owning branch로 전달한다.
