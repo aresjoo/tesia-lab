@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "통합06488ea 전체 React snapshot, 별도 Infra SVG edge 실제 배포, 인증 예외 부분검증과 실제 AI 호출경로 감사를 전달한다. 운영 제품 source13a는 불변이며 전체회귀/실OAuth/전체서비스GO가 아니다. 원root/main/Node/Worker와 이전candidate/FAIL/HOLD/730일은 보존한다.",
-  "sourceCommit": "06488ea288a7f693ebf3696820303cb26f58ad11",
+  "purpose": "통합be0eb054 전체 React snapshot과 FR 용어 제목 교정, 별도 Lab의 동일조건 프롬프트 비교를 전달한다. 운영 제품 source13a/edge7e는 불변이며 전체회귀/실OAuth/전체서비스GO가 아니다. 원root/main/Node/Worker와 이전candidate/FAIL/HOLD/730일은 보존한다.",
+  "sourceCommit": "be0eb0541631bb5db554cf1aa35da8525fcadd7d",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "8debab80d22b95c5a0f934ef44b0cdb14eaf7719e89736e360b1862f976a3802",
+  "snapshotDigest": "04f0b06cb8c0ec3bdaebb7e8dc2e8084f8c63959ba06535ad9a63720e6c6a364",
   "dependencyAudit": {
     "status": "PASS_SCOPED_PRODUCTION_DEPENDENCY_AUDIT",
     "sourceRoot": "/home/beak1/workspaces/active/TETH/worktrees/web-catalogue-evidence-restoration",
@@ -66,8 +66,8 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2361,
-    "bytes": 33617677,
+    "files": 2362,
+    "bytes": 33624492,
     "sourceDirtyFiles": [],
     "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
     "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
@@ -731,6 +731,28 @@
     }
   ],
   "candidate": {
+    "currentPromptComparisonAndGlossaryRepair": {
+      "status": "SCOPED_COMPARISON_AND_UI_FIX_DELIVERED_NOT_DEPLOYED",
+      "reactSource": "be0eb0541631bb5db554cf1aa35da8525fcadd7d",
+      "isolatedUiCommit": "0562995b2e3b4141cdadd1504f61cd3e0234e70f",
+      "labComparisonCommit": "4a81421575e94d0fbd02217c8e98d755893e5095",
+      "comparisonArtifact": "https://github.com/aresjoo/tesia-lab/blob/4a81421575e94d0fbd02217c8e98d755893e5095/server/qa/prompt-comparison.json",
+      "promptEvaluation": {
+        "cases": 7, "actualResponses": 18, "respondentModel": "claude-opus-5-5", "actualExit": 0,
+        "blindReviewPreferredCandidate": 6, "blindReviewTies": 1,
+        "scope": "Developer CLI only; separate sessions and randomized arm labels; not actual SDK/customer API acceptance or statistically powered quality proof",
+        "unresolved": ["P01 exact two sentences returned three", "P05 own short-response policy returned five sentences", "P05 external validation conflated with cost settings", "P06 unnecessary outline and internal names", "previous four model QA failures retained"],
+        "agy": {"requestedModel": "gemini-3.8-flash-high", "actualModelAttested": false, "boundedReviewExit": 0, "fullInventoryValidationExit": 1, "narrowFollowupExit": 0},
+        "orderConsumerAudit": "Original TITLE is stripped from visible content and saved as a session title. ORDER creates a draft card; explicit odPlace and connection gates remain. Raw tag output is not evidence of actual order execution and does not justify removing original UI.",
+        "broadSuperiorityProven": false, "modelGo": false, "serviceGo": false
+      },
+      "glossaryRepair": {"locale": "fr", "key": "meaning", "text": "Définition : {term}", "relatedTestsPassed": 7, "popupObservations": 42, "actualExit": 0, "scopedLintExit": 0, "typeAndServiceBuildExit": 0, "integratedSourceAndTestInputsExact": 778, "deployed": false},
+      "webkit": {"actualExit": 1, "browserBinaryPresent": true, "missingHostLibraries": 33, "productExecuted": false, "safariPassed": false},
+      "operatingSource": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
+      "operatingEdgeSha256": "7e9341b05aa8cc4d1cfb5d44e934bf339ffc95f675c0d8d6c3e024ac3fc0aec5",
+      "customerApiActivated": false, "tradingActivated": false, "newWholeRegressionRuns": 0,
+      "remaining": ["All original screens, layouts, motions and states", "All foreign-language sentences in context", "Actual OAuth success", "Safari and assistive technology", "3000-user realistic load", "Historical SVG504 cause; current 200 responses do not prove it"]
+    },
     "currentPublicSvgEdgeIsolation": {
       "status": "OPERATING_EDGE_APPLIED_PUBLIC_VERIFIED_SCOPED",
       "frontendOperatingSource": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
@@ -1787,7 +1809,8 @@
     },
     "status": "INTEGRATED_FIX_CANDIDATE_DELIVERED_NOT_DEPLOYED",
     "sourceBranch": "agent/web/help-policy-link-parity",
-    "sourceCommit": "2cb3e9d203b7bec08a1bc1de87392324cb623033",
+    "sourceCommit": "be0eb0541631bb5db554cf1aa35da8525fcadd7d",
+    "previousIntegratedSourceCommit": "2cb3e9d203b7bec08a1bc1de87392324cb623033",
     "currentStaticUiPromotion": {
       "sourceCommit": "8a757a523a1f40da366b16584561c5635b9296a1",
       "validatedProductCommit": "78507d63fe9d3c6ae2249f00adecc5ad220021d5",
@@ -5255,8 +5278,9 @@
     ],
     "actualProviderStatus": "Google callback/ACK 미검증; Apple운영등록/emailSMTP 미완료·기존 선택지 준비중 보존",
     "promptProducerIntegrated": false,
-    "activeProductionSource": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
-    "deploymentEvidenceScope": "root deployment와 historicalProduction*는 이전7dd066f에만 적용; candidate를 운영PASS로 해석하지 않음",
+    "activeProductionSource": "13a958b38ccd2a9346417ad7739aaa58c9a25c4b",
+    "previousProductionSource": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",
+    "deploymentEvidenceScope": "root deployment와 historicalProduction*는 이전7dd066f 이력이다. 현재13a 배포는 currentAuthRecoveryLowThreeCandidate, edge7e는 currentPublicSvgEdgeIsolation을 따른다. 새로운 FR 후보를 운영PASS로 해석하지 않음",
     "activationExecuted": false,
     "fullServiceGo": false,
     "preservedPreviousWhole": {

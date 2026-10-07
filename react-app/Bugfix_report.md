@@ -1,5 +1,11 @@
 # TETH 버그 수정·검수 보고서
 
+## 병렬 복구 잔여 검수 — 프랑스어 용어 제목 후보 인수
+
+격리 `agent/web/glossary-locale-repair@0562995`의 FR `meaning` 1키와 신규 `client-glossary-heading-locale.spec.ts`만 인수한다. 원본의 관사/전치사 결합 오류를 `Définition : {term}`으로 교정하며 한국어·다른5외국어·label/body·component/handler/CSS/SVG/auth/API/flags는 바꾸지 않는다. 인수 전 src/package/config/HTML 776개를 직접 대조했고 차이는 허용된 dictionary 1개뿐이었다. 새 시험의 원2FAIL과 후보 신규2+기존5의 단일7PASS/11.067s, 42popup관측·scopedlint/타입servicebuild0는 격리 후보 원자료다. 전수나 통합에서 새로 실행한 7PASS로 재집계하지 않는다.
+
+ROOT가320px PNG를 확인했고 default AGY의 지정3.8flashhigh 좁은 문구 검토를 수용했다(실제모델명 attestation은 CLI 응답에 없음). 추가 WebKit2는 host shared library 누락으로 browser launch 실패·actual1/제품실행0이며 Safari통과나제품버그2건이아니다. 전체 원본 배치/모션·전문장·실OAuth/AT/3000·SVG504 역사 원인은 여전히 미완료다. 실제운영 source13a/edge7e는 이 인수로 변경하지 않았고 main병합/provider/주문 활성화0이다. Git/migration 전달과 배포를 구분한다.
+
 ## 후속 점검 — 인증 추가 예외와 실제 AI 호출 경로
 
 프론트 제품 운영source13a/Appaa803632·카피/CSS/SVG/API/flags는 불변이다. 이전28개 이탈/지연/세션 시험은 새 단일28PASS/29.5s이며, 추가 private 하니스는 원 storage16/90expect를 그대로 보존하고 journal 부분 저장 성공→삭제 실패·CSRF회전 명시재시도4를 추가해 **20PASS/20.3s/actual0**을 확인했다. 원spec/src745/config/package/harness의 전후SHA를 결속했고 API/provider forward0다. `.cache/frontend-parity-audit/auth-exception-followup/run/receipt.json`가 원자료다. EMAIL/HANDOFF 저장실패·동일identity회전·후속mutation토큰 전달은 이 실행의 범위 밖이다. 시험준비/제품변경/전체회귀/실로그인 성공으로 포장하지 않는다.
