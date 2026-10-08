@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최신 전체 React snapshot은 통합 `be0eb0541631bb5db554cf1aa35da8525fcadd7d`의 2362파일/33,624,492bytes/SHA `04f0b06cb8c0ec3bdaebb7e8dc2e8084f8c63959ba06535ad9a63720e6c6a364`다. FR 용어 제목 1키·신규 시험은 관련7PASS/42팝업·lint/타입/servicebuild0이며 운영 미배포다. 독립 동일조건 프롬프트 비교 원문18응답은 별도 Lab `4a81421575e94d0fbd02217c8e98d755893e5095`의 server/qa/prompt-comparison.json을 따른다. 부분 개선은 관측했지만 기존4FAIL과 새 길이/의미 잔여를 닫지 않았고 모델/서비스GO=false다. 운영 UI13a/edge7e는 불변, 원root/Node/Worker·원FAIL/HOLD/730일은 보존한다. 전체 화면·모션·상태/전문장/실OAuth/Safari/AT/3000명/역사504 원인은 미완료다. 다른 전달 당시의 최신·현재는 아래 이력이며 snapshot은 직접 고치지 않고 공식 sync/verify만 사용한다.
+최신 전체 React snapshot은 Web863bc32의 2378파일/33,864,394bytes/SHA57a03350이다. 제품 source는 ec15de3 그대로이고 신규 realHTTP 브라우저 시험1/누적보고서만 후속이다. 실제 session/CSRF/HTTP/DB와 fake HTTPS provider의 두 키가2PASS/actual0/110.461초지만 고객 Anthropic/Bitget 주문·3,000명·운영 GO는 아니다. sourceDirtyFiles·삭제0/공식 sync·verify0, owning Backend62a8196/API14Contracts6350837과 정확 receipt는 migration-verification.json을 따른다. 원제품/root Node·Worker/운영13a·edge7e/기존FAIL/HOLD/730일을 보존하고 snapshot은 직접 수정하지 않는다. 자동 라우터·크레딧 총액/기한·API14 host/실provider·실주문은 미완료다. 아래 최신/현재 표현은 각 전달 당시 이력이다.
 
 인증 journal 정리 실패/CSRF 회전의 private 합성 후속은 원16+신규4=단일20 PASS이며 EMAIL/HANDOFF·실OAuth·Safari·전체 원본 배치/모션·전 문장·3,000명/전체서비스 검증은 남는다. 실제 운영 AI는 gateway 없는 offline compiler이고, 원Lab Anthropic API/SSE·개발 구독 CLI는 다른 경로다. OpenAI HTTP API 준비 코드도 운영 adapter에 연결된 상태가 아니다. 현재 상세 권위는 `candidate.currentPublicSvgEdgeIsolation` 및 [누적보고서](react-app/Bugfix_report.md), 이전 인증 배포는 `candidate.currentAuthRecoveryLowThreeCandidate`를 따른다. 기존 candidate/FAIL/HOLD/730일과 원본 source는 보존하고 부분 PASS를 전수·실서비스 완료로 합산하지 않는다. 아래 다른 source·최신·미배포 표현은 당시 이력이다.
 

@@ -1,5 +1,19 @@
 # TETH 버그 수정·검수 보고서
 
+## 실제 Backend↔React HTTP 브라우저 검증 — 로컬 두 흐름 통과, 고객 provider 미연결
+
+신규 live-loopback spec1과 Backend 신규 harness1로 실제 session/CSRF/HTTP/DB/fake HTTPS를 연결했다. 쿠키 주입·HTTP 응답 대체·고객 API/주문0이다. 초기 브라우저 설치/LD누락과 Secure127 cookie filtered조회·CDP본문 수명·APIRequestContext 쿠키 전송 실패는 시험환경/오라클 오류로 분리해 원 raw를 보존했다. 브라우저의 실제 same-origin fetch로 capabilities200/API0.13.0/available=true와 쿠키 속성을 확인한다.
+
+source6404f1ba 첫 시나리오는 durable create gate까지 성공했지만 비필수 requestfailed 이벤트 대기에서 FAIL했다(raw3dd8dfed). 새 문서의 재개 버튼·부분답변을 직접 확인하는 spec9574fbc3으로 좁혔다. 별도 explicit-cancel1의 DEADLINE/actual1(rawb3de2d02) 뒤 최종 안전 진단에서는 세션·CSRF200과 cancel200을 확인했다. gate-diagnostic actual1의 stderr SHA3613421f에서 provider gate 경과6.859/13.807/21.145초·마지막 timedOut=true/providerClosed=true/intent0이다. 시험용15초 gate가 계약 검증을 거치는 취소 commit보다 먼저 만료된 증거이며 취소 미전송·provider-partial 실패라는 중간 가정은 정정했다. 제품 결함이나 3,000명 성능 검증으로 확대하지 않는다.
+
+native fixturea3abe018은 test-only gate60초/config runner90초로 조정했다(제품 timeout/권한/기존 terminal 단언 불변). 직접 mounted held-cancel의 statuses401/201/200/200/202/200·partial/cancel-intent·정상 종료 actual0, compile/diff-check0은 receipt4abe67fa에 결속한다. 이 시험환경 교정 후 ROOT의 실제 두 브라우저 키 실행 결과는 `consultation-real-backend-react-final-two.receipt.json`을 따른다. 이전 FAIL은 보존하고 부분/direct 성공을 브라우저2PASS로 합산하지 않는다.
+
+전체회귀·새빌드·고객 provider/주문/운영0이다. 시간제한·동일key/provider단회/취소/Origin/CSRF 조건을 면제하지 않는다. 최종 동결·실행·Git/migration은 Program Ledger에서 누적한다.
+
+모인 두 키 첫 실행은 실제1FAIL/둘째NOT_RUN·actual1이다. replay create2/provider1/events200을 확인했으나 화면 partial assertion10초가 누적 HTTP15.868초보다 짧았다(stdout03c71d49/stderrccd5e78d/소스8불변). 새 specf9fdabbe는 관련 response-state 단언5개만25초로 바꾸고 global expect10초/gate20초/test120초·동일 selector/receipt/cardinality를 유지했다. eslint0, 재실행은 `consultation-real-backend-react-observation-two.receipt.json`으로 별도 인수한다. 운영 지연/성능 합격이나 최종 서비스 GO로 쓰지 않는다.
+
+최종 모인 실제 HTTP 브라우저2키는 **2PASS/actual0**, 110.461초다. receipt SHA2e23348a·stdoutd69af21e·stderr34492c53, source8 전후불변이다. 응답유실→명시same-key replay(create2/idem1/provider1)→reader detach/reload→서버확인 partial→done, 명시 중지(create1/cancel1/intent1/provider1)→partial 보존/interrupted를 확인했다. 각 Origin/CSRF·provider path/connection/response close가 true이고 legacyv3 POST0이다. fixture HTTPS 응답을 사용했으며 고객 API key/provider network/주문0, Chromium loopback 한 범위다. 이전 FAIL을 지우거나 실Anthropic/GoogleOAuth/Bitget/3,000명/운영 GO로 올리지 않는다. 완료 뒤 ROOT 소유 임시 node_modules symlink만 제거했고 실제 의존성 디렉터리는 보존했다.
+
 ## 최신 상담 복구 교정 — pending·history 경합과 타입 빌드
 
 발행 API13 adapter/controller와 기존 Native/Client seam의 관련25PASS(raw37042842) 뒤, 보수적 응답유실 처리·same-key single-flight·이미 수락된 pending turn 채택·취소 관찰을 후속4키로 검증했다(actual0/rawd01e9a20). 이는 각 당시 source의 범위이며 최종29PASS로 합산하지 않는다. final direct personal1 Opus5.5 `web-consultation-v13-final-delta-opus-review.receipt.json`은 actual0/modelMatched/입력불변 SCOPED_CANDIDATE_GO C0H0M2Low4다. 지적한 null-conversation pending 정리 실패 중복과 concurrent turn GET/history 단조성 경합은 같은 controller/test2에서 교정했다.
