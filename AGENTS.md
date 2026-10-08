@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+현재 실행연결 개발은 `currentConsultationActivationDevelopment`를 따른다. Backend7f871a0의 routing8/creditleaf3는 owning branch에 실제 전달됐고 라우터Opus C0H0M0Low5와 새 fixed HTTP2PASS는 코드/시험 한정이다. credit 추가검수 C0H0M2Low4 HOLD 및 private routed CLI/startup gate의 후속 native 경계를 구분한다. API14 package/oracle교정은 아직 immutable발행/host이관 성공이 아니다. 새후보를 React/root Node·Worker에 복사하거나 원본 UI/카피/SVG·기존 로그인/모바일설정 경로를 변경하지 않는다. 최신 개발 source와 운영13a/edge7e·아래 당시refs를 구분하며 사용자 준비물은 Program§17.1만 사용한다.
+
 최신 전체 React snapshot은 Web863bc32의 2378파일/33,864,394bytes/SHA57a03350이다. 제품 source는 ec15de3 그대로이고 신규 realHTTP 브라우저 시험1/누적보고서만 후속이다. 실제 session/CSRF/HTTP/DB와 fake HTTPS provider의 두 키가2PASS/actual0/110.461초지만 고객 Anthropic/Bitget 주문·3,000명·운영 GO는 아니다. sourceDirtyFiles·삭제0/공식 sync·verify0, owning Backend62a8196/API14Contracts6350837과 정확 receipt는 migration-verification.json을 따른다. 원제품/root Node·Worker/운영13a·edge7e/기존FAIL/HOLD/730일을 보존하고 snapshot은 직접 수정하지 않는다. 자동 라우터·크레딧 총액/기한·API14 host/실provider·실주문은 미완료다. 아래 최신/현재 표현은 각 전달 당시 이력이다.
 
 인증 journal 정리 실패/CSRF 회전의 private 합성 후속은 원16+신규4=단일20 PASS이며 EMAIL/HANDOFF·실OAuth·Safari·전체 원본 배치/모션·전 문장·3,000명/전체서비스 검증은 남는다. 실제 운영 AI는 gateway 없는 offline compiler이고, 원Lab Anthropic API/SSE·개발 구독 CLI는 다른 경로다. OpenAI HTTP API 준비 코드도 운영 adapter에 연결된 상태가 아니다. 현재 상세 권위는 `candidate.currentPublicSvgEdgeIsolation` 및 [누적보고서](react-app/Bugfix_report.md), 이전 인증 배포는 `candidate.currentAuthRecoveryLowThreeCandidate`를 따른다. 기존 candidate/FAIL/HOLD/730일과 원본 source는 보존하고 부분 PASS를 전수·실서비스 완료로 합산하지 않는다. 아래 다른 source·최신·미배포 표현은 당시 이력이다.
