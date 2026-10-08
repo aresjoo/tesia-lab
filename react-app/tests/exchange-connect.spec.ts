@@ -40,7 +40,9 @@ test('실제 생성 SDK로 거래소 로그인 이동·중복 클릭·브라우�
   await page.goto('/exchange-connect-fixture.html')
   const choose = page.getByRole('button', { name: 'Bybit', exact: true })
   await expect(choose).toBeVisible()
-  await choose.evaluate(node => { (node as HTMLButtonElement).click(); (node as HTMLButtonElement).click() })
+  await choose.click()
+  const authorize = page.getByRole('button', { name: 'Bybit에서 승인하기' })
+  await authorize.evaluate(node => { (node as HTMLButtonElement).click(); (node as HTMLButtonElement).click() })
   await expect(page).toHaveURL(/^https:\/\/www\.bybit\.com\/oauth\?/)
   expect(starts).toBe(1)
   expect(requests.some(path => /order|withdraw/i.test(path))).toBe(false)
@@ -64,7 +66,7 @@ test('거래소 복귀 뒤 서버 결과를 확인하며 로컬 해제와 재연
     await route.fulfill({ response })
   })
   await page.goto('/auth/complete#exchange-transaction=' + txid)
-  await expect(page.getByRole('heading', { name: '거래소 계정 연결 완료' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '거래소 연결', exact: true })).toBeVisible()
   await expect(page.getByText('12****34', { exact: true })).toBeVisible()
   await expect(page.getByText('요청하지 않음 · 실제 권한 확인 전', { exact: true })).toBeVisible()
   await expect(page.getByText('출금 권한 없음', { exact: true })).toHaveCount(0)
@@ -106,19 +108,42 @@ test('알 수 없는 비밀 필드와 잘못된 외부 인증 주소는 성공 �
   })
   await page.goto('/exchange-connect-fixture.html')
   await page.getByRole('button', { name: 'Bybit', exact: true }).click()
+  await page.getByRole('button', { name: 'Bybit에서 승인하기' }).click()
   await expect(page.getByText('연결을 완료하지 못했습니다. 다시 시도해주세요.')).toBeVisible()
   expect(page.url()).toContain('/exchange-connect-fixture.html')
   await expect(page.getByRole('heading', { name: '거래소 계정 연결 완료' })).toHaveCount(0)
 })
 
+test('허용 목록 밖 외부 인증 주소만으로도 이동을 거부함', async ({ page }) => {
+  await sessionRoutes(page)
+  await page.route('**/api/v1/exchange-connections/**', route => {
+    const path = new URL(route.request().url()).pathname
+    const body = path.endsWith('/catalog') ? catalog : path.endsWith('/transactions')
+      ? envelope({ ...pending.data, authorizationUrl: 'https://attacker.example/login' })
+      : envelope({ connections: [] })
+    return route.fulfill({ status: 200, headers, body: JSON.stringify(body) })
+  })
+  await page.goto('/exchange-connect-fixture.html')
+  await page.getByRole('button', { name: 'Bybit', exact: true }).click()
+  await page.getByRole('button', { name: 'Bybit에서 승인하기' }).click()
+  await expect(page.getByText('연결을 완료하지 못했습니다. 다시 시도해주세요.')).toBeVisible()
+  expect(page.url()).toContain('/exchange-connect-fixture.html')
+  await expect(page.getByRole('heading', { name: '거래소 연결', exact: true })).toHaveCount(0)
+})
+
 test('미등록 거래소는 선택할 수 없고 발급되지 않은 키를 요구하지 않음', async ({ page }) => {
   await sessionRoutes(page)
-  await page.route('**/api/v1/exchange-connections/**', route => route.fulfill({ status: 200, headers,
-    body: JSON.stringify(new URL(route.request().url()).pathname.endsWith('/catalog') ? envelope({ providers: catalog.data.providers.map(provider => ({ ...provider, available: false, reason: 'PROVIDER_NOT_CONFIGURED' })) }) : envelope({ connections: [] })) }))
+  let mutations = 0
+  await page.route('**/api/v1/exchange-connections/**', route => {
+    if (route.request().method() !== 'GET') mutations++
+    return route.fulfill({ status: 200, headers,
+      body: JSON.stringify(new URL(route.request().url()).pathname.endsWith('/catalog') ? envelope({ providers: catalog.data.providers.map(provider => ({ ...provider, available: false, reason: 'PROVIDER_NOT_CONFIGURED' })) }) : envelope({ connections: [] })) })
+  })
   await page.goto('/exchange-connect-fixture.html')
-  await expect(page.getByText('아직 연결 정보가 제공되지 않았습니다.', { exact: false })).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Bybit', exact: true })).toHaveCount(0)
+  const sourceProviders = ['Bitget', 'Binance', 'OKX', 'Bybit', 'MEXC', 'WOO X', 'Gate']
+  for (const provider of sourceProviders) await expect(page.getByRole('button', { name: new RegExp(`^${provider}`) })).toBeDisabled()
   await expect(page.locator('input[type=password]')).toHaveCount(0)
+  expect(mutations).toBe(0)
 })
 
 test('실제 NativeServiceApp 명시 공급은 동일 로그인 세션으로 거래소 화면과 인증 시작을 연결', async ({ page }) => {
@@ -134,6 +159,7 @@ test('실제 NativeServiceApp 명시 공급은 동일 로그인 세션으로 거
   await page.goto('/exchange-connect-fixture.html?service=true')
   await expect(page.getByRole('button', { name: 'Bybit', exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Bybit', exact: true }).click()
+  await page.getByRole('button', { name: 'Bybit에서 승인하기' }).click()
   await expect(page).toHaveURL(/^https:\/\/www\.bybit\.com\/oauth\?/)
   expect(starts).toBe(1)
 })
@@ -240,6 +266,7 @@ test('StrictMode pending 복귀는 같은 거래소 시도만 한 번 취소하�
     await route.fulfill({ response })
   })
   await page.goto('/auth/complete#exchange-transaction=' + txid)
+  await expect(page.getByRole('heading', { name: 'Bybit 연결 확인 중' })).toBeVisible()
   const cancel = page.getByRole('button', { name: '연결 취소', exact: true })
   await expect(cancel).toBeVisible()
   await cancel.evaluate(node => { (node as HTMLButtonElement).click(); (node as HTMLButtonElement).click() })

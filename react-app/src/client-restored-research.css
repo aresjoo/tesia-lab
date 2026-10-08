@@ -1,5 +1,5 @@
 /* aresjoo/tesia-lab acccc7f gDoc / g-tabs / g-aux. Scoped migration styles. */
-.client-restored-research{--g0:#0f1012;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;--gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;--gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);--gb:#3d6ef0;--gb2:#5b8af7;--gg:#4ec08d;--gr:#e0604b;--ga:#d9a84e;--fnum:'Geist Variable','Noto Sans KR Variable',sans-serif;display:flex;flex-direction:column;min-height:0;height:100%;width:100%;min-width:0;background:var(--g0);color:var(--gt2);font-family:inherit;font-size:13.5px;line-height:1.65}
+.client-restored-research{--g0:#000;--g1:#17181b;--g2:#1d1f23;--g3:#26282c;--gt:#e3e3e3;--gt2:#c4c7c5;--gt3:#9aa0a6;--gl:rgba(255,255,255,.07);--gl2:rgba(255,255,255,.13);--gb:#3d6ef0;--gb2:#5b8af7;--gg:#4ec08d;--gr:#e0604b;--ga:#d9a84e;--fnum:'Geist Variable','Noto Sans KR Variable',sans-serif;display:flex;flex-direction:column;min-height:0;height:100%;width:100%;min-width:0;background:var(--g0);color:var(--gt2);font-family:inherit;font-size:13.5px;line-height:1.65}
 .client-restored-research *{box-sizing:border-box}
 .client-restored-research button,.client-restored-research input,.client-restored-research textarea{font:inherit}
 .client-restored-research button{cursor:pointer;border:0;line-height:1.4}
@@ -20,6 +20,12 @@
 .client-restored-research .rw-heading .g-title span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .client-restored-research .rw-heading .g-title svg{flex:none;color:var(--gt3)}
 .client-restored-research .rw-heading .g-title:hover:not(:disabled) svg{color:var(--gt)}
+/* Original desktop hover treatment; keep editing discoverable on touch. */
+@media(hover:hover) and (pointer:fine){
+  .client-restored-research .rw-heading .g-title svg{opacity:0;transition:opacity .15s}
+  .client-restored-research .rw-header:hover .g-title svg,
+  .client-restored-research .rw-heading .g-title:focus-visible svg{opacity:1}
+}
 .client-restored-research .rw-heading .g-title-input{display:block;width:100%;min-width:0;min-height:36px;padding:4px 6px;border:1px solid var(--gl2);border-radius:6px;background:var(--g2);color:var(--gt);font:inherit;box-sizing:border-box}
 .client-restored-research .rw-heading .g-title-input:disabled{opacity:.7}
 .client-restored-research .rw-heading .native-title-error{display:block;margin:2px 0 6px;color:var(--client-red,#eb786e);font-size:12px;font-weight:400;line-height:1.6;overflow-wrap:anywhere}
@@ -70,7 +76,9 @@
 .client-restored-research .g-tag.ok{color:var(--gg);border-color:rgba(78,192,141,.35)}
 .client-restored-research .g-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gt3);flex:none}
 .client-restored-research .g-dot.ok{background:var(--gg)}
-.client-restored-research .g-dot.run{background:var(--gb2)}
+@keyframes client-research-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes client-research-row-fade-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.client-restored-research .g-dot.run{background:var(--gb2);animation:client-research-pulse 1.8s infinite}
 .client-restored-research .g-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .client-restored-research .g-table th{font-size:11px;color:var(--gt3);text-align:left;padding:6px 8px;border-bottom:1px solid var(--gl);font-weight:500}
 .client-restored-research .g-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
@@ -98,7 +106,7 @@
 .client-restored-research .rw-complete{max-width:760px;margin:14px auto 0;border-top:1px solid var(--gl);padding-top:14px}
 .client-restored-research .rw-complete h3{font-size:14px}
 .client-restored-research .g-act{display:flex;flex-direction:column;max-width:760px;margin:0 auto;padding:8px 0;list-style:none}
-.client-restored-research .g-act-row{display:flex;gap:12px;padding:7px 0;font-size:13.5px;color:var(--gt2);border-bottom:1px solid var(--gl)}
+.client-restored-research .g-act-row{display:flex;gap:12px;padding:7px 0;font-size:13.5px;color:var(--gt2);border-bottom:1px solid rgba(255,255,255,.04);animation:client-research-row-fade-up .3s ease both}
 .client-restored-research .g-act-row .ts{width:36px;flex:none;padding-top:3px;color:var(--gt3);font-family:var(--fnum,'Geist',sans-serif);font-size:11px;font-variant-numeric:tabular-nums}
 .client-restored-research .g-act-row .ic{width:16px;flex:none;text-align:center;padding-top:1px}
 .client-restored-research .g-act-row.done .ic{color:var(--gg)}

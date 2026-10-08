@@ -77,7 +77,7 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
   const showPending = () => {
     if (!transaction) return
     const id = transaction.transactionId
-    emit('ready', { id: `pending:${++revision}`, kind: 'exchange', title: t('pendingTitle'), description: t('pending'),
+    emit('ready', { id: `pending:${++revision}`, kind: 'exchange', title: names[transaction.exchangeId], description: t('pending'),
       exchanges: [
         { id: 'refresh', title: t('refresh') },
         { id: 'cancel', title: t('cancel') },

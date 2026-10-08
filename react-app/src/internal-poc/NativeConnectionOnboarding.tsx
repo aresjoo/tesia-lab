@@ -1,8 +1,12 @@
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { useClientPreferences } from '../client-preferences'
+import { useConnectionLocaleText } from '../client-connection-locale-copy'
+import { planExchanges, type PlanExchange } from '../client-connection-plan'
+import { exchangeText } from '../exchange-connect/copy'
 import { connectionCopy, type ConnectionCopyKey } from './native-connection-copy'
 import { connectionPresentationBound, connectionSafeUrl, type ConnectionAction, type ConnectionGuide, type ConnectionRow, type NativeConnectionPresentation } from './native-connection-presentation'
 import '../client-delegation.css'
+import '../exchange-connect/source-parity.css'
 
 export type NativeConnectionOnboardingProps = { accountScope?: string | null; presentation?: NativeConnectionPresentation; onReturn: () => void }
 export function NativeConnectionOnboarding(props: NativeConnectionOnboardingProps) {
@@ -13,10 +17,20 @@ export function NativeConnectionOnboarding(props: NativeConnectionOnboardingProp
 function Rows({ rows }: { rows: readonly ConnectionRow[] }) {
   return <div className="tfw-sec">{rows.map(row => <div className="r" key={row.id}><span className="k">{row.label}</span><span className="v" style={{ overflowWrap: 'anywhere', minWidth: 0 }}>{row.value}</span></div>)}</div>
 }
+function SourceLogo({ exchange, size = 30 }: { exchange: PlanExchange; size?: number }) {
+  const [failed, setFailed] = useState(false)
+  const label = planExchanges.find(([id]) => id === exchange)![1]
+  return failed ? <span className="nsp-logo-fallback" style={{ width: size, height: size }} aria-hidden="true">{label.slice(0, 2)}</span>
+    : <img src={`/client-broker-assets/app-${exchange}.${exchange === 'gate' ? 'jpg' : 'png'}`} width={size} height={size} alt="" onError={() => setFailed(true)} />
+}
 function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnboardingProps) {
   const { language } = useClientPreferences(), id = useId()
+  const c = useConnectionLocaleText()
   const t = (key: ConnectionCopyKey) => connectionCopy(language, key)
   const stage = value?.state
+  const exchangeStageBinding = value && stage ? `${value.identity}\u0000${stage.id}` : ''
+  const [exchangePreflight, setExchangePreflight] = useState<{ binding: string; provider: PlanExchange } | null>(null)
+  const selectedProvider = exchangePreflight?.binding === exchangeStageBinding ? exchangePreflight.provider : null
   const [pendingId, setPendingId] = useState<string | null>(null), [notice, setNotice] = useState<'failed' | 'accepted' | 'uidInvalid' | 'apiInvalid' | null>(null)
   const pending = pendingId !== null
   const [uid, setUid] = useState(''), [guide, setGuide] = useState<ConnectionGuide | null>(null)
@@ -37,7 +51,7 @@ function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnbo
     if (!target || !visible(target) || document.hidden || document.querySelector('dialog:modal') || [...document.querySelectorAll('[aria-modal="true"]')].some(visible)) return
     const active = document.activeElement
     if (active === document.body || active === document.documentElement || !visible(active)) target.focus({ preventScroll: true })
-  }, [])
+  }, [stage?.id, selectedProvider])
   useLayoutEffect(() => {
     const inputs = [keyInput.current, secretInput.current, passInput.current]
     return () => { inputs.forEach(input => { if (input) input.value = '' }) }
@@ -116,6 +130,57 @@ function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnbo
     case 'complete':
       body = <div className="tf-donec" style={{ margin: 0, maxWidth: 'none' }}>{ready && <span className="ck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5" /></svg></span>}<div className="rows"><Rows rows={stage.rows} /></div>{stage.actions.map(action => <div key={action.id}>{button(`complete:${action.id}`, action.label, action.onRun, action.primary)}</div>)}</div>
       break
+  }
+  if (value?.identity.startsWith('exchange:') && stage?.kind === 'exchange') {
+    const choices = stage.exchanges ?? []
+    const pendingStage = choices.length > 0 && choices.every(choice => choice.id === 'refresh' || choice.id === 'cancel')
+    if (pendingStage) return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-pending" data-connection-identity={value.identity}>
+      <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('{0} 연결 확인 중', stage.title ?? c('거래소'))}</h1></header>
+        <p className="nsp-lead" aria-hidden="true">{stage.description}</p><div className="nsp-card nsp-pending-card" role="status"><i className="nsp-spinner" aria-hidden="true" /><span>{stage.description}</span></div>
+        <div className="nsp-actions">{choices.map((choice, index) => <button type="button" className={index === 0 ? 'nsp-primary' : 'nsp-link'} key={choice.id} aria-busy={pendingId === `exchange:${choice.id}`} disabled={!ready || !stage.onChoose || pending} onClick={() => void run(`exchange:${choice.id}`, stage.onChoose ? () => stage.onChoose!(choice.id) : undefined)}>{pendingId === `exchange:${choice.id}` ? t('pending') : choice.title}</button>)}</div>
+        {notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+      </div>
+    </section>
+    const available = new Map(choices.map(choice => [choice.id, choice]))
+    const selectedChoice = selectedProvider ? available.get(selectedProvider) : undefined
+    if (selectedProvider && selectedChoice && stage.onChoose) {
+      const providerName = planExchanges.find(([exchange]) => exchange === selectedProvider)![1]
+      return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-preflight" data-connection-identity={value.identity}>
+        <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={() => setExchangePreflight(null)}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('{0} 연결', providerName)}</h1></header>
+          <p className="nsp-lead">{c('{0} 화면이 열리면 아래 두 권한을 허용합니다.', providerName)}</p>
+          <div className="nsp-card"><ul className="nsp-permissions"><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg><span><b>{c('잔고 조회')}</b>{c('전략에 쓸 잔고를 봅니다')}</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg><span><b>{c('주문')}</b>{c('전략 조건에 맞을 때 주문을 냅니다')}</span></li></ul></div>
+          <button type="button" className="nsp-primary nsp-authorize" aria-busy={pendingId === `exchange:${selectedProvider}`} disabled={!ready || pending} onClick={() => void run(`exchange:${selectedProvider}`, () => stage.onChoose!(selectedProvider))}><SourceLogo exchange={selectedProvider} size={20} />{pendingId === `exchange:${selectedProvider}` ? t('pending') : c('{0}에서 승인하기', providerName)}</button>
+          {notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+        </div>
+      </section>
+    }
+    const nonDefaultNotice = stage.description && stage.description !== exchangeText(language, 'intro') ? stage.description : ''
+    const catalogFeedback = value.status === 'loading' ? t('pending') : value.status === 'unavailable' ? t('unavailable') : ''
+    return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-selection" data-connection-identity={value.identity}>
+      <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('거래소 선택')}</h1></header>
+        <p className="nsp-lead">{c('전략을 실행할 거래소를 선택합니다.')}</p>
+        <div className="nsp-exchanges" role="group" aria-label={c('거래소')}>{planExchanges.map(([exchange, label]) => {
+          const choice = available.get(exchange), enabled = ready && Boolean(choice && stage.onChoose)
+          return <button type="button" key={exchange} data-provider-status={enabled ? 'available' : 'unsupported'} aria-label={enabled ? label : `${label} — ${t('unavailable')}`} disabled={!enabled || pending} onClick={() => { if (enabled && !pending) setExchangePreflight({ binding: exchangeStageBinding, provider: exchange }) }}><SourceLogo exchange={exchange} /><b>{label}</b></button>
+        })}</div>
+        {catalogFeedback && <p className="nsp-feedback" role="status">{catalogFeedback}</p>}{nonDefaultNotice && <p className="nsp-feedback" role="alert">{nonDefaultNotice}</p>}{notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+      </div>
+    </section>
+  }
+  if (value?.identity.startsWith('exchange:') && stage?.kind === 'complete') {
+    const grouped = new Map<string, Record<string, string>>()
+    stage.rows.forEach(row => { const split = row.id.lastIndexOf(':'); if (split < 1) return; const owner = row.id.slice(0, split), field = row.id.slice(split + 1); grouped.set(owner, { ...(grouped.get(owner) ?? {}), [field]: row.value }) })
+    const sourceAccounts = [...grouped].map(([connectionId, fields]) => ({ connectionId, fields, exchange: planExchanges.find(([, label]) => label === fields.exchange)?.[0] }))
+    if (sourceAccounts.length && sourceAccounts.every(account => account.exchange)) {
+      const add = stage.actions.find(action => action.id === 'add')
+      return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-complete" data-connection-identity={value.identity}>
+        <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('거래소 연결')}</h1></header>
+          <div className="nsp-card nsp-list">{sourceAccounts.map(account => { const exchange = account.exchange!, action = stage.actions.find(item => item.id === account.connectionId); return <div className="nsp-account" key={account.connectionId}><SourceLogo exchange={exchange} size={22} /><b>{account.fields.exchange}</b>{account.fields.account && <span className="nsp-number">{account.fields.account}</span>}<span className="nsp-access"><em>{account.fields.permissions}</em>{account.fields.withdrawal && <small>{account.fields.withdrawal}</small>}</span>{action && <button type="button" className="nsp-link" aria-busy={pendingId === `complete:${action.id}`} disabled={!ready || pending} onClick={() => void run(`complete:${action.id}`, action.onRun)}>{action.label}</button>}</div> })}</div>
+          {add && <button type="button" className="nsp-primary" aria-busy={pendingId === 'complete:add'} disabled={!ready || pending} onClick={() => void run('complete:add', add.onRun)}>{pendingId === 'complete:add' ? t('pending') : add.label}</button>}
+          {stage.description && <p className="nsp-feedback" role="status">{stage.description}</p>}{notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+        </div>
+      </section>
+    }
   }
   return <section className="client-delegation native-connection-onboarding" lang={language} data-stage={stage?.kind ?? 'unavailable'} data-connection-identity={value?.identity} style={{ minHeight: 0, height: '100%' }}>
     <div className="tfw tf-connect-page" style={{ maxWidth: 640, boxSizing: 'border-box' }}><header className="tfw-hd"><button type="button" className="bk" aria-label={t('back')} onClick={onReturn}>←</button><h2 className="ti">{t('title')}</h2></header>

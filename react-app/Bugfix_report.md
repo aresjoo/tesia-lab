@@ -1,5 +1,86 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 한국어 PDF 전수 목록화와 원본 연결 화면 복원 후보
+
+사용자 제공 `ko_web.pdf` 222쪽과 `ko_mobile.pdf` 248쪽을 직접 렌더링·시각검사하고 470행/86case 원장을 작성했다. PDF 캡처는 10월7일 과거 배포이며 현재 개발/운영과 구분한다. PDF 페이지 중 비교 가능180, 계정/fixture 미재현290을 누락 또는 PASS로 세지 않는다. `aresjoo/tesia-lab` 원격 main은 읽기 전용 확인에서 여전히 `9fbff821df62cad11d026022fc7628c7fcebc431`이며 이 원본을 기준으로 한다. 전체 모션·전문장·실계정 상태 일치는 아직 미검증이다.
+
+복원 후보는 source7 거래소 순서/로고·선택→로컬 권한 안내→명시 승인·서버 관찰 대기/완료 renderer, 900px 3열 breakpoint, 최종 원본 cyan override, 연구 헤더/Critic의 1.8초 pulse, auth/composer/연구 행 portal 및 소개/도움말의 원본 Latin-first 글꼴이다. 원본 선택 타일 클릭만으로 인증 POST하는 차이는 RED로 재현한 뒤 교정했다. 승인 CTA의 single-flight·owner/stale/취소 guard와 실제 권한 미검증 표시는 유지한다. 미지원 source 거래소는 표시하되 비활성화한다. 승인된44px 터치 타겟/중국어 glyph fallback은 보존하므로 literal pixel 동일 판정은 아니다.
+
+표적 통합 실행은 lint0·Chromium desktop30PASS/33.8초였으나 최초 service build는 optional pending title의 TS2345로 actual2였다. 원 실패를 `.cache/pdf-parity-root/final-service-build.stdout.raw`에 보존하고 localized null fallback 한 식만 교정했다. 교정 이후 전체30키를 다시 실행하지 않으며 영향키·후속 build 결과는 이 절에 누적한다. 기존 portal4/public2/motion2·exchange 영향시험과30을 합산해 새로운 전체시험 수로 쓰지 않는다. ROOT·native3 파일 경계를 분리하고 source 동결 후 독립 personal1 Opus5.5 검수를 진행한다. AGY3.8 요청은 좁은 목록검토이며 최종 승인/전체 검수 증거가 아니다.
+
+### 후속 교정·검증
+
+초기 화면 Opus HOLD의 실제 글꼴 결함과 검증 자료 부족을 분리했다. `Noto Sans KR`와 같은
+이름의 U+20BF face가 PC의 설치 글꼴을 가릴 수 있어 독립 `TETH Bitcoin Glyph`로 분리하고,
+승인된 중국어 fallback 뒤 기호만 보완한다. 기존 Noto family를 등록하지 않는 assertion과
+CDP의 실제 기호 글리프를 확인한다. 원본 Latin-first stack·한글/중국어 fallback·원문은 유지한다.
+연구 scope의 원본 검정 배경, activity 구분선 `.04`, desktop hover/focus 편집 표시와 touch 상시
+표시를 복원했다. 서로 다른 legacy runner/fixture 캡처의 탭·문서·수치 차이를 결함으로
+단정해 삭제하지 않았으며 승인된 뒤로가기·이름 저장/오류/초점 개선은 보존했다.
+
+최신 실제 Native renderer는 loading/unavailable에도 source7 grid와 기존 번역 안내를 유지한다.
+확인 중 안내의 중복 낭독을 줄이고 완료 제목의 접근성 이름을 보이는 원문과 맞췄다.
+unknown-field 없는 악성 URL 단독 반례도 SDK allowlist가 차단했다. 원본 권한 안내는
+요청 설명이며 `permissionsVerified=false`를 조회/주문 권한 검증 성공으로 바꾸지 않는다.
+row-menu의 첫 focus는 실제 첫 항목인 고정(Pin)이 정상이다. Rename을 첫 focus로 기대한
+시험 준비 오류와 고정4182 port를 교정했으며 제품 focus 동작을 임의 변경하지 않았다.
+
+마지막 글꼴·거래소 직접 영향 단일14키는 **14PASS/26.6초/actual0**다. 제품10파일과
+시험5파일의 실행 전후 SHA·raw를 `final-symbol-fallback-delta.receipt.json`으로 결속한다.
+raw SHA `bd3a63113010948560964a1e240c0ed04a7a844f40bd756256ff1bad121f9ee2`.
+이전30, 모션/portal6, row2, exchange5·선택1은 다른 실행이며 새 전체시험 수로 합산하지 않는다.
+최종 TSX/controller의 `tsc-b+Vite`18.034초0 뒤 symbol CSS만 교정해 최종 Vite bundle1.731초0도
+별도 결속했다. service flags는 consultation=true/exchange=false, Google-only 추가0이다.
+최종 변경 spec4의 lint0, 기존 확장자/500k chunk 경고는 숨기지 않는다. 전체회귀/730/9월0이다.
+
+거래소12개 새 가시 캡처(390/1440×6상태)는 overflow/겹침/오류/external/API mutation0이며
+synthetic API fixture다. PDF Q41/Q44/Q45/Q47의 계정 미재현 상태를 실제 OAuth 성공으로
+계산하지 않는다. 캡처 뒤 기호 fallback 이름만 달라졌으므로 CSS glyph 시험과 캡처는 구분한다.
+전수 목록과 모든 case의 잔여는 `reports/ares-pdf-parity.md` 및 두 TSV로 Git에 전달한다.
+최종 frozen personal1 Opus5.5 closure는 actual0/modelmatched/입력불변이고 frontend는
+**SCOPED_CANDIDATE_GO C0H0M0/Low9**다. receipt SHA
+`77161cc0ec5cab3d45549109d9c91e09064ccc7552deac0274a8fe48a4c96128`을 결속한다.
+원본 installed face masking은 해소됐으며 CDP는 전용 probe만 검증한 것임을 명시한다.
+포털의 실제 기호는 선행 OS local font가 지원하면 그 글꼴을 쓰는 원본 동작을 보존한다.
+stale test 주석1줄만 이후 교정했고 assertion/제품 실행 의미는 무변경·14키 재실행0이다.
+Low의 backend catalogue/미검증 scope·44px·외부 UI시험 미재결속·출하 flag·연구 fadeUp과
+전원본/실서비스 잔여를 보존한다. source GO를 모든 화면 또는 운영 GO로 확대하지 않는다.
+Git/운영 전달 상태는 Program Ledger가 소유한다.
+
+연구 행의 원본 `fadeUp .3s ease both` 후속은 별도 CSS keyframe으로 복원했다.
+React `key={row.id}`·상태·timer·문구는 그대로이며 reduced-motion의 1-frame 제한을 보존한다.
+해당 정상/감소 모션 **2PASS/4.4초/actual0** 원로그 SHA는
+`dbd3556b979cb7ce8909d4be4a43dda0134ea850853487290cbf3d458122bc6c`이고,
+CSS `7a3929faca6fbfd46d3c8116ffcbb9b6f5fb2e449d161e4e34e5d4ca872dcf6d`,
+spec `af63e4af634685c166f432166426b4c3b817aa21771ffc4ac45103296893e06e` 전후 불변이다.
+관련 lint0·최종 Vite bundle actual0도 별도 실행했다. 그 bundle receipt의 입력 목록은
+staged source를 누락한 기록 도구 한계가 있어 전체 source hash 결속으로 확대하지 않는다.
+도구를 `git diff HEAD`로 교정했지만 이전 receipt는 덮어쓰지 않았고 빌드 재실행도 하지 않았다.
+14키와 2키는 별도 범위이며 전체 원본 모션 검수 완료가 아니다.
+후속 personal1 direct Opus5.5/high의 모션 전용 검수는 actual0·C0H0M0/Low2 scoped GO다.
+raw SHA `0bb26df1849763d78bc076dfa3633991b94e4cad39329bd741584f3128d4e224`와 검수 후
+위2source SHA 불변을 확인했다. 시험 raw의 실행 시점 SHA가 별도 파일이고 파일명 시각이
+mtime과 다른 Low는 보존하며 파일명 시각을 실제 실행시각으로 주장하지 않는다.
+검수자는 read-only staged diff 1회 사용을 공개했으며 제품/index/ref 변경0이다.
+
+최종 read-only 거래소 재대조에서 Q45 계정·초대계정 2단계와 Q47 초대계정 표기·터미널
+동선의 잔여를 명시했다. 일반 OAuth pending renderer만 복원됐으므로 이 두 case가 원본과
+같아졌다고 보고하지 않는다. 원본 구조의 후속 복원과 실제 상태 계약 연결을 각각 진행해야 한다.
+
+### 미연결·미대조 잔여 — 코드 존재와 실제 서비스 연결을 구분
+
+| 항목 | 현재 차이·다음 구현 |
+|---|---|
+| 거래소 목록 | source7와 API12provider6의 교집합은 Bitget/Bybit/MEXC/Gate. Binance/OKX/WOO X는 원본에만, BingX/HTX는 서버에만 있다. 공용 계약·Backend catalogue 정렬이 필요하며 이번 UI 복원으로 지원을 합성하지 않는다. |
+| 초대/UID·구독 | Q42/Q43/Q46 renderer는 있으나 partner URL/UID 검증·billing producer가 actual service에 없다. 원본 가입·조회·승인/거절 상태를 제공하는 계약·서버 adapter가 필요하다. |
+| API key·OAuth 오류 | API12는 OAuth start/query/cancel/disconnect 경로다. API-key 검증 producer와 provider/permission/account/expired 등 원본 오류별 연결은 잔여다. |
+| 설정·계정·연구기록 | renderer와 UI fixture는 존재한다. 로그인한 계정의 billing/security/library projection 연결과 동일 계정 상태 재현은 별도 미완료다. |
+| 인사이트·다운로드 | article/feed producer와 실제 store URL이 미공급이다. 가짜 기사/설치 URL/출시 성공을 넣지 않는다. |
+| 연구·백테스트 모션 | source research pulse 누락은 교정했다. 기존 Critic/g-doc/백테스트 fixture 코드 존재를 실제 producer 성공으로 판정하지 않는다. 실제 연구 이벤트·현재 고객 백테스트 결과의 전체 동선은 별도 미검증이다. |
+| 실제 활성화 | 실모델→저장/복구→로그인 이어쓰기, 실제 OAuth·Bitget 주문/체결, TLS/manager 업그레이드·Safari/보조기술/3,000명은 미완료다. |
+
+원본/개발/운영 홈1440/390 직접 probe의 runtime error·가로 넘침0은 익명 홈 범위다. 거래소390/1440×4상태 8캡처의 mutation/external/error/overflow0도 synthetic auth/API fixture 범위이며 실제 OAuth 성공이 아니다. 증거는 `.cache/pdf-parity-inventory/`, `.cache/pdf-parity-exchange/`, `.cache/pdf-parity-motion/`, `.cache/pdf-parity-root/`에 보존했다. 이전 현재대화/API14 source/인증/SDK·feature flag·타팀 시장/Arena·9월/730은 무변경이다. 기존전체회귀/9월/730재실행0·실 provider/주문/운영 배포0이며 Git 전달도 운영 배포로 보고하지 않는다.
+
 ## 현재 — 원본 현재 대화 로그인 이관 교정·개발 검증, 운영 미반영
 
 private immutable Contracts0.25/mainb3f의 생성 API14 artifact10파일을 원 bytes로 소비하고 adapter/controller를 기존 Native 상담에 연결했다. 사용자 명시 login-intent의 source/ETag/target/epoch에 검증된 ACK/EMAIL을 결속해 최초 claim을 단회 실행하며 단순 AUTH GET·힌트·reload·HANDOFF_UNVERIFIED는 최초 dispatch 권한이 아니다. 기존 추가 Draft claim 카드는 상담에 노출하지 않고 원본 현재 대화·제목을 유지한다. 현재 메모리 표시는 읽기 전용이고 fresh AUTH/history 검증 뒤만 서버 권위로 채택한다. 원본 카피·CSS·SVG·로그인 선택지는 보존했다.

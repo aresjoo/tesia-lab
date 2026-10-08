@@ -2,6 +2,28 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 한국어 PDF 전수 인계와 국소 원본 복원
+
+최신 전체 React snapshot은 Web [b2c88d3](https://github.com/beak1011/tesia-web/tree/b2c88d379d07494fc9ff3cd96f58eefbdb7bb62e)의
+**2,402파일·34,144,881bytes**, digest `899b5114beed83861afda1bd83cc571e6db986e74b849938521ee6926b9d6410`이다.
+clean Web worktree에서 공식 sync/verify actual0, dirty/제거경로0으로 전달했다. 원본 root
+`9fbff821df62cad11d026022fc7628c7fcebc431`·Node/Worker는 덮어쓰지 않았다. 직전 ba2/2,393파일은 아래 이력이다.
+
+사용자 PDF 웹222쪽·모바일248쪽의 [470행/86case 비교 목록](react-app/reports/ares-pdf-parity.md)을
+누락 없이 전달한다. 과거10월7일 캡처와 현재 개발/배포를 구분하며 동일 계정/fixture를 못 만든
+290쪽·71case는 누락 또는 PASS가 아니다. 원본 거래소7개 순서·로고·로컬 권한 안내→명시승인,
+Latin-first 글꼴·설치 글꼴을 가리지 않는 Bitcoin fallback, 연구 pulse/fadeUp·검정/구분선을 국소 복원했다.
+직접영향14PASS, 모션2PASS, 타입/bundle과 personal1 Opus5.5의 각 scoped GO는 별도 증거다.
+전체 원본 화면/모션·실계정·실모델·실거래 완료 판정이 아니다.
+
+Q45 계정/초대계정2단계·Q47 초대계정/터미널/추가연결, source7/API12provider6 정렬,
+초대/UID/billing/연구/설정 실제 상태 producer는 잔여다. 서버 제약을 이유로 원본 UI를 영구 축소하지 않는다.
+Backend [5dda769](https://github.com/beak1011/tesia-backend/tree/5dda769b234596b3e5f89c01b9cdce3dfe3c4307)의
+새 offline ledger snapshot은 source primitive만이다. manager drain·token-key/marker 보존·candidate migration·
+cutover/rollback·새 package pin·실모델→저장/복구→로그인 이어쓰기·TLS/실OAuth/Bitget 주문은 미완료다.
+기존 원장/9월/730 재실행·실 provider/주문·운영 배포0이다. 최신 업무 소유와 전달 상태는
+[Program 활성 Ledger](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/WORK_LEDGER.md)를 따른다.
+
 ### 사용자 확정 제품 원칙
 
 ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program 05e8af7165bd395bba1306d2407f93b56a3d9fcf](https://github.com/beak1011/tesia-program/tree/05e8af7165bd395bba1306d2407f93b56a3d9fcf)의 계획§0/§16·AGENTS·Ledger가 정본이다. backend장점만선별하고 원본사용흐름에 맞는 부족서버기능을 구현한다. 임의축소는 금지하고 변경은 사전승인, 승인된개선은 보존한다.

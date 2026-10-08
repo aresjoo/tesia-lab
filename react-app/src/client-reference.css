@@ -12,7 +12,21 @@
   unicode-range: U+20BF;
 }
 
+/* Separate symbol fallback: do not shadow an installed original Noto family. */
+@font-face {
+  font-family: "TETH Bitcoin Glyph";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/client-fonts/noto-sans-btc.ttf') format('truetype');
+  unicode-range: U+20BF;
+}
+
 :root {
+  /* ares 9fb body --font. Portals cannot inherit the app shell's typography. */
+  --client-source-font: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  /* Preserve the approved shipped Chinese glyph fallback after source faces. */
+  --client-source-font-i18n: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Noto Sans SC Variable", "TETH Bitcoin Glyph", sans-serif;
   --client-0: #000;
   --client-1: #17181b;
   --client-2: #1d1f23;
@@ -27,6 +41,7 @@
 }
 
 .tesia-shell.conversation-surface {
+  --font-ui: var(--client-source-font-i18n);
   min-height: 100svh;
   padding-top: 0;
   padding-left: 64px;
@@ -421,6 +436,8 @@
   font-family: var(--font-ui);
 }
 .client-composer-dialog::backdrop { background: rgba(15, 16, 18, .8); }
+/* These source dialogs are body portals too, outside the font-owning shell. */
+.client-composer-dialog,.client-rowdialog,.client-rowmenu { --font-ui: var(--client-source-font-i18n); font-family: var(--font-ui); }
 .client-home-pill.is-fullscreen textarea { order: -1; flex: 0 0 calc(100% - 44px); height: calc(100% - 66px) !important; max-height: none; margin: 4px 44px 10px 0; padding-right: 4px; }
 .client-home-pill.is-fullscreen .client-pill-spacer { display: block; }
 

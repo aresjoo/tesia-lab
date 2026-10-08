@@ -2,6 +2,17 @@
 
 이 `migration` 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하기 위한 전달본입니다. **전체 서비스 완성·실거래 운영 승인본은 아닙니다.**
 
+## 최신 migration 전달
+
+현재 React 작업본은 Web `b2c88d379d07494fc9ff3cd96f58eefbdb7bb62e`의 2,402파일 전체 snapshot입니다.
+원본 root·Node/Worker는 유지하고, [PDF 470쪽/86case 차이와 미완료 목록](react-app/reports/ares-pdf-parity.md),
+[변경·검증 내역](react-app/Bugfix_report.md), [다른 에이전트를 위한 통합 설명](MIGRATION.md)을 함께 제공합니다.
+거래소·글꼴·연구 모션의 국소 복원이며 전체 화면 일치·실제 AI/주문·운영 배포 완료가 아닙니다.
+
+## 이전 전달 기록
+
+아래 수치와 운영 기록은 각 이전 전달 당시의 이력입니다.
+
 최신 React 전달은 [Web ec15de3](https://github.com/beak1011/tesia-web/tree/ec15de31744cdf08fe99aa2a9ba48500a7f58774)의 전체2377파일/33,835,466bytes, snapshot SHA `339bb88ba9c0aba5606fecaff7d64723a829eac60fe20f96091494167ed8d6f1`이다. 공식 sync/verify로 확인했으며 source dirty·이전경로 삭제0이다. 원본 글꼴과 모바일 설정 접근을 복원하고 발행 API13 SDK 원bytes·React streaming/응답유실 동일key 재개·서버 확인된 대화 복구·취소를 전달한다. 기존 카피/SVG/로그인 선택지·전략/chart 흐름은 보존하며 새 상담 flag는 기본 비활성이다. 합성 API의 관련25/후속4/최종2PASS와 scoped 모델 검수·최종 service build0는 별도 증거이며 실제 Backend↔React/provider 성공은 아니다. 상세는 [누적 보고서](react-app/Bugfix_report.md)를 따른다.
 
 Bitget은 현물·선물 모두, AI는 난이도 기반 자동 라우팅·초기 크레딧만 사용/추가 결제 없음으로 결정됐다. 기존 별도 Bitget OAuth/exchange 조립은 확인했으며 새 상담 서비스에 연결이 빠진 부분과 구분한다. Backend Unicode 출력 상한 후속·API14 claim/list·라우터/크레딧 총액 제한·실계정/주문/운영 검증은 남는다. 운영 UI source13a/edge7e와 원본 root Node/Worker는 변경하지 않았다. 아래 다른 snapshot·'최신'·미결정 표기는 각 작성 당시 이력이다.
