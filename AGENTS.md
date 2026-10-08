@@ -4,11 +4,11 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최상위 제품 원칙과 현재 병렬 연결은 Program 0f7b2189994a8b818b99568acc07ae110d4af853의 계획§0/§16·AGENTS·Ledger가 소유한다. ares는 제품 본체이며 UI/UX/폰트/카피/SVG/모바일/다국어/흐름을 유지한다. backend가 원본 흐름에 맞는 서버계층을 구현하고 임의축소하지 않는다. 원본변경은 사전사용자승인, 승인된개선은 보존한다. 코드/시험/Git/배포/실고객성공을 구분하며 미재현은 미검증이다. LLM직접주문/출금권한은 금지하고 내부발행/Git으로운영활성화하지않는다.
+최상위 제품 원칙과 현재 병렬 연결은 Program 0ad7dcfdd30818c7bfc8ea6a91a3f553acebd3ff의 계획§0/§16·AGENTS·Ledger가 소유한다. ares는 제품 본체이며 UI/UX/폰트/카피/SVG/모바일/다국어/흐름을 유지한다. backend가 원본 흐름에 맞는 서버계층을 구현하고 임의축소하지 않는다. 원본변경은 사전사용자승인, 승인된개선은 보존한다. 코드/시험/Git/배포/실고객성공을 구분하며 미재현은 미검증이다. LLM직접주문/출금권한은 금지하고 내부발행/Git으로운영활성화하지않는다.
 
 9월 수집 source는 Backend `aa85ae28a327a68a93cfeb052f0ddf9332756cf8`의 별도 `agent/backend/public-data-extension`이다. 실제 9월 89,371행·5개 JSON 배열 shard는 검증 완료된 비공개 데이터이며 migration/React/Git에 넣지 않는다. 사용자 최신 지시로 9월 재검증·기존730일 전체 백테스트·대용량 graph 반복0을 유지한다. 후속은 형식·누락·경계의 최소 연결 확인이고 새 기간 백테스트는 NOT_REQUESTED/완료 조건 제외다. 기존20ms·봉인·실패raw는 불변이고30ms는 새extension만 적용한다. 데이터 후보 source HOLD는 별도 동결 backlog이며 AI 연결의 선행 조건이 아니다. 정확한 상태는 `currentDataExtensionDevelopment`와 활성 Program Ledger를 따른다.
 
-현재 연결 개발은 currentAiContinuityDevelopment와 currentConsultationReactDelivery를 따른다. 사용자승인 AI immutable0.1.2/5asset 발행, Backend163 source36/closure223/direct-sdist·별도normalresolver 인수를 완료했다. Webba2c8c8 login claim·발행API14를 fullReact2393/snapshot e4e19e91에 포함한다. UI/copy/SVG/Google Apple email은 유지하고 scopedReact4와후속2·타입build1회를 합산 단일6PASS/실OAuth 성공으로 쓰지않는다. AUTH이어쓰기fcb9fa0와 InfraAnthropic default-off5f5e5f8는 source범위 인수·owningbranch 실제push/remoteexact했고 새설치closure/releasepin/egress/privateconfig/실모델은 남았다. 코드/개별시험이 실제AI/주문/운영완료가 아니다. 부족입력은§17.1, 9월/730반복0·원candidate/FAIL/rootNode/Worker보존이다.
+현재 연결 개발은 Backend6aed835/artifact2252의 AUTH 설치11단계·HTTP2PASS, Infra dd16ae2의 수신 후 보호7PASS를 각각 인수했다. 원FAIL·설치해시 오라클 교정·Opus 원판정/coverage/Low는 currentAiContinuityDevelopment와 owning Bugfix에 보존한다. Webba2c8c8 전체React2393/snapshot e4e19e91·원본 UI/카피/SVG/폰트·Google/Apple/email·rootNode/Worker/730은 변경0이다. 기존11/16/전체/9월/730 재실행0이다. reviewedrelease/Infra pin·제한egress·실privateconfig/Consolecredit·실AI/OAuth/주문/운영은 남는다. HTTP는 fakeHTTPS/parser·synthetic login·same-store server 재구성으로 실고객 성공과 구분한다.
 
 최신 전체 React snapshot은 Web863bc32의 2378파일/33,864,394bytes/SHA57a03350이다. 제품 source는 ec15de3 그대로이고 신규 realHTTP 브라우저 시험1/누적보고서만 후속이다. 실제 session/CSRF/HTTP/DB와 fake HTTPS provider의 두 키가2PASS/actual0/110.461초지만 고객 Anthropic/Bitget 주문·3,000명·운영 GO는 아니다. sourceDirtyFiles·삭제0/공식 sync·verify0, owning Backend62a8196/API14Contracts6350837과 정확 receipt는 migration-verification.json을 따른다. 원제품/root Node·Worker/운영13a·edge7e/기존FAIL/HOLD/730일을 보존하고 snapshot은 직접 수정하지 않는다. 자동 라우터·크레딧 총액/기한·API14 host/실provider·실주문은 미완료다. 아래 최신/현재 표현은 각 전달 당시 이력이다.
 
