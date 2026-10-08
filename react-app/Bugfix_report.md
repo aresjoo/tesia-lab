@@ -1,5 +1,21 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 원본 현재 대화 로그인 이관 교정·개발 검증, 운영 미반영
+
+private immutable Contracts0.25/mainb3f의 생성 API14 artifact10파일을 원 bytes로 소비하고 adapter/controller를 기존 Native 상담에 연결했다. 사용자 명시 login-intent의 source/ETag/target/epoch에 검증된 ACK/EMAIL을 결속해 최초 claim을 단회 실행하며 단순 AUTH GET·힌트·reload·HANDOFF_UNVERIFIED는 최초 dispatch 권한이 아니다. 기존 추가 Draft claim 카드는 상담에 노출하지 않고 원본 현재 대화·제목을 유지한다. 현재 메모리 표시는 읽기 전용이고 fresh AUTH/history 검증 뒤만 서버 권위로 채택한다. 원본 카피·CSS·SVG·로그인 선택지는 보존했다.
+
+독립 union Opus receipt3655a583의 WEB-M1/M2 HOLD를 보존했다. 결정적 거절·미확정을 분리하고 기존 로컬 폐기 버튼을 raw-CAS로 연결했다. 커밋 이후 동일 AUTH revision 전진을 허용하고, 손상/기존 claim 및 login-intent 힌트가 검증된 로그인 채택 자체를 막지 않게 분리했다. claim/observe deadline은 동일 키·본문의 명시 재개를 유지한다. offer 충돌 시에도 유효한 현재 login-intent 메모리를 read-only로 보존하며 send/stop을 차단한다. 잘못된 login-intent는 권위·자동 claim·retain이 아닌 AUTH 채택만 허용한다.
+
+초기 direct10(controller8+integration2)/합성 React1은 교정 전 입력의 증거다. 후속 직접21키는20PASS/fixture1FAIL 뒤 해당1키만 PASS했고, 최종 CAS 직접영향3키는825ms/actual0다. 최종 실제 React 합성 ACK의4키는11.384초/4PASS·0FAIL/SKIP/flaky/worker1이며 pending claim의 메시지·제목 유지/send·stop0, 기존/손상 claim 레코드 및 손상 login-intent의 로그인 채택을 확인했다. `.cache/live-service-activation/react-api14-continuity.amendment.receipt.json` SHA b2be75a0010f5cb6e751df623aed6bc0781059d72f4372b60941581476499d10, 최종 browser raw SHA fda56d36c22eef1065f23c5af7951676b9e5690aa0e586c58e70674ec41a57af가7파일 전후 불변과 각 실패/시험 명단을 결속한다. 관련7파일 lint0와 최종 타입/service build0(빌드1.76초)는 별도 도구 증거이며 raw 미보관 tool 출력의 한계를 유지한다. 기존 Vite extensionless/chunk 경고도 남는다.
+
+후속 독립 delta 검수353272d는 SCOPED_CANDIDATE_GO였으나 조건부 Medium1·Low5개를 남겼다. 조건부 replay 순서는 실제 Backend163의 claim_replay가 source TTL·expected revision 검사 전에 동일 요청을 반환하고 HTTP가 CLAIMED handoff 원source ETag를 허용하는 코드로 확인했다. 이를 신규 시험 통과나 AUTH/CSRF 만료 후 무한 replay 보장으로 세지 않는다. 확정 Low1/Low5는 힌트 삭제 실패 후 기존 재개 버튼을 제공하고 두 AUTH GET의 meta.resourceRevision/data.revision 불일치를 차단하도록 교정했다. 관련 React2키는6.407초/actual0이며 최초 자동 POST0→명시 동일key/body/sourceETag 재개1회→history 복원을 확인했다. low-two receipt SHA7bb7a0b92aad1469a999ceb3433449347c7b0b70dfed1759223a2328a3383345, raw96a0a51cbc7448af1234ca6f945fb425ca6298dfaf4a555d96179329366af685가 변경3파일 전후불변을 결속한다. 이전4PASS와 합산 단일6PASS로 쓰지 않는다.
+
+이 결과는 실제 고객 모델·OAuth·주문·운영 배포 성공이 아니다. 로그인 grant 뒤 같은 대화의 새 AUTH 메시지 append는 기존 서버에서 NOT_FOUND이며 읽기/history·동일 요청 replay와 구분한다. 별도 Backend 단독 writer가 서버 이어 쓰기 구현을 진행하며 이 Web 전달에서 완료를 주장하지 않는다. 과거 미확정 claim 해결 뒤 현재 새 source까지 이관하는 다중-intent는 별도 잔여다. 명시 로컬 폐기는 서버 대화 삭제가 아니며 원source·원FAIL/HOLD·기존730일 결과를 보존한다. 전체 회귀·9월 재검증·730일 재실행0이다. 최종 독립 delta 검수와 owning Git/migration 전달 상태는 Program Ledger를 따른다.
+
+최종 Low2 독립 personal(1) Opus5.5는 actual0/modelMatched/입력불변 SCOPED_CANDIDATE_GO C0/H0/M0이며 receipt SHAe181bbb96aab8644d6985fb0e437fc8a1ffab2cc7a0f6e3a9fecd1844246df8c다. 이는 현재 controller c2503/App6b873/spec2df1의 안내·revision 교정 범위만 승인하며 이전4키의 현재source 재실행 증거를 만들지 않는다. 남은 producer 게이트 가설은 ROOT가 읽기 전용으로 확인했다: Apple reconcile은 state=AUTHENTICATED만 조회해 이미CLAIMED handoff를 제외하고, _target은 세션 실패를 AUTHENTICATION_REQUIRED/CSRF_INVALID로만 매핑해 FORBIDDEN/NOT_FOUND/BAD_REQUEST 확정거절로 위장하지 않는다. 새 코드·시험0의 범위 확인이며 실제 OAuth 만료·손상DB·실서비스 성공은 주장하지 않는다.
+
+최종7파일 전달 freeze19553244는 amendment7+Low2의3파일 override를 현재 bytes에 대조했다. 이후 `VITE_TETH_CONSULTATION=true VITE_TETH_EXCHANGE_CONNECT=false npm run build:service` 단1회는 tsc-b+Vite 포함21.720초/actual0·7파일 전후 불변이다. raw2f1174fe5237c1f83104e01aeb9134b877aa70b09ef053423d87466665924bc3/receipt e0bbcc89df51cef1732eb17d3031acc5475d52fef2e836dcfca17b130fe09e74를 결속한다. Google-only flag를 넣지 않았으며 기존Google/Apple/email을 유지했다. 이는 상담 개발 빌드이고 운영 release flags·실로그인 성공 증거가 아니다. 기존500k 청크 경고(internalPoc2.065MB/NativeStrategies1.069MB)는 별도 최적화 잔여다.
+
 ## 실제 Backend↔React HTTP 브라우저 검증 — 로컬 두 흐름 통과, 고객 provider 미연결
 
 신규 live-loopback spec1과 Backend 신규 harness1로 실제 session/CSRF/HTTP/DB/fake HTTPS를 연결했다. 쿠키 주입·HTTP 응답 대체·고객 API/주문0이다. 초기 브라우저 설치/LD누락과 Secure127 cookie filtered조회·CDP본문 수명·APIRequestContext 쿠키 전송 실패는 시험환경/오라클 오류로 분리해 원 raw를 보존했다. 브라우저의 실제 same-origin fetch로 capabilities200/API0.13.0/available=true와 쿠키 속성을 확인한다.
@@ -9136,3 +9152,5 @@ agy의 추가 두 차례 코드 검수 중 스크롤 재마운트·제목 포커
 <!-- QA_HISTORY_END -->
 
 보안 스캔에서 API0.12 생성 manifest의 공개 artifact SHA256 4개를 API 키로 오탐했다. 독립적으로 normative 원본 및 실제 계약 파일 해시를 대조했고 값은 로그에 출력하지 않았다. 기존44개에 해당4개의 exact commit/file/rule/line fingerprint만 추가하며 범용 규칙·경로 예외는 변경하지 않는다. 원 scan exit2와 분류 원문을 보존한다.
+
+2026-10-08 API14 상담 로그인 이관의 Web 전송 경계를 추가했다. 공개 배포본 `tesia-contracts-api-v14-0.25.0-rc.1.tgz`(SHA256 `6056897bc819ccf57da612c798089da145b8f2cab0cf0503c2892acc0b0509f7`)의 생성 파일 10개는 README의 과거 안내까지 바이트 그대로 보존했고, 별도 어댑터는 명시적으로 호출된 claim과 최대 50개 목록 조회만 same-origin·no-store·manual redirect·엄격 JSON/UTF-8·크기 제한으로 전송한다. 익명 source의 strong `If-Match`, 로그인 target revision, CSRF와 idempotency를 함께 묶고 응답의 계약 버전·요청 결속·증가한 revision·공개 정렬 규칙·닫힌 오류를 검증하며 자동 로그인·자동 claim·retry·저장·주문 권한은 추가하지 않았다. 신규 검증은 합성 응답 기반의 로컬 transport/contract 시험일 뿐 실제 고객 이관, 운영 연결 또는 배포 승인을 뜻하지 않는다.

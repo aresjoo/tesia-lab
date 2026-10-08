@@ -26,6 +26,8 @@ import { NativeServiceTransport, createNativeServiceApi, type NativeJob } from '
 import { SameOriginApiTransport, readApiAdapterConfig } from './api-adapter'
 import { ConsultationV13Adapter } from './consultation-v13-adapter'
 import { NativeConsultationV13Controller, type ConsultationV13Snapshot } from './native-consultation-v13-controller'
+import { ConsultationV14Adapter } from './consultation-v14-adapter'
+import { NativeConsultationSessionV14Controller } from './native-consultation-session-v14-controller'
 import { createBrowserSessionBootstrap } from './browser-session'
 import { ApiResponseError, TesiaApiClient, createSdk } from './contracts/generated/api-v0.1/index'
 import { TesiaConversationV03Client } from './contracts/generated/api-v0.3/client'
@@ -58,6 +60,8 @@ type SessionOffer = { sessionId: string; csrfToken: string; claimIntent?: Native
 const STORAGE_KEY = 'tesia.native.conversation'
 const CONVERSATION_OWNER_KEY = 'tesia.native.conversation-session'
 const SESSION_KEY = 'tesia.native.session-binding'
+const CONSULTATION_LOGIN_KEY = 'tesia.native.consultation-login-intent'
+type ConsultationLoginIntent = { sourceSessionId: string; sourceEtag: string; conversationId: string; panelGeneration: number }
 const expected = (value: ConversationSnapshot) => ({ expectedConversationStateRevision: value.conversationStateRevision, expectedConversationStateHash: value.conversationStateHash })
 const approvalMatchesDraft = (value: StrategyApproval, snapshot: ConversationSnapshot) => (
   value.sourceConversationId === snapshot.conversationId && value.sourceConversationStateRevision === snapshot.conversationStateRevision
@@ -221,6 +225,20 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     setAccountScope(value?.sessionId ?? null)
   }
   const epoch = useRef(0)
+  const [consultationPresentationEpoch, setConsultationPresentationEpoch] = useState(0)
+  const [retainedConsultation, setRetainedConsultation] = useState<{ epoch: number; targetSessionId: string; messages: readonly ClientServiceMessage[] } | null>(null)
+  const [consultationSession] = useState(() => new NativeConsultationSessionV14Controller(
+    new ConsultationV14Adapter({ csrfToken: () => clients.getCsrf() }), {
+      currentSession: async () => { throw new Error('SESSION_CHANGED') },
+      refreshSession: async () => { throw new Error('SESSION_CHANGED') },
+      restoreConversation: async () => false,
+    }))
+  const [consultationSessionState, setConsultationSessionState] = useState(() => consultationSession.getSnapshot())
+  useEffect(() => consultationSession.subscribe(setConsultationSessionState), [consultationSession])
+  useEffect(() => () => consultationSession.detach(), [consultationSession])
+  useEffect(() => {
+    consultationSession.bindTarget(consultationEnabled && sessionState === 'AUTHENTICATED' && phase === 'ready' ? accountScope : null)
+  }, [accountScope, consultationEnabled, consultationSession, phase, sessionState])
   useEffect(() => {
     if (!consultationChat || phase !== 'ready' || !accountScope || !sessionState || !clients.getCsrf()) {
       consultation.unbindOwner()
@@ -336,6 +354,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     } catch { /* memory-only remains usable */ }
   }
   const clearViews = (preserveComposer = false, preserveRows = false) => {
+    setRetainedConsultation(null); setConsultationPresentationEpoch(epoch.current)
     setAuthNotice(null)
     clients.replayReaders.invalidate()
     presentationIntent.invalidate(); setAutomaticPresentation(undefined)
@@ -628,6 +647,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (generation !== epoch.current || logoutIntent.current) return
       const allowed = value.state === owner.sessionState
       if (value.sessionId !== owner.sessionId || !allowed || !current.etag) throw new Error('SESSION_CHANGED')
+      const currentConsultation = consultation.getSnapshot()
+      if (consultationChat && owner.sessionState === 'ANONYMOUS' && currentConsultation.conversationId) {
+        const intent: ConsultationLoginIntent = { sourceSessionId: owner.sessionId, sourceEtag: current.etag,
+          conversationId: currentConsultation.conversationId, panelGeneration: loginGeneration.current }
+        const raw = JSON.stringify(intent)
+        sessionStorage.setItem(CONSULTATION_LOGIN_KEY, raw)
+        if (sessionStorage.getItem(CONSULTATION_LOGIN_KEY) !== raw) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      } else if (sessionStorage.getItem(CONSULTATION_LOGIN_KEY) !== null) {
+        sessionStorage.removeItem(CONSULTATION_LOGIN_KEY)
+        if (sessionStorage.getItem(CONSULTATION_LOGIN_KEY) !== null) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      }
       setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current })
       setLoginOpen(true)
     } catch (failure) {
@@ -923,13 +953,40 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (acceptedAuth.current === identity) return
     const offerEpoch = epoch.current
     // The login panel has verified the cookie round trip. This callback only
-    // records an offer; ownership transfer still needs a separate explicit click.
+    // records an offer. A verified consultation login consumes the user's
+    // original, durable continuation intent once; Draft-only claim stays explicit.
     try {
       const sameAuthenticatedOwner = confirmation === 'HANDOFF_UNVERIFIED' && session.current?.sessionId === result.sessionId && session.current.sessionState === 'AUTHENTICATED'
       const savedOwner = sessionStorage.getItem(CONVERSATION_OWNER_KEY)
       // A locator only offers a choice. Its pre-login owner must match; an
       // unrelated stored draft never inherits the current anonymous session.
       const initiatingOwner = result.claimIntent?.initiatingSessionId
+      let consultationIntent: ConsultationLoginIntent | null = null
+      let loginIntentRaw: string | null = null
+      const dropLoginHint = () => {
+        try {
+          if (loginIntentRaw !== null && sessionStorage.getItem(CONSULTATION_LOGIN_KEY) === loginIntentRaw) {
+            sessionStorage.removeItem(CONSULTATION_LOGIN_KEY)
+            return sessionStorage.getItem(CONSULTATION_LOGIN_KEY) === null
+          }
+        } catch { /* A retry locator is not login authority. */ }
+        return false
+      }
+      try {
+        loginIntentRaw = consultationEnabled && confirmation !== 'HANDOFF_UNVERIFIED'
+          ? sessionStorage.getItem(CONSULTATION_LOGIN_KEY) : null
+        const value = loginIntentRaw && new TextEncoder().encode(loginIntentRaw).length <= 4_096
+          ? JSON.parse(loginIntentRaw) as ConsultationLoginIntent : null
+        if (value && Object.keys(value).sort().join(',') === 'conversationId,panelGeneration,sourceEtag,sourceSessionId'
+          && typeof value.conversationId === 'string' && /^[A-Za-z0-9_-]{16,128}$/.test(value.conversationId)
+          && value.sourceSessionId === initiatingOwner && value.sourceEtag === result.claimIntent?.initiatingSessionEtag
+          && Number.isSafeInteger(value.panelGeneration) && value.panelGeneration >= 0
+          && (returnPanelCurrent() || loginBinding?.sessionId === initiatingOwner
+            && loginBinding.epoch === epoch.current && loginBinding.generation === value.panelGeneration
+            && session.current?.sessionState === 'ANONYMOUS' && session.current.sessionId === initiatingOwner
+            && consultation.getSnapshot().conversationId === value.conversationId)) consultationIntent = value
+      } catch { /* Invalid continuation hints must not reject a verified login. */ }
+      if (!consultationIntent) dropLoginHint()
       // Preserve only this tab's unsent wording across a verified login offer.
       // It is neither a conversation claim nor permission to send under AUTH.
       // Session-only recovery, foreign locators and stale panels keep clearing.
@@ -950,11 +1007,27 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       // A partial write remains an untrusted locator, never login authority.
       sessionStorage.setItem(SESSION_KEY, binding)
       if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      let continuationReady = false
+      if (consultationIntent) {
+        try {
+          consultationSession.offer({ anonymousSessionId: consultationIntent.sourceSessionId,
+            anonymousIfMatch: consultationIntent.sourceEtag, targetSessionId: result.sessionId, conversationId: consultationIntent.conversationId })
+          // Verified ACK/email consumes one explicit login intent, not an AUTH
+          // GET or a storage hint. Lost claim responses remain same-key retries.
+          continuationReady = dropLoginHint()
+          if (!continuationReady) consultationSession.markUnconfirmed()
+        } catch { /* Preserve an existing/corrupt record for explicit recovery, without rolling back login. */ }
+      }
+      const retained = consultationIntent && session.current?.sessionId === consultationIntent.sourceSessionId
+        && consultation.getSnapshot().conversationId === consultationIntent.conversationId ? consultation.getSnapshot().messages : null
       clearNativeJournal()
       epoch.current++; clients.transport.abort(); clients.conversationTransport.abortInFlight()
       clients.setCsrf(null); bindSession(null); clearViews()
       pending.current = null; setHasPending(false); setAuthStorageRecovery(false)
       bindSession(current); clients.setCsrf(result.csrfToken); setSessionState('AUTHENTICATED'); setPhase('ready')
+      if (consultationIntent) {
+        if (retained) setRetainedConsultation({ epoch: epoch.current, targetSessionId: result.sessionId, messages: retained })
+      }
       if (unsentInput) setInput(unsentInput)
       if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current })
       else { setLoginBinding(null); setLoginOpen(false); setLoginRetained(false) }
@@ -965,6 +1038,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
           : result.claimIntent?.initiatingSessionEtag ? '로그인을 확인했습니다. 로그인 전 전략은 아직 연결하거나 승인하지 않았습니다.'
             : '현재 인증 세션은 확인했지만 로그인 전 세션의 사전조건을 복구하지 못해 전략 연결을 차단했습니다. 인증 세션 ETag로 대체하지 않습니다.' })
       setError('')
+      if (continuationReady) void continueConsultationSession()
     } catch {
       // Preserve a still-current provider controller for an explicit retry.
       // Email keeps its existing error/recheck presentation, not provider ACK UI.
@@ -1020,6 +1094,43 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       clients.setCsrf(token.body.data.csrfToken)
     })
   }
+  const continueConsultationSession = async () => {
+    const owner = session.current, generation = epoch.current
+    if (!owner || owner.sessionState !== 'AUTHENTICATED' || logoutIntent.current || pending.current
+      || consultationSession.getSnapshot().busy) return
+    const assertCurrent = () => {
+      if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId
+        || session.current.sessionState !== owner.sessionState || logoutIntent.current) throw new Error('SESSION_CHANGED')
+    }
+    const observe = async (signal?: AbortSignal) => {
+      const assertObservation = () => { assertCurrent(); signal?.throwIfAborted() }
+      assertObservation()
+      const observed = await clients.session.current(); assertObservation()
+      if (observed.body.data.sessionId !== owner.sessionId || observed.body.data.state !== 'AUTHENTICATED'
+        || observed.body.meta.resourceRevision !== observed.body.data.revision || !observed.etag) throw new Error('SESSION_CHANGED')
+      const token = await clients.session.csrf(); assertObservation()
+      const confirmed = await clients.session.current(); assertObservation()
+      if (confirmed.body.data.sessionId !== observed.body.data.sessionId || confirmed.body.data.state !== observed.body.data.state
+        || confirmed.body.meta.resourceRevision !== confirmed.body.data.revision
+        || confirmed.body.data.revision !== observed.body.data.revision || confirmed.etag !== observed.etag) throw new Error('SESSION_CHANGED')
+      clients.setCsrf(token.body.data.csrfToken)
+      return { sessionId: confirmed.body.data.sessionId, state: confirmed.body.data.state, revision: confirmed.body.data.revision }
+    }
+    if (!consultationSession.setPorts({ currentSession: observe, refreshSession: observe,
+      restoreConversation: async (conversationId, targetSessionId) => {
+        assertCurrent()
+        if (owner.sessionId !== targetSessionId) return false
+        consultation.bindOwner(JSON.stringify([targetSessionId, 'AUTHENTICATED']))
+        const restored = await consultation.restoreConversation(conversationId); assertCurrent()
+        return restored
+      } })) return
+    const restored = await consultationSession.claim()
+    if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState) return
+    if (restored) { setRetainedConsultation(null); setError('') }
+    else setError(consultationSession.getSnapshot().issue === 'request-refused'
+      ? 'REQUEST_UNCONFIRMED · 서버가 요청을 확정적으로 거절했습니다. 이 로컬 요청 기록만 폐기할 수 있으며 서버 이력은 삭제하지 않습니다.'
+      : 'REQUEST_UNCONFIRMED · 응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.')
+  }
   const discardRejectedClaim = () => run(async () => {
     const command = pending.current, generation = epoch.current
     if (command?.kind !== 'CLAIM' || command.idempotencyKey !== rejectedClaimKey) return
@@ -1068,7 +1179,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const sendConsultation = async (text: string, displayText?: string) => {
     if (!consultationChat || phase !== 'ready' || !session.current || !clients.getCsrf()
       || consultationState.availability !== 'available' || consultationState.busy
-      || emailBusy || hasPending || hasLogout) return
+      || emailBusy || hasPending || hasLogout || (consultationSession.getSnapshot().available && consultationSession.getSnapshot().issue !== 'request-refused')
+      || retainedConsultation?.epoch === epoch.current && retainedConsultation.targetSessionId === session.current?.sessionId) return
     const owner = { ...session.current }
     const accepted = await consultation.send(text, displayText)
     if (accepted && consultationChatRef.current && session.current?.sessionId === owner.sessionId
@@ -1119,11 +1231,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     try {
       const authority = await refreshConsultationReadAuthority()
       if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
-        || session.current.sessionState !== authority.owner.sessionState || !consultation.discardPending()) throw new Error('SESSION_CHANGED')
+        || session.current.sessionState !== authority.owner.sessionState) throw new Error('SESSION_CHANGED')
+      const claim = consultationSession.getSnapshot()
+      if (claim.canDiscard && claim.targetSessionId === authority.owner.sessionId) {
+        if (!consultationSession.discardPending()) throw new Error('SESSION_CHANGED')
+        setRetainedConsultation(null); setError('')
+      } else if (!consultation.discardPending()) throw new Error('SESSION_CHANGED')
     }
     catch { setError('세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.') }
   }
   const stopConsultation = async () => {
+    if (retainedConsultation?.epoch === epoch.current && retainedConsultation.targetSessionId === session.current?.sessionId) return
     try {
       const authority = await refreshConsultationMutationAuthority()
       if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
@@ -1617,7 +1735,15 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
     onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} />
   </NativeAuthSurface>
-  const consultationError = consultationChat && consultationState.issue === 'unavailable'
+  const consultationClaimAvailable = consultationChat && consultationSessionState.targetSessionId === accountScope
+    && (consultationSessionState.available || consultationSessionState.canDiscard)
+  const consultationError = consultationClaimAvailable && consultationSessionState.issue !== null
+    ? consultationSessionState.issue === 'request-refused' && consultationSessionState.available
+      ? 'REQUEST_UNCONFIRMED · 서버가 요청을 확정적으로 거절했습니다. 이 로컬 요청 기록만 폐기할 수 있으며 서버 이력은 삭제하지 않습니다.'
+      : consultationSessionState.available
+        ? 'REQUEST_UNCONFIRMED · 응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.'
+        : 'REQUEST_UNCONFIRMED · 저장 기록을 확인하지 못해 이 화면에서 재개할 수 없습니다. 세션과 서버 이력을 확인해주세요.'
+    : consultationChat && consultationState.issue === 'unavailable'
     ? nativeShellText(language, 'unavailable')
     : consultationChat && consultationState.issue === 'request-unconfirmed'
       ? consultationState.canResumePending
@@ -1626,10 +1752,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
           ? 'REQUEST_UNCONFIRMED · 서버가 요청을 확정적으로 거절했습니다. 이 로컬 요청 기록만 폐기할 수 있으며 서버 이력은 삭제하지 않습니다.'
           : 'REQUEST_UNCONFIRMED · 저장 기록을 확인하지 못해 이 화면에서 재개할 수 없습니다. 세션과 서버 이력을 확인해주세요.' : ''
   const displayError = error || consultationError
-  const displayBusy = consultationChat ? consultationState.busy : busy
-  const displayMessages = consultationChat ? consultationState.messages : messages
+  const consultationClaimPending = consultationClaimAvailable && consultationSessionState.available && consultationSessionState.issue !== 'request-refused'
+  const retainedConsultationMessages = retainedConsultation?.epoch === consultationPresentationEpoch
+    && retainedConsultation.targetSessionId === accountScope ? retainedConsultation.messages : null
+  const displayBusy = consultationChat ? consultationState.busy || consultationSessionState.busy : busy
+  const displayMessages = consultationChat ? retainedConsultationMessages ?? consultationState.messages : messages
   return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages: displayMessages, input, busy: displayBusy, source: 'service', recovery: null,
-    inputDisabled: displayBusy || emailBusy || hasPending || hasLogout || phase !== 'ready' || (!consultationChat && Boolean(approval || job)), quickReplies: consultationChat ? [] : conversation?.nextQuestion?.options ?? [],
+    inputDisabled: displayBusy || consultationClaimPending || retainedConsultationMessages !== null || emailBusy || hasPending || hasLogout || phase !== 'ready' || (!consultationChat && Boolean(approval || job)), quickReplies: consultationChat ? [] : conversation?.nextQuestion?.options ?? [],
     workflow: consultationChat ? null : hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
     outcome: consultationChat ? null : <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
       && smokeBinding.binding.semanticHash === approval.semanticHash && smokeBinding.contentHash === approval.strategyVersionContentHash
@@ -1657,17 +1786,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>{ui('같은 로그아웃 요청으로 재개')}</button>
         {logoutBoundary && <button disabled={busy} onClick={() => void newSessionAfterLogout()}>{ui('이전 요청 기록을 보존하고 현재 브라우저에서 새 대화 시작')}</button>}</>}
       {hasPending && !hasLogout && <button disabled={busy || phase !== 'ready' || rejectedClaim} onClick={() => { if (pending.current) void run(() => execute(pending.current!)) }}>{ui('같은 요청으로 재개')}</button>}
-      {consultationChat && consultationState.canResumePending && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void resumeConsultationPending() }}>{ui('같은 요청으로 재개')}</button>}
-      {consultationChat && consultationState.canDiscardPending && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void discardConsultationPending() }}>{nativeExecutionUiText(language, '이 로컬 요청 기록만 폐기')}</button>}
+      {consultationChat && (consultationState.canResumePending || consultationClaimPending && consultationSessionState.issue !== null) && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void (consultationClaimPending ? continueConsultationSession() : resumeConsultationPending()) }}>{ui('같은 요청으로 재개')}</button>}
+      {consultationChat && (consultationState.canDiscardPending || consultationClaimAvailable && consultationSessionState.canDiscard) && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void discardConsultationPending() }}>{nativeExecutionUiText(language, '이 로컬 요청 기록만 폐기')}</button>}
       {consultationChat && consultationState.canResumeObservation && !consultationState.canResumePending && !consultationState.canDiscardPending && !hasPending
         && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void resumeConsultationObservation() }}>{nativeExecutionUiText(language, '진행 자동 확인 재개')}</button>}
       {rejectedClaim && <button disabled={busy || phase !== 'ready'} onClick={() => void discardRejectedClaim()}>{ui('연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작')}</button>}</div>,
     onInput: value => { composerRecovery.current = null; setHasComposerRecovery(false); setInput(value) },
     onSend: (value, displayText, researchThread) => consultationChat ? sendConsultation(value, displayText) : send(value, 'composer', displayText, researchThread),
-    canStop: consultationChat && consultationState.canStop,
+    canStop: consultationChat && !consultationClaimPending && retainedConsultationMessages === null && consultationState.canStop,
     onStop: consultationChat ? () => { void stopConsultation() } : undefined,
     onReset: () => {
-      if (working.current || pending.current || logoutIntent.current || displayBusy || hasPending || hasLogout || phase !== 'ready') {
+      if (working.current || pending.current || logoutIntent.current || displayBusy || hasPending || hasLogout || consultationClaimPending || retainedConsultationMessages !== null || phase !== 'ready') {
         setError('확인하지 못한 요청을 먼저 재개하거나 이력에서 확인해주세요.'); return false
       }
       if (consultationChat) {

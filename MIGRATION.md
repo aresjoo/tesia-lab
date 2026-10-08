@@ -4,9 +4,9 @@
 
 ### 사용자 확정 제품 원칙
 
-ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program c051037](https://github.com/beak1011/tesia-program/tree/c0510374c068623a9934e10f544182a44bf7b0e6)의 계획§0/§16·AGENTS·Ledger가 사용자 원칙과 최신 병렬 연결 경계를 소유한다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
+ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program 0f7b2189994a8b818b99568acc07ae110d4af853](https://github.com/beak1011/tesia-program/tree/0f7b2189994a8b818b99568acc07ae110d4af853)의 계획§0/§16·AGENTS·Ledger가 정본이다. backend장점만선별하고 원본사용흐름에 맞는 부족서버기능을 구현한다. 임의축소는 금지하고 변경은 사전승인, 승인된개선은 보존한다.
 
-원 제품 원칙 delta의 독립 personal(1) Opus5.5 C0/H0/M0/Low4는 당시 정책 반영 범위에만 한정하고 새 구현 승인으로 승계하지 않는다. 전체 원본 화면·모션·상태 비교, 실제 모델→저장/이관→거래 권한→승인/한도→주문/체결/복구는 미완료다. 이 전달의 React2378/snapshot57a·원본 root Node/Worker·기존730seal은 변경하지 않았다. 타팀 운영 변경은 별도 확인 대상이며 과거13a/edge7e를 최신으로 단정하지 않는다. 이 브랜치 푸시는 운영 배포가 아니다.
+원 제품 원칙 delta의 독립검수는 당시정책범위이며 새구현GO가 아니다. 현재 cleanWebba2c8c8의 React2393파일/34,001,914bytes/snapshot e4e19e91을 공식sync/verify로 전달한다. currentConsultationReactDelivery가 최신이고 직전API13은 previousConsultationReactDelivery로 원문보존한다. 원root3760/Node/Worker·candidate82·기존2378경로/730seal을 보존해 삭제0이다. 실모델→저장/이관→승인전략/한도→주문/체결/복구와 전원본화면·전문장검수는 미완료다. 이브랜치푸시는 운영배포가 아니다.
 
 ### 9월 데이터 확장 — 비공개 데이터와 연결 미완료를 구분
 
@@ -20,7 +20,7 @@ ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Progra
 
 [Backendf0b5670](https://github.com/beak1011/tesia-backend/tree/f0b56706317b1cc561f140b5020b4ad68340e5b6)은 원자 크레딧 admission/dispatch/실제 lateusage·None 혼합 DB 우회 차단·private0.2 필수 creditPeriod/프로필 결속·명시 routed CLI/startup pending tuple gate를 연결한 개발 source다. native Codex5.6SolHigh A17PASS, None delta4PASS+oracleERROR1→동일1PASS, B후속6PASS/별도gate1PASS/실제fixed+routed factory·rootreopen2PASS를 각각 보존한다. final personal1 Opus5.5는 actual0/입력불변 C0H0M0Low8이다. configured credit의 실제 HTTP↔React reload/중지2PASS/129.088초는 fakeHTTPS/parser·당시15입력exact이며 마지막 None/ASCII delta 뒤 브라우저 재실행 인수가 아니다.
 
-[Contracts PR42](https://github.com/beak1011/tesia-contracts/pull/42)는 기존 동일입력675/ROOT22/Opus 증거를 재실행 없이 인수해 mainb3f에 병합하고 [private immutable v0.25.0rc1](https://github.com/beak1011/tesia-contracts/releases/tag/v0.25.0rc1)을 실제 발행했다. 새9asset 다운로드 bytes/SHA/tag/main/tree가 일치했다. [AI PR41](https://github.com/beak1011/tesia-ai/pull/41)의3ae 호환 후보는 direct/roundtrip 동일 wheel·normal official b3f resolver 성공·old945 혼합 거부·Opus C0H0M0Low5·ROOT RECORD/모듈 검산을 인수했다. AI immutable 설정은 사용자 결정 대기이며 고객 서비스 발행이 아니다. Backend 소비23·API14 core8 확인 결함 교정·shared HTTP4는 독립 파일로 병렬 진행하고 Web API14 adapter는 별도 개발 중이다. 첫 현재 대화 이관에 전체 library 구현을 선행 조건으로 붙이지 않는다. 실제 고객 AI·연구/Critic·Bitget 주문/체결/복구·운영은 미완료다. 이번 snapshot에는 새 서버/adapter 후보를 섞지 않았으며 원본root·UI·카피·SVG·로그인·730seal 불변이다. 부족 입력은 Program§17.1 하나에 모은다.
+[Contracts private immutable0.25](https://github.com/beak1011/tesia-contracts/releases/tag/v0.25.0rc1)/9asset과 사용자승인 [AI private immutable0.1.2](https://github.com/beak1011/tesia-ai/releases/tag/v0.1.2rc1)/5asset을 실제다운로드 인수했다. AI main/PR41 미병합이다. Backend163 source36/closure223 단일direct-sdist11단계·별도normalresolver와 Webba2c8c8 현재대화login claim을 owningbranch실제push·remoteexact했다. generatedAPI14 10asset은발행bytes exact이고 adapter/controller가 이번snapshot에 포함됐다. 원본UI/copy/SVG/로그인옵션 변경0, scopedReact4+후속2와 타입build1회는 각각범위다. 같은대화AUTH이어쓰기는 [Backendfcb9fa0](https://github.com/beak1011/tesia-backend/tree/fcb9fa0b005a0ff3269178e072823d743ee4242d), default-off 설정전달은 [Infra5f5e5f8](https://github.com/beak1011/tesia-infra/tree/5f5e5f80b967a3e07196523a80e6ced26e2db9c7)로 scopedOpus C0/H0/M0·개별시험 인수와 실제push/remoteexact했다. 원FAIL/Low와 delta3P/fixture1E→1P는 각각 보존하고 기존11/16·전체/9월/730 재실행0이다. 새Backend설치closure/releasepin/제한egress/privateconfig/실모델 확인은 남았으며 실제고객AI·주문·운영성공이 아니다. 전체library를첫대화 선행조건으로붙이지않고 부족입력은§17.1에모은다.
 
 ### React 스냅샷 전달 — 아래 실행·Backend/Contracts ref는 직전 배치 기록
 

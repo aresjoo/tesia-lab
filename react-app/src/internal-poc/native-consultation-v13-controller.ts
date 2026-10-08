@@ -368,8 +368,32 @@ export class NativeConsultationV13Controller {
     } finally { deadline.dispose() }
   }
 
-  private async restoreAccepted(generation: number, owner: string, locator: AcceptedLocator, signal: AbortSignal) {
-    const historyResponse = await this.loadHistory(locator.conversationId, signal)
+  async restoreConversation(conversationId: string): Promise<boolean> {
+    if (!this.owner || !ID.test(conversationId)) return false
+    this.retireReader()
+    const generation = ++this.generation, owner = this.owner
+    this.active = null
+    const deadline = this.deadline()
+    this.publish({ availability: 'checking', busy: false, canStop: false })
+    try {
+      const history = await this.loadHistory(conversationId, deadline.signal)
+      if (generation !== this.generation || owner !== this.owner) return false
+      const last = history.turns.at(-1)
+      if (!last || last.conversationId !== conversationId) throw new Error('CONSULTATION_HISTORY_BINDING')
+      // Neither a stored locator nor a successful claim invents turn authority.
+      // Persist only an actual turn from the newly authorized server history.
+      this.persistAccepted({ version: 1, owner, conversationId, turnId: last.turnId })
+      await this.restoreAccepted(generation, owner, this.accepted!, deadline.signal, history)
+      return generation === this.generation && owner === this.owner && this.state.conversationId === conversationId
+    } catch {
+      if (generation === this.generation) this.publish({ availability: 'error', issue: unconfirmedIssue, canResumeObservation: true })
+      return false
+    } finally { deadline.dispose() }
+  }
+
+  private async restoreAccepted(generation: number, owner: string, locator: AcceptedLocator, signal: AbortSignal,
+    observedHistory?: Awaited<ReturnType<NativeConsultationV13Controller['loadHistory']>>) {
+    const historyResponse = observedHistory ?? await this.loadHistory(locator.conversationId, signal)
     if (generation !== this.generation || owner !== this.owner || locator !== this.accepted) return
     const turnResponse = await this.adapter.turn(locator.turnId, signal)
     if (generation !== this.generation || owner !== this.owner || locator !== this.accepted) return
