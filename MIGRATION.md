@@ -2,6 +2,12 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 사용자 확정 제품 원칙
+
+ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program a0524ed](https://github.com/beak1011/tesia-program/tree/a0524ed9064bec215d28cd5462cf1e0196a52c6d)의 계획§0·AGENTS에 사용자 8개 원칙을 반영했다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
+
+정본 delta의 독립 personal(1) Opus5.5 검수는 C0/H0/M0/Low4이며 정책 반영 범위에만 한정한다. 전체 원본 화면·모션·상태 비교, 실제 모델→저장/이관→거래 권한→승인/한도→주문/체결/복구는 아직 미완료다. React2378/snapshot57a·원본 root Node/Worker·운영13a/edge7e·기존730seal은 변경하지 않았다. 이 브랜치 푸시는 운영 배포가 아니다.
+
 ### 현재 실행 연결 개발 — 원자 크레딧/라우팅과 API14 설치 후보 인수
 
 [Backendf0b5670](https://github.com/beak1011/tesia-backend/tree/f0b56706317b1cc561f140b5020b4ad68340e5b6)은 원자 크레딧 admission/dispatch/실제 lateusage·None 혼합 DB 우회 차단·private0.2 필수 creditPeriod/프로필 결속·명시 routed CLI/startup pending tuple gate를 연결한 개발 source다. native Codex5.6SolHigh A17PASS, None delta4PASS+oracleERROR1→동일1PASS, B후속6PASS/별도gate1PASS/실제fixed+routed factory·rootreopen2PASS를 각각 보존한다. final personal1 Opus5.5는 actual0/입력불변 C0H0M0Low8이다. configured credit의 실제 HTTP↔React reload/중지2PASS/129.088초는 fakeHTTPS/parser·당시15입력exact이며 마지막 None/ASCII delta 뒤 브라우저 재실행 인수가 아니다.
