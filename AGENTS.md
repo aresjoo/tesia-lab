@@ -4,7 +4,9 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최상위 제품 원칙은 Program `a0524ed9064bec215d28cd5462cf1e0196a52c6d`의 계획§0·AGENTS다. ares는 참고 디자인이 아닌 제품 본체이며 UI·UX·폰트·카피·SVG·인터랙션·모바일·다국어·사용 흐름을 보존한다. 기존 백엔드에 맞춰 기능을 제거하지 않고 필요한 서버 계층을 구현한다. 원본 변경은 대상/이유/영향/대안과 사용자 사전 승인을 요구하며 이미 승인된 개선은 유지한다. 실제 모델·거래소 권한·승인 전략·위험 한도·주문/체결/중지/복구/판단 기록의 연속 성공과 코드/시험/푸시/배포는 구분한다. 미재현 화면은 미검증이고 전체 복구 PASS가 아니다. 운영·키 투입·실주문은 별도 승인/보안 Gate이며 LLM 직접 주문·출금 권한은 금지한다. 이 원칙 반영으로 원본이나 React snapshot을 변경하거나 서비스 완료를 선언하지 않는다.
+최상위 제품 원칙과 현재 데이터 후속은 Program `a307775f767b19253480b94c3f9a915358498ebc`의 계획§0·AGENTS·Ledger다. ares는 참고 디자인이 아닌 제품 본체이며 UI·UX·폰트·카피·SVG·인터랙션·모바일·다국어·사용 흐름을 보존한다. 기존 백엔드에 맞춰 기능을 제거하지 않고 필요한 서버 계층을 구현한다. 원본 변경은 대상/이유/영향/대안과 사용자 사전 승인을 요구하며 이미 승인된 개선은 유지한다. 실제 모델·거래소 권한·승인 전략·위험 한도·주문/체결/중지/복구/판단 기록의 연속 성공과 코드/시험/푸시/배포는 구분한다. 미재현 화면은 미검증이고 전체 복구 PASS가 아니다. 운영·키 투입·실주문은 별도 승인/보안 Gate이며 LLM 직접 주문·출금 권한은 금지한다. 이 원칙 반영으로 원본이나 React snapshot을 변경하거나 서비스 완료를 선언하지 않는다.
+
+9월 수집 source는 Backend `aa85ae28a327a68a93cfeb052f0ddf9332756cf8`의 별도 `agent/backend/public-data-extension`이다. 실제 9월 89,371행·5개 JSON 배열 shard는 비공개 데이터 경로에만 있고 migration/React/Git에 넣지 않는다. 기존 20ms 정책과 봉인 데이터는 불변이다. 사용자 승인 30ms 상한은 새 extension namespace에만 적용하며 기존 8월 실패 raw의 재표식·반올림·행 삭제는 금지한다. 8월 말 canonical·전체 기간 composite·새 백테스트 실행은 미완료다. 해당 source 인수와 UI·고객 서비스 완료를 혼동하지 않는다. 정확한 상태는 `currentDataExtensionDevelopment`와 활성 Program Ledger를 따른다.
 
 현재 실행연결 개발은 `currentConsultationActivationDevelopment`를 따른다. Backendf0b5670의 원자 credit admission/dispatch/late usage·None 혼합모드 차단·private0.2 필수 creditPeriod·명시 routed CLI/startup gate와 final direct personal1 Opus5.5 actual0/입력불변 C0H0M0Low8을 코드 한정 인수한다. Contracts4791c11은 동일 frozen package·단일 normal675PASS 인수이며 아직 immutable발행/AI+Backend 재핀/normal resolver/host이관 성공이 아니다. Program883924f가 후속 설치와 고객 연결 경계를 소유한다. React2378/snapshot57a03350·원본UI/카피/SVG/모바일언어숨김/Google·Apple·email·운영13a/edge7e·rootNode/Worker·730seal은 불변이다. 고객API/주문/운영GO0이고 사용자 입력은 §17.1 하나에 모으며 내부 구현을 키 대기로 중단하지 않는다. 새Backend를 원본root에 복사하지 않는다. 아래 refs·미완료는 각 전달 당시 이력이다.
 

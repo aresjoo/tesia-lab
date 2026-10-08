@@ -4,9 +4,17 @@
 
 ### 사용자 확정 제품 원칙
 
-ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program a0524ed](https://github.com/beak1011/tesia-program/tree/a0524ed9064bec215d28cd5462cf1e0196a52c6d)의 계획§0·AGENTS에 사용자 8개 원칙을 반영했다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
+ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program a307775](https://github.com/beak1011/tesia-program/tree/a307775f767b19253480b94c3f9a915358498ebc)의 계획§0·AGENTS·Ledger에 사용자 8개 원칙과 9월 데이터 후속을 반영했다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
 
 정본 delta의 독립 personal(1) Opus5.5 검수는 C0/H0/M0/Low4이며 정책 반영 범위에만 한정한다. 전체 원본 화면·모션·상태 비교, 실제 모델→저장/이관→거래 권한→승인/한도→주문/체결/복구는 아직 미완료다. React2378/snapshot57a·원본 root Node/Worker·운영13a/edge7e·기존730seal은 변경하지 않았다. 이 브랜치 푸시는 운영 배포가 아니다.
+
+### 9월 데이터 확장 — 비공개 데이터와 연결 미완료를 구분
+
+[Backend aa85ae2](https://github.com/beak1011/tesia-backend/tree/aa85ae28a327a68a93cfeb052f0ddf9332756cf8)은 기존 형식의 공개 BTCUSDT 증분 수집 CLI·표적 시험·인계 문서·Bugfix만 추가한 별도 branch다. 실제 9월 `[2026-09-01T00:00Z, 2026-10-01T00:00Z)` 수집은 60 GET, 89,371행, 5개 JSON 배열 shard다. contract1m 43,200·mark1m 43,200·contract15m 2,880·funding8h 91이며 마지막 10월1일 funding은 원자료 경계 증거로 포함된다. 파일은 접근 제한된 private runtime에만 보관했고 Git·migration·공개 서버에 데이터 재배포하지 않았다.
+
+최종 CLI 표적 17시험과 ROOT의 실제 완료 namespace 읽기 전용 재사용·normative manifest hash/bytes 검산은 각각 별도 범위다. 독립 personal(1) Opus5.5는 source 인수 범위 C0/H0/M0/Low7이며 전체 기간·새 replay·공개 서비스 GO가 아니다. 실제 수집 당시 CLI SHA와 후속 개선 CLI SHA도 구분해 기록했다. 기존 데이터 104shard와 원4manifest는 ROOT read-back에서 불변이다.
+
+8월 말 funding 26ms는 기존 20ms 상한에 걸려 실패했다. 사용자는 **새 확장 데이터에만 고정 30ms 정책 검토·구현**을 승인했다. 기존 정책·봉인·실패 raw는 보존하고, 새 namespace/계약·부정 시험·새 획득·기간 연결을 구현 중이다. 현재 8월 말 canonical과 전체 기간 composite는 미완료이며, 9월 데이터 수집을 2년+9월 백테스트 완료로 보고하지 않는다. 원본 UI·React·API 모델·실주문·운영 배포는 이번 작업으로 변경하지 않았다. 정확한 후속 증거·미해결 위험은 Program Ledger가 소유한다.
 
 ### 현재 실행 연결 개발 — 원자 크레딧/라우팅과 API14 설치 후보 인수
 
