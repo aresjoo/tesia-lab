@@ -4,9 +4,9 @@
 
 ### 사용자 확정 제품 원칙
 
-ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program a307775](https://github.com/beak1011/tesia-program/tree/a307775f767b19253480b94c3f9a915358498ebc)의 계획§0·AGENTS·Ledger에 사용자 8개 원칙과 9월 데이터 후속을 반영했다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
+ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program c051037](https://github.com/beak1011/tesia-program/tree/c0510374c068623a9934e10f544182a44bf7b0e6)의 계획§0/§16·AGENTS·Ledger가 사용자 원칙과 최신 병렬 연결 경계를 소유한다. 백엔드는 검증된 장점을 선별 연결하고 부족한 서버 기능을 원본 흐름에 맞춰 구현한다. 디자인·카피·기능·흐름의 임의 축소는 금지하며 변경은 사전 승인, 승인된 개선은 보존한다.
 
-정본 delta의 독립 personal(1) Opus5.5 검수는 C0/H0/M0/Low4이며 정책 반영 범위에만 한정한다. 전체 원본 화면·모션·상태 비교, 실제 모델→저장/이관→거래 권한→승인/한도→주문/체결/복구는 아직 미완료다. React2378/snapshot57a·원본 root Node/Worker·운영13a/edge7e·기존730seal은 변경하지 않았다. 이 브랜치 푸시는 운영 배포가 아니다.
+원 제품 원칙 delta의 독립 personal(1) Opus5.5 C0/H0/M0/Low4는 당시 정책 반영 범위에만 한정하고 새 구현 승인으로 승계하지 않는다. 전체 원본 화면·모션·상태 비교, 실제 모델→저장/이관→거래 권한→승인/한도→주문/체결/복구는 미완료다. 이 전달의 React2378/snapshot57a·원본 root Node/Worker·기존730seal은 변경하지 않았다. 타팀 운영 변경은 별도 확인 대상이며 과거13a/edge7e를 최신으로 단정하지 않는다. 이 브랜치 푸시는 운영 배포가 아니다.
 
 ### 9월 데이터 확장 — 비공개 데이터와 연결 미완료를 구분
 
@@ -14,13 +14,13 @@ ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Progra
 
 최종 CLI 표적 17시험과 ROOT의 실제 완료 namespace 읽기 전용 재사용·normative manifest hash/bytes 검산은 각각 별도 범위다. 독립 personal(1) Opus5.5는 source 인수 범위 C0/H0/M0/Low7이며 전체 기간·새 replay·공개 서비스 GO가 아니다. 실제 수집 당시 CLI SHA와 후속 개선 CLI SHA도 구분해 기록했다. 기존 데이터 104shard와 원4manifest는 ROOT read-back에서 불변이다.
 
-8월 말 funding 26ms는 기존 20ms 상한에 걸려 실패했다. 사용자는 **새 확장 데이터에만 고정 30ms 정책 검토·구현**을 승인했다. 기존 정책·봉인·실패 raw는 보존하고, 새 namespace/계약·부정 시험·새 획득·기간 연결을 구현 중이다. 현재 8월 말 canonical과 전체 기간 composite는 미완료이며, 9월 데이터 수집을 2년+9월 백테스트 완료로 보고하지 않는다. 원본 UI·React·API 모델·실주문·운영 배포는 이번 작업으로 변경하지 않았다. 정확한 후속 증거·미해결 위험은 Program Ledger가 소유한다.
+8월 말 funding26ms는 기존20ms 상한에 걸려 실패했고30ms 승인은 새extension만 대상으로 한다. 원본 시간·정책·봉인·실패raw는 보존한다. 사용자 최신 지시로 검증된9월을 재검증하거나 기존730일 전체 백테스트·대용량 graph를 반복하지 않는다. 데이터 후속은 형식·누락·경계의 최소 연결 확인이고 새 기간 백테스트는 NOT_REQUESTED이며 완료 조건이 아니다. 계약/worker 후보와 source 검수 잔여는 동결된 별도 backlog로 두고 AI 연결의 선행 조건으로 쓰지 않는다. 데이터·원본 UI·React·실주문·운영 배포는 이번 문서 전달로 변경하지 않았다.
 
 ### 현재 실행 연결 개발 — 원자 크레딧/라우팅과 API14 설치 후보 인수
 
 [Backendf0b5670](https://github.com/beak1011/tesia-backend/tree/f0b56706317b1cc561f140b5020b4ad68340e5b6)은 원자 크레딧 admission/dispatch/실제 lateusage·None 혼합 DB 우회 차단·private0.2 필수 creditPeriod/프로필 결속·명시 routed CLI/startup pending tuple gate를 연결한 개발 source다. native Codex5.6SolHigh A17PASS, None delta4PASS+oracleERROR1→동일1PASS, B후속6PASS/별도gate1PASS/실제fixed+routed factory·rootreopen2PASS를 각각 보존한다. final personal1 Opus5.5는 actual0/입력불변 C0H0M0Low8이다. configured credit의 실제 HTTP↔React reload/중지2PASS/129.088초는 fakeHTTPS/parser·당시15입력exact이며 마지막 None/ASCII delta 뒤 브라우저 재실행 인수가 아니다.
 
-[Contracts4791c11](https://github.com/beak1011/tesia-contracts/tree/4791c11aabc91d8c81ba991db9fa617e8c9113e8)의 새 wheel/sdist 패키지·ROOT22대조·독립Opus C0H0M0Low6 및 동일 frozen normal whole675PASS/actual0/1925.442초를 인수했다. 단일1회/재시도0/원RED5/이전683을 구분한다. 이 설치는 격리target/no-deps이고 현재 AI가 exact0.24에 결속돼 **Backend만0.25로 바꿀 수 없다**. [Program883924f](https://github.com/beak1011/tesia-program/tree/883924fa0a88eb49579f49648ed847ed6b408ae7)는 immutable발행→새AI호환distribution→Backend동시pin/provenance/current-serviceclosure→normalfreshresolver→API14durableclaim/list/sharedhandoff→React로그인이관 순서를 소유한다. 아직 host/고객 provider·연구/Critic·Bitget 실제 주문/체결/복구·운영은 미완료다. 원본UI/카피/SVG/로그인/모바일homeglobe숨김·Reactsnapshot57a·운영13a/edge7e/rootNode·Worker/730seal 불변이며 이 migration 전달은 teth.ai 배포가 아니다. exact receipt/원실패/Low·defaultbranch moderate4와 부족 입력은 manifest/Program§17.1을 따른다.
+[Contracts PR42](https://github.com/beak1011/tesia-contracts/pull/42)는 기존 동일입력675/ROOT22/Opus 증거를 재실행 없이 인수해 mainb3f에 병합하고 [private immutable v0.25.0rc1](https://github.com/beak1011/tesia-contracts/releases/tag/v0.25.0rc1)을 실제 발행했다. 새9asset 다운로드 bytes/SHA/tag/main/tree가 일치했다. [AI PR41](https://github.com/beak1011/tesia-ai/pull/41)의3ae 호환 후보는 direct/roundtrip 동일 wheel·normal official b3f resolver 성공·old945 혼합 거부·Opus C0H0M0Low5·ROOT RECORD/모듈 검산을 인수했다. AI immutable 설정은 사용자 결정 대기이며 고객 서비스 발행이 아니다. Backend 소비23·API14 core8 확인 결함 교정·shared HTTP4는 독립 파일로 병렬 진행하고 Web API14 adapter는 별도 개발 중이다. 첫 현재 대화 이관에 전체 library 구현을 선행 조건으로 붙이지 않는다. 실제 고객 AI·연구/Critic·Bitget 주문/체결/복구·운영은 미완료다. 이번 snapshot에는 새 서버/adapter 후보를 섞지 않았으며 원본root·UI·카피·SVG·로그인·730seal 불변이다. 부족 입력은 Program§17.1 하나에 모은다.
 
 ### React 스냅샷 전달 — 아래 실행·Backend/Contracts ref는 직전 배치 기록
 
