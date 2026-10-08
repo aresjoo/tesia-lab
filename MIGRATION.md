@@ -4,7 +4,7 @@
 
 ### 사용자 확정 제품 원칙
 
-ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program 0ad7dcfdd30818c7bfc8ea6a91a3f553acebd3ff](https://github.com/beak1011/tesia-program/tree/0ad7dcfdd30818c7bfc8ea6a91a3f553acebd3ff)의 계획§0/§16·AGENTS·Ledger가 정본이다. backend장점만선별하고 원본사용흐름에 맞는 부족서버기능을 구현한다. 임의축소는 금지하고 변경은 사전승인, 승인된개선은 보존한다.
+ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Program 05e8af7165bd395bba1306d2407f93b56a3d9fcf](https://github.com/beak1011/tesia-program/tree/05e8af7165bd395bba1306d2407f93b56a3d9fcf)의 계획§0/§16·AGENTS·Ledger가 정본이다. backend장점만선별하고 원본사용흐름에 맞는 부족서버기능을 구현한다. 임의축소는 금지하고 변경은 사전승인, 승인된개선은 보존한다.
 
 원 제품 원칙 delta의 독립검수는 당시정책범위이며 새구현GO가 아니다. 현재 cleanWebba2c8c8의 React2393파일/34,001,914bytes/snapshot e4e19e91을 공식sync/verify로 전달한다. currentConsultationReactDelivery가 최신이고 직전API13은 previousConsultationReactDelivery로 원문보존한다. 원root3760/Node/Worker·candidate82·기존2378경로/730seal을 보존해 삭제0이다. 실모델→저장/이관→승인전략/한도→주문/체결/복구와 전원본화면·전문장검수는 미완료다. 이브랜치푸시는 운영배포가 아니다.
 
@@ -20,7 +20,19 @@ ares 원본은 참고 시안이 아니라 완성할 제품의 본체다. [Progra
 
 [Backendf0b5670](https://github.com/beak1011/tesia-backend/tree/f0b56706317b1cc561f140b5020b4ad68340e5b6)은 원자 크레딧 admission/dispatch/실제 lateusage·None 혼합 DB 우회 차단·private0.2 필수 creditPeriod/프로필 결속·명시 routed CLI/startup pending tuple gate를 연결한 개발 source다. native Codex5.6SolHigh A17PASS, None delta4PASS+oracleERROR1→동일1PASS, B후속6PASS/별도gate1PASS/실제fixed+routed factory·rootreopen2PASS를 각각 보존한다. final personal1 Opus5.5는 actual0/입력불변 C0H0M0Low8이다. configured credit의 실제 HTTP↔React reload/중지2PASS/129.088초는 fakeHTTPS/parser·당시15입력exact이며 마지막 None/ASCII delta 뒤 브라우저 재실행 인수가 아니다.
 
-[Contracts private immutable0.25](https://github.com/beak1011/tesia-contracts/releases/tag/v0.25.0rc1)/9asset과 [AI private immutable0.1.2](https://github.com/beak1011/tesia-ai/releases/tag/v0.1.2rc1)/5asset은 이전 발행 그대로다. Backend6aed835/artifact2252의 AUTH 설치11단계·HTTP2PASS, Infra dd16ae2의 수신 후 보호7PASS를 각각 인수했다. 원FAIL·설치해시 오라클 교정·Opus 원판정/coverage/Low는 currentAiContinuityDevelopment와 owning Bugfix에 보존한다. Webba2c8c8 전체React2393/snapshot e4e19e91·원본 UI/카피/SVG/폰트·Google/Apple/email·rootNode/Worker/730은 변경0이다. 기존11/16/전체/9월/730 재실행0이다. reviewedrelease/Infra pin·제한egress·실privateconfig/Consolecredit·실AI/OAuth/주문/운영은 남는다. HTTP는 fakeHTTPS/parser·synthetic login·same-store server 재구성으로 실고객 성공과 구분한다. [Backend 전달](https://github.com/beak1011/tesia-backend/tree/6aed8358cd1464425317ca3c04543843da08c6fe)·[Infra 전달](https://github.com/beak1011/tesia-infra/tree/dd16ae20a1f5855cce1096fbf38a0e48d16bcb41)은 실제 push·remoteexact이며 migration 문서 전달은 운영 배포가 아니다.
+[Contracts private immutable0.25](https://github.com/beak1011/tesia-contracts/releases/tag/v0.25.0rc1)/9asset과 [AI private immutable0.1.2](https://github.com/beak1011/tesia-ai/releases/tag/v0.1.2rc1)/5asset은 이전 발행 그대로다. Backend6aed835/artifact2252의 기존 설치11단계·HTTP2PASS와 Infra dd16ae2의 보호7PASS는 이전 범위다. 이번에 새 전체시험이나 모델/거래 호출로 승계하지 않았으며 원 실패·이전 검수·exact SHA는 currentAiContinuityDevelopment에 보존한다. 최신 추가 전달은 아래 currentConsultationOfflineDelivery를 따른다.
+
+### current 상담의 별도 오프라인 전달 — 운영 활성화와 구분
+
+[Infra d9c76ac](https://github.com/beak1011/tesia-infra/tree/d9c76acf3ac9be970bf2265d5471bc9edc02d25b)와 [Backend13bd486](https://github.com/beak1011/tesia-backend/tree/13bd48698dec21e6440243dbe9b4a91b48e8d8d8)는 owning 브랜치에 실제 푸시했다. Infra는 current 상담 release/preparer·bundle/receiver·managed adapter와 선택적 통신 CIDR·관련 시험/운영 안내를 추가한다. 기존188 source/31-wheel reporting 경로와 owner-local 설치기는 바꾸지 않았다. current manifest223·AI0.1.2rc1·Contracts0.25rc1·서비스26-wheel/outer27-entry를 고정하며 PostgreSQL은 import만 검증하고 연결/초기화하지 않는다. bundle642c7d1d는 로컬 합성 인수 artifact이며 이번에 원격 release로 발행하지 않았다.
+
+신규 구조 시험11, managed delta4·권한 후속1, CIDR 초기4·실패한 render 키 후속1, 기존 dd16 대비5profile×3 renderer의15/15 byte 동일성은 각각 별도 증거다. 실제26-wheel 오프라인 설치·27-entry 수신 후 uid1002의 합성 managed 연결1회를 통과했다. 최초 fixture의 toolchain/bin775는 receiver 전에 거부됐고 시험용 경로만0077/0700으로 교정해 다시 연결했다. app=edge 동일UID·nginx metadata stub·합성 TLS·시험 외부 비밀 inode guard이며 OS manager나 실제 모델은 실행하지 않았다.
+
+Backend 신규 시험1파일은 retained direct/sdist 설치본에만 추가했다. 실제 CLI는 격리 netns에서 session/CSRF·예산429·SIGTERM exit0·OS프로세스 재시작과 쿠키/원장 연속성을 확인했다. factory는 시험 전용 fakeHTTPS 완료응답·history·같은 프로세스 재구성을 확인했다. guard 교정 뒤2PASS/28.078초와 마지막 조기종료/cleanup 후속의 CLI-only1PASS/13.249초를 구분한다. CLI provider 완료·실 OAuth 성공은 아니다. 실행 child의 import origin/dispatch는 INFERRED이며 별도 help import 측정·예산응답 bytes 동일성을 실제 저장 replay로 해석하지 않는다.
+
+최종 동결 personal(1) Opus5.5는 C0/H0/M0/Low8 scoped GO다. 최초M4/M1과 Low·원실패를 삭제하지 않았다. 비어 있지 않은 CIDR 필수라는 최종 Low 의견은 실제 managed CIDRNone→localhost-only PASS로 ROOT가 기각했으며 모델 원문은 보존한다. CIDR은 공인IPv4 /24–/32 최대32개의 L3 허용일 뿐 FQDN/443/TLS/path 보장이 아니다. app unit의 ProtectSystem=strict/ReadWritePaths=runtime는 렌더링 확인이며 OS 강제 검증은 아니다.
+
+**미완료:** 공개 renderer의 metadata-first bootstrap, 원장이 있는 runtime의 CIDR 갱신/manager/drain/rollback, root→app 강등·분리UID·실 nginx/TLS, 교체 키 비공개 등록·Console 크레딧/결제차단, 실제 AI 응답/로그인 이관 고객 흐름·연구·Bitget 승인 주문/체결·전체 원본 상태/전 문장/Safari·접근성/3,000명 인수. 사용자 부족 입력은 Program §17.1 하나에 모았다. 이번에는 React2393와 원본/root·9월/730·타팀 WIP를 바꾸지 않았고 유료 호출·주문·운영 배포0이다. 코드는 owning Backend/Infra를 참조하며 원본 Node/Worker에 복사하지 않는다.
 
 ### React 스냅샷 전달 — 아래 실행·Backend/Contracts ref는 직전 배치 기록
 
