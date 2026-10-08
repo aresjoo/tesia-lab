@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { nativeAppNotice, nativeAppUiText } from './native-app-ui-copy'
+import { nativeShellText } from './native-shell-copy'
 import { useExchangeConnectionPresentation } from '../exchange-connect/use-exchange-connection'
 import { readExchangeTransactionLocator } from '../exchange-connect/controller'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
+import { nativeExecutionUiText } from './native-execution-ui-copy'
 import { nativeWorkflowText, nativeWorkflowLeverage, type NativeWorkflowTextKey } from './native-workflow-copy'
 import { describeCondition, formatFractionPercent } from './native-strategy-readable'
 import { nativeStrategyText } from './native-strategy-copy'
@@ -22,6 +24,8 @@ import { NativeHistoryList } from './NativeHistoryList'
 import { describeNativeJob } from './native-job-presentation'
 import { NativeServiceTransport, createNativeServiceApi, type NativeJob } from './native-service-api'
 import { SameOriginApiTransport, readApiAdapterConfig } from './api-adapter'
+import { ConsultationV13Adapter } from './consultation-v13-adapter'
+import { NativeConsultationV13Controller, type ConsultationV13Snapshot } from './native-consultation-v13-controller'
 import { createBrowserSessionBootstrap } from './browser-session'
 import { ApiResponseError, TesiaApiClient, createSdk } from './contracts/generated/api-v0.1/index'
 import { TesiaConversationV03Client } from './contracts/generated/api-v0.3/client'
@@ -91,7 +95,7 @@ function WorkflowButton({ disabled, onClick, ...props }: ButtonHTMLAttributes<HT
 /** Native service-only entry. No fixture adapter fallback and no order authority. */
 export type NativeServicePresentations = Pick<ComponentProps<typeof ClientServiceExperience>,
   'conversationLibrary' | 'insightPresentation' | 'sharingPresentation' | 'researchPresentation' | 'accountPresentation' | 'feedbackPresentation' | 'brokerPresentation' | 'connectionPresentation'>
-export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean } = {}) {
+export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false, consultationEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean; consultationEnabled?: boolean } = {}) {
   const { language, t } = useClientPreferences()
   const ui = (original: Parameters<typeof nativeAppUiText>[1]) => nativeAppUiText(language, original)
   const jobText = (key: NativeJobTextKey, values?: Readonly<Record<string, string | number>>) => nativeJobText(language, key, values)
@@ -106,6 +110,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       session: createSdk(new TesiaApiClient(new SameOriginApiTransport())).session,
       bootstrap: createBrowserSessionBootstrap() }
   })
+  const [consultation] = useState(() => new NativeConsultationV13Controller(new ConsultationV13Adapter({ csrfToken: () => clients.getCsrf() })))
+  const [consultationState, setConsultationState] = useState<ConsultationV13Snapshot>(() => consultation.getSnapshot())
+  useEffect(() => consultation.subscribe(setConsultationState), [consultation])
+  useEffect(() => () => consultation.detach(), [consultation])
   const [phase, setPhase] = useState<InternalPocPresentation['phase']>('loading')
   const [initializing, setInitializing] = useState(true)
   const [initialConnectionFailed, setInitialConnectionFailed] = useState(false)
@@ -119,6 +127,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   })
   const [sessionState, setSessionState] = useState<'ANONYMOUS' | 'AUTHENTICATED' | null>(null)
   const [conversation, setConversation] = useState<ConversationSnapshot | null>(null)
+  // The opt-in owns only a new general-chat surface. Selecting an existing
+  // server strategy conversation returns to its unchanged v0.3 controller.
+  const consultationChat = consultationEnabled && conversation === null
+  const consultationChatRef = useRef(consultationChat)
+  useLayoutEffect(() => { consultationChatRef.current = consultationChat }, [consultationChat])
   const [documentOwner, setDocumentOwner] = useState<DocumentOwner | null>(null)
   const etag = useRef('')
   const [messages, setMessages] = useState<readonly ClientServiceMessage[]>([])
@@ -208,6 +221,14 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     setAccountScope(value?.sessionId ?? null)
   }
   const epoch = useRef(0)
+  useEffect(() => {
+    if (!consultationChat || phase !== 'ready' || !accountScope || !sessionState || !clients.getCsrf()) {
+      consultation.unbindOwner()
+      return
+    }
+    consultation.bindOwner(JSON.stringify([accountScope, sessionState]))
+    void consultation.activate()
+  }, [accountScope, clients, consultation, consultationChat, phase, sessionState])
   const [automaticPresentation, setAutomaticPresentation] = useState<NativeResultPresentationRequest>()
   const [presentationIntent] = useState(() => createNativeResultPresentationIntent(() => null))
   useEffect(() => {
@@ -1044,6 +1065,73 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (pendingId !== clientMessageId) researchDispatches.current.delete(clientMessageId)
     }
   }
+  const sendConsultation = async (text: string, displayText?: string) => {
+    if (!consultationChat || phase !== 'ready' || !session.current || !clients.getCsrf()
+      || consultationState.availability !== 'available' || consultationState.busy
+      || emailBusy || hasPending || hasLogout) return
+    const owner = { ...session.current }
+    const accepted = await consultation.send(text, displayText)
+    if (accepted && consultationChatRef.current && session.current?.sessionId === owner.sessionId
+      && session.current.sessionState === owner.sessionState && consultation.getSnapshot().conversationId !== null) setInput('')
+  }
+  const refreshConsultationMutationAuthority = async () => {
+    const owner = session.current, generation = epoch.current
+    if (!owner || phase !== 'ready') throw new Error('SESSION_CHANGED')
+    const observed = await clients.session.current()
+    if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState
+      || observed.body.data.sessionId !== owner.sessionId || observed.body.data.state !== owner.sessionState
+      || observed.body.meta.resourceRevision !== observed.body.data.revision || !observed.etag) throw new Error('SESSION_CHANGED')
+    const token = await clients.session.csrf(), confirmed = await clients.session.current()
+    if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState
+      || confirmed.body.data.sessionId !== observed.body.data.sessionId || confirmed.body.data.state !== observed.body.data.state
+      || confirmed.body.data.revision !== observed.body.data.revision || confirmed.etag !== observed.etag) throw new Error('SESSION_CHANGED')
+    clients.setCsrf(token.body.data.csrfToken)
+    return { owner, generation }
+  }
+  const resumeConsultationPending = async () => {
+    try {
+      const authority = await refreshConsultationMutationAuthority()
+      if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
+        || session.current.sessionState !== authority.owner.sessionState) throw new Error('SESSION_CHANGED')
+      await consultation.resumePending()
+    }
+    catch { setError('세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.') }
+  }
+  const refreshConsultationReadAuthority = async () => {
+    const owner = session.current, generation = epoch.current
+    if (!owner || phase !== 'ready') throw new Error('SESSION_CHANGED')
+    const observed = await clients.session.current()
+    if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState
+      || observed.body.data.sessionId !== owner.sessionId || observed.body.data.state !== owner.sessionState
+      || observed.body.meta.resourceRevision !== observed.body.data.revision || !observed.etag) throw new Error('SESSION_CHANGED')
+    return { owner, generation }
+  }
+  const resumeConsultationObservation = async () => {
+    try {
+      const authority = await refreshConsultationReadAuthority()
+      if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
+        || session.current.sessionState !== authority.owner.sessionState) throw new Error('SESSION_CHANGED')
+      await consultation.resumeObservation()
+    }
+    catch { setError('세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.') }
+  }
+  const discardConsultationPending = async () => {
+    try {
+      const authority = await refreshConsultationReadAuthority()
+      if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
+        || session.current.sessionState !== authority.owner.sessionState || !consultation.discardPending()) throw new Error('SESSION_CHANGED')
+    }
+    catch { setError('세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.') }
+  }
+  const stopConsultation = async () => {
+    try {
+      const authority = await refreshConsultationMutationAuthority()
+      if (authority.generation !== epoch.current || session.current?.sessionId !== authority.owner.sessionId
+        || session.current.sessionState !== authority.owner.sessionState) throw new Error('SESSION_CHANGED')
+      await consultation.stop()
+    }
+    catch { setError('세션 또는 복구 저장소를 확인하지 못했습니다. 서버 상태를 삭제하지 않았습니다.') }
+  }
   const sendRow = async (scope: string, key: string, label: string) => {
     const row = rowEdits.read(scope, key)
     if (!row?.text.trim()) return
@@ -1529,10 +1617,21 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
     onClose={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }} />
   </NativeAuthSurface>
-  return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages, input, busy, source: 'service', recovery: null,
-    inputDisabled: busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || Boolean(approval || job), quickReplies: conversation?.nextQuestion?.options ?? [],
-    workflow: hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
-    outcome: <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
+  const consultationError = consultationChat && consultationState.issue === 'unavailable'
+    ? nativeShellText(language, 'unavailable')
+    : consultationChat && consultationState.issue === 'request-unconfirmed'
+      ? consultationState.canResumePending
+        ? 'REQUEST_UNCONFIRMED · 응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.'
+        : consultationState.canDiscardPending
+          ? 'REQUEST_UNCONFIRMED · 서버가 요청을 확정적으로 거절했습니다. 이 로컬 요청 기록만 폐기할 수 있으며 서버 이력은 삭제하지 않습니다.'
+          : 'REQUEST_UNCONFIRMED · 저장 기록을 확인하지 못해 이 화면에서 재개할 수 없습니다. 세션과 서버 이력을 확인해주세요.' : ''
+  const displayError = error || consultationError
+  const displayBusy = consultationChat ? consultationState.busy : busy
+  const displayMessages = consultationChat ? consultationState.messages : messages
+  return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages: displayMessages, input, busy: displayBusy, source: 'service', recovery: null,
+    inputDisabled: displayBusy || emailBusy || hasPending || hasLogout || phase !== 'ready' || (!consultationChat && Boolean(approval || job)), quickReplies: consultationChat ? [] : conversation?.nextQuestion?.options ?? [],
+    workflow: consultationChat ? null : hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
+    outcome: consultationChat ? null : <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
       && smokeBinding.binding.semanticHash === approval.semanticHash && smokeBinding.contentHash === approval.strategyVersionContentHash
       && sessionState === 'AUTHENTICATED' && phase === 'ready' && !hasLogout && !hasPending && <NativeStructuralSmokePanel
         key={`${smokeBinding.generation}:${smokeBinding.binding.sessionId}:${smokeBinding.binding.strategyVersionId}`}
@@ -1551,17 +1650,30 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // The journal exists during every normal request. Its presence alone is
     // not an error: show recovery after dispatch settles, or immediately when
     // an explicit error/logout boundary requires attention.
-    issue: (error || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? ui('서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.') : error ? nativeAppNotice(language, error) : (returnBinding !== null && !plainAuthReturn() ? ui('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.') : ui('서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'))}</p>
+    issue: (displayError || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout || (returnBinding !== null && !plainAuthReturn())) && <div role="alert"><p>{rejectedClaim && phase === 'ready' ? ui('서버가 전략 연결 요청을 거절했습니다(BAD_REQUEST). 이 요청 기록만 폐기하고 현재 로그인으로 새 대화를 시작할 수 있습니다. 기존 서버 전략은 삭제하지 않습니다.') : displayError ? nativeAppNotice(language, displayError) : (returnBinding !== null && !plainAuthReturn() ? ui('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.') : ui('서버 응답을 확인하고 있습니다. 새 요청을 만들지 않습니다.'))}</p>
       {returnBinding !== null && !plainAuthReturn() && <button disabled={busy || emailBusy || hasLogout} onClick={reopenReturnRoute}>{ui('로그인 반환 화면으로 돌아가기')}</button>}
       {hasComposerRecovery && <p>{ui('전송하지 않은 입력은 이 화면의 메모리에 임시 보관했습니다. 같은 세션·대화를 다시 확인하면 작성란에 복원하며 자동 전송하지 않습니다. 페이지 새로고침이나 닫기 후에는 보존되지 않습니다.')}</p>}
       {hasLogout && <><p>{ui('로그아웃은 서버 전략 삭제나 진행 중인 백테스트 취소가 아닙니다. 확인하지 못한 기존 요청은 서버에서 계속될 수 있으며 기록은 보존합니다.')}</p>
         <button disabled={busy || phase !== 'ready' || logoutBoundary !== null} onClick={() => void logout()}>{ui('같은 로그아웃 요청으로 재개')}</button>
         {logoutBoundary && <button disabled={busy} onClick={() => void newSessionAfterLogout()}>{ui('이전 요청 기록을 보존하고 현재 브라우저에서 새 대화 시작')}</button>}</>}
       {hasPending && !hasLogout && <button disabled={busy || phase !== 'ready' || rejectedClaim} onClick={() => { if (pending.current) void run(() => execute(pending.current!)) }}>{ui('같은 요청으로 재개')}</button>}
+      {consultationChat && consultationState.canResumePending && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void resumeConsultationPending() }}>{ui('같은 요청으로 재개')}</button>}
+      {consultationChat && consultationState.canDiscardPending && !hasPending && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void discardConsultationPending() }}>{nativeExecutionUiText(language, '이 로컬 요청 기록만 폐기')}</button>}
+      {consultationChat && consultationState.canResumeObservation && !consultationState.canResumePending && !consultationState.canDiscardPending && !hasPending
+        && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void resumeConsultationObservation() }}>{nativeExecutionUiText(language, '진행 자동 확인 재개')}</button>}
       {rejectedClaim && <button disabled={busy || phase !== 'ready'} onClick={() => void discardRejectedClaim()}>{ui('연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작')}</button>}</div>,
-    onInput: value => { composerRecovery.current = null; setHasComposerRecovery(false); setInput(value) }, onSend: (value, displayText, researchThread) => send(value, 'composer', displayText, researchThread), onReset: () => {
-      if (working.current || pending.current || logoutIntent.current || busy || hasPending || hasLogout || phase !== 'ready') {
+    onInput: value => { composerRecovery.current = null; setHasComposerRecovery(false); setInput(value) },
+    onSend: (value, displayText, researchThread) => consultationChat ? sendConsultation(value, displayText) : send(value, 'composer', displayText, researchThread),
+    canStop: consultationChat && consultationState.canStop,
+    onStop: consultationChat ? () => { void stopConsultation() } : undefined,
+    onReset: () => {
+      if (working.current || pending.current || logoutIntent.current || displayBusy || hasPending || hasLogout || phase !== 'ready') {
         setError('확인하지 못한 요청을 먼저 재개하거나 이력에서 확인해주세요.'); return false
+      }
+      if (consultationChat) {
+        const accepted = consultation.reset()
+        if (accepted) setInput('')
+        return accepted
       }
       // No server conversation exists yet: this is only a return to the home
       // composer, not a locator transition or implicit conversation creation.
@@ -1607,7 +1719,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         onEditDraft={analysisJob === job ? () => { void editFromResult() } : undefined}
         editDisabled={busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || resultStatus?.backtestId !== analysisJob.backtestId || !resultStatus.reportReady} />
     </>}
-    onLogin={() => { void openLogin() }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => send(value, 'quick-reply', undefined, researchThread)}
+    onLogin={() => { void openLogin() }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
     conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{nativeAppNotice(language, healthyAuthNotice.text)}</p>}
       {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>

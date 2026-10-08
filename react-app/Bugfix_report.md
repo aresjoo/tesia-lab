@@ -1,5 +1,35 @@
 # TETH 버그 수정·검수 보고서
 
+## 최신 상담 복구 교정 — pending·history 경합과 타입 빌드
+
+발행 API13 adapter/controller와 기존 Native/Client seam의 관련25PASS(raw37042842) 뒤, 보수적 응답유실 처리·same-key single-flight·이미 수락된 pending turn 채택·취소 관찰을 후속4키로 검증했다(actual0/rawd01e9a20). 이는 각 당시 source의 범위이며 최종29PASS로 합산하지 않는다. final direct personal1 Opus5.5 `web-consultation-v13-final-delta-opus-review.receipt.json`은 actual0/modelMatched/입력불변 SCOPED_CANDIDATE_GO C0H0M2Low4다. 지적한 null-conversation pending 정리 실패 중복과 concurrent turn GET/history 단조성 경합은 같은 controller/test2에서 교정했다.
+
+history 먼저→서버 turn GET 순서로 관찰하며 정상 sequence 전진을 허용한다. 새 대화의 null pending은 clientMessageId·text·locator turn ID가 모두 서버 확인된 경우만 채택하고, replay 메시지는 정확한 동일 tuple일 때 교체해 중복 ID를 만들지 않는다. 저장소 정리 실패는 명시 차단하며 서버 확인된 답변은 유지한다. availability와 dead resume 버튼의 조건도 정렬했다. 서버 history cap1..256과 commit 후 grant의 오류 경로를 실제 코드로 대조했고 모델의 추가 가설을 확정 버그로 세지 않았다.
+
+신규2키만 단일2PASS/actual0이며 raw `.cache/live-service-activation/web-consultation-v13-delta-final-2.raw.txt` SHAe4c14fe14bf23322128069e357ac167bd49be3e9d5dea5a2dc595243cf6037ad를 보존한다. 직전 build actual2 TS2345(raw4053d8e62a7c69d37d3ed50813b1def7e7913aa794caa87163d59cf244f53d8a)는 disposition의 unknown 타입 오류였고 문자열 guard로 교정했다. 최종 service build 한 번은 actual0, raw `web-consultation-v13-delta-final-service-build.raw.txt` SHA92a625c015bd73b67d8b73771f6bf70598ad505b525faa4b0d694b8529b152be다. controller890700a776eae91626b1d418b3cfa22c8e4196e7d3f6a7d0b2fdb5b62302e623/spec ee456f0adfb57179250c7b6d7250077178eaefc79185bd9e6915f068c990b83f가 최종 입력이며 기존25/all/model 반복0이다. Vite 확장자/chunk 경고는 남는다.
+
+실제 Backend↔React loopback 통합은 정확2파일 제안만 인수했고 아직 실행하지 않았다. 위 시험은 합성 API와 실제 React DOM 범위이고 Provider/API credential·주문·운영 배포0이다. 기존 상담/전략/chart·카피/SVG/로그인 선택지는 보존하며 default-off flag와 capability 확인을 유지한다. API14 전체 목록/로그인 이관·라우터/크레딧 총액 제한·실provider·실거래는 별도 잔여다.
+
+## 현재 연결 후보 — 발행 API13 소비와 실제 React 상담 경로
+
+독립 personal1 Opus5.5의 `web-consultation-v13-opus-review.receipt.json`은 actual0/model matched/입력 불변·**HOLD C0H5M7Low8**다. accepted A 뒤 pending B 응답유실, 확정 거절과 불확정의 구분, cancel 응답 cursor 선행 경합, silent SSE deadline, 대화 화면의 복구 안내 노출을 후속 교정한다. H5는 모델 excerpt 당시 가설이었고 ROOT는 기존 notice 조건을 추가 확인했다. reload의 독립 GET snapshot 경합/100개 초과 페이지와 sessionStorage getter 차단도 좁은 반례로 검증한다. 모델의 non-NFC 응답을 normalize해 성공으로 바꾸라는 M6 권고는 발행 strict API13과 충돌하므로 채택하지 않는다. 대신 정상 NFC 조각 합성의 catch-up을 개선한다. create replay202/폐쇄 SSE 규약도 실제 HTTP 계약대로 유지한다. 이 후속은 exact6 writer에 반환했고 새 final source 검수 전 운영·고객 호출은 열지 않는다.
+
+발행된 private immutable Contracts945/0.24rc1의 API13 npm artifact10파일을 원bytes로 인수했다. tar SHA47e0c73a14eccdfe82cae64354fe699b47ead6e7af8488c77c635905ead4287b·intake receipt45fc724a9c4f6ded7cb98b55d868180c72f6a8d0ddeb027ea230e862e582ca98이며 SDK source/schema 로컬 재작성0이다. dist6은 정확파일 force-add로 인수하고 repository ignore를 확대하지 않았다. 원 staged scan1/findings6은 generation checksum을 해당 공개 artifact와 대조한 분류이며 scanner PASS로 고쳐 쓰지 않는다. 분류 actual0/unclassified0·새예외0와 원scan을 보존했다. owning commit7e0251f로 push했으며 artifact CANDIDATE_NOT_PUBLISHED metadata는 npm registry 상태라 수정하지 않는다.
+
+상담은 신규 adapter/controller와 기존 NativeServiceApp·ClientServiceExperience stop seam에 연결하며 Root service-main prop은 default-off다. capability unavailable이면 입력을 보존하고 legacy compiler로 몰래 fallback하거나 이중 요청하지 않는다. 기존 전략·backtest/chart·library 동선은 별도 현재 conversation을 선택할 때 유지한다. 1차 관련26PASS/scopedlint/servicebuild0는 synthetic API/session의 Node/실React DOM 범위다. 실제 DOM에서 ANON partial→done·stop→cancel/interrupted·capfalse 입력보존/v13·v3 POST0를 확인했고 실제 Backend/provider 성공으로 확대하지 않는다. 최초 CJS interop fixture4FAIL과 수정 후 DOM4PASS는 별도 기록이다.
+
+ROOT가 확인한 single-flight·응답유실 동일 body/key·6회 이상 pending관찰·owner별 pending namespace·accepted locator GET복구·stale input clear·midstream transport 재접속을 교정한다. 후속 핵심4키×2프로젝트8PASS는 첫26과 별도 source다. 추가 cancel 응답유실/CSRF 재개는 owner별 bounded command와 동일key 명시 재시도로 구현 중이며 새 source 검수는 미완료다. locator는 서버 현재 owner가 확인되기 전 권위가 아니고 reload/detach가 새create/provider dispatch나 server cancel을 발생시키지 않는다. 일반 상담의 전체 목록·ANON→AUTH 이관은 API14 계약 선행 잔여다. 카피/SVG/레이아웃/기존 로그인 provider를 삭제하지 않으며 새실고객 호출/실주문/운영배포0이다. 정확 실행/최종SHA·잔여·Git/migration 상태는 Program Ledger가 소유한다.
+
+## 현재 후보 — 원본 글꼴과 모바일 언어 접근 경로 복원
+
+2026-10-08 고정 원본 `aresjoo/tesia-lab@9fbff821df62cad11d026022fc7628c7fcebc431`와 운영 source `13a958b38ccd2a9346417ad7739aaa58c9a25c4b`, React base `be0eb0541631bb5db554cf1aa35da8525fcadd7d`를 대조했다. `.cache/restoration-check/browser.json`의 6개 원본 관측은 제목 글꼴을 `-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif`로 기록하지만 운영/React는 Variable Noto/Geist 우선이었다. `src/client-reference.css`의 공용 shell 선언 한 줄만 원본 순서로 복원하고 카피·SVG·색상·레이아웃·인증·API·flags는 변경하지 않는다. U+20BF 전용 font-face와 다른 화면의 국소 font override도 그대로 둔다.
+
+원본 `original.html`은 `@media (max-width:860px)`에서 `#g-globe{display:none}`을 명시하며 `browser.json`도 원본·배포 모바일 3언어 모두 `localeVisible:false`다. 따라서 모바일 지구본을 새로 노출하지 않는다. 로그인 상태의 기존 React 햄버거→설정 메뉴→일반 설정→7언어 select 경로를 320/390/640/860px에서 검증하고, 861/1440px에서는 원본 데스크톱 지구본을 검증한다. 실제 외부 로그인 없이 기존 preview identity만 사용하며 외부 요청·API·mutation·service worker를 차단한다.
+
+전용 Chromium 2프로젝트×6폭의 최종 단일 실행은 **12PASS/0FAIL·14.9초/exit 0**이다. 실제 앱 첫 실행은 signed-in preview를 먼저 주입해 원래 렌더되지 않는 지구본을 요구한 시험 전제 오류로 12FAIL, 다음 실행은 기존 접근성 hit area 44px를 원본 SVG 20px와 혼동한 oracle 오류로 8PASS/4FAIL이었으며 제품 결함으로 합산하지 않는다. 마지막 시험은 guest 지구본의 원본 숨김/노출과 44px hit area·20px SVG를 구분하고, signed-in 설정 경로의 7언어·입력/DOM 보존·수평 overflow 0·외부/API/mutation/service worker 0을 확인했다. 전용 spec scoped ESLint와 `build:service`는 각각 exit 0이며 build의 기존 Vite 확장자·500kB chunk 경고는 남는다. 최초 두 준비 실행은 `node_modules` 부재와 불완전한 root install로 앱 mount 전 실패했고 제품 결과가 아니다. 전체 회귀는 실행하지 않았다.
+
+지정 `agy --model gemini-3.8-flash-high`의 첫 headless 실행은 command 권한 자동 거부로 출력 없이 exit 0이었고, sandbox 재실행은 exit 0으로 원본 모바일 숨김과 기존 설정 경로를 재확인했다. 다만 CLI 출력에 실제 모델 매칭 attestation이 없어 모델 일치 성공으로 승격하지 않는다. 리뷰가 제안한 추가 font-face/locale-panel 변경은 승인된 단일 선언 범위를 넘어 채택하지 않았다. 실제 provider·로그인·주문·운영 네트워크 쓰기와 배포는 0이며 Backend key/상담 stream 준비 상태와 이 UI 패리티 교정은 분리한다.
+
 ## 병렬 복구 잔여 검수 — 프랑스어 용어 제목 후보 인수
 
 격리 `agent/web/glossary-locale-repair@0562995`의 FR `meaning` 1키와 신규 `client-glossary-heading-locale.spec.ts`만 인수한다. 원본의 관사/전치사 결합 오류를 `Définition : {term}`으로 교정하며 한국어·다른5외국어·label/body·component/handler/CSS/SVG/auth/API/flags는 바꾸지 않는다. 인수 전 src/package/config/HTML 776개를 직접 대조했고 차이는 허용된 dictionary 1개뿐이었다. 새 시험의 원2FAIL과 후보 신규2+기존5의 단일7PASS/11.067s, 42popup관측·scopedlint/타입servicebuild0는 격리 후보 원자료다. 전수나 통합에서 새로 실행한 7PASS로 재집계하지 않는다.

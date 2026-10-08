@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 React 상담 전달 — original UI 보존, 실제 서버 통합 대기
+
+[Web ec15de3](https://github.com/beak1011/tesia-web/tree/ec15de31744cdf08fe99aa2a9ba48500a7f58774)의 clean tracked2377파일/33,835,466bytes를 snapshot `339bb88ba9c0aba5606fecaff7d64723a829eac60fe20f96091494167ed8d6f1`로 전달했다. sourceDirtyFiles·removedPriorPaths는 비어 있고 공식 sync/verify actual0이다. SDK dist6 경로를 추측한 force-add 준비 명령2회는 actual128, 해당 ignored 경로의 verify2회는 actual1이었다. 실제 Git 추적 목록을 확인한 뒤 정확 index/types/validator의 js/d.ts6개만 force-add했고 verify actual0으로 닫았다. SDK bytes/제품 코드를 바꾸거나 ignore 규칙을 확대하지 않았다.
+
+이번 제품 변화는 원본 shell font 순서 한 줄·발행 API13 SDK·default-off 상담 adapter/controller 및 기존 Native/Client seam이다. 카피·SVG·원본 모바일 globe 숨김/설정 접근·기존 로그인/전략/chart는 유지한다. 응답유실 시 동일 owner/body/key로 명시 재개하고 view detach는 서버 취소를 만들지 않는다. accepted/pending 복구·NFC 조각 합성·bounded 관찰·취소 경합을 시험했고 최종2키/빌드0를 앞선25/4와 합산하지 않는다. 모델 final C0H0M2의 경합 의견은 controller/test만 추가 교정했고 이 후속은 모델 동결 이후 시험 증거로 구분한다. 실제 Backend 통합 E2E는 아직 실행하지 않았다.
+
+운영source13a/edge7e·원본 root제품/Node/Worker는 불변이며 이 전달은 운영 배포가 아니다. Backend final Unicode 상한 반례는 좁은 후속 중이고 API14 aggregate/host·자동 라우터/크레딧 기한/총액·실provider·실계정/주문은 미완료다. 기존 `backend-bitget-single-delivery`의 OAuth/exchange mount가 있다는 점을 확인했으므로 새 상담 구성의 누락을 전체 OAuth 부재로 보고하지 않는다. 사용자 확정사항은 현물·선물 모두/자동 난이도 라우팅/크레딧만 사용이고 실제 부족분만 [Program 정본](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/TESIA_AI_POC_Product_Implementation_Plan.md#171-준비물)에서 요청한다.
+
+아래 후보·계획·미완료 표현은 각 당시 기록이며 현재 source의 전체 서비스 완료 증거로 합산하지 않는다.
+
 ### 현재 상담 application 후보 — 정상 흐름 확인, HTTP·실서비스 보류
 
 [Backend 구현9a2a9b5](https://github.com/beak1011/tesia-backend/tree/9a2a9b5628dfad77e5608c60caf225b280133423)와 [문서 전달6f3afb6](https://github.com/beak1011/tesia-backend/tree/6f3afb6540ebddd356ded2fad8310d1e320f2710)에 새 application/store/projection3개와 관련 시험3개를 전달했다. 기존 shared session/CSRF·같은 물리 transaction·durable runner를 재사용하며 요청 멱등 replay, 연속 API13 event, owner-bound history cursor, 취소·재시작 복구를 연결하는 서버 소스 후보다. 기존212개 Python bytes는 보존했고 현재 source215개다. 이전 manifest212/package237 설치 승인을 새 source의 설치 승인으로 승계하지 않는다.

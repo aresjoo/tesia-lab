@@ -1,0 +1,156 @@
+{
+  "apiContractVersion": "0.13.0",
+  "automaticPagination": false,
+  "automaticRetry": false,
+  "defaultLimit": 100,
+  "executionAuthority": false,
+  "managedRequestHeaders": [
+    "Origin"
+  ],
+  "maxRequestBytes": 65536,
+  "maxRequestTargetBytes": 2048,
+  "maxResponseBytes": 262144,
+  "maxTurnBytes": 258048,
+  "mutationHeaders": [
+    "X-CSRF-Token",
+    "Idempotency-Key"
+  ],
+  "operations": [
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "getConsultationCapabilitiesV13",
+      "path": "/api/v13/consultation/capabilities",
+      "queryKeys": [],
+      "request": "CapabilitiesRequest",
+      "response": "CapabilitiesEnvelope",
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "CSRF_INVALID",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "IDEMPOTENCY_KEY_REUSED",
+        "CLIENT_MESSAGE_ID_REUSED",
+        "TURN_IN_PROGRESS",
+        "BUDGET_EXCEEDED",
+        "RATE_LIMITED",
+        "PROVIDER_UNAVAILABLE",
+        "INTERNAL_ERROR"
+      ],
+      "method": "POST",
+      "mutation": true,
+      "operationId": "createConsultationTurnV13",
+      "path": "/api/v13/consultation/turns",
+      "queryKeys": [],
+      "request": "CreateRequest",
+      "response": "TurnEnvelope",
+      "successStatus": 202
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "getConsultationTurnV13",
+      "path": "/api/v13/consultation/turns/{turnId}",
+      "queryKeys": [],
+      "request": "TurnRequest",
+      "response": "TurnEnvelope",
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "CURSOR_INVALID",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "listConsultationEventsV13",
+      "path": "/api/v13/consultation/turns/{turnId}/events",
+      "queryKeys": [
+        "after",
+        "limit"
+      ],
+      "request": "EventsRequest",
+      "response": "EventsEnvelope",
+      "sseEvent": "Event",
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "CURSOR_INVALID",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "listConsultationHistoryV13",
+      "path": "/api/v13/consultation/conversations/{conversationId}/history",
+      "queryKeys": [
+        "cursor",
+        "limit"
+      ],
+      "request": "HistoryRequest",
+      "response": "HistoryEnvelope",
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "CSRF_INVALID",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "IDEMPOTENCY_KEY_REUSED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "POST",
+      "mutation": true,
+      "operationId": "cancelConsultationTurnV13",
+      "path": "/api/v13/consultation/turns/{turnId}/cancel",
+      "queryKeys": [],
+      "request": "CancelRequest",
+      "response": "CancelEnvelope",
+      "successStatus": 200
+    }
+  ],
+  "originPolicy": {
+    "ingress": "TRUST_CONFIGURED_SERVICE_ORIGIN_ONLY_NO_CLIENT_FORWARDED_ORIGIN_AUTHORITY",
+    "invalid": "DUPLICATE_MALFORMED_NULL_OR_FOREIGN_REJECTED",
+    "mutation": "REQUIRED_EXACT_SAME_ORIGIN",
+    "read": "ABSENT_ALLOWED_SUPPLIED_EXACT_SAME_ORIGIN"
+  },
+  "producerImplemented": false,
+  "releaseStatus": "CANDIDATE_NOT_PUBLISHED",
+  "sessionCookie": "__Host-tesia_session",
+  "turnWrapperReserveBytes": 4096
+}

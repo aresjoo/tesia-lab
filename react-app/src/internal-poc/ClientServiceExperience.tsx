@@ -134,7 +134,7 @@ export type ClientServiceHistory = {
  * This module is reachable only from the separately built internal entrypoint.
  */
 export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
-  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void> }; onLogin?: () => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
+  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: () => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
   /** Observed result identity/status, only for the conversation's unread UI. */
@@ -1041,7 +1041,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         artifactOpenLabel={strategyDocument ? n('openStrategyDraft') : undefined} showResearchTeam={!strategyDocument}
         reportArtifact={analysis ? { identity: analysisIdentity ?? 'current-result', label: nativeResultText(language, 'resultTitle'), openLabel: nativeResultText(language, 'resultTitle'), content: researchData ? null : <NativeAnalysisReportSlot /> } : undefined}
         notice={!researchHistory && strategyDocument && state.issue ? <div className="client-service-issue">{state.issue}</div> : undefined}
-        onStop={() => undefined} canStop={false} busy={state.busy && state.phase !== 'loading'} inputDisabled={!available} maxLength={1000}
+        onStop={state.onStop ?? (() => undefined)} canStop={state.canStop ?? false} busy={state.busy && state.phase !== 'loading'} inputDisabled={!available} maxLength={1000}
         inputLabel={c('askTeth')} sendLabel={c('send')} titleLabel={c('title')} initialTitle={visibleTitle}
         titleEditor={activeRecord && <NativeConversationTitle key={JSON.stringify([accountScope, activeRecord.id])} title={visibleTitle}
           onSave={library?.onRename ? value => renameConversation(activeRecord.id, value) : undefined} />}
