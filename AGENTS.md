@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-현재 실행연결 개발은 `currentConsultationActivationDevelopment`를 따른다. Backend7f871a0의 routing8/creditleaf3는 owning branch에 실제 전달됐고 라우터Opus C0H0M0Low5와 새 fixed HTTP2PASS는 코드/시험 한정이다. credit 추가검수 C0H0M2Low4 HOLD 및 private routed CLI/startup gate의 후속 native 경계를 구분한다. API14 package/oracle교정은 아직 immutable발행/host이관 성공이 아니다. 새후보를 React/root Node·Worker에 복사하거나 원본 UI/카피/SVG·기존 로그인/모바일설정 경로를 변경하지 않는다. 최신 개발 source와 운영13a/edge7e·아래 당시refs를 구분하며 사용자 준비물은 Program§17.1만 사용한다.
+현재 실행연결 개발은 `currentConsultationActivationDevelopment`를 따른다. Backendf0b5670의 원자 credit admission/dispatch/late usage·None 혼합모드 차단·private0.2 필수 creditPeriod·명시 routed CLI/startup gate와 final direct personal1 Opus5.5 actual0/입력불변 C0H0M0Low8을 코드 한정 인수한다. Contracts4791c11은 동일 frozen package·단일 normal675PASS 인수이며 아직 immutable발행/AI+Backend 재핀/normal resolver/host이관 성공이 아니다. Program883924f가 후속 설치와 고객 연결 경계를 소유한다. React2378/snapshot57a03350·원본UI/카피/SVG/모바일언어숨김/Google·Apple·email·운영13a/edge7e·rootNode/Worker·730seal은 불변이다. 고객API/주문/운영GO0이고 사용자 입력은 §17.1 하나에 모으며 내부 구현을 키 대기로 중단하지 않는다. 새Backend를 원본root에 복사하지 않는다. 아래 refs·미완료는 각 전달 당시 이력이다.
 
 최신 전체 React snapshot은 Web863bc32의 2378파일/33,864,394bytes/SHA57a03350이다. 제품 source는 ec15de3 그대로이고 신규 realHTTP 브라우저 시험1/누적보고서만 후속이다. 실제 session/CSRF/HTTP/DB와 fake HTTPS provider의 두 키가2PASS/actual0/110.461초지만 고객 Anthropic/Bitget 주문·3,000명·운영 GO는 아니다. sourceDirtyFiles·삭제0/공식 sync·verify0, owning Backend62a8196/API14Contracts6350837과 정확 receipt는 migration-verification.json을 따른다. 원제품/root Node·Worker/운영13a·edge7e/기존FAIL/HOLD/730일을 보존하고 snapshot은 직접 수정하지 않는다. 자동 라우터·크레딧 총액/기한·API14 host/실provider·실주문은 미완료다. 아래 최신/현재 표현은 각 전달 당시 이력이다.
 

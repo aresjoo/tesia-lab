@@ -2,13 +2,13 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 실행 연결 개발 — 모델 라우터 인수, 크레딧 추가 교정
+### 현재 실행 연결 개발 — 원자 크레딧/라우팅과 API14 설치 후보 인수
 
-owning [Backend7f871a0](https://github.com/beak1011/tesia-backend/tree/7f871a02c7d60ddb1318c62bffe33258f77c402c)에 자동 모델 선택8파일·크레딧 기간 leaf3파일을 실제 commit/push했다. 라우터 최초21 뒤 후속7PASS와 독립 personal1 Opus5.5 C0H0M0Low5는 scoped code 인수다. 같은 변경 서버의 fixed HTTP↔React reload/명시중지2키도 새 단일2PASS/약122초·9입력불변으로 확인했으나 fake HTTPS 응답이며 고객 Anthropic·routed CLI 성공이 아니다. 원본 UI·카피·SVG·기존 Google/Apple/email·Web863 snapshot은 불변이다.
+[Backendf0b5670](https://github.com/beak1011/tesia-backend/tree/f0b56706317b1cc561f140b5020b4ad68340e5b6)은 원자 크레딧 admission/dispatch/실제 lateusage·None 혼합 DB 우회 차단·private0.2 필수 creditPeriod/프로필 결속·명시 routed CLI/startup pending tuple gate를 연결한 개발 source다. native Codex5.6SolHigh A17PASS, None delta4PASS+oracleERROR1→동일1PASS, B후속6PASS/별도gate1PASS/실제fixed+routed factory·rootreopen2PASS를 각각 보존한다. final personal1 Opus5.5는 actual0/입력불변 C0H0M0Low8이다. configured credit의 실제 HTTP↔React reload/중지2PASS/129.088초는 fakeHTTPS/parser·당시15입력exact이며 마지막 None/ASCII delta 뒤 브라우저 재실행 인수가 아니다.
 
-크레딧 leaf 추가 Opus는 C0H0M2Low4 HOLD다. main/TEMP schema 권위와 caller fence 결속을 신규3파일 안에서 교정 중이며 app/runner 연결은 인수 전 보류한다. 다른 native는 routed CLI·시작 시 QUEUED 지원tuple 검사·명시 credit config를 별도7파일에서 연결한다. API14는 격리 package 단일시험 뒤 old version/governance oracle5FAIL을 보존·같은5+helper5=10PASS로 정리했지만 새 최종 package/immutable 발행·Backend/AI exact pin·host claim/list·React 이관은 아직 미완료다. 정확 승인·원FAIL/receipt는 [Programa752b2f](https://github.com/beak1011/tesia-program/tree/a752b2f1414b3f9ae41351392d7c03140fbe4d3d) 및 owning Bugfix를 따른다. 개발 브랜치 전달을 teth.ai 운영 반영이나 키만 있으면 완료 상태로 해석하지 않는다. Backend 기본branch가 보고한 moderate 의존성 경고4건도 별도 잔여이며 무결점 주장은 하지 않는다.
+[Contracts4791c11](https://github.com/beak1011/tesia-contracts/tree/4791c11aabc91d8c81ba991db9fa617e8c9113e8)의 새 wheel/sdist 패키지·ROOT22대조·독립Opus C0H0M0Low6 및 동일 frozen normal whole675PASS/actual0/1925.442초를 인수했다. 단일1회/재시도0/원RED5/이전683을 구분한다. 이 설치는 격리target/no-deps이고 현재 AI가 exact0.24에 결속돼 **Backend만0.25로 바꿀 수 없다**. [Program883924f](https://github.com/beak1011/tesia-program/tree/883924fa0a88eb49579f49648ed847ed6b408ae7)는 immutable발행→새AI호환distribution→Backend동시pin/provenance/current-serviceclosure→normalfreshresolver→API14durableclaim/list/sharedhandoff→React로그인이관 순서를 소유한다. 아직 host/고객 provider·연구/Critic·Bitget 실제 주문/체결/복구·운영은 미완료다. 원본UI/카피/SVG/로그인/모바일homeglobe숨김·Reactsnapshot57a·운영13a/edge7e/rootNode·Worker/730seal 불변이며 이 migration 전달은 teth.ai 배포가 아니다. exact receipt/원실패/Low·defaultbranch moderate4와 부족 입력은 manifest/Program§17.1을 따른다.
 
-### 현재 React 상담 전달 — original UI 보존, 로컬 HTTP 두 흐름 검증
+### React 스냅샷 전달 — 아래 실행·Backend/Contracts ref는 직전 배치 기록
 
 [Web863bc32](https://github.com/beak1011/tesia-web/tree/863bc32fd6a786da600307965663e1524f4c67c7)의 clean tracked2378파일/33,864,394bytes를 snapshot `57a03350ab8d39c7340169fa2ced96fb097f832840b15a27ac8d1625525fc497`로 전달했다. sourceDirtyFiles·removedPriorPaths는 비어 있고 공식 sync/verify actual0이다. 이번 후속은 신규 real-loopback 시험1과 누적보고서뿐이며 ec15de3의 제품 source/SDK bytes는 불변이다. 이전 SDK dist6 경로 추측/ignored 준비 실패와 정확 추적 경로 인수는 원자료·직전 보고서에 보존하며 새 실패나 전체서비스 성공으로 합산하지 않는다.
 
