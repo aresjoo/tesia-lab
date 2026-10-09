@@ -404,6 +404,32 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   }, [accountScope, connectionPlanContinuation, onConnectionPlanContinuationConsumed, state.sessionState])
   const connectionData = nativeAccounts && state.sessionState === 'AUTHENTICATED' && connectionPresentationBound(connectionPresentation, accountScope)
     ? connectionPresentation : undefined
+  const latestConnectionPlanAuthority = useRef({ owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, plan: connectionPlan })
+  useLayoutEffect(() => {
+    latestConnectionPlanAuthority.current = { owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, plan: connectionPlan }
+  }, [accountScope, connectionBrowse, connectionData, connectionPlan, state.sessionState])
+  const connectionPlanAuthorize = (() => {
+    const browse = connectionBrowse, data = connectionData, stage = data?.state, exchange = connectionPlan.exchange
+    // This bridge is deliberately limited to the currently shipped API12 Bitget producer.
+    if (connectionPlan.step !== 'authorize' || exchange !== 'bitget' || !browse || browse.mode !== 'continuation' || browse.owner !== accountScope || browse.session !== 'AUTHENTICATED'
+      || state.sessionState !== 'AUTHENTICATED' || data?.status !== 'ready' || stage?.kind !== 'exchange'
+      || data.identity !== `exchange:${accountScope}` || !stage.exchanges?.some(choice => choice.id === exchange) || !stage.onChoose) return undefined
+    const action = stage.onChoose
+    return async () => {
+      await Promise.resolve()
+      const current = latestConnectionPlanAuthority.current
+      if (ownerRef.current !== accountScope || current.owner !== accountScope || current.session !== 'AUTHENTICATED'
+        || current.browse !== browse || current.data !== data || current.data?.identity !== `exchange:${accountScope}`
+        || current.plan.step !== 'authorize' || current.plan.exchange !== exchange || data.state !== stage || stage.onChoose !== action
+        || !stage.exchanges?.some(choice => choice.id === exchange)) return
+      await action(exchange)
+      const settled = latestConnectionPlanAuthority.current
+      if (ownerRef.current === accountScope && settled.owner === accountScope && settled.session === 'AUTHENTICATED'
+        && settled.browse === browse && settled.plan.step === 'authorize' && settled.plan.exchange === exchange) {
+        setConnectionBrowse(value => value === browse ? { ...browse, mode: 'browse' } : value)
+      }
+    }
+  })()
   const settingsAccountConnections = projectSettingsAccountConnections(connectionData, accountScope)
   const settingsConnectionOwner = connectionData ? settingsAccountConnectionOwner(connectionData.scope, connectionData.identity) : null
   const latestSettingsConnections = useRef(settingsAccountConnections)
@@ -1113,7 +1139,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           ? <NativeConnectionOnboarding accountScope={accountScope} presentation={connectionData} onReturn={closeConnection} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} />
           : <ClientConnectionPlan view={connectionPlan} signedIn={state.sessionState === 'AUTHENTICATED'} onNavigate={setConnectionPlan}
               onSignup={next => { setConnectionPlan(next); login('signup', accountScope && state.sessionState === 'ANONYMOUS'
-                ? { issuer: 'client-connection-plan', operation: 'signup', requestId: crypto.randomUUID(), sourceSessionId: accountScope, plan: next } : undefined) }} onClose={closeConnection}
+                ? { issuer: 'client-connection-plan', operation: 'signup', requestId: crypto.randomUUID(), sourceSessionId: accountScope, plan: next } : undefined) }} onAuthorize={connectionPlanAuthorize} onClose={closeConnection}
               onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} />}
       </Suspense></ClientLoadBoundary>}
       <div className="native-service-route-content" hidden={connectionOpen || Boolean(settingsTab || connectionStatus)} inert={Boolean(settingsTab || connectionStatus)} style={{ display: connectionOpen || settingsTab || connectionStatus ? 'none' : 'contents' }}>

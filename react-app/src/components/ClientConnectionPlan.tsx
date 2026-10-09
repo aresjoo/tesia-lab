@@ -37,14 +37,17 @@ function Benefits({paid=false,short=false}:{paid?:boolean;short?:boolean}){
 }
 /** af7b8d1 plView/plCheckout and px. Display/navigation, never provider authority. */
 type ClientConnectionPlanResult=ReturnType<typeof commonPreviewResult>
-export default function ClientConnectionPlan({view,resultContext,result,signedIn,onNavigate,onSignup,onClose,onHelp}:{
+export default function ClientConnectionPlan({view,resultContext,result,signedIn,onNavigate,onSignup,onAuthorize,onClose,onHelp}:{
   view:ConnectionPlanLocation;signedIn:boolean;onNavigate:(next:ConnectionPlanLocation)=>void
   resultContext?:CommonResultContext|null;result?:ClientConnectionPlanResult|null
-  onSignup:(next:ConnectionPlanLocation)=>void;onClose:()=>void;onHelp:(trigger:HTMLButtonElement)=>void
+  onSignup:(next:ConnectionPlanLocation)=>void;onAuthorize?:()=>Promise<void>;onClose:()=>void;onHelp:(trigger:HTMLButtonElement)=>void
 }){
   const c=useConnectionLocaleText()
   const unavailable=c("실제 결제·거래소 연결은 아직 제공되지 않습니다. 카드 정보는 입력할 수 없습니다.")
   const heading=useRef<HTMLHeadingElement>(null),root=useRef<HTMLElement>(null)
+  const authorizeLock=useRef(false)
+  const authorizeAlive=useRef(false)
+  const [authorizePending,setAuthorizePending]=useState(false)
   const {language}=useClientPreferences()
   const good=Boolean(result&&result.evaluation.trades.length&&result.evaluation.pnl>=0&&result.evaluation.nav>=result.points.at(-1)!.benchmark)
   const number=new Intl.NumberFormat(language,{maximumFractionDigits:1}),percent=(value:number)=>`${value>0?'+':''}${number.format(value)}%`
@@ -54,8 +57,15 @@ export default function ClientConnectionPlan({view,resultContext,result,signedIn
   const isPostPlan=step==='free'||step==='account'||step==='authorize'
   const title=step==='checkout'?c("플랜 구성"):step==='free'?c("거래소 선택"):step==='account'?c("{0} 계정",exchange[1]):step==='authorize'?c("{0} 연결",exchange[1]):c("거래소 연결")
   const headingIdentity=(step==='account'||step==='authorize')?`${step}:${exchange[0]}`:step
+  useLayoutEffect(()=>{authorizeAlive.current=true;return()=>{authorizeAlive.current=false}},[])
   useLayoutEffect(()=>{root.current?.scrollTo({top:0,behavior:'instant'});heading.current?.focus({preventScroll:true})},[headingIdentity])
   const pick=(next:ConnectionPlanLocation['step'])=>{const choice={...view,step:next};if(!signedIn)onSignup(choice);else onNavigate(choice)}
+  const authorize=async()=>{
+    if(!onAuthorize||authorizeLock.current)return
+    authorizeLock.current=true;setAuthorizePending(true)
+    try{await onAuthorize()}catch{/* The supplied controller owns its observed error projection. */}
+    finally{authorizeLock.current=false;if(authorizeAlive.current)setAuthorizePending(false)}
+  }
   const chooseExchange=<div className="cpl-exs" role="radiogroup" aria-label={c('거래소')}>{planExchanges.map(([id,name],index)=><button type="button" role="radio" key={id} className={id===view.exchange?'on':''} aria-checked={id===view.exchange} tabIndex={id===view.exchange?0:-1} onClick={()=>onNavigate({...view,exchange:id})} onKeyDown={event=>{
     let next:number
     if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%planExchanges.length
@@ -122,8 +132,8 @@ export default function ClientConnectionPlan({view,resultContext,result,signedIn
           <p id="connection-plan-unavailable" className="cpl-unavailable">{c("초대 가입 링크는 아직 제공되지 않습니다.")}</p>
         </>:<>
           <div className="cpx-card"><ul className="cpx-perm">{[[c("잔고 조회"),c("전략에 쓸 잔고를 봅니다")],[c("주문"),c("전략 조건에 맞을 때 주문을 냅니다")]].map(([label,detail])=><li key={label}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg><span><b>{label}</b>{detail}</span></li>)}</ul></div>
-          <button type="button" className="cpl-cta cpl-cta-w cpx-cta" disabled aria-describedby="connection-plan-unavailable"><Logo id={exchange[0]} size={20}/>{c('{0}에서 승인하기',exchange[1])}</button>
-          <p id="connection-plan-unavailable" className="cpl-unavailable">{c("실제 거래소 승인은 아직 제공되지 않습니다. 계정이 연결되거나 주문 권한이 부여되지 않습니다.")}</p>
+          <button type="button" className="cpl-cta cpl-cta-w cpx-cta" aria-busy={authorizePending} disabled={!onAuthorize||authorizePending} aria-describedby={onAuthorize?undefined:"connection-plan-unavailable"} onClick={()=>void authorize()}><Logo id={exchange[0]} size={20}/>{c('{0}에서 승인하기',exchange[1])}</button>
+          {!onAuthorize&&<p id="connection-plan-unavailable" className="cpl-unavailable">{c("실제 거래소 승인은 아직 제공되지 않습니다. 계정이 연결되거나 주문 권한이 부여되지 않습니다.")}</p>}
         </>}
         <p className="cpx-help"><span>{c("막히면 상담원이 24시간 답합니다.")}</span><button type="button" className="cpl-link" onClick={event=>onHelp(event.currentTarget)}>{c("상담원에게 묻기")}</button></p>
       </div>}

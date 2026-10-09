@@ -66,7 +66,7 @@ async function mountExchangeHook(page: Page, wire: HookWire, strict: boolean) {
   await expect.poll(() => wire.requests.filter(value => value.endsWith('/exchange-connections/catalog')).length).toBe(1)
 }
 
-async function mountConnectionPlanAuth(page: Page) {
+async function mountConnectionPlanAuth(page: Page, emptyConnections = false) {
   const anonymous = 'session_connection_plan_anon_0001', authenticated = 'session_connection_plan_auth_0001'
   const anonymousEtag = '"connection_plan_anon_etag_0001"', authenticatedEtag = '"connection_plan_auth_etag_0001"'
   const challenge = 'email_challenge_connection_plan_0001'
@@ -78,6 +78,7 @@ async function mountConnectionPlanAuth(page: Page) {
     sessionGates: [] as Array<{ wait: Promise<void>; fail?: boolean }>,
     heldSessionReads: 0,
     releasedSessionReads: 0,
+    exchangeStarts: 0,
   }
   await page.clock.setFixedTime(new Date('2030-01-01T00:00:15Z'))
   const meta = (version: string, revision: string | null) => ({ apiContractVersion: version, requestId: 'req_connection_plan_0001', traceId: 'trace_connection_plan_0001', resourceRevision: revision })
@@ -122,10 +123,17 @@ async function mountConnectionPlanAuth(page: Page) {
       { exchangeId: 'bingx', available: false, reason: 'PROVIDER_UNAVAILABLE' }, { exchangeId: 'gate', available: false, reason: 'PROVIDER_UNAVAILABLE' },
       { exchangeId: 'mexc', available: false, reason: 'PROVIDER_UNAVAILABLE' }, { exchangeId: 'htx', available: false, reason: 'PROVIDER_UNAVAILABLE' },
     ] } }) })
-    if (path === '/api/v1/exchange-connections/') return route.fulfill({ headers, body: JSON.stringify({ apiContractVersion: '0.12.0', data: { connections: [{
+    if (path === '/api/v1/exchange-connections/') return route.fulfill({ headers, body: JSON.stringify({ apiContractVersion: '0.12.0', data: { connections: emptyConnections ? [] : [{
       connectionId: exchangeConnection, exchangeId: 'bitget', maskedAccountLabel: '12**34', connectedAt: '2030-01-01T00:00:00Z', status: 'connected',
       permissions: { read: true, spotTrade: true, futuresTrade: false, withdrawal: false }, permissionsVerified: true,
     }] } }) })
+    if (path === '/api/v1/exchange-connections/transactions') {
+      state.exchangeStarts++
+      return route.fulfill({ headers, body: JSON.stringify({ apiContractVersion: '0.12.0', data: {
+        transactionId: 'exchange_transaction_start_0001', exchangeId: 'bitget', status: 'pending', expiresAt: '2030-01-01T01:00:00Z',
+        authorizationUrl: 'https://www.bitget.com/account/oauth?clientId=fixture', connectionId: null, failureCode: null,
+      } }) })
+    }
     return route.abort('blockedbyclient')
   })
   await page.goto('/connection-plan-auth.html')
@@ -299,6 +307,153 @@ test('동일 signup panel의 검증된 EMAIL 결과만 선택한 연결 plan을 
   await expect(page.locator('.native-connection-onboarding')).toHaveCount(0)
   expect(await page.evaluate(() => sessionStorage.getItem('tesia.native.connection-plan-login-intent'))).toBeNull()
   expect(state.posts).toEqual(['/api/v9/auth/email/challenges', `/api/v9/auth/email/challenges/email_challenge_connection_plan_0001/verifications`])
+})
+
+test('검증된 로그인 뒤 현재 owner의 available Bitget 승인 CTA만 기존 API12 start를 한 번 호출한다', async ({ page }) => {
+  const state = await mountConnectionPlanAuth(page, true)
+  await page.route('https://www.bitget.com/**', route => route.fulfill({ contentType: 'text/html', body: '<title>Bitget fixture</title>' }))
+  const entry = page.locator('.client-site-footer').getByRole('button', { name: '거래소 연결', exact: true })
+  await entry.scrollIntoViewIfNeeded(); await entry.click()
+  await page.getByRole('button', { name: '무료로 시작하기', exact: true }).click()
+  const panel = page.getByRole('region', { name: '실제 계정 로그인', exact: true })
+  await panel.getByRole('button', { name: '이메일로 로그인', exact: true }).click()
+  const form = panel.getByRole('form', { name: '이메일 로그인', exact: true })
+  await form.getByLabel('이메일 주소', { exact: true }).fill('connection-plan@example.invalid')
+  await form.getByRole('button', { name: '계속', exact: true }).click()
+  await form.getByLabel('6자리 인증번호', { exact: true }).fill('000123')
+  await form.getByRole('button', { name: '계속', exact: true }).click()
+  await page.getByRole('button', { name: 'Bitget', exact: true }).click()
+  await page.getByRole('button', { name: '기존 초대 계정 연결', exact: true }).click()
+  const authorize = page.getByRole('button', { name: 'Bitget에서 승인하기', exact: true })
+  await expect(authorize).toBeEnabled()
+  await expect(page.getByText('실제 거래소 승인은 아직 제공되지 않습니다. 계정이 연결되거나 주문 권한이 부여되지 않습니다.', { exact: true })).toHaveCount(0)
+  await authorize.evaluate(node => { (node as HTMLButtonElement).click(); (node as HTMLButtonElement).click() })
+  await expect(page).toHaveURL(/^https:\/\/www\.bitget\.com\/account\/oauth\?/)
+  expect(state.exchangeStarts).toBe(1)
+  expect(state.posts.filter(path => path === '/api/v1/exchange-connections/transactions')).toHaveLength(1)
+})
+
+test('비로그인·foreign owner·미지원 catalog·pending presentation은 승인 callback을 노출하지 않는다', async ({ page }) => {
+  await page.route('**/connection-authorize-boundary.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><body><div id="root"></div></body></html>' }))
+  await page.goto('/connection-authorize-boundary.html')
+  await page.evaluate(async () => {
+    const refresh = (await import('/@react-refresh')).default
+    refresh.injectIntoGlobalHook(window)
+    Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
+    const componentPath = '/src/internal-poc/ClientServiceExperience.tsx'
+    const source = await (await fetch(componentPath)).text()
+    const reactPath = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
+    if (!reactPath) throw new Error('Missing Vite React instance')
+    const ReactModule = await import(/* @vite-ignore */ reactPath)
+    const DOM = await import('/@id/react-dom/client')
+    const { ClientServiceExperience } = await import(/* @vite-ignore */ componentPath)
+    const React = ReactModule.default ?? ReactModule
+    const owner = 'owner-authorize-boundary-a', starts: string[] = []
+    const controls = { starts, setSession: (value: 'ANONYMOUS' | 'AUTHENTICATED') => { void value }, setMode: (value: 'available' | 'foreign' | 'unsupported' | 'pending' | 'rejecting') => { void value } }
+    Reflect.set(window, 'connectionAuthorizeBoundary', controls)
+    function Host() {
+      const [sessionState, setSession] = React.useState<'ANONYMOUS' | 'AUTHENTICATED'>('ANONYMOUS')
+      const [mode, setMode] = React.useState<'available' | 'foreign' | 'unsupported' | 'pending' | 'rejecting'>('available')
+      controls.setSession = setSession; controls.setMode = setMode
+      const exchanges = mode === 'pending' ? [{ id: 'refresh', title: '다시 확인' }, { id: 'cancel', title: '연결 취소' }]
+        : mode === 'unsupported' ? [{ id: 'bybit', title: 'Bybit' }] : [{ id: 'bitget', title: 'Bitget' }]
+      const connectionPresentation = { scope: mode === 'foreign' ? 'owner-authorize-boundary-b' : owner, identity: `exchange:${owner}`, requestId: '', status: 'ready' as const,
+        state: { id: `exchange:${mode}`, kind: 'exchange' as const, title: '거래소 연결', exchanges,
+          onChoose: async (exchange: string) => { if (mode === 'rejecting') throw new Error('synthetic rejected connection action'); starts.push(exchange) } } }
+      return React.createElement(ClientServiceExperience, {
+        nativeAccounts: true, accountScope: owner, connectionPresentation,
+        connectionPlanContinuation: { issuer: 'client-connection-plan', operation: 'signup', requestId: 'authorize_boundary_request_0001', sourceSessionId: 'session_anonymous_source_0001', targetSessionId: owner, plan: { step: 'authorize', exchange: 'bitget' } },
+        onConnectionPlanContinuationConsumed: () => undefined, onLogin: () => undefined,
+        state: { phase: 'ready', sessionState, messages: [], input: '', busy: false, inputDisabled: false, source: 'service', recovery: null, quickReplies: [], workflow: null, outcome: null, issue: null,
+          onInput: () => undefined, onSend: async () => undefined, onReset: async () => undefined, onRecover: undefined, onLogout: undefined },
+      })
+    }
+    ;(DOM.createRoot ?? DOM.default.createRoot)(document.getElementById('root')).render(React.createElement(Host))
+  })
+  const controls = () => page.evaluate(() => Reflect.get(window, 'connectionAuthorizeBoundary').starts as string[])
+  const pageErrors: Error[] = []
+  page.on('pageerror', error => pageErrors.push(error))
+  const footerEntry = page.locator('.client-site-footer').getByRole('button', { name: '거래소 연결', exact: true })
+  await footerEntry.scrollIntoViewIfNeeded(); await footerEntry.click()
+  await page.getByRole('button', { name: '무료로 시작하기', exact: true }).click()
+  expect(await controls()).toEqual([])
+  await page.evaluate(() => Reflect.get(window, 'connectionAuthorizeBoundary').setSession('AUTHENTICATED'))
+  const authorize = page.getByRole('button', { name: 'Bitget에서 승인하기', exact: true })
+  await expect(authorize).toBeEnabled()
+  const retiredClick = await authorize.evaluateHandle(node => {
+    const key = Object.keys(node).find(candidate => candidate.startsWith('__reactProps$'))
+    const click = key ? Reflect.get(Reflect.get(node, key), 'onClick') : undefined
+    if (typeof click !== 'function') throw new Error('Missing retained React click callback')
+    return click as () => void
+  })
+  await page.evaluate(() => Reflect.get(window, 'connectionAuthorizeBoundary').setMode('foreign'))
+  await expect(authorize).toBeDisabled()
+  await retiredClick.evaluate(click => click())
+  await expect.poll(controls).toEqual([])
+  await page.evaluate(() => Reflect.get(window, 'connectionAuthorizeBoundary').setMode('rejecting'))
+  await expect(authorize).toBeEnabled()
+  await authorize.click()
+  await expect(authorize).toBeEnabled()
+  expect(pageErrors).toEqual([])
+  for (const mode of ['foreign', 'unsupported', 'pending'] as const) {
+    await page.evaluate(value => Reflect.get(window, 'connectionAuthorizeBoundary').setMode(value), mode)
+    await expect(authorize).toBeDisabled()
+    await authorize.evaluate(node => (node as HTMLButtonElement).click())
+  }
+  expect(await controls()).toEqual([])
+})
+
+test('API12 identity와 현재 authorize plan에 결속되어 legacy presentation과 퇴역 plan callback을 거절한다', async ({ page }) => {
+  await page.route('**/connection-authorize-plan-binding.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html lang="ko"><meta name="viewport" content="width=device-width,initial-scale=1"><body><div id="root"></div></body></html>' }))
+  await page.goto('/connection-authorize-plan-binding.html')
+  await page.evaluate(async () => {
+    const refresh = (await import('/@react-refresh')).default
+    refresh.injectIntoGlobalHook(window)
+    Object.assign(window, { $RefreshReg$: () => {}, $RefreshSig$: () => (type: unknown) => type, __vite_plugin_react_preamble_installed__: true })
+    const componentPath = '/src/internal-poc/ClientServiceExperience.tsx'
+    const source = await (await fetch(componentPath)).text()
+    const reactPath = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1]
+    if (!reactPath) throw new Error('Missing Vite React instance')
+    const ReactModule = await import(/* @vite-ignore */ reactPath)
+    const DOM = await import('/@id/react-dom/client')
+    const { ClientServiceExperience } = await import(/* @vite-ignore */ componentPath)
+    const React = ReactModule.default ?? ReactModule
+    const owner = 'owner-authorize-plan-binding-a', starts: string[] = []
+    const controls = { starts, setLegacy: (value: boolean) => { void value } }
+    Reflect.set(window, 'connectionAuthorizePlanBinding', controls)
+    function Host() {
+      const [legacy, setLegacy] = React.useState(false)
+      controls.setLegacy = setLegacy
+      const connectionPresentation = { scope: owner, identity: legacy ? `legacy:${owner}` : `exchange:${owner}`, requestId: '', status: 'ready' as const,
+        state: { id: legacy ? 'legacy-exchange-stage' : 'api12-exchange-stage', kind: 'exchange' as const, title: '거래소 연결', exchanges: [{ id: 'bitget', title: 'Bitget' }],
+          onChoose: async (exchange: string) => { starts.push(exchange) } } }
+      return React.createElement(ClientServiceExperience, {
+        nativeAccounts: true, accountScope: owner, connectionPresentation,
+        connectionPlanContinuation: { issuer: 'client-connection-plan', operation: 'signup', requestId: 'authorize_plan_binding_request_0001', sourceSessionId: 'session_anonymous_source_0002', targetSessionId: owner, plan: { step: 'authorize', exchange: 'bitget' } },
+        onConnectionPlanContinuationConsumed: () => undefined, onLogin: () => undefined,
+        state: { phase: 'ready', sessionState: 'AUTHENTICATED', messages: [], input: '', busy: false, inputDisabled: false, source: 'service', recovery: null, quickReplies: [], workflow: null, outcome: null, issue: null,
+          onInput: () => undefined, onSend: async () => undefined, onReset: async () => undefined, onRecover: undefined, onLogout: undefined },
+      })
+    }
+    ;(DOM.createRoot ?? DOM.default.createRoot)(document.getElementById('root')).render(React.createElement(Host))
+  })
+  const authorize = page.getByRole('button', { name: 'Bitget에서 승인하기', exact: true })
+  await expect(authorize).toBeEnabled()
+  const retiredPlanClick = await authorize.evaluateHandle(node => {
+    const key = Object.keys(node).find(candidate => candidate.startsWith('__reactProps$'))
+    const click = key ? Reflect.get(Reflect.get(node, key), 'onClick') : undefined
+    if (typeof click !== 'function') throw new Error('Missing retained React click callback')
+    return click as () => void
+  })
+  await page.getByRole('button', { name: '뒤로', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Bitget 계정', exact: true })).toBeVisible()
+  await retiredPlanClick.evaluate(click => click())
+  await expect.poll(() => page.evaluate(() => Reflect.get(window, 'connectionAuthorizePlanBinding').starts as string[])).toEqual([])
+  await page.getByRole('button', { name: '기존 초대 계정 연결', exact: true }).click()
+  await page.evaluate(() => Reflect.get(window, 'connectionAuthorizePlanBinding').setLegacy(true))
+  await expect(authorize).toBeDisabled()
+  await authorize.evaluate(node => (node as HTMLButtonElement).click())
+  expect(await page.evaluate(() => Reflect.get(window, 'connectionAuthorizePlanBinding').starts as string[])).toEqual([])
 })
 
 test('retained 인증 panel은 이전 plan을 폐기하고 가장 최근 signup plan만 한 번 재개한다', async ({ page }) => {

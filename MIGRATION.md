@@ -2,6 +2,14 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 가입 플랜에서 실제 제공된 Bitget 승인 호출
+
+최신 Web [c6a3dfa](https://github.com/beak1011/tesia-web/tree/c6a3dfabadf7206cb8c86ece26c17fb17c65fabc)의 clean 전체React2,414파일·34,767,601bytes를 공식 sync/verify actual0으로 전달했다. snapshot `702aa4e4244abe875e5ab3fd4282c884a9c589475f458abda00c69bdd1e53430`, dirty0·제거0이며 ares 원본main9fb/root와 Worker는 그대로다. 아래 단락은 이전 전달 이력이며 현재 writer는 Program Ledger 최상단을 따른다.
+
+가입 후 continuation의 원래 승인 CTA가 기존 API12 controller의 onChoose로 이어진다. 정확한 API12 identity·현재 인증 owner·ready/available Bitget·현재 authorize plan을 생성/클릭 시점 모두 확인한다. 범용 legacy callback·같은 계정이라도 단계/거래소를 떠난 callback·중복 클릭은 호출하지 않는다. 원문/SVG/CSS/배치는 보존했고 미제공 환경의 비활성/안내도 유지한다. 연결을 초대 혜택·구독·전략 실행 승인으로 만들지 않는다.
+
+최초2PASS5.5초→독립H1/M1 교정→신규1PASS3.4초·영향2PASS4.3초와 최종 Opus5.5 C0H0M0 scopedGO, 타입/service bundle actual0·불변21.145초다. 전체 회귀·730·9월 시험은0이다. Web 로그인 fixture는 이메일 ACK이며 Google/Bitget 실제 공급자 성공·주문·운영 적용 증거는 아니다. screenshot 미캡처·전체시각PASS0, 로컬4176 HTTP200이다. 서버의 기존 Google/Bitget vault/session authority를 재사용하고 개발 구성의 상담/exchange true를 운영 활성화로 해석하지 않는다.
+
 ### 현재 — 원본 백테스트 모션과 판단 시점 전달
 
 최신 통합/작업 소유 상태는 [Program9074e1c](https://github.com/beak1011/tesia-program/tree/9074e1c06585a21b176b2cee1b8d6fd1f6d3a41d)를 따른다. UI·metadata source writer는 동결·반환했으며 실제 Nginx include 검증/live generation/공유lock/durable recovery와 서버 bootstrap은 미구현 내부 작업이다. 비공개 키 대기 또는 고객 완료로 축소하지 않는다. 이 문서 참조 갱신은 React snapshot·원본 UI 변경0이다.

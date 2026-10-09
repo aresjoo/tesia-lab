@@ -1,5 +1,13 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 전달 — 가입 후 기존 Bitget 승인 경로 연결
+
+원본 ClientConnectionPlan 승인 CTA가 항상 비활성이어서 가입 후 continuation에서 기존 API12 controller로 이어지지 않던 caller를 연결했다. 같은 인증 owner·정확한 `exchange:${accountScope}` identity·ready catalogue·현재 authorize/Bitget plan에만 onChoose를 공급하고, 클릭 시 committed owner/presentation/plan을 다시 확인한다. 기존 Google 인증·CSRF·API12 start·provider redirect·암호화 저장은 재구현하지 않는다. 원문/CSS/SVG/배치는 그대로이며 callback 제공 시에만 거짓 미제공 안내를 숨긴다. 초대·결제·구독·StrategyVersion·주문 권한은 생성하지 않는다.
+
+최초 RED2→GREEN2/5.5초, 독립 Opus의 H1(API12 identity)/M1(retired plan) HOLD 뒤 신규 반례 RED1→GREEN1/3.4초·영향2PASS/4.3초 및 지정 lint0이다. `.cache/live-service-activation/web-exchange-authorize-{caller,binding-followup}-*/` raw/receipt와 `.cache/pdf-parity-root/current-reuse-web-{initial,corrected}.receipt.json`에 결속한다. 최종 personal1 Opus5.5 actual0/modelmatched/입력불변 C0H0M0 scopedGO이며 Low(loading 안내·다른 거래소 bridge·pending focus·추가 상태 coverage)는 남긴다. AGY3.8flashhigh는 초기 원문/클래스/동선의 좁은 읽기 점검이고 최종 보안 GO가 아니다.
+
+최종 타입/service bundle은 `current-reuse-web-build.receipt.json` actual0·불변21.145초, Google-only/consultation/exchange true의 개발 구성이다. 이는 실제 서비스 활성화가 아니다. 현재 로컬4176만 HTTP200이며 스크린샷은 미캡처·시각 PASS로 주장하지 않는다. Web 로그인 fixture는 이메일 ACK이고 provider/redirect는 synthetic이다. Google 실제 공급자 로그인·운영 Bitget 연결·주문 성공은 이 시험으로 입증하지 않는다. 전체/730/9월 시험0, 실제 provider·주문·운영 변경0이다.
+
 ## 현재 전달 — 원본 백테스트 진행 레일·판단·결과 정리
 
 원본9fb의22603–22625 4단계 rail·spinner·최근5개 판단 feed와22667–22669 마지막900ms wrap을 기존 CSS/elapsed/evidence로 복원했다. full stop의 실제 판단 공개는 원본 ai1900/rule900 경계 뒤에만 하고, 판단 대기 중 chart/잔고/feed는 j-1·날짜/진행 일수는 j로 구분한다. prep의 빈 증거·locale 수치·mix gate0 총pick·ticker·reduced-motion 즉시 결과·matchMedia 보호도 원본에 맞춘다. planner/가격·판단 데이터/Native 실제백테스트·TradingView·권한/API/CSS는 변경하지 않았다. 신규 UI키13개만7언어로 추가하며 AGY의 영어 held 의견을 deferred로 교정했다.
