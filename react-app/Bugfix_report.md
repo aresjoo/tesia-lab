@@ -1,6 +1,16 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 통합 — configured 고객지원 요청 수명
+
+고객지원 accepted source3는 백테스트 후속 교정이나 실제 서버 작업을 기다리지 않고 독립 Git 전달한다. 합쳐진 당시 후보의 타입·서비스 build는 `.cache/pdf-parity-root/help-catalogue-final-build.receipt.json` actual0·입력불변·19.129초다. 이후 백테스트 review의 원본 날짜 차이는 그 writer가 별도로 교정하므로 이 build를 후속 백테스트 source에 결속하지 않는다. Help source3는 검수 이후 불변이고 실제 vendor 호출·운영 배포0이다. configLoader/chunk 경고는 그대로 보존했다.
+
+별도50369c3의 원본 configured Zendesk 분기 exact3를 base 일치 확인 후 가져왔다. config9e7ce86b/component42ad049d/specf7fa1270는 독립 검수 입력과 동일하다. script loading 공유/취소 구독 해제, initialOpen 실패 fallback, 닫힌 fallback 재오픈 flash 및 동시 인스턴스의 supersede 고아화를 교정했다. 기본 팝오버·카피·SVG·FAQ/정책·모션·CSP는 보존한다.
+
+최초3PASS9.8초/false-return1PASS4.1초/마지막2PASS5.4초는 별도이며 rawbc2d2e22/receipt7225cd93를 결속한다. `help-runtime-retirement-final-opus.receipt.json`은 personal1 Opus5.5 actual0/불변 scopedGO C0H0이며 서비스 Medium1은 실제 vendor queue/CSP/등록과 렌더 미검증이다. 이를 C0H0M0 또는 실provider 성공으로 포장하지 않는다. 원 HOLD·비소유 script/지연 초점/추가 시험 Low는 source branch Bugfix에 보존했고 whole/기존키 재실행0이다.
+
 ## 현재 — checkout 원본 제목·행·여백 복원
+
+시험 결과는 당시 tool 출력으로 확인했으며 별도 불변 Playwright raw/receipt는 없다. mutable `test-results/.last-run.json`은 정본 증거로 사용하지 않는다. `.cache/pdf-parity-root/checkout-original-agy.{raw,receipt.json}`은 원문 대조만 소유하고 시험 raw를 대신하지 않는다. 증거 보완을 명목으로 기존 영향 키를 다시 실행하지 않았다.
 
 ares9fb 원본24150/24154와 달리 보이던 좌측 구독 제목·추가 소개 및 우측 연결 계정 행을 원본 숨김 h3와 요금2행으로 복원했다. 원본24151/CSS7195와 다른 결제 제목 h2/34px 여백도 h3/0 0 6px로 복원했다. renderer의 supplied-result 격리와 원본 SVG·카피·선택 동작은 보존하고 DESIGN223/287의 승인된 결제·초대·승인 안전 예외는 변경하지 않았다. 앱의 PAN/CVC 수집·가짜 결제 성공은 추가하지 않는다.
 

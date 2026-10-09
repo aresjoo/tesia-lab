@@ -2,6 +2,14 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 고객지원 독립 전달
+
+Web [f830513](https://github.com/beak1011/tesia-web/tree/f83051349e54b534359a13c7eb2b7fa04bfc1d5d)의 검수 완료 commit만 별도 clean worktree에서 공식 sync/verify actual0으로 전달했다. React2,414파일·34,728,177bytes, snapshot `1a92cbf03c7cf16b711a5f37d887a8c4584c69b804efdbd90e35d77469897524`, dirty0·제거0이다. 수정 중 백테스트 파일은 포함하지 않았으며 ares root/main·Worker는 그대로다.
+
+기본 Help의 원문·SVG·FAQ/정책·모션은 보존하고 configured widget의 요청 공유·취소·재오픈·동시 요청 고아화를 교정했다. 마지막 신규2PASS5.4초와 personal1 Opus5.5 actual0/불변 scopedGO C0H0를 인수했으며 실제 vendor/CSP Medium1은 별도 미검증이다. 당시 묶음 타입/build19.129초 actual0은 후속 백테스트 교정 전 후보에만 결속한다. 전체 시험/9월/730 반복0·provider/주문/운영 배포0이다.
+
+서버는 [Infra b5728f0](https://github.com/beak1011/tesia-infra/tree/b5728f040b8ba6c4f8400ebe788813a46ffd779f)의 metadata-only FD snapshot을 별도 전달했다. immutable/writable 비교·optional direct-parent·sanitized 오류를 교정했고 마지막 신규1키PASS0.002초와 최종 C0H0M0 scopedGO다. lease/단일 호출TOCTOU Low와 최초 전체 custody 설계HOLD는 보존한다. 이는 실제 bootstrap/custody/Nginx control 구현·운영 활성화 완료가 아니다.
+
 ### 현재 — checkout 원본 행·제목 여백과 서버 비재귀 관측
 
 Web [99bdaa6](https://github.com/beak1011/tesia-web/tree/99bdaa6dfc3978ff6471169078289e0e25199497)의 전체 React 2,412파일·34,696,364bytes를 공식 sync/verify actual0으로 전달한다. snapshot `9b054492b64b841da7835ce640e3e5c271c3670ff1be48e20ed64a86d2caa793`, sourceDirty0·제거0이며 ares root/main 및 Worker는 그대로다. 첫 verify 호출의 인수 오기는 제품 검사 전 usage 오류였고 `--verify` 단독 호출 actual0으로 정정했다. snapshot 자체를 반복 생성하지 않았다.

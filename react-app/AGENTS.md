@@ -1,5 +1,9 @@
 # Web 작업 지침
 
+- ROOT는 별도 고객지원 branch50369c3의 accepted exact3(config/ClientHelp/전용spec)를 원본 base일치 확인 후 현재 통합본에 이식했다. 해시는 config9e7ce86b/component42ad049d/specf7fa1270이며 복원 copy/SVG/motion/CSP 불변이다. personal1 Opus5.5 scopedGO는 C0H0·실vendor/CSP Medium1 별도미검증이다. 원HOLD/추가국소3·1·2PASS 및 Low를 보존하며 실제 provider 성공으로승격하지 않는다. source3는 동결이며 합친 당시 타입/bundle19.129초 actual0·불변을 인수했다. 백테스트 날짜 후속 교정과 서버 검수를 기다리지 않고 Help exact3+ROOT문서만 독립 전달한다.
+
+- 다음 원본모션 단독 writer `legacy_candidate_preparation`은 `src/components/ClientCatalogueBacktest.tsx`와 전용 replay spec1·client-static-ui-copy.json의 신규7언어키만인 exact3를 소유한다. 원본4단계 진행 레일·최근5개 공개 판단·마지막900ms wrap을 기존 elapsed/원 evidence에서 투영하고 잔존 원본CSS를 그대로 사용한다. 새 판단/AI 성공/주문/실시장 producer를 합성하거나 Native 실제 백테스트 경로를 변경하지 않는다. 신규 국소3키 raw/실exit/입력SHA만 수집하고 전체/bundle은 ROOT가 모인 후보에1회 수행한다. 다른 source/docs는 ROOT 소유이며 검수 중 파일 변경은 금지한다.
+
 - checkout 원본복원 writer의 `ClientConnectionPlan.tsx`·`client-connection-plan.spec.ts`·`client-connection-plan-handoff.spec.ts` exact3는 동결·ROOT 반환했다. 원본24150의 hidden heading·24154 요금2행·24151/7195 결제 heading h3/margin0 0 6px를 복원했다. 별도 RED/GREEN2키와 추가1키만 수행했으며 결제·초대·승인 안전 예외는 보존했다. ROOT가 docs/Git을 소유한다. 다음 연구/백테스트 모션 대조는 읽기전용이며 제품 파일 쓰기 권한이 아니다.
 
 - 현재 source 소유: 기능별 auth 후속 exact8(source7/spec1)은 원본 최종 override대로 connect/direct copy/watch/new copy/backtest signup, review/settings-import/analyze/manage login, link auth0, 빈 내전략 CTA는 인증 없이 대화 복귀로 복원·동결했다. 최종 교정 직접영향 desktop/mobile2PASS와 creator 실제DOM2PASS, 최종 타입/bundle actual0/24.154초, personal1 Opus5.5 C0H0M0 scopedGO·AGY3.8high 읽기 대조를 결속한다. 기존 수정React를 기준으로 내전략login을 요구했던 모델M1은 원본15942/18699 대조 후 철회했으며 원판정/실패는 보존한다. ROOT가 AGENTS/Bugfix/Git/Lab sync를 소유한다. 다음 거래소 원본 진입·완료 도움말/초점 국소 복원은 별도 writer legacy_candidate_preparation이며 정확 파일 경계 확정 전 source쓰기0이다. 원문/API/승인 email code-only·기존 controller 권한 무변경, 실제 sharing producer와 host 이전세션 복귀는 별도 검증이다. 모든 callback 일괄 signup 치환·검수 중 source 변경·whole 반복을 금지한다.
