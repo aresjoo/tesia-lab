@@ -2,6 +2,23 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 실제 OAuth·Bitget 연결의 현재 작업 경계
+
+현재 통합 기준은 [Program 729ff22](https://github.com/beak1011/tesia-program/tree/729ff22)의
+활성 Ledger와 기존 Decision Log다. 실제 TETH는 Google 필수·Apple 선택의 legacy OAuth,
+Bitget API12, identity/exchange 두 저장소를 사용한다. 아래 source232·generic shared-profile
+오프라인 인수는 이 운영 서비스를 직접 교체하는 권위가 아니다.
+
+별도 `agent/backend/oauth-consultation-continuation`에서 기존 인증/거래소·key/session을
+보존하고 같은 identity store에 API13/14 상담을 추가한다. 두-store 후보 준비와 Infra의
+작업·복구 경합 수정은 서로 다른 파일 writer가 병렬 진행한다. 아직 동결되지 않은 변경은
+Git 전달 또는 운영 성공으로 표시하지 않는다. ares root·전체 React2407의 디자인/흐름은
+변경하지 않았으며 키 입력 대기를 내부 구현의 중단 사유로 사용하지 않는다.
+
+enabled bundle의 좁은 320/390/1440 renderer 점검은 source 변경0/외부POST0으로 반환했다.
+1440 홈의 첫 캡처는 원본 reveal 중간 상태였다. 2.4초 뒤 재확인에서55카드·3열·opacity1을
+확인했으며, 이를 전체470쪽 또는 실제 API 성공으로 확대하지 않는다.
+
 ### 현재 — 원본 완료 동선·실제 글꼴·서비스 스타일 복원
 
 전체 React 출처는 Web [7c0188e](https://github.com/beak1011/tesia-web/tree/7c0188e696abddb532e7724af573ac8436d855f6)의 **2,407파일·34,559,759bytes**,
