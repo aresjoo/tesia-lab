@@ -4,7 +4,7 @@
 
 ### 기존 인증·거래소 연결 재사용 — 서버 전달과 운영 구분
 
-최신 작업·소유권은 [Program 49024ef](https://github.com/beak1011/tesia-program/tree/49024ef4acf6b93d224e8b7b8b6e3f813eabea1f)의 Ledger를 따른다. 서버의 Google token/JWKS·같은 session authority·Bitget 암호화 store·상담 claim은 이미 같은 factory에 조립돼 있어 재구현하지 않는다. 현재 React snapshot은 아래 Webc6이며 이 문서 후속에서 원본 UI·React·카피·SVG·CSS·Worker 변경은 없다.
+최신 작업·소유권은 [Program b65607a](https://github.com/beak1011/tesia-program/tree/b65607a5cf33ab9fbe3008994ecf7e8f78f1377c)의 Ledger를 따른다. 서버의 Google token/JWKS·같은 session authority·Bitget 암호화 store·상담 claim은 이미 같은 factory에 조립돼 있어 재구현하지 않는다. 현재 React snapshot은 아래 Webc6이며 이 문서 후속에서 원본 UI·React·카피·SVG·CSS·Worker 변경은 없다.
 
 [Backend9dda3b2](https://github.com/beak1011/tesia-backend/tree/9dda3b287f130cbb7335ba8428d1f3892cad1df5)는 기존 fresh signed credential/permission guard를 유지한 채 Bitget opaque encrypted openId 상한을 provider와 서버의 두 경계에서 선별 교정하고 공식 hash manifest/pin을 정렬한 패키지 입력이다. source-free 직접·sdist 설치11단계가 actual0/24.982초, source238/전체668파일 전후 동일이다. [문서 후속c93407b](https://github.com/beak1011/tesia-backend/tree/c93407b2e73cd9924b708f906ce1b5cd4c5b94ed)는 새 package source가 아니다. 최초 closure 실패와 fixture 실패는 삭제하거나 최종 PASS에 합산하지 않았다.
 
@@ -12,7 +12,9 @@
 
 기존 운영 연결은 위 개발 후보와 구분한다. 10월9일05:48UTC 운영팀의 최신 증거는 Bitget `connected` 1건, 권한 검증·조회 허용을 확인했다. 현물·선물·출금 권한은 모두 false이고 주문 성공 증거는 아니다. ROOT의 공개 SSH 관측은 운영 selector `6a9c47fe…`와 Backend `b172921…`·90-canary 설정을 확인했으며 고객키/DB 본문을 읽지 않았다. 이전 설치 직후 provider0 기록으로 이 후속 성공을 부정하거나 낡은 d1 서버로 되돌리지 않는다.
 
-통합 주의: `9dda`는 운영 `b172`의 완전한 기능 상위집합이 아니다. Classic 계정의 HTTP200/400·정확code40084→v2 단1회 처리, 비밀 없는 진단, 같은 owner/provider canary pending 원자 교체를 현재 상담·보안 경로에 선택 병합 중이다. 이미 승인된 부가 scope 정책과 기존 저장 연결을 보존한다. 새 source 검수와 기존 원장 보존·실서버 적용은 별도 단계이며 이 문서의 메타데이터 갱신은 React snapshot을 바꾸지 않는다.
+통합 주의: 당시 `9dda`는 운영 `b172`의 완전한 기능 상위집합이 아니었다. 후속 [Backend a083626](https://github.com/beak1011/tesia-backend/tree/a083626adab1332b00d59d2d228806ce253ebbd1)에 Classic 계정의 HTTP200/400·정확code40084→v2 단1회 처리, 비밀 없는 진단, 같은 owner/provider canary pending 원자 교체를 현재 상담·보안 경로에 선택 통합했다. 이미 승인된 부가 scope 정책과 기존 저장 연결·processing·타owner/provider를 보존하고 실패 시 rollback한다. 완료 로그는 실제 provider 반환 뒤에만 기록한다. 최종관련7PASS/0.288초, 서로 다른 두 국소 Opus5.5 C0H0M0, 새 source-free 설치11단계 actual0/24.570초를 인수했고 원ERROR/FAIL/Low는 보존했다. [문서 후속5faaf97](https://github.com/beak1011/tesia-backend/tree/5faaf9782736aa6893ad7f133997ae1b2dbfc30a)는 새 package source가 아니다.
+
+[Infra0b4c8b2](https://github.com/beak1011/tesia-infra/tree/0b4c8b280bc22507ea025c83862124ed86584752/experiments/static_source_promotion)의 local source/spec/공개 collector9개도 byte 불변으로 전달했다. 현재6a9 host profile·Nginx leaf는 각 국소 검수됐지만 기존 운영 도구의 교체는 아니다. 미완결 production authority·workspace import·실제 driver/lease 조립·현재 설정 syntax·실서버 적용과 기존 인증/연결 이어 쓰기는 남았다. 새로운 AI·주문·전체 원본 상태 성공까지 완료된 것으로 읽지 않는다. 이 메타데이터 갱신은 React snapshot을 바꾸지 않는다.
 
 ### 현재 — 원본 가입 플랜에서 실제 제공된 Bitget 승인 호출
 
