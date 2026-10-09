@@ -2,7 +2,17 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 — 원본 거래소 제목 계층과 설치 상태 정정
+### 현재 — 문서 질문 저장 기반·운영 전환 경계 전달
+
+이번 전달은 서버 변경과 검증 기록을 연결하는 메타데이터 변경이다. React source는 [Web5ee2994](https://github.com/beak1011/tesia-web/tree/5ee29948ddba3277772ca31cfdb3070ab1bae6e8), 원본 ares main은 `9fbff821df62cad11d026022fc7628c7fcebc431` 그대로다. 전체 React2,414파일·34,771,616bytes와 snapshot `1b99a8651cf19d4e5da8e15406d4b6c89ca5c09fe033809bdbc697d2b9dda3a3`는 변경하지 않았다. 원본 root/main·Worker·문구·SVG·모션·배치 변경0이며 기존 sync/verify 증거를 새 실행으로 계산하지 않는다.
+
+[Backend d3793c2](https://github.com/beak1011/tesia-backend/tree/d3793c21e9caa2a1db657acde15e1a65c02ae612)와 [기록631176a](https://github.com/beak1011/tesia-backend/tree/631176a1173fb6241a05f36177af347798274d60)는 선택 Draft의 소유자·대화·revision·원문 hash를 확인하여 질문에 불변 문서 snapshot을 결속하는 내부 모듈을 추가했다. 동일 질문의 이중 식별자 재시도·재시작 복원, 타 소유자 차단과 SQLite 복구 실패 분류를 검증했다. 최종 동일 프로세스 import 경로/hash 결속 시험은 문서 모듈11개 PASS/32.957초·actual0, personal1 Opus5.5 최종 증거 검수는 C0H0M0 scopedGO다. 최초 실패와 후속 Low는 Backend Bugfix_report에 보존했다. 이 모듈은 authenticated Draft 부분집합이며 비로그인 문서 질문을 제품에서 제외하는 정책이 아니다. 공개 document reference 계약·HTTP admission·실제 모델 context·React 요청 연결은 아직 미완료이고 기존 설치 package source `a083626`도 변경하지 않았다.
+
+[Infra9091ee5](https://github.com/beak1011/tesia-infra/tree/9091ee50838d1db6602fd3a6ac89d813dfa1eb4c)는 기존 Nginx 정규식의 escaped-dot 처리를 신규3키로 검증하고, 고정 원본 site의 direct proxy6곳만503으로 바꾸는 단일-site pair를 신규3키로 검증했다. 외부 Apple include까지 차단한 전체 HOLD 증거는 아니다. 실제 공개 console wrapper336bytes를 읽기 전용으로 수집하여 정확 source/hash `20902f51…`를 독립 검수한 뒤 host/driver pin을 정렬했고 신규1키를 검증했다. 운영 인증·거래소 저장소·비밀정보·설정은 읽거나 변경하지 않았다. 현재 Web 권위를 설명하는 manifest와 전체 include closure HOLD·최신 static candidate 결속은 여전히 필요하므로 운영 적용0이다.
+
+최신 정본·소유권·잔여는 [Program5eba94a의 WORK_LEDGER](https://github.com/beak1011/tesia-program/blob/5eba94aeabd414fd962bfef401b414883f746e77/WORK_LEDGER.md)를 따른다. 읽기 전용 UI 상태3건 점검에서는 신규 확정 UI 결함0이었지만 모바일 언어 진입 미재현 등을 전체 일치/PASS로 처리하지 않았다. 연구/Critic·초대·구독·랭킹·공유의 실제 producer와 문서 질문 공개 계약 연결은 다음 범위다. Backend default branch의 moderate 경고4개는 동일 setuptools sdist/macOS 파일명 advisory1건이며 별도 빌드 범위 위험으로 기록했다. 실제 AI 응답·전체 화면/다국어 일치·자동 주문·운영 배포 완료를 주장하지 않는다. 전체 회귀·기존730일 백테스트·9월 데이터 재검증은 실행하지 않았다.
+
+### 직전 — 원본 거래소 제목 계층과 설치 상태 정정
 
 Web [5ee2994](https://github.com/beak1011/tesia-web/tree/5ee29948ddba3277772ca31cfdb3070ab1bae6e8)의 clean 전체 React2,414파일·34,771,616bytes를 공식 sync/verify actual0으로 전달했다. snapshot `1b99a8651cf19d4e5da8e15406d4b6c89ca5c09fe033809bdbc697d2b9dda3a3`, dirty0·제거0이다. 원격 ares main은 재확인한 `9fbff821` 그대로이며 원본 root/main·Worker는 변경하지 않았다. 아래의 이전 snapshot/source 참조는 해당 시점 이력이다.
 
