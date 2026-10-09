@@ -4,10 +4,11 @@
 
 ## 최신 migration 전달
 
-현재 React 작업본은 Web `b2c88d379d07494fc9ff3cd96f58eefbdb7bb62e`의 2,402파일 전체 snapshot입니다.
+현재 React 작업본은 Web `7c0188e696abddb532e7724af573ac8436d855f6`의 2,407파일 전체 snapshot입니다.
 원본 root·Node/Worker는 유지하고, [PDF 470쪽/86case 차이와 미완료 목록](react-app/reports/ares-pdf-parity.md),
 [변경·검증 내역](react-app/Bugfix_report.md), [다른 에이전트를 위한 통합 설명](MIGRATION.md)을 함께 제공합니다.
-거래소·글꼴·연구 모션의 국소 복원이며 전체 화면 일치·실제 AI/주문·운영 배포 완료가 아닙니다.
+원본 Q45/Q47 완료 동선·설정 SVG·한글4weight를 복원하고, 해제·언어 변경 경합과 서비스 font/CSP를 국소 검증했습니다.
+전체 화면 일치·실제 AI/주문·운영 배포 완료가 아닙니다. 과거 추가 작업 예약은 AGENTS에서 제거해 활성 정본과 최신 전달만 가리킵니다.
 
 ## 이전 전달 기록
 
