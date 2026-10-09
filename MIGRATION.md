@@ -4,16 +4,18 @@
 
 ### 실제 OAuth·Bitget 연결의 현재 작업 경계
 
-현재 통합 기준은 [Program 729ff22](https://github.com/beak1011/tesia-program/tree/729ff22)의
+현재 통합 기준은 [Program fe44b28](https://github.com/beak1011/tesia-program/tree/fe44b28)의
 활성 Ledger와 기존 Decision Log다. 실제 TETH는 Google 필수·Apple 선택의 legacy OAuth,
 Bitget API12, identity/exchange 두 저장소를 사용한다. 아래 source232·generic shared-profile
 오프라인 인수는 이 운영 서비스를 직접 교체하는 권위가 아니다.
 
-별도 `agent/backend/oauth-consultation-continuation`에서 기존 인증/거래소·key/session을
-보존하고 같은 identity store에 API13/14 상담을 추가한다. 두-store 후보 준비와 Infra의
-작업·복구 경합 수정은 서로 다른 파일 writer가 병렬 진행한다. 아직 동결되지 않은 변경은
-Git 전달 또는 운영 성공으로 표시하지 않는다. ares root·전체 React2407의 디자인/흐름은
-변경하지 않았으며 키 입력 대기를 내부 구현의 중단 사유로 사용하지 않는다.
+별도 [Backend71b1ced](https://github.com/beak1011/tesia-backend/tree/71b1cedef7cf90534f5c00787ae5db3837dcb8f5)를
+push했다. 기존 인증/거래소·key/session을 보존하고 같은 identity store에 API13/14 상담을
+추가하며 두-store candidate의 명시 path/profile migration을 구현한다. 공식 manifest source238의
+새 direct/sdist 설치11단계를26.057초에 통과했고 실제 모델 응답·운영 배포와 구분한다.
+Infra의 private journal·candidate 연결과 서버 실행 도구는 서로 다른 파일 writer가 진행한다.
+아직 동결되지 않은 변경은 Git 전달 또는 운영 성공으로 표시하지 않는다. ares root·전체
+React2407의 디자인/흐름은 변경하지 않았으며 키 입력 대기를 내부 구현의 중단 사유로 사용하지 않는다.
 
 enabled bundle의 좁은 320/390/1440 renderer 점검은 source 변경0/외부POST0으로 반환했다.
 1440 홈의 첫 캡처는 원본 reveal 중간 상태였다. 2.4초 뒤 재확인에서55카드·3열·opacity1을
