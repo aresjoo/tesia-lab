@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+- 후속 `ares_parity_followup`의 `src/client-connection-plan.css`·`tests/client-connection-plan.spec.ts` exact2는 동결·반환했다. 원본9fb7309 본인 확인 제목500/회색 한 줄만 복원했고 신규1키1440/390 RED→GREEN1PASS/3.6초·개인1 Opus5.5 C0H0M0 scopedGO를 인수했다. 카피·JSX/SVG·API/권한/flags 변경0이며 ROOT가 Bugfix/Git/공식 migration 전달을 소유한다. AGY 첫 비교 빈 응답과 별도 inline 국소 의견·Low·모바일 cold mount/전수/실서비스 한계는 Bugfix를 따른다. 추가 제품 쓰기는 명시 배정 전 금지한다.
+
 - ROOT는 별도 고객지원 branch50369c3의 accepted exact3(config/ClientHelp/전용spec)를 원본 base일치 확인 후 현재 통합본에 이식했다. 해시는 config9e7ce86b/component42ad049d/specf7fa1270이며 복원 copy/SVG/motion/CSP 불변이다. personal1 Opus5.5 scopedGO는 C0H0·실vendor/CSP Medium1 별도미검증이다. 원HOLD/추가국소3·1·2PASS 및 Low를 보존하며 실제 provider 성공으로승격하지 않는다. source3는 동결이며 합친 당시 타입/bundle19.129초 actual0·불변을 인수했다. 백테스트 날짜 후속 교정과 서버 검수를 기다리지 않고 Help exact3+ROOT문서만 독립 전달한다.
 
 - 원본모션 writer `legacy_candidate_preparation`의 `src/components/ClientCatalogueBacktest.tsx`·전용 replay spec·client-static-ui-copy 신규13키7언어 exact3는 동결·ROOT 반환했다. 원본4단계 rail·최근5개 공개 판단·마지막900ms wrap·ai1900/rule900 및 pending 날짜j/잔고j-1을 복원했고 sourcec2de7e00/copyd4a22e0b가 최종 C0H0M0 scopedGO·타입/build18.999초 actual0에 결속한다. 초기3PASS7.3초와 날짜 RED→AI1PASS3.1초는 별도다. 마지막 spec-only clock/재시도/잔고·ticker 단언 강화의 specf6288f81·AI1PASS3.7초 및 ROOT 직접 PNG2확인을 인수했다. 제품/copy 변경0·rebuild0이며 모든 쓰기 권한은 반환했다. 새 판단/AI 성공/주문/실시장 producer를 합성하거나 Native 실제백테스트를 변경하지 않는다. ROOT가 docs/Git/sync를 소유하며 whole/기존3/9월/730 반복0이다.

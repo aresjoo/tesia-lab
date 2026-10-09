@@ -1,5 +1,15 @@
 # TETH 버그 수정·검수 보고서
 
+## 후속 원본 대조 — 거래소 가입 안내의 제목 계층
+
+ares `9fbff821`의 최종 `index.html:7309`와 달리 본인 확인 제목이 첫 가입 제목과 같은600/흰색으로 표시되던 차이를 복원했다. `src/client-connection-plan.css`에 원본의 두 번째 안내 행500/`#cdcdcd` 한 줄만 추가했다. 카피·배치·SVG·인증·API·권한·feature flag 변경0이다. 로그인/signup intent와 back SVG는 최신 코드에서 이미 복원돼 있어 과거 gap을 반복하지 않았다.
+
+신규 시험1키는 수정 전 RED actual1(기대500/실제600), 수정 후 GREEN actual0·1PASS/3.6초이며1440/390 두 폭의 실제 React computed style을 검증한다. 원본 전체 CSS의 격리 대조에서도 같은 차이를 재현했다. source CSS `0b640492cd1ab26d5915b3ae0453d938283fa8ae429a774a990c36b0245d4286`·spec `7126a869318ac0c12519378c5e39a78d5dbd5907663367280fc6973894f1d2b3`를 동결했다. `.cache/pdf-parity-root/ares-followup-audit/`의 RED/GREEN·보고서와 `followup-web-steps-initial.receipt.json`을 인수한다. 개인1 Opus5.5 actual0/modelmatched/입력불변 C0H0M0 scopedGO이며 positional selector·390 cold mount·기본 한국어 fixture·정적검수 한계 Low는 보존한다.
+
+AGY3.8flashhigh의 첫 파일 비교는 headless permission auto-denied/빈 응답이라 검수 성공이 아니다. 권한 우회나 계정 전환 없이 원본rule·patch·두 행·측정결과를 본문으로 제공한 별도 국소 비교1회는 actual0/응답을 받았으며 최소 복원에 동의했다. 모델 identity의 독립 확인과 보안 최종승인은 아니다. `front-gemini`는 AGY 경로를 사용했고, `impeccable`은 기존 원본 제품의 검수 기준만 적용했다. 전문장·전화면 또는 새 디자인 승인으로 해석하지 않는다.
+
+실제 서비스 잔여는 UI 삭제와 구분한다. 문서 질문의 `scopeId/documentId`가 상담 wire에 전달되지 않으며 owner/version·journal 계약 선행 연결이 필요하다. 연구/Critic renderer는 있으나 실제 run/event/document producer가 없고, 초대/구독·랭킹도 실제 사실 공급이 남는다. PDF290쪽 미재현은 누락 또는 PASS가 아니다. 로컬4176은 Vite 개발 서버로 현재 CSS를 제공하지만 이번 운영 배포·전체 회귀·빌드·9월·730·실OAuth/provider/주문은0이다.
+
 ## 현재 전달 — 가입 후 기존 Bitget 승인 경로 연결
 
 원본 ClientConnectionPlan 승인 CTA가 항상 비활성이어서 가입 후 continuation에서 기존 API12 controller로 이어지지 않던 caller를 연결했다. 같은 인증 owner·정확한 `exchange:${accountScope}` identity·ready catalogue·현재 authorize/Bitget plan에만 onChoose를 공급하고, 클릭 시 committed owner/presentation/plan을 다시 확인한다. 기존 Google 인증·CSRF·API12 start·provider redirect·암호화 저장은 재구현하지 않는다. 원문/CSS/SVG/배치는 그대로이며 callback 제공 시에만 거짓 미제공 안내를 숨긴다. 초대·결제·구독·StrategyVersion·주문 권한은 생성하지 않는다.

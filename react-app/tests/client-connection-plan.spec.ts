@@ -14,6 +14,25 @@ test('f5070e0 source cyan highlight is consistent through plan and authorization
 async function member(page:Page){await page.addInitScript(()=>sessionStorage.setItem('teth-client-profile-preview',JSON.stringify({name:'플랜 검수',email:'plan@example.test'})))}
 async function signup(page:Page){await page.getByRole('button',{name:/Google/}).click();await page.getByLabel('연령',{exact:true}).fill('28');await page.getByRole('button',{name:'시장에 입장하기',exact:true}).click()}
 
+test('9fb account verification keeps the original secondary heading at desktop and mobile widths',async({page})=>{
+  await member(page)
+  for(const width of [1440,390]){
+    await page.setViewportSize({width,height:900})
+    await page.goto('/#/connect/account?exchange=okx')
+    const root=page.getByTestId('connection-plan')
+    await expect(root).toHaveAttribute('data-step','account')
+    const primary=root.locator('.cpx-steps li').first().locator('b')
+    const secondary=root.locator('.cpx-steps li').nth(1).locator('b')
+    await expect(primary).toHaveText('TETH 초대 링크로 가입')
+    await expect(primary).toHaveCSS('font-weight','600')
+    await expect(primary).toHaveCSS('color','rgb(255, 255, 255)')
+    await expect(secondary).toHaveText('본인 확인')
+    await expect(secondary).toHaveCSS('font-weight','500')
+    await expect(secondary).toHaveCSS('color','rgb(205, 205, 205)')
+    await expect(secondary).toHaveCSS('font-size','16px')
+  }
+})
+
 test('checkout keyboard chooses exactly one exchange and keeps selection focus',async({page})=>{
   await member(page);await page.goto('/#/connect/checkout?exchange=okx')
   const root=page.getByTestId('connection-plan')

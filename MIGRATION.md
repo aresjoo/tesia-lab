@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 거래소 제목 계층과 설치 상태 정정
+
+Web [5ee2994](https://github.com/beak1011/tesia-web/tree/5ee29948ddba3277772ca31cfdb3070ab1bae6e8)의 clean 전체 React2,414파일·34,771,616bytes를 공식 sync/verify actual0으로 전달했다. snapshot `1b99a8651cf19d4e5da8e15406d4b6c89ca5c09fe033809bdbc697d2b9dda3a3`, dirty0·제거0이다. 원격 ares main은 재확인한 `9fbff821` 그대로이며 원본 root/main·Worker는 변경하지 않았다. 아래의 이전 snapshot/source 참조는 해당 시점 이력이다.
+
+원본 최종 index7309의 본인확인 보조제목500/#cdcdcd를 CSS 한 줄로 복원했다. 신규 실제 React1키의1440/390 computed style PASS3.6초, AGY 국소 원문 비교 및 personal1 Opus5.5 C0H0M0 scopedGO를 인수했다. 로컬 `http://localhost:4176/`에서 확인할 수 있다. 문구/SVG/배치/handlers/API는 변경하지 않았고 원격 배포나 모든 상태/언어 일치로 승격하지 않는다.
+
+Backend [fdefe92](https://github.com/beak1011/tesia-backend/tree/fdefe9204ef42d70694fec7c847bef80ebe2b10b)의 신규 tool/spec는 과거 정상 resolver와 현재 packagea083의 필수 direct URL/METADATA를 실제 pinned CLI exit0으로 결속한다. 기존 설치 도구에 남은814c/945 NO_GO를 현재 실패로 보고했던 해석을 정정했다. 원 package/receipt·source9/pin3/API14는 그대로이고 pip/install11/전체를 재실행하지 않았다. 최종1키PASS0.008초와 Opus C0H0M0/Low5를 구분한다. 현재 input wheel은 과거 resolver에 쓰인 wheel 또는 Git source로 추정하지 않는다.
+
+실서비스 잔여는 원본 UI의 삭제와 구분한다. 문서별 질문 context는 실제 wire의 owner/version 계약 연결이 남고, 연구/Critic·초대/구독/공유/랭킹 renderer는 존재하지만 실제 producer 인수가 남는다. API14·Google/session/Bitget vault의 기존 구현은 재사용한다. PDF 미재현290은 누락/PASS가 아니며 운영 AI·주문·전체원본 완료를 주장하지 않는다.
+
 ### 기존 인증·거래소 연결 재사용 — 서버 전달과 운영 구분
 
 최신 작업·소유권은 [Program b65607a](https://github.com/beak1011/tesia-program/tree/b65607a5cf33ab9fbe3008994ecf7e8f78f1377c)의 Ledger를 따른다. 서버의 Google token/JWKS·같은 session authority·Bitget 암호화 store·상담 claim은 이미 같은 factory에 조립돼 있어 재구현하지 않는다. 현재 React snapshot은 아래 Webc6이며 이 문서 후속에서 원본 UI·React·카피·SVG·CSS·Worker 변경은 없다.
