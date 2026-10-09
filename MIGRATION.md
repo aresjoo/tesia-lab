@@ -4,6 +4,8 @@
 
 ### 현재 — 원본 백테스트 모션과 판단 시점 전달
 
+최신 통합/작업 소유 상태는 [Program9074e1c](https://github.com/beak1011/tesia-program/tree/9074e1c06585a21b176b2cee1b8d6fd1f6d3a41d)를 따른다. UI·metadata source writer는 동결·반환했으며 실제 Nginx include 검증/live generation/공유lock/durable recovery와 서버 bootstrap은 미구현 내부 작업이다. 비공개 키 대기 또는 고객 완료로 축소하지 않는다. 이 문서 참조 갱신은 React snapshot·원본 UI 변경0이다.
+
 Web [96faf23](https://github.com/beak1011/tesia-web/tree/96faf23c4ea11e7c0974ea07e85915f206f363ac)의 clean 전체React2,414파일·34,749,773bytes를 공식sync/verify actual0으로 전달했다. snapshot `6bfd072fa33ebf340d2589fd51c755abfa502eb2a92e79230c62f162d23c4eab`, sourceDirty0·제거0이며 ares root/main과 Worker는 무변경이다.
 
 기존 elapsed/evidence/CSS에서 원본4단계 rail·최근5개 판단·마지막900ms wrap·ai1900/rule900 공개 시점을 복원했다. pending 잔고/차트/feed는 j-1, 날짜/일수는 j이며 원본 가격·판단을 새로 합성하지 않는다. 신규 템플릿13개만7언어로 추가했다. Native 실제 백테스트/TradingView/공용API/주문 권위는 그대로다.
