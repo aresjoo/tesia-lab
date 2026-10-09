@@ -74,6 +74,52 @@ async function open(page:Page){
  });await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','ready');await expect(page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true})).toBeVisible()
 }
 async function result(page:Page){await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click();await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','run');await page.getByRole('button',{name:'바로 결과 보기',exact:true}).click();await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','result')}
+async function replayFixture(page:Page,strategyId='r1'){return page.evaluate(async strategyId=>{
+ const request={owner:'bt-owner-a',strategyId,period:365,amount:1000} as const
+ const value=await Reflect.get(window,'btFixture').run(request),path='/src/client-catalogue-backtest-result.ts'
+ const plan=(await import(/* @vite-ignore */path)).catalogueBacktestReplay(value),replayEnd=plan.segments.at(-1)!.end
+ const publicAt=(j:number)=>value.evidence.decisions.filter((d:{j:number;k:string})=>d.j<=j&&!['pick','hold'].includes(d.k)).slice(-5).reverse(),full=plan.segments.find((segment:{stop?:{full:boolean;j:number}})=>segment.stop?.full&&segment.stop.j>0&&publicAt(segment.stop.j).some((d:{j:number})=>d.j===segment.stop!.j))!
+ const threshold=value.strategy.kind==='agent'||value.strategy.kind==='mix'&&value.strategy.gate>0?1900:900,thresholdAt=full.start+threshold,beforeAt=Math.floor((thresholdAt-1)/100)*100,afterAt=Math.ceil(thresholdAt/100)*100
+ const datePath='/src/client-catalogue-presentation.ts',date=(await import(/* @vite-ignore */datePath)).catalogueDateReader(value.calendar)(value.result.eq[full.stop.j].i),expectedDate=`${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`
+ const cataloguePath='/src/client-catalogue.ts',catalogue=await import(/* @vite-ignore */cataloguePath),prepTicker=catalogue.catalogueTitle(catalogue.catalogueAssets(value.strategy)[0]),pendingBalance=`$${Math.round(value.result.eq[full.stop.j-1].v*request.amount).toLocaleString('en-US')}`
+ const decisions=publicAt(value.result.eq.length-1),ids=(rows:readonly {ix:number}[])=>rows.map(d=>d.ix)
+ return {replayStart:plan.segments[0].start,replayEnd,duration:plan.duration,days:value.result.eq.length,prepTicker,full:{threshold,beforeAt,afterAt,current:full.stop.j+1,expectedDate,pendingBalance,before:ids(publicAt(full.stop.j-1)),after:ids(publicAt(full.stop.j)),panel:full.stop.kind==='buy'?'조건에 맞아 진입':full.stop.kind==='hold'?'그대로 유지':'새로 사지 않음'},decisions:decisions.map((d:{ix:number;k:string;tag:string;tk:string;title:string;cmp:string;pnl?:number})=>({ix:d.ix,k:d.k,tag:d.tag,title:d.k==='skip'&&!d.tk?'':d.tk||d.title,value:d.pnl===undefined?d.cmp:`${d.pnl>0?'+':''}${d.pnl.toFixed(1)}%`}))}
+},strategyId)}
+test('원본 재생 단계는 준비→실행→900ms 정리→결과를 실제 replay 시간으로 지난다',async({page})=>{
+ await page.clock.install({time:new Date('2031-01-01T00:00:00Z')});await open(page);const timing=await replayFixture(page)
+ await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000))
+ await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click()
+ const rail=page.locator('.bt-stepbox');await expect(rail.getByRole('heading',{name:'지금 하는 일',exact:true})).toBeVisible();await expect(rail.locator('li').filter({hasText:'가격 자료 준비'})).toHaveClass(/\brun\b/)
+ await page.clock.runFor(timing.replayStart);await expect(rail.locator('li').filter({hasText:'가격 자료 준비'})).toHaveClass(/\bok\b/);await expect(rail.locator('li').filter({hasText:'하루씩 다시 돌리기'})).toHaveClass(/\brun\b/)
+ const wrapAt=Math.ceil(timing.replayEnd/100)*100;await page.clock.runFor(wrapAt-timing.replayStart);await expect(page.getByText(`${timing.days.toLocaleString('ko-KR')}일을 다 돌렸습니다. 결과를 정리하는 중`,{exact:true})).toBeVisible();await expect(rail.locator('li').filter({hasText:'결과 정리'})).toHaveClass(/\brun\b/)
+ await page.clock.runFor(timing.duration-wrapAt+100);await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','result')
+})
+test('원본 재생 판단줄은 실제 evidence 최신 5개이며 reduced motion은 즉시 결과로 간다',async({page})=>{
+ await page.clock.install({time:new Date('2031-01-01T00:00:00Z')});await open(page);const timing=await replayFixture(page);expect(timing.decisions).toHaveLength(5)
+ await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000))
+ await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click();const rows=page.locator('.bt-feed .bt-fr'),ids=()=>rows.evaluateAll(nodes=>nodes.map(node=>Number(node.getAttribute('data-decision-index'))))
+ const panelDecision=page.locator('.bt-panel .cell b').filter({hasText:timing.full.panel});await page.clock.runFor(timing.full.beforeAt);await expect(rows).toHaveCount(timing.full.before.length);expect(await ids()).toEqual(timing.full.before);expect(timing.full.after).not.toEqual(timing.full.before);await expect(panelDecision).toHaveCount(0)
+ await page.clock.runFor(timing.full.afterAt-timing.full.beforeAt);await expect(rows).toHaveCount(timing.full.after.length);expect(await ids()).toEqual(timing.full.after);expect(await panelDecision.count()).toBeGreaterThan(0)
+ await page.clock.runFor(Math.ceil(timing.replayEnd/100)*100-timing.full.afterAt);await expect(rows).toHaveCount(5);expect(await ids()).toEqual(timing.decisions.map(d=>d.ix))
+ for(const [index,decision] of timing.decisions.entries()){const row=rows.nth(index);await expect(row).toContainText(decision.tag);if(decision.title)await expect(row).toContainText(decision.title);if(decision.value)await expect(row).toContainText(decision.value)}
+ for(const [language,current,decisions] of [['en','Current step','Decisions made'],['fr','Étape en cours','Décisions prises']] as const){await page.evaluate(async language=>{const path='/src/client-preferences.ts';(await import(/* @vite-ignore */path)).setClientPreference('language',language)},language);await expect(page.locator('.bt-stepbox h3')).toHaveText(current);await expect(page.locator('.bt-feedbox h3')).toHaveText(decisions)}
+ expect(await page.evaluate(async()=>{const path='/src/client-static-ui-copy.ts';return (await import(/* @vite-ignore */path)).staticUiText('en','기회 {opportunities}번, 매수 {buys}번, 보류 {skips}번',{opportunities:3,buys:1,skips:2})})).toBe('3 opportunities, 1 buys, 2 deferred')
+ await page.evaluate(async()=>{const path='/src/client-preferences.ts';(await import(/* @vite-ignore */path)).setClientPreference('language','ko')})
+ await page.getByRole('button',{name:'뒤로',exact:true}).click();await page.emulateMedia({reducedMotion:'reduce'});await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click();await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','result');await expect(page.locator('.bt-stepbox')).toHaveCount(0)
+})
+test('원본 재생 취소는 진행 rail과 timer를 정리한 뒤 다음 뒤로 이동만 전달한다',async({page})=>{
+ const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.clock.install({time:new Date('2031-01-01T00:00:00Z')});await open(page);const timing=await replayFixture(page)
+ await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000))
+ await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click();await page.clock.runFor(timing.replayStart+500);await expect(page.locator('.bt-stepbox')).toBeVisible();await page.getByRole('button',{name:'뒤로',exact:true}).click();await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','ready')
+ expect(await page.evaluate(()=>JSON.parse(sessionStorage.getItem('teth-client-catalogue-backtest:bt-owner-a:r1')!))).toMatchObject({done:false});await page.clock.runFor(timing.duration*2);await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-phase','ready');await expect(page.locator('.bt-stepbox,.bt-feedbox')).toHaveCount(0)
+ await page.getByRole('button',{name:'뒤로',exact:true}).click();expect(await page.evaluate(()=>Reflect.get(window,'btFixture').counts().backs)).toBe(1);expect(errors).toEqual([])
+})
+test('AI 1900ms full stop은 판단 전 잔고를 유지하면서 현재 날짜·일수만 표시한다',async({page},info)=>{
+ await page.clock.install({time:new Date('2031-01-01T00:00:00Z')});await open(page);await page.evaluate(()=>Reflect.get(window,'btFixture').strategy('d1'));await expect(page.getByTestId('catalogue-backtest-shell')).toHaveAttribute('data-strategy-id','d1');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));const timing=await replayFixture(page,'d1');expect(timing.full.threshold).toBe(1900)
+ await page.getByRole('button',{name:'과거를 다시 돌려 보기',exact:true}).click();await expect(page.locator('.bt-panel .ph')).toContainText(`${timing.prepTicker}의 하루 가격을 불러오는 중`);const rows=page.locator('.bt-feed .bt-fr'),ids=()=>rows.evaluateAll(nodes=>nodes.map(node=>Number(node.getAttribute('data-decision-index'))));await page.clock.runFor(timing.full.beforeAt)
+ await expect(page.locator('.bt-steps li').filter({hasText:'AI 판단 되짚기'})).toHaveClass(/\brun\b/);await expect(page.locator('.bt-steps li').filter({hasText:'하루씩 다시 돌리기'}).locator('.evd')).toHaveText(`${timing.full.current.toLocaleString('ko-KR')} / ${timing.days.toLocaleString('ko-KR')}일`);await expect(page.locator('.bt-panel .ph>b')).toHaveText(timing.full.expectedDate);await expect(page.locator('.bt-cap-l>b')).toHaveText(timing.full.pendingBalance);expect(await ids()).toEqual(timing.full.before);await page.screenshot({path:info.outputPath('ai1900-pending.png'),fullPage:true})
+ await page.clock.runFor(timing.full.afterAt-timing.full.beforeAt);await expect.poll(ids).toEqual(timing.full.after);await page.screenshot({path:info.outputPath('ai1900-after.png'),fullPage:true})
+})
 test('실제worker 원본 기간·예산·원문·2선·결과·거래·판단·reload·조건 재검증',async({page},info)=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));const external:string[]=[];page.on('request',r=>{if(new URL(r.url()).origin!==new URL(info.project.use.baseURL!).origin)external.push(r.url())})
  await open(page);await page.getByRole('group',{name:'기간',exact:true}).getByRole('button',{name:'최근 3개월',exact:true}).click();await page.getByRole('group',{name:'시작 금액',exact:true}).getByRole('button',{name:'3,000',exact:true}).click()

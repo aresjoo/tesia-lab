@@ -1,5 +1,17 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 전달 — 원본 백테스트 진행 레일·판단·결과 정리
+
+원본9fb의22603–22625 4단계 rail·spinner·최근5개 판단 feed와22667–22669 마지막900ms wrap을 기존 CSS/elapsed/evidence로 복원했다. full stop의 실제 판단 공개는 원본 ai1900/rule900 경계 뒤에만 하고, 판단 대기 중 chart/잔고/feed는 j-1·날짜/진행 일수는 j로 구분한다. prep의 빈 증거·locale 수치·mix gate0 총pick·ticker·reduced-motion 즉시 결과·matchMedia 보호도 원본에 맞춘다. planner/가격·판단 데이터/Native 실제백테스트·TradingView·권한/API/CSS는 변경하지 않았다. 신규 UI키13개만7언어로 추가하며 AGY의 영어 held 의견을 deferred로 교정했다.
+
+초기 관련3키 PASS7.3초와 AI1900 날짜 RED→신규1키 PASS3.1초는 별도다. `.cache/frontend-parity-audit/catalogue-replay-source-restoration-final-20261009/receipt.json`과 `catalogue-replay-ai1900-followup-20261009/receipt.json`은 당시 직접 tool 출력을 이후 create-only로 기록한 증거이며 실행 시작부터 수집한 immutable 프로세스 raw라고 주장하지 않는다. 최초 RED/mount 하니스 오류/임계값 실패는 삭제하지 않는다.
+
+최종 sourcec2de7e00fa5e42d3e1e695cd871f865addb54db08592d206aea77edf0f8aa073/copyd4a22e0b1a62af6c4e81375d665d546ef28c4357619db712a4d48610052fb308에 대한 타입/service bundle actual0·불변18.999초를 `.cache/pdf-parity-root/catalogue-replay-corrected-build.receipt.json`에 결속했다. 앞19.129초 build 이후 제품의 확정 날짜 차이가 교정돼 최종 build가 필요했고 기존 전체 시험을 반복한 것이 아니다. configLoader/chunk 경고 및 fixture 격리 guard는 유지했다. `catalogue-replay-corrected-opus.receipt.json`은 personal1 Opus5.5 actual0/modelmatched/불변 C0H0M0 scopedGO다. 앞 scopedGO의 Medium 날짜·AI경계·clock 문제와 Low를 보존하며 GO를 모든 preview 단계/모든 언어/실서버·모델 성공으로 확대하지 않는다.
+
+후속은 시험만의 재시도·clock/잔고 단언 보강으로 제한한다. 기존3키 재실행 권고는 이미 인수한 결과와 명시 사용자 related-only 원칙에 따라 새 완료 조건으로 붙이지 않았다. 제품/copy/bundle을 다시 바꾸지 않는다. whole/730/9월 재실행0·실provider/주문/운영0이며 실제 연구·서비스 데이터 producer 연결은 별도다. About·다운로드·Help·설정 readonly 원본 재대조에서 새로 확정한 누락은0이지만 다른계정 PDF28case 및 미재현 상태는 누락/PASS로 단정하지 않는다.
+
+최종 specf6288f8152f2456b19780388c46c8d6fd5942835185d2f818d85eb8116a4d26b는 네 focused key의 start전 pauseAt, AI after의 expect.poll, pending 잔고 eq[j-1]*amount·prep ticker 직접 단언을 보강했다. 그 AI1키만 PASS3.7초·lint/diff0이고 제품 SHA·bundle 불변이므로 rebuild/재검수0이다. `catalogue-replay-ai1900-spec-final-20261009/receipt.json`과 PNG pending be614fbdbf7a5785afe80b3d545bb3bdc7791453497db0d37ee534441801a319/after e8f32645fb09943284f86f27b710ac935bff1493f9e21b9a787aa14dc6ae6d98를 인수했다. ROOT가 두 데스크톱 캡처를 직접 확인해 rail/feed/panel 날짜·잔고 전환과 현재 폭의 정렬을 봤다. 모바일/전PDF/모든 상태의 시각 PASS가 아니다.
+
 ## 현재 통합 — configured 고객지원 요청 수명
 
 고객지원 accepted source3는 백테스트 후속 교정이나 실제 서버 작업을 기다리지 않고 독립 Git 전달한다. 합쳐진 당시 후보의 타입·서비스 build는 `.cache/pdf-parity-root/help-catalogue-final-build.receipt.json` actual0·입력불변·19.129초다. 이후 백테스트 review의 원본 날짜 차이는 그 writer가 별도로 교정하므로 이 build를 후속 백테스트 source에 결속하지 않는다. Help source3는 검수 이후 불변이고 실제 vendor 호출·운영 배포0이다. configLoader/chunk 경고는 그대로 보존했다.

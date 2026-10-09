@@ -2,6 +2,14 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 백테스트 모션과 판단 시점 전달
+
+Web [96faf23](https://github.com/beak1011/tesia-web/tree/96faf23c4ea11e7c0974ea07e85915f206f363ac)의 clean 전체React2,414파일·34,749,773bytes를 공식sync/verify actual0으로 전달했다. snapshot `6bfd072fa33ebf340d2589fd51c755abfa502eb2a92e79230c62f162d23c4eab`, sourceDirty0·제거0이며 ares root/main과 Worker는 무변경이다.
+
+기존 elapsed/evidence/CSS에서 원본4단계 rail·최근5개 판단·마지막900ms wrap·ai1900/rule900 공개 시점을 복원했다. pending 잔고/차트/feed는 j-1, 날짜/일수는 j이며 원본 가격·판단을 새로 합성하지 않는다. 신규 템플릿13개만7언어로 추가했다. Native 실제 백테스트/TradingView/공용API/주문 권위는 그대로다.
+
+초기3PASS7.3초·날짜 RED→AI1PASS3.1초·spec-only 강화AI1PASS3.7초는 별도이며 기존3/전체/9월/730 반복0이다. 제품sourcec2de7e00/copyd4a22e0b에 대한 최종타입/servicebundle actual0·불변18.999초와 personal1 Opus5.5 C0H0M0 scopedGO를 인수했다. 이후 spec-only의 clock·poll·잔고/ticker 단언 교정은 rebuild/재검수0으로 전달한다. ROOT가 데스크톱 pending/after PNG2를 직접 확인했지만 이를 전체모바일·전PDF·실provider 성공으로 확대하지 않는다. 원실패/Low·증거의 tool출력후수집 provenance는 Web Bugfix에 보존한다. 로컬 `http://localhost:4176/` HTTP200이며 운영 배포/실제고객AI·주문0이다.
+
 ### 현재 — 고객지원 독립 전달
 
 Web [f830513](https://github.com/beak1011/tesia-web/tree/f83051349e54b534359a13c7eb2b7fa04bfc1d5d)의 검수 완료 commit만 별도 clean worktree에서 공식 sync/verify actual0으로 전달했다. React2,414파일·34,728,177bytes, snapshot `1a92cbf03c7cf16b711a5f37d887a8c4584c69b804efdbd90e35d77469897524`, dirty0·제거0이다. 수정 중 백테스트 파일은 포함하지 않았으며 ares root/main·Worker는 그대로다.
