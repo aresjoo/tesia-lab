@@ -97,8 +97,8 @@ export default function ClientConnectionPlan({view,resultContext,result,signedIn
           <p className="cpl-foot">{c("매월 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.")}</p>
         </article>
       </div>:step==='checkout'?<div className="cpl-cogrid">
-        <section className="cpl-left"><h2 className="cpl-t3">{c("TETH 구독")}</h2><p className="cpl-d2">{c("먼저 연결할 거래소를 고르십시오. 구독 하나로 거래소 7곳을 모두 연결할 수 있습니다.")}</p>{chooseExchange}
-          <h2 className="cpl-t3 mt">{c("결제 수단 선택하기")}</h2>
+        <section className="cpl-left"><h3 className="cpl-t3" hidden>{c("TETH 구독")}</h3>{chooseExchange}
+          <h3 className="cpl-t3">{c("결제 수단 선택하기")}</h3>
           <button className="cpl-apple" type="button" disabled aria-describedby="connection-plan-unavailable" aria-label={c("Apple Pay로 결제")}><svg width="16" height="19" viewBox="0 0 16 19" aria-hidden="true"><path fill="currentColor" d="M13.1 10.1c0-2.4 2-3.6 2.1-3.6-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9s-1.9-.9-3.2-.8C3.2 4.7 1.7 5.6.8 7.2c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8s1.9.8 3.2.8c1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-4.1zM10.7 3c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Pay</span></button>
           <div className="cpl-or"><span>{c("또는")}</span></div>
           <fieldset className="cpl-form" disabled aria-describedby="connection-plan-unavailable"><legend className="sr-only">{c("카드 정보")}</legend>
@@ -110,7 +110,7 @@ export default function ClientConnectionPlan({view,resultContext,result,signedIn
           <p id="connection-plan-unavailable" className="cpl-unavailable" role="status">{unavailable}</p>
         </section>
         <aside className="cpl-right"><div className="cpl-sumcard"><h2>{c("TETH 구독")}</h2><p>{c("선택한 거래소 계정으로 전략을 실행합니다.")}</p><Benefits paid short/>
-          <div className="cpl-lines"><div><span>{c('연결할 계정: {0}',exchange[1])}</span></div><div><span>{c("매월 구독료")}</span><b className="num">$280.00</b></div><div className="tot"><span>{c("오늘 결제 금액")}</span><b className="num">$280.00</b></div></div>
+          <div className="cpl-lines"><div><span>{c("매월 구독료")}</span><b className="num">$280.00</b></div><div className="tot"><span>{c("오늘 결제 금액")}</span><b className="num">$280.00</b></div></div>
           <button className="cpl-cta cpl-cta-w" type="button" disabled aria-describedby="connection-plan-unavailable">{c("$280 결제하고 시작하기")}</button>
         </div><p className="cpl-legal">{c("해지할 때까지 매월 $280이 자동 결제됩니다. 설정의 결제에서 언제든 해지할 수 있으며, 해지 후에도 남은 구독 기간 동안 이용할 수 있습니다.")}</p></aside>
       </div>:<div className="cpx-body">

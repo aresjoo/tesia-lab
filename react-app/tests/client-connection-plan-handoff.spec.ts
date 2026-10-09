@@ -18,7 +18,8 @@ for (const width of [320, 1440]) test(`original account subscription branch pres
     await page.keyboard.press('Enter')
     await expect(root).toHaveAttribute('data-step', 'checkout')
     await expect(root.getByRole('radio', { name, exact: true })).toBeChecked()
-    await expect(root.locator('.cpl-lines')).toContainText(`연결할 계정: ${name}`)
+    await expect(root.locator('.cpl-lines > div')).toHaveCount(2)
+    await expect(root.locator('.cpl-lines')).not.toContainText('연결할 계정:')
     await expect(root.getByLabel('카드 번호', { exact: true })).toBeDisabled()
     await expect(root.getByRole('button', { name: '$280 결제하고 시작하기', exact: true })).toBeDisabled()
     if (exchange === 'gate') {

@@ -16,14 +16,26 @@ async function signup(page:Page){await page.getByRole('button',{name:/Google/}).
 
 test('checkout keyboard chooses exactly one exchange and keeps selection focus',async({page})=>{
   await member(page);await page.goto('/#/connect/checkout?exchange=okx')
+  const root=page.getByTestId('connection-plan')
   const group=page.getByRole('radiogroup',{name:'거래소',exact:true})
+  await expect(root.locator('.cpl-left > .cpl-t3').first()).toHaveText('TETH 구독')
+  await expect(root.locator('.cpl-left > .cpl-t3').first()).toBeHidden()
+  const paymentHeading=root.locator('.cpl-left > .cpl-t3').nth(1)
+  await expect(paymentHeading).toHaveText('결제 수단 선택하기')
+  expect(await paymentHeading.evaluate(element=>element.tagName)).toBe('H3')
+  await expect(paymentHeading).toHaveCSS('margin-top','0px')
+  await expect(paymentHeading).toHaveCSS('margin-bottom','6px')
+  await expect(root).not.toContainText('먼저 연결할 거래소를 고르십시오.')
+  await expect(root).not.toContainText('연결할 계정:')
+  await expect(root.locator('.cpl-lines > div')).toHaveCount(2)
+  await expect(root.locator('.cpl-lines > div').first()).toContainText('매월 구독료')
+  await expect(root.locator('.cpl-lines > div').last()).toContainText('오늘 결제 금액')
   await group.getByRole('radio',{name:'OKX',exact:true}).focus()
   for(const [key,name] of [['ArrowRight','Bybit'],['ArrowUp','OKX'],['End','Gate'],['ArrowRight','Bitget'],['Home','Bitget']]){
     await page.keyboard.press(key)
     await expect(group.getByRole('radio',{name,exact:true})).toBeChecked()
     await expect(group.getByRole('radio',{name,exact:true})).toBeFocused()
     await expect(group.locator('[tabindex="0"]')).toHaveCount(1)
-    await expect(page.locator('.cpl-lines')).toContainText(`연결할 계정: ${name}`)
   }
   await page.reload();await expect(group.getByRole('radio',{name:'Bitget',exact:true})).toBeChecked()
 })
@@ -61,7 +73,8 @@ for(const width of [320,390,900,1440])for(const step of ['plan','checkout'] as c
     await expect(root.getByLabel('보안 코드',{exact:true})).toBeDisabled()
     await expect(root.getByRole('button',{name:'$280 결제하고 시작하기',exact:true})).toBeDisabled()
     await root.getByRole('radio',{name:'Binance',exact:true}).click()
-    await expect(root.locator('.cpl-lines')).toContainText('연결할 계정: Binance')
+    await expect(root.locator('.cpl-lines > div')).toHaveCount(2)
+    await expect(root.locator('.cpl-lines')).not.toContainText('연결할 계정:')
     await page.reload();await expect(root.getByRole('radio',{name:'Binance',exact:true})).toBeChecked()
     expect(await root.locator('.cpl-in').evaluateAll(els=>els.every(el=>el.getBoundingClientRect().right<=innerWidth+1))).toBe(true)
   }

@@ -2,6 +2,14 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — checkout 원본 행·제목 여백과 서버 비재귀 관측
+
+Web [99bdaa6](https://github.com/beak1011/tesia-web/tree/99bdaa6dfc3978ff6471169078289e0e25199497)의 전체 React 2,412파일·34,696,364bytes를 공식 sync/verify actual0으로 전달한다. snapshot `9b054492b64b841da7835ce640e3e5c271c3670ff1be48e20ed64a86d2caa793`, sourceDirty0·제거0이며 ares root/main 및 Worker는 그대로다. 첫 verify 호출의 인수 오기는 제품 검사 전 usage 오류였고 `--verify` 단독 호출 actual0으로 정정했다. snapshot 자체를 반복 생성하지 않았다.
+
+checkout은 원본24150/24154의 숨김 제목·요금2행,24151/CSS7195의 결제 제목 h3·margin0 0 6px를 복원했다. 승인된 결제·초대·승인 안전 예외는 그대로다. RED→영향2PASS와 추가 제목 RED→해당1PASS는 tool 출력으로 확인했으나 전용 Playwright raw는 없다. mutable last-run을 불변 증거로 승격하지 않는다. AGY 읽기 대조와 ROOT 실제 CSS 확인은 별도며 고객 결제/OAuth 성공은 아니다. 빌드는 앞 e4da871 인수와 구분하고 이 DOM-only 후속에서 반복하지 않았다.
+
+Infra [9e28c97](https://github.com/beak1011/tesia-infra/tree/9e28c97764f8ea78fb97a13c2016c1b507e68957)은 manager READY를 호출하지 않는 별도 systemd 읽기 observer다. 신규4키와 personal1 Opus5.5 C0H0M0 scopedGO를 인수했고 실제 systemd·운영·private 자료·provider/order 실행0이다. Help configured 재오픈·동시 요청 교정은 별도 검수 중이므로 snapshot에 WIP를 넣지 않는다. 현재 서버의 old-no-socket 최초 bootstrap·custody·Nginx control·writer-free composition은 실제 구현 대상으로 추적하며 키만 넣으면 완료라고 주장하지 않는다.
+
 ### 현재 — 원본 거래소 플랜·완료 화면과 가입 복귀
 
 clean Web [e4da871](https://github.com/beak1011/tesia-web/tree/e4da8717c6d09ffc65094811340af69f57a8f4eb)의 전체 React **2,412파일·34,693,789bytes**를 공식 sync/verify actual0으로 전달했다. snapshot `5153065e2aa23d303dcf07a02d9f5be9a325b5efef11364924439de8c8e105ee`, dirty0·제거0이며 원본 root/main9fb와 Node/Worker는 무변경이다.

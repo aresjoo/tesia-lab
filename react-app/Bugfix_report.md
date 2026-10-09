@@ -1,5 +1,11 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — checkout 원본 제목·행·여백 복원
+
+ares9fb 원본24150/24154와 달리 보이던 좌측 구독 제목·추가 소개 및 우측 연결 계정 행을 원본 숨김 h3와 요금2행으로 복원했다. 원본24151/CSS7195와 다른 결제 제목 h2/34px 여백도 h3/0 0 6px로 복원했다. renderer의 supplied-result 격리와 원본 SVG·카피·선택 동작은 보존하고 DESIGN223/287의 승인된 결제·초대·승인 안전 예외는 변경하지 않았다. 앱의 PAN/CVC 수집·가짜 결제 성공은 추가하지 않는다.
+
+최종 source d6843b7763eff51fb426c9c8ec86fd68b9d57281da5704fe5cfd8b02c2cb187d/주spec d46ab6a282e7d44cfde7a608bd9f89d1c4c68d894697c1f01a7d60e974fcef9d/handoff spec ef417232a16240eff960f22ea4fbcfe95488c09c5c2c9d9e29a1619a2f45bbfe다. 제목 visible RED1→영향2PASS/10.4초와 제목태그 RED1→해당1PASS/4.8초는 별도 실행이며 단일3PASS로 합산하지 않는다. diff-check0이며 whole/build/운영0이다. AGY3.8high 읽기 대조 actual0·입력불변은 최초 행 복원의 일치 및 추가 제목 여백 차이를 확인했다. ROOT가 실제원본 CSS와 비교해 수용했고 마지막1키가 그 교정을 검증한다. AGY를 최종 운영 승인으로 승격하지 않는다.
+
 ## 현재 — 원본 거래소 진입·Q47와 가입 복귀
 
 명시 메뉴의 catalogue/원본 plan 진입과 background 계정 관측을 분리했다. background 연결 목록은 원본 설정에 투영하되 임의 팝업을 열지 않는다. 검증된 callback은 현재 owner·locator·requestId에 결속하고 StrictMode 동시 소비는 한 번만, owner A→B의 늦은 callback은 재생하지 않는다. guest 원본 Q42 플랜 및 authenticated 실제 API12 목록 Q47를 구분하고 초대·구독·UID·접근 권리를 합성하지 않는다. Q47의 원본 없는 back/일반 설명/마스킹 UID를 제거하고 모든 연결 단계의 원문 도움말, list768px breakpoint·행 간격·13px 계정 링크를 복원했다. 원문·SVG·44px 접근성·실제 경고는 보존한다.
