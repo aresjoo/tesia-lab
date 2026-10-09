@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 기능별 원본 인증·내전략 대화 복귀
+
+clean Web [128e532](https://github.com/beak1011/tesia-web/tree/128e5324ad07b35f0ba8918e897558d19950ecd1)의 전체 React **2,411파일·34,638,762bytes**를 공식 sync/verify actual0으로 전달했다. snapshot `bab6085db569f8275481266c8beb932d0c16c73c45a0480098ccdb86b98026ce`, dirty0·제거경로0이며 ares root/main9fb·Node/Worker는 변경하지 않았다.
+
+원본 최종 override대로 거래소 연결·직접복사·관심·새복사·백테스트는 signup, 리뷰·설정 가져오기·분석·관리는 login이다. 빈 내전략의 채팅에서 전략 만들기는 인증 없이 대화로 돌아간다. 링크는 실제 producer 없을 때 성공을 합성하지 않는다. 첫 모달·카피·SVG·CSS·API·승인 email 예외는 유지한다.
+
+최종 personal1 Opus5.5 C0H0M0 scopedGO·AGY3.8high 읽기 대조, 교정 후 직접영향 desktop/mobile2PASS와 별도 creator DOM2PASS, 최종 타입/bundle actual0/24.154초를 결속했다. 기존 수정React를 원본으로 오인한 모델M1은 원문15942/18699 제공 후 철회했으며 원판정·실패는 보존한다. creator component 콜백 증거를 full host의 과거세션 복구 또는 고객 OAuth 성공으로 확대하지 않는다.
+
+SQL callback-held lease는 Infra a20c10e로 전달했고, 실제 Backend↔Infra live 관측의 기동·종료 교정은 source별 국소 검수 중이다. 로컬4176에서 화면 확인이 가능하다. 운영 배포·실제 고객 AI/주문·전원본470쪽 완료는 별도다. whole/9월/730 재실행0이다.
+
 ### 현재 — 원본 로그인·가입 의도 후속
 
 clean Web [701d0f5](https://github.com/beak1011/tesia-web/tree/701d0f54fc1c7c71660ea6635edb70b766767407)의 전체 React **2,411파일·34,626,989bytes**를 공식 sync/verify actual0으로 전달했다.

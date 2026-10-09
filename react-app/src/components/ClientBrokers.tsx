@@ -27,7 +27,7 @@ export type BrokerServices={
   /** Presentation cancellation scope only; never connection or payment authority. */
   presentationScope?:string
   onOpenAccount?:(brokerId:string)=>void
-  onLogin?:()=>void
+  onLogin?:(intent:'login'|'signup')=>void
   authenticated?:boolean
   /** Must resolve only after the server has accepted an ownership-verified review. */
   submitReview?:(brokerId:string,review:{rating:number;text:string})=>Promise<void>
@@ -301,7 +301,7 @@ function BrokerDetail({broker:b,services,onBack,onNotice,reviewView,onReviewView
   const selectTab=(next:'overview'|'reviews',focus=false)=>{setTab(next);if(focus)tabs.current?.querySelector<HTMLButtonElement>(`[data-tab="${next}"]`)?.focus({preventScroll:true})}
   useEffect(()=>{clientResearchScrollport()?.scrollTo({top:0});heading.current?.focus({preventScroll:true})},[])
   useEffect(()=>{const el=carousel.current;if(!el)return;const sync=()=>setEdges({left:el.scrollLeft>4,right:el.scrollLeft<el.scrollWidth-el.clientWidth-4});const wheel=(e:WheelEvent)=>{if(e.ctrlKey||Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;const max=el.scrollWidth-el.clientWidth;if((e.deltaY>0&&el.scrollLeft<max-1)||(e.deltaY<0&&el.scrollLeft>1)){el.scrollLeft+=e.deltaY;e.preventDefault()}};sync();const resize=new ResizeObserver(sync);resize.observe(el);el.addEventListener('scroll',sync,{passive:true});el.addEventListener('wheel',wheel,{passive:false});return()=>{resize.disconnect();el.removeEventListener('scroll',sync);el.removeEventListener('wheel',wheel)}},[tab])
-  const connect=()=>{if(services.actionPending)return;if(state===null){onNotice('TETH로 연결','계정 연결 서비스가 아직 준비되지 않았습니다. 연결이나 결제는 실행되지 않았어요.');return}if(state==='SOON')return;if(services.onConnect)services.onConnect(b.id,state);else if(state==='GUEST'&&services.onLogin)services.onLogin();else if(state==='NEEDS_PLAN'&&services.authenticated&&!services.serviceBoundary)setPlanOffer({scope:services.presentationScope,href:window.location.href,trigger:document.activeElement instanceof HTMLElement?document.activeElement:undefined});else onNotice('TETH로 연결','계정 연결 서비스가 아직 준비되지 않았습니다. 연결이나 결제는 실행되지 않았어요.')}
+  const connect=()=>{if(services.actionPending)return;if(state===null){onNotice('TETH로 연결','계정 연결 서비스가 아직 준비되지 않았습니다. 연결이나 결제는 실행되지 않았어요.');return}if(state==='SOON')return;if(services.onConnect)services.onConnect(b.id,state);else if(state==='GUEST'&&services.onLogin)services.onLogin('signup');else if(state==='NEEDS_PLAN'&&services.authenticated&&!services.serviceBoundary)setPlanOffer({scope:services.presentationScope,href:window.location.href,trigger:document.activeElement instanceof HTMLElement?document.activeElement:undefined});else onNotice('TETH로 연결','계정 연결 서비스가 아직 준비되지 않았습니다. 연결이나 결제는 실행되지 않았어요.')}
   const subscribe=(offer:BrokerPlanOffer)=>{
     const current=latestPlan.current
     if(!planAlive.current||consumedOffer.current===offer||current.planOffer!==offer||current.brokerId!==b.id
@@ -311,7 +311,7 @@ function BrokerDetail({broker:b,services,onBack,onNotice,reviewView,onReviewView
     current.services.onSubscribe?.()
   }
   const account=()=>!unavailable&&services.onOpenAccount?services.onOpenAccount(b.id):onNotice('계정 개설','계정 개설 경로를 확인하고 있습니다. 새 계정이나 연결은 생성되지 않았어요.')
-  const write=()=>{if(reviewLock.current)return;if(!services.authenticated){if(services.onLogin)services.onLogin();else onNotice('로그인이 필요합니다','리뷰를 남기려면 로그인해주세요.');return}setReviewStatus('idle');setWriting(true)}
+  const write=()=>{if(reviewLock.current)return;if(!services.authenticated){if(services.onLogin)services.onLogin('login');else onNotice('로그인이 필요합니다','리뷰를 남기려면 로그인해주세요.');return}setReviewStatus('idle');setWriting(true)}
   // The request belongs to this detail, not the dismissible writer. Closing
   // that window never claims cancellation and cannot unlock a second submit.
   const submitReview:NonNullable<BrokerServices['submitReview']>=async(brokerId,payload)=>{

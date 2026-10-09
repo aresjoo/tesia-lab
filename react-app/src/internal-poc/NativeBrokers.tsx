@@ -10,7 +10,7 @@ import { brokerViewDataset, type BrokerViewState } from '../client-broker-view'
 /** Source catalogue navigation only. No preview account, review or fee producer. */
 type Props = {
   onReturn: () => void; shouldFocus: () => boolean; listRequest: number
-  accountScope?: string | null; presentation?: BrokerServicePresentation; signedIn?: boolean; onLogin?: () => void
+  accountScope?: string | null; presentation?: BrokerServicePresentation; signedIn?: boolean; onLogin?: (intent: 'login' | 'signup') => void
   viewState?: BrokerViewState | null; onViewStateChange?: (view: BrokerViewState) => void
 }
 export function NativeBrokers(props: Props) {

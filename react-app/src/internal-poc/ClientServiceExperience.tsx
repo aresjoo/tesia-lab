@@ -1081,7 +1081,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       <div className="native-service-route-content" hidden={connectionOpen || Boolean(settingsTab || connectionStatus)} inert={Boolean(settingsTab || connectionStatus)} style={{ display: connectionOpen || settingsTab || connectionStatus ? 'none' : 'contents' }}>
       {strategies && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setResearchHistory(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setResearchHistory(false)} />}>
         <NativeStrategies onReturn={closeSharing} location={sharingLocation} onNavigate={navigateSharing} shouldFocus={shouldFocusStrategies} executionContent={historyContent}
-          owner={accountScope} presentation={sharingData} brokerPresentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={() => login('login')} onAsk={prepareQuestion}
+          owner={accountScope} presentation={sharingData} brokerPresentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={intent => login(intent === 'signup' ? 'signup' : 'login')} onAsk={prepareQuestion}
           datasetIdentity={sharingDataset} viewState={sharingView} onViewStateChange={next => {
             if (sharingData && ownerRef.current === accountScope && next.owner === accountScope && next.datasetIdentity === sharingDataset) setSharingView(next)
           }}
@@ -1089,7 +1089,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           notice={<>{state.issue && <div className="client-service-issue">{state.issue}</div>}{navigationFeedback}{!executionHistory && historyFeedback}</>} />
       </Suspense></ClientLoadBoundary>}
       {brokers && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setBrokers(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setBrokers(false)} />}>
-        <NativeBrokers accountScope={accountScope} presentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={() => login('login')} onReturn={() => setBrokers(false)} shouldFocus={shouldFocusBrokers} listRequest={brokerListRequest} viewState={brokerView} onViewStateChange={updateBrokerView} />
+        <NativeBrokers accountScope={accountScope} presentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={intent => login(intent === 'signup' ? 'signup' : 'login')} onReturn={() => setBrokers(false)} shouldFocus={shouldFocusBrokers} listRequest={brokerListRequest} viewState={brokerView} onViewStateChange={updateBrokerView} />
       </Suspense></ClientLoadBoundary>}
       {insights && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setInsights(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setInsights(false)} />}>
         <NativeInsights key={accountScope} onReturn={closeInsights} shouldFocus={shouldFocusInsights} data={insightData?.data} onFeedback={insightData?.onFeedback} controlledLocation={insightLocation} onNavigate={navigateInsight} locationHref={insightHref} onAsk={prepareQuestion} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={intent => login(intent === 'signup' ? 'signup' : 'login')} />

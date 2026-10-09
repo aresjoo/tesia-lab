@@ -1,5 +1,15 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 기능별 원본 인증 동선 복원·전달
+
+ares `9fbff821` 최종 override를 기준으로 거래소 연결·직접 복사·관심·새 복사·백테스트는 signup, 리뷰·설정 가져오기·분석·관리는 login으로 나누었다. 빈 내전략의 채팅에서 전략 만들기는 원본15942/18699처럼 인증 없이 대화로 돌아간다. 링크 생성은 인증 전환과 분리하며 실제 producer 부재를 성공으로 합성하지 않는다. source7/spec1 외 UI·카피·SVG·CSS·API·owner/controller·승인 email code-only 정책 변경0이다.
+
+초기 desktop/mobile6PASS와 직접영향2PASS 뒤 독립 검수가 설정 가져오기 동선을 지적하여 해당 키만 교정했다. 후속2PASS/5.3초(raw85bb5695), 원RED68989f7d를 보존한다. 기존 수정React의 guest login을 원본 권위로 오인한 내전략 M1은 원본 최종 함수를 제공한 personal1 Opus5.5가 명시 철회했으며 C0H0M0 scopedGO(actual0·입력불변)다(`auth-feature-original-clarification-opus.receipt.json`). 원 M1/Low 판정은 삭제하지 않는다. AGY3.8high의 원본 동선 목록 대조 actual0·입력불변은 최종 승인이 아니다.
+
+최종 제품 source7의 타입/service bundle actual0·입력불변·24.154초다(`auth-feature-corrected-final-build.receipt.json`). 앞24.643초 빌드 이후 실제 동선 결함 교정으로 최종 후보가 바뀌었으므로 새 최종 빌드가 필요했으며 두 결과를 합산하지 않는다. configLoader/chunk 경고는 보존한다. 이후 제품 변경 없이 creator 실제 component DOM의 desktop/mobile2PASS/3.4초(raw3f42cab5, specfdf465f4)를 추가했다: 내전략 CTA onReturn1·auth0, 원본 tfBackToChat의 guest 홈 복귀·auth0. 이는 full host의 이전 세션/PREV 복구 성공이나 실제 OAuth 성공이 아니다. guest+비어있지 않은 preview candidate 및 전체 host 복귀 의미 Low는 별도 잔여로 남긴다.
+
+이번 batch는 Git/migration 전달 대상이며 운영 배포·실제 모델/로그인/주문 성공은 아니다. whole/730/9월 재실행0, 동결 검수 중 제품 수정0이다.
+
 ## 현재 — 원본 로그인·가입 의도와 retained controller 복원
 
 원본 `AUTH.mode`는 login/signup을 구분하지만 실제 서비스의 홈·사이드바 callback은 같아 의도를 잃었다. `ClientServiceExperience`→`NativeServiceApp.loginBinding`→`NativeLoginPanel.intent`로 owner/session/generation에 결속했다. 첫 modal의 공통 원문·Google/Apple/email API·CSS·승인된 email code-only 정책은 바꾸지 않는다. DOM marker는 실제 로그인/신규 가입 성공의 증거가 아니다.

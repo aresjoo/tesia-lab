@@ -21,7 +21,7 @@ import copy from '../client-strategy-list-copy.json'
  * verified producer. The existing source filters/cards/detail shell own UI. */
 export function NativePublicStrategyCatalogue({ onReturn, location = { period: 'all' }, onNavigate, shouldFocus, signedIn, onLogin }: {
   onReturn: () => void; location?: SharedLocation; onNavigate?: (value: SharedLocation, replace?: boolean) => void
-  shouldFocus: () => boolean; signedIn: boolean; onLogin: () => void
+  shouldFocus: () => boolean; signedIn: boolean; onLogin: (intent: 'login' | 'signup') => void
 }) {
   const { language } = useClientPreferences(), id = useId()
   const title = useRef<HTMLHeadingElement>(null), detailTitle = useRef<HTMLHeadingElement>(null)
@@ -86,13 +86,18 @@ export function NativePublicStrategyCatalogue({ onReturn, location = { period: '
     clientResearchScrollport(title.current?.closest<HTMLElement>('#research-main') ?? null)
       ?.scrollTo({ top: 0, behavior: 'instant' })
   }
-  const action = () => { if (!signedIn) onLogin(); else setUnavailable(true) }
+  const unavailableAction = () => setUnavailable(true)
+  const authAction = (intent: 'login' | 'signup') => () => {
+    if (!signedIn) onLogin(intent)
+    else setUnavailable(true)
+  }
+  const signupAction = authAction('signup'), loginAction = authAction('login')
   return <section id="research-main" className="client-research-hub client-sharing-hub native-strategies" aria-labelledby={id}>
     <header className="hub-header"><h1 ref={title} id={id} tabIndex={-1}>{copy[language].title}</h1><button type="button" onClick={onReturn}>{researchCopy(language, 'return')}</button></header>
     <div className="client-strategy-sharing" data-public-catalogue>
       {selected ? <ClientSharedDetailShell row={catalogueIdentity(selected)} location={current} title={detailTitle} onNavigate={navigate}
         info={[[copy[language].title, catalogueIdentity(selected).title], [catalogueIdentity(selected).asset, catalogueAssets(selected).join(', ')]]}
-        onCopy={action} onAnalyze={action} onWatch={action} onCopyLink={action} analyzing={false} watched={false} shareAvailable={false}>
+        onCopy={signupAction} onAnalyze={loginAction} onWatch={signupAction} onCopyLink={unavailableAction} analyzing={false} watched={false} shareAvailable={false}>
         <p className="ss3-empty" role="status">{sharingUnavailable(language)}</p>
         {unavailable && <p role="status">{sharingUnavailable(language)}</p>}
       </ClientSharedDetailShell> : <>

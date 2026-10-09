@@ -21,7 +21,7 @@ export type NativeStrategyViewState = {
 type NativeStrategiesProps = {
   onReturn: () => void; shouldFocus: () => boolean; executionContent?: ReactNode; onTabChange: () => void; notice?: ReactNode
   brokerPresentation?: BrokerServicePresentation
-  presentation?: SharingServicePresentation; owner?: string | null; signedIn?: boolean; onLogin?: () => void
+  presentation?: SharingServicePresentation; owner?: string | null; signedIn?: boolean; onLogin?: (intent: 'login' | 'signup') => void
   onAsk?: (text: string) => void | Promise<void>
   location?: SharedLocation
   onNavigate?: (location: SharedLocation, replace?: boolean) => void
@@ -33,7 +33,7 @@ type NativeStrategiesProps = {
 /** Owner/dataset replacement and data removal discard local routes and drafts. */
 export function NativeStrategies(props: NativeStrategiesProps) {
   if (!props.presentation) return <NativePublicStrategyCatalogue key={props.owner ?? 'public'} onReturn={props.onReturn}
-    location={props.location} onNavigate={props.onNavigate} shouldFocus={props.shouldFocus} signedIn={props.signedIn ?? false} onLogin={props.onLogin ?? props.onReturn} />
+    location={props.location} onNavigate={props.onNavigate} shouldFocus={props.shouldFocus} signedIn={props.signedIn ?? false} onLogin={intent => { if (props.onLogin) props.onLogin(intent); else props.onReturn() }} />
   return <NativeStrategySurface key={JSON.stringify([props.owner ?? null, props.datasetIdentity ?? 'default', props.presentation !== undefined])} {...props} />
 }
 /** Same source sharing renderer, with explicit service-only inputs. */

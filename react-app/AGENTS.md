@@ -1,6 +1,6 @@
 # Web 작업 지침
 
-- 현재 source 소유: Web536957b의 원문·설정·dock과 후속 auth intent source3+spec은 동결했다. source db37e1d0/ea718c8d/fa5d302f의 최종 personal1 Opus5.5는 C0H0M0이고 ROOT는 reset 인과관계 시험1키만 보강해 speca520b38e로 동결했다. Backend 담당자는 private live-observer 작업으로 이관되어 Web source 쓰기0이다. ROOT만 AGENTS/Bugfix·묶음 타입/bundle·Git/Lab sync를 소유한다. broker/copy/watch 등의 기능별 login/signup 차이는 다음 exact writer 승인 후 교정하며 지금 무단 일괄치환하지 않는다. 첫 modal 공통원문·승인 email code-only 정책·API/CSS/권한을 유지하고 marker를 실제 인증 성공으로 세지 않는다. 없는 verification/entitlement 합성 금지, 작은 복원마다 whole/제품 rebuild 반복 금지다.
+- 현재 source 소유: 기능별 auth 후속 exact8(source7/spec1)은 원본 최종 override대로 connect/direct copy/watch/new copy/backtest signup, review/settings-import/analyze/manage login, link auth0, 빈 내전략 CTA는 인증 없이 대화 복귀로 복원·동결했다. 최종 교정 직접영향 desktop/mobile2PASS와 creator 실제DOM2PASS, 최종 타입/bundle actual0/24.154초, personal1 Opus5.5 C0H0M0 scopedGO·AGY3.8high 읽기 대조를 결속한다. 기존 수정React를 기준으로 내전략login을 요구했던 모델M1은 원본15942/18699 대조 후 철회했으며 원판정/실패는 보존한다. ROOT가 AGENTS/Bugfix/Git/Lab sync를 소유한다. 다음 거래소 원본 진입·완료 도움말/초점 국소 복원은 별도 writer legacy_candidate_preparation이며 정확 파일 경계 확정 전 source쓰기0이다. 원문/API/승인 email code-only·기존 controller 권한 무변경, 실제 sharing producer와 host 이전세션 복귀는 별도 검증이다. 모든 callback 일괄 signup 치환·검수 중 source 변경·whole 반복을 금지한다.
 
 - 실제서비스 CSP 후속: ROOT는 `vite.internal-poc.config.ts`의 serviceOnly font emission을 소유한다. 폰트만 파일로 방출해 서버 font-src self를 유지하며 기존 public/POC asset 정책·UI·카피·권한은 바꾸지 않는다. Backend 정책 writer는 별도 integration WT이고 공용 API변경0이다.
 

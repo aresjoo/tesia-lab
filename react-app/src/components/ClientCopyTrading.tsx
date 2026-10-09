@@ -293,7 +293,7 @@ export function ClientCopyDashboard({ account, sources, navigate, Dialog, servic
 }
 
 export function ClientCopyTrading({ location, account, sources, navigate, Dialog, onStartGate, onFollow, backLabel, watching, onWatch, onAsk, signedIn, onLogin, servicePresentation: service }: SharedProps & {
-  servicePresentation?: SharingServicePresentation; location: SharedLocation; onStartGate: () => boolean; onFollow: () => void; backLabel?: string; watching: (nick: string) => boolean; onWatch: (nick: string) => void; onAsk: (text: string) => void | Promise<void>; signedIn: boolean; onLogin: () => void
+  servicePresentation?: SharingServicePresentation; location: SharedLocation; onStartGate: () => boolean; onFollow: () => void; backLabel?: string; watching: (nick: string) => boolean; onWatch: (nick: string) => void; onAsk: (text: string) => void | Promise<void>; signedIn: boolean; onLogin: (intent: 'login' | 'signup') => void
 }) {
   const [action, setAction] = useState<Action | null>(null), [askFailed, setAskFailed] = useState(false), [asking, setAsking] = useState(false)
   const { language } = useClientPreferences()
@@ -312,7 +312,7 @@ export function ClientCopyTrading({ location, account, sources, navigate, Dialog
   const start = () => { if (source && onStartGate()) navigate({ view: 'copy-setup', nick: source.nick, period: 'all' }) }
   const open = (kind: Action['kind']) => { if (copy) setAction({ kind, id: copy.id, trigger: document.activeElement instanceof HTMLElement ? document.activeElement : undefined }) }
   const ask = async () => {
-    if (!signedIn) { onLogin(); return }
+    if (!signedIn) { onLogin('login'); return }
     if (!source || lifetime.current.asking) return
     const version = lifetime.current.version; lifetime.current.asking = true; setAsking(true); setAskFailed(false)
     try { if (service) await service.onAnalyze?.(source, 'all'); else await onAsk(sharedAnalysisRequest(source, 'all')) }
@@ -320,7 +320,7 @@ export function ClientCopyTrading({ location, account, sources, navigate, Dialog
     finally { if (version === lifetime.current.version) { lifetime.current.asking = false; setAsking(false) } }
   }
   if (location.view === 'trader' && source) return <><TraderProfile service={service} source={source} location={location} navigate={navigate} onStart={start} watching={watching(source.nick)} onWatch={() => onWatch(source.nick)} onAsk={() => { void ask() }} asking={asking} />{askError && <p role="alert">{askError}</p>}</>
-  if (!signedIn && (location.view === 'copy-setup' || location.view === 'copy-detail')) return <Empty title={text('로그인 후 카피를 관리할 수 있어요')} action={<button type="button" className="wbtn" onClick={onLogin}>{text('로그인')}</button>} />
+  if (!signedIn && (location.view === 'copy-setup' || location.view === 'copy-detail')) return <Empty title={text('로그인 후 카피를 관리할 수 있어요')} action={<button type="button" className="wbtn" onClick={() => onLogin('login')}>{text('로그인')}</button>} />
   if (location.view === 'copy-setup' && source) return <CopySetup service={service} key={source.nick} source={source} account={account} navigate={navigate} Dialog={Dialog} onStartGate={onStartGate} onFollow={onFollow} />
   if (location.view !== 'copy-detail' || !copy) return <Empty title={text(location.view === 'copy-detail' ? '카피를 찾을 수 없어요' : '지금은 볼 수 없는 트레이더예요')} action={<button type="button" className="obtn" onClick={() => navigate({ period: 'all' }, true)}>{text('전략들로 돌아가기')}</button>} />
   const tab = location.copyTab ?? 'pos'
