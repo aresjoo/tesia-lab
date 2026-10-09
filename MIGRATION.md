@@ -17,25 +17,25 @@ snapshot `3b211a2db8ff3991ccd3684593fda087c834c43e78f86b42f535060d29d41de8`, sou
 최종 묶음 타입/service bundle은 actual0/20.741초·입력불변, AGY3.8high는 원문 일치의 읽기 전용 검토다.
 Opus의 scopedGO 이후 초점 Low 교정은 신규2키 증거로 구분한다. 고객지원 기존 FAQ/정책 링크의 승인 근거는 사용자 확인 중이며 이번에 임의 제거하지 않았다.
 
-서버 전달은 [Infra14e45ed](https://github.com/beak1011/tesia-infra/tree/14e45ed)의 private START intent·physical attestor·per-process pidfd TERM·manager 소비 교정과
-기존 Backend71b1ced/source238 설치를 재사용한다. 최종 독립 검수와 이후 strict-string/오류 oracle 국소 교정을 구분해 원FAIL을 보존했다.
+서버 전달은 [Infra4608622](https://github.com/beak1011/tesia-infra/tree/46086223f8aead8714c56174017266332a38f77c)의 실제 symlink selector CAS·private START intent·physical attestor·per-process pidfd TERM·manager와
+Backend98cf45b의 실제 listener 진입/정상중지 교정을 포함한다. 새c055514/source238 패키지 설치11단계는 actual0/29.262초이며 기존71b 후보를 반복하거나 새source 권위로 승계하지 않았다. 최종 독립 검수와 이후 strict-string/오류 oracle 국소 교정을 구분해 원FAIL을 보존했다.
 실제 unit/selector/edge를 조립하는 driver·운영 배포·실제 모델/고객 OAuth/주문 성공은 이번 snapshot 검증으로 완료 판정하지 않는다.
 로컬 HMR4176은 이 Web source를 제공한다. 전체 회귀·9월·730일 재실행0이며 상세 실행은 `react-app/Bugfix_report.md`와 Program Ledger를 따른다.
 
 ### 실제 OAuth·Bitget 연결의 현재 작업 경계
 
-현재 통합 기준은 [Program fe44b28](https://github.com/beak1011/tesia-program/tree/fe44b28)의
+현재 통합 기준은 [Program97985d2](https://github.com/beak1011/tesia-program/tree/97985d2a76cf7cf9b2a009febd591fad0027eddc)의
 활성 Ledger와 기존 Decision Log다. 실제 TETH는 Google 필수·Apple 선택의 legacy OAuth,
 Bitget API12, identity/exchange 두 저장소를 사용한다. 아래 source232·generic shared-profile
 오프라인 인수는 이 운영 서비스를 직접 교체하는 권위가 아니다.
 
-별도 [Backend71b1ced](https://github.com/beak1011/tesia-backend/tree/71b1cedef7cf90534f5c00787ae5db3837dcb8f5)를
+별도 [Backend98cf45b](https://github.com/beak1011/tesia-backend/tree/98cf45b)를
 push했다. 기존 인증/거래소·key/session을 보존하고 같은 identity store에 API13/14 상담을
 추가하며 두-store candidate의 명시 path/profile migration을 구현한다. 공식 manifest source238의
-새 direct/sdist 설치11단계를26.057초에 통과했고 실제 모델 응답·운영 배포와 구분한다.
-Infra의 private journal·candidate 연결과 서버 실행 도구는 서로 다른 파일 writer가 진행한다.
+새 direct/sdist 설치11단계를29.262초에 통과했고 실제 모델 응답·운영 배포와 구분한다. package evidence63f372eb·runtime e01ae004다. 첫97f 설치 도구 pin누락 실패는 빌드 전에 종료됐고 상수2만 정렬했으며 원자료는 보존한다.
+Infra의 callback-held SQL probe 독립검수 H1/H2/M1 교정, explicit edge hold/release adapter, Web 로그인/가입 intent 복원은 서로 다른 파일 writer가 동시에 진행한다. 미검증 SQL free evidence·가짜 verification/access·실제 연구 역할을 합성하지 않는다.
 아직 동결되지 않은 변경은 Git 전달 또는 운영 성공으로 표시하지 않는다. ares root·전체
-React2407의 디자인/흐름은 변경하지 않았으며 키 입력 대기를 내부 구현의 중단 사유로 사용하지 않는다.
+React2410의 디자인/흐름은 이번 서버 메타데이터 전달에서 변경하지 않았으며 키 입력 대기를 내부 구현의 중단 사유로 사용하지 않는다.
 
 enabled bundle의 좁은 320/390/1440 renderer 점검은 source 변경0/외부POST0으로 반환했다.
 1440 홈의 첫 캡처는 원본 reveal 중간 상태였다. 2.4초 뒤 재확인에서55카드·3열·opacity1을
