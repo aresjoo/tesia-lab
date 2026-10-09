@@ -68,6 +68,7 @@ import { accountPresentationBound, accountLocationAvailable, type NativeAccountP
 import { brokerPresentationBound, type BrokerServicePresentation } from '../client-broker-presentation'
 import { brokerViewBound, brokerViewDataset, type BrokerViewState } from '../client-broker-view'
 import { connectionPresentationBound, type NativeConnectionPresentation } from './native-connection-presentation'
+import type { ConnectionPlanLocation } from '../client-connection-plan'
 import { projectSettingsAccountConnections, settingsAccountConnectionOwner } from './client-settings-account-connections'
 import { NativeResearchWorkspace } from './NativeResearchWorkspace'
 import { nativeResearchText } from './native-research-workspace-copy'
@@ -84,6 +85,7 @@ const NativeBrokers = lazy(() => import('./NativeBrokers').then(module => ({ def
 const NativeInsights = lazy(() => import('./NativeInsights').then(module => ({ default: module.NativeInsights })))
 const NativeStrategies = lazy(() => import('./NativeStrategies').then(module => ({ default: module.NativeStrategies })))
 const NativeConnectionOnboarding = lazy(() => import('./NativeConnectionOnboarding').then(module => ({ default: module.NativeConnectionOnboarding })))
+const ClientConnectionPlan = lazy(() => import('../components/ClientConnectionPlan'))
 
 type SettingsConnectionOperationInternal = {
   token: number
@@ -131,6 +133,8 @@ function ServiceAssistantAnswer({ blocks, source, contentIdentity, questionActio
 type UnavailableFeature = ResearchPage | 'download' | 'trading'
 type ShellNotice = { key: NativeShellCopyKey; feature?: UnavailableFeature }
 type ClientAuthIntent = 'login' | 'signup'
+export type ClientConnectionPlanAuthRequest = { issuer: 'client-connection-plan'; operation: 'signup'; requestId: string; sourceSessionId: string; plan: ConnectionPlanLocation }
+export type ClientConnectionPlanContinuationReceipt = ClientConnectionPlanAuthRequest & { targetSessionId: string }
 
 /** Current-conversation projection only; the native controller retains all
  * SDK/owner checks. A successful selection, not a click, closes the history. */
@@ -144,8 +148,8 @@ export type ClientServiceHistory = {
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
-  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
+  state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent, request?: ClientConnectionPlanAuthRequest) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
   /** Observed result identity/status, only for the conversation's unread UI. */
@@ -173,9 +177,13 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   sharingPresentation?: { scope: string; identity?: string; data: SharingServicePresentation }
   accountPresentation?: NativeAccountPresentation
   brokerPresentation?: BrokerServicePresentation
-  /** Explicit owner-bound display request. Change requestId to reopen a closed
-   * journey; stage changes alone never reopen it or grant trading authority. */
+  /** Explicit owner-bound display data. A non-empty requestId is reserved for
+   * a verified callback intent; background data continues to feed settings. */
   connectionPresentation?: NativeConnectionPresentation & { requestId: string }
+  /** One validated auth-panel result may resume presentation once. It grants
+   * neither exchange access nor a connection/provider operation. */
+  connectionPlanContinuation?: ClientConnectionPlanContinuationReceipt | null
+  onConnectionPlanContinuationConsumed?: (requestId: string) => void
   authSurface?: ReactNode
   feedbackPresentation?: { scope: string; onSubmit: (submission: ClientFeedbackSubmission) => Promise<void> }
   researchPresentation?: { scope: string; data: Omit<NativeResearchWorkspaceProps, 'title' | 'titleEditor' | 'onBack' | 'strategyDocument' | 'analysis' | 'analysisOpen' | 'onOpenAnalysis' | 'onCloseAnalysis' | 'composer' | 'composerHasContext' | 'threadForDocument' | 'threadEntriesForDocument' | 'threadActivity'> }
@@ -379,8 +387,23 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   if (alertsView && (!accountData || alertsView.scope !== accountData.scope || alertsView.identity !== accountData.identity)) setAlertsView(null)
   const [alertsRequest, setAlertsRequest] = useState(0)
   const [dismissedConnection, setDismissedConnection] = useState<string | null>(null)
+  const [connectionBrowse, setConnectionBrowse] = useState<{ owner: typeof accountScope; session: typeof state.sessionState; request: number; mode: 'browse' | 'continuation' } | null>(null)
+  const connectionBrowseSequence = useRef(0)
+  const consumedConnectionPlan = useRef<string | null>(null)
+  const [connectionPlan, setConnectionPlan] = useState<ConnectionPlanLocation>({ step: 'plan', exchange: 'bitget' })
+  if (connectionBrowse && (connectionBrowse.owner !== accountScope || connectionBrowse.session !== state.sessionState)) setConnectionBrowse(null)
+  useLayoutEffect(() => {
+    const receipt = connectionPlanContinuation
+    if (!receipt || receipt.issuer !== 'client-connection-plan' || receipt.operation !== 'signup'
+      || receipt.targetSessionId !== accountScope || state.sessionState !== 'AUTHENTICATED'
+      || consumedConnectionPlan.current === receipt.requestId) return
+    consumedConnectionPlan.current = receipt.requestId
+    setConnectionPlan(receipt.plan)
+    setConnectionBrowse({ owner: accountScope, session: state.sessionState, request: ++connectionBrowseSequence.current, mode: 'continuation' })
+    onConnectionPlanContinuationConsumed?.(receipt.requestId)
+  }, [accountScope, connectionPlanContinuation, onConnectionPlanContinuationConsumed, state.sessionState])
   const connectionData = nativeAccounts && state.sessionState === 'AUTHENTICATED' && connectionPresentationBound(connectionPresentation, accountScope)
-    && connectionPresentation.requestId.trim() ? connectionPresentation : undefined
+    ? connectionPresentation : undefined
   const settingsAccountConnections = projectSettingsAccountConnections(connectionData, accountScope)
   const settingsConnectionOwner = connectionData ? settingsAccountConnectionOwner(connectionData.scope, connectionData.identity) : null
   const latestSettingsConnections = useRef(settingsAccountConnections)
@@ -460,15 +483,18 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       return latestSettingsConnectionOwner.current === request.ownerBinding && activeSettingsConnection.current === null
     },
   }
-  const connectionKey = connectionData ? JSON.stringify([accountScope, connectionData.identity, connectionData.requestId]) : null
-  const connectionOpen = connectionKey !== null && connectionKey !== dismissedConnection
+  const connectionKey = connectionData?.requestId.trim() ? JSON.stringify([accountScope, connectionData.identity, connectionData.requestId]) : null
+  const callbackConnectionOpen = connectionKey !== null && connectionKey !== dismissedConnection
+  const explicitConnectionOpen = connectionBrowse !== null && connectionBrowse.owner === accountScope && connectionBrowse.session === state.sessionState
+  const connectionOpen = callbackConnectionOpen || explicitConnectionOpen
   const closeConnection = () => {
+    setConnectionBrowse(null)
     setDismissedConnection(connectionKey)
     requestAnimationFrame(() => document.getElementById('tesia-main')?.focus({ preventScroll: true }))
   }
   useEffect(() => {
     if (!connectionOpen) return
-    const closeOnNavigation = () => setDismissedConnection(connectionKey)
+    const closeOnNavigation = () => { setConnectionBrowse(null); setDismissedConnection(connectionKey) }
     window.addEventListener('popstate', closeOnNavigation)
     window.addEventListener('hashchange', closeOnNavigation)
     window.addEventListener('teth:navigate', closeOnNavigation)
@@ -656,7 +682,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     // same-tick guard. Closing a menu never constitutes a logout receipt.
     void state.onLogout?.()
   }
-  const login = (intent: ClientAuthIntent = 'login') => { setHomeEntrance(false); if (onLogin) onLogin(intent); else unavailable() }
+  const login = (intent: ClientAuthIntent = 'login', request?: ClientConnectionPlanAuthRequest) => { setHomeEntrance(false); if (onLogin) onLogin(intent, request); else unavailable() }
   const settingsTab = useClientSettingsRoute({
     signedIn: nativeAccounts && state.sessionState === 'AUTHENTICATED',
     ready: nativeAccounts && state.phase !== 'loading',
@@ -820,10 +846,17 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     if (hasConversation) setConfirmReset(true)
     else reset()
   }
-  // Reuse the original catalogue entry from both the sidebar and an unlinked
-  // terminal. Browsing grants no exchange connection or execution authority.
+  // Source acPageView owns the explicit connection entry. The catalogue stays
+  // available only on its existing non-native discovery branch.
   const browseExchanges = () => {
     closeClientSettingsRoute()
+    if (nativeAccounts) {
+      setSurface(null); setNotice(null); setConfirmReset(false); setHomeEntrance(false)
+      setResearchHistory(false); setAccountPlan(false); setTrading(false); setInsights(false); setBrokers(false)
+      setConnectionPlan({ step: 'plan', exchange: 'bitget' })
+      setConnectionBrowse({ owner: accountScope, session: state.sessionState, request: ++connectionBrowseSequence.current, mode: 'browse' })
+      return
+    }
     brokerFocusIntent.current = true
     setSurface(null); setNotice(null); setConfirmReset(false); setHomeEntrance(false)
     setResearchHistory(false); setAccountPlan(false); setTrading(false); setInsights(false)
@@ -1076,7 +1109,12 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           notify: <NativeSettingsPlan key={JSON.stringify([accountScope, accountData.identity, 'notify'])} data={accountData} tab="notify" onNavigate={navigateAccount} />,
         } : undefined} />}
       {connectionOpen && !connectionStatus && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={closeConnection} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={closeConnection} />}>
-        <NativeConnectionOnboarding accountScope={accountScope} presentation={connectionData} onReturn={closeConnection} />
+        {connectionData && connectionBrowse?.mode !== 'continuation'
+          ? <NativeConnectionOnboarding accountScope={accountScope} presentation={connectionData} onReturn={closeConnection} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} />
+          : <ClientConnectionPlan view={connectionPlan} signedIn={state.sessionState === 'AUTHENTICATED'} onNavigate={setConnectionPlan}
+              onSignup={next => { setConnectionPlan(next); login('signup', accountScope && state.sessionState === 'ANONYMOUS'
+                ? { issuer: 'client-connection-plan', operation: 'signup', requestId: crypto.randomUUID(), sourceSessionId: accountScope, plan: next } : undefined) }} onClose={closeConnection}
+              onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} />}
       </Suspense></ClientLoadBoundary>}
       <div className="native-service-route-content" hidden={connectionOpen || Boolean(settingsTab || connectionStatus)} inert={Boolean(settingsTab || connectionStatus)} style={{ display: connectionOpen || settingsTab || connectionStatus ? 'none' : 'contents' }}>
       {strategies && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setResearchHistory(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setResearchHistory(false)} />}>

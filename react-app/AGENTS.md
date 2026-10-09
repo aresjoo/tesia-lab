@@ -2,6 +2,14 @@
 
 - 현재 source 소유: 기능별 auth 후속 exact8(source7/spec1)은 원본 최종 override대로 connect/direct copy/watch/new copy/backtest signup, review/settings-import/analyze/manage login, link auth0, 빈 내전략 CTA는 인증 없이 대화 복귀로 복원·동결했다. 최종 교정 직접영향 desktop/mobile2PASS와 creator 실제DOM2PASS, 최종 타입/bundle actual0/24.154초, personal1 Opus5.5 C0H0M0 scopedGO·AGY3.8high 읽기 대조를 결속한다. 기존 수정React를 기준으로 내전략login을 요구했던 모델M1은 원본15942/18699 대조 후 철회했으며 원판정/실패는 보존한다. ROOT가 AGENTS/Bugfix/Git/Lab sync를 소유한다. 다음 거래소 원본 진입·완료 도움말/초점 국소 복원은 별도 writer legacy_candidate_preparation이며 정확 파일 경계 확정 전 source쓰기0이다. 원문/API/승인 email code-only·기존 controller 권한 무변경, 실제 sharing producer와 host 이전세션 복귀는 별도 검증이다. 모든 callback 일괄 signup 치환·검수 중 source 변경·whole 반복을 금지한다.
 
+- 원본 거래소 writer `legacy_candidate_preparation`은 exact6를 동결·반환했다: `src/internal-poc/ClientServiceExperience.tsx`, `src/internal-poc/NativeServiceApp.tsx`, `src/exchange-connect/use-exchange-connection.ts`, `src/internal-poc/NativeConnectionOnboarding.tsx`, `src/exchange-connect/source-parity.css`, `tests/internal-poc/native-exchange-source-entry.spec.ts`. 메뉴/background intent·owner callback·Q47 배치·signup plan 복귀를 교정했고 latest Opus scopedGO 뒤 Low 응답역전은 신규2키, 최종 타입의 null guard는 한 줄로 교정했다. UID/초대/access 성공을 합성하지 않는다. 추가 source 쓰기는 명시 배정 후에만 하며 ROOT는 docs/Git/독립 검수·최종 타입/build만 소유한다.
+
+- ROOT는 `package-lock.json`에서 npm audit가 확인한 `source-map-js` transitive1.2.1의 patched1.2.2만 기계적으로 갱신한다. React/Vite/다른dependency·package.json·UI/API 변경0이고 실제 diff에서 해당1개 외 변경이 나오면 그대로 진행하지 않는다. 외부 source map parse의 DoS advisory 확인과 좁은 회귀를 기록하며 전체 suite를 붙이지 않는다. 변경 후 최종 frontend bundle은 원본 거래소 복원 묶음에 모아 한 번 실행한다.
+
+- 위 writer의 추가 exact2 `src/components/ClientConnectionPlan.tsx`·`src/components/ClientMainExperience.tsx`도 동결·반환했다. service fixture 격리 guard 실패를 renderer의 typed result 공급/기존 preview parent 계산으로 분리했다. 원본 JSX/copy/SVG/style 불변, runtime fixture 의존0·supplied-result seam1PASS이며 최종 타입/service bundle20.214초 actual0다. 앞 타입/null 실패와 fixture guard 실패는 삭제하지 않는다. 현재 제품 쓰기는 전부 반환했으며 ROOT가 docs/Git/공식 Lab sync만 수행한다.
+
+- 동일 거래소 writer의 exact5에 `src/internal-poc/NativeServiceApp.tsx`만 추가하여 exact6로 확장한다. 원본 signup plan 이어가기는 상담 로그인 키를 재사용하지 않는 별도 private UI intent다. same issuer/session/epoch/generation·auth request에 저장하고 validated ACK/EMAIL 결과의 현재 target session에서 단회 소비한다. 임의 owner 전환을 성공으로 추정하거나 기존 Google/Apple/email·상담 claim을 변경하지 않는다. publicschema/server 주문권한 변화0, 취소/이탈/stale는 안전 폐기다. next plan 화면은 실제 제공 action/fact만 사용하고 subscription/invitation을 합성하지 않는다. ROOT가 Program Decision과 독립 인증·UI 검수/Git을 소유한다.
+
 - 실제서비스 CSP 후속: ROOT는 `vite.internal-poc.config.ts`의 serviceOnly font emission을 소유한다. 폰트만 파일로 방출해 서버 font-src self를 유지하며 기존 public/POC asset 정책·UI·카피·권한은 바꾸지 않는다. Backend 정책 writer는 별도 integration WT이고 공용 API변경0이다.
 
 - 제품 본체는 ares 원본의 전체 UI·UX·사용 흐름이다. 일부 연결의 Mock은 내부 검증 수단이며 목표는 실제 AI·고객 계정 실거래다. 거래·백테스트의 실행 의미·권한은 서버 계약을 따른다.

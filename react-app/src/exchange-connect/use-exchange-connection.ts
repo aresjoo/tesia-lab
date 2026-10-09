@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { createSdk, TesiaApiClient } from '../internal-poc/contracts/generated/api-v0.1/index.js'
 import { SameOriginApiTransport } from '../internal-poc/api-adapter'
@@ -16,8 +16,23 @@ export function useExchangeConnectionPresentation(scope: string | null, authenti
   // Preserve the locator across React StrictMode's setup/cleanup/setup cycle.
   // It is never an authentication receipt; each load verifies the server owner.
   const [locator] = useState(() => readExchangeTransactionLocator(window.location.href))
+  const callbackIntent = useRef<{ owner: string | null; replayOpen: boolean }>({ owner: null, replayOpen: Boolean(locator) })
   useEffect(() => {
     if (!enabled || !scope || !authenticated) return
+    // Only the verified callback location carries visible-entry intent. Normal
+    // background refreshes still project owner-bound data into account settings.
+    const currentUrl = new URL(window.location.href)
+    const currentLocator = readExchangeTransactionLocator(currentUrl.href)
+    const intent = callbackIntent.current
+    const callbackRoute = locator && currentUrl.pathname === '/auth/complete' && !currentUrl.search
+      && (currentLocator === locator || !currentUrl.hash && intent.owner === scope)
+    if (callbackRoute && currentLocator === locator && intent.owner === null) intent.owner = scope
+    const callbackLocator = callbackRoute && intent.replayOpen && intent.owner === scope ? locator : null
+    if (callbackLocator) queueMicrotask(() => {
+      // React StrictMode replays setup before this microtask. Any later locale,
+      // auth or owner rerun is a background read and cannot recreate intent.
+      if (callbackIntent.current === intent && intent.owner === scope) intent.replayOpen = false
+    })
     const session = createSdk(new TesiaApiClient(new SameOriginApiTransport())).session
     const controller = createExchangeConnectionController(scope, {
       client: new TesiaExchangeConnectionsV12Client(createExchangeConnectionsTransport()),
@@ -27,16 +42,10 @@ export function useExchangeConnectionPresentation(scope: string | null, authenti
       // Callback endpoints are not workspace routes. The canonical source hash
       // route remains valid when the customer reloads after exchange return.
       onOpenTerminal: () => pushSiteLocation('/#/trade'),
-      text: key => exchangeText(language, key), onChange: value => setPresentation({ ...value, requestId: value.identity }),
+      text: key => exchangeText(language, key), onChange: value => setPresentation({ ...value, requestId: callbackLocator ? 'oauth-callback' : '' }),
     })
     // StrictMode may replay setup after the first setup removed the locator
-    // hash. Retain it only while still on the clean callback endpoint. Later
-    // locale/auth rerenders must not rewrite a workspace route or poll the
-    // already-consumed callback locator again.
-    const currentUrl = new URL(window.location.href)
-    const currentLocator = readExchangeTransactionLocator(currentUrl.href)
-    const callbackLocator = locator && currentUrl.pathname === '/auth/complete' && !currentUrl.search
-      && (!currentUrl.hash || currentLocator === locator) ? locator : null
+    // hash. Only the first consuming owner shares that same-turn replay.
     if (currentLocator && currentLocator === locator) window.history.replaceState(null, '', '/auth/complete')
     void controller.load(callbackLocator)
     return () => controller.dispose()

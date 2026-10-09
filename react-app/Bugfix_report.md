@@ -1,5 +1,21 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 원본 거래소 진입·Q47와 가입 복귀
+
+명시 메뉴의 catalogue/원본 plan 진입과 background 계정 관측을 분리했다. background 연결 목록은 원본 설정에 투영하되 임의 팝업을 열지 않는다. 검증된 callback은 현재 owner·locator·requestId에 결속하고 StrictMode 동시 소비는 한 번만, owner A→B의 늦은 callback은 재생하지 않는다. guest 원본 Q42 플랜 및 authenticated 실제 API12 목록 Q47를 구분하고 초대·구독·UID·접근 권리를 합성하지 않는다. Q47의 원본 없는 back/일반 설명/마스킹 UID를 제거하고 모든 연결 단계의 원문 도움말, list768px breakpoint·행 간격·13px 계정 링크를 복원했다. 원문·SVG·44px 접근성·실제 경고는 보존한다.
+
+가입 plan은 상담 이관 키와 분리된 UI intent로 same sourceSID/strongETag/epoch/panelGeneration/requestId에 저장한다. validated ACK/EMAIL의 현재 targetSID에서 한 번 소비하고 stale/cancel/owner 교체는 폐기한다. retained 인증창을 재진입할 때 latest plan 교체 또는 plain/header intent 폐기가 빠진 Medium1을 수정했다. controller/key/기존 도전을 자동 재발행하지 않으며 명시적 이메일 수정/새 challenge 뒤의 plan 복귀만 검증했다. 기존 challenge 자동완료나 실제 EMAIL/OAuth 성공으로 확대하지 않는다.
+
+초기 원 HOLD·하니스 실패와 source별 국소 키를 보존했다. followup receipt59679c5e의 EMAIL 실제 NativeServiceApp fixture desktop/mobile 각1PASS, owner 교체·StrictMode callback 신규 키 및 Q47/설정 점검은 서로 별도다. 최종 retained/Q47 receipt0752ff73의 desktop1PASS4.6초/mobile1PASS4.7초/Q47 800·320 신규1PASS2.3초와 1440/320 캡처 runtime0/overflow0를 인수했다. ROOT가 캡처를 직접 확인했다. AGY3.8high 읽기 의견은 최종 승인이 아니며 실제900px였던 이전 입력을768px로 잘못 설명한 의견은 기각했다.
+
+마지막 personal1 Opus5.5 `exchange-retained-final-opus.receipt.json` actual0/modelmatched/입력불변 C0H0M0 scopedGO 뒤 Low의 응답역전·generation 재확인을 신규2키만으로 교정했다. 늦은 성공1PASS4.8초/늦은 이전 오류1PASS4.2초이며 최종 app7a4a6ef1/spec0dccac22다. 최초 잘못된 project명 호출은 테스트 실행 전 거절이며 PASS로 세지 않는다. 첫 묶음 타입검사18.040초는 experience488의 TS18047로 exit2였다. 명시 `connectionBrowse !== null` 한 줄로 null.session 런타임 방어까지 교정했으며 experience16914cd4에 대해 별도 최종 빌드를 결속한다. 검수 전후 source SHA가 다름을 보존하며 모든 final source를 같은 모델 입력 GO로 포장하지 않는다.
+
+ROOT dependency 교정은 package-lock의 source-map-js1.2.1→1.2.2 단일 transitive pin이다. 처음 lock만 갱신한 뒤 installed1.2.1이 남아 있음을 확인했고 최종 npm ci로 Vite8.2.2/plugin6.1.0/PostCSS8.5.26를 기존 pin 그대로 유지했다. 좁은 malformed indexed-offset5건 거절 및 valid mapping/SourceNode roundtrip을 확인했다. `npm audit --omit=dev` exit0/총0은 개발 의존성 전체 보안 완료가 아니다. 원 tool output은 보존하고 없는 raw hash·영수증은 발명하지 않는다.
+
+타입 교정 뒤 두 번째 bundle19.580초는 INTERNAL_CLIENT_FIXTURE_DEPENDENCY로 exit1이었다. newly reachable ClientConnectionPlan의 preview 계산 값import가 원인이다. guard를 완화하지 않고 renderer에 typed 결과를 공급하도록 순수화했으며 기존 preview parent만 동일 계산을 memo 전달한다. 카드 JSX·원문·SVG·스타일은 불변이다. source2860f750/4cb3e780의 emitted runtime fixture 의존0과 실제 Vite 브라우저 supplied-result 카드1PASS(요청0/pageerror0)를 확인했다. preamble/title encoding 하니스 오류도 보존한다.
+
+최종 동결 묶음 `exchange-entry-isolated-build.receipt.json`의 타입/service bundle actual0·입력불변·20.214초를 인수했다. 앞 두 실제 실패를 삭제하거나 성공으로 합치지 않는다. fixture bundle 격리 guard는 유지했으며 configLoader/chunk500k 경고는 보존한다. flags=true는 빌드 조건이지 provider 활성화가 아니다. whole/기존 suite/9월/730 재실행0, provider/실계정/실주문/운영 변경0이다. 로컬4176은 현재 HMR 소스를 제공한다. 고객지원 configured exact3는 독립 브랜치에서 진행해 이 전달을 기다리게 하지 않는다.
+
 ## 현재 — 기능별 원본 인증 동선 복원·전달
 
 ares `9fbff821` 최종 override를 기준으로 거래소 연결·직접 복사·관심·새 복사·백테스트는 signup, 리뷰·설정 가져오기·분석·관리는 login으로 나누었다. 빈 내전략의 채팅에서 전략 만들기는 원본15942/18699처럼 인증 없이 대화로 돌아간다. 링크 생성은 인증 전환과 분리하며 실제 producer 부재를 성공으로 합성하지 않는다. source7/spec1 외 UI·카피·SVG·CSS·API·owner/controller·승인 email code-only 정책 변경0이다.

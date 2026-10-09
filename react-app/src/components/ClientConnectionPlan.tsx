@@ -1,8 +1,8 @@
 import { useConnectionLocaleText } from '../client-connection-locale-copy'
-import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { planExchanges, type ConnectionPlanLocation, type PlanExchange } from '../client-connection-plan'
 import type { CommonResultContext } from '../client-common-revision'
-import { commonPreviewResult } from '../client-common-backtest-preview'
+import type { commonPreviewResult } from '../client-common-backtest-preview'
 import { commonBacktestText } from '../client-common-backtest-copy'
 import { useClientPreferences } from '../client-preferences'
 import '../client-connection-plan.css'
@@ -36,16 +36,16 @@ function Benefits({paid=false,short=false}:{paid?:boolean;short?:boolean}){
   return <ul className={`cpl-items${short?' sm':''}`}>{rows.map(([icon,label])=><li key={icon}><Icon name={icon}/><span>{label}</span></li>)}</ul>
 }
 /** af7b8d1 plView/plCheckout and px. Display/navigation, never provider authority. */
-export default function ClientConnectionPlan({view,resultContext,signedIn,onNavigate,onSignup,onClose,onHelp}:{
+type ClientConnectionPlanResult=ReturnType<typeof commonPreviewResult>
+export default function ClientConnectionPlan({view,resultContext,result,signedIn,onNavigate,onSignup,onClose,onHelp}:{
   view:ConnectionPlanLocation;signedIn:boolean;onNavigate:(next:ConnectionPlanLocation)=>void
-  resultContext?:CommonResultContext|null
+  resultContext?:CommonResultContext|null;result?:ClientConnectionPlanResult|null
   onSignup:(next:ConnectionPlanLocation)=>void;onClose:()=>void;onHelp:(trigger:HTMLButtonElement)=>void
 }){
   const c=useConnectionLocaleText()
   const unavailable=c("실제 결제·거래소 연결은 아직 제공되지 않습니다. 카드 정보는 입력할 수 없습니다.")
   const heading=useRef<HTMLHeadingElement>(null),root=useRef<HTMLElement>(null)
   const {language}=useClientPreferences()
-  const result=useMemo(()=>resultContext?commonPreviewResult({input:resultContext.input,state:{turnId:resultContext.sourceTurnId,period:resultContext.period,amount:resultContext.amount}}):null,[resultContext])
   const good=Boolean(result&&result.evaluation.trades.length&&result.evaluation.pnl>=0&&result.evaluation.nav>=result.points.at(-1)!.benchmark)
   const number=new Intl.NumberFormat(language,{maximumFractionDigits:1}),percent=(value:number)=>`${value>0?'+':''}${number.format(value)}%`
   const equity=result?.points.map(p=>p.value)??[],low=Math.min(...equity),high=Math.max(...equity)

@@ -2,6 +2,16 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 거래소 플랜·완료 화면과 가입 복귀
+
+clean Web [e4da871](https://github.com/beak1011/tesia-web/tree/e4da8717c6d09ffc65094811340af69f57a8f4eb)의 전체 React **2,412파일·34,693,789bytes**를 공식 sync/verify actual0으로 전달했다. snapshot `5153065e2aa23d303dcf07a02d9f5be9a325b5efef11364924439de8c8e105ee`, dirty0·제거0이며 원본 root/main9fb와 Node/Worker는 무변경이다.
+
+명시 메뉴의 원본 플랜/Q47 목록을 복원하고 background 계정 관측의 자동 팝업을 제거했다. 검증된 callback의 현재 owner/단회 표시·설정 연결 목록은 보존한다. Q47 도움말·원문·간격·768px 반응형, signup 뒤 선택한 플랜의 단회 복귀를 sourceSID/ETag/epoch/generation/requestId에 결속했다. 원본에 없는 설명/UID/back을 제거하되 실제 오류·확정 권한·승인44px 접근성을 유지한다. 초대/구독·provider 성공은 합성하지 않는다.
+
+개별 Opus5.5 scopedGO 이후 Low 응답역전/늦은 오류는 신규2키만 교정했다. 기존 challenge 자동재개는 검증 범위 밖이다. 타입의 null guard와 fixture graph 두 실제 빌드 실패를 보존하고 원본 플랜 renderer는 typed 결과 공급으로 순수화해 기존 preview parent만 계산한다. JSX/copy/SVG/style는 유지한다. 최종 타입/service bundle actual0·입력불변·20.214초이며 전체 회귀/9월/730 재실행0이다. 로컬4176에서 확인 가능하다.
+
+서버는 Backend715d84d/source238의 새 설치11단계와 Infra [b50949e](https://github.com/beak1011/tesia-infra/tree/b50949ef3ae5042c5cb73df07314b08b5f980d72)의 attestor/preparer를 별도 전달했다. 실제 임시 offline24-wheel 설치·파일1875·canonical readback도 성공했지만 운영 DB·서비스·실제 고객 모델/주문은0이다. 새 code release를 기존 runtime에 바로 기동하면 schema mutation 위험이 있어 명시 candidate 보존 경로를 사용해야 한다. 고객지원 configured 분기와 실제 서버 composition은 독립 작업이며 이 snapshot에 미검수 WIP를 포함하지 않는다.
+
 ### 현재 — 기능별 원본 인증·내전략 대화 복귀
 
 clean Web [128e532](https://github.com/beak1011/tesia-web/tree/128e5324ad07b35f0ba8918e897558d19950ecd1)의 전체 React **2,411파일·34,638,762bytes**를 공식 sync/verify actual0으로 전달했다. snapshot `bab6085db569f8275481266c8beb932d0c16c73c45a0480098ccdb86b98026ce`, dirty0·제거경로0이며 ares root/main9fb·Node/Worker는 변경하지 않았다.

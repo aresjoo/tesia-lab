@@ -10,7 +10,8 @@ import { nativeExecutionUiText } from './native-execution-ui-copy'
 import { nativeWorkflowText, nativeWorkflowLeverage, type NativeWorkflowTextKey } from './native-workflow-copy'
 import { describeCondition, formatFractionPercent } from './native-strategy-readable'
 import { nativeStrategyText } from './native-strategy-copy'
-import { ClientServiceExperience, type ClientServiceMessage } from './ClientServiceExperience'
+import { ClientServiceExperience, type ClientConnectionPlanAuthRequest, type ClientConnectionPlanContinuationReceipt, type ClientServiceMessage } from './ClientServiceExperience'
+import { planExchanges, type ConnectionPlanLocation } from '../client-connection-plan'
 import { captureTurnObservation, captureValidationObservation } from './native-research-observations'
 import { observedResearchEntries } from './native-research-projection'
 import { nativeObservationCopy, nativeObservationNavigationErrors, type ObservationNavigationError } from './native-observation-copy'
@@ -56,14 +57,30 @@ type HistoryOwner = { sessionId: string; revision: string; etag: string; convers
 type DocumentOwner = { sessionId: string; sessionState: 'ANONYMOUS' | 'AUTHENTICATED'; conversationId: string; draftId: string }
 type HistoryNavigation = { cursors: (string | undefined)[]; index: number; offset: number }
 type NativeAuthIntent = 'login' | 'signup'
-type NativeLoginBinding = { sessionId: string; epoch: number; generation: number; intent: NativeAuthIntent }
+type NativeConnectionPlanLoginIntent = ClientConnectionPlanAuthRequest & { sourceEtag: string; sourceEpoch: number; panelGeneration: number }
+type NativeLoginBinding = { sessionId: string; epoch: number; generation: number; intent: NativeAuthIntent; connectionPlan?: NativeConnectionPlanLoginIntent }
 const MAX_HISTORY_CURSORS = 100
 type SessionOffer = { sessionId: string; csrfToken: string; claimIntent?: NativeAuthenticated['claimIntent'] }
 const STORAGE_KEY = 'tesia.native.conversation'
 const CONVERSATION_OWNER_KEY = 'tesia.native.conversation-session'
 const SESSION_KEY = 'tesia.native.session-binding'
 const CONSULTATION_LOGIN_KEY = 'tesia.native.consultation-login-intent'
+const CONNECTION_PLAN_LOGIN_KEY = 'tesia.native.connection-plan-login-intent'
 type ConsultationLoginIntent = { sourceSessionId: string; sourceEtag: string; conversationId: string; panelGeneration: number }
+const connectionPlanLocation = (value: unknown): value is ConnectionPlanLocation => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).sort().join(',') !== 'exchange,step') return false
+  const plan = value as Record<string, unknown>
+  return ['plan', 'checkout', 'free', 'account', 'authorize'].includes(String(plan.step))
+    && planExchanges.some(([exchange]) => exchange === plan.exchange)
+}
+const connectionPlanRequest = (value: unknown): value is ClientConnectionPlanAuthRequest => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).sort().join(',') !== 'issuer,operation,plan,requestId,sourceSessionId') return false
+  const request = value as Record<string, unknown>
+  return request.issuer === 'client-connection-plan' && request.operation === 'signup'
+    && typeof request.requestId === 'string' && /^[A-Za-z0-9_-]{16,128}$/.test(request.requestId)
+    && typeof request.sourceSessionId === 'string' && /^session_[A-Za-z0-9_-]{12,80}$/.test(request.sourceSessionId)
+    && connectionPlanLocation(request.plan)
+}
 const expected = (value: ConversationSnapshot) => ({ expectedConversationStateRevision: value.conversationStateRevision, expectedConversationStateHash: value.conversationStateHash })
 const approvalMatchesDraft = (value: StrategyApproval, snapshot: ConversationSnapshot) => (
   value.sourceConversationId === snapshot.conversationId && value.sourceConversationStateRevision === snapshot.conversationStateRevision
@@ -299,7 +316,16 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [authStorageRecovery, setAuthStorageRecovery] = useState(false)
   const [loginResume, setLoginResume] = useState(0)
   const loginGeneration = useRef(0)
+  const openLoginSequence = useRef(0), openLoginInFlight = useRef(0)
   const [loginBinding, setLoginBinding] = useState<NativeLoginBinding | null>(null)
+  const [connectionPlanContinuation, setConnectionPlanContinuation] = useState<ClientConnectionPlanContinuationReceipt | null>(null)
+  const discardConnectionPlanLogin = () => {
+    try { sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY) } catch { /* Fail closed: memory binding is retired below. */ }
+    setLoginBinding(current => {
+      if (!current?.connectionPlan) return current
+      return { sessionId: current.sessionId, epoch: current.epoch, generation: current.generation, intent: current.intent }
+    })
+  }
   // A validated missing session on the fixed OAuth return route admits only
   // result/ACK recovery presentation. This is not a session or owner binding.
   const [returnBinding, setReturnBinding] = useState<{ epoch: number; generation: number } | null>(null)
@@ -357,6 +383,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   }
   const clearViews = (preserveComposer = false, preserveRows = false) => {
     setRetainedConsultation(null); setConsultationPresentationEpoch(epoch.current)
+    setConnectionPlanContinuation(null)
     setAuthNotice(null)
     clients.replayReaders.invalidate()
     presentationIntent.invalidate(); setAutomaticPresentation(undefined)
@@ -451,6 +478,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       recoveringReturn = null
     }
     const authReturn = !emailRecovery && window.location.pathname === '/auth/complete' && !exchangeOwnsReturn()
+    if (!emailRecovery && !authReturn) {
+      try { sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY) } catch { /* Stale UI intent remains non-authorizing. */ }
+    }
     // Query/hash values are not callback authority. Malformed return URLs do
     // not fall through to anonymous creation; protected recovery stays first.
     if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
@@ -598,18 +628,19 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     jobPolling.current = { job, control }
     return () => { control.stop(); if (jobPolling.current?.control === control) jobPolling.current = null }
   }, [clients, job, presentationIntent])
+  const reportFailure = (failure: unknown) => {
+    if (!clients.getCsrf()) setPhase('error')
+    if (authenticationRequired(failure)) {
+      clients.setCsrf(null); setPhase('error'); setSessionState(null)
+    }
+    setError(failure instanceof NativeSubmitNotReady ? `NOT_READY · ${nativeSubmitNotReadyCopy}`
+      : `${safeCode(failure)} · 응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.`)
+  }
   const run = async (operation: () => Promise<void>) => {
     if (working.current) return
     working.current = true; setBusy(true); setError('')
     try { await operation() }
-    catch (failure) {
-      if (!clients.getCsrf()) setPhase('error')
-      if (authenticationRequired(failure)) {
-        clients.setCsrf(null); setPhase('error'); setSessionState(null)
-      }
-      setError(failure instanceof NativeSubmitNotReady ? `NOT_READY · ${nativeSubmitNotReadyCopy}`
-        : `${safeCode(failure)} · 응답을 확인하지 못했습니다. 같은 요청으로 재개하거나 세션과 서버 이력을 확인해주세요.`)
-    }
+    catch (failure) { reportFailure(failure) }
     finally { working.current = false; setBusy(false) }
   }
   const runHistory = (operation: () => Promise<void>) => run(async () => {
@@ -617,7 +648,21 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     try { await operation() }
     finally { setHistoryPending(false) }
   })
-  const openLogin = (intent: NativeAuthIntent = 'login') => run(async () => {
+  const openLogin = (intent: NativeAuthIntent = 'login', planRequest?: ClientConnectionPlanAuthRequest) => {
+    const sequence = ++openLoginSequence.current
+    const runOpenLogin = async () => {
+      // Re-entry may replace a display continuation while the first session
+      // observation is pending. Business operations remain mutually excluded.
+      if (working.current && openLoginInFlight.current === 0) return
+      if (openLoginInFlight.current++ === 0) { working.current = true; setBusy(true); setError('') }
+      try { await performOpenLogin() }
+      catch (failure) { if (sequence === openLoginSequence.current) reportFailure(failure) }
+      finally {
+        openLoginInFlight.current--
+        if (openLoginInFlight.current === 0) { working.current = false; setBusy(false) }
+      }
+    }
+    const performOpenLogin = async () => {
     if (returnBindingRef.current) {
       if (!plainAuthReturn()) {
         setError('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.')
@@ -639,18 +684,64 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (loginRetained) {
       // This opens only a redacted recovery shell. No previous link, provider
       // confirmation or ACK affordance is restored by this local transition.
-      const retainedIntent = loginBinding?.sessionId === owner.sessionId
-        && loginBinding.generation === loginGeneration.current ? loginBinding.intent : intent
-      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current, intent: retainedIntent })
-      setLoginResume(value => value + 1); setLoginOpen(true); return
+      const retained = loginBinding
+      if (!retained || retained.sessionId !== owner.sessionId || retained.epoch !== generation
+        || retained.generation !== loginGeneration.current) return
+      try {
+        // A new entry while the same auth controller is retained replaces its
+        // presentation continuation, but never restarts its provider/email work.
+        const current = await clients.session.current(), value = current.body.data
+        if (sequence !== openLoginSequence.current) return
+        if (generation !== epoch.current || logoutIntent.current || !loginRetained
+          || retained.generation !== loginGeneration.current || value.sessionId !== owner.sessionId
+          || value.state !== owner.sessionState || !current.etag) throw new Error('SESSION_CHANGED')
+        let connectionPlan: NativeConnectionPlanLoginIntent | undefined
+        if (planRequest !== undefined) {
+          if (!connectionPlanRequest(planRequest) || intent !== 'signup' || owner.sessionState !== 'ANONYMOUS'
+            || planRequest.sourceSessionId !== owner.sessionId) throw new Error('SESSION_CHANGED')
+          connectionPlan = { ...planRequest, sourceEtag: current.etag, sourceEpoch: generation, panelGeneration: retained.generation }
+          const raw = JSON.stringify(connectionPlan)
+          sessionStorage.setItem(CONNECTION_PLAN_LOGIN_KEY, raw)
+          if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== raw) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+        } else if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== null) {
+          sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY)
+          if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== null) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+        }
+        setLoginBinding({ sessionId: retained.sessionId, epoch: retained.epoch, generation: retained.generation, intent,
+          ...(connectionPlan ? { connectionPlan } : {}) })
+        setLoginResume(value => value + 1); setLoginOpen(true)
+      } catch (failure) {
+        if (sequence !== openLoginSequence.current) return
+        // The retained challenge remains mounted, but a stale/partially written
+        // presentation hint must never survive the user's newer entry intent.
+        try { sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY) } catch { /* Fail closed in memory below. */ }
+        setLoginBinding(current => current?.sessionId === retained.sessionId && current.epoch === retained.epoch
+          && current.generation === retained.generation
+          ? { sessionId: current.sessionId, epoch: current.epoch, generation: current.generation, intent }
+          : current)
+        throw failure
+      }
+      return
     }
     try {
       // Closing preserves memory only. Reopening does not replay START/ACK:
       // first verify the present cookie owner with the existing validated SDK.
       const current = await clients.session.current(), value = current.body.data
-      if (generation !== epoch.current || logoutIntent.current) return
+      if (sequence !== openLoginSequence.current || generation !== epoch.current || logoutIntent.current) return
       const allowed = value.state === owner.sessionState
       if (value.sessionId !== owner.sessionId || !allowed || !current.etag) throw new Error('SESSION_CHANGED')
+      let connectionPlan: NativeConnectionPlanLoginIntent | undefined
+      if (planRequest !== undefined) {
+        if (!connectionPlanRequest(planRequest) || intent !== 'signup' || owner.sessionState !== 'ANONYMOUS'
+          || planRequest.sourceSessionId !== owner.sessionId) throw new Error('SESSION_CHANGED')
+        connectionPlan = { ...planRequest, sourceEtag: current.etag, sourceEpoch: generation, panelGeneration: loginGeneration.current }
+        const raw = JSON.stringify(connectionPlan)
+        sessionStorage.setItem(CONNECTION_PLAN_LOGIN_KEY, raw)
+        if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== raw) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      } else if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== null) {
+        sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY)
+        if (sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) !== null) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
+      }
       const currentConsultation = consultation.getSnapshot()
       if (consultationChat && owner.sessionState === 'ANONYMOUS' && currentConsultation.conversationId) {
         const intent: ConsultationLoginIntent = { sourceSessionId: owner.sessionId, sourceEtag: current.etag,
@@ -662,15 +753,18 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         sessionStorage.removeItem(CONSULTATION_LOGIN_KEY)
         if (sessionStorage.getItem(CONSULTATION_LOGIN_KEY) !== null) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
       }
-      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current, intent })
+      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current, intent, ...(connectionPlan ? { connectionPlan } : {}) })
       setLoginOpen(true)
     } catch (failure) {
+      if (sequence !== openLoginSequence.current) return
       if (generation === epoch.current) {
         loginGeneration.current++; setLoginBinding(null); setLoginRetained(false); setLoginOpen(false)
       }
       throw failure
     }
-  })
+    }
+    return runOpenLogin()
+  }
   const reopenReturnRoute = () => {
     const binding = returnBindingRef.current
     if (!binding || binding.epoch !== epoch.current || binding.generation !== loginGeneration.current
@@ -991,6 +1085,37 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
             && consultation.getSnapshot().conversationId === value.conversationId)) consultationIntent = value
       } catch { /* Invalid continuation hints must not reject a verified login. */ }
       if (!consultationIntent) dropLoginHint()
+      let connectionPlanReceipt: ClientConnectionPlanContinuationReceipt | null = null
+      let planIntentRaw: string | null = null
+      const dropPlanHint = () => {
+        try {
+          if (planIntentRaw !== null && sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) === planIntentRaw) {
+            sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY)
+            return sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY) === null
+          }
+        } catch { /* A presentation continuation is never login authority. */ }
+        return false
+      }
+      try {
+        planIntentRaw = sessionStorage.getItem(CONNECTION_PLAN_LOGIN_KEY)
+        const value = confirmation !== 'HANDOFF_UNVERIFIED' && planIntentRaw && new TextEncoder().encode(planIntentRaw).length <= 4_096
+          ? JSON.parse(planIntentRaw) as NativeConnectionPlanLoginIntent : null
+        const inMemory = loginBinding?.connectionPlan
+        const samePanel = returnPanelCurrent() || Boolean(inMemory && loginBinding
+          && loginBinding.sessionId === value?.sourceSessionId && loginBinding.epoch === epoch.current
+          && loginBinding.generation === value?.panelGeneration && inMemory.requestId === value?.requestId
+          && inMemory.sourceEpoch === value?.sourceEpoch && inMemory.sourceEtag === value?.sourceEtag)
+        if (value && Object.keys(value).sort().join(',') === 'issuer,operation,panelGeneration,plan,requestId,sourceEpoch,sourceEtag,sourceSessionId'
+          && connectionPlanRequest({ issuer: value.issuer, operation: value.operation, requestId: value.requestId,
+            sourceSessionId: value.sourceSessionId, plan: value.plan })
+          && typeof value.sourceEtag === 'string' && /^"[A-Za-z0-9_-]{16,128}"$/.test(value.sourceEtag)
+          && Number.isSafeInteger(value.sourceEpoch) && value.sourceEpoch >= 0
+          && Number.isSafeInteger(value.panelGeneration) && value.panelGeneration >= 0 && samePanel
+          && value.sourceSessionId === initiatingOwner && value.sourceEtag === result.claimIntent?.initiatingSessionEtag
+          && dropPlanHint()) connectionPlanReceipt = { issuer: value.issuer, operation: value.operation, requestId: value.requestId,
+            sourceSessionId: value.sourceSessionId, targetSessionId: result.sessionId, plan: value.plan }
+      } catch { /* Invalid/stale presentation hints are discarded below. */ }
+      if (!connectionPlanReceipt) dropPlanHint()
       // Preserve only this tab's unsent wording across a verified login offer.
       // It is neither a conversation claim nor permission to send under AUTH.
       // Session-only recovery, foreign locators and stale panels keep clearing.
@@ -1029,6 +1154,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       clients.setCsrf(null); bindSession(null); clearViews()
       pending.current = null; setHasPending(false); setAuthStorageRecovery(false)
       bindSession(current); clients.setCsrf(result.csrfToken); setSessionState('AUTHENTICATED'); setPhase('ready')
+      if (connectionPlanReceipt) setConnectionPlanContinuation(connectionPlanReceipt)
       if (consultationIntent) {
         if (retained) setRetainedConsultation({ epoch: epoch.current, targetSessionId: result.sessionId, messages: retained })
       }
@@ -1721,7 +1847,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       const owner = {}; emailDispatch.current = owner; setEmailBusy(true)
       return () => { if (emailDispatch.current === owner) { emailDispatch.current = null; setEmailBusy(false) } }
     }}
-    onClose={retain => { setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
+    onClose={retain => { if (!retain) discardConnectionPlanLogin(); setLoginRetained(Boolean(retain)); setLoginOpen(false); closeClientSettingsRoute() }} /></NativeAuthSurface>
   const returnAuthSurface = returnBinding !== null && (loginOpen || loginRetained) && sessionState === null && !hasLogout && <NativeAuthSurface open={loginOpen}>
     {!plainAuthReturn() && <section className="cs-native-login ca-auth native-provider-login" aria-label={ui('로그인 반환 복구')}>
       <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} onClick={() => { setLoginRetained(true); setLoginOpen(false); closeClientSettingsRoute() }}>✕</button>
@@ -1852,7 +1978,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         onEditDraft={analysisJob === job ? () => { void editFromResult() } : undefined}
         editDisabled={busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || resultStatus?.backtestId !== analysisJob.backtestId || !resultStatus.reportReady} />
     </>}
-    onLogin={intent => { void openLogin(intent === 'signup' ? 'signup' : 'login') }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
+    connectionPlanContinuation={connectionPlanContinuation}
+    onConnectionPlanContinuationConsumed={requestId => setConnectionPlanContinuation(current => current?.requestId === requestId ? null : current)}
+    onLogin={(intent, request) => { void openLogin(intent === 'signup' ? 'signup' : 'login', request) }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
     conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{nativeAppNotice(language, healthyAuthNotice.text)}</p>}
       {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>
