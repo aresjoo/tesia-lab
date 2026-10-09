@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import { clientLanguages, setClientPreference, useClientPreferences } from '../client-preferences'
 import { clientSettingsHash, clientSettingsTabs, type ClientSettingsTab } from '../client-settings-navigation'
 import { setSettingsNavigationCollapsed, useSettingsLayout } from '../client-settings-layout'
@@ -17,9 +17,18 @@ import { ClientLogo } from './ClientChrome'
 import { getConversationCopy } from '../client-conversation-copy'
 import { ClientSettingsUsage, type ClientSettingsUsageProps } from './ClientSettingsUsage'
 import { usageText } from '../client-usage-presentation'
+import { useConnectionLocaleText } from '../client-connection-locale-copy'
+import { settingsAccountConnectionOwner, type ClientSettingsAccountConnectionsPresentation } from '../internal-poc/client-settings-account-connections'
 import '../client-settings.css'
 
 type CopyKey = keyof typeof copy
+export type ClientSettingsConnectionOperation = {
+  pending: { ownerBinding: string; id: string } | null
+  failure: { ownerBinding: string; revision: string } | null
+  focusRequest: { token: number; ownerBinding: string; id: string; restoreFocus: boolean } | null
+  start: (data: ClientSettingsAccountConnectionsPresentation, id: string, action: () => Promise<void>, restoreFocus: boolean) => void
+  takeFocusRequest: (request: { token: number; ownerBinding: string }) => boolean
+}
 type Props = {
   tab: ClientSettingsTab
   profile?: { name: string; email?: string; handle?: string }
@@ -31,6 +40,8 @@ type Props = {
   billing?: ClientBillingPresentation
   billingActions?: ClientBillingActions
   usage?: ClientSettingsUsageProps
+  accountConnections?: ClientSettingsAccountConnectionsPresentation
+  accountConnectionOperation?: ClientSettingsConnectionOperation
   onBack: () => void
   onNewStrategy: () => void
   onCopyStrategy: () => void
@@ -58,18 +69,36 @@ function Icon({ name }: { name: keyof typeof icons }) {
   const sourceBack = name === 'back'
   return <svg width={sourceBack ? 16 : 17} height={sourceBack ? 16 : 17} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sourceBack ? 2 : 1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[name]}</svg>
 }
-function Row({ label, value, action, hint }: { label: string; value?: ReactNode; action?: ReactNode; hint?: string }) {
-  return <div className="stg-r"><div className="k"><b>{label}</b>{hint && <span>{hint}</span>}</div><div className="v">{value}</div>{action && <div className="a">{action}</div>}</div>
+function Row({ label, value, action, hint, connectionId }: { label: string; value?: ReactNode; action?: ReactNode; hint?: string; connectionId?: string }) {
+  return <div className="stg-r" data-settings-connection={connectionId}><div className="k"><b>{label}</b>{hint && <span>{hint}</span>}</div><div className="v">{value}</div>{action && <div className="a">{action}</div>}</div>
 }
-function Section({ title, children }: { title?: string; children: ReactNode }) {
-  return <section className="stg-sec">{title && <header><h2>{title}</h2></header>}<div className="stg-card">{children}</div></section>
+function Section({ title, children, sectionRef }: { title?: string; children: ReactNode; sectionRef?: Ref<HTMLElement> }) {
+  return <section ref={sectionRef} className="stg-sec">{title && <header><h2>{title}</h2></header>}<div className="stg-card">{children}</div></section>
+}
+
+function SettingsAccountConnections({ data, unavailable, pending, failed, onDisconnect }: {
+  data: ClientSettingsAccountConnectionsPresentation
+  unavailable: string
+  pending: boolean
+  failed: boolean
+  onDisconnect: (id: string, action: () => Promise<void>, trigger: HTMLButtonElement) => void
+}) {
+  const c = useConnectionLocaleText()
+  const accessLabel = (access: ClientSettingsAccountConnectionsPresentation['accounts'][number]['access']) => access === 'invitation'
+    ? c('TETH 초대 계정') : access === 'subscription' ? c('구독') : access === 'subscription-ended' ? c('구독이 끝나 새 주문이 멈췄습니다') : undefined
+  return <>
+    {data.accounts.map(account => <Row key={account.id} connectionId={account.id} label={account.exchangeLabel} value={account.maskedAccountLabel}
+      hint={accessLabel(account.access)} action={<button type="button" className="stg-b" aria-busy={pending}
+        disabled={!account.onDisconnect || pending} onClick={event => { if (account.onDisconnect && !pending) onDisconnect(account.id, account.onDisconnect, event.currentTarget) }}>{c('연결 끊기')}</button>} />)}
+    {failed && <p className="stg-empty" role="alert">{unavailable}</p>}
+  </>
 }
 
 /** Client layout with honest unavailable states. No local account, card, session
  * or security flags: service operations must come from the authenticated host.
  * Notification/billing/security details remain separate migration items.
  * Identity/email editors consume explicit owner-bound UI callbacks only. */
-export function ClientSettingsPage({ tab, profile, identityActions, onEmailChange, security, securityActions, securityScopeId, billing, billingActions, usage, onBack, onNewStrategy, onCopyStrategy, onBrokers, onHelp, onLogout, logoutDisabled, details }: Props) {
+export function ClientSettingsPage({ tab, profile, identityActions, onEmailChange, security, securityActions, securityScopeId, billing, billingActions, usage, accountConnections, accountConnectionOperation, onBack, onNewStrategy, onCopyStrategy, onBrokers, onHelp, onLogout, logoutDisabled, details }: Props) {
   const { language, storageError } = useClientPreferences()
   const layout = useSettingsLayout()
   const href = useSiteLocation(true)
@@ -87,8 +116,32 @@ export function ClientSettingsPage({ tab, profile, identityActions, onEmailChang
   const mobileBack = useRef<HTMLAnchorElement>(null)
   const logoutTrigger = useRef<HTMLButtonElement>(null)
   const confirm = useRef<HTMLDivElement>(null)
+  const connectionSection = useRef<HTMLElement>(null)
+  const brokersAction = useRef<HTMLButtonElement>(null)
+  const latestConnections = useRef(accountConnections)
+  const latestConnectionOperation = useRef(accountConnectionOperation)
   const [confirmLogout, setConfirmLogout] = useState(false)
   const lastTab = useRef(tab)
+  useLayoutEffect(() => {
+    latestConnections.current = accountConnections
+    latestConnectionOperation.current = accountConnectionOperation
+  }, [accountConnections, accountConnectionOperation])
+  useLayoutEffect(() => {
+    const request = accountConnectionOperation?.focusRequest
+    if (!request?.restoreFocus) return
+    const frame = requestAnimationFrame(() => {
+      const latest = latestConnections.current
+      const operation = latestConnectionOperation.current
+      if (!operation?.takeFocusRequest(request)
+        || latest && settingsAccountConnectionOwner(latest.scope, latest.identity) !== request.ownerBinding
+        || document.activeElement !== document.body && document.activeElement !== document.documentElement) return
+      const buttons = connectionSection.current?.querySelectorAll<HTMLButtonElement>('[data-settings-connection] button') ?? []
+      const same = [...buttons].find(button => button.closest<HTMLElement>('[data-settings-connection]')?.dataset.settingsConnection === request.id)
+      const target = same && !same.disabled ? same : brokersAction.current
+      if (target?.isConnected && !target.disabled && target.getClientRects().length) target.focus({ preventScroll: true })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [accountConnectionOperation?.focusRequest])
   useLayoutEffect(() => {
     // CSS may hide a focused control before the media-query store commits.
     // Recover that exact control's logical successor, but never steal a newer
@@ -174,7 +227,10 @@ export function ClientSettingsPage({ tab, profile, identityActions, onEmailChang
           <ClientSettingsIdentityRows profile={profile} actions={identityActions} />
           <ClientSettingsEmailRow key={profile?.email ?? ''} email={profile?.email} onRequest={onEmailChange} />
         </Section>
-        <Section title={s('connections')}>{missing}<Row label={s('brokers')} action={<button type="button" className="stg-b" onClick={onBrokers}>{s('brokers')}</button>} /></Section>
+        <Section title={s('connections')} sectionRef={connectionSection}>{accountConnections ? <SettingsAccountConnections key={JSON.stringify([accountConnections.scope, accountConnections.identity])} data={accountConnections} unavailable={s('unavailable')}
+          pending={accountConnectionOperation?.pending?.ownerBinding === settingsAccountConnectionOwner(accountConnections.scope, accountConnections.identity)}
+          failed={accountConnectionOperation?.failure?.ownerBinding === settingsAccountConnectionOwner(accountConnections.scope, accountConnections.identity) && accountConnectionOperation.failure.revision === accountConnections.revision}
+          onDisconnect={(id, action, trigger) => accountConnectionOperation?.start(accountConnections, id, action, Boolean(connectionSection.current?.contains(document.activeElement) || document.activeElement === trigger))} /> : missing}<Row label={s('brokers')} action={<button ref={brokersAction} type="button" className="stg-b" onClick={onBrokers}>{s('brokers')}</button>} /></Section>
         <Section><Row label={s('logout')} hint={s('logoutHint')} action={<button ref={logoutTrigger} type="button" className="stg-b" disabled={logoutDisabled || !onLogout} onClick={() => setConfirmLogout(true)}>{s('logout')}</button>} />
           {confirmLogout && <div ref={confirm} className="stg-confirm" role="group" aria-label={s('confirmLogout')} onKeyDown={event => { if (event.key === 'Escape' && !event.nativeEvent.isComposing) { event.stopPropagation(); cancelLogout() } }}>
             <p>{s('confirmLogout')}</p><button type="button" className="stg-b" onClick={cancelLogout}>{s('cancel')}</button><button type="button" className="stg-b p" disabled={logoutDisabled || !onLogout} onClick={() => { if (!logoutDisabled && onLogout) { setConfirmLogout(false); onLogout() } }}>{s('logout')}</button>

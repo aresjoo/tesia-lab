@@ -43,7 +43,9 @@ async function observeArrivalMotion(page: Page) {
   await page.addInitScript(() => {
     const original = Element.prototype.animate
     const calls: { frames: Keyframe[]; duration: number | string | undefined; width: number; height: number }[] = []
+    const animations: Animation[] = []
     Reflect.set(window, 'nativeArrivalMotions', calls)
+    Reflect.set(window, 'nativeArrivalAnimations', animations)
     Element.prototype.animate = function (frames, options) {
       const rect = this.getBoundingClientRect()
       const animation = original.call(this, frames, options)
@@ -52,7 +54,11 @@ async function observeArrivalMotion(page: Page) {
           duration: typeof options === 'number' ? options : options?.duration, width: rect.width, height: rect.height }
         // StrictMode synchronously disposes its first effect before paint. It
         // is not a second user-visible transition; retain the live setup only.
-        queueMicrotask(() => { if (animation.playState !== 'idle') calls.push(observation) })
+        queueMicrotask(() => {
+          if (animation.playState === 'idle') return
+          calls.push(observation)
+          animations.push(animation)
+        })
       }
       return animation
     }
@@ -72,7 +78,7 @@ test('서비스 첫 질문도 기존 입력창의 위치에서 대화로 이어�
     await expect(page.locator('.client-session-loading')).toHaveCount(0)
     await expect.poll(() => page.evaluate(() => Reflect.get(window, 'nativeArrivalMotions').length)).toBe(1)
     const motion = await page.evaluate(() => Reflect.get(window, 'nativeArrivalMotions')[0])
-    expect(motion.duration).toBe(400)
+    expect(motion.duration).toBe(340)
     expect(motion.frames[0].transform).toContain('translate(')
     const scale = motion.frames[0].transform.match(/scale\(([^,]+), ([^)]+)\)/)
     expect(Number(scale[1]) * motion.width).toBeCloseTo(before!.width, 0)
@@ -86,6 +92,21 @@ test('서비스 첫 질문도 기존 입력창의 위치에서 대화로 이어�
     await expect(page.getByText('요청을 보냈습니다. 응답이 도착하면 이 대화에 이어집니다.', { exact: true })).toHaveCount(0)
     expect(await page.evaluate(() => Reflect.get(window, 'nativeArrivalMotions').length)).toBe(1)
     expect(state.posts).toHaveLength(2)
+  } finally { state.releaseCreate(); state.releaseTurn() }
+})
+
+test('첫 질문의 dock 이동은 입력 상호작용 즉시 취소한다', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await observeArrivalMotion(page)
+  const state = await setup(page, 'no-preference')
+  await page.locator('#strategy-idea').fill(question)
+  await page.locator('#strategy-idea').press('Enter')
+  try {
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'nativeArrivalAnimations').length)).toBe(1)
+    await page.evaluate(() => Reflect.get(window, 'nativeArrivalAnimations')[0].pause())
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'nativeArrivalAnimations')[0].playState)).toBe('paused')
+    await page.locator('.g-composer').dispatchEvent('pointerdown')
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'nativeArrivalAnimations')[0].playState)).toBe('idle')
   } finally { state.releaseCreate(); state.releaseTurn() }
 })
 

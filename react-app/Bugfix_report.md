@@ -1,5 +1,33 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 전달 — 설정·소개·고객지원 원문 복원 묶음
+
+설정 최종 source00ce4691/experience70e640be/projection530c57d4/speca96703cb는 실제 connection owner 단위 operation을 보존하고 committed React 상태로 실패/완료를 판단한다. 계정↔사용량 및 profile page remount에서 pending을 중복 해제하지 않는다. 마지막 연결 삭제 후 기존 거래소 CTA로 초점이 돌아가며, 설정 이탈 중 완료된 작업의 초점 요청은 재입장 때 재생하지 않는다. 최종 신규2키 PASS/4.6초(raw2794e99b)는 앞 시험을 반복하지 않았다. route frame/콜백 수의 시험 전제 오류 로그도 보존했다. 독립 liveness Opus5.5 C0H0M0 scopedGO는 이 최종 초점 교정 전 source29860f8/experiencedd3bd4 입력이며, 이후 Low/추가 반례 교정은 위 신규2키 증거로 구분한다.
+
+실제 서비스 `/about/`가 원문을 연구·준비 문구로 재치환하던 `servicePageCopy` 호출을 제거했다. source7723a089/spec7430d791의 신규3키 PASS/15.0초는 서비스 경로의 7언어 핵심 원문과 가입 CTA를 검증했다. 제품 RED와 reload 초기언어를 덮던 harness FAIL을 보존했다. 참조0인 기존 `src/client-service-page-copy.ts`는 제거했고 Git에서 복구 가능하다. 소개 문장·원본 동선 외 API/권한/flags 변경0이다.
+
+고객지원은 한국어·영어 `help.sub`만 원문으로 복원했다(copy2ae62e17). ClientHelp 컴포넌트/SVG/모션은 불변이다. main1440/native320의 신규2키 PASS/45.7초(raw5e1e000d), 영향 기존1키 PASS(raw06b8e504)는 별도 실행이다. 기존 FAQ·정책 링크는 원본에 없고 과거 보고서에 승인 표기가 있으나 활성 정본에서 근거가 확인되지 않아 사용자 확인 중이다. 이번에는 링크를 임의 제거하지 않았다. 원본의 조건부 Zendesk 경로는 실제 공개 config/CSP/provider 연결 과제로 구분한다.
+
+묶은 변경의 최종 타입·service bundle은 actual0/20.741초·입력 전후 SHA 불변이다(`.cache/pdf-parity-root/settings-about-help-final-build.receipt.json`). 상담/거래소 flag true 빌드이며 실제 API/주문 활성화가 아니다. 향후 native configLoader 확장자 및 기존 chunk500k 경고는 숨기지 않았다. 삭제파일을 inventory에서 읽던 준비 도구 오류는 도구만 교정했으며 실패 때 제품 빌드는 실행되지 않았다. AGY3.8high의 읽기 전용 확인은 고객지원7언어 원문 및 About 직접 호출 일치를 확인했다(response27763bc1/actual0/입력불변). 브라우저 최종 GO나 링크 승인 근거로 승격하지 않는다.
+
+이번 소스·시험·Git 전달과 운영 배포/실제 고객 모델/OAuth/주문은 구분한다. 원본 전 화면·모션/Safari/접근성/3,000명 완료를 주장하지 않으며 전체 회귀·9월·730일 백테스트 재실행0이다. 아래 중간 후보/검수 대기 표기는 당시 이력이다.
+
+## 현재 — 설정 계정의 실제 연결 표시와 원본 dock 모션
+
+첫 UI 독립 personal1 Opus5.5는 C0H0/scoped GO 표기였지만 Medium2를 실제 반례로 수용했다. actual controller guard가 오류에도 새 connected revision을 발행하고 resolve하여 settings 실패 안내가 빠지던 문제, keyboard disconnect 후 body로 초점이 떨어지는 문제다. pending을 같은 owner의 페이지 수준으로 올려 revision/계정↔사용량 이동에도 동기 잠금을 보존하고, fresh 확정 목록에서 대상 id가 남는 실패는 기존 unavailable 안내로 표시한다. 확정DELETE 뒤 제거된 행은 복원하지 않는다. 초점은 body에 있을 때만 원행 또는 기존 거래소 CTA로 복귀한다. 신규3PASS/3.3초(raw037fa885), 별도 stale-owner1PASS/2.7초(raw1b9d5f68), 실제 ANONYMOUS 경계1PASS/3.2초(rawa28327e3)이며 앞8을 반복하지 않았다. settingsde18533f/specc3cd53f1·projection4772e7c9·experienceda057b7f를 동결해 followup 검수 입력과 결속했다. scoped ESLint0이다.
+
+이 동결 후보의 마지막 타입/servicebundle1회는 actual0/20.021초·입력불변이다(`.cache/pdf-parity-root/settings-dock-final-service-build.receipt.json`). 상담/거래소 연결 flag true의 서비스 빌드이며 provider/주문 활성화 증거가 아니다. chunk500k 및 future configLoader warning은 보존하고 억제하지 않았다. 독립 followup 완료와 실제 운영 배포는 별도이며 ROOT의 추가 초점 frame 점검은 읽기 전용으로 진행했다.
+
+원본과 현재 renderer의 국소 재대조에서 설정 계정은 이미 확인된 거래소 목록을 전달받지 못했고, 홈→대화 dock의 실제 이동이 원본340ms보다60ms 길었다. 연구 pulse/g-doc/Critic renderer의 추가 재작업 근거는 없으며 producer 부재와 화면 미재현을 UI 누락으로 세지 않는다. 원본 카피·SVG·색감·CSS·모바일 동선과 공개 API/schema/권한은 변경하지 않았다.
+
+`ClientServiceExperience`가 기존 owner/session-bound complete.connectionList를 private `client-settings-account-connections.ts`로 투영해 `ClientSettingsPage`의 원본 Row/Section에 공급한다. 마스킹/거래소/확정 access와 기존 disconnect callback만 재사용하며 account status·초대/구독을 추정하지 않는다. 입력 미공급/0연결은 기존 unavailable이고 owner/ANON 교체 때 목록을 폐기한다. 실패해도 확인된 실제 연결을 임의 삭제하지 않으며 DELETE 성공 후 source가 제거한 행만 사라진다. desktop/mobile8PASS/5.4초(raw7e9de079)는 해당 focused fixture이고 실제 OAuth/운영 성공은 아니다. 초기 harness RED와 첫3PASS/1FAIL은 원자료에 보존했다.
+
+ROOT가 사전 검수에서 같은 owner의 이전 revision 완료가 새 pending을 풀 수 있는 async 경합을 찾아, exact revision+operation token을 결속했다. 이전 실패·완료는 새 요청의 busy/error에 영향이 없고 동기 throw도 기존 unavailable로 정리한다. 신규desktop1PASS/3.1초(raw611c80b8)만 실행했으며 앞8을 반복하지 않았다. 최종 settingsa096934b/spec7f0370ab·projection4772e7c9·experienceda057b7f를 동결했다. exact4/후속2의 국소 ESLint는 각각0이며 전체 lint/build/whole을 반복하지 않았다.
+
+dock 제품2e233f35는 WAAPI duration400→340 단일상수 복원이며 easing/geometry·mobile/reduced-motion·입력/visibility/resize 취소는 불변이다. 첫 focused3PASS/4.5초(rawd8cd0dbf)는 duration/취소/reduced만 검증했다. ROOT가 취소 assertion의 자연 완료 false-pass 가능성을 찾아 actual Animation을 pause→paused로 고정한 뒤 pointerdown→idle를 확인하도록 시험만 보강했다. 해당1PASS/4.3초(raw01147605), 최종 spec52883500이며 원3은 재실행하지 않았다. 첫 anchored grep의 body0/No tests found는 selection-miss로 별도 보존한다. 표준 Vite Desktop Chrome/synthetic API 경계이고 실제 모델·backend/운영 증거가 아니다.
+
+AGY3.8high는 읽기 전용 public motion snippet에서340ms/easing·860px 이하 제외·reduce guard 일치를 확인했다(responseac113523). clone cleanup400ms와 실제 이동340ms를 혼동하지 않았으며 브라우저 미관측/최종승인 아님을 명시했다. 개인1 Opus5.5의 frozen UI/source·spec·읽기전용 controller7개 검수와 마지막 서비스 타입/bundle1회는 ROOT가 별도 결속한다. 전원본470쪽·미재현290쪽·실제OAuth/고객AI/주문·Safari/3,000명은 이 국소 복원으로 완료 처리하지 않는다.
+
 ## 현재 — 원본 확인·완료 동선과 연속 병렬 구현
 
 최종 후속 personal1 직접 Opus5.5는 frozen hook4b0736dd/font79351f55/configf6294ced/spec2의 입력불변·actual0·C0H0M0 scoped GO다(`web-closed-delta-opus.receipt.json`). L3의 pathname/query 가드 의견은 locator reader가 이미 정확경로/search를 제한해 false positive로 분류했고 나머지 Low의 clean callback 재조회·owner/remount·비동기 부재 단언·Safari/폰트축 한계를 보존한다. 판정 후 source 변경 없이 최신 compiled8b6ed786의 실제 `_StaticBundle`1440에서 canonical trade/reload·원본 heading custom glyph·496face/4weight·500/600/700 computedweight+CDP glyph·style/CSP/pageerror0을 추가 확인했다(receiptadd6c95b/종료8aad9bc7). diagnostic만 사용했고 타 OS raster/실 callback producer/OAuth/고객 AI/주문 성공이 아니다. 제품18파일261af1a는 실제 owning branch push했으며 이 추가 문서·Lab 전달은 Program Ledger가 소유한다.

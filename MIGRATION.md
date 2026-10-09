@@ -2,6 +2,26 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 문구·설정 상태·dock 후속 전달
+
+clean Web [536957b](https://github.com/beak1011/tesia-web/tree/536957bc7e3e012811d0980cc921d27c4c6d84c6)의 전체 React **2,410파일·34,610,597bytes**를 공식 sync로 전달했다.
+snapshot `3b211a2db8ff3991ccd3684593fda087c834c43e78f86b42f535060d29d41de8`, source dirty0이다.
+사용하지 않는 원문 치환기 `src/client-service-page-copy.ts`만 제거했으며 Git 복구 가능하다.
+삭제 경로를 index에 반영하기 전 첫 verify는 실패했고, staging 후 공식 verify는 actual0이다.
+원본 root/main9fb·Node/Worker는 변경하지 않았다. 아래 Web7c/React2407 표기는 직전 이력이다.
+
+서비스 About의 원문 재치환을 제거하고 한국어·영어 고객지원 sub를 원본으로 복원했다.
+설정은 API12가 확인한 연결 목록을 원본 행에 표시하며, 비동기 실패·owner 교체·page remount·마지막 행 해제 및 이탈 후 초점 재생을 좁은 키로 교정했다.
+대화 dock 이동은 원본340ms로 복원했다. 없는 verification/초대/구독 사실을 합성하지 않는다.
+신규 About3·Help2/영향1·설정 마지막2 및 앞선 국소 시험은 별도 실행이며 전체PASS로 합산하지 않는다.
+최종 묶음 타입/service bundle은 actual0/20.741초·입력불변, AGY3.8high는 원문 일치의 읽기 전용 검토다.
+Opus의 scopedGO 이후 초점 Low 교정은 신규2키 증거로 구분한다. 고객지원 기존 FAQ/정책 링크의 승인 근거는 사용자 확인 중이며 이번에 임의 제거하지 않았다.
+
+서버 전달은 [Infra14e45ed](https://github.com/beak1011/tesia-infra/tree/14e45ed)의 private START intent·physical attestor·per-process pidfd TERM·manager 소비 교정과
+기존 Backend71b1ced/source238 설치를 재사용한다. 최종 독립 검수와 이후 strict-string/오류 oracle 국소 교정을 구분해 원FAIL을 보존했다.
+실제 unit/selector/edge를 조립하는 driver·운영 배포·실제 모델/고객 OAuth/주문 성공은 이번 snapshot 검증으로 완료 판정하지 않는다.
+로컬 HMR4176은 이 Web source를 제공한다. 전체 회귀·9월·730일 재실행0이며 상세 실행은 `react-app/Bugfix_report.md`와 Program Ledger를 따른다.
+
 ### 실제 OAuth·Bitget 연결의 현재 작업 경계
 
 현재 통합 기준은 [Program fe44b28](https://github.com/beak1011/tesia-program/tree/fe44b28)의

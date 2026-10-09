@@ -303,7 +303,7 @@ export function ClientConversation({ children, artifact, artifactLabel: supplied
     const animation = el.animate([
       { transform: `translate(${initialArrival.left - to.left}px, ${initialArrival.top - to.top}px) scale(${initialArrival.width / to.width}, ${initialArrival.height / to.height})` },
       { transform: 'none' },
-    ], { duration: 400, easing: 'cubic-bezier(.3,0,.15,1)' })
+    ], { duration: 340, easing: 'cubic-bezier(.3,0,.15,1)' })
     el.style.transformOrigin = 'top left'
     const finish = () => animation.cancel()
     const hidden = () => { if (document.hidden) finish() }

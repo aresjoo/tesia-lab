@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+- 현재 후속 source 소유: dock·설정 exact4·소개 exact2·고객지원 copy/spec3의 병렬 writer는 모두 동결·반환했다. ROOT만 AGENTS/Bugfix·최종 묶음 타입/bundle 증거·Git/Lab sync를 소유한다. 후속 담당3명은 각각 actual driver 공개 메타데이터, 원본 renderer/producer 차이, 상담 호출 흐름을 읽기 전용 조사하며 이 Web source에는 쓰지 않는다. 원본 문구/배치 복원 외 새 카피·API·권한·없는 verification/entitlement 합성은 금지한다. 작은 복원마다 전체 회귀·개별 제품 rebuild를 반복하지 않는다.
+
 - 실제서비스 CSP 후속: ROOT는 `vite.internal-poc.config.ts`의 serviceOnly font emission을 소유한다. 폰트만 파일로 방출해 서버 font-src self를 유지하며 기존 public/POC asset 정책·UI·카피·권한은 바꾸지 않는다. Backend 정책 writer는 별도 integration WT이고 공용 API변경0이다.
 
 - 현재 ROOT 후속 단독 범위: 원본 한국어 webfont 공급·실 glyph 검증을 위한 `client-reference.css`, 필요시 로컬 font stylesheet, portal font spec 및 `exchange-connect.spec.ts` 영향2키. font family 문자열만의 PASS를 실제 한글 패리티로 취급하지 않는다. 다른 담당은 읽기 전용이고 공용 API·원문 카피·거래 권위는 불변이다.

@@ -38,7 +38,7 @@ import { marketBindingKey, type MarketResponseBinding } from '../client-market-r
 import { ClientAnswerActions } from '../components/ClientAnswerActions'
 import { ClientLocalePanel } from '../components/ClientLocalePanel'
 import { ClientSettingsMenu, ClientProfileMenu, ClientFeedbackDialog, type ClientFeedbackSubmission } from '../components/ClientAccountUI'
-import { ClientSettingsPage } from '../components/ClientSettingsPage'
+import { ClientSettingsPage, type ClientSettingsConnectionOperation } from '../components/ClientSettingsPage'
 import type { ClientSettingsUsageProps } from '../components/ClientSettingsUsage'
 import { ClientUsageBanner } from '../components/ClientUsageBanner'
 import { ClientConnectionStatus, type ClientConnectionStatusProps } from '../components/ClientConnectionStatus'
@@ -68,6 +68,7 @@ import { accountPresentationBound, accountLocationAvailable, type NativeAccountP
 import { brokerPresentationBound, type BrokerServicePresentation } from '../client-broker-presentation'
 import { brokerViewBound, brokerViewDataset, type BrokerViewState } from '../client-broker-view'
 import { connectionPresentationBound, type NativeConnectionPresentation } from './native-connection-presentation'
+import { projectSettingsAccountConnections, settingsAccountConnectionOwner } from './client-settings-account-connections'
 import { NativeResearchWorkspace } from './NativeResearchWorkspace'
 import { nativeResearchText } from './native-research-workspace-copy'
 import { NativePersistentRegion } from './NativePersistentRegion'
@@ -83,6 +84,15 @@ const NativeBrokers = lazy(() => import('./NativeBrokers').then(module => ({ def
 const NativeInsights = lazy(() => import('./NativeInsights').then(module => ({ default: module.NativeInsights })))
 const NativeStrategies = lazy(() => import('./NativeStrategies').then(module => ({ default: module.NativeStrategies })))
 const NativeConnectionOnboarding = lazy(() => import('./NativeConnectionOnboarding').then(module => ({ default: module.NativeConnectionOnboarding })))
+
+type SettingsConnectionOperationInternal = {
+  token: number
+  ownerBinding: string
+  sourceRevision: string
+  id: string
+  restoreFocus: boolean
+}
+type SettingsConnectionSettlement = { operation: SettingsConnectionOperationInternal; rejected: boolean; ready: boolean }
 
 /** In-memory presentation only. Observations are supplied after the native SDK
  * has accepted a response; a restored snapshot is not a past turn transcript. */
@@ -370,6 +380,85 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   const [dismissedConnection, setDismissedConnection] = useState<string | null>(null)
   const connectionData = nativeAccounts && state.sessionState === 'AUTHENTICATED' && connectionPresentationBound(connectionPresentation, accountScope)
     && connectionPresentation.requestId.trim() ? connectionPresentation : undefined
+  const settingsAccountConnections = projectSettingsAccountConnections(connectionData, accountScope)
+  const settingsConnectionOwner = connectionData ? settingsAccountConnectionOwner(connectionData.scope, connectionData.identity) : null
+  const latestSettingsConnections = useRef(settingsAccountConnections)
+  const latestSettingsConnectionOwner = useRef(settingsConnectionOwner)
+  const settingsConnectionSequence = useRef(0)
+  const activeSettingsConnection = useRef<SettingsConnectionOperationInternal | null>(null)
+  const latestSettingsFocus = useRef<ClientSettingsConnectionOperation['focusRequest']>(null)
+  const settingsPageRendered = useRef(false)
+  const [settingsConnectionPending, setSettingsConnectionPending] = useState<SettingsConnectionOperationInternal | null>(null)
+  const [settingsConnectionSettlement, setSettingsConnectionSettlement] = useState<SettingsConnectionSettlement | null>(null)
+  const [settingsConnectionFailure, setSettingsConnectionFailure] = useState<ClientSettingsConnectionOperation['failure']>(null)
+  const [settingsConnectionFocus, setSettingsConnectionFocus] = useState<ClientSettingsConnectionOperation['focusRequest']>(null)
+  useLayoutEffect(() => {
+    latestSettingsConnections.current = settingsAccountConnections
+    latestSettingsConnectionOwner.current = settingsConnectionOwner
+    latestSettingsFocus.current = settingsConnectionFocus
+  }, [settingsAccountConnections, settingsConnectionOwner, settingsConnectionFocus])
+  useLayoutEffect(() => {
+    const settlement = settingsConnectionSettlement
+    if (!settlement || activeSettingsConnection.current !== settlement.operation) return
+    const operation = settlement.operation
+    if (settingsConnectionOwner !== operation.ownerBinding) {
+      queueMicrotask(() => {
+        if (activeSettingsConnection.current !== operation) return
+        activeSettingsConnection.current = null
+        setSettingsConnectionPending(current => current === operation ? null : current)
+        setSettingsConnectionSettlement(current => current === settlement ? null : current)
+      })
+      return
+    }
+    const revision = connectionData?.state.id
+    if (revision === operation.sourceRevision && !settlement.ready) {
+      const frame = requestAnimationFrame(() => setSettingsConnectionSettlement(current => current === settlement ? { ...current, ready: true } : current))
+      return () => cancelAnimationFrame(frame)
+    }
+    const remains = settingsAccountConnections?.accounts.some(account => account.id === operation.id) ?? false
+    queueMicrotask(() => {
+      if (activeSettingsConnection.current !== operation) return
+      activeSettingsConnection.current = null
+      setSettingsConnectionPending(current => current === operation ? null : current)
+      setSettingsConnectionSettlement(current => current === settlement ? null : current)
+      setSettingsConnectionFailure(remains && revision ? { ownerBinding: operation.ownerBinding, revision } : null)
+      setSettingsConnectionFocus(operation.restoreFocus && settingsPageRendered.current
+        ? { token: operation.token, ownerBinding: operation.ownerBinding, id: operation.id, restoreFocus: true }
+        : null)
+    })
+  }, [connectionData, settingsAccountConnections, settingsConnectionOwner, settingsConnectionSettlement])
+  const startSettingsConnectionOperation: ClientSettingsConnectionOperation['start'] = (data, id, action, restoreFocus) => {
+    const ownerBinding = settingsAccountConnectionOwner(data.scope, data.identity)
+    const latest = latestSettingsConnections.current
+    if (!latest || settingsAccountConnectionOwner(latest.scope, latest.identity) !== ownerBinding || latest.revision !== data.revision) return
+    if (activeSettingsConnection.current?.ownerBinding === ownerBinding) return
+    const operation = { token: ++settingsConnectionSequence.current, ownerBinding, sourceRevision: data.revision, id, restoreFocus }
+    activeSettingsConnection.current = operation
+    setSettingsConnectionPending(operation)
+    setSettingsConnectionSettlement(null)
+    setSettingsConnectionFailure(null)
+    setSettingsConnectionFocus(null)
+    const settle = (rejected: boolean) => {
+      if (activeSettingsConnection.current === operation) setSettingsConnectionSettlement({ operation, rejected, ready: false })
+    }
+    try {
+      void Promise.resolve(action()).then(() => settle(false), () => settle(true))
+    } catch {
+      settle(true)
+    }
+  }
+  const settingsConnectionOperation: ClientSettingsConnectionOperation = {
+    pending: settingsConnectionPending,
+    failure: settingsConnectionFailure,
+    focusRequest: settingsConnectionFocus,
+    start: startSettingsConnectionOperation,
+    takeFocusRequest: request => {
+      if (latestSettingsFocus.current?.token !== request.token) return false
+      latestSettingsFocus.current = null
+      queueMicrotask(() => setSettingsConnectionFocus(current => current?.token === request.token ? null : current))
+      return latestSettingsConnectionOwner.current === request.ownerBinding && activeSettingsConnection.current === null
+    },
+  }
   const connectionKey = connectionData ? JSON.stringify([accountScope, connectionData.identity, connectionData.requestId]) : null
   const connectionOpen = connectionKey !== null && connectionKey !== dismissedConnection
   const closeConnection = () => {
@@ -572,6 +661,13 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     ready: nativeAccounts && state.phase !== 'loading',
     onLogin: login,
   })
+  const settingsPageIsRendered = Boolean(settingsTab && !connectionOpen && !connectionStatus)
+  useLayoutEffect(() => {
+    settingsPageRendered.current = settingsPageIsRendered
+    if (settingsPageIsRendered) return
+    latestSettingsFocus.current = null
+    queueMicrotask(() => setSettingsConnectionFocus(null))
+  }, [settingsPageIsRendered])
   const history = () => {
     historyFocusIntent.current = !researchHistory
     setHomeEntrance(false)
@@ -969,7 +1065,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     }} /></div>}
     <main id="tesia-main" className="client-source-main" tabIndex={-1}>
       {connectionStatus && <ClientConnectionStatus {...connectionStatus} scope={state.sessionState === 'AUTHENTICATED' ? accountScope ?? null : null} source="service" />}
-      {settingsTab && !connectionOpen && !connectionStatus && <ClientSettingsPage key={JSON.stringify([accountScope, accountData?.identity])} tab={settingsTab} usage={usageActions} profile={accountData?.profile} onBack={() => closeClientSettingsRoute(true)} onNewStrategy={() => { closeClientSettingsRoute(true); newConversation() }} onCopyStrategy={() => navigateSharing({ period: 'all' })} onBrokers={browseExchanges} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} onLogout={logoutFromProfile} logoutDisabled={logoutDisabled}
+      {settingsTab && !connectionOpen && !connectionStatus && <ClientSettingsPage key={JSON.stringify([accountScope, accountData?.identity])} tab={settingsTab} usage={usageActions} accountConnections={settingsAccountConnections} accountConnectionOperation={settingsConnectionOperation} profile={accountData?.profile} onBack={() => closeClientSettingsRoute(true)} onNewStrategy={() => { closeClientSettingsRoute(true); newConversation() }} onCopyStrategy={() => navigateSharing({ period: 'all' })} onBrokers={browseExchanges} onHelp={trigger => { surfaceReturnFocus.current = trigger; setSurface('help') }} onLogout={logoutFromProfile} logoutDisabled={logoutDisabled}
         identityActions={{ name: accountData?.actions?.onProfileName, handle: accountData?.actions?.onProfileHandle }}
         onEmailChange={accountData?.actions?.onEmailChange}
         security={accountData?.security} securityActions={accountData?.actions?.security} securityScopeId={JSON.stringify([accountScope, accountData?.identity])}

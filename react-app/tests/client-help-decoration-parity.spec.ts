@@ -53,7 +53,7 @@ for (const surface of ['Main', 'Native'] as const) for (const width of [320, 390
     await expect(decoration).toHaveText('')
     expect(await decoration.evaluate(element => ({ role: element.getAttribute('role'), title: element.getAttribute('title'), label: element.getAttribute('aria-label'), tabIndex: (element as HTMLElement).tabIndex }))).toEqual({ role: null, title: null, label: null, tabIndex: -1 })
     await expect(panel.locator(':scope > p').first()).toHaveText('무엇이든 물어보십시오. 상담원이 연중무휴 24시간 대기하고 있습니다.')
-    await expect(panel.locator(':scope > p').last()).toHaveText('실시간 채팅은 곧 제공됩니다. support@teth.ai')
+    await expect(panel.locator(':scope > p').last()).toHaveText('상담원이 24시간 답합니다. support@teth.ai')
     // The existing outer button decoration has a distinct original 11px size.
     await expect(trigger.locator('.help-status-dot')).toHaveCSS('width', '11px')
     await expect(trigger.locator('.help-status-dot')).toHaveCSS('height', '11px')

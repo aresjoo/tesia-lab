@@ -1,5 +1,3 @@
-import { useSiteHrefMapper } from '../site-navigation'
-import { servicePageCopy } from '../client-service-page-copy'
 // About/download/policies: tesia-lab 9fbff821.
 // Static content is compiled JSX, not injected HTML.
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -45,7 +43,6 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
   page: SitePage; location: string
   historyNavigation?: { revision: number; href: string; history: boolean; position: { x: number; y: number } | null }
 }) {
-  const service = useSiteHrefMapper() !== null
   const download = readDownloadConfig()
   const { language, t } = useClientPreferences()
   // Keep the original Korean meaning and localize the full public document,
@@ -190,7 +187,7 @@ export default function ClientPublicPages({ page, location, historyNavigation }:
 </span>
 <InternalLink className="cta" href="/"><PublicCopy page="about" copyKey="cta" /></InternalLink>
 </header>
-<ClientAboutPage previewNotice={null} pricingNotice={null} faqNotice={null} copy={text => service ? servicePageCopy(language, text, aboutText(language, text)) : aboutText(language, text)} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} />
+<ClientAboutPage previewNotice={null} pricingNotice={null} faqNotice={null} copy={text => aboutText(language, text)} onHelp={event => { footerHelpTrigger.current = event.currentTarget; setFooterHelpOpen(true) }} />
 
 
 
