@@ -12,6 +12,10 @@ Backend [fdefe92](https://github.com/beak1011/tesia-backend/tree/fdefe9204ef42d7
 
 실서비스 잔여는 원본 UI의 삭제와 구분한다. 문서별 질문 context는 실제 wire의 owner/version 계약 연결이 남고, 연구/Critic·초대/구독/공유/랭킹 renderer는 존재하지만 실제 producer 인수가 남는다. API14·Google/session/Bitget vault의 기존 구현은 재사용한다. PDF 미재현290은 누락/PASS가 아니며 운영 AI·주문·전체원본 완료를 주장하지 않는다.
 
+서버 후속은 [Infra c478a89](https://github.com/beak1011/tesia-infra/tree/c478a899be7a298aedc6e96cdc63d3cf4ca44023)의 concrete static driver다. OPEN/HELD 상태 의미·fractional/preboot clock·효과 전 non-latch·reload-before-observe drift latch를 각각 신규5/3/2/1키로 검증했고 과거 키·전체를 반복하지 않았다. 마지막 Opus5.5 C0H0M0는 한 줄 microdelta 범위이며 전체 서버 GO가 아니다. ROOT는 기존 source·raw/pin 동치를 별도 판독했고 원HOLD/Low를 보존했다.
+
+최신 Web5ee의 타입/service build actual0/22.777초·tracked2414불변, 정적 bundle1167파일·27,822,892bytes/tree81662166을 새로 준비했다. 운영 Google-only/exchange-off/consult-off flag를 변경하지 않았고 driver의 이전Web96 candidate는 아직 재결속하지 않았다. 실제 운영의 현재 Web manifest·변경 entrypoint·HOLD bytes·site54 escaped-dot 지원을 확정해야 안전하게 적용할 수 있다. 키를 기다리는 것으로 축소하지 않는다. 현재6a9/90-canary·Google·Bitget 조회 연결은 보존하고 운영 변경·실고객 모델/주문0이다. 현재 정본·정확 소유권은 [Program187491a](https://github.com/beak1011/tesia-program/tree/187491a3921687d1de4df9c0b33f940df4af0e43/WORK_LEDGER.md)를 따른다. 이 서버 메타데이터 전달은 위 React snapshot을 바꾸지 않는다.
+
 ### 기존 인증·거래소 연결 재사용 — 서버 전달과 운영 구분
 
 최신 작업·소유권은 [Program b65607a](https://github.com/beak1011/tesia-program/tree/b65607a5cf33ab9fbe3008994ecf7e8f78f1377c)의 Ledger를 따른다. 서버의 Google token/JWKS·같은 session authority·Bitget 암호화 store·상담 claim은 이미 같은 factory에 조립돼 있어 재구현하지 않는다. 현재 React snapshot은 아래 Webc6이며 이 문서 후속에서 원본 UI·React·카피·SVG·CSS·Worker 변경은 없다.
