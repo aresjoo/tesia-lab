@@ -1,5 +1,17 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 원본 로그인·가입 의도와 retained controller 복원
+
+원본 `AUTH.mode`는 login/signup을 구분하지만 실제 서비스의 홈·사이드바 callback은 같아 의도를 잃었다. `ClientServiceExperience`→`NativeServiceApp.loginBinding`→`NativeLoginPanel.intent`로 owner/session/generation에 결속했다. 첫 modal의 공통 원문·Google/Apple/email API·CSS·승인된 email code-only 정책은 바꾸지 않는다. DOM marker는 실제 로그인/신규 가입 성공의 증거가 아니다.
+
+초기 신규4키는14.5초에 통과했으나 독립 personal1 Opus5.5가 epoch만 바뀌고 같은 controller가 retained일 때 기존 login이 signup으로 바뀌는 H1을 발견했다. panel key와 같은 session/generation에 intent를 유지하고 현재 epoch만 재결속했다. ROOT가 원본 index18039/18195/23388/24255와 PublicMain1106을 대조해 Trading Intro CTA의 signup 연결도 복원했다. 직접 React 클릭 이벤트가 intent로 들어가지 않도록 copy/broker/strategy callback을 감싸고 insight/app은 문자열로 정규화한다.
+
+최종 source는 experience db37e1d0/app ea718c8d/panel fa5d302f/spec b8052063이다. 신규3키의 RED34a13d18에는 epoch·Intro의 제품 결함2개와 fixture-only 실패1개가 분리된다. GREEN8a18c0fe의 앞2키는 PASS이며 event DOM PASS 뒤 Vite 변환 소스를 원문으로 읽던 하니스만 실패했다. 그1키만 Node 원문 검사로 교정해 PASS/3.9초(raw1f921db0)를 확인했다. exact4 ESLint0(rawdc349456)·diff-check0, followup receipt14e332d0이며 옛4/whole 재실행0이다. 이전 실패를 삭제하거나 합산 전체PASS로 보고하지 않는다.
+
+묶음 타입/service bundle1회는 actual0/26.881초·입력불변이다(`.cache/pdf-parity-root/auth-intent-final-build.receipt.json`). flags consultation/exchange=true는 빌드 조건이고 운영/provider 활성화가 아니다. configLoader/chunk500k 경고는 보존했다. 최종 frozen personal1 Opus5.5는 actual0/modelmatched/입력불변 C0H0M0 scopedGO다. Low1의 reset 미수락 false-pass 위험은 시험만 보강해 landing/workflow 종료를 먼저 확인한1키 PASS/5.3초(raw47d8e0c9, speca520b38e)이며 제품3SHA/bundle불변·whole/rebuild0이다. insight의 원문검사만 있는 Low2와 지역변수 가독성·settings callback Low는 별도 잔여로 보존한다.
+
+AGY3.8high 읽기검수 actual0/입력불변은 최종 승인이 아니다. default intent·retained pending 재진입·modal 양방향 전환 의견은 실제 명시 호출·기존 보안/승인 email 예외와 분리했다. ROOT와 별도 읽기 조사로 최종 원본 override24251→acStart의 broker connect는 signup, review는 login, 직접 전략복사/watch는 signup, 설정 가져오기/분석/관리는 login임을 확인했다. 현재 단일 no-arg callback이 이 기능별 의도를 잃는 차이는 확정 후속이며 이번 GO를 모든 버튼의 원본 일치로 확대하지 않는다. 뒤 소유 묶음에서 최소 callback/시험으로 복원한다. Git/Lab 전달과 운영·실제 고객 OAuth·모델 응답 성공은 각각 별도다. 로컬4176 HTTP200이며 원본 UI를 임의 재설계하지 않는다.
+
 ## 현재 전달 — 설정·소개·고객지원 원문 복원 묶음
 
 설정 최종 source00ce4691/experience70e640be/projection530c57d4/speca96703cb는 실제 connection owner 단위 operation을 보존하고 committed React 상태로 실패/완료를 판단한다. 계정↔사용량 및 profile page remount에서 pending을 중복 해제하지 않는다. 마지막 연결 삭제 후 기존 거래소 CTA로 초점이 돌아가며, 설정 이탈 중 완료된 작업의 초점 요청은 재입장 때 재생하지 않는다. 최종 신규2키 PASS/4.6초(raw2794e99b)는 앞 시험을 반복하지 않았다. route frame/콜백 수의 시험 전제 오류 로그도 보존했다. 독립 liveness Opus5.5 C0H0M0 scopedGO는 이 최종 초점 교정 전 source29860f8/experiencedd3bd4 입력이며, 이후 Low/추가 반례 교정은 위 신규2키 증거로 구분한다.

@@ -11,7 +11,7 @@ import type { NativeEmailAuthenticated } from './native-email-auth'
 
 const labels = { GOOGLE: 'Google', APPLE: 'Apple' } as const
 const defaultProviders: readonly NativeAuthProvider[] = ['GOOGLE', 'APPLE']
-export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSessionRecovered, onClose, hidden = false, resumeToken = 0, isCurrent = () => true, expectedSessionId, canEmailDispatch = true, acquireEmailDispatch, providers = defaultProviders, enabledProviders = providers, emailAvailable = true, sourceLayout = false, returning = false, returnOnly = false, recoveryBlocked, onRecheckSession, recheckDisabled = false }: {
+export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSessionRecovered, onClose, hidden = false, resumeToken = 0, isCurrent = () => true, expectedSessionId, canEmailDispatch = true, acquireEmailDispatch, providers = defaultProviders, enabledProviders = providers, emailAvailable = true, sourceLayout = false, returning = false, returnOnly = false, recoveryBlocked, onRecheckSession, recheckDisabled = false, intent = 'login' }: {
   onAuthenticated: (result: NativeAuthenticated) => void | Promise<void>
   onSessionRecovered?: (result: NativeSessionRecovery) => void | Promise<void>
   onClose?: (retain?: boolean) => void
@@ -31,6 +31,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
   recoveryBlocked?: string
   onRecheckSession?: () => void
   recheckDisabled?: boolean
+  intent?: 'login' | 'signup'
 }) {
   const { t, language } = useClientPreferences()
   const text = (key: NativeAuthUiCopyKey, params?: Readonly<Record<string, string>>) => nativeAuthUiText(language, key, params)
@@ -122,7 +123,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
   if (!returnOnly && emailOpen && onEmailAuthenticated && emailAvailable) return <NativeEmailLoginPanel hidden={hidden} resumeToken={resumeToken}
     expectedSessionId={expectedSessionId} isCurrent={isCurrent} onAuthenticated={onEmailAuthenticated} onSessionRecovered={onSessionRecovered} onClose={onClose}
     canDispatch={canEmailDispatch} acquireDispatch={acquireEmailDispatch} />
-  if (needsResume) return <section ref={panelElement} hidden={hidden} inert={hidden} aria-label={text('authSection')} aria-busy={busy || recheckDisabled} className="cs-native-login ca-auth native-provider-login">
+  if (needsResume) return <section ref={panelElement} hidden={hidden} inert={hidden} data-native-auth-intent={intent} aria-label={text('authSection')} aria-busy={busy || recheckDisabled} className="cs-native-login ca-auth native-provider-login">
     {sourceLayout && onClose && <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>✕</button>}
     <h2 className="au-title">{text('resumeTitle')}</h2>
     <p className="au-sub">{text('resumeDescription')}</p>
@@ -165,7 +166,7 @@ export function NativeLoginPanel({ onAuthenticated, onEmailAuthenticated, onSess
     {returnOnly && onRecheckSession && <button className="au-textbtn" disabled={busy || recheckDisabled} onClick={onRecheckSession}>{nativeShellText(language, 'checkSession')}</button>}
     {!sourceLayout && onClose && <button data-native-auth-close className="au-textbtn" disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>{text('close')}</button>}
   </section>
-  return <section ref={panelElement} hidden={hidden} inert={hidden} aria-label={text('authSection')} aria-busy={busy || recheckDisabled} className="cs-native-login ca-auth native-provider-login">
+  return <section ref={panelElement} hidden={hidden} inert={hidden} data-native-auth-intent={intent} aria-label={text('authSection')} aria-busy={busy || recheckDisabled} className="cs-native-login ca-auth native-provider-login">
     {sourceLayout && onClose && <button type="button" data-native-auth-close className="au-x" aria-label={t('common.close')} disabled={busy} onClick={() => onClose(auth.hasMemoryIntent())}>✕</button>}
     <h2 className="au-title">{t('auth.title')}</h2>
     <p className="au-sub">{t('auth.sub').split(/<br\s*\/?\s*>/i).map((line, index) => <Fragment key={index}>{index > 0 && <br />}{line}</Fragment>)}</p>

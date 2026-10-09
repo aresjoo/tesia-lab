@@ -55,6 +55,8 @@ type History = HistoryOperations['listNativeConversationHistoryV8']['response'][
 type HistoryOwner = { sessionId: string; revision: string; etag: string; conversationId: string }
 type DocumentOwner = { sessionId: string; sessionState: 'ANONYMOUS' | 'AUTHENTICATED'; conversationId: string; draftId: string }
 type HistoryNavigation = { cursors: (string | undefined)[]; index: number; offset: number }
+type NativeAuthIntent = 'login' | 'signup'
+type NativeLoginBinding = { sessionId: string; epoch: number; generation: number; intent: NativeAuthIntent }
 const MAX_HISTORY_CURSORS = 100
 type SessionOffer = { sessionId: string; csrfToken: string; claimIntent?: NativeAuthenticated['claimIntent'] }
 const STORAGE_KEY = 'tesia.native.conversation'
@@ -297,7 +299,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [authStorageRecovery, setAuthStorageRecovery] = useState(false)
   const [loginResume, setLoginResume] = useState(0)
   const loginGeneration = useRef(0)
-  const [loginBinding, setLoginBinding] = useState<{ sessionId: string; epoch: number; generation: number } | null>(null)
+  const [loginBinding, setLoginBinding] = useState<NativeLoginBinding | null>(null)
   // A validated missing session on the fixed OAuth return route admits only
   // result/ACK recovery presentation. This is not a session or owner binding.
   const [returnBinding, setReturnBinding] = useState<{ epoch: number; generation: number } | null>(null)
@@ -519,7 +521,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (sessionStorage.getItem(SESSION_KEY) !== binding) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
     if (recoveringReturn) { returnBindingRef.current = null; setReturnBinding(null); setLoginRetained(false) }
     bindSession(current)
-    setLoginBinding({ sessionId: current.sessionId, epoch: generation, generation: loginGeneration.current })
+    setLoginBinding({ sessionId: current.sessionId, epoch: generation, generation: loginGeneration.current, intent: 'login' })
     try { setPreviousConversation(readPreviousConversation(current.sessionId)); setNavigationError('') }
     catch { setPreviousConversation(null); setNavigationError('read') }
     clients.setCsrf(token.body.data.csrfToken)
@@ -615,7 +617,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     try { await operation() }
     finally { setHistoryPending(false) }
   })
-  const openLogin = () => run(async () => {
+  const openLogin = (intent: NativeAuthIntent = 'login') => run(async () => {
     if (returnBindingRef.current) {
       if (!plainAuthReturn()) {
         setError('로그인 반환 화면을 벗어났습니다. 해당 화면으로 돌아가 세션을 다시 확인해주세요. 새 로그인을 시작하지 않았습니다.')
@@ -637,7 +639,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (loginRetained) {
       // This opens only a redacted recovery shell. No previous link, provider
       // confirmation or ACK affordance is restored by this local transition.
-      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current })
+      const retainedIntent = loginBinding?.sessionId === owner.sessionId
+        && loginBinding.generation === loginGeneration.current ? loginBinding.intent : intent
+      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current, intent: retainedIntent })
       setLoginResume(value => value + 1); setLoginOpen(true); return
     }
     try {
@@ -658,7 +662,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         sessionStorage.removeItem(CONSULTATION_LOGIN_KEY)
         if (sessionStorage.getItem(CONSULTATION_LOGIN_KEY) !== null) throw new Error('NATIVE_JOURNAL_UNAVAILABLE')
       }
-      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current })
+      setLoginBinding({ sessionId: owner.sessionId, epoch: generation, generation: loginGeneration.current, intent })
       setLoginOpen(true)
     } catch (failure) {
       if (generation === epoch.current) {
@@ -1029,7 +1033,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         if (retained) setRetainedConsultation({ epoch: epoch.current, targetSessionId: result.sessionId, messages: retained })
       }
       if (unsentInput) setInput(unsentInput)
-      if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current })
+      if (sameAuthenticatedOwner) setLoginBinding({ sessionId: current.sessionId, epoch: epoch.current, generation: loginGeneration.current, intent: loginBinding?.intent ?? 'login' })
       else { setLoginBinding(null); setLoginOpen(false); setLoginRetained(false) }
       authReceipt.current = { result, ...(saved ? { conversationId: saved } : {}) }; acceptedAuth.current = identity; setClaimAvailable(Boolean(saved && result.claimIntent?.initiatingSessionEtag))
       setAuthNotice({ sessionId: result.sessionId, text: confirmation === 'HANDOFF_UNVERIFIED'
@@ -1705,7 +1709,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     ? job?.state === 'COMPLETED' ? job : retainedMatches ? retainedResult.job : null : null
   const authSurface = (loginOpen || loginRetained) && loginBinding !== null && sessionState !== null
     && (phase !== 'error' || (authStorageRecovery && loginBinding.sessionId === accountScope)) && !hasLogout && <NativeAuthSurface open={loginOpen}><NativeLoginPanel
-    key={`${loginBinding.sessionId}:${sessionState}:${loginBinding.generation}`} hidden={!loginOpen} resumeToken={loginResume}
+    key={`${loginBinding.sessionId}:${sessionState}:${loginBinding.generation}`} hidden={!loginOpen} resumeToken={loginResume} intent={loginBinding.intent}
     onAuthenticated={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); authenticated(value) }}
     onSessionRecovered={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); sessionRecovered(value) }}
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
@@ -1848,7 +1852,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         onEditDraft={analysisJob === job ? () => { void editFromResult() } : undefined}
         editDisabled={busy || emailBusy || hasPending || hasLogout || phase !== 'ready' || resultStatus?.backtestId !== analysisJob.backtestId || !resultStatus.reportReady} />
     </>}
-    onLogin={() => { void openLogin() }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
+    onLogin={intent => { void openLogin(intent === 'signup' ? 'signup' : 'login') }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
     conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{nativeAppNotice(language, healthyAuthNotice.text)}</p>}
       {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>

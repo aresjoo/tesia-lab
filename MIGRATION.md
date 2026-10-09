@@ -2,6 +2,18 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 로그인·가입 의도 후속
+
+clean Web [701d0f5](https://github.com/beak1011/tesia-web/tree/701d0f54fc1c7c71660ea6635edb70b766767407)의 전체 React **2,411파일·34,626,989bytes**를 공식 sync/verify actual0으로 전달했다.
+snapshot `748730ddf2d3f7c239f806ca0027c9af528185e3c4c0c5da11354df96630a2c0`, source dirty0·제거경로0이다. 원본 root/main9fb·Node/Worker는 변경하지 않았다.
+홈·사이드바의 login/signup 의도를 기존 controller에 전달하고, retained pending의 epoch 이탈 시 의도 오염과 Trading Intro의 signup 연결을 교정했다.
+첫 모달 원문·CSS·Google/Apple/email API·승인 email code-only 예외는 그대로다. 최종 personal1 Opus5.5 C0H0M0 scopedGO, 묶음 타입/bundle actual0/26.881초이며 이후 reset 인과관계 시험1키만5.3초에 보강했다. 제품3SHA/bundle은 불변이다.
+AGY 읽기검수 뒤 원본 최종 override를 직접 대조해 broker connect/review와 전략 copy/watch/분석/가져오기/관리의 기능별 의도 차이를 추가 확인했다. 이는 다음 독립 수정 대상으로 기록했으며 이번 전달을 모든 버튼/전 화면의 원본 일치로 확대하지 않는다.
+로컬4176에서 확인 가능하다. 실제 고객 모델·OAuth·주문·운영 배포 성공은 이 Git 전달과 별개다.
+
+서버 오프라인 전달은 [Infra16048e4](https://github.com/beak1011/tesia-infra/tree/16048e4a8e89d46f6ac7b0f00da1ca0f8ca5ccc2)의 c055/source238/entrypoint11·26wheel/27entry pin 교정이다. 새 prepare/build/receive exit0·bundlea625d635·delivery577fb5f8·독립 C0H0M0 scopedGO를 확인했고 초기 pip 부재 실패 partial은 보존했다.
+SQL·Edge 후속과 실제 listener 관측 채널은 별도 소유로 진행 중이며 generic shared-profile 전달을 actual legacy 교체 승인으로 사용하지 않는다.
+
 ### 현재 — 원본 문구·설정 상태·dock 후속 전달
 
 clean Web [536957b](https://github.com/beak1011/tesia-web/tree/536957bc7e3e012811d0980cc921d27c4c6d84c6)의 전체 React **2,410파일·34,610,597bytes**를 공식 sync로 전달했다.
