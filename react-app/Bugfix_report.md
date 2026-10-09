@@ -1,5 +1,31 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 원본 확인·완료 동선과 연속 병렬 구현
+
+최종 후속 personal1 직접 Opus5.5는 frozen hook4b0736dd/font79351f55/configf6294ced/spec2의 입력불변·actual0·C0H0M0 scoped GO다(`web-closed-delta-opus.receipt.json`). L3의 pathname/query 가드 의견은 locator reader가 이미 정확경로/search를 제한해 false positive로 분류했고 나머지 Low의 clean callback 재조회·owner/remount·비동기 부재 단언·Safari/폰트축 한계를 보존한다. 판정 후 source 변경 없이 최신 compiled8b6ed786의 실제 `_StaticBundle`1440에서 canonical trade/reload·원본 heading custom glyph·496face/4weight·500/600/700 computedweight+CDP glyph·style/CSP/pageerror0을 추가 확인했다(receiptadd6c95b/종료8aad9bc7). diagnostic만 사용했고 타 OS raster/실 callback producer/OAuth/고객 AI/주문 성공이 아니다. 제품18파일261af1a는 실제 owning branch push했으며 이 추가 문서·Lab 전달은 Program Ledger가 소유한다.
+
+실제 한글 glyph의 별도 결함을 재현했다. 원본은 Google `Noto Sans KR`를 로드하지만 React import는 `Noto Sans KR Variable`만 등록해 현재 stack의 static 이름에 매칭되지 않았다. 원본 CDP는 custom NotoSansKR-Thin, 현재는 OS MalgunGothic이었다. 과거 'Noto Sans KR face가 없어야 함' assertion은 원본과 모순되어 교정했다. 원본 literal stack을 유지하며 pinned Fontsource5.3.0/Noto v39의124subset를 원본400/500/600/700 네 weight로 기계 매핑한 로컬496face로 공급한다. 같은124font파일을 재사용하며 패키지/lock/새font파일/외부font요청 추가0이다. 처음124wide-weight 후보의 한글probe RED1→portal source/service×320/1440의4PASS/33.5초, aliasSHA 추가 결속1PASS/3.8초는 과거 별도 실행이다. 앞4receipt의 untracked aliasSHA 누락 한계도 보존한다. 최종 원본4weight registry+실glyph scoped service1440 key는1PASS/4.5초다(`korean-original-four-weights.receipt.json`). 현재 aliasSHA79351f55/clientrefb05561f8/spec5d16e26a, literalstack/원문/배치 불변이다. 실제 compiled 이전bundle의 한국어 AI 트레이딩 heading에서도 custom Noto Sans KR glyph와 self-origin font를 확인했으며 새4weight source 결과와 동일 빌드라고 혼합하지 않는다.
+
+실제 서비스 CSP/경로 확인은 UI를 source로 읽는 검사와 분리했다. callback endpoint에서 거래 화면을 연 뒤 canonical `/#/trade`로 이동하도록 교정하고 해당 React key1PASS/2.8초를 확인했다. Backend 실제 `_StaticBundle` 로컬host의 전환·재로드·font파일 로드·style attribute 적용은 별도 scoped1440 검사로 CSP/page error0이다. synthetic session/CSRF GET만 사용했고 실제 OAuth·로그인 계정 producer·주문0이다. strict baseline CSP의 원 차단9건은 삭제하지 않고 Backend가 style attribute만 분리 허용하며 Web은 serviceOnly font-file emission으로 font-src self를 유지했다. 이전 bundle receipt의 config/package/artifact hash 누락과 locale 재실행 경로는 별도 후속으로 추적한다.
+
+그 후 locale 경합을 실제 service fixture에서 재현했다. callback locator를 StrictMode용으로 보존한 hook이 터미널 이동 이후 언어 변경 때 URL을 다시 `/auth/complete`로 쓰던 확정 RED를 교정했다. retained locator는 clean callback endpoint에 있을 때만 재설정에 사용하고 다른 route에서는 URL이나 소비된 locator를 건드리지 않는다. 같은 신규 key1PASS/3.2초로 en 변경·ko StorageEvent·canonical 경로 유지·transaction GET 총1·추가 mutation0을 확인했다. 최초 준비 하니스의 terminal data 과단언 실패는 원위치 보존한다. hook4b0736dd/spec4426aa1c는 기존1key와 별도 결과다.
+
+최종 타입+서비스 bundle은 actual0/23.172초이며 source/config/package/lock의 전후 불변 SHA를 결속했다. 별도 정적 산출 검사에서 pinned font124subset→496face의4weight 정확매핑, font-file231, CSS data-font URI0/미해석 package URL0, bundle digest8b6ed786을 확인했다. 이전 bundle 증거 누락을 덮어쓰지 않으며 실제 compiled host의 앞선 단일폭 확인을 최신 동일 산출물 시험이라고 보고하지 않는다. 후속 변경3파일 lint0은 별도 실행이다. 기존 Native chunk500k/향후configLoader 확장자 경고는 숨기지 않으며 전체 성능·Safari·접근성·3000명 검증을 대신하지 않는다.
+
+Opus의 guard 후속 HOLD(M1)는 성공DELETE 후 refresh 실패 때 stale행/재DELETE를 발견했다. 해당 key1 RED→교정PASS1/1.1초로 확인했고 즉시 confirmed목록에서 해제행을 제거해 local-only안내를 유지한다. 최종 focused 개인1 Opus5.5는 입력불변/C0H0M0/scopedGO다. fullhost·초대producer·모션·whole 미검증과 raw/delta 한계 Low를 유지하며 시험을 합산하지 않는다. 최종 scoped lint0·타입/servicebundle actual0/20.345초도 별도다. distCSS16개에서 미해석 `@fontsource-variable` URL0을 직접 확인했다.
+
+기존 거래소 spec의 영향2키도 확인했다. Q47를 옛 권한 문구/`연결 해제` 버튼으로 검사하고 은퇴한 owner 콜백의 재dispatch를 기대하던 RED4(웹·모바일)를 보존했다. 원본 `연결 끊기`/배지 합성0 및 owner 복귀 시 명시 load로 새 콜백만 사용하도록 oracle을 교정했다. 동일2키×2project는 후속4PASS/5.0초·제품 불변이다(`affected-exchange-original-fixed.receipt.json`). 원제품 안전조건을 완화해 PASS시키지 않았다.
+
+Q45는 명시적인 계정/초대 검증 presentation만 원본 2단계·스피너로 표시하고 generic OAuth pending에서 성공을 추정하지 않는다. Q47는 서버가 확인한 API12 연결 목록을 원본 행·터미널·추가연결·해제 버튼에 공급한다. 초대/구독 사실은 API에 없어 배지를 만들지 않는다. 실제 React hook의 내부 terminal navigation도 연결했고 주문 요청0이다. local-only 키삭제 안내를 보존했다. 다른 소유자/퇴역 요청, 중복 클릭, 모순·비마스킹 supplied fields를 방어한다.
+
+설정 뒤로가기 SVG만 원본16×16/stroke2로 복원했다. 최종 CSS20px와 다른 아이콘·원문·동선은 불변이다. AGY 공개 소스 좁은 조사 후 부모 onBack과 원본 최종 mobile override를 직접 확인해 두 Medium 의견을 false positive로 기각했다. 첫 AGY tool 호출은 command auto-denied이고 공개 소스 직접 제공 호출만 의견 증거다.
+
+검증은 서로 다른 실행이다: renderer 초기5PASS/3.2초, description 후속1PASS/1.9초, 설정320/390/1440의3PASS/3.5초, controller 초기5PASS/1.1초, React hook1PASS/2.6초. ROOT의 첫 catalog 1행/비규범 masked fixture와 fixture session 불일치 실패는 `.cache/pdf-parity-root/terminal-controller-*.{stdout,stderr}.raw`에 보존했다. 제품 조건을 완화하지 않고 fixture만 규범6provider/마스킹문법/기존fixture세션에 맞췄다.
+
+독립 personal1 Opus5.5는 최초 frozen범위 C0H0/scopedGO였다. 이후 확정 UX 결함을 바로 교정했다: 일시적인 세션 조회 실패가 연결 목록을 미연결 선택화면으로 바꾸던 문제, 이전 소유자의 add callback, 재연결 후 local-only 안내 잔존. session 변경은 이전 연결을 숨기며 transient failure는 마지막 확인 목록과 실패 안내를 유지한다. ESLint control-regex1은 동등 charCode 검사로 교정했고 규칙 disable0이다. 후속 직접 영향9PASS/3.5초와 scoped lint0은 `.cache/pdf-parity-root/continuation-front-{guard-malformed-delta,final-lint}.receipt.json`에 제품/시험 전후SHA로 결속했다. 최초 lintFAIL과 이전 모델 Medium/Low·coverage는 삭제하지 않는다. 원본 renderer·설정 시험의 writer raw/hash와 ROOT receipt는 증거 범위가 다르다. 전체 회귀·9월 재검증·730 백테스트 반복0이다.
+
+실제 Q45 intermediate producer·초대/referral verifier는 아직 API12에 없다. 원본의 클릭 플래그/합성UID/setTimeout을 실제 사실로 재사용하지 않는다. source7/provider6 및 별도 OAuth assembly는 유지할 연결 과제이며 UI 삭제로 덮지 않는다. 현재 Git 전달/운영 반영은 Program Ledger를 따르며 이 scoped 시험을 실제 OAuth·고객 AI·자동매매 완료로 보고하지 않는다.
+
 ## 현재 — 한국어 PDF 전수 목록화와 원본 연결 화면 복원 후보
 
 사용자 제공 `ko_web.pdf` 222쪽과 `ko_mobile.pdf` 248쪽을 직접 렌더링·시각검사하고 470행/86case 원장을 작성했다. PDF 캡처는 10월7일 과거 배포이며 현재 개발/운영과 구분한다. PDF 페이지 중 비교 가능180, 계정/fixture 미재현290을 누락 또는 PASS로 세지 않는다. `aresjoo/tesia-lab` 원격 main은 읽기 전용 확인에서 여전히 `9fbff821df62cad11d026022fc7628c7fcebc431`이며 이 원본을 기준으로 한다. 전체 모션·전문장·실계정 상태 일치는 아직 미검증이다.

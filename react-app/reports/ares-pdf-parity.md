@@ -40,7 +40,7 @@
 | 전략 복사, Q12-Q22(11), web 32-73 / mobile 45-81 | `ClientStrategySharing`, `ClientSharedStrategyDetail`, `ClientCopyTrading` | renderer 존재. 이번 작업본의 거래소 표시 교정이 실제 복사 권한을 만들지는 않음 | 실제 catalogue/account 연결, follow/copy 권한, 포지션·자금 이동 producer 미연결 | Q12/Q15/Q16 관측, Q13-Q14는 계정 차이, Q17-Q22는 `unavailable` |
 | 백테스트, Q23-Q27(5), web 74-83 / mobile 82-93 | `ClientCatalogueBacktest`, `ClientCommonBacktest`, `ClientBacktestWorkspace` | 기존 화면·fixture와 별도 sealed 730일 증거는 존재 | 현재 고객의 원본 전 과정 입력→실행→좋음/나쁨 결과→수정 흐름은 미인증. 전체 원본 매칭도 미인증 | Q23만 관측, Q24-Q27 `unavailable` |
 | AI 트레이딩, Q28-Q39(12), web 84-114 / mobile 94-125 | `ClientTradingIntro`, `ClientUserStrategy`, `ClientCopyDashboard`, 조건부 주문 표시층 | renderer 존재, 이번 PDF 교정으로 주문 권한·실계정 상태를 추가하지 않음 | 실제 연결 계정, 전략 상태, 포지션, 미체결 주문, 체결·청산 producer 미연결 | Q28만 관측, Q29-Q39 `unavailable` |
-| 거래소 연결·플랜, Q40-Q47(8), web 115-131 / mobile 126-141 | `ClientConnectionPlan`, `NativeConnectionOnboarding`, `exchange-connect/controller.ts` | source 순서/로고, 선택→권한 안내→승인·대기 renderer, provider명 pending title, 900px 배치·cyan 계열을 국소 복원. 미지원 거래소는 비활성 경계 | Q42/Q43 초대 URL·UID, Q45 계정/초대계정 2단계, Q46 billing, Q47 초대계정 분류·터미널/추가 연결 동선, 실제 OAuth/API-key·permission/account/provider 오류 연결은 잔여 | 8개 모두 `different-account`; 현재 renderer 존재만으로 재현/PASS 아님 |
+| 거래소 연결·플랜, Q40-Q47(8), web 115-131 / mobile 126-141 | `ClientConnectionPlan`, `NativeConnectionOnboarding`, `exchange-connect/controller.ts` | source 순서/로고, 선택→권한 안내→승인·대기, 명시 verification의 Q45 2단계와 API12 확인 목록의 Q47 터미널/추가 연결/해제 동선을 복원. 900px 배치·cyan 계열 유지, 미지원 거래소 비활성 | Q42/Q43 초대 URL·UID, Q45 실제 중간검증 producer, Q46 billing, Q47 실제 초대/구독 분류, 실제 OAuth/API-key·permission/account/provider 오류 연결은 잔여 | PDF 8개는 `different-account`; 현재 renderer·합성 API 시험을 동일 계정 전수 재현/PASS로 세지 않음 |
 | 설정, Q48-Q60(13), web 132-154 / mobile 142-160 | `ClientSettingsPage`와 Billing/Usage/Security/Notifications 하위 컴포넌트 | 동일 화면을 여는 UI fixture/recipe 존재. Q54는 billing+usage 두 표시 계약의 합성일 뿐 동일 계정 fixture가 아님 | 실제 identity, billing, usage ledger, 알림, 2FA·device producer 미연결 | 13개 모두 `different-account` |
 | 연구 기록, Q61-Q62(2), web 155-158 / mobile 161-164 | `ClientResearchHub`, `ClientResearchHistory`, `ClientResearchWorkspace` | 연구 헤더·Critic의 1.8초 pulse와 행의 원본 0.3초 fadeUp, 검정 배경·구분선·hover/focus 시각값 복원 | 빈 기록/기록 있음 UI fixture와 실제 계정 library·연구 이벤트 producer는 별개. 연구 전체 원본 매칭 미인증 | 2개 모두 `unavailable` |
 | 계정 프리셋, A01-A15(15), web 159-188 / mobile 165-186 | 설정·플랜·계정 표시 renderer 조합 | 상태별 renderer/fixture가 있어도 금융·권한 상태를 합성 성공으로 보지 않음 | guest/login/연결/거래량/card/subscription/2FA를 한 실제 계정에서 공급하는 producer 없음 | 15개 모두 `different-account` |
@@ -52,11 +52,17 @@
 
 ## 교차 계약 차이
 
+### 실제 한글 webfont 공급과 서비스 host
+
+원본 Google Noto Sans KR와 React Variable import의 family mismatch는 실제 CDP로 확인하고 원본 이름 그대로 로컬 공급했다. 동일한 CSS family 문자열만의 이전 검증은 실제 한글 패리티 증거가 아니며 기존 '원본 KR face 금지' oracle은 폐기했다. pinned124 subset의 family/URL mapping과 한글 custom glyph/별도 Bitcoin fallback을 검증했고 카피·배치·font stack은 변경하지 않았다. weight400~700 이산원본과 Variable범위 차이 등 국소 Low는 Bugfix에 남긴다.
+
+4176은 public Vite QA host이며 NativeServiceApp/실제 서버의 증거가 아니다. 후속 실제 `_StaticBundle` alias+servicebundle의 합성 authenticated GET 검증에서 NativeServiceApp/NativeTradingWorkspace 마운트는 확인했지만, 직접 auth-complete hash의 reload 경로와 CSP 스타일/font 차단은 별도 연결 결함 후보로 조사·교정한다. 이를 UI 누락이나 실제 로그인·provider 성공으로 처리하지 않는다.
+
 ### 거래소 확인·완료 상태의 확정 잔여
 
-현재 pending은 서버 OAuth transaction의 pending/processing을 보여주는 일반 대기 상태다.
-원본 Q45의 승인 후 `계정 확인`·`초대 계정 확인` 2단계와 같지 않다. Q47의
-초대계정 표기·터미널·추가 연결 버튼도 아직 원본 전체 동선과 일치하지 않는다.
+현재 generic pending은 서버 OAuth transaction의 pending/processing을 보여주는 일반 대기 상태다.
+후속 Q45 2단계 renderer는 명시 verification 입력에만 복원했고 API12는 그 중간 사실을 아직 공급하지 않는다.
+Q47 행·터미널·추가연결·해제는 실제 API12 connected 목록/callback에 연결했다. API12에 없는 초대/구독 표기는 합성하지 않는다.
 이는 fixture의 provider명 차이와 구분해야 할 복원 대상이다. 원본 renderer/문구/배치를
 먼저 계승하고, masked account·단계별 검증·초대 eligibility·terminal navigation의
 필요한 서버 계약을 붙여야 한다. generic pending을 검증 성공으로 간주하거나 서버 제약을
@@ -95,4 +101,4 @@ QR과 Q46 구독 결제 branch를 같은 누락으로 보는 가정은 기각한
 - 설정·연구 재현 경계: `.cache/pdf-source-parity/settings-research-reproducibility.tsv`
 - 현재 source 계약: `src/client-connection-plan.ts`, `src/exchange-connect/controller.ts`, `src/internal-poc/contracts/generated/api-v0.12/types.ts`, `src/client-download-config.ts`, `src/components/ClientDownloadStore.tsx`, `src/components/ClientConnectionPlan.tsx`
 
-이 문서 작성에서는 제품·시험·계약 source를 수정하거나 테스트·빌드·실 provider·credential·주문·배포를 실행하지 않았다.
+초기 PDF 목록 작성은 읽기 전용이었다. 후속 renderer/실제 연결 동선의 제품·표적시험 변경과 검증은 Bugfix_report 및 Program Ledger에서 별도로 추적한다. 실제 provider·credential·주문·배포 성공으로 승계하지 않는다.

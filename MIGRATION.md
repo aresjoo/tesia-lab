@@ -2,6 +2,25 @@
 
 ## 최신 전달·정적 운영 확인
 
+### 현재 — 원본 완료 동선·실제 글꼴·서비스 스타일 복원
+
+전체 React 출처는 Web [7c0188e](https://github.com/beak1011/tesia-web/tree/7c0188e696abddb532e7724af573ac8436d855f6)의 **2,407파일·34,559,759bytes**,
+snapshot `f7fee94467c4175a27ef91d47b57721c497ec06f0568d61dcae1cc4b904cbcbd`다.
+clean source에서 공식 sync/verify를 사용했고 dirty·제거경로0이다. 아래 b2c/2,402 전달은 직전 이력이다.
+
+Q45 명시 검증의2단계와 Q47 API12 확인 계정의 터미널·추가·해제 renderer를 원본으로 복원했다.
+초대/구독 권리를 합성하지 않으며 실제 verification/billing producer는 별도다. 설정 back SVG와
+원본 한글 family400/500/600/700을 복원하고, 해제 성공 뒤 stale행·터미널 뒤 locale 경로 회귀는
+해당 key만 RED→GREEN 수정했다. 최종 타입/bundle·산출font파일·개인1 Opus5.5 C0H0M0 scopedGO,
+같은 compiled bundle의1440px actual StaticBundle 경로/재로드/글꼴/style/CSP 오류0을 각각 기록했다.
+모든470쪽 상태·Safari·실계정·고객 모델·주문·운영 배포를 완료했다는 의미는 아니다.
+
+Backend [a71c97e](https://github.com/beak1011/tesia-backend/tree/a71c97e61cd06fe01efcbd116a60429b1630b612)는
+기존 원장을 보존하는 candidate migration/fsync/proof와 source232/CSP의 별도 통합이다.
+실제 패키지 검사가 발견한 optionalhosted import 문제는 후속에서 교정하고, 성공 없는 wheel을
+Infra에 전달하지 않는다. cutover 신규7반례와 release pin은 독립 담당이 진행한다.
+최신 구현·artifact·검수·운영 상태는 Program Ledger를 따르며, key 대기로 가능한 내부 작업을 멈추지 않는다.
+
 ### 한국어 PDF 전수 인계와 국소 원본 복원
 
 최신 전체 React snapshot은 Web [b2c88d3](https://github.com/beak1011/tesia-web/tree/b2c88d379d07494fc9ff3cd96f58eefbdb7bb62e)의

@@ -1,5 +1,5 @@
 import type { TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
-import type { NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
+import type { ConnectionListAccount, NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
 import type { ExchangeCopyKey } from './copy'
 
 type Client = Pick<TesiaExchangeConnectionsV12Client, 'catalog' | 'start' | 'transaction' | 'connections' | 'cancel' | 'disconnect'>
@@ -12,6 +12,8 @@ export type ExchangeControllerPorts = {
   currentSession: () => Promise<{ sessionId: string; state: string }>
   csrf: () => Promise<string>
   navigateToExchange: (authorizationUrl: string) => void
+  /** Internal navigation only; it grants neither trading nor plan eligibility. */
+  onOpenTerminal?: () => void | Promise<void>
   text: (key: ExchangeCopyKey) => string
   onChange: (presentation: NativeConnectionPresentation) => void
 }
@@ -47,7 +49,15 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     locked = true
     const epoch = generation
     try { await ensureSession(epoch); await operation(epoch) }
-    catch { if (alive(epoch)) showExchanges('ready', t('failed')) }
+    catch (error) {
+      if (alive(epoch)) {
+        if (error instanceof Error && error.message === 'SESSION_CHANGED') {
+          providers = []; connections = []; transaction = undefined
+          emit('error', { id: `retired:${++revision}`, kind: 'exchange', title: t('title'), description: t('failed'), exchanges: null })
+        } else if (connections.length) showConnected(t('failed'))
+        else showExchanges('ready', [t('failed'), disconnectNotice].filter(Boolean).join(' '))
+      }
+    }
     finally { locked = false }
   }
   const mutationToken = async (epoch: number) => {
@@ -89,7 +99,31 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
       }) : Promise.resolve(),
     })
   }
-  const showConnected = () => emit('ready', { id: `connections:${++revision}`, kind: 'complete', title: t('connectedTitle'), description: [t('connected'), disconnectNotice].filter(Boolean).join(' '),
+  const addExchange = () => guard(async () => { showExchanges() })
+  const disconnectAccount = (connectionId: string) => guard(async epoch => {
+    // Retired row callbacks cannot disconnect an account absent from this list.
+    if (!connections.some(connection => connection.connectionId === connectionId)) return
+    const result = await ports.client.disconnect(connectionId, await mutationToken(epoch))
+    if (!alive(epoch)) return
+    // DELETE is already confirmed: a failed refresh cannot restore this row.
+    connections = connections.filter(connection => connection.connectionId !== connectionId)
+    disconnectNotice = result.data.revocation === 'local_only' ? t('localRemoved') : ''
+    await loadConnections(epoch)
+    if (connections.length) showConnected(); else showExchanges('ready', disconnectNotice || t('intro'))
+  })
+  const showConnected = (description = t('connected')) => {
+    const accounts = connections.map(connection => ({
+      id: connection.connectionId, exchangeId: connection.exchangeId,
+      maskedAccountLabel: connection.maskedAccountLabel,
+      onDisconnect: () => disconnectAccount(connection.connectionId),
+    }))
+    if (!accounts.length) { showExchanges(); return }
+    emit('ready', { id: `connections:${++revision}`, kind: 'complete', title: t('connectedTitle'), description: [description, disconnectNotice].filter(Boolean).join(' '),
+    connectionList: {
+      accounts: accounts as [ConnectionListAccount, ...ConnectionListAccount[]],
+      onAddExchange: addExchange,
+      onOpenTerminal: ports.onOpenTerminal ? () => guard(async () => { await ports.onOpenTerminal!() }) : undefined,
+    },
     rows: connections.flatMap(connection => [
       { id: `${connection.connectionId}:exchange`, label: t('exchange'), value: names[connection.exchangeId] },
       { id: `${connection.connectionId}:account`, label: t('account'), value: connection.maskedAccountLabel },
@@ -98,18 +132,13 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
       { id: `${connection.connectionId}:withdrawal`, label: t('withdrawLabel'), value: connection.permissionsVerified ? t('withdrawal') : t('unverifiedWithdrawal') },
     ]),
     actions: [
-      { id: 'add', label: t('add'), primary: true, onRun: async () => { if (!locked && !disposed) showExchanges() } },
+      { id: 'add', label: t('add'), primary: true, onRun: addExchange },
       ...connections.map(connection => ({ id: connection.connectionId, label: `${names[connection.exchangeId]} · ${t('disconnect')}`,
-        onRun: () => guard(async epoch => {
-          const result = await ports.client.disconnect(connection.connectionId, await mutationToken(epoch))
-          if (!alive(epoch)) return
-          disconnectNotice = result.data.revocation === 'local_only' ? t('localRemoved') : ''
-          await loadConnections(epoch)
-          if (connections.length) showConnected(); else showExchanges('ready', disconnectNotice || t('intro'))
-        }),
+        onRun: () => disconnectAccount(connection.connectionId),
       })),
     ],
   })
+  }
   const loadConnections = async (epoch: number) => {
     const result = await ports.client.connections()
     await ensureSession(epoch)
@@ -125,6 +154,7 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     if (transaction.status === 'connected') {
       await loadConnections(epoch)
       if (!connections.some(connection => connection.connectionId === transaction?.connectionId && connection.exchangeId === transaction.exchangeId)) throw new Error('CONNECTION_NOT_CONFIRMED')
+      disconnectNotice = ''
       showConnected()
     } else if (['pending', 'processing'].includes(transaction.status)) showPending()
     else {

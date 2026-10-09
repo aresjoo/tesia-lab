@@ -22,6 +22,18 @@
 .native-exchange-source-parity .nsp-permissions b{display:block;margin-bottom:2px;color:#fff;font-size:16px;font-weight:600}
 .native-exchange-source-parity .nsp-pending-card{display:flex;align-items:center;gap:14px;min-height:94px;color:#cdcdcd;font-size:15px;line-height:1.5}
 .native-exchange-source-parity .nsp-spinner{display:inline-block;flex:none;width:18px;height:18px;border:2px solid #9a9a9a;border-top-color:#fff;border-radius:50%;animation:nsp-spin .8s linear infinite}
+.native-exchange-source-parity .nsp-verification-card{padding-top:18px;padding-bottom:14px}
+.native-exchange-source-parity .nsp-verification-account{display:flex;align-items:center;gap:10px;margin:0;font-size:16px;color:#ececec}
+.native-exchange-source-parity .nsp-verification-account img{border-radius:6px}
+.native-exchange-source-parity .nsp-verification-account b{color:#fff;font-weight:600}
+.native-exchange-source-parity .nsp-verification-steps{margin:16px 0 0;padding:0;border-top:1px solid rgba(255,255,255,.1);list-style:none}
+.native-exchange-source-parity .nsp-verification-steps li{display:grid;grid-template-columns:18px auto minmax(0,1fr);align-items:center;gap:10px;padding:12px 0;color:#cdcdcd;font-size:14px}
+.native-exchange-source-parity .nsp-verification-steps li b{color:#fff;font-weight:600}
+.native-exchange-source-parity .nsp-verification-steps li>span:last-child{text-align:right}
+.native-exchange-source-parity .nsp-step-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border:1.5px solid rgba(255,255,255,.18);border-radius:50%;color:#cdcdcd}
+.native-exchange-source-parity .nsp-step-icon i{display:block;width:14px;height:14px;border:1.7px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:nsp-verify-spin .7s linear infinite}
+.native-exchange-source-parity .nsp-verification-steps li.checking .nsp-step-icon{border-color:transparent}
+.native-exchange-source-parity .nsp-verification-steps li.verified .nsp-step-icon{border:0}
 .native-exchange-source-parity .nsp-actions{display:flex;align-items:center;justify-content:center;gap:6px 24px;flex-wrap:wrap}
 .native-exchange-source-parity .nsp-primary{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;height:auto;padding:12px 22px;border:0;border-radius:999px;background:#fff;color:#000;font-size:16px;font-weight:500;cursor:pointer}
 .native-exchange-source-parity .nsp-authorize{gap:8px}
@@ -36,12 +48,15 @@
 .native-exchange-source-parity .nsp-account{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:16px}
 .native-exchange-source-parity .nsp-account img{flex:none;border-radius:6px}
 .native-exchange-source-parity .nsp-account b{color:#fff;font-weight:600}
+.native-exchange-source-parity .nsp-plan{margin-left:auto;color:#9a9a9a;font-size:13.5px;font-style:normal}
 .native-exchange-source-parity .nsp-access{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-left:auto;color:#9a9a9a;font-size:13.5px}
 .native-exchange-source-parity .nsp-account em{font-style:normal}
 .native-exchange-source-parity .nsp-access small{font-size:12px}
 .native-exchange-source-parity .nsp-account .nsp-link{margin-left:4px}
+.native-exchange-source-parity .nsp-list-links{display:flex;align-items:baseline;gap:22px;margin:16px 2px 0}
 .native-exchange-source-parity .nsp-number{color:#cdcdcd;font-variant-numeric:tabular-nums}
 @keyframes nsp-spin{to{transform:rotate(360deg)}}
+@keyframes nsp-verify-spin{to{transform:rotate(360deg)}}
 @media(max-width:900px){
   .native-exchange-source-parity .nsp-page{padding:64px 16px 100px}
   .native-exchange-source-parity .nsp-head{align-items:flex-start;margin-bottom:6px}
@@ -52,4 +67,9 @@
   .native-exchange-source-parity .nsp-card{padding:20px 18px}
   .native-exchange-source-parity .nsp-access{align-items:flex-start;margin-left:32px;width:100%}
 }
-@media(prefers-reduced-motion:reduce){.native-exchange-source-parity *{transition:none!important}.native-exchange-source-parity .nsp-spinner{animation:none}}
+@media(max-width:600px){
+  .native-exchange-source-parity .nsp-verification-steps li{grid-template-columns:18px minmax(0,1fr)}
+  .native-exchange-source-parity .nsp-verification-steps li>span:last-child{grid-column:2;text-align:left}
+  .native-exchange-source-parity .nsp-plan{margin-left:0;width:100%;padding-left:32px}
+}
+@media(prefers-reduced-motion:reduce){.native-exchange-source-parity *{transition:none!important}.native-exchange-source-parity .nsp-spinner,.native-exchange-source-parity .nsp-step-icon i{animation:none}}

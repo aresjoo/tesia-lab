@@ -4,63 +4,17 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-최상위 제품 원칙과 현재 병렬 연결은 Program 0ad7dcfdd30818c7bfc8ea6a91a3f553acebd3ff의 계획§0/§16·AGENTS·Ledger가 소유한다. ares는 제품 본체이며 UI/UX/폰트/카피/SVG/모바일/다국어/흐름을 유지한다. backend가 원본 흐름에 맞는 서버계층을 구현하고 임의축소하지 않는다. 원본변경은 사전사용자승인, 승인된개선은 보존한다. 코드/시험/Git/배포/실고객성공을 구분하며 미재현은 미검증이다. LLM직접주문/출금권한은 금지하고 내부발행/Git으로운영활성화하지않는다.
+제품·구현 정본은 [Program 활성 진입점](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/README.md)과 연결된 계획§0/§16·WORK_LEDGER다. ares 원본 main은 제품 본체이며 UI·UX·카피·글꼴·SVG·모바일·다국어·흐름을 유지한다. 서버는 이 원본에 맞추고, 임의 변경은 사전 승인하며 승인된 개선은 보존한다.
 
-9월 수집 source는 Backend `aa85ae28a327a68a93cfeb052f0ddf9332756cf8`의 별도 `agent/backend/public-data-extension`이다. 실제 9월 89,371행·5개 JSON 배열 shard는 검증 완료된 비공개 데이터이며 migration/React/Git에 넣지 않는다. 사용자 최신 지시로 9월 재검증·기존730일 전체 백테스트·대용량 graph 반복0을 유지한다. 후속은 형식·누락·경계의 최소 연결 확인이고 새 기간 백테스트는 NOT_REQUESTED/완료 조건 제외다. 기존20ms·봉인·실패raw는 불변이고30ms는 새extension만 적용한다. 데이터 후보 source HOLD는 별도 동결 backlog이며 AI 연결의 선행 조건이 아니다. 정확한 상태는 `currentDataExtensionDevelopment`와 활성 Program Ledger를 따른다.
+이 브랜치는 원본과 React 이식본의 전달·검토용이며 main 교체·자동 운영 배포를 하지 않는다. [MIGRATION.md](MIGRATION.md)를 먼저 읽고, 최신 React 출처/전체 해시는 `migration-manifest.json`, 실제 실행·미검증·운영 여부는 `migration-verification.json`의 최상위 현재 항목을 따른다. 과거 candidate와 검수 원자료는 당시 범위이며 새 전체 승인으로 승계하지 않는다. 오래된 작업 예약·중복 현재 상태는 제거했고 필요한 과거 결정은 Git/정본의 Decision Log에서 확인한다.
 
-현재 내부 전달은 Backend13bd486의 설치본 CLI/factory 복구 시험과 Infra d9c76ac의 current223 상담26-wheel/27-entry release·receiver·managed adapter·선택적 CIDR renderer다. 구체적인 Git 경계·원 실패·범위별 시험·Opus 원판정/Low는 migration-verification.json의 currentConsultationOfflineDelivery와 owning Bugfix/Program Ledger를 따른다. 실제 오프라인 수신·설치·non-root 합성 설정 전달을 검증했지만 실제 Anthropic/OAuth/Bitget주문·운영 배포는 하지 않았다. renderer bootstrap metadata-first·기존 원장 갱신 도구·root 강등/분리UID/TLS·실 private config/Console credit와 전체 서비스 검증은 남는다. Webba2c8c8 React2393/snapshot e4e19e91·ares UI/카피/SVG/폰트/로그인 옵션·root Node/Worker·9월/730·타팀 WIP는 변경0이다. 기존 전체/설치11/HTTP2/9월/730을 반복하지 않았고 부분 PASS를 전체 완료로 합산하지 않는다.
+원본 루트의 바닐라 구조·실행 설명은 아래 규칙대로 유지한다. `react-app/`은 별도의 React package.json/AGENTS.md를 따른다. 스냅샷을 직접 수정하지 않고, 출처 담당이 clean Web에서 `tools/sync-migration.mjs`의 sync/verify로 전체 추적 코드·자산·SDK·시험을 전달한다. 이전 snapshot의 클라이언트 편집은 먼저 합의하며 덮어쓰지 않는다. 생성 SDK·계약과 타팀 WIP를 임의 수정하지 않는다.
 
-최신 전체 React snapshot은 Web863bc32의 2378파일/33,864,394bytes/SHA57a03350이다. 제품 source는 ec15de3 그대로이고 신규 realHTTP 브라우저 시험1/누적보고서만 후속이다. 실제 session/CSRF/HTTP/DB와 fake HTTPS provider의 두 키가2PASS/actual0/110.461초지만 고객 Anthropic/Bitget 주문·3,000명·운영 GO는 아니다. sourceDirtyFiles·삭제0/공식 sync·verify0, owning Backend62a8196/API14Contracts6350837과 정확 receipt는 migration-verification.json을 따른다. 원제품/root Node·Worker/운영13a·edge7e/기존FAIL/HOLD/730일을 보존하고 snapshot은 직접 수정하지 않는다. 자동 라우터·크레딧 총액/기한·API14 host/실provider·실주문은 미완료다. 아래 최신/현재 표현은 각 전달 당시 이력이다.
+코드·시험·Git·배포·실고객 성공을 구분한다. 미재현 화면은 기능 누락 또는 PASS가 아니다. synthetic model/auth/API와 데모 chart는 내부 검증 수단이며 실제 모델→저장/복구→로그인 이관→승인 전략/한도→거래소 주문·체결·중지·복구가 별도로 검증돼야 한다. LLM 직접 주문·출금 권한은 없고 Validator→Risk Engine→Order Intent만 실행 경로다. Secret/key/token/cookie는 문서·프롬프트·로그·Git에 넣지 않는다.
 
-인증 journal 정리 실패/CSRF 회전의 private 합성 후속은 원16+신규4=단일20 PASS이며 EMAIL/HANDOFF·실OAuth·Safari·전체 원본 배치/모션·전 문장·3,000명/전체서비스 검증은 남는다. 실제 운영 AI는 gateway 없는 offline compiler이고, 원Lab Anthropic API/SSE·개발 구독 CLI는 다른 경로다. OpenAI HTTP API 준비 코드도 운영 adapter에 연결된 상태가 아니다. 현재 상세 권위는 `candidate.currentPublicSvgEdgeIsolation` 및 [누적보고서](react-app/Bugfix_report.md), 이전 인증 배포는 `candidate.currentAuthRecoveryLowThreeCandidate`를 따른다. 기존 candidate/FAIL/HOLD/730일과 원본 source는 보존하고 부분 PASS를 전수·실서비스 완료로 합산하지 않는다. 아래 다른 source·최신·미배포 표현은 당시 이력이다.
+9월 공개 데이터는 기존 형식의 비공개89,371행이며 React/Git에 재배포하지 않는다. 검증된9월과730일 봉인 결과는 보존하고 재검증·전체 백테스트를 반복하지 않는다. 변경마다 해당 범위의 시험을 실행하며 불필요한 전체15k 재실행을 하지 않는다. 운영 활성화와 사용자 준비물은 Program§17.1의 한 양식과 실제 보안·통신·credential/credit 인수 증거를 따른다.
 
-후속 최신 React 출처는manifest의통합753e61a/2356파일입니다. 문장/CJK강조/이미지alt 후속 static46a62의related26/compiled3폭/lint/typebuild는별도검증이며새운영GO가아닙니다. 실제운영eeb61과새후속상태 `candidate.currentLocalizationSentencePolish`를구분하고원KO/SVG/흐름/수치/인증/계산/opaqueprose/artworkbytes·통합authFIX·원FAIL/730일을보존합니다. Root-owned snapshot은직접수정하지않고sync/verify만사용합니다. 아래3c88은직전전달입니다.
-
-최신 전체React는manifest의통합3c88b77/2352파일이며7언어 표시보완의상태는 `candidate.currentCompleteStaticLocalization`을 따릅니다. static eeb61d82는 실제teth.ai반영/public7언어×3폭검증완료이며통합authFIX는별도미배포입니다. 원KO/SVG/흐름/숫자/저장/API/userprose/주문권위는유지하고source-owned고정예시만현지화합니다. 문장/CJK강조/alt후속·원어민전문장감수/실서비스는남으므로무누락완료로확대하지않습니다. 원FAIL/이전candidate/root9fb/Node·Worker/730일·362검수입력을보존하고옛freeze재사용금지·snapshot직접수정금지/syncverify단일전달을유지합니다. 아래8d36/efe7는직전이력입니다.
-
-현재 전체스냅샷은manifest의통합efe7b23/2250파일이고 최신정적운영권위는 `candidate.currentHomeScrollbarRestoration`의별도static8d36이다. 공용문서scrollbar 숨김/소개fallback만복원했고public3폭3PASS·wheel/실키보드·정적bytes를확인했다. 인증/API/flags/카피/geometry는기존운영그대로이며통합authFIX는미배포다. Low6·실provider/서비스NO_GO·원FAIL/730일은보존하며아래1023/c34는직전인수기록이다. 스냅샷직접수정금지와sync/verify단일전달원칙을유지한다.
-
-현재 전달 출처는 manifest의 통합1023bce/전체2250파일이고 최신배포·검수권위는 `candidate.currentUserApprovedSourceUxTest`다. 실제운영sourcec34의UI-only 승격/public3폭확인을완료했으며static문서HEADac4f776과구분한다. 인증3파일/SDK/API/flags는운영b7그대로,통합authFIX는미배포다. 원본최종푸터의7localeKO/Powered by와Reactforeign6연구본문/KO거래소의차이는추가확정후속항목이다. 원56raw결속한계/준비FAIL/실서비스NO_GO·원자료는보존하고새whole·실providerGO로확대하지않는다. 아래currentRootCause/운영b7·미배포문구는각직전입력의역사다.
-
-최신 후보 상태는 `migration-verification.json`의 `candidate.currentRootCauseTransitionFixes`, 파일 출처는 `migration-manifest.json`을 따른다. 원9fb 최종 title/`skIntroCopy`/`applyLang` DOM과 실제 onclick/click 행동을 oracle로 삼는다. 긴 본문/kicker/bold/용어 UI는 원본 최종 제거 항목이므로 다시 넣지 않는다. 통합2cb3e9d의 상태교정과 staticc34a210/auth guardadd4d0f를 분리하며 운영b7은 미변경이다. retained 화면 상태 정리를 세션 채택·자동ACK로 승격하지 않고 accounts []를acReady로추정하지 않는다. 이전candidate/GO/HOLD·whole수치는 각당시범위며 새서비스승인이아니다. API/flags/권한변경0·실producer는별도선행이다.
-
-현재 운영 정적 출처는 `candidate.currentUserApprovedFooterTest`의 b7a7c58입니다. 협의된 한국어 푸터3값·Bitget 문구를 원9fb로 복원하고 실제 원격/public3폭을 확인했습니다. 다른6언어·인증/API/SDK/flags 변경0, 실제 provider/주문·법률·전체서비스 GO는 아닙니다. 아래5f/8a/7dd의 pending/HOLD는 이전 입력 이력입니다. 원본 ares UI·문구·SVG·대화/연구 UX가 기본이며 필요한 backend producer를 이에 맞춥니다. 실제 데이터·거래 의미론·승인/주문 권위는 공용 계약과 Program 정본을 따릅니다. 원문을 임의로 준비중 카피로 바꿔 연결 누락을 숨기지 않습니다.
-
-최신 React 전체 출처는 `migration-manifest.json`, 현재 검증·운영 상태는 `MIGRATION.md`와 `migration-verification.json`의 `candidate.currentStaticUiPromotion`을 따른다. 통합 인증 교정·원문 푸터는 스냅샷에 보존한다. 별도 UI26 정적 출처8a757a5를 운영에 실제 배포했으며 공개3폭/4문서/350자산을 확인했다. 기존 운영인증·푸터·API·flags는 유지한다. 고정 실디렉터리의 RENAME_EXCHANGE와 점검503/재시작을 사용하고 backup을 보존한다. 물리symlink/무중단/실provider/법률/전체서비스 승인으로 확대하지 않는다. 아래 pending/HOLD·운영7dd 표현은 이전 입력의 이력이다.
-
-최종 단일549spec/15,302키 전수는 **15,284PASS/1FAIL/원17SKIP/actual1**로 종료했다. 미실행·중단·retry·flaky·시험밖오류0이며 원 copy-trading 동적 import GC 실패와 raw/receipt/log는 불변으로 보존한다. 해당 시험만 초기 확보한 실제setter bridge의 동기반복호출으로 교정한 후 동일40키 전체가40PASS/actual0(67.9초)다. 원14제목·147단언·언어7·DOM/원장·요청·손익색·USDT 조건은 유지했다. 이40을 전수PASS로 합산하거나 GC 근본인과를 폐쇄하지 않는다. 후속 전체 실행0이다.
-
-ROOT PM의 unchanged-product 배치 증거 적용과 정본§0.4·REPOSITORY_GOVERNANCE의 장시간 검증 증거 결합 경계에 따라 역사 전수와 exact 영향40을 별도 결속한다. 이는 공용 서비스 합격 기준 변경이나 전체PASS가 아니다. 최고급 독립 모델·최종 gate·archive/권위CAS·공개smoke·원자적전환/롤백은 pending/HOLD다. Main 복원을 Native producer 연결 완료로 승계하지 않으며 Google·Apple·이메일 선택지, 운영teth.ai7dd·원root·운영9객체·DB/730일은 유지한다. 실provider/Reactprompt/서비스GO0이다.
-
-이전 source775d849·2,223파일·2216/314304·24spec878PASS의 인수는 `candidate.currentApprovedCopyRestoration`에 과거 입력 근거로 보존한다. Opus5.5의46원문CODE_GO와 신규시험 가상key2값의Sonnet5.5 CODE_GO도 별도이며 최신전체PASS로 승계하지 않는다. 원 연구 최종override를 우선하며 이미 맞는 search/noHistory/more는 바꾸지 않는다. 카피Golden은 원문fixture를 기대값으로 쓰고 제품사전을 재사용하지 않는다.
-
-부모source9d/2212/4f0의 단일539spec/15026은15009PASS/0FAIL/원17SKIP/미실행·중단·retry·flaky·시험밖오류0/actual0로 종료했다. 원17키exact·source/public불변·재시작0이며 최신314304 전체PASS로 승계하지 않는다. 기존68/26/390과 모든 원wholeFAIL·미확정GC인과를 합산/면제하지 않는다. 최종정적release검수·archive/권위CAS·공개smoke·원자적전환/롤백 전 배포HOLD이고 provider/Reactprompt/서비스GO는 별도다. Google추가를 이유로 Apple·이메일을 제거하거나 미등록방식을 실제성공으로 표시하지 않는다.
-
-현재 React 출처·전체 파일 해시·미커밋 포함 여부는 `migration-manifest.json`을, 최신 검사·실패 보존·배포 여부는 `MIGRATION.md`와 `migration-verification.json`의 candidate 상태를 따른다. 기존 운영7dd066f의 deployment 이력을 새 후보의 PASS로 승계하지 않는다. 이전 전체 FAIL·새 인증 소비 영향 PASS와 코드 검수를 구분하고 배포 HOLD를 유지한다. Google·Apple·이메일을 모두 보존하며 요청하지 않은 로그인 방식 제거·provider 활성화·root 프롬프트 통합을 하지 않는다. 부분PASS·모델 CODE_GO는 실공급자·전체서비스 승인이 아니다. 합성 fixture의 과거 secret scan 한정분류는 shared ignore/rule 변경이나 raw findings0가 아니다.
-
-이 브랜치는 클라이언트 원본과 React 이식본을 함께 검토하는 전달 브랜치다. 먼저 [MIGRATION.md](MIGRATION.md)를 읽는다. 아래의 바닐라 구조·실행·검증 설명은 루트 원본 앱에 적용되며, React 앱은 `react-app/`의 별도 package.json과 AGENTS.md를 따른다. 이 브랜치 자체는 원본 main을 교체하거나 자동 배포하지 않는다. 별도 승인된 정적 배포와 전체 서비스 Gate는 아래 검증 기록으로 구분한다.
-
-현재 `react-app/`은 병합본뿐 아니라 사용자 요청에 따라 Web PR54의 미병합 거래소 연결 후보도 포함한다. 미병합 여부와 코드 포함 여부를 혼동하지 않는다. 후속 전달은 현재 통합 후보의 구현·시험·생성 SDK를 함께 싣고 정확한 출처·검증·잔여를 기록한다. 후보 포함은 main 병합/계약 승인/실계정 성공/운영 flag 활성화 권한이 아니다.
-
-현재 snapshot에는 UI 탐색·접근성·로그인 선택지 보존에 이어 모바일 필터 시트·문서 복귀·catalogue 전체 D/EV 근거·마커·미니차트와 지연 장착 초점 교정도 포함한다. 관련 source engine·SDK·인증 권한은 바꾸지 않았으며 상세 원본 차이와 최소 보완은 MIGRATION 및 React DESIGN/Bugfix를 따른다. 전체 검사와 후속 영향 검사를 합산해 무결함으로 쓰지 않는다. 별도 승인된 teth.ai 정적 업데이트의 실행 여부는 `migration-verification.json`을 확인한다. 이를 클라이언트 main 병합·root server/Worker 배포·투자 프롬프트 draft 통합·실제 공급자 인증 완료로 해석하지 않는다. migration push 자체는 배포를 실행하지 않는다.
-
-후속 푸터7언어 본문·desktop authnav/globe 스크롤·원본22종 거래소 아이콘·내 거래소 필터 복원도 포함한다. unknown/로드실패 fallback과 요청 identity·eligible·권한 경계를 유지하며 ID 없는 NativeAccountPanels에는 추정 아이콘을 넣지 않았다. 최초 영향664개 중1건은 CDP Promise 수거 실패로 보존하고 test-only 수명을 교정했다. 최종 검증과 배포 기록은 같은 영수증에 누적한다. Google 추가를 이유로 Apple·이메일 UI를 제거하거나 미등록 방식을 실제 성공으로 표시하지 않는다.
-
-최신 후속은 연구 문서의 세션 메뉴와 인사이트 최종 원문 복원이다. 삭제 후 문서 캐시가 unmount에서 재생성되는 결함은 entry identity로 차단하며 영구 삭제-ID 목록은 만들지 않는다. guest320 제목 공간과 짧은 화면 본문은 조작부를 숨기지 않고 보완한다. 중간 통합의 실제 short-height 실패와 test-only 동결 위반을 보존하고 새 동결 검증만 최종 근거로 쓴다. API·실제 인증·투자 프롬프트·주문 권한 변경0이며 별도 공급자 상태를 원본 fixture 값으로 덮지 않는다.
-
-추가 후속은 로그인 연구 헤더의 짧은 높이·정상 unmount 직전 스크롤, 인사이트 복사 안내의 위치·수명·늦은 응답, 도움말 한국어 원문이다. caller가 없는 구형 연구 Plan/Run 두 export와 전용 CSS만 제거하고 실제 Critic/Log는 보존한다. 원본 자체 가격49/280의 충돌을 임의 해결하지 않으며 execCommand 호환성 잔여를 정책 승인으로 포장하지 않는다. 신규 범위의 exact 검증·미배포/배포 구분은 영수증을 따른다.
-
-후속 복사 호환성·terminal plan 복귀·native 제목저장 오류·reduced-motion FAQ 교정은 원본 계승과 React 연결 결함의 최소 보완이다. 새로운 디자인/카피·인증·API·가격·프로듀서를 만들지 않는다. 실제 클립보드 초점/선택의 안전성과 scope stale 거절을 유지하며, 코드GO와 배포/실공급자 성공을 분리한다. 앞 독립HOLD와 중간 중단을 지우지 않고 같은 정확한 입력의 최종 검사만 인수한다.
-
-| 추가 경로 | 역할 |
-| --- | --- |
-| `README.md`, `MIGRATION.md` | 전달 진입점과 원본 대비 구조/동작 대응·잔여·누적 갱신 절차 |
-| `react-app/` | 실제 로컬 React 통합 작업본의 추적 코드·자산·테스트 스냅샷. Node 22, npm ci, Vite 개발/빌드·lint·Playwright 사용 |
-| `migration-manifest.json` | 출처 SHA, 캡처 시각, 미커밋 파일, 전체 파일 해시 |
-| `migration-verification.json` | 해당 전달본에서 실행한 검사와 미검증 범위 |
-| `tools/sync-migration.mjs` | 출처를 수정하지 않는 명시적 동기화·해시 확인. 자동 push/배포 없음 |
-
-원본 `index.html`·`site-config.js`와 루트 정적 페이지는 이번 전달에서 변경하지 않는다. React의 원본 계승이 완벽하다는 가정으로 검토하지 말고, MIGRATION.md의 미완료 목록을 먼저 확인한다. React 파일을 직접 수정한 뒤 다시 동기화할 때는 먼저 출처 담당과 변경을 합의한다. 다른 팀 작업을 덮어쓰지 않는다. `.mailbox`는 이 원격 clone에 제공되지 않아 클라이언트 세션의 메시지 수신 여부를 확인할 수 없으며, 전달 문서가 상대의 실제 확인을 증명하지 않는다.
+Google·Apple·이메일 UI를 함께 유지하며 Google 추가를 이유로 다른 옵션을 지우지 않는다. 원문 푸터·Powered by·Bitget 카피·원본 로고/아이콘은 임의로 준비중 문구나 새 디자인으로 바꾸지 않는다. 원본 root index/site-config/Node/Worker는 이 전달에서 불변이다. 로컬 clone에 .mailbox가 없으면 상대의 실제 인계 확인을 추정하지 않고 전달 문서/Git과 팀 메시지로 경계를 명시한다.
 
 ## 작업 원칙
 

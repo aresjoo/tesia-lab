@@ -57,8 +57,17 @@ for (const width of [320, 1440]) for (const native of [false, true]) {
       node.append(probe)
     })
     await page.evaluate(() => document.fonts.load('16px "TETH Bitcoin Glyph"', '₿'))
-    // No web face may mask the user's installed source family for Hangul.
-    expect(await page.evaluate(() => [...document.fonts].some(face => face.family.replaceAll('"', '') === 'Noto Sans KR'))).toBe(false)
+    // The original explicitly supplies this Korean webfont. A family string
+    // alone must not pass while the browser silently uses an OS fallback.
+    await composer.evaluate(node => {
+      const probe = document.createElement('span')
+      probe.className = 'source-hangul-font-probe'
+      probe.textContent = '로그인 전략 확인'
+      node.append(probe)
+    })
+    await page.evaluate(() => document.fonts.load('16px "Noto Sans KR"', '로그인 전략 확인'))
+    expect(await page.evaluate(() => [...document.fonts].some(face => face.family.replaceAll('"', '').replaceAll("'", '') === 'Noto Sans KR' && face.status === 'loaded'))).toBe(true)
+    expect(await page.evaluate(() => [...new Set([...document.fonts].filter(face => face.family.replaceAll('"', '').replaceAll("'", '') === 'Noto Sans KR').map(face => face.weight))].sort())).toEqual(['400', '500', '600', '700'])
     const cdp = await page.context().newCDPSession(page)
     try {
       await cdp.send('DOM.enable')
@@ -67,8 +76,12 @@ for (const width of [320, 1440]) for (const native of [false, true]) {
       const node = await cdp.send('DOM.querySelector', { nodeId: document.root.nodeId, selector: '.source-bitcoin-font-probe' })
       const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId: node.nodeId })
       expect(fonts.some(face => face.isCustomFont && face.postScriptName === 'NotoSans-Regular' && face.glyphCount === 1)).toBe(true)
+      const hangul = await cdp.send('DOM.querySelector', { nodeId: document.root.nodeId, selector: '.source-hangul-font-probe' })
+      const rendered = await cdp.send('CSS.getPlatformFontsForNode', { nodeId: hangul.nodeId })
+      expect(rendered.fonts.some(face => face.isCustomFont && face.postScriptName.startsWith('NotoSansKR-') && face.glyphCount > 0)).toBe(true)
     } finally { await cdp.detach() }
     await page.locator('.source-bitcoin-font-probe').evaluate(node => node.remove())
+    await page.locator('.source-hangul-font-probe').evaluate(node => node.remove())
     await composer.locator('.client-expand').click()
     await expect(composer).toHaveCount(0)
     await expect(input).toHaveValue(draft)

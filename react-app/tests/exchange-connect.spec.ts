@@ -68,10 +68,12 @@ test('거래소 복귀 뒤 서버 결과를 확인하며 로컬 해제와 재연
   await page.goto('/auth/complete#exchange-transaction=' + txid)
   await expect(page.getByRole('heading', { name: '거래소 연결', exact: true })).toBeVisible()
   await expect(page.getByText('12****34', { exact: true })).toBeVisible()
-  await expect(page.getByText('요청하지 않음 · 실제 권한 확인 전', { exact: true })).toBeVisible()
+  // Original Q47 lists confirmed accounts, not synthesized permission/access badges.
+  await expect(page.locator('[data-stage=exchange-connection-list]')).toBeVisible()
+  await expect(page.locator('.nsp-plan')).toHaveCount(0)
   await expect(page.getByText('출금 권한 없음', { exact: true })).toHaveCount(0)
   expect(page.url()).not.toContain(txid)
-  await page.getByRole('button', { name: 'Bybit · 연결 해제' }).click()
+  await page.getByRole('button', { name: '연결 끊기', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Bybit', exact: true })).toBeVisible()
   await expect(page.getByText('TETH의 연결 정보를 삭제했습니다. 거래소에서도 해당 API 키를 삭제해주세요.', { exact: true })).toBeVisible()
   expect(deletes).toBe(1)
@@ -200,7 +202,13 @@ test('세션이 바뀌거나 화면이 닫힌 뒤 늦게 도착한 응답은 다
   release!(); await call
   expect(redirects).toBe(0)
   session = scope
-  const second = state.onChoose!('bybit')
+  // An old owner's choice must stay retired even when that session returns.
+  await state.onChoose!('bybit')
+  expect(starts).toBe(1)
+  await controller.load()
+  const restored = presentation!.state
+  if (restored.kind !== 'exchange') throw Error('Wrong restored stage')
+  const second = restored.onChoose!('bybit')
   await expect.poll(() => starts).toBe(2)
   controller.dispose(); release!(); await second
   expect(redirects).toBe(0)

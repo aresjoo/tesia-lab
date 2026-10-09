@@ -98,6 +98,12 @@ export const createInternalPocConfig = ({ serviceOnly = false }: { serviceOnly?:
     },
   }],
   build: {
+    // The service's CSP permits same-origin fonts, not data: fonts. Keep other
+    // asset decisions and public/POC builds unchanged; CSS URLs remain tracked
+    // by the backend's existing static-bundle closure.
+    assetsInlineLimit: serviceOnly
+      ? (filePath: string) => /\.(?:woff2?|ttf|otf)$/i.test(filePath) ? false : undefined
+      : undefined,
     outDir: serviceOnly ? 'dist-service' : 'dist-internal-poc',
     rollupOptions: {
       input: {

@@ -4,7 +4,7 @@ import { useConnectionLocaleText } from '../client-connection-locale-copy'
 import { planExchanges, type PlanExchange } from '../client-connection-plan'
 import { exchangeText } from '../exchange-connect/copy'
 import { connectionCopy, type ConnectionCopyKey } from './native-connection-copy'
-import { connectionPresentationBound, connectionSafeUrl, type ConnectionAction, type ConnectionGuide, type ConnectionRow, type NativeConnectionPresentation } from './native-connection-presentation'
+import { connectionPresentationBound, connectionSafeUrl, type ConnectionAction, type ConnectionGuide, type ConnectionList, type ConnectionRow, type ConnectionVerification, type NativeConnectionPresentation } from './native-connection-presentation'
 import '../client-delegation.css'
 import '../exchange-connect/source-parity.css'
 
@@ -22,6 +22,24 @@ function SourceLogo({ exchange, size = 30 }: { exchange: PlanExchange; size?: nu
   const label = planExchanges.find(([id]) => id === exchange)![1]
   return failed ? <span className="nsp-logo-fallback" style={{ width: size, height: size }} aria-hidden="true">{label.slice(0, 2)}</span>
     : <img src={`/client-broker-assets/app-${exchange}.${exchange === 'gate' ? 'jpg' : 'png'}`} width={size} height={size} alt="" onError={() => setFailed(true)} />
+}
+const verificationStatuses = new Set(['waiting', 'checking', 'verified'])
+const accountAccesses = new Set(['invitation', 'subscription', 'subscription-ended'])
+function safeMaskedAccountLabel(value: unknown): value is string | undefined {
+  return value === undefined || typeof value === 'string' && value.length <= 64 && ![...value].some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127) && /[•*]/.test(value)
+}
+function safeVerification(value: ConnectionVerification | undefined): value is ConnectionVerification {
+  if (!value || typeof value.exchangeId !== 'string' || !verificationStatuses.has(value.account) || !verificationStatuses.has(value.invitation) || !safeMaskedAccountLabel(value.maskedAccountLabel)) return false
+  return value.account === 'verified' || value.invitation === 'waiting'
+}
+function safeConnectionList(value: ConnectionList | undefined): value is ConnectionList {
+  if (!value || !Array.isArray(value.accounts) || !value.accounts.length || value.onOpenTerminal !== undefined && typeof value.onOpenTerminal !== 'function' || value.onAddExchange !== undefined && typeof value.onAddExchange !== 'function') return false
+  const ids = new Set<string>()
+  return value.accounts.every(account => {
+    if (!account || typeof account.id !== 'string' || !account.id.trim() || typeof account.exchangeId !== 'string' || ids.has(account.id) || account.onDisconnect !== undefined && typeof account.onDisconnect !== 'function' || account.access !== undefined && !accountAccesses.has(account.access) || !safeMaskedAccountLabel(account.maskedAccountLabel)) return false
+    ids.add(account.id)
+    return true
+  })
 }
 function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnboardingProps) {
   const { language } = useClientPreferences(), id = useId()
@@ -134,6 +152,22 @@ function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnbo
   if (value?.identity.startsWith('exchange:') && stage?.kind === 'exchange') {
     const choices = stage.exchanges ?? []
     const pendingStage = choices.length > 0 && choices.every(choice => choice.id === 'refresh' || choice.id === 'cancel')
+    const verificationExchange = safeVerification(stage.verification) && planExchanges.find(([exchange]) => exchange === stage.verification?.exchangeId)
+    if (pendingStage && safeVerification(stage.verification) && verificationExchange) {
+      const verification = stage.verification, exchange = verificationExchange[0], exchangeName = verificationExchange[1]
+      const steps = [
+        { id: 'account', label: c('계정 확인'), description: c('승인한 계정을 읽는 중'), status: verification.account },
+        { id: 'invitation', label: c('초대 계정 확인'), description: c('TETH 초대로 만든 계정인지'), status: verification.invitation },
+      ] as const
+      return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-verification" data-connection-identity={value.identity}>
+        <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('{0} 연결 확인 중', exchangeName)}</h1></header>
+          <p className="nsp-lead" aria-hidden="true">{c('승인한 계정을 확인하고 있습니다.')}</p>
+          <div className="nsp-card nsp-verification-card" role="status"><p className="nsp-verification-account"><SourceLogo exchange={exchange} size={22} /><b>{exchangeName}</b>{verification.maskedAccountLabel && <span className="nsp-number">{verification.maskedAccountLabel}</span>}</p><ul className="nsp-verification-steps">{steps.map(step => <li className={step.status} key={step.id}><span className="nsp-step-icon" aria-hidden="true">{step.status === 'checking' ? <i /> : step.status === 'verified' ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg> : null}</span><b>{step.label}</b><span>{step.status === 'verified' ? c('확인했습니다') : step.description}</span></li>)}</ul></div>
+          <div className="nsp-actions">{choices.map((choice, index) => <button type="button" className={index === 0 ? 'nsp-primary' : 'nsp-link'} key={choice.id} aria-busy={pendingId === `exchange:${choice.id}`} disabled={!ready || !stage.onChoose || pending} onClick={() => void run(`exchange:${choice.id}`, stage.onChoose ? () => stage.onChoose!(choice.id) : undefined)}>{pendingId === `exchange:${choice.id}` ? t('pending') : choice.title}</button>)}</div>
+          {notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+        </div>
+      </section>
+    }
     if (pendingStage) return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-pending" data-connection-identity={value.identity}>
       <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('{0} 연결 확인 중', stage.title ?? c('거래소'))}</h1></header>
         <p className="nsp-lead" aria-hidden="true">{stage.description}</p><div className="nsp-card nsp-pending-card" role="status"><i className="nsp-spinner" aria-hidden="true" /><span>{stage.description}</span></div>
@@ -168,6 +202,20 @@ function ConnectionScope({ presentation: value, onReturn }: NativeConnectionOnbo
     </section>
   }
   if (value?.identity.startsWith('exchange:') && stage?.kind === 'complete') {
+    const connectionList = safeConnectionList(stage.connectionList) ? stage.connectionList : undefined
+    const explicitAccounts = connectionList?.accounts.map(account => ({ account, exchange: planExchanges.find(([exchange]) => exchange === account.exchangeId)?.[0] }))
+    if (connectionList && explicitAccounts?.every(account => account.exchange)) {
+      const accessLabel = (access: 'invitation' | 'subscription' | 'subscription-ended') => access === 'invitation' ? c('TETH 초대 계정') : access === 'subscription' ? c('구독') : c('구독이 끝나 새 주문이 멈췄습니다')
+      return <section className="native-connection-onboarding native-exchange-source-parity" lang={language} data-stage="exchange-connection-list" data-connection-identity={value.identity}>
+        <div className="nsp-page"><header className="nsp-head"><button type="button" className="nsp-back" aria-label={t('back')} onClick={onReturn}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button><h1 ref={heading} tabIndex={-1}>{c('거래소 연결')}</h1></header>
+          <div className="nsp-card nsp-list">{explicitAccounts.map(({ account, exchange }) => <div className="nsp-account" key={account.id}><SourceLogo exchange={exchange!} size={22} /><b>{planExchanges.find(([id]) => id === exchange)![1]}</b>{account.maskedAccountLabel && <span className="nsp-number">{account.maskedAccountLabel}</span>}{account.access && <em className="nsp-plan">{accessLabel(account.access)}</em>}<button type="button" className="nsp-link" aria-busy={pendingId === `connection-list:disconnect:${account.id}`} disabled={!ready || !account.onDisconnect || pending} onClick={() => void run(`connection-list:disconnect:${account.id}`, account.onDisconnect)}>{c('연결 끊기')}</button></div>)}</div>
+          <button type="button" className="nsp-primary" aria-busy={pendingId === 'connection-list:terminal'} disabled={!ready || !connectionList.onOpenTerminal || pending} onClick={() => void run('connection-list:terminal', connectionList.onOpenTerminal)}>{pendingId === 'connection-list:terminal' ? t('pending') : c('터미널 열기')}</button>
+          <p className="nsp-list-links"><button type="button" className="nsp-link" aria-busy={pendingId === 'connection-list:add'} disabled={!ready || !connectionList.onAddExchange || pending} onClick={() => void run('connection-list:add', connectionList.onAddExchange)}>{pendingId === 'connection-list:add' ? t('pending') : c('거래소 더 연결하기')}</button></p>
+          {stage.description && <p className="nsp-feedback" role="status">{stage.description}</p>}
+          {notice && <p id={`${id}-notice`} className="nsp-feedback" role={notice === 'accepted' ? 'status' : 'alert'}>{t(notice)}</p>}
+        </div>
+      </section>
+    }
     const grouped = new Map<string, Record<string, string>>()
     stage.rows.forEach(row => { const split = row.id.lastIndexOf(':'); if (split < 1) return; const owner = row.id.slice(0, split), field = row.id.slice(split + 1); grouped.set(owner, { ...(grouped.get(owner) ?? {}), [field]: row.value }) })
     const sourceAccounts = [...grouped].map(([connectionId, fields]) => ({ connectionId, fields, exchange: planExchanges.find(([, label]) => label === fields.exchange)?.[0] }))

@@ -1,5 +1,11 @@
 # Web 작업 지침
 
+- 실제서비스 CSP 후속: ROOT는 `vite.internal-poc.config.ts`의 serviceOnly font emission을 소유한다. 폰트만 파일로 방출해 서버 font-src self를 유지하며 기존 public/POC asset 정책·UI·카피·권한은 바꾸지 않는다. Backend 정책 writer는 별도 integration WT이고 공용 API변경0이다.
+
+- 현재 ROOT 후속 단독 범위: 원본 한국어 webfont 공급·실 glyph 검증을 위한 `client-reference.css`, 필요시 로컬 font stylesheet, portal font spec 및 `exchange-connect.spec.ts` 영향2키. font family 문자열만의 PASS를 실제 한글 패리티로 취급하지 않는다. 다른 담당은 읽기 전용이고 공용 API·원문 카피·거래 권위는 불변이다.
+
+- 현재 병렬 소유: 거래소 renderer4와 설정 SVG는 동결·ROOT 반환됐다. `auth_http_continuity`는 신규 `tests/exchange-callback-navigation-locale.spec.ts`만 써서 terminal 이후 언어 변경의 경로 회귀를 재현한다. ROOT는 `exchange-connect/controller.ts`, `exchange-connect/use-exchange-connection.ts`, 신규 완료 목록 controller spec의 실제 연결 동선을 소유한다. 생성 SDK·API 계약·카피 사전은 변경하지 않는다. 서버가 확인한 연결 사실만 표시하며 초대/구독 권한을 추정하지 않는다.
+
 - 제품 본체는 ares 원본의 전체 UI·UX·사용 흐름이다. 일부 연결의 Mock은 내부 검증 수단이며 목표는 실제 AI·고객 계정 실거래다. 거래·백테스트의 실행 의미·권한은 서버 계약을 따른다.
 - 화면·문구·SVG·대화·연구 UX는 ares 원본을 React로 계승한다. 기존 backend의 제한에 맞춰 원본 UX를 축소하지 않고 필요한 producer를 연결한다. 실제 wire·검증·주문 권한은 별도 계약을 따른다.
 - 제품 정본은 `beak1011/tesia-program`, API/schema는 `beak1011/tesia-contracts`의 생성 client로만 소비한다.

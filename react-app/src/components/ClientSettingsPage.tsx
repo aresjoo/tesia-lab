@@ -55,7 +55,8 @@ const icons: Record<ClientSettingsTab | 'back' | 'brokers' | 'help', ReactNode> 
   help: <><circle cx="12" cy="12" r="9" /><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 1-1 1.700M12 17h.010" /></>,
 }
 function Icon({ name }: { name: keyof typeof icons }) {
-  return <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[name]}</svg>
+  const sourceBack = name === 'back'
+  return <svg width={sourceBack ? 16 : 17} height={sourceBack ? 16 : 17} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sourceBack ? 2 : 1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[name]}</svg>
 }
 function Row({ label, value, action, hint }: { label: string; value?: ReactNode; action?: ReactNode; hint?: string }) {
   return <div className="stg-r"><div className="k"><b>{label}</b>{hint && <span>{hint}</span>}</div><div className="v">{value}</div>{action && <div className="a">{action}</div>}</div>
