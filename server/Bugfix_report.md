@@ -4,6 +4,8 @@
 
 registry1.42 exact4 정책 export는 owner-private/create-only, NFC·32,768bytes 경계를 유지한다. 제품 mode `settings/dialogue/judgment/report` 4개는 비용 tier `cheap/standard/deep` 3개와 별개이며, export manifest는 동적 선호와 provider/서비스 연결을 모두 false로 남긴다. 관련 국소6시험은6PASS이고 전체1,412·UI·모델 호출·운영 작업은 수행하지 않았다.
 
+Opus5.5의 frozen source 판정은 C0/H0/M0/L4다. text/SHA의 runtime 검사는 import registry 자기 일치이고 독립 고정값은 test golden이 소유하며, `sourceHashes`는 export-time disk reference로 loaded-module provenance가 아니다. manifest 부재는 미완료이고 존재해도 consumer 재해시가 필수다. 원자적 완료 경계는 manifest 게시뿐이며 `mkdir` 후 실패한 부분 directory는 자동 cleanup·same-path retry하지 않는다. 1.42는 1.24와 분리된 branch/new destination으로 전달한다.
+
 ## 동일 조건 비교 — 개선점 관측, 모델 품질 NO_GO 유지
 
 [원문과 독립 검수](qa/prompt-comparison.json)는 원9fb와 retry/번역 교정 후보417767c의 7사례·2arm·18실제 응답이다. personal(1) Opus5.5/high/tools0·동일 JSON 이력 scaffold·고정 시각·각 arm 실제 assistant 이력으로 비교했으며 actual0/18완료/실제모델명 전부일치·제품6SHA 불변이다. 독립 Opus5.5는 버전명을 숨긴 X/Y 검수에서 개선본6선호/1동률이었지만 1회 소규모 공개 비교이므로 전체 우월성·성공률·실SDK/API 가용성·서비스GO 근거가 아니다.

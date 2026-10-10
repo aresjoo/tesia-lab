@@ -20,7 +20,9 @@
 | `index.mjs`, `worker.mjs`, `investment-tool-policy.mjs` | 기존 Anthropic SDK/SSE·읽기 전용 조회, retry0·최대6회 정상 continuation |
 | `tools/export-consultation-policies.mjs` | registry1.42의 제품 mode4 정책을 owner-private 새 디렉터리에 create-only로 준비. cheap/standard/deep 비용 tier3 라우팅·설정·credential은 내보내지 않음 |
 
-Exporter는 정책별 exact text/ID/SHA, NFC, 최대32,768 UTF-8 bytes와 디렉터리0700/파일0600을 검증한다. 결과 manifest도 동적 선호·output gate·표시 parser·provider·서비스 활성화가 모두 미연결임을 명시하며, 이 도구 실행만으로 실제 상담 소비가 완료되지 않는다.
+Exporter의 text/SHA 검사는 import된 `PROMPTS`의 자기 일치이며 독립 release anchor는 export spec의 golden bytes/SHA가 검증한다. manifest의 `sourceHashes`는 export 시점 디스크 reference일 뿐 이미 load된 module provenance 증거가 아니다. manifest가 없으면 미완료이고, 있어도 consumer가 정책 파일을 다시 hash해야 한다. 원자성은 디렉터리 전체가 아니라 완료 manifest 게시에만 적용된다.
+
+`mkdir` 뒤 실패하면 부분 디렉터리를 자동 삭제하지 않고 같은 path 재시도도 create-only 규칙으로 거절하므로, 상태를 확인한 뒤 새 owner-private destination을 사용한다. 이 1.42 export branch는 기존 1.24 전달과 분리되며 같은 위치를 덮어쓰지 않는다. manifest는 동적 선호·output gate·표시 parser·provider·서비스 활성화를 모두 미연결로 기록한다.
 
 입력은 최대16개, 개별16,000자·전체64,000자·context16,000자이며 마지막 실제 user를 보존한다. browser system은 미확인 user-role 데이터로 감싸며 역할·승인·시장값을 권위로 받지 않는다. assistant 발화도 사용자 승인이나 사실 근거가 아니다. `plain:true`는 원 BT_SYS_J/R의 정확한 digest 두 개만 스타일 선택에 사용하고 unknown plain/think:true는422로 거절한다.
 
