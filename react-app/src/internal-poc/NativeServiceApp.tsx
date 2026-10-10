@@ -4,6 +4,7 @@ import { nativeAppNotice, nativeAppUiText } from './native-app-ui-copy'
 import { nativeShellText } from './native-shell-copy'
 import { useExchangeConnectionPresentation, useBitgetCanaryPresentation } from '../exchange-connect/use-exchange-connection'
 import { readExchangeTransactionLocator } from '../exchange-connect/controller'
+import { accountPresentationBound } from './native-account-presentation'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
 import { nativeExecutionUiText } from './native-execution-ui-copy'
@@ -1956,7 +1957,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={returnAuthSurface || authSurface}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
     conversationLibrary={presentations.conversationLibrary} insightPresentation={presentations.insightPresentation}
-    sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} onConnectionClose={bitgetCanary?.close} brokerPresentation={presentations.brokerPresentation ?? bitgetCanary?.broker} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation ?? bitgetCanary?.connection}
+    sharingPresentation={presentations.sharingPresentation} accountPresentation={accountPresentationBound(presentations.accountPresentation, accountScope) ? presentations.accountPresentation : bitgetCanary?.account} feedbackPresentation={presentations.feedbackPresentation} onConnectionClose={bitgetCanary?.close} brokerPresentation={presentations.brokerPresentation ?? bitgetCanary?.broker} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation ?? bitgetCanary?.connection}
     researchPresentation={strategyDocument && presentations.researchPresentation?.scope === accountScope && presentations.researchPresentation.data.scopeId === strategyDocument.identity ? presentations.researchPresentation : strategyDocument && accountScope ? { scope: accountScope, data: {
       scopeId: strategyDocument.identity,
       entries: researchEntries,

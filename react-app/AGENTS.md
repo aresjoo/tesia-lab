@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+- Bitget 연결→터미널 후속 source4/spec1는 동결·반환했다. ROOT가 단독 작성한 `controller.ts`, `use-exchange-connection.ts`, 신규 `account-presentation.ts`, `NativeServiceApp.tsx`는 기존 SDK/owner가 확인한 연결 metadata·권한만 공급하고 실제 ledger6/strategies는null로 둔다. modal/navigation·DELETE재열기/locale·cataloggate·local_only고지 경합을 교정했으며 Webbaa581a의 cleanbuild17.577초와 마지막 Opus5.5 microdelta C0H0M0/codeGo를 앞HOLD와구분한다. 후속spec의settle/명시선택2PASS는제품변경0이다. ROOT는 문서/Git/migration전달만 소유한다. 원본디자인/카피/flags·실키/DB/운영/주문변경0, 실제계좌조회producer는미구현이며metadata를잔고/포지션/전략/체결 또는0으로합성금지다. 추가source/계약/backend/운영쓰기는명시경계배정후에만진행하며국소시험/Git/배포/실고객성공을구분한다.
+
 - 운영 보존 최종 delta writer는 모두 반환했다. ROOT는 Opus가 지적한 초기 catalog/close epoch와 자연 복귀 recheck 조건의 최소 교정 및 신규1/2키 인수를 마쳤다. 최종 source를 고정한 뒤 정확 flags build·delta 독립 검수·실제 운영 적용을 소유한다. 코드/국소시험/Git/운영/실provider 성공을 구분하며 새 디자인·copy·whole/9월/730 반복0이다. 구버전 탭은 새로고침이 필요할 수 있고 기존 로그인·거래소 저장 데이터는 보존한다.
 
 - 운영 보존 후속 writer는 모두 다시 동결·반환했다. ROOT ClientServiceExperience의 Bitget canary authorize bridge·owner/browse/plan ref와 NativeLoginPanel의 locator 없는 명시 session-only 재확인을 최소 교정했다. source8/spec3는 타입·지정 lint 및 leaf/통합 국소 결과에 결속하며 새 frozen source의 실제 build/독립 검수/Git/migration/운영은 ROOT만 수행한다. 추가 UI/copy/CSS/SVG 변경0, 전체·9월·730 반복0이다. auth/Bitget 각 시험의 최초 하니스 실패와 미검증 익명 가입→AUTH continuation/실 provider는 Bugfix에 보존한다.

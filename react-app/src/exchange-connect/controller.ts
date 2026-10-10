@@ -1,6 +1,7 @@
 import type { TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
 import type { ConnectionListAccount, NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
 import type { ExchangeCopyKey } from './copy'
+import { ApiV12Error } from '../internal-poc/contracts/generated/api-v0.12/client.js'
 
 type Client = Pick<TesiaExchangeConnectionsV12Client, 'catalog' | 'start' | 'transaction' | 'connections' | 'cancel' | 'disconnect'>
 type Provider = Awaited<ReturnType<Client['catalog']>>['data']['providers'][number]
@@ -16,6 +17,10 @@ export type ExchangeControllerPorts = {
   onOpenTerminal?: () => void | Promise<void>
   text: (key: ExchangeCopyKey) => string
   onChange: (presentation: NativeConnectionPresentation) => void
+  /** Validated, owner-confirmed connection metadata only; never account balances. */
+  onConnections?: (connections: readonly Connection[] | null) => void
+  /** Confirmed mutation invalidation survives visible controller disposal. */
+  onConnectionsChanged?: (connectionId: string, localRemovalOnly: boolean) => void
   automaticPolling?: boolean
   allowedExchangeId?: Provider['exchangeId']
 }
@@ -56,11 +61,13 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     catch (error) {
       stopPolling()
       if (alive(epoch)) {
-        if (error instanceof Error && error.message === 'SESSION_CHANGED') {
+        if (error instanceof Error && error.message === 'SESSION_CHANGED'
+          || error instanceof ApiV12Error && [401, 403].includes(error.status)) {
           providers = []; connections = []; transaction = undefined
+          ports.onConnections?.(null)
           emit('error', { id: `retired:${++revision}`, kind: 'exchange', title: t('title'), description: t('failed'), exchanges: null })
         } else if (connections.length) showConnected(t('failed'))
-        else showExchanges('ready', [t('failed'), disconnectNotice].filter(Boolean).join(' '))
+        else showExchanges('error', [t('failed'), disconnectNotice].filter(Boolean).join(' '))
       }
     }
     finally { locked = false }
@@ -126,9 +133,13 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     // Retired row callbacks cannot disconnect an account absent from this list.
     if (!connections.some(connection => connection.connectionId === connectionId)) return
     const result = await ports.client.disconnect(connectionId, await mutationToken(epoch))
+    // Closing/navigation cancels observation, never the server mutation. Notify
+    // the owner-data supplier even if this visible controller was retired.
+    ports.onConnectionsChanged?.(connectionId, result.data.revocation === 'local_only')
     if (!alive(epoch)) return
     // DELETE is already confirmed: a failed refresh cannot restore this row.
     connections = connections.filter(connection => connection.connectionId !== connectionId)
+    ports.onConnections?.(connections)
     disconnectNotice = result.data.revocation === 'local_only' ? t('localRemoved') : ''
     await loadConnections(epoch)
     if (connections.length) showConnected(); else showExchanges('ready', disconnectNotice || t('intro'))
@@ -164,8 +175,11 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
   const loadConnections = async (epoch: number) => {
     const result = await ports.client.connections()
     await ensureSession(epoch)
-    if (alive(epoch)) connections = result.data.connections.filter(connection => connection.status === 'connected'
-      && (!ports.allowedExchangeId || connection.exchangeId === ports.allowedExchangeId))
+    if (alive(epoch)) {
+      connections = result.data.connections.filter(connection => connection.status === 'connected'
+        && (!ports.allowedExchangeId || connection.exchangeId === ports.allowedExchangeId))
+      ports.onConnections?.(connections)
+    }
   }
   const observeTransaction = async (id: string, epoch: number) => {
     if (!ID.test(id)) throw new Error('INVALID_LOCATOR')
@@ -203,14 +217,16 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     connect,
     hasObservedTransaction: (id: string) => transaction?.transactionId === id,
     stopPolling: () => { stopPolling(); generation++ },
-    load: (locator: string | null = null) => guard(async epoch => {
+    load: (locator: string | null = null, localRemovalOnly = false) => guard(async epoch => {
+      if (localRemovalOnly) disconnectNotice = t('localRemoved')
       emit('loading', { id: `loading:${++revision}`, kind: 'exchange', title: t('title'), exchanges: null })
       const catalog = await ports.client.catalog()
       await ensureSession(epoch)
       if (!alive(epoch)) return
       providers = catalog.data.providers.filter(provider => !ports.allowedExchangeId || provider.exchangeId === ports.allowedExchangeId)
+      await loadConnections(epoch)
       if (locator) await observeTransaction(locator, epoch)
-      else { await loadConnections(epoch); if (connections.length) showConnected(); else showExchanges() }
+      else { if (connections.length) showConnected(); else showExchanges('ready', disconnectNotice || t('intro')) }
     }),
     dispose: () => { stopPolling(); disposed = true; generation++; providers = []; connections = []; transaction = undefined },
   }

@@ -3,13 +3,15 @@ import { useClientPreferences } from '../client-preferences'
 import { createSdk, TesiaApiClient } from '../internal-poc/contracts/generated/api-v0.1/index.js'
 import { SameOriginApiTransport } from '../internal-poc/api-adapter'
 import type { NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
-import { TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
+import { ApiV12Error, TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
 import { createExchangeConnectionsTransport } from './transport'
 import { createExchangeConnectionController, readExchangeTransactionLocator } from './controller'
 import { exchangeText } from './copy'
 import { pushSiteLocation } from '../site-navigation'
 import { CLIENT_BROKERS } from '../client-broker-fixtures'
 import type { BrokerServicePresentation } from '../client-broker-presentation'
+import type { NativeAccountPresentation } from '../internal-poc/native-account-presentation'
+import { connectedAccountPresentation } from './account-presentation'
 
 /** Explicit service opt-in. An anonymous session never starts exchange OAuth. */
 export function useExchangeConnectionPresentation(scope: string | null, authenticated: boolean, enabled: boolean) {
@@ -60,12 +62,16 @@ export function useExchangeConnectionPresentation(scope: string | null, authenti
  * action. Preparatory broker metadata is not live fees, reviews or permissions. */
 export function useBitgetCanaryPresentation(scope: string | null, authenticated: boolean, enabled = false) {
   const { language } = useClientPreferences()
-  const [state, setState] = useState<{ scope: string; broker?: BrokerServicePresentation; connection?: NativeConnectionPresentation & { requestId: string }; close: () => void }>()
+  const [state, setState] = useState<{ scope: string; broker?: BrokerServicePresentation; account?: NativeAccountPresentation; connection?: NativeConnectionPresentation & { requestId: string }; close: () => void }>()
   const [locator] = useState(() => readExchangeTransactionLocator(window.location.href))
   const callbackIntent = useRef<{ owner: string | null; replayOpen: boolean }>({ owner: null, replayOpen: Boolean(locator) })
+  // A confirmed mutation belongs to the owner, not the modal or locale effect
+  // that initiated it. The current owner receives invalidation after retirement.
+  const connectionChanges = useRef<{ scope: string | null; localRemovalOnly?: boolean; notify?: (id: string, localRemovalOnly: boolean) => void }>({ scope: null })
   useEffect(() => {
     if (!enabled || !scope || !authenticated) return
-    let retired = false, requested = false, presentationRequest = 0, actionEpoch = 0, busy = false
+    let retired = false, unavailable = false, catalogConfirmed = false, requested = false, presentationRequest = 0, actionEpoch = 0, accountRead = 0, busy = false
+    if (connectionChanges.current.scope !== scope) connectionChanges.current = { scope }
     const currentUrl = new URL(window.location.href), intent = callbackIntent.current
     const currentLocator = readExchangeTransactionLocator(currentUrl.href)
     const callbackRoute = locator && currentUrl.pathname === '/auth/complete' && !currentUrl.search
@@ -79,24 +85,62 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     const session = createSdk(new TesiaApiClient(new SameOriginApiTransport())).session
     const client = new TesiaExchangeConnectionsV12Client(createExchangeConnectionsTransport())
     const currentSession = async () => {
-      const result = await session.current()
-      if (retired || result.body.meta.resourceRevision !== result.body.data.revision
-        || result.body.data.sessionId !== scope || result.body.data.state !== 'AUTHENTICATED') throw new Error('SESSION_CHANGED')
-      return result.body.data
+      try {
+        const result = await session.current()
+        if (retired || result.body.meta.resourceRevision !== result.body.data.revision
+          || result.body.data.sessionId !== scope || result.body.data.state !== 'AUTHENTICATED') throw new Error('SESSION_CHANGED')
+        return result.body.data
+      } catch (error) {
+        if (!retired) { account = undefined; accountRead++; publish() }
+        throw error
+      }
     }
     let controller: ReturnType<typeof createExchangeConnectionController> | undefined
     let connection: NativeConnectionPresentation | undefined
     let broker: BrokerServicePresentation | undefined
+    let account: NativeAccountPresentation | undefined
+    let confirmedConnections: Awaited<ReturnType<typeof client.connections>>['data']['connections'] | null = null
+    const setAccounts = (connections: Awaited<ReturnType<typeof client.connections>>['data']['connections'] | null) => {
+      accountRead++
+      confirmedConnections = connections
+      account = connections === null ? undefined : connectedAccountPresentation(scope, [...connections],
+        key => exchangeText(language, key), async () => {
+          const current = broker?.catalog?.find(item => item.broker.id === 'bitget')?.connectionState
+          if (retired || !broker?.actions?.onConnect || !current) throw new Error('PROVIDER_UNAVAILABLE')
+          await broker.actions.onConnect('bitget', current)
+        })
+      if (broker?.catalog) broker = { ...broker, catalog: broker.catalog.map(item => item.broker.id === 'bitget'
+        ? { ...item, connectionState: account?.accounts?.length ? 'CONNECTED' : 'NEEDS_LINK' } : item) }
+      publish()
+    }
     const publish = () => {
-      if (!retired) setState({ scope, broker, ...(requested && connection ? { connection: { ...connection,
+      if (!retired && !unavailable) setState({ scope, broker, account, ...(requested && connection ? { connection: { ...connection,
         requestId: `${connection.identity}:presentation:${presentationRequest}` } } : {}), close })
     }
     const close = () => {
+      if (retired || unavailable) return
       requested = false; actionEpoch++; busy = false
       // Closing is not cancellation. Retire every captured action/read so an
       // in-flight result cannot reopen the closed surface or mutate later.
       controller?.dispose(); controller = undefined
       publish()
+      // A finite read survives visible retirement. It neither polls nor mutates
+      // the provider, and cannot replace a newer read or another owner's data.
+      void refreshAccounts()
+    }
+    const refreshAccounts = async () => {
+      if (retired || unavailable || !catalogConfirmed) return
+      const request = ++accountRead
+      try {
+        await currentSession()
+        const result = await client.connections()
+        await currentSession()
+        if (!retired && request === accountRead) setAccounts(result.data.connections)
+      } catch (error) {
+        // A transport outage does not revoke previously verified metadata.
+        // Invalid/unauthorized responses do; unknown financial data stays null.
+        if (!retired && request === accountRead && !(error instanceof ApiV12Error && error.code === 'TRANSPORT_FAILED')) setAccounts(null)
+      }
     }
     const allowed = async () => {
       await currentSession()
@@ -110,30 +154,53 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         navigateToExchange: href => window.location.assign(href),
         onOpenTerminal: () => pushSiteLocation('/#/trade'),
         text: key => exchangeText(language, key), automaticPolling: true, allowedExchangeId: 'bitget',
+        onConnections: connections => {
+          if (retired || controller !== value) return
+          setAccounts(connections)
+        },
+        onConnectionsChanged: (id, localRemovalOnly) => {
+          if (connectionChanges.current.scope === scope) {
+            connectionChanges.current.localRemovalOnly = localRemovalOnly
+            connectionChanges.current.notify?.(id, localRemovalOnly)
+          }
+        },
         onChange: next => {
           if (retired || controller !== value) return
           connection = next
           if (broker?.catalog && next.status !== 'loading') broker = { ...broker,
             catalog: broker.catalog.map(item => item.broker.id === 'bitget' ? { ...item,
-              connectionState: next.status === 'ready' && next.state.kind === 'complete' ? 'CONNECTED' : 'NEEDS_LINK' } : item) }
+              connectionState: account?.accounts?.length ? 'CONNECTED' : 'NEEDS_LINK' } : item) }
           publish()
         },
       })
       return value
     }
+    const invalidateConnection = (id: string, localRemovalOnly: boolean) => {
+      if (retired || unavailable) return
+      // Dispose all readers that could have captured a pre-DELETE snapshot,
+      // including a newly reopened modal. Reads after this point see the commit.
+      controller?.dispose(); controller = undefined
+      actionEpoch++; busy = false
+      connection = undefined
+      setAccounts(confirmedConnections?.filter(item => item.connectionId !== id) ?? null)
+      if (requested) { controller = createController(); void controller.load(null, localRemovalOnly) }
+      else void refreshAccounts()
+    }
+    connectionChanges.current.notify = invalidateConnection
     void (async () => {
       try {
         await allowed()
         // Presentation close retires transaction actions, not this owner's
         // background catalogue. A route transition must not erase entry.
         if (retired) return
+        catalogConfirmed = true
         controller = createController()
-        await controller.load(callbackLocator)
+        await controller.load(requested ? callbackLocator : null, connectionChanges.current.localRemovalOnly)
         if (retired) return
         broker = { scope, identity: `bitget-canary:${scope}`, catalog: CLIENT_BROKERS.map(item => ({
           broker: { ...item, conn: item.id === 'bitget', rating: null, traders: '—', rvN: undefined, traderN: undefined,
             promo: undefined, fees: undefined, lev: undefined, lev2: undefined },
-          connectionState: item.id === 'bitget' ? connection?.status === 'ready' && connection.state.kind === 'complete' ? 'CONNECTED' : 'NEEDS_LINK' : 'SOON',
+          connectionState: item.id === 'bitget' ? account?.accounts?.length ? 'CONNECTED' : 'NEEDS_LINK' : 'SOON',
           info: null, reviews: null,
         })), actions: { onConnect: async id => {
           if (id !== 'bitget' || retired) throw new Error('PROVIDER_UNAVAILABLE')
@@ -146,9 +213,15 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
             controller?.dispose(); controller = createController()
             requested = true; presentationRequest++
             // Reopen from the current server list, not a cached complete flag.
-            await controller.load()
+            await controller.load(null, connectionChanges.current.localRemovalOnly)
             if (retired || request !== actionEpoch || connection?.status !== 'ready') return
-            if (connection.state.kind !== 'complete') await controller.connect('bitget')
+            // A prior local-only removal needs its existing warning surface,
+            // not an immediate redirect that would erase it. The list's
+            // explicit onChoose action still permits a new consent flow.
+            if (connection.state.kind !== 'complete' && !connectionChanges.current.localRemovalOnly) await controller.connect('bitget')
+          } catch (error) {
+            if (!retired && error instanceof ApiV12Error && [401, 403].includes(error.status)) setAccounts(null)
+            throw error
           } finally { if (request === actionEpoch) busy = false }
         } } }
         if (requested && callbackLocator && controller?.hasObservedTransaction(callbackLocator) && intent.owner === scope
@@ -158,6 +231,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         publish()
       } catch {
         if (retired) return
+        unavailable = true
         controller?.dispose(); controller = undefined; setState(undefined)
       }
     })()
@@ -167,6 +241,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     window.addEventListener('teth:navigate', leave)
     return () => {
       retired = true; actionEpoch++; controller?.dispose()
+      if (connectionChanges.current.notify === invalidateConnection) connectionChanges.current.notify = undefined
       window.removeEventListener('popstate', leave)
       window.removeEventListener('hashchange', leave)
       window.removeEventListener('teth:navigate', leave)

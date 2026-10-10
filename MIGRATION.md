@@ -2,7 +2,15 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 — UI 운영 반영·Google/Bitget 보존
+### 현재 개발 후속 — Bitget 연결을 터미널에 전달
+
+Web [`2a6cb9f`](https://github.com/beak1011/tesia-web/tree/2a6cb9fac650852dc17c2f80b4700d8a641ce9cf)의 clean 전체 React2,423파일·34,932,511bytes를 공식 sync/verify로 전달했다. snapshot `ad6e267267caa6a30e969d82c353c7944dd89a40675a23e56ffd7fc3062cfe2a`, sourceDirty0·제거0이다. 최신HEAD는product source baa581a 대비문서2개/시험1개만변경했다. ares root/main·원문/CSS/SVG·Node/Worker와 Google/session/Bitget 저장소·운영 flags는 변경하지 않는다. 아래 운영 반영은 직전32c5 기록이며 이번 개발 후속의 배포 증거가 아니다.
+
+사용자의 연결 후 터미널 `현재 환경에서는 거래소 계좌 조회와 연결을 지원하지 않습니다` 고지는 실제 service entry의 accountPresentation 누락에서 발생했다. API12 생성 SDK·현재 AUTH owner로 검증한 Bitget 연결 계정/권한을 기존 terminal renderer에 전달한다. modal close·terminal 이동에도 유지하고 logout/owner 교체·401 때 폐기한다. confirmedDELETE 이후 화면 이동·재열기·동일owner 언어 변경과 늦은 snapshot을 차단하고 기존 local_only 해제 안내를 보존한다. 초기 catalog 확인 전/실패 후 navigation에서 계좌 표시가 부활하지 않으며 금융 ledger6/strategies는 null(unknown)이다. 연결 metadata를 실제 잔고·포지션·승인 전략 또는 0으로 만들지 않는다.
+
+최초22PASS와34실행31PASS/3하니스FAIL→개별2/2PASS, 이후mutationdelta12PASS/6.5초, 마지막직접영향14실행12PASS/2하니스FAIL→같은notice2PASS/1.9초와 closednotice4PASS/3.3초는 별도 실행이다. 타입/지정lint actual0, product sourcebaa581a의 clean service build actual0·17.577초·tracked2,413 불변/1,166파일/tree `a2f38855921e15be0affac0cba1e95b0ee53900658e5e70a68cee93f24236c1c`를 인수한다. 최종personal1 actualOpus5.5 한줄guard검수 C0H0M0/codeGo는M3-R1종결범위다. 원HOLD/Low를전체무조건GO로바꾸지않는다. 이후제품변경0으로해당spec만3초정착·START0→명시선택START1/합성동의화면 웹/모바일2PASS2.2초·lint0을보강했고 재빌드0이다. 이전 Opus HOLD/H1/M4·후속M2·noticeM3와 원FAIL은 [Bugfix_report](react-app/Bugfix_report.md)에 남겼다. 전체/9월/730 재실행0, provider/고객키/DB/주문/이번운영 변경0이다. 실제 잔고·포지션 GET은 현재 서버에 없다. 기존 암호화 credential/owner 검증은 재사용하되 status를 변경하는 claim_disconnect를 조회에 사용하지 않고 별도 nonmutating loader·read-only 계약/GET provider/SDK를 연결해야 한다. 키 재발급을 자동 요구할 근거는 없다. 이번 Git 전달을 실제 계좌 조회·teth.ai 반영 완료로 해석하지 않는다.
+
+### 직전 — UI 운영 반영·Google/Bitget 보존
 
 Web [`be4dc9c`](https://github.com/beak1011/tesia-web/tree/be4dc9cfc1aab2ff3ebe9c51cc757c9f30d492aa)의 clean 전체 React2,422파일·34,898,978bytes를 공식 sync로 전달했다. snapshot `bd3fcd17b68f1acf3f327a0eee70930336dc05bd3c2fdf4721ce1a79e8aae18b`, sourceDirty0·제거0이다. 제품 build source는 직전32c5ef4와 동일하고 최신 HEAD의 차이는 배포 Bugfix 문서1개뿐이다. ares 원본9fb root/main·Node/Worker·원문/CSS/SVG는 변경하지 않는다.
 
