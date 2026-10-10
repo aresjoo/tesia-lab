@@ -37,6 +37,23 @@ Mock 판단 자료는 실제 cfg/출처/관측일/신호일/체결일을 구분�
 
 ## 재현
 
+### 기존 상담 서버에 동일 정책 전달
+
+`tools/export-consultation-policies.mjs`는 세션 개선본 registry1.24의 4개 정책을 **글자·ID·SHA 변경 없이** 기존 Python 상담 설정의 `systemPrompt: {file, revision, sha256}` 형태로 준비한다. credential·모델·가격·크레딧 설정을 생성하거나 읽지 않으며 provider/서버/운영을 활성화하지 않는다. 출력 부모는 현재 사용자 소유의 실제 절대 경로·0700이어야 하고, 상위 경로는 root/현재 사용자 소유와 비공유 쓰기 또는 sticky 경계를 확인한다. 새 하위 디렉터리만 만들며 기존 파일/디렉터리는 덮어쓰지 않는다. 정책 파일은0600, 최대32768bytes/NFC/registry SHA를 먼저 확인한다. manifest는 임시 파일의 쓰기·sync 뒤 마지막에 exclusive link로 게시한다. 존재 여부만으로 성공을 판단하지 않고 parse·정책 해시를 재검증한다. 실패 시 부분 출력은 자동 삭제하거나 재사용하지 않는다. 파일/디렉터리 sync 이후에도 fsync 실패·전원 장애가 발생하면 존재하는 출력의 인수가 확정된 것은 아니며, 명시 검증 뒤 판단한다. root/sameUID에 대한 변조 방어 또는 코드 출처 서명의 대용 도구가 아니다.
+
+```bash
+node server/tools/export-consultation-policies.mjs /absolute/owner-private-parent/new-policy-directory
+node --test server/tests/consultation-policy-export.test.mjs
+```
+
+`policy-inputs.json`의 해당 `systemPrompt` 항목과 정책 파일을 검토된 서버 설정에 결속한다. 설정과 prompt 파일은 같은 비공개 디렉터리에서 기존 서버 reader가 재검증해야 한다. 일반 투자 대화에는 `dialogue`를 사용한다. `settings`는 원 source의 Mock 설정 안내이므로 실서비스 일반 대화/실주문 정책으로 선택하지 않는다. 판단·보고서 모드는 실제 관측/보고서 producer와 결속된 요청에만 적용한다. 자동 난이도 라우팅의 각 모델 profile이 사용할 정책·가격·입출력 상한도 서버 설정에서 별도로 결속한다.
+
+완료 인수에는 CLI exit0·pending 파일 없음·manifest parse·4개 정책 해시 재확인이 모두 필요하다. `POLICY_PUBLISHED_DURABILITY_UNCONFIRMED`는 게시 후 sync/정리 실패이므로 완료로 인수하지 않는다. `POLICY_DESTINATION_EXISTS`는 재사용 금지이며 기타 `POLICY_*` 진단은 경로/입력값을 포함하지 않는다. 부분 출력은 운영자가 확인 후 별도 새 디렉터리로 재시도한다. `sourceHashScope`의 3개 디스크 해시는 export 시점 참고 정보이지 평가된 모듈의 provenance·연결 완료 증거가 아니다. 1.24.0의 정책 길이·SHA는 시험의 별도 golden 리터럴로 고정한다. Node `--preserve-symlinks-main`은 상대 import를 바꾸므로 지원하지 않으며 정상 기본 CLI로 실행한다. 정적 모듈 import 자체가 실패하면 Node의 원래 오류 진단이 발생할 수 있다.
+
+**이 전달만으로 개선본 전부가 서비스에 적용되는 것은 아니다.** 동적 `buildInvestmentRequest`의 선호/근거 처리, 출력 gate, ASK/NEXT/TITLE/CHART 표시 parser 및 실제 시장 도구는 별도 소비 연결이다. `runtimeScope`는 이 공백과 provider/활성화0을 명시한다. 기존 `/api/chat`를 인증 없는 공개 우회 경로로 추가하거나 브라우저 지침에 권위를 돌려주지 않는다. 원본 UI·카피·SVG를 바꾸지 않고 동일 상담 UX로 연결해야 한다. 실제 모델 길이/번역 QA 잔여도 이 파일 전달 시험으로 닫지 않는다.
+
+검수·수정 기록: 최초 후행 경로 separator 누락으로3PASS/1FAIL 뒤 교정했고, 독립 검수의 폐쇄 mode/ID·partial manifest·CLI symlink·golden 부재·반례 SHA 마스킹을 보완했다. 직접 영향6시험은6PASS/0FAIL/0SKIP다. 마지막 Opus검수의 시험 symlink가 공유/tmp의 import를 향하던 N1은 경로를0700부모 안쪽으로 옮기고 정확 오류·출력 미생성을 확인했다. N2조상 경계 반례도 추가했고 해당CLI·새조상2시험만2PASS/332.727ms로 확인했다. 이를 최종7시험 전체 재실행이나 최종모델 재승인으로 쓰지 않는다. 별도 실제 설치 reader는 합성 설정으로 fixed4 정책과 routed3 profile 결속을 확인했으며 provider0이다. workspace 상위0775로 실제 export가 거절된 것은 권한 정책의 정상 차단이다. 권한 완화 없이 별도 비공개 경로에서 export만 재확인하고 수용된4정책과 byte equality를 확인했다. socket class 대체/미지원 symlink-main 성공 기대는 하니스 실패로 원기록을 보존한다. root/sameUID 경합과 디스크 장애 fault injection은 완료 증거가 아니며 서버/React/운영 소비·실제 응답·서비스GO는 별도다. PM Ledger와 원자료 `.cache/investment-policy-service-bridge/`에서 실행별 범위를 구분한다.
+
 ```bash
 cd server
 npm ci --ignore-scripts
