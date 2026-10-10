@@ -1,9 +1,10 @@
 import { readInvestmentDisplay, validInvestmentDisplay } from './investment-display-contract.mjs';
 import { settingsPreviewTag } from './investment-intent-admission.mjs';
 /** Streaming protocol guard. It is not a semantic financial fact checker. */
-const BLOCKED = ['[ORDER', '[ACT', '[TLINE', '[SETUP', '[STRATEGY', '[GAUGE', '<WORK', '<CHIPS', '<THINK'];
+const BLOCKED = ['[ORDER', '[ACT', '[TLINE', '[SETUP', '[STRATEGY', '[GAUGE', '<WORK', '<CHIPS', '<THINK', '</THINK', '<THINKING', '</THINKING', '<REASONING', '</REASONING'];
 const DISPLAY = ['[CHART', '[ASK', '[NEXT', '[TITLE'];
 const MAX_OUTPUT_CHARS = 64000;
+const BLOCKED_CONTROL = /\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS)(?=[\s/>])|<\/?(?:THINK|THINKING|REASONING)(?=[\s/>])/i;
 
 export function createInvestmentOutputGate(write, { settingsPreview = null, allowDisplay = true, allowTitle = true, allowQuestions = true } = {}) {
   const previewTag = settingsPreviewTag(settingsPreview);
@@ -18,7 +19,7 @@ export function createInvestmentOutputGate(write, { settingsPreview = null, allo
     total += value.length;
     if (total > MAX_OUTPUT_CHARS) return fail();
     let pending = tail + value;
-    if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
+    if (BLOCKED_CONTROL.test(pending)) return fail();
     tail = '';
     for (;;) {
       const tag = readInvestmentDisplay(pending);
@@ -34,7 +35,7 @@ export function createInvestmentOutputGate(write, { settingsPreview = null, allo
     }
     // ASCII normalization keeps offsets stable for ß/ligatures/combining text.
     const upper = pending.replace(/[a-z]/g, (character) => character.toUpperCase());
-    if (/\[(?:ORDER|SETUP|STRATEGY|GAUGE)\s*\{|\[(?:ACT|TLINE)\s*\[|<(?:WORK|CHIPS|THINK)(?=[\s/>])/i.test(pending)) return fail();
+    if (BLOCKED_CONTROL.test(pending)) return fail();
     let keep = 0;
     for (const marker of [...BLOCKED, ...DISPLAY]) {
       for (let n = 1; n <= marker.length && n <= upper.length; n++) {
