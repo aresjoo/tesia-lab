@@ -4,11 +4,11 @@
 
 ## 최신 migration 전달
 
-현재 React 작업본은 Web `7c0188e696abddb532e7724af573ac8436d855f6`의 2,407파일 전체 snapshot입니다.
-원본 root·Node/Worker는 유지하고, [PDF 470쪽/86case 차이와 미완료 목록](react-app/reports/ares-pdf-parity.md),
-[변경·검증 내역](react-app/Bugfix_report.md), [다른 에이전트를 위한 통합 설명](MIGRATION.md)을 함께 제공합니다.
-원본 Q45/Q47 완료 동선·설정 SVG·한글4weight를 복원하고, 해제·언어 변경 경합과 서비스 font/CSP를 국소 검증했습니다.
-전체 화면 일치·실제 AI/주문·운영 배포 완료가 아닙니다. 과거 추가 작업 예약은 AGENTS에서 제거해 활성 정본과 최신 전달만 가리킵니다.
+현재 React 작업본은 Web [`be0d31b`](https://github.com/beak1011/tesia-web/tree/be0d31b331694fac0899a9eea93f2d3c574b0a2b)의 clean 전체 2,419파일·34,819,655bytes snapshot입니다.
+사용자90상태·7언어·웹/모바일 비교의 확정 배치 차이를 교정했습니다. 홈/대화의 추가 검수 영역·관측 없는 완료 작업, 전략 요약 행·설정 위치·소개/거래소 상단 간격·카피 상세 중복 제목과 모바일 고지 겹침이 이번 범위입니다.
+[변경·검증·잔여](react-app/Bugfix_report.md), [원본 대비 통합 설명](MIGRATION.md)을 함께 제공합니다. 기존 보고서는 이전 비교 범위의 이력이며 이번 1,260쌍의 전수 PASS 자료가 아닙니다.
+원문·SVG·승인 접근성·기존 Google/Bitget과 서버 권위, ares root·Node/Worker는 유지합니다. 상태 재현 실패·무작위 제목·다른 경로 비교를 기능 누락으로 계산하지 않습니다.
+국소시험·타입/service build·독립 scoped 검수와 공식 sync/verify를 구분합니다. 전체 화면/모션/다국어 일치·실제 AI/주문·운영 배포 완료는 아닙니다. 카피 상세의 실제 고지/44px 복귀로 인한 높이 예외도 남습니다.
 
 ## 이전 전달 기록
 

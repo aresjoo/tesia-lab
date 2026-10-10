@@ -32,7 +32,7 @@
 }
 /* Only the local preview has a fixed 28px inspection bar. Keep its legal
    links above that bar; the service/source shell retains its original inset. */
-.tesia-shell.client-source-app:has(>.client-development-boundary) .client-gallery-home .client-home-band { bottom: 28px; }
+.tesia-shell.client-source-app:has(>.client-development-boundary) .client-gallery-home .client-home-band { bottom: var(--client-inspection-height,28px); }
 /* Large type/short keyboards: use the document flow instead of covering the gallery. */
 @media (max-width:860px) and (max-height:560px) {
   .client-source-app .client-home-content.client-gallery-home { padding-top: 120px; padding-bottom: 0; }

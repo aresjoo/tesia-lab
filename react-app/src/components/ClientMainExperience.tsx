@@ -70,7 +70,7 @@ import { ClientClarificationCard } from './ClientClarificationCard'
 import { intakeCard } from '../client-intake-card'
 import { useConversationCopy, type ConversationCopyKey } from '../client-conversation-copy'
 import { clientResearchLabel, previousResearchLabel } from '../client-research-label'
-import { ClientResponseSequence } from './ClientResponseSequence'
+import { ClientResponseSequence, type ClientResponseBlock } from './ClientResponseSequence'
 import { ClientStoredMarketResponse, type ClientMarketChartSource } from './ClientStoredMarketResponse'
 import { ClientFollowups } from './ClientFollowups'
 import { ClientContinueResponse } from './ClientContinueResponse'
@@ -134,8 +134,8 @@ function resultContextVisible(turn:ClientTurn,owner:string|null){
 }
 function ConversationTurn({ turn, onEdit, owner, marketResponse, summarized = false }: { turn: ClientTurn; onEdit: (text: string) => void; owner: string | null; marketResponse?: ReactNode; summarized?: boolean }) {
   const { c } = useConversationCopy()
-  const thinking = turn.status === 'running' && !turn.answer
-  const status = thinking ? 'running' : turn.status === 'stopped' ? 'stopped' : turn.status === 'failed' ? 'failed' : 'done'
+  const working = turn.status === 'running'
+  const status = working ? 'running' : turn.status === 'stopped' ? 'stopped' : turn.status === 'failed' ? 'failed' : 'done'
   const observed = Boolean(turn.responseSequence || turn.responseSequenceInvalid)
   const visible = !observed || turn.responseSequence?.owner === owner
   if(turn.commonRevision&&turn.commonRevision.owner!==owner)return null
@@ -143,13 +143,16 @@ function ConversationTurn({ turn, onEdit, owner, marketResponse, summarized = fa
   return <Fragment>
     {!summarized && <ClientUserMessage onEdit={onEdit} resultCard={turn.commonResultContext&&<ClientCommonResultCard context={turn.commonResultContext}/>}>{turn.question}</ClientUserMessage>}
     {!observed && !turn.sourceIntake && !turn.sourceIntakeInvalid && <ClientResponseSequence source="mock" blocks={[
-      { id: `${turn.id}:work`, kind: 'work', activity: {
-        label: c(thinking ? 'thinkingSummary' : turn.status === 'stopped' ? 'workStopped' : turn.status === 'failed' ? 'failed' : 'workDone'), status,
-        startedAt: turn.startedAt, finishedAt: turn.finishedAt ?? (thinking ? undefined : turn.startedAt + 1800),
+      // A legacy completed answer does not contain observed work events. Do
+      // not invent a completed timeline when restoring that answer. Typed
+      // responseSequence activities remain the authority for recorded work.
+      ...(turn.status !== 'done' ? [{ id: `${turn.id}:work`, kind: 'work' as const, activity: {
+        label: c(working ? 'thinkingSummary' : turn.status === 'stopped' ? 'workStopped' : 'failed'), status,
+        startedAt: turn.startedAt, finishedAt: turn.finishedAt,
         // Latest source removed its canned narrator. No summary exists in this
         // local turn record, so retain the source heading without invented prose.
-        steps: [{ id: 'thinking', title: c(thinking ? 'thinking' : 'thoughtDone'), status }],
-      } },
+        steps: [{ id: 'thinking', title: c(working ? 'thinking' : turn.status === 'stopped' ? 'workStopped' : 'failed'), status }],
+      } } satisfies ClientResponseBlock] : []),
       { id: `${turn.id}:answer`, kind: 'text', text: turn.answer, status: turn.status === 'running' ? 'streaming' : turn.status === 'stopped' || turn.status === 'failed' ? 'interrupted' : 'done' },
     ]} />}
     {marketResponse}
@@ -216,6 +219,9 @@ function refreshAccountClockAtEvent(setClock: (timestamp: number) => void) {
  * UI preview adapters remain isolated from approved service/execution contracts.
  */
 export function ClientMainExperience({ marketChartSource, terminalMarketSource, responseSource, connectionStatus, catalogueCopySetup }: { marketChartSource?: ClientMarketChartSource; terminalMarketSource?: TerminalMarketSource; responseSource?: ClientResponseSource; connectionStatus?: Omit<ClientConnectionStatusProps, 'scope' | 'source'>; catalogueCopySetup?: CatalogueCopySetup } = {}) {
+  // Explicit local inspection only. This does not enable a provider, grant
+  // service entitlements or alter account/trading permissions.
+  const [showInspectionBoundary] = useState(() => new URLSearchParams(location.search).get('inspect') === '1')
   const localeUi = useStaticUiCopy()
   const [terminalMenuHost, setTerminalMenuHost] = useState<HTMLDivElement | null>(null)
   const { c, language } = useConversationCopy()
@@ -1080,7 +1086,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     }
     openTrading()
   }
-  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={publicShell} className={`tesia-shell conversation-surface client-source-app ${isHome && !settingsTab ? 'view-landing' : 'view-briefing'}${publicConversationVisible ? ' has-public-conversation' : ''}${guestInsightVisible ? ' has-guest-insight-entry' : ''}${guestBrokerDocumentVisible ? ' has-guest-broker-document' : ''}${tradingIntro && !settingsTab ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px` } as CSSProperties}>
+  return <ClientQuestionDockProvider activeKey={activeQuestionKey}><div ref={publicShell} className={`tesia-shell conversation-surface client-source-app ${isHome && !settingsTab ? 'view-landing' : 'view-briefing'}${publicConversationVisible ? ' has-public-conversation' : ''}${guestInsightVisible ? ' has-guest-insight-entry' : ''}${guestBrokerDocumentVisible ? ' has-guest-broker-document' : ''}${tradingIntro && !settingsTab ? ' has-trading-intro' : ''}${settingsTab ? ' has-settings' : ''}${hasSiteFooter ? ' has-site-footer' : ''}`} style={{ '--client-band-height': `${bandHeight}px`, '--client-inspection-height': showInspectionBoundary ? '28px' : '0px' } as CSSProperties}>
     <ClientResponseSourceBridge source={responseBridgeSource} owner={owner} store={store} onFailure={error => {
       if (store.commitUncertain()) setAccountNotice(uncertainCommitMessage)
       else if (error instanceof InlineConnectionError) setAccountNotice(error.message)
@@ -1274,7 +1280,7 @@ export function ClientMainExperience({ marketChartSource, terminalMarketSource, 
     {registrations.storageError && <div className="client-global-notice" role="status">{localeUi("전략 기록을 이 브라우저에 저장하거나 불러오지 못했어요.")}<button type="button" onClick={userStrategies.store.retrySave}>{localeUi("다시 시도")}</button></div>}
     {((state.storageError && !storageNoticeDismissed) || state.recoveryWarning || notice) && <div className="client-global-notice" role="status">{state.storageError && !storageNoticeDismissed ? c('storageError') : state.recoveryWarning ? c('recoveryWarning') : notice && c(notice)}<button type="button" aria-label={c('closeNotice')} onClick={() => { setNotice(''); setStorageNoticeDismissed(true); if (state.recoveryWarning) store.dismissRecovery() }}>×</button></div>}
     </div>
-    <aside className="client-development-boundary" aria-label={localeUi("로컬 검수 환경")}><details><summary>{localeUi("로컬 UI 검수 · 서비스 미연결")}</summary><p>{localeUi("클라이언트 원본 9fbff821의 홈·거래소·인사이트·터미널을 이식한 React 검수 화면입니다. 대화·연구·차트·랭킹·거래는 시각 검수용 데이터이며 공유 흐름은 이식 중입니다. 터미널의 체결·손익은 공통 합성 일봉 시뮬레이션이며 실제 다중자산 계정 데이터가 아닙니다. 이 공개 경로에서 인증·메일·피드백·결제·거래소 연결·주문은 실제 처리되지 않습니다. 실제 서비스 계약을 소비하는 내부 진입점은 별도로 유지합니다. 실제 비밀번호·API 키·카드 정보를 입력하지 마세요.")}</p></details></aside>
+    {showInspectionBoundary && <aside className="client-development-boundary" aria-label={localeUi("로컬 검수 환경")}><details><summary>{localeUi("로컬 UI 검수 · 서비스 미연결")}</summary><p>{localeUi("클라이언트 원본 9fbff821의 홈·거래소·인사이트·터미널을 이식한 React 검수 화면입니다. 대화·연구·차트·랭킹·거래는 시각 검수용 데이터이며 공유 흐름은 이식 중입니다. 터미널의 체결·손익은 공통 합성 일봉 시뮬레이션이며 실제 다중자산 계정 데이터가 아닙니다. 이 공개 경로에서 인증·메일·피드백·결제·거래소 연결·주문은 실제 처리되지 않습니다. 실제 서비스 계약을 소비하는 내부 진입점은 별도로 유지합니다. 실제 비밀번호·API 키·카드 정보를 입력하지 마세요.")}</p></details></aside>}
     {(isHome || tradingIntro) && !settingsTab && !surface && !auth && <ClientLoadBoundary fallback={null}><Suspense fallback={null}><ClientHelp /></Suspense></ClientLoadBoundary>}
     {upgrade && <ClientLoadBoundary fallback={<ClientLoadFallback onClose={() => setUpgrade(null)} />}><Suspense fallback={null}><ClientUpgradeSheet context="plan" trigger={upgrade.trigger} freeUsed={account.state.freeUsed} onClose={() => setUpgrade(null)} onSubscribe={subscribeFromPlan} /></Suspense></ClientLoadBoundary>}
     <ClientLocalePanel open={surface === 'locale'} returnFocus={surfaceReturnFocus} manageBackground={false} onClose={() => setSurface(null)} />

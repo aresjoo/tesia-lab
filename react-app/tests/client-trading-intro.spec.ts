@@ -58,7 +58,10 @@ test('member without owned strategies gets intro and source connection plan with
   await expect(page.getByTestId('connection-plan')).toBeVisible()
   // Keep the original plan styling check on the member path that owns it.
   await expect(page.getByTestId('connection-plan')).toHaveCSS('background-color','rgb(0, 0, 0)')
-  await page.getByTestId('connection-plan').getByRole('button',{name:'뒤로',exact:true}).click()
+  // The original first plan has no back control; use its browser-history path.
+  await expect(page.getByTestId('connection-plan').getByRole('button',{name:'뒤로',exact:true})).toBeHidden()
+  await page.goBack();await expect(page.locator('.txh')).toBeVisible()
+  await page.goBack()
   await expect(page.locator('#strategy-idea')).toHaveValue('소개를 보고 와도 남아야 하는 질문')
 })
 

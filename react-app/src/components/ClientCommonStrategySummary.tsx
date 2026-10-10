@@ -33,15 +33,18 @@ export default function ClientCommonStrategySummary({ turn, state, busy, onOpen,
     [t('buyWhen'), `${proposal || input.requestedRsi !== undefined ? t('rsiRebound').replace('{rsi}', fmt.format(p.rsiTh)) : p.rsiTh === 44 ? t('rebound') : `RSI(n−1) < ${fmt.format(p.rsiTh)} · ΔP > 0.5%`}${p.trendFilter ? `, ${t('clearTrend')}` : ''}${input.requestedRsi !== undefined && input.requestedRsi !== p.rsiTh ? ` (RSI ${fmt.format(input.requestedRsi)} → ${fmt.format(p.rsiTh)} · 5–70)` : ''}`],
     [t('sellWhen'), `${p.tp !== null ? t('takeRule').replace('{take}', fmt.format(p.tp)) + ' ' : ''}${t('exitRule').replace('{stop}', fmt.format(p.sl))}`],
     [t('testPeriod'), `${commonDate(start)} → ${commonDate(p.endI)}`],
-    [t('requestedFrame'), input.timeframe === '일봉' ? t('daily') : t('frameHour')],
-    [t('timeframe'), t('daily')],
   ]
   if (proposal?.excludedConditions.length) rows.push([t('excludedConditions'), proposal.excludedConditions.join(', ')])
   return <section className="client-strategy-summary" data-testid="common-strategy-summary" aria-labelledby={id}>
     <h3 id={id} tabIndex={-1}>{proposal?.name ?? (turn.sourceIntake ? sourceIntakeText(language, 'summary') : t('summaryTitle'))}</h3>
-    <dl>{rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-    {onEdit && <button className="summary-edit" type="button" disabled={busy} onClick={onEdit}>{t('revise')}</button>}
-    <p>{t('summaryPreview')}</p>
+    <dl>{rows.map(([label, value], index) => <div key={label}>
+      <dt>{label}</dt><dd>{value}</dd>
+      {turn.sourceIntake && index === rows.length - 1 && onEdit && <button className="summary-edit" type="button" disabled={busy} onClick={onEdit}>{t('revise')}</button>}
+    </div>)}</dl>
+    <div className="summary-note">
+      {!turn.sourceIntake && <p className="summary-timeframe">{t('requestedFrame')}: {input.timeframe === '일봉' ? t('daily') : t('frameHour')} · {t('timeframe')}: {t('daily')}</p>}
+      <p>{t('summaryPreview')}</p>
+    </div>
     <button className="summary-open" type="button" disabled={busy} onClick={onOpen}>{t('open')}</button>
   </section>
 }

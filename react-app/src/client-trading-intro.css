@@ -1,17 +1,19 @@
 /* 194e4f5 sk-main introduction; source media, local preview boundary and route ownership preserved. */
 /* The introduction is a document, not a conversation: restore source guest chrome. */
 .tesia-shell.client-source-app.has-trading-intro .client-auth-nav{display:flex}
-.client-source-app .txh-route-heading{position:sticky;top:0;z-index:10;display:flex;align-items:center;min-height:64px;padding:0 18px;background:#000;font-size:14px;font-weight:500}
+.client-source-app .txh-route-heading{position:sticky;top:0;z-index:10;display:flex;align-items:center;min-height:44px;padding:0 18px;background:#000;font-size:14px;font-weight:500}
+/* Final source nochead hides the desktop title bar and gives #g-content 40px.
+   The banner is home-only (source founder rule); keep its mounted state intact. */
+.tesia-shell.client-source-app.has-trading-intro .client-app-banner{display:none}
 @media(min-width:861px){
   .tesia-shell.client-source-app.has-trading-intro .client-globe{display:block}
-  .client-source-app .txh-route-heading{padding-right:540px}
+  .client-source-app .txh-route-heading{height:40px;min-height:40px}
+  .client-source-app .txh-route-heading span{display:none}
 }
 @media(max-width:860px){
-  .tesia-shell.client-source-app.has-trading-intro .client-app-banner{display:flex}
   .tesia-shell.client-source-app.has-trading-intro .client-hamburger{top:10px}
-  .tesia-shell.client-source-app.has-trading-intro .client-hamburger.with-banner{top:74px}
-  .client-source-app .txh-route-heading{height:64px}
-  .client-source-app.has-trading-intro:has(.client-app-banner) .txh-route-heading{height:128px}
+  .tesia-shell.client-source-app.has-trading-intro .client-auth-nav{top:8px}
+  .client-source-app .txh-route-heading{height:44px}
   .client-source-app .txh-route-heading span{display:none}
 }
 .client-source-app .txh { --gt:#e3e3e3; --gt2:#c4c7c5; --gt3:#9aa0a6; --g1:#17191c; --g2:#202226; --g3:#292c31; --gl:rgba(255,255,255,.08); --gl2:rgba(255,255,255,.13); --gb2:#7c9cff; --num:var(--font-number,ui-monospace,monospace); word-break:keep-all; overflow-wrap:anywhere; color:var(--gt); overflow-x:clip; }
@@ -27,7 +29,7 @@
 .client-source-app .txh-copy{position:relative;z-index:1}
 .client-source-app .txh-back{position:absolute;left:24px;top:20px;z-index:2;background:none;border:0;padding:0;font-family:inherit;font-size:13px;color:#9aa0a6;cursor:pointer}
 .client-source-app .txh-back:hover{color:#fff}
-.client-source-app .txh-eyebrow{font-size:14px;color:#cdcdcd;margin-bottom:14px}
+.client-source-app .txh-eyebrow{font-size:14px;line-height:1.6;color:#cdcdcd;margin-bottom:14px}
 .client-source-app .txh-hero h1{font-family:inherit;font-weight:400;font-size:48px;line-height:1.2;letter-spacing:-.02em;color:#fff}
 /* Route arrival focuses this non-interactive heading for announcements, not as
    an actionable control. Keep the focus ring on the actual buttons and links. */

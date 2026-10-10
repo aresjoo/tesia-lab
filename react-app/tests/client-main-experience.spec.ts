@@ -22,24 +22,20 @@ async function drawer(page: Page) {
   else await page.locator('.client-rail-logo-row button').click()
 }
 
-test('기본 진입은 원본 홈→동일 대화→스트리밍이며 완료 작업을 펼쳐볼 수 있다', async ({ page }) => {
+test('기본 진입은 원본 홈→동일 대화→스트리밍이며 관측 없는 완료 작업을 합성하지 않는다', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', e => errors.push(e.message))
   await begin(page)
   await expect(page.locator('.client-source-app')).toHaveCount(1)
   await expect(page.locator('.market-briefing,.tesia-header,.build-progress')).toHaveCount(0)
-  const activity = page.locator('.g-act2 .hd')
-  await expect(activity).toHaveAttribute('aria-expanded', 'false')
-  await activity.click()
-  await expect(page.locator('.g-act2 .ar')).toBeVisible()
-  await expect(page.locator('.g-act2 .at')).toHaveText('생각 완료')
+  await expect(page.locator('.g-act2')).toHaveCount(0)
   // dab5aa2 removed the canned narrator. No public summary was supplied for
   // this local turn; do not restore invented prose to satisfy the old test.
   await expect(page.locator('.g-act2 .ad')).toHaveCount(0)
   await expect(page.locator('.g-amsg')).not.toBeEmpty()
   await page.reload()
   await expect(page.locator('.g-umsg')).toHaveText('비트코인 하락 후 반등 전략')
-  await expect(page.locator('.g-act2 .hd')).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.locator('.g-act2')).toHaveCount(0)
   expect(errors).toEqual([])
 })
 
@@ -128,20 +124,10 @@ test('반응형 홈·대화의 버튼과 본문이 320~1440px에서 겹치지 �
     }).toBe(true)
     await expect.poll(() => page.evaluate(() => {
       const terms = document.querySelector('.client-home-terms')!.getBoundingClientRect()
-      const boundary = document.querySelector('.client-development-boundary')!.getBoundingClientRect()
-      return terms.bottom <= boundary.top
+      return terms.bottom <= innerHeight
     })).toBe(true)
-    // A CSS-only absence counterexample, not a simulated service login: the
-    // extra inset must disappear when this preview-only element is absent.
-    expect(await page.evaluate(() => {
-      const band = document.querySelector('.client-home-band')!, boundary = document.querySelector('.client-development-boundary')!
-      const parent = boundary.parentNode!, next = boundary.nextSibling
-      const preview = getComputedStyle(band).bottom
-      boundary.remove()
-      const withoutPreviewBar = getComputedStyle(band).bottom
-      parent.insertBefore(boundary, next)
-      return { preview, withoutPreviewBar }
-    })).toEqual({ preview: '28px', withoutPreviewBar: '0px' })
+    await expect(page.locator('.client-development-boundary')).toHaveCount(0)
+    await expect(page.locator('.client-home-band')).toHaveCSS('bottom', '0px')
   }
 })
 

@@ -216,7 +216,7 @@ test('7언어·좁은 화면·200%에서 긴 조건을 생략하거나 HTML로 �
   await page.screenshot({ path: info.outputPath('proposal-fr-expanded.png'), fullPage: true })
 })
 
-test('다른 화면에서 완료 제안을 받아도 자동 이동하지 않으며 수정 클릭은 초안을 보존한다', async ({ page }) => {
+test('다른 화면에서 완료 제안을 받아도 자동 이동하지 않으며 원본 카드 복귀는 작성 중인 초안을 보존한다', async ({ page }) => {
   await mount(page); expect(await deliver(page, sequence())).toBe(true)
   await page.evaluate(() => { history.pushState(null, '', '#/share'); window.dispatchEvent(new Event('teth:navigate')) })
   await expect(page.locator('.client-sharing-hub')).toBeVisible()
@@ -226,8 +226,9 @@ test('다른 화면에서 완료 제안을 받아도 자동 이동하지 않으�
   await page.getByRole('button', { name: '대화로 돌아가기', exact: true }).click()
   const card = page.getByTestId('common-strategy-summary')
   await expect(card.getByRole('heading')).toHaveText(proposal.name)
-  await card.locator('.summary-edit').click()
+  await expect(card.locator('.summary-edit')).toHaveCount(0)
   await expect(page.locator('.g-composer textarea')).toHaveValue('별도로 작성한 질문')
+  await page.locator('.g-composer textarea').focus()
   await expect(page.locator('.g-composer textarea')).toBeFocused()
   expect((await saved(page)).turns).toHaveLength(1)
 })

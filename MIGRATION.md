@@ -2,7 +2,24 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 — 문서 질문 저장 기반·운영 전환 경계 전달
+### 현재 — 90상태 비교의 원본 배치 후속 복원
+
+Web [`be0d31b`](https://github.com/beak1011/tesia-web/tree/be0d31b331694fac0899a9eea93f2d3c574b0a2b)의 clean 전체 React2,419파일·34,819,655bytes를 공식 sync/verify로 전달한다. snapshot `9a3aec749de35c26815673746094867d161ac94fc36842fd196369868e5003c9`, sourceDirty0·제거0이다. 원격 ares main은 `9fbff821df62cad11d026022fc7628c7fcebc431`로 재확인했고 원본 root/main·Node/Worker는 변경하지 않는다. 아래 이전 전달과 서비스 후보는 해당 시점 이력이다.
+
+사용자 `개발본화면비교.html`의90상태·7언어·웹/모바일1,260쌍을 기준으로 확정된 차이를 기능별 writer로 나눠 복원했다. 비교의 상태 차이630쌍을630개 제품 결함으로 계산하지 않는다. PDF285페이지는 이번에 직접 처리하지 않았으며 HTML 데이터·PNG와 원본 최종 override/DOM을 대조했다.
+
+- 홈/대화: 일반 화면의 원본에 없는28px 검수 footer와 관측 없는 legacy 완료 작업 합성을 제거했다. 내부 고지는 `?inspect=1`에서만 표시하며 provider/주문 flag는 아니다. 실제 responseSequence 작업·완료 답변의 원본 복사/평가·자유 대화 수정은 보존한다. legacy 부분/중지/실패 상태는 실제 상태로 표시하고 종료 시간을 합성하지 않는다.
+- 전략 요약/설정: 기본4행(+요청된 제외조건),104px 가로 라벨·원본 구분선/간격과 intake 마지막 행 수정 버튼, desktop40px 설정 wrapper/mobile 제목 위치·언어 버튼/통화 행을 복원했다. 실제 요청값·기간·주기 차이/preview 고지·소유자·7언어와 승인48px CTA 가변 높이는 보존한다.
+- 소개/거래소: 소개 상단desktop40/mobile44px·eyebrow1.6, 거래소 desktop40/mobile plan12/post-plan72px·제목 행간/checkout32px를 복원했다. 원본에 없는 첫 plan back만 숨기고 post-plan44px back·원본 인증 버튼30/36px·Google/Bitget controller를 보존한다. 비홈 route의 배너 paint만 원본 home-only 규칙에 맞추고 홈/저장은 유지한다.
+- 카피 상세: 중복64px Hub 헤더·mobile 이중18px 바깥 여백만 제거했다. 일반 관리 목록은 그대로고 keyboard return utility는 초점 시44px overlay로 노출한다. 실제상태 고지와44px back 때문에 원본 title y대비desktop+26/mobile390+22px가 남는다. 모바일 고지/메뉴의 실제36×16px 교차는 고지 좌64/우18px·자연 줄바꿈으로 교정했으며320px에서는 안내 높이만큼 제목이 밀리는 승인 접근성/고지 예외를 보존한다.
+
+원본 질문의 `.g-askcard` 대신 최종 `.ska` 선택자·X02 insight route 불일치·홈 무작위 문구는 재현 조건 차이로 분리했다. 원본에도 존재하는 답변 평가 버튼을 삭제하지 않았다. 비동기 카피 loading을 화면 누락으로 계산하거나 미재현 OAuth/계정 상태를 PASS로 승격하지 않는다.
+
+국소 시험 배치6PASS/10.9초·카드1PASS/3.6초·관련5PASS/12.4초·route3PASS/15.2초·카피2PASS/6.1초 및 후속2PASS/11.3초·메뉴 겹침1PASS/10.1초는 별도 실행이다. 기존 route 하니스1FAIL→해당1PASS와 초기 타입TS2322/legacy fixture 실패도 삭제하지 않고 [Bugfix_report](react-app/Bugfix_report.md)에 기록했다. 최종 타입/service build actual0·입력불변26.808초와 지정 lint actual0·불변8.289초, 개인1 Opus5.5 actual0/modelmatched/입력불변 scopedGO를 인수한다. 마지막 GO는 미세 CSS/spec 범위이며 전수·실서비스 GO가 아니다. AGY3.8 요청은 좁은 일관성 비교만 소유한다. ROOT의14캡처 오류/변경요청/가로 넘침0과 새390/320 카피 PNG 확인도 해당 fixture 범위다.
+
+전체1,260쌍/모든 모션/언어/계정 상태 일치, 실제 모델·실OAuth·주문/체결·운영 배포는 미완료이며 이번 실행은0이다. 전체 회귀·설치11·9월/730 재실행0, 고객API/provider/주문0이다. 서버·프롬프트/Arena WIP는 별도 정본을 따르고 이 UI 배치의 미완료로 합산하지 않는다. 전체 React 전달·Git push와 운영 반영을 구분한다.
+
+### 직전 — 문서 질문 저장 기반·운영 전환 경계 전달
 
 이번 전달은 서버 변경과 검증 기록을 연결하는 메타데이터 변경이다. React source는 [Web5ee2994](https://github.com/beak1011/tesia-web/tree/5ee29948ddba3277772ca31cfdb3070ab1bae6e8), 원본 ares main은 `9fbff821df62cad11d026022fc7628c7fcebc431` 그대로다. 전체 React2,414파일·34,771,616bytes와 snapshot `1b99a8651cf19d4e5da8e15406d4b6c89ca5c09fe033809bdbc697d2b9dda3a3`는 변경하지 않았다. 원본 root/main·Worker·문구·SVG·모션·배치 변경0이며 기존 sync/verify 증거를 새 실행으로 계산하지 않는다.
 

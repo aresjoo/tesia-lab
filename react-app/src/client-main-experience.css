@@ -7,14 +7,14 @@ body:has(.tesia-shell.client-source-app) { background:#000; }
 .tesia-shell.client-source-app > .skip-link { top:12px; max-width:calc(100% - 32px); box-sizing:border-box; transform:translateY(calc(-100% - 12px)); transition:transform 180ms var(--ease-out); overflow-wrap:anywhere; }
 .tesia-shell.client-source-app > .skip-link:focus { transform:translateY(0); }
 @media (prefers-reduced-motion:reduce) { .tesia-shell.client-source-app > .skip-link { transition:none; } }
-.client-source-app .client-source-main { height: calc(100dvh - 28px); min-height: 0; padding: 0; outline: none; overflow: hidden; background:var(--client-0); }
+.client-source-app .client-source-main { height: calc(100dvh - var(--client-inspection-height,0px)); min-height: 0; padding: 0; outline: none; overflow: hidden; background:var(--client-0); }
 .tesia-shell.client-source-app .client-sidebar { background:#000; border-right:1px solid rgba(255,255,255,.1); }
 .client-source-app .g-center { background:var(--client-0); }
 .tesia-shell.client-source-app.has-public-conversation { height:var(--client-chat-height,100dvh); min-height:0; }
 /* Only the transcript scrolls. A legacy 100vh body grows beyond the viewport
    under CSS zoom and lets native focus scroll the entire shell offscreen. */
 body:has(.tesia-shell.client-source-app.has-public-conversation) { min-height:0; }
-.client-source-app.has-public-conversation .client-source-main { height:calc(var(--client-chat-height,100dvh) - 28px); }
+.client-source-app.has-public-conversation .client-source-main { height:calc(var(--client-chat-height,100dvh) - var(--client-inspection-height,0px)); }
 .client-source-app .client-main-terminal { height: 100%; min-height: 0; }
 .client-source-app .client-main-terminal[hidden] { display: none; }
 .client-source-app .client-main-terminal > .client-source-terminal { height: 100%; min-height: 0; }
@@ -25,10 +25,10 @@ body:has(.tesia-shell.client-source-app.has-public-conversation) { min-height:0;
   .client-source-app .client-main-terminal .cat-heading { padding-left: 64px; }
   .client-source-app .client-main-account { padding-top: 60px; box-sizing: border-box; }
 }
-.client-source-app.view-landing .client-source-main { height: auto; min-height: calc(100svh - 28px); overflow: visible; }
-.client-source-app.view-landing .landing-main { min-height: calc(100svh - 28px); }
-.client-source-app.view-landing .landing-hero { min-height: calc(100svh - 28px); }
-.client-source-app .client-home-terms { bottom: 42px; }
+.client-source-app.view-landing .client-source-main { height: auto; min-height: calc(100svh - var(--client-inspection-height,0px)); overflow: visible; }
+.client-source-app.view-landing .landing-main { min-height: calc(100svh - var(--client-inspection-height,0px)); }
+.client-source-app.view-landing .landing-hero { min-height: calc(100svh - var(--client-inspection-height,0px)); }
+.client-source-app .client-home-terms { bottom: calc(14px + var(--client-inspection-height,0px)); }
 .client-source-app .client-conversation-frame { height: 100%; }
 /* Reserve the fixed account bell's hit area without moving the source chat menu. */
 .client-source-app:has(.client-account-utility) .client-lab-conversation .g-chead { padding-right:72px; }
@@ -107,8 +107,8 @@ body:has(.tesia-shell.client-source-app .client-research-hub) { min-width: 0; }
   .client-source-app { padding-left: 0 !important; }
   .client-source-app:not(.view-landing) .client-hamburger { top: 0; }
   .client-development-boundary { left: 0; }
-  .client-source-app.view-landing .landing-hero { min-height: calc(100svh - 28px); padding-top: 110px; padding-bottom: 50px; }
-  .client-source-app .client-source-main { height: calc(100dvh - 28px); }
+  .client-source-app.view-landing .landing-hero { min-height: calc(100svh - var(--client-inspection-height,0px)); padding-top: 110px; padding-bottom: 50px; }
+  .client-source-app .client-source-main { height: calc(100dvh - var(--client-inspection-height,0px)); }
   .client-lab-conversation .client-answer-actions button { width: 40px; height: 40px; }
   .client-next-actions { width: 100%; }
   .client-lab-conversation .client-next-actions button { min-height: 44px; flex-wrap: wrap; column-gap: 10px; row-gap: 3px; }

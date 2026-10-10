@@ -114,14 +114,18 @@
 }
 
 /* React host and accessibility corrections, without global source body flags. */
-.client-connection-plan{height:100%;overflow-y:auto;overscroll-behavior:contain;background:#000;color:#ececec;padding:56px 24px 0;word-break:keep-all;overflow-wrap:anywhere}
+.client-connection-plan{height:100%;overflow-y:auto;overscroll-behavior:contain;background:#000;color:#ececec;padding:40px 24px 0;word-break:keep-all;overflow-wrap:anywhere}
 .client-connection-plan.is-checkout{background:#000}
 .client-connection-plan button{font-family:inherit}
 .client-connection-plan :focus-visible{outline:2px solid #a8c7fa;outline-offset:3px}
 .client-connection-plan .cpl-head{position:relative;padding-inline:44px}
 .client-connection-plan .cpl-head .cpl-back{position:absolute;left:0;top:0}
+/* Original plView has no back button in the first plan header. Keep the React
+   callback/DOM intact; post-plan back controls retain their 44px hit areas. */
+.client-connection-plan .cpl:not(.cpl-co) .cpl-head{padding-inline:0}
+.client-connection-plan .cpl:not(.cpl-co) .cpl-head .cpl-back{display:none}
 .client-connection-plan .cpl-back{min-width:44px;min-height:44px;flex:none}
-.client-connection-plan h1{line-height:1.25}
+.client-connection-plan h1{line-height:1.6}
 .client-connection-plan .cpl-form{border:0;padding:0;margin:0;min-inline-size:0}
 .client-connection-plan .cpl-cta{height:auto;min-height:48px;padding:10px 16px;line-height:1.5}
 .client-connection-plan .cpl-logos{flex-wrap:wrap;max-width:100%}
@@ -137,7 +141,17 @@
 .client-connection-plan .cpl-bt .cpl-price>span{max-width:100%;font-size:clamp(28px,3vw,40px)}
 .client-connection-plan .cpl-bt .cpl-items b{font-weight:400}
 .client-source-app:has(.client-connection-plan) .client-account-utility{display:none}
-@media(max-width:860px){.client-connection-plan{padding:64px 14px 0}.client-connection-plan .cpl-head{padding-inline:44px}.client-connection-plan .cpl-cohead h1{font-size:26px}}
+/* Final ares 9fb: pl-page has no app banner/header; .pl-co starts at 72px
+   on mobile. Hide this route's banner paint, not its DOM or dismissal state. */
+.tesia-shell.client-source-app:has(.client-connection-plan) .client-app-banner{display:none}
+@media(max-width:860px){
+  .client-connection-plan{padding:0 14px 0}
+  .client-connection-plan.is-checkout{padding-top:72px}
+  .client-connection-plan.is-checkout>.cpl{padding-top:0}
+  .client-connection-plan .cpl-cohead h1{font-size:32px}
+  .tesia-shell.client-source-app:has(.client-connection-plan) .client-hamburger{top:10px}
+  .tesia-shell.client-source-app:has(.client-connection-plan) .client-auth-nav{top:8px}
+}
 @media(prefers-reduced-motion:reduce){.client-connection-plan *{transition:none!important}}
 
 /* af7b8d1 px final overrides: one decision per screen, no stepper. */

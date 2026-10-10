@@ -171,7 +171,11 @@ test('direct guest checkout stays on plan and cancelled intent never resumes thr
   const root=page.getByTestId('connection-plan');await expect(root).toHaveAttribute('data-step','plan')
   await root.getByRole('button',{name:'구독으로 시작하기',exact:true}).click()
   await page.keyboard.press('Escape')
-  await root.getByRole('button',{name:'뒤로',exact:true}).click()
+  await expect(root.getByRole('button',{name:'뒤로',exact:true})).toBeHidden()
+  // A direct plan entry has no prior application history. Leave through the
+  // original sidebar, not a React-only header control absent from the source.
+  await page.getByRole('button',{name:'사이드바 열기',exact:true}).click()
+  await page.locator('.client-drawer-brand button').first().click()
   await expect(page.locator('#strategy-idea')).toBeVisible()
   await page.getByRole('button',{name:'로그인',exact:true}).first().click()
   await page.getByRole('button',{name:/Google/}).click()

@@ -1,5 +1,29 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 — 90상태 비교 자료의 원본 배치 후속 복원
+
+사용자 제공 `개발본화면비교.html`의 90상태·7언어·웹/모바일 1,260쌍을 입력으로 삼았다. 원격 ares main도 `9fbff821`임을 다시 확인했다. 원본 HTML의 최종 override와 실제 DOM을 기준으로 교정하며, 비교 도구의 `상태 차이` 630쌍을 모두 이식 결함 또는 미구현으로 계산하지 않는다. PDF285페이지는 이번에 직접 처리하지 않았고 HTML의 데이터·PNG와 원본 소스를 대조했다.
+
+확정 수정은 기본 화면의 검수 footer가 예약한28px 제거(`?inspect=1`에서만 내부 고지 유지), 기록 없는 완료 답변에 합성하던 작업완료1단계 제거, 전략 요약의4행/제외조건과104px 라벨·가로 배치 복원, intake 수정 버튼의 마지막 행 배치, 설정 desktop40px wrapper/mobile 제목4px 및 언어·USD 행 복원이다. 관측된 작업 스트림과 원본 실제 답변의 복사·평가 버튼, 사용자 요청값/기간/제외조건·요청/계산 주기 고지·7언어·소유자 검사·Google/Bitget·서버 권한은 보존한다. AI 요약의 별도 수정 버튼은 원본에 없으므로 제거했고, 자유 입력·사용자 메시지 수정·결과 revision 경로는 그대로다. 48px 전략 CTA는 글자 확대 때 늘어날 수 있도록 최소 높이로 보존한다.
+
+검증은 관련 신규6키 PASS/10.9초, 기존 카드 복귀·초안 보존1키 PASS/3.6초, 반응형 홈/연구·관측 작업 순서·7언어320px/200%·최종 홈 캡처5키 PASS/12.4초로 분리한다. 첫 홈 PNG는 entrance animation이 끝나기 전이라 최종 화면 근거에서 제외하고 reduced-motion/폰트 대기 캡처로 교체했다. 원본 비교 자료와 이전 실패 기록은 덮어쓰지 않는다. 초기 ROOT 신규2PASS 및 각 writer의 RED→GREEN은 최종 배치 수치와 합산하지 않는다. 증거는 `.cache/ui-parity-restoration/`이며 결과 경로를 분리해 병렬 시험이 타인의 PNG를 지우지 않도록 했다.
+
+비교 도구의 R01/R02는 원본 질문 카드를 `.g-askcard`로 찾지만 최종 원본은 `.ska`라 다음 단계로 전환되지 않는다. 실제 원본 `.ska` ID로 진행되는 것을 별도 확인했으며 React의 정상2·3단계를 결함으로 처리하지 않는다. X02는 원본 `#/insight`와 개발 `#/insight/trending`을 비교한 잘못된 route라404만으로 화면 누락을 판정하지 않는다. 홈 제목은 원본과 React 모두 문구 pool의 무작위 선택이며 다른 문구 하나만으로 원문 복구를 하지 않는다.
+
+추가 확정 차이는 AI 트레이딩 소개의 desktop40/mobile44px 상단 영역·eyebrow 행간, 거래소 desktop40px/mobile plan12px/post-plan72px 제목 간격·원본에 없는 첫 plan back·checkout32px 제목이다. 소개/연결에만 원본 home-only 배너 규칙을 복원하고 배너 DOM/저장·홈 배너와 post-plan44px 복귀는 보존했다. 원본 인증 버튼 desktop30/mobile36px는 임의로44px로 확대하지 않는다. 신규 route3키 PASS/15.2초, 기존 route3은2PASS/1FAIL이며 비로그인 원본 sidebar의 비활성 새 전략 버튼을 누른 ROOT 하니스 오류를 실제 brand 복귀로 교정한 해당1키 PASS/3.8초를 별도 보존한다.
+
+Q19~22 카피 상세의 중복64px Hub 제목·모바일 이중18px 바깥 여백도 복원했다. 일반 관리 목록 헤더·여백은 유지하고 시각적으로 가린 return utility는 키보드 초점에서44px overlay로 다시 노출한다. 실제 preview 고지·성과 loading·소유자·값·승인44px back은 삭제하지 않는다. 고지와44px back 때문에 원본 title y대비desktop+26/mobile+22px 예외가 남으며 전체 동일로 보고하지 않는다. 카피 상세/기존 목록2키는 RED1/첫 CSS 특이도 실패1 뒤 최종2PASS/6.1초다. 이후 독립 검수의 모바일 고지 여백·legacy 제목 단언 Medium2건을 고지 자체18px 인셋/range 단언·한국어 고정/제목 count1과 중지·실패 양성 단언으로 교정했고 해당2키만 PASS/11.3초다. 과거 실패·PNG와 새 결과는 서로 다른 cache 경로에 보존한다.
+
+legacy 부분 답변을 완료 작업으로 표시하던 후속 Medium은 running/stopped/failed 실제 상태 및 기존 thinkingSummary/workStopped/failed 키로 교정했다. 없는 finishedAt을 합성하지 않고 관측된 responseSequence의 실제 완료 작업과3초 표시는 유지한다. 최초 타입 오류TS2322(actual2)·fixture 길이/이전 페이지 unload에 의한1FAIL들은 교정했고, 격리 컨텍스트와 실제 기록 양성 대조 최종2키 PASS/6.5초로 확인했다. 시험용 재생과 실제 모델 호출을 구분하며 기존 응답 renderer/controller는 보존한다.
+
+ROOT가 로컬 웹/모바일14캡처의 런타임 오류·변경 요청·가로 넘침0과 카피 상세 새 PNG를 직접 확인했다. 개인1 `claude-opus-5-5`의 실제 모델 identity·입력불변 검수에서 C0H0이며 static scopedGO와 서비스 NO_GO를 구분한다. AGY3.8flashhigh 요청의 좁은 비교는 최종승인이나 모델 identity 증거가 아니다. 최종 교정 입력1490개 불변에 결속한 타입/service build actual0·25.004초와 지정 lint actual0·5.198초는 `.cache/ui-parity-restoration/{build,lint}-medium-closed.receipt.json`을 따른다. 전체 회귀·설치11·9월·730일 재실행0, 운영 배포·실계정·실제 고객 모델·주문0이다. 전체1,260쌍 일치·전체 모션/언어/상태 완료와 실제서비스 완료를 주장하지 않는다. Git/공식 migration 전달은 이 범위만 하며 타팀 서버·프롬프트/Arena WIP와 원본 root/Worker는 변경하지 않는다.
+
+`opus-medium-closed.receipt.json`은 직전 Medium2건을 닫은 C0H0M0/PASS_WITH_LOWS·actual0/modelmatched/입력불변 기록이다. 정적 판독이며 모델이 ROOT 시험·PNG를 재실행한 것은 아니다. 고지16/18px 인셋 차이·320/768 경계·전체 목록 coverage 등 Low는 남긴다. 복원 storage의 status4종은 기존 `client-experience-store.ts:113` validTurn에서 제한하므로 임의 status 폴백 Low를 새 확정 결함으로 승격하지 않는다. Vite의 미래 native configLoader·500KB chunk 경고는 숨기지 않고 원 stdout/stderr에 보존하며 이번 배치의 빌드 오류와 구분한다. 서버 운영 전환과 전체 원본 대조는 별도 잔여다.
+
+최종 PNG 재판독에서 모바일 고지 text와 hamburger의36×16px 실제 교차를 추가 발견했다. 별도 읽기 검수도 hamburger x10..54/text x18..297을 확인했고, 카피 상세에만 고지 좌64/우18px·자동 줄바꿈을 적용했다. 실제 textRange가 메뉴 오른쪽보다10px 이상 떨어지고 우측18px 안에 있는지1440/390/320 국소1키 PASS/10.1초로 확인했다. ROOT가 새390/320 PNG를 직접 확인했고,390은 제목 y120 유지/320은 고지 줄바꿈 높이만큼 밀리므로320 전수원본일치로 보고하지 않는다. 현재 최종 입력의 타입/service bundle actual0·불변26.808초와 지정 lint actual0·불변8.289초는 `build-menu-clearance.receipt.json`/`lint-menu-clearance.receipt.json`에 결속한다. 직전 build는 직전 입력 증거로 보존하며 최종 source에 전용하지 않는다. 마지막 미세 CSS/spec 독립 검수 결과는 `opus-menu-clearance.receipt.json`을 따른다. 제품 writer는 모두 반환했으며 로컬4176 HTTP200/HMR 반영, 운영 승격0이다.
+
+최종 CSS/spec exact2는 개인1 Opus5.5 actual0/modelmatched/입력불변 C0H0M0 scopedGO다. 320px 안내 clipping의 별도 scrollHeight 단언과391~768/다국어 고지 coverage 권고 Low는 보존한다. ROOT의320px PNG에서는 안내 두 줄이 실제 보였지만 이를 모든 폭/언어 증명으로 확대하지 않는다. 새 staged diff의 gitleaks8.24.3은0건이며 React 전달 snapshot에는 무시된 cache/실행 로그/키·생성 bundle을 포함하지 않는다.
+
 ## 후속 원본 대조 — 거래소 가입 안내의 제목 계층
 
 ares `9fbff821`의 최종 `index.html:7309`와 달리 본인 확인 제목이 첫 가입 제목과 같은600/흰색으로 표시되던 차이를 복원했다. `src/client-connection-plan.css`에 원본의 두 번째 안내 행500/`#cdcdcd` 한 줄만 추가했다. 카피·배치·SVG·인증·API·권한·feature flag 변경0이다. 로그인/signup intent와 back SVG는 최신 코드에서 이미 복원돼 있어 과거 gap을 반복하지 않았다.

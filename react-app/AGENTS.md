@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+- 현재90상태 비교 후속은 ROOT(홈/대화/shell/관련시험)와 설정·전략 요약·소개/거래소·카피 상세의 독립 writer 범위를 모았고 모든 writer는 파일을 동결·반환했다. ROOT가 최종 미세 교정·검수·문서/Git·공식 migration 전달을 소유한다. `?inspect=1`은 내부 고지만 노출하며 인증·provider·주문 flag가 아니다. 일반 화면에는 원본에 없는28px 검수 바가 없다. 원문·SVG·실제 기록/안전 고지와 승인44px 접근성을 보존하며 전체1,260쌍 일치 또는 실제서비스 GO로 승격하지 않는다. 추가 source 쓰기는 새 exact 범위 배정 후에만 가능하며 정확한 수정·잔여·증거는 Bugfix_report 최상단을 따른다.
+
 - 후속 `ares_parity_followup`의 `src/client-connection-plan.css`·`tests/client-connection-plan.spec.ts` exact2는 동결·반환했다. 원본9fb7309 본인 확인 제목500/회색 한 줄만 복원했고 신규1키1440/390 RED→GREEN1PASS/3.6초·개인1 Opus5.5 C0H0M0 scopedGO를 인수했다. 카피·JSX/SVG·API/권한/flags 변경0이며 ROOT가 Bugfix/Git/공식 migration 전달을 소유한다. AGY 첫 비교 빈 응답과 별도 inline 국소 의견·Low·모바일 cold mount/전수/실서비스 한계는 Bugfix를 따른다. 추가 제품 쓰기는 명시 배정 전 금지한다.
 
 - ROOT는 별도 고객지원 branch50369c3의 accepted exact3(config/ClientHelp/전용spec)를 원본 base일치 확인 후 현재 통합본에 이식했다. 해시는 config9e7ce86b/component42ad049d/specf7fa1270이며 복원 copy/SVG/motion/CSP 불변이다. personal1 Opus5.5 scopedGO는 C0H0·실vendor/CSP Medium1 별도미검증이다. 원HOLD/추가국소3·1·2PASS 및 Low를 보존하며 실제 provider 성공으로승격하지 않는다. source3는 동결이며 합친 당시 타입/bundle19.129초 actual0·불변을 인수했다. 백테스트 날짜 후속 교정과 서버 검수를 기다리지 않고 Help exact3+ROOT문서만 독립 전달한다.

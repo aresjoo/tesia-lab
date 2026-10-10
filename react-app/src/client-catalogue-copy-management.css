@@ -1,4 +1,10 @@
 /* f43b9b6a sk-cpx: a reading column, persistent positions, two history tabs. */
+/* Final ares cpxView has its own back/title, not a second 64px Hub row.
+   Keep the existing return utility keyboard-accessible without changing other
+   Hub routes, the actual-state boundary or the approved 44px hit areas. */
+.client-source-app .client-source-main .client-sharing-hub:has(>.client-strategy-sharing>.catalogue-copy-management)>.hub-header{position:absolute;width:1px;height:1px;min-height:0;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.client-source-app .client-source-main .client-sharing-hub:has(>.client-strategy-sharing>.catalogue-copy-management)>.hub-header h1{position:absolute;width:1px;height:1px;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.client-source-app .client-source-main .client-sharing-hub:has(>.client-strategy-sharing>.catalogue-copy-management)>.hub-header:has(button:focus){position:fixed;top:8px;left:72px;right:16px;width:auto;height:auto;min-height:44px;padding:0 8px;clip-path:none;white-space:normal;z-index:10}
 .client-strategy-sharing .catalogue-copy-management.cq-page{width:100%;max-width:760px;margin:0 auto;padding:28px 24px 96px;background:none;color:#ececec;font-weight:400;container-type:inline-size}
 .catalogue-copy-management :is(button,summary){font-family:inherit}
 .catalogue-copy-management .num{font-variant-numeric:tabular-nums;font-weight:400}
@@ -58,6 +64,11 @@
 .catalogue-copy-management .cpp-foot{margin-top:32px}
 .catalogue-copy-management .cq-help{margin:48px 0 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:14px;color:#9a9a9a}
 @media(max-width:768px){
+ /* The cpx column already owns the source's 16px mobile inset. */
+ .client-strategy-sharing:has(>.catalogue-copy-management){padding-left:0;padding-right:0}
+ /* The fixed menu occupies x10..54. Preserve the disclosure beside it;
+    narrow screens may wrap the notice instead of covering the menu. */
+ .client-strategy-sharing:has(>.catalogue-copy-management)>.ss3-boundary{padding-left:64px;padding-right:18px;overflow-wrap:anywhere}
  .client-strategy-sharing .catalogue-copy-management.cq-page{padding:16px 16px 96px}
  .catalogue-copy-management .cq-back{margin-bottom:16px}
  .client-strategy-sharing .catalogue-copy-management .cpp-nick{font-size:28px}

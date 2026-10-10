@@ -2,7 +2,7 @@
    Keep the conversation mounted; no document.body mode or global teardown. */
 .tesia-shell.client-source-app.has-settings { padding-left:0!important; }
 .client-source-app.has-settings :is(.client-sidebar,.client-hamburger,.client-account-utility,.client-auth-nav,.client-app-banner,.client-globe,.client-drawer-scrim) { display:none!important; }
-.client-source-app.has-settings .client-source-main { height:calc(100dvh - 28px); min-height:0; overflow:hidden; }
+.client-source-app.has-settings .client-source-main { height:calc(100dvh - var(--client-inspection-height,0px)); min-height:0; overflow:hidden; }
 .client-settings-page { height:100%; min-height:0; overflow-y:auto; overscroll-behavior:contain; scroll-padding-top:8px; color:#ececec; background:#000; line-height:1.6; }
 .client-settings-page .stg { position:relative; display:grid; grid-template-columns:300px minmax(0,1fr); gap:0; min-height:100%; }
 .client-settings-page .stg-mback { display:none; }
@@ -15,6 +15,8 @@
 .client-settings-page .stg-tg:hover { background:rgba(255,255,255,.08); color:#f2f3f5; }
 .client-settings-page .stg-tg svg { color:inherit; }
 @media (min-width:901px) {
+  /* Source #g-content supplies this space outside the settings grid. */
+  .client-settings-page { padding-top:40px; }
   .client-settings-page .stg { grid-template-areas:"nav main"; transition:grid-template-columns .28s cubic-bezier(.2,.7,.2,1); }
   .client-settings-page .stg-navigation,.client-settings-page .stg-rail { grid-area:nav; }
   .client-settings-page .stg-main { grid-area:main; }
@@ -24,7 +26,7 @@
   .client-settings-page .stg .stg-navigation { padding-top:60px; overflow-x:hidden; }
   .client-settings-page .stg-main { transition:padding .28s cubic-bezier(.2,.7,.2,1); }
   .client-settings-page .stg.nav-hid .stg-main { padding-left:40px; }
-  .client-settings-page .nav-hid .stg-rail { display:flex; position:sticky; top:0; align-self:start; height:calc(100dvh - 28px); width:64px; flex-direction:column; align-items:center; gap:6px; padding:10px 0; background:#000; border-right:1px solid rgba(255,255,255,.1); z-index:41; animation:settings-rail-in .28s cubic-bezier(.2,.7,.2,1) both; }
+  .client-settings-page .nav-hid .stg-rail { display:flex; position:sticky; top:0; align-self:start; height:calc(100dvh - var(--client-inspection-height,0px)); width:64px; flex-direction:column; align-items:center; gap:6px; padding:10px 0; background:#000; border-right:1px solid rgba(255,255,255,.1); z-index:41; animation:settings-rail-in .28s cubic-bezier(.2,.7,.2,1) both; }
   .client-settings-page .nav-hid :is(.stg-tg,.stg-ri) { display:flex; position:relative; left:auto; top:auto; flex:none; width:44px; height:44px; align-items:center; justify-content:center; border:0; border-radius:12px; background:transparent; color:#cfd3d8; cursor:pointer; transition:background-color .15s ease,color .15s ease; }
   .client-settings-page .nav-hid .stg-tg { margin-bottom:8px; }
   .client-settings-page .nav-hid :is(.stg-tg,.stg-ri):is(:hover,:focus-visible) { background:rgba(255,255,255,.08); color:#f2f3f5; }
@@ -38,7 +40,7 @@
 @media (prefers-reduced-motion:reduce) {
   .client-settings-page .stg,.client-settings-page .stg-navigation,.client-settings-page .stg-main,.client-settings-page .stg-rail,.client-settings-page .stg-tg,.client-settings-page .stg-ri,.client-settings-page .stg-tip,.client-settings-page .stg-tg :is(svg,img) { transition:none; animation:none; }
 }
-.client-settings-page .stg-navigation { position:sticky; top:0; align-self:start; min-width:0; display:flex; flex-direction:column; gap:2px; width:300px; height:calc(100dvh - 28px); padding:60px 10px 24px; background:#000; border-right:1px solid rgba(255,255,255,.1); overflow-y:auto; scrollbar-width:thin; }
+.client-settings-page .stg-navigation { position:sticky; top:0; align-self:start; min-width:0; display:flex; flex-direction:column; gap:2px; width:300px; height:calc(100dvh - var(--client-inspection-height,0px)); padding:60px 10px 24px; background:#000; border-right:1px solid rgba(255,255,255,.1); overflow-y:auto; scrollbar-width:thin; }
 .client-settings-page .stg-nav { min-width:0; display:grid; gap:2px; }
 .client-settings-page .stg-nav small { display:block; margin:22px 12px 8px; font-size:14px; color:#9a9a9a; font-weight:400; }
 .client-settings-page .stg-back,.client-settings-page .stg-ni { display:flex; align-items:center; gap:12px; min-height:44px; padding:8px 12px; border:0; border-radius:10px; background:none; color:#ececec; font:inherit; font-size:16px; font-weight:400; line-height:1.4; text-align:left; text-decoration:none; cursor:pointer; }
@@ -213,7 +215,8 @@
   .client-settings-page .stg-back { width:auto; margin:0 0 6px; padding:8px; justify-content:flex-start; font-size:16px; }
   .client-settings-page .stg-main { max-width:none; margin:0; padding:calc(16px + env(safe-area-inset-top)) 16px 120px; }
   .client-settings-page .m-detail .stg-navigation,.client-settings-page .m-list .stg-main { display:none; }
-  .client-settings-page .stg-mback { display:flex; align-items:center; gap:6px; min-height:44px; width:fit-content; padding:0; background:none; color:#ececec; font:inherit; font-size:16px; text-decoration:none; }
+  /* Keep the approved 44px target without shifting the source title by 4px. */
+  .client-settings-page .stg-mback { display:flex; align-items:center; gap:6px; min-height:44px; width:fit-content; margin-bottom:-4px; padding:0; background:none; color:#ececec; font:inherit; font-size:16px; text-decoration:none; }
   .client-settings-page .stg-mback svg { color:inherit; }
   .client-settings-page h1 { margin:6px 0 28px; }
   .client-settings-page .stg-card { padding:0 18px; }
@@ -229,6 +232,12 @@
   .client-settings-page .stg-r.ed .k { padding-top:0; }
   .client-settings-page .stg-r.ed .a { grid-column:1; grid-row:auto; justify-self:end; padding-top:0; }
   .client-settings-page .stg-in { height:44px; font-size:16px; }
+  /* General source rows retain a right-side language action and USD below
+     its hint, including under the narrow-screen stacking rules below. */
+  .client-settings-page .stg-r:has(> .a > .stg-sel),
+  .client-settings-page .stg-r:has(> .a > .stg-sel) ~ .stg-r { grid-template-columns:minmax(0,1fr) auto; gap:6px 12px; }
+  .client-settings-page .stg-r:has(> .a > .stg-sel) > .a { grid-column:2; grid-row:1/3; justify-self:end; }
+  .client-settings-page .stg-r:has(> .a > .stg-sel) ~ .stg-r > .v { grid-column:1; grid-row:2; }
 }
 @media (max-width:480px) {
   .client-settings-page .stg-billing-summary-row .a { grid-column:1; }
