@@ -55,7 +55,9 @@ export type NativeAccountLedgerColumn = 'exchange' | 'strategy' | 'symbol' | 'si
 export type NativeAccountLedgerRow = {
   id: string
   accountId: string
-  /** Assets are account-wide; every other row must identify its strategy. */
+  /** Observed exchange positions/assets are account-wide, without TETH strategy attribution. */
+  origin?: 'exchange'
+  /** Other non-asset rows must identify their owning strategy. */
   strategyId?: string
   cells: Readonly<Partial<Record<NativeAccountLedgerColumn, string>>>
   tone?: 'up' | 'dn' | 'zz'
@@ -172,7 +174,10 @@ export function accountPresentationBound(data: NativeAccountPresentation | undef
     if (!rows) continue
     if (!unique(rows.map(row => row.id))) return false
     if (rows.some(row => !row.accountId || data.accounts !== null && !accounts.has(row.accountId)
-      || tab !== 'assets' && (!row.strategyId || !strategies.has(row.strategyId) || strategies.get(row.strategyId)!.accountId !== row.accountId))) return false
+      || row.origin === 'exchange' && (tab !== 'pos' && tab !== 'assets' || data.accounts === null
+        || !accounts.has(row.accountId) || row.strategyId !== undefined || row.trade !== undefined)
+      || tab !== 'assets' && row.origin !== 'exchange'
+        && (!row.strategyId || !strategies.has(row.strategyId) || strategies.get(row.strategyId)!.accountId !== row.accountId))) return false
   }
   return unique((data.documents ?? []).map(document => `${document.kind}:${document.id}`))
     && (data.documents ?? []).every(document => (!document.strategyId || strategies.has(document.strategyId))

@@ -9445,3 +9445,13 @@ agy의 추가 두 차례 코드 검수 중 스크롤 재마운트·제목 포커
 보안 스캔에서 API0.12 생성 manifest의 공개 artifact SHA256 4개를 API 키로 오탐했다. 독립적으로 normative 원본 및 실제 계약 파일 해시를 대조했고 값은 로그에 출력하지 않았다. 기존44개에 해당4개의 exact commit/file/rule/line fingerprint만 추가하며 범용 규칙·경로 예외는 변경하지 않는다. 원 scan exit2와 분류 원문을 보존한다.
 
 2026-10-08 API14 상담 로그인 이관의 Web 전송 경계를 추가했다. 공개 배포본 `tesia-contracts-api-v14-0.25.0-rc.1.tgz`(SHA256 `6056897bc819ccf57da612c798089da145b8f2cab0cf0503c2892acc0b0509f7`)의 생성 파일 10개는 README의 과거 안내까지 바이트 그대로 보존했고, 별도 어댑터는 명시적으로 호출된 claim과 최대 50개 목록 조회만 same-origin·no-store·manual redirect·엄격 JSON/UTF-8·크기 제한으로 전송한다. 익명 source의 strong `If-Match`, 로그인 target revision, CSRF와 idempotency를 함께 묶고 응답의 계약 버전·요청 결속·증가한 revision·공개 정렬 규칙·닫힌 오류를 검증하며 자동 로그인·자동 claim·retry·저장·주문 권한은 추가하지 않았다. 신규 검증은 합성 응답 기반의 로컬 transport/contract 시험일 뿐 실제 고객 이관, 운영 연결 또는 배포 승인을 뜻하지 않는다.
+
+## Bitget 연결 후 실제 계좌 조회 누락
+
+다른 팀의 진단을 운영 Backend b172921·기존 연결 metadata 교정본2a6cb9f와 비교했다. OAuth 연결 자체는 유지됐지만 실제 잔고·포지션 producer가 없었고 운영 Web에도 metadata 교정이 미반영됐다. 기존 API12 metadata 배선을 유지하고 별도 generated API17(bdaaddf8980c6ddbad2dca0c77a36fcdb677cfeb)을 소비한다. 새키·재연결은 요구하지 않는다.
+
+GET-only same-origin·정상 service bearer와 연결 튜플을 조회 전후 검증한다. 세션/owner/revision 변경·로그아웃·해제·화면 이동·숨겨진 탭은 이전 financial snapshot을 폐기한다. 일시 통신 실패는 link metadata를 보존하고 15/30/60초 간격으로 재조회한다. confirmed-empty와 unavailable을 구분하며 적용 section 하나라도 unavailable이면 해당 pane을 null로 둔다. 서로 다른 coin을 합산하지 않고 decimal 문자열을 보존한다. equity 없음은 balance로 대체하지 않고 used는 미확인으로 남긴다. 실제 포지션에는 TETH strategyId나 거래 권한을 만들지 않는다. 전체/미선택 terminal에는 실제 exchange 행이 보이며 선택된 전략에 임의 귀속하지 않는다. 레이아웃·카피·CSS·SVG·기존 로그인/연결 흐름·feature flag는 유지한다.
+
+최초 actual personal1 Opus5.5 SOURCE_HOLD C0/H1/M3/L5에서 부분 성공의 거짓 완전성, 금융 필드 추정, 일시 세션/내비게이션 오류 후 중단을 확인했다. 위 교정 후 104개 scoped Playwright 시험22.7초(신규60+기존API12보존44), TypeScript·scoped ESLint·diff check PASS다. 최초82PASS·실패·기존2a6cb9f에서도 재현되는 masked-label legacy assertion 실패는 보존한다. 잘못된 VITE_TESIA 이름을 사용한 최초 build는 최종 권위가 아니다. 최종 명시 VITE_TETH_AUTH_GOOGLE_ONLY/ BITGET_CANARY=true, EXCHANGE_CONNECT/CONSULTATION=false clean build와 재검수는 별도 수행한다. 이 작성 시 운영 반영·실계좌 GET·browser 실사용 검증은 미완료이며 실주문은 범위 밖이다.
+
+후속 독립 검수는 이전 H1/M3를 종결하고 effect 재실행 후 금융 캐시 재노출·지연 없는 반복 revision 재조회2건을 새 M으로 판정했다. 세 반례를 먼저 RED로 재현한 뒤 cleanup에서 금융값만 제거하고 조회 전에 금융값을 비우며 재바인딩은 즉시1회 후15/30/60초 간격으로 제한했다. 확정 read 권한 연결만 조회한다. 최종116개 scoped PASS26.2초·타입·scoped lint·diff check를 별도 기록한다. 이전104/82 PASS와 모든 실패는 보존한다. 2d532995/b8d5 build는 변경 전 역사이며 최종 source/build/배포 권위로 승계하지 않는다.

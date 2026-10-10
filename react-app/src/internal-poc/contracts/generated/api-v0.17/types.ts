@@ -1,0 +1,22 @@
+// Generated API17 candidate wire types; no order or credential authority.
+export type AccountProduct = {"balances":BalanceSection;"positions":PositionSection;"product":"spot" | "USDT-FUTURES" | "USDC-FUTURES" | "COIN-FUTURES" | "unified"};
+export type AccountResponse = {"apiContractVersion":"0.17.0";"data":AccountSnapshot};
+export type AccountSnapshot = {"accountMode":"classic" | "uta";"connectionId":Id;"exchangeId":"bitget";"observedAt":string;"products":Array<AccountProduct>};
+export type BalanceItem = {"available":(DecimalString) | (null);"balance":(DecimalString) | (null);"coin":Coin;"equity":(DecimalString) | (null);"frozen":(DecimalString) | (null);"locked":(DecimalString) | (null);"unrealizedPnl":(DecimalString) | (null)};
+export type BalanceSection = {"items":Array<BalanceItem>;"reason":(SectionReason) | (null);"status":SectionStatus};
+export type ClassicFuturesProduct = (AccountProduct) & ({"balances"?:{"status"?:"ok" | "unavailable"};"positions"?:{"status"?:"ok" | "unavailable"};"product"?:"USDT-FUTURES" | "USDC-FUTURES" | "COIN-FUTURES"});
+export type ClassicSpotProduct = (AccountProduct) & ({"balances"?:{"status"?:"ok" | "unavailable"};"positions"?:{"status"?:"not_applicable"};"product"?:"spot"});
+export type Coin = string;
+export type DecimalString = string;
+export type ErrorCode = "BAD_REQUEST" | "AUTHENTICATION_REQUIRED" | "FORBIDDEN" | "CSRF_INVALID" | "ORIGIN_INVALID" | "NOT_FOUND" | "PROVIDER_UNAVAILABLE" | "TRANSACTION_EXPIRED" | "TRANSACTION_REPLAYED" | "PROVIDER_FAILED" | "PERMISSION_REJECTED" | "ACCOUNT_CONFLICT" | "RATE_LIMITED" | "INTERNAL_ERROR";
+export type ErrorEnvelope = {"apiContractVersion":"0.17.0";"error":{"code":ErrorCode;"message":string}};
+export type Id = string;
+export type PositionItem = {"entryPrice":(DecimalString) | (null);"marginCoin":(Coin) | (null);"markPrice":(DecimalString) | (null);"quantity":QuantityString;"side":"long" | "short";"symbol":Symbol;"unrealizedPnl":(DecimalString) | (null)};
+export type PositionSection = {"items":Array<PositionItem>;"reason":(SectionReason) | (null);"status":SectionStatus};
+export type QuantityString = string;
+export type SectionReason = "PROVIDER_FAILED" | "PERMISSION_REJECTED" | "RATE_LIMITED" | "PROVIDER_UNAVAILABLE";
+export type SectionStatus = "ok" | "unavailable" | "not_applicable";
+export type Symbol = string;
+export type UnifiedFuturesProduct = (AccountProduct) & ({"balances"?:{"status"?:"not_applicable"};"positions"?:{"status"?:"ok" | "unavailable"};"product"?:"USDT-FUTURES" | "USDC-FUTURES" | "COIN-FUTURES"});
+export type UnifiedProduct = (AccountProduct) & ({"balances"?:{"status"?:"ok" | "unavailable"};"positions"?:{"status"?:"not_applicable"};"product"?:"unified"});
+export type DeepReadonly<T> = T extends object ? {readonly [K in keyof T]:DeepReadonly<T[K]>} : T;

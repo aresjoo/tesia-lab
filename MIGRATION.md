@@ -2,7 +2,17 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 개발 후속 — Bitget 연결을 터미널에 전달
+### 현재 개발 후속 — 기존 Bitget 연결로 실제 계좌 조회
+
+Web [`9f513ac`](https://github.com/beak1011/tesia-web/tree/9f513ac0d0744f92bbc1c29cb85679aadfaaa01a)의 clean React 전체 2,433파일·35,024,472bytes를 공식 sync로 전달했다. snapshot `3f15a336bee6f8e73ce2a5fcbd013f42578e9b1e1cae84fc4f36059e7cc88455`, sourceDirty0·제거0이다. 원본 root/main·Worker·배치·카피·CSS·SVG는 변경하지 않는다. 최초 sync는 제한clone의 origin/main 추적ref부재로 owned partialcopy 후실패했고, 명시fetch와 해당복사본만복구 후 재실행했다. 원실패는 cache에 보존한다.
+
+다른 팀의 연결 metadata 수정은 맞았지만 서버 계좌 producer도 필요했다. [Backend PR174](https://github.com/beak1011/tesia-backend/pull/174)는 기존 암호화credential을 nonmutating getter로 재사용하는 API17 GET을 구현한다. Classic/UTA 계좌별 잔고·현재포지션을 조회하고 owner/session/연결을 요청전후 검증한다. 출금·이체·주문은 추가하지 않으며 기존 RSA/Google/canary/orders=false를 보존한다. API12metadata와API17금융조회는 구분한다. 사용자의 키재발급·재OAuth를 요구할 근거는 없다.
+
+Web 전용+기존연결 보존116PASS와 Backend 설치wheel51PASS/skip0을 각각 확인했다. 실제 personal1 Opus5.5는 Backend sourceGO(필수canary범위시험후폐쇄), Web 마지막hookdelta C0H0M0L5 SOURCE_GO이며 운영GO가 아니다. 일부section실패·로그아웃/owner변경/연결해제·응답역전·재진입은 이전금융사실을폐기하고 unknown을0으로만들지않는다. equity미제공시available등으로합산대체하지않고 frozen은독립보존한다. 정상poll중일시unavailable표시의체감, 실계좌providerGET·운영배포·자동매매/체결 성공은 아직별도확인대상이다.
+
+운영Backend/Web 반영과 실제고객조회는 준비중이다. Source/Git전달을 서비스완료로 해석하지 않는다. 정확한 상태는 아래 verification과 Program의 Bitget account-read 정본을 따른다.
+
+### 직전 — Bitget 연결을 터미널에 전달
 
 Web [`2a6cb9f`](https://github.com/beak1011/tesia-web/tree/2a6cb9fac650852dc17c2f80b4700d8a641ce9cf)의 clean 전체 React2,423파일·34,932,511bytes를 공식 sync/verify로 전달했다. snapshot `ad6e267267caa6a30e969d82c353c7944dd89a40675a23e56ffd7fc3062cfe2a`, sourceDirty0·제거0이다. 최신HEAD는product source baa581a 대비문서2개/시험1개만변경했다. ares root/main·원문/CSS/SVG·Node/Worker와 Google/session/Bitget 저장소·운영 flags는 변경하지 않는다. 아래 운영 반영은 직전32c5 기록이며 이번 개발 후속의 배포 증거가 아니다.
 

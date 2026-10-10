@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useClientPreferences } from '../client-preferences'
-import { createSdk, TesiaApiClient } from '../internal-poc/contracts/generated/api-v0.1/index.js'
+import { ApiResponseError, createSdk, TesiaApiClient } from '../internal-poc/contracts/generated/api-v0.1/index.js'
 import { SameOriginApiTransport } from '../internal-poc/api-adapter'
 import type { NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
 import { ApiV12Error, TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
@@ -11,7 +11,11 @@ import { pushSiteLocation } from '../site-navigation'
 import { CLIENT_BROKERS } from '../client-broker-fixtures'
 import type { BrokerServicePresentation } from '../client-broker-presentation'
 import type { NativeAccountPresentation } from '../internal-poc/native-account-presentation'
-import { connectedAccountPresentation } from './account-presentation'
+import { connectedAccountPresentation, observedAccountPresentation } from './account-presentation'
+import { ApiV17Error, TesiaBitgetAccountV17Client } from '../internal-poc/contracts/generated/api-v0.17/client.js'
+import { accountConnectionBinding, createBitgetAccountTransport } from './account-read'
+
+class SessionBindingError extends Error {}
 
 /** Explicit service opt-in. An anonymous session never starts exchange OAuth. */
 export function useExchangeConnectionPresentation(scope: string | null, authenticated: boolean, enabled: boolean) {
@@ -84,14 +88,30 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     })
     const session = createSdk(new TesiaApiClient(new SameOriginApiTransport())).session
     const client = new TesiaExchangeConnectionsV12Client(createExchangeConnectionsTransport())
+    const accountClient = new TesiaBitgetAccountV17Client(createBitgetAccountTransport())
+    let financialGeneration = 0, financialPending = false, financialStopped = false, financialFailures = 0, financialRebinds = 0, metadataRefreshes = 0
+    let financialAbort: AbortController | undefined, financialTimer: number | undefined
+    let snapshots: Awaited<ReturnType<typeof accountClient.account>>[] = []
+    const retireFinancial = (clear: boolean) => {
+      financialGeneration++; financialAbort?.abort()
+      if (financialTimer !== undefined) window.clearTimeout(financialTimer)
+      financialTimer = undefined
+      if (clear) snapshots = []
+    }
     const currentSession = async () => {
       try {
         const result = await session.current()
         if (retired || result.body.meta.resourceRevision !== result.body.data.revision
-          || result.body.data.sessionId !== scope || result.body.data.state !== 'AUTHENTICATED') throw new Error('SESSION_CHANGED')
+          || result.body.data.sessionId !== scope || result.body.data.state !== 'AUTHENTICATED') throw new SessionBindingError('SESSION_CHANGED')
         return result.body.data
       } catch (error) {
-        if (!retired) { account = undefined; accountRead++; publish() }
+        if (!retired) {
+          retireFinancial(true); accountRead++
+          if (error instanceof SessionBindingError || error instanceof ApiResponseError && error.status === 401) {
+            financialStopped = true; account = undefined
+          } else { financialFailures++; projectAccounts(); scheduleFinancial() }
+          publish()
+        }
         throw error
       }
     }
@@ -100,18 +120,36 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     let broker: BrokerServicePresentation | undefined
     let account: NativeAccountPresentation | undefined
     let confirmedConnections: Awaited<ReturnType<typeof client.connections>>['data']['connections'] | null = null
+    const readableConnections = () => confirmedConnections?.filter(item => item.exchangeId === 'bitget' && item.status === 'connected'
+      && item.permissionsVerified && item.permissions.read) ?? []
+    const accountMetadata = () => confirmedConnections === null ? undefined : connectedAccountPresentation(scope, [...confirmedConnections],
+      key => exchangeText(language, key), async () => {
+        const current = broker?.catalog?.find(item => item.broker.id === 'bitget')?.connectionState
+        if (retired || !broker?.actions?.onConnect || !current) throw new Error('PROVIDER_UNAVAILABLE')
+        await broker.actions.onConnect('bitget', current)
+      })
+    const projectAccounts = () => {
+      const metadata = accountMetadata()
+      account = !financialStopped && metadata ? observedAccountPresentation(metadata, snapshots) : undefined
+    }
+    const scheduleFinancial = () => {
+      if (retired || unavailable || financialStopped || financialPending || metadataRefreshes || document.hidden
+        || financialTimer !== undefined || !readableConnections().length) return
+      // Bounded backoff for transient failures; each attempt still revalidates
+      // session/metadata and only one read may be pending. No OAuth is retried.
+      const delay = 15_000 * 2 ** Math.min(Math.max(financialFailures - 1, 0), 2)
+      financialTimer = window.setTimeout(() => { financialTimer = undefined; void refreshFinancial() }, delay)
+    }
     const setAccounts = (connections: Awaited<ReturnType<typeof client.connections>>['data']['connections'] | null) => {
       accountRead++
+      if (accountConnectionBinding(connections) !== accountConnectionBinding(confirmedConnections)) retireFinancial(true)
       confirmedConnections = connections
-      account = connections === null ? undefined : connectedAccountPresentation(scope, [...connections],
-        key => exchangeText(language, key), async () => {
-          const current = broker?.catalog?.find(item => item.broker.id === 'bitget')?.connectionState
-          if (retired || !broker?.actions?.onConnect || !current) throw new Error('PROVIDER_UNAVAILABLE')
-          await broker.actions.onConnect('bitget', current)
-        })
+      financialStopped = connections === null
+      projectAccounts()
       if (broker?.catalog) broker = { ...broker, catalog: broker.catalog.map(item => item.broker.id === 'bitget'
         ? { ...item, connectionState: account?.accounts?.length ? 'CONNECTED' : 'NEEDS_LINK' } : item) }
       publish()
+      if (!financialPending && financialTimer === undefined) void refreshFinancial()
     }
     const publish = () => {
       if (!retired && !unavailable) setState({ scope, broker, account, ...(requested && connection ? { connection: { ...connection,
@@ -123,23 +161,87 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       // Closing is not cancellation. Retire every captured action/read so an
       // in-flight result cannot reopen the closed surface or mutate later.
       controller?.dispose(); controller = undefined
+      retireFinancial(true); projectAccounts()
       publish()
-      // A finite read survives visible retirement. It neither polls nor mutates
-      // the provider, and cannot replace a newer read or another owner's data.
+      // This finite metadata refresh survives visible retirement without OAuth
+      // mutation, and cannot replace a newer read or another owner's data.
       void refreshAccounts()
     }
     const refreshAccounts = async () => {
       if (retired || unavailable || !catalogConfirmed) return
       const request = ++accountRead
+      metadataRefreshes++
+      let confirmed = false
       try {
         await currentSession()
         const result = await client.connections()
         await currentSession()
-        if (!retired && request === accountRead) setAccounts(result.data.connections)
+        if (!retired && request === accountRead) { setAccounts(result.data.connections); confirmed = true }
       } catch (error) {
         // A transport outage does not revoke previously verified metadata.
         // Invalid/unauthorized responses do; unknown financial data stays null.
-        if (!retired && request === accountRead && !(error instanceof ApiV12Error && error.code === 'TRANSPORT_FAILED')) setAccounts(null)
+        if (!retired && request === accountRead) {
+          if (error instanceof ApiV12Error && error.code === 'TRANSPORT_FAILED') {
+            retireFinancial(true); financialFailures++; projectAccounts(); publish()
+          } else setAccounts(null)
+        }
+      } finally {
+        metadataRefreshes--
+        if (confirmed && !financialFailures) void refreshFinancial()
+        else scheduleFinancial()
+      }
+    }
+    const refreshFinancial = async () => {
+      if (retired || unavailable || financialStopped || financialPending || metadataRefreshes || document.hidden || !catalogConfirmed) return
+      const connections = readableConnections()
+      if (!connections.length) return
+      const generation = financialGeneration, binding = accountConnectionBinding(confirmedConnections)
+      const abort = new AbortController()
+      financialAbort = abort; financialPending = true
+      // A pending owner/metadata check cannot keep an older financial snapshot
+      // visible. Only completion of this freshly bound read can publish facts.
+      snapshots = []; projectAccounts(); publish()
+      const rebind = () => {
+        financialRebinds++
+        if (financialRebinds > 1) financialFailures = Math.max(financialFailures, financialRebinds - 1)
+      }
+      const current = () => !retired && !financialStopped && !abort.signal.aborted && generation === financialGeneration
+        && binding === accountConnectionBinding(confirmedConnections)
+      try {
+        const before = await currentSession()
+        if (!current()) return
+        const observations: Awaited<ReturnType<typeof accountClient.account>>[] = []
+        for (const item of connections) {
+          observations.push(await accountClient.account(item.connectionId, { signal: abort.signal }))
+          if (!current()) return
+        }
+        // Re-read metadata after provider I/O: external revocation, permission
+        // changes or replacement of the connection cannot retain older facts.
+        const latest = await client.connections()
+        const after = await currentSession()
+        if (!current()) return
+        if (before.revision !== after.revision) { rebind(); retireFinancial(true); projectAccounts(); publish(); return }
+        if (binding !== accountConnectionBinding(latest.data.connections)) { rebind(); setAccounts(latest.data.connections); return }
+        financialFailures = 0; financialRebinds = 0; snapshots = observations; projectAccounts(); publish()
+      } catch (error) {
+        if (!current()) return
+        snapshots = []
+        if (error instanceof ApiV17Error && error.status === 401 || error instanceof ApiV12Error && [401, 403].includes(error.status)) {
+          retireFinancial(true); financialStopped = true; account = undefined
+        } else {
+          financialFailures++; projectAccounts()
+          // Permission rejection or an externally removed connection needs an
+          // authoritative metadata refresh, never a cached connected flag.
+          if (error instanceof ApiV17Error && [403, 404].includes(error.status)) void refreshAccounts()
+        }
+        publish()
+      } finally {
+        financialPending = false
+        if (financialAbort === abort) financialAbort = undefined
+        if (!retired && !unavailable && !financialStopped && readableConnections().length) {
+          if (generation !== financialGeneration && !financialFailures && financialRebinds <= 1) void refreshFinancial()
+          else scheduleFinancial()
+        }
       }
     }
     const allowed = async () => {
@@ -236,15 +338,26 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       }
     })()
     const leave = () => close()
+    const visibility = () => {
+      retireFinancial(true); projectAccounts(); publish()
+      if (!document.hidden) { financialFailures = 0; void refreshAccounts() }
+    }
     window.addEventListener('popstate', leave)
     window.addEventListener('hashchange', leave)
     window.addEventListener('teth:navigate', leave)
+    document.addEventListener('visibilitychange', visibility)
     return () => {
       retired = true; actionEpoch++; controller?.dispose()
+      retireFinancial(true)
+      // Effect retirement may retain verified connection metadata, but a same-
+      // owner reactivation or language change must not re-expose its old facts.
+      setState(value => value?.scope === scope && value.account ? { ...value, account: { ...value.account,
+        ledger: { pos: null, open: null, orders: null, fills: null, closed: null, assets: null } } } : value)
       if (connectionChanges.current.notify === invalidateConnection) connectionChanges.current.notify = undefined
       window.removeEventListener('popstate', leave)
       window.removeEventListener('hashchange', leave)
       window.removeEventListener('teth:navigate', leave)
+      document.removeEventListener('visibilitychange', visibility)
     }
   }, [scope, authenticated, enabled, language, locator])
   return enabled && authenticated && state?.scope === scope ? state : undefined

@@ -1,0 +1,30 @@
+{
+  "apiContractVersion": "0.17.0",
+  "maxDocumentDepth": 16,
+  "maxResponseBytes": 262144,
+  "maxSectionItems": 1000,
+  "operations": [
+    {
+      "method": "GET",
+      "name": "account",
+      "path": "/api/v1/exchange-connections/{connectionId}/account",
+      "response": "AccountResponse"
+    }
+  ],
+  "statusByCode": {
+    "ACCOUNT_CONFLICT": 409,
+    "AUTHENTICATION_REQUIRED": 401,
+    "BAD_REQUEST": 400,
+    "CSRF_INVALID": 403,
+    "FORBIDDEN": 403,
+    "INTERNAL_ERROR": 500,
+    "NOT_FOUND": 404,
+    "ORIGIN_INVALID": 403,
+    "PERMISSION_REJECTED": 403,
+    "PROVIDER_FAILED": 502,
+    "PROVIDER_UNAVAILABLE": 503,
+    "RATE_LIMITED": 429,
+    "TRANSACTION_EXPIRED": 410,
+    "TRANSACTION_REPLAYED": 409
+  }
+}

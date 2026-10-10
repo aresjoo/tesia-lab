@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "purpose": "최신 clean Web2a6cb9f Bitget terminal metadata 연결 후속과 직전 실제32c5 UI 운영 반영을 구분한다. 실제잔고/포지션 producer·고객OAuth·모델·주문·전체1260쌍 일치는 별도이며 이번개발후속 운영변경은0이다.",
-  "sourceCommit": "2a6cb9fac650852dc17c2f80b4700d8a641ce9cf",
+  "purpose": "기존 Bitget OAuth 연결을 재사용하는 read-only API17 계좌조회 source와 React배선을 전달한다. 실제운영/고객GET/자동주문 성공은 별도증거다.",
+  "sourceCommit": "9f513ac0d0744f92bbc1c29cb85679aadfaaa01a",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "ad6e267267caa6a30e969d82c353c7944dd89a40675a23e56ffd7fc3062cfe2a",
+  "snapshotDigest": "3f15a336bee6f8e73ce2a5fcbd013f42578e9b1e1cae84fc4f36059e7cc88455",
   "latestBitgetTerminalMetadata": {
     "sourceCommit": "2a6cb9fac650852dc17c2f80b4700d8a641ce9cf",
     "reactFiles": 2423,
@@ -6957,5 +6957,37 @@
         "Existing 500kB chunk warning and default Web dependency High2/Moderate1 unresolved"
       ]
     }
+  },
+  "latestBitgetAccountRead": {
+    "sourceCommit": "9f513ac0d0744f92bbc1c29cb85679aadfaaa01a",
+    "backendCommit": "1bdfa39327d4abc3586cddae90415791508e07fc",
+    "contractsAuthorityCommit": "bdaaddf8980c6ddbad2dca0c77a36fcdb677cfeb",
+    "reactFiles": 2433,
+    "reactBytes": 35024472,
+    "sourceDirtyFiles": [],
+    "removedPriorPaths": [],
+    "syncExit": 0,
+    "verifyExit": 0,
+    "webTestsPassed": 116,
+    "backendInstalledTestsPassed": 51,
+    "backendInstalledSkips": 0,
+    "sourceIndependentReview": {
+      "model": "claude-opus-5-5",
+      "profile": "personal1",
+      "webDelta": "SOURCE_GO C0H0M0L5",
+      "backendRuntime": "SOURCE_GO C0H0M1L9; mandatorycanarytests closed in1bdfa"
+    },
+    "existingOAuthCredentialsReused": true,
+    "userKeyRegenerationRequired": false,
+    "uiLayoutCopyCssSvgChanges": false,
+    "actualDeployment": "pending",
+    "realProviderRead": "not_performed",
+    "orders": 0,
+    "knownLimitations": [
+      "현재계좌 사실만조회; 주문/체결이력/전략귀속/자동매매완료 아님",
+      "일부 section실패는 금융paneunknown; 빈계좌0합성 안함",
+      "정상poll전에도financialfacts를clear하여일시unavailable표시가능; 실제체감 미검증",
+      "Source/test/Git와운영/고객조회는별도"
+    ]
   }
 }

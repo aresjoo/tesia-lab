@@ -54,6 +54,10 @@ async function mount(page: Page, baseURL: string | undefined, options: { enabled
         wire.holdNextSnapshot = false; wire.snapshotHeld = true
         await new Promise<void>(resolve => { wire.releaseSnapshot = resolve })
       }
+    } else if (path === `/api/v1/exchange-connections/${connectionId}/account` && request.method() === 'GET') {
+      // This regression suite supplies connection metadata only. Financial
+      // unavailability stays unknown, rather than inventing balances/positions.
+      return route.fulfill({ status: 503, headers, body: JSON.stringify({ apiContractVersion: '0.17.0', error: { code: 'PROVIDER_UNAVAILABLE', message: 'Synthetic account observations unavailable' } }) })
     } else if (path === `/api/v1/exchange-connections/${connectionId}` && request.method() === 'DELETE') {
       if (wire.holdDisconnect) await new Promise<void>(resolve => { wire.releaseDisconnect = resolve })
       wire.connected = false; data = { connectionId, status: 'disconnected', revocation: 'local_only' }
