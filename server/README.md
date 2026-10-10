@@ -6,7 +6,7 @@
 
 사용자가 지정한 `be935c98f2a67f62287549736f173ccbe0600021`과 원 비교본 `9fbff821df62cad11d026022fc7628c7fcebc431`의 index/Node/Worker 세 파일은 바이트 SHA가 같다. 원 browser `taiSystem/taiConvSystem/taiBuildSystem/taiMarket/taiStream`→`POST /api/chat`→Anthropic SDK/SSE·market tools, BT_SYS_J/R의 판단·결과 설명을 대조했다. 후속은 기존 registry1.24와 activation guard를 계승하며 이번에 index·SDK 호출·React를 다시 작성하지 않았다.
 
-이 checkout의 React2,135개는 과거 비교 snapshot이다. 최신 migration `b284262832648ccea33aadeca9508fc632b03c25`의 React2,423개 및 현재 Backend의 API13 상담 adapter/journal/SSE·API14 이관 구현을 확인했다. **그 구현의 존재와 이 Lab의 동적 선호·출력 gate·표시 producer를 실제로 소비하는 것은 별도다.** 정적 export1.24 담당의 작업, existing Google/Bitget·원본 카피·SVG·레이아웃은 보존한다. 현재 source/ref·통합 잔여는 [Program 정본](https://github.com/beak1011/tesia-program/pull/189)의 §16과 Ledger가 소유한다.
+이 checkout의 React2,135개는 과거 비교 snapshot이다. 최신 migration `b284262832648ccea33aadeca9508fc632b03c25`의 React2,423개 및 현재 Backend의 API13 상담 adapter/journal/SSE·API14 이관 구현을 확인했다. **그 구현의 존재와 이 Lab의 동적 선호·출력 gate·표시 producer를 실제로 소비하는 것은 별도다.** existing Google/Bitget·원본 카피·SVG·레이아웃은 보존한다. 현재 source/ref·통합 잔여는 [Program 정본](https://github.com/beak1011/tesia-program/pull/189)의 §16과 Ledger가 소유한다.
 
 ## 요청과 응답 계약
 
@@ -18,6 +18,9 @@
 | `investment-output-gate.mjs` | 실제 delta의 실행·사고 태그 차단, 표시 JSON 검증, 부분/실패 응답의 완료 금지 |
 | `../investment-ui-contract.mjs`, `investment-display-contract.mjs` | source와 서버의 ASK/NEXT/TITLE/CHART 표시 계약 |
 | `index.mjs`, `worker.mjs`, `investment-tool-policy.mjs` | 기존 Anthropic SDK/SSE·읽기 전용 조회, retry0·최대6회 정상 continuation |
+| `tools/export-consultation-policies.mjs` | registry1.42의 제품 mode4 정책을 owner-private 새 디렉터리에 create-only로 준비. cheap/standard/deep 비용 tier3 라우팅·설정·credential은 내보내지 않음 |
+
+Exporter는 정책별 exact text/ID/SHA, NFC, 최대32,768 UTF-8 bytes와 디렉터리0700/파일0600을 검증한다. 결과 manifest도 동적 선호·output gate·표시 parser·provider·서비스 활성화가 모두 미연결임을 명시하며, 이 도구 실행만으로 실제 상담 소비가 완료되지 않는다.
 
 입력은 최대16개, 개별16,000자·전체64,000자·context16,000자이며 마지막 실제 user를 보존한다. browser system은 미확인 user-role 데이터로 감싸며 역할·승인·시장값을 권위로 받지 않는다. assistant 발화도 사용자 승인이나 사실 근거가 아니다. `plain:true`는 원 BT_SYS_J/R의 정확한 digest 두 개만 스타일 선택에 사용하고 unknown plain/think:true는422로 거절한다.
 

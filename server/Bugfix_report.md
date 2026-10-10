@@ -1,6 +1,8 @@
 # 투자 상담 활성화 준비 — 누적 버그 보고서
 
-이 후보의 기준은 Lab `8646b6525631d5e1f71e38a8e2e515f23571b5b5`/prompt registry1.24.0이다. 제품·권위·활성화 정본은 Program §16과 WORK_LEDGER다. 기존 공개 QA 실패는 `qa/README.md`와 원문 `qa/investment-usability.json`에 보존한다. 본 보고서의 국소 교정을 모델 품질·React 실제 연결·운영 성공으로 승계하지 않는다.
+현재 정책 source 기준은 Lab `1615da1a6901a437e199c7f7f3ee8fe3b94a0c23`/prompt registry1.42.0이며, 아래 activation guard 이력의 기준은 `8646b6525631d5e1f71e38a8e2e515f23571b5b5`/registry1.24.0이다. 제품·권위·활성화 정본은 Program §16과 WORK_LEDGER다. 기존 공개 QA 실패는 `qa/README.md`와 원문 `qa/investment-usability.json`에 보존한다. 본 보고서의 국소 교정을 모델 품질·React 실제 연결·운영 성공으로 승계하지 않는다.
+
+registry1.42 exact4 정책 export는 owner-private/create-only, NFC·32,768bytes 경계를 유지한다. 제품 mode `settings/dialogue/judgment/report` 4개는 비용 tier `cheap/standard/deep` 3개와 별개이며, export manifest는 동적 선호와 provider/서비스 연결을 모두 false로 남긴다. 관련 국소6시험은6PASS이고 전체1,412·UI·모델 호출·운영 작업은 수행하지 않았다.
 
 ## 동일 조건 비교 — 개선점 관측, 모델 품질 NO_GO 유지
 
