@@ -1,5 +1,11 @@
 # Web 작업 지침
 
+- 운영 보존 최종 delta writer는 모두 반환했다. ROOT는 Opus가 지적한 초기 catalog/close epoch와 자연 복귀 recheck 조건의 최소 교정 및 신규1/2키 인수를 마쳤다. 최종 source를 고정한 뒤 정확 flags build·delta 독립 검수·실제 운영 적용을 소유한다. 코드/국소시험/Git/운영/실provider 성공을 구분하며 새 디자인·copy·whole/9월/730 반복0이다. 구버전 탭은 새로고침이 필요할 수 있고 기존 로그인·거래소 저장 데이터는 보존한다.
+
+- 운영 보존 후속 writer는 모두 다시 동결·반환했다. ROOT ClientServiceExperience의 Bitget canary authorize bridge·owner/browse/plan ref와 NativeLoginPanel의 locator 없는 명시 session-only 재확인을 최소 교정했다. source8/spec3는 타입·지정 lint 및 leaf/통합 국소 결과에 결속하며 새 frozen source의 실제 build/독립 검수/Git/migration/운영은 ROOT만 수행한다. 추가 UI/copy/CSS/SVG 변경0, 전체·9월·730 반복0이다. auth/Bitget 각 시험의 최초 하니스 실패와 미검증 익명 가입→AUTH continuation/실 provider는 Bugfix에 보존한다.
+
+- UI 우선 배포 보존 후보의 auth exact4·Bitget exact3는 동결·ROOT 반환했다. ROOT 배선은 `NativeServiceApp.tsx`, `service-main.tsx`, `ClientServiceExperience.tsx` exact3이며 원본 CSS/copy/SVG와 최신 상담/API13·14/owner/복구를 보존한다. 일반 Exchange/Consultation은 false, Google-only/Bitget canary는 true인 실제 운영 구성을 최종 빌드에 명시해야 한다. 국소 leaf 시험·lint는 인수했지만 ROOT 통합/최종 build·새 독립 검수·운영 반영은 아직이다. locator 분실/만료의 자연 로그인 복구 제한은 검수 잔여이며 자동 승인하지 않는다. 추가 source 쓰기는 새 exact 배정 후에만 수행한다.
+
 - 현재90상태 비교 후속은 ROOT(홈/대화/shell/관련시험)와 설정·전략 요약·소개/거래소·카피 상세의 독립 writer 범위를 모았고 모든 writer는 파일을 동결·반환했다. ROOT가 최종 미세 교정·검수·문서/Git·공식 migration 전달을 소유한다. `?inspect=1`은 내부 고지만 노출하며 인증·provider·주문 flag가 아니다. 일반 화면에는 원본에 없는28px 검수 바가 없다. 원문·SVG·실제 기록/안전 고지와 승인44px 접근성을 보존하며 전체1,260쌍 일치 또는 실제서비스 GO로 승격하지 않는다. 추가 source 쓰기는 새 exact 범위 배정 후에만 가능하며 정확한 수정·잔여·증거는 Bugfix_report 최상단을 따른다.
 
 - 후속 `ares_parity_followup`의 `src/client-connection-plan.css`·`tests/client-connection-plan.spec.ts` exact2는 동결·반환했다. 원본9fb7309 본인 확인 제목500/회색 한 줄만 복원했고 신규1키1440/390 RED→GREEN1PASS/3.6초·개인1 Opus5.5 C0H0M0 scopedGO를 인수했다. 카피·JSX/SVG·API/권한/flags 변경0이며 ROOT가 Bugfix/Git/공식 migration 전달을 소유한다. AGY 첫 비교 빈 응답과 별도 inline 국소 의견·Low·모바일 cold mount/전수/실서비스 한계는 Bugfix를 따른다. 추가 제품 쓰기는 명시 배정 전 금지한다.

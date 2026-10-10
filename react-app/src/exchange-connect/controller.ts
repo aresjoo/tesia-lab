@@ -16,6 +16,8 @@ export type ExchangeControllerPorts = {
   onOpenTerminal?: () => void | Promise<void>
   text: (key: ExchangeCopyKey) => string
   onChange: (presentation: NativeConnectionPresentation) => void
+  automaticPolling?: boolean
+  allowedExchangeId?: Provider['exchangeId']
 }
 const names: Record<Provider['exchangeId'], string> = { bybit: 'Bybit', bitget: 'Bitget', bingx: 'BingX', gate: 'Gate', mexc: 'MEXC', htx: 'HTX' }
 const ID = /^[A-Za-z0-9_-]{16,128}$/
@@ -34,6 +36,8 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
   let providers: readonly Provider[] = [], connections: readonly Connection[] = []
   let transaction: Transaction | undefined
   let disconnectNotice = ''
+  let pollTimer: ReturnType<typeof setTimeout> | undefined, pollDeadline = 0, pollStopped = false
+  const stopPolling = () => { if (pollTimer !== undefined) clearTimeout(pollTimer); pollTimer = undefined; pollStopped = true }
   let revision = 0
   const t = ports.text
   const alive = (epoch: number) => !disposed && epoch === generation
@@ -50,6 +54,7 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     const epoch = generation
     try { await ensureSession(epoch); await operation(epoch) }
     catch (error) {
+      stopPolling()
       if (alive(epoch)) {
         if (error instanceof Error && error.message === 'SESSION_CHANGED') {
           providers = []; connections = []; transaction = undefined
@@ -66,22 +71,38 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     return csrf
   }
   const terminalCleanup = (value: Transaction) => ['failed', 'expired', 'cancelled'].includes(value.status) ? t('cleanup') : ''
+  const connect = (exchangeId: string) => guard(async epoch => {
+    if (ports.allowedExchangeId) {
+      if (exchangeId !== ports.allowedExchangeId) throw new Error('PROVIDER_UNAVAILABLE')
+      const catalog = await ports.client.catalog()
+      await ensureSession(epoch)
+      providers = catalog.data.providers.filter(item => item.exchangeId === ports.allowedExchangeId)
+    }
+    const provider = providers.find(item => item.exchangeId === exchangeId && item.available)
+    if (!provider) throw new Error('PROVIDER_UNAVAILABLE')
+    const result = await ports.client.start({ exchangeId: provider.exchangeId }, await mutationToken(epoch))
+    if (!alive(epoch)) return
+    await ensureSession(epoch)
+    const candidate = result.data
+    if (candidate.exchangeId !== exchangeId || candidate.status !== 'pending' || !candidate.authorizationUrl) throw new Error('INVALID_TRANSACTION')
+    if (ports.allowedExchangeId === 'bitget') {
+      const url = new URL(candidate.authorizationUrl)
+      // Do not normalize an explicit port, credentials, a fragment or another
+      // vendor path into the operating Bitget consent destination.
+      if (!/^https:\/\/www\.bitget\.com\//.test(candidate.authorizationUrl) || candidate.authorizationUrl.includes('#')
+        || url.protocol !== 'https:' || url.hostname !== 'www.bitget.com' || url.username || url.password || url.port || url.hash
+        || url.pathname !== '/account/oauth') throw new Error('INVALID_TRANSACTION')
+    }
+    transaction = candidate
+    pollStopped = false; pollDeadline = 0
+    showPending()
+    ports.navigateToExchange(candidate.authorizationUrl)
+  })
   const showExchanges = (status: NativeConnectionPresentation['status'] = 'ready', description = t('intro')) => {
     emit(status === 'ready' && !providers.some(provider => provider.available) ? 'unavailable' : status, {
       id: `exchanges:${++revision}`, kind: 'exchange', title: t('title'), description,
       exchanges: providers.filter(provider => provider.available).map(provider => ({ id: provider.exchangeId, title: names[provider.exchangeId] })),
-      onChoose: exchangeId => guard(async epoch => {
-        const provider = providers.find(item => item.exchangeId === exchangeId && item.available)
-        if (!provider) throw new Error('PROVIDER_UNAVAILABLE')
-        const token = await mutationToken(epoch)
-        const result = await ports.client.start({ exchangeId: provider.exchangeId }, token)
-        if (!alive(epoch)) return
-        await ensureSession(epoch)
-        transaction = result.data
-        if (transaction.exchangeId !== exchangeId || transaction.status !== 'pending' || !transaction.authorizationUrl) throw new Error('INVALID_TRANSACTION')
-        showPending()
-        ports.navigateToExchange(transaction.authorizationUrl)
-      }),
+      onChoose: connect,
     })
   }
   const showPending = () => {
@@ -89,10 +110,11 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
     const id = transaction.transactionId
     emit('ready', { id: `pending:${++revision}`, kind: 'exchange', title: names[transaction.exchangeId], description: t('pending'),
       exchanges: [
-        { id: 'refresh', title: t('refresh') },
+        ...(!ports.automaticPolling || pollStopped ? [{ id: 'refresh', title: t('refresh') }] : []),
         { id: 'cancel', title: t('cancel') },
       ],
       onChoose: action => action === 'refresh' ? guard(epoch => observeTransaction(id, epoch)) : action === 'cancel' ? guard(async epoch => {
+        stopPolling()
         const result = await ports.client.cancel(id, await mutationToken(epoch))
         if (!alive(epoch)) return
         transaction = undefined; showExchanges('ready', [t('intro'), terminalCleanup(result.data)].filter(Boolean).join(' '))
@@ -142,36 +164,54 @@ export function createExchangeConnectionController(scope: string, ports: Exchang
   const loadConnections = async (epoch: number) => {
     const result = await ports.client.connections()
     await ensureSession(epoch)
-    if (alive(epoch)) connections = result.data.connections.filter(connection => connection.status === 'connected')
+    if (alive(epoch)) connections = result.data.connections.filter(connection => connection.status === 'connected'
+      && (!ports.allowedExchangeId || connection.exchangeId === ports.allowedExchangeId))
   }
   const observeTransaction = async (id: string, epoch: number) => {
     if (!ID.test(id)) throw new Error('INVALID_LOCATOR')
     const result = await ports.client.transaction(id)
     await ensureSession(epoch)
     if (!alive(epoch)) return
-    if (result.data.transactionId !== id) throw new Error('INVALID_TRANSACTION')
+    if (result.data.transactionId !== id || ports.allowedExchangeId && result.data.exchangeId !== ports.allowedExchangeId) throw new Error('INVALID_TRANSACTION')
     transaction = result.data
     if (transaction.status === 'connected') {
+      stopPolling()
       await loadConnections(epoch)
       if (!connections.some(connection => connection.connectionId === transaction?.connectionId && connection.exchangeId === transaction.exchangeId)) throw new Error('CONNECTION_NOT_CONFIRMED')
       disconnectNotice = ''
       showConnected()
-    } else if (['pending', 'processing'].includes(transaction.status)) showPending()
+    } else if (['pending', 'processing'].includes(transaction.status)) { showPending(); schedulePolling(id, epoch) }
     else {
+      stopPolling()
       const cleanup = terminalCleanup(transaction)
       transaction = undefined; showExchanges('ready', [t('failed'), cleanup].filter(Boolean).join(' '))
     }
   }
+  const schedulePolling = (id: string, epoch: number) => {
+    if (!ports.automaticPolling || pollStopped || !alive(epoch)) return
+    pollDeadline ||= Date.now() + 300_000
+    if (Date.now() >= pollDeadline) { stopPolling(); showPending(); return }
+    if (pollTimer !== undefined) clearTimeout(pollTimer)
+    pollTimer = setTimeout(() => {
+      pollTimer = undefined
+      if (!alive(epoch) || pollStopped) return
+      if (locked) { schedulePolling(id, epoch); return }
+      void guard(current => observeTransaction(id, current))
+    }, Math.min(1_000, pollDeadline - Date.now()))
+  }
   return {
+    connect,
+    hasObservedTransaction: (id: string) => transaction?.transactionId === id,
+    stopPolling: () => { stopPolling(); generation++ },
     load: (locator: string | null = null) => guard(async epoch => {
       emit('loading', { id: `loading:${++revision}`, kind: 'exchange', title: t('title'), exchanges: null })
       const catalog = await ports.client.catalog()
       await ensureSession(epoch)
       if (!alive(epoch)) return
-      providers = catalog.data.providers
+      providers = catalog.data.providers.filter(provider => !ports.allowedExchangeId || provider.exchangeId === ports.allowedExchangeId)
       if (locator) await observeTransaction(locator, epoch)
       else { await loadConnections(epoch); if (connections.length) showConnected(); else showExchanges() }
     }),
-    dispose: () => { disposed = true; generation++; providers = []; connections = []; transaction = undefined },
+    dispose: () => { stopPolling(); disposed = true; generation++; providers = []; connections = []; transaction = undefined },
   }
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { useClientPreferences } from '../client-preferences'
 import { nativeAppNotice, nativeAppUiText } from './native-app-ui-copy'
 import { nativeShellText } from './native-shell-copy'
-import { useExchangeConnectionPresentation } from '../exchange-connect/use-exchange-connection'
+import { useExchangeConnectionPresentation, useBitgetCanaryPresentation } from '../exchange-connect/use-exchange-connection'
 import { readExchangeTransactionLocator } from '../exchange-connect/controller'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
@@ -118,7 +118,7 @@ function WorkflowButton({ disabled, onClick, ...props }: ButtonHTMLAttributes<HT
 /** Native service-only entry. No fixture adapter fallback and no order authority. */
 export type NativeServicePresentations = Pick<ComponentProps<typeof ClientServiceExperience>,
   'conversationLibrary' | 'insightPresentation' | 'sharingPresentation' | 'researchPresentation' | 'accountPresentation' | 'feedbackPresentation' | 'brokerPresentation' | 'connectionPresentation'>
-export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false, consultationEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean; consultationEnabled?: boolean } = {}) {
+export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnabled = false, consultationEnabled = false, naturalLoginFlow = false, bitgetCanaryEnabled = false }: { presentations?: NativeServicePresentations; exchangeConnectionsEnabled?: boolean; consultationEnabled?: boolean; naturalLoginFlow?: boolean; bitgetCanaryEnabled?: boolean } = {}) {
   const { language, t } = useClientPreferences()
   const ui = (original: Parameters<typeof nativeAppUiText>[1]) => nativeAppUiText(language, original)
   const jobText = (key: NativeJobTextKey, values?: Readonly<Record<string, string | number>>) => nativeJobText(language, key, values)
@@ -236,6 +236,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [accountScope, setAccountScope] = useState<string | null>(null)
   const exchangeConnectionPresentation = useExchangeConnectionPresentation(accountScope,
     sessionState === 'AUTHENTICATED', exchangeConnectionsEnabled && phase === 'ready')
+  const bitgetCanary = useBitgetCanaryPresentation(accountScope, sessionState === 'AUTHENTICATED',
+    bitgetCanaryEnabled && phase === 'ready' && !exchangeConnectionsEnabled)
   const bindSession = (value: typeof session.current) => {
     // Keep request authority in the existing ref. React state only scopes the
     // lifetime of unsent local UI; it cannot authorize a request.
@@ -309,7 +311,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   else if (hasPending && !busy && !pendingRecoveryVisible) setPendingRecoveryVisible(true)
   const [rejectedClaimKey, setRejectedClaimKey] = useState<string | null>(null)
   const [loginOpen, setLoginOpen] = useState(() => window.location.pathname === '/auth/complete'
-    && !(exchangeConnectionsEnabled && readExchangeTransactionLocator(window.location.href)))
+    && !((exchangeConnectionsEnabled || bitgetCanaryEnabled) && readExchangeTransactionLocator(window.location.href)))
   const [loginRetained, setLoginRetained] = useState(false)
   // Presentation recovery only: a failed durable write must not discard the
   // provider controller, or let its callback imply that the host accepted it.
@@ -330,7 +332,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   // result/ACK recovery presentation. This is not a session or owner binding.
   const [returnBinding, setReturnBinding] = useState<{ epoch: number; generation: number } | null>(null)
   const returnBindingRef = useRef<typeof returnBinding>(null)
-  const exchangeOwnsReturn = () => exchangeConnectionsEnabled && Boolean(readExchangeTransactionLocator(window.location.href))
+  const exchangeOwnsReturn = () => (exchangeConnectionsEnabled || bitgetCanaryEnabled) && Boolean(readExchangeTransactionLocator(window.location.href))
   const plainAuthReturn = () => window.location.pathname === '/auth/complete'
     && window.location.search === '' && window.location.hash === '' && !exchangeOwnsReturn()
   useEffect(() => {
@@ -1840,7 +1842,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     onSessionRecovered={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); sessionRecovered(value) }}
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
     emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
-    sourceLayout returning={sessionState === 'AUTHENTICATED'} expectedSessionId={loginBinding.sessionId} isCurrent={panelCurrent}
+    sourceLayout naturalFlow={naturalLoginFlow} returning={sessionState === 'AUTHENTICATED'} expectedSessionId={loginBinding.sessionId} isCurrent={panelCurrent}
     onEmailAuthenticated={value => { if (!panelCurrent()) throw new Error('SESSION_CHANGED'); emailAuthenticated(value) }}
     canEmailDispatch={!busy && !hasPending && !hasLogout && phase === 'ready'} acquireEmailDispatch={() => {
       if (working.current || emailDispatch.current || pending.current || logoutIntent.current || phase !== 'ready' || !panelCurrent()) return null
@@ -1859,7 +1861,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     onAuthenticated={value => acceptReturnSession(value, false)} onSessionRecovered={value => acceptReturnSession(value, true)}
     enabledProviders={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY === 'true' ? ['GOOGLE'] : undefined}
     emailAvailable={import.meta.env.VITE_TETH_AUTH_GOOGLE_ONLY !== 'true'}
-    sourceLayout isCurrent={returnPanelCurrent} canEmailDispatch={false} acquireEmailDispatch={() => null}
+    sourceLayout naturalFlow={naturalLoginFlow} isCurrent={returnPanelCurrent} canEmailDispatch={false} acquireEmailDispatch={() => null}
     recoveryBlocked={hasPending ? ui('미확정 전략 요청 기록을 보존했습니다. 이 기록을 지우거나 새 로그인 세션에 자동 연결하지 않습니다.') : undefined}
     onRecheckSession={() => { void run(recheckReturnSession) }} recheckDisabled={busy || emailBusy}
     onEmailAuthenticated={() => { throw new Error('SESSION_CHANGED') }}
@@ -1954,7 +1956,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   }} nativeAccounts strategyDocument={strategyDocument} conversationNotice={conversationNotice} authSurface={returnAuthSurface || authSurface}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
     conversationLibrary={presentations.conversationLibrary} insightPresentation={presentations.insightPresentation}
-    sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} brokerPresentation={presentations.brokerPresentation} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation}
+    sharingPresentation={presentations.sharingPresentation} accountPresentation={presentations.accountPresentation} feedbackPresentation={presentations.feedbackPresentation} onConnectionClose={bitgetCanary?.close} brokerPresentation={presentations.brokerPresentation ?? bitgetCanary?.broker} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation ?? bitgetCanary?.connection}
     researchPresentation={strategyDocument && presentations.researchPresentation?.scope === accountScope && presentations.researchPresentation.data.scopeId === strategyDocument.identity ? presentations.researchPresentation : strategyDocument && accountScope ? { scope: accountScope, data: {
       scopeId: strategyDocument.identity,
       entries: researchEntries,

@@ -148,7 +148,7 @@ export type ClientServiceHistory = {
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
   state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent, request?: ClientConnectionPlanAuthRequest) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
@@ -180,6 +180,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   /** Explicit owner-bound display data. A non-empty requestId is reserved for
    * a verified callback intent; background data continues to feed settings. */
   connectionPresentation?: NativeConnectionPresentation & { requestId: string }
+  onConnectionClose?: () => void
   /** One validated auth-panel result may resume presentation once. It grants
    * neither exchange access nor a connection/provider operation. */
   connectionPlanContinuation?: ClientConnectionPlanContinuationReceipt | null
@@ -404,12 +405,35 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   }, [accountScope, connectionPlanContinuation, onConnectionPlanContinuationConsumed, state.sessionState])
   const connectionData = nativeAccounts && state.sessionState === 'AUTHENTICATED' && connectionPresentationBound(connectionPresentation, accountScope)
     ? connectionPresentation : undefined
-  const latestConnectionPlanAuthority = useRef({ owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, plan: connectionPlan })
+  const latestConnectionPlanAuthority = useRef({ owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, plan: connectionPlan })
   useLayoutEffect(() => {
-    latestConnectionPlanAuthority.current = { owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, plan: connectionPlan }
-  }, [accountScope, connectionBrowse, connectionData, connectionPlan, state.sessionState])
+    latestConnectionPlanAuthority.current = { owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, plan: connectionPlan }
+  }, [accountScope, connectionBrowse, connectionData, brokerData, connectionPlan, state.sessionState])
   const connectionPlanAuthorize = (() => {
     const browse = connectionBrowse, data = connectionData, stage = data?.state, exchange = connectionPlan.exchange
+    if (nativeAccounts && connectionPlan.step === 'authorize' && exchange === 'bitget' && browse
+      && browse.owner === accountScope && browse.session === 'AUTHENTICATED' && state.sessionState === 'AUTHENTICATED'
+      && brokerData?.identity === `bitget-canary:${accountScope}` && brokerData.actions?.onConnect) {
+      const broker = brokerData, action = brokerData.actions.onConnect
+      const choice = broker.catalog?.find(item => item.broker.id === exchange && item.broker.conn)
+      if (choice?.connectionState === 'NEEDS_LINK' || choice?.connectionState === 'CONNECTED') {
+        const connectionState = choice.connectionState
+        return async () => {
+          await Promise.resolve()
+          const current = latestConnectionPlanAuthority.current
+          if (ownerRef.current !== accountScope || current.owner !== accountScope || current.session !== 'AUTHENTICATED'
+            || current.browse !== browse || current.broker !== broker || current.broker?.identity !== `bitget-canary:${accountScope}`
+            || current.plan.step !== 'authorize' || current.plan.exchange !== exchange
+            || broker.actions?.onConnect !== action || !broker.catalog?.includes(choice)) return
+          await action(exchange, connectionState)
+          const settled = latestConnectionPlanAuthority.current
+          if (ownerRef.current === accountScope && settled.owner === accountScope && settled.session === 'AUTHENTICATED'
+            && settled.browse === browse && settled.plan.step === 'authorize' && settled.plan.exchange === exchange) {
+            setConnectionBrowse(value => value === browse ? { ...browse, mode: 'browse' } : value)
+          }
+        }
+      }
+    }
     // This bridge is deliberately limited to the currently shipped API12 Bitget producer.
     if (connectionPlan.step !== 'authorize' || exchange !== 'bitget' || !browse || browse.mode !== 'continuation' || browse.owner !== accountScope || browse.session !== 'AUTHENTICATED'
       || state.sessionState !== 'AUTHENTICATED' || data?.status !== 'ready' || stage?.kind !== 'exchange'
@@ -514,6 +538,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   const explicitConnectionOpen = connectionBrowse !== null && connectionBrowse.owner === accountScope && connectionBrowse.session === state.sessionState
   const connectionOpen = callbackConnectionOpen || explicitConnectionOpen
   const closeConnection = () => {
+    onConnectionClose?.()
     setConnectionBrowse(null)
     setDismissedConnection(connectionKey)
     requestAnimationFrame(() => document.getElementById('tesia-main')?.focus({ preventScroll: true }))

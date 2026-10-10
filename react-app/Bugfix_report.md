@@ -1,5 +1,23 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 후보 — UI 우선 배포의 기존 운영 로그인·Bitget 보존
+
+최종 delta 검수에서 추가 확인한 두 경계도 교정했다. 늦은 Bitget callback 결과는 닫힌 화면이나 이동한 설정 URL을 덮지 않도록 requested·현재 경로/locator를 재확인한다. 신규1키 최종 PASS2.0초·전후 입력불변이며 그 전 root guard 미세 변경 중 실행된 PASS는 최종 결속에서 제외했다. 자연 복귀의 유효 locator 일시 실패는 session-only 확인과 정확 transaction 재시도 둘을 제공한다. 신규 transient1키+변경 NOT_FOUND1키 PASS2.9초·wall3.47초로 새 START0/동일 locator2GET/ACK1을 확인했다. SDK 반환에 transactionId가 없는 ACK 정리 Low는 추정 계약 변경 없이 남긴다. 첫 Opus·후속 M2/실패 기록과 이전 빌드는 보존하며 최종 운영 입력에 전용하지 않는다.
+
+최종 독립 검수 후속: 첫 Opus5.5는 C0/H0/M2였고 두 가용성 문제를 최소 교정했다. 초기 Bitget catalog 대기 중 화면 닫기가 owner의 background producer까지 폐기하던 문제는 background에 retired-only 검사를 사용하고 명시 연결 action epoch는 보존했다. 신규1키 PASS2.0초·START/DELETE/provider0이다. 자연 인증 복귀의 유효 locator에서 recoveryBlocked/NOT_FOUND에도 기존 session-only 재확인을 제공하고 known conflict·ACK replay의 경계를 유지했다. 재생 ACK 채택 성공 후 해당 exact intent만 정리한다. 신규2키 PASS3.0초(actual wall3.65초)·lint0·입력불변이며 기존 시험은 반복하지 않았다. 별도 delta Opus와 최종 운영 flags 빌드·실제 배포 결과는 후속 영수증으로 결속한다. 이전 a51 빌드는 당시 입력의 성공 기록일 뿐 이 교정의 최종 빌드가 아니다.
+
+기존 구버전 탭은 배포 후 새로고침이 필요할 수 있다. 엄격한 새 정적 파일 트리를 유지하며 기존 hashed asset용 새 서버/edge route는 추가하지 않는다. 저장된 로그인·거래소 데이터의 보존과 구버전 탭의 무새로고침 호환을 혼동하지 않는다.
+
+최신 최소 교정·검증: 자연 returnOnly에서 locator가 분실·만료되면 기존 `세션 다시 확인`을 노출해 불가능한 재시도 반복을 해소했다. unbound ACK/known owner 충돌 우회는 하지 않는다. 신규 delta2만 PASS3.2초(actual wall3.72초)·lint actual0이며 최초 grep anchor의 No tests found는 시험0/actual1로 보존한다. ROOT는 실제 AUTH 플랜 authorize에 owner/identity/catalog/action/browse/plan이 결속된 Bitget canary callback을 이어 붙였고 현재 권한을 재검증한 뒤 pending/관리 화면으로 전환한다. 일반 API12 continuation 경로는 보존했다. 실제 service-main 통합의 Google-only 자연 이동·AUTH 플랜 승인2키 PASS와 pending 닫기/현재 연결 재조회/재열기 START0의1키 PASS4.1초는 별도 실행이다. 최초 selector/fixture 기대 오류와 원 raw를 보존하며 단일3PASS 또는 실 OAuth 성공으로 포장하지 않는다. 타입 검사 actual0·ROOT 배선3 lint actual0, 최종 flags build·개인1 Opus5.5는 별도 결속 예정이다.
+
+접속 후속: 사용자 지정 기존 계정에 기존 공개키만 TTL30m로 재등록했고 기존 vm.py SSH identity probe actual0으로 접속 복구를 확인했다. 새 키 생성/IAM/서버 설정 변경0이다. 아래 등록0은 복구 전 진단 기록이며 삭제/만료 이력은 미확인이다. 이 성공을 UI 배포 또는 최종 후보 승인으로 계산하지 않는다.
+
+기존 be0d의 기본 dist는 Google-only가 아니며 현재 공개 addf914의 자연 로그인·Bitget 단독 연결 기능도 없어 그대로 배포하지 않는다. donor 전체 파일을 덮어쓰지 않고 auth exact4·Bitget exact3·ROOT 배선3에만 선별 통합했다. 원본 UI/copy/SVG/CSS·기존 manual/Apple/email 경로·최신 상담/API13·14/owner/복구를 보존한다. 최종 구성은 Google-only=true, Exchange=false, Consultation=false, BitgetCanary=true이며 실제 provider/주문을 새로 활성화하지 않는다.
+
+Auth 신규6키는 최초5PASS/1FAIL(기존 수동 링크 기대문구 오류) 후 source 변경 없이 해당1키만 교정1PASS/2.2초다. source3 lint actual0·동결 SHA 불변이다. Bitget 신규6키 최종PASS/5.1초·지정3파일 lint actual0·동결 SHA 불변이며 초기1PASS/5FAIL와 debug 실패는 합성 응답의 필수 no-store 누락으로 구분해 보존한다. SDK 조건은 완화하지 않았다. 이는 leaf 시험이며 ROOT 실제 service 통합 시험·타입/build·새 personal1 Opus5.5 독립 검수·운영·실 Google/Bitget 성공 증거는 아니다. Auth naturalFlow의 tab locator 분실/만료 후 명시 재시도 제한은 독립 검수 잔여다.
+
+배포 경로의 기존 VM/계정/로컬 키는 일치하지만 현재 OS Login 등록 공개키0개를 확인했다. 기존 --plain transport는 등록을 자동 갱신하지 않는다. 삭제/만료 이력은 미확인이고 키 등록/IAM/운영 변경0이다. 공개017859와 release78ae는 동일 addf914 파일 트리의 계산 방식 차이로 확인했으며 파일 drift 차단에서 제외한다. SSH 실패로 fresh live 전체 CAS는 아직 관측하지 않았다. 새 candidate commit/push/migration·배포는 미진행이며 이전 be0d 전달을 새 후보 전달로 계산하지 않는다.
+
 ## 현재 — 90상태 비교 자료의 원본 배치 후속 복원
 
 사용자 제공 `개발본화면비교.html`의 90상태·7언어·웹/모바일 1,260쌍을 입력으로 삼았다. 원격 ares main도 `9fbff821`임을 다시 확인했다. 원본 HTML의 최종 override와 실제 DOM을 기준으로 교정하며, 비교 도구의 `상태 차이` 630쌍을 모두 이식 결함 또는 미구현으로 계산하지 않는다. PDF285페이지는 이번에 직접 처리하지 않았고 HTML의 데이터·PNG와 원본 소스를 대조했다.

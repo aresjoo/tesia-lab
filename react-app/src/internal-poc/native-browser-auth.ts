@@ -42,6 +42,35 @@ function rememberClaimPrecondition(value: ClaimPrecondition): void {
   // cannot offer claim unless it can recover this exact observed precondition.
   try { sessionStorage.setItem(CLAIM_PRECONDITION_KEY, JSON.stringify(value)) } catch { /* login remains available */ }
 }
+const AUTOMATIC_RETURN_KEY = 'tesia.native.auth-return'
+export type NativeAuthReturnIntent = { provider: NativeAuthProvider; transactionId: string; expiresAt: string }
+export function readNativeAuthReturnIntent(): NativeAuthReturnIntent | null {
+  try {
+    const raw = sessionStorage.getItem(AUTOMATIC_RETURN_KEY)
+    if (!raw || raw.length > 512) return null
+    const value: unknown = JSON.parse(raw)
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null
+    const data = value as Record<string, unknown>
+    if (Object.keys(data).sort().join(',') !== 'expiresAt,provider,transactionId'
+      || !['GOOGLE', 'APPLE'].includes(String(data.provider)) || typeof data.transactionId !== 'string'
+      || !/^oidc_tx_[A-Za-z0-9_-]{12,80}$/.test(data.transactionId) || typeof data.expiresAt !== 'string'
+      || !Number.isFinite(Date.parse(data.expiresAt)) || Date.parse(data.expiresAt) <= Date.now()) return null
+    return data as NativeAuthReturnIntent
+  } catch { return null }
+}
+export function rememberNativeAuthReturnIntent(intent: NativeAuthReturnIntent): void {
+  // This tab-local, non-secret locator only selects an existing server result.
+  // It is never identity proof or permission to claim a strategy or place orders.
+  try {
+    sessionStorage.setItem(AUTOMATIC_RETURN_KEY, JSON.stringify(intent))
+    const stored = readNativeAuthReturnIntent()
+    if (!stored || stored.provider !== intent.provider || stored.transactionId !== intent.transactionId || stored.expiresAt !== intent.expiresAt) fail()
+  } catch { fail() }
+}
+export function clearNativeAuthReturnIntent(intent: NativeAuthReturnIntent): void {
+  const current = readNativeAuthReturnIntent()
+  try { if (current?.provider === intent.provider && current.transactionId === intent.transactionId) sessionStorage.removeItem(AUTOMATIC_RETURN_KEY) } catch { /* completed login remains completed */ }
+}
 const safeFailure = (error: unknown) => {
   const code = error && typeof error === 'object' && 'code' in error ? error.code : ''
   return new NativeAuthError(typeof code === 'string' && [
@@ -108,9 +137,15 @@ export function createNativeBrowserAuth() {
   let initiatingSessionId: string | null = null
   let initiatingPrecondition: ClaimPrecondition | null = null
   let transactionId: string | null = null
+  let automaticPrecondition: ClaimPrecondition | null = null
   let ready: { data: Extract<GoogleAuthResultEnvelope['data'], { status: 'READY_FOR_ACK' }>; context: VersionedMutationContext } | null = null
   let acknowledged: Awaited<ReturnType<typeof ports.GOOGLE.acknowledgeResult>>['body']['data'] | null = null
   let terminal = false
+  let bindingConflict = false
+  function conflict(): never {
+    bindingConflict = true; acknowledged = null; acknowledgementUnconfirmed = false
+    fail('AUTH_BINDING_CONFLICT')
+  }
   let acknowledgementUnconfirmed = false
   const serverExpired = (error: unknown) => (error instanceof BrowserAuthError || error instanceof ApiV04ResponseError)
     && error.status === 410 && ['AUTH_TRANSACTION_EXPIRED', 'AUTH_RESULT_EXPIRED'].includes(error.code)
@@ -126,11 +161,12 @@ export function createNativeBrowserAuth() {
     if (!startContext) fail('AUTH_RESTART_NOT_CONFIRMED')
     const response = await serverCall<Awaited<ReturnType<(typeof ports)[NativeAuthProvider]['createTransaction']>>>(() => ports[provider].createTransaction(startContext!))
     if (Date.parse(response.body.data.expiresAt) <= Date.now()) fail('AUTH_TRANSACTION_EXPIRED')
-    if (transactionId !== null && transactionId !== response.body.data.transactionId) fail('AUTH_BINDING_CONFLICT')
+    if (transactionId !== null && transactionId !== response.body.data.transactionId) conflict()
     transactionId = response.body.data.transactionId
-    return { provider, authorizationRedirect: response.body.data.authorizationRedirect }
+    return { provider, authorizationRedirect: response.body.data.authorizationRedirect, transactionId: response.body.data.transactionId, expiresAt: response.body.data.expiresAt }
   }
   const run = async <T>(provider: NativeAuthProvider, operation: () => Promise<T>): Promise<T> => {
+    if (bindingConflict) fail('AUTH_BINDING_CONFLICT')
     if (provider !== 'GOOGLE' && provider !== 'APPLE') fail('AUTH_PROVIDER_MISMATCH')
     if (selected !== null && selected !== provider) fail('AUTH_PROVIDER_MISMATCH')
     if (busy) fail('AUTH_FLOW_BUSY')
@@ -138,9 +174,10 @@ export function createNativeBrowserAuth() {
     try { return await operation() } catch (error) { throw safeFailure(error) } finally { busy = false }
   }
   return {
+    hasBindingConflict: () => bindingConflict,
     hasMemoryIntent: () => startContext !== null || ready !== null || acknowledged !== null,
     canResumeStart: () => startContext !== null && !terminal && !acknowledgementUnconfirmed && !acknowledged,
-    canResumeAcknowledgement: () => acknowledgementUnconfirmed || acknowledged !== null,
+    canResumeAcknowledgement: () => !bindingConflict && (acknowledgementUnconfirmed || acknowledged !== null),
     canResumeResult: () => transactionId !== null || ready !== null,
     resumeStart(provider: NativeAuthProvider) { return run(provider, async () => {
       // A retained panel may replay only a context already created in memory.
@@ -149,7 +186,7 @@ export function createNativeBrowserAuth() {
       if (!startContext || acknowledgementUnconfirmed || acknowledged) fail('AUTH_RESTART_NOT_CONFIRMED')
       return sendStart(provider)
     }) },
-    canRestart: () => terminal && !acknowledgementUnconfirmed && !acknowledged,
+    canRestart: () => !bindingConflict && terminal && !acknowledgementUnconfirmed && !acknowledged,
     restart(provider: NativeAuthProvider) { return run(provider, async () => {
       if (!terminal || acknowledgementUnconfirmed || acknowledged) fail('AUTH_RESTART_NOT_CONFIRMED')
       // A persisted precondition is an untrusted locator for a returned page,
@@ -196,15 +233,21 @@ export function createNativeBrowserAuth() {
       }
       return sendStart(provider)
     }) },
-    readResult(provider: NativeAuthProvider) { return run(provider, async () => {
+    readResult(provider: NativeAuthProvider, expectedTransactionId?: string) { return run(provider, async () => {
+      if (expectedTransactionId !== undefined) {
+        const saved = initiatingPrecondition ?? readClaimPrecondition()
+        if (!saved || saved.provider !== provider) conflict()
+        automaticPrecondition = saved
+      }
       const response = await serverCall<Awaited<ReturnType<(typeof ports)[NativeAuthProvider]['getCurrentResult']>>>(() => ports[provider].getCurrentResult()), data = response.body.data
-      if (transactionId !== null && data.transactionId !== transactionId) fail('AUTH_BINDING_CONFLICT')
+      if ((expectedTransactionId !== undefined && data.transactionId !== expectedTransactionId)
+        || transactionId !== null && data.transactionId !== transactionId) conflict()
       if (Date.parse(data.expiresAt) <= Date.now()) fail('AUTH_RESULT_EXPIRED')
       if (data.status !== 'READY_FOR_ACK') {
         if (!acknowledgementUnconfirmed && !acknowledged) terminal = true
         ready = null; return { status: data.status }
       }
-      if (ready && ready.data.resultId !== data.resultId) fail('AUTH_BINDING_CONFLICT')
+      if (ready && ready.data.resultId !== data.resultId) conflict()
       const etag = response.headers.ETag
       if (typeof etag !== 'string') fail()
       ready ??= { data, context: { csrfToken: data.acknowledgementCsrfToken, idempotencyKey: crypto.randomUUID(), ifMatch: etag } }
@@ -216,8 +259,12 @@ export function createNativeBrowserAuth() {
         if (Date.parse(ready.data.expiresAt) <= Date.now()) fail('AUTH_RESULT_EXPIRED')
         acknowledgementUnconfirmed = true
         try {
-          acknowledged = (await ports[provider].acknowledgeResult(ready.data.resultId, ready.context)).body.data
-          acknowledgementUnconfirmed = false
+          const candidate = (await ports[provider].acknowledgeResult(ready.data.resultId, ready.context)).body.data
+          if (candidate.resultId !== ready.data.resultId || candidate.transactionId !== ready.data.transactionId
+            || initiatingSessionId !== null && candidate.handoffReservation.initiatingSessionId !== initiatingSessionId
+            || automaticPrecondition !== null && (candidate.handoffReservation.initiatingSessionId !== automaticPrecondition.sessionId
+              || candidate.handoffReservation.initiatingSessionRevision !== automaticPrecondition.revision)) conflict()
+          acknowledged = candidate; acknowledgementUnconfirmed = false
         } catch (error) {
           if (serverExpired(error)) { acknowledgementUnconfirmed = false; terminal = true }
           throw error
@@ -225,11 +272,13 @@ export function createNativeBrowserAuth() {
       }
       const data = acknowledged
       if (data.resultId !== ready.data.resultId || data.transactionId !== ready.data.transactionId
-        || initiatingSessionId !== null && data.handoffReservation.initiatingSessionId !== initiatingSessionId) fail('AUTH_BINDING_CONFLICT')
+        || initiatingSessionId !== null && data.handoffReservation.initiatingSessionId !== initiatingSessionId
+        || automaticPrecondition !== null && (data.handoffReservation.initiatingSessionId !== automaticPrecondition.sessionId
+          || data.handoffReservation.initiatingSessionRevision !== automaticPrecondition.revision)) conflict()
       // Ack is not session proof. Never bootstrap/create another anonymous session here.
       const current = await session.current()
       if (current.body.meta.resourceRevision !== current.body.data.revision) fail()
-      if (current.body.data.state !== 'AUTHENTICATED' || current.body.data.sessionId !== data.session.sessionId || typeof current.etag !== 'string') fail('AUTH_BINDING_CONFLICT')
+      if (current.body.data.state !== 'AUTHENTICATED' || current.body.data.sessionId !== data.session.sessionId || typeof current.etag !== 'string') conflict()
       const csrf = await session.csrf()
       const saved = initiatingPrecondition ?? readClaimPrecondition()
       const initiatingSessionEtag = saved?.provider === provider && saved.sessionId === data.handoffReservation.initiatingSessionId

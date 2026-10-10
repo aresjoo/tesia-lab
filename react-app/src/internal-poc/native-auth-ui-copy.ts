@@ -5,6 +5,11 @@ const column = { ko: 0, en: 1, ja: 2, 'zh-CN': 3, 'zh-TW': 4, es: 5, fr: 6 } as 
 /** UI only: error codes, server timestamps, identifiers and auth authority are
  * not translated. Controllers retain keys; current-locale rendering is late. */
 export const nativeAuthUiCopy = {
+  naturalHome: ['홈으로 돌아가기', 'Return home', 'ホームに戻る', '返回首页', '返回首頁', 'Volver al inicio', 'Revenir à l’accueil'],
+  naturalBusy: ['로그인 중…', 'Signing in…', 'ログイン中…', '正在登录…', '登入中…', 'Iniciando sesión…', 'Connexion en cours…'],
+  naturalFailure: ['로그인하지 못했습니다. 다시 시도해주세요.', 'Sign-in failed. Please try again.', 'ログインできませんでした。もう一度お試しください。', '未能登录，请重试。', '無法登入，請再試一次。', 'No se pudo iniciar sesión. Inténtalo de nuevo.', 'La connexion a échoué. Veuillez réessayer.'],
+  naturalRetry: ['다시 시도', 'Try again', '再試行', '重试', '再試一次', 'Reintentar', 'Réessayer'],
+  naturalContinue: ['로그인 계속하기', 'Continue sign-in', 'ログインを続ける', '继续登录', '繼續登入', 'Continuar inicio de sesión', 'Continuer la connexion'],
   authSection: ['실제 계정 로그인', 'Account sign-in', 'アカウントログイン', '账户登录', '帳戶登入', 'Inicio de sesión de cuenta', 'Connexion au compte'],
   providers: ['로그인 공급자', 'Sign-in provider', 'ログインプロバイダー', '登录提供方', '登入提供者', 'Proveedor de acceso', 'Fournisseur de connexion'],
   close: ['닫기', 'Close', '閉じる', '关闭', '關閉', 'Cerrar', 'Fermer'],
