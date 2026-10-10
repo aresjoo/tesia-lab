@@ -2,15 +2,15 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 — UI 우선 배포의 운영 Google·Bitget 보존
+### 현재 — UI 운영 반영·Google/Bitget 보존
 
-Web [`32c5ef4`](https://github.com/beak1011/tesia-web/tree/32c5ef413b0b1f347fb3932a4c1faddd6ee78947)의 clean 전체 React2,422파일·34,895,549bytes를 공식 sync로 전달했다. snapshot `1fd993a45747e8e738a888cfdc7b22035eb60e11d9011d217fa77eb00cce5e2d`, sourceDirty0·제거0이다. ares 원본9fb root/main·Node/Worker·원문/CSS/SVG는 변경하지 않는다.
+Web [`be4dc9c`](https://github.com/beak1011/tesia-web/tree/be4dc9cfc1aab2ff3ebe9c51cc757c9f30d492aa)의 clean 전체 React2,422파일·34,898,978bytes를 공식 sync로 전달했다. snapshot `bd3fcd17b68f1acf3f327a0eee70930336dc05bd3c2fdf4721ce1a79e8aae18b`, sourceDirty0·제거0이다. 제품 build source는 직전32c5ef4와 동일하고 최신 HEAD의 차이는 배포 Bugfix 문서1개뿐이다. ares 원본9fb root/main·Node/Worker·원문/CSS/SVG는 변경하지 않는다.
 
 기본 be0d build는 기존 운영 자연 로그인·Bitget-only 연결이 없어 그대로 승격하지 않았다. addf 운영 donor의 필요한 auth/canary 동작만 이식하고 최신 상담/API13·14·owner/복구는 보존했다. 실제 운영 구성은 Google-only=true, 일반 Exchange=false, Consultation=false, BitgetCanary=true이다. 현재 로그인한 사용자의 원본 플랜 승인에서 Bitget 연결/관리로 이어지는 caller를 결속하고, 자연 return locator 분실/차단·일시 오류의 session-only 확인과 bound retry·화면 이탈 경계를 교정했다. 기존 서버·암호화 저장·계정 자료·기능 flags는 바꾸지 않는다.
 
-신규 leaf/auth/실제 service-main 국소시험과 후속 반례를 분리하여 검증했고 전체 회귀·9월·730 재실행0이다. 첫 독립 Opus와 후속 M2의 원판정·교정·시험 자료는 [Bugfix_report](react-app/Bugfix_report.md)에 보존한다. 최종 flags 빌드·독립 검수와 실제 운영 적용 결과는 배포 영수증으로 별도 갱신한다. 이번 React 전달은 실 Google/OAuth·고객 모델·주문 성공 또는 전체 화면 일치 판정이 아니다. 기존 구버전 탭은 배포 후 새로고침이 필요할 수 있다.
+신규 leaf/auth/실제 service-main 국소시험과 후속 반례를 분리하여 검증했고 전체 회귀·9월·730 재실행0이다. 최종 clean flags build actual0/23.165초와 personal1 Opus5.5 Web C0H0M0·배포 중 실패/조건 검수/ROOT 인수를 구분한다. 2026-10-10 07:17 UTC 최신 UI를 `https://teth.ai/`에 실제 반영했다. 공개 HTML15,028bytes/SHAe7733cf1·실제 JS/CSS44/이미지56/SVG2 총102개 bytes exact와 공개1440/390/320 홈·로그인창·닫기/초점·폰트/overflow 국소3폭 PASS(actual0,9.81초)를 확인했다. 원 후보 파일1,167개/tree f468와 보존 이전1,177개 fullmap을 검사했고 기존 Backendb172921/selector6a9·Google/Bitget 자료/flags를 유지했다. 배포 중 실패와 bootstrap 전 클릭 smoke 실패를 숨기지 않고 [Bugfix_report](react-app/Bugfix_report.md)에 기록했다. 실제 Google/OAuth·고객 모델·주문 성공 또는 전체 화면 일치 판정이 아니며 새 AI/실주문 활성화0이다. 기존 구버전 탭은 새로고침이 필요할 수 있다.
 
-### 현재 — 90상태 비교의 원본 배치 후속 복원
+### 직전 — 90상태 비교의 원본 배치 후속 복원
 
 Web [`be0d31b`](https://github.com/beak1011/tesia-web/tree/be0d31b331694fac0899a9eea93f2d3c574b0a2b)의 clean 전체 React2,419파일·34,819,655bytes를 공식 sync/verify로 전달한다. snapshot `9a3aec749de35c26815673746094867d161ac94fc36842fd196369868e5003c9`, sourceDirty0·제거0이다. 원격 ares main은 `9fbff821df62cad11d026022fc7628c7fcebc431`로 재확인했고 원본 root/main·Node/Worker는 변경하지 않는다. 아래 이전 전달과 서비스 후보는 해당 시점 이력이다.
 

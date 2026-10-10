@@ -1,5 +1,15 @@
 # TETH 버그 수정·검수 보고서
 
+## 운영 반영 — 원본 복원 UI·기존 Google/Bitget 보존
+
+2026-10-10 07:17:05 UTC에 Web `32c5ef413b0b1f347fb3932a4c1faddd6ee78947`의 UI를 `https://teth.ai/`에 실제 반영했다. 최종 명시 flags는 Google-only/BitgetCanary=true, 일반 Exchange/Consultation=false다. clean build actual0·2,412개 입력 불변·23.165초와 최종 personal1 Opus5.5 Web delta C0/H0/M0를 구분해 인수했다. 정적 파일1,167개/tree `f468c5f523d2b2b749979143396fee6da8bc7ca5fb3fe7845f1dbd1cdb62f669`가 live에 있고 이전1,177개는 정확한 슬롯에 보존됐다. 기존 Backendb172921·selector6a9·Google/Bitget 저장소·flags·서비스를 유지했으며 신규 서버/AI/주문 활성화는0이다. 정상 재시작 중 서비스 자체 저장소 쓰기는 가능하므로 DB bytes 보존을 주장하지 않는다.
+
+실제 배포 중 installer 루트 파일명 오류·include5 canonical 정렬 누락·Nginx 검사 디렉터리 부재·재시작 확인 실패가 발생했고 원 실패를 보존했다. 최종 CANDIDATE_START_HOLD의 정확한 내부 원인은 미확정이다. 실제 active 새 PID202179·loopback 전체 probe·새/옛 fullmap·flags/저장소 메타데이터·Nginx closure/worker를 확인한 별도 명시 복구로 OPEN만1회 재개했다. 추가 TERM/start/exchange·자동 retry/rollback은0이다. 복구 Opus C0/H0/M3 CONDITIONAL 원판정은 그대로이며 ROOT가 제안된 callback identity/실행 횟수·결과 phase·OPEN shadow 슬롯3개를 반영하고 같은 수정 바이트의 원격 inspection actual0으로 조건을 닫았다. 이를 새 모델의 무조건 GO로 표시하지 않는다. 설치·복구 원자료는 `.cache/ui-static-release/`와 Infra Bugfix_report가 소유한다.
+
+07:20:01 UTC 공개 GET200의 HTML15,028bytes/SHA `e7733cf17a47b5464752a025dd372db2708836bb94afd941ab2d5c97d5a06c69`와 실제 JS/CSS44·소개/다운로드 이미지56·SVG2의102개 bytes/SHA가 배포 파일과 exact다. 최초 공개 검사에서 보존된 미선언 legacy 이미지6개에404를 기대하지 못한 하니스 오류는 별도 기록이다. 실제 화면은 `CLIENT_PUBLIC_ASSETS`/HTML static 선언의 nested 소개5·다운로드3·번역48을 사용하며 전체 실제56은200/exact다. legacy6을 서비스하도록 서버 경로를 확장하거나 기존 파일을 삭제하지 않았다.
+
+최초 익명 브라우저3폭 검사는 세션 bootstrap 완료 전 login click의 guard return 때문에 실패했다. 후속 공개390 진단에서 최초 session401→anonymous201→session200/CSRF200의 정상 흐름과 로그인창 실제 가시를 확인했다. 교정 하니스의1440/390/320 최종 공개3폭은 actual0/PASS·9.81초다. 홈/로그인창/닫기·초점 복귀·Google 활성/Apple와 이메일 비활성·폰트 ready·가로 넘침0을 확인했고 PNG9개를 보존했다. 초기session401과 해당console1은 정상 인증 부재로 따로 기록했으며 그 외 console/pageerror0, provider 버튼 클릭0이다. ROOT가 desktop 홈·320px 로그인 PNG를 직접 확인했다. `.cache/ui-static-release/public-browser-settled-lfpj4E/receipt.json`이 최종 좁은 검사를 소유하고 최초 실패자료는 `public-browser-smoke-HwBvDq`에 남긴다. 전체 UI·언어·모션 일치나 실제 OAuth 성공으로 승계하지 않는다. 전체 회귀·설치11·9월·730일 재실행0, 고객 모델/실주문0이다.
+
 ## 현재 후보 — UI 우선 배포의 기존 운영 로그인·Bitget 보존
 
 최종 delta 검수에서 추가 확인한 두 경계도 교정했다. 늦은 Bitget callback 결과는 닫힌 화면이나 이동한 설정 URL을 덮지 않도록 requested·현재 경로/locator를 재확인한다. 신규1키 최종 PASS2.0초·전후 입력불변이며 그 전 root guard 미세 변경 중 실행된 PASS는 최종 결속에서 제외했다. 자연 복귀의 유효 locator 일시 실패는 session-only 확인과 정확 transaction 재시도 둘을 제공한다. 신규 transient1키+변경 NOT_FOUND1키 PASS2.9초·wall3.47초로 새 START0/동일 locator2GET/ACK1을 확인했다. SDK 반환에 transactionId가 없는 ACK 정리 Low는 추정 계약 변경 없이 남긴다. 첫 Opus·후속 M2/실패 기록과 이전 빌드는 보존하며 최종 운영 입력에 전용하지 않는다.
