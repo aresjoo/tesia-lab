@@ -4,6 +4,8 @@
 
 [교정 기록](concise-dialogue.json)은 각 실제 응답·당시 입력/정책/helper·원 acceptance·검수 원문과 해시를 보존한다. 원 [사용 QA](investment-usability.json), [35MB 기록](../tests/recorded-investment-turns.json), [초기 원본 비교](prompt-comparison.json)는 불변이다.
 
+현재 helper는 일반 대화의 질문 중단과 자료 형식 귀속만 추가 교정했다. [source-only 결속](response-preference-correction.json)은 평가 당시 helper와 현재 helper를 구분한다. 신규 사용성 13개 및 직접 영향 시험 1,108개가 통과했고, 기존 146개·6개 요청의 system/messages/선호/원문 근거를 정확 재생했다. 새 모델 호출·새 브라우저 실행은 0이며 아래 기록의 실제 응답·점수·실패를 변경하지 않았다. 합성 표시 태그 재조립은 실제 내부 추론 유출이나 주문 실행 증거가 없어 이번 수정 범위에서 보류했다.
+
 | 정책 | 실제 사례 / 응답 | 범위 |
 |---|---:|---|
 | 이전1.24 사용 QA | 12 / 24 | 원4실패 보존 |
@@ -41,4 +43,4 @@ Source142 사전8반례는5PASS3FAIL→7PASS1FAIL이며 교정대상7은전부PA
 
 마지막 helper 후속은 정책 registry1.42를 유지한 채 본문 첫 문장과 인용 제목의 자료 판정을 교정했다. 새2사례6턴의 실제응답은 기존146과 별도 기록한다. 기존146 captured요청과 browser48기록 요청의 policy/system/messages/선호/UTF-16근거는 새helper에서도 동일했지만 이를152개 최종helper 신규호출이나새UI48실행으로 승계하지 않는다. source조건은 사전2RED→독립2GREEN·원8제한보존·전량146/48결속·새6실제응답으로ROOT가인수했다. 독립Opus 원조건부(codeGo:false)는 그대로며 새무조건GO로표기하지 않는다.
 
-최종 공개19단계 archive와 runtime11파일을 결속한 전체 검사는 Node24.14.0과 지원최저 Node22.15.0에서 각각1,412PASS·0FAIL·0SKIP·actualexit0이다. syntax3·Worker dry-run·diff whitespace 검사도actual0이며 Worker656.98KiB/gzip133.77KiB, 배포0이다. 정책은1.42.0, helper 마지막 후속은 a4fd9d08이며 원1.42 146턴과후속6턴의 raw·해시·독립검수는 각각보존한다. CLI/provider/UI/source 결과는합산서비스GO가아니다.
+교정 전 공개19단계 archive와 runtime11파일을 결속한 전체 검사는 Node24.14.0과 지원최저 Node22.15.0에서 각각1,412PASS·0FAIL·0SKIP·actualexit0이었다. syntax3·Worker dry-run·diff whitespace 검사도actual0이며 Worker656.98KiB/gzip133.77KiB, 배포0이다. 정책은1.42.0, 평가 당시 helper는 a4fd9d08이며 원1.42 146턴과후속6턴의 raw·해시·독립검수는 각각보존한다. 현재 helper의 검증은 위 source-only 결속으로 구분한다. CLI/provider/UI/source 결과는합산서비스GO가아니다.

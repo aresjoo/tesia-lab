@@ -72,13 +72,47 @@ for(const phase of archive.phases)test('reconstruct exact published request inpu
   assert.equal(index,run.turns.length);
  }
 });
-test('latest archive binds current policy without relabeling earlier responses',async()=>{
+test('latest actual evaluation and the source-only correction retain separate runtime bindings',async()=>{
  const latest=archive.phases.at(-1),record=JSON.parse(latest.raw);
- for(const [file,sha256] of Object.entries(record.runtimeInputSha256))assert.equal(hash(rootFile(file)),sha256,file+' latest captured runtime');
+ const correction=JSON.parse(rootFile('server/qa/response-preference-correction.json'));
+ assert.equal(correction.schemaVersion,1);assert.equal(correction.kind,'response-preference-source-correction');
+ assert.equal(correction.archiveSha256,hash(rootFile('server/qa/concise-dialogue.json')));
+ assert.equal(correction.baselinePhase,latest.key);
+ assert.deepEqual(Object.keys(correction.runtimeCorrections),['server/investment-response-preferences.mjs']);
+ assert.equal(correction.acceptanceTest,'server/tests/response-preference-usability.test.mjs');
+ assert.equal(correction.acceptanceTestSha256,hash(rootFile(correction.acceptanceTest)));
+ for(const field of ['newModelCalls','newBrowserRuns','customerProviderCalls','productionChanges'])assert.equal(correction[field],0);
+ assert.equal(correction.historicalResponsesUnchanged,true);
+ for(const [file,sha256] of Object.entries(record.runtimeInputSha256)){
+  const delta=correction.runtimeCorrections[file];if(delta)assert.equal(delta.beforeSha256,sha256);
+  assert.equal(hash(rootFile(file)),delta?.afterSha256??sha256,file+' current source runtime');
+ }
  assert.equal(hash(rootFile('server/investment-prompts.mjs')),record.runtimeInputSha256['server/investment-prompts.mjs']);
- assert.equal(hash(rootFile('server/investment-response-preferences.mjs')),record.runtimeInputSha256['server/investment-response-preferences.mjs']);
  assert.deepEqual(PROMPTS,record.promptSnapshots);
  const r=await buildInvestmentRequest({messages:[{role:'user',content:'MDD 뜻은?'}]});assert.equal(r.promptSha256,await digestText(r.system));
+});
+test('source-only correction preserves the captured 146 and 6 requests without claiming new responses',async()=>{
+ const correction=JSON.parse(rootFile('server/qa/response-preference-correction.json'));
+ assert.deepEqual(correction.replayedPhases,{policy142:146,policy143:6});
+ for(const [key,expectedTurns] of Object.entries(correction.replayedPhases)){
+  const record=JSON.parse(archive.phases.find(p=>p.key===key).raw);
+  const cases=Object.values(record.corpusInputSnapshots).flatMap(s=>JSON.parse(s).cases);let checked=0;
+  for(const run of record.runs){
+   const c=cases.find(v=>v.id===run.id),history=[];let index=0;
+   for(const input of c.turns||c.messages){
+    history.push(input);if(input.role!=='user')continue;
+    const turn=run.turns[index++],payload={messages:history};
+    if(legacy[run.mode])Object.assign(payload,{plain:true,system:legacy[run.mode]});
+    const current=await buildInvestmentRequest(payload);
+    assert.equal(current.promptSha256,turn.requestPromptSha256);
+    assert.equal(hash(JSON.stringify(current.messages)),turn.requestMessagesSha256);
+    assert.deepEqual(current.responsePreferences,turn.responsePreferences);
+    assert.deepEqual(current.responseFormat,turn.responseFormat);
+    history.push({role:'assistant',content:turn.answer});checked++;
+   }
+  }
+  assert.equal(checked,expectedTurns);
+ }
 });
 test('frozen132 helper reproduced 260 prior inputs; these are not current134 responses',async()=>{
  const phase132=archive.phases.find(p=>p.key==='policy132');

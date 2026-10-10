@@ -41,14 +41,15 @@ function pointedCopyObject(clause,earlierOnly=false){
  const inputFormat='(?:(?:한|두|세|네|[0-9]+)\\s*(?:문장|문단|줄)(?:만)?\\s*)?';
  return new RegExp('(?<![\\p{L}\\p{N}])'+pointer+'\\s*'+inputFormat+object+'(?:을|를)?(?=\\s|$)','u').test(clause);
 }
-function koreanReferencePredicate(text){
+function koreanReferencePredicate(text,processOnly=false){
  // These are process verbs with attributive/past morphology, not a noun's final consonant.
- return /^(?:(?:답|대답|응답|설명|요약|정리|작성|분석|비교|교정|번역|진행|발표|발행|출판|배포|보도|공개|공시|게재|제출|게시|기록|방송|제공|표시)(?:한|된|했던|하는|하던|되어|돼|해\s*준)|받(?:은|았던)|읽(?:은|었던)|쓰(?:인|던)|쓴|적(?:힌|은)|열(?:린|었던)|나온)(?=\s|$)/u.test(text)
+ return /^(?:답|대답|응답|설명|요약|정리|작성|분석|비교|교정|번역|진행|발표|발행|출판|배포|보도|공개|공시|게재|제출|게시|기록|방송|제공|표시)(?:한|된|했던|하는|하던|되어|돼|해\s*준)(?=\s|$)/u.test(text)
+  ||!processOnly&&/^(?:받(?:은|았던)|읽(?:은|었던)|쓰(?:인|던)|쓴|적(?:힌|은)|열(?:린|었던)|나온)(?=\s|$)/u.test(text)
   ||/^(?:하고\s*나서|나서)(?=\s|$)/u.test(text);
 }
 function inputFormatObject(text,index,length){
  const before=text.slice(0,index),after=text.slice(index+length);
- return /^\s+in\s+(?:[\p{Script=Latin}\p{N}]+['’]s\b|(?:the|this|that|a)\s+(?:report|statement|letter|article|text)\b)/iu.test(after)||/\b(?:these|those|the|first|last|previous|following)\s*$/iu.test(before)||/^\s+(?:of|from)\s+(?!now\s+on\b)\S+/iu.test(after)||koreanReferencePredicate(koreanOutputModifiers(after.replace(/^\s*(?:으로|로|만)?\s*/u,'')))||/(?<![\p{L}\p{N}])(?:이|그|위|아래|다음|이전|앞선)(?:의)?\s*$/u.test(before)||/^(?:의|을|를|은|는)(?=\s|$)/u.test(after);
+ return /^\s+in\s+(?:[\p{Script=Latin}\p{N}]+['’]s\b|(?:the|this|that|a)\s+(?:report|statement|letter|article|text)\b)/iu.test(after)||/\b(?:these|those|the|first|last|previous|following)\s*$/iu.test(before)||/^\s+(?:of|from)\s+(?!now\s+on\b)\S+/iu.test(after)||koreanLanguageReference(after.replace(/^\s*(?:으로|로|만)?\s*/u,''))||/(?<![\p{L}\p{N}])(?:이|그|위|아래|다음|이전|앞선)(?:의)?\s*$/u.test(before)||/^(?:의|을|를|은|는)(?=\s|$)/u.test(after);
 }
 function koreanNarrativePredicate(text){
  // 현재 명령 뒤에 덧붙는 자료/과거 절을 현재 출력 요청으로 승격하지 않습니다.
@@ -60,11 +61,13 @@ function koreanOutputModifiers(text){
 }
 function koreanLanguageReference(text){
  const words=koreanOutputModifiers(text.replace(/^만\s*/u,'')).slice(0,256).trim().split(/\s+/u);
- // Leading temporal/adverbial modifiers can precede the process predicate.
- // Do not cross an explicit object particle to reinterpret another noun's modifier.
- for(let i=0;i<Math.min(words.length,4);i++){
-  if(koreanReferencePredicate(words.slice(i).join(' ')))return true;
-  if(/(?:을|를|의|에서)$/u.test(words[i]))break;
+ // A supplied artifact may have a topical object before its relative predicate.
+ // Stop at a current output command so a later reference cannot absorb it.
+ let crossedObject=false;
+ for(let i=0;i<words.length;i++){
+  if(koreanReferencePredicate(words.slice(i).join(' '),crossedObject))return true;
+  if(currentKoreanFormatRequest(words[i],false))break;
+  if(/(?:을|를|의|에서)$/u.test(words[i]))crossedObject=true;
  }
  return false;
 }
@@ -163,7 +166,7 @@ function hasQualifiedTransformationFormat(clause){
  const action='(?:번역|요약|정리|교정)(?:만\\s*)?(?:해|하)|바꿔|고쳐|다듬|옮겨';
  return new RegExp(target+modifiers+'(?:'+action+')','u').test(clause)||new RegExp('(?:'+action+')(?:줘|주세요)?\\s*'+target,'u').test(clause)||/\bsummarize\b[^.!?。！？;,，:\n]*\b(?:in\s+(?:Korean|English|Japanese)|(?:one|two|three|four|[0-9]+)\s+sentences?)\b/i.test(clause);
 }
-const KO_STOP_SOURCE=/질문(?:은|을)?\s*(?:여기서|이제)?\s*그만|(?:이제\s*)?질문(?:은|을)?\s*(?:여기서|이제)?\s*(?:하지|묻지)\s*(?:말고|마)/.source;
+const KO_STOP_SOURCE=/질문(?:은|을)?\s*(?:여기서|이제)?\s*그만|(?:이제\s*)?질문(?:은|을)?\s*(?:여기서|이제)?\s*(?:하지|묻지)\s*(?:말고|말아|마)/.source;
 function currentQuestionDirective(text,index,length,continuation=null,allowContinuation=true){
  const match=text.slice(index,index+length),after=text.slice(index+length).trim(),before=text.slice(0,index);
  if(isReportedQuestionDirective(text,index,length))return false;
@@ -211,7 +214,7 @@ function currentDirectContinuation(tail){
  }
  // 주제 명사·형용사를 서술어로 오인하지 않고 실제 현재 종결 명령을 요구합니다.
  const command=tail.match(/(?:(?:답|대답|응답|설명|요약|정리|분석|비교|교정|작성|번역)\s*(?:해(?:\s*(?:줘|주세요|줘요|주십시오))?|하(?:세요|십시오))|(?:알려|말해|써|보여|바꿔|고쳐|다듬어|옮겨|풀어)\s*(?:줘|주세요|줘요|주십시오)|부탁(?:해요|해|합니다|드립니다))\s*$/u);
- if(command){const topic=tail.slice(0,command.index);if(topic.length<=128&&/[\p{L}\p{N}]+(?:은|는|을|를|도|에|의|이|가)(?=\s|$)/u.test(topic))return true;}
+ if(command){const topic=tail.slice(0,command.index);if(topic.length<=128&&/[\p{L}\p{N}]+(?:은|는|을|를|도|에|의|이|가|만)(?=\s|$)/u.test(topic))return true;}
  return /^(?:왜|어떻게|무엇을)(?=\s)/u.test(tail)||/^(?:(?:한국어|영어|일본어)로|(?:한|두|세|네|[0-9]+)\s*문장|자세히|상세히|(?:답|대답|응답|설명|요약|정리|작성|분석|비교|교정|번역|말)\s*(?:해|하)|알려|써|바꿔|고쳐|다듬어|옮겨|풀어|부탁|(?:바로|다시|계속|이제)\s+|계속(?:해|하))/u.test(tail)||hasSuppliedTextObject(tail)||/^[\p{L}\p{N}%]+(?:은|는|을|를|도|에|의)(?=\s)/u.test(tail)||/^[\p{Script=Latin}\p{N}'’]+\s+[\p{L}\p{N}]+(?:은|는|을|를|도|에|의)(?=\s)/u.test(tail);
 }
 function affirmativeConjunctionContinuation(raw,end){
@@ -240,7 +243,7 @@ function currentEnglishLanguageAttachment(text,index,length=0,continuation=''){
  // slash, hyphen or comma-followed topical argument is not response authority.
  const rest=after.replace(COUNT_EVENTS,' ').replace(DETAIL_EVENTS,' ').replace(/[,，:：]/gu,' ')
   .replace(/\b(?:from\s+now\s+on|always|please|only|just|exactly|now|again|briefly|too|and|but|in|with|using|sentences?|paragraphs?)\b/gi,' ').trim();
- const processAttachment=/(?:\b[a-z]+ed|\bheld|\bgiven|\bspoken|\btaken|\bwritten|\bshown|\bsent|\bmade)\s*$/iu.test(before)&&!/\b(?:the|a|an|this|that)\s+[a-z]+ed\s*$/iu.test(before);
+ const processAttachment=/(?:\b[a-z]+ed|\bheld|\bgiven|\bspoken|\btaken|\bwritten|\bwrote|\bshown|\bsent|\bmade)\s*$/iu.test(before)&&!/\b(?:the|a|an|this|that)\s+[a-z]+ed\s*$/iu.test(before);
  return !rest&&(!before.trim()||currentEnglishFormatFragment(before)||directEnglishClause(before)&&!processAttachment);
 }
 function directEnglishFormatPrefix(before){

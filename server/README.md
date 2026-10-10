@@ -4,6 +4,8 @@
 
 ## 원본 계승과 적용 경로
 
+현재 source 후속은 일반 사용의 질문 중단 누락과 자료 언어·문장 수의 선호 오인만 교정했다. 신규 사용성13개·직접 영향 시험1,108개와 기존146/6 요청 재생을 통과했으며, [source-only 결속](qa/response-preference-correction.json)에 평가 당시/현재 helper를 분리했다. 아래 전체 회귀·모델·UI 결과는 교정 전 후보의 검증 이력이며 이번에 새 모델/API·브라우저를 실행한 것은 아니다. 합성 표시 태그 재조립은 실제 유출·거래 실행 증거가 없어 이번 교정에서 보류했다.
+
 사용자가 지정한 `be935c98f2a67f62287549736f173ccbe0600021`과 원 비교본 `9fbff821df62cad11d026022fc7628c7fcebc431`의 index/Node/Worker 세 파일은 바이트 SHA가 같다. 원 browser `taiSystem/taiConvSystem/taiBuildSystem/taiMarket/taiStream`→`POST /api/chat`→Anthropic SDK/SSE·market tools, BT_SYS_J/R의 판단·결과 설명을 대조했다. 후속은 기존 registry1.24와 activation guard를 계승하며 이번에 index·SDK 호출·React를 다시 작성하지 않았다.
 
 이 checkout의 React2,135개는 과거 비교 snapshot이다. 최신 migration `b284262832648ccea33aadeca9508fc632b03c25`의 React2,423개 및 현재 Backend의 API13 상담 adapter/journal/SSE·API14 이관 구현을 확인했다. **그 구현의 존재와 이 Lab의 동적 선호·출력 gate·표시 producer를 실제로 소비하는 것은 별도다.** 정적 export1.24 담당의 작업, existing Google/Bitget·원본 카피·SVG·레이아웃은 보존한다. 현재 source/ref·통합 잔여는 [Program 정본](https://github.com/beak1011/tesia-program/pull/189)의 §16과 Ledger가 소유한다.
