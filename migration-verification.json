@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "purpose": "기존 Bitget OAuth 연결을 재사용하는 read-only API17 계좌조회 source와 React배선을 전달한다. 실제운영/고객GET/자동주문 성공은 별도증거다.",
-  "sourceCommit": "9f513ac0d0744f92bbc1c29cb85679aadfaaa01a",
+  "sourceCommit": "f41a01149ba490c9d5db927405453fa14ebac77e",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "3f15a336bee6f8e73ce2a5fcbd013f42578e9b1e1cae84fc4f36059e7cc88455",
+  "snapshotDigest": "2d5c7fdf3187507bd1384b70e2a6c9135d4d49077f27bceb271b74af3716e13a",
   "latestBitgetTerminalMetadata": {
     "sourceCommit": "2a6cb9fac650852dc17c2f80b4700d8a641ce9cf",
     "reactFiles": 2423,
@@ -1088,11 +1088,15 @@
     "dependencyInstall": "검증된 기존 설치 재사용; 새 clean npm ci 주장0"
   },
   "snapshot": {
-    "files": 2393,
-    "bytes": 34001914,
+    "files": 2433,
+    "bytes": 35033954,
     "sourceDirtyFiles": [],
-    "hashVerification": "최신 sync snapshot exact 검증은 별도 --verify 결과를 따른다. 이전 독립 staged 전달검수는 과거 입력 범위다.",
-    "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0"
+    "hashVerification": "공식 --verify actual0; 현재 snapshot 전체 exact 검증",
+    "clientOriginalFiles": "root original HTML/server/Worker/workflow/main 변경·병합0",
+    "sourceCommit": "f41a01149ba490c9d5db927405453fa14ebac77e",
+    "snapshotDigest": "2d5c7fdf3187507bd1384b70e2a6c9135d4d49077f27bceb271b74af3716e13a",
+    "syncExit": 0,
+    "verifyExit": 0
   },
   "historicalProductionChecks": [
     {
@@ -6959,6 +6963,102 @@
     }
   },
   "latestBitgetAccountRead": {
+    "sourceCommit": "f41a01149ba490c9d5db927405453fa14ebac77e",
+    "backendCommit": "1bdfa39327d4abc3586cddae90415791508e07fc",
+    "contractsAuthorityCommit": "bdaaddf8980c6ddbad2dca0c77a36fcdb677cfeb",
+    "reactFiles": 2433,
+    "reactBytes": 35033954,
+    "sourceDirtyFiles": [],
+    "removedPriorPaths": [],
+    "syncExit": 0,
+    "verifyExit": 0,
+    "webTestsPassed": 126,
+    "backendInstalledTestsPassed": 51,
+    "backendInstalledSkips": 0,
+    "sourceIndependentReview": {
+      "model": "claude-opus-5-5",
+      "profile": "personal1",
+      "webDelta": "SOURCE_GO C0H0M0L4 (freshness delta)",
+      "backendRuntime": "SOURCE_GO C0H0M1L9; mandatorycanarytests closed in1bdfa",
+      "previousWebDelta": "9f SOURCE_GO C0H0M0L5 retained historical"
+    },
+    "existingOAuthCredentialsReused": true,
+    "userKeyRegenerationRequired": false,
+    "uiLayoutCopyCssSvgChanges": false,
+    "actualDeployment": "PREPARED_NOT_ACTIVATED_FOR_THIS_WEB_SNAPSHOT",
+    "realProviderRead": "not_performed_by_this_delivery",
+    "orders": 0,
+    "knownLimitations": [
+      "현재계좌 사실 조회만 구현; 주문/체결이력/전략귀속/자동매매완료 아님",
+      "일부 section실패는 금융pane unknown; 빈계좌0합성 안함",
+      "동일 owner/binding 검증snapshot은 성공완료 후 최대30초 표시; 미관측 서버변경을 실시간인지했다고 주장하지 않음",
+      "실provider 지연/화면체감·정적운영 반영·실고객GET는 별도ROOT증거",
+      "Source/test/Git/artifact 준비와운영/고객조회는별도"
+    ],
+    "snapshotDigest": "2d5c7fdf3187507bd1384b70e2a6c9135d4d49077f27bceb271b74af3716e13a",
+    "webTestSeconds": 27.7,
+    "webTestScope": {
+      "readerPresentationBinding": 82,
+      "existingApi12Preservation": 44,
+      "projects": [
+        "desktop",
+        "mobile"
+      ],
+      "wholeServiceRegression": false
+    },
+    "typecheckExit": 0,
+    "scopedLintExit": 0,
+    "diffCheckExit": 0,
+    "freshness": {
+      "sameOwnerSameBinding": true,
+      "observedSessionRevisionBound": true,
+      "clock": "performance.now",
+      "maxLeaseMilliseconds": 30000,
+      "leaseStarts": "successful full read completion",
+      "pendingOrRetryExtendsLease": false,
+      "expiryIndependentOfPendingRead": true,
+      "normalRefreshKeepsVerifiedFactsWithinLease": true,
+      "logoutOwnerBindingRevisionVisibilityRetirementErrorsClearImmediately": true,
+      "unobservedServerChangesAssumed": false,
+      "sourceSchemaRendererCopyChanges": false,
+      "initialRed": {
+        "failed": 3,
+        "retained": true
+      },
+      "targetedGreen": {
+        "passed": 6,
+        "seconds": 4.0
+      }
+    },
+    "finalPreparedStaticBuild": {
+      "sourceCommit": "f41a01149ba490c9d5db927405453fa14ebac77e",
+      "actualExit": 0,
+      "sourceCleanBefore": true,
+      "sourceCleanAfter": true,
+      "sourceInputsUnchanged": true,
+      "envIsolated": true,
+      "emptyHome": true,
+      "rootDotenvFiles": 0,
+      "publicFlags": {
+        "VITE_TETH_AUTH_GOOGLE_ONLY": "true",
+        "VITE_TETH_EXCHANGE_CONNECT": "false",
+        "VITE_TETH_CONSULTATION": "false",
+        "VITE_TETH_BITGET_CANARY": "true"
+      },
+      "zendeskWidgetIdentifier": null,
+      "artifactFiles": 1166,
+      "artifactBytes": 27855535,
+      "treeSha256": "1d13e3894aea8915a8adb12954a28c9d6ef4f6052a1b58c6cff6ff3243a15268",
+      "manifestSha256": "d1a309ef38b2e214b8cf796df210b9660da1c8c61241306b90063230e6c7cf77",
+      "bindingSha256": "69870e08e028dbf816a4d0a44ef6f0d345d4c2941b47e23bc3d50b4a16603498",
+      "archiveSha256": "952b2c7d76e7e6c674bed1795dc1f20bf8d49666728aab7bdbb2e2a6b49f825e",
+      "buildReceiptSha256": "46a039c5a83f5c62b5f02869abc949d18b2989d7b61c53cbe685058efb70d601",
+      "packageTestsPassed": 6,
+      "packageTestSeconds": 0.317,
+      "actualHostModified": false
+    }
+  },
+  "previousBitgetAccountReadSnapshot": {
     "sourceCommit": "9f513ac0d0744f92bbc1c29cb85679aadfaaa01a",
     "backendCommit": "1bdfa39327d4abc3586cddae90415791508e07fc",
     "contractsAuthorityCommit": "bdaaddf8980c6ddbad2dca0c77a36fcdb677cfeb",
@@ -6989,5 +7089,6 @@
       "정상poll전에도financialfacts를clear하여일시unavailable표시가능; 실제체감 미검증",
       "Source/test/Git와운영/고객조회는별도"
     ]
-  }
+  },
+  "currentDeliveryStatus": "LATEST_BITGET_WEB_SOURCE_AND_STATIC_ARTIFACT_PREPARED_NOT_OPERATIONAL"
 }

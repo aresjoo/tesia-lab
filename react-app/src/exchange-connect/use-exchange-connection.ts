@@ -92,17 +92,29 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     let financialGeneration = 0, financialPending = false, financialStopped = false, financialFailures = 0, financialRebinds = 0, metadataRefreshes = 0
     let financialAbort: AbortController | undefined, financialTimer: number | undefined
     let snapshots: Awaited<ReturnType<typeof accountClient.account>>[] = []
+    let snapshotLease: { binding: string; revision: string; deadline: number } | undefined
+    let snapshotExpiryTimer: number | undefined
+    const clearSnapshot = () => {
+      snapshots = []; snapshotLease = undefined
+      if (snapshotExpiryTimer !== undefined) window.clearTimeout(snapshotExpiryTimer)
+      snapshotExpiryTimer = undefined
+    }
+    const freshSnapshot = () => snapshotLease !== undefined && snapshotLease.binding === accountConnectionBinding(confirmedConnections)
+      && performance.now() < snapshotLease.deadline
     const retireFinancial = (clear: boolean) => {
       financialGeneration++; financialAbort?.abort()
       if (financialTimer !== undefined) window.clearTimeout(financialTimer)
       financialTimer = undefined
-      if (clear) snapshots = []
+      if (clear) clearSnapshot()
     }
     const currentSession = async () => {
       try {
         const result = await session.current()
         if (retired || result.body.meta.resourceRevision !== result.body.data.revision
           || result.body.data.sessionId !== scope || result.body.data.state !== 'AUTHENTICATED') throw new SessionBindingError('SESSION_CHANGED')
+        if (snapshotLease && snapshotLease.revision !== result.body.data.revision) {
+          clearSnapshot(); projectAccounts(); publish()
+        }
         return result.body.data
       } catch (error) {
         if (!retired) {
@@ -129,6 +141,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         await broker.actions.onConnect('bitget', current)
       })
     const projectAccounts = () => {
+      if (snapshots.length && !freshSnapshot()) clearSnapshot()
       const metadata = accountMetadata()
       account = !financialStopped && metadata ? observedAccountPresentation(metadata, snapshots) : undefined
     }
@@ -198,9 +211,11 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       const generation = financialGeneration, binding = accountConnectionBinding(confirmedConnections)
       const abort = new AbortController()
       financialAbort = abort; financialPending = true
-      // A pending owner/metadata check cannot keep an older financial snapshot
-      // visible. Only completion of this freshly bound read can publish facts.
-      snapshots = []; projectAccounts(); publish()
+      // A verified same-owner/binding snapshot survives a healthy refresh only
+      // within its completion-based monotonic lease. Starting a read never
+      // extends that lease; its independent timer also expires while I/O waits.
+      if (!freshSnapshot()) clearSnapshot()
+      projectAccounts(); publish()
       const rebind = () => {
         financialRebinds++
         if (financialRebinds > 1) financialFailures = Math.max(financialFailures, financialRebinds - 1)
@@ -222,10 +237,17 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         if (!current()) return
         if (before.revision !== after.revision) { rebind(); retireFinancial(true); projectAccounts(); publish(); return }
         if (binding !== accountConnectionBinding(latest.data.connections)) { rebind(); setAccounts(latest.data.connections); return }
-        financialFailures = 0; financialRebinds = 0; snapshots = observations; projectAccounts(); publish()
+        financialFailures = 0; financialRebinds = 0; clearSnapshot()
+        snapshots = observations
+        snapshotLease = { binding, revision: after.revision, deadline: performance.now() + 30_000 }
+        snapshotExpiryTimer = window.setTimeout(() => {
+          snapshotExpiryTimer = undefined
+          clearSnapshot(); projectAccounts(); publish()
+        }, 30_000)
+        projectAccounts(); publish()
       } catch (error) {
         if (!current()) return
-        snapshots = []
+        clearSnapshot()
         if (error instanceof ApiV17Error && error.status === 401 || error instanceof ApiV12Error && [401, 403].includes(error.status)) {
           retireFinancial(true); financialStopped = true; account = undefined
         } else {

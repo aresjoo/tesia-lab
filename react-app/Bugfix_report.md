@@ -1,5 +1,13 @@
 # TETH 버그 수정·검수 보고서
 
+## Bitget 계좌 갱신 — 정상 조회 중 잔고와 연결 버튼 반복
+
+실제 계좌 조회 소비 후보 `9f513ac`는 15초 갱신을 시작할 때마다 이전 snapshot을 지웠다. 연결 metadata는 유지됐지만 금융 pane이 null로 바뀌어 기존 renderer의 미확인 고지와 `거래소 연결하기` 버튼이 다시 표시됐다. 이는 거래소가 연결을 해제한 결과가 아니다. 동일 사용자의 정상 갱신에서도 기존 화면이 반복 전환되는 문제를 ROOT가 원본의 자연스러운 연결 흐름에 맞춰 교정하도록 승인했다.
+
+hook과 전용 시험만 교정했다. 조회 전후 세션 revision·현재 연결 tuple을 확인하고 성공적으로 완료한 snapshot에만 완료 시점부터 최대 30초의 monotonic 유효시간을 부여한다. 같은 owner·같은 연결의 정상 갱신은 이 유효시간 안에서 이전 잔고·포지션을 유지하며, 조회 시작·재시도는 유효시간을 연장하지 않는다. 별도 만료 timer는 session/provider 응답 대기 중에도 금융 pane을 null로 지운다. 로그아웃·owner/locale/활성 상태 변경·연결 삭제·관측된 revision/연결 tuple 변화·tab visibility 변경·조회 실패는 기존 즉시 폐기 경로를 유지한다. 서버 응답 전 미관측 변경을 이미 확인했다고 추정하지 않으며, 유효시간이 지난 수치를 0 또는 최신 값으로 합성하지 않는다. 원본 renderer·CSS·카피·SDK/API·일반 flags·거래 권한은 변경하지 않았다.
+
+원 `9f513ac`에 추가한 회귀3키는 모두 실제 RED였으며 로그·PNG·trace를 보존했다. 교정 후 targeted6키 PASS/4.0초는 실제 NativeTradingWorkspace의 정상 held GET 중 잔고·포지션/CONNECTED metadata 유지와 pane 내 연결 CTA 부재, session/provider 대기 중 독립 만료, 관측 revision의 provider 시작 전 폐기, wall clock 후퇴, 성공 완료 시만 갱신/이전 만료 timer 취소를 확인한다. 최종 관련126키 PASS/27.7초는 reader/presentation/binding82와 기존 API12 보존44의 desktop/mobile 단일 실행이며 타입·지정 lint·diff 검사도 각각 actual0이다. 증거는 `.cache/bitget-account-read-web-ops/freshness-*`에 보존한다. 독립 검수·Git/새 artifact·배포는 ROOT가 별도로 결속한다. 앞 116PASS와 9f의 격리 build/1166 파일 artifact는 당시 source의 역사 기록이며 이 추가 수정의 빌드·운영 성공으로 전용하지 않는다. 실제 고객 계좌 통신·주문·VM 변경은 이 Web 교정에서 수행하지 않았다.
+
 ## Bitget 연결 후 터미널 — 연결 metadata 배선 누락
 
 사용자가 실제 연결 후 `현재 환경에서는 거래소 계좌 조회와 연결을 지원하지 않습니다` 고지를 제보했다. service entry는 `presentations`를 공급하지 않고 NativeServiceApp이 외부 `accountPresentation`만 전달했으므로, Bitget canary가 연결을 확인해도 terminal은 항상 undefined를 받았다. AGY3.8 좁은 읽기 추적과 ROOT source 대조로 이 경로를 확인했다. 사용자 계정의 Bitget 권한 거절을 관측한 결과가 아니다.

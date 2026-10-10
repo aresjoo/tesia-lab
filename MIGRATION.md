@@ -2,7 +2,17 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 개발 후속 — 기존 Bitget 연결로 실제 계좌 조회
+### 현재 개발 후속 — Bitget 정상 갱신 화면 유지와 만료 검증
+
+Web [`f41a011`](https://github.com/beak1011/tesia-web/tree/f41a01149ba490c9d5db927405453fa14ebac77e)의 clean React 전체 2,433파일·35,033,954bytes를 공식 `tools/sync-migration.mjs` sync/verify로 전달했다. snapshot `2d5c7fdf3187507bd1384b70e2a6c9135d4d49077f27bceb271b74af3716e13a`, sourceDirty0·제거0이다. ares 원본 root/main·Worker·원문 배치·카피·CSS·SVG·다른 팀 작업은 변경하지 않는다. 직전9f 스냅샷과 당시116PASS/검수·빌드 기록은 아래와 Git/cache 이력에 보존한다.
+
+정상 15초 갱신 시작 때도 금융 pane을 지워 연결 버튼이 반복 표시되던 문제를 hook만 교정했다. 같은 사용자·같은 연결·검증된 session revision에서 성공적으로 완료한 계좌 사실은 최대30초의 monotonic 유효시간 동안 유지한다. 조회 시작·재시도는 이 시간을 연장하지 않고, 독립 timer가 응답 대기 중에도 만료시킨다. 로그아웃/owner·관측 revision·연결 변경·연결 삭제·visibility/locale/활성 상태 변경·조회 실패는 즉시 폐기한다. 미관측 서버 변경을 이미 확인했다고 가정하지 않고, unknown을0이나 최신 수치로 합성하지 않는다. SDK/API17·원본 renderer/동선·주문 권한은 변경하지 않는다.
+
+원9f에서 신규3키 RED를 재현한 뒤 targeted6PASS/4.0초, 최종126PASS/27.7초(reader/presentation/binding82+기존API12보존44, desktop/mobile)·타입/지정lint/diff actual0를 확인했다. personal1 실제 Opus5.5 freshness delta는 `SOURCE_GO C0H0M0L4`이며 과거HOLD/116PASS와 구분한다. 이는 합성 HTTP 회귀·해당 source 검수이고 운영GO나 고객GET 성공이 아니다.
+
+새 source를 `env -i`·빈 HOME·정확4flags(Google-only/Bitget-canary=true, 일반Exchange/Consultation=false)·dotenv0에서 격리 빌드했다. pre/post clean·tracked 입력 불변/build actual0, public 정적1,166파일/tree `1d13e3894aea8915a8adb12954a28c9d6ef4f6052a1b58c6cff6ff3243a15268`다. 엄격 manifest/raw-USTAR 검증과 패키지6PASS/0.317초, manifest `d1a309ef38b2e214b8cf796df210b9660da1c8c61241306b90063230e6c7cf77`·archive `952b2c7d76e7e6c674bed1795dc1f20bf8d49666728aab7bdbb2e2a6b49f825e`를 결속했다. Zendesk 별도 환경값은 없고 identifier=null이다. 새 source/artifact는 **준비 완료·운영 미반영** 상태이며 Backend 활성화·Web static CAS·실계좌GET·자동매매/체결은 ROOT가 별도 실행·검증한다. 저장된 OAuth credential을 재사용하는 설계이며 이 전달을 위해 사용자 키 재발급/재연결/주문을 요구하지 않는다.
+
+### 직전 개발 후속 — 9f 계좌 조회 소비 후보
 
 Web [`9f513ac`](https://github.com/beak1011/tesia-web/tree/9f513ac0d0744f92bbc1c29cb85679aadfaaa01a)의 clean React 전체 2,433파일·35,024,472bytes를 공식 sync로 전달했다. snapshot `3f15a336bee6f8e73ce2a5fcbd013f42578e9b1e1cae84fc4f36059e7cc88455`, sourceDirty0·제거0이다. 원본 root/main·Worker·배치·카피·CSS·SVG는 변경하지 않는다. 최초 sync는 제한clone의 origin/main 추적ref부재로 owned partialcopy 후실패했고, 명시fetch와 해당복사본만복구 후 재실행했다. 원실패는 cache에 보존한다.
 

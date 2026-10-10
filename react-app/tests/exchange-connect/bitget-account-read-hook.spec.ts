@@ -9,7 +9,7 @@ const pending = { transactionId, exchangeId: 'bitget', status: 'pending', expire
   authorizationUrl: 'https://www.bitget.com/account/oauth?state=synthetic', connectionId: null, failureCode: null }
 const linked = { connectionId, exchangeId: 'bitget', status: 'connected', maskedAccountLabel: '***0001',
   connectedAt: '2030-01-01T00:01:00Z', permissions: { read: true, spotTrade: false, futuresTrade: false, withdrawal: false }, permissionsVerified: true }
-async function mount(page: Page, baseURL: string | undefined, options: { enabled?: boolean; authenticated?: boolean; callback?: boolean; connected?: boolean; holdInitialCatalog?: boolean; holdConnections?: boolean; service?: boolean; transactionFailed?: boolean; allowed?: boolean; holdAccount?: boolean } = {}) {
+async function mount(page: Page, baseURL: string | undefined, options: { enabled?: boolean; authenticated?: boolean; callback?: boolean; connected?: boolean; holdInitialCatalog?: boolean; holdConnections?: boolean; service?: boolean; workspace?: boolean; transactionFailed?: boolean; allowed?: boolean; holdAccount?: boolean } = {}) {
   if (!baseURL) throw new Error('LOOPBACK_REQUIRED')
   const origin = new URL(baseURL).origin
   const wire = { owner, revision: '1', sessionState: 'AUTHENTICATED', failNextSession: 0, denySession: false, holdNextSession: false, sessionHeld: false, releaseSession: () => {}, churnRevision: false, churnBinding: false, permissionsVerified: true, unavailableBalances: false, unavailablePositions: false,
@@ -113,6 +113,8 @@ async function mount(page: Page, baseURL: string | undefined, options: { enabled
     const appPath = '/src/internal-poc/NativeServiceApp.tsx', routerPath = '/src/components/SiteRouter.tsx'
     const App = options.service ? await import(/* @vite-ignore */appPath) : undefined
     const Router = options.service ? await import(/* @vite-ignore */routerPath) : undefined
+    const workspacePath = '/src/internal-poc/NativeTradingWorkspace.tsx'
+    const Workspace = options.workspace ? await import(/* @vite-ignore */workspacePath) : undefined
     function Host() {
       const [scope, setScope] = React.useState('session_operating_bitget_fixture_001')
       const [enabled, setEnabled] = React.useState(options.enabled)
@@ -122,6 +124,8 @@ async function mount(page: Page, baseURL: string | undefined, options: { enabled
       return React.createElement(React.Fragment, null,
         React.createElement('output', { id: 'status', hidden: true }, JSON.stringify({ scope: value?.scope,
           broker: value?.broker, connection: value?.connection, account: value?.account })),
+        Workspace ? React.createElement(Workspace.NativeTradingWorkspace,
+          { accountScope: scope, presentation: value?.account, onReturn: () => {}, onNew: () => {} }) : null,
         App && Router ? React.createElement(Router.SiteRouter, { service: true }, React.createElement(App.NativeServiceApp,
           { naturalLoginFlow: true, bitgetCanaryEnabled: true })) : null)
     }
@@ -198,6 +202,60 @@ test('refresh waits fifteen seconds after completion and never overlaps provider
   expect(wire.accountReads).toBe(1)
   await page.clock.runFor(1_100)
   await expect.poll(() => wire.accountReads).toBe(2)
+  expect(wire.starts).toBe(0)
+})
+
+test('healthy refresh preserves verified rows without showing a connection CTA while provider GET is held', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true, workspace: true })
+  const workspace = page.locator('.native-trading-workspace')
+  await expect(status(page)).toContainText(wire.accountValue)
+  await workspace.locator('.ctt-bottom-tabs [data-tab-id="assets"]').click()
+  const pane = workspace.locator('[data-native-ledger="assets"]')
+  await expect(pane).toContainText(`${wire.accountValue} BTC`)
+  wire.holdNextAccount = true
+  await page.clock.runFor(15_100)
+  await expect.poll(() => wire.accountHeld).toBe(true)
+  await expect(pane).toContainText(`${wire.accountValue} BTC`)
+  await expect(pane.locator('.tft-empty')).toHaveCount(0)
+  await expect(pane.getByRole('button', { name: '거래소 연결하기' })).toHaveCount(0)
+  expect(await act(page, `${control}.value.account.ledger.pos[0].cells.symbol`)).toBe('BTCUSDT')
+  expect(await act(page, `${control}.value.broker.catalog.find(item => item.broker.id === 'bitget').connectionState`)).toBe('CONNECTED')
+  wire.releaseAccount()
+  await expect.poll(() => wire.accountReads).toBe(2)
+  expect(wire.starts).toBe(0); expect(wire.outbound).toEqual([])
+})
+
+test('verified snapshot freshness expires independently while a session refresh is held', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true })
+  await expect(status(page)).toContainText(wire.accountValue)
+  wire.holdNextSession = true
+  await page.clock.runFor(15_100)
+  await expect.poll(() => wire.sessionHeld).toBe(true)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(13_000)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(2_100)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).toBeNull()
+  expect(await act(page, `${control}.value.account.ledger.pos`)).toBeNull()
+  expect(await act(page, `${control}.value.account.accounts[0].id`)).toBe(connectionId)
+  expect(wire.accountReads).toBe(1)
+  wire.accountValue = '11.000000000000000011'; wire.releaseSession()
+  await expect(status(page)).toContainText('11.000000000000000011 BTC')
+  expect(wire.starts).toBe(0)
+})
+
+test('verified snapshot freshness expires during provider I/O without overlapping or restarting OAuth', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true })
+  await expect(status(page)).toContainText(wire.accountValue)
+  wire.holdNextAccount = true
+  await page.clock.runFor(15_100)
+  await expect.poll(() => wire.accountHeld).toBe(true)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(15_100)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).toBeNull()
+  expect(wire.accountReads).toBe(2)
+  wire.releaseAccount()
+  await expect(status(page)).toContainText(wire.accountValue)
   expect(wire.starts).toBe(0)
 })
 
@@ -451,17 +509,61 @@ for (const churn of ['revision', 'binding'] as const) test(`continuous ${churn} 
   expect(wire.starts).toBe(0)
 })
 
-test('a new financial refresh immediately clears older facts while the session query is held', async ({ page, baseURL }) => {
+test('an observed session revision change clears the leased facts before a held provider query', async ({ page, baseURL }) => {
   const wire = await mount(page, baseURL, { enabled: true, connected: true })
   await expect(status(page)).toContainText(wire.accountValue)
-  wire.holdNextSession = true; wire.revision = '2'
+  wire.holdNextSession = true; wire.holdNextAccount = true; wire.revision = '2'
   await page.clock.runFor(15_100)
   await expect.poll(() => wire.sessionHeld).toBe(true)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  wire.accountValue = '10.00000000000000001'; wire.releaseSession()
+  await expect.poll(() => wire.accountHeld).toBe(true)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).toBeNull()
+  expect(await act(page, `${control}.value.account.ledger.pos`)).toBeNull()
+  expect(wire.accountReads).toBe(2)
+  wire.releaseAccount()
+  await expect(status(page)).toContainText('10.00000000000000001 BTC')
+})
+
+test('freshness uses monotonic elapsed time even if the wall clock moves backwards', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true })
+  await expect(status(page)).toContainText(wire.accountValue)
+  wire.holdNextSession = true
+  await page.clock.runFor(15_100)
+  await expect.poll(() => wire.sessionHeld).toBe(true)
+  await page.evaluate(() => { const now = Date.now; Date.now = () => now() - 3_600_000 })
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(15_100)
   expect(await act(page, `${control}.value.account.ledger.assets`)).toBeNull()
   expect(await act(page, `${control}.value.account.ledger.pos`)).toBeNull()
   expect(wire.accountReads).toBe(1)
-  wire.accountValue = '10.00000000000000001'; wire.releaseSession()
-  await expect(status(page)).toContainText('10.00000000000000001 BTC')
+  wire.releaseSession()
+  await expect(status(page)).toContainText(wire.accountValue)
+  expect(wire.starts).toBe(0)
+})
+
+test('only successful completion renews freshness and cancels the older expiry timer', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true })
+  await expect(status(page)).toContainText(wire.accountValue)
+  wire.accountValue = '12.000000000000000012'
+  wire.holdNextAccount = true
+  await page.clock.runFor(15_100)
+  await expect.poll(() => wire.accountHeld).toBe(true)
+  await page.clock.runFor(10_100)
+  wire.releaseAccount()
+  await expect(status(page)).toContainText(`${wire.accountValue} BTC`)
+  await page.clock.runFor(5_100)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  wire.holdNextSession = true
+  await page.clock.runFor(10_100)
+  await expect.poll(() => wire.sessionHeld).toBe(true)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(13_000)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).not.toBeNull()
+  await page.clock.runFor(2_100)
+  expect(await act(page, `${control}.value.account.ledger.assets`)).toBeNull()
+  wire.releaseSession()
+  expect(wire.starts).toBe(0)
 })
 
 test('an unverified connection keeps metadata without any account getter or OAuth retry', async ({ page, baseURL }) => {
