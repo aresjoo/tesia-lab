@@ -1,5 +1,27 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 후보 — Bitget 초기 조회·대기 요청 복구 교정
+
+최종 personal1 actual claude-opus-5-5 micro 검수는 SOURCE_GO C0/H0/M0/L8, 운영 HOLD다. M1/M2/L1/L2/L3/L8 종결을 독립 확인했고 ROOT가 입력23파일 SHA 전후 동치를 재계산했다. 모델은 시험/해시를 직접 실행하지 않았으며 ROOT의 빌드·설치·실측 영수증과 구분한다. Backend 지침의 낡은 API12/runtime 목록은 문서로 교정했다. 기존 L4/L6/L9와 최초 미검증 locator, 일반 private config의 equals형식 재핀 전 보완, driver 일부 원인 래핑, csrf 단독5xx/HTML429·500 복구는 Low 잔여다. 실제 Bitget40006/25620 고객 응답 관측과 sealed setuptools advisory는 미완료이며 운영 GO로 확대하지 않는다. 원 첫 C0/H0/M2/L9와 새 C0/H0/M0/L8은 별도 검수다. 원자료 `.cache/bitget-review-fixes/final-micro/{receipt.json,assessment.txt}`를 따른다.
+
+
+후속 교정과 개발 의존성 패치 뒤 ROOT 공식 service build는 actual0·17.765초·공개1166파일·frozen runtime23 입력/lock 불변이다. 동일 flags의 패치 전17.938초 빌드와 공개 파일 전체 bytes가 같고 지정 runtime/copy/spec lint actual0·1.855초다. 최종 증거 `.cache/bitget-review-fixes/final-micro/web-build-patched-dependency-receipt.json`과 `web-dependency-receipt.json`을 따른다. 아래31입력/1.42초는 최초 후보의 역사이며 새 source의 검증으로 대체하지 않는다. 코드 최종 Opus는 runtime/test23 입력을 검수하고, lock의 단일 dev dependency 패치는 ROOT의 실제 inventory/audit/lint/build로 별도 인수한다.
+
+독립 첫 Opus5.5의 M1/L8을 교정했다. 실제 API0.1 getAuthSession은 오류401만 허용하므로 JSON503을 ApiResponseError로 가정한 첫 의견은 그대로 채택하지 않았다. Bitget hook만 opt-in하는 앱 transport에서 same-origin exact GET auth/session·query/hash 없음·429/500/502/503/504를 body 소비 전 일시 통신 실패로 거절한다. API12 GET의 HTML502/503/504도 같은 읽기 복구로 분류한다. default-off·다른 경로·POST/DELETE·401·정상200의 malformedJSON·INVALID_RESPONSE는 기존 규격을 따른다. 생성SDK/계약과 원본 동선은 바꾸지 않았다.
+
+발행된 명시 취소는 같은 promise로 중복 클릭을 병합하고, 폴링 기한 후 실패한 수동 GET의 실제 안내를 유지한다. 신규7키 RED6FAIL1PASS→GREEN7PASS4.5초, 경계·관련8PASS6.5초, 선택 기존3PASS4.9초는 서로 다른 실행이다. 처음 python 명령 환경 실패와 중복 baseline RED도 원자료에 남긴다. runtime4/spec2 동결은 `.cache/bitget-web-review-fixes-agent/opus-followup/freeze-receipt.json`이다. 첫 미검증 callback locator와 connected 뒤 connections GET 실패 복구는 기존 Low 잔여이며 권위를 합성하지 않았다.
+
+추가 개발 의존성 감사에서 실제 lock의 brace-expansion5.0.9가 기존 GHSA3건에 해당함을 확인해5.0.12로 갱신했다. package.json/다른 lock package 변경0, npm 온라인 audit0건·정확 lock 설치를 확인했다. [패치 근거](https://github.com/advisories/GHSA-q2hr-2g5m-vwhr). 이는 새 기능·운영 활성화가 아니라 eslint 하위 개발 도구의 제한된 갱신이다. 아래 최초 build는 패치 이전 도구 환경의 당시 증거다.
+
+ROOT 공식 서비스 빌드는 정확 운영 flags(Google-only/Bitget canary=true, general Exchange/Consultation=false, Zendesk 미설정)로 최종actual0·Vite1.42초를 확인했다. build 출력1166파일·HTML14723bytes와 검수 frozen source31파일 불변을 `.cache/bitget-review-fixes/web-build-receipt.json`에 고정했다. 첫TS2688·기존 app-only 검사 범위는 보존한다. 기존 native configLoader/혼합 import/청크500kB 경고는 별도다. 이 빌드는 운영 반영이 아니다.
+
+`agent/web/bitget-review-fixes`는 운영 UI `c1f14020`을 기준으로 hook/controller/account projection runtime3와 신규spec2를 교정한다. ROOT가 기존 안내 영역의7언어 권한 거부·조회 제한·부분 미지원·대기 조회 실패 copy2를 추가했다. 원본 배치/CSS/SVG/모달 동선·API12/API17 생성SDK·owner/session/epoch 및 금융 null/[] 의미는 유지한다. 타팀 상담/시장/Arena source를 덮어쓰지 않는다.
+
+초기 session/catalog의 일시 장애에는 제한된 GET 재시도를 적용하고 소진 후 현재 탭 복귀/화면 이동에서 새 제한 burst를 시작한다. 명시 인증/설정/규격 거부는 자동 복구하지 않는다. 같은 owner/connection의 재조회는 단조 시계로5초 간격을 유지하며 권한 거부·429·부분 미지원은 연결 삭제/자동OAuth로 바꾸지 않는다. 대기 상태 조회 오류는 Native UI가 action을 차단하는 error 상태 대신 사실에 맞는 ready+실패 안내로 남긴다. 조회 중 취소는 단회 대기 처리하며 이미 processing이면 취소하지 않는다. callback이 DELETE 전에 요청을 선점한409는 같은 요청 GET으로 확인하고 DELETE/START를 반복하지 않는다.
+
+원자료는 프로젝트 `.cache/bitget-web-review-fixes-agent/freeze-receipt.json`을 따른다. 신규 첫 실행9PASS/fixture3FAIL18.5초, 해당 fixture3만 교정한3PASS3.5초, 추가 controller2PASS5.2초, 초기복구 소진1PASS2.2초, 기존 경계 선택6PASS5.0초, 최종 추가 경계5PASS9.3초를 각각 보존한다. 최종 agent 타입 검사는 앱 `tsconfig.app.json`만 포함했다. ROOT 공식 build의 Node 타입 환경 실패TS2688은 별도 기록하며 exact lock의 `npm ci --ignore-scripts --offline`로 정상 환경을 준비했다. agent 지정 lint·diff·secret scan은actual0이다. 전체 suite·실provider/고객 브라우저·새 운영 반영은 이 국소 시험의 합격 범위가 아니다. 독립검수/공식build/Git/migration 결과는 같은 절에 후속 결속한다.
+
+
 ## 연결 완료 후 하단 빈 상태의 불필요한 재연결 안내
 
 사용자는 이미 Bitget을 연결했는데 하단에 `아직 공급된 계정 데이터가 없습니다. / 거래소 연결하기`가 남는 문제를 교정하도록 요청했다. 원인은 `NativeAccountLedger`가 rows=null이면 현재 owner의 연결 metadata와 무관하게 연결 CTA를 표시하는 조건이었다. 정상 snapshot 갱신 보존과 별개로, 조회 실패·미공급 주문/체결 탭은 여전히 null이어서 해당 조건을 탄다.

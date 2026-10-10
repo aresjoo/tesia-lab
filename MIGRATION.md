@@ -1,5 +1,14 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 전달 — Bitget 실패 복구 교정과 재검토
+
+clean Web `c97f2e42410da6a83ee41a2df8237f5897ca08a2`의 전체 추적 2435파일을 공식 sync/verify(actual0)로 전달했다. snapshot `3625379a1dbb33f667d3b83660761b9a82ae7a1c929dbcf0268ae93a8c520626`. 이전 c1f 스냅샷의 client 수정은 없었고 원본 root/main·Node·Worker 변경0이다. `react-app/`은 직접 수정하지 않았다. 이 범위는 Bitget hook/controller/transport/account projection와 기존7언어 안내·회귀 시험이며 CSS/SVG/TSX/생성SDK 변경0이다. 다른 팀 상담·시장·Arena 후보를 덮어쓰지 않는다.
+
+세션 SDK401-only 규격을 보존한 정확 session GET 장애 복구·취소 중복 병합·조회5초 pacing·API12/API17 규격403·손상credential owner local_only 해제·account/OAuth 용량 격리 및 배포 전 콜백 보호를 검수했다. personal1 actual Opus5.5 최종 SOURCE_GO C0/H0/M0/L8이고 첫 C0/H0/M2/L9와 원 실패는 보존한다. 모델은 시험을 재실행하지 않았으며 ROOT가23입력 SHA 전후동치·실제 빌드/설치를 확인했다. Web 공식 build actual0/17.765초/1166공개파일, Backend sourcea8df 정상26wheel설치후3PASS/5.058초·sdist235payload/ZIP exact, Web7·8·3PASS 및 Infra13·3PASS는 각각 별도 실행이다. brace-expansion 개발 의존성1개만5.0.12로 갱신했고 온라인 audit0/lint0 및 공개 bundle byte 동치를 확인했다.
+
+**운영 미반영/HOLD:** active/unknown canary는 nginx HOLD 전에 배포를 거절한다. admission pause/pending·processing·in-flight drain은 미구현으로 기존 수동 OPEN 복구를 우회로 재사용하지 않는다. 이 전달은 고객 OAuth·실주문·전체 서비스 완료가 아니다. full collateral inventory/DNS수명/최초locator·csrf단독 장애/driver 진단 래핑/미래 equals argv/실사용자 브라우저/AI주문bridge/sealed setuptools advisory는 잔여다. Backend [draft PR175](https://github.com/beak1011/tesia-backend/pull/175), Web [draft PR62](https://github.com/beak1011/tesia-web/pull/62), Infra [draft PR120](https://github.com/beak1011/tesia-infra/pull/120)의 각 담당 경계로 통합하며 자동 main 병합·운영 전환0이다. `.mailbox` 미설치이므로 상대 팀의 실제 열람/승인은 확인했다고 기록하지 않는다.
+
+
 ## 최신 전달·정적 운영 확인
 
 ### 현재 개발 후속 — 연결된 계정의 미제공 데이터 안내

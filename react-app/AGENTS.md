@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+사용자 승인된 Bitget 초기 GET 복구·조회 간격·대기 거래 취소 교정은 별도 agent/web/bitget-review-fixes에서 수행한다. Frontend 단독 writer는 exchange-connect hook/controller/account-presentation/account-read 및 관련 시험을 소유한다. ROOT는 기존 안내 영역의 7언어 오류 copy·문서·최종 타입/build·독립 검수·공식 migration 전달을 소유한다. 원본 배치/CSS/SVG/가입 동선·API12/API17 생성 SDK·owner/session/epoch 응답 폐기·null/실제[] 의미를 유지한다. 자동 OAuth/키 삭제/주문 활성화는 추가하지 않는다.
+
 - 사용자 요청의 연결 완료 후 빈 상태 교정은 ROOT가 별도 `agent/web/bitget-connected-empty-ux`에서 exact5(`NativeAccountPanels.tsx`, `NativeTradingWorkspace.tsx`, `native-account-presentation-copy.ts`, 원장 fidelity spec, 계좌 read hook spec)를 소유한다. 현재 owner에 구조적으로 결속된 accounts가 있으면 하단 null 원장의 재연결 CTA를 표시하지 않고 7언어 연결 완료·데이터 미표시 안내를 사용한다. null/실제 빈 배열/실제 공급행 의미와 상단 추가 연결 action을 유지한다. Backend/API/자격증명/flags/CSS/SVG 변경0이며 독립 검수·Git·공식 migration·운영 증거는 Bugfix를 따른다. 이전 paragraph의 계좌 producer 미구현은 당시 역사이며 현재 API17 읽기 배포와 구분한다.
 
 - Bitget 연결→터미널 후속 source4/spec1는 동결·반환했다. ROOT가 단독 작성한 `controller.ts`, `use-exchange-connection.ts`, 신규 `account-presentation.ts`, `NativeServiceApp.tsx`는 기존 SDK/owner가 확인한 연결 metadata·권한만 공급하고 실제 ledger6/strategies는null로 둔다. modal/navigation·DELETE재열기/locale·cataloggate·local_only고지 경합을 교정했으며 Webbaa581a의 cleanbuild17.577초와 마지막 Opus5.5 microdelta C0H0M0/codeGo를 앞HOLD와구분한다. 후속spec의settle/명시선택2PASS는제품변경0이다. ROOT는 문서/Git/migration전달만 소유한다. 원본디자인/카피/flags·실키/DB/운영/주문변경0, 실제계좌조회producer는미구현이며metadata를잔고/포지션/전략/체결 또는0으로합성금지다. 추가source/계약/backend/운영쓰기는명시경계배정후에만진행하며국소시험/Git/배포/실고객성공을구분한다.

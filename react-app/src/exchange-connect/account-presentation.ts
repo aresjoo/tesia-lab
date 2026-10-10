@@ -62,3 +62,10 @@ export function observedAccountPresentation(metadata: NativeAccountPresentation,
     assets: balancesConfirmed ? assets : null,
     pos: positionsConfirmed ? positions : null } }
 }
+
+/** Finite advisory only; stored connection/permissions remain separate facts. */
+export function accountObservationFailure(snapshots: readonly DeepReadonly<AccountResponse>[]): AccountResponse['data']['products'][number]['balances']['reason'] | undefined {
+  const reasons = new Set(snapshots.flatMap(({ data }) => data.products.flatMap(product =>
+    [product.balances, product.positions].filter(section => section.status === 'unavailable').map(section => section.reason))))
+  return (['PERMISSION_REJECTED', 'RATE_LIMITED', 'PROVIDER_UNAVAILABLE', 'PROVIDER_FAILED'] as const).find(reason => reasons.has(reason))
+}

@@ -5,15 +5,20 @@ import { SameOriginApiTransport } from '../internal-poc/api-adapter'
 import type { NativeConnectionPresentation } from '../internal-poc/native-connection-presentation'
 import { ApiV12Error, TesiaExchangeConnectionsV12Client } from '../internal-poc/contracts/generated/api-v0.12/client.js'
 import { createExchangeConnectionsTransport } from './transport'
-import { createExchangeConnectionController, readExchangeTransactionLocator } from './controller'
+import { createExchangeConnectionController, readExchangeTransactionLocator, isTransientExchangeReadFailure } from './controller'
 import { exchangeText } from './copy'
 import { pushSiteLocation } from '../site-navigation'
 import { CLIENT_BROKERS } from '../client-broker-fixtures'
 import type { BrokerServicePresentation } from '../client-broker-presentation'
 import type { NativeAccountPresentation } from '../internal-poc/native-account-presentation'
-import { connectedAccountPresentation, observedAccountPresentation } from './account-presentation'
+import { connectedAccountPresentation, observedAccountPresentation, accountObservationFailure } from './account-presentation'
 import { ApiV17Error, TesiaBitgetAccountV17Client } from '../internal-poc/contracts/generated/api-v0.17/client.js'
 import { accountConnectionBinding, createBitgetAccountTransport } from './account-read'
+import { nativeAccountText } from '../internal-poc/native-account-presentation-copy'
+
+const ACCOUNT_READ_INTERVAL = 5_000
+const INITIAL_RETRY_DELAYS = [1_000, 2_000, 4_000] as const
+const transientInitializationFailure = isTransientExchangeReadFailure
 
 class SessionBindingError extends Error {}
 
@@ -72,10 +77,18 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
   // A confirmed mutation belongs to the owner, not the modal or locale effect
   // that initiated it. The current owner receives invalidation after retirement.
   const connectionChanges = useRef<{ scope: string | null; localRemovalOnly?: boolean; notify?: (id: string, localRemovalOnly: boolean) => void }>({ scope: null })
+  // Admission pacing survives same-owner locale/effect reactivation; it never
+  // supplies authority or carries financial observations across owners.
+  const accountAdmission = useRef<{ scope: string | null; starts: Map<string, number> }>({ scope: null, starts: new Map() })
   useEffect(() => {
     if (!enabled || !scope || !authenticated) return
     let retired = false, unavailable = false, catalogConfirmed = false, requested = false, presentationRequest = 0, actionEpoch = 0, accountRead = 0, busy = false
     if (connectionChanges.current.scope !== scope) connectionChanges.current = { scope }
+    if (accountAdmission.current.scope !== scope) accountAdmission.current = { scope, starts: new Map() }
+    const admission = accountAdmission.current.starts
+    let initialRetry = 0, initialBusy = false, transientExhausted = false, initialTimer: number | undefined
+    let financialRetryDelay: number | undefined
+    let financialAdvisory: ReturnType<typeof accountObservationFailure>
     const currentUrl = new URL(window.location.href), intent = callbackIntent.current
     const currentLocator = readExchangeTransactionLocator(currentUrl.href)
     const callbackRoute = locator && currentUrl.pathname === '/auth/complete' && !currentUrl.search
@@ -86,7 +99,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     if (callbackLocator) queueMicrotask(() => {
       if (callbackIntent.current === intent && intent.owner === scope) intent.replayOpen = false
     })
-    const session = createSdk(new TesiaApiClient(new SameOriginApiTransport())).session
+    const session = createSdk(new TesiaApiClient(new SameOriginApiTransport({ recoverSessionGatewayFailures: true }))).session
     const client = new TesiaExchangeConnectionsV12Client(createExchangeConnectionsTransport())
     const accountClient = new TesiaBitgetAccountV17Client(createBitgetAccountTransport())
     let financialGeneration = 0, financialPending = false, financialStopped = false, financialFailures = 0, financialRebinds = 0, metadataRefreshes = 0
@@ -105,7 +118,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       financialGeneration++; financialAbort?.abort()
       if (financialTimer !== undefined) window.clearTimeout(financialTimer)
       financialTimer = undefined
-      if (clear) clearSnapshot()
+      if (clear) { clearSnapshot(); financialAdvisory = undefined }
     }
     const currentSession = async () => {
       try {
@@ -144,13 +157,22 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       if (snapshots.length && !freshSnapshot()) clearSnapshot()
       const metadata = accountMetadata()
       account = !financialStopped && metadata ? observedAccountPresentation(metadata, snapshots) : undefined
+      const reason = financialAdvisory ?? accountObservationFailure(snapshots)
+      if (account && reason) {
+        const key = reason === 'PERMISSION_REJECTED' ? 'accountPermissionRejected'
+          : reason === 'RATE_LIMITED' ? 'accountRateLimited'
+          : reason === 'PROVIDER_UNAVAILABLE' ? 'accountScopeUnavailable' : 'accountTemporarilyUnavailable'
+        account = { ...account, sourceLabel: `${account.sourceLabel} · ${nativeAccountText(language, key)}` }
+      }
     }
-    const scheduleFinancial = () => {
+    const admissionDelay = () => Math.max(0, ...readableConnections().map(item =>
+      (admission.get(item.connectionId) ?? -Infinity) + ACCOUNT_READ_INTERVAL - performance.now()))
+    const scheduleFinancial = (pacedDelay?: number) => {
       if (retired || unavailable || financialStopped || financialPending || metadataRefreshes || document.hidden
         || financialTimer !== undefined || !readableConnections().length) return
       // Bounded backoff for transient failures; each attempt still revalidates
       // session/metadata and only one read may be pending. No OAuth is retried.
-      const delay = 15_000 * 2 ** Math.min(Math.max(financialFailures - 1, 0), 2)
+      const delay = pacedDelay ?? financialRetryDelay ?? 15_000 * 2 ** Math.min(Math.max(financialFailures - 1, 0), 2)
       financialTimer = window.setTimeout(() => { financialTimer = undefined; void refreshFinancial() }, delay)
     }
     const setAccounts = (connections: Awaited<ReturnType<typeof client.connections>>['data']['connections'] | null) => {
@@ -208,6 +230,9 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       if (retired || unavailable || financialStopped || financialPending || metadataRefreshes || document.hidden || !catalogConfirmed) return
       const connections = readableConnections()
       if (!connections.length) return
+      const wait = admissionDelay()
+      if (wait > 0) { scheduleFinancial(wait); return }
+      financialRetryDelay = undefined
       const generation = financialGeneration, binding = accountConnectionBinding(confirmedConnections)
       const abort = new AbortController()
       financialAbort = abort; financialPending = true
@@ -227,6 +252,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         if (!current()) return
         const observations: Awaited<ReturnType<typeof accountClient.account>>[] = []
         for (const item of connections) {
+          admission.set(item.connectionId, performance.now())
           observations.push(await accountClient.account(item.connectionId, { signal: abort.signal }))
           if (!current()) return
         }
@@ -237,7 +263,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         if (!current()) return
         if (before.revision !== after.revision) { rebind(); retireFinancial(true); projectAccounts(); publish(); return }
         if (binding !== accountConnectionBinding(latest.data.connections)) { rebind(); setAccounts(latest.data.connections); return }
-        financialFailures = 0; financialRebinds = 0; clearSnapshot()
+        financialFailures = 0; financialRebinds = 0; financialAdvisory = undefined; clearSnapshot()
         snapshots = observations
         snapshotLease = { binding, revision: after.revision, deadline: performance.now() + 30_000 }
         snapshotExpiryTimer = window.setTimeout(() => {
@@ -251,7 +277,12 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
         if (error instanceof ApiV17Error && error.status === 401 || error instanceof ApiV12Error && [401, 403].includes(error.status)) {
           retireFinancial(true); financialStopped = true; account = undefined
         } else {
-          financialFailures++; projectAccounts()
+          financialFailures++
+          financialAdvisory = error instanceof ApiV17Error && error.code === 'PERMISSION_REJECTED' ? 'PERMISSION_REJECTED'
+            : error instanceof ApiV17Error && error.code === 'RATE_LIMITED' ? 'RATE_LIMITED'
+            : error instanceof ApiV17Error && error.code === 'PROVIDER_UNAVAILABLE' ? 'PROVIDER_UNAVAILABLE' : 'PROVIDER_FAILED'
+          if (financialAdvisory === 'RATE_LIMITED') financialRetryDelay = ACCOUNT_READ_INTERVAL * 2 ** Math.min(financialFailures - 1, 3)
+          projectAccounts()
           // Permission rejection or an externally removed connection needs an
           // authoritative metadata refresh, never a cached connected flag.
           if (error instanceof ApiV17Error && [403, 404].includes(error.status)) void refreshAccounts()
@@ -311,13 +342,15 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
       else void refreshAccounts()
     }
     connectionChanges.current.notify = invalidateConnection
-    void (async () => {
+    const initialize = async () => {
+      if (retired || unavailable || initialBusy) return
+      initialBusy = true
       try {
         await allowed()
         // Presentation close retires transaction actions, not this owner's
         // background catalogue. A route transition must not erase entry.
         if (retired) return
-        catalogConfirmed = true
+        catalogConfirmed = true; transientExhausted = false
         controller = createController()
         await controller.load(requested ? callbackLocator : null, connectionChanges.current.localRemovalOnly)
         if (retired) return
@@ -353,14 +386,32 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
           && (!window.location.hash || readExchangeTransactionLocator(window.location.href) === callbackLocator))
           window.history.replaceState(null, '', '/')
         publish()
-      } catch {
+      } catch (error) {
         if (retired) return
-        unavailable = true
-        controller?.dispose(); controller = undefined; setState(undefined)
-      }
-    })()
-    const leave = () => close()
+        controller?.dispose(); controller = undefined
+        if (transientInitializationFailure(error) && initialRetry < INITIAL_RETRY_DELAYS.length) {
+          // GET-only finite recovery. Never retry user consent or a mutation,
+          // and never reopen after a definitive auth/catalog/schema rejection.
+          initialTimer = window.setTimeout(() => { initialTimer = undefined; void initialize() }, INITIAL_RETRY_DELAYS[initialRetry++])
+          return
+        }
+        transientExhausted = transientInitializationFailure(error)
+        unavailable = !transientExhausted
+        retireFinancial(true); setState(undefined)
+      } finally { initialBusy = false }
+    }
+    const recoverInitialization = () => {
+      if (retired || unavailable || !transientExhausted || initialBusy || initialTimer !== undefined || document.hidden) return false
+      // Exhaustion stops automatic retries, not future explicit observation.
+      // Auth/catalog/schema rejection never enters this recovery path.
+      transientExhausted = false; initialRetry = 0
+      void initialize()
+      return true
+    }
+    void initialize()
+    const leave = () => { if (!recoverInitialization()) close() }
     const visibility = () => {
+      if (recoverInitialization()) return
       retireFinancial(true); projectAccounts(); publish()
       if (!document.hidden) { financialFailures = 0; void refreshAccounts() }
     }
@@ -370,6 +421,7 @@ export function useBitgetCanaryPresentation(scope: string | null, authenticated:
     document.addEventListener('visibilitychange', visibility)
     return () => {
       retired = true; actionEpoch++; controller?.dispose()
+      if (initialTimer !== undefined) window.clearTimeout(initialTimer)
       retireFinancial(true)
       // Effect retirement may retain verified connection metadata, but a same-
       // owner reactivation or language change must not re-expose its old facts.

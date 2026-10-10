@@ -23,6 +23,12 @@ export function createExchangeConnectionsTransport(): ExchangeConnectionsTranspo
           credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: abort.signal })
         if (window.location.origin !== origin || response.redirected || response.url !== url.href
           || response.body === null) throw new Error('EXCHANGE_TRANSPORT_INVALID')
+        if (request.method === 'GET' && [502, 503, 504].includes(response.status)
+          && response.headers.get('content-type')?.split(';', 1)[0]?.trim().toLowerCase() === 'text/html') {
+          // Gateway HTML is not a contract response. Only read observations
+          // may recover; mutation responses keep the original strict boundary.
+          throw new TypeError('EXCHANGE_GATEWAY_UNAVAILABLE')
+        }
         reader = response.body.getReader()
         const decoder = new TextDecoder('utf-8', { fatal: true })
         let bytes = 0, body = ''

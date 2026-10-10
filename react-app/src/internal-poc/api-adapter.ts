@@ -77,6 +77,7 @@ async function* decodeSseBody(body: ReadableStream<Uint8Array>): AsyncIterable<s
 }
 
 export class SameOriginApiTransport implements ApiTransport {
+  constructor(private readonly options: Readonly<{ recoverSessionGatewayFailures?: boolean }> = {}) {}
   async request(
     url: string,
     init: Readonly<{ method: string; headers: Readonly<Record<string, string>>; body?: string }>,
@@ -96,6 +97,14 @@ export class SameOriginApiTransport implements ApiTransport {
         redirect: 'manual',
         cache: 'no-store',
       })
+      const requested = new URL(url, window.location.origin)
+      if (this.options.recoverSessionGatewayFailures === true && init.method === 'GET'
+        && requested.origin === window.location.origin && requested.pathname === '/api/v1/auth/session'
+        && !requested.search && !requested.hash && [429, 500, 502, 503, 504].includes(response.status)) {
+        // The Bitget host may retry this observation. Refuse the gateway body
+        // before parsing; it supplies neither session nor schema authority.
+        throw new TypeError('SESSION_GATEWAY_UNAVAILABLE')
+      }
       return {
         status: response.status,
         headers: responseHeaders(response.headers),

@@ -4,6 +4,8 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+이번 최신 Bitget 교정은 source-only 전달이며 운영 HOLD다. 통합 담당은 MIGRATION 최신 절과 draft PR62/175/120 경계를 확인하고 기존 main/타팀 WIP를 덮어쓰지 않는다. active canary의 updater 사전 거절을 우회하거나 이전 OPEN 복구를 재사용하지 않는다.
+
 제품·구현 정본은 [Program 활성 진입점](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/README.md)과 연결된 계획§0/§16·WORK_LEDGER다. ares 원본 main은 제품 본체이며 UI·UX·카피·글꼴·SVG·모바일·다국어·흐름을 유지한다. 서버는 이 원본에 맞추고, 임의 변경은 사전 승인하며 승인된 개선은 보존한다.
 
 이 브랜치는 원본과 React 이식본의 전달·검토용이며 main 교체·자동 운영 배포를 하지 않는다. [MIGRATION.md](MIGRATION.md)를 먼저 읽고, 최신 React 출처/전체 해시는 `migration-manifest.json`, 실제 실행·미검증·운영 여부는 `migration-verification.json`의 최상위 현재 항목을 따른다. 과거 candidate와 검수 원자료는 당시 범위이며 새 전체 승인으로 승계하지 않는다. 오래된 작업 예약·중복 현재 상태는 제거했고 필요한 과거 결정은 Git/정본의 Decision Log에서 확인한다.
