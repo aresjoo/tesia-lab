@@ -19,10 +19,11 @@ export function NativeAccountFields({ fields, dashboard = false }: { fields: rea
   return <div className="nfx-rows">{fields.map((field, index) => <div key={index} className="nfx-row"><span className="nfx-rlb">{field.label}</span><b className={`nfx-rr ${field.tone ?? ''}`}>{field.value}</b></div>)}</div>
 }
 
-export function NativeAccountLedger({ tab, rows, sourceLabel, onSelect, onAccount, canAccount, onNavigate, canNavigate, onPause, canPause, onOpenTrade, canOpenTrade, onConnect }: {
+export function NativeAccountLedger({ tab, rows, sourceLabel, hasConnectedAccount, onSelect, onAccount, canAccount, onNavigate, canNavigate, onPause, canPause, onOpenTrade, canOpenTrade, onConnect }: {
   tab: NativeAccountLedgerTab
   rows: readonly NativeAccountLedgerRow[] | null
   sourceLabel: string
+  hasConnectedAccount: boolean
   onSelect: (id: string) => void
   onAccount: (id: string) => void
   canAccount?: (id: string) => boolean
@@ -42,7 +43,7 @@ export function NativeAccountLedger({ tab, rows, sourceLabel, onSelect, onAccoun
   return <div className="client-terminal-ledger" data-native-ledger={tab}>
     <p className="tft-tnote">{sourceLabel}{tab === 'assets' && ` · ${nativeAccountText(language, 'accountWide')}`}</p>
     {tab === 'pos' && <p id={stopDescriptionId} className="ledger-sr-only">{nativeAccountText(language, 'stopNotice')}</p>}
-    {rows === null ? <div className="tft-empty"><p role="status">{nativeAccountText(language, 'unavailable')}</p>{onConnect && <button type="button" className="nfx-btn pri" onClick={onConnect}>{clientTerminalText(language, 'connectExchange')}</button>}</div>
+    {rows === null ? <div className="tft-empty"><p role="status">{nativeAccountText(language, hasConnectedAccount ? 'connectedUnavailable' : 'unavailable')}</p>{!hasConnectedAccount && onConnect && <button type="button" className="nfx-btn pri" onClick={onConnect}>{clientTerminalText(language, 'connectExchange')}</button>}</div>
       : rows.length === 0 ? <p className="tft-empty">{nativeAccountText(language, 'empty')}</p>
         : tab === 'assets' ? <div className="tft-assets">{rows.map(row => <article className="tft-asx num" key={row.id} data-record-id={row.id} aria-label={row.asset?.exchange.name ?? row.cells.exchange}>
           <div className="ah2">{row.asset?.exchange && <span className="exb" aria-hidden="true" style={{ backgroundColor: row.asset.exchange.color, color: row.asset.exchange.foreground }}>{row.asset.exchange.name.slice(0, 2).toUpperCase()}</span>}<b><button type="button" className="stlk" disabled={canAccount?.(row.accountId) === false} onClick={() => { if (canAccount?.(row.accountId) !== false) onAccount(row.accountId) }}>{row.asset?.exchange.name ?? row.cells.exchange ?? '—'}</button></b>{row.asset?.strategyCountLabel && <span className="mut">{row.asset.strategyCountLabel}</span>}</div>

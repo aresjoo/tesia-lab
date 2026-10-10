@@ -259,16 +259,27 @@ test('verified snapshot freshness expires during provider I/O without overlappin
   expect(wire.starts).toBe(0)
 })
 
-test('whole getter failure clears financial facts and preserves connection metadata', async ({ page, baseURL }) => {
-  const wire = await mount(page, baseURL, { enabled: true, connected: true })
+test('whole getter failure clears financial facts and preserves connection metadata without asking to reconnect', async ({ page, baseURL }) => {
+  const wire = await mount(page, baseURL, { enabled: true, connected: true, workspace: true })
   await expect(status(page)).toContainText(wire.accountValue)
   wire.accountError = 502
   await page.clock.runFor(15_100)
   await expect.poll(() => act(page, `${control}.value.account.ledger.assets`)).toBeNull()
   expect(await act(page, `${control}.value.account.accounts[0].id`)).toBe(connectionId)
+  const workspace = page.locator('.native-trading-workspace')
+  for (const tab of ['pos', 'open', 'orders', 'fills', 'closed', 'assets']) {
+    await workspace.locator(`.ctt-bottom-tabs [data-tab-id="${tab}"]`).click()
+    const pane = workspace.locator(`[data-native-ledger="${tab}"]`)
+    await expect(pane.getByRole('status')).toHaveText('거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.')
+    await expect(pane.getByRole('button', { name: '거래소 연결하기', exact: true })).toHaveCount(0)
+  }
   wire.accountError = 0; wire.accountValue = '7.0001'
   await page.clock.runFor(15_100)
   await expect(status(page)).toContainText('7.0001 BTC')
+  const assets = workspace.locator('[data-native-ledger="assets"]')
+  await expect(assets).toContainText('7.0001 BTC')
+  await expect(assets.locator('.tft-empty')).toHaveCount(0)
+  expect(wire.starts).toBe(0); expect(wire.outbound).toEqual([])
 })
 
 test('account 401 clears the presentation and stops background retries', async ({ page, baseURL }) => {

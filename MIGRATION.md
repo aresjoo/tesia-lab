@@ -2,7 +2,15 @@
 
 ## 최신 전달·정적 운영 확인
 
-### 현재 개발 후속 — Bitget 정상 갱신 화면 유지와 만료 검증
+### 현재 개발 후속 — 연결된 계정의 미제공 데이터 안내
+
+Web [`c1f1402`](https://github.com/beak1011/tesia-web/tree/c1f14020fc536bd44cd597eef92c71eedbde81ab)의 clean React 전체 2,433파일·35,043,600bytes를 공식 sync/verify actual0으로 전달했다. snapshot `9ed3d081b86232aebd392136c1f7b88798e6b979f29c2c2957d3841bdfa981e7`, sourceDirty0·제거0이다. 기존 f41 전달·126PASS와 당시 빌드/운영 이력은 보존하며 ares root/main·Worker·다른 팀 작업은 변경하지 않는다.
+
+현재 사용자에 결속된 연결 계정이 있는데 ledger가 null이면 하단에 “거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.”를 표시하고 해당 하단 연결 버튼을 숨긴다. 7개 언어를 반영하며 연결 없는 unknown, 확인된 빈 배열, 실제 공급된 행, 상단 연결 동작은 유지한다. 레이아웃·CSS·SVG·API·Backend·인증 설정·거래 권한은 바꾸지 않는다.
+
+Root 국소 회귀16PASS/9.8초·타입/지정lint/diff0과 personal(1) 실제 Opus5.5 `SOURCE_GO C0H0M0L4`를 인수했다. 한 번의 격리 clean service build는 actual0/19.423초이며 빈 HOME·env-i·정확4flags(Google-only/Bitget-canary=true, 일반Exchange/Consultation=false), dotenv0·Zendesk=null·source 입력 불변이다. public1,166파일/tree `5780f33f3f7b6902898a5dfce72e17624c2318ee701f218adbfb4d02f8be61ff`, manifest `c296c24f58894dcff46721b268b2569b5becf2212e7cf0c6f504af6670fc6226`, archive `148399539cddc04ff3deed324335e265cd19c3ae20e773c5cce605c83f634aeb`의 엄격 manifest/USTAR 검증을 완료했다. 이 최신 수정은 **준비 완료·운영 미반영**이며 실제 반영·공개 바이트 확인은 별도 운영 검수/배포 증거가 필요하다. 고객 키 재발급·재연결·금융 행위를 수행하지 않았다.
+
+### 직전 개발 후속 — Bitget 정상 갱신 화면 유지와 만료 검증
 
 Web [`f41a011`](https://github.com/beak1011/tesia-web/tree/f41a01149ba490c9d5db927405453fa14ebac77e)의 clean React 전체 2,433파일·35,033,954bytes를 공식 `tools/sync-migration.mjs` sync/verify로 전달했다. snapshot `2d5c7fdf3187507bd1384b70e2a6c9135d4d49077f27bceb271b74af3716e13a`, sourceDirty0·제거0이다. ares 원본 root/main·Worker·원문 배치·카피·CSS·SVG·다른 팀 작업은 변경하지 않는다. 직전9f 스냅샷과 당시116PASS/검수·빌드 기록은 아래와 Git/cache 이력에 보존한다.
 

@@ -1,5 +1,7 @@
 # Web 작업 지침
 
+- 사용자 요청의 연결 완료 후 빈 상태 교정은 ROOT가 별도 `agent/web/bitget-connected-empty-ux`에서 exact5(`NativeAccountPanels.tsx`, `NativeTradingWorkspace.tsx`, `native-account-presentation-copy.ts`, 원장 fidelity spec, 계좌 read hook spec)를 소유한다. 현재 owner에 구조적으로 결속된 accounts가 있으면 하단 null 원장의 재연결 CTA를 표시하지 않고 7언어 연결 완료·데이터 미표시 안내를 사용한다. null/실제 빈 배열/실제 공급행 의미와 상단 추가 연결 action을 유지한다. Backend/API/자격증명/flags/CSS/SVG 변경0이며 독립 검수·Git·공식 migration·운영 증거는 Bugfix를 따른다. 이전 paragraph의 계좌 producer 미구현은 당시 역사이며 현재 API17 읽기 배포와 구분한다.
+
 - Bitget 연결→터미널 후속 source4/spec1는 동결·반환했다. ROOT가 단독 작성한 `controller.ts`, `use-exchange-connection.ts`, 신규 `account-presentation.ts`, `NativeServiceApp.tsx`는 기존 SDK/owner가 확인한 연결 metadata·권한만 공급하고 실제 ledger6/strategies는null로 둔다. modal/navigation·DELETE재열기/locale·cataloggate·local_only고지 경합을 교정했으며 Webbaa581a의 cleanbuild17.577초와 마지막 Opus5.5 microdelta C0H0M0/codeGo를 앞HOLD와구분한다. 후속spec의settle/명시선택2PASS는제품변경0이다. ROOT는 문서/Git/migration전달만 소유한다. 원본디자인/카피/flags·실키/DB/운영/주문변경0, 실제계좌조회producer는미구현이며metadata를잔고/포지션/전략/체결 또는0으로합성금지다. 추가source/계약/backend/운영쓰기는명시경계배정후에만진행하며국소시험/Git/배포/실고객성공을구분한다.
 
 - 운영 보존 최종 delta writer는 모두 반환했다. ROOT는 Opus가 지적한 초기 catalog/close epoch와 자연 복귀 recheck 조건의 최소 교정 및 신규1/2키 인수를 마쳤다. 최종 source를 고정한 뒤 정확 flags build·delta 독립 검수·실제 운영 적용을 소유한다. 코드/국소시험/Git/운영/실provider 성공을 구분하며 새 디자인·copy·whole/9월/730 반복0이다. 구버전 탭은 새로고침이 필요할 수 있고 기존 로그인·거래소 저장 데이터는 보존한다.

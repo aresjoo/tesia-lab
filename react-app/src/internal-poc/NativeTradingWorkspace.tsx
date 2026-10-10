@@ -221,7 +221,7 @@ function AccountScope({ onReturn, onNew, onBrowseExchanges, presentation: data, 
       notice={<>{!data && <p>{clientTerminalText(language, 'accountUnavailable')}</p>}{data && <p>{data.sourceLabel}</p>}{feedback && <p role={feedback === 'failed' ? 'alert' : 'status'}>{nativeAccountText(language, feedback)}</p>}{pending.size > 0 && <p role="status">{nativeAccountText(language, 'pending')}</p>}</>}
       renderBottom={(strategyId, scope) => [...(['pos', 'open', 'orders', 'fills', 'closed', 'assets'] as const).map((id: NativeAccountLedgerTab) => ({
         id, label: clientTerminalText(language, id), content: data ? <NativeAccountLedger tab={id} rows={data.ledger[id]?.filter(row => id === 'assets' || scope === 'all' || row.strategyId === strategyId || row.origin === 'exchange' && strategyId === null) ?? null} sourceLabel={data.sourceLabel} onSelect={id => control.current?.select(id)} onAccount={openAccount} canAccount={canAccount} onNavigate={onNavigate ? navigate : undefined} canNavigate={canNavigate}
-          onConnect={connect} canPause={canPause} onPause={row => { if (current.current === data && canPause(row)) void run(row.strategyId!, () => data.actions!.onStatus!(row.strategyId!, 'off')).catch(() => {}) }}
+          hasConnectedAccount={!!data.accounts?.length} onConnect={connect} canPause={canPause} onPause={row => { if (current.current === data && canPause(row)) void run(row.strategyId!, () => data.actions!.onStatus!(row.strategyId!, 'off')).catch(() => {}) }}
           canOpenTrade={canOpenLedgerTrade} onOpenTrade={(row, trigger) => {
             if (current.current !== data || !canOpenLedgerTrade(row)) return
             control.current?.select(row.strategyId!, 'completed')

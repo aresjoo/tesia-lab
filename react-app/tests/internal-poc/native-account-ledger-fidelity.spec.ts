@@ -541,11 +541,13 @@ for (const change of ['row', 'version', 'owner', 'dataset'] as const) {
   })
 }
 
-test('원장 미공급 연결 CTA는 명시 callback 우선이며 실패해도 탐색으로 우회하지 않는다', async ({ page }) => {
+test('미연결 원장 CTA는 명시 callback 우선이며 실패해도 탐색으로 우회하지 않는다', async ({ page }) => {
   await mount(page)
   await page.evaluate(() => {
     const next = structuredClone(Reflect.get(window, 'ledgerInput'))
-    next.ledger.pos = null
+    next.accounts = []
+    next.strategies = null
+    for (const tab of Object.keys(next.ledger)) next.ledger[tab] = null
     Reflect.get(window, 'ledgerRender')('owner-a', next)
   })
   const pane = await bottom(page, 'pos'), connect = pane.getByRole('button', { name: '거래소 연결하기', exact: true })
@@ -554,6 +556,93 @@ test('원장 미공급 연결 CTA는 명시 callback 우선이며 실패해도 �
   await page.evaluate(() => Reflect.get(window, 'ledgerAudit').reject())
   await expect(page.locator('.native-trading-workspace [role=alert]')).toHaveText(nativeAccountText('ko', 'failed'))
   expect(await audit(page)).toEqual([['connect']])
+})
+
+test('연결된 계정의 미공급 6탭은 재연결을 요구하지 않는다', async ({ page }) => {
+  const requests = await mount(page)
+  await page.evaluate(() => {
+    const next = structuredClone(Reflect.get(window, 'ledgerInput'))
+    next.strategies = null
+    for (const tab of Object.keys(next.ledger)) next.ledger[tab] = null
+    Reflect.get(window, 'ledgerRender')('owner-a', next)
+  })
+  for (const tab of ['pos', 'open', 'orders', 'fills', 'closed', 'assets']) {
+    const pane = await bottom(page, tab)
+    await expect(pane.getByRole('status')).toHaveText('거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.')
+    await expect(pane.getByRole('button', { name: '거래소 연결하기', exact: true })).toHaveCount(0)
+    await expect(pane.locator('table,.tft-asx')).toHaveCount(0)
+    await expect(pane).not.toContainText(nativeAccountText('ko', 'empty'))
+  }
+  expect(await audit(page)).toEqual([])
+  expect(requests).toEqual([])
+})
+
+test('연결 후 미공급 안내는 7언어에서 재연결 버튼 없이 갱신된다', async ({ page }) => {
+  await mount(page)
+  await page.evaluate(() => {
+    const next = structuredClone(Reflect.get(window, 'ledgerInput'))
+    next.ledger.assets = null
+    Reflect.get(window, 'ledgerRender')('owner-a', next)
+  })
+  const pane = await bottom(page, 'assets')
+  const expected = {
+    ko: '거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.',
+    en: 'Your exchange is connected. There is no data to display yet.',
+    ja: '取引所は接続されています。表示できるデータはまだありません。',
+    'zh-CN': '交易所已连接，暂时没有可显示的数据。',
+    'zh-TW': '交易所已連接，暫時沒有可顯示的資料。',
+    es: 'Tu exchange está conectado. Aún no hay datos para mostrar.',
+    fr: 'Votre plateforme est connectée. Aucune donnée à afficher pour le moment.',
+  }
+  for (const [language, message] of Object.entries(expected)) {
+    await page.evaluate(language => Reflect.get(window, 'ledgerLanguage')('language', language), language)
+    await expect(pane.getByRole('status')).toHaveText(message)
+    await expect(pane.locator('.tft-empty button')).toHaveCount(0)
+  }
+  expect(await audit(page)).toEqual([])
+})
+
+test('연결된 미공급 데이터가 실제 빈 결과 또는 공급값으로 바뀌면 안내를 교체한다', async ({ page }) => {
+  await mount(page)
+  const pane = await bottom(page, 'assets')
+  for (const rows of [null, [], fixture().ledger.assets]) {
+    await page.evaluate(rows => {
+      const next = structuredClone(Reflect.get(window, 'ledgerInput'))
+      next.ledger.assets = rows
+      Reflect.get(window, 'ledgerRender')('owner-a', next)
+    }, rows)
+    if (rows === null) await expect(pane.getByRole('status')).toHaveText('거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.')
+    else if (rows.length === 0) await expect(pane.locator('.tft-empty')).toHaveText(nativeAccountText('ko', 'empty'))
+    else await expect(pane.locator('.ag2 b')).toHaveText(['123.456789 TOKEN', '63.200000 TOKEN', '26.100003 TOKEN', '-17.170007 TOKEN'])
+    await expect(pane.getByRole('button', { name: '거래소 연결하기', exact: true })).toHaveCount(0)
+  }
+})
+
+test('연결 제거와 owner 변경은 이전 계정의 연결 완료 안내를 남기지 않는다', async ({ page }) => {
+  await mount(page)
+  await page.evaluate(() => {
+    const next = structuredClone(Reflect.get(window, 'ledgerInput'))
+    next.ledger.pos = null
+    Reflect.set(window, 'connectedEmptyInput', next)
+    Reflect.get(window, 'ledgerRender')('owner-a', next)
+  })
+  const pane = await bottom(page, 'pos')
+  await expect(pane.getByRole('status')).toHaveText('거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.')
+  await page.evaluate(() => {
+    const next = structuredClone(Reflect.get(window, 'connectedEmptyInput'))
+    next.accounts = []
+    next.strategies = null
+    for (const tab of Object.keys(next.ledger)) next.ledger[tab] = null
+    Reflect.get(window, 'ledgerRender')('owner-a', next)
+  })
+  await expect(pane.getByRole('button', { name: '거래소 연결하기', exact: true })).toBeVisible()
+  await expect(pane.getByRole('status')).toHaveText(nativeAccountText('ko', 'unavailable'))
+  await page.evaluate(() => Reflect.get(window, 'ledgerRender')('owner-b', Reflect.get(window, 'connectedEmptyInput')))
+  await expect(page.locator('.native-trading-workspace')).toHaveAttribute('data-account-identity', '')
+  const foreignPane = await bottom(page, 'pos')
+  await expect(foreignPane.getByRole('button', { name: '거래소 연결하기', exact: true })).toBeVisible()
+  await expect(foreignPane).not.toContainText('거래소는 연결되어 있습니다.')
+  expect(await audit(page)).toEqual([])
 })
 
 test('액션과 자산 메타 미공급은 수량·브랜드·시각을 만들어내지 않는다', async ({ page }) => {

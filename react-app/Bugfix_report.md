@@ -1,5 +1,13 @@
 # TETH 버그 수정·검수 보고서
 
+## 연결 완료 후 하단 빈 상태의 불필요한 재연결 안내
+
+사용자는 이미 Bitget을 연결했는데 하단에 `아직 공급된 계정 데이터가 없습니다. / 거래소 연결하기`가 남는 문제를 교정하도록 요청했다. 원인은 `NativeAccountLedger`가 rows=null이면 현재 owner의 연결 metadata와 무관하게 연결 CTA를 표시하는 조건이었다. 정상 snapshot 갱신 보존과 별개로, 조회 실패·미공급 주문/체결 탭은 여전히 null이어서 해당 조건을 탄다.
+
+현재 owner에 구조적으로 결속된 accounts가 있으면 null 원장은 `거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.`를 7언어로 표시하고 하단 연결 CTA를 숨긴다. 연결 해제·미확인/다른 owner는 기존 연결 안내를 유지하며 상단 별도 계정 추가 action은 유지한다. null을 실제 빈 결과([])나 잔고0으로 바꾸지 않는다. 알려지지 않은 데이터를 조회 중 또는 거래 이력 없음으로 확정하지 않으며 원본 배치/CSS/SVG/API/Backend/자격증명/flags는 변경하지 않는다.
+
+원문 재현 시험 RED1을 보존했다. 중간 시험은 accounts를 지우면서 다른 계정행/전략을 남겨 기존 구조 guard에 정상 거부된 4FAIL/8PASS였으며, source guard를 변경하지 않고 미연결 fixture를 유효하게 교정했다. 최종 국소 데스크톱·모바일16PASS/9.8초는 6탭·7언어·null→실제 빈 배열/공급행·연결 제거/owner 변경·기존 명시 연결 callback과 실제 generated SDK→hook→workspace의 계좌502 실패/복구 및 정상 held 조회 중 CTA 부재를 확인한다. 타입·지정 lint·diff 검사 actual0. 증거는 `.cache/bitget-connected-empty-ux-root/`이며 합산 전체 suite 또는 실고객 계좌 성공으로 해석하지 않는다. 개인1 actual claude-opus-5-5 독립 검수는 SOURCE_GO C0/H0/M0/L4였다. L3의 다른 공급자 가능성은 저장소 검색에서 실제 NativeAccountPresentation의 accounts 생성이 Bitget 연결 metadata 한 경로임을 확인했다. 권한 미검증/미공급4탭의 공통 문구와 accounts=null/일부실패/locale effect UI 단언 공백은 Low 잔여로 보존하며 전체완료로 승격하지 않는다. Git/운영 전달은 후속 증거에 결속한다.
+
 ## Bitget 계좌 갱신 — 정상 조회 중 잔고와 연결 버튼 반복
 
 실제 계좌 조회 소비 후보 `9f513ac`는 15초 갱신을 시작할 때마다 이전 snapshot을 지웠다. 연결 metadata는 유지됐지만 금융 pane이 null로 바뀌어 기존 renderer의 미확인 고지와 `거래소 연결하기` 버튼이 다시 표시됐다. 이는 거래소가 연결을 해제한 결과가 아니다. 동일 사용자의 정상 갱신에서도 기존 화면이 반복 전환되는 문제를 ROOT가 원본의 자연스러운 연결 흐름에 맞춰 교정하도록 승인했다.

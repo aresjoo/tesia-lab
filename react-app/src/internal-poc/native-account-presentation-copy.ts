@@ -4,6 +4,7 @@ type Translations = readonly [string, string, string, string, string, string, st
 const column = { ko: 0, en: 1, ja: 2, 'zh-CN': 3, 'zh-TW': 4, es: 5, fr: 6 } as const satisfies Record<ClientLanguage, number>
 const copy = {
   unavailable: ['아직 공급된 계정 데이터가 없습니다.', 'Account data has not been supplied yet.', '口座データはまだ提供されていません。', '尚未提供账户数据。', '尚未提供帳戶資料。', 'Aún no se han proporcionado datos de la cuenta.', 'Les données du compte n’ont pas encore été fournies.'],
+  connectedUnavailable: ['거래소는 연결되어 있습니다. 아직 표시할 데이터가 없습니다.', 'Your exchange is connected. There is no data to display yet.', '取引所は接続されています。表示できるデータはまだありません。', '交易所已连接，暂时没有可显示的数据。', '交易所已連接，暫時沒有可顯示的資料。', 'Tu exchange está conectado. Aún no hay datos para mostrar.', 'Votre plateforme est connectée. Aucune donnée à afficher pour le moment.'],
   empty: ['해당 기록이 없습니다.', 'There are no matching records.', '該当する記録はありません。', '没有相应记录。', '沒有相應紀錄。', 'No hay registros correspondientes.', 'Aucun enregistrement correspondant.'],
   failed: ['요청을 완료하지 못했습니다. 다시 시도해주세요.', 'Could not complete the request. Please try again.', '処理を完了できませんでした。再試行してください。', '未能完成请求，请重试。', '無法完成要求，請重試。', 'No se pudo completar. Inténtalo de nuevo.', 'Impossible de terminer. Réessayez.'],
   accepted: ['요청을 전달했습니다. 갱신된 계정 기록을 확인해주세요.', 'Request submitted. Check the updated account records.', '要求を送信しました。更新された口座記録を確認してください。', '请求已提交，请查看更新后的账户记录。', '要求已送出，請查看更新後的帳戶紀錄。', 'Solicitud enviada. Consulta los registros actualizados.', 'Demande transmise. Consultez les données actualisées du compte.'],
