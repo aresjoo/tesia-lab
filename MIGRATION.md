@@ -1,5 +1,17 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 Backend copy view source·Python282 closure 전달 — 운영 미반영
+
+Backend view source [`722dc840`](https://github.com/beak1011/tesia-backend/tree/722dc840f53606a40be1130765a63f96af210751)의 exact8은 조회 baselines DB write0·cold/실패 차단, cooldown/lock·유계 admission, 단일 generation/freshness·lease/drain와 조회 verification 권위를 교정했다. actual personal(1) Opus5.5 session `bf36e6cf-dfca-49ce-83da-6a6f8e611528`은 `SCOPED_SOURCE_GO`/P0 0/P1 0/필수0이다. 아래905 누적 통합을 계승한 source 검수이며 API18 wire·주문 권한·기존 원장/위험 의미를 바꾸거나 source GO를 서비스 GO로 확대하지 않는다.
+
+별도 closure [`049973f1`](https://github.com/beak1011/tesia-backend/tree/049973f1ec5ba17496b43f8fc7adcbc552b3ad2a)/tree `2e95f479e1ba62516019ed1ca947801b84919594`는 exact7이다. 최초 author1의 Python282 manifest를 보존했고, 실제 loader의 기존281 고정값이 새282를 거절하므로 승인된 count 한줄을 교정한 뒤 final author1을 수행했다. 승인경로192/192·새 `view_proof.py`1·제거0, 최종 manifest SHA-256 `835c0bc2a6db8bd6fb01c521c8ad70fa2bbca0c9d4551ce2fd88881716a3c2a8`/content `af2c424bca0d03a2ce632666ecff01399065f6db3b2a08e725c4744bf3766178`, source closure `7f86e2ed29129d8b02086e7187250c32147ad60fa8abaef907d14b8e3c70b5d9`다.
+
+증거 `.cache/backend-copy-view-proof-closure`의 direct build1은 wheel SHA-256 `ae7375ba9941b1d8ce787c92298def407cdf25bb783d54dd2e1dae29a1c6aaac`/1,567,370bytes/exit0이다. source-free `--no-deps --target` 설치와 변경 closure probe1은 exit0, raw SHA-256 `8f6648f639bafebc74333ec2dd1dad45b2ea502f1da91f55a60c96c499d6d841`/`SOURCE_FREE_DIRECT_MANIFEST_PASS`/282/provider0/order0이다. formal setuptools80.9.0와 실제 builder83.0.0의 차이는 유지하며 새 normal resolver·sdist·formal11·전체시험·730일·9월 재실행은0이다.
+
+PR182의 기존 head905는 최신 closure049로 non-force fast-forward됐으며 원905 ancestor·remote exact·worktree clean을 ROOT가 확인했다. 기존 API18 서버 issuer/reviewer A와 고객 copy B의 승인 경계를 유지한다. 새 prompt 원문 고객승인이나 신규 public contract는 필수 선행조건으로 추가하지 않는다.
+
+이 전달은 문서2만 갱신한다. React2492/source `ea11a2a175f8b68b6dc34472e797a2b25bae347b`/snapshot `4b1c8322b5da0f73838995d0be77741a4daf02079c0ed8656408500653b5e763`와 ares main `9fbff821df62cad11d026022fc7628c7fcebc431`·디자인·화면·카피·SVG·source bytes 변경0이며 sync·build·시험을 실행하지 않았다. public copy HTTP factory·실제 source35 설치/비공개 설정·fresh approval·activation·고객 모델 응답은 미완료다. source/closure Git 전달은 main 병합·운영 배포·실고객 AI·실주문 GO가 아니다. 아래 Python281과 Infra source35는 각각 당시 패키지/별도 carrier 증거로 보존한다.
+
 ## 최신 Anthropic private policy 경로·source carrier 전달 — 운영 미실행
 
 Infra [`cdc00b18`](https://github.com/beak1011/tesia-infra/tree/cdc00b18f4a1fd7dcbb21ccb6ddc0b54ba4ad209)은 기존 Google·Bitget·crypto 경로와 보안 guard를 유지한 채 Anthropic 상담 설정 경로를 전용 `/etc/teth/oauth/anthropic/consultation.json`으로 일관화했다. 직접 양성/old-path 거절 2키와 독립 Opus5.5 검수는 `SCOPED_SOURCE_GO`/필수0이며, carrier [`4de033c1`](https://github.com/beak1011/tesia-infra/tree/4de033c1887c4506e6fc50529178b62a05309056)는 검수된 source digest를 capsule→entry→packet chain에 재핀했다. 이는 source 전달이고 Infra main 병합이나 운영 반영이 아니다.
