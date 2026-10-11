@@ -28,6 +28,7 @@ import { NativeServiceTransport, createNativeServiceApi, type NativeJob } from '
 import { SameOriginApiTransport, readApiAdapterConfig } from './api-adapter'
 import { ConsultationV13Adapter } from './consultation-v13-adapter'
 import { NativeConsultationV13Controller, type ConsultationV13Snapshot } from './native-consultation-v13-controller'
+import { nativeInvestmentQuestionUserText } from './native-investment-display'
 import { ConsultationV14Adapter } from './consultation-v14-adapter'
 import { NativeConsultationSessionV14Controller } from './native-consultation-session-v14-controller'
 import { createBrowserSessionBootstrap } from './browser-session'
@@ -1309,15 +1310,16 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (pendingId !== clientMessageId) researchDispatches.current.delete(clientMessageId)
     }
   }
-  const sendConsultation = async (text: string, displayText?: string) => {
+  const sendConsultation = async (text: string, displayText?: string, clearComposer = true) => {
     if (!consultationChat || phase !== 'ready' || !session.current || !clients.getCsrf()
       || consultationState.availability !== 'available' || consultationState.busy
       || emailBusy || hasPending || hasLogout || (consultationSession.getSnapshot().available && consultationSession.getSnapshot().issue !== 'request-refused')
-      || retainedConsultation?.epoch === epoch.current && retainedConsultation.targetSessionId === session.current?.sessionId) return
+      || retainedConsultation?.epoch === epoch.current && retainedConsultation.targetSessionId === session.current?.sessionId) return false
     const owner = { ...session.current }
     const accepted = await consultation.send(text, displayText)
-    if (accepted && consultationChatRef.current && session.current?.sessionId === owner.sessionId
+    if (accepted && clearComposer && consultationChatRef.current && session.current?.sessionId === owner.sessionId
       && session.current.sessionState === owner.sessionState && consultation.getSnapshot().conversationId !== null) setInput('')
+    return accepted
   }
   const refreshConsultationMutationAuthority = async () => {
     const owner = session.current, generation = epoch.current
@@ -1925,7 +1927,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         && <button disabled={displayBusy || phase !== 'ready'} onClick={() => { void resumeConsultationObservation() }}>{nativeExecutionUiText(language, '진행 자동 확인 재개')}</button>}
       {rejectedClaim && <button disabled={busy || phase !== 'ready'} onClick={() => void discardRejectedClaim()}>{ui('연결 요청 기록을 폐기하고 현재 로그인으로 새 대화 시작')}</button>}</div>,
     onInput: value => { composerRecovery.current = null; setHasComposerRecovery(false); setInput(value) },
-    onSend: (value, displayText, researchThread) => consultationChat ? sendConsultation(value, displayText) : send(value, 'composer', displayText, researchThread),
+    onSend: async (value, displayText, researchThread) => { if (consultationChat) await sendConsultation(value, displayText); else await send(value, 'composer', displayText, researchThread) },
     canStop: consultationChat && !consultationClaimPending && retainedConsultationMessages === null && consultationState.canStop,
     onStop: consultationChat ? () => { void stopConsultation() } : undefined,
     onReset: () => {
@@ -1983,7 +1985,25 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     </>}
     connectionPlanContinuation={connectionPlanContinuation}
     onConnectionPlanContinuationConsumed={requestId => setConnectionPlanContinuation(current => current?.requestId === requestId ? null : current)}
-    onLogin={(intent, request) => { void openLogin(intent === 'signup' ? 'signup' : 'login', request) }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={(value, researchThread) => consultationChat ? sendConsultation(value) : send(value, 'quick-reply', undefined, researchThread)}
+    onLogin={(intent, request) => { void openLogin(intent === 'signup' ? 'signup' : 'login', request) }} onHistory={() => { if (!hasLogout) void loadHistory() }} onQuickReply={async (value, researchThread) => { if (consultationChat) await sendConsultation(value); else await send(value, 'quick-reply', undefined, researchThread) }}
+    marketQuestionActions={consultationChat && accountScope ? { scope: accountScope, submit: async (answer, signal) => {
+      if (signal.aborted) return false
+      const message = displayMessages.find(candidate => candidate.id === answer.binding.messageId)
+      const block = message?.responseBlocks?.find(candidate => candidate.kind === 'market-question'
+        && candidate.presentation.binding.observationId === answer.binding.observationId)
+      if (!block || block.kind !== 'market-question') return false
+      const text = nativeInvestmentQuestionUserText(block.presentation, answer)
+      return text !== null && !signal.aborted && await sendConsultation(text, undefined, false) === true
+    } } : undefined}
+    followupActions={consultationChat && accountScope ? { scope: accountScope, activate: async (selection, signal) => {
+      if (signal.aborted || selection.kind !== 'question') return false
+      const message = displayMessages.find(candidate => candidate.id === selection.binding.messageId)
+      const block = message?.responseBlocks?.find(candidate => candidate.kind === 'followups'
+        && candidate.presentation.binding.observationId === selection.binding.observationId)
+      if (!block || block.kind !== 'followups'
+        || !block.presentation.questions.some(question => JSON.stringify(question) === JSON.stringify(selection.item))) return false
+      return await sendConsultation(selection.item.text, undefined, false) === true
+    } } : undefined}
     conversationNavigation={<>{healthyAuthNotice && <p className="sr-only" data-native-auth-notice role="status">{nativeAppNotice(language, healthyAuthNotice.text)}</p>}
       {!hasLogout && phase === 'ready' && sessionState !== null && (navigationError || (previousConversation && previousConversation.conversationId !== conversation?.conversationId)) && <section className="client-service-recovery" aria-label={nativeObservationCopy[language].previousLabel}>
       {previousConversation && previousConversation.conversationId !== conversation?.conversationId && <>

@@ -100,6 +100,9 @@ type SettingsConnectionSettlement = { operation: SettingsConnectionOperationInte
  * has accepted a response; a restored snapshot is not a past turn transcript. */
 export type ClientServiceMessage = InternalPocPresentation['messages'][number] & {
   responseBlocks?: readonly ClientResponseBlock[]
+  /** Validated first-turn display hint only. It is neither a wire field nor a
+   * durable server rename acknowledgement. */
+  displayTitleSuggestion?: Readonly<{ messageId: string; value: string }>
   observation?: NativeResearchObservation
   /** Memory-only submitted wording; never parsed from a server response/prefix. */
   displayText?: string
@@ -617,7 +620,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   const noticeText = quotaNotice?.scope === accountScope && quotaNotice ? usageText(language, quotaNotice.key) : notice ? n(notice.key, notice.feature ? featureLabel(notice.feature) : undefined) : ''
   // A translated default is presentation, never a user-authored title. Keep
   // explicit titles (even an exact "새 전략") intact across locale changes.
-  const [title, setTitle] = useState<{ value: string; scope?: string } | null>(null)
+  const [title, setTitle] = useState<{ value: string; scope?: string; origin: 'automatic' | 'server' | 'manual' } | null>(null)
   const [recoveryDismissed, setRecoveryDismissed] = useState(false)
   const hasConversation = state.messages.some(message => message.role === 'user') || Boolean(state.workflow)
   const isHome = !hasConversation && (state.phase === 'ready' || (loadingHome && (state.phase === 'loading' || state.phase === 'error')))
@@ -647,6 +650,13 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
     }
   }
   const activeRecord = library?.records.find(record => record.id === library.activeId)
+  const displayTitleSuggestion = [...state.messages].reverse().find(message => message.role === 'assistant'
+    && message.displayTitleSuggestion?.messageId === message.id)?.displayTitleSuggestion
+  useEffect(() => {
+    if (!displayTitleSuggestion || activeRecord) return
+    setTitle(current => current?.origin === 'manual' || current?.origin === 'server' && current.value === displayTitleSuggestion.value
+      ? current : { value: displayTitleSuggestion.value, scope: strategyDocument?.identity ?? documentIdentity, origin: 'server' })
+  }, [activeRecord, displayTitleSuggestion, documentIdentity, strategyDocument?.identity])
   const visibleTitle = (activeRecord?.title.trim() ? activeRecord.title : undefined) ?? (title && (title.scope === undefined || title.scope === strategyDocument?.identity)
     ? title.value : c('newStrategy'))
   const available = state.phase === 'ready' && !state.inputDisabled && !state.busy
@@ -851,7 +861,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         ? pill.getBoundingClientRect() : undefined)
     }
     const displayText = isHome && source === 'composer' ? state.input.trim() || value : value
-    if (!hasConversation) setTitle({ value: displayText.trim().slice(0, 40) })
+    if (!hasConversation) setTitle({ value: displayText.trim().slice(0, 40), origin: 'automatic' })
     // This Promise<void> is not an acknowledgement: controllers can resolve
     // after recording a recoverable failure. Preserve selections and let their
     // existing journal/recovery logic own the combined request and retries.
@@ -1231,7 +1241,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         inputLabel={c('askTeth')} sendLabel={c('send')} titleLabel={c('title')} initialTitle={visibleTitle}
         titleEditor={activeRecord && <NativeConversationTitle key={JSON.stringify([accountScope, activeRecord.id])} title={visibleTitle}
           onSave={library?.onRename ? value => renameConversation(activeRecord.id, value) : undefined} />}
-        onTitleChange={value => setTitle({ value, scope: strategyDocument?.identity ?? documentIdentity })} onTitleReset={() => setTitle(null)}
+        onTitleChange={value => setTitle({ value, scope: strategyDocument?.identity ?? documentIdentity, origin: 'manual' })} onTitleReset={() => setTitle(null)}
         activityKey={`${state.phase}:${state.messages.length}:${state.busy}:${Boolean(state.workflow)}:${resultActivityKey ?? ''}`} previewTools={<></>}
         headerActions={<>{researchData && <button type="button" className="g-qchip" data-native-open-research onClick={() => setResearchWorkspaceOpen(true)}>{c('conversationDocuments')}</button>}{!nativeAccounts && state.onLogout && <button className="client-service-logout" type="button" disabled={state.busy} onClick={() => void state.onLogout?.()}>{shellText(language, 'logout')}</button>}</>}>
         {!historyView.open && conversationNavigation}

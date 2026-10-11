@@ -1,5 +1,19 @@
 # TETH 버그 수정·검수 보고서
 
+## 현재 후보 — API13 상담의 PR6 표시 태그 원본 소비
+
+Program 정본 `fe73f7995cd07b0badd5062c31f52b99c8e41f3b`의 승인에 따라 Web `c97f2e42410da6a83ee41a2df8237f5897ca08a2` 위에서 기존 API13 `answerText`/`answer_delta` 문자열 계약은 바꾸지 않고 ares의 표시 전용 PR6 태그를 소비한다. 원본 parser는 Lab `d8b094fd9d69bd29161f47e211c8fbcf876c1f3b`의 `investment-ui-contract.mjs` SHA256 `709f157c21049b27bb47e0787c27ad54809b3419891c651491ce0f8ca9c9acec`를 bytes exact로 이관했다. 새 공개 API·요청 필드·주문 권위·feature flag·카피·CSS는 추가하지 않았다.
+
+누적 응답은 태그가 잘린 suffix를 본문에서 숨기고, 구조 블록은 `COMPLETED`에서만 만든다. `FAILED`·`CANCELLED`·`AMBIGUOUS`, malformed·중복 태그, ASK와 NEXT 동시 존재, 첫 turn이 아닌 TITLE은 fail closed다. ASK는 원본의 단일 단계·단일 선택·고유 선택지 2~4개를 기존 질문 카드에 투영하고, 선택 시 제목의 물음표 suffix를 제거한 뒤 선택지 설명까지 포함한 일반 사용자 문장으로 API13에 다시 보낸다. 건너뛰기는 원본 안전 문장을 보낸다. NEXT도 기존 follow-up 카드에서 원문을 일반 사용자 문장으로 보낸다. deterministic ID는 로컬 표시 결속에만 사용하며 LLM 태그나 ID를 주문·series 권위로 해석하지 않는다.
+
+TITLE은 첫 상담의 메모리 전용 기본 제목 제안이고 사용자가 직접 바꾼 제목이나 서버 대화 기록을 덮지 않는다. CHART는 strict 원본 validator로 소비·제거하지만 실제 series producer가 없으므로 chart/loading/unavailable 상태를 합성하지 않는다. 따라서 이 후보는 CHART 기능 완료나 제목 서버 영속을 주장하지 않는다. retired owner의 늦은 완료 응답은 현재 owner 제목을 되살리지 못한다.
+
+TEST-first 원 RED는 parser 모듈 부재로 exit1이었다. 구현 후 parser5키 최초 실행은 desktop/mobile 10PASS/1.6초였다. UI 하니스의 최초 두 실패는 API13 terminal sequence fixture가1이었던 계약 위반과 원본 버튼의 접근 가능한 이름에 설명/화살표가 포함된 선택자 오류였고 제품 guard를 완화하지 않고 fixture/선택자만 교정했다. 최종 승인 직접7키는 desktop 7PASS/7.4초이며 Unicode·emoji·4096자 누적 분할, 실패/취소/모호 종료, malformed/중복/상호배제, ASK 원문·설명·skip, CHART 0합성, ASK 키보드 Enter, NEXT 실제 전송, retired-owner를 확인했다. 원 stdout은 `.cache/pr6-display/final-direct-keyboard.raw`, 타입 검사는 `.cache/pr6-display/typecheck-tsc.raw`의 actual0·15.229초다. 없는 npm `typecheck` script를 호출한 준비 오류와 중간 UI 실패 raw도 덮어쓰지 않았다. 전체 suite·전체 build·실provider·고객 계정·운영 배포·실주문은 실행하지 않았으며 독립 source 모델 검수와 Git 전달은 후속이다.
+
+첫 독립 personal1 actual Opus5.5 `b88d5b0e`는 C0/H0/M1로 source HOLD였다. 원 parser가 반환하지 않은 일반 산문 `[Next steps](url)`/`[Title]`까지 로컬 marker가 표시 태그로 오인해 본문을 자르고 interrupted로 바꾸는 M1을 확인했다. `readInvestmentDisplay`가 null이면 실제 태그 partial suffix만 보류하도록 교정했고, 새 산문 반례는 원 코드에서 실제1FAIL 뒤 최종 PASS다. 추가로 원 Backend gate의 TITLE 의미는 첫 turn이 아니라 이전 `COMPLETED` 답변 부재이므로, 첫 FAILED 뒤 둘째 COMPLETED TITLE을 허용하도록 controller의 restore/send 상태를 같은 의미로 맞췄다. 이 키도 원 조건에서 실제1FAIL 뒤 최종 PASS다. ASK/NEXT 카드 전송은 별도 작성 중 composer 값을 요청 본문으로 쓰지 않고 지우지도 않는다. 실제 React textarea 값·keyboard ASK·NEXT를 묶은 반례는 기존 clear 경로에서1FAIL 뒤 최종 PASS다. 세 직접 delta의 최종 단일 실행은3PASS/7.2초이며 `.cache/pr6-display/delta-final-green.raw`에 보존한다. RED는 각각 `delta-markdown-red.raw`, `delta-title-red.raw`, `delta-draft-red.raw`다. 대소문자 태그는 donor gate의 uppercase 정규화와 일치하므로 새 결함으로 세지 않았고, owner 전환 제목 잔류는 실제 렌더 반례 없이 이번 수정으로 확대하지 않았다. 이 delta 뒤 source 전체 재시험·type/build 반복은0이며 ROOT micro-delta 독립검수를 기다린다.
+
+같은 actual Opus5.5 session `b88d5b0e`의 micro-delta 재검수는 C0/H0/M0 `SCOPED_SOURCE_GO`였다. 검수자는 바뀐 source를 읽었고 전용 spec은 읽지 않았으므로 모델 판정이 시험 coverage를 직접 확인했다고 주장하지 않는다. ROOT가 동결9파일 SHA와 최종3GREEN·원RED3 raw SHA를 독립 대조했으며 full CLI JSON은 `.cache/live-service-activation/pr6-web-delta-opus.receipt.json`에 있다. 최초 타입 검사 actual0·15.229초는 이 세 교정 전 source의 증거이고 교정 뒤 재실행하지 않았다. accepted 복원 404/pending에서 Web이 TITLE을 더 허용적으로 표시할 수 있으나 Backend gate가 해당 TITLE을 발행하지 않는다는 L9, 실제 owner 전환 렌더 coverage, 전체 build·회귀·실서비스는 잔여다. 이 SOURCE_GO를 운영·서비스·ares 공식 migration 완료로 승격하지 않는다.
+
 ## 현재 후보 — Bitget 초기 조회·대기 요청 복구 교정
 
 최종 personal1 actual claude-opus-5-5 micro 검수는 SOURCE_GO C0/H0/M0/L8, 운영 HOLD다. M1/M2/L1/L2/L3/L8 종결을 독립 확인했고 ROOT가 입력23파일 SHA 전후 동치를 재계산했다. 모델은 시험/해시를 직접 실행하지 않았으며 ROOT의 빌드·설치·실측 영수증과 구분한다. Backend 지침의 낡은 API12/runtime 목록은 문서로 교정했다. 기존 L4/L6/L9와 최초 미검증 locator, 일반 private config의 equals형식 재핀 전 보완, driver 일부 원인 래핑, csrf 단독5xx/HTML429·500 복구는 Low 잔여다. 실제 Bitget40006/25620 고객 응답 관측과 sealed setuptools advisory는 미완료이며 운영 GO로 확대하지 않는다. 원 첫 C0/H0/M2/L9와 새 C0/H0/M0/L8은 별도 검수다. 원자료 `.cache/bitget-review-fixes/final-micro/{receipt.json,assessment.txt}`를 따른다.

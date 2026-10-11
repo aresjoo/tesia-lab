@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-이번 최신 Bitget 교정은 source-only 전달이며 운영 HOLD다. 통합 담당은 MIGRATION 최신 절과 draft PR62/175/120 경계를 확인하고 기존 main/타팀 WIP를 덮어쓰지 않는다. active canary의 updater 사전 거절을 우회하거나 이전 OPEN 복구를 재사용하지 않는다.
+이번 최신 PR6 상담 display 소비 교정은 source-only 전달이며 운영 HOLD다. API13 공개 wire를 바꾸지 않고 원본 shared parser로 ASK/NEXT/TITLE을 display-only 소비하며, 실제 series producer가 없는 CHART는 합성하지 않는다. 통합 담당은 MIGRATION 최신 절과 이전 Bitget 전달 경계를 함께 확인하고 기존 main/타팀 WIP를 덮어쓰지 않는다. Backend 모델 작업 배분과 active canary의 updater 사전 거절을 우회하거나 이전 OPEN 복구를 재사용하지 않는다.
 
 제품·구현 정본은 [Program 활성 진입점](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/README.md)과 연결된 계획§0/§16·WORK_LEDGER다. ares 원본 main은 제품 본체이며 UI·UX·카피·글꼴·SVG·모바일·다국어·흐름을 유지한다. 서버는 이 원본에 맞추고, 임의 변경은 사전 승인하며 승인된 개선은 보존한다.
 

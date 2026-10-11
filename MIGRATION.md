@@ -1,5 +1,15 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 전달 — PR6 상담 display protocol 소비
+
+clean Web `2e354bab65809a844cff10895fa0081c78481750`의 전체 추적 2,439파일·35,136,848bytes를 기존 공식 sync/verify로 전달했다. snapshot `7491a0e56e63f9438e39366d6db0eddb7332cdd692e5fa6996020df5453afbbd`, sourceDirty0·제거0이며 직전 `c97f2e4` 대비 제품 변경은 정확9파일이다. 원본 ares root/main·Node·Worker와 기존 Bitget/API12/API17 동작, 공개 API13 wire는 바꾸지 않았다.
+
+Lab PR6 `d8b094f`의 shared `investment-ui-contract.mjs`를 bytes exact로 재사용한다. Backend가 검증해 기존 `answerText`/`answer_delta`로 보내는 태그를 누적 suffix에서만 보류하고 COMPLETED에서 구조 블록으로 만든다. ASK/NEXT는 원 사용자 문구를 기존 상담 전송으로 제출하고 별도 composer draft를 지우지 않는다. TITLE은 첫 completed 답변 기준의 메모리 표시만 제공한다. CHART는 태그를 파싱하더라도 실제 series producer가 없으므로 loading/unavailable/데이터를 합성하지 않는다. FAILED/CANCELLED/AMBIGUOUS 응답에서는 구조 블록을 만들지 않는다.
+
+직접 영향 7키 7PASS/7.4초와 typecheck actual0/15.229초는 최초 판본 증거다. actual Opus5.5 최초 검수는 일반 Markdown 링크를 display marker로 오인한 M1 때문에 `SOURCE_HOLD(C0/H0/M1)`였고 이를 보존한다. 해당 산문 보존, 첫 FAILED 뒤 TITLE 허용, 카드 클릭 시 composer draft 보존의 RED3→GREEN3PASS/7.2초 교정 뒤 같은 검수 세션의 판정은 `SCOPED_SOURCE_GO(C0/H0/M0)`다. 검수자는 source를 읽었고 spec은 읽지 않았으며 ROOT가 원 raw와 SHA를 별도로 인수했다. micro delta 뒤 typecheck·전체 build·전체 회귀는 반복하지 않았다.
+
+**운영 미반영/HOLD:** 이 전달은 frontend source와 Git 스냅샷 전달이다. 실제 CHART series producer와 TITLE 영속화는 미연결이고, accepted 복원 404/pending 때 Web TITLE 허용 범위가 Backend gate보다 넓을 수 있으나 서버가 발행을 차단한다. 고객/provider/키/주문/배포를 실행하지 않았고 서비스·운영 GO가 아니다. 이전 Bitget 전달과 그 운영 HOLD 기록은 아래에 그대로 보존한다.
+
 ## 최신 전달 — Bitget 실패 복구 교정과 재검토
 
 clean Web `c97f2e42410da6a83ee41a2df8237f5897ca08a2`의 전체 추적 2435파일을 공식 sync/verify(actual0)로 전달했다. snapshot `3625379a1dbb33f667d3b83660761b9a82ae7a1c929dbcf0268ae93a8c520626`. 이전 c1f 스냅샷의 client 수정은 없었고 원본 root/main·Node·Worker 변경0이다. `react-app/`은 직접 수정하지 않았다. 이 범위는 Bitget hook/controller/transport/account projection와 기존7언어 안내·회귀 시험이며 CSS/SVG/TSX/생성SDK 변경0이다. 다른 팀 상담·시장·Arena 후보를 덮어쓰지 않는다.

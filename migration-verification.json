@@ -1,9 +1,53 @@
 {
   "schema": 1,
-  "purpose": "연결된 owner-bound Bitget 계정의 미제공 ledger 안내를 교정한 React source 전달. 운영 반영과 실제 금융 행위는 별도 증거다.",
-  "sourceCommit": "c97f2e42410da6a83ee41a2df8237f5897ca08a2",
+  "purpose": "기존 API13 wire를 유지하며 PR6 상담 display protocol을 원본 shared parser로 소비하는 React source 전달. 운영 반영과 실제 금융 행위는 별도 증거다.",
+  "sourceCommit": "2e354bab65809a844cff10895fa0081c78481750",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "3625379a1dbb33f667d3b83660761b9a82ae7a1c929dbcf0268ae93a8c520626",
+  "snapshotDigest": "7491a0e56e63f9438e39366d6db0eddb7332cdd692e5fa6996020df5453afbbd",
+  "latestPr6DisplayConsumption": {
+    "sourceCommit": "2e354bab65809a844cff10895fa0081c78481750",
+    "parserSourceCommit": "d8b094fd",
+    "parserSha256": "709f157c21049b27bb47e0787c27ad54809b3419891c651491ce0f8ca9c9acec",
+    "reactFiles": 2439,
+    "reactBytes": 35136848,
+    "sourceDirtyFiles": [],
+    "removedPriorPaths": [],
+    "syncActualExit": 0,
+    "verifyActualExit": 0,
+    "api13PublicWireChanged": false,
+    "displaySemantics": {
+      "askAndNext": "validated display-only cards submit ordinary API13 user text without clearing a separate composer draft",
+      "title": "memory-only hint from the first completed answer",
+      "chart": "validated tag only; no series, loading, unavailable, or data synthesis without an actual producer"
+    },
+    "tests": {
+      "initialDirect": "7PASS/7.4s",
+      "microDelta": "3PASS/7.2s",
+      "redCasesPreserved": 3,
+      "typecheck": "actual0/15.229s before micro correction; not rerun afterward"
+    },
+    "independentReview": {
+      "model": "claude-opus-5-5",
+      "profile": "personal(1)",
+      "initial": "C0/H0/M1 SOURCE_HOLD",
+      "final": "C0/H0/M0 SCOPED_SOURCE_GO",
+      "reviewedSpecs": false,
+      "rootAcceptedRawEvidence": true
+    },
+    "remaining": [
+      "actual CHART series producer and TITLE persistence are not connected",
+      "accepted restore 404/pending Web TITLE admission is broader than the Backend issuance gate",
+      "full regression, post-micro typecheck, build, deployment, and real service success were not repeated or claimed"
+    ],
+    "wholeRegressionRepeated": false,
+    "typecheckRepeatedAfterMicroDelta": false,
+    "buildRepeated": false,
+    "providerCalls": 0,
+    "orders": 0,
+    "productionDeployment": false,
+    "actualServiceGo": false,
+    "originalRootMainNodeWorkerModified": false
+  },
   "latestConnectedEmptyUx": {
     "sourceCommit": "c1f14020fc536bd44cd597eef92c71eedbde81ab",
     "reactFiles": 2433,
@@ -8479,7 +8523,7 @@
       "Source/test/Git와운영/고객조회는별도"
     ]
   },
-  "currentDeliveryStatus": "BITGET_REVIEW_FIXES_SOURCE_DELIVERED_OPERATIONAL_HOLD",
+  "currentDeliveryStatus": "PR6_DISPLAY_SOURCE_DELIVERED_OPERATIONAL_HOLD",
   "previousDeploymentRecordBeforeReviewFixes": {
     "status": "STATIC_UI_DEPLOYED_AND_PUBLIC_CHECKS_PASSED",
     "currentDeployedSource": "7dd066fdbaf2e51e2f61d5b200a3dff211fbbb1d",

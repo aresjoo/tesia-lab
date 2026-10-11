@@ -1,6 +1,7 @@
 import type { ClientServiceMessage } from './ClientServiceExperience'
 import type { Event, History, TerminalState, Turn } from './contracts/generated/api-v0.13/dist/index.js'
 import { ConsultationV13Adapter, ConsultationV13HttpError, ConsultationV13ProtocolError, ConsultationV13TransportError, consultationV13CanonicalEvent } from './consultation-v13-adapter'
+import { projectNativeInvestmentDisplay, type NativeInvestmentDisplayState } from './native-investment-display'
 
 export type ConsultationV13Availability = 'idle' | 'checking' | 'available' | 'unavailable' | 'error'
 export type ConsultationV13Issue = 'unavailable' | 'request-unconfirmed' | null
@@ -25,6 +26,7 @@ type ActiveTurn = {
   assistantMessageId: string
   cursor: number
   answer: string
+  allowTitle: boolean
   seen: Map<number, string>
   terminal: boolean
   cancelling: boolean
@@ -107,6 +109,7 @@ export class NativeConsultationV13Controller {
   private pendingCancelRaw: string | null = null
   private readonly createFlights = new Set<string>()
   private storageFailed = false
+  private completedTurnSeen = false
   private state: ConsultationV13Snapshot = {
     availability: 'idle', issue: null, messages: [], busy: false, canStop: false, canResumePending: false,
     canDiscardPending: false, canResumeObservation: false, conversationId: null, activeTurnId: null,
@@ -149,6 +152,7 @@ export class NativeConsultationV13Controller {
     this.pendingCancel = null
     this.pendingCancelRaw = null
     this.storageFailed = false
+    this.completedTurnSeen = false
     this.readPending(owner)
     this.readAccepted(owner)
     this.readPendingCancel(owner)
@@ -170,6 +174,7 @@ export class NativeConsultationV13Controller {
     this.pendingCancel = null
     this.pendingCancelRaw = null
     this.storageFailed = false
+    this.completedTurnSeen = false
     this.publish({ availability: 'idle', issue: null, messages: [], busy: false, canStop: false, canResumePending: false,
       canDiscardPending: false, canResumeObservation: false, conversationId: null, activeTurnId: null })
   }
@@ -429,7 +434,15 @@ export class NativeConsultationV13Controller {
       try { this.clearPending() }
       catch { this.storageFailed = true }
     }
-    const messages = history.turns.flatMap(item => this.turnMessages(item.turnId === turn.turnId ? turn : item, item.turnId === turn.turnId))
+    let completedTurnSeen = false, activeAllowTitle = false
+    const messages = history.turns.flatMap(item => {
+      const observed = item.turnId === turn.turnId ? turn : item
+      const allowTitle = !completedTurnSeen
+      if (observed.turnId === turn.turnId) activeAllowTitle = allowTitle
+      if (observed.state === 'COMPLETED') completedTurnSeen = true
+      return this.turnMessages(observed, item.turnId === turn.turnId, allowTitle)
+    })
+    this.completedTurnSeen = completedTurnSeen
     if (terminal.has(turn.state as TerminalState)) {
       if (this.pendingCancel) this.clearPendingCancel()
       this.active = null
@@ -440,7 +453,8 @@ export class NativeConsultationV13Controller {
     }
     const active: ActiveTurn = {
       generation, turnId: turn.turnId, clientMessageId: turn.clientMessageId, assistantMessageId: `${turn.turnId}_reply`,
-      cursor: turn.lastSequence, answer: turn.answerText, seen: new Map(), terminal: false, cancelling: false,
+      cursor: turn.lastSequence, answer: turn.answerText, allowTitle: activeAllowTitle,
+      seen: new Map(), terminal: false, cancelling: false,
       reader: new AbortController(),
     }
     this.active = active
@@ -450,14 +464,18 @@ export class NativeConsultationV13Controller {
     void this.follow(active)
   }
 
-  private turnMessages(turn: Turn, current: boolean): ClientServiceMessage[] {
+  private turnMessages(turn: Turn, current: boolean, allowTitle: boolean): ClientServiceMessage[] {
     const assistantMessageId = `${turn.turnId}_reply`
     const status = current && !terminal.has(turn.state as TerminalState)
       ? 'streaming' : turn.state === 'COMPLETED' ? 'done' : 'interrupted'
+    const displayState: NativeInvestmentDisplayState = status === 'streaming' ? 'STREAMING'
+      : status === 'done' ? 'COMPLETED' : terminal.has(turn.state as TerminalState) ? turn.state as NativeInvestmentDisplayState : 'FAILED'
+    const display = projectNativeInvestmentDisplay({ text: turn.answerText, state: displayState,
+      scopeId: this.owner ?? '', messageId: assistantMessageId, allowTitle })
     return [
       { id: turn.clientMessageId, role: 'user', text: turn.userText, delivery: 'answered' },
-      { id: assistantMessageId, role: 'assistant', text: turn.answerText,
-        responseBlocks: [{ id: `${assistantMessageId}_text`, kind: 'text', text: turn.answerText, status }] },
+      { id: assistantMessageId, role: 'assistant', text: display.text, responseBlocks: display.blocks,
+        ...(display.titleSuggestion ? { displayTitleSuggestion: display.titleSuggestion } : {}) },
     ]
   }
 
@@ -545,7 +563,8 @@ export class NativeConsultationV13Controller {
     }
     const active: ActiveTurn = {
       generation, turnId: turn.turnId, clientMessageId: request.clientMessageId, assistantMessageId, cursor: turn.lastSequence,
-      answer: turn.answerText, seen: new Map(), terminal: terminal.has(turn.state as TerminalState), cancelling: false, reader: new AbortController(),
+      answer: turn.answerText, allowTitle: !this.completedTurnSeen, seen: new Map(),
+      terminal: terminal.has(turn.state as TerminalState), cancelling: false, reader: new AbortController(),
     }
     this.active = active
     const userMessage: ClientServiceMessage = { id: request.clientMessageId, role: 'user', text: request.text,
@@ -567,8 +586,11 @@ export class NativeConsultationV13Controller {
   }
 
   private assistantMessage(active: ActiveTurn, status: 'streaming' | 'done' | 'interrupted'): ClientServiceMessage {
-    return { id: active.assistantMessageId, role: 'assistant', text: active.answer,
-      responseBlocks: [{ id: `${active.assistantMessageId}_text`, kind: 'text', text: active.answer, status }] }
+    const display = projectNativeInvestmentDisplay({ text: active.answer,
+      state: status === 'streaming' ? 'STREAMING' : status === 'done' ? 'COMPLETED' : 'FAILED',
+      scopeId: this.owner ?? '', messageId: active.assistantMessageId, allowTitle: active.allowTitle })
+    return { id: active.assistantMessageId, role: 'assistant', text: display.text, responseBlocks: display.blocks,
+      ...(display.titleSuggestion ? { displayTitleSuggestion: display.titleSuggestion } : {}) }
   }
 
   private updateAssistant(active: ActiveTurn, status: 'streaming' | 'done' | 'interrupted') {
@@ -752,6 +774,7 @@ export class NativeConsultationV13Controller {
     }
     this.retireReader()
     this.active = null
+    this.completedTurnSeen = false
     this.publish({ issue: null, messages: [], busy: false, canStop: false, canResumePending: false, canDiscardPending: false,
       canResumeObservation: false, conversationId: null, activeTurnId: null })
     return true
@@ -770,6 +793,7 @@ export class NativeConsultationV13Controller {
     active.reader.abort()
     try { this.clearPendingCancel() } catch { this.storageFailed = true }
     this.updateTerminalAssistant(active, completed ? 'done' : 'interrupted')
+    if (completed) this.completedTurnSeen = true
     this.active = null
     this.publish({ busy: false, canStop: false, ...this.pendingFlags(), canResumeObservation: false, activeTurnId: null,
       issue: completed && !this.pending && !this.storageFailed ? null : unconfirmedIssue })

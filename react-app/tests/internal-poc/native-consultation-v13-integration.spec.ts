@@ -488,6 +488,106 @@ test('actual capability-disabled home preserves typed input and sends no v3 fall
   expect({ v13Posts, v3Posts }).toEqual({ v13Posts: 0, v3Posts: 0 })
 })
 
+test('PR6 completed display tags reuse original cards and send ASK or NEXT as ordinary API13 user text', async ({ page }) => {
+  const sent: string[] = []
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  const ask = { steps: [{ title: '위험 기준은? 🤔', multi: false, options: [
+    { t: '계좌의 2%', d: '계좌 자기자본 기준 📉' }, { t: '진입가의 2%', d: '진입 가격 기준' },
+  ] }] }
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!url.pathname.startsWith('/api/')) return route.continue()
+    if (url.pathname === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: '"session_consultation_browser_01"' }, body: JSON.stringify({ meta: meta('0.1.0', '1'), data: session }) })
+    if (url.pathname === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ meta: meta('0.1.0', null), data: { csrfToken: 'csrf_consultation_browser_01', expiresAt: session.expiresAt } }) })
+    if (url.pathname.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (url.pathname === '/api/v13/consultation/turns' && method === 'POST') {
+      const body = request.postDataJSON(), ordinal = sent.push(body.text), currentTurn = `turn_display_synthetic_0${ordinal}`
+      const answerText = ordinal === 1
+        ? `완료된 본문 ✅\n[CHART {"tv":"BINANCE:BTCUSDT","data":"binance:BTCUSDT","label":"비트코인"}]\n[ASK ${JSON.stringify(ask)}]\n[TITLE "첫 상담 제목 📌"]`
+        : ordinal === 2 ? '두 번째 본문\n[NEXT ["What next? 🚀"]]' : '세 번째 본문'
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope({ turnId: currentTurn, conversationId,
+        clientMessageId: body.clientMessageId, state: 'COMPLETED', createdAt: timestamp, updatedAt: timestamp,
+        userText: body.text, answerText, lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null }) })
+    }
+    return route.abort('blockedbyclient')
+  })
+  await page.goto('/')
+  await page.locator('#strategy-idea').fill('첫 질문')
+  await page.locator('#strategy-idea').press('Enter')
+  await expect.poll(() => errors).toEqual([])
+  await expect(page.locator('.g-amsg[data-response-state="done"]')).toContainText('완료된 본문 ✅')
+  await expect(page.locator('.g-amsg')).not.toContainText('[ASK')
+  await expect(page.locator('.client-market-chart')).toHaveCount(0)
+  await expect(page.locator('.g-title')).toContainText('첫 상담 제목 📌')
+  const composer = page.locator('.g-composer textarea')
+  await composer.evaluate((element, value) => {
+    Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set?.call(element, value)
+    element.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: value }))
+  }, '전송하지 않은 composer 초안 🚧')
+  await expect(composer).toHaveValue('전송하지 않은 composer 초안 🚧')
+  const askOption = page.locator('.g-askcard .op').filter({ hasText: '계좌의 2%' }).first()
+  await expect(askOption).toBeVisible()
+  await askOption.focus()
+  await page.keyboard.press('Enter')
+  await expect.poll(() => sent.length).toBe(2)
+  expect(sent[1]).toBe('위험 기준은: 계좌의 2% (계좌 자기자본 기준 📉) 기준으로 진행해줘')
+  await expect(composer).toHaveValue('전송하지 않은 composer 초안 🚧')
+  await expect(page.locator('.g-nextq')).toContainText('What next? 🚀')
+  await page.locator('.g-nextq').click()
+  await expect.poll(() => sent.length).toBe(3)
+  await expect(composer).toHaveValue('전송하지 않은 composer 초안 🚧')
+  expect(sent).toEqual(['첫 질문', '위험 기준은: 계좌의 2% (계좌 자기자본 기준 📉) 기준으로 진행해줘', 'What next? 🚀'])
+})
+
+test('TITLE remains allowed until the first completed answer rather than the first failed turn', async () => {
+  let ordinal = 0
+  const adapter = new ConsultationV13Adapter({ origin, csrfToken: () => 'csrf', fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+    if (url.pathname === '/api/v13/consultation/turns' && init?.method === 'POST') {
+      const body = JSON.parse(String(init.body)), current = ++ordinal
+      return new Response(envelope({ turnId: `turn_display_title_${current}`, conversationId, clientMessageId: body.clientMessageId,
+        state: current === 1 ? 'FAILED' : 'COMPLETED', createdAt: timestamp, updatedAt: timestamp, userText: body.text,
+        answerText: current === 1 ? '첫 응답 실패' : '완료 본문\n[TITLE "첫 완료 제목"]', lastSequence: 2, terminalSequence: 2,
+        cancelRequested: false, usage, failureCode: current === 1 ? 'INTERNAL_ERROR' : null }), { status: 202, headers: wireHeaders() })
+    }
+    throw Error(`unexpected route ${url}`)
+  } })
+  const controller = new NativeConsultationV13Controller(adapter, { storage: memoryStorage(), randomId: () => `00000000-0000-4000-8000-0000000000${ordinal + 10}` })
+  controller.bindOwner(JSON.stringify(['owner_first_completed_title', 'ANONYMOUS']))
+  await controller.activate()
+  expect(await controller.send('실패하는 첫 질문')).toBe(true)
+  expect(controller.getSnapshot().messages.at(-1)?.displayTitleSuggestion).toBeUndefined()
+  expect(await controller.send('완료하는 둘째 질문')).toBe(true)
+  expect(controller.getSnapshot().messages.at(-1)?.displayTitleSuggestion).toEqual({
+    messageId: 'turn_display_title_2_reply', value: '첫 완료 제목',
+  })
+})
+
+test('PR6 late completed TITLE from a retired owner cannot repopulate the new owner snapshot', async () => {
+  let release!: () => void
+  const held = new Promise<void>(resolve => { release = resolve })
+  const adapter = new ConsultationV13Adapter({ origin, csrfToken: () => 'csrf', fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+    if (init?.method === 'POST') {
+      const body = JSON.parse(String(init.body)); await held
+      return new Response(envelope({ turnId, conversationId, clientMessageId: body.clientMessageId, state: 'COMPLETED', createdAt: timestamp, updatedAt: timestamp,
+        userText: body.text, answerText: '이전 owner 본문\n[TITLE "이전 owner 제목"]', lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null }), { status: 202, headers: wireHeaders() })
+    }
+    throw Error(`unexpected route ${url}`)
+  } })
+  const controller = new NativeConsultationV13Controller(adapter, { storage: memoryStorage(), randomId: () => '00000000-0000-4000-8000-000000000099' })
+  controller.bindOwner(JSON.stringify(['owner_before_display', 'ANONYMOUS'])); await controller.activate()
+  const pending = controller.send('이전 질문')
+  controller.bindOwner(JSON.stringify(['owner_after_display', 'AUTHENTICATED']))
+  release()
+  await expect(pending).resolves.toBe(false)
+  expect(controller.getSnapshot()).toMatchObject({ messages: [], conversationId: null, activeTurnId: null })
+})
+
 test('terminal accepted A and uncertain pending B both survive reload; only explicit B resume reuses its command', async () => {
   const storage = memoryStorage(), owner = JSON.stringify(['anonymous_session_01', 'ANONYMOUS'])
   const posts: { key: string | null; body: string }[] = []
