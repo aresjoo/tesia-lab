@@ -1,5 +1,13 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 Web production copy 입력·기존 구독 안전관리 전달 — 운영 미반영
+
+Web `6ef438d8aea7f887e0383bfea09ab25e389da633`/tree `cbe5a4f7dfcbe5f911d6513083dd854a28953923`의 clean exact8을 공식 sync/verify로 전달했다. 전체 React 2,494파일·35,923,889bytes, snapshot `e90f1c091c396dd5ced8157d9abecdc624990cec866f2fc1e0988db91d6562bb`, sourceDirty0·제거0이다. 기존 ea11 source 위 제품2·Node시험2·문서2·package/workflow2만 변경하며 원본 renderer/UI/CSS/문구·공개 API18 wire·main·운영은 변경하지 않는다.
+
+서비스 copy는 기본 off이며 명시 flag와 동일 origin의 서버 발행 deployment asset raw SHA pin을 모두 요구한다. 새 setup은 현재 owner의 정확히 한 eligible Bitget 연결·정확 승인 version/policy/environment·해당 classic 시장 USDT available 신선도를 검증한다. 기존 구독의 재접속 read/pause/stop은 구독별 exact scope와 서버 안전관리 권위로 복구하며 새 setup/예산/승인 상태로 차단하지 않는다. 최초 관리 mount read는 복구 정착 뒤 known을 확인하고 stale owner/session을 거절한다. 서버 issuer/trusted store/config 조립·asset publisher·실제 provider 공급과 운영 활성화는 별도 미완료이며 수기 binding이나 모델의 직접 주문 권위를 만들지 않는다.
+
+실제 Node22.23.2 신규 두 모듈 단일 실행은 8PASS/555.920305ms/exit0(raw `aa56d8e5c9ffe3e4ab4db3c15b6b675311cbfd03b721b11fcd6fac70f5025f67`)이고 실제 hook+scheduler+HTTP fixture이지 DOM/실서버/실고객 증거가 아니다. 기존 격리 의존성을 재사용한 Node24 타입/service build는 exit0(raw `4839ef488d02b013f7d4d9c5ca6f5e1ed8e283bf765ff9c0dc67e66282d9d6a9`)이며 Vite 1.89s는 전체시간이 아니다. 같은 actual personal1 Opus5.5 최종 필수 delta는 SCOPED_P1_DELTA_GO/P0 0/P1 0(raw `e98c1156e683e4e5fcdd0a535934e175194c232b4b6e124c96ae18d60e8c82ed`)다. 이후 의미 변화 없는 const/export/type만 교정하고 exact4 ESLint는 오류0·경고0·exit0(empty raw SHA `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`)이다. 앞 8키/build/Opus는 lint 교정 전 source 증거이며 승인대로 반복하지 않았다. 최초 오류8·ignore 하니스·nested dist 누락·기존 FAIL은 보존한다. Git 전달은 main 병합·운영 배포·고객 모델·주문 또는 서비스 GO가 아니다.
+
 ## 최신 Backend copy view source·Python282 closure 전달 — 운영 미반영
 
 Backend view source [`722dc840`](https://github.com/beak1011/tesia-backend/tree/722dc840f53606a40be1130765a63f96af210751)의 exact8은 조회 baselines DB write0·cold/실패 차단, cooldown/lock·유계 admission, 단일 generation/freshness·lease/drain와 조회 verification 권위를 교정했다. actual personal(1) Opus5.5 session `bf36e6cf-dfca-49ce-83da-6a6f8e611528`은 `SCOPED_SOURCE_GO`/P0 0/P1 0/필수0이다. 아래905 누적 통합을 계승한 source 검수이며 API18 wire·주문 권한·기존 원장/위험 의미를 바꾸거나 source GO를 서비스 GO로 확대하지 않는다.

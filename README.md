@@ -4,6 +4,8 @@
 
 ## 최신 migration 전달
 
+현재 정본 React snapshot은 Web `6ef438d8aea7f887e0383bfea09ab25e389da633`의 clean 2,494파일·35,923,889bytes이며 digest `e90f1c091c396dd5ced8157d9abecdc624990cec866f2fc1e0988db91d6562bb`다. 명시적 production copy 입력과 기존 구독의 구독별 안전관리·최초 mount 복구를 전달했다. 원본 UI·카피·main·운영 변경0이며 기본 off/발행 artifact 미공급 상태와 실제 provider·고객 거래 미완료를 유지한다. 신규 Node22 8키·격리 타입/build·같은 Opus 필수delta·지정 ESLint와 원 실패/한계는 [최신 전달 범위](MIGRATION.md) 및 [소스 기록](react-app/Bugfix_report.md)을 따른다. 아래 be0d 비교는 이전 snapshot 이력이다.
+
 현재 React 작업본은 Web [`be0d31b`](https://github.com/beak1011/tesia-web/tree/be0d31b331694fac0899a9eea93f2d3c574b0a2b)의 clean 전체 2,419파일·34,819,655bytes snapshot입니다.
 사용자90상태·7언어·웹/모바일 비교의 확정 배치 차이를 교정했습니다. 홈/대화의 추가 검수 영역·관측 없는 완료 작업, 전략 요약 행·설정 위치·소개/거래소 상단 간격·카피 상세 중복 제목과 모바일 고지 겹침이 이번 범위입니다.
 [변경·검증·잔여](react-app/Bugfix_report.md), [원본 대비 통합 설명](MIGRATION.md)을 함께 제공합니다. 기존 보고서는 이전 비교 범위의 이력이며 이번 1,260쌍의 전수 PASS 자료가 아닙니다.
