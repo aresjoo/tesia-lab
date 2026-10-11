@@ -1,5 +1,14 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 서버 통합 전달 — 프론트 스냅샷 불변
+
+Backend [37a93a73](https://github.com/beak1011/tesia-backend/tree/37a93a73cc21ab87aa581f0ef8cd0d9ec7b7bd45)는 아래 mint replay closure를 보존한 채 CI의 오래된 Contracts/AI pin·빌드 recipe·시험 기대값을 현재 승인 권위에 정렬했다. [draft PR182](https://github.com/beak1011/tesia-backend/pull/182)가 이전 PR181의 최종 main 후보를 대체한다. main 병합·운영 배포는 아니다.
+
+- CI 교정 `6580cd02`: 실제 Contracts0.32 epoch1791729409/umask0022/direct build로 승인 wheel `dbb91cf4…`/1,491,664bytes를 한 번 재현했다. Opus5.5 scoped delta GO·필수0이며 원 HOLD2와 시험 하니스 실패를 보존했다.
+- 고정 기대값 `37a93a73`: API16 aggregate metadata만0.32로 정렬하고 기존 검수된32경로만 승인집합에 추가했다. 원 API16 module/schema SHA 불변, donor blob32 mismatch0·실제변경190/승인190·직접2PASS1.293초다. 새 제품 로직이나 권한을 추가한 변경이 아니다.
+- React2492/sourceea11/snapshot4b1c8322·원본 main·화면·카피·SVG는 그대로다. 이 문서 전달에서 sync·시험·build·provider·주문·운영 실행은0이다. GitHub Actions의 account billing 차단과 Web 기존 lint33 P2/P3는 코드 회귀나 전체PASS로 계산하지 않는다.
+- 별도 실제 copy 조회 producer는 아직 이 후보에 포함하지 않았다. 실제 고객 AI·권한 발행·거래·HTTP factory·운영 전환은 별도 미완료다.
+
 ## 최신 전달 — 문서 질문 로그인 후 claimed-admission 복구
 
 clean Web `ea11a2a175f8b68b6dc34472e797a2b25bae347b`의 전체 추적 **2,492파일·35,839,832bytes**를 공식 sync/verify actual0으로 전달했다. snapshot `4b1c8322b5da0f73838995d0be77741a4daf02079c0ed8656408500653b5e763`, sourceDirty0·제거0이며 직전 2,491파일 중 2,488파일은 byte 동일하고 신규1·수정3의 정확4경로만 갱신됐다. 원본 ares root/main `9fbff821df62cad11d026022fc7628c7fcebc431`·Node·Worker와 비공개 9월 데이터는 변경하지 않았다.
