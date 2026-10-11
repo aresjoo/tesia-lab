@@ -1,5 +1,11 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 Anthropic private policy 경로·source carrier 전달 — 운영 미실행
+
+Infra [`cdc00b18`](https://github.com/beak1011/tesia-infra/tree/cdc00b18f4a1fd7dcbb21ccb6ddc0b54ba4ad209)은 기존 Google·Bitget·crypto 경로와 보안 guard를 유지한 채 Anthropic 상담 설정 경로를 전용 `/etc/teth/oauth/anthropic/consultation.json`으로 일관화했다. 직접 양성/old-path 거절 2키와 독립 Opus5.5 검수는 `SCOPED_SOURCE_GO`/필수0이며, carrier [`4de033c1`](https://github.com/beak1011/tesia-infra/tree/4de033c1887c4506e6fc50529178b62a05309056)는 검수된 source digest를 capsule→entry→packet chain에 재핀했다. 이는 source 전달이고 Infra main 병합이나 운영 반영이 아니다.
+
+로컬 create-only source35 packet의 archive SHA-256은 `d708a85a722f094971100b171ede9126745127980dcf170565e7e0050540e2bb`, package digest는 `fd2746b437f7742e5206052450d32acfdc37f7549e54cf0980cfe2b1aea5e570`, receipt SHA-256은 `98154c3d100eaba726ba29d65d61493dfc284e91828d018fbb275de5596d1f59`다. 이 전달에서 root 설치·SSH·activation·실제 provider 모델 호출·실고객 검증·주문은 모두 실행하지 않았다. React2492/source `ea11a2a175f8b68b6dc34472e797a2b25bae347b`/snapshot `4b1c8322b5da0f73838995d0be77741a4daf02079c0ed8656408500653b5e763`와 ares main `9fbff821df62cad11d026022fc7628c7fcebc431`·원본 UI/코드는 변경하지 않았다.
+
 ## 최신 서버 통합 전달 — 프론트 스냅샷 불변
 
 최신 누적 Backend는 [905269c2](https://github.com/beak1011/tesia-backend/tree/905269c2197c25e5cca46d39ea91c03110690c43)다. 기존 37a93a73 이후 실제 Bitget 카피 조회 producer와 그 패키지 closure를 정확10파일로 선별 통합했고, PR182의 동일 head branch를 비강제 fast-forward했다. OAuth·상담 seam3, CI2, dependency pin은 이전 바이트 그대로이며 donor source/spec4도 일치한다(독립 10 blob 대조 불일치0).
