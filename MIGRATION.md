@@ -6,7 +6,7 @@ clean Web `30587e07f01e64e6ebcf5c61b9fc65b6b64aad04`의 전체 추적 **2,491파
 
 문서 질문 App의 기존 API13/16/19/20 흐름 위에 카피 실행 optional port를 선별 결속했다. runtime input/flag 기본은 absent/false이고 합성 계좌·주문·issuer/projection을 만들지 않는다. Contracts `a381` API18 입력은 source-only 후보이며 정식 발행·패키지 권위가 아니다. 실제 personal(1) Opus5.5 session `757369d7-13ab-4b24-b66d-aa2ed9031f88`은 공유7·독립31 blob을 읽고 `SCOPED_INTEGRATION_SOURCE_GO`/필수 수정0을 판정했다. 직접 영향 54PASS/32.5초는 copy execution과 원본 setup 범위이며 일반 상담 회귀가 포함되지 않는다. pending-claim Medium2와 실제 issuer/projection·공식 API18 publication은 미해결이다. 이번 migration 전달에서 추가 시험·build는 실행하지 않고 Web 원증거를 그대로 인수했다.
 
-**개발·운영 미반영:** Backend 최신 선별 통합은 독립 검수 중이다. PROD DEV gate는 실행0이고 운영 Anthropic private config는 부재한다. 고객/provider/credential/주문/배포를 실행하지 않았으며 운영 GO·서비스 GO가 아니다. 원본 카피·모션·ares 흐름을 이번 전달에서 추가 변경하지 않았고, source-only Contracts·Web 검수와 Backend 검수 pending을 합산해 서비스 완료로 해석하지 않는다.
+**개발·운영 미반영:** Backend 최신 선별 통합 source `c843fdd0b0977a6ce807cb3706bd7242edc5786e`는 별도 actual personal(1) Opus5.5의 `SCOPED_INTEGRATION_SOURCE_GO`/mandatory0을 인수했다. 다만 Runtime manifest 255-entry와 실제 Python281의 package closure는 stale하며 이 판정은 source-only다. PROD DEV gate는 실행0이고 운영 Anthropic private config는 부재한다. 고객/provider/credential/주문/배포를 실행하지 않았으며 운영 GO·서비스 GO가 아니다. 원본 카피·모션·ares 흐름을 이번 전달에서 추가 변경하지 않았고, source-only Contracts·Web·Backend 검수를 합산해 서비스 완료로 해석하지 않는다.
 
 아래 PR6 상담 display protocol 소비는 직전 snapshot의 전달 이력이다.
 

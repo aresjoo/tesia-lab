@@ -4,7 +4,7 @@
 
 ## migration 브랜치의 추가 작업 경계
 
-현재 React snapshot은 clean Web `30587e07f01e64e6ebcf5c61b9fc65b6b64aad04`의 문서 질문 App 위 카피 실행 선별 통합이다. 기존 공식 sync/verify로 전체 2,491파일을 전달했고 이전 snapshot의 클라이언트 수정이나 제거 경로는 없었다. 실제 personal(1) Opus5.5 session `757369d7-13ab-4b24-b66d-aa2ed9031f88`의 판정은 `SCOPED_INTEGRATION_SOURCE_GO`지만 직접 영향 54PASS에는 일반 상담 회귀가 포함되지 않고 pending-claim Medium2가 남는다. Contracts `a381`은 source-only API18 후보이며 정식 발행·패키지 권위가 아니고, Backend 최신 선별 통합은 독립 검수 중이라 이 snapshot의 서비스 준비·운영 GO로 합산하지 않는다. PROD DEV gate는 실행하지 않았고 운영 Anthropic private config도 부재한다. 원본 root/main·Node·Worker, 카피·모션·ares 흐름, 비공개 9월 데이터는 이 전달에서 변경하지 않는다.
+현재 React snapshot은 clean Web `30587e07f01e64e6ebcf5c61b9fc65b6b64aad04`의 문서 질문 App 위 카피 실행 선별 통합이다. 기존 공식 sync/verify로 전체 2,491파일을 전달했고 이전 snapshot의 클라이언트 수정이나 제거 경로는 없었다. 실제 personal(1) Opus5.5 session `757369d7-13ab-4b24-b66d-aa2ed9031f88`의 판정은 `SCOPED_INTEGRATION_SOURCE_GO`지만 직접 영향 54PASS에는 일반 상담 회귀가 포함되지 않고 pending-claim Medium2가 남는다. Contracts `a381`은 source-only API18 후보이며 정식 발행·패키지 권위가 아니다. Backend 선별 통합 source `c843fdd0b0977a6ce807cb3706bd7242edc5786e`도 별도 actual personal(1) Opus5.5에서 `SCOPED_INTEGRATION_SOURCE_GO`/mandatory0으로 인수됐지만, Runtime manifest 255-entry와 실제 Python281의 package closure는 아직 stale하다. 이를 이 snapshot의 서비스 준비·운영 GO로 합산하지 않는다. PROD DEV gate는 실행하지 않았고 운영 Anthropic private config도 부재한다. 원본 root/main·Node·Worker, 카피·모션·ares 흐름, 비공개 9월 데이터는 이 전달에서 변경하지 않는다.
 
 아래 PR6 상담 display 소비 문단은 직전 snapshot의 경계다.
 
