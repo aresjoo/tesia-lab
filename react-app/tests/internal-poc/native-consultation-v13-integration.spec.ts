@@ -1,10 +1,13 @@
 import { expect, test } from '@playwright/test'
 import { ConsultationV13Adapter } from '../../src/internal-poc/consultation-v13-adapter'
+import { ConsultationV16Adapter } from '../../src/internal-poc/consultation-v16-adapter'
 import { NativeConsultationV13Controller, type ConsultationV13Snapshot } from '../../src/internal-poc/native-consultation-v13-controller'
+import conversationFixture from '../fixtures/service-v03/recorded-conversation.json' with { type: 'json' }
 
 const origin = 'https://service.example.test'
 const wireHeaders = (type = 'application/json') => ({ 'Content-Type': type, 'Cache-Control': 'no-store' })
 const envelope = (data: unknown) => JSON.stringify({ apiContractVersion: '0.13.0', data })
+const envelope16 = (data: unknown) => JSON.stringify({ apiContractVersion: '0.16.0', data })
 const usage = { status: 'UNKNOWN', inputTokens: null, outputTokens: null } as const
 const turnId = 'turn_synthetic_000001', conversationId = 'conversation_synthetic_01'
 const timestamp = '2026-10-07T00:00:00Z'
@@ -338,6 +341,247 @@ test('accepted locator reload verifies turn and history then resumes observation
   expect(createPosts).toBe(1)
 })
 
+test('document question persists both mutations then joins API16 metadata to the exact API13 turn and local anchor', async () => {
+  const storage = memoryStorage(), owner = JSON.stringify(['document_owner_0001', 'AUTHENTICATED'])
+  const generalTurnId = 'turn_general_document_0001', documentTurnId = 'turn_document_question_0001'
+  const serverDocumentId = 'research_work_server_000001'
+  const researchThread = { scopeId: 'local-scope:not-server-authority', documentId: 'report' }
+  const locator = { producerServiceId: 'research_service_000001', kind: 'report' as const, documentId: serverDocumentId,
+    revision: 17, contentSha256: 'a'.repeat(64) }
+  const documentRef = 'docref_document_snapshot_000001'
+  let clientMessageId = ''
+  const general = { turnId: generalTurnId, conversationId, clientMessageId: 'client_message_general_0001', state: 'COMPLETED',
+    createdAt: timestamp, updatedAt: timestamp, userText: '기존 질문', answerText: '기존 답변', lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null }
+  const documentTurn = () => ({ turnId: documentTurnId, conversationId, clientMessageId, state: 'COMPLETED', createdAt: '2026-10-07T00:00:01Z',
+    updatedAt: '2026-10-07T00:00:01Z', userText: '이 보고서의 근거는?', answerText: '문서 근거 답변', lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null })
+  const v13 = new ConsultationV13Adapter({ origin, csrfToken: () => 'csrf-v13', fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+    if (url.pathname === '/api/v13/consultation/turns' && init?.method === 'POST') {
+      const body = JSON.parse(String(init.body))
+      return new Response(envelope({ ...general, clientMessageId: body.clientMessageId, userText: body.text }), { status: 202, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith(`/turns/${documentTurnId}`)) return new Response(envelope(documentTurn()), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/history')) return new Response(envelope({ conversationId, snapshotId: 'snapshot_document_join_0001', offset: 0,
+      limit: 100, totalCount: 2, turns: [general, documentTurn()], nextCursor: null }), { status: 200, headers: wireHeaders() })
+    throw Error(`unexpected API13 document route ${url}`)
+  } })
+  const calls: { method: string; path: string; key: string | null; csrf: string | null; body: string | null }[] = []
+  const v16 = new ConsultationV16Adapter({ origin, fetch: async (input, init) => {
+    const url = new URL(String(input)), headers = new Headers(init?.headers), method = init?.method ?? 'GET'
+    calls.push({ method, path: `${url.pathname}${url.search}`, key: headers.get('idempotency-key'), csrf: headers.get('x-csrf-token'), body: init?.body ? String(init.body) : null })
+    if (url.pathname.endsWith('/locator')) return new Response(envelope16(locator), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/document-references')) return new Response(envelope16({ documentRef, ...locator }), { status: 201, headers: wireHeaders() })
+    if (url.pathname.endsWith('/document-questions')) {
+      const body = JSON.parse(String(init?.body)); clientMessageId = body.clientMessageId
+      return new Response(envelope16({ conversationId, turnId: documentTurnId, clientMessageId, documentRef, state: 'QUEUED' }), { status: 202, headers: wireHeaders() })
+    }
+    const projection = { conversationId, turnId: documentTurnId, clientMessageId, documentRef, ...locator, state: 'COMPLETED' }
+    if (url.pathname.endsWith(`/turns/${documentTurnId}`)) return new Response(envelope16(projection), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/history')) return new Response(envelope16({ items: [projection], nextCursor: null }), { status: 200, headers: wireHeaders() })
+    throw Error(`unexpected API16 document route ${url}`)
+  } })
+  let ordinal = 0
+  const controller = new NativeConsultationV13Controller(v13, { storage, documentAdapter: v16, documentCsrfToken: () => 'csrf-v16',
+    randomId: () => `00000000-0000-4000-8000-${String(++ordinal).padStart(12, '0')}` })
+  controller.bindOwner(owner); await controller.activate(); expect(await controller.send('기존 질문')).toBe(true)
+  const documentResult = await controller.sendDocumentQuestion({ kind: 'report', documentId: serverDocumentId, text: '이 보고서의 근거는?', researchThread })
+  expect({ documentResult, calls: calls.map(call => `${call.method} ${call.path}`), snapshot: controller.getSnapshot() }).toMatchObject({ documentResult: true })
+  const documentMessages = controller.getSnapshot().messages.filter(message => message.id === clientMessageId || message.id === `${documentTurnId}_reply`)
+  expect(documentMessages).toHaveLength(2)
+  expect(documentMessages[0]).toMatchObject({ role: 'user', text: '이 보고서의 근거는?', researchThread })
+  expect(documentMessages[1]).toMatchObject({ role: 'assistant', researchThread })
+  const mutations = calls.filter(call => call.method === 'POST')
+  expect(mutations).toHaveLength(2)
+  expect(JSON.parse(mutations[0].body!)).toEqual({ apiContractVersion: '0.16.0', locator })
+  expect(JSON.parse(mutations[1].body!)).toEqual({ apiContractVersion: '0.16.0', clientMessageId,
+    text: '이 보고서의 근거는?', documentRef })
+  expect(mutations.every(call => Boolean(call.key) && call.csrf === 'csrf-v16')).toBe(true)
+  expect(calls.filter(call => call.method === 'GET').every(call => call.key === null && call.csrf === null && call.body === null)).toBe(true)
+})
+
+test('document question reload explicitly resumes admitted GET-only and restores all verified local anchors', async () => {
+  const storage = memoryStorage(), owner = JSON.stringify(['document_owner_0002', 'AUTHENTICATED'])
+  const generalTurnId = 'turn_general_document_0002'
+  const documents = [
+    { turnId: 'turn_document_question_0002', documentId: 'draft_server_document_0002', kind: 'plan' as const,
+      text: '이 계획을 설명해줘', answer: '계획 문서 답변', documentRef: 'docref_document_snapshot_000002',
+      locator: { producerServiceId: 'draft_service_000002', kind: 'plan' as const, documentId: 'draft_server_document_0002', revision: 3, contentSha256: 'b'.repeat(64) },
+      researchThread: { scopeId: 'local-plan-scope', documentId: 'plan' } },
+    { turnId: 'turn_document_question_0003', documentId: 'report_server_document_0003', kind: 'report' as const,
+      text: '이 보고서도 설명해줘', answer: '보고서 문서 답변', documentRef: 'docref_document_snapshot_000003',
+      locator: { producerServiceId: 'report_service_000003', kind: 'report' as const, documentId: 'report_server_document_0003', revision: 4, contentSha256: 'c'.repeat(64) },
+      researchThread: { scopeId: 'local-report-scope', documentId: 'report' } },
+    { turnId: 'turn_document_question_0004', documentId: 'stress_server_document_0004', kind: 'stress' as const,
+      text: '이 스트레스 결과도 설명해줘', answer: '스트레스 문서 답변', documentRef: 'docref_document_snapshot_000004',
+      locator: { producerServiceId: 'stress_service_000004', kind: 'stress' as const, documentId: 'stress_server_document_0004', revision: 5, contentSha256: 'e'.repeat(64) },
+      researchThread: { scopeId: 'local-stress-scope', documentId: 'stress' } },
+  ]
+  let loseQuestion = true, loseReconcile = true, historySettled = false, v16Posts = 0
+  const clientIds = new Map<string, string>()
+  const questionPosts: { body: string; key: string | null }[] = []
+  const general = { turnId: generalTurnId, conversationId, clientMessageId: 'client_message_general_0002', state: 'COMPLETED',
+    createdAt: timestamp, updatedAt: timestamp, userText: '초기 계획', answerText: '계획 준비', lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null }
+  const documentTurn = (index: number, history = false) => {
+    const document = documents[index], progressing = history && !historySettled
+    return { turnId: document.turnId, conversationId, clientMessageId: clientIds.get(document.turnId) ?? '',
+      state: progressing ? 'DISPATCHING' : 'COMPLETED', createdAt: `2026-10-07T00:00:0${index + 1}Z`, updatedAt: `2026-10-07T00:00:0${index + 1}Z`,
+      userText: document.text, answerText: progressing ? '' : document.answer, lastSequence: progressing ? 1 : 2,
+      terminalSequence: progressing ? null : 2, cancelRequested: false, usage, failureCode: null }
+  }
+  const v13 = new ConsultationV13Adapter({ origin, csrfToken: () => 'csrf-v13', fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+    if (url.pathname === '/api/v13/consultation/turns' && init?.method === 'POST') {
+      const body = JSON.parse(String(init.body)); return new Response(envelope({ ...general, clientMessageId: body.clientMessageId, userText: body.text }), { status: 202, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith(`/turns/${generalTurnId}`)) return new Response(envelope(general), { status: 200, headers: wireHeaders() })
+    const turnIndex = documents.findIndex(document => url.pathname.endsWith(`/turns/${document.turnId}`))
+    if (turnIndex >= 0) return new Response(envelope(documentTurn(turnIndex)), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/history')) return new Response(envelope({ conversationId, snapshotId: 'snapshot_document_join_0002', offset: 0,
+      limit: 100, totalCount: 1 + clientIds.size, turns: [general, ...documents.filter(document => clientIds.has(document.turnId)).map((_, index) => documentTurn(index, true))], nextCursor: null }), { status: 200, headers: wireHeaders() })
+    throw Error(`unexpected API13 recovery route ${url}`)
+  } })
+  const v16 = new ConsultationV16Adapter({ origin, fetch: async (input, init) => {
+    const url = new URL(String(input)), method = init?.method ?? 'GET'
+    if (method === 'POST') v16Posts++
+    if (url.pathname.endsWith('/locator')) {
+      const document = documents.find(candidate => url.pathname.includes(`/${candidate.documentId}/`))!
+      return new Response(envelope16(document.locator), { status: 200, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith('/document-references')) {
+      const body = JSON.parse(String(init?.body)), document = documents.find(candidate => candidate.documentId === body.locator.documentId)!
+      return new Response(envelope16({ documentRef: document.documentRef, ...document.locator }), { status: 201, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith('/document-questions')) {
+      const body = String(init?.body); questionPosts.push({ body, key: new Headers(init?.headers).get('idempotency-key') })
+      const request = JSON.parse(body), document = documents.find(candidate => candidate.documentRef === request.documentRef)!
+      clientIds.set(document.turnId, request.clientMessageId)
+      if (loseQuestion) { loseQuestion = false; throw new TypeError('question response lost') }
+      return new Response(envelope16({ conversationId, turnId: document.turnId, clientMessageId: request.clientMessageId, documentRef: document.documentRef, state: 'QUEUED' }), { status: 202, headers: wireHeaders() })
+    }
+    const turnIndex = documents.findIndex(document => url.pathname.endsWith(`/turns/${document.turnId}`))
+    if (turnIndex >= 0) {
+      if (loseReconcile) { loseReconcile = false; throw new TypeError('first admitted reconcile lost') }
+      const document = documents[turnIndex]
+      return new Response(envelope16({ conversationId, turnId: document.turnId, clientMessageId: clientIds.get(document.turnId),
+        documentRef: document.documentRef, ...document.locator, state: 'COMPLETED' }), { status: 200, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith('/history')) return new Response(envelope16({ items: documents.filter(document => clientIds.has(document.turnId)).map(document => ({
+      conversationId, turnId: document.turnId, clientMessageId: clientIds.get(document.turnId), documentRef: document.documentRef,
+      ...document.locator, state: 'QUEUED',
+    })), nextCursor: null }), { status: 200, headers: wireHeaders() })
+    throw Error(`unexpected API16 recovery route ${url}`)
+  } })
+  let ordinal = 20
+  const options = { storage, documentAdapter: v16, documentCsrfToken: () => 'csrf-v16',
+    randomId: () => `00000000-0000-4000-8000-${String(++ordinal).padStart(12, '0')}` }
+  let controller = new NativeConsultationV13Controller(v13, options)
+  controller.bindOwner(owner); await controller.activate(); expect(await controller.send('초기 계획')).toBe(true)
+  expect(await controller.sendDocumentQuestion({ kind: documents[0].kind, documentId: documents[0].documentId,
+    text: documents[0].text, researchThread: documents[0].researchThread })).toBe(false)
+  expect(controller.getSnapshot()).toMatchObject({ canResumeDocumentPending: true, busy: false })
+  controller.detach()
+
+  let resumedOrdinal = 100
+  controller = new NativeConsultationV13Controller(v13, { ...options,
+    randomId: () => `ffffffff-ffff-4fff-8fff-${String(++resumedOrdinal).padStart(12, '0')}` })
+  controller.bindOwner(owner); await controller.activate()
+  expect(controller.getSnapshot()).toMatchObject({ availability: 'available', canResumeDocumentPending: true })
+  expect(questionPosts).toHaveLength(1)
+  const resumed = await controller.resumeDocumentPending()
+  expect({ resumed, questionPosts, snapshot: controller.getSnapshot() }).toMatchObject({ resumed: false,
+    snapshot: { availability: 'error', canResumeDocumentPending: false, canResumeObservation: true } })
+  expect(questionPosts).toHaveLength(2)
+  expect(questionPosts[1]).toEqual(questionPosts[0])
+  const postsBeforeObservation = v16Posts
+  expect(await controller.resumeObservation()).toBe(true)
+  expect(v16Posts).toBe(postsBeforeObservation)
+  historySettled = true
+  expect(await controller.sendDocumentQuestion({ kind: documents[1].kind, documentId: documents[1].documentId,
+    text: documents[1].text, researchThread: documents[1].researchThread })).toBe(true)
+  const thirdResult = await controller.sendDocumentQuestion({ kind: documents[2].kind, documentId: documents[2].documentId,
+    text: documents[2].text, researchThread: documents[2].researchThread })
+  expect({ thirdResult, snapshot: controller.getSnapshot(), questionPosts }).toMatchObject({ thirdResult: true })
+  const postsAfterJoin = v16Posts
+  controller.detach()
+
+  const restored = new NativeConsultationV13Controller(v13, { ...options, randomId: () => 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee' })
+  restored.bindOwner(owner); await restored.activate()
+  expect(v16Posts).toBe(postsAfterJoin)
+  for (const document of documents) {
+    expect(restored.getSnapshot().messages.find(message => message.id === clientIds.get(document.turnId))).toMatchObject({ researchThread: document.researchThread })
+    expect(restored.getSnapshot().messages.find(message => message.id === `${document.turnId}_reply`)).toMatchObject({ researchThread: document.researchThread })
+  }
+})
+
+test('first definitive document 4xx is discardable but a 4xx after unknown remains exact-resumable', async () => {
+  const storage = memoryStorage(), owner = JSON.stringify(['document_owner_0004', 'AUTHENTICATED'])
+  const documentId = 'report_server_document_0004', documentRef = 'docref_document_snapshot_000004'
+  const locator = { producerServiceId: 'report_service_000004', kind: 'report' as const, documentId,
+    revision: 1, contentSha256: 'd'.repeat(64) }
+  const researchThread = { scopeId: 'local-report-scope-4', documentId: 'report' }
+  let generalClientMessageId = 'client_message_general_0004'
+  const general = () => ({ turnId: 'turn_general_document_0004', conversationId, clientMessageId: generalClientMessageId, state: 'COMPLETED',
+    createdAt: timestamp, updatedAt: timestamp, userText: '기존 상담', answerText: '기존 답변', lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null })
+  const v13 = new ConsultationV13Adapter({ origin, csrfToken: () => 'csrf-v13', fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+    if (url.pathname === '/api/v13/consultation/turns' && init?.method === 'POST') {
+      const body = JSON.parse(String(init.body)); generalClientMessageId = body.clientMessageId
+      return new Response(envelope({ ...general(), userText: body.text }), { status: 202, headers: wireHeaders() })
+    }
+    if (url.pathname.endsWith('/turns/turn_general_document_0004')) return new Response(envelope(general()), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/history')) return new Response(envelope({ conversationId, snapshotId: 'snapshot_document_refusal_0004', offset: 0,
+      limit: 100, totalCount: 1, turns: [general()], nextCursor: null }), { status: 200, headers: wireHeaders() })
+    throw Error(`unexpected API13 refusal route ${url}`)
+  } })
+  let questionAttempts = 0
+  const questionCalls: { body: string; key: string | null }[] = []
+  const error16 = (code: string, message: string) => JSON.stringify({ apiContractVersion: '0.16.0', error: { code, message } })
+  const v16 = new ConsultationV16Adapter({ origin, fetch: async (input, init) => {
+    const url = new URL(String(input))
+    if (url.pathname.endsWith('/locator')) return new Response(envelope16(locator), { status: 200, headers: wireHeaders() })
+    if (url.pathname.endsWith('/document-references')) return new Response(envelope16({ documentRef, ...locator }), { status: 201, headers: wireHeaders() })
+    if (url.pathname.endsWith('/document-questions')) {
+      questionAttempts++
+      questionCalls.push({ body: String(init?.body), key: new Headers(init?.headers).get('idempotency-key') })
+      if (questionAttempts === 1) return new Response(error16('BAD_REQUEST', 'Document question request is invalid.'), { status: 400, headers: wireHeaders() })
+      if (questionAttempts === 2) throw new TypeError('question result unknown')
+      return new Response(error16('IDEMPOTENCY_KEY_REUSED', 'Idempotency key was already used.'), { status: 409, headers: wireHeaders() })
+    }
+    throw Error(`unexpected API16 refusal route ${url}`)
+  } })
+  let ordinal = 40
+  const options = { storage, documentAdapter: v16, documentCsrfToken: () => 'csrf-v16',
+    randomId: () => `00000000-0000-4000-8000-${String(++ordinal).padStart(12, '0')}` }
+  let controller = new NativeConsultationV13Controller(v13, options)
+  controller.bindOwner(owner); await controller.activate(); expect(await controller.send('기존 상담')).toBe(true)
+
+  expect(await controller.sendDocumentQuestion({ kind: 'report', documentId, text: '첫 거절 질문', researchThread })).toBe(false)
+  expect(controller.getSnapshot()).toMatchObject({ canDiscardPending: true, canResumeDocumentPending: false })
+  controller.detach()
+
+  controller = new NativeConsultationV13Controller(v13, { ...options, randomId: () => 'dddddddd-dddd-4ddd-8ddd-dddddddddddd' })
+  controller.bindOwner(owner); await controller.activate()
+  expect(controller.getSnapshot()).toMatchObject({ availability: 'available', conversationId, canDiscardPending: true })
+  expect(controller.discardPending()).toBe(true)
+  expect(controller.getSnapshot()).toMatchObject({ availability: 'error', canResumeObservation: true })
+  expect(await controller.resumeObservation()).toBe(true)
+  expect(controller.getSnapshot()).toMatchObject({ availability: 'available', conversationId })
+
+  expect(await controller.sendDocumentQuestion({ kind: 'report', documentId, text: '응답 미확인 질문', researchThread })).toBe(false)
+  expect(controller.getSnapshot()).toMatchObject({ canDiscardPending: false, canResumeDocumentPending: true })
+  expect(await controller.resumeDocumentPending()).toBe(false)
+  expect(controller.getSnapshot()).toMatchObject({ canDiscardPending: false, canResumeDocumentPending: true })
+  expect(questionCalls.slice(1)).toHaveLength(2)
+  expect(questionCalls[2]).toEqual(questionCalls[1])
+})
+
 test('lost cancel response keeps observation and reload retries only the owner-bound cancel key', async () => {
   const storage = memoryStorage(), owner = JSON.stringify(['anonymous_session_01', 'ANONYMOUS'])
   const cancelKeys: string[] = []
@@ -460,6 +704,248 @@ test('actual anonymous NativeServiceApp renders partial, done and explicit stop 
   releases[1]()
   await expect(page.locator('.g-amsg[data-response-state="interrupted"]')).toContainText('중지 전 부분')
   expect({ createCount, cancelCount, v3Posts }).toEqual({ createCount: 2, cancelCount: 1, v3Posts: 0 })
+})
+
+test('actual app sends an owner-bound plan question through API16 and renders the answer in that document thread', async ({ page }) => {
+  const ready = conversationFixture.snapshots.ready
+  const authenticated = { ...session, sessionId: 'session_plan_fixture_000001', state: 'AUTHENTICATED' as const,
+    issuedAt: '2030-01-01T00:00:00Z', expiresAt: '2030-01-02T00:00:00Z' }
+  const owner = JSON.stringify([authenticated.sessionId, authenticated.state])
+  const generalTurnId = 'turn_document_app_general_0001', documentTurnId = 'turn_document_app_answer_0001'
+  const generalClientMessageId = 'client_message_document_app_general_0001'
+  const general = { turnId: generalTurnId, conversationId, clientMessageId: generalClientMessageId, state: 'COMPLETED',
+    createdAt: timestamp, updatedAt: timestamp, userText: '기존 상담', answerText: '기존 상담 답변', lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null }
+  const locator = { producerServiceId: 'draft_service_document_app_0001', kind: 'plan', documentId: ready.draftId,
+    revision: ready.draftState.revision, contentSha256: 'd'.repeat(64) }
+  const documentRef = 'docref_document_app_snapshot_0001'
+  let documentClientMessageId = ''
+  const documentTurn = () => ({ turnId: documentTurnId, conversationId, clientMessageId: documentClientMessageId, state: 'COMPLETED',
+    createdAt: '2026-10-07T00:00:01Z', updatedAt: '2026-10-07T00:00:01Z', userText: '이 계획의 근거를 설명해줘',
+    answerText: '계획 문서 근거 답변', lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null })
+  const calls: { method: string; path: string; body: string | null }[] = []
+  await page.addInitScript(({ conversationId: storedConversationId, owner: storedOwner, consultationOwner, consultationConversationId, consultationTurnId }) => {
+    sessionStorage.setItem('tesia.native.conversation', storedConversationId)
+    sessionStorage.setItem('tesia.native.conversation-session', storedOwner)
+    sessionStorage.setItem(`tesia.native.consultation-v13.accepted:${encodeURIComponent(consultationOwner)}`, JSON.stringify({
+      version: 1, owner: consultationOwner, conversationId: consultationConversationId, turnId: consultationTurnId,
+    }))
+  }, { conversationId: ready.conversationId, owner: authenticated.sessionId, consultationOwner: owner,
+    consultationConversationId: conversationId, consultationTurnId: generalTurnId })
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!url.pathname.startsWith('/api/')) return route.continue()
+    if (url.pathname === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: '"plan_session_etag_fixture_0001"' },
+      body: JSON.stringify({ meta: meta('0.1.0', '1'), data: authenticated }) })
+    if (url.pathname === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      meta: meta('0.1.0', null), data: { csrfToken: 'csrf_plan_fixture_000001', expiresAt: authenticated.expiresAt },
+    }) })
+    if (url.pathname.startsWith(`/api/v3/conversations/${ready.conversationId}`) && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { ETag: '"plan_conversation_etag_fixture_0004"' }, body: JSON.stringify({
+        meta: { requestId: 'req_document_app_000001', traceId: 'trace_document_app_000001', apiContractVersion: '0.3.0',
+          resourceRevision: ready.conversationStateRevision }, data: ready,
+      }) })
+    if (url.pathname.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (url.pathname === `/api/v13/consultation/turns/${generalTurnId}`) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(general) })
+    if (url.pathname === `/api/v13/consultation/turns/${documentTurnId}`) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(documentTurn()) })
+    if (url.pathname === `/api/v13/consultation/conversations/${conversationId}/history`) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope({
+      conversationId, snapshotId: 'snapshot_document_app_0001', offset: 0, limit: 100, totalCount: documentClientMessageId ? 2 : 1,
+      turns: documentClientMessageId ? [general, documentTurn()] : [general], nextCursor: null,
+    }) })
+    if (url.pathname.startsWith('/api/v16/')) {
+      calls.push({ method, path: url.pathname, body: request.postData() })
+      if (url.pathname.endsWith(`/documents/plan/${ready.draftId}/locator`) && method === 'GET') return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16(locator) })
+      if (url.pathname.endsWith('/document-references') && method === 'POST') return route.fulfill({ status: 201, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16({ documentRef, ...locator }) })
+      if (url.pathname.endsWith('/document-questions') && method === 'POST') {
+        const body = request.postDataJSON(); documentClientMessageId = body.clientMessageId
+        return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16({
+          conversationId, turnId: documentTurnId, clientMessageId: documentClientMessageId, documentRef, state: 'QUEUED',
+        }) })
+      }
+      const projection = { conversationId, turnId: documentTurnId, clientMessageId: documentClientMessageId, documentRef, ...locator, state: 'COMPLETED' }
+      if (url.pathname.endsWith(`/turns/${documentTurnId}`) && method === 'GET') return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16(projection) })
+      if (url.pathname.endsWith('/history') && method === 'GET') return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16({ items: [projection], nextCursor: null }) })
+    }
+    return route.abort('blockedbyclient')
+  })
+  await page.goto('/')
+  await page.locator('.g-tabs').getByRole('button', { name: '전략 초안', exact: true }).click()
+  const workspace = page.locator('.native-research-workspace')
+  await expect(workspace).toBeVisible()
+  const composer = page.locator('.g-composer textarea')
+  await composer.fill('이 계획의 근거를 설명해줘'); await composer.press('Enter')
+  const thread = workspace.locator('.native-research-thread[data-document-id="plan"]')
+  await expect(thread).toContainText('계획 문서 근거 답변')
+  expect(calls.map(call => `${call.method} ${call.path}`)).toEqual([
+    `GET /api/v16/consultation/documents/plan/${ready.draftId}/locator`,
+    'POST /api/v16/consultation/document-references',
+    `POST /api/v16/consultation/conversations/${conversationId}/document-questions`,
+    `GET /api/v16/consultation/turns/${documentTurnId}`,
+    `GET /api/v16/consultation/conversations/${conversationId}/history`,
+  ])
+  expect(JSON.parse(calls[1].body!)).toEqual({ apiContractVersion: '0.16.0', locator })
+  expect(JSON.parse(calls[2].body!)).toEqual({ apiContractVersion: '0.16.0', clientMessageId: documentClientMessageId,
+    text: '이 계획의 근거를 설명해줘', documentRef })
+})
+
+test('cold plan question retries one immutable first admission then observes the server conversation without another POST', async ({ page }) => {
+  const ready = conversationFixture.snapshots.ready
+  const owner = JSON.stringify([session.sessionId, session.state])
+  const coldConversationId = 'conversation_cold_document_0001'
+  const coldTurnId = 'turn_cold_document_answer_0001'
+  const locator = { producerServiceId: 'draft_service_cold_document_01', kind: 'plan' as const, documentId: ready.draftId,
+    revision: ready.draftState.revision, contentSha256: 'e'.repeat(64) }
+  const documentRef = 'docref_cold_document_snapshot_0001'
+  const question = '처음 여는 계획의 근거를 설명해줘'
+  const answer = '서버가 만든 첫 문서 대화의 답변'
+  let documentClientMessageId = ''
+  let firstAdmissionReads = 0
+  const firstAdmissions: { key?: string; body: string | null }[] = []
+  const scopedPosts: string[] = []
+  const coldTurn = () => ({ turnId: coldTurnId, conversationId: coldConversationId, clientMessageId: documentClientMessageId,
+    state: 'COMPLETED', createdAt: timestamp, updatedAt: timestamp, userText: question, answerText: answer,
+    lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null })
+  const projection = () => ({ conversationId: coldConversationId, turnId: coldTurnId,
+    clientMessageId: documentClientMessageId, documentRef, ...locator, state: 'COMPLETED' })
+
+  await page.addInitScript(({ conversationId: storedConversationId, sessionId }) => {
+    sessionStorage.setItem('tesia.native.conversation', storedConversationId)
+    sessionStorage.setItem('tesia.native.conversation-session', sessionId)
+  }, { conversationId: ready.conversationId, sessionId: session.sessionId })
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), path = url.pathname, method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: '"cold_document_session_etag_01"' },
+      body: JSON.stringify({ meta: meta('0.1.0', '1'), data: session }) })
+    if (path === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      meta: meta('0.1.0', null), data: { csrfToken: 'csrf_cold_document_fixture_01', expiresAt: session.expiresAt },
+    }) })
+    if (path.startsWith(`/api/v3/conversations/${ready.conversationId}`) && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { ETag: '"cold_document_conversation_etag_04"' }, body: JSON.stringify({
+        meta: { requestId: 'req_cold_document_0001', traceId: 'trace_cold_document_0001', apiContractVersion: '0.3.0',
+          resourceRevision: ready.conversationStateRevision }, data: ready,
+      }) })
+    if (path.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (path === `/api/v16/consultation/documents/plan/${ready.draftId}/locator` && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16(locator) })
+    if (path === '/api/v16/consultation/document-references' && method === 'POST') return route.fulfill({ status: 201, contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16({ documentRef, ...locator }) })
+    if (path === '/api/v16/consultation/document-questions' && method === 'POST') {
+      firstAdmissions.push({ key: request.headers()['idempotency-key'], body: request.postData() })
+      if (firstAdmissions.length === 1) return route.fulfill({ status: 503, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' },
+        body: JSON.stringify({ apiContractVersion: '0.16.0', error: { code: 'PROVIDER_UNAVAILABLE', message: 'Provider unavailable.' } }) })
+      documentClientMessageId = request.postDataJSON().clientMessageId
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16({
+        conversationId: coldConversationId, turnId: coldTurnId, clientMessageId: documentClientMessageId, documentRef, state: 'QUEUED',
+      }) })
+    }
+    if (path === `/api/v16/consultation/conversations/${coldConversationId}/document-questions` && method === 'POST') {
+      scopedPosts.push(path); return route.abort('blockedbyclient')
+    }
+    if (path === `/api/v16/consultation/turns/${coldTurnId}` && method === 'GET') {
+      firstAdmissionReads++
+      if (firstAdmissionReads === 1) return route.abort('connectionfailed')
+      return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16(projection()) })
+    }
+    if (path === `/api/v16/consultation/conversations/${coldConversationId}/history` && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16({ items: [projection()], nextCursor: null }) })
+    if (path === `/api/v13/consultation/conversations/${coldConversationId}/history` && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope({ conversationId: coldConversationId,
+        snapshotId: 'snapshot_cold_document_0001', offset: 0, limit: 100, totalCount: 1, turns: [coldTurn()], nextCursor: null }) })
+    if (path === `/api/v13/consultation/turns/${coldTurnId}` && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope(coldTurn()) })
+    return route.abort('blockedbyclient')
+  })
+
+  await page.goto('/')
+  await page.locator('.g-tabs').getByRole('button', { name: '전략 초안', exact: true }).click()
+  const workspace = page.locator('.native-research-workspace')
+  await expect(workspace).toBeVisible()
+  const composer = page.locator('.g-composer textarea')
+  await composer.fill(question); await composer.press('Enter')
+  const retry = page.getByRole('button', { name: '같은 요청으로 재개', exact: true })
+  await expect(retry).toBeVisible()
+  await retry.click()
+  await expect.poll(() => firstAdmissions.length).toBe(2)
+  expect(firstAdmissions[1]).toEqual(firstAdmissions[0])
+  const observe = page.getByRole('button', { name: '진행 자동 확인 재개', exact: true })
+  await expect(observe).toBeVisible()
+  await observe.click()
+  await expect(workspace.locator('.native-research-thread[data-document-id="plan"]')).toContainText(answer)
+  expect({ firstAdmissionPosts: firstAdmissions.length, scopedPosts: scopedPosts.length, firstAdmissionReads }).toEqual({
+    firstAdmissionPosts: 2, scopedPosts: 0, firstAdmissionReads: 2,
+  })
+  expect(JSON.parse(firstAdmissions[0].body!)).toEqual({ apiContractVersion: '0.16.0',
+    clientMessageId: documentClientMessageId, text: question, documentRef })
+})
+
+test('actual app presents claimed anonymous plan anchors only in the current AUTH document thread', async ({ page }) => {
+  const ready = conversationFixture.snapshots.ready
+  const authenticated = { ...session, sessionId: 'session_claimed_plan_target_01', state: 'AUTHENTICATED' as const,
+    issuedAt: '2030-01-01T00:00:00Z', expiresAt: '2030-01-02T00:00:00Z' }
+  const anonymousSessionId = 'session_claimed_plan_source_01'
+  const owner = JSON.stringify([authenticated.sessionId, authenticated.state])
+  const sourceScope = JSON.stringify([anonymousSessionId, 'ANONYMOUS', ready.conversationId, ready.draftId])
+  const claimedTurnId = 'turn_claimed_plan_answer_0001'
+  const claimedClientMessageId = 'client_message_claimed_plan_0001'
+  const question = '로그인 전 계획 질문'
+  const answer = '로그인 뒤에도 같은 계획 문서에 표시되는 답변'
+  const textSha256 = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(question)))]
+    .map(byte => byte.toString(16).padStart(2, '0')).join('')
+  const locator = { producerServiceId: 'draft_service_claimed_plan_01', kind: 'plan' as const, documentId: ready.draftId,
+    revision: ready.draftState.revision, contentSha256: 'c'.repeat(64) }
+  const researchThread = { scopeId: sourceScope, documentId: 'plan' }
+  const documentRef = 'docref_claimed_plan_snapshot_0001'
+  const claimedTurn = { turnId: claimedTurnId, conversationId: ready.conversationId, clientMessageId: claimedClientMessageId,
+    state: 'COMPLETED', createdAt: timestamp, updatedAt: timestamp, userText: question, answerText: answer,
+    lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null }
+  const projection = { conversationId: ready.conversationId, turnId: claimedTurnId, clientMessageId: claimedClientMessageId,
+    documentRef, ...locator, state: 'COMPLETED' }
+  const journal = JSON.stringify({ version: 2, stage: 'settled', owner, conversationId: ready.conversationId, bindings: [{
+    conversationId: ready.conversationId, turnId: claimedTurnId, clientMessageId: claimedClientMessageId, textSha256,
+    createdAt: timestamp, lastSequence: 2, documentRef, locator, researchThread,
+  }] })
+  await page.addInitScript(({ conversationId: storedConversationId, sessionId, owner: storedOwner, acceptedTurnId, journal: storedJournal }) => {
+    sessionStorage.setItem('tesia.native.conversation', storedConversationId)
+    sessionStorage.setItem('tesia.native.conversation-session', sessionId)
+    sessionStorage.setItem(`tesia.native.consultation-v13.accepted:${encodeURIComponent(storedOwner)}`, JSON.stringify({
+      version: 1, owner: storedOwner, conversationId: storedConversationId, turnId: acceptedTurnId,
+    }))
+    sessionStorage.setItem(`tesia.native.consultation-v16.document-question:${encodeURIComponent(storedOwner)}`, storedJournal)
+  }, { conversationId: ready.conversationId, sessionId: authenticated.sessionId, owner, acceptedTurnId: claimedTurnId, journal })
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!url.pathname.startsWith('/api/')) return route.continue()
+    if (url.pathname === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: '"claim_plan_session_etag_01"' },
+      body: JSON.stringify({ meta: meta('0.1.0', '1'), data: authenticated }) })
+    if (url.pathname === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      meta: meta('0.1.0', null), data: { csrfToken: 'csrf_claimed_plan_fixture_01', expiresAt: authenticated.expiresAt },
+    }) })
+    if (url.pathname.startsWith(`/api/v3/conversations/${ready.conversationId}`) && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { ETag: '"claim_plan_conversation_etag_04"' }, body: JSON.stringify({
+        meta: { requestId: 'req_claimed_plan_0001', traceId: 'trace_claimed_plan_0001', apiContractVersion: '0.3.0',
+          resourceRevision: ready.conversationStateRevision }, data: ready,
+      }) })
+    if (url.pathname.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (url.pathname === `/api/v13/consultation/conversations/${ready.conversationId}/history`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope({ conversationId: ready.conversationId,
+        snapshotId: 'snapshot_claimed_plan_0001', offset: 0, limit: 100, totalCount: 1, turns: [claimedTurn], nextCursor: null }) })
+    if (url.pathname === `/api/v13/consultation/turns/${claimedTurnId}`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope(claimedTurn) })
+    if (url.pathname === `/api/v16/consultation/conversations/${ready.conversationId}/history`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16({ items: [projection], nextCursor: null }) })
+    if (url.pathname === `/api/v16/consultation/turns/${claimedTurnId}`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16(projection) })
+    return route.abort('blockedbyclient')
+  })
+  await page.goto('/')
+  await page.locator('.g-tabs').getByRole('button', { name: '전략 초안', exact: true }).click()
+  const thread = page.locator('.native-research-thread[data-document-id="plan"]')
+  await expect(thread).toContainText(question)
+  await expect(thread).toContainText(answer)
 })
 
 test('actual capability-disabled home preserves typed input and sends no v3 fallback', async ({ page }) => {
@@ -1036,4 +1522,364 @@ test('delta-final: restore는 history snapshot 뒤 authoritative turn을 읽어 
   expect(reads).toEqual(['history', 'turn'])
   expect(controller.getSnapshot()).toMatchObject({ availability: 'available', busy: false, activeTurnId: null })
   expect(controller.getSnapshot().messages[1].responseBlocks?.[0]).toMatchObject({ text: '부분 완료', status: 'done' })
+})
+
+test('SETUP admission waits 800ms and accepts only the latest exact durable COMPLETED turn without POST', async () => {
+  const setup = '[SETUP {"entryMode":null,"pair":"ETH/USDT"}]'
+  const answerText = `설정 조건을 이어서 확인합니다.\n${setup}`
+  const owner = JSON.stringify(['authenticated_setup_session_01', 'AUTHENTICATED'])
+  const acceptedKey = `tesia.native.consultation-v13.accepted:${encodeURIComponent(owner)}`
+  type Drift = 'none' | 'history' | 'answer' | 'sequence' | 'binding' | 'owner' | 'failed'
+
+  {
+    const storage = memoryStorage(), waits: number[] = []
+    let posts = 0, historyReads = 0, turnReads = 0, release!: () => void
+    const held = new Promise<void>(resolve => { release = resolve })
+    const completed = { turnId, conversationId, clientMessageId: 'client_message_live_setup_01', state: 'COMPLETED',
+      createdAt: timestamp, updatedAt: timestamp, userText: 'ETH 전략 만들어줘', answerText, lastSequence: 2, terminalSequence: 2,
+      cancelRequested: false, usage, failureCode: null }
+    const fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+      if (url.pathname.endsWith('/turns') && init?.method === 'POST') {
+        posts++
+        const body = JSON.parse(String(init.body))
+        return new Response(envelope({ ...completed, clientMessageId: body.clientMessageId, userText: body.text }), { status: 202, headers: wireHeaders() })
+      }
+      if (url.pathname.endsWith('/history')) {
+        historyReads++
+        const locator = JSON.parse(storage.getItem(acceptedKey)!)
+        const durable = { ...completed, clientMessageId: locator.turnId === turnId ? 'client_message_live_setup_01' : completed.clientMessageId }
+        return new Response(envelope({ conversationId, snapshotId: 'snapshot_live_setup_01', offset: 0, limit: 100,
+          totalCount: 1, turns: [durable], nextCursor: null }), { status: 200, headers: wireHeaders() })
+      }
+      if (url.pathname.endsWith(`/turns/${turnId}`)) {
+        turnReads++
+        return new Response(envelope(completed), { status: 200, headers: wireHeaders() })
+      }
+      throw Error(`unexpected live SETUP route ${url}`)
+    }
+    const controller = new NativeConsultationV13Controller(new ConsultationV13Adapter({ fetch, origin, csrfToken: () => 'csrf' }), {
+      storage, wait: async milliseconds => { waits.push(milliseconds); await held },
+      randomId: () => 'live_setup_01',
+    })
+    controller.bindOwner(owner); await controller.activate(); expect(await controller.send('ETH 전략 만들어줘')).toBe(true)
+    expect(controller.getSnapshot()).toMatchObject({ busy: false, setupCandidate: null })
+    expect(controller.getSnapshot().messages[1].text).toBe('설정 조건을 이어서 확인합니다.')
+    expect(waits).toEqual([800])
+    release()
+    await expect.poll(() => controller.getSnapshot().setupCandidate).toEqual({
+      owner, conversationId, turnId, setup: { entryMode: null, pair: 'ETH/USDT' },
+    })
+    expect({ posts, historyReads, turnReads }).toEqual({ posts: 1, historyReads: 1, turnReads: 1 })
+    controller.detach()
+  }
+
+  for (const drift of ['none', 'history', 'answer', 'sequence', 'binding', 'owner', 'failed'] as const satisfies readonly Drift[]) {
+    const storage = memoryStorage()
+    storage.setItem(acceptedKey, JSON.stringify({ version: 1, owner, conversationId, turnId }))
+    const initial = { turnId, conversationId, clientMessageId: 'client_message_setup_0001', state: drift === 'failed' ? 'FAILED' : 'COMPLETED',
+      createdAt: timestamp, updatedAt: timestamp, userText: 'ETH 전략 만들어줘', answerText, lastSequence: 2, terminalSequence: 2,
+      cancelRequested: false, usage, failureCode: drift === 'failed' ? 'INTERNAL_ERROR' : null }
+    let historyReads = 0, turnReads = 0, posts = 0, release!: () => void
+    const held = new Promise<void>(resolve => { release = resolve })
+    const waits: number[] = []
+    const fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/capabilities')) return new Response(envelope(capability), { status: 200, headers: wireHeaders() })
+      if (init?.method === 'POST') { posts++; throw Error('SETUP observation must not POST') }
+      if (url.pathname.endsWith('/history')) {
+        historyReads++
+        const latest = historyReads === 1 ? initial : drift === 'history'
+          ? { ...initial, turnId: 'turn_setup_newer_0001', clientMessageId: 'client_message_setup_newer_0001' }
+          : drift === 'sequence' ? { ...initial, lastSequence: 3, terminalSequence: 3 } : initial
+        return new Response(envelope({ conversationId, snapshotId: `snapshot_setup_${historyReads}`, offset: 0, limit: 100,
+          totalCount: 1, turns: [latest], nextCursor: null }), { status: 200, headers: wireHeaders() })
+      }
+      if (url.pathname.endsWith(`/turns/${turnId}`)) {
+        turnReads++
+        const observed = turnReads === 1 ? initial : drift === 'answer' ? { ...initial, answerText: `${answerText} 변조` }
+          : drift === 'sequence' ? { ...initial, lastSequence: 3, terminalSequence: 3 }
+          : drift === 'binding' ? { ...initial, conversationId: 'conversation_setup_foreign_01' } : initial
+        return new Response(envelope(observed), { status: 200, headers: wireHeaders() })
+      }
+      throw Error(`unexpected SETUP route ${url}`)
+    }
+    const controller = new NativeConsultationV13Controller(new ConsultationV13Adapter({ fetch, origin, csrfToken: () => 'csrf' }), {
+      storage, wait: async milliseconds => { waits.push(milliseconds); await held },
+    })
+    controller.bindOwner(owner)
+    await controller.activate()
+    expect(controller.getSnapshot().setupCandidate).toBeNull()
+    expect(controller.getSnapshot().messages[1].text).toBe('설정 조건을 이어서 확인합니다.')
+    if (drift === 'failed') {
+      expect(waits).toEqual([])
+      expect({ historyReads, turnReads, posts }).toEqual({ historyReads: 1, turnReads: 1, posts: 0 })
+      controller.detach()
+      continue
+    }
+    expect(waits).toEqual([800])
+    if (drift === 'owner') controller.bindOwner(JSON.stringify(['authenticated_setup_session_02', 'AUTHENTICATED']))
+    release()
+    await expect.poll(() => ({ historyReads, turnReads })).toEqual(drift === 'owner'
+      ? { historyReads: 1, turnReads: 1 } : { historyReads: 2, turnReads: 2 })
+    if (drift === 'none') {
+      await expect.poll(() => controller.getSnapshot().setupCandidate).toEqual({
+        owner, conversationId, turnId, setup: { entryMode: null, pair: 'ETH/USDT' },
+      })
+    } else expect(controller.getSnapshot().setupCandidate).toBeNull()
+    expect(posts).toBe(0)
+    controller.detach()
+  }
+})
+
+test('durable SETUP reuses the original five-answer intake and explicitly retries one API19 body and key', async ({ page }) => {
+  const setup = '[SETUP {"entryMode":null,"pair":"BTC/USDT"}]'
+  const answerText = `설정 조건을 이어서 확인합니다.\n${setup}`
+  const completed = { turnId, conversationId, clientMessageId: 'client_message_source_intake_01', state: 'COMPLETED',
+    createdAt: timestamp, updatedAt: timestamp, userText: 'BTC 전략 만들어줘', answerText, lastSequence: 2, terminalSequence: 2,
+    cancelRequested: false, usage, failureCode: null }
+  let accepted = completed
+  let consultationPosts = 0
+  const v19: { key: string | undefined; body: string | null; origin: string | undefined }[] = []
+  let v20Reads = 0, v3Posts = 0
+  const v16Requests: string[] = []
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!url.pathname.startsWith('/api/')) return route.continue()
+    if (url.pathname.startsWith('/api/v16/')) { v16Requests.push(`${method} ${url.pathname}`); return route.abort('blockedbyclient') }
+    if (url.pathname.startsWith('/api/v3/') && method === 'POST') { v3Posts++; return route.abort('blockedbyclient') }
+    if (url.pathname === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: '"session_consultation_browser_01"' }, body: JSON.stringify({ meta: meta('0.1.0', '1'), data: session }) })
+    if (url.pathname === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ meta: meta('0.1.0', null), data: { csrfToken: 'csrf_consultation_browser_01', expiresAt: session.expiresAt } }) })
+    if (url.pathname.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (url.pathname === '/api/v13/consultation/turns' && method === 'POST') {
+      const body = request.postDataJSON()
+      consultationPosts++
+      accepted = { ...completed, turnId: consultationPosts === 1 ? turnId : 'turn_source_intake_000002',
+        clientMessageId: body.clientMessageId, userText: body.text }
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(accepted) })
+    }
+    if (url.pathname.endsWith('/history')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope({
+      conversationId, snapshotId: 'snapshot_source_intake_01', offset: 0, limit: 100, totalCount: 1, turns: [accepted], nextCursor: null,
+    }) })
+    if (url.pathname === `/api/v13/consultation/turns/${accepted.turnId}`) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(accepted) })
+    if (url.pathname === `/api/v19/consultation/conversations/${conversationId}/turns/${turnId}/source-intake-completions` && method === 'POST') {
+      v19.push({ key: request.headers()['idempotency-key'], body: request.postData(), origin: request.headers()['origin'] })
+      if (v19.length === 1) return route.fulfill({ status: 409, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({
+        apiContractVersion: '0.19.0', error: { code: 'SOURCE_INTAKE_INVALID', message: 'Source intake invalid.' },
+      }) })
+      if (v19.length === 2) return route.abort('connectionfailed')
+      const sha = 'a'.repeat(64)
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({
+        apiContractVersion: '0.19.0', data: { completionCommitId: 'completion_commit_source_01', committedAt: timestamp,
+          sourceIntakeReceipt: { receiptId: 'source_intake_receipt_01', conversationId, turnId, sourceSessionId: session.sessionId,
+            sourceOwnerBindingSha256: sha, sourceRequestSha256: sha, sourceAnswerSha256: sha, sourceBindingSha256: sha, answersSha256: sha },
+          researchWorkIntent: { researchWorkId: 'research_work_source_01', sourceIntakeReceiptId: 'source_intake_receipt_01', state: 'QUEUED' } },
+      }) })
+    }
+    if (url.pathname === '/api/v20/consultation/research-works/research_work_source_01' && method === 'GET') {
+      v20Reads++
+      return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({
+        apiContractVersion: '0.20.0', data: v20Reads === 1
+          ? { researchWorkId: 'research_work_source_01', state: 'QUEUED' }
+          : { researchWorkId: 'research_work_source_01', state: 'COMPLETED', reportText: '실제 연구 보고서' },
+      }) })
+    }
+    return route.abort('blockedbyclient')
+  })
+
+  await page.goto('/')
+  const home = page.locator('#strategy-idea'); await home.fill('BTC 전략 만들어줘'); await home.press('Enter')
+  const intake = page.getByTestId('source-intake')
+  await expect(intake).toBeVisible()
+  await intake.locator('.intake-options button').nth(2).click()
+  await expect(intake).toHaveAttribute('data-answer-count', '1')
+  for (let answer = 1; answer < 5; answer++) await intake.locator('.intake-options button').first().click()
+  await expect.poll(() => v19.length).toBe(1)
+  await expect(intake).toHaveAttribute('data-answer-count', '0')
+
+  for (let answer = 0; answer < 5; answer++) await intake.locator('.intake-options button').first().click()
+  await expect(intake).toHaveAttribute('data-answer-count', '5')
+  await expect.poll(() => v19.length).toBe(2)
+  const resume = page.getByRole('button', { name: '같은 요청으로 재개', exact: true })
+  await expect(resume).toBeVisible()
+  await resume.click()
+  await expect.poll(() => v19.length).toBe(3)
+  expect(v19[2]).toEqual(v19[1])
+  expect(v19[0]?.key).not.toBe(v19[1]?.key)
+  expect(JSON.parse(v19[1]!.body!)).toEqual({ apiContractVersion: '0.19.0', answers: [
+    { key: 'asset', index: 0, recommended: false }, { key: 'style', index: 0, recommended: false },
+    { key: 'budget', index: 0, recommended: false }, { key: 'period', index: 0, recommended: false },
+    { key: 'stop', index: 0, recommended: false },
+  ] })
+  await expect(resume).toHaveCount(0)
+  await expect(intake).toHaveAttribute('data-answer-count', '5')
+  await expect(page.getByText('실제 연구 보고서', { exact: true })).toBeVisible({ timeout: 10_000 })
+  expect(v20Reads).toBeGreaterThanOrEqual(2)
+  await page.reload()
+  await expect(page.getByTestId('source-intake')).toHaveAttribute('data-answer-count', '5')
+  await expect(page.getByRole('button', { name: '같은 요청으로 재개', exact: true })).toHaveCount(0)
+  expect(v19).toHaveLength(3)
+  await expect(page.getByText('실제 연구 보고서', { exact: true })).toBeVisible()
+
+  const workspace = page.locator('.native-research-workspace')
+  await expect(workspace.getByRole('tab', { name: '검증 결과', exact: true })).toHaveAttribute('aria-selected', 'true')
+  const unsupported = page.locator('.g-composer textarea')
+  await unsupported.fill('접근할 수 없는 보고서 질문은 보존')
+  const postsBeforeUnsupported = consultationPosts
+  const v16BeforeUnsupported = [...v16Requests]
+  await unsupported.press('Enter')
+  await expect(unsupported).toHaveValue('접근할 수 없는 보고서 질문은 보존')
+  await expect(page.getByText('실제 연구 보고서', { exact: true })).toBeVisible()
+  await unsupported.fill('같은 보고서의 다음 질문도 보존')
+  await unsupported.press('Enter')
+  await expect(unsupported).toHaveValue('같은 보고서의 다음 질문도 보존')
+  expect({ consultationPosts, v16Requests, v3Posts }).toEqual({ consultationPosts: postsBeforeUnsupported,
+    v16Requests: [...v16BeforeUnsupported,
+      'GET /api/v16/consultation/documents/report/research_work_source_01/locator',
+      'GET /api/v16/consultation/documents/report/research_work_source_01/locator'], v3Posts: 0 })
+  expect(v19).toHaveLength(3)
+})
+
+test('claimed report replays its accepted API19 tuple before reload and a following API16 question', async ({ page }) => {
+  const ready = conversationFixture.snapshots.ready
+  const anon = 'session_report_claim_source_01', target = 'session_report_claim_target_01'
+  const anonOwner = JSON.stringify([anon, 'ANONYMOUS']), authOwner = JSON.stringify([target, 'AUTHENTICATED'])
+  const setupTurnId = 'turn_report_setup_source_01', reportTurnId = 'turn_report_question_source_01'
+  const reportClientId = 'client_message_report_source_01', workId = 'research_work_report_claim_01'
+  const reportQuestion = '로그인 전 보고서 질문', reportAnswer = '로그인 전 보고서 답변'
+  const reportCreatedAt = '2026-10-07T00:00:01Z'
+  const textSha256 = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(reportQuestion)))]
+    .map(byte => byte.toString(16).padStart(2, '0')).join('')
+  const locator = { producerServiceId: 'report_service_claimed_01', kind: 'report' as const, documentId: workId,
+    revision: 7, contentSha256: 'b'.repeat(64) }
+  const documentRef = 'docref_report_claimed_snapshot_01', researchThread = { scopeId: workId, documentId: 'report' }
+  const reportTurn = { turnId: reportTurnId, conversationId: ready.conversationId, clientMessageId: reportClientId,
+    state: 'COMPLETED', createdAt: reportCreatedAt, updatedAt: reportCreatedAt, userText: reportQuestion, answerText: reportAnswer,
+    lastSequence: 2, terminalSequence: 2, cancelRequested: false, usage, failureCode: null }
+  const setupTurn = { ...reportTurn, turnId: setupTurnId, clientMessageId: 'client_message_report_setup_01',
+    createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:00Z', userText: 'BTC 전략 만들어줘',
+    answerText: '[SETUP {"entryMode":null,"pair":"BTC/USDT"}]' }
+  const projection = { conversationId: ready.conversationId, turnId: reportTurnId, clientMessageId: reportClientId,
+    documentRef, ...locator, state: 'COMPLETED' }
+  const sourceJournal = JSON.stringify({ version: 2, stage: 'settled', owner: anonOwner, conversationId: ready.conversationId, bindings: [{
+    conversationId: ready.conversationId, turnId: reportTurnId, clientMessageId: reportClientId, textSha256,
+    createdAt: reportCreatedAt, lastSequence: 2, documentRef, locator, researchThread,
+  }] })
+  const completion = { completionCommitId: 'completion_commit_report_claim_01', receiptId: 'source_intake_receipt_report_01',
+    researchWorkId: workId, sourceSessionId: anon }
+  const intake = { version: 2, owner: anonOwner, locatorOwner: anonOwner, conversationId: ready.conversationId,
+    turnId: setupTurnId, pair: 'BTC/USDT', value: { answers: [
+      { key: 'asset', index: 0, recommended: false }, { key: 'style', index: 0, recommended: false },
+      { key: 'budget', index: 0, recommended: false }, { key: 'period', index: 0, recommended: false },
+      { key: 'stop', index: 0, recommended: false },
+    ] }, status: 'accepted', idempotencyKey: 'source_intake_report_claim_key_01', completion }
+  const offer = { anonymousSessionId: anon, anonymousIfMatch: '"anonymous_report_claim_etag_01"', targetSessionId: target,
+    conversationId: ready.conversationId }
+  const pendingClaim = { version: 1, offer, idempotencyKey: 'consultation_report_claim_key_01', expectedRevision: '1',
+    committedRevision: null, disposition: 'uncertain' }
+  await page.addInitScript(({ ready, target, authOwner, anonOwner, setupTurnId, pendingClaim, sourceJournal, intake }) => {
+    if (sessionStorage.getItem('tesia.fixture.report-claim.seeded') === '1') return
+    sessionStorage.setItem('tesia.native.conversation', ready.conversationId)
+    sessionStorage.setItem('tesia.native.conversation-session', target)
+    sessionStorage.setItem('tesia.native.session-binding', JSON.stringify({ sessionId: target, sessionState: 'AUTHENTICATED' }))
+    sessionStorage.setItem(`tesia.native.consultation-v14.claim:${encodeURIComponent(target)}`, JSON.stringify(pendingClaim))
+    sessionStorage.setItem(`tesia.native.consultation-v16.document-question:${encodeURIComponent(anonOwner)}`, sourceJournal)
+    sessionStorage.setItem(`tesia.native.consultation-v19.source-intake:${encodeURIComponent(JSON.stringify([anonOwner, ready.conversationId, setupTurnId, 'BTC/USDT']))}`,
+      JSON.stringify(intake))
+    sessionStorage.removeItem(`tesia.native.consultation-v13.accepted:${encodeURIComponent(authOwner)}`)
+    sessionStorage.setItem('tesia.fixture.report-claim.seeded', '1')
+  }, { ready, target, authOwner, anonOwner, setupTurnId, pendingClaim, sourceJournal, intake })
+  let claimed = false, failFirstCompletionReplay = true, followupClientId = ''
+  const api19Calls: { key?: string; body: string | null }[] = []
+  let api3Posts = 0
+  const followupTurnId = 'turn_report_followup_answer_01'
+  const followupTurn = () => ({ ...reportTurn, turnId: followupTurnId, clientMessageId: followupClientId,
+    createdAt: '2026-10-07T00:00:02Z', updatedAt: '2026-10-07T00:00:02Z', userText: '이 보고서의 다음 근거는?', answerText: '후속 보고서 답변' })
+  await page.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url()), path = url.pathname, method = request.method()
+    if (request.isNavigationRequest()) return route.fulfill({ contentType: 'text/html', body: browserHtml })
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path.startsWith('/api/v3/') && method === 'POST') { api3Posts++; return route.abort('blockedbyclient') }
+    if (path === '/api/v1/auth/session') return route.fulfill({ contentType: 'application/json', headers: { ETag: claimed ? '"authenticated_report_claim_etag_02"' : '"authenticated_report_claim_etag_01"' },
+      body: JSON.stringify({ meta: meta('0.1.0', claimed ? '2' : '1'), data: { ...session, sessionId: target,
+        state: 'AUTHENTICATED', revision: claimed ? '2' : '1', issuedAt: '2030-01-01T00:00:00Z', expiresAt: '2030-01-02T00:00:00Z' } }) })
+    if (path === '/api/v1/auth/csrf') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      meta: meta('0.1.0', null), data: { csrfToken: 'csrf_report_claim_fixture_01', expiresAt: '2030-01-02T00:00:00Z' },
+    }) })
+    if (path.startsWith(`/api/v3/conversations/${ready.conversationId}`) && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { ETag: '"report_claim_conversation_etag_04"' }, body: JSON.stringify({ meta: {
+        requestId: 'req_report_claim_0001', traceId: 'trace_report_claim_0001', apiContractVersion: '0.3.0',
+        resourceRevision: ready.conversationStateRevision }, data: ready }) })
+    if (path.endsWith('/capabilities')) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(capability) })
+    if (path === `/api/v14/consultation/anonymous-sessions/${anon}/claim` && method === 'POST') {
+      claimed = true
+      return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({ apiContractVersion: '0.14.0', data: {
+        anonymousSessionId: anon, sessionId: target, state: 'AUTHENTICATED', revision: '2', mode: 'CONSULTATION_ONLY',
+        grantScope: 'CONSULTATION_V13', oldSessionRevoked: true,
+        claimedLegacyResourceCounts: { conversations: 0, messages: 0, drafts: 0, patches: 0, validations: 0, idempotencyRecords: 0 },
+        claimedConsultationResourceCounts: { conversations: 1, turns: 2, events: 4, idempotencyRecords: 2 },
+      } }) })
+    }
+    const turns = followupClientId ? [setupTurn, reportTurn, followupTurn()] : [setupTurn, reportTurn]
+    if (path === `/api/v13/consultation/conversations/${ready.conversationId}/history`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope({ conversationId: ready.conversationId,
+        snapshotId: 'snapshot_report_claim_01', offset: 0, limit: 100, totalCount: turns.length, turns, nextCursor: null }) })
+    const observedTurn = turns.find(value => path === `/api/v13/consultation/turns/${value.turnId}`)
+    if (observedTurn) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope(observedTurn) })
+    const projections = followupClientId ? [projection, { ...projection, turnId: followupTurnId, clientMessageId: followupClientId }] : [projection]
+    if (path === `/api/v16/consultation/conversations/${ready.conversationId}/history`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16({ items: projections, nextCursor: null }) })
+    const observedProjection = projections.find(value => path === `/api/v16/consultation/turns/${value.turnId}`)
+    if (observedProjection) return route.fulfill({ contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16(observedProjection) })
+    if (path === `/api/v19/consultation/conversations/${ready.conversationId}/turns/${setupTurnId}/source-intake-completions` && method === 'POST') {
+      api19Calls.push({ key: request.headers()['idempotency-key'], body: request.postData() })
+      if (failFirstCompletionReplay) { failFirstCompletionReplay = false; return route.abort('connectionfailed') }
+      const sha = 'a'.repeat(64)
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({
+        apiContractVersion: '0.19.0', data: { completionCommitId: completion.completionCommitId, committedAt: timestamp,
+          sourceIntakeReceipt: { receiptId: completion.receiptId, conversationId: ready.conversationId, turnId: setupTurnId,
+            sourceSessionId: anon, sourceOwnerBindingSha256: sha, sourceRequestSha256: sha, sourceAnswerSha256: sha,
+            sourceBindingSha256: sha, answersSha256: sha },
+          researchWorkIntent: { researchWorkId: workId, sourceIntakeReceiptId: completion.receiptId, state: 'QUEUED' } },
+      }) })
+    }
+    if (path === `/api/v20/consultation/research-works/${workId}`) return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: JSON.stringify({ apiContractVersion: '0.20.0', data: {
+        researchWorkId: workId, state: 'COMPLETED', reportText: 'claim 뒤 복구된 실제 연구 보고서',
+      } }) })
+    if (path === `/api/v16/consultation/documents/report/${workId}/locator` && method === 'GET') return route.fulfill({ contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16(locator) })
+    if (path === '/api/v16/consultation/document-references' && method === 'POST') return route.fulfill({ status: 201, contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' }, body: envelope16({ documentRef, ...locator }) })
+    if (path === `/api/v16/consultation/conversations/${ready.conversationId}/document-questions` && method === 'POST') {
+      followupClientId = request.postDataJSON().clientMessageId
+      return route.fulfill({ status: 202, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' }, body: envelope16({
+        conversationId: ready.conversationId, turnId: followupTurnId, clientMessageId: followupClientId, documentRef, state: 'QUEUED',
+      }) })
+    }
+    return route.abort('blockedbyclient')
+  })
+  await page.goto('/')
+  await page.getByRole('button', { name: '같은 요청으로 재개', exact: true }).click()
+  await expect.poll(() => api19Calls.length).toBe(1)
+  await page.getByRole('button', { name: '같은 요청으로 재개', exact: true }).click()
+  await expect(page.getByRole('tabpanel', { name: '검증 결과 문서' })).toContainText('claim 뒤 복구된 실제 연구 보고서', { timeout: 10_000 })
+  expect(api19Calls).toHaveLength(2)
+  expect(api19Calls[1]).toEqual(api19Calls[0])
+  await page.reload()
+  await expect(page.getByRole('tabpanel', { name: '검증 결과 문서' })).toContainText('claim 뒤 복구된 실제 연구 보고서', { timeout: 10_000 })
+  await expect.poll(() => api19Calls.length).toBe(3)
+  expect(api19Calls[2]).toEqual(api19Calls[1])
+  const composer = page.locator('.g-composer textarea')
+  await composer.fill('이 보고서의 다음 근거는?'); await composer.press('Enter')
+  await expect(page.locator('.native-research-thread[data-document-id="report"]')).toContainText('후속 보고서 답변')
+  const completionReplaysBeforeFollowupReload = api19Calls.length
+  await page.reload()
+  await expect.poll(() => api19Calls.length).toBe(completionReplaysBeforeFollowupReload + 1)
+  expect(api19Calls.at(-1)).toEqual(api19Calls.at(-2))
+  await expect(page.getByRole('tabpanel', { name: '검증 결과 문서' })).toContainText('claim 뒤 복구된 실제 연구 보고서', { timeout: 10_000 })
+  await expect(page.locator('.native-research-thread[data-document-id="report"]')).toContainText('후속 보고서 답변')
+  expect({ api3Posts, followupClientId: Boolean(followupClientId) }).toEqual({ api3Posts: 0, followupClientId: true })
 })

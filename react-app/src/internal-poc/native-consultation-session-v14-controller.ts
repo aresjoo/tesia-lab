@@ -28,7 +28,7 @@ type Pending = Readonly<{
 export type NativeConsultationSessionV14Options = Readonly<{
   currentSession: (signal?: AbortSignal) => Promise<ConsultationSessionObservation>
   refreshSession: (signal?: AbortSignal) => Promise<ConsultationSessionObservation>
-  restoreConversation: (conversationId: string, targetSessionId: string) => Promise<boolean>
+  restoreConversation: (conversationId: string, targetSessionId: string, anonymousSessionId: string) => Promise<boolean>
   storage?: StoragePort | null
   randomId?: () => string
   requestTimeoutMs?: number
@@ -225,7 +225,8 @@ export class NativeConsultationSessionV14Controller {
       const confirmed = await this.bounded(signal => this.ports.refreshSession(signal))
       this.requireCurrent(generation, target); this.requireAuth(confirmed, target)
       if (BigInt(confirmed.revision) < BigInt(pending.committedRevision!)) throw new Error('CLAIM_REVISION_CHANGED')
-      const restored = await this.ports.restoreConversation(pending.offer.conversationId, target)
+      const restored = await this.ports.restoreConversation(
+        pending.offer.conversationId, target, pending.offer.anonymousSessionId)
       this.requireCurrent(generation, target)
       if (!restored) throw new Error('CLAIM_HISTORY_UNCONFIRMED')
       const key = storageKey(target)

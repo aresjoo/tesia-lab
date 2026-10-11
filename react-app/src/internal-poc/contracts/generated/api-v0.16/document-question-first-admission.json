@@ -1,0 +1,80 @@
+{
+  "apiContractVersion": "0.16.0",
+  "authorityType": "SUPPLEMENTAL_OPERATION_CHILD",
+  "releaseStatus": "INTERNAL_CANDIDATE_NOT_PUBLISHED",
+  "installedAggregateAuthority": {
+    "baseOperationManifestSha256": "be45c11af5a9335841503c26f28150afe55d9b5b5564e98c838820e400311857",
+    "contractsCommitSha": "470106dfad7f5aa7187d7db6d2c0aa84e8b5dc05",
+    "contractsSourceTreeSha": "65c01a3225ee837f40a308d48a70b5e8994e1057",
+    "installedOperationCount": 5,
+    "payloadFileCount": 600,
+    "payloadSha256": "44fdde9e69ad7ea6838167b65bedea0c25f41411a2d69c0c8012578ec8ef8142",
+    "pythonDistributionVersion": "0.31.0rc1",
+    "schemaSha256": "960e8cccbb30c22de49fcd444e0fb1c76beda233e8d2b89efa44021bf66b6e17",
+    "validationModuleSha256": "7106cf2925b7f49e3e950f1cc293bf6d145aeefe9b6f7020a73cb497a207dc7d"
+  },
+  "installedOperationManifestPromoted": false,
+  "combinedOperationCount": 6,
+  "operations": [
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "CSRF_INVALID",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "CLIENT_MESSAGE_ID_REUSED",
+        "TURN_IN_PROGRESS",
+        "IDEMPOTENCY_KEY_REUSED",
+        "DOCUMENT_REFERENCE_INVALID",
+        "DOCUMENT_TOO_LARGE",
+        "BUDGET_EXCEEDED",
+        "RATE_LIMITED",
+        "PROVIDER_UNAVAILABLE",
+        "INTERNAL_ERROR"
+      ],
+      "idempotency": {
+        "canonicalRequest": [
+          "conversationId:null",
+          "canonicalDocumentQuestionRequest"
+        ],
+        "family": "createConsultationDocumentQuestionV16",
+        "sameKeyDifferentRequest": "IDEMPOTENCY_KEY_REUSED_EFFECT_ZERO",
+        "sameKeySameRequest": "REPLAY_ORIGINAL_CONVERSATION_TURN_REFERENCE",
+        "scope": [
+          "currentLogicalOwner",
+          "Idempotency-Key"
+        ]
+      },
+      "method": "POST",
+      "mutation": true,
+      "operationId": "createInitialConsultationDocumentQuestionV16",
+      "path": "/api/v16/consultation/document-questions",
+      "pathKeys": [],
+      "queryKeys": [],
+      "request": "DocumentQuestionRequest",
+      "response": "DocumentQuestionEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_AND_DOCUMENT_AUTHORITY",
+        "NULL_CONVERSATION_INPUT_SERVER_ALLOCATES_API13_CONVERSATION",
+        "SAME_LOGICAL_DOCUMENT_QUESTION_OWNER_AND_KEY_FAMILY_AS_SCOPED_CREATE",
+        "CANONICAL_REQUEST_DIGEST_BINDS_CONVERSATION_ID_NULL_AND_REQUEST",
+        "SINGLE_TRANSACTION_CONVERSATION_TURN_RESERVATION_DOCUMENT_BINDING_AND_REPLAY",
+        "UNCHANGED_IMMUTABLE_DOCUMENT_REFERENCE",
+        "QUESTION_AND_DOCUMENT_TOKEN_COST_ADMISSION",
+        "TYPED_DOCUMENT_SNAPSHOT_SEPARATE_FROM_USER_TEXT",
+        "PREADMISSION_FAILURE_CONVERSATION_TURN_RESERVATION_AND_PROVIDER_EFFECT_ZERO",
+        "POSTCOMMIT_DISPATCH_FAILURE_PRESERVES_ORIGINAL_ADMISSION_FOR_SAME_KEY_REPLAY"
+      ],
+      "successStatus": 202
+    }
+  ],
+  "publicationAuthority": {
+    "backendAssetMayBeByteExactCopy": true,
+    "contractGitBlobAndGeneratedSdkArtifactRequired": true,
+    "installedContractsOperationAuthority": false,
+    "pythonOrAiWheelRebuildRequired": false,
+    "sourceTreeFallbackAllowed": false
+  }
+}

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { ConsultationV13Adapter } from '../../src/internal-poc/consultation-v13-adapter'
 import { ConsultationV14Adapter } from '../../src/internal-poc/consultation-v14-adapter'
+import { ConsultationV16Adapter } from '../../src/internal-poc/consultation-v16-adapter'
 import { NativeConsultationV13Controller } from '../../src/internal-poc/native-consultation-v13-controller'
 import { NativeConsultationSessionV14Controller } from '../../src/internal-poc/native-consultation-session-v14-controller'
 import { TEST_ORIGIN } from '../test-origin'
@@ -51,6 +52,81 @@ test('API14 claim and exact refreshed AUTH restore server API13 history without 
     `GET /api/v13/consultation/conversations/${conversationId}/history`, `GET /api/v13/consultation/turns/${turnId}`])
   conversation.detach(); controller.detach()
   expect(calls).toHaveLength(3)
+})
+
+test('API14 claim restores anonymous document anchors only after exact AUTH API13 and API16 joins', async () => {
+  const values = new Map<string, string>()
+  const storagePort = { getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => { values.set(key, value) }, removeItem: (key: string) => { values.delete(key) } }
+  const anonymousOwner = JSON.stringify([offer.anonymousSessionId, 'ANONYMOUS'])
+  const authenticatedOwner = JSON.stringify([offer.targetSessionId, 'AUTHENTICATED'])
+  const sourceKey = `tesia.native.consultation-v16.document-question:${encodeURIComponent(anonymousOwner)}`
+  const targetKey = `tesia.native.consultation-v16.document-question:${encodeURIComponent(authenticatedOwner)}`
+  const documentRef = 'docref_claimed_snapshot_000001'
+  const locator = { producerServiceId: 'research_service_claimed_0001', kind: 'report' as const,
+    documentId: 'research_work_claimed_0001', revision: 9, contentSha256: 'a'.repeat(64) }
+  const researchThread = { scopeId: 'local-claimed-report-scope', documentId: 'report' }
+  const question = '로그인 전 보고서 질문'
+  const textSha256 = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(question)))]
+    .map(byte => byte.toString(16).padStart(2, '0')).join('')
+  const binding = { conversationId, turnId, clientMessageId: turn.clientMessageId, textSha256,
+    createdAt: timestamp, lastSequence: 2, documentRef, locator, researchThread }
+  const sourceJournal = JSON.stringify({ version: 2, stage: 'admitted', attempted: true, disposition: 'uncertain', owner: anonymousOwner,
+    conversationId, clientMessageId: turn.clientMessageId, text: null, researchThread,
+    mintIdempotencyKey: 'mint_claimed_fixture_0001', questionIdempotencyKey: 'question_claimed_fixture_0001',
+    mintRequest: { apiContractVersion: '0.16.0', locator },
+    questionRequest: { apiContractVersion: '0.16.0', clientMessageId: turn.clientMessageId, text: question, documentRef },
+    turnId, joined: true, bindings: [binding] })
+  values.set(sourceKey, sourceJournal)
+  const claimedTurn = { ...turn, userText: question }
+  const projection = { conversationId, turnId, clientMessageId: turn.clientMessageId, documentRef, ...locator, state: 'COMPLETED' }
+  const calls: string[] = []
+  const fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const path = new URL(String(input)).pathname, method = init?.method ?? 'GET'
+    calls.push(`${method} ${path}`)
+    expect(values.get(targetKey)).toBeUndefined()
+    if (path.endsWith('/claim')) return response('0.14.0', { anonymousSessionId: offer.anonymousSessionId, sessionId: offer.targetSessionId,
+      state: 'AUTHENTICATED', revision: '8', mode: 'CONSULTATION_ONLY', grantScope: 'CONSULTATION_V13', oldSessionRevoked: true,
+      claimedLegacyResourceCounts: { conversations: 0, messages: 0, drafts: 0, patches: 0, validations: 0, idempotencyRecords: 0 },
+      claimedConsultationResourceCounts: { conversations: 1, turns: 1, events: 2, idempotencyRecords: 1 } })
+    if (path.startsWith('/api/v16/') && path.endsWith('/history')) return response('0.16.0', { items: [projection], nextCursor: null })
+    if (path.startsWith('/api/v16/') && path.endsWith(`/turns/${turnId}`)) return response('0.16.0', projection)
+    if (path.endsWith('/history')) return response('0.13.0', { conversationId, snapshotId: 'snapshot_claimed_fixture_01', offset: 0, limit: 100,
+      totalCount: 1, turns: [claimedTurn], nextCursor: null })
+    if (path.endsWith(`/turns/${turnId}`)) return response('0.13.0', claimedTurn)
+    throw new Error(`unexpected fixture route ${path}`)
+  }
+  const conversation = new NativeConsultationV13Controller(
+    new ConsultationV13Adapter({ origin, fetch, csrfToken: () => 'csrf_fixture' }),
+    { storage: storagePort, documentAdapter: new ConsultationV16Adapter({ origin, fetch }) })
+  const callback: string[][] = []
+  const controller = new NativeConsultationSessionV14Controller(new ConsultationV14Adapter({ origin, fetch, csrfToken: () => 'csrf_fixture' }), {
+    storage: storagePort, randomId: () => 'fixture_claimed_anchor_01',
+    currentSession: async () => ({ sessionId: offer.targetSessionId, state: 'AUTHENTICATED', revision: '7' }),
+    refreshSession: async () => ({ sessionId: offer.targetSessionId, state: 'AUTHENTICATED', revision: '8' }),
+    restoreConversation: async (id, target, source) => {
+      callback.push([id, target, source])
+      conversation.bindOwner(JSON.stringify([target, 'AUTHENTICATED']))
+      if (!await conversation.restoreConversation(id)) return false
+      expect(values.get(targetKey)).toBeUndefined()
+      return conversation.restoreClaimedDocumentAnchors(JSON.stringify([source, 'ANONYMOUS']), id)
+    },
+  })
+  controller.offer(offer)
+  expect(await controller.claim()).toBe(true)
+  expect(callback).toEqual([[conversationId, offer.targetSessionId, offer.anonymousSessionId]])
+  expect(values.get(sourceKey)).toBe(sourceJournal)
+  expect(JSON.parse(values.get(targetKey)!)).toEqual({ version: 2, stage: 'settled', owner: authenticatedOwner,
+    conversationId, bindings: [binding] })
+  expect(conversation.getSnapshot().messages).toMatchObject([
+    { id: turn.clientMessageId, role: 'user', researchThread },
+    { id: `${turnId}_reply`, role: 'assistant', researchThread },
+  ])
+  expect(calls.filter(call => call.startsWith('POST '))).toEqual([
+    `POST /api/v14/consultation/anonymous-sessions/${offer.anonymousSessionId}/claim`,
+  ])
+  expect(calls.slice(1).every(call => call.startsWith('GET '))).toBe(true)
+  conversation.detach(); controller.detach()
 })
 
 test('a late claimed-history response cannot replace a newly bound conversation owner', async () => {

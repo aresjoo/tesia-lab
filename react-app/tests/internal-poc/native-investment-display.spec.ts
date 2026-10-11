@@ -95,8 +95,47 @@ test('ordinary Markdown labels that resemble display names remain complete prose
     text,
     blocks: [{ id: `${messageId}_text`, kind: 'text', text, status: 'done' }],
     titleSuggestion: null,
+    setup: null,
     valid: true,
   })
+})
+
+test('SETUP stays hidden for every split and terminal state while only its exact closed payload becomes a completed candidate', () => {
+  const body = '설정 화면에서 조건을 이어서 확인합니다.'
+  const tag = '[SETUP {"entryMode":null,"pair":"BTC/USDT"}]'
+  const raw = `${body}\n${tag}`
+  for (let end = body.length; end <= raw.length; end++) {
+    const streaming = projectNativeInvestmentDisplay({ text: raw.slice(0, end), state: 'STREAMING', scopeId, messageId, allowTitle: true })
+    expect(streaming.text).not.toContain('[SETUP')
+    expect(streaming.setup).toBeNull()
+  }
+  for (const state of ['FAILED', 'CANCELLED', 'AMBIGUOUS'] as const) {
+    for (const text of [raw, `${body}\n[SETUP {"entryMode":null`]) {
+      const terminal = projectNativeInvestmentDisplay({ text, state, scopeId, messageId, allowTitle: true })
+      expect(terminal.text).toBe(body)
+      expect(terminal.setup).toBeNull()
+    }
+  }
+
+  expect(projectNativeInvestmentDisplay({ text: raw, state: 'COMPLETED', scopeId, messageId, allowTitle: true })).toMatchObject({
+    text: body, valid: true, setup: { entryMode: null, pair: 'BTC/USDT' },
+  })
+  for (const suffix of [
+    '[SETUP {"entryMode":"dip","pair":"BTC/USDT"}]',
+    '[SETUP {"entryMode":null,"pair":"SOL/USDT"}]',
+    '[SETUP {"entryMode":null,"pair":"ETH/USDT","extra":true}]',
+    `${tag}${tag}`,
+    `${tag}[NEXT ["후속 질문"]]`,
+  ]) {
+    const rejected = projectNativeInvestmentDisplay({ text: `${body}\n${suffix}`, state: 'COMPLETED', scopeId, messageId, allowTitle: true })
+    expect(rejected).toMatchObject({ text: body, valid: false, setup: null })
+    expect(rejected.blocks.filter(block => block.kind !== 'text')).toEqual([])
+  }
+
+  for (const prose of ['[SETUP]은 설정 단계를 뜻합니다.', '[SETUP guide](https://example.test/setup)를 읽어주세요.']) {
+    const ordinary = projectNativeInvestmentDisplay({ text: prose, state: 'COMPLETED', scopeId, messageId, allowTitle: true })
+    expect(ordinary).toMatchObject({ text: prose, valid: true, setup: null })
+  }
 })
 
 test('ASK selections preserve original title, option descriptions and plain user-text semantics', () => {

@@ -1,3 +1,5 @@
+import {LiveCatalogueCopyManagement} from '../copy-execution/LiveCatalogueCopyManagement'
+import type {CatalogueCopyExecutionPort} from '../copy-execution/catalogue-port'
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { catalogueAssets, catalogueTitle, findCatalogueStrategy } from '../client-catalogue'
@@ -80,7 +82,7 @@ function CopyPanel({ budget, data }: { budget: boolean; data: CatalogueCopyInspe
   </details>)}</div>}<p className="cq-basis">{t('recordBasis')}</p></>
 }
 
-export function ClientCatalogueCopyManagement({ account, id, tab = 'pos', navigate, Dialog, onBack, backLabel, signedIn, onLogin, onHelp }: {
+function PreviewCatalogueCopyManagement({ account, id, tab = 'pos', navigate, Dialog, onBack, backLabel, signedIn, onLogin, onHelp }: {
   account: CatalogueCopyView; id: string; tab?: Tab; navigate: Navigation; Dialog: DialogType; onBack: () => void; backLabel?: string; signedIn: boolean; onLogin: () => void; onHelp?: (trigger: HTMLElement) => void
 }) {
   const inspection = useCatalogueCopyInspection(account, id, true), { language, money, percent, t } = useFormat()
@@ -177,4 +179,10 @@ function CatalogueCopyAction({ account, id, record, data, loadState, action, Dia
     {failed && <p role="alert">{sw.failed}</p>}
     <div className="ss3-dacts" ref={actionsRef}><button type="button" className="obtn" onClick={onClose}>{action.kind === 'settings' ? sw.close : copyActionText(language, '취소')}</button>{action.kind === 'settings' && <button type="button" className="wbtn" disabled={disabled} onClick={onAdjust}>{t('budget')}</button>}{action.kind !== 'settings' && <button type="button" className="wbtn" disabled={disabled || action.kind === 'adjust' && !valid} aria-busy={account.busy} onClick={() => { void submit() }}>{copyActionText(language, '확인')}</button>}</div>
   </Dialog>
+}
+
+/** The actual API port owns execution facts; the preview renderer retains its original account path. */
+export function ClientCatalogueCopyManagement(props: { account?: CatalogueCopyView; live?: CatalogueCopyExecutionPort; id: string; tab?: Tab; navigate: Navigation; Dialog: DialogType; onBack: () => void; backLabel?: string; signedIn: boolean; onLogin: () => void; onHelp?: (trigger: HTMLElement) => void }) {
+  if (props.live) return <LiveCatalogueCopyManagement {...props} live={props.live}/>
+  return props.account ? <PreviewCatalogueCopyManagement {...props} account={props.account}/> : null
 }

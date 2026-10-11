@@ -1,3 +1,4 @@
+import type {CatalogueCopyExecutionPort} from '../copy-execution/catalogue-port'
 import { ClientQuestionDockProvider } from '../components/ClientQuestionDock'
 import { Fragment, lazy, Suspense, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
@@ -24,6 +25,8 @@ import { researchNavigationLabel } from '../client-research-copy'
 import { clientResearchLabel } from '../client-research-label'
 import { shellText } from '../client-shell-copy'
 import { ClientConversation, ClientUserMessage } from '../components/ClientConversation'
+import ClientSourceIntake from '../components/ClientSourceIntake'
+import type { SourceIntake, SourceIntakeKey } from '../client-source-intake'
 import { NativeConversationTitle } from './NativeConversationTitle'
 import { ClientClarificationCard } from '../components/ClientClarificationCard'
 import { ClientResearchActivity } from '../components/ClientResearchActivity'
@@ -148,10 +151,19 @@ export type ClientServiceHistory = {
   render: (onSelected?: () => void) => ReactNode
 }
 
+export type ClientServiceSourceIntake = {
+  messageId: string
+  turnId: string
+  value: SourceIntake
+  active: boolean
+  onPick: (key: SourceIntakeKey, index: number, recommended: boolean) => boolean
+  onRestart: () => void
+}
+
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions }: {
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, catalogueCopyExecution, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions, sourceIntake }: {
   state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent, request?: ClientConnectionPlanAuthRequest) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
@@ -177,6 +189,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   /** Owner-bound UI inputs, never preview records or implicit HTTP producers. */
   conversationLibrary?: ConversationLibraryPresentation
   insightPresentation?: { scope: string; data: InsightPresentationData; onFeedback?: (slug: string, value: 0 | 1 | 2) => Promise<void> }
+  catalogueCopyExecution?: CatalogueCopyExecutionPort
   sharingPresentation?: { scope: string; identity?: string; data: SharingServicePresentation }
   accountPresentation?: NativeAccountPresentation
   brokerPresentation?: BrokerServicePresentation
@@ -190,7 +203,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   onConnectionPlanContinuationConsumed?: (requestId: string) => void
   authSurface?: ReactNode
   feedbackPresentation?: { scope: string; onSubmit: (submission: ClientFeedbackSubmission) => Promise<void> }
-  researchPresentation?: { scope: string; data: Omit<NativeResearchWorkspaceProps, 'title' | 'titleEditor' | 'onBack' | 'strategyDocument' | 'analysis' | 'analysisOpen' | 'onOpenAnalysis' | 'onCloseAnalysis' | 'composer' | 'composerHasContext' | 'threadForDocument' | 'threadEntriesForDocument' | 'threadActivity'> }
+  researchPresentation?: { scope: string; openIdentity?: string; data: Omit<NativeResearchWorkspaceProps, 'title' | 'titleEditor' | 'onBack' | 'strategyDocument' | 'analysis' | 'analysisOpen' | 'onOpenAnalysis' | 'onCloseAnalysis' | 'composer' | 'composerHasContext' | 'threadForDocument' | 'threadEntriesForDocument' | 'threadActivity'> }
   executionHistory?: ClientServiceHistory
   /** Redacted lookup notice also survives loss of access to privileged rows. */
   historyFeedback?: ReactNode
@@ -207,6 +220,8 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   /** Explicit existing-flow acceptance, not permission to save alerts or order. */
   followupActions?: { scope: string; activate: (selection: FollowupSelection, signal: AbortSignal, thread?: NativeResearchThreadOrigin) => boolean | Promise<boolean> }
   continuationActions?: { scope: string; resume: (request: ContinueResponseRequest, signal: AbortSignal, thread?: NativeResearchThreadOrigin) => boolean | Promise<boolean> }
+  /** Current durable SETUP turn only. The host owns owner/session/API binding. */
+  sourceIntake?: ClientServiceSourceIntake
 }) {
   const { language, t } = useClientPreferences()
   const { c } = useConversationCopy()
@@ -384,6 +399,14 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   if (sharingView && (!sharingData || sharingView.owner !== accountScope || sharingView.datasetIdentity !== sharingDataset)) setSharingView(null)
   const researchData = accountScope && researchPresentation?.scope === accountScope
     && (!strategyDocument || researchPresentation.data?.scopeId === strategyDocument.identity) ? researchPresentation.data : undefined
+  const openedResearchIdentity = useRef<string | null>(null)
+  useEffect(() => {
+    const identity = researchData && researchPresentation?.openIdentity
+      ? JSON.stringify([accountScope, researchPresentation.openIdentity]) : null
+    if (!identity || openedResearchIdentity.current === identity) return
+    openedResearchIdentity.current = identity
+    setResearchWorkspaceOpen(true)
+  }, [accountScope, researchData, researchPresentation?.openIdentity])
   const [researchWorkflowHost, setResearchWorkflowHost] = useState<HTMLDivElement | null>(null)
   const [researchOutcomeHost, setResearchOutcomeHost] = useState<HTMLDivElement | null>(null)
   const accountData = state.sessionState === 'AUTHENTICATED' && accountPresentationBound(accountPresentation, accountScope) ? accountPresentation : undefined
@@ -1180,7 +1203,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
       <div className="native-service-route-content" hidden={connectionOpen || Boolean(settingsTab || connectionStatus)} inert={Boolean(settingsTab || connectionStatus)} style={{ display: connectionOpen || settingsTab || connectionStatus ? 'none' : 'contents' }}>
       {strategies && <ClientLoadBoundary fallback={<ClientLoadFallback inline onClose={() => setResearchHistory(false)} />}><Suspense fallback={<ClientLoadFallback inline loading onClose={() => setResearchHistory(false)} />}>
         <NativeStrategies onReturn={closeSharing} location={sharingLocation} onNavigate={navigateSharing} shouldFocus={shouldFocusStrategies} executionContent={historyContent}
-          owner={accountScope} presentation={sharingData} brokerPresentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={intent => login(intent === 'signup' ? 'signup' : 'login')} onAsk={prepareQuestion}
+          owner={accountScope} catalogueCopyExecution={state.sessionState === 'AUTHENTICATED' && catalogueCopyExecution?.scope === accountScope ? catalogueCopyExecution : undefined} presentation={sharingData} brokerPresentation={brokerData} signedIn={state.sessionState === 'AUTHENTICATED'} onLogin={intent => login(intent === 'signup' ? 'signup' : 'login')} onAsk={prepareQuestion}
           datasetIdentity={sharingDataset} viewState={sharingView} onViewStateChange={next => {
             if (sharingData && ownerRef.current === accountScope && next.owner === accountScope && next.datasetIdentity === sharingDataset) setSharingView(next)
           }}
@@ -1252,7 +1275,9 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
               {message.delivery === 'uncertain' && <p className="client-service-delivery" data-delivery="uncertain">{n('uncertainDelivery')}</p>}</Fragment>
             // NativeAnalysisLayout's documentMountKey already isolates replaced
             // documents. First binding is not a new conversation lifetime.
-          : <ServiceAssistantAnswer key={JSON.stringify([accountScope, state.sessionState, message.id])} source={state.source} blocks={assistantBlocks(message)} contentIdentity={message.observation?.id} questionActions={questionActions(message)} chartActions={chartActions(message)} followupActions={followups(message)} continuation={continuation(message)} />)}
+          : <Fragment key={JSON.stringify([accountScope, state.sessionState, message.id])}><ServiceAssistantAnswer source={state.source} blocks={assistantBlocks(message)} contentIdentity={message.observation?.id} questionActions={questionActions(message)} chartActions={chartActions(message)} followupActions={followups(message)} continuation={continuation(message)} />
+            {sourceIntake?.messageId === message.id && <ClientSourceIntake turnId={sourceIntake.turnId} value={sourceIntake.value} active={sourceIntake.active}
+              onPick={sourceIntake.onPick} onRestart={sourceIntake.onRestart} />}</Fragment>)}
           {state.busy && <PendingOperation source={state.source} />}
           {!state.busy && clarification && clarificationKey && (!lastQuestionMessage?.researchThread || !researchData) ? <ClientClarificationCard key={clarificationKey} dockKey={clarificationKey} question={{ title: clarification.prompt, options: state.quickReplies.map(value => ({ value, label: value })) }} disabled={!available}
             composer={{ value: state.input, onChange: editInput, onSubmit: () => send() }} onAnswer={value => send(value, 'quick-reply')} />

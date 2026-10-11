@@ -1,3 +1,4 @@
+import type {CatalogueCopyExecutionPort} from '../copy-execution/catalogue-port'
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { useClientPreferences } from '../client-preferences'
 import { researchCopy } from '../client-research-copy'
@@ -20,6 +21,7 @@ export type NativeStrategyViewState = {
 
 type NativeStrategiesProps = {
   onReturn: () => void; shouldFocus: () => boolean; executionContent?: ReactNode; onTabChange: () => void; notice?: ReactNode
+  catalogueCopyExecution?: CatalogueCopyExecutionPort
   brokerPresentation?: BrokerServicePresentation
   presentation?: SharingServicePresentation; owner?: string | null; signedIn?: boolean; onLogin?: (intent: 'login' | 'signup') => void
   onAsk?: (text: string) => void | Promise<void>
@@ -33,7 +35,7 @@ type NativeStrategiesProps = {
 /** Owner/dataset replacement and data removal discard local routes and drafts. */
 export function NativeStrategies(props: NativeStrategiesProps) {
   if (!props.presentation) return <NativePublicStrategyCatalogue key={props.owner ?? 'public'} onReturn={props.onReturn}
-    location={props.location} onNavigate={props.onNavigate} shouldFocus={props.shouldFocus} signedIn={props.signedIn ?? false} onLogin={intent => { if (props.onLogin) props.onLogin(intent); else props.onReturn() }} />
+    owner={props.owner ?? null} copyExecution={props.catalogueCopyExecution} location={props.location} onNavigate={props.onNavigate} shouldFocus={props.shouldFocus} signedIn={props.signedIn ?? false} onLogin={intent => { if (props.onLogin) props.onLogin(intent); else props.onReturn() }} />
   return <NativeStrategySurface key={JSON.stringify([props.owner ?? null, props.datasetIdentity ?? 'default', props.presentation !== undefined])} {...props} />
 }
 /** Same source sharing renderer, with explicit service-only inputs. */

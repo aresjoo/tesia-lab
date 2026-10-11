@@ -1,0 +1,226 @@
+{
+  "acceptedCurrentSessionKinds": [
+    "ANONYMOUS",
+    "AUTHENTICATED"
+  ],
+  "apiContractVersion": "0.16.0",
+  "apiNumberStatus": "PROPOSED_NOT_RESERVED",
+  "authenticatedGrantScope": "CONSULTATION_V13",
+  "executionAuthority": false,
+  "hostImplementation": "HOST_IMPLEMENTATION_NOT_RUN",
+  "idempotencyPolicies": {
+    "createConsultationDocumentQuestionV16": [
+      "currentLogicalOwner",
+      "POST",
+      "createConsultationDocumentQuestionV16",
+      "conversationId",
+      "canonicalDocumentQuestionRequest"
+    ],
+    "mintDocumentReferenceV16": [
+      "currentLogicalOwner",
+      "POST",
+      "mintDocumentReferenceV16",
+      "canonicalReferenceMintRequest"
+    ]
+  },
+  "managedRequestHeaders": [
+    "Origin"
+  ],
+  "maxQuestionUtf16Units": 16000,
+  "maxRequestBytes": 65536,
+  "maxRequestTargetBytes": 2048,
+  "maxResponseBytes": 262144,
+  "mutationHeaders": [
+    "X-CSRF-Token",
+    "Idempotency-Key"
+  ],
+  "operations": [
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "NOT_FOUND",
+        "DOCUMENT_REVISION_CONFLICT",
+        "DOCUMENT_TOO_LARGE",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "getConsultationDocumentLocatorV16",
+      "path": "/api/v16/consultation/documents/{kind}/{documentId}/locator",
+      "pathKeys": [
+        "kind",
+        "documentId"
+      ],
+      "queryKeys": [],
+      "request": null,
+      "response": "ProducerLocatorEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_AND_LOGICAL_OWNER",
+        "SOURCE_GRANT_WHEN_REQUIRED_BY_SOURCE_LINEAGE",
+        "REGISTERED_TYPED_PRODUCER_REQUERY",
+        "PLAN_REVISION_FROM_ACTUAL_DRAFT_REVISION",
+        "PLAN_CONTENT_SHA256_FROM_CANONICAL_DRAFT_STATE_UTF8",
+        "REPORT_REVISION_FROM_UNIQUE_COMPLETED_EVENT_SEQUENCE",
+        "REPORT_CONTENT_SHA256_FROM_JOURNAL_VERIFIED_RESULT_BYTES",
+        "READ_ONLY_MINT_TURN_PROVIDER_AND_BILLING_EFFECT_ZERO"
+      ],
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "CSRF_INVALID",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "IDEMPOTENCY_KEY_REUSED",
+        "DOCUMENT_REVISION_CONFLICT",
+        "DOCUMENT_TOO_LARGE",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "POST",
+      "mutation": true,
+      "operationId": "mintDocumentReferenceV16",
+      "path": "/api/v16/consultation/document-references",
+      "pathKeys": [],
+      "queryKeys": [],
+      "request": "ReferenceMintRequest",
+      "response": "ReferenceEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_AND_LOGICAL_OWNER",
+        "SOURCE_GRANT_WHEN_REQUIRED_BY_SOURCE_LINEAGE",
+        "REGISTERED_TYPED_PRODUCER_REQUERY",
+        "EXACT_KIND_DOCUMENT_ID_REVISION_AND_CONTENT_SHA256",
+        "IMMUTABLE_OPAQUE_DOCUMENT_REFERENCE"
+      ],
+      "successStatus": 201
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "CSRF_INVALID",
+        "ORIGIN_INVALID",
+        "NOT_FOUND",
+        "CLIENT_MESSAGE_ID_REUSED",
+        "TURN_IN_PROGRESS",
+        "IDEMPOTENCY_KEY_REUSED",
+        "DOCUMENT_REFERENCE_INVALID",
+        "DOCUMENT_TOO_LARGE",
+        "BUDGET_EXCEEDED",
+        "RATE_LIMITED",
+        "PROVIDER_UNAVAILABLE",
+        "INTERNAL_ERROR"
+      ],
+      "method": "POST",
+      "mutation": true,
+      "operationId": "createConsultationDocumentQuestionV16",
+      "path": "/api/v16/consultation/conversations/{conversationId}/document-questions",
+      "pathKeys": [
+        "conversationId"
+      ],
+      "queryKeys": [],
+      "request": "DocumentQuestionRequest",
+      "response": "DocumentQuestionEnvelope",
+      "successRequires": [
+        "EXISTING_CONVERSATION_ID_FROM_PATH_NO_API13_NULL_CREATE_SEMANTICS",
+        "CURRENT_SERVER_SESSION_AND_CONVERSATION_OWNER",
+        "SOURCE_GRANT_WHEN_REQUIRED_BY_SOURCE_LINEAGE",
+        "UNCHANGED_IMMUTABLE_DOCUMENT_REFERENCE",
+        "QUESTION_AND_DOCUMENT_TOKEN_COST_ADMISSION",
+        "TYPED_DOCUMENT_SNAPSHOT_SEPARATE_FROM_USER_TEXT"
+      ],
+      "successStatus": 202
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "NOT_FOUND",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "getConsultationDocumentQuestionTurnV16",
+      "path": "/api/v16/consultation/turns/{turnId}",
+      "pathKeys": [
+        "turnId"
+      ],
+      "queryKeys": [],
+      "request": null,
+      "response": "DocumentQuestionTurnEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_AND_TURN_READ_AUTHORITY",
+        "EXISTING_API13_TURN_ID_JOIN",
+        "ORIGINAL_IMMUTABLE_DOCUMENT_REFERENCE_ECHO",
+        "ORIGINAL_PUBLIC_SNAPSHOT_METADATA_ECHO_NO_REMINT",
+        "READ_ONLY_NO_PROVIDER_OR_BILLING_EFFECT"
+      ],
+      "successStatus": 200
+    },
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "NOT_FOUND",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "listConsultationDocumentQuestionHistoryV16",
+      "path": "/api/v16/consultation/conversations/{conversationId}/history",
+      "pathKeys": [
+        "conversationId"
+      ],
+      "queryKeys": [
+        "cursor",
+        "limit"
+      ],
+      "request": null,
+      "response": "DocumentQuestionHistoryEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_AND_CONVERSATION_READ_AUTHORITY",
+        "EXISTING_API13_TURN_ID_JOIN",
+        "ORIGINAL_IMMUTABLE_DOCUMENT_REFERENCE_ECHO",
+        "ORIGINAL_PUBLIC_SNAPSHOT_METADATA_ECHO_NO_REMINT",
+        "READ_ONLY_NO_PROVIDER_OR_BILLING_EFFECT"
+      ],
+      "successStatus": 200
+    }
+  ],
+  "orderAuthority": false,
+  "originPolicy": {
+    "ingress": "TRUST_CONFIGURED_SERVICE_ORIGIN_ONLY_NO_CLIENT_FORWARDED_ORIGIN_AUTHORITY",
+    "invalid": "DUPLICATE_MALFORMED_NULL_OR_FOREIGN_REJECTED",
+    "mutation": "REQUIRED_EXACT_SAME_ORIGIN"
+  },
+  "producerImplemented": false,
+  "providerImplementation": "PROVIDER_IMPLEMENTATION_NOT_RUN",
+  "releaseStatus": "INTERNAL_CANDIDATE_NOT_PUBLISHED",
+  "runtimeAvailableKinds": {
+    "backtest": "PRODUCER_NOT_IMPLEMENTED",
+    "connect": "PRODUCER_NOT_IMPLEMENTED",
+    "critic": "PRODUCER_NOT_IMPLEMENTED",
+    "holdout": "PRODUCER_NOT_IMPLEMENTED",
+    "hypothesis": "PRODUCER_NOT_IMPLEMENTED",
+    "live": "PRODUCER_NOT_IMPLEMENTED",
+    "plan": "DRAFT_PRODUCER_REQUERY_REQUIRED",
+    "report": "COMPLETED_API20_PRODUCER_REQUERY_REQUIRED",
+    "run": "PRODUCER_NOT_IMPLEMENTED",
+    "strategy": "PRODUCER_NOT_IMPLEMENTED",
+    "stress": "PRODUCER_NOT_IMPLEMENTED"
+  },
+  "sessionCookie": "__Host-tesia_session",
+  "sourceGrantPolicy": "REQUIRED_FOR_CONTINUATION_OR_FOREIGN_PHYSICAL_SOURCE_LINEAGE_NOT_FRESH_AUTH_DIRECT_OWNER",
+  "strategyAuthority": false
+}

@@ -1,0 +1,5397 @@
+{
+  "apiContractVersion": "0.18.0",
+  "cases": [
+    {
+      "name": "create",
+      "schemaName": "CreateCopyRequest",
+      "valid": true,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "update",
+      "schemaName": "UpdateCopyRequest",
+      "valid": true,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5"
+      }
+    },
+    {
+      "name": "start",
+      "schemaName": "StartCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0
+      }
+    },
+    {
+      "name": "close",
+      "schemaName": "CloseCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0
+      }
+    },
+    {
+      "name": "pause",
+      "schemaName": "PauseCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0
+      }
+    },
+    {
+      "name": "stop",
+      "schemaName": "StopCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0
+      }
+    },
+    {
+      "name": "copy-unconnected",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "version",
+      "schemaName": "VersionResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "copy-list",
+      "schemaName": "CopyListResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "version-list",
+      "schemaName": "VersionListResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "environment": "demo",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "name": "코인 추세 따라가기",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "status": "approved",
+            "strategyId": "strategy_fixture_00001",
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "PauseCopyRequest-no-revision",
+      "schemaName": "PauseCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0"
+      }
+    },
+    {
+      "name": "StopCopyRequest-no-revision",
+      "schemaName": "StopCopyRequest",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0"
+      }
+    },
+    {
+      "name": "StartCopyRequest-missing-revision",
+      "schemaName": "StartCopyRequest",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0"
+      }
+    },
+    {
+      "name": "CloseCopyRequest-missing-revision",
+      "schemaName": "CloseCopyRequest",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0"
+      }
+    },
+    {
+      "name": "UpdateCopyRequest-missing-revision",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0"
+      }
+    },
+    {
+      "name": "caller-ownerId",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "ownerId": "untrusted_fixture",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-accountId",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "accountId": "untrusted_fixture",
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-modelIdentity",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "modelIdentity": "untrusted_fixture",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-issuer",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "issuer": "untrusted_fixture",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-reviewer",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "reviewer": "untrusted_fixture",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-approved",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "approved": "untrusted_fixture",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-approval",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "approval": "untrusted_fixture",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "caller-policyHash",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "policyHash": "untrusted_fixture",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "update-forbidden-connectionId",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "untrusted_fixture",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5"
+      }
+    },
+    {
+      "name": "update-forbidden-environment",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "environment": "untrusted_fixture",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5"
+      }
+    },
+    {
+      "name": "update-forbidden-versionId",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "versionId": "untrusted_fixture"
+      }
+    },
+    {
+      "name": "update-forbidden-startMode",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "untrusted_fixture"
+      }
+    },
+    {
+      "name": "update-forbidden-modelIdentity",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "modelIdentity": "untrusted_fixture"
+      }
+    },
+    {
+      "name": "update-forbidden-approved",
+      "schemaName": "UpdateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "approved": "untrusted_fixture",
+        "expectedRevision": 0,
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5"
+      }
+    },
+    {
+      "name": "decimal-'NaN'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "NaN",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'Infinity'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "Infinity",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'1e3'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1e3",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'01'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "01",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'+1'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "+1",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'1.'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1.",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-' 1'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": " 1",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'1\\n'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1\n",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'0'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "0",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'-0'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "-0",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'-1'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "-1",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'99999999999999999999999999999999999'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "99999999999999999999999999999999999",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-'1.0000000000000000000000000000000000'",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1.0000000000000000000000000000000000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-1",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": 1,
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "decimal-True",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": true,
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "precision-limit-maxPositionFraction",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "1.00000000000000000000000000000001",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "precision-limit-maxLossUsdt",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "1000",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "1000.00000000000000000000000000001",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "current-position-pending",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "current_position",
+          "state": "PENDING_CURRENT_POSITION",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "current-position-false-active",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "current_position",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "policy-binding-promptSha256",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "policy-binding-decisionIntervalSeconds",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 31,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "policy-binding-spec",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "changed",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "policy-binding-symbols",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "ETHUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "policy-binding-model",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "other-fixture",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "review-after-issue-microsecond",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000003Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "duplicate-symbol",
+      "schemaName": "VersionResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "approval": {
+            "issuedAt": "2026-10-11T00:00:00.000002Z",
+            "issuerId": "issuer_fixture_00001",
+            "reviewEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewedAt": "2026-10-11T00:00:00.000001Z",
+            "reviewerId": "reviewer_fixture_00001"
+          },
+          "name": "코인 추세 따라가기",
+          "policy": {
+            "decisionIntervalSeconds": 30,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "market": "USDT-FUTURES",
+            "modelIdentity": {
+              "model": "gemini-fixture-model",
+              "provider": "google",
+              "revision": null
+            },
+            "promptSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "riskLimits": {
+              "maxEntryAgeSeconds": 30,
+              "maxLeverage": 1,
+              "maxPositionFraction": "0.5",
+              "maxPriceDeviationFraction": "0.005"
+            },
+            "rules": [
+              "확정 봉으로 진입 방향을 결정한다.",
+              "승인된 손실 한도 안에서만 진입한다."
+            ],
+            "spec": "합성 계약의 추세 판단",
+            "symbols": [
+              "BTCUSDT",
+              "BTCUSDT"
+            ]
+          },
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "status": "approved",
+          "strategyId": "strategy_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "known-partial-fees",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "UNKNOWN-retains-partial",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "UNKNOWN",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "CANCELLED-retains-partial",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "CANCELLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-fill-ACK0.2",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "ACK",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-fill-FILLED0.2",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-fill-PARTIALLY_FILLED0.5",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.5",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-fill-PARTIALLY_FILLED0",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-fill-UNKNOWN0.6",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.6",
+                  "quantity": "0.5",
+                  "state": "UNKNOWN",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unknown-accounting-totalPnlUsdt",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": "0"
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unknown-accounting-realizedPnlUsdt",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": "0",
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unknown-accounting-fundingUsdt",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": "0",
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unknown-accounting-accountingComplete",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": true,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "fake-verified-synthetic",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": true,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "fake-verified-unconnected",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": true,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unconnected-update-claimed",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": true,
+                "reason": null
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-date-2026-02-30T00:00:00Z",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-02-30T00:00:00Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-date-2026-10-11T24:00:00Z",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T24:00:00Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "bad-date-2026-10-11T00:00:00+00:00",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:00+00:00",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "safe-error",
+      "schemaName": "ErrorEnvelope",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "error": {
+          "code": "REVISION_CONFLICT",
+          "message": "REVISION_CONFLICT"
+        }
+      }
+    },
+    {
+      "name": "unsafe-error-message",
+      "schemaName": "ErrorEnvelope",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "provider payload"
+        }
+      }
+    },
+    {
+      "name": "calendar-fraction-1Z",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:00.1Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "calendar-fraction-12Z",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:00.12Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "calendar-fraction-1234Z",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:00.1234Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "calendar-fraction-12345Z",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:00.12345Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "observation-lost-emergency-controls",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": true,
+                "reason": null
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": true,
+                "reason": null
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "unknown-cannot-confirm-accounting",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": true,
+              "fees": [],
+              "feesConfirmed": true,
+              "fundingConfirmed": true,
+              "fundingUsdt": "0",
+              "realizedPnlUsdt": "0",
+              "totalPnlUsdt": "0"
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "UNKNOWN",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "confirmed-funding-cannot-be-null",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": true,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "page-default",
+      "schemaName": "PageQuery",
+      "valid": true,
+      "value": {}
+    },
+    {
+      "name": "page-max",
+      "schemaName": "PageQuery",
+      "valid": true,
+      "value": {
+        "cursor": "cursor_fixture_000001",
+        "limit": 100
+      }
+    },
+    {
+      "name": "page-bool",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "limit": true
+      }
+    },
+    {
+      "name": "page-float",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "limit": 1.2
+      }
+    },
+    {
+      "name": "page-zero",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "limit": 0
+      }
+    },
+    {
+      "name": "page-too-many",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "limit": 101
+      }
+    },
+    {
+      "name": "page-caller-owner",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "ownerId": "owner_fixture"
+      }
+    },
+    {
+      "name": "page-unsafe-cursor",
+      "schemaName": "PageQuery",
+      "valid": false,
+      "value": {
+        "cursor": "cursor_fixture_000001&owner=bad"
+      }
+    },
+    {
+      "name": "significant-digits-34",
+      "schemaName": "CreateCopyRequest",
+      "valid": true,
+      "value": {
+        "allocationUsdt": "123456789012345678.1234567890123456",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "significant-digits-35",
+      "schemaName": "CreateCopyRequest",
+      "valid": false,
+      "value": {
+        "allocationUsdt": "123456789012345678.12345678901234567",
+        "apiContractVersion": "0.18.0",
+        "connectionId": "connection_fixture_00001",
+        "environment": "demo",
+        "maxLossUsdt": "25",
+        "maxPositionFraction": "0.5",
+        "startMode": "next_signal",
+        "versionId": "version_fixture_000001"
+      }
+    },
+    {
+      "name": "close-target-durable-before-order",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "PENDING",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "PAUSED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "close-target-cannot-remain-active",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "PENDING",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "ACTIVE",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "close-complete-needs-signed-facts",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "COMPLETE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "unconnected",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "STOPPED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "verified-needs-current-section-consistency",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": true,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "exchange",
+            "positions": {
+              "items": [],
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "verificationEvidenceSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "close-complete-signed-flat-shape",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "COMPLETE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": true,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "exchange",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "STOPPED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "close-complete-blocks-live-partial",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "COMPLETE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": false,
+              "fees": [],
+              "feesConfirmed": false,
+              "fundingConfirmed": false,
+              "fundingUsdt": null,
+              "realizedPnlUsdt": null,
+              "totalPnlUsdt": null
+            },
+            "actualExecutionVerified": true,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [
+                {
+                  "action": "OPEN_LONG",
+                  "averagePrice": "100",
+                  "clientOid": "teth_fixture_order_00001",
+                  "eventId": "decision_fixture_00001",
+                  "fees": [
+                    {
+                      "amount": "0.001",
+                      "currency": "USDT"
+                    }
+                  ],
+                  "feesConfirmed": false,
+                  "filledQuantity": "0.2",
+                  "quantity": "0.5",
+                  "state": "PARTIALLY_FILLED",
+                  "symbol": "BTCUSDT"
+                }
+              ],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "exchange",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "STOPPED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "complete-zero-is-confirmed-not-missing",
+      "schemaName": "CopyResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": true,
+              "fees": [],
+              "feesConfirmed": true,
+              "fundingConfirmed": true,
+              "fundingUsdt": "0",
+              "realizedPnlUsdt": "0",
+              "totalPnlUsdt": "0"
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": null,
+              "status": "ok"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "complete-cannot-hide-unavailable-orders",
+      "schemaName": "CopyResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": {
+          "allocationUsdt": "1000",
+          "closeStatus": "NONE",
+          "connectionId": "connection_fixture_00001",
+          "currentPositionAvailable": false,
+          "environment": "demo",
+          "exchangeId": "bitget",
+          "execution": {
+            "accounting": {
+              "accountingComplete": true,
+              "fees": [],
+              "feesConfirmed": true,
+              "fundingConfirmed": true,
+              "fundingUsdt": "0",
+              "realizedPnlUsdt": "0",
+              "totalPnlUsdt": "0"
+            },
+            "actualExecutionVerified": false,
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "lastDecision": null,
+            "observedAt": "2026-10-11T00:01:00Z",
+            "orders": {
+              "hasMore": false,
+              "items": [],
+              "nextCursor": null,
+              "reason": "ACCOUNT_FACTS_UNAVAILABLE",
+              "status": "unavailable"
+            },
+            "origin": "synthetic",
+            "positions": {
+              "items": [],
+              "reason": null,
+              "status": "ok"
+            },
+            "verificationEvidenceSha256": null
+          },
+          "joinedAt": "2026-10-11T00:00:30Z",
+          "maxLossUsdt": "25",
+          "maxPositionFraction": "0.5",
+          "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+          "revision": 0,
+          "startMode": "next_signal",
+          "state": "CREATED",
+          "subscriptionId": "subscription_fixture_00001",
+          "versionId": "version_fixture_000001"
+        }
+      }
+    },
+    {
+      "name": "summary-realized-incomplete",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": "5",
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-total-incomplete",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": "5",
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-complete-unverified",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "COMPLETE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "STOPPED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-verified-no-proof",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": true,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-synthetic-verified",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": true,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "synthetic",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-false-with-proof",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "exchange",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-complete-accounting",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": true,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": "0",
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": "0",
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-complete-exchange-no-proof",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "COMPLETE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "exchange",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "STOPPED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-complete-accounting-missing-total",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": true,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "exchange",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": "5",
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-start",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": true,
+                "reason": null
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-update",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": true,
+                "reason": null
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-close",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": true,
+                "reason": null
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-query",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": true,
+                "reason": null
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-unconnected-cancel",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": false,
+            "actualExecutionVerified": false,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": true,
+                "reason": null
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "NONE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "unconnected",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": null,
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "CREATED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": null,
+            "verificationEvidenceSha256": null,
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "summary-signed-complete-zero",
+      "schemaName": "CopyListResponse",
+      "valid": true,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [
+          {
+            "accountingComplete": true,
+            "actualExecutionVerified": true,
+            "allocationUsdt": "1000",
+            "availability": {
+              "cancel": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "close": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "pause": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "query": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "start": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "stop": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              },
+              "update": {
+                "available": false,
+                "reason": "RUNTIME_UNAVAILABLE"
+              }
+            },
+            "closeStatus": "COMPLETE",
+            "connectionId": "connection_fixture_00001",
+            "currentPositionAvailable": false,
+            "environment": "demo",
+            "exchangeId": "bitget",
+            "joinedAt": "2026-10-11T00:00:30Z",
+            "maxLossUsdt": "25",
+            "maxPositionFraction": "0.5",
+            "observedAt": "2026-10-11T00:01:00Z",
+            "origin": "exchange",
+            "policyHash": "347b7c607166df53f99e4a243a716b2d85ca22d6ed4acedb7dbefe6b53ed6666",
+            "realizedPnlUsdt": "0",
+            "revision": 0,
+            "startMode": "next_signal",
+            "state": "STOPPED",
+            "subscriptionId": "subscription_fixture_00001",
+            "totalPnlUsdt": "0",
+            "verificationEvidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "versionId": "version_fixture_000001"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "name": "empty-copy-page-has-cursor",
+      "schemaName": "CopyListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [],
+        "nextCursor": "cursor_fixture_next_0001"
+      }
+    },
+    {
+      "name": "empty-version-page-has-cursor",
+      "schemaName": "VersionListResponse",
+      "valid": false,
+      "value": {
+        "apiContractVersion": "0.18.0",
+        "data": [],
+        "nextCursor": "cursor_fixture_next_0001"
+      }
+    }
+  ],
+  "fixtureProvenance": "SYNTHETIC_CONTRACT_SHAPES_NO_APPROVAL_OR_REAL_EXECUTION_EVIDENCE"
+}

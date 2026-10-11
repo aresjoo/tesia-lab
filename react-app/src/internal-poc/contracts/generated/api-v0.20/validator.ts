@@ -1,0 +1,25 @@
+import type {DeepReadonly} from './types.js';
+const maxResponse=262144,maxDepth=16;
+const active=new Set(['QUEUED','DISPATCHING','STREAMING','FAILED','CANCELLED','AMBIGUOUS']);
+const errors=new Set(['BAD_REQUEST','AUTHENTICATION_REQUIRED','FORBIDDEN','NOT_FOUND','RATE_LIMITED','INTERNAL_ERROR']);
+const bad=():never=>{throw Error('BAD_REQUEST')};
+function unicode(value:string):void{for(let i=0;i<value.length;i++){const n=value.charCodeAt(i);if(n>=0xd800&&n<=0xdbff){const next=value.charCodeAt(++i);if(!(next>=0xdc00&&next<=0xdfff))bad()}else if(n>=0xdc00&&n<=0xdfff)bad()}}
+export function strictParseApiV20(payload:string):unknown{
+ if(typeof payload!=='string'||new TextEncoder().encode(payload).length>maxResponse)bad();unicode(payload);let at=0;
+ const ws=()=>{while(/[\t\n\r ]/.test(payload[at]??'')&&at<payload.length)at++};
+ const string=():string=>{const start=at++;let escaped=false;while(at<payload.length){const c=payload[at++]!;if(escaped){escaped=false;continue}if(c==='\\'){escaped=true;continue}if(c==='"'){const result:unknown=JSON.parse(payload.slice(start,at));if(typeof result!=='string')return bad();unicode(result);return result}}return bad()};
+ const value=(depth:number):any=>{if(depth>maxDepth)bad();ws();const c=payload[at];
+  if(c==='"')return string();
+  if(c==='{'){at++;ws();const out:Record<string,unknown>=Object.create(null),keys=new Set<string>();if(payload[at]==='}'){at++;return out}while(true){ws();if(payload[at]!=='"')bad();const key=string();if(keys.has(key))bad();keys.add(key);ws();if(payload[at++]!==':')bad();out[key]=value(depth+1);ws();const next=payload[at++];if(next==='}')return out;if(next!==',')bad()}}
+  if(c==='['){at++;ws();const out:unknown[]=[];if(payload[at]===']'){at++;return out}while(true){out.push(value(depth+1));ws();const next=payload[at++];if(next===']')return out;if(next!==',')bad()}}
+  for(const [literal,result] of [['true',true],['false',false],['null',null]] as const){if(payload.startsWith(literal,at)){at+=literal.length;return result}}
+  const match=/^-?(?:0|[1-9][0-9]*)/.exec(payload.slice(at));if(match){at+=match[0].length;if(/[.eE]/.test(payload[at]??''))bad();const result=Number(match[0]);if(!Number.isSafeInteger(result))bad();return result}return bad()};
+ try{const result=value(0);ws();if(at!==payload.length)bad();return result}catch{return bad()}
+}
+function clone(value:unknown,depth=0):unknown{if(depth>maxDepth)bad();if(value===null||typeof value==='boolean')return value;if(typeof value==='string'){unicode(value);return value}if(typeof value==='number'){if(!Number.isSafeInteger(value))bad();return value}if(typeof value!=='object')return bad();const isArray=Array.isArray(value),prototype=Object.getPrototypeOf(value);if(!isArray&&prototype!==Object.prototype&&prototype!==null)bad();const descriptors=Object.getOwnPropertyDescriptors(value),out:any=isArray?[]:Object.create(null);for(const key of Reflect.ownKeys(descriptors)){if(typeof key!=='string')return bad();if(isArray&&key==='length')continue;const descriptor=descriptors[key]!;if(!descriptor.enumerable||!Object.hasOwn(descriptor,'value'))bad();if(isArray&&!/^(?:0|[1-9][0-9]*)$/.test(key))bad();unicode(key);out[key]=clone(descriptor.value,depth+1)}if(isArray&&out.length!==(value as unknown[]).length)bad();return out}
+export function snapshotApiV20(input:unknown):unknown{try{return strictParseApiV20(JSON.stringify(clone(input)))}catch{return bad()}}
+function record(value:any,keys:readonly string[]):boolean{return value!==null&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key))}
+function id(value:any):boolean{return typeof value==='string'&&/^[A-Za-z0-9_-]{16,128}$/.test(value)}
+function projection(value:any):boolean{if(value===null||typeof value!=='object'||!id(value.researchWorkId)||typeof value.state!=='string')return false;if(value.state==='COMPLETED')return record(value,['researchWorkId','state','reportText'])&&typeof value.reportText==='string'&&value.reportText.length>=1&&value.reportText.length<=64000;return record(value,['researchWorkId','state'])&&active.has(value.state)}
+export function validateApiV20(input:unknown,schemaName:'ProjectionEnvelope'|'ErrorEnvelope'):boolean{try{const value:any=snapshotApiV20(input);if(schemaName==='ProjectionEnvelope')return record(value,['apiContractVersion','data'])&&value.apiContractVersion==='0.20.0'&&projection(value.data);if(schemaName==='ErrorEnvelope'){if(!record(value,['apiContractVersion','error'])||value.apiContractVersion!=='0.20.0'||!record(value.error,['code','message'])||!errors.has(value.error.code)||typeof value.error.message!=='string')return false;const count=[...value.error.message].length;return count>=1&&count<=256&&!/[\u0000-\u001f\u007f-\u009f]/.test(value.error.message)}return false}catch{return false}}
+export function freezeApiV20<T>(value:T):DeepReadonly<T>{if(value!==null&&typeof value==='object'){for(const child of Object.values(value))freezeApiV20(child);Object.freeze(value)}return value as DeepReadonly<T>}

@@ -1,4 +1,4 @@
-export type InvestmentDisplayName = 'CHART' | 'ASK' | 'NEXT' | 'TITLE'
+export type InvestmentDisplayName = 'CHART' | 'ASK' | 'NEXT' | 'TITLE' | 'SETUP'
 
 export type InvestmentDisplayRead =
   | { start: number; invalid: true }

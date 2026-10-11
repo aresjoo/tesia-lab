@@ -1,5 +1,15 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 최신 전달 — 문서 질문 App 위 카피 실행 선별 통합
+
+clean Web `30587e07f01e64e6ebcf5c61b9fc65b6b64aad04`의 전체 추적 **2,491파일·35,825,089bytes**를 기존 공식 sync/verify로 전달했다. snapshot `a34da6289d06fc18ed3b523eaf4ac6cb3d1de1a26e7d14c70ae020178d509bee`, sourceDirty0·제거0이며 직전 2,439파일 중 2,422파일은 byte 동일하고 신규52·수정17의 정확69경로만 갱신됐다. sync 전 공식 verify가 이전 snapshot의 클라이언트 수정·누락·추가 경로0을 확인했다. 원본 ares root/main `9fbff821df62cad11d026022fc7628c7fcebc431`·Node·Worker와 비공개 9월 데이터는 변경하지 않았다.
+
+문서 질문 App의 기존 API13/16/19/20 흐름 위에 카피 실행 optional port를 선별 결속했다. runtime input/flag 기본은 absent/false이고 합성 계좌·주문·issuer/projection을 만들지 않는다. Contracts `a381` API18 입력은 source-only 후보이며 정식 발행·패키지 권위가 아니다. 실제 personal(1) Opus5.5 session `757369d7-13ab-4b24-b66d-aa2ed9031f88`은 공유7·독립31 blob을 읽고 `SCOPED_INTEGRATION_SOURCE_GO`/필수 수정0을 판정했다. 직접 영향 54PASS/32.5초는 copy execution과 원본 setup 범위이며 일반 상담 회귀가 포함되지 않는다. pending-claim Medium2와 실제 issuer/projection·공식 API18 publication은 미해결이다. 이번 migration 전달에서 추가 시험·build는 실행하지 않고 Web 원증거를 그대로 인수했다.
+
+**개발·운영 미반영:** Backend 최신 선별 통합은 독립 검수 중이다. PROD DEV gate는 실행0이고 운영 Anthropic private config는 부재한다. 고객/provider/credential/주문/배포를 실행하지 않았으며 운영 GO·서비스 GO가 아니다. 원본 카피·모션·ares 흐름을 이번 전달에서 추가 변경하지 않았고, source-only Contracts·Web 검수와 Backend 검수 pending을 합산해 서비스 완료로 해석하지 않는다.
+
+아래 PR6 상담 display protocol 소비는 직전 snapshot의 전달 이력이다.
+
 ## 최신 전달 — PR6 상담 display protocol 소비
 
 clean Web `2e354bab65809a844cff10895fa0081c78481750`의 전체 추적 2,439파일·35,136,848bytes를 기존 공식 sync/verify로 전달했다. snapshot `7491a0e56e63f9438e39366d6db0eddb7332cdd692e5fa6996020df5453afbbd`, sourceDirty0·제거0이며 직전 `c97f2e4` 대비 제품 변경은 정확9파일이다. 원본 ares root/main·Node·Worker와 기존 Bitget/API12/API17 동작, 공개 API13 wire는 바꾸지 않았다.

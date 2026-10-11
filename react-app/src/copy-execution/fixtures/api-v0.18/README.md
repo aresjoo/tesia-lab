@@ -1,0 +1,3 @@
+# API18 Bitget AI copy execution
+
+Private compiled ESM candidate; dist is tracked and source-free pack is tested. Wire0.18.0/package0.28.0-rc.1; not published or aggregate authority. Use TesiaBitgetCopyV18Client with an injected BitgetCopyTransport. Authentication/Origin/CSRF/issuer approval/risk/execution are server-owned. No global transport, credential storage, activation or automatic retry. Aborted mutation may still have reached the server; resolve by owner-bound projection and the original idempotency key. Frozen DTOs preserve unknown/partial fees and null accounting. Schema validation cannot verify approval or actual execution evidence. Current-position producer unavailable means pending, never auto-copy historical orders. See owning docs/api-v0.18.md.

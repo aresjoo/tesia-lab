@@ -9,13 +9,16 @@ export type NativeInvestmentDisplayProjection = Readonly<{
   text: string
   blocks: readonly ClientResponseBlock[]
   titleSuggestion: Readonly<{ messageId: string; value: string }> | null
+  setup: NativeInvestmentSetup | null
   valid: boolean
 }>
 
-type Display = Readonly<{ name: 'CHART' | 'ASK' | 'NEXT' | 'TITLE'; value: unknown }>
+export type NativeInvestmentSetup = Readonly<{ entryMode: null; pair: 'BTC/USDT' | 'ETH/USDT' }>
+
+type Display = Readonly<{ name: 'CHART' | 'ASK' | 'NEXT' | 'TITLE' | 'SETUP'; value: unknown }>
 type AskValue = { steps: [{ title: string; multi: false; options: { t: string; d: string }[] }] }
 
-const DISPLAY_NAMES = ['CHART', 'ASK', 'NEXT', 'TITLE'] as const
+const DISPLAY_NAMES = ['CHART', 'ASK', 'NEXT', 'TITLE', 'SETUP'] as const
 const ASK_SKIP_TEXT = '지금은 이 질문을 건너뛰겠습니다. 확인된 정보로 설명 가능한 부분만 이어서 알려주세요. 미확인 조건을 임의로 정하거나 실행하지 마세요.'
 
 function partialDisplaySuffix(text: string) {
@@ -23,7 +26,7 @@ function partialDisplaySuffix(text: string) {
   if (start < 0) return -1
   const suffix = text.slice(start).toUpperCase()
   return DISPLAY_NAMES.some(name => (`[${name}`).startsWith(suffix))
-    || /^\[(?:CHART|ASK|NEXT|TITLE)\s*$/i.test(suffix) ? start : -1
+    || /^\[(?:CHART|ASK|NEXT|TITLE|SETUP)\s*$/i.test(suffix) ? start : -1
 }
 
 function scan(text: string, allowTitle: boolean) {
@@ -53,7 +56,8 @@ function scan(text: string, allowTitle: boolean) {
     at += display.end
   }
   const names = displays.map(display => display.name)
-  if (new Set(names).size !== names.length || names.includes('ASK') && names.includes('NEXT')) valid = false
+  if (new Set(names).size !== names.length || names.includes('ASK') && names.includes('NEXT')
+    || names.includes('SETUP') && names.length !== 1) valid = false
   return { text: body.trim(), displays, complete, valid }
 }
 
@@ -73,12 +77,14 @@ export function projectNativeInvestmentDisplay({ text, state, scopeId, messageId
   const blocks = textBlock(messageId, parsed.text, state)
   if (state !== 'COMPLETED' || !parsed.complete || !parsed.valid) {
     return { text: parsed.text, blocks: state === 'COMPLETED'
-      ? textBlock(messageId, parsed.text, 'FAILED') : blocks, titleSuggestion: null, valid: state !== 'COMPLETED' || parsed.complete && parsed.valid }
+      ? textBlock(messageId, parsed.text, 'FAILED') : blocks, titleSuggestion: null, setup: null,
+      valid: state !== 'COMPLETED' || parsed.complete && parsed.valid }
   }
 
   const ask = parsed.displays.find(display => display.name === 'ASK')
   const next = parsed.displays.find(display => display.name === 'NEXT')
   const title = parsed.displays.find(display => display.name === 'TITLE')
+  const setup = parsed.displays.find(display => display.name === 'SETUP')
   if (ask) {
     const value = ask.value as AskValue
     const observationId = `${messageId}:display:ASK:0`
@@ -120,6 +126,7 @@ export function projectNativeInvestmentDisplay({ text, state, scopeId, messageId
     text: parsed.text,
     blocks,
     titleSuggestion: title ? { messageId, value: title.value as string } : null,
+    setup: setup ? setup.value as NativeInvestmentSetup : null,
     valid: true,
   }
 }

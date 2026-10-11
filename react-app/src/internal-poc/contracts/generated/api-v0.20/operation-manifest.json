@@ -1,0 +1,49 @@
+{
+  "acceptedCurrentSessionKinds": [
+    "ANONYMOUS",
+    "AUTHENTICATED"
+  ],
+  "apiContractVersion": "0.20.0",
+  "billingEffect": false,
+  "executionEffect": false,
+  "hostImplementation": "HOST_IMPLEMENTATION_NOT_RUN",
+  "installedApi20": "INSTALLED_API20_NOT_RUN",
+  "maxRequestTargetBytes": 2048,
+  "maxResponseBytes": 262144,
+  "mutationHeaders": [],
+  "operations": [
+    {
+      "errorCodes": [
+        "BAD_REQUEST",
+        "AUTHENTICATION_REQUIRED",
+        "FORBIDDEN",
+        "NOT_FOUND",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "method": "GET",
+      "mutation": false,
+      "operationId": "getConsultationResearchWorkV20",
+      "path": "/api/v20/consultation/research-works/{researchWorkId}",
+      "pathKeys": [
+        "researchWorkId"
+      ],
+      "queryKeys": [],
+      "request": null,
+      "response": "ProjectionEnvelope",
+      "successRequires": [
+        "CURRENT_SERVER_SESSION_READ_AUTHORITY",
+        "SERVER_OWNED_RESEARCH_WORK_BINDING",
+        "JOURNAL_STATE_PROJECTION",
+        "COMPLETED_RESULT_DIGEST_AND_UTF8_AND_OUTPUT_GATE_PROVENANCE"
+      ],
+      "successStatus": 200
+    }
+  ],
+  "producerImplemented": false,
+  "readOnly": true,
+  "releaseStatus": "INTERNAL_CANDIDATE_NOT_PUBLISHED",
+  "resumeEffect": false,
+  "retryEffect": false,
+  "sessionCookie": "__Host-tesia_session"
+}

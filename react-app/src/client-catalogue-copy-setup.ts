@@ -6,6 +6,8 @@ export type CatalogueCopySetup = {
   owner: string; sourceSha: string; strategyId: string; available: number
   /** Changes whenever supplied connection/account evidence is replaced. */
   revision: string
+  /** Actual Bitget presentation uses USDT; source preview keeps USD. */
+  moneyUnit?: 'USD' | 'USDT'
   /** One-shot presentation request after returning from the connection flow. */
   resumeId?: string
   onConfirm: (settings: Readonly<CatalogueCopySettings>, signal: AbortSignal) => Promise<void>
@@ -22,7 +24,7 @@ export function catalogueCopyScope(value: CatalogueCopySetup | undefined, owner:
   if (!value || !owner || value.owner !== owner || value.sourceSha !== catalogueSourceSha || value.strategyId !== id
     || !id || findCatalogueStrategy(id)?.id !== id || !value.revision.trim() || typeof value.onConfirm !== 'function'
     || !Number.isFinite(value.available) || value.available < 0) return null
-  return JSON.stringify([owner, catalogueSourceSha, id, value.revision, value.available, value.resumeId ?? null])
+  return JSON.stringify([owner, catalogueSourceSha, id, value.revision, value.available, value.resumeId ?? null, value.moneyUnit ?? 'USD'])
 }
 export function catalogueCopyDecimal(raw: string) {
   return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw.trim()) ? Number(raw.trim()) : NaN

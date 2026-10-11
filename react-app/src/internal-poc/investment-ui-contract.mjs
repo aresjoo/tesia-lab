@@ -19,6 +19,7 @@ const chartIdentities = {
   'SP:SPX':['yahoo:^GSPC',['S&P 500','SPX','S&P500']],
 };
 export function validInvestmentDisplay(name, value, { allowTitle = true } = {}) {
+  if (name === 'SETUP') return keys(value, ['entryMode', 'pair']) && value.entryMode === null && ['BTC/USDT', 'ETH/USDT'].includes(value.pair);
   if (name === 'TITLE') return allowTitle && string(value, 80);
   if (name === 'NEXT') return Array.isArray(value) && value.length >= 1 && value.length <= 2 && value.every(v => string(v, 160)) && new Set(value).size === value.length;
   if (name === 'ASK') {
@@ -44,7 +45,7 @@ export function validInvestmentDisplay(name, value, { allowTitle = true } = {}) 
 
 /** Locate one complete JSON tag, respecting JSON strings and nested brackets. */
 export function readInvestmentDisplay(text) {
-  const match = /\[(CHART|ASK|NEXT|TITLE)\s*(?=[{["])/i.exec(text);
+  const match = /\[(CHART|ASK|NEXT|TITLE|SETUP)\s*(?=[{["])/i.exec(text);
   if (!match) return null;
   const start = match.index, from = start + match[0].length;
   let quoted = false, escaped = false, depth = 0, end = -1;

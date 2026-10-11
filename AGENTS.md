@@ -4,6 +4,10 @@
 
 ## migration 브랜치의 추가 작업 경계
 
+현재 React snapshot은 clean Web `30587e07f01e64e6ebcf5c61b9fc65b6b64aad04`의 문서 질문 App 위 카피 실행 선별 통합이다. 기존 공식 sync/verify로 전체 2,491파일을 전달했고 이전 snapshot의 클라이언트 수정이나 제거 경로는 없었다. 실제 personal(1) Opus5.5 session `757369d7-13ab-4b24-b66d-aa2ed9031f88`의 판정은 `SCOPED_INTEGRATION_SOURCE_GO`지만 직접 영향 54PASS에는 일반 상담 회귀가 포함되지 않고 pending-claim Medium2가 남는다. Contracts `a381`은 source-only API18 후보이며 정식 발행·패키지 권위가 아니고, Backend 최신 선별 통합은 독립 검수 중이라 이 snapshot의 서비스 준비·운영 GO로 합산하지 않는다. PROD DEV gate는 실행하지 않았고 운영 Anthropic private config도 부재한다. 원본 root/main·Node·Worker, 카피·모션·ares 흐름, 비공개 9월 데이터는 이 전달에서 변경하지 않는다.
+
+아래 PR6 상담 display 소비 문단은 직전 snapshot의 경계다.
+
 이번 최신 PR6 상담 display 소비 교정은 source-only 전달이며 운영 HOLD다. API13 공개 wire를 바꾸지 않고 원본 shared parser로 ASK/NEXT/TITLE을 display-only 소비하며, 실제 series producer가 없는 CHART는 합성하지 않는다. 통합 담당은 MIGRATION 최신 절과 이전 Bitget 전달 경계를 함께 확인하고 기존 main/타팀 WIP를 덮어쓰지 않는다. Backend 모델 작업 배분과 active canary의 updater 사전 거절을 우회하거나 이전 OPEN 복구를 재사용하지 않는다.
 
 제품·구현 정본은 [Program 활성 진입점](https://github.com/beak1011/tesia-program/blob/agent/program/investment-prompt-quality/PM/README.md)과 연결된 계획§0/§16·WORK_LEDGER다. ares 원본 main은 제품 본체이며 UI·UX·카피·글꼴·SVG·모바일·다국어·흐름을 유지한다. 서버는 이 원본에 맞추고, 임의 변경은 사전 승인하며 승인된 개선은 보존한다.
