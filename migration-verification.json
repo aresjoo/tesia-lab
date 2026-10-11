@@ -1,9 +1,53 @@
 {
   "schema": 1,
-  "purpose": "문서 질문 App의 기존 상담 경계를 보존하며 카피 실행 optional port를 선별 통합한 React source 전달. Contracts source 후보, Backend 검수, 운영 반영과 실제 금융 행위는 각각 별도 증거다.",
-  "sourceCommit": "30587e07f01e64e6ebcf5c61b9fc65b6b64aad04",
+  "purpose": "문서 질문 로그인 후 admitted이지만 joined되지 않은 상태를 기존 API13/16 권위로 검증해 target settled binding으로 복구한 React source 전달. 실제 UI, Backend 후속, 운영 반영과 금융 행위는 각각 별도 증거다.",
+  "sourceCommit": "ea11a2a175f8b68b6dc34472e797a2b25bae347b",
   "clientMain": "9fbff821df62cad11d026022fc7628c7fcebc431",
-  "snapshotDigest": "a34da6289d06fc18ed3b523eaf4ac6cb3d1de1a26e7d14c70ae020178d509bee",
+  "snapshotDigest": "4b1c8322b5da0f73838995d0be77741a4daf02079c0ed8656408500653b5e763",
+  "currentClaimedAdmissionRecovery": {
+    "sourceCommit": "ea11a2a175f8b68b6dc34472e797a2b25bae347b",
+    "reactFiles": 2492,
+    "reactBytes": 35839832,
+    "sourceDirtyFiles": [],
+    "removedPriorPaths": [],
+    "changedPriorPaths": 4,
+    "addedPaths": 1,
+    "modifiedPaths": 3,
+    "unchangedPriorPaths": 2488,
+    "syncActualExit": 0,
+    "verifyActualExit": 0,
+    "scope": "admitted && !joined after existing API14 claim/fresh AUTH; validate current question through API16 turn/history and API13 history/turn before writing the target settled binding",
+    "sourceJournalOwnerBodyKeyUnchanged": true,
+    "initialBindingsZeroRecovered": true,
+    "directControllerFixtures": {
+      "uniqueCases": 2,
+      "projects": ["desktop", "mobile"],
+      "executionsPassed": 4,
+      "actualUiTest": false
+    },
+    "narrowTypecheck": {
+      "actualExit": 2,
+      "controllerErrors": 0,
+      "wholeTypecheckPass": false
+    },
+    "webSourceReview": {
+      "model": "claude-opus-5-5",
+      "profile": "personal(1)",
+      "session": "995cd003",
+      "verdict": "SCOPED_CLAIMED_ADMISSION_GO",
+      "requiredFixes": 0
+    },
+    "remaining": [
+      "existing target sequence retry is deferred P2",
+      "question-ready and API14 transaction logical-alias mint-ready are separate follow-ups"
+    ],
+    "migrationDeliveryTestsOrBuildsExecuted": false,
+    "providerCalls": 0,
+    "orders": 0,
+    "productionDeployment": false,
+    "actualServiceGo": false,
+    "originalRootMainNodeWorkerModified": false
+  },
   "currentCopyExecutionIntegration": {
     "sourceCommit": "30587e07f01e64e6ebcf5c61b9fc65b6b64aad04",
     "reactFiles": 2491,

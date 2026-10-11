@@ -777,25 +777,72 @@ export class NativeConsultationV13Controller {
     let source: DocumentQuestionJournal
     try { source = parseDocumentJournal(sourceRaw, sourceOwner) }
     catch { return false }
+    const claimedAdmission = source.stage === 'admitted' && !source.joined ? source : null
     if (source.conversationId !== conversationId
-      || source.stage !== 'settled' && !(source.stage === 'admitted' && source.joined)
-      || source.bindings.length < 1) return false
-    const target: SettledDocumentQuestionJournal = {
-      version: 2, stage: 'settled', owner, conversationId, bindings: source.bindings,
-    }
-    const targetRaw = JSON.stringify(target), existingTargetRaw = this.storage.getItem(targetKey)
-    if (new TextEncoder().encode(targetRaw).length > MAX_DOCUMENT_JOURNAL_BYTES
-      || existingTargetRaw !== null && existingTargetRaw !== targetRaw
-      || existingTargetRaw !== null && this.documentJournalRaw !== existingTargetRaw) return false
+      || claimedAdmission === null && (source.stage !== 'settled' && !(source.stage === 'admitted' && source.joined)
+        || source.bindings.length < 1)
+      || claimedAdmission !== null && accepted.turnId !== claimedAdmission.turnId) return false
+    const existingTargetRaw = this.storage.getItem(targetKey)
+    const unchanged = () => generation === this.generation && owner === this.owner && accepted === this.accepted
+      && this.state.conversationId === conversationId
+      && this.storage!.getItem(sourceKey) === sourceRaw && this.storage!.getItem(targetKey) === existingTargetRaw
     const deadline = this.deadline()
     try {
-      const documentHistory = await this.loadDocumentHistory(conversationId, deadline.signal)
-      if (generation !== this.generation || owner !== this.owner || accepted !== this.accepted) return false
-      const consultationHistory = await this.loadHistory(conversationId, deadline.signal)
-      if (generation !== this.generation || owner !== this.owner || accepted !== this.accepted) return false
-      const verified = await this.verifyDocumentBindings(source.bindings, documentHistory, consultationHistory, deadline.signal)
-      if (generation !== this.generation || owner !== this.owner || accepted !== this.accepted
-        || this.storage.getItem(sourceKey) !== sourceRaw || this.storage.getItem(targetKey) !== existingTargetRaw) return false
+      let bindings = source.bindings
+      let documentHistory: readonly DocumentQuestionTurnProjection[]
+      let consultationHistory: Awaited<ReturnType<NativeConsultationV13Controller['loadHistory']>>
+      let verified: Map<string, NativeResearchThreadOrigin>
+      if (claimedAdmission !== null) {
+        const turnId = claimedAdmission.turnId, questionRequest = claimedAdmission.questionRequest
+        if (turnId === null || questionRequest === null) return false
+        const projection = await this.documentAdapter.turn(turnId, { signal: deadline.signal })
+        if (!unchanged()) return false
+        documentHistory = await this.loadDocumentHistory(conversationId, deadline.signal)
+        if (!unchanged()) return false
+        const documentMatches = documentHistory.filter(candidate => candidate.turnId === turnId)
+        if (documentMatches.length !== 1 || !projectionMatchesJournal(projection, claimedAdmission)
+          || !projectionMatchesJournal(documentMatches[0], claimedAdmission)) throw new Error('CONSULTATION_DOCUMENT_BINDING')
+        consultationHistory = await this.loadHistory(conversationId, deadline.signal)
+        if (!unchanged()) return false
+        const consultationMatches = consultationHistory.turns.filter(candidate => candidate.turnId === turnId)
+        if (consultationMatches.length !== 1) throw new Error('CONSULTATION_DOCUMENT_BINDING')
+        const consultationTurn = (await this.adapter.turn(turnId, deadline.signal)).data
+        if (!unchanged()) return false
+        const observed = consultationMatches[0]
+        if (consultationTurn.turnId !== turnId || consultationTurn.conversationId !== conversationId
+          || consultationTurn.clientMessageId !== claimedAdmission.clientMessageId || consultationTurn.userText !== questionRequest.text
+          || observed.conversationId !== consultationTurn.conversationId || observed.clientMessageId !== consultationTurn.clientMessageId
+          || observed.userText !== consultationTurn.userText || observed.createdAt !== consultationTurn.createdAt
+          || consultationTurn.lastSequence < observed.lastSequence) throw new Error('CONSULTATION_DOCUMENT_BINDING')
+        const currentTextSha256 = await textSha256(questionRequest.text)
+        if (!unchanged()) return false
+        verified = await this.verifyDocumentBindings(claimedAdmission.bindings, documentHistory, consultationHistory, deadline.signal)
+        if (!unchanged()) return false
+        const binding: DocumentQuestionBinding = {
+          conversationId, turnId, clientMessageId: claimedAdmission.clientMessageId,
+          textSha256: currentTextSha256, createdAt: consultationTurn.createdAt, lastSequence: consultationTurn.lastSequence,
+          documentRef: questionRequest.documentRef, locator: claimedAdmission.mintRequest.locator,
+          researchThread: claimedAdmission.researchThread,
+        }
+        bindings = [...claimedAdmission.bindings.filter(candidate => candidate.turnId !== binding.turnId), binding]
+        if (bindings.length > MAX_DOCUMENT_BINDINGS || !projectionMatchesBinding(projection, binding)
+          || binding.createdAt !== observed.createdAt || binding.lastSequence < observed.lastSequence) {
+          throw new Error('CONSULTATION_DOCUMENT_BINDING')
+        }
+        verified.set(binding.turnId, binding.researchThread)
+      } else {
+        documentHistory = await this.loadDocumentHistory(conversationId, deadline.signal)
+        if (!unchanged()) return false
+        consultationHistory = await this.loadHistory(conversationId, deadline.signal)
+        if (!unchanged()) return false
+        verified = await this.verifyDocumentBindings(bindings, documentHistory, consultationHistory, deadline.signal)
+        if (!unchanged()) return false
+      }
+      const target: SettledDocumentQuestionJournal = { version: 2, stage: 'settled', owner, conversationId, bindings }
+      const targetRaw = JSON.stringify(target)
+      if (new TextEncoder().encode(targetRaw).length > MAX_DOCUMENT_JOURNAL_BYTES
+        || existingTargetRaw !== null && existingTargetRaw !== targetRaw
+        || existingTargetRaw !== null && this.documentJournalRaw !== existingTargetRaw || !unchanged()) return false
       if (existingTargetRaw === null) this.persistDocumentJournal(target)
       else {
         this.documentJournal = target
@@ -803,7 +850,7 @@ export class NativeConsultationV13Controller {
       }
       this.documentVerifiedThreads = verified
       const anchors = new Map<string, NativeResearchThreadOrigin>()
-      source.bindings.forEach(binding => {
+      bindings.forEach(binding => {
         anchors.set(binding.clientMessageId, binding.researchThread)
         anchors.set(`${binding.turnId}_reply`, binding.researchThread)
       })
