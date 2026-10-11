@@ -2,12 +2,20 @@
 
 ## 최신 서버 통합 전달 — 프론트 스냅샷 불변
 
+최신 누적 Backend는 [905269c2](https://github.com/beak1011/tesia-backend/tree/905269c2197c25e5cca46d39ea91c03110690c43)다. 기존 37a93a73 이후 실제 Bitget 카피 조회 producer와 그 패키지 closure를 정확10파일로 선별 통합했고, PR182의 동일 head branch를 비강제 fast-forward했다. OAuth·상담 seam3, CI2, dependency pin은 이전 바이트 그대로이며 donor source/spec4도 일치한다(독립 10 blob 대조 불일치0).
+
+- 분할 체결의 원장 평균 원가·실현손익이 긴 소수가 되어 조회를 차단하는 P1은 원장 계산을 바꾸지 않고 파생4값의 표시 직렬화만 교정했다. 관련9시험 PASS/2.164초, 독립 Opus5.5 `SCOPED_P1_SERIALIZATION_DELTA_GO`·필수0이며 원 HOLD와 fixture 오류를 보존한다.
+- Python281 목록은 그대로이고 journal/composition 두 해시만 변경됐다. 새 direct wheel `71ba2034…`/1,562,763bytes 및 source-free 변경 closure probe `d5bfd703…`는 각각 exit0이다. 새 normal resolver·sdist·전체시험은 실행하지 않았다. builder setuptools83과 formal80.9의 차이는 남는다.
+- 이 소스는 signed GET·구독별 원장/감사에 기반한 조회 producer다. public HTTP factory·승인 발행·실고객 AI·실주문·운영 활성화를 완료한 것은 아니다. 조회 캐시/단일 실행·audit budget과 tick 경합은 factory 연결 전 Gate다. React 스냅샷·ares 화면/카피/SVG는 변경하지 않았다.
+
+아래는 보존한 CI 정렬 인수 기록이다.
+
 Backend [37a93a73](https://github.com/beak1011/tesia-backend/tree/37a93a73cc21ab87aa581f0ef8cd0d9ec7b7bd45)는 아래 mint replay closure를 보존한 채 CI의 오래된 Contracts/AI pin·빌드 recipe·시험 기대값을 현재 승인 권위에 정렬했다. [draft PR182](https://github.com/beak1011/tesia-backend/pull/182)가 이전 PR181의 최종 main 후보를 대체한다. main 병합·운영 배포는 아니다.
 
 - CI 교정 `6580cd02`: 실제 Contracts0.32 epoch1791729409/umask0022/direct build로 승인 wheel `dbb91cf4…`/1,491,664bytes를 한 번 재현했다. Opus5.5 scoped delta GO·필수0이며 원 HOLD2와 시험 하니스 실패를 보존했다.
 - 고정 기대값 `37a93a73`: API16 aggregate metadata만0.32로 정렬하고 기존 검수된32경로만 승인집합에 추가했다. 원 API16 module/schema SHA 불변, donor blob32 mismatch0·실제변경190/승인190·직접2PASS1.293초다. 새 제품 로직이나 권한을 추가한 변경이 아니다.
 - React2492/sourceea11/snapshot4b1c8322·원본 main·화면·카피·SVG는 그대로다. 이 문서 전달에서 sync·시험·build·provider·주문·운영 실행은0이다. GitHub Actions의 account billing 차단과 Web 기존 lint33 P2/P3는 코드 회귀나 전체PASS로 계산하지 않는다.
-- 별도 실제 copy 조회 producer는 아직 이 후보에 포함하지 않았다. 실제 고객 AI·권한 발행·거래·HTTP factory·운영 전환은 별도 미완료다.
+- 당시37 후보에는 실제 copy 조회 producer가 없었으며, 최신905 후보가 위 범위만 추가했다. 실제 고객 AI·권한 발행·거래·HTTP factory·운영 전환은 별도 미완료다.
 
 ## 최신 전달 — 문서 질문 로그인 후 claimed-admission 복구
 
