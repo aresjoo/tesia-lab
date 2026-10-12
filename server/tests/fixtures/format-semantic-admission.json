@@ -1,0 +1,2860 @@
+{
+  "declaredUtc": "2026-10-10T06:02:32.521102+00:00",
+  "scope": "Predeclared source136 full-helper/finaldelta counterexamples. Original39 inputs/expectations preserved; real builder currently fails38 before137 correction. Native consumer conditional-N is separate.",
+  "baselineHelperSha256": "2d4a1e593a19d0f6c021b01c92c750d350adf42ef514f64d671fa8510f3068a4",
+  "cases": [
+    {
+      "id": "HA-verb-honorific",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역해 주십시오: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-verb-modifier",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역 좀 해줘: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-verb-please",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 번역 부탁해요: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-verb-move-honorific",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "이 문장을 영어로 옮겨 주십시오: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-forward-below-data",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "아래 자료를 요약해줘\n앞으로 일본어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-forward-below-attributive-answer",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "아래의 답변을 요약해줘\n앞으로 일본어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-forward-behind-data",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "뒤 자료를 요약해줘\n앞으로 일본어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-forward-next-disclosure",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "다음 공시를 요약해줘\n앞으로 일본어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-backward-thanks",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 내렸다. 앞으로 영어 두 문장으로 답해줘.\n위 문단을 일본어로 번역해줘\n감사합니다"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-backward-data",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 내렸다. 앞으로 영어 두 문장으로 답해줘.\n위 자료를 일본어로 번역해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-backward-above-text",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 내렸다. 앞으로 영어 두 문장으로 답해줘.\n윗글을 일본어로 번역해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HA-backward-honorific",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 내렸다. 앞으로 영어 두 문장으로 답해줘.\n위 문단을 일본어로 번역해 주십시오"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "HB-descriptive",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 진행된 실적 발표를 요약해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HB-past",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 회의에서 일본어로 진행했는데 내용 좀 정리해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HB-after-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 회의에서 일본어로 설명하고 나서 받은 질문을 정리해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HB-returned",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 회의에서 일본어로 설명하고 돌아왔는데 내용 좀 정리해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HB-wish",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 싶은데 표현 좀 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HC-candlestick",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Explain it in Japanese candlestick terms."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HC-numeric-yields",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Answer me in Japanese 10-year yields."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "HC-hyphen-yen",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Explain it in Japanese-yen terms."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M1-sentence-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Explain these two sentences."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M1-paragraph-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Explain the first two paragraphs of the report."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M1-ko-paragraph-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "이 두 문단의 차이를 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M1-backward-two-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "위 두 문장만 요약해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "currentN-consumer-object-scope",
+      "expectedCurrentTransformationTask": true
+    },
+    {
+      "id": "M2-ceo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "The CEO took no questions on the call."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M2-honorific-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "부장님이 질문은 그만하시래요."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M2-wish-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "동료가 질문은 그만했으면 좋겠대."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M2-imperative-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "동료가 질문은 그만하라네."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M2-asked-honorific",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "동료가 질문은 그만해 달라셨어."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M3-newline-finance",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답해줘\n재무제표 분석 부탁해"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M3-then-imperative",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Answer in English, then tell me the risks."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M3-self-emphasis",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "As I said, answer in English."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M4-postfix-language",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Answer in English from now on."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "M4-postfix-count-control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Answer in two sentences from now on."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "class": "positive-control",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta-stop-polite",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문은 그만해요."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta-stop-honorific",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문은 하지 마십시오."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta-stop-adverb",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문은 이제 하지 마."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta-stop-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문을 그만해."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta-negated-stop-polite",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문은 그만하지 말아줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": false
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": false
+      },
+      "class": "mandatory",
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "actual-connected-comma",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고, 질문은 하지 마."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "reported-stop-comma",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문은 하지 마, 라고 했어."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "reported-connected-comma",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 설명하고 질문은 하지 마, 라고 친구가 말했어."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false
+    },
+    {
+      "id": "delta138/H1-courtesy-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n감사합니다~"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-courtesy-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n감사드려요."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-courtesy-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n미리 감사합니다."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-courtesy-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n부탁드립니다."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-courtesy-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n고마워요 :)"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-courtesy-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\nThanks a lot!"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": "앞쪽 공급문안의 영어 지속 지시는 자료이며 번역은 일본어 국소 요청입니다."
+    },
+    {
+      "id": "delta138/H1-control-supported",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 올랐다. 앞으로 영어로 답해줘.\n위 자료를 일본어로 번역해줘\n고마워요."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/H1-control-independent",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "고마워요. 앞으로 영어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/H2-positive-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 한 문단으로 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청이며 명사·부사 수식어를 전언 관형형으로 오인하면 안 됩니다. 한 문단은 고정 문장수를 해제합니다."
+    },
+    {
+      "id": "delta138/H2-positive-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "한국어로 최대한 쉽게 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청입니다."
+    },
+    {
+      "id": "delta138/H2-positive-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 가능한 짧게 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청입니다."
+    },
+    {
+      "id": "delta138/H2-positive-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 간단한 요약 부탁해요"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청입니다."
+    },
+    {
+      "id": "delta138/H2-positive-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 한 줄로 요약해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청입니다."
+    },
+    {
+      "id": "delta138/H2-positive-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 북한 리스크 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 직접 출력 언어 요청입니다."
+    },
+    {
+      "id": "delta138/H2-reported-쓴",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 쓴 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-reported-받은",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 받은 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-reported-나온",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 나온 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-reported-열린",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 열린 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-reported-적힌",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 적힌 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-reported-읽은",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 읽은 보고서의 결론을 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "일본어는 보고서의 기존 작성/수신 상태이며 현재 답변 언어가 아닙니다."
+    },
+    {
+      "id": "delta138/H2-control-direct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 쉽게 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/H2-control-attributive",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 일본어로 진행한 회의의 결론을 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M1-topical-past",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 금리 전망도 알려줬는데 다시 정리해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "이전 행위 서술과 현재 정리 요청을 구별합니다. 이전 행위의 언어는 지속 요청이 아닙니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 금리 전망도 자세히 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 금리 전망도 두 문장으로 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 2
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 최고 금리도 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 광고 매출도 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 안전한 투자 방법도 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-topical-positive-6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 미국 금리는 언제 내릴지도 알려줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "현재 접속 지시와 현재 주제 질문의 긍정 대조군입니다. 수식어가 출력 지시를 전언으로 바꾸지 않습니다."
+    },
+    {
+      "id": "delta138/M1-control-topical",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 금리 전망도 알려줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M1-control-simple",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 답하고 금리도 좀 알려줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M2-past-comma",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제는 질문은 그만하고, 바로 나왔어요."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": "과거 질문 중단 서술은 현재 질문 중단 요청이 아닙니다."
+    },
+    {
+      "id": "delta138/M2-positive-comma",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "질문은 그만하고, 분산투자가 뭔지 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M2-positive-space",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "질문은 그만하고 분산투자가 뭔지 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M3-malformed-closing-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "”앞으로 영어로 답해줘”"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "interpretation-note",
+      "reason": "정적 검수는 이 비표준 닫는 글리프 쌍을 인용으로 해석했습니다. 현재 명시 paired-quote 계약과 다를 수 있으므로 엄격 기대 불일치는 보존하되 확정 권한 오염으로 자동 승격하지 않습니다."
+    },
+    {
+      "id": "delta138/M3-malformed-closing-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "’앞으로 영어로 답해줘’"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "interpretation-note",
+      "reason": "정적 검수는 이 비표준 닫는 글리프 쌍을 인용으로 해석했습니다. 현재 명시 paired-quote 계약과 다를 수 있으므로 엄격 기대 불일치는 보존하되 확정 권한 오염으로 자동 승격하지 않습니다."
+    },
+    {
+      "id": "delta138/M3-malformed-closing-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "」앞으로 영어로 답해줘」"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "interpretation-note",
+      "reason": "정적 검수는 이 비표준 닫는 글리프 쌍을 인용으로 해석했습니다. 현재 명시 paired-quote 계약과 다를 수 있으므로 엄격 기대 불일치는 보존하되 확정 권한 오염으로 자동 승격하지 않습니다."
+    },
+    {
+      "id": "delta138/M3-valid-control-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "“앞으로 영어로 답해줘”"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M3-valid-control-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "‘앞으로 영어로 답해줘’"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M3-valid-control-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "「앞으로 영어로 답해줘」"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M3-orphan-control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "” 영어로 답해줘. ”"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "delta138/M3-bare-control",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "앞으로 영어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory",
+      "reason": ""
+    },
+    {
+      "id": "full138/FULL-H1-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "아래 문장을 정중하게 바꿔 주십시오: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H1-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "요약해 주십시오: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H1-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "교정 부탁드립니다: 앞으로 일본어로 답해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H2-independent",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 영어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "주가는 내렸다. 앞으로 영어 두 문장으로 답해줘.\n위 문단을 일본어로 번역해줘\n앞으로 한국어로 답해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko"
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": true,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H3-comma-past",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "어제 회의에서 일본어로 설명하고, 받은 질문을 정리해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H4-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로만 진행된 실적 발표를 요약해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-H4-2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 어제 진행된 실적 발표를 요약해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M2-차이",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "ETF와 펀드 차이 두 문장으로 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M2-추이",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "ETF와 펀드 추이 두 문장으로 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M2-순위",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "ETF와 펀드 순위 두 문장으로 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M2-범위",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "ETF와 펀드 범위 두 문장으로 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 2
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M2-detail",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "ETF와 펀드 차이 자세히 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": null
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M3-one-again",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "일본어로 한 번 더 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ja",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M4-en-and",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Tell me the risks, and answer in English."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M4-ko-postposed",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "분산투자 설명해줘 영어로."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M5-input-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "Explain two sentences from the report."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/FULL-M6-report",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "친구가 질문은 하지 마, 그러더라."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "full138/H2-positive-ko-prior-en",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "한국어로 최대한 쉽게 설명해줘"
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1
+      },
+      "expectedCurrentTransformationTask": false,
+      "class": "mandatory"
+    },
+    {
+      "id": "independent138/paragraph-language-with-object",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "영어로 한 문단으로 채권 위험을 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedFollowingFormat": {
+        "language": "en",
+        "sentenceCount": null
+      },
+      "expectedCurrentTransformationTask": false,
+      "reason": "원독립20 첫324 후보검사 Medium 실패를 공개 회귀로 추가; 원criteria/원FAIL 보존."
+    },
+    {
+      "id": "independent138/stop-with-noun-possessive",
+      "messages": [
+        {
+          "role": "user",
+          "content": "앞으로 한국어 한 문장으로 답해줘."
+        },
+        {
+          "role": "assistant",
+          "content": "응답 기록용 합성 문장입니다."
+        },
+        {
+          "role": "user",
+          "content": "질문은 그만하고 채권의 뜻을 설명해줘."
+        }
+      ],
+      "expectedCurrentFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedFollowingFormat": {
+        "language": "ko",
+        "sentenceCount": 1,
+        "questionsStopped": true
+      },
+      "expectedCurrentTransformationTask": false,
+      "reason": "원독립20 첫324 후보검사 Medium 실패를 공개 회귀로 추가; 원criteria/원FAIL 보존."
+    }
+  ],
+  "followingUser": "이제 분산투자를 설명해줘.",
+  "supplementalDeclarationSha256": "b8849b135cf0f8826154274c584af936f2af87dac5f74e4e8be8164e803cfb95",
+  "supplementalDeclarations": {
+    "original42Sha256": "2393a7fd419d8944c92a0f3d6921db0c6ac80549e7ded4219dd1d7cdbf98dd5b",
+    "originalFull20Sha256": "3d691a02c23473703113c07557b96668ebcc4def802e13914541d23311d8d65f",
+    "first42NullPresenceCorrectionIds": [
+      "H2-positive-1",
+      "M1-topical-positive-1"
+    ],
+    "full20BaselineCorrection": "shared prior mutation in original full20 preserved privately; new distinct18 variants use KO1, independent currentKO request retains priorEN1. CPU2 separate child tests, no unsafe parent parse.",
+    "scope": "Additional contract variants declared before138 runtime adoption; original private declarations/RED unchanged, currentformat null explicit per existing DETAIL_EVENTS."
+  }
+}

@@ -8,6 +8,21 @@ const evidence=JSON.parse(readFileSync(new URL('./recorded-investment-turns.json
 const candidateProvenance=JSON.parse(readFileSync(new URL('./recorded-investment-candidate-provenance.json',import.meta.url)));
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const active=evidence.evaluations.at(-1);
+// Reconstruct the post-evaluation corrected policy; equivalence is separately
+// recorded for these 92 requests, not asserted for arbitrary future inputs.
+assert.ok('server/investment-intent-admission.mjs' in active.runtimeInputSha256);
+assert.equal(hash(readFileSync(new URL('../investment-intent-admission.mjs',import.meta.url))),active.runtimeInputSha256['server/investment-intent-admission.mjs']);
+function historicalModuleSource(file){
+ const snapshot=candidateProvenance.files[file];
+ const bytes=Buffer.from(snapshot.baseSnapshotBase64,'base64');
+ assert.equal(hash(bytes),snapshot.historicalEffectiveSha256,file);
+ return bytes.toString('utf8');
+}
+const historicalPreferencesUrl='data:text/javascript;base64,'+Buffer.from(historicalModuleSource('server/investment-response-preferences.mjs')).toString('base64');
+const historicalPolicySource=historicalModuleSource('server/investment-prompts.mjs')
+ .replace("'./investment-response-preferences.mjs'",JSON.stringify(historicalPreferencesUrl))
+ .replace("'./investment-intent-admission.mjs'",JSON.stringify(new URL('../investment-intent-admission.mjs',import.meta.url).href));
+const historicalPolicy=await import('data:text/javascript;base64,'+Buffer.from(historicalPolicySource).toString('base64'));
 const legacySource=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
 const legacy=Object.fromEntries([['judgment','J'],['report','R']].map(([m,c])=>[m,legacySource.match(new RegExp("var BT_SYS_"+c+"='([^']*)';"))[1]]));
 const readRuntime=file=>readFileSync(new URL('../../'+file,import.meta.url));
@@ -37,10 +52,11 @@ test('historical failures, actual calls and corpus/policy provenance remain sepa
 });
 test('frozen release evidence binds actual runtime and unchanged case inputs, without promoting simulated calls to live app',()=>{
  assert.equal(active.runs.length,55);assert.equal(active.completedResponses,92);assert.equal(active.actualCliInvocations,92);assert.equal(active.inputsUnchangedAtFinish,true);
- assert.deepEqual(active.promptSnapshots,PROMPTS);
+ assert.deepEqual(active.promptSnapshots,historicalPolicy.PROMPTS);
+ assert.notDeepEqual(active.promptSnapshots,PROMPTS);
  assert.equal(candidateProvenance.schemaVersion,1);assert.equal(candidateProvenance.kind,'recorded-investment-candidate-runtime-provenance');
  assert.equal(candidateProvenance.immutableBaseCommit,'8646b6525631d5e1f71e38a8e2e515f23571b5b5');
- assert.deepEqual(Object.keys(candidateProvenance.files).sort(),['server/index.mjs','server/investment-response-preferences.mjs','server/worker.mjs']);
+ assert.deepEqual(Object.keys(candidateProvenance.files).sort(),['server/index.mjs','server/investment-output-gate.mjs','server/investment-prompts.mjs','server/investment-response-preferences.mjs','server/worker.mjs']);
  for(const [f,h] of Object.entries(active.runtimeInputSha256)){
   const correction=evidence.postEvalRuntimeCorrection;
   const expected=f==='index.html'?evidence.postEvalSourceCorrection.afterSha256:correction&&f===correction.file?correction.afterSha256:h;
@@ -74,14 +90,22 @@ for(const run of active.runs)test('actual history, format frame and fragmented s
  for(const [index,t] of run.turns.entries()){
   history.push({role:'user',content:t.user});
   const payload={messages:history};if(legacy[run.mode])Object.assign(payload,{plain:true,system:legacy[run.mode]});
+  const historical=await historicalPolicy.buildInvestmentRequest(payload);
+  assert.equal(historical.promptSha256,t.requestPromptSha256);assert.equal(historical.basePolicySha256,t.basePolicySha256);assert.deepEqual(historical.responsePreferences,t.responsePreferences);
   const r=await buildInvestmentRequest(payload);
-  assert.equal(r.promptSha256,t.requestPromptSha256);assert.equal(r.basePolicySha256,t.basePolicySha256);assert.deepEqual(r.responsePreferences,t.responsePreferences);
+  assert.equal(r.promptSha256,await digestText(r.system));
+  assert.equal(r.basePolicySha256,PROMPTS[r.settingsPreview?'settings':r.mode].sha256);
+  assert.notEqual(r.basePolicySha256,historical.basePolicySha256);
+  assert.deepEqual(r.responsePreferences,t.responsePreferences);
   assert.equal(t.answerSha256,hash(t.answer));assert.equal(t.cliInvoked,true);
   const events=[],gate=createInvestmentOutputGate(v=>events.push(v),{allowDisplay:t.allowDisplay,allowTitle:t.allowTitle,allowQuestions:t.allowQuestions});
   for(let i=0;i<t.answer.length;i+=7)gate.send({text:t.answer.slice(i,i+7)});gate.send({done:true});
   assert.equal(events.at(-1)?.done?'PASS':'BLOCKED',t.gateReplay.status);
   assert.equal(events.map(v=>v.text||'').join(''),t.gateReplay.completedText);
-  for(const e of Object.values(r.responsePreferences.evidence))assert.equal(history[e.messageIndex].content.slice(e.start,e.end),e.text);
+  for(const e of Object.values(r.responsePreferences.evidence)){
+   assert.equal(history[e.messageIndex].role,'user');
+   assert.equal(history[e.messageIndex].content.slice(e.start,e.end),e.text);
+  }
   history.push({role:'assistant',content:t.answer});
  }
 });

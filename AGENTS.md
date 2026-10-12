@@ -20,7 +20,9 @@
 
 ## 투자 AI 프롬프트 후보의 추가 경계
 
-`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.24.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
+현재 후속은 `agent/lab/investment-concise-dialogue`이며 정책/helper·관련 tests·새 QA 증거와 설명만 ROOT가 작성한다. 원be935 Anthropic/SSE와 registry1.24를 계승하고 모든 원실패를 보존한다. 기억된 responsePreferences/현재responseFormat과 aux user 데이터는 주문권한이 없다. 과거 React2135 snapshot과 이후 current React2422/API13·14 구현/이정책의실제소비를 구분한다. 본문길이·금융정밀도·사용성은 실제응답으로검수하고 source계약시험으로모델품질을대체하지않는다.
+
+`server/README.md`와 Program 정본 §16/Ledger를 따른다. 서버 registry1.42.0과 shared `investment-ui-contract.mjs`가 상담 지침·표시 schema를 소유한다. ROOT는 source 투자 소비·프록시·개발 평가·문서를 소유하며 React2135 snapshot/AI compiler/Backend/공용 계약은 읽기 전용이다. 원본 불변은 이전 React snapshot 전달 범위이고 이 명시 후속 source 변경에는 적용하지 않는다. 사용자 질문·자유 텍스트 정정으로 설정/검증/예약을 실행하지 않으며 풍부한 조건을 보존한다. bounded 기억과 wizard는 대화에 결속한 미확인 참고이며 승인 권한이 없다. 폐쇄형 초기 또는 명시 새 scope의 BTC/ETH 요청만 Mock 설정 이동한다. 실행 태그는 모델에게 권한이 없고 표시 JSON도 완전히 검증한다. 실제 provider/React 실행 연결/운영은 NO_GO이며 main server 병합이 자동 배포를 유발하므로 migration draft만 전달한다. 검수 의견은 자동 시험·독립 평가를 대체하지 않는다.
 
 ## 작업 원칙
 
@@ -114,7 +116,14 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | 경로 | 현재 역할 |
 | --- | --- |
 | `server/README.md`, `server/investment-*.mjs`, `server/tests/` | 투자 상담 정책 registry·요청/출력 검증·단순 Mock 설정 진입·공개 개발 반례·실제 route SDK fixture. 주문 계약과 provider/공개 배포 완료가 아님. |
+| `server/qa/concise-dialogue.json`, `server/tests/concise-dialogue-evidence.test.mjs` | 원본 계승·각 단계 실제 CLI 응답과 당시 입력/정책·실패/독립 검수 해시, 정확 이력 재구성. 현재 후보와 과거 동치/응답을 분리하고 고객 provider·서비스 GO로 승격하지 않는다. |
+| `server/tests/format-semantic-boundaries.test.mjs`, `server/tests/fixtures/format-semantic-boundaries.json` | ROOT 소유. 언어/전언/변환/후방 참조 및 bounded CPU 반례를 원기대값·과거 FAIL과 함께 검증한다. |
+| `server/tests/format-semantic-followups.test.mjs`, `server/tests/fixtures/format-semantic-followups.json` | ROOT 소유. 후속47개 사전 언어/자료/접속 명령과10,000/16,000자 colon 반례를 원기대·실제 RED와 함께 검증한다. |
+| `server/tests/format-semantic-admission.test.mjs`, `server/tests/fixtures/format-semantic-admission.json` | ROOT 소유. 선언104개 자료·객체·전언·정중명령 및 cap내 CPU4를 검사한다. 최초39개38FAIL과 추가단계 원RED는 보존한다. |
 | `server/qa/prompt-comparison.json` | 원본9fb와 교정417767c의 동일 개발CLI18응답·블라인드 Opus검수·소비코드 amendment·AGY 국소형식목록. 기존 QA FAIL을 보존하며 고객API/모델품질/서비스GO가 아님. |
+| `server/tests/format-reported-language-regression.test.mjs`, `server/tests/fixtures/format-reported-language-regression.json` | ROOT 소유. 사전 자료/전언/현재언어98개와 선언해시를 검증하며 간접지칭·동형어2개 해석쟁점의 원기대/FAIL은 별도 보존한다. |
+| `server/tests/reasoning-output-boundary.test.mjs` | Codex5.6SolHigh 구현. 실제 추론문 노출의 청크별 차단과 일반 꺾쇠·기존 표시/think 회귀를 검증한다. |
+| `server/tests/investment-system-byte-budget.test.mjs` | Codex5.6SolHigh acceptance. 4개 정책·폐쇄형 응답 선호1,056조합과 실제4모드 builder의 system32,768byte 한도를 검증하며 APIcap은 변경하지 않는다. |
 | `.github/workflows/server-quality.yml` | credential 없이 상담 프록시의 check/test를 PR에서 실행. main 배포에는 동일 검증을 선행. |
 | `index.html` | 핵심 앱. 스타일, 화면 마크업, 상태, 시뮬레이션, 차트, 인증, 리서치, 라이브 운용, 다국어·통화 UI가 한 파일에 들어 있는 모놀리식 데모다. |
 | `artifacts/teth-redesign/` | 전략 목록과 상세 개편(2026-09-29)의 기록. 라운드별 Claude, Codex 비평(`r0` ~ `r8`), 기준과 최종 스크린샷, `tools/` 에 `index.html` 의 `MK_CAT`, `RD_CORE`, `RD_CSS` 블록을 만드는 소스와 적용 스크립트가 있다. 세 판단 방식(직접 탐색, 조건 실행, 혼합)은 하나의 원장 엔진으로 계산한다. |
@@ -220,4 +229,6 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 
 투자 프롬프트 후보는 브라우저의 지침 생성 함수를 제거하고 데이터 context/잘린 이력 표시를 사용한다. 기존 source main과 React2,135 snapshot은 보존한다. main server 변경 병합은 자동 운영 배포를 유발하므로 서비스 NO-GO 동안 금지하며 후보는 migration 대상 draft로 전달한다.
 
-최신 migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.
+이전 비교 snapshot migration d53a806의 거래소 연결 후보와 React2,135개 bytes를 보존한 위에서 투자AI 변경만 추가했다. rvHidden/rvNew의 숨은 모델태그 지시와 rvDraft의 미확인 성과·미선택 조건은 제거했고 TLINE 모델사건태그는 검증된 서버사건 계약 전까지 차단한다.
+
+후속 프롬프트 교정은 activation guard `4a81421575e94d0fbd02217c8e98d755893e5095` 위 별도 draft다. 최신 migrationb284262의 React2,423개를 과거 snapshot으로 덮어쓰지 않고 통합 담당이 이 프롬프트 delta를 이식한다.

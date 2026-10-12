@@ -43,7 +43,7 @@ for (const earlier of ['RSI 30미만 1분봉 숏20배, 손절2%로 해줘', '뉴
 }
 test('server-selected settings prompt acknowledges exact UI transition without extra questions', async () => {
   const request = await buildInvestmentRequest({ messages: [{ role: 'user', content: '비트코인 전략 만들어줘' }] });
-  assert.equal(request.promptId, 'investment-settings-ko-1.24.0');
+  assert.equal(request.promptId, 'investment-settings-ko-1.42.0');
   assert.match(request.system, /서버가 별도 Mock 설정 화면을 엽니다/);
   assert.match(request.system, /본문에서 묻지 않습니다/);
 });
