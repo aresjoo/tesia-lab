@@ -1,6 +1,10 @@
 # 투자 상담 활성화 준비 — 누적 버그 보고서
 
-이 후보의 기준은 Lab `8646b6525631d5e1f71e38a8e2e515f23571b5b5`/prompt registry1.24.0이다. 제품·권위·활성화 정본은 Program §16과 WORK_LEDGER다. 기존 공개 QA 실패는 `qa/README.md`와 원문 `qa/investment-usability.json`에 보존한다. 본 보고서의 국소 교정을 모델 품질·React 실제 연결·운영 성공으로 승계하지 않는다.
+현재 정책 기준은 최신 PR6 `d8b094fd9d69bd29161f47e211c8fbcf876c1f3b`/registry1.42.0이며, 아래 activation guard 이력은 Lab `8646b6525631d5e1f71e38a8e2e515f23571b5b5`/registry1.24.0 당시 증거다. 제품·권위·활성화 정본은 Program §16과 WORK_LEDGER다. 기존 공개 QA 실패는 `qa/README.md`와 원문 `qa/investment-usability.json`에 보존한다. 본 보고서의 국소 교정을 모델 품질·React 실제 연결·운영 성공으로 승계하지 않는다.
+
+## 최신 정책 출처의 안전한 내보내기
+
+기존 정책 출력 캐시는 registry1.24였고 검수된 exporter sibling은 이전 helper 출처였다. 최신 PR6 위에 `937a673`의 exporter·spec 두 파일만 동일 바이트로 선별 이식했다. 프롬프트·helper·UI를 수정하지 않고 현재 디스크의 세 source hash와 registry1.42 정책4 golden bytes를 결속한다. 관련6시험은 6PASS/0FAIL/288.697ms이며 전체 회귀·모델 호출·운영은 실행하지 않았다. 출력은 directory0700/files0600·create-only이고 비용 tier3과 제품 mode4를 구분한다. 실제 상담 설정·비공개 credential·credit 증거·서버 활성화는 아직 별도다.
 
 ## 동일 조건 비교 — 개선점 관측, 모델 품질 NO_GO 유지
 

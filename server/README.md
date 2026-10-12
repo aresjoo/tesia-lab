@@ -12,6 +12,8 @@
 
 ## 요청과 응답 계약
 
+정책 준비: `node tools/export-consultation-policies.mjs /absolute/private-parent/new-directory`를 `server/`에서 실행한다. 부모는 본인 소유0700이며 출력은 새 디렉터리에만 생성한다. 최신 registry1.42의 제품 mode4 정책과 현재 출처 목록을 내보내고 credential·가격·credit 설정은 생성하지 않는다. `node --test tests/consultation-policy-export.test.mjs`로 관련6시험을 확인한다. 이 준비는 실제 API 연결·동적 선호 소비·서비스 활성화 성공을 뜻하지 않는다.
+
 | 파일 | 책임 |
 |---|---|
 | `investment-prompts.mjs` | 설정 안내·상담·과거 판단·성과 설명의 text/ID/SHA와 bounded request builder |

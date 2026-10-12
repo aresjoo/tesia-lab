@@ -1,5 +1,7 @@
 # TETH 프로젝트 작업 지침
 
+현재 한정 후속은 `agent/lab/latest-policy-export`다. 최신 PR6 `d8b094fd`의 프롬프트·동적 선호·출력 코드를 보존하며 검수된 `937a673`의 정책 내보내기 도구와 시험만 동일 바이트로 선별 이식했다. `node --test server/tests/consultation-policy-export.test.mjs` 관련6시험이 통과했다. owner-private 새 디렉터리로 registry1.42 정책4·출처 목록을 준비하며 credential·가격·credit 설정은 생성하지 않는다. 실제 모델·React·서버 활성화는 별도 검증이고 main 자동 배포를 실행하지 않는다.
+
 이 파일은 이 저장소의 에이전트용 기준 문서다. 작업을 시작할 때 실제 코드와 함께 읽고, 구조·동작·실행 방법이 바뀌면 같은 변경 안에서 이 문서도 갱신한다.
 
 ## migration 브랜치의 추가 작업 경계
