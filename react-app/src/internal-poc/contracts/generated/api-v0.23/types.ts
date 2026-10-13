@@ -1,0 +1,27 @@
+// Generated source-only API23. Account definitions derive only from pinned frozen inputs.
+export type StartRequest={readonly "apiContractVersion":"0.23.0";readonly "environment":("demo"|"production")};
+export type CancelRequest={readonly "apiContractVersion":"0.23.0"};
+export type StartData={readonly "transactionId":string;readonly "exchangeId":"gate";readonly "environment":("demo"|"production");readonly "status":"AUTH_PENDING";readonly "authorizationUrl":string;readonly "expiresAtMs":number};
+export type ConnectionView={readonly "connectionId":string;readonly "exchangeId":"gate";readonly "environment":("demo"|"production");readonly "status":"CONNECTED"};
+export type ConnectionListData={readonly "connections":ReadonlyArray<ConnectionView>};
+export type Error={readonly "code":("BAD_REQUEST"|"UNAUTHENTICATED"|"FORBIDDEN"|"NOT_FOUND"|"PROVIDER_UNAVAILABLE"|"PROVIDER_FAILED"|"PROVIDER_OWNER_ATTEMPT_UNCERTAIN"|"RATE_LIMITED")};
+export type StartResponse={readonly "apiContractVersion":"0.23.0";readonly "data":StartData};
+export type TransactionResponse={readonly "apiContractVersion":"0.23.0";readonly "data":TransactionView};
+export type ConnectionListResponse={readonly "apiContractVersion":"0.23.0";readonly "data":ConnectionListData};
+export type AccountResponse={readonly "apiContractVersion":"0.23.0";readonly "data":GateAccountSnapshot};
+export type ErrorEnvelope={readonly "apiContractVersion":"0.23.0";readonly "error":Error};
+export type GateAccountSnapshot={readonly "connectionId":string;readonly "exchangeId":"gate";readonly "accountMode":("classic"|"multi_currency"|"portfolio"|"single_currency");readonly "products":ReadonlyArray<GateAccount_Product>;readonly "snapshotAtomic":false;readonly "readStartedAtMs":number;readonly "readFinishedAtMs":number};
+export type GateAccount_Label=string;
+export type GateAccount_DecimalString=string;
+export type GateAccount_QuantityString=string;
+export type GateAccount_BalanceItem={readonly "coin":GateAccount_Label;readonly "available":GateAccount_DecimalString;readonly "balance":(GateAccount_DecimalString|null);readonly "equity":(GateAccount_DecimalString|null);readonly "locked":(GateAccount_DecimalString|null);readonly "unrealizedPnl":(GateAccount_DecimalString|null);readonly "frozen":null};
+export type GateAccount_PositionItem={readonly "symbol":GateAccount_Label;readonly "side":("long"|"short");readonly "quantity":GateAccount_QuantityString;readonly "quantityUnit":"contracts";readonly "positionMode":("single"|"dual_long"|"dual_short");readonly "positionId":(number|null);readonly "entryPrice":(GateAccount_DecimalString|null);readonly "markPrice":(GateAccount_DecimalString|null);readonly "unrealizedPnl":(GateAccount_DecimalString|null);readonly "marginCoin":("BTC"|"USDT"|"USD1")};
+export type GateAccount_SectionReason=("PERMISSION_REJECTED"|"RATE_LIMITED"|"LOCAL_BUSY"|"PROVIDER_TRUNCATED"|"PROVIDER_DEADLINE_EXCEEDED"|"PROVIDER_FAILED");
+export type GateAccount_BalanceSection={readonly "status":("ok"|"unavailable"|"not_applicable"|"not_opened");readonly "reason":(GateAccount_SectionReason|null);readonly "items":ReadonlyArray<GateAccount_BalanceItem>};
+export type GateAccount_PositionSection={readonly "status":("ok"|"unavailable"|"not_applicable"|"not_opened");readonly "reason":(GateAccount_SectionReason|null);readonly "items":ReadonlyArray<GateAccount_PositionItem>};
+export type GateAccount_Product={readonly "product":("spot"|"unified"|"perpetual_btc"|"perpetual_usdt"|"perpetual_usd1");readonly "balanceScope":("independent"|"unified_collateral"|"market_margin_non_additive");readonly "balances":GateAccount_BalanceSection;readonly "positions":GateAccount_PositionSection};
+export type TransactionView={readonly "transactionId":string;readonly "exchangeId":"gate";readonly "environment":("demo"|"production")}&({readonly status:"CONNECTED";readonly connectionId:string;readonly reason:null;readonly reconciliationRequired:false}|{readonly status:"HOLD";readonly connectionId:null;readonly reason:"PROVIDER_OWNER_ATTEMPT_UNCERTAIN";readonly reconciliationRequired:true}|{readonly status:"FAILED_NO_RETRY";readonly connectionId:null;readonly reason:"PROVIDER_FAILED";readonly reconciliationRequired:false}|{readonly status:"AUTH_PENDING"|"CLAIMED"|"PROCESSING"|"TOKEN_RECEIVED"|"SENT"|"ISSUED_KEY"|"CANCELLED";readonly connectionId:null;readonly reason:null;readonly reconciliationRequired:false});
+export type CancelResponse=Readonly<{apiContractVersion:"0.23.0";data:Extract<TransactionView,{status:"CANCELLED"|"HOLD"|"CONNECTED"}>}>;
+export type ErrorCode=Error["code"];
+export type SchemaName="StartRequest"|"CancelRequest"|"StartResponse"|"TransactionResponse"|"CancelResponse"|"ConnectionListResponse"|"AccountResponse"|"ErrorEnvelope";
+export type DeepReadonly<T>=T extends object?{readonly [P in keyof T]:DeepReadonly<T[P]>}:T;

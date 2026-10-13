@@ -1,0 +1,74 @@
+{
+  "accountSourceCommit": "f77c0df",
+  "accountSourceSha256": {
+    "schemas/exchanges/gate/account-snapshot.schema.json": "3ec84e43eef1cbe8e985cefd7da7b351d2b522a78ade41eabd10927f2f798162",
+    "src/tesia_contracts/gate_account_validation.py": "a0d562276bc4a4b0686a07fc72708d96a480ee52902c197fb09485a99a53ddf8"
+  },
+  "apiContractVersion": "0.23.0",
+  "distributionAggregateVersion": null,
+  "generatedSha256": {
+    "client.ts": "cbd39b54b26669de73f698ca6daedbacf48fd61b575bab9d047c792514a6dbb5",
+    "index.ts": "cc37c31d2e47a755f02c03aa5d98e45622d5ed23d148010d6f63aaa77a96ed41",
+    "types.ts": "46009008788a244b87ea146de18542cc9944429609e43cb9309f236d481ce069",
+    "validator.ts": "32f622b4cf1a13d19806017177d6d35caf1cd47c122d6d62ac7d1590821348a4"
+  },
+  "operations": [
+    {
+      "method": "POST",
+      "operationId": "startGateBrokerConnection",
+      "path": "/api/v1/gate-broker-connections/transactions",
+      "request": "StartRequest",
+      "response": "StartResponse",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "operationId": "getGateBrokerConnectionTransaction",
+      "path": "/api/v1/gate-broker-connections/transactions/{transactionId}",
+      "request": null,
+      "response": "TransactionResponse",
+      "successStatus": 200
+    },
+    {
+      "method": "POST",
+      "operationId": "cancelGateBrokerConnectionTransaction",
+      "path": "/api/v1/gate-broker-connections/transactions/{transactionId}/cancel",
+      "request": "CancelRequest",
+      "response": "CancelResponse",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "operationId": "listGateBrokerConnections",
+      "path": "/api/v1/gate-broker-connections",
+      "request": null,
+      "response": "ConnectionListResponse",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "operationId": "getGateBrokerConnectionAccount",
+      "path": "/api/v1/gate-broker-connections/{connectionId}/account",
+      "request": null,
+      "response": "AccountResponse",
+      "successStatus": 200
+    }
+  ],
+  "reservationStatus": "ISOLATED_SOURCE_CANDIDATE_ONLY",
+  "runtimeLimits": {
+    "authority": "local SDK parser guards; not public HTTP limits or host proof",
+    "maxDocumentBytes": 8388608,
+    "maxDocumentDepth": 16,
+    "numberRepresentation": "safe-integer-only; larger Python integers rejected without rounding"
+  },
+  "sourceOnly": true,
+  "sourceSha256": {
+    "fixtures/api/v0.23/gate-broker-invalid.json": "3fce872ff0ee24510b1f00ce68673e635f680c388b14f0cca67dc29b4cbaaebf",
+    "fixtures/api/v0.23/gate-broker-valid.json": "7164a69123a7cf67ef73c0ce4a06053fc406ebe2d8f1a1a399cf10615b61af52",
+    "openapi/api-v0.23.yaml": "269e19305977b28bd6ac269c21cdffedc3ac232c84b4b9e0e03e81fd63e5b856",
+    "schemas/api/v0.23/gate-broker-service.schema.json": "d522f483402876a80f46547461252f0527cf6476a328b143bdebb07f9617f123",
+    "src/tesia_contracts/api_v23_validation.py": "3c4cb7413cdbf1c0bae2ad3efe07bf071feab9b700b7bd2695a9254ce39df9b8",
+    "tests/test_api_v23_gate_broker_service.py": "15e1effc2bf2dd492ff51eae40d67d3b3cc0f3334738c4023d30099335818026",
+    "tools/generate_api_v23_types.py": "df7de8869ca25b408fe50d3a8924277fb005a6add8be602ec736ddab46a32493"
+  }
+}

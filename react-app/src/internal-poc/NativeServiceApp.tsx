@@ -5,6 +5,7 @@ import { nativeAppNotice, nativeAppUiText } from './native-app-ui-copy'
 import { nativeShellText } from './native-shell-copy'
 import { useExchangeConnectionPresentation, useBitgetCanaryPresentation } from '../exchange-connect/use-exchange-connection'
 import { readExchangeTransactionLocator } from '../exchange-connect/controller'
+import { readGateBrokerTransactionLocator, useGateBrokerConnection, type GateBrokerAuthorizationPort } from '../exchange-connect/use-gate-broker-connection'
 import { accountPresentationBound } from './native-account-presentation'
 import { closeClientSettingsRoute } from '../use-client-settings-route'
 import { nativeJobText, type NativeJobTextKey } from './native-job-copy'
@@ -835,6 +836,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     sessionState === 'AUTHENTICATED', exchangeConnectionsEnabled && phase === 'ready')
   const bitgetCanary = useBitgetCanaryPresentation(accountScope, sessionState === 'AUTHENTICATED',
     bitgetCanaryEnabled && phase === 'ready' && !exchangeConnectionsEnabled)
+  const gateBrokerEnabled = import.meta.env.VITE_TETH_GATE_BROKER_ENABLED === 'true'
+  const gateBroker = useGateBrokerConnection(accountScope, sessionState === 'AUTHENTICATED', gateBrokerEnabled && phase === 'ready')
+  const gateBrokerAuthorization = useMemo<GateBrokerAuthorizationPort | undefined>(() => gateBroker?.available
+    ? { scope: gateBroker.scope, identity: `gate-broker:${gateBroker.scope}`, environment: 'production', authorize: gateBroker.connect }
+    : undefined, [gateBroker?.available, gateBroker?.scope, gateBroker?.connect])
   const catalogueCopyExecution = useCandidateCopyExecution(copyExecutionInput, copyExecutionEnabled && phase === 'ready', clients.session, () => session.current, sessionState === 'AUTHENTICATED' ? accountScope : null)
   const bindSession = (value: typeof session.current) => {
     // Keep request authority in the existing ref. React state only scopes the
@@ -985,7 +991,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   else if (hasPending && !busy && !pendingRecoveryVisible) setPendingRecoveryVisible(true)
   const [rejectedClaimKey, setRejectedClaimKey] = useState<string | null>(null)
   const [loginOpen, setLoginOpen] = useState(() => window.location.pathname === '/auth/complete'
-    && !((exchangeConnectionsEnabled || bitgetCanaryEnabled) && readExchangeTransactionLocator(window.location.href)))
+    && !((exchangeConnectionsEnabled || bitgetCanaryEnabled) && readExchangeTransactionLocator(window.location.href))
+    && !(gateBrokerEnabled && readGateBrokerTransactionLocator(window.location.href)))
   const [loginRetained, setLoginRetained] = useState(false)
   // Presentation recovery only: a failed durable write must not discard the
   // provider controller, or let its callback imply that the host accepted it.
@@ -1007,6 +1014,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [returnBinding, setReturnBinding] = useState<{ epoch: number; generation: number } | null>(null)
   const returnBindingRef = useRef<typeof returnBinding>(null)
   const exchangeOwnsReturn = () => (exchangeConnectionsEnabled || bitgetCanaryEnabled) && Boolean(readExchangeTransactionLocator(window.location.href))
+    || gateBrokerEnabled && Boolean(readGateBrokerTransactionLocator(window.location.href))
   const plainAuthReturn = () => window.location.pathname === '/auth/complete'
     && window.location.search === '' && window.location.hash === '' && !exchangeOwnsReturn()
   useEffect(() => {
@@ -1156,13 +1164,14 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       recoveringReturn = null
     }
     const authReturn = !emailRecovery && window.location.pathname === '/auth/complete' && !exchangeOwnsReturn()
+    const gateReturn = gateBrokerEnabled && Boolean(readGateBrokerTransactionLocator(window.location.href))
     if (!emailRecovery && !authReturn) {
       try { sessionStorage.removeItem(CONNECTION_PLAN_LOGIN_KEY) } catch { /* Stale UI intent remains non-authorizing. */ }
     }
     // Query/hash values are not callback authority. Malformed return URLs do
     // not fall through to anonymous creation; protected recovery stays first.
     if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
-    const existing = emailRecovery || authReturn ? await clients.session.current().catch(failure => {
+    const existing = emailRecovery || authReturn || gateReturn ? await clients.session.current().catch(failure => {
       if (!(failure instanceof ApiResponseError) || failure.status !== 401 || failure.envelope.error.code !== 'AUTHENTICATION_REQUIRED') throw failure
       if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return null
       if (emailRecovery) {
@@ -1179,11 +1188,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       return null
     }) : null
     if (generation !== epoch.current || (recoveringReturn && returnBindingRef.current !== recoveringReturn)) return
-    if ((emailRecovery || authReturn) && !existing) return
+    if ((emailRecovery || authReturn || gateReturn) && !existing) return
     if (authReturn && !plainAuthReturn()) throw new Error('SESSION_CHANGED')
     // Direct return GETs must retain the existing browser-session invariant
     // before any CSRF read or session/owner adoption; the SDK stays unchanged.
-    if (authReturn && existing && existing.body.meta.resourceRevision !== existing.body.data.revision) throw new Error('SESSION_CHANGED')
+    if ((authReturn || gateReturn) && existing && existing.body.meta.resourceRevision !== existing.body.data.revision) throw new Error('SESSION_CHANGED')
     if (existing && !['ANONYMOUS', 'AUTHENTICATED'].includes(existing.body.data.state)) throw new Error('SESSION_CHANGED')
     // An untrusted email locator suppresses creation only. The existing session
     // still comes from the real SDK GET, not a stored authentication receipt.
@@ -3051,7 +3060,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       } : undefined}
     analysisPresentationBlocked={loginOpen || claimAvailable || Boolean(paperBinding || smokeBinding) || hasLogout || phase !== 'ready'}
     conversationLibrary={presentations.conversationLibrary} insightPresentation={presentations.insightPresentation}
-    sharingPresentation={presentations.sharingPresentation} catalogueCopyExecution={catalogueCopyExecution} accountPresentation={accountPresentationBound(presentations.accountPresentation, accountScope) ? presentations.accountPresentation : bitgetCanary?.account} feedbackPresentation={presentations.feedbackPresentation} onConnectionClose={bitgetCanary?.close} brokerPresentation={presentations.brokerPresentation ?? bitgetCanary?.broker} connectionPresentation={presentations.connectionPresentation ?? exchangeConnectionPresentation ?? bitgetCanary?.connection}
+    sharingPresentation={presentations.sharingPresentation} catalogueCopyExecution={catalogueCopyExecution} accountPresentation={accountPresentationBound(presentations.accountPresentation, accountScope) ? presentations.accountPresentation : bitgetCanary?.account} feedbackPresentation={presentations.feedbackPresentation} onConnectionClose={gateBroker?.requested ? gateBroker.close : bitgetCanary?.close} brokerPresentation={presentations.brokerPresentation ?? bitgetCanary?.broker} connectionPresentation={gateBroker?.requested ? gateBroker.connection : presentations.connectionPresentation ?? exchangeConnectionPresentation ?? bitgetCanary?.connection}
+    gateBrokerAuthorization={gateBrokerAuthorization}
     researchPresentation={sourceResearchPresentation ?? (strategyDocument && presentations.researchPresentation?.scope === accountScope && presentations.researchPresentation.data.scopeId === strategyDocument.identity ? presentations.researchPresentation : strategyDocument && accountScope ? { scope: accountScope, data: {
       scopeId: strategyDocument.identity,
       entries: researchEntries,

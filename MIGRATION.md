@@ -1,6 +1,12 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
-## 현재 전체 React 전달 — 승인 전략·백테스트 진입·연구 원문 보존
+## 현재 누적 React 전달 — ROOT Gate 연결 소스 exact10
+
+기본 전체 출처 `dd917e1cb77aa4c1b1153424679b3afb977fbbbd`는 유지하고, Web [`76ba42a59feaa63c6fbeba504515316be4f6214e`](https://github.com/beak1011/tesia-web/tree/76ba42a59feaa63c6fbeba504515316be4f6214e)의 Gate 소스 exact10만 누적 인수했다. Native/ClientServiceExperience의 Gate 전용 승인 배선2, 새 owner-bound hook/spec2, 동결 API23 adapter1/SDK5이며 source `Bugfix_report.md`는 제외한다. manifest의 해당10 entry와 누적 snapshot digest만 갱신했고 전체 source/tree가76과 동일하다는 의미가 아니다. 다른 연구/WIP·Bitget·UI·카피·CSS·설정·package/pin·원본 root/main·Node/Worker는 이 전달에서 변경하지 않았다.
+
+Gate 기존 승인 버튼은 명시 flag와 현재 AUTH owner가 맞을 때만 API23을 호출한다. callback의 비인가 transaction locator로 현재 owner GET을 수행하고 durable intent·취소/재조회·scope/generation fence를 유지한다. 공식 UID/fresh권리 proof 없는 `TOKEN_RECEIVED`는 기존 대기 표현이며 CONNECTED로 합성하지 않는다. source-only Opus GO와 기존 직접시험은 원 owning source의 증거이고 이 전달에서 추가 시험·빌드·배포는0이다. ROOT의 별도 운영 Web 전환은 `b3038a8e01397922a44263223610230bf2817f7a`이며 실제 사용자 OAuth/CONNECTED는 미검증이다. migration Git 전달은 고객 수신·main 병합·운영 활성화·실계좌·주문 성공이 아니다.
+
+## 기본 전체 React 전달 — 승인 전략·백테스트 진입·연구 원문 보존
 
 최신 Web [`dd917e1`](https://github.com/beak1011/tesia-web/tree/dd917e1cb77aa4c1b1153424679b3afb977fbbbd)/tree `9a071266be2e4286507799e8642816f2e765037c`의 clean 전체 **2,539파일·36,564,948bytes**를 전달했다. snapshot `5e8d23bcf62e4bb0499731b08612d1301eb704a16d69783f57bd2abc7d11a777`, 이전2536에서 추가3·제거0이며 파일별 SHA 검증 통과다. 원본 HTML/CSS/SVG·카피·배치 파일은 변경하지 않는다. 아래7a3 기록은 이전 전달 증거다.
 

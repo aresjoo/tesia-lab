@@ -71,6 +71,7 @@ import { accountPresentationBound, accountLocationAvailable, type NativeAccountP
 import { brokerPresentationBound, type BrokerServicePresentation } from '../client-broker-presentation'
 import { brokerViewBound, brokerViewDataset, type BrokerViewState } from '../client-broker-view'
 import { connectionPresentationBound, type NativeConnectionPresentation } from './native-connection-presentation'
+import type { GateBrokerAuthorizationPort } from '../exchange-connect/use-gate-broker-connection'
 import type { ConnectionPlanLocation } from '../client-connection-plan'
 import { projectSettingsAccountConnections, settingsAccountConnectionOwner } from './client-settings-account-connections'
 import { NativeResearchWorkspace } from './NativeResearchWorkspace'
@@ -163,7 +164,7 @@ export type ClientServiceSourceIntake = {
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisBinding, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, catalogueCopyExecution, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions, sourceIntake }: {
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisBinding, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, catalogueCopyExecution, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, gateBrokerAuthorization, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions, sourceIntake }: {
   state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent, request?: ClientConnectionPlanAuthRequest) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
@@ -200,6 +201,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
    * a verified callback intent; background data continues to feed settings. */
   connectionPresentation?: NativeConnectionPresentation & { requestId: string }
   onConnectionClose?: () => void
+  gateBrokerAuthorization?: GateBrokerAuthorizationPort
   /** One validated auth-panel result may resume presentation once. It grants
    * neither exchange access nor a connection/provider operation. */
   connectionPlanContinuation?: ClientConnectionPlanContinuationReceipt | null
@@ -454,12 +456,32 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   }, [accountScope, connectionPlanContinuation, onConnectionPlanContinuationConsumed, state.sessionState])
   const connectionData = nativeAccounts && state.sessionState === 'AUTHENTICATED' && connectionPresentationBound(connectionPresentation, accountScope)
     ? connectionPresentation : undefined
-  const latestConnectionPlanAuthority = useRef({ owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, plan: connectionPlan })
+  const latestConnectionPlanAuthority = useRef({ owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, gateBroker: gateBrokerAuthorization, plan: connectionPlan })
   useLayoutEffect(() => {
-    latestConnectionPlanAuthority.current = { owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, plan: connectionPlan }
-  }, [accountScope, connectionBrowse, connectionData, brokerData, connectionPlan, state.sessionState])
+    latestConnectionPlanAuthority.current = { owner: accountScope, session: state.sessionState, browse: connectionBrowse, data: connectionData, broker: brokerData, gateBroker: gateBrokerAuthorization, plan: connectionPlan }
+  }, [accountScope, connectionBrowse, connectionData, brokerData, gateBrokerAuthorization, connectionPlan, state.sessionState])
   const connectionPlanAuthorize = (() => {
     const browse = connectionBrowse, data = connectionData, stage = data?.state, exchange = connectionPlan.exchange
+    if (nativeAccounts && connectionPlan.step === 'authorize' && exchange === 'gate' && browse
+      && browse.owner === accountScope && browse.session === 'AUTHENTICATED' && state.sessionState === 'AUTHENTICATED'
+      && gateBrokerAuthorization && gateBrokerAuthorization.scope === accountScope && gateBrokerAuthorization.environment === 'production'
+      && gateBrokerAuthorization.identity === `gate-broker:${accountScope}`) {
+      const port = gateBrokerAuthorization, action = port.authorize
+      return async () => {
+        await Promise.resolve()
+        const current = latestConnectionPlanAuthority.current
+        if (ownerRef.current !== accountScope || current.owner !== accountScope || current.session !== 'AUTHENTICATED'
+          || current.browse !== browse || current.gateBroker !== port || port.authorize !== action
+          || current.plan.step !== 'authorize' || current.plan.exchange !== 'gate') return
+        await action()
+        const settled = latestConnectionPlanAuthority.current
+        if (ownerRef.current === accountScope && settled.owner === accountScope && settled.session === 'AUTHENTICATED'
+          && settled.browse === browse && settled.gateBroker === port && port.authorize === action
+          && settled.plan.step === 'authorize' && settled.plan.exchange === 'gate') {
+          setConnectionBrowse(value => value === browse ? { ...browse, mode: 'browse' } : value)
+        }
+      }
+    }
     if (nativeAccounts && connectionPlan.step === 'authorize' && exchange === 'bitget' && browse
       && browse.owner === accountScope && browse.session === 'AUTHENTICATED' && state.sessionState === 'AUTHENTICATED'
       && brokerData?.identity === `bitget-canary:${accountScope}` && brokerData.actions?.onConnect) {
