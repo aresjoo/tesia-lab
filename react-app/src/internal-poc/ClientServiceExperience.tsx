@@ -163,7 +163,7 @@ export type ClientServiceSourceIntake = {
 /** Same client presentation; all authoritative state/actions belong to InternalPocApp.
  * This module is reachable only from the separately built internal entrypoint.
  */
-export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, catalogueCopyExecution, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions, sourceIntake }: {
+export function ClientServiceExperience({ state, onLogin, onHistory, onQuickReply, conversationNavigation, navigationFeedback, strategyDocument, conversationNotice, resultActivityKey, analysis, analysisIdentity, analysisBinding, analysisPresentationBlocked = false, nativeAccounts = false, sessionRecoveryNeeded = false, loadingHome = false, accountScope, usagePresentation, connectionStatus, executionHistory, historyFeedback, clarification, composerRequest, conversationLibrary, insightPresentation, sharingPresentation, catalogueCopyExecution, researchPresentation, accountPresentation, feedbackPresentation, brokerPresentation, connectionPresentation, onConnectionClose, connectionPlanContinuation, onConnectionPlanContinuationConsumed, authSurface, marketQuestionActions, marketChartActions, followupActions, continuationActions, sourceIntake }: {
   state: Omit<InternalPocPresentation, 'messages' | 'onSend'> & { messages: readonly ClientServiceMessage[]; onSend: (value: string, displayText?: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; canStop?: boolean; onStop?: () => void }; onLogin?: (intent?: ClientAuthIntent, request?: ClientConnectionPlanAuthRequest) => void; onHistory?: () => void; onQuickReply?: (value: string, researchThread?: NativeResearchThreadOrigin) => Promise<void>; serviceNotice?: string; sessionRecoveryNeeded?: boolean; conversationNavigation?: ReactNode
   strategyDocument?: { identity: string; content: ReactNode; renderResearch?: (actions: ReactNode) => ReactNode }
   conversationNotice?: ReactNode
@@ -172,6 +172,9 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   analysis?: ReactNode
   /** Presentation identity only. Result ownership remains in the controller. */
   analysisIdentity?: string
+  /** App-owned verified source/job/version join. Readiness never replaces approval. */
+  analysisBinding?: Readonly<{ owner: string; sourceConversationId: string; researchWorkId: string;
+    strategyVersionId: string; semanticHash: string; backtestId: string; reportReady: boolean }>
   /** Active controller-owned auth/approval overlays, not retained hidden DOM. */
   analysisPresentationBlocked?: boolean
   /** Untrusted presence hint for the initial empty surface, never authority. */
@@ -399,6 +402,26 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   if (sharingView && (!sharingData || sharingView.owner !== accountScope || sharingView.datasetIdentity !== sharingDataset)) setSharingView(null)
   const researchData = accountScope && researchPresentation?.scope === accountScope
     && (!strategyDocument || researchPresentation.data?.scopeId === strategyDocument.identity) ? researchPresentation.data : undefined
+  const analysisBound = Boolean(analysisBinding && state.phase === 'ready' && state.sessionState === 'AUTHENTICATED'
+    && analysisBinding.owner === JSON.stringify([accountScope, state.sessionState])
+    && analysisBinding.researchWorkId === researchData?.scopeId && analysisBinding.backtestId === analysisIdentity
+    && analysisBinding.sourceConversationId && analysisBinding.strategyVersionId && analysisBinding.semanticHash)
+  // Mount the verified getter before reportReady, otherwise its status callback
+  // can never confirm readiness. Retired source/owner/job content cannot mount.
+  const scopedAnalysis = analysisBinding === undefined || analysisBound ? analysis : undefined
+  const suppliedResearchReport = researchData?.documents?.some(item => item.id === 'report')
+    || researchData?.typedDocuments?.some(item => item.id === 'report')
+  const suppliedBacktest = researchData?.documents?.some(item => item.id === 'bt1')
+    || researchData?.typedDocuments?.some(item => item.id === 'bt1')
+  const resultDocumentId = scopedAnalysis && researchData
+    ? analysisBinding === undefined ? suppliedResearchReport ? undefined : 'report'
+      : analysisBound && analysisBinding.reportReady && !suppliedBacktest ? 'bt1' : undefined
+    : undefined
+  // Reuse the existing artifact surface; never replace a supplied research
+  // report or an existing backtest document with a result portal.
+  const researchDocuments = resultDocumentId ? [...(researchData?.documents ?? []), {
+    id: resultDocumentId, title: nativeResultText(language, 'resultTitle'), content: <NativeAnalysisReportSlot />,
+  }] : researchData?.documents
   const openedResearchIdentity = useRef<string | null>(null)
   useEffect(() => {
     const identity = researchData && researchPresentation?.openIdentity
@@ -586,9 +609,8 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
   const feedbackData = accountScope && feedbackPresentation?.scope === accountScope ? feedbackPresentation : undefined
   const researchView = researchData?.view ?? (researchViewState?.scope === researchData?.scopeId ? researchViewState?.view : undefined)
   const currentResearchId = normalizeResearchView(researchView, [...RESEARCH_DOCUMENT_SURFACES.map(item => item.id),
-    ...(researchData?.documents ?? []).map(item => item.id), ...(researchData?.typedDocuments ?? []).map(item => item.id)]).activeDocumentId
-  const currentResearchTitle = currentResearchId === 'report' && analysis ? nativeResultText(language, 'resultTitle')
-    : researchData?.documents?.find(item => item.id === currentResearchId)?.title ?? researchData?.typedDocuments?.find(item => item.id === currentResearchId)?.title
+    ...(researchDocuments ?? []).map(item => item.id), ...(researchData?.typedDocuments ?? []).map(item => item.id)]).activeDocumentId
+  const currentResearchTitle = researchDocuments?.find(item => item.id === currentResearchId)?.title ?? researchData?.typedDocuments?.find(item => item.id === currentResearchId)?.title
       ?? RESEARCH_DOCUMENT_SURFACES.find(item => item.id === currentResearchId)?.title ?? currentResearchId
   const changeResearchView = (view: NativeResearchView) => {
     if (!researchData) return
@@ -1245,7 +1267,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           animate={homeEntrance} onBandHeight={setBandHeight}>
           {!historyView.open && conversationNavigation}
         </ClientHomeSurface>
-      </section></div> : <NativeAnalysisLayout key={documentMountKey} analysis={analysis} composerRequest={composerRequest}
+      </section></div> : <NativeAnalysisLayout key={documentMountKey} analysis={scopedAnalysis} composerRequest={composerRequest}
         presentationActive={state.phase === 'ready' && !connectionOpen && !historyView.open && !accountPlan && !trading && !insights && !brokers && !strategies && !surface && !confirmReset && !analysisPresentationBlocked}><div hidden={Boolean(researchData && researchWorkspaceOpen)} style={{ height: '100%', minHeight: 0 }}><ClientConversation value={state.input} onChange={editInput} onSend={() => send()} composerRequest={composerRequest}
         composerTarget={researchData && researchWorkspaceOpen ? researchComposerHost : undefined}
         composerPlaceholder={questionPlaceholder}
@@ -1256,9 +1278,9 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
         conversationNotice={researchData && researchWorkspaceOpen ? undefined : conversationNotice}
         artifact={researchData && strategyDocument ? <></> : strategyDocument?.content} artifactLabel={strategyDocument ? n('strategyDraft') : undefined}
         onOpenArtifact={researchData ? () => openResearch('plan') : undefined}
-        onOpenReport={researchData ? () => openResearch('report') : undefined}
+        onOpenReport={researchData && resultDocumentId ? () => openResearch(resultDocumentId) : undefined}
         artifactOpenLabel={strategyDocument ? n('openStrategyDraft') : undefined} showResearchTeam={!strategyDocument}
-        reportArtifact={analysis ? { identity: analysisIdentity ?? 'current-result', label: nativeResultText(language, 'resultTitle'), openLabel: nativeResultText(language, 'resultTitle'), content: researchData ? null : <NativeAnalysisReportSlot /> } : undefined}
+        reportArtifact={scopedAnalysis && (!researchData || resultDocumentId) ? { identity: analysisIdentity ?? 'current-result', label: nativeResultText(language, 'resultTitle'), openLabel: nativeResultText(language, 'resultTitle'), content: researchData ? null : <NativeAnalysisReportSlot /> } : undefined}
         notice={!researchHistory && strategyDocument && state.issue ? <div className="client-service-issue">{state.issue}</div> : undefined}
         onStop={state.onStop ?? (() => undefined)} canStop={state.canStop ?? false} busy={state.busy && state.phase !== 'loading'} inputDisabled={!available} maxLength={1000}
         inputLabel={c('askTeth')} sendLabel={c('send')} titleLabel={c('title')} initialTitle={visibleTitle}
@@ -1314,7 +1336,7 @@ export function ClientServiceExperience({ state, onLogin, onHistory, onQuickRepl
           </> }))
         }}
         notice={<>{researchWorkspaceOpen && conversationNotice ? <div className="client-service-result-notice" role="status">{conversationNotice}</div> : null}{researchWorkspaceOpen && state.issue ? <div className="client-service-issue">{state.issue}</div> : null}<div ref={setResearchOutcomeHost} /></>}
-        documents={analysis ? [...(researchData.documents ?? []).filter(item => item.id !== 'report'), { id: 'report', title: nativeResultText(language, 'resultTitle'), content: <NativeAnalysisReportSlot /> }] : researchData.documents}
+        documents={researchDocuments}
         titleEditor={activeRecord && <NativeConversationTitle key={JSON.stringify([accountScope, activeRecord.id])} title={visibleTitle} onSave={library?.onRename ? value => renameConversation(activeRecord.id, value) : undefined} />} title={visibleTitle} strategyDocument={strategyDocument?.renderResearch ? strategyDocument.renderResearch(<div ref={setResearchWorkflowHost} />) : <>{strategyDocument?.content}<div ref={setResearchWorkflowHost} /></>} composer={<div ref={setResearchComposerHost} className="client-lab-conversation native-research-composer-host" />} onBack={() => {
         setResearchWorkspaceOpen(false)
         requestAnimationFrame(() => root.current?.querySelector<HTMLButtonElement>('[data-native-open-research]')?.focus({ preventScroll: true }))

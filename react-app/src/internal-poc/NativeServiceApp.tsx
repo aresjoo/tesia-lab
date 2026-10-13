@@ -66,6 +66,8 @@ import { createNativeReplayReaderScope, type NativeReplayReaderFactory } from '.
 type History = HistoryOperations['listNativeConversationHistoryV8']['response']['data']
 type HistoryOwner = { sessionId: string; revision: string; etag: string; conversationId: string }
 type DocumentOwner = { sessionId: string; sessionState: 'ANONYMOUS' | 'AUTHENTICATED'; conversationId: string; draftId: string }
+type SourceJobScope = { owner: string; conversationId: string; draftId: string; bindingHash: string;
+  strategyVersionId: string; semanticHash: string; backtestId: string }
 type HistoryNavigation = { cursors: (string | undefined)[]; index: number; offset: number }
 type NativeAuthIntent = 'login' | 'signup'
 type NativeConnectionPlanLoginIntent = ClientConnectionPlanAuthRequest & { sourceEtag: string; sourceEpoch: number; panelGeneration: number }
@@ -576,6 +578,85 @@ const assertSameJob = (next: NativeJob, observed: NativeJob) => {
     if (next[field] !== observed[field]) throw new Error('BINDING_CONFLICT')
   }
 }
+
+/** Source strategy reads reuse the original SDKs. Local approval/view objects
+ * are comparison targets, never a substitute for current server authority. */
+export class NativeSourceStrategyBacktestAuthority {
+  constructor(private readonly ports: Readonly<{
+    owner: (conversationId: string, expected?: HistoryOwner) => Promise<HistoryOwner>
+    conversations: Pick<ServiceConversationV03Port, 'getConversation'>
+    proposals: Pick<NativeResearchStrategyProposalV22Adapter, 'getAppliedDraft'>
+    history: (conversationId: string, cursor?: string) => Promise<History>
+    job: (backtestId: string) => Promise<NativeJob>
+  }>) {}
+  async observe(view: ProposalView, isCurrent: () => boolean) {
+    const check = () => { if (!isCurrent()) throw new Error('SESSION_CHANGED') }
+    check()
+    const owner = await this.ports.owner(view.snapshot.conversationId)
+    check()
+    if (view.owner !== JSON.stringify([owner.sessionId, 'AUTHENTICATED'])) throw new Error('BINDING_CONFLICT')
+    const bound = await this.ports.proposals.getAppliedDraft(view.bound.proposalId)
+    check()
+    if (canonicalApiV22(bound) !== canonicalApiV22(view.bound)) throw new Error('BINDING_CONFLICT')
+    const current = await this.ports.conversations.getConversation(view.snapshot.conversationId)
+    check()
+    if (!current.etag || current.etag !== view.etag || !sameProposalBase(proposalBase(current.body.data), view.bound.draftBase)
+      || canonicalApiV22(current.body.data.draftState) !== canonicalApiV22(bound.draftState)
+      || current.body.data.semanticHash !== bound.semanticHash) throw new Error('BINDING_CONFLICT')
+    await this.ports.owner(owner.conversationId, owner)
+    check()
+    return { owner, snapshot: current.body.data, etag: current.etag }
+  }
+  async confirm(view: ProposalView, expectedApproval: StrategyApproval, isCurrent: () => boolean) {
+    const observed = await this.observe(view, isCurrent)
+    let cursor: string | undefined, revision: string | undefined
+    const cursors = new Set<string>(), matches: History['rows'][number][] = []
+    let complete = false
+    for (let pages = 0; pages < 10; pages++) {
+      const page = await this.ports.history(observed.owner.conversationId, cursor)
+      if (!isCurrent()) throw new Error('SESSION_CHANGED')
+      if (page.conversationId !== observed.owner.conversationId || revision && revision !== page.snapshotRevision) throw new Error('BINDING_CONFLICT')
+      revision = page.snapshotRevision
+      matches.push(...page.rows.filter(row => row.approval.strategyVersionId === expectedApproval.strategyVersionId))
+      if (!page.nextCursor) { complete = true; break }
+      if (cursors.has(page.nextCursor)) throw new Error('BINDING_CONFLICT')
+      cursors.add(page.nextCursor); cursor = page.nextCursor
+    }
+    const jobIds = new Set<string>()
+    if (!complete || matches.length === 0 || !approvalMatchesDraft(expectedApproval, observed.snapshot)) throw new Error('BINDING_CONFLICT')
+    for (const row of matches) {
+      if (canonicalApiV22(row.approval) !== canonicalApiV22(expectedApproval)) throw new Error('BINDING_CONFLICT')
+      if (row.job === null) {
+        if (matches.length !== 1) throw new Error('BINDING_CONFLICT')
+      } else {
+        if (jobIds.has(row.job.backtestId) || row.job.strategyVersionId !== expectedApproval.strategyVersionId
+          || row.job.semanticHash !== expectedApproval.semanticHash) throw new Error('BINDING_CONFLICT')
+        jobIds.add(row.job.backtestId)
+      }
+    }
+    await this.ports.owner(observed.owner.conversationId, observed.owner)
+    if (!isCurrent()) throw new Error('SESSION_CHANGED')
+    return { ...observed, approval: matches[0].approval, rows: matches }
+  }
+  async selectJob(view: ProposalView, approval: StrategyApproval, expectedJob: NativeJob, isCurrent: () => boolean) {
+    const observed = await this.confirm(view, approval, isCurrent)
+    const matches = observed.rows.filter(row => row.job?.backtestId === expectedJob.backtestId)
+    if (matches.length !== 1 || !matches[0].job) throw new Error('BINDING_CONFLICT')
+    assertSameJob(matches[0].job, expectedJob)
+    const job = await this.ports.job(expectedJob.backtestId)
+    if (!isCurrent()) throw new Error('SESSION_CHANGED')
+    assertSameJob(job, expectedJob)
+    if (job.strategyVersionId !== observed.approval.strategyVersionId || job.semanticHash !== observed.approval.semanticHash) throw new Error('BINDING_CONFLICT')
+    await this.ports.owner(observed.owner.conversationId, observed.owner)
+    if (!isCurrent()) throw new Error('SESSION_CHANGED')
+    return { ...observed, job }
+  }
+  static matchesJob(job: NativeJob, scope: SourceJobScope, view: ProposalView): boolean {
+    return scope.owner === view.owner && scope.bindingHash === view.bound.bindingHash
+      && scope.conversationId === view.snapshot.conversationId && scope.draftId === view.snapshot.draftId
+      && scope.backtestId === job.backtestId && scope.strategyVersionId === job.strategyVersionId && scope.semanticHash === job.semanticHash
+  }
+}
 const safeCode = (error: unknown) => {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : ''
   return ['AUTHENTICATION_REQUIRED', 'NOT_READY', 'SNAPSHOT_CHANGED', 'BINDING_CONFLICT', 'SOURCE_VERIFICATION_FAILED'].includes(code) ? code : 'REQUEST_UNCONFIRMED'
@@ -625,6 +706,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }))
   const [sourceIntakeAdapter] = useState(() => new NativeSourceIntakeV19Adapter({ csrfToken: () => clients.getCsrf() }))
   const [researchWorkAdapter] = useState(() => new NativeResearchWorkV20Adapter())
+  const [sourceBacktestProposalReads] = useState(() => new NativeResearchStrategyProposalV22Adapter())
   const [proposalOrchestration] = useState(() => new NativeResearchProposalOrchestration({
     proposals: new NativeResearchStrategyProposalV22Adapter(), documents: new ConsultationV16Adapter(), conversations: clients.conversation,
     sessions: new ConsultationV14Adapter({ csrfToken: () => clients.getCsrf() }),
@@ -724,12 +806,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const [challenge, setChallenge] = useState<ApprovalChallenge | null>(null)
   const [approval, setApproval] = useState<StrategyApproval | null>(null)
   const [job, setJob] = useState<NativeJob | null>(null)
+  const [sourceJobScope, setSourceJobScope] = useState<SourceJobScope | null>(null)
   const [pollIssue, setPollIssue] = useState<{ job: NativeJob; retrying: boolean } | null>(null)
   const [refreshingJob, setRefreshingJob] = useState<NativeJob | null>(null)
   const jobPolling = useRef<{ job: NativeJob; control: ReturnType<typeof startNativeJobPolling> } | null>(null)
   // One confirmed result may remain visible while its own conversation draft
   // is edited. It is never approval, submission or current-draft authority.
-  const [retainedResult, setRetainedResult] = useState<{ job: NativeJob; owner: HistoryOwner; draftId: string } | null>(null)
+  const [retainedResult, setRetainedResult] = useState<{ job: NativeJob; owner: HistoryOwner; draftId: string; sourceScope?: SourceJobScope } | null>(null)
   const [resultStatus, setResultStatus] = useState<NativeServiceResultStatus | null>(null)
   const [history, setHistory] = useState<History | null>(null)
   const [historyPending, setHistoryPending] = useState(false)
@@ -769,6 +852,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const strategyConversation = conversation ?? proposalActive?.snapshot ?? null
   const strategyOwner: DocumentOwner | null = documentOwner ?? (proposalActive && accountScope && sessionState
     ? { sessionId: accountScope, sessionState, conversationId: proposalActive.snapshot.conversationId, draftId: proposalActive.snapshot.draftId } : null)
+  const sourceJobCurrent = Boolean(job && sourceJobScope && proposalActive
+    && NativeSourceStrategyBacktestAuthority.matchesJob(job, sourceJobScope, proposalActive))
+  const strategyJob = conversation || sourceJobCurrent ? job : null
   const [consultationPresentationEpoch, setConsultationPresentationEpoch] = useState(0)
   const [retainedConsultation, setRetainedConsultation] = useState<{ epoch: number; targetSessionId: string; messages: readonly ClientServiceMessage[] } | null>(null)
   const [proposalClaimAdapter] = useState(() => new NativeResearchProposalV14ClaimAdapter({ csrfToken: () => clients.getCsrf() }, {
@@ -868,8 +954,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     document.addEventListener('visibilitychange', retireHiddenPresentation)
     return () => document.removeEventListener('visibilitychange', retireHiddenPresentation)
   }, [presentationIntent])
-  const presentationSessionId = documentOwner?.sessionId, presentationSessionState = documentOwner?.sessionState
-  const presentationConversationId = documentOwner?.conversationId, presentationDraftId = documentOwner?.draftId
+  const presentationSessionId = strategyOwner?.sessionId, presentationSessionState = strategyOwner?.sessionState
+  const presentationConversationId = strategyOwner?.conversationId, presentationDraftId = strategyOwner?.draftId
   useLayoutEffect(() => () => clients.replayReaders.invalidate(),
     [clients, sessionState, presentationSessionId, presentationSessionState, presentationConversationId, presentationDraftId])
   const createReplayReader = useCallback<NativeReplayReaderFactory>(request => {
@@ -1528,6 +1614,14 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         return
       }
       case 'SUBMIT': {
+        const source = proposalActive?.snapshot.conversationId === command.conversationId ? proposalActive : null
+        if (!conversation && !source) throw new Error('BINDING_CONFLICT')
+        if (source) {
+          if (!approval || approval.strategyVersionId !== command.body.strategyVersionId || approval.semanticHash !== command.body.expectedSemanticHash
+            || source.owner !== JSON.stringify([command.sessionId, command.sessionState])) throw new Error('BINDING_CONFLICT')
+          await sourceBacktestAuthority().confirm(source, approval, () => sourceBacktestCurrent(source, generation))
+          assertCurrent(); contextFor(command)
+        }
         // Generated v0.7 client binds strategyVersionId, semanticHash and
         // profileId to this exact request before returning the accepted job.
         const value = await clients.native.jobs.call('submitNativeBacktestV7', command.body, context).catch(failure => {
@@ -1535,6 +1629,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
           throw failure
         })
         complete(); presentationIntent.acceptSubmission(command.idempotencyKey, value.data)
+        setSourceJobScope(source ? sourceJobBinding(source, value.data) : null)
         setResultStatus(null); setJob(value.data)
         return
       }
@@ -2310,9 +2405,9 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       approvalChallengeId: challenge.approvalChallengeId, acknowledgedSemanticHash: receipt.semanticHash } })
   }
   const submit = async () => {
-    if (!approval || !conversation) return
-    await start({ ...base(), kind: 'SUBMIT', conversationId: conversation.conversationId, body: { strategyVersionId: approval.strategyVersionId,
-      expectedSemanticHash: approval.semanticHash, profileId: 'INTERNAL_POC_FULL' } }, selectedHistoryOwner ? async () => {
+    if (!approval || !strategyConversation) return
+    await start({ ...base(), kind: 'SUBMIT', conversationId: strategyConversation.conversationId, body: { strategyVersionId: approval.strategyVersionId,
+      expectedSemanticHash: approval.semanticHash, profileId: 'INTERNAL_POC_FULL' } }, selectedHistoryOwner && !proposalActive ? async () => {
       await confirmHistoryDraft(selectedHistoryOwner, approval)
     } : undefined)
   }
@@ -2332,8 +2427,35 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }
     return { sessionId: current.sessionId, revision: current.revision, etag: response.etag, conversationId }
   }
+  const sourceBacktestCurrent = (view: ProposalView, generation: number) => {
+    const source = sourceIntakeRef.current, owner = session.current
+    return generation === epoch.current && proposalViewRef.current?.bound.bindingHash === view.bound.bindingHash
+      && proposalViewRef.current.etag === view.etag && owner?.sessionState === 'AUTHENTICATED'
+      && view.owner === JSON.stringify([owner.sessionId, owner.sessionState]) && source?.completion?.researchWorkId === view.researchWorkId
+      && sourceIntakeCurrent(source, sourceIntakeGeneration.current)
+  }
+  const sourceBacktestAuthority = () => new NativeSourceStrategyBacktestAuthority({ owner: observeHistoryOwner,
+    conversations: clients.conversation, proposals: sourceBacktestProposalReads,
+    history: async (conversationId, cursor) => (await clients.native.history.call('listNativeConversationHistoryV8', {
+      conversationId, limit: 50, ...(cursor ? { cursor } : {}),
+    })).data, job: async backtestId => (await clients.native.jobs.call('getNativeBacktestV7', { backtestId })).data })
+  const sourceJobBinding = (view: ProposalView, value: NativeJob): SourceJobScope => ({ owner: view.owner,
+    conversationId: view.snapshot.conversationId, draftId: view.snapshot.draftId, bindingHash: view.bound.bindingHash,
+    strategyVersionId: value.strategyVersionId, semanticHash: value.semanticHash, backtestId: value.backtestId })
+  const adoptStrategyRead = (value: ConversationSnapshot, valueEtag: string, source: ProposalView | null) => {
+    if (!source) { remember(value, valueEtag); return }
+    const view = Object.freeze({ ...source, snapshot: value, etag: valueEtag })
+    proposalViewRef.current = view; setProposalView(view)
+  }
   const confirmHistoryDraft = async (owner: HistoryOwner, value: StrategyApproval) => {
     const generation = epoch.current
+    const source = proposalActive?.snapshot.conversationId === owner.conversationId ? proposalActive : null
+    if (source) {
+      const verified = await sourceBacktestAuthority().confirm(source, value, () => sourceBacktestCurrent(source, generation))
+      if (verified.owner.sessionId !== owner.sessionId || verified.owner.revision !== owner.revision || verified.owner.etag !== owner.etag) throw new Error('SESSION_CHANGED')
+      adoptStrategyRead(verified.snapshot, verified.etag, source)
+      return
+    }
     await observeHistoryOwner(owner.conversationId, owner)
     const current = await clients.conversation.getConversation(owner.conversationId)
     await observeHistoryOwner(owner.conversationId, owner)
@@ -2345,21 +2467,22 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     remember(current.body.data, current.etag)
   }
   const loadHistory = (direction: 'first' | 'next' | 'previous' = 'first') => runHistory(async () => {
-    if (!conversation || logoutIntent.current || phase !== 'ready') return
+    if (!strategyConversation || logoutIntent.current || phase !== 'ready') return
     if (session.current?.sessionState !== 'AUTHENTICATED') {
       setError('로그인 후 실행 이력을 확인할 수 있습니다. 현재 전략 초안과 검증 상태는 유지합니다.')
       return
     }
-    if (direction !== 'first' && (!history || !historyOwner.current || historyNeedsRefresh)) return
+    if (direction !== 'first' && (!history || history.conversationId !== strategyConversation.conversationId || !historyOwner.current || historyNeedsRefresh)) return
     if (direction === 'next' && !history?.nextCursor) return
     if (direction === 'previous' && historyNavigation.index <= 0) return
     const cursor = direction === 'first' ? undefined : direction === 'next' ? history!.nextCursor
       : historyNavigation.cursors[historyNavigation.index - 1]
     const generation = epoch.current
-    const owner = await observeHistoryOwner(conversation.conversationId, direction === 'first' ? undefined : historyOwner.current ?? undefined)
+    if (proposalActive) await sourceBacktestAuthority().observe(proposalActive, () => sourceBacktestCurrent(proposalActive, generation))
+    const owner = await observeHistoryOwner(strategyConversation.conversationId, direction === 'first' ? undefined : historyOwner.current ?? undefined)
     let value: History
     try {
-      value = (await clients.native.history.call('listNativeConversationHistoryV8', { conversationId: conversation.conversationId, limit: 50, ...(cursor ? { cursor } : {}) })).data
+      value = (await clients.native.history.call('listNativeConversationHistoryV8', { conversationId: strategyConversation.conversationId, limit: 50, ...(cursor ? { cursor } : {}) })).data
     } catch (failure) {
       if (generation !== epoch.current) return
       const code = failure && typeof failure === 'object' && 'code' in failure ? String(failure.code) : ''
@@ -2373,7 +2496,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       setHistoryNotice(refresh ? 'historyPositionChangedNotice' : 'historyPageFailedNotice')
       return
     }
-    await observeHistoryOwner(conversation.conversationId, owner)
+    await observeHistoryOwner(strategyConversation.conversationId, owner)
     if (generation !== epoch.current) return
     if (direction !== 'first' && history?.snapshotRevision !== value.snapshotRevision) {
       setHistoryNeedsRefresh(true); setHistoryNotice('historySnapshotChangedNotice')
@@ -2392,38 +2515,58 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   })
   const selectHistoryRow = (row: History['rows'][number], onSelected?: () => void) => runHistory(async () => {
     const owner = historyOwner.current, generation = epoch.current
-    if (!owner || !conversation || !history?.rows.includes(row) || historyNeedsRefresh || pending.current || logoutIntent.current || phase !== 'ready'
-      || history.conversationId !== conversation.conversationId || row.approval.sourceConversationId !== conversation.conversationId) return
-    if (row.job) await observeHistoryOwner(conversation.conversationId, owner)
+    if (!owner || !strategyConversation || !history?.rows.includes(row) || historyNeedsRefresh || pending.current || logoutIntent.current || phase !== 'ready'
+      || history.conversationId !== strategyConversation.conversationId || row.approval.sourceConversationId !== strategyConversation.conversationId) return
+    let selectedApproval = row.approval, selectedJob = row.job
+    if (proposalActive) {
+      const verified: Awaited<ReturnType<NativeSourceStrategyBacktestAuthority['confirm']>> & { job?: NativeJob } = row.job ? await sourceBacktestAuthority().selectJob(proposalActive, row.approval, row.job,
+        () => sourceBacktestCurrent(proposalActive, generation)) : await sourceBacktestAuthority().confirm(proposalActive, row.approval,
+        () => sourceBacktestCurrent(proposalActive, generation))
+      if (verified.owner.sessionId !== owner.sessionId || verified.owner.revision !== owner.revision || verified.owner.etag !== owner.etag) throw new Error('SESSION_CHANGED')
+      selectedApproval = verified.approval
+      selectedJob = verified.job ?? null
+      adoptStrategyRead(verified.snapshot, verified.etag, proposalActive)
+      setSourceJobScope(selectedJob ? sourceJobBinding(proposalActive, selectedJob) : null)
+    } else if (row.job) await observeHistoryOwner(strategyConversation.conversationId, owner)
     else await confirmHistoryDraft(owner, row.approval)
     if (generation !== epoch.current) return
     closePaper(); closeSmoke()
     presentationIntent.invalidate(); setAutomaticPresentation(undefined)
     setReceipt(null); setChallenge(null); setAcknowledged(false)
     setRetainedResult(null)
-    setApproval(row.approval)
-    setResultStatus(previous => previous?.backtestId === row.job?.backtestId ? previous : null)
-    setJob(row.job); setSelectedHistoryOwner(owner); setEditingNotice(false)
+    setApproval(selectedApproval)
+    setResultStatus(previous => previous?.backtestId === selectedJob?.backtestId ? previous : null)
+    setJob(selectedJob); setSelectedHistoryOwner(owner); setEditingNotice(false)
     onSelected?.()
   })
   const editCurrentDraft = async () => {
     let confirmed = false
     await run(async () => {
-      if (!conversation || (!approval && !job) || pending.current || logoutIntent.current || phase !== 'ready') return
+      if (!strategyConversation || (!approval && !job) || pending.current || logoutIntent.current || phase !== 'ready') return
       const generation = epoch.current
-      const owner = await observeHistoryOwner(conversation.conversationId, selectedHistoryOwner ?? undefined)
-      const current = await clients.conversation.getConversation(conversation.conversationId)
-      await observeHistoryOwner(conversation.conversationId, owner)
+      const source = proposalActive
+      const verified = source ? await sourceBacktestAuthority().observe(source, () => sourceBacktestCurrent(source, generation)) : null
+      const owner = await observeHistoryOwner(strategyConversation.conversationId, selectedHistoryOwner ?? undefined)
+      const current = await clients.conversation.getConversation(strategyConversation.conversationId)
+      await observeHistoryOwner(strategyConversation.conversationId, owner)
       if (generation !== epoch.current) return
-      if (current.body.data.conversationId !== conversation.conversationId || current.body.data.draftId !== conversation.draftId) throw new Error('BINDING_CONFLICT')
+      if (current.body.data.conversationId !== strategyConversation.conversationId || current.body.data.draftId !== strategyConversation.draftId
+        || verified && (!sameProposalBase(proposalBase(current.body.data), proposalBase(verified.snapshot)) || current.etag !== verified.etag)) throw new Error('BINDING_CONFLICT')
       if (job?.state === 'COMPLETED' && resultStatus?.backtestId === job.backtestId && resultStatus.reportReady) {
-        setRetainedResult({ job, owner, draftId: conversation.draftId })
+        let retainedJob: NativeJob = job
+        if (source) {
+          if (!approval || !sourceJobScope || !NativeSourceStrategyBacktestAuthority.matchesJob(job, sourceJobScope, source)) throw new Error('BINDING_CONFLICT')
+          retainedJob = (await sourceBacktestAuthority().selectJob(source, approval, job, () => sourceBacktestCurrent(source, generation))).job
+        }
+        setRetainedResult({ job: retainedJob, owner, draftId: strategyConversation.draftId, ...(sourceJobScope ? { sourceScope: sourceJobScope } : {}) })
       }
       // Leave the active job, not its server lifetime. A confirmed completed
       // result can remain read-only, separate from the editable draft. Epoch fences
       // a poll already in flight before React cleans up the previous job effect.
-      epoch.current++
-      remember(current.body.data, current.etag)
+      if (source) { presentationIntent.invalidate(); clients.replayReaders.invalidate() }
+      else epoch.current++
+      adoptStrategyRead(current.body.data, current.etag, source)
+      setSourceJobScope(null)
       setApproval(null); setResultStatus(null); setJob(null); setSelectedHistoryOwner(null); setReceipt(null); setChallenge(null); setAcknowledged(false); setDiff([])
       setEditingNotice(true)
       confirmed = true
@@ -2597,7 +2740,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const historyNextDisabled = busy || hasLogout || historyNeedsRefresh
   // One controller, one visible list. The source history hub may display this
   // subset, but it cannot create account-wide records or bypass row guards.
-  const renderHistory = (onSelected?: () => void) => conversation && <>
+  const renderHistory = (onSelected?: () => void) => strategyConversation && <>
     {history && <section className="native-history-panel" aria-label={jobText('historyTitle')}>
       {!onSelected && <h3>{jobText('historyTitle')}</h3>}
       <p className="native-history-page">{jobText('historyPage', { page: historyNavigation.offset + historyNavigation.index + 1 })}</p>
@@ -2608,8 +2751,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       <NativeHistoryList rows={history.rows}
         selectedRow={selectedHistoryOwner && approval
           ? { strategyVersionId: approval.strategyVersionId, backtestId: job?.backtestId ?? null } : undefined}
-        getSelectionDisabled={row => busy || hasPending || hasLogout || historyNeedsRefresh || (!row.job && !approvalMatchesDraft(row.approval, conversation))}
-        getSelectionNotice={row => !row.job && !approvalMatchesDraft(row.approval, conversation)
+        getSelectionDisabled={row => busy || hasPending || hasLogout || historyNeedsRefresh || (!row.job && !approvalMatchesDraft(row.approval, strategyConversation))}
+        getSelectionNotice={row => !row.job && !approvalMatchesDraft(row.approval, strategyConversation)
           ? jobText('historyApprovalMismatchNotice') : undefined}
         onSelect={row => void selectHistoryRow(row, onSelected)} />
       <nav className="native-history-navigation" aria-label={jobText('historyNavigationLabel')}>
@@ -2662,7 +2805,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       </>}
     </div>}
     {approval && <div className="native-workflow-stage"><p className="native-workflow-binding" tabIndex={-1} data-workflow-focus>{workflowText('approvedVersion')} <code>{approval.strategyVersionId}</code></p>
-      {!job && <div className="native-workflow-actions"><WorkflowButton className="native-workflow-button is-primary" disabled={busy || hasPending} onClick={() => void submit()}>{workflowText('submit')}</WorkflowButton></div>}
+      {!strategyJob && <div className="native-workflow-actions"><WorkflowButton className="native-workflow-button is-primary" disabled={busy || hasPending} onClick={() => void submit()}>{workflowText('submit')}</WorkflowButton></div>}
     </div>}
     <div className="native-workflow-utilities">
       <div className="native-workflow-actions">
@@ -2706,24 +2849,26 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     && strategyOwner.conversationId === strategyConversation.conversationId && strategyOwner.draftId === strategyConversation.draftId
     ? { identity: proposalActive?.researchWorkId ?? JSON.stringify([strategyOwner.sessionId, strategyOwner.sessionState, strategyOwner.conversationId, strategyOwner.draftId]),
       content: renderResearch(null), renderResearch } : undefined
-  const currentResultStatus = resultStatus?.backtestId === job?.backtestId ? resultStatus : null
+  const currentResultStatus = resultStatus?.backtestId === (strategyJob?.backtestId ?? retainedResult?.job.backtestId) ? resultStatus : null
   const resultStateKeys = { loading: 'resultChecking', ready: 'resultReady', error: 'resultNeedsCheck' } as const satisfies Record<NativeServiceResultStatus['state'], NativeJobTextKey>
   const jobPresentation = job ? describeNativeJob(job, language) : null
-  const conversationNotice = strategyDocument && job ? <span data-native-result-status={currentResultStatus?.state}>
+  const conversationNotice = strategyDocument && strategyJob ? <span data-native-result-status={currentResultStatus?.state}>
     {jobPresentation?.label}{jobPresentation?.invalidReason && <> · {jobPresentation.invalidReason.label}</>}
-    {job.state === 'COMPLETED' && <> · {jobText(resultStateKeys[currentResultStatus?.state ?? 'loading'])}</>}
+    {strategyJob.state === 'COMPLETED' && <> · {jobText(resultStateKeys[currentResultStatus?.state ?? 'loading'])}</>}
   </span> : undefined
   const observeResultStatus = useCallback((status: NativeServiceResultStatus) => {
-    if (phase !== 'ready' || hasLogout || status.backtestId !== job?.backtestId) return
+    if (phase !== 'ready' || hasLogout || status.backtestId !== (strategyJob?.backtestId ?? retainedResult?.job.backtestId)) return
     setResultStatus(previous => previous?.backtestId === status.backtestId && previous.state === status.state && previous.label === status.label && previous.reportReady === status.reportReady ? previous : status)
-  }, [phase, hasLogout, job?.backtestId])
-  const retainedMatches = retainedResult && documentOwner && conversation
-    && documentOwner.sessionState === 'AUTHENTICATED' && sessionState === 'AUTHENTICATED'
-    && retainedResult.owner.sessionId === documentOwner.sessionId
-    && retainedResult.owner.conversationId === conversation.conversationId
-    && retainedResult.draftId === conversation.draftId
-  const analysisJob = phase === 'ready' && !hasLogout && conversation && documentOwner
-    ? job?.state === 'COMPLETED' ? job : retainedMatches ? retainedResult.job : null : null
+  }, [phase, hasLogout, strategyJob?.backtestId, retainedResult?.job.backtestId])
+  const retainedMatches = retainedResult && strategyOwner && strategyConversation
+    && strategyOwner.sessionState === 'AUTHENTICATED' && sessionState === 'AUTHENTICATED'
+    && retainedResult.owner.sessionId === strategyOwner.sessionId
+    && retainedResult.owner.conversationId === strategyConversation.conversationId
+    && retainedResult.draftId === strategyConversation.draftId
+    && (conversation || proposalActive && retainedResult.sourceScope
+      && NativeSourceStrategyBacktestAuthority.matchesJob(retainedResult.job, retainedResult.sourceScope, proposalActive))
+  const analysisJob = phase === 'ready' && !hasLogout && strategyConversation && strategyOwner
+    ? strategyJob?.state === 'COMPLETED' && strategyJob.resultAvailable ? strategyJob : retainedMatches ? retainedResult.job : null : null
   const authSurface = (loginOpen || loginRetained) && loginBinding !== null && sessionState !== null
     && (phase !== 'error' || (authStorageRecovery && loginBinding.sessionId === accountScope)) && !hasLogout && <NativeAuthSurface open={loginOpen}><NativeLoginPanel
     key={`${loginBinding.sessionId}:${sessionState}:${loginBinding.generation}`} hidden={!loginOpen} resumeToken={loginResume} intent={loginBinding.intent}
@@ -2829,7 +2974,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages: displayMessages, input, busy: displayBusy, source: 'service', recovery: null,
     inputDisabled: displayBusy || consultationClaimPending || retainedConsultationMessages !== null || emailBusy || hasPending || hasLogout || phase !== 'ready' || (!consultationChat && Boolean(approval || job)), quickReplies: consultationChat ? [] : conversation?.nextQuestion?.options ?? [],
     workflow: consultationChat && !proposalActive ? null : hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
-    outcome: consultationChat ? null : <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
+    outcome: consultationChat && !sourceJobCurrent ? null : <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
       && smokeBinding.binding.semanticHash === approval.semanticHash && smokeBinding.contentHash === approval.strategyVersionContentHash
       && sessionState === 'AUTHENTICATED' && phase === 'ready' && !hasLogout && !hasPending && <NativeStructuralSmokePanel
         key={`${smokeBinding.generation}:${smokeBinding.binding.sessionId}:${smokeBinding.binding.strategyVersionId}`}
@@ -2839,8 +2984,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       && sessionState === 'AUTHENTICATED' && phase === 'ready' && !hasLogout && !hasPending && <NativePaperPanel
         key={`${paperBinding.generation}:${paperBinding.scope.sessionId}:${paperBinding.scope.strategyVersionId}`}
         scope={paperBinding.scope} isCurrent={() => paperCurrent(paperBinding)} verifyOwner={mutation => verifyPaperOwner(paperBinding, mutation)} onClose={closePaper} />}
-      {job && <section className="native-job-section" aria-label={jobText('jobProgressRegion')} data-native-job-state={job.state}>
-      <NativeJobActivity job={job} />
+      {strategyJob && <section className="native-job-section" aria-label={jobText('jobProgressRegion')} data-native-job-state={strategyJob.state}>
+      <NativeJobActivity job={strategyJob} />
       {pollIssue?.job === job && <p className="native-job-problem" role={pollIssue.retrying ? 'status' : 'alert'} data-native-polling={pollIssue.retrying ? 'retrying' : 'stopped'}>{jobText(pollIssue.retrying ? 'pollingRetryNotice' : 'pollingStoppedNotice')}</p>}
       <button className="g-qchip native-job-refresh" disabled={busy || refreshingJob === job} onClick={() => void refreshJob()}>{jobText('jobRefresh')}</button>
     </section>}
@@ -2916,11 +3061,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     } } : undefined)}
     resultActivityKey={`${analysisJob?.backtestId ?? ''}:${currentResultStatus?.state ?? ''}`}
     analysisIdentity={analysisJob?.backtestId}
+    analysisBinding={proposalActive && analysisJob && (analysisJob === strategyJob ? sourceJobScope : retainedResult?.sourceScope) ? {
+      owner: proposalActive.owner, sourceConversationId: proposalActive.bound.sourceOrigin.sourceAPI13Locator.conversationId,
+      researchWorkId: proposalActive.researchWorkId, strategyVersionId: analysisJob.strategyVersionId,
+      semanticHash: analysisJob.semanticHash, backtestId: analysisJob.backtestId,
+      reportReady: currentResultStatus?.backtestId === analysisJob.backtestId && currentResultStatus.reportReady,
+    } : undefined}
     clarification={!hasLogout && phase === 'ready' && !approval && !job && conversation?.nextQuestion
       ? { prompt: conversation.nextQuestion.prompt, identity: `${conversation.conversationId}:${conversation.conversationStateRevision}:${conversation.nextQuestion.questionId}` } : null}
     historyFeedback={historyNotice && <p className="native-workflow-notice native-history-feedback" role="alert">{jobText(historyNotice)}</p>}
     navigationFeedback={navigationError && <p className="client-service-recovery" role="alert">{nativeObservationNavigationErrors[language][navigationError]}</p>}
-    executionHistory={!hasLogout && conversation && phase === 'ready' && sessionState === 'AUTHENTICATED'
+    executionHistory={!hasLogout && strategyConversation && strategyOwner && phase === 'ready' && sessionState === 'AUTHENTICATED'
       ? { disabled: busy || hasPending, pending: historyPending, onLoad: () => { void loadHistory() }, render: renderHistory } : undefined}
     analysis={analysisJob && <>
       {analysisJob !== job && <div className="native-retained-result-notice" role="status">{workflowText('priorResult')} <span>{analysisJob.strategyVersionId}</span></div>}

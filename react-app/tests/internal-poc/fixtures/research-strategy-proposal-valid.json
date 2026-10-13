@@ -1,0 +1,249 @@
+{
+  "fixtureClass": "SYNTHETIC_CONTRACT_ONLY",
+  "reportText": "합성 계약 시험 자료: BTCUSDT 15분 RSI14 28, 100USDT 1배, 손절2% 익절5%.",
+  "customerText": "완료 보고서를 바탕으로 전략 후보를 제안해 주세요.",
+  "input": {
+    "contractVersion": "0.1.0",
+    "kind": "RESEARCH_STRATEGY_PROPOSAL_INPUT",
+    "ownerPrincipalId": "principal_fixture_00000001",
+    "report": {
+      "producerServiceId": "tesia_research_report",
+      "kind": "report",
+      "documentId": "research_work_fixture_00000001",
+      "revision": 31,
+      "contentSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+    },
+    "customerSource": {
+      "turnId": "turn_customer_fixture_00000001",
+      "role": "user",
+      "normalization": "NFC",
+      "textSha256": "b2b0793a64b388126d2472a192e8c3a75e9b64541e48576e6ee65544adeb174d"
+    },
+    "draftBase": {
+      "conversationId": "conversation_fixture_00000001",
+      "conversationStateRevision": "1",
+      "conversationStateHash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "draftId": "draft_fixture_00000001",
+      "draftRevision": "1",
+      "projectionHash": "2f0a94c25da39003eca0bece4bd3377230f51dc85c6f335778f6abe6ad74b28c"
+    },
+    "draftState": {
+      "contractVersion": "0.2.0",
+      "draftId": "draft_fixture_00000001",
+      "revision": 1,
+      "serverDefaultsVersion": "draft-defaults-0.2.0",
+      "projection": {
+        "contractVersion": "0.1.0",
+        "versions": {
+          "dsl": "0.1.0",
+          "evaluator": "evaluator-0.1.0",
+          "indicatorRegistry": "registry-0.1.0",
+          "riskPolicy": "risk-policy-0.1.0"
+        },
+        "stateRules": {
+          "allowPyramiding": false,
+          "maxConcurrentPositions": 1
+        },
+        "riskLimits": {
+          "currency": "USDT",
+          "maxAllowedLeverage": 3,
+          "maxDailyLoss": "50",
+          "maxOrderNotional": "300",
+          "maxTotalExposureNotional": "300"
+        },
+        "features": [],
+        "entryRules": [],
+        "exitRules": []
+      },
+      "projectionHash": "2f0a94c25da39003eca0bece4bd3377230f51dc85c6f335778f6abe6ad74b28c"
+    },
+    "prompt": {
+      "promptId": "synthetic_research_proposal",
+      "promptSha256": "e7d0b1dd182a5709c9e468306f55d56814fe063554077ae4c0e53df0aeac3be5"
+    },
+    "modelIdentity": {
+      "provider": "anthropic",
+      "model": "synthetic-contract-model",
+      "revision": null
+    },
+    "usageJournalTurnId": "turn_proposal_fixture_00000001"
+  },
+  "result": {
+    "contractVersion": "0.1.0",
+    "status": "UNAPPROVED",
+    "sourceInputSha256": "50b3bdb44068f468a5585a280a75d623cd44f23a32d3a4c26531647986a4f5da",
+    "report": {
+      "producerServiceId": "tesia_research_report",
+      "kind": "report",
+      "documentId": "research_work_fixture_00000001",
+      "revision": 31,
+      "contentSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+    },
+    "customerSource": {
+      "turnId": "turn_customer_fixture_00000001",
+      "role": "user",
+      "normalization": "NFC",
+      "textSha256": "b2b0793a64b388126d2472a192e8c3a75e9b64541e48576e6ee65544adeb174d"
+    },
+    "draftBase": {
+      "conversationId": "conversation_fixture_00000001",
+      "conversationStateRevision": "1",
+      "conversationStateHash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "draftId": "draft_fixture_00000001",
+      "draftRevision": "1",
+      "projectionHash": "2f0a94c25da39003eca0bece4bd3377230f51dc85c6f335778f6abe6ad74b28c"
+    },
+    "prompt": {
+      "promptId": "synthetic_research_proposal",
+      "promptSha256": "e7d0b1dd182a5709c9e468306f55d56814fe063554077ae4c0e53df0aeac3be5"
+    },
+    "modelIdentity": {
+      "provider": "anthropic",
+      "model": "synthetic-contract-model",
+      "revision": null
+    },
+    "tradingCandidate": {
+      "market": {
+        "exchange": "binance",
+        "marketType": "usd_m_perpetual",
+        "priceCurrency": "USDT",
+        "symbol": "BTCUSDT"
+      },
+      "clock": {
+        "evaluateOn": "candle_close",
+        "oncePerCandle": true,
+        "session": "24x7",
+        "timeframe": "15m",
+        "timezone": "UTC"
+      },
+      "features": [
+        {
+          "id": "rsi14",
+          "period": 14,
+          "source": "close",
+          "timeframe": "15m",
+          "type": "rsi"
+        }
+      ],
+      "entryRules": [
+        {
+          "condition": {
+            "id": "condition_rsi_low",
+            "kind": "comparison",
+            "left": {
+              "featureId": "rsi14",
+              "kind": "feature_ref"
+            },
+            "operator": "lt",
+            "right": {
+              "kind": "number",
+              "unit": "index",
+              "value": "28"
+            }
+          },
+          "id": "entry_rsi_low",
+          "positionExistsPolicy": "skip",
+          "rearm": "on_false",
+          "side": "long"
+        }
+      ],
+      "positionSizing": {
+        "amount": "100",
+        "currency": "USDT",
+        "type": "fixed_notional"
+      },
+      "exitRules": [
+        {
+          "distanceFraction": "0.02",
+          "id": "exit_stop",
+          "kind": "stop_loss",
+          "orderType": "market",
+          "priority": 1,
+          "reduceOnly": true,
+          "triggerPrice": "mark_price"
+        },
+        {
+          "distanceFraction": "0.05",
+          "id": "exit_take",
+          "kind": "take_profit",
+          "orderType": "market",
+          "priority": 2,
+          "reduceOnly": true,
+          "triggerPrice": "mark_price"
+        }
+      ],
+      "execution": {
+        "entryOrderType": "market",
+        "leverage": 1,
+        "marginMode": "isolated",
+        "positionMode": "one_way"
+      }
+    },
+    "reportProvenance": [
+      {
+        "path": "/clock",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/entryRules",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/execution",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/exitRules",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/features",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/market",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      },
+      {
+        "path": "/positionSizing",
+        "source": "REPORT_DERIVED",
+        "startByte": 0,
+        "endByte": 85,
+        "spanSha256": "98847084825a6c826a7d17697faa2d71de172680176497e886581891e973cd55"
+      }
+    ],
+    "usage": {
+      "journalTurnId": "turn_proposal_fixture_00000001",
+      "inputTokens": 7,
+      "outputTokens": 3,
+      "cacheCreationInputTokens": 0,
+      "cacheReadInputTokens": 0
+    },
+    "proposalHash": "119e2d876a0fcb8d0c37975e98d45dcb9e1eb0490e440d754bf2b6256d2fccc8"
+  },
+  "observedUsage": {
+    "journalTurnId": "turn_proposal_fixture_00000001",
+    "inputTokens": 7,
+    "outputTokens": 3,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0
+  }
+}

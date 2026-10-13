@@ -1,5 +1,16 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 현재 전체 React 전달 — 승인 전략·백테스트 진입·연구 원문 보존
+
+최신 Web [`dd917e1`](https://github.com/beak1011/tesia-web/tree/dd917e1cb77aa4c1b1153424679b3afb977fbbbd)/tree `9a071266be2e4286507799e8642816f2e765037c`의 clean 전체 **2,539파일·36,564,948bytes**를 전달했다. snapshot `5e8d23bcf62e4bb0499731b08612d1301eb704a16d69783f57bd2abc7d11a777`, 이전2536에서 추가3·제거0이며 파일별 SHA 검증 통과다. 원본 HTML/CSS/SVG·카피·배치 파일은 변경하지 않는다. 아래7a3 기록은 이전 전달 증거다.
+
+- `react-app/src/internal-poc/NativeServiceApp.tsx`: 원 API13 대화를 유지한 별도 전략 snapshot을 submit/history/select/edit/result/replay에 연결했다. 실제 current AUTH·API22 bound·v3 CAS·API8 승인 전체 tuple·API7 job을 확인한다. 같은 승인Version의 서로 다른 정상 job은 허용하고 선택은 exact backtestId의 유일행만 사용한다.
+- `react-app/src/internal-poc/ClientServiceExperience.tsx`: 실제 결과가 원 연구 report를 지우지 않도록 복원했다. 원문·선택을 보존하고 내부 source/job binding과 reportReady에 따라 비어 있는 기존 bt1 결과 영역만 사용한다. 기존 supplied bt1/타owner·source/job은 덮지 않는다. 새 디자인·분류·문구·자동 고객 동의는 없다.
+- repo-local golden fixture와 신규 시험2를 함께 전달했다. 인접 Contracts worktree 의존성은 제거하고 SDK7는 원 donor Git blob의 고정 SHA로 검증한다. source-backtest SDK 합성1 PASS3.0초·실 Client/g-doc/portal 합성표시1 PASS2.7초·multi-job 신규1 PASS3.9초 및 최종 타입/service build PASS다. 독립 personal1 Opus5.5 검수와 이후 실제 Backend 행 의미에 대한 작은 후속 검수도 SCOPED_GO였다. 각 source 범위·첫 하니스 실패·최종 SHA는 `react-app/Bugfix_report.md`에 기록했다.
+- 실제 결과는 기존 hash-bound 보고서/API5 캔들·fill/API11 slow replay·skip·lightweight-charts 전문 차트 경로를 재사용한다. 소스 연결 확인은 실제 고객 결과/차트 성공이 아니다. 현재 OAuth 서버의 native store/readiness/facade 조립과 고객 승인 전략→검증된9월 composition의 trusted runner adapter는 미완료이며, 기존 sealed RSI/730일 guard는 임의로 완화하지 않았다.
+
+서버 설치 준비는 Backend [`37ebf8e`](https://github.com/beak1011/tesia-backend/tree/37ebf8ec6497104246a09249b1ebd8a771c9c0be)의 별도 exact-two-distribution installer·목적 준비 도구로 전달했다. source314 실제 package와 정상 fresh resolver NO_GO는 그대로 보존한다. 최신 개발 source는 아직 운영 미반영이며 typed 모델→승인→실계산→차트→실주문/전체90상태 완료가 아니다. 기존 Google·Bitget·대화 저장/원장·ares 원본 보존과 운영 전환은 별도 진행한다.
+
 ## 현재 전체 React 전달 — 연구 전략 API22·복구 연결, 운영 미반영
 
 Web [`7a3ac987`](https://github.com/beak1011/tesia-web/tree/7a3ac9879f1683b2b6fdd7235b03c6255801de1f)/tree `17a1a1df6de0527adf827034917fe41ef453aea4`의 clean 전체 **2,536파일·36,504,941bytes**를 기존 `react-app/`에 동기화하고 파일별 SHA 검증을 통과했다. snapshot은 `354d455cdd067e905def547a15af38205bbffaa9d187e3407e2faa84ac6bd959`이며 이전 2,494파일에서 추가42·제거0이다. 원본 HTML·SVG·배치·문구 영역은 수정하지 않는다. 원격 추가 병합 이력은 강제 푸시 없이 보존했고 통합 전후 제품 tree가 동일했다.

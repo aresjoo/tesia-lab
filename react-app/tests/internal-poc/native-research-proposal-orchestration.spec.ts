@@ -1,8 +1,20 @@
 import { readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 
-const fixture = JSON.parse(readFileSync(resolve(process.cwd(), '../contracts-research-strategy-proposal/fixtures/research-strategy-proposal/valid.json'), 'utf8'))
+const fixture = JSON.parse(readFileSync(resolve(process.cwd(), 'tests/internal-poc/fixtures/research-strategy-proposal-valid.json'), 'utf8'))
+// Independently frozen donor Contracts 4db116ea. No adjacent worktree is
+// required by a clean checkout, CI or the full migration delivery.
+const sdkSha256: Readonly<Record<string, string>> = {
+  'types.ts': '50b25b6129bfe8515dbb781da56729c4159c1021a4fa254085710b7b1c7c6ac6',
+  'validator.ts': 'fbebebf48f2801c009f2806b6c74bfe47ed33f227263160c610d701e054b0f7b',
+  'client.ts': '501766ff3d8d48f8c8f9f2ff7f8de7ef6b492397f6695ea152a5a5c8c7b6934a',
+  'index.ts': '6ab7634857b19b499833bd303b4ef4ffd8fc783ae12ba61b676f108603c3cf46',
+  'operation-manifest.json': 'b5f696ff5af767d3e44f4bfce323ce5856e6825e21e4c5b5da808a533059d2d9',
+  'generation-manifest.json': 'cc6095f6445792437a6fdb64cd1266e95d08a9d5de8ecb032501c75c011c64fe',
+  'package.json': 'd878db60c72d58fb1333674b5ce7e590abb3c9a37244b9059ed126fb4ec8ec01',
+}
 const html = `<!doctype html><html><body><script type="module">
 import R from '/@react-refresh';R.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;
 </script></body></html>`
@@ -644,8 +656,8 @@ test('API22 getters delta restores only server-hashed adjunct and rejects stale/
     expect(get.headers['if-match']).toBeUndefined()
   }
   for (const name of ['types.ts', 'validator.ts', 'client.ts', 'index.ts', 'operation-manifest.json', 'generation-manifest.json', 'package.json']) {
-    expect(readFileSync(resolve(process.cwd(), 'src/internal-poc/contracts/generated/api-v0.22', name)))
-      .toEqual(readFileSync(resolve(process.cwd(), '../contracts-research-strategy-proposal/generated/typescript/api-v0.22', name)))
+    expect(createHash('sha256').update(readFileSync(resolve(process.cwd(), 'src/internal-poc/contracts/generated/api-v0.22', name))).digest('hex'))
+      .toBe(sdkSha256[name])
   }
 })
 
