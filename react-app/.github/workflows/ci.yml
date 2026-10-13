@@ -23,6 +23,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Run copy candidate Node tests
+        if: matrix.shard == 1
+        run: npm run test:copy-candidate
       - name: Run copy production Node tests
         if: matrix.shard == 1
         run: npm run test:copy-production

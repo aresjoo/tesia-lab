@@ -21,6 +21,8 @@ import { sharingCopy } from '../client-sharing-copy'
 import { sharingUnavailable } from '../client-sharing-presentation'
 import copy from '../client-strategy-list-copy.json'
 
+import { ClientStrategySharing } from '../components/ClientStrategySharing'
+import { localCatalogueEnabled } from '../client-evaluated-strategy-catalogue'
 /** The original public catalogue definitions are editorial content. Reading
  * them never runs the browser preview engine or creates account/order state.
  * Real performance and follower counts remain absent until supplied by a
@@ -119,6 +121,10 @@ export function NativePublicStrategyCatalogue({ onReturn, location = { period: '
     else setUnavailable(true)
   }
   const signupAction = authAction('signup'), loginAction = authAction('login')
+  if (localCatalogueEnabled(import.meta.env.DEV, window.location.hostname, false, import.meta.env.VITE_LOCAL_STRATEGY_CATALOGUE === 'true') && (!current.nick || current.nick.startsWith('eval-') || current.nick.startsWith('generated-') || current.view === 'copy-detail')) return <section id="research-main" className="client-research-hub client-sharing-hub native-strategies" aria-labelledby={id}>
+    <header className="hub-header"><h1 ref={title} id={id} tabIndex={-1}>{copy[language].title}</h1><button type="button" onClick={onReturn}>{researchCopy(language, 'return')}</button></header>
+    <ClientStrategySharing location={current} onNavigate={navigate} onReturn={onReturn} onAsk={() => Promise.reject(Error('UNAVAILABLE'))} signedIn={signedIn} onLogin={onLogin} owner={owner} copyExecution={copyExecution} shouldFocus={shouldFocus} routeTitleRef={title}/>
+  </section>
   return <section id="research-main" className="client-research-hub client-sharing-hub native-strategies" aria-labelledby={id}>
     <header className="hub-header"><h1 ref={title} id={id} tabIndex={-1}>{copy[language].title}</h1><button type="button" onClick={onReturn}>{researchCopy(language, 'return')}</button></header>
     <div className="client-strategy-sharing" data-public-catalogue>

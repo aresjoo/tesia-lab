@@ -8,6 +8,7 @@ const baseURL = `http://127.0.0.1:${port}`
 
 export default defineConfig({
   testDir: './tests',
+  testMatch: '**/*.spec.ts',
   fullyParallel: true,
   timeout: process.env.CI ? 180_000 : 120_000,
   expect: { timeout: process.env.CI ? 20_000 : 10_000 },

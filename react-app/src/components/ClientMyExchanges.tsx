@@ -1,6 +1,7 @@
 import { useClientPreferences } from '../client-preferences'
 import { isMyExchangeId, selectedMyExchanges, type MyExchange, type MyExchangeFilter } from '../client-my-exchanges'
 import copy from '../client-my-exchanges-copy.json'
+import { evaluatedExchangeFilterSummary } from '../client-evaluated-execution'
 import { ClientSharingDropdown } from './ClientSharingDropdown'
 import '../client-my-exchanges.css'
 
@@ -31,9 +32,10 @@ export function ClientMyExchanges({ exchanges, value, open, onOpenChange, onSele
   </span>
 }
 
-export function ClientMyExchangeResult({ selected, count, onReset }: { selected: readonly MyExchange[]; count: number; onReset: () => void }) {
+export function ClientMyExchangeResult({ selected, count, onReset, executionPlanned = false }: { selected: readonly MyExchange[]; count: number; onReset: () => void; executionPlanned?: boolean }) {
   const { language } = useClientPreferences(), t = copy[language]
   if (!selected.length) return null
-  const message = (count ? t.note : t.empty).replace('{names}', selected.map(exchange => exchange.name).join(', ')).replace('{count}', count.toLocaleString(language))
+  const names = selected.map(exchange => exchange.name).join(', ')
+  const message = executionPlanned ? evaluatedExchangeFilterSummary(language, names, count) : (count ? t.note : t.empty).replace('{names}', names).replace('{count}', count.toLocaleString(language))
   return count ? <p className="myex-note" role="status">{message}</p> : <div className="myex-empty"><p role="status">{message}</p><button type="button" className="pl-link" onClick={onReset}>{t.reset}</button></div>
 }

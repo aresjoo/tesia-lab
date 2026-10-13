@@ -13,7 +13,12 @@ import {api18CandidateFixture} from './candidate-fixture'
 import {TesiaBitgetCopyV18Client} from './fixtures/api-v0.18/client.js'
 import type {ApprovedVersion,CopySnapshot,CopySummary,DeepReadonly as V18Readonly,Environment,Market} from './fixtures/api-v0.18/types.js'
 import type {CopyPresentation,CopyScope,IssuedSourceBinding,SourceSelection} from './presentation'
-import type {CatalogueCopyExecutionPort} from './catalogue-port'
+import type {CatalogueCopyExecutionPort, CatalogueCopySource} from './catalogue-port'
+import { readExecutionMinimum, minimumForPolicy, decimalAtLeast } from '../client-execution-minimum'
+import { createCopyMutationDispatchObserver, waitForCopyStartReadiness } from './start-readiness'
+
+type CreateSettings=Readonly<Pick<CopySnapshot,'allocationUsdt'|'maxLossUsdt'|'maxPositionFraction'|'startMode'>>
+const sameCreateSettings=(a:CreateSettings,b:CreateSettings)=>a.allocationUsdt===b.allocationUsdt&&a.maxLossUsdt===b.maxLossUsdt&&a.maxPositionFraction===b.maxPositionFraction&&a.startMode===b.startMode
 
 type DevelopmentCopyInput = Readonly<{
  mode?:'development'
@@ -27,6 +32,7 @@ type DevelopmentCopyInput = Readonly<{
 }>
 export type CopyExecutionDeploymentBinding=Readonly<{
  sourceSha:string;sourceId:string;strategyId:string;versionId:string;policyHash:string;environment:Environment
+ minimumDescriptor?:CatalogueCopySource['minimumDescriptor']
 }>
 export type CopyExecutionDeployment=Readonly<{schema:1;environment:Environment;bindings:ReadonlyArray<CopyExecutionDeploymentBinding>}>
 export type ServiceCopyInput=Readonly<{mode:'service';deployment:CopyExecutionDeployment;fixture?:never}>
@@ -73,11 +79,21 @@ export function parseCopyExecutionDeployment(raw:string):CopyExecutionDeployment
   if(root.schema!==1||!['production','demo'].includes(root.environment as string)||!Array.isArray(root.bindings)||root.bindings.length>1000)return null
   const seen=new Set<string>(),bindings:CopyExecutionDeploymentBinding[]=[]
   for(const candidate of root.bindings){
-   if(!candidate||typeof candidate!=='object'||Array.isArray(candidate)||!exactKeys(candidate as Record<string,unknown>,['sourceSha','sourceId','strategyId','versionId','policyHash','environment']))return null
+   if(!candidate||typeof candidate!=='object'||Array.isArray(candidate))return null
    const row=candidate as Record<string,unknown>
+   const hasMinimum=Object.hasOwn(row,'minimumDescriptor')
+   if(!exactKeys(row,['sourceSha','sourceId','strategyId','versionId','policyHash','environment',...(hasMinimum?['minimumDescriptor']:[])]))return null
    if(['sourceSha','sourceId','strategyId','versionId','policyHash','environment'].some(key=>typeof row[key]!=='string')||!SOURCE_SHA.test(row.sourceSha as string)||!SOURCE_ID.test(row.sourceId as string)||!ID.test(row.strategyId as string)||!ID.test(row.versionId as string)||!HASH64.test(row.policyHash as string)||row.environment!==root.environment)return null
+   let minimumDescriptor:CatalogueCopySource['minimumDescriptor']
+   if(hasMinimum){
+    const descriptor=row.minimumDescriptor
+    if(!descriptor||typeof descriptor!=='object'||Array.isArray(descriptor)||!exactKeys(descriptor as Record<string,unknown>,['policyVersionId','descriptorPolicyHash']))return null
+    const value=descriptor as Record<string,unknown>
+    if(typeof value.policyVersionId!=='string'||!/^(?:policy_)?[a-f0-9]{64}$/.test(value.policyVersionId)||typeof value.descriptorPolicyHash!=='string'||!HASH64.test(value.descriptorPolicyHash))return null
+    minimumDescriptor=Object.freeze({policyVersionId:value.policyVersionId,descriptorPolicyHash:value.descriptorPolicyHash})
+   }
    const pair=JSON.stringify([row.sourceSha,row.sourceId]);if(seen.has(pair))return null;seen.add(pair)
-   bindings.push(Object.freeze({sourceSha:String(row.sourceSha),sourceId:String(row.sourceId),strategyId:String(row.strategyId),versionId:String(row.versionId),policyHash:String(row.policyHash),environment:row.environment as Environment}))
+   bindings.push(Object.freeze({sourceSha:String(row.sourceSha),sourceId:String(row.sourceId),strategyId:String(row.strategyId),versionId:String(row.versionId),policyHash:String(row.policyHash),environment:row.environment as Environment,...(minimumDescriptor?{minimumDescriptor}:{})}))
   }
   return Object.freeze({schema:1,environment:root.environment as Environment,bindings:Object.freeze(bindings)})
  }catch{return null}
@@ -104,7 +120,7 @@ export function resolveCopyExecutionMode(input:CandidateCopyInput|undefined,enab
  if(input.mode==='service')return'service'
  return runtime.dev&&['localhost','127.0.0.1','[::1]'].includes(runtime.hostname)&&input.fixture===api18CandidateFixture?'development':'off'
 }
-export function issuedProductionBinding(deployment:CopyExecutionDeployment,source:SourceSelection):IssuedSourceBinding|null{
+export function issuedProductionBinding(deployment:CopyExecutionDeployment,source:SourceSelection):CopyExecutionDeploymentBinding|null{
  const found=deployment.bindings.filter(row=>row.sourceSha===source.sourceSha&&row.sourceId===source.sourceId)
  return found.length===1?found[0]!:null
 }
@@ -140,6 +156,13 @@ export function productionBudgetFromAccount(account:V17Readonly<AccountSnapshot>
 }
 
 const validDevelopmentBudget=(value:Budget|null):value is Budget=>Boolean(value&&/^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(value.availableUsdt)&&Number.isFinite(Number(value.availableUsdt))&&Number(value.availableUsdt)<=Number.MAX_SAFE_INTEGER&&value.revision&&Number.isFinite(value.expiresAtMs)&&value.expiresAtMs>Date.now()&&value.expiresAtMs<=Date.now()+10_000)
+async function sourceMinimum(source: CatalogueCopySource, signal: AbortSignal) {
+ const descriptor=source.minimumDescriptor
+ if(!descriptor)return null
+ if(!HASH64.test(descriptor.descriptorPolicyHash)||!/^(?:[a-f0-9]{64}|policy_[a-f0-9]{64})$/.test(descriptor.policyVersionId))return null
+ const quote=await readExecutionMinimum(signal),item=minimumForPolicy(quote,descriptor.policyVersionId,descriptor.descriptorPolicyHash)
+ return item&&quote?{...item,expiresAtMs:Date.parse(quote.expiresAt)}:null
+}
 function coversBudget(available:string,requested:string){
  const [a,af='']=available.split('.'),[b,bf='']=requested.split('.'),scale=Math.max(af.length,bf.length)
  return BigInt(a+af.padEnd(scale,'0'))>=BigInt(b+bf.padEnd(scale,'0'))
@@ -162,9 +185,10 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
    const value=(await sessionPort.current()).body.data,now=latest.current()
    if(retired||abort.signal.aborted||value.state!=='AUTHENTICATED'||value.sessionId!==key||now?.sessionState!=='AUTHENTICATED'||now.sessionId!==key)throw new CopyControllerError('SCOPE_CHANGED')
   }
-  const raw=createCopyTransport({origin:()=>window.location.origin,fetch:window.fetch.bind(window)})
+  const dispatch=createCopyMutationDispatchObserver(window.fetch.bind(window))
+  const raw=createCopyTransport({origin:()=>window.location.origin,fetch:dispatch.fetch})
   if(mode==='development'){
-   const development=input as DevelopmentCopyInput,sourceIds=new Map<string,string>()
+   const development=input as DevelopmentCopyInput,sourceIds=new Map<string,string>(),sourceHashes=new Map<string,string>()
    const scope:CopyScope|null=development.connectionId&&development.environment?{owner:key,sessionId:key,connectionId:development.connectionId,environment:development.environment}:null
    const controller=createCandidateCopyController({fixture:development.fixture,currentScope:()=>{
     const value=latest.current();return !retired&&value?.sessionState==='AUTHENTICATED'&&value.sessionId===key?scope:null
@@ -174,30 +198,49 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
     if(retired)return
     const value:CatalogueCopyExecutionPort={scope:key,controller,moneyUnit:'USDT',
      sourceForCopy:id=>{const state=controller.getSnapshot();return sourceIds.get(state.copies.find(copy=>copy.subscriptionId===id)?.versionId??(state.selectedCopy?.subscriptionId===id?state.selectedCopy.versionId:'')??'')??null},
-     copyForSource:id=>{
-      const versionId=[...sourceIds].find(([,sourceId])=>sourceId===id)?.[0];if(!versionId)return null
+     copyForSource:(id,sourceSha=catalogueSourceSha)=>{
+      const versionId=[...sourceIds].find(([versionId,sourceId])=>sourceId===id&&sourceHashes.get(versionId)===sourceSha)?.[0];if(!versionId)return null
       const selected=controller.getSnapshot().selectedCopy;if(selected?.versionId===versionId)return selected.subscriptionId
       const copies=controller.getSnapshot().copies.filter(copy=>copy.versionId===versionId&&copy.connectionId===scope?.connectionId);return copies.length===1?copies[0].subscriptionId:null
-     },prepareSetup:async(sourceId,signal)=>{
-      if(!scope)return null
-      const version=await controller.selectSource({sourceSha:catalogueSourceSha,sourceId},signal)
-      sourceIds.set(version.versionId,sourceId)
+     },prepareSetup:async(sourceId,signal,selection={sourceSha:catalogueSourceSha,sourceId})=>{
+      if(!scope||selection.sourceId!==sourceId)return null
+      const version=await controller.selectSource(selection,signal)
+      sourceIds.set(version.versionId,sourceId);sourceHashes.set(version.versionId,selection.sourceSha)
       if(!development.readAvailableBudget)return null
       const budget=await development.readAvailableBudget(scope,version.versionId,signal);await confirmedSession()
       if(!validDevelopmentBudget(budget)||signal.aborted)return null
-      const createIntent=crypto.randomUUID(),startIntent=crypto.randomUUID();let submitted=false
-      return{owner:key,sourceSha:catalogueSourceSha,strategyId:sourceId,revision:JSON.stringify([version.versionId,version.policyHash,budget.revision]),available:Number(budget.availableUsdt),moneyUnit:'USDT',
+      const minimum=selection.minimumDescriptor?await sourceMinimum(selection,signal):null;await confirmedSession()
+      if(selection.minimumDescriptor&&(!minimum||minimum.expiresAtMs<=Date.now()||signal.aborted))return null
+      const createIntent=crypto.randomUUID(),startIntent=crypto.randomUUID();let submitted=false,startSubmitted=false;let createdSnapshot:V18Readonly<CopySnapshot>|null=null,createdSettings:CreateSettings|null=null
+      return{owner:key,sourceSha:selection.sourceSha,strategyId:sourceId,revision:JSON.stringify([version.versionId,version.policyHash,budget.revision]),available:Number(budget.availableUsdt),moneyUnit:'USDT',minimumUsdt:minimum?.minimumAllocationUsdt,
        onConfirm:async(settings:Readonly<CatalogueCopySettings>,request:AbortSignal)=>{
         const allocationUsdt=String(settings.amount),maxLossUsdt=timesPercent(String(settings.amount),Math.abs(settings.loss))
         if(!/^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(allocationUsdt))throw new CopyControllerError('INVALID_REQUEST')
+        const createSettings:CreateSettings={allocationUsdt,maxLossUsdt,maxPositionFraction:timesPercent(String(settings.cap),1),startMode:settings.existing==='copy'?'current_position':'next_signal'}
+        if(createdSettings&&!sameCreateSettings(createdSettings,createSettings))throw new CopyControllerError('IDEMPOTENCY_CONFLICT')
         if(!submitted){
+         let minimumExpiresAt=Infinity
+         if(selection.minimumDescriptor){const quote=await sourceMinimum(selection,request);await confirmedSession();if(!quote||quote.expiresAtMs<=Date.now()||!decimalAtLeast(allocationUsdt,quote.minimumAllocationUsdt)||!decimalAtLeast(maxLossUsdt,quote.requiredMaxLossUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE');minimumExpiresAt=quote.expiresAtMs}
          // Freshness limits account evidence, never the user's time to fill the original sheet.
          const fresh=await development.readAvailableBudget!(scope,version.versionId,request);await confirmedSession()
-         if(request.aborted||!validDevelopmentBudget(fresh)||!coversBudget(fresh.availableUsdt,allocationUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+         if(minimumExpiresAt<=Date.now()||request.aborted||!validDevelopmentBudget(fresh)||!coversBudget(fresh.availableUsdt,allocationUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
         }
-        let created
-        try{created=await controller.create({allocationUsdt,maxLossUsdt,maxPositionFraction:timesPercent(String(settings.cap),1),startMode:settings.existing==='copy'?'current_position':'next_signal'},createIntent,request);submitted=true}catch(error){if(controller.getSnapshot().phase==='reconciliation')submitted=true;throw error}
-        const active=await controller.action('start',created.subscriptionId,created.revision,startIntent,request)
+        let created=createdSnapshot
+        if(!created){
+         const sent=dispatch.watch(createIntent)
+         try{created=await controller.create(createSettings,createIntent,request);createdSnapshot=created;createdSettings=createSettings;submitted=true}catch(error){submitted=controller.hasUncertainIntent(createIntent)&&(submitted||sent.dispatched);throw error}finally{sent.release()}
+        }
+        if(!startSubmitted){
+         await waitForCopyStartReadiness(created,signal=>controller.readCopy(created.subscriptionId,signal),request)
+         await confirmedSession()
+         let minimumExpiresAt=Infinity
+         if(selection.minimumDescriptor){const quote=await sourceMinimum(selection,request);await confirmedSession();if(!quote||quote.expiresAtMs<=Date.now()||!decimalAtLeast(allocationUsdt,quote.minimumAllocationUsdt)||!decimalAtLeast(maxLossUsdt,quote.requiredMaxLossUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE');minimumExpiresAt=quote.expiresAtMs}
+         const fresh=await development.readAvailableBudget!(scope,version.versionId,request);await confirmedSession()
+         if(minimumExpiresAt<=Date.now()||request.aborted||!validDevelopmentBudget(fresh)||!coversBudget(fresh.availableUsdt,allocationUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+        }
+        let active
+        const sent=dispatch.watch(startIntent)
+        try{active=await controller.action('start',created.subscriptionId,created.revision,startIntent,request);startSubmitted=true}catch(error){startSubmitted=controller.hasUncertainIntent(startIntent)&&(startSubmitted||sent.dispatched);throw error}finally{sent.release()}
         if(active.state!=='ACTIVE')throw new CopyControllerError('EXECUTION_UNAVAILABLE')
        }}
      }}
@@ -258,8 +301,8 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
    if(previous&&(!sameBinding(previous.binding,binding)||previous.child!==child))throw new CopyControllerError('COPY_BINDING_MISMATCH')
    child.subscriptions.add(id);known.set(id,Object.freeze({binding,child}))
   }
-  const matchingCopies=(sourceId:string)=>{
-   const binding=issuedProductionBinding(deployment,{sourceSha:catalogueSourceSha,sourceId});if(!binding)return[]
+  const matchingCopies=(sourceId:string,sourceSha=catalogueSourceSha)=>{
+   const binding=issuedProductionBinding(deployment,{sourceSha,sourceId});if(!binding)return[]
    return[...known].filter(([,value])=>value.binding.versionId===binding.versionId&&value.binding.policyHash===binding.policyHash&&value.binding.environment===binding.environment)
   }
   const readBudget=async(expected:ProductionConnectionProof,market:Market,signal:AbortSignal)=>{
@@ -273,6 +316,7 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
   }
   const awaitRestoreSettlement=async()=>{const settlement=restoreSettlement;if(settlement)await settlement;await confirmedSession();if(retired)throw new CopyControllerError('SCOPE_CHANGED')}
   const controller:Controller={
+   hasUncertainIntent:id=>[...children].some(child=>child.controller.hasUncertainIntent(id)),
    bind(next){if(next===null)retireSetup()},getSnapshot:()=>state,subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener)},
    async selectSource(selection,signal){if(!currentSetup)throw new CopyControllerError('SOURCE_BINDING_UNAVAILABLE');const value=await currentSetup.controller.selectSource(selection,signal);publish({phase:'ready',reason:null,selectedVersion:value});return value},
    async loadLists(){publish({phase:known.size?'ready':'idle',reason:null,copies:Object.freeze([...summaries.values()])})},
@@ -283,13 +327,24 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
    dispose(){if(disposed)return;disposed=true;for(const child of [...children])destroyChild(child);listeners.clear()}
   }
   const port:CatalogueCopyExecutionPort={scope:key,controller,moneyUnit:'USDT',
+   bindingForSource:selection=>{
+    if(retired||latest.current()?.sessionId!==key||latest.current()?.sessionState!=='AUTHENTICATED')return null
+    const binding=issuedProductionBinding(deployment,selection);if(!binding)return null
+    const approved=controller.getSnapshot().versions.some(row=>row.status==='approved'&&row.versionId===binding.versionId&&row.strategyId===binding.strategyId&&row.policyHash===binding.policyHash&&row.environment===binding.environment)
+    return approved?binding:null
+   },
    sourceForCopy:id=>{const entry=known.get(id);if(!entry)return null;const rows=deployment.bindings.filter(row=>row.versionId===entry.binding.versionId&&row.policyHash===entry.binding.policyHash&&row.environment===entry.binding.environment);return rows.length===1?rows[0]!.sourceId:null},
-   copyForSource:id=>{const matches=matchingCopies(id);return matches.length===1?matches[0]![0]:null},
-   prepareSetup:async(sourceId,signal)=>{
+   copyForSource:(id,sourceSha=catalogueSourceSha)=>{const matches=matchingCopies(id,sourceSha);return matches.length===1?matches[0]![0]:null},
+   prepareSetup:async(sourceId,signal,selection={sourceSha:catalogueSourceSha,sourceId})=>{
+    if(selection.sourceId!==sourceId)return null
     await awaitRestoreSettlement()
     if(signal.aborted)return null
-    if(matchingCopies(sourceId).length)return null
-    const turn=++interaction,binding=issuedProductionBinding(deployment,{sourceSha:catalogueSourceSha,sourceId});if(!binding)return null
+    if(matchingCopies(sourceId,selection.sourceSha).length)return null
+    const turn=++interaction,binding=issuedProductionBinding(deployment,selection);if(!binding)return null
+    const descriptor=binding.minimumDescriptor
+    if(!descriptor||selection.minimumDescriptor&&(selection.minimumDescriptor.policyVersionId!==descriptor.policyVersionId||selection.minimumDescriptor.descriptorPolicyHash!==descriptor.descriptorPolicyHash))return null
+    // Only the pinned deployment may supply the ordinary catalogue descriptor.
+    selection=Object.freeze({...selection,minimumDescriptor:descriptor})
     const before=await readConnections();let version:V18Readonly<ApprovedVersion>|undefined,failure:unknown,failed=false
     try{version=await readProductionIssuedVersion(copyClient,binding,signal)}catch(error){failure=error;failed=true}
     const after=await readConnections()
@@ -301,22 +356,45 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
     if(beforeProof.connectionId!==next.connectionId||beforeProof.identity!==next.identity){retireSetup();return null}
     proof=next
     const setupScope=Object.freeze({owner:key,sessionId:key,connectionId:next.connectionId,environment:deployment.environment}),setup=createChild(setupScope,next);currentSetup=setup
-    const selected=await setup.controller.selectSource({sourceSha:catalogueSourceSha,sourceId},signal);publish({phase:'ready',reason:null,selectedVersion:selected})
+    const selected=await setup.controller.selectSource(selection,signal);publish({phase:'ready',reason:null,selectedVersion:selected})
     if(signal.aborted||turn!==interaction||proof!==next)return null
     const budget=await readBudget(next,selected.policy.market,signal)
     if(!budget||budget.expiresAtMs<=Date.now()||turn!==interaction)return null
+    const minimum=await sourceMinimum(selection,signal)
+    await verifyCurrent(next)
+    if(!minimum||minimum.expiresAtMs<=Date.now()||budget.expiresAtMs<=Date.now()||signal.aborted||turn!==interaction||!coversBudget(budget.availableUsdt,minimum.requiredAvailableUsdt))return null
     void controller.loadLists(abort.signal).catch(()=>undefined)
-    const createIntent=crypto.randomUUID(),startIntent=crypto.randomUUID();let submitted=false
-    return{owner:key,sourceSha:catalogueSourceSha,strategyId:sourceId,revision:JSON.stringify(['local',selected.versionId,selected.policyHash,budget.revision]),available:Number(budget.availableUsdt),moneyUnit:'USDT',
+    const createIntent=crypto.randomUUID(),startIntent=crypto.randomUUID();let submitted=false,startSubmitted=false;let createdSnapshot:V18Readonly<CopySnapshot>|null=null,createdSettings:CreateSettings|null=null
+    return{owner:key,sourceSha:selection.sourceSha,strategyId:sourceId,revision:JSON.stringify(['local',selected.versionId,selected.policyHash,budget.revision]),available:Number(budget.availableUsdt),moneyUnit:'USDT',minimumUsdt:minimum?.minimumAllocationUsdt,
      onConfirm:async(settings:Readonly<CatalogueCopySettings>,request:AbortSignal)=>{
       if(turn!==interaction||proof!==next)throw new CopyControllerError('SCOPE_CHANGED')
       const allocationUsdt=String(settings.amount),maxLossUsdt=timesPercent(String(settings.amount),Math.abs(settings.loss))
       if(!DECIMAL.test(allocationUsdt))throw new CopyControllerError('INVALID_REQUEST')
-      if(!submitted){const fresh=await readBudget(next,selected.policy.market,request);if(!fresh||fresh.expiresAtMs<=Date.now()||!coversBudget(fresh.availableUsdt,allocationUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')}
-      let created
-      try{created=await setup.controller.create({allocationUsdt,maxLossUsdt,maxPositionFraction:timesPercent(String(settings.cap),1),startMode:settings.existing==='copy'?'current_position':'next_signal'},createIntent,request);submitted=true}catch(error){if(setup.controller.getSnapshot().phase==='reconciliation')submitted=true;throw error}
+      const createSettings:CreateSettings={allocationUsdt,maxLossUsdt,maxPositionFraction:timesPercent(String(settings.cap),1),startMode:settings.existing==='copy'?'current_position':'next_signal'}
+      if(createdSettings&&!sameCreateSettings(createdSettings,createSettings))throw new CopyControllerError('IDEMPOTENCY_CONFLICT')
+      if(!submitted){
+       const quote=await sourceMinimum(selection,request);await verifyCurrent(next)
+       if(!quote||quote.expiresAtMs<=Date.now()||!decimalAtLeast(allocationUsdt,quote.minimumAllocationUsdt)||!decimalAtLeast(maxLossUsdt,quote.requiredMaxLossUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+       const fresh=await readBudget(next,selected.policy.market,request);if(quote.expiresAtMs<=Date.now()||!fresh||fresh.expiresAtMs<=Date.now()||!coversBudget(fresh.availableUsdt,allocationUsdt)||!coversBudget(fresh.availableUsdt,quote.requiredAvailableUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+      }
+      let created=createdSnapshot
+      if(!created){
+       const sent=dispatch.watch(createIntent)
+       try{created=await setup.controller.create(createSettings,createIntent,request);createdSnapshot=created;createdSettings=createSettings;submitted=true}catch(error){submitted=setup.controller.hasUncertainIntent(createIntent)&&(submitted||sent.dispatched);throw error}finally{sent.release()}
+      }
       remember(created.subscriptionId,bindingOf(created),setup)
-      const active=await setup.controller.action('start',created.subscriptionId,created.revision,startIntent,request);publish({phase:'ready',reason:null,selectedCopy:active})
+      if(!startSubmitted){
+       await waitForCopyStartReadiness(created,signal=>setup.controller.readCopy(created.subscriptionId,signal),request)
+       await verifyCurrent(next)
+       const quote=await sourceMinimum(selection,request);await verifyCurrent(next)
+       if(!quote||quote.expiresAtMs<=Date.now()||!decimalAtLeast(allocationUsdt,quote.minimumAllocationUsdt)||!decimalAtLeast(maxLossUsdt,quote.requiredMaxLossUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+       const fresh=await readBudget(next,selected.policy.market,request)
+       if(quote.expiresAtMs<=Date.now()||request.aborted||!fresh||fresh.expiresAtMs<=Date.now()||!coversBudget(fresh.availableUsdt,allocationUsdt)||!coversBudget(fresh.availableUsdt,quote.requiredAvailableUsdt))throw new CopyControllerError('ACCOUNT_FACTS_UNAVAILABLE')
+      }
+      let active
+      const sent=dispatch.watch(startIntent)
+      try{active=await setup.controller.action('start',created.subscriptionId,created.revision,startIntent,request);startSubmitted=true}catch(error){startSubmitted=setup.controller.hasUncertainIntent(startIntent)&&(startSubmitted||sent.dispatched);throw error}finally{sent.release()}
+      publish({phase:'ready',reason:null,selectedCopy:active})
       if(active.state!=='ACTIVE')throw new CopyControllerError('EXECUTION_UNAVAILABLE')
      }}
    }}
@@ -325,6 +403,20 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
    await confirmedSession();let value:T|undefined,failure:unknown,failed=false
    try{value=await operation()}catch(error){failure=error;failed=true}
    await confirmedSession();if(failed)throw failure;return value!
+  }
+  const readApprovedVersions=async()=>{
+   const versions:Array<Awaited<ReturnType<typeof copyClient.listVersions>>['data'][number]>=[],ids=new Set<string>(),cursors=new Set<string>();let cursor:string|undefined
+   for(let page=0;;page++){
+    if(page>=50)throw new CopyControllerError('PAGINATION_BOUND_EXCEEDED')
+    const response=await currentApi18(()=>copyClient.listVersions({limit:20,...(cursor===undefined?{}:{cursor}),signal:abort.signal}))
+    if(retired)return
+    for(const row of response.data){if(ids.has(row.versionId))throw new CopyControllerError('LIST_BINDING_MISMATCH');ids.add(row.versionId);versions.push(row)}
+    if(versions.length>1000)throw new CopyControllerError('PAGINATION_BOUND_EXCEEDED')
+    if(response.nextCursor===null)break
+    if(!response.data.length||cursors.has(response.nextCursor))throw new CopyControllerError('PAGINATION_BINDING_MISMATCH')
+    cursors.add(response.nextCursor);cursor=response.nextCursor
+   }
+   if(!retired)publish({versions:Object.freeze(versions)})
   }
   const restoreExisting=async()=>{
    const copies:V18Readonly<CopySummary>[]=[],ids=new Set<string>(),cursors=new Set<string>();let cursor:string|undefined
@@ -362,6 +454,7 @@ export function useCandidateCopyExecution(input:CandidateCopyInput|undefined,ena
   }
   const disconnect=controller.subscribe(()=>{if(!retired)setPort({input,port})})
   restoreSettlement=restoreExisting().catch(()=>{if(!retired&&restoreTurn===interaction)publish({phase:'unavailable',reason:'SOURCE_BINDING_UNAVAILABLE'})})
+  if(deployment.bindings.length)void readApprovedVersions().catch(()=>{if(!retired)publish({versions:Object.freeze([])})})
   setPort({input,port})
   return()=>{retired=true;abort.abort();disconnect();controller.dispose()}
  },[input,key,mode,sessionPort])

@@ -1,11 +1,14 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import { type CatalogueStrategy } from '../client-catalogue'
 import { sourceCatalogueIdentity } from '../client-catalogue-detail-locale'
-import { catalogueCopyDecimal, catalogueCopyLosses, catalogueCopyMinimum, catalogueCopySettings, type CatalogueCopySetup } from '../client-catalogue-copy-setup'
+import { catalogueCopyCanonicalAmount, catalogueCopyDecimal, catalogueCopyLosses, catalogueCopyMinimum, catalogueCopySettings, type CatalogueCopySetup } from '../client-catalogue-copy-setup'
 import { useClientPreferences } from '../client-preferences'
 import { ClientStrategyGlyph } from './ClientStrategyGlyph'
 import copy from '../client-catalogue-copy-setup-copy.json'
 import '../client-catalogue-copy-setup.css'
+import { ceilMinimumUsdt, decimalAtLeast } from '../client-execution-minimum'
+import type { StrategyKind } from '../client-strategy-classification'
+export type CopySetupIdentity = { title: string; kind: StrategyKind; asset: string; byline: string; futures: boolean }
 
 function revealControl(dialog: HTMLDialogElement, control: HTMLElement) {
   const port = dialog.querySelector<HTMLElement>(dialog.classList.contains('is-content-scroll') ? 'form' : '.ccs-body')
@@ -20,21 +23,22 @@ function revealControl(dialog: HTMLDialogElement, control: HTMLElement) {
  * The supplied callback owns persistence/approval. No synthetic connection,
  * order, budget transfer, elapsed-time success or local entitlement is created.
  */
-export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger, sourcePreview = false }: {
-  strategy: Readonly<CatalogueStrategy>; setup: CatalogueCopySetup; onClose: () => void; trigger?: HTMLElement; sourcePreview?: boolean
+export function ClientCatalogueCopySetup({ strategy, executionIdentity, setup, onClose, trigger, sourcePreview = false }: {
+  strategy?: Readonly<CatalogueStrategy>; executionIdentity?: CopySetupIdentity; setup: CatalogueCopySetup; onClose: () => void; trigger?: HTMLElement; sourcePreview?: boolean
 }) {
   const { language } = useClientPreferences(), text = copy[language], id = useId(), dialog = useRef<HTMLDialogElement>(null)
   const [amount, setAmount] = useState(''), [loss, setLoss] = useState<number>(-20), [existing, setExisting] = useState('skip'), [cap, setCap] = useState('95')
   const [advanced, setAdvanced] = useState(false), [busy, setBusy] = useState(false), [failed, setFailed] = useState(false)
   const request = useRef<AbortController | null>(null), live = useRef(false)
   const submit = useRef<HTMLButtonElement>(null), dismissed = useRef(false)
-  const minimum = catalogueCopyMinimum(strategy), raw = catalogueCopyDecimal(amount), rawCap = catalogueCopyDecimal(cap)
-  const valid = catalogueCopySettings(strategy, setup.available, amount, loss, existing, cap)
+  const floor = setup.minimumUsdt ?? (strategy && setup.moneyUnit !== 'USDT' ? String(catalogueCopyMinimum(strategy)) : null)
+  const minimum = floor && ceilMinimumUsdt(floor), raw = catalogueCopyDecimal(amount), rawCap = catalogueCopyDecimal(cap)
+  const valid = floor ? catalogueCopySettings(strategy, setup.available, amount, loss, existing, cap, floor) : null
   const money = (value: number) => setup.moneyUnit === 'USDT' ? `${new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)} USDT` : new Intl.NumberFormat(language, { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 2 }).format(value)
   const format = (template: string, values: Record<string, string | number>) => template.replace(/\{(\w+)\}/g, (original, key: string) => String(values[key] ?? original))
-  const budgetError = !amount ? '' : !Number.isFinite(raw) || raw < minimum ? format(text.minimum, { amount: money(minimum) }) : raw > setup.available ? text.exceeds : ''
+  const budgetError = !amount ? '' : !minimum || !floor ? text.failed : !decimalAtLeast(catalogueCopyCanonicalAmount(amount) ?? '', floor) ? format(text.minimum, { amount: money(Number(minimum)) }) : raw > setup.available ? text.exceeds : ''
   const capError = !Number.isInteger(rawCap) || rawCap < 5 || rawCap > 95
-  const identity = sourceCatalogueIdentity(strategy, language, sourcePreview)
+  const identity = strategy ? sourceCatalogueIdentity(strategy, language, sourcePreview) : executionIdentity
   useEffect(() => {
     live.current = true
     const el = dialog.current!, origin = trigger ?? document.activeElement
@@ -99,12 +103,12 @@ export function ClientCatalogueCopySetup({ strategy, setup, onClose, trigger, so
     <form onSubmit={event => { event.preventDefault(); void confirm() }}>
       <div className="ccs-body">
         <header><h2 id={`${id}-title`} tabIndex={-1}>{text.title}</h2><button type="button" aria-label={text.close} className="ccs-close" onClick={dismiss}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.7"/></svg></button></header>
-        <div className="ccs-strategy"><div className="ccs-identity"><ClientStrategyGlyph kind={identity.kind} evidence={identity.glyph} size={32}/><div><b lang={/[가-힣]/.test(identity.title) ? 'ko' : language}>{identity.title}</b><span>@{strategy.by}, {identity.asset}{strategy.fut ? ' ' + text.futures : ''}</span></div></div>
-          {strategy.fut && strategy.lev > 1 && <p>{format(text.leverage, { leverage: strategy.lev })}</p>}
-        </div>
+        {identity && <div className="ccs-strategy"><div className="ccs-identity"><ClientStrategyGlyph kind={identity.kind} evidence={'glyph' in identity ? identity.glyph : undefined} size={32}/><div><b lang={/[가-힣]/.test(identity.title) ? 'ko' : language}>{identity.title}</b><span>@{strategy?.by ?? executionIdentity?.byline}, {identity.asset}{(strategy?.fut || executionIdentity?.futures) ? ' ' + text.futures : ''}</span></div></div>
+          {strategy?.fut && strategy.lev > 1 && <p>{format(text.leverage, { leverage: strategy.lev })}</p>}
+        </div>}
         <fieldset disabled={busy} className="ccs-fields">
-          <div className="ccs-field"><label htmlFor={`${id}-amount`}>{text.budget}</label><div className="ccs-input"><span aria-hidden="true">{setup.moneyUnit === 'USDT' ? 'USDT' : '$'}</span><input id={`${id}-amount`} type="text" inputMode="decimal" autoComplete="off" value={amount} placeholder={String(minimum)} aria-invalid={Boolean(budgetError)} aria-describedby={`${id}-hint ${id}-error`} onChange={event => { setAmount(event.target.value); setFailed(false) }}/><button type="button" onClick={() => setAmount(String(Math.floor(setup.available)))}>{text.max}</button></div>
-            <p className="ccs-hint" id={`${id}-hint`}>{format(text.available, { amount: money(setup.available), min: money(minimum) })}</p><p className="ccs-error" id={`${id}-error`} role="alert">{budgetError}</p></div>
+          <div className="ccs-field"><label htmlFor={`${id}-amount`}>{text.budget}</label><div className="ccs-input"><span aria-hidden="true">{setup.moneyUnit === 'USDT' ? 'USDT' : '$'}</span><input id={`${id}-amount`} type="text" inputMode="decimal" autoComplete="off" value={amount} placeholder={minimum ?? '—'} aria-invalid={Boolean(budgetError)} aria-describedby={`${id}-hint ${id}-error`} onChange={event => { setAmount(event.target.value); setFailed(false) }}/><button type="button" onClick={() => setAmount(String(Math.floor(setup.available)))}>{text.max}</button></div>
+            <p className="ccs-hint" id={`${id}-hint`}>{format(text.available, { amount: money(setup.available), min: minimum ? money(Number(minimum)) : '—' })}</p><p className="ccs-error" id={`${id}-error`} role="alert">{budgetError}</p></div>
           <div className="ccs-field"><span id={`${id}-loss`}>{text.loss}</span><div className="ccs-pills" role="radiogroup" aria-labelledby={`${id}-loss`}>{catalogueCopyLosses.map((value, index) => <button type="button" role="radio" key={value} aria-checked={loss === value} tabIndex={loss === value ? 0 : -1} onClick={() => setLoss(value)} onKeyDown={event => choose(event, index, catalogueCopyLosses, setLoss)}>{Math.abs(value)}%</button>)}</div><p className="ccs-hint">{format(text.lossHint, { loss: Math.abs(loss) })}</p></div>
           <dl className="ccs-summary">{[[text.budget, Number.isFinite(raw) && raw > 0 ? money(raw) : text.empty], [text.loss, `${Number.isFinite(raw) && raw > 0 ? money(raw * Math.abs(loss) / 100) + ' ' : ''}(${Math.abs(loss)}%)`], [text.timing, existing === 'skip' ? text.next : text.current], [text.cap, capError ? '—' : `${rawCap}%`]].map(([key, value]) => <div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl>
           <button className="ccs-more" type="button" aria-expanded={advanced} aria-controls={`${id}-advanced`} onClick={() => setAdvanced(value => !value)}>{advanced ? text.less : text.details}</button>

@@ -1,5 +1,21 @@
 # 클라이언트 원본 → React 이식 변경 안내
 
+## 현재 전체 React 전달 — 연구 전략 API22·복구 연결, 운영 미반영
+
+Web [`7a3ac987`](https://github.com/beak1011/tesia-web/tree/7a3ac9879f1683b2b6fdd7235b03c6255801de1f)/tree `17a1a1df6de0527adf827034917fe41ef453aea4`의 clean 전체 **2,536파일·36,504,941bytes**를 기존 `react-app/`에 동기화하고 파일별 SHA 검증을 통과했다. snapshot은 `354d455cdd067e905def547a15af38205bbffaa9d187e3407e2faa84ac6bd959`이며 이전 2,494파일에서 추가42·제거0이다. 원본 HTML·SVG·배치·문구 영역은 수정하지 않는다. 원격 추가 병합 이력은 강제 푸시 없이 보존했고 통합 전후 제품 tree가 동일했다.
+
+이 전체 전달에는 이전에 별도 개발된 전략 카탈로그/상세/최소금액/모델 아이콘·copy readiness·Node CI 연결도 함께 들어간다. 그 내용의 정본과 이전 증거는 `react-app/Bugfix_report.md`가 소유한다. 전체 파일 전달이나 전체 타입/build 통과는 모든 원본 화면·실서비스 흐름 검증 완료를 뜻하지 않는다.
+
+이번 신규 변경은 다음처럼 확인하면 된다.
+
+- `react-app/src/internal-poc/NativeServiceApp.tsx`: 원 API13 대화를 유지하고 연구 보고서→API22 서버 구조화 후보→현재 v3 초안·고객 승인 근거를 별도 snapshot으로 연결한다. 실제 COMBINED/current-cookie 권한을 사용하며 옛 principal·새 과금 권위를 만들지 않는다.
+- `react-app/src/internal-poc/native-research-strategy-proposal-v22-adapter.ts`와 `contracts/generated/api-v0.22/`: Contracts `4db116ea`의 실제 SDK·해시 검증·순수 applied-draft/approval-companion 조회를 소비한다. 실제 full policy/provenance가 검증되기 전 자동 승인하지 않는다.
+- 원예약 재개: 실제 최초 POST marker와 원 key/body를 보존하고 검증된 QUEUED/paid COMPLETED에서만 전이별 최대2회·4초 간격으로 재개한다. 응답 유실 뒤 유한 GET 관측75회로 늦은 결과를 읽는다. cold·원키 부재·불확실 paid 상태의 자동 POST는0이다.
+- 시험은 실제 SDK+합성 fetch다. 신규 재개1 PASS3.6초·lost-reply1 PASS3.9초·좁은 타입과 전체 `tsc -b`/service build PASS다. AGY3.8flash의 exact diff-only RO는 이번 App의 태그/classes/font/style/카피 자체 변경0을 관측했지만 실제 DOM/보안/전체 원본 일치 GO는 아니다.
+- 서버 구현은 Backend [`ca02f964`](https://github.com/beak1011/tesia-backend/tree/ca02f9647ec1a13523a9d86acb73ee98113e6168)에 있다. 실제 public Bridge→Runtime→producer/journal 신규1은96.633초 PASS(합성 provider1), source314의 direct/sdist 설치11은 PASS다. 실제 site-packages API22 probe도 별도로 통과했다. 원AI0.1.6의 Contracts032 의존성은 보존했으므로 정상 fresh resolver는 아직 NO_GO이며 통제된 설치와 구분한다.
+
+남은 범위는 source 전략의 backtest submit/history/result selector·원 연구 보고서 보존, 실제 서버의 add-only schema/설정·활성화, typed 모델→고객 승인→백테스트→실거래의 연속 확인이다. 개발 전달·운영 배포·실고객 성공은 구분하며 이번 전달의 운영·주문 활성화는0이다. 정확 최신 소유·Gate는 Program `WORK_LEDGER.md`와 제품계획 §20, 실제 수정·실패 원자료는 각 repository의 `Bugfix_report.md`를 따른다.
+
 ## 최신 Web production copy 입력·기존 구독 안전관리 전달 — 운영 미반영
 
 Web `6ef438d8aea7f887e0383bfea09ab25e389da633`/tree `cbe5a4f7dfcbe5f911d6513083dd854a28953923`의 clean exact8을 공식 sync/verify로 전달했다. 전체 React 2,494파일·35,923,889bytes, snapshot `e90f1c091c396dd5ced8157d9abecdc624990cec866f2fc1e0988db91d6562bb`, sourceDirty0·제거0이다. 기존 ea11 source 위 제품2·Node시험2·문서2·package/workflow2만 변경하며 원본 renderer/UI/CSS/문구·공개 API18 wire·main·운영은 변경하지 않는다.

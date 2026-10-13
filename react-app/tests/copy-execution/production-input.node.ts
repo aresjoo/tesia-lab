@@ -158,6 +158,59 @@ const mountProduction=(deployment:CopyExecutionDeployment,fetcher:typeof fetch)=
  return{mounted,restore(){mounted.unmount();Reflect.set(globalThis,'fetch',previousFetch);if(previousWindow===undefined)Reflect.deleteProperty(globalThis,'window');else Reflect.set(globalThis,'window',previousWindow)}}
 }
 
+test('approved minimum descriptor is deployment-bound and fresh required balance fences setup create and start',{timeout:20_000},async()=>{
+ const minimumDescriptor={policyVersionId:'b'.repeat(64),descriptorPolicyHash:'c'.repeat(64)}
+ const bound={...binding,minimumDescriptor},encodeBinding=(row:unknown)=>JSON.stringify({schema:1,environment:'demo',bindings:[row]})
+ assert.deepEqual(production.parseCopyExecutionDeployment(artifact()).bindings[0],binding)
+ assert.deepEqual(production.parseCopyExecutionDeployment(encodeBinding(bound)).bindings[0],bound)
+ for(const descriptor of [null,{}, {...minimumDescriptor,extra:true},{...minimumDescriptor,policyVersionId:binding.versionId},{...minimumDescriptor,descriptorPolicyHash:'C'.repeat(64)}])
+  assert.equal(production.parseCopyExecutionDeployment(encodeBinding({...binding,minimumDescriptor:descriptor})),null)
+ type Scenario='success'|'absent'|'absent-override'|'override'|'override-id'|'hash'|'expired'|'confirm-expired'|'start-expired'|'setup-balance'|'confirm-balance'|'start-balance'|'loss'|'floor'
+ for(const scenario of ['success','absent','absent-override','override','override-id','hash','expired','confirm-expired','start-expired','setup-balance','confirm-balance','start-balance','loss','floor'] as Scenario[]){
+  const deployment=production.parseCopyExecutionDeployment(encodeBinding(scenario.startsWith('absent')?binding:bound))
+  const detail=wire('copy-unconnected'),connectionId=detail.data.connectionId,subscriptionId=detail.data.subscriptionId
+  let current:CopySnapshot|null=null,accounts=0,quotes=0;const posts:string[]=[]
+  const fetcher=(async(input:RequestInfo|URL,init?:RequestInit)=>{
+   const url=new URL(String(input),'https://service.example.test'),body=typeof init?.body==='string'?JSON.parse(init.body):undefined
+   if(url.pathname==='/__teth/execution-minimum'){
+    quotes++;assert.equal(init?.credentials,'omit');assert.equal(init?.method,'GET');assert.equal(url.search,'')
+    const expired=scenario==='expired'||scenario==='confirm-expired'&&quotes>=2||scenario==='start-expired'&&quotes>=3
+    const now=Date.now();return jsonResponse(url.href,{schemaVersion:'bitget-copy-minimum-0.1',venue:'bitget',symbol:'BTCUSDT',asOf:new Date(now-10).toISOString(),expiresAt:new Date(now+(expired?-1:2990)).toISOString(),snapshotRuleSha256:'d'.repeat(64),quoteSha256:'e'.repeat(64),estimates:{[minimumDescriptor.policyVersionId]:{descriptorPolicyHash:scenario==='hash'?'f'.repeat(64):minimumDescriptor.descriptorPolicyHash,status:'estimated',minimumAllocationUsdt:'100',requiredAvailableUsdt:'900',requiredMaxLossUsdt:'20',riskRequiredAvailableUsdt:'800'}}})
+   }
+   if(url.pathname==='/api/v1/strategy-copies'&&url.search)return jsonResponse(url.href,{apiContractVersion:'0.18.0',data:[],nextCursor:null})
+   if(url.pathname==='/api/v1/copy-strategy-versions')return jsonResponse(url.href,wire('version-list'))
+   if(url.pathname===`/api/v1/copy-strategy-versions/${binding.versionId}`)return jsonResponse(url.href,version)
+   if(url.pathname==='/api/v1/exchange-connections/')return jsonResponse(url.href,{apiContractVersion:'0.12.0',data:{connections:[connected(connectionId)]}})
+   if(url.pathname===`/api/v1/exchange-connections/${connectionId}/account`){
+    accounts++;const value=accountSnapshot(connectionId),insufficient=scenario==='setup-balance'||scenario==='confirm-balance'&&accounts>=2||scenario==='start-balance'&&accounts>=3
+    for(const product of value.data.products)for(const balance of product.balances.items as Array<{available:string}>)balance.available=insufficient?'800':'1000'
+    return jsonResponse(url.href,value)
+   }
+   if(url.pathname===`/api/v1/strategy-copies/${subscriptionId}`&&init?.method==='GET'&&current)return jsonResponse(url.href,{apiContractVersion:'0.18.0',data:current})
+   if(init?.method==='POST')posts.push(url.pathname)
+   if(url.pathname==='/api/v1/strategy-copies'&&init?.method==='POST'){
+    const value=structuredClone(detail);Object.assign(value.data,{versionId:binding.versionId,policyHash:binding.policyHash,allocationUsdt:body.allocationUsdt,maxLossUsdt:body.maxLossUsdt,maxPositionFraction:body.maxPositionFraction,startMode:body.startMode});value.data.execution.origin='synthetic';value.data.execution.availability.start={available:true,reason:null};current=value.data;return jsonResponse(url.href,value,201)
+   }
+   if(url.pathname===`/api/v1/strategy-copies/${subscriptionId}/start`&&current){current={...current,state:'ACTIVE',revision:1};return jsonResponse(url.href,{apiContractVersion:'0.18.0',data:current})}
+   throw Error(`UNEXPECTED_FETCH:${init?.method}:${url.pathname}${url.search}`)
+  }) as typeof fetch
+  const mounted=mountProduction(deployment,fetcher)
+  try{
+   await mounted.mounted.flush(()=>Boolean(mounted.mounted.value()))
+   const port=mounted.mounted.value(),signal=new AbortController().signal
+   const supplied=scenario==='override'||scenario==='override-id'||scenario==='absent-override'?{sourceSha:binding.sourceSha,sourceId:'f1',minimumDescriptor:{...minimumDescriptor,...(scenario==='override'?{descriptorPolicyHash:'f'.repeat(64)}:scenario==='override-id'?{policyVersionId:'f'.repeat(64)}:{})}}:undefined
+   const setup=await port.prepareSetup('f1',signal,supplied)
+   if(['absent','absent-override','override','override-id','hash','expired','setup-balance'].includes(scenario)){assert.equal(setup,null,scenario);assert.deepEqual(posts,[],scenario);continue}
+   assert.ok(setup,scenario);assert.equal(setup.minimumUsdt,'100')
+   const settings={amount:scenario==='floor'?50:200,loss:scenario==='loss'?-5:-20,existing:'skip',cap:50}
+   if(scenario==='success')await setup.onConfirm(settings,signal)
+   else await assert.rejects(setup.onConfirm(settings,signal),/ACCOUNT_FACTS_UNAVAILABLE/,scenario)
+   assert.deepEqual(posts,scenario==='success'?['/api/v1/strategy-copies',`/api/v1/strategy-copies/${subscriptionId}/start`]:scenario==='start-balance'||scenario==='start-expired'?['/api/v1/strategy-copies']:[],scenario)
+   if(scenario==='success'){assert.equal(accounts,3);assert.equal(quotes,3)}
+  }finally{mounted.restore()}
+ }
+})
+
 test('OPUS P1-1 restored source enters known management before revoked setup gates',{timeout:20_000},async()=>{
  const list=wire('copy-list'),detail=wire('copy-unconnected'),revoked=wire('version');revoked.data.status='revoked'
  const connectionId=detail.data.connectionId,subscriptionId=detail.data.subscriptionId
@@ -186,11 +239,14 @@ test('OPUS P1-1 restored source enters known management before revoked setup gat
 test('OPUS P1-2 creating Y preserves X and routes both known bindings',{timeout:20_000},async()=>{
  const versionY=wire('version');versionY.data.versionId='version_fixture_000002';versionY.data.strategyId='strategy_fixture_00002';versionY.data.policy.spec='합성 계약의 두 번째 승인 정책';versionY.data.policyHash=bitgetAiPolicyHash(versionY.data.policy)
  const baseList=wire('copy-list'),baseDetail=wire('copy-unconnected'),xId=baseDetail.data.subscriptionId,xConnection=baseDetail.data.connectionId,yId='subscription_fixture_00002',yConnection='connection_fixture_00002'
- const bindingY={sourceSha:binding.sourceSha,sourceId:'f2',strategyId:versionY.data.strategyId,versionId:versionY.data.versionId,policyHash:versionY.data.policyHash,environment:'demo'}
+ const bindingY={sourceSha:binding.sourceSha,sourceId:'f2',strategyId:versionY.data.strategyId,versionId:versionY.data.versionId,policyHash:versionY.data.policyHash,environment:'demo',minimumDescriptor:{policyVersionId:'b'.repeat(64),descriptorPolicyHash:'c'.repeat(64)}}
  const deployment=production.parseCopyExecutionDeployment(JSON.stringify({schema:1,environment:'demo',bindings:[binding,bindingY]})),posts:Array<{path:string;body:Record<string,unknown>}>=[]
  let api17=0,yCurrent:CopySnapshot|null=null
  const fetcher=(async(input:RequestInfo|URL,init?:RequestInit)=>{
-  const url=new URL(String(input)),body=typeof init?.body==='string'?JSON.parse(init.body):undefined
+  const url=new URL(String(input),'https://service.example.test'),body=typeof init?.body==='string'?JSON.parse(init.body):undefined
+  if(url.pathname==='/__teth/execution-minimum'){
+   const now=Date.now();return jsonResponse(url.href,{schemaVersion:'bitget-copy-minimum-0.1',venue:'bitget',symbol:'BTCUSDT',asOf:new Date(now-10).toISOString(),expiresAt:new Date(now+2990).toISOString(),snapshotRuleSha256:'d'.repeat(64),quoteSha256:'e'.repeat(64),estimates:{[bindingY.minimumDescriptor.policyVersionId]:{descriptorPolicyHash:bindingY.minimumDescriptor.descriptorPolicyHash,status:'estimated',minimumAllocationUsdt:'100',requiredAvailableUsdt:'900',requiredMaxLossUsdt:'20',riskRequiredAvailableUsdt:'800'}}})
+  }
   if(url.pathname==='/api/v1/strategy-copies'&&url.search)return jsonResponse(url.href,baseList)
   if(url.pathname===`/api/v1/strategy-copies/${xId}`&&init?.method==='GET')return jsonResponse(url.href,baseDetail)
   if(url.pathname===`/api/v1/strategy-copies/${yId}`&&init?.method==='GET'&&yCurrent)return jsonResponse(url.href,{apiContractVersion:'0.18.0',data:yCurrent})
@@ -214,7 +270,7 @@ test('OPUS P1-2 creating Y preserves X and routes both known bindings',{timeout:
   await setup.onConfirm({amount:200,loss:-20,existing:'skip',cap:50},new AbortController().signal)
   assert.equal(port.copyForSource('f1'),xId);assert.equal(port.copyForSource('f2'),yId)
   const paused=await port.controller.action('pause',xId,0,'opus_p1_x_pause_0001'),stopped=await port.controller.action('stop',yId,1,'opus_p1_y_stop_00001')
-  assert.equal(paused.connectionId,xConnection);assert.equal(stopped.connectionId,yConnection);assert.equal(api17,2)
+  assert.equal(paused.connectionId,xConnection);assert.equal(stopped.connectionId,yConnection);assert.equal(api17,3)
   assert.deepEqual(posts.map(value=>value.path),['/api/v1/strategy-copies',`/api/v1/strategy-copies/${yId}/start`,`/api/v1/strategy-copies/${xId}/pause`,`/api/v1/strategy-copies/${yId}/stop`])
  }finally{mounted.restore()}
 })

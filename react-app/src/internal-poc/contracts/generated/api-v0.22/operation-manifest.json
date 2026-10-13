@@ -1,0 +1,112 @@
+{
+  "apiContractVersion": "0.22.0",
+  "customerConsentEffect": false,
+  "executionEffect": false,
+  "getEffects": {
+    "billing": false,
+    "dispatch": false,
+    "resume": false,
+    "retry": false
+  },
+  "maxListItems": 50,
+  "maxRequestBytes": 65536,
+  "maxResponseBytes": 262144,
+  "operations": [
+    {
+      "method": "POST",
+      "mutation": true,
+      "mutationHeaders": [
+        "Origin",
+        "X-CSRF-Token",
+        "Idempotency-Key"
+      ],
+      "operationId": "createResearchStrategyProposalV22",
+      "path": "/api/v22/consultation/research-strategy-proposals",
+      "pathKeys": [],
+      "request": "CreateRequest",
+      "response": "ProjectionEnvelope",
+      "successStatus": 202
+    },
+    {
+      "method": "GET",
+      "mutation": false,
+      "mutationHeaders": [],
+      "operationId": "listResearchStrategyProposalsV22",
+      "path": "/api/v22/consultation/research-strategy-proposals",
+      "pathKeys": [],
+      "request": null,
+      "response": "ListEnvelope",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "mutation": false,
+      "mutationHeaders": [],
+      "operationId": "getResearchStrategyProposalV22",
+      "path": "/api/v22/consultation/research-strategy-proposals/{proposalId}",
+      "pathKeys": [
+        "proposalId"
+      ],
+      "request": null,
+      "response": "ProjectionEnvelope",
+      "successStatus": 200
+    },
+    {
+      "method": "POST",
+      "mutation": true,
+      "mutationHeaders": [
+        "Origin",
+        "X-CSRF-Token",
+        "Idempotency-Key",
+        "If-Match"
+      ],
+      "operationId": "applyResearchStrategyProposalV22",
+      "path": "/api/v22/consultation/research-strategy-proposals/{proposalId}/apply",
+      "pathKeys": [
+        "proposalId"
+      ],
+      "request": "ApplyRequest",
+      "response": "ApplyEnvelope",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "mutation": false,
+      "mutationHeaders": [],
+      "operationId": "getResearchStrategyProposalApprovalCompanionV22",
+      "path": "/api/v22/consultation/research-strategy-proposals/{proposalId}/approval-companions/{challengeId}",
+      "pathKeys": [
+        "proposalId",
+        "challengeId"
+      ],
+      "request": null,
+      "response": "CompanionEnvelope",
+      "successStatus": 200
+    },
+    {
+      "method": "GET",
+      "mutation": false,
+      "mutationHeaders": [],
+      "operationId": "getResearchStrategyProposalAppliedDraftV22",
+      "path": "/api/v22/consultation/research-strategy-proposals/{proposalId}/applied-draft",
+      "pathKeys": [
+        "proposalId"
+      ],
+      "request": null,
+      "response": "ApplyEnvelope",
+      "successStatus": 200
+    }
+  ],
+  "producerImplemented": false,
+  "releaseStatus": "CANDIDATE_NOT_PUBLISHED",
+  "serverAuthority": [
+    "AUTHENTICATED_CURRENT_OWNER",
+    "REPORT_GATE_AND_PHYSICAL_SOURCE_LINEAGE",
+    "NO_API13_TO_V3_TURN_COPY",
+    "IMMUTABLE_SOURCE_ORIGIN",
+    "DRAFT_CAS",
+    "PROPOSAL_BOUND_DRAFT",
+    "COMPANION_ATOMIC_APPROVAL_BINDING"
+  ],
+  "sessionCookie": "__Host-tesia_session"
+}

@@ -6,11 +6,11 @@ import identityCopy from '../client-strategy-identity-copy.json'
 import '../client-strategy-identity.css'
 
 /** Only explicit presentation evidence. No rotating/default exchange or status. */
-export function ClientStrategyIdentityMeta({ kind, venue, fallback, id }: { kind?: StrategyKind; venue?: StrategyVenue; fallback: string; id?: string }) {
+export function ClientStrategyIdentityMeta({ kind, venue, fallback, id, label: suppliedLabel }: { kind?: StrategyKind; venue?: StrategyVenue; fallback: string; id?: string; label?: string }) {
   const { language } = useClientPreferences()
   const knownKind = kind && ['agent', 'rule', 'mix'].includes(kind) ? kindCopy[language][kind] : null
   const exchange = strategyVenue(venue)
-  const label = [knownKind, exchange ? identityCopy[language].runningOn.replace('{venue}', () => exchange.name) : null].filter(Boolean).join(', ') || fallback
+  const label = suppliedLabel ?? ([knownKind, exchange ? identityCopy[language].runningOn.replace('{venue}', () => exchange.name) : null].filter(Boolean).join(', ') || fallback)
   return <span id={id} className="strategy-identity-meta">
     {exchange?.logo && <img src={exchange.logo} alt="" width="14" height="14" loading="lazy"/>}
     <span>{label}</span>

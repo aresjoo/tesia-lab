@@ -188,6 +188,7 @@ export function createCandidateCopyController(ports: CopyControllerPorts) {
     },signal)}finally{if(activeMutation===ticket){activeMutation=null;busy=false;emit({mutationBusy:false,...([...intents.values()].some(intent=>intent.uncertain)?{phase:'reconciliation' as const,reason:'ORDER_RECONCILIATION_REQUIRED'}:{})})}}
   }
   return {
+    hasUncertainIntent:(intentId:string)=>intents.get(intentId)?.uncertain===true,
     bind,getSnapshot:()=>state,subscribe(listener:()=>void){listeners.add(listener);return()=>listeners.delete(listener)},
     selectSource,loadLists,readCopy,
     create(settings:Settings,intentId:string,signal?:AbortSignal){

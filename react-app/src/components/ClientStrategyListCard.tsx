@@ -14,8 +14,9 @@ import '../client-strategy-list.css'
 
 /** Source skfCard: one navigation target and four information groups. No
  * exchange, kind, return, or follower count is inferred from a nickname. */
-export function ClientStrategyListCard({ title, asset, kind, glyph, venue, followers, performance, location, onNavigate, own = false }: StrategyClassification & StrategyIdentity & {
+export function ClientStrategyListCard({ title, asset, kind, glyph, venue, followers, performance, performanceLabel, metadataLabel, location, onNavigate, own = false }: StrategyClassification & StrategyIdentity & {
   title: string; asset: string; followers?: number; performance: ListPerformance | null
+  performanceLabel?: string; metadataLabel?: string
   location: SharedLocation; onNavigate: (location: SharedLocation) => void; own?: boolean
 }) {
   const localeUi = useStaticUiCopy()
@@ -34,8 +35,8 @@ export function ClientStrategyListCard({ title, asset, kind, glyph, venue, follo
       if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
       event.preventDefault(); onNavigate(location)
     }}>
-      <div className="skf-top"><ClientStrategyGlyph kind={kind} evidence={glyph}/><div className="skf-nm"><h3>{title}</h3><ClientStrategyIdentityMeta id={`${id}-asset`} kind={kind} venue={venue} fallback={asset}/></div></div>
-      <div className="skf-perf"><div className="skf-ret" id={`${id}-performance`}><small>{text.recent}</small><b className={!performance || performance.percent === 0 ? undefined : performance.percent < 0 ? 'negative' : 'positive'}>{performance ? sharedPercent(performance.percent, language) : unavailable}</b></div>
+      <div className="skf-top"><ClientStrategyGlyph kind={kind} evidence={glyph}/><div className="skf-nm"><h3>{title}</h3><ClientStrategyIdentityMeta id={`${id}-asset`} kind={kind} venue={venue} fallback={asset} label={metadataLabel}/></div></div>
+      <div className="skf-perf"><div className="skf-ret" id={`${id}-performance`}><small>{performanceLabel ?? text.recent}</small><b className={!performance || performance.percent === 0 ? undefined : performance.percent < 0 ? 'negative' : 'positive'}>{performance ? sharedPercent(performance.percent, language) : unavailable}</b></div>
         {spark && <svg viewBox="0 0 170 78" preserveAspectRatio="none" aria-hidden="true">{spark.flat ? <line x1="0" x2="170" y1="39" y2="39" stroke="rgba(255,255,255,.34)" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke"/> : !spark.negative ? curve('#2ebd85') : <>
           <defs><clipPath id={`${id}-up`}><rect x="-2" y="-2" width="174" height={spark.baseline + 2}/></clipPath><clipPath id={`${id}-down`}><rect x="-2" y={spark.baseline} width="174" height={80 - spark.baseline}/></clipPath></defs>
           <line x1="0" x2="170" y1={spark.baseline} y2={spark.baseline} stroke="rgba(255,255,255,.2)" strokeWidth="1" strokeDasharray="2 3" vectorEffect="non-scaling-stroke"/>

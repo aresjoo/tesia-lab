@@ -30,11 +30,15 @@ import { SameOriginApiTransport, readApiAdapterConfig } from './api-adapter'
 import { ConsultationV13Adapter } from './consultation-v13-adapter'
 import { NativeConsultationV13Controller, type ConsultationV13Snapshot, type NativeConsultationSetupCandidate } from './native-consultation-v13-controller'
 import { ConsultationV16Adapter } from './consultation-v16-adapter'
+import { ApiV16Error } from './contracts/generated/api-v0.16/index'
 import { NativeSourceIntakeV19Adapter, NativeSourceIntakeV19Error } from './native-source-intake-v19-adapter'
 import { ApiV20Error, NativeResearchWorkV20Adapter, type ResearchWorkProjection } from './native-research-work-v20-adapter'
+import { ApiV22Error, NativeResearchStrategyProposalV22Adapter, type DraftBase, type ProposalBoundDraft, type ProposalProjection, type CreateRequest, type ApprovalCompanion } from './native-research-strategy-proposal-v22-adapter'
+import { canonicalApiV22 } from './contracts/generated/api-v0.22/index'
+import type { ServiceConversationV03Port } from './contracts/generated/api-v0.3/sdk'
 import { pickSourceIntake, readSourceIntake, type SourceIntake } from '../client-source-intake'
 import { nativeInvestmentQuestionUserText } from './native-investment-display'
-import { ConsultationV14Adapter } from './consultation-v14-adapter'
+import { ConsultationV14Adapter, type ConsultationV14ClaimCommand } from './consultation-v14-adapter'
 import { NativeConsultationSessionV14Controller } from './native-consultation-session-v14-controller'
 import { createBrowserSessionBootstrap } from './browser-session'
 import { ApiResponseError, TesiaApiClient, createSdk } from './contracts/generated/api-v0.1/index'
@@ -73,6 +77,365 @@ const CONVERSATION_OWNER_KEY = 'tesia.native.conversation-session'
 const SESSION_KEY = 'tesia.native.session-binding'
 const CONSULTATION_LOGIN_KEY = 'tesia.native.consultation-login-intent'
 const SOURCE_INTAKE_KEY = 'tesia.native.consultation-v19.source-intake:'
+const PROPOSAL_INTENT_KEY = 'tesia.native.consultation-v22.proposal-intent:'
+const PROPOSAL_RESUME_KEY = 'tesia.native.consultation-v22.proposal-resume:'
+type ProposalCreateIntent = { request: CreateRequest; createKey: string; proposalId: string | null;
+  applyKey: string | null; applyAttempted: boolean; createAttempted?: true }
+const proposalIntentKeys = (value: ProposalCreateIntent) => ['applyAttempted,applyKey,createKey,proposalId,request',
+  'applyAttempted,applyKey,createAttempted,createKey,proposalId,request'].includes(Object.keys(value).sort().join(','))
+type ProposalHold = 'APPROVAL_COMPANION_UNAVAILABLE' | 'API22_CLAIM_UNAVAILABLE' | 'REQUEST_UNCONFIRMED'
+  | 'APPLIED_SNAPSHOT_RELOAD_UNAVAILABLE' | 'BINDING_CONFLICT' | 'PROPOSAL_FAILED'
+type ProposalView = Readonly<{ owner: string; researchWorkId: string; bound: ProposalBoundDraft; snapshot: ConversationSnapshot; etag: string }>
+type ProposalObservation = Readonly<{ projection: ProposalProjection | null; view: ProposalView | null; hold: ProposalHold | null }>
+type ProposalCombinedClaim = Readonly<{ sourceOwner: string; owner: string; conversationId: string; turnId: string;
+  researchWorkId: string; sourceSessionId: string; targetSessionId: string; revision: string; epoch: number }>
+
+/** Captures only the original SDK-validated COMBINED response. History restore
+ * must still finish before the App can expose this tuple to read-only recovery. */
+export class NativeResearchProposalV14ClaimAdapter extends ConsultationV14Adapter {
+  private observed: ProposalCombinedClaim | null = null
+  constructor(options: ConstructorParameters<typeof ConsultationV14Adapter>[0], private readonly context: Readonly<{
+    capture: () => { source: NativeSourceIntakeState | null; owner: string; epoch: number; isCurrent: () => boolean }
+  }>) { super(options) }
+
+  override async claim(command: ConsultationV14ClaimCommand, signal?: AbortSignal) {
+    const captured = this.context.capture(), source = captured.source
+    this.observed = null
+    const response = await super.claim(command, signal)
+    if (captured.isCurrent() && !signal?.aborted && source?.status === 'accepted' && source.completion
+      && response.data.mode === 'COMBINED' && response.data.claimedLegacyResourceCounts.drafts >= 1
+      && source.owner === JSON.stringify([command.anonymousSessionId, 'ANONYMOUS'])
+      && captured.owner === JSON.stringify([command.targetSessionId, 'AUTHENTICATED'])
+      && source.completion.sourceSessionId === command.anonymousSessionId) {
+      this.observed = Object.freeze({ sourceOwner: source.owner, owner: captured.owner, conversationId: source.conversationId,
+        turnId: source.turnId, researchWorkId: source.completion.researchWorkId, sourceSessionId: response.data.anonymousSessionId,
+        targetSessionId: response.data.sessionId, revision: response.data.revision, epoch: captured.epoch })
+    }
+    return response
+  }
+
+  completed(source: NativeSourceIntakeState | null, owner: string, epoch: number): ProposalCombinedClaim | null {
+    const observed = this.observed
+    if (!source || source.status !== 'accepted' || !source.completion || !observed || observed.epoch !== epoch
+      || observed.owner !== owner || source.locatorOwner !== owner || source.owner !== observed.sourceOwner
+      || source.conversationId !== observed.conversationId || source.turnId !== observed.turnId
+      || source.completion.researchWorkId !== observed.researchWorkId || source.completion.sourceSessionId !== observed.sourceSessionId) return null
+    return observed
+  }
+}
+const proposalBase = (snapshot: ConversationSnapshot): DraftBase => ({ conversationId: snapshot.conversationId,
+  draftId: snapshot.draftId, conversationStateRevision: snapshot.conversationStateRevision,
+  conversationStateHash: snapshot.conversationStateHash, draftRevision: snapshot.draftRevision, projectionHash: snapshot.projectionHash })
+const sameProposalBase = (left: DraftBase, right: DraftBase) => canonicalApiV22(left) === canonicalApiV22(right)
+
+/** Only this source-bound lifecycle owns automatic draft construction. Local
+ * intents prevent redispatch; they never prove source, owner or server state. */
+export class NativeResearchProposalOrchestration {
+  private readonly flights = new Map<string, Promise<ProposalObservation>>()
+  static shouldObserve(value: ProposalObservation, observations: number): boolean {
+    return observations < 75 && (value.hold === null || value.hold === 'REQUEST_UNCONFIRMED')
+      && (value.projection === null || value.projection.state === 'PENDING'
+        && !['FAILED', 'CANCELLED', 'AMBIGUOUS'].includes(value.projection.executionState ?? ''))
+  }
+  constructor(private readonly ports: Readonly<{
+    proposals: Pick<NativeResearchStrategyProposalV22Adapter, 'create' | 'read' | 'list' | 'apply' | 'getAppliedDraft' | 'getApprovalCompanion'>
+    documents: Pick<ConsultationV16Adapter, 'locator'>
+    conversations: Pick<ServiceConversationV03Port, 'getConversation'>
+    sessions?: Pick<ConsultationV14Adapter, 'list'>
+    storage: Pick<Storage, 'getItem' | 'setItem'>
+    randomId: () => string
+  }>) {}
+
+  async approvalReview(input: Readonly<{ view: ProposalView; receipt: DraftValidationReceipt; challenge: ApprovalChallenge;
+    isCurrent: () => boolean; signal?: AbortSignal }>): Promise<ApprovalCompanion | null> {
+    try {
+      const { view, receipt, challenge } = input
+      if (!input.isCurrent() || input.signal?.aborted || receipt.semanticHash !== view.snapshot.semanticHash
+        || challenge.semanticHash !== receipt.semanticHash || challenge.validationReceiptId !== receipt.validationReceiptId
+        || !sameProposalBase(proposalBase(view.snapshot), { conversationId: challenge.conversationId, draftId: challenge.draftId,
+          conversationStateRevision: challenge.conversationStateRevision, conversationStateHash: challenge.conversationStateHash,
+          draftRevision: challenge.draftRevision, projectionHash: challenge.projectionHash })) return null
+      const observed = await this.ports.proposals.getApprovalCompanion(view.bound.proposalId, challenge.approvalChallengeId, { signal: input.signal })
+      if (!input.isCurrent() || input.signal?.aborted || canonicalApiV22(observed.proposalBoundDraft) !== canonicalApiV22(view.bound)
+        || observed.approvalCompanion.validationReceiptId !== receipt.validationReceiptId
+        || observed.approvalCompanion.challengeId !== challenge.approvalChallengeId
+        || observed.approvalCompanion.semanticHash !== receipt.semanticHash
+        || observed.approvalCompanion.issuedStrategyVersionId !== null || observed.approvalCompanion.issuedContentHash !== null) return null
+      const current = await this.ports.conversations.getConversation(view.snapshot.conversationId)
+      if (!input.isCurrent() || input.signal?.aborted || current.etag !== view.etag
+        || !sameProposalBase(proposalBase(current.body.data), view.bound.draftBase)) return null
+      return observed.approvalCompanion
+    } catch { return null }
+  }
+
+  observe(input: Readonly<{ owner: string; sourceOwner: string; researchWorkId: string;
+    sourceConversationId: string; sourceTurnId: string; reportText: string; csrfToken: string;
+    isCurrent: () => boolean; signal?: AbortSignal; combinedClaim?: ProposalCombinedClaim; epoch?: number;
+    readOnlyRecovery?: boolean }>): Promise<ProposalObservation> {
+    const key = JSON.stringify([input.owner, input.sourceConversationId, input.sourceTurnId, input.researchWorkId])
+    const flightKey = input.readOnlyRecovery ? `${key}:read-only` : key
+    const active = this.flights.get(flightKey)
+    if (active) return active
+    const operation = this.observeSource(input, key).finally(() => { if (this.flights.get(flightKey) === operation) this.flights.delete(flightKey) })
+    this.flights.set(flightKey, operation)
+    return operation
+  }
+
+  private async observeSource(input: Parameters<NativeResearchProposalOrchestration['observe']>[0], key: string): Promise<ProposalObservation> {
+    let projection: ProposalProjection | null = null
+    const result = (hold: ProposalHold | null, view: ProposalView | null = null): ProposalObservation => ({ projection, view, hold })
+    const current = () => { if (!input.isCurrent() || input.signal?.aborted) throw new Error('SESSION_CHANGED') }
+    const claimed = input.owner !== input.sourceOwner, claim = input.combinedClaim, readOnly = input.readOnlyRecovery === true
+    if (readOnly && sourceOwner(input.owner)?.[1] !== 'AUTHENTICATED') return result('API22_CLAIM_UNAVAILABLE')
+    if (claimed && !readOnly && (!claim || claim.sourceOwner !== input.sourceOwner || claim.owner !== input.owner
+      || claim.epoch !== input.epoch || claim.conversationId !== input.sourceConversationId || claim.turnId !== input.sourceTurnId
+      || claim.researchWorkId !== input.researchWorkId || input.owner !== JSON.stringify([claim.targetSessionId, 'AUTHENTICATED'])
+      || input.sourceOwner !== JSON.stringify([claim.sourceSessionId, 'ANONYMOUS']))) return result('API22_CLAIM_UNAVAILABLE')
+    const storageKey = PROPOSAL_INTENT_KEY + encodeURIComponent(key)
+    try {
+      current()
+      if (readOnly) {
+        if (!this.ports.sessions) return result('API22_CLAIM_UNAVAILABLE')
+        let cursor: string | undefined, restored = false
+        const cursors = new Set<string>()
+        for (let page = 0; page < 10; page++) {
+          const history = await this.ports.sessions.list({ limit: 50, ...(cursor ? { cursor } : {}) }, input.signal)
+          current()
+          const matches = history.data.conversations.filter(item => item.conversationId === input.sourceConversationId && item.turnCount > 0)
+          if (matches.length > 1) return result('API22_CLAIM_UNAVAILABLE')
+          if (matches.length === 1) { restored = true; break }
+          const next = history.data.nextCursor
+          if (next === null || cursors.has(next)) break
+          cursors.add(next); cursor = next
+        }
+        if (!restored) return result('API22_CLAIM_UNAVAILABLE')
+      }
+      const reportLocator = await this.ports.documents.locator('report', input.researchWorkId, { signal: input.signal })
+      current()
+      const reportBytes = new TextEncoder().encode(input.reportText)
+      const reportDigest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', reportBytes))].map(value => value.toString(16).padStart(2, '0')).join('')
+      current()
+      if (reportBytes.byteLength > 65_536 || new TextDecoder('utf-8', { fatal: true }).decode(reportBytes) !== input.reportText
+        || reportDigest !== reportLocator.contentSha256) return result('BINDING_CONFLICT')
+      const request: CreateRequest = { apiContractVersion: '0.22.0', reportLocator: { ...reportLocator, kind: 'report' },
+        sourceAPI13Locator: { conversationId: input.sourceConversationId, turnId: input.sourceTurnId } }
+      const resumePending = async (candidate: ProposalProjection): Promise<{ projection: ProposalProjection; hold: ProposalHold | null }> => {
+        const eligible = candidate.state === 'PENDING' && (candidate.executionState === 'COMPLETED'
+          || claimed && candidate.executionState === 'QUEUED')
+        if (readOnly || !eligible) return { projection: candidate, hold: null }
+        const originKey = PROPOSAL_INTENT_KEY + encodeURIComponent(JSON.stringify([
+          input.sourceOwner, input.sourceConversationId, input.sourceTurnId, input.researchWorkId]))
+        const currentRaw = this.ports.storage.getItem(storageKey), originRaw = this.ports.storage.getItem(originKey)
+        const raw = currentRaw ?? originRaw
+        if (raw === null) return { projection: candidate, hold: 'REQUEST_UNCONFIRMED' }
+        const original = JSON.parse(raw) as ProposalCreateIntent
+        if (!proposalIntentKeys(original) || original.createAttempted !== true || original.proposalId !== candidate.proposalId
+          || original.applyAttempted !== false || original.applyKey !== null
+          || typeof original.createKey !== 'string' || !/^[A-Za-z0-9_-]{16,128}$/.test(original.createKey)
+          || canonicalApiV22(original.request) !== canonicalApiV22(request)) return { projection: candidate, hold: 'REQUEST_UNCONFIRMED' }
+        const transition = JSON.stringify({ owner: input.owner, sourceOwner: input.sourceOwner, proposalId: candidate.proposalId,
+          executionState: candidate.executionState, createKey: original.createKey, request: original.request })
+        const resumeKey = PROPOSAL_RESUME_KEY + encodeURIComponent(JSON.stringify([
+          input.owner, input.sourceOwner, candidate.proposalId, original.createKey, candidate.executionState]))
+        const attempted = this.ports.storage.getItem(resumeKey)
+        let attempts = 0, lastAttemptAt = 0
+        if (attempted !== null) {
+          if (attempted === transition) attempts = 1 // Original marker already consumed its first attempt.
+          else {
+            const record = JSON.parse(attempted) as { transition: string; attempts: number; lastAttemptAt: number }
+            if (Object.keys(record).sort().join(',') !== 'attempts,lastAttemptAt,transition' || record.transition !== transition
+              || ![1, 2].includes(record.attempts) || !Number.isSafeInteger(record.lastAttemptAt) || record.lastAttemptAt < 0) {
+              return { projection: candidate, hold: 'REQUEST_UNCONFIRMED' }
+            }
+            attempts = record.attempts; lastAttemptAt = record.lastAttemptAt
+          }
+        }
+        if (attempts >= 2 || Date.now() - lastAttemptAt < 4_000) return { projection: candidate, hold: null }
+        let before: Awaited<ReturnType<ServiceConversationV03Port['getConversation']>>
+        try { before = await this.ports.conversations.getConversation(candidate.draftBase.conversationId) }
+        catch { return { projection: candidate, hold: 'BINDING_CONFLICT' } }
+        current()
+        if (!before.etag || !sameProposalBase(proposalBase(before.body.data), candidate.draftBase)) return { projection: candidate, hold: 'BINDING_CONFLICT' }
+        if (this.ports.storage.getItem(storageKey) !== currentRaw || this.ports.storage.getItem(originKey) !== originRaw) {
+          return { projection: candidate, hold: 'REQUEST_UNCONFIRMED' }
+        }
+        const concurrentAttempt = this.ports.storage.getItem(resumeKey)
+        if (concurrentAttempt !== attempted) return { projection: candidate, hold: null }
+        // Preserve exact pre-POST custody. A lost reply never earns an automatic
+        // new key or reservation. Only a fresh eligible server state, current
+        // CAS/authority and the bounded cadence can consume its second attempt.
+        const nextAttempt = JSON.stringify({ transition, attempts: attempts + 1, lastAttemptAt: Date.now() })
+        this.ports.storage.setItem(resumeKey, nextAttempt)
+        if (this.ports.storage.getItem(resumeKey) !== nextAttempt) return { projection: candidate, hold: 'REQUEST_UNCONFIRMED' }
+        current()
+        const replay = await this.ports.proposals.create(original.request, { csrfToken: input.csrfToken,
+          idempotencyKey: original.createKey, signal: input.signal }, input.reportText)
+        current()
+        if (replay.proposalId !== candidate.proposalId || canonicalApiV22(replay.sourceOrigin) !== canonicalApiV22(candidate.sourceOrigin)
+          || !sameProposalBase(replay.state === 'UNAPPROVED' ? replay.proposal.draftBase : replay.draftBase, candidate.draftBase)) {
+          return { projection: candidate, hold: 'BINDING_CONFLICT' }
+        }
+        const observed = await this.ports.proposals.read(candidate.proposalId, { signal: input.signal })
+        current()
+        if (canonicalApiV22(observed.sourceOrigin) !== canonicalApiV22(candidate.sourceOrigin)
+          || canonicalApiV22(observed.state === 'UNAPPROVED' ? observed.proposal.report : observed.reportLocator) !== canonicalApiV22(reportLocator)
+          || !sameProposalBase(observed.state === 'UNAPPROVED' ? observed.proposal.draftBase : observed.draftBase, candidate.draftBase)) {
+          return { projection: candidate, hold: 'BINDING_CONFLICT' }
+        }
+        return { projection: observed, hold: null }
+      }
+      if (claimed || readOnly) {
+        // The COMBINED tuple permits observation only. Current-cookie server
+        // reads, not the anonymous marker, authorize the existing proposal.
+        const page = await this.ports.proposals.list({ sourceConversationId: input.sourceConversationId, limit: 50 }, { signal: input.signal })
+        current()
+        const matches = page.items.filter(item => item.sourceOrigin.sourceAPI13Locator.turnId === input.sourceTurnId
+          && canonicalApiV22(item.state === 'UNAPPROVED' ? item.proposal.report : item.reportLocator) === canonicalApiV22(reportLocator))
+        if (matches.length !== 1 || page.nextCursor !== null) return result('API22_CLAIM_UNAVAILABLE')
+        projection = await this.ports.proposals.read(matches[0].proposalId, { signal: input.signal })
+        current()
+        if (projection.sourceOrigin.sourceAPI13Locator.conversationId !== input.sourceConversationId
+          || projection.sourceOrigin.sourceAPI13Locator.turnId !== input.sourceTurnId
+          || canonicalApiV22(projection.state === 'UNAPPROVED' ? projection.proposal.report : projection.reportLocator) !== canonicalApiV22(reportLocator)) return result('API22_CLAIM_UNAVAILABLE')
+        const resumed = await resumePending(projection)
+        projection = resumed.projection
+        if (resumed.hold) return result(resumed.hold)
+        if (projection.state !== 'UNAPPROVED') return result(readOnly ? 'API22_CLAIM_UNAVAILABLE'
+          : projection.state !== 'PENDING' || ['FAILED', 'CANCELLED', 'AMBIGUOUS'].includes(projection.executionState ?? '') ? 'PROPOSAL_FAILED' : null)
+        let bound: ProposalBoundDraft
+        try { bound = await this.ports.proposals.getAppliedDraft(projection.proposalId, { signal: input.signal }) }
+        catch (error) {
+          current()
+          if (readOnly) return result('API22_CLAIM_UNAVAILABLE')
+          // Only the server's precise no-adjunct response permits an AUTH
+          // first apply. Unknown/attempted local custody never allocates a key.
+          if (!(error instanceof ApiV22Error) || error.code !== 'PROPOSAL_NOT_READY') return result('API22_CLAIM_UNAVAILABLE')
+          type ClaimedIntent = ProposalCreateIntent
+          const originKey = PROPOSAL_INTENT_KEY + encodeURIComponent(JSON.stringify([
+            input.sourceOwner, input.sourceConversationId, input.sourceTurnId, input.researchWorkId]))
+          const aliasRaw = this.ports.storage.getItem(storageKey), originRaw = this.ports.storage.getItem(originKey)
+          const raw = aliasRaw ?? originRaw
+          if (raw === null) return result('API22_CLAIM_UNAVAILABLE')
+          const intent = JSON.parse(raw) as ClaimedIntent
+          if (!proposalIntentKeys(intent) || intent.createAttempted !== undefined && intent.createAttempted !== true
+            || canonicalApiV22(intent.request) !== canonicalApiV22(request) || intent.proposalId !== projection.proposalId
+            || intent.applyAttempted !== false || intent.applyKey !== null || typeof intent.createKey !== 'string'
+            || !/^[A-Za-z0-9_-]{16,128}$/.test(intent.createKey)) return result('API22_CLAIM_UNAVAILABLE')
+          const before = await this.ports.conversations.getConversation(projection.proposal.draftBase.conversationId)
+          current()
+          if (!before.etag || !sameProposalBase(proposalBase(before.body.data), projection.proposal.draftBase)) return result('BINDING_CONFLICT')
+          if (this.ports.storage.getItem(storageKey) !== aliasRaw || this.ports.storage.getItem(originKey) !== originRaw) return result('API22_CLAIM_UNAVAILABLE')
+          const attempted = { ...intent, applyKey: this.ports.randomId(), applyAttempted: true }
+          const bytes = JSON.stringify(attempted)
+          this.ports.storage.setItem(storageKey, bytes)
+          if (this.ports.storage.getItem(storageKey) !== bytes) return result('API22_CLAIM_UNAVAILABLE')
+          current()
+          const applied = await this.ports.proposals.apply(projection.proposalId, { apiContractVersion: '0.22.0',
+            proposalHash: projection.proposal.proposalHash, draftBase: projection.proposal.draftBase }, {
+            csrfToken: input.csrfToken, idempotencyKey: attempted.applyKey, ifMatch: before.etag, signal: input.signal })
+          current()
+          bound = await this.ports.proposals.getAppliedDraft(projection.proposalId, { signal: input.signal })
+          current()
+          if (canonicalApiV22(applied) !== canonicalApiV22(bound)) return result('BINDING_CONFLICT')
+        }
+        current()
+        if (bound.proposalHash !== projection.proposal.proposalHash || canonicalApiV22(bound.sourceOrigin) !== canonicalApiV22(projection.sourceOrigin)
+          || canonicalApiV22(bound.reportLocator) !== canonicalApiV22(reportLocator)) return result('BINDING_CONFLICT')
+        const after = await this.ports.conversations.getConversation(bound.draftBase.conversationId)
+        current()
+        if (!after.etag || !sameProposalBase(proposalBase(after.body.data), bound.draftBase)
+          || canonicalApiV22(after.body.data.draftState) !== canonicalApiV22(bound.draftState)
+          || after.body.data.candidateState !== bound.candidateState || after.body.data.semanticHash !== bound.semanticHash) return result('BINDING_CONFLICT')
+        return result('APPROVAL_COMPANION_UNAVAILABLE', Object.freeze({ owner: input.owner, researchWorkId: input.researchWorkId,
+          bound, snapshot: after.body.data, etag: after.etag }))
+      }
+      type Intent = ProposalCreateIntent
+      const stored = this.ports.storage.getItem(storageKey)
+      let intent: Intent | null = stored === null ? null : JSON.parse(stored) as Intent
+      if (intent && (!proposalIntentKeys(intent) || intent.createAttempted !== undefined && intent.createAttempted !== true
+        || canonicalApiV22(intent.request) !== canonicalApiV22(request)
+        || typeof intent.createKey !== 'string' || !/^[A-Za-z0-9_-]{16,128}$/.test(intent.createKey)
+        || (intent.proposalId !== null && (typeof intent.proposalId !== 'string' || !/^[A-Za-z0-9_-]{16,128}$/.test(intent.proposalId)))
+        || (intent.applyKey !== null && (typeof intent.applyKey !== 'string' || !/^[A-Za-z0-9_-]{16,128}$/.test(intent.applyKey)))
+        || typeof intent.applyAttempted !== 'boolean')) return result('BINDING_CONFLICT')
+      const persist = (value: Intent) => {
+        current()
+        const bytes = JSON.stringify(value)
+        this.ports.storage.setItem(storageKey, bytes)
+        if (this.ports.storage.getItem(storageKey) !== bytes) throw new Error('INTENT_STORAGE_UNCONFIRMED')
+        intent = value
+      }
+      if (intent?.proposalId) projection = await this.ports.proposals.read(intent.proposalId, { signal: input.signal })
+      else {
+        // Recovery is read-only. No local marker is authorization to repost.
+        const page = await this.ports.proposals.list({ sourceConversationId: input.sourceConversationId, limit: 50 }, { signal: input.signal })
+        current()
+        const matches = page.items.filter(item => item.sourceOrigin.sourceAPI13Locator.turnId === input.sourceTurnId
+          && canonicalApiV22(item.state === 'UNAPPROVED' ? item.proposal.report : item.reportLocator) === canonicalApiV22(reportLocator))
+        if (matches.length > 1 || page.nextCursor !== null) return result('BINDING_CONFLICT')
+        projection = matches[0] ?? null
+        if (projection) { if (intent) persist({ ...intent, proposalId: projection.proposalId }) }
+        else if (intent) return result('REQUEST_UNCONFIRMED')
+        else {
+          const fresh = { request, createKey: this.ports.randomId(), proposalId: null, applyKey: null, applyAttempted: false, createAttempted: true as const }
+          persist(fresh)
+          projection = await this.ports.proposals.create(request, { csrfToken: input.csrfToken, idempotencyKey: fresh.createKey, signal: input.signal }, input.reportText)
+          current()
+          persist({ ...fresh, proposalId: projection.proposalId })
+        }
+      }
+      current()
+      if (projection.sourceOrigin.sourceAPI13Locator.conversationId !== input.sourceConversationId
+        || projection.sourceOrigin.sourceAPI13Locator.turnId !== input.sourceTurnId
+        || canonicalApiV22(projection.state === 'UNAPPROVED' ? projection.proposal.report : projection.reportLocator) !== canonicalApiV22(reportLocator)) return result('BINDING_CONFLICT')
+      const resumed = await resumePending(projection)
+      projection = resumed.projection
+      if (resumed.hold) return result(resumed.hold)
+      if (projection.state !== 'UNAPPROVED') return result(projection.state !== 'PENDING'
+        || ['FAILED', 'CANCELLED', 'AMBIGUOUS'].includes(projection.executionState ?? '') ? 'PROPOSAL_FAILED' : null)
+      const proposed = projection.proposal
+      let bound: ProposalBoundDraft | undefined
+      try { bound = await this.ports.proposals.getAppliedDraft(projection.proposalId, { signal: input.signal }) }
+      catch (error) {
+        current()
+        if (!(error instanceof ApiV22Error) || !['NOT_FOUND', 'PROPOSAL_NOT_READY'].includes(error.code)) return result('APPLIED_SNAPSHOT_RELOAD_UNAVAILABLE')
+      }
+      current()
+      if (!bound) {
+        if (intent?.applyAttempted) return result('APPLIED_SNAPSHOT_RELOAD_UNAVAILABLE')
+        const before = await this.ports.conversations.getConversation(proposed.draftBase.conversationId)
+        current()
+        if (!sameProposalBase(proposalBase(before.body.data), proposed.draftBase) || !before.etag) return result('BINDING_CONFLICT')
+        if (!intent) throw new Error('INTENT_REQUIRED')
+        const applyKey = intent.applyKey ?? this.ports.randomId()
+        persist({ ...intent, applyKey, applyAttempted: true })
+        bound = await this.ports.proposals.apply(projection.proposalId, { apiContractVersion: '0.22.0',
+          proposalHash: proposed.proposalHash, draftBase: proposed.draftBase }, {
+          csrfToken: input.csrfToken, idempotencyKey: applyKey, ifMatch: before.etag, signal: input.signal })
+        current()
+        // Never promote a local/cache object to read authority. Re-query the
+        // stored immutable adjunct through the original hash-validating SDK.
+        const verified = await this.ports.proposals.getAppliedDraft(projection.proposalId, { signal: input.signal })
+        current()
+        if (canonicalApiV22(verified) !== canonicalApiV22(bound)) return result('BINDING_CONFLICT')
+        bound = verified
+      }
+      if (bound.proposalHash !== proposed.proposalHash || canonicalApiV22(bound.sourceOrigin) !== canonicalApiV22(projection.sourceOrigin)
+        || canonicalApiV22(bound.reportLocator) !== canonicalApiV22(reportLocator)) return result('BINDING_CONFLICT')
+      const after = await this.ports.conversations.getConversation(bound.draftBase.conversationId)
+      current()
+      if (!after.etag || !sameProposalBase(proposalBase(after.body.data), bound.draftBase)
+        || canonicalApiV22(after.body.data.draftState) !== canonicalApiV22(bound.draftState)
+        || after.body.data.candidateState !== bound.candidateState || after.body.data.semanticHash !== bound.semanticHash) return result('BINDING_CONFLICT')
+      return result('APPROVAL_COMPANION_UNAVAILABLE', Object.freeze({ owner: input.owner, researchWorkId: input.researchWorkId,
+        bound, snapshot: after.body.data, etag: after.etag }))
+    } catch (error) {
+      if (error instanceof ApiV22Error || error instanceof ApiV16Error) return result(error.code === 'TRANSPORT_FAILED' ? 'REQUEST_UNCONFIRMED'
+        : claimed || readOnly ? 'API22_CLAIM_UNAVAILABLE' : 'BINDING_CONFLICT')
+      return result(claimed || readOnly ? 'API22_CLAIM_UNAVAILABLE' : 'REQUEST_UNCONFIRMED')
+    }
+  }
+}
 type NativeSourceIntakeState = Readonly<{
   version: 2
   /** Immutable owner of the API19 source tuple. A verified API14 claim may only add a locator alias. */
@@ -262,6 +625,12 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }))
   const [sourceIntakeAdapter] = useState(() => new NativeSourceIntakeV19Adapter({ csrfToken: () => clients.getCsrf() }))
   const [researchWorkAdapter] = useState(() => new NativeResearchWorkV20Adapter())
+  const [proposalOrchestration] = useState(() => new NativeResearchProposalOrchestration({
+    proposals: new NativeResearchStrategyProposalV22Adapter(), documents: new ConsultationV16Adapter(), conversations: clients.conversation,
+    sessions: new ConsultationV14Adapter({ csrfToken: () => clients.getCsrf() }),
+    storage: { getItem: key => sessionStorage.getItem(key), setItem: (key, value) => sessionStorage.setItem(key, value) },
+    randomId: () => crypto.randomUUID(),
+  }))
   const [consultationState, setConsultationState] = useState<ConsultationV13Snapshot>(() => consultation.getSnapshot())
   useEffect(() => consultation.subscribe(setConsultationState), [consultation])
   useEffect(() => () => consultation.detach(), [consultation])
@@ -289,6 +658,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   const recoverClaimedReportSource = useRef<(researchWorkId: string, sourceSessionId?: string) => Promise<boolean>>(async () => false)
   const [researchProjection, setResearchProjection] = useState<ResearchWorkProjection | null>(null)
   const [researchProjectionIssue, setResearchProjectionIssue] = useState(false)
+  const [proposalView, setProposalView] = useState<ProposalView | null>(null)
+  const proposalViewRef = useRef<ProposalView | null>(null)
+  const [proposalHold, setProposalHold] = useState<ProposalHold | null>(null)
+  const [proposalReview, setProposalReview] = useState<ApprovalCompanion | null>(null)
+  const [proposalCombinedClaim, setProposalCombinedClaim] = useState<ProposalCombinedClaim | null>(null)
   const [conversation, setConversation] = useState<ConversationSnapshot | null>(null)
   // The opt-in owns only a new general-chat surface. Selecting an existing
   // server strategy conversation returns to its unchanged v0.3 controller.
@@ -387,10 +761,28 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     setAccountScope(value?.sessionId ?? null)
   }
   const epoch = useRef(0)
+  const proposalActive = conversation === null && proposalView && phase === 'ready' && accountScope && sessionState
+    && proposalView.owner === JSON.stringify([accountScope, sessionState])
+    && sourceIntake?.status === 'accepted' && sourceIntake.locatorOwner === proposalView.owner
+    && sourceIntake.completion?.researchWorkId === proposalView.researchWorkId
+    && consultationState.conversationId === sourceIntake.conversationId ? proposalView : null
+  const strategyConversation = conversation ?? proposalActive?.snapshot ?? null
+  const strategyOwner: DocumentOwner | null = documentOwner ?? (proposalActive && accountScope && sessionState
+    ? { sessionId: accountScope, sessionState, conversationId: proposalActive.snapshot.conversationId, draftId: proposalActive.snapshot.draftId } : null)
   const [consultationPresentationEpoch, setConsultationPresentationEpoch] = useState(0)
   const [retainedConsultation, setRetainedConsultation] = useState<{ epoch: number; targetSessionId: string; messages: readonly ClientServiceMessage[] } | null>(null)
+  const [proposalClaimAdapter] = useState(() => new NativeResearchProposalV14ClaimAdapter({ csrfToken: () => clients.getCsrf() }, {
+    capture: () => {
+      const owner = session.current, generation = epoch.current
+      const source = sourceIntakeClaim.current?.state ?? sourceIntakeRef.current
+      return { source, owner: JSON.stringify([owner?.sessionId, owner?.sessionState]), epoch: generation,
+        isCurrent: () => generation === epoch.current && session.current?.sessionId === owner?.sessionId
+          && session.current?.sessionState === owner?.sessionState
+          && (sourceIntakeClaim.current?.state ?? sourceIntakeRef.current) === source }
+    },
+  }))
   const [consultationSession] = useState(() => new NativeConsultationSessionV14Controller(
-    new ConsultationV14Adapter({ csrfToken: () => clients.getCsrf() }), {
+    proposalClaimAdapter, {
       currentSession: async () => { throw new Error('SESSION_CHANGED') },
       refreshSession: async () => { throw new Error('SESSION_CHANGED') },
       restoreConversation: async () => false,
@@ -580,6 +972,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     } catch { /* memory-only remains usable */ }
   }
   const clearViews = (preserveComposer = false, preserveRows = false) => {
+    setProposalCombinedClaim(null)
+    proposalViewRef.current = null; setProposalView(null); setProposalHold(null); setProposalReview(null)
     setRetainedConsultation(null); setConsultationPresentationEpoch(epoch.current)
     setConnectionPlanContinuation(null)
     setAuthNotice(null)
@@ -1023,10 +1417,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       if (value.conversationId !== request.conversationId || value.draftId !== request.draftId
         || value.conversationStateRevision !== request.body.expectedConversationStateRevision
         || value.conversationStateHash !== request.body.expectedConversationStateHash) throw new Error('BINDING_CONFLICT')
-      if (!conversation || conversation.conversationId !== value.conversationId || conversation.draftId !== value.draftId
-        || conversation.conversationStateRevision !== value.conversationStateRevision || conversation.conversationStateHash !== value.conversationStateHash
-        || conversation.draftRevision !== value.draftRevision || conversation.projectionHash !== value.projectionHash
-        || (value.semanticHash !== undefined && value.semanticHash !== conversation.semanticHash)) throw new Error('BINDING_CONFLICT')
+      if (!strategyConversation || strategyConversation.conversationId !== value.conversationId || strategyConversation.draftId !== value.draftId
+        || strategyConversation.conversationStateRevision !== value.conversationStateRevision || strategyConversation.conversationStateHash !== value.conversationStateHash
+        || strategyConversation.draftRevision !== value.draftRevision || strategyConversation.projectionHash !== value.projectionHash
+        || (value.semanticHash !== undefined && value.semanticHash !== strategyConversation.semanticHash)) throw new Error('BINDING_CONFLICT')
     }
     switch (command.kind) {
       case 'CLAIM': {
@@ -1103,9 +1497,28 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         assertCurrent(); assertBinding(value, command)
         if (value.validationReceiptId !== command.body.validationReceiptId || value.semanticHash !== command.body.acknowledgedSemanticHash || value.consumptionState !== 'AVAILABLE') throw new Error('BINDING_CONFLICT')
         complete(); setChallenge(value); setAcknowledged(false)
+        if (proposalActive && receipt) {
+          const reviewed = await proposalOrchestration.approvalReview({ view: proposalActive, receipt, challenge: value,
+            isCurrent: () => generation === epoch.current && proposalViewRef.current === proposalActive
+              && session.current?.sessionId === command.sessionId && session.current.sessionState === command.sessionState })
+          assertCurrent()
+          setProposalReview(reviewed); setProposalHold(reviewed ? null : 'APPROVAL_COMPANION_UNAVAILABLE')
+        }
         return
       }
       case 'APPROVE': {
+        if (proposalActive && proposalHold) throw new Error('APPROVAL_COMPANION_UNAVAILABLE')
+        if (proposalActive) {
+          if (!receipt || !challenge || !proposalReview || proposalReview.challengeId !== command.body.approvalChallengeId) throw new Error('APPROVAL_COMPANION_UNAVAILABLE')
+          const reviewed = await proposalOrchestration.approvalReview({ view: proposalActive, receipt, challenge,
+            isCurrent: () => generation === epoch.current && proposalViewRef.current === proposalActive
+              && session.current?.sessionId === command.sessionId && session.current.sessionState === command.sessionState })
+          assertCurrent()
+          if (!reviewed || canonicalApiV22(reviewed) !== canonicalApiV22(proposalReview)) {
+            setProposalHold('APPROVAL_COMPANION_UNAVAILABLE'); setAcknowledged(false)
+            throw new Error('APPROVAL_COMPANION_UNAVAILABLE')
+          }
+        }
         const value = (await clients.conversation.approveDraft(command.draftId, command.body, context)).body.data
         assertCurrent()
         assertBinding({ conversationId: value.sourceConversationId, draftId: value.sourceDraftId, conversationStateRevision: value.sourceConversationStateRevision, conversationStateHash: value.sourceConversationStateHash,
@@ -1194,7 +1607,8 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (!session.current) throw new Error('SESSION_REQUIRED')
     return { version: 1 as const, ...session.current, idempotencyKey: crypto.randomUUID() }
   }
-  const draftBase = (snapshot: ConversationSnapshot) => ({ ...base(), conversationId: snapshot.conversationId, draftId: snapshot.draftId, ifMatch: etag.current })
+  const draftBase = (snapshot: ConversationSnapshot) => ({ ...base(), conversationId: snapshot.conversationId, draftId: snapshot.draftId,
+    ifMatch: proposalActive?.snapshot === snapshot ? proposalActive.etag : etag.current })
   const executeLogout = async (command: NativeLogoutCommand) => {
     if (!await observeLogoutSession(command)) return
     const generation = epoch.current
@@ -1473,7 +1887,13 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       } })) return
     const restored = await consultationSession.claim()
     if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState) return
-    if (restored) { setRetainedConsultation(null); setError('') }
+    if (restored) {
+      // claim() true includes current AUTH recheck plus history/anchor restore;
+      // COMBINED comes only from the separately captured typed server reply.
+      setProposalCombinedClaim(proposalClaimAdapter.completed(sourceIntakeRef.current,
+        JSON.stringify([owner.sessionId, owner.sessionState]), generation))
+      setRetainedConsultation(null); setError('')
+    }
     else {
       if (consultationSession.getSnapshot().issue === 'request-refused') sourceIntakeClaim.current = null
       setError(consultationSession.getSnapshot().issue === 'request-refused'
@@ -1536,6 +1956,10 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       && researchThread.documentId === 'plan') {
       return { kind: 'plan' as const, documentId: conversation.draftId }
     }
+    if (proposalActive && proposalActive.owner === JSON.stringify([owner.sessionId, owner.sessionState])
+      && researchThread.scopeId === proposalActive.researchWorkId && researchThread.documentId === 'plan') {
+      return { kind: 'plan' as const, documentId: proposalActive.snapshot.draftId }
+    }
     const candidate = consultation.getSnapshot().setupCandidate
     const acceptedSource = sourceIntake?.status === 'accepted' ? sourceIntake : null
     const completion = acceptedSource?.completion ?? null
@@ -1579,7 +2003,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       || confirmed.body.data.sessionId !== observed.body.data.sessionId || confirmed.body.data.state !== observed.body.data.state
       || confirmed.body.data.revision !== observed.body.data.revision || confirmed.etag !== observed.etag) throw new Error('SESSION_CHANGED')
     clients.setCsrf(token.body.data.csrfToken)
-    return { owner, generation }
+    return { owner, generation, revision: confirmed.body.data.revision }
   }
   recoverClaimedReportSource.current = async (researchWorkId, expectedSourceSessionId) => {
     const owner = session.current, conversationId = consultation.getSnapshot().conversationId
@@ -1742,6 +2166,58 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, researchWorkAdapter, sourceIntake?.completion?.researchWorkId, sourceIntake?.locatorOwner,
     sourceIntake?.conversationId, sourceIntake?.turnId, sourceIntake?.pair, setupBinding])
+  useEffect(() => {
+    const accepted = sourceIntake, report = researchProjection
+    const owner = session.current, generation = epoch.current, sourceGeneration = sourceIntakeGeneration.current
+    if (!consultationChat || phase !== 'ready' || !owner || !accepted || accepted.status !== 'accepted'
+      || !accepted.completion || report?.state !== 'COMPLETED' || report.researchWorkId !== accepted.completion.researchWorkId
+      || !sourceIntakeCurrent(accepted, sourceGeneration)) {
+      proposalViewRef.current = null; setProposalView(null); setProposalHold(null); setProposalReview(null); return
+    }
+    const controller = new AbortController()
+    let disposed = false, observations = 0, timer: ReturnType<typeof setTimeout> | undefined
+    const current = () => !disposed && generation === epoch.current && sourceIntakeCurrent(accepted, sourceGeneration)
+      && session.current?.sessionId === owner.sessionId && session.current.sessionState === owner.sessionState
+    const observe = async () => {
+      if (!current()) return
+      try {
+        const readOnlyRecovery = accepted.owner !== accepted.locatorOwner && proposalCombinedClaim === null
+        if (readOnlyRecovery) {
+          const claimState = consultationSession.getSnapshot(), history = consultation.getSnapshot()
+          if (owner.sessionState !== 'AUTHENTICATED' || claimState.available || claimState.busy
+            || history.availability !== 'available' || history.busy || history.conversationId !== accepted.conversationId) {
+            proposalViewRef.current = null; setProposalView(null); setProposalHold('API22_CLAIM_UNAVAILABLE'); return
+          }
+        }
+        const authority = readOnlyRecovery ? await refreshConsultationReadAuthority() : await refreshConsultationMutationAuthority()
+        if (!current() || authority.generation !== generation) return
+        if (proposalCombinedClaim && BigInt(authority.revision) < BigInt(proposalCombinedClaim.revision)) {
+          setProposalHold('API22_CLAIM_UNAVAILABLE'); return
+        }
+        const csrfToken = readOnlyRecovery ? '' : clients.getCsrf()
+        if (csrfToken === null) throw new Error('SESSION_CHANGED')
+        const value = await proposalOrchestration.observe({ owner: accepted.locatorOwner, sourceOwner: accepted.owner,
+          researchWorkId: report.researchWorkId, sourceConversationId: accepted.conversationId,
+          sourceTurnId: accepted.turnId, reportText: report.reportText, csrfToken, isCurrent: current, signal: controller.signal,
+          ...(proposalCombinedClaim ? { combinedClaim: proposalCombinedClaim, epoch: generation } : readOnlyRecovery ? { readOnlyRecovery: true } : {}) })
+        if (!current()) return
+        if (proposalViewRef.current?.bound.bindingHash !== value.view?.bound.bindingHash) {
+          setProposalReview(null); setReceipt(null); setChallenge(null); setAcknowledged(false)
+        }
+        proposalViewRef.current = value.view; setProposalView(value.view); setProposalHold(value.hold)
+        setResearchProjectionIssue(Boolean(value.hold && value.hold !== 'APPROVAL_COMPANION_UNAVAILABLE'))
+        if (NativeResearchProposalOrchestration.shouldObserve(value, observations++)) timer = setTimeout(() => { void observe() }, 4_000)
+      } catch { if (current()) { setProposalHold('REQUEST_UNCONFIRMED'); setResearchProjectionIssue(true) } }
+    }
+    // StrictMode's setup/cleanup replay cannot dispatch either mutation.
+    queueMicrotask(() => { if (current()) void observe() })
+    return () => { disposed = true; controller.abort(); if (timer !== undefined) clearTimeout(timer) }
+    // Immutable source/report and owner changes retire every late response.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, consultationChat, accountScope, sessionState, proposalOrchestration, proposalCombinedClaim, researchProjection?.researchWorkId,
+    researchProjection?.state, sourceIntake?.owner, sourceIntake?.locatorOwner, sourceIntake?.conversationId,
+    sourceIntake?.turnId, sourceIntake?.completion?.researchWorkId, consultationState.availability,
+    consultationState.busy, consultationSessionState.available, consultationSessionState.busy])
   const resumeConsultationPending = async () => {
     try {
       const authority = await refreshConsultationMutationAuthority()
@@ -1759,7 +2235,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     if (generation !== epoch.current || session.current?.sessionId !== owner.sessionId || session.current.sessionState !== owner.sessionState
       || observed.body.data.sessionId !== owner.sessionId || observed.body.data.state !== owner.sessionState
       || observed.body.meta.resourceRevision !== observed.body.data.revision || !observed.etag) throw new Error('SESSION_CHANGED')
-    return { owner, generation }
+    return { owner, generation, revision: observed.body.data.revision }
   }
   const resumeConsultationObservation = async () => {
     try {
@@ -1816,19 +2292,21 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     }
   }
   const validate = async () => {
-    if (!conversation) return
+    if (!strategyConversation) return
     setReceipt(null); setChallenge(null); setAcknowledged(false)
-    await start({ ...draftBase(conversation), kind: 'VALIDATE', body: expected(conversation) })
+    if (proposalActive) { setProposalReview(null); setProposalHold('APPROVAL_COMPANION_UNAVAILABLE') }
+    await start({ ...draftBase(strategyConversation), kind: 'VALIDATE', body: expected(strategyConversation) })
   }
   const prepareApproval = async () => {
     if (sessionState !== 'AUTHENTICATED') { await openLogin(); return }
-    if (!conversation || !receipt) return
-    await start({ ...draftBase(conversation), kind: 'CHALLENGE', body: { ...expected(conversation), validationReceiptId: receipt.validationReceiptId, acknowledgedSemanticHash: receipt.semanticHash } })
+    if (!strategyConversation || !receipt) return
+    await start({ ...draftBase(strategyConversation), kind: 'CHALLENGE', body: { ...expected(strategyConversation), validationReceiptId: receipt.validationReceiptId, acknowledgedSemanticHash: receipt.semanticHash } })
   }
   const approve = async () => {
-    if (!acknowledged || !conversation || !receipt || !challenge || sessionState !== 'AUTHENTICATED') return
+    if (proposalActive && proposalHold) return
+    if (!acknowledged || !strategyConversation || !receipt || !challenge || sessionState !== 'AUTHENTICATED') return
     if (receipt.validationReceiptId !== challenge.validationReceiptId || receipt.semanticHash !== challenge.semanticHash) return
-    await start({ ...draftBase(conversation), kind: 'APPROVE', body: { ...expected(conversation), validationReceiptId: receipt.validationReceiptId,
+    await start({ ...draftBase(strategyConversation), kind: 'APPROVE', body: { ...expected(strategyConversation), validationReceiptId: receipt.validationReceiptId,
       approvalChallengeId: challenge.approvalChallengeId, acknowledgedSemanticHash: receipt.semanticHash } })
   }
   const submit = async () => {
@@ -2112,7 +2590,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     })
     return accepted
   }
-  const snapshot = conversation?.draftState.projection
+  const snapshot = strategyConversation?.draftState.projection
   const rejectedClaim = hasPending && rejectedClaimKey !== null
   const historyPreviousDisabled = busy || hasLogout || historyNavigation.index === 0 || historyNeedsRefresh
   const historyFirstDisabled = busy || hasLogout
@@ -2153,7 +2631,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
     || (hasPending && (!busy || pendingRecoveryVisible)) || hasLogout)
   const healthyAuthNotice = authNotice && authNotice.sessionId === accountScope && phase === 'ready'
     && sessionState === 'AUTHENTICATED' && !error && !hasPending && !hasLogout ? authNotice : null
-  const workflow = conversation ? <section className="native-strategy-workflow" aria-label={workflowText('summary')} ref={workflowElement}
+  const workflow = strategyConversation ? <section className="native-strategy-workflow" aria-label={workflowText('summary')} ref={workflowElement}
     onClickCapture={event => {
       const target = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-workflow-action]')
       if (target && target.getAttribute('aria-disabled') !== 'true') workflowFocus.current = document.activeElement === target ? target : null
@@ -2170,17 +2648,17 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       <div className="native-workflow-row"><dt>{workflowText('orderAmount')}</dt><dd>{snapshot?.positionSizing?.amount ?? workflowText('unset')} USDT</dd></div>
     </dl>
     <p className="native-workflow-note">{workflowText('changes', { changes: diff.length ? diff.join(', ') : workflowText('noChanges') })}</p>
-    <details className="native-workflow-source"><summary>{workflowText('source')}</summary><pre tabIndex={0}>{JSON.stringify(snapshot, null, 2)}</pre></details>
-    {conversation.unresolvedCapabilityBlockers.length > 0 && <p className="native-workflow-notice" role="alert">{workflowText('blockers', { reasons: conversation.unresolvedCapabilityBlockers.map(item => item.reasonCode).join(', ') })}</p>}
+    <details className="native-workflow-source"><summary>{workflowText('source')}</summary><pre tabIndex={0}>{JSON.stringify(proposalActive ? { projection: snapshot, proposalBoundDraft: proposalActive.bound, approvalCompanion: proposalReview } : snapshot, null, 2)}</pre></details>
+    {strategyConversation.unresolvedCapabilityBlockers.length > 0 && <p className="native-workflow-notice" role="alert">{workflowText('blockers', { reasons: strategyConversation.unresolvedCapabilityBlockers.map(item => item.reasonCode).join(', ') })}</p>}
     <div className="native-workflow-actions">
-      {!approval && <WorkflowButton className={`native-workflow-button ${receipt ? 'is-secondary' : 'is-primary'}`} disabled={busy || hasPending || conversation.candidateState !== 'READY_FOR_VALIDATION'} onClick={() => void validate()}>{workflowText('validate')}</WorkflowButton>}
+      {!approval && <WorkflowButton className={`native-workflow-button ${receipt ? 'is-secondary' : 'is-primary'}`} disabled={busy || hasPending || strategyConversation.candidateState !== 'READY_FOR_VALIDATION'} onClick={() => void validate()}>{workflowText('validate')}</WorkflowButton>}
     </div>
     {receipt && !approval && <div className="native-workflow-stage"><p className="native-workflow-note" tabIndex={-1} data-workflow-focus>{workflowText('validated', { expiresAt: receipt.expiresAt })}</p>
       {!challenge ? <div className="native-workflow-actions"><WorkflowButton className="native-workflow-button is-primary" disabled={busy || hasPending} onClick={() => void prepareApproval()}>{workflowText(sessionState === 'AUTHENTICATED' ? 'reviewApproval' : 'loginContinue')}</WorkflowButton></div> : <>
-        <label className="native-workflow-consent"><input type="checkbox" checked={acknowledged} disabled={busy || hasPending} onChange={event => setAcknowledged(event.target.checked)} /><span>{workflowText('consent')}</span></label>
+        <label className="native-workflow-consent"><input type="checkbox" checked={acknowledged} disabled={busy || hasPending || Boolean(proposalActive && proposalHold)} onChange={event => setAcknowledged(event.target.checked)} /><span>{workflowText('consent')}</span></label>
         <p className="native-workflow-note">{workflowText('costs')}</p>
         <p className="native-workflow-binding">{workflowText('approvalTarget')} <code>{challenge.semanticHash}</code></p>
-        <div className="native-workflow-actions"><WorkflowButton className="native-workflow-button is-primary" disabled={!acknowledged || busy || hasPending} onClick={() => void approve()}>{workflowText('approve')}</WorkflowButton></div>
+        <div className="native-workflow-actions"><WorkflowButton className="native-workflow-button is-primary" disabled={!acknowledged || busy || hasPending || Boolean(proposalActive && proposalHold)} onClick={() => void approve()}>{workflowText('approve')}</WorkflowButton></div>
       </>}
     </div>}
     {approval && <div className="native-workflow-stage"><p className="native-workflow-binding" tabIndex={-1} data-workflow-focus>{workflowText('approvedVersion')} <code>{approval.strategyVersionId}</code></p>
@@ -2194,7 +2672,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
       </div>
       {(approval || job) && <p className="native-workflow-note">{workflowText('editNotice')}</p>}
       {editingNotice && <p className="native-workflow-notice" role="status">{workflowText('editingReady')}</p>}
-      {selectedHistoryOwner && approval && <p className="native-workflow-note" data-native-history-selection tabIndex={-1} role="status">{jobText('historySelectedApprovalNotice', { approved: approval.sourceDraftRevision, current: conversation.draftRevision })}</p>}
+      {selectedHistoryOwner && approval && <p className="native-workflow-note" data-native-history-selection tabIndex={-1} role="status">{jobText('historySelectedApprovalNotice', { approved: approval.sourceDraftRevision, current: strategyConversation.draftRevision })}</p>}
       <div className="native-workflow-actions"><button className="native-workflow-button is-text" disabled={busy || hasLogout} onClick={() => void loadHistory()}>{jobText('historyOpen')}</button></div>
     </div>
   </section> : showRecoveryWorkflow ? <section aria-label={workflowText('recoveryLabel')}><h2>{workflowText('recoveryTitle')}</h2><p>{workflowText('recoveryNotice')}</p></section>
@@ -2222,11 +2700,11 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         onChange: (key: string, text: string) => rowEdits.change(rowEditScope(documentOwner), key, text, conversation.conversationStateRevision),
         onSubmit: (key: string, label: string) => { void sendRow(rowEditScope(documentOwner), key, label) },
       } : undefined
-  const renderResearch = (actions: ReactNode) => conversation ? <NativeStrategyDocument snapshot={conversation} researchPlan editor={strategyEditor} planActions={actions} /> : null
-  const strategyDocument = phase === 'ready' && !hasLogout && conversation && documentOwner
-    && documentOwner.sessionState === sessionState
-    && documentOwner.conversationId === conversation.conversationId && documentOwner.draftId === conversation.draftId
-    ? { identity: JSON.stringify([documentOwner.sessionId, documentOwner.sessionState, documentOwner.conversationId, documentOwner.draftId]),
+  const renderResearch = (actions: ReactNode) => strategyConversation ? <NativeStrategyDocument snapshot={strategyConversation} researchPlan editor={strategyEditor} planActions={actions} /> : null
+  const strategyDocument = phase === 'ready' && !hasLogout && strategyConversation && strategyOwner
+    && strategyOwner.sessionState === sessionState
+    && strategyOwner.conversationId === strategyConversation.conversationId && strategyOwner.draftId === strategyConversation.draftId
+    ? { identity: proposalActive?.researchWorkId ?? JSON.stringify([strategyOwner.sessionId, strategyOwner.sessionState, strategyOwner.conversationId, strategyOwner.draftId]),
       content: renderResearch(null), renderResearch } : undefined
   const currentResultStatus = resultStatus?.backtestId === job?.backtestId ? resultStatus : null
   const resultStateKeys = { loading: 'resultChecking', ready: 'resultReady', error: 'resultNeedsCheck' } as const satisfies Record<NativeServiceResultStatus['state'], NativeJobTextKey>
@@ -2350,7 +2828,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
   } : undefined
   return <ClientServiceExperience sessionRecoveryNeeded={returnBinding !== null || loginOpen || loginRetained || emailBusy || hasPending || hasLogout} loadingHome={(initializing && initialHome) || initialHomeFailure} accountScope={accountScope} composerRequest={composerRequest} state={{ phase, sessionState, messages: displayMessages, input, busy: displayBusy, source: 'service', recovery: null,
     inputDisabled: displayBusy || consultationClaimPending || retainedConsultationMessages !== null || emailBusy || hasPending || hasLogout || phase !== 'ready' || (!consultationChat && Boolean(approval || job)), quickReplies: consultationChat ? [] : conversation?.nextQuestion?.options ?? [],
-    workflow: consultationChat ? null : hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
+    workflow: consultationChat && !proposalActive ? null : hasLogout ? <section aria-label={ui('로그아웃 요청')}><h2>{ui('로그아웃 요청 확인')}</h2><p>{ui('이전 세션의 요청 기록은 로그인 권한이나 서버 처리 결과가 아닙니다.')}</p></section> : workflow,
     outcome: consultationChat ? null : <>{smokeBinding && approval && smokeBinding.binding.strategyVersionId === approval.strategyVersionId
       && smokeBinding.binding.semanticHash === approval.semanticHash && smokeBinding.contentHash === approval.strategyVersionContentHash
       && sessionState === 'AUTHENTICATED' && phase === 'ready' && !hasLogout && !hasPending && <NativeStructuralSmokePanel
@@ -2418,7 +2896,7 @@ export function NativeServiceApp({ presentations = {}, exchangeConnectionsEnable
         })
       },
     onLogout: sessionState === 'AUTHENTICATED' && !hasLogout ? logout : undefined,
-  }} nativeAccounts strategyDocument={sourceResearchPresentation ? undefined : strategyDocument} conversationNotice={conversationNotice} authSurface={returnAuthSurface || authSurface}
+  }} nativeAccounts strategyDocument={sourceResearchPresentation && !proposalActive ? undefined : strategyDocument} conversationNotice={conversationNotice} authSurface={returnAuthSurface || authSurface}
     sourceIntake={sourceIntake && setupCandidate && sourceIntake.locatorOwner === setupCandidate.owner
       && sourceIntake.conversationId === setupCandidate.conversationId && sourceIntake.turnId === setupCandidate.turnId
       && sourceIntake.pair === setupCandidate.setup.pair ? {
