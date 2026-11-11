@@ -24462,7 +24462,7 @@ function pxSubRoute(){ var a=acS(); a.route='paid'; a.has=null; a.g=0; acSave();
 /* 터미널 오른쪽 칸: 복사한 전략이 있으면 목록(이름, 운용, 순손익, 관리), 없으면 전략 찾기 */
 function pxTermSide(){
   var cps=[]; try{ cps=((tfS().cp&&tfS().cp.copies)||[]).filter(function(c){ return c.status==='active'; }); }catch(e){}
-  if(!cps.length) return '<div class="px-tbrain"><b>실행 중인 전략이 없습니다</b><span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span><button type="button" class="pl-cta pl-cta-w" onclick="tfShareHub()">전략 찾기</button><button type="button" class="pl-link" onclick="tfBackToChat()">새 전략 만들기</button></div>';
+  if(!cps.length) return '<div class="px-tbrain"><b>실행 중인 전략이 없습니다</b><span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span><button type="button" class="pl-cta pl-cta-w" onclick="tfShareHub()">전략 복사</button><button type="button" class="pl-link" onclick="tfBackToChat()">새 전략 만들기</button></div>';
   return '<div class="px-tbrain"><b>복사한 전략 '+cps.length+'개가 실행 중입니다</b><div class="px-tcps">'+cps.map(function(c){ var d=cpCalc(c), s=tfSSFind(c.nick);
     return '<div class="r"><div><b>'+gEsc(s?mkTitle(s):c.nick)+'</b><span class="num">운용 '+cpUsd(d.inv,0)+', 순손익 <i class="'+(d.net>=0?'mk-up':'mk-dn')+'">'+cpUsd(d.net)+'</i></span></div><button type="button" class="pl-link" onclick="cpDetailGo(&quot;'+c.id+'&quot;)">관리</button></div>'; }).join('')+'</div><button type="button" class="pl-link" onclick="tfShareHub()">전략 더 찾기</button></div>';
 }
@@ -26988,3 +26988,5 @@ if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌�
 <link rel="stylesheet" href="g4-t1.css">
 <script src="g4-t1-data.js"></script>
 <script src="g4-t1.js"></script>
+<link rel="stylesheet" href="g4-t2.css?v=1">
+<script src="g4-t2.js?v=1"></script>

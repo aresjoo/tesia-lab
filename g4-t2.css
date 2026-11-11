@@ -1,0 +1,32 @@
+/* G4/T2 스케치(claude): 돈 순서 목록. 색과 형태는 DESIGN_PROMPT.md(검정 바탕, 윤곽 카드, 숫자 400, 회색 알약 36px). 청록 없음 */
+body.g4-list .gft-wm{display:none!important}
+body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
+.ss3 .g4-back{margin:0 0 8px}
+.g4l-h1{margin:0 0 16px;font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
+.mk-card.skf.g4l{gap:12px}
+.mk-card.skf.g4l .skf-top{margin-bottom:0}
+.g4l-perf .skf-ret small{font-size:14px;color:#9a9a9a}
+.g4l-perf .skf-ret b{font-size:32px;line-height:1.15;color:#fff}
+.g4l-perf svg{height:48px}
+.g4l-info{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"sub sub min" "now fw go";align-items:center;column-gap:16px;row-gap:12px}
+.g4l-sub{grid-area:sub;margin:0;font-size:14px;line-height:1.45;color:#cdcdcd}
+.g4l-min{grid-area:min;font-size:14px;color:#afafaf;white-space:nowrap}
+.g4l-now{grid-area:now;font-size:14px;line-height:1.45;color:#ececec}
+.g4l-fw{grid-area:fw;min-width:0}
+.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;white-space:nowrap}
+.mk-card.skf.g4l:hover .g4l-go{background:#3a3a3a;color:#fff}
+.g4l-morew{display:flex;justify-content:center;margin:28px 0 0}
+.g4l-more{height:44px;padding:0 22px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font:inherit;font-size:15px;cursor:pointer}
+.g4l-more:hover{background:#3a3a3a;color:#fff}
+.g4l-more:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.g4l-enter .mk-spark{animation:g4l-draw .6s cubic-bezier(.2,.75,.2,1) both}
+@keyframes g4l-draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.g4l-enter .mk-spark{animation:none}}
+@media (max-width:1180px){
+  .g4l-info{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sub sub" "now min" "fw go";row-gap:8px}
+}
+@media (max-width:760px){
+  .g4l-h1{font-size:28px;margin-bottom:16px}
+  .g4l-perf .skf-ret b{font-size:28px}
+  .ss3 #ss3-q::placeholder{color:transparent}
+}

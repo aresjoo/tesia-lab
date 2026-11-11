@@ -21,7 +21,7 @@
     var help = spa ? 'event.stopPropagation();tfTxHelp()' : 'event.stopPropagation();if(window.tethHelpOpen){window.tethHelpOpen();}else{location.href=\''+base+'index.html#/trade\';}';
     return '<footer class="gft'+(opts.lime?' gft-lime':'')+'" aria-label="사이트 정보"><div class="gft-in">'+bar(base)+'<div class="gft-rule" aria-hidden="true"></div><div class="gft-top">'
       +'<nav class="gft-cols" aria-label="바닥글 메뉴">'
-      +col('제품',[link(spa,base,'AI 트레이딩',"tfNav('#/trade')",'index.html#/trade'),link(spa,base,'전략 따라하기',"tfShareHub('find')",'index.html#/trade'),link(spa,base,'새 전략 만들기','gHome()','index.html'),link(spa,base,'거래소 연결','tfBrokersView()','index.html#/trade')])
+      +col('제품',[link(spa,base,'AI 트레이딩',"tfNav('#/trade')",'index.html#/trade'),link(spa,base,'전략 복사',"tfShareHub('find')",'index.html#/trade'),link(spa,base,'새 전략 만들기','gHome()','index.html'),link(spa,base,'거래소 연결','tfBrokersView()','index.html#/trade')])
       +col('회사',[link(spa,base,'TETH 정보',null,'about/'),link(spa,base,'앱 다운로드',null,'download/',true)])
       +col('도움',['<button type="button" onclick="'+help+'">24시간 상담</button>',link(spa,base,'인사이트',"tfNav('#/insight')",'index.html#/insight'),link(spa,base,'이용 현황',"tfNav('#/plan')",'index.html#/plan')])
       +col('약관',[link(spa,base,'서비스 약관',null,'policies/#terms',true),link(spa,base,'개인정보처리방침',null,'policies/#privacy',true)])
