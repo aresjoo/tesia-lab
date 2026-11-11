@@ -1,80 +1,183 @@
-/* DESIGN_PROMPT: existing black shell, gray cards, white pill, no new brand shapes. */
+/* G4 T1: DESIGN_PROMPT + accepted S1/S2/S3/S4. Existing shell and logo assets. */
 html,body{background:#000!important;color-scheme:dark}
-.gft-wm{display:none!important}
-.gft,.gft.gft-lime{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
+body.g4-main .gft-wm{display:none!important}
+body.g4-main .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
 body.g4-main #teth-help,body.g4-main #hw-fab,body.g4-main .hw-fab{display:none!important}
 .tft-chart,#nfxh-tv,#nfxh-ph,.tft-chart iframe{background:#000!important;color-scheme:dark}
-.g4-trade{width:100%;max-width:900px;box-sizing:border-box;margin:0 auto;padding:32px 28px 40px;color:#ececec;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
-.g4-trade *{box-sizing:border-box}
-.g4-usp{font-size:16px;color:#cdcdcd;margin:0 0 18px;letter-spacing:-.02em}
-.g4-money{border:1px solid rgba(255,255,255,.14);background:#303030;border-radius:26px;padding:28px 32px}
-.g4-strategy{display:flex;gap:12px;align-items:center;margin-bottom:24px;min-width:0}
+.g4-trade{width:100%;max-width:1040px;box-sizing:border-box;margin:0 auto;padding:28px 32px 40px;color:#ececec;line-height:1.5}
+.g4-trade *,.g4-budget-form *{box-sizing:border-box}
+.g4-usp{display:flex;align-items:center;gap:12px;font-size:18px;color:#ececec;margin:0 0 20px;letter-spacing:-.02em}
+.g4-start{font-size:32px;font-weight:400;line-height:1.25;margin:0 0 24px}
+.g4-linked .g4-usp{font-size:14px;color:#cdcdcd;margin-bottom:8px}
+.g4-money{position:relative;border:1px solid rgba(255,255,255,.15);background:transparent;border-radius:26px;padding:24px 28px}
+.g4-strategy{display:flex;gap:12px;align-items:center;margin-bottom:20px;min-width:0}
 .g4-strategy>div{flex:1;min-width:0}
 .g4-strategy span{font-size:16px;overflow-wrap:anywhere}
 .g4-strategy small{display:block;font-size:14px;color:#9a9a9a}
-.g4-strategy .mk-xtag{flex:none;font-size:14px;background:none;border:0;padding:0;white-space:nowrap}
-.g4-money h1{font-size:32px;font-weight:400;line-height:1.2;letter-spacing:-.03em;margin:0;color:#fff}
-.g4-amount{display:block;font-size:64px;font-weight:400;letter-spacing:-.04em;margin-top:7px;font-variant-numeric:tabular-nums}
-.g4-profit{font-size:24px;font-weight:400;margin:8px 0 12px;font-variant-numeric:tabular-nums}
-.g4-trade .up{color:#58b892}.g4-trade .down{color:#e58079}
-.g4-compare{font-size:16px;color:#cdcdcd;margin:12px 0 0}
-.g4-period{font-size:14px;color:#9a9a9a;margin:8px 0 0}
-.g4-now{border-top:1px solid rgba(255,255,255,.14);padding-top:18px;margin-top:20px}
-.g4-now p{font-size:16px;margin:0 0 6px;overflow-wrap:anywhere}
-.g4-now small{font-size:14px;color:#cdcdcd}
-.g4-primary{display:block;width:100%;min-height:52px;background:#fff;color:#000;border:0;border-radius:999px;font:inherit;font-size:16px;cursor:pointer;margin-top:20px;padding:12px 18px}
+.g4-strategy .mk-xtag{display:inline-flex;flex:none;gap:6px;align-items:center;font-size:14px;background:none;border:0;padding:0;white-space:nowrap}
+.g4-money h1{font-size:28px;font-weight:400;line-height:1.25;letter-spacing:-.03em;margin:0;color:#fff}
+.g4-amount{display:block;font-size:56px;font-weight:400;letter-spacing:-.04em;line-height:1.15;margin-top:8px;font-variant-numeric:tabular-nums}
+.g4-money-row{display:flex;align-items:center;gap:28px}
+.g4-money-row h1{flex:none;font-size:24px}
+.g4-first .g4-money-row h1{display:flex;align-items:center;gap:20px}
+.g4-first .g4-money-row .g4-amount{margin:0}
+.g4-comparison{padding-left:24px;border-left:1px solid rgba(255,255,255,.15);font-size:16px;color:#cdcdcd}
+.g4-comparison p{margin:3px 0}
+.g4-comparison p:last-child{display:flex;flex-wrap:wrap;gap:4px 16px}
+.g4-comparison p:last-child>span:first-child{color:#9a9a9a;font-size:14px}
+.g4-profit{font-size:24px;font-weight:400;margin:8px 0;font-variant-numeric:tabular-nums}
+.g4-invested{font-size:16px;color:#cdcdcd;margin:6px 0}
+.g4-trade .up{color:#56c486}.g4-trade .down{color:#ee766a}
+.g4-curve{margin:20px 0 0;width:100%;min-width:0}
+.g4-curve svg{display:block;width:100%;height:200px;overflow:visible}
+.g4-curve polyline{fill:none;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.g4-line-strategy{stroke:#ececec;stroke-width:1.7}.g4-line-hold{stroke:#9a9a9a;stroke-width:1.2;stroke-dasharray:4 5}
+.g4-curve figcaption{display:flex;justify-content:flex-end;gap:20px;font-size:14px;color:#cdcdcd;margin-top:12px}
+.g4-curve figcaption span{display:flex;gap:8px;align-items:center;white-space:nowrap}
+.g4-curve em{font-style:normal;font-weight:400}
+.g4-key{display:inline-block;width:22px;border-top:2px solid #ececec}.g4-key.dashed{border-top:1px dashed #9a9a9a}
+.g4-period{font-size:14px;color:#cdcdcd;margin:-21px 0 0;max-width:52%}
+.g4-now{display:flex;align-items:center;flex-wrap:wrap;gap:8px 20px;font-size:14px;padding-top:18px;margin-top:20px;border-top:1px solid rgba(255,255,255,.1)}
+.g4-running{display:inline-flex;align-items:center;gap:10px;font-size:18px}
+.g4-next,.g4-followers{color:#cdcdcd}
+.g4-bars{display:inline-flex;align-items:flex-end;gap:3px;height:19px;width:24px;flex:none}
+.g4-bars i{display:block;width:3px;border-radius:2px;background:#ececec;height:7px;animation:g4-pulse 1.5s linear infinite}
+.g4-bars i:nth-child(2){height:12px;animation-delay:-1s}.g4-bars i:nth-child(3){height:18px;animation-delay:-.5s}
+.g4-primary{display:block;width:100%;min-height:52px;background:#fff;color:#000;border:0;border-radius:999px;font:inherit;font-size:16px;font-weight:400;cursor:pointer;margin:0;padding:12px 18px}
+.g4-actions{margin-top:24px}
 .g4-free{font-size:14px;color:#cdcdcd;text-align:center;margin:12px 0 0}
-.g4-history{margin-top:32px}
+.g4-secondary{display:flex;justify-content:center;gap:28px;margin-top:12px}
+.g4-history{margin-top:30px;scroll-margin-top:20px}
 .g4-section-head{display:flex;gap:16px;align-items:center;justify-content:space-between}
 .g4-section-head h2{font-size:18px;font-weight:400;margin:0}
-.g4-trade a,.g4-trade button:not(.g4-primary),.g4-back{color:#cdcdcd;text-decoration:underline;text-underline-offset:4px;font-size:14px}
-.g4-history ol{list-style:none;margin:12px 0 0;padding:0}
-.g4-history li{border-bottom:1px solid rgba(255,255,255,.14);padding:18px 0}
-.g4-history li>div{display:flex;justify-content:space-between;gap:16px;color:#9a9a9a;font-size:14px}
-.g4-history p{font-size:16px;margin:7px 0 0}
+.g4-trade a,.g4-trade button:not(.g4-primary):not(.g4-pills button),.g4-back{color:#cdcdcd;text-decoration:underline;text-underline-offset:4px;font-size:14px}
+.g4-trade button:not(.g4-primary){background:none;border:0;padding:0;font-family:inherit;cursor:pointer}
+.g4-history ol{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid rgba(255,255,255,.1)}
+.g4-history li{border-bottom:1px solid rgba(255,255,255,.1);padding:14px 0}
+.g4-history summary{display:grid;grid-template-columns:110px 1fr auto;align-items:baseline;gap:16px;list-style:none;cursor:pointer;font-size:16px}
+.g4-history summary::-webkit-details-marker{display:none}
+.g4-history time,.g4-record-tag{font-size:14px;color:#9a9a9a;white-space:nowrap;font-weight:400}
+.g4-history p{font-size:16px;margin:12px 0 0;color:#cdcdcd}
 .g4-links{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:28px}
-.g4-help{margin:32px 0 0;color:#9a9a9a;font-size:14px}
-.g4-help button{background:none;border:0;padding:0;font:inherit;cursor:pointer}
-.g4-trade select{width:100%;background:#212121;color:#ececec;border:1px solid rgba(255,255,255,.14);border-radius:19px;min-height:44px;padding:10px;margin-bottom:18px;font:inherit}
+.g4-help{margin:26px 0 0;color:#9a9a9a;font-size:14px}
 .g4-back{display:inline-block;margin:16px 0}
+.g4-portfolio{margin-bottom:24px;font-size:16px}
+.g4-portfolio>div:first-of-type{display:flex;align-items:baseline;gap:14px}
+.g4-portfolio>div>strong{font-size:36px;font-weight:400;font-variant-numeric:tabular-nums}
+.g4-pills{display:flex;gap:12px;margin-top:16px}
+.g4-trade .g4-pills button{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:12px 22px;min-width:0;flex:1;color:#ececec;text-decoration:none}
+.g4-trade .g4-pills button[aria-pressed=true]{border:2px solid #9a9a9a;padding:11px 21px}
+.g4-pills span{display:block;font-size:14px}.g4-pills strong{display:block;font-size:24px;font-weight:400;font-variant-numeric:tabular-nums}
 .g4-n1{padding:20px 0;margin-bottom:18px;color:#ececec}
 .g4-n1>span{font-size:18px}.g4-n1>strong{display:block;font-size:40px;font-weight:400;line-height:1.2}
 .g4-n1 p{margin:8px 0;color:#cdcdcd;font-size:16px}.g4-n1 small{display:block;color:#9a9a9a;font-size:14px}
 .g4-n1.compact{padding:0;margin:0 0 20px}.g4-n1.compact>strong{font-size:32px}
-.g4-primary:focus-visible,.g4-trade a:focus-visible,.g4-trade button:focus-visible{outline:2px solid #fff;outline-offset:4px}
-@media(max-width:600px){
- .g4-trade{padding:20px 16px 32px}
- .g4-usp{font-size:14px;margin-bottom:14px}
- .g4-money{padding:20px;border-radius:24px}
- .g4-strategy{gap:10px;margin-bottom:20px;flex-wrap:wrap}
- .g4-strategy>div{flex-basis:calc(100% - 52px)}
- .g4-strategy .mk-xtag{display:none}
- .g4-money h1{font-size:28px}.g4-amount{font-size:48px}.g4-profit{font-size:22px}
- .g4-compare{font-size:16px}.g4-period{font-size:14px}
- .g4-now{padding-top:14px;margin-top:16px}.g4-now p{font-size:14px}
- .g4-primary{min-height:48px;margin-top:16px}
- .g4-history{margin-top:26px}.g4-section-head{flex-wrap:wrap;gap:8px}
- .g4-history li>div{font-size:14px}.g4-n1>strong{font-size:32px}
-}
-@media(prefers-reduced-motion:reduce){.g4-trade *{animation:none!important;transition:none!important}}
 .mk-card.skf:has(.g4-n1){display:flex!important;flex-direction:column;align-items:stretch}
 .mk-card.skf .g4-n1{order:1}.mk-card.skf .skf-top{order:0;margin-bottom:20px}.mk-card.skf .skf-fw{order:2}
-
-.g4-links button{background:none;border:0;padding:0;font:inherit;cursor:pointer}
-
-/* Mobile chrome occupies 60px; the scroll viewport starts below it. */
-@media(max-width:860px){body.g4-main #g-scroll{margin-top:60px}}
-.g4-budget-dialog .ss3-dlg .din{background:#2f2f2f}
+.g4-trade a:focus-visible,.g4-trade button:focus-visible,.g4-history summary:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.g4-budget-dialog .ss3-dlg{width:500px;max-width:100%;border:0;border-radius:26px}
+.g4-budget-dialog .ss3-dlg .din{background:#2f2f2f;padding:26px 28px;border-radius:26px;max-height:calc(100dvh - 32px)}
 .g4-budget-dialog .dh2 b{font-size:24px;font-weight:400}
-.g4-budget-form{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#ececec}
+.g4-budget-form{color:#ececec}
 .g4-budget-form label{display:block;font-size:16px;margin:24px 0 10px}
 .g4-budget-strategy{font-size:16px;margin:0;color:#cdcdcd}
-.g4-budget-input{display:flex;align-items:center;gap:10px;min-height:56px;padding:0 16px;border:1px solid rgba(255,255,255,.14);border-radius:19px;background:#212121}
-.g4-budget-input input{background:transparent;color:#fff;border:0;outline:0;min-width:0;width:100%;font:inherit;font-size:24px;font-variant-numeric:tabular-nums}
+.g4-budget-now{display:flex;align-items:center;gap:10px;font-size:16px;margin:18px 0 24px}
+.g4-budget-dialog .g4-bars i{animation:none}
+.g4-budget-form .g4-money-row{display:block}
+.g4-budget-form h1{font-size:16px;font-weight:400;margin:0}
+.g4-budget-form .g4-amount{font-size:36px;margin-top:0}
+.g4-budget-form .g4-comparison{padding:0;border:0;font-size:14px;margin-top:6px}
+.g4-budget-form .g4-comparison p{display:inline;margin-right:8px}
+.g4-budget-form .g4-curve svg{height:96px}
+.g4-budget-form .g4-curve figcaption{justify-content:flex-start}
+.g4-budget-input{display:flex;align-items:center;gap:4px;min-height:56px;padding:0 16px;border:1px solid rgba(255,255,255,.14);border-radius:19px;background:#212121}
+.g4-budget-input input{appearance:textfield;background:transparent;color:#fff;border:0;outline:0;min-width:0;width:100%;font:inherit;font-size:20px;font-variant-numeric:tabular-nums}
+.g4-budget-input input::-webkit-inner-spin-button,.g4-budget-input input::-webkit-outer-spin-button{appearance:none;margin:0}
 .g4-budget-input:focus-within{outline:1px solid #fff;outline-offset:2px}
 #g4-budget-min,#g4-budget-error{font-size:14px;margin:10px 0;color:#cdcdcd}
-#g4-budget-error{color:#e58079}
-.g4-budget-form .g4-primary{font-family:inherit;font-size:16px;border-radius:999px;min-height:48px}
+#g4-budget-error:empty{display:none}#g4-budget-error{color:#ef4444}
+.g4-budget-form .g4-primary{margin-top:20px;position:sticky;bottom:0}
 .g4-budget-form .g4-primary:disabled{opacity:.45;cursor:default}
+@keyframes g4-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes g4-reveal{from{opacity:.35}to{opacity:1}}
+@keyframes g4-draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+.g4-arrive .g4-amount{animation:g4-reveal .25s ease-out both}.g4-arrive .g4-curve svg{animation:g4-draw .55s ease-out both}
+@media(min-width:861px){
+ .g4-first .g4-money{margin-bottom:84px}
+ .g4-first .g4-now{position:absolute;left:4px;right:4px;top:100%;border:0;padding-top:20px;margin-top:0;min-height:64px;justify-content:space-between;gap:12px}
+ .g4-first .g4-now>span+span{font-size:14px}
+ .g4-owned .g4-curve svg{height:172px}
+ .g4-owned .g4-curve figcaption{justify-content:flex-start}
+ .g4-linked .g4-curve svg{height:172px}
+}
+@media(max-width:1100px) and (min-width:861px){.g4-first .g4-money-row h1{display:block}.g4-first .g4-money-row .g4-amount{margin-top:8px}}
+@media(max-width:860px){
+ html.g4-entry body.has-banner .g-scroll{padding-top:0!important}
+ body.g4-main #g-scroll{margin-top:60px}
+ .g4-trade{padding:16px 16px 160px}
+ .g4-usp{font-size:14px;margin-bottom:16px;gap:8px}
+ .g4-start{font-size:28px;max-width:290px;margin-bottom:20px}
+ .g4-money{padding:20px 18px;border-radius:24px}
+ .g4-strategy{gap:10px;margin-bottom:20px;flex-wrap:wrap}
+ .g4-strategy>div{flex-basis:calc(100% - 48px)}
+ .g4-strategy .mk-xtag{margin-left:46px;margin-top:-10px;font-size:14px}
+ .g4-money h1{font-size:24px}
+ .g4-money-row,.g4-first .g4-money-row h1{display:block}
+ .g4-amount,.g4-first .g4-money-row .g4-amount{font-size:44px;margin-top:6px}
+ .g4-profit{font-size:22px;margin:8px 0}
+ .g4-comparison{padding:0;border:0;font-size:14px;margin-top:10px}
+ .g4-comparison p:last-child{gap:4px 10px}
+ .g4-curve{margin-top:18px}.g4-curve svg,.g4-linked .g4-curve svg{height:130px}
+ .g4-curve figcaption{justify-content:flex-start;gap:18px;margin-top:10px;font-size:12px}
+ .g4-curve em{display:none}.g4-key{width:20px}
+ .g4-period{margin:12px 0 0;max-width:none;font-size:12px}
+ .g4-now{padding-top:14px;margin-top:14px;gap:6px 8px;font-size:14px}
+ .g4-running{font-size:16px;flex-basis:100%}
+ .g4-followers{margin-left:32px}.g4-next{font-size:12px;flex-basis:100%;margin-left:32px}
+ .g4-owned .g4-now{align-items:flex-start}
+ .g4-history{margin-top:24px;scroll-margin-top:16px}
+ .g4-history summary{grid-template-columns:1fr auto;gap:8px}
+ .g4-record-text{grid-row:2;grid-column:1/-1;font-size:14px}
+ .g4-record-tag{grid-row:1;grid-column:2}
+ .g4-history p{font-size:14px}
+ .g4-actions{position:fixed;bottom:0;left:0;right:0;z-index:90;background:#000;padding:12px 16px calc(14px + env(safe-area-inset-bottom));margin:0}
+ .g4-primary{min-height:48px}
+ .g4-free{font-size:14px;margin-top:9px}
+ .g4-secondary{margin-top:10px}
+ .g4-portfolio{margin-bottom:20px}.g4-portfolio>div>strong{font-size:32px}
+ .g4-pills{gap:8px}.g4-trade .g4-pills button{padding:10px 12px}.g4-trade .g4-pills button[aria-pressed=true]{padding:9px 11px}
+ .g4-pills span{font-size:12px}.g4-pills strong{font-size:22px}
+ .g4-chart-back{display:inline-flex;align-items:center;min-height:40px;margin:10px 16px 10px 64px}
+ .g4-budget-dialog.ss3-dlgw{padding:0;align-items:flex-end}
+ .g4-budget-dialog .ss3-dlg{width:100%;border-radius:26px 26px 0 0}
+ .g4-budget-dialog .ss3-dlg .din{border-radius:26px 26px 0 0;padding:26px 22px calc(24px + env(safe-area-inset-bottom));max-height:calc(100dvh - 60px)}
+}
+@media(prefers-reduced-motion:reduce){.g4-trade *{animation:none!important;transition:none!important}}
 
-@media(max-width:860px){.g4-chart-back{display:inline-flex;align-items:center;min-height:40px;margin:10px 16px 10px 64px}}
+/* Match the selected compact mobile card; retain all approved numbers. */
+.g4-invested small{display:block;font-size:14px;color:#9a9a9a;margin-top:4px}
+body.g4-main #tf-devbtn{top:auto!important;right:16px!important;bottom:132px!important;left:auto!important}
+@media(max-width:860px){
+ .g4-strategy{flex-wrap:nowrap;gap:8px;margin-bottom:12px}
+ .g4-strategy>div{flex:1;flex-basis:auto}
+ .g4-strategy .mk-xtag{margin:0;font-size:12px;gap:4px}
+ .g4-strategy span{font-size:14px}
+ .g4-strategy small{font-size:12px}
+ .g4-money{padding:16px}
+ .g4-money-row h1{font-size:18px}
+ .g4-comparison{margin-top:6px;line-height:1.35}
+ .g4-comparison p{margin:2px 0}
+ .g4-curve{margin-top:12px}
+ .g4-curve svg,.g4-linked .g4-curve svg{height:96px}
+ .g4-curve figcaption{margin-top:8px}
+ .g4-period{margin-top:6px;font-size:12px}
+ .g4-now{padding-top:10px;margin-top:10px;gap:4px 10px}
+ .g4-running{font-size:14px}
+ .g4-followers,.g4-next{margin-left:0;font-size:12px}
+ .g4-next{flex-basis:auto}
+ .g4-followers{border-right:1px solid rgba(255,255,255,.15);padding-right:10px}
+ .g4-linked .g4-period{display:none}
+ body.g4-main #qa2-panel{bottom:auto!important;top:60px!important;max-height:60vh!important}
+}
+
+@media(max-width:860px){body.g4-main #tf-devbtn{bottom:114px!important;left:16px!important;right:auto!important}body.g4-main #qa2-panel{top:auto!important;bottom:156px!important;max-height:60vh!important}}
