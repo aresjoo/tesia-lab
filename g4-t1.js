@@ -9,7 +9,7 @@
   function esc(v) { return gEsc(String(v == null ? '' : v)); }
   function money(v, cents) { return cpUsd(v, cents ? 2 : 0); }
   function signed(v) { return (v > 0 ? '+' : '') + money(v, true); }
-  function date(i) { var d = idxToDate(i); return d.getFullYear() + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0'); }
+  function date(i) { var d = idxToDate(i); return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.'; }
   function tidy(t) {
     var text = skdText(String(t || '').replace(/바꿉니입니다/g, '바꿉니다').replace(/올립니입니다/g, '올립니다'));
     return text.replace(/\b([A-Z][A-Z0-9]*)[을를](?:\(를\))?/g, function (_, symbol) { return symbol + (symbol.endsWith('L') ? '을' : '를'); })
@@ -22,8 +22,8 @@
   var oldPolite = mkPolite;
   mkPolite = function (t) { return tidy(oldPolite(t)); };
   var oldMessages = mkChatMsgs, oldFeed = tbFeed;
-  mkChatMsgs = function () { return oldMessages.apply(this, arguments).map(function (m) { return Object.assign({}, m, {t: tidy(m.t)}); }); };
-  tbFeed = function (messages) { return oldFeed((messages || []).map(function (m) { return Object.assign({}, m, {t: tidy(m.t), ts: String(m.ts || '').replace(/:\d\d$/, '')}); })); };
+  mkChatMsgs = function () { return oldMessages.apply(this, arguments).map(function (m) { return Object.assign({}, m, {t: tidy(m.t), ts: date(m.i) + ' ' + ((String(m.ts || '').match(/\d{2}:\d{2}/) || ['09:00'])[0])}); }); };
+  tbFeed = function (messages) { return oldFeed((messages || []).map(function (m) { return Object.assign({}, m, {t: tidy(m.t), ts: String(m.ts || '').replace(/(\d{2}:\d{2}):\d{2}/g, '$1')}); })); };
   function now(s) { return tidy(mkChatNow(s, s.r)); }
   function first(t, n) { return (t.match(/.*?(?:\.(?=\s|$)|$)/g) || [t]).filter(Boolean).slice(0, n).join(' ').trim(); }
   function n1(s, small) {
@@ -61,14 +61,14 @@
       + curve(s, null, compact) + (!compact ? '<p class="g4-period">최근 1년 ' + money(y.final) + ', 그냥 들고 있었다면 ' + money(y.benchFinal) + '</p>' : '') + '</div>';
   }
   function running(s, row) {
-    return '<div class="g4-now">' + (!row || !D.hasFill(row) ? '<span class="g4-running">' + bars() + COPY.running + '</span>' : '')
-      + '<span>' + esc(D.pos(s, row)) + '</span>' + (row && !D.hasFill(row) ? '<span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + (!row ? '<span class="g4-followers">' + s.fw.toLocaleString() + '명이 따라가는 중</span><span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + '</div>';
+    var waiting = row && !D.hasFill(row);
+    return '<div class="g4-now">' + (waiting ? '<span class="g4-running g4-waiting">' + bars() + COPY.running + ', ' + esc(D.pos(s, row)) + '</span>' : (!row ? '<span class="g4-running">' + bars() + COPY.running + '</span>' : '') + '<span>' + esc(D.pos(s, row)) + '</span>') + (row && !D.hasFill(row) ? '<span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + (!row ? '<span class="g4-followers">' + s.fw.toLocaleString() + '명이 따라가는 중</span><span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + '</div>';
   }
   function records(s) {
     var messages = mkChatMsgs(s, s.r, 6).filter(function (m) { return m.k !== 'now' && m.k !== 'intro'; });
     return messages.map(function (m, i) {
       var t = tidy(m.t), split = tbSent(t, 2);
-      return '<li' + (i ? ' class="g4-record-extra" hidden' : '') + '><details><summary><time>' + esc(m.ts.replace(/:\d\d$/, '')) + '</time><span class="g4-record-text">' + esc(split.head) + '</span><span class="g4-record-tag">' + esc(m.tag) + '</span></summary>'
+      return '<li' + (i ? ' class="g4-record-extra" hidden' : '') + '><details><summary><time>' + esc(m.ts) + '</time><span class="g4-record-text">' + esc(split.head) + '</span><span class="g4-record-tag">' + esc(m.tag) + '</span></summary>'
         + (split.rest ? '<p>' + esc(split.rest) + '</p>' : '') + '</details></li>';
     }).join('') || '<li>아직 판단 기록이 없습니다.</li>';
   }
@@ -107,6 +107,7 @@
     document.body.classList.add('g4-main');
     document.documentElement.classList.remove('g4-entry');
     window.G4_T1_READY = true;
+    lastLocation = location.href;
     arrived = true;
   }
   function showList() {
@@ -241,6 +242,7 @@
       + '<button id="g4-budget-next" type="submit" class="g4-primary" disabled>거래소 연결</button></form>');
     $('ss3-dlgw').classList.add('g4-budget-dialog');
     budgetSync();
+    armOverlay();
     if (innerWidth > 760) $('g4-budget').focus();
   }
   function connectBudget(event) {
@@ -286,12 +288,21 @@
       var available = Math.floor(cpState().spot * 100) / 100, adjusted = o.budget != null && o.budget > available;
       inp.value = o.budget == null ? '' : adjusted ? available : o.budget;
       cpFormSync();
-      if (adjusted) $('cps-amt-fld').insertAdjacentHTML('beforeend', '<p class="g4-budget-adjusted">사용 가능 금액 ' + money(available, true) + '으로 맞췄습니다.</p>');
+      if (adjusted) adjustedNotice();
     }
+    if ($('mk-follow')) armOverlay();
     return v;
   };
   var oldSync = cpFormSync;
-  cpFormSync = function () { captureBudget(); var v = oldSync.apply(this, arguments); formatAmount($('cps-amt')); return v; };
+  function adjustedNotice() {
+    var field = $('cps-amt-fld');
+    if (field && !field.querySelector('.g4-budget-adjusted')) field.insertAdjacentHTML('beforeend', '<p class="g4-budget-adjusted" role="status">사용 가능 금액으로 맞췄습니다</p>');
+  }
+  cpFormSync = function () {
+    var input = $('cps-amt'), available = Math.floor(cpState().spot * 100) / 100;
+    if (input && Number(rawAmount(input.value)) > available) { input.value = available; adjustedNotice(); }
+    captureBudget(); var v = oldSync.apply(this, arguments); formatAmount(input); return v;
+  };
   // A successful account operation resumes only an explicitly pending copy intent.
   tfIntentRun = function () {
     var o = tfIntentPeek();
@@ -325,6 +336,7 @@
       if ($('cpa-go')) $('cpa-go').textContent = '예산 변경 완료';
       formatAmount($('cpa-amt'));
       var tabs = dialog.querySelectorAll('.cpa-tgl button'); if (tabs[1]) tabs[1].textContent = '예산 회수';
+      armOverlay();
     }
     return v;
   };
@@ -347,6 +359,8 @@
     var confirm = document.createElement('button'); confirm.type = 'button'; confirm.className = 'wbtn'; confirm.id = 'g4-stop-confirm'; confirm.textContent = '복사 중단 확정';
     confirm.onclick = function () { mkStopGo(cid, selected); };
     dialog.querySelector('.acts3').prepend(confirm);
+    dialog.querySelector('.acts3 .obtn').textContent = '전략 복사 계속';
+    armOverlay();
     return v;
   };
   toast = function (message) {
@@ -358,6 +372,40 @@
     clearTimeout(node._h); node.textContent = message;
     node._h = setTimeout(function () { node.remove(); }, 2000);
   };
+  var lastLocation = location.href, dismissedLocation = null, closingFromBack = false;
+  function overlayOpen() { return document.querySelector('.g4-manage-dialog, .g4-budget-dialog, #mk-follow'); }
+  function armOverlay() {
+    var state = history.state || {}, next = Object.assign({}, state, {g4Overlay: true, g4ClosedOverlay: false});
+    if (state.g4Overlay || state.g4ClosedOverlay) history.replaceState(next, '', location.href);
+    else history.pushState(next, '', location.href);
+    lastLocation = location.href;
+    dismissedLocation = null;
+  }
+  function dismissOverlay() {
+    if (!closingFromBack && history.state && history.state.g4Overlay) {
+      dismissedLocation = location.href;
+      history.replaceState(Object.assign({}, history.state, {g4Overlay: false, g4ClosedOverlay: true}), '', location.href);
+    }
+  }
+  var oldDialogClose = tfSS3DlgClose, oldFollowClose = mkFollowClose;
+  tfSS3DlgClose = function () { if (document.querySelector('.g4-manage-dialog, .g4-budget-dialog')) dismissOverlay(); return oldDialogClose.apply(this, arguments); };
+  mkFollowClose = function () { if ($('mk-follow')) dismissOverlay(); return oldFollowClose.apply(this, arguments); };
+  window.addEventListener('popstate', function () {
+    var same = lastLocation === location.href;
+    if (overlayOpen()) {
+      dismissedLocation = null;
+      closingFromBack = true;
+      try { oldDialogClose(true); oldFollowClose(true); } finally { closingFromBack = false; }
+      lastLocation = location.href;
+      return;
+    }
+    // Skip adjacent copies of the same summary or dismissed-sheet location.
+    if (same && (location.hash === '#/trade' || dismissedLocation === location.href || (history.state && (history.state.g4Overlay || history.state.g4ClosedOverlay)))) {
+      history.back(); return;
+    }
+    lastLocation = location.href;
+  });
+  window.addEventListener('hashchange', function () { lastLocation = location.href; });
   // Main-page adjustment keeps the user here and refreshes the existing ledger values.
   var oldAdjCommit = cpAdjCommit;
   cpAdjCommit = function (cid, amount, direction) {

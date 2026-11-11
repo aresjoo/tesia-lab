@@ -119,9 +119,6 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 | `about/index.html` | 제품 소개, 기능 설명, 요금제, 신뢰·위험 안내, FAQ, 최종 CTA를 제공한다. 요금제는 `site-config.js`에서 렌더링한다. |
 | `download/index.html` | 앱 소개 캐러셀, 스토어 선택 링크와 QR 코드를 제공한다. QR 이미지는 외부 QR 생성 서비스에서 가져온다. |
 | `policies/index.html` | 해시 라우팅으로 개요, 개인정보처리방침, 서비스 약관, 기술·안전 설명, FAQ를 보여 준다. 법률·정책 문구 변경 시 시행일과 실제 서비스 상태를 별도로 검증해야 한다. |
-| `g4-t1-data.js` | G4 T1 N1 계산(btCompute 상태 복원), 보유 전략 선정, 복사 원장 조회와 strategyId·budget·returnTo 세션 인계를 담당한다. |
-| `g4-t1.js` | G4 T1 독립 2단계 구현. #/trade 요약, #/trade/strategies 목록 주소, #/trade/chart 터미널, 동일 전략 상세·가입·연결 복귀를 묶는다. |
-| `g4-t1.css` | G4 T1 검정 바탕·금액·판단 기록 반응형. QA 버튼은 기존 표시 유지, 대형 청록 푸터 숨김, 차트 바탕 검정. |
 | `assets/` | 로고, 소형 로고, 파비콘 PNG 원본을 보관한다. |
 | `.nojekyll` | GitHub Pages에서 Jekyll 처리를 비활성화한다. |
 | `.mailbox/mail.ps1` | claude·codex·agy 세션 간 우체통 구현. UTF-8 BOM으로 저장해야 한다. |
@@ -195,51 +192,3 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 작업은 코드만 동작한다고 끝난 것이 아니다. 구현, 사용자 문구, 공용 설정, 정책 문구, 링크, 이 기준 문서가 서로 일치하고, 대체된 레거시 문서와 그 참조가 제거되며, 수행한 검증과 수행하지 못한 검증이 최종 보고에 명확히 기록되어야 완료다.
 
 여기에 더해 자신의 인박스에 처리하지 않은 메시지가 없어야 하고, 선점한 `claim`은 `release`로 해제되어 있어야 하며, 다른 세션이 이어받아야 할 미검증 항목은 `handoff`로 전달되어 있어야 한다.
-
-## 이 worktree의 G4 T1 실행 및 검증 범위
-
-사용자 지정 포트는 8812이며 `python3 -m http.server 8812 --bind 127.0.0.1`로 이 폴더를 제공한다. 시작 주소는 `http://127.0.0.1:8812/#/trade`. 코드 작성자는 teth:1.2, 실제 브라우저 촬영은 teth:1.1이 담당한다. 4단계 한국어 카피는 G4/T1/copy/table-v4.md, 배치와 행동은 decision.md 및 astra/astra-decision.md, 숫자·상태 충돌은 PO decision-1.md/N1을 우선한다. G4 신규 본문은 `lang="ko"`로 지정한 한국어 통합본이며 7개 언어 번역은 이번 산출물에 포함되지 않는다.
-
-실행 코드의 새 진입값은 표의 수치를 하드코딩하지 않고 기존 btCompute(1000, 전체/365일)와 cpCalc를 사용한다. 기존 index.html CRLF를 유지하므로 차이 공백 검사는 `git -c core.whitespace=cr-at-eol diff --check`로 수행한다. 전체 흐름/화면 판정은 G4/T1/build/film/의 대리 촬영 결과와 수정판 재촬영이 있어야 한다. 코드 검사만으로 화면 통과를 선언하지 않는다.
-
-G4 T1 PO 13:37 보탬: 맡긴 사람의 주 단추는 수익·손실 모두 「예산 조정」이며 기존 cpAdjDlg를 연다. 확정 후 같은 메인의 원장 금액을 갱신한다. 「차트 보기」·「복사 중단」은 밑줄 보조 액션이고 중단은 기존 선택창을 연다. 파운더 결정에 따라 QA 단추와 패널의 숨김을 되돌렸다. N1 숫자가 문구표보다 우선한다.
-
-G4 T1 v3: 복사 게이트는 authOpen 후 tfIntentSet 순서를 따른다. 가입 후 미연결이면 같은 전략의 예산 입력창을 열고 $1,000을 기본으로 채우고 사용자가 바꾼 값과 명시적으로 지운 빈 값도 보존한다. 연결 완료 후 기존 금액 시트로 복원한다. 차트 라우트는 window.TF_PREVIEW와 #/trade/chart 주소를 유지한다. 모바일 메인 스크롤은 고정 바 60px 아래부터 시작한다. cap-slot 런타임/DOM 검사는 G4/T1/sketch/codex/checks/v3-runtime.mjs, 촬영 담당은 계속 1.1이다.
-
-
-### G4 T1 4단계 통합 (2026-11-11)
-
-채택 시안 S1 안2, S2 안2, S3 안2 카드와 안3 알약, S4 안2를 구현한다. `g4-t1-data.js`는 N1 결과, 거래소별 얼굴 전략, 활성 복사, 현재 포지션, 두 곡선과 인계를 계산한다. `g4-t1.js`는 네 상태와 S4 시트를 그리며 `g4-t1.css`는 T1 스타일과 움직임을 담당한다. main/assets/logos의 Bitget/Binance/OKX PNG와 체크섬이 같은 원본을 그대로 사용한다.
-
-곡선은 첫 방문/연결/S4에서 btCompute.eq/bench ×1000, 맡긴 상태에서 cpCalc.at(i).value와 동일 원장·동일 종목 집합의 보유값이다. 모든 봉과 마지막 점을 보존한다. 수익률/잔액을 하드코딩하지 않는다. 다중 합계와 선택 전략을 구분하며 선택한 copyId가 기록·조정·중단·차트 종목을 결정한다. 모바일 주 단추는 단일 DOM을 고정한다. 수치 카운트업 없이 첫 등장만, 상태 막대는 명도만 움직이며 reduced-motion에서는 정지한다.
-
-| 감싼 함수 | 범위/목적 |
-|---|---|
-| tfNFRoute, tfDashView, tfIntroView, tfTradeInactiveView | T1 메인·목록·중첩 차트 라우트 |
-| tfShareHub, mkCard/tfSS3Card | T2 진입 경로와 N1 카드 |
-| tfSS3DetailRender | T3 N1 머리글과 T1 복귀; I9 기존 30일 숫자는 유지 |
-| mkPolite | 앱 문장 고침 층/종목 티커와 기존 어미 오류 수정 |
-| gContent | T1 body 클래스 제거 |
-| cpSetupGo, mkFollowSheet, cpFormSync | 가입/금액/기존 복사 시트 인계와 금액 유지 |
-| tfIntentRun, acAfter, authSyncUI | 가입/연결 후 같은 전략 복귀; 비동기 메인 갱신은 열린 시트를 덮지 않음 |
-| cpAdjCommit | 조정 후 메인 원장 갱신 |
-| mktStratSym | T1 차트에서만 선택한 복사 종목 우선; 다른 경로는 기존 함수 |
-
-index head의 검정 가림막은 본문 준비 시 제거하고, 모듈 실패 시 2.5초 뒤 기존 라우터로 복구한다. T1 바닥 워터마크 숨김은 body.g4-main으로 한정한다. 차트 배경 검정은 기존 v3 전역 수정 범위를 유지한다.
-
-재현 검사: `/root/teth-org/bin/cap-slot node /root/teth-org/sprint/G4/T1/integrate/checks/runtime.mjs` 및 `edges.mjs`. 흐름 계약과 촬영 인계는 G4/T1/integrate/flow.md, README.md. 이 검사는 숫자/DOM/클릭 검사이며 필름 검수 통과가 아니다. 실제 외부 거래소 승인·결제는 실행하지 않는다. 1.1 필름과 /attract 검수 넷이 남는다.
-
-
-### G4 T1 K 수정 (review4-decision.md 및 S8)
-
-새 복사의 `simStartI`, 첫 원장 입금 봉, `startAfterI`는 현재 봉이다. `cpCalc`는 `startAfterI` 뒤의 첫 진입부터 초기 입금을 투자한다. 첫 체결 전에는 원장 자산과 투입금만 보이고 손익·곡선은 숨긴다. 시트의 새 복사 시작 선택은 「다음 진입부터」 하나다. `startAfterI`가 없는 기존 여러 날 QA 원장의 계산은 그대로다. 날짜 세대 이동 시 `startAfterI`도 함께 이동한다. 복사별 `exchangeId`를 저장해 차트 시세 출처와 운용 거래소를 구별한다.
-
-메인의 원본 전략 수익률 비교는 제거하고 예산 조정 창 한 줄만 남긴다. 남는 곡선 둘은 cpCalc의 내 자산과 동일 입출금 원장의 그냥 들고 있기다. 첫 방문의 범례에는 금액을 반복하지 않는다. 판단 기록은 메인과 차트 모두 MM/DD HH:mm, 긴 성과 기간은 연도 포함 YYYY/MM/DD이며 초는 빼고 다음 판단 문장은 v4 문구를 따른다.
-
-T1 알림은 상단 1줄, pointer-events:none, 2초 뒤 DOM 제거다. 선택한 복사 id는 sessionStorage에 남긴다. 390 QA는 하단 행동 영역 위쪽의 전용 빈 공간에 두고 메뉴·모달이 열리면 고정 주 단추를 숨긴다. 1440 다중 전략 합계와 선택 알약은 한 줄이다. 조정·중단 창은 52px 흰 알약과 밑줄 취소, 숫자 400을 사용한다. 중단 선택지는 먼저 선택하고 「복사 중단 확정」에서 기존 정산 함수를 호출한다.
-
-금액 입력은 쉼표를 표시하지만 원장·인계에는 쉼표를 제거한 Number 값을 쓴다. 연결 완료 시 초과 예산만 가용 금액으로 맞추며 빈 입력은 유지한다. 가입 고정 문구는 「영원히 무료, 카드 등록 필요없음」이다. 새 복사 완료 뒤 브라우저 뒤로의 복귀점은 #/trade 요약이다.
-
-추가 감싼 함수: mkChatMsgs/tbFeed(정본 문장·분 단위 시각), tbCopyBlock(첫 체결 전 대기), cpAdjRender/cpAdjSync(문구·쉼표), mkStopDlg(선택 후 확정), toast(T1 알림). `index.html` 변경은 cpCalc/cpStart 원장, 쉼표 파싱, 거래소 표기, 가입 문구에 한정한다.
-
-수정판 재현: `/root/teth-org/bin/cap-slot node /root/teth-org/sprint/G4/T1/k-fix/checks/runtime.mjs` 및 `edges.mjs`. 실행 기록과 K별 촬영 인계는 G4/T1/k-fix/README.md. 이 검사는 브라우저 DOM·클릭·계산 검사이며 시각 검수 통과가 아니다. 촬영은 1.1, 최종 판정은 PO; 재촬영과 /attract 재검수 전 머지하지 않는다.
