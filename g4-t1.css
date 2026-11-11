@@ -181,3 +181,67 @@ body.g4-main #tf-devbtn{top:auto!important;right:16px!important;bottom:132px!imp
 }
 
 @media(max-width:860px){body.g4-main #tf-devbtn{bottom:114px!important;left:16px!important;right:auto!important}body.g4-main #qa2-panel{top:auto!important;bottom:156px!important;max-height:60vh!important}}
+
+/* Review4 K1-K12: keep the approved cards, remove collisions and competing copy. */
+#g4-notice{position:fixed;z-index:10050;top:68px;left:50%;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:10px 16px;border-radius:999px;background:#303030;color:#ececec;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;pointer-events:none}
+body.g4-main #toast:not(.show){visibility:hidden!important;pointer-events:none!important}
+.g4-budget-adjusted{font-size:14px;color:#cdcdcd;margin:10px 0}
+.g4-manage-dialog .ss3-dlg{border:0;border-radius:26px;background:#303030;width:560px}
+.g4-manage-dialog .din{background:#303030;padding:28px;border-radius:26px}
+.g4-manage-dialog .dh2 b{font-weight:400;font-size:24px}
+.g4-manage-dialog .num,.g4-manage-dialog b{font-weight:400!important}
+.g4-manage-dialog .cpa-pnl{background:transparent;padding:0;margin:0 0 18px;font-size:14px;color:#cdcdcd}
+.g4-manage-dialog .cpa-tgl{gap:8px;margin-bottom:16px}
+.g4-manage-dialog .cpa-tgl button{border:1px solid rgba(255,255,255,.2);border-radius:999px;background:transparent;color:#cdcdcd;font-weight:400;min-height:40px}
+.g4-manage-dialog .cpa-tgl button.on{border:2px solid #9a9a9a;background:transparent;color:#fff}
+.g4-manage-dialog .cps-in{border:1px solid rgba(255,255,255,.15);border-radius:19px;background:#212121}
+.g4-manage-dialog input[type=number]{appearance:textfield;font-weight:400}
+.g4-manage-dialog input::-webkit-inner-spin-button,.g4-manage-dialog input::-webkit-outer-spin-button{appearance:none;margin:0}
+.g4-manage-dialog .acts3{display:flex;gap:20px;align-items:center}
+.g4-manage-dialog .acts3 .wbtn{border:0;border-radius:999px;min-height:50px;background:#fff;color:#000;font-weight:400}
+.g4-manage-dialog .acts3 .wbtn:disabled{opacity:.4;cursor:default}
+.g4-manage-dialog .acts3 .obtn{background:none;border:0;border-radius:0;color:#cdcdcd;text-decoration:underline;text-underline-offset:4px;font-weight:400;flex:0 0 auto;min-width:0;padding:12px 4px}
+.g4-manage-dialog .mk-stop-o{border:1px solid rgba(255,255,255,.2);border-radius:24px;background:transparent;color:#ececec;padding:16px 20px}
+.g4-manage-dialog .mk-stop-o:first-child{background:#fff;color:#000;border-radius:26px}
+.g4-manage-dialog .mk-stop-o:first-child span{color:#333}
+.g4-manage-dialog .mk-stop-o b{font-size:16px}.g4-manage-dialog .mk-stop-o span{font-size:14px}
+@media(min-width:861px){
+ .g4-owned .g4-money{padding:20px 28px}
+ .g4-owned .g4-strategy{margin-bottom:14px}
+ .g4-owned .g4-curve{margin-top:14px}
+ .g4-owned .g4-curve svg{height:142px}
+ .g4-owned .g4-now{padding-top:12px;margin-top:12px}
+ .g4-owned .g4-actions{margin-top:16px}
+ .g4-multiple .g4-portfolio{display:grid;grid-template-columns:auto 1fr;column-gap:24px;align-items:center;margin-bottom:16px}
+ .g4-multiple .g4-portfolio>span{grid-column:1;grid-row:1;font-size:14px}
+ .g4-multiple .g4-portfolio>div:first-of-type{grid-column:1;grid-row:2}
+ .g4-multiple .g4-portfolio>div>strong{font-size:30px}
+ .g4-multiple .g4-pills{grid-column:2;grid-row:1/3;margin:0}
+ .g4-multiple .g4-pills button{padding:8px 16px}.g4-multiple .g4-pills button[aria-pressed=true]{padding:7px 15px}
+ .g4-multiple .g4-pills strong{font-size:22px}
+ .g4-multiple .g4-usp{margin-bottom:12px}
+}
+@media(max-width:860px){
+ .g4-actions{padding-top:48px}
+ body.g4-main #tf-devbtn{left:auto!important;right:16px!important;bottom:100px!important}
+ body.g4-main:has(#g-side.mobile-open) .g4-actions,body.g4-main:has(.ss3-dlgw) .g4-actions{visibility:hidden;pointer-events:none}
+ body.g4-main:has(#g-side.mobile-open) #tf-devbtn{right:16px!important}
+ .g4-trade{padding-bottom:190px}
+ .g4-manage-dialog.ss3-dlgw{padding:0;align-items:flex-end}
+ .g4-manage-dialog .ss3-dlg{width:100%;max-width:100%;border-radius:26px 26px 0 0}
+ .g4-manage-dialog .din{border-radius:26px 26px 0 0;padding:24px 22px;max-height:calc(100dvh - 60px)}
+}
+.g4-manage-dialog .acts3 .wbtn{height:52px;flex:1}
+.g4-manage-dialog .mk-stop-o:first-child{background:transparent;color:#ececec}
+.g4-manage-dialog .mk-stop-o:first-child span{color:#cdcdcd}
+.g4-manage-dialog .mk-stop-o[aria-pressed=true]{border:2px solid #9a9a9a;padding:15px 19px}
+.g4-manage-dialog .cpa-tgl button.on{background:#212121}
+.g4-manage-dialog .acts3:has(#g4-stop-confirm){flex-direction:column}
+.g4-manage-dialog #g4-stop-confirm{width:100%;flex:none}
+.g4-manage-dialog .g4-stop-amounts{font-size:16px;font-weight:400;color:#ececec;line-height:1.6}
+
+/* PO final polish: one input outline, one waiting sentence. */
+.g4-budget-dialog .g4-budget-input input[type=text],.g4-manage-dialog .cps-in input[type=text],#mk-follow .skc-in input[type=text]{border:0;outline:0;background:transparent;box-shadow:none;border-radius:0;padding:0}
+.g4-budget-input:focus-within{outline:0;border-color:#fff}
+.g4-waiting{font-size:14px;gap:6px;white-space:nowrap}
+.g4-now:has(.g4-waiting)>.g4-next{margin-left:0;flex-basis:100%}
