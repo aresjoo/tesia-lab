@@ -1,24 +1,30 @@
-/* G4/T2 스케치(claude): 돈 순서 목록. 색과 형태는 DESIGN_PROMPT.md(검정 바탕, 윤곽 카드, 숫자 400, 회색 알약 36px). 청록 없음 */
+/* G4/T2 전략 복사 목록(claude 뼈대, 4단계 통합). 시안 S1 S2 S3 안1(sprint/G4/T2/astra/astra-decision.md), DESIGN_PROMPT.md(검정 바탕, 윤곽 카드, 숫자 400, 주 단추 흰 알약). 청록 없음 */
 body.g4-list .gft-wm{display:none!important}
 body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
 .ss3 .g4-back{margin:0 0 8px}
 .g4l-h1{margin:0 0 16px;font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
 .mk-card.skf.g4l{gap:12px}
 .mk-card.skf.g4l .skf-top{margin-bottom:0}
+.mk-card.skf.g4l.g4l-back{border-color:#fff;box-shadow:0 0 0 1px #fff}
 .g4l-perf .skf-ret small{font-size:14px;color:#9a9a9a}
+.g4l-amtrow{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
 .g4l-perf .skf-ret b{font-size:32px;line-height:1.15;color:#fff}
-.g4l-perf svg{height:48px}
+.g4l-pct{font-size:17px;font-weight:400;line-height:1}
+.g4l-pct.up{color:#2ebd85}
+.g4l-pct.dn{color:#f0566a}
+#g-root .mk-card.g4l .g4l-spark,.mk-card.g4l .g4l-spark{flex:none;width:100%;height:48px;max-width:none;min-width:0;margin:0;opacity:1}
 .g4l-info{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"sub sub min" "now fw go";align-items:center;column-gap:16px;row-gap:12px}
 .g4l-sub{grid-area:sub;margin:0;font-size:14px;line-height:1.45;color:#cdcdcd}
 .g4l-min{grid-area:min;font-size:14px;color:#afafaf;white-space:nowrap}
 .g4l-now{grid-area:now;font-size:14px;line-height:1.45;color:#ececec}
 .g4l-fw{grid-area:fw;min-width:0}
-.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:999px;background:#2f2f2f;color:#ececec;font-size:14px;white-space:nowrap}
-.mk-card.skf.g4l:hover .g4l-go{background:#3a3a3a;color:#fff}
+.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:36px;padding:0 18px;border-radius:999px;background:#fff;color:#000;font-size:14px;font-weight:600;white-space:nowrap}
+.mk-card.skf.g4l:hover .g4l-go{background:#e6e6e6}
 .g4l-morew{display:flex;justify-content:center;margin:28px 0 0}
 .g4l-more{height:44px;padding:0 22px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font:inherit;font-size:15px;cursor:pointer}
 .g4l-more:hover{background:#3a3a3a;color:#fff}
 .g4l-more:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.g4l-end{margin:28px 0 0;text-align:center;font-size:15px;color:#cdcdcd}
 .g4l-enter .mk-spark{animation:g4l-draw .6s cubic-bezier(.2,.75,.2,1) both}
 @keyframes g4l-draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @media (prefers-reduced-motion:reduce){.g4l-enter .mk-spark{animation:none}}
@@ -28,6 +34,10 @@ body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
 @media (max-width:760px){
   .g4l-h1{font-size:28px;margin-bottom:16px}
   .g4l-perf .skf-ret b{font-size:28px}
+  .g4l-pct{font-size:14px}
+  .g4l-amtrow{gap:6px}
+  .g4l-perf{gap:12px}
+  #g-root .mk-card.g4l .g4l-spark,.mk-card.g4l .g4l-spark{height:52px}
   .ss3 #ss3-q::placeholder{color:transparent}
   .mk .mk3-bar .mk3-flt .ss3-search:focus-within,.mk .mk3-bar .mk3-flt .ss3-search:has(input:not(:placeholder-shown)){flex:1 0 100%;order:9}
   .ss3 .ss3-search:focus-within #ss3-q::placeholder{color:#848a94}
