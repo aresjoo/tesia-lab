@@ -18,10 +18,14 @@
   var HELP = '<p class="cq-help mk-help">막히면 상담원이 24시간 답합니다. <button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>';
 
   function base() { return location.pathname + location.search; }
-  /* K1: 저장된 로그인이 없으면 복원할 것이 없으니 곧장 그린다. 있으면 복원(또는 부팅 0.9초) 뒤 */
+  /* K1·K12: 저장된 로그인이 없으면 복원할 것이 없으니 곧장 그린다. 있으면 복원이 끝난 뒤(TF_STATE_READY)에만.
+     부팅 0.9초 타이머(TF_BOOTED)는 복원과 무관하게 켜지므로 세지 않는다(복원 전 전체 목록을 그렸다가 내 거래소 목록으로 바꾸던 것).
+     복원 부팅을 안 쓰는 화면(?ui=classic)이나 9초가 지나도 복원이 안 끝나면 그때 그린다 */
+  var forced = false;
   function saved() { try { var p = JSON.parse(localStorage.getItem('teth.state') || 'null'); return !!(p && p.v && p.user); } catch (_) { return false; } }
-  function ready() { return !!(window.TF_STATE_READY || window.TF_BOOTED || !saved()); }
-  function sigNow() { var c = []; try { c = tfMyExConn(); } catch (_) {} return location.hash + '|' + (S.user ? S.user.email || 1 : 0) + '|' + c.join(',') + '|' + (c.length ? tfMyExGet() : ''); }
+  function ready() { return !!(forced || window.TF_STATE_READY || !saved() || (window.TF_BOOTED && !window.ANTIGRAVITY_RESEARCH_UI)); }
+  function hold(on) { document.documentElement.classList.toggle('g4l-wait', !!on); }
+  function sigNow() { var c = []; try { c = tfMyExConn(); } catch (_) {} return location.hash + '|' + (S.user ? S.user.email || 1 : 0) + '|' + c.join(',') + '|' + (c.length ? tfMyExGet() : '') + '|' + ((window.GLC && GLC.lang) || 'ko'); }
   function onList() { var h = location.hash; return h === LIST || h.indexOf(LIST + '?') === 0; }
   function ssGet(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (_) { return null; } }
   function ssSet(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
@@ -151,7 +155,7 @@
     var st = history.state;
     try { replace(LIST); t1Hub('find'); } finally { keepOpen = false; backId = null; }
     try { history.replaceState(st, '', base() + url()); } catch (_) {} /* T1 showList 가 비운 기록 상태를 되돌린다 */
-    document.body.classList.add('g4-list');
+    document.body.classList.add('g4-list'); hold(false);
     document.body.classList.remove('has-banner'); /* K4: 다운로드 띠는 홈에만. 0.3초 감시를 기다리지 않고 첫 프레임부터 뺀다 */
     drawn = sigNow();
     var page = document.querySelector('#g-content .ss3'), back = page && page.querySelector('.g4-back');
@@ -190,7 +194,7 @@
     if (h === LIST || h.indexOf(LIST + '?') === 0) {
       /* K1: 확정 목록을 한 번만 그린다. 저장된 로그인이 있으면 복원 뒤에 그리고(복원 전 임시 목록 없음),
          부팅 재라우팅이 같은 상태로 다시 부르면 그리지 않는다(세던 숫자를 끝 값으로 덮지 않게) */
-      if (!ready()) return true;
+      if (!ready()) { hold(true); return true; }
       if (G.mode === 'tfss3' && drawn === sigNow() && document.querySelector('#ss3-grid .g4l-grid, #ss3-grid .myex-empty, #ss3-grid .ss3-empty')) return true;
       var pm = G.mode, pos = ssGet(POS), back = pm === 'tfss3d' && pos && pos.url === h;
       var reload = reloadY != null && reloadY.url === h;
@@ -292,5 +296,18 @@
       return tx('linkMy', { ex: tfMyExNames(ids), n: n });
     }
   };
-  if (onList() && ready()) tfRoute();
+  /* K13: 언어를 바꾸면 AI 트레이딩의 둘러보기 링크는 그 자리에서, 목록은 조건·펼친 수·스크롤을 지킨 채 다시 그린다 */
+  var gl0 = window.glcSetLang;
+  if (typeof gl0 === 'function') glcSetLang = function () {
+    var r = gl0.apply(this, arguments);
+    try {
+      var a = document.querySelector('#g-content .g4-links a'); if (a && G.mode === 'nfmain') a.textContent = G4T2.linkText();
+      if (onList() && G.mode === 'tfss3' && ready()) draw({ keep: true, restore: { y: getY() } });
+    } catch (_) {}
+    return r;
+  };
+  if (onList()) {
+    if (ready()) tfRoute();
+    else { hold(true); setTimeout(function () { if (!document.documentElement.classList.contains('g4l-wait')) return; forced = true; tfRoute(); }, 9000); }
+  }
 })();
