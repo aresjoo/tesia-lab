@@ -29,8 +29,18 @@
       .filter(function (row) { return row.s && !row.d.missing; });
   }
   function exchange(s) { return mkEx(s)[0].replace(/^app-/, ''); }
+  function copyExchange(c) {
+    if (c.exchangeId) return c.exchangeId;
+    var s = tfSSFind(c.nick), ex = s && exchange(s), connected = linked();
+    return connected.indexOf(ex) >= 0 ? ex : connected.length === 1 ? connected[0] : ex || '';
+  }
+  function hasFill(row) {
+    var eq = row.s.r.eq, last = eq[eq.length - 1].i;
+    return (row.d.lots || []).some(function (lot) { return lot.inv != null && lot.inv <= last; });
+  }
   function linked() { return S.user ? acConnList().filter(function (id) { return acReady(id); }) : []; }
   function pos(s, row) {
+    if (row && !hasFill(row)) return '다음 진입을 기다리는 중';
     if (row && !row.d.posOpen) return row.d.waiting > 0.005 ? '원본 전략이 다음에 진입하면 예산 ' + cpUsd(row.d.waiting, 0) + '을 반영합니다.' : '현재 보유 종목이 없습니다.';
     var L = held(s);
     if (!L.length) return '진입 조건을 기다리고 있습니다.';
@@ -70,5 +80,5 @@
     try { sessionStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
     return value;
   }
-  window.G4T1Data = { results: results, held: held, face: face, mine: mine, exchange: exchange, linked: linked, pos: pos, curve: curve, handoff: read, save: save };
+  window.G4T1Data = { results: results, held: held, face: face, mine: mine, exchange: exchange, copyExchange: copyExchange, hasFill: hasFill, linked: linked, pos: pos, curve: curve, handoff: read, save: save };
 })();

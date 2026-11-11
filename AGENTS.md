@@ -198,9 +198,9 @@ TETH는 AI 트레이딩 에이전트의 제품 경험을 보여 주는 정적 �
 
 ## 이 worktree의 G4 T1 실행 및 검증 범위
 
-사용자 지정 포트는 8812이며 `python3 -m http.server 8812 --bind 127.0.0.1`로 이 폴더를 제공한다. 시작 주소는 `http://127.0.0.1:8812/#/trade`. 코드 작성자는 teth:1.2, 실제 브라우저 촬영은 teth:1.1이 담당한다. 4단계 한국어 카피는 G4/T1/copy/table-v3.md, 배치와 행동은 decision.md 및 astra/astra-decision.md, 숫자·상태 충돌은 PO decision-1.md/N1을 우선한다. G4 신규 본문은 `lang="ko"`로 지정한 한국어 통합본이며 7개 언어 번역은 이번 산출물에 포함되지 않는다.
+사용자 지정 포트는 8812이며 `python3 -m http.server 8812 --bind 127.0.0.1`로 이 폴더를 제공한다. 시작 주소는 `http://127.0.0.1:8812/#/trade`. 코드 작성자는 teth:1.2, 실제 브라우저 촬영은 teth:1.1이 담당한다. 4단계 한국어 카피는 G4/T1/copy/table-v4.md, 배치와 행동은 decision.md 및 astra/astra-decision.md, 숫자·상태 충돌은 PO decision-1.md/N1을 우선한다. G4 신규 본문은 `lang="ko"`로 지정한 한국어 통합본이며 7개 언어 번역은 이번 산출물에 포함되지 않는다.
 
-실행 코드의 새 진입값은 표의 수치를 하드코딩하지 않고 기존 btCompute(1000, 전체/365일)와 cpCalc를 사용한다. 기존 index.html CRLF를 유지하므로 차이 공백 검사는 `git -c core.whitespace=cr-at-eol diff --check`로 수행한다. 전체 흐름/화면 판정은 G4/T1/sketch/codex/README.md의 대리 촬영 결과가 있어야 한다. 코드 검사만으로 화면 통과를 선언하지 않는다.
+실행 코드의 새 진입값은 표의 수치를 하드코딩하지 않고 기존 btCompute(1000, 전체/365일)와 cpCalc를 사용한다. 기존 index.html CRLF를 유지하므로 차이 공백 검사는 `git -c core.whitespace=cr-at-eol diff --check`로 수행한다. 전체 흐름/화면 판정은 G4/T1/build/film/의 대리 촬영 결과와 수정판 재촬영이 있어야 한다. 코드 검사만으로 화면 통과를 선언하지 않는다.
 
 G4 T1 PO 13:37 보탬: 맡긴 사람의 주 단추는 수익·손실 모두 「예산 조정」이며 기존 cpAdjDlg를 연다. 확정 후 같은 메인의 원장 금액을 갱신한다. 「차트 보기」·「복사 중단」은 밑줄 보조 액션이고 중단은 기존 선택창을 연다. 파운더 결정에 따라 QA 단추와 패널의 숨김을 되돌렸다. N1 숫자가 문구표보다 우선한다.
 
@@ -228,3 +228,18 @@ G4 T1 v3: 복사 게이트는 authOpen 후 tfIntentSet 순서를 따른다. 가�
 index head의 검정 가림막은 본문 준비 시 제거하고, 모듈 실패 시 2.5초 뒤 기존 라우터로 복구한다. T1 바닥 워터마크 숨김은 body.g4-main으로 한정한다. 차트 배경 검정은 기존 v3 전역 수정 범위를 유지한다.
 
 재현 검사: `/root/teth-org/bin/cap-slot node /root/teth-org/sprint/G4/T1/integrate/checks/runtime.mjs` 및 `edges.mjs`. 흐름 계약과 촬영 인계는 G4/T1/integrate/flow.md, README.md. 이 검사는 숫자/DOM/클릭 검사이며 필름 검수 통과가 아니다. 실제 외부 거래소 승인·결제는 실행하지 않는다. 1.1 필름과 /attract 검수 넷이 남는다.
+
+
+### G4 T1 K 수정 (review4-decision.md 및 S8)
+
+새 복사의 `simStartI`, 첫 원장 입금 봉, `startAfterI`는 현재 봉이다. `cpCalc`는 `startAfterI` 뒤의 첫 진입부터 초기 입금을 투자한다. 첫 체결 전에는 원장 자산과 투입금만 보이고 손익·곡선은 숨긴다. 시트의 새 복사 시작 선택은 「다음 진입부터」 하나다. `startAfterI`가 없는 기존 여러 날 QA 원장의 계산은 그대로다. 날짜 세대 이동 시 `startAfterI`도 함께 이동한다. 복사별 `exchangeId`를 저장해 차트 시세 출처와 운용 거래소를 구별한다.
+
+메인의 원본 전략 수익률 비교는 제거하고 예산 조정 창 한 줄만 남긴다. 남는 곡선 둘은 cpCalc의 내 자산과 동일 입출금 원장의 그냥 들고 있기다. 첫 방문의 범례에는 금액을 반복하지 않는다. 판단 기록은 메인과 차트 모두 MM/DD HH:mm, 긴 성과 기간은 연도 포함 YYYY/MM/DD이며 초는 빼고 다음 판단 문장은 v4 문구를 따른다.
+
+T1 알림은 상단 1줄, pointer-events:none, 2초 뒤 DOM 제거다. 선택한 복사 id는 sessionStorage에 남긴다. 390 QA는 하단 행동 영역 위쪽의 전용 빈 공간에 두고 메뉴·모달이 열리면 고정 주 단추를 숨긴다. 1440 다중 전략 합계와 선택 알약은 한 줄이다. 조정·중단 창은 52px 흰 알약과 밑줄 취소, 숫자 400을 사용한다. 중단 선택지는 먼저 선택하고 「복사 중단 확정」에서 기존 정산 함수를 호출한다.
+
+금액 입력은 쉼표를 표시하지만 원장·인계에는 쉼표를 제거한 Number 값을 쓴다. 연결 완료 시 초과 예산만 가용 금액으로 맞추며 빈 입력은 유지한다. 가입 고정 문구는 「영원히 무료, 카드 등록 필요없음」이다. 새 복사 완료 뒤 브라우저 뒤로의 복귀점은 #/trade 요약이다.
+
+추가 감싼 함수: mkChatMsgs/tbFeed(정본 문장·분 단위 시각), tbCopyBlock(첫 체결 전 대기), cpAdjRender/cpAdjSync(문구·쉼표), mkStopDlg(선택 후 확정), toast(T1 알림). `index.html` 변경은 cpCalc/cpStart 원장, 쉼표 파싱, 거래소 표기, 가입 문구에 한정한다.
+
+수정판 재현: `/root/teth-org/bin/cap-slot node /root/teth-org/sprint/G4/T1/k-fix/checks/runtime.mjs` 및 `edges.mjs`. 실행 기록과 K별 촬영 인계는 G4/T1/k-fix/README.md. 이 검사는 브라우저 DOM·클릭·계산 검사이며 시각 검수 통과가 아니다. 촬영은 1.1, 최종 판정은 PO; 재촬영과 /attract 재검수 전 머지하지 않는다.

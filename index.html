@@ -5026,7 +5026,7 @@ body.tm-helpon #teth-help-pop.on{display:block!important}
       </div>
       <div class="au-err" id="au-email-err">올바른 이메일 주소를 입력해 주십시오.</div>
       <button class="au-btn primary au-gap" onclick="authEmailNext()">계속</button>
-      <div class="au-free" id="au-free">영원히 무료, 카드 등록 없음</div>
+      <div class="au-free" id="au-free">영원히 무료, 카드 등록 필요없음</div>
     </div>
 
     <!-- step 3: 코드 확인 -->
@@ -14979,7 +14979,7 @@ function cpState(){
 }
 function cpFind(id){ return cpState().copies.find(function(x){ return x.id===id; })||null; }
 /* 파생 계산 단일 함수 — 서머리/카드/상세가 전부 이걸 쓴다 (수치 불일치 구조적 차단).
-   데모: 카피 시작을 시뮬레이션 30봉 전으로 간주 (실서버: 실시간 체결 스트림) */
+   새 복사는 현재 봉부터, 과거 운용 QA 원장은 저장된 시작 봉부터 재생 */
 function cpCalc(c2){
   var s2=tfSSFind(c2.nick), m=s2?cpMeta(c2.nick):null, led=c2.ledger||[];
   var inv=led.reduce(function(a,e){ return a+(e.type==='add'?e.amt:-e.amt); },0);
@@ -15015,6 +15015,7 @@ function cpCalc(c2){
     if((endBar!=null&&i>=endBar)||(stopI!=null&&i>stopI)) return null;
     /* 수동 정리 뒤 아직 원본이 새로 진입하지 않은 동안(현금 상태)의 입금은 다음 진입부터. 그 밖에는 판단 방식대로 */
     var inCash=mans.some(function(m){ if(m>i) return false; for(var k=0;k<entries.length;k++) if(entries[k]>m) return entries[k]>i; return true; });
+    if(c2.startAfterI!=null&&i<=c2.startAfterI){ for(var q=0;q<entries.length;q++) if(entries[q]>c2.startAfterI) return entries[q]; return null; }
     if(immediate&&!inCash) return i;
     for(var k=0;k<entries.length;k++) if(inCash?entries[k]>i:entries[k]>=i) return entries[k];
     return null;
@@ -15117,7 +15118,7 @@ function cpAdjRender(cid){
 function cpAdjSync(cid){
   var c2=cpFind(cid); if(!c2) return false;
   var cp=cpState(), d=cpCalc(c2), el=$('cpa-amt'), go=$('cpa-go'), err=$('cpa-err');
-  var v=parseFloat(el&&el.value), dir=TF_CPA.dir, msg='';
+  var v=Number(el&&el.value.replace(/,/g,'')), dir=TF_CPA.dir, msg='';
   if(el&&el.value!==''){
     if(!isFinite(v)||v<=0) msg='0보다 큰 금액을 입력해주십시오';
     else if(dir==='add'&&v>cp.spot) msg='사용 가능 금액보다 큽니다';
@@ -15131,7 +15132,7 @@ function cpAdjSync(cid){
 function cpAdjGo(cid){
   if(!cpAdjSync(cid)) return;
   var c2=cpFind(cid), cp=cpState(), d=cpCalc(c2), cfg=cpCfg();
-  var v=parseFloat($('cpa-amt').value), dir=TF_CPA.dir;
+  var v=Number($('cpa-amt').value.replace(/,/g,'')), dir=TF_CPA.dir;
   /* 보호 장치: 손실 -20% 이하에서 추가 입금은 확인 1단계 추가 (핵심 원칙 4) */
   if(dir==='add'&&d.myPct<=(cfg.LOSS_GUARD||-0.2)&&!TF_CPA.confirmed){
     TF_CPA.confirmed=false;
@@ -15389,7 +15390,7 @@ function cpSetupView(ne){ mkFollowSheet(ne); }
 function cpFormSync(){
   var el=$('cps-amt'), cta=$('cps-cta'), fld=$('cps-amt-fld'), err=$('cps-amt-err');
   if(!el) return true;
-  var cfg=cpCfg(), cp=cpState(), v=parseFloat(el.value), min=(window.TF_MKF&&TF_MKF.min)||cfg.MIN_COPY_USDT||50, msg='';
+  var cfg=cpCfg(), cp=cpState(), v=Number(el.value.replace(/,/g,'')), min=(window.TF_MKF&&TF_MKF.min)||cfg.MIN_COPY_USDT||50, msg='';
   if(el.value!==''&&(!isFinite(v)||v<min)) msg='최소 $'+min+'부터 시작할 수 있습니다';
   else if(isFinite(v)&&v>cp.spot) msg='사용 가능 금액보다 큽니다';
   if(fld) fld.classList.toggle('bad',!!msg);
@@ -15432,23 +15433,24 @@ function cpStart(ne){
     toast('이미 이 전략을 따라가고 있습니다. 복사한 전략 탭에서 관리할 수 있습니다');
     mkFollowClose(true); TF_ONSHARE=false; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} tfShareHub('follow'); return;
   }
-  var amt=parseFloat($('cps-amt').value);
+  var amt=Number($('cps-amt').value.replace(/,/g,''));
   var cp=cpState();
   var mainPair=CPP_PAIR[s2.asset]||s2.asset;
   var eqA=s2.r.eq||[];
   var c2={id:'cp'+Date.now(), nick:nick, mode:'ratio', amount:amt, pairs:(TF_CPS.pairs||[mainPair]).slice(),
     gen:{asof:MK_ASOF.slice(),len:PRICE0.length},
-    simStartI:eqA.length>31?eqA[eqA.length-31].i:null, /* 데모: 시작을 30봉 전으로 시뮬 (표기: 시뮬레이션) */
+    simStartI:eqA.length?eqA[eqA.length-1].i:null, startAfterI:eqA.length?eqA[eqA.length-1].i:null,
+    exchangeId:typeof G4T1Data!=='undefined'?G4T1Data.exchange(s2):mkEx(s2)[0].replace(/^app-/,''),
     adv:{marginMode:'follow',lev:'follow',slip:'sys',maxMarginPct:TF_MKF.cap||95,maxPosX:5,maxLoss:TF_MKF.loss||-20,existing:TF_MKF.existing||'skip'},
-    at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt,i:eqA.length>31?eqA[eqA.length-31].i:null}]}; /* 입출금은 append-only, 예산은 기존 스팟 배분 로직 그대로 */
+    at:Date.now(), status:'active', ledger:[{at:Date.now(),type:'add',amt:amt,i:eqA.length?eqA[eqA.length-1].i:null}]}; /* 입출금은 append-only, 예산은 기존 스팟 배분 로직 그대로 */
   cp.spot=Math.max(0,cp.spot-amt);
   cp.copies.push(c2);
   tfSaveNow();
   tfTrack('cp_start',{nick:nick,amt:amt,maxLoss:c2.adv.maxLoss});
   mkFollowClose(true);
-  toast(nick+' 전략 복사를 시작했습니다. '+(c2.adv.existing==='copy'?'지금 든 종목부터 바로 따라갑니다':'다음 진입부터 자동으로 따라갑니다'));
+  toast(nick+' 전략 복사를 시작했습니다.');
   TF_ONSHARE=false;
-  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  try{ history.replaceState({g4Summary:true},'',location.pathname+location.search+'#/trade'); history.pushState({g4Summary:true},'',location.pathname+location.search+'#/trade'); }catch(e){}
   tfShareHub('follow');
 }
 /* ── 상세: 딥링크 라우트 #/share/s/<ne>[/<pd>] ── */
@@ -21331,7 +21333,7 @@ function mkMigrate(){
       /* 데이터 세대가 바뀌면 저장된 봉 번호를 같은 날짜의 새 봉 번호로 옮긴다 */
       var g=c.gen, now={asof:MK_ASOF.slice(),len:PRICE0.length};
       if(!g){ g=c.gen={asof:MK_GEN0.asof.slice(),len:MK_GEN0.len}; ch=true; }
-      if(g.len!==now.len||g.asof.join('-')!==now.asof.join('-')){ var d0=new Date(g.asof[0],g.asof[1]-1,g.asof[2]), d1=new Date(now.asof[0],now.asof[1]-1,now.asof[2]), sh=(now.len-g.len)-Math.round((d1-d0)/86400000); ['simStartI','flatI','endI','stopI'].forEach(function(k){ if(c[k]!=null) c[k]=Math.max(0,Math.min(now.len-1,c[k]+sh)); }); if(c.flats) c.flats=c.flats.map(function(x){ return Math.max(0,Math.min(now.len-1,x+sh)); }); (c.ledger||[]).forEach(function(e){ if(e.i!=null) e.i=Math.max(0,Math.min(now.len-1,e.i+sh)); }); c.gen=now; ch=true; }
+      if(g.len!==now.len||g.asof.join('-')!==now.asof.join('-')){ var d0=new Date(g.asof[0],g.asof[1]-1,g.asof[2]), d1=new Date(now.asof[0],now.asof[1]-1,now.asof[2]), sh=(now.len-g.len)-Math.round((d1-d0)/86400000); ['simStartI','startAfterI','flatI','endI','stopI'].forEach(function(k){ if(c[k]!=null) c[k]=Math.max(0,Math.min(now.len-1,c[k]+sh)); }); if(c.flats) c.flats=c.flats.map(function(x){ return Math.max(0,Math.min(now.len-1,x+sh)); }); (c.ledger||[]).forEach(function(e){ if(e.i!=null) e.i=Math.max(0,Math.min(now.len-1,e.i+sh)); }); c.gen=now; ch=true; }
       /* 봉 번호가 없는 입출금(이전 형식)은 첫 건을 시작 봉, 나머지를 마지막 봉으로 본다 */
       (c.ledger||[]).forEach(function(e,ix){ if(e.i==null){ e.i=(ix===0&&c.simStartI!=null)?c.simStartI:now.len-1; ch=true; } }); });
     if(ch) tfSave(); }catch(e){}
@@ -24243,7 +24245,7 @@ function p16Late(){
   }
   /* 전략 시작 직전의 본인 확인 관문 */
   if(typeof btMineStart==='function'&&!btMineStart.kyc){ var bm0=btMineStart; btMineStart=function(m){ var args=arguments, self=this; if(m==='live'){ acRunGate(acS().ex||acConnList()[0],function(){ bm0.apply(self,args); }); return; } return bm0.apply(self,args); }; btMineStart.kyc=1; }
-  if(typeof cpStart==='function'&&!cpStart.kyc){ var cs0=cpStart; cpStart=function(ne){ var args=arguments, self=this, s=null; try{ s=tfSSFind(decodeURIComponent(ne)); }catch(e){} var ex=s&&s.ex&&acEx(s.ex)&&acS().conn[s.ex]?s.ex:(acConnList()[0]||null); acRunGate(ex,function(){ cs0.apply(self,args); }); }; cpStart.kyc=1; }
+  if(typeof cpStart==='function'&&!cpStart.kyc){ var cs0=cpStart; cpStart=function(ne){ var args=arguments, self=this, s=null; try{ s=tfSSFind(decodeURIComponent(ne)); }catch(e){} var ex=s&&typeof G4T1Data!=='undefined'?G4T1Data.exchange(s):(s&&s.ex&&acEx(s.ex)&&acS().conn[s.ex]?s.ex:(acConnList()[0]||null)); acRunGate(ex,function(){ cs0.apply(self,args); }); }; cpStart.kyc=1; }
   /* 팝업 메뉴는 예전 그대로 둔다. 설정 항목의 이동은 index.html 의 gmSetClick 이 맡는다 */
   GLC.cur='USD'; glcSetCur=function(){ GLC.cur='USD'; };
   try{ applyCurrency(); }catch(e){}
@@ -24596,7 +24598,7 @@ function skcLoss(v,btn){ TF_MKF.loss=v; var g=btn&&btn.parentNode; if(g) [].forE
 function skcEx(v,btn){ mkFollowExisting(v,btn); var h=$('skc-ex-h'); if(h) h.textContent=v==='copy'?'원본이 지금 가진 포지션을 현재 가격으로 바로 따라 삽니다.':'원본이 새로 진입할 때부터 따라갑니다.'; var g=btn&&btn.parentNode; if(g) [].forEach.call(g.children,function(b){ b.setAttribute('aria-checked',String(b===btn)); }); }
 function skcMore(){ var a=$('skc-adv'), b=$('skc-more-b'); if(!a) return; a.hidden=!a.hidden; if(b){ b.setAttribute('aria-expanded',String(!a.hidden)); b.textContent=a.hidden?'세부 설정':'세부 설정 접기'; } }
 /* 확인 행: 지금 고른 값을 항상 보인다 (바꾼 값도 그대로) */
-function skcSum(v){ var el=$('mk-f-sum'); if(!el) return; var L=Math.abs(TF_MKF.loss||20); if(v==null){ var raw=parseFloat(($('cps-amt')||{}).value); if(isFinite(raw)&&raw>0) v=raw; }
+function skcSum(v){ var el=$('mk-f-sum'); if(!el) return; var L=Math.abs(TF_MKF.loss||20); if(v==null){ var raw=Number(String(($('cps-amt')||{}).value||'').replace(/,/g,'')); if(isFinite(raw)&&raw>0) v=raw; }
   el.innerHTML=skcRow('복사 예산',v==null?'<em>미입력</em>':cpUsd(v,0))
     +skcRow('손실 중단 기준',v==null?L+'%':cpUsd(v*L/100,0)+' ('+L+'%)')
     +skcRow('시작 시점',TF_MKF.existing==='copy'?'현재 포지션부터':'다음 진입부터')
@@ -25540,8 +25542,8 @@ function tbText(){ try{ var b=document.querySelector('#g-content .tft-brain'); i
 /* 차트 탭 줄의 시세 출처 표시에도 운용 거래소 앱 아이콘 */
 mktRefNote=function(){ try{ var bar=document.querySelector('#g-content .tft-page .mkt-tabs'); if(!bar) return;
   var id=null, ex=null, s=TF_TM.sel?tfTmOf(TF_TM.sel):null;
-  if(s){ id=s.ex; ex=s.exL; } else { var c=cpState().copies.filter(function(x){ return x.status==='active'; })[0]; if(c){ id=(acConnList&&acConnList()[0])||'bitget'; ex=acName?acName(id):id; } }
-  var el=bar.querySelector('.mkt-ref'), key=id&&id!=='binance'?id+'|'+ex:'';
+  if(s){ id=s.ex; ex=s.exL; } else { var cs=cpState().copies.filter(function(x){ return x.status==='active'; }), c=cs[typeof TB_CP==='number'?TB_CP:0]; if(c){ id=typeof G4T1Data!=='undefined'?G4T1Data.copyExchange(c):(acConnList&&acConnList()[0])||'bitget'; ex=acName?acName(id):id; } }
+  var el=bar.querySelector('.mkt-ref'), key=id?id+'|'+ex:'';
   if(!key){ if(el) el.remove(); return; }
   if(el&&el.getAttribute('data-k')===key) return;
   if(!el){ el=document.createElement('span'); el.className='mkt-ref'; bar.appendChild(el); }
@@ -25581,7 +25583,7 @@ function tbTitle(s2){ var st=s2.r&&s2.r.state||{}, o=st.open, L=!o?[]:o.length!=
   if(s2.kind==='mix'&&st.pick) return mkTk(st.pick)+' 진입 신호를 기다리고 있습니다';
   return '현금으로 기다리고 있습니다'; }
 function tbCopyBlock(c2){ var s2=tfSSFind(c2.nick); if(!s2||!s2.r) return '';
-  var st=s2.r.state||{}, id=(acConnList&&acConnList()[0])||'bitget', ex=acName?acName(id):id;
+  var st=s2.r.state||{}, id=typeof G4T1Data!=='undefined'?G4T1Data.copyExchange(c2):(acConnList&&acConnList()[0])||'bitget', ex=acName?acName(id):id;
   var nx=st.nextEval!=null?'다음 판단 '+mkMD(st.nextEval):'다음 판단 다음 거래일 종가';
   var msgs=[]; try{ msgs=mkChatMsgs(s2,s2.r,6)||[]; }catch(e){}
   var now=null; try{ var nt=mkChatNow(s2,s2.r); if(nt) now={t:nt}; }catch(e){} if(!now) now=msgs.filter(function(m){ return m.k==='now'; })[0];
@@ -26378,7 +26380,7 @@ var I18N={
   'nav.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
   'nav.signup':{ko:'무료로 시작',en:'Start free',ja:'無料で始める','zh-CN':'免费开始','zh-TW':'免費開始',es:'Empieza gratis',fr:'Commencer gratuitement'},
   'chip.free':{ko:'카드 등록 없이 무료',en:'Free, no card needed',ja:'カード登録なしで無料','zh-CN':'免费，无需绑卡','zh-TW':'免費，無需綁卡',es:'Gratis, sin tarjeta',fr:'Gratuit, sans carte'},
-  'auth.free':{ko:'영원히 무료, 카드 등록 없음',en:'Free forever, no card needed',ja:'ずっと無料、カード登録不要','zh-CN':'永久免费，无需绑卡','zh-TW':'永久免費，無需綁卡',es:'Gratis para siempre, sin tarjeta',fr:'Gratuit pour toujours, sans carte'},
+  'auth.free':{ko:'영원히 무료, 카드 등록 필요없음',en:'Free forever, no card needed',ja:'ずっと無料、カード登録不要','zh-CN':'永久免费，无需绑卡','zh-TW':'永久免費，無需綁卡',es:'Gratis para siempre, sin tarjeta',fr:'Gratuit pour toujours, sans carte'},
   'side.new':{ko:'＋ 새 전략',en:'＋ New strategy',ja:'＋ 新しい戦略','zh-CN':'＋ 新策略','zh-TW':'＋ 新策略',es:'＋ Nueva estrategia',fr:'＋ Nouvelle stratégie'},
   'side.note':{ko:'시장을 이길 전략, |로그인|하고 바로 시작하십시오.',en:'|Log in| and start beating the market.',ja:'市場に勝つ戦略、|ログイン|して今すぐ始めましょう。','zh-CN':'战胜市场的策略，|登录|即刻开始。','zh-TW':'戰勝市場的策略，|登入|即刻開始。',es:'Estrategias para ganar al mercado, |inicia sesión| y empieza ya.',fr:'Des stratégies pour battre le marché, |connectez-vous| et commencez.'},
   'side.login':{ko:'로그인',en:'Log in',ja:'ログイン','zh-CN':'登录','zh-TW':'登入',es:'Iniciar sesión',fr:'Se connecter'},
