@@ -3,7 +3,9 @@ body.g4-list .gft-wm{display:none!important}
 body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
 .ss3 .g4-back{margin:0 0 8px}
 .g4l-h1{margin:0 0 16px;font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
-.mk-card.skf.g4l{gap:12px}
+.mk-card.skf.g4l{gap:12px;padding:16px 24px;-webkit-tap-highlight-color:transparent} /* K7: 단추 48 만큼 위아래 여백을 줄여 1440 셋째 줄 금액 자리 유지 */
+.mk-card.skf.g4l *{-webkit-tap-highlight-color:transparent} /* K2: 눌림 청록 바탕 없음 */
+.mk-card.skf.g4l:active{background:rgba(255,255,255,.04)}
 .mk-card.skf.g4l .skf-top{margin-bottom:0}
 .mk-card.skf.g4l.g4l-back{border-color:#fff;box-shadow:0 0 0 1px #fff}
 .g4l-perf .skf-ret small{font-size:14px;color:#9a9a9a}
@@ -18,20 +20,24 @@ body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
 .g4l-min{grid-area:min;font-size:14px;color:#afafaf;white-space:nowrap}
 .g4l-now{grid-area:now;font-size:14px;line-height:1.45;color:#ececec}
 .g4l-fw{grid-area:fw;min-width:0}
-.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:36px;padding:0 18px;border-radius:999px;background:#fff;color:#000;font-size:14px;font-weight:600;white-space:nowrap}
+.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:48px;padding:0 22px;border-radius:999px;background:#fff;color:#000;font-size:15px;font-weight:600;white-space:nowrap}
 .mk-card.skf.g4l:hover .g4l-go{background:#e6e6e6}
 .g4l-morew{display:flex;justify-content:center;margin:28px 0 0}
 .g4l-more{height:44px;padding:0 22px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font:inherit;font-size:15px;cursor:pointer}
 .g4l-more:hover{background:#3a3a3a;color:#fff}
 .g4l-more:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .g4l-end{margin:28px 0 0;text-align:center;font-size:15px;color:#cdcdcd}
-.g4l-enter .mk-spark{animation:g4l-draw .6s cubic-bezier(.2,.75,.2,1) both}
-@keyframes g4l-draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-@media (prefers-reduced-motion:reduce){.g4l-enter .mk-spark{animation:none}}
+/* K10: 빈 결과에서는 떠 있는 상담 단추 없이 아래 한 줄만 */
+body.g4-list.g4l-empty #teth-help,body.g4-list.g4l-empty #teth-help-pop{display:none!important}
 @media (max-width:1180px){
   .g4l-info{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sub sub" "now min" "fw go";row-gap:8px}
 }
+@media (max-width:860px){
+  /* K3: 스크롤로 메뉴 단추가 숨으면 그 차폐 바도 같이 사라져 로그인 알약이 카드 제목을 덮었다. 같은 바를 알약 층 뒤에 둔다 */
+  body.g4-list.ham-hide #g-auth-btns::before{content:'';position:fixed;top:0;left:0;right:0;height:60px;background:#000;z-index:-1;pointer-events:none}
+}
 @media (max-width:760px){
+  .mk-card.skf.g4l{padding:14px 18px}
   .g4l-h1{font-size:28px;margin-bottom:16px}
   .g4l-perf .skf-ret b{font-size:28px}
   .g4l-pct{font-size:14px}

@@ -4,11 +4,24 @@
   'use strict';
   var D = G4T1Data, LIST = '#/trade/strategies', PER = 10, POS = 'g4.t2.pos', FROM = 'g4.t2.from', LAST = 'g4.t2.last', COUNTED = 'g4.t2.counted';
   var t1Hub = tfShareHub, t1NF = tfNFRoute, t1Detail = tfSS3DetailRender, t1Card = mkCard, oldContent = gContent;
-  var expanded = false, sig = null, keepOpen = false, backId = null, reloadY = null;
+  var expanded = false, sig = null, keepOpen = false, backId = null, reloadY = null, drawn = null;
   var KIND = { agent: 1, rule: 1, mix: 1 }, MKT = { crypto: 1, stock: 1, index: 1, multi: 1 };
+  /* 문구 7개 언어(K5 링크, K9 빈 결과). 정본 sprint/G4/T2/copy/ (카피 주인 1.3 agy) */
+  var TX = {
+    linkMy: { ko: '{ex} 전략 {n}개 둘러보기 →', en: 'Explore {n} {ex} strategies →', ja: '{ex}の{n}戦略を見る →', 'zh-CN': '浏览 {n} 个 {ex} 策略 →', 'zh-TW': '瀏覽 {n} 個 {ex} 策略 →', es: 'Explorar {n} estrategias de {ex} →', fr: 'Découvrir {n} stratégies {ex} →' },
+    linkAll: { ko: '전체 {n}개 전략 둘러보기 →', en: 'Explore all {n} strategies →', ja: '全{n}の戦略を見る →', 'zh-CN': '浏览全部 {n} 个策略 →', 'zh-TW': '瀏覽全部 {n} 個策略 →', es: 'Explorar las {n} estrategias →', fr: 'Découvrir les {n} stratégies →' },
+    emptyMkt: { ko: '이 시장에는 없지만, 다른 시장에 {ex} 전략 {n}개가 있습니다.', en: 'None in this market, but {n} {ex} strategies are active in other markets.', ja: 'この市場にはありませんが、他の市場に{ex}戦略が{n}件あります。', 'zh-CN': '该市场暂无策略，但在其他市场有 {n} 个 {ex} 策略。', 'zh-TW': '此市場暫無策略，但在其他市場有 {n} 個 {ex} 策略。', es: 'No hay en este mercado, pero hay {n} estrategias de {ex} en otros mercados.', fr: "Aucune dans ce marché, mais {n} stratégies {ex} sont disponibles sur d'autres marchés." },
+    /* 시장이 아닌 조건(종류, 검색)으로 0개일 때. 확정본(table-v2-K)에 없는 경우라 1.3 확인 대기 */
+    emptyFlt: { ko: '{ex}에서 실행하는 전략 중 이 조건에 맞는 것은 없습니다.', en: 'No {ex} strategies match these filters.', ja: 'この条件に合う{ex}の戦略はありません。', 'zh-CN': '没有符合这些条件的 {ex} 策略。', 'zh-TW': '沒有符合這些條件的 {ex} 策略。', es: 'Ninguna estrategia de {ex} coincide con estos filtros.', fr: 'Aucune stratégie {ex} ne correspond à ces filtres.' }
+  };
+  function tx(k, v) { var e = TX[k] || {}, l = (window.GLC && GLC.lang) || 'ko', t = e[l] || e.ko || k; return t.replace(/\{(\w+)\}/g, function (_, n) { return v && v[n] != null ? v[n] : ''; }); }
   var HELP = '<p class="cq-help mk-help">막히면 상담원이 24시간 답합니다. <button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>';
 
   function base() { return location.pathname + location.search; }
+  /* K1: 저장된 로그인이 없으면 복원할 것이 없으니 곧장 그린다. 있으면 복원(또는 부팅 0.9초) 뒤 */
+  function saved() { try { var p = JSON.parse(localStorage.getItem('teth.state') || 'null'); return !!(p && p.v && p.user); } catch (_) { return false; } }
+  function ready() { return !!(window.TF_STATE_READY || window.TF_BOOTED || !saved()); }
+  function sigNow() { var c = []; try { c = tfMyExConn(); } catch (_) {} return location.hash + '|' + (S.user ? S.user.email || 1 : 0) + '|' + c.join(',') + '|' + (c.length ? tfMyExGet() : ''); }
   function onList() { var h = location.hash; return h === LIST || h.indexOf(LIST + '?') === 0; }
   function ssGet(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (_) { return null; } }
   function ssSet(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
@@ -17,6 +30,7 @@
   function setY(y) { var sc = $('g-scroll'); if (docScroll()) window.scrollTo(0, y); else if (sc) sc.scrollTop = y; }
   function real(s) { return !!(s && s.cfg && !s.me); }
   function fin(s, per) { return real(s) ? D.results(s, per || 0).final : -1e18; }
+  function win(s) { return fin(s) > 1000 ? 1 : 0; }
   function day(i) { var d = idxToDate(i); return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.'; }
   function pct(v) { var x = (v / 1000 - 1) * 100; return '(' + (x >= 0 ? '+' : '-') + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%)'; }
   /* 기록 상태(T1 의 창 표시 g4Overlay 등)를 지우지 않고 주소만 바꾼다 */
@@ -57,16 +71,17 @@
   }
 
   /* 걸러 내고 세운 줄. 기본 = 전체 기간 금액순 */
-  function rowsNow() {
-    var t = tfSSState(), rows = tfSSRows(), k = mkSortKey(t);
-    if (t.ss.asset && t.ss.asset !== 'all') rows = rows.filter(function (s) { return s.mkt === t.ss.asset; });
+  function rowsNow(asset) {
+    var t = tfSSState(), rows = tfSSRows(), k = mkSortKey(t), m = asset || t.ss.asset;
+    if (m && m !== 'all') rows = rows.filter(function (s) { return s.mkt === m; });
     if (t.ss.kind && t.ss.kind !== 'all') rows = rows.filter(function (s) { return (s.kind || 'rule') === t.ss.kind; });
     if (TF_SS_Q) {
       var q = TF_SS_Q.toLowerCase();
       rows = rows.filter(function (s) { return [s.nick, s.asset, mkTitle(s), s.one || '', s.by ? '@' + s.by : '', s.id || '', mkOldNames(s.id), MK_KIND[s.kind] || '', mkUni(s).list.join(' '), mkUni(s).list.map(mkTk).join(' '), mkTk(s.asset || '')].join(' ').toLowerCase().indexOf(q) >= 0; });
     }
     if (typeof tfMyExFilter === 'function') rows = tfMyExFilter(rows);
-    rows.sort(k === 'fw' ? function (a, b) { return (b.fw || 0) - (a.fw || 0) || fin(b) - fin(a); }
+    /* K6: 복사한 사람순 = [끝 값 > $1,000 먼저, 그다음 따라가는 사람 큰 순]. 숫자는 그대로 */
+    rows.sort(k === 'fw' ? function (a, b) { return win(b) - win(a) || (b.fw || 0) - (a.fw || 0) || fin(b) - fin(a); }
       : function (a, b) { return fin(b) - fin(a); });
     return rows;
   }
@@ -76,7 +91,7 @@
     if (!real(s)) return t1Card(s);
     var r = D.results(s, 0), ne = tfSS3Rid(s), ex = mkEx(s), money = Math.round(r.final), hold = Math.round(r.benchFinal), now = mkNowLine(s);
     return '<article class="mk-card skf g4l k-' + s.kind + (backId && backId === ne ? ' g4l-back' : '') + '" role="link" tabindex="0" data-id="' + gEsc(s.id) + '" data-ne="' + gEsc(ne) + '" aria-label="' + gEsc(mkHook(s)) + ' 전략 보기" onclick="G4T2.open(event,\'' + ne + '\')" onkeydown="G4T2.open(event,\'' + ne + '\')">'
-      + '<div class="skf-top">' + mkGlyph(s, 28) + '<div class="skf-nm"><h3>' + gEsc(mkHook(s)) + '</h3><span><img src="assets/logos/' + ex[0] + '.png" alt="" width="14" height="14" loading="lazy">' + MK_KIND[s.kind] + ', ' + ex[1] + '에서 실행</span></div></div>'
+      + '<div class="skf-top">' + mkGlyph(s, 28) + '<div class="skf-nm"><h3>' + gEsc(mkHook(s)) + '</h3><span><img src="assets/logos/' + ex[0] + '.png" alt="" width="14" height="14" decoding="sync">' + MK_KIND[s.kind] + ', ' + ex[1] + '에서 실행</span></div></div>'
       + '<div class="skf-perf g4l-perf"><div class="skf-ret"><small>$1,000 넣었다면 지금</small><div class="g4l-amtrow"><b class="num g4l-amt" data-to="' + money + '">' + cpUsd(money, 0) + '</b><span class="num g4l-pct ' + (r.final >= 1000 ? 'up' : 'dn') + '" data-to="' + r.final + '">' + pct(r.final) + '</span></div></div>' + spark(r) + '</div>'
       + '<div class="g4l-info">'
       + '<p class="g4l-sub num">그냥 들고 있었다면 ' + cpUsd(hold, 0) + ', ' + day(r.i0) + '부터</p>'
@@ -95,20 +110,28 @@
     if (sig !== s2) { if (!keepOpen) expanded = false; sig = s2; }
     if (my) {
       var nm = gEsc(tfMyExNames(tfMyExIds()));
-      if (!rows.length) return '<div class="myex-empty"><p>' + nm + '에서 실행할 수 있는 전략이 아직 없습니다.</p><button type="button" class="pl-link" onclick="tfMyExSet(\'\')">전체 보기</button></div>' + HELP;
+      if (!rows.length) {
+        /* K9(table-v2-K): 고른 시장에만 없으면 다른 시장의 개수를 말하고, 「전체 보기」는 시장만 되돌린다(내 거래소는 그대로). 개수 = 되돌린 뒤 보이는 카드 수 */
+        var ex = tfMyExNames(tfMyExIds()), n0 = TF_MYEX_N, other = MKT[t.ss.asset] ? rowsNow('all').filter(real).length : 0; TF_MYEX_N = n0;
+        return empty('<div class="myex-empty"><p>' + gEsc(other ? tx('emptyMkt', { ex: ex, n: other }) : tx('emptyFlt', { ex: ex })) + '</p><button type="button" class="pl-link" onclick="' + (other ? 'G4T2.allMarkets()' : 'tfMyExSet(\'\')') + '">전체 보기</button></div>');
+      }
       note = '<p class="myex-note">' + nm + '에서 바로 실행할 수 있는 전략 ' + rows.length + '개입니다.</p>';
     }
-    if (!rows.length) return '<div class="ss3-empty">조건에 맞는 전략이 없습니다<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>' + HELP;
+    if (!rows.length) return empty('<div class="ss3-empty">조건에 맞는 전략이 없습니다<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>');
+    emptyFlag(false);
     var shown = expanded ? rows : rows.slice(0, PER), rest = rows.length - shown.length;
     return note + '<div class="mk-grid mk3-grid g4l-grid">' + shown.map(mkCard).join('') + '</div>'
       + (rest > 0 ? '<div class="g4l-morew"><button type="button" class="g4l-more" onclick="G4T2.more()">나머지 ' + rest + '개 더 보기</button></div>' : endLine(rows.length)) + HELP;
   };
+  /* K10: 빈 결과는 떠 있는 상담 단추를 숨기고 24시간 한 줄만 둔다(DESIGN_PROMPT 4절) */
+  function emptyFlag(on) { document.body.classList.toggle('g4l-empty', !!on); }
+  function empty(html) { emptyFlag(true); return html + HELP; }
   /* 끝 문장(I4): 31개 전부를 다 보였을 때만 */
   function endLine(n) { return n && n === allCount() ? '<p class="g4l-end">' + n + '개 전략을 모두 봤습니다</p>' : ''; }
   function allCount() { return tfSSRows().filter(real).length; }
   /* 머리 한 줄의 개수 = 시장, 검색을 건 뒤 줄 수(종류 탭은 전체일 때만 이 줄, 내 거래소가 켜지면 안내 한 줄만: 시안 S2 안1) */
   function headCount() { return rowsNow().filter(real).length; }
-  function headLine() { return '전략 ' + headCount() + '개가 같은 $1,000을 굴린 결과입니다.'; }
+  function headLine() { var n = headCount(); return n ? '전략 ' + n + '개가 같은 $1,000을 굴린 결과입니다.' : ''; } /* K8: 0개면 줄 없음 */
 
   /* 조작 줄: 제목, 정렬 이름, 전체일 때 한 줄 */
   var c0 = mk3Controls;
@@ -117,7 +140,7 @@
     var sort = mkSortKey(t), sel = d.querySelector('.skf-sort select'), row = d.querySelector('.mk3-kindrow');
     if (sort === 'win') sort = 'pick';
     if (sel) sel.innerHTML = [['pick', '전체 기간 금액순'], ['fw', '복사한 사람순']].map(function (o) { return '<option value="' + o[0] + '"' + (sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('');
-    if (row && !row.querySelector('.mk3-kindhelp') && !(typeof tfMyExOn === 'function' && tfMyExOn())) row.insertAdjacentHTML('beforeend', '<p class="mk3-kindhelp one g4l-count">' + headLine() + '</p>');
+    if (row && !row.querySelector('.mk3-kindhelp') && !(typeof tfMyExOn === 'function' && tfMyExOn())) row.insertAdjacentHTML('beforeend', '<p class="mk3-kindhelp one g4l-count"' + (headLine() ? '' : ' hidden') + '>' + headLine() + '</p>');
     return '<h1 class="g4l-h1">전략 복사</h1>' + d.innerHTML;
   };
 
@@ -129,30 +152,33 @@
     try { replace(LIST); t1Hub('find'); } finally { keepOpen = false; backId = null; }
     try { history.replaceState(st, '', base() + url()); } catch (_) {} /* T1 showList 가 비운 기록 상태를 되돌린다 */
     document.body.classList.add('g4-list');
+    document.body.classList.remove('has-banner'); /* K4: 다운로드 띠는 홈에만. 0.3초 감시를 기다리지 않고 첫 프레임부터 뺀다 */
+    drawn = sigNow();
     var page = document.querySelector('#g-content .ss3'), back = page && page.querySelector('.g4-back');
     if (back && !ssGet(FROM)) back.remove();
     if (o.restore) { setY(o.restore.y); requestAnimationFrame(function () { setY(o.restore.y); }); }
     else if (o.fresh && !ssGet(COUNTED)) { ssSet(COUNTED, 1); enter(); }
   }
-  /* 새로 들어온 첫 화면만: 큰 금액이 $1,000 에서 제 값으로, 곡선이 왼쪽에서 */
+  /* 새로 들어온 첫 화면만: 큰 금액이 $1,000 에서 제 값으로(K1: 곡선과 로고는 첫 프레임부터 다 그려 둔다) */
   function enter() {
     try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (_) {}
     var g = document.querySelector('#ss3-grid .g4l-grid'); if (!g) return;
-    /* I1: 시작 시각은 첫 프레임 시각으로 잡고 진행값은 0~1 로 묶는다(막힌 동안 시작된 프레임의 시각이 앞서도 $1,000 아래로 안 감) */
-    var els = [], t0 = null;
+    var els = [], el = 0, last = null;
     [].forEach.call(g.querySelectorAll('.g4l-amt'), function (b) { var r = b.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) els.push({ b: b, to: +b.dataset.to, pc: b.parentNode.querySelector('.g4l-pct') }); });
-    g.classList.add('g4l-enter');
     function paint(e) { els.forEach(function (x) { var v = 1000 + (x.to - 1000) * e; x.b.textContent = cpUsd(Math.round(v), 0); if (x.pc) x.pc.textContent = pct(1000 + (+x.pc.dataset.to - 1000) * e); }); }
     paint(0);
-    requestAnimationFrame(function tick(now) {
-      if (t0 == null) t0 = now;
-      var p = Math.max(0, Math.min(1, (now - t0) / 600));
-      paint(1 - Math.pow(1 - p, 3));
-      if (p < 1) requestAnimationFrame(tick); else g.classList.remove('g4l-enter');
+    /* K1: 진행은 실제로 그려진 프레임마다 더한다. 부팅 직후 막힌 프레임 하나가 세기를 건너뛰지 않게 한 프레임에 최대 50ms */
+    requestAnimationFrame(function tick() {
+      var now = performance.now();
+      if (last != null) el += Math.min(50, now - last);
+      last = now;
+      var p = Math.max(0, Math.min(1, el / 600));
+      paint(1 - Math.pow(1 - p, 2));
+      if (p < 1) requestAnimationFrame(tick);
     });
   }
 
-  gContent = function () { document.body.classList.remove('g4-list'); return oldContent.apply(this, arguments); };
+  gContent = function () { document.body.classList.remove('g4-list'); return oldContent.apply(this, arguments); }; /* g4l-empty 는 목록(g4-list)에서만 듣고, 목록을 그릴 때마다 다시 정한다 */
 
   tfShareHub = function (tab) {
     if (tab === 'follow') { tfNav('#/trade'); return; }
@@ -162,6 +188,10 @@
   };
   tfNFRoute = function (h) {
     if (h === LIST || h.indexOf(LIST + '?') === 0) {
+      /* K1: 확정 목록을 한 번만 그린다. 저장된 로그인이 있으면 복원 뒤에 그리고(복원 전 임시 목록 없음),
+         부팅 재라우팅이 같은 상태로 다시 부르면 그리지 않는다(세던 숫자를 끝 값으로 덮지 않게) */
+      if (!ready()) return true;
+      if (G.mode === 'tfss3' && drawn === sigNow() && document.querySelector('#ss3-grid .g4l-grid, #ss3-grid .myex-empty, #ss3-grid .ss3-empty')) return true;
       var pm = G.mode, pos = ssGet(POS), back = pm === 'tfss3d' && pos && pos.url === h;
       var reload = reloadY != null && reloadY.url === h;
       if (pm === 'nfmain') ssSet(FROM, 1); else if (pm !== 'tfss3d' && pm !== 'tfss3' && !reload) ssSet(FROM, null);
@@ -175,7 +205,7 @@
   var s0 = tfSS3Search;
   tfSS3Search = function () {
     var r = s0.apply(this, arguments); setUrl();
-    var c = document.querySelector('.g4l-count'); if (c) c.textContent = headLine();
+    var c = document.querySelector('.g4l-count'); if (c) { c.textContent = headLine(); c.hidden = !c.textContent; }
     return r;
   };
   /* 목록의 스크롤 자리를 이 탭에 적어 둔다(새로고침 복원용) */
@@ -252,7 +282,15 @@
       if (pos && pos.id === ne && pos.url) { history.back(); return; }
       expanded = false; tfNav(url());
     },
-    url: url
+    url: url,
+    allMarkets: function () { var t = tfSSState(); t.ss.asset = 'all'; tfSave(); tfShareHub('find'); },
+    /* K5: AI 트레이딩의 「둘러보기」 링크. 개수 = 이 링크로 도착하는 목록(필터 없음, 내 거래소 상태 그대로)의 카드 수 */
+    linkText: function () {
+      var rows = tfSSRows().filter(real), ids = typeof tfMyExIds === 'function' ? tfMyExIds() : [];
+      if (!ids.length) return tx('linkAll', { n: rows.length });
+      var n = rows.filter(function (s) { return ids.indexOf(String(mkEx(s)[0] || '').replace(/^app-/, '')) >= 0; }).length;
+      return tx('linkMy', { ex: tfMyExNames(ids), n: n });
+    }
   };
-  if (onList()) tfRoute();
+  if (onList() && ready()) tfRoute();
 })();
