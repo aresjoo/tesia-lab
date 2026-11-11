@@ -98,7 +98,7 @@
     var sort = mkSortKey(t), sel = d.querySelector('.skf-sort select'), row = d.querySelector('.mk3-kindrow');
     if (sort === 'win') sort = 'pick';
     if (sel) sel.innerHTML = [['pick', '전체 기간 금액순'], ['fw', '복사한 사람순'], ['ret', '최근 1년 금액순']].map(function (o) { return '<option value="' + o[0] + '"' + (sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('');
-    if (row && !row.querySelector('.mk3-kindhelp') && !(typeof tfMyExOn === 'function' && tfMyExOn())) row.insertAdjacentHTML('beforeend', '<p class="mk3-kindhelp one">전략 ' + tfSSRows().filter(real).length + '개가 같은 $1,000을 굴린 결과입니다.</p>');
+    if (row && !row.querySelector('.mk3-kindhelp') && !(typeof tfMyExOn === 'function' && tfMyExOn())) row.insertAdjacentHTML('beforeend', '<p class="mk3-kindhelp one">전략 ' + tfSSRows().filter(function (s) { return real(s) && (!MKT[t.ss.asset] || s.mkt === t.ss.asset); }).length + '개가 같은 $1,000을 굴린 결과입니다.</p>');
     return '<h1 class="g4l-h1">전략 복사</h1>' + d.innerHTML;
   };
 
