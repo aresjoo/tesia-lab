@@ -32,6 +32,7 @@
       win: '총 {n}번의 매매 중 {wins}번 수익 달성 (승률 {win}%)', viewAll: '거래 {n}건 모두 보기', cta: '{amt}으로 복사하기', adjust: '예산 조정',
       free: '영원히 무료, 카드 등록 필요없음', editRules: '규칙 수정하기', chartAria: '{amt}이 {final}까지 간 곡선',
       allBack: '← 결과', allTitle: '거래 {n}건', day: '{n}일', holding: '보유 중', allMore: '이전 거래 {n}건 더 보기', foldLog: '판단 기록', foldMonth: '월별 수익률', foldTech: '자세한 지표',
+      sumFull: '큰 하락장에서도 {lev}양방향 대응으로 자산을 지켰고, 단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumShort: '단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumLev: '{n}배 ',
       connect: '거래소 연결', minErr: '최소 {min}부터 시작할 수 있습니다', short: '숏', long: '롱', lev: '{n}배', buy: '매수', closeShort: '숏 청산', closeLong: '롱 청산', sell: '매도' },
     en: { navBack: '← Strategy Details', mineBack: '← Back to chat', navTitle: 'Direct Market Verification', mine: 'My Strategy', target: 'If you invested {amt}, now', since: 'Since {date} to present',
       replaying: 'Replaying day by day {cur} / {days} days', skip: 'View results now', landOk: 'Even replaying {days} days day by day, it is {final}',
@@ -39,6 +40,7 @@
       win: 'Achieved profit in {wins} of {n} trades (Win rate {win}%)', viewAll: 'View all {n} trades', cta: 'Copy with {amt}', adjust: 'Adjust Budget',
       free: 'Free forever, no card required', editRules: 'Edit rules', chartAria: '{amt} growing to {final}',
       allBack: '← Results', allTitle: '{n} trades', day: '{n}d', holding: 'Holding', allMore: 'Show {n} earlier trades', foldLog: 'Decision log', foldMonth: 'Monthly returns', foldTech: 'Detailed metrics',
+      sumFull: 'Protected capital through {lev}two-way hedging during severe bear markets, outperforming simple buy-and-hold by {x}x.', sumShort: 'Outperformed simple buy-and-hold by {x}x.', sumLev: '{n}x ',
       connect: 'Connect exchange', minErr: 'Start from {min}', short: 'Short', long: 'Long', lev: '{n}x', buy: 'Buy', closeShort: 'short closed', closeLong: 'long closed', sell: 'sold' }
   };
   function lang() { return typeof GLC !== 'undefined' && GLC.lang === 'en' ? 'en' : 'ko'; }
@@ -143,6 +145,7 @@
       + '<div class="t4-layout"><div class="t4-main">'
       + '<button type="button" class="t4-link bk t4-back" onclick="G4T4.back()">' + L(s.mine ? 'mineBack' : 'navBack') + '</button>'
       + '<h1 class="t4-name">' + esc(sName(s)) + '</h1>' + exLine(s)
+      + (V.mine ? '' : '<p class="t4-sum" id="t4-sum">' + sumLine() + '</p>')
       + '<p class="t4-sub">' + L('target', { amt: usd(V.amt) }) + '</p>'
       + '<div class="t4-money"><b class="t4-final num">' + usd(V.F) + '</b><span class="num ' + (up ? 'up' : 'dn') + '">' + pct(V.ret) + '</span></div>'
       + '<p class="t4-since">' + L('since', { date: esc(dSent(e0)) }) + '</p>'
@@ -171,6 +174,17 @@
   function runLine() { return L('replaying', { cur: '<span id="t4-day">0</span>', days: n0(V.N) }); }
   function okLine() { return L('landOk', { days: n0(V.N), final: '<b class="num">' + usd(V.F) + '</b>' }); }
   /* J9: N = 끝난 거래 수, M = 그중 수익(pnl > 0), 엔진 값. 문구는 agy 확정 전 임시(flow-contract 0.5) */
+  /* J8: 0초 한 줄 요약(카피 표 12). 모델 문장을 기다리지 않고 엔진 값으로만 채운다. 각 마디는 엔진이 참일 때만 쓴다:
+     「{x}배」 = F / H(소수 한 자리), 「양방향」 = 롱과 숏 거래가 둘 다 있음, 「{n}배」 = 레버리지 > 1,
+     「큰 하락장에서도 … 자산을 지켰고」 = 그냥 들고 있기 최대 하락 ≤ -20% 이고 전략 최대 하락이 그보다 얕음.
+     F 가 원금 아래이거나 H 보다 낮으면 줄을 쓰지 않는다(지어낸 문장 금지). sumShort 는 확정 문장의 뒷마디 */
+  function sumLine() {
+    var R = V.R; if (!(V.F >= V.amt && V.H > 0 && V.F > V.H)) return '';
+    var x = (V.F / V.H).toFixed(1), sides = {}; R.tr.forEach(function (t) { sides[t.side] = 1; });
+    var lev = V.s.cfg && V.s.cfg.lev > 1 ? TX[lang()].sumLev.replace('{n}', V.s.cfg.lev) : '';
+    var full = sides[1] && sides[-1] && isFinite(R.benchMdd) && isFinite(R.mdd) && R.benchMdd <= -20 && R.mdd > R.benchMdd;
+    return L(full ? 'sumFull' : 'sumShort', { lev: esc(lev), x: x });
+  }
   function winLine() {
     var c = V.R.tr.filter(function (t) { return !t.open && t.x != null; }), m = c.filter(function (t) { return t.pnl > 0; }).length;
     /* J9 카피 확정(표 13): n = 끝난 거래 수, wins = 그중 수익, 승률 = wins / n 반올림(앱 「자세한 지표」 승률과 같은 정의) */
