@@ -64,11 +64,19 @@
     var waiting = row && !D.hasFill(row);
     return '<div class="g4-now">' + (waiting ? '<span class="g4-running g4-waiting">' + bars() + COPY.running + ', ' + esc(D.pos(s, row)) + '</span>' : (!row ? '<span class="g4-running">' + bars() + COPY.running + '</span>' : '') + '<span>' + esc(D.pos(s, row)) + '</span>') + (row && !D.hasFill(row) ? '<span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + (!row ? '<span class="g4-followers">' + s.fw.toLocaleString() + '명이 따라가는 중</span><span class="g4-next">다음 판단 ' + esc(tbNextClose()) + '</span>' : '') + '</div>';
   }
+  /* K25: 매수·매도 기록의 시각은 T3 상세(판단 기록 체결, 최근 체결 내역 표)와 같은 거래 원본 = 이벤트의 체결 봉(xi).
+     같은 거래가 T1 에서는 신호 봉 날짜로 보여 T3 와 하루 이틀 달랐다. 체결 봉을 모르는 기록만 다음 봉 */
+  function fillTs(s, m) {
+    if ((m.k !== 'buy' && m.k !== 'sell') || m.i == null) return m.ts;
+    var ev = ((s.r && s.r.events) || []).filter(function (e) { return e.i === m.i && e.xi != null && e.t === (m.k === 'buy' ? 'enter' : 'exit') && (!m.a || !e.a || e.a === m.a); })[0];
+    var w = String(mkWhen(s, ev ? ev.xi : m.i + 1, m.a)).match(/^(\d{4})\.(\d{2})\.(\d{2}) (\d{2}:\d{2})/);
+    return w ? w[1] + '. ' + (+w[2]) + '. ' + (+w[3]) + '. ' + w[4] : m.ts;
+  }
   function records(s) {
     var messages = mkChatMsgs(s, s.r, 6).filter(function (m) { return m.k !== 'now' && m.k !== 'intro'; });
     return messages.map(function (m, i) {
       var t = tidy(m.t), split = tbSent(t, 2);
-      return '<li' + (i ? ' class="g4-record-extra" hidden' : '') + '><details><summary><time>' + esc(m.ts) + '</time><span class="g4-record-text">' + esc(split.head) + '</span><span class="g4-record-tag">' + esc(m.tag) + '</span></summary>'
+      return '<li' + (i ? ' class="g4-record-extra" hidden' : '') + '><details><summary><time>' + esc(fillTs(s, m)) + '</time><span class="g4-record-text">' + esc(split.head) + '</span><span class="g4-record-tag">' + esc(m.tag) + '</span></summary>'
         + (split.rest ? '<p>' + esc(split.rest) + '</p>' : '') + '</details></li>';
     }).join('') || '<li>아직 판단 기록이 없습니다.</li>';
   }
