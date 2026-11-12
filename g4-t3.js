@@ -381,8 +381,27 @@
   /* 390 바 높이를 QA 단추와 토스트 자리 계산에 넘긴다(I9) */
   function barHeight() { var b = document.querySelector('.t3-mobile-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t3-bar-h', b.offsetHeight + 'px'); }
   function onDetail() { return !!document.querySelector('.t3-detail'); }
+  /* G4 T4 J1~J3: 직접 검증(T4, #bt-root.t4) 화면에서 여는 가입 창(K11), 복사 창(I7 f, b), 예산 조정 창(K12)도 상세와 같은 창.
+     창 머리 숫자는 T4 가 받은 기간(T3 I5 인계)으로 그린다. 상세에서만 하는 일(스크롤 저장, 다시 그리기, 안내 줄)은 onDetail 그대로 */
+  function onT4() { return !!document.querySelector('#bt-root.t4') && !!(window.G4T4 && G4T4.ctx && G4T4.ctx()); }
+  function onHost() { return onDetail() || onT4(); }
+  function hostCur() { if (onDetail()) return current; var c = onT4() ? G4T4.ctx() : null; return c && real(c.s) ? { s: c.s, per: per(c.per) } : null; }
   /* 창의 숫자 = 상세에서 지금 고른 기간의 큰 숫자(목록 → 상세 → 가입 → 복사 창이 같은 값) */
-  function curPer(s) { return current && current.s.id === s.id ? current.per : per(state(s).per); }
+  function curPer(s) { var c = hostCur(); return c && c.s.id === s.id ? c.per : per(state(s).per); }
+  /* 창 머리 차이 줄. 원금보다 늘었으면 「+$X 더 벌었습니다」, 원금보다 줄었는데 그냥 들고 있기보다 덜 줄었으면 「$X 덜 잃었습니다」
+     (G4 T4 카피 확정 copy/decision-copy.md 1: 손실인 사람에게 「더 벌었습니다」 금지), 차이 0 이하면 줄 없음 */
+  function diffLine(r) {
+    var f = Math.round(r.final), d = f - Math.round(r.benchFinal); if (d <= 0) return '';
+    if (f >= 1000) return '<p class="t3s-diff"><span class="up">+' + money(d) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>';
+    return '<p class="t3s-diff">' + esc(ko() ? '차이 ' + money(d) + ' 덜 잃었습니다' : 'Difference ' + money(d) + ' less lost') + '</p>'; /* B3 mine: 「차이 $118 덜 잃었습니다」 */
+  }
+  /* G4 T4 J4: 내 전략(공개 전략이 아님) 창 머리. 상세 창과 같은 틀에 T4 가 계산한 결과(r)를 넣는다 */
+  function headFor(r, o) {
+    return '<div class="t3s-head">' + (o.logo || '') + '<div><b>' + esc(o.name) + '</b>' + (o.sub ? '<span>' + esc(o.sub) + '</span>' : '') + '</div></div>'
+      + '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="' + (r.ret >= 0 ? 'up' : 'dn') + ' num">' + pct(r.ret) + '</em></div>'
+      + '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + diffLine(r) + '</div>'
+      + curve(r, { h: 84, legend: true, tags: true, cls: 'compact', animate: false });
+  }
   function sheetHead(s, mode, row) {
     var r = series(s, curPer(s)), diff = Math.round(r.final) - Math.round(r.benchFinal), sub = mode === 'b' ? T('connected', { ex: exOf(s).name }) : mode === 'c' ? T('copyingTag') : official(s);
     var h = '<div class="t3s-head">' + logo(s, 28) + '<div><b>' + esc(name(s)) + '</b><span>' + esc(sub) + '</span></div></div>';
@@ -394,14 +413,15 @@
         + '<p>' + esc(T('heroSub')) + ' ' + money(Math.round(r.final)) + '</p><p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p></div>';
     } else {
       h += '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="' + (r.ret >= 0 ? 'up' : 'dn') + ' num">' + pct(r.ret) + '</em></div>'
-        + (mode === 'auth' ? '' : '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + (diff > 0 ? '<p class="t3s-diff"><span class="up">+' + money(diff) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>' : '')) + '</div>';
+        + (mode === 'auth' ? '' : '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + diffLine(r)) + '</div>';
     }
-    return h + curve(r, { h: mode === 'auth' ? 72 : 84, legend: mode !== 'auth', tags: mode === 'c', cls: 'compact', animate: false });
+    /* G4 T4 B3 안2: 창 곡선 끝에 「전략 $X / 그냥 들고 있었다면 $H」 꼬리표(가입 창 머리는 그대로) */
+    return h + curve(r, { h: mode === 'auth' ? 72 : 84, legend: mode !== 'auth', tags: mode !== 'auth', cls: 'compact', animate: false });
   }
   var t1Sheet = mkFollowSheet;
   mkFollowSheet = function (ne) {
     var v = t1Sheet.apply(this, arguments);
-    if (!onDetail()) return v;
+    if (!onHost()) return v;
     var id; try { id = decodeURIComponent(ne); } catch (_) { id = ne; }
     var s = tfSSFind(id); if (!real(s)) return v;
     try { fSheet(s); bSheet(s); } catch (e) { if (window.console) console.warn('g4-t3 sheet', e); }
@@ -446,7 +466,7 @@
   var oldAdjRender = cpAdjRender;
   cpAdjRender = function (cid) {
     var v = oldAdjRender.apply(this, arguments);
-    if (!onDetail()) return v;
+    if (!onHost()) return v;
     try { cSheet(cid); } catch (e) { if (window.console) console.warn('g4-t3 adjust', e); }
     return v;
   };
@@ -504,10 +524,10 @@
   authOpen = function () {
     authHeadOff();
     var v = oldAuthOpen.apply(this, arguments);
-    if (onDetail() && authOn()) {
-      var title = document.querySelector('#au-start .au-title'), sub = document.querySelector('#au-start .au-sub');
-      if (current && title) {
-        try { title.insertAdjacentHTML('afterend', '<div class="t3s t3-au-head">' + sheetHead(current.s, 'auth') + '</div>'); if (sub) sub.style.display = 'none'; } catch (e) { authHeadOff(); }
+    if (onHost() && authOn()) {
+      var title = document.querySelector('#au-start .au-title'), sub = document.querySelector('#au-start .au-sub'), hc = hostCur();
+      if (hc && title) {
+        try { title.insertAdjacentHTML('afterend', '<div class="t3s t3-au-head">' + sheetHead(hc.s, 'auth') + '</div>'); if (sub) sub.style.display = 'none'; } catch (e) { authHeadOff(); }
       }
       if (!(history.state && history.state.g4t3Auth)) history.pushState({ g4t3Auth: true }, '', location.href);
     }
@@ -553,7 +573,7 @@
   })();
   addEventListener('popstate', function () {
     if (skipPop) { skipPop = false; return; }
-    if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } setTimeout(function () { if (!authOn()) authHeadOff(); }, 400); }
+    if (authOn() && !(history.state && history.state.g4t3Auth) && onHost()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } setTimeout(function () { if (!authOn()) authHeadOff(); }, 400); }
   });
   /* K1(I10): 분석의 화면 확인 프레임은 옛 상세 선택자(.mk3-dh 등)만 기다려 새 상세에서 20초 뒤 실패했다.
      새 상세(.t3-detail 의 큰 돈)가 그려지면 준비로 본다. 끝까지 못 그리면 8초에 넘어가고, 분석은 첫 카드의 N1 숫자로 시작한다 */
@@ -673,6 +693,7 @@
   }
 
   window.G4T3 = {
+    head: headFor, name: name, /* G4 T4: 창 머리, 전략 이름(en NAME_EN) */
     series: series, curve: curve, T: T,
     period: function (v) {
       if (!current) return; current.per = per(v); MKD.per = current.per; preserve();
