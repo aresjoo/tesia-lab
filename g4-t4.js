@@ -268,7 +268,8 @@
       + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" value="' + usd(V.amt).slice(1) + '" oninput="G4T4.mineSync()" aria-describedby="g4-budget-min g4-budget-error"></div>'
       + '<p id="g4-budget-min">' + esc(T3T('minNote', { min: usd(min) })) + '</p><p id="g4-budget-error" role="status"></p>'
       + '<button id="g4-budget-next" type="submit" class="g4-primary">' + esc(linked ? T3T('start') : '거래소 연결') + '</button>'
-      + '<p class="t3s-foot">' + esc(T3T('foot')) + '</p></form>');
+      + '<p class="t3s-foot">' + esc(T3T('foot')) + '</p>'
+      + '<p class="t4-mine-links"><button type="button" class="t3-link" onclick="tfSS3DlgClose(true);rvFix()">규칙 수정하기</button></p></form>'); /* B3 mine 둘째 줄(J4, T7 경계) */
     var w = $('ss3-dlgw'); if (w) w.classList.add('g4-budget-dialog', 't3s', 't4-mine', linked ? 't4-mine-b' : 't4-mine-f');
     try { tfTrack('bt_copy', { id: 'mine', per: BT.per, budget: V.amt }); } catch (_) {}
   }

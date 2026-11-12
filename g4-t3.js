@@ -407,14 +407,14 @@
   function diffLine(r) {
     var f = Math.round(r.final), d = f - Math.round(r.benchFinal); if (d <= 0) return '';
     if (f >= 1000) return '<p class="t3s-diff"><span class="up">+' + money(d) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>';
-    return '<p class="t3s-diff">' + money(d) + ' ' + esc(ko() ? '덜 잃었습니다' : 'less lost') + '</p>';
+    return '<p class="t3s-diff">' + esc(ko() ? '차이 ' + money(d) + ' 덜 잃었습니다' : 'Difference ' + money(d) + ' less lost') + '</p>'; /* B3 mine: 「차이 $118 덜 잃었습니다」 */
   }
   /* G4 T4 J4: 내 전략(공개 전략이 아님) 창 머리. 상세 창과 같은 틀에 T4 가 계산한 결과(r)를 넣는다 */
   function headFor(r, o) {
     return '<div class="t3s-head">' + (o.logo || '') + '<div><b>' + esc(o.name) + '</b>' + (o.sub ? '<span>' + esc(o.sub) + '</span>' : '') + '</div></div>'
       + '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="' + (r.ret >= 0 ? 'up' : 'dn') + ' num">' + pct(r.ret) + '</em></div>'
       + '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + diffLine(r) + '</div>'
-      + curve(r, { h: 84, legend: true, tags: false, cls: 'compact', animate: false });
+      + curve(r, { h: 84, legend: true, tags: true, cls: 'compact', animate: false });
   }
   function sheetHead(s, mode, row) {
     var r = series(s, curPer(s)), diff = Math.round(r.final) - Math.round(r.benchFinal), sub = mode === 'b' ? T('connected', { ex: exOf(s).name }) : mode === 'c' ? T('copyingTag') : official(s);
@@ -429,7 +429,8 @@
       h += '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="' + (r.ret >= 0 ? 'up' : 'dn') + ' num">' + pct(r.ret) + '</em></div>'
         + (mode === 'auth' ? '' : '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + diffLine(r)) + '</div>';
     }
-    return h + curve(r, { h: mode === 'auth' ? 72 : 84, legend: mode !== 'auth', tags: mode === 'c', cls: 'compact', animate: false });
+    /* G4 T4 B3 안2: 창 곡선 끝에 「전략 $X / 그냥 들고 있었다면 $H」 꼬리표(가입 창 머리는 그대로) */
+    return h + curve(r, { h: mode === 'auth' ? 72 : 84, legend: mode !== 'auth', tags: mode !== 'auth', cls: 'compact', animate: false });
   }
   var t1Sheet = mkFollowSheet;
   mkFollowSheet = function (ne) {
