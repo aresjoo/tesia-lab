@@ -63,7 +63,7 @@ function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value
   taiAskSkip=function(id){ taiAskClose(id); taiAskSkipText(); };
   /* "바로 실행" 류 단추: 고정 질문 다섯 개 대신 AI에게 보낸다. AI가 모르는 것만 [ASK]로 묻는다 */
   var ts0=tfStart; tfStart=function(act){
-    if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); if(G.cur&&(act.type==='delegate_trade'||act.type==='auto_trade')) taiAI(G.cur).setupRequest={type:act.type,label:act.label,direction:act.direction}; f.value=act.label; gSend(); return; }
+    if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); f.value=act.label; gSend(); return; }
     return ts0.apply(this,arguments); };
 })();
 /* 전략 설계서 카드가 사용자의 말을 그대로 보여 준다: RSI 숫자는 그대로 엔진 기준값으로, 계산하지 못한 조건은 "검증에서 뺀 조건"으로 */
