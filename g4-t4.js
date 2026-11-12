@@ -22,26 +22,25 @@
   function ymd(i) { var d = String(mkDate(i)).split('.'); return [+d[0], +d[1], +d[2]]; }
   function dList(i) { var d = ymd(i); return ko() ? d[0] + '. ' + d[1] + '. ' + d[2] + '.' : MON[d[1] - 1] + ' ' + d[2] + ', ' + d[0]; }
   function dSent(i) { var d = ymd(i); return ko() ? d[0] + '년 ' + d[1] + '월 ' + d[2] + '일' : MON[d[1] - 1] + ' ' + d[2] + ', ' + d[0]; }
-  /* 문구: 카피 주인 확정본(copy/table-v2.md 1~19, check-int.md). en 은 그 표의 en 칸 그대로.
-     표에 없는 것(mineBack, allBack, allTitle, day, holding, allMore, fold*, connect, minErr, short, long, buy, close*, sell, chartAria)은 en 확정 전 임시 */
+  /* 문구: 카피 주인 확정본 copy/table-v2.md(15:19 갱신, 1~35, 4절 TX 스니펫 그대로). en 은 전부 1.3 확정 */
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var TX = {
     ko: { navBack: '← 전략 상세', mineBack: '← 대화로', navTitle: '과거 시장에서 직접 검증', mine: '내 전략', target: '{amt} 넣었다면 지금', since: '{date}부터 지금까지',
       replaying: '하루씩 다시 굴리는 중 {cur} / {days}일', skip: '결과 바로 보기', landOk: '{days}일을 하루씩 다시 굴려도 {final}입니다',
       diffProfit: '그냥 들고 있었다면 {bench} (차이 {diff} 더 벌었습니다)', diffLoss: '그냥 들고 있었다면 {bench} (차이 {diff} 덜 잃었습니다)', hold: '그냥 들고 있었다면 {bench}',
+      sumFull: '큰 하락장에서도 {lev}양방향 대응으로 자산을 지켰고, 단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumShort: '단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumLev: '{n}배 ',
       win: '총 {n}번의 매매 중 {wins}번 수익 달성 (승률 {win}%)', viewAll: '거래 {n}건 모두 보기', cta: '{amt}으로 복사하기', adjust: '예산 조정',
       free: '영원히 무료, 카드 등록 필요없음', editRules: '규칙 수정하기', chartAria: '{amt}이 {final}까지 간 곡선',
       allBack: '← 결과', allTitle: '거래 {n}건', day: '{n}일', holding: '보유 중', allMore: '이전 거래 {n}건 더 보기', foldLog: '판단 기록', foldMonth: '월별 수익률', foldTech: '자세한 지표',
-      sumFull: '큰 하락장에서도 {lev}양방향 대응으로 자산을 지켰고, 단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumShort: '단순 보유 대비 {x}배 더 높은 성과를 냈습니다.', sumLev: '{n}배 ',
       connect: '거래소 연결', minErr: '최소 {min}부터 시작할 수 있습니다', short: '숏', long: '롱', lev: '{n}배', buy: '매수', closeShort: '숏 청산', closeLong: '롱 청산', sell: '매도' },
     en: { navBack: '← Strategy Details', mineBack: '← Back to chat', navTitle: 'Direct Market Verification', mine: 'My Strategy', target: 'If you invested {amt}, now', since: 'Since {date} to present',
       replaying: 'Replaying day by day {cur} / {days} days', skip: 'View results now', landOk: 'Even replaying {days} days day by day, it is {final}',
       diffProfit: 'If simply held {bench} (Difference {diff} more earned)', diffLoss: 'If simply held {bench} (Difference {diff} less lost)', hold: 'If simply held {bench}',
+      sumFull: 'Protected capital through {lev}two-way hedging during severe bear markets, outperforming simple buy-and-hold by {x}x.', sumShort: 'Outperformed simple buy-and-hold by {x}x.', sumLev: '{n}x ',
       win: 'Achieved profit in {wins} of {n} trades (Win rate {win}%)', viewAll: 'View all {n} trades', cta: 'Copy with {amt}', adjust: 'Adjust Budget',
       free: 'Free forever, no card required', editRules: 'Edit rules', chartAria: '{amt} growing to {final}',
       allBack: '← Results', allTitle: '{n} trades', day: '{n}d', holding: 'Holding', allMore: 'Show {n} earlier trades', foldLog: 'Decision log', foldMonth: 'Monthly returns', foldTech: 'Detailed metrics',
-      sumFull: 'Protected capital through {lev}two-way hedging during severe bear markets, outperforming simple buy-and-hold by {x}x.', sumShort: 'Outperformed simple buy-and-hold by {x}x.', sumLev: '{n}x ',
-      connect: 'Connect exchange', minErr: 'Start from {min}', short: 'Short', long: 'Long', lev: '{n}x', buy: 'Buy', closeShort: 'short closed', closeLong: 'long closed', sell: 'sold' }
+      connect: 'Connect exchange', minErr: 'Minimum {min} to start', short: 'Short', long: 'Long', lev: '{n}x', buy: 'Buy', closeShort: 'Short closed', closeLong: 'Long closed', sell: 'Sell' }
   };
   function lang() { return typeof GLC !== 'undefined' && GLC.lang === 'en' ? 'en' : 'ko'; }
   function ko() { return lang() === 'ko'; }
