@@ -17,7 +17,7 @@
       heroCompare: '그냥 들고 있었다면 {bench} (차이 {diff} 더 벌었습니다)', heroHold: '그냥 들고 있었다면 {bench}',
       since: '{date}부터 지금까지', follow: '{count}명이 따라가는 중', official: '{ex} 선물 공식 연동', officialSpot: '{ex} 공식 연동',
       endStrategy: '전략', endHold: '그냥 들고 있었다면', keyStrategy: '전략', keyHold: '그냥 들고 있기',
-      posLive: '지금 {pos} 운용 중', posWait: '진입 조건을 기다리고 있습니다.', next: '다음 판단', execLinked: '{ex} 계정으로 바로 복사합니다',
+      posLive: '지금 {pos} 보유 중', posWait: '지금 신호를 기다리는 중', next: '다음 판단', execLinked: '{ex} 계정으로 바로 복사합니다',
       execUnlinked: '{ex} 계정 연결 후 바로 실행됩니다',
       tabAll: '전체', tab1Y: '최근 1년', tab3M: '최근 3개월', tab30D: '최근 30일', period: '기간',
       cardTitle: '이 전략 복사', cardMin: '최소 운용 금액 {min}', btnCopy: '{amt}으로 복사하기', btnAdjust: '예산 조정',
@@ -33,15 +33,15 @@
       foot: '복사는 무료이며 언제든 위약금 없이 멈출 수 있습니다.', connected: '{ex} 연결됨',
       adjTitle: '예산 조정, {name}', myAsset: '내 운용 자산 {amt} (수익률 {ret})', tabAdd: '예산 추가', tabOut: '예산 회수',
       avail: '계정 잔여 가능 금액: {amt}', adjNote: '조정된 예산은 다음 AI 진입 주문부터 자동으로 반영됩니다.', adjBtn: '예산 변경 완료', copyingTag: '복사 중',
-      authSub: 'TETH를 잠금 해제하고 AI 투자 전략 복사를 시작하십시오.', authBack: '전략 상세로 돌아왔습니다. 언제든 무료로 복사할 수 있습니다.',
-      chatBack: '← 전략 상세로 돌아가기'
+      authBack: '전략 상세로 돌아왔습니다. 언제든 무료로 복사할 수 있습니다.',
+      chatBack: '← 전략 상세로 돌아가기', addAmt: '추가할 금액', outAmt: '회수할 금액', none: '아직 없음'
     },
     en: {
       back: '← Copy Strategies', heroSub: 'If you invested $1,000, now',
       heroCompare: 'If you had held: {bench} ({diff} more earned)', heroHold: 'If you had held: {bench}',
       since: 'Since {date} to present', follow: '{count} people following', official: 'Official {ex} Futures Integration', officialSpot: 'Official {ex} Integration',
       endStrategy: 'Strategy', endHold: 'Buy & Hold', keyStrategy: 'Strategy', keyHold: 'Buy & Hold',
-      posLive: 'Currently holding {pos}', posWait: 'Waiting for entry conditions.', next: 'Next decision:', execLinked: 'Ready to copy directly to your {ex} account',
+      posLive: 'Currently holding {pos}', posWait: 'Waiting for signal', next: 'Next decision:', execLinked: 'Ready to copy directly to your {ex} account',
       execUnlinked: 'Executes immediately upon connecting {ex} account',
       tabAll: 'All', tab1Y: 'Past 1 Year', tab3M: 'Past 3 Months', tab30D: 'Past 30 Days', period: 'Period',
       cardTitle: 'Copy This Strategy', cardMin: 'Minimum investment {min}', btnCopy: 'Copy with {amt}', btnAdjust: 'Adjust Budget',
@@ -57,8 +57,8 @@
       foot: 'Copying is completely free and can be stopped anytime without penalties.', connected: '{ex} connected',
       adjTitle: 'Adjust Budget, {name}', myAsset: 'My Copied Asset: {amt} (Return {ret})', tabAdd: 'Add Budget', tabOut: 'Withdraw Budget',
       avail: 'Available Account Balance: {amt}', adjNote: 'Adjusted budget will apply automatically from the next AI entry order.', adjBtn: 'Confirm Budget Adjustment', copyingTag: 'Copying',
-      authSub: 'Unlock TETH and start copying AI trading strategies.', authBack: 'Returned to strategy details. You can copy for free anytime.',
-      chatBack: '← Back to Strategy Details'
+      authBack: 'Returned to strategy details. You can copy for free anytime.',
+      chatBack: '← Back to Strategy Details', addAmt: 'Amount to add', outAmt: 'Amount to withdraw', none: 'None yet'
     }
   };
   /* 전략 이름 영어(문구표 #2 의 f1 과 같은 짜임. 나머지 30개는 agy 확인 전 임시) */
@@ -116,12 +116,18 @@
     return m ? MON[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1] + ', ' + m[4] : t;
   }
   function enWords(t) { return String(t).replace(/(나스닥|테슬라|엔비디아|숏|롱|금)/g, function (w) { return WORD_EN[w] || w; }); }
-  /* 지금 한 줄: G4T1Data.pos 그대로 계산, 문구표 #12 의 틀로 */
+  /* 지금 한 줄: G4T1Data.pos 그대로 계산, 문구표 #12 와 5.1(K16)의 틀로.
+     보유 = 「지금 {pos} {pnl} 보유 중」. 포지션 없이 기다림(복사했지만 첫 체결 전 포함) = 목록 카드와 같은 말(mkNowLine, 「지금 신호를 기다리는 중」 등) */
+  function waitLine(s) {
+    if (!ko()) return T('posWait');
+    var w = ''; try { w = mkNowLine(s) || ''; } catch (_) {}
+    return /기다리/.test(w) && !/보유 중$/.test(w) ? '지금 ' + w : T('posWait');
+  }
   function posLine(s, row) {
     var p = D.pos(s, row), m = String(p).match(/^지금 (.+) 보유 중$/);
     if (m) return T('posLive', { pos: ko() ? m[1] : enWords(m[1]) });
-    if (/기다리/.test(p) || ko()) return ko() ? p : T('posWait');
-    return T('posWait');
+    if (/기다리/.test(p)) return waitLine(s);
+    return ko() ? p : T('posWait');
   }
   function copyFor(s) { return D.mine().find(function (x) { return x.s.id === s.id; }) || null; }
   function budget(s) { var h = D.handoff(); return h && h.strategyId === s.id && Number.isFinite(h.budget) && h.budget > 0 ? h.budget : 1000; }
@@ -272,7 +278,8 @@
   function preserve() {
     if (!onOverview()) return;
     var sc = $('g-scroll'), y = document.body.classList.contains('gft-doc') ? window.scrollY : sc ? sc.scrollTop : 0;
-    write(KEY, { id: current.s.id, per: current.per, y: y });
+    /* K15: 「이전 판단 기록 보기」를 펼친 채 거래 내역으로 갔으면 돌아올 때도 펼쳐 둔다(접히면 본문이 짧아져 같은 자리로 못 돌아온다) */
+    write(KEY, { id: current.s.id, per: current.per, y: y, more: !!document.querySelector('.t3-detail .t3-more-records[open]') });
   }
   /* K3: 새로고침 직전 자리도 남긴다(스크롤 멈출 때, pagehide). 복원은 본문 높이가 찰 때까지 몇 번 다시 */
   function scroller() { return document.body.classList.contains('gft-doc') ? null : $('g-scroll'); }
@@ -316,11 +323,21 @@
       if (p < 1) frame = requestAnimationFrame(step);
     });
   }
+  /* K17: 부팅 때 저장 복원(STORE.load)과 부팅 재라우팅이 이미 그린 같은 상세를 0.6초쯤 뒤 한 번 더 그려 곡선이 끝 상태로 바뀌었다.
+     같은 전략, 같은 탭, 같은 사람 상태, 같은 언어를 2.5초 안에 다시 그리라면 지금 화면을 그대로 둔다(기간, 예산, 언어가 바뀌면 다시 그림) */
+  var lastSig = '', lastAt = 0;
+  function sig(s, tab) {
+    var row = copyFor(s), u = S.user ? (S.user.email || S.user.id || 'u') : '';
+    return [s.id, tab || 'ov', u, row ? row.c.id + ':' + row.d.value + ':' + row.d.inv : '', D.linked().join(','), lang(), per(state(s).per)].join('|');
+  }
   tfSS3DetailRender = function (ne, pd, tab) {
     var s; try { s = tfSSFind(decodeURIComponent(ne)); } catch (_) {}
     if (!real(s)) return oldDetail.apply(this, arguments);
+    var k = sig(s, tab);
+    if (k === lastSig && Date.now() - lastAt < 2500 && G.mode === 'tfss3d' && document.querySelector('#g-content .t3-detail') && !$('modal-auth').classList.contains('open')) return;
     var restore = state(s), v = oldDetail.apply(this, arguments), page = document.querySelector('#g-content .mk-detail');
     if (!page) return v;
+    lastSig = k; lastAt = Date.now();
     page.querySelectorAll(':scope > .g4-n1,:scope > a.g4-back').forEach(function (el) { el.remove(); });
     page.classList.add('t3-detail'); page.lang = ko() ? 'ko' : 'en'; document.body.classList.add('g4-t3');
     var nav = page.querySelector('.mk-dtabs'); if (nav) nav.hidden = true;
@@ -328,7 +345,9 @@
     if (crumb) crumb.innerHTML = '<button type="button" class="t3-link t3-crumb" onclick="G4T3.' + (ov ? 'back' : 'overview') + '()">' + esc(ov ? T('back') : T('chatBack')) + '</button>';
     current = { s: s, per: per(restore.per), row: copyFor(s), ne: encodeURIComponent(s.id) };
     requestAnimationFrame(barHeight);
+    sideEn();
     if (ov) {
+      if (restore.more) { var more = page.querySelector('.t3-more-records'); if (more) more.open = true; }
       if (restore.y) restoreY(restore.y, 0);
       countIn(s);
       if (typeof MK_OV_KEEP !== 'undefined' && MK_OV_KEEP && MK_OV_KEEP.ne === ne) MK_OV_KEEP = null;
@@ -354,7 +373,7 @@
   var tradesGo = mkGoTrades;
   mkGoTrades = function (ne) { if (current) preserve(); return tradesGo.apply(this, arguments); };
   var oldAdjust = cpAdjCommit;
-  cpAdjCommit = function () { var on = !!document.querySelector('.t3-detail'), id = current && current.s.id, v = oldAdjust.apply(this, arguments); if (on && id) { preserve(); tfSS3DetailRender(id, 'all', 'ov'); } return v; };
+  cpAdjCommit = function () { var on = !!document.querySelector('.t3-detail'), id = current && current.s.id, v = oldAdjust.apply(this, arguments); if (on && id) { preserve(); lastSig = ''; tfSS3DetailRender(id, 'all', 'ov'); } return v; };
   /* I5: T4 는 고른 맥락(전략, 기간, $1,000)을 받는다. T4 의 가입·재생은 T4 몫 */
   var oldBTView = btView;
   btView = function () { var h = read('g4.t3.verify'); if (h && BT.s && h.strategyId === BT.s.id) { BT.per = h.per; BT.amt = h.budget; BT.R = null; write('g4.t3.verify', null); } return oldBTView.apply(this, arguments); };
@@ -363,8 +382,10 @@
   /* 390 바 높이를 QA 단추와 토스트 자리 계산에 넘긴다(I9) */
   function barHeight() { var b = document.querySelector('.t3-mobile-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t3-bar-h', b.offsetHeight + 'px'); }
   function onDetail() { return !!document.querySelector('.t3-detail'); }
+  /* 창의 숫자 = 상세에서 지금 고른 기간의 큰 숫자(목록 → 상세 → 가입 → 복사 창이 같은 값) */
+  function curPer(s) { return current && current.s.id === s.id ? current.per : per(state(s).per); }
   function sheetHead(s, mode, row) {
-    var r = series(s, 0), diff = Math.round(r.final) - Math.round(r.benchFinal), sub = mode === 'b' ? T('connected', { ex: exOf(s).name }) : mode === 'c' ? T('copyingTag') : official(s);
+    var r = series(s, curPer(s)), diff = Math.round(r.final) - Math.round(r.benchFinal), sub = mode === 'b' ? T('connected', { ex: exOf(s).name }) : mode === 'c' ? T('copyingTag') : official(s);
     var h = '<div class="t3s-head">' + logo(s, 28) + '<div><b>' + esc(name(s)) + '</b><span>' + esc(sub) + '</span></div></div>';
     if (mode === 'c') {
       var d = row.d;
@@ -373,10 +394,10 @@
       h += '<div class="t3s-money"><span>' + esc(m65[0].replace(/[:\s]+$/, '')) + '</span><strong class="num">' + money(d.value, true) + '<small>' + esc((m65[1] || '').trim()) + '</small></strong>'
         + '<p>' + esc(T('heroSub')) + ' ' + money(Math.round(r.final)) + '</p><p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p></div>';
     } else {
-      h += '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="up num">' + pct(s.r.ret) + '</em></div>'
-        + '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + (diff > 0 ? '<p><span class="up">+' + money(diff) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>' : '') + '</div>';
+      h += '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="' + (r.ret >= 0 ? 'up' : 'dn') + ' num">' + pct(r.ret) + '</em></div>'
+        + (mode === 'auth' ? '' : '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + (diff > 0 ? '<p class="t3s-diff"><span class="up">+' + money(diff) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>' : '')) + '</div>';
     }
-    return h + curve(r, { h: 84, legend: true, tags: mode === 'c', cls: 'compact', animate: false });
+    return h + curve(r, { h: mode === 'auth' ? 72 : 84, legend: mode !== 'auth', tags: mode === 'c', cls: 'compact', animate: false });
   }
   var t1Sheet = mkFollowSheet;
   mkFollowSheet = function (ne) {
@@ -444,6 +465,12 @@
     var go = $('cpa-go'); if (go) go.textContent = T('adjBtn');
     var cancel = w.querySelector('.acts3 .obtn'); if (cancel) cancel.remove();
     var amt = $('cpa-amt');
+    /* K12(A3 c 안3): 「추가할 금액」 이름표 + f·b 창과 같은 큰 $ 칸. 「USD」와 파란 「최대」 칩은 뺀다 */
+    var box = amt && amt.closest('.cps-in');
+    if (box && !box.classList.contains('t3s-amt')) {
+      box.classList.add('t3s-amt'); box.insertAdjacentHTML('afterbegin', '<i aria-hidden="true">$</i>'); amt.placeholder = '';
+      var fld = box.closest('.cps-fld'); if (fld) fld.insertAdjacentHTML('beforebegin', '<label class="t3s-amt-l" for="cpa-amt">' + esc(T(TF_CPA.dir === 'add' ? 'addAmt' : 'outAmt')) + '</label>');
+    }
     if (amt && amt.value === '' && TF_CPA.dir === 'add') { amt.value = Math.min(1000, Math.floor(cpState().spot)) || ''; if (amt.value) cpAdjSync(cid); }
     enFix();
   }
@@ -470,15 +497,25 @@
   /* ── I6 가입 창: 열 때 기록 한 칸, 브라우저 뒤로 = 창만 닫고 같은 상세(claude 3e0cf4e 239~256줄) ── */
   var authBack = false, skipPop = false, oldClose = closeModal, oldAuthOpen = authOpen;
   function authOn() { var m = $('modal-auth'); return !!(m && m.classList.contains('open')); }
+  /* K11: 상세에서 연 가입 창은 설명문 대신 A3 f 안3 머리 한 덩어리(로고, 이름, 「$1,000 넣었다면 지금 $X +%」, 작은 곡선). 다른 화면에서 열면 원래 창 */
+  function authHeadOff() {
+    document.querySelectorAll('#modal-auth .t3-au-head').forEach(function (n) { n.remove(); });
+    var sub = document.querySelector('#au-start .au-sub'); if (sub) sub.style.display = '';
+  }
   authOpen = function () {
+    authHeadOff();
     var v = oldAuthOpen.apply(this, arguments);
     if (onDetail() && authOn()) {
-      var sub = document.querySelector('#modal-auth .au-sub'); if (sub) sub.textContent = T('authSub');
+      var title = document.querySelector('#au-start .au-title'), sub = document.querySelector('#au-start .au-sub');
+      if (current && title) {
+        try { title.insertAdjacentHTML('afterend', '<div class="t3s t3-au-head">' + sheetHead(current.s, 'auth') + '</div>'); if (sub) sub.style.display = 'none'; } catch (e) { authHeadOff(); }
+      }
       if (!(history.state && history.state.g4t3Auth)) history.pushState({ g4t3Auth: true }, '', location.href);
     }
     return v;
   };
   closeModal = function (id) {
+    if (id === 'modal-auth') setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
     var wasOn = id === 'modal-auth' && authOn(), v = oldClose.apply(this, arguments);
     if (wasOn && !authBack && history.state && history.state.g4t3Auth) {
       if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
@@ -487,7 +524,7 @@
   };
   addEventListener('popstate', function () {
     if (skipPop) { skipPop = false; return; }
-    if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } }
+    if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } setTimeout(function () { if (!authOn()) authHeadOff(); }, 400); }
   });
   /* K1(I10): 분석의 화면 확인 프레임은 옛 상세 선택자(.mk3-dh 등)만 기다려 새 상세에서 20초 뒤 실패했다.
      새 상세(.t3-detail 의 큰 돈)가 그려지면 준비로 본다. 끝까지 못 그리면 8초에 넘어가고, 분석은 첫 카드의 N1 숫자로 시작한다 */
@@ -562,6 +599,16 @@
     if (by) { if (sc) sc.scrollTop += by; else window.scrollBy(0, by); }
     noticeT = setTimeout(dropNotice, 3200);
   };
+  /* K18(문구표 5.2): 영어 화면의 왼쪽 사이드바 빈 목록 「아직 없음」 → 「None yet」. 사이드바가 다시 그려져도 같게 */
+  function sideEn() {
+    if (ko()) return;
+    document.querySelectorAll('#g-art-list .g-note, #g-sess-list .g-note').forEach(function (n) { if (n.textContent.trim() === TX.ko.none) n.textContent = T('none'); });
+  }
+  if (window.MutationObserver) ['g-art-list', 'g-sess-list'].forEach(function (id) { var el = $(id); if (el) new MutationObserver(sideEn).observe(el, { childList: true }); });
+  sideEn();
+  /* K17: 상세 주소에 있는 동안 html.g4-detail(첫 칠하기 전 index.html 머리에서 붙임). 다운로드 띠와 그 자리 64px 를 처음부터 뺀다 */
+  function detailFlag() { document.documentElement.classList.toggle('g4-detail', /^#\/share\/s\//.test(location.hash)); }
+  addEventListener('hashchange', detailFlag); detailFlag();
   /* K7(I9): QA 단추는 주소에 ?qa=1 이 있을 때만(PO 12:57 판정) */
   function qaFlag() { return /[?&]qa=1(?:&|$)/.test(location.search) || /[?&]qa=1(?:&|$)/.test(location.hash); }
   function qaSync() { document.documentElement.classList.toggle('t3-qa', qaFlag()); }
@@ -569,7 +616,7 @@
   /* 언어를 바꾸면 상세를 그 자리에서 다시 그린다(곡선은 그리지 않음) */
   if (typeof glcSetLang === 'function') {
     var gl0 = glcSetLang;
-    glcSetLang = function () { var r = gl0.apply(this, arguments); try { if (onDetail() && current) { preserve(); tfSS3DetailRender(current.ne, 'all', 'ov'); } } catch (_) {} return r; };
+    glcSetLang = function () { var r = gl0.apply(this, arguments); try { if (onDetail() && current) { preserve(); lastSig = ''; tfSS3DetailRender(current.ne, 'all', 'ov'); } sideEn(); } catch (_) {} return r; };
   }
 
   window.G4T3 = {
