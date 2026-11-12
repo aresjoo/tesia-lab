@@ -95,9 +95,13 @@ body.g4-t3 .gft-wm{display:none!important} /* I12 바닥 청록 TETH 없음(T2 �
 .t3-info>summary{font-size:18px;cursor:pointer}
 .t3-info>p{font-size:16px;line-height:1.6;color:#cdcdcd}
 .t3-help{font-size:14px;color:#9a9a9a;margin:48px 0 0;line-height:1.7}
-.t3-owned{border-bottom:1px solid #ffffff1a;padding-bottom:20px;margin-bottom:24px}
-.t3-owned>span{display:block;color:#afafaf;font-size:16px}
-.t3-owned>strong{display:block;font-size:44px;font-weight:400;color:#fff;margin:6px 0 0}
+.t3-owned{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid #ffffff1a;padding-bottom:16px;margin:0 0 20px}
+.t3-owned>span{color:#afafaf;font-size:16px}
+.t3-owned>strong{font-size:32px;font-weight:400;color:#fff}
+.t3-notice{margin:10px 0 0;font-size:13px;line-height:1.5;color:#ececec;background:#2f2f2f;border-radius:12px;padding:10px 12px}
+.t3-notice.floating{position:fixed;z-index:41;left:16px;right:16px;bottom:calc(var(--t3-bar-h,150px) + 8px);margin:0}
+.t3-notice.floating.top{bottom:auto;top:64px}
+html:not(.t3-qa) body.g4-t3 #tf-devbtn,html:not(.t3-qa) body.g4-t3 #tf-devpanel{display:none!important} /* K7 */
 .t3-mobile-bar,.t3-mobile-secondary{display:none}
 .t3-return{display:block;margin:16px}
 @media(max-width:1180px) and (min-width:861px){.t3-layout{gap:28px;grid-template-columns:minmax(0,1fr) 300px}.t3-final{font-size:56px!important}.t3-card-num{font-size:44px}.t3-action{padding:22px}.t3-plot{margin-right:116px}.t3-tag{font-size:17px}}
@@ -117,7 +121,8 @@ body.g4-t3 .gft-wm{display:none!important} /* I12 바닥 청록 TETH 없음(T2 �
  .t3-records{margin-top:32px}.t3-main h2{font-size:20px}.t3-records li{grid-template-columns:1fr;gap:8px}.t3-rec-main b{font-size:18px}.t3-rec-main p{font-size:15px}
  .t3-rec-time{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:4px 14px;font-size:12px;padding-top:0}
  .t3-orders{margin-top:32px}.t3-tbl{font-size:13px}.t3-tbl th{font-size:12px;padding:10px 6px}.t3-tbl td{padding:14px 6px}
- .t3-help{margin-top:32px}.t3-owned>strong{font-size:34px}
+ .t3-help{margin-top:32px}.t3-owned{padding-bottom:12px;margin-bottom:14px}.t3-owned>span{font-size:14px}.t3-owned>strong{font-size:24px}
+ body.g4-t3:has(.t3-owned) .t3-header{margin-bottom:12px}
  .t3-mobile-bar{position:fixed;z-index:39;left:0;right:0;bottom:0;display:block;padding:12px 16px calc(10px + env(safe-area-inset-bottom));background:#000;border-top:1px solid #ffffff24;box-sizing:border-box}
  .t3-bar-n{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;color:#ececec;font-size:16px}.t3-bar-n strong{font-weight:400;font-size:22px;color:#fff;white-space:nowrap}
  .t3-mobile-bar .t3-primary{min-height:52px;font-size:17px}

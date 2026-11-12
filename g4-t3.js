@@ -181,7 +181,7 @@
     return '<section class="t3-proof" data-period="' + p + '"><div class="t3-proof-top"><p>' + esc(T('heroSub')) + '</p>' + periodPicker(p) + '</div>'
       + '<div class="t3-money"><strong class="t3-final num" data-value="' + Math.round(r.final) + '">' + money(Math.round(r.final)) + '</strong><span class="num ' + (r.ret >= 0 ? 'up' : 'dn') + '">' + pct(r.ret) + '</span></div>'
       + compare(r, 't3-compare-line') + '<p class="t3-range">' + esc(T('since', { date: longDate(r.i0) })) + '</p>'
-      + '<div id="t3-chart">' + curve(r, { animate: drawOnce(s, p), h: innerWidth <= 860 ? 168 : 224 }) + '</div></section>';
+      + '<div id="t3-chart">' + curve(r, { animate: drawOnce(s, p), h: innerWidth <= 860 ? (copyFor(s) ? 140 : 168) : 224 }) + '</div></section>';
   }
   function now(s, row) {
     var ex = exOf(s), line = '';
@@ -259,7 +259,7 @@
     var x = state(s), row = copyFor(s); current = { s: s, per: per(x.per), row: row, ne: ne };
     MKD.s = s; MKD.per = current.per; MKD.tab = 'bal'; MKD.gran = 'day'; MKD.eq = s.r.eq;
     return '<div class="t3-layout"><div class="t3-main">'
-      + (row ? '<div class="t3-owned"><span>' + esc(T('barMine')) + '</span><strong class="num">' + money(row.d.value, true) + '</strong></div>' : '')
+      + (row ? '<p class="t3-owned"><span>' + esc(T('barMine')) + '</span><strong class="num">' + money(row.d.value, true) + '</strong></p>' : '')
       + '<div id="t3-proof-host">' + proof(s, current.per) + '</div>' + now(s, row)
       + '<nav class="t3-mobile-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></nav>'
       + records(s) + orders(s)
@@ -272,6 +272,19 @@
     var sc = $('g-scroll'), y = document.body.classList.contains('gft-doc') ? window.scrollY : sc ? sc.scrollTop : 0;
     write(KEY, { id: current.s.id, per: current.per, y: y });
   }
+  /* K3: 새로고침 직전 자리도 남긴다(스크롤 멈출 때, pagehide). 복원은 본문 높이가 찰 때까지 몇 번 다시 */
+  function scroller() { return document.body.classList.contains('gft-doc') ? null : $('g-scroll'); }
+  function restoreY(y, n) {
+    requestAnimationFrame(function () {
+      var sc = scroller(); if (sc) sc.scrollTop = y; else window.scrollTo(0, y);
+      var got = sc ? sc.scrollTop : window.scrollY;
+      if (Math.abs(got - y) > 2 && n < 12) setTimeout(function () { if (onDetail()) restoreY(y, n + 1); }, 120);
+    });
+  }
+  var saveT = 0;
+  function saveSoon() { if (!onDetail() || !current) return; clearTimeout(saveT); saveT = setTimeout(preserve, 150); }
+  addEventListener('scroll', saveSoon, { passive: true, capture: true });
+  addEventListener('pagehide', function () { if (onDetail()) preserve(); });
   function handoff() {
     if (!current) return null;
     preserve(); var s = current.s, h = D.save(s.id, budget(s)), r = series(s, 0);
@@ -314,7 +327,7 @@
     current = { s: s, per: per(restore.per), row: copyFor(s), ne: encodeURIComponent(s.id) };
     requestAnimationFrame(barHeight);
     if (ov) {
-      if (restore.y) requestAnimationFrame(function () { var sc = $('g-scroll'); if (document.body.classList.contains('gft-doc')) window.scrollTo(0, restore.y); else if (sc) sc.scrollTop = restore.y; });
+      if (restore.y) restoreY(restore.y, 0);
       countIn(s);
       if (typeof MK_OV_KEEP !== 'undefined' && MK_OV_KEEP && MK_OV_KEEP.ne === ne) MK_OV_KEEP = null;
     } else {
@@ -474,6 +487,52 @@
     if (skipPop) { skipPop = false; return; }
     if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } }
   });
+  /* K1(I10): 분석의 화면 확인 프레임은 옛 상세 선택자(.mk3-dh 등)만 기다려 새 상세에서 20초 뒤 실패했다.
+     새 상세(.t3-detail 의 큰 돈)가 그려지면 준비로 본다. 끝까지 못 그리면 8초에 넘어가고, 분석은 첫 카드의 N1 숫자로 시작한다 */
+  if (typeof anFrame === 'function') {
+    anFrame = function (ne, pd, ok, fail) {
+      var fr = document.createElement('iframe'); fr.className = 'an-frame'; fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
+      fr.style.cssText = 'position:fixed;left:0;top:0;width:' + AN_W + 'px;height:' + AN_H + 'px;border:0;opacity:0;pointer-events:none;z-index:-1';
+      fr.src = location.pathname + location.search + (location.search ? '&' : '?') + 'an=1#/share/s/' + ne + '/' + pd;
+      var t0 = Date.now(), timer;
+      fr.onload = function () {
+        timer = setInterval(function () {
+          var w = fr.contentWindow, d = fr.contentDocument; if (!w || !d) return;
+          var ready = w.G && w.G.mode === 'tfss3d' && d.querySelector('.t3-detail .t3-final, .mk3-dh, .mk3-t, #g-content .mk3');
+          if (ready) {
+            clearInterval(timer);
+            try { var st = d.createElement('style'); st.textContent = '#tf-devbtn,#tf-devpanel,#teth-help,.hw-fab,#hw-fab,[id^=hw-],.g-terms,.t3-mobile-bar{display:none!important} #g-scroll{scrollbar-width:none} html,body{overflow:hidden}'; d.head.appendChild(st); } catch (e) {}
+            anLib(d, function () { setTimeout(function () { ok(fr); }, 500); }, function () { fail(); fr.remove(); }); return;
+          }
+          if (Date.now() - t0 > 8000) { clearInterval(timer); fail(); fr.remove(); }
+        }, 250);
+      };
+      fr.onerror = function () { clearInterval(timer); fail(); fr.remove(); };
+      document.body.appendChild(fr);
+    };
+  }
+  /* K4(I9): 390 상세의 안내(사용량 소진 등)는 떠 있는 토스트 대신 「지금」 문장 바로 아래 한 줄로. 지금 문장이 화면 밖이면 바 바로 위 한 줄 */
+  var t3Toast = toast;
+  toast = function (message) {
+    if (!onDetail() || innerWidth > 860) return t3Toast.apply(this, arguments);
+    var nowEl = document.querySelector('.t3-detail .t3-now'), old = document.querySelector('.t3-notice');
+    if (old) old.remove();
+    var r = nowEl && nowEl.getBoundingClientRect(), bar = document.querySelector('.t3-mobile-bar'), barTop = bar ? bar.getBoundingClientRect().top : innerHeight;
+    var n = document.createElement('p'); n.className = 't3-notice'; n.setAttribute('role', 'status'); n.textContent = message;
+    /* 1) 「지금」 문장 바로 아래에 들어가 바 위에 다 보이면 거기 2) 아니면 바 바로 위 한 줄 3) 그 줄이 지금·다음 판단 문장과 겹치면 화면 위 머리 아래 */
+    var placed = false;
+    if (r && r.top > 0 && r.bottom < barTop) { nowEl.insertAdjacentElement('afterend', n); placed = n.getBoundingClientRect().bottom <= barTop - 4; if (!placed) n.remove(); }
+    if (!placed) {
+      n.classList.add('floating'); document.body.appendChild(n);
+      var nr = n.getBoundingClientRect(), hit = [].some.call(document.querySelectorAll('.t3-detail .t3-pos, .t3-detail .t3-next, .t3-detail .t3-final'), function (e) { var q = e.getBoundingClientRect(); return q.bottom > nr.top && q.top < nr.bottom; });
+      if (hit) n.classList.add('top');
+    }
+    setTimeout(function () { n.remove(); }, 3200);
+  };
+  /* K7(I9): QA 단추는 주소에 ?qa=1 이 있을 때만(PO 12:57 판정) */
+  function qaFlag() { return /[?&]qa=1(?:&|$)/.test(location.search) || /[?&]qa=1(?:&|$)/.test(location.hash); }
+  function qaSync() { document.documentElement.classList.toggle('t3-qa', qaFlag()); }
+  qaSync(); addEventListener('hashchange', qaSync);
   /* 언어를 바꾸면 상세를 그 자리에서 다시 그린다(곡선은 그리지 않음) */
   if (typeof glcSetLang === 'function') {
     var gl0 = glcSetLang;
@@ -498,9 +557,13 @@
     analyze: function () {
       if (!current) return; var h = handoff();
       if (!S.user) { tfSS3Ask(current.ne, 'all'); return; }
+      var here = location.href;
+      /* K2: 사용량이 막힌 사람은 기록·주소를 건드리기 전에 막고 상세에 그대로 둔다(안내는 I9 자리) */
+      if (typeof aiGate === 'function' && aiGate('new') === 'block') { tfSS3Ask(current.ne, 'all'); try { history.replaceState(history.state, '', here); } catch (_) {} return; }
       /* tfSS3Ask 는 지금 기록 칸을 대화 주소로 바꾼다. 상세 칸을 하나 더 쌓아 두어 뒤로 한 번 = 상세(I10) */
-      try { history.pushState(null, '', location.href); } catch (_) {}
+      try { history.pushState(null, '', here); } catch (_) {}
       tfSS3Ask(current.ne, 'all');
+      if (G.mode === 'tfss3d') { try { history.replaceState(history.state, '', here); } catch (_) {} return; } /* 다른 이유로 대화에 못 들어갔으면 주소 복구(codex 4ca3056 방어) */
       var content = $('g-content');
       if (content && !content.querySelector('.t3-return')) content.insertAdjacentHTML('afterbegin', '<a class="t3-return t3-link" href="' + esc(h.returnTo) + '">' + esc(T('chatBack')) + '</a>');
     }
