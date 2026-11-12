@@ -61,9 +61,11 @@
   if (typeof tfVerifyGo === 'function') { var verifyGo = tfVerifyGo; tfVerifyGo = function () { clickAt = performance.now(); return verifyGo.apply(this, arguments); }; }
   /* J13: 백테스트 주소로 곧장 오면 index.html 머리가 본문을 가린다(html.g4-bt-wait). 이 화면을 그리거나 다른 주소로 가면 푼다 */
   function reveal() { document.documentElement.classList.remove('g4-bt-wait'); }
+  /* K7: 백테스트 주소에 있는 동안 html.g4-bt(다운로드 띠 빼기, index.html 머리) */
+  function btFlag() { document.documentElement.classList.toggle('g4-bt', /^#\/share\/bt\//.test(location.hash)); }
   var missing = 0; /* K6: 없는 id 로 전략 찾기 화면에 넘긴 시각 */
   function revealWhenList() { if ((window.G && G.mode === 'tfss3') || performance.now() - missing > 1500) { missing = 0; reveal(); } else requestAnimationFrame(revealWhenList); }
-  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) { if (missing) revealWhenList(); else reveal(); } if (/^#\/share\/s\//.test(location.hash)) write('g4.t4.return', null); });
+  addEventListener('hashchange', function () { btFlag(); if (!/^#\/share\/bt\//.test(location.hash)) { if (missing) revealWhenList(); else reveal(); } if (/^#\/share\/s\//.test(location.hash)) write('g4.t4.return', null); });
 
   btRoute = function (h) {
     var m = h.match(/^#\/share\/bt\/([^/]+)(?:\/(go|all))?$/);
