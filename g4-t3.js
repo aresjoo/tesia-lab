@@ -207,7 +207,10 @@
   function recItem(s, m) {
     var body = ko() ? tbSent(skdText(m.t || ''), 2).head : recEn(m, s), times;
     if ((m.k === 'buy' || m.k === 'sell') && m.i != null) {
-      times = '<span>' + esc(T('signal', { t: stamp(mkWhen(s, m.i, m.a), true) })) + '</span><span>' + esc(T('fill', { t: stamp(mkWhen(s, m.i + 1, m.a), false) })) + '</span>';
+      /* R1(5단계 리허설): 체결은 표(mkOrders)와 같은 거래 원본 = 이벤트의 체결 봉(xi). 추적 손절처럼 그날 체결되면 신호와 같은 날.
+         체결 봉을 모르는 기록만 예전처럼 다음 봉 */
+      var ev = ((s.r && s.r.events) || []).filter(function (e) { return e.i === m.i && e.xi != null && e.t === (m.k === 'buy' ? 'enter' : 'exit') && (!m.a || !e.a || e.a === m.a); })[0];
+      times = '<span>' + esc(T('signal', { t: stamp(mkWhen(s, m.i, m.a), true) })) + '</span><span>' + esc(T('fill', { t: stamp(mkWhen(s, ev ? ev.xi : m.i + 1, m.a), false) })) + '</span>';
     } else times = '<span>' + esc(m.ts || '') + '</span>';
     return '<li><div class="t3-rec-main"><b>' + esc(ko() ? skdText(m.tag || '') : (TAG_EN[m.tag] || '')) + '</b>' + (body ? '<p>' + esc(body) + '</p>' : '') + '</div><div class="t3-rec-time num">' + times + '</div></li>';
   }
@@ -429,7 +432,7 @@
     form.querySelectorAll('.g4-budget-strategy, .g4-budget-now, .g4-proof').forEach(function (n) { n.remove(); });
     form.insertAdjacentHTML('afterbegin', sheetHead(s, 'f'));
     var lb = form.querySelector('label[for="g4-budget"]'); if (lb) lb.textContent = T('budget');
-    var mn = $('g4-budget-min'); if (mn) mn.textContent = T('minNote', { min: money(mkMin(s)) });
+    var mn = $('g4-budget-min'); if (mn) mn.style.display = 'none'; /* R2(5단계 리허설): 칸 밑 최소 금액 문장은 뺀다. 최소 미만이면 #g4-budget-error 가 알린다 */
     var go = $('g4-budget-next'); if (go) go.textContent = T('connect', { ex: exOf(s).name });
     form.insertAdjacentHTML('beforeend', '<p class="t3s-foot">' + esc(T('foot')) + '</p>');
     enFix();
@@ -440,7 +443,7 @@
     var t = $('mk-f-t'); if (t) t.textContent = T('copyTitle');
     var st = w.querySelector('.skc-strat'); if (st) st.outerHTML = sheetHead(s, 'b');
     var fld = $('cps-amt-fld'), lb = fld && fld.querySelector('label'); if (lb) lb.textContent = T('budget');
-    var hint = $('skc-amt-h'); if (hint) hint.textContent = T('minNote', { min: money(mkMin(s)) });
+    var hint = $('skc-amt-h'); if (hint) hint.style.display = 'none'; /* R2: 같은 문장을 b 창에서도 뺀다. 최소 미만이면 #cps-amt-err 가 알린다 */
     var loss = w.querySelector('.skc-pills') && w.querySelector('.skc-pills').closest('.skc-fld');
     if (loss) {
       var box = document.createElement('details'); box.className = 't3s-more';
