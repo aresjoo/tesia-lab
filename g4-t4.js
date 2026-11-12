@@ -351,6 +351,20 @@
   /* 언어를 바꾸면 이 화면을 그 언어로 다시 그린다(착지 0초) */
   if (typeof glcSetLang === 'function') { var gl0 = glcSetLang; glcSetLang = function () { var r = gl0.apply(this, arguments); try { if ($('bt-root') && $('bt-root').classList.contains('t4') && BT.s) { V = null; lastHash = ''; btView(); } } catch (_) {} return r; }; }
 
+  /* K10(4단계): T4 에서 연 창의 인계는 돌아올 자리가 T4 착지다(decision-1 ④ returnTo #/share/bt/<id>).
+     T1 의 D.save 는 창을 열 때마다 returnTo 를 상세로 되돌리고 per, 얼굴을 버린다. T4 화면 위에서 같은 전략이면 다시 채운다 */
+  if (D && typeof D.save === 'function') {
+    var save0 = D.save;
+    D.save = function (id) {
+      var h = save0.apply(this, arguments), rt = $('bt-root');
+      if (h && V && !V.mine && rt && rt.classList.contains('t4') && h.strategyId === V.s.id) {
+        h.returnTo = '#/share/bt/' + ne(); h.per = BT.per;
+        h.face = { final: V.F, bench: V.H, ret: V.ret, since: V.R.i0, pos: D.pos ? D.pos(V.s) : null };
+        write(HANDOFF, h);
+      }
+      return h;
+    };
+  }
   /* PO 15:30 (2): T4 위에서 예산 조정을 마치면 T3 K21 과 같은 안내(「$X를 예산에 추가했습니다」)를 화면 안 한 줄로(3.2초, role=status).
      앱 토스트는 390 아래 띠와 겹치고 금방 사라져 안정 컷에 남지 않았다. 화면은 다시 그리지 않고 읽던 자리 그대로 */
   if (typeof cpAdjCommit === 'function') {
