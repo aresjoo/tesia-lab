@@ -4,6 +4,9 @@
   'use strict';
   var D = G4T1Data, LIST = '#/trade/strategies', PER = 10, POS = 'g4.t2.pos', FROM = 'g4.t2.from', LAST = 'g4.t2.last', COUNTED = 'g4.t2.counted';
   var t1Hub = tfShareHub, t1NF = tfNFRoute, t1Detail = tfSS3DetailRender, t1Card = mkCard, oldContent = gContent;
+  /* R1(S8, K1 대체): 그 숫자를 처음 보는 사람만 $1,000 부터 센다. count = entry ∈ {direct, reload, home-nav}.
+     direct·reload = 이 문서가 목록 주소로 열린 뒤 첫 그리기(landed), home-nav = 사이드바·메뉴 「전략 복사」(tfShareView). T1 링크, 상세에서 뒤로는 끝 값 0초부터 */
+  var landed = false, landedDrawn = false, navEntry = false;
   var drawing = false, expanded = false, sig = null, keepOpen = false, backId = null, reloadY = null, drawn = null;
   var KIND = { agent: 1, rule: 1, mix: 1 }, MKT = { crypto: 1, stock: 1, index: 1, multi: 1 };
   /* 문구 7개 언어(K5 링크, K9 빈 결과). 정본 sprint/G4/T2/copy/ (카피 주인 1.3 agy) */
@@ -12,10 +15,16 @@
     linkAll: { ko: '전체 {n}개 전략 둘러보기 →', en: 'Explore all {n} strategies →', ja: '全{n}の戦略を見る →', 'zh-CN': '浏览全部 {n} 个策略 →', 'zh-TW': '瀏覽全部 {n} 個策略 →', es: 'Explorar las {n} estrategias →', fr: 'Découvrir les {n} stratégies →' },
     emptyMkt: { ko: '이 시장에는 없지만, 다른 시장에 {ex} 전략 {n}개가 있습니다.', en: 'None in this market, but {n} {ex} strategies are active in other markets.', ja: 'この市場にはありませんが、他の市場に{ex}戦略が{n}件あります。', 'zh-CN': '该市场暂无策略，但在其他市场有 {n} 个 {ex} 策略。', 'zh-TW': '此市場暫無策略，但在其他市場有 {n} 個 {ex} 策略。', es: 'No hay en este mercado, pero hay {n} estrategias de {ex} en otros mercados.', fr: "Aucune dans ce marché, mais {n} stratégies {ex} sont disponibles sur d'autres marchés." },
     /* 시장이 아닌 조건(종류, 검색)으로 0개일 때. 확정본(table-v2-K)에 없는 경우라 1.3 확인 대기 */
+    /* K17(agy-copy-k2 권고 영어): 빈 결과 문장과 단추, 상담 줄. 다른 언어는 한국어로 둔다(카피 주인 확정 전) */
+    viewAll: { ko: '전체 보기', en: 'View all' },
+    emptyGuest: { ko: '조건에 맞는 전략이 없습니다', en: 'No strategies match your filters' },
+    resetFlt: { ko: '필터 초기화', en: 'Reset filters' },
+    helpLine: { ko: '막히면 상담원이 24시간 답합니다.', en: 'Need help? 24/7 agent is available.' },
+    helpBtn: { ko: '상담원에게 묻기', en: 'Ask agent' },
     emptyFlt: { ko: '{ex}에서 실행하는 전략 중 이 조건에 맞는 것은 없습니다.', en: 'No {ex} strategies match these filters.', ja: 'この条件に合う{ex}の戦略はありません。', 'zh-CN': '没有符合这些条件的 {ex} 策略。', 'zh-TW': '沒有符合這些條件的 {ex} 策略。', es: 'Ninguna estrategia de {ex} coincide con estos filtros.', fr: 'Aucune stratégie {ex} ne correspond à ces filtres.' }
   };
   function tx(k, v) { var e = TX[k] || {}, l = (window.GLC && GLC.lang) || 'ko', t = e[l] || e.ko || k; return t.replace(/\{(\w+)\}/g, function (_, n) { return v && v[n] != null ? v[n] : ''; }); }
-  var HELP = '<p class="cq-help mk-help">막히면 상담원이 24시간 답합니다. <button type="button" class="pl-link" onclick="tfTxHelp()">상담원에게 묻기</button></p>';
+  function help() { return '<p class="cq-help mk-help">' + gEsc(tx('helpLine')) + ' <button type="button" class="pl-link" onclick="tfTxHelp()">' + gEsc(tx('helpBtn')) + '</button></p>'; } /* K17: 그릴 때마다 지금 언어로 */
 
   function base() { return location.pathname + location.search; }
   /* K1·K12: 저장된 로그인이 없으면 복원할 것이 없으니 곧장 그린다. 있으면 복원이 끝난 뒤(TF_STATE_READY)에만.
@@ -128,21 +137,22 @@
       if (!rows.length) {
         /* K9(table-v2-K): 고른 시장에만 없으면 다른 시장의 개수를 말하고, 「전체 보기」는 시장만 되돌린다(내 거래소는 그대로). 개수 = 되돌린 뒤 보이는 카드 수 */
         var ex = tfMyExNames(tfMyExIds()), n0 = TF_MYEX_N, other = MKT[t.ss.asset] ? rowsNow('all').filter(real).length : 0; TF_MYEX_N = n0;
-        return empty('<div class="myex-empty"><p>' + gEsc(other ? tx('emptyMkt', { ex: ex, n: other }) : tx('emptyFlt', { ex: ex })) + '</p><button type="button" class="pl-link" onclick="' + (other ? 'G4T2.allMarkets()' : 'tfMyExSet(\'\')') + '">전체 보기</button></div>');
+        return empty('<div class="myex-empty"><p>' + gEsc(other ? tx('emptyMkt', { ex: ex, n: other }) : tx('emptyFlt', { ex: ex })) + '</p><button type="button" class="pl-link" onclick="' + (other ? 'G4T2.allMarkets()' : 'tfMyExSet(\'\')') + '">' + gEsc(tx('viewAll')) + '</button></div>');
       }
       note = '<p class="myex-note">' + nm + '에서 바로 실행할 수 있는 전략 ' + rows.length + '개입니다.</p>';
     }
-    if (!rows.length) return empty('<div class="ss3-empty">조건에 맞는 전략이 없습니다<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">필터 초기화</button></div>');
+    if (!rows.length) return empty('<div class="ss3-empty">' + gEsc(tx('emptyGuest')) + '<br><button type="button" class="mk-btn2" style="margin-top:16px" onclick="tfSS3Reset()">' + gEsc(tx('resetFlt')) + '</button></div>');
     emptyFlag(false);
     var shown = expanded ? rows : rows.slice(0, PER), rest = rows.length - shown.length;
     return note + '<div class="mk-grid mk3-grid g4l-grid">' + shown.map(mkCard).join('') + '</div>'
-      + (rest > 0 ? '<div class="g4l-morew"><button type="button" class="g4l-more" onclick="G4T2.more()">나머지 ' + rest + '개 더 보기</button></div>' : endLine(rows.length)) + HELP;
+      + (rest > 0 ? '<div class="g4l-morew"><button type="button" class="g4l-more" onclick="G4T2.more()">나머지 ' + rest + '개 더 보기</button></div>' : endLine(rows.length)) + help();
   };
   /* K10: 빈 결과는 떠 있는 상담 단추를 숨기고 24시간 한 줄만 둔다(DESIGN_PROMPT 4절) */
   function emptyFlag(on) { document.body.classList.toggle('g4l-empty', !!on); }
-  function empty(html) { emptyFlag(true); return html + HELP; }
-  /* 끝 문장(I4): 31개 전부를 다 보였을 때만 */
-  function endLine(n) { return n && n === allCount() ? '<p class="g4l-end">' + n + '개 전략을 모두 봤습니다</p>' : ''; }
+  function empty(html) { emptyFlag(true); return html + help(); }
+  /* 끝 문장(I4): 31개 전부를 다 보였을 때, R3: 내 거래소 목록 전부(조건 없음, 예 Bitget 12개)를 다 보였을 때 */
+  function myAll() { var t = tfSSState(); return typeof tfMyExOn === 'function' && tfMyExOn() && (t.ss.asset || 'all') === 'all' && (t.ss.kind || 'all') === 'all' && !TF_SS_Q; }
+  function endLine(n) { return n && (n === allCount() || myAll()) ? '<p class="g4l-end">' + n + '개 전략을 모두 봤습니다</p>' : ''; }
   function allCount() { return tfSSRows().filter(real).length; }
   /* 머리 한 줄의 개수 = 시장, 검색을 건 뒤 줄 수(종류 탭은 전체일 때만 이 줄, 내 거래소가 켜지면 안내 한 줄만: 시안 S2 안1) */
   function headCount() { return rowsNow().filter(real).length; }
@@ -172,8 +182,8 @@
     drawn = sigNow();
     var page = document.querySelector('#g-content .ss3'), back = page && page.querySelector('.g4-back');
     if (back && !ssGet(FROM)) back.remove();
-    if (o.restore) { setY(o.restore.y); requestAnimationFrame(function () { setY(o.restore.y); }); }
-    else if (o.fresh && !ssGet(COUNTED)) { ssSet(COUNTED, 1); enter(); }
+    if (o.restore) { setY(o.restore.y); if (o.fresh) enter(); requestAnimationFrame(function () { setY(o.restore.y); }); } /* R1: 새로고침은 되돌린 자리에서 같은 프레임에 센다(끝 값이 한 프레임 먼저 보이지 않게) */
+    else if (o.fresh) enter();
   }
   /* 새로 들어온 첫 화면만: 큰 금액이 $1,000 에서 제 값으로(K1: 곡선과 로고는 첫 프레임부터 다 그려 둔다) */
   function enter() {
@@ -198,7 +208,7 @@
 
   tfShareHub = function (tab) {
     if (tab === 'follow') { tfNav('#/trade'); return; }
-    if (onList()) { draw({}); return; }
+    if (onList()) { navEntry = false; draw({}); return; }
     expanded = false;
     tfNav(url());
   };
@@ -212,13 +222,16 @@
       var reload = reloadY != null && reloadY.url === h;
       if (pm === 'nfmain') ssSet(FROM, 1); else if (pm !== 'tfss3d' && pm !== 'tfss3' && !reload) ssSet(FROM, null);
       parse(h);
-      draw({ keep: true, restore: back ? pos : reload ? { y: reloadY.y } : null, fresh: !back && !reload && pm !== 'tfss3' });
+      var count = !back && ((landed && !landedDrawn) || navEntry); landedDrawn = true; navEntry = false; /* R1 */
+      draw({ keep: true, restore: back ? pos : reload ? { y: reloadY.y } : null, fresh: count });
       ssSet(POS, null);
       return true;
     }
-    leave(); /* K15 */
+    leave(); navEntry = false; /* K15, R1: 목록 밖으로 가면 사이드바 진입 표시도 버린다 */
     return t1NF(h);
   };
+  var sv0 = window.tfShareView; /* R1: 사이드바·메뉴 「전략 복사」로 오는 것 = home-nav */
+  if (typeof sv0 === 'function') tfShareView = function () { navEntry = true; return sv0.apply(this, arguments); };
   var home0 = window.gHome;
   /* K15: 「새 전략」은 주소가 안 바뀔 수 있다. 부팅 0.9초(TF_BOOTED) 전에 누르면 앱이 목록 주소를 지우지 않아 부팅 재라우팅이 목록을 다시 그렸다 → 목록을 떠난 것으로 본다 */
   if (typeof home0 === 'function') gHome = function () {
@@ -327,6 +340,7 @@
     } catch (_) {}
     return r;
   };
+  landed = onList(); /* R1: 이 문서가 목록 주소로 열렸나(직행·새로고침) */
   if (onList()) {
     if (ready()) tfRoute();
     else { hold(true); setTimeout(function () { if (!onList() || !document.documentElement.classList.contains('g4l-wait')) return; forced = true; tfRoute(); }, 9000); }

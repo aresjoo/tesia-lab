@@ -8,12 +8,21 @@ function btAiCall(o,cb){
     var body={messages:[{role:'user',content:o.user}],system:o.system}; if(o.think) body.think=true; else body.plain=true;
     fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.text(); })
       .then(function(raw){ clearTimeout(to); var t='', err=false, ok2=false; raw.split(/\n/).forEach(function(l){ if(l.indexOf('data:')!==0) return; try{ var j=JSON.parse(l.slice(5)); if(j.text) t+=j.text; if(j.error) err=true; if(j.done) ok2=true; }catch(e){} });
-        t=btAiClean(t); if(err||!ok2||t.length<12) fin('bad'); else fin(null,t); })
+        t=btAiClean(t,o.complete); if(err||!ok2||(o.complete?!t:t.length<12)) fin('bad'); else fin(null,t); })
       .catch(function(e){ clearTimeout(to); fin(String(e)); }); };
   if(typeof taiEnsure==='function') taiEnsure(go); else go(true);
 }
 /* 모델의 글에서 표식과 금지 부호를 걷어 낸다 */
-function btAiClean(t){ return String(t||'').replace(/\[(?:NEXT|ACT|TITLE|CHART|SETUP|GAUGE|ASK|TLINE)[\s\S]*$/,'').replace(/[*#`>]/g,'').replace(/—|–/g,', ').replace(/·/g,', ').replace(/[ \t]+/g,' ').replace(/\n{2,}/g,'\n').trim(); }
+function btAiClean(t,complete){
+  t=String(t||'').replace(/<\/?final_answer\s*>?/gi,'').replace(/\[(?:NEXT|ACT|TITLE|CHART|SETUP|GAUGE|ASK|TLINE)[\s\S]*$/,'').replace(/[*#`>]/g,'').replace(/—|–/g,', ').replace(/·/g,', ').replace(/[ \t]+/g,' ').replace(/\n{2,}/g,'\n').trim();
+  if(complete){
+    /* 소수점은 문장 끝이 아니다. 완성 문장 뒤의 잘린 조각만 버린다. */
+    var re=/[.!?。！？](?!\d)["'”’)]*/g, m, end=0;
+    while((m=re.exec(t))) end=re.lastIndex;
+    t=t.slice(0,end).trim();
+  }
+  return t;
+}
 function btR1(v,d){ return v==null||!isFinite(v)?null:+v.toFixed(d==null?1:d); }
 /* 그날(i) 장 마감까지 알 수 있던 값만 모은다. i 뒤의 가격은 읽지 않는다 */
 function btFactsAt(d){
@@ -158,6 +167,7 @@ function btReadFacts(){
 function btReadKey(){ var R=BT.R; return BT.id+'|'+BT.per+'|'+BT.amt+'|'+R.ret.toFixed(3)+'|'+R.N; }
 function btReadHtml(){
   var k=btReadKey(), X=BT_AI.R[k]||{st:'load'};
+  if(X.st==='ok'){ var text=btAiClean(X.t,true); X=text?{st:'ok',t:text}:{st:'fail'}; }
   var body=X.st==='ok'?X.t.split(/\n+/).filter(Boolean).slice(0,4).map(function(x,i){ return '<p'+(i===0?' class="h"':'')+'>'+gEsc(x)+'</p>'; }).join('')
     :X.st==='fail'?'<p class="f">해석을 불러오지 못했습니다. 결과 숫자는 위에 그대로 있습니다.</p><button type="button" class="bt-rtry" onclick="btReadLoad(1)">다시 시도</button>'
     :'<div class="bt-sk" aria-label="결과를 읽는 중"><i></i><i></i><i></i></div><p class="l">결과를 읽고 있습니다</p>';
@@ -166,7 +176,7 @@ function btReadHtml(){
 function btReadLoad(force){
   var k=btReadKey(), X=BT_AI.R[k]; if(X&&X.st==='ok'&&!force) return; if(X&&X.st==='load'&&!force) return;
   X=BT_AI.R[k]={st:'load'}; var paint=function(){ var e=$('bt-read'); if(e&&btReadKey()===k) e.outerHTML=btReadHtml(); }; paint();
-  btAiCall({system:BT_SYS_R,user:JSON.stringify(btReadFacts()),timeout:40000},function(err,t){ if(err){ X.st='fail'; X.err=err; } else { X.st='ok'; X.t=t; } paint(); });
+  btAiCall({system:BT_SYS_R,user:JSON.stringify(btReadFacts()),timeout:40000,complete:true},function(err,t){ if(err){ X.st='fail'; X.err=err; } else { X.st='ok'; X.t=t; } paint(); });
 }
 function btResultRail(){
   var R=BT.R, s=BT.s, pf=R.final-BT.amt, diff=Math.round(R.final)-Math.round(R.benchFinal);
