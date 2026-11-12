@@ -119,7 +119,6 @@
       + '<div class="skf-perf g4l-perf"><div class="skf-ret"><small>$1,000 넣었다면 지금</small><div class="g4l-amtrow"><b class="num g4l-amt" data-to="' + money + '">' + cpUsd(money, 0) + '</b><span class="num g4l-pct ' + (r.final >= 1000 ? 'up' : 'dn') + '" data-to="' + r.final + '">' + pct(r.final) + '</span></div></div>' + spark(r) + '</div>'
       + '<div class="g4l-info">'
       + '<p class="g4l-sub num">그냥 들고 있었다면 ' + cpUsd(hold, 0) + ', ' + day(r.i0) + '부터</p>'
-      + '<span class="g4l-min num">최소 ' + cpUsd(mkMin(s), 0) + '</span>'
       + '<span class="g4l-now">' + (now ? '지금 ' + gEsc(now) : '') + '</span>'
       + '<span class="skf-fw g4l-fw">' + (s.fw ? mkFwHtml(s.fw) : '') + '</span>'
       + '<span class="g4l-go" aria-hidden="true">이 전략 보기</span>'

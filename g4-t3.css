@@ -1,0 +1,181 @@
+/* G4 T3 4단계 통합: 시안 A1 안2(+안3 끝 값), A2 안3, A3 안3. DESIGN_PROMPT 색·글자·형태. 숫자 굵기 400, 초록은 숫자에만. */
+body.g4-t3{background:#000}
+body.g4-t3 #g-content{padding-bottom:0}
+body.g4-t3 #teth-help,body.g4-t3 #hw-fab,body.g4-t3 .hw-fab{display:none!important}
+body.g4-t3 .gft-wm{display:none!important} /* I12 바닥 청록 TETH 없음(T2 목록과 같은 꼴) */
+.t3-detail{max-width:1180px!important;margin:0 auto!important;padding:24px 32px 32px!important;color:#ececec}
+.t3-detail .tfbk-bc{margin:0 0 20px!important;font-size:16px}
+.t3-detail .mk-dtabs[hidden]{display:none!important}
+.t3-detail .mk-dbody{padding:0!important}
+.t3-detail button,.t3-detail select,.t3-detail summary{-webkit-tap-highlight-color:transparent;font:inherit}
+.t3-detail :focus-visible{outline:2px solid #b3b3b3;outline-offset:5px}
+.t3-detail .up,.t3s .up{color:#34c47c}.t3-detail .dn,.t3s .dn{color:#ee766a}
+.t3-detail .t3-link,.t3-return,.t3s .t3-link{border:0;background:none;padding:0;color:#cdcdcd;font-size:14px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.t3-detail .t3-crumb{font-size:16px;color:#ececec}
+.t3-logo{display:inline-block;flex-shrink:0;border-radius:6px;vertical-align:middle}
+.t3-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:28px}
+.t3-title-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.t3-title-row h1{font-size:36px;font-weight:400;line-height:1.25;margin:0;color:#fff;letter-spacing:-.8px}
+.t3-copying{font-size:14px;color:#cdcdcd;border:1px solid #ffffff26;border-radius:999px;padding:6px 12px}
+.t3-sub{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;color:#cdcdcd;font-size:16px}
+.t3-sub>i{font-style:normal;color:#ffffff40;margin:0 6px}
+.t3-menu{position:relative;flex-shrink:0}
+.t3-menu>summary{list-style:none;cursor:pointer;border:0;background:#2f2f2f;border-radius:999px;width:44px;height:44px;text-align:center;line-height:36px;font-size:24px;color:#ececec}
+.t3-menu>summary::-webkit-details-marker{display:none}
+.t3-menu>div{position:absolute;z-index:25;right:0;top:52px;width:200px;padding:8px;background:#303030;border:1px solid #ffffff24;border-radius:20px}
+.t3-menu button{background:transparent;border:0;color:#ececec;display:block;text-align:left;width:100%;padding:12px;font-size:14px;border-radius:12px;cursor:pointer}
+.t3-menu button:hover{background:#ffffff0c}
+.t3-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start}
+.t3-main{min-width:0}
+.t3-proof-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.t3-proof-top>p{font-size:18px;color:#ececec;margin:0}
+.t3-period{display:flex;align-items:center;font-size:14px;color:#afafaf}
+.t3-period>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.t3-period select{background:#212121;border:1px solid transparent;color:#ececec;border-radius:999px;padding:10px 40px 10px 20px;font-size:16px;cursor:pointer;min-height:44px}
+.t3-money{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;margin:6px 0 10px}
+.t3-final{font-size:72px!important;font-weight:400!important;color:#fff;line-height:1.05;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.t3-money>span{font-size:24px;font-weight:400}
+.t3-compare-line{font-size:22px;line-height:1.45;color:#ececec;margin:0}
+.t3-range{font-size:16px;color:#cdcdcd;margin:10px 0 20px}
+.t3-curve{margin:0}
+.t3-plot{position:relative;margin-right:132px}
+.t3-curve svg{display:block;width:100%;height:100%;overflow:visible}
+.t3-curve path{fill:none;vector-effect:non-scaling-stroke}
+.t3-grid{stroke:#ffffff14;stroke-width:1}
+.t3-line{stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.t3-hold{stroke:#cdcdcd;stroke-width:1.6;stroke-dasharray:4 5}
+.t3-tag{position:absolute;left:calc(100% + 14px);white-space:nowrap;font-size:20px;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}
+.t3-tag small{display:block;font-size:12px;color:#9a9a9a;margin-bottom:3px}
+.t3-tag.h{color:#cdcdcd}
+.t3-curve.drawing .t3-tag{opacity:0;animation:t3fade .25s ease .85s forwards}
+@keyframes t3fade{to{opacity:1}}
+.t3-curve figcaption{display:flex;gap:20px;color:#afafaf;font-size:12px;margin:8px 0 0}
+.t3-key{display:inline-block;width:16px;border-top:2px solid #fff;vertical-align:middle;margin-right:6px}
+.t3-key.dashed{border-color:#cdcdcd;border-top-style:dashed}
+.t3-now{border-top:1px solid #ffffff1a;border-bottom:1px solid #ffffff1a;padding:20px 0;margin-top:28px}
+.t3-pos{margin:0;font-size:22px;color:#ececec}
+.t3-next{margin:10px 0 0;font-size:16px;color:#afafaf}
+.t3-next time{color:#ececec;margin-left:10px}
+.t3-exec{margin:8px 0 0;font-size:14px;color:#cdcdcd}
+/* 1440 따라오는 카드 (A1 안2, A2 안3) */
+.t3-action{position:sticky;top:92px;border:1px solid #ffffff24;border-radius:26px;padding:28px}
+.t3-card-title{font-size:20px;color:#ececec;margin:0 0 14px}
+.t3-card-lb{font-size:16px;color:#ececec;margin:0}
+.t3-card-num{display:block;font-size:56px;font-weight:400;line-height:1.1;margin:4px 0 12px;letter-spacing:-1.5px;color:#fff}
+.t3-card-ex{display:flex;align-items:center;gap:10px;font-size:16px;color:#ececec;margin:0 0 24px}
+.t3-card-min{font-size:13px;color:#9a9a9a;margin:0 0 20px}
+.t3-primary{display:block;width:100%;min-height:52px;border:0;border-radius:999px;background:#fff;color:#000;font-size:17px;line-height:1.25;padding:14px 16px;cursor:pointer;font-weight:500}
+.t3-primary:hover{background:#e7e7e7}
+.t3-free{font-size:14px;color:#cdcdcd;line-height:1.5;text-align:center;margin:12px 0 0}
+.t3-secondary{display:flex;flex-direction:column;align-items:center;gap:16px;border-top:1px solid #ffffff1a;margin-top:22px;padding-top:22px}
+.t3-secondary .t3-link{font-size:16px;color:#ececec}
+/* 판단 기록 (A2 안3) */
+.t3-main h2{font-size:24px;font-weight:400;line-height:1.4;margin:0 0 8px;color:#fff}
+.t3-records{margin-top:44px}
+.t3-record-note{font-size:13px;line-height:1.6;color:#9a9a9a;margin:0 0 6px}
+.t3-records ol{list-style:none;margin:0;padding:0}
+.t3-records li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;border-bottom:1px solid #ffffff1a;padding:18px 0}
+.t3-rec-main b{display:block;font-size:22px;font-weight:600;color:#fff;margin-bottom:6px}
+.t3-rec-main p{margin:0;font-size:16px;line-height:1.6;color:#ececec}
+.t3-rec-time{display:flex;flex-direction:column;align-items:flex-end;gap:8px;font-size:14px;color:#cdcdcd;white-space:nowrap;padding-top:4px}
+.t3-more-records{margin-top:16px;font-size:15px;color:#ececec}
+.t3-more-records>summary{cursor:pointer;list-style:none;text-decoration:underline;text-underline-offset:4px;display:inline-block}
+.t3-more-records>summary::-webkit-details-marker{display:none}
+/* 최근 체결 내역 */
+.t3-orders{margin-top:44px}
+.t3-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.t3-section-head .t3-link{font-size:16px;color:#ececec}
+.t3-order-note{font-size:13px;color:#9a9a9a;margin:0 0 10px}
+.t3-tblw{overflow-x:auto}
+.t3-tbl{width:100%;border-collapse:collapse;font-size:16px}
+.t3-tbl th{font-size:14px;font-weight:400;color:#afafaf;text-align:left;padding:12px;border-bottom:1px solid #ffffff1a}
+.t3-tbl td{padding:18px 12px;border-bottom:1px solid #ffffff1a;color:#ececec;white-space:nowrap}
+.t3-tbl .r{text-align:right}.t3-tbl b{font-weight:500}
+.t3-info{margin-top:32px;padding-top:24px;border-top:1px solid #ffffff1a}
+.t3-info>summary{font-size:18px;cursor:pointer}
+.t3-info>p{font-size:16px;line-height:1.6;color:#cdcdcd}
+.t3-help{font-size:14px;color:#9a9a9a;margin:48px 0 0;line-height:1.7}
+.t3-owned{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid #ffffff1a;padding-bottom:16px;margin:0 0 20px}
+.t3-owned>span{color:#afafaf;font-size:16px}
+.t3-owned>strong{font-size:32px;font-weight:400;color:#fff}
+.t3-notice{margin:10px 0 0;font-size:13px;line-height:1.5;color:#ececec;background:#2f2f2f;border-radius:12px;padding:10px 12px}
+html:not(.t3-qa) body.g4-t3 #tf-devbtn,html:not(.t3-qa) body.g4-t3 #tf-devpanel{display:none!important} /* K7 */
+.t3-mobile-bar,.t3-mobile-secondary{display:none}
+.t3-return{display:block;margin:16px}
+@media(max-width:1180px) and (min-width:861px){.t3-layout{gap:28px;grid-template-columns:minmax(0,1fr) 300px}.t3-final{font-size:56px!important}.t3-card-num{font-size:44px}.t3-action{padding:22px}.t3-plot{margin-right:116px}.t3-tag{font-size:17px}}
+/* 390 (A1 안2 390): 큰 숫자 → 비교 → 곡선 → 지금 → 검증·분석 글자 → 아래 고정 바 */
+@media(max-width:860px){
+ .t3-detail{padding:14px 16px 200px!important;width:100%!important;box-sizing:border-box}
+ .t3-detail .tfbk-bc{margin-bottom:14px!important}.t3-detail .t3-crumb{font-size:15px}
+ .t3-header{margin-bottom:18px;gap:12px}.t3-title-row{gap:8px}.t3-title-row h1{font-size:28px;line-height:1.25;letter-spacing:-.6px}
+ .t3-sub{gap:4px 6px;font-size:13px;margin-top:8px}.t3-sub>i{margin:0 2px}.t3-detail[lang=en] .t3-sub>i{display:none}.t3-detail[lang=en] .t3-sub>span:last-child{flex-basis:100%;margin-left:26px}.t3-sub .t3-logo{width:18px;height:18px}
+ .t3-menu>summary{width:40px;height:40px;line-height:32px}
+ .t3-layout{display:block}.t3-action{display:none}.t3-proof-top>p{font-size:15px}.t3-period select{font-size:14px;padding:8px 34px 8px 16px;min-height:38px}
+ .t3-money{gap:12px;margin:4px 0 6px}.t3-final{font-size:52px!important;letter-spacing:-1.5px}.t3-money>span{font-size:18px}
+ .t3-compare-line{font-size:16px}.t3-range{font-size:13px;margin:6px 0 12px}
+ .t3-plot{margin-right:92px}.t3-tag{font-size:14px;left:calc(100% + 8px)}.t3-tag small{font-size:10px;margin-bottom:2px}
+ .t3-now{padding:14px 0;margin-top:16px}.t3-pos{font-size:17px;line-height:1.4}.t3-next{font-size:13px;margin-top:6px}.t3-exec{font-size:13px}
+ .t3-mobile-secondary{display:flex;gap:22px;padding-top:14px;flex-wrap:wrap}.t3-mobile-secondary .t3-link{font-size:14px;color:#ececec}
+ .t3-records{margin-top:32px}.t3-main h2{font-size:20px}.t3-records li{grid-template-columns:1fr;gap:8px}.t3-rec-main b{font-size:18px}.t3-rec-main p{font-size:15px}
+ .t3-rec-time{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:4px 14px;font-size:12px;padding-top:0}
+ .t3-orders{margin-top:32px}.t3-tbl{font-size:13px}.t3-tbl th{font-size:12px;padding:10px 6px}.t3-tbl td{padding:14px 6px}
+ .t3-help{margin-top:32px}.t3-owned{padding-bottom:12px;margin-bottom:14px}.t3-owned>span{font-size:14px}.t3-owned>strong{font-size:24px}
+ body.g4-t3:has(.t3-owned) .t3-header{margin-bottom:12px}
+ .t3-mobile-bar{position:fixed;z-index:39;left:0;right:0;bottom:0;display:block;padding:12px 16px calc(10px + env(safe-area-inset-bottom));background:#000;border-top:1px solid #ffffff24;box-sizing:border-box}
+ .t3-bar-n{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;color:#ececec;font-size:16px}.t3-bar-n strong{font-weight:400;font-size:22px;color:#fff;white-space:nowrap}
+ .t3-mobile-bar .t3-primary{min-height:52px;font-size:17px}
+ .t3-bar-free{margin:8px 0 0;text-align:center;font-size:12px;color:#afafaf}
+ body.g4-t3:has(#mk-follow) .t3-mobile-bar,body.g4-t3:has(#ss3-dlgw) .t3-mobile-bar,body.g4-t3:has(#modal-auth.open) .t3-mobile-bar{visibility:hidden}
+ /* I9: QA 는 숨기지 않고(파운더 2026-10-01) 숫자·곡선·링크·바와 겹치지 않는 자리(바 위 오른쪽 작게) */
+ body.g4-t3 #tf-devbtn{bottom:calc(var(--t3-bar-h,150px) - 46px)!important;right:16px!important;left:auto!important;height:30px!important;padding:0 12px!important;font-size:12px!important} /* 바 첫 줄 오른쪽 빈자리: 숫자·단추·본문과 겹치지 않음 */
+ body.g4-t3 #toast{bottom:calc(var(--t3-bar-h,150px) + 12px)}
+ body.g4-t3 #toast:not(.show){visibility:hidden}
+}
+@media(prefers-reduced-motion:reduce){.t3-detail *,.t3s *{scroll-behavior:auto!important;animation:none!important;transition:none!important}.t3-curve.drawing .t3-tag{opacity:1}}
+
+/* 복사 창 세 상태(A3 안3): f = T1 예산 창, b = 복사 창, c = 예산 조정. 머리 같은 결 */
+.t3s-head{display:flex;align-items:center;gap:12px;margin:2px 0 18px}
+.t3s-head b{display:block;font-size:17px;font-weight:500;color:#fff}
+.t3s-head span{display:block;font-size:14px;color:#cdcdcd;margin-top:2px}
+.t3s-money>span{display:block;font-size:15px;color:#ececec}
+.t3s-money>div{display:flex;align-items:baseline;gap:14px;margin:2px 0 6px}
+.t3s-money strong{display:block;font-size:40px;font-weight:400;color:#fff;letter-spacing:-1px;line-height:1.15}
+.t3s-money em{font-style:normal;font-size:24px}
+.t3s-money p{margin:2px 0 0;font-size:15px;color:#ececec}
+.t3s .t3-curve.compact{margin:12px 0 18px}
+.t3s .t3-curve.compact .t3-plot{margin-right:0}
+.t3s-adjust .t3-curve.compact .t3-plot{margin-right:112px}
+.t3s-adjust .t3-tag{font-size:15px}
+.t3s-money strong small{font-size:16px;margin-left:10px;color:#afafaf}
+#ss3-dlgw.t3s .g4-budget-input,#mk-follow.t3s .skc-in{min-height:64px;border-radius:19px}
+#ss3-dlgw.t3s #g4-budget,#mk-follow.t3s #cps-amt{font-size:28px}
+.t3s-more{border-top:1px solid #ffffff1a;margin:6px 0 14px;padding-top:12px}
+.t3s-more>summary{cursor:pointer;list-style:none;font-size:15px;color:#ececec;display:flex;justify-content:space-between}
+.t3s-more>summary::after{content:'⌄';color:#afafaf}
+.t3s-more[open]>summary::after{content:'⌃'}
+.t3s-more>summary::-webkit-details-marker{display:none}
+.t3s-foot{font-size:13px;color:#afafaf;text-align:center;margin:12px 0 0}
+
+/* K8: 화면 확인을 못 해도 분석 단계에 보이는 N1 카드 */
+.an-n1{display:flex;flex-direction:column;gap:4px;border:1px solid #ffffff24;border-radius:20px;padding:14px 16px;margin:6px 0;color:#ececec;font-size:14px}
+.an-n1 b{font-size:15px;font-weight:500;color:#fff}.an-n1 strong{font-size:20px;font-weight:400;color:#fff}.an-n1 em{font-style:normal;color:#34c47c}
+
+/* K13: 1440 카드 주 단추 글자가 .t3-detail button{font:inherit} 에 덮여 13.5px 였다. 18px 굵게 */
+.t3-detail .t3-action .t3-primary{font-size:18px;font-weight:600}
+/* K14: 창의 차이 문장 18px, 초록 숫자 굵게 */
+.t3s-money p.t3s-diff{font-size:18px;color:#ececec}
+.t3s-money p.t3s-diff .up{font-weight:600}
+/* K12: 복사 중 예산 조정 금액 칸 = 「추가할 금액」 이름표 + f·b 창과 같은 큰 $ 칸(A3 c 안3). USD, 파란 최대 칩 없음 */
+.t3s-amt-l{display:block;font-size:16px;color:#ececec;margin:20px 0 10px}
+#ss3-dlgw.t3s .cps-in.t3s-amt{height:auto;min-height:64px;padding:0 18px;gap:6px;border-radius:19px;background:#212121;border:1px solid #ffffff24}
+#ss3-dlgw.t3s .cps-in.t3s-amt:focus-within{border-color:#fff}
+#ss3-dlgw.t3s .cps-in.t3s-amt i{font-style:normal;font-size:28px;color:#fff;line-height:1}
+#ss3-dlgw.t3s .cps-in.t3s-amt input{font-size:28px;color:#fff;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+#ss3-dlgw.t3s .cps-in.t3s-amt input::-webkit-outer-spin-button,#ss3-dlgw.t3s .cps-in.t3s-amt input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#ss3-dlgw.t3s .cps-in.t3s-amt .un,#ss3-dlgw.t3s .cps-in.t3s-amt .mx{display:none}
+/* K11: 상세에서 연 가입 창 머리(A3 f 안3 머리 부품) */
+#modal-auth .t3-au-head{text-align:left;margin:18px 0 20px;padding:16px 16px 4px;border:1px solid #ffffff1f;border-radius:20px}
+#modal-auth .t3-au-head .t3s-head{margin:0 0 12px}
+#modal-auth .t3-au-head .t3s-money strong{font-size:36px}
+#modal-auth .t3-au-head .t3s-money em{font-size:20px}
+#modal-auth .t3-au-head .t3-curve.compact{margin:8px 0 10px}
