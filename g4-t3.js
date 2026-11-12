@@ -38,7 +38,7 @@
     },
     en: {
       back: '← Copy Strategies', heroSub: 'If you invested $1,000, now',
-      heroCompare: 'If you had held: {bench} ({diff} more earned)', heroHold: 'If you had held: {bench}',
+      heroCompare: 'If you had held: {bench} ({diff} more)', heroHold: 'If you had held: {bench}',
       since: 'Since {date} to present', follow: '{count} people following', official: 'Official {ex} Futures Integration', officialSpot: 'Official {ex} Integration',
       endStrategy: 'Strategy', endHold: 'Buy & Hold', keyStrategy: 'Strategy', keyHold: 'Buy & Hold',
       posLive: 'Currently holding {pos}', posWait: 'Waiting for signal', next: 'Next decision:', execLinked: 'Ready to copy directly to your {ex} account',
@@ -392,7 +392,7 @@
      (G4 T4 카피 확정 copy/decision-copy.md 1: 손실인 사람에게 「더 벌었습니다」 금지), 차이 0 이하면 줄 없음 */
   function diffLine(r) {
     var f = Math.round(r.final), d = f - Math.round(r.benchFinal); if (d <= 0) return '';
-    if (f >= 1000) return '<p class="t3s-diff"><span class="up">+' + money(d) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>';
+    if (f >= 1000) return '<p class="t3s-diff"><span class="up">+' + money(d) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more') /* P3-4(T3 카피 2.3): en 「more」 로 T4 착지와 같게 */ + '</p>';
     return '<p class="t3s-diff">' + esc(ko() ? '차이 ' + money(d) + ' 덜 잃었습니다' : 'Difference ' + money(d) + ' less lost') + '</p>'; /* B3 mine: 「차이 $118 덜 잃었습니다」 */
   }
   /* G4 T4 J4: 내 전략(공개 전략이 아님) 창 머리. 상세 창과 같은 틀에 T4 가 계산한 결과(r)를 넣는다 */
