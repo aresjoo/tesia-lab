@@ -145,3 +145,5 @@ body.g4-t4-all #bt-root > .bt-hd,body.g4-t4-all #bt-root > .bt-id,body.g4-t4-all
 /* K9, K11: 착지 1줄을 안 쓰는 화면은 재생 줄이 「결과 바로 보기」 줄 왼쪽에 */
 #bt-root.t4 .t4-skiprow-run{justify-content:space-between;align-items:baseline;gap:12px}
 #bt-root.t4 .t4-state-in{min-height:0;margin:0}
+/* P3-5(claude 재대조): 뒤로 온 착지(.still, 다시 굴리지 않음)는 주 단추가 처음부터 청록. 흰색 → 청록 0.45초 전환은 재생 끝 착지 신호(J11)에만 */
+#bt-root.t4.still .t4-primary,#bt-root.t4.still .t4-card,#bt-root.t4.still .t4-bar{transition:none!important}
