@@ -258,7 +258,7 @@
   mk3Head = function (s, ne, pd, watching) {
     if (!real(s)) return oldHead.apply(this, arguments);
     var row = copyFor(s);
-    return '<header class="t3-header"><div><div class="t3-title-row"><h1>' + esc(name(s)) + '</h1>' + (row ? '<span class="t3-copying">' + esc(T('copying', { amt: money(row.d.inv) })) + '</span>' : '') + '</div>'
+    return '<header class="t3-header"><div><div class="t3-title-row"><h1>' + esc(name(s)) + '</h1>' + '</div>' /* 다듬기(4): 「현재 $X 복사 운용 중」 배지는 뺀다(바로 아래 「내 운용 자산」 줄과 같은 말, $1,000 이 한 화면에 네 번) */
       + '<p class="t3-sub">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span><i aria-hidden="true">|</i><span>' + esc(T('follow', { count: Number(s.fw || 0).toLocaleString('en-US') })) + '</span></p></div>'
       + '<details class="t3-menu"><summary aria-label="' + esc(T('menu')) + '">⋯</summary><div><button type="button" onclick="tfSS3WatchTgl(\'' + ne + '\')">' + esc(T('watch')) + '</button>'
       + '<button type="button" onclick="tfSS3CopyLink(\'' + ne + '\',\'all\')">' + esc(T('link')) + '</button><button type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></details></header>';
