@@ -21,12 +21,12 @@
     var help = spa ? 'event.stopPropagation();tfTxHelp()' : 'event.stopPropagation();if(window.tethHelpOpen){window.tethHelpOpen();}else{location.href=\''+base+'index.html#/trade\';}';
     return '<footer class="gft'+(opts.lime?' gft-lime':'')+'" aria-label="사이트 정보"><div class="gft-in">'+bar(base)+'<div class="gft-rule" aria-hidden="true"></div><div class="gft-top">'
       +'<nav class="gft-cols" aria-label="바닥글 메뉴">'
-      +col('제품',[link(spa,base,'AI 트레이딩',"tfNav('#/trade')",'index.html#/trade'),link(spa,base,'전략 따라하기',"tfShareHub('find')",'index.html#/trade'),link(spa,base,'새 전략 만들기','gHome()','index.html'),link(spa,base,'거래소 연결','tfBrokersView()','index.html#/trade')])
+      +col('제품',[link(spa,base,'AI 트레이딩',"tfNav('#/trade')",'index.html#/trade'),link(spa,base,'전략 복사',"tfShareHub('find')",'index.html#/trade'),link(spa,base,'새 전략 만들기','gHome()','index.html'),link(spa,base,'거래소 연결','tfBrokersView()','index.html#/trade')])
       +col('회사',[link(spa,base,'TETH 정보',null,'about/'),link(spa,base,'앱 다운로드',null,'download/',true)])
       +col('도움',['<button type="button" onclick="'+help+'">24시간 상담</button>',link(spa,base,'인사이트',"tfNav('#/insight')",'index.html#/insight'),link(spa,base,'이용 현황',"tfNav('#/plan')",'index.html#/plan')])
       +col('약관',[link(spa,base,'서비스 약관',null,'policies/#terms',true),link(spa,base,'개인정보처리방침',null,'policies/#privacy',true)])
       +'</nav><div class="gft-copy">'
-      +'<p>TETH는 고객이 말로 정한 전략을 AI 에이전트가 판단하고 실행하는 AI 트레이딩 서비스입니다. 고객이 각 거래에 직접 개입하지 않아도 AI 에이전트가 주식, 옵션, 암호화폐 거래를 실행할 수 있으며, 모든 거래는 고객이 연결한 Bitget 계정 안에서 이루어집니다.</p>'
+      +'<p>TETH는 고객이 말로 정한 전략을 AI 에이전트가 판단하고 실행하는 AI 트레이딩 서비스입니다. 고객이 각 거래에 직접 개입하지 않아도 AI 에이전트가 주식, 옵션, 암호화폐 거래를 실행할 수 있으며, 모든 거래는 고객이 연결한 거래소 계정 안에서 이루어집니다.</p>'
       +'<p><b>Bitget이 선정한 최고의 AI입니다.</b></p>'
       +'<p class="dim">TETH는 조회와 주문 권한만 사용하며 출금 권한은 요청하지 않습니다. 거래 한도는 고객이 직접 설정하고, 언제든지 전략을 중지하거나 연결을 해제할 수 있습니다. 판단 근거는 거래마다 기록으로 남깁니다.</p>'
       +'<p class="dim">© 2026 TETH AI. 모든 권리 보유.</p></div></div>'

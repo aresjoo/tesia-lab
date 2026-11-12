@@ -1,0 +1,51 @@
+/* G4/T2 전략 복사 목록(claude 뼈대, 4단계 통합). 시안 S1 S2 S3 안1(sprint/G4/T2/astra/astra-decision.md), DESIGN_PROMPT.md(검정 바탕, 윤곽 카드, 숫자 400, 주 단추 흰 알약). 청록 없음 */
+body.g4-list .gft-wm{display:none!important}
+body.g4-list .gft{--gft-bg:#000;--gft-fg:#fff;background:#000!important}
+.ss3 .g4-back{margin:0 0 8px}
+.g4l-h1{margin:0 0 16px;font-size:32px;font-weight:400;line-height:1.25;letter-spacing:-.01em;color:#fff}
+.mk-card.skf.g4l{gap:12px;padding:16px 24px;-webkit-tap-highlight-color:transparent} /* K7: 단추 48 만큼 위아래 여백을 줄여 1440 셋째 줄 금액 자리 유지 */
+.mk-card.skf.g4l *{-webkit-tap-highlight-color:transparent} /* K2: 눌림 청록 바탕 없음 */
+.mk-card.skf.g4l:active{background:rgba(255,255,255,.04)}
+.mk-card.skf.g4l .skf-top{margin-bottom:0}
+.mk-card.skf.g4l.g4l-back{border-color:#fff;box-shadow:0 0 0 1px #fff}
+.g4l-perf .skf-ret small{font-size:14px;color:#9a9a9a}
+.g4l-amtrow{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.g4l-perf .skf-ret b{font-size:32px;line-height:1.15;color:#fff}
+.g4l-pct{font-size:17px;font-weight:400;line-height:1}
+.g4l-pct.up{color:#2ebd85}
+.g4l-pct.dn{color:#f0566a}
+#g-root .mk-card.g4l .g4l-spark,.mk-card.g4l .g4l-spark{flex:none;width:100%;height:48px;max-width:none;min-width:0;margin:0;opacity:1}
+.g4l-info{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"sub sub min" "now fw go";align-items:center;column-gap:16px;row-gap:12px}
+.g4l-sub{grid-area:sub;margin:0;font-size:14px;line-height:1.45;color:#cdcdcd}
+.g4l-min{grid-area:min;font-size:14px;color:#afafaf;white-space:nowrap}
+.g4l-now{grid-area:now;font-size:14px;line-height:1.45;color:#ececec}
+.g4l-fw{grid-area:fw;min-width:0}
+.g4l-go{grid-area:go;display:inline-flex;align-items:center;height:48px;padding:0 22px;border-radius:999px;background:#fff;color:#000;font-size:15px;font-weight:600;white-space:nowrap}
+.mk-card.skf.g4l:hover .g4l-go{background:#e6e6e6}
+.g4l-morew{display:flex;justify-content:center;margin:28px 0 0}
+.g4l-more{height:44px;padding:0 22px;border:0;border-radius:999px;background:#2f2f2f;color:#ececec;font:inherit;font-size:15px;cursor:pointer}
+.g4l-more:hover{background:#3a3a3a;color:#fff}
+.g4l-more:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.g4l-end{margin:28px 0 0;text-align:center;font-size:15px;color:#cdcdcd}
+/* K10: 빈 결과에서는 떠 있는 상담 단추 없이 아래 한 줄만 */
+body.g4-list.g4l-empty #teth-help{display:none!important} /* K11: 아래 「상담원에게 묻기」로 여는 창(#teth-help-pop)은 숨기지 않는다 */
+/* K12 대기 중 본문 숨김은 뺐다(K15): 대기 중에는 카드 틀(g4-t2.js hold) */
+@media (max-width:1180px){
+  .g4l-info{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sub sub" "now min" "fw go";row-gap:8px}
+}
+@media (max-width:860px){
+  /* K3: 스크롤로 메뉴 단추가 숨으면 그 차폐 바도 같이 사라져 로그인 알약이 카드 제목을 덮었다. 같은 바를 알약 층 뒤에 둔다 */
+  body.g4-list.ham-hide #g-auth-btns::before{content:'';position:fixed;top:0;left:0;right:0;height:60px;background:#000;z-index:-1;pointer-events:none}
+}
+@media (max-width:760px){
+  .mk-card.skf.g4l{padding:14px 18px}
+  .g4l-h1{font-size:28px;margin-bottom:16px}
+  .g4l-perf .skf-ret b{font-size:28px}
+  .g4l-pct{font-size:14px}
+  .g4l-amtrow{gap:6px}
+  .g4l-perf{gap:12px}
+  #g-root .mk-card.g4l .g4l-spark,.mk-card.g4l .g4l-spark{height:52px}
+  .ss3 #ss3-q::placeholder{color:transparent}
+  .mk .mk3-bar .mk3-flt .ss3-search:focus-within,.mk .mk3-bar .mk3-flt .ss3-search:has(input:not(:placeholder-shown)){flex:1 0 100%;order:9}
+  .ss3 .ss3-search:focus-within #ss3-q::placeholder{color:#848a94}
+}
