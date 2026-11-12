@@ -99,7 +99,7 @@
       + running(s, row) + (row || isLinked ? action : '') + '</section>'
       + '<section class="g4-history" aria-labelledby="g4-history-title"><div class="g4-section-head"><h2 id="g4-history-title">' + COPY.records + '</h2><button type="button" aria-expanded="false" onclick="G4T1.toggleRecords(this)">판단 기록 보기</button></div><ol>' + records(s) + '</ol></section>'
       + (!row && !isLinked ? action : '')
-      + '<nav class="g4-links" aria-label="더 둘러보기"><a href="' + listRoute + '">' + (isLinked ? '다른 ' : '전체 ') + (tfSSRows().filter(function (x) { return !x.me; }).length - (isLinked ? 1 : 0)) + '개 전략 둘러보기 →</a></nav>'
+      + '<nav class="g4-links" aria-label="더 둘러보기"><a href="' + listRoute + '">' + (window.G4T2 && G4T2.linkText ? esc(G4T2.linkText()) : '전체 ' + tfSSRows().filter(function (x) { return !x.me; }).length + '개 전략 둘러보기 →') + '</a></nav>'
       + '<p class="g4-help">막히면 상담원이 24시간 답합니다. <button type="button" onclick="tethHelpOpen()">상담원에게 묻기</button></p></main>';
     G4T1.current = { strategyId: s.id, copyId: row ? row.c.id : null, linked: !!isLinked };
     TF_RENDERING = true;
