@@ -267,8 +267,10 @@
       + '<p class="t3-help">' + esc(T('support')) + ' <button class="t3-link" type="button" onclick="tfTxHelp()">' + esc(T('supportLink')) + '</button></p>'
       + '</div>' + card(s, row) + '</div>' + bar(s, row);
   };
+  /* K9: 개요 화면에 있을 때만, 그 전략의 자리만 저장한다(떠난 뒤 늦게 도는 저장이 T4 의 0 으로 덮지 않게) */
+  function onOverview() { return !!document.querySelector('.t3-detail #t3-proof-host') && !!current && location.hash.indexOf(route(current.s)) === 0; }
   function preserve() {
-    if (!current) return;
+    if (!onOverview()) return;
     var sc = $('g-scroll'), y = document.body.classList.contains('gft-doc') ? window.scrollY : sc ? sc.scrollTop : 0;
     write(KEY, { id: current.s.id, per: current.per, y: y });
   }
@@ -282,7 +284,7 @@
     });
   }
   var saveT = 0;
-  function saveSoon() { if (!onDetail() || !current) return; clearTimeout(saveT); saveT = setTimeout(preserve, 150); }
+  function saveSoon() { if (!onOverview()) return; clearTimeout(saveT); saveT = setTimeout(preserve, 150); }
   addEventListener('scroll', saveSoon, { passive: true, capture: true });
   addEventListener('pagehide', function () { if (onDetail()) preserve(); });
   function handoff() {
@@ -341,7 +343,7 @@
     }
     return v;
   };
-  gContent = function () { cancelAnimationFrame(frame); document.body.classList.remove('g4-t3'); return oldContent.apply(this, arguments); };
+  gContent = function () { cancelAnimationFrame(frame); clearTimeout(saveT); dropNotice(); document.body.classList.remove('g4-t3'); return oldContent.apply(this, arguments); };
   var listOpen = G4T2.open;
   G4T2.open = function (e, ne) {
     if (e && e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
@@ -512,22 +514,53 @@
     };
   }
   /* K4(I9): 390 상세의 안내(사용량 소진 등)는 떠 있는 토스트 대신 「지금」 문장 바로 아래 한 줄로. 지금 문장이 화면 밖이면 바 바로 위 한 줄 */
+  /* K8(I10): 화면 확인 프레임이나 캡처 라이브러리를 못 불러와도 「전략 페이지 열기 실패」로 끝내지 않는다.
+     그 단계를 이 전략의 N1 카드(문구표 #71)로 마치고 분석을 바로 시작한다. 정상 경로는 index.html anShots 와 같다 */
+  if (typeof anShots === 'function') {
+    anShots = function (run, s, ne, pd) {
+      var done; AN.gate = new Promise(function (r) { done = r; });
+      var mine = function (st) { AN.own = 1; try { return actStep(run, st); } finally { AN.own = 0; } };
+      var open = mine({ kind: 'fetch', title: '전략 페이지 여는 중' });
+      var fin = function () { AN.gate = null; done(); };
+      anFrame(ne, pd, function (fr) {
+        open.done('전략 페이지 열기 완료', '', (Date.now() - open.st.t0) + 'ms');
+        var i = 0;
+        var next = function () {
+          if (i >= AN_TABS.length) { AN.lastShotAt = Date.now(); setTimeout(function () { try { fr.remove(); } catch (e) {} }, 200); anHead(run, mkHook(s) + ' 전략을 분석하는 중'); fin(); return; }
+          var tb = AN_TABS[i++], st = mine({ kind: 'fetch', title: tb[1] + ' 화면 확인 중' });
+          anCapture(fr, ne, pd, tb[0], function (url, w, h) {
+            if (url) { st.st.open = true; st.done(tb[1] + ' 화면 확인 완료', '<img class="an-shot" src="' + url + '" alt="' + tb[1] + ' 화면" width="' + w + '" height="' + h + '" loading="lazy">', w + '×' + h); }
+            else st.fail(tb[1] + ' 화면 확인 실패', '화면을 가져오지 못했습니다. 다른 화면으로 계속합니다.');
+            setTimeout(next, 300);
+          });
+        };
+        next();
+      }, function () {
+        var r = series(s, 0), title = name(s) + ' / ' + T('heroSub') + ' ' + money(Math.round(r.final));
+        var card = '<div class="an-n1"><b>' + esc(name(s)) + '</b><span>' + esc(T('heroSub')) + ' <strong class="num">' + money(Math.round(r.final)) + '</strong> <em class="up num">' + pct(s.r.ret) + '</em></span><span>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</span></div>';
+        open.st.open = true; open.done(title, card, '');
+        anHead(run, mkHook(s) + ' 전략을 분석하는 중'); fin();
+      });
+      return AN.gate;
+    };
+  }
+  /* K4·K10(I9): 390 상세의 안내(사용량 소진 등)는 떠 있는 토스트가 아니라 「지금」 문장 바로 아래 흐름 안의 한 줄.
+     아무것도 덮지 않고(아래 글이 밀림), 바 뒤로 가면 그만큼만 본문을 올려 보이게 하고, 화면을 떠나면 바로 사라진다 */
+  var noticeT = 0;
+  function dropNotice() { clearTimeout(noticeT); document.querySelectorAll('.t3-notice').forEach(function (n) { n.remove(); }); }
+  addEventListener('hashchange', dropNotice); addEventListener('popstate', dropNotice);
   var t3Toast = toast;
   toast = function (message) {
-    if (!onDetail() || innerWidth > 860) return t3Toast.apply(this, arguments);
-    var nowEl = document.querySelector('.t3-detail .t3-now'), old = document.querySelector('.t3-notice');
-    if (old) old.remove();
-    var r = nowEl && nowEl.getBoundingClientRect(), bar = document.querySelector('.t3-mobile-bar'), barTop = bar ? bar.getBoundingClientRect().top : innerHeight;
+    var nowEl = document.querySelector('.t3-detail .t3-now');
+    if (!onDetail() || innerWidth > 860 || !nowEl) return t3Toast.apply(this, arguments);
+    dropNotice();
     var n = document.createElement('p'); n.className = 't3-notice'; n.setAttribute('role', 'status'); n.textContent = message;
-    /* 1) 「지금」 문장 바로 아래에 들어가 바 위에 다 보이면 거기 2) 아니면 바 바로 위 한 줄 3) 그 줄이 지금·다음 판단 문장과 겹치면 화면 위 머리 아래 */
-    var placed = false;
-    if (r && r.top > 0 && r.bottom < barTop) { nowEl.insertAdjacentElement('afterend', n); placed = n.getBoundingClientRect().bottom <= barTop - 4; if (!placed) n.remove(); }
-    if (!placed) {
-      n.classList.add('floating'); document.body.appendChild(n);
-      var nr = n.getBoundingClientRect(), hit = [].some.call(document.querySelectorAll('.t3-detail .t3-pos, .t3-detail .t3-next, .t3-detail .t3-final'), function (e) { var q = e.getBoundingClientRect(); return q.bottom > nr.top && q.top < nr.bottom; });
-      if (hit) n.classList.add('top');
-    }
-    setTimeout(function () { n.remove(); }, 3200);
+    nowEl.insertAdjacentElement('afterend', n);
+    var bar = document.querySelector('.t3-mobile-bar'), barTop = bar ? bar.getBoundingClientRect().top : innerHeight, r = n.getBoundingClientRect();
+    var sc = scroller(), by = 0;
+    if (r.bottom > barTop - 8) by = r.bottom - barTop + 12; else if (r.top < 64) by = r.top - 72;
+    if (by) { if (sc) sc.scrollTop += by; else window.scrollBy(0, by); }
+    noticeT = setTimeout(dropNotice, 3200);
   };
   /* K7(I9): QA 단추는 주소에 ?qa=1 이 있을 때만(PO 12:57 판정) */
   function qaFlag() { return /[?&]qa=1(?:&|$)/.test(location.search) || /[?&]qa=1(?:&|$)/.test(location.hash); }
