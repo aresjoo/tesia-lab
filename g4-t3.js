@@ -538,7 +538,24 @@
      I6 기록 칸이 남아 있으면 한 칸 뒤로 정리한다. 브라우저 뒤로로 닫을 때는 이미 그 칸을 지나왔으므로(state 에 g4t3Auth 없음) 그대로 */
   function authClosed() {
     setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
-    if (!authBack && history.state && history.state.g4t3Auth && !S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
+    if (authBack || !(history.state && history.state.g4t3Auth)) return;
+    if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
+  }
+  /* K23: 가입을 마치면(signupDone) 가입 창 칸을 T1 의 「닫힌 창」 칸으로 바꾼 뒤 진행한다. 곧 열리는 복사 창(g4-t1.js armOverlay)은
+     새 칸을 쌓지 않고 이 칸을 다시 쓰고, 창이 안 열려도 뒤로가 이 칸을 건너뛴다(g4-t1.js popstate). 가입 칸이 남아 상세에서 뒤로 한 번이 헛돌던 것 */
+  if (typeof signupDone === 'function') {
+    var oldSignupDone = signupDone;
+    signupDone = function () {
+      if (history.state && history.state.g4t3Auth) {
+        history.replaceState(Object.assign({}, history.state, { g4t3Auth: false, g4Overlay: false, g4ClosedOverlay: true }), '', location.href);
+        /* T1 의 가입 뒤 이어하기(openSaved)는 이 칸을 상세 주소로 되돌린 뒤 복사 창 칸을 하나 더 쌓는다. 그 한 번만 이 칸에 다시 쓴다 */
+        var push = history.pushState, undo = function () { if (history.pushState === once) history.pushState = push; }, once = function (st) {
+          undo(); return (st && st.g4Overlay ? history.replaceState : push).apply(history, arguments);
+        };
+        history.pushState = once; setTimeout(undo, 3000);
+      }
+      return oldSignupDone.apply(this, arguments);
+    };
   }
   (function watchAuth() {
     var m = $('modal-auth'); if (!m) { addEventListener('DOMContentLoaded', watchAuth, { once: true }); return; }
