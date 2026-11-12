@@ -322,6 +322,29 @@
   /* 언어를 바꾸면 이 화면을 그 언어로 다시 그린다(착지 0초) */
   if (typeof glcSetLang === 'function') { var gl0 = glcSetLang; glcSetLang = function () { var r = gl0.apply(this, arguments); try { if ($('bt-root') && $('bt-root').classList.contains('t4') && BT.s) { V = null; lastHash = ''; btView(); } } catch (_) {} return r; }; }
 
+  /* PO 15:30 (2): T4 위에서 예산 조정을 마치면 T3 K21 과 같은 안내(「$X를 예산에 추가했습니다」)를 화면 안 한 줄로(3.2초, role=status).
+     앱 토스트는 390 아래 띠와 겹치고 금방 사라져 안정 컷에 남지 않았다. 화면은 다시 그리지 않고 읽던 자리 그대로 */
+  if (typeof cpAdjCommit === 'function') {
+    var adj0 = cpAdjCommit;
+    cpAdjCommit = function () {
+      var rt = $('bt-root'); if (!(rt && rt.classList.contains('t4'))) return adj0.apply(this, arguments);
+      var said = [], keep = toast, v, y0 = scrollY, sc = $('g-scroll'), sy = sc ? sc.scrollTop : 0;
+      toast = function (m) { said.push(m); };
+      try { v = adj0.apply(this, arguments); } finally { toast = keep; }
+      if (sc) sc.scrollTop = sy; else scrollTo(0, y0);
+      if (said.length) notice(said[said.length - 1]);
+      return v;
+    };
+  }
+  var noticeT = 0;
+  function notice(msg) {
+    clearTimeout(noticeT); document.querySelectorAll('.t4-notice').forEach(function (n) { n.remove(); });
+    var at = $('t4-cmp') || document.querySelector('#bt-root.t4 .t4-all-sub'); if (!at) { try { toast(msg); } catch (_) {} return; }
+    var n = document.createElement('p'); n.className = 't4-notice'; n.setAttribute('role', 'status'); n.textContent = msg; at.insertAdjacentElement('afterend', n);
+    noticeT = setTimeout(function () { n.remove(); }, 3200);
+  }
+  addEventListener('hashchange', function () { clearTimeout(noticeT); document.querySelectorAll('.t4-notice').forEach(function (n) { n.remove(); }); });
+
   gContent = function () { stop(); document.body.classList.remove('g4-t4', 'g4-t4-all'); return prevContent.apply(this, arguments); };
 
   /* ── J4: 내 전략의 주 단추 = 그 사람 상태의 창(거래소 연결 전 = f 창, 연결됨 = b 창)과 같은 틀, 금액 $1,000.
@@ -337,8 +360,8 @@
     var head = window.G4T3 && G4T3.head ? G4T3.head(r, { name: sName(V.s), sub: TX[lang()].mine }) : '';
     tfSS3Dlg(T3T('copyTitle'), '<form class="g4-budget-form t4-mine-form" onsubmit="G4T4.mineGo(event)">' + head
       + '<label for="' + id + '">' + esc(T3T('budget')) + '</label><div class="g4-budget-input"><span>$</span>'
-      + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" value="' + usd(V.amt).slice(1) + '" oninput="G4T4.mineSync()" aria-describedby="g4-budget-min g4-budget-error"></div>'
-      + '<p id="g4-budget-min">' + esc(T3T('minNote', { min: usd(min) })) + '</p><p id="g4-budget-error" role="status"></p>'
+      + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" value="' + usd(V.amt).slice(1) + '" oninput="G4T4.mineSync()" aria-describedby="g4-budget-error"></div>'
+      + '<p id="g4-budget-error" role="status"></p>' /* T3 R2: 칸 밑 최소 금액 문장은 빼고, 최소 미만이면 오류 줄만 */
       + '<button id="g4-budget-next" type="submit" class="g4-primary">' + esc(linked ? T3T('start') : TX[lang()].connect) + '</button>'
       + '<p class="t3s-foot">' + esc(T3T('foot')) + '</p>'
       + '<p class="t4-mine-links"><button type="button" class="t3-link" onclick="tfSS3DlgClose(true);rvFix()">' + L('editRules') + '</button></p></form>'); /* B3 mine 둘째 줄(J4, T7 경계) */
@@ -356,7 +379,9 @@
       var el = $('g4-budget') || $('cps-amt'), n = mineAmt(), ok = Number.isFinite(n) && n >= mineMin(), e = $('g4-budget-error'), b = $('g4-budget-next');
       if (el) { var raw = String(el.value).replace(/[^0-9.]/g, ''), p = raw.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); el.value = p.join('.'); }
       if (e) e.textContent = el && el.value && !ok ? TX[lang()].minErr.replace('{min}', usd(mineMin())) : '';
-      if (b) b.disabled = !ok; return ok;
+      if (b) b.disabled = !ok;
+      var h = read(HANDOFF); if (h && h.strategyId === 'mine') { h.budget = Number.isFinite(n) && n > 0 ? n : null; write(HANDOFF, h); } /* 금액을 바꾸면 인계도 같은 값 */
+      return ok;
     },
     mineGo: function (ev) {
       if (ev) ev.preventDefault();
@@ -374,7 +399,11 @@
       /* C2(코드 검수 1): 재생 중에 창을 열면 결과를 그 자리에서 확정한다(착지 0초, seen). 창을 닫거나 뒤로 와도 다시 굴리지 않는다.
          이미 착지했으면 끝 상태(.still)로 고정. 재생 중 단추는 계속 누를 수 있다(결정: 재생 중 흰 주 단추) */
       if (roll) land(true); else { var rt = $('bt-root'); if (rt && rt.classList.contains('t4')) rt.classList.add('still'); }
-      if (s.mine) { mineSheet(); return; }
+      if (s.mine) {
+        /* PO 15:30 (1): 내 전략 창도 공개 창과 같은 T5 인계(decision-1 ④). strategyId 'mine', budget, per, returnTo, 얼굴 */
+        write(HANDOFF, { strategyId: 'mine', budget: V.amt, per: BT.per, returnTo: '#/share/bt/mine', face: { final: V.F, bench: V.H, ret: V.ret, since: V.R.i0, pos: null } });
+        mineSheet(); return;
+      }
       var n = ne(), h = (D && D.save && D.save(s.id, V.amt)) || { strategyId: s.id };
       h.budget = V.amt; h.per = BT.per; h.returnTo = '#/share/bt/' + n;
       h.face = { final: V.F, bench: V.H, ret: V.ret, since: V.R.i0, pos: D && D.pos ? D.pos(s) : null };

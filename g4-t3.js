@@ -207,7 +207,10 @@
   function recItem(s, m) {
     var body = ko() ? tbSent(skdText(m.t || ''), 2).head : recEn(m, s), times;
     if ((m.k === 'buy' || m.k === 'sell') && m.i != null) {
-      times = '<span>' + esc(T('signal', { t: stamp(mkWhen(s, m.i, m.a), true) })) + '</span><span>' + esc(T('fill', { t: stamp(mkWhen(s, m.i + 1, m.a), false) })) + '</span>';
+      /* R1(5단계 리허설): 체결은 표(mkOrders)와 같은 거래 원본 = 이벤트의 체결 봉(xi). 추적 손절처럼 그날 체결되면 신호와 같은 날.
+         체결 봉을 모르는 기록만 예전처럼 다음 봉 */
+      var ev = ((s.r && s.r.events) || []).filter(function (e) { return e.i === m.i && e.xi != null && e.t === (m.k === 'buy' ? 'enter' : 'exit') && (!m.a || !e.a || e.a === m.a); })[0];
+      times = '<span>' + esc(T('signal', { t: stamp(mkWhen(s, m.i, m.a), true) })) + '</span><span>' + esc(T('fill', { t: stamp(mkWhen(s, ev ? ev.xi : m.i + 1, m.a), false) })) + '</span>';
     } else times = '<span>' + esc(m.ts || '') + '</span>';
     return '<li><div class="t3-rec-main"><b>' + esc(ko() ? skdText(m.tag || '') : (TAG_EN[m.tag] || '')) + '</b>' + (body ? '<p>' + esc(body) + '</p>' : '') + '</div><div class="t3-rec-time num">' + times + '</div></li>';
   }
@@ -240,7 +243,7 @@
       + '<p class="t3-free"><button type="button" class="t3-link" onclick="G4T3.mine()">' + esc(T('myAssetLink', { amt: money(row.d.value, true) })) + '</button></p>'
       + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
     return '<aside class="t3-action"><p class="t3-card-title">' + esc(T('cardTitle')) + '</p><p class="t3-card-lb">' + esc(T('heroSub')) + '</p><strong class="t3-card-num num">' + money(Math.round(r.final)) + '</strong>'
-      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p><p class="t3-card-min">' + esc(T('cardMin', { min: money(mkMin(s)) })) + '</p>'
+      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p>' /* R5b: 「최소 운용 금액 $X」 줄은 뺀다(R5 와 같은 규칙, 최소 미만은 복사 창 오류 줄) */
       + '<button id="t3-copy" class="t3-primary" type="button" onclick="G4T3.copy()">' + esc(primaryLabel(s, null)) + '</button>'
       + '<p class="t3-free">' + esc(S.user && linkedTo(s) ? T('linkedNote') : T('free')) + '</p>'
       + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
@@ -449,7 +452,7 @@
     form.querySelectorAll('.g4-budget-strategy, .g4-budget-now, .g4-proof').forEach(function (n) { n.remove(); });
     form.insertAdjacentHTML('afterbegin', sheetHead(s, 'f'));
     var lb = form.querySelector('label[for="g4-budget"]'); if (lb) lb.textContent = T('budget');
-    var mn = $('g4-budget-min'); if (mn) mn.textContent = T('minNote', { min: money(mkMin(s)) });
+    var mn = $('g4-budget-min'); if (mn) mn.style.display = 'none'; /* R2(5단계 리허설): 칸 밑 최소 금액 문장은 뺀다. 최소 미만이면 #g4-budget-error 가 알린다 */
     var go = $('g4-budget-next'); if (go) go.textContent = T('connect', { ex: exOf(s).name });
     form.insertAdjacentHTML('beforeend', '<p class="t3s-foot">' + esc(T('foot')) + '</p>');
     enFix();
@@ -460,7 +463,7 @@
     var t = $('mk-f-t'); if (t) t.textContent = T('copyTitle');
     var st = w.querySelector('.skc-strat'); if (st) st.outerHTML = sheetHead(s, 'b');
     var fld = $('cps-amt-fld'), lb = fld && fld.querySelector('label'); if (lb) lb.textContent = T('budget');
-    var hint = $('skc-amt-h'); if (hint) hint.textContent = T('minNote', { min: money(mkMin(s)) });
+    var hint = $('skc-amt-h'); if (hint) hint.style.display = 'none'; /* R2: 같은 문장을 b 창에서도 뺀다. 최소 미만이면 #cps-amt-err 가 알린다 */
     var loss = w.querySelector('.skc-pills') && w.querySelector('.skc-pills').closest('.skc-fld');
     if (loss) {
       var box = document.createElement('details'); box.className = 't3s-more';
@@ -549,12 +552,36 @@
   };
   closeModal = function (id) {
     if (id === 'modal-auth') setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
-    var wasOn = id === 'modal-auth' && authOn(), v = oldClose.apply(this, arguments);
-    if (wasOn && !authBack && history.state && history.state.g4t3Auth) {
-      if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
-    }
-    return v;
+    return oldClose.apply(this, arguments);
   };
+  /* K22: 닫는 길이 여럿이다(✕·바깥 누름 = closeModal, Esc = 앱 공통 keydown 이 open 클래스만 지움). 어느 길이든 창이 닫히는 순간
+     I6 기록 칸이 남아 있으면 한 칸 뒤로 정리한다. 브라우저 뒤로로 닫을 때는 이미 그 칸을 지나왔으므로(state 에 g4t3Auth 없음) 그대로 */
+  function authClosed() {
+    setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
+    if (authBack || !(history.state && history.state.g4t3Auth)) return;
+    if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
+  }
+  /* K23: 가입을 마치면(signupDone) 가입 창 칸을 T1 의 「닫힌 창」 칸으로 바꾼 뒤 진행한다. 곧 열리는 복사 창(g4-t1.js armOverlay)은
+     새 칸을 쌓지 않고 이 칸을 다시 쓰고, 창이 안 열려도 뒤로가 이 칸을 건너뛴다(g4-t1.js popstate). 가입 칸이 남아 상세에서 뒤로 한 번이 헛돌던 것 */
+  if (typeof signupDone === 'function') {
+    var oldSignupDone = signupDone;
+    signupDone = function () {
+      if (history.state && history.state.g4t3Auth) {
+        history.replaceState(Object.assign({}, history.state, { g4t3Auth: false, g4Overlay: false, g4ClosedOverlay: true }), '', location.href);
+        /* T1 의 가입 뒤 이어하기(openSaved)는 이 칸을 상세 주소로 되돌린 뒤 복사 창 칸을 하나 더 쌓는다. 그 한 번만 이 칸에 다시 쓴다 */
+        var push = history.pushState, undo = function () { if (history.pushState === once) history.pushState = push; }, once = function (st) {
+          undo(); return (st && st.g4Overlay ? history.replaceState : push).apply(history, arguments);
+        };
+        history.pushState = once; setTimeout(undo, 3000);
+      }
+      return oldSignupDone.apply(this, arguments);
+    };
+  }
+  (function watchAuth() {
+    var m = $('modal-auth'); if (!m) { addEventListener('DOMContentLoaded', watchAuth, { once: true }); return; }
+    var was = authOn();
+    new MutationObserver(function () { var on = authOn(); if (was && !on) authClosed(); was = on; }).observe(m, { attributes: true, attributeFilter: ['class'] });
+  })();
   addEventListener('popstate', function () {
     if (skipPop) { skipPop = false; return; }
     if (authOn() && !(history.state && history.state.g4t3Auth) && onHost()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } setTimeout(function () { if (!authOn()) authHeadOff(); }, 400); }
