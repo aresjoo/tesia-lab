@@ -268,7 +268,8 @@
   function viewMain() {
     /* J5: 부팅 라우팅이 같은 화면을 곧바로 한 번 더 그리면 재생이 처음부터 다시 시작됐다(직행 446ms, 1114ms 두 번). 같은 전략, 같은 기간, 같은 주소를 2.5초 안에 다시 그리라면 그대로 둔다 */
     var r0 = $('bt-root');
-    if (r0 && r0.classList.contains('t4') && V && V.s.id === BT.s.id && V.per === BT.per && location.hash === lastHash && performance.now() - lastAt < 2500) return;
+    /* M-1(1.2 merge 검수): 모두 보기 화면(.t4-all)도 #bt-root.t4 라 같은 조건에 걸려 결과를 안 그렸다 → 이미 결과/재생 화면이 그려져 있을 때만 그대로 둔다 */
+    if (r0 && r0.classList.contains('t4') && !r0.classList.contains('t4-all') && V && V.s.id === BT.s.id && V.per === BT.per && location.hash === lastHash && performance.now() - lastAt < 2500) return;
     stop();
     tfPageMode('tfbt', TX[lang()].navTitle); /* 카피 표 2 */
     V = numbers();
