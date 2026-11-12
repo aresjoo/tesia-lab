@@ -247,15 +247,17 @@
      1440 = 창 바닥, 390 = 아래 고정 띠 위 12px. 곡선 높이 1440 200~300px, 390 120~210px. 재생 시작 때 한 번 정하고 착지 때 다시 확인 */
   function shown(el) { return !!(el && getComputedStyle(el).display !== 'none' && el.getClientRects().length); } /* 고정 위치 요소는 offsetParent 가 비어 있다 */
   function fitPlot() {
-    var pl = $('t4-chart'), st = $('t4-stats'), bar = $('t4-bar'); if (!pl || !st) return;
+    var pl = $('t4-chart'), st = $('t4-stats'), bar = $('t4-bar'), sk = document.querySelector('#bt-root.t4 .t4-skiprow'); if (!pl || !st) return;
     var mob = shown(bar), lo = mob ? 120 : 200, hi = mob ? 210 : 300;
     var sc = $('g-scroll'), off = sc ? sc.scrollTop : scrollY;
     var bottom = (mob ? bar.getBoundingClientRect().top : innerHeight) - 12;
-    var cs = getComputedStyle(st), need = st.offsetHeight + parseFloat(cs.marginTop || 0);
-    var top = pl.getBoundingClientRect().top + off;
-    var h = Math.max(lo, Math.min(hi, Math.floor(bottom - top - need)));
-    pl.style.height = h + 'px';
+    if (pl.nextElementSibling !== st) { pl.insertAdjacentElement('afterend', st); st.classList.remove('t4-stats-up'); } /* 기본 자리 = 곡선 바로 아래 */
+    var need = st.offsetHeight + parseFloat(getComputedStyle(st).marginTop || 0), h = Math.floor(bottom - (pl.getBoundingClientRect().top + off) - need);
+    /* K11(4단계): 390 에서 곡선을 최소로 줄여도 줄이 띠 뒤로 가면(영어 긴 문장, 긴 이름) 줄을 비교 문장 바로 아래로 올린다 */
+    if (mob && h < lo && sk) { sk.insertAdjacentElement('beforebegin', st); st.classList.add('t4-stats-up'); h = Math.floor(bottom - (pl.getBoundingClientRect().top + off)); }
+    pl.style.height = Math.max(lo, Math.min(hi, h)) + 'px';
   }
+
   function barHeight() { var b = $('t4-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t4-bar-h', b.offsetHeight + 'px'); }
 
   var lastAt = 0, lastHash = '';
