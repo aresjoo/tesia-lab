@@ -243,7 +243,7 @@
       + '<p class="t3-free"><button type="button" class="t3-link" onclick="G4T3.mine()">' + esc(T('myAssetLink', { amt: money(row.d.value, true) })) + '</button></p>'
       + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
     return '<aside class="t3-action"><p class="t3-card-title">' + esc(T('cardTitle')) + '</p><p class="t3-card-lb">' + esc(T('heroSub')) + '</p><strong class="t3-card-num num">' + money(Math.round(r.final)) + '</strong>'
-      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p><p class="t3-card-min">' + esc(T('cardMin', { min: money(mkMin(s)) })) + '</p>'
+      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p>' /* R5b: 「최소 운용 금액 $X」 줄은 뺀다(R5 와 같은 규칙, 최소 미만은 복사 창 오류 줄) */
       + '<button id="t3-copy" class="t3-primary" type="button" onclick="G4T3.copy()">' + esc(primaryLabel(s, null)) + '</button>'
       + '<p class="t3-free">' + esc(S.user && linkedTo(s) ? T('linkedNote') : T('free')) + '</p>'
       + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
