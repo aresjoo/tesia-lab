@@ -155,7 +155,7 @@
     var st = history.state;
     try { replace(LIST); t1Hub('find'); } finally { keepOpen = false; backId = null; }
     try { history.replaceState(st, '', base() + url()); } catch (_) {} /* T1 showList 가 비운 기록 상태를 되돌린다 */
-    document.body.classList.add('g4-list'); hold(false);
+    document.body.classList.add('g4-list'); hold(false); document.documentElement.classList.remove('g4l-skel'); /* K14 틀 끝 */
     document.body.classList.remove('has-banner'); /* K4: 다운로드 띠는 홈에만. 0.3초 감시를 기다리지 않고 첫 프레임부터 뺀다 */
     drawn = sigNow();
     var page = document.querySelector('#g-content .ss3'), back = page && page.querySelector('.g4-back');
