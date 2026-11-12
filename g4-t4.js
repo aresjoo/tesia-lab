@@ -61,7 +61,9 @@
   if (typeof tfVerifyGo === 'function') { var verifyGo = tfVerifyGo; tfVerifyGo = function () { clickAt = performance.now(); return verifyGo.apply(this, arguments); }; }
   /* J13: 백테스트 주소로 곧장 오면 index.html 머리가 본문을 가린다(html.g4-bt-wait). 이 화면을 그리거나 다른 주소로 가면 푼다 */
   function reveal() { document.documentElement.classList.remove('g4-bt-wait'); }
-  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) reveal(); if (/^#\/share\/s\//.test(location.hash)) write('g4.t4.return', null); });
+  var missing = 0; /* K6: 없는 id 로 전략 찾기 화면에 넘긴 시각 */
+  function revealWhenList() { if ((window.G && G.mode === 'tfss3') || performance.now() - missing > 1500) { missing = 0; reveal(); } else requestAnimationFrame(revealWhenList); }
+  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) { if (missing) revealWhenList(); else reveal(); } if (/^#\/share\/s\//.test(location.hash)) write('g4.t4.return', null); });
 
   btRoute = function (h) {
     var m = h.match(/^#\/share\/bt\/([^/]+)(?:\/(go|all))?$/);
@@ -72,7 +74,8 @@
     TF_ONSHARE = true;
     if (!window.TF_STATE_READY) { TF_ONSHARE = false; return; }
     var s = null; try { s = tfSSFind(decodeURIComponent(m[1])); } catch (_) {}
-    if (!s || !s.cfg) { TF_ONSHARE = false; reveal(); tfShareHub('find'); return; }
+    /* K6: 없는 id 는 전략 찾기 화면(G.mode tfss3)을 그린 다음에 가림을 푼다(먼저 풀면 부팅 때 그려 둔 홈이 0.1~0.2초 보였다) */
+    if (!s || !s.cfg) { TF_ONSHARE = false; missing = performance.now(); tfShareHub('find'); requestAnimationFrame(revealWhenList); return; }
     if (BT.id !== s.id) { btStop(); BT.id = s.id; BT.s = s; BT.R = null; BT.phase = 'ready'; BT.sel = null; BT.grp = null; BT.filt = null; BT.trf = 'all'; BT.decN = 8; BT.ordN = 8; }
     BT.s = s; btView(); /* 재생 멈춤은 viewMain 이 정한다(같은 화면 다시 그리기면 그대로 둠) */
   };
