@@ -23,7 +23,7 @@
   function ymd(i) { var d = String(mkDate(i)).split('.'); return [+d[0], +d[1], +d[2]]; }
   function dList(i) { var d = ymd(i); return ko() ? d[0] + '. ' + d[1] + '. ' + d[2] + '.' : MON[d[1] - 1] + ' ' + d[2] + ', ' + d[0]; }
   function dSent(i) { var d = ymd(i); return ko() ? d[0] + '년 ' + d[1] + '월 ' + d[2] + '일' : MON[d[1] - 1] + ' ' + d[2] + ', ' + d[0]; }
-  /* 문구: 카피 주인 확정본 copy/table-v2.md(15:19 갱신, 1~35, 4절 TX 스니펫 그대로). en 은 전부 1.3 확정 */
+  /* 문구: 카피 주인 확정본 copy/table-v2.md(16:56 갱신, 1~35). en 은 전부 1.3 확정 */
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var TX = {
     ko: { navBack: '← 전략 상세', mineBack: '← 대화로', navTitle: '과거 시장에서 직접 검증', mine: '내 전략', target: '{amt} 넣었다면 지금', since: '{date}부터 지금까지',
@@ -36,7 +36,7 @@
       connect: '거래소 연결', minErr: '최소 {min}부터 시작할 수 있습니다', short: '숏', long: '롱', lev: '{n}배', buy: '매수', closeShort: '숏 청산', closeLong: '롱 청산', sell: '매도' },
     en: { navBack: '← Strategy Details', mineBack: '← Back to chat', navTitle: 'Direct Market Verification', mine: 'My Strategy', target: 'If you invested {amt}, now', since: 'Since {date} to present',
       replaying: 'Replaying day by day {cur} / {days} days', skip: 'View results now', landOk: 'Even replaying {days} days day by day, it is {final}',
-      diffProfit: 'If simply held {bench} (Difference {diff} more earned)', diffLoss: 'If simply held {bench} (Difference {diff} less lost)', hold: 'If simply held {bench}',
+      diffProfit: 'If you had held: {bench} ({diff} more)', diffLoss: 'If you had held: {bench} ({diff} less lost)', hold: 'If you had held: {bench}', /* K11 안3(16:56): T3 창과 같은 말. {diff} 에 + 부호가 붙어 들어온다 */
       sumFull: 'Protected capital through {lev}two-way hedging during severe bear markets, outperforming simple buy-and-hold by {x}x.', sumShort: 'Outperformed simple buy-and-hold by {x}x.', sumLev: '{n}x ',
       win: 'Achieved profit in {wins} of {n} trades (Win rate {win}%)', viewAll: 'View all {n} trades', cta: 'Copy with {amt}', adjust: 'Adjust Budget',
       free: 'Free forever, no card required', editRules: 'Edit rules', chartAria: '{amt} growing to {final}',
@@ -159,8 +159,10 @@
       + '<div class="t4-money"><b class="t4-final num">' + usd(V.F) + '</b><span class="num ' + (up ? 'up' : 'dn') + '">' + pct(V.ret) + '</span></div>'
       + '<p class="t4-since">' + L('since', { date: esc(dSent(e0)) }) + '</p>'
       /* B1 안3: 상태 한 줄(재생 중 = 하루씩 다시 굴리는 중 n / N일, 착지 = 착지 1줄)과 비교 문장(0초부터, 착지 때 굵게)이 F 바로 밑 */
-      + '<p class="t4-state" id="t4-state"></p><p class="t4-cmp" id="t4-cmp">' + cmpLine() + '</p>'
-      + '<div class="t4-skiprow"><button type="button" class="t4-link bt-skip" id="t4-skip" onclick="G4T4.skip()">' + L('skip') + '</button></div>'
+      /* K9, K11(카피 확정 16:56): 착지 1줄을 안 쓰는 화면(손실, 390 영어)은 재생 줄을 「결과 바로 보기」 줄 안에 두어 착지 때 곡선이 움직이지 않게 */
+      + (okHidden() ? '<p class="t4-cmp" id="t4-cmp">' + cmpLine() + '</p><div class="t4-skiprow t4-skiprow-run"><span class="t4-state t4-state-in" id="t4-state"></span>'
+        : '<p class="t4-state" id="t4-state"></p><p class="t4-cmp" id="t4-cmp">' + cmpLine() + '</p><div class="t4-skiprow">')
+      + '<button type="button" class="t4-link bt-skip" id="t4-skip" onclick="G4T4.skip()">' + L('skip') + '</button></div>'
       + '<div class="t4-plot" id="t4-chart" onclick="G4T4.skip()" role="img" aria-label="' + L('chartAria', { amt: usd(V.amt), final: usd(V.F) }) + '">'
       + '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id="t4-clip"><rect id="t4-clip-r" x="0" y="0" width="0" height="' + H + '"/></clipPath></defs>'
       + '<line x1="0" x2="' + W + '" y1="' + base + '" y2="' + base + '" class="t4-base"/>'
@@ -180,6 +182,8 @@
     if (V.diff > 0) return L('diffLoss', { bench: usd(V.H), diff: usd(V.diff) });
     return L('hold', { bench: usd(V.H) });
   }
+  /* K9(카피 확정): 손실(F < $1,000)이면 착지 1줄 「…굴려도 $949입니다」를 쓰지 않는다. K11 안3: 390 영어도 1줄을 쓰지 않는다 */
+  function okHidden() { return V.F < V.amt || (!ko() && matchMedia('(max-width:860px)').matches); }
   function runLine() { return L('replaying', { cur: '<span id="t4-day">0</span>', days: n0(V.N) }); }
   function okLine() { return L('landOk', { days: n0(V.N), final: '<b class="num">' + usd(V.F) + '</b>' }); }
   /* J9: N = 끝난 거래 수, M = 그중 수익(pnl > 0), 엔진 값. 문구는 agy 확정 전 임시(flow-contract 0.5) */
@@ -232,7 +236,7 @@
     stop(); if (!$('t4-state')) return;
     paint(V.N - 1);
     var root = $('bt-root'); root.setAttribute('data-phase', 'result'); root.classList.add('landed'); if (instant) root.classList.add('still');
-    $('t4-state').innerHTML = okLine(); /* B2: 착지 1줄, 비교 문장 굵게(.landed), 주 단추 청록(.on) */
+    $('t4-state').innerHTML = okHidden() ? '' : okLine(); /* B2: 착지 1줄, 비교 문장 굵게(.landed), 주 단추 청록(.on). K9 K11: 손실, 390 영어는 1줄 없이 2줄만 */
     var c = $('t4-card'), b = $('t4-bar'); if (c) c.classList.add('on'); if (b) b.classList.add('on');
     BT.phase = 'result'; markSeen(); barHeight(); fitPlot();
     try { tfTrack('bt_land', { id: BT.id, per: BT.per, instant: !!instant }); } catch (_) {}
