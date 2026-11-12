@@ -4,7 +4,7 @@
   'use strict';
   var D = G4T1Data, LIST = '#/trade/strategies', PER = 10, POS = 'g4.t2.pos', FROM = 'g4.t2.from', LAST = 'g4.t2.last', COUNTED = 'g4.t2.counted';
   var t1Hub = tfShareHub, t1NF = tfNFRoute, t1Detail = tfSS3DetailRender, t1Card = mkCard, oldContent = gContent;
-  var expanded = false, sig = null, keepOpen = false, backId = null, reloadY = null, drawn = null;
+  var drawing = false, expanded = false, sig = null, keepOpen = false, backId = null, reloadY = null, drawn = null;
   var KIND = { agent: 1, rule: 1, mix: 1 }, MKT = { crypto: 1, stock: 1, index: 1, multi: 1 };
   /* 문구 7개 언어(K5 링크, K9 빈 결과). 정본 sprint/G4/T2/copy/ (카피 주인 1.3 agy) */
   var TX = {
@@ -24,7 +24,18 @@
   var forced = false;
   function saved() { try { var p = JSON.parse(localStorage.getItem('teth.state') || 'null'); return !!(p && p.v && p.user); } catch (_) { return false; } }
   function ready() { return !!(forced || window.TF_STATE_READY || !saved() || (window.TF_BOOTED && !window.ANTIGRAVITY_RESEARCH_UI)); }
-  function hold(on) { document.documentElement.classList.toggle('g4l-wait', !!on); }
+  /* K15: 복원을 기다리는 동안 본문을 숨기지 않는다. 목록 주소에 있을 때만 카드 틀(index.html G4L_SKEL_DRAW, 이름 없이 $1,000)을 그리고
+     목록 화면 상태(TF_ONNF)로 둔다. 그래야 앞판처럼 기다리는 중에 어디로 나가도 원래 라우터가 그 화면을 그린다(T1 g4-entry 숨김도 푼다) */
+  function hold(on) {
+    on = !!on && onList();
+    document.documentElement.classList.toggle('g4l-wait', on);
+    if (!on) return;
+    try { if (window.G4L_SKEL_DRAW) G4L_SKEL_DRAW(); } catch (_) {}
+    window.TF_ONNF = true; document.documentElement.classList.remove('g4-entry');
+  }
+  /* K15: 목록 밖으로 나가는 길(다른 라우트, 본문 교체, 새 전략, 주소 바뀜)에서 대기를 바로 푼다.
+     틀 표시(html.g4l-skel: 보조 칸 숨김 등)는 틀이 화면에서 실제로 사라졌을 때만 걷는다. T1 이 복원 뒤에 그리는 #/trade 처럼 틀이 남아 있는 동안 보조 칸이 위 단추에 겹쳐 뜨지 않게 */
+  function leave() { hold(false); if (!document.querySelector('#g-content article.g4l-skel')) document.documentElement.classList.remove('g4l-skel'); }
   function sigNow() { var c = []; try { c = tfMyExConn(); } catch (_) {} return location.hash + '|' + (S.user ? S.user.email || 1 : 0) + '|' + c.join(',') + '|' + (c.length ? tfMyExGet() : '') + '|' + ((window.GLC && GLC.lang) || 'ko'); }
   function onList() { var h = location.hash; return h === LIST || h.indexOf(LIST + '?') === 0; }
   function ssGet(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (_) { return null; } }
@@ -153,7 +164,8 @@
     o = o || {};
     keepOpen = !!o.keep; backId = o.restore && o.restore.id || null;
     var st = history.state;
-    try { replace(LIST); t1Hub('find'); } finally { keepOpen = false; backId = null; }
+    drawing = true;
+    try { replace(LIST); t1Hub('find'); } finally { keepOpen = false; backId = null; drawing = false; }
     try { history.replaceState(st, '', base() + url()); } catch (_) {} /* T1 showList 가 비운 기록 상태를 되돌린다 */
     document.body.classList.add('g4-list'); hold(false); document.documentElement.classList.remove('g4l-skel'); /* K14 틀 끝 */
     document.body.classList.remove('has-banner'); /* K4: 다운로드 띠는 홈에만. 0.3초 감시를 기다리지 않고 첫 프레임부터 뺀다 */
@@ -182,7 +194,7 @@
     });
   }
 
-  gContent = function () { document.body.classList.remove('g4-list'); return oldContent.apply(this, arguments); }; /* g4l-empty 는 목록(g4-list)에서만 듣고, 목록을 그릴 때마다 다시 정한다 */
+  gContent = function () { document.body.classList.remove('g4-list'); var r = oldContent.apply(this, arguments); if (!drawing) leave(); return r; }; /* K15: 목록 그리기 밖의 본문 교체(거래소 연결처럼 주소가 목록 그대로인 화면 포함)는 목록을 떠난 것 */ /* g4l-empty 는 목록(g4-list)에서만 듣고, 목록을 그릴 때마다 다시 정한다 */
 
   tfShareHub = function (tab) {
     if (tab === 'follow') { tfNav('#/trade'); return; }
@@ -204,8 +216,17 @@
       ssSet(POS, null);
       return true;
     }
+    leave(); /* K15 */
     return t1NF(h);
   };
+  var home0 = window.gHome;
+  /* K15: 「새 전략」은 주소가 안 바뀔 수 있다. 부팅 0.9초(TF_BOOTED) 전에 누르면 앱이 목록 주소를 지우지 않아 부팅 재라우팅이 목록을 다시 그렸다 → 목록을 떠난 것으로 본다 */
+  if (typeof home0 === 'function') gHome = function () {
+    leave();
+    if (onList()) { try { history.replaceState(null, '', base()); } catch (_) {} window.TF_ONNF = false; }
+    return home0.apply(this, arguments);
+  };
+  addEventListener('hashchange', function () { if (!onList()) leave(); }); /* K15 */
   var s0 = tfSS3Search;
   tfSS3Search = function () {
     var r = s0.apply(this, arguments); setUrl();
@@ -308,6 +329,6 @@
   };
   if (onList()) {
     if (ready()) tfRoute();
-    else { hold(true); setTimeout(function () { if (!document.documentElement.classList.contains('g4l-wait')) return; forced = true; tfRoute(); }, 9000); }
+    else { hold(true); setTimeout(function () { if (!onList() || !document.documentElement.classList.contains('g4l-wait')) return; forced = true; tfRoute(); }, 9000); }
   }
 })();
