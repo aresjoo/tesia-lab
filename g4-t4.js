@@ -198,8 +198,13 @@
     var lx = (X(j) / W * 100).toFixed(2) + '%';
     if (dot) { dot.style.left = lx; dot.style.top = (Y(v) / H * 100).toFixed(2) + '%'; }
     var vl = $('t4-vline'), bub = $('t4-bub');
-    if (vl) vl.style.left = lx;
-    if (bub) { var pw = $('t4-chart').clientWidth, bw = bub.offsetWidth, x = X(j) / W * pw; bub.style.left = Math.max(0, Math.min(pw - bw, x - bw / 2)).toFixed(1) + 'px'; } /* 말풍선은 머리점 위, 곡선 칸 밖으로 나가지 않게 */
+    /* K1(4단계): 말풍선은 머리점 바로 위에 붙어 따라간다(위가 모자라면 머리점 아래). 세로선은 말풍선에서 머리점까지 */
+    if (bub) {
+      var pl = $('t4-chart'), pw = pl.clientWidth, ph = pl.clientHeight, bw = bub.offsetWidth, bh = bub.offsetHeight, x = X(j) / W * pw, dy = Y(v) / H * ph;
+      var top = dy - bh - 14, below = top < -8; if (below) top = dy + 14;
+      bub.style.left = Math.max(0, Math.min(pw - bw, x - bw / 2)).toFixed(1) + 'px'; bub.style.top = top.toFixed(1) + 'px';
+      if (vl) { vl.style.left = lx; vl.style.top = (below ? dy : top + bh).toFixed(1) + 'px'; vl.style.height = Math.max(0, below ? top - dy : dy - top - bh).toFixed(1) + 'px'; }
+    } else if (vl) vl.style.left = lx;
     var d = $('t4-day'), dt = $('t4-date'), b = $('t4-bal');
     if (d) d.textContent = (j + 1).toLocaleString('en-US');
     if (dt) dt.textContent = dList(R.eq[j].i);
