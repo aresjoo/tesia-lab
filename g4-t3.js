@@ -646,11 +646,27 @@
     noticeT = setTimeout(dropNotice, 3200);
   };
   /* K18(문구표 5.2): 영어 화면의 왼쪽 사이드바 빈 목록 「아직 없음」 → 「None yet」. 사이드바가 다시 그려져도 같게 */
+  /* K20: 공통 메뉴의 펼친 라벨과 접힌 툴팁을 같은 언어로. en 이외의 메뉴는 원래 한국어 표시 유지 */
+  var sideLabels = [
+    ['#g-side [onclick="gHistory()"]', '연구 기록', 'Research'],
+    ['#g-tf-dash-btn', 'AI 트레이딩', 'AI Trading'],
+    ['#g-tf-share-btn', '전략 복사', 'Copy Trading'],
+    ['#g-tf-cx-btn', '거래소 연결', 'Connect Exchange'],
+    ['#g-guest-note + .g-sec', '최근', 'Recent']
+  ];
   function sideEn() {
+    sideLabels.forEach(function (row) {
+      var el = document.querySelector(row[0]); if (!el) return;
+      var labels = el.querySelectorAll('.lb, .lbp'), text = row[lang() === 'en' ? 2 : 1];
+      (labels.length ? labels : [el]).forEach(function (n) { if (n.textContent !== text) n.textContent = text; });
+    });
     if (ko()) return;
     document.querySelectorAll('#g-art-list .g-note, #g-sess-list .g-note').forEach(function (n) { if (n.textContent.trim() === TX.ko.none) n.textContent = T('none'); });
   }
-  if (window.MutationObserver) ['g-art-list', 'g-sess-list'].forEach(function (id) { var el = $(id); if (el) new MutationObserver(sideEn).observe(el, { childList: true }); });
+  if (window.MutationObserver) {
+    ['g-side', 'g-art-list'].forEach(function (id) { var el = $(id); if (el) new MutationObserver(sideEn).observe(el, { childList: true, subtree: true }); });
+    new MutationObserver(sideEn).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  }
   sideEn();
   /* K17: 상세 주소에 있는 동안 html.g4-detail(첫 칠하기 전 index.html 머리에서 붙임). 다운로드 띠와 그 자리 64px 를 처음부터 뺀다 */
   function detailFlag() { var on = /^#\/share\/s\//.test(location.hash); document.documentElement.classList.toggle('g4-detail', on); if (!on) reveal(); }
