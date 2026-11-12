@@ -223,7 +223,7 @@
     var root = $('bt-root'); root.setAttribute('data-phase', 'result'); root.classList.add('landed'); if (instant) root.classList.add('still');
     $('t4-state').innerHTML = okLine(); /* B2: 착지 1줄, 비교 문장 굵게(.landed), 주 단추 청록(.on) */
     var c = $('t4-card'), b = $('t4-bar'); if (c) c.classList.add('on'); if (b) b.classList.add('on');
-    BT.phase = 'result'; markSeen(); barHeight();
+    BT.phase = 'result'; markSeen(); barHeight(); fitPlot();
     try { tfTrack('bt_land', { id: BT.id, per: BT.per, instant: !!instant }); } catch (_) {}
   }
   function tick(now) {
@@ -231,6 +231,19 @@
     var e = now - roll.t0;
     if (e >= 0) { var k = Math.min(1, e / roll.dur); paint(Math.floor(k * (V.N - 1))); if (k >= 1) { land(false); return; } }
     raf = requestAnimationFrame(tick);
+  }
+  /* K2(4단계): 착지 첫 화면 안에 승률 줄과 「거래 N건 모두 보기」가 들어오게 곡선 높이를 맞춘다.
+     1440 = 창 바닥, 390 = 아래 고정 띠 위 12px. 곡선 높이 1440 200~300px, 390 120~210px. 재생 시작 때 한 번 정하고 착지 때 다시 확인 */
+  function shown(el) { return !!(el && getComputedStyle(el).display !== 'none' && el.getClientRects().length); } /* 고정 위치 요소는 offsetParent 가 비어 있다 */
+  function fitPlot() {
+    var pl = $('t4-chart'), st = $('t4-stats'), bar = $('t4-bar'); if (!pl || !st) return;
+    var mob = shown(bar), lo = mob ? 120 : 200, hi = mob ? 210 : 300;
+    var sc = $('g-scroll'), off = sc ? sc.scrollTop : scrollY;
+    var bottom = (mob ? bar.getBoundingClientRect().top : innerHeight) - 12;
+    var cs = getComputedStyle(st), need = st.offsetHeight + parseFloat(cs.marginTop || 0);
+    var top = pl.getBoundingClientRect().top + off;
+    var h = Math.max(lo, Math.min(hi, Math.floor(bottom - top - need)));
+    pl.style.height = h + 'px';
   }
   function barHeight() { var b = $('t4-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t4-bar-h', b.offsetHeight + 'px'); }
 
@@ -248,8 +261,9 @@
     lastAt = performance.now(); lastHash = location.hash;
     var now = performance.now(), from = clickAt && now - clickAt < 2000 ? clickAt : !booted && now < 4000 ? 0 : now;
     booted = true; clickAt = 0;
+    barHeight();
     if (seen() || reduced()) { land(true); return; }
-    $('t4-state').innerHTML = runLine(); paint(0);
+    $('t4-state').innerHTML = runLine(); fitPlot(); paint(0);
     BT.phase = 'run';
     roll = { t0: now + DELAY, dur: Math.max(MIN_ROLL, from + TOTAL - now - DELAY) }; raf = requestAnimationFrame(tick);
     try { tfTrack('bt_start', { id: BT.id, per: BT.per, t4: 1 }); } catch (_) {}
@@ -429,5 +443,5 @@
   };
   /* 모두 보기로 가기 전 자리(돌아올 때 history.back 이 착지 화면이 되게) */
   addEventListener('hashchange', function (e) { try { var o = new URL(e.oldURL).hash, n = new URL(e.newURL).hash; if (/\/all$/.test(n) && n.indexOf('#/share/bt/') === 0) write('g4.t4.allFrom', o); } catch (_) {} });
-  addEventListener('resize', function () { if (document.body.classList.contains('g4-t4')) barHeight(); });
+  addEventListener('resize', function () { if (document.body.classList.contains('g4-t4')) { barHeight(); fitPlot(); } });
 })();
