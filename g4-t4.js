@@ -188,6 +188,7 @@
     var c = V.R.tr.filter(function (t) { return !t.open && t.x != null; }), m = c.filter(function (t) { return t.pnl > 0; }).length;
     /* J9 카피 확정(표 13): n = 끝난 거래 수, wins = 그중 수익, 승률 = wins / n 반올림(앱 「자세한 지표」 승률과 같은 정의) */
     var n = c.length, win = n ? Math.round(m / n * 100) : 0;
+    if (n < 3) return ''; /* K3(4단계): 끝난 거래 3건 미만이면 승률 줄을 빼고 「거래 N건 모두 보기」만(숫자는 바꾸지 않음) */
     return L('win', { n: n0(n), wins: '<b class="' + (m > 0 ? 'up' : '') + '">' + n0(m) + '</b>', win: win });
   }
 
