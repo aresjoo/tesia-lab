@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   var D = G4T1Data, selectedCopy = sessionStorage.getItem('g4.t1.selectedCopy'), listRoute = '#/trade/strategies';
+  var selectedAt = +sessionStorage.getItem('g4.t1.selectedAt') || 0;
+  function markSelected() { selectedAt = Date.now(); try { sessionStorage.setItem('g4.t1.selectedAt', String(selectedAt)); } catch (_) {} }
   var oldNF = tfNFRoute, oldDash = tfDashView, oldHub = tfShareHub;
   var oldContent = gContent, oldSheet = mkFollowSheet, oldSetup = cpSetupGo;
   var oldAfter = acAfter, oldIntent = tfIntentRun, oldAuthSync = authSyncUI;
@@ -82,34 +84,38 @@
   }
   function render() {
     if (!window.TF_STATE_READY) return;
-    var owned = D.mine(), row = owned.find(function (x) { return x.c.id === selectedCopy; }) || owned[0], connected = !row ? D.linked() : [];
+    /* 핫픽스 mine 도착: 시작한 내 전략(D.live)도 행. 내 전략을 고른 적보다 나중에 시작했으면 그것이 첫 화면(방금 시작한 것) */
+    var copies = D.mine(), mines = D.live ? D.live() : [], owned = mines.concat(copies);
+    var picked = owned.find(function (x) { return x.c.id === selectedCopy; }), newest = mines.reduce(function (a, x) { return !a || x.st.at > a.st.at ? x : a; }, null);
+    var row = newest && (!picked || newest.st.at > selectedAt) ? newest : picked || copies[0] || mines[0], connected = !row ? D.linked() : [];
     var f = row ? { s: row.s, all: D.results(row.s, 0) } : D.face(connected.length ? connected : null);
     // A connected exchange with no eligible held strategy keeps the list, not another exchange's face.
     if (!f) { showList(); return; }
     var s = f.s, isLinked = !row && connected.length > 0, multiple = owned.length > 1;
-    if (row) { selectedCopy = row.c.id; sessionStorage.setItem('g4.t1.selectedCopy', selectedCopy); }
+    if (row) { if (selectedCopy !== row.c.id) markSelected(); selectedCopy = row.c.id; sessionStorage.setItem('g4.t1.selectedCopy', selectedCopy); }
+    var mineRow = !!(row && row.mine), title = function (x) { return x.mine ? mkHook(x.s) : mkTitle(x.s); }; /* 내 전략 이름 = T4 착지, 대화와 같은 mkHook(앱 mkTitle 은 코인을 심볼로 바꾼다) */
     tfPageMode('nfmain', 'AI 트레이딩');
     TF_ONNF = true; TF_ONSHARE = false; TF_ONSTRAT = false;
     var choose = '';
     if (multiple) {
       var total = owned.reduce(function (v, x) { return v + x.d.value; }, 0), pnl = owned.reduce(function (v, x) { return v + x.d.total; }, 0);
       choose = '<section class="g4-portfolio" aria-label="전체 복사 자산"><span>합계 내 자산</span><div><strong>' + money(total, true) + '</strong><span class="' + (pnl >= 0 ? 'up' : 'down') + '">' + signed(pnl) + '</span></div><div class="g4-pills" aria-label="복사한 전략 선택">'
-        + owned.map(function (x) { return '<button type="button" aria-pressed="' + (x === row) + '" data-copy-id="' + esc(x.c.id) + '" onclick="G4T1.selectCopy(this.dataset.copyId)"><span>' + esc(mkTitle(x.s)) + '</span><strong>' + money(x.d.value, true) + '</strong></button>'; }).join('') + '</div></section>';
+        + owned.map(function (x) { return '<button type="button" aria-pressed="' + (x === row) + '" data-copy-id="' + esc(x.c.id) + '" onclick="G4T1.selectCopy(this.dataset.copyId)"><span>' + esc(title(x)) + '</span><strong>' + money(x.d.value, true) + '</strong></button>'; }).join('') + '</div></section>';
     }
-    var action = '<div class="g4-actions"><button class="g4-primary" type="button" onclick="G4T1.primary()">' + (row ? '예산 조정' : isLinked ? '이 전략 복사하기' : '이 전략 보기') + '</button>'
-      + (!row ? '<p class="g4-free">' + COPY.free + '</p>' : '<nav class="g4-secondary"><a href="#/trade/chart">차트 보기</a><button type="button" onclick="G4T1.stop()">복사 중단</button></nav>') + '</div>';
+    var action = '<div class="g4-actions"><button class="g4-primary" type="button" onclick="G4T1.primary()">' + (mineRow ? '규칙 수정하기' : row ? '예산 조정' : isLinked ? '이 전략 복사하기' : '이 전략 보기') + '</button>'
+      + (!row ? '<p class="g4-free">' + COPY.free + '</p>' : '<nav class="g4-secondary"><a href="#/trade/chart">차트 보기</a>' + (mineRow ? '' : '<button type="button" onclick="G4T1.stop()">복사 중단</button>') + '</nav>') + '</div>';
     var body = '<main class="g4-trade ' + (row ? 'g4-owned' + (multiple ? ' g4-multiple' : '') : isLinked ? 'g4-linked' : 'g4-first') + (!arrived ? ' g4-arrive' : '') + '" lang="ko">' + choose
       + '<p class="g4-usp">' + (row ? bars() + COPY.managed : isLinked ? esc(acName(D.exchange(s))) + COPY.linked : COPY.usp) + '</p>'
       + (isLinked ? '<h1 class="g4-start">' + COPY.start + '</h1>' : '')
-      + '<section class="g4-money" aria-label="' + esc(mkTitle(s)) + '"><div class="g4-strategy">' + mkGlyph(s, 36)
-      + '<div><span>' + esc(mkTitle(s)) + '</span><small>' + esc(MK_KIND[s.kind]) + '</small></div>' + mkExTag(s) + '</div>'
+      + '<section class="g4-money" aria-label="' + esc(row ? title(row) : mkTitle(s)) + '"><div class="g4-strategy">' + mkGlyph(s, 36)
+      + '<div><span>' + esc(row ? title(row) : mkTitle(s)) + '</span><small>' + esc(mineRow ? '내 전략' : MK_KIND[s.kind]) + '</small></div>' + mkExTag(s) + '</div>'
       + (row ? '<h1 id="g4-title">내 자산<strong class="g4-amount">' + money(row.d.value, true) + '</strong></h1>' + (D.hasFill(row) ? '<p class="g4-profit ' + (row.d.total >= 0 ? 'up' : 'down') + '">' + signed(row.d.total) + ' (' + mkPct0(row.d.myPct * 100, 1) + ')</p>' : '') + '<p class="g4-invested">' + COPY.invested + money(row.d.inv, true) + '</p>' + (D.hasFill(row) ? curve(s, row, false) : '') : proof(s, false))
       + running(s, row) + (row || isLinked ? action : '') + '</section>'
       + '<section class="g4-history" aria-labelledby="g4-history-title"><div class="g4-section-head"><h2 id="g4-history-title">' + COPY.records + '</h2><button type="button" aria-expanded="false" onclick="G4T1.toggleRecords(this)">판단 기록 보기</button></div><ol>' + records(s) + '</ol></section>'
       + (!row && !isLinked ? action : '')
       + '<nav class="g4-links" aria-label="더 둘러보기"><a href="' + listRoute + '">' + (window.G4T2 && G4T2.linkText ? esc(G4T2.linkText()) : '전체 ' + tfSSRows().filter(function (x) { return !x.me; }).length + '개 전략 둘러보기 →') + '</a></nav>'
       + '<p class="g4-help">막히면 상담원이 24시간 답합니다. <button type="button" onclick="tethHelpOpen()">상담원에게 묻기</button></p></main>';
-    G4T1.current = { strategyId: s.id, copyId: row ? row.c.id : null, linked: !!isLinked };
+    G4T1.current = { strategyId: s.id, copyId: row && !mineRow ? row.c.id : null, linked: !!isLinked, mineAt: mineRow ? row.st.at : null };
     TF_RENDERING = true;
     try { gContent(body); } finally { TF_RENDERING = false; }
     document.body.classList.add('g4-main');
@@ -423,6 +429,15 @@
     if (onMain && location.hash === '#/trade' && copy && copy.ledger.length !== entries) render();
     return v;
   };
+  /* 내 전략 카드 「규칙 수정하기」: T4 mine 둘째 줄과 같은 rvFix(대화에서 규칙 고치기). rvFix 는 내 전략 결과(BT.s.mine, BT.R)를 읽으니 그 결과를 먼저 만든다 */
+  function editMine() {
+    var s = typeof tfSSFind === 'function' ? tfSSFind('mine') : null;
+    if (!s || typeof rvFix !== 'function') { if (typeof tfBackToChat === 'function') tfBackToChat(); return; }
+    var bt = tfS().bt || {};
+    BT = Object.assign({}, BT, { s: s, id: s.id, per: bt.id === s.id && bt.per != null ? bt.per : (BT.s && BT.s.mine ? BT.per : 0), amt: 1000, R: null });
+    BT.R = btCompute();
+    rvFix();
+  }
   window.G4T1 = {
     current: null,
     render: render,
@@ -430,6 +445,7 @@
     connectBudget: connectBudget,
     primary: function () {
       var c = G4T1.current;
+      if (c.mineAt) { editMine(); return; }
       if (c.copyId) { cpAdjDlg(c.copyId); return; }
       if (c.linked) { D.save(c.strategyId, 1000); mkFollowSheet(c.strategyId); return; } D.save(c.strategyId); tfSS3Go(encodeURIComponent(c.strategyId), 'all', 'ov');
     },
@@ -443,7 +459,7 @@
       document.querySelectorAll('.g4-record-extra').forEach(function (el) { el.hidden = !expand; });
       if (expand) document.querySelector('.g4-history').scrollIntoView({ block: 'start', behavior: 'auto' });
     },
-    selectCopy: function (id) { selectedCopy = id; sessionStorage.setItem('g4.t1.selectedCopy', id); render(); }
+    selectCopy: function (id) { selectedCopy = id; sessionStorage.setItem('g4.t1.selectedCopy', id); markSelected(); render(); }
   };
   if (/^#\/trade(?:\/|$)/.test(location.hash) && window.TF_STATE_READY) tfRoute();
 })();

@@ -28,6 +28,35 @@
       .map(function (c) { return { c: c, s: tfSSFind(c.nick), d: cpCalc(c) }; })
       .filter(function (row) { return row.s && !row.d.missing; });
   }
+  /* 핫픽스 mine 도착(T5 cur3 P1): 대화로 만든 내 전략을 시작하면 S.tf.strat 에 live 로 남는데 T1 은 복사 기록(cp.copies)만 읽어
+     공개 추천 카드로 갔다. live 내 전략도 T1 카드 행으로. 복사 기록 행과 모양은 같고(c.id, s, d) mine 표시만 더한다.
+     전략 객체는 시작 때 저장한 규칙(p)과 자산으로 엔진(mkRunCfg)을 돌린 것, 이름은 대화, 착지와 같은 이름(aiSpec.name) */
+  var liveCache = new Map();
+  function liveStrategy(st) {
+    var a = (typeof BT_MINE_ALIAS !== 'undefined' && BT_MINE_ALIAS[st.asset]) || st.asset, p = st.p || {};
+    if (!a || !MK_PX_CFG[a] || p.rsiTh == null) return null;
+    var cfg = { id: 'mine', kind: 'rule', asset: a, rsiTh: p.rsiTh, tp: p.tp, sl: p.sl, tf: p.trendFilter ? 1 : 0, fng: p.fng != null ? p.fng : null, startI: 61 };
+    var key = st.at + '|' + JSON.stringify(cfg) + '|' + PRICE0.length + '|' + (st.g4name || '');
+    if (liveCache.has(key)) return liveCache.get(key);
+    var name = st.g4name || st.name;
+    var s = { id: 'mine-live-' + st.at, mine: true, live: true, kind: 'rule', mkt: /비트코인|이더리움|솔라나|리플|도지코인|에이다|아발란체|비앤비/.test(a) ? 'crypto' : 'stock',
+      nick: name, name: name, one: '', asset: a, uni: null, cfg: cfg, ex: st.ex || linked()[0] || null, p: p, fw: 0, by: '', r: mkRunCfg(cfg) };
+    liveCache.set(key, s);
+    return s;
+  }
+  function live() {
+    if (!S.user) return [];
+    var t = tfS(), ai = t.aiSpec || {}, named = false;
+    var rows = (t.strat || []).filter(function (st) { return st && st.status === 'live' && !st.src && st.p; }).map(function (st, k) {
+      /* 이름: 방금 시작한 것(맨 앞)이 지금 대화의 규칙과 같으면 그 이름을 기록에 붙여 둔다(나중에 다른 대화를 해도 이름이 그대로) */
+      if (!st.g4name && k === 0 && ai.name && ai.rsiTh === st.p.rsiTh && (ai.tp == null || ai.tp === st.p.tp)) { st.g4name = ai.name; named = true; }
+      var s = liveStrategy(st); if (!s) return null;
+      var cap = (st.cap || 0) / 1000;
+      return { c: { id: 'mine:' + st.at }, s: s, st: st, mine: true, d: { value: cap, inv: cap, total: 0, myPct: 0, lots: [], posOpen: false, waiting: 0 } };
+    }).filter(Boolean);
+    if (named && typeof tfSave === 'function') tfSave();
+    return rows;
+  }
   function exchange(s) { return mkEx(s)[0].replace(/^app-/, ''); }
   function copyExchange(c) {
     if (c.exchangeId) return c.exchangeId;
@@ -80,5 +109,5 @@
     try { sessionStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
     return value;
   }
-  window.G4T1Data = { results: results, held: held, face: face, mine: mine, exchange: exchange, copyExchange: copyExchange, hasFill: hasFill, linked: linked, pos: pos, curve: curve, handoff: read, save: save };
+  window.G4T1Data = { results: results, held: held, face: face, mine: mine, live: live, exchange: exchange, copyExchange: copyExchange, hasFill: hasFill, linked: linked, pos: pos, curve: curve, handoff: read, save: save };
 })();
