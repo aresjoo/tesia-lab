@@ -1,0 +1,107 @@
+/* G4 T4 2단계 claude 스케치: 직접 검증 재생 화면. T3 상세(ad494b2)와 같은 결. DESIGN_PROMPT 색·글자·형태. 숫자 굵기 400, 초록·빨강은 숫자에만. */
+body.g4-t4{background:#000}
+body.g4-t4 #g-content{padding-bottom:0}
+body.g4-t4 #teth-help,body.g4-t4 #hw-fab,body.g4-t4 .hw-fab{display:none!important}
+body.g4-t4 .gft-wm{display:none!important}
+#bt-root.t4{max-width:1180px;margin:0 auto;padding:24px 32px 48px;color:#ececec;box-sizing:border-box}
+#bt-root.t4 button{font:inherit;-webkit-tap-highlight-color:transparent}
+#bt-root.t4 :focus-visible{outline:2px solid #b3b3b3;outline-offset:5px}
+#bt-root.t4 .up{color:#34c47c}#bt-root.t4 .dn{color:#ee766a}
+.t4-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start}
+.t4-main{min-width:0}
+#bt-root.t4 .t4-link,body.g4-t4-all .t4-link{border:0;background:none;padding:0;color:#cdcdcd;font-size:14px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;width:auto;height:auto;display:inline;border-radius:0}
+#bt-root.t4 .t4-back,body.g4-t4-all .t4-back{font-size:16px;color:#ececec;margin:0 0 20px;display:inline-block}
+.t4-name{font-size:36px;font-weight:400;line-height:1.25;color:#fff;margin:8px 0 12px;letter-spacing:-.01em}
+.t4-ex{display:flex;align-items:center;gap:10px;color:#cdcdcd;font-size:16px;flex-wrap:wrap}
+.t4-ex img{border-radius:50%;flex:none}.t4-ex i{font-style:normal;color:#ffffff38}
+.t4-sub{font-size:18px;color:#ececec;margin:36px 0 2px}
+.t4-money{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;margin:2px 0 6px}
+.t4-final{font-size:72px;font-weight:400;color:#fff;letter-spacing:-2px;line-height:1.05}
+.t4-money>span{font-size:24px;font-weight:400}
+.t4-since{font-size:16px;color:#cdcdcd;margin:0}
+.num{font-variant-numeric:tabular-nums}
+/* 재생 줄: 굴리는 중 세 줄, 착지 두 줄. 높이를 같게 잡아 곡선이 움직이지 않게 */
+.t4-replay{height:96px;margin:18px 0 18px}
+.t4-prog{font-size:14px;color:#9a9a9a;margin:0 0 4px}
+.t4-roll{display:flex;align-items:baseline;gap:14px;margin:0 0 6px}
+.t4-roll span{font-size:18px;color:#cdcdcd;font-variant-numeric:tabular-nums;min-width:118px}
+.t4-roll b{font-size:30px;font-weight:400}
+.t4-ok{font-size:22px;color:#fff;margin:0 0 6px;animation:t4in .35s ease-out both}
+.t4-ok b{font-weight:400}
+.t4-cmp{font-size:20px;color:#ececec;margin:0;animation:t4in .35s .12s ease-out both}
+.still .t4-ok,.still .t4-cmp,.still .t4-tr,.still .t4-tag,.still .t4-mk{animation:none!important}
+@keyframes t4in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 곡선 */
+.t4-plot{position:relative;height:300px;margin:0 140px 0 0;cursor:pointer;border-top:1px solid #ffffff1a;border-bottom:1px solid #ffffff1a}
+.t4-plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.t4-eq{fill:none;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.t4-hold{fill:none;stroke:#9a9a9a;stroke-width:1.5;stroke-dasharray:3 4;vector-effect:non-scaling-stroke}
+.t4-base{stroke:#ffffff26;stroke-width:1;vector-effect:non-scaling-stroke}
+.t4-dot{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px #ffffff22}
+.landed .t4-dot{display:none}
+.t4-mk{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#34c47c;opacity:0;transform:scale(.4);transition:opacity .25s,transform .25s}
+.t4-mk.on{opacity:1;transform:none}
+.t4-tag{position:absolute;left:calc(100% + 16px);width:124px;transform:translateY(-50%);opacity:0;pointer-events:none}
+.landed .t4-tag{opacity:1;animation:t4in .35s ease-out both}
+.t4-tag small{display:block;font-size:12px;color:#9a9a9a;line-height:1.3}
+.t4-tag b{display:block;font-size:20px;font-weight:400;color:#fff}
+.t4-tag-h b{color:#cdcdcd}
+/* 큰 거래 셋 */
+.t4-trades{list-style:none;margin:18px 140px 0 0;padding:0}
+.t4-tr{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid #ffffff1a;font-size:16px;animation:t4in .3s ease-out both}
+.t4-tr span:first-child{color:#9a9a9a;font-size:14px;font-variant-numeric:tabular-nums}
+.t4-tr b{font-weight:400}
+.t4-more{display:none;gap:22px;flex-wrap:wrap;margin-top:18px}
+/* 1440 오른쪽 따라오는 카드(T3 I4 와 같은 결). 착지 = 「방금 한 일 다음 단계」 파랑 */
+.t4-card{position:sticky;top:92px;border:1px solid #ffffff24;border-radius:26px;padding:28px;transition:background .45s ease,border-color .45s ease}
+.t4-card h2{font-size:20px;font-weight:400;color:#fff;margin:0 0 18px}
+.t4-card-sub{font-size:16px;color:#ececec;margin:0}
+.t4-card-num{display:block;font-size:56px;font-weight:400;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin:2px 0 10px}
+.t4-ex-sm{font-size:15px;margin-bottom:22px}
+.t4-card.on{background:linear-gradient(180deg,#0e0e0e 0%,#1b2740 48%,#24406a 100%);border-color:#5a8dff}
+#bt-root.t4 .t4-primary{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:999px;background:#fff;color:#000;border:0;font-size:16px;font-weight:500;cursor:pointer;transition:background .45s ease,color .45s ease}
+#bt-root.t4 .t4-primary:hover{background:#e5e5e5}
+#bt-root.t4 .on .t4-primary{background:#2f6fed;color:#fff}
+#bt-root.t4 .on .t4-primary:hover{background:#2a63d4}
+.t4-free{font-size:14px;color:#cdcdcd;text-align:center;margin:12px 0 0}
+.t4-card-links{display:flex;flex-direction:column;align-items:center;gap:14px;border-top:1px solid #ffffff1a;margin-top:22px;padding-top:20px}
+.t4-card-links .t4-link{font-size:16px!important;color:#ececec!important}
+.t4-bar{display:none}
+@media(max-width:1180px) and (min-width:861px){.t4-layout{gap:28px;grid-template-columns:minmax(0,1fr) 300px}.t4-final{font-size:56px}.t4-card-num{font-size:44px}.t4-card{padding:22px}.t4-plot,.t4-trades{margin-right:120px}.t4-tag{width:108px}}
+/* QA 는 T3 I9 와 같은 자리(숨기지 않음, 숫자·바와 겹치지 않게) */
+html:not(.t3-qa) body.g4-t4 #tf-devbtn,html:not(.t3-qa) body.g4-t4 #tf-devpanel{display:none!important}
+@media(max-width:860px){
+ #bt-root.t4{padding:58px 16px calc(var(--t4-bar-h,150px) + 24px)} /* 머리 44px(tf-route 는 본문을 맨 위에 붙인다) + T3 와 같은 14px */
+ .t4-layout{display:block}.t4-card{display:none}
+ #bt-root.t4 .t4-back{margin-bottom:10px}
+ .t4-name{font-size:26px;margin:4px 0 6px}
+ .t4-ex{font-size:14px;gap:8px}
+ .t4-sub{font-size:15px;margin-top:18px}
+ .t4-money{gap:12px}.t4-final{font-size:52px;letter-spacing:-1.5px}.t4-money>span{font-size:18px}
+ .t4-since{font-size:14px}
+ .t4-replay{height:84px;margin:12px 0 12px}
+ .t4-prog{font-size:13px}.t4-roll span{font-size:15px;min-width:96px}.t4-roll b{font-size:24px}
+ .t4-ok{font-size:18px}.t4-cmp{font-size:16px}
+ .t4-plot{height:210px;margin-right:96px}.t4-trades{margin-right:0}
+ .t4-tag{left:calc(100% + 8px);width:90px}.t4-tag small{font-size:11px}.t4-tag b{font-size:15px}
+ .t4-tr{grid-template-columns:96px 1fr auto;font-size:15px;padding:10px 0}
+ .t4-more{display:flex}.t4-more .t4-link{font-size:14px;color:#ececec}
+ .t4-bar{position:fixed;z-index:39;left:0;right:0;bottom:0;display:block;padding:12px 16px calc(10px + env(safe-area-inset-bottom));background:#000;border-top:1px solid #ffffff24;box-sizing:border-box;transition:background .45s ease}
+ .t4-bar.on{background:linear-gradient(180deg,#0e0e0e 0%,#1b2740 100%);border-top-color:#5a8dff}
+ .t4-bar-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px}
+ .t4-bar-top span{font-size:15px;color:#ececec}.t4-bar-top b{font-size:24px;font-weight:400;color:#fff}
+ #bt-root.t4 .t4-bar .t4-primary{height:52px;font-size:17px}
+ .t4-bar .t4-free{margin-top:8px;font-size:13px}
+ body.g4-t4 #tf-devbtn{bottom:calc(var(--t4-bar-h,150px) - 46px)!important;right:16px!important;left:auto!important;height:30px!important;padding:0 12px!important;font-size:12px!important}
+ body.g4-t4 #toast{bottom:calc(var(--t4-bar-h,150px) + 12px)}
+ body.g4-t4 #toast:not(.show){visibility:hidden}
+ body.g4-t4:has(#mk-follow) .t4-bar,body.g4-t4:has(#ss3-dlgw) .t4-bar,body.g4-t4:has(#modal-auth.open) .t4-bar{visibility:hidden}
+}
+/* 모두 보기: 지금 결과 화면에서 곡선·요약 카드·실행 단추를 빼고 기록만 */
+body.g4-t4-all #bt-root .bt-hd,body.g4-t4-all #bt-root .bt-id,body.g4-t4-all #bt-root .bt-cap,body.g4-t4-all #bt-root #bt-chart,body.g4-t4-all #bt-root #bt-rail,body.g4-t4-all #bt-root #bt-mcta{display:none!important}
+body.g4-t4-all #bt-root .bt-grid{display:block!important}
+body.g4-t4-all #bt-root{max-width:880px;margin:0 auto;padding:24px 32px 48px;box-sizing:border-box}
+body.g4-t4-all .t4-allhd{margin-bottom:18px}
+body.g4-t4-all .t4-allhd .t4-name{font-size:32px}
+body.g4-t4-all .t4-allhd .t4-since{font-size:16px;color:#cdcdcd}
+@media(max-width:860px){body.g4-t4-all #bt-root{padding:58px 16px 40px}body.g4-t4-all .t4-allhd .t4-name{font-size:26px}}
