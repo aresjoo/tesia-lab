@@ -332,12 +332,12 @@
   }
   tfSS3DetailRender = function (ne, pd, tab) {
     var s; try { s = tfSSFind(decodeURIComponent(ne)); } catch (_) {}
-    if (!real(s)) return oldDetail.apply(this, arguments);
+    if (!real(s)) { var v0 = oldDetail.apply(this, arguments); if (s || window.TF_STATE_READY) reveal(); return v0; } /* 저장 복원 전 「없음」 판정 전이면 가린 채 둔다 */
     var k = sig(s, tab);
     if (k === lastSig && Date.now() - lastAt < 2500 && G.mode === 'tfss3d' && document.querySelector('#g-content .t3-detail') && !$('modal-auth').classList.contains('open')) return;
     var restore = state(s), v = oldDetail.apply(this, arguments), page = document.querySelector('#g-content .mk-detail');
     if (!page) return v;
-    lastSig = k; lastAt = Date.now();
+    lastSig = k; lastAt = Date.now(); reveal();
     page.querySelectorAll(':scope > .g4-n1,:scope > a.g4-back').forEach(function (el) { el.remove(); });
     page.classList.add('t3-detail'); page.lang = ko() ? 'ko' : 'en'; document.body.classList.add('g4-t3');
     var nav = page.querySelector('.mk-dtabs'); if (nav) nav.hidden = true;
@@ -607,7 +607,9 @@
   if (window.MutationObserver) ['g-art-list', 'g-sess-list'].forEach(function (id) { var el = $(id); if (el) new MutationObserver(sideEn).observe(el, { childList: true }); });
   sideEn();
   /* K17: 상세 주소에 있는 동안 html.g4-detail(첫 칠하기 전 index.html 머리에서 붙임). 다운로드 띠와 그 자리 64px 를 처음부터 뺀다 */
-  function detailFlag() { document.documentElement.classList.toggle('g4-detail', /^#\/share\/s\//.test(location.hash)); }
+  function detailFlag() { var on = /^#\/share\/s\//.test(location.hash); document.documentElement.classList.toggle('g4-detail', on); if (!on) reveal(); }
+  /* K19: 상세 주소로 곧장 왔을 때 상세를 그릴 때까지 가린 본문(html.g4-detail-wait, index.html 머리)을 그린 순간 푼다. 다른 주소로 가도 푼다 */
+  function reveal() { document.documentElement.classList.remove('g4-detail-wait'); }
   addEventListener('hashchange', detailFlag); detailFlag();
   /* K7(I9): QA 단추는 주소에 ?qa=1 이 있을 때만(PO 12:57 판정) */
   function qaFlag() { return /[?&]qa=1(?:&|$)/.test(location.search) || /[?&]qa=1(?:&|$)/.test(location.hash); }
