@@ -17,6 +17,7 @@
   function read(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (_) { return null; } }
   function write(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
   function usd(v) { return '$' + Math.round(Math.abs(v)).toLocaleString('en-US'); }
+  function money2(v) { return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } /* T3 money(v, true) 와 같은 표기 */
   function sUsd(v) { var n = Math.round(v); return (n < 0 ? '-' : '+') + '$' + Math.abs(n).toLocaleString('en-US'); }
   function pct(v) { return (v < 0 ? '-' : '+') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'; }
   function ymd(i) { var d = String(mkDate(i)).split('.'); return [+d[0], +d[1], +d[2]]; }
@@ -130,14 +131,18 @@
   function allLabel() { return TX[lang()].viewAll.replace('{n}', n0(V.trades)); }
   function card() {
     var e = V.mine ? null : mkEx(V.s);
-    return '<aside class="t4-card" id="t4-card"><h2>' + esc(window.G4T3 ? G4T3.T('cardTitle') : '이 전략 복사') + '</h2>'
-      + '<p class="t4-card-sub">' + L('target', { amt: usd(V.amt) }) + '</p><b class="t4-card-num">' + usd(V.F) + '</b>'
+    /* K8(4단계): 복사 중인 사람은 머리를 「내 운용 자산 $1,000.00」(T3 상세 c 카드와 같은 말, 같은 값 row.d.value) */
+    var row = V.mine ? null : copyRow(V.s);
+    var top = row ? '<h2>' + esc(G4T3.T('barMine')) + '</h2><b class="t4-card-num">' + money2(row.d.value) + '</b>'
+      : '<h2>' + esc(window.G4T3 ? G4T3.T('cardTitle') : '이 전략 복사') + '</h2><p class="t4-card-sub">' + L('target', { amt: usd(V.amt) }) + '</p><b class="t4-card-num">' + usd(V.F) + '</b>';
+    return '<aside class="t4-card" id="t4-card">' + top
       + (e ? '<div class="t4-ex t4-ex-sm"><img src="assets/logos/' + esc(e[0]) + '.png" alt="" width="18" height="18"><span>' + esc(window.G4T3 ? G4T3.T(V.s.cfg && V.s.cfg.fut ? 'official' : 'officialSpot', { ex: e[1] }) : e[1]) + '</span></div>' : '')
       + '<button type="button" class="bt-cta t4-primary" onclick="G4T4.copy()">' + esc(primaryLabel()) + '</button>' + free()
       + '</aside>'; /* 「대화로 돌아가기」는 위 뒤로 링크와 겹쳐 뺌(카피 표 18: 둘째 줄은 「규칙 수정하기」 하나) */ /* B2: 「거래 N건 모두 보기」는 곡선 아래 승률 줄로 */
   }
   function bar() {
-    return '<div class="t4-bar" id="t4-bar"><div class="t4-bar-top"><span>' + L('target', { amt: usd(V.amt) }) + '</span><b>' + usd(V.F) + '</b></div>'
+    var row = V.mine ? null : copyRow(V.s); /* K8: 390 띠도 T3 c 바와 같게 */
+    return '<div class="t4-bar" id="t4-bar"><div class="t4-bar-top">' + (row ? '<span>' + esc(G4T3.T('barMine')) + '</span><b>' + money2(row.d.value) + '</b>' : '<span>' + L('target', { amt: usd(V.amt) }) + '</span><b>' + usd(V.F) + '</b>') + '</div>'
       + '<button type="button" class="bt-cta t4-primary" onclick="G4T4.copy()">' + esc(primaryLabel()) + '</button>' + free() + '</div>';
   }
   function page() {
@@ -356,6 +361,8 @@
       toast = function (m) { said.push(m); };
       try { v = adj0.apply(this, arguments); } finally { toast = keep; }
       if (sc) sc.scrollTop = sy; else scrollTo(0, y0);
+      /* K8: 카드와 390 띠의 「내 운용 자산」을 새 값으로(착지 상태 .on 유지). 본문은 다시 그리지 않는다 */
+      if (V) { var oc = $('t4-card'), ob = $('t4-bar'); if (oc) { oc.outerHTML = card(); $('t4-card').classList.add('on'); } if (ob) { ob.outerHTML = bar(); $('t4-bar').classList.add('on'); } barHeight(); }
       if (said.length) notice(said[said.length - 1]);
       return v;
     };
