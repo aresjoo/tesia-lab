@@ -309,23 +309,7 @@
     if (v) { var x = read(KEY); v.per = x && x.id === v.strategyId ? per(x.per) : prev && prev.strategyId === v.strategyId ? per(prev.per) : 0; write(HANDOFF, v); }
     return v;
   };
-  /* 카드에서 왔으면 끝 값 그대로, 주소로 곧장 온 사람만 이 탭에서 한 번 0.6초 세기(T2 I1 과 같은 규칙) */
-  function countIn(s) {
-    var seenKey = 'g4.t3.seen.' + s.id, pos = read('g4.t2.pos');
-    if (read(seenKey) || pos && pos.id === encodeURIComponent(s.id)) { write(seenKey, true); return; }
-    write(seenKey, true);
-    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var el = document.querySelector('.t3-final'); if (!el) return;
-    var target = +el.dataset.value, start = null;
-    el.textContent = money(1000);
-    frame = requestAnimationFrame(function step(t) {
-      if (!el.isConnected) return;
-      if (start === null) start = t;
-      var p = Math.max(0, Math.min(1, (t - start) / 600));
-      el.textContent = money(Math.round(1000 + (target - 1000) * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) frame = requestAnimationFrame(step);
-    });
-  }
+  /* 다듬기(2): 주소로 곧장 온 사람도 큰 숫자는 0초부터 끝 값(예전 0.6초 $1,000 세기는 뺐다. 세는 동안 바·카드 숫자와 달랐다) */
   /* K17: 부팅 때 저장 복원(STORE.load)과 부팅 재라우팅이 이미 그린 같은 상세를 0.6초쯤 뒤 한 번 더 그려 곡선이 끝 상태로 바뀌었다.
      같은 전략, 같은 탭, 같은 사람 상태, 같은 언어를 2.5초 안에 다시 그리라면 지금 화면을 그대로 둔다(기간, 예산, 언어가 바뀌면 다시 그림) */
   var lastSig = '', lastAt = 0;
@@ -352,7 +336,6 @@
     if (ov) {
       if (restore.more) { var more = page.querySelector('.t3-more-records'); if (more) more.open = true; }
       if (restore.y) restoreY(restore.y, 0);
-      countIn(s);
       if (typeof MK_OV_KEEP !== 'undefined' && MK_OV_KEEP && MK_OV_KEEP.ne === ne) MK_OV_KEEP = null;
     } else {
       var body = page.querySelector('.mk-dbody');
