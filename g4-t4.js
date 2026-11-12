@@ -343,6 +343,10 @@
       + '<p class="t3s-foot">' + esc(T3T('foot')) + '</p>'
       + '<p class="t4-mine-links"><button type="button" class="t3-link" onclick="tfSS3DlgClose(true);rvFix()">' + L('editRules') + '</button></p></form>'); /* B3 mine 둘째 줄(J4, T7 경계) */
     var w = $('ss3-dlgw'); if (w) w.classList.add('g4-budget-dialog', 't3s', 't4-mine', linked ? 't4-mine-b' : 't4-mine-f');
+    /* C1(코드 검수 1): 공개 창과 같은 이력 계약(g4-t1.js armOverlay). 창에 기록 한 칸 = 첫 브라우저 뒤로는 창만 닫고 착지, 다음 뒤로는 대화.
+       닫기(×, Esc)와 뒤로 처리는 T1 의 .g4-budget-dialog 처리(dismissOverlay, popstate)가 그대로 맡는다 */
+    var st = history.state || {}, nx = Object.assign({}, st, { g4Overlay: true, g4ClosedOverlay: false });
+    if (st.g4Overlay || st.g4ClosedOverlay) history.replaceState(nx, '', location.href); else history.pushState(nx, '', location.href);
     try { tfTrack('bt_copy', { id: 'mine', per: BT.per, budget: V.amt }); } catch (_) {}
   }
 
@@ -367,6 +371,9 @@
     skip: function () { if (roll) land(false); },
     copy: function () {
       if (!V) return; var s = V.s;
+      /* C2(코드 검수 1): 재생 중에 창을 열면 결과를 그 자리에서 확정한다(착지 0초, seen). 창을 닫거나 뒤로 와도 다시 굴리지 않는다.
+         이미 착지했으면 끝 상태(.still)로 고정. 재생 중 단추는 계속 누를 수 있다(결정: 재생 중 흰 주 단추) */
+      if (roll) land(true); else { var rt = $('bt-root'); if (rt && rt.classList.contains('t4')) rt.classList.add('still'); }
       if (s.mine) { mineSheet(); return; }
       var n = ne(), h = (D && D.save && D.save(s.id, V.amt)) || { strategyId: s.id };
       h.budget = V.amt; h.per = BT.per; h.returnTo = '#/share/bt/' + n;
