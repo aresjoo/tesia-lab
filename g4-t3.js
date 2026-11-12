@@ -1,219 +1,509 @@
-/* T3 independent code sketch. Input: G4/T3/decision-1.md, N1.
-   Existing engines, copy ledger and T2 history remain the owners of their data. */
+/* G4 T3 4단계 통합 (sprint/G4/T3/stage4/flow-contract.md, integrate-plan.md).
+   뼈대 codex 4ca3056. claude 3e0cf4e 에서 곡선 그리기, 가입 창 뒤로, 신호/체결 짝, 거래소 한 줄.
+   화면은 astra-decision.md 채택안(A1 안2 + 안3 곡선 끝 값, A2 안3, A3 f b c 안3), 문구는 copy/table-v2.md(ko, en) 그대로.
+   숫자는 앱 계산값만(N1 식): 큰 돈 = round(btCompute(per 0).final), 비교 = round(benchFinal), 차이 = 둘의 차. 상수로 박지 않는다.
+   영어 화면에 한국어를 남기지 않는다: 문구표에 없는 다른 언어는 영어로 보인다. */
 (function () {
   'use strict';
   var D = G4T1Data, KEY = 'g4.t3.detail', HANDOFF = 'g4.t1.handoff';
-  var current = null, frame = 0;
+  var current = null, frame = 0, clipN = 0;
   var oldHead = mk3Head, oldOverview = mkOvTab, oldDetail = tfSS3DetailRender;
   var oldContent = gContent, oldSave = D.save, oldSet = mkdSet;
-  var labels = {
-    ko: ['전략 복사','$1,000 넣었다면 지금','그냥 들고 있었다면','차이','전체','최근 1년','최근 30일','기간 선택','전략','그냥 들고 있기','지금','다음 판단','TETH의 판단 기록','최근 체결 내역','전체 거래 내역 보기','직접 검증하기','TETH에게 분석시키기','영원히 무료, 카드 등록 필요없음','복사 중','내 돈','예산 조정','복사 예산','최소','연결 완료','에서 실행','연결 후 실행','전략 정보','관심 전략','링크 복사','막히면 상담원이 24시간 답합니다.','상담원에게 묻기','신호','체결','전체 판단 기록','상세로 돌아가기','넣은 돈'],
-    en: ['Copy strategies','If you invested $1,000','If you had held','Difference','All time','Past year','Past 30 days','Period','Strategy','Buy and hold','Now','Next decision','TETH decisions','Recent orders','View all orders','Verify yourself','Ask TETH to analyze','Free forever, no card needed','Copying','My balance','Adjust budget','Copy budget','Minimum','Connected','Execution on','Connect to run','Strategy details','Watchlist','Copy link','Support answers 24/7.','Ask support','Signal','Execution','All decisions','Back to strategy','Invested'],
-    ja: ['戦略コピー','$1,000を入れていたら','そのまま保有していたら','差額','全期間','過去1年','過去30日','期間','戦略','そのまま保有','現在','次の判断','TETHの判断記録','最近の注文','すべての注文を見る','自分で検証','TETHに分析を依頼','ずっと無料、カード登録不要','コピー中','自分の残高','予算を調整','コピー予算','最低','接続済み','実行先','接続して実行','戦略情報','ウォッチリスト','リンクをコピー','サポートは24時間対応します。','サポートに相談','シグナル','約定','すべての判断','戦略に戻る','投資額'],
-    'zh-CN': ['策略跟单','投入$1,000后现在','如果一直持有','差额','全部','近一年','近30天','期间','策略','一直持有','当前','下次判断','TETH判断记录','最近订单','查看全部订单','自行验证','让TETH分析','永久免费，无需绑卡','跟单中','我的资金','调整预算','跟单预算','最低','已连接','执行交易所','连接后执行','策略信息','自选策略','复制链接','客服24小时解答。','联系客服','信号','成交','全部判断','返回策略','投入金额'],
-    'zh-TW': ['策略跟單','投入$1,000後現在','如果一直持有','差額','全部','近一年','近30天','期間','策略','一直持有','目前','下次判斷','TETH判斷紀錄','最近訂單','查看全部訂單','自行驗證','讓TETH分析','永久免費，無需綁卡','跟單中','我的資金','調整預算','跟單預算','最低','已連接','執行交易所','連接後執行','策略資訊','自選策略','複製連結','客服24小時解答。','聯絡客服','訊號','成交','全部判斷','返回策略','投入金額'],
-    es: ['Copiar estrategias','Si hubieras invertido $1,000','Si hubieras mantenido','Diferencia','Todo','Último año','Últimos 30 días','Período','Estrategia','Comprar y mantener','Ahora','Próxima decisión','Decisiones de TETH','Órdenes recientes','Ver todas las órdenes','Verificar','Pedir análisis a TETH','Gratis para siempre, sin tarjeta','Copiando','Mi saldo','Ajustar presupuesto','Presupuesto','Mínimo','Conectado','Ejecución en','Conectar para ejecutar','Detalles','Favoritos','Copiar enlace','Soporte disponible las 24 horas.','Contactar soporte','Señal','Ejecución','Todas las decisiones','Volver a la estrategia','Invertido'],
-    fr: ['Copier des stratégies','Avec $1,000 investis','En conservant les actifs','Écart','Tout','Dernière année','30 derniers jours','Période','Stratégie','Conserver les actifs','Maintenant','Prochaine décision','Décisions de TETH','Ordres récents','Voir tous les ordres','Vérifier','Demander une analyse à TETH','Gratuit pour toujours, sans carte','Copie active','Mon solde','Ajuster le budget','Budget de copie','Minimum','Connecté','Exécution sur','Connecter pour exécuter','Détails','Favoris','Copier le lien','Assistance disponible 24 h/24.','Contacter l’assistance','Signal','Exécution','Toutes les décisions','Retour à la stratégie','Investi']
+
+  /* ── 문구 (copy/table-v2.md 확정안 ko, en) ── */
+  var TX = {
+    ko: {
+      back: '← 전략 복사', heroSub: '$1,000 넣었다면 지금',
+      heroCompare: '그냥 들고 있었다면 {bench} (차이 {diff} 더 벌었습니다)', heroHold: '그냥 들고 있었다면 {bench}',
+      since: '{date}부터 지금까지', follow: '{count}명이 따라가는 중', official: '{ex} 선물 공식 연동', officialSpot: '{ex} 공식 연동',
+      endStrategy: '전략', endHold: '그냥 들고 있었다면', keyStrategy: '전략', keyHold: '그냥 들고 있기',
+      posLive: '지금 {pos} 운용 중', posWait: '진입 조건을 기다리고 있습니다.', next: '다음 판단', execLinked: '{ex} 계정으로 바로 복사합니다',
+      execUnlinked: '{ex} 계정 연결 후 바로 실행됩니다',
+      tabAll: '전체', tab1Y: '최근 1년', tab3M: '최근 3개월', tab30D: '최근 30일', period: '기간',
+      cardTitle: '이 전략 복사', cardMin: '최소 운용 금액 {min}', btnCopy: '{amt}으로 복사하기', btnAdjust: '예산 조정',
+      free: '영원히 무료, 카드 등록 필요없음', barFree: '영원히 무료, 카드 등록 필요없음', linkedNote: '수수료 0원, 언제든 중단 가능',
+      myAssetLink: '내 복사 자산 {amt} 보기', barLabel: '$1,000 넣었다면 지금', barMine: '내 운용 자산', copying: '현재 {amt} 복사 운용 중',
+      verify: '직접 검증하기', analyze: 'TETH에게 분석시키기',
+      decTitle: 'TETH의 판단 기록', decNote: '신호는 AI 판단 시각, 체결은 실제 주문이 실행된 시각입니다.', signal: '신호 {t}', fill: '체결 {t}',
+      decMore: '이전 판단 기록 보기', ordTitle: '최근 체결 내역', ordNote: '초기 운용 $1,000 기준 체결 결과', ordAll: '전체 거래 내역 보기 ({count}건)',
+      ordCols: ['종목', '주문 유형', '체결 시각', '체결가', '손익'], holding: '보유 중', info: '전략 정보',
+      support: '막히면 상담원이 24시간 답합니다.', supportLink: '상담원에게 묻기', menu: '더 보기', watch: '관심 전략', link: '링크 복사',
+      copyTitle: '전략 복사', budget: '복사 예산', minNote: '최소 {min}부터 자유롭게 설정할 수 있습니다.', stopLabel: '원금 보호 손실 중단',
+      stopDesc: '설정한 예산의 {pct}% 손실 시 복사를 자동으로 멈춰 원금을 보호합니다.', start: '전략 복사 시작', connect: '{ex} 연결하고 복사 시작',
+      foot: '복사는 무료이며 언제든 위약금 없이 멈출 수 있습니다.', connected: '{ex} 연결됨',
+      adjTitle: '예산 조정, {name}', myAsset: '내 운용 자산 {amt} (수익률 {ret})', tabAdd: '예산 추가', tabOut: '예산 회수',
+      avail: '계정 잔여 가능 금액: {amt}', adjNote: '조정된 예산은 다음 AI 진입 주문부터 자동으로 반영됩니다.', adjBtn: '예산 변경 완료', copyingTag: '복사 중',
+      authSub: 'TETH를 잠금 해제하고 AI 투자 전략 복사를 시작하십시오.', authBack: '전략 상세로 돌아왔습니다. 언제든 무료로 복사할 수 있습니다.',
+      chatBack: '← 전략 상세로 돌아가기'
+    },
+    en: {
+      back: '← Copy Strategies', heroSub: 'If you invested $1,000, now',
+      heroCompare: 'If you had held: {bench} ({diff} more earned)', heroHold: 'If you had held: {bench}',
+      since: 'Since {date} to present', follow: '{count} people following', official: 'Official {ex} Futures Integration', officialSpot: 'Official {ex} Integration',
+      endStrategy: 'Strategy', endHold: 'Buy & Hold', keyStrategy: 'Strategy', keyHold: 'Buy & Hold',
+      posLive: 'Currently holding {pos}', posWait: 'Waiting for entry conditions.', next: 'Next decision:', execLinked: 'Ready to copy directly to your {ex} account',
+      execUnlinked: 'Executes immediately upon connecting {ex} account',
+      tabAll: 'All', tab1Y: 'Past 1 Year', tab3M: 'Past 3 Months', tab30D: 'Past 30 Days', period: 'Period',
+      cardTitle: 'Copy This Strategy', cardMin: 'Minimum investment {min}', btnCopy: 'Copy with {amt}', btnAdjust: 'Adjust Budget',
+      free: 'Free forever, no credit card required', barFree: 'Free forever, no card required', linkedNote: 'Zero fees, cancel anytime',
+      myAssetLink: 'View my copied asset {amt}', barLabel: 'If $1,000 invested', barMine: 'My Copied Asset', copying: 'Currently Copying with {amt}',
+      verify: 'Verify Strategy', analyze: 'Ask TETH to Analyze',
+      decTitle: 'TETH Trading Decisions', decNote: 'Signal indicates the AI decision time; Execution indicates the order fill time.', signal: 'Signal: {t}', fill: 'Fill: {t}',
+      decMore: 'View Previous Decisions', ordTitle: 'Recent Executed Orders', ordNote: 'Executed results based on $1,000 initial capital', ordAll: 'View All {count} Orders',
+      ordCols: ['Symbol', 'Type', 'Fill Time', 'Price', 'PnL'], holding: 'Holding', info: 'Strategy info',
+      support: 'Stuck? Our support team answers 24/7.', supportLink: 'Ask Support', menu: 'More', watch: 'Watchlist', link: 'Copy link',
+      copyTitle: 'Copy Strategy', budget: 'Copy Budget', minNote: 'Minimum {min}. You can change this amount freely.', stopLabel: 'Capital Protection Stop-Loss',
+      stopDesc: 'Automatically stops copying if loss reaches {pct}% to protect your principal.', start: 'Start Strategy Copy', connect: 'Connect {ex} and Start Copy',
+      foot: 'Copying is completely free and can be stopped anytime without penalties.', connected: '{ex} connected',
+      adjTitle: 'Adjust Budget, {name}', myAsset: 'My Copied Asset: {amt} (Return {ret})', tabAdd: 'Add Budget', tabOut: 'Withdraw Budget',
+      avail: 'Available Account Balance: {amt}', adjNote: 'Adjusted budget will apply automatically from the next AI entry order.', adjBtn: 'Confirm Budget Adjustment', copyingTag: 'Copying',
+      authSub: 'Unlock TETH and start copying AI trading strategies.', authBack: 'Returned to strategy details. You can copy for free anytime.',
+      chatBack: '← Back to Strategy Details'
+    }
   };
-  var timeNotes = {
-    ko:'신호는 판단한 시각, 체결은 그 판단에 따른 주문이 실행된 시각입니다.',
-    en:'Signal time records a decision; execution time records when its order was filled.',
-    ja:'シグナルは判断した時刻、約定はその注文が成立した時刻です。',
-    'zh-CN':'信号时间是作出判断的时间，成交时间是对应订单执行的时间。',
-    'zh-TW':'訊號時間是作出判斷的時間，成交時間是對應訂單執行的時間。',
-    es:'La señal indica cuándo se decidió; la ejecución, cuándo se completó la orden.',
-    fr:'Le signal indique la décision ; l’exécution indique quand son ordre a été exécuté.'
+  /* 전략 이름 영어(문구표 #2 의 f1 과 같은 짜임. 나머지 30개는 agy 확인 전 임시) */
+  var NAME_EN = {
+    f1: 'BNB Moving Average Bi-Directional 2x', f2: 'DOGE Moving Average Bi-Directional 2x', f3: 'AVAX Trend Bi-Directional',
+    f4: 'ETH Trend Bi-Directional 2x', f5: 'Major Coin Breakout Follower', f6: 'ADA Moving Average Bi-Directional', f7: 'Strongest Coin Long/Short',
+    f8: 'AVAX Moving Average Bi-Directional', f9: 'Two-Coin Long/Short Switch', f10: 'BTC Trend Bi-Directional 2x',
+    d1: 'Three-Coin Split', d2: 'Four Markets, Two Picks', d3: 'Daily Coin Comparison', d4: 'Three Tech Stocks Split', d5: 'Tech Stocks Rising Together', d6: 'One Major Coin',
+    r1: 'BTC After a Big Drop', r2: 'Nasdaq 4% Take Profit', r3: 'ETH Quick Exit', r4: 'Gold Only When Clear', r5: 'Tesla After a Big Drop',
+    r6: 'SOL Short and Frequent', r7: 'XRP 4% Take Profit', r8: 'NVIDIA 8% Target', r9: 'BTC Only When Clear',
+    h1: 'Waiting for Tech Recovery', h2: 'Crypto Market Check First', h3: 'Index and Gold, Short Term', h4: 'Four-Market Recovery Wait',
+    h5: 'Strong Coin Recovery', h6: 'Six-Market Rotation'
   };
-  function lang() { return typeof GLC !== 'undefined' && labels[GLC.lang] ? GLC.lang : 'ko'; }
-  function L(i) { return labels[lang()][i]; }
+  var TAG_EN = {
+    '선물 숏 진입': 'Futures Short Entry', '선물 롱 청산': 'Futures Long Exit', '선물 롱 진입': 'Futures Long Entry', '선물 숏 청산': 'Futures Short Exit',
+    '현물 매수': 'Spot Buy', '현물 매도': 'Spot Sell', '토큰화 주식 매수': 'Tokenized Stock Buy', '토큰화 주식 매도': 'Tokenized Stock Sell',
+    '토큰화 지수 매수': 'Tokenized Index Buy', '토큰화 지수 매도': 'Tokenized Index Sell', '토큰화 금 매수': 'Tokenized Gold Buy', '토큰화 금 매도': 'Tokenized Gold Sell',
+    '포지션 유지': 'Position Held', '보유 유지': 'Holding', '관망': 'Waiting', '숏 후보 선정': 'Short Candidates', '롱 후보 선정': 'Long Candidates',
+    '종목 선정': 'Asset Selection', '현재 상태': 'Current Status', '전략 개요': 'Strategy Overview'
+  };
+  var TYPE_EN = { '숏 진입': 'Short Entry', '롱 진입': 'Long Entry', '숏 청산': 'Short Exit', '롱 청산': 'Long Exit', '매수': 'Buy', '매도': 'Sell' };
+  var WORD_EN = { '숏': 'Short', '롱': 'Long', '나스닥': 'Nasdaq', '금': 'Gold', '테슬라': 'Tesla', '엔비디아': 'NVIDIA' };
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function lang() { return typeof GLC !== 'undefined' && GLC.lang ? GLC.lang : 'ko'; }
+  function ko() { return lang() === 'ko'; }
+  function T(k, o) {
+    var s = (ko() ? TX.ko : TX.en)[k]; if (s == null) s = TX.en[k];
+    return o && typeof s === 'string' ? s.replace(/\{(\w+)\}/g, function (m, x) { return o[x] != null ? o[x] : m; }) : s;
+  }
   function esc(v) { return gEsc(String(v == null ? '' : v)); }
   function money(v, cents) { return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }); }
-  function pct(v) { return (v >= 0 ? '+' : '') + Number(v).toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%'; }
-  function delta(v) { return (v >= 0 ? '+' : '−') + money(Math.abs(v)); }
+  function pct(v) { return (v >= 0 ? '+' : '-') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'; }
   function read(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (_) { return null; } }
   function write(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
   function real(s) { return !!(s && s.cfg && !s.me && !s.mine); }
-  function per(v) { return [0, 365, 30].indexOf(+v) >= 0 ? +v : 0; }
+  function per(v) { return [0, 365, 90, 30].indexOf(+v) >= 0 ? +v : 0; }
   function route(s) { return '#/share/s/' + encodeURIComponent(s.id) + '/all'; }
-  function state(s) { var x = read(KEY); return x && x.id === s.id ? x : {id:s.id, per:0, y:0}; }
-  function day(i) {
-    var d = idxToDate(i);
-    return lang() === 'ko' ? d.getFullYear() + '. ' + (d.getMonth()+1) + '. ' + d.getDate() + '.' : d.toLocaleDateString(lang());
+  function state(s) { var x = read(KEY); return x && x.id === s.id ? x : { id: s.id, per: 0, y: 0 }; }
+  function name(s) { return ko() ? mkHook(s) : (NAME_EN[s.id] || mkHook(s)); }
+  function exOf(s) { var e = mkEx(s); return { file: e[0], name: e[1], id: D.exchange(s) }; }
+  function logo(s, size) { var e = exOf(s); return '<img class="t3-logo" src="assets/logos/' + esc(e.file) + '.png" alt="" width="' + size + '" height="' + size + '">'; }
+  function official(s) { return T(fuIs(s) ? 'official' : 'officialSpot', { ex: exOf(s).name }); }
+  function dot(i) { var d = idxToDate(i); return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.'; }
+  function longDate(i) { var d = idxToDate(i); return ko() ? d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+  /* "2026.10.30 09:00" → ko "2026. 10. 30. 09:00" / en "Oct 30, 2026, 09:00", year=false 면 연도 없이 */
+  function stamp(t, year) {
+    var m = String(t || '').match(/^(\d{4})\.(\d{2})\.(\d{2}) (\d{2}:\d{2})/); if (!m) return t || '';
+    if (ko()) return (year ? m[1] + '. ' : '') + (+m[2]) + '. ' + (+m[3]) + '. ' + m[4];
+    return MON[+m[2] - 1] + ' ' + (+m[3]) + (year ? ', ' + m[1] : '') + ', ' + m[4];
+  }
+  function nextTime() {
+    var t = tbNextClose(); if (ko()) return t;
+    var m = String(t).match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일 (\d{2}:\d{2})/);
+    return m ? MON[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1] + ', ' + m[4] : t;
+  }
+  function enWords(t) { return String(t).replace(/(나스닥|테슬라|엔비디아|숏|롱|금)/g, function (w) { return WORD_EN[w] || w; }); }
+  /* 지금 한 줄: G4T1Data.pos 그대로 계산, 문구표 #12 의 틀로 */
+  function posLine(s, row) {
+    var p = D.pos(s, row), m = String(p).match(/^지금 (.+) 보유 중$/);
+    if (m) return T('posLive', { pos: ko() ? m[1] : enWords(m[1]) });
+    if (/기다리/.test(p) || ko()) return ko() ? p : T('posWait');
+    return T('posWait');
   }
   function copyFor(s) { return D.mine().find(function (x) { return x.s.id === s.id; }) || null; }
   function budget(s) { var h = D.handoff(); return h && h.strategyId === s.id && Number.isFinite(h.budget) && h.budget > 0 ? h.budget : 1000; }
-  function copyLabel(s) {
-    var amount = money(budget(s)), c = lang();
-    return c === 'ko' ? amount + '으로 복사' : c === 'ja' ? amount + 'でコピー' : c === 'zh-TW' ? amount + '跟單' : c === 'zh-CN' ? amount + '跟单' : c === 'es' ? 'Copiar con ' + amount : c === 'fr' ? 'Copier avec ' + amount : 'Copy with ' + amount;
-  }
-  function followers(s) {
-    var n = Number(s.fw || 0).toLocaleString('en-US'), c = lang();
-    return c === 'ko' ? n + '명이 따라가는 중' : c === 'ja' ? n + '人がコピー中' : /^zh/.test(c) ? n + '人跟单中' : c === 'es' ? n + ' personas copiando' : c === 'fr' ? n + ' personnes copient' : n + ' people copying';
-  }
+  function linkedTo(s) { return D.linked().indexOf(D.exchange(s)) >= 0; }
+
+  /* ── 숫자: N1 식 그대로. 전체·1년·3개월 = btCompute(per), 30일 = mkSlice(N1 표대로 기간 고르기 안에만) ── */
   function series(s, p) {
     p = per(p);
-    if (p !== 30) return D.results(s, p);
-    // N1 explicitly retains the recent-30-day slice; it is not a new engine run.
-    var r = mkSlice(s, 30), eq = r.eq, first = eq[0].i, prices = mkUni(s).list.map(mkPx);
+    if (p !== 30) {
+      var r = D.results(s, p);
+      return { eq: r.eq, bench: r.bench, i0: r.i0, final: r.final, benchFinal: r.benchFinal, ret: p === 0 ? s.r.ret : (r.final / 1000 - 1) * 100 };
+    }
+    var x = mkSlice(s, 30), eq = x.eq, first = eq[0].i, prices = mkUni(s).list.map(mkPx);
     var hold = eq.map(function (point) { return prices.reduce(function (sum, px) { return sum + px[point.i] / px[first]; }, 0) / prices.length; });
-    return {r:r, eq:eq, bench:hold, i0:first, T:eq[eq.length-1].i, final:1000*eq[eq.length-1].v, benchFinal:1000*hold[hold.length-1], ret:r.ret};
+    return { eq: eq, bench: hold, i0: first, final: 1000 * eq[eq.length - 1].v, benchFinal: 1000 * hold[hold.length - 1], ret: x.ret };
   }
-  function curve(r) {
-    var values = r.eq.map(function (p) { return p.v; }).concat(r.bench), lo = Math.min.apply(null,values), hi = Math.max.apply(null,values), span = hi-lo || 1;
-    var n = r.eq.length, width = 720, height = 224;
-    function path(hold) { return r.eq.map(function (p,j) { return (j?'L':'M') + (6+j/Math.max(1,n-1)*(width-12)).toFixed(2) + ',' + (12+(1-((hold?r.bench[j]:p.v)-lo)/span)*(height-24)).toFixed(2); }).join(' '); }
-    return '<figure class="t3-curve" data-strategy-end="'+r.final+'" data-hold-end="'+r.benchFinal+'">'
-      +'<svg viewBox="0 0 720 224" preserveAspectRatio="none" role="img" aria-label="'+esc(L(8)+' '+money(r.final)+', '+L(9)+' '+money(r.benchFinal))+'">'
-      +'<path class="t3-grid" d="M6 12H714 M6 112H714 M6 212H714"/><path class="t3-hold" d="'+path(true)+'"/><path class="t3-line" d="'+path(false)+'"/></svg>'
-      +'<figcaption><span>'+esc(day(r.i0))+'</span><span>'+esc(day(r.eq[n-1].i))+'</span></figcaption></figure>';
+
+  /* ── 곡선: 전략 실선 + 그냥 들고 있기 점선 + 끝 값 꼬리표(A1 안3). 그리기는 0.2초에 시작해 0.9초에 끝(I2, claude 3e0cf4e 방식) ── */
+  function drawOnce(s, p) {
+    var k = 'g4.t3.drawn.' + s.id + '.' + p;
+    if (read(k) || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return false;
+    write(k, true); return true;
+  }
+  function curve(r, o) {
+    o = o || {};
+    var values = r.eq.map(function (p) { return p.v; }).concat(r.bench), lo = Math.min.apply(null, values), hi = Math.max.apply(null, values), span = hi - lo || 1;
+    var n = r.eq.length, W = 720, H = o.h || 224, id = 't3clip' + (++clipN), anim = !!o.animate;
+    function y(v) { return 12 + (1 - (v - lo) / span) * (H - 24); }
+    function path(hold) { return r.eq.map(function (p, j) { return (j ? 'L' : 'M') + (4 + j / Math.max(1, n - 1) * (W - 8)).toFixed(2) + ',' + y(hold ? r.bench[j] : p.v).toFixed(2); }).join(' '); }
+    if (n < 2) return '';
+    var ys = y(r.eq[n - 1].v), yh = y(r.bench[n - 1]), gap = 34;
+    if (Math.abs(ys - yh) < gap) { if (ys <= yh) yh = Math.min(H, ys + gap); else ys = Math.min(H, yh + gap); }
+    var tags = o.tags === false ? '' : '<span class="t3-tag s" style="top:' + (ys - 15).toFixed(1) + 'px"><small>' + esc(T('endStrategy')) + '</small>' + money(Math.round(r.final)) + '</span>'
+      + '<span class="t3-tag h" style="top:' + (yh - 15).toFixed(1) + 'px"><small>' + esc(T('endHold')) + '</small>' + money(Math.round(r.benchFinal)) + '</span>';
+    return '<figure class="t3-curve' + (anim ? ' drawing' : '') + (o.cls ? ' ' + o.cls : '') + '" data-strategy-end="' + Math.round(r.final) + '" data-hold-end="' + Math.round(r.benchFinal) + '">'
+      + '<div class="t3-plot" style="height:' + H + 'px"><svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="' + esc(T('keyStrategy') + ' ' + money(Math.round(r.final)) + ', ' + T('keyHold') + ' ' + money(Math.round(r.benchFinal))) + '">'
+      + '<defs><clipPath id="' + id + '"><rect x="0" y="0" height="' + H + '" width="' + (anim ? 0 : W) + '">'
+      + (anim ? '<animate attributeName="width" from="0" to="' + W + '" begin="0.2s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".22 1 .36 1"/>' : '') + '</rect></clipPath></defs>'
+      + '<path class="t3-grid" d="M0 12H' + W + ' M0 ' + (H / 2) + 'H' + W + ' M0 ' + (H - 12) + 'H' + W + '"/>'
+      + '<g clip-path="url(#' + id + ')"><path class="t3-hold" d="' + path(true) + '"/><path class="t3-line" d="' + path(false) + '"/></g></svg>' + tags + '</div>'
+      + (o.legend ? '<figcaption><span><i class="t3-key"></i>' + esc(T('keyStrategy')) + '</span><span><i class="t3-key dashed"></i>' + esc(T('keyHold')) + '</span></figcaption>' : '')
+      + '</figure>';
+  }
+  function compare(r, cls) {
+    var diff = Math.round(r.final) - Math.round(r.benchFinal), bench = money(Math.round(r.benchFinal));
+    if (diff <= 0) return '<p class="' + cls + '">' + esc(T('heroHold', { bench: bench })) + '</p>';
+    var t = esc(T('heroCompare', { bench: bench, diff: '\u0001' })).replace('\u0001', '<span class="up">+' + money(diff) + '</span>');
+    return '<p class="' + cls + '">' + t.replace(' (', '<br>(') + '</p>';
   }
   function periodPicker(p) {
-    return '<label class="t3-period"><span>'+L(7)+'</span><select class="mkd-per" aria-label="'+L(7)+'" onchange="G4T3.period(this.value)">'
-      +[[0,4],[365,5],[30,6]].map(function (x) { return '<option value="'+x[0]+'"'+(p===x[0]?' selected':'')+'>'+L(x[1])+'</option>'; }).join('')+'</select></label>';
+    return '<label class="t3-period"><span>' + esc(T('period')) + '</span><select class="mkd-per" aria-label="' + esc(T('period')) + '" onchange="G4T3.period(this.value)">'
+      + [[0, 'tabAll'], [365, 'tab1Y'], [90, 'tab3M'], [30, 'tab30D']].map(function (x) { return '<option value="' + x[0] + '"' + (p === x[0] ? ' selected' : '') + '>' + esc(T(x[1])) + '</option>'; }).join('') + '</select></label>';
   }
-  function proof(s,p) {
-    var r = series(s,p), diff = Math.round(r.final)-Math.round(r.benchFinal);
-    return '<section class="t3-proof" aria-label="'+L(8)+'" data-period="'+p+'"><div class="t3-proof-top"><p>'+L(1)+'</p>'+periodPicker(p)+'</div>'
-      +'<div class="t3-money"><strong class="t3-final num" data-value="'+r.final+'">'+money(r.final)+'</strong><span class="num '+(r.ret>=0?'up':'dn')+'">'+pct(p===0?s.r.ret:r.ret)+'</span></div>'
-      +'<p class="t3-range">'+esc(day(r.i0))+' → '+esc(day(r.eq[r.eq.length-1].i))+'</p>'
-      +'<div id="t3-chart">'+curve(r)+'</div><div class="t3-compare"><span><i class="t3-key"></i>'+L(8)+' <b class="num">'+money(r.final)+'</b></span>'
-      +'<span><i class="t3-key dashed"></i>'+L(2)+' <b class="num">'+money(r.benchFinal)+'</b></span></div>'
-      +'<p class="t3-difference">'+L(3)+' <span class="num '+(diff>=0?'up':'dn')+'">'+delta(diff)+'</span></p></section>';
+  /* A1 안2: 라벨 + 기간 → 큰 돈 + % → 비교·차이 두 줄 → 날짜 → 큰 곡선(끝 값) */
+  function proof(s, p) {
+    var r = series(s, p);
+    return '<section class="t3-proof" data-period="' + p + '"><div class="t3-proof-top"><p>' + esc(T('heroSub')) + '</p>' + periodPicker(p) + '</div>'
+      + '<div class="t3-money"><strong class="t3-final num" data-value="' + Math.round(r.final) + '">' + money(Math.round(r.final)) + '</strong><span class="num ' + (r.ret >= 0 ? 'up' : 'dn') + '">' + pct(r.ret) + '</span></div>'
+      + compare(r, 't3-compare-line') + '<p class="t3-range">' + esc(T('since', { date: longDate(r.i0) })) + '</p>'
+      + '<div id="t3-chart">' + curve(r, { animate: drawOnce(s, p), h: innerWidth <= 860 ? 168 : 224 }) + '</div></section>';
   }
-  function now(s,row) {
-    return '<section class="t3-now"><div><span class="t3-eyebrow">'+L(10)+'</span><p>'+esc(D.pos(s,row))+'</p></div><p class="t3-next">'+L(11)+' <time>'+esc(tbNextClose())+'</time></p></section>';
+  function now(s, row) {
+    var ex = exOf(s), line = '';
+    if (S.user && !row) line = '<p class="t3-exec">' + esc(T(linkedTo(s) ? 'execLinked' : 'execUnlinked', { ex: ex.name })) + '</p>';
+    return '<section class="t3-now"><p class="t3-pos">' + esc(posLine(s, row)) + '</p><p class="t3-next">' + esc(T('next')) + ' <time>' + esc(nextTime()) + '</time></p>' + line + '</section>';
+  }
+
+  /* ── A2 안3: 판단 기록(굵은 사건 제목 + 한 줄 + 오른쪽 신호·체결), I11 ── */
+  function recEn(m, s) {
+    var t = String(m.t || ''), sym = mkTk(m.a || '') || '', out = [], x;
+    if ((x = t.match(/^(.+?)를 체결가 \$([\d.,]+)에 (숏|롱) 진입했습니다\./))) out.push('Entered ' + WORD_EN[x[3]] + ' on ' + (sym || x[1]) + ' at fill price $' + x[2] + '.');
+    else if ((x = t.match(/^(.+?)의 (롱|숏) 포지션을 체결가 \$([\d.,]+)에 청산했습니다\./))) out.push('Closed the ' + (sym || x[1]) + ' ' + WORD_EN[x[2]] + ' position at fill price $' + x[3] + '.');
+    if ((x = t.match(/(\d+)일 평균선이 (\d+)일 평균선을 (아래|위)로 교차했습니다\./))) out.push(x[1] + '-day MA crossed ' + (x[3] === '아래' ? 'below' : 'above') + ' the ' + x[2] + '-day MA.');
+    else if ((x = t.match(/투입 금액 대비 ([+-]?[\d.]+%)입니다\./))) out.push('Realized return after fees and funding: ' + x[1] + '.');
+    return out.join(' ');
+  }
+  function recItem(s, m) {
+    var body = ko() ? tbSent(skdText(m.t || ''), 2).head : recEn(m, s), times;
+    if ((m.k === 'buy' || m.k === 'sell') && m.i != null) {
+      times = '<span>' + esc(T('signal', { t: stamp(mkWhen(s, m.i, m.a), true) })) + '</span><span>' + esc(T('fill', { t: stamp(mkWhen(s, m.i + 1, m.a), false) })) + '</span>';
+    } else times = '<span>' + esc(m.ts || '') + '</span>';
+    return '<li><div class="t3-rec-main"><b>' + esc(ko() ? skdText(m.tag || '') : (TAG_EN[m.tag] || '')) + '</b>' + (body ? '<p>' + esc(body) + '</p>' : '') + '</div><div class="t3-rec-time num">' + times + '</div></li>';
   }
   function records(s) {
-    var messages = mkChatMsgs(s,s.r,8).filter(function(m){return m.k!=='now'&&m.k!=='intro';});
-    function item(m) {
-      // Signals and executed orders have separate timestamps. Do not relabel a signal as a fill.
-      var signal = m.ts || day(m.i), text = skdText(m.t || ''), split = tbSent(text,1);
-      return '<li><details><summary><span class="t3-record-meta"><time>'+L(31)+' '+esc(signal)+'</time><span>'+esc(skdText(m.tag))+'</span></span><span class="t3-record-head">'+esc(split.head)+'</span></summary>'
-        +(split.rest?'<p>'+esc(split.rest)+'</p>':'')+'</details></li>';
-    }
-    return '<section class="t3-records" aria-labelledby="t3-record-title"><h2 id="t3-record-title">'+L(12)+'</h2><p class="t3-record-note">'+timeNotes[lang()]+'</p><ol>'+messages.slice(0,2).map(item).join('')+'</ol>'
-      +(messages.length>2?'<details class="t3-more-records"><summary>'+L(33)+'</summary><ol>'+messages.slice(2).map(item).join('')+'</ol></details>':'')+'</section>';
+    var ms = mkChatMsgs(s, s.r, 8).filter(function (m) { return m.k !== 'now' && m.k !== 'intro'; });
+    if (!ms.length) return '';
+    return '<section class="t3-records" aria-labelledby="t3-rec-t"><h2 id="t3-rec-t">' + esc(T('decTitle')) + '</h2><p class="t3-record-note">' + esc(T('decNote')) + '</p>'
+      + '<ol>' + ms.slice(0, 2).map(function (m) { return recItem(s, m); }).join('') + '</ol>'
+      + (ms.length > 2 ? '<details class="t3-more-records"><summary>' + esc(T('decMore')) + '</summary><ol>' + ms.slice(2).map(function (m) { return recItem(s, m); }).join('') + '</ol></details>' : '') + '</section>';
   }
-  function orders(s,ne) {
-    var rows = mkOrders(s);
-    return '<section class="t3-orders"><div class="t3-section-head"><h2>'+L(13)+'</h2><button class="t3-link" type="button" onclick="G4T3.orders()">'+L(14)+' ('+rows.length+')</button></div>'
-      +'<p class="t3-order-note">'+L(32)+' / $1,000</p>'+mkOrdersTable(s,rows.slice(0,3))+'</section>';
+  function orders(s) {
+    var rows = mkOrders(s); if (!rows.length) return '';
+    var cols = T('ordCols');
+    var body = rows.slice(0, 3).map(function (x) {
+      var px = ko() ? mkPxU(x.a, x.px) : (/포인트$/.test(mkPxU(x.a, x.px)) ? mkPxFmt(x.px) + ' pts' : '$' + mkPxFmt(x.px));
+      var pnl = x.pnl != null ? '<span class="' + (x.pnl >= 0 ? 'up' : 'dn') + '">' + pct(x.pnl) + '</span>' : x.open ? esc(T('holding')) : '';
+      return '<tr><td><b>' + esc(ko() ? mkTk(x.a) : enWords(mkTk(x.a))) + '</b></td><td>' + esc(ko() ? x.label : (TYPE_EN[x.label] || '')) + '</td><td class="num">' + esc(stamp(x.when, true)) + '</td><td class="num r">' + esc(px) + '</td><td class="num r">' + pnl + '</td></tr>';
+    }).join('');
+    return '<section class="t3-orders"><div class="t3-section-head"><h2>' + esc(T('ordTitle')) + '</h2><button class="t3-link" type="button" onclick="G4T3.orders()">' + esc(T('ordAll', { count: rows.length })) + '</button></div>'
+      + '<p class="t3-order-note">' + esc(T('ordNote')) + '</p><div class="t3-tblw"><table class="t3-tbl"><thead><tr>' + cols.map(function (c, i) { return '<th' + (i > 2 ? ' class="r"' : '') + '>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' + body + '</tbody></table></div></section>';
   }
-  function action(s,row,mobile) {
-    var ex = D.exchange(s), connected = D.linked().indexOf(ex)>=0, r = series(s,current && current.s.id===s.id ? current.per : per(state(s).per)), id = mobile?'t3-mobile-copy':'t3-copy';
-    if(mobile) return '<div class="t3-mobile-bar"><div><span>'+L(row?19:1)+'</span><strong class="num">'+(row?money(row.d.value,true):'$1,000 → '+money(r.final))+'</strong></div>'
-      +'<button id="'+id+'" class="t3-primary" type="button" onclick="G4T3.copy()">'+(row?L(20):copyLabel(s))+'</button></div>';
-    return '<aside class="t3-action"><p class="t3-eyebrow">'+L(row?18:21)+'</p><strong class="t3-budget num">'+money(row?row.d.value:budget(s),!!row)+'</strong>'
-      +'<p class="t3-action-name">'+esc(mkHook(s))+'</p><p class="t3-exchange">'+mkExTag(s)+'<span>'+L(connected?23:25)+'</span></p>'
-      +'<button id="'+id+'" class="t3-primary" type="button" onclick="G4T3.copy()">'+(row?L(20):copyLabel(s))+'</button>'
-      +(!row?'<p class="t3-free">'+L(17)+'</p><p class="t3-min">'+L(22)+' '+money(mkMin(s))+'</p>':'')
-      +'<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">'+L(15)+'</button><button class="t3-link" type="button" onclick="G4T3.analyze()">'+L(16)+'</button></div></aside>';
+
+  /* ── I4 주 단추 자리: 1440 따라오는 카드, 390 아래 고정 바 ── */
+  function primaryLabel(s, row) { return row ? T('btnAdjust') : T('btnCopy', { amt: money(budget(s)) }); }
+  function card(s, row) {
+    var r = series(s, current && current.s.id === s.id ? current.per : per(state(s).per));
+    if (row) return '<aside class="t3-action"><p class="t3-card-title">' + esc(T('barMine')) + '</p><strong class="t3-card-num num">' + money(row.d.value, true) + '</strong>'
+      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p>'
+      + '<button id="t3-copy" class="t3-primary" type="button" onclick="G4T3.copy()">' + esc(T('btnAdjust')) + '</button>'
+      + '<p class="t3-free"><button type="button" class="t3-link" onclick="G4T3.mine()">' + esc(T('myAssetLink', { amt: money(row.d.value, true) })) + '</button></p>'
+      + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
+    return '<aside class="t3-action"><p class="t3-card-title">' + esc(T('cardTitle')) + '</p><p class="t3-card-lb">' + esc(T('heroSub')) + '</p><strong class="t3-card-num num">' + money(Math.round(r.final)) + '</strong>'
+      + '<p class="t3-card-ex">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span></p><p class="t3-card-min">' + esc(T('cardMin', { min: money(mkMin(s)) })) + '</p>'
+      + '<button id="t3-copy" class="t3-primary" type="button" onclick="G4T3.copy()">' + esc(primaryLabel(s, null)) + '</button>'
+      + '<p class="t3-free">' + esc(S.user && linkedTo(s) ? T('linkedNote') : T('free')) + '</p>'
+      + '<div class="t3-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></aside>';
   }
-  mk3Head = function(s,ne,pd,watching) {
-    if(!real(s)) return oldHead.apply(this,arguments);
+  function bar(s, row) {
+    var r = series(s, current && current.s.id === s.id ? current.per : per(state(s).per));
+    var left = row ? '<span>' + esc(T('barMine')) + '</span><strong class="num">' + money(row.d.value, true) + '</strong>' : '<span>' + esc(T('barLabel')) + '</span><strong class="num">' + money(Math.round(r.final)) + '</strong>';
+    return '<div class="t3-mobile-bar' + (row ? ' mine' : '') + '"><p class="t3-bar-n">' + left + '</p><button id="t3-mobile-copy" class="t3-primary" type="button" onclick="G4T3.copy()">' + esc(primaryLabel(s, row)) + '</button>'
+      + (!row && !(S.user && linkedTo(s)) ? '<p class="t3-bar-free">' + esc(T('barFree')) + '</p>' : '') + '</div>';
+  }
+
+  mk3Head = function (s, ne, pd, watching) {
+    if (!real(s)) return oldHead.apply(this, arguments);
     var row = copyFor(s);
-    return '<header class="t3-header"><div><div class="t3-title-row"><h1>'+esc(mkHook(s))+'</h1>'+(row?'<span class="t3-copying">'+L(18)+'</span>':'')+'</div>'
-      +'<p>'+mkExTag(s)+'<span>'+esc(MK_KIND[s.kind])+'</span><span>'+esc(followers(s))+'</span></p></div>'
-      +'<details class="t3-menu"><summary aria-label="'+L(26)+'">⋯</summary><div><button type="button" onclick="tfSS3WatchTgl(\''+ne+'\')">'+L(27)+'</button>'
-      +'<button type="button" onclick="tfSS3CopyLink(\''+ne+'\',\'all\')">'+L(28)+'</button></div></details></header>';
+    return '<header class="t3-header"><div><div class="t3-title-row"><h1>' + esc(name(s)) + '</h1>' + (row ? '<span class="t3-copying">' + esc(T('copying', { amt: money(row.d.inv) })) + '</span>' : '') + '</div>'
+      + '<p class="t3-sub">' + logo(s, 20) + '<span>' + esc(official(s)) + '</span><i aria-hidden="true">|</i><span>' + esc(T('follow', { count: Number(s.fw || 0).toLocaleString('en-US') })) + '</span></p></div>'
+      + '<details class="t3-menu"><summary aria-label="' + esc(T('menu')) + '">⋯</summary><div><button type="button" onclick="tfSS3WatchTgl(\'' + ne + '\')">' + esc(T('watch')) + '</button>'
+      + '<button type="button" onclick="tfSS3CopyLink(\'' + ne + '\',\'all\')">' + esc(T('link')) + '</button><button type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></div></details></header>';
   };
-  mkOvTab = function(s,r,pd,ne) {
-    if(!real(s)) return oldOverview.apply(this,arguments);
-    var x=state(s), row=copyFor(s); current={s:s,per:per(x.per),row:row,ne:ne};
-    MKD.s=s; MKD.per=current.per; MKD.tab='bal'; MKD.gran='day'; MKD.eq=s.r.eq;
+  mkOvTab = function (s, r, pd, ne) {
+    if (!real(s)) return oldOverview.apply(this, arguments);
+    var x = state(s), row = copyFor(s); current = { s: s, per: per(x.per), row: row, ne: ne };
+    MKD.s = s; MKD.per = current.per; MKD.tab = 'bal'; MKD.gran = 'day'; MKD.eq = s.r.eq;
     return '<div class="t3-layout"><div class="t3-main">'
-      +(row?'<div class="t3-owned"><span>'+L(19)+'</span><strong>'+money(row.d.value,true)+'</strong><small>'+L(35)+' '+money(row.d.inv,true)+'</small></div>':'')
-      +'<div id="t3-proof-host">'+proof(s,current.per)+'</div>'+now(s,row)
-      +'<nav class="t3-mobile-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">'+L(15)+'</button><button class="t3-link" type="button" onclick="G4T3.analyze()">'+L(16)+'</button></nav>'
-      +records(s)+orders(s,ne)+'<details class="t3-info"><summary>'+L(26)+'</summary><p>'+esc(mkOne(s))+'</p>'+mkInfoTab(s,r,ne)+'</details></div>'
-      +action(s,row,false)+'</div>'+action(s,row,true)+'<p class="t3-help">'+L(29)+' <button class="t3-link" type="button" onclick="tfTxHelp()">'+L(30)+'</button></p>';
+      + (row ? '<div class="t3-owned"><span>' + esc(T('barMine')) + '</span><strong class="num">' + money(row.d.value, true) + '</strong></div>' : '')
+      + '<div id="t3-proof-host">' + proof(s, current.per) + '</div>' + now(s, row)
+      + '<nav class="t3-mobile-secondary"><button class="t3-link" type="button" onclick="G4T3.verify()">' + esc(T('verify')) + '</button><button class="t3-link" type="button" onclick="G4T3.analyze()">' + esc(T('analyze')) + '</button></nav>'
+      + records(s) + orders(s)
+      + (ko() ? '<details class="t3-info"><summary>' + esc(T('info')) + '</summary><p>' + esc(mkOne(s)) + '</p>' + mkInfoTab(s, r, ne) + '</details>' : '')
+      + '<p class="t3-help">' + esc(T('support')) + ' <button class="t3-link" type="button" onclick="tfTxHelp()">' + esc(T('supportLink')) + '</button></p>'
+      + '</div>' + card(s, row) + '</div>' + bar(s, row);
   };
   function preserve() {
-    if(!current) return;
-    var sc=$('g-scroll'), y=document.body.classList.contains('gft-doc')?window.scrollY:sc?sc.scrollTop:0;
-    write(KEY,{id:current.s.id,per:current.per,y:y});
+    if (!current) return;
+    var sc = $('g-scroll'), y = document.body.classList.contains('gft-doc') ? window.scrollY : sc ? sc.scrollTop : 0;
+    write(KEY, { id: current.s.id, per: current.per, y: y });
   }
   function handoff() {
-    if(!current) return null;
-    preserve(); var h=D.save(current.s.id,budget(current.s));
-    h.per=current.per; h.returnTo=route(current.s); write(HANDOFF,h); return h;
+    if (!current) return null;
+    preserve(); var s = current.s, h = D.save(s.id, budget(s)), r = series(s, 0);
+    h.per = current.per; h.returnTo = route(s);
+    h.face = { final: Math.round(r.final), bench: Math.round(r.benchFinal), ret: s.r.ret, since: r.i0, pos: D.pos(s) }; /* I10: T7 첫 카드가 같은 숫자로 시작하도록 */
+    write(HANDOFF, h); return h;
   }
-  D.save = function(id,amount) {
-    var prev=read(HANDOFF), v=oldSave.apply(this,arguments);
-    if(v) { var x=read(KEY); v.per=x&&x.id===v.strategyId?per(x.per):prev&&prev.strategyId===v.strategyId?per(prev.per):0; write(HANDOFF,v); }
+  D.save = function (id, amount) {
+    var prev = read(HANDOFF), v = oldSave.apply(this, arguments);
+    if (v) { var x = read(KEY); v.per = x && x.id === v.strategyId ? per(x.per) : prev && prev.strategyId === v.strategyId ? per(prev.per) : 0; write(HANDOFF, v); }
     return v;
   };
+  /* 카드에서 왔으면 끝 값 그대로, 주소로 곧장 온 사람만 이 탭에서 한 번 0.6초 세기(T2 I1 과 같은 규칙) */
   function countIn(s) {
-    var seenKey='g4.t3.seen.'+s.id, pos=read('g4.t2.pos');
-    if(read(seenKey)||pos&&pos.id===encodeURIComponent(s.id)) { write(seenKey,true); return; }
-    write(seenKey,true);
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var el=document.querySelector('.t3-final'); if(!el) return;
-    var target=+el.dataset.value, start=null;
-    el.textContent=money(1000);
-    frame=requestAnimationFrame(function step(t) {
-      if(!el.isConnected) return;
-      if(start===null) start=t;
-      var p=Math.max(0,Math.min(1,(t-start)/600));
-      el.textContent=money(1000+(target-1000)*(1-Math.pow(1-p,3)));
-      if(p<1) frame=requestAnimationFrame(step);
+    var seenKey = 'g4.t3.seen.' + s.id, pos = read('g4.t2.pos');
+    if (read(seenKey) || pos && pos.id === encodeURIComponent(s.id)) { write(seenKey, true); return; }
+    write(seenKey, true);
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var el = document.querySelector('.t3-final'); if (!el) return;
+    var target = +el.dataset.value, start = null;
+    el.textContent = money(1000);
+    frame = requestAnimationFrame(function step(t) {
+      if (!el.isConnected) return;
+      if (start === null) start = t;
+      var p = Math.max(0, Math.min(1, (t - start) / 600));
+      el.textContent = money(Math.round(1000 + (target - 1000) * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) frame = requestAnimationFrame(step);
     });
   }
-  tfSS3DetailRender = function(ne,pd,tab) {
-    var s; try{s=tfSSFind(decodeURIComponent(ne));}catch(_){}
-    if(!real(s)) return oldDetail.apply(this,arguments);
-    var restore=state(s), v=oldDetail.apply(this,arguments), page=document.querySelector('#g-content .mk-detail');
-    if(!page) return v;
-    page.querySelectorAll(':scope > .g4-n1,:scope > a.g4-back').forEach(function(el){el.remove();});
-    page.classList.add('t3-detail'); page.lang=lang(); document.body.classList.add('g4-t3');
-    var nav=page.querySelector('.mk-dtabs'); if(nav) nav.hidden=true;
-    var crumb=page.querySelector('.tfbk-bc');
-    if(crumb) crumb.innerHTML='<button type="button" class="t3-link" onclick="G4T3.'+(!tab||tab==='ov'?'back':'overview')+'()">← '+L(!tab||tab==='ov'?0:34)+'</button>';
-    current={s:s,per:per(restore.per),row:copyFor(s),ne:encodeURIComponent(s.id)};
-    if(!tab||tab==='ov') {
-      if(restore.y) requestAnimationFrame(function(){var sc=$('g-scroll');if(document.body.classList.contains('gft-doc'))window.scrollTo(0,restore.y);else if(sc)sc.scrollTop=restore.y;});
+  tfSS3DetailRender = function (ne, pd, tab) {
+    var s; try { s = tfSSFind(decodeURIComponent(ne)); } catch (_) {}
+    if (!real(s)) return oldDetail.apply(this, arguments);
+    var restore = state(s), v = oldDetail.apply(this, arguments), page = document.querySelector('#g-content .mk-detail');
+    if (!page) return v;
+    page.querySelectorAll(':scope > .g4-n1,:scope > a.g4-back').forEach(function (el) { el.remove(); });
+    page.classList.add('t3-detail'); page.lang = ko() ? 'ko' : 'en'; document.body.classList.add('g4-t3');
+    var nav = page.querySelector('.mk-dtabs'); if (nav) nav.hidden = true;
+    var crumb = page.querySelector('.tfbk-bc'), ov = !tab || tab === 'ov';
+    if (crumb) crumb.innerHTML = '<button type="button" class="t3-link t3-crumb" onclick="G4T3.' + (ov ? 'back' : 'overview') + '()">' + esc(ov ? T('back') : T('chatBack')) + '</button>';
+    current = { s: s, per: per(restore.per), row: copyFor(s), ne: encodeURIComponent(s.id) };
+    requestAnimationFrame(barHeight);
+    if (ov) {
+      if (restore.y) requestAnimationFrame(function () { var sc = $('g-scroll'); if (document.body.classList.contains('gft-doc')) window.scrollTo(0, restore.y); else if (sc) sc.scrollTop = restore.y; });
       countIn(s);
-      if(typeof MK_OV_KEEP!=='undefined' && MK_OV_KEEP && MK_OV_KEEP.ne===ne) MK_OV_KEEP=null;
+      if (typeof MK_OV_KEEP !== 'undefined' && MK_OV_KEEP && MK_OV_KEEP.ne === ne) MK_OV_KEEP = null;
     } else {
-      var body=page.querySelector('.mk-dbody');
-      if(body && !body.classList.contains('t3-layout')) {
-        var main=document.createElement('div');main.className='t3-main';
-        while(body.firstChild)main.appendChild(body.firstChild);
-        body.appendChild(main);body.classList.add('t3-layout');body.insertAdjacentHTML('beforeend',action(s,current.row,false));
+      var body = page.querySelector('.mk-dbody');
+      if (body && !body.classList.contains('t3-layout')) {
+        var main = document.createElement('div'); main.className = 't3-main';
+        while (body.firstChild) main.appendChild(body.firstChild);
+        body.appendChild(main); body.classList.add('t3-layout'); body.insertAdjacentHTML('beforeend', card(s, current.row));
       }
-      if(!page.querySelector('.t3-mobile-bar'))page.insertAdjacentHTML('beforeend',action(s,current.row,true));
+      if (!page.querySelector('.t3-mobile-bar')) page.insertAdjacentHTML('beforeend', bar(s, current.row));
     }
     return v;
   };
-  gContent = function() { cancelAnimationFrame(frame); document.body.classList.remove('g4-t3'); return oldContent.apply(this,arguments); };
-  var listOpen=G4T2.open;
-  G4T2.open=function(e,ne){
-    if(e&&e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;
-    var s=tfSSFind(decodeURIComponent(ne)); if(real(s)) write(KEY,{id:s.id,per:0,y:0});
-    return listOpen.apply(this,arguments);
+  gContent = function () { cancelAnimationFrame(frame); document.body.classList.remove('g4-t3'); return oldContent.apply(this, arguments); };
+  var listOpen = G4T2.open;
+  G4T2.open = function (e, ne) {
+    if (e && e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+    var s = tfSSFind(decodeURIComponent(ne)); if (real(s)) write(KEY, { id: s.id, per: 0, y: 0 });
+    return listOpen.apply(this, arguments);
   };
-  mkdSet=function(k,v){if(document.querySelector('.t3-detail')&&k==='per')return window.G4T3.period(v);return oldSet.apply(this,arguments);};
-  var tradesGo=mkGoTrades;
-  mkGoTrades=function(ne){if(current)preserve();return tradesGo.apply(this,arguments);};
-  var oldAdjust=cpAdjCommit;
-  cpAdjCommit=function(){var on=!!document.querySelector('.t3-detail'), id=current&&current.s.id, v=oldAdjust.apply(this,arguments);if(on&&id){preserve();tfSS3DetailRender(id,'all','ov');}return v;};
-  // T4 receives the chosen context; its own login and playback flow is not rewritten here.
-  var oldBTView=btView;
-  btView=function(){var h=read('g4.t3.verify');if(h&&BT.s&&h.strategyId===BT.s.id){BT.per=h.per;BT.amt=h.budget;BT.R=null;write('g4.t3.verify',null);}return oldBTView.apply(this,arguments);};
-  window.G4T3={
-    series:series, curve:curve, labels:labels,
-    period:function(v){if(!current)return;current.per=per(v);MKD.per=current.per;preserve();var host=$('t3-proof-host');if(host)host.innerHTML=proof(current.s,current.per);var bar=document.querySelector('.t3-mobile-bar');if(bar)bar.outerHTML=action(current.s,copyFor(current.s),true);handoff();},
-    copy:function(){if(!current)return;var row=copyFor(current.s);handoff();if(row){cpAdjDlg(row.c.id);return;}cpSetupGo(current.ne);},
-    orders:function(){if(current){preserve();mkGoTrades(current.ne);}},
-    overview:function(){if(current)mkBackOv(current.ne);},
-    back:function(){if(!current)return;preserve();G4T2.back(current.ne);},
-    verify:function(){if(!current)return;var h=handoff();write('g4.t3.verify',h);btOpen(current.ne);},
-    analyze:function(){
-      if(!current)return;var h=handoff();
-      tfSS3Ask(current.ne,'all');
-      if(G.mode==='tfss3d') {history.replaceState(history.state,'',location.pathname+location.search+h.returnTo);return;}
-      var content=$('g-content');if(content&&!content.querySelector('.t3-return')) content.insertAdjacentHTML('afterbegin','<a class="t3-return t3-link" href="'+esc(h.returnTo)+'">← '+L(34)+'</a>');
+  mkdSet = function (k, v) { if (document.querySelector('.t3-detail') && k === 'per') return window.G4T3.period(v); return oldSet.apply(this, arguments); };
+  var tradesGo = mkGoTrades;
+  mkGoTrades = function (ne) { if (current) preserve(); return tradesGo.apply(this, arguments); };
+  var oldAdjust = cpAdjCommit;
+  cpAdjCommit = function () { var on = !!document.querySelector('.t3-detail'), id = current && current.s.id, v = oldAdjust.apply(this, arguments); if (on && id) { preserve(); tfSS3DetailRender(id, 'all', 'ov'); } return v; };
+  /* I5: T4 는 고른 맥락(전략, 기간, $1,000)을 받는다. T4 의 가입·재생은 T4 몫 */
+  var oldBTView = btView;
+  btView = function () { var h = read('g4.t3.verify'); if (h && BT.s && h.strategyId === BT.s.id) { BT.per = h.per; BT.amt = h.budget; BT.R = null; write('g4.t3.verify', null); } return oldBTView.apply(this, arguments); };
+
+  /* ── 복사 창 머리(A3 안3): 로고 + 이름 + 연동/연결 → 돈 → 비교 → 곡선. f(T1 예산 창), b(복사 창), c(예산 조정) 같은 결 ── */
+  /* 390 바 높이를 QA 단추와 토스트 자리 계산에 넘긴다(I9) */
+  function barHeight() { var b = document.querySelector('.t3-mobile-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t3-bar-h', b.offsetHeight + 'px'); }
+  function onDetail() { return !!document.querySelector('.t3-detail'); }
+  function sheetHead(s, mode, row) {
+    var r = series(s, 0), diff = Math.round(r.final) - Math.round(r.benchFinal), sub = mode === 'b' ? T('connected', { ex: exOf(s).name }) : mode === 'c' ? T('copyingTag') : official(s);
+    var h = '<div class="t3s-head">' + logo(s, 28) + '<div><b>' + esc(name(s)) + '</b><span>' + esc(sub) + '</span></div></div>';
+    if (mode === 'c') {
+      var d = row.d;
+      /* 문구표 #65 「내 운용 자산 {amt} (수익률 {ret})」를 라벨, 큰 금액, 괄호 수익률로 나눠 한 번만 보인다 */
+      var m65 = T('myAsset', { amt: '\u0001', ret: pct(d.myPct * 100) }).split('\u0001');
+      h += '<div class="t3s-money"><span>' + esc(m65[0].replace(/[:\s]+$/, '')) + '</span><strong class="num">' + money(d.value, true) + '<small>' + esc((m65[1] || '').trim()) + '</small></strong>'
+        + '<p>' + esc(T('heroSub')) + ' ' + money(Math.round(r.final)) + '</p><p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p></div>';
+    } else {
+      h += '<div class="t3s-money"><span>' + esc(T('heroSub')) + '</span><div><strong class="num">' + money(Math.round(r.final)) + '</strong><em class="up num">' + pct(s.r.ret) + '</em></div>'
+        + '<p>' + esc(T('heroHold', { bench: money(Math.round(r.benchFinal)) })) + '</p>' + (diff > 0 ? '<p><span class="up">+' + money(diff) + '</span> ' + esc(ko() ? '더 벌었습니다' : 'more earned') + '</p>' : '') + '</div>';
+    }
+    return h + curve(r, { h: 84, legend: true, tags: mode === 'c', cls: 'compact', animate: false });
+  }
+  var t1Sheet = mkFollowSheet;
+  mkFollowSheet = function (ne) {
+    var v = t1Sheet.apply(this, arguments);
+    if (!onDetail()) return v;
+    var id; try { id = decodeURIComponent(ne); } catch (_) { id = ne; }
+    var s = tfSSFind(id); if (!real(s)) return v;
+    try { fSheet(s); bSheet(s); } catch (e) { if (window.console) console.warn('g4-t3 sheet', e); }
+    return v;
+  };
+  function fSheet(s) {
+    var w = $('ss3-dlgw'); if (!w || !w.classList.contains('g4-budget-dialog') || w.classList.contains('t3s')) return;
+    w.classList.add('t3s');
+    var t = w.querySelector('#ss3-dlg-t'); if (t) t.textContent = T('copyTitle');
+    var form = w.querySelector('.g4-budget-form'); if (!form) return;
+    form.querySelectorAll('.g4-budget-strategy, .g4-budget-now, .g4-proof').forEach(function (n) { n.remove(); });
+    form.insertAdjacentHTML('afterbegin', sheetHead(s, 'f'));
+    var lb = form.querySelector('label[for="g4-budget"]'); if (lb) lb.textContent = T('budget');
+    var mn = $('g4-budget-min'); if (mn) mn.textContent = T('minNote', { min: money(mkMin(s)) });
+    var go = $('g4-budget-next'); if (go) go.textContent = T('connect', { ex: exOf(s).name });
+    form.insertAdjacentHTML('beforeend', '<p class="t3s-foot">' + esc(T('foot')) + '</p>');
+    enFix();
+  }
+  function bSheet(s) {
+    var w = $('mk-follow'); if (!w || w.classList.contains('t3s')) return;
+    w.classList.add('t3s');
+    var t = $('mk-f-t'); if (t) t.textContent = T('copyTitle');
+    var st = w.querySelector('.skc-strat'); if (st) st.outerHTML = sheetHead(s, 'b');
+    var fld = $('cps-amt-fld'), lb = fld && fld.querySelector('label'); if (lb) lb.textContent = T('budget');
+    var hint = $('skc-amt-h'); if (hint) hint.textContent = T('minNote', { min: money(mkMin(s)) });
+    var loss = w.querySelector('.skc-pills') && w.querySelector('.skc-pills').closest('.skc-fld');
+    if (loss) {
+      var box = document.createElement('details'); box.className = 't3s-more';
+      box.innerHTML = '<summary>' + esc(T('stopLabel')) + '</summary>';
+      loss.parentNode.insertBefore(box, loss); box.appendChild(loss);
+      var ll = $('skc-loss-l'); if (ll) ll.remove();
+      lossDesc();
+    }
+    w.querySelectorAll('#mk-f-sum, .skc-more, #skc-adv').forEach(function (n) { n.hidden = true; n.style.display = 'none'; });
+    var cta = $('cps-cta'); if (cta) cta.textContent = T('start');
+    var foot = w.querySelector('.skc-foot'); if (foot) foot.textContent = T('foot');
+    enFix();
+  }
+  function lossDesc() { var h = $('mk-f-lossh'); if (h && $('mk-follow') && $('mk-follow').classList.contains('t3s')) h.textContent = T('stopDesc', { pct: Math.abs(TF_MKF.loss || 20) }); }
+  var oldLoss = skcLoss;
+  skcLoss = function () { var v = oldLoss.apply(this, arguments); lossDesc(); return v; };
+  var oldAdjRender = cpAdjRender;
+  cpAdjRender = function (cid) {
+    var v = oldAdjRender.apply(this, arguments);
+    if (!onDetail()) return v;
+    try { cSheet(cid); } catch (e) { if (window.console) console.warn('g4-t3 adjust', e); }
+    return v;
+  };
+  function cSheet(cid) {
+    var w = $('ss3-dlgw'), c = cpFind(cid); if (!w || !c) return;
+    var s = tfSSFind(c.nick); if (!real(s)) return;
+    var row = D.mine().find(function (x) { return x.c.id === cid; }); if (!row) return;
+    w.classList.add('t3s', 't3s-adjust');
+    var t = w.querySelector('#ss3-dlg-t'); if (t) t.textContent = T('adjTitle', { name: name(s) });
+    var pnl = w.querySelector('.cpa-pnl');
+    if (pnl) pnl.outerHTML = '<div class="t3s-adj-head">' + sheetHead(s, 'c', row) + '</div>';
+    var tabs = w.querySelectorAll('.cpa-tgl button'); if (tabs[0]) tabs[0].textContent = T('tabAdd'); if (tabs[1]) tabs[1].textContent = T('tabOut');
+    var bal = w.querySelector('.cps-bal'); if (bal) bal.textContent = T('avail', { amt: money(TF_CPA.dir === 'add' ? cpState().spot : cpCalc(c).avail, true) });
+    var note = w.querySelector('.cpa-note'); if (note && TF_CPA.dir === 'add') note.textContent = T('adjNote');
+    var go = $('cpa-go'); if (go) go.textContent = T('adjBtn');
+    var cancel = w.querySelector('.acts3 .obtn'); if (cancel) cancel.remove();
+    var amt = $('cpa-amt');
+    if (amt && amt.value === '' && TF_CPA.dir === 'add') { amt.value = Math.min(1000, Math.floor(cpState().spot)) || ''; if (amt.value) cpAdjSync(cid); }
+    enFix();
+  }
+
+  /* 영어 화면의 복사 창: 앱이 그때그때 쓰는 오류·낭독 문구와 「최대」를 영어로(한국어를 남기지 않음) */
+  var EN_MSG = [
+    [/^최소 \$([\d,.]+)부터 시작할 수 있습니다$/, 'Minimum $$$1 to start'], [/^사용 가능 금액보다 큽니다$/, 'More than your available amount'],
+    [/^0보다 큰 금액을 입력해주십시오$/, 'Enter an amount greater than $0'], [/^회수 가능 금액을 넘었습니다$/, 'More than the amount you can withdraw'],
+    [/^복사 예산 (\$[\d,]+), 손실 (\d+)%에서 멈춤$/, 'Copy budget $1, stops at $2% loss'], [/^사용 가능 금액으로 맞췄습니다$/, 'Set to your available amount'], [/^최대$/, 'Max']
+  ];
+  function enFix() {
+    if (ko()) return;
+    document.querySelectorAll('.t3s #cps-amt-err, .t3s #cpa-err, .t3s #g4-budget-error, .t3s #mk-f-live, .t3s .mx, .t3s .g4-budget-adjusted').forEach(function (el) {
+      var t = el.textContent.trim(); if (!t) return;
+      for (var i = 0; i < EN_MSG.length; i++) if (EN_MSG[i][0].test(t)) { el.textContent = t.replace(EN_MSG[i][0], EN_MSG[i][1]); return; }
+    });
+  }
+  var t1FormSync = cpFormSync;
+  cpFormSync = function () { var v = t1FormSync.apply(this, arguments); enFix(); return v; };
+  var t1AdjSync = cpAdjSync;
+  cpAdjSync = function () { var v = t1AdjSync.apply(this, arguments); enFix(); return v; };
+  if (window.G4T1 && G4T1.budgetSync) { var t1Budget = G4T1.budgetSync; G4T1.budgetSync = function () { var v = t1Budget.apply(this, arguments); enFix(); return v; }; }
+
+  /* ── I6 가입 창: 열 때 기록 한 칸, 브라우저 뒤로 = 창만 닫고 같은 상세(claude 3e0cf4e 239~256줄) ── */
+  var authBack = false, skipPop = false, oldClose = closeModal, oldAuthOpen = authOpen;
+  function authOn() { var m = $('modal-auth'); return !!(m && m.classList.contains('open')); }
+  authOpen = function () {
+    var v = oldAuthOpen.apply(this, arguments);
+    if (onDetail() && authOn()) {
+      var sub = document.querySelector('#modal-auth .au-sub'); if (sub) sub.textContent = T('authSub');
+      if (!(history.state && history.state.g4t3Auth)) history.pushState({ g4t3Auth: true }, '', location.href);
+    }
+    return v;
+  };
+  closeModal = function (id) {
+    var wasOn = id === 'modal-auth' && authOn(), v = oldClose.apply(this, arguments);
+    if (wasOn && !authBack && history.state && history.state.g4t3Auth) {
+      if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
+    }
+    return v;
+  };
+  addEventListener('popstate', function () {
+    if (skipPop) { skipPop = false; return; }
+    if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } }
+  });
+  /* 언어를 바꾸면 상세를 그 자리에서 다시 그린다(곡선은 그리지 않음) */
+  if (typeof glcSetLang === 'function') {
+    var gl0 = glcSetLang;
+    glcSetLang = function () { var r = gl0.apply(this, arguments); try { if (onDetail() && current) { preserve(); tfSS3DetailRender(current.ne, 'all', 'ov'); } } catch (_) {} return r; };
+  }
+
+  window.G4T3 = {
+    series: series, curve: curve, T: T,
+    period: function (v) {
+      if (!current) return; current.per = per(v); MKD.per = current.per; preserve();
+      var host = $('t3-proof-host'); if (host) host.innerHTML = proof(current.s, current.per);
+      var row = copyFor(current.s), b = document.querySelector('.t3-mobile-bar'); if (b) b.outerHTML = bar(current.s, row);
+      var a = document.querySelector('.t3-action'); if (a) a.outerHTML = card(current.s, row); requestAnimationFrame(barHeight);
+      handoff();
+    },
+    copy: function () { if (!current) return; var row = copyFor(current.s); handoff(); if (row) { cpAdjDlg(row.c.id); return; } cpSetupGo(current.ne); },
+    orders: function () { if (current) { preserve(); mkGoTrades(current.ne); } },
+    overview: function () { if (current) mkBackOv(current.ne); },
+    back: function () { if (!current) return; preserve(); G4T2.back(current.ne); },
+    verify: function () { if (!current) return; var h = handoff(); write('g4.t3.verify', h); btOpen(current.ne); },
+    mine: function () { var row = current && copyFor(current.s); if (!row) return; try { sessionStorage.setItem('g4.t1.selectedCopy', row.c.id); } catch (_) {} tfNav('#/trade'); },
+    analyze: function () {
+      if (!current) return; var h = handoff();
+      if (!S.user) { tfSS3Ask(current.ne, 'all'); return; }
+      /* tfSS3Ask 는 지금 기록 칸을 대화 주소로 바꾼다. 상세 칸을 하나 더 쌓아 두어 뒤로 한 번 = 상세(I10) */
+      try { history.pushState(null, '', location.href); } catch (_) {}
+      tfSS3Ask(current.ne, 'all');
+      var content = $('g-content');
+      if (content && !content.querySelector('.t3-return')) content.insertAdjacentHTML('afterbegin', '<a class="t3-return t3-link" href="' + esc(h.returnTo) + '">' + esc(T('chatBack')) + '</a>');
     }
   };
-  if(/^#\/share\/s\//.test(location.hash)&&window.TF_STATE_READY) tfRoute();
+  if (/^#\/share\/s\//.test(location.hash) && window.TF_STATE_READY) tfRoute();
 })();
