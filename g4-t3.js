@@ -25,7 +25,7 @@
       myAssetLink: '내 복사 자산 {amt} 보기', barLabel: '$1,000 넣었다면 지금', barMine: '내 운용 자산', copying: '현재 {amt} 복사 운용 중',
       verify: '직접 검증하기', analyze: 'TETH에게 분석시키기',
       decTitle: 'TETH의 판단 기록', decNote: '신호는 AI 판단 시각, 체결은 실제 주문이 실행된 시각입니다.', signal: '신호 {t}', fill: '체결 {t}',
-      decMore: '이전 판단 기록 보기', ordTitle: '최근 체결 내역', ordNote: '초기 운용 $1,000 기준 체결 결과', ordAll: '전체 거래 내역 보기 ({count}건)',
+      decMore: '이전 판단 기록 보기', ordTitle: '최근 체결 내역', ordNote: '초기 운용 $1,000 기준 체결 결과', ordAll: '전체 체결 내역 보기 ({count}건)', /* PO 22:5x: 목록 제목 「최근 체결 내역」과 같은 말(체결 수). T4 「거래 N건 모두 보기」(거래 수)와 다른 것을 다른 말로 */
       ordCols: ['종목', '주문 유형', '체결 시각', '체결가', '손익'], holding: '보유 중', info: '전략 정보',
       support: '막히면 상담원이 24시간 답합니다.', supportLink: '상담원에게 묻기', menu: '더 보기', watch: '관심 전략', link: '링크 복사',
       copyTitle: '전략 복사', budget: '복사 예산', minNote: '최소 {min}부터 자유롭게 설정할 수 있습니다.', stopLabel: '원금 보호 손실 중단',
@@ -49,7 +49,7 @@
       myAssetLink: 'View my copied asset {amt}', barLabel: 'If $1,000 invested', barMine: 'My Copied Asset', copying: 'Currently Copying with {amt}',
       verify: 'Verify Strategy', analyze: 'Ask TETH to Analyze',
       decTitle: 'TETH Trading Decisions', decNote: 'Signal indicates the AI decision time; Execution indicates the order fill time.', signal: 'Signal: {t}', fill: 'Fill: {t}',
-      decMore: 'View Previous Decisions', ordTitle: 'Recent Executed Orders', ordNote: 'Executed results based on $1,000 initial capital', ordAll: 'View All {count} Orders',
+      decMore: 'View Previous Decisions', ordTitle: 'Recent Executed Orders', ordNote: 'Executed results based on $1,000 initial capital', ordAll: 'View All {count} Fills', /* 체결 = fills, 2.3 T3 카피 주인 확인 대기 */
       ordCols: ['Symbol', 'Type', 'Fill Time', 'Price', 'PnL'], holding: 'Holding', info: 'Strategy info',
       support: 'Stuck? Our support team answers 24/7.', supportLink: 'Ask Support', menu: 'More', watch: 'Watchlist', link: 'Copy link',
       copyTitle: 'Copy Strategy', budget: 'Copy Budget', minNote: 'Minimum {min}. You can change this amount freely.', stopLabel: 'Capital Protection Stop-Loss',
