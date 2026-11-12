@@ -532,12 +532,19 @@
   };
   closeModal = function (id) {
     if (id === 'modal-auth') setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
-    var wasOn = id === 'modal-auth' && authOn(), v = oldClose.apply(this, arguments);
-    if (wasOn && !authBack && history.state && history.state.g4t3Auth) {
-      if (!S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
-    }
-    return v;
+    return oldClose.apply(this, arguments);
   };
+  /* K22: 닫는 길이 여럿이다(✕·바깥 누름 = closeModal, Esc = 앱 공통 keydown 이 open 클래스만 지움). 어느 길이든 창이 닫히는 순간
+     I6 기록 칸이 남아 있으면 한 칸 뒤로 정리한다. 브라우저 뒤로로 닫을 때는 이미 그 칸을 지나왔으므로(state 에 g4t3Auth 없음) 그대로 */
+  function authClosed() {
+    setTimeout(function () { if (!authOn()) authHeadOff(); }, 400);
+    if (!authBack && history.state && history.state.g4t3Auth && !S.user) { skipPop = true; history.back(); if (onDetail()) toast(T('authBack')); }
+  }
+  (function watchAuth() {
+    var m = $('modal-auth'); if (!m) { addEventListener('DOMContentLoaded', watchAuth, { once: true }); return; }
+    var was = authOn();
+    new MutationObserver(function () { var on = authOn(); if (was && !on) authClosed(); was = on; }).observe(m, { attributes: true, attributeFilter: ['class'] });
+  })();
   addEventListener('popstate', function () {
     if (skipPop) { skipPop = false; return; }
     if (authOn() && !(history.state && history.state.g4t3Auth) && onDetail()) { authBack = true; try { oldClose('modal-auth'); } finally { authBack = false; } setTimeout(function () { if (!authOn()) authHeadOff(); }, 400); }
