@@ -661,7 +661,7 @@
   }
 
   window.G4T3 = {
-    head: headFor,
+    head: headFor, name: name, /* G4 T4: 창 머리, 전략 이름(en NAME_EN) */
     series: series, curve: curve, T: T,
     period: function (v) {
       if (!current) return; current.per = per(v); MKD.per = current.per; preserve();

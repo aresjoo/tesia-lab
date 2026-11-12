@@ -102,15 +102,29 @@ html:not(.t3-qa) body.g4-t4 #tf-devbtn,html:not(.t3-qa) body.g4-t4 #tf-devpanel{
  body.g4-t4 #toast:not(.show){visibility:hidden}
  body.g4-t4:has(#mk-follow) .t4-bar,body.g4-t4:has(#ss3-dlgw) .t4-bar,body.g4-t4:has(#modal-auth.open) .t4-bar{visibility:hidden}
 }
-/* 모두 보기: 지금 결과 화면에서 곡선·요약 카드·실행 단추를 빼고 기록만 */
-body.g4-t4-all #bt-root .bt-hd,body.g4-t4-all #bt-root .bt-id,body.g4-t4-all #bt-root .bt-cap,body.g4-t4-all #bt-root #bt-chart,body.g4-t4-all #bt-root #bt-rail,body.g4-t4-all #bt-root #bt-mcta{display:none!important}
-body.g4-t4-all #bt-root .bt-grid{display:block!important}
-body.g4-t4-all #bt-root{max-width:880px;margin:0 auto;padding:24px 32px 48px;box-sizing:border-box}
-body.g4-t4-all .t4-allhd{margin-bottom:18px}
-body.g4-t4-all .t4-allhd .t4-name{font-size:32px}
-body.g4-t4-all .t4-allhd .t4-since{font-size:16px;color:#cdcdcd}
-@media(max-width:860px){body.g4-t4-all #bt-root{padding:58px 16px 40px}body.g4-t4-all .t4-allhd .t4-name{font-size:26px}}
-/* J4: 내 전략 창(f, b 같은 틀)의 금액 칸은 T3 창과 같은 크기 */
-#ss3-dlgw.t4-mine .g4-budget-input{min-height:64px;border-radius:19px}
-#ss3-dlgw.t4-mine .g4-budget-input input{font-size:28px}
-.t4-mine-links{text-align:center;margin:14px 0 0}
+/* B4 안3 모두 보기 첫 층: 결과와 같은 두 칸(1440 오른쪽 카드, 390 아래 띠). 옛 결과 화면의 머리, 곡선, 요약, 실행 단추는 숨김 */
+body.g4-t4-all #bt-root > .bt-hd,body.g4-t4-all #bt-root > .bt-id,body.g4-t4-all #bt-root > .bt-grid,body.g4-t4-all #bt-root > #bt-mcta,body.g4-t4-all #bt-root > .bt-mcta{display:none!important}
+.t4-all-sub{font-size:17px;margin:4px 0 22px}.t4-all-sub span{color:#ececec}
+.t4-alist{list-style:none;margin:0;padding:0;border-top:1px solid #ffffff24}
+.t4-arow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:16px;align-items:center;padding:10px 4px;border-bottom:1px solid #ffffff1a}
+.t4-arow[hidden]{display:none}
+.t4-arow-n b{display:block;font-size:18px;font-weight:600;color:#fff}
+.t4-arow-n span{display:block;font-size:14px;color:#cdcdcd;margin-top:2px}
+.t4-arow-d{font-size:16px;color:#ececec;font-variant-numeric:tabular-nums}
+.t4-arow-p{font-size:24px;font-weight:600;text-align:right}
+#bt-root.t4 .t4-amore{margin:18px 0 26px;font-size:16px;color:#ececec}
+.t4-folds{margin-top:8px}
+.t4-fold{border-bottom:1px solid #ffffff24}
+.t4-fold>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;font-size:18px;color:#fff}
+.t4-fold>summary::-webkit-details-marker{display:none}
+.t4-fold>summary::after{content:'';width:9px;height:9px;border-right:1.5px solid #cdcdcd;border-bottom:1.5px solid #cdcdcd;transform:rotate(45deg) translateY(-3px)}
+.t4-fold[open]>summary::after{transform:rotate(-135deg)}
+.t4-fold>section,.t4-fold>details{margin:0 0 16px}
+.t4-fold>details.bt-tech>summary{display:none}
+@media(max-width:860px){
+ .t4-all-sub{flex-wrap:wrap;font-size:15px}
+ .t4-arow{grid-template-columns:auto minmax(0,1fr) auto;gap:10px;padding:9px 0}
+ .t4-arow-n b{font-size:15px;font-weight:400}.t4-arow-n span{font-size:12px}
+ .t4-arow-d{font-size:12px}.t4-arow-p{font-size:16px;font-weight:400}
+ .t4-fold>summary{font-size:16px}
+}
