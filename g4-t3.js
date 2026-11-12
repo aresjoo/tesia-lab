@@ -649,7 +649,7 @@
     var sc = scroller(), by = 0;
     if (r.bottom > barTop - 8) by = r.bottom - barTop + 12; else if (r.top < 64) by = r.top - 72;
     if (by) { if (sc) sc.scrollTop += by; else window.scrollBy(0, by); }
-    noticeT = setTimeout(dropNotice, 3200);
+    if (!noticeAt) noticeT = setTimeout(dropNotice, 3200); /* 다듬기(1, codex M-C3): 예산 변경 확인은 지우지 않고 그 자리에 둔다(3.2초 뒤 지우면 본문이 40px 튐). 화면을 떠나거나 다음 안내가 오면 사라짐 */
   };
   /* K18(문구표 5.2): 영어 화면의 왼쪽 사이드바 빈 목록 「아직 없음」 → 「None yet」. 사이드바가 다시 그려져도 같게 */
   /* K20: 공통 메뉴의 펼친 라벨과 접힌 툴팁을 같은 언어로. en 이외의 메뉴는 원래 한국어 표시 유지 */
