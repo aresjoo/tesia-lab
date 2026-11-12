@@ -1,5 +1,5 @@
-/* G4 T4 2단계 claude 스케치: 직접 검증 = 같은 $1,000 이 6초 동안 다시 굴러 상세와 같은 끝 값에 닿는다.
-   계약 sprint/G4/T4/sketch/claude/flow-contract.md, 결정 sprint/G4/T4/decision-1.md ①~⑥.
+/* G4 T4 직접 검증 = 같은 $1,000 이 다시 굴러 상세와 같은 끝 값에 닿는다. 뼈대 claude 스케치 3985a84, 통합 g4-T4-int.
+   계약 sprint/G4/T4/sketch/claude/flow-contract.md, 결정 sprint/G4/T4/decision-1.md ①~⑥, decision.md J1~J14.
    숫자는 앱 계산값만: 끝 값 F = round(btCompute(per, $1,000).final) = T3 큰 돈, 그냥 들고 있었다면 H = round(benchFinal),
    굴리는 잔고 v(j) = round(1000 × eq[j].v). F 는 0초부터 그대로 보이고(T2 R1: 본 숫자는 다시 세지 않는다), 굴리는 것은 아래 잔고 한 줄과 곡선뿐.
    준비 화면, 기간·금액 알약, 시작 단추, 게스트 가입 관문은 없다. 가입은 맡기는 순간(T5 진입점)에만. */
@@ -7,8 +7,9 @@
   'use strict';
   if (typeof btView !== 'function' || typeof btRoute !== 'function') return;
   var D = window.G4T1Data, HANDOFF = 'g4.t1.handoff', SEEN = 'g4.t4.seen', FROM = 'g4.t4.from', PER = 'g4.t4.per';
-  var ROLL = 6000, DELAY = 200, W = 1000, H = 300;
-  var raf = 0, roll = null, MODE = 'main', V = null; /* V: 지금 화면의 숫자 묶음 */
+  /* J5: 누른 순간부터 착지까지 3.5초(공개, 내 전략, 주소 직행 모두). 주소 직행은 주소를 연 순간(문서 시작)부터 센다 */
+  var TOTAL = 3500, DELAY = 120, MIN_ROLL = 1500, W = 1000, H = 300;
+  var raf = 0, roll = null, MODE = 'main', V = null, clickAt = 0, booted = false; /* V: 지금 화면의 숫자 묶음 */
   var prevView = btView, prevRoute = btRoute, prevContent = gContent;
 
   function $(id) { return document.getElementById(id); }
@@ -30,20 +31,24 @@
   function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; roll = null; }
 
   /* ── 들어오기: 「직접 검증하기」는 가입 없이 곧장 이 화면 ── */
-  btOpen = function (n) { write(FROM, location.hash); location.hash = '#/share/bt/' + n; };
+  btOpen = function (n) { clickAt = performance.now(); write(FROM, location.hash); location.hash = '#/share/bt/' + n; };
+  if (typeof tfVerifyGo === 'function') { var verifyGo = tfVerifyGo; tfVerifyGo = function () { clickAt = performance.now(); return verifyGo.apply(this, arguments); }; }
+  /* J13: 백테스트 주소로 곧장 오면 index.html 머리가 본문을 가린다(html.g4-bt-wait). 이 화면을 그리거나 다른 주소로 가면 푼다 */
+  function reveal() { document.documentElement.classList.remove('g4-bt-wait'); }
+  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) reveal(); });
 
   btRoute = function (h) {
     var m = h.match(/^#\/share\/bt\/([^/]+)(?:\/(go|all))?$/);
     if (!m) return prevRoute.apply(this, arguments);
     MODE = m[2] === 'all' ? 'all' : 'main';
-    if (m[2] === 'go' || S.user || m[1] === 'mine') { stop(); return prevRoute.call(this, m[2] === 'go' ? h : '#/share/bt/' + m[1]); }
+    if (m[2] === 'go' || S.user || m[1] === 'mine') { if (m[2] === 'go') stop(); var rv = prevRoute.call(this, m[2] === 'go' ? h : '#/share/bt/' + m[1]); if (window.TF_STATE_READY) setTimeout(reveal, 0); return rv; }
     /* 처음 온 사람: 지금 앱은 여기서 상세 + 가입 창으로 보낸다(M1). 이 스케치는 화면을 그대로 연다 */
     TF_ONSHARE = true;
     if (!window.TF_STATE_READY) { TF_ONSHARE = false; return; }
     var s = null; try { s = tfSSFind(decodeURIComponent(m[1])); } catch (_) {}
-    if (!s || !s.cfg) { TF_ONSHARE = false; tfShareHub('find'); return; }
+    if (!s || !s.cfg) { TF_ONSHARE = false; reveal(); tfShareHub('find'); return; }
     if (BT.id !== s.id) { btStop(); BT.id = s.id; BT.s = s; BT.R = null; BT.phase = 'ready'; BT.sel = null; BT.grp = null; BT.filt = null; BT.trf = 'all'; BT.decN = 8; BT.ordN = 8; }
-    BT.s = s; stop(); btView();
+    BT.s = s; btView(); /* 재생 멈춤은 viewMain 이 정한다(같은 화면 다시 그리기면 그대로 둠) */
   };
 
   /* T3 I5 인계(기간, $1,000)를 받는다. 없으면 이 탭에서 마지막으로 본 기간, 그것도 없으면 전체(T3 기본) */
@@ -72,7 +77,7 @@
     var wins = closed.filter(function (t) { return t.pnl > 0; }).sort(function (a, b) { return b.pnl - a.pnl; });
     var big = (wins.length ? wins : closed.slice().sort(function (a, b) { return Math.abs(b.pnl) - Math.abs(a.pnl); })).slice(0, 3)
       .map(function (t) { return { j: Math.max(0, Math.min(N - 1, t.x - R.i0)), t: t }; }).sort(function (a, b) { return a.j - b.j; });
-    return { s: s, R: R, N: N, amt: amt, F: F, H: Hd, diff: F - Hd, ret: ret, lo: lo, hi: hi, big: big, trades: R.tr.length, mine: !!s.mine };
+    return { s: s, per: BT.per, R: R, N: N, amt: amt, F: F, H: Hd, diff: F - Hd, ret: ret, lo: lo, hi: hi, big: big, trades: R.tr.length, mine: !!s.mine };
   }
   function X(j) { return V.N > 1 ? j / (V.N - 1) * W : 0; }
   function Y(v) { var r = V.hi - V.lo || 1; return H - 6 - (v - V.lo) / r * (H - 12); }
@@ -109,10 +114,10 @@
     var s = V.s, R = V.R, e0 = R.eq[0].i, up = V.ret >= 0;
     var holdD = path(function (j) { return V.amt * R.bench[j]; }), eqD = path(function (j) { return V.amt * R.eq[j].v; });
     var base = Y(V.amt).toFixed(1);
-    var mk = V.big.map(function (b, k) { return '<i class="t4-mk" id="t4-mk' + k + '" style="left:' + (X(b.j) / W * 100).toFixed(2) + '%;top:' + (Y(V.amt * R.eq[b.j].v) / H * 100).toFixed(2) + '%"></i>'; }).join('');
+    var mk = V.big.map(function (b, k) { return '<i class="t4-mk' + (b.t.pnl < 0 ? ' dn' : '') + '" id="t4-mk' + k + '" style="left:' + (X(b.j) / W * 100).toFixed(2) + '%;top:' + (Y(V.amt * R.eq[b.j].v) / H * 100).toFixed(2) + '%"></i>'; }).join('');
     /* 끝 값 꼬리표 둘이 겹치면(값이 가까우면) 위아래로 벌린다. 간격 18% */
     var ts = Y(V.F) / H * 100, th = Y(V.H) / H * 100, gap = 18;
-    if (Math.abs(ts - th) < gap) { var mid = (ts + th) / 2, up = ts <= th; ts = mid + (up ? -gap / 2 : gap / 2); th = mid + (up ? gap / 2 : -gap / 2); }
+    if (Math.abs(ts - th) < gap) { var mid = (ts + th) / 2, sAbove = ts <= th; ts = mid + (sAbove ? -gap / 2 : gap / 2); th = mid + (sAbove ? gap / 2 : -gap / 2); } /* J12: 이름이 수익률 색 변수(up)를 덮어 손실이 초록으로 보였다 */
     var tags = '<div class="t4-tag t4-tag-s" style="top:' + ts.toFixed(2) + '%"><small>전략</small><b>' + usd(V.F) + '</b></div>'
       + '<div class="t4-tag t4-tag-h" style="top:' + th.toFixed(2) + '%"><small>그냥 들고 있었다면</small><b>' + usd(V.H) + '</b></div>';
     return '<div class="t4" id="bt-root" data-phase="run" data-kind="' + esc(s.kind) + '">'
@@ -126,8 +131,10 @@
       + '<div class="t4-plot" id="t4-chart" onclick="G4T4.skip()" role="img" aria-label="' + esc(usd(V.amt) + '이 ' + usd(V.F) + '까지 간 곡선') + '">'
       + '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id="t4-clip"><rect id="t4-clip-r" x="0" y="0" width="0" height="' + H + '"/></clipPath></defs>'
       + '<line x1="0" x2="' + W + '" y1="' + base + '" y2="' + base + '" class="t4-base"/>'
-      + '<g clip-path="url(#t4-clip)"><path d="' + holdD + '" class="t4-hold"/><path d="' + eqD + '" class="t4-eq"/></g></svg>'
+      + '<path d="' + holdD + '" class="t4-hold"/><g clip-path="url(#t4-clip)"><path d="' + eqD + '" class="t4-eq"/></g></svg>' /* J7: 그냥 들고 있기 점선은 0초부터 전체 */
       + mk + '<i class="t4-dot" id="t4-dot"></i>' + tags + '</div>'
+      /* J14: 1440 은 곡선이 본문 칸 폭을 다 쓰고, 끝 값은 곡선 오른쪽 꼬리표 대신 곡선 아래 한 줄(390 은 꼬리표 그대로) */
+      + '<div class="t4-keys"><span class="t4-key-s"><i aria-hidden="true"></i>전략 <b class="num">' + usd(V.F) + '</b></span><span class="t4-key-h"><i aria-hidden="true"></i>그냥 들고 있었다면 <b class="num">' + usd(V.H) + '</b></span></div>'
       + '<ol class="t4-trades" id="t4-trades"></ol>'
       + '<div class="t4-more"><button type="button" class="t4-link" onclick="G4T4.all()">' + esc(allLabel()) + '</button>'
       + (V.mine ? '<button type="button" class="t4-link" onclick="rvFix()">규칙 수정하기</button><button type="button" class="t4-link" onclick="rvChat()">대화로 돌아가기</button>' : '') + '</div>'
@@ -175,22 +182,29 @@
   function tick(now) {
     if (!roll || !$('t4-chart')) { raf = 0; return; }
     var e = now - roll.t0;
-    if (e >= 0) { var k = Math.min(1, e / ROLL); paint(Math.floor(k * (V.N - 1))); if (k >= 1) { land(false); return; } }
+    if (e >= 0) { var k = Math.min(1, e / roll.dur); paint(Math.floor(k * (V.N - 1))); if (k >= 1) { land(false); return; } }
     raf = requestAnimationFrame(tick);
   }
   function barHeight() { var b = $('t4-bar'); if (b && b.offsetHeight) document.documentElement.style.setProperty('--t4-bar-h', b.offsetHeight + 'px'); }
 
+  var lastAt = 0, lastHash = '';
   function viewMain() {
+    /* J5: 부팅 라우팅이 같은 화면을 곧바로 한 번 더 그리면 재생이 처음부터 다시 시작됐다(직행 446ms, 1114ms 두 번). 같은 전략, 같은 기간, 같은 주소를 2.5초 안에 다시 그리라면 그대로 둔다 */
+    var r0 = $('bt-root');
+    if (r0 && r0.classList.contains('t4') && V && V.s.id === BT.s.id && V.per === BT.per && location.hash === lastHash && performance.now() - lastAt < 2500) return;
     stop();
     tfPageMode('tfbt', '백테스트');
     V = numbers();
     TF_RENDERING = true; gContent(page()); TF_RENDERING = false;
-    document.body.classList.add('g4-t4');
+    document.body.classList.add('g4-t4'); reveal();
     requestAnimationFrame(barHeight);
+    lastAt = performance.now(); lastHash = location.hash;
+    var now = performance.now(), from = clickAt && now - clickAt < 2000 ? clickAt : !booted && now < 4000 ? 0 : now;
+    booted = true; clickAt = 0;
     if (seen() || reduced()) { land(true); return; }
     $('t4-replay').innerHTML = replayRun(); paint(0);
     BT.phase = 'run';
-    roll = { t0: performance.now() + DELAY }; raf = requestAnimationFrame(tick);
+    roll = { t0: now + DELAY, dur: Math.max(MIN_ROLL, from + TOTAL - now - DELAY) }; raf = requestAnimationFrame(tick);
     try { tfTrack('bt_start', { id: BT.id, per: BT.per, t4: 1 }); } catch (_) {}
     scrollTo(0, 0);
   }
@@ -201,7 +215,7 @@
     var t = tfS(); t.bt = t.bt || {}; t.bt.id = BT.id; t.bt.per = BT.per; t.bt.amt = BT.amt; t.bt.done = 1;
     prevView();
     V = V && V.s === BT.s ? V : numbers();
-    document.body.classList.add('g4-t4', 'g4-t4-all');
+    document.body.classList.add('g4-t4', 'g4-t4-all'); reveal(); booted = true;
     var root = $('bt-root');
     if (root) root.insertAdjacentHTML('afterbegin', '<div class="t4-allhd"><button type="button" class="t4-link bk t4-back" onclick="G4T4.result()">← 결과</button><h1 class="t4-name">거래 ' + V.trades.toLocaleString('en-US') + '건</h1><p class="t4-since">' + esc(mkHook(BT.s)) + ', ' + esc(dSent(V.R.eq[0].i)) + '부터 ' + usd(V.amt) + '</p></div>');
     scrollTo(0, 0);
@@ -220,6 +234,9 @@
     }
     return prevIntent.apply(this, arguments);
   };
+
+  /* J12: 앱의 옛 백테스트 글자 정리(skbApply)가 같은 #bt-root 를 0.3초 뒤 고쳐 써서 제목 「RSI10 비트코인」이 「RSI10 BTC」로 바뀌었다. T4 화면은 건너뛴다(모두 보기 화면은 옛 결과 화면이라 그대로 적용) */
+  if (typeof skbApply === 'function') { var skb = skbApply; skbApply = function (root) { if (root && root.classList && root.classList.contains('t4')) return; return skb.apply(this, arguments); }; }
 
   gContent = function () { stop(); document.body.classList.remove('g4-t4', 'g4-t4-all'); return prevContent.apply(this, arguments); };
 

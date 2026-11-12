@@ -41,11 +41,21 @@ body.g4-t4 .gft-wm{display:none!important}
 .landed .t4-dot{display:none}
 .t4-mk{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#34c47c;opacity:0;transform:scale(.4);transition:opacity .25s,transform .25s}
 .t4-mk.on{opacity:1;transform:none}
+.t4-mk.dn{background:#ee766a} /* J12: 진 거래 표시는 빨강 */
 .t4-tag{position:absolute;left:calc(100% + 16px);width:124px;transform:translateY(-50%);opacity:0;pointer-events:none}
 .landed .t4-tag{opacity:1;animation:t4in .35s ease-out both}
 .t4-tag small{display:block;font-size:12px;color:#9a9a9a;line-height:1.3}
 .t4-tag b{display:block;font-size:20px;font-weight:400;color:#fff}
 .t4-tag-h b{color:#cdcdcd}
+/* J14: 1440 은 곡선이 본문 칸 폭 전부, 끝 값은 곡선 아래 한 줄. 390 은 꼬리표 */
+.t4-keys{display:flex;flex-wrap:wrap;gap:8px 28px;margin:12px 0 0;font-size:14px;color:#9a9a9a}
+.t4-keys span{display:inline-flex;align-items:center;gap:8px}
+.t4-keys i{display:inline-block;width:18px;height:0;border-top:2px solid #fff}
+.t4-key-h i{border-top:1.5px dashed #9a9a9a}
+.t4-keys b{font-size:18px;font-weight:400;color:#fff;opacity:0;transition:opacity .35s ease}
+.t4-key-h b{color:#cdcdcd}
+.landed .t4-keys b{opacity:1}
+@media(min-width:861px){#bt-root.t4 .t4-plot,#bt-root.t4 .t4-trades{margin-right:0}#bt-root.t4 .t4-tag{display:none}}
 /* 큰 거래 셋 */
 .t4-trades{list-style:none;margin:18px 140px 0 0;padding:0}
 .t4-tr{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid #ffffff1a;font-size:16px;animation:t4in .3s ease-out both}
@@ -71,6 +81,7 @@ body.g4-t4 .gft-wm{display:none!important}
 /* QA 는 T3 I9 와 같은 자리(숨기지 않음, 숫자·바와 겹치지 않게) */
 html:not(.t3-qa) body.g4-t4 #tf-devbtn,html:not(.t3-qa) body.g4-t4 #tf-devpanel{display:none!important}
 @media(max-width:860px){
+ .t4-keys{display:none}
  #bt-root.t4{padding:58px 16px calc(var(--t4-bar-h,150px) + 24px)} /* 머리 44px(tf-route 는 본문을 맨 위에 붙인다) + T3 와 같은 14px */
  .t4-layout{display:block}.t4-card{display:none}
  #bt-root.t4 .t4-back{margin-bottom:10px}
