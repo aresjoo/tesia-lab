@@ -547,12 +547,18 @@
     var oldSignupDone = signupDone;
     signupDone = function () {
       if (history.state && history.state.g4t3Auth) {
+        var resume = typeof tfIntentPeek === 'function' && (tfIntentPeek() || {}).kind === 'g4copy'; /* 가입 뒤 이어서 열 복사 창이 있나(T1 의도) */
         history.replaceState(Object.assign({}, history.state, { g4t3Auth: false, g4Overlay: false, g4ClosedOverlay: true }), '', location.href);
         /* T1 의 가입 뒤 이어하기(openSaved)는 이 칸을 상세 주소로 되돌린 뒤 복사 창 칸을 하나 더 쌓는다. 그 한 번만 이 칸에 다시 쓴다 */
         var push = history.pushState, undo = function () { if (history.pushState === once) history.pushState = push; }, once = function (st) {
           undo(); return (st && st.g4Overlay ? history.replaceState : push).apply(history, arguments);
         };
         history.pushState = once; setTimeout(undo, 3000);
+        var v = oldSignupDone.apply(this, arguments);
+        /* K24: 위 머리 「무료로 시작」처럼 이어서 열 복사 창이 없으면(T1 의도 없음) 아무도 이 칸을 다시 쓰지 않는다. 그대로 두면 뒤로 한 번이 같은 상세에서 헛돈다 → 한 칸 뒤로 정리.
+           복사 창이 있는 길은 390 처럼 창이 늦게 열려도 위 한 번 다시 쓰기에 맡긴다 */
+        if (!resume && history.pushState === once && history.state && history.state.g4ClosedOverlay) { undo(); skipPop = true; history.back(); }
+        return v;
       }
       return oldSignupDone.apply(this, arguments);
     };
