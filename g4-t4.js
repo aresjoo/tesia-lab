@@ -35,7 +35,7 @@
   if (typeof tfVerifyGo === 'function') { var verifyGo = tfVerifyGo; tfVerifyGo = function () { clickAt = performance.now(); return verifyGo.apply(this, arguments); }; }
   /* J13: 백테스트 주소로 곧장 오면 index.html 머리가 본문을 가린다(html.g4-bt-wait). 이 화면을 그리거나 다른 주소로 가면 푼다 */
   function reveal() { document.documentElement.classList.remove('g4-bt-wait'); }
-  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) reveal(); });
+  addEventListener('hashchange', function () { if (!/^#\/share\/bt\//.test(location.hash)) reveal(); if (/^#\/share\/s\//.test(location.hash)) write('g4.t4.return', null); });
 
   btRoute = function (h) {
     var m = h.match(/^#\/share\/bt\/([^/]+)(?:\/(go|all))?$/);
@@ -94,7 +94,7 @@
     var fol = window.G4T3 ? G4T3.T('follow', { count: Number(s.fw || 0).toLocaleString('en-US') }) : '';
     return '<div class="t4-ex"><img src="assets/logos/' + esc(e[0]) + '.png" alt="" width="20" height="20"><span>' + esc(off) + '</span>' + (fol ? '<i aria-hidden="true">|</i><span>' + esc(fol) + '</span>' : '') + '</div>';
   }
-  function primaryLabel() { if (V.mine) return '$1,000으로 실행하기'; return copyRow(V.s) ? '예산 조정' : usd(V.amt) + '으로 복사하기'; }
+  function primaryLabel() { return !V.mine && copyRow(V.s) ? '예산 조정' : usd(V.amt) + '으로 복사하기'; } /* J4: 내 전략도 「$1,000으로 복사하기」(카피 확정 2) */
   function free() { return S.user ? '' : '<p class="t4-free">영원히 무료, 카드 등록 필요없음</p>'; }
   function allLabel() { return '거래 ' + V.trades.toLocaleString('en-US') + '건 모두 보기'; }
   function card() {
@@ -221,30 +221,79 @@
     scrollTo(0, 0);
   }
 
-  /* 처음 온 사람이 「$1,000으로 복사하기」 → 가입을 끝내면: 지금 앱(T1 openSaved)은 상세로 보낸다. 여기서 눌렀으면 같은 착지 화면에서 같은 시트를 연다 */
+  /* J1: 여기서 「$1,000으로 복사하기」를 누른 사람이 가입(처음 온 사람)이나 거래소 연결(acAfter copy)을 끝내면
+     지금 앱(T1 openSaved)은 상세로 보낸다. 같은 착지 화면(다시 굴리지 않음)으로 돌아와 같은 창을 $1,000 으로 연다 */
+  function backToLanding(r) {
+    write(PER + '.' + r.id, r.per);
+    try { history.replaceState(null, '', location.pathname + location.search + '#/share/bt/' + r.ne); } catch (_) {}
+    btRoute('#/share/bt/' + r.ne);
+    setTimeout(function () { mkFollowSheet(r.ne); }, 0);
+    return true;
+  }
   var prevIntent = tfIntentRun;
   tfIntentRun = function () {
     var o = tfIntentPeek(), r = read('g4.t4.return');
-    if (o && o.kind === 'g4copy' && S.user && r && r.id === o.id) {
-      tfIntentClear(); write('g4.t4.return', null); write(PER + '.' + r.id, r.per);
-      try { history.replaceState(null, '', location.pathname + location.search + '#/share/bt/' + r.ne); } catch (_) {}
-      btRoute('#/share/bt/' + r.ne);
-      setTimeout(function () { mkFollowSheet(r.ne); }, 0);
-      return true;
-    }
+    if (o && o.kind === 'g4copy' && S.user && r && r.id === o.id) { tfIntentClear(); return backToLanding(r); }
     return prevIntent.apply(this, arguments);
   };
+  if (typeof acAfter === 'function') {
+    var prevAfter = acAfter;
+    acAfter = function (af) {
+      var r = read('g4.t4.return'), h = read(HANDOFF), id = null;
+      try { id = af && af.kind === 'copy' ? decodeURIComponent(af.id) : null; } catch (_) { id = af && af.id; }
+      /* 창을 열면 T1 D.save 가 returnTo 를 상세로 되돌리므로 g4.t4.return(여기서 눌렀다는 기록)으로 판단. 상세로 걸어 나가면 지운다 */
+      if (id && r && r.id === id && h && h.strategyId === id) return backToLanding(r);
+      return prevAfter.apply(this, arguments);
+    };
+  }
 
   /* J12: 앱의 옛 백테스트 글자 정리(skbApply)가 같은 #bt-root 를 0.3초 뒤 고쳐 써서 제목 「RSI10 비트코인」이 「RSI10 BTC」로 바뀌었다. T4 화면은 건너뛴다(모두 보기 화면은 옛 결과 화면이라 그대로 적용) */
   if (typeof skbApply === 'function') { var skb = skbApply; skbApply = function (root) { if (root && root.classList && root.classList.contains('t4')) return; return skb.apply(this, arguments); }; }
 
   gContent = function () { stop(); document.body.classList.remove('g4-t4', 'g4-t4-all'); return prevContent.apply(this, arguments); };
 
+  /* ── J4: 내 전략의 주 단추 = 그 사람 상태의 창(거래소 연결 전 = f 창, 연결됨 = b 창)과 같은 틀, 금액 $1,000.
+     창 머리 숫자는 이 화면 숫자(F, H, 곡선). 창의 단추는 지금 앱의 내 전략 실행 길(btUse: 연결 전 = 거래소 연결, 연결됨 = 「전략 시작」)로 넘긴다.
+     금액은 대화 전략의 예산(intake.budget)에 맞는 값이 있으면 그 값으로 넘긴다($1,000 = TF_BUDGET 0번). 그 뒤 화면은 T5 몫 ── */
+  function T3T(k, o) { return window.G4T3 && G4T3.T ? G4T3.T(k, o) : k; }
+  function mineLinked() { try { var l = D && D.linked ? D.linked() : []; return !!(S.user && l.length && acReady(l[0])); } catch (_) { return false; } }
+  function mineMin() { try { return mkMin(V.s); } catch (_) { return 100; } }
+  function mineAmt() { var el = $('g4-budget') || $('cps-amt'); return el ? Number(String(el.value).replace(/[^0-9.]/g, '')) : NaN; }
+  function mineSheet() {
+    var linked = mineLinked(), id = linked ? 'cps-amt' : 'g4-budget', min = mineMin();
+    var r = { eq: V.R.eq, bench: V.R.bench, i0: V.R.i0, final: V.F, benchFinal: V.H, ret: V.ret };
+    var head = window.G4T3 && G4T3.head ? G4T3.head(r, { name: mkHook(V.s), sub: '내 전략' }) : '';
+    tfSS3Dlg(T3T('copyTitle'), '<form class="g4-budget-form t4-mine-form" onsubmit="G4T4.mineGo(event)">' + head
+      + '<label for="' + id + '">' + esc(T3T('budget')) + '</label><div class="g4-budget-input"><span>$</span>'
+      + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" value="' + usd(V.amt).slice(1) + '" oninput="G4T4.mineSync()" aria-describedby="g4-budget-min g4-budget-error"></div>'
+      + '<p id="g4-budget-min">' + esc(T3T('minNote', { min: usd(min) })) + '</p><p id="g4-budget-error" role="status"></p>'
+      + '<button id="g4-budget-next" type="submit" class="g4-primary">' + esc(linked ? T3T('start') : '거래소 연결') + '</button>'
+      + '<p class="t3s-foot">' + esc(T3T('foot')) + '</p></form>');
+    var w = $('ss3-dlgw'); if (w) w.classList.add('g4-budget-dialog', 't3s', 't4-mine', linked ? 't4-mine-b' : 't4-mine-f');
+    try { tfTrack('bt_copy', { id: 'mine', per: BT.per, budget: V.amt }); } catch (_) {}
+  }
+
   window.G4T4 = {
+    mineSync: function () {
+      var el = $('g4-budget') || $('cps-amt'), n = mineAmt(), ok = Number.isFinite(n) && n >= mineMin(), e = $('g4-budget-error'), b = $('g4-budget-next');
+      if (el) { var raw = String(el.value).replace(/[^0-9.]/g, ''), p = raw.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); el.value = p.join('.'); }
+      if (e) e.textContent = el && el.value && !ok ? '최소 ' + usd(mineMin()) + '부터 시작할 수 있습니다' : '';
+      if (b) b.disabled = !ok; return ok;
+    },
+    mineGo: function (ev) {
+      if (ev) ev.preventDefault();
+      if (!G4T4.mineSync()) return;
+      var n = mineAmt();
+      try { var t = tfS(), k = TF_BUDGET.indexOf(Math.round(n * 1000)); /* tfWon: 원 단위 / 1000 = $ */ if (t.intake && k >= 0) { t.intake.budget = Object.assign({}, t.intake.budget || {}, { i: k, label: usd(n) }); tfSave(); } } catch (_) {}
+      try { tfSS3DlgClose(true); } catch (_) {}
+      btUse();
+    },
+    /* T3 창(g4-t3.js onT4, hostCur)이 지금 화면의 전략과 기간을 읽는다 */
+    ctx: function () { return V && BT.s && V.s.id === BT.s.id && $('bt-root') && $('bt-root').classList.contains('t4') ? { s: V.s, per: BT.per } : null; },
     skip: function () { if (roll) land(false); },
     copy: function () {
       if (!V) return; var s = V.s;
-      if (s.mine) { btUse(); return; }
+      if (s.mine) { mineSheet(); return; }
       var n = ne(), h = (D && D.save && D.save(s.id, V.amt)) || { strategyId: s.id };
       h.budget = V.amt; h.per = BT.per; h.returnTo = '#/share/bt/' + n;
       h.face = { final: V.F, bench: V.H, ret: V.ret, since: V.R.i0, pos: D && D.pos ? D.pos(s) : null };
@@ -259,7 +308,8 @@
     back: function () {
       if (!BT.s) return; if (BT.s.mine) { btBack(); return; }
       var f = read(FROM), d = '#/share/s/' + ne();
-      if (f && f.indexOf(d) === 0 && history.length > 1) { history.back(); return; }
+      /* 가입 창을 Esc 로 닫으면 T3 I6 의 창 기록 칸(g4t3Auth)이 남는다(상세에서도 같음). 그 칸 위면 두 칸 뒤가 상세 */
+      if (f && f.indexOf(d) === 0 && history.length > 1) { if (history.state && history.state.g4t3Auth) history.go(-2); else history.back(); return; }
       location.hash = d + '/all';
     }
   };
