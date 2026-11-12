@@ -103,8 +103,7 @@
       + '<p class="t4-card-sub">' + usd(V.amt) + ' 넣었다면 지금</p><b class="t4-card-num">' + usd(V.F) + '</b>'
       + (e ? '<div class="t4-ex t4-ex-sm"><img src="assets/logos/' + esc(e[0]) + '.png" alt="" width="18" height="18"><span>' + esc(window.G4T3 ? G4T3.T(V.s.cfg && V.s.cfg.fut ? 'official' : 'officialSpot', { ex: e[1] }) : e[1]) + '</span></div>' : '')
       + '<button type="button" class="bt-cta t4-primary" onclick="G4T4.copy()">' + esc(primaryLabel()) + '</button>' + free()
-      + '<div class="t4-card-links"><button type="button" class="t4-link" onclick="G4T4.all()">' + esc(allLabel()) + '</button>'
-      + (V.mine ? '<button type="button" class="t4-link" onclick="rvFix()">규칙 수정하기</button><button type="button" class="t4-link" onclick="rvChat()">대화로 돌아가기</button>' : '') + '</div></aside>';
+      + (V.mine ? '<div class="t4-card-links"><button type="button" class="t4-link" onclick="rvChat()">대화로 돌아가기</button></div>' : '') + '</aside>'; /* B2: 「거래 N건 모두 보기」는 곡선 아래 승률 줄로 */
   }
   function bar() {
     return '<div class="t4-bar" id="t4-bar"><div class="t4-bar-top"><span>' + usd(V.amt) + ' 넣었다면 지금</span><b>' + usd(V.F) + '</b></div>'
@@ -115,11 +114,6 @@
     var holdD = path(function (j) { return V.amt * R.bench[j]; }), eqD = path(function (j) { return V.amt * R.eq[j].v; });
     var base = Y(V.amt).toFixed(1);
     var mk = V.big.map(function (b, k) { return '<i class="t4-mk' + (b.t.pnl < 0 ? ' dn' : '') + '" id="t4-mk' + k + '" style="left:' + (X(b.j) / W * 100).toFixed(2) + '%;top:' + (Y(V.amt * R.eq[b.j].v) / H * 100).toFixed(2) + '%"></i>'; }).join('');
-    /* 끝 값 꼬리표 둘이 겹치면(값이 가까우면) 위아래로 벌린다. 간격 18% */
-    var ts = Y(V.F) / H * 100, th = Y(V.H) / H * 100, gap = 18;
-    if (Math.abs(ts - th) < gap) { var mid = (ts + th) / 2, sAbove = ts <= th; ts = mid + (sAbove ? -gap / 2 : gap / 2); th = mid + (sAbove ? gap / 2 : -gap / 2); } /* J12: 이름이 수익률 색 변수(up)를 덮어 손실이 초록으로 보였다 */
-    var tags = '<div class="t4-tag t4-tag-s" style="top:' + ts.toFixed(2) + '%"><small>전략</small><b>' + usd(V.F) + '</b></div>'
-      + '<div class="t4-tag t4-tag-h" style="top:' + th.toFixed(2) + '%"><small>그냥 들고 있었다면</small><b>' + usd(V.H) + '</b></div>';
     return '<div class="t4" id="bt-root" data-phase="run" data-kind="' + esc(s.kind) + '">'
       + '<div class="t4-layout"><div class="t4-main">'
       + '<button type="button" class="t4-link bk t4-back" onclick="G4T4.back()">' + (s.mine ? '← 대화로' : '← 전략 상세') + '</button>'
@@ -127,37 +121,45 @@
       + '<p class="t4-sub">' + usd(V.amt) + ' 넣었다면 지금</p>'
       + '<div class="t4-money"><b class="t4-final num">' + usd(V.F) + '</b><span class="num ' + (up ? 'up' : 'dn') + '">' + pct(V.ret) + '</span></div>'
       + '<p class="t4-since">' + esc(dSent(e0)) + '부터 지금까지</p>'
-      + '<div class="t4-replay" id="t4-replay"></div>'
+      /* B1 안3: 상태 한 줄(재생 중 = 하루씩 다시 굴리는 중 n / N일, 착지 = 착지 1줄)과 비교 문장(0초부터, 착지 때 굵게)이 F 바로 밑 */
+      + '<p class="t4-state" id="t4-state"></p><p class="t4-cmp" id="t4-cmp">' + cmpLine() + '</p>'
+      + '<div class="t4-skiprow"><button type="button" class="t4-link bt-skip" id="t4-skip" onclick="G4T4.skip()">결과 바로 보기</button></div>'
       + '<div class="t4-plot" id="t4-chart" onclick="G4T4.skip()" role="img" aria-label="' + esc(usd(V.amt) + '이 ' + usd(V.F) + '까지 간 곡선') + '">'
       + '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id="t4-clip"><rect id="t4-clip-r" x="0" y="0" width="0" height="' + H + '"/></clipPath></defs>'
       + '<line x1="0" x2="' + W + '" y1="' + base + '" y2="' + base + '" class="t4-base"/>'
       + '<path d="' + holdD + '" class="t4-hold"/><g clip-path="url(#t4-clip)"><path d="' + eqD + '" class="t4-eq"/></g></svg>' /* J7: 그냥 들고 있기 점선은 0초부터 전체 */
-      + mk + '<i class="t4-dot" id="t4-dot"></i>' + tags + '</div>'
-      /* J14: 1440 은 곡선이 본문 칸 폭을 다 쓰고, 끝 값은 곡선 오른쪽 꼬리표 대신 곡선 아래 한 줄(390 은 꼬리표 그대로) */
-      + '<div class="t4-keys"><span class="t4-key-s"><i aria-hidden="true"></i>전략 <b class="num">' + usd(V.F) + '</b></span><span class="t4-key-h"><i aria-hidden="true"></i>그냥 들고 있었다면 <b class="num">' + usd(V.H) + '</b></span></div>'
+      /* B1 안3: 곡선 머리점 + 세로 기준선 + 날짜·잔고 말풍선. 잔고 = 그날 eq(J6) */
+      + mk + '<i class="t4-vline" id="t4-vline"></i><i class="t4-dot" id="t4-dot"></i>'
+      + '<div class="t4-bub" id="t4-bub"><span id="t4-date">' + esc(dList(R.eq[0].i)) + '</span><b class="num" id="t4-bal">' + usd(V.amt) + '</b></div></div>'
+      /* B2 안2 + J9: 곡선 아래 한 줄 = 「끝난 N번 중 M번 수익」 + 「거래 N건 모두 보기」(mine 은 「규칙 수정하기」 더함). 착지 때 보임 */
+      + '<div class="t4-stats" id="t4-stats"><span>' + winLine() + '</span><span class="t4-stats-links"><button type="button" class="t4-link" onclick="G4T4.all()">' + esc(allLabel()) + '</button>'
+      + (V.mine ? '<button type="button" class="t4-link" onclick="rvFix()">규칙 수정하기</button>' : '') + '</span></div>'
       + '<ol class="t4-trades" id="t4-trades"></ol>'
-      + '<div class="t4-more"><button type="button" class="t4-link" onclick="G4T4.all()">' + esc(allLabel()) + '</button>'
-      + (V.mine ? '<button type="button" class="t4-link" onclick="rvFix()">규칙 수정하기</button><button type="button" class="t4-link" onclick="rvChat()">대화로 돌아가기</button>' : '') + '</div>'
       + '</div>' + card() + '</div>' + bar() + '</div>';
   }
-  function replayRun() {
-    return '<p class="t4-prog">하루씩 다시 굴리는 중 <span id="t4-day">0</span> / ' + V.N.toLocaleString('en-US') + '일</p>'
-      + '<p class="t4-roll"><span id="t4-date">' + esc(dList(V.R.eq[0].i)) + '</span><b class="num" id="t4-bal">' + usd(V.amt) + '</b></p>'
-      + '<button type="button" class="t4-link bt-skip" onclick="G4T4.skip()">결과 바로 보기</button>';
+  /* 문구 = 카피 확정본(copy/decision-copy.md, table-v2.md) */
+  function cmpLine() {
+    if (V.diff > 0 && V.F >= V.amt) return '그냥 들고 있었다면 ' + usd(V.H) + ' (차이 <span class="up">' + sUsd(V.diff) + '</span> 더 벌었습니다)';
+    if (V.diff > 0) return '그냥 들고 있었다면 ' + usd(V.H) + ' (차이 ' + usd(V.diff) + ' 덜 잃었습니다)';
+    return '그냥 들고 있었다면 ' + usd(V.H);
   }
-  function replayDone() {
-    var cmp;
-    if (V.diff > 0 && V.F >= V.amt) cmp = '그냥 들고 있었다면 ' + usd(V.H) + ' (차이 <span class="up">' + sUsd(V.diff) + '</span> 더 벌었습니다)';
-    else if (V.diff > 0) cmp = '그냥 들고 있었다면 ' + usd(V.H) + ' (차이 ' + usd(V.diff) + ' 덜 잃었습니다)';
-    else cmp = '그냥 들고 있었다면 ' + usd(V.H);
-    return '<p class="t4-ok">' + V.N.toLocaleString('en-US') + '일을 하루씩 다시 굴려도 <b class="num">' + usd(V.F) + '</b>입니다</p><p class="t4-cmp">' + cmp + '</p>';
+  function runLine() { return '하루씩 다시 굴리는 중 <span id="t4-day">0</span> / ' + V.N.toLocaleString('en-US') + '일'; }
+  function okLine() { return V.N.toLocaleString('en-US') + '일을 하루씩 다시 굴려도 <b class="num">' + usd(V.F) + '</b>입니다'; }
+  /* J9: N = 끝난 거래 수, M = 그중 수익(pnl > 0), 엔진 값. 문구는 agy 확정 전 임시(flow-contract 0.5) */
+  function winLine() {
+    var c = V.R.tr.filter(function (t) { return !t.open && t.x != null; }), m = c.filter(function (t) { return t.pnl > 0; }).length;
+    return '끝난 ' + c.length.toLocaleString('en-US') + '번 중 <b class="' + (m > 0 ? 'up' : '') + '">' + m.toLocaleString('en-US') + '번 수익</b>';
   }
 
   function paint(j) {
     var R = V.R, r = $('t4-clip-r'), dot = $('t4-dot'); if (!r) return;
     r.setAttribute('width', (X(j) + 1).toFixed(1));
     var v = V.amt * R.eq[j].v;
-    if (dot) { dot.style.left = (X(j) / W * 100).toFixed(2) + '%'; dot.style.top = (Y(v) / H * 100).toFixed(2) + '%'; }
+    var lx = (X(j) / W * 100).toFixed(2) + '%';
+    if (dot) { dot.style.left = lx; dot.style.top = (Y(v) / H * 100).toFixed(2) + '%'; }
+    var vl = $('t4-vline'), bub = $('t4-bub');
+    if (vl) vl.style.left = lx;
+    if (bub) { var pw = $('t4-chart').clientWidth, bw = bub.offsetWidth, x = X(j) / W * pw; bub.style.left = Math.max(0, Math.min(pw - bw, x - bw / 2)).toFixed(1) + 'px'; } /* 말풍선은 머리점 위, 곡선 칸 밖으로 나가지 않게 */
     var d = $('t4-day'), dt = $('t4-date'), b = $('t4-bal');
     if (d) d.textContent = (j + 1).toLocaleString('en-US');
     if (dt) dt.textContent = dList(R.eq[j].i);
@@ -171,10 +173,10 @@
     });
   }
   function land(instant) {
-    stop(); if (!$('t4-replay')) return;
+    stop(); if (!$('t4-state')) return;
     paint(V.N - 1);
     var root = $('bt-root'); root.setAttribute('data-phase', 'result'); root.classList.add('landed'); if (instant) root.classList.add('still');
-    $('t4-replay').innerHTML = replayDone();
+    $('t4-state').innerHTML = okLine(); /* B2: 착지 1줄, 비교 문장 굵게(.landed), 주 단추 청록(.on) */
     var c = $('t4-card'), b = $('t4-bar'); if (c) c.classList.add('on'); if (b) b.classList.add('on');
     BT.phase = 'result'; markSeen(); barHeight();
     try { tfTrack('bt_land', { id: BT.id, per: BT.per, instant: !!instant }); } catch (_) {}
@@ -202,7 +204,7 @@
     var now = performance.now(), from = clickAt && now - clickAt < 2000 ? clickAt : !booted && now < 4000 ? 0 : now;
     booted = true; clickAt = 0;
     if (seen() || reduced()) { land(true); return; }
-    $('t4-replay').innerHTML = replayRun(); paint(0);
+    $('t4-state').innerHTML = runLine(); paint(0);
     BT.phase = 'run';
     roll = { t0: now + DELAY, dur: Math.max(MIN_ROLL, from + TOTAL - now - DELAY) }; raf = requestAnimationFrame(tick);
     try { tfTrack('bt_start', { id: BT.id, per: BT.per, t4: 1 }); } catch (_) {}
