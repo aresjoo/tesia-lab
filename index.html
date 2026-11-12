@@ -8892,10 +8892,10 @@ details.cq-det[open]>summary .z::after{transform:translateY(-30%) rotate(-135deg
 @media (max-width:760px){ #g-content .nfz-open h1{font-size:28px} #g-content .nfz-open h1 em{font-size:16px} #g-content .nfz-sh h2{font-size:18px} }
 /*BT_CSS_END*/
 </style>
-<script src="site-config.js?v=20261111185144"></script>
+<script src="site-config.js?v=20261112-ai-text2"></script>
 <script src="data/px-daily.js?v=2026-09-28b"></script>
 <script src="data/fut-daily.js?v=2026-09-28"></script>
-<script src="site-footer.js?v=20261111185144"></script><!-- gBoot 의 첫 렌더가 gSiteFooter() 를 부르므로 부팅 전에 로드 --><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
+<script src="site-footer.js?v=20261112-ai-text2"></script><!-- gBoot 의 첫 렌더가 gSiteFooter() 를 부르므로 부팅 전에 로드 --><!-- 부팅(gBoot)보다 먼저 로드 — TETH_CONFIG.aiProxy가 최초 프록시 해석에 반영되게 (codex QA P2) -->
 <script>
 "use strict";
 /* ═══════════ state ═══════════ */
@@ -12742,16 +12742,24 @@ function actTic(st){
   if(st.status==='failed') return '<span class="tic fail">!</span>';
   return '<span class="tic ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>';
 }
+/* 한글이 없는 생각 문장은 표시하지 않는다. 단계 제목과 진행 상태는 유지한다. */
+function actThinkText(text){
+  return String(text||'').split(/\r?\n/).map(function(line){
+    return line.replace(/([.!?。！？])(?=\s|[A-Z가-힣])/g,'$1\n').split('\n').filter(function(s){ return /[가-힣ㄱ-ㅎㅏ-ㅣ]/.test(s); }).map(function(s){ return s.trim(); }).join(' ');
+  }).filter(Boolean).join('\n');
+}
 function actPaint(run,st){
   if(!st.el) return;
   st.el.className='ar '+st.status+(st.kind==='note'?' note':'')+(st.kind==='think'?' think':'');
   if(st.kind==='note'){ st.el.innerHTML=actTic(st)+'<div class="ab"><div class="an">'+gEsc(st.title)+'</div></div>'; return; }
   var right=(st.status==='failed'?'<span class="bdg fail">실패</span>':'')+(st.mR?'<span class="am">'+gEsc(st.mR)+'</span>':'');
-  var hasDet=!!st.detail;
+  var detail=st.detail;
+  if(st.kind==='think'){ var text=actThinkText(st.think); detail=text||st.status==='running'?'<div class="cot2">'+gEsc(text)+'</div>':null; }
+  var hasDet=!!detail;
   var open=st.open?' open':'';
   st.el.innerHTML=actTic(st)
    +'<div class="ab'+open+'"><button class="arh" '+(hasDet?'aria-expanded="'+(st.open?'true':'false')+'" onclick="actRowToggle(this)"':'disabled')+'><span class="at">'+gEsc(st.title)+'</span>'+right+(hasDet?'<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>':'')+'</button>'
-   +(hasDet?'<div class="ad"><div class="adin">'+st.detail+'</div></div>':'')+'</div>';
+   +(hasDet?'<div class="ad"><div class="adin">'+detail+'</div></div>':'')+'</div>';
 }
 function actStep(run,st){
   st.status=st.status||'running'; st.t0=Date.now();
@@ -12783,9 +12791,10 @@ function actThink(run){
       if(!d) return;
       if(!buf) d=String(d).replace(/^\s+/,''); /* 첫 청크 선행 개행 제거 */
       buf=(buf+d).replace(/\n{3,}/g,'\n\n'); /* 연속 빈 줄 압축 — 줄바꿈 폭탄 방지 */
-      h.st.think=buf;
+      var visible=actThinkText(buf);
+      h.st.think=visible;
       if(h.st.el&&h.st.el.isConnected){ var box=h.st.el.querySelector('.cot2'); if(box){
-        box.textContent=buf;
+        box.textContent=visible;
         /* 프레임당 1회만 스크롤 핀 (24~44ms 직접 대입 떨림 방지), 넘칠 때만 상단 페이드 마스크 */
         if(!box._pin){ box._pin=1; requestAnimationFrame(function(){ box._pin=0; if(!box.isConnected) return; if(box.scrollHeight>box.clientHeight+4) box.classList.add('ovf'); box.scrollTop=box.scrollHeight; }); }
       } gScrollBottom(); }
@@ -12796,7 +12805,9 @@ function actThink(run){
       h.st.status='done'; h.st.open=false;
       h.st.title='생각 완료'; h.st.mR=Math.max(1,Math.round((Date.now()-h.st.t0)/1000))+'초';
       h.st.ms=Date.now()-h.st.t0;
-      h.st.detail=buf?'<div class="cot2">'+gEsc(buf)+'</div>':null;
+      var visible=actThinkText(buf);
+      h.st.think=visible;
+      h.st.detail=visible?'<div class="cot2">'+gEsc(visible)+'</div>':null;
       var el=h.st.el;
       if(el&&el.isConnected&&el.querySelector('.ab')){
         el.className='ar done think';
@@ -12944,7 +12955,7 @@ function actHydrate(sess,el){
     run.el=el; run.tl=el.querySelector('.tlin');
     d.steps.forEach(function(s){
       s.el=document.createElement('div'); actPaint(run,s); run.tl.appendChild(s.el);
-      if(s.kind==='think'&&s.status==='running'&&s.think){ var bx=s.el.querySelector('.cot2'); if(bx) bx.textContent=s.think; }
+      if(s.kind==='think'&&s.status==='running'&&s.think){ var bx=s.el.querySelector('.cot2'); if(bx) bx.textContent=actThinkText(s.think); }
     });
     actHeadSync(run);
     return;
@@ -13207,9 +13218,10 @@ function tfStart(act){
   if(typeof TF_SS_TOKEN!=='undefined') TF_SS_TOKEN++; /* 진행 중이던 이전 검증 콜백 무효화 (codex F06) */
   t.intake={}; t.qi=0; t.tries=[]; t.cur=null; t.score=0; t.stage='intake'; t.workDone=false; t.plan=null; t.aiSpec=null;
   t.ob={st:'idle',ex:null,uid:'',err:null};
-  var sell=/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
+  var sell=!!(act&&act.direction==='sell')||/팔|정리|손절|탈출|매도/.test((act&&act.label)||'');
   t.sell=sell;
   var c=TAI.chart||((taiAI()||{}).chart);
+  if(act&&act.setup){ c=(taiAI()||{}).chart||c; if(act.setup.pair) c=tfAssetLookup(act.setup.pair==='ETH/USDT'?'이더리움':'비트코인'); }
   t.ctxAsset=c?{label:c.label,tv:c.tv,data:c.data}:null;
   /* 대화에서 이미 파악된 자산은 다시 묻지 않는다 — 인테이크 마찰 축소 (5문답→최대 4) */
   if(t.ctxAsset){ t.intake.asset={i:0,label:t.ctxAsset.label,rec:false}; t.qi=1; }
@@ -20434,6 +20446,26 @@ function taiForecast(){
   requestAnimationFrame(draw);
 }
 /* ── 시장 Q&A 본체: conv/doc 공용 ── */
+/* 실행 칩 의사는 요청 한 번에만 소비한다. 다른 질문에는 이어 붙이지 않는다. */
+function taiSetupRequest(sess,text){
+  var ai=taiAI(sess), act=ai.setupRequest; delete ai.setupRequest;
+  if(act&&act.label===text) return act;
+  if(/^\s*자동매매\s*전략\s*시작[.!]?\s*$/.test(text)) return {type:'delegate_trade',label:text};
+  return null;
+}
+/* SETUP 유무와 관계없이 같은 설정 함수를 연다. 채팅 전송 래퍼를 다시 타지 않는다. */
+function taiSetupAction(sess,setup,request){
+  var ai=taiAI(sess), strategy=sess.strategy||{}, values={};
+  [ai.lastSetup||{},strategy,setup||{}].forEach(function(src){
+    if(src.entryMode==='dip'||src.entryMode==='trend') values.entryMode=src.entryMode;
+    if(src.pair==='BTC/USDT'||src.pair==='ETH/USDT') values.pair=src.pair;
+  });
+  ai.lastSetup=values;
+  Object.keys(values).forEach(function(k){ strategy[k]=values[k]; });
+  sess.strategy=strategy;
+  if(G.cur===sess) S.strategy=strategy;
+  return {type:(request&&request.type)||'delegate_trade',label:(request&&request.label)||'자동매매 전략 시작',direction:request&&request.direction,fixed:true,setup:values};
+}
 function taiMarket(t,fin,fallback){
   var sess=G.cur; if(!sess) return; /* 이 요청의 소유 세션에 바인딩 — 이후 세션 전환에도 기록은 이 세션으로만 */
   /* 모든 진입 경로(ASK 카드 포함) 공통 동시 실행 가드 (codex QA-03) */
@@ -20442,7 +20474,7 @@ function taiMarket(t,fin,fallback){
   if(typeof tfAiGate==='function'&&!tfAiGate()){ if(fallback) fallback(); return; }
   if(typeof tfAiSpend==='function') tfAiSpend('rq'+Date.now());
   TAI.busy=true; TAI.busyAt=Date.now(); taiBusySync(); /* 시세/매크로 조사 등 프리스트림 구간의 이중 전송 차단 (스트림 시작 전엔 TAI.req가 비어 가드가 뚫리던 결함) */
-  var ai=taiAI(sess);
+  var ai=taiAI(sess), setupRequest=taiSetupRequest(sess,t);
   var conv=!!($('g-thread')&&G.mode==='conv');
   var tfReq=taiTfFrom(t);
   if(tfReq){ ai.tf=tfReq; if(ai.chart){ ai.chart.interval=TAI_TFTV[tfReq]||'D'; taiChartRender(); } } /* AI 컨텍스트 ↔ 차트 위젯 동기화 (차트 없어도 tf는 기억) */
@@ -20646,10 +20678,9 @@ function taiMarket(t,fin,fallback){
       if(live&&isPred&&ai.ohlc&&ai.ohlc.rows&&ai.chart) delay(500,taiForecast); /* 미래 구간 시나리오 드로잉 */
       if(spec&&live){ delay(info?1400:600,function(){ if(G.cur===sess) tfAiStrategy(spec); }); }
       if(order&&live&&typeof tfOrderCard==='function'){ delay(info?1400:600,function(){ if(G.cur===sess) tfOrderCard(order); }); }
-      else if(setup&&conv&&live){ /* 자동매매 동의 → 최신 위임 퍼널로 직행 (구버전 스크립트 빌더로 튕기던 라우팅 결함 수정) */
-        if(setup.entryMode==='dip'||setup.entryMode==='trend') S.strategy.entryMode=setup.entryMode;
-        if(setup.pair==='BTC/USDT'||setup.pair==='ETH/USDT') S.strategy.pair=setup.pair;
-        delay(info?1600:800,function(){ if(G.mode==='conv'&&G.cur===sess) tfStart({type:'delegate_trade',label:'자동매매 전략 시작'}); });
+      else if((setup||setupRequest)&&!spec&&conv&&live){
+        var startAction=taiSetupAction(sess,setup,setupRequest);
+        delay(info?1600:800,function(){ if(G.mode==='conv'&&G.cur===sess) tfStart(startAction); });
       }
       else if(ask&&live) delay(500,function(){ if(G.cur===sess) taiAskCard(ask); });
       else if(live&&((nexts&&nexts.length)||(acts&&acts.length))){
@@ -23593,12 +23624,21 @@ function btAiCall(o,cb){
     var body={messages:[{role:'user',content:o.user}],system:o.system}; if(o.think) body.think=true; else body.plain=true;
     fetch(TAI.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.text(); })
       .then(function(raw){ clearTimeout(to); var t='', err=false, ok2=false; raw.split(/\n/).forEach(function(l){ if(l.indexOf('data:')!==0) return; try{ var j=JSON.parse(l.slice(5)); if(j.text) t+=j.text; if(j.error) err=true; if(j.done) ok2=true; }catch(e){} });
-        t=btAiClean(t); if(err||!ok2||t.length<12) fin('bad'); else fin(null,t); })
+        t=btAiClean(t,o.complete); if(err||!ok2||(o.complete?!t:t.length<12)) fin('bad'); else fin(null,t); })
       .catch(function(e){ clearTimeout(to); fin(String(e)); }); };
   if(typeof taiEnsure==='function') taiEnsure(go); else go(true);
 }
 /* 모델의 글에서 표식과 금지 부호를 걷어 낸다 */
-function btAiClean(t){ return String(t||'').replace(/\[(?:NEXT|ACT|TITLE|CHART|SETUP|GAUGE|ASK|TLINE)[\s\S]*$/,'').replace(/[*#`>]/g,'').replace(/—|–/g,', ').replace(/·/g,', ').replace(/[ \t]+/g,' ').replace(/\n{2,}/g,'\n').trim(); }
+function btAiClean(t,complete){
+  t=String(t||'').replace(/<\/?final_answer\s*>?/gi,'').replace(/\[(?:NEXT|ACT|TITLE|CHART|SETUP|GAUGE|ASK|TLINE)[\s\S]*$/,'').replace(/[*#`>]/g,'').replace(/—|–/g,', ').replace(/·/g,', ').replace(/[ \t]+/g,' ').replace(/\n{2,}/g,'\n').trim();
+  if(complete){
+    /* 소수점은 문장 끝이 아니다. 완성 문장 뒤의 잘린 조각만 버린다. */
+    var re=/[.!?。！？](?!\d)["'”’)]*/g, m, end=0;
+    while((m=re.exec(t))) end=re.lastIndex;
+    t=t.slice(0,end).trim();
+  }
+  return t;
+}
 function btR1(v,d){ return v==null||!isFinite(v)?null:+v.toFixed(d==null?1:d); }
 /* 그날(i) 장 마감까지 알 수 있던 값만 모은다. i 뒤의 가격은 읽지 않는다 */
 function btFactsAt(d){
@@ -23743,6 +23783,7 @@ function btReadFacts(){
 function btReadKey(){ var R=BT.R; return BT.id+'|'+BT.per+'|'+BT.amt+'|'+R.ret.toFixed(3)+'|'+R.N; }
 function btReadHtml(){
   var k=btReadKey(), X=BT_AI.R[k]||{st:'load'};
+  if(X.st==='ok'){ var text=btAiClean(X.t,true); X=text?{st:'ok',t:text}:{st:'fail'}; }
   var body=X.st==='ok'?X.t.split(/\n+/).filter(Boolean).slice(0,4).map(function(x,i){ return '<p'+(i===0?' class="h"':'')+'>'+gEsc(x)+'</p>'; }).join('')
     :X.st==='fail'?'<p class="f">해석을 불러오지 못했습니다. 결과 숫자는 위에 그대로 있습니다.</p><button type="button" class="bt-rtry" onclick="btReadLoad(1)">다시 시도</button>'
     :'<div class="bt-sk" aria-label="결과를 읽는 중"><i></i><i></i><i></i></div><p class="l">결과를 읽고 있습니다</p>';
@@ -23751,7 +23792,7 @@ function btReadHtml(){
 function btReadLoad(force){
   var k=btReadKey(), X=BT_AI.R[k]; if(X&&X.st==='ok'&&!force) return; if(X&&X.st==='load'&&!force) return;
   X=BT_AI.R[k]={st:'load'}; var paint=function(){ var e=$('bt-read'); if(e&&btReadKey()===k) e.outerHTML=btReadHtml(); }; paint();
-  btAiCall({system:BT_SYS_R,user:JSON.stringify(btReadFacts()),timeout:40000},function(err,t){ if(err){ X.st='fail'; X.err=err; } else { X.st='ok'; X.t=t; } paint(); });
+  btAiCall({system:BT_SYS_R,user:JSON.stringify(btReadFacts()),timeout:40000,complete:true},function(err,t){ if(err){ X.st='fail'; X.err=err; } else { X.st='ok'; X.t=t; } paint(); });
 }
 function btResultRail(){
   var R=BT.R, s=BT.s, pf=R.final-BT.amt, diff=Math.round(R.final)-Math.round(R.benchFinal);
@@ -24791,7 +24832,7 @@ function taiAskSkipText(){ var f=document.getElementById('g-in'); if(f){ f.value
   taiAskSkip=function(id){ taiAskClose(id); taiAskSkipText(); };
   /* "바로 실행" 류 단추: 고정 질문 다섯 개 대신 AI에게 보낸다. AI가 모르는 것만 [ASK]로 묻는다 */
   var ts0=tfStart; tfStart=function(act){
-    if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); f.value=act.label; gSend(); return; }
+    if(act&&act.label&&G.mode==='conv'&&document.getElementById('g-in')&&!(act.fixed)){ var f=document.getElementById('g-in'); if(G.cur&&(act.type==='delegate_trade'||act.type==='auto_trade')) taiAI(G.cur).setupRequest={type:act.type,label:act.label,direction:act.direction}; f.value=act.label; gSend(); return; }
     return ts0.apply(this,arguments); };
 })();
 /* 전략 설계서 카드가 사용자의 말을 그대로 보여 준다: RSI 숫자는 그대로 엔진 기준값으로, 계산하지 못한 조건은 "검증에서 뺀 조건"으로 */
@@ -26985,8 +27026,8 @@ if(GLC.lang!=='ko') applyLang();
 applyCurrency();
 if(G && G.mode==='home') phRotStart(); /* 부트 시 gHome이 정의 전에 돌았을 수 있어 여기서 시작 */
 </script>
-<script src="teth-copy.js?v=20261111185144"></script>
-<script src="help-widget.js?v=20261111185144"></script>
-<link rel="stylesheet" href="g4-t1.css?v=20261111185144">
-<script src="g4-t1-data.js?v=20261111185144"></script>
-<script src="g4-t1.js?v=20261111185144"></script>
+<script src="teth-copy.js?v=20261112-ai-text2"></script>
+<script src="help-widget.js?v=20261112-ai-text2"></script>
+<link rel="stylesheet" href="g4-t1.css?v=20261112-ai-text2">
+<script src="g4-t1-data.js?v=20261112-ai-text2"></script>
+<script src="g4-t1.js?v=20261112-ai-text2"></script>
