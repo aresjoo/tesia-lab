@@ -358,8 +358,11 @@
   var noticeT = 0;
   function notice(msg) {
     clearTimeout(noticeT); document.querySelectorAll('.t4-notice').forEach(function (n) { n.remove(); });
-    var at = $('t4-cmp') || document.querySelector('#bt-root.t4 .t4-all-sub'); if (!at) { try { toast(msg); } catch (_) {} return; }
-    var n = document.createElement('p'); n.className = 't4-notice'; n.setAttribute('role', 'status'); n.textContent = msg; at.insertAdjacentElement('afterend', n);
+    /* K4(4단계): 지금 보이는 자리에. 390 = 아래 고정 띠 바로 위(화면에 고정), 1440 = 오른쪽 카드 주 단추 바로 아래(카드는 따라온다) */
+    var bar = $('t4-bar'), card = $('t4-card'), n = document.createElement('p'); n.className = 't4-notice'; n.setAttribute('role', 'status'); n.textContent = msg;
+    if (shown(bar)) { n.classList.add('t4-notice-fixed'); document.body.appendChild(n); }
+    else if (shown(card)) { var pb = card.querySelector('.t4-primary'); (pb || card).insertAdjacentElement(pb ? 'afterend' : 'beforeend', n); }
+    else { try { toast(msg); } catch (_) {} return; }
     noticeT = setTimeout(function () { n.remove(); }, 3200);
   }
   addEventListener('hashchange', function () { clearTimeout(noticeT); document.querySelectorAll('.t4-notice').forEach(function (n) { n.remove(); }); });
