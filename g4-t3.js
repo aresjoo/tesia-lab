@@ -373,7 +373,20 @@
   var tradesGo = mkGoTrades;
   mkGoTrades = function (ne) { if (current) preserve(); return tradesGo.apply(this, arguments); };
   var oldAdjust = cpAdjCommit;
-  cpAdjCommit = function () { var on = !!document.querySelector('.t3-detail'), id = current && current.s.id, v = oldAdjust.apply(this, arguments); if (on && id) { preserve(); lastSig = ''; tfSS3DetailRender(id, 'all', 'ov'); } return v; };
+  /* K21: 앱의 예산 변경은 토스트를 부른 뒤 상세를 다시 그린다. 390 안내 줄이 먼저 본문을 올리고(57px) 다시 그리기에 지워지던 것 →
+     누르기 전 스크롤을 그대로 두고, 토스트는 다시 그린 뒤 보이는 「내 운용 자산」 줄 아래에 낸다(1440 은 앱 토스트 그대로) */
+  cpAdjCommit = function () {
+    var on = !!document.querySelector('.t3-detail'), id = current && current.s.id;
+    if (!(on && id)) return oldAdjust.apply(this, arguments);
+    var sc = scroller(), y0 = sc ? sc.scrollTop : scrollY, said = [], keep = toast, v;
+    toast = function (m) { said.push(m); };
+    try { v = oldAdjust.apply(this, arguments); } finally { toast = keep; }
+    if (sc) sc.scrollTop = y0; else scrollTo(0, y0);
+    preserve(); lastSig = ''; tfSS3DetailRender(id, 'all', 'ov');
+    sc = scroller(); if (sc) sc.scrollTop = y0; else scrollTo(0, y0); /* 복원(restoreY)은 다음 프레임이라 안내 자리를 고르기 전에 같은 자리로 */
+    noticeAt = '.t3-detail .t3-owned'; try { said.forEach(function (m) { toast(m); }); } finally { noticeAt = ''; }
+    return v;
+  };
   /* I5: T4 는 고른 맥락(전략, 기간, $1,000)을 받는다. T4 의 가입·재생은 T4 몫 */
   var oldBTView = btView;
   btView = function () { var h = read('g4.t3.verify'); if (h && BT.s && h.strategyId === BT.s.id) { BT.per = h.per; BT.amt = h.budget; BT.R = null; write('g4.t3.verify', null); } return oldBTView.apply(this, arguments); };
@@ -583,7 +596,7 @@
   }
   /* K4·K10(I9): 390 상세의 안내(사용량 소진 등)는 떠 있는 토스트가 아니라 「지금」 문장 바로 아래 흐름 안의 한 줄.
      아무것도 덮지 않고(아래 글이 밀림), 바 뒤로 가면 그만큼만 본문을 올려 보이게 하고, 화면을 떠나면 바로 사라진다 */
-  var noticeT = 0;
+  var noticeT = 0, noticeAt = '';
   function dropNotice() { clearTimeout(noticeT); document.querySelectorAll('.t3-notice').forEach(function (n) { n.remove(); }); }
   addEventListener('hashchange', dropNotice); addEventListener('popstate', dropNotice);
   var t3Toast = toast;
@@ -592,8 +605,14 @@
     if (!onDetail() || innerWidth > 860 || !nowEl) return t3Toast.apply(this, arguments);
     dropNotice();
     var n = document.createElement('p'); n.className = 't3-notice'; n.setAttribute('role', 'status'); n.textContent = message;
-    nowEl.insertAdjacentElement('afterend', n);
-    var bar = document.querySelector('.t3-mobile-bar'), barTop = bar ? bar.getBoundingClientRect().top : innerHeight, r = n.getBoundingClientRect();
+    var bar = document.querySelector('.t3-mobile-bar'), barTop = bar ? bar.getBoundingClientRect().top : innerHeight;
+    var at = nowEl;
+    if (noticeAt) { /* K21: 예산 변경 뒤에는 본문을 움직이지 않는다. 「내 운용 자산」 줄이나 「지금」 줄 아래에 자리가 보이면 거기, 없으면 앱 토스트 */
+      at = [document.querySelector(noticeAt), nowEl].filter(Boolean).find(function (e) { var q = e.getBoundingClientRect(); return q.top >= 64 && q.bottom < barTop - 60; });
+      if (!at) return t3Toast.apply(this, arguments);
+    }
+    at.insertAdjacentElement('afterend', n);
+    var r = n.getBoundingClientRect();
     var sc = scroller(), by = 0;
     if (r.bottom > barTop - 8) by = r.bottom - barTop + 12; else if (r.top < 64) by = r.top - 72;
     if (by) { if (sc) sc.scrollTop += by; else window.scrollBy(0, by); }
