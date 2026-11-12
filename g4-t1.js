@@ -39,7 +39,9 @@
     managed: 'TETH AI가 내 거래소에서 직접 운용 중', linked: ' 계정 연결 완료',
     start: '내 $1,000으로 이 전략 시작하기', invested: '넣은 돈 ',
     ifInvested: '$1,000 넣었다면 지금', strategy: '전략', hold: '그냥 들고 있기',
-    records: 'TETH의 판단 기록', free: '영원히 무료, 카드 등록 필요없음'
+    records: 'TETH의 판단 기록', free: '영원히 무료, 카드 등록 필요없음',
+    /* 핫픽스 mine2(D3): 가상(env paper)으로 도는 내 전략. 앱 봇 상세(tfBotView)의 같은 상태 문구 그대로: 안내 줄, 상태 표시 */
+    paperNote: '가상 실행은 자산 차감 없이 신호와 체결을 재현합니다.', paper: '가상 실행'
   };
   var arrived = false;
   function bars() { return '<span class="g4-bars" aria-hidden="true"><i></i><i></i><i></i></span>'; }
@@ -105,10 +107,10 @@
     var action = '<div class="g4-actions"><button class="g4-primary" type="button" onclick="G4T1.primary()">' + (mineRow ? '규칙 수정하기' : row ? '예산 조정' : isLinked ? '이 전략 복사하기' : '이 전략 보기') + '</button>'
       + (!row ? '<p class="g4-free">' + COPY.free + '</p>' : '<nav class="g4-secondary"><a href="#/trade/chart">차트 보기</a>' + (mineRow ? '' : '<button type="button" onclick="G4T1.stop()">복사 중단</button>') + '</nav>') + '</div>';
     var body = '<main class="g4-trade ' + (row ? 'g4-owned' + (multiple ? ' g4-multiple' : '') : isLinked ? 'g4-linked' : 'g4-first') + (!arrived ? ' g4-arrive' : '') + '" lang="ko">' + choose
-      + '<p class="g4-usp">' + (row ? bars() + COPY.managed : isLinked ? esc(acName(D.exchange(s))) + COPY.linked : COPY.usp) + '</p>'
+      + '<p class="g4-usp">' + (row && row.paper ? bars() + COPY.paperNote : row ? bars() + COPY.managed : isLinked ? esc(acName(D.exchange(s))) + COPY.linked : COPY.usp) + '</p>'
       + (isLinked ? '<h1 class="g4-start">' + COPY.start + '</h1>' : '')
       + '<section class="g4-money" aria-label="' + esc(row ? title(row) : mkTitle(s)) + '"><div class="g4-strategy">' + mkGlyph(s, 36)
-      + '<div><span>' + esc(row ? title(row) : mkTitle(s)) + '</span><small>' + esc(mineRow ? '내 전략' : MK_KIND[s.kind]) + '</small></div>' + mkExTag(s) + '</div>'
+      + '<div><span>' + esc(row ? title(row) : mkTitle(s)) + '</span><small>' + esc(mineRow ? '내 전략' : MK_KIND[s.kind]) + '</small></div>' + (row && row.paper ? '<span class="mk-xtag">' + COPY.paper + '</span>' : mkExTag(s)) + '</div>'
       + (row ? '<h1 id="g4-title">내 자산<strong class="g4-amount">' + money(row.d.value, true) + '</strong></h1>' + (D.hasFill(row) ? '<p class="g4-profit ' + (row.d.total >= 0 ? 'up' : 'down') + '">' + signed(row.d.total) + ' (' + mkPct0(row.d.myPct * 100, 1) + ')</p>' : '') + '<p class="g4-invested">' + COPY.invested + money(row.d.inv, true) + '</p>' + (D.hasFill(row) ? curve(s, row, false) : '') : proof(s, false))
       + running(s, row) + (row || isLinked ? action : '') + '</section>'
       + '<section class="g4-history" aria-labelledby="g4-history-title"><div class="g4-section-head"><h2 id="g4-history-title">' + COPY.records + '</h2><button type="button" aria-expanded="false" onclick="G4T1.toggleRecords(this)">판단 기록 보기</button></div><ol>' + records(s) + '</ol></section>'

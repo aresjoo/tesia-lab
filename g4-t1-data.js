@@ -52,7 +52,7 @@
       if (!st.g4name && k === 0 && ai.name && ai.rsiTh === st.p.rsiTh && (ai.tp == null || ai.tp === st.p.tp)) { st.g4name = ai.name; named = true; }
       var s = liveStrategy(st); if (!s) return null;
       var cap = (st.cap || 0) / 1000;
-      return { c: { id: 'mine:' + st.at }, s: s, st: st, mine: true, d: { value: cap, inv: cap, total: 0, myPct: 0, lots: [], posOpen: false, waiting: 0 } };
+      return { c: { id: 'mine:' + st.at }, s: s, st: st, mine: true, paper: st.env === 'paper', d: { value: cap, inv: cap, total: 0, myPct: 0, lots: [], posOpen: false, waiting: 0 } };
     }).filter(Boolean);
     if (named && typeof tfSave === 'function') tfSave();
     return rows;
