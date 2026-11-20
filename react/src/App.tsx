@@ -1,5 +1,6 @@
 // 앱 셸 (원본 <div id="g-root">). 화면은 해시 경로로 고르고, 아직 옮기지 않은 경로는 원본을 연다.
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { tfSSFind } from './core/engine/catalog';
 import { AccountOverlays } from './screens/account/Overlays';
 import { accountGuard, accountScreen } from './screens/account/routes';
 import { BtScreen, isBtHash } from './screens/bt/BtScreen';
@@ -9,6 +10,10 @@ import { Chead } from './screens/conv/Chead';
 import { Composer } from './screens/conv/Composer';
 import { Activity, Conv, History } from './screens/conv/Conv';
 import { Home, homeMarkEntered } from './screens/home/Home';
+import { CopyDetail } from './screens/share/CopyDetail';
+import { Detail } from './screens/share/Detail';
+import { FollowSheet } from './screens/share/FollowSheet';
+import { Hub } from './screens/share/Hub';
 import { Chead as NFChead } from './screens/insight/NFView';
 import { useNFRoute } from './screens/insight/route';
 import { NfUtil } from './screens/trade/NfUtil';
@@ -20,12 +25,21 @@ import { AppBanner, FeedbackPanel, GlcPanel, HelpWidget, SetMenu, Toast, TopBar 
 import { Sidebar } from './shell/Sidebar';
 import { G, useConv } from './state/conv';
 import { useBodyClass, useWinWidth } from './state/hooks';
-import { useHash } from './state/route';
+import { parseHash, useHash } from './state/route';
 import { setState, sideMobClose, sideToggle, useApp } from './state/store';
 import { taiBoot } from './state/tai';
 
 /** GFT_MODES: 푸터가 붙는 화면. 대화, 백테스트, 터미널, 설정은 뺀다 (메인 홈만 라임, 나머지는 검정) */
 const GFT_MODES: Record<string, 1> = { home: 1, tfintro: 1, tfinactive: 1, tfss3: 1, tfss3d: 1, tfbrokers: 1, tfbroker: 1, tfcpx: 1, nfplan: 1, nfbot: 1, nfins: 1, nfreview: 1, nfperiodic: 1 };
+
+/** gChead(mkHook(s)): 전략 상세의 머리줄 제목은 전략 이름 */
+function detailTitle(ne: string): string {
+  try {
+    return tfSSFind(decodeURIComponent(ne))?.name || '전략 복사';
+  } catch {
+    return '전략 복사';
+  }
+}
 
 export function App() {
   const hash = useHash(); /* 경로가 바뀌면 다시 그린다 */
@@ -41,10 +55,23 @@ export function App() {
   const tradeOn = !!trade && trade.mode !== 'gate';
   /* 인사이트, 거래복기, 정기 보고 (원본 tfNFRoute) */
   const nf = useNFRoute(bt || acct || trade ? '' : hash);
-  const routed = bt || !!acct || !!trade || !!nf;
-  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : acct ? acct.mode : trade ? (tradeOn ? trade.mode : 'home') : nf ? nf.mode : G.mode;
+  /* 전략 복사: 목록(tfss3), 전략 상세(tfss3d), 복사한 전략 상세(tfcpx). #/share/bt/ 는 위의 백테스트가 먼저 가져간다 */
+  const shScr = bt || acct || trade || nf ? null : parseHash(hash);
+  const share = shScr && shScr.k !== 'home' ? shScr : null;
+  const routed = bt || !!acct || !!trade || !!nf || !!share;
+  const shareMode = !share ? '' : share.k === 'share' ? 'tfss3' : share.k === 'detail' ? 'tfss3d' : 'tfcpx';
+  const shareTitle = !share ? '' : share.k === 'detail' ? detailTitle(share.ne) : share.k === 'share' ? '전략 복사' : '';
+  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : acct ? acct.mode : trade ? (tradeOn ? trade.mode : 'home') : nf ? nf.mode : share ? shareMode : G.mode;
   const home = mode === 'home';
-  const title = acct ? acct.title : tradeOn ? tradeTitle(trade) : nf ? nf.title : '';
+  const title = acct ? acct.title : tradeOn ? tradeTitle(trade) : nf ? nf.title : share ? shareTitle : '';
+  /* 전략 복사의 화면이 바뀌면 맨 위로. 같은 상세 안의 기간, 탭 전환은 그대로 둔다 */
+  const shareKey = !share ? '' : share.k === 'detail' ? 'd:' + share.ne : share.k === 'copy' ? 'c:' + share.cid : share.k;
+  useLayoutEffect(() => {
+    if (!shareKey) return;
+    const s = document.getElementById('g-scroll');
+    if (s) s.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }, [shareKey]);
   const chead = useApp((s) => s.chead);
   useEffect(() => {
     accountGuard(hash, user);
@@ -126,7 +153,7 @@ export function App() {
         <div className="g-body">
           <Sidebar />
           <main className="g-center">
-            {acct || tradeOn || nf ? <NFChead title={(acct && chead) || title} /> : !routed && <Chead />}
+            {acct || tradeOn || nf || share ? <NFChead title={(acct && chead) || title} /> : !routed && <Chead />}
             <div className="g-scroll" id="g-scroll">
               <div id="g-content">
                 {bt ? (
@@ -141,6 +168,14 @@ export function App() {
                   <TradeScreen pick={trade} />
                 ) : nf ? (
                   nf.el
+                ) : share ? (
+                  share.k === 'share' ? (
+                    <Hub />
+                  ) : share.k === 'detail' ? (
+                    <Detail key={share.ne} ne={share.ne} pd={share.pd} tab={share.tab} setup={!!share.setup} />
+                  ) : (
+                    <CopyDetail key={share.cid} cid={share.cid} tab={share.tab} />
+                  )
                 ) : mode === 'conv' ? (
                   <Conv key={G.cur ? G.cur.id : ''} />
                 ) : mode === 'activity' ? (
@@ -168,6 +203,7 @@ export function App() {
       <Toast />
       <AuthModal />
       <AccountOverlays />
+      <FollowSheet />
       <HelpWidget />
     </>
   );

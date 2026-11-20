@@ -1,6 +1,7 @@
 // 퍼널 상태(tfS)를 브라우저 저장소와 앱 상태에 잇는다. 모양과 규칙은 core/bt/tf.ts, core/bt/tfStore.ts.
 import { tfS as acctTfS, tfSave as acctTfSave } from '../../core/account/tf';
 import { tfNormalize, type TfState } from '../../core/bt/tf';
+import { tfIntentClear, tfIntentPeek } from '../../core/account/ac';
 import { getState } from '../../state/store';
 
 /** tfS(): 앱에 하나뿐인 전략 상태(core/account/tf.ts 의 S.tf)를 이 조각의 모양으로 본다. 손님 것은 저장되지 않는다. */
@@ -25,43 +26,14 @@ export function tfTrack(n: string, p: Record<string, unknown> = {}): void {
   }
 }
 
-/* 하려던 일 하나를 기억한다 (원본 tfIntentSet, tfIntentPeek, tfIntentClear) */
-export interface Intent {
-  kind: string;
-  id?: string;
-  from?: string;
-  at?: number;
-}
-export function tfIntentSet(o: Intent): void {
-  o.at = Date.now();
-  try {
-    sessionStorage.setItem('teth.intent', JSON.stringify(o));
-  } catch {
-    /* 무시 */
-  }
-}
-export function tfIntentPeek(): Intent | null {
-  let o: Intent | null = null;
-  try {
-    o = JSON.parse(sessionStorage.getItem('teth.intent') || 'null');
-  } catch {
-    /* 무시 */
-  }
-  return o && Date.now() - (o.at || 0) < 1800000 ? o : null;
-}
-export function tfIntentClear(): void {
-  try {
-    sessionStorage.removeItem('teth.intent');
-  } catch {
-    /* 무시 */
-  }
-}
+/* 하려던 일 하나를 기억한다 (원본 tfIntentSet, tfIntentPeek, tfIntentClear): 앱에 한 벌, core/account/ac.ts 것을 쓴다 */
+export { tfIntentClear, tfIntentPeek, tfIntentSet, type Intent } from '../../core/account/ac';
 
 /** tfIntentRun() 가운데 백테스트로 돌아가는 가지: 인증이 끝나면 한 번만 꺼내 그 자리로 간다. 다른 종류(copy, start, settings)는 그 화면을 맡은 조각이 잇는다 */
 export function tfIntentRun(): boolean {
   const o = tfIntentPeek();
   if (!o || !getState().user || o.kind !== 'bt') return false;
   tfIntentClear();
-  window.location.hash = '#/share/bt/' + o.id;
+  window.location.hash = '#/share/bt/' + String(o.id);
   return true;
 }

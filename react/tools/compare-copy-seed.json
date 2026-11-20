@@ -1,0 +1,832 @@
+{
+ "_": "전략 복사(복사 흐름) 견줌용 씨앗. 원본 함수(cpStart, cpAdjCommit, mkStopGo, cpClose, cpFlat)로 만든 복사 여섯 건. o 는 원본 localStorage, r 은 React localStorage. 전략 상태는 두 쪽 모두 같은 teth.state 덩이를 쓰고, React 는 회원 표시(teth.react.user)만 더 둔다",
+ "o": {
+  "teth.state": {
+   "v": 1,
+   "savedAt": 1795050000000,
+   "user": {
+    "name": "김도현",
+    "email": ""
+   },
+   "fbLog": [],
+   "alerts": [],
+   "lastSid": null,
+   "tf": {
+    "intake": {},
+    "qi": 0,
+    "tries": [],
+    "cur": null,
+    "score": 0,
+    "plan": null,
+    "cycle": "year",
+    "ex": null,
+    "uid": null,
+    "api": {
+     "ex": "bitget"
+    },
+    "shared": false,
+    "followers": 0,
+    "reward": 0,
+    "fills": [],
+    "strat": [],
+    "ob": {
+     "st": "idle",
+     "ex": null,
+     "uid": "",
+     "err": null
+    },
+    "creditBal": 0,
+    "creditGrants": {},
+    "creditReqs": [],
+    "notifs": [],
+    "rebates": [],
+    "reviews": [],
+    "periodics": [],
+    "notifPrefs": {
+     "pos": true,
+     "loss": true,
+     "review": true,
+     "rebate": true,
+     "watch": true,
+     "chW": true,
+     "chK": false,
+     "chT": false,
+     "chM": false
+    },
+    "uidLinked": true,
+    "freeUsed": 0,
+    "creditSeen": {},
+    "notifKeys": {},
+    "reviewKeys": {},
+    "fillLog": [],
+    "bill": {
+     "v": 1,
+     "ledger": [
+      {
+       "id": "L17942760000000",
+       "at": 1794276000000,
+       "type": "grant",
+       "reason": "welcome",
+       "amt": 100,
+       "ref": null
+      }
+     ],
+     "seen": {
+      "welcome": 1794276000000,
+      "recon:20767": 1794276000000
+     },
+     "coupons": [],
+     "events": [
+      {
+       "at": 1794276000000,
+       "key": "welcome",
+       "data": {
+        "amt": 100
+       }
+      },
+      {
+       "at": 1794276000000,
+       "key": "recon",
+       "data": {
+        "day": 20767,
+        "fixed": 0,
+        "bal": 100
+       }
+      }
+     ],
+     "mode": "active",
+     "graceAt": null,
+     "cardOn": false,
+     "cycleAt": null,
+     "cardFails": 0
+    },
+    "ac": {
+     "route": null,
+     "ex": null,
+     "has": null,
+     "g": 0,
+     "pay": {
+      "st": "none"
+     },
+     "auth": {
+      "st": "idle"
+     },
+     "uid": {
+      "st": "none"
+     },
+     "conn": {
+      "bitget": {
+       "via": "partner",
+       "at": 1794276000000,
+       "uid": "12345678",
+       "kyc": "ok"
+      }
+     },
+     "cards": [],
+     "bill": [],
+     "sub": null,
+     "kyc": {
+      "st": "none"
+     }
+    },
+    "cp": {
+     "v": 1,
+     "spot": 1939.467650764457,
+     "copies": [
+      {
+       "id": "cp1794276000000",
+       "nick": "BNB 평균선 양방향 2배",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "비앤비"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "skip"
+       },
+       "at": 1794276000000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794276000000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        },
+        {
+         "at": 1794826800000,
+         "type": "add",
+         "amt": 250.5,
+         "i": 1412
+        }
+       ]
+      },
+      {
+       "id": "cp1794276420000",
+       "nick": "코인 셋 나눠 담기",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "가상자산 8종"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 60,
+        "maxPosX": 5,
+        "maxLoss": -30,
+        "existing": "copy"
+       },
+       "at": 1794276420000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794276420000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        },
+        {
+         "at": 1794461400000,
+         "type": "add",
+         "amt": 200,
+         "i": 1412
+        },
+        {
+         "at": 1794705000000,
+         "type": "out",
+         "amt": 100,
+         "i": 1412
+        }
+       ]
+      },
+      {
+       "id": "cp1794280800000",
+       "nick": "BTC 큰 하락 뒤",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "BTC/USDT"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -10,
+        "existing": "skip"
+       },
+       "at": 1794280800000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794280800000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        }
+       ],
+       "flats": [
+        1412
+       ],
+       "flatI": 1412
+      },
+      {
+       "id": "cp1794357900000",
+       "nick": "기술주 회복 기다리기",
+       "mode": "ratio",
+       "amount": 200,
+       "pairs": [
+        "미국 기술주 8종"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "skip"
+       },
+       "at": 1794357900000,
+       "status": "closed",
+       "ledger": [
+        {
+         "at": 1794357900000,
+         "type": "add",
+         "amt": 200,
+         "i": 1382
+        },
+        {
+         "at": 1794994200000,
+         "type": "out",
+         "amt": 189.96765076445703,
+         "i": 1412
+        }
+       ],
+       "endI": 1412,
+       "closedAt": 1794994200000,
+       "settle": {
+        "net": -10.032349235542966,
+        "share": 0,
+        "back": 189.96765076445703
+       }
+      },
+      {
+       "id": "cp1794384900000",
+       "nick": "DOGE 평균선 양방향 2배",
+       "mode": "ratio",
+       "amount": 700,
+       "pairs": [
+        "DOGE/USDT"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -50,
+        "existing": "copy"
+       },
+       "at": 1794384900000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794384900000,
+         "type": "add",
+         "amt": 700,
+         "i": 1382
+        }
+       ],
+       "stopMode": "wait",
+       "winding": true,
+       "windAt": 1794992400000,
+       "stopI": 1412
+      },
+      {
+       "id": "cp1794385800000",
+       "nick": "AVAX 평균선 양방향",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "아발란체"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "copy"
+       },
+       "at": 1794385800000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794385800000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        }
+       ],
+       "stopMode": "manual",
+       "winding": true,
+       "windAt": 1794992700000,
+       "stopI": 1412
+      }
+     ]
+    },
+    "ss": {
+     "tab": "find",
+     "sort": "ret",
+     "asset": "all",
+     "pd": "all"
+    },
+    "follows": [],
+    "termClones": [],
+    "orders": []
+   },
+   "sessions": []
+  }
+ },
+ "r": {
+  "teth.react.user": {
+   "name": "김도현"
+  },
+  "teth.state": {
+   "v": 1,
+   "savedAt": 1795050000000,
+   "user": {
+    "name": "김도현",
+    "email": ""
+   },
+   "fbLog": [],
+   "alerts": [],
+   "lastSid": null,
+   "tf": {
+    "intake": {},
+    "qi": 0,
+    "tries": [],
+    "cur": null,
+    "score": 0,
+    "plan": null,
+    "cycle": "year",
+    "ex": null,
+    "uid": null,
+    "api": {
+     "ex": "bitget"
+    },
+    "shared": false,
+    "followers": 0,
+    "reward": 0,
+    "fills": [],
+    "strat": [],
+    "ob": {
+     "st": "idle",
+     "ex": null,
+     "uid": "",
+     "err": null
+    },
+    "creditBal": 0,
+    "creditGrants": {},
+    "creditReqs": [],
+    "notifs": [],
+    "rebates": [],
+    "reviews": [],
+    "periodics": [],
+    "notifPrefs": {
+     "pos": true,
+     "loss": true,
+     "review": true,
+     "rebate": true,
+     "watch": true,
+     "chW": true,
+     "chK": false,
+     "chT": false,
+     "chM": false
+    },
+    "uidLinked": true,
+    "freeUsed": 0,
+    "creditSeen": {},
+    "notifKeys": {},
+    "reviewKeys": {},
+    "fillLog": [],
+    "bill": {
+     "v": 1,
+     "ledger": [
+      {
+       "id": "L17942760000000",
+       "at": 1794276000000,
+       "type": "grant",
+       "reason": "welcome",
+       "amt": 100,
+       "ref": null
+      }
+     ],
+     "seen": {
+      "welcome": 1794276000000,
+      "recon:20767": 1794276000000
+     },
+     "coupons": [],
+     "events": [
+      {
+       "at": 1794276000000,
+       "key": "welcome",
+       "data": {
+        "amt": 100
+       }
+      },
+      {
+       "at": 1794276000000,
+       "key": "recon",
+       "data": {
+        "day": 20767,
+        "fixed": 0,
+        "bal": 100
+       }
+      }
+     ],
+     "mode": "active",
+     "graceAt": null,
+     "cardOn": false,
+     "cycleAt": null,
+     "cardFails": 0
+    },
+    "ac": {
+     "route": null,
+     "ex": null,
+     "has": null,
+     "g": 0,
+     "pay": {
+      "st": "none"
+     },
+     "auth": {
+      "st": "idle"
+     },
+     "uid": {
+      "st": "none"
+     },
+     "conn": {
+      "bitget": {
+       "via": "partner",
+       "at": 1794276000000,
+       "uid": "12345678",
+       "kyc": "ok"
+      }
+     },
+     "cards": [],
+     "bill": [],
+     "sub": null,
+     "kyc": {
+      "st": "none"
+     }
+    },
+    "cp": {
+     "v": 1,
+     "spot": 1939.467650764457,
+     "copies": [
+      {
+       "id": "cp1794276000000",
+       "nick": "BNB 평균선 양방향 2배",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "비앤비"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "skip"
+       },
+       "at": 1794276000000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794276000000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        },
+        {
+         "at": 1794826800000,
+         "type": "add",
+         "amt": 250.5,
+         "i": 1412
+        }
+       ]
+      },
+      {
+       "id": "cp1794276420000",
+       "nick": "코인 셋 나눠 담기",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "가상자산 8종"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 60,
+        "maxPosX": 5,
+        "maxLoss": -30,
+        "existing": "copy"
+       },
+       "at": 1794276420000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794276420000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        },
+        {
+         "at": 1794461400000,
+         "type": "add",
+         "amt": 200,
+         "i": 1412
+        },
+        {
+         "at": 1794705000000,
+         "type": "out",
+         "amt": 100,
+         "i": 1412
+        }
+       ]
+      },
+      {
+       "id": "cp1794280800000",
+       "nick": "BTC 큰 하락 뒤",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "BTC/USDT"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -10,
+        "existing": "skip"
+       },
+       "at": 1794280800000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794280800000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        }
+       ],
+       "flats": [
+        1412
+       ],
+       "flatI": 1412
+      },
+      {
+       "id": "cp1794357900000",
+       "nick": "기술주 회복 기다리기",
+       "mode": "ratio",
+       "amount": 200,
+       "pairs": [
+        "미국 기술주 8종"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "skip"
+       },
+       "at": 1794357900000,
+       "status": "closed",
+       "ledger": [
+        {
+         "at": 1794357900000,
+         "type": "add",
+         "amt": 200,
+         "i": 1382
+        },
+        {
+         "at": 1794994200000,
+         "type": "out",
+         "amt": 189.96765076445703,
+         "i": 1412
+        }
+       ],
+       "endI": 1412,
+       "closedAt": 1794994200000,
+       "settle": {
+        "net": -10.032349235542966,
+        "share": 0,
+        "back": 189.96765076445703
+       }
+      },
+      {
+       "id": "cp1794384900000",
+       "nick": "DOGE 평균선 양방향 2배",
+       "mode": "ratio",
+       "amount": 700,
+       "pairs": [
+        "DOGE/USDT"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -50,
+        "existing": "copy"
+       },
+       "at": 1794384900000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794384900000,
+         "type": "add",
+         "amt": 700,
+         "i": 1382
+        }
+       ],
+       "stopMode": "wait",
+       "winding": true,
+       "windAt": 1794992400000,
+       "stopI": 1412
+      },
+      {
+       "id": "cp1794385800000",
+       "nick": "AVAX 평균선 양방향",
+       "mode": "ratio",
+       "amount": 500,
+       "pairs": [
+        "아발란체"
+       ],
+       "gen": {
+        "asof": [
+         2026,
+         11,
+         13
+        ],
+        "len": 1413
+       },
+       "simStartI": 1382,
+       "adv": {
+        "marginMode": "follow",
+        "lev": "follow",
+        "slip": "sys",
+        "maxMarginPct": 95,
+        "maxPosX": 5,
+        "maxLoss": -20,
+        "existing": "copy"
+       },
+       "at": 1794385800000,
+       "status": "active",
+       "ledger": [
+        {
+         "at": 1794385800000,
+         "type": "add",
+         "amt": 500,
+         "i": 1382
+        }
+       ],
+       "stopMode": "manual",
+       "winding": true,
+       "windAt": 1794992700000,
+       "stopI": 1412
+      }
+     ]
+    },
+    "ss": {
+     "tab": "find",
+     "sort": "ret",
+     "asset": "all",
+     "pd": "all"
+    },
+    "follows": [],
+    "termClones": [],
+    "orders": []
+   },
+   "sessions": []
+  }
+ }
+}

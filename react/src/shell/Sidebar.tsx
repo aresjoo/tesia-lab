@@ -108,7 +108,14 @@ export function Sidebar() {
         <span className="lb">AI 트레이딩</span>
         <span className="g-ico-pill lbp">AI 트레이딩</span>
       </button>
-      <button className="g-util" id="g-tf-share-btn" onClick={() => nav('#/share')}>
+      <button
+        className={'g-util' + (mode === 'tfss3' || mode === 'tfss3d' ? ' cur' : '')}
+        id="g-tf-share-btn"
+        onClick={() => {
+          nav('#/share');
+          sideMobClose();
+        }}
+      >
         <Ico size={16}>
           <path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.7-.7-2-.8-3-.2z" />
           <path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 21.5 2c0 2.7-.9 7.5-6 10.6a22.4 22.4 0 0 1-3.5 2.4z" />

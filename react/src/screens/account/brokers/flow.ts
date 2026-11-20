@@ -40,6 +40,7 @@ import { mkHash, S, tfBump, type AcRoute } from '../../../core/account/tf';
 import { nav } from '../../../state/route';
 import { authOpen, getState, toast } from '../../../state/store';
 import { acConfirm } from '../confirm';
+import { followOpen } from '../../share/copyActions';
 
 /** 지금 그릴 화면. view: plan=플랜 두 카드(plView), checkout=플랜 구성(plCheckout), page=플랜 뒤 화면(acPageView) */
 export const PL: {
@@ -194,8 +195,8 @@ export function acAfter(af: AcAfter) {
     return;
   }
   if (af.kind === 'copy') {
-    /* 원본은 그 자리에서 mkFollowSheet(id) 를 연다. 전략 복사 조각이 옮기기 전까지는 그 전략의 주소로 간다 */
-    nav('#/share/s/' + (af.id || ''));
+    /* 원본처럼 그 자리에서 복사 설정 창(mkFollowSheet)을 연다 */
+    followOpen(af.id || '');
     return;
   }
   if (af.kind === 'bt') {
