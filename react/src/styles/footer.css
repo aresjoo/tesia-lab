@@ -1,0 +1,45 @@
+/* 생성 파일: tools/extract-from-html.mjs 가 원본 index.html 에서 그대로 꺼낸다. 손으로 고치지 않는다. */
+.gft{--gft-fg:#fff;--gft-bg:#000;--gft-wm:#00f0ff;--gft-line:rgba(255,255,255,.3);--gft-ring:rgba(255,255,255,.25);container-type:inline-size;margin-top:48px;background:var(--gft-bg);color:var(--gft-fg);font-weight:500;word-break:keep-all;overflow-wrap:anywhere}
+.gft.gft-lime{--gft-fg:#0c0d0f;--gft-bg:#00f0ff;--gft-wm:#0c0d0f;--gft-line:#0c0d0f;--gft-ring:rgba(12,13,15,.55)} /* 메인 홈(채팅 랜딩)만 Bitget 청록, 나머지 페이지는 검정 */
+.gft-in{padding:0 40px 28px;border-top:2px solid var(--gft-line)} /* 로빈후드처럼 고객 관계 요약 줄 위아래를 굵은 선으로 */
+.gft-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 48px;align-items:center;min-height:86px;margin:0 -40px;padding:0 40px}
+.gft-rule{height:2px;background:var(--gft-line);margin:0 -40px 23px}
+.gft-crs{justify-self:start;width:fit-content;font-size:16px;line-height:1.3;font-weight:500;color:var(--gft-fg);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.gft-crs:hover{text-decoration-thickness:2px}
+.gft-follow{display:flex;align-items:center;gap:20px;justify-self:start}
+.gft-follow .gft-fl{margin-right:4px;font-size:16px;line-height:24px;font-weight:500;color:var(--gft-fg);white-space:nowrap}
+.gft-follow a{display:block;width:20px;height:20px;color:var(--gft-fg)}
+.gft-follow a[aria-label=X]{width:24px;height:24px}
+.gft-follow a:hover{opacity:.7}
+.gft-follow svg{display:block;width:100%;height:100%;fill:currentColor}
+.gft-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px 48px}
+.gft-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.gft-col h3{margin:0 0 16px;font-size:16px;font-weight:700;line-height:1.5;color:var(--gft-fg)}
+.gft-col a,.gft-col button{display:block;width:fit-content;margin:0 0 12px;padding:0;background:none;border:0;font:inherit;font-size:16px;font-weight:500;line-height:1.5;color:var(--gft-fg);text-decoration:none;text-align:left;cursor:pointer}
+.gft-col a:hover,.gft-col button:hover{text-decoration:underline;text-underline-offset:3px}
+.gft a:focus-visible,.gft button:focus-visible{outline:2px solid var(--gft-fg);outline-offset:3px;border-radius:2px}
+.gft-copy p{margin:0 0 16px;font-size:16px;font-weight:500;line-height:1.6;color:var(--gft-fg)}
+.gft-copy .dim{color:var(--gft-fg)}
+.gft-pw{display:flex;align-items:center;gap:8px;margin-top:72px;font-size:16px;font-weight:500;color:var(--gft-fg)} /* Powered by 는 본문 색(검정 푸터 흰색, 홈 검정). 라임은 워드마크만 */
+.gft-pw img{width:22px;height:22px;border-radius:6px;box-shadow:0 0 0 1px var(--gft-ring)}
+.gft-pw b{font-weight:700;color:var(--gft-fg)}
+.gft-wm{display:block;width:100%;height:auto;margin-top:14px;fill:var(--gft-wm)} /* 검정 푸터에서는 워드마크만 Bitget 청록, 홈(청록 푸터)은 검정 */
+@container (max-width:900px){
+  .gft-top{grid-template-columns:minmax(0,1fr)}
+  .gft-cols{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
+}
+@container (max-width:600px){
+  .gft-in{display:flex;flex-direction:column;padding:0 20px 20px}
+  .gft-bar,.gft-top{display:contents} /* 로빈후드 모바일 순서: 요약 링크, 선, 메뉴, 팔로우, 문단, Powered by, 워드마크 */
+  .gft-crs{order:1;margin:27px 0 27px} /* 로빈후드 모바일 실측 */
+  .gft-rule{order:2;margin:0 -20px 23px}
+  .gft-cols{order:3;grid-template-columns:minmax(0,1fr);row-gap:44px}
+  .gft-follow{order:4;gap:24px;margin:44px 0 0}
+  .gft-follow a{box-sizing:content-box;padding:12px;margin:-12px}
+  .gft-copy{order:5;margin-top:40px}
+  .gft-pw{order:6}
+  .gft-wm{order:7}
+  .gft-pw{margin-top:44px}
+  .gft-col h3{margin-bottom:25px}
+  .gft-col a,.gft-col button{line-height:25px;margin:0 0 8px}
+}
