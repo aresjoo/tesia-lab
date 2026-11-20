@@ -23,9 +23,10 @@ export const takeHomeIntent = () => {
   homeIntent = false;
   return v;
 };
-export function goHome() {
+export function goHome(replace: unknown = false) {
   homeIntent = true;
-  if (window.location.hash) history.pushState(null, '', window.location.pathname + window.location.search);
+  /* replace: 원본처럼 지금 주소를 바꿔 끼워 뒤로가기 기록을 남기지 않는다 (tfIns2Ask) */
+  if (window.location.hash) history[replace === true ? 'replaceState' : 'pushState'](null, '', window.location.pathname + window.location.search);
   window.dispatchEvent(new HashChangeEvent('hashchange'));
 }
 
@@ -41,4 +42,6 @@ const PORTED: RegExp[] = [
   /^#\/brokers(\/[a-z]+)?$/,
   /^#\/settings(\/[a-z]+)?$/,
   /^#\/plan(\/(rebates|alerts))?$/,
+  /* AI 트레이딩: 손님 소개, 비활성, 터미널, 봇 상세 */
+  /^#\/trade(\/bot\/[A-Za-z0-9]+)?$/,
 ];

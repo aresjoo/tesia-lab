@@ -11,6 +11,8 @@ import { Activity, Conv, History } from './screens/conv/Conv';
 import { Home, homeMarkEntered } from './screens/home/Home';
 import { Chead as NFChead } from './screens/insight/NFView';
 import { useNFRoute } from './screens/insight/route';
+import { NfUtil } from './screens/trade/NfUtil';
+import { TradeScreen, tradeTitle, useTradePick } from './screens/trade/route';
 import { routedEnter, routedLeave } from './state/back';
 import { AuthModal } from './shell/AuthModal';
 import { Footer } from './shell/Footer';
@@ -19,7 +21,7 @@ import { Sidebar } from './shell/Sidebar';
 import { G, useConv } from './state/conv';
 import { useBodyClass, useWinWidth } from './state/hooks';
 import { useHash } from './state/route';
-import { setState, sideToggle, useApp } from './state/store';
+import { setState, sideMobClose, sideToggle, useApp } from './state/store';
 import { taiBoot } from './state/tai';
 
 /** GFT_MODES: 푸터가 붙는 화면. 대화, 백테스트, 터미널, 설정은 뺀다 (메인 홈만 라임, 나머지는 검정) */
@@ -34,22 +36,26 @@ export function App() {
   const bt = isBtHash(hash) || isStrategyHash(hash);
   /* 거래소 연결, 설정, 이용 현황 */
   const acct = bt ? null : accountScreen(hash, user);
+  /* AI 트레이딩: 손님 소개, 비활성, 터미널, 봇 상세. gate 는 회원 전용 주소에 들어온 손님(로그인 창을 띄우고 홈으로) */
+  const trade = useTradePick(bt || acct ? '' : hash);
+  const tradeOn = !!trade && trade.mode !== 'gate';
   /* 인사이트, 거래복기, 정기 보고 (원본 tfNFRoute) */
-  const nf = useNFRoute(bt || acct ? '' : hash);
-  const routed = bt || !!acct || !!nf;
-  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : acct ? acct.mode : nf ? nf.mode : G.mode;
+  const nf = useNFRoute(bt || acct || trade ? '' : hash);
+  const routed = bt || !!acct || !!trade || !!nf;
+  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : acct ? acct.mode : trade ? (tradeOn ? trade.mode : 'home') : nf ? nf.mode : G.mode;
   const home = mode === 'home';
-  const title = acct ? acct.title : nf ? nf.title : '';
+  const title = acct ? acct.title : tradeOn ? tradeTitle(trade) : nf ? nf.title : '';
   const chead = useApp((s) => s.chead);
   useEffect(() => {
     accountGuard(hash, user);
   }, [hash, user]);
   /* gContent(): 다른 화면으로 넘어가면 맨 위에서 시작한다 */
   useEffect(() => {
-    if (!acct) return;
+    if (!acct && !trade) return;
     const sc = document.getElementById('g-scroll');
     if (sc) sc.scrollTop = 0;
     window.scrollTo(0, 0);
+    if (trade) sideMobClose(); /* 드로어에서 AI 트레이딩 화면을 골랐으면 드로어는 닫는다 */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
   const lang = useApp((s) => s.lang);
@@ -120,7 +126,7 @@ export function App() {
         <div className="g-body">
           <Sidebar />
           <main className="g-center">
-            {acct || nf ? <NFChead title={(acct && chead) || title} /> : !routed && <Chead />}
+            {acct || tradeOn || nf ? <NFChead title={(acct && chead) || title} /> : !routed && <Chead />}
             <div className="g-scroll" id="g-scroll">
               <div id="g-content">
                 {bt ? (
@@ -131,6 +137,8 @@ export function App() {
                   )
                 ) : acct ? (
                   acct.node
+                ) : trade ? (
+                  <TradeScreen pick={trade} />
                 ) : nf ? (
                   nf.el
                 ) : mode === 'conv' ? (
@@ -155,6 +163,7 @@ export function App() {
         <div id="gm-scrim" className={scrim ? 'on' : ''} onClick={() => setState({ setMenu: { open: false }, glcOpen: false })} />
         <SetMenu />
         <FeedbackPanel />
+        <NfUtil />
       </div>
       <Toast />
       <AuthModal />
