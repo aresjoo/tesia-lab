@@ -22,6 +22,8 @@ export type AppState = {
   toast: { text: string; show: boolean };
   /** 손님이 보내려던 말. 가입이 끝나면 이어서 쓴다. */
   pendingNew: string | null;
+  /** 지금 화면 (원본 G.mode): home, tfintro, tfdash, nfbot ... */
+  mode: string;
 };
 
 const ls = {
@@ -84,6 +86,7 @@ let state: AppState = {
   helpOpen: false,
   toast: { text: '', show: false },
   pendingNew: null,
+  mode: 'home',
 };
 
 const subs = new Set<() => void>();

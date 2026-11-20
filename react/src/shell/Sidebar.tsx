@@ -27,6 +27,9 @@ export function Sidebar() {
   const collapsed = useApp((s) => s.sideCollapsed);
   const mobileOpen = useApp((s) => s.sideMobileOpen);
   const menuOpen = useApp((s) => s.setMenu.open);
+  /** gSideCur(): 지금 화면을 진입 단추에 표시한다 */
+  const mode = useApp((s) => s.mode);
+  const curTrade = mode === 'tfdash' || (mode.indexOf('nf') === 0 && mode.indexOf('nfins') !== 0);
 
   const home = () => {
     goHome();
@@ -93,7 +96,7 @@ export function Sidebar() {
         <span className="lb">연구 기록</span>
         <span className="g-ico-pill lbp">연구 기록</span>
       </button>
-      <button className="g-util" id="g-tf-dash-btn" onClick={() => nav('#/trade')}>
+      <button className={'g-util' + (curTrade ? ' cur' : '')} id="g-tf-dash-btn" onClick={() => nav('#/trade')}>
         <Ico size={16}>
           <rect x="3" y="4" width="18" height="16" rx="2.5" />
           <path d="M7 15l3-4 2.5 2.5L17 9" />

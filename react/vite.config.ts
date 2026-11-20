@@ -14,7 +14,7 @@ function sharedAssets(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const u = decodeURIComponent((req.url || '').split('?')[0]);
-        if (!/^\/(assets|policies|logos)\//.test(u)) return next();
+        if (!/^\/(assets|policies|logos|data)\//.test(u)) return next();
         const f = path.join(repoRoot, u);
         if (!f.startsWith(repoRoot) || !fs.existsSync(f) || !fs.statSync(f).isFile()) return next();
         res.setHeader('Content-Type', MIME[path.extname(f).slice(1).toLowerCase()] || 'application/octet-stream');
