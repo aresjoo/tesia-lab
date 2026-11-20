@@ -1,30 +1,38 @@
 // 앱 셸 (원본 <div id="g-root">). 화면은 해시 경로로 고르고, 아직 옮기지 않은 경로는 원본을 연다.
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { BtScreen, isBtHash } from './screens/bt/BtScreen';
 import { StrategyScreen, isStrategyHash } from './screens/bt/GoScreen';
 import { tfIntentRun } from './screens/bt/tfState';
+import { Chead } from './screens/conv/Chead';
+import { Composer } from './screens/conv/Composer';
+import { Activity, Conv, History } from './screens/conv/Conv';
 import { Home, homeMarkEntered } from './screens/home/Home';
-import { Chead } from './screens/insight/NFView';
+import { Chead as NFChead } from './screens/insight/NFView';
 import { useNFRoute } from './screens/insight/route';
+import { routedEnter, routedLeave } from './state/back';
 import { AuthModal } from './shell/AuthModal';
 import { Footer } from './shell/Footer';
 import { AppBanner, FeedbackPanel, GlcPanel, HelpWidget, SetMenu, Toast, TopBar } from './shell/Overlays';
 import { Sidebar } from './shell/Sidebar';
+import { G, useConv } from './state/conv';
 import { useBodyClass, useWinWidth } from './state/hooks';
 import { useHash } from './state/route';
 import { setState, sideToggle, useApp } from './state/store';
+import { taiBoot } from './state/tai';
 
 /** GFT_MODES: 푸터가 붙는 화면. 대화, 백테스트, 터미널, 설정은 뺀다 (메인 홈만 라임, 나머지는 검정) */
 const GFT_MODES: Record<string, 1> = { home: 1, tfintro: 1, tfinactive: 1, tfss3: 1, tfss3d: 1, tfbrokers: 1, tfbroker: 1, tfcpx: 1, nfplan: 1, nfbot: 1, nfins: 1, nfreview: 1, nfperiodic: 1 };
 
 export function App() {
   const hash = useHash(); /* 경로가 바뀌면 다시 그린다 */
-  /* 화면 고르기: 조각마다 자기 경로를 본다. 아무도 맡지 않으면 홈이다 (원본 tfRoute, G.mode) */
+  useConv(); /* 대화를 열거나 닫으면 다시 그린다 */
+  /* 화면 고르기 (원본 tfRoute, G.mode): 해시 화면이면 그 조각이 그리고, 아니면 대화 쪽 상태(G.mode: home, conv, activity, history)를 따른다 */
   /* 백테스트 여정과 전략 만들기 퍼널 */
   const bt = isBtHash(hash) || isStrategyHash(hash);
   /* 인사이트, 거래복기, 정기 보고 (원본 tfNFRoute) */
   const nf = useNFRoute(bt ? '' : hash);
-  const mode = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : nf ? nf.mode : 'home';
+  const routed = bt || !!nf;
+  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : nf ? nf.mode : G.mode;
   const home = mode === 'home';
   const lang = useApp((s) => s.lang);
   const banner = useApp((s) => s.banner);
@@ -38,7 +46,17 @@ export function App() {
   useBodyClass('g-dark', true);
   useBodyClass('has-banner', banner && home); /* 앱 배너는 홈에서만 */
   useBodyClass('gft-doc', footerDoc, true);
-  useBodyClass('nochead', true); /* 대화 머리줄이 없는 화면 (홈 포함) */
+  useBodyClass('nochead', routed || !(G.cur && !home)); /* 머리줄은 대화가 열려 있을 때만 */
+  /* 해시 화면에 들어오면 보던 대화를 닫고, 뒤로가기로 나오면 그 대화로 돌아간다 */
+  const wasRouted = useRef(false);
+  useEffect(() => {
+    if (routed) routedEnter();
+    else if (wasRouted.current) routedLeave();
+    wasRouted.current = routed;
+  }, [routed, hash]);
+  useEffect(() => {
+    taiBoot(); /* AI 프록시 주소를 정하고, 새로고침이면 보던 대화의 끝으로 내려간다 */
+  }, []);
   /* 모바일: 아래로 내리면 메뉴 단추를 숨기고, 올리면 다시 보인다 */
   useEffect(() => {
     const s = document.getElementById('g-scroll');
@@ -84,13 +102,30 @@ export function App() {
         <div className="g-body">
           <Sidebar />
           <main className="g-center">
-            {nf && <Chead title={nf.title} />}
+            {nf ? <NFChead title={nf.title} /> : !routed && <Chead />}
             <div className="g-scroll" id="g-scroll">
               <div id="g-content">
-                {bt ? isBtHash(hash) ? <BtScreen hash={hash} /> : <StrategyScreen hash={hash} /> : nf ? nf.el : <Home />}
+                {bt ? (
+                  isBtHash(hash) ? (
+                    <BtScreen hash={hash} />
+                  ) : (
+                    <StrategyScreen hash={hash} />
+                  )
+                ) : nf ? (
+                  nf.el
+                ) : mode === 'conv' ? (
+                  <Conv key={G.cur ? G.cur.id : ''} />
+                ) : mode === 'activity' ? (
+                  <Activity />
+                ) : mode === 'history' ? (
+                  <History />
+                ) : (
+                  <Home />
+                )}
                 {footerOn && !footerDoc && <Footer lime={home} />}
               </div>
             </div>
+            {!routed && <Composer />}
           </main>
         </div>
         <div id="gft-slot" hidden={!footerDoc}>

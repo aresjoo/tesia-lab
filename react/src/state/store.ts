@@ -128,18 +128,23 @@ export function authOpen(mode: AuthMode = 'signup') {
 }
 export const authClose = () => setState((s) => ({ auth: { ...s.auth, open: false } }));
 
+/** 로그인과 로그아웃에 이어서 할 일. 대화 조각이 건다(보내려던 말 잇기, 남은 대화 비우기) */
+export const authHooks: { signedIn?: () => void; loggedOut?: () => void } = {};
+
 /** signupDone() */
 export function signIn(name: string) {
   ls.set('teth.react.user', JSON.stringify({ name }));
   const login = state.auth.mode === 'login';
   setState((s) => ({ user: { name }, auth: { ...s.auth, open: false } }));
   toast(login ? '다시 만나서 반갑습니다' : '계정 준비 완료, 시장은 기다려주지 않습니다');
+  authHooks.signedIn?.();
 }
 /** gLogout() */
 export function logout() {
   ls.set('teth.react.user', null);
   ls.set('teth.state', null); /* 원본 gLogout: 저장된 계정 상태(전략, 복기, 보고서)도 지운다. 다음에 로그인한 사람에게 보이지 않게 */
   setState({ user: null, pendingNew: null, setMenu: { open: false } });
+  authHooks.loggedOut?.();
   /* 원본 gLogout 은 gHome() 으로 끝난다: 다른 화면에 있었으면 주소를 지우고 홈으로 */
   if (window.location.hash) {
     try {

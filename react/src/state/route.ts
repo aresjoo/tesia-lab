@@ -16,7 +16,15 @@ export function nav(r: string) {
     else window.location.hash = r;
   } else window.location.href = legacy(r);
 }
+/** 단추로 홈(이나 다른 대화)을 골랐다는 표시. 해시 화면에서 나올 때 뒤로가기와 가르는 데 쓴다 (state/back.ts) */
+let homeIntent = false;
+export const takeHomeIntent = () => {
+  const v = homeIntent;
+  homeIntent = false;
+  return v;
+};
 export function goHome() {
+  homeIntent = true;
   if (window.location.hash) history.pushState(null, '', window.location.pathname + window.location.search);
   window.dispatchEvent(new HashChangeEvent('hashchange'));
 }

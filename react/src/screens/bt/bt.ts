@@ -31,6 +31,7 @@ import { authOpen, getState } from '../../state/store';
 import { acEx, acReady } from './ac';
 import { btAiCall } from './tai';
 import { tfIntentSet, tfS, tfSave, tfTrack } from './tfState';
+import { tfBackToChat } from '../../state/back';
 
 export type Phase = 'ready' | 'run' | 'result';
 export type Sel = { t: 'd' | 'e'; ix: number; j: number } | { t: 't'; id: number; j: number };
@@ -724,14 +725,9 @@ export const btNe = () => tfSS3Rid(BT.s as Strat);
 export const btGoTo = (st: string) => {
   window.location.hash = '#/share/bt/' + btNe() + (st ? '/' + st : '');
 };
-/** 지금 화면의 주소를 지우고 홈(대화)으로. 대화 조각이 붙으면 그 전략을 만든 대화로 돌아간다 (원본 tfBackToChat) */
+/** 지금 화면의 주소를 지우고 그 전략을 만든 대화로 돌아간다 (원본 tfBackToChat) */
 export function backToChat() {
-  try {
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  } catch {
-    /* 무시 */
-  }
-  window.dispatchEvent(new HashChangeEvent('hashchange'));
+  tfBackToChat();
 }
 /** btOpen(ne): 전략 상세의 「백테스트」 단추가 부른다. 손님이면 가입 창을 열고 하려던 일을 기억한다 */
 export function btOpen(ne: string) {

@@ -1,6 +1,8 @@
 // 원본 <aside id="g-side">. class 와 id 는 원본 CSS 가 그대로 먹도록 바꾸지 않는다.
 import type { MouseEvent } from 'react';
 import { PAGES } from '../core/config';
+import { SessList } from '../screens/conv/SessList';
+import { G, gHistory, gHome, useConv } from '../state/conv';
 import { useL } from '../state/hooks';
 import { goHome, nav } from '../state/route';
 import { authOpen, getState, setState, sideMobClose, sideToggle, useApp } from '../state/store';
@@ -30,9 +32,11 @@ export function Sidebar() {
   /** gSideCur(): 지금 화면을 들어가는 단추에 표시한다. 인사이트(nfins)는 설정 메뉴에 있어 표시하지 않는다 */
   const mode = useApp((s) => s.mode);
   const dashCur = mode === 'tfdash' || (mode.indexOf('nf') === 0 && mode.indexOf('nfins') !== 0);
+  useConv(); /* 연구 기록 단추의 지금 자리 표시 */
 
   const home = () => {
     goHome();
+    gHome(); /* 열려 있던 대화를 닫는다 */
     sideMobClose();
   };
   /** gBrandClick(): 접힌 레일에서는 사이드바 열기, 펼침에서는 홈 */
@@ -88,7 +92,7 @@ export function Sidebar() {
           {L('side.newTip')}
         </span>
       </button>
-      <button className="g-util" onClick={() => nav('#/history')}>
+      <button className={'g-util' + (G.mode === 'history' ? ' cur' : '')} onClick={gHistory}>
         <Ico size={16} sw={1.7} join={false}>
           <circle cx="11" cy="11" r="7" />
           <path d="M20 20l-4-4" />
@@ -133,11 +137,7 @@ export function Sidebar() {
         </span>
       </div>
       <div className="g-sec">최근</div>
-      <div id="g-sess-list">
-        <div className="g-note" style={{ padding: '4px 13px' }}>
-          아직 없음
-        </div>
-      </div>
+      <SessList />
       <div className="g-sec" id="g-live-sec" hidden>
         Live
       </div>

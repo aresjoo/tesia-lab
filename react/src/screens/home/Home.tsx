@@ -4,7 +4,10 @@ import { GSUB, pickGreet } from '../../core/greets';
 import { PH_ROT } from '../../core/i18n.data';
 import { TF_TPL_ACTS, TF_TPL_ASSETS, type TplAct, type TplAsset } from '../../core/templates.data';
 import { EMPTY_SEL, TPL_MAX, tplOf, tplText, tplToggle, type TplKind, type TplSel } from '../../core/templates';
+import { G } from '../../state/conv';
 import { useBodyClass, useL, useOutside, usePop } from '../../state/hooks';
+import { gNew } from '../../state/tai';
+import { gPillDropEnd, gPillDropStart } from '../conv/pillDrop';
 import { authOpen, setState, toast, useApp } from '../../state/store';
 import { POLICY, withLinks } from '../../shell/Overlays';
 import { Cosmos } from './Cosmos';
@@ -156,9 +159,23 @@ export function Home() {
   /** gNew: 템플릿만 골랐으면 만든 명령 그대로, 글도 있으면 명령 + 글 */
   const submit = () => {
     const text = tpl ? (typed ? tpl.cmd + '. ' + typed : tpl.cmd) : typed || '비트코인이 떨어졌을 때 사는 전략';
-    setState({ pendingNew: text });
-    if (!user) authOpen('signup');
+    /* 손님이 보내면 가입 창을 띄우고, 가입이 끝나면 이어서 시작한다 */
+    if (!user) {
+      setState({ pendingNew: text });
+      authOpen('signup');
+      return;
+    }
+    const drop = gPillDropStart(); /* 홈 화면이 바뀌기 전에 알약의 자리를 본떠 둔다 */
+    gNew(text, typed || text); /* 말풍선에는 사용자가 실제로 쓴 글만 */
+    gPillDropEnd(drop);
   };
+  /* 치다 만 글도 가입 직후 이어서 보낸다 (원본 AUTH.draft) */
+  useEffect(() => {
+    G.homeDraft = () => (typed ? { text: tpl ? tpl.cmd + '. ' + typed : typed, typed } : null);
+    return () => {
+      G.homeDraft = null;
+    };
+  });
 
   /** gExpToggle */
   const expToggle = (e?: MouseEvent) => {
