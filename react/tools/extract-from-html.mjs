@@ -89,4 +89,65 @@ const helpCss = /var css = ''\+([\s\S]*?);\n\s*var st =/.exec(helpJs);
 if (!helpCss) throw new Error('help-widget.js 의 css 를 찾지 못했다');
 fs.writeFileSync(path.join(out, 'styles/help.css'), banner + vm.runInNewContext(`''+${helpCss[1].replace(/\/\*[\s\S]*?\*\//g, '')}`));
 
+// 4. AI 지침 글 (taiSystem, taiConvSystem, taiMarketRules): 함수 본문을 그대로 돌려 글자를 꺼낸다
+/** `function NAME(` 부터 짝이 맞는 닫는 중괄호까지 */
+function funcSrc(src, name) {
+  const m = new RegExp(`(?:^|\\n)function\\s+${name}\\s*\\(`).exec(src);
+  if (!m) throw new Error(`function ${name} 을 찾지 못했다`);
+  let i = src.indexOf('{', m.index);
+  const start = m.index;
+  let depth = 0;
+  let quote = null;
+  for (; i < src.length; i++) {
+    const ch = src[i];
+    if (quote) {
+      if (ch === '\\') i++;
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '/' && src[i + 1] === '*') {
+      i = src.indexOf('*/', i + 2) + 1;
+      continue;
+    }
+    if (ch === "'" || ch === '"' || ch === '`') quote = ch;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return src.slice(start, i + 1);
+    }
+  }
+  throw new Error(`function ${name} 의 끝을 찾지 못했다`);
+}
+const promptCtx = vm.createContext({ TAI: { chart: null }, gStep: null });
+vm.runInContext(['taiSystem', 'taiConvSystem', 'taiMarketRules'].map((n) => funcSrc(scripts, n)).join('\n'), promptCtx);
+const convStep = {};
+for (const k of ['mode', 'pair', 'tf', 'risk', 'tp']) convStep[k] = vm.runInContext(`gStep=${JSON.stringify(k)}; taiConvSystem()`, promptCtx);
+fs.mkdirSync(path.join(out, 'core/tai'), { recursive: true });
+fs.writeFileSync(
+  path.join(out, 'core/tai/prompt.data.ts'),
+  banner +
+    ts('TAI_SYSTEM', 'string', vm.runInContext('taiSystem(null)', promptCtx)) +
+    ts('TAI_CONV_FREE', 'string', vm.runInContext('gStep=null; taiConvSystem()', promptCtx)) +
+    ts('TAI_CONV_STEP', 'Record<string, string>', convStep) +
+    ts('TAI_MARKET_RULES', 'string', vm.runInContext('taiMarketRules()', promptCtx)),
+);
+
+// 5. 전략 카드가 쓰는 표: 인테이크 선택지(teth-copy.js 의 TFCOPY.intakeOpt)와 백테스트 가격 자료가 있는 자산 이름(data/px-daily.js)
+const copyCtx = vm.createContext({ window: {} });
+vm.runInContext(fs.readFileSync(path.join(root, 'teth-copy.js'), 'utf8'), copyCtx);
+const pxCtx = vm.createContext({ window: {} });
+vm.runInContext(fs.readFileSync(path.join(root, 'data/px-daily.js'), 'utf8'), pxCtx);
+fs.mkdirSync(path.join(out, 'core/tf'), { recursive: true });
+fs.writeFileSync(
+  path.join(out, 'core/tf/intake.data.ts'),
+  banner +
+    ts('TF_INTAKE_OPT', 'Record<string, [string, string][]>', JSON.parse(JSON.stringify(copyCtx.window.TFCOPY.intakeOpt))) +
+    ts('TF_INTAKE_Q', 'Record<string, { t: string; d: string }>', JSON.parse(JSON.stringify(copyCtx.window.TFCOPY.intakeQ))) +
+    ts('PX_ASSETS', 'string[]', Object.keys(pxCtx.window.TETH_PX.px)) +
+    ts('BT_MINE_ALIAS', 'Record<string, string>', evalLit(scripts, 'BT_MINE_ALIAS')),
+);
+
+// (6) 탭과 문서 이름의 한글 표기 (G_LBL)
+fs.writeFileSync(path.join(out, 'core/tai/labels.data.ts'), '// 생성 파일: tools/extract-from-html.mjs. 손으로 고치지 않는다.\n' + ts('G_LBL', 'Record<string, string>', evalLit(scripts, 'G_LBL')));
+
 console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length);

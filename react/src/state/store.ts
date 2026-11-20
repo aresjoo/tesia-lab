@@ -125,17 +125,22 @@ export function authOpen(mode: AuthMode = 'signup') {
 }
 export const authClose = () => setState((s) => ({ auth: { ...s.auth, open: false } }));
 
+/** 로그인과 로그아웃에 이어서 할 일. 대화 조각이 건다(보내려던 말 잇기, 남은 대화 비우기) */
+export const authHooks: { signedIn?: () => void; loggedOut?: () => void } = {};
+
 /** signupDone() */
 export function signIn(name: string) {
   ls.set('teth.react.user', JSON.stringify({ name }));
   const login = state.auth.mode === 'login';
   setState((s) => ({ user: { name }, auth: { ...s.auth, open: false } }));
   toast(login ? '다시 만나서 반갑습니다' : '계정 준비 완료, 시장은 기다려주지 않습니다');
+  authHooks.signedIn?.();
 }
 /** gLogout() */
 export function logout() {
   ls.set('teth.react.user', null);
   setState({ user: null, pendingNew: null, setMenu: { open: false } });
+  authHooks.loggedOut?.();
   toast('로그아웃 완료, 다음에 또 만납니다');
 }
 
