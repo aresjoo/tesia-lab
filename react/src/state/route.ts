@@ -19,4 +19,4 @@ export function goHome() {
 }
 
 /** React 로 옮긴 경로. 여기 없는 경로는 같은 주소의 원본(HTML 판)을 연다. 화면을 옮길 때마다 한 줄씩 는다. */
-const PORTED: RegExp[] = [/^$/, /^#?\/?$/];
+const PORTED: RegExp[] = [/^$/, /^#?\/?$/, /^#\/share\/bt\//, /^#\/strategy\//];

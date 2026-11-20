@@ -1,5 +1,8 @@
 // 앱 셸 (원본 <div id="g-root">). 화면은 해시 경로로 고르고, 아직 옮기지 않은 경로는 원본을 연다.
 import { useEffect } from 'react';
+import { BtScreen, isBtHash } from './screens/bt/BtScreen';
+import { StrategyScreen, isStrategyHash } from './screens/bt/GoScreen';
+import { tfIntentRun } from './screens/bt/tfState';
 import { Home } from './screens/home/Home';
 import { AuthModal } from './shell/AuthModal';
 import { Footer } from './shell/Footer';
@@ -10,17 +13,19 @@ import { useHash } from './state/route';
 import { setState, sideToggle, useApp } from './state/store';
 
 export function App() {
-  useHash(); /* 경로가 바뀌면 다시 그린다. 지금 옮긴 화면은 홈 하나다. */
+  const hash = useHash(); /* 경로가 바뀌면 다시 그린다 */
+  /* 백테스트 여정과 전략 만들기 퍼널: 푸터 없는 화면 */
+  const bt = isBtHash(hash) || isStrategyHash(hash);
   const lang = useApp((s) => s.lang);
   const banner = useApp((s) => s.banner);
   const sideMobileOpen = useApp((s) => s.sideMobileOpen);
   const scrim = useApp((s) => s.setMenu.open || s.glcOpen);
   const w = useWinWidth();
   /* 끝이 있는 열람 화면(홈 포함)의 푸터: PC 는 사이드바 아래 전체 폭, 모바일은 본문 끝 (원본 gftPlace) */
-  const footerDoc = w > 860;
+  const footerDoc = w > 860 && !bt;
 
   useBodyClass('g-dark', true);
-  useBodyClass('has-banner', banner);
+  useBodyClass('has-banner', banner && !bt); /* 앱 배너는 홈에서만 */
   useBodyClass('gft-doc', footerDoc, true);
   useBodyClass('nochead', true); /* 대화 머리줄이 없는 화면 (홈 포함) */
   /* 모바일: 아래로 내리면 메뉴 단추를 숨기고, 올리면 다시 보인다 */
@@ -41,6 +46,11 @@ export function App() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+  /* 인증이 끝나면 하려던 일(백테스트 열기)로 돌아간다 (원본 tfIntentRun) */
+  const authed = useApp((s) => !!s.user);
+  useEffect(() => {
+    if (authed) tfIntentRun();
+  }, [authed]);
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setState({ setMenu: { open: false }, fbOpen: false });
@@ -60,8 +70,8 @@ export function App() {
           <main className="g-center">
             <div className="g-scroll" id="g-scroll">
               <div id="g-content">
-                <Home />
-                {!footerDoc && <Footer lime />}
+                {bt ? isBtHash(hash) ? <BtScreen hash={hash} /> : <StrategyScreen hash={hash} /> : <Home />}
+                {!footerDoc && !bt && <Footer lime />}
               </div>
             </div>
           </main>

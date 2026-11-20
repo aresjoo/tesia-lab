@@ -136,4 +136,71 @@ fs.writeFileSync(
     ts('TETH_CONFIG', '{ appUrl: string; iosStoreUrl: string; androidStoreUrl: string; zendeskKey: string; social: Record<string, string>; aiProxy: string; pricing: SitePlan[] }', siteCfgBox.window.TETH_CONFIG),
 );
 
+// 6. 백테스트 여정이 쓰는 계산 엔진과 카탈로그 (원본 함수와 표를 글자 그대로 꺼낸다)
+// 전략 복사 조각이 core/engine 에 TS 로 옮기면 그쪽으로 모은다. 그때까지 원본과 숫자가 한 자리도 어긋나지 않게 그대로 쓴다.
+const big = [...html.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).sort((a, b) => b.length - a.length)[0];
+/** 최상위 선언(function NAME / var NAME) 한 덩어리. 같은 이름이 여럿이면 마지막 것(원본에서 이기는 것). */
+function declText(src, name) {
+  const re = new RegExp(`^(?:function\\s+${name.replace(/\$/g, '\\$')}\\s*\\(|var\\s+${name.replace(/\$/g, '\\$')}\\s*[=;,])`, 'gm');
+  let m, last = null;
+  while ((m = re.exec(src))) last = m;
+  if (!last) throw new Error(`${name} 선언을 찾지 못했다`);
+  const fn = last[0].startsWith('function');
+  let depth = 0, q = null;
+  for (let i = last.index; i < src.length; i++) {
+    const ch = src[i];
+    if (q) { if (ch === '\\') i++; else if (ch === q) q = null; continue; }
+    if (ch === '/' && src[i + 1] === '*') { i = src.indexOf('*/', i + 2) + 1; continue; }
+    if (ch === '/' && src[i + 1] === '/') { i = src.indexOf('\n', i) - 1; continue; }
+    if (ch === '/') { // 정규식 리터럴
+      let k = i - 1; while (k >= 0 && /\s/.test(src[k])) k--;
+      if (k < 0 || /[(,=:[!&|?{};+\-*%<>~^]/.test(src[k]) || /\breturn$|\btypeof$/.test(src.slice(Math.max(0, k - 6), k + 1))) {
+        let j = i + 1, cls = false;
+        for (; j < src.length; j++) { const c = src[j]; if (c === '\\') { j++; continue; } if (c === '[') cls = true; else if (c === ']') cls = false; else if ((c === '/' && !cls) || c === '\n') break; }
+        if (src[j] === '/') { i = j; continue; }
+      }
+    }
+    if (ch === "'" || ch === '"' || ch === '`') { q = ch; continue; }
+    if (ch === '{' || ch === '[' || ch === '(') depth++;
+    else if (ch === '}' || ch === ']' || ch === ')') { depth--; if (fn && depth === 0 && ch === '}') return src.slice(last.index, i + 1); }
+    else if (!fn && depth === 0 && ch === ';') return src.slice(last.index, i + 1);
+  }
+  throw new Error(`${name} 의 끝을 찾지 못했다`);
+}
+const ENGINE = [
+  // 가격과 지표
+  'mulberry32', 'PRICE', 'PRICE0', 'mkPx', 'mkWithPx', 'mkPxFmt', 'sma', 'rsi', 'RUNSTATS', 'runBacktest', 'runBacktestCore',
+  // 카탈로그 엔진 (현물)
+  'MK_FEE', 'mkVol', 'mkLedger', 'mkCheckIn', 'mkStatsOf', 'mkAgentRun', 'mkRuleRun', 'mkOpen', 'mkFng', 'mkHybridRun',
+  // 선물
+  'MK_FUT_FEE', 'fuD', 'fuSma', 'fuMax', 'fuMin', 'fuVol', 'fuFng', 'fuLedger', 'mkFutRun',
+  'fuIs', 'fuSd', 'FU_WHY', 'FU_WHY_P', 'fuSig', 'fuOuts', 'fuNeed', 'fuAiTxt', 'fuInst',
+  // 카탈로그와 이름, 표기
+  'MK_PX_CFG', 'MK_UNI', 'MK_CAT', 'MK_KIND', 'MK_TK', 'mkTk', 'MK_ALIAS', 'MK_ASOF', 'idxToDate', 'mkMD', 'mkUni', 'mkScope', 'mkJ', 'mkPct0', 'mkSign', 'mkRunCfg',
+  'mkDate', 'mkdTicks', 'mkAssetKo', 'mkHook', 'mkOne', 'MK_CRYPTO', 'mkInst', 'mkInstList', 'MK_WHY', 'MK_WHY_P', 'MK_GLOSS', 'MK_GLOSS_K', 'mkPolite', 'TF_STOP', 'TF_BUDGET',
+  // 백테스트 여정의 모델 지시문 (글자 그대로)
+  'BT_SYS_J', 'BT_SYS_R',
+];
+{
+  const body = ENGINE.map((n) => declText(big, n)).join('\n')
+    .replace(/\(window\.MK_PX_CFG\|\|\{\}\)/g, 'MK_PX_CFG')
+    .replace(/\(window\.MK_DATA_V\|\|''\)/g, 'MK_DATA_V');
+  const extra = ['MK_DATA_V'];
+  fs.mkdirSync(path.join(out, 'core/bt'), { recursive: true });
+  fs.writeFileSync(
+    path.join(out, 'core/bt/engine.gen.ts'),
+    '// @ts-nocheck\n' + banner +
+      '/* 원본 큰 스크립트의 계산 엔진과 카탈로그를 글자 그대로 꺼낸 것이다. 가격 자료는 data/px-daily.js, data/fut-daily.js 가 window 에 싣는다. */\n' +
+      '/* eslint-disable */\n' +
+      body + '\n' +
+      `export { ${ENGINE.concat(extra).join(', ')} };\n`,
+  );
+}
+// teth-copy.js 의 점수 산식 설정
+{
+  const w = {};
+  vm.runInNewContext(fs.readFileSync(path.join(root, 'teth-copy.js'), 'utf8'), { window: w });
+  fs.writeFileSync(path.join(out, 'core/bt/tfc.data.ts'), banner + ts('TFC_SCORE', 'Record<string, number>', w.TFC.score));
+}
+
 console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length, '| pages:', pageCss.join(' '), '| PI:', Object.entries(pagePi).map(([k, v]) => k + ' ' + Object.keys(v).length).join(', '));
