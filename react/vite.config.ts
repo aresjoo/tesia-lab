@@ -32,6 +32,8 @@ export default defineConfig({
   plugins: [react(), sharedAssets()],
   build: {
     assetsDir: 'react-build',
+    // CSS 는 줄이지 않는다: 줄이는 도구가 `backdrop-filter` 와 `-webkit-backdrop-filter` 쌍에서 앞 것을 지워 크롬에서 흐림이 사라진다. 원본 CSS 를 글자 그대로 싣는다.
+    cssMinify: false,
     // 여러 진입: 앱(index.html)과 독립 페이지 셋. 페이지마다 자기 CSS 만 싣는다 (배포 이름은 tools/publish.mjs 가 react-<이름>.html 로 바꾼다).
     rolldownOptions: { input: Object.fromEntries(['index', 'about', 'download', 'policies'].map((n) => [n, path.resolve(path.dirname(fileURLToPath(import.meta.url)), n + '.html')])) },
   },
