@@ -1,5 +1,6 @@
 // 셸 위에 뜨는 것들: 앱 배너, 상단 단추, 언어와 통화 패널, 설정 메뉴, 의견 패널, 토스트, 고객지원 버튼.
 import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent, type ReactNode } from 'react';
+import { tfIntentSet } from '../core/account/ac';
 import { PAGES } from '../core/config';
 import { GLC_CURS, GLC_LANGS } from '../core/i18n.data';
 import { useL, useOutside, usePop } from '../state/hooks';
@@ -208,8 +209,10 @@ export function SetMenu() {
         onClick={(e) => {
           e.stopPropagation();
           close();
-          if (!user) authOpen('login');
-          else nav('#/settings/general');
+          if (!user) {
+            authOpen('login');
+            tfIntentSet({ kind: 'settings' }); /* 로그인하면 설정으로 이어 간다 (gmSetClick) */
+          } else nav('#/settings/general');
         }}
       >
         <Ico>{GearPath}</Ico>
@@ -222,7 +225,7 @@ export function SetMenu() {
         </Ico>
         인사이트
       </button>
-      <button className="gm-item" onClick={item(() => nav('#/trade'))}>
+      <button className="gm-item" onClick={item(() => nav('#/brokers'))}>
         <Ico>
           <path d="M3 21h18M5 21V8l7-5 7 5v13" />
           <path d="M9 21v-6h6v6" />

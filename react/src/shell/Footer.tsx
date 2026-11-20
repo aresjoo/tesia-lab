@@ -64,7 +64,7 @@ export function Footer({ lime, standalone }: { lime?: boolean; standalone?: bool
               <Lk alone={alone} act={goHome} to={PAGES.app}>
                 새 전략 만들기
               </Lk>
-              <Lk alone={alone} act={() => nav('#/trade')} to={appAt('#/trade')}>
+              <Lk alone={alone} act={() => nav('#/brokers')} to={appAt('#/brokers')}>
                 거래소 연결
               </Lk>
             </div>

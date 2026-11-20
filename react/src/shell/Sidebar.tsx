@@ -118,7 +118,7 @@ export function Sidebar() {
         <span className="lb">전략 복사</span>
         <span className="g-ico-pill lbp">전략 복사</span>
       </button>
-      <button className="g-util" id="g-tf-cx-btn" onClick={() => nav('#/trade')}>
+      <button className={'g-util' + (mode === 'tfbrokers' || mode === 'tfbroker' ? ' cur' : '')} id="g-tf-cx-btn" onClick={() => nav('#/brokers')}>
         <Ico size={16}>
           <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
           <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />

@@ -1,5 +1,7 @@
 // 앱 셸 (원본 <div id="g-root">). 화면은 해시 경로로 고르고, 아직 옮기지 않은 경로는 원본을 연다.
 import { useEffect, useRef } from 'react';
+import { AccountOverlays } from './screens/account/Overlays';
+import { accountGuard, accountScreen } from './screens/account/routes';
 import { BtScreen, isBtHash } from './screens/bt/BtScreen';
 import { StrategyScreen, isStrategyHash } from './screens/bt/GoScreen';
 import { tfIntentRun } from './screens/bt/tfState';
@@ -26,14 +28,30 @@ const GFT_MODES: Record<string, 1> = { home: 1, tfintro: 1, tfinactive: 1, tfss3
 export function App() {
   const hash = useHash(); /* 경로가 바뀌면 다시 그린다 */
   useConv(); /* 대화를 열거나 닫으면 다시 그린다 */
+  const user = useApp((s) => s.user);
   /* 화면 고르기 (원본 tfRoute, G.mode): 해시 화면이면 그 조각이 그리고, 아니면 대화 쪽 상태(G.mode: home, conv, activity, history)를 따른다 */
   /* 백테스트 여정과 전략 만들기 퍼널 */
   const bt = isBtHash(hash) || isStrategyHash(hash);
+  /* 거래소 연결, 설정, 이용 현황 */
+  const acct = bt ? null : accountScreen(hash, user);
   /* 인사이트, 거래복기, 정기 보고 (원본 tfNFRoute) */
-  const nf = useNFRoute(bt ? '' : hash);
-  const routed = bt || !!nf;
-  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : nf ? nf.mode : G.mode;
+  const nf = useNFRoute(bt || acct ? '' : hash);
+  const routed = bt || !!acct || !!nf;
+  const mode: string = bt ? (isBtHash(hash) ? 'tfbt' : 'tfdone') : acct ? acct.mode : nf ? nf.mode : G.mode;
   const home = mode === 'home';
+  const title = acct ? acct.title : nf ? nf.title : '';
+  const chead = useApp((s) => s.chead);
+  useEffect(() => {
+    accountGuard(hash, user);
+  }, [hash, user]);
+  /* gContent(): 다른 화면으로 넘어가면 맨 위에서 시작한다 */
+  useEffect(() => {
+    if (!acct) return;
+    const sc = document.getElementById('g-scroll');
+    if (sc) sc.scrollTop = 0;
+    window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
   const lang = useApp((s) => s.lang);
   const banner = useApp((s) => s.banner);
   const sideMobileOpen = useApp((s) => s.sideMobileOpen);
@@ -81,9 +99,9 @@ export function App() {
     if (authed) tfIntentRun();
   }, [authed]);
   useEffect(() => {
-    setState({ mode }); /* 원본 G.mode: 사이드바의 현재 위치 표시가 읽는다 */
+    setState({ mode, chead: title }); /* 원본 G.mode: 사이드바의 현재 위치 표시가 읽는다 */
     if (mode !== 'home') homeMarkEntered(); /* 홈의 등장 연출은 맨 처음 화면이 홈일 때만 */
-  }, [mode]);
+  }, [mode, title]);
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       /* 원본은 Esc 로 열린 모달(.modal-bg.open)을 모두 닫는다: 인증 창도 닫힌다 */
@@ -102,7 +120,7 @@ export function App() {
         <div className="g-body">
           <Sidebar />
           <main className="g-center">
-            {nf ? <NFChead title={nf.title} /> : !routed && <Chead />}
+            {acct || nf ? <NFChead title={(acct && chead) || title} /> : !routed && <Chead />}
             <div className="g-scroll" id="g-scroll">
               <div id="g-content">
                 {bt ? (
@@ -111,6 +129,8 @@ export function App() {
                   ) : (
                     <StrategyScreen hash={hash} />
                   )
+                ) : acct ? (
+                  acct.node
                 ) : nf ? (
                   nf.el
                 ) : mode === 'conv' ? (
@@ -138,6 +158,7 @@ export function App() {
       </div>
       <Toast />
       <AuthModal />
+      <AccountOverlays />
       <HelpWidget />
     </>
   );

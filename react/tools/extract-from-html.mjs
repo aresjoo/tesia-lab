@@ -283,4 +283,20 @@ fs.writeFileSync(
 // (6) 탭과 문서 이름의 한글 표기 (G_LBL)
 fs.writeFileSync(path.join(out, 'core/tai/labels.data.ts'), '// 생성 파일: tools/extract-from-html.mjs. 손으로 고치지 않는다.\n' + ts('G_LBL', 'Record<string, string>', evalLit(scripts, 'G_LBL')));
 
+// 4. 거래소 연결과 설정과 이용 현황 조각(-acct): 거래소 표와 teth-copy.js 의 TFC
+const TF_BROKERS = evalLit(scripts, 'TF_BROKERS');
+const tfcBox = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'teth-copy.js'), 'utf8'), tfcBox);
+fs.mkdirSync(path.join(out, 'core/account'), { recursive: true });
+fs.writeFileSync(
+  path.join(out, 'core/account/brokers.data.ts'),
+  banner +
+    `export type Broker = { id: string; name: string; ord?: number; tag?: string; assets?: string; conn?: boolean; site?: string; mono?: string; [k: string]: unknown };\n` +
+    ts('TF_BROKERS', 'Broker[]', TF_BROKERS),
+);
+fs.writeFileSync(
+  path.join(out, 'core/account/tfc.data.ts'),
+  banner + `/* 원본 teth-copy.js 의 window.TFC 그대로 */\n` + `export const TFC = ${JSON.stringify(tfcBox.window.TFC, null, 1)} as const;\n`,
+);
+
 console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length, '| pages:', pageCss.join(' '), '| PI:', Object.entries(pagePi).map(([k, v]) => k + ' ' + Object.keys(v).length).join(', '));
