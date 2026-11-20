@@ -1,6 +1,6 @@
 // 셸 위에 뜨는 것들: 앱 배너, 상단 단추, 언어와 통화 패널, 설정 메뉴, 의견 패널, 토스트, 고객지원 버튼.
 import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent, type ReactNode } from 'react';
-import { legacy } from '../core/config';
+import { PAGES } from '../core/config';
 import { GLC_CURS, GLC_LANGS } from '../core/i18n.data';
 import { useL, useOutside, usePop } from '../state/hooks';
 import { nav } from '../state/route';
@@ -27,7 +27,7 @@ export function withLinks(text: string, map: Record<string, string>): ReactNode[
   if (last < text.length) out.push(text.slice(last));
   return out;
 }
-export const POLICY = { T: legacy('policies/#terms'), P: legacy('policies/#privacy') };
+export const POLICY = { T: PAGES.terms, P: PAGES.privacy };
 
 export function AppBanner() {
   const L = useL();
@@ -40,7 +40,7 @@ export function AppBanner() {
         <b>TETH AI</b>
         <span>{L('banner.sub')}</span>
       </span>
-      <a className="dl" href={legacy('download/')} target="_blank" rel="noopener noreferrer">
+      <a className="dl" href={PAGES.download} target="_blank" rel="noopener noreferrer">
         {L('banner.dl')}
       </a>
       <button className="x" onClick={bannerClose} aria-label="닫기">
@@ -61,10 +61,10 @@ export function TopBar() {
         </svg>
       </button>
       <span id="g-auth-btns" hidden={!!user}>
-        <a className="ga-nav" href={legacy('about/')}>
+        <a className="ga-nav" href={PAGES.about}>
           {L('nav.about')}
         </a>
-        <a className="ga-nav" href={legacy('download/')} target="_blank" rel="noopener noreferrer">
+        <a className="ga-nav" href={PAGES.download} target="_blank" rel="noopener noreferrer">
           {L('nav.download')}
         </a>
         <button className="ga-login" onClick={() => authOpen('login')}>
@@ -246,7 +246,7 @@ export function SetMenu() {
         </Ico>
         고객센터
       </button>
-      <a className="gm-item" id="gm-dl" hidden={!user} href={legacy('download/')} target="_blank" rel="noopener noreferrer" onClick={close}>
+      <a className="gm-item" id="gm-dl" hidden={!user} href={PAGES.download} target="_blank" rel="noopener noreferrer" onClick={close}>
         <Ico>
           <rect x="6" y="2.5" width="12" height="19" rx="2.6" />
           <path d="M12 6.2v6.6M9.4 10.4l2.6 2.4 2.6-2.4" />
@@ -290,7 +290,7 @@ export function SetMenu() {
           <a href={POLICY.P} target="_blank" rel="noopener noreferrer">
             {L('menu.privacy')}
           </a>
-          <a href={legacy('about/')}>{L('nav.about')}</a>
+          <a href={PAGES.about}>{L('nav.about')}</a>
         </div>
       </div>
       <button className="gm-item" id="gm-plan" hidden={!user} onClick={item(() => nav('#/plan'))}>

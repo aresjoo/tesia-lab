@@ -1,6 +1,6 @@
 // 원본 <aside id="g-side">. class 와 id 는 원본 CSS 가 그대로 먹도록 바꾸지 않는다.
 import type { MouseEvent } from 'react';
-import { legacy } from '../core/config';
+import { PAGES } from '../core/config';
 import { useL } from '../state/hooks';
 import { goHome, nav } from '../state/route';
 import { authOpen, getState, setState, sideMobClose, sideToggle, useApp } from '../state/store';
@@ -140,13 +140,13 @@ export function Sidebar() {
       </div>
       <div id="g-live-list" />
       <div id="g-side-links">
-        <a className="g-util" href={legacy('about/')}>
+        <a className="g-util" href={PAGES.about}>
           <Ico size={15} join={false}>
             {InfoPath}
           </Ico>
           {L('nav.about')}
         </a>
-        <a className="g-util" href={legacy('download/')} target="_blank" rel="noopener noreferrer">
+        <a className="g-util" href={PAGES.download} target="_blank" rel="noopener noreferrer">
           <Ico size={15}>
             <path d="M12 3v12" />
             <path d="M7 10l5 5 5-5" />

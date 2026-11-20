@@ -1,5 +1,7 @@
 // 사이트 푸터 (원본 site-footer.js). 홈에서는 청록(gft-lime), 나머지는 검정.
-import { legacy, SOCIAL } from '../core/config';
+// 독립 페이지(소개, 앱 다운로드, 약관)에서는 standalone: 원본 mount(el,{base:'../'}) 처럼 단추 대신 앱 주소로 가는 링크를 낸다.
+import type { ReactNode } from 'react';
+import { appAt, legacy, PAGES, SOCIAL } from '../core/config';
 import { goHome, nav } from '../state/route';
 import { setState } from '../state/store';
 
@@ -20,7 +22,19 @@ const Sns = ({ k, label }: { k: keyof typeof SOCIAL; label: string }) => (
   </a>
 );
 
-export function Footer({ lime }: { lime?: boolean }) {
+/** link(spa, base, label, spaAct, href, blank): 앱 안에서는 동작 단추, 독립 페이지에서는 링크 */
+function Lk({ alone, act, to, children }: { alone?: boolean; act: () => void; to: string; children: ReactNode }) {
+  return alone ? (
+    <a href={to}>{children}</a>
+  ) : (
+    <button type="button" onClick={act}>
+      {children}
+    </button>
+  );
+}
+
+export function Footer({ lime, standalone }: { lime?: boolean; standalone?: boolean }) {
+  const alone = standalone;
   return (
     <footer className={'gft' + (lime ? ' gft-lime' : '')} aria-label="사이트 정보">
       <div className="gft-in">
@@ -41,23 +55,23 @@ export function Footer({ lime }: { lime?: boolean }) {
           <nav className="gft-cols" aria-label="바닥글 메뉴">
             <div className="gft-col">
               <h3>제품</h3>
-              <button type="button" onClick={() => nav('#/trade')}>
+              <Lk alone={alone} act={() => nav('#/trade')} to={appAt('#/trade')}>
                 AI 트레이딩
-              </button>
-              <button type="button" onClick={() => nav('#/share')}>
+              </Lk>
+              <Lk alone={alone} act={() => nav('#/share')} to={appAt('#/trade')}>
                 전략 따라하기
-              </button>
-              <button type="button" onClick={goHome}>
+              </Lk>
+              <Lk alone={alone} act={goHome} to={PAGES.app}>
                 새 전략 만들기
-              </button>
-              <button type="button" onClick={() => nav('#/trade')}>
+              </Lk>
+              <Lk alone={alone} act={() => nav('#/trade')} to={appAt('#/trade')}>
                 거래소 연결
-              </button>
+              </Lk>
             </div>
             <div className="gft-col">
               <h3>회사</h3>
-              <a href={legacy('about/')}>TETH 정보</a>
-              <a href={legacy('download/')} target="_blank" rel="noopener noreferrer">
+              <a href={PAGES.about}>TETH 정보</a>
+              <a href={PAGES.download} target="_blank" rel="noopener noreferrer">
                 앱 다운로드
               </a>
             </div>
@@ -67,24 +81,25 @@ export function Footer({ lime }: { lime?: boolean }) {
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setState({ helpOpen: true });
+                  /* 독립 페이지는 window.tethHelpOpen() 이라 열려 있으면 닫는다 */
+                  setState((s) => ({ helpOpen: alone ? !s.helpOpen : true }));
                 }}
               >
                 24시간 상담
               </button>
-              <button type="button" onClick={() => nav('#/insight')}>
+              <Lk alone={alone} act={() => nav('#/insight')} to={appAt('#/insight')}>
                 인사이트
-              </button>
-              <button type="button" onClick={() => nav('#/plan')}>
+              </Lk>
+              <Lk alone={alone} act={() => nav('#/plan')} to={appAt('#/plan')}>
                 이용 현황
-              </button>
+              </Lk>
             </div>
             <div className="gft-col">
               <h3>약관</h3>
-              <a href={legacy('policies/#terms')} target="_blank" rel="noopener noreferrer">
+              <a href={PAGES.terms} target="_blank" rel="noopener noreferrer">
                 서비스 약관
               </a>
-              <a href={legacy('policies/#privacy')} target="_blank" rel="noopener noreferrer">
+              <a href={PAGES.privacy} target="_blank" rel="noopener noreferrer">
                 개인정보처리방침
               </a>
             </div>

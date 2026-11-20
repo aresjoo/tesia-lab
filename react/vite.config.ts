@@ -30,6 +30,10 @@ export default defineConfig({
   base: './',
   publicDir: false,
   plugins: [react(), sharedAssets()],
-  build: { assetsDir: 'react-build' },
+  build: {
+    assetsDir: 'react-build',
+    // 여러 진입: 앱(index.html)과 독립 페이지 셋. 페이지마다 자기 CSS 만 싣는다 (배포 이름은 tools/publish.mjs 가 react-<이름>.html 로 바꾼다).
+    rolldownOptions: { input: Object.fromEntries(['index', 'about', 'download', 'policies'].map((n) => [n, path.resolve(path.dirname(fileURLToPath(import.meta.url)), n + '.html')])) },
+  },
   server: { host: '127.0.0.1', port: 5871, strictPort: true },
 });

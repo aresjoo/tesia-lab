@@ -1,0 +1,140 @@
+/* 생성 파일: tools/extract-from-html.mjs 가 원본 about/index.html 의 <style> 에서 그대로 꺼낸다. 손으로 고치지 않는다. */
+
+/* DESIGN_PROMPT: 검정 바탕, 제목 400, 흰 알약 하나, 파랑 금지, 카드 반경 26 */
+body{background:#000}
+.cta,.hero .cta,.final .cta{background:#fff!important;color:#000!important;border:0!important;border-radius:999px!important;height:48px;padding:0 24px!important;display:inline-flex;align-items:center;font-size:16px!important;font-weight:500!important;box-shadow:none!important}
+.cta:hover{background:#e6e6e6!important}
+.hd .cta{height:40px;font-size:14px!important}
+.hero{min-height:auto!important;padding:120px 24px 72px!important}
+.hero h1{font-size:44px!important;font-weight:400!important;letter-spacing:-.01em;line-height:1.25!important}
+.hero .cap{font-size:18px!important;color:#cdcdcd!important;opacity:1!important}
+.feat{min-height:0!important;padding:56px 0!important;gap:48px!important}
+.feat .tx h2{font-size:32px!important;font-weight:400!important;line-height:1.3!important}
+.feat .tx p{font-size:18px!important;color:#cdcdcd!important;line-height:1.6!important}
+.feat .tx .lnk{color:#cdcdcd!important;font-size:14px!important;text-decoration:underline;text-underline-offset:4px}
+.feat .tx .lnk svg{display:none}
+.vis,.vis.v1,.vis.v2,.vis.v3,.vis.v4{background:#141414!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:26px!important;box-shadow:none!important}
+.vis .shot{border-radius:16px!important;box-shadow:none!important}
+.pricing{background:#000!important}
+.pricing h2,.csec h2,.final h2{font-size:32px!important;font-weight:400!important}
+.pricing .sub,.csec .sub,.final .sub{font-size:18px!important;color:#cdcdcd!important}
+.plan,.plan.hl{background:transparent!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:26px!important;box-shadow:none!important}
+.plan.hl{border:2px solid #9a9a9a!important}
+.plan .badge{background:transparent!important;color:#cdcdcd!important;border:1px solid rgba(255,255,255,.14);font-weight:400}
+.plan h3{font-weight:500!important}
+.plan .price{font-weight:400!important}
+.plan .go,.plan.hl .go{background:#fff!important;color:#000!important;border:0!important;border-radius:999px!important;font-weight:500!important}
+.plan:not(.hl) .go{background:transparent!important;color:#ececec!important;border:1px solid rgba(255,255,255,.3)!important}
+.plan li::before{color:#cdcdcd!important;background:none!important}
+.pricing .note{font-size:14px!important;color:#9a9a9a!important}
+.trust b{font-weight:500!important}
+.trust span,.faq .a{color:#cdcdcd!important}
+.faq summary{font-size:16px!important;font-weight:400!important}
+.faq .a a{color:#ececec!important;text-decoration:underline}
+#stars{opacity:.35}
+@media (max-width:700px){ .hero{padding:96px 16px 56px!important} .hero h1{font-size:30px!important} .feat{padding:40px 16px!important;gap:24px!important} .feat .tx h2{font-size:26px!important} .feat .tx p{font-size:16px!important} .pricing h2,.csec h2,.final h2{font-size:26px!important} }
+
+/* 요금 카드: 앱 플랜 화면과 같은 값(pl.css + 시안 강조) */
+.plans.pl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:27px;align-items:stretch;max-width:1080px;margin:40px auto 0;text-align:left}
+.pl-card{position:relative;display:flex;flex-direction:column;padding:26px;border-radius:26px;border:1px solid rgba(255,255,255,.16);background:#212121;min-width:0}
+.pl-card.pl-hi{border-color:rgba(0,240,255,.55);background:linear-gradient(180deg,#0e0e0e 0%,#0a2a2e 48%,#0b4851 100%)}
+.pl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:28px}
+.pl-lb{font-size:20px;font-weight:600;color:#fff}
+.pl-h{margin:24px 0 0;font-size:32px;line-height:1.25;font-weight:400;letter-spacing:-.01em;color:#fff}
+.pl-d{margin:14px 0 0;font-size:18px;line-height:1.55;color:#cdcdcd;min-height:84px}
+.pl-price{display:flex;align-items:baseline;gap:4px;margin:34px 0 28px}
+.pl-price>i{font-style:normal;font-size:20px;color:#fff;align-self:flex-start;margin-top:8px}
+.pl-price>span{font-size:44px;font-weight:400;line-height:1;color:#fff}
+.pl-price>small{font-size:16px;color:#cdcdcd;margin-left:4px}
+.pl-grad{background:linear-gradient(120deg,#e0feff 0%,#00f0ff 55%,#7ff7ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.pl-cta{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-size:15px;font-weight:500;text-decoration:none}
+.pl-cta:hover{background:rgba(255,255,255,.08)}
+.pl-cta-hi{background:#00f0ff;border-color:#00f0ff;color:#000}
+.pl-cta-hi:hover{background:#5cf6ff;border-color:#5cf6ff}
+.pl-sub{margin:42px 0 16px;font-size:16px;color:#ececec}
+.pl-items{list-style:none;margin:0;padding:0;display:grid;gap:20px}
+.pl-items li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;align-items:center;font-size:16px;line-height:1.5;color:#ececec}
+.pl-items li::before{content:none!important}
+.pl-items li svg{color:#cdcdcd}
+.pl-hi .pl-items li svg{color:#00f0ff}
+.pl-logos{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}
+.pl-logos img{border-radius:4px}
+.pl-foot{margin:auto 0 0;padding-top:34px;font-size:13px;line-height:1.6;color:#b4b4b4}
+@media (max-width:760px){ .plans.pl-grid{grid-template-columns:1fr;gap:14px} .pl-card{padding:22px 20px;border-radius:20px} .pl-lb{font-size:18px} .pl-h{font-size:26px;margin-top:18px} .pl-d{font-size:15px;min-height:0;margin-top:10px} .pl-price{margin:22px 0 18px} .pl-price>span{font-size:36px} .pl-sub{margin:26px 0 12px} .pl-items{gap:16px} .pl-items li{font-size:15px} }
+
+/* 소개 페이지 새 구성(ab): 플랜 화면 문법 */
+.ab{max-width:1080px;margin:0 auto;padding:0 24px 40px;color:#ececec}
+.ab .rv{opacity:1!important;transform:none!important}
+.ab-hero{padding:120px 0 24px;text-align:left}
+.ab-h1{margin:14px 0 0;font-size:48px;line-height:1.2;font-weight:400;letter-spacing:-.015em;color:#fff}
+.ab-d{margin:16px 0 0;font-size:18px;line-height:1.6;color:#cdcdcd;max-width:640px}
+.ab-acts{display:flex;align-items:center;gap:24px;margin:32px 0 0;flex-wrap:wrap}
+.ab-cta{display:inline-flex;align-items:center;height:52px;padding:0 28px;border-radius:999px;background:#fff;color:#000;font-size:16px;font-weight:500;text-decoration:none}
+.ab-cta:hover{background:#e6e6e6}
+.ab-link{color:#cdcdcd;font-size:14px;text-decoration:underline;text-underline-offset:4px}
+.ab-link:hover{color:#fff}
+.ab-free{margin:14px 0 0;font-size:14px;color:#9a9a9a}
+.ab-heroshot{margin:48px 0 0;border-radius:26px;border:1px solid rgba(255,255,255,.12);overflow:hidden;background:#141414}
+.ab-heroshot img{display:block;width:100%;height:auto}
+.ab-sec{padding:72px 0 0}
+.ab-sh{margin:0;font-size:32px;font-weight:400;line-height:1.3;color:#fff;letter-spacing:-.01em}
+.ab-ss{margin:10px 0 0;font-size:18px;color:#cdcdcd}
+.ab-steps{display:grid;gap:20px;margin:32px 0 0}
+.ab-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:32px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(255,255,255,.16);background:#212121}
+.ab-h{margin:20px 0 0;font-size:32px;line-height:1.25;font-weight:400;color:#fff;letter-spacing:-.01em}
+.ab-card .ab-d{font-size:18px}
+.ab-card .pl-items{margin:28px 0 0}
+.ab-card .ab-link{display:inline-block;margin:28px 0 0}
+.ab-shot{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#000}
+.ab-shot img{display:block;width:100%;height:auto}
+.ab .plans.pl-grid{margin:32px 0 0;max-width:none}
+.ab-list{margin:28px 0 0;padding:0 24px;border-radius:26px;border:1px solid rgba(255,255,255,.16)}
+.ab-row{display:grid;grid-template-columns:20px minmax(0,1fr);gap:16px;padding:20px 0;border-top:1px solid rgba(255,255,255,.1)}
+.ab-row:first-child{border-top:0}
+.ab-row svg{color:#cdcdcd;margin-top:2px}
+.ab-row b{display:block;font-size:16px;font-weight:500;color:#fff}
+.ab-row span{display:block;margin-top:4px;font-size:16px;line-height:1.55;color:#cdcdcd}
+.ab-faq details{border-top:1px solid rgba(255,255,255,.1)}
+.ab-faq details:first-child{border-top:0}
+.ab-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:16px;color:#fff}
+.ab-faq summary::-webkit-details-marker{display:none}
+.ab-faq summary::after{content:'';width:8px;height:8px;border-right:1.5px solid #9a9a9a;border-bottom:1.5px solid #9a9a9a;transform:rotate(45deg);margin-top:-4px;flex:none;transition:transform .15s}
+.ab-faq details[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.ab-faq p{margin:0 0 20px;font-size:16px;line-height:1.6;color:#cdcdcd}
+.ab-faq a{color:#ececec}
+.ab-final{max-width:none;padding:40px}
+.ab-final .pl-cta{max-width:360px;margin-top:28px}
+.ab-final .pl-d{min-height:0}
+.ab-help{margin:32px 0 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:14px;color:#9a9a9a}
+.ab-help .ab-link{margin-left:6px}
+@media (max-width:860px){
+  .ab{padding:0 16px 32px}
+  .ab-hero{padding:88px 0 16px}
+  .ab-h1{font-size:32px}
+  .ab-d,.ab-card .ab-d,.ab-ss{font-size:16px}
+  .ab-sec{padding:56px 0 0}
+  .ab-sh{font-size:28px}
+  .ab-card{grid-template-columns:1fr;gap:20px;padding:22px 20px;border-radius:20px}
+  .ab-h{font-size:26px;margin-top:14px}
+  .ab-list{padding:0 18px;border-radius:20px}
+  .ab-final{padding:24px 20px}
+}
+.ab-heroshot{-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent);border-bottom:0}
+.ab-tall{display:flex;justify-content:center;padding:28px 0 0;background:#141414;max-height:460px;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
+.ab-tall img{width:72%;max-width:392px;border-radius:14px 14px 0 0}
+@media (max-width:860px){ .ab-tall{max-height:380px;padding-top:20px} .ab-tall img{width:84%} }
+
+/* s2 검수 반영 */
+body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo",sans-serif!important}
+@media (max-width:760px){ #teth-help,#teth-help-pop{display:none!important} }
+.sub-help{max-width:1080px;margin:0 auto;padding:0 24px 56px;font-size:14px;color:#9a9a9a}
+.sub-help a{color:#cdcdcd;text-decoration:underline;text-underline-offset:4px;margin-left:6px}
+.sub-help a:hover{color:#fff}
+@media (max-width:900px){ .sub-help{padding:0 16px 40px} }
+.ab-h1{font-size:32px;line-height:1.3}
+.ab-sh{font-size:18px;line-height:1.5}
+.ab-ss{font-size:16px}
+.ab-card{background:transparent}
+.pl-card{background:transparent}
+.ab-hero{padding-top:112px}
+@media (max-width:860px){ .ab-h1{font-size:28px} .ab-sh{font-size:18px} }
