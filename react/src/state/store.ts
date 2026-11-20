@@ -3,7 +3,7 @@ import { useSyncExternalStore } from 'react';
 import { isCur, isLang } from '../core/i18n';
 
 export type AuthMode = 'login' | 'signup';
-export type User = { name: string } | null;
+export type User = { name: string; email?: string } | null;
 
 export type AppState = {
   user: User;
@@ -22,6 +22,10 @@ export type AppState = {
   toast: { text: string; show: boolean };
   /** 손님이 보내려던 말. 가입이 끝나면 이어서 쓴다. */
   pendingNew: string | null;
+  /** 지금 화면 (원본 G.mode: home, tfbrokers, tfset, nfplan ...). App 이 해시 경로로 정한다. */
+  mode: string;
+  /** 대화 머리줄 제목 (원본 gChead 의 title) */
+  chead: string;
 };
 
 const ls = {
@@ -61,7 +65,7 @@ const ss = {
 function readUser(): User {
   try {
     const v = JSON.parse(ls.get('teth.react.user') || 'null');
-    return v && typeof v.name === 'string' ? { name: v.name } : null;
+    return v && typeof v.name === 'string' ? (typeof v.email === 'string' ? { name: v.name, email: v.email } : { name: v.name }) : null;
   } catch {
     return null;
   }
@@ -84,6 +88,8 @@ let state: AppState = {
   helpOpen: false,
   toast: { text: '', show: false },
   pendingNew: null,
+  mode: 'home',
+  chead: '',
 };
 
 const subs = new Set<() => void>();
@@ -125,17 +131,31 @@ export function authOpen(mode: AuthMode = 'signup') {
 }
 export const authClose = () => setState((s) => ({ auth: { ...s.auth, open: false } }));
 
+/** 로그인, 로그아웃 때 불리는 것들 (S.tf 를 가진 조각이 건다). 값은 바뀐 뒤의 회원. */
+export const userHooks: ((u: User) => void)[] = [];
+const userChanged = () => userHooks.forEach((f) => f(state.user));
+
 /** signupDone() */
-export function signIn(name: string) {
-  ls.set('teth.react.user', JSON.stringify({ name }));
+export function signIn(name: string, email?: string) {
+  const u = email ? { name, email } : { name };
+  ls.set('teth.react.user', JSON.stringify(u));
   const login = state.auth.mode === 'login';
-  setState((s) => ({ user: { name }, auth: { ...s.auth, open: false } }));
+  setState((s) => ({ user: u, auth: { ...s.auth, open: false } }));
+  userChanged();
   toast(login ? '다시 만나서 반갑습니다' : '계정 준비 완료, 시장은 기다려주지 않습니다');
+}
+/** 이름이나 이메일을 고친다 (설정의 계정 탭) */
+export function userPatch(patch: { name?: string; email?: string }) {
+  if (!state.user) return;
+  const u = { ...state.user, ...patch };
+  ls.set('teth.react.user', JSON.stringify(u));
+  setState({ user: u });
 }
 /** gLogout() */
 export function logout() {
   ls.set('teth.react.user', null);
   setState({ user: null, pendingNew: null, setMenu: { open: false } });
+  userChanged();
   toast('로그아웃 완료, 다음에 또 만납니다');
 }
 

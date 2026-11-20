@@ -96,7 +96,7 @@ function Flow({ mode, open }: { mode: AuthMode; open: boolean }) {
     setErr((e) => ({ ...e, [k]: false }));
     good(ref);
   };
-  const finish = (name: string) => signIn(name || '김도현');
+  const finish = (name: string) => signIn(name || '김도현', email); /* 원본 S.user.email=AUTH.email (이메일로 들어온 때만 값이 있다) */
   const ageShow = (name: string) => {
     setDoneName(name);
     setAgeLoading(false);

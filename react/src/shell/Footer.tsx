@@ -50,7 +50,7 @@ export function Footer({ lime }: { lime?: boolean }) {
               <button type="button" onClick={goHome}>
                 새 전략 만들기
               </button>
-              <button type="button" onClick={() => nav('#/trade')}>
+              <button type="button" onClick={() => nav('#/brokers')}>
                 거래소 연결
               </button>
             </div>

@@ -89,4 +89,20 @@ const helpCss = /var css = ''\+([\s\S]*?);\n\s*var st =/.exec(helpJs);
 if (!helpCss) throw new Error('help-widget.js 의 css 를 찾지 못했다');
 fs.writeFileSync(path.join(out, 'styles/help.css'), banner + vm.runInNewContext(`''+${helpCss[1].replace(/\/\*[\s\S]*?\*\//g, '')}`));
 
+// 4. 거래소 연결과 설정과 이용 현황 조각(-acct): 거래소 표와 teth-copy.js 의 TFC
+const TF_BROKERS = evalLit(scripts, 'TF_BROKERS');
+const tfcBox = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'teth-copy.js'), 'utf8'), tfcBox);
+fs.mkdirSync(path.join(out, 'core/account'), { recursive: true });
+fs.writeFileSync(
+  path.join(out, 'core/account/brokers.data.ts'),
+  banner +
+    `export type Broker = { id: string; name: string; ord?: number; tag?: string; assets?: string; conn?: boolean; site?: string; mono?: string; [k: string]: unknown };\n` +
+    ts('TF_BROKERS', 'Broker[]', TF_BROKERS),
+);
+fs.writeFileSync(
+  path.join(out, 'core/account/tfc.data.ts'),
+  banner + `/* 원본 teth-copy.js 의 window.TFC 그대로 */\n` + `export const TFC = ${JSON.stringify(tfcBox.window.TFC, null, 1)} as const;\n`,
+);
+
 console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length);
