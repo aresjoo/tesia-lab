@@ -7,6 +7,8 @@ export type User = { name: string } | null;
 
 export type AppState = {
   user: User;
+  /** 지금 화면 (원본 G.mode): 'home', 'nfins', 'nfreview', 'nfperiodic' ... */
+  mode: string;
   lang: string;
   cur: string;
   /** 데스크톱 사이드바 접힘 */
@@ -72,6 +74,7 @@ const savedCur = ls.get('tethCurrency');
 
 let state: AppState = {
   user: readUser(),
+  mode: 'home',
   lang: isLang(savedLang) ? savedLang : 'ko',
   cur: isCur(savedCur) ? savedCur : 'USD',
   sideCollapsed: true,
@@ -135,7 +138,17 @@ export function signIn(name: string) {
 /** gLogout() */
 export function logout() {
   ls.set('teth.react.user', null);
+  ls.set('teth.state', null); /* 원본 gLogout: 저장된 계정 상태(전략, 복기, 보고서)도 지운다. 다음에 로그인한 사람에게 보이지 않게 */
   setState({ user: null, pendingNew: null, setMenu: { open: false } });
+  /* 원본 gLogout 은 gHome() 으로 끝난다: 다른 화면에 있었으면 주소를 지우고 홈으로 */
+  if (window.location.hash) {
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch {
+      /* 무시 */
+    }
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  }
   toast('로그아웃 완료, 다음에 또 만납니다');
 }
 

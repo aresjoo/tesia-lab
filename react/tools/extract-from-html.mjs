@@ -203,4 +203,23 @@ const ENGINE = [
   fs.writeFileSync(path.join(out, 'core/bt/tfc.data.ts'), banner + ts('TFC_SCORE', 'Record<string, number>', w.TFC.score));
 }
 
+// 4. 인사이트 (글 목록과 본문, 저자, 태그 한국어 이름). 본문은 원본 TF_INS2 그대로다.
+{
+  const TF_INS2 = evalLit(scripts, 'TF_INS2');
+  const TF_INS2_AUTH = evalLit(scripts, 'TF_INS2_AUTH');
+  const INS_TAG_KO = evalLit(scripts, 'INS_TAG_KO');
+  fs.mkdirSync(path.join(out, 'core/insight'), { recursive: true });
+  fs.writeFileSync(
+    path.join(out, 'core/insight/insight.data.ts'),
+    banner +
+      `export type InsSec = { h?: string; ps?: string[]; q?: string; fig?: { t: string; cap: string } };\n` +
+      `export type InsPost = { slug: string; au: string; lv: number; cat: string; art: string; min: number; read: number; trend: number; tags: string[]; assets?: [string, string, string, string][]; title: string; sub: string; body: InsSec[] };\n` +
+      `export type InsAuthor = { nm: string; ro: string; skin: string; hair: string; hairD: string; top: string };\n` +
+      ts('TF_INS2', 'InsPost[]', TF_INS2) +
+      ts('TF_INS2_AUTH', 'Record<string, InsAuthor>', TF_INS2_AUTH) +
+      ts('INS_TAG_KO', 'Record<string, string>', INS_TAG_KO),
+  );
+  console.log('insight posts:', TF_INS2.length, '| authors:', Object.keys(TF_INS2_AUTH).length, '| tags:', Object.keys(INS_TAG_KO).length);
+}
+
 console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length, '| pages:', pageCss.join(' '), '| PI:', Object.entries(pagePi).map(([k, v]) => k + ' ' + Object.keys(v).length).join(', '));

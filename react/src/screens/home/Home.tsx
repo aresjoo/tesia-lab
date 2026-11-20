@@ -12,6 +12,10 @@ import { TplArt, TplThumb } from './TplArt';
 
 /** 첫 진입에만 등장 연출을 한다. 다시 들어오면 바로 보인다. */
 let homeEntered = false;
+/** 다른 화면으로 바로 들어온 경우에 부른다: 원본은 부팅 때 홈을 먼저 한 번 그리므로(gHome 의 TF_HOME_ENTR) 나중에 홈으로 오면 등장 연출이 없다 */
+export const homeMarkEntered = () => {
+  homeEntered = true;
+};
 
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
