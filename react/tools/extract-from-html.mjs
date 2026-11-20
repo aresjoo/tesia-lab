@@ -81,6 +81,36 @@ fs.writeFileSync(
     ts('TF_TPL_ASSETS', 'TplAsset[]', TF_TPL_ASSETS),
 );
 
+// 2-1. 전략 복사: 카탈로그와 가격 설정(계산 층), 화면 문구 표
+const cat = {};
+for (const k of ['MK_PX_CFG', 'MK_UNI', 'MK_CAT', 'MK_ALIAS', 'MK_EX', 'MK_KIND', 'MK_TK', 'SK_SYM', 'MK_USHAPE', 'MK_CRYPTO']) cat[k] = evalLit(scripts, k);
+fs.mkdirSync(path.join(out, 'core/engine'), { recursive: true });
+fs.writeFileSync(
+  path.join(out, 'core/engine/catalog.data.ts'),
+  banner +
+    `import type { CatCfg } from './types';\n` +
+    ts('MK_PX_CFG', 'Record<string, [number, number, number]>', cat.MK_PX_CFG) +
+    ts('MK_UNI', 'Record<string, { label: string; list: string[] }>', cat.MK_UNI) +
+    `/** 이름의 코인은 실행 중에 심볼로 바뀐다 (catalog.ts 의 skSym) */\n` +
+    ts('MK_CAT_RAW', 'CatCfg[]', cat.MK_CAT) +
+    ts('MK_ALIAS', 'Record<string, string>', cat.MK_ALIAS) +
+    ts('MK_EX', '[string, string][]', cat.MK_EX) +
+    ts('MK_KIND', 'Record<string, string>', cat.MK_KIND) +
+    ts('MK_TK', 'Record<string, string>', cat.MK_TK) +
+    ts('SK_SYM', 'Record<string, string>', cat.SK_SYM) +
+    ts('MK_USHAPE', 'Record<string, string>', cat.MK_USHAPE) +
+    ts('MK_CRYPTO', 'Record<string, number>', cat.MK_CRYPTO),
+);
+const sh = {};
+for (const k of ['MK_GLOSS', 'MK_TIP', 'MK_VOICE', 'MK_WHY', 'FU_WHY', 'MK_WHY_P', 'FU_WHY_P', 'MK_PER_L', 'CPX_KIND', 'CPP_PAIR', 'MK_STOP_L']) sh[k] = evalLit(scripts, k);
+fs.writeFileSync(
+  path.join(out, 'core/share.data.ts'),
+  banner +
+    Object.keys(sh)
+      .map((k) => ts(k, k === 'MK_VOICE' ? 'Record<string, Record<string, string>>' : 'Record<string, string>', sh[k]))
+      .join(''),
+);
+
 // 3. 푸터와 고객지원 버튼의 CSS (각 스크립트 안의 문자열)
 const footerJs = fs.readFileSync(path.join(root, 'site-footer.js'), 'utf8');
 fs.writeFileSync(path.join(out, 'styles/footer.css'), banner + evalLit(footerJs.replace(/var CSS\s*=\s*/, 'var CSS=[') .replace(/";\n\s*var WM/, '"];\n  var WM'), 'CSS')[0]);
@@ -89,4 +119,4 @@ const helpCss = /var css = ''\+([\s\S]*?);\n\s*var st =/.exec(helpJs);
 if (!helpCss) throw new Error('help-widget.js 의 css 를 찾지 못했다');
 fs.writeFileSync(path.join(out, 'styles/help.css'), banner + vm.runInNewContext(`''+${helpCss[1].replace(/\/\*[\s\S]*?\*\//g, '')}`));
 
-console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length);
+console.log('styles:', styles.map((s) => s.length).join(', '), '| I18N keys:', Object.keys(I18N).length, '| templates:', TF_TPL_ACTS.length, '+', TF_TPL_ASSETS.length, '| catalog:', cat.MK_CAT.length, '| voice:', Object.keys(sh.MK_VOICE).length);

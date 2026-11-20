@@ -125,17 +125,23 @@ export function authOpen(mode: AuthMode = 'signup') {
 }
 export const authClose = () => setState((s) => ({ auth: { ...s.auth, open: false } }));
 
+/** 로그인, 로그아웃 때 불리는 것들 (S.tf 를 가진 조각이 건다). 값은 바뀐 뒤의 회원. */
+export const userHooks: ((u: User) => void)[] = [];
+const userChanged = () => userHooks.forEach((f) => f(state.user));
+
 /** signupDone() */
 export function signIn(name: string) {
   ls.set('teth.react.user', JSON.stringify({ name }));
   const login = state.auth.mode === 'login';
   setState((s) => ({ user: { name }, auth: { ...s.auth, open: false } }));
+  userChanged();
   toast(login ? '다시 만나서 반갑습니다' : '계정 준비 완료, 시장은 기다려주지 않습니다');
 }
 /** gLogout() */
 export function logout() {
   ls.set('teth.react.user', null);
   setState({ user: null, pendingNew: null, setMenu: { open: false } });
+  userChanged();
   toast('로그아웃 완료, 다음에 또 만납니다');
 }
 
