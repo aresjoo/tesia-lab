@@ -10,8 +10,11 @@ export const useHash = () => useSyncExternalStore(sub, () => window.location.has
 
 /** tfNav(r) */
 export function nav(r: string) {
-  if (PORTED.some((re) => re.test(r))) window.location.hash = r;
-  else window.location.href = legacy(r);
+  /* 같은 주소를 다시 누르면 hashchange 가 나지 않으니 직접 알린다 (원본 tfNav 는 tfRoute 를 다시 부른다) */
+  if (PORTED.some((re) => re.test(r))) {
+    if (window.location.hash === r) window.dispatchEvent(new HashChangeEvent('hashchange'));
+    else window.location.hash = r;
+  } else window.location.href = legacy(r);
 }
 export function goHome() {
   if (window.location.hash) history.pushState(null, '', window.location.pathname + window.location.search);
@@ -19,4 +22,4 @@ export function goHome() {
 }
 
 /** React 로 옮긴 경로. 여기 없는 경로는 같은 주소의 원본(HTML 판)을 연다. 화면을 옮길 때마다 한 줄씩 는다. */
-const PORTED: RegExp[] = [/^$/, /^#?\/?$/];
+const PORTED: RegExp[] = [/^$/, /^#?\/?$/, /^#\/insight(\/|$)/, /^#\/(review|periodic)(\/|$)/];
