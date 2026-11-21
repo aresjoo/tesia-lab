@@ -42,6 +42,8 @@ export const TF_TM = {
   nfTab: 'all',
   /** window.TF_NFH_OPEN: 터미널이 뜬 뒤 열 하단 구역 (알림 딥링크) */
   nfh: null as string | null,
+  /** TB_CP: 판단 패널에 보이는 복사 전략 순번 (복사한 전략이 둘 이상일 때) */
+  cp: 0,
 };
 /* QA 용: 원본에서 고른 전략과 탭을 같은 모양으로 넘겨받는다 (tools/compare.mjs) */
 try {

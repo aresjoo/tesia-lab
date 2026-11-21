@@ -1,5 +1,5 @@
 // 터미널 여러 곳이 같이 쓰는 작은 부품과 표.
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { TF_EX_NAME } from '../../../core/account/derive';
 import { TF_KIND_LABEL } from '../../../core/trade/term';
 
@@ -74,3 +74,39 @@ export const BellIco = () => (
 );
 export const Flex1 = () => <span style={{ flex: 1 }} />;
 export type Kids = { children?: ReactNode };
+
+/** tbThought(t): 두 문장 + 더 보기 */
+export function Thought({ t, B }: { t: string; B: (t: string) => string }) {
+  const more = useRef<HTMLSpanElement>(null);
+  if (!t) return null;
+  const a = String(t).split(/(?<=\.)\s+/);
+  const head = a.length <= 2 ? t : a.slice(0, 2).join(' ');
+  const rest = a.length <= 2 ? '' : a.slice(2).join(' ');
+  return (
+    <div className="tb-th">
+      <p className="tb-thl">{B('TETH의 생각')}</p>
+      <p className="tb-tht">
+        {B(head)}
+        {rest && (
+          <>
+            <span className="tb-more" hidden ref={more}>
+              {B(' ' + rest)}
+            </span>{' '}
+            <button
+              type="button"
+              className="pl-link tb-mb"
+              onClick={(e) => {
+                const m = more.current;
+                if (!m) return;
+                m.hidden = !m.hidden;
+                e.currentTarget.textContent = m.hidden ? '더 보기' : '접기';
+              }}
+            >
+              더 보기
+            </button>
+          </>
+        )}
+      </p>
+    </div>
+  );
+}

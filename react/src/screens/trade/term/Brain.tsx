@@ -6,65 +6,14 @@ import { tfTmSay, type Seg } from '../../../core/trade/say';
 import { bcInit } from '../../../core/account/bc';
 import { sktDate, tfAssetTicker, tfNFTime, tfTmAgo, tfTmDate, TF_TM_EVM, TF_TM_OPM, tfTmPct, tfTmPx, tfTmSign, tfTmWon, tfTmWonS, type TermCalc, type TermRow } from '../../../core/trade/term';
 import { brainText } from '../../../core/trade/text';
-import { tfBackToChat, tfIns2Ask, tfShareHub } from '../bridge';
+import { tfIns2Ask } from '../bridge';
 import { getPreview, getTf } from '../store';
 import { tfTmTradeDlg, tfTmVerDlg } from './dialogs';
-import { MktChev, TbIcon } from './parts';
+import { TermSide } from './Copy';
+import { MktChev, TbIcon, Thought } from './parts';
 import { capUpdate, setTm, TF_TM, tfTmApply, tfTmEvalAt, tfTmInert, tfTmReconnect, tfTmSetStatus, type BrainTab } from './tm';
 
 type Bt = (t: string) => string;
-
-/** pxTermSide(): 전략이 없을 때의 오른쪽 칸 */
-export function TermSide() {
-  return (
-    <div className="px-tbrain">
-      <b>실행 중인 전략이 없습니다</b>
-      <span>전략을 고르면 TETH의 판단과 주문이 여기에 표시됩니다.</span>
-      <button type="button" className="pl-cta pl-cta-w" onClick={() => tfShareHub()}>
-        전략 찾기
-      </button>
-      <button type="button" className="pl-link" onClick={tfBackToChat}>
-        새 전략 만들기
-      </button>
-    </div>
-  );
-}
-
-/** tbThought(t): 두 문장 + 더 보기 */
-function Thought({ t, B }: { t: string; B: Bt }) {
-  const more = useRef<HTMLSpanElement>(null);
-  if (!t) return null;
-  const a = String(t).split(/(?<=\.)\s+/);
-  const head = a.length <= 2 ? t : a.slice(0, 2).join(' ');
-  const rest = a.length <= 2 ? '' : a.slice(2).join(' ');
-  return (
-    <div className="tb-th">
-      <p className="tb-thl">{B('TETH의 생각')}</p>
-      <p className="tb-tht">
-        {B(head)}
-        {rest && (
-          <>
-            <span className="tb-more" hidden ref={more}>
-              {B(' ' + rest)}
-            </span>{' '}
-            <button
-              type="button"
-              className="pl-link tb-mb"
-              onClick={(e) => {
-                const m = more.current;
-                if (!m) return;
-                m.hidden = !m.hidden;
-                e.currentTarget.textContent = m.hidden ? '더 보기' : '접기';
-              }}
-            >
-              더 보기
-            </button>
-          </>
-        )}
-      </p>
-    </div>
-  );
-}
 
 /** tfTmStatusBlock(s,c): 지금 무엇을 들고 있는지. 금액 대신 진입가 대비 % */
 function StatusBlock({ s, c, B }: { s: TermRow; c: TermCalc; B: Bt }) {

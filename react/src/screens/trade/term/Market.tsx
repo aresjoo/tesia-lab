@@ -184,6 +184,13 @@ export function mktSync(stratSym: string | null, first: boolean) {
     MKT.prem = null;
   }
 }
+/** 복사한 전략을 바꿔 고르면 차트도 그 전략의 종목으로 (pxTermSide 감싸기). 직접 고른 종목이 있으면 두고 */
+export function mktCopyFollow(stratSym: string | null) {
+  if (MKT.picked || !stratSym || stratSym === MKT.sym) return;
+  MKT.sym = stratSym;
+  MKT.tick = null;
+  MKT.prem = null;
+}
 /** mktPoll() */
 function mktPoll(sym: string) {
   Promise.all([mktApi('/fapi/v1/ticker/24hr?symbol=' + sym), mktApi('/fapi/v1/premiumIndex?symbol=' + sym)])

@@ -150,7 +150,7 @@ const STATES = [
   ['copy-sheet-route', seq(hashGo('#/share/copy/h2')), null, CPS],
   ['copy-guest-route', null, null, { hash: '#/share/copy/f1' }],
   /* 거래소 연결로 잇기: 거래소 없는 회원은 거래소 연결 화면으로, 본인 확인이 안 끝났으면 확인 창을 거쳐 시작, 다 갖췄으면 바로 시작해 터미널로 */
-  /* copy-kyc-done, copy-start-done 은 끝에 터미널(#/trade)이 나온다. 원본 터미널은 복사한 전략을 판단 패널, 차트 종목, 포지션 표에 보이는데 React 터미널은 아직 안 보여 크게 다르다(옮길 일) */
+  /* copy-kyc-done, copy-start-done 은 끝에 터미널(#/trade)이 나온다. 복사한 전략이 판단 패널, 차트 종목, 시세 출처 줄, 포지션 표에 보인다(screens/trade/term/Copy.tsx). 차트는 TradingView 실물이라 범례 배지와 오류 창이 때때로 다르게 찍힌다 */
   ['copy-noex-connect', seq(login, hashGo('#/share/s/f1'), click('.mk-pri'))],
   ['copy-kyc-gate', seq(click('.mk-pri'), type('#cps-amt', '700'), click('#cps-cta')), null, { hash: '#/share/s/f1', ...CPK }],
   ['copy-kyc-done', seq(click('.mk-pri'), type('#cps-amt', '700'), click('#cps-cta'), wait(2600)), null, { hash: '#/share/s/f1', ...CPK }],

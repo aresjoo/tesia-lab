@@ -11,7 +11,8 @@ import { setPreview, usePreview, useRev, useTf } from './store';
 import { Bottom, Strip } from './term/Bottom';
 import { Brain } from './term/Brain';
 import { tfTmDrawer, tfTmHalt, tfTmMenu } from './term/dialogs';
-import { MktChart, MktHead, mktStratSym, mktSync } from './term/Market';
+import { copyRefEx, copyStratSym, TermFollow } from './term/Copy';
+import { MktChart, MktHead, mktCopyFollow, mktStratSym, mktSync } from './term/Market';
 import { TermOverlays } from './term/overlay';
 import { ExBadge, Flex1, KindBadge, tfExOf2 } from './term/parts';
 import { all, calc, evalStep, setTm, TF_TM, tfTmReconnect, tfTmSelect, tfTmSetStatus } from './term/tm';
@@ -203,12 +204,17 @@ export function Terminal() {
   const empty = !list.length;
   /* 탭의 숫자 배지는 화면을 열 때 한 번 센다 (원본 tfDashView 의 CNT) */
   const [cnt] = useState(() => ({ pos: list.filter((x) => x.status === 'live' && !!calc(x).pos && (TF_TM.scope === 'all' || x.key === TF_TM.sel)).length }));
-  /* 차트 종목은 고른 전략을 따른다 (mktMount, tfTmSelect 감싸기) */
-  const ss = s ? mktStratSym(s.sym) : null;
+  /* 차트 종목은 운용 대상을 따른다 (mktMount, tfTmSelect 감싸기): 고른 전략, 없으면 진행 중인 복사 전략 */
+  const ss = s ? mktStratSym(s.sym) : copyStratSym();
   const lastSel = useRef<string | null | undefined>(undefined);
+  const lastSs = useRef(ss);
   if (lastSel.current !== TF_TM.sel) {
     mktSync(ss, lastSel.current === undefined);
     lastSel.current = TF_TM.sel;
+    lastSs.current = ss;
+  } else if (!s && lastSs.current !== ss) {
+    mktCopyFollow(ss);
+    lastSs.current = ss;
   }
   const [rw] = useState(() => {
     let rz = 0;
@@ -282,7 +288,8 @@ export function Terminal() {
       {K('긴급 정지')}
     </button>
   );
-  const refEx = s && s.ex ? { id: s.ex, name: s.exL } : null;
+  /* 시세 출처와 운용 거래소가 다르면 차트 탭 줄에 한 줄 (mktRefNote): 고른 전략, 없으면 복사 전략이 도는 거래소 */
+  const refEx = s ? (s.ex ? { id: s.ex, name: s.exL } : null) : copyRefEx();
   return (
     <>
       <div
@@ -403,7 +410,8 @@ export function Terminal() {
         {/* 전략이 없는 첫 화면에는 「시뮬레이션 데이터입니다」 줄을 두지 않는다 (pxTermEmpty) */}
         <Bottom cnt={cnt} simnote={!pv && !empty} />
       </div>
-      {/* 복사한 전략 계정 줄(tfTmFollowHtml)은 전략 복사 조각의 cpCalc 원장이 들어오면 여기에 붙인다 */}
+      {/* 복사한 전략 계정 줄 (tfTmFollowHtml). 미리 보기에는 없다 */}
+      {!pv && <TermFollow />}
       <TermOverlays />
     </>
   );

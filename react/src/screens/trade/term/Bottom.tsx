@@ -10,6 +10,7 @@ import { toast } from '../../../state/store';
 import { tfTmConnGo } from '../bridge';
 import { getTf, updateTf } from '../store';
 import { exitPx } from './Brain';
+import { cpxTermRows } from './Copy';
 import { tfTmTradeDlg } from './dialogs';
 import { BellIco, ExBadge } from './parts';
 import { all, calc, setTm, TF_TM, tfNotifGo, tfNotifReadAll, tfTmSelect, tfTmSetStatus } from './tm';
@@ -109,6 +110,8 @@ function Pane({ k }: { k: string }) {
     );
   }
   const list = scopeList();
+  /* 복사한 전략의 행은 표 맨 위에 (원본 tfTmPane 의 cpxTermRows 감싸기). 머리줄은 내 전략 표와 같다 */
+  const cp = k === 'assets' ? [] : cpxTermRows(k);
   const note = <div className="tft-tnote">{K('검증 구간 파생 기록, ' + (TF_TM.scope === 'all' ? '전체 전략' : '현재 전략') + ' 범위')}</div>;
   const wrap = (head: ReactNode, rows: ReactNode[], empty: ReactNode) =>
     rows.length ? (
@@ -160,7 +163,7 @@ function Pane({ k }: { k: string }) {
         </tr>,
       );
     });
-    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', ['수량'], ['진입가'], ['현재가'], ['손절가'], ['미실현'], ['%'], ['']]} />, rows, <Empty tt="현재 포지션이 없습니다." ds="실행 중 전략이 진입하면 여기에 표시됩니다." />);
+    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', ['수량'], ['진입가'], ['현재가'], ['손절가'], ['미실현'], ['%'], ['']]} />, cp.concat(rows), <Empty tt="현재 포지션이 없습니다." ds="실행 중 전략이 진입하면 여기에 표시됩니다." />);
   }
   if (k === 'open') {
     const rows: ReactNode[] = [];
@@ -214,8 +217,8 @@ function Pane({ k }: { k: string }) {
     });
     /* 예약 주문의 조건 대기 행은 맨 위에. 표가 비어 있으면 표를 새로 만든다 (원본 odRowsHtml 감싸기) */
     const od = odRows();
-    if (od.length && !rows.length) return <OpenTable rows={od} />;
-    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', '유형', ['가격'], ['수량'], '상태', ['']]} />, od.concat(rows), <Empty tt="미체결 주문이 없습니다." ds="포지션이 열리면 규칙 기반 손절, 익절 주문이 여기 걸립니다." />);
+    if (od.length && !rows.length) return <OpenTable rows={cp.concat(od)} />;
+    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', '유형', ['가격'], ['수량'], '상태', ['']]} />, cp.concat(od, rows), <Empty tt="미체결 주문이 없습니다." ds="포지션이 열리면 규칙 기반 손절, 익절 주문이 여기 걸립니다." />);
   }
   if (k === 'orders' || k === 'fills') {
     const rows: ReactNode[] = [];
@@ -293,8 +296,8 @@ function Pane({ k }: { k: string }) {
         });
     });
     return k === 'orders'
-      ? wrap(<Th cols={['거래소', '전략', '일자', '심볼', '방향', '유형', ['가격'], ['수량'], '상태']} />, rows, <Empty tt="주문 내역이 없습니다" ds="전략이 거래를 실행하면 주문 이벤트가 기록됩니다." />)
-      : wrap(<Th cols={['거래소', '전략', '일자', '심볼', '방향', ['체결가'], ['수량'], ['수수료']]} />, rows, <Empty tt="체결 내역이 없습니다" ds="체결이 발생하면 여기에 표시됩니다." />);
+      ? wrap(<Th cols={['거래소', '전략', '일자', '심볼', '방향', '유형', ['가격'], ['수량'], '상태']} />, cp.concat(rows), <Empty tt="주문 내역이 없습니다" ds="전략이 거래를 실행하면 주문 이벤트가 기록됩니다." />)
+      : wrap(<Th cols={['거래소', '전략', '일자', '심볼', '방향', ['체결가'], ['수량'], ['수수료']]} />, cp.concat(rows), <Empty tt="체결 내역이 없습니다" ds="체결이 발생하면 여기에 표시됩니다." />);
   }
   if (k === 'closed') {
     const rows: ReactNode[] = [];
@@ -334,7 +337,7 @@ function Pane({ k }: { k: string }) {
           );
         });
     });
-    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', ['진입'], ['청산'], ['보유'], ['수수료'], ['실현 손익']]} />, rows, <Empty tt="종료된 포지션이 없습니다" ds="완결된 거래가 생기면 판단 기록과 연결됩니다." />);
+    return wrap(<Th cols={['거래소', '전략', '심볼', '방향', ['진입'], ['청산'], ['보유'], ['수수료'], ['실현 손익']]} />, cp.concat(rows), <Empty tt="종료된 포지션이 없습니다" ds="완결된 거래가 생기면 판단 기록과 연결됩니다." />);
   }
   if (k === 'assets') {
     /* 자산은 늘 계정 전체. 공용 위임 예산은 거래소마다 한 번만 더한다 */
